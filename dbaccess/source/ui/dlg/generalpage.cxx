@@ -32,59 +32,26 @@
 #include "precompiled_dbaccess.hxx"
 
 #include "dsnItem.hxx"
-#ifndef _DBAUI_GENERALPAGE_HXX_
 #include "generalpage.hxx"
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
-#ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
-#ifndef _DBAUI_DBADMIN_HRC_
 #include "dbadmin.hrc"
-#endif
-#ifndef _DBAUI_DATASOURCEITEMS_HXX_
 #include "dsitems.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _DBAUI_DBADMIN_HXX_
 #include "dbadmin.hxx"
-#endif
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfilt.hxx>
-#ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
-#endif
-#ifndef _DBAUI_LOCALRESACCESS_HXX_
 #include "localresaccess.hxx"
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SV_WAITOBJ_HXX
+#include <connectivity/DriversConfig.hxx>
 #include <vcl/waitobj.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef DBAUI_DRIVERSETTINGS_HXX
 #include "DriverSettings.hxx"
-#endif
 #include "UITools.hxx"
 //.........................................................................
 namespace dbaui
@@ -120,11 +87,11 @@ namespace dbaui
         ,m_sMySQLEntry                  (ModuleRes(STR_MYSQLENTRY))
         ,m_eOriginalCreationMode        (eCreateNew)
         ,m_pCollection                  (NULL)
-        ,m_eCurrentSelection            ( ::dbaccess::DST_UNKNOWN)
         ,m_eNotSupportedKnownType       ( ::dbaccess::DST_UNKNOWN)
         ,m_eLastMessage                 (smNone)
         ,m_bDisplayingInvalid           (sal_False)
         ,m_bUserGrabFocus               (sal_True)
+        ,m_bInitTypeList                (true)
     {
         // fill the listbox with the UI descriptions for the possible types
         // and remember the respective DSN prefixes
@@ -159,10 +126,10 @@ namespace dbaui
     {
         struct DisplayedType
         {
-            ::dbaccess::DATASOURCE_TYPE eType;
+            ::rtl::OUString eType;
             String          sDisplayName;
 
-            DisplayedType( ::dbaccess::DATASOURCE_TYPE _eType, const String& _rDisplayName ) : eType( _eType ), sDisplayName( _rDisplayName ) { }
+            DisplayedType( const ::rtl::OUString& _eType, const String& _rDisplayName ) : eType( _eType ), sDisplayName( _rDisplayName ) { }
         };
         typedef ::std::vector< DisplayedType > DisplayedTypes;
 
@@ -178,69 +145,51 @@ namespace dbaui
     //-------------------------------------------------------------------------
     void OGeneralPage::initializeTypeList()
     {
-        m_pDatasourceType->Clear();
-
-        Reference< XDriverAccess > xDriverManager;
-
-        // get the driver manager, to ask it for all known URL prefixes
-        DBG_ASSERT(m_xORB.is(), "OGeneralPage::initializeTypeList: have no service factory!");
-        if (m_xORB.is())
+        if ( m_bInitTypeList )
         {
+            m_bInitTypeList = false;
+            m_pDatasourceType->Clear();
+
+            if ( m_pCollection )
             {
-                // if the connection pool (resp. driver manager) may be expensive to load if it is accessed the first time,
-                // so display a wait cursor
-                WaitObject aWaitCursor(GetParent());
-                xDriverManager = Reference< XDriverAccess >(m_xORB->createInstance(SERVICE_SDBC_CONNECTIONPOOL), UNO_QUERY);
-                if (!xDriverManager.is())
-                    xDriverManager = Reference< XDriverAccess >(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
-            }
-            if (!xDriverManager.is())
-                ShowServiceNotAvailableError(GetParent(), String(SERVICE_SDBC_DRIVERMANAGER), sal_True);
-        }
+                DisplayedTypes aDisplayedTypes;
 
-        if ( m_pCollection )
-        {
-            DisplayedTypes aDisplayedTypes;
-
-            for (   ::dbaccess::ODsnTypeCollection::TypeIterator aTypeLoop =  m_pCollection->begin();
-                    aTypeLoop != m_pCollection->end();
-                    ++aTypeLoop
-                )
-            {
-                ::dbaccess::DATASOURCE_TYPE eType = aTypeLoop.getType();
-
-                if ( xDriverManager.is() )
-                {   // we have a driver manager to check
-                    ::rtl::OUString sURLPrefix = m_pCollection->getDatasourcePrefix(eType);
-                    if (!xDriverManager->getDriverByURL(sURLPrefix).is())
-                        // we have no driver for this prefix
-                        // -> omit it
-                        continue;
-                }
-                String sDisplayName = aTypeLoop.getDisplayName();
-                if ( m_pDatasourceType->GetEntryPos( sDisplayName ) == LISTBOX_ENTRY_NOTFOUND )
+                ::dbaccess::ODsnTypeCollection::TypeIterator aEnd = m_pCollection->end();
+                for (   ::dbaccess::ODsnTypeCollection::TypeIterator aTypeLoop =  m_pCollection->begin();
+                        aTypeLoop != aEnd;
+                        ++aTypeLoop
+                    )
                 {
-                    if ( approveDataSourceType( eType, sDisplayName ) )
-                        aDisplayedTypes.push_back( DisplayedTypes::value_type( eType, sDisplayName ) );
+                    const ::rtl::OUString sURLPrefix = aTypeLoop.getURLPrefix();
+                    if ( sURLPrefix.getLength() )
+                    {
+                        String sDisplayName = aTypeLoop.getDisplayName();
+                        if (   m_pDatasourceType->GetEntryPos( sDisplayName ) == LISTBOX_ENTRY_NOTFOUND
+                            && approveDataSourceType( sURLPrefix, sDisplayName ) )
+                        {
+                            aDisplayedTypes.push_back( DisplayedTypes::value_type( sURLPrefix, sDisplayName ) );
+                        }
+                    }
                 }
-            }
-            ::std::sort( aDisplayedTypes.begin(), aDisplayedTypes.end(), DisplayedTypeLess() );
-            for (   DisplayedTypes::const_iterator loop = aDisplayedTypes.begin();
-                    loop != aDisplayedTypes.end();
-                    ++loop
-                )
-                insertDatasourceTypeEntryData( loop->eType, loop->sDisplayName );
+                ::std::sort( aDisplayedTypes.begin(), aDisplayedTypes.end(), DisplayedTypeLess() );
+                DisplayedTypes::const_iterator aDisplayEnd = aDisplayedTypes.end();
+                for (   DisplayedTypes::const_iterator loop = aDisplayedTypes.begin();
+                        loop != aDisplayEnd;
+                        ++loop
+                    )
+                    insertDatasourceTypeEntryData( loop->eType, loop->sDisplayName );
+            } // if ( m_pCollection )
         }
     }
 
 
 
     //-------------------------------------------------------------------------
-    void OGeneralPage::setParentTitle(::dbaccess::DATASOURCE_TYPE _eSelectedType)
+    void OGeneralPage::setParentTitle(const ::rtl::OUString& _sURLPrefix)
     {
         if (!m_DBWizardMode)
         {
-            String sName = m_pCollection->getTypeDisplayName(_eSelectedType);
+            const String sName = m_pCollection->getTypeDisplayName(_sURLPrefix);
             if ( m_pAdminDialog )
             {
                 LocalResourceAccess aStringResAccess( PAGE_GENERAL, RSC_TABPAGE );
@@ -272,10 +221,10 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    void OGeneralPage::switchMessage(const ::dbaccess::DATASOURCE_TYPE _eType)
+    void OGeneralPage::switchMessage(const ::rtl::OUString& _sURLPrefix)
     {
         SPECIAL_MESSAGE eMessage = smNone;
-        if ( _eType == m_eNotSupportedKnownType )
+        if ( !_sURLPrefix.getLength()/*_eType == m_eNotSupportedKnownType*/ )
         {
             eMessage = smUnsupportedType;
         }
@@ -299,12 +248,12 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    void OGeneralPage::onTypeSelected(const ::dbaccess::DATASOURCE_TYPE _eType)
+    void OGeneralPage::onTypeSelected(const ::rtl::OUString& _sURLPrefix)
     {
         // the the new URL text as indicated by the selection history
-        implSetCurrentType( _eType );
+        implSetCurrentType( _sURLPrefix );
 
-        switchMessage(_eType);
+        switchMessage(_sURLPrefix);
 
         if ( m_aTypeSelectHandler.IsSet() )
             m_aTypeSelectHandler.Call(this);
@@ -382,16 +331,16 @@ namespace dbaui
             sConnectURL = pUrlItem->GetValue();
         }
 
-        ::dbaccess::DATASOURCE_TYPE eOldSelection = m_eCurrentSelection;
+        ::rtl::OUString eOldSelection = m_eCurrentSelection;
         m_eNotSupportedKnownType =  ::dbaccess::DST_UNKNOWN;
-        implSetCurrentType(  ::dbaccess::DST_UNKNOWN );
+        implSetCurrentType(  ::rtl::OUString() );
 
         // compare the DSN prefix with the registered ones
         String sDisplayName;
 
         if (m_pCollection && bValid)
         {
-            implSetCurrentType( m_pCollection->getType(sConnectURL) );
+            implSetCurrentType( m_pCollection->getPrefix(sConnectURL) );
             sDisplayName = m_pCollection->getTypeDisplayName(m_eCurrentSelection);
         }
 
@@ -405,11 +354,11 @@ namespace dbaui
             insertDatasourceTypeEntryData(m_eCurrentSelection, sDisplayName);
             // remember this type so we can show the special message again if the user selects this
             // type again (without changing the data source)
-            m_eNotSupportedKnownType = m_eCurrentSelection;
+            m_eNotSupportedKnownType = m_pCollection->determineType(m_eCurrentSelection);
         }
 
         if (m_aRB_CreateDatabase.IsChecked() && m_DBWizardMode)
-            sDisplayName = m_pCollection->getTypeDisplayName( ::dbaccess::DST_JDBC);
+            sDisplayName = m_pCollection->getTypeDisplayName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jdbc:")));
         m_pDatasourceType->SelectEntry(sDisplayName);
 
         // notify our listener that our type selection has changed (if so)
@@ -432,8 +381,9 @@ namespace dbaui
     // representative for all MySQl databases)
     // Also, embedded databases (embedded HSQL, at the moment), are not to appear in the list of
     // databases to connect to.
-    bool OGeneralPage::approveDataSourceType( ::dbaccess::DATASOURCE_TYPE eType, String& _inout_rDisplayName )
+    bool OGeneralPage::approveDataSourceType( const ::rtl::OUString& _sURLPrefix, String& _inout_rDisplayName )
     {
+        const ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(_sURLPrefix);
         if ( m_DBWizardMode && ( eType ==  ::dbaccess::DST_MYSQL_JDBC ) )
             _inout_rDisplayName = m_sMySQLEntry;
 
@@ -451,11 +401,13 @@ namespace dbaui
 
 
     // -----------------------------------------------------------------------
-    void OGeneralPage::insertDatasourceTypeEntryData(::dbaccess::DATASOURCE_TYPE _eType, String sDisplayName)
+    void OGeneralPage::insertDatasourceTypeEntryData(const ::rtl::OUString& _sType, String sDisplayName)
     {
         // insert a (temporary) entry
         sal_uInt16 nPos = m_pDatasourceType->InsertEntry(sDisplayName);
-        m_pDatasourceType->SetEntryData(nPos, reinterpret_cast<void*>(_eType));
+        if ( nPos >= m_aURLPrefixes.size() )
+            m_aURLPrefixes.resize(nPos+1);
+        m_aURLPrefixes[nPos] = _sType;
     }
 
     // -----------------------------------------------------------------------
@@ -480,7 +432,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    void OGeneralPage::implSetCurrentType( const ::dbaccess::DATASOURCE_TYPE _eType )
+    void OGeneralPage::implSetCurrentType( const ::rtl::OUString& _eType )
     {
         if ( _eType == m_eCurrentSelection )
             return;
@@ -492,7 +444,7 @@ namespace dbaui
     void OGeneralPage::Reset(const SfxItemSet& _rCoreAttrs)
     {
         // reset all locale data
-        implSetCurrentType(  ::dbaccess::DST_UNKNOWN );
+        implSetCurrentType(  ::rtl::OUString() );
             // this ensures that our type selection link will be called, even if the new is is the same as the
             // current one
         OGenericAdministrationPage::Reset(_rCoreAttrs);
@@ -508,7 +460,7 @@ namespace dbaui
         {
             if ( m_aRB_CreateDatabase.IsChecked() )
             {
-                _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix( ::dbaccess::DST_DBASE)));
+                _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:dbase:"))));
                 bChangedSomething = sal_True;
                 bCommitTypeSelection = false;
             }
@@ -525,24 +477,24 @@ namespace dbaui
         if ( bCommitTypeSelection )
         {
             USHORT nEntry = m_pDatasourceType->GetSelectEntryPos();
-            ::dbaccess::DATASOURCE_TYPE eSelectedType = static_cast< ::dbaccess::DATASOURCE_TYPE>(reinterpret_cast<sal_IntPtr>(m_pDatasourceType->GetEntryData(nEntry)));
+            ::rtl::OUString sURLPrefix = m_aURLPrefixes[nEntry];
             if (m_DBWizardMode)
             {
                 if  (  ( m_pDatasourceType->GetSavedValue() != nEntry )
                     || ( GetDatabaseCreationMode() != m_eOriginalCreationMode )
                     )
                 {
-                    _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix(eSelectedType)));
+                    _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL,sURLPrefix ));
                     bChangedSomething = sal_True;
                 }
                 else
-                    implSetCurrentType(eSelectedType);
+                    implSetCurrentType(sURLPrefix);
             }
             else
             {
                 if ( m_pDatasourceType->GetSavedValue() != nEntry)
                 {
-                    _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getDatasourcePrefix(eSelectedType)));
+                    _rCoreAttrs.Put(SfxStringItem(DSID_CONNECTURL, sURLPrefix));
                     bChangedSomething = sal_True;
                 }
             }
@@ -555,11 +507,11 @@ namespace dbaui
     {
         // get the type from the entry data
         sal_Int16 nSelected = _pBox->GetSelectEntryPos();
-        ::dbaccess::DATASOURCE_TYPE eSelectedType = static_cast< ::dbaccess::DATASOURCE_TYPE>(reinterpret_cast<sal_IntPtr>(_pBox->GetEntryData(nSelected)));
+        const ::rtl::OUString sURLPrefix = m_aURLPrefixes[nSelected];
 
-        setParentTitle(eSelectedType);
+        setParentTitle(sURLPrefix);
         // let the impl method do all the stuff
-        onTypeSelected(eSelectedType);
+        onTypeSelected(sURLPrefix);
         // tell the listener we were modified
         callModifiedHdl();
         // outta here

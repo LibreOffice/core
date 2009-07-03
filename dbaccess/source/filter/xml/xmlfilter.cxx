@@ -115,20 +115,28 @@
 #ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
 #endif
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
-#ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
-#endif
+#include <svtools/moduleoptions.hxx>
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
 #include <tools/diagnose_ex.h>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/mimeconfighelper.hxx>
+#include <comphelper/documentconstants.hxx>
+#include <comphelper/uno3.hxx>
+#include <osl/thread.hxx>
+#include <connectivity/CommonTools.hxx>
+#include <connectivity/DriversConfig.hxx>
+#include "dsntypes.hxx"
 
 using namespace ::com::sun::star;
 
@@ -139,6 +147,138 @@ extern "C" void SAL_CALL createRegistryInfo_ODBFilter( )
 //--------------------------------------------------------------------------
 namespace dbaxml
 {
+    namespace
+    {
+        class FastLoader : public ::osl::Thread
+        {
+        public:
+            typedef enum { E_JAVA, E_CALC } StartType;
+            FastLoader(uno::Reference< lang::XMultiServiceFactory > const & _xFactory,StartType _eType)
+                :m_xFactory(_xFactory)
+                ,m_eWhat(_eType)
+            {}
+
+        protected:
+            virtual ~FastLoader(){}
+
+            /// Working method which should be overridden.
+            virtual void SAL_CALL run();
+            virtual void SAL_CALL onTerminated();
+        private:
+            uno::Reference< lang::XMultiServiceFactory > m_xFactory;
+            StartType m_eWhat;
+        };
+
+        void SAL_CALL FastLoader::run()
+        {
+            if ( m_eWhat == E_JAVA )
+            {
+                static bool s_bFirstTime = true;
+                if ( s_bFirstTime )
+                {
+                    s_bFirstTime = false;
+                    try
+                    {
+                        ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM(m_xFactory);
+                    }
+                    catch(uno::Exception& ex)
+                    {
+                        (void)ex;
+                        OSL_ASSERT(0);
+                    }
+                } // if ( s_bFirstTime )
+            } // if ( m_eWhat == E_JAVA )
+            else if ( m_eWhat == E_CALC )
+            {
+                static bool s_bFirstTime = true;
+                if ( s_bFirstTime )
+                {
+                    s_bFirstTime = false;
+                    try
+                    {
+                        uno::Reference<frame::XComponentLoader> xFrameLoad( m_xFactory->createInstance(
+                                                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")))
+                                                                    ,uno::UNO_QUERY);
+                        const ::rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("_blank"));
+                        sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
+                        uno::Reference< frame::XFrame> xFrame = uno::Reference< frame::XFrame>(xFrameLoad,uno::UNO_QUERY_THROW)->findFrame(sTarget,nFrameSearchFlag);
+                        xFrameLoad.set( xFrame,uno::UNO_QUERY);
+
+                        if ( xFrameLoad.is() )
+                        {
+                            uno::Sequence < beans::PropertyValue > aArgs( 3);
+                            sal_Int32 nLen = 0;
+                            aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
+                            aArgs[nLen++].Value <<= sal_False;
+
+                            aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+                            aArgs[nLen++].Value <<= sal_True;
+
+                            aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
+                            aArgs[nLen++].Value <<= sal_True;
+
+                            ::comphelper::MimeConfigurationHelper aHelper(m_xFactory);
+                            SvtModuleOptions aModuleOptions;
+                            uno::Reference< frame::XModel > xModel(xFrameLoad->loadComponentFromURL(
+                                aModuleOptions.GetFactoryEmptyDocumentURL( aModuleOptions.ClassifyFactoryByServiceName( aHelper.GetDocServiceNameFromMediaType(MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET) )),
+                                ::rtl::OUString(), // empty frame name
+                                0,
+                                aArgs
+                                ),uno::UNO_QUERY);
+                            ::comphelper::disposeComponent(xModel);
+                        }
+                    }
+                    catch(uno::Exception& ex)
+                    {
+                        (void)ex;
+                        OSL_ASSERT(0);
+                    }
+                }
+            }
+        }
+        void SAL_CALL FastLoader::onTerminated()
+        {
+            delete this;
+        }
+
+        class DatasourceURLListener : public ::cppu::WeakImplHelper1< beans::XPropertyChangeListener >
+        {
+            uno::Reference< lang::XMultiServiceFactory > m_xFactory;
+            ::dbaccess::ODsnTypeCollection m_aTypeCollection;
+            DatasourceURLListener(const DatasourceURLListener&);
+            void operator =(const DatasourceURLListener&);
+        protected:
+            virtual ~DatasourceURLListener(){}
+        public:
+            DatasourceURLListener(uno::Reference< lang::XMultiServiceFactory > const & _xFactory) : m_xFactory(_xFactory),m_aTypeCollection(_xFactory){}
+            // XPropertyChangeListener
+            virtual void SAL_CALL propertyChange( const beans::PropertyChangeEvent& _rEvent ) throw (uno::RuntimeException)
+            {
+                ::rtl::OUString sURL;
+                _rEvent.NewValue >>= sURL;
+                FastLoader* pCreatorThread = NULL;
+
+                if ( m_aTypeCollection.needsJVM(sURL) )
+                {
+                    pCreatorThread = new FastLoader(m_xFactory,FastLoader::E_JAVA);
+                } // if ( m_aTypeCollection.needsJVM(sURL) )
+                else if ( sURL.matchIgnoreAsciiCaseAsciiL("sdbc:calc:",10,0) )
+                {
+                    pCreatorThread = new FastLoader(m_xFactory,FastLoader::E_CALC);
+                }
+                if ( pCreatorThread )
+                {
+                    pCreatorThread->createSuspended();
+                    pCreatorThread->setPriority(osl_Thread_PriorityBelowNormal);
+                    pCreatorThread->resume();
+                }
+            }
+            // XEventListener
+            virtual void SAL_CALL disposing( const lang::EventObject& /*_rSource*/ ) throw (uno::RuntimeException)
+            {
+            }
+        };
+    }
     sal_Char __READONLY_DATA sXML_np__db[] = "_db";
     sal_Char __READONLY_DATA sXML_np___db[] = "__db";
 
@@ -391,10 +531,10 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         {
             uno::Reference<sdb::XOfficeDatabaseDocument> xOfficeDoc(GetModel(),UNO_QUERY_THROW);
             m_xDataSource.set(xOfficeDoc->getDataSource(),UNO_QUERY_THROW);
-            OSL_ENSURE(m_xDataSource.is(),"DataSource is NULL!");
+            uno::Reference<beans::XPropertyChangeListener> xListener = new DatasourceURLListener(getServiceFactory());
+            m_xDataSource->addPropertyChangeListener(PROPERTY_URL,xListener);
             uno::Reference< XNumberFormatsSupplier > xNum(m_xDataSource->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER),UNO_QUERY);
             SetNumberFormatsSupplier(xNum);
-
 
             uno::Reference<XComponent> xModel(GetModel(),UNO_QUERY);
             sal_Int32 nRet = ReadThroughComponent( xStorage
@@ -820,16 +960,30 @@ UniReference < XMLPropertySetMapper > ODBFilter::GetCellStylesPropertySetMapper(
 void ODBFilter::setPropertyInfo()
 {
     Reference<XPropertySet> xDataSource(getDataSource());
-    if ( !m_aInfoSequence.empty() && xDataSource.is() )
+    if ( xDataSource.is() )
     {
-        try
+        ::connectivity::DriversConfig aDriverConfig(getServiceFactory());
+        const ::rtl::OUString sURL = ::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_URL));
+        ::comphelper::NamedValueCollection aMetaData = aDriverConfig.getMetaData(sURL);
+        aMetaData.merge( aDriverConfig.getProperties(sURL),true ) ;
+        Sequence<PropertyValue> aInfo;
+        if ( !m_aInfoSequence.empty() )
         {
-            xDataSource->setPropertyValue(PROPERTY_INFO,makeAny(Sequence<PropertyValue>(&(*m_aInfoSequence.begin()),m_aInfoSequence.size())));
+            aInfo = Sequence<PropertyValue>(&(*m_aInfoSequence.begin()),m_aInfoSequence.size());
         }
-        catch(Exception)
+        aMetaData.merge(::comphelper::NamedValueCollection(aInfo),true);
+        aMetaData >>= aInfo;
+        if ( aInfo.getLength() )
         {
-            DBG_UNHANDLED_EXCEPTION();
-        }
+            try
+            {
+                xDataSource->setPropertyValue(PROPERTY_INFO,makeAny(aInfo));
+            }
+            catch(Exception)
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        } // if ( !m_aInfoSequence.empty() && xDataSource.is() )
     }
 }
 // -----------------------------------------------------------------------------

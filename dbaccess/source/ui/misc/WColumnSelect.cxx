@@ -144,8 +144,9 @@ void OWizColumnSelect::Reset()
     // insert the source columns in the left listbox
     const ODatabaseExport::TColumnVector* pSrcColumns = m_pParent->getSrcVector();
     ODatabaseExport::TColumnVector::const_iterator aIter = pSrcColumns->begin();
+    ODatabaseExport::TColumnVector::const_iterator aEnd = pSrcColumns->end();
 
-    for(;aIter != pSrcColumns->end();++aIter)
+    for(;aIter != aEnd;++aIter)
     {
         sal_uInt16 nPos = m_lbOrgColumnNames.InsertEntry((*aIter)->first);
         m_lbOrgColumnNames.SetEntryData(nPos,(*aIter)->second);

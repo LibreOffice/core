@@ -89,6 +89,27 @@ enum DATASOURCE_TYPE
     DST_UNKNOWN         /// unrecognized type
 };
 
+#define PAGE_DBSETUPWIZARD_INTRO                     0
+#define PAGE_DBSETUPWIZARD_DBASE                     1
+#define PAGE_DBSETUPWIZARD_TEXT                      2
+#define PAGE_DBSETUPWIZARD_MSACCESS                  3
+#define PAGE_DBSETUPWIZARD_LDAP                      4
+#define PAGE_DBSETUPWIZARD_ADABAS                    5
+#define PAGE_DBSETUPWIZARD_MYSQL_INTRO               6
+#define PAGE_DBSETUPWIZARD_MYSQL_JDBC                7
+#define PAGE_DBSETUPWIZARD_MYSQL_ODBC                8
+#define PAGE_DBSETUPWIZARD_ORACLE                    9
+#define PAGE_DBSETUPWIZARD_JDBC                      10
+#define PAGE_DBSETUPWIZARD_ADO                       11
+#define PAGE_DBSETUPWIZARD_ODBC                      12
+#define PAGE_DBSETUPWIZARD_SPREADSHEET               13
+#define PAGE_DBSETUPWIZARD_AUTHENTIFICATION          14
+#define PAGE_DBSETUPWIZARD_MOZILLA                   15
+#define PAGE_DBSETUPWIZARD_FINAL                     16
+#define PAGE_DBSETUPWIZARD_USERDEFINED               17
+#define PAGE_DBSETUPWIZARD_MYSQL_NATIVE              18
+
+
 //=========================================================================
 //= ODsnTypeCollection
 //=========================================================================
@@ -96,13 +117,10 @@ class OOO_DLLPUBLIC_DBA ODsnTypeCollection
 {
 protected:
     DECLARE_STL_VECTOR(String, StringVector);
-    DECLARE_STL_VECTOR(DATASOURCE_TYPE, TypeVector);
-    typedef ::std::map<DATASOURCE_TYPE,DATASOURCE_TYPE> TRelatedTypes;
 
     StringVector    m_aDsnTypesDisplayNames;    /// user readable names for the datasource types
     StringVector    m_aDsnPrefixes;             /// DSN prefixes which determine the type of a datasource
-    TypeVector      m_aDsnTypes;                /// types of datasources we know
-    StringVector    m_aUserExtensions;          /// extensions of user defined types
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
 #ifdef DBG_UTIL
     sal_Int32       m_nLivingIterators;         /// just for debugging reasons, counts the living iterators
@@ -112,68 +130,70 @@ public:
     class TypeIterator;
     friend class ODsnTypeCollection::TypeIterator;
 
-    ODsnTypeCollection();
+    ODsnTypeCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory);
     ~ODsnTypeCollection();
 
-    /// get the datasource type from a DSN string
-    DATASOURCE_TYPE getType(const String& _rDsn) const;
-
     /// get the datasource type display name from a DSN string
-    String getTypeDisplayName(DATASOURCE_TYPE _eType) const;
-
-    /// the the DSN prefix associated with a given type
-    String getDatasourcePrefix(DATASOURCE_TYPE _eType) const;
+    String getTypeDisplayName(const ::rtl::OUString& _sURL) const;
 
     /// returns the extension of the user defined type
-    String getTypeExtension(DATASOURCE_TYPE _eType) const;
+    String getTypeExtension(const ::rtl::OUString& _sURL) const;
 
     /// on a given string, cut the type prefix and return the result
-    String cutPrefix(const String& _rDsn) const;
+    String cutPrefix(const ::rtl::OUString& _sURL) const;
+
+    /// on a given string, return the type prefix
+    String getPrefix(const ::rtl::OUString& _sURL) const;
+
+    /// on a given string, return the Java Driver Class
+    String getJavaDriverClass(const ::rtl::OUString& _sURL) const;
 
     /// returns the media type of a file based database
-    String getMediaType(DATASOURCE_TYPE _eType) const;
+    String getMediaType(const ::rtl::OUString& _sURL) const;
 
     /// returns the dsn prefix for a given media type
-    static String getDatasourcePrefixFromMediaType(const String& _sMediaType,const String& _sExtension = String() );
+    String getDatasourcePrefixFromMediaType(const ::rtl::OUString& _sMediaType,const ::rtl::OUString& _sExtension = ::rtl::OUString() );
 
-    void extractHostNamePort(const String& _rDsn,String& _sDatabaseName,String& _rHostname,sal_Int32& _nPortNumber) const;
+    void extractHostNamePort(const ::rtl::OUString& _rDsn,String& _sDatabaseName,String& _rHostname,sal_Int32& _nPortNumber) const;
 
     /// check if the given data source allows creation of tables
-    sal_Bool supportsTableCreation(DATASOURCE_TYPE _eType);
+    sal_Bool supportsTableCreation(const ::rtl::OUString& _sURL) const;
 
     // check if a Browse button may be shown to insert connection url
-    sal_Bool supportsBrowsing(DATASOURCE_TYPE _eType);
+    sal_Bool supportsBrowsing(const ::rtl::OUString& _sURL) const;
 
     /// check if the given data source tyoe is based on the file system - i.e. the URL is a prefix plus a file URL
-    sal_Bool isFileSystemBased(DATASOURCE_TYPE _eType) const;
+    sal_Bool isFileSystemBased(const ::rtl::OUString& _sURL) const;
+
+    bool isConnectionUrlRequired(const ::rtl::OUString& _sURL) const;
 
     /// checks if the given data source type embeds its data into the database document
-    bool isEmbeddedDatabase( DATASOURCE_TYPE _eType ) const;
+    bool isEmbeddedDatabase( const ::rtl::OUString& _sURL ) const;
+
+    ::rtl::OUString getEmbeddedDatabase() const;
+
+    // returns true when the properties dialog can be shown, otherwise false.
+    bool isShowPropertiesEnabled( const ::rtl::OUString& _sURL ) const;
 
     /** returns default settings for newly created databases of the given type.
-
-        Currently implemented (and used) for DST_EMBEDDED_HSQLDB only
     */
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
-            getDefaultDBSettings( DATASOURCE_TYPE _eType ) const;
+            getDefaultDBSettings( const ::rtl::OUString& _sURL ) const;
 
     /// get access to the first element of the types collection
     TypeIterator    begin() const;
     /// get access to the (last + 1st) element of the types collection
     TypeIterator    end() const;
 
-    /** read all user defined driver types.
-        @param  _rxORB
-            The service factory
-    */
-    void initUserDriverTypes(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+    void fillPageIds(const ::rtl::OUString& _sURL,::std::vector<sal_Int16>& _rOutPathIds) const;
 
-protected:
-    /// return the connection type a DSN string represents
-    DATASOURCE_TYPE implDetermineType(const String& _rDsn) const;
+    DATASOURCE_TYPE determineType(const String& _rDsn) const;
 
-    /// return the index within the internal structures for the connection type given
-    sal_Int32 implDetermineTypeIndex(DATASOURCE_TYPE _eType) const;
+    bool needsJVM(const String& _rDsn) const;
+
+    sal_Int32 getIndexOf(const ::rtl::OUString& _sURL) const;
+    sal_Int32 size() const;
+    ::rtl::OUString getType(const ::rtl::OUString& _sURL) const;
 };
 
 //-------------------------------------------------------------------------
@@ -194,7 +214,7 @@ public:
     TypeIterator(const TypeIterator& _rSource);
     ~TypeIterator();
 
-    DATASOURCE_TYPE getType() const;
+    ::rtl::OUString getURLPrefix() const;
     String          getDisplayName() const;
 
     /// prefix increment

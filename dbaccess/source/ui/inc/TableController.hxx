@@ -60,7 +60,6 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
-#include "dsntypes.hxx"
 
 class FixedText;
 namespace dbaui
@@ -75,7 +74,6 @@ namespace dbaui
         ::std::vector< ::boost::shared_ptr<OTableRow> > m_vRowList;
         OTypeInfoMap                                    m_aTypeInfo;
         ::std::vector<OTypeInfoMap::iterator>           m_aTypeInfoIndex;
-        ::dbaccess::ODsnTypeCollection                  m_aTypeCollection;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable;
 

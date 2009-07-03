@@ -410,6 +410,7 @@ OApplicationController::OApplicationController(const Reference< XMultiServiceFac
     :OApplicationController_CBASE( _rxORB )
     ,m_aContextMenuInterceptors( getMutex() )
     ,m_pSubComponentManager( new SubComponentManager( *this, getSharedMutex() ) )
+    ,m_aTypeCollection(_rxORB)
     ,m_aTableCopyHelper(this)
     ,m_pClipbordNotifier(NULL)
     ,m_nAsyncDrop(0)
@@ -422,8 +423,6 @@ OApplicationController::OApplicationController(const Reference< XMultiServiceFac
     ,m_pSelectionNotifier( new SelectionNotifier( getMutex(), *this ) )
 {
     DBG_CTOR(OApplicationController,NULL);
-
-    m_aTypeCollection.initUserDriverTypes(_rxORB);
 }
 //------------------------------------------------------------------------------
 OApplicationController::~OApplicationController()
@@ -940,11 +939,8 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = getContainer()->getSelectionCount() > 0 && getContainer()->isALeafSelected();
                 break;
             case SID_DB_APP_DSUSERADMIN:
-            {
-                ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                aReturn.bEnabled = ( ::dbaccess::DST_EMBEDDED_HSQLDB != eType );
-            }
-            break;
+                aReturn.bEnabled = !m_aTypeCollection.isEmbeddedDatabase(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
+                break;
             case SID_DB_APP_DSRELDESIGN:
                 aReturn.bEnabled = sal_True;
                 break;
@@ -955,36 +951,13 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = getContainer()->getElementType() == E_TABLE && isConnected();
                 break;
             case SID_DB_APP_DSPROPS:
-                aReturn.bEnabled = m_xDataSource.is();
-                if ( aReturn.bEnabled )
-                {
-                    ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                    aReturn.bEnabled =  ::dbaccess::DST_EMBEDDED_HSQLDB != eType
-                                    &&  ::dbaccess::DST_MOZILLA != eType
-                                    &&  ::dbaccess::DST_EVOLUTION != eType
-                                    &&  ::dbaccess::DST_EVOLUTION_GROUPWISE != eType
-                                    &&  ::dbaccess::DST_EVOLUTION_LDAP != eType
-                                    &&  ::dbaccess::DST_KAB != eType
-                                    &&  ::dbaccess::DST_MACAB != eType
-                                    &&  ::dbaccess::DST_OUTLOOK != eType
-                                    &&  ::dbaccess::DST_OUTLOOKEXP != eType;
-                }
+                aReturn.bEnabled = m_xDataSource.is() && m_aTypeCollection.isShowPropertiesEnabled(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
                 break;
             case SID_DB_APP_DSCONNECTION_TYPE:
-                aReturn.bEnabled = !isDataSourceReadOnly() && m_xDataSource.is();
-                if ( aReturn.bEnabled )
-                {
-                    ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                    aReturn.bEnabled =  ::dbaccess::DST_EMBEDDED_HSQLDB != eType;
-                }
+                aReturn.bEnabled = !isDataSourceReadOnly() && m_xDataSource.is() && !m_aTypeCollection.isEmbeddedDatabase(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
                 break;
             case SID_DB_APP_DSADVANCED_SETTINGS:
-                aReturn.bEnabled = m_xDataSource.is();
-                if ( aReturn.bEnabled )
-                {
-                    ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType( ::comphelper::getString( m_xDataSource->getPropertyValue( PROPERTY_URL ) ) );
-                    aReturn.bEnabled = AdvancedSettingsDialog::doesHaveAnyAdvancedSettings( eType );
-                }
+                aReturn.bEnabled = m_xDataSource.is() && AdvancedSettingsDialog::doesHaveAnyAdvancedSettings( m_aTypeCollection.getType(::comphelper::getString( m_xDataSource->getPropertyValue( PROPERTY_URL ) )) );
                 break;
             case SID_DB_APP_CONVERTTOVIEW:
                 aReturn.bEnabled = !isDataSourceReadOnly();
@@ -1034,15 +1007,16 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = m_xDataSource.is();
                 if ( aReturn.bEnabled )
                 {
-                    ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
+                    ::rtl::OUString sURL;
+                    m_xDataSource->getPropertyValue(PROPERTY_URL) >>= sURL;
                     ::rtl::OUString sDSTypeName;
-                    if ( m_aTypeCollection.isEmbeddedDatabase( eType ) )
+                    if ( m_aTypeCollection.isEmbeddedDatabase( sURL ) )
                     {
                         sDSTypeName = String( ModuleRes( RID_STR_EMBEDDED_DATABASE ) );
                     }
                     else
                     {
-                        sDSTypeName = m_aTypeCollection.getTypeDisplayName(eType);
+                        sDSTypeName = m_aTypeCollection.getTypeDisplayName(sURL);
                     }
                     aReturn.sTitle = sDSTypeName;
                 }
@@ -1053,8 +1027,6 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 {
                     ::rtl::OUString sURL;
                     m_xDataSource->getPropertyValue(PROPERTY_URL) >>= sURL;
-                    ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType( sURL );
-
                     String sDatabaseName;
                     String sHostName;
                     sal_Int32 nPortNumber( -1 );
@@ -1063,7 +1035,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
 
                     if ( !sDatabaseName.Len() )
                         sDatabaseName = m_aTypeCollection.cutPrefix( sURL );
-                    if ( m_aTypeCollection.isFileSystemBased(eType) )
+                    if ( m_aTypeCollection.isFileSystemBased(sURL) )
                     {
                         sDatabaseName = SvtPathOptions().SubstituteVariable( sDatabaseName );
                         if ( sDatabaseName.Len() )
@@ -1075,7 +1047,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                     }
 
                     if ( sDatabaseName.Len() == 0 )
-                        sDatabaseName = m_aTypeCollection.getTypeDisplayName( eType );
+                        sDatabaseName = m_aTypeCollection.getTypeDisplayName( sURL );
 
                     aReturn.sTitle = sDatabaseName;
                 }

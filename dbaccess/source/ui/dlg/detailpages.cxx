@@ -528,7 +528,7 @@ namespace dbaui
     //========================================================================
     //= OMySQLJDBCDetailsPage
     //========================================================================
-    OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage( Window* pParent,USHORT _nResId, const SfxItemSet& _rCoreAttrs ,USHORT _nPortId, const char* _pDriverName)
+    OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage( Window* pParent,USHORT _nResId, const SfxItemSet& _rCoreAttrs ,USHORT _nPortId)
         :OCommonBehaviourTabPage(pParent, _nResId, _rCoreAttrs, CBTP_USE_CHARSET ,false)
         ,m_aFL_1            (this, ModuleRes( FL_SEPARATOR1) )
         ,m_aFTHostname      (this, ModuleRes(FT_HOSTNAME))
@@ -543,12 +543,18 @@ namespace dbaui
         ,m_nPortId(_nPortId)
         ,m_bUseClass(true)
     {
-        if ( _pDriverName != NULL )
+        SFX_ITEMSET_GET(_rCoreAttrs, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
+        SFX_ITEMSET_GET(_rCoreAttrs, pTypesItem, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
+        ::dbaccess::ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
+        if (pTypeCollection && pUrlItem && pUrlItem->GetValue().Len() )
+        {
+            m_sDefaultJdbcDriverName = pTypeCollection->getJavaDriverClass(pUrlItem->GetValue());
+        }
+        if ( m_sDefaultJdbcDriverName.Len() )
         {
             m_aEDDriverClass.SetModifyHdl(getControlModifiedLink());
             m_aEDDriverClass.SetModifyHdl(LINK(this, OGeneralSpecialJDBCDetailsPage, OnEditModified));
             m_aTestJavaDriver.SetClickHdl(LINK(this,OGeneralSpecialJDBCDetailsPage,OnTestJavaClickHdl));
-            m_sDefaultJdbcDriverName = String::CreateFromAscii(_pDriverName);
         }
         else
         {
@@ -814,7 +820,7 @@ namespace dbaui
     // -----------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateMySQLJDBC( Window* pParent, const SfxItemSet& _rAttrSet )
     {
-        return ( new OGeneralSpecialJDBCDetailsPage( pParent,PAGE_MYSQL_JDBC, _rAttrSet,DSID_MYSQL_PORTNUMBER ,"com.mysql.jdbc.Driver") );
+        return ( new OGeneralSpecialJDBCDetailsPage( pParent,PAGE_MYSQL_JDBC, _rAttrSet,DSID_MYSQL_PORTNUMBER ) );
     }
     // -----------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateMySQLNATIVE( Window* pParent, const SfxItemSet& _rAttrSet )
@@ -825,7 +831,7 @@ namespace dbaui
     // -----------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateOracleJDBC( Window* pParent, const SfxItemSet& _rAttrSet )
     {
-        return ( new OGeneralSpecialJDBCDetailsPage( pParent,PAGE_ORACLE_JDBC, _rAttrSet,DSID_ORACLE_PORTNUMBER,"oracle.jdbc.driver.OracleDriver" ) );
+        return ( new OGeneralSpecialJDBCDetailsPage( pParent,PAGE_ORACLE_JDBC, _rAttrSet,DSID_ORACLE_PORTNUMBER) );
     }
 
 
@@ -1181,7 +1187,7 @@ namespace dbaui
     //------------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateSpecialSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet )
     {
-        ::dbaccess::DATASOURCE_TYPE eType = ODbDataSourceAdministrationHelper::getDatasourceType( _rAttrSet );
+        ::rtl::OUString eType = ODbDataSourceAdministrationHelper::getDatasourceType( _rAttrSet );
         DataSourceMetaData aMetaData( eType );
         return new SpecialSettingsPage( _pParent, _rAttrSet, aMetaData );
     }

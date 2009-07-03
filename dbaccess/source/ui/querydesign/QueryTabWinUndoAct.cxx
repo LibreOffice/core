@@ -96,7 +96,8 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
 
         // und natuerlich auch die entsprechenden Connections
         ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
-        for(;aIter != m_vTableConnection.end();++aIter)
+        ::std::vector<OTableConnection*>::iterator aEnd = m_vTableConnection.end();
+        for(;aIter != aEnd;++aIter)
         {
             m_pOwner->DeselectConn(*aIter);
             delete (*aIter);

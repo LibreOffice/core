@@ -657,7 +657,8 @@ void ORowSet::freeResources( bool _bComplete )
     MutexGuard aGuard(m_aMutex);
 
     // free all clones
-    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); m_aClones.end() != i; i++)
+    connectivity::OWeakRefArray::iterator aEnd = m_aClones.end();
+    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); aEnd != i; i++)
     {
         Reference< XComponent > xComp(i->get(), UNO_QUERY);
         if (xComp.is())
@@ -2152,7 +2153,8 @@ void ORowSet::notifyRowSetAndClonesRowDelete( const Any& _rBookmark )
     // notify ourself
     onDeleteRow( _rBookmark );
     // notify the clones
-    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); m_aClones.end() != i; i++)
+    connectivity::OWeakRefArray::iterator aEnd = m_aClones.end();
+    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); aEnd != i; i++)
     {
         Reference< XUnoTunnel > xTunnel(i->get(),UNO_QUERY);
         if(xTunnel.is())
@@ -2169,7 +2171,8 @@ void ORowSet::notifyRowSetAndClonesRowDeleted( const Any& _rBookmark, sal_Int32 
     // notify ourself
     onDeletedRow( _rBookmark, _nPos );
     // notify the clones
-    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); m_aClones.end() != i; i++)
+    connectivity::OWeakRefArray::iterator aEnd = m_aClones.end();
+    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); aEnd != i; i++)
     {
         Reference< XUnoTunnel > xTunnel(i->get(),UNO_QUERY);
         if(xTunnel.is())
@@ -2822,7 +2825,6 @@ ORowSetClone::ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORo
             rParent.m_pColumns->getByName(*pIter) >>= xColumn;
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
                 aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
-
             ORowSetColumn* pColumn = new ORowSetColumn( rParent.getMetaData(),
                                                                 this,
                                                                 i,

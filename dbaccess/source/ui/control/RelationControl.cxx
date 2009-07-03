@@ -538,7 +538,8 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
 
         // die Namen aller TabWins einsammeln
         OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->begin();
-        for(;aIter != m_pTableMap->end();++aIter)
+        OJoinTableView::OTableWindowMap::const_iterator aEnd = m_pTableMap->end();
+        for(;aIter != aEnd;++aIter)
         {
             m_lmbLeftTable.InsertEntry(aIter->first);
             m_lmbRightTable.InsertEntry(aIter->first);

@@ -262,7 +262,8 @@ OSingleSelectQueryComposer::~OSingleSelectQueryComposer()
         delete *aColIter;
 
     ::std::vector<OPrivateTables*>::iterator aTabIter = m_aTablesCollection.begin();
-    for(;aTabIter != m_aTablesCollection.end();++aTabIter)
+    ::std::vector<OPrivateTables*>::iterator aTabEnd = m_aTablesCollection.end();
+    for(;aTabIter != aTabEnd;++aTabIter)
         delete *aTabIter;
 }
 // -------------------------------------------------------------------------
@@ -572,12 +573,12 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
         *pComposer, getKeyword( _ePart ) );
 
     // construct the complete statement
-    ::rtl::OUString aSql(m_aPureSelectSQL);
+    ::rtl::OUStringBuffer aSql(m_aPureSelectSQL);
     for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
-        aSql += aClauses[ eLoopParts ];
+        aSql.append(aClauses[ eLoopParts ]);
 
     // set the query
-    setQuery_Impl(aSql);
+    setQuery_Impl(aSql.makeStringAndClear());
     // parameters may also have changed
     clearParametersCollection();
 
@@ -590,10 +591,10 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
     aClauses[ _ePart ] = getComposedClause( ::rtl::OUString(), _rClause, *pComposer, getKeyword( _ePart ) );
     // and parse it, so that m_aAdditiveIterator is up to date
     for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
-        aSql += aClauses[ eLoopParts ];
+        aSql.append(aClauses[ eLoopParts ]);
     try
     {
-        parseAndCheck_throwError( m_aSqlParser, aSql, m_aAdditiveIterator, *this );
+        parseAndCheck_throwError( m_aSqlParser, aSql.makeStringAndClear(), m_aAdditiveIterator, *this );
     }
     catch( const Exception& e )
     {
@@ -642,7 +643,8 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getTables(  ) thro
     {
         const OSQLTables& aTables = m_aSqlIterator.getTables();
         ::std::vector< ::rtl::OUString> aNames;
-        for(OSQLTables::const_iterator aIter = aTables.begin(); aIter != aTables.end();++aIter)
+        OSQLTables::const_iterator aEnd = aTables.end();
+        for(OSQLTables::const_iterator aIter = aTables.begin(); aIter != aEnd;++aIter)
             aNames.push_back(aIter->first);
 
         m_pTables = new OPrivateTables(aTables,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
@@ -1232,7 +1234,8 @@ Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getParameters(  )
     {
         ::vos::ORef< OSQLColumns> aCols = m_aSqlIterator.getParameters();
         ::std::vector< ::rtl::OUString> aNames;
-        for(OSQLColumns::Vector::const_iterator aIter = aCols->get().begin(); aIter != aCols->get().end();++aIter)
+        OSQLColumns::Vector::const_iterator aEnd = aCols->get().end();
+        for(OSQLColumns::Vector::const_iterator aIter = aCols->get().begin(); aIter != aEnd;++aIter)
             aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
         m_aCurrentColumns[ParameterColumns] = new OPrivateColumns(aCols,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,sal_True);
     }
@@ -1285,7 +1288,8 @@ Reference< XIndexAccess > OSingleSelectQueryComposer::setCurrentColumns( EColumn
     if ( !m_aCurrentColumns[_eType] )
     {
         ::std::vector< ::rtl::OUString> aNames;
-        for(OSQLColumns::Vector::const_iterator aIter = _rCols->get().begin(); aIter != _rCols->get().end();++aIter)
+        OSQLColumns::Vector::const_iterator aEnd = _rCols->get().end();
+        for(OSQLColumns::Vector::const_iterator aIter = _rCols->get().begin(); aIter != aEnd;++aIter)
             aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
         m_aCurrentColumns[_eType] = new OPrivateColumns(_rCols,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,sal_True);
     }
@@ -1340,75 +1344,75 @@ namespace
 {
     ::rtl::OUString lcl_getCondition(const Sequence< Sequence< PropertyValue > >& filter )
     {
-        ::rtl::OUString sRet;
+        ::rtl::OUStringBuffer sRet;
         const Sequence< PropertyValue >* pOrIter = filter.getConstArray();
         const Sequence< PropertyValue >* pOrEnd = pOrIter + filter.getLength();
         while ( pOrIter != pOrEnd )
         {
             if ( pOrIter->getLength() )
             {
-                sRet += L_BRACKET;
+                sRet.append(L_BRACKET);
                 const PropertyValue* pAndIter = pOrIter->getConstArray();
                 const PropertyValue* pAndEnd = pAndIter + pOrIter->getLength();
                 while ( pAndIter != pAndEnd )
                 {
-                    sRet += pAndIter->Name;
+                    sRet.append(pAndIter->Name);
                     ::rtl::OUString sValue;
                     pAndIter->Value >>= sValue;
                     switch( pAndIter->Handle )
                     {
                         case SQLFilterOperator::EQUAL:
-                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" = "));
-                            sRet += sValue;
+                            sRet.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" = ")));
+                            sRet.append(sValue);
                             break;
                         case SQLFilterOperator::NOT_EQUAL:
-                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" <> "));
-                            sRet += sValue;
+                            sRet.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" <> ")));
+                            sRet.append(sValue);
                             break;
                         case SQLFilterOperator::LESS:
-                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" < "));
-                            sRet += sValue;
+                            sRet.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" < ")));
+                            sRet.append(sValue);
                             break;
                         case SQLFilterOperator::GREATER:
-                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" > "));
-                            sRet += sValue;
+                            sRet.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" > ")));
+                            sRet.append(sValue);
                             break;
                         case SQLFilterOperator::LESS_EQUAL:
-                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" <= "));
-                            sRet += sValue;
+                            sRet.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" <= ")));
+                            sRet.append(sValue);
                             break;
                         case SQLFilterOperator::GREATER_EQUAL:
-                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" >= "));
-                            sRet += sValue;
+                            sRet.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" >= ")));
+                            sRet.append(sValue);
                             break;
                         case SQLFilterOperator::LIKE:
-                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" LIKE "));
-                            sRet += sValue;
+                            sRet.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" LIKE ")));
+                            sRet.append(sValue);
                             break;
                         case SQLFilterOperator::NOT_LIKE:
-                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" NOT LIKE "));
-                            sRet += sValue;
+                            sRet.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" NOT LIKE ")));
+                            sRet.append(sValue);
                             break;
                         case SQLFilterOperator::SQLNULL:
-                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IS NULL")) ;
+                            sRet.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IS NULL")) );
                             break;
                         case SQLFilterOperator::NOT_SQLNULL:
-                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IS NOT NULL")) ;
+                            sRet.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IS NOT NULL")) );
                             break;
                         default:
                             throw IllegalArgumentException();
                     }
                     ++pAndIter;
                     if ( pAndIter != pAndEnd )
-                        sRet += STR_AND;
+                        sRet.append(STR_AND);
                 }
-                sRet += R_BRACKET;
+                sRet.append(R_BRACKET);
             }
             ++pOrIter;
             if ( pOrIter != pOrEnd && sRet.getLength() )
-                sRet += STR_OR;
+                sRet.append(STR_OR);
         }
-        return sRet;
+        return sRet.makeStringAndClear();
     }
 }
 // -----------------------------------------------------------------------------

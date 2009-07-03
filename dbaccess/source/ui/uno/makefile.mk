@@ -62,7 +62,6 @@ SLOFILES=	\
         $(SLO)$/unoDirectSql.obj	\
         $(SLO)$/DBTypeWizDlg.obj	\
         $(SLO)$/DBTypeWizDlgSetup.obj	\
-        $(SLO)$/AdabasSettingsDlg.obj	\
         $(SLO)$/UserSettingsDlg.obj \
         $(SLO)$/ColumnModel.obj	\
         $(SLO)$/ColumnControl.obj	\

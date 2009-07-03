@@ -74,7 +74,6 @@ extern "C" void SAL_CALL createRegistryInfo_OAdvancedSettingsDialog();
 extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialog();
 extern "C" void SAL_CALL createRegistryInfo_OUserSettingsDialog();
 extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialogSetup();
-extern "C" void SAL_CALL createRegistryInfo_OAdabasSettingsDialog();
 extern "C" void SAL_CALL createRegistryInfo_OColumnControlModel();
 extern "C" void SAL_CALL createRegistryInfo_OColumnControl();
 extern "C" void SAL_CALL createRegistryInfo_OToolboxController();
@@ -107,7 +106,6 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
         createRegistryInfo_ODBTypeWizDialog();
         createRegistryInfo_ODBTypeWizDialogSetup();
         createRegistryInfo_OUserSettingsDialog();
-        createRegistryInfo_OAdabasSettingsDialog();
         createRegistryInfo_OColumnControlModel();
         createRegistryInfo_OColumnControl();
         createRegistryInfo_OToolboxController();

@@ -1198,6 +1198,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
         ++nRowCount;
         sal_Bool bInsertAutoIncrement = sal_True;
         ODatabaseExport::TPositions::const_iterator aPosIter = aColumnMapping.begin();
+        ODatabaseExport::TPositions::const_iterator aPosEnd = aColumnMapping.end();
 
         aCopyEvent.Error.clear();
         try
@@ -1209,7 +1210,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
             sal_Int32 nSourceColumn( 1 );
             ValueTransfer aTransfer( nSourceColumn, nDestColumn, aSourceColTypes, xRow, xStatementParams );
 
-            for ( ; aPosIter != aColumnMapping.end(); ++aPosIter )
+            for ( ; aPosIter != aPosEnd; ++aPosIter )
             {
                 nDestColumn = aPosIter->first;
                 if ( nDestColumn == COLUMN_POSITION_NOT_FOUND )

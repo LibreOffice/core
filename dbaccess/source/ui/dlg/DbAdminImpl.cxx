@@ -61,6 +61,7 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
+#include <connectivity/DriversConfig.hxx>
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
@@ -472,21 +473,14 @@ Reference< XPropertySet > ODbDataSourceAdministrationHelper::getCurrentDataSourc
     return m_xDatasource;
 }
 //-------------------------------------------------------------------------
-::dbaccess::DATASOURCE_TYPE ODbDataSourceAdministrationHelper::getDatasourceType( const SfxItemSet& _rSet )
+::rtl::OUString ODbDataSourceAdministrationHelper::getDatasourceType( const SfxItemSet& _rSet )
 {
     SFX_ITEMSET_GET( _rSet, pConnectURL, SfxStringItem, DSID_CONNECTURL, sal_True );
-    SFX_ITEMSET_GET( _rSet, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True );
-    DBG_ASSERT( pConnectURL && pTypeCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!" );
-    if ( !pConnectURL || !pTypeCollection )
-        return  ::dbaccess::DST_UNKNOWN;
-
-    String sConnectURL = pConnectURL->GetValue();
+    DBG_ASSERT( pConnectURL , "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!" );
+    SFX_ITEMSET_GET(_rSet, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
+    DBG_ASSERT(pTypeCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!");
     ::dbaccess::ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
-    DBG_ASSERT( pCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid type collection!" );
-    if ( !pCollection )
-        return  ::dbaccess::DST_UNKNOWN;
-
-    return pCollection->getType( sConnectURL );
+    return pCollection->getType(pConnectURL->GetValue());
 }
 
 //-------------------------------------------------------------------------
@@ -499,7 +493,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
 {
     String sNewUrl;
 
-    ::dbaccess::DATASOURCE_TYPE eType = getDatasourceType(*m_pItemSetHelper->getOutputSet());
+    ::rtl::OUString eType = getDatasourceType(*m_pItemSetHelper->getOutputSet());
 
     SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
     SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
@@ -509,9 +503,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
     ::dbaccess::ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
     DBG_ASSERT(pCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid type collection!");
 
-
-
-    switch( eType )
+    switch( pCollection->determineType(eType) )
     {
         case  ::dbaccess::DST_DBASE:
         case  ::dbaccess::DST_FLAT:
@@ -599,7 +591,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
     }
     if ( sNewUrl.Len() )
     {
-        String sUrl = pCollection->getDatasourcePrefix(eType);
+        String sUrl = pCollection->getPrefix(eType);
         sUrl += sNewUrl;
         sNewUrl = sUrl;
     }
@@ -672,18 +664,21 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
         }
 
         // go through all known translations and check if we have such a setting
-        PropertyValue aSearchFor;
-        for (   ConstMapInt2StringIterator aIndirect = m_aIndirectPropTranslator.begin();
-                aIndirect != m_aIndirectPropTranslator.end();
-                ++aIndirect
-            )
+        if ( !aInfos.empty() )
         {
-            aSearchFor.Name = aIndirect->second;
-            ConstPropertyValueSetIterator aInfoPos = aInfos.find(aSearchFor);
-            if (aInfos.end() != aInfoPos)
-                // the property is contained in the info sequence
-                // -> transfer it into an item
-                implTranslateProperty(_rDest, aIndirect->first, aInfoPos->Value);
+            PropertyValue aSearchFor;
+            ConstMapInt2StringIterator aEnd = m_aIndirectPropTranslator.end();
+            for (   ConstMapInt2StringIterator aIndirect = m_aIndirectPropTranslator.begin();
+                    aIndirect != aEnd;
+                    ++aIndirect)
+            {
+                aSearchFor.Name = aIndirect->second;
+                ConstPropertyValueSetIterator aInfoPos = aInfos.find(aSearchFor);
+                if (aInfos.end() != aInfoPos)
+                    // the property is contained in the info sequence
+                    // -> transfer it into an item
+                    implTranslateProperty(_rDest, aIndirect->first, aInfoPos->Value);
+            }
         }
 
         convertUrl(_rDest);
@@ -770,9 +765,9 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     // us)
 
     // first determine which of all the items are relevant for the data source (depends on the connection url)
-    ::dbaccess::DATASOURCE_TYPE eType = getDatasourceType(_rSource);
+    ::rtl::OUString eType = getDatasourceType(_rSource);
     ::std::vector< sal_Int32> aDetailIds;
-    ODriversSettings::getSupportedIndirectSettings(eType,aDetailIds);
+    ODriversSettings::getSupportedIndirectSettings(eType,getORB(),aDetailIds);
 
     // collect the translated property values for the relevant items
     PropertyValueSet aRelevantSettings;
@@ -874,22 +869,13 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
 #endif
     }
 
+    ::connectivity::DriversConfig aDriverConfig(getORB());
+    const ::comphelper::NamedValueCollection& aProperties = aDriverConfig.getProperties(eType);
+    Sequence< Any> aTypeSettings;
+    aTypeSettings = aProperties.getOrDefault("TypeInfoSettings",aTypeSettings);
     // here we have a special entry for types from oracle
-    if ( eType ==  ::dbaccess::DST_ORACLE_JDBC )
+    if ( aTypeSettings.getLength() )
     {
-        Sequence< Any > aTypeSettings;
-        static const ::rtl::OUString s_sCondition(RTL_CONSTASCII_USTRINGPARAM("Column(2) = "));
-        static const ::rtl::OUString s_sValue(RTL_CONSTASCII_USTRINGPARAM("Column(6) = PRECISION"));
-        static const sal_Int32 pTypes[] = { -5, -4, -3, -2, -1, 1, 2, 12};
-        aTypeSettings.realloc((sizeof(pTypes)/sizeof(pTypes[0])) * 2);
-        Any* pCondIter = aTypeSettings.getArray();
-        const Any* pCondEnd  = pCondIter + aTypeSettings.getLength();
-        for(const sal_Int32* pType = pTypes;pCondIter != pCondEnd;++pCondIter,++pType)
-        {
-            *pCondIter <<= (s_sCondition + ::rtl::OUString::valueOf(*pType));
-            ++pCondIter;
-            *pCondIter <<= s_sValue;
-        }
         aRelevantSettings.insert(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeInfoSettings")), 0, makeAny(aTypeSettings), PropertyState_DIRECT_VALUE));
     }
 
@@ -1078,7 +1064,7 @@ String ODbDataSourceAdministrationHelper::getDocumentUrl(SfxItemSet& _rDest)
 // -----------------------------------------------------------------------------
 void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
 {
-    ::dbaccess::DATASOURCE_TYPE eType = getDatasourceType(_rDest);
+    ::rtl::OUString eType = getDatasourceType(_rDest);
 
     SFX_ITEMSET_GET(_rDest, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
     SFX_ITEMSET_GET(_rDest, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
@@ -1091,12 +1077,13 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
     USHORT nPortNumberId    = 0;
     sal_Int32 nPortNumber   = -1;
     String sNewHostName;
-    String sUrl = pCollection->cutPrefix(pUrlItem->GetValue());
+    //String sUrl = pCollection->cutPrefix(pUrlItem->GetValue());
     String sUrlPart;
 
     pCollection->extractHostNamePort(pUrlItem->GetValue(),sUrlPart,sNewHostName,nPortNumber);
+    const ::dbaccess::DATASOURCE_TYPE eTy = pCollection->determineType(eType);
 
-    switch( eType )
+    switch( eTy )
     {
         case  ::dbaccess::DST_MYSQL_NATIVE:
         case  ::dbaccess::DST_MYSQL_JDBC:
@@ -1114,13 +1101,13 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
 
     if ( sUrlPart.Len() )
     {
-        if ( eType == ::dbaccess::DST_MYSQL_NATIVE )
+        if ( eTy == ::dbaccess::DST_MYSQL_NATIVE )
         {
             _rDest.Put( SfxStringItem( DSID_DATABASENAME, sUrlPart ) );
         }
         else
         {
-            String sNewUrl = pCollection->getDatasourcePrefix(eType);
+            String sNewUrl = pCollection->getPrefix(eType);
             sNewUrl += sUrlPart;
             _rDest.Put( SfxStringItem( DSID_CONNECTURL, sNewUrl ) );
         }

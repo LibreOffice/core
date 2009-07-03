@@ -220,7 +220,7 @@ namespace dbaui
                                         , USHORT _nResId
                                         , const SfxItemSet& _rCoreAttrs
                                         , USHORT _nPortId
-                                        , const char* _pDriverName);
+                                        );
 
     protected:
 

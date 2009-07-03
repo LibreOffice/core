@@ -183,7 +183,7 @@ namespace dbaui
         return 0L;
     }
     // -----------------------------------------------------------------------
-    sal_Bool OGenericAdministrationPage::getSelectedDataSource(::dbaccess::DATASOURCE_TYPE _eType,::rtl::OUString& _sReturn,::rtl::OUString& _sCurr)
+    sal_Bool OGenericAdministrationPage::getSelectedDataSource(::rtl::OUString& _sReturn,::rtl::OUString& _sCurr)
     {
         // collect all ODBC data source names
         StringBag aOdbcDatasources;
@@ -202,7 +202,7 @@ namespace dbaui
         {
             aEnumeration.getDatasourceNames(aOdbcDatasources);
             // excute the select dialog
-            ODatasourceSelectDialog aSelector(GetParent(), aOdbcDatasources, _eType);
+            ODatasourceSelectDialog aSelector(GetParent(), aOdbcDatasources, false);
             if (_sCurr.getLength())
                 aSelector.Select(_sCurr);
             if ( RET_OK == aSelector.Execute() )

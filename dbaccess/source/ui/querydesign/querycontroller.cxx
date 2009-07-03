@@ -1098,8 +1098,9 @@ void OQueryController::reconnect(sal_Bool _bUI)
 void OQueryController::saveViewSettings(Sequence<PropertyValue>& _rViewProps)
 {
     OTableFields::const_iterator aFieldIter = m_vTableFieldDesc.begin();
+    OTableFields::const_iterator aFieldEnd = m_vTableFieldDesc.end();
     sal_Int32 nCount = 0;
-    for(;aFieldIter != m_vTableFieldDesc.end();++aFieldIter)
+    for(;aFieldIter != aFieldEnd;++aFieldIter)
     {
         if(!(*aFieldIter)->IsEmpty())
             ++nCount;
@@ -1118,7 +1119,7 @@ void OQueryController::saveViewSettings(Sequence<PropertyValue>& _rViewProps)
         PropertyValue *pFieldsIter = aFields.getArray();
         // the fielddata
         aFieldIter = m_vTableFieldDesc.begin();
-        for(sal_Int32 i = 1;aFieldIter != m_vTableFieldDesc.end();++aFieldIter,++i)
+        for(sal_Int32 i = 1;aFieldIter !=aFieldEnd;++aFieldIter,++i)
         {
             if ( !(*aFieldIter)->IsEmpty() )
             {

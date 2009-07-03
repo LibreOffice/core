@@ -336,10 +336,11 @@ sal_Bool OCopyTable::checkAppendData()
         // #90027#
         const ODatabaseExport::TColumnVector* pDestColumns          = m_pParent->getDestVector();
         ODatabaseExport::TColumnVector::const_iterator aDestIter    = pDestColumns->begin();
+        ODatabaseExport::TColumnVector::const_iterator aDestEnd     = pDestColumns->end();
         const sal_uInt32 nDestSize = pDestColumns->size();
         sal_Bool bNotConvert;
         sal_uInt32 i = 0;
-        for(sal_Int32 nPos = 1;aDestIter != pDestColumns->end() && i < nDestSize && i < nSrcSize;++aDestIter,++nPos,++i)
+        for(sal_Int32 nPos = 1;aDestIter != aDestEnd && i < nDestSize && i < nSrcSize;++aDestIter,++nPos,++i)
         {
             bNotConvert = sal_True;
             m_pParent->m_vColumnPos[i] = ODatabaseExport::TPositions::value_type(nPos,nPos);

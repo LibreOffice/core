@@ -573,7 +573,9 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
                 if (pTabWinList)
                 {
                     OJoinTableView::OTableWindowMap::iterator aIter = pTabWinList->begin();
-                    for(;aIter != pTabWinList->end();++aIter)
+                    OJoinTableView::OTableWindowMap::iterator aEnd = pTabWinList->end();
+
+                    for(;aIter != aEnd;++aIter)
                         m_pTableCell->InsertEntry(static_cast<OQueryTableWindow*>(aIter->second)->GetAliasName());
 
                     m_pTableCell->InsertEntry(String(ModuleRes(STR_QUERY_NOTABLE)), 0);
@@ -1790,7 +1792,8 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo , sal_uInt
 
     OTableFields& rFields = getFields();
     OTableFields::iterator aIter = rFields.begin();
-    for(;aIter != rFields.end();++aIter)
+    OTableFields::iterator aEnd = rFields.end();
+    for(;aIter != aEnd;++aIter)
     {
         pEntry = *aIter;
         OSL_ENSURE(pEntry.isValid(),"OTableFieldDescRef was null!");
@@ -1845,8 +1848,10 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
     Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
     ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
 
-    OTableFields::iterator aIter = getFields().begin();
-    for(;aIter != getFields().end();++aIter)
+    OTableFields& rFields = getFields();
+    OTableFields::iterator aIter = rFields.begin();
+    OTableFields::iterator aEnd = rFields.end();
+    for(;aIter != aEnd;++aIter)
     {
         pEntry = *aIter;
         const ::rtl::OUString   aField = pEntry->GetField();
@@ -1926,7 +1931,8 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrde
     sal_Bool bAppend = sal_False;
     OTableFields& rFields = getFields();
     OTableFields::iterator aIter = rFields.begin();
-    for(;aIter != rFields.end();++aIter)
+    OTableFields::iterator aEnd = rFields.end();
+    for(;aIter != aEnd;++aIter)
     {
         pEntry = *aIter;
         ::rtl::OUString aField = pEntry->GetField();

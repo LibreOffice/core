@@ -53,7 +53,7 @@ namespace dbaui
             @param  _out_rDetailsIds
                 Will be filled.
         */
-        static void getSupportedIndirectSettings( ::dbaccess::DATASOURCE_TYPE _eType,::std::vector< sal_Int32>& _out_rDetailsIds );
+        static void getSupportedIndirectSettings( const ::rtl::OUString& _sURLPrefix,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory,::std::vector< sal_Int32>& _out_rDetailsIds );
 
         /** Creates the detail page for Dbase
         */

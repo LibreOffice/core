@@ -181,7 +181,9 @@ void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aD
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
     impl_resetPages( xDatasource );
 
-    ::dbaccess::DATASOURCE_TYPE eType = getDatasourceType(*getOutputSet());
+    DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, getOutputSet()->GetItem(DSID_TYPECOLLECTION));
+    ::dbaccess::ODsnTypeCollection* pCollection = pCollectionItem->getCollection();
+    ::dbaccess::DATASOURCE_TYPE eType = pCollection->determineType(getDatasourceType(*getOutputSet()));
 
     // and insert the new ones
     switch ( eType )
@@ -282,8 +284,10 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
     // special case: MySQL Native does not have the generic PAGE_CONNECTION page
-    ::dbaccess::DATASOURCE_TYPE eType = getDatasourceType( *pExampleSet );
-    if ( eType == ::dbaccess::DST_MYSQL_NATIVE )
+
+    DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, getOutputSet()->GetItem(DSID_TYPECOLLECTION));
+    ::dbaccess::ODsnTypeCollection* pCollection = pCollectionItem->getCollection();
+    if ( pCollection->determineType(getDatasourceType( *pExampleSet )) == ::dbaccess::DST_MYSQL_NATIVE )
     {
         LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
         AddTabPage( PAGE_MYSQL_NATIVE, String( ModuleRes( STR_PAGETITLE_CONNECTION ) ), ODriversSettings::CreateMySQLNATIVE, NULL );
@@ -368,7 +372,7 @@ Reference< XDriver > ODbAdminDialog::getDriver()
     return m_pImpl->getDriver();
 }
 // -----------------------------------------------------------------------------
-::dbaccess::DATASOURCE_TYPE ODbAdminDialog::getDatasourceType(const SfxItemSet& _rSet) const
+::rtl::OUString ODbAdminDialog::getDatasourceType(const SfxItemSet& _rSet) const
 {
     return m_pImpl->getDatasourceType(_rSet);
 }
@@ -391,7 +395,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     SfxPoolItem** pCounter = _rppDefaults;  // want to modify this without affecting the out param _rppDefaults
     *pCounter++ = new SfxStringItem(DSID_NAME, String());
     *pCounter++ = new SfxStringItem(DSID_ORIGINALNAME, String());
-    *pCounter++ = new SfxStringItem(DSID_CONNECTURL, _pTypeCollection ? _pTypeCollection->getDatasourcePrefix(  ::dbaccess::DST_ADABAS ) : String());
+    *pCounter++ = new SfxStringItem(DSID_CONNECTURL, String());
     *pCounter++ = new OStringListItem(DSID_TABLEFILTER, Sequence< ::rtl::OUString >(&sFilterAll, 1));
     *pCounter++ = new DbuTypeCollectionItem(DSID_TYPECOLLECTION, _pTypeCollection);
     *pCounter++ = new SfxBoolItem(DSID_INVALID_SELECTION, sal_False);
