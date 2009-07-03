@@ -1698,7 +1698,7 @@ void XclImpControlHelper::ProcessControl( const XclImpDrawObjBase& rDrawObj ) co
     aPropSet.SetStringProperty( CREATE_OUSTRING( "Name" ), rDrawObj.GetObjName() );
 
     // control visible and printable?
-//    aPropSet.SetBoolProperty( CREATE_OUSTRING( "EnableVisible" ), rDrawObj.IsVisible() );     // waiting for #i88878#
+    aPropSet.SetBoolProperty( CREATE_OUSTRING( "EnableVisible" ), rDrawObj.IsVisible() );
     aPropSet.SetBoolProperty( CREATE_OUSTRING( "Printable" ), rDrawObj.IsPrintable() );
 
     // sheet links
