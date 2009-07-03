@@ -37,131 +37,72 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
+package org.openoffice.sdk.forms;
 
-import com.sun.star.uno.*;
-import com.sun.star.frame.*;
-import com.sun.star.awt.*;
-import com.sun.star.lang.*;
-import com.sun.star.util.*;
-import com.sun.star.container.*;
-import com.sun.star.beans.*;
-import com.sun.star.task.*;
-import com.sun.star.sdbc.*;
-import com.sun.star.sdbcx.*;
-import com.sun.star.sdb.*;
-import com.sun.star.form.*;
 
 // java base stuff
+import com.sun.star.awt.ActionEvent;
+import com.sun.star.awt.XActionListener;
+import com.sun.star.awt.XButton;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.form.runtime.FormOperations;
+import com.sun.star.form.runtime.XFeatureInvalidation;
+import com.sun.star.form.runtime.XFormOperations;
+import com.sun.star.lang.EventObject;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 import java.util.Vector;
 
 
 /**************************************************************************/
 /** a helper class for operating the buttons
 */
-public class ButtonOperator implements XActionListener, XStatusListener
+public class ButtonOperator implements XActionListener, XFeatureInvalidation
 {
-    private XComponentContext   m_xCtx;
+    private XComponentContext   m_componentContext;
     private DocumentHelper      m_aDocument;
+    private XPropertySet        m_form;
+    private XFormOperations     m_formOperations;
 
     private Vector              m_aButtons;
-    private Vector              m_aDispatchers;
 
     /* ------------------------------------------------------------------ */
     /** ctor
     */
-    public ButtonOperator( XComponentContext xCtx, DocumentHelper aDocument )
+    public ButtonOperator( XComponentContext xCtx, DocumentHelper aDocument, XPropertySet _form )
     {
-        m_xCtx = xCtx;
+        m_componentContext = xCtx;
         m_aDocument = aDocument;
+        m_form = _form;
         m_aButtons = new Vector();
-        m_aDispatchers = new Vector();
     }
 
     /* ------------------------------------------------------------------ */
-    /** shows a message that we can't do several things due to an implementation error
-    */
-    private void showImplementationErrorMessage( XInterface xContext )
+    private short getAssociatedFormFeature( XPropertySet _buttonModel )
     {
-        SQLException aBaseError = new SQLException(
-            new String( "Due to a multi-threading issue, this method does not work correctly when invoked via remote java." ),
-            xContext,
-            new String( "S1000" ),
-            0,
-            null
-        );
-        SQLContext aError = new SQLContext(
-            new String( "Unable to perform request." ),
-            xContext,
-            new String( "S1000" ),
-            0,
-            aBaseError,
-            new String( "This functionallity has been disabled due to an implementation bug." )
-        );
-
+        short formFeature = -1;
         try
         {
-            // instantiate an interaction handler who can handle SQLExceptions
-            XInteractionHandler xHandler = (XInteractionHandler)UnoRuntime.queryInterface(
-                XInteractionHandler.class,
-                m_xCtx.getServiceManager().createInstanceWithContext(
-                    "com.sun.star.sdb.InteractionHandler", m_xCtx ) );
-
-            // create a new request
-            InteractionRequest aRequest = new InteractionRequest( aError );
-            xHandler.handle( aRequest );
+            formFeature = Short.valueOf( (String)_buttonModel.getPropertyValue( "Tag" ) );
         }
         catch( com.sun.star.uno.Exception e )
         {
         }
-    }
-
-    /* ------------------------------------------------------------------ */
-    /** reloads the form the given button belongs too
-    */
-    private void reload( Object aControlModel )
-    {
-        // this came from the reload button, so reload the form if the user wishes this ....
-        com.sun.star.form.XLoadable xLoad = (com.sun.star.form.XLoadable)FLTools.getParent(
-            aControlModel, com.sun.star.form.XLoadable.class );
-        // (note that this xLoad equals our m_xMasterForm)
-
-        // produce an error saying that we can't really do this
-//      showImplementationErrorMessage( xLoad );
-
-        // If you did neither your office nor your jave program fit with the
-        // ForceSynchronous=1 parameter, the following line would result in a deadlock due
-        // to an implementation bug.
-        xLoad.reload();
-    }
-
-    /* ------------------------------------------------------------------ */
-    private String getTag( Object aModel )
-    {
-        String sReturn = new String();
-        try
-        {
-            XPropertySet xModelProps = UNO.queryPropertySet( aModel );
-            sReturn = (String)xModelProps.getPropertyValue( "Tag" );
-        }
-        catch( com.sun.star.uno.Exception e )
-        {
-            // though this is a serious error, we're not interested in
-        }
-        return sReturn;
+        return formFeature;
     }
 
     /* ------------------------------------------------------------------ */
     /** get's the button which we operate and which is responsible for a given URL
     */
-    private int getButton( String sActionURL )
+    private XPropertySet getButton( short _formFeature )
     {
-        int nPos = -1;
-        for ( int i=0; ( i < m_aButtons.size() ) && ( -1 == nPos ); ++i )
+        for ( int i=0; i < m_aButtons.size(); ++i )
         {
-            if ( sActionURL.equals( getTag( m_aButtons.elementAt( i ) ) ) )
-                nPos = i;
+            XPropertySet button = (XPropertySet)m_aButtons.elementAt( i );
+            if ( _formFeature == getAssociatedFormFeature( button ) )
+                return button;
         }
-        return nPos;
+        return null;
     }
 
     /* ------------------------------------------------------------------ */
@@ -181,38 +122,20 @@ public class ButtonOperator implements XActionListener, XStatusListener
     /* ------------------------------------------------------------------ */
     /** announces a button which the operator should be responsible for
     */
-    public void addButton( XPropertySet xButtonModel, String sActionURL ) throws java.lang.Exception
+    public void addButton( XPropertySet _buttonModel, short _formFeature  ) throws java.lang.Exception
     {
         // the current view to the document
         DocumentViewHelper aCurrentView = m_aDocument.getCurrentView();
 
         // add a listener so we get noticed if the user presses the button
-        // get the control
         XButton xButtonControl = (XButton)UnoRuntime.queryInterface( XButton.class,
-            aCurrentView.getControl( xButtonModel ) );
-
+            aCurrentView.getFormControl( _buttonModel ) );
         xButtonControl.addActionListener( this );
 
-        // remember the action URL
-        xButtonModel.setPropertyValue( "Tag", sActionURL );
-        // retrieve the dispatcher for the action URL
-        XDispatch xActionDispatch = null;
-        if ( 0 < sActionURL.length() )
-        {
-            // query the current document view for a dispatcher for the action URL
-            URL[] aURL = new URL[] { new URL() };
-            aURL[0].Complete = sActionURL;
-            xActionDispatch = aCurrentView.getDispatcher( aURL );
-            // and if we found one, add ourself as status listener so we get notified whenever something changes
-            if ( null != xActionDispatch )
-            {
-                xActionDispatch.addStatusListener( this, aURL[0] );
-            }
-        }
+        _buttonModel.setPropertyValue( "Tag", String.valueOf( _formFeature ) );
 
-        // remember the button and the dispatcher
-        m_aButtons.add( xButtonModel );
-        m_aDispatchers.add( xActionDispatch );
+        // remember the button
+        m_aButtons.add( _buttonModel );
     }
 
     /* ------------------------------------------------------------------ */
@@ -222,29 +145,6 @@ public class ButtonOperator implements XActionListener, XStatusListener
         if ( -1 < nPos )
         {
             m_aButtons.remove( nPos );
-            m_aDispatchers.remove( nPos );
-        }
-    }
-
-    /* ------------------------------------------------------------------ */
-    /** called when the status of an URL we operate on has changed
-    */
-    public void statusChanged( FeatureStateEvent aEvent ) throws com.sun.star.uno.RuntimeException
-    {
-        // get the button which is responsible for URL
-        int nButtonPos = getButton( aEvent.FeatureURL.Complete );
-        if ( -1 < nButtonPos )
-        {
-            XPropertySet xButton = (XPropertySet)m_aButtons.elementAt( nButtonPos );
-            try
-            {
-                xButton.setPropertyValue( "Enabled", new Boolean( aEvent.IsEnabled ) );
-            }
-            catch( java.lang.Exception e )
-            {
-                System.out.println(e);
-                e.printStackTrace();
-            }
         }
     }
 
@@ -257,64 +157,34 @@ public class ButtonOperator implements XActionListener, XStatusListener
     public void actionPerformed( ActionEvent aEvent ) throws com.sun.star.uno.RuntimeException
     {
         // get the model's name
-        XNamed xModel = (XNamed)FLTools.getModel( aEvent.Source, XNamed.class );
-        String sName = xModel.getName();
-
-        if ( sName.equals( new String( "reload" ) ) )
-            reload( xModel );
-        else
+        XPropertySet buttonModel = (XPropertySet)FLTools.getModel( aEvent.Source, XPropertySet.class );
+        try
         {
-            // get the action URL the button is bound to
-            String sActionURL = getTag( xModel );
+            short formFeature = getAssociatedFormFeature( buttonModel );
+            if ( formFeature != -1 )
+                m_formOperations.execute( formFeature );
+        }
+        catch( final com.sun.star.uno.Exception e )
+        {
+        }
+    }
 
-            // get the dispatcher responsible for this action URL
-            int nButtonPos = getButton( sActionURL );
-            if ( -1 < nButtonPos )
-            {
-                XDispatch xDispatcher = (XDispatch)m_aDispatchers.elementAt( nButtonPos );
-                if ( null != xDispatcher )
-                {
-                    PropertyValue[] aDummyArgs = new PropertyValue[] { };
-                    try
-                    {
-                        xDispatcher.dispatch( FLTools.parseURL( sActionURL, m_xCtx ), aDummyArgs );
-                    }
-                    catch( java.lang.Exception e )
-                    {
-                    }
-                }
-            }
-
-            // below is what we really would like to do - if we would not have these implementation
-            // bugs
-            // Though the current solution has one more advantage: we don't need to determine
-            // the button state ourself. We are told by the form layer framework when the buttons
-            // have to be enabled or disabled.
-            // Once Issuezilla bug #TODO# is fixed (means we have a chance to reach for the form
-            // controller from external components), we can get rid off the implementation specific
-            // part of the URLs we use (this "#0/0" mark), and then we would have a working solution
-            // which is not to be called hack .....
-
-            // the result set to operate on
-//          XResultSet xSet = (XResultSet)FLTools.getParent( xModel, XResultSet.class );
-//
-//          try
-//          {
-//              // this is what we would have liked to do
-//              if ( sName.equals( new String( "first" ) ) )
-//                  xSet.first();
-//              else if ( sName.equals( new String( "prev" ) ) )
-//                  xSet.previous();
-//              else if ( sName.equals( new String( "next" ) ) )
-//                  xSet.next();
-//              else if ( sName.equals( new String( "last" ) ) )
-//                  xSet.last();
-//          }
-//          catch( SQLException e )
-//          {
-//              System.err.println( e );
-//              e.printStackTrace();
-//          }
+    /* ------------------------------------------------------------------ */
+    /* (to be) called when the form layer has been switched to alive mode
+     * @todo
+     *  register as listener somewhere ...
+    */
+    public void onFormsAlive()
+    {
+        try
+        {
+            m_formOperations = FormOperations.createWithFormController(
+                m_componentContext, m_aDocument.getCurrentView().getFormController( m_form ) );
+            m_formOperations.setFeatureInvalidation( this );
+            invalidateAllFeatures();
+        }
+        catch( final com.sun.star.uno.Exception e )
+        {
         }
     }
 
@@ -324,6 +194,39 @@ public class ButtonOperator implements XActionListener, XStatusListener
     public void disposing( EventObject aEvent )
     {
         // not interested in
+    }
+
+    /* ==================================================================
+       = XFeatureInvalidation
+       ================================================================== */
+    private void updateButtonState( XPropertySet _buttonModel, short _formFeature )
+    {
+        try
+        {
+            _buttonModel.setPropertyValue( "Enabled", m_formOperations.isEnabled( _formFeature ) );
+        }
+        catch( com.sun.star.uno.Exception e )
+        {
+        }
+    }
+
+    public void invalidateFeatures( short[] _features ) throws com.sun.star.uno.RuntimeException
+    {
+        for ( int i=0; i<_features.length; ++i )
+        {
+            XPropertySet buttonModel = getButton( _features[i] );
+            if ( buttonModel != null )
+                updateButtonState( buttonModel, _features[i] );
+        }
+    }
+
+    public void invalidateAllFeatures() throws com.sun.star.uno.RuntimeException
+    {
+        for ( int i=0; i < m_aButtons.size(); ++i )
+        {
+            XPropertySet buttonModel = (XPropertySet)m_aButtons.elementAt( i );
+            updateButtonState( buttonModel, getAssociatedFormFeature( buttonModel ) );
+        }
     }
 };
 

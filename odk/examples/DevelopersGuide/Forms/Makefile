@@ -92,7 +92,10 @@ COMMON_JAVAFILES  = \
 	DateValidator.java \
 	TimeValidator.java \
 	ControlValidator.java \
-	SingleControlValidation.java
+	SingleControlValidation.java \
+	HsqlDatabase.java \
+	RowSet.java \
+	URLHelper.java
 
 COMMON_CLASSFILES = $(patsubst %.java,$(COMMON_CLASS_OUT)/%.class,$(COMMON_JAVAFILES))
 
