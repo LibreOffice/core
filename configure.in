@@ -13,4 +13,4 @@ OOO_PREFIX=$($PKG_CONFIG --variable=ooo_prefix OpenOffice.org-bootstrap)
 AC_SUBST(OOO_PREFIX)
 
 dnl Create what is necessary
-AC_OUTPUT([Makefile buildenv])
+AC_OUTPUT([Makefile buildenv build/src/OpenOffice.org-ure.pc])

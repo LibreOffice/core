@@ -1,0 +1,7 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+
+Name: OpenOffice.org URE
+Description: OpenOffice.org URE package
+Version: @PACKAGE_VERSION@

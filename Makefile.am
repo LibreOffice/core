@@ -34,6 +34,7 @@ install-data-local: $(stampdir)/all
 	       -f $(ooo_prefix)/instsetoo_native/util/openoffice.lst \
 	       -l 'en-US' -p "$$PRODUCT" -buildid "$$BUILD" \
 	       -dontstrip -verbose -simple $(DESTDIR)$(ooo_prefix) )
+	$(INSTALL_DATA) $(top_builddir)/build/src/OpenOffice.org-ure.pc $(DESTDIR)$(pkgconfigdir)/
 
 $(stampdir)/all: buildenv
 	( . buildenv ; cd build ; build.pl --all ) && touch $@
