@@ -39,10 +39,22 @@ End
 #endif
 #if ((defined(WNT)) || (defined(LINUX)) || ((defined(SOLARIS)) && (defined(SPARC)))|| defined(NETBSD) )
 STD_UNO_LIB_FILE( gid_File_Lib_Adabas, adabas)
+File gid_File_Oo_Office_Dataaccess_Adabas_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/adabas.xcu";
+End
 #endif
 
 #if defined(WNT)
 STD_UNO_LIB_FILE( gid_File_Lib_Ado, ado)
+File gid_File_Oo_Office_Dataaccess_Ado_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/ado.xcu";
+End
 #endif
 
 STD_UNO_LIB_FILE( gid_File_Lib_Basctl, basctl)
@@ -267,10 +279,15 @@ STD_UNO_LIB_FILE( gid_File_Lib_Dbmm, dbmm)
 STD_UNO_LIB_FILE( gid_File_Lib_Dbacfg, dbacfg)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbase2, dbase )
+File gid_File_Oo_Office_Dataaccess_Dbase_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/dbase.xcu";
+End
 
 STD_LIB_FILE( gid_File_Lib_Dbfile , file)
-
-STD_LIB_FILE(gid_File_Lib_Odbcbase,odbcbase)
+STD_LIB_FILE( gid_File_Lib_Odbcbase,odbcbase)
 
 
 File gid_File_Lib_Dbpool
@@ -435,7 +452,12 @@ End
 #ifdef UNX
 
 #ifdef ENABLE_KAB
-
+File gid_File_Oo_Office_Dataaccess_Kab_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/kab.xcu";
+End
 File gid_File_Lib_Kab_1
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
@@ -454,7 +476,12 @@ End
 #endif
 
 #ifdef MACOSX
-
+File gid_File_Oo_Office_Dataaccess_Macab_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/macab.xcu";
+End
 File gid_File_Lib_Macab_1
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
@@ -473,6 +500,12 @@ End
 #endif  // #ifdef ENABLE_KAB
 
 #ifdef ENABLE_EVOAB2
+File gid_File_Oo_Office_Dataaccess_Evoab2_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/evoab2.xcu";
+End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Evoab , evoab)
 
@@ -502,6 +535,12 @@ File gid_File_Lib_Filterconfig1
     Name = SPECIAL_NAME(filterconfig1);
 End
 
+File gid_File_Oo_Office_Dataaccess_Flat_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/flat.xcu";
+End
 STD_UNO_LIB_FILE( gid_File_Lib_Flat, flat)
 
 #ifdef WNT
@@ -781,11 +820,22 @@ End
 #ifdef SOLAR_JAVA
 
 STD_UNO_LIB_FILE( gid_File_Lib_Jdbc, jdbc)
+File gid_File_Oo_Office_Dataaccess_Jdbc_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/jdbc.xcu";
+End
 
 #endif
 
 #ifdef SOLAR_JAVA
-
+File gid_File_Oo_Office_Dataaccess_Hsqldb_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/hsqldb.xcu";
+End
 File gid_File_Lib_Hsqldb_2
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
@@ -904,6 +954,13 @@ End
 
 #if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) && !defined(MACOSX)
                                                                 // #i91209#
+File gid_File_Oo_Office_Dataaccess_Mozab_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/mozab.xcu";
+End
+
 STD_UNO_LIB_FILE(gid_File_Lib_Mozab,mozab)
 STD_LIB_FILE(gid_File_Lib_Mozabdrv,mozabdrv)
 
@@ -1011,7 +1068,25 @@ End
 #endif
 
 STD_UNO_LIB_FILE(gid_File_Lib_Mysql,mysql)
+File gid_File_Oo_Office_Dataaccess_Mysql_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/mysql.xcu";
+End
 STD_UNO_LIB_FILE(gid_File_Lib_Odbc,odbc)
+File gid_File_Oo_Office_Dataaccess_Odbc_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/odbc.xcu";
+End
+
+File gid_File_Registry_Drivers_Zip
+    Dir = gid_Dir_Share_Registry_Res_Lang;
+    ARCHIVE_TXT_FILE_BODY;
+    EXTRA_ALL_LANG(fcfg_drivers);
+End
 
 // STD_LIB_FILE( gid_File_Lib_Ofa , ofa)
 
