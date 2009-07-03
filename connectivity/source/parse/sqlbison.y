@@ -107,7 +107,7 @@ static connectivity::OSQLInternalNode* newNode(const sal_Char* pNewValue,
 							     const connectivity::SQLNodeType eNodeType,
 								 const sal_uInt32 nNodeID = 0)
 {
-
+    OSL_TRACE("connectivity: Rule Number: %d,%d",eNodeType,nNodeID);
 	return new connectivity::OSQLInternalNode(pNewValue, eNodeType, nNodeID);
 }
 
@@ -115,7 +115,7 @@ static connectivity::OSQLInternalNode* newNode(const ::rtl::OString& _NewValue,
 							    const connectivity::SQLNodeType eNodeType,
 								const sal_uInt32 nNodeID = 0)
 {
-
+    OSL_TRACE("connectivity: Rule Number: %d,%d",eNodeType,nNodeID);
 	return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);
 }
 
@@ -123,7 +123,7 @@ static connectivity::OSQLInternalNode* newNode(const ::rtl::OUString& _NewValue,
 							    const connectivity::SQLNodeType eNodeType,
 								const sal_uInt32 nNodeID = 0)
 {
-
+    OSL_TRACE("connectivity: Rule Number: %d,%d",eNodeType,nNodeID);
 	return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);
 }
 
@@ -676,15 +676,12 @@ manipulative_statement_list:
 	;
 ***/
 
-/*sql:
-		{$$ = SQL_NEW_LISTRULE;}
-	;
-*/
 sql_not:
 	{$$ = SQL_NEW_RULE;}
 	|	SQL_TOKEN_NOT
 	;
-	/* manipulative statements */
+
+/* manipulative statements */
 
 sql:    manipulative_statement
 	;
@@ -767,10 +764,12 @@ insert_statement:
 			$$->append($5);}
 	;
 values_or_query_spec:
-		SQL_TOKEN_VALUES table_value_const_list
+		SQL_TOKEN_VALUES '(' table_value_const_list ')'
 		{$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2);
+			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append($3);
+			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 
@@ -792,18 +791,14 @@ row_value_const_list:
 	;
 row_value_constructor:
 			row_value_constructor_elem
-	  |		'(' row_value_const_list ')'
+/*	  |		'(' row_value_const_list ')'
 			{
 				$$ = SQL_NEW_RULE;
 				$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
 				$$->append($2);
 				$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
 			}
-/*      |		subquery
-			{
-				$$ = SQL_NEW_RULE;
-				$$->append($1);
-			}*/
+			*/
 	;
 row_value_constructor_elem:
 			value_exp /*[^')']*/
@@ -1053,47 +1048,16 @@ truth_value:
 	  ;
 boolean_primary:
 		predicate
-	  | '(' search_condition ')'
-		{
+	|   '(' search_condition ')'
+		{ // boolean_primary: rule 2
 			$$ = SQL_NEW_RULE;
 			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($2);
 			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
 		}
-	;
-
-boolean_test:
-		boolean_primary
-	|	boolean_primary SQL_TOKEN_IS sql_not truth_value
-		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2);
-			$$->append($3);
-			$$->append($4);
-		}
-	;
-boolean_factor:
-		boolean_test
-	|	SQL_TOKEN_NOT boolean_test
-		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2);
-		}
-	;
-boolean_term:
-		boolean_factor
-	|	boolean_term SQL_TOKEN_AND boolean_factor
-		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2);
-			$$->append($3);
-		}
 	|	row_value_constructor_elem  /*[^')' ',']*/
 		{
-    		if(xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
+    		if(xxx_pGLOBAL_SQLPARSER->inPredicateCheck())// boolean_primary: rule 3
 			{
 			    $$ = SQL_NEW_RULE;
 			    sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildComparsionRule($$,$1);
@@ -1115,54 +1079,43 @@ boolean_term:
 			else
 				YYERROR;
 		}
-	|	boolean_term SQL_TOKEN_AND literal
-		{
-		    if(xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
-			{
-			    $$ = SQL_NEW_RULE;
-			    $$->append($1);
-			    $$->append($2);
-			    sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildComparsionRule($$,$3);
-			    if(nErg < 1)
-			    {
-				    delete $$;
-				    if(nErg)
-					    YYERROR;
-				    else
-					    YYABORT;
-			    }
-			}
-			else
-			    YYERROR;
+	;
 
+boolean_test:
+		boolean_primary
+	|	boolean_primary SQL_TOKEN_IS sql_not truth_value
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+			$$->append($4);
 		}
-	|	boolean_term SQL_TOKEN_AND SQL_TOKEN_STRING
+	;
+boolean_factor:
+        boolean_test
+	|   SQL_TOKEN_NOT boolean_test
+		{ // boolean_factor: rule 1
+		    $$ = SQL_NEW_RULE;
+		    $$->append($1);
+		    $$->append($2);
+		}
+	;
+boolean_term:
+		boolean_factor
+	|	boolean_term SQL_TOKEN_AND boolean_factor
 		{
-		    if(xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
-			{
-			    $$ = SQL_NEW_RULE;
-			    $$->append($1);
-			    $$->append($2);
-			    sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildComparsionRule($$,$3);
-			    if(nErg < 1)
-			    {
-				    delete $$;
-				    if(nErg)
-					    YYERROR;
-				    else
-					    YYABORT;
-			    }
-			}
-			else
-			    YYERROR;
-
+			$$ = SQL_NEW_RULE; // boolean_term: rule 1
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
 		}
 	;
 search_condition:
 		boolean_term
 	|	search_condition SQL_TOKEN_OR boolean_term
 		{
-			$$ = SQL_NEW_RULE;
+			$$ = SQL_NEW_RULE; // search_condition
 			$$->append($1);
 			$$->append($2);
 			$$->append($3);
@@ -1182,14 +1135,14 @@ predicate:
 comparison_predicate:
 		row_value_constructor comparison row_value_constructor
 		{
-			$$ = SQL_NEW_RULE;
+			$$ = SQL_NEW_RULE; // comparison_predicate: rule 1
 			$$->append($1);
 			$$->append($2);
 			$$->append($3);
 		}
 	|	comparison row_value_constructor
 		{
-			if(xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
+			if(xxx_pGLOBAL_SQLPARSER->inPredicateCheck()) // comparison_predicate: rule 2
 			{
 				$$ = SQL_NEW_RULE;
 				sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildPredicateRule($$,$2,$1);
@@ -1221,7 +1174,7 @@ comparison:
 	;
 between_predicate:
 		row_value_constructor sql_not SQL_TOKEN_BETWEEN row_value_constructor SQL_TOKEN_AND row_value_constructor
-		{$$ = SQL_NEW_RULE;
+		{$$ = SQL_NEW_RULE; // between_predicate: rule 1
 			$$->append($1);
 			$$->append($2);
 			$$->append($3);
@@ -1231,7 +1184,7 @@ between_predicate:
 		}
 	|	sql_not SQL_TOKEN_BETWEEN row_value_constructor SQL_TOKEN_AND row_value_constructor
 		{
-			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
+			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck()) // between_predicate: rule 2 
 			{
 				$$ = SQL_NEW_RULE;
 				
@@ -1258,7 +1211,7 @@ between_predicate:
 like_predicate:
 		row_value_constructor SQL_TOKEN_NOT SQL_TOKEN_LIKE string_value_exp opt_escape
 		{
-			$$ = SQL_NEW_RULE;
+			$$ = SQL_NEW_RULE; // like_predicate: rule 1
 			$$->append($1);
 			$$->append($2);
 			$$->append($3);
@@ -1267,7 +1220,7 @@ like_predicate:
 		}
 	|	row_value_constructor SQL_TOKEN_LIKE string_value_exp opt_escape
 		{
-			$$ = SQL_NEW_RULE;
+			$$ = SQL_NEW_RULE; // like_predicate: rule 2
 			$$->append($1);
 			$$->append($2);
 			$$->append($3);
@@ -1275,7 +1228,7 @@ like_predicate:
 		}
 	|	row_value_constructor SQL_TOKEN_NOT SQL_TOKEN_LIKE value_exp_primary opt_escape
 		{
-			$$ = SQL_NEW_RULE;
+			$$ = SQL_NEW_RULE;  // like_predicate: rule 3
 			$$->append($1);
 			$$->append($2);
 			$$->append($3);
@@ -1284,7 +1237,7 @@ like_predicate:
 		}
 	|	row_value_constructor SQL_TOKEN_LIKE value_exp_primary opt_escape
 		{
-			$$ = SQL_NEW_RULE;
+			$$ = SQL_NEW_RULE;  // like_predicate: rule 4
 			$$->append($1);
 			$$->append($2);
 			$$->append($3);
@@ -1292,7 +1245,7 @@ like_predicate:
 		}
 	|	sql_not SQL_TOKEN_LIKE string_value_exp opt_escape
 		{
-			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
+			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())  // like_predicate: rule 5
 			{
 				OSQLParseNode* pColumnRef = newNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
 				pColumnRef->append(newNode(xxx_pGLOBAL_SQLPARSER->getFieldName(),SQL_NODE_NAME));
@@ -1314,7 +1267,7 @@ like_predicate:
 		}
 	|	sql_not SQL_TOKEN_LIKE value_exp_primary opt_escape
 		{
-			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
+			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck()) // like_predicate: rule 6
 			{
 				OSQLParseNode* pColumnRef = newNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
 				pColumnRef->append(newNode(xxx_pGLOBAL_SQLPARSER->getFieldName(),SQL_NODE_NAME));
@@ -1355,7 +1308,7 @@ opt_escape:
 test_for_null:
 		row_value_constructor SQL_TOKEN_IS sql_not truth_value
 		{
-			$$ = SQL_NEW_RULE;
+			$$ = SQL_NEW_RULE; // test_for_null: rule 1
 			$$->append($1);
 			$$->append($2);
 			$$->append($3);
@@ -1363,7 +1316,7 @@ test_for_null:
 		}
 	|	SQL_TOKEN_IS sql_not truth_value
 		{
-			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
+			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())// test_for_null: rule 2
 			{
 				OSQLParseNode* pColumnRef = newNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
 				pColumnRef->append(newNode(xxx_pGLOBAL_SQLPARSER->getFieldName(),SQL_NODE_NAME));
@@ -1393,15 +1346,15 @@ in_predicate_value:
 in_predicate:
 		row_value_constructor sql_not SQL_TOKEN_IN in_predicate_value
 		{
-			$$ = SQL_NEW_RULE;
+			$$ = SQL_NEW_RULE;// in_predicate: rule 1
 			$$->append($1);
 			$$->append($2);
 			$$->append($3);
 			$$->append($4);
 		}
-		|	sql_not SQL_TOKEN_IN in_predicate_value
+	|	sql_not SQL_TOKEN_IN in_predicate_value
 		{
-			if ( xxx_pGLOBAL_SQLPARSER->inPredicateCheck() )
+			if ( xxx_pGLOBAL_SQLPARSER->inPredicateCheck() )// in_predicate: rule 2
 			{
 				OSQLParseNode* pColumnRef = newNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
 				pColumnRef->append(newNode(xxx_pGLOBAL_SQLPARSER->getFieldName(),SQL_NODE_NAME));
@@ -3132,7 +3085,7 @@ user:	SQL_TOKEN_NAME
 sql:
 		search_condition /* checking predicats */
 		{
-			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
+			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck()) // sql: rule 1
 			{
 				$$ = $1;
 				if ( SQL_ISRULE($$,search_condition) )
@@ -3143,7 +3096,9 @@ sql:
 			}
 			else
 				YYERROR;
-		};
+		}
+	|   '(' sql ')' /* checking predicats */
+    ;
 %%
 
 

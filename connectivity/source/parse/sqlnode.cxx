@@ -2616,6 +2616,113 @@ sal_Int32 OSQLParser::getFunctionReturnType(const ::rtl::OUString& _sFunctionNam
 
     return nType;
 }
+// -----------------------------------------------------------------------------
+sal_Int32 OSQLParser::getFunctionParameterType(sal_uInt32 _nTokenId, sal_uInt32 _nPos)
+{
+    sal_Int32 nType = DataType::VARCHAR;
+
+    if(_nTokenId == SQL_TOKEN_CHAR)                 nType = DataType::INTEGER;
+    else if(_nTokenId == SQL_TOKEN_INSERT)
+    {
+        if ( _nPos == 2 || _nPos == 3 )
+            nType = DataType::INTEGER;
+    }
+    else if(_nTokenId == SQL_TOKEN_LEFT)
+    {
+        if ( _nPos == 2 )
+            nType = DataType::INTEGER;
+    }
+    else if(_nTokenId == SQL_TOKEN_LOCATE)
+    {
+        if ( _nPos == 3 )
+            nType = DataType::INTEGER;
+    }
+    else if(_nTokenId == SQL_TOKEN_LOCATE_2)
+    {
+        if ( _nPos == 3 )
+            nType = DataType::INTEGER;
+    }
+    else if( _nTokenId == SQL_TOKEN_REPEAT || _nTokenId == SQL_TOKEN_RIGHT )
+    {
+        if ( _nPos == 2 )
+            nType = DataType::INTEGER;
+    }
+    else if(_nTokenId == SQL_TOKEN_SPACE )
+    {
+        nType = DataType::INTEGER;
+    }
+    else if(_nTokenId == SQL_TOKEN_SUBSTRING)
+    {
+        if ( _nPos != 1 )
+            nType = DataType::INTEGER;
+    }
+    else if(_nTokenId == SQL_TOKEN_DATEDIFF)
+    {
+        if ( _nPos != 1 )
+            nType = DataType::TIMESTAMP;
+    }
+    else if(_nTokenId == SQL_TOKEN_DATEVALUE)
+        nType = DataType::DATE;
+    else if(_nTokenId == SQL_TOKEN_DAYNAME)
+        nType = DataType::DATE;
+    else if(_nTokenId == SQL_TOKEN_DAYOFMONTH)
+        nType = DataType::DATE;
+    else if(_nTokenId == SQL_TOKEN_DAYOFWEEK)
+        nType = DataType::DATE;
+    else if(_nTokenId == SQL_TOKEN_DAYOFYEAR)
+        nType = DataType::DATE;
+    else if(_nTokenId == SQL_TOKEN_EXTRACT)              nType = DataType::VARCHAR;
+    else if(_nTokenId == SQL_TOKEN_HOUR)                 nType = DataType::TIME;
+    else if(_nTokenId == SQL_TOKEN_MINUTE)               nType = DataType::TIME;
+    else if(_nTokenId == SQL_TOKEN_MONTH)                nType = DataType::DATE;
+    else if(_nTokenId == SQL_TOKEN_MONTHNAME)            nType = DataType::DATE;
+    else if(_nTokenId == SQL_TOKEN_NOW)                  nType = DataType::TIMESTAMP;
+    else if(_nTokenId == SQL_TOKEN_QUARTER)              nType = DataType::DATE;
+    else if(_nTokenId == SQL_TOKEN_SECOND)               nType = DataType::TIME;
+    else if(_nTokenId == SQL_TOKEN_TIMESTAMPADD)         nType = DataType::TIMESTAMP;
+    else if(_nTokenId == SQL_TOKEN_TIMESTAMPDIFF)        nType = DataType::TIMESTAMP;
+    else if(_nTokenId == SQL_TOKEN_TIMEVALUE)            nType = DataType::TIMESTAMP;
+    else if(_nTokenId == SQL_TOKEN_WEEK)                 nType = DataType::DATE;
+    else if(_nTokenId == SQL_TOKEN_YEAR)                 nType = DataType::DATE;
+
+    else if(_nTokenId == SQL_TOKEN_ABS)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_ACOS)                 nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_ASIN)                 nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_ATAN)                 nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_ATAN2)                nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_CEILING)              nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_COS)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_COT)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_DEGREES)              nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_EXP)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_FLOOR)                nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_LOGF)                 nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_LOG)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_LOG10)                nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_LN)                   nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_MOD)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_PI)                   nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_POWER)                nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_RADIANS)              nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_RAND)                 nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_ROUND)                nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_ROUNDMAGIC)           nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_SIGN)                 nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_SIN)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_SQRT)                 nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_TAN)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_TRUNCATE)             nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_COUNT)                nType = DataType::INTEGER;
+    else if(_nTokenId == SQL_TOKEN_MAX)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_MIN)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_AVG)                  nType = DataType::DOUBLE;
+    else if(_nTokenId == SQL_TOKEN_SUM)                  nType = DataType::DOUBLE;
+
+    else if(_nTokenId == SQL_TOKEN_LOWER)                nType = DataType::VARCHAR;
+    else if(_nTokenId == SQL_TOKEN_UPPER)                nType = DataType::VARCHAR;
+
+    return nType;
+}
 
 // -----------------------------------------------------------------------------
 const SQLError& OSQLParser::getErrorHelper() const

@@ -368,11 +368,12 @@ void ODbaseTable::fillColumns()
         cType[0] = aDBFColumn.db_typ;
         cType[1] = 0;
         aTypeName = ::rtl::OUString::createFromAscii(cType);
+OSL_TRACE("column type: %c",aDBFColumn.db_typ);
 
         switch (aDBFColumn.db_typ)
         {
             case 'C':
-                eType = DataType::CHAR;
+                eType = DataType::VARCHAR;
                 aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
                 break;
             case 'F':
