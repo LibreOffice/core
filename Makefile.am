@@ -3,6 +3,8 @@
 stampdir = $(top_builddir)/build/stamp
 pkgconfigdir = $(libdir)/pkgconfig
 ooo_prefix = @OOO_PREFIX@
+solenvdir = $(ooo_prefix)/solenv
+buildsolverdir = "@abs_builddir@/solver"
 
 # what to add to the package
 
@@ -25,8 +27,13 @@ clean-local:
 # TODO
 distclean-local:
 
-# TODO
 install-data-local: $(stampdir)/all
+	( . buildenv -i ; \
+	  export PRODUCT="OpenOffice" ; \
+	  perl -w $(solenvdir)/bin/make_installer.pl \
+	       -f $(ooo_prefix)/instsetoo_native/util/openoffice.lst \
+	       -l 'en-US' -p "$$PRODUCT" -buildid "$$BUILD" \
+	       -dontstrip -verbose -simple $(DESTDIR)$(ooo_prefix) )
 
 $(stampdir)/all: buildenv
 	( . buildenv ; cd build ; build.pl --all ) && touch $@
