@@ -184,11 +184,7 @@ public:
     sal_Bool CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize );
     sal_Bool AddOwnLightClient();
 
-    // helper for ViewObjectContactOfSdrOle2Obj. As long as the OLE stuff is not
-    // reworked, the things the old Do_PaintObject did at this object need to be
-    // emulated. Isolated those things here. Return value tells if the object
-    // is active
-    bool executeOldDoPaintPreparations(SdrPageView* pPageVew) const;
+    bool executeOldDoPaintPreparations(SdrPageView* pPageVew) const; //remove me with the next incompatible build
 
     // handy to get the empty replacement bitmap without accessing all the old stuff
     Bitmap GetEmtyOLEReplacementBitmap() const;

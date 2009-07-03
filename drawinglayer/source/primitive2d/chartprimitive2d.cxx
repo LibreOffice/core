@@ -76,6 +76,13 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitrive2DIDBlock(ChartPrimitive2D, PRIMITIVE2D_ID_CHARTPRIMITIVE2D)
 
+        basegfx::B2DRange ChartPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        {
+            basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
+            aRetval.transform(getTransformation());
+            return aRetval;
+        }
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
