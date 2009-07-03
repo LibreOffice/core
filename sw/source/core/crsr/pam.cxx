@@ -851,13 +851,22 @@ SwCntntNode* GetNode( SwPaM & rPam, BOOL& rbFirst, SwMoveFn fnMove,
         {
             rbFirst = FALSE;
             pNd = rPam.GetCntntNode();
-            if( pNd &&
-                ( 0 == ( pFrm = pNd->GetFrm()) ||
-                  ( !bInReadOnly && pFrm->IsProtected() ) ||
-                  (pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsHiddenNow()) ) ||
-                ( !bInReadOnly && pNd->FindSectionNode() &&
-                  pNd->FindSectionNode()->GetSection().IsProtect() ))
-                pNd = 0;
+            if( pNd )
+            {
+                if(
+                    (
+                        0 == ( pFrm = pNd->GetFrm()) ||
+                        ( !bInReadOnly && pFrm->IsProtected() ) ||
+                        (pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsHiddenNow())
+                    ) ||
+                    ( !bInReadOnly && pNd->FindSectionNode() &&
+                        pNd->FindSectionNode()->GetSection().IsProtect()
+                    )
+                  )
+                    {
+                        pNd = 0;
+                    }
+            }
         }
 
         if( !pNd )          // steht Cursor auf keinem ContentNode ?

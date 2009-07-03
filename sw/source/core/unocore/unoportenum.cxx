@@ -498,8 +498,14 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                         rePortionType = PORTION_TEXT;
                     break;
                     case RES_TXTATR_CJK_RUBY:
+                       //#i91534# GetEnd() == 0 mixes the order of ruby start/end
+                        if( *pAttr->GetEnd() == *pAttr->GetStart())
+                        {
+                            lcl_InsertRubyPortion(
+                               rPortionArr, pUnoCrsr, rParent, pAttr, sal_False);
+                        }
                         lcl_InsertRubyPortion(
-                            rPortionArr, pUnoCrsr, rParent, pAttr, TRUE);
+                               rPortionArr, pUnoCrsr, rParent, pAttr, TRUE);
                         rePortionType = PORTION_TEXT;
                     break;
                 }
@@ -619,7 +625,8 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                     }
                 break;
                 case RES_TXTATR_CJK_RUBY:
-                    if(pAttr->GetEnd())
+                    //#i91534# GetEnd() == 0 mixes the order of ruby start/end
+                    if(pAttr->GetEnd() && (*pAttr->GetEnd() != *pAttr->GetStart()))
                     {
                         lcl_InsertRubyPortion(
                             rPortionArr, pUnoCrsr, rParent, pAttr, FALSE);

@@ -700,6 +700,7 @@ private:
      SwFmt *_MakeFrmFmt(const String &, SwFmt *, BOOL, BOOL );
      SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, BOOL, BOOL );
 
+     void InitTOXTypes();
 public:
 
     /** Life cycle

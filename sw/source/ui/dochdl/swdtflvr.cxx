@@ -561,10 +561,14 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
             break;
 
         case SOT_FORMAT_STRING:
-            bOK = SetObject( pClpDocFac->GetDoc(),
+        {
+            SwDoc* pDoc = pClpDocFac->GetDoc();
+            ASSERT( pDoc, "Document not found" );
+            pDoc->SetClipBoard( true );
+            bOK = SetObject( pDoc,
                                 SWTRANSFER_OBJECTTYPE_STRING, rFlavor );
-            break;
-
+        }
+        break;
         case SOT_FORMAT_RTF:
             bOK = SetObject( pClpDocFac->GetDoc(),
                                 SWTRANSFER_OBJECTTYPE_RTF, rFlavor );

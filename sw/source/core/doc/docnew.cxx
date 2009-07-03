@@ -430,22 +430,7 @@ SwDoc::SwDoc() :
     pNewDBMgr = new SwNewDBMgr;
 
     // create TOXTypes
-    ShellResource* pShellRes = ViewShell::GetShellRes();
-
-    SwTOXType * pNew = new SwTOXType(TOX_CONTENT,   pShellRes->aTOXContentName        );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-    pNew = new SwTOXType(TOX_INDEX,                 pShellRes->aTOXIndexName  );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-    pNew = new SwTOXType(TOX_USER,                  pShellRes->aTOXUserName  );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-    pNew = new SwTOXType(TOX_ILLUSTRATIONS,         pShellRes->aTOXIllustrationsName );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-    pNew = new SwTOXType(TOX_OBJECTS,               pShellRes->aTOXObjectsName       );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-    pNew = new SwTOXType(TOX_TABLES,                pShellRes->aTOXTablesName        );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-    pNew = new SwTOXType(TOX_AUTHORITIES,           pShellRes->aTOXAuthoritiesName   );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+    InitTOXTypes();
 
     // --> OD 2008-03-07 #refactorlists#
     // pass empty item set containing the paragraph's list attributes
@@ -816,7 +801,7 @@ void SwDoc::ClearDoc()
     // in den BookMarks sind Indizies auf den Content. Diese muessen vorm
     // loesche der Nodes geloescht werden.
     pMarkManager->clearAllMarks();
-    pTOXTypes->DeleteAndDestroy( 0, pTOXTypes->Count() );
+    InitTOXTypes();
 
     // create a dummy pagedesc for the layout
     sal_uInt16 nDummyPgDsc = MakePageDesc( String::CreateFromAscii( "?DUMMY?" ));
@@ -1051,5 +1036,24 @@ SwDoc::GetXmlIdRegistry()
         m_pXmlIdRegistry.reset( ::sfx2::createXmlIdRegistry( IsClipBoard() ) );
     }
     return *m_pXmlIdRegistry;
+}
+
+void SwDoc::InitTOXTypes()
+{
+   ShellResource* pShellRes = ViewShell::GetShellRes();
+   SwTOXType * pNew = new SwTOXType(TOX_CONTENT,   pShellRes->aTOXContentName        );
+   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pNew = new SwTOXType(TOX_INDEX,                 pShellRes->aTOXIndexName  );
+   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pNew = new SwTOXType(TOX_USER,                  pShellRes->aTOXUserName  );
+   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pNew = new SwTOXType(TOX_ILLUSTRATIONS,         pShellRes->aTOXIllustrationsName );
+   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pNew = new SwTOXType(TOX_OBJECTS,               pShellRes->aTOXObjectsName       );
+   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pNew = new SwTOXType(TOX_TABLES,                pShellRes->aTOXTablesName        );
+   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pNew = new SwTOXType(TOX_AUTHORITIES,           pShellRes->aTOXAuthoritiesName   );
+   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
 }
 
