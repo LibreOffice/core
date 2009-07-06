@@ -50,6 +50,8 @@ sLocation=""
 # set location of TestTool
 # (full path including executable 'testtool')
 # if this is empty, we try to parse $HOME/.testtoolrc and use OOoProgramdir
+# on Mac this is VCLTestTool.app/Contents/MacOS/testtool.bin
+#sTestTool="/Users/sca/qa/testtool/VCLTestTool.app/Contents/MacOS/testtool.bin"
 sTestTool=""
 
 #------------------------------------------------------------------------
@@ -58,7 +60,7 @@ sTestTool=""
 function GetValueFromSection ()
 # call with NameOfValue Section file
 {
-   awk -v  sVarName="$1" -v sSectionName="$2" \
+   $AWK -v  sVarName="$1" -v sSectionName="$2" \
       'BEGIN { bInSection = 0}
       {  if ( index ($0 ,"[" sSectionName "]") > 0 )
             bInSection = 1
@@ -80,10 +82,17 @@ case `uname -s` in
     Darwin)
         testtoolrc="$HOME/Library/Application Support/.testtoolrc"
         KILLOFFICEALL="/usr/bin/killall -9 soffice.bin"
+    AWK=awk
+        ;;
+  SunOS)
+        testtoolrc="$HOME/.testtoolrc"
+        KILLOFFICEALL="pkill -9 soffice.bin"
+    AWK=nawk
         ;;
     *)
         testtoolrc="$HOME/.testtoolrc"
         KILLOFFICEALL="pkill -9 soffice.bin"
+    AWK=awk
         ;;
 esac
 
@@ -106,35 +115,10 @@ sResetOfficeBas="${sLocation}global/tools/resetoffice.bas"
 if [ -z "$sTestTool" ]
 then
    sTestTool=`GetValueFromSection Current OOoProgramDir "$testtoolrc"`
-   sTestTool="$sTestTool/program/testtool.bin"
+   sTestTool="$sTestTool/basis-link/program/testtool.bin"
 fi
 
-sd_prog=`dirname "$sTestTool"`
-case `uname -s` in
-    Darwin)
-    # this is a temporary hack until we can live with the default search paths
-    if [ "$DYLD_LIBRARY_PATH" ]; then
-      SYSTEM_DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH"
-      export SYSTEM_DYLD_LIBRARY_PATH
-      DYLD_LIBRARY_PATH="$sd_prog":"$DYLD_LIBRARY_PATH"
-    else
-      DYLD_LIBRARY_PATH="$sd_prog"
-    fi
-    export DYLD_LIBRARY_PATH
-    ;;
 
-  *)
-    # this is a temporary hack until we can live with the default search paths
-    if [ "$LD_LIBRARY_PATH" ]; then
-      SYSTEM_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-      export SYSTEM_LD_LIBRARY_PATH
-      LD_LIBRARY_PATH="$sd_prog":"$LD_LIBRARY_PATH"
-    else
-      LD_LIBRARY_PATH="$sd_prog"
-    fi
-    export LD_LIBRARY_PATH
-    ;;
-esac
 
 echo "****************************************************"
 echo "************ STARTING ************"
@@ -174,39 +158,43 @@ do
     `$KILLOFFICEALL`
 
     echo "****************************************************"
-    echo "running $x"
+    x=`echo "$x"|sed s/[[:blank:]]*$//` #cut all trailing blanks
     sTest="$sLocation$x"
+    if [ -f "$sTest" ]; then
 
-    # three pass logic - first pass is the real test, second pass is reset office, third is closeoffice
-    for z in "1" "2" "3";
-    do
-        "$sTestTool" -run "$sTest" &
-        sleep 5
-        echo " "
-
-        ######### save the PID from the last Background job
-        testtoolpid=$!
-        echo "PID of Testtool: " $testtoolpid
-
-        if [ `ps -A | grep -v "grep" | grep $testtoolpid | wc -l` -gt 0 ] ; then
-            echo " Successfully started"
-        else
-            echo " There might be something wrong with starting the Testtool!"
-        fi
-
-        ######### wait until Testtool has finished & closed
-        while [ `ps -A | grep -v "grep" | grep $testtoolpid | wc -l` -gt 0 ] ;
+        # two pass logic - first pass is the real test, second pass is reset office, third is closeoffice
+            for z in "1" "2";
         do
+            echo "running <$sTest>"
+            "$sTestTool" -run "$sTest" &
             sleep 5
-            i=$((i+5))
-        done
+            echo " "
 
-        ####### for the second run use the office reset script, for the third use office exit!
-        case $z in
-            "1")    sTest="$sResetOfficeBas";;
-            "2")    sTest="$sExitOfficeBas";;
-        esac
-    done
+            ######### save the PID from the last Background job
+            testtoolpid=$!
+            echo "PID of Testtool: " $testtoolpid
+
+            if [ `ps -A | grep -v "grep" | grep $testtoolpid | wc -l` -gt 0 ] ; then
+                echo " Successfully started"
+            else
+                echo " There might be something wrong with starting the Testtool!"
+            fi
+
+            ######### wait until Testtool has finished & closed
+            while [ `ps -A | grep -v "grep" | grep $testtoolpid | wc -l` -gt 0 ] ;
+            do
+                sleep 5
+                i=$((i+5))
+            done
+
+            ####### for the second run use the office reset script!
+                case $z in
+                        "1")    sTest="$sResetOfficeBas";;
+                    esac
+        done
+    else
+        echo "Error: file <$sTest> not found"
+    fi
 done
 
 echo "Duration:" $((i/60)) "min" $((i%60)) "sec "

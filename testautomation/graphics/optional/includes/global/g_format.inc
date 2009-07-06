@@ -666,28 +666,32 @@ testcase tiFormat3D_Effekte
         qaerrorlog "   The 3D-Effects-dialogue was open. Check why."
     else
     end if
-    try
-        if Perspektive.isvisible then
-        else
-            warnlog "why not in draw?"
-        end if
-    catch
-        warnlog "something is wrong mit perspective"
-    endcatch
-    Kontext "DocumentImpress"
-    gMouseClick 40,40
-    Kontext
-    Active.SetPage TabPositionAndSize
-    Kontext "TabPositionAndSize"
-    if PositionX.GetText = X Then
-        printlog "- Perspective acitvated x: "+PositionX.GetText
-    else
-        warnlog "- Perspective seems to have a problem, x value has changed!"
-    end if
-    TabPositionAndSize.OK
-    Kontext "Drei_D_Effekte"
-    Aktualisieren.Click
-    Drei_D_Effekte.Close
+        try
+            if Perspektive.isvisible then
+                Perspektive.Click                         '/// check perspective ///'
+            else
+                warnlog "why not in draw?"
+            end if
+        catch
+            warnlog "something is wrong mit perspective"
+        endcatch
+        Zuweisen.Click                            '/// assign perspective ///'
+        Kontext "DocumentImpress"
+        hTypeKeys "<MOD1 A>"
+        ContextPositionAndSize                        '/// check position and size ///'
+            Kontext
+            Active.SetPage TabPositionAndSize
+            Kontext "TabPositionAndSize"
+            if PositionX.GetText = X Then
+                printlog "- Perspective acitvated x: "+PositionX.GetText
+            else
+                warnlog "- Perspective seems to have a problem, x value has changed!"
+            end if
+            TabPositionAndSize.OK
+        Kontext "Drei_D_Effekte"
+        Aktualisieren.Click
+        Drei_D_Effekte.Close
+    EditSelectAll                   '/// delete rectangle ///'
     hTypeKeys "<DELETE>"
 
     '-----------------------------------RECTANGLE------------------------------------------------------

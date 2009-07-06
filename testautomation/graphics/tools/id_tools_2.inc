@@ -282,7 +282,11 @@ sub SaveMeasurementSetFirst
     elseIf (gApplication = "CALC") then
         sApplication = "CALC"
     endif
+<<<<<<< .working
     printlog "   '/// - save states ///'"
+=======
+    printlog  " - save states "
+>>>>>>> .merge-right.r273717
     ToolsOptions
     hToolsOptions (sApplication,"General")
     ReferenceOld = Masseinheit.GetSelText
@@ -336,7 +340,11 @@ sub ResetMeasurement
     elseIf (gApplication = "CALC") then
         sApplication = "CALC"
     endif
+<<<<<<< .working
     printlog "'/// - Reset states back to what they were before ///'"
+=======
+    printlog " - Reset states back to what they were before "
+>>>>>>> .merge-right.r273717
     ToolsOptions
     hToolsOptions (sApplication,"General")
     if Masseinheit.GetSelText <> ReferenceOld then 'find the right one.
@@ -358,24 +366,24 @@ end Sub
 sub SetKontextApplication
     ' Removed by JSK: sleep 1
     Select Case gApplication
-    Case "DRAW"
-        Kontext "DocumentDraw"
-        '         Printlog "gApplication / Kontext is now: DocumentDraw"
-        ' Removed by JSK: sleep 1
-    Case "IMPRESS"
-        Kontext "DocumentImpress"
-        '         Printlog "gApplication / Kontext is now is now: DocumentImpress"
-        ' Removed by JSK: sleep 1
-    Case "WRITER"
-        Kontext "DocumentWriter"
-        '         Printlog "gApplication / Kontext is now is now: DocumentWriter"
-        ' Removed by JSK: sleep 1
-    Case "CALC"
-        Kontext "DocumentCalc"
-        '         Printlog "gApplication / Kontext is now is now: DocumentCalc"
-        ' Removed by JSK: sleep 1
-    end select
-    ' Removed by JSK: sleep 1
+        Case "DRAW"
+            Kontext "DocumentDraw"
+            Printlog "gApplication / Kontext is now: DocumentDraw"
+             sleep 1
+        Case "IMPRESS"
+            Kontext "DocumentImpress"
+            Printlog "gApplication / Kontext is now is now: DocumentImpress"
+             sleep 1
+        Case "WRITER"
+            Kontext "DocumentWriter"
+            Printlog "gApplication / Kontext is now is now: DocumentWriter"
+            sleep 1
+        Case "CALC"
+            Kontext "DocumentCalc"
+            Printlog "gApplication / Kontext is now is now: DocumentCalc"
+            sleep 1
+        end select
+    sleep 1
 end sub
 
 '-------------------------------------------------------------------------------
@@ -524,7 +532,8 @@ end sub
 sub mouseclickinpresentation
     Kontext "DocumentPresentation"
     autoexecute=false
-    DocumentPresentation.MouseDown ( 50, 50 )   '/// switch slides using mouse clicks ///'
+    printlog " switch slides using mouse clicks "
+    DocumentPresentation.MouseDown ( 50, 50 )   
     DocumentPresentation.MouseUp ( 50, 50 )
     autoexecute=true
 end sub
