@@ -30,7 +30,11 @@
 
 #include "pnghelper.hxx"
 
-#include "zlib/zlib.h"
+#ifdef SYSTEM_ZLIB
+#include "zlib.h"
+#else
+#include <zlib/zlib.h>
+#endif
 
 using namespace pdfi;
 
