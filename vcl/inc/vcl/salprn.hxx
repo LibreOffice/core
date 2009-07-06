@@ -41,7 +41,7 @@
 class SalGraphics;
 class SalFrame;
 struct ImplJobSetup;
-namespace vcl { class PrinterListener; }
+namespace vcl { class PrinterController; }
 
 // -----------------------
 // - SalPrinterQueueInfo -
@@ -125,7 +125,7 @@ public:                     // public for Sal Implementation
                                               const String& rJobName,
                                               const String& rAppName,
                                               ImplJobSetup* pSetupData,
-                                              vcl::PrinterListener& rListener );
+                                              vcl::PrinterController& rController );
 
     virtual BOOL                    EndJob() = 0;
     virtual BOOL                    AbortJob() = 0;

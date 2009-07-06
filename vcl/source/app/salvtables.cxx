@@ -91,7 +91,7 @@ SalPrinter::~SalPrinter()
 }
 
 BOOL SalPrinter::StartJob( const String*, const String&, const String&,
-                           ImplJobSetup*, vcl::PrinterListener& )
+                           ImplJobSetup*, vcl::PrinterController& )
 {
     return FALSE;
 }

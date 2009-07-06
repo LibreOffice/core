@@ -55,13 +55,13 @@ using namespace com::sun::star::uno;
    the preview insists on not being present. This is unfortunate.
 */
 
-class ListenerProperties;
+class ControllerProperties;
 
 @interface ControlTarget : NSObject
 {
-    ListenerProperties* mpListener;
+    ControllerProperties* mpController;
 }
--(id)initWithListenerMap: (ListenerProperties*)pListener;
+-(id)initWithControllerMap: (ControllerProperties*)pController;
 -(void)triggered:(id)pSender;
 -(void)triggeredNumeric:(id)pSender;
 -(void)triggeredPreview:(id)pSender;
@@ -69,9 +69,9 @@ class ListenerProperties;
 @end
 
 
-class ListenerProperties
+class ControllerProperties
 {
-    vcl::PrinterListener*               mpListener;
+    vcl::PrinterController*             mpController;
     std::map< int, rtl::OUString >      maTagToPropertyName;
     std::map< int, sal_Int32 >          maTagToValueInt;
     std::map< NSView*, NSView* >        maViewPairMap;
@@ -89,14 +89,14 @@ class ListenerProperties
     NSTextView*                         mpPagesLabel;
     
     public:
-    ListenerProperties( vcl::PrinterListener* i_pListener,
-                        NSPrintOperation* i_pOp,
-                        NSView* i_pAccessoryView,
-                        NSTabView* i_pTabView,
-                        PrintAccessoryViewState* i_pState )
-    : mpListener( i_pListener ),
+    ControllerProperties( vcl::PrinterController* i_pController,
+                          NSPrintOperation* i_pOp,
+                          NSView* i_pAccessoryView,
+                          NSTabView* i_pTabView,
+                          PrintAccessoryViewState* i_pState )
+    : mpController( i_pController ),
       mnNextTag( 0 ),
-      mnLastPageCount( i_pListener->getPageCount() ),
+      mnLastPageCount( i_pController->getPageCount() ),
       mpState( i_pState ),
       mpOp( i_pOp ),
       mpAccessoryView( i_pAccessoryView ),
@@ -112,10 +112,10 @@ class ListenerProperties
     
     void updatePrintJob()
     {
-        // TODO: refresh page count etc from mpListener 
+        // TODO: refresh page count etc from mpController 
 
         // page range may have changed depending on options
-        sal_Int32 nPages = mpListener->getPageCount();
+        sal_Int32 nPages = mpController->getPageCount();
         #if OSL_DEBUG_LEVEL > 1
         if( nPages != mnLastPageCount )
             fprintf( stderr, "trouble: number of pages changed from %ld to %ld !\n", mnLastPageCount, nPages );
@@ -203,7 +203,7 @@ class ListenerProperties
         std::map< int, sal_Int32 >::const_iterator value_it = maTagToValueInt.find( i_nTag );
         if( name_it != maTagToPropertyName.end() && value_it != maTagToValueInt.end() )
         {
-            PropertyValue* pVal = mpListener->getValue( name_it->second );
+            PropertyValue* pVal = mpController->getValue( name_it->second );
             if( pVal )
             {
                 pVal->Value <<= value_it->second;
@@ -217,7 +217,7 @@ class ListenerProperties
         std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( i_nTag );
         if( name_it != maTagToPropertyName.end() )
         {
-            PropertyValue* pVal = mpListener->getValue( name_it->second );
+            PropertyValue* pVal = mpController->getValue( name_it->second );
             if( pVal )
             {
                 pVal->Value <<= i_nValue;
@@ -231,7 +231,7 @@ class ListenerProperties
         std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( i_nTag );
         if( name_it != maTagToPropertyName.end() )
         {
-            PropertyValue* pVal = mpListener->getValue( name_it->second );
+            PropertyValue* pVal = mpController->getValue( name_it->second );
             if( pVal )
             {
                 pVal->Value <<= i_bValue;
@@ -245,7 +245,7 @@ class ListenerProperties
         std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( i_nTag );
         if( name_it != maTagToPropertyName.end() )
         {
-            PropertyValue* pVal = mpListener->getValue( name_it->second );
+            PropertyValue* pVal = mpController->getValue( name_it->second );
             if( pVal )
             {
                 pVal->Value <<= i_rValue;
@@ -273,7 +273,7 @@ class ListenerProperties
             std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( nTag );
             if( name_it != maTagToPropertyName.end() )
             {
-                MacOSBOOL bEnabled = mpListener->isUIOptionEnabled( name_it->second ) ? YES : NO;
+                MacOSBOOL bEnabled = mpController->isUIOptionEnabled( name_it->second ) ? YES : NO;
                 if( pCtrl )
                 {
                     [pCtrl setEnabled: bEnabled];
@@ -290,14 +290,14 @@ class ListenerProperties
     
     void updatePreviewImage( sal_Int32 i_nPage )
     {
-        sal_Int32 nPages = mpListener->getFilteredPageCount();
+        sal_Int32 nPages = mpController->getFilteredPageCount();
         NSRect aViewFrame = [mpPreview frame];
         Size aPixelSize( static_cast<long>(aViewFrame.size.width),
                          static_cast<long>(aViewFrame.size.height) );
         if( i_nPage >= 0 && nPages > i_nPage )
         {
             GDIMetaFile aMtf;
-            Size aPageSize( mpListener->getFilteredPageFile( i_nPage, aMtf, false ) );
+            Size aPageSize( mpController->getFilteredPageFile( i_nPage, aMtf, false ) );
             VirtualDevice aDev;
             Size aLogicSize( aDev.PixelToLogic( aPixelSize, MapMode( MAP_100TH_MM ) ) );
             double fScaleX = double(aLogicSize.Width())/double(aPageSize.Width());
@@ -355,7 +355,7 @@ class ListenerProperties
         [mpPreviewBox addSubview: [mpPreview autorelease]];
     
         // add a label
-        sal_Int32 nPages = mpListener->getFilteredPageCount();
+        sal_Int32 nPages = mpController->getFilteredPageCount();
         rtl::OUStringBuffer aBuf( 16 );
         aBuf.appendAscii( "/ " );
         aBuf.append( rtl::OUString::valueOf( nPages ) );
@@ -445,11 +445,11 @@ static void filterAccelerator( rtl::OUString& io_rText )
 }
 
 @implementation ControlTarget
--(id)initWithListenerMap: (ListenerProperties*)pListener
+-(id)initWithControllerMap: (ControllerProperties*)pController
 {
     if( (self = [super init]) )
     {
-        mpListener = pListener; 
+        mpController = pController; 
     }
     return self;
 }
@@ -462,14 +462,14 @@ static void filterAccelerator( rtl::OUString& io_rText )
         if( pSelected )
         {
             int nTag = [pSelected tag];
-            mpListener->changePropertyWithIntValue( nTag );
+            mpController->changePropertyWithIntValue( nTag );
         }
     }
     else if( [pSender isMemberOfClass: [NSButton class]] )
     {
         NSButton* pBtn = (NSButton*)pSender;
         int nTag = [pBtn tag];
-        mpListener->changePropertyWithBoolValue( nTag, [pBtn state] == NSOnState );
+        mpController->changePropertyWithBoolValue( nTag, [pBtn state] == NSOnState );
     }
     else if( [pSender isMemberOfClass: [NSMatrix class]] )
     {
@@ -478,7 +478,7 @@ static void filterAccelerator( rtl::OUString& io_rText )
         {
             NSButtonCell* pCell = (NSButtonCell*)pObj;
             int nTag = [pCell tag];
-            mpListener->changePropertyWithIntValue( nTag );
+            mpController->changePropertyWithIntValue( nTag );
         }
     }
     else if( [pSender isMemberOfClass: [NSTextField class]] )
@@ -486,13 +486,13 @@ static void filterAccelerator( rtl::OUString& io_rText )
         NSTextField* pField = (NSTextField*)pSender;
         int nTag = [pField tag];
         rtl::OUString aValue = GetOUString( [pSender stringValue] );
-        mpListener->changePropertyWithStringValue( nTag, aValue );
+        mpController->changePropertyWithStringValue( nTag, aValue );
     }
     else
     {
         DBG_ERROR( "unsupported class" );
     }
-    mpListener->updateEnableState();
+    mpController->updateEnableState();
 }
 -(void)triggeredNumeric:(id)pSender;
 {
@@ -502,11 +502,11 @@ static void filterAccelerator( rtl::OUString& io_rText )
         int nTag = [pField tag];
         sal_Int64 nValue = [pField intValue];
         
-        NSView* pOther = mpListener->getPair( pField );
+        NSView* pOther = mpController->getPair( pField );
         if( pOther )
             [(NSControl*)pOther setIntValue: nValue];
 
-        mpListener->changePropertyWithIntValue( nTag, nValue );
+        mpController->changePropertyWithIntValue( nTag, nValue );
     }
     else if( [pSender isMemberOfClass: [NSStepper class]] )
     {
@@ -514,25 +514,25 @@ static void filterAccelerator( rtl::OUString& io_rText )
         int nTag = [pStep tag];
         sal_Int64 nValue = [pStep intValue];
 
-        NSView* pOther = mpListener->getPair( pStep );
+        NSView* pOther = mpController->getPair( pStep );
         if( pOther )
             [(NSControl*)pOther setIntValue: nValue];
 
-        mpListener->changePropertyWithIntValue( nTag, nValue );
+        mpController->changePropertyWithIntValue( nTag, nValue );
     }
     else
     {
         DBG_ERROR( "unsupported class" );
     }
-    mpListener->updateEnableState();
+    mpController->updateEnableState();
 }
 -(void)triggeredPreview:(id)pSender
 {
-    mpListener->changePreview( pSender );
+    mpController->changePreview( pSender );
 }
 -(void)dealloc
 {
-    delete mpListener;
+    delete mpController;
     [super dealloc];
 }
 @end
@@ -572,9 +572,9 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
 
 
 @implementation AquaPrintAccessoryView
-+(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withListener: (vcl::PrinterListener*)pListener  withState: (PrintAccessoryViewState*)pState;
++(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withController: (vcl::PrinterController*)pController  withState: (PrintAccessoryViewState*)pState;
 {
-    const Sequence< PropertyValue >& rOptions( pListener->getUIOptions() );
+    const Sequence< PropertyValue >& rOptions( pController->getUIOptions() );
     if( rOptions.getLength() == 0 )
         return nil;
 
@@ -590,8 +590,8 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
     
     sal_Bool bIgnoreSubgroup = sal_False;
     
-    ListenerProperties* pListenerProperties = new ListenerProperties( pListener, pOp, pAccessoryView, pTabView, pState );
-    ControlTarget* pCtrlTarget = [[ControlTarget alloc] initWithListenerMap: pListenerProperties];
+    ControllerProperties* pControllerProperties = new ControllerProperties( pController, pOp, pAccessoryView, pTabView, pState );
+    ControlTarget* pCtrlTarget = [[ControlTarget alloc] initWithControllerMap: pControllerProperties];
 
     for( int i = 0; i < rOptions.getLength(); i++ )
     {
@@ -723,7 +723,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 [pBtn setButtonType: NSSwitchButton];
                 [pBtn setTitle: pText];
                 sal_Bool bVal = sal_False;                
-                PropertyValue* pVal = pListener->getValue( aPropertyName );
+                PropertyValue* pVal = pController->getValue( aPropertyName );
                 if( pVal )
                     pVal->Value >>= bVal;
                 [pBtn setState: bVal ? NSOnState : NSOffState];
@@ -733,8 +733,8 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 // connect target
                 [pBtn setTarget: pCtrlTarget];
                 [pBtn setAction: @selector(triggered:)];
-                int nTag = pListenerProperties->addNameTag( aPropertyName );
-                pListenerProperties->addObservedControl( pBtn );
+                int nTag = pControllerProperties->addNameTag( aPropertyName );
+                pControllerProperties->addObservedControl( pBtn );
                 [pBtn setTag: nTag];
 
                 aCheckRect = [pBtn frame];
@@ -793,7 +793,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                                                       numberOfColumns: 1];
                 // get currently selected value
                 sal_Int32 nSelectVal = 0;
-                PropertyValue* pVal = pListener->getValue( aPropertyName );
+                PropertyValue* pVal = pController->getValue( aPropertyName );
                 if( pVal && pVal->Value.hasValue() )
                     pVal->Value >>= nSelectVal;
                 // set individual titles
@@ -807,8 +807,8 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                     // connect target and action
                     [pCell setTarget: pCtrlTarget];
                     [pCell setAction: @selector(triggered:)];
-                    int nTag = pListenerProperties->addNameAndValueTag( aPropertyName, m );
-                    pListenerProperties->addObservedControl( pCell );
+                    int nTag = pControllerProperties->addNameAndValueTag( aPropertyName, m );
+                    pControllerProperties->addObservedControl( pCell );
                     [pCell setTag: nTag];
                     [pTitle release];
                     // set current selection
@@ -870,12 +870,12 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                     NSString* pItemText = CreateNSString( aChoices[m] );
                     [pBtn addItemWithTitle: pItemText];
                     NSMenuItem* pItem = [pBtn itemWithTitle: pItemText];
-                    int nTag = pListenerProperties->addNameAndValueTag( aPropertyName, m );
+                    int nTag = pControllerProperties->addNameAndValueTag( aPropertyName, m );
                     [pItem setTag: nTag];
                     [pItemText release];
                 }
 
-                PropertyValue* pVal = pListener->getValue( aPropertyName );
+                PropertyValue* pVal = pController->getValue( aPropertyName );
                 sal_Int32 aSelectVal = 0;
                 if( pVal && pVal->Value.hasValue() )
                     pVal->Value >>= aSelectVal;
@@ -883,8 +883,8 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 
                 // add the button to observed controls for enabled state changes
                 // also add a tag just for this purpose
-                pListenerProperties->addObservedControl( pBtn );
-                [pBtn setTag: pListenerProperties->addNameTag( aPropertyName )];
+                pControllerProperties->addObservedControl( pBtn );
+                [pBtn setTag: pControllerProperties->addNameTag( aPropertyName )];
 
                 [pBtn sizeToFit];
                 [pCurParent addSubview: [pBtn autorelease]];
@@ -963,17 +963,17 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 
                 // add the field to observed controls for enabled state changes
                 // also add a tag just for this purpose
-                pListenerProperties->addObservedControl( pFieldView );
-                int nTag = pListenerProperties->addNameTag( aPropertyName );
+                pControllerProperties->addObservedControl( pFieldView );
+                int nTag = pControllerProperties->addNameTag( aPropertyName );
                 [pFieldView setTag: nTag];
-                // pListenerProperties->addNamedView( pFieldView, aPropertyName );
+                // pControllerProperties->addNamedView( pFieldView, aPropertyName );
 
                 // move to nCurY
                 aFieldRect.origin.y = nCurY - aFieldRect.size.height;
                 [pFieldView setFrame: aFieldRect];
 
                 // current value
-                PropertyValue* pVal = pListener->getValue( aPropertyName );
+                PropertyValue* pVal = pController->getValue( aPropertyName );
                 if( aCtrlType.equalsAscii( "Range" ) )
                 {
                     // add a stepper control
@@ -985,7 +985,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                     [pStep setValueWraps: NO];
                     [pStep setTag: nTag];
                     [pCurParent addSubview: [pStep autorelease]];
-                    pListenerProperties->addObservedControl( pStep );
+                    pControllerProperties->addObservedControl( pStep );
                     [pStep setTarget: pCtrlTarget];
                     [pStep setAction: @selector(triggered:)];
                     
@@ -1011,7 +1011,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                     [pFieldView setIntValue: nSelectVal];
                     [pStep setIntValue: nSelectVal];
 
-                    pListenerProperties->addViewPair( pFieldView, pStep );
+                    pControllerProperties->addViewPair( pFieldView, pStep );
                     // connect target and action
                     [pFieldView setTarget: pCtrlTarget];
                     [pFieldView setAction: @selector(triggeredNumeric:)];
@@ -1047,7 +1047,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
             DBG_ERROR( "Unsupported UI option" );
         }
     }
-    pListenerProperties->updateEnableState();
+    pControllerProperties->updateEnableState();
     adjustViewAndChildren( pCurParent, aMaxTabSize );
         
     // find the minimum needed tab size
@@ -1060,7 +1060,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
     aViewFrame.size.height = aTabCtrlSize.height + aTabViewFrame.origin.y;
     [pAccessoryView setFrameSize: aViewFrame.size];
     
-    pListenerProperties->setupPreview( pCtrlTarget );
+    pControllerProperties->setupPreview( pCtrlTarget );
 
     // set the accessory view
     [pOp setAccessoryView: [pAccessoryView autorelease]];

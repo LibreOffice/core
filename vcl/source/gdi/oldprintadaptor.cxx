@@ -55,7 +55,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
 OldStylePrintAdaptor::OldStylePrintAdaptor( const boost::shared_ptr< Printer >& i_pPrinter )
-    : PrinterListener( i_pPrinter )
+    : PrinterController( i_pPrinter )
     , mpData( new ImplOldStyleAdaptorData() )
 {
 }

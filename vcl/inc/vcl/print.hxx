@@ -56,7 +56,7 @@ class VirtualDevice;
 class Window;
 
 namespace vcl {
-    class PrinterListener;
+    class PrinterController;
     class PrintDialog;
 }
 
@@ -264,7 +264,7 @@ private:
     SAL_DLLPRIVATE void         ImplFindPaperFormatForUserSize( JobSetup& );
     DECL_DLLPRIVATE_LINK(       ImplDestroyPrinterAsync, void* );
 
-    SAL_DLLPRIVATE bool StartJob( const rtl::OUString& rJobName, boost::shared_ptr<vcl::PrinterListener>& );
+    SAL_DLLPRIVATE bool StartJob( const rtl::OUString& rJobName, boost::shared_ptr<vcl::PrinterController>& );
 
     static SAL_DLLPRIVATE ULONG ImplSalPrinterErrorCodeToVCL( ULONG nError );
 
@@ -386,26 +386,26 @@ public:
         starts a print job asynchronously (that is will return
 
     */
-    static void PrintJob( const boost::shared_ptr<vcl::PrinterListener>& i_pListener,
+    static void PrintJob( const boost::shared_ptr<vcl::PrinterController>& i_pController,
                           const JobSetup& i_rInitSetup
                           );
 
     // implementation detail of PrintJob being asynchronous
     // not exported, not usable outside vcl
-    static void SAL_DLLPRIVATE ImplPrintJob( const boost::shared_ptr<vcl::PrinterListener>& i_pListener,
+    static void SAL_DLLPRIVATE ImplPrintJob( const boost::shared_ptr<vcl::PrinterController>& i_pController,
                                              const JobSetup& i_rInitSetup
                                              );
 };
 
 namespace vcl
 {
-class ImplPrinterListenerData;
+class ImplPrinterControllerData;
 
-class VCL_DLLPUBLIC PrinterListener
+class VCL_DLLPUBLIC PrinterController
 {
-    ImplPrinterListenerData* mpImplData;
+    ImplPrinterControllerData* mpImplData;
 protected:
-    PrinterListener( const boost::shared_ptr<Printer>& );
+    PrinterController( const boost::shared_ptr<Printer>& );
 public:
     struct MultiPageSetup
     {
@@ -432,8 +432,8 @@ public:
         }
     };
 
-    PrinterListener();
-    virtual ~PrinterListener();
+    PrinterController();
+    virtual ~PrinterController();
 
     const boost::shared_ptr<Printer>& getPrinter() const;
     /* for implementations: get current job properties as changed by e.g. print dialog
@@ -449,6 +449,8 @@ public:
     */
     com::sun::star::beans::PropertyValue* getValue( const rtl::OUString& i_rPropertyName );
     const com::sun::star::beans::PropertyValue* getValue( const rtl::OUString& i_rPropertyName ) const;
+    // get a sequence of properties
+    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getValues( const com::sun::star::uno::Sequence< rtl::OUString >& ) const;
 
     /* set a property value - can also be used to add another UI property
     */
@@ -482,6 +484,8 @@ public:
     virtual void jobFinished( com::sun::star::view::PrintableState );
 
     com::sun::star::view::PrintableState getJobState() const;
+
+    void abortJob();
 
     // implementation details, not usable outside vcl
     SAL_DLLPRIVATE int getFilteredPageCount();

@@ -106,7 +106,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
                                           const String& rJobName,
                                           const String& i_rAppName,
                                           ImplJobSetup* i_pSetupData,
-                                          vcl::PrinterListener& i_rListener,
+                                          vcl::PrinterController& i_rController,
                                           bool bIsQuickJob );
     BOOL                        EndJob();
     BOOL                        AbortJob();
@@ -149,7 +149,7 @@ class AquaSalPrinter : public SalPrinter
                                               const String& rJobName,
                                               const String& i_rAppName,
                                               ImplJobSetup* i_pSetupData,
-                                              vcl::PrinterListener& i_rListener );
+                                              vcl::PrinterController& i_rListener );
 
     virtual BOOL                    EndJob();
     virtual BOOL                    AbortJob();

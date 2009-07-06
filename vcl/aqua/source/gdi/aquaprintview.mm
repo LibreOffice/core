@@ -36,12 +36,12 @@
 #include "vcl/print.hxx"
 
 @implementation AquaPrintView
--(id)initWithListener: (vcl::PrinterListener*)pListener withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter
+-(id)initWithController: (vcl::PrinterController*)pController withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter
 {
     NSRect aRect = { { 0, 0 }, [pInfoPrinter->getPrintInfo() paperSize] };
     if( (self = [super initWithFrame: aRect]) != nil )
     {
-        mpListener = pListener;
+        mpController = pController;
         mpInfoPrinter = pInfoPrinter;
     }
     return self;
@@ -77,6 +77,6 @@
     
     // page count is 1 based
     if( nPage - 1 < (mpInfoPrinter->getCurPageRangeStart() + mpInfoPrinter->getCurPageRangeCount() ) )
-        mpListener->printFilteredPage( nPage-1 );
+        mpController->printFilteredPage( nPage-1 );
 }
 @end

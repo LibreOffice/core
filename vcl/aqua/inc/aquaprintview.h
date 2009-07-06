@@ -38,7 +38,6 @@
 #include "vcl/print.hxx"
 
 class AquaSalInfoPrinter;
-namespace vcl { class PrinterListener; }
 
 struct PrintAccessoryViewState
 {
@@ -51,10 +50,10 @@ struct PrintAccessoryViewState
 
 @interface AquaPrintView : NSView
 {
-    vcl::PrinterListener*       mpListener;
+    vcl::PrinterController*     mpController;
     AquaSalInfoPrinter*         mpInfoPrinter;
 }
--(id)initWithListener: (vcl::PrinterListener*)pListener withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter;
+-(id)initWithController: (vcl::PrinterController*)pController withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter;
 -(MacOSBOOL)knowsPageRange: (NSRangePointer)range;
 -(NSRect)rectForPage: (int)page;
 -(NSPoint)locationOfPrintRect: (NSRect)aRect;
@@ -64,7 +63,7 @@ struct PrintAccessoryViewState
 @interface AquaPrintAccessoryView : NSObject
 {
 }
-+(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withListener: (vcl::PrinterListener*)pListener withState: (PrintAccessoryViewState*)pState;
++(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withController: (vcl::PrinterController*)pController withState: (PrintAccessoryViewState*)pState;
 @end
 
 

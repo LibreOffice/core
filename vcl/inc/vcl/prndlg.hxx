@@ -112,7 +112,7 @@ namespace vcl
 
             void readFromSettings();
             void storeToSettings();
-            void initFromMultiPageSetup( const vcl::PrinterListener::MultiPageSetup& );
+            void initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& );
 
             virtual void Resize();
         };
@@ -156,7 +156,7 @@ namespace vcl
 
         FixedLine                               maButtonLine;
 
-        boost::shared_ptr< PrinterListener >    maPListener;
+        boost::shared_ptr< PrinterController >  maPController;
 
         rtl::OUString                           maPageStr;
         rtl::OUString                           maNoPageStr;
@@ -206,7 +206,7 @@ namespace vcl
         DECL_LINK( UIOption_ModifyHdl, Edit* );
 
     public:
-        PrintDialog( Window*, const boost::shared_ptr< PrinterListener >& );
+        PrintDialog( Window*, const boost::shared_ptr< PrinterController >& );
         virtual ~PrintDialog();
 
         bool isPrintToFile();

@@ -484,10 +484,10 @@ void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
     }
 }
 
-static Size getPageSize( vcl::PrinterListener& i_rListener, sal_Int32 i_nPage )
+static Size getPageSize( vcl::PrinterController& i_rController, sal_Int32 i_nPage )
 {
     Size aPageSize;
-    Sequence< PropertyValue > aPageParms( i_rListener.getPageParameters( i_nPage ) );
+    Sequence< PropertyValue > aPageParms( i_rController.getPageParameters( i_nPage ) );
     for( sal_Int32 nProperty = 0, nPropertyCount = aPageParms.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
         if( aPageParms[ nProperty ].Name.equalsAscii( "PageSize" ) )
@@ -506,7 +506,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
                                    const String& i_rJobName,
                                    const String& i_rAppName,
                                    ImplJobSetup* i_pSetupData,
-                                   vcl::PrinterListener& i_rListener,
+                                   vcl::PrinterController& i_rController,
                                    bool bIsQuickJob )
 {
     if( mbJob )
@@ -521,7 +521,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
     aAccViewState.bNeedRestart = true;
 
     // reset IsLastPage
-    i_rListener.setLastPage( sal_False );
+    i_rController.setLastPage( sal_False );
 
     // update job data
     if( i_pSetupData )
@@ -529,20 +529,20 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
 
     // do we want a progress panel ?
     sal_Bool bShowProgressPanel = sal_True;
-    beans::PropertyValue* pMonitor = i_rListener.getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MonitorVisible" ) ) );
+    beans::PropertyValue* pMonitor = i_rController.getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MonitorVisible" ) ) );
     if( pMonitor )
         pMonitor->Value >>= bShowProgressPanel;
 
     // FIXME: jobStarted() should be done after the print dialog has ended (if there is one)
     // how do I know when that might be ?
-    i_rListener.jobStarted();
+    i_rController.jobStarted();
     do
     {
         if( aAccViewState.bNeedRestart )
         {
             mnCurPageRangeStart = 0;
             mnCurPageRangeCount = 0;
-            nAllPages = i_rListener.getFilteredPageCount();
+            nAllPages = i_rController.getFilteredPageCount();
         }
 
         aAccViewState.bNeedRestart = false;
@@ -551,13 +551,13 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
         if( nAllPages > 0 )
         {
             mnCurPageRangeCount = 1;
-            aCurSize = getPageSize( i_rListener, mnCurPageRangeStart );
+            aCurSize = getPageSize( i_rController, mnCurPageRangeStart );
             Size aNextSize( aCurSize );
 
             // print pages up to a different size
             while( mnCurPageRangeCount + mnCurPageRangeStart < nAllPages )
             {
-                aNextSize = getPageSize( i_rListener, mnCurPageRangeStart + mnCurPageRangeCount );
+                aNextSize = getPageSize( i_rController, mnCurPageRangeStart + mnCurPageRangeCount );
                 if( aCurSize == aNextSize // same page size
                     ||
                     (aCurSize.Width() == aNextSize.Height() && aCurSize.Height() == aNextSize.Width()) // same size, but different orientation
@@ -578,7 +578,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
         setPaperSize( aCurSize.Width(), aCurSize.Height(), ORIENTATION_PORTRAIT );
 
         // create view
-        NSView* pPrintView = [[AquaPrintView alloc] initWithListener: &i_rListener withInfoPrinter: this];
+        NSView* pPrintView = [[AquaPrintView alloc] initWithController: &i_rController withInfoPrinter: this];
 
         NSMutableDictionary* pPrintDict = [mpPrintInfo dictionary];
 
@@ -591,7 +591,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
             [pPath release];
         }
 
-        [pPrintDict setObject: [[NSNumber numberWithInt: (int)i_rListener.getPrinter()->GetCopyCount()] autorelease] forKey: NSPrintCopies];
+        [pPrintDict setObject: [[NSNumber numberWithInt: (int)i_rController.getPrinter()->GetCopyCount()] autorelease] forKey: NSPrintCopies];
         [pPrintDict setObject: [[NSNumber numberWithBool: YES] autorelease] forKey: NSPrintDetailedErrorReporting];
         [pPrintDict setObject: [[NSNumber numberWithInt: 1] autorelease] forKey: NSPrintFirstPage];
         [pPrintDict setObject: [[NSNumber numberWithInt: mnCurPageRangeCount] autorelease] forKey: NSPrintLastPage];
@@ -612,7 +612,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
                 [pPrintOperation performSelector: @selector(setJobTitle:) withObject: [CreateNSString( i_rJobName ) autorelease]];
 
             if( bShowPanel && mnCurPageRangeStart == 0 ) // only the first range of pages gets the accesory view
-                pReleaseAfterUse = [AquaPrintAccessoryView setupPrinterPanel: pPrintOperation withListener: &i_rListener withState: &aAccViewState];
+                pReleaseAfterUse = [AquaPrintAccessoryView setupPrinterPanel: pPrintOperation withController: &i_rController withState: &aAccViewState];
 
             bSuccess = TRUE;
             mbJob = true;
@@ -634,14 +634,14 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
     // so we need to call XRenderadble::render one last time with IsLastPage = TRUE
     if( nAllPages > 0 )
     {
-        i_rListener.setLastPage( sal_True );
+        i_rController.setLastPage( sal_True );
         GDIMetaFile aPageFile;
         if( mrContext )
             SetupPrinterGraphics( mrContext );
-        i_rListener.getFilteredPageFile( 0, aPageFile );
+        i_rController.getFilteredPageFile( 0, aPageFile );
     }
 
-    i_rListener.setJobState( bWasAborted
+    i_rController.setJobState( bWasAborted
                              ? view::PrintableState_JOB_ABORTED
                              : view::PrintableState_JOB_SPOOLED );
 
@@ -716,7 +716,7 @@ BOOL AquaSalPrinter::StartJob( const String* i_pFileName,
                                const String& i_rJobName,
                                const String& i_rAppName,
                                ImplJobSetup* i_pSetupData,
-                               vcl::PrinterListener& i_rListener )
+                               vcl::PrinterController& i_rController )
 {
     bool bIsQuickJob = false;
     std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator quick_it =
@@ -728,7 +728,7 @@ BOOL AquaSalPrinter::StartJob( const String* i_pFileName,
             bIsQuickJob = true;
     }
 
-    return mpInfoPrinter->StartJob( i_pFileName, i_rJobName, i_rAppName, i_pSetupData, i_rListener, bIsQuickJob );
+    return mpInfoPrinter->StartJob( i_pFileName, i_rJobName, i_rAppName, i_pSetupData, i_rController, bIsQuickJob );
 }
 
 // -----------------------------------------------------------------------

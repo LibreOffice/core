@@ -33,7 +33,7 @@
 namespace vcl
 {
     struct ImplOldStyleAdaptorData;
-    class VCL_DLLPUBLIC OldStylePrintAdaptor : public PrinterListener
+    class VCL_DLLPUBLIC OldStylePrintAdaptor : public PrinterController
     {
         ImplOldStyleAdaptorData*    mpData;
     public:

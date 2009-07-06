@@ -251,7 +251,7 @@ void PrintDialog::NUpTabPage::Resize()
     aPage->setManagedArea( Rectangle( Point(), GetOutputSizePixel() ) );
 }
 
-void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterListener::MultiPageSetup& i_rMPS )
+void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& i_rMPS )
 {
     maLeftMarginEdt.SetValue( maLeftMarginEdt.Normalize( i_rMPS.nLeftMargin ), FUNIT_100TH_MM );
     maTopMarginEdt.SetValue( maTopMarginEdt.Normalize( i_rMPS.nTopMargin ), FUNIT_100TH_MM );
@@ -373,7 +373,7 @@ void PrintDialog::JobTabPage::storeToSettings()
                      rtl::OUString::createFromAscii( maCollateBox.IsChecked() ? "true" : "false" ) );
 }
 
-PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterListener>& i_rListener )
+PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterController>& i_rController )
     : ModalDialog( i_pParent, VclResId( SV_DLG_PRINT ) )
     , maOKButton( this, VclResId( SV_PRINT_OK ) )
     , maCancelButton( this, VclResId( SV_PRINT_CANCEL ) )
@@ -386,7 +386,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     , maNUpPage( &maTabCtrl, VclResId( SV_PRINT_TAB_NUP ) )
     , maJobPage( &maTabCtrl, VclResId( SV_PRINT_TAB_JOB ) )
     , maButtonLine( this, VclResId( SV_PRINT_BUTTONLINE ) )
-    , maPListener( i_rListener )
+    , maPController( i_rController )
     , maNoPageStr( String( VclResId( SV_PRINT_NOPAGES ) ) )
     , mnCurPage( 0 )
     , mnCachedPages( 0 )
@@ -434,9 +434,9 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
         maJobPage.maPrinters.InsertEntry( *it );
     }
     // select current printer
-    if( maJobPage.maPrinters.GetEntryPos( maPListener->getPrinter()->GetName() ) != LISTBOX_ENTRY_NOTFOUND )
+    if( maJobPage.maPrinters.GetEntryPos( maPController->getPrinter()->GetName() ) != LISTBOX_ENTRY_NOTFOUND )
     {
-        maJobPage.maPrinters.SelectEntry( maPListener->getPrinter()->GetName() );
+        maJobPage.maPrinters.SelectEntry( maPController->getPrinter()->GetName() );
     }
     else
     {
@@ -447,13 +447,13 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
         if( maJobPage.maPrinters.GetEntryPos( aValue ) != LISTBOX_ENTRY_NOTFOUND )
         {
             maJobPage.maPrinters.SelectEntry( aValue );
-            maPListener->setPrinter( boost::shared_ptr<Printer>( new Printer( aValue ) ) );
+            maPController->setPrinter( boost::shared_ptr<Printer>( new Printer( aValue ) ) );
         }
         else
         {
             // fall back to default printer
             maJobPage.maPrinters.SelectEntry( Printer::GetDefaultPrinterName() );
-            maPListener->setPrinter( boost::shared_ptr<Printer>( new Printer( Printer::GetDefaultPrinterName() ) ) );
+            maPController->setPrinter( boost::shared_ptr<Printer>( new Printer( Printer::GetDefaultPrinterName() ) ) );
         }
     }
     // update the text fields for the printer
@@ -463,9 +463,9 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     maJobPage.maPrinters.SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
 
     // setup sizes for N-Up
-    Size aNupSize( maPListener->getPrinter()->PixelToLogic(
-                         maPListener->getPrinter()->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
-    if( maPListener->getPrinter()->GetOrientation() == ORIENTATION_LANDSCAPE )
+    Size aNupSize( maPController->getPrinter()->PixelToLogic(
+                         maPController->getPrinter()->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
+    if( maPController->getPrinter()->GetOrientation() == ORIENTATION_LANDSCAPE )
     {
         maNupLandscapeSize = aNupSize;
         maNupPortraitSize = Size( aNupSize.Height(), aNupSize.Width() );
@@ -477,7 +477,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
         maNupLandscapeSize = Size( aNupSize.Height(), aNupSize.Width() );
         maNUpPage.maNupPortrait.Check();
     }
-    maNUpPage.initFromMultiPageSetup( maPListener->getMultipage() );
+    maNUpPage.initFromMultiPageSetup( maPController->getMultipage() );
 
 
     // setup click handler on the various buttons
@@ -510,7 +510,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     setupOptionalUI();
 
     // set change handler for UI options
-    maPListener->setOptionChangeHdl( LINK( this, PrintDialog, UIOptionsChanged ) );
+    maPController->setOptionChangeHdl( LINK( this, PrintDialog, UIOptionsChanged ) );
 
     // set min size pixel to current size
     SetMinOutputSizePixel( GetOutputSizePixel() );
@@ -639,7 +639,7 @@ void PrintDialog::setupOptionalUI()
 
     std::multimap< rtl::OUString, vcl::RowOrColumn* > aPropertyToDependencyRowMap;
 
-    const Sequence< PropertyValue >& rOptions( maPListener->getUIOptions() );
+    const Sequence< PropertyValue >& rOptions( maPController->getUIOptions() );
     for( int i = 0; i < rOptions.getLength(); i++ )
     {
         Sequence< beans::PropertyValue > aOptProp;
@@ -822,11 +822,11 @@ void PrintDialog::setupOptionalUI()
                 pNewBox->Show();
 
                 sal_Bool bVal = sal_False;
-                PropertyValue* pVal = maPListener->getValue( aPropertyName );
+                PropertyValue* pVal = maPController->getValue( aPropertyName );
                 if( pVal )
                     pVal->Value >>= bVal;
                 pNewBox->Check( bVal );
-                pNewBox->Enable( maPListener->isUIOptionEnabled( aPropertyName ) && pVal != NULL );
+                pNewBox->Enable( maPController->isUIOptionEnabled( aPropertyName ) && pVal != NULL );
                 pNewBox->SetToggleHdl( LINK( this, PrintDialog, UIOption_CheckHdl ) );
 
                 maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pNewBox ) );
@@ -870,7 +870,7 @@ void PrintDialog::setupOptionalUI()
                 }
                 // iterate options
                 sal_Int32 nSelectVal = 0;
-                PropertyValue* pVal = maPListener->getValue( aPropertyName );
+                PropertyValue* pVal = maPController->getValue( aPropertyName );
                 if( pVal && pVal->Value.hasValue() )
                     pVal->Value >>= nSelectVal;
                 for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
@@ -883,7 +883,7 @@ void PrintDialog::setupOptionalUI()
                     maControls.push_front( pBtn );
                     pBtn->SetText( aChoices[m] );
                     pBtn->Check( m == nSelectVal );
-                    pBtn->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
+                    pBtn->Enable( maPController->isUIOptionEnabled( aPropertyName ) );
                     pBtn->SetToggleHdl( LINK( this, PrintDialog, UIOption_RadioHdl ) );
                     pBtn->Show();
                     maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pBtn ) );
@@ -934,11 +934,11 @@ void PrintDialog::setupOptionalUI()
                         pList->InsertEntry( aChoices[m] );
                     }
                     sal_Int32 nSelectVal = 0;
-                    PropertyValue* pVal = maPListener->getValue( aPropertyName );
+                    PropertyValue* pVal = maPController->getValue( aPropertyName );
                     if( pVal && pVal->Value.hasValue() )
                         pVal->Value >>= nSelectVal;
                     pList->SelectEntryPos( static_cast<USHORT>(nSelectVal) );
-                    pList->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
+                    pList->Enable( maPController->isUIOptionEnabled( aPropertyName ) );
                     pList->SetSelectHdl( LINK( this, PrintDialog, UIOption_SelectHdl ) );
                     pList->SetDropDownLineCount( static_cast<USHORT>(aChoices.getLength()) );
                     pList->Show();
@@ -966,12 +966,12 @@ void PrintDialog::setupOptionalUI()
                         pField->SetMax( nMaxValue );
                     }
                     sal_Int64 nCurVal = 0;
-                    PropertyValue* pVal = maPListener->getValue( aPropertyName );
+                    PropertyValue* pVal = maPController->getValue( aPropertyName );
                     if( pVal && pVal->Value.hasValue() )
                         pVal->Value >>= nCurVal;
                     pField->SetValue( nCurVal );
 
-                    pField->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
+                    pField->Enable( maPController->isUIOptionEnabled( aPropertyName ) );
                     pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
                     pField->Show();
 
@@ -992,11 +992,11 @@ void PrintDialog::setupOptionalUI()
                     maControls.push_front( pField );
 
                     rtl::OUString aCurVal;
-                    PropertyValue* pVal = maPListener->getValue( aPropertyName );
+                    PropertyValue* pVal = maPController->getValue( aPropertyName );
                     if( pVal && pVal->Value.hasValue() )
                         pVal->Value >>= aCurVal;
                     pField->SetText( aCurVal );
-                    pField->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
+                    pField->Enable( maPController->isUIOptionEnabled( aPropertyName ) );
                     pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
                     pField->Show();
 
@@ -1089,7 +1089,7 @@ void PrintDialog::checkControlDependencies()
     maJobPage.maCollateImage.SetImage( aImg );
 
     // enable setup button only for printers that can be setup
-    bool bHaveSetup = maPListener->getPrinter()->HasSupport( SUPPORT_SETUPDIALOG );
+    bool bHaveSetup = maPController->getPrinter()->HasSupport( SUPPORT_SETUPDIALOG );
     maJobPage.maSetupButton.Enable( bHaveSetup );
     if( bHaveSetup )
     {
@@ -1123,7 +1123,7 @@ void PrintDialog::checkOptionalControlDependencies()
     for( std::map< Window*, rtl::OUString >::iterator it = maControlToPropertyMap.begin();
          it != maControlToPropertyMap.end(); ++it )
     {
-        bool bShouldbeEnabled = maPListener->isUIOptionEnabled( it->second );
+        bool bShouldbeEnabled = maPController->isUIOptionEnabled( it->second );
         bool bIsEnabled = it->first->IsEnabled();
         // Enable does not do a change check first, so can be less cheap than expected
         if( bShouldbeEnabled != bIsEnabled )
@@ -1176,7 +1176,7 @@ void PrintDialog::setPreviewText( sal_Int32 )
 void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
 {
     // page range may have changed depending on options
-    sal_Int32 nPages = maPListener->getFilteredPageCount();
+    sal_Int32 nPages = maPController->getFilteredPageCount();
     mnCachedPages = nPages;
 
     if( mnCurPage >= nPages )
@@ -1189,7 +1189,7 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
     maPageEdit.SetMin( 1 );
     maPageEdit.SetMax( nPages );
 
-    boost::shared_ptr<Printer> aPrt( maPListener->getPrinter() );
+    boost::shared_ptr<Printer> aPrt( maPController->getPrinter() );
 
 
     if( i_bNewPage )
@@ -1197,7 +1197,7 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
         const MapMode aMapMode( MAP_100TH_MM );
         GDIMetaFile aMtf;
         if( nPages > 0 )
-            maCurPageSize = maPListener->getFilteredPageFile( mnCurPage, aMtf, i_bMayUseCache );
+            maCurPageSize = maPController->getFilteredPageFile( mnCurPage, aMtf, i_bMayUseCache );
 
         maPreviewWindow.setPreview( aMtf );
     }
@@ -1232,7 +1232,7 @@ void PrintDialog::updateNup()
     int nCols   = int(maNUpPage.maNupColEdt.GetValue());
     int nRepeat = int(maNUpPage.maNupRepEdt.GetValue());
 
-    PrinterListener::MultiPageSetup aMPS;
+    PrinterController::MultiPageSetup aMPS;
     aMPS.nRows         = nRows;
     aMPS.nColumns      = nCols;
     aMPS.nRepeat       = nRepeat;
@@ -1248,7 +1248,7 @@ void PrintDialog::updateNup()
 
     aMPS.bDrawBorder        = maNUpPage.maBorderCB.IsChecked();
 
-    maPListener->setMultipage( aMPS );
+    maPController->setMultipage( aMPS );
 
     preparePreview( true, true );
 }
@@ -1260,7 +1260,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
         String aNewPrinter( pBox->GetSelectEntry() );
         maJobPage.maPrinters.SelectEntry( aNewPrinter );
         // set new printer
-        maPListener->setPrinter( boost::shared_ptr<Printer>( new Printer( aNewPrinter ) ) );
+        maPController->setPrinter( boost::shared_ptr<Printer>( new Printer( aNewPrinter ) ) );
         // update text fields
         updatePrinterText();
     }
@@ -1286,7 +1286,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     {
         if( pButton == &maJobPage.maSetupButton )
         {
-            maPListener->getPrinter()->Setup( this );
+            maPController->getPrinter()->Setup( this );
         }
         checkControlDependencies();
         if( pButton == &maNUpPage.maNupPortrait || pButton == &maNUpPage.maNupLandscape || pButton == &maNUpPage.maBorderCB )
@@ -1313,7 +1313,7 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
     }
     else if( pEdit == &maJobPage.maCopyCountField )
     {
-        maPListener->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CopyCount" ) ),
+        maPController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CopyCount" ) ),
                                makeAny( sal_Int32(maJobPage.maCopyCountField.GetValue()) ) );
     }
     return 0;
@@ -1331,7 +1331,7 @@ PropertyValue* PrintDialog::getValueForWindow( Window* i_pWindow ) const
     std::map< Window*, rtl::OUString >::const_iterator it = maControlToPropertyMap.find( i_pWindow );
     if( it != maControlToPropertyMap.end() )
     {
-        pVal = maPListener->getValue( it->second );
+        pVal = maPController->getValue( it->second );
         DBG_ASSERT( pVal, "property value not found" );
     }
     else

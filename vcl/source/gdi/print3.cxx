@@ -130,7 +130,7 @@ public:
     }
 };
 
-class vcl::ImplPrinterListenerData
+class vcl::ImplPrinterControllerData
 {
 public:
     struct ControlDependency
@@ -154,27 +154,27 @@ public:
     sal_Bool                                                    mbLastPage;
     view::PrintableState                                        meJobState;
 
-    vcl::PrinterListener::MultiPageSetup                        maMultiPage;
+    vcl::PrinterController::MultiPageSetup                      maMultiPage;
 
     vcl::PrintProgressDialog*                                   mpProgress;
 
     ImplPageCache                                               maPageCache;
 
-    ImplPrinterListenerData() :
+    ImplPrinterControllerData() :
         mbLastPage( sal_False ),
         meJobState( view::PrintableState_JOB_STARTED ),
         mpProgress( NULL )
     {}
-    ~ImplPrinterListenerData() { delete mpProgress; }
+    ~ImplPrinterControllerData() { delete mpProgress; }
 };
 
-PrinterListener::PrinterListener()
-    : mpImplData( new ImplPrinterListenerData )
+PrinterController::PrinterController()
+    : mpImplData( new ImplPrinterControllerData )
 {
 }
 
-PrinterListener::PrinterListener( const boost::shared_ptr<Printer>& i_pPrinter )
-    : mpImplData( new ImplPrinterListenerData )
+PrinterController::PrinterController( const boost::shared_ptr<Printer>& i_pPrinter )
+    : mpImplData( new ImplPrinterControllerData )
 {
     mpImplData->mpPrinter = i_pPrinter;
 }
@@ -238,13 +238,13 @@ static rtl::OUString queryFile( Printer* pPrinter )
 
 struct PrintJobAsync
 {
-    boost::shared_ptr<PrinterListener>  mpListener;
+    boost::shared_ptr<PrinterController>  mpController;
     JobSetup                            maInitSetup;
 
-    PrintJobAsync( const boost::shared_ptr<PrinterListener>& i_pListener,
+    PrintJobAsync( const boost::shared_ptr<PrinterController>& i_pController,
                    const JobSetup& i_rInitSetup
                    )
-    : mpListener( i_pListener ), maInitSetup( i_rInitSetup )
+    : mpController( i_pController ), maInitSetup( i_rInitSetup )
     {}
 
     DECL_LINK( ExecJob, void* );
@@ -252,7 +252,7 @@ struct PrintJobAsync
 
 IMPL_LINK( PrintJobAsync, ExecJob, void*, EMPTYARG )
 {
-    Printer::ImplPrintJob( mpListener, maInitSetup );
+    Printer::ImplPrintJob( mpController, maInitSetup );
 
     // clean up, do not access members after this
     delete this;
@@ -260,41 +260,41 @@ IMPL_LINK( PrintJobAsync, ExecJob, void*, EMPTYARG )
     return 0;
 }
 
-void Printer::PrintJob( const boost::shared_ptr<PrinterListener>& i_pListener,
+void Printer::PrintJob( const boost::shared_ptr<PrinterController>& i_pController,
                         const JobSetup& i_rInitSetup
                         )
 {
     sal_Bool bSynchronous = sal_False;
-    beans::PropertyValue* pVal = i_pListener->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) ) );
+    beans::PropertyValue* pVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) ) );
     if( pVal )
         pVal->Value >>= bSynchronous;
 
     if( bSynchronous )
-        ImplPrintJob( i_pListener, i_rInitSetup );
+        ImplPrintJob( i_pController, i_rInitSetup );
     else
     {
-        PrintJobAsync* pAsync = new PrintJobAsync( i_pListener, i_rInitSetup );
+        PrintJobAsync* pAsync = new PrintJobAsync( i_pController, i_rInitSetup );
         Application::PostUserEvent( LINK( pAsync, PrintJobAsync, ExecJob ) );
     }
 }
 
-void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListener,
+void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pController,
                             const JobSetup& i_rInitSetup
                             )
 {
     // setup printer
-    boost::shared_ptr<PrinterListener> pListener( i_pListener );
+    boost::shared_ptr<PrinterController> pController( i_pController );
     // if no specific printer is already set, create one
-    if( ! pListener->getPrinter() )
+    if( ! pController->getPrinter() )
     {
         boost::shared_ptr<Printer> pPrinter( new Printer( i_rInitSetup.GetPrinterName() ) );
-        pListener->setPrinter( pPrinter );
+        pController->setPrinter( pPrinter );
     }
 
     // reset last page property
-    i_pListener->setLastPage( sal_False );
+    i_pController->setLastPage( sal_False );
 
-    beans::PropertyValue* pPagesVal = i_pListener->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Pages" ) ) );
+    beans::PropertyValue* pPagesVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Pages" ) ) );
     if( pPagesVal )
     {
         rtl::OUString aPagesVal;
@@ -304,13 +304,13 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListene
             // "Pages" attribute from API is now equivalent to "PageRange"
             // AND "PrintContent" = 1 except calc where it is "PrintRange" = 1
             // Argh ! That sure needs cleaning up
-            beans::PropertyValue* pVal = i_pListener->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) ) );
+            beans::PropertyValue* pVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) ) );
             if( ! pVal )
-                pVal = i_pListener->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ) );
+                pVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ) );
             if( pVal )
             {
                 pVal->Value = makeAny( sal_Int32( 1 ) );
-                i_pListener->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ), pPagesVal->Value );
+                i_pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ), pPagesVal->Value );
             }
         }
     }
@@ -319,25 +319,25 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListene
     // in that case leave the work to that dialog
     const String& rQuick( i_rInitSetup.GetValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ) ) );
     bool bIsQuick = rQuick.Len() && rQuick.EqualsIgnoreCaseAscii( "true" );
-    if( ! pListener->getPrinter()->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG ) && ! bIsQuick )
+    if( ! pController->getPrinter()->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG ) && ! bIsQuick )
     {
         try
         {
-            PrintDialog aDlg( NULL, i_pListener );
+            PrintDialog aDlg( NULL, i_pController );
             if( ! aDlg.Execute() )
             {
                 GDIMetaFile aPageFile;
-                i_pListener->setLastPage( sal_True );
-                if( i_pListener->getPageCount() > 0 )
-                    i_pListener->getFilteredPageFile( 0, aPageFile );
+                i_pController->setLastPage( sal_True );
+                if( i_pController->getPageCount() > 0 )
+                    i_pController->getFilteredPageFile( 0, aPageFile );
                 return;
             }
             if( aDlg.isPrintToFile() )
             {
-                rtl::OUString aFile = queryFile( pListener->getPrinter().get() );
+                rtl::OUString aFile = queryFile( pController->getPrinter().get() );
                 if( ! aFile.getLength() )
                     return;
-                pListener->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LocalFileName" ) ),
+                pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LocalFileName" ) ),
                                      makeAny( aFile ) );
             }
         }
@@ -346,19 +346,19 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListene
         }
     }
 
-    pListener->pushPropertiesToPrinter();
+    pController->pushPropertiesToPrinter();
 
     rtl::OUString aJobName;
-    beans::PropertyValue* pJobNameVal = pListener->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobName" ) ) );
+    beans::PropertyValue* pJobNameVal = pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobName" ) ) );
     if( pJobNameVal )
         pJobNameVal->Value >>= aJobName;
 
-    pListener->getPrinter()->StartJob( String( aJobName ), pListener );
+    pController->getPrinter()->StartJob( String( aJobName ), pController );
 
-    pListener->jobFinished( pListener->getJobState() );
+    pController->jobFinished( pController->getJobState() );
 }
 
-bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::PrinterListener>& i_pListener )
+bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::PrinterController>& i_pController )
 {
     mnError = PRINTER_OK;
 
@@ -403,7 +403,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     // SetPrintFileName to redirect printout into file
     // it can be argued that those methods should be removed in favor
     // of only using the LocalFileName property
-    beans::PropertyValue* pFileValue = i_pListener->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LocalFileName" ) ) );
+    beans::PropertyValue* pFileValue = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LocalFileName" ) ) );
     if( pFileValue )
     {
         rtl::OUString aFile;
@@ -429,12 +429,12 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
         // sallayer does all necessary page printing
         // and also handles showing a dialog
         // that also means it must call jobStarted when the dialog is finished
-        // it also must set the JobState of the listener
+        // it also must set the JobState of the Controller
         if( mpPrinter->StartJob( pPrintFile,
                                  i_rJobName,
                                  Application::GetDisplayName(),
                                  maJobSetup.ImplGetConstData(),
-                                 *i_pListener ) )
+                                 *i_pController ) )
         {
             EndJob();
         }
@@ -456,8 +456,8 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     {
         // possibly a dialog has been shown
         // now the real job starts
-        i_pListener->setJobState( view::PrintableState_JOB_STARTED );
-        i_pListener->jobStarted();
+        i_pController->setJobState( view::PrintableState_JOB_STARTED );
+        i_pController->jobStarted();
 
         if( mpPrinter->StartJob( pPrintFile,
                                  i_rJobName,
@@ -466,22 +466,22 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
                                  maJobSetup.ImplGetConstData() ) )
         {
             mbJobActive             = TRUE;
-            i_pListener->createProgressDialog();
-            int nPages = i_pListener->getFilteredPageCount();
+            i_pController->createProgressDialog();
+            int nPages = i_pController->getFilteredPageCount();
             for( int nPage = 0; nPage < nPages; nPage++ )
             {
                 if( nPage == nPages-1 )
-                    i_pListener->setLastPage( sal_True );
-                i_pListener->printFilteredPage( nPage );
+                    i_pController->setLastPage( sal_True );
+                i_pController->printFilteredPage( nPage );
             }
             EndJob();
 
-            if( i_pListener->getJobState() == view::PrintableState_JOB_STARTED )
-                i_pListener->setJobState( view::PrintableState_JOB_SPOOLED );
+            if( i_pController->getJobState() == view::PrintableState_JOB_STARTED )
+                i_pController->setJobState( view::PrintableState_JOB_SPOOLED );
         }
         else
         {
-            i_pListener->setJobState( view::PrintableState_JOB_FAILED );
+            i_pController->setJobState( view::PrintableState_JOB_FAILED );
 
             mnError = ImplSalPrinterErrorCodeToVCL( mpPrinter->GetErrorCode() );
             if ( !mnError )
@@ -499,27 +499,27 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     return true;
 }
 
-PrinterListener::~PrinterListener()
+PrinterController::~PrinterController()
 {
     delete mpImplData;
 }
 
-view::PrintableState PrinterListener::getJobState() const
+view::PrintableState PrinterController::getJobState() const
 {
     return mpImplData->meJobState;
 }
 
-void PrinterListener::setJobState( view::PrintableState i_eState )
+void PrinterController::setJobState( view::PrintableState i_eState )
 {
     mpImplData->meJobState = i_eState;
 }
 
-const boost::shared_ptr<Printer>& PrinterListener::getPrinter() const
+const boost::shared_ptr<Printer>& PrinterController::getPrinter() const
 {
     return mpImplData->mpPrinter;
 }
 
-void PrinterListener::setPrinter( const boost::shared_ptr<Printer>& i_rPrinter )
+void PrinterController::setPrinter( const boost::shared_ptr<Printer>& i_rPrinter )
 {
     mpImplData->mpPrinter = i_rPrinter;
     Size aPaperSize( i_rPrinter->PixelToLogic( i_rPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
@@ -547,7 +547,7 @@ static Size modifyJobSetup( Printer* pPrinter, const Sequence< PropertyValue >& 
     return aPageSize;
 }
 
-Size PrinterListener::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache )
+Size PrinterController::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache )
 {
     // update progress if necessary
     if( mpImplData->mpProgress )
@@ -635,7 +635,7 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
     o_rMtf.AddAction( new MetaPopAction() );
 }
 
-Size PrinterListener::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache )
+Size PrinterController::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache )
 {
     const MultiPageSetup& rMPS( mpImplData->maMultiPage );
     int nSubPages = rMPS.nRows * rMPS.nColumns;
@@ -713,7 +713,7 @@ Size PrinterListener::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_r
     return aPaperSize;
 }
 
-int PrinterListener::getFilteredPageCount()
+int PrinterController::getFilteredPageCount()
 {
     int nDiv = mpImplData->maMultiPage.nRows * mpImplData->maMultiPage.nColumns;
     if( nDiv < 1 )
@@ -721,7 +721,7 @@ int PrinterListener::getFilteredPageCount()
     return (getPageCount() * mpImplData->maMultiPage.nRepeat + (nDiv-1)) / nDiv;
 }
 
-void PrinterListener::printFilteredPage( int i_nPage )
+void PrinterController::printFilteredPage( int i_nPage )
 {
     if( mpImplData->meJobState != view::PrintableState_JOB_STARTED )
         return;
@@ -811,20 +811,25 @@ void PrinterListener::printFilteredPage( int i_nPage )
     mpImplData->mpPrinter->SetDrawMode( nRestoreDrawMode );
 }
 
-void PrinterListener::jobStarted()
+void PrinterController::jobStarted()
 {
 }
 
-void PrinterListener::jobFinished( view::PrintableState )
+void PrinterController::jobFinished( view::PrintableState )
 {
 }
 
-void PrinterListener::setLastPage( sal_Bool i_bLastPage )
+void PrinterController::abortJob()
+{
+    setJobState( view::PrintableState_JOB_ABORTED );
+}
+
+void PrinterController::setLastPage( sal_Bool i_bLastPage )
 {
     mpImplData->mbLastPage = i_bLastPage;
 }
 
-Sequence< PropertyValue > PrinterListener::getJobProperties( const Sequence< PropertyValue >& i_rMergeList ) const
+Sequence< PropertyValue > PrinterController::getJobProperties( const Sequence< PropertyValue >& i_rMergeList ) const
 {
     std::hash_set< rtl::OUString, rtl::OUStringHash > aMergeSet;
     size_t nResultLen = size_t(i_rMergeList.getLength()) + mpImplData->maUIProperties.size() + 3;
@@ -860,26 +865,40 @@ Sequence< PropertyValue > PrinterListener::getJobProperties( const Sequence< Pro
     return aResult;
 }
 
-const Sequence< beans::PropertyValue >& PrinterListener::getUIOptions() const
+const Sequence< beans::PropertyValue >& PrinterController::getUIOptions() const
 {
     return mpImplData->maUIOptions;
 }
 
-com::sun::star::beans::PropertyValue* PrinterListener::getValue( const rtl::OUString& i_rProperty )
+beans::PropertyValue* PrinterController::getValue( const rtl::OUString& i_rProperty )
 {
     std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
     return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : NULL;
 }
 
-const com::sun::star::beans::PropertyValue* PrinterListener::getValue( const rtl::OUString& i_rProperty ) const
+const beans::PropertyValue* PrinterController::getValue( const rtl::OUString& i_rProperty ) const
 {
     std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
     return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : NULL;
 }
 
-void PrinterListener::setValue( const rtl::OUString& i_rName, const Any& i_rValue )
+Sequence< beans::PropertyValue > PrinterController::getValues( const Sequence< rtl::OUString >& i_rNames ) const
+{
+    Sequence< beans::PropertyValue > aRet( i_rNames.getLength() );
+    sal_Int32 nFound = 0;
+    for( sal_Int32 i = 0; i < i_rNames.getLength(); i++ )
+    {
+        const beans::PropertyValue* pVal = getValue( i_rNames[i] );
+        if( pVal )
+            aRet[ nFound++ ] = *pVal;
+    }
+    aRet.realloc( nFound );
+    return aRet;
+}
+
+void PrinterController::setValue( const rtl::OUString& i_rName, const Any& i_rValue )
 {
     beans::PropertyValue aVal;
     aVal.Name = i_rName;
@@ -888,7 +907,7 @@ void PrinterListener::setValue( const rtl::OUString& i_rName, const Any& i_rValu
     setValue( aVal );
 }
 
-void PrinterListener::setValue( const beans::PropertyValue& i_rValue )
+void PrinterController::setValue( const beans::PropertyValue& i_rValue )
 {
     std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rValue.Name );
@@ -903,7 +922,7 @@ void PrinterListener::setValue( const beans::PropertyValue& i_rValue )
     }
 }
 
-void PrinterListener::setUIOptions( const Sequence< beans::PropertyValue >& i_rOptions )
+void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_rOptions )
 {
     DBG_ASSERT( mpImplData->maUIOptions.getLength() == 0, "setUIOptions called twice !" );
 
@@ -916,7 +935,7 @@ void PrinterListener::setUIOptions( const Sequence< beans::PropertyValue >& i_rO
         bool bIsEnabled = true;
         bool bHaveProperty = false;
         rtl::OUString aPropName;
-        vcl::ImplPrinterListenerData::ControlDependency aDep;
+        vcl::ImplPrinterControllerData::ControlDependency aDep;
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
             const beans::PropertyValue& rEntry( aOptProp[ n ] );
@@ -947,7 +966,7 @@ void PrinterListener::setUIOptions( const Sequence< beans::PropertyValue >& i_rO
         }
         if( bHaveProperty )
         {
-            vcl::ImplPrinterListenerData::PropertyToIndexMap::const_iterator it =
+            vcl::ImplPrinterControllerData::PropertyToIndexMap::const_iterator it =
                 mpImplData->maPropertyToIndex.find( aPropName );
             // sanity check
             if( it != mpImplData->maPropertyToIndex.end() )
@@ -960,7 +979,7 @@ void PrinterListener::setUIOptions( const Sequence< beans::PropertyValue >& i_rO
     }
 }
 
-void PrinterListener::enableUIOption( const rtl::OUString& i_rProperty, bool i_bEnable )
+void PrinterController::enableUIOption( const rtl::OUString& i_rProperty, bool i_bEnable )
 {
     std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
@@ -977,7 +996,7 @@ void PrinterListener::enableUIOption( const rtl::OUString& i_rProperty, bool i_b
     }
 }
 
-bool PrinterListener::isUIOptionEnabled( const rtl::OUString& i_rProperty ) const
+bool PrinterController::isUIOptionEnabled( const rtl::OUString& i_rProperty ) const
 {
     bool bEnabled = false;
     std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator prop_it =
@@ -989,7 +1008,7 @@ bool PrinterListener::isUIOptionEnabled( const rtl::OUString& i_rProperty ) cons
         if( bEnabled )
         {
             // check control dependencies
-            vcl::ImplPrinterListenerData::ControlDependencyMap::const_iterator it =
+            vcl::ImplPrinterControllerData::ControlDependencyMap::const_iterator it =
                 mpImplData->maControlDependencies.find( i_rProperty );
             if( it != mpImplData->maControlDependencies.end() )
             {
@@ -1031,12 +1050,12 @@ bool PrinterListener::isUIOptionEnabled( const rtl::OUString& i_rProperty ) cons
     return bEnabled;
 }
 
-void PrinterListener::setOptionChangeHdl( const Link& i_rHdl )
+void PrinterController::setOptionChangeHdl( const Link& i_rHdl )
 {
     mpImplData->maOptionChangeHdl = i_rHdl;
 }
 
-void PrinterListener::createProgressDialog()
+void PrinterController::createProgressDialog()
 {
     if( ! mpImplData->mpProgress )
     {
@@ -1053,17 +1072,17 @@ void PrinterListener::createProgressDialog()
     }
 }
 
-void PrinterListener::setMultipage( const MultiPageSetup& i_rMPS )
+void PrinterController::setMultipage( const MultiPageSetup& i_rMPS )
 {
     mpImplData->maMultiPage = i_rMPS;
 }
 
-const PrinterListener::MultiPageSetup& PrinterListener::getMultipage() const
+const PrinterController::MultiPageSetup& PrinterController::getMultipage() const
 {
     return mpImplData->maMultiPage;
 }
 
-void PrinterListener::pushPropertiesToPrinter()
+void PrinterController::pushPropertiesToPrinter()
 {
     sal_Int32 nCopyCount = 1;
     // set copycount and collate
