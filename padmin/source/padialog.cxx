@@ -361,13 +361,13 @@ static Color approachColor( const Color& rFrom, const Color& rTo )
     return aColor;
 }
 
-class SpaPrinterListener : public vcl::PrinterListener
+class SpaPrinterController : public vcl::PrinterController
 {
 public:
-    SpaPrinterListener( const boost::shared_ptr<Printer>& i_pPrinter )
-    : vcl::PrinterListener( i_pPrinter )
+    SpaPrinterController( const boost::shared_ptr<Printer>& i_pPrinter )
+    : vcl::PrinterController( i_pPrinter )
     {}
-    virtual ~SpaPrinterListener()
+    virtual ~SpaPrinterController()
     {}
 
     virtual int getPageCount() const { return 1; }
@@ -376,7 +376,7 @@ public:
     virtual void jobFinished();
 };
 
-Sequence< PropertyValue > SpaPrinterListener::getPageParameters( int ) const
+Sequence< PropertyValue > SpaPrinterController::getPageParameters( int ) const
 {
     Sequence< PropertyValue > aRet( 1 );
 
@@ -391,7 +391,7 @@ Sequence< PropertyValue > SpaPrinterListener::getPageParameters( int ) const
     return aRet;
 }
 
-void SpaPrinterListener::printPage( int ) const
+void SpaPrinterController::printPage( int ) const
 {
     const double DELTA = 5.0;
 
@@ -574,7 +574,7 @@ void SpaPrinterListener::printPage( int ) const
 #endif
 }
 
-void SpaPrinterListener::jobFinished()
+void SpaPrinterController::jobFinished()
 {
     String aInfoString( PaResId( RID_PA_TXT_TESTPAGE_PRINTED ) );
     InfoBox aInfoBox( NULL, aInfoString );
@@ -599,11 +599,11 @@ void PADialog::PrintTestPage()
         return;
     }
 
-    boost::shared_ptr<vcl::PrinterListener> pListener( new SpaPrinterListener( pPrinter ) );
+    boost::shared_ptr<vcl::PrinterController> pController( new SpaPrinterController( pPrinter ) );
     JobSetup aJobSetup( pPrinter->GetJobSetup() );
     aJobSetup.SetValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ),
                         String( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
-    Printer::PrintJob( pListener, aJobSetup );
+    Printer::PrintJob( pController, aJobSetup );
 }
 
 void PADialog::AddDevice()
