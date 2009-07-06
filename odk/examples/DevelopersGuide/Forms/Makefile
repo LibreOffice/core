@@ -194,9 +194,6 @@ FormsExample : $(APP1_JAR)  $(APP2_JAR)  $(APP3_JAR)  $(APP4_JAR)
 ProgrammaticScriptAssignment.odt.load : $(COMP_REGISTERFLAG)
 	"$(OFFICE_PROGRAM_PATH)$(PS)soffice" $(basename $@)
 
-DataAwareness.run: $(SAMPLE_CLASS_OUT)/DataAwareness.jar
-	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $< -d OO_SDK_Demo_DB -t bugs
-
 %.run: $(SAMPLE_CLASS_OUT)/%.jar
 	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $<
 

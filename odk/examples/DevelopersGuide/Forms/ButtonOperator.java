@@ -39,7 +39,6 @@
  *************************************************************************/
 package org.openoffice.sdk.forms;
 
-
 // java base stuff
 import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.XActionListener;
