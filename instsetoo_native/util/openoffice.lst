@@ -370,7 +370,7 @@ BrOffice
 			USE_FILEVERSION 1
 			LIBRARYVERSION 9.2.0
 			CODEFILENAME codes_broo.txt
-			PATCHCODEFILE ooo_patchcodes.txt
+			PATCHCODEFILE bro_patchcodes.txt
 			DOWNLOADBANNER	brobanner.bmp
 			DOWNLOADBITMAP	brobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
@@ -437,7 +437,7 @@ BrOffice_wJRE
 			USE_FILEVERSION 1
 			LIBRARYVERSION 9.2.0
 			CODEFILENAME codes_broo.txt
-			PATCHCODEFILE ooo_patchcodes.txt
+			PATCHCODEFILE bro_patchcodes.txt
 			JAVAPRODUCT 1
 			DOWNLOADBANNER	brobanner.bmp
 			DOWNLOADBITMAP	brobitmap.bmp
@@ -510,7 +510,7 @@ BrOffice_Dev
 			USE_FILEVERSION 1
 			JAVAPRODUCT 1
 			LIBRARYVERSION 9.2.0
-			PATCHCODEFILE ooo_patchcodes.txt
+			PATCHCODEFILE brodev_patchcodes.txt
 			CODEFILENAME codes_broodev.txt
 			DOWNLOADBANNER	brobanner.bmp
 			DOWNLOADBITMAP	brobitmap.bmp
