@@ -540,14 +540,14 @@ end sub
 
 '-------------------------------------------------------------------------------
 
-sub im_002
+sub im_002_
     printLog Chr(13) + "--------- im_002_     ---------- $Date: 2008-06-16 10:43:16 $ $Revision: 1.1 $ "
     Call tiEditDeleteSlide
 end sub
 
 '-------------------------------------------------------------------------------
 
-sub im_003
+sub im_003_
     printLog Chr(13) + "--------- im_003_     ----------"
     Call tiViewMasterView
     Call tiViewSlideMaster
@@ -558,21 +558,21 @@ end sub
 
 '-------------------------------------------------------------------------------
 
-sub im_004
+sub im_004_
     printLog Chr(13) + "---------  im_004_     ----------"
     Call tiInsertSlideExpandSummary
 end sub
 
 '-------------------------------------------------------------------------------
 
-sub im_005
+sub im_005_
     printLog Chr(13) + "---------  im_005_     ---------- "
     Call tiFormatModifyLayout ' impress only
 end sub
 
 '-------------------------------------------------------------------------------
 
-sub im_007
+sub im_007_
     printLog Chr(13) + "---------  im_007_     ---------- "
     Call tSlideShowSlideShow
     Call tSlideShowRehearseTimings
@@ -587,14 +587,14 @@ end sub
 
 '-------------------------------------------------------------------------------
 
-sub im_011
+sub im_011_
     printLog Chr(13) + "---------  im_011_     ---------- "
     Call tiDiaLeiste    ' only IMPRESS
 end sub
 
 '-------------------------------------------------------------------------------
 
-sub D_002
+sub D_002_
     printLog Chr(13) + "---------  D_002_     ---------- "
     Call tdEditCrossFading
     Call tdEditLayer
@@ -602,7 +602,7 @@ end sub
 
 '-------------------------------------------------------------------------------
 
-sub D_003
+sub D_003_
     printLog Chr(13) + "---------  D_003_     ---------- "
     call tdViewSlide
     call tdViewPagePane
@@ -610,7 +610,7 @@ end sub
 
 '-------------------------------------------------------------------------------
 
-sub D_005
+sub D_005_
     printLog Chr(13) + "---------  D_005_     ---------- "
     call tiFormatLayer ' only in draw !!!!!
 end sub

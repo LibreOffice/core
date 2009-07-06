@@ -940,10 +940,16 @@ testcase tDataDataPilot
     Datenfeld.Cancel
     sleep 2
     Kontext "Datenpilot"
-    '/// Select second item (Sum – 2001) in 'Data Fields' by 3 <TAB>
-    printlog " Select second item (Sum – 2001) in 'Data Fields' by 3 <TAB>"
-    Datenpilot.TypeKeys "<TAB><TAB><TAB>",TRUE
-    Sleep 3
+	printlog " Close 'DataPilot' dialog with 'Cancel'"
+    Datenpilot.Cancel
+	printlog " Reopen 'DataPilot' dialog by 'Data – Datapilot – Start'"
+    DataDataPilotStart
+    sleep 1
+    Kontext "Datenpilot"
+    '/// Select item (Sum – 2001) in 'Data Fields' by 8 <TAB>
+    printlog " Select item (Sum – 2001) in 'Data Fields' by 8 <TAB>"
+    Datenpilot.TypeKeys "<TAB><TAB><TAB><TAB><TAB><TAB><TAB><TAB>",TRUE
+    Sleep 1
     '/// Click on 'Options' button to open 'Data Filed' dialog
     printlog " Click on 'Options' button to open 'Data Filed' dialog"
     If Optionen.IsEnabled Then
@@ -954,7 +960,7 @@ testcase tDataDataPilot
         Call hCloseDocument
         goto endsub
     end if
-	sleep 3
+	sleep 1
     Kontext "DataFieldsFunctionDlg"
     '/// Click on 'More' button
     printlog " Click on 'More' button"
