@@ -576,6 +576,7 @@ sub set_download_filename
     my $type = get_installation_type();
     my $language = get_downloadname_language($languagestringref);
     my $addon = get_downloadname_addon();
+
     if ( $installer::globals::product =~ /_Dev\s*$/ )
     {
         my $localminor = "";
@@ -658,6 +659,10 @@ sub resolve_variables_in_downloadname
     my $productversion = "";
     if ( $allvariables->{'PRODUCTVERSION'} ) { $productversion = $allvariables->{'PRODUCTVERSION'}; }
     $downloadname =~ s/\{productversion\}/$productversion/;
+
+    my $ppackageversion = "";
+    if ( $allvariables->{'PACKAGEVERSION'} ) { $packageversion = $allvariables->{'PACKAGEVERSION'}; }
+    $downloadname =~ s/\{packageversion\}/$packageversion/;
 
     my $extension = "";
     if ( $allvariables->{'SHORT_PRODUCTEXTENSION'} ) { $extension = $allvariables->{'SHORT_PRODUCTEXTENSION'}; }
