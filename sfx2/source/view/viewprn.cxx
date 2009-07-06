@@ -697,14 +697,14 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     if ( aProps[nProp].Name.equalsAscii("Asynchron") )
                     {
                         aProps[nProp]. Name = rtl::OUString::createFromAscii("Wait");
-                        sal_Bool bAsynchron;
+                        sal_Bool bAsynchron = sal_False;
                         aProps[nProp].Value >>= bAsynchron;
                         aProps[nProp].Value <<= (sal_Bool) (!bAsynchron);
                     }
                     if ( aProps[nProp].Name.equalsAscii("Silent") )
                     {
                         aProps[nProp]. Name = rtl::OUString::createFromAscii("MonitorVisible");
-                        sal_Bool bPrintSilent;
+                        sal_Bool bPrintSilent = sal_False;
                         aProps[nProp].Value >>= bPrintSilent;
                         aProps[nProp].Value <<= (sal_Bool) (!bPrintSilent);
                     }
