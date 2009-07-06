@@ -704,9 +704,9 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     if ( aProps[nProp].Name.equalsAscii("Silent") )
                     {
                         aProps[nProp]. Name = rtl::OUString::createFromAscii("MonitorVisible");
-                        sal_Bool bSilent;
-                        aProps[nProp].Value >>= bSilent;
-                        aProps[nProp].Value <<= (sal_Bool) (!bSilent);
+                        sal_Bool bPrintSilent;
+                        aProps[nProp].Value >>= bPrintSilent;
+                        aProps[nProp].Value <<= (sal_Bool) (!bPrintSilent);
                     }
                 }
             }
