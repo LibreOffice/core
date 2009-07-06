@@ -27,7 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package lib;
 
 import java.io.PrintWriter;
@@ -42,7 +41,6 @@ import com.sun.star.uno.XInterface;
 import share.DescEntry;
 import lib.TestParameters;
 import stats.Summarizer;
-
 
 /**
  * The class supports method based interface tests development.
@@ -81,38 +79,34 @@ import stats.Summarizer;
  *
  * @see TestResult
  */
-public class MultiMethodTest {
+public class MultiMethodTest
+{
 
     /**
      * Contains the TestEnvironment being tested, to allow for tests to access
      * it.
      */
     protected TestEnvironment tEnv;
-
     /**
      * Contains the TestParameters for the tests, to allow for tests to access
      * it.
      */
     protected TestParameters tParam;
-
     /**
      * Contains the Description for the test
      * it.
      */
     protected DescEntry entry;
-
     /**
      * Contains a writer to log an information about the interface testing, to
      * allows for tests to access it.
      */
     protected PrintWriter log;
-
     /**
      * Contains the TestResult instance for the interface test to collect
      * information about methods test.
      */
     protected TestResult tRes;
-
     /**
      * Contains names of the methods have been alreadycalled
      */
@@ -123,7 +117,8 @@ public class MultiMethodTest {
      *
      * @param tEnv the environment to dispose
      */
-    public void disposeEnvironment( TestEnvironment tEnv ) {
+    public void disposeEnvironment(TestEnvironment tEnv)
+    {
         disposeEnvironment();
     }
 
@@ -132,10 +127,11 @@ public class MultiMethodTest {
      *
      * @see #disposeEnvironment(TestEnvironment)
      */
-    public void disposeEnvironment() {
+    public void disposeEnvironment()
+    {
         tEnv.dispose();
         TestCase tCase = tEnv.getTestCase();
-        tCase.disposeTestEnvironment( tEnv, tParam );
+        tCase.disposeTestEnvironment(tEnv, tParam);
     }
 
     /**
@@ -147,92 +143,113 @@ public class MultiMethodTest {
      * called. After them, after() method is called, to allow cleaning up the
      * stuff initialized in before() and test methods.
      *
+     * @param entry the interface test state
      * @param tEnv the environment to test
-     * @param ifcState the interface test state
      * @param tParam the parameters of the test
      *
      * @see #before
      * @see #after
      */
-    public TestResult run( DescEntry entry, TestEnvironment tEnv, TestParameters tParam ) {
+    public TestResult run(DescEntry entry, TestEnvironment tEnv, TestParameters tParam)
+    {
 
         log = (PrintWriter) entry.Logger;
 
         this.tEnv = tEnv;
         this.tParam = tParam;
-        this.log = log;
+        // this.log = log;
         this.entry = entry;
         this.tRes = new TestResult();
         Class testedClass;
 
-        String ifcName = getInterfaceName();
-        System.out.println("checking : "+ifcName);
+        // Some fake code for a self test.
+        // For normal test we must not be a "ifc.qadevooo._SelfTest"
+        if (! entry.entryName.equals("ifc.qadevooo._SelfTest"))
+        {
+            String ifcName = getInterfaceName();
+            System.out.println("checking : " + ifcName);
 
-        // defining a name of the class corresponding to the tested interface
-        // or service
-        String testedClassName;
+            // defining a name of the class corresponding to the tested interface
+            // or service
+            String testedClassName;
 
-        testedClassName = getTestedClassName();
+            testedClassName = getTestedClassName();
 
-        if (entry.EntryType.equals("service")) {
-            testedClassName = "com.sun.star.beans.XPropertySet";
-        }
-
-        try {
-            testedClass = Class.forName(testedClassName);
-        } catch (ClassNotFoundException cnfE) {
-
-            cnfE.printStackTrace(log);
-            log.println("could not find a class : " + getTestedClassName());
-            return null;
-
-        }
-
-        // quering the tested interface from the tested object
-        XInterface tCase = tEnv.getTestObject();
-        Object oObj = UnoRuntime.queryInterface(
-                testedClass, tEnv.getTestObject());
-
-        if (oObj == null) {
-            if (entry.isOptional) {
-                Summarizer.summarizeDown(
-                            entry,"Not supported but optional.OK");
-            } else {
-                Summarizer.summarizeDown(
-                            entry,"queryInterface returned null.FAILED");
-                entry.ErrorMsg="queryInterface returned null";
-                entry.hasErrorMsg=true;
+            if (entry.EntryType.equals("service"))
+            {
+                testedClassName = "com.sun.star.beans.XPropertySet";
             }
 
-            return null;
+            try
+            {
+                testedClass = Class.forName(testedClassName);
+            }
+            catch (ClassNotFoundException cnfE)
+            {
+
+                cnfE.printStackTrace(log);
+                log.println("could not find a class : " + getTestedClassName());
+                return null;
+
+            }
+
+            // quering the tested interface from the tested object
+            XInterface tCase = tEnv.getTestObject();
+            Object oObj = UnoRuntime.queryInterface(testedClass, tEnv.getTestObject());
+
+            if (oObj == null)
+            {
+                if (entry.isOptional)
+                {
+                    Summarizer.summarizeDown(entry, "Not supported but optional.OK");
+                }
+                else
+                {
+                    Summarizer.summarizeDown(entry, "queryInterface returned null.FAILED");
+                    entry.ErrorMsg = "queryInterface returned null";
+                    entry.hasErrorMsg = true;
+                }
+
+                return null;
+            }
+
+            //setting the field oObj
+            setField("oObj", oObj);
         }
 
-        //setting the field oObj
-        setField("oObj",oObj);
-
-
         // to perform some stuff before all method tests
-        try {
+        try
+        {
             before();
-        } catch (Exception e){
+        }
+        catch (Exception e)
+        {
             setSubStates(e.toString());
             return tRes;
         }
 
         // executing methods tests
-        for (int i=0;i<entry.SubEntryCount;i++) {
-            try {
-                executeMethod( entry.SubEntries[i].entryName );
-            } catch (Exception e){
-                log.println("Exception while checking: "+
-                    entry.SubEntries[i].entryName+" : "+e.getMessage());
+        for (int i = 0; i < entry.SubEntryCount; i++)
+        {
+            DescEntry aSubEntry = entry.SubEntries[i];
+            try
+            {
+                executeMethod(aSubEntry.entryName);
+            }
+            catch (Exception e)
+            {
+                log.println("Exception while checking: " + aSubEntry.entryName + " : " + e.getMessage());
             }
         }
 
         // to perform some stuff after all method tests
-        try {
+        try
+        {
             after();
-        } catch (Exception e){}
+        }
+        catch (Exception e)
+        {
+        }
 
         return tRes;
     }
@@ -241,21 +258,23 @@ public class MultiMethodTest {
      * Is called before calling method tests, but after initialization.
      * Subclasses may override to perform actions before method tests.
      */
-    protected void before() {
+    protected void before()
+    {
     }
 
     /**
      * Is called after calling method tests. Subclasses may override
      * to perform actions after method tests.
      */
-    protected void after() {
+    protected void after()
+    {
     }
-
 
     /**
      * @return the name of the interface or the service tested.
      */
-    protected String getTestedClassName() {
+    protected String getTestedClassName()
+    {
         String clsName = this.getClass().getName();
 
         int firstDot = clsName.indexOf(".");
@@ -263,13 +282,12 @@ public class MultiMethodTest {
 
         String append = "com.sun.star.";
 
-        if (entry.longName.indexOf("::drafts::com::")>-1) {
+        if (entry.longName.indexOf("::drafts::com::") > -1)
+        {
             append = "drafts.com.sun.star.";
         }
 
-        return append
-                + clsName.substring(firstDot + 1, lastDot + 1)
-                + clsName.substring(lastDot + 2);
+        return append + clsName.substring(firstDot + 1, lastDot + 1) + clsName.substring(lastDot + 2);
     }
 
     /**
@@ -278,18 +296,22 @@ public class MultiMethodTest {
      * @param methName the method name to set status
      * @param methStatus the status to set to the method
      */
-    protected void setStatus( String methName, Status methStatus ) {
-        tRes.tested( methName, methStatus );
+    protected void setStatus(String methName, Status methStatus)
+    {
+        tRes.tested(methName, methStatus);
     }
 
     /**
      * sets the substates
      */
-    protected void setSubStates(String msg) {
-        for (int k=0;k<entry.SubEntryCount;k++) {
-            entry.SubEntries[k].hasErrorMsg=true;
-            entry.SubEntries[k].ErrorMsg=msg;
-            if (entry.SubEntries[k].State.equals("UNKNOWN")) {
+    protected void setSubStates(String msg)
+    {
+        for (int k = 0; k < entry.SubEntryCount; k++)
+        {
+            entry.SubEntries[k].hasErrorMsg = true;
+            entry.SubEntries[k].ErrorMsg = msg;
+            if (entry.SubEntries[k].State.equals("UNKNOWN"))
+            {
                 entry.SubEntries[k].State = msg;
             }
         }
@@ -299,9 +321,12 @@ public class MultiMethodTest {
     /**
      * Checks if the <code>method</code> is optional in the service.
      */
-    protected boolean isOptional(String method) {
-        for (int k=0;k<entry.SubEntryCount;k++) {
-            if (entry.SubEntries[k].entryName.equals(method)) {
+    protected boolean isOptional(String method)
+    {
+        for (int k = 0; k < entry.SubEntryCount; k++)
+        {
+            if (entry.SubEntries[k].entryName.equals(method))
+            {
                 return entry.SubEntries[k].isOptional;
             }
         }
@@ -311,8 +336,9 @@ public class MultiMethodTest {
     /**
      * Checks if the <code>method</code> test has been already called.
      */
-    protected boolean isCalled( String method ) {
-        return methCalled.contains( method );
+    protected boolean isCalled(String method)
+    {
+        return methCalled.contains(method);
     }
 
     /**
@@ -320,15 +346,16 @@ public class MultiMethodTest {
      * be called. The method checks this and if it is not called, calls it.
      * If the method is failed or skipped, it throws StatusException.
      */
-    protected void requiredMethod(String method) {
+    protected void requiredMethod(String method)
+    {
         log.println("starting required method: " + method);
-        executeMethod( method );
-        Status mtStatus = tRes.getStatusFor( method );
+        executeMethod(method);
+        Status mtStatus = tRes.getStatusFor(method);
 
-        if ( mtStatus != null
-                && (!mtStatus.isPassed() || mtStatus.isFailed()) ) {
-            log.println( "! Required method " + method + " failed" );
-            throw new StatusException( mtStatus );
+        if (mtStatus != null && (!mtStatus.isPassed() || mtStatus.isFailed()))
+        {
+            log.println("! Required method " + method + " failed");
+            throw new StatusException(mtStatus);
         }
     }
 
@@ -336,10 +363,12 @@ public class MultiMethodTest {
      * Checks if the <code>method</code> was called, and if not, call it.
      * On contrary to requiredMethod(), he method doesn't check its status.
      */
-    protected void executeMethod( String method ) {
-        if ( ! isCalled( method ) ) {
-            log.println("Execute: "+ method);
-            callMethod( method );
+    protected void executeMethod(String method)
+    {
+        if (!isCalled(method))
+        {
+            log.println("Execute: " + method);
+            callMethod(method);
             log.println(method + ": " + tRes.getStatusFor(method));
         }
     }
@@ -347,7 +376,8 @@ public class MultiMethodTest {
     /**
      * Just calls the <code>method</code> test.
      */
-    protected void callMethod(String method) {
+    protected void callMethod(String method)
+    {
         methCalled.add(method);
         invokeTestMethod(getMethodFor(method), method);
     }
@@ -359,31 +389,47 @@ public class MultiMethodTest {
      * @param meth the subclass' method to invoke
      * @param methName the name of the method
      */
-    protected void invokeTestMethod(Method meth, String methName) {
-        if (meth == null) {
-            setStatus( methName, Status.skipped( false ) );
-        } else {
+    protected void invokeTestMethod(Method meth, String methName)
+    {
+        if (meth == null)
+        {
+            setStatus(methName, Status.skipped(false));
+        }
+        else
+        {
             Status stat;
 
-            try {
+            try
+            {
                 meth.invoke(this, new Object[0]);
                 return;
-            } catch (InvocationTargetException itE) {
+            }
+            catch (InvocationTargetException itE)
+            {
                 Throwable t = itE.getTargetException();
 
-                if ( t instanceof StatusException ) {
-                    stat = ((StatusException)t).getStatus();
-                } else {
+                if (t instanceof StatusException)
+                {
+                    stat = ((StatusException) t).getStatus();
+                }
+                else
+                {
                     t.printStackTrace(log);
                     stat = Status.exception(t);
                 }
-            } catch (IllegalAccessException iaE) {
+            }
+            catch (IllegalAccessException iaE)
+            {
                 iaE.printStackTrace(log);
                 stat = Status.exception(iaE);
-            } catch (IllegalArgumentException iaE) {
+            }
+            catch (IllegalArgumentException iaE)
+            {
                 iaE.printStackTrace(log);
                 stat = Status.exception(iaE);
-            } catch (ClassCastException ccE) {
+            }
+            catch (ClassCastException ccE)
+            {
                 ccE.printStackTrace(log);
                 stat = Status.exception(ccE);
             }
@@ -397,18 +443,23 @@ public class MultiMethodTest {
      *
      * @return the testing method, if found, <tt>null</tt> otherwise
      */
-    protected Method getMethodFor(String method) {
+    protected Method getMethodFor(String method)
+    {
         String mName = "_" + method;
 
-        if (mName.endsWith("()")) {
+        if (mName.endsWith("()"))
+        {
             mName = mName.substring(0, mName.length() - 2);
         }
 
         final Class[] paramTypes = new Class[0];
 
-        try {
+        try
+        {
             return this.getClass().getDeclaredMethod(mName, paramTypes);
-        } catch (NoSuchMethodException nsmE) {
+        }
+        catch (NoSuchMethodException nsmE)
+        {
             return null;
         }
     }
@@ -416,11 +467,11 @@ public class MultiMethodTest {
     /**
      * @return the name of the interface tested
      */
-    public String getInterfaceName() {
+    public String getInterfaceName()
+    {
         String clName = this.getClass().getName();
-        return clName.substring( clName.lastIndexOf('.') + 1 );
+        return clName.substring(clName.lastIndexOf('.') + 1);
     }
-
 
     /**
      * Initializes <code>fieldName</code> of the subclass with
@@ -428,26 +479,31 @@ public class MultiMethodTest {
      *
      * @return Status describing the result of the operation.
      */
-    protected Status setField( String fieldName, Object value) {
+    protected Status setField(String fieldName, Object value)
+    {
         Field objField;
 
-        try {
-            objField = this.getClass().getField( fieldName );
+        try
+        {
+            objField = this.getClass().getField(fieldName);
         }
-        catch( NoSuchFieldException nsfE ){
-            return Status.exception( nsfE );
+        catch (NoSuchFieldException nsfE)
+        {
+            return Status.exception(nsfE);
         }
 
-        try {
-            objField.set( this, value );
+        try
+        {
+            objField.set(this, value);
             return Status.passed(true);
         }
-        catch( IllegalArgumentException iaE ){
-            return Status.exception( iaE );
+        catch (IllegalArgumentException iaE)
+        {
+            return Status.exception(iaE);
         }
-        catch( IllegalAccessException iaE ){
-            return Status.exception( iaE );
+        catch (IllegalAccessException iaE)
+        {
+            return Status.exception(iaE);
         }
     }
-
 }

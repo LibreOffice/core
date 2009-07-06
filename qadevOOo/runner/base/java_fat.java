@@ -59,47 +59,55 @@ import util.DynamicClassLoader;
  *
  * this class handles tests written in java and running on a fat Office
  */
-public class java_fat implements TestBase {
+public class java_fat implements TestBase
+{
 
-    public static boolean debug = false;
-    public static boolean keepdocument = false;
-    public static boolean logging = true;
-    public static boolean newOffice = false;
+    private static boolean debug = false;
+    private static boolean keepdocument = false;
+    private static boolean logging = true;
+    private static boolean newOffice = false;
     private DynamicClassLoader dcl = null;
 
-    public boolean executeTest(lib.TestParameters param) {
-        dcl = new DynamicClassLoader();
+    private lib.TestParameters m_aParams;
+    private AppProvider m_aOffice;
 
-        DescGetter dg = new APIDescGetter();
-        String job = (String) param.get("TestJob");
-        String ExclusionFile = (String) param.get("ExclusionList");
-        Vector exclusions = null;
-        boolean retValue = true;
-        debug = param.getBool("DebugIsActive");
-        logging = param.getBool("LoggingIsActive");
-        keepdocument = param.getBool("KeepDocument");
-        newOffice = param.getBool(util.PropertyName.NEW_OFFICE_INSTANCE);
-        if (keepdocument) {
-            System.setProperty("KeepDocument", "true");
-        }
-        if (ExclusionFile != null) {
-            exclusions = getExclusionList(ExclusionFile, debug);
-        }
-        //get Job-Descriptions
-        System.out.println("Getting Descriptions for Job: " + job);
+    public boolean executeTest(lib.TestParameters param)
+        {
+            m_aParams = param;
 
-        DescEntry[] entries = dg.getDescriptionFor(job,
-            (String) param.get(
-            "DescriptionPath"),
-            debug);
+            dcl = new DynamicClassLoader();
 
-        System.out.println();
+            DescGetter dg = new APIDescGetter();
+            String job = (String) param.get("TestJob");
+            String ExclusionFile = (String) param.get("ExclusionList");
+            Vector exclusions = null;
+            boolean retValue = true;
+            debug = param.getBool("DebugIsActive");
+            logging = param.getBool("LoggingIsActive");
+            keepdocument = param.getBool("KeepDocument");
+            newOffice = param.getBool(util.PropertyName.NEW_OFFICE_INSTANCE);
+            if (keepdocument)
+            {
+                System.setProperty("KeepDocument", "true");
+            }
+            if (ExclusionFile != null)
+            {
+                exclusions = getExclusionList(ExclusionFile, debug);
+            }
+            //get Job-Descriptions
+            System.out.println("Getting Descriptions for Job: " + job);
 
-        if (entries == null) {
-            System.out.println("Couldn't get Description for Job: " + job);
+            String sDescriptionPath = (String) param.get("DescriptionPath");
+            DescEntry[] entries = dg.getDescriptionFor(job, sDescriptionPath, debug);
 
-            return false;
-        }
+            // System.out.println();
+
+            if (entries == null)
+            {
+                System.out.println("Couldn't get Description for Job: " + job);
+
+                return false;
+            }
 
 //        String officeProviderName = (String) param.get("OfficeProvider");
 //        AppProvider office = (AppProvider) dcl.getInstance(officeProviderName);
@@ -110,265 +118,276 @@ public class java_fat implements TestBase {
 //            System.exit(-1);
 //        }
 
-        AppProvider office = startOffice(param);
+            m_aOffice = startOffice(param);
 
-        boolean firstRun = true;
+            boolean firstRun = true;
 
-        for (int l = 0; l < entries.length; l++) {
-            if (entries[l] == null) {
-                continue;
-            }
-
-            if (entries[l].hasErrorMsg) {
-                System.out.println(entries[l].ErrorMsg);
-
-                continue;
-            }
-
-            if (!firstRun && newOffice) {
-                if (!office.closeExistingOffice(param, true)) {
-                    office.disposeManager(param);
+            for (int l = 0; l < entries.length; l++)
+            {
+                if (entries[l] == null)
+                {
+                    continue;
                 }
-                startOffice(param);
-            }
-            firstRun = false;
+
+                if (entries[l].hasErrorMsg)
+                {
+                    System.out.println(entries[l].ErrorMsg);
+                    retValue = false;
+                    continue;
+                }
+
+                if (!firstRun && newOffice)
+                {
+                    if (!m_aOffice.closeExistingOffice(param, true))
+                    {
+                        m_aOffice.disposeManager(param);
+                    }
+                    startOffice(param);
+                }
+                firstRun = false;
 
 //            XMultiServiceFactory msf = (XMultiServiceFactory) office.getManager(
 //                                               param);
 
-            XMultiServiceFactory msf = (XMultiServiceFactory) param.getMSF();
+                XMultiServiceFactory msf = (XMultiServiceFactory) param.getMSF();
 
-            if (msf == null) {
-                retValue = false;
+                if (msf == null)
+                {
+                    retValue = false;
 
-                continue;
-            }
+                    continue;
+                }
 
 //            param.put("ServiceFactory", msf);
 
-            DescEntry entry = entries[l];
+                DescEntry entry = entries[l];
 
-            //get some helper classes
-            Summarizer sumIt = new Summarizer();
+                //get some helper classes
+                Summarizer sumIt = new Summarizer();
 
-            TestCase tCase = null;
+                TestCase tCase = null;
 
-            try {
-                tCase = (TestCase) dcl.getInstance("mod._" +
-                    entry.entryName);
-            } catch (java.lang.IllegalArgumentException ie) {
-                entry.ErrorMsg = ie.getMessage();
-                entry.hasErrorMsg = true;
-            } catch (java.lang.NoClassDefFoundError ie) {
-                entry.ErrorMsg = ie.getMessage();
-                entry.hasErrorMsg = true;
-            }
+                try
+                {
+                    tCase = (TestCase) dcl.getInstance("mod._" + entry.entryName);
+                }
+                catch (java.lang.IllegalArgumentException ie)
+                {
+                    entry.ErrorMsg = ie.getMessage();
+                    entry.hasErrorMsg = true;
+                }
+                catch (java.lang.NoClassDefFoundError ie)
+                {
+                    entry.ErrorMsg = ie.getMessage();
+                    entry.hasErrorMsg = true;
+                }
 
-            if (tCase == null) {
-                Summarizer.summarizeDown(entry, entry.ErrorMsg);
+                if (tCase == null)
+                {
+                    Summarizer.summarizeDown(entry, entry.ErrorMsg);
 
-                LogWriter sumObj = OutProducerFactory.createOutProducer(param);
-                entry.UserDefinedParams = param;
-                sumObj.initialize(entry, logging);
-                sumObj.summary(entry);
-
-                continue;
-            }
-
-            if (debug) {
-                System.out.println("sleeping 5 seconds..");
-            }
-            util.utils.shortWait(5000);
-
-            System.out.println("Creating: " + entry.entryName);
-
-            LogWriter log = (LogWriter) dcl.getInstance(
-                (String) param.get("LogWriter"));
-            log.initialize(entry, logging);
-            entry.UserDefinedParams = param;
-
-            TestEnvironment tEnv = null;
-
-            try {
-                tCase.setLogWriter((PrintWriter) log);
-                tCase.initializeTestCase(param);
-                tEnv = tCase.getTestEnvironment(param);
-            } catch (Exception e) {
-                System.out.println("Exception while creating " +
-                    tCase.getObjectName());
-                System.out.println("Message " + e.getMessage());
-                e.printStackTrace();
-                tEnv = null;
-            } catch (java.lang.UnsatisfiedLinkError e) {
-                System.out.println("Exception while creating " +
-                    tCase.getObjectName());
-                System.out.println("Message " + e.getMessage());
-                tEnv = null;
-            } catch (java.lang.NoClassDefFoundError e) {
-                System.out.println("Exception while creating " +
-                    tCase.getObjectName());
-                System.out.println("Message " + e.getMessage());
-                tEnv = null;
-            }
-
-            if (tEnv == null) {
-                Summarizer.summarizeDown(entry,
-                    "Couldn't create " +
-                    tCase.getObjectName());
-
-                LogWriter sumObj = OutProducerFactory.createOutProducer(param);
-                entry.UserDefinedParams = param;
-                sumObj.initialize(entry, logging);
-                sumObj.summary(entry);
-
-                continue;
-            }
-
-            System.out.println(tCase.getObjectName() + " recreated ");
-
-            for (int j = 0; j < entry.SubEntryCount; j++) {
-                if (!entry.SubEntries[j].isToTest) {
-                    Summarizer.summarizeDown(entry.SubEntries[j],
-                        "not part of the job");
+                    LogWriter sumObj = OutProducerFactory.createOutProducer(param);
+                    entry.UserDefinedParams = param;
+                    sumObj.initialize(entry, logging);
+                    sumObj.summary(entry);
 
                     continue;
                 }
 
-                if ((exclusions != null) && (exclusions.contains(entry.SubEntries[j].longName))) {
-                    Summarizer.summarizeDown(entry.SubEntries[j],
-                        "known issue");
+                if (debug)
+                {
+                    System.out.println("sleeping 5 seconds..");
+                }
+                util.utils.shortWait(5000);
+
+                System.out.println("Creating: " + entry.entryName);
+
+                LogWriter log = (LogWriter) dcl.getInstance((String) param.get("LogWriter"));
+                log.initialize(entry, logging);
+                entry.UserDefinedParams = param;
+
+                TestEnvironment tEnv = null;
+
+                try
+                {
+                    tCase.setLogWriter((PrintWriter) log);
+                    tCase.initializeTestCase(param);
+                    tEnv = tCase.getTestEnvironment(param);
+                }
+                catch (Exception e)
+                {
+                    System.out.println("Exception while creating " + tCase.getObjectName());
+                    System.out.println("Message " + e.getMessage());
+                    e.printStackTrace();
+                    tEnv = null;
+                }
+                catch (java.lang.UnsatisfiedLinkError e)
+                {
+                    System.out.println("Exception while creating " + tCase.getObjectName());
+                    System.out.println("Message " + e.getMessage());
+                    tEnv = null;
+                }
+                catch (java.lang.NoClassDefFoundError e)
+                {
+                    System.out.println("Exception while creating " + tCase.getObjectName());
+                    System.out.println("Message " + e.getMessage());
+                    tEnv = null;
+                }
+
+                if (tEnv == null)
+                {
+                    Summarizer.summarizeDown(entry, "Couldn't create " + tCase.getObjectName());
+
+                    LogWriter sumObj = OutProducerFactory.createOutProducer(param);
+                    entry.UserDefinedParams = param;
+                    sumObj.initialize(entry, logging);
+                    sumObj.summary(entry);
 
                     continue;
                 }
 
-                System.out.println("running: '" + entry.SubEntries[j].entryName + "'");
+                System.out.println(tCase.getObjectName() + " recreated ");
 
-                LogWriter ifclog = (LogWriter) dcl.getInstance(
-                    (String) param.get("LogWriter"));
+                for (int j = 0; j < entry.SubEntryCount; j++)
+                {
+                    DescEntry aSubEntry = entry.SubEntries[j];
+                    if (!aSubEntry.isToTest)
+                    {
+                        Summarizer.summarizeDown(aSubEntry, "not part of the job");
 
-                ifclog.initialize(entry.SubEntries[j], logging);
-                entry.SubEntries[j].UserDefinedParams = param;
-                entry.SubEntries[j].Logger = ifclog;
-
-                if ((tEnv == null) || tEnv.isDisposed()) {
-                    helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
-                        "AppProvider");
-
-                    if (ph != null) {
-                        office.closeExistingOffice(param, true);
-                        shortWait(5000);
+                        continue;
                     }
 
-                    tEnv = getEnv(entry, param);
-                }
+                    if ((exclusions != null) && (exclusions.contains(aSubEntry.longName)))
+                    {
+                        Summarizer.summarizeDown(aSubEntry, "known issue");
 
-                MultiMethodTest ifc = null;
-                lib.TestResult res = null;
+                        continue;
+                    }
 
-                // run the interface test twice if it failed.
-                int countInterfaceTestRun = 0;
-                boolean finished = false;
-                while (!finished) {
-                    try {
-                        countInterfaceTestRun++;
-                        finished = true;
-                        res = executeInterfaceTest(entry.SubEntries[j], tEnv, param);
-                    } catch (IllegalArgumentException iae) {
-                        System.out.println("Couldn't load class " +
-                            entry.SubEntries[j].entryName);
-                        System.out.println("**** " + iae.getMessage() + " ****");
-                        Summarizer.summarizeDown(entry.SubEntries[j],
-                            iae.getMessage());
-                    } catch (java.lang.NoClassDefFoundError iae) {
-                        System.out.println("Couldn't load class " +
-                            entry.SubEntries[j].entryName);
-                        System.out.println("**** " + iae.getMessage() + " ****");
-                        Summarizer.summarizeDown(entry.SubEntries[j],
-                            iae.getMessage());
-                    } catch (java.lang.RuntimeException e) {
-                        helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
-                            "AppProvider");
+                    System.out.println("running: '" + aSubEntry.entryName + "'");
 
-                        if (ph != null) {
-                            office.closeExistingOffice(param, true);
-                            shortWait(5000);
-                        }
+                    LogWriter ifclog = (LogWriter) dcl.getInstance( (String) param.get("LogWriter"));
 
+                    ifclog.initialize(aSubEntry, logging);
+                    aSubEntry.UserDefinedParams = param;
+                    aSubEntry.Logger = ifclog;
+
+                    if ((tEnv == null) || tEnv.isDisposed())
+                    {
+                        closeExistingOffice();
                         tEnv = getEnv(entry, param);
-                        if (countInterfaceTestRun < 2) {
-                            finished = false;
-                        } else {
-                            Summarizer.summarizeDown(entry.SubEntries[j],
-                                e.toString() + ".FAILED");
+                    }
+
+                    MultiMethodTest ifc = null;
+                    lib.TestResult res = null;
+
+                    // run the interface test twice if it failed.
+                    int countInterfaceTestRun = 0;
+                    boolean finished = false;
+                    while (!finished)
+                    {
+                        try
+                        {
+                            countInterfaceTestRun++;
+                            finished = true;
+                            res = executeInterfaceTest(aSubEntry, tEnv, param);
+                        }
+                        catch (IllegalArgumentException iae)
+                        {
+                            System.out.println("Couldn't load class " + aSubEntry.entryName);
+                            System.out.println("**** " + iae.getMessage() + " ****");
+                            Summarizer.summarizeDown(aSubEntry, iae.getMessage());
+                        }
+                        catch (java.lang.NoClassDefFoundError iae)
+                        {
+                            System.out.println("Couldn't load class " + aSubEntry.entryName);
+                            System.out.println("**** " + iae.getMessage() + " ****");
+                            Summarizer.summarizeDown(aSubEntry, iae.getMessage());
+                        }
+                        catch (java.lang.RuntimeException e)
+                        {
+                            closeExistingOffice();
+                            tEnv = getEnv(entry, param);
+                            if (countInterfaceTestRun < 2)
+                            {
+                                finished = false;
+                            }
+                            else
+                            {
+                                Summarizer.summarizeDown(aSubEntry, e.toString() + ".FAILED");
+                            }
                         }
                     }
-                }
-                if (res != null) {
-                    for (int k = 0; k < entry.SubEntries[j].SubEntryCount; k++) {
-                        if (res.hasMethod(
-                            entry.SubEntries[j].SubEntries[k].entryName)) {
-                            entry.SubEntries[j].SubEntries[k].State = res.getStatusFor(
-                                entry.SubEntries[j].SubEntries[k].entryName).toString();
+                    if (res != null)
+                    {
+                        for (int k = 0; k < aSubEntry.SubEntryCount; k++)
+                        {
+                            DescEntry aSubSubEntry = aSubEntry.SubEntries[k];
+                            if (res.hasMethod( aSubSubEntry.entryName))
+                            {
+                                aSubSubEntry.State = res.getStatusFor(aSubSubEntry.entryName).toString();
+                            }
                         }
+                    }
+
+                    sumIt.summarizeUp(aSubEntry);
+
+                    LogWriter sumIfc = OutProducerFactory.createOutProducer(param);
+                    aSubEntry.UserDefinedParams = param;
+                    sumIfc.initialize(aSubEntry, logging);
+                    sumIfc.summary(aSubEntry);
+                }
+
+                try
+                {
+                    if (!keepdocument)
+                    {
+                        tCase.cleanupTestCase(param);
+                    }
+                }
+                catch (Exception e)
+                {
+                    System.out.println("couldn't cleanup");
+                }
+                catch (java.lang.NoClassDefFoundError e)
+                {
+                    System.out.println("couldn't cleanup");
+                }
+
+                sumIt.summarizeUp(entry);
+
+                LogWriter sumObj = OutProducerFactory.createOutProducer(param);
+
+                sumObj.initialize(entry, logging);
+                sumObj.summary(entry);
+            }
+
+            if (entries.length > 0)
+            {
+                System.out.println();
+
+                int counter = 0;
+                System.out.println("Failures that appeared during scenario execution:");
+
+                for (int i = 0; i < entries.length; i++)
+                {
+                    if (!entries[i].State.endsWith("OK"))
+                    {
+                        System.out.println("\t " + entries[i].longName);
+                        counter++;
                     }
                 }
 
-                sumIt.summarizeUp(entry.SubEntries[j]);
-
-                LogWriter sumIfc = OutProducerFactory.createOutProducer(param);
-                entry.SubEntries[j].UserDefinedParams = param;
-                sumIfc.initialize(entry.SubEntries[j], logging);
-                sumIfc.summary(entry.SubEntries[j]);
+                System.out.println(counter + " of " + entries.length + " tests failed");
             }
 
-            try {
-                if (!keepdocument) {
-                    tCase.cleanupTestCase(param);
-                }
-            } catch (Exception e) {
-                System.out.println("couldn't cleanup");
-            } catch (java.lang.NoClassDefFoundError e) {
-                System.out.println("couldn't cleanup");
-            }
-
-            sumIt.summarizeUp(entry);
-
-            LogWriter sumObj = OutProducerFactory.createOutProducer(param);
-
-            sumObj.initialize(entry, logging);
-            sumObj.summary(entry);
+            closeExistingOffice();
+            return retValue;
         }
 
-        if (entries.length > 1) {
-            System.out.println();
-
-            int counter = 0;
-            System.out.println(
-                "Failures that appeared during scenario execution:");
-
-            for (int i = 0; i < entries.length; i++) {
-                if (!entries[i].State.endsWith("OK")) {
-                    System.out.println("\t " + entries[i].longName);
-                    counter++;
-                }
-            }
-
-            System.out.println(counter + " of " + entries.length +
-                " tests failed");
-        }
-
-        helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
-            "AppProvider");
-
-        if (ph != null) {
-            office.closeExistingOffice(param, true);
-            shortWait(5000);
-        }
-
-        return retValue;
-    }
-
-    protected TestEnvironment getEnv(DescEntry entry, TestParameters param) {
+    private TestEnvironment getEnv(DescEntry entry, TestParameters param)
+        {
 //        if (dcl == null)
 //            dcl = new DynamicClassLoader();
 //        String officeProviderName = (String) param.get("OfficeProvider");
@@ -389,143 +408,172 @@ public class java_fat implements TestBase {
 //
 //        param.put("ServiceFactory", msf);
 
-        AppProvider office = startOffice(param);
+            // AppProvider office = startOffice(param);
 
-        TestCase tCase = null;
+            TestCase tCase = null;
 
-        try {
-            tCase = (TestCase) dcl.getInstance("mod._" + entry.entryName);
-        } catch (java.lang.IllegalArgumentException ie) {
-            entry.ErrorMsg = ie.getMessage();
-            entry.hasErrorMsg = true;
-        } catch (java.lang.NoClassDefFoundError ie) {
-            entry.ErrorMsg = ie.getMessage();
-            entry.hasErrorMsg = true;
+            try
+            {
+                tCase = (TestCase) dcl.getInstance("mod._" + entry.entryName);
+            }
+            catch (java.lang.IllegalArgumentException ie)
+            {
+                entry.ErrorMsg = ie.getMessage();
+                entry.hasErrorMsg = true;
+            }
+            catch (java.lang.NoClassDefFoundError ie)
+            {
+                entry.ErrorMsg = ie.getMessage();
+                entry.hasErrorMsg = true;
+            }
+
+            System.out.println("Creating: " + entry.entryName);
+
+            entry.UserDefinedParams = param;
+
+            LogWriter log = (LogWriter) dcl.getInstance((String) param.get("LogWriter"));
+            log.initialize(entry, logging);
+            tCase.setLogWriter((PrintWriter) log);
+
+            TestEnvironment tEnv = null;
+
+            try
+            {
+                tCase.initializeTestCase(param);
+                tEnv = tCase.getTestEnvironment(param);
+            }
+            catch (com.sun.star.lang.DisposedException de)
+            {
+                System.out.println("Office disposed");
+                closeExistingOffice();
+            }
+            catch (lib.StatusException e)
+            {
+                System.out.println(e.getMessage());
+
+                closeExistingOffice();
+
+                entry.ErrorMsg = e.getMessage();
+                entry.hasErrorMsg = true;
+            }
+
+            return tEnv;
         }
 
-        System.out.println("Creating: " + entry.entryName);
+    private void closeExistingOffice()
+        {
+            helper.ProcessHandler ph = (helper.ProcessHandler) m_aParams.get("AppProvider");
 
-        entry.UserDefinedParams = param;
-
-        LogWriter log = (LogWriter) dcl.getInstance(
-            (String) param.get("LogWriter"));
-        log.initialize(entry, logging);
-        tCase.setLogWriter((PrintWriter) log);
-
-        TestEnvironment tEnv = null;
-
-        try {
-            tCase.initializeTestCase(param);
-            tEnv = tCase.getTestEnvironment(param);
-        } catch (com.sun.star.lang.DisposedException de) {
-            System.out.println("Office disposed");
-
-            helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
-                "AppProvider");
-
-            if (ph != null) {
-                office.closeExistingOffice(param, true);
+            if (ph != null)
+            {
+                m_aOffice.closeExistingOffice(m_aParams, true);
                 shortWait(5000);
             }
-        } catch (lib.StatusException e) {
-            System.out.println(e.getMessage());
 
-            helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
-                "AppProvider");
+        }
 
-            if (ph != null) {
-                office.closeExistingOffice(param, true);
-                shortWait(5000);
+    private void shortWait(int millis)
+        {
+            try
+            {
+                Thread.sleep(millis);
             }
-
-            entry.ErrorMsg = e.getMessage();
-            entry.hasErrorMsg = true;
-        }
-
-        return tEnv;
-    }
-
-    protected void shortWait(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (java.lang.InterruptedException ie) {
-        }
-    }
-
-    protected Vector getExclusionList(String url, boolean debug) {
-        Vector entryList = new Vector();
-        String line = "#";
-        BufferedReader exclusion = null;
-
-        try {
-            exclusion = new BufferedReader(new FileReader(url));
-        } catch (java.io.FileNotFoundException fnfe) {
-            if (debug) {
-                System.out.println("Couldn't find file " + url);
+            catch (java.lang.InterruptedException ie)
+            {
             }
-
-            return entryList;
         }
 
-        while (line != null) {
-            try {
-                if (!line.startsWith("#") && (line.length() > 1)) {
-                    entryList.add(line.trim());
-                }
+    private Vector getExclusionList(String url, boolean debug)
+        {
+            Vector entryList = new Vector();
+            String line = "#";
+            BufferedReader exclusion = null;
 
-                line = exclusion.readLine();
-            } catch (java.io.IOException ioe) {
-                if (debug) {
-                    System.out.println(
-                        "Exception while reading exclusion list");
+            try
+            {
+                exclusion = new BufferedReader(new FileReader(url));
+            }
+            catch (java.io.FileNotFoundException fnfe)
+            {
+                if (debug)
+                {
+                    System.out.println("Couldn't find file " + url);
                 }
 
                 return entryList;
             }
-        }
 
-        try {
-            exclusion.close();
-        } catch (java.io.IOException ioe) {
-            if (debug) {
-                System.out.println("Couldn't close file " + url);
+            while (line != null)
+            {
+                try
+                {
+                    if (!line.startsWith("#") && (line.length() > 1))
+                    {
+                        entryList.add(line.trim());
+                    }
+
+                    line = exclusion.readLine();
+                }
+                catch (java.io.IOException ioe)
+                {
+                    if (debug)
+                    {
+                        System.out.println("Exception while reading exclusion list");
+                    }
+
+                    return entryList;
+                }
+            }
+
+            try
+            {
+                exclusion.close();
+            }
+            catch (java.io.IOException ioe)
+            {
+                if (debug)
+                {
+                    System.out.println("Couldn't close file " + url);
+                }
+
+                return entryList;
             }
 
             return entryList;
         }
 
-        return entryList;
-    }
-
     private TestResult executeInterfaceTest(
         DescEntry entry, TestEnvironment tEnv, TestParameters param)
-        throws IllegalArgumentException, java.lang.NoClassDefFoundError {
-        MultiMethodTest ifc = (MultiMethodTest) dcl.getInstance(entry.entryName);
-        return ifc.run(entry, tEnv, param);
-    }
-
-    private AppProvider startOffice(lib.TestParameters param) {
-
-        if (dcl == null) {
-            dcl = new DynamicClassLoader();
+        throws IllegalArgumentException, java.lang.NoClassDefFoundError
+        {
+            MultiMethodTest ifc = (MultiMethodTest) dcl.getInstance(entry.entryName);
+            return ifc.run(entry, tEnv, param);
         }
 
-        String officeProviderName = (String) param.get("OfficeProvider");
-        AppProvider office = (AppProvider) dcl.getInstance(officeProviderName);
+    private AppProvider startOffice(lib.TestParameters param)
+        {
 
-        if (office == null) {
-            System.out.println("ERROR: Wrong parameter 'OfficeProvider', " +
-                " it cannot be instantiated.");
-            System.exit(-1);
+            if (dcl == null)
+            {
+                dcl = new DynamicClassLoader();
+            }
+
+            String officeProviderName = (String) param.get("OfficeProvider");
+            AppProvider office = (AppProvider) dcl.getInstance(officeProviderName);
+
+            if (office == null)
+            {
+                System.out.println("ERROR: Wrong parameter 'OfficeProvider', " + " it cannot be instantiated.");
+                System.exit(-1);
+            }
+
+            XMultiServiceFactory msf = (XMultiServiceFactory) office.getManager(param);
+
+            if (msf != null)
+            {
+                param.put("ServiceFactory", msf);
+            }
+
+            return office;
         }
-
-        XMultiServiceFactory msf = (XMultiServiceFactory) office.getManager(
-            param);
-
-        if (msf != null){
-            param.put("ServiceFactory", msf);
-        }
-
-        return office;
-    }
 }

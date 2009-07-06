@@ -429,7 +429,7 @@ public class DesktopTools {
      * @param xModel the XModel of the document to bring to top
      */
     public static void bringWindowToFront(XModel xModel){
-        System.out.println("DEBUG: bring to front xModel");
+        // System.out.println("DEBUG: bring to front xModel");
 
         XTopWindow xTopWindow =
                 (XTopWindow) UnoRuntime.queryInterface(
@@ -440,7 +440,7 @@ public class DesktopTools {
     }
 
     public static void bringWindowToFront(XComponent xComponent){
-        System.out.println("DEBUG: bring to front xComponent");
+        // System.out.println("DEBUG: bring to front xComponent");
         XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, xComponent);
         if (xModel != null){
             bringWindowToFront(xModel);

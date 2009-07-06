@@ -366,17 +366,20 @@ public class ProcessHandler
         {
             ow = (OfficeWatcher) param.get(PropertyName.OFFICE_WATCHER);
         }
+        if (ow != null)
+        {
+            ow.ping();
+        }
 
+        int hangcheck = 10;
         while (!this.isFinished() && changedText)
         {
             count++;
-            if (ow != null)
-            {
-                ow.ping();
-            }
-            dbg("runCommand: waiting " + mTimeOut / 1000 + " seconds while command execution is ongoing... " + count);
-            shortWait(mTimeOut);
+            // dbg("runCommand: waiting " + mTimeOut / 1000 + " seconds while command execution is ongoing... " + count);
+            // shortWait(mTimeOut);
+            // shortWait(2000); // wait 2 seconds.
             //waitFor(mTimeOut);
+            waitFor(2000, false); // wait but don't kill
 
             if (ow != null)
             {
@@ -385,13 +388,18 @@ public class ProcessHandler
             // check for changes in the output stream. If there are no changes, the process maybe hangs
             if (!this.isFinished())
             {
-                if (this.getOutputText().length() == memText.length())
+                hangcheck--;
+                if (hangcheck < 0)
                 {
-                    changedText = false;
-                    dbg("runCommand Could not detect changes in output stream!!!");
-
+                    String sOutputText = getOutputText();
+                    if (sOutputText.length() == memText.length())
+                    {
+                        changedText = false;
+                    // dbg("runCommand Could not detect changes in output stream!!!");
+                    }
+                    hangcheck = 10;
+                    memText = this.getOutputText();
                 }
-                memText = this.getOutputText();
             }
         }
 
@@ -539,9 +547,6 @@ public class ProcessHandler
         stderr = new Pump(m_aProcess.getErrorStream(), log, "err > ");
         stdIn = new PrintStream(m_aProcess.getOutputStream());
 
-        // int nExitValue = m_aProcess.exitValue();
-        // int dummy = 0;
-
         dbg("execute: flush io-streams");
 
         flushInput();
@@ -578,7 +583,12 @@ public class ProcessHandler
      * @return <code>true</code> if process correctly exited
      * (exit code doesn't affect to this result).
      */
-    public boolean waitFor(long timeout)
+     public boolean waitFor(long timeout)
+     {
+         return waitFor(timeout, true);
+     }
+
+    private boolean waitFor(long timeout, boolean bKillProcessAfterTimeout)
     {
         if (isFinished())
         {
@@ -638,11 +648,14 @@ public class ProcessHandler
             }
         }
 
-        if (!isFinished)
+        if (bKillProcessAfterTimeout == true)
         {
-            log.println("Going to destroy the process!!");
-            m_aProcess.destroy();
-            log.println("Process has been destroyed!");
+            if (!isFinished)
+            {
+                log.println("Going to destroy the process!!");
+                m_aProcess.destroy();
+                log.println("Process has been destroyed!");
+            }
         }
 //  Removed as hung up in SDK test 'PathSettings'
 //        try {
