@@ -1035,7 +1035,7 @@ BOOL SfxObjectShell::Print
             // pepare adaptor for old style StartPage/EndPage printing
             boost::shared_ptr< Printer > pPrinter( new Printer( rPrt.GetJobSetup() ) );
             vcl::OldStylePrintAdaptor* pAdaptor = new vcl::OldStylePrintAdaptor( pPrinter );
-            boost::shared_ptr< vcl::PrinterListener > pListener( pAdaptor );
+            boost::shared_ptr< vcl::PrinterController > pController( pAdaptor );
 
             pAdaptor->StartPage();
 
@@ -1133,7 +1133,7 @@ BOOL SfxObjectShell::Print
             }
             pAdaptor->EndPage();
 
-            Printer::PrintJob( pListener, rPrt.GetJobSetup() );
+            Printer::PrintJob( pController, rPrt.GetJobSetup() );
 
             delete pIter;
             break;

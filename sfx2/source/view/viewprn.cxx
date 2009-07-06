@@ -72,7 +72,7 @@ using namespace com::sun::star::uno;
 TYPEINIT1(SfxPrintingHint, SfxHint);
 
 // -----------------------------------------------------------------------
-class SfxPrinterListener : public vcl::PrinterListener, public SfxListener
+class SfxPrinterController : public vcl::PrinterController, public SfxListener
 {
     Any                                     maCompleteSelection;
     Any                                     maSelection;
@@ -90,15 +90,15 @@ class SfxPrinterListener : public vcl::PrinterListener, public SfxListener
     Sequence< beans::PropertyValue > getMergedOptions() const;
     const Any& getSelectionObject() const;
 public:
-    SfxPrinterListener( const Any& i_rComplete,
-                        const Any& i_rSelection,
-                        const Any& i_rViewProp,
-                        const Reference< view::XRenderable >& i_xRender,
-                        sal_Bool i_bApi, sal_Bool i_bDirect,
-                        SfxViewShell* pView
-                      );
+    SfxPrinterController( const Any& i_rComplete,
+                          const Any& i_rSelection,
+                          const Any& i_rViewProp,
+                          const Reference< view::XRenderable >& i_xRender,
+                          sal_Bool i_bApi, sal_Bool i_bDirect,
+                          SfxViewShell* pView
+                        );
     
-    virtual ~SfxPrinterListener();
+    virtual ~SfxPrinterController();
     virtual void Notify( SfxBroadcaster&, const SfxHint& );
     
     virtual int  getPageCount() const;
@@ -108,13 +108,13 @@ public:
     virtual void jobFinished( com::sun::star::view::PrintableState );
 };
 
-SfxPrinterListener::SfxPrinterListener( const Any& i_rComplete,
-                                        const Any& i_rSelection,
-                                        const Any& i_rViewProp,
-                                        const Reference< view::XRenderable >& i_xRender,
-                                        sal_Bool i_bApi, sal_Bool i_bDirect,
-                                        SfxViewShell* pView
-                                       )
+SfxPrinterController::SfxPrinterController( const Any& i_rComplete,
+                                            const Any& i_rSelection,
+                                            const Any& i_rViewProp,
+                                            const Reference< view::XRenderable >& i_xRender,
+                                            sal_Bool i_bApi, sal_Bool i_bDirect,
+                                            SfxViewShell* pView
+                                          )
     : maCompleteSelection( i_rComplete )
     , maSelection( i_rSelection )
     , mxRenderable( i_xRender )
@@ -180,7 +180,7 @@ SfxPrinterListener::SfxPrinterListener( const Any& i_rComplete,
     setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "View" ) ), makeAny( i_rViewProp ) );
 }
 
-void SfxPrinterListener::Notify( SfxBroadcaster& , const SfxHint& rHint )
+void SfxPrinterController::Notify( SfxBroadcaster& , const SfxHint& rHint )
 { 
     if ( rHint.IsA(TYPE(SfxSimpleHint)) )
     {
@@ -194,11 +194,11 @@ void SfxPrinterListener::Notify( SfxBroadcaster& , const SfxHint& rHint )
     }
 }
 
-SfxPrinterListener::~SfxPrinterListener()
+SfxPrinterController::~SfxPrinterController()
 {
 }
 
-const Any& SfxPrinterListener::getSelectionObject() const
+const Any& SfxPrinterController::getSelectionObject() const
 {
     sal_Int32 nChoice = 0;
     const beans::PropertyValue* pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ) );
@@ -207,7 +207,7 @@ const Any& SfxPrinterListener::getSelectionObject() const
     return nChoice > 1 ? maSelection : maCompleteSelection;
 }
 
-Sequence< beans::PropertyValue > SfxPrinterListener::getMergedOptions() const
+Sequence< beans::PropertyValue > SfxPrinterController::getMergedOptions() const
 {
     boost::shared_ptr<Printer> pPrinter( getPrinter() );
     if( pPrinter.get() != mpLastPrinter )
@@ -226,7 +226,7 @@ Sequence< beans::PropertyValue > SfxPrinterListener::getMergedOptions() const
     return aRenderOptions;
 }
 
-int SfxPrinterListener::getPageCount() const
+int SfxPrinterController::getPageCount() const
 {
     int nPages = 0;
     boost::shared_ptr<Printer> pPrinter( getPrinter() );
@@ -238,7 +238,7 @@ int SfxPrinterListener::getPageCount() const
     return nPages;
 }
 
-Sequence< beans::PropertyValue > SfxPrinterListener::getPageParameters( int i_nPage ) const
+Sequence< beans::PropertyValue > SfxPrinterController::getPageParameters( int i_nPage ) const
 {
     boost::shared_ptr<Printer> pPrinter( getPrinter() );
     Sequence< beans::PropertyValue > aResult;
@@ -251,7 +251,7 @@ Sequence< beans::PropertyValue > SfxPrinterListener::getPageParameters( int i_nP
     return aResult;
 }
 
-void SfxPrinterListener::printPage( int i_nPage ) const
+void SfxPrinterController::printPage( int i_nPage ) const
 {
     boost::shared_ptr<Printer> pPrinter( getPrinter() );
     if( mxRenderable.is() && pPrinter )
@@ -261,7 +261,7 @@ void SfxPrinterListener::printPage( int i_nPage ) const
     }
 }
 
-void SfxPrinterListener::jobStarted()
+void SfxPrinterController::jobStarted()
 {
     if ( mpObjectShell )
     {
@@ -271,7 +271,7 @@ void SfxPrinterListener::jobStarted()
     }
 }
 
-void SfxPrinterListener::jobFinished( com::sun::star::view::PrintableState nState )
+void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nState )
 {
     if ( mpObjectShell )
     {
@@ -612,7 +612,7 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
     Any aComplete( makeAny( GetObjectShell()->GetModel() ) );
     Any aViewProp( makeAny( xController ) );
     
-    boost::shared_ptr<vcl::PrinterListener> pListener( new SfxPrinterListener( aComplete,
+    boost::shared_ptr<vcl::PrinterController> pController( new SfxPrinterController( aComplete,
                                                                                aSelection,
                                                                                aViewProp,
                                                                                GetRenderable(),
@@ -621,10 +621,10 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
                                                                                this
                                                                                ) );
     for (sal_Int32 nProp=0; nProp<rProps.getLength(); nProp++)
-        pListener->setValue( rProps[nProp].Name, rProps[nProp].Value );
+        pController->setValue( rProps[nProp].Name, rProps[nProp].Value );
 
     SfxObjectShell *pObjShell = GetObjectShell();
-    pListener->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobName" ) ),
+    pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobName" ) ),
                         makeAny( rtl::OUString( pObjShell->GetTitle(0) ) ) );
 
     // FIXME: job setup
@@ -633,14 +633,14 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
         aJobSetup.SetValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ),
                             String( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
 
-    Printer::PrintJob( pListener, aJobSetup );
+    Printer::PrintJob( pController, aJobSetup );
 }
 
 void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 {
-    USHORT                  nCopies=1;
+    // USHORT                  nCopies=1;
     USHORT                  nDialogRet = RET_CANCEL;
-    BOOL                    bCollate=FALSE;
+    // BOOL                    bCollate=FALSE;
     SfxPrinter*             pPrinter = 0;
     PrintDialog*            pPrintDlg = 0;
     SfxDialogExecutor_Impl* pExecutor = 0;
