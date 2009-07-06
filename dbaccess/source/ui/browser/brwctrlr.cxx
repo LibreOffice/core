@@ -1068,13 +1068,11 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
     // the filter or the sort criterias have changed ? -> update our parser
     if (evt.PropertyName.equals(PROPERTY_ACTIVECOMMAND))
     {
-        initializeParser();
         if (m_xParser.is())
             DO_SAFE( m_xParser->setElementaryQuery(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new query to my parser !" );
     }
     else if (evt.PropertyName.equals(PROPERTY_FILTER))
     {
-        initializeParser();
         if ( m_xParser.is() && m_xParser->getFilter() != ::comphelper::getString(evt.NewValue))
         {
             DO_SAFE( m_xParser->setFilter(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new filter to my parser !" );
@@ -1083,7 +1081,6 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
     }
     else if (evt.PropertyName.equals(PROPERTY_HAVING_CLAUSE))
     {
-        initializeParser();
         if ( m_xParser.is() && m_xParser->getHavingClause() != ::comphelper::getString(evt.NewValue))
         {
             DO_SAFE( m_xParser->setHavingClause(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new filter to my parser !" );
@@ -1092,7 +1089,6 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
     }
     else if (evt.PropertyName.equals(PROPERTY_ORDER))
     {
-        initializeParser();
         if ( m_xParser.is() && m_xParser->getOrder() != ::comphelper::getString(evt.NewValue))
         {
             DO_SAFE( m_xParser->setOrder(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new order to my parser !" );
@@ -1790,7 +1786,6 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
 
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
 
-    initializeParser();
     const ::rtl::OUString sOldVal = bFilter ? m_xParser->getFilter() : m_xParser->getOrder();
     const ::rtl::OUString sOldHaving = m_xParser->getHavingClause();
     try
@@ -2035,7 +2030,6 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             if (!xField.is())
                 break;
 
-            initializeParser();
             const ::rtl::OUString sOldSort = m_xParser->getOrder();
             sal_Bool bParserSuccess = sal_False;
             HANDLE_SQL_ERRORS(
@@ -2066,7 +2060,6 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             sal_Bool bHaving = sal_False;
             ::rtl::OUString sName;
             xField->getPropertyValue(PROPERTY_NAME) >>= sName;
-            initializeParser();
             Reference< XColumnsSupplier > xColumnsSupplier(m_xParser, UNO_QUERY);
             Reference< ::com::sun::star::container::XNameAccess >  xCols = xColumnsSupplier.is() ? xColumnsSupplier->getColumns() : Reference< ::com::sun::star::container::XNameAccess > ();
             if ( xCols.is() && xCols->hasByName(sName) )
@@ -2576,6 +2569,9 @@ void SbaXDataBrowserController::LoadFinished(sal_Bool /*bWasSynch*/)
         getBrowserView()->getGridControl()->setDesignMode(sal_False);
 
         // -------------------------------
+        initializeParser();
+
+        // -------------------------------
         InvalidateAll();
 
         m_aAsyncGetCellFocus.Call();
@@ -2611,7 +2607,7 @@ void SbaXDataBrowserController::initializeParser() const
         }
         catch(Exception&)
         {
-            DBG_WARNING("SbaXDataBrowserController::initializeParser: something went wrong while creating the parser !");
+            DBG_UNHANDLED_EXCEPTION();
             m_xParser = NULL;
             // no further handling, we ignore the error
         }
@@ -2717,7 +2713,6 @@ sal_Bool SbaXDataBrowserController::isValidCursor() const
         bIsValid = ::cppu::any2bool(xProp->getPropertyValue(PROPERTY_ISNEW));
         if ( !bIsValid )
         {
-            initializeParser();
             bIsValid = m_xParser.is();
         }
     } // if ( !bIsValid )

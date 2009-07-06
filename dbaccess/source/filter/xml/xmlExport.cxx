@@ -629,7 +629,11 @@ void ODBExport::exportConnectionData()
                 if ( sOrigUrl == sFileName )
                 {
                     ::svt::OFileNotation aTransformer( sFileName );
-                    AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,GetRelativeReference(aTransformer.get( ::svt::OFileNotation::N_URL )));
+                    ::rtl::OUStringBuffer sURL( aTransformer.get( ::svt::OFileNotation::N_URL ) );
+                    if ( sURL.charAt(sURL.getLength()-1) != '/' )
+                        sURL.append(sal_Unicode('/'));
+
+                    AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,GetRelativeReference(sURL.makeStringAndClear()));
                 } // if ( sOrigUrl == sFileName )
                 else
                     AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,sOrigUrl);

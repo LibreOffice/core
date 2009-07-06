@@ -633,6 +633,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
         bAllowViews = false;
 
     OCopyTable* pPage1( new OCopyTable( this ) );
+    pPage1->disallowUseHeaderLine();
     if ( !bAllowViews )
         pPage1->disallowViews();
     pPage1->setCreateStyleAction();

@@ -53,8 +53,7 @@
 #include "AddField.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include "DateTime.hxx"
-#include <svtools/syslocale.hxx>
-#include <vcl/svapp.hxx>
+
 #include <sfx2/filedlghelper.hxx>
 #include <tools/string.hxx>
 #include <tools/diagnose_ex.h>
@@ -104,6 +103,7 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
+#include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 
@@ -142,6 +142,8 @@
 #include <svtools/itemset.hxx>
 #include <svtools/aeitem.hxx> //CHINA001
 #include <svtools/cliplistener.hxx>
+#include <svtools/syslocale.hxx>
+#include <svtools/viewoptions.hxx>
 
 #include <vos/mutex.hxx>
 #include "PropertyForward.hxx"
@@ -341,8 +343,11 @@ void OReportController::disposing()
         m_pClipbordNotifier->AddRemoveListener( getView(), sal_False );
         m_pClipbordNotifier->release();
         m_pClipbordNotifier = NULL;
-    }
+    } // if ( getView() && m_pClipbordNotifier )
+    if ( m_pGroupsFloater )
     {
+        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_GROUPS_SORTING ) );
+        aDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( m_pGroupsFloater->GetWindowState(WINDOWSTATE_MASK_ALL).GetBuffer() ) );
         ::std::auto_ptr<FloatingWindow> aTemp(m_pGroupsFloater);
         m_pGroupsFloater = NULL;
     }
@@ -2558,6 +2563,9 @@ void OReportController::openSortingAndGroupingDialog()
     if ( !m_pGroupsFloater )
     {
         m_pGroupsFloater = new OGroupsSortingDialog(getView(),!isEditable(),this);
+        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_GROUPS_SORTING ) );
+        if ( aDlgOpt.Exists() )
+            m_pGroupsFloater->SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
         m_pGroupsFloater->AddEventListener(LINK(this,OReportController,EventLstHdl));
     }
     else if ( isUiVisible() )
@@ -3280,7 +3288,7 @@ void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
     sal_Bool bTime = aMap.getUnpackedValueOrDefault(PROPERTY_TIME_STATE,sal_False);
     if ( bTime )
     {
-        sFunction = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("NOW()"));
+        sFunction = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("TIMEVALUE(NOW())"));
         aMap[PROPERTY_FORMATKEY] <<= aMap.getUnpackedValueOrDefault(PROPERTY_FORMATKEYTIME,sal_Int32(0));
         createControl(aMap.getAsConstPropertyValueList(),xSection,sFunction);
     }

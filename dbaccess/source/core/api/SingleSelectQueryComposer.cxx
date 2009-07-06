@@ -579,8 +579,13 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
 
     // set the query
     setQuery_Impl(aSql.makeStringAndClear());
-    // parameters may also have changed
-    clearParametersCollection();
+
+    // clear column collections which (might) have changed
+    clearColumns( ParameterColumns );
+    if ( _ePart == Order )
+        clearColumns( OrderColumns );
+    if ( _ePart == Group )
+        clearColumns( GroupByColumns );
 
     // also, since the "additive filter" change, we need to rebuild our "additive" statement
     aSql = m_aPureSelectSQL;
@@ -676,26 +681,42 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         bCase = m_xMetaData->supportsMixedCaseQuotedIdentifiers();
         aSelectColumns = m_aSqlIterator.getSelectColumns();
 
-        ::rtl::OUString sSql = m_aPureSelectSQL;
-        sSql += STR_WHERE;
-        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" 0 = 1 "));
-        ::rtl::OUString sGroupBy = getSQLPart(Group,m_aSqlIterator,sal_True);
-        if ( sGroupBy.getLength() )
-            sSql += sGroupBy;
+        ::rtl::OUStringBuffer aSQL;
+        aSQL.append( m_aPureSelectSQL );
+        aSQL.append( STR_WHERE );
 
+        // preserve the original WHERE clause
+        // #i102234# / 2009-06-02 / frank.schoenheit@sun.com
+        ::rtl::OUString sOriginalWhereClause = getSQLPart( Where, m_aSqlIterator, sal_False );
+        if ( sOriginalWhereClause.getLength() )
+        {
+            aSQL.appendAscii( " ( 0 = 1 ) AND ( " );
+            aSQL.append( sOriginalWhereClause );
+            aSQL.appendAscii( " ) " );
+        }
+        else
+        {
+            aSQL.appendAscii( " ( 0 = 1 ) " );
+        }
+
+        ::rtl::OUString sGroupBy = getSQLPart( Group, m_aSqlIterator, sal_True );
+        if ( sGroupBy.getLength() )
+            aSQL.append( sGroupBy );
+
+        ::rtl::OUString sSQL( aSQL.makeStringAndClear() );
         // normalize the statement so that it doesn't contain any application-level features anymore
         ::rtl::OUString sError;
-        const ::std::auto_ptr< OSQLParseNode > pStatementTree( m_aSqlParser.parseTree( sError, sSql, false ) );
+        const ::std::auto_ptr< OSQLParseNode > pStatementTree( m_aSqlParser.parseTree( sError, sSQL, false ) );
         DBG_ASSERT( pStatementTree.get(), "OSingleSelectQueryComposer::getColumns: could not parse the column retrieval statement!" );
         if ( pStatementTree.get() )
-            if ( !pStatementTree->parseNodeToExecutableStatement( sSql, m_xConnection, m_aSqlParser, NULL ) )
+            if ( !pStatementTree->parseNodeToExecutableStatement( sSQL, m_xConnection, m_aSqlParser, NULL ) )
                 break;
 
         Reference< XResultSetMetaData > xResultSetMeta;
         Reference< XResultSetMetaDataSupplier > xResMetaDataSup;
         try
         {
-            xPreparedStatement.set( m_xConnection->prepareStatement( sSql ), UNO_QUERY_THROW );
+            xPreparedStatement.set( m_xConnection->prepareStatement( sSQL ), UNO_QUERY_THROW );
             xResMetaDataSup.set( xPreparedStatement, UNO_QUERY_THROW );
             xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
         }
@@ -707,7 +728,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
             Reference< XPropertySet > xStatementProps( xStatement, UNO_QUERY_THROW );
             try { xStatementProps->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, makeAny( sal_False ) ); }
             catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
-            xResMetaDataSup.set( xStatement->executeQuery( sSql ), UNO_QUERY_THROW );
+            xResMetaDataSup.set( xStatement->executeQuery( sSQL ), UNO_QUERY_THROW );
             xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
         }
 
@@ -1243,14 +1264,15 @@ Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getParameters(  )
     return m_aCurrentColumns[ParameterColumns];
 }
 // -----------------------------------------------------------------------------
-void OSingleSelectQueryComposer::clearParametersCollection()
+void OSingleSelectQueryComposer::clearColumns( const EColumnType _eType )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::clearParametersCollection" );
-    if ( m_aCurrentColumns[ParameterColumns] )
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::clearColumns" );
+    OPrivateColumns* pColumns = m_aCurrentColumns[ _eType ];
+    if ( pColumns != NULL )
     {
-        m_aCurrentColumns[ParameterColumns]->disposing();
-        m_aColumnsCollection.push_back(m_aCurrentColumns[ParameterColumns]);
-        m_aCurrentColumns[ParameterColumns] = NULL;
+        pColumns->disposing();
+        m_aColumnsCollection.push_back( pColumns );
+        m_aCurrentColumns[ _eType ] = NULL;
     }
 }
 // -----------------------------------------------------------------------------

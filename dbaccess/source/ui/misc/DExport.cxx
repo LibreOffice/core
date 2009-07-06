@@ -732,6 +732,7 @@ sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _rTableName,const
                         m_bIsAutoIncrement  = aWizard.shouldCreatePrimaryKey();
                         m_vColumns          = aWizard.GetColumnPositions();
                         m_vColumnTypes      = aWizard.GetColumnTypes();
+                        m_bAppendFirstLine  = !aWizard.UseHeaderLine();
                     }
                     break;
                 default:

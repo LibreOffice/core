@@ -112,11 +112,13 @@ OCopyTable::OCopyTable( Window * pParent )
     ,m_aRB_Def(             this, ModuleRes( RB_DEF             ) )
     ,m_aRB_View(            this, ModuleRes( RB_VIEW            ) )
     ,m_aRB_AppendData(      this, ModuleRes( RB_APPENDDATA      ) )
+    ,m_aCB_UseHeaderLine(   this, ModuleRes( CB_USEHEADERLINE   ) )
     ,m_aCB_PrimaryColumn(   this, ModuleRes( CB_PRIMARY_COLUMN  ) )
     ,m_aFT_KeyName(         this, ModuleRes( FT_KEYNAME         ) )
     ,m_edKeyName(           this, ModuleRes( ET_KEYNAME         ) )
     ,m_pPage2(NULL)
     ,m_pPage3(NULL)
+    ,m_bUseHeaderAllowed(TRUE)
 {
     DBG_CTOR(OCopyTable,NULL);
 
@@ -127,6 +129,7 @@ OCopyTable::OCopyTable( Window * pParent )
         if ( !m_pParent->supportsViews() )
             m_aRB_View.Disable();
 
+        m_aCB_UseHeaderLine.Check(TRUE);
         m_bPKeyAllowed = m_pParent->supportsPrimaryKey();
 
         m_aCB_PrimaryColumn.Enable(m_bPKeyAllowed);
@@ -187,6 +190,7 @@ IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton )
     m_aFT_KeyName.Enable(bKey && m_aCB_PrimaryColumn.IsChecked());
     m_edKeyName.Enable(bKey && m_aCB_PrimaryColumn.IsChecked());
     m_aCB_PrimaryColumn.Enable(bKey);
+    m_aCB_UseHeaderLine.Enable(m_bUseHeaderAllowed && IsOptionDefData());
 
     // set typ what to do
     if( IsOptionDefData() )
@@ -211,7 +215,8 @@ sal_Bool OCopyTable::LeavePage()
 {
     DBG_CHKTHIS(OCopyTable,NULL);
     m_pParent->m_bCreatePrimaryKeyColumn    = (m_bPKeyAllowed && m_aCB_PrimaryColumn.IsEnabled()) ? m_aCB_PrimaryColumn.IsChecked() : sal_False;
-    m_pParent->m_aKeyName               = m_pParent->m_bCreatePrimaryKeyColumn ? m_edKeyName.GetText() : String();
+    m_pParent->m_aKeyName                   = m_pParent->m_bCreatePrimaryKeyColumn ? m_edKeyName.GetText() : String();
+    m_pParent->setUseHeaderLine( m_aCB_UseHeaderLine.IsChecked() );
 
     // first check if the table already exists in the database
     if( m_pParent->getOperation() != CopyTableOperation::AppendData )
@@ -296,6 +301,7 @@ void OCopyTable::ActivatePage()
     m_pParent->GetOKButton().Enable( TRUE );
     m_nOldOperation = m_pParent->getOperation();
     m_edTableName.GrabFocus();
+    m_aCB_UseHeaderLine.Check(m_pParent->UseHeaderLine());
 }
 //------------------------------------------------------------------------
 String OCopyTable::GetTitle() const

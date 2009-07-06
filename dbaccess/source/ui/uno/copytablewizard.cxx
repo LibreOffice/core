@@ -171,6 +171,8 @@ namespace dbaui
         virtual void SAL_CALL setDestinationTableName( const ::rtl::OUString& _destinationTableName ) throw (RuntimeException);
         virtual Optional< ::rtl::OUString > SAL_CALL getCreatePrimaryKey() throw (RuntimeException);
         virtual void SAL_CALL setCreatePrimaryKey( const Optional< ::rtl::OUString >& _newPrimaryKey ) throw (IllegalArgumentException, RuntimeException);
+        virtual sal_Bool SAL_CALL getUseHeaderLineAsColumnNames() throw (RuntimeException);
+        virtual void SAL_CALL setUseHeaderLineAsColumnNames( sal_Bool _bUseHeaderLineAsColumnNames ) throw (RuntimeException);
         virtual void SAL_CALL addCopyTableListener( const Reference< XCopyTableListener >& Listener ) throw (RuntimeException);
         virtual void SAL_CALL removeCopyTableListener( const Reference< XCopyTableListener >& Listener ) throw (RuntimeException);
 
@@ -331,6 +333,7 @@ private:
         sal_Int16                       m_nOperation;
         ::rtl::OUString                 m_sDestinationTable;
         Optional< ::rtl::OUString >     m_aPrimaryKeyName;
+        sal_Bool                        m_bUseHeaderLineAsColumnNames;
 
         // source
         SharedConnection                m_xSourceConnection;
@@ -381,6 +384,7 @@ CopyTableWizard::CopyTableWizard( const Reference< XMultiServiceFactory >& _rxOR
     ,m_nOperation( CopyTableOperation::CopyDefinitionAndData )
     ,m_sDestinationTable()
     ,m_aPrimaryKeyName( sal_False, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) ))
+    ,m_bUseHeaderLineAsColumnNames( sal_True )
     ,m_xSourceConnection()
     ,m_nCommandType( CommandType::COMMAND )
     ,m_pSourceObject()
@@ -522,7 +526,18 @@ void SAL_CALL CopyTableWizard::setCreatePrimaryKey( const Optional< ::rtl::OUStr
 
     m_aPrimaryKeyName = _newPrimaryKey;
 }
-
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL CopyTableWizard::getUseHeaderLineAsColumnNames() throw (RuntimeException)
+{
+    CopyTableAccessGuard aGuard( *this );
+    return m_bUseHeaderLineAsColumnNames;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL CopyTableWizard::setUseHeaderLineAsColumnNames( sal_Bool _bUseHeaderLineAsColumnNames ) throw (RuntimeException)
+{
+    CopyTableAccessGuard aGuard( *this );
+    m_bUseHeaderLineAsColumnNames = _bUseHeaderLineAsColumnNames;
+}
 //--------------------------------------------------------------------
 void SAL_CALL CopyTableWizard::addCopyTableListener( const Reference< XCopyTableListener >& _rxListener ) throw (RuntimeException)
 {
@@ -589,6 +604,7 @@ void CopyTableWizard::impl_attributesToDialog_nothrow( OCopyTableWizard& _rDialo
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::impl_attributesToDialog_nothrow" );
     // primary key column
     _rDialog.setCreatePrimaryKey( m_aPrimaryKeyName.IsPresent, m_aPrimaryKeyName.Value );
+    _rDialog.setUseHeaderLine(m_bUseHeaderLineAsColumnNames);
 
     // everything else was passed at construction time already
 }
@@ -606,6 +622,7 @@ void CopyTableWizard::impl_dialogToAttributes_nothrow( const OCopyTableWizard& _
     m_sDestinationTable = _rDialog.getName();
 
     m_nOperation = _rDialog.getOperation();
+    m_bUseHeaderLineAsColumnNames = _rDialog.UseHeaderLine();
 }
 
 //-------------------------------------------------------------------------
