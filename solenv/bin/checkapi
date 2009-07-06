@@ -1,4 +1,5 @@
 #!/bin/sh
+
 PS=":"
 # cygwin:
 if [ "$GUI" = "WNT" ]; then
@@ -15,8 +16,15 @@ else
     myCLASSPATH=$JARFOLDER/OOoRunner.jar
 fi
 
-myCLASSPATH=$myCLASSPATH${PS}${JARFOLDER}/ridl.jar${PS}${JARFOLDER}/unoil.jar${PS}${JARFOLDER}/jurt.jar${PS}${JARFOLDER}/juh.jar${PS}${JARFOLDER}/java_uno.jar
-myCLASSPATH=$myCLASSPATH${PS}/net/unoapi/export/unoapi/bin/mysql.jar${PS}$SOLVER_LIB
+myCLASSPATH=$myCLASSPATH${PS}${JARFOLDER}/ridl.jar${PS}\
+${JARFOLDER}/unoil.jar${PS}\
+${JARFOLDER}/jurt.jar${PS}\
+${JARFOLDER}/juh.jar${PS}\
+${JARFOLDER}/java_uno.jar
+
+myCLASSPATH=$myCLASSPATH${PS}\
+/net/unoapi/export/unoapi/bin/mysql.jar${PS}\
+$SOLVER_LIB
 
 if [ -n "$JAVAI" ]; then
 	JAVABIN=$JAVAI
@@ -51,12 +59,13 @@ if [ -n "$RUNNERPROPS" ]; then
     PARAM="$PARAM -runnerini $RUNNERPROPS"
 fi
 
-MYXDEBUG=""
-if [ -n "$XDEBUG" ]; then
-    # export XDEBUG="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8001" 
-    MYXDEBUG=$XDEBUG
+DEBUG_THE_API=""
+if [ -n "$DEBUGAPI" ]; then
+    export DEBUGAPI="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=9002,suspend=y" 
+    DEBUG_THE_API=$DEBUGAPI
 fi
 
-COMMAND="$JAVABIN -Xmx120m $MYXDEBUG -cp $myCLASSPATH org.openoffice.Runner $PARAM $*"
+COMMAND="$JAVABIN -Xmx120m $DEBUG_THE_API -cp $myCLASSPATH org.openoffice.Runner $PARAM $*"
 echo $COMMAND
 $COMMAND
+# if COMMAND fails, it returns also the exitcode
