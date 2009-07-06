@@ -34,6 +34,8 @@
 #include <basegfx/vector/b2ivector.hxx>
 #include <basebmp/scanlineformats.hxx>
 
+#include "stdio.h"
+
 using namespace basegfx;
 using namespace basebmp;
 
@@ -80,16 +82,19 @@ BOOL SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
 #else
             case 16: nFormat = Format::SIXTEEN_BIT_LSB_TC_MASK; break;
 #endif
+            case 0:
             case 24: nFormat = Format::TWENTYFOUR_BIT_TC_MASK; break;
             case 32: nFormat = Format::THIRTYTWO_BIT_TC_MASK; break;
         }
         m_aDevice = aDevPal.empty()
                     ? createBitmapDevice( aDevSize, false, nFormat )
                     : createBitmapDevice( aDevSize, false, nFormat, PaletteMemorySharedVector( new std::vector< basebmp::Color >(aDevPal) ) );
+
         // update device in existing graphics
         for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
              it != m_aGraphics.end(); ++it )
              (*it)->setDevice( m_aDevice );
+
     }
     return true;
 }
