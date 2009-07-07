@@ -1507,7 +1507,7 @@ File gid_File_Lib_Ucpchelp1
 End
 
 #ifndef DISABLE_NEON
-SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucpdav1,ucpdav1)
+SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Ucpdav1,ucpdav1)
 #endif
 
 SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Ucpfile1,ucpfile1)
