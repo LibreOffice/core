@@ -1,0 +1,1 @@
+be build : afms AGG:agg BSH:beanshell cppunit EPM:epm external fondu HSQLDB:hsqldb hyphen icc SYSTRAY_GTK:libegg libtextcat LIBWPD:libwpd LIBXMLSEC:libxmlsec LPSOLVE:lpsolve LUCENE:lucene MSFONTEXTRACT:msfontextract np_sdk OPENSSL:openssl REDLAND:redland rhino SANE:sane TWAIN:twain UNIXODBC:unixODBC VIGRA:vigra xsltml X11_EXTENSIONS:x11_extensions NULL

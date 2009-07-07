@@ -1,0 +1,10 @@
+# Source this if you want to use build.pl directly, like:
+# . buildenv
+# or
+# source buildenv
+
+ooo_prefix="@OOO_PREFIX@"
+solverdir="$ooo_prefix/solver"
+buildsolverdir="@abs_builddir@/solver"
+
+. "$solverdir"/buildenv-common
