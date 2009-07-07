@@ -373,7 +373,7 @@ public:
     virtual int getPageCount() const { return 1; }
     virtual Sequence< PropertyValue > getPageParameters( int i_nPage ) const;
     virtual void printPage( int i_nPage ) const;
-    virtual void jobFinished();
+    virtual void jobFinished( com::sun::star::view::PrintableState );
 };
 
 Sequence< PropertyValue > SpaPrinterController::getPageParameters( int ) const
@@ -574,7 +574,7 @@ void SpaPrinterController::printPage( int ) const
 #endif
 }
 
-void SpaPrinterController::jobFinished()
+void SpaPrinterController::jobFinished( com::sun::star::view::PrintableState )
 {
     String aInfoString( PaResId( RID_PA_TXT_TESTPAGE_PRINTED ) );
     InfoBox aInfoBox( NULL, aInfoString );
