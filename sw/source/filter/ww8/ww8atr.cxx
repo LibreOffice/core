@@ -4959,8 +4959,16 @@ static Writer& OutWW8_SwTabStop(Writer& rWrt, const SfxPoolItem& rHt)
 {
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
     const SvxTabStopItem & rTStops = (const SvxTabStopItem&)rHt;
-    const SfxPoolItem* pLR = rWW8Wrt.HasItem( RES_LR_SPACE );
-    long nCurrentLeft = pLR ? ((const SvxLRSpaceItem*)pLR)->GetTxtLeft() : 0;
+    bool bTabsRelativeToIndex = rWW8Wrt.pCurPam->GetDoc()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT);
+    long nCurrentLeft = 0;
+
+    if (bTabsRelativeToIndex)
+    {
+        const SfxPoolItem* pLR = rWW8Wrt.HasItem( RES_LR_SPACE );
+
+        if (pLR != NULL)
+            nCurrentLeft = ((const SvxLRSpaceItem*)pLR)->GetTxtLeft();
+    }
 
 
     // --> FLR 2009-03-17 #i100264#
@@ -4994,9 +5002,14 @@ static Writer& OutWW8_SwTabStop(Writer& rWrt, const SfxPoolItem& rHt)
         OutWW8_SwTabStopAdd(rWW8Wrt, rTStops, nCurrentLeft);
     else
     {
-        const SvxLRSpaceItem &rStyleLR =
+        long nStyleLeft = 0;
+
+        if (bTabsRelativeToIndex)
+        {
+            const SvxLRSpaceItem &rStyleLR =
             ItemGet<SvxLRSpaceItem>(*rWW8Wrt.pStyAttr, RES_LR_SPACE);
-        long nStyleLeft = rStyleLR.GetTxtLeft();
+            nStyleLeft = rStyleLR.GetTxtLeft();
+        }
 
         OutWW8_SwTabStopDelAdd(rWW8Wrt, *pStyleTabs, nStyleLeft, rTStops,
             nCurrentLeft);
