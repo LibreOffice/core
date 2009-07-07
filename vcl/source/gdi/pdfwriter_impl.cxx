@@ -792,7 +792,8 @@ static void appendNonStrokingColor( const Color& rColor, OStringBuffer& rBuffer 
 }
 
 // matrix helper class
-namespace vcl
+// TODO: use basegfx matrix class instead or derive from it
+namespace vcl // TODO: use anonymous namespace to keep this class local
 {
 /*  for sparse matrices of the form (2D linear transformations)
  *  f[0] f[1] 0
@@ -812,6 +813,7 @@ public:
     void scale( double sx, double sy );
     void rotate( double angle );
     void translate( double tx, double ty );
+    bool invert();
 
     void append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer, Point* pBack = NULL );
 
@@ -886,6 +888,36 @@ void Matrix3::translate( double tx, double ty )
 {
     f[4] += tx;
     f[5] += ty;
+}
+
+bool Matrix3::invert()
+{
+    // short circuit trivial cases
+    if( f[1]==f[2] && f[1]==0.0 && f[0]==f[3] && f[0]==1.0 )
+    {
+        f[4] = -f[4];
+        f[5] = -f[5];
+        return true;
+    }
+
+    // check determinant
+    const double fDet = f[0]*f[3]-f[1]*f[2];
+    if( fDet == 0.0 )
+        return false;
+
+    // invert the matrix
+    double fn[6];
+    fn[0] = +f[3] / fDet;
+    fn[1] = -f[1] / fDet;
+    fn[2] = -f[2] / fDet;
+    fn[3] = +f[0] / fDet;
+
+    // apply inversion to translation
+    fn[4] = -(f[4]*fn[0] + f[5]*fn[2]);
+    fn[5] = -(f[4]*fn[1] + f[5]*fn[3]);
+
+    set( fn );
+    return true;
 }
 
 void Matrix3::append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer, Point* pBack )
@@ -6635,6 +6667,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         // subsequent use of that operator would move
         // the texline matrix relative to what was set before
         // making use of that would drive us into rounding issues
+        Matrix3 aMat;
         if( nRun == 0 && fAngle == 0.0 && fXScale == 1.0 && fSkew == 0.0 )
         {
             m_aPages.back().appendPoint( aCurPos, rLine, false );
@@ -6642,7 +6675,6 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         }
         else
         {
-            Matrix3 aMat;
             if( fSkew != 0.0 )
                 aMat.skew( 0.0, fSkew );
             aMat.scale( fXScale, 1.0 );
@@ -6665,15 +6697,17 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         appendHex( rGlyphs[nBeginRun].m_nMappedGlyphId, aKernedLine );
         appendHex( rGlyphs[nBeginRun].m_nMappedGlyphId, aUnkernedLine );
 
+        aMat.invert();
         bool bNeedKern = false;
         for( sal_uInt32 nPos = nBeginRun+1; nPos < aRunEnds[nRun]; nPos++ )
         {
             appendHex( rGlyphs[nPos].m_nMappedGlyphId, aUnkernedLine );
-            // check for adjustment
-            double fTheoreticalGlyphWidth = rGlyphs[nPos].m_aPos.X() - rGlyphs[nPos-1].m_aPos.X();
-            fTheoreticalGlyphWidth = fabs( fTheoreticalGlyphWidth ); // #i100522# workaround until #i87686# gets fixed
-            fTheoreticalGlyphWidth = 1000.0 * fTheoreticalGlyphWidth / fXScale / double(nPixelFontHeight);
-            sal_Int32 nAdjustment = rGlyphs[nPos-1].m_nNativeWidth - sal_Int32(fTheoreticalGlyphWidth+0.5);
+            // check if glyph advance matches with the width of the previous glyph, else adjust
+            const Point aThisPos = aMat.transform( rGlyphs[nPos].m_aPos );
+            const Point aPrevPos = aMat.transform( rGlyphs[nPos-1].m_aPos );
+            double fAdvance = aThisPos.X() - aPrevPos.X();
+            fAdvance *= 1000.0 / (fXScale * nPixelFontHeight);
+            const sal_Int32 nAdjustment = rGlyphs[nPos-1].m_nNativeWidth - sal_Int32(fAdvance+0.5);
             if( nAdjustment != 0 )
             {
                 bNeedKern = true;
