@@ -36,8 +36,10 @@ install-data-local: $(stampdir)/all
 	cp -r $(top_builddir)/solenv $(DESTDIR)$(ooo_prefix)/
 	cp -r $(top_builddir)/solver $(DESTDIR)$(ooo_prefix)/
 	$(INSTALL_DATA) $(top_builddir)/Linux*Env.Set.sh $(DESTDIR)$(solverdir)/
+	$(INSTALL_DATA) $(top_builddir)/build/src/Makefile.common $(DESTDIR)$(solverdir)/
 	$(INSTALL_DATA) $(top_builddir)/build/src/buildenv-common $(DESTDIR)$(solverdir)/
 	$(INSTALL_DATA) $(top_builddir)/build/src/OpenOffice.org-bootstrap.pc $(DESTDIR)$(pkgconfigdir)/
+	$(INSTALL_SCRIPT) $(top_builddir)/build/bin/copyexcept $(DESTDIR)$(ooo_prefix)/solenv/bin
 
 $(stampdir)/all: $(stampdir)/bootstrap
 	( . ./Linux*Env.Set.sh ; \

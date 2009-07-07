@@ -1,0 +1,19 @@
+# the common rules
+
+# TODO more in dist-hook, likeremove .o's in dmake, stuff in build/stamp, etc.
+# [basically everything that we have in .gitignores ;-)]
+dist-hook-common:
+	git log --date=short --pretty="format:@%cd  %an  <%ae>  [%H]%n%n%s%n%n%e%b" | sed -e "s|^\([^@]\)|\t\1|" -e "s|^@||" >$(distdir)/ChangeLog
+	rm -rf $(distdir)/*/unxlng*.pro
+
+install-data-common:
+	( . buildenv -i ; \
+	  export PRODUCT="OpenOffice" ; \
+	  perl -w $(solenvdir)/bin/make_installer.pl \
+	       -f $(ooo_prefix)/instsetoo_native/util/openoffice.lst \
+	       -l 'en-US' -p "$$PRODUCT" -buildid "$$BUILD" -destdir "$(DESTDIR)$(ooo_prefix)" \
+	       -dontstrip -verbose -simple "/" )
+	$(solenvdir)/bin/copyexcept $(top_builddir)/solver $(DESTDIR)$(ooo_prefix)/
+
+all-common:
+	( . buildenv ; cd build ; build.pl --all $$WITH_CPUS -- $$WITH_ICECREAM )

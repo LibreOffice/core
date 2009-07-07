@@ -1,0 +1,85 @@
+#!/usr/bin/perl -w
+
+use strict;
+use File::Copy;
+
+sub syntax()
+{
+    print "copyexcept [-x exception-file] <src> <dest>\n";
+    print "  -x: file containing list of files not to copy\n";
+    print "  -v: verbose\n";
+    print "  --help: this message\n";
+}
+
+sub copy_recursive($$$$);
+sub copy_recursive($$$$)
+{
+    my ($excepts, $src, $dest, $verbose) = @_;
+
+    if (defined $excepts->{$src}) {
+        print "skipping $src\n" if ( $verbose );
+        return;
+    }
+
+    if (-d $src) {
+        print "mkdir -p $dest\n" if ( $verbose );
+        system("mkdir -p $dest") == 0 || die "Failed to mkdir -p $dest: $!";
+
+        my $dir;
+        opendir ($dir, $src) || die "Can't open dir $src: $!";
+        my @entries;
+        while (my $name = readdir ($dir)) {
+            $name =~ /^\./ && next;
+            $name =~ /^\s*$/ && next;
+            copy_recursive ($excepts, "$src/$name", "$dest/$name", $verbose);
+        }
+        closedir ($dir);
+    } elsif (-f $src) {
+        print "syscopy $src -> $dest\n" if ( $verbose );
+        File::Copy::copy ($src, $dest) || die "Failed to copy $src -> $dest: $!";
+        my $perm = (stat $src)[2];
+        chmod ($perm, $dest);
+    } else {
+        print "skipping link $src\n" if ( $verbose );
+    }
+}
+
+# main ...
+my (@src, $dest, $except, $verbose);
+
+while (my $arg = shift @ARGV) {
+    if ($arg eq '-h' || $arg eq '--help') {
+        syntax();
+        exit 0;
+    } elsif ($arg eq '-x') {
+        $except = shift @ARGV;
+    } elsif ($arg eq '-v') {
+        $verbose = 1;
+    } else {
+        push @src, $arg;
+    }
+}
+
+$dest = pop @src;
+@src && defined $dest || die "Missing src or dest\n";
+
+system("mkdir -p $dest") == 0 || die "Failed to mkdir -p $dest: $!";
+
+my $ef;
+my %exceptions;
+if ( defined $except && $except ne '' ) {
+    open ($ef, $except) || die "Can't open $except: $!";
+    while (<$ef>) {
+        chomp;
+        # pre-process ?
+        $exceptions{$_} = '1';
+    }
+    close ($ef);
+}
+
+for my $s (@src) {
+    my $suffix = $s;
+    $suffix =~ s|^.*/||g;
+    print "Copy $s -> $dest/$suffix\n" if ( $verbose );
+    copy_recursive (\%exceptions, $s, "$dest/$suffix", $verbose);
+}

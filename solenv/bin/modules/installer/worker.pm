@@ -820,7 +820,9 @@ sub install_simple ($$$$$$)
         my $destinationfile = $onelink->{'destinationfile'};
 
         # print "link $destinationfile -> $destdir$destination\n";
-        symlink ("$destinationfile", "$destdir$destination") || die "Can't create symlink: $!";
+        if ( !symlink ("$destinationfile", "$destdir$destination") && !$installer::globals::split ) {
+            die "Can't create symlink: $!";
+        }
         push @lines, "$destination\n";
     }
 
