@@ -428,7 +428,7 @@ End
 
 #endif
 
-STD_LIB_FILE(gid_File_Lib_Drawinglayer,drawinglayer)
+STD_LIB_FILE_PATCH(gid_File_Lib_Drawinglayer,drawinglayer)
 
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Embobj,embobj)
 
@@ -596,7 +596,7 @@ End
 #ifdef QUARTZ
 File gid_File_Lib_Fps_Aqua
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
     Name = SPECIAL_COMPONENT_LIB_NAME(fps_aqua.uno);
@@ -1163,7 +1163,7 @@ SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Productregistration, productregistr
 File gid_File_Lib_Vclplug_Gen
     Name = LIBNAME(vclplug_gen);
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Program;
 End
 #endif
@@ -1173,7 +1173,7 @@ End
 File gid_File_Lib_Vclplug_Gtk
     Name = LIBNAME(vclplug_gtk);
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Program;
 End
 #endif
@@ -1182,7 +1182,7 @@ End
 File gid_File_Lib_Vclplug_Kde
     Name = LIBNAME(vclplug_kde);
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Program;
 End
 #endif
@@ -1208,7 +1208,7 @@ End
 #endif
 
 #if defined UNX && ! defined QUARTZ
-STD_LIB_FILE( gid_File_Lib_Vclplug_Svp, vclplug_svp )
+STD_LIB_FILE_PATCH( gid_File_Lib_Vclplug_Svp, vclplug_svp )
 STD_LIB_FILE( gid_File_Lib_BaseBmp, basebmp )
 #endif
 
@@ -1547,7 +1547,11 @@ STD_LIB_FILE( gid_File_Lib_BaseGfx, basegfx )
 File gid_File_Lib_Vcl
     Name = LIBNAME(vcl);
     TXT_FILE_BODY;
+<<<<<<< .working
     Styles = (PACKED,UNO_COMPONENT,PATCH);
+=======
+    Styles = (PACKED,PATCH,UNO_COMPONENT);
+>>>>>>> .merge-right.r273775
     Dir = gid_Dir_Program;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
