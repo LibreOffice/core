@@ -1,0 +1,12 @@
+OpenOffice.org - split build
+============================
+
+This package provides the possibility to build OpenOffice.org by pieces.  This
+one contains the 3rd party libraries that are usually available in the Linux
+systems.
+
+To build, do the usual
+
+./autogen.sh or ./configure
+make
+make install

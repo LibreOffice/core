@@ -1,0 +1,19 @@
+dnl Version X.Y.A.M
+dnl   X.Y - version
+dnl   A   - minor, or 97 for devel, 98 for alpha, 99 for beta
+dnl   M   - milestone, or micro version
+AC_INIT(OpenOffice.org-libs-extern-sys,3.1.97.50)
+
+AM_INIT_AUTOMAKE([1.8b tar-ustar])
+PKG_PROG_PKG_CONFIG
+
+dnl Where should be the OOo installed
+PKG_CHECK_MODULES(OOO_BOOTSTRAP,OpenOffice.org-bootstrap)
+OOO_PREFIX=$($PKG_CONFIG --variable=ooo_prefix OpenOffice.org-bootstrap)
+AC_SUBST(OOO_PREFIX)
+
+dnl OpenOffice.org build dependencies
+PKG_CHECK_MODULES(OOO_URE,OpenOffice.org-ure)
+
+dnl Create what is necessary
+AC_OUTPUT([Makefile buildenv build/src/OpenOffice.org-libs-extern-sys.pc])

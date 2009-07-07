@@ -1,0 +1,1 @@
+bs build : BERKELEYDB:berkeleydb BITSTREAM_VERA_FONTS:bitstream_vera_fonts BOOST:boost CAIRO:cairo CURL:curl DICTIONARIES:dictionaries EXPAT:expat HUNSPELL:hunspell ICU:icu JPEG:jpeg LIBXML2:libxml2 LIBXSLT:libxslt MOZ:moz NEON:neon PYTHON:python SAXON:saxon stax ZLIB:zlib NULL

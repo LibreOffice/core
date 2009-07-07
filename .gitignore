@@ -1,0 +1,21 @@
+/Makefile
+/Makefile.in
+/aclocal.m4
+/autom4te.cache
+/buildenv
+/config.log
+/config.parms
+/config.status
+/configure
+/install-sh
+/logfile.log
+/missing
+/OpenOffice
+/solver
+
+/*/unxlng??.pro
+
+localize.sdf
+
+# temp files
+.*.swp
