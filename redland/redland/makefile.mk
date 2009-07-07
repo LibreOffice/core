@@ -46,7 +46,7 @@ all:
 
 # --- Files --------------------------------------------------------
 
-.INCLUDE :	../redlandversion.mk
+.INCLUDE :	redlandversion.mk
 
 REDLANDVERSION=1.0.7
 

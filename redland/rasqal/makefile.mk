@@ -46,7 +46,7 @@ all:
 
 # --- Files --------------------------------------------------------
 
-.INCLUDE :	../redlandversion.mk
+.INCLUDE :	redlandversion.mk
 
 RASQALVERSION=0.9.15
 

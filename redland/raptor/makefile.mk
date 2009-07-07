@@ -46,7 +46,7 @@ all:
 
 # --- Files --------------------------------------------------------
 
-.INCLUDE :	../redlandversion.mk
+.INCLUDE :	redlandversion.mk
 
 RAPTORVERSION=$(RAPTOR_MAJOR).4.17
 

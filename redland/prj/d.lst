@@ -15,4 +15,3 @@ symlink: %_DEST%\lib%_EXT%\librdf.0.dylib %_DEST%\lib%_EXT%\librdf.dylib
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%
 ..\%__SRC%\lib\lib*.dll.a %_DEST%\lib%_EXT%\lib*.a
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%
-..\redlandversion.mk %_DEST%\inc%_EXT%\redlandversion.mk

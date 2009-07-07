@@ -1,4 +1,4 @@
-el      external :       SO:external_so soltools NULL
+el      external :       SO:external_so NULL
 el	external					usr1 - all el_mkout NULL
 el	external\glibc		nmake	-	all	el_glibc NULL
 el	external\gpc		nmake	-	all	el_gpc NULL

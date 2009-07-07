@@ -1,2 +1,2 @@
-fd      fondu :       solenv NULL
+fd      fondu :       NULL
 fd	fondu		nmake	-	u	fd_fondu NULL

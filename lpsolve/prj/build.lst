@@ -1,3 +1,3 @@
-lps	lpsolve	: sal NULL
+lps	lpsolve	: NULL
 lps	lpsolve		usr1	-	all	lps_mkout NULL
 lps	lpsolve		nmake	-	all	lps_lpsolve NULL

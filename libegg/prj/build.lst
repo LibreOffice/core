@@ -1,2 +1,2 @@
-eg  libegg   :  soltools NULL
+eg  libegg   :  NULL
 eg	libegg\source			    nmake	-	u	eg_src NULL
