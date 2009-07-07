@@ -1687,7 +1687,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                             installer::epmfile::create_new_directory_structure($newepmdir);
                             $installer::globals::postprocess_specialepm = 1;
 
-                            if (( $installer::globals::patch ) && ( $installer::globals::issolarisx86build )) { installer::worker::fix2_solaris_x86_patch($packagename, $installer::globals::epmoutpath); }
+                            # solaris patch not needed anymore
+                            # if (( $installer::globals::patch ) && ( $installer::globals::issolarisx86build )) { installer::worker::fix2_solaris_x86_patch($packagename, $installer::globals::epmoutpath); }
                         }
                     }
                     else    # this is the standard epm (not relocatable) or ( nonlinux and nonsolaris )
