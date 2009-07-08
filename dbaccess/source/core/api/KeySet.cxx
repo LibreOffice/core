@@ -310,7 +310,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
     const ::rtl::OUString sOldFilter = xAnalyzer->getFilter();
     if ( sOldFilter.getLength() )
     {
-        aFilter = sOldFilter + aAnd + aFilter;
+        aFilter = sOldFilter + aAnd + aFilter.makeStringAndClear();
     }
     xAnalyzer->setFilter(aFilter.makeStringAndClear());
     m_xStatement = m_xConnection->prepareStatement(xAnalyzer->getQueryWithSubstitution());
