@@ -49,16 +49,9 @@
 #define _SVSTDARR_USHORTSSORT
 #include <svtools/svstdarr.hxx>
 
-<<<<<<< .working
 #include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
 #include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
-=======
-//#include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
-//#include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
-//#include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
->>>>>>> .merge-right.r273569
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -311,14 +304,8 @@ void SAL_CALL SwXParagraph::SetPropertyValues_Impl(
                 if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
                     throw beans::PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
-<<<<<<< .working
-                SwXTextCursor::SetPropertyValue(*pUnoCrsr, *m_pPropSet,
+                SwXTextCursor::SetPropertyValue(aCursor, *m_pPropSet,
                                         sTmp, pValues[nProp]);
-=======
-                SwXTextCursor::SetPropertyValue(aCursor, aPropSet,
-                                        sTmp, pValues[nProp], pMap);
-                pMap++;
->>>>>>> .merge-right.r273569
             }
         }
     }
@@ -376,11 +363,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXParagraph::GetPropertyValues_Impl(
                     BOOL bDone = FALSE;
                     beans::PropertyState eTemp;
                     bDone = SwUnoCursorHelper::getCrsrPropertyValue(
-<<<<<<< .working
-                                *pEntry, *pUnoCrsr, &(pValues[nProp]), eTemp, rTxtNode.GetTxtNode() );
-=======
-                        pMap, aPam, &(pValues[nProp]), eTemp, pTxtNode );
->>>>>>> .merge-right.r273569
+                        *pEntry, aPam, &(pValues[nProp]), eTemp, pTxtNode );
                     if(!bDone)
                         m_pPropSet->getPropertyValue(*pEntry, rAttrSet, pValues[nProp]);
                 }
@@ -457,8 +440,9 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXParagraph::setProp
 
     if (rPropertyNames.getLength() != rValues.getLength())
         throw lang::IllegalArgumentException();
-    SwUnoCrsr* pUnoCrsr = ((SwXParagraph*)this)->GetCrsr();
-    if(!pUnoCrsr)
+
+    const SwTxtNode * const pTxtNode( GetTxtNode() );
+    if (!pTxtNode)
         throw uno::RuntimeException();
 
     //SwNode& rTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode();
@@ -479,7 +463,9 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXParagraph::setProp
     const SfxItemPropertyMap*  pPropMap = m_pPropSet->getPropertyMap();
 
     OUString sTmp;
-    SwParaSelection aParaSel( pUnoCrsr );
+    SwPosition aPos( *pTxtNode );
+    SwCursor aCursor( aPos, 0, false );
+    SwParaSelection aParaSel( & aCursor );
     for (sal_Int32 i = 0;  i < nProps;  ++i)
     {
         try
@@ -498,7 +484,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXParagraph::setProp
                 else
                 {
                     SwXTextCursor::SetPropertyValue(
-                                *pUnoCrsr, *m_pPropSet, pProp[i], pValue[i] );
+                                aCursor, *m_pPropSet, pProp[i], pValue[i] );
                 }
             }
         }
@@ -563,11 +549,10 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXParagraph::G
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    SwUnoCrsr* pUnoCrsr = ((SwXParagraph*)this)->GetCrsr();
-    if (!pUnoCrsr)
-        throw uno::RuntimeException();
-    SwTxtNode* pTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode().GetTxtNode();
+    const SwTxtNode * const pTxtNode( GetTxtNode() );
     DBG_ASSERT( pTxtNode != NULL, "need text node" );
+    if (!pTxtNode)
+        throw uno::RuntimeException();
 
     // #i46786# Use SwAttrSet pointer for determining the state.
     //          Use the value SwAttrSet (from the paragraph OR the style)
@@ -603,7 +588,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXParagraph::G
                 // (compare to SwXParagraph::getPropertyState)
                 sal_Bool bAttrSetFetched = sal_True;
                 beans::PropertyState eState = lcl_SwXParagraph_getPropertyState(
-                            *pUnoCrsr, &pAttrSet, *pEntry, bAttrSetFetched );
+                            *pTxtNode, &pAttrSet, *pEntry, bAttrSetFetched );
                 rResult.State  = eState;
 
 //                if (bDirectValuesOnly  &&  PropertyState_DIRECT_VALUE != eState)
@@ -618,12 +603,14 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXParagraph::G
                     if (!SwXParagraph::getDefaultTextContentValue(
                                 aValue, pProp[i], pEntry->nWID ) )
                     {
+                        SwPosition aPos( *pTxtNode );
+                        SwPaM aPam( aPos );
                         // handle properties that are not part of the attribute
                         // and thus only pretendend to be paragraph attributes
                         BOOL bDone = FALSE;
                         beans::PropertyState eTemp;
                         bDone = SwUnoCursorHelper::getCrsrPropertyValue(
-                                    *pEntry, *pUnoCrsr, &aValue, eTemp, pTxtNode );
+                                    *pEntry, aPam, &aValue, eTemp, pTxtNode );
 
                         // if not found try the real paragraph attributes...
                         if (!bDone)
@@ -748,13 +735,9 @@ beans::PropertyState lcl_SwXParagraph_getPropertyState(
         (*ppSet) = rTxtNode.GetpSwAttrSet();
         rAttrSetFetched = sal_True;
     }
-<<<<<<< .working
-    switch( rEntry.nWID )
-=======
     SwPosition aPos( rTxtNode );
     SwPaM aPam( aPos );
-    switch( rMap.nWID )
->>>>>>> .merge-right.r273569
+    switch( rEntry.nWID )
     {
     case FN_UNO_NUM_RULES:
         // if numbering is set, return it; else do nothing
@@ -774,11 +757,7 @@ beans::PropertyState lcl_SwXParagraph_getPropertyState(
     case FN_UNO_PARA_CONDITIONAL_STYLE_NAME:
         {
             SwFmtColl* pFmt = SwXTextCursor::GetCurTxtFmtColl(
-<<<<<<< .working
-                rUnoCrsr, rEntry.nWID == FN_UNO_PARA_CONDITIONAL_STYLE_NAME);
-=======
-                aPam, rMap.nWID == FN_UNO_PARA_CONDITIONAL_STYLE_NAME);
->>>>>>> .merge-right.r273569
+                aPam, rEntry.nWID == FN_UNO_PARA_CONDITIONAL_STYLE_NAME);
             eRet = pFmt ? beans::PropertyState_DIRECT_VALUE
                         : beans::PropertyState_AMBIGUOUS_VALUE;
         }
@@ -808,7 +787,7 @@ beans::PropertyState SwXParagraph::getPropertyState(const OUString& rPropertyNam
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     beans::PropertyState eRet = beans::PropertyState_DEFAULT_VALUE;
-    const SwTxtNode * pTxtNode( GetTxtNode() );
+    const SwTxtNode * const pTxtNode( GetTxtNode() );
     if (pTxtNode)
     {
         const SwAttrSet* pSet = 0;
@@ -816,13 +795,8 @@ beans::PropertyState SwXParagraph::getPropertyState(const OUString& rPropertyNam
         if(!pEntry)
             throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         sal_Bool bDummy = sal_False;
-<<<<<<< .working
-        eRet = lcl_SwXParagraph_getPropertyState( *pUnoCrsr, &pSet, *pEntry,
-                                                     bDummy );
-=======
-        eRet = lcl_SwXParagraph_getPropertyState( *pTxtNode, &pSet, *pMap,
+        eRet = lcl_SwXParagraph_getPropertyState( *pTxtNode, &pSet, *pEntry,
                 bDummy );
->>>>>>> .merge-right.r273569
     }
     else
         throw uno::RuntimeException();
@@ -841,16 +815,10 @@ uno::Sequence< beans::PropertyState > SwXParagraph::getPropertyStates(
     uno::Sequence< beans::PropertyState > aRet(PropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
 
-<<<<<<< .working
-    SwUnoCrsr* pUnoCrsr = ((SwXParagraph*)this)->GetCrsr();
-    const SfxItemPropertyMap* pMap = m_pPropSet->getPropertyMap();
-    if( pUnoCrsr )
-=======
     const SwTxtNode * pTxtNode( GetTxtNode() );
     if (pTxtNode)
->>>>>>> .merge-right.r273569
     {
-        const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
+        const SfxItemPropertyMap* pMap = m_pPropSet->getPropertyMap();
         const SwAttrSet* pSet = 0;
         sal_Bool bAttrSetFetched = sal_False;
         for(sal_Int32 i = 0, nEnd = PropertyNames.getLength(); i < nEnd; i++,++pStates,++pNames )
@@ -858,24 +826,16 @@ uno::Sequence< beans::PropertyState > SwXParagraph::getPropertyStates(
             const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( *pNames );
             if(!pEntry)
                 throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + *pNames, static_cast < cppu::OWeakObject * > ( this ) );
-<<<<<<< .working
-            if (bAttrSetFetched && !pSet &&
-                pEntry->nWID >= RES_CHRATR_BEGIN &&
-                pEntry->nWID <= RES_UNKNOWNATR_END )
-                *pStates = beans::PropertyState_DEFAULT_VALUE;
-            else
-                *pStates = lcl_SwXParagraph_getPropertyState( *pUnoCrsr, &pSet,*pEntry, bAttrSetFetched );
-=======
-            if (bAttrSetFetched && !pSet && isATR(pMap->nWID))
+
+            if (bAttrSetFetched && !pSet && isATR(pEntry->nWID))
             {
                 *pStates = beans::PropertyState_DEFAULT_VALUE;
             }
             else
             {
                 *pStates = lcl_SwXParagraph_getPropertyState(
-                    *pTxtNode, &pSet, *pMap, bAttrSetFetched );
+                    *pTxtNode, &pSet, *pEntry, bAttrSetFetched );
             }
->>>>>>> .merge-right.r273569
         }
     }
     else
@@ -937,24 +897,14 @@ void SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
                         pTemp->MovePara(fnParaCurr, fnParaEnd);
                     }
                     pTemp->GetDoc()->ResetAttrs(*pTemp, sal_True, &aWhichIds);
-<<<<<<< .working
-                    delete pTemp;
-                }
-            }
-            else
-                SwUnoCursorHelper::resetCrsrPropertyValue(*pEntry, *pUnoCrsr);
-        }
-        else
-=======
                 }
             }
             else
             {
-                SwUnoCursorHelper::resetCrsrPropertyValue(pMap, aCursor);
+                SwUnoCursorHelper::resetCrsrPropertyValue(*pEntry, aCursor);
             }
         }
         else
->>>>>>> .merge-right.r273569
             throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     else
@@ -979,13 +929,9 @@ uno::Any SwXParagraph::getPropertyDefault(const OUString& rPropertyName)
             if(pEntry->nWID < RES_FRMATR_END)
             {
                 const SfxPoolItem& rDefItem =
-<<<<<<< .working
-                    pUnoCrsr->GetDoc()->GetAttrPool().GetDefaultItem(pEntry->nWID);
+                    pTxtNode->GetDoc()->GetAttrPool().GetDefaultItem(
+                        pEntry->nWID);
                 rDefItem.QueryValue(aRet, pEntry->nMemberId);
-=======
-                    pTxtNode->GetDoc()->GetAttrPool().GetDefaultItem(pMap->nWID);
-                rDefItem.QueryValue(aRet, pMap->nMemberId);
->>>>>>> .merge-right.r273569
             }
         }
         else

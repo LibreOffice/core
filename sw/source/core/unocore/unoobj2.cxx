@@ -1177,7 +1177,7 @@ SwXTextRange::SwXTextRange(SwPaM& rPam,
     pBox(0),
     pBoxStartNode(0),
     aObjectDepend(this, 0),
-    m_pPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)),
     xParentText(rxParent),
     pMark(NULL)
 {
