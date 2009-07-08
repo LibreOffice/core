@@ -237,8 +237,10 @@ private:
     virtual sal_Bool SAL_CALL hasPropertyByName(rtl::OUString const & Name)
         throw (com::sun::star::uno::RuntimeException);
 
+public://TODO
     virtual rtl::OUString SAL_CALL getHierarchicalName()
         throw (com::sun::star::uno::RuntimeException);
+private://TODO
 
     virtual rtl::OUString SAL_CALL composeHierarchicalName(
         rtl::OUString const & aRelativeName)

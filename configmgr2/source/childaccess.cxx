@@ -45,7 +45,6 @@
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
-#include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "rtl/uuid.h"
@@ -265,6 +264,7 @@ css::uno::Any ChildAccess::asValue() {
 void ChildAccess::commitChanges() {
     commitChildChanges();
     if (changedValue_.get() != 0) {
+        Components::singleton().addModification(getHierarchicalName());
         if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get())) {
             prop->setValue(*changedValue_);
         } else if (LocalizedPropertyValueNode * locval =
@@ -311,28 +311,7 @@ rtl::OUString ChildAccess::getRelativePath() {
     } else {
         return name_;
     }
-    rtl::OUStringBuffer buf(templateName);
-        //TODO: verify template name contains no bad chars?
-    buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("['"));
-    for (sal_Int32 i = 0; i < name_.getLength(); ++i) {
-        sal_Unicode c = name_[i];
-        switch (c) {
-        case '&':
-            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("&amp;"));
-            break;
-        case '"':
-            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("&quot;"));
-            break;
-        case '\'':
-            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("&apos;"));
-            break;
-        default:
-            buf.append(c);
-            break;
-        }
-    }
-    buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("']"));
-    return buf.makeStringAndClear();
+    return Components::createSegment(templateName, name_);
 }
 
 void ChildAccess::addSupportedServiceNames(

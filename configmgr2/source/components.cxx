@@ -40,6 +40,7 @@
 #include "comphelper/sequenceasvector.hxx"
 #include "libxml/parser.h"
 #include "libxml/xmlschemastypes.h"
+#include "libxml/xmlwriter.h"
 #include "osl/diagnose.h"
 #include "osl/file.hxx"
 #include "osl/mutex.hxx"
@@ -90,6 +91,11 @@ template< typename T > sal_Int32 findFirst(
 {
     sal_Int32 i = string.indexOf(sub, fromIndex);
     return i == -1 ? string.getLength() : i;
+}
+
+bool isPrefix(rtl::OUString const & prefix, rtl::OUString const & path) {
+    return prefix.getLength() < path.getLength() && path.match(prefix) &&
+        path[prefix.getLength()] == '/';
 }
 
 xmlChar const * xmlString(char const * str) {
@@ -151,12 +157,20 @@ struct XmlDoc: private boost::noncopyable {
     ~XmlDoc() { xmlFreeDoc(doc); }
 };
 
+struct XmlTextWriter: private boost::noncopyable {
+    xmlTextWriterPtr writer;
+
+    explicit XmlTextWriter(xmlTextWriterPtr theWriter): writer(theWriter) {}
+
+    ~XmlTextWriter() { xmlFreeTextWriter(writer); }
+};
+
 rtl::OUString fullTemplateName(
     rtl::OUString const & component, rtl::OUString const & name)
 {
-    OSL_ASSERT(component.indexOf('/') == -1);
+    OSL_ASSERT(component.indexOf(':') == -1);
     rtl::OUStringBuffer buf(component);
-    buf.append(sal_Unicode('/'));
+    buf.append(sal_Unicode(':'));
     buf.append(name);
     return buf.makeStringAndClear();
 }
@@ -191,7 +205,22 @@ rtl::Reference< Node > NodeRef::getMember(rtl::OUString const &) {
         css::uno::Reference< css::uno::XInterface >());
 }
 
-xmlDocPtr parseXmlFile(rtl::OUString const & url) {
+rtl::OString convertToUtf8(rtl::OUString const & text) {
+    rtl::OString utf8;
+    if (!text.convertToString(
+            &utf8, RTL_TEXTENCODING_UTF8,
+            (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+             RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
+    {
+        throw css::uno::RuntimeException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("cannot translate text to UTF-8")),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    return utf8;
+}
+
+rtl::OString convertToFilepath(rtl::OUString const & url) {
     rtl::OUString path1;
     if (osl::FileBase::getSystemPathFromFileURL(url, path1) !=
         osl::FileBase::E_None)
@@ -214,9 +243,15 @@ xmlDocPtr parseXmlFile(rtl::OUString const & url) {
              path1),
             css::uno::Reference< css::uno::XInterface >());
     }
+    return path2;
+}
+
+xmlDocPtr parseXmlFile(rtl::OUString const & url) {
     XmlParserContext context;
     xmlDocPtr doc(
-        xmlCtxtReadFile(context.context, path2.getStr(), 0, XML_PARSE_NOERROR));
+        xmlCtxtReadFile(
+            context.context, convertToFilepath(url).getStr(), 0,
+            XML_PARSE_NOERROR));
         //TODO: pass (external) file URL instead of filepath?
     if (doc == 0) {
         throw css::uno::RuntimeException(
@@ -1040,7 +1075,8 @@ void parseXcsFile(
 void parseXcuNode(
     rtl::OUString const & componentName,
     Components::TemplateMap const & templates, xmlDocPtr doc,
-    xmlNodePtr xmlNode, rtl::Reference< Node > const & node)
+    xmlNodePtr xmlNode, rtl::Reference< Node > const & node,
+    Components * modifications, rtl::OUString const & pathPrefix)
 {
     if (GroupNode * group = dynamic_cast< GroupNode * >(node.get())) {
         for (xmlNodePtr p(skipBlank(xmlNode->xmlChildrenNode)); p != 0;
@@ -1237,9 +1273,30 @@ void parseXcuNode(
                         break;
                     }
                 }
+                if (modifications != 0) {
+                    if (localized == 0) {
+                        modifications->addModification(pathPrefix + name);
+                    } else {
+                        rtl::OUString path(
+                            pathPrefix + name +
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")));
+                        for (LocalizedValues::iterator j(values.begin());
+                             j != values.end(); ++j)
+                        {
+                            modifications->addModification(
+                                path +
+                                Components::createSegment(
+                                    rtl::OUString(
+                                        RTL_CONSTASCII_USTRINGPARAM("*")),
+                                    j->first));
+                        }
+                    }
+                }
             } else if (isOorElement(p, "node")) {
                 Operation op = getOperationAttribute(doc, p);
-                if (op != OPERATION_MODIFY && op != OPERATION_FUSE) {
+                if ((op != OPERATION_MODIFY && op != OPERATION_FUSE) ||
+                    modifications != 0)
+                {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM(
@@ -1259,7 +1316,9 @@ void parseXcuNode(
                          fromXmlString(doc->URL)),
                         css::uno::Reference< css::uno::XInterface >());
                 }
-                parseXcuNode(componentName, templates, doc, p, i->second);
+                parseXcuNode(
+                    componentName, templates, doc, p, i->second, 0,
+                    rtl::OUString());
             } else {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(
@@ -1320,13 +1379,17 @@ void parseXcuNode(
                              fromXmlString(doc->URL)),
                             css::uno::Reference< css::uno::XInterface >());
                     }
-                    parseXcuNode(componentName, templates, doc, p, j->second);
+                    parseXcuNode(
+                        componentName, templates, doc, p, j->second, 0,
+                        rtl::OUString());
                 }
                 break;
             case OPERATION_REPLACE:
                 {
                     rtl::Reference< Node > member(i->second->clone());
-                    parseXcuNode(componentName, templates, doc, p, member);
+                    parseXcuNode(
+                        componentName, templates, doc, p, member, 0,
+                        rtl::OUString());
                     NodeMap::iterator j(
                         Components::resolveNode(name, &set->getMembers()));
                     if (j == set->getMembers().end()) {
@@ -1343,12 +1406,15 @@ void parseXcuNode(
                         Components::resolveNode(name, &set->getMembers()));
                     if (j == set->getMembers().end()) {
                         rtl::Reference< Node > member(i->second->clone());
-                        parseXcuNode(componentName, templates, doc, p, member);
+                        parseXcuNode(
+                            componentName, templates, doc, p, member, 0,
+                            rtl::OUString());
                         set->getMembers().insert(
                             NodeMap::value_type(name, member));
                     } else {
                         parseXcuNode(
-                            componentName, templates, doc, p, j->second);
+                            componentName, templates, doc, p, j->second, 0,
+                            rtl::OUString());
                     }
                 }
                 break;
@@ -1362,6 +1428,10 @@ void parseXcuNode(
                     }
                 }
                 break;
+            }
+            if (modifications != 0) {
+                modifications->addModification(
+                    pathPrefix + Components::createSegment(templateName, name));
             }
         }
     } else {
@@ -1424,7 +1494,8 @@ void parseXcuFile(
              fromXmlString(doc.doc->URL)),
             css::uno::Reference< css::uno::XInterface >());
     }
-    parseXcuNode(comp, *templates, doc.doc, root, i->second);
+    parseXcuNode(
+        comp, *templates, doc.doc, root, i->second, 0, rtl::OUString());
 }
 
 void parseFiles(
@@ -1524,6 +1595,100 @@ void parseSystemLayer() {
     //TODO
 }
 
+void writeNode(
+    xmlTextWriterPtr writer, rtl::OUString const & name,
+    rtl::Reference< Node > const & node)
+{
+    if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node.get())) {
+        xmlTextWriterStartElementNS(
+            writer, xmlString("oor"), xmlString("prop"),
+            xmlString("http://openoffice.org/2001/registry"));
+        xmlTextWriterWriteAttributeNS(
+            writer, xmlString("oor"), xmlString("name"),
+            xmlString("http://openoffice.org/2001/registry"),
+            xmlString(convertToUtf8(name).getStr()));
+        xmlTextWriterWriteAttributeNS(
+            writer, xmlString("oor"), xmlString("op"),
+            xmlString("http://openoffice.org/2001/registry"),
+            xmlString("fuse"));
+        //TODO: oor:type
+        xmlTextWriterStartElementNS(
+            writer, xmlString("oor"), xmlString("value"),
+            xmlString("http://openoffice.org/2001/registry"));
+        css::uno::Any value(prop->getValue());
+        switch (value.getValueType().getTypeClass()) {
+        case css::uno::TypeClass_VOID:
+            xmlTextWriterWriteAttributeNS(
+                writer, xmlString("xsi"), xmlString("nil"),
+                xmlString("http://www.w3.org/2001/XMLSchema-instance"),
+                xmlString("true"));
+            break;
+        case css::uno::TypeClass_BOOLEAN:
+            {
+                bool val;
+                value >>= val;
+                xmlTextWriterWriteString(
+                    writer, xmlString(val ? "true" : "false"));
+            }
+            break;
+        case css::uno::TypeClass_BYTE:
+        case css::uno::TypeClass_SHORT:
+        case css::uno::TypeClass_UNSIGNED_SHORT:
+        case css::uno::TypeClass_LONG:
+        case css::uno::TypeClass_UNSIGNED_LONG:
+        case css::uno::TypeClass_HYPER: //TODO: TypeClass_UNSIGNED_HYPER?
+            {
+                sal_Int64 val;
+                value >>= val;
+                xmlTextWriterWriteString(
+                    writer,
+                    xmlString(
+                        convertToUtf8(rtl::OUString::valueOf(val)).getStr()));
+            }
+            break;
+        case css::uno::TypeClass_STRING:
+            {
+                rtl::OUString val;
+                value >>= val;
+                xmlTextWriterWriteString(
+                    writer, xmlString(convertToUtf8(val).getStr()));
+            }
+            break;
+            //TODO
+        default:
+            OSL_ASSERT(false);
+            throw css::uno::RuntimeException(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+                css::uno::Reference< css::uno::XInterface >());
+        }
+        xmlTextWriterEndElement(writer);
+        xmlTextWriterEndElement(writer);
+    } else if (GroupNode * group = dynamic_cast< GroupNode * >(node.get())) {
+        xmlTextWriterStartElementNS(
+            writer, xmlString("oor"), xmlString("node"),
+            xmlString("http://openoffice.org/2001/registry"));
+        xmlTextWriterWriteAttributeNS(
+            writer, xmlString("oor"), xmlString("name"),
+            xmlString("http://openoffice.org/2001/registry"),
+            xmlString(convertToUtf8(name).getStr()));
+        if (group->getTemplateName().getLength() != 0) { // set member
+            xmlTextWriterWriteAttributeNS(
+                writer, xmlString("oor"), xmlString("op"),
+                xmlString("http://openoffice.org/2001/registry"),
+                xmlString("replace"));
+        }
+        for (NodeMap::iterator i(group->getMembers().begin());
+             i != group->getMembers().end(); ++i)
+        {
+            writeNode(writer, i->first, i->second);
+        }
+        xmlTextWriterEndElement(writer);
+    } else {
+        if(true)abort();*(char*)0=0;throw 0;//TODO
+    }
+}
+
 }
 
 Components & Components::singleton() {
@@ -1533,6 +1698,33 @@ Components & Components::singleton() {
 
 bool Components::allLocales(rtl::OUString const & locale) {
     return locale.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*"));
+}
+
+rtl::OUString Components::createSegment(
+    rtl::OUString const & templateName, rtl::OUString const & name)
+{
+    rtl::OUStringBuffer buf(templateName);
+        //TODO: verify template name contains no bad chars?
+    buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("['"));
+    for (sal_Int32 i = 0; i < name.getLength(); ++i) {
+        sal_Unicode c = name[i];
+        switch (c) {
+        case '&':
+            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("&amp;"));
+            break;
+        case '"':
+            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("&quot;"));
+            break;
+        case '\'':
+            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("&apos;"));
+            break;
+        default:
+            buf.append(c);
+            break;
+        }
+    }
+    buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("']"));
+    return buf.makeStringAndClear();
 }
 
 bool Components::parseSegment(
@@ -1619,6 +1811,7 @@ rtl::Reference< Node > Components::resolvePath(
     rtl::OUString const & path, rtl::OUString * firstSegment,
     rtl::OUString * lastSegment)
 {
+    //TODO: parse .../foo['b/ar']/... correctly
     if (path.getLength() == 0 || path[0] != '/') {
         throw css::uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path, 0);
@@ -1703,6 +1896,60 @@ rtl::Reference< Node > Components::getTemplate(rtl::OUString const & fullName)
     return i == templates_.end() ? 0 : i->second;
 }
 
+void Components::addModification(rtl::OUString const & path) {
+    //TODO
+    for (Modifications::iterator i(modifications_.begin());
+         i != modifications_.end();)
+    {
+        if (path == *i || isPrefix(*i, path)) {
+            return;
+        }
+        if (isPrefix(path, *i)) {
+            modifications_.erase(i++);
+        } else {
+            ++i;
+        }
+    }
+    modifications_.push_back(path);
+}
+
+void Components::writeModifications() {
+    rtl::OUString url(getModificationFileUrl());
+    XmlTextWriter writer(
+        xmlNewTextWriterFilename(convertToFilepath(url).getStr(), 0));
+    if (writer.writer == 0) {
+        throw css::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot write ")) + url,
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    xmlTextWriterSetIndent(writer.writer, 1);
+        //TODO: more readable, but potentially slower?
+    xmlTextWriterStartDocument(writer.writer, 0, 0, 0);
+    xmlTextWriterStartElement(writer.writer, xmlString("modifications"));
+    for (Modifications::iterator i(modifications_.begin());
+         i != modifications_.end(); ++i)
+    {
+        xmlTextWriterStartElement(writer.writer, xmlString("item"));
+        xmlTextWriterWriteAttribute(
+            writer.writer, xmlString("path"),
+            xmlString(convertToUtf8(i->copy(0, i->lastIndexOf('/'))).getStr()));
+            //TODO
+        rtl::OUString name;
+        rtl::Reference< Node > node(resolvePath(*i, 0, &name));
+        if (node.is()) {
+            writeNode(writer.writer, name, node);
+        } else {
+            if(true)abort();*(char*)0=0;throw 0;//TODO
+        }
+        xmlTextWriterEndElement(writer.writer);
+    }
+    if (xmlTextWriterEndDocument(writer.writer) == -1) {
+        throw css::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot write ")) + url,
+            css::uno::Reference< css::uno::XInterface >());
+    }
+}
+
 namespace {
 
 rtl::OUString expand(rtl::OUString const & str) {
@@ -1765,17 +2012,21 @@ Components::Components() {
                     "${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/"
                     "user/registry"))),
         &templates_, &components_);
-    parseModificationLayer(
-        expand(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/"
-                    "user/registrymodifications"))));
+    parseModificationLayer();
 }
 
 Components::~Components() {}
 
-void Components::parseModificationLayer(rtl::OUString const & url) {
+rtl::OUString Components::getModificationFileUrl() const {
+    return expand(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM(
+                "${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/"
+                "registrymodifications")));
+}
+
+void Components::parseModificationLayer() {
+    rtl::OUString url(getModificationFileUrl());
     osl::DirectoryItem di;
     switch (osl::DirectoryItem::get(url, di)) {
     case osl::FileBase::E_None:
@@ -1806,7 +2057,7 @@ void Components::parseModificationLayer(rtl::OUString const & url) {
     for (xmlNodePtr p(skipBlank(root->xmlChildrenNode)); p != 0;
          p = skipBlank(p->next))
     {
-        if (xmlStrEqual(p->name, xmlString("set")) && p->ns == 0) {
+        if (xmlStrEqual(p->name, xmlString("item")) && p->ns == 0) {
             XmlString path(xmlGetNoNsProp(p, xmlString("path")));
             if (path.str == 0) {
                 throw css::uno::RuntimeException(
@@ -1827,9 +2078,10 @@ void Components::parseModificationLayer(rtl::OUString const & url) {
                      fromXmlString(doc.doc->URL)),
                     css::uno::Reference< css::uno::XInterface >());
             }
-            parseXcuNode(componentName, templates_, doc.doc, p, node);
-        } else if (xmlStrEqual(p->name, xmlString("unset")) && p->ns == 0) {
-            //TODO
+            parseXcuNode(
+                componentName, templates_, doc.doc, p, node, this,
+                (fromXmlString(path.str) +
+                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"))));
         } else {
             throw css::uno::RuntimeException(
                 (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad content in ")) +

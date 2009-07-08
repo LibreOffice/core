@@ -276,20 +276,34 @@ void Access::reportChildChanges(
 }
 
 void Access::commitChildChanges() {
-    while (!modifiedChildren_.empty()) {
-        HardChildMap::iterator i(modifiedChildren_.begin());
-        rtl::Reference< ChildAccess > child(getModifiedChild(i));
-        if (child.is()) {
-            child->commitChanges();
-            // In case the child was inserted:
-            getMemberNodes()[i->first] = child->getNode();
-                //TODO: collision handling?
-        } else {
-            // Removed child node:
-            getMemberNodes().erase(i->first); //TODO: collision handling?
+    if (!modifiedChildren_.empty()) {
+        while (!modifiedChildren_.empty()) {
+            HardChildMap::iterator i(modifiedChildren_.begin());
+            rtl::Reference< ChildAccess > child(getModifiedChild(i));
+            if (child.is()) {
+                child->commitChanges();
+                // In case the child was inserted:
+                if (getMemberNodes()[i->first] == 0) {
+                    Components::singleton().addModification(
+                        child->getHierarchicalName());
+                }
+                getMemberNodes()[i->first] = child->getNode();
+                    //TODO: collision handling?
+            } else {
+                // Removed child node:
+                rtl::OUString pathPrefix(getHierarchicalName());
+                if (pathPrefix.getLength() == 0 ||
+                    pathPrefix[pathPrefix.getLength() - 1] != '/')
+                {
+                    pathPrefix +=
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                }
+                Components::singleton().addModification(pathPrefix + i->first);
+                getMemberNodes().erase(i->first); //TODO: collision handling?
+            }
+            i->second->notInTransaction();
+            modifiedChildren_.erase(i);
         }
-        i->second->notInTransaction();
-        modifiedChildren_.erase(i);
     }
 }
 

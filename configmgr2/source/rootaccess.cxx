@@ -170,7 +170,7 @@ void RootAccess::commitChanges()
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
     commitChildChanges();
-    //TODO: write changes to disk
+    Components::singleton().writeModifications();
 }
 
 sal_Bool RootAccess::hasPendingChanges() throw (css::uno::RuntimeException) {

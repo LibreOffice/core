@@ -32,6 +32,8 @@
 
 #include "sal/config.h"
 
+#include <list>
+
 #include "boost/noncopyable.hpp"
 #include "rtl/ref.hxx"
 #include "stl/hash_map"
@@ -53,6 +55,9 @@ public:
 
     static bool allLocales(rtl::OUString const & locale);
 
+    static rtl::OUString createSegment(
+        rtl::OUString const & templateName, rtl::OUString const & name);
+
     static bool parseSegment(
         rtl::OUString const & segment, rtl::OUString * name, bool * setElement,
         rtl::OUString * templateName);
@@ -66,6 +71,10 @@ public:
 
     rtl::Reference< Node > getTemplate(rtl::OUString const & fullName) const;
 
+    void addModification(rtl::OUString const & path);
+
+    void writeModifications();
+
     typedef
         std::hash_map< rtl::OUString, rtl::Reference< Node>, rtl::OUStringHash >
         TemplateMap;
@@ -75,11 +84,17 @@ private:
 
     ~Components();
 
-    void parseModificationLayer(rtl::OUString const & url);
+    rtl::OUString getModificationFileUrl() const;
+
+    void parseModificationLayer();
 
     TemplateMap templates_;
 
     NodeMap components_;
+
+    typedef std::list< rtl::OUString > Modifications;
+
+    Modifications modifications_;
 };
 
 }
