@@ -203,9 +203,7 @@ void ChildAccess::setProperty(css::uno::Any const & value) {
         OSL_ASSERT(locprop != 0);
         type = locprop->getType();
         nillable = locprop->isNillable();
-    } else if (LocalizedPropertyNode * locprop =
-               dynamic_cast< LocalizedPropertyNode * >(node_.get()))
-    {
+    } else if (dynamic_cast< LocalizedPropertyNode * >(node_.get()) != 0) {
         rtl::OUString locale(getRootAccess()->getLocale());
         if (!Components::allLocales(locale)) {
             rtl::Reference< ChildAccess > child(getChild(locale));
@@ -236,9 +234,7 @@ css::uno::Any ChildAccess::asValue() {
     {
         return locval->getValue();
     }
-    if (LocalizedPropertyNode * locprop =
-        dynamic_cast< LocalizedPropertyNode * >(node_.get()))
-    {
+    if (dynamic_cast< LocalizedPropertyNode * >(node_.get()) != 0) {
         rtl::OUString locale(getRootAccess()->getLocale());
         if (!Components::allLocales(locale)) {
             rtl::Reference< ChildAccess > child(getChild(locale));

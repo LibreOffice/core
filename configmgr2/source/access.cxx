@@ -910,9 +910,7 @@ void Access::insertByName(
         freeAcc->bind(root, this, aName); // must not throw
         freeAcc->markAsModified(); //TODO: must not throw
         //TODO notify change
-    } else if (LocalizedPropertyNode * locprop =
-               dynamic_cast< LocalizedPropertyNode * >(p.get()))
-    {
+    } else if (dynamic_cast< LocalizedPropertyNode * >(p.get()) != 0) {
         insertLocalizedPropertyValueChild(aName, aElement);
     } else {
         OSL_ASSERT(false);
