@@ -35,6 +35,8 @@
 #include <tools/list.hxx>
 #include <tools/string.hxx>
 
+#include <vector>
+
 //------------------------------------------------------------------
 
 #ifdef _SV_MULTISEL_CXX
@@ -110,6 +112,79 @@ public:
 
     ULONG           GetRangeCount() const { return aSels.Count(); }
     const Range&    GetRange( ULONG nRange ) const { return *(const Range*)aSels.GetObject(nRange); }
+};
+
+class TOOLS_DLLPUBLIC StringRangeEnumerator
+{
+    std::vector< sal_Int32 >            maSequence;
+    sal_Int32                           mnMin;
+    sal_Int32                           mnMax;
+    sal_Int32                           mnOffset;
+public:
+
+    typedef std::vector< sal_Int32 >::const_iterator Iterator;
+
+    StringRangeEnumerator() {}
+    StringRangeEnumerator( const rtl::OUString& i_rInput,
+                           sal_Int32 i_nMinNumber = -1,
+                           sal_Int32 i_nMaxNumber = -1,
+                           sal_Int32 i_nLogicalOffset = -1 ) :
+        mnMin( i_nMinNumber ),
+        mnMax( i_nMaxNumber ),
+        mnOffset( i_nLogicalOffset )
+    {
+        getRangesFromString( i_rInput, maSequence, mnMin, mnMax, mnOffset );
+    }
+
+    size_t size() const { return maSequence.size(); }
+    Iterator begin() const { return maSequence.begin(); }
+    Iterator end() const { return maSequence.end(); }
+
+    sal_Int32 getMin() const { return mnMin; }
+    void setMin( sal_Int32 i_nMinValue ) { mnMin = i_nMinValue; }
+    sal_Int32 getMax() const { return mnMax; }
+    void setMax( sal_Int32 i_nMaxValue ) { mnMax = i_nMaxValue; }
+    sal_Int32 getLogicalOffset() const { return mnOffset; }
+    void setLogicalOffset( sal_Int32 i_nOffset ) { mnOffset = i_nOffset; }
+
+    void setRange( const rtl::OUString& i_rNewRange )
+    {
+        maSequence.clear();
+        getRangesFromString( i_rNewRange, maSequence, mnMin, mnMax, mnOffset );
+    }
+
+
+    /**
+    i_rPageRange:     the string to be changed into a sequence of numbers
+                      valid format example "5-3,9,9,7-8" ; instead of ',' ';' or ' ' are allowed as well
+    o_rPageVector:    the output sequence of numbers
+    i_nLogicalOffset: an offset to be applied to each number in the string before inserting it in the resulting sequence
+                      example: a user enters page numbers from 1 to n (since that is logical)
+                               of course usable page numbers in code would start from 0 and end at n-1
+                               so the logical offset would be -1
+    i_nMinNumber:     the minimum allowed number, a negative number means no minimum check
+    i_nMaxNumber:     the maximum allowed number, a negative number means no maximum check
+
+    @returns: true if the input string was valid, o_rPageVector will contain the resulting sequence
+              false if the input string was invalid, o_rPageVector will be unchanged
+
+    behavior:
+    - only non-negative sequence numbers are allowed
+    - only non-negative values in the input string are allowed
+    - the string "-3" will be either
+      * an error if no minimum is given
+      * or result in the sequence i_nMinNumber to 3
+    - the string "3-" will be either
+      * an error if no maximum is given
+      * or result in the seqeuence 3 to i_nMaxNumber
+    - an empty string as input is valid and will result in an empty result vector
+    */
+    static bool getRangesFromString( const rtl::OUString& i_rPageRange,
+                                     std::vector< sal_Int32 >& o_rPageVector,
+                                     sal_Int32 i_nMinNumber = -1,
+                                     sal_Int32 i_nMaxNumber = -1,
+                                     sal_Int32 i_nLogicalOffset = -1
+                                    );
 };
 
 #endif  // _SV_MULTISEL_HXX
