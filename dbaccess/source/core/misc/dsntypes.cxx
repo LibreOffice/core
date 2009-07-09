@@ -601,7 +601,7 @@ String ODsnTypeCollection::TypeIterator::getDisplayName() const
 //-------------------------------------------------------------------------
 const ODsnTypeCollection::TypeIterator& ODsnTypeCollection::TypeIterator::operator++()
 {
-    DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypes.size(), "ODsnTypeCollection::TypeIterator::operator++ : invalid position!");
+    DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size(), "ODsnTypeCollection::TypeIterator::operator++ : invalid position!");
     if (m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size())
         ++m_nPosition;
     return *this;
