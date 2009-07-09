@@ -381,7 +381,7 @@ void lcl_FormatPostIt( IDocumentContentOperations* pIDCO, SwPaM& aPam, SwPostItF
 void lcl_PrintPostIts( ViewShell* pPrtShell, const XubString& rJobName,
                         BOOL& rStartJob, int& rJobStartError, BOOL bReverse)
 {
-#ifdef TL_NOT_NOW /*TLPDF*/
+#ifdef TL_NOT_NOW /* TLPDF ??? */
     // Formatieren und Ausdrucken
     pPrtShell->CalcLayout();
 
@@ -944,13 +944,13 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 BOOL ViewShell::Prt(
     OutputDevice* pOutDev,
     SwPrtOptions& rOptions,
-    SfxProgress* pProgress,
+    SfxProgress* pProgress, /* TLPDF superfluous ??? */
     bool bIsPDFExport )
 {
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //Immer die Druckroutine in viewpg.cxx (fuer Seitenvorschau) mitpflegen!!
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    ASSERT( bIsPDFExport || pProgress, "Printing without progress bar!" )
+// TLPDF    ASSERT( bIsPDFExport || pProgress, "Printing without progress bar!" )
 
     BOOL bStartJob = FALSE;
 
@@ -960,6 +960,7 @@ BOOL ViewShell::Prt(
     //! rOptions.bPrintSelection parameter will be false.
     BOOL bSelection = rOptions.bPrintSelection;
 
+// TLPDF: this one should hold just one page now. Thus clean-up should be possible
     MultiSelection aMulti( rOptions.aMulti );
 
     if ( !aMulti.GetSelectCount() )
@@ -973,6 +974,10 @@ BOOL ViewShell::Prt(
             "Seite 0 Drucken?" );
     ASSERT( aPages.Min() <= aPages.Max(),
             "MinSeite groesser MaxSeite." );
+
+// TLPDF
+    ASSERT( aPages.Min() == aPages.Max(), "Min page should be equal to Max page now" ); /* TL PDF */
+// TLPDF TODO: clean-up aPage.Min/Max which should be identical now
 
 #ifdef TL_NOT_NOW /*TLPDF*/
     Printer* pPrt = 0;   //!! will be 0 for PDF export !!    /*TLPDF*/
@@ -1101,13 +1106,14 @@ BOOL ViewShell::Prt(
         BOOL bStop = FALSE;
         int nJobStartError = JOBSET_ERR_DEFAULT;
 
-        USHORT nCopyCnt = rOptions.bCollate ? rOptions.nCopyCount : 1;
+// TLPDF       USHORT nCopyCnt = rOptions.bCollate ? rOptions.nCopyCount : 1;
 
-        USHORT nPrintCount = 1;
+// TLPDF       USHORT nPrintCount = 1;
         XubString sJobName( rOptions.GetJobName() );
 
-        for ( USHORT nCnt = 0; !bStop && nCnt < nCopyCnt; nCnt++ )
-        {
+// TLPDF    the copy count is now handled by the printer itself...
+// TLPDF       for ( USHORT nCnt = 0; !bStop && nCnt < nCopyCnt; nCnt++ )
+// TLPDF        {
             const SwPageFrm *pStPage  = (SwPageFrm*)pShell->GetLayout()->Lower();
             const SwFrm     *pEndPage = pStPage;
 
@@ -1126,8 +1132,9 @@ BOOL ViewShell::Prt(
 
                     // Reschedule statt Yield, da Yield keine Events abarbeitet
                     // und es sonst eine Endlosschleife gibt.
-                    while( pOutDev->IsPrinting() && pProgress )
-                            pProgress->Reschedule();
+// TLPDF progrssbaris now handled by new print dialog
+// TLPDF                   while( pOutDev->IsPrinting() && pProgress )
+// TLPDF                            pProgress->Reschedule();
 
                     sJobName = rOptions.MakeNextJobName();
                     nJobStartError = JOBSET_ERR_DEFAULT;
@@ -1161,10 +1168,11 @@ BOOL ViewShell::Prt(
                 }
             }
 
+            OSL_ENSURE( nFirstPageNo, "fist page not found!  Should not happen!" );   // TLPDF
             if( !nFirstPageNo )
             {
-                bStop = TRUE;
-                break;
+// TLPDF                bStop = TRUE;
+// TLPDF                break;      // TLPDF should continue after '(end of the copy count loop)'
             }
 
 // HACK: Hier muss von der MultiSelection noch eine akzeptable Moeglichkeit
@@ -1357,10 +1365,12 @@ BOOL ViewShell::Prt(
                                     rOptions.bPrintRightPage, rOptions.bPrintLeftPage,
                                     rOptions.bPrintReverse );
 
+#ifdef TL_NOT_NOW /*TLPDF*/
                         if ( pProgress )
                             lcl_SetState( *pProgress, nPrintCount++, nSelCount,
                                           pStr, nMergeAct, nMergeCnt,
                                           nSelCount, nPageNo );
+#endif // TL_NOT_NOW /*TLPDF*/
 
                         if( !bStartJob && JOBSET_ERR_DEFAULT == nJobStartError
                             && sJobName.Len() )
@@ -1438,28 +1448,34 @@ BOOL ViewShell::Prt(
                     {   ++nPageNo;
                         pStPage = (SwPageFrm*)pStPage->GetNext();
                     }
-                }
-                if ( bStop )
-                    break;
+                }  // TLPDF loop end: while( pStPage && !bStop )
+// TLPDF               if ( bStop )
+// TLPDF                   break;
             }
 
-            // Wenn PostIts am Dokumentenende gedruckt werden sollen, dann hier machen
-            if( ((rOptions.nPrintPostIts == POSTITS_ENDDOC) && !rOptions.bPrintReverse)
-                || (rOptions.nPrintPostIts == POSTITS_ONLY) )
-                    lcl_PrintPostItsEndDoc( pPostItShell, aPostItFields, aMulti,
-                        sJobName, bStartJob, nJobStartError,
-                        rOptions.bPrintRightPage, rOptions.bPrintLeftPage,
-                        rOptions.bPrintReverse );
-
-            if( pPostItShell )
+            if (!bStop) // TLPDF: see break above
             {
-                pPostItDoc->setPrinter( 0, false, false );  //damit am echten DOC der Drucker bleibt
-                delete pPostItShell;        //Nimmt das PostItDoc mit ins Grab.
-            }
+                // Wenn PostIts am Dokumentenende gedruckt werden sollen, dann hier machen
+                if( ((rOptions.nPrintPostIts == POSTITS_ENDDOC) && !rOptions.bPrintReverse)
+                    || (rOptions.nPrintPostIts == POSTITS_ONLY) )
+                        lcl_PrintPostItsEndDoc( pPostItShell, aPostItFields, aMulti,
+                            sJobName, bStartJob, nJobStartError,
+                            rOptions.bPrintRightPage, rOptions.bPrintLeftPage,
+                            rOptions.bPrintReverse );
 
-            if( bStartJob )
-                rOptions.bJobStartet = TRUE;
-        }
+                if( pPostItShell )
+                {
+                    pPostItDoc->setPrinter( 0, false, false );  //damit am echten DOC der Drucker bleibt
+                    delete pPostItShell;        //Nimmt das PostItDoc mit ins Grab.
+                }
+
+                if( bStartJob )
+                    rOptions.bJobStartet = TRUE;
+            }   // TLPDF: if (!bStop) see break above
+
+// TLPDF    the copy count is now handled by the printer itself...
+// TLPDF    (end of the copy count loop)
+// TLPDF       }
 
     }
     delete pStr;

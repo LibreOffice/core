@@ -133,6 +133,7 @@
 #include <svtools/langtab.hxx>
 #include <map>
 #include <set>
+#include <vector>
 
 #include <svx/eeitem.hxx>
 #include <svx/editeng.hxx>
@@ -2935,6 +2936,141 @@ SfxViewShell * SwXTextDocument::GuessViewShell()
 /* -----------------------------23.08.02 16:00--------------------------------
 
  ---------------------------------------------------------------------------*/
+
+static bool lcl_getSingleValue(
+    const OUString &rText,
+    sal_Int32 &rVal )
+{
+    bool bRes = false;
+    const sal_Int32 nLen = rText.getLength();
+    if (nLen > 0)
+    {
+        // verify that text consists of decimal number 0..9 only
+        bool bValidText = true;
+        const sal_Unicode *pText = rText.getStr();
+        for (sal_Int32 i = 0; i < nLen && bValidText; ++i)
+        {
+            const sal_Unicode cChar = pText[i];
+            if (cChar < '0' || cChar > '9')
+                bValidText = false;
+        }
+
+        // get integer value if text is valid
+        if (bValidText)
+        {
+            rVal = rText.toInt32();
+            bRes = true;
+        }
+    }
+    return bRes;
+}
+
+static bool lcl_getSubRangeBounds(
+    const OUString &rSubRange,
+    sal_Int32 &rFirst,
+    sal_Int32 &rLast )
+{
+    bool bRes = false;
+
+    // check for page range...
+    sal_Int32 nPos = rSubRange.indexOf( (sal_Unicode)'-' );
+    if (nPos > 0)
+    {
+        // page range found...
+        nPos = 0;
+        const OUString aFirstPage( rSubRange.getToken( 0, '-', nPos ) );
+        const OUString aLastPage( rSubRange.getToken( 0, '-', nPos ) );
+        sal_Int32 nTmpFirst = -1;
+        sal_Int32 nTmpLast = -1;
+        if (lcl_getSingleValue( aFirstPage, nTmpFirst ) && lcl_getSingleValue( aLastPage, nTmpLast ))
+        {
+            rFirst  = nTmpFirst;
+            rLast   = nTmpLast;
+            bRes = true;
+        }
+    }
+    else
+    {
+        // single page value...
+        sal_Int32 nVal = -1;
+        if (lcl_getSingleValue( rSubRange, nVal ))
+        {
+            rFirst = rLast = nVal;
+            bRes = true;
+        }
+    }
+
+    return bRes;
+}
+
+static bool lcl_PageRangeToVector(
+    const OUString &rPageRange, // valid format example "5-3,9,9,7-8" instead of ',' ';' or ' ' are allowed as well
+    std::vector< sal_Int32 > &rPageVector )
+{
+    bool bRes = false;
+
+    // - strip leading and trailing whitespaces
+    // - unify token delimeters to ';'
+    // - remove duplicate delimiters
+    OUString aRange( rPageRange.trim() );
+    aRange = aRange.replace( (sal_Unicode)' ', (sal_Unicode)';' );
+    aRange = aRange.replace( (sal_Unicode)',', (sal_Unicode)';' );
+    sal_Int32 nPos = -1;
+    while ((nPos = aRange.indexOf( C2U(";;") )) >= 0)
+        aRange = aRange.replaceAt( nPos, 2, C2U(";") );
+
+    if (aRange.getLength() > 0)
+    {
+        std::vector< sal_Int32 > aTmpVector;
+
+        // iterate over all sub ranges and add the respective pages to the
+        // vector while preserving the page order
+        bool bFailed = false;
+        nPos = 0;
+        do
+        {
+            const OUString aSubRange = aRange.getToken( 0, ';', nPos );
+            sal_Int32 nFirst = -1, nLast = -1;
+            if (lcl_getSubRangeBounds( aSubRange, nFirst, nLast )
+                && nFirst > 0 && nLast > 0)
+            {
+                // add pages of sub range to vector
+                if (nFirst == nLast)
+                    aTmpVector.push_back( nFirst );
+                else if (nFirst < nLast)
+                {
+                    for (sal_Int32 i = nFirst; i <= nLast; ++i)
+                        aTmpVector.push_back( i );
+                }
+                else if (nFirst > nLast)
+                {
+                    for (sal_Int32 i = nFirst; i >= nLast; --i)
+                        aTmpVector.push_back( i );
+                }
+                else
+                    OSL_ENSURE( 0, "unexpected case" );
+            }
+            else
+                bFailed = true;
+        }
+        while (!bFailed && 0 <= nPos && nPos < aRange.getLength());
+        
+        if (!bFailed)
+        {
+            rPageVector = aTmpVector;
+            bRes = true;
+        }
+    }
+    else
+    {
+        // empty string ...
+        rPageVector.clear();
+        bRes = true;
+    }
+
+    return bRes;
+}
+
 void SAL_CALL SwXTextDocument::render(
         sal_Int32 nRenderer,
         const uno::Any& rSelection,
@@ -3014,6 +3150,16 @@ void SAL_CALL SwXTextDocument::render(
         else if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ) )
             rxOptions[ nProperty].Value >>= bSkipEmptyPages;
     }
+
+#if OSL_DEBUG_LEVEL > 1
+    std::vector< sal_Int32 > _aVec1;
+    bool _bTmp1 = lcl_PageRangeToVector( C2U(""), _aVec1 );
+    _bTmp1 = lcl_PageRangeToVector( C2U("-1"), _aVec1 );
+    _bTmp1 = lcl_PageRangeToVector( C2U("3 0"), _aVec1 );
+    _bTmp1 = lcl_PageRangeToVector( C2U("1-5,7 7,15-12;8"), _aVec1 );
+    _bTmp1 = lcl_PageRangeToVector( C2U("  2-6,,7  7,15-12;;;9"), _aVec1 );
+    _bTmp1 = lcl_PageRangeToVector( C2U(";,5-1,,7  7,12-15;;;9"), _aVec1 );
+#endif
 
     OutputDevice*   pOut = 0;
     if (xRenderDevice.is())
