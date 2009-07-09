@@ -964,11 +964,17 @@ static bool lcl_getSubRangeBounds(
     return bRes;
 }
 
+inline bool checkValue( std::set< sal_Int32 >* i_pPossibleValues, sal_Int32 nVal )
+{
+    return i_pPossibleValues ? (i_pPossibleValues->find( nVal ) != i_pPossibleValues->end()) : true;
+}
+
 bool StringRangeEnumerator::getRangesFromString( const OUString& i_rPageRange,
                                                  std::vector< sal_Int32 >& o_rPageVector,
                                                  sal_Int32 i_nMinNumber,
                                                  sal_Int32 i_nMaxNumber,
-                                                 sal_Int32 i_nLogicalOffset
+                                                 sal_Int32 i_nLogicalOffset,
+                                                 std::set< sal_Int32 >* i_pPossibleValues
                                                )
 {
     bool bRes = false;
@@ -1002,16 +1008,25 @@ bool StringRangeEnumerator::getRangesFromString( const OUString& i_rPageRange,
             {
                 // add pages of sub range to vector
                 if (nFirst == nLast)
-                    aTmpVector.push_back( nFirst );
+                {
+                    if( checkValue( i_pPossibleValues, nFirst ) )
+                        aTmpVector.push_back( nFirst );
+                }
                 else if (nFirst < nLast)
                 {
                     for (sal_Int32 i = nFirst; i <= nLast; ++i)
-                        aTmpVector.push_back( i );
+                    {
+                        if( checkValue( i_pPossibleValues, i ) )
+                            aTmpVector.push_back( i );
+                    }
                 }
                 else if (nFirst > nLast)
                 {
                     for (sal_Int32 i = nFirst; i >= nLast; --i)
-                        aTmpVector.push_back( i );
+                    {
+                        if( checkValue( i_pPossibleValues, i ) )
+                            aTmpVector.push_back( i );
+                    }
                 }
                 else
                     OSL_ENSURE( 0, "unexpected case" );

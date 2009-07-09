@@ -36,6 +36,7 @@
 #include <tools/string.hxx>
 
 #include <vector>
+#include <set>
 
 //------------------------------------------------------------------
 
@@ -128,12 +129,14 @@ public:
     StringRangeEnumerator( const rtl::OUString& i_rInput,
                            sal_Int32 i_nMinNumber = -1,
                            sal_Int32 i_nMaxNumber = -1,
-                           sal_Int32 i_nLogicalOffset = -1 ) :
+                           sal_Int32 i_nLogicalOffset = -1,
+                           std::set< sal_Int32 >* i_pPossibleValues = NULL
+                           ) :
         mnMin( i_nMinNumber ),
         mnMax( i_nMaxNumber ),
         mnOffset( i_nLogicalOffset )
     {
-        getRangesFromString( i_rInput, maSequence, mnMin, mnMax, mnOffset );
+        getRangesFromString( i_rInput, maSequence, mnMin, mnMax, mnOffset, i_pPossibleValues );
     }
 
     size_t size() const { return maSequence.size(); }
@@ -147,10 +150,10 @@ public:
     sal_Int32 getLogicalOffset() const { return mnOffset; }
     void setLogicalOffset( sal_Int32 i_nOffset ) { mnOffset = i_nOffset; }
 
-    void setRange( const rtl::OUString& i_rNewRange )
+    void setRange( const rtl::OUString& i_rNewRange, std::set< sal_Int32 >* i_pPossibleValues = NULL )
     {
         maSequence.clear();
-        getRangesFromString( i_rNewRange, maSequence, mnMin, mnMax, mnOffset );
+        getRangesFromString( i_rNewRange, maSequence, mnMin, mnMax, mnOffset, i_pPossibleValues );
     }
 
 
@@ -183,7 +186,8 @@ public:
                                      std::vector< sal_Int32 >& o_rPageVector,
                                      sal_Int32 i_nMinNumber = -1,
                                      sal_Int32 i_nMaxNumber = -1,
-                                     sal_Int32 i_nLogicalOffset = -1
+                                     sal_Int32 i_nLogicalOffset = -1,
+                                     std::set< sal_Int32 >* i_pPossibleValues = NULL
                                     );
 };
 
