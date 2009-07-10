@@ -45,7 +45,7 @@ class SW_DLLPUBLIC SwNodeIndex
     friend void SwNodes::DeRegisterIndex( SwNodeIndex& );
     friend void SwNodes::RemoveNode( ULONG, ULONG, BOOL );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     static int nSerial;
     int MySerial;
 #endif

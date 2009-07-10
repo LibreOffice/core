@@ -322,7 +322,7 @@ SwTabPortion::SwTabPortion( const KSHORT nTabPosition, const xub_Unicode cFillCh
     : SwFixPortion( 0, 0 ), nTabPos(nTabPosition), cFill(cFillChar)
 {
     nLineLength = 1;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( IsFilled() )
     {
         ASSERT( ' ' != cFill, "SwTabPortion::CTOR: blanks ?!" );
@@ -557,7 +557,7 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
 
 void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // Wir wollen uns die Fixbreite anzeigen
     if( rInf.OnWin() && OPTDBG( rInf ) &&
         !rInf.GetOpt().IsPagePreview() && \

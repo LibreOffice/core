@@ -116,7 +116,7 @@ SV_DECL_PTRARR(SwpHts,SwTxtAttr*,1,1)
 // Leider ist das SwpHints nicht ganz wasserdicht:
 // Jeder darf an den Hints rumfummeln, ohne die Sortierreihenfolge
 // und Verkettung sicherstellen zu muessen.
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #define CHECK_SWPHINTS(pNd)  { if( pNd->GetpSwpHints() && \
                                    !pNd->GetDoc()->IsInReading() ) \
                                   pNd->GetpSwpHints()->Check(); }
@@ -368,7 +368,7 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
                             ((SwTxtFrm*)pFrm)->SetFtn( TRUE );
                         }
                     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     while( 0 != (pCntnt = (SwCntntFrm*)aIter.Next()) )
                     {
                         SwFtnFrm *pDbgFtn = pCntnt->FindFtnFrm();

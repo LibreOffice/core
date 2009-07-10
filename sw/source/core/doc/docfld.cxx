@@ -601,7 +601,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     {
                         if( aPara.CalcWithStackOverflow() )
                             pFld->CalcField( aPara );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                         else
                         {
                             // mind. ein ASSERT
@@ -669,7 +669,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     {
                         if( aPara.CalcWithStackOverflow() )
                             pFml->Calc( aPara, nValue );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                         else
                         {
                             // mind. ein ASSERT
@@ -907,7 +907,7 @@ void _SetGetExpFld::SetBodyPos( const SwCntntFrm& rFrm )
         SwNodeIndex aIdx( *rFrm.GetNode() );
         SwDoc& rDoc = *aIdx.GetNodes().GetDoc();
         SwPosition aPos( aIdx );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ASSERT( ::GetBodyTxtNode( rDoc, aPos, rFrm ), "wo steht das Feld" );
 #else
         ::GetBodyTxtNode( rDoc, aPos, rFrm );
@@ -2551,7 +2551,7 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, USHORT nFldWhich )
     {
         // einen Index fuers bestimmen vom TextNode anlegen
         SwPosition aPos( rDoc.GetNodes().GetEndOfPostIts() );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ASSERT( GetBodyTxtNode( rDoc, aPos, *pFrm ), "wo steht das Feld" );
 #else
         GetBodyTxtNode( rDoc, aPos, *pFrm );
@@ -2599,7 +2599,7 @@ void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
             if( !pFrm )
                 break;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             ASSERT( GetBodyTxtNode( rDoc, aPos, *pFrm ), "wo steht das Feld" );
 #else
             GetBodyTxtNode( rDoc, aPos, *pFrm );

@@ -106,7 +106,7 @@
  *
  * --------------------------------------------------*/
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #error Wer fummelt denn an den makefiles rum?
 #endif
 
@@ -139,7 +139,7 @@ SwImplProtocol* SwProtocol::pImpl = NULL;
 
 ULONG lcl_GetFrameId( const SwFrm* pFrm )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     static BOOL bFrameId = FALSE;
     if( bFrameId )
         return pFrm->GetFrmId();

@@ -102,7 +102,7 @@ public:
                                        const long nXPos,
                                        const sal_Bool bRight );
     // <--
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     void ShowContour( OutputDevice* pOut, const SdrObject* pObj,
                       const Color& rClosedColor, const Color& rOpenColor );
 #endif
@@ -235,7 +235,7 @@ public:
     }
     // <--
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     void ShowContour( OutputDevice* pOut );
 #endif
 };

@@ -2777,7 +2777,7 @@ void SwRootFrm::_RemoveFromList( SwSectionFrm* pSct )
         pDestroy->Remove( nPos );
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 BOOL SwRootFrm::IsInDelList( SwSectionFrm* pSct ) const
 {

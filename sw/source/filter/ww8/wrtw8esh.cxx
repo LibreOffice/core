@@ -2028,7 +2028,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt)
                         if (bSwapInPage)
                             (const_cast<SdrObject*>(pSdrObj))->SetPage(0);
                     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     else
                         ASSERT( !this, "Where is the SDR-Object?" );
 #endif

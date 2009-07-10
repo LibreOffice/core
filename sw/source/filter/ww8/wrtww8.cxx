@@ -721,7 +721,7 @@ ULONG SwWW8Writer::FillUntil( SvStream& rStrm, ULONG nEndPos )
 
     if( nEndPos > nCurPos )
         SwWW8Writer::FillCount( rStrm, nEndPos - nCurPos );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
         ASSERT( nEndPos == nCurPos, "Falsches FillUntil()" );
 #endif

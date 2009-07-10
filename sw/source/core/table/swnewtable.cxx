@@ -50,7 +50,7 @@
 #include <svx/protitem.hxx>
 #include <swtblfmt.hxx>
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #define CHECK_TABLE(t)
 #else
 #ifdef DEBUG
@@ -779,7 +779,7 @@ BOOL SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
     aFndBox.MakeFrms( *this );
 //  aFndBox.RestoreChartData( *this );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     {
         const SwTableBoxes &rTabBoxes = aLines[0]->GetTabBoxes();
         long nNewWidth = 0;
@@ -2144,7 +2144,7 @@ void SwTable::CleanUpBottomRowSpan( USHORT nDelLines )
     }
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 struct RowSpanCheck
 {
@@ -2178,7 +2178,7 @@ void SwTable::CheckConsistency() const
             if( nRowSp < 0 )
             {
                 ASSERT( aIter != aRowSpanCells.end(), "Missing master box" )
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 //RowSpanCheck &rCheck = *aIter;
 #endif
                 ASSERT( aIter->nLeft == nWidth && aIter->nRight == nNewWidth,

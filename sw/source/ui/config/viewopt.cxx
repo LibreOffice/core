@@ -61,7 +61,7 @@
 
 #include <svx/acorrcfg.hxx>
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 BOOL   SwViewOption::bTest9 = FALSE;        //DrawingLayerNotLoading
 #endif
 Color SwViewOption::aDocBoundColor(COL_LIGHTGRAY);
@@ -114,7 +114,7 @@ BOOL SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             && bFormView == rOpt.IsFormView()
             && mbViewLayoutBookMode == rOpt.mbViewLayoutBookMode
             && bShowPlaceHolderFields == rOpt.bShowPlaceHolderFields
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             // korrespondieren zu den Angaben in ui/config/cfgvw.src
             && bTest1 == rOpt.IsTest1()
             && bTest2 == rOpt.IsTest2()
@@ -245,7 +245,7 @@ SwViewOption::SwViewOption() :
 
     bSelectionInReadonly = SW_MOD()->GetAccessibilityOptions().IsSelectionInReadonly();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // korrespondieren zu den Angaben in ui/config/cfgvw.src
     bTest1 = bTest2 = bTest3 = bTest4 =
              bTest5 = bTest6 = bTest7 = bTest8 = bTest10 = FALSE;
@@ -280,7 +280,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bTest1          = rVOpt.bTest1      ;
     bTest2          = rVOpt.bTest2      ;
     bTest3          = rVOpt.bTest3      ;
@@ -320,7 +320,7 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bTest1          = rVOpt.bTest1      ;
     bTest2          = rVOpt.bTest2      ;
     bTest3          = rVOpt.bTest3      ;

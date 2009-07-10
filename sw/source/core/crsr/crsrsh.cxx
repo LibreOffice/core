@@ -335,7 +335,7 @@ if( GetWin() )
 }
 
 
-#if !defined( PRODUCT )
+#if defined(DBG_UTIL)
 
 void SwCrsrShell::SttCrsrMove()
 {
@@ -1461,7 +1461,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
                 Point aCentrPt( aCharRect.Center() );
                 aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
                 pTblFrm->GetCrsrOfst( pTblCrsr->GetPoint(), aCentrPt, &aTmpState );
-#ifdef PRODUCT
+#ifndef DBG_UTIL
                 pTblFrm->GetCharRect( aCharRect, *pTblCrsr->GetPoint() );
 #else
                 if ( !pTblFrm->GetCharRect( aCharRect, *pTblCrsr->GetPoint() ) )
@@ -2014,7 +2014,7 @@ void SwCrsrShell::Combine()
     SwCrsrSaveState aSaveState( *pCurCrsr );
     if( pCrsrStk->HasMark() )           // nur wenn GetMark gesetzt wurde
     {
-#ifdef PRODUCT
+#ifndef DBG_UTIL
         CheckNodesRange( pCrsrStk->GetMark()->nNode, pCurCrsr->GetPoint()->nNode, TRUE );
 #else
         if( !CheckNodesRange( pCrsrStk->GetMark()->nNode, pCurCrsr->GetPoint()->nNode, TRUE ))

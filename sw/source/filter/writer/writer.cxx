@@ -250,7 +250,7 @@ SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
 /////////////////////////////////////////////////////////////////////////////
 
 // Stream-spezifisches
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 SvStream& Writer::Strm()
 {
     ASSERT( pStrm, "Oh-oh. Dies ist ein Storage-Writer. Gleich knallts!" );

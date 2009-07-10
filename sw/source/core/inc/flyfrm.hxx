@@ -168,7 +168,7 @@ public:
 
     virtual void  CheckDirection( BOOL bVert );
     virtual void Cut();
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 #endif
 

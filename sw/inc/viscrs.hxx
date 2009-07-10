@@ -172,7 +172,7 @@ public:
     // TRUE: an die Position kann der Cursor gesetzt werden
     virtual BOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
 //              am sichtbaren Cursor
     virtual BOOL IsSelOvr( int eFlags =
@@ -217,7 +217,7 @@ public:
     // TRUE: an die Position kann der Cursor gesetzt werden
     virtual BOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
 //              am sichtbaren Cursor
     virtual BOOL IsSelOvr( int eFlags =

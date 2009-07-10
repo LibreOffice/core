@@ -559,7 +559,7 @@ void SwUndoSetFlyFmt::Undo( SwUndoIter& rIter )
                 ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
                 const xub_StrLen nIdx = pPos->nContent.GetIndex();
                 SwTxtAttr * pHnt = pTxtNode->GetTxtAttr( nIdx, RES_TXTATR_FLYCNT );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                             "Missing FlyInCnt-Hint." );
                 ASSERT( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFrmFmt,

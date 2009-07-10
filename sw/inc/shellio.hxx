@@ -538,7 +538,7 @@ public:
     inline SvStream& OutULong( ULONG nVal )     { return OutULong( Strm(), nVal ); }
 
     void SetStrm( SvStream& rStrm ) { pStrm = &rStrm; }
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     SvStream& Strm() { return *pStrm; }
 #else
     SvStream& Strm();

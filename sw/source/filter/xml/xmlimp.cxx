@@ -842,7 +842,7 @@ void SwXMLImport::endDocument( void )
                                             pTxtNode->GetTxt().Len() );
                 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 // !!! This should be impossible !!!!
                 ASSERT( pSttNdIdx->GetIndex()+1 !=
                                         pPaM->GetBound( sal_True ).nNode.GetIndex(),

@@ -2435,7 +2435,7 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
 }
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 /*******************************************************
  ******************************************************/
 /*----------------- OS 11.01.95  -----------------------

@@ -74,7 +74,7 @@ using namespace com::sun::star::uno;
 
 using namespace ::com::sun::star;
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #define CHECK_TABLE(t)
 #else
 #ifdef DEBUG
@@ -197,7 +197,7 @@ BOOL lcl_DelOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 
 typedef BOOL (*FN_lcl_SetBoxWidth)(SwTableLine*, CR_SetBoxWidth&, SwTwips, BOOL );
 
-#if !defined( PRODUCT ) || defined( JP_DEBUG )
+#if defined(DBG_UTIL) || defined( JP_DEBUG )
 
 void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
 
@@ -3499,7 +3499,7 @@ void lcl_AjustLines( SwTableLine* pLine, CR_SetBoxWidth& rParam )
     }
 }
 
-#if !defined( PRODUCT ) || defined( JP_DEBUG )
+#if defined(DBG_UTIL) || defined( JP_DEBUG )
 
 void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize )
 {

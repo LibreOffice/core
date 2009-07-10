@@ -142,7 +142,7 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
     pLines( &rLines ),
     nWidth( 0UL )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     sal_uInt16 nEndCPos = 0U;
 #endif
     sal_uInt16 nLines = rLines.Count();
@@ -176,7 +176,7 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
             }
             else
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 sal_uInt16 nCheckPos =
                     nCPos + (sal_uInt16)SwWriteTable::GetBoxWidth( pBox );
                 if( !nEndCPos )
@@ -193,7 +193,7 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
                 }
 #endif
                 nCPos = (sal_uInt16)nWidth;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 SwXMLTableColumn_Impl aCol( (sal_uInt16)nWidth );
                 ASSERT( aCols.Seek_Entry(&aCol), "couldn't find last column" );
                 ASSERT( SwXMLTableColumn_Impl(nCheckPos) ==
@@ -699,7 +699,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
             // Und ihren Index
             sal_uInt16 nOldCol = nCol;
             SwXMLTableColumn_Impl aCol( nCPos );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             sal_Bool bFound =
 #endif
                 pLines->GetColumns().Seek_Entry( &aCol, &nCol );
@@ -989,7 +989,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             const sal_uInt16 nOldCol = nCol;
             {
                 SwXMLTableColumn_Impl aCol( nCPos );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 const sal_Bool bFound =
 #endif
                     rLines.GetColumns().Seek_Entry( &aCol, &nCol );

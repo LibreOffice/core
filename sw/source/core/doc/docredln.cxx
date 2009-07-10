@@ -59,7 +59,7 @@ using namespace com::sun::star;
 
 TYPEINIT1(SwRedlineHint, SfxHint);
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 
     #define _CHECK_REDLINE( pDoc )
     #define _DEBUG_REDLINE( pDoc )
@@ -309,7 +309,7 @@ Verhalten von Delete-Redline:
 
 bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     SwRedline aCopy( *pNewRedl );
 #endif
     _CHECK_REDLINE( this )
@@ -3675,7 +3675,7 @@ void SwRedline::SetContentIdx( const SwNodeIndex* pIdx )
         delete pCntntSect, pCntntSect = 0;
         bIsVisible = FALSE;
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
         ASSERT( !this, "das ist keine gueltige Operation" );
 #endif

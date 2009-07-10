@@ -341,7 +341,7 @@ USHORT SwNode::GetSectionLevel() const
 |*
 *******************************************************************/
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 long SwNode::nSerial = 0;
 #endif
 
@@ -373,7 +373,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const BYTE nNdType )
         pStartOfSection = (SwStartNode*)this;
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     nMySerial = nSerial;
     nSerial++;
 #endif
@@ -406,7 +406,7 @@ SwNode::SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNdType )
         pStartOfSection = (SwStartNode*)this;
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     nMySerial = nSerial;
     nSerial++;
 #endif

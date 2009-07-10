@@ -1040,7 +1040,7 @@ BOOL SwShellCrsr::UpDown( BOOL bUp, USHORT nCnt )
                             &GetPtPos(), GetShell()->GetUpDownX() );
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
 //              am sichtbaren Cursor
@@ -1182,7 +1182,7 @@ BOOL SwShellTableCrsr::IsInside( const Point& rPt ) const
     return FALSE;
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
 //              am sichtbaren Cursor

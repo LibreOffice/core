@@ -1286,7 +1286,7 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
             break;
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ASSERT( pActual, "Keinen Cntnt gefunden." );
     if ( bBodyOnly )
         ASSERT( pActual->IsInDocBody(), "Cnt nicht im Body." );

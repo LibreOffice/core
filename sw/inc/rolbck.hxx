@@ -72,7 +72,7 @@ class SwCharFmt;
 #include <IDocumentMarkAccess.hxx>
 // <--
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 class Writer;
 #define OUT_HSTR_HINT( name )   \
     friend Writer& OutUndo_Hstr_ ## name( Writer&, const SwHstryHint& );

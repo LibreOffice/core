@@ -466,7 +466,7 @@ public:
  TabPage Testeinstellungen fuer SW
 --------------------------------------------------------- */
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 class SwTestTabPage : public SfxTabPage
 {

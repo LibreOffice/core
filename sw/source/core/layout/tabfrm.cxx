@@ -3642,7 +3642,7 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
             // Spalten abklappern, dies erledigt SwSectionFrm::FindLastCntnt
             if( pRet->IsColBodyFrm() )
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 SwSectionFrm* pSect = pRet->FindSctFrm();
                 ASSERT( pSect, "Wo kommt denn die Spalte her?")
                 ASSERT( IsAnLower( pSect ), "Gespaltene Zelle?" );
@@ -4609,7 +4609,7 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
     {
         bValidSize = TRUE;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         if ( HasFixSize() )
         {
             const SwFmtFrmSize &rFrmSize = GetFmt()->GetFrmSize();

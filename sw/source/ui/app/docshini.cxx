@@ -653,7 +653,7 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
                             pDoc->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
                     }
                 }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 else
                     ASSERT( !this, "ohne Sw3Reader geht nichts" );
 #endif

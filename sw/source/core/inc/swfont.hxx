@@ -844,7 +844,7 @@ public:
  *                      class SvStatistics
  *************************************************************************/
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #define SV_STAT(nWhich)
 #else
 

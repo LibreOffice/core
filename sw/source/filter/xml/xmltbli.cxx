@@ -2249,7 +2249,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                 bSplit = 1UL == pCell->GetColSpan();
             }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             if( nCol == nRightCol-1UL )
             {
                 ASSERT( bSplit, "Split-Flag falsch" );

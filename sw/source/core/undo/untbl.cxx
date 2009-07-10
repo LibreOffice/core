@@ -68,7 +68,7 @@
 #endif
 #include <unochart.hxx>
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #define CHECK_TABLE(t)
 #else
 #ifdef DEBUG
@@ -78,7 +78,7 @@
 #endif
 #endif
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     #define _DEBUG_REDLINE( pDoc )
 #else
     void lcl_DebugRedline( const SwDoc* pDoc );
@@ -196,7 +196,7 @@ public:
 void InsertSort( SvUShorts& rArr, USHORT nIdx, USHORT* pInsPos = 0 );
 void InsertSort( SvULongs& rArr, ULONG nIdx, USHORT* pInsPos = 0 );
 
-#if defined( JP_DEBUG ) && !defined( PRODUCT )
+#if defined( JP_DEBUG ) && defined(DBG_UTIL)
 #include "shellio.hxx"
 void DumpDoc( SwDoc* pDoc, const String& rFileNm );
 void CheckTable( const SwTable& );
@@ -3220,7 +3220,7 @@ void InsertSort( SvULongs& rArr, ULONG nIdx, USHORT* pInsPos )
         *pInsPos = nU;
 }
 
-#if defined( JP_DEBUG ) && !defined( PRODUCT )
+#if defined( JP_DEBUG ) && defined(DBG_UTIL)
 
 
 void DumpDoc( SwDoc* pDoc, const String& rFileNm )

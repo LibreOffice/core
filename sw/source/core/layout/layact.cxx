@@ -116,7 +116,7 @@
 
 
 //Sparen von Schreibarbeit um den Zugriff auf zerstoerte Seiten zu vermeiden.
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 static void BreakPoint()
 {
@@ -2808,7 +2808,7 @@ BOOL SwLayIdle::DoIdleJob( IdleJobType eJob, BOOL bVisAreaOnly )
 }
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #if OSL_DEBUG_LEVEL > 1
 
 /*************************************************************************
@@ -2857,7 +2857,7 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
 SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
     pRoot( pRt ),
     pImp( pI )
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #if OSL_DEBUG_LEVEL > 1
     , bIndicator( FALSE )
 #endif
@@ -3040,7 +3040,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
     if( pImp->IsAccessible() )
         pImp->FireAccessibleEvents();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #if OSL_DEBUG_LEVEL > 1
     if ( bIndicator && pImp->GetShell()->GetWin() )
     {

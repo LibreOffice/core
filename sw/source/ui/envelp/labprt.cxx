@@ -137,7 +137,7 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
 
     if ( bEnable )
         aColField.GrabFocus();
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
         ASSERT( pButton == &aPageButton, "NewButton?" );
 #endif

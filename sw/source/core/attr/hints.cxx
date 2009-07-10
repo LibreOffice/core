@@ -147,7 +147,7 @@ SwAttrSetChg::~SwAttrSetChg()
 }
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 void SwAttrSetChg::ClearItem( USHORT nWhch )
 {
@@ -183,7 +183,7 @@ SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
  * Ist keines vorhanden, returnt ein 0-Pointer !!!
  * Used to be inlined (hintids.hxx) in PRODUCT.
  ******************************************************************************/
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 const SfxPoolItem* GetDfltAttr( USHORT nWhich )
 {
     return aAttrTab[ nWhich - POOLATTR_BEGIN ];

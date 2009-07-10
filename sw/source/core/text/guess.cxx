@@ -176,7 +176,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     {
         nCutPos = rInf.GetTxtBreak( nLineWidth, nMaxLen, nMaxComp );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         if ( STRING_LEN != nCutPos )
         {
             rInf.GetTxtSize( &rSI, rInf.GetIdx(), nCutPos - rInf.GetIdx(),

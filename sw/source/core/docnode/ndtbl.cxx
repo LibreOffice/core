@@ -108,7 +108,7 @@
 // --> OD 2005-12-05 #i27138#
 #include <rootfrm.hxx>
 // <--
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #define CHECK_TABLE(t)
 #else
 #ifdef DEBUG

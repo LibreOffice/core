@@ -308,7 +308,7 @@ BOOL SwCrsrShell::SelTblBox()
     const SwStartNode* pStartNode =
         pCurCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // the old code checks whether we're in a table by asking the
     // frame. This should yield the same result as searching for the
     // table box start node, right?

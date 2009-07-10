@@ -116,7 +116,7 @@ public:
 private:
     friend void _FinitCore();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     long int nSerial;
     static long int nInstances;
 #endif

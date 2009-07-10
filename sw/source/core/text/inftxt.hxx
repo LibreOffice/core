@@ -79,7 +79,7 @@ class SwWrongList;
 #define DIR_RIGHT2LEFT 2
 #define DIR_TOP2BOTTOM 3
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #define OPTCALM( rInf )  (rInf).IsOptCalm()
 #define OPTLOW( rInf )   (rInf).IsOptLow()
 #define OPTDBG( rInf )   (rInf).IsOptDbg()
@@ -380,7 +380,7 @@ public:
         { return ( pKanaComp && nKanaIdx < pKanaComp->Count() )
                    ? (*pKanaComp)[nKanaIdx] : 0; }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     sal_Bool IsOptCalm() const;
     sal_Bool IsOptLow() const;
     sal_Bool IsOptDbg() const;
@@ -423,7 +423,7 @@ class SwTxtPaintInfo : public SwTxtSizeInfo
     void _DrawBackBrush( const SwLinePortion &rPor ) const;
 
 protected:
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pWrongList = 0; pSmartTags = 0; pSpaceAdd = 0; pBrushItem = 0;}
 #else
     SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pSmartTags = 0; pSpaceAdd = 0;

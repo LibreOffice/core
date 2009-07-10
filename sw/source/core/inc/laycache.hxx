@@ -72,7 +72,7 @@ public:
           return pImpl; }
     void UnlockImpl() { --nLockCount; }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     sal_Bool CompareLayout( const SwDoc& rDoc ) const;
 #endif
 };

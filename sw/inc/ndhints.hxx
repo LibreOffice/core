@@ -94,7 +94,7 @@ public:
         { return SwpHtStart::operator[](nIdx); }
     inline USHORT Count() const { return SwpHtStart::Count(); }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     BOOL Check() const;
 #endif
 };

@@ -546,7 +546,7 @@ String lcl_dbg_out(const SwNode & rNode)
     aTmpStr += String::CreateFromInt32(rNode.GetIndex());
     aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     aTmpStr += String(" serial=\"", RTL_TEXTENCODING_ASCII_US);
     aTmpStr += String::CreateFromInt32(rNode.GetSerial());
     aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);

@@ -248,7 +248,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
         ( pMyFollow->IsVertical() && !pMyFollow->Prt().Width() ) ||
         ( ! pMyFollow->IsVertical() && !pMyFollow->Prt().Height() ) )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         const SwFrm *pOldUp = GetUpper();
 #endif
 
@@ -377,7 +377,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
                 pPage->ValidateCntnt();
         }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ASSERT( pOldUp == GetUpper(), "SwTxtFrm::CalcFollow: heavy follow" );
 #endif
 
@@ -667,7 +667,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
         }
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else if ( pFoll->GetValidPrtAreaFlag() ||
               pFoll->GetValidSizeFlag() )
     {
@@ -767,7 +767,7 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
         }
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
     {
         CalcFtnFlag( nTxtPos-1 );
@@ -1843,7 +1843,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
     const SwFrm *pDbgFtnCont = (const SwFrm*)(FindPageFrm()->FindFtnCont());
     (void)pDbgFtnCont;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // nStopAt laesst sich vom CV bearbeiten.
     static MSHORT nStopAt = 0;
     if( nStopAt == GetFrmId() )
@@ -2089,7 +2089,7 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
     const XubString aXXX = GetTxtNode()->GetTxt();
     const SwTwips nDbgY = Frm().Top();
     (void)nDbgY;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // nStopAt laesst sich vom CV bearbeiten.
     static MSHORT nStopAt = 0;
     if( nStopAt == GetFrmId() )
@@ -2135,7 +2135,7 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
         //DBG_LOOP; shadows declaration above.
         //resolved into:
 #if OSL_DEBUG_LEVEL > 1
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         DbgLoop aDbgLoop2( (const void*) this );
 #endif
 #endif

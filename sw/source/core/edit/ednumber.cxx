@@ -585,7 +585,7 @@ BOOL SwEditShell::IsProtectedOutlinePara() const
             }
         }
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
     {
         ASSERT(!this, "Cursor not on an outline node" );

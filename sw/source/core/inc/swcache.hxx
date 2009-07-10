@@ -60,7 +60,7 @@
  *
  */
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
@@ -94,7 +94,7 @@ class SwCache : public SwCacheObjArr
 
     void DeleteObj( SwCacheObj *pObj );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ByteString aName;
     long nAppend;           //Anzahl der Eintragungen durch Erweiterung.
     long nInsertFree;       //Anzahl der Eintragungen auf freie Plaetze.
@@ -116,7 +116,7 @@ class SwCache : public SwCacheObjArr
 public:
 
     //nur BYTE hineinstecken!!!
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     SwCache( const USHORT nInitSize, const USHORT nGrowSize,
             const ByteString &rNm );
     ~SwCache();
@@ -197,7 +197,7 @@ public:
 
     inline BOOL IsLocked() const { return 0 != nLock; }
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     inline void Lock() { ++nLock; }
     inline void Unlock() { --nLock; }
 #else
@@ -249,7 +249,7 @@ public:
 inline void SwCache::IncreaseMax( const USHORT nAdd )
 {
     nCurMax = nCurMax + sal::static_int_cast< USHORT >(nAdd);
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ++nIncreaseMax;
 #endif
 }
@@ -257,7 +257,7 @@ inline void SwCache::DecreaseMax( const USHORT nSub )
 {
     if ( nCurMax > nSub )
         nCurMax = nCurMax - sal::static_int_cast< USHORT >(nSub);
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ++nDecreaseMax;
 #endif
 }

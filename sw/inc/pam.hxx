@@ -185,7 +185,7 @@ public:
 
     virtual void SetMark();
     void DeleteMark() { pMark = pPoint; }
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     void Exchange()
     {
         if(pPoint != pMark)

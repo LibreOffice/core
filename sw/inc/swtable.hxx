@@ -38,7 +38,7 @@
 #include <swtypes.hxx>
 #include <calbck.hxx>
 #include <swrect.hxx>
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #include <node.hxx>         // fuer StartNode->GetMyIndex
 #else
 class SwStartNode;
@@ -111,7 +111,7 @@ protected:
 
     BOOL        bModifyLocked   :1;
     BOOL        bNewModel       :1; // FALSE: old SubTableModel; TRUE: new RowSpanModel
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bool bDontChangeModel;  // This is set by functions (like Merge()) to forbid a laet model change
 #endif
 
@@ -210,7 +210,7 @@ public:
     BOOL Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes, const SwSelBoxes& rMerged,
                 SwTableBox* pMergeBox, SwUndoTblMerge* pUndo = 0 )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         bDontChangeModel = true;
 #endif
         return bNewModel ? NewMerge( pDoc, rBoxes, rMerged, pMergeBox, pUndo ) :
@@ -219,7 +219,7 @@ public:
     BOOL SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt=1,
                    BOOL bSameHeight = FALSE )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         bDontChangeModel = true;
 #endif
         return bNewModel ? NewSplitRow( pDoc, rBoxes, nCnt, bSameHeight ) :
@@ -323,7 +323,7 @@ public:
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
     BOOL SetRowHeight( SwTableBox& rAktBox, USHORT eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     void CheckConsistency() const;
 #endif
 };
@@ -412,7 +412,7 @@ public:
 
     const SwStartNode *GetSttNd() const { return pSttNd; }
     ULONG GetSttIdx() const
-#ifdef PRODUCT
+#ifndef DBG_UTIL
         { return pSttNd ? pSttNd->GetIndex() : 0; }
 #else
         ;

@@ -509,7 +509,7 @@ private:
     bool mbColumnSelection       : 1;    // true: this content has bee created by a column selection
                                          //       (clipboard docs only)
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bool mbXMLExport : 1;                // TRUE: during XML export
 #endif
 
@@ -1061,7 +1061,7 @@ public:
     inline void SetOLEPrtNotifyPending( bool bSet = true );
     void PrtOLENotify( sal_Bool bAll ); //Alle oder nur Markierte
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bool InXMLExport() const            { return mbXMLExport; }
     void SetXMLExport( bool bFlag )     { mbXMLExport = bFlag; }
 #endif

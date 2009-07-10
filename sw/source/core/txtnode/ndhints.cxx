@@ -45,7 +45,7 @@ _SV_IMPL_SORTAR_ALG( SwpHtEnd, SwTxtAttr* )
 void DumpHints( const SwpHtStart &rHtStart,
                 const SwpHtEnd &rHtEnd )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     aDbstream << "DumpHints:" << endl;
     (aDbstream << "\tStarts:" ).WriteNumber(rHtStart.Count()) << endl;
     for( USHORT i = 0; i < rHtStart.Count(); ++i )
@@ -240,14 +240,14 @@ BOOL SwpHtEnd::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
 void SwpHintsArr::Insert( const SwTxtAttr *pHt )
 {
     Resort();
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     USHORT nPos;
     ASSERT(!SwpHtStart::Seek_Entry( pHt, &nPos ), "Insert: hint already in HtStart");
     ASSERT(!aHtEnd.Seek_Entry( pHt, &nPos ), "Insert: hint already in HtEnd");
 #endif
     SwpHtStart::Insert( pHt );
     aHtEnd.Insert( pHt );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #ifdef NIE
     (aDbstream << "Insert: " ).WriteNumber( long( pHt ) )<< endl;
     DumpHints( *this, aHtEnd );
@@ -266,7 +266,7 @@ void SwpHintsArr::DeleteAtPos( const USHORT nPos )
     USHORT nEndPos;
     aHtEnd.Seek_Entry( pHt, &nEndPos );
     aHtEnd.Remove( nEndPos );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #ifdef NIE
     (aDbstream << "DeleteAtPos: " ).WriteNumber( long( pHt ) )<< endl;
     DumpHints( *this, aHtEnd );
@@ -274,7 +274,7 @@ void SwpHintsArr::DeleteAtPos( const USHORT nPos )
 #endif
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 /*************************************************************************
  *                      SwpHintsArr::Check()
@@ -399,7 +399,7 @@ BOOL SwpHintsArr::Resort()
         if( pLast && !lcl_IsLessStart( *pLast, *pHt ) )
         {
 #ifdef NIE
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 //            ASSERT( bResort, "!Resort/Start: correcting hints-array" );
             aDbstream << "Resort: Starts" << endl;
             DumpHints( *this, aHtEnd );
@@ -422,7 +422,7 @@ BOOL SwpHintsArr::Resort()
         if( pLast && !lcl_IsLessEnd( *pLast, *pHt ) )
         {
 #ifdef NIE
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             aDbstream << "Resort: Ends" << endl;
             DumpHints( *this, aHtEnd );
 #endif
@@ -438,7 +438,7 @@ BOOL SwpHintsArr::Resort()
         }
         pLast = pHt;
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #ifdef NIE
     aDbstream << "Resorted:" << endl;
     DumpHints( *this, aHtEnd );

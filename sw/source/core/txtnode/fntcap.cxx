@@ -707,7 +707,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         if( nPos == STRING_LEN || nPos > nMaxPos )
             nPos = nMaxPos;
         ASSERT( nPos, "nextCharBlock not implemented?" );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         if( !nPos )
             nPos = nMaxPos;
 #endif
@@ -821,7 +821,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         if( nPos == STRING_LEN || nPos > nMaxPos )
             nPos = nMaxPos;
         ASSERT( nPos, "endOfCharBlock not implemented?" );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         if( !nPos )
             nPos = nMaxPos;
 #endif

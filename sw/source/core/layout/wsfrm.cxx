@@ -102,7 +102,7 @@ SwFrm::SwFrm( SwModify *pMod ) :
     pPrev( 0 ),
     pDrawObjs( 0 )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bFlag01 = bFlag02 = bFlag03 = bFlag04 = bFlag05 = 0;
 #endif
 
@@ -3866,7 +3866,7 @@ void lcl_InvalidateCntnt( SwCntntFrm *pCnt, BYTE nInv )
                 if( pLastSctCnt == pCnt )
                     pLastSctCnt = NULL;
             }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             else
                 ASSERT( !pLastSctCnt, "Where's the last SctCntnt?" );
 #endif
@@ -3894,7 +3894,7 @@ void lcl_InvalidateCntnt( SwCntntFrm *pCnt, BYTE nInv )
                     pLastSctCnt = NULL;
                 }
             }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             else
                 ASSERT( !pLastTabCnt, "Where's the last TabCntnt?" );
 #endif

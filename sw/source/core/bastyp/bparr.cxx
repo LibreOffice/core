@@ -41,7 +41,7 @@
 // immer ~ 20 * MAXENTRY == 20000 Eintraege
 const USHORT nBlockGrowSize = 20;
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 
 #define CHECKIDX( p, n, i, c )
 

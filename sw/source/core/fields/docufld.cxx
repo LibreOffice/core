@@ -2318,7 +2318,7 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
                 {
                     // einen sdbcx::Index fuers bestimmen vom TextNode anlegen
                     SwPosition aPos( pDoc->GetNodes().GetEndOfPostIts() );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     ASSERT( GetBodyTxtNode( *pDoc, aPos, *pFrm ),
                             "wo steht das Feld" );
 #else

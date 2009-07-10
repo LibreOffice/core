@@ -201,7 +201,7 @@ void SwLooping::Control( SwPageFrm* pPage )
     }
     else if( ++nCount > LOOP_DETECT )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #if OSL_DEBUG_LEVEL > 1
         static BOOL bNoLouie = FALSE;
         if( bNoLouie )

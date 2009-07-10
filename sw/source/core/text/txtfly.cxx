@@ -98,7 +98,7 @@
 #include <svx/svdoedge.hxx>
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #include "viewopt.hxx"  // SwViewOptions, nur zum Testen (Test2)
 #endif
 #include "doc.hxx"
@@ -1817,7 +1817,7 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
 
         delete pPolyPolygon;
         // UPPER_LOWER_TEST
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         const SwRootFrm* pTmpRootFrm = pFmt->getIDocumentLayoutAccess()->GetRootFrm();
         if( pTmpRootFrm->GetCurrShell() )
         {
@@ -1890,7 +1890,7 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
  *                      SwContourCache::ShowContour()
  * zeichnet die PolyPolygone des Caches zu Debugzwecken.
  *************************************************************************/
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 void SwContourCache::ShowContour( OutputDevice* pOut, const SdrObject* pObj,
     const Color& rClosedColor, const Color& rOpenColor )
@@ -1941,7 +1941,7 @@ void SwContourCache::ShowContour( OutputDevice* pOut, const SdrObject* pObj,
  *                      SwTxtFly::ShowContour()
  * zeichnet die PolyPolygone des Caches zu Debugzwecken.
  *************************************************************************/
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 void SwTxtFly::ShowContour( OutputDevice* pOut )
 {

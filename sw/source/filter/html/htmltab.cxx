@@ -912,7 +912,7 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
 {
     ASSERT( nCells < pCells->Count(), "Anzahl Zellen falsch" );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
      sal_uInt16 nEnd = pCells->Count();
 #endif
     // The colspan of empty cells at the end has to be fixed to the new
@@ -930,7 +930,7 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
         else
             break;
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     for( i=nCells; i<nEnd; i++ )
     {
         HTMLTableCell *pCell = (*pCells)[i];
@@ -1790,7 +1790,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
             HTMLTableCell *pCell = GetCell(nTopRow,nCol);
             const sal_Bool bSplit = 1 == pCell->GetColSpan();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             if( nCol == nRightCol-1 )
             {
                 ASSERT( bSplit, "Split-Flag falsch" );
@@ -3394,7 +3394,7 @@ void _CellSaveStruct::AddContents( HTMLTableCnts *pNewCnts )
 void _CellSaveStruct::InsertCell( SwHTMLParser& rParser,
                                   HTMLTable *pCurTable )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // Die Attribute muessen schon beim Auefrauemen des Kontext-Stacks
     // entfernt worden sein, sonst ist etwas schiefgelaufen. Das
     // Checken wir mal eben ...

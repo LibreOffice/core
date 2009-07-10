@@ -156,7 +156,7 @@
 #include "postit.hxx"
 
 //JP 11.10.2001: enable test code for bug fix 91313
-#if !defined( PRODUCT ) && (OSL_DEBUG_LEVEL > 1)
+#if defined(DBG_UTIL) && (OSL_DEBUG_LEVEL > 1)
 //#define TEST_FOR_BUG91313
 #endif
 
@@ -1503,7 +1503,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         case KS_CheckKey:
             eKeyState = KS_KeyToView;       // default weiter zur View
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // JP 19.01.99: zum Umschalten des Cursor Verhaltens in ReadOnly
             //              Bereichen

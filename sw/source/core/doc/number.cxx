@@ -478,7 +478,7 @@ const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const
     }
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 long int SwNumRule::nInstances = 0;
 #endif
 
@@ -512,7 +512,7 @@ SwNumRule::SwNumRule( const String& rNm,
     msDefaultListId()
     // <--
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     nSerial = nInstances++;
 #endif
 
@@ -632,7 +632,7 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
       msDefaultListId( rNumRule.msDefaultListId )
       // <--
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     nSerial = nInstances++;
 #endif
 

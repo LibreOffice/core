@@ -407,7 +407,7 @@ void SwShadowCursorItem::FillViewOptions( SwViewOption& rVOpt ) const
     rVOpt.SetShdwCrsrFillMode( eMode );
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/

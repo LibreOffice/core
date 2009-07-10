@@ -428,7 +428,7 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
         }
         break;
         default:
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             if(nSlot)
             {
                 ByteString sStr( "nSlot: " );

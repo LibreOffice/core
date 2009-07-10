@@ -89,7 +89,7 @@
 #include <algorithm>
 #include <map>
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #define CHECK    Check();
 #else
 #define CHECK
@@ -289,7 +289,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint, USHORT nMod
         }
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( !rNode.GetDoc()->IsInReading() )
         CHECK;
 #endif
@@ -975,11 +975,11 @@ BOOL SwTxtNode::Insert( SwTxtAttr *pAttr, USHORT nMode )
                 // FussNote im Redline-Bereich NICHT ins FtnArray einfuegen!
                 if( StartOfSectionIndex() > rNodes.GetEndOfRedlines().GetIndex() )
                 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     const BOOL bSuccess =
 #endif
                         pDoc->GetFtnIdxs().Insert( pTxtFtn );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     ASSERT( bSuccess, "FtnIdx nicht eingetragen." );
 #endif
                 }
@@ -2157,7 +2157,7 @@ void SwpHints::Insert( SwTxtAttr* pHint, SwTxtNode &rNode, USHORT nMode )
     {
         SwpHintsArr::Insert( pHint );
         CalcFlags();
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         if( !rNode.GetDoc()->IsInReading() )
             CHECK;
 #endif
@@ -2245,7 +2245,7 @@ void SwpHints::Insert( SwTxtAttr* pHint, SwTxtNode &rNode, USHORT nMode )
         rNode.Modify( 0, &aHint );
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( !bNoHintAdjustMode && !rNode.GetDoc()->IsInReading() )
         CHECK;
 #endif

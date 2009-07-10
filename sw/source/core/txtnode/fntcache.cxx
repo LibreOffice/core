@@ -1041,7 +1041,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     // a window. Therefore bUseSrcFont is always 0 in this case.
     //
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
     const BOOL bNoAdjust = bPrt ||
             (  pWin &&

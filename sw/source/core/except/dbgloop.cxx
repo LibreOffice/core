@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #error Wer fummelt denn an den makefiles rum?
 #endif
 #include <tools/stream.hxx>

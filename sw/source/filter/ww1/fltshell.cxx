@@ -1630,7 +1630,7 @@ SfxItemSet* SwFltOutBase::NewFlyDefaults()
 BOOL SwFltOutBase::BeginFly( RndStdIds eAnchor /*= FLY_AT_CNTNT*/,
                            BOOL bAbsolutePos /*= FALSE*/,
                            const SfxItemSet*
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                                pMoreAttrs /*= 0*/
 #endif
                             )

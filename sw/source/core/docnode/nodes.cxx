@@ -397,7 +397,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
             if( pFrmNd && !((SwCntntNode*)pFrmNd)->GetDepends() )
                 pFrmNd = 0;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             if( !pFrmNd )
                 ASSERT( !this, "ChgNode() - kein FrameNode gefunden" );
 #endif

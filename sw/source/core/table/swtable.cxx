@@ -74,7 +74,7 @@
 #include <redline.hxx>
 #include <list>
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #define CHECK_TABLE(t)
 #else
 #ifdef DEBUG
@@ -1090,7 +1090,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
         }
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     {
 // steht im tblrwcl.cxx
 extern void _CheckBoxWidth( const SwTableLine&, SwTwips );
@@ -1197,7 +1197,7 @@ static void lcl_CalcNewWidths( std::list<USHORT> &rSpanPos, ChangeList& rChanges
         USHORT nPos = (USHORT)nSum;
         while( pCurr != rChanges.end() && pCurr->first < nPos )
         {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             USHORT nTemp = pCurr->first;
             nTemp = pCurr->second;
 #endif
@@ -1297,7 +1297,7 @@ static void lcl_CalcNewWidths( std::list<USHORT> &rSpanPos, ChangeList& rChanges
 void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
     const SwTabCols &rOld, const SwTableBox *pStart, BOOL bCurRowOnly )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     static int nCallCount = 0;
     ++nCallCount;
 #endif
@@ -2013,7 +2013,7 @@ BOOL SwTableBox::IsInHeadline( const SwTable* pTbl ) const
     return pTbl->GetTabLines()[ 0 ] == pLine;
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 ULONG SwTableBox::GetSttIdx() const
 {

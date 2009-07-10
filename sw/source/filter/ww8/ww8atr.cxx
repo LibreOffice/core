@@ -3514,7 +3514,7 @@ ULONG SwWW8Writer::ReplaceCr( BYTE nChar )
         pChpPlc->AppendFkpEntry(rStrm.Tell());
         nRetPos = rStrm.Tell();
     }
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     else
     {
         ASSERT( nRetPos || nPos == (ULONG)pFib->fcMin,

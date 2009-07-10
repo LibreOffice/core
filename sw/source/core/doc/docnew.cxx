@@ -324,7 +324,7 @@ SwDoc::SwDoc() :
     mbInsOnlyTxtGlssry =
     mbContains_MSVBasic =
     mbKernAsianPunctuation =
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     mbXMLExport =
 #endif
     // --> OD 2006-03-21 #b6375613#

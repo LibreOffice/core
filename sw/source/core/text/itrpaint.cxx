@@ -104,7 +104,7 @@ void SwTxtPainter::CtorInitTxtPainter( SwTxtFrm *pNewFrm, SwTxtPaintInfo *pNewIn
     pInf = pNewInf;
     SwFont *pMyFnt = GetFnt();
     GetInfo().SetFont( pMyFnt );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( ALIGN_BASELINE != pMyFnt->GetAlign() )
     {
         ASSERT( ALIGN_BASELINE == pMyFnt->GetAlign(),

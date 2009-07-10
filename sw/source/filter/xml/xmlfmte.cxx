@@ -87,7 +87,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
     if( eFamily != XML_TOKEN_INVALID )
         AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, eFamily );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // style:parent-style-name="..." (if its not the default only)
     const SwFmt* pParent = rFmt.DerivedFrom();
     // Parent-Namen nur uebernehmen, wenn kein Default

@@ -1282,7 +1282,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         nLastKashida = nChg;
     };
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // check kashida data
     long nTmpKashidaPos = -1;
     sal_Bool bWrongKash = sal_False;

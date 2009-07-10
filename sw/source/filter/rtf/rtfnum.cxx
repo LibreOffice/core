@@ -734,7 +734,7 @@ void SwRTFParser::RemoveUnusedNumRule( SwNumRule* pRule )
         }
         pDoc->DelNumRule( pRule->GetName() );
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
     {
         ASSERT( pRule, "NumRulePointer 0 kann nicht geloescht werden" );

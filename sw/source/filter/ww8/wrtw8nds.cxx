@@ -1056,13 +1056,13 @@ void WW8_SwAttrIter::FieldVanish( const String& rTxt )
 
 void WW8_SwAttrIter::OutSwTOXMark(const SwTOXMark& rAttr,
     bool
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         bStart
 #endif
     )
 {
     // its a field; so get the Text form the Node and build the field
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ASSERT( bStart, "calls only with the startposition!" );
 #endif
     String sTxt;

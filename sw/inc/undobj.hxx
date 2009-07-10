@@ -106,7 +106,7 @@ namespace utl {
     class TransliterationWrapper;
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 class Writer;
 class SwUndo;
 #define OUT_UNDOBJ( name )  \

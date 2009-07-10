@@ -114,7 +114,7 @@ long SwWriteTable::GetBoxWidth( const SwTableBox *pBox )
 
 long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     BOOL bOldGetLineHeightCalled = bGetLineHeightCalled;
     bGetLineHeightCalled = TRUE;
 #endif
@@ -135,7 +135,7 @@ long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
         // <--
         bUseLayoutHeights = bLayoutAvailable; /*FALSE;*/
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ASSERT( bLayoutAvailable || !bOldGetLineHeightCalled, "Layout ungueltig?" );
 #endif
     }
@@ -431,7 +431,7 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
     BOOL bSubExpanded = FALSE;
     USHORT nLines = rLines.Count();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     USHORT nEndCPos = 0;
 #endif
 
@@ -467,11 +467,11 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
         }
         else
         {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             long nCheckPos = nRPos + GetLineHeight( pLine );
 #endif
             nRPos = nStartRPos + nParentLineHeight;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             SwWriteTableRow aRow( nStartRPos + nParentLineHeight, bUseLayoutHeights );
             ASSERT( aRows.Seek_Entry(&aRow),
                     "Parent-Zeile nicht gefunden" );
@@ -514,7 +514,7 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
             }
             else
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 USHORT nCheckPos = nCPos + (USHORT)GetBoxWidth( pBox );
                 if( !nEndCPos )
                 {
@@ -528,7 +528,7 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
                 }
 #endif
                 nCPos = nStartCPos + nParentLineWidth;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 SwWriteTableCol aCol( nStartCPos + nParentLineWidth );
                 ASSERT( aCols.Seek_Entry(&aCol),
                         "Parent-Zelle nicht gefunden" );
@@ -594,7 +594,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
         // Und ihren Index
         USHORT nOldRow = nRow;
         SwWriteTableRow aRow( nRPos,bUseLayoutHeights );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         BOOL bFound =
 #endif
             aRows.Seek_Entry( &aRow, &nRow );
@@ -679,7 +679,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
             // Und ihren Index
             USHORT nOldCol = nCol;
             SwWriteTableCol aCol( nCPos );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             BOOL bFound2 =
 #endif
                 aCols.Seek_Entry( &aCol, &nCol );
@@ -776,7 +776,7 @@ SwWriteTable::SwWriteTable(const SwTableLines& rLines, long nWidth,
     nInnerBorder(0), nBaseWidth(nBWidth), nHeadEndRow(USHRT_MAX),
      nLeftSub(nLSub), nRightSub(nRSub), nTabWidth(nWidth), bRelWidths(bRel),
     bUseLayoutHeights(true),
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bGetLineHeightCalled(false),
 #endif
     bColsOption(false), bColTags(true), bLayoutExport(false),
@@ -803,7 +803,7 @@ SwWriteTable::SwWriteTable( const SwHTMLTableLayout *pLayoutInfo )
     nInnerBorder(0), nBaseWidth(pLayoutInfo->GetWidthOption()), nHeadEndRow(0),
     nLeftSub(0), nRightSub(0), nTabWidth(pLayoutInfo->GetWidthOption()),
     bRelWidths(pLayoutInfo->HasPrcWidthOption()), bUseLayoutHeights(false),
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bGetLineHeightCalled(false),
 #endif
     bColsOption(pLayoutInfo->HasColsOption()),
