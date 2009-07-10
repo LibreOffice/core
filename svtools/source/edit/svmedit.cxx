@@ -1478,7 +1478,7 @@ long MultiLineEdit::PreNotify( NotifyEvent& rNEvt )
 {
     long nDone = 0;
 
-#if (OSL_DEBUG_LEVEL > 1) && !defined( PRODUCT )
+#if (OSL_DEBUG_LEVEL > 1) && defined(DBG_UTIL)
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyEvent& rKEvent = *rNEvt.GetKeyEvent();

@@ -589,7 +589,7 @@ void SfxItemPool::Delete()
                     for ( USHORT n = (*ppItemArr)->Count(); n; --n, ++ppHtArr )
                         if (*ppHtArr)
                         {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                             ReleaseRef( **ppHtArr, (*ppHtArr)->GetRefCount() );
 #endif
                             delete *ppHtArr;
@@ -598,7 +598,7 @@ void SfxItemPool::Delete()
                 }
                 if ( *ppDefaultItem )
                 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     SetRefCount( **ppDefaultItem, 0 );
 #endif
                     DELETEZ( *ppDefaultItem );
@@ -621,7 +621,7 @@ void SfxItemPool::Delete()
             for ( USHORT n = (*ppItemArr)->Count(); n; --n, ++ppHtArr )
                 if (*ppHtArr)
                 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     ReleaseRef( **ppHtArr, (*ppHtArr)->GetRefCount() );
 #endif
                     delete *ppHtArr;
@@ -630,7 +630,7 @@ void SfxItemPool::Delete()
         }
         if ( *ppDefaultItem )
         {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             SetRefCount( **ppDefaultItem, 0 );
 #endif
             delete *ppDefaultItem;

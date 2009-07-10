@@ -3227,7 +3227,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
 // static
 // try to make it inline if possible since this a loop body
 // TRUE: continue; FALSE: break loop, if pFoundEntry==NULL dupe found
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 inline
 #endif
     BOOL SvNumberFormatter::ImpLookupCurrencyEntryLoopBody(

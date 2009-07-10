@@ -1991,7 +1991,7 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
         nCheck = nLocaleDataChecking;
         if (!nCheck)
         {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             nCheck = 1;
 #else
             const char* pEnv = getenv( "OOO_ENABLE_LOCALE_DATA_CHECKS");

@@ -79,7 +79,7 @@ void PropertyMapImpl::add( PropertyMapEntry* pMap ) throw()
     {
         OUString aName( pMap->mpName, pMap->mnNameLen, RTL_TEXTENCODING_ASCII_US );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         PropertyMap::iterator aIter = maPropertyMap.find( aName );
         if( aIter != maPropertyMap.end() )
         {

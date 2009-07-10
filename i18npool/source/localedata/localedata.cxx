@@ -38,13 +38,6 @@
 #include <stdio.h>
 #include "rtl/instance.hxx"
 
-#if OSL_DEBUG_LEVEL == 0
-#  ifndef NDEBUG
-#    define NDEBUG
-#  endif
-#endif
-#include <assert.h>
-
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -1131,7 +1124,7 @@ LocaleData::getContinuousNumberingLevels( const lang::Locale& rLocale ) throw(Ru
                              rVal.Value <<= (sal_Int16) sVal.toInt32();
                              break;
                         default:
-                             assert(0);
+                             OSL_ASSERT(0);
                         }
                    }
               }
@@ -1255,7 +1248,7 @@ LocaleData::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(Runti
                         case 10: level[j].sTransliteration = tmp; break;
                         case 11: level[j].nNatNum    = tmp.toInt32();   break;
                         default:
-                            assert(0);
+                            OSL_ASSERT(0);
                     }
                 }
             }

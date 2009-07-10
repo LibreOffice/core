@@ -39,11 +39,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#if OSL_DEBUG_LEVEL == 0 && !defined(NDEBUG)
-#define NDEBUG
-#endif
-#include <assert.h>
-
 // Cyrillic upper case
 #define C_CYR_A "\xD0\x90"
 #define C_CYR_B "\xD0\x91"
@@ -271,7 +266,7 @@ const char* expected_name( int i, int last )
      else if( i==1    ) return "NumberingType";
      else if( i==2    ) return "Suffix";
      else if( i==last ) return "Value";
-     else { assert(0); return ""; }
+     else { OSL_ASSERT(0); return ""; }
 }
 static
 const char* expected_type( int i, int last )
@@ -281,7 +276,7 @@ const char* expected_type( int i, int last )
      else if( i==1    ) return "sal_Int16";
      else if( i==2    ) return "OUString";
      else if( i==last ) return "sal_Int32";
-     else { assert(0); return ""; }
+     else { OSL_ASSERT(0); return ""; }
 }
 static
 void failedToConvert( int i, int last )
@@ -455,7 +450,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                return OUString::createFromAscii(""); // ignore prefix and suffix
           case PAGE_DESCRIPTOR:
           case BITMAP:
-               assert(0);
+               OSL_ASSERT(0);
                throw IllegalArgumentException();
           case CHARS_UPPER_LETTER_N:
                lcl_formatChars1( upperLetter, 26, number-1, result ); // 1=>A, 2=>B, ..., 26=>Z, 27=>AA, 28=>BB, ...
@@ -473,7 +468,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                } catch (Exception& ) {
                     // When translteration property is missing, return default number (bug #101141#)
                     result += OUString::valueOf( number );
-                    // assert(0);
+                    // OSL_ASSERT(0);
                     // throw IllegalArgumentException();
                }
                break;
@@ -667,7 +662,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
               break;
 
           default:
-               assert(0);
+               OSL_ASSERT(0);
                throw IllegalArgumentException();
       }
 

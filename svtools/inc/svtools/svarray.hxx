@@ -128,7 +128,7 @@ inline void* operator new( size_t, DummyType* pPtr )
 }
 inline void operator delete( void*, DummyType* ) {}
 
-#if defined(PRODUCT)
+#if !defined(DBG_UTIL)
 
 #define _SVVARARR_DEF_GET_OP_INLINE( nm, ArrElem ) \
 ArrElem& operator[](USHORT nP) const { return *(pData+nP); }\
@@ -335,7 +335,7 @@ SV_IMPL_VARARR_GEN( nm, AE, AE & )
 #define SV_IMPL_VARARR_PLAIN( nm, AE ) \
 SV_IMPL_VARARR_GEN( nm, AE, AE )
 
-#if defined(PRODUCT)
+#if !defined(DBG_UTIL)
 
 #define _SVOBJARR_DEF_GET_OP_INLINE( nm,ArrElem )\
 ArrElem& operator[](USHORT nP) const { return *(pData+nP); }\

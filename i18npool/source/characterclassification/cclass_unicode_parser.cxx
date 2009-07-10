@@ -1038,7 +1038,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             if ( !xNatNumSup.is() )
             {
                 throw RuntimeException( OUString(
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     RTL_CONSTASCII_USTRINGPARAM(
                         "cclass_Unicode::parseText: can't instanciate "
                         NATIVENUMBERSUPPLIER_SERVICENAME )

@@ -66,7 +66,7 @@ struct SvParser_Impl
     rtl_TextToUnicodeConverter hConv;
     rtl_TextToUnicodeContext   hContext;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     SvFileStream aOut;
 #endif
 
@@ -100,7 +100,7 @@ SvParser::SvParser( SvStream& rIn, BYTE nStackSize )
     pTokenStack = new TokenStackType[ nTokenStackSize ];
     pTokenStackPos = pTokenStack;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
     // wenn die Datei schon existiert, dann Anhaengen:
     if( !pImplData )
@@ -119,7 +119,7 @@ SvParser::SvParser( SvStream& rIn, BYTE nStackSize )
 
 SvParser::~SvParser()
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( pImplData->aOut.IsOpen() )
         pImplData->aOut << "\n\n >>>>>>>>>>>>>>> Dump Ende <<<<<<<<<<<<<<<\n";
     pImplData->aOut.Close();
@@ -417,7 +417,7 @@ sal_Unicode SvParser::GetNextChar()
             return sal_Unicode(EOF);
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( pImplData->aOut.IsOpen() )
         pImplData->aOut << ByteString::ConvertFromUnicode( c,
                                                 RTL_TEXTENCODING_MS_1251 );

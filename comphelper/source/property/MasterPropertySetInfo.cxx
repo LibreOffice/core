@@ -84,7 +84,7 @@ void MasterPropertySetInfo::add( PropertyInfo* pMap, sal_Int32 nCount, sal_uInt8
     {
         OUString aName( pMap->mpName, pMap->mnNameLen, RTL_TEXTENCODING_ASCII_US );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         PropertyDataHash::iterator aIter = maMap.find( aName );
         if( aIter != maMap.end() )
             OSL_ENSURE( sal_False, "Warning: PropertyInfo added twice, possible error!");
@@ -102,7 +102,7 @@ void MasterPropertySetInfo::add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
 
     while ( aIter != aEnd )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         PropertyDataHash::iterator aDebugIter = maMap.find( (*aIter).first );
         if( aDebugIter != maMap.end() )
             OSL_ENSURE( sal_False, "Warning: PropertyInfo added twice, possible error!");

@@ -137,7 +137,7 @@ class SimpleTokenizer_Impl
 
     String getTokStr( /*out*/const sal_Unicode* pStartPos, /*out*/const sal_Unicode* pEndPos );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // TEST: Token ausgeben
     String getFullTokenStr( /*out*/TokenTypes eType,
         /*out*/const sal_Unicode* pStartPos, /*out*/const sal_Unicode* pEndPos );

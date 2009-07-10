@@ -34,12 +34,6 @@
 #include "xmlaccelcfg.hxx"
 
 #include <vector>
-#if OSL_DEBUG_LEVEL == 0
-#  ifndef NDEBUG
-#    define NDEBUG
-#  endif
-#endif
-#include <assert.h>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <cppuhelper/implbase1.hxx>
 
@@ -200,7 +194,7 @@ void AttributeListImpl::clear()
     ::std::vector<struct TagAttribute> dummy;
     m_pImpl->vecAttribute.swap( dummy );
 
-    assert( ! getLength() );
+    OSL_ASSERT( ! getLength() );
 }
 
 // ------------------------------------------------------------------

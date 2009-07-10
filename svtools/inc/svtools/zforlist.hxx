@@ -901,7 +901,7 @@ private:
         );
 
     // used as a loop body inside of GetNewCurrencySymbolString() and GetCurrencyEntry()
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     inline
 #endif
         static BOOL ImpLookupCurrencyEntryLoopBody(
