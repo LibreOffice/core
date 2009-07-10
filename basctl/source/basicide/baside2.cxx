@@ -1588,7 +1588,7 @@ void ModulWindowLayout::DockaWindow( DockingWindow* pDockingWindow )
         // evtl. Sonderbehandlung...
         ArrangeWindows();
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
         DBG_ERROR( "Wer will sich denn hier andocken ?" );
 #endif
