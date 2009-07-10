@@ -151,7 +151,6 @@ ListElement::Write2Html( HtmlCreator & io_rHC ) const
 XmlElement *
 ListElement::Create_and_Add_NewElement()
 {
-    OSL_ASSERT(fCreateNewElement != 0);
     XmlElement * pNew = (*fCreateNewElement)(Name());
     Children().push_back( pNew );
     return pNew;
