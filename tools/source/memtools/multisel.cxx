@@ -913,7 +913,9 @@ bool StringRangeEnumerator::insertRange( sal_Int32 i_nFirst, sal_Int32 i_nLast, 
         if( checkValue( i_nFirst ) && checkValue( i_nLast ) )
         {
             maSequence.push_back( Range( i_nFirst, i_nLast ) );
-            mnCount += std::abs( i_nLast - i_nFirst - 1 );
+            sal_Int32 nNumber = i_nLast - i_nFirst;
+            nNumber = nNumber < 0 ? -nNumber : nNumber;
+            mnCount += nNumber + 1;
         }
         else
             bSuccess = false;
