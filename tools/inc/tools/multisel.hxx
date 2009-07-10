@@ -117,31 +117,58 @@ public:
 
 class TOOLS_DLLPUBLIC StringRangeEnumerator
 {
-    std::vector< sal_Int32 >            maSequence;
-    sal_Int32                           mnMin;
-    sal_Int32                           mnMax;
-    sal_Int32                           mnOffset;
+    struct Range
+    {
+        sal_Int32   nFirst;
+        sal_Int32   nLast;
+
+        Range() : nFirst( -1 ), nLast( -1 ) {}
+        Range( sal_Int32 i_nFirst, sal_Int32 i_nLast ) : nFirst( i_nFirst ), nLast( i_nLast ) {}
+    };
+    std::vector< StringRangeEnumerator::Range >            maSequence;
+    sal_Int32                                              mnCount;
+    sal_Int32                                              mnMin;
+    sal_Int32                                              mnMax;
+    sal_Int32                                              mnOffset;
+
+    bool insertRange( sal_Int32 nFirst, sal_Int32 nLast, bool bSequence );
+    bool checkValue( sal_Int32, const std::set< sal_Int32 >* i_pPossibleValues = NULL ) const;
 public:
+    class TOOLS_DLLPUBLIC Iterator
+    {
+        const StringRangeEnumerator*      pEnumerator;
+        const std::set< sal_Int32 >*      pPossibleValues;
+        sal_Int32                         nRangeIndex;
+        sal_Int32                         nCurrent;
 
-    typedef std::vector< sal_Int32 >::const_iterator Iterator;
+        friend class StringRangeEnumerator;
+        Iterator( const StringRangeEnumerator* i_pEnum,
+                  const std::set< sal_Int32 >* i_pPossibleValues,
+                  sal_Int32 i_nRange,
+                  sal_Int32 i_nCurrent )
+        : pEnumerator( i_pEnum ), pPossibleValues( i_pPossibleValues )
+        , nRangeIndex( i_nRange ), nCurrent( i_nCurrent ) {}
+    public:
+        Iterator() : pEnumerator( NULL ), pPossibleValues( NULL ), nRangeIndex( -1 ), nCurrent( -1 ) {}
+        Iterator& operator++();
+        sal_Int32 operator*() const;
+        bool operator==(const Iterator&) const;
+        bool operator!=(const Iterator& i_rComp) const
+        { return ! (*this == i_rComp); }
+    };
 
-    StringRangeEnumerator() {}
+    friend class StringRangeEnumerator::Iterator;
+
+    StringRangeEnumerator() : mnCount( 0 ), mnMin( -1 ), mnMax( -1 ), mnOffset( -1 ) {}
     StringRangeEnumerator( const rtl::OUString& i_rInput,
                            sal_Int32 i_nMinNumber = -1,
                            sal_Int32 i_nMaxNumber = -1,
-                           sal_Int32 i_nLogicalOffset = -1,
-                           std::set< sal_Int32 >* i_pPossibleValues = NULL
-                           ) :
-        mnMin( i_nMinNumber ),
-        mnMax( i_nMaxNumber ),
-        mnOffset( i_nLogicalOffset )
-    {
-        getRangesFromString( i_rInput, maSequence, mnMin, mnMax, mnOffset, i_pPossibleValues );
-    }
+                           sal_Int32 i_nLogicalOffset = -1
+                           );
 
-    size_t size() const { return maSequence.size(); }
-    Iterator begin() const { return maSequence.begin(); }
-    Iterator end() const { return maSequence.end(); }
+    size_t size() const { return size_t(mnCount); }
+    Iterator begin( const std::set< sal_Int32 >* i_pPossibleValues = NULL ) const;
+    Iterator end( const std::set< sal_Int32 >* i_pPossibleValues = NULL ) const;
 
     sal_Int32 getMin() const { return mnMin; }
     void setMin( sal_Int32 i_nMinValue ) { mnMin = i_nMinValue; }
@@ -150,11 +177,8 @@ public:
     sal_Int32 getLogicalOffset() const { return mnOffset; }
     void setLogicalOffset( sal_Int32 i_nOffset ) { mnOffset = i_nOffset; }
 
-    void setRange( const rtl::OUString& i_rNewRange, std::set< sal_Int32 >* i_pPossibleValues = NULL )
-    {
-        maSequence.clear();
-        getRangesFromString( i_rNewRange, maSequence, mnMin, mnMax, mnOffset, i_pPossibleValues );
-    }
+    bool setRange( const rtl::OUString& i_rNewRange );
+    bool hasValue( sal_Int32 nValue, const std::set< sal_Int32 >* i_pPossibleValues = NULL ) const;
 
 
     /**
