@@ -124,7 +124,7 @@ void SfxApplication::Init
 */
 {
 #ifdef DDE_AVAILABLE
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     InitializeDde();
 #else
     if( !InitializeDde() )

@@ -337,7 +337,7 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
 }
 
 void SAL_CALL XMLTransformerBase::endElement( const OUString&
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 rName
 #endif
 )
@@ -348,7 +348,7 @@ rName
         // Get topmost context
         ::rtl::Reference< XMLTransformerContext > xContext = m_pContexts->back();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         OSL_ENSURE( xContext->GetQName() == rName,
                 "XMLTransformerBase::endElement: popped context has wrong lname" );
 #endif

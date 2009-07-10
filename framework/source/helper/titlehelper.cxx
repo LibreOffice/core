@@ -616,7 +616,7 @@ void TitleHelper::impl_appendModuleName (::rtl::OUStringBuffer& sTitle)
 }
 
 //*****************************************************************************************************************
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 void TitleHelper::impl_appendDebugVersion (::rtl::OUStringBuffer& sTitle)
 {
         ::rtl::OUString sDefault ;

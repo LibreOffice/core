@@ -2032,7 +2032,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                          ( RID_SW_TP_MAILCONFIG != nPageId || MailMergeCfg_Impl().IsEmailSupported() ) )
                         AddTabPage( nPageId, rTextArray.GetString(i), nGroup );
                 }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 AddTabPage( RID_SW_TP_OPTTEST_PAGE, String::CreateFromAscii("Interner Test"), nGroup );
 #endif
             }
@@ -2048,7 +2048,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                     if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         AddTabPage( nPageId, rHTMLArray.GetString(i), nGroup );
                 }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 AddTabPage( RID_SW_TP_OPTTEST_PAGE, String::CreateFromAscii("Interner Test"), nGroup );
 #endif
             }

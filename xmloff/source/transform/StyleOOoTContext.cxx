@@ -352,7 +352,7 @@ XMLTypedPropertiesOOoTContext_Impl
         ++i;
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( !( XML_NAMESPACE_NONE == nPrefix ||
                 (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) ||
                 XML_PROP_TYPE_END==m_aPropTypes[1] ||

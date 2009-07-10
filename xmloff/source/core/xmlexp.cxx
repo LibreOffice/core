@@ -988,7 +988,7 @@ void SvXMLExport::ClearAttrList()
     mpAttrList->Clear();
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 void SvXMLExport::CheckAttrList()
 {
     DBG_ASSERT( !mpAttrList->getLength(),

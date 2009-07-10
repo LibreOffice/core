@@ -532,7 +532,7 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHi
         aTitle += String(aProductName);
         aTitle += ' ';
         aTitle += String( GetModuleName_Impl( aDocServiceName ) );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ::rtl::OUString aDefault;
         aTitle += DEFINE_CONST_UNICODE(" [");
         String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
@@ -1095,7 +1095,7 @@ String SfxTopViewFrame::UpdateTitle()
     aTitle += ' ';
     ::rtl::OUString aDocServiceName( GetObjectShell()->GetFactory().GetDocumentServiceName() );
     aTitle += String( GetModuleName_Impl( aDocServiceName ) );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ::rtl::OUString aDefault;
     aTitle += DEFINE_CONST_UNICODE(" [");
     String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));

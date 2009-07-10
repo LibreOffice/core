@@ -1348,7 +1348,7 @@ void Desktop::Main()
         else
             aTitle = aTitleString;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         //include version ID in non product builds
         ::rtl::OUString aDefault;
         aTitle += DEFINE_CONST_UNICODE(" [");

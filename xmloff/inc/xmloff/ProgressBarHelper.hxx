@@ -52,7 +52,7 @@ class XMLOFF_DLLPUBLIC ProgressBarHelper
             // #96469#; if the value goes over the Range the progressbar starts again
             sal_Bool                                                                        bRepeat;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             sal_Bool                                                                        bFailure;
 #endif
 public:

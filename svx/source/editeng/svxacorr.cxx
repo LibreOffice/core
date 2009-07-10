@@ -1385,7 +1385,7 @@ void SvxAutoCorrect::SaveCplSttExceptList( LanguageType eLang )
         if( pLists )
             pLists->SaveCplSttExceptList();
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
     {
         DBG_ERROR("speichern einer leeren Liste?");
@@ -1401,7 +1401,7 @@ void SvxAutoCorrect::SaveWrdSttExceptList(LanguageType eLang)
         if(pLists)
             pLists->SaveWrdSttExceptList();
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
     {
         DBG_ERROR("speichern einer leeren Liste?");

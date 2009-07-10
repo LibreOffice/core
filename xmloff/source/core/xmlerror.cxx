@@ -126,7 +126,7 @@ void XMLErrors::AddRecord(
     aErrors.push_back( ErrorRecord( nId, rParams, rExceptionMessage,
                                     nRow, nColumn, rPublicId, rSystemId ) );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
     // give detailed assertion on this message
 

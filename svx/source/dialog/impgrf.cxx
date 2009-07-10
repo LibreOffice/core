@@ -111,7 +111,7 @@ int LoadGraphic( const String &rPath, const String &rFilterName,
         nRes = pFilter->ImportGraphic( rGraphic, rPath, *pStream,
                                        nFilter, pDeterminedFormat );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( nRes )
     {
         if( pMed )

@@ -1117,7 +1117,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
             break;
             default:
             {
-                #if (OSL_DEBUG_LEVEL > 1) && !defined( PRODUCT )
+                #if (OSL_DEBUG_LEVEL > 1) && defined(DBG_UTIL)
                     if ( ( nCode == KEY_W ) && rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
                     {
                         SfxItemSet aAttribs = pEditView->GetAttribs();

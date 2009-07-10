@@ -2781,7 +2781,7 @@ sal_Bool XMLTextFieldExport::ExplodeFieldMasterName(
     sal_Int32 nSeparator = sMasterName.indexOf('.', nLength);
     sal_Bool bReturn = sal_True;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // check for service name
     bReturn &= (0 == sFieldMasterPrefix.compareTo(sMasterName, nLength));
 #endif

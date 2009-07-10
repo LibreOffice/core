@@ -359,7 +359,7 @@ SfxApplication::SfxApplication()
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ initialize DDE" );
 
 #ifdef DDE_AVAILABLE
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     InitializeDde();
 #else
     if( !InitializeDde() )

@@ -283,7 +283,7 @@ SfxItemPresentation SvxLineSpacingItem::GetPresentation
     XubString&          rText, const IntlWrapper *
 )   const
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     rText.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "SvxLineSpacingItem" ));
 #else
     rText.Erase();

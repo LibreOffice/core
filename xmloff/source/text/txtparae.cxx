@@ -274,7 +274,7 @@ SV_IMPL_PTRARR( OUStrings_Impl, OUStringPtr )
 SV_DECL_PTRARR_SORT_DEL( OUStringsSort_Impl, OUStringPtr, 20, 10 )
 SV_IMPL_OP_PTRARR_SORT( OUStringsSort_Impl, OUStringPtr )
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 static int txtparae_bContainsIllegalCharacters = sal_False;
 #endif
 
@@ -1293,7 +1293,7 @@ XMLTextParagraphExport::~XMLTextParagraphExport()
 //    delete pExportedLists;
     // <--
     delete pListAutoPool;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     txtparae_bContainsIllegalCharacters = sal_False;
 #endif
     // --> OD 2008-04-25 #refactorlists#
@@ -3341,7 +3341,7 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
         default:
             if( cChar < 0x0020 )
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 OSL_ENSURE( txtparae_bContainsIllegalCharacters ||
                             cChar >= 0x0020,
                             "illegal character in text content" );

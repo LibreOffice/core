@@ -839,7 +839,7 @@ void SbiRuntime::PushVar( SbxVariable* pVar )
 
 SbxVariableRef SbiRuntime::PopVar()
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( !nExprLvl )
     {
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
@@ -882,7 +882,7 @@ BOOL SbiRuntime::ClearExprStack()
 SbxVariable* SbiRuntime::GetTOS( short n )
 {
     n = nExprLvl - n - 1;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( n < 0 )
     {
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );

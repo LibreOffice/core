@@ -44,7 +44,7 @@
 #include "svxrtf.hxx"
 
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #undef DEBUG_JP
 #endif
 

@@ -189,7 +189,7 @@ void SfxApplication::InitializeDisplayName_Impl()
 
         aGuard.clear();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ::rtl::OUString aDefault;
         aTitle += DEFINE_CONST_UNICODE(" [");
 

@@ -659,7 +659,7 @@ void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, BOOL bMDI )
 */
 
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     const SfxInterface *p_IF = GetInterface();
     if ( !p_IF )
         return;
@@ -702,7 +702,7 @@ void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, BOOL bMDI )
 */
 
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     const SfxInterface *p_IF = GetInterface();
     if ( !p_IF )
         return;

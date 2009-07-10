@@ -1293,7 +1293,7 @@ XubString SdrView::GetStatusText()
         aStr.SearchAndReplaceAscii("%2", UniString::CreateFromInt32(nLin + 1));
         aStr.SearchAndReplaceAscii("%3", UniString::CreateFromInt32(nCol + 1));
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         aStr += UniString( RTL_CONSTASCII_USTRINGPARAM( ", Level " ) );
         aStr += UniString::CreateFromInt32( pTextEditOutliner->GetDepth( aSel.nEndPara ) );
 #endif

@@ -77,7 +77,7 @@
 
 using ::basic::BasicManagerRepository;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 DECLARE_LIST( SfxFrameWindowFactoryArray_Impl, SfxFrameWindowFactory* )
 SV_DECL_PTRARR(SfxInitLinkList, Link*, 2, 2)
 #endif
@@ -203,7 +203,7 @@ void SfxApplication::Deinitialize()
 
     delete pAppData_Impl->pLabelResMgr;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     DELETEX(pAppData_Impl->pSlotPool);
     DELETEX(pAppData_Impl->pEventConfig);
     DELETEX(pAppData_Impl->pMiscConfig);
@@ -212,7 +212,7 @@ void SfxApplication::Deinitialize()
     DELETEX(pAppData_Impl->pInitLinkList);
 #endif
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     DELETEX(pAppData_Impl->pTbxCtrlFac);
     DELETEX(pAppData_Impl->pStbCtrlFac);
     DELETEX(pAppData_Impl->pMenuCtrlFac);

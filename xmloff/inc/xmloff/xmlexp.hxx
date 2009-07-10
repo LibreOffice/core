@@ -363,7 +363,7 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     // Check if common attribute list is empty.
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     void CheckAttrList() {}
 #else
     void CheckAttrList();
