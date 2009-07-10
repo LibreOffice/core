@@ -47,6 +47,7 @@
 #include "osl/thread.hxx"
 #include "rtl/bootstrap.hxx"
 #include "rtl/ref.hxx"
+#include "rtl/strbuf.hxx"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
 #include "rtl/textcvt.h"
@@ -575,8 +576,81 @@ bool parseHexbinaryValue(
     return true;
 }
 
+template< typename T > xmlChar const * parseEscapedValue(
+    xmlChar const * text, bool (* parse)(xmlChar const *, xmlChar const *, T *),
+    T * value)
+{
+    if (*text++ != '[') {
+        return 0;
+    }
+    rtl::OStringBuffer buf;
+    for (;;) {
+        xmlChar c = *text++;
+        switch (c) {
+        case '\0':
+            return 0;
+        case ']':
+            goto done;
+        case '\\':
+            c = *text++;
+            switch (c) {
+            case '\\':
+            case ']':
+                buf.append(static_cast< char >(c));
+                break;
+            case 'u':
+                if (text[0] == '0' && text[1] == '0' &&
+                    (text[2] == '0' || text[2] == '1') &&
+                    ((text[3] >= '0' && text[3] <= '9') ||
+                     (text[3] >= 'A' && text[3] <= 'F') ||
+                     (text[3] >= 'a' && text[3] <= 'f')))
+                {
+                    buf.append(
+                        static_cast< char >(
+                            ((text[2] - '0') << 4) |
+                            (text[3] <= '9'
+                             ? text[3] - '0'
+                             : (text[3] - (text[3] <= 'F' ? 'A' : 'a') + 10))));
+                    text += 4;
+                    break;
+                }
+                if ((text[0] == 'F' || text[0] == 'f') &&
+                    (text[1] == 'F' || text[1] == 'f') &&
+                    (text[2] == 'F' || text[2] == 'f') &&
+                    (text[3] == 'E' || text[3] == 'e' ||
+                     text[3] == 'F' || text[3] == 'f'))
+                {
+                    buf.append(static_cast< char >(0xEF));
+                    buf.append(static_cast< char >(0xBF));
+                    buf.append(
+                        static_cast< char >(
+                            0xBE + (text[3] == 'F' || text[3] == 'f' ? 1 : 0)));
+                    text += 4;
+                    break;
+                }
+                // fall through
+            default:
+                return 0;
+            }
+            break;
+        default:
+            buf.append(static_cast< char >(c));
+            break;
+        }
+    }
+done:
+    rtl::OString unesc(buf.makeStringAndClear());
+    return
+        (*parse)(
+            reinterpret_cast< xmlChar const * >(unesc.getStr()),
+            (reinterpret_cast< xmlChar const * >(unesc.getStr()) +
+             unesc.getLength()),
+            value)
+        ? text : 0;
+}
+
 template< typename T > bool parseListValue(
-    xmlNodePtr node, xmlChar const * text,
+    xmlDocPtr doc, xmlNodePtr node, xmlChar const * text,
     bool (* parse)(xmlChar const *, xmlChar const *, T *),
     css::uno::Sequence< T > * value)
 {
@@ -587,32 +661,67 @@ template< typename T > bool parseListValue(
             xmlGetNsProp(
                 node, xmlString("separator"),
                 xmlString("http://openoffice.org/2001/registry")));
-        XmlString col;
-        xmlChar const * p;
-        xmlChar const * sep;
-        int sepLen;
-        if (sepAttr.str == 0) {
-            col = xmlSchemaCollapseString(text);
-            p = col.str == 0 ? text : col.str;
-            sep = xmlString(" ");
-            sepLen = RTL_CONSTASCII_LENGTH(" ");
-        } else {
-            p = text;
-            sep = sepAttr.str;
-            sepLen = xmlStrlen(sep);
-        }
-        if (*p != '\0') {
+        if (getBooleanAttribute(
+                doc, node, "http://openoffice.org/2001/registry", "escaped",
+                false))
+        {
             for (;;) {
-                xmlChar const * q = xmlStrstr(p, sep);
                 T val;
-                if (!(*parse)(p, q, &val)) {
+                text = parseEscapedValue(text, parse, &val);
+                if (text == 0) {
                     return false;
                 }
                 seq.push_back(val);
-                if (q == 0) {
+                if (*text == 0) {
                     break;
                 }
-                p = q + sepLen;
+                if (sepAttr.str == 0) {
+                    xmlChar const * p = text;
+                    while (*p == ' ' || *p == '\t' || *p == '\0x0A' ||
+                           *p == '\0x0D')
+                    {
+                        ++p;
+                    }
+                    if (p == text) {
+                        return false;
+                    }
+                    text = p;
+                } else {
+                    int sepLen = xmlStrlen(sepAttr.str);
+                    if (xmlStrncmp(text, sepAttr.str, sepLen) != 0) {
+                        return false;
+                    }
+                    text += sepLen;
+                }
+            }
+        } else {
+            XmlString col;
+            xmlChar const * p;
+            xmlChar const * sep;
+            int sepLen;
+            if (sepAttr.str == 0) {
+                col = xmlSchemaCollapseString(text);
+                p = col.str == 0 ? text : col.str;
+                sep = xmlString(" ");
+                sepLen = RTL_CONSTASCII_LENGTH(" ");
+            } else {
+                p = text;
+                sep = sepAttr.str;
+                sepLen = xmlStrlen(sep);
+            }
+            if (*p != '\0') {
+                for (;;) {
+                    xmlChar const * q = xmlStrstr(p, sep);
+                    T val;
+                    if (!(*parse)(p, q, &val)) {
+                        return false;
+                    }
+                    seq.push_back(val);
+                    if (q == 0) {
+                        break;
+                    }
+                    p = q + sepLen;
+                }
             }
         }
     }
@@ -669,7 +778,17 @@ css::uno::Any parseValue(xmlDocPtr doc, xmlNodePtr node, Type type) {
         }
         break;
     case TYPE_STRING:
+        if (getBooleanAttribute(
+                doc, node, "http://openoffice.org/2001/registry", "escaped",
+                false))
         {
+            rtl::OUString val;
+            xmlChar const * p = parseEscapedValue(
+                text.str, &parseStringValue, &val);
+            if (p != 0 && *p == '\0') {
+                return css::uno::makeAny(val);
+            }
+        } else {
             rtl::OUString val;
             if (parseStringValue(text.str, 0, &val)) {
                 return css::uno::makeAny(val);
@@ -698,7 +817,7 @@ css::uno::Any parseValue(xmlDocPtr doc, xmlNodePtr node, Type type) {
     case TYPE_BOOLEAN_LIST:
         {
             css::uno::Sequence< sal_Bool > val;
-            if (parseListValue(node, text.str, &parseBooleanValue, &val)) {
+            if (parseListValue(doc, node, text.str, &parseBooleanValue, &val)) {
                 return css::uno::makeAny(val);
             }
         }
@@ -706,7 +825,7 @@ css::uno::Any parseValue(xmlDocPtr doc, xmlNodePtr node, Type type) {
     case TYPE_SHORT_LIST:
         {
             css::uno::Sequence< sal_Int16 > val;
-            if (parseListValue(node, text.str, &parseShortValue, &val)) {
+            if (parseListValue(doc, node, text.str, &parseShortValue, &val)) {
                 return css::uno::makeAny(val);
             }
         }
@@ -714,7 +833,7 @@ css::uno::Any parseValue(xmlDocPtr doc, xmlNodePtr node, Type type) {
     case TYPE_INT_LIST:
         {
             css::uno::Sequence< sal_Int32 > val;
-            if (parseListValue(node, text.str, &parseIntValue, &val)) {
+            if (parseListValue(doc, node, text.str, &parseIntValue, &val)) {
                 return css::uno::makeAny(val);
             }
         }
@@ -722,7 +841,7 @@ css::uno::Any parseValue(xmlDocPtr doc, xmlNodePtr node, Type type) {
     case TYPE_LONG_LIST:
         {
             css::uno::Sequence< sal_Int64 > val;
-            if (parseListValue(node, text.str, &parseLongValue, &val)) {
+            if (parseListValue(doc, node, text.str, &parseLongValue, &val)) {
                 return css::uno::makeAny(val);
             }
         }
@@ -730,7 +849,7 @@ css::uno::Any parseValue(xmlDocPtr doc, xmlNodePtr node, Type type) {
     case TYPE_DOUBLE_LIST:
         {
             css::uno::Sequence< double > val;
-            if (parseListValue(node, text.str, &parseDoubleValue, &val)) {
+            if (parseListValue(doc, node, text.str, &parseDoubleValue, &val)) {
                 return css::uno::makeAny(val);
             }
         }
@@ -738,7 +857,7 @@ css::uno::Any parseValue(xmlDocPtr doc, xmlNodePtr node, Type type) {
     case TYPE_STRING_LIST:
         {
             css::uno::Sequence< rtl::OUString > val;
-            if (parseListValue(node, text.str, &parseStringValue, &val)) {
+            if (parseListValue(doc, node, text.str, &parseStringValue, &val)) {
                 return css::uno::makeAny(val);
             }
         }
@@ -746,7 +865,8 @@ css::uno::Any parseValue(xmlDocPtr doc, xmlNodePtr node, Type type) {
     case TYPE_HEXBINARY_LIST:
         {
             css::uno::Sequence< css::uno::Sequence< sal_Int8 > > val;
-            if (parseListValue(node, text.str, &parseHexbinaryValue, &val)) {
+            if (parseListValue(doc, node, text.str, &parseHexbinaryValue, &val))
+            {
                 return css::uno::makeAny(val);
             }
         }
@@ -1595,6 +1715,93 @@ void parseSystemLayer() {
     //TODO
 }
 
+void writeBooleanValue(xmlTextWriterPtr writer, sal_Bool const & value) {
+    xmlTextWriterWriteString(
+        writer, xmlString(value ? "true" : "false"));
+}
+
+void writeShortValue(xmlTextWriterPtr writer, sal_Int16 const & value) {
+    xmlTextWriterWriteString(
+        writer,
+        xmlString(
+            convertToUtf8(rtl::OUString::valueOf(sal_Int32(value))).getStr()));
+}
+
+void writeIntValue(xmlTextWriterPtr writer, sal_Int32 const & value) {
+    xmlTextWriterWriteString(
+        writer,
+        xmlString(convertToUtf8(rtl::OUString::valueOf(value)).getStr()));
+}
+
+void writeLongValue(xmlTextWriterPtr writer, sal_Int64 const & value) {
+    xmlTextWriterWriteString(
+        writer,
+        xmlString(convertToUtf8(rtl::OUString::valueOf(value)).getStr()));
+}
+
+void writeDoubleValue(xmlTextWriterPtr writer, double const & value) {
+    xmlTextWriterWriteString(
+        writer,
+        xmlString(convertToUtf8(rtl::OUString::valueOf(value)).getStr()));
+}
+
+void writeStringValue(xmlTextWriterPtr writer, rtl::OUString const & value) {
+    rtl::OUStringBuffer buf;
+    buf.append(sal_Unicode('['));
+    for (sal_Int32 i = 0; i < value.getLength(); ++i) {
+        sal_Unicode c = value[i];
+        if (c <= 0x001F || c == 0xFFFE || c == 0xFFFF) {
+            static sal_Unicode const hexDigit[16] = {
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C',
+                'D', 'E', 'F' };
+            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("\\u"));
+            buf.append(hexDigit[(c >> 12) & 0xF]);
+            buf.append(hexDigit[(c >> 8) & 0xF]);
+            buf.append(hexDigit[(c >> 4) & 0xF]);
+            buf.append(hexDigit[c & 0xF]);
+        } else {
+            if (c == '\\' || c == ']') {
+                buf.append(sal_Unicode('\\'));
+            }
+            buf.append(c);
+        }
+    }
+    buf.append(sal_Unicode(']'));
+    xmlTextWriterWriteString(
+        writer, xmlString(convertToUtf8(buf.makeStringAndClear()).getStr()));
+}
+
+void writeHexbinaryValue(
+    xmlTextWriterPtr writer, css::uno::Sequence< sal_Int8 > const & value)
+{
+    rtl::OStringBuffer buf;
+    buf.append('[');
+    for (sal_Int32 i = 0; i < value.getLength(); ++i) {
+        static char const hexDigit[16] = {
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C',
+            'D', 'E', 'F' };
+        buf.append(hexDigit[(value[i] >> 4) & 0xF]);
+        buf.append(hexDigit[value[i] & 0xF]);
+    }
+    buf.append(']');
+    xmlTextWriterWriteString(
+        writer, xmlString(buf.makeStringAndClear().getStr()));
+}
+
+template< typename T > void writeListValue(
+    xmlTextWriterPtr writer, void (* write)(xmlTextWriterPtr, T const &),
+    css::uno::Any const & value)
+{
+    css::uno::Sequence< T > val;
+    value >>= val;
+    for (sal_Int32 i = 0; i < val.getLength(); ++i) {
+        if (i != 0) {
+            xmlTextWriterWriteString(writer, xmlString(" "));
+        }
+        (*write)(writer, val[i]);
+    }
+}
+
 void writeNode(
     xmlTextWriterPtr writer, rtl::OUString const & name,
     rtl::Reference< Node > const & node)
@@ -1615,47 +1822,109 @@ void writeNode(
         xmlTextWriterStartElementNS(
             writer, xmlString("oor"), xmlString("value"),
             xmlString("http://openoffice.org/2001/registry"));
-        css::uno::Any value(prop->getValue());
-        switch (value.getValueType().getTypeClass()) {
-        case css::uno::TypeClass_VOID:
+        Type type = prop->getType();
+        if (type == TYPE_ANY) {
+            type = mapType(prop->getValue());
+        }
+        switch (type) {
+        case TYPE_NIL:
             xmlTextWriterWriteAttributeNS(
                 writer, xmlString("xsi"), xmlString("nil"),
                 xmlString("http://www.w3.org/2001/XMLSchema-instance"),
                 xmlString("true"));
             break;
-        case css::uno::TypeClass_BOOLEAN:
+        case TYPE_BOOLEAN:
             {
                 bool val;
-                value >>= val;
-                xmlTextWriterWriteString(
-                    writer, xmlString(val ? "true" : "false"));
+                prop->getValue() >>= val;
+                writeBooleanValue(writer, val);
             }
             break;
-        case css::uno::TypeClass_BYTE:
-        case css::uno::TypeClass_SHORT:
-        case css::uno::TypeClass_UNSIGNED_SHORT:
-        case css::uno::TypeClass_LONG:
-        case css::uno::TypeClass_UNSIGNED_LONG:
-        case css::uno::TypeClass_HYPER: //TODO: TypeClass_UNSIGNED_HYPER?
+        case TYPE_SHORT:
+            {
+                sal_Int16 val;
+                prop->getValue() >>= val;
+                writeShortValue(writer, val);
+            }
+            break;
+        case TYPE_INT:
+            {
+                sal_Int32 val;
+                prop->getValue() >>= val;
+                writeIntValue(writer, val);
+            }
+            break;
+        case TYPE_LONG:
             {
                 sal_Int64 val;
-                value >>= val;
-                xmlTextWriterWriteString(
-                    writer,
-                    xmlString(
-                        convertToUtf8(rtl::OUString::valueOf(val)).getStr()));
+                prop->getValue() >>= val;
+                writeLongValue(writer, val);
             }
             break;
-        case css::uno::TypeClass_STRING:
+        case TYPE_DOUBLE:
             {
-                rtl::OUString val;
-                value >>= val;
-                xmlTextWriterWriteString(
-                    writer, xmlString(convertToUtf8(val).getStr()));
+                double val;
+                prop->getValue() >>= val;
+                writeDoubleValue(writer, val);
             }
             break;
-            //TODO
-        default:
+        case TYPE_STRING:
+            {
+                xmlTextWriterWriteAttributeNS(
+                    writer, xmlString("oor"), xmlString("escaped"),
+                    xmlString("http://openoffice.org/2001/registry"),
+                    xmlString("true"));
+                rtl::OUString val;
+                prop->getValue() >>= val;
+                writeStringValue(writer, val);
+            }
+            break;
+        case TYPE_HEXBINARY:
+            {
+                // Written in escaped form to be able to share
+                // writeHexbinaryValue with the TYPE_HEXBINARY_LIST case (see
+                // there):
+                xmlTextWriterWriteAttributeNS(
+                    writer, xmlString("oor"), xmlString("escaped"),
+                    xmlString("http://openoffice.org/2001/registry"),
+                    xmlString("true"));
+                css::uno::Sequence< sal_Int8 > val;
+                prop->getValue() >>= val;
+                writeHexbinaryValue(writer, val);
+            }
+            break;
+        case TYPE_BOOLEAN_LIST:
+            writeListValue(writer, &writeBooleanValue, prop->getValue());
+            break;
+        case TYPE_SHORT_LIST:
+            writeListValue(writer, &writeShortValue, prop->getValue());
+            break;
+        case TYPE_INT_LIST:
+            writeListValue(writer, &writeIntValue, prop->getValue());
+            break;
+        case TYPE_LONG_LIST:
+            writeListValue(writer, &writeLongValue, prop->getValue());
+            break;
+        case TYPE_DOUBLE_LIST:
+            writeListValue(writer, &writeDoubleValue, prop->getValue());
+            break;
+        case TYPE_STRING_LIST:
+            xmlTextWriterWriteAttributeNS(
+                writer, xmlString("oor"), xmlString("escaped"),
+                xmlString("http://openoffice.org/2001/registry"),
+                xmlString("true"));
+            writeListValue(writer, &writeStringValue, prop->getValue());
+            break;
+        case TYPE_HEXBINARY_LIST:
+            // Written in escaped form to distinguish an empty list from a list
+            // with one empty hexbinary element:
+            xmlTextWriterWriteAttributeNS(
+                writer, xmlString("oor"), xmlString("escaped"),
+                xmlString("http://openoffice.org/2001/registry"),
+                xmlString("true"));
+            writeListValue(writer, &writeHexbinaryValue, prop->getValue());
+            break;
+        default: // TYPE_ERROR, TYPE_ANY
             OSL_ASSERT(false);
             throw css::uno::RuntimeException(
                 rtl::OUString(
