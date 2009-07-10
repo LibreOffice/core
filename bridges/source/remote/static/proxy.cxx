@@ -30,12 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_bridges.hxx"
-#if OSL_DEBUG_LEVEL == 0
-#  ifndef NDEBUG
-#    define NDEBUG
-#  endif
-#endif
-#include <assert.h>
 #include <sal/alloca.h>
 #include <bridges/remote/proxy.hxx>
 #include <bridges/remote/context.h>
@@ -84,7 +78,7 @@ void acquireRemote2UnoProxy( uno_Interface *pThis )
             freeRemote2UnoProxy,
             p->m_sOid.pData,
             p->m_pType );
-        assert( (uno_Interface *)p == pThis );
+        OSL_ASSERT( (uno_Interface *)p == pThis );
     }
 }
 

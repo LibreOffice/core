@@ -36,15 +36,6 @@
 #include <parse.hxx>
 #include <cr_html.hxx>
 
-#if OSL_DEBUG_LEVEL == 0
-#  ifndef NDEBUG
-#    define NDEBUG
-#  endif
-#endif
-#include <assert.h>
-
-
-
 XmlElement::XmlElement( const char * i_sName )
     : sName(i_sName)
 {
@@ -160,7 +151,7 @@ ListElement::Write2Html( HtmlCreator & io_rHC ) const
 XmlElement *
 ListElement::Create_and_Add_NewElement()
 {
-    assert(fCreateNewElement != 0);
+    OSL_ASSERT(fCreateNewElement != 0);
     XmlElement * pNew = (*fCreateNewElement)(Name());
     Children().push_back( pNew );
     return pNew;
