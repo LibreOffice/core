@@ -377,7 +377,7 @@ void SAL_CALL OPropertySet::getFastPropertyValue
         uno::Reference< beans::XFastPropertySet > xStylePropSet( m_pImplProperties->GetStyle(), uno::UNO_QUERY );
         if( xStylePropSet.is() )
         {
-#ifndef NDEBUG
+#ifdef DBG_UTIL
             {
                 // check if the handle of the style points to the same property
                 // name as the handle in this property set

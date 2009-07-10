@@ -964,7 +964,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 //  -> wird weggelassen
                 //! ??? Loesch-Aktion rueckgaengig machen ???
                 //! ??? Aktion irgendwo anders speichern  ???
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 String aValue;
                 if ( eSourceType == SC_CAT_CONTENT )
                     ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
@@ -1122,7 +1122,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                     ScChangeAction* pAct = pThisTrack->GetLast();
                     if ( pAct && pAct->GetActionNumber() > nOldActionMax )
                         pAct->SetComment( rComment );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     else
                         DBG_ERROR( "MergeDocument: wohin mit dem Kommentar?!?" );
 #endif

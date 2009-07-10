@@ -394,7 +394,7 @@ ScRawToken* ScRawToken::Clone() const
 
 FormulaToken* ScRawToken::CreateToken() const
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #define IF_NOT_OPCODE_ERROR(o,c) if (eOp!=o) DBG_ERROR1( #c "::ctor: OpCode %d lost, converted to " #o "; maybe inherit from FormulaToken instead!", int(eOp))
 #else
 #define IF_NOT_OPCODE_ERROR(o,c)

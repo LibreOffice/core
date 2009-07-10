@@ -608,7 +608,7 @@ sal_Bool ScChildrenShapes::IsSelected(sal_Int32 nIndex,
     bResult = maZOrderedShapes[nIndex]->bSelected;
     rShape = maZOrderedShapes[nIndex]->xShape;
 
-#ifndef PRODUCT // test whether it is truly selected by a slower method
+#ifdef DBG_UTIL // test whether it is truly selected by a slower method
     uno::Reference< drawing::XShape > xReturnShape;
     sal_Bool bDebugResult(sal_False);
     uno::Reference<container::XIndexAccess> xIndexAccess;
@@ -1204,7 +1204,7 @@ sal_Bool ScChildrenShapes::FindShape(const uno::Reference<drawing::XShape>& xSha
     if ((rItr != maZOrderedShapes.end()) && (*rItr != NULL) && ((*rItr)->xShape.get() == xShape.get()))
         bResult = sal_True; // if the shape is found
 
-#ifndef PRODUCT // test whether it finds truly the correct shape (perhaps it is not really sorted)
+#ifdef DBG_UTIL // test whether it finds truly the correct shape (perhaps it is not really sorted)
     SortedShapes::iterator aDebugItr = maZOrderedShapes.begin();
     SortedShapes::iterator aEndItr = maZOrderedShapes.end();
     sal_Bool bFound(sal_False);

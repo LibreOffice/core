@@ -349,7 +349,7 @@ USHORT ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                 }
                 else
                 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     String aTmp;
                     ByteString aMsg( "broken Matrix, no MatFormula at origin, Pos: " );
                     aPos.Format( aTmp, SCA_VALID_COL | SCA_VALID_ROW, pDocument );
@@ -379,7 +379,7 @@ USHORT ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                 if ( !nEdges )
                     nEdges = 1;             // mittendrin
             }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             else
             {
                 String aTmp;
