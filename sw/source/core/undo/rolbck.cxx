@@ -566,17 +566,7 @@ void SwHistoryChangeFmtColl::SetInDoc( SwDoc* pDoc, bool )
 }
 
 
-SwHistoryTxtFlyCnt::SwHistoryTxtFlyCnt( SwTxtFlyCnt* pTxtFly )
-    : SwHistoryHint( HSTRY_FLYCNT )
-    , m_pUndo( new SwUndoDelLayFmt( pTxtFly->GetFlyCnt().GetFrmFmt() ) )
-{
-    ASSERT( pTxtFly->GetFlyCnt().GetFrmFmt(),
-            "SwHistoryTxtFlyCnt: FlyCntnt without Format" );
-    m_pUndo->ChgShowSel( FALSE );
-}
-
-
-SwHistoryTxtFlyCnt::SwHistoryTxtFlyCnt( SwFlyFrmFmt* pFlyFmt )
+SwHistoryTxtFlyCnt::SwHistoryTxtFlyCnt( SwFrmFmt* const pFlyFmt )
     : SwHistoryHint( HSTRY_FLYCNT )
     , m_pUndo( new SwUndoDelLayFmt( pFlyFmt ) )
 {
@@ -1065,7 +1055,8 @@ void SwHistory::Add( SwTxtAttr* pHint, ULONG nNodeIdx, bool bNewAttr )
                             static_cast<SwTxtFtn*>(pHint), nNodeIdx );
                 break;
             case RES_TXTATR_FLYCNT:
-                pHt = new SwHistoryTxtFlyCnt( static_cast<SwTxtFlyCnt*>(pHint) );
+                pHt = new SwHistoryTxtFlyCnt( static_cast<SwTxtFlyCnt*>(pHint)
+                            ->GetFlyCnt().GetFrmFmt() );
                 break;
             case RES_TXTATR_FIELD:
                 pHt = new SwHistorySetTxtFld(
