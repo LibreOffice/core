@@ -291,14 +291,36 @@ void Access::commitChildChanges() {
                     //TODO: collision handling?
             } else {
                 // Removed child node:
-                rtl::OUString pathPrefix(getHierarchicalName());
-                if (pathPrefix.getLength() == 0 ||
-                    pathPrefix[pathPrefix.getLength() - 1] != '/')
+                rtl::OUString path(getHierarchicalName());
+                if (path.getLength() == 0 ||
+                    path[path.getLength() - 1] != '/')
                 {
-                    pathPrefix +=
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                    path += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
                 }
-                Components::singleton().addModification(pathPrefix + i->first);
+                rtl::Reference< Node > node(getNode());
+                if (dynamic_cast< LocalizedPropertyNode * >(node.get()) != 0) {
+                    path += Components::createSegment(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")),
+                        i->first);
+                } else if (dynamic_cast< SetNode * >(node.get()) != 0) {
+                    rtl::OUString templateName;
+                    if (GroupNode * group = dynamic_cast< GroupNode * >(
+                            i->second->getNode().get()))
+                    {
+                        templateName = group->getTemplateName();
+                    } else if (SetNode * set = dynamic_cast< SetNode * >(
+                                   i->second->getNode().get()))
+                    {
+                        templateName = set->getTemplateName();
+                    } else {
+                        OSL_ASSERT(false);
+                    }
+                    OSL_ASSERT(templateName.getLength() != 0);
+                    path += Components::createSegment(templateName, i->first);
+                } else {
+                    path += i->first;
+                }
+                Components::singleton().addModification(path);
                 getMemberNodes().erase(i->first); //TODO: collision handling?
             }
             i->second->notInTransaction();
@@ -955,8 +977,10 @@ void Access::removeByName(rtl::OUString const & aName)
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
     }
-    child->unbind(); // must not throw
-    child->markAsModified();
+    // unbind() modifies the parent chain that markAsModified() walks, so order
+    // is important:
+    child->markAsModified(); //TODO: must not throw
+    child->unbind();
     //TODO notify change
 }
 

@@ -77,10 +77,18 @@ namespace css = com::sun::star;
 typedef std::hash_map< rtl::OUString, css::uno::Any, rtl::OUStringHash >
     LocalizedValues;
 
+bool isRemovedValue(css::uno::Any const & value) {
+    // An ANY of type TYPE whose value is VOID is used within a LocalizedValues
+    // map as a marker for a removed localized value (in a fused xcu property
+    // within the registrymodifications file):
+    return value.getValueType().getTypeClass() == css::uno::TypeClass_TYPE;
+}
+
 void setValues(LocalizedPropertyNode * node, LocalizedValues const & values) {
     for (LocalizedValues::const_iterator i(values.begin()); i != values.end();
          ++i)
     {
+        OSL_ASSERT(!isRemovedValue(i->second));
         node->getMembers().insert(
             NodeMap::value_type(
                 i->first, new LocalizedPropertyValueNode(i->second)));
@@ -97,6 +105,63 @@ template< typename T > sal_Int32 findFirst(
 bool isPrefix(rtl::OUString const & prefix, rtl::OUString const & path) {
     return prefix.getLength() < path.getLength() && path.match(prefix) &&
         path[prefix.getLength()] == '/';
+}
+
+bool decodeXml(
+    rtl::OUString const & encoded, sal_Int32 begin, sal_Int32 end,
+    rtl::OUString * decoded)
+{
+    OSL_ASSERT(
+        begin >= 0 && begin <= end && end <= encoded.getLength() &&
+        decoded != 0);
+    rtl::OUStringBuffer buf;
+    while (begin != end) {
+        sal_Unicode c = encoded[begin++];
+        if (c == '&') {
+            if (encoded.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("amp;"), begin))
+            {
+                buf.append(sal_Unicode('&'));
+                begin += RTL_CONSTASCII_LENGTH("amp;");
+            } else if (encoded.matchAsciiL(
+                           RTL_CONSTASCII_STRINGPARAM("quot;"), begin))
+            {
+                buf.append(sal_Unicode('"'));
+                begin += RTL_CONSTASCII_LENGTH("quot;");
+            } else if (encoded.matchAsciiL(
+                           RTL_CONSTASCII_STRINGPARAM("apos;"), begin))
+            {
+                buf.append(sal_Unicode('\''));
+                begin += RTL_CONSTASCII_LENGTH("apos;");
+            } else {
+                return false;
+            }
+            OSL_ASSERT(begin <= end);
+        } else {
+            buf.append(c);
+        }
+    }
+    *decoded = buf.makeStringAndClear();
+    return true;
+}
+
+rtl::OUString parseLastSegment(
+    rtl::OUString const & path, rtl::OUString * name)
+{
+    OSL_ASSERT(name != 0);
+    sal_Int32 i = path.getLength();
+    OSL_ASSERT(i > 0 && path[i - 1] != '/');
+    if (path[i - 1] == ']') {
+        OSL_ASSERT(i > 2 && (path[i - 2] == '\'' || (path[i - 2] == '"')));
+        sal_Int32 j = path.lastIndexOf(path[i - 2], i - 2);
+        OSL_ASSERT(j > 0);
+        decodeXml(path, j + 1, i - 2, name);
+        i = path.lastIndexOf('/', j);
+    } else {
+        i = path.lastIndexOf('/');
+        *name = path.copy(i + 1);
+    }
+    OSL_ASSERT(i != -1);
+    return path.copy(0, i);
 }
 
 xmlChar const * xmlString(char const * str) {
@@ -1230,6 +1295,7 @@ void parseXcuNode(
                          fromXmlString(doc->URL)),
                         css::uno::Reference< css::uno::XInterface >());
                 }
+                Operation op(getOperationAttribute(doc, p));
                 //TODO: oor:finalized attributes
                 xmlNodePtr q(skipBlank(p->xmlChildrenNode));
                 LocalizedValues values;
@@ -1281,14 +1347,39 @@ void parseXcuNode(
                              fromXmlString(doc->URL)),
                             css::uno::Reference< css::uno::XInterface >());
                     }
-                    // For nil values, any actually provided value is simply
-                    // ignored for now:
+                    bool remove;
+                    switch (getOperationAttribute(doc, q)) {
+                    case OPERATION_MODIFY:
+                        remove = false;
+                        break;
+                    case OPERATION_REMOVE:
+                        //TODO: disallow removing when e.g. lang=""?
+                        if (localized != 0 && op == OPERATION_FUSE) {
+                            remove = true;
+                            break;
+                        }
+                        // fall through
+                    default:
+                        throw css::uno::RuntimeException(
+                            (rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM(
+                                    "xcu: bad op attribute for value element"
+                                    " in ")) +
+                             fromXmlString(doc->URL)),
+                            css::uno::Reference< css::uno::XInterface >());
+                    }
+                    // For nil and removed values, any actually provided value
+                    // is simply ignored for now:
                     if (!values.insert(
                             LocalizedValues::value_type(
-                                lang.str == 0
-                                    ? rtl::OUString() : fromXmlString(lang.str),
-                                nil ? com::sun::star::uno::Any()
-                                    : parseValue(doc, q, type))).
+                                (lang.str == 0
+                                 ? rtl::OUString() : fromXmlString(lang.str)),
+                                (remove
+                                 ? css::uno::makeAny(
+                                     cppu::UnoType< cppu::UnoVoidType >::get())
+                                 : (nil
+                                    ? css::uno::Any()
+                                    : parseValue(doc, q, type))))).
                         second)
                     {
                         throw css::uno::RuntimeException(
@@ -1318,7 +1409,7 @@ void parseXcuNode(
                              fromXmlString(doc->URL)),
                             css::uno::Reference< css::uno::XInterface >());
                     }
-                    switch (getOperationAttribute(doc, p)) {
+                    switch (op) {
                     case OPERATION_MODIFY:
                         throw css::uno::RuntimeException(
                             (rtl::OUString(
@@ -1341,7 +1432,7 @@ void parseXcuNode(
                         break;
                     }
                 } else {
-                    switch (getOperationAttribute(doc, p)) {
+                    switch (op) {
                     case OPERATION_MODIFY:
                     case OPERATION_FUSE:
                         if (property != 0) {
@@ -1350,20 +1441,25 @@ void parseXcuNode(
                             for (LocalizedValues::iterator j(values.begin());
                                  j != values.end(); ++j)
                             {
-                                NodeMap::iterator k(
-                                    Components::resolveNode(
-                                        j->first, &localized->getMembers()));
-                                if (k == localized->getMembers().end()) {
-                                    localized->getMembers().insert(
-                                        NodeMap::value_type(
-                                            j->first,
-                                            new LocalizedPropertyValueNode(
-                                                j->second)));
+                                if (isRemovedValue(j->second)) {
+                                    localized->getMembers().erase(j->first);
                                 } else {
-                                    dynamic_cast<
-                                        LocalizedPropertyValueNode * >(
-                                            k->second.get())->
-                                        setValue(j->second);
+                                    NodeMap::iterator k(
+                                        Components::resolveNode(
+                                            j->first,
+                                            &localized->getMembers()));
+                                    if (k == localized->getMembers().end()) {
+                                        localized->getMembers().insert(
+                                            NodeMap::value_type(
+                                                j->first,
+                                                new LocalizedPropertyValueNode(
+                                                    j->second)));
+                                    } else {
+                                        dynamic_cast<
+                                            LocalizedPropertyValueNode * >(
+                                                k->second.get())->
+                                            setValue(j->second);
+                                    }
                                 }
                             }
                         }
@@ -2045,40 +2141,14 @@ sal_Int32 Components::parseSegment(
     if (del != '\'' && del != '"') {
         return -1;
     }
-    rtl::OUStringBuffer buf;
-    for (;;) {
-        if (i == path.getLength()) {
-            return -1;
-        }
-        sal_Unicode c = path[i++];
-        if (c == del) {
-            break;
-        }
-        if (c == '&') {
-            if (path.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("amp;"), i)) {
-                buf.append(sal_Unicode('&'));
-                i += RTL_CONSTASCII_LENGTH("amp;");
-            } else if (path.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("quot;"), i))
-            {
-                buf.append(sal_Unicode('"'));
-                i += RTL_CONSTASCII_LENGTH("quot;");
-            } else if (path.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("apos;"), i))
-            {
-                buf.append(sal_Unicode('\''));
-                i += RTL_CONSTASCII_LENGTH("apos;");
-            } else {
-                return -1;
-            }
-        } else {
-            buf.append(c);
-        }
-    }
-    if (i == path.getLength() || path[i++] != ']') {
+    sal_Int32 j = path.indexOf(del, i);
+    if (j == -1 || j + 1 == path.getLength() || path[j + 1] != ']' ||
+        !decodeXml(path, i, j, name))
+    {
         return -1;
     }
-    *name = buf.makeStringAndClear();
     *setElement = true;
-    return i;
+    return j + 2;
 }
 
 NodeMap::iterator Components::resolveNode(
@@ -2226,32 +2296,93 @@ void Components::writeModifications() {
     xmlTextWriterWriteAttribute(
         writer.writer, xmlString("xmlns:xs"),
         xmlString("http://www.w3.org/2001/XMLSchema"));
+    //TODO: Do not write back information about those removed items that did not
+    // come from the .xcs/.xcu files, anyway (but had been added dynamically
+    // instead):
     for (Modifications::iterator i(modifications_.begin());
          i != modifications_.end(); ++i)
     {
         xmlTextWriterStartElement(writer.writer, xmlString("item"));
-        sal_Int32 n = i->getLength();
-        OSL_ASSERT(n > 0 && (*i)[n - 1] != '/');
-        if ((*i)[n - 1] == ']') {
-            OSL_ASSERT(n > 2 && ((*i)[n - 2] == '\'' || ((*i)[n - 2] == '"')));
-            n = i->lastIndexOf((*i)[n - 2], n - 2);
-            OSL_ASSERT(n > 0);
-        }
-        n = i->lastIndexOf('/', n);
-        OSL_ASSERT(n != -1);
-        xmlTextWriterWriteAttribute(
-            writer.writer, xmlString("path"),
-            xmlString(convertToUtf8(i->copy(0, n)).getStr()));
         rtl::OUString name;
-        rtl::Reference< Node > node(resolvePath(*i, 0, &name));
+        rtl::OUString parentPath(parseLastSegment(*i, &name));
+        rtl::Reference< Node > node(resolvePath(*i, 0, 0));
         if (node.is()) {
+            xmlTextWriterWriteAttribute(
+                writer.writer, xmlString("path"),
+                xmlString(convertToUtf8(parentPath).getStr()));
             writeNode(writer.writer, name, node);
         } else {
-            if(true)abort();*(char*)0=0;throw 0;//TODO
+            rtl::Reference< Node > parent(resolvePath(parentPath, 0, 0));
+            if (dynamic_cast< LocalizedPropertyNode * >(parent.get()) != 0) {
+                rtl::OUString parentName;
+                rtl::OUString grandparentPath(
+                    parseLastSegment(parentPath, &parentName));
+                xmlTextWriterWriteAttribute(
+                    writer.writer, xmlString("path"),
+                    xmlString(convertToUtf8(grandparentPath).getStr()));
+                xmlTextWriterStartElementNS(
+                    writer.writer, xmlString("oor"), xmlString("prop"),
+                    xmlString("http://openoffice.org/2001/registry"));
+                xmlTextWriterWriteAttributeNS(
+                    writer.writer, xmlString("oor"), xmlString("name"),
+                    xmlString("http://openoffice.org/2001/registry"),
+                    xmlString(convertToUtf8(parentName).getStr()));
+                xmlTextWriterWriteAttributeNS(
+                    writer.writer, xmlString("oor"), xmlString("op"),
+                    xmlString("http://openoffice.org/2001/registry"),
+                    xmlString("fuse"));
+                xmlTextWriterStartElementNS(
+                    writer.writer, xmlString("oor"), xmlString("value"),
+                    xmlString("http://openoffice.org/2001/registry"));
+                xmlTextWriterWriteAttribute(
+                    writer.writer, xmlString("xml:lang"),
+                    xmlString(convertToUtf8(name).getStr()));
+                xmlTextWriterWriteAttributeNS(
+                    writer.writer, xmlString("oor"), xmlString("op"),
+                    xmlString("http://openoffice.org/2001/registry"),
+                    xmlString("remove"));
+                xmlTextWriterEndElement(writer.writer);
+                xmlTextWriterEndElement(writer.writer);
+            } else if (dynamic_cast< GroupNode * >(parent.get()) != 0) {
+                OSL_ASSERT(
+                    dynamic_cast< GroupNode * >(parent.get())->isExtensible());
+                xmlTextWriterWriteAttribute(
+                    writer.writer, xmlString("path"),
+                    xmlString(convertToUtf8(parentPath).getStr()));
+                xmlTextWriterStartElementNS(
+                    writer.writer, xmlString("oor"), xmlString("prop"),
+                    xmlString("http://openoffice.org/2001/registry"));
+                xmlTextWriterWriteAttributeNS(
+                    writer.writer, xmlString("oor"), xmlString("name"),
+                    xmlString("http://openoffice.org/2001/registry"),
+                    xmlString(convertToUtf8(name).getStr()));
+                xmlTextWriterWriteAttributeNS(
+                    writer.writer, xmlString("oor"), xmlString("op"),
+                    xmlString("http://openoffice.org/2001/registry"),
+                    xmlString("remove"));
+                xmlTextWriterEndElement(writer.writer);
+            } else {
+                OSL_ASSERT(dynamic_cast< SetNode * >(parent.get()) != 0);
+                xmlTextWriterWriteAttribute(
+                    writer.writer, xmlString("path"),
+                    xmlString(convertToUtf8(parentPath).getStr()));
+                xmlTextWriterStartElementNS(
+                    writer.writer, xmlString("oor"), xmlString("node"),
+                    xmlString("http://openoffice.org/2001/registry"));
+                xmlTextWriterWriteAttributeNS(
+                    writer.writer, xmlString("oor"), xmlString("name"),
+                    xmlString("http://openoffice.org/2001/registry"),
+                    xmlString(convertToUtf8(name).getStr()));
+                xmlTextWriterWriteAttributeNS(
+                    writer.writer, xmlString("oor"), xmlString("op"),
+                    xmlString("http://openoffice.org/2001/registry"),
+                    xmlString("remove"));
+                xmlTextWriterEndElement(writer.writer);
+            }
         }
         xmlTextWriterEndElement(writer.writer);
     }
-    if (xmlTextWriterEndDocument(writer.writer) == -1) {
+    if (xmlTextWriterEndDocument(writer.writer) == -1) { //TODO: check all -1?
         throw css::uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot write ")) + url,
             css::uno::Reference< css::uno::XInterface >());
