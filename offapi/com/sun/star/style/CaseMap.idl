@@ -78,6 +78,9 @@ published constants CaseMap
      */
     const short SMALLCAPS = 4;
 
+    /** The first character of each first word of each sentence is put in upper case.
+     */
+    const short SENTENCE = 5;
 };
 
 //=============================================================================
