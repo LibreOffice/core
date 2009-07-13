@@ -402,6 +402,9 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
             < "Lowercase" ; Default ; > ;
             < "Title" ; Default ; > ;
             < "Small capitals" ; Default ; > ;
+//#i1601: This specific change would be a file-format change
+// and thus needs to be approved by OASIS before being activated
+//          < "Sentence" ; Default ; > ;
         };
     };
     FixedText FT_RELIEF

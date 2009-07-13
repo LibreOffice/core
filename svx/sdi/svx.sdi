@@ -1483,6 +1483,31 @@ SfxVoidItem ChangeCaseToLower SID_TRANSLITERATE_LOWER
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem ChangeCaseToSentenceCase SID_TRANSLITERATE_SENTENCE_CASE
+()
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem ChangeCaseToUpper SID_TRANSLITERATE_UPPER
 ()
 [

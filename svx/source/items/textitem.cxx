@@ -2378,6 +2378,7 @@ sal_Bool SvxCaseMapItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
         case SVX_CASEMAP_VERSALIEN   :      nRet = style::CaseMap::UPPERCASE; break;
         case SVX_CASEMAP_GEMEINE     :      nRet = style::CaseMap::LOWERCASE; break;
         case SVX_CASEMAP_TITEL       :      nRet = style::CaseMap::TITLE    ; break;
+        case SVX_CASEMAP_SENTENCE    :      nRet = style::CaseMap::SENTENCE ; break;
         case SVX_CASEMAP_KAPITAELCHEN:      nRet = style::CaseMap::SMALLCAPS; break;
     }
     rVal <<= (sal_Int16)(nRet);
@@ -2398,6 +2399,7 @@ sal_Bool SvxCaseMapItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
     case style::CaseMap::UPPERCASE:  nVal = SVX_CASEMAP_VERSALIEN   ; break;
     case style::CaseMap::LOWERCASE:  nVal = SVX_CASEMAP_GEMEINE     ; break;
     case style::CaseMap::TITLE    :  nVal = SVX_CASEMAP_TITEL       ; break;
+    case style::CaseMap::SENTENCE :  nVal = SVX_CASEMAP_SENTENCE    ; break;
     case style::CaseMap::SMALLCAPS:  nVal = SVX_CASEMAP_KAPITAELCHEN; break;
     }
     SetValue(nVal);

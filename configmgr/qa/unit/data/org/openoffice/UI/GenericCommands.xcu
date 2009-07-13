@@ -2097,6 +2097,11 @@
           <value xml:lang="x-no-translate"></value><value xml:lang="en-US">~Lowercase</value>
         </prop>
       </node>
+      <node oor:name=".uno:ChangeCaseToSentenceCase" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">~Sentence Case</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ChangeCaseToHalfWidth" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="x-no-translate"></value><value xml:lang="en-US">H~alf-width</value>
