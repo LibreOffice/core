@@ -1,4 +1,4 @@
-ure	cli_ure	:	cppu cppuhelper sal codemaker stoc udkapi tools NULL
+ure     cli_ure :       cppu cppuhelper sal codemaker stoc udkapi NULL
 ure	cli_ure						usr1	-	all	ure_mkout NULL
 ure	cli_ure\inc					nmake   -   all   ure_inc NULL
 ure	cli_ure\version				nmake   -   all   ure_source_version ure_inc NULL
