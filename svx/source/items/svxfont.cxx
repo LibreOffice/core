@@ -176,49 +176,17 @@ XubString SvxFont::CalcCaseMap( const XubString &rTxt ) const
                     bBlank = TRUE;
                 else
                 {
-                    String aTemp( aTxt.GetChar( i ) );
-                     if( bBlank )
+                    if( bBlank )
                     {
+                        String aTemp( aTxt.GetChar( i ) );
                         aCharClass.toUpper( aTemp );
-                        bBlank = FALSE;
-
+                        aTxt.Replace( i, 1, aTemp );
                     }
-                    else
-                     {
-                        aCharClass.toLower( aTemp );
-                    }
-                    aTxt.Replace( i, 1, aTemp );
-
+                    bBlank = FALSE;
                 }
             }
             break;
         }
-        case SVX_CASEMAP_SENTENCE:
-        {
-            // SENTENCE CASE
-            BOOL bPoint = TRUE;
-
-            for( USHORT i = 0; i < aTxt.Len(); ++i )
-            {
-                sal_Unicode c = aTxt.GetChar(i);
-                if( sal_Unicode('.') == c || sal_Unicode('!') == c || sal_Unicode('?') == c )
-                    bPoint = TRUE;
-                else if( sal_Unicode(' ') == c || sal_Unicode('\t') == c )
-                    ;
-                else
-                {
-                    if( bPoint )
-                    {
-                        String aTemp( c );
-                         aCharClass.toUpper( aTemp );
-                         aTxt.Replace( i, 1, aTemp );
-                     }
-                    bPoint = FALSE;
-                 }
-             }
-             break;
-         }
-
         default:
         {
             DBG_ASSERT(!this, "SvxFont::CaseMapTxt: unknown casemap");

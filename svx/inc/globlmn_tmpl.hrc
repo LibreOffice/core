@@ -1355,13 +1355,6 @@
                 };\
                 MenuItem\
                 {\
-                    Identifier = SID_TRANSLITERATE_SENTENCE_CASE; \
-                    Command = ".uno:ChangeCaseToSentenceCase" ; \
-                    HelpID = SID_TRANSLITERATE_SENTENCE_CASE; \
-                    Text [ en-US ] = "~Sentence case";\
-                };\
-                MenuItem\
-                {\
                     Identifier = SID_TRANSLITERATE_HALFWIDTH; \
                     Command = ".uno:ChangeCaseToHalfWidth" ; \
                     HelpID = SID_TRANSLITERATE_HALFWIDTH; \
