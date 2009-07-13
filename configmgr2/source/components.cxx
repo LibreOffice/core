@@ -732,6 +732,12 @@ template< typename T > bool parseListValue(
 css::uno::Any parseValue(xmlDocPtr doc, xmlNodePtr node, Type type) {
     XmlString text(xmlNodeListGetString(doc, node->xmlChildrenNode, 1));
     switch (type) {
+    case TYPE_ANY:
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("invalid value of type any in ")) +
+             fromXmlString(doc->URL)),
+            css::uno::Reference< css::uno::XInterface >());
     case TYPE_BOOLEAN:
         if (text.str != 0) {
             XmlString col(xmlSchemaCollapseString(text.str));
@@ -808,12 +814,6 @@ css::uno::Any parseValue(xmlDocPtr doc, xmlNodePtr node, Type type) {
             }
         }
         break;
-    case TYPE_ANY:
-        throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("invalid value of type any in ")) +
-             fromXmlString(doc->URL)),
-            css::uno::Reference< css::uno::XInterface >());
     case TYPE_BOOLEAN_LIST:
         {
             css::uno::Sequence< sal_Bool > val;
@@ -1822,7 +1822,7 @@ void writeNode(
         if (type == TYPE_ANY) {
             type = mapType(prop->getValue());
             static char const * const typeNames[] = {
-                0, 0, // TYPE_ERROR, TYPE_NIL,
+                0, 0, 0, // TYPE_ERROR, TYPE_NIL, TYPE_ANY
                 "xs:boolean", // TYPE_BOOLEAN
                 "xs:short", // TYPE_SHORT
                 "xs:int", // TYPE_INT
@@ -1830,7 +1830,6 @@ void writeNode(
                 "xs:double", // TYPE_DOUBLE
                 "xs:string", // TYPE_STRING
                 "xs:hexBinary", // TYPE_HEXBINARY
-                0, // TYPE_ANY
                 "oor:boolean-list", // TYPE_BOOLEAN_LIST
                 "oor:short-list", // TYPE_SHORT_LIST
                 "oor:int-list", // TYPE_INT_LIST

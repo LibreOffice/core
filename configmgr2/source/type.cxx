@@ -55,6 +55,8 @@ css::uno::Type mapType(Type type) {
         return cppu::UnoType< cppu::UnoVoidType >::get();
     case TYPE_NIL: //TODO: can happen?
         return cppu::UnoType< cppu::UnoVoidType >::get();
+    case TYPE_ANY: //TODO: can happen?
+        return cppu::UnoType< css::uno::Any >::get();
     case TYPE_BOOLEAN:
         return cppu::UnoType< sal_Bool >::get();
     case TYPE_SHORT:
@@ -69,8 +71,6 @@ css::uno::Type mapType(Type type) {
         return cppu::UnoType< rtl::OUString >::get();
     case TYPE_HEXBINARY:
         return cppu::UnoType< css::uno::Sequence< sal_Int8 > >::get();
-    case TYPE_ANY: //TODO: can happen?
-        return cppu::UnoType< css::uno::Any >::get();
     case TYPE_BOOLEAN_LIST:
         return cppu::UnoType< css::uno::Sequence< sal_Bool > >::get();
     case TYPE_SHORT_LIST:
