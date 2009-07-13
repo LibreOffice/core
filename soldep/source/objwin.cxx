@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -795,4 +795,30 @@ ObjectWin* ObjectList::GetPtrByName( const ByteString& rText )
        i++;
     }
     return 0;
+}
+
+ObjectList* ObjectList::FindTopLevelModules()
+{
+    ObjectList* pList = new ObjectList;
+    for ( USHORT i=0; i<Count(); i++ )
+    {
+       ObjectWin* pObjectWin = GetObject( i );
+       if ( pObjectWin->IsTop() )
+           pList->Insert( pObjectWin );
+    }
+
+    return pList;
+}
+
+BOOL ObjectWin::IsTop()
+{
+    ULONG nConCount = mConnections.Count();
+    for ( ULONG i = 0; i < nConCount; i++ )
+    {
+        Connector* pCon = mConnections.GetObject( i );
+        if ( pCon && pCon->IsStart( this) )
+            return FALSE;
+    }
+
+    return TRUE;
 }

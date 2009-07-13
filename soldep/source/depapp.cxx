@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ void MyApp::Main()
     pSolDep->Init();
     aMainWin.SetText( String::CreateFromAscii( SOLDEPL_NAME ));
     pSolDep->Hide();
-    aMainWin.Show();
+    aMainWin.Show();    
     Help aHelp;
     SetHelp(&aHelp);
     aHelp.EnableContextHelp();

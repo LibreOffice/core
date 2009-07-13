@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#ifdef PRODUCT_MAPPER_HXX
+#ifndef PRODUCT_MAPPER_HXX
 #define PRODUCT_MAPPER_HXX
 
 #ifndef _SSTRING_HXX

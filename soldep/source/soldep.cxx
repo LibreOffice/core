@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -296,7 +296,7 @@ IMPL_LINK( SolDep, ToolSelect, SoldepToolBox* , pBox)
             SvFileStream aStream( String::CreateFromAscii("d:\\out.svm"), STREAM_STD_READWRITE );
             aMtf.Write( aStream );
             break;
-        }
+        }       
         case TID_SOLDEP_HIDE_INDEPENDEND:
             {
                 ToggleHideDependency();
@@ -530,7 +530,7 @@ ULONG SolDep::GetStart(SolIdMapper* pIdMapper, ObjectList* pObjList)
 }
 
 /*****************************************************************************/
-ULONG SolDep::GetStartPrj(SolIdMapper* pIdMapper, ObjectList* pObjList)
+ULONG SolDep::GetStartPrj(SolIdMapper* , ObjectList* )
 /*****************************************************************************/
 {
 //  DBG_ASSERT( FALSE , "prjdep" );
@@ -956,9 +956,23 @@ BOOL SolDep::FindProject()
     if ( aFindProjectDlg.Execute() == RET_OK ) {
         msProject = aFindProjectDlg.GetProject();
         //now we have a project string
+
         pObjectWin = mpObjectList->GetPtrByName( msProject );
-        mpObjectList->ResetSelectedObject();
-        MarkObjects( pObjectWin );
+        if (pObjectWin)
+        {
+            mpObjectList->ResetSelectedObject();
+            MarkObjects( pObjectWin );
+        }
+        else
+        {
+            mpObjectList->ResetSelectedObject();
+            for ( USHORT i=0; i<mpObjectList->Count(); i++ )
+            {
+               ObjectWin* pObjectWin = mpObjectList->GetObject( i );
+               if ( !pObjectWin->IsTop() )
+                    pObjectWin->SetViewMask(FALSE);
+            }
+        }
     }
     return FALSE;
 }
