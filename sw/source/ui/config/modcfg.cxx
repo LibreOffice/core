@@ -328,7 +328,6 @@ sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
                 case  SVX_CASEMAP_GEMEINE     : nRet = 6;break;
                 case  SVX_CASEMAP_KAPITAELCHEN: nRet = 7;break;
                 case  SVX_CASEMAP_TITEL       : nRet = 8;break;
-                case  SVX_CASEMAP_SENTENCE    : nRet = 10;break;
             }
         }
         break;
@@ -387,7 +386,6 @@ void lcl_ConvertCfgToAttr(sal_Int32 nVal, AuthorCharAttr& rAttr, sal_Bool bDelet
         case 6: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = SVX_CASEMAP_GEMEINE      ; break;
         case 7: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = SVX_CASEMAP_KAPITAELCHEN ; break;
         case 8: rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = SVX_CASEMAP_TITEL        ; break;
-        case 10:rAttr.nItemId = SID_ATTR_CHAR_CASEMAP;  rAttr.nAttr = SVX_CASEMAP_SENTENCE     ; break;
         case 9: rAttr.nItemId = SID_ATTR_BRUSH; break;
     }
 }

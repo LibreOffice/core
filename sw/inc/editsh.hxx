@@ -201,7 +201,6 @@ public:
 
     // change text to Upper/Lower/Hiragana/Katagana/...
     void TransliterateText( sal_uInt32 nType );
-    void TransliterateText( const String& rModuleName );
 
     // count words in current selection
     void CountWords( SwDocStat& rStat ) const;

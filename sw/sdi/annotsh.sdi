@@ -195,13 +195,6 @@ interface Annotation : _Annotation
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    SID_TRANSLITERATE_SENTENCE_CASE
-    [
-        ExecMethod = ExecTransliteration;
-        StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
     SID_TRANSLITERATE_HALFWIDTH
     [
         ExecMethod = ExecTransliteration;

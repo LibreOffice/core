@@ -55,7 +55,6 @@
 #include <svx/svdoutl.hxx>
 #include <unoobj.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -740,15 +739,14 @@ void SwDrawTextShell::ExecTransliteration( SfxRequest & rReq )
         case SID_TRANSLITERATE_LOWER:
             nMode = TransliterationModules_UPPERCASE_LOWERCASE;
             break;
-        case SID_TRANSLITERATE_SENTENCE_CASE:
-            nMode = TransliterationModulesExtra::SENTENCE_CASE;
-            break;
+
         case SID_TRANSLITERATE_HALFWIDTH:
             nMode = TransliterationModules_FULLWIDTH_HALFWIDTH;
             break;
         case SID_TRANSLITERATE_FULLWIDTH:
             nMode = TransliterationModules_HALFWIDTH_FULLWIDTH;
             break;
+
         case SID_TRANSLITERATE_HIRAGANA:
             nMode = TransliterationModules_KATAKANA_HIRAGANA;
             break;

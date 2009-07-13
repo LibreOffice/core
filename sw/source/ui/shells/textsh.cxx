@@ -71,8 +71,9 @@
 #include <svx/htmlmode.hxx>
 #include <svx/pfiledlg.hxx>
 #include <svx/htmlcfg.hxx>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HDL_
+#include <com/sun/star/i18n/TransliterationModules.hdl>
+#endif
 
 #include <sot/clsids.hxx>
 #include <svx/acorrcfg.hxx>
@@ -1050,15 +1051,14 @@ void SwTextShell::ExecTransliteration( SfxRequest & rReq )
         case SID_TRANSLITERATE_LOWER:
             nMode = TransliterationModules_UPPERCASE_LOWERCASE;
             break;
-        case SID_TRANSLITERATE_SENTENCE_CASE:
-            nMode = TransliterationModulesExtra::SENTENCE_CASE;
-            break;
+
         case SID_TRANSLITERATE_HALFWIDTH:
             nMode = TransliterationModules_FULLWIDTH_HALFWIDTH;
             break;
         case SID_TRANSLITERATE_FULLWIDTH:
             nMode = TransliterationModules_HALFWIDTH_FULLWIDTH;
             break;
+
         case SID_TRANSLITERATE_HIRAGANA:
             nMode = TransliterationModules_KATAKANA_HIRAGANA;
             break;
