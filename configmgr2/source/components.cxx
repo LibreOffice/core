@@ -1333,7 +1333,7 @@ void parseXcuNode(
                             NodeMap::value_type(
                                 name,
                                 new PropertyNode(
-                                    type, true, values[rtl::OUString()],
+                                    TYPE_ANY, true, values[rtl::OUString()],
                                     true)));
                         break;
                     case OPERATION_REMOVE:
@@ -1420,7 +1420,7 @@ void parseXcuNode(
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM(
-                                "xcu: invalid operation on group node in")) +
+                                "xcu: invalid operation on group node in ")) +
                          fromXmlString(doc->URL)),
                         css::uno::Reference< css::uno::XInterface >());
                 }
@@ -1818,14 +1818,34 @@ void writeNode(
             writer, xmlString("oor"), xmlString("op"),
             xmlString("http://openoffice.org/2001/registry"),
             xmlString("fuse"));
-        //TODO: oor:type
-        xmlTextWriterStartElementNS(
-            writer, xmlString("oor"), xmlString("value"),
-            xmlString("http://openoffice.org/2001/registry"));
         Type type = prop->getType();
         if (type == TYPE_ANY) {
             type = mapType(prop->getValue());
+            static char const * const typeNames[] = {
+                0, 0, // TYPE_ERROR, TYPE_NIL,
+                "xs:boolean", // TYPE_BOOLEAN
+                "xs:short", // TYPE_SHORT
+                "xs:int", // TYPE_INT
+                "xs:long", // TYPE_LONG
+                "xs:double", // TYPE_DOUBLE
+                "xs:string", // TYPE_STRING
+                "xs:hexBinary", // TYPE_HEXBINARY
+                0, // TYPE_ANY
+                "oor:boolean-list", // TYPE_BOOLEAN_LIST
+                "oor:short-list", // TYPE_SHORT_LIST
+                "oor:int-list", // TYPE_INT_LIST
+                "oor:long-list", // TYPE_LONG_LIST
+                "oor:double-list", // TYPE_DOUBLE_LIST
+                "oor:string-list", // TYPE_STRING_LIST
+                "oor:hexBinary-list" }; // TYPE_HEXBINARY_LIST
+            xmlTextWriterWriteAttributeNS(
+                writer, xmlString("oor"), xmlString("type"),
+                xmlString("http://openoffice.org/2001/registry"),
+                xmlString(typeNames[type]));
         }
+        xmlTextWriterStartElementNS(
+            writer, xmlString("oor"), xmlString("value"),
+            xmlString("http://openoffice.org/2001/registry"));
         switch (type) {
         case TYPE_NIL:
             xmlTextWriterWriteAttributeNS(
@@ -1996,62 +2016,70 @@ rtl::OUString Components::createSegment(
     return buf.makeStringAndClear();
 }
 
-bool Components::parseSegment(
-    rtl::OUString const & segment, rtl::OUString * name, bool * setElement,
-    rtl::OUString * templateName)
+sal_Int32 Components::parseSegment(
+    rtl::OUString const & path, sal_Int32 index, rtl::OUString * name,
+    bool * setElement, rtl::OUString * templateName)
 {
-    OSL_ASSERT(name != 0 && setElement != 0);
-    sal_Int32 i = segment.indexOf('[');
-    if (i == -1) {
-        *name = segment;
-        *setElement = false;
-        return true;
+    OSL_ASSERT(
+        index >= 0 && index <= path.getLength() && name != 0 &&
+        setElement != 0);
+    sal_Int32 i = index;
+    while (i < path.getLength() && path[i] != '/' && path[i] != '[') {
+        ++i;
     }
-    *setElement = true;
+    if (i == path.getLength() || path[i] == '/') {
+        *name = path.copy(index, i - index);
+        *setElement = false;
+        return i;
+    }
     if (templateName != 0) {
-        // For backwards compatibility, treat an empty template name the same
-        // as "*".
-        *templateName = segment.copy(0, i);
-        if (templateName->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*"))) {
+        if (i - index == 1 && path[index] == '*') {
             *templateName = rtl::OUString();
+        } else {
+            *templateName = path.copy(index, i - index);
         }
     }
-    if (segment[segment.getLength() - 1] != ']' ||
-        (segment[i + 1] != '\'' && segment[i + 1] != '"') ||
-        segment.getLength() - 2 <= i + 1 ||
-        segment[segment.getLength() - 2] != segment[i + 1])
-    {
-        return false;
+    if (++i == path.getLength()) {
+        return -1;
+    }
+    sal_Unicode del = path[i++];
+    if (del != '\'' && del != '"') {
+        return -1;
     }
     rtl::OUStringBuffer buf;
-    i += 2;
-    while (i < segment.getLength() - 2) {
-        sal_Unicode c = segment[i];
+    for (;;) {
+        if (i == path.getLength()) {
+            return -1;
+        }
+        sal_Unicode c = path[i++];
+        if (c == del) {
+            break;
+        }
         if (c == '&') {
-            if (segment.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("amp;"), i + 1))
-            {
+            if (path.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("amp;"), i)) {
                 buf.append(sal_Unicode('&'));
-                i += RTL_CONSTASCII_LENGTH("&amp;");
-            } else if (segment.matchAsciiL(
-                           RTL_CONSTASCII_STRINGPARAM("quot;"), i + 1))
+                i += RTL_CONSTASCII_LENGTH("amp;");
+            } else if (path.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("quot;"), i))
             {
                 buf.append(sal_Unicode('"'));
-                i += RTL_CONSTASCII_LENGTH("&quot;");
-            } else if (segment.matchAsciiL(
-                           RTL_CONSTASCII_STRINGPARAM("apos;"), i + 1))
+                i += RTL_CONSTASCII_LENGTH("quot;");
+            } else if (path.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("apos;"), i))
             {
                 buf.append(sal_Unicode('\''));
-                i += RTL_CONSTASCII_LENGTH("&apos;");
+                i += RTL_CONSTASCII_LENGTH("apos;");
             } else {
-                return false;
+                return -1;
             }
         } else {
             buf.append(c);
-            ++i;
         }
     }
+    if (i == path.getLength() || path[i++] != ']') {
+        return -1;
+    }
     *name = buf.makeStringAndClear();
-    return true;
+    *setElement = true;
+    return i;
 }
 
 NodeMap::iterator Components::resolveNode(
@@ -2080,15 +2108,14 @@ rtl::Reference< Node > Components::resolvePath(
     rtl::OUString const & path, rtl::OUString * firstSegment,
     rtl::OUString * lastSegment)
 {
-    //TODO: parse .../foo['b/ar']/... correctly
     if (path.getLength() == 0 || path[0] != '/') {
         throw css::uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path, 0);
     }
-    sal_Int32 n = findFirst(path, '/', 1);
     rtl::OUString seg;
     bool setElement;
-    if (!parseSegment(path.copy(1, n - 1), &seg, &setElement, 0) || setElement)
+    sal_Int32 n = parseSegment(path, 1, &seg, &setElement, 0);
+    if (n == -1 || setElement)
     {
         throw css::uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path, 0);
@@ -2099,14 +2126,17 @@ rtl::Reference< Node > Components::resolvePath(
     NodeMap::iterator i(resolveNode(seg, &components_));
     rtl::Reference< Node > p(i == components_.end() ? 0 : i->second);
     while (p != 0 && n != path.getLength()) {
-        sal_Int32 n1 = findFirst(path, '/', n + 1);
-        rtl::OUString segment(path.copy(n + 1, n1 - (n + 1)));
-        // For backwards compatibility, ignore a final slash:
-        if (segment.getLength() == 0 && n1 == path.getLength()) {
-            break;
+        if (path[n++] != '/') {
+            throw css::uno::RuntimeException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path,
+                css::uno::Reference< css::uno::XInterface >());
+        }
+        if (n == path.getLength()) {
+            break; // for backwards compatibility, ignore a final slash
         }
         rtl::OUString templateName;
-        if (!parseSegment(segment, &seg, &setElement, &templateName)) {
+        n = parseSegment(path, n, &seg, &setElement, &templateName);
+        if (n == -1) {
             throw css::uno::RuntimeException(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path,
                 css::uno::Reference< css::uno::XInterface >());
@@ -2150,7 +2180,6 @@ rtl::Reference< Node > Components::resolvePath(
             // with simple path segments, like group members:
             p = p->getMember(seg);
         }
-        n = n1;
     }
     if (p != 0 && lastSegment != 0) {
         *lastSegment = seg;
@@ -2195,14 +2224,25 @@ void Components::writeModifications() {
         //TODO: more readable, but potentially slower?
     xmlTextWriterStartDocument(writer.writer, 0, 0, 0);
     xmlTextWriterStartElement(writer.writer, xmlString("modifications"));
+    xmlTextWriterWriteAttribute(
+        writer.writer, xmlString("xmlns:xs"),
+        xmlString("http://www.w3.org/2001/XMLSchema"));
     for (Modifications::iterator i(modifications_.begin());
          i != modifications_.end(); ++i)
     {
         xmlTextWriterStartElement(writer.writer, xmlString("item"));
+        sal_Int32 n = i->getLength();
+        OSL_ASSERT(n > 0 && (*i)[n - 1] != '/');
+        if ((*i)[n - 1] == ']') {
+            OSL_ASSERT(n > 2 && ((*i)[n - 2] == '\'' || ((*i)[n - 2] == '"')));
+            n = i->lastIndexOf((*i)[n - 2], n - 2);
+            OSL_ASSERT(n > 0);
+        }
+        n = i->lastIndexOf('/', n);
+        OSL_ASSERT(n != -1);
         xmlTextWriterWriteAttribute(
             writer.writer, xmlString("path"),
-            xmlString(convertToUtf8(i->copy(0, i->lastIndexOf('/'))).getStr()));
-            //TODO
+            xmlString(convertToUtf8(i->copy(0, n)).getStr()));
         rtl::OUString name;
         rtl::Reference< Node > node(resolvePath(*i, 0, &name));
         if (node.is()) {

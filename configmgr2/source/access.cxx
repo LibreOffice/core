@@ -1047,14 +1047,12 @@ rtl::Reference< ChildAccess > Access::getUnmodifiedChild(
 }
 
 rtl::Reference< ChildAccess > Access::getSubChild(rtl::OUString const & path) {
-    sal_Int32 i = path.indexOf('/');
     rtl::OUString name;
     bool setElement;
     rtl::OUString templateName;
-    if (!Components::parseSegment(
-            i == -1 ? path : path.copy(0, i), &name, &setElement,
-            &templateName))
-    {
+    sal_Int32 i = Components::parseSegment(
+        path, 0, &name, &setElement, &templateName);
+    if (i == -1 || (i != path.getLength() && path[i] != '/')) {
         return rtl::Reference< ChildAccess >();
     }
     rtl::Reference< ChildAccess > child(getChild(name));
@@ -1077,8 +1075,8 @@ rtl::Reference< ChildAccess > Access::getSubChild(rtl::OUString const & path) {
     }
     // For backwards compatibility, ignore a final slash after non-value nodes:
     return child->isValue()
-        ? (i == -1 ? child : rtl::Reference< ChildAccess >())
-        : (i == -1 || i + 1 == path.getLength()
+        ? (i == path.getLength() ? child : rtl::Reference< ChildAccess >())
+        : (i >= path.getLength() - 1
            ? child : child->getSubChild(path.copy(i + 1)));
 }
 

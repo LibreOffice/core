@@ -58,9 +58,9 @@ public:
     static rtl::OUString createSegment(
         rtl::OUString const & templateName, rtl::OUString const & name);
 
-    static bool parseSegment(
-        rtl::OUString const & segment, rtl::OUString * name, bool * setElement,
-        rtl::OUString * templateName);
+    static sal_Int32 parseSegment(
+        rtl::OUString const & path, sal_Int32 index, rtl::OUString * name,
+        bool * setElement, rtl::OUString * templateName);
 
     static NodeMap::iterator resolveNode(
         rtl::OUString const & name, NodeMap * map);
