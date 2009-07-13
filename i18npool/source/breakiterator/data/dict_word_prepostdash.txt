@@ -24,6 +24,12 @@ $Katakana  = [[:Script = KATAKANA:] [:name = KATAKANA-HIRAGANA PROLONGED SOUND M
 $Ideographic = [:Ideographic:];
 $Hangul = [:Script = HANGUL:];
 
+# list of dashes or hyphens that should be accepted as part of the word if a single one of these
+# pre- or postfixes a word. E.g. in German: "Arbeits-" or "-nehmer" where that hyphen needs to
+# be part of the word in order to have it properly spell checked etc.
+$PrePostDashHyphen = [ [:name = HYPHEN-MINUS:] [:name = EN DASH:] [:name = EM DASH:] ];
+
+
 $ALetter   = [\u0002 [:Alphabetic:] [:name= COMMERCIAL AT:] [:name= HEBREW PUNCTUATION GERESH:]
                            - $Ideographic
                            - $Katakana
@@ -103,7 +109,10 @@ $NumberSequence {100};
 #     - may include both letters and numbers.
 #     - may include  MideLetter, MidNumber punctuation.
 #
-$LetterSequence = $ALetterEx ($FormatEx* $MidLetterEx? $FormatEx* $ALetterEx)*;     # rules #6, #7
+# At most one leading or trailing dash/hyphen should be accepted as well.
+# E.g. in German: "Arbeits-" or "-nehmer" where that hyphen needs to
+# be part of the word in order to have it properly spell checked etc.
+$LetterSequence = $PrePostDashHyphen? $ALetterEx ($FormatEx* $MidLetterEx? $FormatEx* $ALetterEx)* $PrePostDashHyphen?;     # rules #6, #7
 ($NumberSequence $FormatEx*)? $LetterSequence ($FormatEx* ($NumberSequence | $LetterSequence))* $SufixLetterEx? {200};
 
 [[:P:][:S:]]*;

@@ -34,8 +34,7 @@ $ALetter   = [\u0002 [:Alphabetic:] [:name= COMMERCIAL AT:] [:name= HEBREW PUNCT
                            
 $MidLetter = [[:name = APOSTROPHE:] [:name = GRAVE ACCENT:] \u0084 [:name = SOFT HYPHEN:] [:name = MIDDLE DOT:] [:name = GREEK TONOS:] [:name= FULL STOP:] 
               [:name = HEBREW PUNCTUATION GERSHAYIM:] [:name = DOUBLE VERTICAL LINE:] [:name = LEFT SINGLE QUOTATION MARK:]
-              [:name = RIGHT SINGLE QUOTATION MARK:] [:name = HYPHENATION POINT:] [:name = PRIME:] 
-              [:name = HYPHEN-MINUS:] [:name = EN DASH:] [:name = EM DASH:] ];
+              [:name = RIGHT SINGLE QUOTATION MARK:] [:name = HYPHENATION POINT:] [:name = PRIME:] ];  
 
 $SufixLetter = [:name= FULL STOP:];
               
