@@ -37,6 +37,7 @@
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
+using ::com::sun::star::awt::Size;
 using ::com::sun::star::chart2::XChartDocument;
 using ::com::sun::star::chart2::data::XDataProvider;
 using ::com::sun::star::chart2::data::XDataSequence;
@@ -57,12 +58,12 @@ ChartConverter::~ChartConverter()
 }
 
 void ChartConverter::convertFromModel( XmlFilterBase& rFilter,
-        ChartSpaceModel& rModel, const Reference< XChartDocument >& rxChartDoc )
+        ChartSpaceModel& rModel, const Reference< XChartDocument >& rxChartDoc, const Size& rChartSize )
 {
     OSL_ENSURE( rxChartDoc.is(), "ChartConverter::convertFromModel - missing chart document" );
     if( rxChartDoc.is() )
     {
-        ConverterRoot aConvBase( rFilter, *this, rxChartDoc, rModel );
+        ConverterRoot aConvBase( rFilter, *this, rxChartDoc, rChartSize, rModel );
         ChartSpaceConverter aSpaceConv( aConvBase, rModel );
         aSpaceConv.convertFromModel();
     }

@@ -383,7 +383,7 @@ void CreateChartCallback::onCreateXShape( const Reference< drawing::XShape >& rx
 
         // convert imported chart model to chart document
         Reference< chart2::XChartDocument > xChartDoc( xDocModel, UNO_QUERY_THROW );
-        mrFilter.getChartConverter().convertFromModel( mrFilter, aModel, xChartDoc );
+        mrFilter.getChartConverter().convertFromModel( mrFilter, aModel, xChartDoc, rxShape->getSize() );
     }
     catch( Exception& )
     {

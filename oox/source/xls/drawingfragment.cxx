@@ -468,7 +468,7 @@ void OoxDrawingFragment::onEndElement( const OUString& rChars )
             {
                 Rectangle aLoc = mxAnchor->calcEmuLocation( maEmuSheetSize );
                 if( (aLoc.X >= 0) && (aLoc.Y >= 0) && (aLoc.Width >= 0) && (aLoc.Height >= 0) )
-                    mxShape->addShape( getOoxFilter(), getThemeRef(), mxDrawPage, &aLoc );
+                    mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, &aLoc );
             }
             mxShape.reset();
             mxAnchor.reset();

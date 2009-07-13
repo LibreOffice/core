@@ -48,6 +48,7 @@ const sal_Int32 NMSP_ACTIVATION             = 12 << 16;
 const sal_Int32 NMSP_DRAWINGML              = 21 << 16;
 const sal_Int32 NMSP_DIAGRAM                = 22 << 16;
 const sal_Int32 NMSP_CHART                  = 23 << 16;
+const sal_Int32 NMSP_CDR                    = 24 << 16; // ChartDrawingML
 // VML
 const sal_Int32 NMSP_VML                    = 31 << 16;
 const sal_Int32 NMSP_OFFICE                 = 32 << 16;
@@ -79,6 +80,23 @@ inline sal_Int32 getToken( sal_Int32 nElement ) { return nElement & TOKEN_MASK; 
 
 /** Returns the namespace of the passed element without token identifier. */
 inline sal_Int32 getNamespace( sal_Int32 nElement ) { return nElement & NMSP_MASK; }
+
+// ----------------------------------------------------------------------------
+
+// defines for tokens with specific namespaces, can be used in switch/cases
+#define A_TOKEN( token )            (::oox::NMSP_DRAWINGML | XML_##token)
+#define AX_TOKEN( token )           (::oox::NMSP_AX | XML_##token)
+#define C_TOKEN( token )            (::oox::NMSP_CHART | XML_##token)
+#define CDR_TOKEN( token )          (::oox::NMSP_CDR | XML_##token)
+#define O_TOKEN( token )            (::oox::NMSP_OFFICE | XML_##token)
+#define PPT_TOKEN( token )          (::oox::NMSP_PPT | XML_##token)
+#define R_TOKEN( token )            (::oox::NMSP_RELATIONSHIPS | XML_##token)
+#define VML_TOKEN( token )          (::oox::NMSP_VML | XML_##token)
+#define VMLX_TOKEN( token )         (::oox::NMSP_VML_XLS | XML_##token)
+#define XDR_TOKEN( token )          (::oox::NMSP_XDR | XML_##token)
+#define XLS_TOKEN( token )          (::oox::NMSP_XLS | XML_##token)
+#define XM_TOKEN( token )           (::oox::NMSP_XM | XML_##token)
+#define XML_TOKEN( token )          (::oox::NMSP_XML | XML_##token)
 
 // ============================================================================
 

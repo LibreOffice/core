@@ -231,7 +231,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
         }
         else if (mpShape.get() != NULL)
         {
-            mpShape->addShape(*mxFilterBase, mpThemePtr, mxShapes);
+            mpShape->addShape(*mxFilterBase, mpThemePtr.get(), mxShapes);
             xResult.set(mpShape->getXShape());
         }
     }

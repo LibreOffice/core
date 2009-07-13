@@ -36,6 +36,7 @@
 #include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
+    namespace awt { struct Size; }
     namespace chart2 { class XChartDocument; }
     namespace chart2 { namespace data { class XDataProvider; } }
     namespace chart2 { namespace data { class XDataSequence; } }
@@ -64,7 +65,8 @@ public:
     void                convertFromModel(
                             ::oox::core::XmlFilterBase& rFilter,
                             ChartSpaceModel& rModel,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc,
+                            const ::com::sun::star::awt::Size& rChartSize );
 
     /** Creates an internal data provider. Derived classes may override this
         function to create an external data provider. */

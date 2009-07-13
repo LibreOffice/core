@@ -130,7 +130,7 @@ public:
     // addShape is creating and inserting the corresponding XShape.
     void                addShape(
                             const oox::core::XmlFilterBase& rFilterBase,
-                            const ThemePtr& rxTheme,
+                            const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle* pShapeRect = 0,
                             ShapeIdMap* pShapeMap = 0 );
@@ -148,14 +148,14 @@ protected:
                         createAndInsert(
                             const ::oox::core::XmlFilterBase& rFilterBase,
                             const ::rtl::OUString& rServiceName,
-                            const ThemePtr& rxTheme,
+                            const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle* pShapeRect );
 
     void                addChildren(
                             const ::oox::core::XmlFilterBase& rFilterBase,
                             Shape& rMaster,
-                            const ThemePtr& rxTheme,
+                            const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle& rClientRect,
                             ShapeIdMap* pShapeMap );

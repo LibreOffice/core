@@ -61,6 +61,7 @@ struct ChartSpaceModel
     View3DRef           mxView3D;           /// 3D settings.
     TitleRef            mxTitle;            /// Chart main title.
     LegendRef           mxLegend;           /// Chart legend.
+    ::rtl::OUString     maDrawingPath;      /// Path to drawing fragment with embedded shapes.
     sal_Int32           mnDispBlanksAs;     /// Mode how to display blank values.
     sal_Int32           mnStyle;            /// Index to default formatting.
     bool                mbAutoTitleDel;     /// True = automatic title deleted manually.

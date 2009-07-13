@@ -67,7 +67,7 @@ PPTShape::~PPTShape()
 void PPTShape::addShape(
         const oox::core::XmlFilterBase& rFilterBase,
         const SlidePersist& rSlidePersist,
-        const oox::drawingml::ThemePtr& rxTheme,
+        const oox::drawingml::Theme* pTheme,
         const Reference< XShapes >& rxShapes,
         const awt::Rectangle* pShapeRect,
         ::oox::drawingml::ShapeIdMap* pShapeMap )
@@ -157,7 +157,7 @@ void PPTShape::addShape(
                 aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getOtherTextStyle() : rSlidePersist.getOtherTextStyle();
             setMasterTextListStyle( aMasterTextListStyle );
 
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, rxTheme, rxShapes, pShapeRect ) );
+            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect ) );
 
             if( pShapeMap && msId.getLength() )
             {
@@ -167,7 +167,7 @@ void PPTShape::addShape(
             // if this is a group shape, we have to add also each child shape
             Reference< XShapes > xShapes( xShape, UNO_QUERY );
             if ( xShapes.is() )
-                addChildren( rFilterBase, *this, rxTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap );
+                addChildren( rFilterBase, *this, pTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap );
         }
     }
     catch( const Exception&  )

@@ -62,7 +62,8 @@ public:
                             ::oox::core::XmlFilterBase& rFilter,
                             ChartConverter& rChartConverter,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc,
-                            const ChartSpaceModel& rChartSpace );
+                            const ::com::sun::star::awt::Size& rChartSize,
+                            const ChartSpaceModel& rChartModel );
     virtual             ~ConverterRoot();
 
     /** Creates an instance for the passed service name, using the passed service factory. */
@@ -83,6 +84,9 @@ protected:
     /** Returns the API chart document model. */
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
                         getChartDocument() const;
+    /** Returns the total size of the chart shape in 1/100 mm. */
+    const ::com::sun::star::awt::Size&
+                        getChartSize() const;
     /** Returns the object formatter. */
     ObjectFormatter&    getFormatter() const;
 

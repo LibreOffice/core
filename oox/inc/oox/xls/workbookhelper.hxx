@@ -286,8 +286,6 @@ public:
     WorksheetBuffer&    getWorksheets() const;
     /** Returns the office theme object read from the theme substorage. */
     ThemeBuffer&        getTheme() const;
-    /** Returns the office theme object reference read from the theme substorage. */
-    ::boost::shared_ptr< ::oox::drawingml::Theme > getThemeRef() const;
     /** Returns all cell formatting objects read from the styles substream. */
     StylesBuffer&       getStyles() const;
     /** Returns the shared strings read from the shared strings substream. */
