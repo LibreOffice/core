@@ -2181,6 +2181,11 @@ interface DrawView
         ExecMethod = FuSupport ;
         StateMethod = GetCtrlState ;
     ]
+    SID_TRANSLITERATE_SENTENCE_CASE // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetCtrlState ;
+    ]
     SID_TRANSLITERATE_HALFWIDTH // ole : no, status : ?
     [
         ExecMethod = FuSupport ;

@@ -63,7 +63,8 @@
 #include <sot/formats.hxx>
 #include <sfx2/topfrm.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hdl>
+#include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <svx/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svx/outlobj.hxx>
@@ -538,6 +539,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
     if( pOlView && (
         (nSlot == SID_TRANSLITERATE_UPPER) ||
         (nSlot == SID_TRANSLITERATE_LOWER) ||
+        (nSlot == SID_TRANSLITERATE_SENTENCE_CASE) ||
         (nSlot == SID_TRANSLITERATE_HALFWIDTH) ||
         (nSlot == SID_TRANSLITERATE_FULLWIDTH) ||
         (nSlot == SID_TRANSLITERATE_HIRAGANA) ||
@@ -671,6 +673,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
 
         case SID_TRANSLITERATE_UPPER:
         case SID_TRANSLITERATE_LOWER:
+        case SID_TRANSLITERATE_SENTENCE_CASE:
         case SID_TRANSLITERATE_HALFWIDTH:
         case SID_TRANSLITERATE_FULLWIDTH:
         case SID_TRANSLITERATE_HIRAGANA:
@@ -689,6 +692,9 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
                         break;
                     case SID_TRANSLITERATE_LOWER:
                         nType = TransliterationModules_UPPERCASE_LOWERCASE;
+                        break;
+                    case SID_TRANSLITERATE_SENTENCE_CASE:
+                        nType = TransliterationModulesExtra::SENTENCE_CASE;
                         break;
                     case SID_TRANSLITERATE_HALFWIDTH:
                         nType = TransliterationModules_FULLWIDTH_HALFWIDTH;
@@ -996,7 +1002,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         GetDoc()->SetChanged(TRUE);
     }
 
-    // Da šberladen, muss hier der Status gesetzt werden
+    // Da ï¿½berladen, muss hier der Status gesetzt werden
     if( !GetDocSh()->IsModified() )
     {
         rSet.DisableItem( SID_SAVEDOC );
