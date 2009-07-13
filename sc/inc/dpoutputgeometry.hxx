@@ -57,6 +57,8 @@ public:
     void getRowFieldPositions(::std::vector<ScAddress>& rAddrs) const;
     void getPageFieldPositions(::std::vector<ScAddress>& rAddrs) const;
 
+    SCROW getRowFieldHeaderRow() const;
+
     FieldType getFieldButtonType(const ScAddress& rPos) const;
 
 private:
@@ -64,7 +66,7 @@ private:
 
 private:
     ScRange     maOutRange;
-    sal_uInt32  mnRowFields;
+    sal_uInt32  mnRowFields;    /// number of row fields (data layout field NOT included!)
     sal_uInt32  mnColumnFields;
     sal_uInt32  mnPageFields;
     sal_uInt32  mnDataFields;

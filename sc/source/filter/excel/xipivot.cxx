@@ -1486,21 +1486,35 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
 
     vector<ScAddress> aRowBtns;
     aGeometry.getRowFieldPositions(aRowBtns);
-    itr    = aRowBtns.begin();
-    itrEnd = aRowBtns.end();
-    for (; itr != itrEnd; ++itr)
+    if (aRowBtns.empty())
     {
-        sal_Int16 nMFlag = SC_MF_BUTTON | SC_MF_BUTTON_POPUP;
-        String aName;
-        rDoc.GetString(itr->Col(), itr->Row(), itr->Tab(), aName);
-        if (rSaveData.HasInvisibleMember(aName))
-            nMFlag |= SC_MF_HIDDEN_MEMBER;
-        rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
+        if (bDataLayout)
+        {
+            // No row fields, but the data layout button exists.
+            SCROW nRow = aGeometry.getRowFieldHeaderRow();
+            SCCOL nCol = rOutRange.aStart.Col();
+            SCTAB nTab = rOutRange.aStart.Tab();
+            rDoc.ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, SC_MF_BUTTON);
+        }
     }
-    if (bDataLayout)
+    else
     {
-        --itr; // move back to the last row field position.
-        rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), SC_MF_BUTTON);
+        itr    = aRowBtns.begin();
+        itrEnd = aRowBtns.end();
+        for (; itr != itrEnd; ++itr)
+        {
+            sal_Int16 nMFlag = SC_MF_BUTTON | SC_MF_BUTTON_POPUP;
+            String aName;
+            rDoc.GetString(itr->Col(), itr->Row(), itr->Tab(), aName);
+            if (rSaveData.HasInvisibleMember(aName))
+                nMFlag |= SC_MF_HIDDEN_MEMBER;
+            rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
+        }
+        if (bDataLayout)
+        {
+            --itr; // move back to the last row field position.
+            rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), SC_MF_BUTTON);
+        }
     }
 }
 
