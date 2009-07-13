@@ -58,7 +58,6 @@ protected:
     sal_Int32* nextCellIndex;
     sal_Int32* previousCellIndex;
     sal_Int32 cellIndexSize;
-
     virtual void SAL_CALL makeIndex(const rtl::OUString& text, sal_Int32 pos) throw(com::sun::star::uno::RuntimeException);
 };
 

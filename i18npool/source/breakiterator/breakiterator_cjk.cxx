@@ -46,9 +46,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //      class BreakIterator_CJK
 //      ----------------------------------------------------;
 
-BreakIterator_CJK::BreakIterator_CJK() :
-    dict( NULL ),
-    hangingCharacters()
+BreakIterator_CJK::BreakIterator_CJK() : dict(NULL)
 {
         cBreakIterator = "com.sun.star.i18n.BreakIterator_CJK";
 }

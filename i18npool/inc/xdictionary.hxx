@@ -45,13 +45,11 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 // cache structure.
 struct WordBreakCache {
+    sal_Bool equals(const sal_Unicode *str, Boundary& boundary);    // checking cached string
     sal_Int32 length;       // contents length saved here.
     sal_Unicode *contents;      // seperated segment contents.
     sal_Int32* wordboundary;        // word boundaries in segments.
     sal_Int32 size;         // size of wordboundary
-
-    WordBreakCache();
-    sal_Bool equals(const sal_Unicode *str, Boundary& boundary);    // checking cached string
 };
 
 class xdictionary

@@ -360,27 +360,20 @@
 </LC_CURRENCY>
 <LC_TRANSLITERATION ref="en_US"/>
 <LC_MISC>
-  <BreakIteratorRules>
-    <EditMode/>
-    <DictionaryMode>dict_word_prepostdash</DictionaryMode>
-    <WordCountMode/>
-    <CharacterMode/>
-    <LineMode/>
-  </BreakIteratorRules>
-  <ReservedWords>
-    <trueWord>waar</trueWord>
-    <falseWord>onwaar</falseWord>
-    <quarter1Word>1ste kwartaal</quarter1Word>
-    <quarter2Word>2de kwartaal</quarter2Word>
-    <quarter3Word>3de kwartaal</quarter3Word>
-    <quarter4Word>4de kwartaal</quarter4Word>
-    <aboveWord>boven</aboveWord>
-    <belowWord>onder</belowWord>
-    <quarter1Abbreviation>K1</quarter1Abbreviation>
-    <quarter2Abbreviation>K2</quarter2Abbreviation>
-    <quarter3Abbreviation>K3</quarter3Abbreviation>
-    <quarter4Abbreviation>K4</quarter4Abbreviation>
-  </ReservedWords>
+<ReservedWords>
+<trueWord>waar</trueWord>
+<falseWord>onwaar</falseWord>
+<quarter1Word>1ste kwartaal</quarter1Word>
+<quarter2Word>2de kwartaal</quarter2Word>
+<quarter3Word>3de kwartaal</quarter3Word>
+<quarter4Word>4de kwartaal</quarter4Word>
+<aboveWord>boven</aboveWord>
+<belowWord>onder</belowWord>
+<quarter1Abbreviation>K1</quarter1Abbreviation>
+<quarter2Abbreviation>K2</quarter2Abbreviation>
+<quarter3Abbreviation>K3</quarter3Abbreviation>
+<quarter4Abbreviation>K4</quarter4Abbreviation>
+</ReservedWords>
 </LC_MISC>
 <LC_NumberingLevel ref="en_US"/>
 <LC_OutLineNumberingLevel ref="en_US"/>
