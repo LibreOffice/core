@@ -61,6 +61,10 @@ rtl::Reference< Node > LocalizedPropertyValueNode::getMember(
     return rtl::Reference< Node >();
 }
 
+rtl::OUString LocalizedPropertyValueNode::getTemplateName() const {
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+}
+
 css::uno::Any LocalizedPropertyValueNode::getValue() const {
     return value_;
 }

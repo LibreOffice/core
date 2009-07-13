@@ -44,6 +44,8 @@ public:
 
     virtual rtl::Reference< Node > getMember(rtl::OUString const & name) = 0;
 
+    virtual rtl::OUString getTemplateName() const { return rtl::OUString(); }
+
 protected:
     Node() {}
 

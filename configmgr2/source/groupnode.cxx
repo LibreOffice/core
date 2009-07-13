@@ -56,12 +56,12 @@ rtl::Reference< Node > GroupNode::getMember(rtl::OUString const & name) {
     return i == members_.end() ? rtl::Reference< Node >() : i->second;
 }
 
-bool GroupNode::isExtensible() const {
-    return extensible_;
-}
-
 rtl::OUString GroupNode::getTemplateName() const {
     return templateName_;
+}
+
+bool GroupNode::isExtensible() const {
+    return extensible_;
 }
 
 NodeMap & GroupNode::getMembers() {

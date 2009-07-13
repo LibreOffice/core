@@ -284,43 +284,17 @@ void Access::commitChildChanges() {
                 child->commitChanges();
                 // In case the child was inserted:
                 if (getMemberNodes()[i->first] == 0) {
-                    Components::singleton().addModification(
-                        child->getHierarchicalName());
+                    Components::singleton().addModification(child->getPath());
                 }
                 getMemberNodes()[i->first] = child->getNode();
                     //TODO: collision handling?
             } else {
                 // Removed child node:
-                rtl::OUString path(getHierarchicalName());
-                if (path.getLength() == 0 ||
-                    path[path.getLength() - 1] != '/')
-                {
-                    path += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-                }
-                rtl::Reference< Node > node(getNode());
-                if (dynamic_cast< LocalizedPropertyNode * >(node.get()) != 0) {
-                    path += Components::createSegment(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")),
-                        i->first);
-                } else if (dynamic_cast< SetNode * >(node.get()) != 0) {
-                    rtl::OUString templateName;
-                    if (GroupNode * group = dynamic_cast< GroupNode * >(
-                            i->second->getNode().get()))
-                    {
-                        templateName = group->getTemplateName();
-                    } else if (SetNode * set = dynamic_cast< SetNode * >(
-                                   i->second->getNode().get()))
-                    {
-                        templateName = set->getTemplateName();
-                    } else {
-                        OSL_ASSERT(false);
-                    }
-                    OSL_ASSERT(templateName.getLength() != 0);
-                    path += Components::createSegment(templateName, i->first);
-                } else {
-                    path += i->first;
-                }
-                Components::singleton().addModification(path);
+                Components::singleton().addModification(
+                    getPath() +
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
+                    Components::createSegment(
+                        i->second->getNode()->getTemplateName(), i->first));
                 getMemberNodes().erase(i->first); //TODO: collision handling?
             }
             i->second->notInTransaction();
@@ -588,15 +562,7 @@ rtl::OUString Access::getHierarchicalName() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
-    rtl::OUString path;
-    rtl::Reference< Access > parent(getParentAccess());
-    if (parent.is()) {
-        path = parent->getHierarchicalName();
-    }
-    if (path.getLength() != 0 && path[path.getLength() - 1] != '/') {
-        path += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    }
-    return path + getRelativePath();
+    return getPath();
 }
 
 rtl::OUString Access::composeHierarchicalName(

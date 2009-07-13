@@ -75,6 +75,8 @@ public:
         rtl::Reference< RootAccess > const & root,
         rtl::Reference< Node > const & node);
 
+    virtual rtl::OUString getPath();
+
     virtual rtl::Reference< Node > getNode();
 
     virtual rtl::Reference< RootAccess > getRootAccess();
@@ -126,8 +128,6 @@ public:
 
 private:
     virtual ~ChildAccess();
-
-    virtual rtl::OUString getRelativePath();
 
     virtual void addSupportedServiceNames(
         std::vector< rtl::OUString > * services);

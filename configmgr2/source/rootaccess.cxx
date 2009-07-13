@@ -75,9 +75,14 @@ bool RootAccess::isUpdate() const {
 
 RootAccess::~RootAccess() {}
 
+rtl::OUString RootAccess::getPath() {
+    getNode();
+    return path_;
+}
+
 rtl::Reference< Node > RootAccess::getNode() {
     if (!node_.is()) {
-        node_ = Components::singleton().resolvePath(path_, 0, &name_);
+        node_ = Components::singleton().resolvePath(path_, 0, &name_, &path_);
         if (!node_.is()) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot find ")) +
@@ -94,10 +99,6 @@ rtl::Reference< RootAccess > RootAccess::getRootAccess() {
 
 rtl::Reference< Access > RootAccess::getParentAccess() {
     return rtl::Reference< Access >();
-}
-
-rtl::OUString RootAccess::getRelativePath() {
-    return path_;
 }
 
 void RootAccess::addSupportedServiceNames(

@@ -53,11 +53,11 @@ public:
 
     virtual rtl::Reference< Node > getMember(rtl::OUString const & name);
 
+    virtual rtl::OUString getTemplateName() const;
+
     rtl::OUString const & getDefaultTemplateName() const;
 
     bool isValidTemplate(rtl::OUString const & templateName) const;
-
-    rtl::OUString getTemplateName() const;
 
     NodeMap & getMembers();
 

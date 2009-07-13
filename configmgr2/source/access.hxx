@@ -126,6 +126,8 @@ public:
 
     void releaseChild(rtl::OUString const & name);
 
+    virtual rtl::OUString getPath() = 0;
+
     virtual rtl::Reference< Node > getNode() = 0;
 
 protected:
@@ -136,8 +138,6 @@ protected:
     virtual rtl::Reference< RootAccess > getRootAccess() = 0;
 
     virtual rtl::Reference< Access > getParentAccess() = 0;
-
-    virtual rtl::OUString getRelativePath() = 0;
 
     virtual void addSupportedServiceNames(
         std::vector< rtl::OUString > * services) = 0;
@@ -237,10 +237,8 @@ private:
     virtual sal_Bool SAL_CALL hasPropertyByName(rtl::OUString const & Name)
         throw (com::sun::star::uno::RuntimeException);
 
-public://TODO
     virtual rtl::OUString SAL_CALL getHierarchicalName()
         throw (com::sun::star::uno::RuntimeException);
-private://TODO
 
     virtual rtl::OUString SAL_CALL composeHierarchicalName(
         rtl::OUString const & aRelativeName)

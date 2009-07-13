@@ -2087,6 +2087,9 @@ bool Components::allLocales(rtl::OUString const & locale) {
 rtl::OUString Components::createSegment(
     rtl::OUString const & templateName, rtl::OUString const & name)
 {
+    if (templateName.getLength() == 0) {
+        return name;
+    }
     rtl::OUStringBuffer buf(templateName);
         //TODO: verify template name contains no bad chars?
     buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("['"));
@@ -2175,7 +2178,7 @@ NodeMap::iterator Components::resolveNode(
 
 rtl::Reference< Node > Components::resolvePath(
     rtl::OUString const & path, rtl::OUString * firstSegment,
-    rtl::OUString * lastSegment)
+    rtl::OUString * lastSegment, rtl::OUString * canonicalPath)
 {
     if (path.getLength() == 0 || path[0] != '/') {
         throw css::uno::RuntimeException(
@@ -2191,6 +2194,11 @@ rtl::Reference< Node > Components::resolvePath(
     }
     if (firstSegment != 0) {
         *firstSegment = seg;
+    }
+    rtl::OUStringBuffer canonic;
+    if (canonicalPath != 0) {
+        canonic.append(sal_Unicode('/'));
+        canonic.append(seg);
     }
     NodeMap::iterator i(resolveNode(seg, &components_));
     rtl::Reference< Node > p(i == components_.end() ? 0 : i->second);
@@ -2249,9 +2257,18 @@ rtl::Reference< Node > Components::resolvePath(
             // with simple path segments, like group members:
             p = p->getMember(seg);
         }
+        if (p != 0 && canonicalPath != 0) {
+            canonic.append(sal_Unicode('/'));
+            canonic.append(createSegment(p->getTemplateName(), seg));
+        }
     }
-    if (p != 0 && lastSegment != 0) {
-        *lastSegment = seg;
+    if (p != 0) {
+        if (lastSegment != 0) {
+            *lastSegment = seg;
+        }
+        if (canonicalPath != 0) {
+            *canonicalPath = canonic.makeStringAndClear();
+        }
     }
     return p;
 }
@@ -2305,14 +2322,14 @@ void Components::writeModifications() {
         xmlTextWriterStartElement(writer.writer, xmlString("item"));
         rtl::OUString name;
         rtl::OUString parentPath(parseLastSegment(*i, &name));
-        rtl::Reference< Node > node(resolvePath(*i, 0, 0));
+        rtl::Reference< Node > node(resolvePath(*i, 0, 0, 0));
         if (node.is()) {
             xmlTextWriterWriteAttribute(
                 writer.writer, xmlString("path"),
                 xmlString(convertToUtf8(parentPath).getStr()));
             writeNode(writer.writer, name, node);
         } else {
-            rtl::Reference< Node > parent(resolvePath(parentPath, 0, 0));
+            rtl::Reference< Node > parent(resolvePath(parentPath, 0, 0, 0));
             if (dynamic_cast< LocalizedPropertyNode * >(parent.get()) != 0) {
                 rtl::OUString parentName;
                 rtl::OUString grandparentPath(
@@ -2507,8 +2524,11 @@ void Components::parseModificationLayer() {
                     css::uno::Reference< css::uno::XInterface >());
             }
             rtl::OUString componentName;
+            rtl::OUString canonicalPath;
             rtl::Reference< Node > node(
-                resolvePath(fromXmlString(path.str), &componentName, 0));
+                resolvePath(
+                    fromXmlString(path.str), &componentName, 0,
+                    &canonicalPath));
             if (!node.is()) {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(
@@ -2519,7 +2539,7 @@ void Components::parseModificationLayer() {
             }
             parseXcuNode(
                 componentName, templates_, doc.doc, p, node, this,
-                (fromXmlString(path.str) +
+                (canonicalPath +
                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"))));
         } else {
             throw css::uno::RuntimeException(

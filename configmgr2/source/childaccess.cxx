@@ -100,6 +100,17 @@ ChildAccess::ChildAccess(
     OSL_ASSERT(root.is() && node.is());
 }
 
+rtl::OUString ChildAccess::getPath() {
+    rtl::OUString path;
+    rtl::Reference< Access > parent(getParentAccess());
+    if (parent.is()) {
+        path = parent->getPath() +
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    }
+    return path +
+        Components::createSegment(getNode()->getTemplateName(), name_);
+}
+
 rtl::Reference< Node > ChildAccess::getNode() {
     return node_;
 }
@@ -264,7 +275,7 @@ css::uno::Any ChildAccess::asValue() {
 void ChildAccess::commitChanges() {
     commitChildChanges();
     if (changedValue_.get() != 0) {
-        Components::singleton().addModification(getHierarchicalName());
+        Components::singleton().addModification(getPath());
         if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get())) {
             prop->setValue(*changedValue_);
         } else if (LocalizedPropertyValueNode * locval =
@@ -287,31 +298,6 @@ ChildAccess::~ChildAccess() {
     if (parent_.is()) {
         parent_->releaseChild(name_);
     }
-}
-
-rtl::OUString ChildAccess::getRelativePath() {
-    rtl::OUString templateName;
-    if (dynamic_cast< SetNode * >(getParentNode().get()) != 0) {
-        rtl::Reference< Node > node(getNode());
-        if (GroupNode * group = dynamic_cast< GroupNode * >(node.get())) {
-            templateName = group->getTemplateName();
-        } else if (SetNode * set = dynamic_cast< SetNode * >(node.get())) {
-            templateName = set->getTemplateName();
-        } else {
-            OSL_ASSERT(false);
-            throw css::uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-                static_cast< cppu::OWeakObject * >(this));
-        }
-    } else if (dynamic_cast< LocalizedPropertyValueNode * >(getNode().get()) !=
-               0)
-    {
-        templateName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
-    } else {
-        return name_;
-    }
-    return Components::createSegment(templateName, name_);
 }
 
 void ChildAccess::addSupportedServiceNames(

@@ -48,9 +48,9 @@ public:
 
     virtual rtl::Reference< Node > getMember(rtl::OUString const & name);
 
-    bool isExtensible() const;
+    virtual rtl::OUString getTemplateName() const;
 
-    rtl::OUString getTemplateName() const;
+    bool isExtensible() const;
 
     NodeMap & getMembers();
 

@@ -49,6 +49,8 @@ public:
 
     virtual rtl::Reference< Node > getMember(rtl::OUString const &);
 
+    virtual rtl::OUString getTemplateName() const;
+
     com::sun::star::uno::Any getValue() const;
 
     void setValue(com::sun::star::uno::Any const & value);

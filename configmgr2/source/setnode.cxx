@@ -72,6 +72,10 @@ rtl::Reference< Node > SetNode::getMember(rtl::OUString const & name) {
     return i == members_.end() ? rtl::Reference< Node >() : i->second;
 }
 
+rtl::OUString SetNode::getTemplateName() const {
+    return templateName_;
+}
+
 rtl::OUString const & SetNode::getDefaultTemplateName() const {
     return defaultTemplateName_;
 }
@@ -82,10 +86,6 @@ bool SetNode::isValidTemplate(rtl::OUString const & templateName) const {
             additionalTemplateNames_.begin(), additionalTemplateNames_.end(),
             templateName) !=
          additionalTemplateNames_.end());
-}
-
-rtl::OUString SetNode::getTemplateName() const {
-    return templateName_;
 }
 
 NodeMap & SetNode::getMembers() {

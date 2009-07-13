@@ -74,13 +74,13 @@ public:
 private:
     virtual ~RootAccess();
 
+    virtual rtl::OUString getPath();
+
     virtual rtl::Reference< Node > getNode();
 
     virtual rtl::Reference< RootAccess > getRootAccess();
 
     virtual rtl::Reference< Access > getParentAccess();
-
-    virtual rtl::OUString getRelativePath();
 
     virtual void addSupportedServiceNames(
         std::vector< rtl::OUString > * services);
