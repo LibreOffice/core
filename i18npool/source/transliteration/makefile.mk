@@ -78,7 +78,8 @@ SLOFILES=   \
                         $(SLO)$/numtochar.obj \
                         $(SLO)$/numtotext_cjk.obj \
                         $(SLO)$/chartonum.obj \
-                        $(SLO)$/texttonum.obj
+                        $(SLO)$/texttonum.obj \
+                        $(SLO)$/transliteration_sentencecase.obj
 
 # --- Targets ------------------------------------------------------
 
