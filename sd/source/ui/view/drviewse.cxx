@@ -34,9 +34,7 @@
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
-
+#include <com/sun/star/i18n/TransliterationModules.hdl>
 
 #include <comphelper/processfactory.hxx>
 
@@ -1390,7 +1388,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_TRANSLITERATE_UPPER:
         case SID_TRANSLITERATE_LOWER:
-        case SID_TRANSLITERATE_SENTENCE_CASE:
         case SID_TRANSLITERATE_HALFWIDTH:
         case SID_TRANSLITERATE_FULLWIDTH:
         case SID_TRANSLITERATE_HIRAGANA:
@@ -1409,9 +1406,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                         break;
                     case SID_TRANSLITERATE_LOWER:
                         nType = TransliterationModules_UPPERCASE_LOWERCASE;
-                        break;
-                    case SID_TRANSLITERATE_SENTENCE_CASE:
-                        nType = TransliterationModulesExtra::SENTENCE_CASE;
                         break;
                     case SID_TRANSLITERATE_HALFWIDTH:
                         nType = TransliterationModules_FULLWIDTH_HALFWIDTH;

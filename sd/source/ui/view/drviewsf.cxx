@@ -256,7 +256,6 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
 
         rSet.DisableItem( SID_TRANSLITERATE_UPPER );
         rSet.DisableItem( SID_TRANSLITERATE_LOWER );
-        rSet.DisableItem( SID_TRANSLITERATE_SENTENCE_CASE );
         rSet.DisableItem( SID_TRANSLITERATE_HALFWIDTH );
         rSet.DisableItem( SID_TRANSLITERATE_FULLWIDTH );
         rSet.DisableItem( SID_TRANSLITERATE_HIRAGANA );
