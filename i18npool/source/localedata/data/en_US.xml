@@ -477,7 +477,6 @@
   <LC_TRANSLITERATION>
     <Transliteration unoid="LOWERCASE_UPPERCASE"/>
     <Transliteration unoid="UPPERCASE_LOWERCASE"/>
-    <Transliteration unoid="SENTENCE_CASE"/>
     <Transliteration unoid="IGNORE_CASE"/>
   </LC_TRANSLITERATION>
   <LC_MISC>
