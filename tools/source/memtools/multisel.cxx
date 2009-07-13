@@ -952,6 +952,16 @@ bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange )
     mnCount = 0;
     maSequence.clear();
 
+    // we love special cases
+    if( i_rNewRange.getLength() == 0 )
+    {
+        if( mnMin >= 0 && mnMax >= 0 )
+        {
+            insertRange( mnMin, mnMax, mnMin != mnMax );
+        }
+        return true;
+    }
+
     const sal_Unicode* pInput = i_rNewRange.getStr();
     rtl::OUStringBuffer aNumberBuf( 16 );
     sal_Int32 nLastNumber = -1, nNumber = -1;
@@ -998,8 +1008,9 @@ bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange )
         }
         else if( *pInput == sal_Unicode(',') || *pInput == sal_Unicode(';') )
             bInsertRange = true;
-        else
+        else if( *pInput )
         {
+
             bSuccess = false;
             break; // parse error
         }

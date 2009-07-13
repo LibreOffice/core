@@ -204,7 +204,8 @@ public:
     - the string "3-" will be either
       * an error if no maximum is given
       * or result in the seqeuence 3 to i_nMaxNumber
-    - an empty string as input is valid and will result in an empty result vector
+    - an empty string as input is valid and will result in the range [min,max] if given
+      or an empty vector, if not
     */
     static bool getRangesFromString( const rtl::OUString& i_rPageRange,
                                      std::vector< sal_Int32 >& o_rPageVector,
