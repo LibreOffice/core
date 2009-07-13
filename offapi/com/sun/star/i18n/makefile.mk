@@ -98,7 +98,6 @@ IDLFILES=\
     Transliteration.idl \
     TransliterationModules.idl \
     TransliterationModulesNew.idl \
-    TransliterationModulesExtra.idl \
     TransliterationType.idl \
     UnicodeScript.idl \
     UnicodeType.idl \
