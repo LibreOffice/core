@@ -56,6 +56,8 @@
 #include <svtools/eitem.hxx>
 
 #include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+
 
 #include "viewutil.hxx"
 #include "global.hxx"
@@ -129,6 +131,9 @@ sal_Int32 ScViewUtil::GetTransliterationType( USHORT nSlotID )
             break;
         case SID_TRANSLITERATE_LOWER:
             nType = com::sun::star::i18n::TransliterationModules_UPPERCASE_LOWERCASE;
+            break;
+        case SID_TRANSLITERATE_SENTENCE_CASE:
+            nType = com::sun::star::i18n::TransliterationModulesExtra::SENTENCE_CASE;
             break;
         case SID_TRANSLITERATE_HALFWIDTH:
             nType = com::sun::star::i18n::TransliterationModules_FULLWIDTH_HALFWIDTH;
