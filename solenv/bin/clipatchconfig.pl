@@ -31,7 +31,7 @@
 
 use warnings;
 use strict;
-use diagnostics;
+# use diagnostics;
 
 sub trim;
 sub readRedirectionValues($);
