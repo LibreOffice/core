@@ -67,7 +67,8 @@ public:
 
     rtl::Reference< Node > resolvePath(
         rtl::OUString const & path, rtl::OUString * firstSegment,
-        rtl::OUString * lastSegment, rtl::OUString * canonicalPath);
+        rtl::OUString * lastSegment, rtl::OUString * canonicalPath,
+        rtl::Reference< Node > * parent);
 
     rtl::Reference< Node > getTemplate(rtl::OUString const & fullName) const;
 

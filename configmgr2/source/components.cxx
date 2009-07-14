@@ -1934,10 +1934,123 @@ template< typename T > void writeListValue(
     }
 }
 
-void writeNode(
-    xmlTextWriterPtr writer, rtl::OUString const & name,
-    rtl::Reference< Node > const & node)
+void writeValue(xmlTextWriterPtr writer, Type type, css::uno::Any const & value)
 {
+    switch (type) {
+    case TYPE_NIL:
+        xmlTextWriterWriteAttribute(
+            writer, xmlString("xsi:nil"), xmlString("true"));
+        break;
+    case TYPE_BOOLEAN:
+        {
+            bool val;
+            value >>= val;
+            writeBooleanValue(writer, val);
+        }
+        break;
+    case TYPE_SHORT:
+        {
+            sal_Int16 val;
+            value >>= val;
+            writeShortValue(writer, val);
+        }
+        break;
+    case TYPE_INT:
+        {
+            sal_Int32 val;
+            value >>= val;
+            writeIntValue(writer, val);
+        }
+        break;
+    case TYPE_LONG:
+        {
+            sal_Int64 val;
+            value >>= val;
+            writeLongValue(writer, val);
+        }
+        break;
+    case TYPE_DOUBLE:
+        {
+            double val;
+            value >>= val;
+            writeDoubleValue(writer, val);
+        }
+        break;
+    case TYPE_STRING:
+        {
+            xmlTextWriterWriteAttribute(
+                writer, xmlString("oor:escaped"), xmlString("true"));
+            rtl::OUString val;
+            value >>= val;
+            writeStringValue(writer, val);
+        }
+        break;
+    case TYPE_HEXBINARY:
+        {
+            // Written in escaped form to be able to share writeHexbinaryValue
+            // with the TYPE_HEXBINARY_LIST case (see there):
+            xmlTextWriterWriteAttribute(
+                writer, xmlString("oor:escaped"), xmlString("true"));
+            css::uno::Sequence< sal_Int8 > val;
+            value >>= val;
+            writeHexbinaryValue(writer, val);
+        }
+        break;
+    case TYPE_BOOLEAN_LIST:
+        writeListValue(writer, &writeBooleanValue, value);
+        break;
+    case TYPE_SHORT_LIST:
+        writeListValue(writer, &writeShortValue, value);
+        break;
+    case TYPE_INT_LIST:
+        writeListValue(writer, &writeIntValue, value);
+        break;
+    case TYPE_LONG_LIST:
+        writeListValue(writer, &writeLongValue, value);
+        break;
+    case TYPE_DOUBLE_LIST:
+        writeListValue(writer, &writeDoubleValue, value);
+        break;
+    case TYPE_STRING_LIST:
+        xmlTextWriterWriteAttribute(
+            writer, xmlString("oor:escaped"), xmlString("true"));
+        writeListValue(writer, &writeStringValue, value);
+        break;
+    case TYPE_HEXBINARY_LIST:
+        // Written in escaped form to distinguish an empty list from a list with
+        // one empty hexbinary element:
+        xmlTextWriterWriteAttribute(
+            writer, xmlString("oor:escaped"), xmlString("true"));
+        writeListValue(writer, &writeHexbinaryValue, value);
+        break;
+    default: // TYPE_ERROR, TYPE_ANY
+        OSL_ASSERT(false);
+        throw css::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+}
+
+void writeNode(
+    xmlTextWriterPtr writer, rtl::Reference< Node > const & parent,
+    rtl::OUString const & name, rtl::Reference< Node > const & node)
+{
+    static char const * const typeNames[] = {
+        0, 0, 0, // TYPE_ERROR, TYPE_NIL, TYPE_ANY
+        "xs:boolean", // TYPE_BOOLEAN
+        "xs:short", // TYPE_SHORT
+        "xs:int", // TYPE_INT
+        "xs:long", // TYPE_LONG
+        "xs:double", // TYPE_DOUBLE
+        "xs:string", // TYPE_STRING
+        "xs:hexBinary", // TYPE_HEXBINARY
+        "oor:boolean-list", // TYPE_BOOLEAN_LIST
+        "oor:short-list", // TYPE_SHORT_LIST
+        "oor:int-list", // TYPE_INT_LIST
+        "oor:long-list", // TYPE_LONG_LIST
+        "oor:double-list", // TYPE_DOUBLE_LIST
+        "oor:string-list", // TYPE_STRING_LIST
+        "oor:hexBinary-list" }; // TYPE_HEXBINARY_LIST
     if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node.get())) {
         xmlTextWriterStartElement(writer, xmlString("oor:prop"));
         xmlTextWriterWriteAttribute(
@@ -1948,122 +2061,45 @@ void writeNode(
         Type type = prop->getType();
         if (type == TYPE_ANY) {
             type = mapType(prop->getValue());
-            static char const * const typeNames[] = {
-                0, 0, 0, // TYPE_ERROR, TYPE_NIL, TYPE_ANY
-                "xs:boolean", // TYPE_BOOLEAN
-                "xs:short", // TYPE_SHORT
-                "xs:int", // TYPE_INT
-                "xs:long", // TYPE_LONG
-                "xs:double", // TYPE_DOUBLE
-                "xs:string", // TYPE_STRING
-                "xs:hexBinary", // TYPE_HEXBINARY
-                "oor:boolean-list", // TYPE_BOOLEAN_LIST
-                "oor:short-list", // TYPE_SHORT_LIST
-                "oor:int-list", // TYPE_INT_LIST
-                "oor:long-list", // TYPE_LONG_LIST
-                "oor:double-list", // TYPE_DOUBLE_LIST
-                "oor:string-list", // TYPE_STRING_LIST
-                "oor:hexBinary-list" }; // TYPE_HEXBINARY_LIST
             xmlTextWriterWriteAttribute(
                 writer, xmlString("oor:type"), xmlString(typeNames[type]));
         }
         xmlTextWriterStartElement(writer, xmlString("oor:value"));
-        switch (type) {
-        case TYPE_NIL:
-            xmlTextWriterWriteAttribute(
-                writer, xmlString("xsi:nil"), xmlString("true"));
-            break;
-        case TYPE_BOOLEAN:
-            {
-                bool val;
-                prop->getValue() >>= val;
-                writeBooleanValue(writer, val);
-            }
-            break;
-        case TYPE_SHORT:
-            {
-                sal_Int16 val;
-                prop->getValue() >>= val;
-                writeShortValue(writer, val);
-            }
-            break;
-        case TYPE_INT:
-            {
-                sal_Int32 val;
-                prop->getValue() >>= val;
-                writeIntValue(writer, val);
-            }
-            break;
-        case TYPE_LONG:
-            {
-                sal_Int64 val;
-                prop->getValue() >>= val;
-                writeLongValue(writer, val);
-            }
-            break;
-        case TYPE_DOUBLE:
-            {
-                double val;
-                prop->getValue() >>= val;
-                writeDoubleValue(writer, val);
-            }
-            break;
-        case TYPE_STRING:
-            {
-                xmlTextWriterWriteAttribute(
-                    writer, xmlString("oor:escaped"), xmlString("true"));
-                rtl::OUString val;
-                prop->getValue() >>= val;
-                writeStringValue(writer, val);
-            }
-            break;
-        case TYPE_HEXBINARY:
-            {
-                // Written in escaped form to be able to share
-                // writeHexbinaryValue with the TYPE_HEXBINARY_LIST case (see
-                // there):
-                xmlTextWriterWriteAttribute(
-                    writer, xmlString("oor:escaped"), xmlString("true"));
-                css::uno::Sequence< sal_Int8 > val;
-                prop->getValue() >>= val;
-                writeHexbinaryValue(writer, val);
-            }
-            break;
-        case TYPE_BOOLEAN_LIST:
-            writeListValue(writer, &writeBooleanValue, prop->getValue());
-            break;
-        case TYPE_SHORT_LIST:
-            writeListValue(writer, &writeShortValue, prop->getValue());
-            break;
-        case TYPE_INT_LIST:
-            writeListValue(writer, &writeIntValue, prop->getValue());
-            break;
-        case TYPE_LONG_LIST:
-            writeListValue(writer, &writeLongValue, prop->getValue());
-            break;
-        case TYPE_DOUBLE_LIST:
-            writeListValue(writer, &writeDoubleValue, prop->getValue());
-            break;
-        case TYPE_STRING_LIST:
-            xmlTextWriterWriteAttribute(
-                writer, xmlString("oor:escaped"), xmlString("true"));
-            writeListValue(writer, &writeStringValue, prop->getValue());
-            break;
-        case TYPE_HEXBINARY_LIST:
-            // Written in escaped form to distinguish an empty list from a list
-            // with one empty hexbinary element:
-            xmlTextWriterWriteAttribute(
-                writer, xmlString("oor:escaped"), xmlString("true"));
-            writeListValue(writer, &writeHexbinaryValue, prop->getValue());
-            break;
-        default: // TYPE_ERROR, TYPE_ANY
-            OSL_ASSERT(false);
-            throw css::uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-                css::uno::Reference< css::uno::XInterface >());
+        writeValue(writer, type, prop->getValue());
+        xmlTextWriterEndElement(writer);
+        xmlTextWriterEndElement(writer);
+    } else if (LocalizedPropertyNode * locprop =
+               dynamic_cast< LocalizedPropertyNode * >(node.get()))
+    {
+        xmlTextWriterStartElement(writer, xmlString("oor:prop"));
+        xmlTextWriterWriteAttribute(
+            writer, xmlString("oor:name"),
+            xmlString(convertToUtf8(name).getStr()));
+        xmlTextWriterWriteAttribute(
+            writer, xmlString("oor:op"), xmlString("fuse"));
+        for (NodeMap::iterator i(locprop->getMembers().begin());
+             i != locprop->getMembers().end(); ++i)
+        {
+            writeNode(writer, node, i->first, i->second);
         }
         xmlTextWriterEndElement(writer);
+    } else if (LocalizedPropertyValueNode * locval =
+               dynamic_cast< LocalizedPropertyValueNode * >(node.get()))
+    {
+        xmlTextWriterStartElement(writer, xmlString("oor:value"));
+        if (name.getLength() != 0) {
+            xmlTextWriterWriteAttribute(
+                writer, xmlString("xml:lang"),
+                xmlString(convertToUtf8(name).getStr()));
+        }
+        Type type = dynamic_cast< LocalizedPropertyNode * >(parent.get())->
+            getType();
+        if (type == TYPE_ANY) {
+            type = mapType(locval->getValue());
+            xmlTextWriterWriteAttribute(
+                writer, xmlString("oor:type"), xmlString(typeNames[type]));
+        }
+        writeValue(writer, type, locval->getValue());
         xmlTextWriterEndElement(writer);
     } else if (GroupNode * group = dynamic_cast< GroupNode * >(node.get())) {
         xmlTextWriterStartElement(writer, xmlString("oor:node"));
@@ -2077,11 +2113,29 @@ void writeNode(
         for (NodeMap::iterator i(group->getMembers().begin());
              i != group->getMembers().end(); ++i)
         {
-            writeNode(writer, i->first, i->second);
+            writeNode(writer, node, i->first, i->second);
+        }
+        xmlTextWriterEndElement(writer);
+    } else if (SetNode * set = dynamic_cast< SetNode * >(node.get())) {
+        xmlTextWriterStartElement(writer, xmlString("oor:node"));
+        xmlTextWriterWriteAttribute(
+            writer, xmlString("oor:name"),
+            xmlString(convertToUtf8(name).getStr()));
+        if (set->getTemplateName().getLength() != 0) { // set member
+            xmlTextWriterWriteAttribute(
+                writer, xmlString("oor:op"), xmlString("replace"));
+        }
+        for (NodeMap::iterator i(set->getMembers().begin());
+             i != set->getMembers().end(); ++i)
+        {
+            writeNode(writer, node, i->first, i->second);
         }
         xmlTextWriterEndElement(writer);
     } else {
-        if(true)abort();*(char*)0=0;throw 0;//TODO
+        OSL_ASSERT(false);
+        throw css::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+            css::uno::Reference< css::uno::XInterface >());
     }
 }
 
@@ -2190,7 +2244,8 @@ NodeMap::iterator Components::resolveNode(
 
 rtl::Reference< Node > Components::resolvePath(
     rtl::OUString const & path, rtl::OUString * firstSegment,
-    rtl::OUString * lastSegment, rtl::OUString * canonicalPath)
+    rtl::OUString * lastSegment, rtl::OUString * canonicalPath,
+    rtl::Reference< Node > * parent)
 {
     if (path.getLength() == 0 || path[0] != '/') {
         throw css::uno::RuntimeException(
@@ -2213,6 +2268,7 @@ rtl::Reference< Node > Components::resolvePath(
         canonic.append(seg);
     }
     NodeMap::iterator i(resolveNode(seg, &components_));
+    rtl::Reference< Node > par;
     rtl::Reference< Node > p(i == components_.end() ? 0 : i->second);
     while (p != 0 && n != path.getLength()) {
         if (path[n++] != '/') {
@@ -2223,6 +2279,7 @@ rtl::Reference< Node > Components::resolvePath(
         if (n == path.getLength()) {
             break; // for backwards compatibility, ignore a final slash
         }
+        par = p;
         rtl::OUString templateName;
         n = parseSegment(path, n, &seg, &setElement, &templateName);
         if (n == -1) {
@@ -2281,6 +2338,9 @@ rtl::Reference< Node > Components::resolvePath(
         if (canonicalPath != 0) {
             *canonicalPath = canonic.makeStringAndClear();
         }
+        if (parent != 0) {
+            *parent = par;
+        }
     }
     return p;
 }
@@ -2337,15 +2397,16 @@ void Components::writeModifications() {
         xmlTextWriterStartElement(writer.writer, xmlString("item"));
         rtl::OUString name;
         rtl::OUString parentPath(parseLastSegment(*i, &name));
-        rtl::Reference< Node > node(resolvePath(*i, 0, 0, 0));
+        rtl::Reference< Node > parent;
+        rtl::Reference< Node > node(resolvePath(*i, 0, 0, 0, &parent));
         if (node.is()) {
             xmlTextWriterWriteAttribute(
                 writer.writer, xmlString("path"),
                 xmlString(
                     convertToUtf8(escapeText(parentPath, false)).getStr()));
-            writeNode(writer.writer, name, node);
+            writeNode(writer.writer, parent, name, node);
         } else {
-            rtl::Reference< Node > parent(resolvePath(parentPath, 0, 0, 0));
+            parent = resolvePath(parentPath, 0, 0, 0, 0);
             if (dynamic_cast< LocalizedPropertyNode * >(parent.get()) != 0) {
                 rtl::OUString parentName;
                 rtl::OUString grandparentPath(
@@ -2539,7 +2600,7 @@ void Components::parseModificationLayer() {
             rtl::Reference< Node > node(
                 resolvePath(
                     rtl::OStringToOUString(unescPath, RTL_TEXTENCODING_UTF8),
-                    &componentName, 0, &canonicalPath));
+                    &componentName, 0, &canonicalPath, 0));
             if (!node.is()) {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(

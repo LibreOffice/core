@@ -82,7 +82,8 @@ rtl::OUString RootAccess::getPath() {
 
 rtl::Reference< Node > RootAccess::getNode() {
     if (!node_.is()) {
-        node_ = Components::singleton().resolvePath(path_, 0, &name_, &path_);
+        node_ = Components::singleton().resolvePath(
+            path_, 0, &name_, &path_, 0);
         if (!node_.is()) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot find ")) +
