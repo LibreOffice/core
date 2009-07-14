@@ -89,18 +89,6 @@ namespace sdr { namespace contact {
         */
         void    setControlDesignMode( bool _bDesignMode ) const;
 
-        /** determines whether the instance belongs to a given OutputDevice
-            @precond
-                The instance knows the device it belongs to, or can determine it.
-                If this is not the case, you will notice an assertion, and the method will
-                return false.
-        */
-        bool    belongsToDevice( const OutputDevice* _pDevice ) const;
-
-        /** positions the control for subsequent paint operations
-        */
-        void    positionControlForPaint( const DisplayInfo& _rDisplayInfo ) const;
-
         /** callback from impl class to react on changes of properties form the XControlModel
         */
         void propertyChange();
