@@ -36,6 +36,7 @@ ModalDialog SV_DLG_PRINT
     Closeable = TRUE;
     Sizeable = TRUE;
     Moveable = TRUE;
+    Maxable = TRUE;
     SVLook = TRUE;
 
     Size = MAP_APPFONT( 350, 215 );

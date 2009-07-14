@@ -1508,6 +1508,8 @@ void PrintDialog::Resize()
     // and do the preview; however the metafile does not need to be gotten anew
     preparePreview( false );
 
+    // do an invalidate for the benefit of the grouping elements
+    Invalidate();
 }
 
 // -----------------------------------------------------------------------------
