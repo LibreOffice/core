@@ -144,6 +144,116 @@ bool decodeXml(
     return true;
 }
 
+rtl::OUString escapeText(rtl::OUString const & text, bool escapeClosingBracket)
+{
+    rtl::OUStringBuffer buf;
+    for (sal_Int32 i = 0; i < text.getLength(); ++i) {
+        sal_Unicode c = text[i];
+        if (c < 0x0009 || c == 0x000B || c == 0x000C ||
+            (c > 0x000D && c <= 0x001F) || c == 0xFFFE || c == 0xFFFF)
+        {
+            static sal_Unicode const hexDigit[16] = {
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C',
+                'D', 'E', 'F' };
+            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("\\u"));
+            buf.append(hexDigit[(c >> 12) & 0xF]);
+            buf.append(hexDigit[(c >> 8) & 0xF]);
+            buf.append(hexDigit[(c >> 4) & 0xF]);
+            buf.append(hexDigit[c & 0xF]);
+        } else {
+            if (c == '\\' || (c == ']' && escapeClosingBracket)) {
+                buf.append(sal_Unicode('\\'));
+            }
+            buf.append(c);
+        }
+    }
+    return buf.makeStringAndClear();
+}
+
+xmlChar const * unescapeText(
+    xmlChar const * text, bool enclosingBrackets, rtl::OString * unescaped)
+{
+    OSL_ASSERT(text != 0 && unescaped != 0);
+    if (enclosingBrackets && *text++ != '[') {
+        return 0;
+    }
+    rtl::OStringBuffer buf;
+    for (;;) {
+        xmlChar c = *text++;
+        switch (c) {
+        case '\0':
+            if (enclosingBrackets) {
+                return 0;
+            }
+            *unescaped = buf.makeStringAndClear();
+            return text;
+        case '\\':
+            c = *text++;
+            switch (c) {
+            case ']':
+                if (!enclosingBrackets) {
+                    return 0;
+                }
+                // fall through
+            case '\\':
+                buf.append(static_cast< char >(c));
+                break;
+            case 'u':
+                if (text[0] == '0' && text[1] == '0' &&
+                    (text[2] == '0' || text[2] == '1') &&
+                    ((text[3] >= '0' && text[3] <= '9') ||
+                     (text[3] >= 'A' && text[3] <= 'F') ||
+                     (text[3] >= 'a' && text[3] <= 'f')))
+                {
+                    char n = static_cast< char >(
+                        ((text[2] - '0') << 4) |
+                        (text[3] <= '9'
+                         ? text[3] - '0'
+                         : (text[3] - (text[3] <= 'F' ? 'A' : 'a') + 10)));
+                    switch (n) {
+                    case '\x09':
+                    case '\x0A':
+                    case '\x0D':
+                        return 0;
+                    default:
+                        break;
+                    }
+                    buf.append(n);
+                    text += 4;
+                    break;
+                }
+                if ((text[0] == 'F' || text[0] == 'f') &&
+                    (text[1] == 'F' || text[1] == 'f') &&
+                    (text[2] == 'F' || text[2] == 'f') &&
+                    (text[3] == 'E' || text[3] == 'e' ||
+                     text[3] == 'F' || text[3] == 'f'))
+                {
+                    buf.append(static_cast< char >(0xEF));
+                    buf.append(static_cast< char >(0xBF));
+                    buf.append(
+                        static_cast< char >(
+                            0xBE + (text[3] == 'F' || text[3] == 'f' ? 1 : 0)));
+                    text += 4;
+                    break;
+                }
+                // fall through
+            default:
+                return 0;
+            }
+            break;
+        case ']':
+            if (enclosingBrackets) {
+                *unescaped = buf.makeStringAndClear();
+                return text;
+            }
+            // fall through
+        default:
+            buf.append(static_cast< char >(c));
+            break;
+        }
+    }
+}
+
 rtl::OUString parseLastSegment(
     rtl::OUString const & path, rtl::OUString * name)
 {
@@ -645,72 +755,15 @@ template< typename T > xmlChar const * parseEscapedValue(
     xmlChar const * text, bool (* parse)(xmlChar const *, xmlChar const *, T *),
     T * value)
 {
-    if (*text++ != '[') {
-        return 0;
-    }
-    rtl::OStringBuffer buf;
-    for (;;) {
-        xmlChar c = *text++;
-        switch (c) {
-        case '\0':
-            return 0;
-        case ']':
-            goto done;
-        case '\\':
-            c = *text++;
-            switch (c) {
-            case '\\':
-            case ']':
-                buf.append(static_cast< char >(c));
-                break;
-            case 'u':
-                if (text[0] == '0' && text[1] == '0' &&
-                    (text[2] == '0' || text[2] == '1') &&
-                    ((text[3] >= '0' && text[3] <= '9') ||
-                     (text[3] >= 'A' && text[3] <= 'F') ||
-                     (text[3] >= 'a' && text[3] <= 'f')))
-                {
-                    buf.append(
-                        static_cast< char >(
-                            ((text[2] - '0') << 4) |
-                            (text[3] <= '9'
-                             ? text[3] - '0'
-                             : (text[3] - (text[3] <= 'F' ? 'A' : 'a') + 10))));
-                    text += 4;
-                    break;
-                }
-                if ((text[0] == 'F' || text[0] == 'f') &&
-                    (text[1] == 'F' || text[1] == 'f') &&
-                    (text[2] == 'F' || text[2] == 'f') &&
-                    (text[3] == 'E' || text[3] == 'e' ||
-                     text[3] == 'F' || text[3] == 'f'))
-                {
-                    buf.append(static_cast< char >(0xEF));
-                    buf.append(static_cast< char >(0xBF));
-                    buf.append(
-                        static_cast< char >(
-                            0xBE + (text[3] == 'F' || text[3] == 'f' ? 1 : 0)));
-                    text += 4;
-                    break;
-                }
-                // fall through
-            default:
-                return 0;
-            }
-            break;
-        default:
-            buf.append(static_cast< char >(c));
-            break;
-        }
-    }
-done:
-    rtl::OString unesc(buf.makeStringAndClear());
+    rtl::OString unesc;
+    text = unescapeText(text, true, &unesc);
     return
-        (*parse)(
-            reinterpret_cast< xmlChar const * >(unesc.getStr()),
-            (reinterpret_cast< xmlChar const * >(unesc.getStr()) +
-             unesc.getLength()),
-            value)
+        (text != 0 &&
+         (*parse)(
+             reinterpret_cast< xmlChar const * >(unesc.getStr()),
+             (reinterpret_cast< xmlChar const * >(unesc.getStr()) +
+              unesc.getLength()),
+             value))
         ? text : 0;
 }
 
@@ -1844,24 +1897,7 @@ void writeDoubleValue(xmlTextWriterPtr writer, double const & value) {
 void writeStringValue(xmlTextWriterPtr writer, rtl::OUString const & value) {
     rtl::OUStringBuffer buf;
     buf.append(sal_Unicode('['));
-    for (sal_Int32 i = 0; i < value.getLength(); ++i) {
-        sal_Unicode c = value[i];
-        if (c <= 0x001F || c == 0xFFFE || c == 0xFFFF) {
-            static sal_Unicode const hexDigit[16] = {
-                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C',
-                'D', 'E', 'F' };
-            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("\\u"));
-            buf.append(hexDigit[(c >> 12) & 0xF]);
-            buf.append(hexDigit[(c >> 8) & 0xF]);
-            buf.append(hexDigit[(c >> 4) & 0xF]);
-            buf.append(hexDigit[c & 0xF]);
-        } else {
-            if (c == '\\' || c == ']') {
-                buf.append(sal_Unicode('\\'));
-            }
-            buf.append(c);
-        }
-    }
+    buf.append(escapeText(value, true));
     buf.append(sal_Unicode(']'));
     xmlTextWriterWriteString(
         writer, xmlString(convertToUtf8(buf.makeStringAndClear()).getStr()));
@@ -1903,17 +1939,12 @@ void writeNode(
     rtl::Reference< Node > const & node)
 {
     if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node.get())) {
-        xmlTextWriterStartElementNS(
-            writer, xmlString("oor"), xmlString("prop"),
-            xmlString("http://openoffice.org/2001/registry"));
-        xmlTextWriterWriteAttributeNS(
-            writer, xmlString("oor"), xmlString("name"),
-            xmlString("http://openoffice.org/2001/registry"),
+        xmlTextWriterStartElement(writer, xmlString("oor:prop"));
+        xmlTextWriterWriteAttribute(
+            writer, xmlString("oor:name"),
             xmlString(convertToUtf8(name).getStr()));
-        xmlTextWriterWriteAttributeNS(
-            writer, xmlString("oor"), xmlString("op"),
-            xmlString("http://openoffice.org/2001/registry"),
-            xmlString("fuse"));
+        xmlTextWriterWriteAttribute(
+            writer, xmlString("oor:op"), xmlString("fuse"));
         Type type = prop->getType();
         if (type == TYPE_ANY) {
             type = mapType(prop->getValue());
@@ -1933,20 +1964,14 @@ void writeNode(
                 "oor:double-list", // TYPE_DOUBLE_LIST
                 "oor:string-list", // TYPE_STRING_LIST
                 "oor:hexBinary-list" }; // TYPE_HEXBINARY_LIST
-            xmlTextWriterWriteAttributeNS(
-                writer, xmlString("oor"), xmlString("type"),
-                xmlString("http://openoffice.org/2001/registry"),
-                xmlString(typeNames[type]));
+            xmlTextWriterWriteAttribute(
+                writer, xmlString("oor:type"), xmlString(typeNames[type]));
         }
-        xmlTextWriterStartElementNS(
-            writer, xmlString("oor"), xmlString("value"),
-            xmlString("http://openoffice.org/2001/registry"));
+        xmlTextWriterStartElement(writer, xmlString("oor:value"));
         switch (type) {
         case TYPE_NIL:
-            xmlTextWriterWriteAttributeNS(
-                writer, xmlString("xsi"), xmlString("nil"),
-                xmlString("http://www.w3.org/2001/XMLSchema-instance"),
-                xmlString("true"));
+            xmlTextWriterWriteAttribute(
+                writer, xmlString("xsi:nil"), xmlString("true"));
             break;
         case TYPE_BOOLEAN:
             {
@@ -1985,10 +2010,8 @@ void writeNode(
             break;
         case TYPE_STRING:
             {
-                xmlTextWriterWriteAttributeNS(
-                    writer, xmlString("oor"), xmlString("escaped"),
-                    xmlString("http://openoffice.org/2001/registry"),
-                    xmlString("true"));
+                xmlTextWriterWriteAttribute(
+                    writer, xmlString("oor:escaped"), xmlString("true"));
                 rtl::OUString val;
                 prop->getValue() >>= val;
                 writeStringValue(writer, val);
@@ -1999,10 +2022,8 @@ void writeNode(
                 // Written in escaped form to be able to share
                 // writeHexbinaryValue with the TYPE_HEXBINARY_LIST case (see
                 // there):
-                xmlTextWriterWriteAttributeNS(
-                    writer, xmlString("oor"), xmlString("escaped"),
-                    xmlString("http://openoffice.org/2001/registry"),
-                    xmlString("true"));
+                xmlTextWriterWriteAttribute(
+                    writer, xmlString("oor:escaped"), xmlString("true"));
                 css::uno::Sequence< sal_Int8 > val;
                 prop->getValue() >>= val;
                 writeHexbinaryValue(writer, val);
@@ -2024,19 +2045,15 @@ void writeNode(
             writeListValue(writer, &writeDoubleValue, prop->getValue());
             break;
         case TYPE_STRING_LIST:
-            xmlTextWriterWriteAttributeNS(
-                writer, xmlString("oor"), xmlString("escaped"),
-                xmlString("http://openoffice.org/2001/registry"),
-                xmlString("true"));
+            xmlTextWriterWriteAttribute(
+                writer, xmlString("oor:escaped"), xmlString("true"));
             writeListValue(writer, &writeStringValue, prop->getValue());
             break;
         case TYPE_HEXBINARY_LIST:
             // Written in escaped form to distinguish an empty list from a list
             // with one empty hexbinary element:
-            xmlTextWriterWriteAttributeNS(
-                writer, xmlString("oor"), xmlString("escaped"),
-                xmlString("http://openoffice.org/2001/registry"),
-                xmlString("true"));
+            xmlTextWriterWriteAttribute(
+                writer, xmlString("oor:escaped"), xmlString("true"));
             writeListValue(writer, &writeHexbinaryValue, prop->getValue());
             break;
         default: // TYPE_ERROR, TYPE_ANY
@@ -2049,18 +2066,13 @@ void writeNode(
         xmlTextWriterEndElement(writer);
         xmlTextWriterEndElement(writer);
     } else if (GroupNode * group = dynamic_cast< GroupNode * >(node.get())) {
-        xmlTextWriterStartElementNS(
-            writer, xmlString("oor"), xmlString("node"),
-            xmlString("http://openoffice.org/2001/registry"));
-        xmlTextWriterWriteAttributeNS(
-            writer, xmlString("oor"), xmlString("name"),
-            xmlString("http://openoffice.org/2001/registry"),
+        xmlTextWriterStartElement(writer, xmlString("oor:node"));
+        xmlTextWriterWriteAttribute(
+            writer, xmlString("oor:name"),
             xmlString(convertToUtf8(name).getStr()));
         if (group->getTemplateName().getLength() != 0) { // set member
-            xmlTextWriterWriteAttributeNS(
-                writer, xmlString("oor"), xmlString("op"),
-                xmlString("http://openoffice.org/2001/registry"),
-                xmlString("replace"));
+            xmlTextWriterWriteAttribute(
+                writer, xmlString("oor:op"), xmlString("replace"));
         }
         for (NodeMap::iterator i(group->getMembers().begin());
              i != group->getMembers().end(); ++i)
@@ -2311,6 +2323,9 @@ void Components::writeModifications() {
     xmlTextWriterStartDocument(writer.writer, 0, 0, 0);
     xmlTextWriterStartElement(writer.writer, xmlString("modifications"));
     xmlTextWriterWriteAttribute(
+        writer.writer, xmlString("xmlns:oor"),
+        xmlString("http://openoffice.org/2001/registry"));
+    xmlTextWriterWriteAttribute(
         writer.writer, xmlString("xmlns:xs"),
         xmlString("http://www.w3.org/2001/XMLSchema"));
     //TODO: Do not write back information about those removed items that did not
@@ -2326,7 +2341,8 @@ void Components::writeModifications() {
         if (node.is()) {
             xmlTextWriterWriteAttribute(
                 writer.writer, xmlString("path"),
-                xmlString(convertToUtf8(parentPath).getStr()));
+                xmlString(
+                    convertToUtf8(escapeText(parentPath, false)).getStr()));
             writeNode(writer.writer, name, node);
         } else {
             rtl::Reference< Node > parent(resolvePath(parentPath, 0, 0, 0));
@@ -2336,28 +2352,22 @@ void Components::writeModifications() {
                     parseLastSegment(parentPath, &parentName));
                 xmlTextWriterWriteAttribute(
                     writer.writer, xmlString("path"),
-                    xmlString(convertToUtf8(grandparentPath).getStr()));
-                xmlTextWriterStartElementNS(
-                    writer.writer, xmlString("oor"), xmlString("prop"),
-                    xmlString("http://openoffice.org/2001/registry"));
-                xmlTextWriterWriteAttributeNS(
-                    writer.writer, xmlString("oor"), xmlString("name"),
-                    xmlString("http://openoffice.org/2001/registry"),
+                    xmlString(
+                        convertToUtf8(escapeText(grandparentPath, false)).
+                        getStr()));
+                xmlTextWriterStartElement(writer.writer, xmlString("oor:prop"));
+                xmlTextWriterWriteAttribute(
+                    writer.writer, xmlString("oor:name"),
                     xmlString(convertToUtf8(parentName).getStr()));
-                xmlTextWriterWriteAttributeNS(
-                    writer.writer, xmlString("oor"), xmlString("op"),
-                    xmlString("http://openoffice.org/2001/registry"),
-                    xmlString("fuse"));
-                xmlTextWriterStartElementNS(
-                    writer.writer, xmlString("oor"), xmlString("value"),
-                    xmlString("http://openoffice.org/2001/registry"));
+                xmlTextWriterWriteAttribute(
+                    writer.writer, xmlString("oor:op"), xmlString("fuse"));
+                xmlTextWriterStartElement(
+                    writer.writer, xmlString("oor:value"));
                 xmlTextWriterWriteAttribute(
                     writer.writer, xmlString("xml:lang"),
                     xmlString(convertToUtf8(name).getStr()));
-                xmlTextWriterWriteAttributeNS(
-                    writer.writer, xmlString("oor"), xmlString("op"),
-                    xmlString("http://openoffice.org/2001/registry"),
-                    xmlString("remove"));
+                xmlTextWriterWriteAttribute(
+                    writer.writer, xmlString("oor:op"), xmlString("remove"));
                 xmlTextWriterEndElement(writer.writer);
                 xmlTextWriterEndElement(writer.writer);
             } else if (dynamic_cast< GroupNode * >(parent.get()) != 0) {
@@ -2365,35 +2375,27 @@ void Components::writeModifications() {
                     dynamic_cast< GroupNode * >(parent.get())->isExtensible());
                 xmlTextWriterWriteAttribute(
                     writer.writer, xmlString("path"),
-                    xmlString(convertToUtf8(parentPath).getStr()));
-                xmlTextWriterStartElementNS(
-                    writer.writer, xmlString("oor"), xmlString("prop"),
-                    xmlString("http://openoffice.org/2001/registry"));
-                xmlTextWriterWriteAttributeNS(
-                    writer.writer, xmlString("oor"), xmlString("name"),
-                    xmlString("http://openoffice.org/2001/registry"),
+                    xmlString(
+                        convertToUtf8(escapeText(parentPath, false)).getStr()));
+                xmlTextWriterStartElement(writer.writer, xmlString("oor:prop"));
+                xmlTextWriterWriteAttribute(
+                    writer.writer, xmlString("oor:name"),
                     xmlString(convertToUtf8(name).getStr()));
-                xmlTextWriterWriteAttributeNS(
-                    writer.writer, xmlString("oor"), xmlString("op"),
-                    xmlString("http://openoffice.org/2001/registry"),
-                    xmlString("remove"));
+                xmlTextWriterWriteAttribute(
+                    writer.writer, xmlString("oor:op"), xmlString("remove"));
                 xmlTextWriterEndElement(writer.writer);
             } else {
                 OSL_ASSERT(dynamic_cast< SetNode * >(parent.get()) != 0);
                 xmlTextWriterWriteAttribute(
                     writer.writer, xmlString("path"),
-                    xmlString(convertToUtf8(parentPath).getStr()));
-                xmlTextWriterStartElementNS(
-                    writer.writer, xmlString("oor"), xmlString("node"),
-                    xmlString("http://openoffice.org/2001/registry"));
-                xmlTextWriterWriteAttributeNS(
-                    writer.writer, xmlString("oor"), xmlString("name"),
-                    xmlString("http://openoffice.org/2001/registry"),
+                    xmlString(
+                        convertToUtf8(escapeText(parentPath, false)).getStr()));
+                xmlTextWriterStartElement(writer.writer, xmlString("oor:node"));
+                xmlTextWriterWriteAttribute(
+                    writer.writer, xmlString("oor:name"),
                     xmlString(convertToUtf8(name).getStr()));
-                xmlTextWriterWriteAttributeNS(
-                    writer.writer, xmlString("oor"), xmlString("op"),
-                    xmlString("http://openoffice.org/2001/registry"),
-                    xmlString("remove"));
+                xmlTextWriterWriteAttribute(
+                    writer.writer, xmlString("oor:op"), xmlString("remove"));
                 xmlTextWriterEndElement(writer.writer);
             }
         }
@@ -2523,12 +2525,21 @@ void Components::parseModificationLayer() {
                      fromXmlString(doc.doc->URL)),
                     css::uno::Reference< css::uno::XInterface >());
             }
+            rtl::OString unescPath;
+            if (unescapeText(path.str, false, &unescPath) == 0) {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "badly escaped path attribute in ")) +
+                     fromXmlString(doc.doc->URL)),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
             rtl::OUString componentName;
             rtl::OUString canonicalPath;
             rtl::Reference< Node > node(
                 resolvePath(
-                    fromXmlString(path.str), &componentName, 0,
-                    &canonicalPath));
+                    rtl::OStringToOUString(unescPath, RTL_TEXTENCODING_UTF8),
+                    &componentName, 0, &canonicalPath));
             if (!node.is()) {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(
