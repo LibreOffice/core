@@ -65,9 +65,6 @@ public:
     ::com::sun::star::uno::Sequence< ::rtl::OUString > GetKeywordsSet( const ::rtl::OUString& aChars );
     ::com::sun::star::lang::Locale GetLanguage( const ::rtl::OUString& aChars );
     void UpdateDocStatistic( const ::rtl::OUString& aChars );
-    sal_Bool Is16Digit( sal_Unicode cSign );
-    ::rtl::OUString Decode_xHHHH_( const ::rtl::OUString& aChars );
-
 
     // com.sun.star.xml.sax.XFastDocumentHandler
 

@@ -148,8 +148,8 @@ void SequenceOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes )
     if( nBytes > 0 )
     {
         if( mrData.getLength() - mnPos < nBytes )
-            mrData.realloc( mnPos + nBytes );
-        memcpy( mrData.getArray() + mnPos, pMem, static_cast< size_t >( nBytes ) );
+            const_cast< StreamDataSequence& >( mrData ).realloc( mnPos + nBytes );
+        memcpy( const_cast< StreamDataSequence& >( mrData ).getArray() + mnPos, pMem, static_cast< size_t >( nBytes ) );
         mnPos += nBytes;
     }
 }

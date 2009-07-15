@@ -45,7 +45,7 @@ class ExcelFilter : public ::oox::core::XmlFilterBase
 {
 public:
     explicit            ExcelFilter(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory );
     virtual             ~ExcelFilter();
 
     virtual bool        importDocument() throw();
@@ -54,7 +54,7 @@ public:
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const;
     virtual sal_Int32   getSchemeClr( sal_Int32 nColorSchemeToken ) const;
 
-    virtual const ::oox::vml::DrawingPtr getDrawings();
+    virtual ::oox::vml::Drawing* getVmlDrawing();
     virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles();
     virtual ::oox::drawingml::chart::ChartConverter& getChartConverter();
 
@@ -71,7 +71,7 @@ class ExcelBiffFilter : public ::oox::core::BinaryFilterBase
 {
 public:
     explicit            ExcelBiffFilter(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory );
     virtual             ~ExcelBiffFilter();
 
     virtual bool        importDocument() throw();

@@ -51,8 +51,10 @@ enum Unit
     UNIT_POINT,         /// Points.
     UNIT_TWIP,          /// Twips (1/20 point).
     UNIT_EMU,           /// English Metric Unit (1/360,000 cm).
-    UNIT_PIXELX,        /// Horizontal screen pixels.
-    UNIT_PIXELY,        /// Vertical screen pixels.
+    UNIT_SCREENX,       /// Horizontal screen pixels.
+    UNIT_SCREENY,       /// Vertical screen pixels.
+    UNIT_REFDEVX,       /// Horizontal pixels in Calc reference device.
+    UNIT_REFDEVY,       /// Vertical pixels in Calc reference device.
     UNIT_DIGIT,         /// Digit width of document default font.
     UNIT_SPACE,         /// Space character width of document default font.
 

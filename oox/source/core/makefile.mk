@@ -54,11 +54,9 @@ SLOFILES =	\
         $(SLO)$/filterdetect.obj			\
         $(SLO)$/fragmenthandler.obj			\
         $(SLO)$/fragmenthandler2.obj		\
-        $(SLO)$/modelobjectcontainer.obj	\
         $(SLO)$/recordparser.obj			\
         $(SLO)$/relations.obj				\
         $(SLO)$/relationshandler.obj		\
-        $(SLO)$/skipcontext.obj				\
         $(SLO)$/xmlfilterbase.obj
 
 # --- Targets -------------------------------------------------------

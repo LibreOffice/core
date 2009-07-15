@@ -74,6 +74,25 @@ namespace oox {
 
 // ============================================================================
 
+const sal_Int32 API_RGB_TRANSPARENT         = -1;       /// Transparent color for API calls.
+const sal_Int32 API_RGB_BLACK               = 0x00000;  /// Black color for API calls.
+const sal_Int32 API_RGB_WHITE               = 0xFFFFF;  /// White color for API calls.
+
+const sal_Int16 API_LINE_NONE               = 0;
+const sal_Int16 API_LINE_HAIR               = 2;
+const sal_Int16 API_LINE_THIN               = 35;
+const sal_Int16 API_LINE_MEDIUM             = 88;
+const sal_Int16 API_LINE_THICK              = 141;
+
+const sal_Int16 API_ESCAPE_NONE             = 0;        /// No escapement.
+const sal_Int16 API_ESCAPE_SUPERSCRIPT      = 101;      /// Superscript: raise characters automatically (magic value 101).
+const sal_Int16 API_ESCAPE_SUBSCRIPT        = -101;     /// Subscript: lower characters automatically (magic value -101).
+
+const sal_Int8 API_ESCAPEHEIGHT_NONE        = 100;      /// Relative character height if not escaped.
+const sal_Int8 API_ESCAPEHEIGHT_DEFAULT     = 58;       /// Relative character height if escaped.
+
+// ============================================================================
+
 // Limitate values ------------------------------------------------------------
 
 template< typename ReturnType, typename Type >
@@ -92,7 +111,7 @@ inline ReturnType getIntervalValue( Type nValue, Type nBegin, Type nEnd )
 }
 
 template< typename ReturnType >
-inline ReturnType getDoubleIntervalValue( double fValue, double fBegin, double fEnd )
+inline ReturnType getIntervalValue( double fValue, double fBegin, double fEnd )
 {
     double fInterval = fEnd - fBegin;
     double fCount = (fValue < fBegin) ? -(::rtl::math::approxFloor( (fBegin - fValue - 1.0) / fInterval ) + 1.0) : ::rtl::math::approxFloor( (fValue - fBegin) / fInterval );
@@ -197,8 +216,8 @@ private:
 class ByteOrderConverter
 {
 public:
-    inline static void  convertLittleEndian( sal_Int8& ) {}
-    inline static void  convertLittleEndian( sal_uInt8& ) {}
+    inline static void  convertLittleEndian( sal_Int8& ) {}     // present for usage in templates
+    inline static void  convertLittleEndian( sal_uInt8& ) {}    // present for usage in templates
 #ifdef OSL_BIGENDIAN
     inline static void  convertLittleEndian( sal_Int16& rnValue )  { swap2( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
     inline static void  convertLittleEndian( sal_uInt16& rnValue ) { swap2( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
@@ -235,7 +254,6 @@ public:
 
 #ifdef OSL_BIGENDIAN
 private:
-    inline static void  swap( sal_uInt8& rnData1, sal_uInt8& rnData2 );
     inline static void  swap2( sal_uInt8* pnData );
     inline static void  swap4( sal_uInt8* pnData );
     inline static void  swap8( sal_uInt8* pnData );
@@ -259,28 +277,23 @@ inline void ByteOrderConverter::writeLittleEndian( void* pDstBuffer, Type nValue
 }
 
 #ifdef OSL_BIGENDIAN
-inline void ByteOrderConverter::swap( sal_uInt8& rnData1, sal_uInt8& rnData2 )
-{
-    rnData1 ^= rnData2 ^= rnData1 ^= rnData2;
-}
-
 inline void ByteOrderConverter::swap2( sal_uInt8* pnData )
 {
-    swap( pnData[ 0 ], pnData[ 1 ] );
+    ::std::swap( pnData[ 0 ], pnData[ 1 ] );
 }
 
 inline void ByteOrderConverter::swap4( sal_uInt8* pnData )
 {
-    swap( pnData[ 0 ], pnData[ 3 ] );
-    swap( pnData[ 1 ], pnData[ 2 ] );
+    ::std::swap( pnData[ 0 ], pnData[ 3 ] );
+    ::std::swap( pnData[ 1 ], pnData[ 2 ] );
 }
 
 inline void ByteOrderConverter::swap8( sal_uInt8* pnData )
 {
-    swap( pnData[ 0 ], pnData[ 7 ] );
-    swap( pnData[ 1 ], pnData[ 6 ] );
-    swap( pnData[ 2 ], pnData[ 5 ] );
-    swap( pnData[ 3 ], pnData[ 4 ] );
+    ::std::swap( pnData[ 0 ], pnData[ 7 ] );
+    ::std::swap( pnData[ 1 ], pnData[ 6 ] );
+    ::std::swap( pnData[ 2 ], pnData[ 5 ] );
+    ::std::swap( pnData[ 3 ], pnData[ 4 ] );
 }
 #endif
 

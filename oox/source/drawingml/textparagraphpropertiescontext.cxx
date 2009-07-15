@@ -164,8 +164,8 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
         rPropertyMap[ PROP_ParaTabStops ] <<= aSeq;
     }
 
-    if ( mpFillPropertiesPtr && mpFillPropertiesPtr->mxGraphic.is() )
-        mrBulletList.setGraphic( mpFillPropertiesPtr->mxGraphic );
+    if ( mxBlipProps.get() && mxBlipProps->mxGraphic.is() )
+        mrBulletList.setGraphic( mxBlipProps->mxGraphic );
 
     if( mrBulletList.is() )
         rPropertyMap[ PROP_IsNumbering ] <<= sal_True;
@@ -205,7 +205,7 @@ Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChild
             mrBulletList.mbBulletColorFollowText <<= sal_True;
             break;
         case NMSP_DRAWINGML|XML_buClr:          // CT_Color
-            xRet.set( new colorChoiceContext( *this, *mrBulletList.maBulletColorPtr ) );
+            xRet.set( new ColorContext( *this, *mrBulletList.maBulletColorPtr ) );
             break;
 
         // EG_TextBulletSize
@@ -266,8 +266,8 @@ Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChild
             break;
         case NMSP_DRAWINGML|XML_buBlip:         // CT_TextBlipBullet
             {
-                mpFillPropertiesPtr.reset( new FillProperties );
-                xRet.set( new BlipFillPropertiesContext( *this, rXAttributes, *mpFillPropertiesPtr ) );
+                mxBlipProps.reset( new BlipFillProperties );
+                xRet.set( new BlipFillContext( *this, rXAttributes, *mxBlipProps ) );
             }
             break;
 

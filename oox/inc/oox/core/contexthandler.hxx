@@ -47,6 +47,7 @@ namespace core {
 
 class XmlFilterBase;
 class FragmentHandler;
+struct Relation;
 class Relations;
 
 // ============================================================================
@@ -72,12 +73,12 @@ public:
     /** Returns the full path of the current fragment. */
     const ::rtl::OUString& getFragmentPath() const;
 
-    /** Returns the full fragment path for the passed relative target. */
-    ::rtl::OUString     getFragmentPathFromTarget( const ::rtl::OUString& rTarget ) const;
+    /** Returns the full fragment path for the target of the passed relation. */
+    ::rtl::OUString     getFragmentPathFromRelation( const Relation& rRelation ) const;
     /** Returns the full fragment path for the passed relation identifier. */
     ::rtl::OUString     getFragmentPathFromRelId( const ::rtl::OUString& rRelId ) const;
-    /** Returns the full fragment path for the passed type. */
-    ::rtl::OUString     getFragmentPathFromType( const ::rtl::OUString& rType ) const;
+    /** Returns the full fragment path for the first relation of the passed type. */
+    ::rtl::OUString     getFragmentPathFromFirstType( const ::rtl::OUString& rType ) const;
 
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 

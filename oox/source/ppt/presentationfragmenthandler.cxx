@@ -111,18 +111,18 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
             if( aSlideFragmentPath.getLength() > 0 )
             {
                 SlidePersistPtr pMasterPersistPtr;
-                SlidePersistPtr pSlidePersistPtr( new SlidePersist( sal_False, sal_False, xSlide,
+                SlidePersistPtr pSlidePersistPtr( new SlidePersist( rFilter, sal_False, sal_False, xSlide,
                                     ShapePtr( new PPTShape( Slide, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
 
                 FragmentHandlerRef xSlideFragmentHandler( new SlideFragmentHandler( rFilter, aSlideFragmentPath, pSlidePersistPtr, Slide ) );
 
                 // importing the corresponding masterpage/layout
-                OUString aLayoutFragmentPath = xSlideFragmentHandler->getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "slideLayout" ) );
+                OUString aLayoutFragmentPath = xSlideFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "slideLayout" ) );
                 if ( aLayoutFragmentPath.getLength() > 0 )
                 {
                     // importing layout
                     RelationsRef xLayoutRelations = rFilter.importRelations( aLayoutFragmentPath );
-                    OUString aMasterFragmentPath = xLayoutRelations->getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "slideMaster" ) );
+                    OUString aMasterFragmentPath = xLayoutRelations->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "slideMaster" ) );
                     if( aMasterFragmentPath.getLength() )
                     {
                         // check if the corresponding masterpage+layout has already been imported
@@ -148,7 +148,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                             else
                                 xMasterPage = xMasterPages->insertNewByIndex( xMasterPages->getCount() );
 
-                            pMasterPersistPtr = SlidePersistPtr( new SlidePersist( sal_True, sal_False, xMasterPage,
+                            pMasterPersistPtr = SlidePersistPtr( new SlidePersist( rFilter, sal_True, sal_False, xMasterPage,
                                 ShapePtr( new PPTShape( Master, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
                             pMasterPersistPtr->setLayoutPath( aLayoutFragmentPath );
                             rFilter.getMasterPages().push_back( pMasterPersistPtr );
@@ -156,7 +156,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                             FragmentHandlerRef xMasterFragmentHandler( new SlideFragmentHandler( rFilter, aMasterFragmentPath, pMasterPersistPtr, Master ) );
 
                             // set the correct theme
-                            OUString aThemeFragmentPath = xMasterFragmentHandler->getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "theme" ) );
+                            OUString aThemeFragmentPath = xMasterFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "theme" ) );
                             if( aThemeFragmentPath.getLength() > 0 )
                             {
                                 std::map< OUString, oox::drawingml::ThemePtr >& rThemes( rFilter.getThemes() );
@@ -194,7 +194,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                 pSlidePersistPtr->createXShapes( rFilter );
 
                 // now importing the notes page
-                OUString aNotesFragmentPath = xSlideFragmentHandler->getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "notesSlide" ) );
+                OUString aNotesFragmentPath = xSlideFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "notesSlide" ) );
                 if( aNotesFragmentPath.getLength() > 0 )
                 {
                     Reference< XPresentationPage > xPresentationPage( xSlide, UNO_QUERY );
@@ -203,7 +203,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                         Reference< XDrawPage > xNotesPage( xPresentationPage->getNotesPage() );
                         if ( xNotesPage.is() )
                         {
-                            SlidePersistPtr pNotesPersistPtr( new SlidePersist( sal_False, sal_True, xNotesPage,
+                            SlidePersistPtr pNotesPersistPtr( new SlidePersist( rFilter, sal_False, sal_True, xNotesPage,
                                 ShapePtr( new PPTShape( Slide, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
                             FragmentHandlerRef xNotesFragmentHandler( new SlideFragmentHandler( getFilter(), aNotesFragmentPath, pNotesPersistPtr, Slide ) );
                             rFilter.getNotesPages().push_back( pNotesPersistPtr );

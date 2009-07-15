@@ -33,8 +33,6 @@
 
 #include "oox/core/fragmenthandler2.hxx"
 
-#define C_TOKEN( token )    (::oox::NMSP_CHART | XML_##token)
-
 namespace oox { namespace drawingml { class Shape; } }
 
 namespace oox {
