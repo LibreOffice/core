@@ -973,7 +973,7 @@ sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (
     if( pRelationshipId )
         *pRelationshipId = sRelationshipId;
 
-    sax_fastparser::FSHelperPtr p = openOutputStreamWithSerializer( sFullStream, OUString::createFromAscii( sContentType ) );
+    sax_fastparser::FSHelperPtr p = openFragmentStreamWithSerializer( sFullStream, OUString::createFromAscii( sContentType ) );
 
     maOpenedStreamMap[ sFullStream ] = std::make_pair( sRelationshipId, p );
 
@@ -990,14 +990,14 @@ sal_Int32 XclExpXmlStream::getSchemeClr( sal_Int32 /*nColorSchemeToken*/ ) const
     return -1;
 }
 
-const oox::vml::DrawingPtr XclExpXmlStream::getDrawings()
+oox::vml::Drawing* XclExpXmlStream::getVmlDrawing()
 {
-    return oox::vml::DrawingPtr();
+    return 0;
 }
 
 const oox::drawingml::Theme* XclExpXmlStream::getCurrentTheme() const
 {
-    return NULL;
+    return 0;
 }
 
 const oox::drawingml::table::TableStyleListPtr XclExpXmlStream::getTableStyles()

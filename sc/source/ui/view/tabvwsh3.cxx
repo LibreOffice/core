@@ -991,14 +991,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             }
             break;
 
-        case SID_STATUS_DOCPOS:
-            {
-                //! Navigator an-/ausschalten (wie im Writer) ???
-                //!GetViewData()->GetDispatcher().Execute( SID_NAVIGATOR,
-                //!                       SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
-            }
-            break;
-
         case FID_PROTECT_DOC:
             {
                 ScDocument*         pDoc = GetViewData()->GetDocument();

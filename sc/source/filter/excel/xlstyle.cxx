@@ -665,6 +665,7 @@ void XclFontPropSetHelper::ReadFontProperties( XclFontData& rFontData,
             sal_Int8 nApiEscHeight = 0;
             maHlpChEscapement.ReadFromPropertySet( rPropSet );
             maHlpChEscapement.ReadFromPropertySet( rPropSet );
+            maHlpChEscapement.ReadFromPropertySet( rPropSet );
             maHlpChEscapement >> nApiEscapement >> nApiEscHeight;
             rFontData.SetApiEscapement( nApiEscapement );
         }
