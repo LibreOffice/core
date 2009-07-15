@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,6 @@ TARGET=ooo_mozab
 # --- Files --------------------------------------------------------
 # ----- pkg-config start -------
 .INCLUDE .IGNORE : pkgroot.mk
-
 .IF "$(PKGCONFIG_ROOT)"!=""
 PKG_CONFIG:=$(PKGCONFIG_ROOT)$/bin$/pkg-config
 PKG_CONFIG_PATH:=$(PKGCONFIG_ROOT)$/lib$/pkgconfig
@@ -53,41 +52,57 @@ LD_LIBRARY_PATH!:=$(LD_LIBRARY_PATH)$(PATH_SEPERATOR)$(PKGCONFIG_ROOT)$/lib
 .EXPORT : PKG_CONFIG_PATH PKG_CONFIG LD_LIBRARY_PATH
 .ENDIF          # "$(PKGCONFIG_ROOT)"!=""
 
-.IF "$(BUILD_SPECIAL)"!=""
 # reduce prerequisites by disabling mozilla binary
 DISABLE_MOZ_EXECUTABLE=TRUE
 .EXPORT : DISABLE_MOZ_EXECUTABLE
-.ENDIF			# "$(BUILD_SPECIAL)"!=""
 
 .IF "$(SYSBASE)"!="" && "$(OS)" == "LINUX"
 # hmm... rather gcc specific switches...
 CFLAGS:=-isystem $(SYSBASE)/usr/include -B$(SYSBASE)/usr/lib
-LDFLAGS:=-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -LX11
+LDFLAGS:=-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -L$(SYSBASE)/usr/X11R6/lib
 SYSBASE_X11:=--x-includes=$(SYSBASE)/usr/include/X11 --x-libraries=$(SYSBASE)/usr/X11R6/lib
 .EXPORT : CFLAGS LDFLAGS
 .ENDIF			# "$(SYSBASE)"!="" && "$(OS)" == "LINUX"
 
+.IF "$(SYSBASE)"!="" && "$(OS)" == "MACOSX"
+PKGCONFIG_ROOT!:=$(ENV_ROOT)$/macports-1.7.0
+PKG_CONFIG:=$(PKGCONFIG_ROOT)$/bin$/pkg-config
+PKG_CONFIG_PATH:=$(PKGCONFIG_ROOT)$/lib$/pkgconfig
+.EXPORT : PKG_CONFIG_PATH PKG_CONFIG
+# hmm... rather gcc specific switches...
+CFLAGS:=-isystem $(SYSBASE)/usr/include -B$(SYSBASE)/usr/lib -B$(SYSBASE)/usr/lib/system -L$(ENV_ROOT)/macports-1.7.0/lib -lmathCommon
+LDFLAGS:=-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -L$(SYSBASE)/usr/lib/system
+XLDOPTS:= -B$(SYSBASE)/usr/lib -B$(SYSBASE)/usr/lib/system -lmathCommon
+.EXPORT : CFLAGS LDFLAGS XLDOPTS
+.ENDIF			# "$(SYSBASE)"!="" && "$(OS)" == "MACOSX"
+
 # ----- pkg-config end -------
 
-MOZILLA_VERSION*=1.7.5
-.IF "$(MOZILLA_VERSION)"=="1.7b"
-TARFILE_NAME=mozilla-source-1.7b-source
-.ELSE
-TARFILE_NAME=mozilla-source-$(MOZILLA_VERSION)
-.ENDIF
+MOZILLA_VERSION=1.1.14
+TARFILE_NAME=seamonkey-$(MOZILLA_VERSION).source
+
 TARFILE_ROOTDIR=mozilla
+PATCH_FILES=seamonkey-source-$(MOZILLA_VERSION).patch
 
-PATCH_FILES=mozilla-source-$(MOZILLA_VERSION).patch 
-
-# These files are needed for the W32 build when BUILD_MOZAB is set
+# This file is needed for the W32 build when BUILD_MOZAB is set
+# (currently only vc8/vs2005 is supported when BUILD_MOZAB is set)
+.IF "$(COM)"=="GCC"
 LIBIDL_VC71_ZIPFILE_NAME*=vc71-libIDL-0.6.8-bin.zip
 LIBGLIB_VC71_ZIPFILE_NAME*=vc71-glib-1.2.10-bin.zip
-WINTOOLS_ZIPFILE_NAME*=wintools.zip
+MOZTOOLS_ZIPFILE_NAME*=wintools.zip
+.ELSE
+MOZTOOLS_ZIPFILE_NAME*=vc8-moztools.zip
+.ENDIF
 
 ADDITIONAL_FILES=mailnews$/addrbook$/src$/nsAbMD5sum.cpp
 
 CONFIGURE_DIR=
-MOZILLA_CONFIGURE_FLAGS= $(SYSBASE_X11) --disable-tests \
+.IF "$(GUIBASE)"!="aqua"
+MOZILLA_CONFIGURE_FLAGS += $(SYSBASE_X11)
+.ENDIF
+
+MOZILLA_CONFIGURE_FLAGS +=  --disable-tests \
+                --enable-application=suite \
                 --enable-ldap \
                 --enable-crypto \
                 --enable-optimize \
@@ -99,7 +114,6 @@ MOZILLA_CONFIGURE_FLAGS= $(SYSBASE_X11) --disable-tests \
                 --disable-debug \
                 --disable-xprint \
                 --disable-postscript \
-                --disable-freetype2 \
                 --without-system-zlib \
                 --disable-installer \
                 --disable-accessibility \
@@ -108,7 +122,19 @@ MOZILLA_CONFIGURE_FLAGS= $(SYSBASE_X11) --disable-tests \
                 --disable-oji \
                 --disable-profilesharing \
                 --disable-boehm \
-                --disable-jsloader
+                --disable-jsloader \
+                --disable-canvas \
+                --disable-xft \
+                --disable-freetype2 \
+                --disable-gnomeui \
+                --disable-image-encoders \
+                --disable-plugins \
+                --disable-printing \
+                --enable-extensions="pref"
+
+#.IF "$(GUI)"!="WNT"
+#MOZILLA_CONFIGURE_FLAGS += --enable-system-cairo
+#.ENDIF
 
 #disable profilelocking to share profile with mozilla
 #disable activex and activex-scripting to remove the dependence of Microsoft_SDK\src\mfc\atlbase.h
@@ -116,12 +142,20 @@ MOZILLA_CONFIGURE_FLAGS= $(SYSBASE_X11) --disable-tests \
 #disable others to save build times
 
 .IF "$(GUI)"=="UNX"
+.IF "$(GUIBASE)"=="aqua"
+MACDEVSDK*=/Developer/SDKs/MacOSX10.4u.sdk
+MOZILLA_CONFIGURE_FLAGS+= \
+    --with-macos-sdk=$(MACDEVSDK) \
+    --disable-glibtest \
+    --enable-macos-target=10.4 \
+    --disable-libxul
+DEFAULT_MOZILLA_TOOLKIT=mac
+.ELSE
 #We do not need mozilla ui, but libIDL version are decided by default toolkit.
 #default-toolkit=xlib need libIDL < 0.68
 #default-toolkit=gtk2 need libIDL > 0.8 (know as libIDL2)
-.IF "x$(DEFAULT_MOZILLA_TOOLKIT)"=="x"
-DEFAULT_MOZILLA_TOOLKIT=gtk2
-.ENDIF
+DEFAULT_MOZILLA_TOOLKIT*=gtk2
+.ENDIF # "$(GUIBASE)"=="aqua"
 MOZILLA_CONFIGURE_FLAGS+= --enable-default-toolkit=$(DEFAULT_MOZILLA_TOOLKIT)
 .ENDIF
 
@@ -142,13 +176,17 @@ CXXFLAGS:=-features=tmplife
 .IF "$(CPU)"=="U"
 CXXFLAGS+=-m64
 .ENDIF
-.EXPORT : CXXFLAGS 
+.EXPORT : CXXFLAGS
 .ENDIF          # "$(COMNAME)"=="sunpro5"
 .ENDIF
 
 .IF "$(OS)"=="SOLARIS" && "$(CPUNAME)"=="SPARC" && "$(CPU)"=="U"
 PKG_CONFIG_PATH=/usr/lib/64/pkgconfig
 .EXPORT: PKG_CONFIG_PATH
+MAKE=/usr/sfw/bin/gmake
+.EXPORT: MAKE
+CFLAGS=-I/usr/sfw/include
+.EXPORT: CFLAGS
 .ENDIF
 .IF "$(COM)"=="C52" && "$(CPUNAME)"=="SPARC" && "$(CPU)"=="U"
 CFLAGS=-m64
@@ -156,7 +194,7 @@ ASFLAGS=-m64
 .EXPORT: CFLAGS ASFLAGS
 .ENDIF
 
-MOZDIR=$(MISC)$/build$/mozilla
+MOZDIR=$(MISC)$/build$/seamonkey
 MOZTARGET=$(OS)$(COM)$(CPU)
 
 .IF "$(GUI)"=="WNT"
@@ -190,33 +228,35 @@ CXX:=cl.exe
 .ENDIF
 
 # Variables to install/use our own wintools
+.IF "$(COM)"=="GCC"
 MOZTOOLSUNPACK:=$(MISC)$/build$/moztoolsunpack
 MOZTOOLSINST:=$(MISC)$/build$/moztoolsinst
-.IF "$(USE_SHELL)"!="4nt"
-MOZ_TOOLS_DOS:=$(shell @cygpath -ad "$(MISC)")\build\moztoolsinst
-.IF "$(COM)"=="GCC"
-PATH!:=$(PATH):$(shell @cygpath $(MOZ_TOOLS_DOS))/bin:$(shell @cygpath $(MOZ_TOOLS_DOS))/vc71/bin
 .ELSE
-PATH!:=$(shell @cygpath $(MOZ_TOOLS_DOS))/vc71/bin:$(shell @cygpath $(MOZ_TOOLS_DOS))/bin:$(PATH)
+MOZTOOLS_EXTRACT:=$(MISC)$/build$/moztools
 .ENDIF
-.IF "$(USE_SHELL)"=="tcsh"
-SET_MOZ_TOOLS_INSTALL_BAT:=setenv MOZ_TOOLS "$(MOZ_TOOLS_DOS)"
-.ELIF "$(USE_SHELL)"=="bash"
+.IF "$(USE_SHELL)"!="4nt"
+.IF "$(COM)"=="GCC"
+MOZ_TOOLS_DOS:=$(shell @cygpath -ad "$(MISC)")\build\moztoolsinst
+PATH!:=$(PATH):$(shell @cygpath $(MOZ_TOOLS_DOS))/bin:$(shell @cygpath $(MOZ_TOOLS_DOS))/vc71/bin
 SET_MOZ_TOOLS_INSTALL_BAT:=export "MOZ_TOOLS=$(MOZ_TOOLS_DOS)"
 .ELSE
-SET_MOZ_TOOLS_INSTALL_BAT:=MOZ_TOOLS="$(MOZ_TOOLS_DOS)"; export MOZ_TOOLS
+MOZ_TOOLS_DOS:=$(shell @cygpath -ad "$(MISC)")\build\moztools\vc8-moztools
+PATH!:=$(shell @cygpath $(MOZ_TOOLS_DOS))/bin:$(PATH)
 .ENDIF
 .ELSE # "$(USE_SHELL)"!="4nt"
 # MOZ_TOOLS must contain an absolute path
-MOZ_TOOLS_DOS:=$(shell @echo %@SFN[$(MISC)])\build\moztoolsinst
-PATH!:=$(MOZ_TOOLS_DOS)\vc71\bin;$(MOZ_TOOLS_DOS)\bin;$(PATH)
-SET_MOZ_TOOLS_INSTALL_BAT:=set MOZ_TOOLS=$(MOZ_TOOLS_DOS)
+MOZ_TOOLS_DOS:=$(shell @echo %@SFN[$(MISC)])\build\moztools\vc8-moztools
+PATH!:=$(MOZ_TOOLS_DOS)\bin;$(PATH)
 .ENDIF # "$(USE_SHELL)"!="4nt"
+
 MOZ_TOOLS:=$(subst,\,/ $(MOZ_TOOLS_DOS))
+.IF "$(COM)"=="GCC"
 GLIB_PREFIX:=$(MOZ_TOOLS)/vc71
 LIBIDL_PREFIX:=$(MOZ_TOOLS)/vc71
+.EXPORT : GLIB_PREFIX LIBIDL_PREFIX
+.ENDIF
 
-.EXPORT : PATH MOZ_TOOLS GLIB_PREFIX LIBIDL_PREFIX
+.EXPORT : PATH MOZ_TOOLS
 .ENDIF # "$(GUI)"=="WNT"
 
 # --- Targets ------------------------------------------------------
@@ -231,7 +271,7 @@ all:
 .INCLUDE : tg_ext.mk
 
 .IF "$(GUI)"=="WNT"
-NEEDWINTOOLSFLAGFILE:=$(MISC)$/build$/wintools.complete
+NEEDWINTOOLSFLAGFILE:=$(MISC)$/build$/moztools.complete
 .ENDIF # "$(GUI)"=="WNT"
 
 ALLTAR: $(NEEDWINTOOLSFLAGFILE) \
@@ -249,29 +289,43 @@ $(MISC)$/remove_build.flag : $(PATCH_FILES)
 
 # Unpack/setup Windows build tools
 .IF "$(GUI)"=="WNT"
-$(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(MISC)$/build$/wintools.complete
+$(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(MISC)$/build$/moztools.complete
 
-$(MISC)$/build$/wintools.unpack : $(PRJ)$/download$/$(WINTOOLS_ZIPFILE_NAME)
+.IF "$(COM)"=="GCC"
+$(MISC)$/build$/moztools.unpack : $(PRJ)$/download$/$(MOZTOOLS_ZIPFILE_NAME)
     -$(RENAME) $(MOZTOOLSUNPACK) $(MOZTOOLSUNPACK)_removeme
     -$(RENAME) $(MOZTOOLSINST) $(MOZTOOLSINST)_removeme
     -rm -rf $(MOZTOOLSUNPACK)_removeme $(MOZTOOLSINST)_removeme
     @-$(MKDIRHIER) $(MOZTOOLSUNPACK)
-    unzip $(PRJ)$/download$/$(WINTOOLS_ZIPFILE_NAME) -d $(MOZTOOLSUNPACK)
-    $(TOUCH) $(MISC)$/build$/wintools.unpack
+    unzip $(PRJ)$/download$/$(MOZTOOLS_ZIPFILE_NAME) -d $(MOZTOOLSUNPACK)
+    $(TOUCH) $(MISC)$/build$/moztools.unpack
 
-$(MISC)$/build$/wintools.install : $(MISC)$/build$/wintools.unpack
+$(MISC)$/build$/moztools.install : $(MISC)$/build$/moztools.unpack
     cd $(MOZTOOLSUNPACK)$/buildtools$/windows && $(SET_MOZ_TOOLS_INSTALL_BAT) && cmd /c install.bat
-    $(TOUCH) $(MISC)$/build$/wintools.install
+    $(TOUCH) $(MISC)$/build$/moztools.install
 
-$(MISC)$/build$/wintools.complete : \
-  $(MISC)$/build$/wintools.install \
+$(MISC)$/build$/moztools.complete : \
+  $(MISC)$/build$/moztools.install \
   $(PRJ)$/download$/$(LIBIDL_VC71_ZIPFILE_NAME) \
   $(PRJ)$/download$/$(LIBGLIB_VC71_ZIPFILE_NAME)
     unzip $(PRJ)$/download$/$(LIBIDL_VC71_ZIPFILE_NAME) -d $(MOZTOOLSINST)
     unzip $(PRJ)$/download$/$(LIBGLIB_VC71_ZIPFILE_NAME) -d $(MOZTOOLSINST)
 # chmod is also needed for W32-4nt build (when cygwin unzip is used)
     -chmod -R +x $(MOZTOOLSINST)$/vc71$/bin
-    $(TOUCH) $(MISC)$/build$/wintools.complete
+    $(TOUCH) $(MISC)$/build$/moztools.complete
+.ELSE
+$(MISC)$/build$/moztools.unpack : $(PRJ)$/download$/$(MOZTOOLS_ZIPFILE_NAME)
+    -$(RENAME) $(MOZTOOLS_EXTRACT) $(MOZTOOLS_EXTRACT)_removeme
+    -rm -rf $(MOZTOOLS_EXTRACT)_removeme
+    @-$(MKDIRHIER) $(MOZTOOLS_EXTRACT)
+    unzip $(PRJ)$/download$/$(MOZTOOLS_ZIPFILE_NAME) -d $(MOZTOOLS_EXTRACT)
+# chmod is also needed for W32-4nt build (when cygwin unzip is used)
+    -chmod -R +x $(MOZTOOLS_EXTRACT)$/vc8-moztools$/bin
+    $(TOUCH) $(MISC)$/build$/moztools.unpack
+
+$(MISC)$/build$/moztools.complete : $(MISC)$/build$/moztools.unpack
+    $(TOUCH) $(MISC)$/build$/moztools.complete
+.ENDIF
 .ENDIF # "$(GUI)"=="WNT"
 
 zip:	\
