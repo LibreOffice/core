@@ -52,6 +52,20 @@ sub change_length_of_string
 }
 
 ########################################################################################
+# The length of the new string must be identical with the length of the old string
+########################################################################################
+
+sub change_length_of_string_with_letter
+{
+    my ($newstringref, $oldstring, $onestring) = @_;
+
+    while ( length($$newstringref) < length($oldstring) )
+    {
+        $$newstringref = $$newstringref . $onestring;
+    }
+}
+
+########################################################################################
 # Converting a string to a unicode string
 ########################################################################################
 
@@ -78,23 +92,46 @@ sub convert_to_unicode
 
 sub replace_productname_in_file
 {
-    my ($sourcepath, $destpath, $variableshashref, $filedescription) = @_;
+    my ($sourcepath, $destpath, $variableshashref, $onefilehash, $styles) = @_;
 
     my $onefile = installer::files::read_binary_file($sourcepath);
+
+    # searching for "x"
 
     my $onestring = "x" . chr(0);
     my $replacestring = "";
     for ( my $i = 1; $i <= 80; $i++ ) { $replacestring .= $onestring; }
 
     my $productname = $variableshashref->{'PRODUCTNAME'} . " " . $variableshashref->{'PRODUCTVERSION'};
-    if ( $filedescription ne "" ) { $productname = $filedescription; }
+    if ( exists($onefilehash->{'FileDescription'}) ) { $productname = $onefilehash->{'FileDescription'}; }
     my $unicode_productname = convert_to_unicode($productname);
 
     change_length_of_string(\$unicode_productname, $replacestring);
 
-    my $found = $onefile =~ s/$replacestring/$unicode_productname/s;
+    my $found1 = $onefile =~ s/$replacestring/$unicode_productname/sg;
+
+    my $found2 = 0;
+
+    if ( $styles =~ /\bPATCH_SO_NAME_Z\b/ )
+    {
+        # searching for "z"
+
+        $onestring = "z" . chr(0);
+        $replacestring = "";
+        for ( my $i = 1; $i <= 80; $i++ ) { $replacestring .= $onestring; }
+
+        my $productname2 = $variableshashref->{'PRODUCTNAME'} . " " . $variableshashref->{'PRODUCTVERSION'};
+        if ( exists($onefilehash->{'FileDescriptionZ'}) ) { $productname2 = $onefilehash->{'FileDescriptionZ'}; }
+        my $unicode_productname2 = convert_to_unicode($productname2);
+
+        change_length_of_string_with_letter(\$unicode_productname2, $replacestring, $onestring);
+
+        $found2 = $onefile =~ s/$replacestring/$unicode_productname2/sg;
+    }
 
     installer::files::save_binary_file($onefile, $destpath);
+
+    my $found = $found1 + $found2;
 
     return $found;
 }
@@ -142,8 +179,6 @@ sub resolving_patchsoname_flag
             my $destinationpath = $replacedir . $onefilename;
             my $movepath = $destinationpath . ".orig";
 
-            if ( exists($onefile-> {'FileDescription'}) ) { $filedescription = $onefile-> {'FileDescription'}; }
-
             # if (!(-f $destinationpath))   # do nothing if the file already exists
             # {
 
@@ -152,7 +187,7 @@ sub resolving_patchsoname_flag
             if ( $copysuccess )
             {
                 # Now the file can be patch (binary!)
-                my $found = replace_productname_in_file($movepath, $destinationpath, $variableshashref, $filedescription);
+                my $found = replace_productname_in_file($movepath, $destinationpath, $variableshashref, $onefile, $styles);
 
                 if ($found == 0)
                 {
