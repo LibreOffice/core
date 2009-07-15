@@ -66,13 +66,13 @@ MOZ_REG_LIB := $(MOZ_LIB)$/mozreg.lib
 
 .IF "$(OS)"=="WNT" 
 .IF "$(COM)"=="GCC"
-MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lembed_base_s -lnspr4 -lmozreg_s -lxpcom
+MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lembed_base_s -lnspr4 -lmozreg_s -lxpcom -lxpcom_core
 .ELSE
 LIB += $(MOZ_LIB)
-MOZ_LIB_XPCOM= $(MOZ_EMBED_LIB) $(MOZ_LIB)$/nspr4.lib $(MOZ_REG_LIB) $(MOZ_LIB)$/xpcom.lib
+MOZ_LIB_XPCOM= $(MOZ_EMBED_LIB) $(MOZ_LIB)$/nspr4.lib $(MOZ_REG_LIB) $(MOZ_LIB)$/xpcom.lib $(MOZ_LIB)$/xpcom_core.lib
 .ENDIF
 .ELSE "$(OS)"=="WNT" 
-MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lembed_base_s -lnspr4 -lmozreg_s -lxpcom
+MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lnspr4 -lxpcom_core -lmozreg_s -lembed_base_s
 .ENDIF
 #End of mozilla specific stuff.
 
@@ -153,7 +153,8 @@ MOZSLOFILES=\
     $(SLO)$/MNSINIParser.obj	\
     $(SLO)$/MNSRunnable.obj	\
     $(SLO)$/MNSProfile.obj					\
-    $(SLO)$/MNSProfileDirServiceProvider.obj
+    $(SLO)$/MNSProfileDirServiceProvider.obj    \
+    $(SLO)$/MLdapAttributeMap.obj
 
 
 SLO2FILES=\

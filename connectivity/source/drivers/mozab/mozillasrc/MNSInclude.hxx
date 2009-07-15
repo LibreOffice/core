@@ -47,6 +47,7 @@
 #include <nsCOMPtr.h>
 #include <nsISupportsArray.h>
 #include <nsString.h>
+
 #if defined __SUNPRO_CC
 #pragma disable_warn
     // somewhere in the files included directly or indirectly in nsString.h, warnings are enabled, again
@@ -73,6 +74,8 @@
 #include <nsIAbDirectoryQueryProxy.h>
 #include <nsIAbDirFactory.h>
 #include <nsIRunnable.h>
+#include <nsIAbLDAPAttributeMap.h>
+#include <nsILDAPMessage.h>
 
 #include <prerr.h>
 
