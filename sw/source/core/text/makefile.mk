@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ CDEFS+=-Dmydebug
 
 # --- Files --------------------------------------------------------
 
-.IF "$(product)$(cap)" == ""
+.IF "DBG_UTIL" != ""
 CXXFILES += \
         txtio.cxx
 .ENDIF
@@ -97,7 +97,7 @@ SLOFILES =  \
         $(SLO)$/SwGrammarMarkUp.obj \
         $(SLO)$/wrong.obj
 
-.IF "$(product)$(cap)" == ""
+.IF "$DBG_UTIL" != ""
 SLOFILES +=  \
         $(SLO)$/txtio.obj
 .ENDIF

@@ -73,7 +73,7 @@ SUBLIBS3= \
                 $(SLB)$/SwNumberTree.lib \
                 $(SLB)$/tablecore.lib
 
-.IF "$(DBG_LEVEL)" != "0"
+.IF "DBG_UTIL" != ""
 SUBLIBS3+= \
         $(SLB)$/except.lib
 .ENDIF

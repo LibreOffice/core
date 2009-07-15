@@ -162,7 +162,7 @@ SHL2OBJS=   $(SLO)$/swdetect.obj \
         $(SLO)$/detreg.obj \
         $(SLO)$/iodetect.obj
 
-.IF "$(product)"==""
+.IF "DBG_UTIL"!=""
 SHL2OBJS+=  \
         $(SLO)$/errhdl.obj
 .ENDIF
