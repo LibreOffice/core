@@ -91,7 +91,7 @@ CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-excepti
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 .ELSE
 CONFIGURE_ACTION=
-BUILD_ACTION= cmd.exe /c ms_make.bat
+BUILD_ACTION= cmd.exe /d /c ms_make.bat
 .ENDIF
 .ENDIF
 
