@@ -1771,20 +1771,17 @@ End
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Oooimprovecore , oooimprovecore)
 
-#if defined WNT && \
-    (defined M1310 || \
-     ((defined M1400 || defined M1500) && \
-      !(defined SYSTEM_MOZILLA || defined WITHOUT_MOZILLA)))
-File gid_File_Moz_Msvcp71
+#if defined WNT && !defined SYSTEM_MOZILLA && !defined WITHOUT_MOZILLA
+File gid_File_Moz_Msvcp80
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Name = SCP2_URE_DL_NORMAL("msvcp71" SCP2_STDLP_DEBUG);
+    Name = SCP2_URE_DL_NORMAL("msvcp80");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
-File gid_File_Moz_Msvcr71
+File gid_File_Moz_Msvcr80
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Name = SCP2_URE_DL_NORMAL("msvcr71" SCP2_STDLP_DEBUG);
+    Name = SCP2_URE_DL_NORMAL("msvcr80");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
 #endif

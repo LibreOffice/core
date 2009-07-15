@@ -1760,12 +1760,15 @@ dnl      The following find microsoft, matches nn.nn.nnnn then pulls numbers out
 			AC_MSG_RESULT([found Compiler version $CCNUMVER.])
 			if test "$CCNUMVER" -ge "001500000000"; then
 				COMEX=12
+				MSVSVER=2008
 				AC_MSG_RESULT([found .NET 2008 / VS 9.0.])
 			elif test "$CCNUMVER" -ge "001400000000"; then
 				COMEX=11
+				MSVSVER=2005
 				AC_MSG_RESULT([found .NET 2005.])
 			elif test "$CCNUMVER" -ge "001300102240"; then
 				COMEX=10
+				MSVSVER=2003
 				AC_MSG_RESULT([found .NET 2003.])
 			else
 				AC_MSG_ERROR([Compiler too old. Use Microsoft C/C++ .NET 2003/2005 compiler.])
@@ -4126,9 +4129,14 @@ AC_SUBST(MOZILLA_VERSION)
 
 AC_MSG_CHECKING([for toolkit mozilla should use])
 if test -z "$with_mozilla_toolkit"; then
-   if test "$_os" != "WINNT"; then
-      MOZILLA_TOOLKIT=gtk2
-      AC_MSG_RESULT([gtk2])
+   if test "$_os" != "WINNT" ; then
+      if test "$_os" = "Darwin" ; then
+         MOZILLA_TOOLKIT=mac  
+         AC_MSG_RESULT([mac])
+      else
+         MOZILLA_TOOLKIT=gtk2
+         AC_MSG_RESULT([gtk2])
+      fi
    fi
 else
    MOZILLA_TOOLKIT=$with_mozilla_toolkit
@@ -4150,7 +4158,7 @@ else
       enable_build_mozilla=
 fi
 
-AC_MSG_CHECKING([whether to build Mozilla])
+AC_MSG_CHECKING([whether to build Mozilla/SeaMonkey])
 if test -n "$enable_build_mozilla"; then
    BUILD_MOZAB="TRUE"
    AC_MSG_RESULT([yes])
@@ -4160,17 +4168,25 @@ else
 fi
 
 if test "$BUILD_MOZAB" = "TRUE"; then
+  if test "$_os" = "WINNT"; then
+    if test "$WITH_MINGWIN" != "yes"; then
+      # compiling with MSVC. Only supported platform here is MSVS2005 at the moment.
+      if test "$MSVSVER" != "2005"; then
+        AC_MSG_ERROR([Building SeaMonkey is supported with Microsoft Visual Studio .NET 2005 only.])
+      fi
+    else
+      AC_MSG_WARN([Building SeaMonkey with mingwin is not tested, and likely to break.])
+      echo "Building SeaMonkey with mingwin is not tested, and likely to break." >> warn
+    fi
+  fi
+
    if test -z "$MOZILLA_VERSION"; then
-      MOZILLA_VERSION=1.7.5
+      MOZILLA_VERSION=1.1.14
    fi
-   if test "$MOZILLA_VERSION" = "1.7b" ; then
-      MOZILLA_SOURCE_VERSION="mozilla-source-1.7b-source"
-   else
-      MOZILLA_SOURCE_VERSION="mozilla-source-${MOZILLA_VERSION}"
-   fi
+   MOZILLA_SOURCE_VERSION="seamonkey-${MOZILLA_VERSION}.source"
    for e in gz bz2; do
       AC_MSG_CHECKING([for $MOZILLA_SOURCE_VERSION.tar.$e])
-      if test ! -e "./moz/download/$MOZILLA_SOURCE_VERSION.tar.$e" && test "$HAVE_MOZILLA_TARBALL" != "y"; then
+      if test ! -e "moz/download/$MOZILLA_SOURCE_VERSION.tar.$e" && test "$HAVE_MOZILLA_TARBALL" != "y"; then
          AC_MSG_RESULT([not found])
          HAVE_MOZILLA_TARBALL=n
       else
@@ -4179,22 +4195,16 @@ if test "$BUILD_MOZAB" = "TRUE"; then
       fi
    done
    if test "$HAVE_MOZILLA_TARBALL" != "y"; then
-         AC_MSG_ERROR([Mozilla source archive not found.
+         AC_MSG_ERROR([Mozilla/SeaMonkey source archive not found.
 Please copy $MOZILLA_SOURCE_VERSION.tar.bz2 or $MOZILLA_SOURCE_VERSION.tar.gz to moz/download/.
 The archives can be found here:
-http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla$MOZILLA_VERSION/source/])
+http://releases.mozilla.org/pub/mozilla.org/seamonkey/releases/$MOZILLA_VERSION/])
    fi
    if test "$_os" = "WINNT"; then
-      AC_MSG_CHECKING([for glib and libIDL binaries])
-      if test ! -e "./moz/download/vc71-glib-1.2.10-bin.zip" \
-           -o ! -e "./moz/download/vc71-libIDL-0.6.8-bin.zip" \
-           -o ! -e "./moz/download/wintools.zip" ; then
-AC_MSG_ERROR([One or more of the following archives is missing in moz/download/
-  vc71-glib-1.2.10-bin.zip
-  vc71-libIDL-0.6.8-bin.zip
-(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc71/)
-  wintools.zip
-(from http://ftp.mozilla.org/pub/mozilla.org/mozilla/source/wintools.zip)])
+      AC_MSG_CHECKING([for moztools binaries])
+      if test ! -e "moz/download/vc8-moztools.zip" ; then
+        AC_MSG_ERROR([The following file is missing in moz/download: vc8-moztools.zip
+(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc8/)])
       else
          AC_MSG_RESULT([ok])
       fi
