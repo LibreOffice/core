@@ -446,6 +446,9 @@ endcase
 '-----------------------------------------------------------
 
 testcase tZORest
+Warnlog "#i102752# - tZORest outcommented due to bug."
+goto endsub
+
     printlog "- Draw Functions-Objectbar: Rest"
     if gApplication = "HTML" then
         printlog "This test does not apply to HTML documents"

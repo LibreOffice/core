@@ -59,6 +59,8 @@ sub w_fields3
 
 end sub
 
+'-----------------------------------------------------------------
+
 testcase tFieldsReferences
 
   printlog "Insert/Cross-reference"
@@ -86,8 +88,8 @@ endcase
 
 testcase tSetReferences_1
 
-  Dim  sReference  as String
-  Dim  sTestFile   as String
+  Dim sReference as String
+  Dim sTestFile  as String
 
   sReference = "myTest"
   sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\fields\pageTest.sxw")
@@ -133,7 +135,7 @@ endcase
 
 testcase tSetReferences_2
 
-  Dim  sReference  as String
+  Dim sReference as String
 
   sReference = "myTest"
 
@@ -174,8 +176,8 @@ endcase
 
 testcase tInsertReference_1
 
-  Dim  sReference  as String
-  Dim  sTestFile   as String
+  Dim sReference as String
+  Dim sTestFile  as String
 
   sReference = "myTest"
   sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\fields\pageTest.sxw")
@@ -234,8 +236,8 @@ endcase
 
 testcase tInsertReference_2
 
-  Dim  sReference  as String
-  Dim  sTestFile   as String
+  Dim sReference as String
+  Dim sTestFile  as String
 
   sReference = "myTest"
   sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\fields\chapterTest.sxw")
@@ -294,8 +296,8 @@ endcase
 
 testcase tInsertReference_3
 
-  Dim  sReference      as String
-  Dim  sReferenceName  as String
+  Dim sReference     as String
+  Dim sReferenceName as String
 
   sReference     = "est !"
   sReferenceName = "myTest"
@@ -354,14 +356,20 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tInsertReference_4
-qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
-goto endsub
 
-  Dim  sReference      as String
-  Dim  sAbove , sBelow as String
+  Dim sReference as String
+  Dim sAbove     as String
+  Dim sBelow     as String
 
-  sReference = "myTest"
-  sAbove = "above" : sBelow = "below"
+    sReference = "myTest"
+    Select Case iSystemSprache
+        Case 01 : sAbove = "above"  : sBelow = "below"
+        Case 35 : sAbove = "sur"    : sBelow = "sous"
+        Case 39 : sAbove = "sopra"  : sBelow = "sotto"
+        Case 49 : sAbove = "oben"   : sBelow = "unten"
+        Case 46 : sAbove = "ovan"   : sBelow = "under"
+        Case 55 : sAbove = "arriba" : sBelow = "abajo"
+    End Select
 
   printlog "Insert Reference - Above/Below"
  '/// <b> Insert Reference - Above/Below</b>
@@ -440,8 +448,8 @@ endcase
 
 testcase tInsertReference_5
 
-  Dim  sReference  as String
-  Dim  sTestSytle  as String
+  Dim sReference as String
+  Dim sTestSytle as String
 
   sReference = "myTest"
   sTestSytle = "A"
@@ -503,7 +511,7 @@ endcase
 
 testcase tInsertReference_6
 
-  Dim  sFootnote   as String
+  Dim sFootnote as String
 
   sFootnote = "Test"
 
@@ -537,7 +545,7 @@ endcase
 
 testcase tInsertReference_7
 
-  Dim  sEndnote   as String
+  Dim sEndnote as String
 
   sEndnote = "Test"
 
@@ -571,7 +579,9 @@ endcase
 
 testcase tInsertReference_8_1
 
-  Dim sCategory , sCaption , sSeparator as String
+  Dim sCategory  as String
+  Dim sCaption   as String
+  Dim sSeparator as String
 
   sCategory = "A" : sCaption = "B" : sSeparator = "*"
 
@@ -619,7 +629,9 @@ endcase
 
 testcase tInsertReference_8_2
 
-  Dim sCategory , sCaption , sSeparator as String
+  Dim sCategory  as String
+  Dim sCaption   as String
+  Dim sSeparator as String
 
   sCategory = "A" : sCaption = "B" : sSeparator = "*"
 
@@ -667,8 +679,8 @@ endcase
 
 testcase tInsertBookmark_1
 
-  Dim  sBookmark   as String
-  Dim  sTestFile   as String
+  Dim sBookmark as String
+  Dim sTestFile as String
 
   sBookmark = "myTest"
   sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\fields\pageTest.sxw")
@@ -725,8 +737,8 @@ endcase
 
 testcase tInsertBookmark_2
 
-  Dim  sBookmark   as String
-  Dim  sTestFile   as String
+  Dim sBookmark as String
+  Dim sTestFile as String
 
   sBookmark = "myTest"
   sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\fields\chapterTest.sxw")
@@ -782,8 +794,8 @@ endcase
 
 testcase tInsertBookmark_3
 
-  Dim  sReference   as String
-  Dim  sBookmark    as String
+  Dim sReference as String
+  Dim sBookmark  as String
 
   sReference  = "est !"
   sBookmark   = "myTest"
@@ -839,14 +851,20 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tInsertBookmark_4
-qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
-goto endsub
 
-  Dim  sBookmark       as String
-  Dim  sAbove , sBelow as String
+  Dim sBookmark as String
+  Dim sAbove    as String
+  Dim sBelow    as String
 
   sBookmark = "myTest"
-  sAbove = "above" : sBelow = "below"
+    Select Case iSystemSprache
+        Case 01 : sAbove = "above"  : sBelow = "below"
+        Case 35 : sAbove = "sur"    : sBelow = "sous"
+        Case 39 : sAbove = "sopra"  : sBelow = "sotto"
+        Case 49 : sAbove = "oben"   : sBelow = "unten"
+        Case 46 : sAbove = "ovan"   : sBelow = "under"
+        Case 55 : sAbove = "arriba" : sBelow = "abajo"
+    End Select
 
   printlog "Insert Bookmark - Above/Below"
  '/// <b> Insert Bookmark - Above/Below</b>
@@ -922,8 +940,8 @@ endcase
 
 testcase tInsertBookmark_5
 
-  Dim  sBookmark   as String
-  Dim  sTestSytle  as String
+  Dim sBookmark  as String
+  Dim sTestSytle as String
 
   sBookmark  = "myTest"
   sTestSytle = "A"
@@ -979,4 +997,3 @@ testcase tInsertBookmark_5
 endcase
 
 '-----------------------------------------------------------------
-

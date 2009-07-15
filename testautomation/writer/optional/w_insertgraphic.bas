@@ -61,7 +61,7 @@ sub main
 	printlog Chr(13) + "      - Test of Graphic function -"
 
 	Call hStatusIn ( "writer", "w_insertgraphic.bas" , "Graphic" )
-	Call wOptionenUndo("AutoCaption")
+	Call wOptionsUndo("AutoCaption")
 
     'Software Configuration:
     'Getting the decimal seperator from global function
@@ -69,10 +69,10 @@ sub main
     'Setting the measurement unit to centimeters.
     gMeasurementUnit = fSetMeasurementToCM()
 
-	Call tInsertGraphic_X
+    Call tInsertGraphic_X
     Call tInsertGraphic_1
-	Call tInsertGraphic_2
-	Call tInsertGraphic_3
+    Call tInsertGraphic_2
+    Call tInsertGraphic_3
 	Call tInsertGraphic_4
 	Call tInsertGraphic_5
 	Call tInsertGraphic_6

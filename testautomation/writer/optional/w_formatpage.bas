@@ -37,7 +37,8 @@
 '*
 '\*******************************************************************
 
-global gSeperator , gMeasurementUnit as String
+global gSeperator as String
+global gMeasurementUnit as String
 
 sub main
     Dim StartZeit
@@ -60,7 +61,7 @@ sub main
 
     Call hStatusIn ( "writer", "w_FormatPage.bas" , "Page" )
 
-    Call wOptionenUndo ( "Alle" )        ' Sets all writer-options to default
+    Call wOptionsUndo ( "All" )        ' Sets all writer-options to default
     'Software Configuration:
     'Getting the decimal seperator from global function
     gSeperator = GetDecimalSeperator()

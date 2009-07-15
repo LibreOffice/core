@@ -54,6 +54,8 @@ sub w_fields2
 
 end sub
 
+'-----------------------------------------------------------------
+
 testcase tFieldsOther_0
 
   Dim sTest as String
@@ -94,10 +96,14 @@ testcase tFieldsOther_1_1
         exit sub
     end if
 
-  Dim sFirstName  , sLastName   as String
-  Dim sFirstName1 , sLastName1  as String
-  Dim sFirstName2 , sLastName2  as String
-  Dim sInitial1   , sInitial2   as String
+  Dim sFirstName  as String
+  Dim sLastName   as String
+  Dim sFirstName1 as String
+  Dim sLastName1  as String
+  Dim sFirstName2 as String
+  Dim sLastName2  as String
+  Dim sInitial1   as String
+  Dim sInitial2   as String
 
   sFirstName1 = "ABC" : sLastName1 = "DEF"
   sFirstName2 = "XYZ" : sLastName2 = "OPQ"
@@ -196,10 +202,13 @@ testcase tFieldsOther_1_2
         exit sub
     end if
 
-  Dim sFirstName  , sLastName   as String
-  Dim sFirstName1 , sLastName1  as String
-  Dim sFirstName2 , sLastName2  as String
-  Dim sInitial1                 as String
+  Dim sFirstName  as String
+  Dim sLastName   as String
+  Dim sFirstName1 as String
+  Dim sLastName1  as String
+  Dim sFirstName2 as String
+  Dim sLastName2  as String
+  Dim sInitial1   as String
 
   sFirstName1 = "ABC" : sLastName1 = "DEF"
   sFirstName2 = "XYZ" : sLastName2 = "OPQ"
@@ -297,9 +306,9 @@ endcase
 
 testcase tFieldsOther_2
 
-  Dim  sTestFile     as String
-  Dim  sChapter()    as String
-  Dim  i             as Integer
+  Dim sTestFile  as String
+  Dim sChapter() as String
+  Dim i          as Integer
 
   sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\fields\chapterTest.sxw")
 
@@ -445,9 +454,9 @@ testcase tFieldsOther_5
 qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
 goto endsub
 
-  Dim  sTestFile     as String
-  Dim  sPage()       as String
-  Dim  i             as Integer
+  Dim sTestFile as String
+  Dim sPage()   as String
+  Dim i         as Integer
 
   sPage = Array( _
                  "2"         , _
@@ -506,7 +515,9 @@ testcase tFieldsOther_6_1
         exit sub
     end if
 
-  Dim aUserData(14) , aUserData1() , aUserData2() as String
+  Dim aUserData(14) as String
+  Dim aUserData1() as String
+  Dim aUserData2() as String
 
   Dim i as Integer
 
@@ -682,8 +693,8 @@ testcase tFieldsOther_6_2
     end if
 
   Dim aUserData(16) as String
-  Dim aUserData1() as String
-  Dim aUserData2() as String
+  Dim aUserData1()  as String
+  Dim aUserData2()  as String
 
   Dim i as Integer
 
@@ -859,9 +870,9 @@ testcase tFieldsOther_7
 qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
 goto endsub
 
-  Dim  sTestFile     as String
-  Dim  sStatistics() as String
-  Dim  i             as Integer
+  Dim sTestFile     as String
+  Dim sStatistics() as String
+  Dim i             as Integer
 
   sStatistics = Array( _
                       "2"         , _
@@ -924,19 +935,19 @@ goto endsub
 
     Dim  sTestFile     as String
     Dim  sDirectory    as String
+    Dim  oDirectory    as String
     Dim  sLanguage     as String
     Dim  sFormat()     as String
     Dim  sResult(6)    as String
     Dim  i             as Integer
     
     sLanguage    = fGetDirLanguage()
-    sDirectory   = "..\..\OpenOffice.org\Basis 3.0\share\template\" & sLanguage & "\educate"
-    sTestFile    = Convertpath ( gNetzOfficePath + sDirectory + "\diploma.ott")
+    sTestFile    = Convertpath (gTesttoolpath + "writer\optional\input\fields\diploma.ott")
     
     sResult(0)   = fGetCateGory()
     sResult(1)   = "diploma.ott"
     sResult(2)   = "diploma"
-    sResult(3)   = Convertpath ( gNetzOfficePath + sDirectory )
+    sResult(3)   = Convertpath (gTesttoolpath + "writer\optional\input\fields\") 
     sResult(4)   = sTestFile
     sResult(5)   = fGetStyle()
     
@@ -981,16 +992,17 @@ goto endsub
     Kontext "TabDokumentFeldbefehle"
     TabDokumentFeldbefehle.Close
     
+    Do Until GetDocumentCount = 0
     Call hCloseDocument
-    Call hCloseDocument
-
+    Loop
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tFieldsOther_9
 
-    Dim sTime1 , sTime2  as  String
+    Dim sTime1 as String
+    Dim sTime2 as String
 
   printlog "Insert/Fields/Other/Document / Time"
  '/// <b> Insert/Fields/Other/Document / Time </b>
@@ -1050,4 +1062,3 @@ testcase tFieldsOther_9
 endcase
 
 '-----------------------------------------------------------------
-

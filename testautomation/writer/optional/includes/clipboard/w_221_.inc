@@ -50,9 +50,6 @@ end sub
 
 
 testcase DrawToHTMLScrollingText
-  QaErrorLog "#i95309# - DrawToHTMLScrollingText outcommented due to problem when opening certain sxd-files."
-  goto endsub
-
 
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
@@ -108,10 +105,7 @@ endcase
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToHTMLGroupedObject
-  QaErrorLog "#i95309# - DrawToHTMLGroupedObject outcommented due to problem when opening certain sxd-files."
-  goto endsub
 
-  
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
   printlog " + Jump to beginning of document "
@@ -166,9 +160,6 @@ endcase
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToHTML3D
-  QaErrorLog "#i95309# - DrawToHTML3D outcommented due to problem when opening certain sxd-files."
-  goto endsub
-
 
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
@@ -224,9 +215,6 @@ endcase
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToHTMLFontwork
-  QaErrorLog "#i95309# - DrawToHTMLFontwork outcommented due to problem when opening certain sxd-files."
-  goto endsub
-
 
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
@@ -282,9 +270,6 @@ endcase
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToHTMLBullets
-  QaErrorLog "#i95309# - DrawToHTMLBullets outcommented due to problem when opening certain sxd-files."
-  goto endsub
-
 
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
@@ -340,9 +325,6 @@ endcase
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToHTMLDimensionLines
-  QaErrorLog "#i95309# - DrawToHTMLDimensionLines outcommented due to problem when opening certain sxd-files."
-  goto endsub
-
 
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
@@ -399,9 +381,6 @@ endcase
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToHTMLConnectors
-  QaErrorLog "#i95309# - DrawToHTMLConnectors outcommented due to problem when opening certain sxd-files."
-  goto endsub
-
 
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "

@@ -628,6 +628,9 @@ endcase
 '-----------------------------------------------------------
 
 testcase tGraphicAnchor
+Warnlog "#i102752# - tGraphicAnchor outcommented due to bug."
+goto endsub
+
     printlog "- Graphic-(Frame)-Objectbar: Anchor"
     printlog " Open new document"
     Call hNewDocument

@@ -95,9 +95,11 @@ endcase
 testcase tParagraphIndent1
 
   Dim sTest                               as String
-  Dim iLenTest       , iLenHalf           as Integer
+  Dim iLenTest                            as Integer
+  Dim iLenHalf                            as Integer
   Dim sPageWidth                          as String
-  Dim sMarginLeft    , sMarginRight       as String
+  Dim sMarginLeft                         as String
+  Dim sMarginRight                        as String
   Dim sIndentLeft                         as String
 
   sTest        = "lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"
@@ -157,9 +159,11 @@ endcase
 testcase tParagraphIndent2
 
   Dim sTest                               as String
-  Dim iLenTest       , iLenHalf           as Integer
+  Dim iLenTest                            as Integer
+  Dim iLenHalf                            as Integer
   Dim sPageWidth                          as String
-  Dim sMarginLeft    , sMarginRight       as String
+  Dim sMarginLeft                         as String
+  Dim sMarginRight                        as String
   Dim sIndentRight                        as String
 
   sTest        = "lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"
@@ -219,10 +223,13 @@ endcase
 testcase tParagraphIndent3
 
   Dim sTest                             as String
-  Dim iLenTest     , iLenNew            as Integer
+  Dim iLenTest                          as Integer
+  Dim iLenNew                           as Integer
   Dim sPageWidth                        as String
-  Dim sMarginLeft  , sMarginRight       as String
-  Dim sIndentRight , sIndentFirst       as String
+  Dim sMarginLeft                       as String
+  Dim sMarginRight                      as String
+  Dim sIndentRight                      as String
+  Dim sIndentFirst                      as String
 
   sTest        = "lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"
   sPageWidth   = "8" + gSeperator + "00" + gMeasurementUnit
@@ -281,10 +288,13 @@ endcase
 testcase tParagraphIndent4
 
   Dim sTest                             as String
-  Dim iLenTest     , iLenNew            as Integer
+  Dim iLenTest                          as Integer
+  Dim iLenNew                           as Integer
   Dim sPageWidth                        as String
-  Dim sMarginLeft  , sMarginRight       as String
-  Dim sIndentRight , sIndentFirst       as String
+  Dim sMarginLeft                       as String
+  Dim sMarginRight                      as String
+  Dim sIndentRight                      as String
+  Dim sIndentFirst                      as String
 
   sTest        = "lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"
   sPageWidth   = "8" + gSeperator + "00" + gMeasurementUnit
@@ -347,7 +357,8 @@ endcase
 testcase tParagraphIndent5
 
   Dim sTestFile          as String
-  Dim sTest1 , sTest2    as String  'the words in 2nd paragraph (sTest1 is head , sTest2 is end)
+  Dim sTest1             as String
+  Dim sTest2             as String  'the words in 2nd paragraph (sTest1 is head , sTest2 is end)
   Dim sSpacing           as String
 
   sTest1    = "He2" : sTest2 = "endof2ndparagraph"
@@ -406,7 +417,8 @@ endcase
 testcase tParagraphIndent6
 
   Dim sTestFile          as String
-  Dim sTest1 , sTest2    as String  '(sTest1 is head of paragraph 1 , sTest2 is end of paragraph2)
+  Dim sTest1             as String
+  Dim sTest2             as String  '(sTest1 is head of paragraph 1 , sTest2 is end of paragraph2)
   Dim sSpacing           as String
 
   sTest1    = "He1" : sTest2 = "endof2ndparagraph"
@@ -466,7 +478,8 @@ testcase tParagraphIndent7
 
   Dim sTestFile                as String
   Dim sEndOfPara1              as String
-  Dim sStartPara2 , sEndPara2  as String
+  Dim sStartPara2              as String
+  Dim sEndPara2                as String
   Dim sParagraph2              as String
 
   sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\spacing.sxw")
@@ -623,7 +636,7 @@ endcase
 
 testcase tParagraphIndent9
 
-  Dim sTestFile  as String
+  Dim sTestFile as String
 
   sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\eightline.sxw")
 
@@ -663,7 +676,7 @@ endcase
 
 testcase tParagraphIndent10
 
-  Dim sTestFile  as String
+  Dim sTestFile as String
 
   sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\eightline.sxw")
 
@@ -733,7 +746,7 @@ endcase
 
 testcase tParagraphIndent11
 
-    Dim sTestFile  as String
+    Dim sTestFile as String
     
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\eightline.sxw")
     
@@ -741,7 +754,7 @@ testcase tParagraphIndent11
     '/// <b>Test Line spacing - Double lines</b>
     
     Call hNewDocument
-    Call wOptionenUndo ( "Grundschriften" )
+    Call wOptionsUndo ( "Grundschriften" )
     '/// Open the test file
     '/// This file includes 8 lines
     '/// when the spacing is Double lines , the first 4 lines should be in 1st page
@@ -883,6 +896,9 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphIndent13
+Warnlog "#i102752# - tParagraphIndent13 outcommented due to bug."
+goto endsub
+
 
   Dim sTestFile  as String
   Dim sAtLeast   as String
@@ -952,6 +968,8 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphIndent14
+Warnlog "#i102752# - tParagraphIndent14 outcommented due to bug."
+goto endsub
 
   Dim sTestFile  as String
   Dim sAtLeast   as String
@@ -1086,9 +1104,13 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tParagraphIndent16
+Warnlog "#i102752# - tParagraphIndent16 outcommented due to bug."
+goto endsub
 
-  Dim sTestFile                as String
-  Dim sPositionX , sPositionY  as String
+
+  Dim sTestFile    as String
+  Dim sPositionX as String
+  Dim sPositionY as String
 
   sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\registerTrue.sxw")
 
@@ -1148,7 +1170,8 @@ endcase
 
 testcase tParagraphIndent17
 
-  Dim sTestFile1 , sTestFile2  as String
+  Dim sTestFile1 as String
+  Dim sTestFile2 as String
 
   sTestFile1 = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\AddSpacingShouldCheck.doc")
   sTestFile2 = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\AddSpacingShouldNotCheck.doc")
@@ -1207,8 +1230,10 @@ endcase
 testcase tParagraphIndent18
 
   Dim sPageWidth                          as String
-  Dim sMarginLeft    , sMarginRight       as String
-  Dim sBeforeText    , sAfterText         as String
+  Dim sMarginLeft                         as String
+  Dim sMarginRight                        as String
+  Dim sBeforeText                         as String
+  Dim sAfterText                          as String
 
   sPageWidth   = "8"   + gSeperator + "00" + gMeasurementUnit
   sMarginLeft  = "2"   + gSeperator + "00" + gMeasurementUnit

@@ -1,4 +1,4 @@
-'encoding UTF-8  Do not remove or change this line!
+	'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 '* 
@@ -39,6 +39,7 @@
 
 sub wr_o_2
     Dim temp as boolean
+
     Call tToolsOptionsWriterDefaultfont("BASICFONTS")
     Call tToolsOptionsWriterPrint
     ' is located in wr_o_a.inc
@@ -55,8 +56,6 @@ end sub
 '------------------------------------------------------------------------------
 
 testcase tToolsOptionsWriterDefaultfont (WestOrEast as string)
-QaErrorLog "#i94557# - Testcase outcommented due to bug"
-goto endsub
 
     Dim bCheckboxes(1) as boolean    ' Checkbox states
     Dim iListBox(5) as integer         ' ListBox
@@ -66,10 +65,11 @@ goto endsub
     Dim iTempListBox(5) as integer
     Dim sTempListBox(5) as String
     Dim iTempListBoxSize(5) as integer
-    Dim sTempListBoxSize(5) as String    
+    Dim sTempListBoxSize(5) as String
     Dim sInitFont(5) as String
     Dim sInitFontSize(5) as String
-    Dim i,x as integer
+    Dim i as integer
+    Dim x as integer
     Dim sFileName as string
     Dim sTempS as String
 
@@ -91,11 +91,11 @@ goto endsub
     sInitFontSize(2) = UeberschriftGroesse.GetSelText
     sInitFontSize(3) = ListeGroesse.GetSelText
     sInitFontSize(4) = BeschriftungGroesse.GetSelText
-    sInitFontSize(5) = VerzeichnisGroesse.GetSelText    
+    sInitFontSize(5) = VerzeichnisGroesse.GetSelText
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-	sleep 2
-	
+    WaitSlot (2)
+
     if (Ucase(WestOrEast) = "BASICFONTSASIAN") then
         printlog "------------ ASIAN FONTS -------------"
         warnlog "TBO: don't know how it get's handeld, so don't pay ANY attention to warnlogs :-)"
@@ -138,7 +138,7 @@ goto endsub
     sListBoxSize(3) = ListeGroesse.GetSelText
     sListBoxSize(4) = BeschriftungGroesse.GetSelText
     sListBoxSize(5) = VerzeichnisGroesse.GetSelText
-    
+
     printlog ("'/// - all states inverting ///")
 
     AktuellesDokument.UnCheck
@@ -176,11 +176,11 @@ goto endsub
     sTempListBoxSize(2) = UeberschriftGroesse.GetSelText
     sTempListBoxSize(3) = ListeGroesse.GetSelText
     sTempListBoxSize(4) = BeschriftungGroesse.GetSelText
-    sTempListBoxSize(5) = VerzeichnisGroesse.GetSelText    
-    
+    sTempListBoxSize(5) = VerzeichnisGroesse.GetSelText
+
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-    Sleep 5
+    WaitSlot (2)
 
     Printlog "'/// - check whether fonts get changed in doc. ///"
     Kontext "DocumentWriter"
@@ -216,10 +216,11 @@ goto endsub
     Call wTypeKeys "<Down>"
     sTempS = wGetCharacterFontSize()
     if sTempS <> sTempListBoxSize(5) then Warnlog "Index fontsize: state changed  is: "+sTempS+" ;should: "+sTempListBoxSize(5)+" : "+iTempListBoxSize(5)
-    
+
     printlog (" - SO quit - start"   )
 
     Call wOfficeRestart
+    WaitSlot (2)
 
     printlog ("'/// - checking states ///")
     ToolsOptions
@@ -237,11 +238,11 @@ goto endsub
     if ( ListeGroesse.GetSelIndex           <> iTempListBoxSize(3) ) then WarnLog "List fontsize           state changed"
     if ( BeschriftungGroesse.GetSelIndex    <> iTempListBoxSize(4) ) then WarnLog "Caption fontsize    state changed"
     if ( VerzeichnisGroesse.GetSelIndex     <> iTempListBoxSize(5) ) then WarnLog "Index fontsize     state changed"
-    
+
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-	sleep 2
-	
+    WaitSlot (2)
+
     Printlog "'///  - verify global settings don't affect saved Document ///"
     '///+ use input\\writer\\optional\\options\\options2.sxw ///
     Call hFileOpen ( sFileName )
@@ -265,7 +266,7 @@ goto endsub
     sTempS = wGetCharacterFont()
     if sTempS <> sListBox(5) then Warnlog "Index font: Writer changed  Font !?! is: "+sTempS+" ;should: "+sListBox(5)+" : "+iListBox(5)
 
-	Call wTypeKeys "<Mod1 Home><Right>"
+    Call wTypeKeys "<Mod1 Home><Right>"
     sTempS = wGetCharacterFontSize()
     if sTempS <> sListBoxSize(1) then Warnlog "Default font: Writer changed  Font !?! is: "+sTempS+" ;should: "+sListBoxSize(1)+" : "+iListBoxSize(1)
     Call wTypeKeys "<Down>"
@@ -280,8 +281,9 @@ goto endsub
     Call wTypeKeys "<Down>"
     sTempS = wGetCharacterFontSize()
     if sTempS <> sListBoxSize(5) then Warnlog "Index font: Writer changed  Font !?! is: "+sTempS+" ;should: "+sListBoxSize(5)+" : "+iListBoxSize(5)
-    
+
     Call hCloseDocument
+    Call hNewDocument
 
     printlog ("'/// - all UnCheck -> o ///")
     ToolsOptions
@@ -293,12 +295,12 @@ goto endsub
         ' Workraound: Sometimes checkbox is disabled...don't know why
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.Cancel
-        sleep 2
+        WaitSlot (1)
         ToolsOptions
         Call hToolsOptions ( "WRITER" , WestOrEast )
         AktuellesDokument.Check
     end if
-        
+
     StandardSchrift.Select(1)
     Ueberschrift.Select(1)
     Liste.Select(1)
@@ -313,8 +315,8 @@ goto endsub
     
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-	sleep 2
-	
+    WaitSlot (2)
+
     printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
     Call hToolsOptions ( "WRITER" , WestOrEast )
@@ -332,10 +334,9 @@ goto endsub
     if ( BeschriftungGroesse.GetSelIndex    <> 1 ) then WarnLog "Caption fontsize    is not item 1"
     if ( VerzeichnisGroesse.GetSelIndex     <> 1 ) then WarnLog "Index fontsize     is not item 1"
 
-    
     Printlog ("'/// - all Check -> x ///")
 
-    Sleep 2
+    Sleep 1
     AktuellesDokument.Check
     StandardSchrift.Select(StandardSchrift.GetItemCount)
     Ueberschrift.Select   (Ueberschrift.GetItemCount   )
@@ -347,12 +348,12 @@ goto endsub
     UeberschriftGroesse.Select   (UeberschriftGroesse.GetItemCount   )
     ListeGroesse.Select          (ListeGroesse.GetItemCount          )
     BeschriftungGroesse.Select   (BeschriftungGroesse.GetItemCount   )
-    VerzeichnisGroesse.Select    (VerzeichnisGroesse.GetItemCount    )    
+    VerzeichnisGroesse.Select    (VerzeichnisGroesse.GetItemCount    )
     
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-	sleep 2
-	
+    WaitSlot (2)
+
     printlog ("'/// - check if all Checked ///")
     ToolsOptions
     Call hToolsOptions ( "WRITER" , WestOrEast )
@@ -384,10 +385,11 @@ goto endsub
     if ( ListeGroesse.GetSelText           <> sInitFontSize(3) ) then WarnLog "List fontsize           not init font!"
     if ( BeschriftungGroesse.GetSelText    <> sInitFontSize(4) ) then WarnLog "Caption fontsize    not init font!"
     if ( VerzeichnisGroesse.GetSelText     <> sInitFontSize(5) ) then WarnLog "Index fontsize     not init font!"
+    AktuellesDokument.Uncheck
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Ok
-    
+
     '/// Open a new docuent and check fonts for default
     Call hNewDocument
     ToolsOptions
@@ -405,8 +407,9 @@ goto endsub
     if ( BeschriftungGroesse.GetSelText    <> sInitFontSize(4) ) then warnlog "Caption fontsize    not init font!"
     if ( VerzeichnisGroesse.GetSelText     <> sInitFontSize(5) ) then warnlog "Index fontsize     not init font!"
     Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.Cancel    
+    ExtrasOptionenDlg.Cancel
     Call hCloseDocument
+    Call hNewDocument
 
     printlog ("'/// - restore states ///")
     ToolsOptions
@@ -424,13 +427,13 @@ goto endsub
     ListeGroesse.SetText           (sListBoxSize(3))
     BeschriftungGroesse.SetText    (sListBoxSize(4))
     VerzeichnisGroesse.SetText     (sListBoxSize(5))
-    
+
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-	Do Until GetDocumentCount = 0
-		Call hCloseDocument
-	Loop
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -442,9 +445,9 @@ testcase tToolsOptionsWriterPrint1
     Dim bRadioBut(4) as boolean         ' RadioButtons
     Dim bTempRadioBut(4) as boolean
     Dim i as integer, sWriterFilter as string
-	Dim WriterFilterExtension(10) as string	
-	WriterFilterExtension() = hGetFilternameExtension ( "writer8" )
-	
+    Dim WriterFilterExtension(10) as string
+        WriterFilterExtension() = hGetFilternameExtension ( "writer8" )
+
     ' sMetricField(i) and sTempMetricField(i)
     '(1) = Grafiken
     '(2) = Tabellen
@@ -560,7 +563,7 @@ testcase tToolsOptionsWriterPrint1
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-	sleep 2
+    WaitSlot (2)
     Call hFileSaveAsWithFilterKill(gOfficepath + "user\work\printtest." & WriterFilterExtension(0) , "writer8")
 
     printlog ("'/// - SO quit - start ///")
@@ -596,7 +599,7 @@ testcase tToolsOptionsWriterPrint1
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-    sleep 2
+    WaitSlot (2)
 	' Notify is saved with document
     Call hFileOpen(gOfficepath + "user\work\printtest." & WriterFilterExtension(0) )
     ToolsOptions
@@ -635,8 +638,8 @@ testcase tToolsOptionsWriterPrint1
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-	sleep 2
-	
+    WaitSlot (2)
+
     printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "PRINT" )
@@ -691,8 +694,8 @@ testcase tToolsOptionsWriterPrint1
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-	sleep 2
-	
+    WaitSlot (2)
+
     printlog ("'/// - check if all Checked ///")
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "PRINT" )
@@ -756,11 +759,11 @@ testcase tToolsOptionsWriterPrint1
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-	sleep 2
-	
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+    WaitSlot (2)
+
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -770,7 +773,7 @@ testcase tToolsOptionsWriterTable
     Dim sTempMetricField(4) as string
     Dim bRadioBut(3) as boolean    ' RadioButton states
     Dim bTempRadioBut(3) as boolean
-       
+
     ' sMetricField(i) and sTempMetricField(i)
     '(1) = VerschiebenZeile
     '(2) = VerschiebenSpalte
@@ -842,8 +845,8 @@ testcase tToolsOptionsWriterTable
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-	sleep 2
-	
+    WaitSlot (2)
+
     printlog ("'/// - all UnCheck -> o ///")
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "Table" )
@@ -879,8 +882,8 @@ testcase tToolsOptionsWriterTable
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-	sleep 2
-	
+    WaitSlot (2)
+
     printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "Table" )
@@ -925,8 +928,8 @@ testcase tToolsOptionsWriterTable
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-	sleep 2
-	
+    WaitSlot (2)
+
     printlog ("'/// - check if all Checked ///")
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "Table" )
@@ -950,9 +953,9 @@ testcase tToolsOptionsWriterTable
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -971,7 +974,7 @@ testcase tToolsOptionsWriterTable1
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-    Sleep 5
+    WaitSlot (2)
 
     '/// ///
     ToolsOptions
@@ -982,7 +985,8 @@ testcase tToolsOptionsWriterTable1
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
+'------------------------------------------------------------------------------

@@ -95,7 +95,7 @@ sub LoadIncludeFiles
 end sub
 
 sub TableConfiguration
-    Call wOptionenUndo("Tabelle")
+    Call wOptionsUndo("Tabelle")
     Call hNewDocument
     if iSprache = iSystemSprache then
             printlog "Systemlocale matches UI-language"

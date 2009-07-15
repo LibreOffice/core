@@ -299,9 +299,9 @@ testcase tToolsOptionsHTMLPrint
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -496,9 +496,9 @@ testcase tToolsOptionsHTMLTable
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------

@@ -55,9 +55,7 @@ testcase tLanguageSettingsComplexTextLayout
     Dim sCurrentDocumentLanguage as string
     Dim sCurrentCTLLanguage as string
     Dim bSequenceChecking as boolean
-'	if Val(mid$(gMinor, 2, Len(gMinor))) < 141 then
-'        goto endsub
-'    end if
+
     '/// Open new writerdocument
     Call hNewDocument
     '/// Activate Asian support
@@ -66,9 +64,9 @@ testcase tLanguageSettingsComplexTextLayout
     bCTLLanguage = ActiveDeactivateCTLSupport(True)
 
 	ToolsOptions
-    '/// Goto 'Tools->Options->Language settings->Languages
+        '/// Goto 'Tools->Options->Language settings->Languages
 	Call hToolsOptions ("LanguageSettings","Languages")
-    sCurrentCTLLanguage = LanguageComplexScript.GetSelText
+        sCurrentCTLLanguage = LanguageComplexScript.GetSelText
 	Kontext "TabSprachen"
     For i = 1 to LanguageComplexScript.GetItemCount
         '/// Select CTL-Language
@@ -81,88 +79,88 @@ testcase tLanguageSettingsComplexTextLayout
         '/// Reopen options and go to Tabpage 'Complex Text Layout'
         ToolsOptions
         Call hToolsOptions ("LanguageSettings","ComplexTextLayout")
-        
+
         Kontext "TabComplexTextLayout"
-		bSequenceChecking = FALSE
-		Select Case iSprache
-			'/// Checkboxes under 'Sequence checking' should all be checked for CTL languages
-            '/// + like "Thai", "Lao", "Khmer", "Vietnamese"
-            Case 01
-                sCTLLan = Array("Thai", "Lao", "Khmer", "Vietnamese")
-            Case 49
-                sCTLLan = Array("Thai", "Lao", "Khmer", "Vietnamesisch")
-			Case else
-				QAErrorlog "Please adapt testcase for this language"
-				Kontext "ExtrasOptionenDlg"
-				ExtrasOptionenDlg.Ok
-				goto IfNoSupport
+            bSequenceChecking = FALSE
+            Select Case iSprache
+                '/// Checkboxes under 'Sequence checking' should all be checked for CTL languages
+                '/// + like "Thai", "Lao", "Khmer", "Vietnamese"
+                Case 01
+                    sCTLLan = Array("Thai", "Lao", "Khmer", "Burmese", "Vietnamese")
+                Case 49
+                    sCTLLan = Array("Thai", "Lao", "Khmer", "Birmanisch", "Vietnamesisch")
+                Case else
+                    QAErrorlog "Please adapt testcase for this language"
+                    Kontext "ExtrasOptionenDlg"
+                        ExtrasOptionenDlg.Ok
+                    goto IfNoSupport
 		end select
 
-        for j = 0 to 2
+        for j = 0 to 4
             if sCTLLan(j) = sCurrentDocumentLanguage then
                 bSequenceChecking = TRUE
                 exit for
             end if
         next j
 
-		Select Case bSequenceChecking
-			Case TRUE
-				if UseSequenceChecking.IsChecked = False then
-					Warnlog "'Sequence Checking' should be checked for language: " & sCurrentDocumentLanguage
-				end if
-				if Restricted.IsEnabled = False or Restricted.IsChecked = False then
-					Warnlog "'Restricted' should be enabled and checked for language: " & sCurrentDocumentLanguage
-				end if
-				if TypeAndReplace.IsEnabled = False or TypeAndReplace.IsChecked = False then
-					Warnlog "'Type And Replace' should be enabled and checked for language: " & sCurrentDocumentLanguage
-				end if
+        Select Case bSequenceChecking
+            Case TRUE
+                if UseSequenceChecking.IsChecked = False then
+                    Warnlog "'Sequence Checking' should be checked for language: " & sCurrentDocumentLanguage
+                end if
+                if Restricted.IsEnabled = False or Restricted.IsChecked = False then
+                    Warnlog "'Restricted' should be enabled and checked for language: " & sCurrentDocumentLanguage
+                end if
+                if TypeAndReplace.IsEnabled = False or TypeAndReplace.IsChecked = False then
+                    Warnlog "'Type And Replace' should be enabled and checked for language: " & sCurrentDocumentLanguage
+                end if
 
-			Case FALSE
-				if UseSequenceChecking.IsChecked = True then
-					QAErrorlog "'Sequence Checking' should not be checked for language: " & sCurrentDocumentLanguage
-				end if
-				if Restricted.IsEnabled = True AND Restricted.IsChecked = True then
-					QAErrorlog "'Restricted' should not be checked for language: " & sCurrentDocumentLanguage
-				end if
-				if TypeAndReplace.IsEnabled = True AND TypeAndReplace.IsChecked = True then
-					QAErrorlog "'Type And Replace' should not checked for language: " & sCurrentDocumentLanguage
-				end if
-		end select
-        
+            Case FALSE
+                if UseSequenceChecking.IsChecked = True then
+                    QAErrorlog "'Sequence Checking' should not be checked for language: " & sCurrentDocumentLanguage
+                end if
+                if Restricted.IsEnabled = True AND Restricted.IsChecked = True then
+                    QAErrorlog "'Restricted' should not be checked for language: " & sCurrentDocumentLanguage
+                end if
+                if TypeAndReplace.IsEnabled = True AND TypeAndReplace.IsChecked = True then
+                    QAErrorlog "'Type And Replace' should not checked for language: " & sCurrentDocumentLanguage
+                end if
+        end select
+
         'Get the number of Numerals-entries.
         iNumeralsCount = Numerals.GetItemCount
-        
+
         Kontext "ExtrasOptionenDlg"
-		ExtrasOptionenDlg.Ok
+            ExtrasOptionenDlg.Ok
         ToolsOptions
         Call hToolsOptions ("LanguageSettings","Languages")
         Kontext "TabSprachen"
     next i
-    
+
     Kontext "ExtrasOptionenDlg"
-	if ExtrasOptionenDlg.Exists then ExtrasOptionenDlg.Ok
-    
+        if ExtrasOptionenDlg.Exists then ExtrasOptionenDlg.Ok
+
     printlog "Check the Numerals-menu."
     ToolsOptions
     Call hToolsOptions ("LanguageSettings","ComplexTextLayout")
-    
+
     Printlog " Select every entry in the list, then press OK to close the dialogue, then open it again and check if the value got saved."
     for iNumeralsCounter = 1 to iNumeralsCount
         Numerals.Select iNumeralsCounter
         Printlog " Numerals nr: " + iNumeralsCounter + " = " + Numerals.GetSelText
-        
+
         'Press ok, and open the dialogue again.
         Kontext "ExtrasOptionenDlg"
 	    if ExtrasOptionenDlg.Exists then ExtrasOptionenDlg.Ok
         ToolsOptions
         Call hToolsOptions ("LanguageSettings","ComplexTextLayout")
-        
+
         if Numerals.GetSelIndex <> iNumeralsCounter then Warnlog "The Numeral-Entry number: " + iNumeralsCounter + " didn't get saved when pressing OK in the FormatCharacter-dialogue."
     next iNumeralsCounter
-    
+
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Ok
-    
+
     '/// Choose Thai as CTL language
     ToolsOptions
     Call hToolsOptions ("LanguageSettings","Languages")
@@ -173,7 +171,7 @@ testcase tLanguageSettingsComplexTextLayout
 
     '/// Restart office
     Call wOfficeRestart
-    
+
     '/// Reopen options and go to Tabpage 'Complex Text Layout'
     ToolsOptions
     Call hToolsOptions ("LanguageSettings","ComplexTextLayout")
@@ -202,7 +200,7 @@ IfNoSupport:
     Call ActiveDeactivateAsianSupport(bAsianLanguage)
     Call ActiveDeactivateCTLSupport(bCTLLanguage)
 
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase

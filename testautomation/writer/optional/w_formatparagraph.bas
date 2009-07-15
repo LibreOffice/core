@@ -60,7 +60,7 @@ sub main
 
     Call hStatusIn ( "writer", "w_formatparagraph.bas" , "Paragrahp" )
 
-    Call wOptionenUndo ( "Alle" )        ' Sets all writer-options to default
+    Call wOptionsUndo ( "All" )        ' Sets all writer-options to default
     'Software Configuration:
     'Getting the decimal seperator from global function
     gSeperator = GetDecimalSeperator()

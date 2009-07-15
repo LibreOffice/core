@@ -32,7 +32,7 @@
 '*
 '* owner :  fredrik.haegg@sun.com
 '*
-'* short description : Test of content and update reliability of the fields 
+'* short description : Writer Filter Availability Test (Import/Export/Group names)
 '*
 '\*******************************************************************
 
@@ -40,59 +40,26 @@ global gSeperator as String
 global gMeasurementUnit as String
 
 sub main
+ Dim ImportFilterDatei as String
 
-    Dim StartZeit
-    StartZeit = Now()
+  use "writer\tools\includes\w_tool6.inc"
+  use "writer\optional\includes\filter\w_filter.inc"
 
-    use "writer\tools\includes\w_tools.inc"
-    use "writer\tools\includes\w_tool3.inc"
-    use "writer\tools\includes\w_tool7.inc"   
-    use "writer\optional\includes\tools\tools1.inc"
-    use "writer\optional\includes\tools\tools2.inc"
-    use "writer\optional\includes\fields\w_fields1.inc"
-    use "writer\optional\includes\fields\w_fields2.inc"
-    use "writer\optional\includes\fields\w_fields3.inc"
-    use "writer\optional\includes\fields\w_fields4.inc"
-    use "writer\optional\includes\fields\w_fields5.inc"
-    use "writer\optional\includes\fields\w_fields6.inc"   
-    use "writer\optional\includes\fields\w_fields7.inc"   
+   Call hStatusIn ( "writer", "w_filter.bas" )
 
-    printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartZeit )
-    printlog Chr(13) + "******* Writer - Level 1 - Test *******"
+   Call tSammleImportFilter
+   Call tCollectSaveAsFilter
+   Call tCollectExportFilters
+   Call tGroupNameCheck
 
-    Call hStatusIn ( "writer", "w_fields.bas" , "Fields" )
-
-    'Software Configuration:
-    'Getting the decimal seperator from global function
-    gSeperator = GetDecimalSeperator()
-    'Setting the measurement unit to centimeters.
-    gMeasurementUnit = fSetMeasurementToCM()
-
-    printlog Chr(13) + " --- Test Fields - General Test ---"
-    Call w_fields1
-    Call w_fields2
-    printlog Chr(13) + " --- Test Fields - Reference ---"
-    Call w_fields3
-    printlog Chr(13) + " --- Test Fields - Doc information ---"
-    Call w_fields4
-    printlog Chr(13) + " --- Test Fields - Variables ---"
-    Call w_fields5                  
-    printlog Chr(13) + " --- Test Fields - Functions ---"
-    Call w_fields6
-    printlog Chr(13) + " --- Test Fields - L10N ---"
-    Call w_fields7
-
-    Call hStatusOut
-
-    Printlog Chr(13) + "End of Level 1 Test - Fields"
-    Printlog "Duration: "+ WieLange ( StartZeit )
-    Printlog "Date: " +  Date + "    Time: " + Time
+   Call hStatusOut
 
 end sub
 
 sub LoadIncludeFiles
    use "global\system\includes\master.inc"
    use "global\system\includes\gvariabl.inc"
-   Call GetUseFiles
-   gApplication = "WRITER"
-end Sub
+   use "global\tools\includes\optional\t_xml1.inc"
+   gApplication   = "WRITER"
+   Call GetUseFiles()
+end sub

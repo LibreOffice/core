@@ -760,6 +760,9 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAnchor
+Warnlog "#i102752# - tFormatAnchor outcommented due to bug."
+goto endsub
+
     PrintLog "- Format / Anchor"
 
     printlog " Open new document"
@@ -894,6 +897,9 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAnchorArea
+Warnlog "#i102752# - tFormatAnchorArea outcommented due to bug."
+goto endsub
+
     PrintLog "- Format / Anchor drawing objects"
     if gApplication = "HTML" then
         printlog "Not in WriterWeb!"

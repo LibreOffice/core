@@ -45,6 +45,8 @@ sub w_fields7
 
 end sub
 
+'-----------------------------------------------------------------
+
 testcase tL10N_1
 
     if iSprache <> 1 then
@@ -163,7 +165,7 @@ testcase tL10N_1
         if sAsiancbChecked = true then Aktivieren.IsChecked
     end if
     
-    if sCTLcb = true then    
+    if sCTLcb = true then
         if sCTLcbChecked = true then ComplexScriptEnabled.IsChecked
     end if
 

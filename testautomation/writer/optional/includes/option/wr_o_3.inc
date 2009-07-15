@@ -62,10 +62,10 @@ end sub
 '------------------------------------------------------------------------------
 testcase tToolsOptionsWriterCursor
 
-    Dim irgendwas(17) as boolean    ' Checkbox states
+    Dim irgendwas(17) as boolean        ' Checkbox states
     Dim bRadioBut(4) as boolean         ' RadioButtons
     Dim bTempRadioBut(4) as boolean
-    Dim iListBox(1) as integer         ' ListBox
+    Dim iListBox(1) as integer          ' ListBox
     Dim iTempListBox(1) as integer
 
     Call hNewDocument
@@ -116,6 +116,7 @@ testcase tToolsOptionsWriterCursor
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
+    WaitSlot (2)
 
     printlog ("'/// - SO quit - start ///")
 
@@ -257,14 +258,14 @@ testcase tToolsOptionsWriterCursor
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
 testcase tToolsOptionsWriterChanges
-   Dim iListBox(2) as integer         ' ListBox
+   Dim iListBox(2) as integer            ' ListBox
    Dim iTempListBox(2) as integer
    Dim iListBox2(3,2) as integer         ' ListBox
    Dim iTempListBox2(3,2) as integer
@@ -353,15 +354,16 @@ testcase tToolsOptionsWriterChanges
     
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-    
+
     printlog ("'/// - SO quit - start ///")
-    
+
     Call wOfficeRestart
-    
+    WaitSlot (2)
+
     printlog ("'/// - checking states ///")
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "CHANGES" )
-    
+
     if ( EinfuegenAttribute.GetSelIndex <> iTempListBox2(1,1) ) then WarnLog "EinfuegenAttribute state changed; is: "+EinfuegenAttribute.GetSelIndex +"; should: "+ iTempListBox2(1,1)
     if ( EinfuegenFarbe.GetSelIndex     <> iTempListBox2(1,2) ) then WarnLog "EinfuegenFarbe state changed"
     if ( LoeschenAttribute.GetSelIndex <> iTempListBox2(2,1) ) then WarnLog "LoeschenAttribute state changed"
@@ -439,14 +441,13 @@ testcase tToolsOptionsWriterChanges
     'new document starts with unchecked edit changes record!? (i hope always ;-))
     printlog ("'/ Function test: color-real-print / screenshot also possible///'")
     Call hNewDocument
-    sleep (3)
-    
+
     Kontext "DocumentWriter"
     DocumentWriter.TypeKeys "This is normal text"
     DocumentWriter.TypeKeys "<return>"
     DocumentWriter.TypeKeys "The quick brown fox jumps over the lazy dog"
     DocumentWriter.TypeKeys "<return>"
-    
+
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "CHANGES" )
     EinfuegenAttribute.Select (2) 'bold
@@ -455,12 +456,12 @@ testcase tToolsOptionsWriterChanges
     LoeschenFarbe.Select      (92)  ' sun3
     AendernAttribute.Select   (8) 'smallcaps
     AendernFarbe.Select       (30)'red4
-    
+
     ZeilenMarkierung.Select   (4) 'outer margins
     ZeilenFarbe.Select        (52)'turquise4
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Ok
-    
+
     Kontext "DocumentWriter"
     DocumentWriter.TypeKeys "This is inserted text"
     DocumentWriter.TypeKeys "<return>"
@@ -493,11 +494,12 @@ testcase tToolsOptionsWriterChanges
     DocumentWriter.TypeKeys "<return>"
     EditChangesRecord
     Call hCloseDocument
+
     '--------------------------------------------------------------------------
     printlog ("'/// - restore states ///")
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "CHANGES" )
-    
+
     try
         EinfuegenAttribute.Select (iListBox2(1,1))
     catch
@@ -510,7 +512,7 @@ testcase tToolsOptionsWriterChanges
         EinfuegenFarbe.Select (1)
         WarnLog ("EinfuegenFarbe has wrong initialvalue: " + iListBox2(1,2))
     endcatch
-    
+
     try
         printlog       iListBox2(2,1)
         LoeschenAttribute.Select (iListBox2(2,1))
@@ -518,14 +520,14 @@ testcase tToolsOptionsWriterChanges
         LoeschenAttribute.Select (1)
         WarnLog ("LoeschenAttribute has wrong initialvalue: " + iListBox2(2,1) )
     endcatch
-    
+
     try
         LoeschenFarbe.Select     (iListBox2(2,2))
     catch
         LoeschenFarbe.Select (1)
         WarnLog ("LoeschenFarbe has wrong initialvalue: " + iListBox2(2,2))
     endcatch
-    
+
     try
         AendernAttribute.Select (iListBox2(3,1))
     catch
@@ -539,7 +541,7 @@ testcase tToolsOptionsWriterChanges
         AendernFarbe.Select (1)
         WarnLog ("AendernFarbe has wrong initialvalue: " + iListBox2(3,2))
     endcatch
-    
+
     try
         ZeilenMarkierung.Select   (iListBox(1))
     catch
@@ -553,20 +555,17 @@ testcase tToolsOptionsWriterChanges
         ZeilenFarbe.Select (1)
         WarnLog ("ZeilenFarbe has wrong initialvalue: " + iListBox(4))
     endcatch
-    
+
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-    
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
 testcase tToolsOptionsWriterInsert
-QaErrorLog "#i94753# - tToolsOptionsInsert shows machine-dependant results. Outcommented."
-goto endsub
-
 
     Dim irgendwas(8) as boolean    ' Checkbox states
 
@@ -655,6 +654,7 @@ goto endsub
     if Kategorie.GetSelIndex <> 11 then Warnlog "Das Zahlenformat ist nicht Text geblieben!"
     Zahlenformat.Cancel
     Call hCloseDocument
+    Call hNewDocument
 
     printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
@@ -672,11 +672,11 @@ goto endsub
     Wiederholen.Check
     NichtTrennen.Check
     Umrandung.Check
-    
+
     AutomatischeZahlenerkennung.Check
     Zahlenformaterkennung.Check
     AutomatischeAusrichtung.Check
-    
+
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
@@ -705,8 +705,9 @@ goto endsub
     Kontext "Zahlenformat"
     if Kategorie.GetSelIndex <> 3 then Warnlog "numberformat didn't get changed!"
     Zahlenformat.Cancel
-    
+
     Call hCloseDocument
+    Call hNewDocument
 
     printlog ("'/// - check if all Checked ///")
     ToolsOptions
@@ -716,7 +717,7 @@ goto endsub
     if ( Wiederholen.IsChecked                 = FALSE ) then WarnLog "Wiederholen o"
     if ( NichtTrennen.IsChecked                = FALSE ) then WarnLog "NichtTrennen o"
     if ( Umrandung.IsChecked                   = FALSE ) then WarnLog "Umrandung o"
-    
+
     if ( AutomatischeZahlenerkennung.IsChecked = FALSE ) then WarnLog "AutomatischeZahlenerkennung o"
     if ( Zahlenformaterkennung.IsChecked       = FALSE ) then WarnLog "Zahlenformaterkennung o"
     if ( AutomatischeAusrichtung.IsChecked     = FALSE ) then WarnLog "AutomatischeAusrichtung o"
@@ -725,19 +726,17 @@ goto endsub
     ExtrasOptionenDlg.OK
 
     printlog ("'/// - restore states ///")
-    
-    Call wOptionenUndo("Table")
-    
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+
+    Call wOptionsUndo("Table")
+
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' ********************************************************************
 
 testcase tToolsOptionsAutocaption
-QaErrorLog "#i94748# - tToolsOptionsAutocaption outcommented due to unreliable results."
-goto endsub
 
     Dim Auswahl(20) as String
     Dim i as Integer
@@ -746,6 +745,8 @@ goto endsub
     printlog "- Tools/Options/StarOffice Writer/AutoCaption"
 
     Call hNewDocument
+    Call wOptionsUndo( "All" )
+
     ToolsOptions
     Call hToolsOptions("WRITER","AutoCaption")
     Kontext "TabAutocaption"
@@ -761,6 +762,9 @@ goto endsub
         Category.SetText Auswahl(i)
     next i
 
+    ObjectList.Select 1
+    Position.Select Position.GetItemCount   'Select "Caption: Below"
+
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
@@ -773,8 +777,9 @@ goto endsub
     Kontext "TabelleEinfuegenWriter"
     TabelleEinfuegenWriter.OK
     Kontext "DocumentWriter"
-    Call wTypeKeys ("<UP>", 2)
-    Call wTypeKeys ("<Home>")
+    Call wTypeKeys ("<MOD1 Home>")
+    Call wTypeKeys ("<DOWN>", 2)
+    Call wTypeKeys ("<HOME>")
     Select Case iSprache
         Case 31:
             Call wTypeKeys ("<Mod1 Shift Right>") ', 3
@@ -791,6 +796,7 @@ goto endsub
     Kontext
     Active.SetPage TabType
     Kontext "TabType"
+'    if gPlatGroup = "unx" then
     Width.SetText "2"
     TabType.OK
     Call wTypeKeys ("<Return>")
@@ -804,7 +810,9 @@ goto endsub
     end select
     EditCopy
     Wait 500
-    if Trim$(GetClipboardText) <> Auswahl (2) then Warnlog "Caption of a frame is wrong.  Not " & Auswahl(2) & " but: " & GetClipboardtext
+    if Trim$(GetClipboardText) <> Auswahl (2) then 
+        Warnlog "Caption of a frame is wrong.  Not " & Auswahl(2) & " but: " & GetClipboardtext
+    endif
     Call wTypeKeys ("<Escape>")
     sleep(1)
     Call wTypeKeys ("<Home><SHIFT END><Delete>")
@@ -824,7 +832,9 @@ goto endsub
             Call wTypeKeys ("<Mod1 Shift Right>")
     end select
     EditCopy
-    if Trim$(GetClipboardText) <> Auswahl (3) then Warnlog "Caption of a graphic is wrong. Not " & Auswahl(3) & " but: " & GetClipboardtext
+    if Trim$(GetClipboardText) <> Auswahl (3) then 
+        Warnlog "Caption of a graphic is wrong. Not " & Auswahl(3) & " but: " & GetClipboardtext
+    endif
     Call hCloseDocument
     
     printlog "'///   - Check caption of all other objects ///"
@@ -876,17 +886,17 @@ goto endsub
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     sleep (1)
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------
 
 testcase tToolsOptionsWriterCompatibility1
-    
+
     Dim i as integer
-    
+
     printlog "Check status change of all checkboxes in StarOffice Writer->Compatibility options" 
     printlog " Test of option 'Use StarOffice 6.0/7 tabstop formatting'"
     Call hNewDocument
@@ -951,6 +961,7 @@ testcase tToolsOptionsWriterCompatibility1
 
     '/// restart the office
     Call wOfficeRestart
+    WaitSlot (2)
 
     printlog "check state of all checkboxes and set defaults"
     ToolsOptions
@@ -978,9 +989,9 @@ testcase tToolsOptionsWriterCompatibility1
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Ok
 
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------
@@ -1011,7 +1022,7 @@ testcase tToolsOptionsWriterCompatibility2
         Warnlog "Seems document has been formatted wrong"
         DefaultFailed = true
     endcatch
-    
+
     Call wTypeKeys ("<Home>")
     Call wTypeKeys ("<Down>" ,3)
     Call wTypeKeys ("<Shift Right>")
@@ -1025,7 +1036,7 @@ testcase tToolsOptionsWriterCompatibility2
         Warnlog "Seems document has been formatted wrong"
         DefaultFailed = true
     endcatch
-    
+
     if DefaultFailed = false then
         printlog " in Tools->Options->StarOffice Writer->Compatitibility check option 'Use StarOffice 6.0/7 tabstop formatting'"
         ToolsOptions
@@ -1048,7 +1059,7 @@ testcase tToolsOptionsWriterCompatibility2
         catch
             Warnlog "Seems document has been formatted wrong"
         endcatch
-        
+
         Call wTypeKeys ("<Home>")
         Call wTypeKeys ("<Down>" , 4)
         Call wTypeKeys ("<Shift Right>")
@@ -1059,7 +1070,7 @@ testcase tToolsOptionsWriterCompatibility2
             end if
         catch
             Warnlog "Seems document has been formatted wrong"
-        endcatch        
+        endcatch
 
         printlog "in Tools->Options->StarOffice Writer->Compatitibility uncheck option 'Use StarOffice 6.0/7 tabstop formatting'"
         ToolsOptions
@@ -1073,15 +1084,14 @@ testcase tToolsOptionsWriterCompatibility2
     end if
 
     printlog "Close document"
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------------------------------------
 testcase tToolsOptionsWriterCompatibility3
 
-'Variables:
 DIM iWords_to_right     AS integer 'variable for counting word-steps
 DIM iOptionsCount       AS integer 'variable for counting options on cmopatibility page
 DIM sDocument           AS string  'variable for saving the doc
@@ -1095,11 +1105,11 @@ DIM sFoundWord          AS string  'variable for word found one line below
     ToolsOptions
     Kontext "ExtrasOptionenDLG"
     printlog "Checking Options settings"
-    
+
     printlog "Tools-Options-OOo Writer-Compatibility"
     Call hToolsOptions("WRITER","COMPATIBILITY")
     Kontext "TabCompatibility"
-    
+
     printlog "Verify that the entry 'Expand word space on lines with manual line breaks in justified paragraphs' is checked by default"
     iOptionsCount = Options.GetItemCount
     Options.Select iOptionsCount
@@ -1109,12 +1119,12 @@ DIM sFoundWord          AS string  'variable for word found one line below
         warnlog "Warning: Expand word space on lines...is not checked as default!"
         Options.Check
     end if
-    
+
     printlog " Close dialog with OK"
     Kontext "ExtrasOptionenDLG"
     ExtrasOptionenDLG.OK
     sleep (1)
-    
+
     printlog " Insert a paragraph with several lines of text"
     Kontext "DocumentWriter"
     DocumentWriter.typekeys ("one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twentyone twentytwo twentythree twentyfour twentyfive twentysix")
@@ -1130,16 +1140,16 @@ DIM sFoundWord          AS string  'variable for word found one line below
     Kontext "TextObjectbar"
     Blocksatz.Click 'setting to justified
     Kontext "DocumentWriter"
-    
+
     printlog "(Now the paragraph adjustment is 'justified')"
     printlog "Setting text to justified."
     sleep (1)
-    
+
     printlog " Click into the middle of a line"
     DocumentWriter.TypeKeys "<MOD1 HOME>" 'jumping to beginning of text
     DocumentWriter.TypeKeys "<MOD1 RIGHT>",9,true '9 times to the right
     sleep (1)
-    
+
     printlog " Insert a line break by pressing <SHIFT>+<ENTER>"
     DocumentWriter.TypeKeys "<SHIFT RETURN>"
     sleep (1)
@@ -1356,19 +1366,19 @@ DIM sFoundWord          AS string  'variable for word found one line below
     sleep (1)
     Kontext "ExtrasOptionenDLG"
     ExtrasOptionenDLG.OK 'Closing the options
-    
+
     printlog " Close document"
     Call hCloseDocument
-        
+
     printlog " New Writer document"
     Call hNewDocument
-    
+
     printlog " Tools-Options-OOo Writer-Compatibility"
     ToolsOptions 'calling options 
     Kontext "ExtrasOptionenDLG"
     Call hToolsOptions("WRITER","COMPATIBILITY")
     Kontext "TabCompatibility"
-    
+
     printlog " Verify that the entry 'Expand word space [...]' is checked"
     iOptionsCount = Options.GetItemCount
     Options.Select iOptionsCount
@@ -1379,9 +1389,10 @@ DIM sFoundWord          AS string  'variable for word found one line below
     end if
     Kontext "ExtrasOptionenDLG"
     ExtrasOptionenDLG.Cancel 'leaving the options
-    
+
     printlog " Close document"
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
+' -------------------------------------------------------

@@ -218,6 +218,9 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAlignment
+Warnlog "#i102752# - tFormatAlignment outcommented due to bug."
+goto endsub
+
     PrintLog "- Format / Alignment"
 
     printlog " Open new document"
@@ -413,6 +416,9 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAnchorObject
+Warnlog "#i102752# - tFormatAnchorObject outcommented due to bug."
+goto endsub
+
     PrintLog "- Format / Anchor Frame"
 
     printlog " Open new document"
@@ -880,6 +886,9 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAlignmentArea
+Warnlog "#i102752# - tFormatAlignmentArea outcommented due to bug."
+goto endsub
+
     PrintLog "- Format / Alignment drawing objects"
     if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
@@ -1092,7 +1101,7 @@ testcase tFormatPositionAndSizeLegend
 
     printlog " Insert a legend"
     sleep (1)
-    Call wObjektSelektieren(13, 13, 75, 75)
+    Call wObjektSelektieren(30, 30, 75, 75)
 
     hUseAsyncSlot( "FormatPositionAndSize" )
     kontext "active"
@@ -1408,6 +1417,9 @@ endcase
 '-----------------------------------------------------------
 
 testcase tHtmlDocFormatAlignment
+Warnlog "#i102752# - tHtmlDocFormatAlignment outcommented due to bug."
+goto endsub
+
     gApplication = "HTML"
     PrintLog "- Format / Alignment"
 

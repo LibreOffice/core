@@ -180,9 +180,9 @@ endcase
 
 testcase tTextframes_2
 
-    Dim sText as String
-    Dim sHeight         as String
-    Dim sSpacing        as String
+    Dim sText    as String
+    Dim sHeight  as String
+    Dim sSpacing as String
 
     sText    = "ABCDEFG"
     sSpacing = "0"
@@ -226,9 +226,10 @@ endcase
 
 testcase tTextframes_3
 
-    Dim sText, sExpect as String
-    Dim sHeight         as String
-    Dim sSpacing        as String
+    Dim sText    as String
+    Dim sExpect  as String
+    Dim sHeight  as String
+    Dim sSpacing as String
 
     sText    = "ABCDEFG"
     sExpect  = "ABCDEFG"
@@ -272,9 +273,12 @@ endcase
 
 testcase tTextframes_4
 
-    Dim sWidth     , sHeight     as String
-    Dim sWidthNew1 , sHeightNew1 as String
-    Dim sWidthNew2 , sHeightNew2 as String
+    Dim sWidth      as String
+    Dim sHeight     as String
+    Dim sWidthNew1  as String
+    Dim sHeightNew1 as String
+    Dim sWidthNew2  as String
+    Dim sHeightNew2 as String
     
     sWidth      = "2"+ gSeperator + "00" + gMeasurementUnit
     sHeight     = "1"+ gSeperator + "00" + gMeasurementUnit
@@ -306,8 +310,8 @@ testcase tTextframes_4
     Height.SetText  sHeight
     Sleep 1
     
-    if Width.GetText  <> sWidth      then Warnlog "Keep ration(Uncheck) doesn't work - width!"
-    if Height.GetText <> sHeight     then Warnlog "Keep ration(Uncheck) doesn't work - heigth!"
+    if Width.GetText  <> sWidth  then Warnlog "Keep ration(Uncheck) doesn't work - width!"
+    if Height.GetText <> sHeight then Warnlog "Keep ration(Uncheck) doesn't work - heigth!"
     
     '/// Check if height is changed after width is changed.
     Width.SetText   sWidthNew1
@@ -333,9 +337,12 @@ endcase
 
 testcase tTextframes_5
     
-    Dim sWidth     , sHeight     as String
-    Dim sWidthNew1 , sHeightNew1 as String
-    Dim sWidthNew2 , sHeightNew2 as String
+    Dim sWidth      as String
+    Dim sHeight     as String
+    Dim sWidthNew1  as String
+    Dim sHeightNew1 as String
+    Dim sWidthNew2  as String
+    Dim sHeightNew2 as String
     
     sWidth      = "2"+ gSeperator + "00" + gMeasurementUnit
     sHeight     = "1"+ gSeperator + "00" + gMeasurementUnit
@@ -361,9 +368,9 @@ testcase tTextframes_5
     KeepRatio.UnCheck
     
     '/// + Set width and height
-    Width.SetText   sWidth
+    Width.SetText sWidth
     Sleep 1
-    Height.SetText  sHeight
+    Height.SetText sHeight
     Sleep 1
     
     '/// + Check Keep ratio
@@ -371,7 +378,7 @@ testcase tTextframes_5
     Sleep 1
     
     '/// Check if height is changed after width is changed.
-    Width.SetText   sWidthNew1
+    Width.SetText sWidthNew1
     Sleep 1
     
     if Width.GetText  <> sWidthNew1  then Warnlog "Keep ration(check) doesn't work - widthNew1 !"
@@ -394,7 +401,8 @@ endcase
 
 testcase tTextframes_6
 
-    Dim sTestFile , sTestText as String
+    Dim sTestFile as String
+    Dim sTestText as String
     
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\textframe\AnchorToPage.sxw")
     sTestText = "Bottom"
@@ -479,7 +487,10 @@ testcase tTextframes_6
     fCloseNavigator
     Wait 500
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
     
 endcase
 
@@ -487,8 +498,8 @@ endcase
 
 testcase tTextframes_7
 
-    Dim sTestFile  as String
-    Dim sDummy     as String
+    Dim sTestFile as String
+    Dim sDummy    as String
     
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\textframe\AnchorToParagraph.sxw")
     sDummy    = "She heard"
@@ -556,7 +567,10 @@ testcase tTextframes_7
     fCloseNavigator
     Wait 500
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
     
 endcase
 
@@ -686,7 +700,10 @@ testcase tTextframes_8
     fCloseNavigator
     Wait 500
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
@@ -814,7 +831,10 @@ testcase tTextframes_9
     fCloseNavigator
     Wait 500
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
@@ -822,8 +842,10 @@ endcase
 
 testcase tTextframes_10
 
-    Dim sColumn1   , sColumn2   as String
-    Dim sTestFile1 , sTestFile2 as String
+    Dim sColumn1   as String
+    Dim sColumn2   as String
+    Dim sTestFile1 as String
+    Dim sTestFile2 as String
     
     sColumn1   = "1"
     sColumn2   = "2"
@@ -914,7 +936,10 @@ testcase tTextframes_10
     fCloseNavigator
     Wait 500
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
@@ -923,7 +948,8 @@ endcase
 testcase tTextframes_11
 
     Dim sTestFile as String
-    Dim sDummy1 , sDummy2 as String
+    Dim sDummy1   as String
+    Dim sDummy2   as String
     
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\textframe\pageParagraph.sxw")
     sDummy1   = "He heard"
@@ -1041,7 +1067,10 @@ Check2:
     fCloseNavigator
     Wait 500
 
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
@@ -1093,8 +1122,11 @@ endcase
 
 testcase tTextframes_13
 
-    Dim sHorizontalBy     as String
-    Dim iHorizontalLeft , iHorizontalRight , iHorizontalCenter , iHorizontalFromLeft as Integer
+    Dim sHorizontalBy       as String
+    Dim iHorizontalLeft     as Integer
+    Dim iHorizontalRight    as Integer
+    Dim iHorizontalCenter   as Integer
+    Dim iHorizontalFromLeft as Integer
     
     sHorizontalBy       = "1"+ gSeperator + "00" + gMeasurementUnit
     
@@ -1203,8 +1235,11 @@ endcase
 
 testcase tTextframes_14
 
-    Dim sVerticalBy     as String
-    Dim iVerticalTop , iVerticalBottom , iVerticalCenter , iVerticalFromTop as Integer
+    Dim sVerticalBy      as String
+    Dim iVerticalTop     as Integer
+    Dim iVerticalBottom  as Integer
+    Dim iVerticalCenter  as Integer
+    Dim iVerticalFromTop as Integer
     
     sVerticalBy      = "1"+ gSeperator + "00" + gMeasurementUnit
     
@@ -1313,7 +1348,8 @@ endcase
 
 testcase tTextframes_15
 
-    Dim sOriginalName , sNewName as String
+    Dim sOriginalName as String
+    Dim sNewName      as String
     
     sOriginalName = "TEST1"
     sNewName      = "TEST2"
@@ -1369,7 +1405,8 @@ endcase
 
 testcase tTextframes_16
 
-    Dim sOriginalName , sNewName as String
+    Dim sOriginalName as String
+    Dim sNewName      as String
     
     sOriginalName = "TEST1"
     sNewName      = "TEST2"
@@ -1423,3 +1460,5 @@ testcase tTextframes_16
     Call hCloseDocument
 
 endcase
+
+'---------------------------------------------------

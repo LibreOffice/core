@@ -248,11 +248,10 @@ testcase tCollectSaveAsFilter
  Dim j as Integer
  Dim x as Integer
 
- Dim lsListe(350) as String           ' IST list gets generated with tested SO and written into
-
- Dim iFilterCount                     as Integer
- Dim fActualFilterFile                as String
- Dim fSortedFilterFile                as String
+ Dim lsListe(350)      as String           ' IST list gets generated with tested SO and written into
+ Dim iFilterCount      as Integer
+ Dim fActualFilterFile as String
+ Dim fSortedFilterFile as String
 
    ListAllDelete(lsListe())
    x = 0
@@ -311,11 +310,10 @@ testcase tCollectExportFilters
  Dim j as Integer
  Dim x as Integer
 
- Dim lsListe(350) as String           ' IST list gets generated with tested SO and written into
-
- Dim iFilterCount                     as Integer
- Dim fActualFilterFile                as String
- Dim fSortedFilterFile                as String
+ Dim lsListe(350)      as String           ' IST list gets generated with tested SO and written into
+ Dim iFilterCount      as Integer
+ Dim fActualFilterFile as String
+ Dim fSortedFilterFile as String
 
    ListAllDelete(lsListe())
    x = 0
@@ -353,8 +351,8 @@ testcase tCollectExportFilters
       hCloseDocument()
    next j
 
-   Printlog chr(13)+" This are "+ x + " - from 70 expected." + chr(13)
-   if x <> 70 then warnlog "Somewhere Over the rainbow... there are filters missing / too much :-("
+    Printlog chr(13)+" This are "+ x + " - from 65 expected." + chr(13)
+    if x <> 65 then warnlog "Somewhere Over the rainbow... there are filters missing / too much :-("
 
    if (app.dir(fActualFilterFile) = "") then
       Call ListWrite(lsListe(),fActualFilterFile, "utf8")
@@ -542,8 +540,10 @@ end function
 '------------------------------------------------------------------------------------------------------------------------------
 
 testcase tGroupNameCheck
-QaErrorLog "#i94734# - testcase tGroupNameCheck outcommented due to unpredictable results."
-goto endsub
+    if gPlatGroup = "unx" then
+        Printlog "No testing under Unix/Linux. Exiting testcase."
+        goto endsub
+    end if
 
 '///' inspired from #97305 : 86+88: missing import filters in fileopen dialog ///'
 '///+' -> 97723 97758 ///'
@@ -577,11 +577,7 @@ function TBOXMLGetListOfFilterGroups ( iLang as integer, sList() as string  ) as
   dim iAttrCount as integer
 
    sElementLine = "UI;FilterClassification;GlobalFilters;Classes"
-   if gNetzInst then
-        sXMLFile = ConvertPath ( gNetzOfficePath + "share\registry\res\" + gISOLang + "\org\openoffice\Office\UI.xcu" )
-   else
-        sXMLFile = ConvertPath ( gOfficePath + "share\registry\res\" + gISOLang + "\org\openoffice\Office\UI.xcu" )
-   end if
+   sXMLFile = gNetzOfficePath & ConvertPath("Basis\share\registry\res\" + gISOLang + "\org\openoffice\Office\UI.xcu")
 
    if (dir(sXMLFile) = "") then
        qaErrorLog "File doesn't exist :-( '" + sXMLFile + "'"

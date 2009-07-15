@@ -58,21 +58,21 @@ testcase tToolsOptionsHTMLContent
     Call hNewDocument
 
     printlog "'///- Tools/Options/HTML: Content ///"
-    
+
     printlog ("'/// - save states ///")
     ToolsOptions
     Call hToolsOptions ("HTML","View")
-    
+
     irgendwas(1) = GrafikenUndObjekte.IsChecked
     irgendwas(2) = Tabellen.IsChecked
     irgendwas(3) = Zeichnungen.IsChecked
     irgendwas(4) = Feldnamen.IsChecked
     irgendwas(5) = Notizen.IsChecked
-    
+
     'irgendwas(9) = Felder.IsChecked
-    
+
     printlog ("'/// - all states inverting ///")
-    
+
     if irgendwas(1) Then GrafikenUndObjekte.UnCheck Else GrafikenUndObjekte.Check
     if irgendwas(2) Then Tabellen.UnCheck Else Tabellen.Check
     if irgendwas(3) Then Zeichnungen.UnCheck Else Zeichnungen.Check
@@ -97,7 +97,7 @@ testcase tToolsOptionsHTMLContent
     if ( irgendwas(3) = Zeichnungen.IsChecked  ) Then WarnLog "Zeichnungen state changed"
     if ( irgendwas(4) = Feldnamen.IsChecked  ) Then  WarnLog "Feldnamen state changed"
     if ( irgendwas(5) = Notizen.IsChecked  ) Then  WarnLog "Notizen state changed"
-       
+    
     printlog ("'/// - all UnCheck -> o ///")
     
     GrafikenUndObjekte.UnCheck
@@ -120,8 +120,8 @@ testcase tToolsOptionsHTMLContent
     if Zeichnungen.IsChecked Then WarnLog "Zeichnungen x"
     if Feldnamen.IsChecked Then  WarnLog "Feldnamen x"
     if Notizen.IsChecked Then  WarnLog "Notizen x"
-       
-    Printlog ("'/// - all Check -> x ///")    
+    
+    Printlog ("'/// - all Check -> x ///")
     GrafikenUndObjekte.Check
     Tabellen.Check
     Zeichnungen.Check
@@ -414,7 +414,7 @@ testcase tToolsOptionsHTMLGrid
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options1.sxw" )
     Call sMakeReadOnlyDocumentEditable
    
-    printlog "'///- Tools/Options/HTML: Grid ///"    
+    printlog "'///- Tools/Options/HTML: Grid ///"
     printlog ("'/// - save states ///")
     
     ToolsOptions
@@ -510,7 +510,7 @@ testcase tToolsOptionsHTMLGrid
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     
-    printlog ("'/// - check if all UnChecked ///")       
+    printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
     Call hToolsOptions ( "HTML","Grid" )
     

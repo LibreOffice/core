@@ -146,7 +146,8 @@ endcase
 testcase tFormatPage_17
 
     Dim sTestFile as String
-    Dim sDummy1 as String  ,  sDummy2 as String
+    Dim sDummy1 as String
+    Dim sDummy2 as String
 
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testForAutoFit.sxw")
 
@@ -447,9 +448,10 @@ testcase tFormatPage_20
     Sleep 2
     MenuSelect(Menugetitemid(4))
     Sleep 2
-    MenuSelect(Menugetitemid(9))
+    MenuSelect(Menugetitemid(10))
     Sleep 2
-    MenuSelect(Menugetitemid(3))
+    Call hMenuFindSelect (".uno:InsertPageFooter?PageStyle:string=Default&On:bool=true", true, 3, true)   'Find "Insert:Footer:Default" and call the slot.
+'    MenuSelect(Menugetitemid(3))
     Sleep 2
 
     '/// formatPage , tabpage footer
@@ -468,9 +470,9 @@ testcase tFormatPage_20
     '/// Set the bigger fonts to selection in the footer
     fFormatCharacter("TabFont")
     try
-        SizeWest.Select  SizeWest.GetItemCount-2
+        SizeWest.Select SizeWest.GetItemCount-2
     catch
-        Size.Select      Size.GetItemCount-2
+        Size.Select Size.GetItemCount-2
     endcatch
     TabFont.OK
 
@@ -500,19 +502,15 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tFormatPage_21
-Warnlog "#i102452# - tFormatPage_21 outcommented. Something wrong in AutoFit Height."
-goto endsub
-
 
     Dim sTestFile as String
-    Dim sDummy1 as String  ,  sDummy2 as String
+    Dim sDummy1 as String
+    Dim sDummy2 as String
 
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testForAutoFit.sxw")
 
     PrintLog "- AutoFit height - Check (Footer,multiline content)"
     '/// AutoFit height - Check (Footer,multiline content)
-
-    Call hNewDocument
 
     '/// Open test file testForAutoFit.sxw
      Call hFileOpen(sTestFile)
@@ -533,7 +531,7 @@ goto endsub
     
     '/// Remember number in line
     EditCopy
-    sDummy1 =  GetClipboardText
+    sDummy1 = GetClipboardText
 
     '/// Again 1 step up
     Call wTypeKeys "<Up>"
@@ -541,15 +539,15 @@ goto endsub
 
     '/// Remember number in current line
     EditCopy
-    sDummy2 =  GetClipboardText
-    
-    '/// Insert a footer
+    sDummy2 = GetClipboardText
+
+    printlog " Insert a footer"
     DocumentWriter.UseMenu
     MenuSelect(Menugetitemid(4))
     Sleep 2
-    MenuSelect(Menugetitemid(9))
+    MenuSelect(Menugetitemid(10))
     Sleep 2
-    MenuSelect(Menugetitemid(3))
+    Call hMenuFindSelect (".uno:InsertPageFooter?PageStyle:string=Default&On:bool=true", true, 3, true)   'Find "Insert:Footer:Default" and call the slot.
     Sleep 2
     
     '/// formatPage , tabpage footer
@@ -642,13 +640,14 @@ testcase tFormatPage_22
     sDummy =  GetClipboardText
 
     '/// Insert a footer
-     DocumentWriter.UseMenu
-     MenuSelect(Menugetitemid(4))
-     Sleep 2
-     MenuSelect(Menugetitemid(10))
-     Sleep 2
-     MenuSelect(Menugetitemid(3))
-     Sleep 2
+    DocumentWriter.UseMenu
+    MenuSelect(Menugetitemid(4))
+    Sleep 2
+    MenuSelect(Menugetitemid(10))
+    Sleep 2
+    Call hMenuFindSelect (".uno:InsertPageFooter?PageStyle:string=Default&On:bool=true", true, 3, true)   'Find "Insert:Footer:Default" and call the slot.
+'    MenuSelect(Menugetitemid(3))
+    Sleep 2
 
     '/// formatPage , tabpage footer ,UnCheck AutoFit Height
     fFormatPageWriter("TabFusszeile")
@@ -662,9 +661,9 @@ testcase tFormatPage_22
     '/// Set the bigger fonts to selection in the footer
     fFormatCharacter("TabFont")
     try
-        SizeWest.Select  SizeWest.GetItemCount-2
+        SizeWest.Select SizeWest.GetItemCount-2
     catch
-        Size.Select      Size.GetItemCount-2
+        Size.Select Size.GetItemCount-2
     endcatch
     TabFont.OK
     
@@ -703,8 +702,6 @@ testcase tFormatPage_23
     PrintLog "- AutoFit height - UnCheck (Footer,multiline content)"
     '/// AutoFit height - UnCheck (Footer,multiline content)
 
-    Call hNewDocument
-
     '/// Open test file testForAutoFit.sxw
     Call hFileOpen(sTestFile)
     Call sMakeReadOnlyDocumentEditable
@@ -732,7 +729,8 @@ testcase tFormatPage_23
     Sleep 2
     MenuSelect(Menugetitemid(10))
     Sleep 2
-    MenuSelect(Menugetitemid(3))
+    Call hMenuFindSelect (".uno:InsertPageFooter?PageStyle:string=Default&On:bool=true", true, 3, true)   'Find "Insert:Footer:Default" and call the slot.
+'    MenuSelect(Menugetitemid(3))
     Sleep 2
     
     '/// formatPage , tabpage footer ,Uncheck AutoFit Height
@@ -856,7 +854,7 @@ testcase tFormatPage_26
      DocumentWriter.UseMenu
      MenuSelect(Menugetitemid(4))
      Sleep 2
-     MenuSelect(Menugetitemid(9))
+     MenuSelect(Menugetitemid(10))
      Sleep 2
      MenuSelect(Menugetitemid(1))
      Sleep 2
@@ -894,7 +892,7 @@ testcase tFormatPage_27
      DocumentWriter.UseMenu
      MenuSelect(Menugetitemid(4))
      Sleep 2
-     MenuSelect(Menugetitemid(9))
+     MenuSelect(Menugetitemid(10))
      Sleep 2
      MenuSelect(Menugetitemid(1))
      Sleep 2
@@ -903,7 +901,7 @@ testcase tFormatPage_27
      DocumentWriter.UseMenu
      MenuSelect(Menugetitemid(4))
       Sleep 2
-     MenuSelect(Menugetitemid(9))
+     MenuSelect(Menugetitemid(10))
      Sleep 2
      MenuSelect(Menugetitemid(1))
      Sleep 2

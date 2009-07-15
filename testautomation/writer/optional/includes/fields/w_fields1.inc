@@ -49,55 +49,63 @@ sub w_fields1
 
 end sub
 
-testcase tFields_1
-qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
-goto endsub
+'-----------------------------------------------------------------
 
-    Dim sDate , sDate1 , sDate2 as String
-    
+testcase tFields_1
+
+    Dim sDate as String
     sDate  = Date
-    sDate1 = Left (sDate , 6)
-    sDate2 = Right(sDate , 2)
-    
+
     printlog "Insert / Fields / Date"
     '/// <b> Default should be mm/dd/yy </b>
-    
+
     Call hNewDocument
-    
+
     '/// Insert / Fields / Date , the 1st date is fixed
     InsertFieldsDate
-    
+
     '/// Return
     Call wTypeKeys "<Return>"
-    
+
     '/// Insert / Fields / Date
     InsertFieldsDate
-    
+
     Call wTypeKeys "<Home>"
-    
+
     '/// Set 2nd date only to be date , not fixed
     '/// In 2nd date , Edit / Fields , select date in 'select'
+    '/// Select second format in 'Format'
     EditFields
     Kontext "FeldbefehlBearbeitenDokument"
     Auswahl.Select 2
-    Sleep 2
+    Zahlenformat.Select 2  'Should be the same as the value we get with 'Time'.
+    '/// Close the dialog
     FeldbefehlBearbeitenDokument.OK
-    
+
+    '/// Set first date to the right format, but leave as unfixed
+    '/// In 1nd date , Edit / Fields , select second format in 'Format'
+    Call wTypeKeys "<MOD1 Home>"
+
+    EditFields
+    Kontext "FeldbefehlBearbeitenDokument"
+    Zahlenformat.Select 2  'Should be the same as the value we get with 'Time'.
+    FeldbefehlBearbeitenDokument.OK
+
     '/// Check if the date is correct
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "<Shift Right>"
     EditCopy
-    if GetClipboard <> sDate1 then
+    if GetClipboard <> sDate then
         Warnlog "Fixed date is wrong ! Hope you don't run this case in the midnight"
     end if
-    
+
     Call wTypeKeys "<Down><Home>"
     Call wTypeKeys "<Shift Right>"
     EditCopy
-    if GetClipboard <> sDate2 then
+    if GetClipboard <> sDate then
         Warnlog "Date is wrong ! Hope you don't run this case in the midnight"
     end if
-    
+
     Call hCloseDocument
 
 endcase
@@ -105,19 +113,17 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tFields_2
-qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
-goto endsub
 
-    Dim sTime() , sTime1 , sTime2 as String
-    Dim sTemp                   as String
+    Dim sTime  as String
+    Dim sTime1 as String
+    Dim sTime2 as String
+    Dim sTemp  as String
     
     printlog "Insert / Fields / Time"
-    '/// <b> Default should be hh/mm/ss pm </b>
+    '/// <b> Default could be hh/mm/ss pm  or simply  hh/mm/ss , depending on the system the test is running on.</b>
     
     Call hNewDocument
-    
     sTime = Time
-    sTemp = Right(sTime , 2)  'It should get am or pm
     
     '/// Insert / Fields / Time , the 1st time is fixed
     InsertFieldsTime
@@ -135,7 +141,6 @@ goto endsub
     EditFields
     Kontext "FeldbefehlBearbeitenDokument"
     Auswahl.Select 2
-    Sleep 2
     FeldbefehlBearbeitenDokument.OK
     
     '/// Check if the time is correct
@@ -143,19 +148,17 @@ goto endsub
     Call wTypeKeys "<Shift Right>"
     EditCopy
     sTime1 = GetClipboard
-    if Len(sTime1)       < 11    then Warnlog "Fixed time is wrong !"
-    if Right(sTime1 , 2) <> sTemp then Warnlog "Fixed time is wrong ! , Hope you don't run this case in the midnight"
+    if NOT Len(sTime1) > 7 then Warnlog "Fixed time-format is wrong !"
     
     Call wTypeKeys "<Down><Home>"
     Call wTypeKeys "<Shift Right>"
     EditCopy
     sTime2 = GetClipboard
-    if Len(sTime2)       <> 11    then Warnlog "Time is wrong !"
-    if Right(sTime2 , 2) <> sTemp then Warnlog "Time is wrong ! , Hope you don't run this case in the midnight"
+    if NOT Len(sTime2) > 7 then Warnlog "Time-format is wrong !"
     
     printlog "Stop for a while ..."
     '/// Stop for  a while , check if the time is still correct
-    Sleep 5
+    Sleep 2
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "<Shift Right>"
     EditCopy

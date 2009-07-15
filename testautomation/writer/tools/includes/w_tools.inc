@@ -858,8 +858,10 @@ end function
 
 ' -----------------------------------------------------------------------
 
-sub wOptionenUndo ( sOption$ )
-    Dim i as integer, sTempSeparator as string, sTempUnit as integer
+sub wOptionsUndo ( sOption$ )
+    Dim i as integer
+    Dim sTempSeparator as string
+    Dim sTempUnit as integer
 
     Printlog "  - Initial state"
 
@@ -878,7 +880,7 @@ sub wOptionenUndo ( sOption$ )
     end if
     sTempUnit = Masseinheit.GetSelIndex
 
-    if sOption$ = "Laden" OR sOption$ = "Alle" then
+    if sOption$ = "Laden" OR sOption$ = "All" then
         ' Update
         AufNachfrage.Check
         Feldbefehle.Check
@@ -899,7 +901,7 @@ sub wOptionenUndo ( sOption$ )
     end if
 
     Call hToolsOptions("WRITER","View")
-    if sOption$ = "Inhalte" OR sOption$ = "Alle" then
+    if sOption$ = "Inhalte" OR sOption$ = "All" then
         ' Guides
         Hilfslinien.Uncheck
         FarbigeHandles.Check
@@ -919,7 +921,7 @@ sub wOptionenUndo ( sOption$ )
         Notizen.Check
     end if
 
-    if sOption$ = "Cursor" OR sOption$ = "Alle" then
+    if sOption$ = "Cursor" OR sOption$ = "All" then
         Call hToolsOptions("WRITER","FormattingAids")
         ' Display of
         Absatzenden.UnCheck
@@ -937,7 +939,7 @@ sub wOptionenUndo ( sOption$ )
         Zonen_Cursor.Check
     end if
 
-    if sOption$ = "Raster" OR sOption$ = "Alle" then
+    if sOption$ = "Raster" OR sOption$ = "All" then
         Call hToolsOptions("WRITER","Grid")
         ' Grid
         FangrasterBenutzen.Uncheck
@@ -967,13 +969,13 @@ sub wOptionenUndo ( sOption$ )
         RasterUnterteilungYAchse.More 1
     end if
 
-    if sOption$ = "Grundschriften" OR sOption$ = "Alle" then
+    if sOption$ = "Grundschriften" OR sOption$ = "All" then
         Call hToolsOptions("WRITER","BasicFonts")
         Standard.Click
         AktuellesDokument.Uncheck
     end if
 
-    if sOption$ = "Drucken" OR sOption$ = "Alle" then
+    if sOption$ = "Drucken" OR sOption$ = "All" then
         Call hToolsOptions("WRITER","Print")
         ' Contents
         Grafiken.Check
@@ -995,7 +997,7 @@ sub wOptionenUndo ( sOption$ )
         Fax.SetNoSelection
     end if
 
-    if sOption$ = "Tabelle" OR sOption$ = "Alle" then
+    if sOption$ = "Tabelle" OR sOption$ = "All" then
         Call hToolsOptions("WRITER","Table")
         ' Default
         Ueberschrift.Check
@@ -1040,7 +1042,7 @@ sub wOptionenUndo ( sOption$ )
         Variabel.Check
     end if
 
-    if sOption$ = "Aenderung" OR sOption$ = "Alle" then
+    if sOption$ = "Aenderung" OR sOption$ = "All" then
         Call hToolsOptions("WRITER","Changes")
         ' Text display
         EinfuegenAttribute.Select 4
@@ -1054,7 +1056,7 @@ sub wOptionenUndo ( sOption$ )
         Zeilenfarbe.Select 1
     end if
 
-    if sOption$ = "AutoCaption" OR sOption$ = "Alle" then
+    if sOption$ = "AutoCaption" OR sOption$ = "All" then
         Call hToolsOptions("WRITER","Autocaption")
         for i = 1 to ObjectList.GetItemCount
             ObjectList.Select i

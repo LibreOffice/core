@@ -61,11 +61,6 @@ end sub
 '---------------------------------------------------
 
 testcase tTextframes_33
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
-
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
 
     printlog "- Test attribute 'AutoSize' in linked frames"
     '/// Test attribute 'AutoSize' in linked frames
@@ -73,17 +68,16 @@ goto endsub
     Call hNewDocument
     
     '/// insert a frame
-    Call fInsertFrame(30,30 , 40,40)
+    Call fInsertFrame(30,30 , 50,50)
     
     Call wTypeKeys "<ESCAPE>"
-    Wait 500
+    WaitSlot (5)
     
     '/// insert another frame
-    Call fInsertFrame(50,50 , 65,65)
+    Call fInsertFrame(50,50 , 80,80)
     
     printlog "Move the second frame away from the first one."
     Call wTypeKeys "<RIGHT>",10
-    Call wTypeKeys "<DOWN>",7
     
     '/// Set focus to first frame
     Call wTypeKeys "<TAB>"
@@ -98,7 +92,7 @@ goto endsub
     Wait 500
     
     '/// Target the second frame
-    Call gMouseClick(60,60)
+    Call gMouseClick(60,20)
     Wait 500
     
     '/// Format/Frame / Type ,
@@ -132,12 +126,9 @@ endcase
 
 testcase tTextframes_34
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-    
-    Dim sText as String
-    Dim sOriginalName 
-    Dim sTargetName as String
+    Dim sText         as String
+    Dim sOriginalName as String
+    Dim sTargetName   as String
     
     sOriginalName = "TEST1"
     sTargetName   = "TEST2"
@@ -148,7 +139,7 @@ testcase tTextframes_34
     Call hNewDocument
     
     '/// insert a frame , set frame name
-    Call fInsertFrame(30,30 , 40,40)
+    Call fInsertFrame(30,30 , 50,50)
     
     Call fFormatFrame("TabZusaetze")
     ObjektName.SetText sOriginalName
@@ -158,12 +149,11 @@ testcase tTextframes_34
     Wait 500
     
     '/// insert another frame , set frame name
-    Call fInsertFrame(50,50 , 65,65)
+    Call fInsertFrame(50,50 , 70,70)
     
     printlog "Move second frame away from the first frame."
-    Call wTypeKeys "<RIGHT>", 10
-    Call wTypeKeys "<DOWN>", 10
-
+    Call wTypeKeys "<RIGHT>", 12
+    
     printlog "Name second object."
     Call fFormatFrame("TabZusaetze")
     ObjektName.SetText sTargetName
@@ -182,7 +172,7 @@ testcase tTextframes_34
     Wait 500
     
     '/// Target the second frame
-    Call gMouseClick(60,80)
+    Call gMouseClick(60,20)
     Wait 500
     
     Call wTypeKeys "<RETURN>"
@@ -207,13 +197,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_35
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-
-    Dim iNoLink , iLink  as Integer
+    Dim iNoLink as Integer
+    Dim iLink   as Integer
     
     iNoLink = 1
     iLink   = 2
@@ -224,17 +210,16 @@ goto endsub
     Call hNewDocument
     
     '/// insert a frame
-    Call fInsertFrame(30,30 , 40,40)
+    Call fInsertFrame(30,30 , 50,50)
     
     Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame
-    Call fInsertFrame(50,50 , 65,65)
+    Call fInsertFrame(50,50 , 80,80)
     
     printlog "Move the second frame away from the first one."
     Call wTypeKeys "<RIGHT>",10
-    Call wTypeKeys "<DOWN>",7
     
     '/// Set focus to first frame
     Call wTypeKeys "<TAB>"
@@ -249,7 +234,7 @@ goto endsub
     Wait 500
     
     '/// Target the second frame
-    Call gMouseClick(60,60)
+    Call gMouseClick(60,20)
     Wait 500
     
     '/// Check if the link is showed correctly (Format.Frame.Options)
@@ -275,16 +260,11 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_36
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
-
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
 
     Dim sTestFile as String
     Dim sTestText as String
-    Dim iNoLink as Integer
-    Dim iLink as Integer
+    Dim iNoLink   as Integer
+    Dim iLink     as Integer
     
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\textframe\twopages.sxw")
     iNoLink   = 1
@@ -360,21 +340,21 @@ goto endsub
     if NextLink.GetSelIndex     <> iNoLink then Warnlog "2nd frame: next link should be none"
     TabZusaetze.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_37
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-    
-    Dim sTestFile , sTestText  as  String
-    Dim iNoLink   , iLink      as  Integer
+    Dim sTestFile as String
+    Dim sTestText as String
+    Dim iNoLink   as String
+    Dim iLink     as  Integer
     
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\textframe\Header.sxw")
     iNoLink   = 1
@@ -424,21 +404,21 @@ goto endsub
     if NextLink.GetSelIndex     <> iNoLink then Warnlog "2nd frame: next link should be none"
     TabZusaetze.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_38
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-    
-    Dim sTestFile , sTestText  as  String
-    Dim iNoLink   , iLink      as  Integer
+    Dim sTestFile as String
+    Dim sTestText as  String
+    Dim iNoLink   as String
+    Dim iLink     as  Integer
     
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\textframe\Footer.sxw")
     iNoLink   = 1
@@ -486,33 +466,34 @@ goto endsub
     if NextLink.GetSelIndex     <> iNoLink then Warnlog "2nd frame: next link should be none"
     TabZusaetze.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_39
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    Dim sHorizontalBy1 as String
-    Dim sHorizontalBy2 as String
-    Dim sVerticalBy1 as String
-    Dim sVerticalBy2 as String
+    Dim sHorizontalBy1    as String
+    Dim sHorizontalBy2    as String
+    Dim sVerticalBy1      as String
+    Dim sVerticalBy2      as String
     Dim sHorizontalByNew1 as String
     Dim sHorizontalByNew2 as String
-    Dim sVerticalByNew1 as String
-    Dim sVerticalByNew2 as String
+    Dim sVerticalByNew1   as String
+    Dim sVerticalByNew2   as String
     
-    sHorizontalBy1     = "2"+ gSeperator + "00" + gMeasurementUnit
-    sVerticalBy1       = "1"+ gSeperator + "00" + gMeasurementUnit
-    sHorizontalBy2     = "7"+ gSeperator + "00" + gMeasurementUnit
-    sVerticalBy2       = "4"+ gSeperator + "00" + gMeasurementUnit
-    sHorizontalByNew1  = "3"+ gSeperator + "00" + gMeasurementUnit
-    sVerticalByNew1    = "2"+ gSeperator + "00" + gMeasurementUnit
-    sHorizontalByNew2  = "8"+ gSeperator + "00" + gMeasurementUnit
-    sVerticalByNew2    = "5"+ gSeperator + "00" + gMeasurementUnit
+    sHorizontalBy1    = "2"+ gSeperator + "00" + gMeasurementUnit
+    sVerticalBy1      = "1"+ gSeperator + "00" + gMeasurementUnit
+    sHorizontalBy2    = "7"+ gSeperator + "00" + gMeasurementUnit
+    sVerticalBy2      = "4"+ gSeperator + "00" + gMeasurementUnit
+    sHorizontalByNew1 = "3"+ gSeperator + "00" + gMeasurementUnit
+    sVerticalByNew1   = "2"+ gSeperator + "00" + gMeasurementUnit
+    sHorizontalByNew2 = "7"+ gSeperator + "00" + gMeasurementUnit
+    sVerticalByNew2   = "4"+ gSeperator + "00" + gMeasurementUnit
     
     printlog "- Test drag&drop with a linked frame - keyboard"
     '/// Test drag&drop with a linked frame - keyboard
@@ -520,12 +501,12 @@ goto endsub
     Call hNewDocument
     
     '/// insert a frame and set Horizontal and Vertical
-    Call fInsertFrame(40,40 , 50,50)
+    Call fInsertFrame(30,30 , 49,49)
     
     Call fFormatFrame("TabType")
     HorizontalBy.SetText sHorizontalBy1
     wait 500
-    VerticalBy.SetText   sVerticalBy1
+    VerticalBy.SetText sVerticalBy1
     wait 500
     TabType.OK
     
@@ -533,12 +514,12 @@ goto endsub
     Wait 500
     
     '/// insert another frame and set Horizontal and Vertical
-    Call fInsertFrame(50,50 , 60,60)
+    Call fInsertFrame(51,51 , 80,80)
     
     Call fFormatFrame("TabType")
     HorizontalBy.SetText sHorizontalBy2
     wait 500
-    VerticalBy.SetText   sVerticalBy2
+    VerticalBy.SetText sVerticalBy2
     wait 500
     TabType.OK
     
@@ -582,11 +563,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_40
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
-
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
 
     Dim sHorizontalBy as String
     
@@ -598,7 +574,7 @@ goto endsub
     Call hNewDocument
     
     '/// insert a frame
-    Call fInsertFrame(30,30 , 50,50)
+    Call fInsertFrame(30,30 , 49,49)
     
     Call fFormatFrame("TabType")
     HorizontalBy.SetText sHorizontalBy
@@ -609,11 +585,11 @@ goto endsub
     Wait 500
     
     '/// insert another frame
-    Call fInsertFrame(50,50 , 65,65)
+    Call fInsertFrame(51,51 , 80,80)
     
     printlog "Move the second frame away from the first one."
     Call wTypeKeys "<RIGHT>",10
-    Call wTypeKeys "<DOWN>",7
+'    Call wTypeKeys "<DOWN>",7
     
     Call wTypeKeys "<Tab>"
     
@@ -626,7 +602,7 @@ goto endsub
     Wait 500
     
     '/// Target the second frame
-    Call gMouseClick(60,60)
+    Call gMouseClick(75,30)
     Wait 500
     
     '/// Move 1st frame with keyboard (Left)
@@ -649,13 +625,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_41
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-
-    Dim  iLink , iNolink as  Integer
+    Dim iLink as String
+    Dim iNolink as Integer
     
     iLink   =  2
     iNolink =  1
@@ -666,17 +638,16 @@ goto endsub
     Call hNewDocument
     
     '/// insert a frame
-    Call fInsertFrame(30,30 , 50,50)
+    Call fInsertFrame(30,30 , 49,49)
     
     Call wTypeKeys "<ESCAPE>"
-    Wait 500
+    WaitSlot (5)
     
     '/// insert another frame
-    Call fInsertFrame(50,50 , 65,65)
+    Call fInsertFrame(51,51 , 80,80)
     
     printlog "Move the second frame away from the first one."
     Call wTypeKeys "<RIGHT>",10
-    Call wTypeKeys "<DOWN>",7
     
     '/// Set focus to 1st frame
     Call wTypeKeys "<Tab>"
@@ -690,7 +661,7 @@ goto endsub
     Wait 500
     
     '/// Target the second frame
-    Call gMouseClick(60,60)
+    Call gMouseClick(60,20)
     Wait 500
     
     '/// Remove link
@@ -719,7 +690,7 @@ endcase
 
 testcase tTextframes_42
 
-    Dim  iNoLink  as  Integer
+    Dim iNoLink as Integer
     
     iNoLink  =  1
     
@@ -767,9 +738,9 @@ endcase
 
 testcase tTextframes_43
 
-    Dim  iLink  as  Integer
+    Dim iLink as Integer
     
-    iLink  =  2
+    iLink = 2
     
     printlog "- Link frame in footer with frame in bodytext should be forbidded"
     '/// Link frame in footer with frame in bodytext should be forbidded
@@ -814,8 +785,8 @@ endcase
 
 testcase tTextframes_44
 
-    Dim  sText    as  String
-    Dim  iNoLink  as  Integer
+    Dim sText   as String
+    Dim iNoLink as Integer
     
     sText    =  "Test"
     iNoLink  =  1
@@ -861,10 +832,7 @@ endcase
 
 testcase tTextframes_45
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-
-    Dim  iNoLink  as  Integer
+    Dim iNoLink as Integer
     
     iNoLink  =  1
     
@@ -874,17 +842,17 @@ testcase tTextframes_45
     Call hNewDocument
     
     '/// insert a frame
-    Call fInsertFrame(30,30 , 35,40)
+    Call fInsertFrame(30,30 , 45,45)
     
     Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame
-    Call fInsertFrame(50,50 , 65,65)
+    Call fInsertFrame(50,50 , 70,70)
     
     printlog "Move the second frame away from the first one."
     Call wTypeKeys "<RIGHT>",10
-    Call wTypeKeys "<DOWN>",7
+'    Call wTypeKeys "<DOWN>",7
     
     '/// set focus to 1st frame
     Call wTypeKeys "<TAB>"
@@ -895,7 +863,7 @@ testcase tTextframes_45
     Sleep 2
     Verketten.Click
     Wait 500
-    Call gMouseClick(60,60)
+    Call gMouseClick(75,30)
     Wait 500
     
     '/// link two frames (1st frame is target frame)
@@ -904,7 +872,7 @@ testcase tTextframes_45
     Wait 500
     Verketten.Click
     Wait 500
-    Call gMouseClick(20,35)
+    Call gMouseClick(35,35)
     Wait 500
     
     Call fFormatFrame("TabZusaetze")
@@ -919,12 +887,9 @@ endcase
 
 testcase tTextframes_46
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-
-    Dim  iNoLink  as  Integer
+    Dim iNoLink as Integer
     
-    iNoLink  =  1
+    iNoLink = 1
     
     printlog "- Frames couldn't be linked with the current one is part of another 'chain'"
     '/// Frames couldn't be linked with the current one is part of another 'chain'
@@ -932,13 +897,13 @@ testcase tTextframes_46
     Call hNewDocument
     
     '/// insert a frame
-    Call fInsertFrame(50,30 , 70,40)
+    Call fInsertFrame(30,30 , 49,49)
     
     Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame
-    Call fInsertFrame(60,50 , 80,60)
+    Call fInsertFrame(51,51 , 65,65)
     
     printlog "Move the frame away from the position of the first one."
     Call wTypeKeys "<RIGHT>",4
@@ -948,12 +913,12 @@ testcase tTextframes_46
     Wait 500
     
     '/// insert 3rd frame
-    Call fInsertFrame(70,60 , 90,70)
+    Call fInsertFrame(70,70 , 80,80)
     Wait 500
     
     printlog "Move the frame away from the position of the first one."
-    Call wTypeKeys "<RIGHT>",8
-    Call wTypeKeys "<DOWN>",8
+    Call wTypeKeys "<LEFT>",8
+    Call wTypeKeys "<UP>",8
     
     '/// set focus to 1st frame
     Call wTypeKeys "<SHIFT F4>" 'make sure object is selected.
@@ -966,7 +931,7 @@ testcase tTextframes_46
     Sleep 1
     Verketten.Click
     Sleep 1
-    Call gMouseClick(45,45)
+    Call gMouseClick(70,70)
     Wait 500
     
     '/// set focus to 3rd frame
@@ -977,7 +942,7 @@ testcase tTextframes_46
     Sleep 2
     Verketten.Click
     Sleep 1
-    Call gMouseClick(45,45)
+    Call gMouseClick(70,70)
     Wait 500
     
     Call fFormatFrame("TabZusaetze")
@@ -992,9 +957,9 @@ endcase
 
 testcase tTextframes_47
 
-    Dim  iLink  as  Integer
+    Dim iLink as Integer
     
-    iLink  =  2
+    iLink = 2
     
     printlog "- Frames couldn't be linked with the current one is in protected section"
     '/// Frames couldn't be linked with the current one is in protected section
@@ -1011,10 +976,12 @@ testcase tTextframes_47
     TabBereiche.OK
     wait 500
     
-    Call wTypeKeys "<up>" , 1
+    Call wTypeKeys "<UP>" , 1
+    Call wTypeKeys "<RETURN>", 6
     
     '/// Insert a frame (A) in the section
     Call wInsertFrame
+    Call wTypeKeys "<UP>" , 2
     Call wTypeKeys "<ESCAPE>"
     
     '/// Set the section to be protected
@@ -1025,7 +992,10 @@ testcase tTextframes_47
     BereicheBearbeiten.OK
     
     '/// Insert another frame (B) out of the section
-    Call fInsertFrame(50,50 , 60,60)
+    Call fInsertFrame(30,70 , 60,90)
+    
+    Call wTypeKeys "<RIGHT>" , 8
+    Call wTypeKeys "<DOWN>" , 8
     
     '/// Link B->A (A is target)
     Call fFormatFrame("TabZusaetze")
@@ -1045,9 +1015,9 @@ endcase
 
 testcase tTextframes_48
 
-    Dim  iLink  as  Integer
+    Dim iLink as Integer
     
-    iLink  =  2
+    iLink = 2
     
     printlog "- Frames could be linked with the current one is set to 'editable in protected documents' even it is in protected section "
     '/// Frames could be linked with the current one is set to "editable in protected documents" even it is in protected section

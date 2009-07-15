@@ -47,13 +47,13 @@ sub main
 
     use "writer\tools\includes\w_tools.inc"
     use "writer\tools\includes\w_tool5.inc"
-	use "writer\tools\includes\w_tool6.inc"
+    use "writer\tools\includes\w_tool6.inc"
 
     use "writer\optional\includes\option\wr_o_1.inc"
     use "writer\optional\includes\option\wr_o_2.inc"
     use "writer\optional\includes\option\wr_o_3.inc"
     use "writer\optional\includes\option\wr_o_4.inc"
-    use "writer\optional\includes\option\wr_o_5.inc"    
+    use "writer\optional\includes\option\wr_o_5.inc"
     use "writer\optional\includes\option\wr_o_a.inc"
 
     printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartTime )
@@ -74,7 +74,7 @@ sub main
     Call wr_o_5          'Language Settings
     Call tToolsOptionsWriterDirectCursor2 
     Call wSetMacroSecurityLevel(3)   ' Set security to default -- medium
-    Call wOptionenUndo("Alle")
+    Call wOptionsUndo("All")
     Call hStatusOut
 
     Printlog Chr(13) + "End of Options - Test :"
