@@ -194,6 +194,23 @@ testcase tDataSort
     '/// Close 'Sort' dialog with 'Cancel
     printlog " Close 'Sort' dialog with 'Cancel"
     TabSortierenOptionen.Cancel
+	printlog " Select cell B3"
+	Kontext ( "DocumentCalc" )
+	fCalcSelectRange ( "B3" )
+	printlog " Fill cells B3:B8 with numbers 1-6"
+    DocumentCalc.TypeKeys "1<RETURN>2<RETURN>3<RETURN>4<RETURN>5<RETURN>6"
+	printlog " Select cell C3"
+	fCalcSelectRange ( "C3" )
+	printlog " Fill cells C3:C8 with numbers 7-2"
+    DocumentCalc.TypeKeys "7<RETURN>6<RETURN>5<RETURN>4<RETURN>3<RETURN>2"
+	printlog " Select cells B5:B6"
+	fCalcSelectRange ( "B5:B6" )
+	printlog " Open Data Sort"
+	DataSort
+	Kontext ( "SortRange" )
+	printlog " SortRange dialog has opened"
+	printlog " Cancel Sort Range dialog"
+	SortRange.Cancel
     '/// Close document
     printlog " Close document"
     Call hCloseDocument
