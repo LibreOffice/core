@@ -1233,7 +1233,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         bStoreToSameLocation = sal_True;
         AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Save" ) ) );
 
-        rMedium.CheckFileDate( pMedium->GetInitFileDate() );
+        if ( pMedium->DocNeedsFileDateCheck() )
+            rMedium.CheckFileDate( pMedium->GetInitFileDate( sal_False ) );
 
         if ( bCopyTo && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
         {
@@ -2089,6 +2090,12 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
                 InvalidateName();
             SetModified(sal_False); // nur bei gesetztem Medium zur"ucksetzen
             Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
+
+            // this is the end of the saving process, it is possible that the file was changed
+            // between medium commit and this step ( attributes change and so on )
+            // so get the file date again
+            if ( pNewMed->DocNeedsFileDateCheck() )
+                pNewMed->GetInitFileDate( sal_True );
         }
     }
 

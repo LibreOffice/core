@@ -165,6 +165,7 @@ VistaFilePicker::VistaFilePicker(const css::uno::Reference< css::lang::XMultiSer
     , m_rDialog             (new VistaFilePickerImpl())
     , m_aAsyncExecute       (m_rDialog                )
     , m_nFilePickerThreadId (0                        )
+    , m_bInitialized        (false                    )
 {
 }
 
@@ -345,6 +346,20 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL VistaFilePicker::getSelectedFiles
 ::sal_Int16 SAL_CALL VistaFilePicker::execute()
     throw(css::uno::RuntimeException)
 {
+    bool bInitialized(false);
+    {
+        osl::MutexGuard aGuard(m_aMutex);
+        bInitialized = m_bInitialized;
+    }
+
+    if ( !bInitialized )
+    {
+        sal_Int16 nTemplateDescription = css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
+        css::uno::Sequence < css::uno::Any > aInitArguments(1);
+        aInitArguments[0] <<= nTemplateDescription;
+        initialize(aInitArguments);
+    }
+
     RequestRef rRequest(new Request());
     rRequest->setRequest (VistaFilePickerImpl::E_SHOW_DIALOG_MODAL);
 
@@ -640,6 +655,11 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
     if ( ! m_aAsyncExecute.isRunning())
         m_aAsyncExecute.create();
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::NON_BLOCKED);
+
+    {
+        osl::MutexGuard aGuard(m_aMutex);
+        m_bInitialized = true;
+    }
 }
 
 //------------------------------------------------------------------------------------
