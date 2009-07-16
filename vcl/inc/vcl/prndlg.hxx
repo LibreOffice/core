@@ -73,6 +73,7 @@ namespace vcl
             virtual ~PrintPreviewWindow();
 
             virtual void Paint( const Rectangle& rRect );
+            virtual void Command( const CommandEvent& );
 
             void setPreview( const GDIMetaFile& );
             void setScale( double fScaleX, double fScaleY );
@@ -194,6 +195,7 @@ namespace vcl
 
         virtual void Resize();
         virtual void Paint( const Rectangle& );
+        virtual void Command( const CommandEvent& );
 
         DECL_LINK( SelectHdl, ListBox* );
         DECL_LINK( ClickHdl, Button* );
@@ -212,6 +214,9 @@ namespace vcl
         bool isPrintToFile();
         int getCopyCount();
         bool isCollate();
+
+        void previewForward();
+        void previewBackward();
     };
 
     class PrintProgressDialog : public ModelessDialog

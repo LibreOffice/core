@@ -97,6 +97,26 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& i_rRect )
     Pop();
 }
 
+void PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
+{
+    if( rEvt.GetCommand() == COMMAND_WHEEL )
+    {
+        const CommandWheelData* pWheelData = rEvt.GetWheelData();
+        PrintDialog* pDlg = dynamic_cast<PrintDialog*>(GetParent());
+        if( pDlg )
+        {
+            if( pWheelData->GetDelta() > 0 )
+                pDlg->previewForward();
+            else if( pWheelData->GetDelta() < 0 )
+                pDlg->previewBackward();
+            /*
+            else
+                huh ?
+            */
+        }
+    }
+}
+
 void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPreview )
 {
     maMtf = i_rNewPreview;
@@ -1276,11 +1296,11 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     }
     else if( pButton == &maForwardBtn )
     {
-        maPageEdit.Up();
+        previewForward();
     }
     else if( pButton == &maBackwardBtn )
     {
-        maPageEdit.Down();
+        previewBackward();
     }
     else
     {
@@ -1456,6 +1476,22 @@ void PrintDialog::Paint( const Rectangle& i_rRect )
     #endif
 }
 
+void PrintDialog::Command( const CommandEvent& rEvt )
+{
+    if( rEvt.GetCommand() == COMMAND_WHEEL )
+    {
+        const CommandWheelData* pWheelData = rEvt.GetWheelData();
+        if( pWheelData->GetDelta() > 0 )
+            previewForward();
+        else if( pWheelData->GetDelta() < 0 )
+            previewBackward();
+        /*
+        else
+            huh ?
+        */
+    }
+}
+
 void PrintDialog::Resize()
 {
     Size aPixDiff( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
@@ -1510,6 +1546,16 @@ void PrintDialog::Resize()
 
     // do an invalidate for the benefit of the grouping elements
     Invalidate();
+}
+
+void PrintDialog::previewForward()
+{
+    maPageEdit.Up();
+}
+
+void PrintDialog::previewBackward()
+{
+    maPageEdit.Down();
 }
 
 // -----------------------------------------------------------------------------
@@ -1635,3 +1681,4 @@ void PrintProgressDialog::Paint( const Rectangle& )
         aDecoView.DrawFrame( aFrameRect );
     }
 }
+
