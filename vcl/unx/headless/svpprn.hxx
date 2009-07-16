@@ -79,6 +79,7 @@ public:
     psp::JobData            m_aJobData;
     psp::PrinterGfx         m_aPrinterGfx;
     ULONG                   m_nCopies;
+    bool                    m_bCollate;
     SalInfoPrinter*         m_pInfoPrinter;
 
     PspSalPrinter( SalInfoPrinter* );

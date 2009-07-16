@@ -1288,9 +1288,10 @@ XubString Printer::GetPaperBinName( USHORT nPaperBin ) const
 
 // -----------------------------------------------------------------------
 
-BOOL Printer::SetCopyCount( USHORT nCopy, BOOL /*bCollate*/ )
+BOOL Printer::SetCopyCount( USHORT nCopy, BOOL bCollate )
 {
     mnCopyCount = nCopy;
+    mbCollateCopy = bCollate;
     return TRUE;
 }
 

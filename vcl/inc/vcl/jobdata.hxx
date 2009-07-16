@@ -74,6 +74,8 @@ struct JobData
 
     JobData( const JobData& rData ) { *this = rData; }
 
+    void setCollate( bool bCollate );
+
     // creates a new buffer using new
     // it is up to the user to delete it again
     bool getStreamBuffer( void*& pData, int& bytes );

@@ -892,7 +892,18 @@ ULONG PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, USHORT 
         case PRINTER_CAPABILITIES_COPIES:
             return 0xffff;
         case PRINTER_CAPABILITIES_COLLATECOPIES:
-            return 0;
+        {
+            // see if the PPD contains a value to set Collate to True
+            JobData aData;
+            JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
+
+            const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) ) : NULL;
+            const PPDValue* pVal = pKey ? pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "True" ) ) ) : NULL;
+
+            // PPDs don't mention the number of possible collated copies.
+            // so let's guess as many as we want ?
+            return pVal ? 0xffff : 0;
+        }
         case PRINTER_CAPABILITIES_SETORIENTATION:
             return 1;
         case PRINTER_CAPABILITIES_SETDUPLEX:
@@ -926,6 +937,7 @@ ULONG PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, USHORT 
    m_bSwallowFaxNo( false ),
    m_pGraphics( NULL ),
    m_nCopies( 1 ),
+   m_bCollate( false ),
    m_pInfoPrinter( pInfoPrinter )
 {
 }
@@ -951,7 +963,7 @@ BOOL PspSalPrinter::StartJob(
     const XubString* pFileName,
     const XubString& rJobName,
     const XubString& rAppName,
-    ULONG nCopies, BOOL /*bCollate*/,
+    ULONG nCopies, BOOL bCollate,
     ImplJobSetup* pJobSetup )
 {
     vcl_sal::PrinterUpdate::jobStarted();
@@ -960,13 +972,17 @@ BOOL PspSalPrinter::StartJob(
     m_bPdf      = false;
     m_aFileName = pFileName ? *pFileName : String();
     m_aTmpFile  = String();
-    m_nCopies       = nCopies;
+    m_nCopies   = nCopies;
+    m_bCollate  = bCollate;
 
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, m_aJobData );
     if( m_nCopies > 1 )
+    {
         // in case user did not do anything (m_nCopies=1)
         // take the default from jobsetup
         m_aJobData.m_nCopies = m_nCopies;
+        m_aJobData.setCollate( bCollate );
+    }
 
     // check wether this printer is configured as fax
     int nMode = 0;
@@ -1076,9 +1092,12 @@ SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, BOOL )
     m_pGraphics = new PspGraphics( &m_aJobData, &m_aPrinterGfx, m_bFax ? &m_aFaxNr : NULL, m_bSwallowFaxNo, m_pInfoPrinter  );
     m_pGraphics->SetLayout( 0 );
     if( m_nCopies > 1 )
+    {
         // in case user did not do anything (m_nCopies=1)
         // take the default from jobsetup
         m_aJobData.m_nCopies = m_nCopies;
+        m_aJobData.setCollate( m_nCopies > 1 && m_bCollate );
+    }
 
     m_aPrintJob.StartPage( m_aJobData );
     m_aPrinterGfx.Init( m_aPrintJob );

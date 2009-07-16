@@ -468,11 +468,16 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
             mbJobActive             = TRUE;
             i_pController->createProgressDialog();
             int nPages = i_pController->getFilteredPageCount();
-            for( int nPage = 0; nPage < nPages; nPage++ )
+            int nRepeatCount = bUserCopy ? mnCopyCount : 1;
+            for( int nIteration = 0; nIteration < nRepeatCount; nIteration++ )
             {
-                if( nPage == nPages-1 )
-                    i_pController->setLastPage( sal_True );
-                i_pController->printFilteredPage( nPage );
+                for( int nPage = 0; nPage < nPages; nPage++ )
+                {
+                    if( nPage == nPages-1 && nIteration == nRepeatCount-1 )
+                        i_pController->setLastPage( sal_True );
+                    i_pController->printFilteredPage( nPage );
+                }
+                // FIXME: duplex ?
             }
             EndJob();
 
@@ -1090,7 +1095,7 @@ void PrinterController::pushPropertiesToPrinter()
     if( pVal )
         pVal->Value >>= nCopyCount;
     sal_Bool bCollate = sal_False;
-    pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CopyCount" ) ) );
+    pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) );
     if( pVal )
         pVal->Value >>= bCollate;
     mpImplData->mpPrinter->SetCopyCount( static_cast<USHORT>(nCopyCount), bCollate );

@@ -507,7 +507,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     #endif
     maForwardBtn.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maBackwardBtn.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maJobPage.maCollateBox.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maJobPage.maCollateBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maJobPage.maSetupButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.maNupPortrait.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.maNupLandscape.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
@@ -1302,6 +1302,11 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     {
         previewBackward();
     }
+    else if( pButton == &maJobPage.maCollateBox )
+    {
+        maPController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ),
+                                 makeAny( sal_Bool(isCollate()) ) );
+    }
     else
     {
         if( pButton == &maJobPage.maSetupButton )
@@ -1335,6 +1340,8 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
     {
         maPController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CopyCount" ) ),
                                makeAny( sal_Int32(maJobPage.maCopyCountField.GetValue()) ) );
+        maPController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ),
+                               makeAny( sal_Bool(isCollate()) ) );
     }
     return 0;
 }
