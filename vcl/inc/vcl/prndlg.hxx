@@ -136,6 +136,8 @@ namespace vcl
             Image                                   maNoCollateImg;
             Image                                   maNoCollateHCImg;
 
+            long                                    mnCollateUIMode;
+
             JobTabPage( Window*, const ResId& );
             virtual ~JobTabPage();
 

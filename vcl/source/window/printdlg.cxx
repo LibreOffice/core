@@ -291,17 +291,17 @@ void PrintDialog::NUpTabPage::readFromSettings()
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     rtl::OUString aValue;
 
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_NUpPage" ) ),
+    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Rows" ) ) );
     sal_Int32 nVal = aValue.toInt32();
     maNupRowsEdt.SetValue( sal_Int64( nVal > 1 ? nVal : 1) );
 
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_NUpPage" ) ),
+    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Columns" ) ) );
     nVal = aValue.toInt32();
     maNupColEdt.SetValue( sal_Int64(nVal > 1 ? nVal : 1) );
 
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_NUpPage" ) ),
+    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Portrait" ) ) );
     if( aValue.equalsIgnoreAsciiCaseAscii( "true" ) )
         maNupPortrait.Check();
@@ -314,13 +314,13 @@ void PrintDialog::NUpTabPage::storeToSettings()
 {
     #if 0
     SettingsConfigItem* pItem = SettingsConfigItem::get();
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_NUpPage" ) ),
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Rows" ) ),
                      maNupRowsEdt.GetText() );
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_NUpPage" ) ),
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Columns" ) ),
                      maNupColEdt.GetText() );
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_NUpPage" ) ),
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Portrait" ) ),
                      rtl::OUString::createFromAscii( maNupPortrait.IsChecked() ? "true" : "false" ) );
     #endif
@@ -340,6 +340,7 @@ PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
     , maCollateHCImg( VclResId( SV_PRINT_COLLATE_HC_IMG ) )
     , maNoCollateImg( VclResId( SV_PRINT_NOCOLLATE_IMG ) )
     , maNoCollateHCImg( VclResId( SV_PRINT_NOCOLLATE_HC_IMG ) )
+    , mnCollateUIMode( 0 )
 {
     FreeResource();
     maPrinters.SMHID2( "JobPage", "PrinterList" );
@@ -361,34 +362,46 @@ void PrintDialog::JobTabPage::readFromSettings()
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     rtl::OUString aValue;
 
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_JobPage" ) ),
+    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToFile" ) ) );
     maToFileBox.Check( aValue.equalsIgnoreAsciiCaseAscii( "true" ) );
 
     #if 0
     // do not actually make copy count persistent
     // the assumption is that this would lead to a lot of unwanted copies
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_JobPage" ) ),
+    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CopyCount" ) ) );
     sal_Int32 nVal = aValue.toInt32();
     maCopyCountField.SetValue( sal_Int64(nVal > 1 ? nVal : 1) );
     #endif
 
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_JobPage" ) ),
-                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) );
-    maCollateBox.Check( aValue.equalsIgnoreAsciiCaseAscii( "true" ) );
+    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
+                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CollateBox" ) ) );
+    if( aValue.equalsIgnoreAsciiCaseAscii( "alwaysoff" ) )
+    {
+        mnCollateUIMode = 1;
+        maCollateBox.Check( FALSE );
+        maCollateBox.Enable( FALSE );
+    }
+    else
+    {
+        mnCollateUIMode = 0;
+        aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
+                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) );
+        maCollateBox.Check( aValue.equalsIgnoreAsciiCaseAscii( "true" ) );
+    }
 }
 
 void PrintDialog::JobTabPage::storeToSettings()
 {
     SettingsConfigItem* pItem = SettingsConfigItem::get();
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_JobPage" ) ),
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToFile" ) ),
                      rtl::OUString::createFromAscii( maToFileBox.IsChecked() ? "true" : "false" ) );
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_JobPage" ) ),
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CopyCount" ) ),
                      maCopyCountField.GetText() );
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_JobPage" ) ),
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ),
                      rtl::OUString::createFromAscii( maCollateBox.IsChecked() ? "true" : "false" ) );
 }
@@ -1096,7 +1109,7 @@ void PrintDialog::setupOptionalUI()
 void PrintDialog::checkControlDependencies()
 {
     if( maJobPage.maCopyCountField.GetValue() > 1 )
-        maJobPage.maCollateBox.Enable( TRUE );
+        maJobPage.maCollateBox.Enable( maJobPage.mnCollateUIMode == 0 );
     else
         maJobPage.maCollateBox.Enable( FALSE );
 
