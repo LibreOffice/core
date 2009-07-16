@@ -2146,7 +2146,9 @@ void SwTabFrm::MakeAll()
 
         if ( !bValidSize || !bValidPrtArea )
         {
-            const BOOL bOptLower = (Frm().*fnRect->fnGetHeight)() == 0;
+            // HB #i101593# no optimization as it leeds to not layouting certain nested tables
+            // const BOOL bOptLower = (Frm().*fnRect->fnGetHeight)() == 0;
+            const BOOL bOptLower = FALSE;
 
             const long nOldPrtWidth = (Prt().*fnRect->fnGetWidth)();
             const long nOldFrmWidth = (Frm().*fnRect->fnGetWidth)();
