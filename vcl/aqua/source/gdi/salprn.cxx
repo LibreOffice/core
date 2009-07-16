@@ -127,20 +127,27 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
             NSRect aImageRect = [mpPrintInfo imageablePageBounds];
             if( mePageOrientation == ORIENTATION_PORTRAIT )
             {
+                // move mirrored CTM back into paper
                 double dX = 0, dY = aPaperSize.height;
+                // move CTM to reflect imageable area
                 dX += aImageRect.origin.x;
                 dY -= aPaperSize.height - aImageRect.size.height - aImageRect.origin.y;
                 CGContextTranslateCTM( i_rContext, dX + mnStartPageOffsetX, dY - mnStartPageOffsetY );
+                // scale to be top/down and reflect our "virtual" DPI
                 CGContextScaleCTM( i_rContext, 0.1, -0.1 );
             }
             else
             {
+                // move CTM to reflect imageable area
+                double dX = aImageRect.origin.x, dY = aPaperSize.height - aImageRect.size.height - aImageRect.origin.y;
+                CGContextTranslateCTM( i_rContext, -dX, -dY );
+                // turn by 90 degree
                 CGContextRotateCTM( i_rContext, M_PI/2 );
-                double dX = aPaperSize.height, dY = -aPaperSize.width;
-                dY += aPaperSize.height - aImageRect.size.height - aImageRect.origin.y;
-                dX -= aImageRect.origin.x;
-
+                // move turned CTM back into paper
+                dX = aPaperSize.height;
+                dY = -aPaperSize.width;
                 CGContextTranslateCTM( i_rContext, dX + mnStartPageOffsetY, dY - mnStartPageOffsetX );
+                // scale to be top/down and reflect our "virtual" DPI
                 CGContextScaleCTM( i_rContext, -0.1, 0.1 );
             }
             mpGraphics->SetPrinterGraphics( i_rContext, nDPIX, nDPIY, 1.0 );
