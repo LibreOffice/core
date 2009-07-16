@@ -2898,6 +2898,15 @@ static USHORT aPasteSpecialIds[] =
     0
 };
 
+
+int SwTransferable::PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& rData )
+{
+    // Plain text == unformatted
+    return SwTransferable::PasteFormat( rSh, rData, SOT_FORMAT_STRING );
+}
+
+// -----------------------------------------------------------------------
+
 int SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData, ULONG& rFormatUsed )
 {
     int nRet = 0;

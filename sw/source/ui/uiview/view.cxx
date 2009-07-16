@@ -672,6 +672,7 @@ void SwView::_CheckReadonlyState()
             SID_DELETE,                 FN_BACKSPACE,               FN_SHIFT_BACKSPACE,
             SID_UNDO,
             SID_REDO,                   SID_REPEAT,                 SID_PASTE,
+            SID_PASTE_UNFORMATTED,
             FN_PASTESPECIAL,            SID_SBA_BRW_INSERT,
             SID_BACKGROUND_COLOR,       FN_INSERT_BOOKMARK,
             SID_CHARMAP,                FN_INSERT_SOFT_HYPHEN,

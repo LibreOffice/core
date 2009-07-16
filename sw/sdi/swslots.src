@@ -850,6 +850,10 @@ SfxSlotInfo FN_PASTESPECIAL
 {
     Slotname [ en-US ] = "Paste Special";
 };
+SfxSlotInfo FN_PASTEUNFORMATTED
+{
+    Slotname [ en-US ] = "Paste Unformatted Text";
+};
 SfxSlotInfo FN_POSTIT
 {
     Slotname [ en-US ] = "Insert Note";
