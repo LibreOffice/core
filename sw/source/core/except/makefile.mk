@@ -49,7 +49,7 @@ PRJPCH=
 
 CXXFILES =
 
-.IF "DBG_UTIL"!=""
+.IF "$(DBG_UTIL)"!=""
 CXXFILES += \
         errhdl.cxx			\
         dbgloop.cxx

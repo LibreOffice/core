@@ -47,13 +47,6 @@ CDEFS+=-Dmydebug
 
 # --- Files --------------------------------------------------------
 
-.IF "DBG_UTIL" != ""
-CXXFILES += \
-        txtio.cxx
-.ENDIF
-
-
-
 SLOFILES =  \
                 $(SLO)$/atrstck.obj \
                 $(SLO)$/EnhancedPDFExportHelper.obj \
@@ -97,7 +90,7 @@ SLOFILES =  \
         $(SLO)$/SwGrammarMarkUp.obj \
         $(SLO)$/wrong.obj
 
-.IF "$DBG_UTIL" != ""
+.IF "$(DBG_UTIL)"!=""
 SLOFILES +=  \
         $(SLO)$/txtio.obj
 .ENDIF
