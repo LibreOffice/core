@@ -294,6 +294,12 @@ namespace sdr { namespace contact {
         if ( !_rControl.is() )
             return;
 
+    #if OSL_DEBUG_LEVEL > 0
+        ::basegfx::B2DTuple aViewScale, aViewTranslate;
+        double nViewRotate(0), nViewShearX(0);
+        _rViewTransformation.decompose( aViewScale, aViewTranslate, nViewRotate, nViewShearX );
+    #endif
+
         // transform the logic bound rect, using the view transformation, to pixel coordinates
         ::basegfx::B2DPoint aTopLeft( _rLogicBoundingRect.Left(), _rLogicBoundingRect.Top() );
         aTopLeft *= _rViewTransformation;
@@ -514,7 +520,7 @@ namespace sdr { namespace contact {
 
             Failure of this method will be reported via an assertion in a non-product version.
         */
-        bool    ensureControl();
+        bool    ensureControl( const basegfx::B2DHomMatrix* _pInitialViewTransformationOrNULL );
 
         /** returns our XControl, if it already has been created
 
@@ -565,6 +571,8 @@ namespace sdr { namespace contact {
                     IPageViewAccess& _rPageView,
                     const OutputDevice& _rDevice,
                     const SdrUnoObj& _rUnoObject,
+                    const basegfx::B2DHomMatrix& _rInitialViewTransformation,
+                    const basegfx::B2DHomMatrix& _rInitialZoomNormalization,
                     ControlHolder& _out_rControl
                 );
 
@@ -739,7 +747,11 @@ namespace sdr { namespace contact {
 
         /** ensures that we have a control for the given PageView/OutputDevice
         */
-        bool impl_ensureControl_nothrow( IPageViewAccess& _rPageView, const OutputDevice& _rDevice );
+        bool impl_ensureControl_nothrow(
+                IPageViewAccess& _rPageView,
+                const OutputDevice& _rDevice,
+                const basegfx::B2DHomMatrix& _rInitialViewTransformation
+             );
 
         /** retrieves the device which a PageView belongs to, starting from its ObjectContactOfPageView
 
@@ -910,8 +922,8 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void ViewObjectContactOfUnoControl_Impl::positionAndZoomControl( const basegfx::B2DHomMatrix& _rViewTransformation ) const
     {
-        OSL_PRECOND( ( m_pOutputDeviceForWindow != NULL ) && m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no output device or no control!" );
-        if ( ( m_pOutputDeviceForWindow == NULL ) || !m_aControl.is() )
+        OSL_PRECOND( m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no output device or no control!" );
+        if ( !m_aControl.is() )
             return;
 
         try
@@ -931,7 +943,7 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    bool ViewObjectContactOfUnoControl_Impl::ensureControl()
+    bool ViewObjectContactOfUnoControl_Impl::ensureControl( const basegfx::B2DHomMatrix* _pInitialViewTarnsformationOrNULL )
     {
         OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::ensureControl: already disposed()" );
         if ( impl_isDisposed_nofail() )
@@ -943,9 +955,11 @@ namespace sdr { namespace contact {
             return false;
 
         SdrPageViewAccess aPVAccess( pPageViewContact->GetPageWindow().GetPageView() );
+        const OutputDevice& rDevice( imp_getPageViewDevice_nothrow( *pPageViewContact ) );
         return impl_ensureControl_nothrow(
             aPVAccess,
-            imp_getPageViewDevice_nothrow( *pPageViewContact )
+            rDevice,
+            _pInitialViewTarnsformationOrNULL ? *_pInitialViewTarnsformationOrNULL : rDevice.GetViewTransformation()
         );
     }
 
@@ -972,7 +986,8 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    bool ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow( IPageViewAccess& _rPageView, const OutputDevice& _rDevice )
+    bool ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow( IPageViewAccess& _rPageView, const OutputDevice& _rDevice,
+        const basegfx::B2DHomMatrix& _rInitialViewTransformation )
     {
         if ( m_aControl.is() )
         {
@@ -997,7 +1012,7 @@ namespace sdr { namespace contact {
             return false;
 
         ControlHolder aControl;
-        if ( !createControlForDevice( _rPageView, _rDevice, *pUnoObject, aControl ) )
+        if ( !createControlForDevice( _rPageView, _rDevice, *pUnoObject, _rInitialViewTransformation, m_aZoomLevelNormalization, aControl ) )
             return false;
 
         m_pOutputDeviceForWindow = &_rDevice;
@@ -1032,7 +1047,8 @@ namespace sdr { namespace contact {
 
     //--------------------------------------------------------------------
     bool ViewObjectContactOfUnoControl_Impl::createControlForDevice( IPageViewAccess& _rPageView,
-        const OutputDevice& _rDevice, const SdrUnoObj& _rUnoObject, ControlHolder& _out_rControl )
+        const OutputDevice& _rDevice, const SdrUnoObj& _rUnoObject, const basegfx::B2DHomMatrix& _rInitialViewTransformation,
+        const basegfx::B2DHomMatrix& _rInitialZoomNormalization, ControlHolder& _out_rControl )
     {
         _out_rControl.clear();
 
@@ -1056,8 +1072,8 @@ namespace sdr { namespace contact {
             UnoControlContactHelper::adjustControlGeometry_throw(
                 _out_rControl,
                 _rUnoObject.GetLogicRect(),
-                _rDevice.GetViewTransformation(),
-                _rDevice.GetInverseViewTransformation()
+                _rInitialViewTransformation,
+                _rInitialZoomNormalization
             );
 
             // #107049# set design mode before peer is created,
@@ -1492,8 +1508,7 @@ namespace sdr { namespace contact {
     {
         // force control here to make it a VCL ChildWindow. Will be fetched
         // and used below by getExistentControl()
-        m_pVOCImpl->ensureControl();
-        m_pVOCImpl->positionAndZoomControl( _rViewInformation.getObjectToViewTransformation() );
+        m_pVOCImpl->ensureControl( &_rViewInformation.getObjectToViewTransformation() );
 
         // get needed data
         const ViewContactOfUnoControl& rViewContactOfUnoControl( m_pVOCImpl->getViewContact() );
@@ -1551,7 +1566,7 @@ namespace sdr { namespace contact {
     Reference< XControl > ViewObjectContactOfUnoControl::getControl()
     {
         VOCGuard aGuard( *m_pImpl );
-        m_pImpl->ensureControl();
+        m_pImpl->ensureControl( NULL );
         return m_pImpl->getExistentControl().getControl();
     }
 
@@ -1562,7 +1577,8 @@ namespace sdr { namespace contact {
         ControlHolder aControl;
 
         InvisibleControlViewAccess aSimulatePageView( _inout_ControlContainer );
-        OSL_VERIFY( ViewObjectContactOfUnoControl_Impl::createControlForDevice( aSimulatePageView, _rWindow, _rUnoObject, aControl ) );
+        OSL_VERIFY( ViewObjectContactOfUnoControl_Impl::createControlForDevice( aSimulatePageView, _rWindow, _rUnoObject,
+            _rWindow.GetViewTransformation(), _rWindow.GetInverseViewTransformation(), aControl ) );
         return aControl.getControl();
     }
 
