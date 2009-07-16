@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Testing verbosity and functionality of the undo history
 '*

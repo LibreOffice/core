@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : helge.delfs@Sun.Com
+'* owner : oliver.craemer@sun.com
 '*
 '* short description : Resource Test for the Chart Data Dialogue in Impress.
 '*

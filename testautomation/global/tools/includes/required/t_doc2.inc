@@ -286,6 +286,10 @@ function fSelectFirstOLE() as integer
         end select
         Kontext "NavigatorWriter"
         if NavigatorWriter.Exists(10) then
+			' Check if all content is visible
+			if Auswahlliste.GetItemCount < 2 then
+				Inhaltsansicht.Click
+			end if
             'Select first OLE in list
             Auswahlliste.TypeKeys "<HOME>"
             for iIndex = 1 to 13

@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : oliver.craemer@sun.com
 '*
 '* short description : Level 1 functional test for Chart2 Wizard
 '*

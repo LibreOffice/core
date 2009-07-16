@@ -30,7 +30,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description :  Testcases for the Format-Menu
 '*
@@ -764,7 +764,10 @@ Warnlog "#i102752# - tFormatAnchor outcommented due to bug."
 goto endsub
 
     PrintLog "- Format / Anchor"
-
+	
+	Warnlog "#i102752#Writer crashes if you change the anchor of a drawing object to page"
+	goto endsub
+	
     printlog " Open new document"
     Call hNewDocument
     printlog " Insert a graphic from file '..\writer\required\input\graphics\jolink.jpg'"
@@ -897,8 +900,9 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAnchorArea
-Warnlog "#i102752# - tFormatAnchorArea outcommented due to bug."
-goto endsub
+
+	Warnlog "#i102752#Writer crashes if you change the anchor of a drawing object to page"
+	goto endsub
 
     PrintLog "- Format / Anchor drawing objects"
     if gApplication = "HTML" then

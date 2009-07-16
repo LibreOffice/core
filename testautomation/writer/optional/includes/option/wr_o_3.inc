@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Writer options tests
 '*
@@ -657,6 +657,7 @@ testcase tToolsOptionsWriterInsert
     Call hNewDocument
 
     printlog ("'/// - check if all UnChecked ///")
+	Call hNewDocument
     ToolsOptions
     Call hToolsOptions ( "WRITER" , "Table" )
 

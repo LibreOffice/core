@@ -282,11 +282,7 @@ sub SaveMeasurementSetFirst
     elseIf (gApplication = "CALC") then
         sApplication = "CALC"
     endif
-<<<<<<< .working
-    printlog "   '/// - save states ///'"
-=======
     printlog  " - save states "
->>>>>>> .merge-right.r273717
     ToolsOptions
     hToolsOptions (sApplication,"General")
     ReferenceOld = Masseinheit.GetSelText
@@ -340,11 +336,7 @@ sub ResetMeasurement
     elseIf (gApplication = "CALC") then
         sApplication = "CALC"
     endif
-<<<<<<< .working
-    printlog "'/// - Reset states back to what they were before ///'"
-=======
     printlog " - Reset states back to what they were before "
->>>>>>> .merge-right.r273717
     ToolsOptions
     hToolsOptions (sApplication,"General")
     if Masseinheit.GetSelText <> ReferenceOld then 'find the right one.

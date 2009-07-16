@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* Owner : fredrik.haegg@sun.com
+'* Owner : helge.delfs@sun.com
 '*
 '* short description :
 '*

@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Test of textframe - 3
 '*

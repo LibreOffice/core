@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description :  Testcases for the Format-Menu.
 '*
@@ -886,8 +886,9 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAlignmentArea
-Warnlog "#i102752# - tFormatAlignmentArea outcommented due to bug."
-goto endsub
+
+	Warnlog "#i102752#Writer crashes if you change the anchor of a drawing object to page"
+	goto endsub
 
     PrintLog "- Format / Alignment drawing objects"
     if gApplication = "HTML" then

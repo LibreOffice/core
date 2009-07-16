@@ -30,7 +30,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description:  Testcases for the Toolbar.
 '*
@@ -446,8 +446,9 @@ endcase
 '-----------------------------------------------------------
 
 testcase tZORest
-Warnlog "#i102752# - tZORest outcommented due to bug."
-goto endsub
+
+	Warnlog "#i102752#Writer crashes if you change the anchor of a drawing object to page"
+	goto endsub
 
     printlog "- Draw Functions-Objectbar: Rest"
     if gApplication = "HTML" then
