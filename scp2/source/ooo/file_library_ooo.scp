@@ -1547,11 +1547,7 @@ STD_LIB_FILE( gid_File_Lib_BaseGfx, basegfx )
 File gid_File_Lib_Vcl
     Name = LIBNAME(vcl);
     TXT_FILE_BODY;
-<<<<<<< .working
     Styles = (PACKED,UNO_COMPONENT,PATCH);
-=======
-    Styles = (PACKED,PATCH,UNO_COMPONENT);
->>>>>>> .merge-right.r273775
     Dir = gid_Dir_Program;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
