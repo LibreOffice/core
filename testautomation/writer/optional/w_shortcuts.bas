@@ -51,19 +51,20 @@ sub main
     printlog Chr(13) + "******* Writer - Shortcut - Test *******"
 
     Call hStatusIn ( "writer", "w_shortcuts.bas","Writer Shortcut-Test" )
-        Call tShortcutGlobalNew
-        Call tShortcutGlobalOpen
-        Call tShortcutGlobalSave
-        Call tShortcutGlobalSaveAs
-        Call tShortcutSelectAll
-        Call tShortcutFindAndReplace
-        Call tShortcutBold
-        Call tShortcutItalic
-        Call tShortcutUnderline
-        Call tShortcutDoubleUnderline
-        Call tShortcutAlign
-        Call tShortcutSuperscript
-        Call tShortcutSubscript
+	Call tShortcutGlobalNew
+	Call tShortcutGlobalOpen
+	Call tShortcutGlobalSave
+	Call tShortcutGlobalSaveAs
+	Call tShortcutSelectAll
+	Call tShortcutFindAndReplace
+	Call tShortcutBold
+	Call tShortcutItalic
+	Call tShortcutUnderline
+	Call tShortcutDoubleUnderline
+	Call tShortcutAlign
+	Call tShortcutSuperscript
+	Call tShortcutSubscript
+	Call tShortcutPasteUnformattedText
     Call hStatusOut
 
     Printlog Chr(13) + "End of Shortcut - Test :"
