@@ -32,13 +32,18 @@
 #include "precompiled_sw.hxx"
 
 
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Any.hxx>
+
 #include <hintids.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/objsh.hxx>
+#include <tools/resary.hxx>
+#include <tools/debug.hxx>
+#include <rtl/ustring.hxx>
+#include <toolkit/awt/vclxdevice.hxx>
+#include <toolkit/awt/vclxdevice.hxx>
 
-#ifndef _INTN_HXX //autogen
-// #include <tools/intn.hxx>
-#endif
 #include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/prnmon.hxx>
@@ -46,6 +51,7 @@
 #include <svx/pbinitem.hxx>
 #include <svx/svdview.hxx>
 #include <unotools/localedatawrapper.hxx>
+
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
 #include <fmtfsize.hxx>
@@ -76,10 +82,14 @@
 #include <txtfrm.hxx>       // MinPrtLine
 #include <viscrs.hxx>       // SwShellCrsr
 #include <fmtpdsc.hxx>      // SwFmtPageDesc
+#include <globals.hrc>
 
 #define JOBSET_ERR_DEFAULT          0
 #define JOBSET_ERR_ERROR            1
 #define JOBSET_ERR_ISSTARTET        2
+
+
+using namespace ::com::sun::star;
 
 //--------------------------------------------------------------------
 //Klasse zum Puffern von Paints
@@ -201,6 +211,7 @@ void SwPaintQueue::Remove( ViewShell *pSh )
     }
 }
 
+/*****************************************************************************/
 
 const XubString& SwPrtOptions::MakeNextJobName()
 {
@@ -213,6 +224,205 @@ const XubString& SwPrtOptions::MakeNextJobName()
 
     return sJobName += XubString::CreateFromInt32( ++nJobNo );
 }
+
+/*****************************************************************************/
+
+SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
+    mpLast( NULL )
+{
+    ResStringArray aLocalizedStrings( SW_RES( STR_PRINTOPTUI ) );
+
+    DBG_ASSERT( aLocalizedStrings.Count() >= 46, "resource incomplete" );
+    if( aLocalizedStrings.Count() < 46 ) // bad resource ?
+        return;
+
+    // create sequence of print UI options
+    // (5 options are not available for Writer-Web)
+    const int nNumProps = bWeb? 17 : 22;
+    m_aUIProperties.realloc( nNumProps );
+    int nIdx = 0;
+
+    // create Section for Contents (results in an extra tab page in dialog)
+    m_aUIProperties[ nIdx++ ].Value = getGroupControlOpt( aLocalizedStrings.GetString( 0 ), rtl::OUString() );
+
+    // create a bool option for graphics
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 1 ),
+                                                  aLocalizedStrings.GetString( 2 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintGraphics" ) ),
+                                                  sal_True );
+    // create a bool option for tables
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 3 ),
+                                                  aLocalizedStrings.GetString( 4 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintTables" ) ),
+                                                  sal_True );
+
+    if (!bWeb)
+    {
+        // create a bool option for drawings
+        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 5 ),
+                                                  aLocalizedStrings.GetString( 6 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDrawings" ) ),
+                                                  sal_True );
+    }
+
+    // create a bool option for controls
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 7 ),
+                                                  aLocalizedStrings.GetString( 8 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintControls" ) ),
+                                                  sal_True );
+
+    // create a bool option for background
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 9 ),
+                                                  aLocalizedStrings.GetString( 10 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBackground" ) ),
+                                                  sal_True );
+
+    // create a bool option for black
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 11 ),
+                                                  aLocalizedStrings.GetString( 12 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBlack" ) ),
+                                                  sal_False );
+
+    if (!bWeb)
+    {
+        // create a bool option for hidden text
+        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 13 ),
+                                                  aLocalizedStrings.GetString( 14 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintHiddenText" ) ),
+                                                  sal_False );
+
+        // create a bool option for place holder
+        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 15 ),
+                                                  aLocalizedStrings.GetString( 16 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintPlaceholder" ) ),
+                                                  sal_False );
+    }
+
+    // create a list box for notes content
+    uno::Sequence< rtl::OUString > aChoices( 4 );
+    aChoices[0] = aLocalizedStrings.GetString( 19 );
+    aChoices[1] = aLocalizedStrings.GetString( 20 );
+    aChoices[2] = aLocalizedStrings.GetString( 21 );
+    aChoices[3] = aLocalizedStrings.GetString( 22 );
+    uno::Sequence< rtl::OUString > aHelpText( 2 );
+    aHelpText[0] = aLocalizedStrings.GetString( 18 );
+    aHelpText[1] = aLocalizedStrings.GetString( 18 );
+    m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( aLocalizedStrings.GetString( 17 ),
+                                                    aHelpText,
+                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintNotes" ) ),
+                                                    aChoices,
+                                                    0,
+                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) )
+                                                    );
+
+    // create Section for Page settings (results in an extra tab page in dialog)
+    m_aUIProperties[ nIdx++ ].Value = getGroupControlOpt( aLocalizedStrings.GetString( 23 ), rtl::OUString() );
+
+    if (!bWeb)
+    {
+        // create a bool option for left pages
+        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 24 ),
+                                                   aLocalizedStrings.GetString( 25 ),
+                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintLeftPages" ) ),
+                                                   sal_True );
+
+        // create a bool option for right pages
+        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 26 ),
+                                                   aLocalizedStrings.GetString( 27 ),
+                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRightPages" ) ),
+                                                   sal_True );
+    }
+
+    // create a bool option for reversed order (solve in vcl ?)
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 28 ),
+                                                   aLocalizedStrings.GetString( 29 ),
+                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintReverseOrder" ) ),
+                                                   sal_False );
+
+    // create a bool option for brochure
+    rtl::OUString aBrochurePropertyName( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochure" ) );
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 30 ),
+                                                   aLocalizedStrings.GetString( 31 ),
+                                                   aBrochurePropertyName,
+                                                   sal_False );
+
+    // create a bool option for brochure RTL dependent on brochure
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 32 ),
+                                                   aLocalizedStrings.GetString( 33 ),
+                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochureRTL" ) ),
+                                                   sal_False,
+                                                   &aBrochurePropertyName,
+                                                   -1,
+                                                   sal_True
+                                                   );
+
+    // create subgroup for misc options
+    m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 34 ) ), rtl::OUString() );
+
+    // create a bool option for blank pages
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 35 ),
+                                                   aLocalizedStrings.GetString( 36 ),
+                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintEmptyPages" ) ),
+                                                   sal_True );
+
+    // create a bool option for paper tray
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 37 ),
+                                                   aLocalizedStrings.GetString( 38 ),
+                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PaperTray" ) ),
+                                                   sal_False );
+
+    // print range selection
+    m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 39 ) ), rtl::OUString(), true, true );
+
+    // create a choice for the content to create
+    rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
+    aChoices.realloc( 3 );
+    aHelpText.realloc( 3 );
+    aChoices[0] = aLocalizedStrings.GetString( 40 );
+    aHelpText[0] = aLocalizedStrings.GetString( 41 );
+    aChoices[1] = aLocalizedStrings.GetString( 42 );
+    aHelpText[1] = aLocalizedStrings.GetString( 43 );
+    aChoices[2] = aLocalizedStrings.GetString( 44 );
+    aHelpText[2] = aLocalizedStrings.GetString( 45 );
+    m_aUIProperties[nIdx++].Value = getChoiceControlOpt( rtl::OUString(),
+                                                         aHelpText,
+                                                         aPrintRangeName,
+                                                         aChoices,
+                                                         0 );
+    // create a an Edit dependent on "Pages" selected
+    m_aUIProperties[nIdx++].Value = getEditControlOpt( rtl::OUString(),
+                                                       rtl::OUString(),
+                                                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
+                                                       rtl::OUString(),
+                                                       &aPrintRangeName, 1, sal_True
+                                                     );
+
+
+    DBG_ASSERT( nIdx == nNumProps, "number of added properties is not as expected" );
+}
+
+
+bool SwPrintUIOptions::processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp )
+{
+    bool bChanged = processProperties( i_rNewProp );
+
+    uno::Reference< awt::XDevice >  xRenderDevice;
+    uno::Any aVal( getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) ) );
+    aVal >>= xRenderDevice;
+
+    OutputDevice* pOut = 0;
+    if (xRenderDevice.is())
+    {
+        VCLXDevice*     pDevice = VCLXDevice::GetImplementation( xRenderDevice );
+        pOut = pDevice ? pDevice->GetOutputDevice() : 0;
+    }
+    bChanged = bChanged || (pOut != mpLast);
+    if( pOut )
+        mpLast = pOut;
+
+    return bChanged;
+}
+
 
 /******************************************************************************
  *  Methode     :   void SetSwVisArea( ViewShell *pSh, Point aPrtOffset, ...
@@ -228,8 +438,12 @@ void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, BOOL bPDFExport )
     pSh->Imp()->SetFirstVisPageInvalid();
     Point aPt( rRect.Pos() );
 
-    if (!bPDFExport)
-        aPt += pSh->aPrtOffst;
+    // calculate an offset for the rectangle of the n-th page to
+    // move the start point of the output operation to a position
+    // such that in the output device all pages will be painted
+    // at the same position
+// TLPDF    if (!bPDFExport)
+// TLPDF        aPt += pSh->aPrtOffst;
     aPt.X() = -aPt.X(); aPt.Y() = -aPt.Y();
 
 // TLPDF   OutputDevice *pOut = bPDFExport ?
@@ -428,13 +642,13 @@ void lcl_PrintPostIts( ViewShell* pPrtShell, const XubString& rJobName,
         pPrn->EndPage();
         pPage = bReverse ? pPage->GetPrev() : pPage->GetNext();
     }
-    #else
-    (void)pPrtShell;
-    (void)rJobName;
-    (void)rStartJob;
-    (void)rJobStartError;
-    (void)bReverse;
-    #endif
+#else
+(void)pPrtShell;
+(void)rJobName;
+(void)rStartJob;
+(void)rJobStartError;
+(void)bReverse;
+#endif
 }
 
 /******************************************************************************
@@ -543,7 +757,7 @@ void ViewShell::InitPrt( /*Printer *pPrt,*/ OutputDevice *pOutDev ) /* TLPDF */
     OutputDevice *pTmpDev = pOutDev; // TLPDF pPDFOut ? pPDFOut : (OutputDevice *) pPrt;
     if ( pTmpDev )
     {
-// TLPDRF        aPrtOffst = pPrt ? pPrt->GetPageOffset() : Point();
+// TLPDF        aPrtOffst = pPrt ? pPrt->GetPageOffset() : Point();
         aPrtOffst = Point();
 
         aPrtOffst += pTmpDev->GetMapMode().GetOrigin();
@@ -944,16 +1158,16 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 BOOL ViewShell::Prt(
     OutputDevice* pOutDev,
     SwPrtOptions& rOptions,
+    const SwPrintUIOptions &rPrintUIOptions, /* TLPDF keep this or the above? */
+    sal_Int32 nRenderer,
     SfxProgress* pProgress, /* TLPDF superfluous ??? */
     bool bIsPDFExport )
 {
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //Immer die Druckroutine in viewpg.cxx (fuer Seitenvorschau) mitpflegen!!
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// TLPDF    ASSERT( bIsPDFExport || pProgress, "Printing without progress bar!" )
 
     BOOL bStartJob = FALSE;
-
     //! Note: Since for PDF export of (multi-)selection a temporary
     //! document is created that contains only the selects parts,
     //! and thus that document is to printed in whole the,
@@ -966,6 +1180,10 @@ BOOL ViewShell::Prt(
     if ( !aMulti.GetSelectCount() )
         return bStartJob;
 
+    // save settings of OutputDevice (should be done always now since the
+    // output device is now provided by a call from outside the Writer)
+    pOutDev->Push();
+
     Range aPages( aMulti.FirstSelected(), aMulti.LastSelected() );
     if ( aPages.Max() > USHRT_MAX )
         aPages.Max() = USHRT_MAX;
@@ -976,32 +1194,12 @@ BOOL ViewShell::Prt(
             "MinSeite groesser MaxSeite." );
 
 // TLPDF
-    ASSERT( aPages.Min() == aPages.Max(), "Min page should be equal to Max page now" ); /* TL PDF */
+    ASSERT( aPages.Min() == aPages.Max(), "Min page should be equal to Max page now" ); /* TLPDF */
 // TLPDF TODO: clean-up aPage.Min/Max which should be identical now
 
-#ifdef TL_NOT_NOW /*TLPDF*/
-    Printer* pPrt = 0;   //!! will be 0 for PDF export !!    /*TLPDF*/
-#endif // TL_NOT_NOW /*TLPDF*/
-    if (bIsPDFExport)
-        pOutDev->Push();
-    else
-    {
-#ifdef TL_NOT_NOW /*TLPDF*/
-//        pOutDev = dynamic_cast< Printer* >(pOutDev);
-        DBG_ASSERT( pOutDev, "printer missing" );
-        if( !pOutDev || !pOutDev->GetName().Len() )
-        {
-            ASSERT( FALSE, "Drucken ohne Drucker?" );
-            return bStartJob;
-        }
-
-        if( !rOptions.GetJobName().Len() && !pOutDev->IsJobActive() )
-            return bStartJob;
-#endif // TL_NOT_NOW /*TLPDF*/
-    }
 
     // Einstellungen am Drucker merken
-//    SwPrtOptSave aPrtSave( pOutDev );      /*TLPDF ???*/
+//    SwPrtOptSave aPrtSave( pOutDev );      /* TLPDF wo dann heutzutage ??? */
 
     // eine neue Shell fuer den Printer erzeugen
     ViewShell *pShell;
@@ -1046,14 +1244,6 @@ BOOL ViewShell::Prt(
 
     SET_CURR_SHELL( pShell );
 
-#ifdef TL_NOT_NOW  /*TLPDF*/
-    if ( pProgress )
-    {
-        Link aLnk = LINK(pShell->Imp(), SwViewImp, SetStopOutDev);
-        ((SfxPrintProgress *)pProgress)->SetCancelHdl(aLnk);
-    }
-#endif // TL_NOT_NOW  /*TLPDF*/
-
     //JP 01.02.99: das ReadOnly Flag wird NIE mitkopiert; Bug 61335
     if( pOpt->IsReadonly() )
         pShell->pOpt->SetReadonly( TRUE );
@@ -1065,27 +1255,27 @@ BOOL ViewShell::Prt(
 
     XubString* pStr = 0;
     ULONG nMergeAct = rOptions.nMergeAct, nMergeCnt = rOptions.nMergeCnt;
-    if ( pProgress )
-    {
-        if( nMergeAct )
-        {
-            pStr = new SW_RESSTR(STR_STATSTR_LETTER);
-            *pStr += ' ';
-            *pStr += XubString::CreateFromInt64( nMergeAct );
-            if( nMergeCnt )
-            {
-                *pStr += '/';
-                *pStr += XubString::CreateFromInt64( nMergeCnt );
-            }
-        }
-        else
-        {
-            ++nMergeAct;
-        }
-    }
 
-    // Seiten fuers Drucken formatieren
-    pShell->CalcPagesForPrint( (USHORT)aPages.Max(), pProgress, pStr,
+
+/* TLPDF neu: start */
+#if OSL_DEBUG_LEVEL > 1
+    DBG_ASSERT( 0 <= nRenderer && nRenderer <= rPrintUIOptions.GetPagesToPrint().size(),
+            "nRenderer out of bounds");
+#endif
+    const sal_Int32 nPage = rPrintUIOptions.GetPagesToPrint()[ nRenderer ]; /* TLPDF */
+#if OSL_DEBUG_LEVEL > 1
+    DBG_ASSERT( 0 <= nPage && nPage <= rPrintUIOptions.GetValidStartFrms().size(),
+            "nPage out of bounds");
+#endif
+    const SwPrintUIOptions::ValidStartFramesMap_t &rFrms = rPrintUIOptions.GetValidStartFrms();
+    SwPrintUIOptions::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( nPage ) );
+    DBG_ASSERT( aIt != rFrms.end(), "failed to find start frame" );
+    const SwPageFrm *pStPage = aIt->second;
+/* TLPDF neu: end */
+
+
+    // benötigte Seiten fuers Drucken formatieren
+    pShell->CalcPagesForPrint( (USHORT)nPage, pProgress, pStr,
                                 nMergeAct, nMergeCnt );
 
     // Some field types, can require a valid layout
@@ -1106,84 +1296,19 @@ BOOL ViewShell::Prt(
         BOOL bStop = FALSE;
         int nJobStartError = JOBSET_ERR_DEFAULT;
 
-// TLPDF       USHORT nCopyCnt = rOptions.bCollate ? rOptions.nCopyCount : 1;
-
-// TLPDF       USHORT nPrintCount = 1;
         XubString sJobName( rOptions.GetJobName() );
-
-// TLPDF    the copy count is now handled by the printer itself...
-// TLPDF       for ( USHORT nCnt = 0; !bStop && nCnt < nCopyCnt; nCnt++ )
-// TLPDF        {
-            const SwPageFrm *pStPage  = (SwPageFrm*)pShell->GetLayout()->Lower();
-            const SwFrm     *pEndPage = pStPage;
-
-            USHORT nFirstPageNo = 0;
-            USHORT nLastPageNo  = 0;
-            USHORT nPageNo      = 1;
-#ifdef TL_NOT_NOW  /*TLPDF*/
-            if (pOutDev)
-            {
-                if( rOptions.IsPrintSingleJobs() && sJobName.Len() &&
-                    ( bStartJob || rOptions.bJobStartet ) )
-                {
-                    pOutDev->EndJob();
-                    bStartJob = FALSE;
-                    rOptions.bJobStartet = TRUE;
-
-                    // Reschedule statt Yield, da Yield keine Events abarbeitet
-                    // und es sonst eine Endlosschleife gibt.
-// TLPDF progrssbaris now handled by new print dialog
-// TLPDF                   while( pOutDev->IsPrinting() && pProgress )
-// TLPDF                            pProgress->Reschedule();
-
-                    sJobName = rOptions.MakeNextJobName();
-                    nJobStartError = JOBSET_ERR_DEFAULT;
-                }
-            }
-#endif //TL_NOT_NOW  /*TLPDF*/
-
-            for( USHORT i = 1; i <= (USHORT)aPages.Max(); ++i )
-            {
-                if( i < (USHORT)aPages.Min() )
-                {
-                    if( !pStPage->GetNext() )
-                        break;
-                    pStPage = (SwPageFrm*)pStPage->GetNext();
-                    pEndPage= pStPage;
-                }
-                else if( i == (USHORT)aPages.Min() )
-                {
-                    nFirstPageNo = i;
-                    nLastPageNo = nFirstPageNo;
-                    if( !pStPage->GetNext() || (i == (USHORT)aPages.Max()) )
-                        break;
-                    pEndPage = pStPage->GetNext();
-                }
-                else if( i > (USHORT)aPages.Min() )
-                {
-                    nLastPageNo = i;
-                    if( !pEndPage->GetNext() || (i == (USHORT)aPages.Max()) )
-                        break;
-                    pEndPage = pEndPage->GetNext();
-                }
-            }
-
-            OSL_ENSURE( nFirstPageNo, "fist page not found!  Should not happen!" );   // TLPDF
-            if( !nFirstPageNo )
-            {
-// TLPDF                bStop = TRUE;
-// TLPDF                break;      // TLPDF should continue after '(end of the copy count loop)'
-            }
 
 // HACK: Hier muss von der MultiSelection noch eine akzeptable Moeglichkeit
 // geschaffen werden, alle Seiten von Seite x an zu deselektieren.
 // Z.B. durch SetTotalRange ....
 
 //          aMulti.Select( Range( nLastPageNo+1, SELECTION_MAX ), FALSE );
-            MultiSelection aTmpMulti( Range( 1, nLastPageNo ) );
+// TLPDF           MultiSelection aTmpMulti( Range( 1, nLastPageNo ) );
+            MultiSelection aTmpMulti( Range( 1, nPage ) );
             long nTmpIdx = aMulti.FirstSelected();
             static long nEndOfSelection = SFX_ENDOFSELECTION;
-            while ( nEndOfSelection != nTmpIdx && nTmpIdx <= long(nLastPageNo) )
+// TLPDF            while ( nEndOfSelection != nTmpIdx && nTmpIdx <= long(nLastPageNo) )
+            while ( nEndOfSelection != nTmpIdx && nTmpIdx <= long(nPage) )
             {
                 aTmpMulti.Select( nTmpIdx );
                 nTmpIdx = aMulti.NextSelected();
@@ -1193,23 +1318,6 @@ BOOL ViewShell::Prt(
 
             const USHORT nSelCount = USHORT(aMulti.GetSelectCount()
                             /* * nCopyCnt*/);
-
-            if ( pProgress )
-            {
-                pProgress->SetText( SW_RESSTR(STR_STATSTR_PRINT) );
-                lcl_SetState( *pProgress, 1, nSelCount, pStr,
-                              nMergeAct, nMergeCnt, nSelCount, 1 );
-            }
-
-            if ( rOptions.bPrintReverse )
-            {
-                const SwFrm *pTmp = pStPage;
-                pStPage  = (SwPageFrm*)pEndPage;
-                pEndPage = pTmp;
-                nPageNo  = nLastPageNo;
-            }
-            else
-                nPageNo = nFirstPageNo;
 
             // PostitListe holen
             _SetGetExpFlds aPostItFields;
@@ -1241,51 +1349,12 @@ BOOL ViewShell::Prt(
             const SwPageDesc *pLastPageDesc = NULL;
             BOOL bSetOrient   = FALSE;
             BOOL bSetPaperSz  = FALSE;
-#ifdef TL_NOT_NOW /*TLPDF*/
-            BOOL bSetPaperBin = FALSE;
-#endif // TL_NOT_NOW /*TLPDF*/
             BOOL bSetPrt      = FALSE;
-            if (pOutDev)
-            {
-#ifdef TL_NOT_NOW /*TLPDF*/
-                bSetOrient      = pOutDev->HasSupport( SUPPORT_SET_ORIENTATION );
-                bSetPaperSz     = pOutDev->HasSupport( SUPPORT_SET_PAPERSIZE );
-                bSetPaperBin    =  !rOptions.bPaperFromSetup &&
-                                    pOutDev->HasSupport( SUPPORT_SET_PAPERBIN );
-                bSetPrt = bSetOrient || bSetPaperSz || bSetPaperBin;
-#endif // TL_NOT_NOW /*TLPDF*/
-            }
 
             if ( rOptions.nPrintPostIts != POSTITS_ONLY )
             {
-                // --> FME 2005-01-05 #110536# This valiable is used to track
-                // the number of pages which actually have been printed.
-                // If nPagesPrinted is odd, we have to send an additional
-                // empty page to the printer if we are currently in collation
-                // and duplex mode and there are still some more copies of the
-                // document to print.
-                USHORT nPagesPrinted = 0;
-                // <--
-
-                while( pStPage && !bStop )
+//TLPDF                while( pStPage && !bStop )
                 {
-                    // Mag der Anwender noch ?
-                    if ( pProgress )
-                        pProgress->Reschedule();
-
-#ifdef TL_NOT_NOW /*TLPDF*/
-                    if (pOutDev)
-                    {
-                        if (    JOBSET_ERR_ERROR == nJobStartError ||
-                             ( !pOutDev->IsJobActive() && ( !sJobName.Len() || bStartJob ) ) ||
-                                pShell->Imp()->IsStopOutDev() )
-                        {
-                            bStop = TRUE;
-                            break;
-                        }
-                    }
-#endif // TL_NOT_NOW /*TLPDF*/
-
                     ::SetSwVisArea( pShell, pStPage->Frm(), bIsPDFExport );
 
                     //  wenn wir einen Umschlag drucken wird ein Offset beachtet
@@ -1299,10 +1368,6 @@ BOOL ViewShell::Prt(
                         pOutDev->SetMapMode( aTmp );
                     }
 
-                    const BOOL bRightPg = pStPage->OnRightPage();
-                    if( aMulti.IsSelected( nPageNo ) &&
-                        ( (bRightPg && rOptions.bPrintRightPage) ||
-                            (!bRightPg && rOptions.bPrintLeftPage) ) )
                     {
                         if ( bSetPrt )
                         {
@@ -1312,47 +1377,6 @@ BOOL ViewShell::Prt(
                             if ( pLastPageDesc != rFormatPage.GetPageDesc() )
                             {
                                 pLastPageDesc = rFormatPage.GetPageDesc();
-
-#ifdef TL_NOT_NOW /*TLPDF*/
-                                const BOOL bLandScp = rFormatPage.GetPageDesc()->GetLandscape();
-
-                                if( bSetPaperBin )      // Schacht einstellen.
-                                    pOutDev->SetPaperBin( rFormatPage.GetFmt()->
-                                                       GetPaperBin().GetValue() );
-#endif // TL_NOT_NOW /*TLPDF*/
-
-                                if (bSetOrient )
-                                 {
-#ifdef TL_NOT_NOW /*TLPDF*/
-                                        // Orientation einstellen: Breiter als Hoch
-                                        //  -> Landscape, sonst -> Portrait.
-                                        if( bLandScp )
-                                        pOutDev->SetOrientation(ORIENTATION_LANDSCAPE);
-                                        else
-                                        pOutDev->SetOrientation(ORIENTATION_PORTRAIT);
-#endif // TL_NOT_NOW /*TLPDF*/
-                                 }
-
-                                 if (bSetPaperSz )
-                                 {
-#ifdef TL_NOT_NOW /*TLPDF*/
-                                    Size aSize = pStPage->Frm().SSize();
-                                    if ( bLandScp && bSetOrient )
-                                    {
-                                            // landscape is always interpreted as a rotation by 90 degrees !
-                                            // this leads to non WYSIWIG but at least it prints!
-                                            // #i21775#
-                                            long nWidth = aSize.Width();
-                                            aSize.Width() = aSize.Height();
-                                            aSize.Height() = nWidth;
-                                    }
-                                    Paper ePaper = SvxPaperInfo::GetSvPaper(aSize,MAP_TWIP,TRUE);
-                                    if ( PAPER_USER == ePaper )
-                                            pOutDev->SetPaperSizeUser( aSize );
-                                    else
-                                            pOutDev->SetPaper( ePaper );
-#endif // TL_NOT_NOW /*TLPDF*/
-                                 }
                             }
                         }
 
@@ -1361,50 +1385,26 @@ BOOL ViewShell::Prt(
                         if( rOptions.bPrintReverse &&
                             rOptions.nPrintPostIts == POSTITS_ENDPAGE )
                                 lcl_PrintPostItsEndPage( pPostItShell, aPostItFields,
-                                    nPageNo, aMulti, sJobName, bStartJob, nJobStartError,
+                                    nPage /* TLPDF nPageNo*/, aMulti, sJobName, bStartJob, nJobStartError,
                                     rOptions.bPrintRightPage, rOptions.bPrintLeftPage,
                                     rOptions.bPrintReverse );
 
-#ifdef TL_NOT_NOW /*TLPDF*/
-                        if ( pProgress )
-                            lcl_SetState( *pProgress, nPrintCount++, nSelCount,
-                                          pStr, nMergeAct, nMergeCnt,
-                                          nSelCount, nPageNo );
-#endif // TL_NOT_NOW /*TLPDF*/
 
                         if( !bStartJob && JOBSET_ERR_DEFAULT == nJobStartError
                             && sJobName.Len() )
                         {
-#ifdef TL_NOT_NOW /*TLPDF*/
-                            if( pOutDev && !pOutDev->IsJobActive() )
-                            {
-                                bStartJob = pOutDev->StartJob( sJobName );
-                                if( !bStartJob )
-                                {
-                                    nJobStartError = JOBSET_ERR_ERROR;
-                                    continue;
-                                }
-                            }
-#endif // TL_NOT_NOW /*TLPDF*/
 
 // TLPDF                            pShell->InitPrt( pOutDev, bIsPDFExport ? pOutDev : 0 );
                            pShell->InitPrt( pOutDev );
 
-                            ::SetSwVisArea( pShell, pStPage->Frm(), TRUE /*bIsPDFExport*/ );     // TLPDF
+                            ::SetSwVisArea( pShell, pStPage->Frm(), bIsPDFExport );     // TLPDF
                             nJobStartError = JOBSET_ERR_ISSTARTET;
                         }
                         // --> FME 2005-12-12 #b6354161# Feature - Print empty pages
-                        if ( rOptions.bPrintEmptyPages || pStPage->Frm().Height() )
+// TLPDF                        if ( rOptions.bPrintEmptyPages || pStPage->Frm().Height() )
                         // <--
                         {
-// TLPDF                            if (pOutDev)
-// TLPDF                                pOutDev->StartPage();
-
                             pStPage->GetUpper()->Paint( pStPage->Frm() );
-                            ++nPagesPrinted;
-
-// TLPDF                            if (pOutDev)
-// TLPDF                                pOutDev->EndPage();
                         }
                         SwPaintQueue::Repaint();
 
@@ -1412,7 +1412,7 @@ BOOL ViewShell::Prt(
                         if( (!rOptions.bPrintReverse) &&
                             rOptions.nPrintPostIts == POSTITS_ENDPAGE )
                                 lcl_PrintPostItsEndPage( pPostItShell, aPostItFields,
-                                    nPageNo, aMulti, sJobName, bStartJob, nJobStartError,
+                                    nPage /* TLPDF nPageNo */, aMulti, sJobName, bStartJob, nJobStartError,
                                     rOptions.bPrintRightPage, rOptions.bPrintLeftPage,
                                     rOptions.bPrintReverse );
                     }
@@ -1422,35 +1422,7 @@ BOOL ViewShell::Prt(
                     if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
                         pOutDev->SetMapMode( aOldMapMode );
 
-                    if ( pStPage == pEndPage )
-                    {
-#ifdef TL_NOT_NOW /*TLPDF*/
-                        // --> FME 2005-01-05 #110536# Print emtpy page if
-                        // we are have an odd page count in collation/duplex
-                        // mode and there are still some copies to print:
-                        if ( pPrt && ( 1 == ( nPagesPrinted % 2 ) ) &&
-                             ( DUPLEX_SHORTEDGE == pPrt->GetDuplexMode() || DUPLEX_LONGEDGE == pPrt->GetDuplexMode() ) &&
-                             nCnt + 1 < nCopyCnt )
-                        {
-                            pOutDev->StartPage();
-                            pOutDev->EndPage();
-                        }
-                        // <--
-#endif // TL_NOT_NOW /*TLPDF*/
-                        pStPage = 0;
-                    }
-                    else if ( rOptions.bPrintReverse )
-                    {
-                        --nPageNo;
-                        pStPage = (SwPageFrm*)pStPage->GetPrev();
-                    }
-                    else
-                    {   ++nPageNo;
-                        pStPage = (SwPageFrm*)pStPage->GetNext();
-                    }
                 }  // TLPDF loop end: while( pStPage && !bStop )
-// TLPDF               if ( bStop )
-// TLPDF                   break;
             }
 
             if (!bStop) // TLPDF: see break above
@@ -1473,10 +1445,6 @@ BOOL ViewShell::Prt(
                     rOptions.bJobStartet = TRUE;
             }   // TLPDF: if (!bStop) see break above
 
-// TLPDF    the copy count is now handled by the printer itself...
-// TLPDF    (end of the copy count loop)
-// TLPDF       }
-
     }
     delete pStr;
 
@@ -1493,9 +1461,9 @@ BOOL ViewShell::Prt(
             delete pOutDevDoc;
     }
 
-    // restore settings of OutputDevice
-    if (bIsPDFExport)
-        pOutDev->Pop();
+    // restore settings of OutputDevice (should be done always now since the
+    // output device is now provided by a call from outside the Writer)
+    pOutDev->Pop();
 
     return bStartJob;
 }

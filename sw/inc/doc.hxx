@@ -113,6 +113,8 @@ class SwList;
 
 #include <svtools/embedhlp.hxx>
 #include <vector>
+#include <set>
+#include <map>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -239,6 +241,8 @@ class SwMsgPoolItem;
 class SwChartDataProvider;
 class SwChartLockController_Helper;
 class IGrammarContact;
+class SwPrintUIOptions;
+class SwPageFrm;
 
 namespace sw { namespace mark {
     class MarkManager;
@@ -1349,6 +1353,11 @@ public:
     // travel over PaM Ring
     sal_Bool InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
                         SwPaM& rPaM, SwCrsrShell* pShell = 0);
+
+    // get the set of printable pages for the XRenderable API by
+    // evaluating the respective settings (see implementation)
+    void GetValidPagesForPrinting( SwPrintUIOptions &rPrintUIOptions,
+            sal_Int32 nDocPageCount );
 
     sal_uInt16 GetPageCount() const;
     const Size GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const;

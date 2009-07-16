@@ -881,6 +881,8 @@ SwNewDBMgr::~SwNewDBMgr()
 BOOL SwNewDBMgr::MergePrint( SwView& rView,
                              SwPrtOptions& rOpt, SfxProgress& rProgress, BOOL bIsAPI )
 {
+    (void) rView;  (void) rOpt;  (void) rProgress;  (void) bIsAPI;  /* TLPDF */
+#ifdef TL_NOT_NOW /*TLPDF*/  //!! Currently broken beyond repair since we will not have a printer
     SwWrtShell* pSh = &rView.GetWrtShell();
     //check if the doc is synchronized and contains at least one linked section
     BOOL bSynchronizedDoc = pSh->IsLabelDoc() && pSh->GetSectionFmtCount() > 1;
@@ -1038,6 +1040,8 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
     }
 
     return bRet;
+#endif // TL_NOT_NOW /*TLPDF*/  //!! Currently broken beyond repair since we will not have a printer
+    return TRUE; /* TLPDF */
 }
 /*-- 21.06.2004 09:08:16---------------------------------------------------
 
@@ -1045,6 +1049,8 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
 BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
                                 SwPrtOptions& rOpt, SfxProgress& rProgress, BOOL bIsAPI )
 {
+    (void) rView;  (void) rOpt;  (void) rProgress;  (void) bIsAPI;  /* TLPDF */
+#ifdef TL_NOT_NOW /*TLPDF*/  //!! Currently broken beyond repair since we will not have a printer
     SwWrtShell* pSh = &rView.GetWrtShell();
     //check if the doc is synchronized and contains at least one linked section
     //merge source is already open
@@ -1201,6 +1207,8 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
     }
 
     return bRet;
+#endif // TL_NOT_NOW /*TLPDF*/  //!! Currently broken beyond repair since we will not have a printer
+    return TRUE; /* TLPDF */
 }
 
 

@@ -71,6 +71,7 @@ class SfxViewShell;
 class SwViewOption;
 class SwViewImp;
 class SwPrtOptions;
+class SwPrintUIOptions;
 class SwPagePreViewPrtData;
 class Window;
 class OutputDevice;
@@ -364,8 +365,9 @@ public:
 
     //Druckauftrag abwickeln.
     // bIsPDFExport == true is: do PDF Export (no printing!)
-    sal_Bool Prt( OutputDevice* pOutDev, SwPrtOptions& rOptions, SfxProgress* pProgress,
-                  bool bIsPDFExport = false );
+    sal_Bool Prt( OutputDevice* pOutDev, SwPrtOptions& rOptions,
+            const SwPrintUIOptions &rPrintUIOptions, sal_Int32 nRenderer /* offset in vector of pages to print */,
+            SfxProgress* pProgress, bool bIsPDFExport = false );
 
     //"Drucken" fuer OLE 2.0
     static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, SwPrtOptions& rOptions,

@@ -2470,7 +2470,11 @@ USHORT  SwPagePreView::Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *
         if( bPrtPros )
             pSh->PrintProspect( aOpts, rProgress, bPrtPros_RTL );
         else
+        {
+#ifdef TL_NOT_NOW /*TLPDF*/  //!! Currently broken beyond repair since we will not have a printer                          
             pSh->Prt( pPrinter, aOpts, &rProgress );    /*TLPDF*/
+#endif // TL_NOT_NOW /*TLPDF*/  //!! Currently broken beyond repair since we will not have a printer                          
+        }
     }
     else
     {

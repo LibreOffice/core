@@ -31,13 +31,23 @@
 #ifndef _SWPRTOPT_HXX
 #define _SWPRTOPT_HXX
 
+#include <vcl/print.hxx>
 #include <tools/multisel.hxx>
 #include <printdata.hxx>
+
+#include <set>
+#include <map>
+#include <vector>
 
 #define POSTITS_NONE    0
 #define POSTITS_ONLY    1
 #define POSTITS_ENDDOC  2
 #define POSTITS_ENDPAGE 3
+
+
+class SwPageFrm;
+
+////////////////////////////////////////////////////////////
 
 class SwPrtOptions : public SwPrintData
 {
@@ -80,6 +90,36 @@ public:
                 SwPrintData::operator=(rData);
                 return *this;
             }
+};
+
+
+////////////////////////////////////////////////////////////
+
+class SwPrintUIOptions : public vcl::PrinterOptionsHelper
+{
+    OutputDevice* mpLast;
+
+    // pages valid for printing (accoridng to the current settings)
+    // and their respective start frames (see getRendererCount in unotxdoc.cxx)
+    std::set< sal_Int32 > aValidPages;       // the set of possible pages (see StringRangeEnumerator::getRangesFromString )
+    std::map< sal_Int32, const SwPageFrm * > aValidStartFrms;    // the map of start frames for those pages
+
+    // vector of pages and their order to be printed (duplicates and any order allowed!)
+    // (see 'render' in unotxdoc.cxx)
+    std::vector< sal_Int32 > aPagesToPrint;
+
+public:
+    SwPrintUIOptions( BOOL bWeb );
+
+    bool processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp );
+
+    typedef std::map< sal_Int32, const SwPageFrm * > ValidStartFramesMap_t;
+
+    std::set< sal_Int32 > & GetValidPagesSet()                      { return aValidPages; }
+    ValidStartFramesMap_t &          GetValidStartFrms()            { return aValidStartFrms; }
+    const ValidStartFramesMap_t &    GetValidStartFrms() const      { return aValidStartFrms; }
+    std::vector< sal_Int32 > &          GetPagesToPrint()           { return aPagesToPrint; }
+    const std::vector< sal_Int32 > &    GetPagesToPrint() const     { return aPagesToPrint; }
 };
 
 

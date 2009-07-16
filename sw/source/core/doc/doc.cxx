@@ -46,6 +46,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/poly.hxx>
+#include <tools/multisel.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/itemiter.hxx>
 #include <sfx2/printer.hxx>
@@ -95,12 +96,9 @@
 #include <fldupde.hxx>
 #include <swbaslnk.hxx>
 #include <printdata.hxx>
-#ifndef _CMDID_H
+#include <swprtopt.hxx>
 #include <cmdid.h>              // fuer den dflt - Printer in SetJob
-#endif
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>          // StatLine-String
-#endif
 #include <comcore.hrc>
 #include <SwUndoTOXChange.hxx>
 #include <SwUndoFmt.hxx>
@@ -990,6 +988,130 @@ const SwDocStat& SwDoc::GetDocStat() const
 {
     return *pDocStat;
 }
+
+
+void SwDoc::GetValidPagesForPrinting(
+    SwPrintUIOptions &rPrintUIOptions,
+    sal_Int32 nDocPageCount )
+{
+    DBG_ASSERT( pLayout, "no layout present" );
+    if (!pLayout)
+        return;
+
+    // properties to take into account when calcualting the set of pages
+    const bool bPrintLeftPage   = rPrintUIOptions.getBoolValue( C2U( "PrintLeftPages" ),    false );
+    const bool bPrintRightPage  = rPrintUIOptions.getBoolValue( C2U( "PrintRightPages" ),   false );
+    const bool bPrintReverse    = rPrintUIOptions.getBoolValue( C2U( "PrintReverseOrder" ), false );
+    const bool bPrintEmptyPages = rPrintUIOptions.getBoolValue( C2U( "PrintEmptyPages" ),   false );
+
+    Range aPages( 1, nDocPageCount );
+
+    MultiSelection aMulti( aPages );
+    aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
+    aMulti.Select( aPages );
+
+    const SwPageFrm *pStPage  = (SwPageFrm*)pLayout->Lower();
+    const SwFrm     *pEndPage = pStPage;
+
+    USHORT nFirstPageNo = 0;
+    USHORT nLastPageNo  = 0;
+    USHORT nPageNo      = 1;
+
+    for( USHORT i = 1; i <= (USHORT)aPages.Max(); ++i )
+    {
+        if( i < (USHORT)aPages.Min() )
+        {
+            if( !pStPage->GetNext() )
+                break;
+            pStPage = (SwPageFrm*)pStPage->GetNext();
+            pEndPage= pStPage;
+        }
+        else if( i == (USHORT)aPages.Min() )
+        {
+            nFirstPageNo = i;
+            nLastPageNo = nFirstPageNo;
+            if( !pStPage->GetNext() || (i == (USHORT)aPages.Max()) )
+                break;
+            pEndPage = pStPage->GetNext();
+        }
+        else if( i > (USHORT)aPages.Min() )
+        {
+            nLastPageNo = i;
+            if( !pEndPage->GetNext() || (i == (USHORT)aPages.Max()) )
+                break;
+            pEndPage = pEndPage->GetNext();
+        }
+    }
+
+    DBG_ASSERT( nFirstPageNo, "first page not found!  Should not happen!" );
+    if (nFirstPageNo)
+    {
+// HACK: Hier muss von der MultiSelection noch eine akzeptable Moeglichkeit
+// geschaffen werden, alle Seiten von Seite x an zu deselektieren.
+// Z.B. durch SetTotalRange ....
+
+//              aMulti.Select( Range( nLastPageNo+1, SELECTION_MAX ), FALSE );
+        MultiSelection aTmpMulti( Range( 1, nLastPageNo ) );
+        long nTmpIdx = aMulti.FirstSelected();
+        static long nEndOfSelection = SFX_ENDOFSELECTION;
+        while ( nEndOfSelection != nTmpIdx && nTmpIdx <= long(nLastPageNo) )
+        {
+            aTmpMulti.Select( nTmpIdx );
+            nTmpIdx = aMulti.NextSelected();
+        }
+        aMulti = aTmpMulti;
+// Ende des HACKs
+
+        if (bPrintReverse)
+        {
+            const SwFrm *pTmp = pStPage;
+            pStPage  = (SwPageFrm*)pEndPage;
+            pEndPage = pTmp;
+            nPageNo  = nLastPageNo;
+        }
+        else
+            nPageNo = nFirstPageNo;
+
+        std::set< sal_Int32 > &rValidPages = rPrintUIOptions.GetValidPagesSet();
+        std::map< sal_Int32, const SwPageFrm * > &rValidStartFrms = rPrintUIOptions.GetValidStartFrms();
+        rValidPages.clear();
+        rValidStartFrms.clear();
+        while ( pStPage )
+        {
+            const BOOL bRightPg = pStPage->OnRightPage();
+            if ( aMulti.IsSelected( nPageNo ) &&
+                ( (bRightPg && bPrintRightPage) ||
+                    (!bRightPg && bPrintLeftPage) ) )
+            {
+                // --> FME 2005-12-12 #b6354161# Feature - Print empty pages
+                if ( bPrintEmptyPages || pStPage->Frm().Height() )
+                // <--
+                {
+                    // pStPage->GetUpper()->Paint( pStPage->Frm() );
+                    rValidPages.insert( nPageNo );
+                    rValidStartFrms[ nPageNo ] = pStPage;
+                }
+            }
+
+            if ( pStPage == pEndPage )
+            {
+                pStPage = 0;
+            }
+            else if ( bPrintReverse )
+            {
+                --nPageNo;
+                pStPage = (SwPageFrm*)pStPage->GetPrev();
+            }
+            else
+            {   ++nPageNo;
+                pStPage = (SwPageFrm*)pStPage->GetNext();
+            }
+        }
+    }
+}
+
+
+
 
 sal_uInt16 SwDoc::GetPageCount() const
 {
