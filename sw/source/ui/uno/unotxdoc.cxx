@@ -2567,6 +2567,7 @@ SwDoc * SwXTextDocument::GetRenderDoc( SfxViewShell *&rpView, const uno::Any& rS
         // Otherwise the View should be obtained from the "View" property passed on in the
         // calls to the XRenderable functions.
         DBG_ASSERT( bIsPDFExport, "code should have been called for PDF export only..." );
+        (void)bIsPDFExport; // avoid warning in non dbg case
 
         // used for PDF export of (multi-)selection
         if (rSelection.hasValue())     // is anything selected ?
