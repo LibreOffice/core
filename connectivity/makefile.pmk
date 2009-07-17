@@ -55,8 +55,10 @@ JAVAPREPRO=$(JAVAPREPRO) + " -product"
 PACKAGE=org.openoffice.Office.DataAccess
 .INCLUDE :  settings.mk
 
+COMPONENT_CONFIG_DATA*=$(TARGET).xcu
+
 LOCALIZEDFILES= \
-    $(TARGET).xcu
+    $(COMPONENT_CONFIG_DATA)
 
 XCUFILES= \
     $(LOCALIZEDFILES) \

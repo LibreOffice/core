@@ -31,7 +31,10 @@
 
 .INCLUDE : target.mk
 
-ALLTAR: "$(PWD)$/$(MISC)$/registry$/schema$/$(PACKAGEDIR)$/$(TARGET).xcs"
-"$(PWD)$/$(MISC)$/registry$/schema$/$(PACKAGEDIR)$/$(TARGET).xcs" : $(SOLARXMLDIR)$/registry$/schema$/$(PACKAGEDIR)$/Drivers.xcs
+COMPONENT_CONFIG_SCHEMA*=$(TARGET).xcs
+
+ALLTAR: "$(PWD)$/$(MISC)$/registry$/schema$/$(PACKAGEDIR)$/$(COMPONENT_CONFIG_SCHEMA)"
+"$(PWD)$/$(MISC)$/registry$/schema$/$(PACKAGEDIR)$/$(COMPONENT_CONFIG_SCHEMA)" : $(SOLARXMLDIR)$/registry$/schema$/$(PACKAGEDIR)$/Drivers.xcs
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
+

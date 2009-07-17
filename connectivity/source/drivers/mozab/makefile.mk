@@ -83,6 +83,11 @@ USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
 VISIBILITY_HIDDEN=TRUE
 
+.IF "$(OS)"!="WNT" 
+COMPONENT_CONFIG_DATA=$(TARGET)2.xcu
+COMPONENT_CONFIG_SCHEMA=$(TARGET)2.xcs
+.ENDIF
+
 # --- Settings ----------------------------------
 
 .IF "$(DBGUTIL_OJ)"!=""
@@ -94,24 +99,10 @@ ENVCFLAGS+=/FR$(SLO)$/
 .INCLUDE :  $(PRJ)$/version.mk
 
 # --- Files -------------------------------------
-# redefine because win and linux differ
-.IF "$(OS)"=="WNT" 
-LOCALIZEDFILES= \
-    $(TARGET).xcu
-.ELSE
-LOCALIZEDFILES= \
-    $(TARGET)2.xcu
-.ENDIF
-
-XCUFILES= \
-    $(LOCALIZEDFILES) \
-
-
 
 SLOFILES=\
         $(SLO)$/MDriver.obj						\
         $(SLO)$/MServices.obj
-
             
 # --- MOZAB BASE Library -----------------------------------
 
@@ -201,17 +192,6 @@ DEF2NAME=	$(SHL2TARGET)
 # --- Targets ----------------------------------
 
 .INCLUDE : $(PRJ)$/target.pmk
-
-.IF "$(GUI)"=="WNT" 
-.ELSE
-ALLTAR: "$(PWD)$/$(MISC)$/registry$/schema$/$(PACKAGEDIR)$/$(TARGET)2.xcs" "$(PWD)$/$(MISC)$/registry$/data$/$(PACKAGEDIR)$/$(TARGET).xcu"
-"$(PWD)$/$(MISC)$/registry$/schema$/$(PACKAGEDIR)$/$(TARGET)2.xcs" : $(SOLARXMLDIR)$/registry$/schema$/$(PACKAGEDIR)$/Drivers.xcs
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-"$(PWD)$/$(MISC)$/registry$/data$/$(PACKAGEDIR)$/$(TARGET).xcu" : "$(PWD)$/$(MISC)$/registry$/data$/$(PACKAGEDIR)$/$(TARGET)2.xcu" 
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-.ENDIF
 
 # --- filter file ------------------------------
 
