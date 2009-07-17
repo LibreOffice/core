@@ -431,7 +431,7 @@ bool SwPrintUIOptions::processPropertiesAndCheckFormat( const com::sun::star::un
  *  Aenderung   :
  ******************************************************************************/
 
-void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, BOOL bPDFExport )
+void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, BOOL /*bPDFExport*/ )
 {
     ASSERT( !pSh->GetWin(), "Drucken mit Window?" );
     pSh->aVisArea = rRect;
@@ -1316,8 +1316,10 @@ BOOL ViewShell::Prt(
             aMulti = aTmpMulti;
 // Ende des HACKs
 
+#if 0
             const USHORT nSelCount = USHORT(aMulti.GetSelectCount()
                             /* * nCopyCnt*/);
+#endif
 
             // PostitListe holen
             _SetGetExpFlds aPostItFields;
@@ -1347,8 +1349,8 @@ BOOL ViewShell::Prt(
             MapMode aOldMapMode;
 
             const SwPageDesc *pLastPageDesc = NULL;
-            BOOL bSetOrient   = FALSE;
-            BOOL bSetPaperSz  = FALSE;
+            // BOOL bSetOrient   = FALSE;
+            // BOOL bSetPaperSz  = FALSE;
             BOOL bSetPrt      = FALSE;
 
             if ( rOptions.nPrintPostIts != POSTITS_ONLY )
