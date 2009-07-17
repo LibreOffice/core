@@ -493,17 +493,17 @@ void XclEscher::AddSdrPage()
 
 XclExpDffAnchor::XclExpDffAnchor( const XclExpRoot& rRoot, sal_uInt16 nFlags ) :
     XclExpRoot( rRoot ),
-    maAnchor( rRoot.GetCurrScTab() ),
+    mnScTab( rRoot.GetCurrScTab() ),
     mnFlags( nFlags )
 {
 }
 
 XclExpDffAnchor::XclExpDffAnchor( const XclExpRoot& rRoot, const SdrObject& rSdrObj ) :
     XclExpRoot( rRoot ),
-    maAnchor( rRoot.GetCurrScTab() )
+    mnScTab( rRoot.GetCurrScTab() )
 {
     SetFlags( rSdrObj );
-    maAnchor.SetRect( GetDoc(), rSdrObj.GetCurrentBoundRect(), MAP_100TH_MM );
+    maAnchor.SetRect( GetDoc(), mnScTab, rSdrObj.GetCurrentBoundRect(), MAP_100TH_MM );
 }
 
 void XclExpDffAnchor::SetFlags( const SdrObject& rSdrObj )
@@ -516,7 +516,7 @@ void XclExpDffAnchor::SetFlags( const SdrObject& rSdrObj )
 void XclExpDffAnchor::WriteData( EscherEx& rEx, const Rectangle& rRect )
 {
     // the rectangle is already in twips
-    maAnchor.SetRect( GetDoc(), rRect, MAP_TWIP );
+    maAnchor.SetRect( GetDoc(), mnScTab, rRect, MAP_TWIP );
     WriteData( rEx );
 }
 
@@ -533,7 +533,7 @@ void XclExpDffAnchor::WriteData( EscherEx& rEx ) const
 XclExpDffNoteAnchor::XclExpDffNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect ) :
     XclExpDffAnchor( rRoot, EXC_ESC_ANCHOR_SIZELOCKED )
 {
-    maAnchor.SetRect( GetDoc(), rRect, MAP_100TH_MM );
+    maAnchor.SetRect( GetDoc(), mnScTab, rRect, MAP_100TH_MM );
 }
 
 

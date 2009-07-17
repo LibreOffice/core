@@ -41,8 +41,8 @@
 #include "rangelst.hxx"
 #include "xlchart.hxx"
 #include "xlstyle.hxx"
+#include "xiescher.hxx"
 #include "xistring.hxx"
-#include "xiroot.hxx"
 
 #include <boost/shared_ptr.hpp>
 
@@ -115,7 +115,7 @@ public:
     /** Starts the API chart document conversion. Must be called once before all API conversion. */
     void                InitConversion( XChartDocRef xChartDoc ) const;
     /** Finishes the API chart document conversion. Must be called once after all API conversion. */
-    void                FinishConversion( ScfProgressBar& rProgress ) const;
+    void                FinishConversion( XclImpDffConverter& rDffConv ) const;
 
     /** Returns the data provider for the chart document. */
     XDataProviderRef    GetDataProvider() const;
@@ -1357,7 +1357,7 @@ public:
     inline sal_Size     GetProgressSize() const { return 2 * EXC_CHART_PROGRESS_SIZE; }
 
     /** Converts and writes all properties to the passed chart. */
-    void                Convert( XChartDocRef xChartDoc, ScfProgressBar& rProgress ) const;
+    void                Convert( XChartDocRef xChartDoc, XclImpDffConverter& rDffConv ) const;
 
 private:
     /** Reads a CHSERIES group (data series source and formatting). */
@@ -1402,6 +1402,31 @@ typedef ScfRef< XclImpChChart > XclImpChChartRef;
 
 // ----------------------------------------------------------------------------
 
+/** Drawing manager of a chart. */
+class XclImpChartDrawingManager : public XclImpDrawingManager
+{
+public:
+    explicit            XclImpChartDrawingManager( const XclImpRoot& rRoot, bool bOwnTab );
+
+    /** Converts all objects and inserts them into the chart drawing page. */
+    void                ConvertObjects(
+                            XclImpDffConverter& rDffConv,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
+                            const Rectangle& rChartRect );
+
+    /** Calculate the resulting rectangle of the passed anchor. */
+    virtual Rectangle   CalcAnchorRect( const XclObjAnchor& rAnchor, bool bDffAnchor ) const;
+    /** Called whenever an object has been inserted into the draw page. */
+    virtual void        OnObjectInserted( const XclImpDrawObjBase& rDrawObj );
+
+private:
+    Rectangle           maChartRect;        /// Position and size of the chart shape in 1/100 mm.
+    SCTAB               mnScTab;            /// Index of the sheet that contains the chart.
+    bool                mbOwnTab;           /// True = own sheet, false = embedded object.
+};
+
+// ----------------------------------------------------------------------------
+
 /** Represents the entire chart substream (all records in BOF/EOF block). */
 class XclImpChart : protected XclImpRoot
 {
@@ -1412,6 +1437,7 @@ public:
     /** Constructs a new chart object.
         @param bOwnTab  True = chart is on an own sheet; false = chart is an embedded object. */
     explicit            XclImpChart( const XclImpRoot& rRoot, bool bOwnTab );
+    virtual             ~XclImpChart();
 
     /** Reads the complete chart substream (BOF/EOF block).
         @descr  The passed stream must be located in the BOF record of the chart substream. */
@@ -1425,14 +1451,19 @@ public:
     inline bool         IsPivotChart() const { return mbIsPivotChart; }
 
     /** Creates the chart object in the passed component. */
-    void                Convert( XModelRef xModel, ScfProgressBar& rProgress ) const;
+    void                Convert( XModelRef xModel, XclImpDffConverter& rDffConv, const Rectangle& rChartRect ) const;
 
 private:
+    /** Returns (initially creates) the drawing manager containing embedded shapes. **/
+    XclImpChartDrawingManager& GetDrawingManager();
     /** Reads the CHCHART group (entire chart data). */
     void                ReadChChart( XclImpStream& rStrm );
 
 private:
+    typedef ScfRef< XclImpChartDrawingManager > XclImpDrawingMgrRef;
+
     XclImpChChartRef    mxChartData;        /// The chart data (CHCHART group).
+    XclImpDrawingMgrRef mxDrawingMgr;       /// Drawing manager for embedded shapes.
     bool                mbOwnTab;           /// true = own sheet; false = embedded object.
     bool                mbIsPivotChart;     /// true = chart is based on a pivot table.
 };

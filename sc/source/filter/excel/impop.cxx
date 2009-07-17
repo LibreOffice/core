@@ -1212,7 +1212,7 @@ void ImportExcel::PostDocLoad( void )
         }
 
         // #111099# open forms in alive mode (has no effect, if no controls in document)
-        pDocObj->setPropertyValue( CREATE_OUSTRING( SC_UNO_APPLYFMDES ), ::comphelper::makeBoolAny( sal_False ) );
+        pDocObj->setPropertyValue( CREATE_OUSTRING( SC_UNO_APPLYFMDES ), uno::Any( false ) );
     }
 
     // enables extended options to be set to the view after import

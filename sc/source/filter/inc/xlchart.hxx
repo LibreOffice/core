@@ -170,6 +170,8 @@ const sal_Int32 EXC_CHART_AXESSET_NONE          = -1;       /// For internal use
 const sal_Int32 EXC_CHART_AXESSET_PRIMARY       = 0;        /// API primary axes set index.
 const sal_Int32 EXC_CHART_AXESSET_SECONDARY     = 1;        /// API secondary axes set index.
 
+const sal_Int32 EXC_CHART_UNIT                  = 4000;     /// Chart objects are positioned in 1/4000 of chart area.
+
 // (0x0850) CHFRINFO ----------------------------------------------------------
 
 const sal_uInt16 EXC_ID_CHFRINFO                = 0x0850;

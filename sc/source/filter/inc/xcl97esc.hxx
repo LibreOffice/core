@@ -194,6 +194,7 @@ public:
 
 protected:  // for access in derived classes
     XclObjAnchor                maAnchor;       /// The client anchor data.
+    SCTAB                       mnScTab;        /// Calc sheet index.
     sal_uInt16                  mnFlags;        /// Flags for DFF stream export.
 };
 

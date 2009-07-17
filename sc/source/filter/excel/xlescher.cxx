@@ -166,8 +166,7 @@ void lclMirrorRectangle( Rectangle& rRect )
 
 // ----------------------------------------------------------------------------
 
-XclObjAnchor::XclObjAnchor( SCTAB nScTab ) :
-    mnScTab( nScTab ),
+XclObjAnchor::XclObjAnchor() :
     mnLX( 0 ),
     mnTY( 0 ),
     mnRX( 0 ),
@@ -175,35 +174,35 @@ XclObjAnchor::XclObjAnchor( SCTAB nScTab ) :
 {
 }
 
-Rectangle XclObjAnchor::GetRect( ScDocument& rDoc, MapUnit eMapUnit ) const
+Rectangle XclObjAnchor::GetRect( ScDocument& rDoc, SCTAB nScTab, MapUnit eMapUnit ) const
 {
     double fScale = lclGetTwipsScale( eMapUnit );
     Rectangle aRect(
-        lclGetXFromCol( rDoc, mnScTab, maFirst.mnCol, mnLX, fScale ),
-        lclGetYFromRow( rDoc, mnScTab, maFirst.mnRow, mnTY, fScale ),
-        lclGetXFromCol( rDoc, mnScTab, maLast.mnCol,  mnRX + 1, fScale ),
-        lclGetYFromRow( rDoc, mnScTab, maLast.mnRow,  mnBY, fScale ) );
+        lclGetXFromCol( rDoc, nScTab, maFirst.mnCol, mnLX, fScale ),
+        lclGetYFromRow( rDoc, nScTab, maFirst.mnRow, mnTY, fScale ),
+        lclGetXFromCol( rDoc, nScTab, maLast.mnCol,  mnRX + 1, fScale ),
+        lclGetYFromRow( rDoc, nScTab, maLast.mnRow,  mnBY, fScale ) );
 
     // #106948# adjust coordinates in mirrored sheets
-    if( rDoc.IsLayoutRTL( mnScTab ) )
+    if( rDoc.IsLayoutRTL( nScTab ) )
         lclMirrorRectangle( aRect );
     return aRect;
 }
 
-void XclObjAnchor::SetRect( ScDocument& rDoc, const Rectangle& rRect, MapUnit eMapUnit )
+void XclObjAnchor::SetRect( ScDocument& rDoc, SCTAB nScTab, const Rectangle& rRect, MapUnit eMapUnit )
 {
     Rectangle aRect( rRect );
     // #106948# adjust coordinates in mirrored sheets
-    if( rDoc.IsLayoutRTL( mnScTab ) )
+    if( rDoc.IsLayoutRTL( nScTab ) )
         lclMirrorRectangle( aRect );
 
     double fScale = lclGetTwipsScale( eMapUnit );
     long nDummy = 0;
-    lclGetColFromX( rDoc, mnScTab, maFirst.mnCol, mnLX, 0,             nDummy, aRect.Left(),   fScale );
-    lclGetColFromX( rDoc, mnScTab, maLast.mnCol,  mnRX, maFirst.mnCol, nDummy, aRect.Right(),  fScale );
+    lclGetColFromX( rDoc, nScTab, maFirst.mnCol, mnLX, 0,             nDummy, aRect.Left(),   fScale );
+    lclGetColFromX( rDoc, nScTab, maLast.mnCol,  mnRX, maFirst.mnCol, nDummy, aRect.Right(),  fScale );
     nDummy = 0;
-    lclGetRowFromY( rDoc, mnScTab, maFirst.mnRow, mnTY, 0,             nDummy, aRect.Top(),    fScale );
-    lclGetRowFromY( rDoc, mnScTab, maLast.mnRow,  mnBY, maFirst.mnRow, nDummy, aRect.Bottom(), fScale );
+    lclGetRowFromY( rDoc, nScTab, maFirst.mnRow, mnTY, 0,             nDummy, aRect.Top(),    fScale );
+    lclGetRowFromY( rDoc, nScTab, maLast.mnRow,  mnBY, maFirst.mnRow, nDummy, aRect.Bottom(), fScale );
 }
 
 // ----------------------------------------------------------------------------

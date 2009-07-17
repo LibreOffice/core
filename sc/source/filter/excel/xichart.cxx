@@ -39,6 +39,7 @@
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
@@ -65,6 +66,8 @@
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 
 #include <sfx2/objsh.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/unoapi.hxx>
 
 #include "document.hxx"
 #include "drwlayer.hxx"
@@ -76,7 +79,6 @@
 #include "xistyle.hxx"
 #include "xipage.hxx"
 #include "xiview.hxx"
-#include "xiescher.hxx"
 #include "tokenarray.hxx"
 #include "token.hxx"
 #include "compiler.hxx"
@@ -88,11 +90,14 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::UNO_SET_THROW;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::util::XNumberFormatsSupplier;
+using ::com::sun::star::drawing::XDrawPage;
+using ::com::sun::star::drawing::XDrawPageSupplier;
 
 using ::com::sun::star::chart2::XChartDocument;
 using ::com::sun::star::chart2::XDiagram;
@@ -246,14 +251,14 @@ void XclImpChRoot::InitConversion( Reference< XChartDocument > xChartDoc ) const
     }
 }
 
-void XclImpChRoot::FinishConversion( ScfProgressBar& rProgress ) const
+void XclImpChRoot::FinishConversion( XclImpDffConverter& rDffConv ) const
 {
-    rProgress.Progress( EXC_CHART_PROGRESS_SIZE );
+    rDffConv.Progress( EXC_CHART_PROGRESS_SIZE );
     // unlock the model
     Reference< XModel > xModel( mxChData->GetChartDoc(), UNO_QUERY );
     if( xModel.is() )
         xModel->unlockControllers();
-    rProgress.Progress( EXC_CHART_PROGRESS_SIZE );
+    rDffConv.Progress( EXC_CHART_PROGRESS_SIZE );
 
     mxChData->FinishConversion();
 }
@@ -3475,7 +3480,7 @@ XclImpChTextRef XclImpChChart::GetDefaultText( XclChTextType eTextType ) const
     return maDefTexts.get( nDefTextId );
 }
 
-void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressBar& rProgress ) const
+void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, XclImpDffConverter& rDffConv ) const
 {
     // initialize conversion (locks the model to suppress any internal updates)
     InitConversion( xChartDoc );
@@ -3517,7 +3522,7 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressB
     }
 
     // unlock the model
-    FinishConversion( rProgress );
+    FinishConversion( rDffConv );
 }
 
 void XclImpChChart::ReadChSeries( XclImpStream& rStrm )
@@ -3673,10 +3678,76 @@ Reference< XDiagram > XclImpChChart::CreateDiagram() const
 
 // ----------------------------------------------------------------------------
 
+XclImpChartDrawingManager::XclImpChartDrawingManager( const XclImpRoot& rRoot, bool bOwnTab ) :
+    XclImpDrawingManager( rRoot, bOwnTab ), // sheet charts may contain OLE objects
+    mnScTab( rRoot.GetCurrScTab() ),
+    mbOwnTab( bOwnTab )
+{
+}
+
+void XclImpChartDrawingManager::ConvertObjects( XclImpDffConverter& rDffConv,
+        const Reference< XModel >& rxModel, const Rectangle& rChartRect )
+{
+    maChartRect = rChartRect;   // needed in CalcAnchorRect() callback
+
+    SdrModel* pSdrModel = 0;
+    SdrPage* pSdrPage = 0;
+    if( mbOwnTab )
+    {
+        // chart sheet: insert all shapes into the sheet, not into the chart object
+        pSdrModel = GetDoc().GetDrawLayer();
+        pSdrPage = GetSdrPage( mnScTab );
+    }
+    else
+    {
+        // embedded chart object: insert all shapes into the chart
+        try
+        {
+            Reference< XDrawPageSupplier > xDrawPageSupp( rxModel, UNO_QUERY_THROW );
+            Reference< XDrawPage > xDrawPage( xDrawPageSupp->getDrawPage(), UNO_SET_THROW );
+            pSdrPage = ::GetSdrPageFromXDrawPage( xDrawPage );
+            pSdrModel = pSdrPage ? pSdrPage->GetModel() : 0;
+        }
+        catch( Exception& )
+        {
+        }
+    }
+
+    if( pSdrModel && pSdrPage )
+        ImplConvertObjects( rDffConv, *pSdrModel, *pSdrPage );
+}
+
+Rectangle XclImpChartDrawingManager::CalcAnchorRect( const XclObjAnchor& rAnchor, bool bDffAnchor ) const
+{
+    /*  In objects with DFF client anchor, the position of the shape is stored
+        in the cell address components of the client anchor. In old BIFF3-BIFF5
+        objects, the position is stored in the offset components of the anchor. */
+    Rectangle aRect(
+        static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maFirst.mnCol : rAnchor.mnLX ) / EXC_CHART_UNIT * maChartRect.GetWidth()  + 0.5 ),
+        static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maFirst.mnRow : rAnchor.mnTY ) / EXC_CHART_UNIT * maChartRect.GetHeight() + 0.5 ),
+        static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maLast.mnCol  : rAnchor.mnRX ) / EXC_CHART_UNIT * maChartRect.GetWidth()  + 0.5 ),
+        static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maLast.mnRow  : rAnchor.mnBY ) / EXC_CHART_UNIT * maChartRect.GetHeight() + 0.5 ) );
+    aRect.Justify();
+    // move shapes into chart area for sheet charts
+    if( mbOwnTab )
+        aRect.Move( maChartRect.Left(), maChartRect.Top() );
+    return aRect;
+}
+
+void XclImpChartDrawingManager::OnObjectInserted( const XclImpDrawObjBase& )
+{
+}
+
+// ----------------------------------------------------------------------------
+
 XclImpChart::XclImpChart( const XclImpRoot& rRoot, bool bOwnTab ) :
     XclImpRoot( rRoot ),
     mbOwnTab( bOwnTab ),
     mbIsPivotChart( false )
+{
+}
+
+XclImpChart::~XclImpChart()
 {
 }
 
@@ -3710,6 +3781,7 @@ void XclImpChart::ReadChartSubStream( XclImpStream& rStrm )
             case EXC_ID_SCL:            rTabViewSett.ReadScl( rStrm );          break;
         }
 
+        // common records
         switch( rStrm.GetRecId() )
         {
             case EXC_ID_EOF:            bLoop = false;                          break;
@@ -3721,12 +3793,29 @@ void XclImpChart::ReadChartSubStream( XclImpStream& rStrm )
             case EXC_ID5_BOF:           XclTools::SkipSubStream( rStrm );       break;
 
             case EXC_ID_CHCHART:        ReadChChart( rStrm );                   break;
-            case EXC_ID_OBJ:            GetTracer().TraceChartEmbeddedObj();    break;
 
             case EXC_ID8_CHPIVOTREF:
                 GetTracer().TracePivotChartExists();
                 mbIsPivotChart = true;
             break;
+
+            // BIFF specific records
+            default: switch( GetBiff() )
+            {
+                case EXC_BIFF5: switch( rStrm.GetRecId() )
+                {
+                    case EXC_ID_OBJ:        GetDrawingManager().ReadObj( rStrm );           break;
+                }
+                break;
+                case EXC_BIFF8: switch( rStrm.GetRecId() )
+                {
+                    case EXC_ID_MSODRAWING: GetDrawingManager().ReadMsoDrawing( rStrm );    break;
+                    // #i61786# weird documents: OBJ without MSODRAWING -> read in BIFF5 format
+                    case EXC_ID_OBJ:        GetDrawingManager().ReadObj( rStrm );           break;
+                }
+                break;
+                default:;
+            }
         }
     }
 }
@@ -3740,14 +3829,28 @@ void XclImpChart::UpdateObjFrame( const XclObjLineData& rLineData, const XclObjF
 
 sal_Size XclImpChart::GetProgressSize() const
 {
-    return mxChartData.is() ? mxChartData->GetProgressSize() : 0;
+    return
+        (mxChartData.is() ? mxChartData->GetProgressSize() : 0) +
+        (mxDrawingMgr.is() ? mxDrawingMgr->GetProgressSize() : 0);
 }
 
-void XclImpChart::Convert( Reference< XModel > xModel, ScfProgressBar& rProgress ) const
+void XclImpChart::Convert( Reference< XModel > xModel, XclImpDffConverter& rDffConv, const Rectangle& rChartRect ) const
 {
     Reference< XChartDocument > xChartDoc( xModel, UNO_QUERY );
-    if( mxChartData.is() && xChartDoc.is() )
-        mxChartData->Convert( xChartDoc, rProgress );
+    if( xChartDoc.is() )
+    {
+        if( mxChartData.is() )
+            mxChartData->Convert( xChartDoc, rDffConv );
+        if( mxDrawingMgr.is() )
+            mxDrawingMgr->ConvertObjects( rDffConv, xModel, rChartRect );
+    }
+}
+
+XclImpChartDrawingManager& XclImpChart::GetDrawingManager()
+{
+    if( !mxDrawingMgr )
+        mxDrawingMgr.reset( new XclImpChartDrawingManager( GetRoot(), mbOwnTab ) );
+    return *mxDrawingMgr;
 }
 
 void XclImpChart::ReadChChart( XclImpStream& rStrm )

@@ -207,6 +207,12 @@ XclImpObjectManager& XclImpRoot::GetObjectManager() const
     return *mrImpData.mxObjMgr;
 }
 
+XclImpSheetDrawingManager& XclImpRoot::GetDrawingManager() const
+{
+    DBG_ASSERT( !IsInGlobals(), "XclImpRoot::GetDrawingManager - must not be called from workbook globals" );
+    return mrImpData.mxObjMgr->GetDrawingManager( GetCurrScTab() );
+}
+
 XclImpCondFormatManager& XclImpRoot::GetCondFormatManager() const
 {
     DBG_ASSERT( mrImpData.mxCondFmtMgr.is(), "XclImpRoot::GetCondFormatManager - invalid call, wrong BIFF" );
