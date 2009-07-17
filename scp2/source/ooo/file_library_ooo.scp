@@ -958,7 +958,11 @@ File gid_File_Oo_Office_Dataaccess_Mozab_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+#ifdef WNT
     Name = "/registry/spool/DataAccess/mozab.xcu";
+#else
+    Name = "/registry/spool/DataAccess/mozab2.xcu";
+#endif
 End
 
 STD_UNO_LIB_FILE(gid_File_Lib_Mozab,mozab)
