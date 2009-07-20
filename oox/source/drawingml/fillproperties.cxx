@@ -348,9 +348,9 @@ void FillProperties::pushToPropMap( PropertyMap& rPropMap, const FillPropertyIds
                                 rPropMap.setProperty( rPropIds[ FillBitmapSizeYId ], nFillBmpSizeY );
 
                                 // offset of the first bitmap tile (given as EMUs), convert to percent
-                                sal_Int16 nTileOffsetX = getIntervalValue< sal_Int16 >( maBlipProps.moTileOffsetX.get( 0 ) / 3.6 / aOriginalSize.Width, 0, 100 );
+                                sal_Int16 nTileOffsetX = getDoubleIntervalValue< sal_Int16 >( maBlipProps.moTileOffsetX.get( 0 ) / 3.6 / aOriginalSize.Width, 0, 100 );
                                 rPropMap.setProperty( rPropIds[ FillBitmapOffsetXId ], nTileOffsetX );
-                                sal_Int16 nTileOffsetY = getIntervalValue< sal_Int16 >( maBlipProps.moTileOffsetY.get( 0 ) / 3.6 / aOriginalSize.Height, 0, 100 );
+                                sal_Int16 nTileOffsetY = getDoubleIntervalValue< sal_Int16 >( maBlipProps.moTileOffsetY.get( 0 ) / 3.6 / aOriginalSize.Height, 0, 100 );
                                 rPropMap.setProperty( rPropIds[ FillBitmapOffsetYId ], nTileOffsetY );
                             }
                         }

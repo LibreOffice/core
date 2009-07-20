@@ -1149,7 +1149,7 @@ void ObjectFormatter::convertTextRotation( PropertySet& rPropSet, const ModelRef
         /*  Chart2 expects rotation angle as double value in range of [0,360).
             OOXML counts clockwise, Chart2 counts counterclockwise. */
         double fAngle = rxTextProp->getTextProperties().moRotation.get( 0 );
-        fAngle = getIntervalValue< double >( -fAngle / 60000.0, 0.0, 360.0 );
+        fAngle = getDoubleIntervalValue< double >( -fAngle / 60000.0, 0.0, 360.0 );
         rPropSet.setProperty( PROP_TextRotation, fAngle );
 
         if( bSupportsStacked )

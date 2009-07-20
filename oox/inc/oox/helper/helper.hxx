@@ -111,7 +111,7 @@ inline ReturnType getIntervalValue( Type nValue, Type nBegin, Type nEnd )
 }
 
 template< typename ReturnType >
-inline ReturnType getIntervalValue( double fValue, double fBegin, double fEnd )
+inline ReturnType getDoubleIntervalValue( double fValue, double fBegin, double fEnd )
 {
     double fInterval = fEnd - fBegin;
     double fCount = (fValue < fBegin) ? -(::rtl::math::approxFloor( (fBegin - fValue - 1.0) / fInterval ) + 1.0) : ::rtl::math::approxFloor( (fValue - fBegin) / fInterval );
