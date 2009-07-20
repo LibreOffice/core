@@ -90,7 +90,7 @@ SLOFILES =  \
         $(SLO)$/SwGrammarMarkUp.obj \
         $(SLO)$/wrong.obj
 
-.IF "$(DBG_UTIL)"!=""
+.IF "$(dbgutil)"!=""
 SLOFILES +=  \
         $(SLO)$/txtio.obj
 .ENDIF
