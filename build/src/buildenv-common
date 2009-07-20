@@ -40,7 +40,7 @@ if [ "$buildenv_build" = "1" ] ; then
     . "$solverdir"/Linux*Env.Set.sh
 
     export SOLARLIB="$SOLARLIB -L$buildsolverdir/$UPD/$INPATH/lib"
-    export SOLARINC="$SOLARINC -I$buildsolverdir/$UPD/$INPATH/inc"
+    export SOLARINC="$SOLARINC -I$buildsolverdir/$UPD/$INPATH/inc -I$buildsolverdir/$UPD/$INPATH/inc/external"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$buildsolverdir/$UPD/$INPATH/lib"
     export PATH="$PATH:$buildsolverdir/$UPD/$INPATH/bin"
     export CLASSPATH="$CLASSPATH:$buildsolverdir/$UPD/$INPATH/bin"

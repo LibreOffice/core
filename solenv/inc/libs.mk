@@ -54,7 +54,7 @@ ICUUCLIB=-licuuc
 ICUDATALIB=-licudata
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 I18NUTILLIB=-li18nutil$(COMID)
-.INCLUDE .IGNORE : i18npool$/version.mk
+.INCLUDE .IGNORE : i18npoolversion.mk
 I18NISOLANGLIB=-li18nisolang$(ISOLANG_MAJOR)$(COMID)
 I18NPAPERLIB=-li18npaper$(DLLPOSTFIX)
 .IF "$(WITH_GPC)"!="NO"
@@ -66,6 +66,9 @@ SALHELPERLIB=-lsalhelper$(UDK_MAJOR)$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 XMLSCRIPTLIB =-lxcr$(DLLPOSTFIX)
+.IF "$(BUILDSOLVER)"!=""
+.INCLUDE .IGNORE : $(BUILDSOLVER)$/$(UPD)$/$(INPATH)$/inc$/comphelper$/version.mk
+.ENDIF
 .INCLUDE .IGNORE : comphelper$/version.mk
 COMPHELPERLIB=-lcomphelp$(COMPHLP_MAJOR)$(COMID)
 CONNECTIVITYLIB=-lconnectivity
@@ -80,6 +83,9 @@ CPPUHELPERLIB=-lcppuhelper$(UDK_MAJOR)$(COMID)
 CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(BUILDSOLVER)"!=""
+.INCLUDE .IGNORE : $(BUILDSOLVER)$/$(UPD)$/$(INPATH)$/inc$/ucbhelper$/version.mk
+.ENDIF
 .INCLUDE .IGNORE : ucbhelper$/version.mk
 UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COMID)
 .IF "$(SYSTEM_OPENSSL)" == "YES"
@@ -98,6 +104,9 @@ REGLIB=-lreg$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 REGLIB=-lreg
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(BUILDSOLVER)"!=""
+.INCLUDE .IGNORE : $(BUILDSOLVER)$/$(UPD)$/$(INPATH)$/inc$/vos$/version.mk
+.ENDIF
 .INCLUDE .IGNORE : vos$/version.mk
 VOSLIB=-lvos$(VOS_MAJOR)$(COMID)
 XMLOFFLIB=-lxo$(DLLPOSTFIX)
