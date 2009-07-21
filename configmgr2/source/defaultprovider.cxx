@@ -114,17 +114,17 @@ rtl::OUString getImplementationName() {
             "com.sun.star.comp.configuration.DefaultProvider"));
 }
 
-com::sun::star::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
+css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
     rtl::OUString name(
         RTL_CONSTASCII_USTRINGPARAM(
             "com.sun.star.configuration.DefaultProvider"));
     return css::uno::Sequence< rtl::OUString >(&name, 1);
 }
 
-com::sun::star::uno::Reference< com::sun::star::lang::XSingleComponentFactory >
+css::uno::Reference< css::lang::XSingleComponentFactory >
 SAL_CALL createFactory(
     cppu::ComponentFactoryFunc, rtl::OUString const &,
-    com::sun::star::uno::Sequence< rtl::OUString > const &, rtl_ModuleCount *)
+    css::uno::Sequence< rtl::OUString > const &, rtl_ModuleCount *)
     SAL_THROW(())
 {
     return new Factory;
