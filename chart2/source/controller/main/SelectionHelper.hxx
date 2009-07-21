@@ -42,6 +42,8 @@ namespace chart
 {
 //.............................................................................
 
+class ObjectIdentifier;
+
 //-----------------------------------------------------------------------------
 /**
 */
@@ -53,6 +55,7 @@ public: //methods
     rtl::OUString getSelectedCID();
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape > getSelectedAdditionalShape();
+    ObjectIdentifier getSelectedOID() const;
 
     bool isResizeableObjectSelected();
     bool isRotateableObjectSelected( const ::com::sun::star::uno::Reference<

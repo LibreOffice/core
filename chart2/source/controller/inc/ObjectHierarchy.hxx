@@ -30,6 +30,8 @@
 #ifndef CHART2_OBJECTHIERARCHY_HXX
 #define CHART2_OBJECTHIERARCHY_HXX
 
+#include "ObjectIdentifier.hxx"
+
 #include <rtl/ustring.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/awt/KeyEvent.hpp>
@@ -50,8 +52,8 @@ class ImplObjectHierarchy;
 class ObjectHierarchy
 {
 public:
-    typedef ::rtl::OUString tCID;
-    typedef ::std::vector< tCID > tChildContainer;
+    typedef ObjectIdentifier tOID;
+    typedef ::std::vector< tOID > tChildContainer;
 
     /** @param bFlattenDiagram
             If <TRUE/>, the content of the diaram (data series, wall, floor,
@@ -65,20 +67,20 @@ public:
         bool bFlattenDiagram = false );
     ~ObjectHierarchy();
 
-    static tCID      getRootNodeCID();
-    static bool      isRootNode( const tCID & rCID );
+    static tOID      getRootNodeOID();
+    static bool      isRootNode( const tOID& rOID );
 
-    /// equal to getChildren( getRootNodeCID())
+    /// equal to getChildren( getRootNodeOID())
     tChildContainer  getTopLevelChildren() const;
-    bool             hasChildren( const tCID & rParent ) const;
-    tChildContainer  getChildren( const tCID & rParent ) const;
+    bool             hasChildren( const tOID& rParent ) const;
+    tChildContainer  getChildren( const tOID& rParent ) const;
 
-    tChildContainer  getSiblings( const tCID & rNode ) const;
+    tChildContainer  getSiblings( const tOID& rNode ) const;
 
     /// The result is empty, if the node cannot be found in the tree
-    tCID             getParent( const tCID & rNode ) const;
+    tOID             getParent( const tOID& rNode ) const;
     /// @returns -1, if no parent can be determined
-    sal_Int32        getIndexInParent( const tCID & rNode ) const;
+    sal_Int32        getIndexInParent( const tOID& rNode ) const;
 
 private:
 
@@ -88,16 +90,16 @@ private:
 class ObjectKeyNavigation
 {
 public:
-    explicit ObjectKeyNavigation( const ObjectHierarchy::tCID & rCurrentCID,
+    explicit ObjectKeyNavigation( const ObjectHierarchy::tOID & rCurrentOID,
                                   const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::chart2::XChartDocument > & xChartDocument,
                                   ExplicitValueProvider * pExplicitValueProvider = 0 );
 
     bool handleKeyEvent( const ::com::sun::star::awt::KeyEvent & rEvent );
-    ObjectHierarchy::tCID getCurrentSelection() const;
+    ObjectHierarchy::tOID getCurrentSelection() const;
 
 private:
-    void setCurrentSelection( const ObjectHierarchy::tCID & rCID );
+    void setCurrentSelection( const ObjectHierarchy::tOID& rOID );
     bool first();
     bool last();
     bool next();
@@ -107,7 +109,7 @@ private:
     bool veryFirst();
     bool veryLast();
 
-    ObjectHierarchy::tCID m_aCurrentCID;
+    ObjectHierarchy::tOID m_aCurrentOID;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > m_xChartDocument;
     ExplicitValueProvider * m_pExplicitValueProvider;

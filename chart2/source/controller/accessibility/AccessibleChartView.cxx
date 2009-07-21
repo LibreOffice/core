@@ -39,6 +39,7 @@
 #include "ObjectIdentifier.hxx"
 #include "ResId.hxx"
 #include "Strings.hrc"
+#include "AccessibleViewForwarder.hxx"
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -75,13 +76,30 @@ AccessibleChartView::AccessibleChartView(
             true, // has children
             true  // always transparent
             ),
-        m_xContext( xContext )
+        m_xContext( xContext ),
+        m_pSdrView( NULL ),
+        m_pViewForwarder( NULL )
+{
+    AddState( AccessibleStateType::OPAQUE );
+}
+
+AccessibleChartView::AccessibleChartView(
+    const Reference< uno::XComponentContext >& xContext, SdrView* pView ) :
+        impl::AccessibleChartView_Base(
+            AccessibleElementInfo(), // empty for now
+            true, // has children
+            true  // always transparent
+            ),
+        m_xContext( xContext ),
+        m_pSdrView( pView ),
+        m_pViewForwarder( NULL )
 {
     AddState( AccessibleStateType::OPAQUE );
 }
 
 AccessibleChartView::~AccessibleChartView()
 {
+    delete m_pViewForwarder;
 }
 
 
@@ -353,7 +371,7 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
 
         {
             AccessibleElementInfo aAccInfo;
-            aAccInfo.m_aCID = C2U("ROOT");
+            aAccInfo.m_aOID = ObjectIdentifier( C2U( "ROOT" ) );
             aAccInfo.m_xChartDocument = uno::WeakReference< chart2::XChartDocument >(
                 uno::Reference< chart2::XChartDocument >( m_xChartModel.get(), uno::UNO_QUERY ));
             aAccInfo.m_xSelectionSupplier = m_xSelectionSupplier;
@@ -361,6 +379,14 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
             aAccInfo.m_xWindow = m_xWindow;
             aAccInfo.m_pParent = 0;
             aAccInfo.m_spObjectHierarchy = m_spObjectHierarchy;
+            aAccInfo.m_pSdrView = m_pSdrView;
+            Window* pWindow = VCLUnoHelper::GetWindow( m_xWindow );
+            if ( m_pViewForwarder )
+            {
+                delete m_pViewForwarder;
+            }
+            m_pViewForwarder = new AccessibleViewForwarder( this, pWindow );
+            aAccInfo.m_pViewForwarder = m_pViewForwarder;
             // broadcasts an INVALIDATE_ALL_CHILDREN event globally
             SetInfo( aAccInfo );
         }
@@ -387,16 +413,16 @@ void SAL_CALL AccessibleChartView::selectionChanged( const lang::EventObject& /*
 
     if( xSelectionSupplier.is() )
     {
-        rtl::OUString aSelectedObjectCID;
-        Any aSelection = xSelectionSupplier->getSelection();
-        if(aSelection>>=aSelectedObjectCID)
+        ObjectIdentifier aSelectedOID( xSelectionSupplier->getSelection() );
+        if ( m_aCurrentSelectionOID.isValid() )
         {
-            if( m_aCurrentSelectionCID.getLength())
-                NotifyEvent( LOST_SELECTION, m_aCurrentSelectionCID );
-            if( aSelectedObjectCID.getLength())
-                NotifyEvent( GOT_SELECTION, aSelectedObjectCID );
-            m_aCurrentSelectionCID = aSelectedObjectCID;
+            NotifyEvent( LOST_SELECTION, m_aCurrentSelectionOID );
         }
+        if( aSelectedOID.isValid() )
+        {
+            NotifyEvent( GOT_SELECTION, aSelectedOID );
+        }
+        m_aCurrentSelectionOID = aSelectedOID;
     }
 }
 

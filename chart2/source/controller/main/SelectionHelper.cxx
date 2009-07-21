@@ -96,6 +96,20 @@ uno::Reference< drawing::XShape > Selection::getSelectedAdditionalShape()
     return m_xSelectAdditionalShape;
 }
 
+ObjectIdentifier Selection::getSelectedOID() const
+{
+    ObjectIdentifier aReturn;
+    if ( m_aSelectedObjectCID.getLength() > 0 )
+    {
+        aReturn = ObjectIdentifier( m_aSelectedObjectCID );
+    }
+    else if ( m_xSelectAdditionalShape.is() )
+    {
+        aReturn = ObjectIdentifier( m_xSelectAdditionalShape );
+    }
+    return aReturn;
+}
+
 bool Selection::setSelection( const ::rtl::OUString& rCID )
 {
     if( !rCID.equals( m_aSelectedObjectCID ) )

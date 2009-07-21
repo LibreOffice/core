@@ -465,6 +465,8 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
                     SchAlignmentTabPage::CreateWithoutRotation can be deleted. */
                 AddTabPage(TP_ALIGNMENT, String(SchResId(STR_PAGE_ALIGNMENT)), SchAlignmentTabPage::CreateWithoutRotation, NULL);
             break;
+        default:
+            break;
     }
 
     // used to find out if user left the dialog with OK. When OK is pressed but

@@ -104,7 +104,7 @@ bool AccessibleChartElement::ImplUpdateChildren()
     bool bResult = false;
     Reference< chart2::XTitle > xTitle(
         ObjectIdentifier::getObjectPropertySet(
-            GetInfo().m_aCID, Reference< chart2::XChartDocument >( GetInfo().m_xChartDocument )),
+            GetInfo().m_aOID.getObjectCID(), Reference< chart2::XChartDocument >( GetInfo().m_xChartDocument )),
         uno::UNO_QUERY );
     m_bHasText = xTitle.is();
 
@@ -139,7 +139,7 @@ void AccessibleChartElement::InitTextEdit()
         {
             Reference< lang::XInitialization > xInit( m_xTextHelper, uno::UNO_QUERY_THROW );
             Sequence< uno::Any > aArgs( 3 );
-            aArgs[0] <<= GetInfo().m_aCID;
+            aArgs[0] <<= GetInfo().m_aOID.getObjectCID();
             aArgs[1] <<= Reference< XAccessible >( this );
             aArgs[2] <<= Reference< awt::XWindow >( GetInfo().m_xWindow );
             xInit->initialize( aArgs );
@@ -227,7 +227,7 @@ OUString SAL_CALL AccessibleChartElement::getAccessibleName()
     throw (::com::sun::star::uno::RuntimeException)
 {
     return ObjectNameProvider::getNameForCID(
-        GetInfo().m_aCID, GetInfo().m_xChartDocument );
+        GetInfo().m_aOID.getObjectCID(), GetInfo().m_xChartDocument );
 }
 
 // ________ AccessibleChartElement::XAccessibleContext (overloaded) ________
@@ -252,7 +252,7 @@ Reference< awt::XFont > SAL_CALL AccessibleChartElement::getFont()
     {
         Reference< beans::XMultiPropertySet > xObjProp(
             ObjectIdentifier::getObjectPropertySet(
-                GetInfo().m_aCID, Reference< chart2::XChartDocument >( GetInfo().m_xChartDocument )), uno::UNO_QUERY );
+                GetInfo().m_aOID.getObjectCID(), Reference< chart2::XChartDocument >( GetInfo().m_xChartDocument )), uno::UNO_QUERY );
         awt::FontDescriptor aDescr(
             CharacterProperties::createFontDescriptorFromPropertySet( xObjProp ));
         xFont = xDevice->getFont( aDescr );
@@ -273,7 +273,7 @@ OUString SAL_CALL AccessibleChartElement::getToolTipText()
     CheckDisposeState();
 
     return ObjectNameProvider::getHelpText(
-        GetInfo().m_aCID, Reference< chart2::XChartDocument >( GetInfo().m_xChartDocument ));
+        GetInfo().m_aOID.getObjectCID(), Reference< chart2::XChartDocument >( GetInfo().m_xChartDocument ));
 }
 
 // ________ XAccessibleComponent ________
@@ -283,7 +283,7 @@ sal_Bool SAL_CALL AccessibleChartElement::containsPoint( const awt::Point& aPoin
     return AccessibleBase::containsPoint( aPoint );
 }
 
-Reference< accessibility::XAccessible > SAL_CALL AccessibleChartElement::getAccessibleAtPoint( const awt::Point& aPoint )
+Reference< XAccessible > SAL_CALL AccessibleChartElement::getAccessibleAtPoint( const awt::Point& aPoint )
     throw (uno::RuntimeException)
 {
     return AccessibleBase::getAccessibleAtPoint( aPoint );

@@ -53,6 +53,7 @@
 #include "dlg_CreationWizard.hxx"
 #include "dlg_ChartType.hxx"
 //#include "svx/ActionDescriptionProvider.hxx"
+#include "AccessibleChartView.hxx"
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"
 
@@ -102,6 +103,7 @@ namespace chart
 //.............................................................................
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
@@ -1372,12 +1374,9 @@ DrawViewWrapper* ChartController::GetDrawViewWrapper()
     return m_pDrawViewWrapper;
 }
 
-uno::Reference< accessibility::XAccessible > ChartController::CreateAccessible()
+uno::Reference< XAccessible > ChartController::CreateAccessible()
 {
-    uno::Reference< accessibility::XAccessible > xResult(
-        m_xCC->getServiceManager()->createInstanceWithContext(
-            CHART2_ACCESSIBLE_SERVICE_NAME, m_xCC ), uno::UNO_QUERY );
-
+    uno::Reference< XAccessible > xResult = new AccessibleChartView( m_xCC, GetDrawViewWrapper() );
     impl_initializeAccessible( uno::Reference< lang::XInitialization >( xResult, uno::UNO_QUERY ) );
     return xResult;
 }
@@ -1409,7 +1408,7 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         uno::Reference<frame::XModel> xModel(m_aModel->getModel());
         aArguments[1]=uno::makeAny(xModel);
         aArguments[2]=uno::makeAny(m_xChartView);
-        uno::Reference< accessibility::XAccessible > xParent;
+        uno::Reference< XAccessible > xParent;
         if( m_pChartWindow )
         {
             Window* pParentWin( m_pChartWindow->GetAccessibleParentWindow());
