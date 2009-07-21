@@ -127,8 +127,12 @@ public:
     sal_Size            GetProgressSize() const;
     /** Creates and returns an SdrObject from the contained data. Caller takes ownership! */
     SdrObject*          CreateSdrObject( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect, bool bIsDff ) const;
-    /** Additional processing for the passed SdrObject (calls virtual DoProcessSdrObj() function). */
-    void                ProcessSdrObject( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
+    /** Additional processing for the passed SdrObject before insertion into
+        the drawing page (calls virtual DoPreProcessSdrObj() function). */
+    void                PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
+    /** Additional processing for the passed SdrObject after insertion into the
+        drawing page (calls virtual DoPostProcessSdrObj() function). */
+    void                PostProcessSdrObject( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
 
 protected:
     /** Reads the object name in a BIFF5 OBJ record. */
@@ -167,8 +171,10 @@ protected:
     virtual sal_Size    DoGetProgressSize() const;
     /** Derived classes create and return a new SdrObject from the contained data. Caller takes ownership! */
     virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const;
-    /** Derived classes may perform additional processing for the passed SdrObject. */
-    virtual void        DoProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
+    /** Derived classes may perform additional processing for the passed SdrObject before insertion. */
+    virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
+    /** Derived classes may perform additional processing for the passed SdrObject after insertion. */
+    virtual void        DoPostProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
 
 private:
     /** Reads the contents of a BIFF3 OBJ record. */
@@ -403,7 +409,7 @@ protected:
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
     virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const;
     /** Inserts the contained text data at the passed object. */
-    virtual void        DoProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
+    virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
 
 protected:
     XclImpObjTextData   maTextData;     /// Textbox data from BIFF5 OBJ or BIFF8 TXO record.
@@ -434,6 +440,8 @@ protected:
     virtual sal_Size    DoGetProgressSize() const;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
     virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const;
+    /** Converts the chart document. */
+    virtual void        DoPostProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
 
 private:
     /** Calculates the object anchor of a sheet chart (chart fills one page). */
@@ -459,7 +467,7 @@ public:
 
 protected:
     /** Inserts the note into the document, sets visibility. */
-    virtual void        DoProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
+    virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
 
 private:
     ScAddress           maScPos;        /// Cell position of the note object.
@@ -538,7 +546,7 @@ protected:
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
     virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const;
     /** Additional processing on the SdrObject, calls new virtual function DoProcessControl(). */
-    virtual void        DoProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
+    virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
 
     /** Derived classes return the service name of the control component to be created. */
     virtual ::rtl::OUString DoGetServiceName() const = 0;
@@ -887,7 +895,7 @@ protected:
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
     virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const;
     /** Overloaded to do additional processing on the SdrObject. */
-    virtual void        DoProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
+    virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
 
 private:
     /** Reads and sets the picture flags from a BIFF3-BIFF5 OBJ picture record. */
@@ -1044,7 +1052,7 @@ private:
 
 private:
     /** Data per registered drawing manager, will be stacked for recursive calls. */
-    struct XclImpConverterData
+    struct XclImpDffConvData
     {
         XclImpDrawingManager& mrDrawingMgr;     /// Current drawing manager containing drawing objects.
         SdrModel&           mrSdrModel;         /// The SdrModel of the drawing manager.
@@ -1055,15 +1063,15 @@ private:
         sal_Int32           mnLastCtrlIndex;    /// Last insertion index of a form control (for macro events).
         bool                mbHasCtrlForm;      /// True = mxCtrlForm is initialized (but maybe still null).
 
-        explicit            XclImpConverterData(
+        explicit            XclImpDffConvData(
                                 XclImpDrawingManager& rDrawingMgr,
                                 SdrModel& rSdrModel, SdrPage& rSdrPage );
     };
 
     /** Returns the current drawing manager data struct from top of the stack. */
-    XclImpConverterData&  GetConvData();
+    XclImpDffConvData&      GetConvData();
     /** Returns the current drawing manager data struct from top of the stack. */
-    const XclImpConverterData& GetConvData() const;
+    const XclImpDffConvData& GetConvData() const;
 
     /** Reads contents of a hyperlink property and returns the extracted URL. */
     String              ReadHlinkProperty( SvStream& rDffStrm ) const;
@@ -1084,13 +1092,13 @@ private:
 
 private:
     typedef ScfRef< ScfProgressBar >                ScfProgressBarRef;
-    typedef ScfRef< XclImpConverterData >           XclImpConverterDataRef;
-    typedef ::std::vector< XclImpConverterDataRef > XclImpConverterDataStack;
+    typedef ScfRef< XclImpDffConvData >             XclImpDffConvDataRef;
+    typedef ::std::vector< XclImpDffConvDataRef >   XclImpDffConvDataStack;
 
     const ::rtl::OUString maStdFormName;    /// Standard name of control forms.
     SotStorageStreamRef mxCtlsStrm;         /// The 'Ctls' stream for OCX form controls.
     ScfProgressBarRef   mxProgress;         /// The progress bar used in ProcessObj().
-    XclImpConverterDataStack maDataStack;   /// Stack for registered drawing managers.
+    XclImpDffConvDataStack maDataStack;     /// Stack for registered drawing managers.
     sal_uInt32          mnOleImpFlags;      /// Application OLE import settings.
     sal_Int32           mnDefTextMargin;    /// Default margin in text boxes.
 };

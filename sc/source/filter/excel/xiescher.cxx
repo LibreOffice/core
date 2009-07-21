@@ -120,11 +120,10 @@
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::XInterface;
-using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_SET_THROW;
@@ -454,9 +453,9 @@ SdrObject* XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffConv, con
     return xSdrObj.release();
 }
 
-void XclImpDrawObjBase::ProcessSdrObject( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const
+void XclImpDrawObjBase::PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const
 {
-    // default: front layer, derived classes may have to set other layer in DoProcessSdrObj()
+    // default: front layer, derived classes may have to set other layer in DoPreProcessSdrObj()
     rSdrObj.NbcSetLayer( SC_LAYER_FRONT );
 
     // set object name (GetObjName() will always return a non-empty name)
@@ -492,7 +491,13 @@ void XclImpDrawObjBase::ProcessSdrObject( XclImpDffConverter& rDffConv, SdrObjec
 #endif
 
     // call virtual function for object type specific processing
-    DoProcessSdrObj( rDffConv, rSdrObj );
+    DoPreProcessSdrObj( rDffConv, rSdrObj );
+}
+
+void XclImpDrawObjBase::PostProcessSdrObject( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const
+{
+    // call virtual function for object type specific processing
+    DoPostProcessSdrObj( rDffConv, rSdrObj );
 }
 
 // protected ------------------------------------------------------------------
@@ -760,11 +765,15 @@ SdrObject* XclImpDrawObjBase::DoCreateSdrObj( XclImpDffConverter& rDffConv, cons
     return 0;
 }
 
-void XclImpDrawObjBase::DoProcessSdrObj( XclImpDffConverter&, SdrObject& ) const
+void XclImpDrawObjBase::DoPreProcessSdrObj( XclImpDffConverter&, SdrObject& ) const
 {
     // trace if object is not printable
     if( !IsPrintable() )
         GetTracer().TraceObjectNotPrintable();
+}
+
+void XclImpDrawObjBase::DoPostProcessSdrObj( XclImpDffConverter&, SdrObject& ) const
+{
 }
 
 void XclImpDrawObjBase::ImplReadObj3( XclImpStream& rStrm )
@@ -1383,7 +1392,7 @@ SdrObject* XclImpTextObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const Re
     return xSdrObj.release();
 }
 
-void XclImpTextObj::DoProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const
+void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const
 {
     // set text data
     if( SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( &rSdrObj ) )
@@ -1449,7 +1458,7 @@ void XclImpTextObj::DoProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rS
         }
     }
     // base class processing
-    XclImpRectObj::DoProcessSdrObj( rDffConv, rSdrObj );
+    XclImpRectObj::DoPreProcessSdrObj( rDffConv, rSdrObj );
 }
 
 // ----------------------------------------------------------------------------
@@ -1565,20 +1574,29 @@ SdrObject* XclImpChartObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const R
 
         // create the container OLE object
         xSdrObj.reset( new SdrOle2Obj( svt::EmbeddedObjectRef( xEmbObj, nAspect ), aEmbObjName, rAnchorRect ) );
-
-        // convert Excel chart to OOo Chart
-        if( ::svt::EmbeddedObjectRef::TryRunningState( xEmbObj ) )
-        {
-            Reference< XModel > xModel( xEmbObj->getComponent(), UNO_QUERY );
-            mxChart->Convert( xModel, rDffConv, rAnchorRect );
-
-            Reference< XEmbedPersist > xPers( xEmbObj, UNO_QUERY );
-            if( xPers.is() )
-                xPers->storeOwn();
-        }
     }
 
     return xSdrObj.release();
+}
+
+void XclImpChartObj::DoPostProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const
+{
+    const SdrOle2Obj* pSdrOleObj = dynamic_cast< const SdrOle2Obj* >( &rSdrObj );
+    if( mxChart.is() && pSdrOleObj )
+    {
+        Reference< XEmbeddedObject > xEmbObj = pSdrOleObj->GetObjRef();
+        if( xEmbObj.is() && ::svt::EmbeddedObjectRef::TryRunningState( xEmbObj ) ) try
+        {
+            Reference< XModel > xModel( xEmbObj->getComponent(), UNO_QUERY_THROW );
+            mxChart->Convert( xModel, rDffConv, rSdrObj.GetLogicRect() );
+
+            Reference< XEmbedPersist > xPersist( xEmbObj, UNO_QUERY_THROW );
+            xPersist->storeOwn();
+        }
+        catch( Exception& )
+        {
+        }
+    }
 }
 
 void XclImpChartObj::FinalizeTabChart()
@@ -1633,7 +1651,7 @@ void XclImpNoteObj::SetNoteData( const ScAddress& rScPos, sal_uInt16 nNoteFlags 
     mnNoteFlags = nNoteFlags;
 }
 
-void XclImpNoteObj::DoProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const
+void XclImpNoteObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const
 {
     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( &rSdrObj );
     if( pTextObj && maScPos.IsValid() )
@@ -1643,7 +1661,7 @@ void XclImpNoteObj::DoProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rS
             if( SdrCaptionObj* pCaption = pNote->GetCaption() )
             {
                 // create formatted text
-                XclImpTextObj::DoProcessSdrObj( rDffConv, *pCaption );
+                XclImpTextObj::DoPreProcessSdrObj( rDffConv, *pCaption );
                 // set textbox rectangle from imported object
                 pCaption->NbcSetLogicRect( pTextObj->GetLogicRect() );
                 // copy all items from imported object (resets shadow items)
@@ -1891,9 +1909,9 @@ SdrObject* XclImpTbxObjBase::DoCreateSdrObj( XclImpDffConverter& rDffConv, const
     return xSdrObj.release();
 }
 
-void XclImpTbxObjBase::DoProcessSdrObj( XclImpDffConverter& /*rDffConv*/, SdrObject& /*rSdrObj*/ ) const
+void XclImpTbxObjBase::DoPreProcessSdrObj( XclImpDffConverter& /*rDffConv*/, SdrObject& /*rSdrObj*/ ) const
 {
-    // do not call DoProcessSdrObj() from base class (to skip text processing)
+    // do not call DoPreProcessSdrObj() from base class (to skip text processing)
     ProcessControl( *this );
 }
 
@@ -2726,17 +2744,17 @@ SdrObject* XclImpPictureObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const
     return xSdrObj.release();
 }
 
-void XclImpPictureObj::DoProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const
+void XclImpPictureObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const
 {
     if( IsOcxControl() )
     {
-        // do not call XclImpRectObj::DoProcessSdrObj(), it would trace missing "printable" feature
+        // do not call XclImpRectObj::DoPreProcessSdrObj(), it would trace missing "printable" feature
         ProcessControl( *this );
     }
     else if( mbEmbedded || mbLinked )
     {
         // trace missing "printable" feature
-        XclImpRectObj::DoProcessSdrObj( rDffConv, rSdrObj );
+        XclImpRectObj::DoPreProcessSdrObj( rDffConv, rSdrObj );
 
         SfxObjectShell* pDocShell = GetDocShell();
         SdrOle2Obj* pOleSdrObj = dynamic_cast< SdrOle2Obj* >( &rSdrObj );
@@ -3000,7 +3018,7 @@ FASTBOOL XclImpSimpleDffConverter::GetColorFromPalette( USHORT nIndex, Color& rC
 
 // ----------------------------------------------------------------------------
 
-XclImpDffConverter::XclImpConverterData::XclImpConverterData(
+XclImpDffConverter::XclImpDffConvData::XclImpDffConvData(
         XclImpDrawingManager& rDrawingMgr, SdrModel& rSdrModel, SdrPage& rSdrPage ) :
     mrDrawingMgr( rDrawingMgr ),
     mrSdrModel( rSdrModel ),
@@ -3055,7 +3073,7 @@ void XclImpDffConverter::Progress( sal_Size nDelta )
 
 void XclImpDffConverter::InitializeDrawing( XclImpDrawingManager& rDrawingMgr, SdrModel& rSdrModel, SdrPage& rSdrPage )
 {
-    XclImpConverterDataRef xConvData( new XclImpConverterData( rDrawingMgr, rSdrModel, rSdrPage ) );
+    XclImpDffConvDataRef xConvData( new XclImpDffConvData( rDrawingMgr, rSdrModel, rSdrPage ) );
     maDataStack.push_back( xConvData );
     SetModel( &xConvData->mrSdrModel, 1440 );
 }
@@ -3066,18 +3084,15 @@ void XclImpDffConverter::ProcessObject( SdrObjList& rObjList, const XclImpDrawOb
     {
         if( const XclObjAnchor* pAnchor = rDrawObj.GetAnchor() )
         {
-            XclImpConverterData& rConvData = GetConvData();
-            Rectangle aAnchorRect = rConvData.mrDrawingMgr.CalcAnchorRect( *pAnchor, false );
+            Rectangle aAnchorRect = GetConvData().mrDrawingMgr.CalcAnchorRect( *pAnchor, false );
             if( rDrawObj.IsValidSize( aAnchorRect ) )
             {
                 // CreateSdrObject() recursively creates embedded child objects
                 SdrObjectPtr xSdrObj( rDrawObj.CreateSdrObject( *this, aAnchorRect, false ) );
                 if( xSdrObj.is() )
-                    rDrawObj.ProcessSdrObject( *this, *xSdrObj );
+                    rDrawObj.PreProcessSdrObject( *this, *xSdrObj );
                 // call InsertSdrObject() also, if SdrObject is missing
                 InsertSdrObject( rObjList, rDrawObj, xSdrObj.release() );
-                // callback to drawing manager for e.g. tracking of used sheet area
-                rConvData.mrDrawingMgr.OnObjectInserted( rDrawObj );
             }
         }
     }
@@ -3127,7 +3142,7 @@ SdrObject* XclImpDffConverter::CreateSdrObject( const XclImpTbxObjBase& rTbxObj,
         // try to insert the control into the form
         ::com::sun::star::awt::Size aDummySize;
         Reference< XShape > xShape;
-        XclImpConverterData& rConvData = GetConvData();
+        XclImpDffConvData& rConvData = GetConvData();
         if( rConvData.mxCtrlForm.is() && InsertControl( xFormComp, aDummySize, &xShape, TRUE ) )
         {
             xSdrObj.reset( rTbxObj.CreateSdrObjectFromShape( xShape, rAnchorRect ) );
@@ -3214,7 +3229,7 @@ void XclImpDffConverter::ProcessClientAnchor2( SvStream& rDffStrm,
         DffRecordHeader& rHeader, void* /*pClientData*/, DffObjData& rObjData )
 {
     // find the OBJ record data related to the processed shape
-    XclImpConverterData& rConvData = GetConvData();
+    XclImpDffConvData& rConvData = GetConvData();
     if( XclImpDrawObjBase* pDrawObj = rConvData.mrDrawingMgr.FindDrawObj( rObjData.rSpHd ).get() )
     {
         DBG_ASSERT( rHeader.nRecType == DFF_msofbtClientAnchor, "XclImpDffConverter::ProcessClientAnchor2 - no client anchor record" );
@@ -3231,7 +3246,7 @@ void XclImpDffConverter::ProcessClientAnchor2( SvStream& rDffStrm,
 SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffObjData,
         void* pClientData, Rectangle& /*rTextRect*/, SdrObject* pOldSdrObj )
 {
-    XclImpConverterData& rConvData = GetConvData();
+    XclImpDffConvData& rConvData = GetConvData();
 
     /*  pOldSdrObj passes a generated SdrObject. This function owns this object
         and can modify it. The function has either to return it back to caller
@@ -3297,14 +3312,11 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
             xSdrObj->SetMergedItem( XFillColorItem( EMPTY_STRING, GetPalette().GetColor( EXC_COLOR_WINDOWBACK ) ) );
 
         // additional processing on the SdrObject
-        xDrawObj->ProcessSdrObject( *this, *xSdrObj );
-
-        // callback to drawing manager for e.g. tracking of used sheet area
-        rConvData.mrDrawingMgr.OnObjectInserted( *xDrawObj );
+        xDrawObj->PreProcessSdrObject( *this, *xSdrObj );
 
         /*  If the SdrObject will not be inserted into the draw page, delete it
-            here. Happens e.g. for notes: The ProcessSdrObject() call above has
-            inserted the note into the document, and the SdrObject is not
+            here. Happens e.g. for notes: The PreProcessSdrObject() call above
+            has inserted the note into the document, and the SdrObject is not
             needed anymore. */
         if( !xDrawObj->IsInsertSdrObj() )
             xSdrObj.reset();
@@ -3330,7 +3342,7 @@ sal_Bool XclImpDffConverter::InsertControl( const Reference< XFormComponent >& r
 {
     if( GetDocShell() ) try
     {
-        XclImpConverterData& rConvData = GetConvData();
+        XclImpDffConvData& rConvData = GetConvData();
         Reference< XIndexContainer > xFormIC( rConvData.mxCtrlForm, UNO_QUERY_THROW );
         Reference< XControlModel > xCtrlModel( rxFormComp, UNO_QUERY_THROW );
 
@@ -3359,13 +3371,13 @@ sal_Bool XclImpDffConverter::InsertControl( const Reference< XFormComponent >& r
 
 // private --------------------------------------------------------------------
 
-XclImpDffConverter::XclImpConverterData& XclImpDffConverter::GetConvData()
+XclImpDffConverter::XclImpDffConvData& XclImpDffConverter::GetConvData()
 {
     DBG_ASSERT( !maDataStack.empty(), "XclImpDffConverter::GetConvData - no drawing manager on stack" );
     return *maDataStack.back();
 }
 
-const XclImpDffConverter::XclImpConverterData& XclImpDffConverter::GetConvData() const
+const XclImpDffConverter::XclImpDffConvData& XclImpDffConverter::GetConvData() const
 {
     DBG_ASSERT( !maDataStack.empty(), "XclImpDffConverter::GetConvData - no drawing manager on stack" );
     return *maDataStack.back();
@@ -3481,19 +3493,27 @@ void XclImpDffConverter::ProcessShContainer( SvStream& rDffStrm, const DffRecord
 
 void XclImpDffConverter::InsertSdrObject( SdrObjList& rObjList, const XclImpDrawObjBase& rDrawObj, SdrObject* pSdrObj )
 {
+    XclImpDffConvData& rConvData = GetConvData();
     /*  Take ownership of the passed object. If insertion fails (e.g. rDrawObj
         states to skip insertion), the object is automatically deleted. */
     SdrObjectPtr xSdrObj( pSdrObj );
     if( xSdrObj.is() && rDrawObj.IsInsertSdrObj() )
+    {
         rObjList.NbcInsertObject( xSdrObj.release() );
-    // SdrObject still here? Insertion failed, remove data from shape ID map.
+        // callback to drawing manager for e.g. tracking of used sheet area
+        rConvData.mrDrawingMgr.OnObjectInserted( rDrawObj );
+        // callback to drawing object for post processing (use pSdrObj, xSdrObj already released)
+        rDrawObj.PostProcessSdrObject( *this, *pSdrObj );
+    }
+    /*  SdrObject still here? Insertion failed, remove data from shape ID map.
+        The SdrObject will be destructed then. */
     if( xSdrObj.is() )
-        GetConvData().maSolverCont.RemoveSdrObjectInfo( *xSdrObj );
+        rConvData.maSolverCont.RemoveSdrObjectInfo( *xSdrObj );
 }
 
 void XclImpDffConverter::InitControlForm()
 {
-    XclImpConverterData& rConvData = GetConvData();
+    XclImpDffConvData& rConvData = GetConvData();
     if( rConvData.mbHasCtrlForm )
         return;
 
