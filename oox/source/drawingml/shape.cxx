@@ -434,7 +434,7 @@ Reference< XShape > Shape::createAndInsert(
 
     // use a callback for further processing on the XShape (e.g. charts)
     if( mxShape.is() && mxCreateCallback.get() )
-        mxCreateCallback->onCreateXShape( mxShape );
+        mxCreateCallback->onCreateXShape( mxShape, rxShapes );
 
     return mxShape;
 }

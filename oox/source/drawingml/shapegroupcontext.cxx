@@ -106,7 +106,7 @@ Reference< XFastContextHandler > ShapeGroupContext::createFastChildContext( sal_
         xRet.set( new GraphicShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ) ) );
         break;
     case XML_graphicFrame:  // CT_GraphicalObjectFrame
-        xRet.set( new GraphicalObjectFrameContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.OLE2Shape" ) ) ) );
+        xRet.set( new GraphicalObjectFrameContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.OLE2Shape" ) ), true ) );
         break;
     }
     if( !xRet.is() )

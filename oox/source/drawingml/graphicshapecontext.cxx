@@ -106,8 +106,9 @@ Reference< XFastContextHandler > GraphicShapeContext::createFastChildContext( sa
 
 // ====================================================================
 // CT_GraphicalObjectFrameContext
-GraphicalObjectFrameContext::GraphicalObjectFrameContext( ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr )
+GraphicalObjectFrameContext::GraphicalObjectFrameContext( ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr, bool bEmbedShapesInChart )
 : ShapeContext( rParent, pMasterShapePtr, pShapePtr )
+, mbEmbedShapesInChart( bEmbedShapesInChart )
 {
 }
 
@@ -135,7 +136,7 @@ Reference< XFastContextHandler > GraphicalObjectFrameContext::createFastChildCon
             else if ( sUri.equalsAscii( "http://schemas.openxmlformats.org/drawingml/2006/diagram" ) )
                 xRet.set( new DiagramGraphicDataContext( *this, mpShapePtr ) );
             else if ( sUri.equalsAscii( "http://schemas.openxmlformats.org/drawingml/2006/chart" ) )
-                xRet.set( new ChartGraphicDataContext( *this, mpShapePtr ) );
+                xRet.set( new ChartGraphicDataContext( *this, mpShapePtr, mbEmbedShapesInChart ) );
             else if ( sUri.compareToAscii( "http://schemas.openxmlformats.org/drawingml/2006/table" ) == 0 )
                 xRet.set( new table::TableContext( *this, mpShapePtr ) );
             else
@@ -348,23 +349,25 @@ Reference< XFastContextHandler > DiagramGraphicDataContext::createFastChildConte
 class CreateChartCallback : public CreateShapeCallback
 {
 public:
-    explicit            CreateChartCallback( XmlFilterBase& rFilter, const OUString& rFragmentPath );
-    virtual void        onCreateXShape( const Reference< drawing::XShape >& rxShape );
+    explicit            CreateChartCallback( XmlFilterBase& rFilter, const OUString& rFragmentPath, bool bEmbedShapes );
+    virtual void        onCreateXShape( const Reference< drawing::XShape >& rxShape, const Reference< drawing::XShapes >& rxShapes );
 
 private:
     XmlFilterBase&      mrFilter;
     OUString            maFragmentPath;
+    bool                mbEmbedShapes;
 };
 
 // --------------------------------------------------------------------
 
-CreateChartCallback::CreateChartCallback( XmlFilterBase& rFilter, const OUString& rFragmentPath ) :
+CreateChartCallback::CreateChartCallback( XmlFilterBase& rFilter, const OUString& rFragmentPath, bool bEmbedShapes ) :
     mrFilter( rFilter ),
-    maFragmentPath( rFragmentPath )
+    maFragmentPath( rFragmentPath ),
+    mbEmbedShapes( bEmbedShapes )
 {
 }
 
-void CreateChartCallback::onCreateXShape( const Reference< drawing::XShape >& rxShape )
+void CreateChartCallback::onCreateXShape( const Reference< drawing::XShape >& rxShape, const Reference< drawing::XShapes >& rxShapes )
 {
     OSL_ENSURE( maFragmentPath.getLength() > 0, "CreateChartCallback::onCreateXShape - missing chart fragment" );
     if( maFragmentPath.getLength() > 0 ) try
@@ -376,14 +379,17 @@ void CreateChartCallback::onCreateXShape( const Reference< drawing::XShape >& rx
         // get the XModel interface of the embedded object from the OLE shape
         Reference< frame::XModel > xDocModel;
         aShapeProp.getProperty( xDocModel, PROP_Model );
+        Reference< chart2::XChartDocument > xChartDoc( xDocModel, UNO_QUERY_THROW );
 
         // load the chart data from the XML fragment
         chart::ChartSpaceModel aModel;
         mrFilter.importFragment( new chart::ChartSpaceFragment( mrFilter, maFragmentPath, aModel ) );
 
         // convert imported chart model to chart document
-        Reference< chart2::XChartDocument > xChartDoc( xDocModel, UNO_QUERY_THROW );
-        mrFilter.getChartConverter().convertFromModel( mrFilter, aModel, xChartDoc, rxShape->getSize() );
+        Reference< drawing::XShapes > xExternalPage;
+        if( !mbEmbedShapes )
+            xExternalPage = rxShapes;
+        mrFilter.getChartConverter().convertFromModel( mrFilter, aModel, xChartDoc, xExternalPage, rxShape->getPosition(), rxShape->getSize() );
     }
     catch( Exception& )
     {
@@ -392,8 +398,9 @@ void CreateChartCallback::onCreateXShape( const Reference< drawing::XShape >& rx
 
 // ====================================================================
 
-ChartGraphicDataContext::ChartGraphicDataContext( ContextHandler& rParent, ShapePtr pShapePtr ) :
-    ShapeContext( rParent, ShapePtr(), pShapePtr )
+ChartGraphicDataContext::ChartGraphicDataContext( ContextHandler& rParent, ShapePtr pShapePtr, bool bEmbedShapes ) :
+    ShapeContext( rParent, ShapePtr(), pShapePtr ),
+    mbEmbedShapes( bEmbedShapes )
 {
     pShapePtr->setServiceName( "com.sun.star.drawing.OLE2Shape" );
 }
@@ -405,7 +412,7 @@ Reference< XFastContextHandler > ChartGraphicDataContext::createFastChildContext
     {
         AttributeList aAttribs( rxAttribs );
         OUString aFragmentPath = getFragmentPathFromRelId( aAttribs.getString( NMSP_RELATIONSHIPS | XML_id, OUString() ) );
-        CreateShapeCallbackRef xCallback( new CreateChartCallback( getFilter(), aFragmentPath ) );
+        CreateShapeCallbackRef xCallback( new CreateChartCallback( getFilter(), aFragmentPath, mbEmbedShapes ) );
         mpShapePtr->setCreateShapeCallback( xCallback );
     }
     return 0;

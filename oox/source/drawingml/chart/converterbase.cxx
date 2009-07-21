@@ -56,18 +56,18 @@ namespace chart {
 
 struct ConverterData
 {
+    ObjectFormatter     maFormatter;
     XmlFilterBase&      mrFilter;
     ChartConverter&     mrConverter;
     Reference< XChartDocument > mxDoc;
     Size                maSize;
-    ObjectFormatter     maFormatter;
 
     explicit            ConverterData(
                             XmlFilterBase& rFilter,
                             ChartConverter& rChartConverter,
+                            const ChartSpaceModel& rChartModel,
                             const Reference< XChartDocument >& rxChartDoc,
-                            const Size& rChartSize,
-                            const ChartSpaceModel& rChartSpace );
+                            const Size& rChartSize );
                         ~ConverterData();
 };
 
@@ -76,14 +76,14 @@ struct ConverterData
 ConverterData::ConverterData(
         XmlFilterBase& rFilter,
         ChartConverter& rChartConverter,
+        const ChartSpaceModel& rChartModel,
         const Reference< XChartDocument >& rxChartDoc,
-        const Size& rChartSize,
-        const ChartSpaceModel& rChartModel ) :
+        const Size& rChartSize ) :
+    maFormatter( rFilter, rxChartDoc, rChartModel ),
     mrFilter( rFilter ),
     mrConverter( rChartConverter ),
     mxDoc( rxChartDoc ),
-    maSize( rChartSize ),
-    maFormatter( rFilter, rxChartDoc, rChartModel )
+    maSize( rChartSize )
 {
     OSL_ENSURE( mxDoc.is(), "ConverterData::ConverterData - missing chart document" );
     // lock the model to suppress internal updates during conversion
@@ -115,10 +115,10 @@ ConverterData::~ConverterData()
 ConverterRoot::ConverterRoot(
         XmlFilterBase& rFilter,
         ChartConverter& rChartConverter,
+        const ChartSpaceModel& rChartModel,
         const Reference< XChartDocument >& rxChartDoc,
-        const Size& rChartSize,
-        const ChartSpaceModel& rChartModel ) :
-    mxData( new ConverterData( rFilter, rChartConverter, rxChartDoc, rChartSize, rChartModel ) )
+        const Size& rChartSize ) :
+    mxData( new ConverterData( rFilter, rChartConverter, rChartModel, rxChartDoc, rChartSize ) )
 {
 }
 

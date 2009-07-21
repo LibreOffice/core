@@ -38,6 +38,7 @@
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::awt::Point;
 using ::com::sun::star::awt::Rectangle;
 using ::com::sun::star::awt::Size;
 using ::com::sun::star::drawing::XShapes;
@@ -51,32 +52,6 @@ namespace chart {
 
 // ============================================================================
 
-AnchorPosModel::AnchorPosModel() :
-    mfX( -1.0 ),
-    mfY( -1.0 )
-{
-}
-
-bool AnchorPosModel::isValid() const
-{
-    return (0.0 <= mfX) && (mfX <= 1.0) && (0.0 <= mfY) && (mfY <= 1.0);
-}
-
-// ----------------------------------------------------------------------------
-
-AnchorSizeModel::AnchorSizeModel() :
-    mnWidth( -1 ),
-    mnHeight( -1 )
-{
-}
-
-bool AnchorSizeModel::isValid() const
-{
-    return (mnWidth >= 0) && (mnHeight >= 0);
-}
-
-// ============================================================================
-
 ShapeAnchor::ShapeAnchor( bool bRelSize ) :
     mbRelSize( bRelSize )
 {
@@ -85,8 +60,8 @@ ShapeAnchor::ShapeAnchor( bool bRelSize ) :
 void ShapeAnchor::importExt( const AttributeList& rAttribs )
 {
     OSL_ENSURE( !mbRelSize, "ShapeAnchor::importExt - unexpected 'cdr:ext' element" );
-    maSize.mnWidth = rAttribs.getInteger64( XML_cx, 0 );
-    maSize.mnHeight = rAttribs.getInteger64( XML_cy, 0 );
+    maSize.Width = rAttribs.getInteger64( XML_cx, 0 );
+    maSize.Height = rAttribs.getInteger64( XML_cy, 0 );
 }
 
 void ShapeAnchor::setPos( sal_Int32 nElement, sal_Int32 nParentContext, const OUString& rValue )
@@ -112,7 +87,7 @@ void ShapeAnchor::setPos( sal_Int32 nElement, sal_Int32 nParentContext, const OU
     }
 }
 
-Rectangle ShapeAnchor::calcEmuLocation( const AnchorSizeModel& rEmuChartSize ) const
+Rectangle ShapeAnchor::calcEmuLocation( const EmuRectangle& rEmuChartRect ) const
 {
     Rectangle aLoc( -1, -1, -1, -1 );
 
@@ -121,19 +96,19 @@ Rectangle ShapeAnchor::calcEmuLocation( const AnchorSizeModel& rEmuChartSize ) c
     if( maFrom.isValid() && (mbRelSize ? maTo.isValid() : maSize.isValid()) )
     {
         // calculate shape position
-        aLoc.X = getLimitedValue< sal_Int32, double >( maFrom.mfX * rEmuChartSize.mnWidth, 0, SAL_MAX_INT32 );
-        aLoc.Y = getLimitedValue< sal_Int32, double >( maFrom.mfY * rEmuChartSize.mnHeight, 0, SAL_MAX_INT32 );
+        aLoc.X = getLimitedValue< sal_Int32, double >( maFrom.mfX * rEmuChartRect.Width, 0, SAL_MAX_INT32 );
+        aLoc.Y = getLimitedValue< sal_Int32, double >( maFrom.mfY * rEmuChartRect.Height, 0, SAL_MAX_INT32 );
 
         // calculate shape size
         if( mbRelSize )
         {
-            aLoc.Width = getLimitedValue< sal_Int32, double >( maTo.mfX * rEmuChartSize.mnWidth, 0, SAL_MAX_INT32 ) - aLoc.X;
+            aLoc.Width = getLimitedValue< sal_Int32, double >( maTo.mfX * rEmuChartRect.Width, 0, SAL_MAX_INT32 ) - aLoc.X;
             if( aLoc.Width < 0 )
             {
                 aLoc.X += aLoc.Width;
                 aLoc.Width *= -1;
             }
-            aLoc.Height = getLimitedValue< sal_Int32, double >( maTo.mfY * rEmuChartSize.mnHeight, 0, SAL_MAX_INT32 ) - aLoc.Y;
+            aLoc.Height = getLimitedValue< sal_Int32, double >( maTo.mfY * rEmuChartRect.Height, 0, SAL_MAX_INT32 ) - aLoc.Y;
             if( aLoc.Height < 0 )
             {
                 aLoc.Y += aLoc.Height;
@@ -142,8 +117,8 @@ Rectangle ShapeAnchor::calcEmuLocation( const AnchorSizeModel& rEmuChartSize ) c
         }
         else
         {
-            aLoc.Width = getLimitedValue< sal_Int32, sal_Int64 >( maSize.mnWidth, 0, SAL_MAX_INT32 );
-            aLoc.Height = getLimitedValue< sal_Int32, sal_Int64 >( maSize.mnHeight, 0, SAL_MAX_INT32 );
+            aLoc.Width = getLimitedValue< sal_Int32, sal_Int64 >( maSize.Width, 0, SAL_MAX_INT32 );
+            aLoc.Height = getLimitedValue< sal_Int32, sal_Int64 >( maSize.Height, 0, SAL_MAX_INT32 );
         }
     }
 
@@ -152,12 +127,16 @@ Rectangle ShapeAnchor::calcEmuLocation( const AnchorSizeModel& rEmuChartSize ) c
 // ============================================================================
 
 ChartDrawingFragment::ChartDrawingFragment( XmlFilterBase& rFilter,
-        const OUString& rFragmentPath, const Reference< XShapes >& rxDrawPage, const Size& rChartSize ) :
+        const OUString& rFragmentPath, const Reference< XShapes >& rxDrawPage,
+        const Size& rChartSize, const Point& rShapesOffset, bool bOleSupport ) :
     FragmentHandler2( rFilter, rFragmentPath ),
-    mxDrawPage( rxDrawPage )
+    mxDrawPage( rxDrawPage ),
+    mbOleSupport( bOleSupport )
 {
-    maEmuChartSize.mnWidth = static_cast< sal_Int64 >( rChartSize.Width ) * 360;
-    maEmuChartSize.mnHeight = static_cast< sal_Int64 >( rChartSize.Height ) * 360;
+    maEmuChartRect.X = static_cast< sal_Int64 >( rShapesOffset.X ) * 360;
+    maEmuChartRect.Y = static_cast< sal_Int64 >( rShapesOffset.Y ) * 360;
+    maEmuChartRect.Width = static_cast< sal_Int64 >( rChartSize.Width ) * 360;
+    maEmuChartRect.Height = static_cast< sal_Int64 >( rChartSize.Height ) * 360;
 }
 
 ChartDrawingFragment::~ChartDrawingFragment()
@@ -198,8 +177,11 @@ ContextHandlerRef ChartDrawingFragment::onCreateContext( sal_Int32 nElement, con
                     mxShape.reset( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) );
                     return new GraphicShapeContext( *this, ShapePtr(), mxShape );
                 case CDR_TOKEN( graphicFrame ):
+                    if( !mbOleSupport )
+                        return 0;
                     mxShape.reset( new Shape( "com.sun.star.drawing.OLE2Shape" ) );
-                    return new GraphicalObjectFrameContext( *this, ShapePtr(), mxShape );
+                    return new GraphicalObjectFrameContext( *this, ShapePtr(), mxShape, true );
+                break;
                 case CDR_TOKEN( grpSp ):
                     mxShape.reset( new Shape( "com.sun.star.drawing.GroupShape" ) );
                     return new ShapeGroupContext( *this, ShapePtr(), mxShape );
@@ -240,7 +222,7 @@ void ChartDrawingFragment::onEndElement( const OUString& rChars )
         case CDR_TOKEN( relSizeAnchor ):
             if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() )
             {
-                Rectangle aLoc = mxAnchor->calcEmuLocation( maEmuChartSize );
+                Rectangle aLoc = mxAnchor->calcEmuLocation( maEmuChartRect );
                 if( (aLoc.X >= 0) && (aLoc.Y >= 0) && (aLoc.Width >= 0) && (aLoc.Height >= 0) )
                     mxShape->addShape( getFilter(), getFilter().getCurrentTheme(), mxDrawPage, &aLoc );
             }

@@ -47,20 +47,17 @@ struct AnchorPosModel
     double              mfX;                /// X coordinate relative to chart object (0.0 to 1.0).
     double              mfY;                /// Y coordinate relative to chart object (0.0 to 1.0).
 
-    explicit            AnchorPosModel();
-    bool                isValid() const;
+    inline explicit     AnchorPosModel() : mfX( -1.0 ), mfY( -1.0 ) {}
+    inline bool         isValid() const { return (0.0 <= mfX) && (mfX <= 1.0) && (0.0 <= mfY) && (mfY <= 1.0); }
 };
 
 // ----------------------------------------------------------------------------
 
 /** Absolute shape size in a chart object (in EMUs). */
-struct AnchorSizeModel
+struct AnchorSizeModel : public EmuSize
 {
-    sal_Int64           mnWidth;            /// Width in EMUs.
-    sal_Int64           mnHeight;           /// Height in EMUs.
-
-    explicit            AnchorSizeModel();
-    bool                isValid() const;
+    inline explicit     AnchorSizeModel() : EmuSize( -1, -1 ) {}
+    inline bool         isValid() const { return (Width >= 0) && (Height >= 0); }
 };
 
 // ============================================================================
@@ -80,7 +77,7 @@ public:
 
     /** Calculates the resulting shape anchor in EMUs. */
     ::com::sun::star::awt::Rectangle
-                        calcEmuLocation( const AnchorSizeModel& rEmuChartSize ) const;
+                        calcEmuLocation( const EmuRectangle& rEmuChartRect ) const;
 
 private:
     AnchorPosModel      maFrom;             /// Top-left position relative to chart object.
@@ -102,7 +99,9 @@ public:
                             ::oox::core::XmlFilterBase& rFilter,
                             const ::rtl::OUString& rFragmentPath,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxDrawPage,
-                            const ::com::sun::star::awt::Size& rChartSize );
+                            const ::com::sun::star::awt::Size& rChartSize,
+                            const ::com::sun::star::awt::Point& rShapesOffset,
+                            bool bOleSupport );
     virtual             ~ChartDrawingFragment();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
@@ -111,9 +110,10 @@ public:
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
                         mxDrawPage;             /// Drawing page of this sheet.
-    AnchorSizeModel     maEmuChartSize;         /// Chart size in EMUs.
     ::oox::drawingml::ShapePtr mxShape;         /// Current top-level shape.
     ShapeAnchorRef      mxAnchor;               /// Current anchor of top-level shape.
+    EmuRectangle        maEmuChartRect;         /// Position and size of the chart object for embedded shapes (in EMUs).
+    bool                mbOleSupport;           /// True = allow to insert OLE objects into the drawing page.
 };
 
 // ============================================================================

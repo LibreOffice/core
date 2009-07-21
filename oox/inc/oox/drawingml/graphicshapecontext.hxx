@@ -51,10 +51,12 @@ public:
 class GraphicalObjectFrameContext : public ShapeContext
 {
 public:
-    GraphicalObjectFrameContext( ::oox::core::ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr );
+    GraphicalObjectFrameContext( ::oox::core::ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr, bool bEmbedShapesInChart );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
+private:
+    bool                mbEmbedShapesInChart;
 };
 
 // ====================================================================
@@ -102,13 +104,16 @@ class ChartGraphicDataContext : public ShapeContext
 public:
     explicit            ChartGraphicDataContext(
                             ::oox::core::ContextHandler& rParent,
-                            ShapePtr pShapePtr );
+                            ShapePtr pShapePtr, bool bEmbedShapes );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
                         createFastChildContext(
                             sal_Int32 nElement,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
                         throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+
+private:
+    bool                mbEmbedShapes;
 };
 
 // ====================================================================

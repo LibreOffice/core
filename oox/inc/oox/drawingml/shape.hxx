@@ -69,7 +69,8 @@ class CreateShapeCallback
 public:
     virtual             ~CreateShapeCallback();
     virtual void        onCreateXShape(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape ) = 0;
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes ) = 0;
 };
 typedef ::boost::shared_ptr< CreateShapeCallback > CreateShapeCallbackRef;
 

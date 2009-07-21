@@ -61,22 +61,6 @@ namespace xls {
 
 // ============================================================================
 
-AnchorPosModel::AnchorPosModel() :
-    mnX( -1 ),
-    mnY( -1 )
-{
-}
-
-// ----------------------------------------------------------------------------
-
-AnchorSizeModel::AnchorSizeModel() :
-    mnWidth( -1 ),
-    mnHeight( -1 )
-{
-}
-
-// ----------------------------------------------------------------------------
-
 AnchorCellModel::AnchorCellModel() :
     mnCol( -1 ),
     mnRow( -1 ),
@@ -124,15 +108,15 @@ void ShapeAnchor::importAnchor( sal_Int32 nElement, const AttributeList& rAttrib
 void ShapeAnchor::importPos( const AttributeList& rAttribs )
 {
     OSL_ENSURE( meType == ANCHOR_ABSOLUTE, "ShapeAnchor::importPos - unexpected 'xdr:pos' element" );
-    maPos.mnX = rAttribs.getInteger64( XML_x, 0 );
-    maPos.mnY = rAttribs.getInteger64( XML_y, 0 );
+    maPos.X = rAttribs.getInteger64( XML_x, 0 );
+    maPos.Y = rAttribs.getInteger64( XML_y, 0 );
 }
 
 void ShapeAnchor::importExt( const AttributeList& rAttribs )
 {
     OSL_ENSURE( (meType == ANCHOR_ABSOLUTE) || (meType == ANCHOR_ONECELL), "ShapeAnchor::importExt - unexpected 'xdr:ext' element" );
-    maSize.mnWidth = rAttribs.getInteger64( XML_cx, 0 );
-    maSize.mnHeight = rAttribs.getInteger64( XML_cy, 0 );
+    maSize.Width = rAttribs.getInteger64( XML_cx, 0 );
+    maSize.Height = rAttribs.getInteger64( XML_cy, 0 );
 }
 
 void ShapeAnchor::importClientData( const AttributeList& rAttribs )
@@ -175,12 +159,12 @@ bool ShapeAnchor::isValidAnchor() const
         case ANCHOR_ABSOLUTE:
             OSL_ENSURE( maPos.isValid(), "ShapeAnchor::isValidAnchor - invalid position" );
             OSL_ENSURE( maSize.isValid(), "ShapeAnchor::isValidAnchor - invalid size" );
-            bValid = maPos.isValid() && maSize.isValid() && (maSize.mnWidth > 0) && (maSize.mnHeight > 0);
+            bValid = maPos.isValid() && maSize.isValid() && (maSize.Width > 0) && (maSize.Height > 0);
         break;
         case ANCHOR_ONECELL:
             OSL_ENSURE( maFrom.isValid(), "ShapeAnchor::isValidAnchor - invalid from position" );
             OSL_ENSURE( maSize.isValid(), "ShapeAnchor::isValidAnchor - invalid size" );
-            bValid = maFrom.isValid() && maSize.isValid() && (maSize.mnWidth > 0) && (maSize.mnHeight > 0);
+            bValid = maFrom.isValid() && maSize.isValid() && (maSize.Width > 0) && (maSize.Height > 0);
         break;
         case ANCHOR_TWOCELL:
             OSL_ENSURE( maFrom.isValid(), "ShapeAnchor::isValidAnchor - invalid from position" );
@@ -208,10 +192,10 @@ Rectangle ShapeAnchor::calcApiLocation( const Size& rApiSheetSize, const AnchorS
     {
         case ANCHOR_ABSOLUTE:
             OSL_ENSURE( maPos.isValid(), "ShapeAnchor::calcApiLocation - invalid position" );
-            if( maPos.isValid() && (maPos.mnX < rEmuSheetSize.mnWidth) && (maPos.mnY < rEmuSheetSize.mnHeight) )
+            if( maPos.isValid() && (maPos.X < rEmuSheetSize.Width) && (maPos.Y < rEmuSheetSize.Height) )
             {
-                aApiLoc.X = rUnitConv.scaleToMm100( static_cast< double >( maPos.mnX ), UNIT_EMU );
-                aApiLoc.Y = rUnitConv.scaleToMm100( static_cast< double >( maPos.mnY ), UNIT_EMU );
+                aApiLoc.X = rUnitConv.scaleToMm100( static_cast< double >( maPos.X ), UNIT_EMU );
+                aApiLoc.Y = rUnitConv.scaleToMm100( static_cast< double >( maPos.Y ), UNIT_EMU );
             }
         break;
         case ANCHOR_ONECELL:
@@ -238,10 +222,10 @@ Rectangle ShapeAnchor::calcApiLocation( const Size& rApiSheetSize, const AnchorS
             if( maSize.isValid() )
             {
                 aApiLoc.Width = ::std::min< sal_Int32 >(
-                    rUnitConv.scaleToMm100( static_cast< double >( maSize.mnWidth ), UNIT_EMU ),
+                    rUnitConv.scaleToMm100( static_cast< double >( maSize.Width ), UNIT_EMU ),
                     rApiSheetSize.Width - aApiLoc.X );
                 aApiLoc.Height = ::std::min< sal_Int32 >(
-                    rUnitConv.scaleToMm100( static_cast< double >( maSize.mnHeight ), UNIT_EMU ),
+                    rUnitConv.scaleToMm100( static_cast< double >( maSize.Height ), UNIT_EMU ),
                     rApiSheetSize.Height - aApiLoc.Y );
             }
         break;
@@ -283,8 +267,8 @@ Rectangle ShapeAnchor::calcEmuLocation( const AnchorSizeModel& rEmuSheetSize ) c
     UnitConverter& rUnitConv = getUnitConverter();
 
     Size aSheetSize(
-        getLimitedValue< sal_Int32, sal_Int64 >( rEmuSheetSize.mnWidth, 0, SAL_MAX_INT32 ),
-        getLimitedValue< sal_Int32, sal_Int64 >( rEmuSheetSize.mnHeight, 0, SAL_MAX_INT32 ) );
+        getLimitedValue< sal_Int32, sal_Int64 >( rEmuSheetSize.Width, 0, SAL_MAX_INT32 ),
+        getLimitedValue< sal_Int32, sal_Int64 >( rEmuSheetSize.Height, 0, SAL_MAX_INT32 ) );
     Rectangle aLoc( -1, -1, -1, -1 );
 
     // calculate shape position
@@ -292,10 +276,10 @@ Rectangle ShapeAnchor::calcEmuLocation( const AnchorSizeModel& rEmuSheetSize ) c
     {
         case ANCHOR_ABSOLUTE:
             OSL_ENSURE( maPos.isValid(), "ShapeAnchor::calcEmuLocation - invalid position" );
-            if( maPos.isValid() && (maPos.mnX < aSheetSize.Width) && (maPos.mnY < aSheetSize.Height) )
+            if( maPos.isValid() && (maPos.X < aSheetSize.Width) && (maPos.Y < aSheetSize.Height) )
             {
-                aLoc.X = static_cast< sal_Int32 >( maPos.mnX );
-                aLoc.Y = static_cast< sal_Int32 >( maPos.mnY );
+                aLoc.X = static_cast< sal_Int32 >( maPos.X );
+                aLoc.Y = static_cast< sal_Int32 >( maPos.Y );
             }
         break;
         case ANCHOR_ONECELL:
@@ -326,8 +310,8 @@ Rectangle ShapeAnchor::calcEmuLocation( const AnchorSizeModel& rEmuSheetSize ) c
             OSL_ENSURE( maSize.isValid(), "ShapeAnchor::calcEmuLocation - invalid size" );
             if( maSize.isValid() )
             {
-                aLoc.Width = static_cast< sal_Int32 >( ::std::min< sal_Int64 >( maSize.mnWidth, aSheetSize.Width - aLoc.X ) );
-                aLoc.Height = static_cast< sal_Int32 >( ::std::min< sal_Int64 >( maSize.mnHeight, aSheetSize.Height - aLoc.Y ) );
+                aLoc.Width = static_cast< sal_Int32 >( ::std::min< sal_Int64 >( maSize.Width, aSheetSize.Width - aLoc.X ) );
+                aLoc.Height = static_cast< sal_Int32 >( ::std::min< sal_Int64 >( maSize.Height, aSheetSize.Height - aLoc.Y ) );
             }
         break;
         case ANCHOR_TWOCELL:
@@ -381,8 +365,8 @@ OoxDrawingFragment::OoxDrawingFragment( const WorksheetHelper& rHelper, const OU
     OSL_ENSURE( mxDrawPage.is(), "OoxDrawingFragment::OoxDrawingFragment - missing drawing page" );
 
     maApiSheetSize = getDrawPageSize();
-    maEmuSheetSize.mnWidth = static_cast< sal_Int64 >( getUnitConverter().scaleFromMm100( maApiSheetSize.Width, UNIT_EMU ) );
-    maEmuSheetSize.mnHeight = static_cast< sal_Int64 >( getUnitConverter().scaleFromMm100( maApiSheetSize.Height, UNIT_EMU ) );
+    maEmuSheetSize.Width = static_cast< sal_Int64 >( getUnitConverter().scaleFromMm100( maApiSheetSize.Width, UNIT_EMU ) );
+    maEmuSheetSize.Height = static_cast< sal_Int64 >( getUnitConverter().scaleFromMm100( maApiSheetSize.Height, UNIT_EMU ) );
 }
 
 // oox.core.ContextHandler2Helper interface -----------------------------------
@@ -423,7 +407,7 @@ ContextHandlerRef OoxDrawingFragment::onCreateContext( sal_Int32 nElement, const
                     return new GraphicShapeContext( *this, ShapePtr(), mxShape );
                 case XDR_TOKEN( graphicFrame ):
                     mxShape.reset( new Shape( "com.sun.star.drawing.OLE2Shape" ) );
-                    return new GraphicalObjectFrameContext( *this, ShapePtr(), mxShape );
+                    return new GraphicalObjectFrameContext( *this, ShapePtr(), mxShape, getSheetType() != SHEETTYPE_CHARTSHEET );
                 case XDR_TOKEN( grpSp ):
                     mxShape.reset( new Shape( "com.sun.star.drawing.GroupShape" ) );
                     return new ShapeGroupContext( *this, ShapePtr(), mxShape );

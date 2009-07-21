@@ -45,6 +45,7 @@
 #include "properties.hxx"
 
 using ::rtl::OUString;
+using ::com::sun::star::awt::Point;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -71,7 +72,7 @@ ChartSpaceConverter::~ChartSpaceConverter()
 {
 }
 
-void ChartSpaceConverter::convertFromModel()
+void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExternalPage, const Point& rChartPos )
 {
     /*  create data provider (virtual function in the ChartConverter class,
         derived converters may create an external data provider) */
@@ -163,9 +164,32 @@ void ChartSpaceConverter::convertFromModel()
     // embedded drawing shapes
     if( mrModel.maDrawingPath.getLength() > 0 ) try
     {
-        Reference< XDrawPageSupplier > xDrawPageSupp( getChartDocument(), UNO_QUERY_THROW );
-        Reference< XShapes > xShapes( xDrawPageSupp->getDrawPage(), UNO_QUERY_THROW );
-        getFilter().importFragment( new ChartDrawingFragment( getFilter(), mrModel.maDrawingPath, xShapes, getChartSize() ) );
+        /*  Get the internal draw page of the chart document, if no external
+            drawing page has been passed. */
+        Reference< XShapes > xShapes;
+        Point aShapesOffset( 0, 0 );
+        if( rxExternalPage.is() )
+        {
+            xShapes = rxExternalPage;
+            // offset for embedded shapes to move them inside the chart area
+            aShapesOffset = rChartPos;
+        }
+        else
+        {
+            Reference< XDrawPageSupplier > xDrawPageSupp( getChartDocument(), UNO_QUERY_THROW );
+            xShapes.set( xDrawPageSupp->getDrawPage(), UNO_QUERY_THROW );
+        }
+
+        /*  If an external drawing page is passed, all embedded shapes will be
+            inserted there (used e.g. with 'chart sheets' in spreadsheet
+            documents). In this case, all types of shapes including OLE objects
+            are supported. If the shapes are inserted into the internal chart
+            drawing page instead, it is not possible to embed OLE objects. */
+        bool bOleSupport = rxExternalPage.is();
+
+        // now, xShapes is not null anymore
+        getFilter().importFragment( new ChartDrawingFragment(
+            getFilter(), mrModel.maDrawingPath, xShapes, getChartSize(), aShapesOffset, bOleSupport ) );
     }
     catch( Exception& )
     {
