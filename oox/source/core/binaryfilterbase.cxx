@@ -42,8 +42,8 @@ namespace core {
 
 // ============================================================================
 
-BinaryFilterBase::BinaryFilterBase( const Reference< XMultiServiceFactory >& rxFactory ) :
-    FilterBase( rxFactory )
+BinaryFilterBase::BinaryFilterBase( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
+    FilterBase( rxGlobalFactory )
 {
 }
 

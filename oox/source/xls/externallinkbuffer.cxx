@@ -115,7 +115,7 @@ ExternalName::ExternalName( const ExternalLink& rParentLink, sal_Int32 nLocalShe
 
 void ExternalName::importDefinedName( const AttributeList& rAttribs )
 {
-    maModel.maName = rAttribs.getString( XML_name, OUString() );
+    maModel.maName = rAttribs.getXString( XML_name, OUString() );
     OSL_ENSURE( maModel.maName.getLength() > 0, "ExternalName::importDefinedName - empty name" );
     // zero-based index into sheet list of externalBook
     maModel.mnSheet = rAttribs.getInteger( XML_sheetId, -1 );
@@ -123,7 +123,7 @@ void ExternalName::importDefinedName( const AttributeList& rAttribs )
 
 void ExternalName::importDdeItem( const AttributeList& rAttribs )
 {
-    maModel.maName = rAttribs.getString( XML_name, OUString() );
+    maModel.maName = rAttribs.getXString( XML_name, OUString() );
     OSL_ENSURE( maModel.maName.getLength() > 0, "ExternalName::importDdeItem - empty name" );
     maExtNameModel.mbOleObj     = false;
     maExtNameModel.mbStdDocName = rAttribs.getBool( XML_ole, false );
@@ -138,7 +138,7 @@ void ExternalName::importValues( const AttributeList& rAttribs )
 
 void ExternalName::importOleItem( const AttributeList& rAttribs )
 {
-    maModel.maName = rAttribs.getString( XML_name, OUString() );
+    maModel.maName = rAttribs.getXString( XML_name, OUString() );
     OSL_ENSURE( maModel.maName.getLength() > 0, "ExternalName::importOleItem - empty name" );
     maExtNameModel.mbOleObj    = true;
     maExtNameModel.mbNotify    = rAttribs.getBool( XML_advise, false );
@@ -235,8 +235,8 @@ void ExternalName::importExternalName( BiffInputStream& rStrm )
     }
 
     maModel.maName = (getBiff() == BIFF8) ?
-        rStrm.readUniString( rStrm.readuInt8() ) :
-        rStrm.readByteString( false, getTextEncoding() );
+        rStrm.readUniStringBody( rStrm.readuInt8() ) :
+        rStrm.readByteStringUC( false, getTextEncoding() );
     OSL_ENSURE( maModel.maName.getLength() > 0, "ExternalName::importExternalName - empty name" );
 
     switch( mrParentLink.getLinkType() )
@@ -277,7 +277,7 @@ void ExternalName::importExternalName( BiffInputStream& rStrm )
                             appendResultValue( rStrm.readDouble() );
                         break;
                         case BIFF_DATATYPE_STRING:
-                            appendResultValue( bBiff8 ? rStrm.readUniString() : rStrm.readByteString( false, getTextEncoding() ) );
+                            appendResultValue( bBiff8 ? rStrm.readUniString() : rStrm.readByteStringUC( false, getTextEncoding() ) );
                         break;
                         case BIFF_DATATYPE_BOOL:
                             appendResultValue< double >( (rStrm.readuInt8() == 0) ? 0.0 : 1.0 );
@@ -453,7 +453,7 @@ void ExternalLink::importExternalBook( const Relations& rRelations, const Attrib
 
 void ExternalLink::importSheetName( const AttributeList& rAttribs )
 {
-    insertExternalSheet( rAttribs.getString( XML_val, OUString() ) );
+    insertExternalSheet( rAttribs.getXString( XML_val, OUString() ) );
 }
 
 void ExternalLink::importDefinedName( const AttributeList& rAttribs )
@@ -463,8 +463,8 @@ void ExternalLink::importDefinedName( const AttributeList& rAttribs )
 
 void ExternalLink::importDdeLink( const AttributeList& rAttribs )
 {
-    OUString aDdeService = rAttribs.getString( XML_ddeService, OUString() );
-    OUString aDdeTopic = rAttribs.getString( XML_ddeTopic, OUString() );
+    OUString aDdeService = rAttribs.getXString( XML_ddeService, OUString() );
+    OUString aDdeTopic = rAttribs.getXString( XML_ddeTopic, OUString() );
     setDdeOleTargetUrl( aDdeService, aDdeTopic, LINKTYPE_DDE );
 }
 
@@ -477,8 +477,8 @@ ExternalNameRef ExternalLink::importDdeItem( const AttributeList& rAttribs )
 
 void ExternalLink::importOleLink( const Relations& rRelations, const AttributeList& rAttribs )
 {
-    OUString aProgId = rAttribs.getString( XML_progId, OUString() );
-    OUString aTargetUrl = rRelations.getTargetFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+    OUString aProgId = rAttribs.getXString( XML_progId, OUString() );
+    OUString aTargetUrl = rRelations.getExternalTargetFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
     setDdeOleTargetUrl( aProgId, aTargetUrl, LINKTYPE_OLE );
 }
 
@@ -525,7 +525,7 @@ void ExternalLink::importExternalBook( const Relations& rRelations, RecordInputS
         break;
         case OOBIN_EXTERNALBOOK_OLE:
         {
-            OUString aTargetUrl = rRelations.getTargetFromRelId( rStrm.readString() );
+            OUString aTargetUrl = rRelations.getExternalTargetFromRelId( rStrm.readString() );
             OUString aProgId = rStrm.readString();
             setDdeOleTargetUrl( aProgId, aTargetUrl, LINKTYPE_OLE );
         }
@@ -554,9 +554,7 @@ ExternalNameRef ExternalLink::importExternalName( RecordInputStream& rStrm )
 
 void ExternalLink::importExternSheet( BiffInputStream& rStrm )
 {
-    rStrm.enableNulChars( true );
-    OStringBuffer aTargetBuffer( rStrm.readByteString( false ) );
-    rStrm.enableNulChars( false );
+    OStringBuffer aTargetBuffer( rStrm.readByteString( false, true ) );
     // references to own sheets have wrong string length field (off by 1)
     if( (aTargetBuffer.getLength() > 0) && (aTargetBuffer[ 0 ] == 3) )
         aTargetBuffer.append( static_cast< sal_Char >( rStrm.readuInt8() ) );
@@ -592,9 +590,7 @@ void ExternalLink::importExternalBook( BiffInputStream& rStrm )
     else if( rStrm.getRemaining() >= 3 )
     {
         // NUL characters may occur
-        rStrm.enableNulChars( true );
-        aTarget = rStrm.readUniString();
-        rStrm.enableNulChars( false );
+        aTarget = rStrm.readUniString( true );
     }
 
     // parse the encoded URL

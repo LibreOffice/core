@@ -301,7 +301,7 @@ DefinedName::DefinedName( const WorkbookHelper& rHelper, sal_Int32 nLocalSheet )
 
 void DefinedName::importDefinedName( const AttributeList& rAttribs )
 {
-    maModel.maName        = rAttribs.getString( XML_name, OUString() );
+    maModel.maName        = rAttribs.getXString( XML_name, OUString() );
     maModel.mnSheet       = rAttribs.getInteger( XML_localSheetId, -1 );
     maModel.mnFuncGroupId = rAttribs.getInteger( XML_functionGroupId, -1 );
     maModel.mbMacro       = rAttribs.getBool( XML_xlm, false );
@@ -359,7 +359,6 @@ void DefinedName::importDefinedName( BiffInputStream& rStrm )
     sal_Int16 nTabId = BIFF_DEFNAME_GLOBAL;
     sal_uInt8 nNameLen = 0, nShortCut = 0;
 
-    rStrm.enableNulChars( true );
     switch( eBiff )
     {
         case BIFF2:
@@ -370,27 +369,26 @@ void DefinedName::importDefinedName( BiffInputStream& rStrm )
             rStrm >> nShortCut >> nNameLen;
             mnFmlaSize = rStrm.readuInt8();
             setFlag( nFlags, BIFF_DEFNAME_FUNC, getFlag( nFlagsBiff2, BIFF2_DEFNAME_FUNC ) );
-            maModel.maName = rStrm.readCharArray( nNameLen, getTextEncoding() );
+            maModel.maName = rStrm.readCharArrayUC( nNameLen, getTextEncoding(), true );
         }
         break;
         case BIFF3:
         case BIFF4:
             rStrm >> nFlags >> nShortCut >> nNameLen >> mnFmlaSize;
-            maModel.maName = rStrm.readCharArray( nNameLen, getTextEncoding() );
+            maModel.maName = rStrm.readCharArrayUC( nNameLen, getTextEncoding(), true );
         break;
         case BIFF5:
             rStrm >> nFlags >> nShortCut >> nNameLen >> mnFmlaSize >> nRefId >> nTabId;
             rStrm.skip( 4 );
-            maModel.maName = rStrm.readCharArray( nNameLen, getTextEncoding() );
+            maModel.maName = rStrm.readCharArrayUC( nNameLen, getTextEncoding(), true );
         break;
         case BIFF8:
             rStrm >> nFlags >> nShortCut >> nNameLen >> mnFmlaSize >> nRefId >> nTabId;
             rStrm.skip( 4 );
-            maModel.maName = rStrm.readUniString( nNameLen );
+            maModel.maName = rStrm.readUniStringBody( nNameLen, true );
         break;
         case BIFF_UNKNOWN: break;
     }
-    rStrm.enableNulChars( false );
 
     // macro function/command, hidden flag
     maModel.mnFuncGroupId = extractValue< sal_Int32 >( nFlags, 6, 6 );
@@ -510,7 +508,7 @@ void DefinedName::convertFormula()
             {
                 Reference< XPrintAreas > xPrintAreas( getSheetFromDoc( maModel.mnSheet ), UNO_QUERY );
                 ApiCellRangeList aPrintRanges;
-                getFormulaParser().extractCellRangeList( aPrintRanges, xTokens->getTokens(), maModel.mnSheet );
+                getFormulaParser().extractCellRangeList( aPrintRanges, xTokens->getTokens(), false, maModel.mnSheet );
                 if( xPrintAreas.is() && !aPrintRanges.empty() )
                     xPrintAreas->setPrintAreas( ContainerHelper::vectorToSequence( aPrintRanges ) );
             }
@@ -519,7 +517,7 @@ void DefinedName::convertFormula()
             {
                 Reference< XPrintAreas > xPrintAreas( getSheetFromDoc( maModel.mnSheet ), UNO_QUERY );
                 ApiCellRangeList aTitleRanges;
-                getFormulaParser().extractCellRangeList( aTitleRanges, xTokens->getTokens(), maModel.mnSheet );
+                getFormulaParser().extractCellRangeList( aTitleRanges, xTokens->getTokens(), false, maModel.mnSheet );
                 if( xPrintAreas.is() && !aTitleRanges.empty() )
                 {
                     bool bHasRowTitles = false;
@@ -561,7 +559,7 @@ bool DefinedName::getAbsoluteRange( CellRangeAddress& orRange ) const
     /*  ScNamedRangeObj::XCellRangeReferrer::getReferredCells is buggy with
         relative references, so we extract an absolute reference by hand. */
     Reference< XFormulaTokens > xTokens( mxNamedRange, UNO_QUERY );
-    return xTokens.is() && getFormulaParser().extractAbsoluteRange( orRange, xTokens->getTokens() );
+    return xTokens.is() && getFormulaParser().extractCellRange( orRange, xTokens->getTokens(), false );
 }
 
 void DefinedName::implImportOoxFormula( FormulaContext& rContext )

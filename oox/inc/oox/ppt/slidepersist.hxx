@@ -33,18 +33,19 @@
 
 #include "tokens.hxx"
 #include <boost/shared_ptr.hpp>
-#include <oox/vml/drawing.hxx>
-#include <oox/drawingml/shape.hxx>
-#include <oox/drawingml/theme.hxx>
-#include <oox/drawingml/clrscheme.hxx>
-#include <oox/drawingml/textliststyle.hxx>
-#include <oox/drawingml/textparagraphproperties.hxx>
+#include "oox/drawingml/shape.hxx"
+#include "oox/drawingml/theme.hxx"
+#include "oox/drawingml/clrscheme.hxx"
+#include "oox/drawingml/textliststyle.hxx"
+#include "oox/drawingml/textparagraphproperties.hxx"
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include "oox/core/fragmenthandler.hxx"
 
 #include <list>
+
+namespace oox { namespace vml { class Drawing; } }
 
 namespace oox { namespace ppt {
 
@@ -65,7 +66,8 @@ class SlidePersist : public boost::enable_shared_from_this< SlidePersist >
 {
 
 public:
-    SlidePersist( sal_Bool bMaster, sal_Bool bNotes, const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >&,
+    SlidePersist( oox::core::XmlFilterBase& rFilter, sal_Bool bMaster, sal_Bool bNotes,
+                    const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >&,
                     oox::drawingml::ShapePtr pShapesPtr, const ::oox::drawingml::TextListStylePtr & );
     ~SlidePersist();
 
@@ -108,7 +110,7 @@ public:
     oox::drawingml::ShapePtr getShapes() { return maShapesPtr; }
     ::std::list< boost::shared_ptr< TimeNode > >& getTimeNodeList() { return maTimeNodeList; }
 
-    oox::vml::DrawingPtr getDrawing() { return mpDrawingPtr; }
+    oox::vml::Drawing* getDrawing() { return mpDrawingPtr.get(); }
 
     void createXShapes( const oox::core::XmlFilterBase& rFilterBase );
     void createBackground( const oox::core::XmlFilterBase& rFilterBase );
@@ -121,7 +123,7 @@ public:
 private:
     rtl::OUString                                                           maPath;
     rtl::OUString                                                           maLayoutPath;
-    oox::vml::DrawingPtr                                                    mpDrawingPtr;
+    ::boost::shared_ptr< oox::vml::Drawing >                                mpDrawingPtr;
     com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >    mxPage;
     oox::drawingml::ThemePtr                                                mpThemePtr;         // the theme that is used
     oox::drawingml::ClrSchemePtr                                            mpClrSchemePtr;     // the local color scheme (if any)

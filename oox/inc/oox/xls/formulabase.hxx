@@ -63,6 +63,8 @@ const sal_uInt8 BIFF_TOKCLASS_REF               = 0x20;     /// 20-3F: Reference
 const sal_uInt8 BIFF_TOKCLASS_VAL               = 0x40;     /// 40-5F: Value class tokens.
 const sal_uInt8 BIFF_TOKCLASS_ARR               = 0x60;     /// 60-7F: Array class tokens.
 
+const sal_uInt8 BIFF_TOKFLAG_INVALID            = 0x80;     /// This bit must be null for a valid token identifier.
+
 // base token identifiers -----------------------------------------------------
 
 const sal_uInt8 BIFF_TOKID_NONE                 = 0x00;     /// Placeholder for invalid token id.
@@ -548,6 +550,7 @@ public:
     inline const ::com::sun::star::table::CellAddress& getBaseAddress() const { return maBaseAddress; }
     inline bool         isRelativeAsOffset() const { return mbRelativeAsOffset; }
     inline bool         is2dRefsAs3dRefs() const { return mb2dRefsAs3dRefs; }
+    inline bool         isNulCharsAllowed() const { return mbAllowNulChars; }
 
     virtual void        setTokens( const ApiTokenSequence& rTokens ) = 0;
     virtual void        setSharedFormula( const ::com::sun::star::table::CellAddress& rBaseAddr );
@@ -555,13 +558,15 @@ public:
 protected:
     explicit            FormulaContext(
                             bool bRelativeAsOffset,
-                            bool b2dRefsAs3dRefs );
+                            bool b2dRefsAs3dRefs,
+                            bool bAllowNulChars = false );
     virtual             ~FormulaContext();
 
 private:
     ::com::sun::star::table::CellAddress maBaseAddress;
     bool                mbRelativeAsOffset;
     bool                mb2dRefsAs3dRefs;
+    bool                mbAllowNulChars;
 };
 
 // ----------------------------------------------------------------------------
@@ -572,7 +577,8 @@ class TokensFormulaContext : public FormulaContext
 public:
     explicit            TokensFormulaContext(
                             bool bRelativeAsOffset,
-                            bool b2dRefsAs3dRefs );
+                            bool b2dRefsAs3dRefs,
+                            bool bAllowNulChars = false );
 
     inline const ApiTokenSequence& getTokens() const { return maTokens; }
 
@@ -591,7 +597,8 @@ public:
     explicit            SimpleFormulaContext(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaTokens >& rxTokens,
                             bool bRelativeAsOffset,
-                            bool b2dRefsAs3dRefs );
+                            bool b2dRefsAs3dRefs,
+                            bool bAllowNulChars = false );
 
     virtual void        setTokens( const ApiTokenSequence& rTokens );
 
@@ -720,20 +727,51 @@ public:
     ::com::sun::star::uno::Any
                         extractReference( const ApiTokenSequence& rTokens ) const;
 
-    /** Tries to extract an absolute cell range from a formula token sequence.
+    /** Tries to extract a single cell address from a formula token sequence.
 
-        @param orRange  (output parameter) The extracted cell range address.
-            Only valid, if the function returns true.
+        @param orAddress  (output parameter) If the token sequence is valid,
+            this parameter will contain the extracted cell address. If the
+            token sequence contains unexpected tokens, nothing meaningful is
+            inserted, and the function returns false.
 
         @param rTokens  The token sequence to be parsed. Should contain exactly
-            one address token or cell range address token. The token sequence
-            may contain whitespace tokens.
+            one cell address token. The token sequence may contain whitespace
+            tokens.
 
-        @return  True, if orRange contains the extracted cell range address.
+        @param bAllowRelative  True = it is allowed that rTokens contains
+            relative references (based on cell A1 of the current sheet).
+            False = only real absolute references will be accepted.
+
+        @return  True, if the token sequence contains a valid cell address
+            which has been extracted to orAddress, false otherwise.
      */
-    bool                extractAbsoluteRange(
+    bool                extractCellAddress(
+                            ::com::sun::star::table::CellAddress& orAddress,
+                            const ApiTokenSequence& rTokens,
+                            bool bAllowRelative ) const;
+
+    /** Tries to extract a cell range address from a formula token sequence.
+
+        @param orAddress  (output parameter) If the token sequence is valid,
+            this parameter will contain the extracted cell range address. If
+            the token sequence contains unexpected tokens, nothing meaningful
+            is inserted, and the function returns false.
+
+        @param rTokens  The token sequence to be parsed. Should contain exactly
+            one cell range address token. The token sequence may contain
+            whitespace tokens.
+
+        @param bAllowRelative  True = it is allowed that rTokens contains
+            relative references (based on cell A1 of the current sheet).
+            False = only real absolute references will be accepted.
+
+        @return  True, if the token sequence contains a valid cell range
+            address which has been extracted to orRange, false otherwise.
+     */
+    bool                extractCellRange(
                             ::com::sun::star::table::CellRangeAddress& orRange,
-                            const ApiTokenSequence& rTokens ) const;
+                            const ApiTokenSequence& rTokens,
+                            bool bAllowRelative ) const;
 
     /** Tries to extract a cell range list from a formula token sequence.
 
@@ -748,6 +786,10 @@ public:
             standard function parameter separator token. The token sequence may
             contain parentheses and whitespace tokens.
 
+        @param bAllowRelative  True = it is allowed that rTokens contains
+            relative references (based on cell A1 of the current sheet).
+            False = only real absolute references will be accepted.
+
         @param nFilterBySheet  If non-negative, this function returns only cell
             ranges located in the specified sheet, otherwise returns all cell
             ranges contained in the token sequence.
@@ -755,6 +797,7 @@ public:
     void                extractCellRangeList(
                             ApiCellRangeList& orRanges,
                             const ApiTokenSequence& rTokens,
+                            bool bAllowRelative,
                             sal_Int32 nFilterBySheet = -1 ) const;
 
     /** Tries to extract a string from a formula token sequence.

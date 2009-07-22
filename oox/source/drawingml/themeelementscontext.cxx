@@ -77,7 +77,7 @@ Reference< XFastContextHandler > FillStyleListContext::createFastChildContext( s
         case NMSP_DRAWINGML|XML_pattFill:
         case NMSP_DRAWINGML|XML_grpFill:
             mrFillStyleList.push_back( FillPropertiesPtr( new FillProperties ) );
-            return FillPropertiesGroupContext::StaticCreateContext( *this, nElement, xAttribs, *mrFillStyleList.back() );
+            return FillPropertiesContext::createFillContext( *this, nElement, xAttribs, *mrFillStyleList.back() );
     }
     return 0;
 }

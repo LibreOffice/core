@@ -339,7 +339,7 @@ void Color::importColor( const AttributeList& rAttribs )
     if( rAttribs.getBool( XML_auto, false ) )
         setAuto();
     else if( rAttribs.hasAttribute( XML_rgb ) )
-        setRgb( rAttribs.getHex( XML_rgb, API_RGB_TRANSPARENT ), rAttribs.getDouble( XML_tint, 0.0 ) );
+        setRgb( rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else if( rAttribs.hasAttribute( XML_theme ) )
         setTheme( rAttribs.getInteger( XML_theme, -1 ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else if( rAttribs.hasAttribute( XML_indexed ) )
@@ -505,9 +505,7 @@ static const sal_Int32 spnDefColors8[] =
 // ----------------------------------------------------------------------------
 
 ColorPalette::ColorPalette( const WorkbookHelper& rHelper ) :
-    WorkbookHelper( rHelper ),
-    mnWindowColor( ::oox::drawingml::Color::getSystemColor( XML_window ) ),
-    mnWinTextColor( ::oox::drawingml::Color::getSystemColor( XML_windowText ) )
+    WorkbookHelper( rHelper )
 {
     // default colors
     switch( getFilterType() )
@@ -534,7 +532,7 @@ ColorPalette::ColorPalette( const WorkbookHelper& rHelper ) :
 
 void ColorPalette::importPaletteColor( const AttributeList& rAttribs )
 {
-    appendColor( rAttribs.getHex( XML_rgb, API_RGB_TRANSPARENT ) );
+    appendColor( rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT ) );
 }
 
 void ColorPalette::importPaletteColor( RecordInputStream& rStrm )
@@ -571,17 +569,16 @@ sal_Int32 ColorPalette::getColor( sal_Int32 nPaletteIdx ) const
     {
         case OOX_COLOR_WINDOWTEXT3:
         case OOX_COLOR_WINDOWTEXT:
-        case OOX_COLOR_CHWINDOWTEXT:    nColor = mnWinTextColor;        break;
+        case OOX_COLOR_CHWINDOWTEXT:    nColor = getBaseFilter().getSystemColor( XML_windowText );  break;
         case OOX_COLOR_WINDOWBACK3:
         case OOX_COLOR_WINDOWBACK:
-        case OOX_COLOR_CHWINDOWBACK:    nColor = mnWindowColor;         break;
-//        case OOX_COLOR_BUTTONBACK:
-//        case OOX_COLOR_CHBORDERAUTO:
-//        case OOX_COLOR_NOTEBACK:
-        case OOX_COLOR_NOTETEXT:        nColor = mnWinTextColor;        break;  // !TODO
-        case OOX_COLOR_FONTAUTO:        nColor = API_RGB_TRANSPARENT;   break;
-        default:
-            OSL_ENSURE( false, "ColorPalette::getColor - unknown color index" );
+        case OOX_COLOR_CHWINDOWBACK:    nColor = getBaseFilter().getSystemColor( XML_window );      break;
+        case OOX_COLOR_BUTTONBACK:      nColor = getBaseFilter().getSystemColor( XML_btnFace );     break;
+        case OOX_COLOR_CHBORDERAUTO:    nColor = 0x000000; /* really always black? */               break;
+        case OOX_COLOR_NOTEBACK:        nColor = getBaseFilter().getSystemColor( XML_infoBk );      break;
+        case OOX_COLOR_NOTETEXT:        nColor = getBaseFilter().getSystemColor( XML_infoText );    break;
+        case OOX_COLOR_FONTAUTO:        nColor = API_RGB_TRANSPARENT;                               break;
+        default:                        OSL_ENSURE( false, "ColorPalette::getColor - unknown color index" );
     }
     return nColor;
 }
@@ -748,7 +745,7 @@ void Font::importAttribs( sal_Int32 nElement, const AttributeList& rAttribs )
         case XLS_TOKEN( rFont ):    // when in <rPr> element
             if( rAttribs.hasAttribute( XML_val ) )
             {
-                maModel.maName = rAttribs.getString( XML_val, OUString() );
+                maModel.maName = rAttribs.getXString( XML_val, OUString() );
                 maUsedFlags.mbNameUsed = true;
             }
         break;
@@ -949,7 +946,7 @@ void Font::importCfRule( BiffInputStream& rStrm )
 
     OSL_ENSURE( rStrm.getRemaining() >= 118, "Font::importCfRule - missing record data" );
     sal_Int64 nRecPos = rStrm.tell();
-    maModel.maName = rStrm.readUniString( rStrm.readuInt8() );
+    maModel.maName = rStrm.readUniStringBody( rStrm.readuInt8() );
     maUsedFlags.mbNameUsed = maModel.maName.getLength() > 0;
     OSL_ENSURE( !rStrm.isEof() && (rStrm.tell() <= nRecPos + 64), "Font::importCfRule - font name too long" );
     rStrm.seek( nRecPos + 64 );
@@ -1219,12 +1216,12 @@ void Font::importFontData5( BiffInputStream& rStrm )
 
 void Font::importFontName2( BiffInputStream& rStrm )
 {
-    maModel.maName = rStrm.readByteString( false, getTextEncoding() );
+    maModel.maName = rStrm.readByteStringUC( false, getTextEncoding() );
 }
 
 void Font::importFontName8( BiffInputStream& rStrm )
 {
-    maModel.maName = rStrm.readUniString( rStrm.readuInt8() );
+    maModel.maName = rStrm.readUniStringBody( rStrm.readuInt8() );
 }
 
 // ============================================================================
@@ -2102,12 +2099,12 @@ void Fill::finalizeImport()
             if( !rModel.mbPattColorUsed )
                 rModel.maPatternColor.setAuto();
             sal_Int32 nPattColor = rModel.maPatternColor.getColor(
-                *this, ::oox::drawingml::Color::getSystemColor( XML_windowText ) );
+                *this, getBaseFilter().getSystemColor( XML_windowText ) );
 
             if( !rModel.mbFillColorUsed )
                 rModel.maFillColor.setAuto();
             sal_Int32 nFillColor = rModel.maFillColor.getColor(
-                *this, ::oox::drawingml::Color::getSystemColor( XML_window ) );
+                *this, getBaseFilter().getSystemColor( XML_window ) );
 
             maApiData.mnColor = lclGetMixedColor( nPattColor, nFillColor, nAlpha );
             maApiData.mbTransparent = false;
@@ -2813,7 +2810,7 @@ CellStyle::CellStyle( const WorkbookHelper& rHelper ) :
 
 void CellStyle::importCellStyle( const AttributeList& rAttribs )
 {
-    maModel.maName      = rAttribs.getString( XML_name, OUString() );
+    maModel.maName      = rAttribs.getXString( XML_name, OUString() );
     maModel.mnXfId      = rAttribs.getInteger( XML_xfId, -1 );
     maModel.mnBuiltinId = rAttribs.getInteger( XML_builtinId, -1 );
     maModel.mnLevel     = rAttribs.getInteger( XML_iLevel, 0 );
@@ -2848,7 +2845,7 @@ void CellStyle::importStyle( BiffInputStream& rStrm )
     else
     {
         maModel.maName = (getBiff() == BIFF8) ?
-            rStrm.readUniString() : rStrm.readByteString( false, getTextEncoding() );
+            rStrm.readUniString() : rStrm.readByteStringUC( false, getTextEncoding() );
     }
 }
 

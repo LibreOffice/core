@@ -37,10 +37,14 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.Any;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XInitialization;
+import com.sun.star.lang.XEventListener;
+import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.lang.WrappedTargetRuntimeException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.Pair;
+import com.sun.star.beans.StringPair;
 import com.sun.star.container.XEnumeration;
 import com.sun.star.container.ElementExistException;
 import com.sun.star.container.NoSuchElementException;
@@ -421,7 +425,7 @@ public class RDFRepositoryTest extends ComplexTestCase
                       + " pkg:idref ?idref . "
                 + " FILTER (?type = odf:ContentFile || ?type = odf:StylesFile)"
                 + " }";
-log.println(query);
+//log.println(query);
             result = xRep.querySelect(mkNss() + query);
             assure("query: example-element-2\n" + query,
                 eq(result, new String[] { "path", "idref" },
@@ -456,13 +460,21 @@ log.println(query);
 
             String content = "behold, for i am the content.";
             XTextRange xTR = new TestRange(content);
+            XMetadatable xM = (XMetadatable) xTR;
 
             Statement[] result = xRep.getStatementRDFa((XMetadatable)xTR);
             assure("RDFa: get: not empty (initial)",
                 0 == result.length);
 
             try {
-                xRep.setStatementRDFa(foo, bar, null, "", null);
+                xRep.setStatementRDFa(foo, new XURI[] {}, xM, "", null);
+                assure("RDFa: set: no predicate", false);
+            } catch (IllegalArgumentException e) {
+                // ignore
+            }
+
+            try {
+                xRep.setStatementRDFa(foo, new XURI[] {bar}, null, "", null);
                 assure("RDFa: set: null", false);
             } catch (IllegalArgumentException e) {
                 // ignore
@@ -470,7 +482,7 @@ log.println(query);
 
             XLiteral trlit = Literal.create(xContext, content);
             Statement x_FooBarTRLit = new Statement(foo, bar, trlit, null);
-            xRep.setStatementRDFa(foo, bar, xTR, "", null);
+            xRep.setStatementRDFa(foo, new XURI[] { bar }, xM, "", null);
 
             result = xRep.getStatementRDFa((XMetadatable)xTR);
             assure("RDFa: get: without content",
@@ -487,12 +499,12 @@ log.println(query);
 
             Statement x_FooBarLittype = new Statement(foo, bar, littype, null);
             Statement x_FooLabelLit = new Statement(foo, rdfslabel, lit, null);
-            xRep.setStatementRDFa(foo, bar, xTR, "42", uint);
+            xRep.setStatementRDFa(foo, new XURI[] { bar }, xM, "42", uint);
 
             result = xRep.getStatementRDFa((XMetadatable)xTR);
             assure("RDFa: get: with content",
-                2 == result.length && eq((Statement)result[0], x_FooBarLittype)
-                && eq((Statement)result[1], x_FooLabelLit));
+                2 == result.length && eq((Statement)result[0], x_FooLabelLit)
+                && eq((Statement)result[1], x_FooBarLittype));
 
             //FIXME: do this?
             xTR.setString(content);
@@ -504,19 +516,23 @@ log.println(query);
                 eq((Statement)result.Second, xFooLabelTRLit));
 */
 
-            xRep.removeStatementRDFa(xTR);
+            xRep.removeStatementRDFa((XMetadatable)xTR);
 
             result = xRep.getStatementRDFa((XMetadatable)xTR);
             assure("RDFa: get: not empty (removed)",
                 0 == result.length);
 
-            xRep.setStatementRDFa(foo, bar, xTR, "", null);
+            xRep.setStatementRDFa(foo, new XURI[] { foo, bar, baz }, xM,
+                "", null);
 
+            Statement x_FooFooTRLit = new Statement(foo, foo, trlit, null);
+            Statement x_FooBazTRLit = new Statement(foo, baz, trlit, null);
             result = xRep.getStatementRDFa((XMetadatable) xTR);
-            assure("RDFa: get: without content (reinsert)",
-                1 == result.length && eq((Statement)result[0], x_FooBarTRLit));
+            assure("RDFa: get: without content (multiple predicates, reinsert)",
+                eq(result, new Statement[] {
+                     x_FooFooTRLit, x_FooBarTRLit, x_FooBazTRLit }));
 
-            xRep.removeStatementRDFa(xTR);
+            xRep.removeStatementRDFa((XMetadatable)xTR);
 
             result = xRep.getStatementRDFa((XMetadatable) xTR);
             assure("RDFa: get: not empty (re-removed)",
@@ -531,9 +547,28 @@ log.println(query);
 
 // utilities -------------------------------------------------------------
 
+    public void report2(Exception e)
+    {
+        if (e instanceof WrappedTargetException)
+        {
+            log.println("Cause:");
+            Exception cause = (Exception)
+                (((WrappedTargetException)e).TargetException);
+            log.println(cause.toString());
+            report2(cause);
+        } else if (e instanceof WrappedTargetRuntimeException) {
+            log.println("Cause:");
+            Exception cause = (Exception)
+                (((WrappedTargetRuntimeException)e).TargetException);
+            log.println(cause.toString());
+            report2(cause);
+        }
+    }
+
     public void report(Exception e) {
         log.println("Exception occurred:");
         e.printStackTrace((java.io.PrintWriter) log);
+        report2(e);
         failed();
     }
 
@@ -680,19 +715,28 @@ log.println(query);
         return true;
     }
 
+    static boolean eq(Statement[] i_Result, Statement[] i_Expected)
+    {
+        if (i_Result.length != i_Expected.length) {
+            log.println("eq: different lengths: " + i_Result.length + " " +
+                i_Expected.length);
+            return false;
+        }
+        Statement[] expected = (Statement[])
+            java.util.Arrays.asList(i_Expected).toArray();
+        java.util.Arrays.sort(i_Result, new StmtComp());
+        java.util.Arrays.sort(expected, new StmtComp());
+        for (int i = 0; i < expected.length; ++i) {
+            if (!eq(i_Result[i], expected[i])) return false;
+        }
+        return true;
+    }
+
     static boolean eq(XEnumeration i_Enum, Statement[] i_Expected)
         throws Exception
     {
         Statement[] current = toSeq(i_Enum);
-        if (current.length != i_Expected.length) {
-            return false;
-        }
-        java.util.Arrays.sort(current, new StmtComp());
-        java.util.Arrays.sort(i_Expected, new StmtComp());
-        for (int i = 0; i < i_Expected.length; ++i) {
-            if (!eq(i_Expected[i], current[i])) return false;
-        }
-        return true;
+        return eq(current, i_Expected);
     }
 
     static boolean eq(XNode i_Left, XNode i_Right)
@@ -767,24 +811,35 @@ log.println(query);
         return namespaces;
     }
 
-    class TestRange implements XTextRange, XMetadatable
+    class TestRange implements XTextRange, XMetadatable, XServiceInfo
     {
+        String m_Stream;
+        String m_XmlId;
         String m_Text;
-        String m_ID;
         TestRange(String i_Str) { m_Text = i_Str; }
+
+        public String getStringValue() { return ""; }
+        public String getNamespace() { return ""; }
+        public String getLocalName() { return ""; }
+
+        public StringPair getMetadataReference()
+            { return new StringPair(m_Stream, m_XmlId); }
+        public void setMetadataReference(StringPair i_Ref)
+            throws IllegalArgumentException
+            { m_Stream = (String)i_Ref.First; m_XmlId = (String)i_Ref.Second; }
+        public void ensureMetadataReference()
+            { m_Stream = "content.xml"; m_XmlId = "42"; }
+
+        public String getImplementationName() { return null; }
+        public String[] getSupportedServiceNames() { return null; }
+        public boolean supportsService(String i_Svc)
+            { return i_Svc.equals("com.sun.star.text.Paragraph"); }
 
         public XText getText() { return null; }
         public XTextRange getStart() { return null; }
         public XTextRange getEnd() { return null; }
         public String getString() { return m_Text; }
         public void setString(String i_Str) { m_Text = i_Str; }
-
-        public String getStringValue() { return m_ID; }
-
-        public String getXmlId() { return m_ID; }
-        public void setXmlId(String i_ID) throws IllegalArgumentException
-            { m_ID = i_ID; }
-        public void ensureXmlId() { m_ID = "content.xml#42"; }
     }
 }
 

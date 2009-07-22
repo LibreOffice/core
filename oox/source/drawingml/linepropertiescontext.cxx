@@ -67,31 +67,31 @@ Reference< XFastContextHandler > LinePropertiesContext::createFastChildContext( 
     switch( nElement )
     {
         // LineFillPropertiesGroup
-        case NMSP_DRAWINGML|XML_noFill:
-        case NMSP_DRAWINGML|XML_solidFill:
-        case NMSP_DRAWINGML|XML_gradFill:
-        case NMSP_DRAWINGML|XML_pattFill:
-            xRet = FillPropertiesGroupContext::StaticCreateContext( *this, nElement, xAttribs, mrLineProperties.maLineFill );
+        case A_TOKEN( noFill ):
+        case A_TOKEN( solidFill ):
+        case A_TOKEN( gradFill ):
+        case A_TOKEN( pattFill ):
+            xRet = FillPropertiesContext::createFillContext( *this, nElement, xAttribs, mrLineProperties.maLineFill );
         break;
 
         // LineDashPropertiesGroup
-        case NMSP_DRAWINGML|XML_prstDash:   // CT_PresetLineDashProperties
+        case A_TOKEN( prstDash ):  // CT_PresetLineDashProperties
             mrLineProperties.moPresetDash = aAttribs.getToken( XML_val );
         break;
-        case NMSP_DRAWINGML|XML_custDash:   // CT_DashStopList
+        case A_TOKEN( custDash ):  // CT_DashStopList
         break;
 
         // LineJoinPropertiesGroup
-        case NMSP_DRAWINGML|XML_round:
-        case NMSP_DRAWINGML|XML_bevel:
-        case NMSP_DRAWINGML|XML_miter:
+        case A_TOKEN( round ):
+        case A_TOKEN( bevel ):
+        case A_TOKEN( miter ):
             mrLineProperties.moLineJoint = getToken( nElement );
         break;
 
-        case NMSP_DRAWINGML|XML_headEnd:    // CT_LineEndProperties
-        case NMSP_DRAWINGML|XML_tailEnd:    // CT_LineEndProperties
+        case A_TOKEN( headEnd ):  // CT_LineEndProperties
+        case A_TOKEN( tailEnd ):  // CT_LineEndProperties
         {                                   // ST_LineEndType
-            bool bTailEnd = nElement == (NMSP_DRAWINGML|XML_tailEnd);
+            bool bTailEnd = nElement == A_TOKEN( tailEnd );
             LineArrowProperties& rArrowProps = bTailEnd ? mrLineProperties.maEndArrow : mrLineProperties.maStartArrow;
             rArrowProps.moArrowType = aAttribs.getToken( XML_type );
             rArrowProps.moArrowWidth = aAttribs.getToken( XML_w );

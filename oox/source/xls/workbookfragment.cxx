@@ -204,25 +204,25 @@ void OoxWorkbookFragment::finalizeImport()
     ISegmentProgressBarRef xGlobalSegment = getProgressBar().createSegment( PROGRESS_LENGTH_GLOBALS );
 
     // read the theme substream
-    OUString aThemeFragmentPath = getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "theme" ) );
+    OUString aThemeFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "theme" ) );
     if( aThemeFragmentPath.getLength() > 0 )
         importOoxFragment( new ThemeFragmentHandler( getFilter(), aThemeFragmentPath, getTheme() ) );
     xGlobalSegment->setPosition( 0.25 );
 
     // read the styles substream (requires finalized theme buffer)
-    OUString aStylesFragmentPath = getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "styles" ) );
+    OUString aStylesFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "styles" ) );
     if( aStylesFragmentPath.getLength() > 0 )
         importOoxFragment( new OoxStylesFragment( *this, aStylesFragmentPath ) );
     xGlobalSegment->setPosition( 0.5 );
 
     // read the shared string table substream (requires finalized styles buffer)
-    OUString aSstFragmentPath = getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "sharedStrings" ) );
+    OUString aSstFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "sharedStrings" ) );
     if( aSstFragmentPath.getLength() > 0 )
         importOoxFragment( new OoxSharedStringsFragment( *this, aSstFragmentPath ) );
     xGlobalSegment->setPosition( 0.75 );
 
     // read the connections substream
-    OUString aConnFragmentPath = getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "connections" ) );
+    OUString aConnFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "connections" ) );
     if( aConnFragmentPath.getLength() > 0 )
         importOoxFragment( new OoxConnectionsFragment( *this, aConnFragmentPath ) );
     xGlobalSegment->setPosition( 1.0 );
@@ -240,7 +240,7 @@ void OoxWorkbookFragment::finalizeImport()
         if( const Relation* pRelation = getRelations().getRelationFromRelId( rWorksheets.getSheetRelId( nSheet ) ) )
         {
             // get fragment path of the sheet
-            OUString aFragmentPath = getFragmentPathFromTarget( pRelation->maTarget );
+            OUString aFragmentPath = getFragmentPathFromRelation( *pRelation );
             OSL_ENSURE( aFragmentPath.getLength() > 0, "OoxWorkbookFragment::finalizeImport - cannot access sheet fragment" );
             if( aFragmentPath.getLength() > 0 )
             {
@@ -443,7 +443,7 @@ bool BiffWorkbookFragment::importWorkspaceFragment()
             /*  Read current sheet name (sheet substreams may not be in the
                 same order as SHEET records are). */
             mrStrm.skip( 4 );
-            OUString aSheetName = mrStrm.readByteString( false, getTextEncoding() );
+            OUString aSheetName = mrStrm.readByteStringUC( false, getTextEncoding() );
             sal_Int32 nCurrSheet = rWorksheets.getCalcSheetIndex( aSheetName );
             // load the sheet fragment records
             BiffFragmentType eSheetFragment = startFragment( getBiff() );

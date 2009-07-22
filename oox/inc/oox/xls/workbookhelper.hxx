@@ -40,6 +40,7 @@
 namespace com { namespace sun { namespace star {
     namespace container { class XNameAccess; }
     namespace container { class XNameContainer; }
+    namespace lang { class XMultiServiceFactory; }
     namespace awt { class XDevice; }
     namespace table { struct CellAddress; }
     namespace table { struct CellRangeAddress; }
@@ -178,6 +179,7 @@ class SharedStringsBuffer;
 class ExternalLinkBuffer;
 class DefinedNamesBuffer;
 class TableBuffer;
+class ScenarioBuffer;
 class WebQueryBuffer;
 class PivotCacheBuffer;
 class PivotTableBuffer;
@@ -208,6 +210,9 @@ public:
 
     /** Returns the base filter object (base class of all filters). */
     ::oox::core::FilterBase& getBaseFilter() const;
+    /** Returns a reference to the global service factory. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                        getGlobalFactory() const;
     /** Returns the file type of the current filter. */
     FilterType          getFilterType() const;
     /** Returns the filter progress bar. */
@@ -227,6 +232,9 @@ public:
     /** Returns a reference to the source/target spreadsheet document model. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >
                         getDocument() const;
+    /** Returns a reference to the service factory of the spreadsheet document model. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                        getDocumentFactory() const;
     /** Returns the reference device of the document. */
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >
                         getReferenceDevice() const;
@@ -246,6 +254,10 @@ public:
     /** Returns a reference to the specified spreadsheet in the document model. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
                         getSheetFromDoc( sal_Int32 nSheet ) const;
+    /** Returns a reference to the specified spreadsheet in the document model. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
+                        getSheetFromDoc( const ::rtl::OUString& rSheet ) const;
+
     /** Returns the XCell interface for the passed cell address. */
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
                         getCellFromDoc(
@@ -298,6 +310,8 @@ public:
     DefinedNamesBuffer& getDefinedNames() const;
     /** Returns the tables collection (equivalent to Calc's database ranges). */
     TableBuffer&        getTables() const;
+    /** Returns the scenarios collection. */
+    ScenarioBuffer&     getScenarios() const;
     /** Returns the web queries. */
     WebQueryBuffer&     getWebQueries() const;
     /** Returns the collection of pivot caches. */

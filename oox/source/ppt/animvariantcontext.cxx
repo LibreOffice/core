@@ -89,7 +89,7 @@ namespace oox { namespace ppt {
             break;
         }
         case NMSP_PPT|XML_clrVal:
-            xRet.set( new ::oox::drawingml::colorChoiceContext( *this, maColor ) );
+            xRet.set( new ::oox::drawingml::ColorContext( *this, maColor ) );
             // we'll defer setting the Any until the end.
             break;
         case NMSP_PPT|XML_fltVal:

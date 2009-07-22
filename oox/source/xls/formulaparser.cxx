@@ -41,6 +41,7 @@
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
+#include "oox/core/filterbase.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
@@ -55,7 +56,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
 using ::com::sun::star::sheet::ComplexReference;
@@ -66,6 +66,17 @@ using namespace ::com::sun::star::sheet::ReferenceFlags;
 
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+namespace {
+
+sal_uInt16 lclReadFmlaSize( BiffInputStream& rStrm, BiffType eBiff, const sal_uInt16* pnFmlaSize )
+{
+    return pnFmlaSize ? *pnFmlaSize : ((eBiff == BIFF2) ? rStrm.readuInt8() : rStrm.readuInt16());
+}
+
+} // namespace
 
 // parser implementation base =================================================
 
@@ -94,6 +105,9 @@ public:
     void                setFormula(
                             FormulaContext& rContext,
                             const ApiTokenSequence& rTokens );
+
+    /** Tries to resolve the passed ref-id to an OLE target URL. */
+    OUString            resolveOleTarget( sal_Int32 nRefId ) const;
 
 protected:
     typedef ::std::pair< sal_Int32, bool >  WhiteSpace;
@@ -268,6 +282,15 @@ void FormulaParserImpl::setFormula( FormulaContext& rContext, const ApiTokenSequ
 {
     initializeImport( rContext );
     finalizeImport( rTokens );
+}
+
+OUString FormulaParserImpl::resolveOleTarget( sal_Int32 nRefId ) const
+{
+    const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId ).get();
+    OSL_ENSURE( pExtLink && (pExtLink->getLinkType() == LINKTYPE_OLE), "FormulaParserImpl::resolveOleTarget - missing or wrong link" );
+    if( pExtLink && (pExtLink->getLinkType() == LINKTYPE_OLE) )
+         return getBaseFilter().getAbsoluteUrl( pExtLink->getTargetUrl() );
+    return OUString();
 }
 
 void FormulaParserImpl::initializeImport( FormulaContext& rContext )
@@ -1262,8 +1285,7 @@ OoxFormulaParserImpl::OoxFormulaParserImpl( const OpCodeProvider& rOpCodeProv ) 
 {
     try
     {
-        Reference< XMultiServiceFactory > xFactory( getDocument(), UNO_QUERY_THROW );
-        mxParser.set( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.sheet.FormulaParser" ) ), UNO_QUERY_THROW );
+        mxParser.set( getDocumentFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.sheet.FormulaParser" ) ), UNO_QUERY_THROW );
     }
     catch( Exception& )
     {
@@ -2054,7 +2076,7 @@ void BiffFormulaParserImpl::importBiffFormula( FormulaContext& rContext,
     initializeImport( rContext );
     mnCurrRefId = 0;
 
-    sal_uInt16 nFmlaSize = pnFmlaSize ? *pnFmlaSize : ((getBiff() == BIFF2) ? rStrm.readuInt8() : rStrm.readuInt16());
+    sal_uInt16 nFmlaSize = lclReadFmlaSize( rStrm, getBiff(), pnFmlaSize );
     sal_Int64 nEndPos = mnAddDataPos = rStrm.tell() + nFmlaSize;
     bool bRelativeAsOffset = getFormulaContext().isRelativeAsOffset();
 
@@ -2066,73 +2088,77 @@ void BiffFormulaParserImpl::importBiffFormula( FormulaContext& rContext,
         sal_uInt8 nTokenClass = nTokenId & BIFF_TOKCLASS_MASK;
         sal_uInt8 nBaseId = nTokenId & BIFF_TOKID_MASK;
 
-        if( nTokenClass == BIFF_TOKCLASS_NONE )
+        bOk = !getFlag( nTokenId, BIFF_TOKFLAG_INVALID );
+        if( bOk )
         {
-            // base tokens
-            switch( nBaseId )
+            if( nTokenClass == BIFF_TOKCLASS_NONE )
             {
-                case BIFF_TOKID_EXP:        bOk = (this->*mpImportExpToken)( rStrm );               break;
-                case BIFF_TOKID_TBL:        bOk = false; /* multiple op. will be set externally */  break;
-                case BIFF_TOKID_ADD:        bOk = pushBinaryOperator( OPCODE_ADD );                 break;
-                case BIFF_TOKID_SUB:        bOk = pushBinaryOperator( OPCODE_SUB );                 break;
-                case BIFF_TOKID_MUL:        bOk = pushBinaryOperator( OPCODE_MULT );                break;
-                case BIFF_TOKID_DIV:        bOk = pushBinaryOperator( OPCODE_DIV );                 break;
-                case BIFF_TOKID_POWER:      bOk = pushBinaryOperator( OPCODE_POWER );               break;
-                case BIFF_TOKID_CONCAT:     bOk = pushBinaryOperator( OPCODE_CONCAT );              break;
-                case BIFF_TOKID_LT:         bOk = pushBinaryOperator( OPCODE_LESS );                break;
-                case BIFF_TOKID_LE:         bOk = pushBinaryOperator( OPCODE_LESS_EQUAL );          break;
-                case BIFF_TOKID_EQ:         bOk = pushBinaryOperator( OPCODE_EQUAL );               break;
-                case BIFF_TOKID_GE:         bOk = pushBinaryOperator( OPCODE_GREATER_EQUAL );       break;
-                case BIFF_TOKID_GT:         bOk = pushBinaryOperator( OPCODE_GREATER );             break;
-                case BIFF_TOKID_NE:         bOk = pushBinaryOperator( OPCODE_NOT_EQUAL );           break;
-                case BIFF_TOKID_ISECT:      bOk = pushBinaryOperator( OPCODE_INTERSECT );           break;
-                case BIFF_TOKID_LIST:       bOk = pushBinaryOperator( OPCODE_LIST );                break;
-                case BIFF_TOKID_RANGE:      bOk = pushBinaryOperator( OPCODE_RANGE );               break;
-                case BIFF_TOKID_UPLUS:      bOk = pushUnaryPreOperator( OPCODE_PLUS_SIGN );         break;
-                case BIFF_TOKID_UMINUS:     bOk = pushUnaryPreOperator( OPCODE_MINUS_SIGN );        break;
-                case BIFF_TOKID_PERCENT:    bOk = pushUnaryPostOperator( OPCODE_PERCENT );          break;
-                case BIFF_TOKID_PAREN:      bOk = pushParenthesesOperator();                        break;
-                case BIFF_TOKID_MISSARG:    bOk = pushOperand( OPCODE_MISSING );                    break;
-                case BIFF_TOKID_STR:        bOk = (this->*mpImportStrToken)( rStrm );               break;
-                case BIFF_TOKID_NLR:        bOk = (this->*mpImportNlrToken)( rStrm );               break;
-                case BIFF_TOKID_ATTR:       bOk = importAttrToken( rStrm );                         break;
-                case BIFF_TOKID_SHEET:      bOk = (this->*mpImportSheetToken)( rStrm );             break;
-                case BIFF_TOKID_ENDSHEET:   bOk = (this->*mpImportEndSheetToken)( rStrm );          break;
-                case BIFF_TOKID_ERR:        bOk = pushBiffErrorOperand( rStrm.readuInt8() );        break;
-                case BIFF_TOKID_BOOL:       bOk = pushBiffBoolOperand( rStrm.readuInt8() );         break;
-                case BIFF_TOKID_INT:        bOk = pushValueOperand< double >( rStrm.readuInt16() ); break;
-                case BIFF_TOKID_NUM:        bOk = pushValueOperand( rStrm.readDouble() );           break;
-                default:                    bOk = false;
+                // base tokens
+                switch( nBaseId )
+                {
+                    case BIFF_TOKID_EXP:        bOk = (this->*mpImportExpToken)( rStrm );               break;
+                    case BIFF_TOKID_TBL:        bOk = false; /* multiple op. will be set externally */  break;
+                    case BIFF_TOKID_ADD:        bOk = pushBinaryOperator( OPCODE_ADD );                 break;
+                    case BIFF_TOKID_SUB:        bOk = pushBinaryOperator( OPCODE_SUB );                 break;
+                    case BIFF_TOKID_MUL:        bOk = pushBinaryOperator( OPCODE_MULT );                break;
+                    case BIFF_TOKID_DIV:        bOk = pushBinaryOperator( OPCODE_DIV );                 break;
+                    case BIFF_TOKID_POWER:      bOk = pushBinaryOperator( OPCODE_POWER );               break;
+                    case BIFF_TOKID_CONCAT:     bOk = pushBinaryOperator( OPCODE_CONCAT );              break;
+                    case BIFF_TOKID_LT:         bOk = pushBinaryOperator( OPCODE_LESS );                break;
+                    case BIFF_TOKID_LE:         bOk = pushBinaryOperator( OPCODE_LESS_EQUAL );          break;
+                    case BIFF_TOKID_EQ:         bOk = pushBinaryOperator( OPCODE_EQUAL );               break;
+                    case BIFF_TOKID_GE:         bOk = pushBinaryOperator( OPCODE_GREATER_EQUAL );       break;
+                    case BIFF_TOKID_GT:         bOk = pushBinaryOperator( OPCODE_GREATER );             break;
+                    case BIFF_TOKID_NE:         bOk = pushBinaryOperator( OPCODE_NOT_EQUAL );           break;
+                    case BIFF_TOKID_ISECT:      bOk = pushBinaryOperator( OPCODE_INTERSECT );           break;
+                    case BIFF_TOKID_LIST:       bOk = pushBinaryOperator( OPCODE_LIST );                break;
+                    case BIFF_TOKID_RANGE:      bOk = pushBinaryOperator( OPCODE_RANGE );               break;
+                    case BIFF_TOKID_UPLUS:      bOk = pushUnaryPreOperator( OPCODE_PLUS_SIGN );         break;
+                    case BIFF_TOKID_UMINUS:     bOk = pushUnaryPreOperator( OPCODE_MINUS_SIGN );        break;
+                    case BIFF_TOKID_PERCENT:    bOk = pushUnaryPostOperator( OPCODE_PERCENT );          break;
+                    case BIFF_TOKID_PAREN:      bOk = pushParenthesesOperator();                        break;
+                    case BIFF_TOKID_MISSARG:    bOk = pushOperand( OPCODE_MISSING );                    break;
+                    case BIFF_TOKID_STR:        bOk = (this->*mpImportStrToken)( rStrm );               break;
+                    case BIFF_TOKID_NLR:        bOk = (this->*mpImportNlrToken)( rStrm );               break;
+                    case BIFF_TOKID_ATTR:       bOk = importAttrToken( rStrm );                         break;
+                    case BIFF_TOKID_SHEET:      bOk = (this->*mpImportSheetToken)( rStrm );             break;
+                    case BIFF_TOKID_ENDSHEET:   bOk = (this->*mpImportEndSheetToken)( rStrm );          break;
+                    case BIFF_TOKID_ERR:        bOk = pushBiffErrorOperand( rStrm.readuInt8() );        break;
+                    case BIFF_TOKID_BOOL:       bOk = pushBiffBoolOperand( rStrm.readuInt8() );         break;
+                    case BIFF_TOKID_INT:        bOk = pushValueOperand< double >( rStrm.readuInt16() ); break;
+                    case BIFF_TOKID_NUM:        bOk = pushValueOperand( rStrm.readDouble() );           break;
+                    default:                    bOk = false;
+                }
             }
-        }
-        else
-        {
-            // classified tokens
-            switch( nBaseId )
+            else
             {
-                case BIFF_TOKID_ARRAY:      bOk = importArrayToken( rStrm );                                        break;
-                case BIFF_TOKID_FUNC:       bOk = (this->*mpImportFuncToken)( rStrm );                              break;
-                case BIFF_TOKID_FUNCVAR:    bOk = (this->*mpImportFuncVarToken)( rStrm );                           break;
-                case BIFF_TOKID_NAME:       bOk = importNameToken( rStrm );                                         break;
-                case BIFF_TOKID_REF:        bOk = (this->*mpImportRefToken)( rStrm, false, false );                 break;
-                case BIFF_TOKID_AREA:       bOk = (this->*mpImportAreaToken)( rStrm, false, false );                break;
-                case BIFF_TOKID_MEMAREA:    bOk = importMemAreaToken( rStrm, true );                                break;
-                case BIFF_TOKID_MEMERR:     bOk = importMemAreaToken( rStrm, false );                               break;
-                case BIFF_TOKID_MEMNOMEM:   bOk = importMemAreaToken( rStrm, false );                               break;
-                case BIFF_TOKID_MEMFUNC:    bOk = importMemFuncToken( rStrm );                                      break;
-                case BIFF_TOKID_REFERR:     bOk = (this->*mpImportRefToken)( rStrm, true, false );                  break;
-                case BIFF_TOKID_AREAERR:    bOk = (this->*mpImportAreaToken)( rStrm, true, false );                 break;
-                case BIFF_TOKID_REFN:       bOk = (this->*mpImportRefToken)( rStrm, false, true );                  break;
-                case BIFF_TOKID_AREAN:      bOk = (this->*mpImportAreaToken)( rStrm, false, true );                 break;
-                case BIFF_TOKID_MEMAREAN:   bOk = importMemFuncToken( rStrm );                                      break;
-                case BIFF_TOKID_MEMNOMEMN:  bOk = importMemFuncToken( rStrm );                                      break;
-                case BIFF_TOKID_FUNCCE:     bOk = (this->*mpImportFuncCEToken)( rStrm );                            break;
-                case BIFF_TOKID_NAMEX:      bOk = (this->*mpImportNameXToken)( rStrm );                             break;
-                case BIFF_TOKID_REF3D:      bOk = (this->*mpImportRef3dToken)( rStrm, false, bRelativeAsOffset );   break;
-                case BIFF_TOKID_AREA3D:     bOk = (this->*mpImportArea3dToken)( rStrm, false, bRelativeAsOffset );  break;
-                case BIFF_TOKID_REFERR3D:   bOk = (this->*mpImportRef3dToken)( rStrm, true, bRelativeAsOffset );    break;
-                case BIFF_TOKID_AREAERR3D:  bOk = (this->*mpImportArea3dToken)( rStrm, true, bRelativeAsOffset );   break;
-                default:                    bOk = false;
+                // classified tokens
+                switch( nBaseId )
+                {
+                    case BIFF_TOKID_ARRAY:      bOk = importArrayToken( rStrm );                                        break;
+                    case BIFF_TOKID_FUNC:       bOk = (this->*mpImportFuncToken)( rStrm );                              break;
+                    case BIFF_TOKID_FUNCVAR:    bOk = (this->*mpImportFuncVarToken)( rStrm );                           break;
+                    case BIFF_TOKID_NAME:       bOk = importNameToken( rStrm );                                         break;
+                    case BIFF_TOKID_REF:        bOk = (this->*mpImportRefToken)( rStrm, false, false );                 break;
+                    case BIFF_TOKID_AREA:       bOk = (this->*mpImportAreaToken)( rStrm, false, false );                break;
+                    case BIFF_TOKID_MEMAREA:    bOk = importMemAreaToken( rStrm, true );                                break;
+                    case BIFF_TOKID_MEMERR:     bOk = importMemAreaToken( rStrm, false );                               break;
+                    case BIFF_TOKID_MEMNOMEM:   bOk = importMemAreaToken( rStrm, false );                               break;
+                    case BIFF_TOKID_MEMFUNC:    bOk = importMemFuncToken( rStrm );                                      break;
+                    case BIFF_TOKID_REFERR:     bOk = (this->*mpImportRefToken)( rStrm, true, false );                  break;
+                    case BIFF_TOKID_AREAERR:    bOk = (this->*mpImportAreaToken)( rStrm, true, false );                 break;
+                    case BIFF_TOKID_REFN:       bOk = (this->*mpImportRefToken)( rStrm, false, true );                  break;
+                    case BIFF_TOKID_AREAN:      bOk = (this->*mpImportAreaToken)( rStrm, false, true );                 break;
+                    case BIFF_TOKID_MEMAREAN:   bOk = importMemFuncToken( rStrm );                                      break;
+                    case BIFF_TOKID_MEMNOMEMN:  bOk = importMemFuncToken( rStrm );                                      break;
+                    case BIFF_TOKID_FUNCCE:     bOk = (this->*mpImportFuncCEToken)( rStrm );                            break;
+                    case BIFF_TOKID_NAMEX:      bOk = (this->*mpImportNameXToken)( rStrm );                             break;
+                    case BIFF_TOKID_REF3D:      bOk = (this->*mpImportRef3dToken)( rStrm, false, bRelativeAsOffset );   break;
+                    case BIFF_TOKID_AREA3D:     bOk = (this->*mpImportArea3dToken)( rStrm, false, bRelativeAsOffset );  break;
+                    case BIFF_TOKID_REFERR3D:   bOk = (this->*mpImportRef3dToken)( rStrm, true, bRelativeAsOffset );    break;
+                    case BIFF_TOKID_AREAERR3D:  bOk = (this->*mpImportArea3dToken)( rStrm, true, bRelativeAsOffset );   break;
+                    default:                    bOk = false;
+                }
             }
         }
     }
@@ -2161,13 +2187,13 @@ bool BiffFormulaParserImpl::importRefTokenNotAvailable( BiffInputStream&, bool, 
 
 bool BiffFormulaParserImpl::importStrToken2( BiffInputStream& rStrm )
 {
-    return pushValueOperand( rStrm.readByteString( false, getTextEncoding() ) );
+    return pushValueOperand( rStrm.readByteStringUC( false, getTextEncoding(), getFormulaContext().isNulCharsAllowed() ) );
 }
 
 bool BiffFormulaParserImpl::importStrToken8( BiffInputStream& rStrm )
 {
     // read flags field for empty strings also
-    return pushValueOperand( rStrm.readUniString( rStrm.readuInt8() ) );
+    return pushValueOperand( rStrm.readUniStringBody( rStrm.readuInt8(), getFormulaContext().isNulCharsAllowed() ) );
 }
 
 bool BiffFormulaParserImpl::importAttrToken( BiffInputStream& rStrm )
@@ -2296,6 +2322,7 @@ bool BiffFormulaParserImpl::importArrayToken( BiffInputStream& rStrm )
     size_t nOpSize = popOperandSize();
     size_t nOldArraySize = getFormulaSize();
     bool bBiff8 = getBiff() == BIFF8;
+    bool bNulChars = getFormulaContext().isNulCharsAllowed();
 
     // read array size
     swapStreamPosition( rStrm );
@@ -2324,8 +2351,8 @@ bool BiffFormulaParserImpl::importArrayToken( BiffInputStream& rStrm )
                 break;
                 case BIFF_DATATYPE_STRING:
                     appendRawToken( OPCODE_PUSH ) <<= bBiff8 ?
-                        rStrm.readUniString() :
-                        rStrm.readByteString( false, getTextEncoding() );
+                        rStrm.readUniString( bNulChars ) :
+                        rStrm.readByteStringUC( false, getTextEncoding(), bNulChars );
                 break;
                 case BIFF_DATATYPE_BOOL:
                     appendRawToken( OPCODE_PUSH ) <<= static_cast< double >( (rStrm.readuInt8() == BIFF_TOK_BOOL_FALSE) ? 0.0 : 1.0 );
@@ -2785,6 +2812,54 @@ void FormulaParser::convertNumberToHyperlink( FormulaContext& rContext, const OU
         aTokens[ 5 ].OpCode = OPCODE_CLOSE;
         mxImpl->setFormula( rContext, aTokens );
     }
+}
+
+OUString FormulaParser::importOleTargetLink( const OUString& rFormulaString )
+{
+    // obviously, this would overburden our formula parser, so we parse it manually
+    OUString aTargetLink;
+    sal_Int32 nFmlaLen = rFormulaString.getLength();
+    if( (nFmlaLen >= 8) && (rFormulaString[ 0 ] == '[') )
+    {
+        // passed string is trimmed already
+        sal_Int32 nBracketClose = rFormulaString.indexOf( ']' );
+        sal_Int32 nExclamation = rFormulaString.indexOf( '!' );
+        if( (nBracketClose >= 2) &&
+            (nBracketClose + 1 == nExclamation) &&
+            (rFormulaString[ nExclamation + 1 ] == '\'') &&
+            (rFormulaString[ nFmlaLen - 1 ] == '\'') )
+        {
+            sal_Int32 nRefId = rFormulaString.copy( 1, nBracketClose - 1 ).toInt32();
+            aTargetLink = mxImpl->resolveOleTarget( nRefId );
+        }
+    }
+    return aTargetLink;
+}
+
+OUString FormulaParser::importOleTargetLink( RecordInputStream& rStrm )
+{
+    OUString aTargetLink;
+    sal_Int32 nFmlaSize = rStrm.readInt32();
+    sal_Int64 nFmlaEndPos = rStrm.tell() + ::std::max< sal_Int32 >( nFmlaSize, 0 );
+    if( (nFmlaSize == 7) && (rStrm.getRemaining() >= 7) )
+    {
+        sal_uInt8 nToken;
+        sal_Int16 nRefId;
+        sal_Int32 nNameId;
+        rStrm >> nToken >> nRefId >> nNameId;
+        if( nToken == (BIFF_TOKCLASS_VAL|BIFF_TOKID_NAMEX) )
+            aTargetLink = mxImpl->resolveOleTarget( nRefId );
+    }
+    rStrm.seek( nFmlaEndPos );
+    return aTargetLink;
+}
+
+OUString FormulaParser::importOleTargetLink( BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize ) const
+{
+    OUString aTargetLink;
+    sal_uInt16 nFmlaSize = lclReadFmlaSize( rStrm, getBiff(), pnFmlaSize );
+    rStrm.skip( nFmlaSize );
+    return aTargetLink;
 }
 
 // ============================================================================

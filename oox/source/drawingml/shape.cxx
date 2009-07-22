@@ -65,7 +65,21 @@ namespace oox { namespace drawingml {
 
 // ============================================================================
 
+CreateShapeCallback::CreateShapeCallback( XmlFilterBase& rFilter ) :
+    mrFilter( rFilter )
+{
+}
+
 CreateShapeCallback::~CreateShapeCallback()
+{
+}
+
+OUString CreateShapeCallback::onCreateXShape( const OUString& rServiceName, const Rectangle& )
+{
+    return rServiceName;
+}
+
+void CreateShapeCallback::onXShapeCreated( const Reference< XShape >& ) const
 {
 }
 
@@ -74,7 +88,7 @@ CreateShapeCallback::~CreateShapeCallback()
 Shape::Shape( const sal_Char* pServiceName )
 : mpLinePropertiesPtr( new LineProperties )
 , mpFillPropertiesPtr( new FillProperties )
-, mpGraphicPropertiesPtr( new FillProperties )
+, mpGraphicPropertiesPtr( new GraphicProperties )
 , mpCustomShapePropertiesPtr( new CustomShapeProperties )
 , mpMasterTextListStyle( new TextListStyle )
 , mnSubType( 0 )
@@ -235,10 +249,14 @@ Reference< XShape > Shape::createAndInsert(
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
         const awt::Rectangle* pShapeRect )
 {
-    basegfx::B2DHomMatrix aTransformation;
-
     awt::Size aSize( pShapeRect ? awt::Size( pShapeRect->Width, pShapeRect->Height ) : maSize );
     awt::Point aPosition( pShapeRect ? awt::Point( pShapeRect->X, pShapeRect->Y ) : maPosition );
+
+    OUString aServiceName = rServiceName;
+    if( mxCreateCallback.get() )
+        aServiceName = mxCreateCallback->onCreateXShape( aServiceName, awt::Rectangle( aPosition.X / 360, aPosition.Y / 360, aSize.Width / 360, aSize.Height / 360 ) );
+
+    basegfx::B2DHomMatrix aTransformation;
     if( aSize.Width != 1 || aSize.Height != 1)
     {
         // take care there are no zeros used by error
@@ -279,7 +297,7 @@ Reference< XShape > Shape::createAndInsert(
     }
 
     // special for lineshape
-    if ( rServiceName == OUString::createFromAscii( "com.sun.star.drawing.LineShape" ) )
+    if ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.LineShape" ) )
     {
         ::basegfx::B2DPolygon aPoly;
         aPoly.insert( 0, ::basegfx::B2DPoint( 0, 0 ) );
@@ -300,7 +318,7 @@ Reference< XShape > Shape::createAndInsert(
 
         maShapeProperties[ PROP_PolyPolygon ] <<= aPolyPolySequence;
     }
-    else if ( rServiceName == OUString::createFromAscii( "com.sun.star.drawing.ConnectorShape" ) )
+    else if ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.ConnectorShape" ) )
     {
         ::basegfx::B2DPolygon aPoly;
         aPoly.insert( 0, ::basegfx::B2DPoint( 0, 0 ) );
@@ -336,7 +354,7 @@ Reference< XShape > Shape::createAndInsert(
     }
     Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
     if ( !mxShape.is() )
-        mxShape = Reference< drawing::XShape >( xServiceFact->createInstance( rServiceName ), UNO_QUERY_THROW );
+        mxShape = Reference< drawing::XShape >( xServiceFact->createInstance( aServiceName ), UNO_QUERY_THROW );
 
     Reference< XPropertySet > xSet( mxShape, UNO_QUERY );
     if( mxShape.is() && xSet.is() )
@@ -383,6 +401,8 @@ Reference< XShape > Shape::createAndInsert(
 
         PropertyMap aShapeProperties;
         aShapeProperties.insert( getShapeProperties().begin(), getShapeProperties().end() );
+        if( mxCreateCallback.get() )
+            aShapeProperties.insert( mxCreateCallback->getShapeProperties().begin(), mxCreateCallback->getShapeProperties().end() );
 
         // add properties from textbody to shape properties
         if( mpTextBody.get() )
@@ -390,12 +410,12 @@ Reference< XShape > Shape::createAndInsert(
 
         // applying properties
         PropertySet aPropSet( xSet );
-        if ( rServiceName == OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )
-            mpGraphicPropertiesPtr->pushToPropSet( aPropSet, FillProperties::DEFAULT_PICIDS, rFilterBase, rFilterBase.getModelObjectContainer(), 0, -1 );
-        if ( mpTablePropertiesPtr.get() && ( rServiceName == OUString::createFromAscii( "com.sun.star.drawing.TableShape" ) ) )
+        if ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )
+            mpGraphicPropertiesPtr->pushToPropSet( aPropSet, rFilterBase, -1 );
+        if ( mpTablePropertiesPtr.get() && ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.TableShape" ) ) )
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
-        aFillProperties.pushToPropSet( aPropSet, FillProperties::DEFAULT_IDS, rFilterBase, rFilterBase.getModelObjectContainer(), mnRotation, nFillPhClr );
-        aLineProperties.pushToPropSet( aPropSet, LineProperties::DEFAULT_IDS, rFilterBase, rFilterBase.getModelObjectContainer(), nLinePhClr );
+        aFillProperties.pushToPropSet( aPropSet, FillProperties::DEFAULT_IDS, rFilterBase, rFilterBase.getModelObjectHelper(), mnRotation, nFillPhClr );
+        aLineProperties.pushToPropSet( aPropSet, LineProperties::DEFAULT_IDS, rFilterBase, rFilterBase.getModelObjectHelper(), nLinePhClr );
 
         // applying autogrowheight property before setting shape size, because
         // the shape size might be changed if currently autogrowheight is true
@@ -406,9 +426,11 @@ Reference< XShape > Shape::createAndInsert(
             if( /*const Any* pAutoGrowHeight =*/ aShapeProperties.getProperty( PROP_TextAutoGrowHeight ) )
                 xSet->setPropertyValue( rPropName, Any( false ) );
 
-        aPropSet.setProperties( aShapeProperties );
+        // do not set properties at a group shape (this causes assertions from svx)
+        if( aServiceName != OUString::createFromAscii( "com.sun.star.drawing.GroupShape" ) )
+            aPropSet.setProperties( aShapeProperties );
 
-        if( rServiceName == OUString::createFromAscii( "com.sun.star.drawing.CustomShape" ) )
+        if( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.CustomShape" ) )
             mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape );
 
         // in some cases, we don't have any text body.
@@ -434,7 +456,7 @@ Reference< XShape > Shape::createAndInsert(
 
     // use a callback for further processing on the XShape (e.g. charts)
     if( mxShape.is() && mxCreateCallback.get() )
-        mxCreateCallback->onCreateXShape( mxShape );
+        mxCreateCallback->onXShapeCreated( mxShape );
 
     return mxShape;
 }

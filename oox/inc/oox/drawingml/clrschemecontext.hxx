@@ -34,6 +34,7 @@
 #include "oox/core/contexthandler.hxx"
 #include "oox/drawingml/clrscheme.hxx"
 #include "oox/drawingml/color.hxx"
+#include "oox/drawingml/colorchoicecontext.hxx"
 
 namespace oox { namespace drawingml {
 
@@ -42,20 +43,27 @@ class clrMapContext : public oox::core::ContextHandler
 public:
     clrMapContext( ::oox::core::ContextHandler& rParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, ClrMap& rClrMap );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+};
+
+class clrSchemeColorContext : private Color, public ColorContext
+{
+public:
+    clrSchemeColorContext( ::oox::core::ContextHandler& rParent, ClrScheme& rClrScheme, sal_Int32 nColorToken );
+    virtual ~clrSchemeColorContext();
+
+private:
+    ClrScheme&      mrClrScheme;
+    sal_Int32       mnColorToken;
 };
 
 class clrSchemeContext : public oox::core::ContextHandler
 {
 public:
     clrSchemeContext( ::oox::core::ContextHandler& rParent, ClrScheme& rClrScheme );
-    virtual void SAL_CALL startFastElement( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL endFastElement( sal_Int32 aElementToken ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 private:
     ClrScheme&      mrClrScheme;
-    Color           maColor;
 };
 
 } }

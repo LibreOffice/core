@@ -434,7 +434,12 @@ void DataPointConverter::convertFromModel( const Reference< XDataSeries >& rxDat
 
         // point formatting
         if( mrModel.mxShapeProp.is() )
-            getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, rTypeGroup.getSeriesObjectType(), rSeries.mnIndex );
+        {
+            if( rTypeGroup.getTypeInfo().mbPictureOptions )
+                getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, mrModel.mxPicOptions.getOrCreate(), rTypeGroup.getSeriesObjectType(), rSeries.mnIndex );
+            else
+                getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, rTypeGroup.getSeriesObjectType(), rSeries.mnIndex );
+        }
     }
     catch( Exception& )
     {
@@ -492,6 +497,13 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
             Reference< XLabeledDataSequence > xXValueSeq = createCategorySequence( CREATE_OUSTRING( "values-x" ) );
             if( xXValueSeq.is() )
                 aLabeledSeqVec.push_back( xXValueSeq );
+            // add size values of bubble charts
+            if( rTypeInfo.meTypeId == TYPEID_BUBBLE )
+            {
+                Reference< XLabeledDataSequence > xSizeValueSeq = createLabeledDataSequence( SeriesModel::POINTS, CREATE_OUSTRING( "values-size" ), true );
+                if( xSizeValueSeq.is() )
+                    aLabeledSeqVec.push_back( xSizeValueSeq );
+            }
         }
         // attach labeled data sequences to series
         if( !aLabeledSeqVec.empty() )
@@ -526,7 +538,10 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     // series formatting
     ObjectFormatter& rFormatter = getFormatter();
     ObjectType eObjType = rTypeGroup.getSeriesObjectType();
-    rFormatter.convertFrameFormatting( aSeriesProp, mrModel.mxShapeProp, eObjType, mrModel.mnIndex );
+    if( rTypeInfo.mbPictureOptions )
+        rFormatter.convertFrameFormatting( aSeriesProp, mrModel.mxShapeProp, mrModel.mxPicOptions.getOrCreate(), eObjType, mrModel.mnIndex );
+    else
+        rFormatter.convertFrameFormatting( aSeriesProp, mrModel.mxShapeProp, eObjType, mrModel.mnIndex );
 
     // set the (unused) property default value used by the Chart2 templates (true for pie/doughnut charts)
     bool bIsPie = rTypeInfo.meTypeCategory == TYPECATEGORY_PIE;

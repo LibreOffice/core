@@ -86,6 +86,17 @@ public:
                             const ::rtl::OUString& rUrl,
                             double fValue ) const;
 
+    /** Converts the passed XML formula to an OLE link target. */
+    ::rtl::OUString     importOleTargetLink( const ::rtl::OUString& rFormulaString );
+
+    /** Imports and converts an OLE link target from the passed stream. */
+    ::rtl::OUString     importOleTargetLink( RecordInputStream& rStrm );
+
+    /** Imports and converts an OLE link target from the passed stream. */
+    ::rtl::OUString     importOleTargetLink(
+                            BiffInputStream& rStrm,
+                            const sal_uInt16* pnFmlaSize = 0 ) const;
+
 private:
     ::std::auto_ptr< FormulaParserImpl > mxImpl;
 };

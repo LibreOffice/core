@@ -69,6 +69,21 @@ DataLabelsModel::~DataLabelsModel()
 
 // ============================================================================
 
+PictureOptionsModel::PictureOptionsModel() :
+    mfStackUnit( 1.0 ),
+    mnPictureFormat( XML_stretch ),
+    mbApplyToFront( false ),
+    mbApplyToSides( false ),
+    mbApplyToEnd( false )
+{
+}
+
+PictureOptionsModel::~PictureOptionsModel()
+{
+}
+
+// ============================================================================
+
 ErrorBarModel::ErrorBarModel() :
     mfValue( 0.0 ),
     mnDirection( XML_y ),

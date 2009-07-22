@@ -76,6 +76,8 @@ SLOFILES =										\
         $(SLO)$/querytablefragment.obj			\
         $(SLO)$/richstring.obj					\
         $(SLO)$/richstringcontext.obj			\
+        $(SLO)$/scenariobuffer.obj				\
+        $(SLO)$/scenariocontext.obj				\
         $(SLO)$/sharedformulabuffer.obj			\
         $(SLO)$/sharedstringsbuffer.obj			\
         $(SLO)$/sharedstringsfragment.obj		\

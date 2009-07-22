@@ -29,7 +29,6 @@
  ************************************************************************/
 
 #include "oox/drawingml/clrschemecontext.hxx"
-#include "oox/drawingml/colorchoicecontext.hxx"
 #include "oox/core/namespaces.hxx"
 #include "tokens.hxx"
 
@@ -67,66 +66,44 @@ clrMapContext::clrMapContext( ContextHandler& rParent,
     setClrMap( xAttributes, rClrMap, XML_folHlink );
 }
 
-Reference< XFastContextHandler > clrMapContext::createFastChildContext( sal_Int32 /* aElementToken */, const Reference< XFastAttributeList >& /* xAttribs */ )
-    throw (SAXException, RuntimeException)
-{
-    Reference< XFastContextHandler > xRet;
-    return xRet;
-}
-
-clrSchemeContext::clrSchemeContext( ContextHandler& rParent, ClrScheme& rClrScheme )
-: ContextHandler( rParent )
-, mrClrScheme( rClrScheme )
+clrSchemeColorContext::clrSchemeColorContext( ContextHandler& rParent, ClrScheme& rClrScheme, sal_Int32 nColorToken ) :
+    ColorContext( rParent, *this ),
+    mrClrScheme( rClrScheme ),
+    mnColorToken( nColorToken )
 {
 }
 
-void clrSchemeContext::startFastElement( sal_Int32 /* aElementToken */, const Reference< XFastAttributeList >& /* xAttribs */ ) throw (SAXException, RuntimeException)
+clrSchemeColorContext::~clrSchemeColorContext()
+{
+    mrClrScheme.setColor( mnColorToken, getColor( getFilter() ) );
+}
+
+clrSchemeContext::clrSchemeContext( ContextHandler& rParent, ClrScheme& rClrScheme ) :
+    ContextHandler( rParent ),
+    mrClrScheme( rClrScheme )
 {
 }
 
-void clrSchemeContext::endFastElement( sal_Int32 aElementToken ) throw (SAXException, RuntimeException)
+Reference< XFastContextHandler > clrSchemeContext::createFastChildContext(
+        sal_Int32 nElement, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
 {
-    switch( aElementToken )
+    switch( nElement )
     {
-        case NMSP_DRAWINGML|XML_dk1:
-        case NMSP_DRAWINGML|XML_lt1:
-        case NMSP_DRAWINGML|XML_dk2:
-        case NMSP_DRAWINGML|XML_lt2:
-        case NMSP_DRAWINGML|XML_accent1:
-        case NMSP_DRAWINGML|XML_accent2:
-        case NMSP_DRAWINGML|XML_accent3:
-        case NMSP_DRAWINGML|XML_accent4:
-        case NMSP_DRAWINGML|XML_accent5:
-        case NMSP_DRAWINGML|XML_accent6:
-        case NMSP_DRAWINGML|XML_hlink:
-        case NMSP_DRAWINGML|XML_folHlink:
-        {
-            mrClrScheme.setColor( aElementToken & 0xffff, maColor.getColor( getFilter() ) );
-            break;
-        }
+        case A_TOKEN( dk1 ):
+        case A_TOKEN( lt1 ):
+        case A_TOKEN( dk2 ):
+        case A_TOKEN( lt2 ):
+        case A_TOKEN( accent1 ):
+        case A_TOKEN( accent2 ):
+        case A_TOKEN( accent3 ):
+        case A_TOKEN( accent4 ):
+        case A_TOKEN( accent5 ):
+        case A_TOKEN( accent6 ):
+        case A_TOKEN( hlink ):
+        case A_TOKEN( folHlink ):
+            return new clrSchemeColorContext( *this, mrClrScheme, getToken( nElement ) );
     }
-}
-
-Reference< XFastContextHandler > clrSchemeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& /* xAttribs */ ) throw (SAXException, RuntimeException)
-{
-    Reference< XFastContextHandler > xRet;
-    switch( aElementToken )
-    {
-        case NMSP_DRAWINGML|XML_scrgbClr:   // CT_ScRgbColor
-        case NMSP_DRAWINGML|XML_srgbClr:    // CT_SRgbColor
-        case NMSP_DRAWINGML|XML_hslClr: // CT_HslColor
-        case NMSP_DRAWINGML|XML_sysClr: // CT_SystemColor
-//      case NMSP_DRAWINGML|XML_schemeClr:  // CT_SchemeColor
-        case NMSP_DRAWINGML|XML_prstClr:    // CT_PresetColor
-        {
-            xRet.set( new colorChoiceContext( *this, maColor ) );
-            break;
-        }
-    }
-    if( !xRet.is() )
-        xRet.set( this );
-
-    return xRet;
+    return 0;
 }
 
 } }

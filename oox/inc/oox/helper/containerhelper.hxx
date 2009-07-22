@@ -140,14 +140,15 @@ private:
     work correctly for nonexisting keys, there is no need to check the passed
     key before.
  */
-template< typename KeyType, typename ObjType >
-class RefMap : public ::std::map< KeyType, ::boost::shared_ptr< ObjType > >
+template< typename KeyType, typename ObjType, typename CompType = ::std::less< KeyType > >
+class RefMap : public ::std::map< KeyType, ::boost::shared_ptr< ObjType >, CompType >
 {
 public:
-    typedef ::std::map< KeyType, ::boost::shared_ptr< ObjType > >   container_type;
-    typedef typename container_type::key_type                       key_type;
-    typedef typename container_type::mapped_type                    mapped_type;
-    typedef typename container_type::value_type                     value_type;
+    typedef ::std::map< KeyType, ::boost::shared_ptr< ObjType >, CompType > container_type;
+    typedef typename container_type::key_type                               key_type;
+    typedef typename container_type::mapped_type                            mapped_type;
+    typedef typename container_type::value_type                             value_type;
+    typedef typename container_type::key_compare                            key_compare;
 
 public:
     /** Returns true, if the object accossiated to the passed key exists.

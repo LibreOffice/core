@@ -37,9 +37,11 @@
 #include "oox/drawingml/color.hxx"
 #include "oox/helper/helper.hxx"
 
-namespace oox { class PropertyMap; }
-namespace oox { class PropertySet; }
-namespace oox { namespace core { class ModelObjectContainer; } }
+namespace oox {
+    class ModelObjectHelper;
+    class PropertyMap;
+    class PropertySet;
+}
 
 namespace oox {
 namespace drawingml {
@@ -52,11 +54,8 @@ enum FillPropertyId
     FillColorId,
     FillTransparenceId,
     FillGradientId,
-    FillBitmapId,
+    FillBitmapUrlId,
     FillBitmapModeId,
-    FillBitmapTileId,
-    FillBitmapStretchId,
-    FillBitmapLogicalSizeId,
     FillBitmapSizeXId,
     FillBitmapSizeYId,
     FillBitmapOffsetXId,
@@ -70,13 +69,11 @@ struct FillPropertyIds
     const sal_Int32*    mpnPropertyIds;
     bool                mbNamedFillGradient;
     bool                mbNamedFillBitmap;
-    bool                mbTransformGraphic;
 
     explicit            FillPropertyIds(
                             const sal_Int32* pnPropertyIds,
                             bool bNamedFillGradient,
-                            bool bNamedFillBitmap,
-                            bool bTransformGraphic );
+                            bool bNamedFillBitmap );
 
     inline bool         has( FillPropertyId ePropId ) const { return mpnPropertyIds[ ePropId ] >= 0; }
     inline sal_Int32    operator[]( FillPropertyId ePropId ) const { return mpnPropertyIds[ ePropId ]; }
@@ -84,35 +81,73 @@ struct FillPropertyIds
 
 // ============================================================================
 
-struct FillProperties
+struct GradientFillProperties
 {
     typedef ::std::map< double, Color > GradientStopMap;
 
-    OptValue< sal_Int32 > moFillType;           /// Fill type (OOXML token).
-    OptValue< bool >    moRotateWithShape;      /// True = rotate gradient/bitmap with shape.
-    Color               maFillColor;            /// Solid fill color and transparence.
     GradientStopMap     maGradientStops;        /// Gradient stops (colors/transparence).
+    OptValue< ::com::sun::star::geometry::IntegerRectangle2D > moFillToRect;
+    OptValue< ::com::sun::star::geometry::IntegerRectangle2D > moTileRect;
     OptValue< sal_Int32 > moGradientPath;       /// If set, gradient follows rectangle, circle, or shape.
     OptValue< sal_Int32 > moShadeAngle;         /// Rotation angle of linear gradients.
-    OptValue< bool >    moShadeScaled;
-    OptValue< sal_Int32 > moFlipModeToken;
-    OptValue< com::sun::star::geometry::IntegerRectangle2D > moFillToRect;
-    OptValue< com::sun::star::geometry::IntegerRectangle2D > moTileRect;
-    OptValue< sal_Int32 > moPattPreset;         /// Preset pattern type.
+    OptValue< sal_Int32 > moShadeFlip;          /// Flip mode of gradient, if not stretched to shape.
+    OptValue< bool >    moShadeScaled;          /// True = scale gradient into shape.
+    OptValue< bool >    moRotateWithShape;      /// True = rotate gradient with shape.
+
+    /** Overwrites all members that are explicitly set in rSourceProps. */
+    void                assignUsed( const GradientFillProperties& rSourceProps );
+};
+
+// ============================================================================
+
+struct PatternFillProperties
+{
     Color               maPattFgColor;          /// Pattern foreground color.
     Color               maPattBgColor;          /// Pattern background color.
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > mxGraphic;
+    OptValue< sal_Int32 > moPattPreset;         /// Preset pattern type.
+
+    /** Overwrites all members that are explicitly set in rSourceProps. */
+    void                assignUsed( const PatternFillProperties& rSourceProps );
+};
+
+// ============================================================================
+
+struct BlipFillProperties
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
+                        mxGraphic;              /// The fill graphic.
+    OptValue< sal_Int32 > moBitmapMode;         /// Bitmap tile or stretch.
+    OptValue< ::com::sun::star::geometry::IntegerRectangle2D >
+                        moFillRect;             /// Stretch fill offsets.
+    OptValue< sal_Int32 > moTileOffsetX;        /// Width of bitmap tiles (EMUs).
+    OptValue< sal_Int32 > moTileOffsetY;        /// Height of bitmap tiles (EMUs).
+    OptValue< sal_Int32 > moTileScaleX;         /// Horizontal scaling of bitmap tiles (1/1000 percent).
+    OptValue< sal_Int32 > moTileScaleY;         /// Vertical scaling of bitmap tiles (1/1000 percent).
+    OptValue< sal_Int32 > moTileAlign;          /// Anchor point inside bitmap.
+    OptValue< sal_Int32 > moTileFlip;           /// Flip mode of bitmap tiles.
+    OptValue< bool >    moRotateWithShape;      /// True = rotate bitmap with shape.
+    // effects
+    OptValue< sal_Int32 > moColorEffect;        /// XML token for a color effect.
+    OptValue< sal_Int32 > moBrightness;         /// Brightness in the range [-100000,100000].
+    OptValue< sal_Int32 > moContrast;           /// Contrast in the range [-100000,100000].
     Color               maColorChangeFrom;      /// Start color of color transformation.
     Color               maColorChangeTo;        /// Destination color of color transformation.
-    OptValue< sal_Int32 > moBitmapMode;         /// Bitmap tile or stretch.
-    OptValue< sal_Int32 > moTileX;              /// Width of bitmap tiles.
-    OptValue< sal_Int32 > moTileY;              /// Height of bitmap tiles.
-    OptValue< sal_Int32 > moTileSX;
-    OptValue< sal_Int32 > moTileSY;
-    OptValue< sal_Int32 > moTileAlign;          /// Anchor point inside bitmap.
+
+    /** Overwrites all members that are explicitly set in rSourceProps. */
+    void                assignUsed( const BlipFillProperties& rSourceProps );
+};
+
+// ============================================================================
+
+struct FillProperties
+{
+    OptValue< sal_Int32 > moFillType;           /// Fill type (OOXML token).
+    Color               maFillColor;            /// Solid fill color and transparence.
+    GradientFillProperties maGradientProps;     /// Properties for gradient fills.
+    PatternFillProperties maPatternProps;       /// Properties for pattern fills.
+    BlipFillProperties  maBlipProps;            /// Properties for bitmap fills.
 
     static FillPropertyIds DEFAULT_IDS;         /// Default fill property identifiers for shape fill.
-    static FillPropertyIds DEFAULT_PICIDS;      /// Default fill property identifiers for pictures.
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const FillProperties& rSourceProps );
@@ -126,7 +161,7 @@ struct FillProperties
                             PropertyMap& rPropMap,
                             const FillPropertyIds& rPropIds,
                             const ::oox::core::XmlFilterBase& rFilter,
-                            ::oox::core::ModelObjectContainer& rObjContainer,
+                            ModelObjectHelper& rModelObjHelper,
                             sal_Int32 nShapeRotation, sal_Int32 nPhClr ) const;
 
     /** Writes the properties to the passed property set. */
@@ -134,8 +169,30 @@ struct FillProperties
                             PropertySet& rPropSet,
                             const FillPropertyIds& rPropIds,
                             const ::oox::core::XmlFilterBase& rFilter,
-                            ::oox::core::ModelObjectContainer& rObjContainer,
+                            ModelObjectHelper& rModelObjHelper,
                             sal_Int32 nShapeRotation, sal_Int32 nPhClr ) const;
+};
+
+// ============================================================================
+
+struct GraphicProperties
+{
+    BlipFillProperties  maBlipProps;            /// Properties for the graphic.
+
+    /** Overwrites all members that are explicitly set in rSourceProps. */
+    void                assignUsed( const GraphicProperties& rSourceProps );
+
+    /** Writes the properties to the passed property map. */
+    void                pushToPropMap(
+                            PropertyMap& rPropMap,
+                            const ::oox::core::XmlFilterBase& rFilter,
+                            sal_Int32 nPhClr ) const;
+
+    /** Writes the properties to the passed property set. */
+    void                pushToPropSet(
+                            PropertySet& rPropSet,
+                            const ::oox::core::XmlFilterBase& rFilter,
+                            sal_Int32 nPhClr ) const;
 };
 
 // ============================================================================
