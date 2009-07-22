@@ -4,6 +4,7 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 	xmlns:rng="http://relaxng.org/ns/structure/1.0">
 
+<xsl:include href="resourcestools.xsl"/>
 <xsl:output method="xml"/>
 
 <xsl:template match="/">
@@ -20,7 +21,7 @@
 		<xsl:variable name="defname" select="@name"/>
 		<xsl:for-each select="rng:attribute|rng:element">
 			<xsl:choose>
-				<xsl:when test="local-name()='element'">
+				<xsl:when test="local-name()='element'">					
 					<element>
 						<xsl:call-template name="defineattrs">
 							<xsl:with-param name="nsname" select="$nsname"/>
@@ -61,11 +62,21 @@
 			<xsl:when test="$localname='attribute'">
 				<xsl:for-each select="attribute[@name=$name and @tokenid]">
 					<xsl:attribute name="tokenid"><xsl:value-of select="@tokenid"/></xsl:attribute>
+					<xsl:attribute name="qname">
+						<xsl:call-template name="idtoqname">
+							<xsl:with-param name="id" select="@tokenid"/>
+						</xsl:call-template>
+					</xsl:attribute>
 				</xsl:for-each>
 			</xsl:when>
 			<xsl:when test="$localname='element'">
 				<xsl:for-each select="element[@name=$name and @tokenid]">
 					<xsl:attribute name="tokenid"><xsl:value-of select="@tokenid"/></xsl:attribute>
+					<xsl:attribute name="qname">
+						<xsl:call-template name="idtoqname">
+							<xsl:with-param name="id" select="@tokenid"/>
+						</xsl:call-template>
+					</xsl:attribute>
 				</xsl:for-each>
 			</xsl:when>
 		</xsl:choose>
