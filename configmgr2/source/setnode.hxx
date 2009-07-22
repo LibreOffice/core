@@ -45,7 +45,7 @@ namespace configmgr {
 class SetNode: public Node {
 public:
     SetNode(
-        rtl::OUString const & defaultTemplateName,
+        int layer, rtl::OUString const & defaultTemplateName,
         std::vector< rtl::OUString > const & additionalTemplateNames,
         rtl::OUString const & templateName);
 

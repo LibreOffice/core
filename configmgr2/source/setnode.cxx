@@ -36,7 +36,6 @@
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
-#include "components.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
 #include "setnode.hxx"
@@ -44,10 +43,10 @@
 namespace configmgr {
 
 SetNode::SetNode(
-    rtl::OUString const & defaultTemplateName,
+    int layer, rtl::OUString const & defaultTemplateName,
     std::vector< rtl::OUString > const & additionalTemplateNames,
     rtl::OUString const & templateName):
-    defaultTemplateName_(defaultTemplateName),
+    Node(layer), defaultTemplateName_(defaultTemplateName),
     additionalTemplateNames_(additionalTemplateNames),
     templateName_(templateName)
 {
@@ -62,13 +61,14 @@ SetNode::SetNode(
 rtl::Reference< Node > SetNode::clone() const {
     rtl::Reference< SetNode > fresh(
         new SetNode(
-            defaultTemplateName_, additionalTemplateNames_, templateName_));
+            getLayer(), defaultTemplateName_, additionalTemplateNames_,
+            templateName_));
     members_.clone(&fresh->members_);
     return fresh.get();
 }
 
 rtl::Reference< Node > SetNode::getMember(rtl::OUString const & name) {
-    NodeMap::iterator i(Components::resolveNode(name, &members_));
+    NodeMap::iterator i(members_.find(name));
     return i == members_.end() ? rtl::Reference< Node >() : i->second;
 }
 

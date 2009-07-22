@@ -69,6 +69,7 @@
 #include "childaccess.hxx"
 #include "components.hxx"
 #include "groupnode.hxx"
+#include "layer.hxx"
 #include "localizedpropertynode.hxx"
 #include "localizedpropertyvaluenode.hxx"
 #include "lock.hxx"
@@ -252,7 +253,7 @@ void Access::insertLocalizedPropertyValueChild(
     rtl::Reference< ChildAccess > child(
         new ChildAccess(
             getRootAccess(), this, name,
-            new LocalizedPropertyValueNode(value)));
+            new LocalizedPropertyValueNode(TOP_LAYER, value)));
     child->markAsModified();
     //TODO notify change
 }
@@ -280,13 +281,14 @@ void Access::commitChildChanges() {
         while (!modifiedChildren_.empty()) {
             HardChildMap::iterator i(modifiedChildren_.begin());
             rtl::Reference< ChildAccess > child(getModifiedChild(i));
+            NodeMap & members = getMemberNodes();
             if (child.is()) {
                 child->commitChanges();
                 // In case the child was inserted:
-                if (getMemberNodes()[i->first] == 0) {
+                if (members[i->first] == 0) {
                     Components::singleton().addModification(child->getPath());
                 }
-                getMemberNodes()[i->first] = child->getNode();
+                members[i->first] = child->getNode();
                     //TODO: collision handling?
             } else {
                 // Removed child node:
@@ -295,7 +297,7 @@ void Access::commitChildChanges() {
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
                     Components::createSegment(
                         i->second->getNode()->getTemplateName(), i->first));
-                getMemberNodes().erase(i->first); //TODO: collision handling?
+                members.erase(i->first); //TODO: collision handling?
             }
             i->second->notInTransaction();
             modifiedChildren_.erase(i);
@@ -868,7 +870,7 @@ void Access::insertByName(
         rtl::Reference< ChildAccess > child(
             new ChildAccess(
                 getRootAccess(), this, aName,
-                new PropertyNode(TYPE_ANY, true, aElement, true)));
+                new PropertyNode(TOP_LAYER, TYPE_ANY, true, aElement, true)));
         child->markAsModified();
         //TODO notify change
     } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
@@ -956,7 +958,8 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
     OSL_ASSERT(thisIs(IS_SET|IS_UPDATE));
     rtl::OUString tmplName(
         dynamic_cast< SetNode * >(getNode().get())->getDefaultTemplateName());
-    rtl::Reference< Node > p(Components::singleton().getTemplate(tmplName));
+    rtl::Reference< Node > p(
+        Components::singleton().getTemplate(TOP_LAYER, tmplName));
     if (!p.is()) {
         throw css::uno::Exception(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unknown template ")) +

@@ -49,7 +49,7 @@ class LocalizedPropertyValueNode;
 
 class LocalizedPropertyNode: public Node {
 public:
-    LocalizedPropertyNode(Type type, bool nillable);
+    LocalizedPropertyNode(int layer, Type type, bool nillable);
 
     virtual rtl::Reference< Node > clone() const;
 

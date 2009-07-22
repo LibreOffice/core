@@ -27,47 +27,17 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#include "precompiled_configmgr.hxx"
+#ifndef INCLUDED_CONFIGMGR_LAYER_HXX
+#define INCLUDED_CONFIGMGR_LAYER_HXX
+
 #include "sal/config.h"
 
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
-
-#include "groupnode.hxx"
-#include "node.hxx"
-#include "nodemap.hxx"
+#include <climits>
 
 namespace configmgr {
 
-GroupNode::GroupNode(
-    int layer, bool extensible, rtl::OUString const & templateName):
-    Node(layer), extensible_(extensible), templateName_(templateName)
-{}
-
-rtl::Reference< Node > GroupNode::clone() const {
-    rtl::Reference< GroupNode > fresh(
-        new GroupNode(getLayer(), extensible_, templateName_));
-    members_.clone(&fresh->members_);
-    return fresh.get();
-}
-
-rtl::Reference< Node > GroupNode::getMember(rtl::OUString const & name) {
-    NodeMap::iterator i(members_.find(name));
-    return i == members_.end() ? rtl::Reference< Node >() : i->second;
-}
-
-rtl::OUString GroupNode::getTemplateName() const {
-    return templateName_;
-}
-
-bool GroupNode::isExtensible() const {
-    return extensible_;
-}
-
-NodeMap & GroupNode::getMembers() {
-    return members_;
-}
-
-GroupNode::~GroupNode() {}
+enum { TOP_LAYER = INT_MAX };
 
 }
+
+#endif

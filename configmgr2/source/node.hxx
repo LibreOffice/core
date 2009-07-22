@@ -46,10 +46,14 @@ public:
 
     virtual rtl::OUString getTemplateName() const { return rtl::OUString(); }
 
+    int getLayer() const { return layer_; }
+
 protected:
-    Node() {}
+    Node(int layer): layer_(layer) {}
 
     virtual ~Node() {}
+
+    int layer_;
 };
 
 }

@@ -35,6 +35,7 @@
 #include <list>
 
 #include "boost/noncopyable.hpp"
+#include "libxml/parser.h"
 #include "rtl/ref.hxx"
 #include "stl/hash_map"
 
@@ -47,6 +48,7 @@ namespace rtl {
 
 namespace configmgr {
 
+class GroupNode;
 class Node;
 
 class Components: private boost::noncopyable {
@@ -62,32 +64,66 @@ public:
         rtl::OUString const & path, sal_Int32 index, rtl::OUString * name,
         bool * setElement, rtl::OUString * templateName);
 
-    static NodeMap::iterator resolveNode(
-        rtl::OUString const & name, NodeMap * map);
-
     rtl::Reference< Node > resolvePath(
         rtl::OUString const & path, rtl::OUString * firstSegment,
         rtl::OUString * lastSegment, rtl::OUString * canonicalPath,
         rtl::Reference< Node > * parent);
 
-    rtl::Reference< Node > getTemplate(rtl::OUString const & fullName) const;
+    rtl::Reference< Node > getTemplate(
+        int layer, rtl::OUString const & fullName) const;
 
     void addModification(rtl::OUString const & path);
 
     void writeModifications();
-
-    typedef
-        std::hash_map< rtl::OUString, rtl::Reference< Node>, rtl::OUStringHash >
-        TemplateMap;
 
 private:
     Components();
 
     ~Components();
 
+    void parseXcsGroupContent(
+        int layer, rtl::OUString const & componentName, xmlDocPtr doc,
+        xmlNodePtr node, rtl::Reference< GroupNode > const & group);
+
+    rtl::Reference< Node > parseXcsGroup(
+        int layer, rtl::OUString const & componentName, xmlDocPtr doc,
+        xmlNodePtr node, rtl::OUString const & templateName);
+
+    xmlNodePtr parseXcsTemplates(
+        int layer, rtl::OUString const & componentName, xmlDocPtr doc,
+        xmlNodePtr node);
+
+    xmlNodePtr parseXcsComponent(
+        int layer, xmlDocPtr doc, rtl::OUString const & component,
+        xmlNodePtr node);
+
+    void parseXcsFile(int layer, rtl::OUString const & url);
+
+    void parseXcuNode(
+        int layer, rtl::OUString const & componentName, xmlDocPtr doc,
+        xmlNodePtr xmlNode, rtl::Reference< Node > const & node,
+        bool modifications, rtl::OUString const & pathPrefix);
+
+    void parseXcuFile(int layer, rtl::OUString const & url);
+
+    void parseFiles(
+        int layer, rtl::OUString const & extension,
+        void (Components::* parseFile)(int, rtl::OUString const &),
+        rtl::OUString const & url, bool recursive);
+
+    void parseXcsXcuLayer(int layer, rtl::OUString const & url);
+
+    void parseModuleLayer(int layer, rtl::OUString const & url);
+
+    void parseResLayer(int layer, rtl::OUString const & url);
+
     rtl::OUString getModificationFileUrl() const;
 
     void parseModificationLayer();
+
+    typedef
+        std::hash_map< rtl::OUString, rtl::Reference< Node>, rtl::OUStringHash >
+        TemplateMap;
 
     TemplateMap templates_;
 

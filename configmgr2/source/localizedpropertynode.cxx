@@ -35,7 +35,6 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
-#include "components.hxx"
 #include "localizedpropertynode.hxx"
 #include "localizedpropertyvaluenode.hxx"
 #include "node.hxx"
@@ -50,13 +49,14 @@ namespace css = com::sun::star;
 
 }
 
-LocalizedPropertyNode::LocalizedPropertyNode(Type type, bool nillable):
-    type_(type), nillable_(nillable)
+LocalizedPropertyNode::LocalizedPropertyNode(
+    int layer, Type type, bool nillable):
+    Node(layer), type_(type), nillable_(nillable)
 {}
 
 rtl::Reference< Node > LocalizedPropertyNode::clone() const {
     rtl::Reference< LocalizedPropertyNode > fresh(
-        new LocalizedPropertyNode(type_, nillable_));
+        new LocalizedPropertyNode(getLayer(), type_, nillable_));
     members_.clone(&fresh->members_);
     return fresh.get();
 }
@@ -64,7 +64,7 @@ rtl::Reference< Node > LocalizedPropertyNode::clone() const {
 rtl::Reference< Node > LocalizedPropertyNode::getMember(
     rtl::OUString const & name)
 {
-    NodeMap::iterator i(Components::resolveNode(name, &members_));
+    NodeMap::iterator i(members_.find(name));
     return i == members_.end() ? rtl::Reference< Node >() : i->second;
 }
 

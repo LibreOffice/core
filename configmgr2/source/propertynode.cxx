@@ -48,12 +48,14 @@ namespace css = com::sun::star;
 }
 
 PropertyNode::PropertyNode(
-    Type type, bool nillable, css::uno::Any const & value, bool extension):
-    type_(type), nillable_(nillable), value_(value), extension_(extension)
+    int layer, Type type, bool nillable, css::uno::Any const & value,
+    bool extension):
+    Node(layer), type_(type), nillable_(nillable), value_(value),
+    extension_(extension)
 {}
 
 rtl::Reference< Node > PropertyNode::clone() const {
-    return new PropertyNode(type_, nillable_, value_, extension_);
+    return new PropertyNode(getLayer(), type_, nillable_, value_, extension_);
 }
 
 rtl::Reference< Node > PropertyNode::getMember(rtl::OUString const &) {

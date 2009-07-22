@@ -43,7 +43,8 @@ namespace configmgr {
 
 class LocalizedPropertyValueNode: public Node {
 public:
-    LocalizedPropertyValueNode(com::sun::star::uno::Any const & value);
+    LocalizedPropertyValueNode(
+        int layer, com::sun::star::uno::Any const & value);
 
     virtual rtl::Reference< Node > clone() const;
 

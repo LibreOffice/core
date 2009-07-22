@@ -42,7 +42,7 @@ namespace configmgr {
 
 class GroupNode: public Node {
 public:
-    GroupNode(bool extensible, rtl::OUString const & templateName);
+    GroupNode(int layer, bool extensible, rtl::OUString const & templateName);
 
     virtual rtl::Reference< Node > clone() const;
 

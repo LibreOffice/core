@@ -45,8 +45,8 @@ namespace configmgr {
 class PropertyNode: public Node {
 public:
     PropertyNode(
-        Type type, bool nillable, com::sun::star::uno::Any const & value,
-        bool extension);
+        int layer, Type type, bool nillable,
+        com::sun::star::uno::Any const & value, bool extension);
 
     virtual rtl::Reference< Node > clone() const;
 
