@@ -55,7 +55,11 @@ BasicRenderable::BasicRenderable( IDEBaseWindow* pWin )
     m_aUIProperties.realloc( 3 );
 
     // create Subgroup for print range
-    m_aUIProperties[0].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 0 ) ), rtl::OUString(), true , true);
+    m_aUIProperties[0].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 0 ) ),
+                                                      rtl::OUString(),
+                                                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) ),
+                                                      true
+                                                      );
 
     // create a choice for the range to print
     rtl::OUString aPrintContentName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
