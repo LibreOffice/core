@@ -108,6 +108,7 @@ void ListBox::ImplInitListBoxData()
     mnDDHeight      = 0;
     mbDDAutoSize    = TRUE;
     mnSaveValue     = LISTBOX_ENTRY_NOTFOUND;
+    mnLineCount     = 0;
 }
 
 // -----------------------------------------------------------------------

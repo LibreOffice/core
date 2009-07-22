@@ -1266,14 +1266,14 @@ Any PrinterOptionsHelper::getGroupControlOpt( const rtl::OUString& i_rTitle, con
 }
 
 Any PrinterOptionsHelper::getSubgroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpText,
-                                                 bool i_bJobPage, bool i_bInternalOnly )
+                                                 const rtl::OUString& i_rGroupHint, bool i_bInternalOnly )
 {
     PropertyValue aAddProps[2];
     sal_Int32 nUsed = 0;
-    if( i_bJobPage )
+    if( i_rGroupHint.getLength() )
     {
-        aAddProps[nUsed  ].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PutOnJobPage" ) );
-        aAddProps[nUsed++].Value <<= sal_True;
+        aAddProps[nUsed  ].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GroupingHint" ) );
+        aAddProps[nUsed++].Value <<= i_rGroupHint;
     }
     if( i_bInternalOnly )
     {

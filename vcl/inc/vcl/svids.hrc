@@ -114,8 +114,8 @@
 #define SV_PRINT_PRT_NUP_PAGEREPEAT_EDT     23
 
 #define SV_PRINT_TAB_JOB                    2
-#define SV_PRINT_PRINTERS                   1
-#define SV_PRINT_PRT_TOFILE                 2
+#define SV_PRINT_PRINTERS_FL                1
+#define SV_PRINT_PRINTERS                   2
 #define SV_PRINT_PRT_SETUP                  3
 #define SV_PRINT_RANGE                      4
 #define SV_PRINT_ALL                        5
@@ -133,6 +133,15 @@
 #define SV_PRINT_COLLATE_HC_IMG             17
 #define SV_PRINT_NOCOLLATE_HC_IMG           18
 #define SV_PRINT_NOPAGES                    19
+#define SV_PRINT_STATUS_TXT                 20
+#define SV_PRINT_LOCATION_TXT               21
+#define SV_PRINT_COMMENT_TXT                22
+
+#define SV_PRINT_TAB_OPT                    3
+#define SV_PRINT_OPT_PRINT_FL               1
+#define SV_PRINT_OPT_TOFILE                 2
+#define SV_PRINT_OPT_SINGLEJOBS             3
+#define SV_PRINT_OPT_REVERSE                4
 
 #define SV_DLG_PRINT_PROGRESS             2049
 #define SV_PRINT_PROGRESS_CANCEL            1

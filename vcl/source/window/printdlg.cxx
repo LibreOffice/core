@@ -60,14 +60,6 @@ using namespace com::sun::star::beans;
 #define SMHID2( a, b ) SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX ":" a ":" b ) ) ) )
 #define SMHID1( a ) SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX  ":" a ) ) ) )
 
-void PrintDialog::PrinterListBox::RequestHelp( const HelpEvent& i_rHEvt )
-{
-    if( i_rHEvt.GetMode() & HELPMODE_QUICK )
-        Help::ShowBalloon( this, i_rHEvt.GetMousePosPixel(), GetHelpText() );
-    else
-        ListBox::RequestHelp( i_rHEvt );
-}
-
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const ResId& i_rId )
     : Window( i_pParent, i_rId ),
       mfScaleX( 1 ),
@@ -328,10 +320,17 @@ void PrintDialog::NUpTabPage::storeToSettings()
 
 PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
     : TabPage( i_pParent, rResId )
-    , maPrinters( this, VclResId( SV_PRINT_PRINTERS) )
+    , maPrinterFL( this, VclResId( SV_PRINT_PRINTERS_FL ) )
+    , maPrinters( this, VclResId( SV_PRINT_PRINTERS ) )
+    , maStatusLabel( this, VclResId( SV_PRINT_STATUS_TXT ) )
+    , maStatusTxt( this, 0 )
+    , maLocationLabel( this, VclResId( SV_PRINT_LOCATION_TXT ) )
+    , maLocationTxt( this, 0 )
+    , maCommentLabel( this, VclResId( SV_PRINT_COMMENT_TXT ) )
+    , maCommentTxt( this, 0 )
     , maSetupButton( this, VclResId( SV_PRINT_PRT_SETUP ) )
-    , maToFileBox( this, VclResId( SV_PRINT_PRT_TOFILE ) )
     , maCopies( this, VclResId( SV_PRINT_COPIES ) )
+    , maCopySpacer( this, WB_VERT )
     , maCopyCount( this, VclResId( SV_PRINT_COPYCOUNT ) )
     , maCopyCountField( this, VclResId( SV_PRINT_COPYCOUNT_FIELD ) )
     , maCollateBox( this, VclResId( SV_PRINT_COLLATE ) )
@@ -343,28 +342,95 @@ PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
     , mnCollateUIMode( 0 )
 {
     FreeResource();
+    maPrinterFL.SMHID2( "JobPage", "Printer" );
     maPrinters.SMHID2( "JobPage", "PrinterList" );
+    maStatusLabel.SMHID2( "JobPage", "StatusLabel" );
+    maStatusTxt.SMHID2( "JobPage", "StatusText" );
+    maLocationLabel.SMHID2( "JobPage", "LocationLabel" );
+    maLocationTxt.SMHID2( "JobPage", "LocationText" );
+    maCommentLabel.SMHID2( "JobPage", "CommentLabel" );
+    maCommentTxt.SMHID2( "JobPage", "CommentText" );
     maSetupButton.SMHID2( "JobPage", "Setup" );
-    maToFileBox.SMHID2( "JobPage", "ToFile" );
     maCopies.SMHID2( "JobPage", "CopiesLine" );
+    maCopySpacer.SMHID2( "JobPage", "CopySpacer" );
     maCopyCount.SMHID2( "JobPage", "CopiesText" );
     maCopyCountField.SMHID2( "JobPage", "Copies" );
     maCollateBox.SMHID2( "JobPage", "Collate" );
     maCollateImage.SMHID2( "JobPage", "CollateImage" );
+
+    maCopySpacer.Show();
+    maStatusTxt.Show();
+    maCommentTxt.Show();
+    maLocationTxt.Show();
+
+    setupLayout();
 }
 
 PrintDialog::JobTabPage::~JobTabPage()
 {
 }
 
+void PrintDialog::JobTabPage::setupLayout()
+{
+    // HACK: this is not a dropdown box, but the dropdown line count
+    // sets the results of GetOptimalSize in a normal ListBox
+    maPrinters.SetDropDownLineCount( 4 );
+
+    Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
+
+    maLayout.setParentWindow( this );
+    maLayout.setOuterBorder( aBorder.Width() );
+
+    // add printer fixed line
+    maLayout.addWindow( &maPrinterFL );
+    // add print LB
+    maLayout.addWindow( &maPrinters );
+
+    // create a row for stati and properties button
+    boost::shared_ptr< vcl::RowOrColumn > xStateRow( new vcl::RowOrColumn( &maLayout, false ) );
+    maLayout.addChild( xStateRow );
+    boost::shared_ptr< vcl::RowOrColumn > xLabelCol( new vcl::RowOrColumn( xStateRow.get(), true, aBorder.Height() ) );
+    xStateRow->addChild( xLabelCol );
+    xLabelCol->addWindow( &maStatusLabel );
+    xLabelCol->addWindow( &maLocationLabel );
+    xLabelCol->addWindow( &maCommentLabel );
+
+    boost::shared_ptr< vcl::RowOrColumn > xStatusCol( new vcl::RowOrColumn( xStateRow.get(), true, aBorder.Height() ) );
+    xStateRow->addChild( xStatusCol );
+    xStatusCol->addWindow( &maStatusTxt );
+    xStatusCol->addWindow( &maLocationTxt );
+    xStatusCol->addWindow( &maCommentTxt );
+
+    xStateRow->addWindow( &maSetupButton );
+
+    // add print range and copies columns
+    maLayout.addWindow( &maCopies );
+    boost::shared_ptr< vcl::RowOrColumn > xRangeRow( new vcl::RowOrColumn( &maLayout, false, aBorder.Width() ) );
+    maLayout.addChild( xRangeRow );
+
+    // create print range and add to range row
+    mxPrintRange.reset( new vcl::RowOrColumn( xRangeRow.get() ) );
+    xRangeRow->addChild( mxPrintRange );
+    xRangeRow->addWindow( &maCopySpacer );
+
+    boost::shared_ptr< vcl::RowOrColumn > xCopyCollateCol( new vcl::RowOrColumn( xRangeRow.get() ) );
+    xRangeRow->addChild( xCopyCollateCol );
+
+    // add copies row to copy/collate column
+    boost::shared_ptr< vcl::RowOrColumn > xCopiesRow( new vcl::RowOrColumn( xCopyCollateCol.get(), false, 0 ) );
+    xCopyCollateCol->addChild( xCopiesRow );
+    xCopiesRow->addWindow( &maCopyCount );
+    xCopiesRow->addWindow( &maCopyCountField );
+    boost::shared_ptr< vcl::RowOrColumn > xCollateRow( new vcl::RowOrColumn( xCopyCollateCol.get(), false, 0 ) );
+    xCopyCollateCol->addChild( xCollateRow );
+    xCollateRow->addWindow( &maCollateBox );
+    xCollateRow->addWindow( &maCollateImage );
+}
+
 void PrintDialog::JobTabPage::readFromSettings()
 {
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     rtl::OUString aValue;
-
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToFile" ) ) );
-    maToFileBox.Check( aValue.equalsIgnoreAsciiCaseAscii( "true" ) );
 
     #if 0
     // do not actually make copy count persistent
@@ -396,15 +462,53 @@ void PrintDialog::JobTabPage::storeToSettings()
 {
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToFile" ) ),
-                     rtl::OUString::createFromAscii( maToFileBox.IsChecked() ? "true" : "false" ) );
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CopyCount" ) ),
                      maCopyCountField.GetText() );
     pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ),
                      rtl::OUString::createFromAscii( maCollateBox.IsChecked() ? "true" : "false" ) );
 }
+
+void PrintDialog::JobTabPage::Resize()
+{
+    maLayout.setManagedArea( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
+}
+
+PrintDialog::OutputOptPage::OutputOptPage( Window* i_pParent, const ResId& i_rResId )
+    : TabPage( i_pParent, i_rResId )
+    , maOptionsLine( this, VclResId( SV_PRINT_OPT_PRINT_FL ) )
+    , maToFileBox( this, VclResId( SV_PRINT_OPT_TOFILE ) )
+    , maCollateSingleJobsBox( this, VclResId( SV_PRINT_OPT_SINGLEJOBS ) )
+    , maReverseOrderBox( this, VclResId( SV_PRINT_OPT_REVERSE ) )
+{
+    maOptionsLine.SMHID2( "OptPage", "Options" );
+    maToFileBox.SMHID2( "OptPage", "ToFile" );
+    maCollateSingleJobsBox.SMHID2( "OptPage", "SingleJobs" );
+    maReverseOrderBox.SMHID2( "OptPage", "Reverse" );
+}
+
+PrintDialog::OutputOptPage::~OutputOptPage()
+{
+}
+
+void PrintDialog::OutputOptPage::readFromSettings()
+{
+    SettingsConfigItem* pItem = SettingsConfigItem::get();
+    rtl::OUString aValue;
+
+    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
+                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToFile" ) ) );
+    maToFileBox.Check( aValue.equalsIgnoreAsciiCaseAscii( "true" ) );
+}
+
+void PrintDialog::OutputOptPage::storeToSettings()
+{
+    SettingsConfigItem* pItem = SettingsConfigItem::get();
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
+                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToFile" ) ),
+                     rtl::OUString::createFromAscii( maToFileBox.IsChecked() ? "true" : "false" ) );
+}
+
 
 PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterController>& i_rController )
     : ModalDialog( i_pParent, VclResId( SV_DLG_PRINT ) )
@@ -418,15 +522,12 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     , maTabCtrl( this, VclResId( SV_PRINT_TABCTRL ) )
     , maNUpPage( &maTabCtrl, VclResId( SV_PRINT_TAB_NUP ) )
     , maJobPage( &maTabCtrl, VclResId( SV_PRINT_TAB_JOB ) )
+    , maOptionsPage( &maTabCtrl, VclResId( SV_PRINT_TAB_OPT ) )
     , maButtonLine( this, VclResId( SV_PRINT_BUTTONLINE ) )
     , maPController( i_rController )
     , maNoPageStr( String( VclResId( SV_PRINT_NOPAGES ) ) )
     , mnCurPage( 0 )
     , mnCachedPages( 0 )
-    , maCommentText( String( VclResId( SV_PRINT_PRT_COMMENT ) ) )
-    , maStatusText( String( VclResId( SV_PRINT_PRT_STATUS ) ) )
-    , maLocationText( String( VclResId( SV_PRINT_PRT_LOCATION ) ) )
-    , maTypeText( String( VclResId( SV_PRINT_PRT_TYPE ) ) )
     , maPreviewCtrlRow( NULL, false )
 {
     FreeResource();
@@ -444,8 +545,8 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     // insert the tab pages
     maTabCtrl.InsertPage( SV_PRINT_TAB_JOB, maJobPage.GetText() );
     maTabCtrl.SetTabPage( SV_PRINT_TAB_JOB, &maJobPage );
-    maTabCtrl.InsertPage( SV_PRINT_PAGE_PREVIEW, maNUpPage.GetText() );
-    maTabCtrl.SetTabPage( SV_PRINT_PAGE_PREVIEW, &maNUpPage );
+    maTabCtrl.InsertPage( SV_PRINT_TAB_NUP, maNUpPage.GetText() );
+    maTabCtrl.SetTabPage( SV_PRINT_TAB_NUP, &maNUpPage );
 
     // set symbols on forward and backward button
     maBackwardBtn.SetSymbol( SYMBOL_PREV );
@@ -563,6 +664,10 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maForwardBtn.SMHID1( "ForwardBtn" );
     maBackwardBtn.SMHID1( "BackwardBtn" );
     maTabCtrl.SMHID1( "TabPages" );
+
+    // insert options page last
+    maTabCtrl.InsertPage( SV_PRINT_TAB_OPT, maOptionsPage.GetText() );
+    maTabCtrl.SetTabPage( SV_PRINT_TAB_OPT, &maOptionsPage );
 }
 
 PrintDialog::~PrintDialog()
@@ -578,6 +683,7 @@ void PrintDialog::readFromSettings()
 {
     maJobPage.readFromSettings();
     maNUpPage.readFromSettings();
+    maOptionsPage.readFromSettings();
 
     // read last selected tab page; if it exists, actiavte it
     SettingsConfigItem* pItem = SettingsConfigItem::get();
@@ -599,6 +705,7 @@ void PrintDialog::storeToSettings()
 {
     maJobPage.storeToSettings();
     maNUpPage.storeToSettings();
+    maOptionsPage.storeToSettings();
 
     // store last selected printer
     SettingsConfigItem* pItem = SettingsConfigItem::get();
@@ -614,7 +721,7 @@ void PrintDialog::storeToSettings()
 
 bool PrintDialog::isPrintToFile()
 {
-    return maJobPage.maToFileBox.IsChecked();
+    return maOptionsPage.maToFileBox.IsChecked();
 }
 
 int PrintDialog::getCopyCount()
@@ -659,12 +766,8 @@ void PrintDialog::setupOptionalUI()
 {
     const long nBorderWidth = maJobPage.maCopies.GetPosPixel().X();
 
-    vcl::RowOrColumn aPrintRangeRow( NULL, false, nBorderWidth );
     std::vector<vcl::RowOrColumn*> aDynamicColumns;
     vcl::RowOrColumn* pCurColumn = 0;
-
-    aPrintRangeRow.setParentWindow( &maJobPage );
-    aPrintRangeRow.setOuterBorder( nBorderWidth );
 
     Window* pCurParent = 0, *pDynamicPageParent = 0;
     USHORT nOptPageId = 9, nCurSubGroup = 0;
@@ -687,7 +790,7 @@ void PrintDialog::setupOptionalUI()
         Sequence< rtl::OUString > aHelpTexts;
         sal_Int64 nMinValue = 0, nMaxValue = 0;
         sal_Int32 nCurHelpText = 0;
-        sal_Bool bOnJobPageValue = sal_False;
+        rtl::OUString aGroupingHint;
         rtl::OUString aDependsOnName;
         sal_Int32 nDependsOnValue = 0;
         sal_Bool bUseDependencyRow = sal_False;
@@ -719,9 +822,9 @@ void PrintDialog::setupOptionalUI()
                 rEntry.Value >>= bValue;
                 bEnabled = bValue;
             }
-            else if( rEntry.Name.equalsAscii( "PutOnJobPage" ) )
+            else if( rEntry.Name.equalsAscii( "GroupingHint" ) )
             {
-                rEntry.Value >>= bOnJobPageValue;
+                rEntry.Value >>= aGroupingHint;
             }
             else if( rEntry.Name.equalsAscii( "DependsOnName" ) )
             {
@@ -758,7 +861,7 @@ void PrintDialog::setupOptionalUI()
         }
 
         if( aCtrlType.equalsAscii( "Group" ) ||
-            ( ! pCurParent && ! (bOnJobPage || bOnJobPageValue) ) )
+            ( ! pCurParent && ! (bOnJobPage || aGroupingHint.getLength() ) ) )
         {
             // add new tab page
             TabPage* pNewGroup = new TabPage( &maTabCtrl );
@@ -781,13 +884,13 @@ void PrintDialog::setupOptionalUI()
             pCurColumn->setParentWindow( pNewGroup );
             pCurColumn->setOuterBorder( nBorderWidth );
         }
-        else if( aCtrlType.equalsAscii( "Subgroup" ) && (pCurParent || bOnJobPageValue) )
+        else if( aCtrlType.equalsAscii( "Subgroup" ) && (pCurParent || aGroupingHint.getLength() ) )
         {
             // change to job page or back if necessary
-            if( (bOnJobPage && ! bOnJobPageValue) ||
-                (! bOnJobPage && bOnJobPageValue) )
+            if( (bOnJobPage && ! aGroupingHint.getLength() ) ||
+                (! bOnJobPage && aGroupingHint.getLength() ) )
             {
-                bOnJobPage = bOnJobPageValue;
+                bOnJobPage = (aGroupingHint.getLength() != 0);
                 if( bOnJobPage )
                 {
                     pDynamicPageParent = pCurParent;    // save current parent
@@ -801,27 +904,31 @@ void PrintDialog::setupOptionalUI()
 
             if( bOnJobPage )
             {
-                // create a new column in the PrintRange row
-                vcl::RowOrColumn* pNewColumn = new vcl::RowOrColumn( &aPrintRangeRow, true, nBorderWidth );
-                aPrintRangeRow.addChild( pNewColumn );
-                pCurColumn = pNewColumn;
+                if( aGroupingHint.equalsAscii( "PrintRange" ) )
+                    pCurColumn = maJobPage.mxPrintRange.get();
+                else
+                    pCurColumn = &maJobPage.maLayout;
             }
             else
                 pCurColumn = aDynamicColumns.back();
 
             // create group FixedLine
-            FixedLine* pNewSub = new FixedLine( pCurParent );
-            maControls.push_front( pNewSub );
-            pNewSub->SetText( aText );
-            pNewSub->Show();
+            if( ! aGroupingHint.equalsAscii( "PrintRange" ) ||
+                ! pCurColumn->countElements() == 0
+               )
+            {
+                FixedLine* pNewSub = new FixedLine( pCurParent );
+                maControls.push_front( pNewSub );
+                pNewSub->SetText( aText );
+                pNewSub->Show();
 
-            // set help id
-            setSmartId( pNewSub, "FixedLine", sal_Int32( nCurSubGroup++ ) );
-            // set help text
-            setHelpText( pNewSub, aHelpTexts, 0 );
-
-            // add group to current column
-            pCurColumn->addWindow( pNewSub );
+                // set help id
+                setSmartId( pNewSub, "FixedLine", sal_Int32( nCurSubGroup++ ) );
+                // set help text
+                setHelpText( pNewSub, aHelpTexts, 0 );
+                // add group to current column
+                pCurColumn->addWindow( pNewSub );
+            }
         }
         else
         {
@@ -1055,11 +1162,7 @@ void PrintDialog::setupOptionalUI()
     }
 
     // calculate job page
-    long nJobPageCurY = maJobPage.maCollateImage.GetPosPixel().Y();
-    nJobPageCurY += maJobPage.maCollateImage.GetSizePixel().Height();
-
-    Size aMaxSize = aPrintRangeRow.getOptimalSize( WINDOWSIZE_PREFERRED );
-    aMaxSize.Height() += nJobPageCurY;
+    Size aMaxSize = maJobPage.maLayout.getOptimalSize( WINDOWSIZE_PREFERRED );
 
     Size aMaxPageSize;
     for( std::vector< vcl::RowOrColumn* >::iterator it = aDynamicColumns.begin();
@@ -1095,8 +1198,6 @@ void PrintDialog::setupOptionalUI()
 
     // and finally arrange controls
     aTabSize = maTabCtrl.GetTabPageSizePixel();
-    aPrintRangeRow.setManagedArea( Rectangle( Point( 0, nJobPageCurY ),
-                                   Size( aTabSize.Width(), aTabSize.Height() - nJobPageCurY ) ) );
     for( std::vector< vcl::RowOrColumn* >::iterator it = aDynamicColumns.begin();
          it != aDynamicColumns.end(); ++it )
     {
@@ -1184,14 +1285,16 @@ void PrintDialog::updatePrinterText()
     const QueueInfo* pInfo = Printer::GetQueueInfo( maJobPage.maPrinters.GetSelectEntry(), true );
     if( pInfo )
     {
-        rtl::OUStringBuffer aBuf( 256 );
-        aBuf.append( searchAndReplace( maTypeText, "%s", 2, pInfo->GetDriver() ) );
-        aBuf.append( sal_Unicode( '\n' ) );
-        aBuf.append( searchAndReplace( maLocationText, "%s", 2, pInfo->GetLocation() ) );
-        aBuf.append( sal_Unicode( '\n' ) );
-        aBuf.append( searchAndReplace( maCommentText, "%s", 2, pInfo->GetComment() ) );
-        aBuf.append( sal_Unicode( '\n' ) );
-        maJobPage.maPrinters.SetHelpText( aBuf.makeStringAndClear() );
+        maJobPage.maLocationTxt.SetText( pInfo->GetLocation() );
+        maJobPage.maCommentTxt.SetText( pInfo->GetComment() );
+        // FIXME: status text
+        maJobPage.maStatusTxt.SetText( String() );
+    }
+    else
+    {
+        maJobPage.maLocationTxt.SetText( String() );
+        maJobPage.maCommentTxt.SetText( String() );
+        maJobPage.maStatusTxt.SetText( String() );
     }
 }
 
@@ -1319,6 +1422,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     {
         maPController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ),
                                  makeAny( sal_Bool(isCollate()) ) );
+        checkControlDependencies();
     }
     else
     {

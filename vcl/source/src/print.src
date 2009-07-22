@@ -101,23 +101,6 @@ ModalDialog SV_DLG_PRINT
         Text [en-US] = "No pages";
     };
 
-    String SV_PRINT_PRT_TYPE
-    {
-        Text [en-US] = "Type: %s";
-    };
-    String SV_PRINT_PRT_STATUS
-    {
-        Text [en-US] = "Status: %s";
-    };
-    String SV_PRINT_PRT_LOCATION
-    {
-        Text [en-US] = "Location: %s";
-    };
-    String SV_PRINT_PRT_COMMENT
-    {
-        Text [en-US] = "Comment: %s";
-    };
-
     TabPage SV_PRINT_TAB_NUP
     {
         Text [en-US] = "N-Up";
@@ -296,14 +279,38 @@ ModalDialog SV_DLG_PRINT
 
     TabPage SV_PRINT_TAB_JOB
     {
-        Text [en-US] = "Job Setup";
+        Text [en-US] = "General";
         Hide = TRUE;
 
+        FixedLine SV_PRINT_PRINTERS_FL
+        {
+            Pos = MAP_APPFONT( 5, 5 );
+            Size = MAP_APPFONT( 100, 10 );
+            Text [ en-US ] = "Prin~ter";
+        };
         ListBox SV_PRINT_PRINTERS
         {
             Pos = MAP_APPFONT( 5, 5 );
-            Size = MAP_APPFONT( 100, 200 );
-            DropDown = TRUE;
+            Size = MAP_APPFONT( 100, 80 );
+            Border = TRUE;
+        };
+        FixedText SV_PRINT_STATUS_TXT
+        {
+            Pos = MAP_APPFONT( 5, 5 );
+            Size = MAP_APPFONT( 100, 10 );
+            Text [en-US] = "Status:";
+        };
+        FixedText SV_PRINT_LOCATION_TXT
+        {
+            Pos = MAP_APPFONT( 5, 5 );
+            Size = MAP_APPFONT( 100, 10 );
+            Text [en-US] = "Location";
+        };
+        FixedText SV_PRINT_COMMENT_TXT
+        {
+            Pos = MAP_APPFONT( 5, 5 );
+            Size = MAP_APPFONT( 100, 10 );
+            Text [en-US] = "Comment:";
         };
         PushButton SV_PRINT_PRT_SETUP
         {
@@ -311,17 +318,11 @@ ModalDialog SV_DLG_PRINT
             Size = MAP_APPFONT( 50, 15 );
             Text [en-US] = "Properties...";
         };
-        CheckBox SV_PRINT_PRT_TOFILE
-        {
-            Pos = MAP_APPFONT( 10, 20 );
-            Size = MAP_APPFONT( 200, 12 );
-            Text [en-US] = "Print to file";
-        };
         FixedLine SV_PRINT_COPIES
         {
             Pos = MAP_APPFONT( 5, 35 );
             Size = MAP_APPFONT( 150, 10 );
-            Text [en-US] = "Copies";
+            Text [en-US] = "Print Range and Copies";
         };
         FixedText SV_PRINT_COPYCOUNT
         {
@@ -369,6 +370,37 @@ ModalDialog SV_DLG_PRINT
         Image SV_PRINT_NOCOLLATE_HC_IMG
         {
             ImageBitmap = Bitmap { File = "ncollate_h.png" ; };
+        };
+    };
+
+    TabPage SV_PRINT_TAB_OPT
+    {
+        Text [en-US] = "Options";
+        Hide = TRUE;
+
+        FixedLine SV_PRINT_PRT_NUP
+        {
+            Pos = MAP_APPFONT( 5, 5 );
+            Size = MAP_APPFONT( 150, 10 );
+            Text [en-US] = "Options";
+        };
+        CheckBox SV_PRINT_OPT_TOFILE
+        {
+            Pos = MAP_APPFONT( 10, 20 );
+            Size = MAP_APPFONT( 200, 12 );
+            Text [en-US] = "Print to ~file";
+        };
+        CheckBox SV_PRINT_OPT_SINGLEJOBS
+        {
+            Pos = MAP_APPFONT( 10, 35 );
+            Size = MAP_APPFONT( 200, 12 );
+            Text [en-US] = "~Create single print jobs for collated output";
+        };
+        CheckBox SV_PRINT_OPT_REVERSE
+        {
+            Pos = MAP_APPFONT( 10, 50 );
+            Size = MAP_APPFONT( 200, 12 );
+            Text [en-US] = "Print in ~reverse page order";
         };
     };
 };

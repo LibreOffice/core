@@ -200,16 +200,18 @@ namespace vcl
     class Spacer : public WindowArranger
     {
         WindowArranger::Element     m_aElement;
+        Size                        m_aSize;
         public:
-        Spacer( WindowArranger* i_pParent = NULL, sal_Int32 i_nPrio = 20 )
+        Spacer( WindowArranger* i_pParent = NULL, sal_Int32 i_nPrio = 20, const Size& i_rSize = Size( 0, 0 ) )
         : WindowArranger( i_pParent )
         , m_aElement( NULL, boost::shared_ptr<WindowArranger>(), i_nPrio )
+        , m_aSize( i_rSize )
         {}
 
         virtual ~Spacer() {}
 
         virtual Size getOptimalSize( WindowSizeType ) const
-        { return Size( 0, 0 ); }
+        { return m_aSize; }
         virtual void resize() {}
         virtual void setParentWindow( Window* ) {}
         virtual size_t countElements() const { return 1; }

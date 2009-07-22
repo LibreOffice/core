@@ -174,6 +174,7 @@ public:
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    virtual Size    GetOptimalSize(WindowSizeType eType) const;
 
     void            SetImage( const Image& rImage );
     const Image&    GetImage() const { return maImage; }

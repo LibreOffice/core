@@ -53,16 +53,6 @@ namespace vcl
 {
     class PrintDialog : public ModalDialog
     {
-        class PrinterListBox : public ListBox
-        {
-        public:
-            PrinterListBox( Window* i_pParent, const ResId& i_rId )
-            : ListBox( i_pParent, i_rId )
-            {}
-            virtual ~PrinterListBox() {}
-            virtual void RequestHelp( const HelpEvent& i_rHEvt );
-        };
-
         class PrintPreviewWindow : public Window
         {
             GDIMetaFile         maMtf;
@@ -121,11 +111,19 @@ namespace vcl
         class JobTabPage : public TabPage
         {
         public:
-            PrinterListBox                          maPrinters;
+            FixedLine                               maPrinterFL;
+            ListBox                                 maPrinters;
+            FixedText                               maStatusLabel;
+            FixedText                               maStatusTxt;
+            FixedText                               maLocationLabel;
+            FixedText                               maLocationTxt;
+            FixedText                               maCommentLabel;
+            FixedText                               maCommentTxt;
+
             PushButton                              maSetupButton;
-            CheckBox                                maToFileBox;
 
             FixedLine                               maCopies;
+            FixedLine                               maCopySpacer;
             FixedText                               maCopyCount;
             NumericField                            maCopyCountField;
             CheckBox                                maCollateBox;
@@ -138,8 +136,30 @@ namespace vcl
 
             long                                    mnCollateUIMode;
 
+            vcl::RowOrColumn                        maLayout;
+            boost::shared_ptr<vcl::RowOrColumn>     mxPrintRange;
+
             JobTabPage( Window*, const ResId& );
             virtual ~JobTabPage();
+
+            void readFromSettings();
+            void storeToSettings();
+
+            virtual void Resize();
+
+            void setupLayout();
+        };
+
+        class OutputOptPage : public TabPage
+        {
+        public:
+            FixedLine                           maOptionsLine;
+            CheckBox                            maToFileBox;
+            CheckBox                            maCollateSingleJobsBox;
+            CheckBox                            maReverseOrderBox;
+
+            OutputOptPage( Window*, const ResId& );
+            virtual ~OutputOptPage();
 
             void readFromSettings();
             void storeToSettings();
@@ -156,6 +176,7 @@ namespace vcl
         TabControl                              maTabCtrl;
         NUpTabPage                              maNUpPage;
         JobTabPage                              maJobPage;
+        OutputOptPage                           maOptionsPage;
 
         FixedLine                               maButtonLine;
 
@@ -176,10 +197,8 @@ namespace vcl
         Size                                    maNupPortraitSize;
         Size                                    maNupLandscapeSize;
 
-        rtl::OUString                           maCommentText;
-        rtl::OUString                           maStatusText;
-        rtl::OUString                           maLocationText;
-        rtl::OUString                           maTypeText;
+        rtl::OUString                           maPrintToFileText;
+        rtl::OUString                           maPrintText;
 
         vcl::RowOrColumn                        maPreviewCtrlRow;
         Rectangle                               maPreviewBackground;

@@ -571,7 +571,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     // create a subgroup (e.g. a FixedLine); following controls will be grouped in it until the next
     // subgroup or group begins
     // setting bJobPage = true will make the subgroup appear on the first page of the print dialog
-    static com::sun::star::uno::Any getSubgroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpText, bool i_bJobPage = false, bool i_bInternalOnly = false );
+    static com::sun::star::uno::Any getSubgroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpText, const rtl::OUString& i_rGroupHint = rtl::OUString(), bool i_bInternalOnly = false );
 
     // create a bool option (usually a checkbox)
     static com::sun::star::uno::Any getBoolControlOpt( const rtl::OUString& i_rTitle,
