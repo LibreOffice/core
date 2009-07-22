@@ -35,6 +35,7 @@
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
+#include <com/sun/star/awt/MouseWheelBehavior.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/Style.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -82,6 +83,7 @@ using ::com::sun::star::style::VerticalAlignment_BOTTOM;
 using ::com::sun::star::style::VerticalAlignment_MAKE_FIXED_SIZE;
 
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
+namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
 
 
 //====================================================================
@@ -226,6 +228,8 @@ private:
     ::toolkit::AccessibilityClient      maAccFactory;
     bool                                mbDisposed;
     bool                                mbDrawingOntoParent;    // no bit mask, is passed around  by reference
+    sal_Bool                            mbEnableVisible;
+    sal_Bool                            mbDirectVisible;
 
     ::osl::Mutex                        maListenerContainerMutex;
     ::cppu::OInterfaceContainerHelper   maWindow2Listeners;
@@ -272,6 +276,15 @@ public:
         live longer then the object just being constructed.
     */
     VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex, bool _bWithDefaultProps );
+
+    /** synchronously mbEnableVisible
+    */
+    void    setEnableVisible( sal_Bool bEnableVisible ) { mbEnableVisible = bEnableVisible; }
+    sal_Bool    isEnableVisible() { return mbEnableVisible; }
+    /** synchronously mbDirectVisible;
+    */
+    void    setDirectVisible( sal_Bool bDirectVisible ) { mbDirectVisible = bDirectVisible; }
+    sal_Bool    isDirectVisible() { return mbDirectVisible; }
 
     /** asynchronously notifies a mouse event to the VCLXWindow's XMouseListeners
     */
@@ -347,6 +360,8 @@ VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, ::vos::IMutex& _rMutex, 
     ,mrMutex( _rMutex )
     ,mbDisposed( false )
     ,mbDrawingOntoParent( false )
+    ,mbEnableVisible(sal_True)
+    ,mbDirectVisible(sal_True)
     ,maListenerContainerMutex( )
     ,maWindow2Listeners( maListenerContainerMutex )
     ,maDockableWindowListeners( maListenerContainerMutex )
@@ -625,7 +640,12 @@ void VCLXWindow::SetWindow( Window* pWindow )
     SetOutputDevice( pWindow );
 
     if ( GetWindow() )
+    {
         GetWindow()->AddEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
+        sal_Bool bDirectVisible = pWindow ? pWindow->IsVisible() : false;
+        mpImpl->setDirectVisible( bDirectVisible );
+    }
+
 }
 
 void VCLXWindow::suspendVclEventListening( )
@@ -1226,7 +1246,8 @@ void VCLXWindow::setVisible( sal_Bool bVisible ) throw(::com::sun::star::uno::Ru
             }
         }
 */
-        pWindow->Show( bVisible );
+        mpImpl->setDirectVisible( bVisible );
+        pWindow->Show( bVisible &&  mpImpl->isEnableVisible() );
     }
 }
 
@@ -1529,6 +1550,7 @@ void VCLXWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds, bool bWithDe
                          BASEPROPERTY_HELPURL,
                          BASEPROPERTY_TEXT,
                          BASEPROPERTY_PRINTABLE,
+                         BASEPROPERTY_ENABLEVISIBLE, // for visibility
                          BASEPROPERTY_TABSTOP,
                          0);
 
@@ -1634,19 +1656,27 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
         }
         break;
 
-        case BASEPROPERTY_WHEELWITHOUTFOCUS:
+        case BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR:
         {
-            sal_Bool bWheelOnHover( sal_True );
-            if ( Value >>= bWheelOnHover )
+            sal_uInt16 nWheelBehavior( MouseWheelBehavior::SCROLL_FOCUS_ONLY );
+            OSL_VERIFY( Value >>= nWheelBehavior );
+
+            AllSettings aSettings = pWindow->GetSettings();
+            MouseSettings aMouseSettings = aSettings.GetMouseSettings();
+
+            USHORT nVclBehavior( MOUSE_WHEEL_FOCUS_ONLY );
+            switch ( nWheelBehavior )
             {
-                AllSettings aSettings = pWindow->GetSettings();
-                MouseSettings aMouseSettings = aSettings.GetMouseSettings();
-
-                aMouseSettings.SetNoWheelActionWithoutFocus( !bWheelOnHover );
-                aSettings.SetMouseSettings( aMouseSettings );
-
-                pWindow->SetSettings( aSettings, TRUE );
+            case MouseWheelBehavior::SCROLL_DISABLED:   nVclBehavior = MOUSE_WHEEL_DISABLE;     break;
+            case MouseWheelBehavior::SCROLL_FOCUS_ONLY: nVclBehavior = MOUSE_WHEEL_FOCUS_ONLY;  break;
+            case MouseWheelBehavior::SCROLL_ALWAYS:     nVclBehavior = MOUSE_WHEEL_ALWAYS;      break;
+            default:
+                OSL_ENSURE( false, "VCLXWindow::setProperty( 'MouseWheelBehavior' ): illegal property value!" );
             }
+
+            aMouseSettings.SetWheelBehavior( nWheelBehavior );
+            aSettings.SetMouseSettings( aMouseSettings );
+            pWindow->SetSettings( aSettings, TRUE );
         }
         break;
 
@@ -1670,6 +1700,19 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             sal_Bool b = sal_Bool();
             if ( Value >>= b )
                 setEnable( b );
+        }
+        break;
+        case BASEPROPERTY_ENABLEVISIBLE:
+        {
+            sal_Bool b = sal_False;
+            if ( Value >>= b )
+            {
+                if( b != mpImpl->isEnableVisible() )
+                {
+                    mpImpl->setEnableVisible( b );
+                    pWindow->Show( b && mpImpl->isDirectVisible() );
+                }
+            }
         }
         break;
         case BASEPROPERTY_TEXT:
@@ -2122,10 +2165,19 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 aProp <<= mpImpl->mnWritingMode;
                 break;
 
-            case BASEPROPERTY_WHEELWITHOUTFOCUS:
+            case BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR:
             {
-                sal_Bool bWheelOnHover = !GetWindow()->GetSettings().GetMouseSettings().GetNoWheelActionWithoutFocus();
-                aProp <<= bWheelOnHover;
+                USHORT nVclBehavior = GetWindow()->GetSettings().GetMouseSettings().GetWheelBehavior();
+                sal_Int16 nBehavior = MouseWheelBehavior::SCROLL_FOCUS_ONLY;
+                switch ( nVclBehavior )
+                {
+                case MOUSE_WHEEL_DISABLE:       nBehavior = MouseWheelBehavior::SCROLL_DISABLED;    break;
+                case MOUSE_WHEEL_FOCUS_ONLY:    nBehavior = MouseWheelBehavior::SCROLL_FOCUS_ONLY;  break;
+                case MOUSE_WHEEL_ALWAYS:        nBehavior = MouseWheelBehavior::SCROLL_ALWAYS;      break;
+                default:
+                    OSL_ENSURE( false, "VCLXWindow::getProperty( 'MouseWheelBehavior' ): illegal VCL value!" );
+                }
+                aProp <<= nBehavior;
             }
             break;
 
@@ -2135,6 +2187,10 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
 
             case BASEPROPERTY_ENABLED:
                 aProp <<= (sal_Bool) GetWindow()->IsEnabled();
+                break;
+
+            case BASEPROPERTY_ENABLEVISIBLE:
+                aProp <<= (sal_Bool) mpImpl->isEnableVisible();
                 break;
 
             case BASEPROPERTY_TEXT:
@@ -2411,7 +2467,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
     if ( !pWindow )
         return;
 
-    if ( pWindow )
+    if ( isDesignMode() || mpImpl->isEnableVisible() )
     {
         TabPage* pTabPage = dynamic_cast< TabPage* >( pWindow );
         if ( pTabPage )
