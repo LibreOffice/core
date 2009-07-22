@@ -1,4 +1,4 @@
-﻿<!--
+<!--
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,9 +66,8 @@
     xmlns:common="http://exslt.org/common"
     exclude-result-prefixes = "xalan"
     xml:space="default">
-  <xsl:output method="text" />
 
-  <xsl:key name="same-attribute"
+ <xsl:key name="same-attribute"
            match="rng:attribute" use="@name" />
 
   <xsl:key name="same-element"
