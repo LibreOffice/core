@@ -7,7 +7,7 @@
  
   OpenOffice.org - a multi-platform office productivity suite
  
-  $RCSfile: fastresourcesimpl_dml-textCharacter.xsl,v $
+  $RCSfile: fastresourcesimpl_wml.xsl,v $
  
   $Revision: 1.3 $
  
@@ -68,12 +68,17 @@
   <xsl:include href="resourcestools.xsl"/>
 
   <xsl:template match="/">
-    <out xml:space="preserve">
+    <out>
+      <xsl:variable name="ns" select="substring-before(substring-after($file, 'OOXMLfastresources_'), '.cxx')"/>
       <xsl:call-template name="licenseheader"/>
+      <xsl:text>
+// namespace: </xsl:text>
+      <xsl:value-of select="$ns"/>
       <xsl:text>
 #include &lt;iostream&gt;
 #include &lt;doctok/resourceids.hxx&gt;
 #include &lt;ooxml/resourceids.hxx&gt;
+#include &lt;doctok/sprmids.hxx&gt;
 #include "OOXMLfastresources.hxx"
 #include "OOXMLFastTokens.hxx"
 #include "OOXMLFastHelper.hxx"
@@ -87,7 +92,7 @@ namespace ooxml {
 using namespace ::std;
 
       </xsl:text>
-      <xsl:call-template name="fastcontextimpls"><xsl:with-param name="ns">dml-textCharacter</xsl:with-param></xsl:call-template>
+      <xsl:call-template name="fastcontextimpls"><xsl:with-param name="ns" select="$ns"/></xsl:call-template>
       <xsl:text>
 }}
 /// @endcond GENERATED

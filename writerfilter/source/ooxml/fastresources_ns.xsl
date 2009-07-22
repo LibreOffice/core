@@ -7,7 +7,7 @@
  
   OpenOffice.org - a multi-platform office productivity suite
  
-  $RCSfile: fastresources_dml-chartDrawing.xsl,v $
+  $RCSfile: fastresources_wml.xsl,v $
  
   $Revision: 1.3 $
  
@@ -68,11 +68,20 @@
   <xsl:include href="resourcestools.xsl"/>
 
   <xsl:template match="/">
+    <xsl:variable name="ns" select="substring-before(substring-after($file, 'OOXMLfastresources_'), '.hxx')"/>
+    <xsl:variable name="incguard">
+      <xsl:text>INCLUDED_OOXML_FASTRESOURCES_</xsl:text>
+      <xsl:value-of select="translate($ns, 'abcdefghijklmnopqrstuvwxyz-', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_')"/>
+      <xsl:text>_HXX</xsl:text>
+    </xsl:variable>
     <xsl:call-template name="licenseheader"/>
     <xsl:text>
-#ifndef INCLUDED_OOXML_FASTRESOURCES_DML_CHARTDRAWING_HXX
-#define INCLUDED_OOXML_FASTRESOURCES_DML_CHARTDRAWING_HXX
-
+#ifndef </xsl:text>
+    <xsl:value-of select="$incguard"/>
+    <xsl:text>
+#define </xsl:text>
+    <xsl:value-of select="$incguard"/>
+    <xsl:text>
 #include &lt;vector&gt;
 #include &lt;boost/shared_ptr.hpp&gt;
 #include &lt;string&gt;
@@ -90,12 +99,14 @@ using namespace ::com::sun::star;
 /// @cond GENERATED
     </xsl:text>
     <xsl:call-template name="fastcontextdecls">
-      <xsl:with-param name="namespace">dml-chartDrawing</xsl:with-param>
+      <xsl:with-param name="namespace" select="$ns"/>
     </xsl:call-template>
     <xsl:text>
 /// @endcond
 }}
-#endif //INCLUDED_OOXML_FASTRESOURCES_DML_CHARTDRAWING_HXX&#xa;</xsl:text>
+#endif //</xsl:text>
+    <xsl:value-of select="$incguard"/>
+    <xsl:text>&#xa;</xsl:text>
   </xsl:template>
 
   <xsl:template match="*"/>

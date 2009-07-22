@@ -209,11 +209,11 @@ $(OOXMLFASTRESOURCECXXS): $(MODELPROCESSED)
 
 $(OOXMLFASTRESOURCEHXXS): $(MODELPROCESSED)
 
-$(OOXMLCXXOUTDIR)$/OOXMLfastresources%.cxx: fastresourcesimpl%.xsl
-    $(XSLTPROC) $< $(MODELPROCESSED) > $@
+$(OOXMLCXXOUTDIR)$/OOXMLfastresources%.cxx: fastresourcesimpl_ns.xsl
+    $(XSLTPROC) --stringparam file $@ $< $(MODELPROCESSED) > $@
 
-$(OOXMLHXXOUTDIR)$/OOXMLfastresources%.hxx: fastresources%.xsl
-    $(XSLTPROC) $< $(MODELPROCESSED) > $@
+$(OOXMLHXXOUTDIR)$/OOXMLfastresources%.hxx: fastresources_ns.xsl
+    $(XSLTPROC) --stringparam file $@ $< $(MODELPROCESSED) > $@
 
 $(OOXMLVALUESHXX): $(OOXMLVALUESXSL) $(MODELPROCESSED)
     $(XSLTPROC) $(OOXMLVALUESXSL) $(MODELPROCESSED) > $@
