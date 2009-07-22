@@ -1092,10 +1092,10 @@ sub set_revision_in_pkginfo
                 my $micro = $3;
 
                 my $finalmajor = $major;
-                my $finalminor = 0;
+                my $finalminor = $minor;
                 my $finalmicro = 0;
 
-                if (( $packagename =~ /-ure\s*$/ ) && ( $finalmajor == 1 )) { $finalminor = 4; }
+                # if (( $packagename =~ /-ure\s*$/ ) && ( $finalmajor == 1 )) { $finalminor = 4; }
 
                 $version = "$finalmajor.$finalminor.$finalmicro";
             }

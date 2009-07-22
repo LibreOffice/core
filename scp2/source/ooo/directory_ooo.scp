@@ -207,6 +207,11 @@ Directory gid_Dir_User_Registry_Data_Org_Openoffice_Office_Ui
     DosName = "UI";
 End
 
+Directory gid_Dir_User_Registry_Data_Org_Openoffice_Office_Dataaccess
+    ParentID = gid_Dir_User_Registry_Data_Org_Openoffice_Office;
+    HostName = "DataAccess";
+End
+
 Directory gid_Dir_User_Registry_Data_Org_Openoffice_Office_OOoImprovement
     ParentID = gid_Dir_User_Registry_Data_Org_Openoffice_Office;
     DosName = "OOoImprovement";
@@ -747,6 +752,11 @@ Directory gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui
     HostName = "UI";
 End
 
+Directory gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Dataaccess
+    ParentID = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    HostName = "DataAccess";
+End
+
 Directory gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_OOoImprovement
     ParentID = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     HostName = "OOoImprovement";
@@ -790,6 +800,11 @@ End
 Directory gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui
     ParentID = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     HostName = "UI";
+End
+
+Directory gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Dataaccess
+    ParentID = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    HostName = "DataAccess";
 End
 
 Directory gid_Dir_Share_Registry_Data_Org_Openoffice_Ucb
@@ -922,11 +937,6 @@ Directory gid_Dir_Share_Registry_Modules_Oo_Office_Scripting
     HostName = "Scripting";
 End
 
-Directory gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess
-    ParentID = gid_Dir_Share_Registry_Modules_Oo_Office;
-    HostName = "DataAccess";
-End
-
 Directory gid_Dir_Share_Registry_Modules_Oo_Office_Addons
     ParentID = gid_Dir_Share_Registry_Modules_Oo_Office;
     HostName = "Addons";
@@ -955,6 +965,16 @@ End
 Directory gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Misc
     ParentID = gid_Dir_Share_Registry_Modules_Oo_TypeDetection;
     HostName = "Misc";
+End
+
+Directory gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess
+    ParentID = gid_Dir_Share_Registry_Modules_Oo_Office;
+	HostName = "DataAccess";
+End
+
+Directory gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers
+    ParentID = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess;
+	HostName = "Drivers";
 End
 
 Directory gid_Dir_Autotext

@@ -47,7 +47,7 @@ ALLTAR : $(HIDSRS$(TNR)PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
-$(MISC)$/$(TARGET).$(SRS$(TNR)NAME).dprr: $(SRC$(TNR)FILES) $(HIDSRS$(TNR)PARTICLE) $(HID$(TNR)FILES)
+$(MISC)$/$(TARGET).$(SRS$(TNR)NAME).dprr: $(SRC$(TNR)FILES) $(HIDSRS$(TNR)PARTICLE) $(HID$(TNR)FILES) $(LOCALIZE_ME_DEST)
     @echo ------------------------------
     @echo Making: $@
     @@-$(RM) $(MISC)$/$(TARGET).$(SRS$(TNR)NAME).dprr
@@ -63,7 +63,7 @@ $(foreach,i,$(SRC$(TNR)FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZE
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 
-$(SRS)$/$(SRS$(TNR)NAME).srs: $(foreach,i,$(SRC$(TNR)FILES) $(COMMONMISC)$/$(TARGET)$/$i)
+$(SRS)$/$(SRS$(TNR)NAME).srs: $(foreach,i,$(SRC$(TNR)FILES) $(COMMONMISC)$/$(TARGET)$/$i) $(LOCALIZE_ME_DEST)
 .ELSE			# "$(WITH_LANG)"!=""
 $(SRS)$/$(SRS$(TNR)NAME).srs: $(SRC$(TNR)FILES)
 .ENDIF			# "$(WITH_LANG)"!=""

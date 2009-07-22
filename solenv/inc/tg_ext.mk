@@ -47,7 +47,11 @@ LDFLAGS!:=$(EXTRA_LINKFLAGS) $(LDFLAGS)
 .EXPORT : LDFLAGS
 .ENDIF
 
-PATH!:=.:$(SOLARBINDIR):$(PATH)
+.IF "$(GUI)"=="WNT" && "$(USE_SHELL)"!="4nt"
+PATH!:=.:$(SOLARBINDIR:^"/cygdrive/":s/://):$(PATH)
+.ELSE           # "$(GUI)"=="WNT" && "$(USE_SHELL)"!="4nt"
+PATH!:=.$(PATH_SEPERATOR)$(SOLARBINDIR)$(PATH_SEPERATOR)$(PATH)
+.ENDIF          # "$(GUI)"=="WNT" && "$(USE_SHELL)"!="4nt"
 .EXPORT : PATH
 
 #override

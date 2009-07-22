@@ -39,6 +39,9 @@ my $script = $0;
 ( our $script_name = $script ) =~ s/^.*\b(\w+)\.pl$/$1/;
 ( our $script_path = $script ) =~ s/$script_name.*//;
 
+# Prototypes
+sub installOffice();
+
 our $debug = 0;           # run without executing commands
 
 our $is_command_infos = 1;   # print command details before exec
@@ -53,6 +56,9 @@ our $cleanup = 0;
 
 # should the office be startable without user interaction
 our $autorun = 0;
+
+# should impress open documents without autopilot
+our $autoimpress = 0;
 
 # force openOffice.org installation if StarOffice is available
 our $is_ooo = 0;
@@ -292,8 +298,22 @@ sub installOffice(){
         makeAutoRun($destinationPath);
     }
 
+    if ($autoimpress) {
+        makeAutoImpress($destinationPath);
+    }
+
     return $success;
 }
+
+sub makeAutoImpress(){
+    my $destinationPath = shift;
+
+    if (patchXCU ($destinationPath, $script_path.$script_name."_impress.oxt") != 0) {
+        print_error("could not register ".$script_path.$script_name."_impress.oxt", "1");
+    }
+    return 0;
+}
+
 
 sub makeAutoRun(){
 
@@ -301,9 +321,8 @@ sub makeAutoRun(){
 
     patchBootstraprc($destinationPath);
 
-
-    if (patchXCU ($destinationPath) != 0) {
-        print_error("could not patch XCU files", "1");
+    if (patchXCU ($destinationPath, $script_path.$script_name.".oxt") != 0) {
+        print_error("could not register ".$script_path.$script_name.".oxt", "1");
     }
     return 0;
 }
@@ -340,6 +359,7 @@ sub patchBootstraprc(){
 
 sub patchXCU(){
     my $destinationPath = shift;
+    my $oxt = shift;
     my $unopkg="";
 
     find sub { $unopkg=$File::Find::name if -e _ && /$UNOPKGBIN$/ }, $destinationPath;
@@ -351,8 +371,8 @@ sub patchXCU(){
         $unopkg = "\"$unopkg\"";
     }
 
-    my $unopkgCommand = "$unopkg add $script_path".$script_name.".oxt";
-    print "patch xcu files for automatic office start...\n" if $debug;
+    my $unopkgCommand = "$unopkg add $oxt";
+    print "register oxt file ...\n" if $debug;
     print "call $unopkgCommand\n" if $debug;
     my $success=0;
     $success = system($unopkgCommand);
@@ -471,12 +491,17 @@ sub getInstsetUtilFolder(){
     my $instsetFolder = $RootDir.$PS.$instset;
     my $utilFolder="";
 
-    if(-w $instsetFolder) {
+    if( open(DATEI, ">$instsetFolder".$PS."touch"))
+    {
+        close(DATEI);
+        unlink($instsetFolder.$PS."touch");
         print "$instsetFolder is writable \n" if $debug;
         $utilFolder = $RootDir.$PS.$instset.$PS."util";
-    } else {
+    }
+    else
+    {
         print "$instsetFolder is NOT writable \n" if $debug;
-        print "copy $instset to $destPath$PS..n" if $debug;
+        print "copy $instset to $destPath$PS..\n" if $debug;
         my $prjPath=$destPath.$PS."..";
 
         my $command = "$ENV{COPYPRJ} -x $instset $prjPath";
@@ -872,6 +897,11 @@ sub parseArgs
         if ( $ARGV[$i] =~ /^-autorun$/ ) {
             my $value = $ARGV[++$i];
             if ($value =~ /^true$/ || ($value =~ /^1$/ )) { $autorun = 1 };
+        }
+
+        if ( $ARGV[$i] =~ /^-autoimpress$/ ) {
+            my $value = $ARGV[++$i];
+            if ($value =~ /^true$/ || ($value =~ /^1$/ )) { $autoimpress = 1 };
         }
 
         if ( $ARGV[$i] =~ /^-debug$/ ) {

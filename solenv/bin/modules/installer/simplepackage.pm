@@ -404,14 +404,18 @@ sub create_simple_package
         else
         {
             installer::systemactions::copy_one_file($source, $destination);
-            # see issue 102274
-            my $unixrights = "";
-            if ( $onefile->{'UnixRights'} )
-            {
-                $unixrights = $onefile->{'UnixRights'};
 
-                my $localcall = "$installer::globals::wrapcmd chmod $unixrights \'$destination\' \>\/dev\/null 2\>\&1";
-                system($localcall);
+            if ( ! $installer::globals::iswindowsbuild )
+            {
+                # see issue 102274
+                my $unixrights = "";
+                if ( $onefile->{'UnixRights'} )
+                {
+                    $unixrights = $onefile->{'UnixRights'};
+
+                    my $localcall = "$installer::globals::wrapcmd chmod $unixrights \'$destination\' \>\/dev\/null 2\>\&1";
+                    system($localcall);
+                }
             }
         }
     }

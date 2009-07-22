@@ -1117,7 +1117,7 @@ sub update_solver
     my $solver     = shift;
     my $milestone  = shift;
 
-    my @zip_sub_dirs = ('bin', 'doc', 'idl', 'inc', 'lib', 'par', 'pck', 'pdb', 'pus', 'rdb', 'res', 'xml');
+    my @zip_sub_dirs = ('bin', 'doc', 'idl', 'inc', 'lib', 'par', 'pck', 'pdb', 'pus', 'rdb', 'res', 'xml', 'sdf');
 
     use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 
