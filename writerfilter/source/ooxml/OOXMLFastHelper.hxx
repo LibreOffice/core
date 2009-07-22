@@ -49,6 +49,9 @@ public:
     static uno::Reference<XFastContextHandler> createAndSetParent
     (OOXMLFastContextHandler * pHandler, sal_uInt32 nToken, Id nId);
 
+    static uno::Reference<XFastContextHandler> createAndSetParentAndDefine
+    (OOXMLFastContextHandler * pHandler, sal_uInt32 nToken, Id nId, Id nDefine);
+
     static uno::Reference<XFastContextHandler> createAndSetParentRef
     (OOXMLFastContextHandler * pHandler, sal_uInt32 nToken,
      const uno::Reference < xml::sax::XFastAttributeList > & Attribs);
@@ -92,6 +95,40 @@ OOXMLFastHelper<T>::createAndSetParent
     debug_logger->addTag(pTmp->toTag());
     debug_logger->endElement("created");
     debug_logger->endElement("createAndSetParent");
+#endif
+
+    return aResult;
+}
+
+template <class T>
+uno::Reference<XFastContextHandler>
+OOXMLFastHelper<T>::createAndSetParentAndDefine
+(OOXMLFastContextHandler * pHandler, sal_uInt32 nToken, Id nId, Id nDefine)
+{
+    OOXMLFastContextHandler * pTmp = new T(pHandler);
+    OOXMLFastContextHandler::RefAndPointer_t aResult(pTmp);
+
+    pTmp->setToken(nToken);
+    pTmp->setId(nId);
+    pTmp->setDefine(nDefine);
+
+#ifdef DEBUG_CREATE
+    debug_logger->startElement("createAndSetParentAndDefine");
+    debug_logger->attribute("context", pHandler->getType());
+    debug_logger->attribute("token", fastTokenToId(pTmp->getToken()));
+    debug_logger->attribute("id", (*QNameToString::Instance())(nId));
+
+    static char buffer[16];
+    snprintf(buffer, sizeof(buffer), "0x%08" SAL_PRIxUINT32, nId);
+
+    debug_logger->attribute("idnum", buffer);
+    if (pTmp->isFallback())
+        debug_logger->attribute("fallback", "yes");
+
+    debug_logger->startElement("created");
+    debug_logger->addTag(pTmp->toTag());
+    debug_logger->endElement("created");
+    debug_logger->endElement("createAndSetParentAndDefine");
 #endif
 
     return aResult;

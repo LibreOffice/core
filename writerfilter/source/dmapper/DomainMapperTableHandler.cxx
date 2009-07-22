@@ -140,7 +140,7 @@ void DomainMapperTableHandler::endTable()
     if( nTblPropSize )
     {
         const beans::PropertyValues aDebugTbl = m_aTableProperties->GetPropertyValues();
-        for( sal_Int32  nDebug = 0; nDebug < nTblPropSize; ++nDebug)
+        for( sal_uInt32  nDebug = 0; nDebug < nTblPropSize; ++nDebug)
         {
             const ::rtl::OUString sName = aDebugTbl[nDebug].Name;
             sNames += sName;

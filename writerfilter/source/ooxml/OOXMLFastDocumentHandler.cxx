@@ -33,6 +33,7 @@
 #include "OOXMLFastDocumentHandler.hxx"
 #include "OOXMLFastContextHandler.hxx"
 #include "OOXMLFastTokens.hxx"
+#include "OOXMLFactory.hxx"
 
 namespace writerfilter {
 namespace ooxml
@@ -138,7 +139,7 @@ OOXMLFastDocumentHandler::getContextHandler() const
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
  OOXMLFastDocumentHandler::createFastChildContext
 (::sal_Int32 Element,
- const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+ const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
 #ifdef DEBUG_CONTEXT_STACK
@@ -147,7 +148,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
          << endl;
 #endif
 
-    return getContextHandler()->createFromStart(Element, Attribs);
+    return OOXMLFactory::getInstance()->createFastChildContextFromStart(getContextHandler().get(), Element);
 }
 
 OOXMLParserState::Pointer_t OOXMLFastDocumentHandler::getParserState() const

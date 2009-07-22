@@ -81,6 +81,7 @@ SLOFACTORIESNAMESPACES= \
 SLOFILES= \
     $(SLOFACTORIESNAMESPACES) \
     $(SLOFASTNAMESPACES) \
+    $(SLO)$/OOXMLFactory_generated.obj \
     $(SLO)$/OOXMLFactory.obj \
     $(SLO)$/OOXMLBinaryObjectReference.obj\
     $(SLO)$/OOXMLfastresources.obj \
@@ -278,6 +279,8 @@ $(SLOFILES): $(OOXMLGENHEADERS)
 $(SLO)/OOXMLfastresources.obj: $(OOXMLFASTRESOURCESCXX) $(OOXMLGENHEADERS)
 
 $(SLO)/OOXMLvalues.obj: $(OOXMLVALUESCXX) $(OOXMLVALUESHXX)
+
+$(SLO)$/OOXMLFactory_generated.obj: $(OOXMLFACTORYGENERATEDCXX) $(OOXMLGENHEADERS)
 
 $(SLOFASTNAMESPACES): OOXMLFastHelper.hxx
 

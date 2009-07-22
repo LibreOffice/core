@@ -179,6 +179,8 @@ public:
     virtual void setId(Id nId);
     virtual Id getId() const;
 
+    void setDefine(Id nDefine);
+    Id getDefine() const;
     void setFallback(bool bFallbac);
     bool isFallback() const;
 
@@ -231,6 +233,7 @@ public:
 protected:
     OOXMLFastContextHandler * mpParent;
     Id mId;
+    Id mnDefine;
     Token_t mnToken;
 
 #ifdef DEBUG_CONTEXT_STACK
@@ -380,6 +383,8 @@ public:
     (OOXMLFastContextHandler * pContext);
     virtual ~OOXMLFastContextHandlerBooleanValue();
 
+    virtual string getType() const { return "BooleanValue"; }
+
 protected:
     bool mbValue;
 
@@ -401,6 +406,8 @@ public:
     (OOXMLFastContextHandler * pContext);
     virtual ~OOXMLFastContextHandlerIntegerValue();
 
+    virtual string getType() const { return "IntegerValue"; }
+
 protected:
     sal_Int32 mnValue;
 
@@ -421,6 +428,8 @@ public:
     (OOXMLFastContextHandler * pContext);
     virtual ~OOXMLFastContextHandlerStringValue();
 
+    virtual string getType() const { return "StringValue"; }
+
 protected:
     ::rtl::OUString  msValue;
 
@@ -440,6 +449,8 @@ public:
     OOXMLFastContextHandlerHexValue
     (OOXMLFastContextHandler * pContext);
     virtual ~OOXMLFastContextHandlerHexValue();
+
+    virtual string getType() const { return "HexValue"; }
 
 protected:
     sal_Int32  mnValue;
@@ -492,6 +503,8 @@ protected:
 
     virtual ResourceEnum_t getResource() const { return TABLE; }
 
+    virtual string getType() const { return "Table"; }
+
     void addCurrentChild();
 };
 
@@ -502,6 +515,9 @@ public:
     virtual ~OOXMLFastContextHandlerXNote();
 
     void checkId(const rtl::OUString & rId);
+
+    virtual string getType() const { return "XNote"; }
+
 private:
     bool mbForwardEventsSaved;
     ::rtl::OUString msMyXNoteId;
@@ -524,6 +540,8 @@ public:
     (OOXMLFastContextHandler * pContext);
     virtual ~OOXMLFastContextHandlerTextTableCell();
 
+    virtual string getType() const { return "TextTableCell"; }
+
     void startCell();
     void endCell();
 };
@@ -534,6 +552,8 @@ public:
     OOXMLFastContextHandlerTextTableRow
     (OOXMLFastContextHandler * pContext);
     virtual ~OOXMLFastContextHandlerTextTableRow();
+
+    virtual string getType() const { return "TextTableRow"; }
 
     void startRow();
     void endRow();
@@ -546,6 +566,8 @@ public:
     (OOXMLFastContextHandler * pContext);
 
     virtual ~OOXMLFastContextHandlerTextTable();
+
+    virtual string getType() const { return "TextTable"; }
 
 protected:
     virtual void lcl_startFastElement
@@ -563,6 +585,8 @@ public:
     explicit OOXMLFastContextHandlerShape
     (OOXMLFastContextHandler * pContext);
     virtual ~OOXMLFastContextHandlerShape();
+
+    virtual string getType() const { return "Shape"; }
 
     // ::com::sun::star::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startUnknownElement

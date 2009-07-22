@@ -4401,7 +4401,7 @@ void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
                 //otherwise ignore sText
             }
             else */
-            if( pContext->GetFootnote().is() )
+            if( pContext && pContext->GetFootnote().is() )
             {
                 if( !pContext->GetFootnoteSymbol() )
                     pContext->GetFootnote()->setLabel( sText );

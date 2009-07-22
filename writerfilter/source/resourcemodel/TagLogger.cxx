@@ -273,7 +273,7 @@ namespace writerfilter
 
             fileName += "/writerfilter.";
             fileName += name;
-            fileName += ".tmp";
+            fileName += ".xml";
 
             ofstream dumpStream(fileName.c_str());
             aIt->second->output(dumpStream);

@@ -71,6 +71,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <ooxml/OOXMLDocument.hxx>
+#include <resourcemodel/TagLogger.hxx>
 
 #include <ctype.h>
 
@@ -98,6 +99,12 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
     uno::Reference<lang::XMultiComponentFactory> xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW );
     if (::ucbhelper::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
     {
+#ifdef DEBUG_ELEMENT
+        writerfilter::TagLogger::Pointer_t debugLogger
+        (writerfilter::TagLogger::getInstance("DEBUG"));
+        debugLogger->startDocument();
+#endif
+
         rtl::OUString arg=aArguments[0];
 
         ::comphelper::setProcessServiceFactory(xServiceFactory);
@@ -142,6 +149,11 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
 
         Stream::Pointer_t pStream = createStreamHandler();
         pDocument->resolve(*pStream);
+
+#ifdef DEBUG_ELEMENT
+        writerfilter::TagLogger::dump("DEBUG");
+        debugLogger->endDocument();
+#endif
 
         ::ucbhelper::ContentBroker::deinitialize();
     }
