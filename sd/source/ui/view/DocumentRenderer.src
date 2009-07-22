@@ -227,8 +227,8 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     {
         ItemList [ en-US ] =
         {
-            < "~All"; >;
-            < "~Pages"; >;
+            < "~All Slides"; >;
+            < "~Slides"; >;
             < "~Selection"; >;
         };
     };

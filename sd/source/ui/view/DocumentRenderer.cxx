@@ -549,7 +549,9 @@ namespace {
             // print range selection
             AddDialogControl( vcl::PrinterOptionsHelper::getSubgroupControlOpt(
                                 String( SdResId( _STR_IMPRESS_PRINT_UI_PAGE_RANGE ) ),
-                                rtl::OUString(), true, true )
+                                rtl::OUString(),
+                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) ),
+                                true )
                              );
 
             // create a choice for the content to create
