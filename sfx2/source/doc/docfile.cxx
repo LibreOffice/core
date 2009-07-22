@@ -568,7 +568,7 @@ long SfxMedium::GetFileVersion() const
 //------------------------------------------------------------------
 void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
 {
-    GetInitFileDate();
+    GetInitFileDate( sal_True );
     if ( pImp->m_aDateTime.Seconds != aInitDate.Seconds
       || pImp->m_aDateTime.Minutes != aInitDate.Minutes
       || pImp->m_aDateTime.Hours != aInitDate.Hours
@@ -607,9 +607,15 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
 }
 
 //------------------------------------------------------------------
-util::DateTime SfxMedium::GetInitFileDate()
+sal_Bool SfxMedium::DocNeedsFileDateCheck()
 {
-    if ( !pImp->m_bGotDateTime && GetContent().is() )
+    return ( !IsReadOnly() && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) );
+}
+
+//------------------------------------------------------------------
+util::DateTime SfxMedium::GetInitFileDate( sal_Bool bIgnoreOldValue )
+{
+    if ( ( bIgnoreOldValue || !pImp->m_bGotDateTime ) && GetContent().is() )
     {
         try
         {
@@ -866,11 +872,8 @@ sal_Bool SfxMedium::Commit()
 
     sal_Bool bResult = ( GetError() == SVSTREAM_OK );
 
-    if ( bResult )
-    {
-        pImp->m_bGotDateTime = sal_False;
-        GetInitFileDate();
-    }
+    if ( bResult && DocNeedsFileDateCheck() )
+        GetInitFileDate( sal_True );
 
     // remove truncation mode from the flags
     nStorOpenMode &= (~STREAM_TRUNC);
@@ -1399,6 +1402,10 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
         else
             GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
     }
+
+    // when the file is locked, get the current file date
+    if ( bResult && DocNeedsFileDateCheck() )
+        GetInitFileDate( sal_True );
 
     return bResult;
 }
@@ -2662,8 +2669,6 @@ void SfxMedium::GetMedium_Impl()
                 pInStream = utl::UcbStreamHelper::CreateStream( pImp->xInputStream );
         }
 
-        GetInitFileDate();
-
         pImp->bDownloadDone = sal_True;
         pImp->aDoneLink.ClearPendingCall();
         pImp->aDoneLink.Call( (void*) GetError() );
@@ -3305,6 +3310,7 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
             // that must be copied here
 
             SFX_ITEMSET_ARG( pSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
+            if (!pFileNameItem) throw uno::RuntimeException();
             ::rtl::OUString aNewTempFileURL = SfxMedium::CreateTempCopyWithExt( pFileNameItem->GetValue() );
             if ( aNewTempFileURL.getLength() )
             {
@@ -3326,6 +3332,7 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
         bReadOnly = TRUE;
 
     SFX_ITEMSET_ARG( pSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
+    if (!pFileNameItem) throw uno::RuntimeException();
     aLogicName = pFileNameItem->GetValue();
     nStorOpenMode = bReadOnly ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
     bDirect = FALSE;

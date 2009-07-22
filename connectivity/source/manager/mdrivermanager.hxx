@@ -44,6 +44,7 @@
 #include <comphelper/logging.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <osl/mutex.hxx>
+#include "connectivity/DriversConfig.hxx"
 
 namespace drivermanager
 {
@@ -81,16 +82,15 @@ namespace drivermanager
         ::comphelper::EventLogger       m_aEventLogger;
 
         DECLARE_STL_VECTOR(DriverAccess, DriverAccessArray);
-        DriverAccessArray       m_aDriversBS;
+        DriverAccessArray               m_aDriversBS;
 
         // for drivers registered at runtime (not bootstrapped) we don't require an XServiceInfo interface,
         // so we have to remember their impl-name in another way
         DECLARE_STL_USTRINGACCESS_MAP(SdbcDriver, DriverCollection);
         DriverCollection                m_aDriversRT;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-                                m_xServiceFactory;
-        sal_Int32               m_nLoginTimeout;
+        ::connectivity::DriversConfig   m_aDriverConfig;
+        sal_Int32                       m_nLoginTimeout;
 
     private:
         OSDBCDriverManager(

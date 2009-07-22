@@ -621,6 +621,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         else
             aBaseURL = pMed->GetBaseURL();
     }
+    pMed->GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, aBaseURL ) );
 
     pImp->nLoadedFlags = 0;
     pImp->bModelInitialized = sal_False;
@@ -1138,7 +1139,12 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 */
 
 {
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::SaveTo_Impl" );
+    RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE SfxObjectShell::SaveTo_Impl" );
+    if( RTL_LOGFILE_HASLOGFILE() )
+    {
+        ByteString aString( rMedium.GetName(), RTL_TEXTENCODING_ASCII_US );
+        RTL_LOGFILE_PRODUCT_CONTEXT_TRACE1( aLog, "saving \"%s\"", aString.GetBuffer() );
+    }
 
     AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Begin" ) ) );
 
@@ -1227,7 +1233,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         bStoreToSameLocation = sal_True;
         AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Save" ) ) );
 
-        rMedium.CheckFileDate( pMedium->GetInitFileDate() );
+        if ( pMedium->DocNeedsFileDateCheck() )
+            rMedium.CheckFileDate( pMedium->GetInitFileDate( sal_False ) );
 
         if ( bCopyTo && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
         {
@@ -2083,6 +2090,12 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
                 InvalidateName();
             SetModified(sal_False); // nur bei gesetztem Medium zur"ucksetzen
             Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
+
+            // this is the end of the saving process, it is possible that the file was changed
+            // between medium commit and this step ( attributes change and so on )
+            // so get the file date again
+            if ( pNewMed->DocNeedsFileDateCheck() )
+                pNewMed->GetInitFileDate( sal_True );
         }
     }
 
@@ -3106,6 +3119,13 @@ void SfxObjectShell::SetSecurityOptOpenReadOnly( sal_Bool _b )
 
 sal_Bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
 {
+    RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE SfxObjectShell::LoadOwnFormat" );
+    if( RTL_LOGFILE_HASLOGFILE() )
+    {
+        ByteString aString( rMedium.GetName(), RTL_TEXTENCODING_ASCII_US );
+        RTL_LOGFILE_PRODUCT_CONTEXT_TRACE1( aLog, "loading \"%s\"", aString.GetBuffer() );
+    }
+
     uno::Reference< embed::XStorage > xStorage = rMedium.GetStorage();
     if ( xStorage.is() )
     {

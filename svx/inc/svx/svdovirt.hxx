@@ -83,7 +83,6 @@ public:
     virtual const Rectangle& GetLastBoundRect() const;
     virtual void RecalcBoundRect();
     virtual void SetChanged();
-    virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
     virtual SdrObject* Clone() const;
     virtual void operator=(const SdrObject& rObj);
 

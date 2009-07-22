@@ -97,7 +97,10 @@ namespace drawinglayer
                 basegfx::B2DPolyPolygonVector&,
                 const String& rText,
                 xub_StrLen nIndex,
-                xub_StrLen nLength);
+                xub_StrLen nLength,
+                // #i89784# added suppirt for DXArray for justified text
+                const ::std::vector< double >& rDXArray,
+                double fFontScaleWidth);
 
             basegfx::B2DRange getTextBoundRect(
                 const String& rText,

@@ -319,6 +319,10 @@ public:
     void SetHitTolerancePixel(USHORT nVal) { nHitTolPix=nVal; TheresNewMapMode(); }
     USHORT GetHitTolerancePixel() const { return (USHORT)nHitTolPix; }
 
+    // data read access on logic HitTolerance and MinMoveTolerance
+    const USHORT getHitTolLog() const { return nHitTolLog; }
+    const USHORT getMinMovLog() const { return nMinMovLog; }
+
     // Flag zur Visualisierung von Gruppen abfragen/testen
     BOOL DoVisualizeEnteredGroup() const { return bVisualizeEnteredGroup; }
     void SetVisualizeEnteredGroup(BOOL bNew) { bVisualizeEnteredGroup = bNew; }
@@ -558,35 +562,6 @@ public:
 
     // #103911# Set document color for svx at SdrPageViews
     void SetApplicationDocumentColor(Color aDocumentColor);
-
-    /** Determine typical background color for given area on given page
-
-        This method calculates a single representative color for the
-        given rectangular area. This is accomplished by sampling from
-        various points within that area, and calculating a weighted
-        mean value of those samples. High contrast settings are
-        respected by this method, i.e. in high contrast mode,
-        svtools::DOCCOLOR is used as the background color.
-
-        @attention For some cases, such as highly structured
-        background or huge color ranges spanned by the background,
-        this method cannot yield meaningful results, as the background
-        simply cannot be represented by a single color. Beware.
-
-        @param rArea
-        Rectangular area to determine representative background color from
-
-        @param rVisibleLayers
-        Set of layers visible when calculating the background color
-
-        @param rCurrPage
-        Current page for which to determine background color on
-
-        @return a representative background color.
-     */
-    Color CalcBackgroundColor( const Rectangle&     rArea,
-                               const SetOfByte&     rVisibleLayers,
-                               const SdrPage&   rCurrPage ) const;
 
     // #i38135#
     // Sets the timer for Object animations and restarts.

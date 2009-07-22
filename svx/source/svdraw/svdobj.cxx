@@ -127,6 +127,7 @@
 #include <svx/polysc3d.hxx>
 #include "svx/svdotable.hxx"
 #include "svx/shapepropertynotifier.hxx"
+#include <svx/sdrhittesthelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -175,8 +176,15 @@ FASTBOOL SdrObjUserData::HasMacro(const SdrObject* /*pObj*/) const
 
 SdrObject* SdrObjUserData::CheckMacroHit(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const
 {
-    if (pObj==NULL) return NULL;
-    return pObj->CheckHit(rRec.aPos,rRec.nTol,rRec.pVisiLayer);
+    if(pObj)
+    {
+        if(rRec.pPageView)
+        {
+            return SdrObjectPrimitiveHit(*pObj, rRec.aPos, rRec.nTol, *rRec.pPageView, rRec.pVisiLayer, false);
+        }
+    }
+
+    return 0;
 }
 
 Pointer SdrObjUserData::GetMacroPointer(const SdrObjMacroHitRec& /*rRec*/, const SdrObject* /*pObj*/) const
@@ -902,6 +910,10 @@ const Rectangle& SdrObject::GetLastBoundRect() const
 
 void SdrObject::RecalcBoundRect()
 {
+    // #i101680# suppress BoundRect calculations on import(s)
+    if(pModel && pModel->isLocked() )
+        return;
+
     // central new method which will calculate the BoundRect using primitive geometry
     if(aOutRect.IsEmpty())
     {
@@ -980,19 +992,6 @@ BOOL SdrObject::LineGeometryUsageIsNecessary() const
 {
     XLineStyle eXLS = (XLineStyle)((const XLineStyleItem&)GetMergedItem(XATTR_LINESTYLE)).GetValue();
     return (eXLS != XLINE_NONE);
-}
-
-SdrObject* SdrObject::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
-    {
-        return 0L;
-    }
-
-    Rectangle aO(GetCurrentBoundRect());
-    aO.Left()-=nTol; aO.Top()-=nTol; aO.Right()+=nTol; aO.Bottom()+=nTol;
-    FASTBOOL bRet=aO.IsInside(rPnt);
-    return bRet ? (SdrObject*)this : NULL;
 }
 
 SdrObject* SdrObject::Clone() const
@@ -1730,11 +1729,6 @@ FASTBOOL SdrObject::HasTextEdit() const
     return FALSE;
 }
 
-SdrObject* SdrObject::CheckTextEditHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    return CheckHit(rPnt,nTol,pVisiLayer);
-}
-
 sal_Bool SdrObject::BegTextEdit(SdrOutliner& /*rOutl*/)
 {
     return FALSE;
@@ -1806,11 +1800,19 @@ FASTBOOL SdrObject::HasMacro() const
 
 SdrObject* SdrObject::CheckMacroHit(const SdrObjMacroHitRec& rRec) const
 {
-    SdrObjUserData* pData=ImpGetMacroUserData();
-    if (pData!=NULL) {
-        return pData->CheckMacroHit(rRec,this);
+    SdrObjUserData* pData = ImpGetMacroUserData();
+
+    if(pData)
+    {
+        return pData->CheckMacroHit(rRec, this);
     }
-    return CheckHit(rRec.aPos,rRec.nTol,rRec.pVisiLayer);
+
+    if(rRec.pPageView)
+    {
+        return SdrObjectPrimitiveHit(*this, rRec.aPos, rRec.nTol, *rRec.pPageView, rRec.pVisiLayer, false);
+    }
+
+    return 0;
 }
 
 Pointer SdrObject::GetMacroPointer(const SdrObjMacroHitRec& rRec) const

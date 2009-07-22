@@ -99,7 +99,7 @@ sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceN
 }
 
 // -------------------------------------------------------------------------
-OResultSet::OResultSet(OStatement_Base* pStmt, const ::boost::shared_ptr< connectivity::OSQLParseTreeIterator >& _pSQLIterator )
+OResultSet::OResultSet(OCommonStatement* pStmt, const ::boost::shared_ptr< connectivity::OSQLParseTreeIterator >& _pSQLIterator )
     : OResultSet_BASE(m_aMutex)
     ,OPropertySetHelper(OResultSet_BASE::rBHelper)
     ,m_pStatement(pStmt)
@@ -512,7 +512,7 @@ void SAL_CALL OResultSet::close(  ) throw(SQLException, RuntimeException)
 {
     ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("In/Out: OResultSet::close" );
-    // dispose();
+    dispose();
 }
 // -------------------------------------------------------------------------
 
@@ -1124,9 +1124,6 @@ void OResultSet::fillRowData()
     }
 
     m_aQuery.setExpression( queryExpression );
-
-    // We need a unique id for caching mechanism so should fetch card:URI
-    m_aQuery.setAttributes( m_aAttributeStrings );
 
     rtl::OUString aStr(  m_pTable->getName() );
     m_aQuery.setAddressbook( aStr );

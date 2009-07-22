@@ -30,11 +30,17 @@
  ************************************************************************/
 
 #include "precompiled_svx.hxx"
+
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
+#include <svx/sdr/attribute/sdrformtextattribute.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/editobj.hxx>
 #include <svx/flditem.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+// pointer compare define
+#define pointerOrContentEqual(p, q) ((p == q) || (p && q && *p == *q))
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -56,9 +62,9 @@ namespace drawinglayer
             bool bBlink,
             bool bScroll,
             bool bInEditMode)
-        :   mrSdrText(rSdrText),
+        :   mpSdrText(&rSdrText),
             maOutlinerParaObject(rOutlinerParaObject),
-            meFormTextStyle(eFormTextStyle),
+            mpSdrFormTextAttribute(0),
             maTextLeftDistance(aTextLeftDistance),
             maTextUpperDistance(aTextUpperDistance),
             maTextRightDistance(aTextRightDistance),
@@ -70,12 +76,79 @@ namespace drawinglayer
             mbScroll(bScroll),
             mbInEditMode(bInEditMode)
         {
+            if(XFT_NONE != eFormTextStyle)
+            {
+                // text on path. Create FormText attribute
+                const SfxItemSet& rSet = getSdrText().GetItemSet();
+                mpSdrFormTextAttribute = new SdrFormTextAttribute(rSet);
+            }
+        }
+
+        SdrTextAttribute::~SdrTextAttribute()
+        {
+            if(mpSdrFormTextAttribute)
+            {
+                delete mpSdrFormTextAttribute;
+                mpSdrFormTextAttribute = 0;
+            }
+        }
+
+        SdrTextAttribute::SdrTextAttribute(const SdrTextAttribute& rCandidate)
+        :   mpSdrText(&rCandidate.getSdrText()),
+            maOutlinerParaObject(rCandidate.getOutlinerParaObject()),
+            mpSdrFormTextAttribute(0),
+            maTextLeftDistance(rCandidate.getTextLeftDistance()),
+            maTextUpperDistance(rCandidate.getTextUpperDistance()),
+            maTextRightDistance(rCandidate.getTextRightDistance()),
+            maTextLowerDistance(rCandidate.getTextLowerDistance()),
+            mbContour(rCandidate.isContour()),
+            mbFitToSize(rCandidate.isFitToSize()),
+            mbHideContour(rCandidate.isHideContour()),
+            mbBlink(rCandidate.isBlink()),
+            mbScroll(rCandidate.isScroll()),
+            mbInEditMode(rCandidate.isInEditMode())
+        {
+            if(rCandidate.getSdrFormTextAttribute())
+            {
+                mpSdrFormTextAttribute = new SdrFormTextAttribute(*rCandidate.getSdrFormTextAttribute());
+            }
+        }
+
+        SdrTextAttribute& SdrTextAttribute::operator=(const SdrTextAttribute& rCandidate)
+        {
+            mpSdrText = &rCandidate.getSdrText();
+            maOutlinerParaObject = rCandidate.getOutlinerParaObject();
+
+            if(mpSdrFormTextAttribute)
+            {
+                delete mpSdrFormTextAttribute;
+            }
+
+            mpSdrFormTextAttribute = 0;
+
+            if(rCandidate.getSdrFormTextAttribute())
+            {
+                mpSdrFormTextAttribute = new SdrFormTextAttribute(*rCandidate.getSdrFormTextAttribute());
+            }
+
+            maTextLeftDistance = rCandidate.getTextLeftDistance();
+            maTextUpperDistance = rCandidate.getTextUpperDistance();
+            maTextRightDistance = rCandidate.getTextRightDistance();
+            maTextLowerDistance = rCandidate.getTextLowerDistance();
+            mbContour = rCandidate.isContour();
+            mbFitToSize = rCandidate.isFitToSize();
+            mbHideContour = rCandidate.isHideContour();
+            mbBlink = rCandidate.isBlink();
+            mbScroll = rCandidate.isScroll();
+            mbInEditMode = rCandidate.isInEditMode();
+
+            return *this;
         }
 
         bool SdrTextAttribute::operator==(const SdrTextAttribute& rCandidate) const
         {
             return (getOutlinerParaObject() == rCandidate.getOutlinerParaObject()
-                && getFormTextStyle() == rCandidate.getFormTextStyle()
+                && pointerOrContentEqual(getSdrFormTextAttribute(), rCandidate.getSdrFormTextAttribute())
                 && getTextLeftDistance() == rCandidate.getTextLeftDistance()
                 && getTextUpperDistance() == rCandidate.getTextUpperDistance()
                 && getTextRightDistance() == rCandidate.getTextRightDistance()
@@ -92,7 +165,7 @@ namespace drawinglayer
         {
             if(isBlink())
             {
-                mrSdrText.GetObject().impGetBlinkTextTiming(rAnimList);
+                mpSdrText->GetObject().impGetBlinkTextTiming(rAnimList);
             }
         }
 
@@ -100,7 +173,7 @@ namespace drawinglayer
         {
             if(isScroll())
             {
-                mrSdrText.GetObject().impGetScrollTextTiming(rAnimList, fFrameLength, fTextLength);
+                mpSdrText->GetObject().impGetScrollTextTiming(rAnimList, fFrameLength, fTextLength);
             }
         }
     } // end of namespace attribute

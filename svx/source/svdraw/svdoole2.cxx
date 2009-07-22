@@ -1578,13 +1578,6 @@ UINT16 SdrOle2Obj::GetObjIdentifier() const
 
 // -----------------------------------------------------------------------------
 
-SdrObject* SdrOle2Obj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    return ImpCheckHit(rPnt,nTol,pVisiLayer,TRUE,TRUE);
-}
-
-// -----------------------------------------------------------------------------
-
 void SdrOle2Obj::TakeObjNameSingul(XubString& rName) const
 {
     rName = ImpGetResStr(bFrame ? STR_ObjNameSingulFrame : STR_ObjNameSingulOLE2);
@@ -2215,79 +2208,11 @@ sal_Bool SdrOle2Obj::AddOwnLightClient()
 
 //////////////////////////////////////////////////////////////////////////////
 
-bool SdrOle2Obj::executeOldDoPaintPreparations(SdrPageView* pPageVew) const
+bool SdrOle2Obj::executeOldDoPaintPreparations(SdrPageView* /*pPageVew*/) const
 {
-    bool bIsActive(false);
-    // copy of the old SdrOle2Obj::Do_PaintObject stuff which evtl. needs
-    // to be emulated.
-
-    // //charts must be painted resolution dependent!! #i82893#, #i75867#
-    // if( ChartPrettyPainter::IsChart(xObjRef) && ChartPrettyPainter::ShouldPrettyPaintChartOnThisDevice( rOut.GetOutDev() ) )
-    //     if( !rOut.GetOffset().nA && !rOut.GetOffset().nB )//offset!=0 is the scenario 'copy -> past special gdi metafile' which does not work with direct painting so far
-    //         if( ChartPrettyPainter::DoPrettyPaintChart( this->getXModel(), rOut.GetOutDev(), aRect ) )
-    //             return bOk;
-    //
-    // if( !GetGraphic() )
-    //     ( (SdrOle2Obj*) this)->GetObjRef_Impl();    // try to create embedded object
-
-    // this one can be used directly, just reformatting a bit
-    if(!GetGraphic())
-    {
-        // try to create embedded object
-        const_cast< SdrOle2Obj* >(this)->GetObjRef_Impl();
-    }
-
-    // if ( xObjRef.is() )
-    // {
-    //     sal_Int64 nMiscStatus = xObjRef->getStatus( GetAspect() );
-    //     if( !bSizProt && (nMiscStatus & embed::EmbedMisc::EMBED_NEVERRESIZE) )
-    //      ( (SdrOle2Obj*) this)->bSizProt = TRUE;
-
-    // old stuff which relies on xObjRef and nMiscStatus
-    if(xObjRef.is())
-    {
-        const sal_Int64 nMiscStatus(xObjRef->getStatus(GetAspect()));
-
-        // this hack (to change model data during PAINT argh(!)) can also be reproduced
-        // directly
-        if(!IsResizeProtect() && (nMiscStatus & embed::EmbedMisc::EMBED_NEVERRESIZE))
-        {
-            const_cast< SdrOle2Obj* >(this)->SetResizeProtect(true);
-        }
-
-    //     OutputDevice* pOut = rOut.GetOutDev();
-    //
-    //     //TODO/LATER: currently it's not possible to compare the windows, the XOutDev contains a virtual device
-    //     sal_Int32 nState = xObjRef->getCurrentState();
-    //     //if ( ( nState != embed::EmbedStates::INPLACE_ACTIVE && nState != embed::EmbedStates::UI_ACTIVE ) ||
-    //     //       pModel && SfxInPlaceClient::GetActiveWindow( pModel->GetPersist(), xObjRef ) != pOut )
-    //  {
-    //         if ( nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
-    //      {
-    //          // PlugIn-Objekt connecten
-    //          if (rInfoRec.pPV!=NULL)
-    //          {
-    //              SdrOle2Obj* pOle2Obj = (SdrOle2Obj*) this;
-    //              SdrView* pSdrView = (SdrView*) &rInfoRec.pPV->GetView();
-    //              pSdrView->DoConnect(pOle2Obj);
-    //          }
-    //      }
-
-        // nState is used in old paint to see if OLE is activated and to do
-        // a different paint
-        const sal_Int32 nState(xObjRef->getCurrentState());
-
-        bIsActive = (nState == embed::EmbedStates::ACTIVE);
-
-        // for this one i need the view.
-        if(pPageVew && (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE))
-        {
-            // connect plugin object
-            pPageVew->GetView().DoConnect(const_cast< SdrOle2Obj* >(this));
-        }
-    }
-
-    return bIsActive;
+    //#i101925# moved this stuff to method ViewObjectContactOfSdrOle2Obj::createPrimitive2DSequence and reorganized it further to avoid superfluous metafile creation for charts
+    //this method can be removed with the next incompatible build
+    return false;
 }
 
 Bitmap SdrOle2Obj::GetEmtyOLEReplacementBitmap() const

@@ -269,7 +269,6 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
     awt::Size aChartSize;
     // this flag is necessarry for pie charts in the core
     sal_Bool bSetSwitchData = sal_False;
-    sal_Bool bDomainForDefaultDataNeeded = sal_False;
 
     ::rtl::OUString sAutoStyleName;
     ::rtl::OUString aOldChartTypeName;
@@ -302,14 +301,8 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
                             case XML_CHART_CLASS_CIRCLE:
                                 bSetSwitchData = sal_True;
                                 break;
-                            case XML_CHART_CLASS_SCATTER:
-                                bDomainForDefaultDataNeeded = sal_True;
-                                break;
                             case XML_CHART_CLASS_STOCK:
                                 mbIsStockChart = true;
-                                break;
-                            case XML_CHART_CLASS_BUBBLE:
-                                DBG_ERROR( "Bubble chart not supported yet" );
                                 break;
                             default:
                                 break;
@@ -321,10 +314,6 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
                         // service is taken from add-in-name attribute
                         bHasAddin = true;
 
-                        // for service charts assume domain in base type
-                        // if base type doesn't use a domain this is ok,
-                        // the data just grows bigger
-                        bDomainForDefaultDataNeeded = sal_True;
                         aOldChartTypeName = sClassName;
                         maChartTypeServiceName = sClassName;
                     }
@@ -361,7 +350,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
         maChartTypeServiceName = SchXMLTools::GetChartTypeByClassName( aChartClass_Bar, false /* bUseOldNames */ );
     }
 
-    InitChart (aChartSize, bDomainForDefaultDataNeeded, aOldChartTypeName, bSetSwitchData);
+    InitChart (aChartSize, aOldChartTypeName, bSetSwitchData);
 
     if( bHasAddin )
     {
@@ -1116,7 +1105,6 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
 */
 void SchXMLChartContext::InitChart(
     awt::Size aChartSize,
-    sal_Bool /* bDomainForDefaultDataNeeded */,
     const OUString & rChartTypeServiceName, // currently the old service name
     sal_Bool /* bSetSwitchData */ )
 {

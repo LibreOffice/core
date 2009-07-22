@@ -41,28 +41,19 @@
 #include <svx/svdetc.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/view3d.hxx>
-
-// #116425#
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
-
-// #116425#
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/svdouno.hxx>
-
 #define XOR_CREATE_PEN          PEN_SOLID
 #include <svx/svdopath.hxx>
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <svx/sdr/overlay/overlaysdrobject.hxx>
 #include <sdrpaintwindow.hxx>
-
-// #i72535#
 #include "fmobj.hxx"
-
-// #i68562#
 #include <svx/svdocirc.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -172,7 +163,10 @@ void ImpSdrCreateViewExtraData::CreateAndShowOverlay(const SdrCreateView& rView,
         {
             if(pObject)
             {
-                ::sdr::overlay::OverlaySdrObject* pNew = new ::sdr::overlay::OverlaySdrObject(basegfx::B2DPoint(), *pObject);
+                const sdr::contact::ViewContact& rVC = pObject->GetViewContact();
+                const drawinglayer::primitive2d::Primitive2DSequence aSequence = rVC.getViewIndependentPrimitive2DSequence();
+                sdr::overlay::OverlayObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence);
+
                 pOverlayManager->add(*pNew);
                 maObjects.append(*pNew);
             }
@@ -868,6 +862,18 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, BOOL bFull*/)
             else
             {
                 mpCreateViewExtraData->CreateAndShowOverlay(*this, 0, pAktCreate->TakeCreatePoly(aDragStat));
+            }
+
+            // #i101679# Force changed overlay to be shown
+            for(sal_uInt32 a(0); a < PaintWindowCount(); a++)
+            {
+                SdrPaintWindow* pCandidate = GetPaintWindow(a);
+                sdr::overlay::OverlayManager* pOverlayManager = pCandidate->GetOverlayManager();
+
+                if(pOverlayManager)
+                {
+                    pOverlayManager->flush();
+                }
             }
         }
 

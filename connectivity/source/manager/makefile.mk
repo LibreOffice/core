@@ -35,6 +35,7 @@ PRJNAME=connectivity
 TARGET=sdbc
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings ----------------------------------
 .IF "$(DBGUTIL_OJ)"!=""
@@ -62,6 +63,8 @@ SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
     $(COMPHELPERLIB)            \
+    $(DBTOOLSLIB)              \
+    $(UNOTOOLSLIB)              \
     $(SALLIB)
 
 SHL1DEPN=

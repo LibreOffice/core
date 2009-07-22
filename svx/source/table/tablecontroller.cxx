@@ -1952,7 +1952,6 @@ void SvxTableController::updateSelectionOverlay()
                     if( pOverlayManager )
                     {
                         // sdr::overlay::CellOverlayType eType = sdr::overlay::CELL_OVERLAY_INVERT;
-                        // sdr::overlay::CellOverlayType eType = sdr::overlay::CELL_OVERLAY_HATCH;
                         sdr::overlay::CellOverlayType eType = sdr::overlay::CELL_OVERLAY_TRANSPARENT;
 
                         sdr::overlay::OverlayObjectCell* pOverlay = new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );

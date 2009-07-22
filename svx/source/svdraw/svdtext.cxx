@@ -53,6 +53,7 @@ SdrText::SdrText( SdrTextObj& rObject, OutlinerParaObject* pOutlinerParaObject /
 
 SdrText::~SdrText()
 {
+    clearWeak();
     delete mpOutlinerParaObject;
 }
 

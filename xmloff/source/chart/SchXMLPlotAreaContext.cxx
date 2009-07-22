@@ -195,10 +195,9 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
         mrCategoriesAddress( rCategoriesAddress ),
         mrSeriesDefaultsAndStyles( rSeriesDefaultsAndStyles ),
         mnNumOfLinesProp( 0 ),
-        mnNumOfLinesReadBySeries( 0 ),
         mbStockHasVolume( sal_False ),
         mnSeries( 0 ),
-        mnMaxSeriesLength( 0 ),
+        m_aGlobalSeriesImportInfo( rAllRangeAddressesAvailable ),
         maSceneImportHelper( rImport ),
         mbHasSize(false),
         mbHasPosition(false),
@@ -206,14 +205,11 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
         m_bAxisPositionAttributeImported(false),
         mrChartAddress( rChartAddress ),
         mrHasOwnTable( rHasOwnTable ),
-        mrAllRangeAddressesAvailable( rAllRangeAddressesAvailable ),
         mrColHasLabels( rColHasLabels ),
         mrRowHasLabels( rRowHasLabels ),
         mrDataRowSource( rDataRowSource ),
-        mnFirstFirstDomainIndex( -1 ),
         maChartTypeServiceName( aChartTypeServiceName ),
         mrLSequencesPerIndex( rLSequencesPerIndex ),
-        mnCurrentDataIndex( 0 ),
         mbGlobalChartTypeUsedBySeries( false ),
         maChartSize( rChartSize )
 {
@@ -578,14 +574,11 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
                         mrImportHelper, GetImport(), rLocalName,
                         mxNewDoc, maAxes,
                         mrSeriesDefaultsAndStyles.maSeriesStyleList,
-                        mnSeries, mnMaxSeriesLength,
-                        mnNumOfLinesReadBySeries, mbStockHasVolume,
-                        maFirstFirstDomainAddress,
-                        mnFirstFirstDomainIndex,
-                        mrAllRangeAddressesAvailable,
+                        mnSeries,
+                        mbStockHasVolume,
+                        m_aGlobalSeriesImportInfo,
                         maChartTypeServiceName,
                         mrLSequencesPerIndex,
-                        mnCurrentDataIndex,
                         mbGlobalChartTypeUsedBySeries, maChartSize );
                 }
                 mnSeries++;
@@ -659,15 +652,8 @@ void SchXMLPlotAreaContext::EndElement()
             maSceneImportHelper.setSceneAttributes( xDiaProp );
         }
 
-        // if the property NumberOfLines and the number of series containing
-        // class="chart:line" as attribute are both different from 0 they must
-        // be equal
-        OSL_ASSERT( mnNumOfLinesProp == 0 || mnNumOfLinesReadBySeries == 0 ||
-                    mnNumOfLinesProp == mnNumOfLinesReadBySeries );
-
         // set correct number of lines at series
-        if( ! mrAllRangeAddressesAvailable &&
-            mnNumOfLinesReadBySeries == 0 &&
+        if( ! m_aGlobalSeriesImportInfo.rbAllRangeAddressesAvailable &&
             mnNumOfLinesProp > 0 &&
             maChartTypeServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.ColumnChartType" )))
         {
@@ -1533,7 +1519,7 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
         break;
 
         case XML_TOK_AXIS_CATEGORIES:
-            pContext = new SchXMLCategoriesDomainContext( mrImportHelper, GetImport(),
+            pContext = new SchXMLCategoriesContext( mrImportHelper, GetImport(),
                                                           p_nPrefix, rLocalName,
                                                           mrCategoriesAddress );
             maCurrentAxis.bHasCategories = true;
@@ -1640,7 +1626,7 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
 
 // ========================================
 
-SchXMLCategoriesDomainContext::SchXMLCategoriesDomainContext(
+SchXMLCategoriesContext::SchXMLCategoriesContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
@@ -1652,11 +1638,11 @@ SchXMLCategoriesDomainContext::SchXMLCategoriesDomainContext(
 {
 }
 
-SchXMLCategoriesDomainContext::~SchXMLCategoriesDomainContext()
+SchXMLCategoriesContext::~SchXMLCategoriesContext()
 {
 }
 
-void SchXMLCategoriesDomainContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLCategoriesContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
 

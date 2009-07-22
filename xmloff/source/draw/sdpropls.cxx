@@ -268,7 +268,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "ControlDataStyle",               XML_NAMESPACE_STYLE,XML_DATA_STYLE_NAME,        XML_TYPE_STRING|MID_FLAG_NO_PROPERTY_EXPORT|MID_FLAG_SPECIAL_ITEM, CTF_SD_CONTROL_SHAPE_DATA_STYLE ),
     GMAP( "ControlTextEmphasis",            XML_NAMESPACE_STYLE,XML_TEXT_EMPHASIZE,         XML_TYPE_CONTROL_TEXT_EMPHASIZE, 0 ),
     GMAP( "ImageScaleMode",                 XML_NAMESPACE_STYLE,XML_REPEAT,                 XML_SD_TYPE_IMAGE_SCALE_MODE|MID_FLAG_MULTI_PROPERTY, 0 ),
-    GMAP( "ControlWritingMode",             XML_NAMESPACE_STYLE,XML_WRITING_MODE,           XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT|MID_FLAG_MULTI_PROPERTY, 0 ),
+    GMAP( "ControlWritingMode",             XML_NAMESPACE_STYLE,XML_WRITING_MODE,           XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT|MID_FLAG_MULTI_PROPERTY, CTF_CONTROLWRITINGMODE ),
 
     // special entries for floating frames
     GMAP( "FrameIsAutoScroll",          XML_NAMESPACE_DRAW, XML_FRAME_DISPLAY_SCROLLBAR,    XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_SCROLLBAR ),
@@ -1230,6 +1230,10 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     XMLPropertyState* pClip11State = NULL;
     XMLPropertyState* pClipState = NULL;
 
+    XMLPropertyState* pShapeWritingMode = NULL;
+    XMLPropertyState* pTextWritingMode = NULL;
+    XMLPropertyState* pControlWritingMode = NULL;
+
     // filter properties
     for( std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
          aIter != rProperties.end();
@@ -1261,13 +1265,23 @@ void XMLShapeExportPropertyMapper::ContextFilter(
                 break;
             case CTF_WRITINGMODE:
                 {
+                    pShapeWritingMode = property;
                     text::WritingMode eWritingMode;
                     if( property->maValue >>= eWritingMode )
                     {
                         if( text::WritingMode_LR_TB == eWritingMode )
+                        {
                             property->mnIndex = -1;
+                            pShapeWritingMode = 0;
+                        }
                     }
                 }
+                break;
+            case CTF_CONTROLWRITINGMODE:
+                pControlWritingMode = property;
+                break;
+            case CTF_TEXTWRITINGMODE:
+                pTextWritingMode = property;
                 break;
             case CTF_REPEAT_OFFSET_X:
                 pRepeatOffsetX = property;
@@ -1351,6 +1365,19 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             case CTF_TEXT_CLIP11:           pClip11State = property; break;
             case CTF_TEXT_CLIP:             pClipState = property; break;
         }
+    }
+
+    // check for duplicate writing mode
+    if( pShapeWritingMode && (pTextWritingMode || pControlWritingMode) )
+    {
+        if( pTextWritingMode )
+            pTextWritingMode->mnIndex = -1;
+        if( pControlWritingMode )
+            pControlWritingMode->mnIndex = -1;
+    }
+    else if( pTextWritingMode && pControlWritingMode )
+    {
+        pControlWritingMode->mnIndex = -1;
     }
 
     // do not export visual area for internal ole objects

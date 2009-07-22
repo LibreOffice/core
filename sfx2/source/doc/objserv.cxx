@@ -415,7 +415,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( pDocInfItem )
             {
                 // parameter, e.g. from replayed macro
-                pDocInfItem->updateDocumentInfo(getDocProperties());
+                pDocInfItem->UpdateDocumentInfo(getDocProperties(), true);
                 SetUseUserData( pDocInfItem->IsUseUserData() );
             }
             else
@@ -478,7 +478,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     if ( pDocInfoItem )
                     {
                         // user has done some changes to DocumentInfo
-                        pDocInfoItem->updateDocumentInfo(getDocProperties());
+                        pDocInfoItem->UpdateDocumentInfo(getDocProperties());
                         SetUseUserData( ((const SfxDocumentInfoItem *)pDocInfoItem)->IsUseUserData() );
 
                         // add data from dialog for possible recording purposes

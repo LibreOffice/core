@@ -37,7 +37,6 @@
 #include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/svdattr.hxx>
-#include "svdtouch.hxx"
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svddrag.hxx>
@@ -78,6 +77,10 @@ inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+
+// #i89784#
+#include <svx/sdr/attribute/sdrtextattribute.hxx>
+#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 
 using namespace sdr;
 
@@ -1825,51 +1828,6 @@ UINT16 SdrPathObj::GetObjIdentifier() const
     return USHORT(meKind);
 }
 
-SdrObject* SdrPathObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
-    {
-        return NULL;
-    }
-
-    sal_Bool bHit(sal_False);
-    const basegfx::B2DPoint aHitPoint(rPnt.X(), rPnt.Y());
-
-    if(GetPathPoly().isClosed() && (bTextFrame || HasFill()))
-    {
-        // hit in filled polygon? Subdivbide needed for better precision
-        if(GetPathPoly().areControlPointsUsed())
-        {
-            bHit = basegfx::tools::isInside(GetPathPoly().getDefaultAdaptiveSubdivision(), aHitPoint);
-        }
-        else
-        {
-            bHit = basegfx::tools::isInside(GetPathPoly(), aHitPoint);
-        }
-    }
-
-    if(!bHit)
-    {
-        // hit polygon line?
-        const double fHalfLineWidth(ImpGetLineWdt() / 2.0);
-        double fDistance(nTol);
-
-        if(fHalfLineWidth > fDistance)
-        {
-            fDistance = fHalfLineWidth;
-        }
-
-        bHit = basegfx::tools::isInEpsilonRange(GetPathPoly(), aHitPoint, fDistance);
-    }
-
-    if(!bHit && !IsTextFrame() && HasText())
-    {
-        bHit = (0L != SdrTextObj::CheckHit(rPnt,nTol,pVisiLayer));
-    }
-
-    return bHit ? (SdrObject*)this : 0L;
-}
-
 void SdrPathObj::operator=(const SdrObject& rObj)
 {
     SdrTextObj::operator=(rObj);
@@ -2717,7 +2675,19 @@ SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
 
 SdrObject* SdrPathObj::DoConvertToPolyObj(BOOL bBezier) const
 {
-    SdrObject* pRet = ImpConvertMakeObj(GetPathPoly(), IsClosed(), bBezier);
+    // #i89784# check for FontWork with activated HideContour
+    bool bHideContour(false);
+
+    {
+        drawinglayer::attribute::SdrTextAttribute* pText = drawinglayer::primitive2d::createNewSdrTextAttribute(GetObjectItemSet(), *getText(0));
+        bHideContour = pText && pText->getSdrFormTextAttribute() && pText->isHideContour();
+        delete pText;
+    }
+
+    SdrObject* pRet = bHideContour ?
+        0 :
+        ImpConvertMakeObj(GetPathPoly(), IsClosed(), bBezier);
+
     SdrPathObj* pPath = PTR_CAST(SdrPathObj, pRet);
 
     if(pPath)

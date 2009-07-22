@@ -60,11 +60,8 @@ namespace sdr
             // Flag to remember which state to draw. Inited with sal_False (0)
             unsigned                                mbOverlayState : 1;
 
-            // Draw geometry
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-            // Create the BaseRange. This method needs to calculate maBaseRange.
-            virtual void createBaseRange(OutputDevice& rOutputDevice);
+            // geometry creation for OverlayObject
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
             // #i53216# check blink time value range (currently 25 < mnBlinkTime < 10000)
             void impCheckBlinkTimeValueRange();
@@ -100,11 +97,6 @@ namespace sdr
             // execute event from base class ::sdr::animation::Event. Default
             // implementation does nothing and does not create a new event.
             virtual void Trigger(sal_uInt32 nTime);
-
-            // Zoom has changed. If the objects logical size
-            // depends on the MapMode of the used OutputDevice, use this call
-            // to invalidate the range in logical coordinates.
-            virtual void zoomHasChanged();
         };
     } // end of namespace overlay
 } // end of namespace sdr
