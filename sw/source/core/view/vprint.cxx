@@ -372,7 +372,10 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
                                                    sal_False );
 
     // print range selection
-    m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 39 ) ), rtl::OUString(), true, true );
+    m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 39 ) ),
+                                                           rtl::OUString(),
+                                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) ),
+                                                           true );
 
     // create a choice for the content to create
     rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
@@ -1259,12 +1262,12 @@ BOOL ViewShell::Prt(
 
 /* TLPDF neu: start */
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( 0 <= nRenderer && nRenderer <= rPrintUIOptions.GetPagesToPrint().size(),
+    DBG_ASSERT( 0 <= nRenderer && nRenderer <= sal_Int32(rPrintUIOptions.GetPagesToPrint().size()),
             "nRenderer out of bounds");
 #endif
     const sal_Int32 nPage = rPrintUIOptions.GetPagesToPrint()[ nRenderer ]; /* TLPDF */
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( 0 <= nPage && nPage <= rPrintUIOptions.GetValidStartFrms().size(),
+    DBG_ASSERT( 0 <= nPage && nPage <= sal_Int32(rPrintUIOptions.GetValidStartFrms().size()),
             "nPage out of bounds");
 #endif
     const SwPrintUIOptions::ValidStartFramesMap_t &rFrms = rPrintUIOptions.GetValidStartFrms();
