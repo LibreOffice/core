@@ -60,9 +60,6 @@ namespace chart
 #define CHART_CHARTAPIWRAPPER_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.ChartDocumentWrapper")
 
 // accessibility
-#define CHART2_ACCESSIBLE_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.comp.chart2.AccessibleChartView")
-#define CHART2_ACCESSIBLE_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.AccessibleChartView")
-
 #define CHART_ACCESSIBLE_TEXT_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.comp.chart2.AccessibleTextComponent")
 #define CHART_ACCESSIBLE_TEXT_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.accessibility.AccessibleTextComponent")
 

@@ -70,20 +70,6 @@ namespace chart
 //.............................................................................
 
 AccessibleChartView::AccessibleChartView(
-    const Reference<uno::XComponentContext> & xContext ) :
-        impl::AccessibleChartView_Base(
-            AccessibleElementInfo(), // empty for now
-            true, // has children
-            true  // always transparent
-            ),
-        m_xContext( xContext ),
-        m_pSdrView( NULL ),
-        m_pViewForwarder( NULL )
-{
-    AddState( AccessibleStateType::OPAQUE );
-}
-
-AccessibleChartView::AccessibleChartView(
     const Reference< uno::XComponentContext >& xContext, SdrView* pView ) :
         impl::AccessibleChartView_Base(
             AccessibleElementInfo(), // empty for now
@@ -205,20 +191,6 @@ awt::Point SAL_CALL AccessibleChartView::getLocationOnScreen()
         aResult.Y += aBounds.Y;
     }
     return aResult;
-}
-
-//-----------------------------------------------------------------
-// lang::XServiceInfo
-//-----------------------------------------------------------------
-
-APPHELPER_XSERVICEINFO_IMPL( AccessibleChartView, CHART2_ACCESSIBLE_SERVICE_IMPLEMENTATION_NAME )
-
-uno::Sequence< rtl::OUString > AccessibleChartView::getSupportedServiceNames_Static()
-{
-    uno::Sequence< rtl::OUString > aSNS( 2 );
-    aSNS.getArray()[ 0 ] = C2U("com.sun.star.accessibility.Accessible");
-    aSNS.getArray()[ 1 ] = CHART2_ACCESSIBLE_SERVICE_NAME;
-    return aSNS;
 }
 
 //-----------------------------------------------------------------

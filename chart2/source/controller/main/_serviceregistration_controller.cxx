@@ -80,14 +80,6 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_controller[] =
         , 0
         , 0
     }
-    ,{
-          ::chart::AccessibleChartView::create
-        , ::chart::AccessibleChartView::getImplementationName_Static
-        , ::chart::AccessibleChartView::getSupportedServiceNames_Static
-        , ::cppu::createSingleComponentFactory
-        , 0
-        , 0
-    }
     ,{ 0, 0, 0, 0, 0, 0 }
 };
 

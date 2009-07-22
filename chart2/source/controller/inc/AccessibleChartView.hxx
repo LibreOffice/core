@@ -74,15 +74,8 @@ class AccessibleChartView :
 public:
     AccessibleChartView(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
-    AccessibleChartView(
-        const ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext >& xContext, SdrView* pView );
     virtual ~AccessibleChartView();
-
-    // ____ lang::XServiceInfo ____
-    APPHELPER_XSERVICEINFO_DECL()
-    APPHELPER_SERVICE_FACTORY_HELPER( AccessibleChartView )
 
     // ____ WeakComponentHelper (called from XComponent::dispose()) ____
     virtual void SAL_CALL disposing();
