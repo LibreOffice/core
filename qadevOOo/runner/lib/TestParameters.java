@@ -258,8 +258,11 @@ public class TestParameters extends Hashtable {
     public TestParameters() {
         //fill the propertyset
         String user = System.getProperty("user.name");
-        if ( user != null) {
-            ConnectionString = "pipe,name=" + user;
+        if ( user != null)
+        {
+            String PipeConnectionString = "pipe,name=" + user;
+            put(PropertyName.PIPE_CONNECTION_STRING,PipeConnectionString);
+            put(PropertyName.USE_PIPE_CONNECTION, Boolean.TRUE);
         }
         put(PropertyName.CONNECTION_STRING,ConnectionString);
         put(PropertyName.TEST_BASE,TestBase);

@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Test of the insert graphic function - 4
 '*
@@ -53,6 +53,8 @@
 '\***********************************************************************
 
 testcase tInsertGraphic_31
+Warnlog "#i102752# - tInsertGraphic_31 outcommented due to bug."
+goto endsub
 
   Dim iLeft as Integer
   Dim iRight as Integer
@@ -179,6 +181,8 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tInsertGraphic_32
+Warnlog "#i102752# - tInsertGraphic_32 outcommented due to bug."
+goto endsub
 
   Dim iLeft as Integer
   Dim iRight as Integer
@@ -295,6 +299,8 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tInsertGraphic_33
+Warnlog "#i102752# - tInsertGraphic_33 outcommented due to bug."
+goto endsub
 
     Dim iLeft as Integer
     Dim iRight as Integer
@@ -421,6 +427,8 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tInsertGraphic_34
+Warnlog "#i102752# - tInsertGraphic_34 outcommented due to bug."
+goto endsub
 
   Dim iTop as Integer
   Dim iBottom as Integer

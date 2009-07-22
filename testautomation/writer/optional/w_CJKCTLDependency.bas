@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner :  fredrik.haegg@sun.com
+'* owner :  helge.delfs@sun.com
 '*
 '* short description : Test CJK and CTL support dependency
 '*

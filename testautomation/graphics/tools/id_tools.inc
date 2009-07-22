@@ -75,8 +75,8 @@ end function
 '-------------------------------------------------------------------------------
 function GetDecimalSeperator ( sDummy$ ) as String
 
-    '/// Input : number with fractionmark from 'NumericField' as String ///'
-    '///+ Output: '.' or ',' as String                                  ///'
+    printlog "Input : number with fractionmark from 'NumericField' as String "
+    printlog "+ Output: '.' or ',' as String "
     dim i1, i2 as integer
 
     ' get position of fraction mark / get IT
@@ -114,8 +114,8 @@ function LiberalMeasurement ( sShould$, sActual$) as Boolean
         if (GetMeasUnit(sShould$) <> GetMeasUnit(sActual$) ) then
             warnlog "In function LiberalMeasurement the measUnit is different, compare not possible yet"
         else
-            ' set factor for liberality ;-)
-            ' took units from http://gsl.openoffice.org/source/browse/gsl/vcl/source/src/units.src
+            printlog "set factor for liberality ;-)"
+            printlog "took units from http://gsl.openoffice.org/source/browse/gsl/vcl/source/src/units.src"
             select case GetMeasUnit(sShould$)
             case "mm", "ミリ", "公厘" : iTolerance = 2.0             '01, 81,     88
             case "cm","センチ","厘米","公分"  : iTolerance = 0.5       '01, 81, 86, 88
@@ -145,8 +145,8 @@ end function
 function GetMeasUnit ( sWert$ ) as String
 
     dim iBounder as integer
-    '/// Input : Number with or without MeasurementUnit 'NumericField' as String ///'
-    '///+ Output: Initials of MeasurementUnit as String or "" when only a number ///'
+    printlog " Input : Number with or without MeasurementUnit 'NumericField' as String "
+    printlog "+ Output: Initials of MeasurementUnit as String or when only a number "
 
     iBounder = -1
     do
@@ -254,10 +254,10 @@ end function
 '-------------------------------------------------------------------------------
 function fIsDocumentWritable() as boolean
 
-    '/// check if a document is writeable
-    '/// <u>parameter:</u>
-    '/// <u>return:</u>
-    '/// true if the document is writeable otherwise false
+    printlog " check if a document is writeable"
+    printlog " <u>parameter:</u>"
+    printlog " <u>return:</u>"
+    printlog " true if the document is writeable otherwise false"
 
     Kontext "Standardbar"
     if Bearbeiten.GetState(2) <> 1 then
@@ -271,10 +271,10 @@ end function
 '-------------------------------------------------------------------------------
 function fMakeDocumentWritable() as boolean
 
-    '/// make a document is writeable
-    '/// <u>parameter:</u>
-    '/// <u>return:</u>
-    '/// true if the document can make writeable otherwise false
+    printlog " make a document is writeable"
+    printlog " <u>parameter:</u>"
+    printlog " <u>return:</u>"
+    printlog " true if the document can make writeable otherwise false"
 
     Kontext "Standardbar"
     sleep (1)
@@ -604,7 +604,7 @@ function sAnalyseContextMenu(iItems as integer, optional iError as long) as inte
         ' collecting criteria for underlining:
         ' 1st one: is word selected? yes: underlined;
 
-        '/// If the string "vnd.sun.search:SubMenu" (the SunSearch-menu) is found in the menu, we'll skip that word. ///'
+        printlog " If the string vnd.sun.search:SubMenu (the SunSearch-menu) is found in the menu, we'll skip that word. "
 
         'Get first entry.
         f = MenuGetItemCommand (MenuGetItemID (1))

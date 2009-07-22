@@ -401,6 +401,10 @@ Order2 dbaccess:ListBox:DLG_ORDERCRIT:LB_ORDERVALUE2
 Fieldname3 dbaccess:ListBox:DLG_ORDERCRIT:LB_ORDERFIELD3
 Order3 dbaccess:ListBox:DLG_ORDERCRIT:LB_ORDERVALUE3
 
+*SortRange sc:ModalDialog:RID_SCDLG_SORT_WARNING
+ExtendSelection   sc:PushButton:RID_SCDLG_SORT_WARNING:BTN_EXTSORT
+CurrentSelection   sc:PushButton:RID_SCDLG_SORT_WARNING:BTN_CURSORT
+
 *Spellcheck HID_SPELLCHECK
 NotInDictionary svx:MultiLineEdit:RID_SVXDLG_SPELLCHECK:ED_NEWWORD
 Suggestions svx:ListBox:RID_SVXDLG_SPELLCHECK:LB_SUGGESTION

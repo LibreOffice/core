@@ -30,7 +30,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : CROSS-APPLICATIONS CLIPBOARD TEST (Writer)
 '*
@@ -48,10 +48,9 @@ sub w_222_
 
 end sub
 
+'------------------------------------------------------------------------------
 
 testcase DrawToWriterScrollingText
-'  QaErrorLog "#i95309# - DrawToWriterScrollingText outcommented due to problem when opening certain sxd-files."
-'  goto endsub
 
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
@@ -107,9 +106,6 @@ endcase
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToWriterGroupedObject
-'  QaErrorLog "#i95309# - DrawToWriterGroupedObject outcommented due to problem when opening certain sxd-files."
-'  goto endsub
-
 
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
@@ -165,9 +161,6 @@ endcase
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToWriter3D
-'  QaErrorLog "#i95309# - DrawToWriter3D outcommented due to problem when opening certain sxd-files."
-'  goto endsub
-
 
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
@@ -223,9 +216,6 @@ endcase
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToWriterFontwork
-'  QaErrorLog "#i95309# - DrawToWriterFontwork outcommented due to problem when opening certain sxd-files."
-'  goto endsub
-
 
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
@@ -281,9 +271,6 @@ endcase
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToWriterBullets
-'  QaErrorLog "#i95309# - DrawToWriterBullets outcommented due to problem when opening certain sxd-files."
-'  goto endsub
-
 
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
@@ -339,9 +326,6 @@ endcase
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToWriterDimensionLines
-  QaErrorLog "#i95309# - DrawToWriterDimensionLines outcommented due to problem when opening certain sxd-files."
-  goto endsub
-
 
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
@@ -398,9 +382,6 @@ endcase
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToWriterConnectors
-'  QaErrorLog "#i95309# - DrawToWriterConnectors outcommented due to problem when opening certain sxd-files."
-'  goto endsub
-
 
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
@@ -454,3 +435,4 @@ testcase DrawToWriterConnectors
     Loop
 endcase
 
+'------------------------------------------------------------------------------

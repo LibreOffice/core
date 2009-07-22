@@ -282,7 +282,7 @@ sub SaveMeasurementSetFirst
     elseIf (gApplication = "CALC") then
         sApplication = "CALC"
     endif
-    printlog "   '/// - save states ///'"
+    printlog  " - save states "
     ToolsOptions
     hToolsOptions (sApplication,"General")
     ReferenceOld = Masseinheit.GetSelText
@@ -336,7 +336,7 @@ sub ResetMeasurement
     elseIf (gApplication = "CALC") then
         sApplication = "CALC"
     endif
-    printlog "'/// - Reset states back to what they were before ///'"
+    printlog " - Reset states back to what they were before "
     ToolsOptions
     hToolsOptions (sApplication,"General")
     if Masseinheit.GetSelText <> ReferenceOld then 'find the right one.
@@ -358,24 +358,24 @@ end Sub
 sub SetKontextApplication
     ' Removed by JSK: sleep 1
     Select Case gApplication
-    Case "DRAW"
-        Kontext "DocumentDraw"
-        '         Printlog "gApplication / Kontext is now: DocumentDraw"
-        ' Removed by JSK: sleep 1
-    Case "IMPRESS"
-        Kontext "DocumentImpress"
-        '         Printlog "gApplication / Kontext is now is now: DocumentImpress"
-        ' Removed by JSK: sleep 1
-    Case "WRITER"
-        Kontext "DocumentWriter"
-        '         Printlog "gApplication / Kontext is now is now: DocumentWriter"
-        ' Removed by JSK: sleep 1
-    Case "CALC"
-        Kontext "DocumentCalc"
-        '         Printlog "gApplication / Kontext is now is now: DocumentCalc"
-        ' Removed by JSK: sleep 1
-    end select
-    ' Removed by JSK: sleep 1
+        Case "DRAW"
+            Kontext "DocumentDraw"
+            Printlog "gApplication / Kontext is now: DocumentDraw"
+             sleep 1
+        Case "IMPRESS"
+            Kontext "DocumentImpress"
+            Printlog "gApplication / Kontext is now is now: DocumentImpress"
+             sleep 1
+        Case "WRITER"
+            Kontext "DocumentWriter"
+            Printlog "gApplication / Kontext is now is now: DocumentWriter"
+            sleep 1
+        Case "CALC"
+            Kontext "DocumentCalc"
+            Printlog "gApplication / Kontext is now is now: DocumentCalc"
+            sleep 1
+        end select
+    sleep 1
 end sub
 
 '-------------------------------------------------------------------------------
@@ -524,21 +524,22 @@ end sub
 sub mouseclickinpresentation
     Kontext "DocumentPresentation"
     autoexecute=false
-    DocumentPresentation.MouseDown ( 50, 50 )   '/// switch slides using mouse clicks ///'
+    printlog " switch slides using mouse clicks "
+    DocumentPresentation.MouseDown ( 50, 50 )   
     DocumentPresentation.MouseUp ( 50, 50 )
     autoexecute=true
 end sub
 
 '-------------------------------------------------------------------------------
 
-sub im_002
+sub im_002_
     printLog Chr(13) + "--------- im_002_     ---------- $Date: 2008-06-16 10:43:16 $ $Revision: 1.1 $ "
     Call tiEditDeleteSlide
 end sub
 
 '-------------------------------------------------------------------------------
 
-sub im_003
+sub im_003_
     printLog Chr(13) + "--------- im_003_     ----------"
     Call tiViewMasterView
     Call tiViewSlideMaster
@@ -549,21 +550,21 @@ end sub
 
 '-------------------------------------------------------------------------------
 
-sub im_004
+sub im_004_
     printLog Chr(13) + "---------  im_004_     ----------"
     Call tiInsertSlideExpandSummary
 end sub
 
 '-------------------------------------------------------------------------------
 
-sub im_005
+sub im_005_
     printLog Chr(13) + "---------  im_005_     ---------- "
     Call tiFormatModifyLayout ' impress only
 end sub
 
 '-------------------------------------------------------------------------------
 
-sub im_007
+sub im_007_
     printLog Chr(13) + "---------  im_007_     ---------- "
     Call tSlideShowSlideShow
     Call tSlideShowRehearseTimings
@@ -578,14 +579,14 @@ end sub
 
 '-------------------------------------------------------------------------------
 
-sub im_011
+sub im_011_
     printLog Chr(13) + "---------  im_011_     ---------- "
     Call tiDiaLeiste    ' only IMPRESS
 end sub
 
 '-------------------------------------------------------------------------------
 
-sub D_002
+sub D_002_
     printLog Chr(13) + "---------  D_002_     ---------- "
     Call tdEditCrossFading
     Call tdEditLayer
@@ -593,7 +594,7 @@ end sub
 
 '-------------------------------------------------------------------------------
 
-sub D_003
+sub D_003_
     printLog Chr(13) + "---------  D_003_     ---------- "
     call tdViewSlide
     call tdViewPagePane
@@ -601,7 +602,7 @@ end sub
 
 '-------------------------------------------------------------------------------
 
-sub D_005
+sub D_005_
     printLog Chr(13) + "---------  D_005_     ---------- "
     call tiFormatLayer ' only in draw !!!!!
 end sub

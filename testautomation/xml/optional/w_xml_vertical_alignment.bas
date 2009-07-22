@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@Sun.COM
+'* owner : helge.delfs@sun.com
 '*
 '* short description  :  Testing for vertical alignment in writer
 '*
