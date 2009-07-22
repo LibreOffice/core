@@ -341,7 +341,8 @@ public class FilterComponent
                                     case DataType.BIGINT:
                                     case DataType.INTEGER:
                                     case DataType.SMALLINT:
-                                        aValue = String.valueOf(((Double) aValue).intValue());
+                                        if ( AnyConverter.isDouble(aValue) )
+                                            aValue = String.valueOf(((Double) aValue).intValue());
                                         break;
                                     case DataType.BIT:
                                     case DataType.BOOLEAN:
@@ -351,7 +352,8 @@ public class FilterComponent
                                         //curValue = new Boolean(dblvalue == 1.0); // wrong! we need a string, not a boolean value
 
                                         // converts the '1.0'/'0.0' (EffectiveValue) to a 'boolean' String like 'true'/'false'
-                                        aValue = String.valueOf(((Double) aValue).intValue() == 1);
+                                        if ( AnyConverter.isDouble(aValue) )
+                                            aValue = String.valueOf(((Double) aValue).intValue() == 1);
                                         break;
                                     default:
                                         aValue = String.valueOf(aValue);
@@ -413,7 +415,9 @@ public class FilterComponent
             String sreturn = JavaTools.replaceSubString(_BaseString, FieldName, "<FIELDNAME>");
             String soperator = sLogicOperators[_filtercondition.Handle - 1];
             sreturn = JavaTools.replaceSubString(sreturn, soperator, "<LOGICOPERATOR>");
-            String sDisplayValue = AnyConverter.toString(_filtercondition.Value);
+            String sDisplayValue = "";
+            if ( !AnyConverter.isVoid(_filtercondition.Value) )
+                sDisplayValue = AnyConverter.toString(_filtercondition.Value);
             sreturn = JavaTools.replaceSubString(sreturn, sDisplayValue, "<VALUE>");
             return sreturn;
         }

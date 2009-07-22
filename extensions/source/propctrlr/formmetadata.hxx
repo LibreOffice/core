@@ -340,8 +340,10 @@ namespace pcr
     #define PROPERTY_ID_SCALE_MODE                  196
     #define PROPERTY_ID_INPUT_REQUIRED              197
     #define PROPERTY_ID_WRITING_MODE                198
-    #define PROPERTY_ID_TEXT_ANCHOR_TYPE            199
-    #define PROPERTY_ID_SHEET_ANCHOR_TYPE           200
+    #define PROPERTY_ID_ENABLE_VISIBLE              199
+    #define PROPERTY_ID_WHEEL_BEHAVIOR              200
+    #define PROPERTY_ID_TEXT_ANCHOR_TYPE            201
+    #define PROPERTY_ID_SHEET_ANCHOR_TYPE           202
 
 //............................................................................
 } // namespace pcr

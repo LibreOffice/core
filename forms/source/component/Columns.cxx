@@ -345,6 +345,7 @@ void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, sal_B
     aForbiddenProperties.insert( PROPERTY_VERTICALALIGN );
     aForbiddenProperties.insert( PROPERTY_IMAGE_URL );
     aForbiddenProperties.insert( PROPERTY_IMAGE_POSITION );
+    aForbiddenProperties.insert( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableVisible" ) ) );
     if ( !bAllowDropDown )
         aForbiddenProperties.insert( PROPERTY_DROPDOWN );
 

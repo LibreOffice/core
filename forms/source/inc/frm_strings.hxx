@@ -113,6 +113,7 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_CYCLE,                    "Cycle" );
     FORMS_CONSTASCII_STRING( PROPERTY_CONTROLSOURCE,            "DataField" );
     FORMS_CONSTASCII_STRING( PROPERTY_ENABLED,                  "Enabled" );
+    FORMS_CONSTASCII_STRING( PROPERTY_ENABLEVISIBLE,                  "EnableVisible" );
     FORMS_CONSTASCII_STRING( PROPERTY_READONLY,                 "ReadOnly" );
     FORMS_CONSTASCII_STRING( PROPERTY_RELEVANT,                 "Relevant" );
     FORMS_CONSTASCII_STRING( PROPERTY_ISREADONLY,               "IsReadOnly" );
