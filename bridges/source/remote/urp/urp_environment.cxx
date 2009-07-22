@@ -342,10 +342,13 @@ static void SAL_CALL RemoteEnvironment_thisDispose( uno_Environment *pEnvRemote 
             pImpl->m_pReader = 0;
         }
 
-        ::osl::MutexGuard guard2( ::osl::Mutex::getGlobalMutex() );
-        if( ! g_bStaticDestructorsCalled )
+        bool bReleaseStubs = false;
         {
-            // delete the stubs
+            ::osl::MutexGuard guard2( ::osl::Mutex::getGlobalMutex() );
+            bReleaseStubs = !g_bStaticDestructorsCalled;
+        }
+        if( bReleaseStubs )
+        {
             releaseStubs( pEnvRemote );
         }
     }

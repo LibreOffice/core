@@ -59,7 +59,7 @@
 
 /** manages a text table.
 
-    @see som::sun::star:text::TextTable
+    @see com::sun::star::text::TextTable
     @see com::sun::star::text::Cell
  */
 published interface XTextTable: com::sun::star::text::XTextContent

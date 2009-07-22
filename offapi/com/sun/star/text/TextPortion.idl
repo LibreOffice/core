@@ -31,16 +31,8 @@
 #define __com_sun_star_text_TextPortion_idl__
 
 
-#ifndef __com_sun_star_style_ParagraphProperties_idl__
-#include <com/sun/star/style/ParagraphProperties.idl>
-#endif
-
 #ifndef __com_sun_star_beans_XTolerantMultiPropertySet_idl__
 #include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_style_CharacterProperties_idl__
-#include <com/sun/star/style/CharacterProperties.idl>
 #endif
 
 #ifndef __com_sun_star_container_XContentEnumerationAccess_idl__
@@ -50,9 +42,19 @@
 #ifndef __com_sun_star_text_TextRange_idl__
 #include <com/sun/star/text/TextRange.idl>
 #endif
+
 #ifndef __com_sun_star_text_XTextContent_idl__
 #include <com/sun/star/text/XTextContent.idl>
 #endif
+
+#ifndef __com_sun_star_text_XTextField_idl__
+#include <com/sun/star/text/XTextField.idl>
+#endif
+
+#ifndef __com_sun_star_text_XFootnote_idl__
+#include <com/sun/star/text/XFootnote.idl>
+#endif
+
 
 //=============================================================================
 
@@ -61,65 +63,107 @@ module com { module sun { module star { module text {
 //=============================================================================
 /** A TextPortion is a piece of text within a paragraph that does not
     contain changes of its attributes inside.
-    <p>It is created by an enumaration implemented in a paragraph service.
-    It is used to export the content of the paragraph to an external document format.</p>
 
+    <p>
+    It is created by an enumeration implemented in a paragraph service.
+    It may be used to export the content of the paragraph to an external
+    document format.
+    </p>
+
+    @see com::sun::star::text::TextPortionEnumeration
+    @see com::sun::star::text::XTextPortionEnumeration
 */
 published service TextPortion
 {
-    service com::sun::star::text::TextRange;
+    service ::com::sun::star::text::TextRange;
 
     //-------------------------------------------------------------------------
     /** contains text frames, graphic objects, embedded objects or
-         shapes that are anchored at or as character.
+        shapes that are anchored at or as character.
         @see com.sun.star.text.TextFrame
         @see com.sun.star.text.TextGraphicObject
      */
-    [optional] interface ::com::sun::star::container::XContentEnumerationAccess;
+    [optional]
+    interface ::com::sun::star::container::XContentEnumerationAccess;
 
     //-------------------------------------------------------------------------
     /** gives access to a sequence of properties.
         @since OOo 2.0.0
      */
-    [optional] interface ::com::sun::star::beans::XTolerantMultiPropertySet;
+    [optional]
+    interface ::com::sun::star::beans::XTolerantMultiPropertySet;
 
     //-------------------------------------------------------------------------
     /** contains the type of the text portion.
+
     <p> Valid content type names are:</p>
-    <UL>
-        <LI><P>Text - string content</P>
-        <LI><P>TextField - TextField content</P>
-        <LI><P>TextContent - text content - supplied via the interface XContentEnumerationAccess</P>
-        <LI><P>Footnote - a footnote or an endnote</P>
-        <LI><P>ControlCharacter - a control character</P>
-        <LI><P>ReferenceMark - a reference mark </P>
-        <LI><P>DocumentIndexMark - a document index mark</P>
-        <LI><P>Bookmark - a bookmark</P>
-        <LI><P>Redline - a redline portion which is a result of the change tracking feature.</P>
-        <LI><P>Ruby - a ruby attribute which is used in Asian text</P>
-        <LI><P>Frame - a frame.</P>
-    </UL>
-    <p>The text portions for reference marks and document index marks are generated twice for
-         each mark since they may include string content.</p>
+    <dl>
+        <dt>Text</dt><dd>string content</dd>
+        <dt>TextField</dt><dd>a text field</dd>
+        <dt>TextContent</dt><dd>text content - supplied via the
+            interface <type scope="com::sun::star::container">
+            XContentEnumerationAccess</type></dd>
+        <dt>ControlCharacter</dt><dd>a control character</dd>
+        <dt>Footnote</dt><dd>a footnote or an endnote</dd>
+        <dt>ReferenceMark</dt><dd>a reference mark</dd>
+        <dt>DocumentIndexMark</dt><dd>a document index mark</dd>
+        <dt>Bookmark</dt><dd>a bookmark</dd>
+        <dt>Redline</dt><dd>a redline portion which is a result
+            of the change tracking feature</dd>
+        <dt>Ruby</dt><dd>a ruby attribute which is used in Asian text</dd>
+        <dt>Frame</dt><dd>a frame</dd>
+        <dt>SoftPageBreak</dt><dd>a soft page break</dd>
+    </dl>
+    <p>For Reference marks, document index marks, etc., 2 text portions
+       will be generated, one for the start position and one for the
+       end position.</p>
      */
     [readonly, property] string TextPortionType;
 
     //-------------------------------------------------------------------------
-    /** returns the control character if the text portion contains a ControlCharacter*/
+    /** contains the control character of a text portion of type
+        ControlCharacter.
+     */
     [readonly, property] short ControlCharacter;
 
     //-------------------------------------------------------------------------
-    /** contains the bookmark if the portion is of the type */
-    [optional, property] com::sun::star::text::XTextContent Bookmark;
+    /** contains the bookmark of a text portion of type Bookmark. */
+    [optional, readonly, property]
+    ::com::sun::star::text::XTextContent Bookmark;
 
     //-------------------------------------------------------------------------
-    /** determines whether the portion is a point only.*/
-    [optional, property] boolean IsCollapsed;
+    /** contains the document index mark of a text portion of type
+        DocumentIndexMark. */
+    [optional, readonly, property]
+    ::com::sun::star::text::XTextContent DocumentIndexMark;
 
     //-------------------------------------------------------------------------
-    /** determines whether the portion is a start portion if two portions are needed to include an
-     object (i.e. DocmentIndexMark)*/
-    [optional, property] boolean IsStart;
+    /** contains the bookmark of a text portion of type ReferenceMark. */
+    [optional, readonly, property]
+    ::com::sun::star::text::XTextContent ReferenceMark;
+
+    //-------------------------------------------------------------------------
+    /** contains the footnote of a text portion of type Footnote. */
+    [optional, readonly, property]
+    ::com::sun::star::text::XFootnote Footnote;
+
+    //-------------------------------------------------------------------------
+    /** contains the text field of a text portion of type TextField. */
+    [optional, readonly, property]
+    ::com::sun::star::text::XTextField TextField;
+
+    //-------------------------------------------------------------------------
+    /** contains whether the portion is a point only. */
+    [optional, readonly, property] boolean IsCollapsed;
+
+    //-------------------------------------------------------------------------
+    /** contains whether the portion is the start of the portion.
+
+        <p>This is used for portions which are represented by
+        2 TextPortion objects (e.g., DocmentIndexMark).</p>
+     */
+    [optional, readonly, property] boolean IsStart;
+
 };
 
 //=============================================================================
