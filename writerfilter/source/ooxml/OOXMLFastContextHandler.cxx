@@ -41,6 +41,8 @@
 #include "Handler.hxx"
 #include "ooxmlLoggers.hxx"
 
+static const ::rtl::OUString aEmptyStr;
+
 static const sal_uInt8 s0x7[] = { 0x7, 0x0 };
 static const sal_uInt8 s0xd[] = { 0xd, 0x0 };
 static const sal_uInt8 sCR[] = { 0xd, 0x0 };
@@ -983,6 +985,11 @@ void OOXMLFastContextHandler::clearProps()
 #endif
 
     setPropertySet(OOXMLPropertySet::Pointer_t(new OOXMLPropertySetImpl()));
+}
+
+const ::rtl::OUString & OOXMLFastContextHandler::getText() const
+{
+    return aEmptyStr;
 }
 
 void OOXMLFastContextHandler::setDocument(OOXMLDocument * pDocument)

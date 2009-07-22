@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,6 +63,7 @@
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
     xmlns:xalan="http://xml.apache.org/xalan"
     xmlns:UML = 'org.omg.xmi.namespace.UML' 
+    xmlns:common="http://exslt.org/common"
     exclude-result-prefixes = "xalan"
     xml:space="default">
   <xsl:output method="text" />
@@ -249,15 +250,13 @@ const Token_t OOXML_FAST_TOKENS_END =</xsl:text>
       node according to the current <define>.
   -->
   <xsl:template name="contextresource">
-    <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
-    <xsl:choose>
-      <xsl:when test="count(key('context-resource', @name)) = 1">
-        <xsl:value-of select="key('context-resource', @name)/@resource"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="key('context-resource', @name)[generate-id(ancestor::namespace)=$mynsid]/@resource"/>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:variable name="name" select="@name"/>
+    <xsl:variable name="nsid" select="generate-id(ancestor::namespace)"/>
+    <xsl:for-each select="key('context-resource', @name)">
+        <xsl:if test="generate-id(ancestor::namespace) = $nsid">
+            <xsl:value-of select="@resource"/>
+        </xsl:if>
+    </xsl:for-each>
   </xsl:template>
 
   <!--
@@ -2158,11 +2157,27 @@ void dumpAttribs
   <xsl:value-of select="@name"/>
 </xsl:template>
 
+<xsl:template name="idfornamespace">
+    <xsl:text>NN_</xsl:text>
+    <xsl:value-of select="translate(@name, '-', '_')"/>
+</xsl:template>
+
+<xsl:template name="localidfordefine">
+    <xsl:text>DEFINE_</xsl:text>
+    <xsl:value-of select="@name"/>
+</xsl:template>
+
+<xsl:template name="idfordefine">
+    <xsl:for-each select="ancestor::namespace">
+        <xsl:call-template name="idfornamespace"/>
+    </xsl:for-each>
+    <xsl:text>|</xsl:text>
+    <xsl:call-template name="localidfordefine"/>
+</xsl:template>
+
 <xsl:template name="caselabeldefine">
-  <xsl:text>case CLASS_</xsl:text>
-  <xsl:value-of select="translate(ancestor::namespace/@name, '-', '_')"/>
-  <xsl:text>_</xsl:text>
-  <xsl:value-of select="@name"/>
+  <xsl:text>case </xsl:text>
+  <xsl:call-template name="idfordefine"/>
   <xsl:text>:</xsl:text>
 </xsl:template>
 
@@ -2245,6 +2260,668 @@ uno::Reference&lt;XFastContextHandler&gt; </xsl:text>
     }
 
     return xResult;
+}
+</xsl:text>
+</xsl:template>
+
+<!-- *** Factory *** -->
+
+<xsl:template name="factoryattributetoresourcemapinner">
+    <xsl:for-each select=".//rng:attribute">
+        <xsl:variable name="resource">
+            <xsl:for-each select="rng:ref">
+                <xsl:value-of select="key('context-resource', @name)/@resource"/>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:if test="string-length($resource) > 0">
+            <xsl:text>
+            (*pMap)[</xsl:text>
+            <xsl:call-template name="fasttoken"/>
+            <xsl:text>] = RT_</xsl:text>
+            <xsl:value-of select="$resource"/>
+            <xsl:text>;</xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+    <xsl:for-each select=".//rng:ref[not(ancestor::rng:element or ancestor::rng:attribute)]">
+        <xsl:call-template name="factoryattributetoresourcemapinner"/>
+    </xsl:for-each>
+</xsl:template>
+
+<!-- factoryattributetoresourcemap -->
+<xsl:template name="factoryattributetoresourcemap">
+    <xsl:text>
+AttributeToResourceMapPointer </xsl:text>
+    <xsl:call-template name="factoryclassname"/>
+    <xsl:text>::createAttributeToResourceMap(Id nId)
+{
+    AttributeToResourceMapPointer pMap(new AttributeToResourceMap());
+    
+    switch (nId)
+    {</xsl:text>
+    <xsl:for-each select="rng:grammar/rng:define">
+        <xsl:variable name="inner">
+            <xsl:call-template name="factoryattributetoresourcemapinner"/>
+        </xsl:variable>
+        <xsl:if test="string-length($inner) > 0">
+            <xsl:text>
+    </xsl:text>
+            <xsl:call-template name="caselabeldefine"/>
+            <xsl:value-of select="$inner"/>
+            <xsl:text>
+        break;</xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+    default:
+        break;
+    }
+    
+    return pMap;
+}
+</xsl:template>
+
+<!-- factorylistvaluemap -->
+<xsl:template name="factorylistvaluemap">
+    <xsl:text>
+ListValueMapPointer </xsl:text>
+    <xsl:call-template name="factoryclassname"/>
+    <xsl:text>::createListValueMap(Id nId)
+{
+    ListValueMapPointer pMap(new ListValueMap());
+    
+    switch (nId)
+    {</xsl:text>
+    <xsl:for-each select="resource[@resource='List']">
+        <xsl:text>
+    </xsl:text>
+        <xsl:call-template name="caselabeldefine"/>
+        <xsl:for-each select="value">
+            <xsl:text>
+        (*pMap)[</xsl:text>
+            <xsl:call-template name="valuestringname">
+                <xsl:with-param name="string" select="text()"/>
+            </xsl:call-template>
+            <xsl:text>] = </xsl:text>
+            <xsl:call-template name="idtoqname">
+                <xsl:with-param name="id" select="@tokenid"/>
+            </xsl:call-template>
+            <xsl:text>;</xsl:text>
+        </xsl:for-each>
+        <xsl:text>
+        break;</xsl:text>
+    </xsl:for-each>
+    <xsl:text>
+    default:
+        break;
+    }
+    
+    return pMap;
+}</xsl:text>
+</xsl:template>
+
+<xsl:template name="idforref">
+    <xsl:variable name="name" select="@name"/>
+    <xsl:for-each select="ancestor::namespace/rng:grammar/rng:define[@name=$name]">
+        <xsl:call-template name="idfordefine"/>
+    </xsl:for-each>
+</xsl:template>
+
+<!-- factoryelementtoresorucemapinner -->
+<xsl:template name="factorycreateelementmapinner">
+    <xsl:for-each select=".//rng:element">
+        <xsl:variable name="resource">
+            <xsl:for-each select="rng:ref">
+                <xsl:call-template name="contextresource"/>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:if test="string-length($resource) > 0">
+            <xsl:text>
+        (*pMap)[</xsl:text>
+            <xsl:call-template name="fasttoken"/>
+            <xsl:text>] = CreateElement(RT_</xsl:text>
+            <xsl:value-of select="$resource"/>
+            <xsl:text>, </xsl:text>
+            <xsl:for-each select="rng:ref">
+                <xsl:call-template name="idforref"/>
+            </xsl:for-each>
+            <xsl:text>);</xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+    <xsl:for-each select=".//rng:ref[not(ancestor::rng:element or ancestor::rng:attribute)]">
+        <xsl:variable name="name" select="@name"/>
+        <xsl:variable name="block">
+            <xsl:for-each select="ancestor::namespace/rng:grammar/rng:define[@name=$name]">
+                <xsl:call-template name="factorycreateelementmapinner"/>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:if test="string-length($block) > 0">
+            <xsl:text>
+         /* ref: </xsl:text>
+            <xsl:value-of select="$name"/>
+            <xsl:text>*/</xsl:text>
+            <xsl:value-of select="$block"/>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="factorycreateelementmapfromstart">
+    <xsl:for-each select="start">
+        <xsl:variable name="name" select="@name"/>
+        <xsl:variable name="block">
+            <xsl:for-each select="ancestor::namespace/rng:grammar/rng:define[@name=$name]">
+                <xsl:call-template name="factorycreateelementmapinner">
+                </xsl:call-template>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:if test="string-length($block) > 0">
+            <xsl:text>
+        /* start: </xsl:text>
+            <xsl:value-of select="$name"/>
+            <xsl:text>*/</xsl:text>
+            <xsl:value-of select="$block"/>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
+<!-- factoryelementtoresourcemap -->
+<xsl:template name="factorycreateelementmap">
+    <xsl:text>
+CreateElementMapPointer </xsl:text>
+    <xsl:call-template name="factoryclassname"/>
+    <xsl:text>::createCreateElementMap(Id nId)
+{
+    CreateElementMapPointer pMap(new CreateElementMap());
+    
+    switch (nId)
+    {</xsl:text>
+    <xsl:for-each select="rng:grammar/rng:define">
+        <xsl:variable name="inner">
+            <xsl:call-template name="factorycreateelementmapinner"/>
+        </xsl:variable>
+        <xsl:if test="string-length($inner) > 0">
+            <xsl:text>
+    </xsl:text>
+            <xsl:call-template name="caselabeldefine"/>
+            <xsl:value-of select="$inner"/>             
+            <xsl:text>
+        break;</xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+    <xsl:text>
+    default:</xsl:text>
+        <xsl:call-template name="factorycreateelementmapfromstart"/>
+        <xsl:text>
+        break;
+    }
+    
+    return pMap;
+}</xsl:text>
+</xsl:template>
+
+  <!--
+      Chooses the action for the current <action> element.
+  -->
+  <xsl:template name="factorychooseaction">
+    <xsl:if test="@tokenid">
+      <xsl:text>
+        if (sal::static_int_cast&lt;Id&gt;(pHandler-&gt;getId()) == </xsl:text>
+      <xsl:call-template name="idtoqname">
+        <xsl:with-param name="id" select="@tokenid"/>
+      </xsl:call-template>
+      <xsl:text>)
+      {</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="./cond">
+      <xsl:text>
+    {
+        OOXMLPropertySetEntryToInteger aHandler(</xsl:text>
+        <xsl:call-template name="idtoqname">
+          <xsl:with-param name="id" select="@tokenid"/>
+        </xsl:call-template>
+        <xsl:text>);
+        dynamic_cast&lt;OOXMLFastContextHandlerStream*&gt;(pHandler)-&gt;getPropertySetAttrs()-&gt;resolve(aHandler);
+        
+        if (sal::static_int_cast&lt;Id&gt;(aHandler.getValue()) == </xsl:text>
+        <xsl:call-template name="idtoqname">
+          <xsl:with-param name="id" select="@value"/>
+        </xsl:call-template>
+        <xsl:text>)
+        {</xsl:text>
+    </xsl:for-each>
+    <xsl:choose>
+        <xsl:when test="@action='handleXNotes' or 
+            @action='handleHdrFtr' or 
+            @action='handleComment' or 
+            @action='handlePicture' or 
+            @action='handleBreak' or 
+            @action='handleOLE'">
+            <xsl:text>
+    dynamic_cast&lt;OOXMLFastContextHandlerProperties*&gt;(pHandler)-&gt;</xsl:text>
+            <xsl:value-of select="@action"/>
+            <xsl:text>();</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='propagateCharacterPropertiesAsSet'">
+          <xsl:text>
+    pHandler-&gt;propagateCharacterPropertiesAsSet(</xsl:text>
+    <xsl:call-template name="idtoqname">
+      <xsl:with-param name="id" select="@sendtokenid"/>
+    </xsl:call-template>
+    <xsl:text>);</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='startCell' or @action='endCell'">
+            <xsl:text>
+    dynamic_cast&lt;OOXMLFastContextHandlerTextTableCell*&gt;(pHandler)-&gt;</xsl:text>
+            <xsl:value-of select="@action"/>
+            <xsl:text>();</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='sendProperty' or @action='handleHyperlink'">
+            <xsl:text>
+    dynamic_cast&lt;OOXMLFastContextHandlerStream*&gt;(pHandler)-&gt;</xsl:text>
+            <xsl:value-of select="@action"/>
+            <xsl:text>();</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='fieldstart'">
+            <xsl:text>
+    pHandler-&gt;startField();</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='fieldsep'">
+            <xsl:text>
+    pHandler-&gt;fieldSeparator();</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='fieldend'">
+            <xsl:text>
+    pHandler-&gt;endField();</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='printproperty'">
+          <xsl:text>
+    dynamic_cast&lt;OOXMLFastContextHandlerStream*&gt;(pHandler)-&gt;sendProperty(</xsl:text>
+        <xsl:call-template name="idtoqname">
+          <xsl:with-param name="id" select="@sendtokenid"/>
+        </xsl:call-template>
+        <xsl:text>);</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='sendPropertiesWithId'">
+          <xsl:text>
+    pHandler-&gt;sendPropertiesWithId(</xsl:text>
+          <xsl:call-template name="idtoqname">
+            <xsl:with-param name="id" select="@sendtokenid"/>
+          </xsl:call-template>
+          <xsl:text>);</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='text'">
+    pHandler-&gt;text(sText);
+        </xsl:when>
+        <xsl:when test="@action='newProperty'">
+          <xsl:text>
+    OOXMLFastHelper&lt;OOXMLIntegerValue&gt;::newProperty(pHandler, </xsl:text>
+    <xsl:call-template name="idtoqname">
+      <xsl:with-param name="id" select="@tokenid"/>
+    </xsl:call-template>
+    <xsl:text>, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
+    <xsl:value-of select="@value"/>
+    <xsl:text>")));</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='mark'">
+          <xsl:text>
+    OOXMLFastHelper&lt;OOXMLIntegerValue&gt;::mark(pHandler, </xsl:text>
+    <xsl:call-template name="idtoqname">
+      <xsl:with-param name="id" select="@sendtokenid"/>
+    </xsl:call-template>
+    <xsl:text>, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
+    <xsl:value-of select="@value"/>
+    <xsl:text>")));</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='tokenproperty'">
+          <xsl:text>
+    OOXMLFastHelper&lt;OOXMLIntegerValue&gt;::newProperty(pHandler, </xsl:text>
+    <xsl:call-template name="idtoqname">
+      <xsl:with-param name="id">ooxml:token</xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>, pHandler-&gt;getToken());</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>
+    pHandler-&gt;</xsl:text>
+        <xsl:value-of select="@action"/>
+        <xsl:text>();</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:for-each select="./cond">
+      <xsl:text>
+        }
+    }</xsl:text>
+    </xsl:for-each>
+    <xsl:if test="@tokenid">
+      <xsl:text>
+    }</xsl:text>
+    </xsl:if>
+  </xsl:template>
+
+<!-- factoryaction -->
+<xsl:template name="factoryaction">
+    <xsl:param name="action"/>
+    <xsl:text>
+void </xsl:text>
+    <xsl:call-template name="factoryclassname"/>
+    <xsl:text>::</xsl:text>
+    <xsl:value-of select="$action"/>
+    <xsl:text>Action(OOXMLFastContextHandler * pHandler</xsl:text>
+    <xsl:if test="$action='characters'">
+        <xsl:text>, const ::rtl::OUString &amp; sText</xsl:text>
+    </xsl:if>
+    <xsl:text>)
+{
+    switch (pHandler->getId())
+    {</xsl:text>
+    <xsl:for-each select="resource[action/@name=$action]">
+        <xsl:text>
+    </xsl:text>
+        <xsl:call-template name="caselabeldefine"/>
+        <xsl:for-each select="action[@name=$action]">
+            <xsl:call-template name="factorychooseaction"/>
+        </xsl:for-each>
+        <xsl:text>
+        break;</xsl:text>
+    </xsl:for-each>
+    <xsl:text>
+    default:
+        break;
+    }
+}</xsl:text>
+</xsl:template>
+
+<!-- Key: actions" -->
+<xsl:key name="actions" match="/model/namespace/resource/action"
+    use="@name"/>
+
+<!-- factoryactions -->
+<xsl:template name="factoryactions">
+    <xsl:variable name="ns" select="@name"/>
+    <xsl:for-each select="resource/action">
+        <xsl:sort select="@name"/>
+        <xsl:if test="generate-id(key('actions', @name)[ancestor::namespace/@name=$ns][1]) = generate-id(.)">
+            <xsl:variable name="name" select="@name"/>
+            <xsl:for-each select="ancestor::namespace">
+            <xsl:call-template name="factoryaction">
+                <xsl:with-param name="action" select="$name"/>
+            </xsl:call-template>
+            </xsl:for-each>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="factoryactiondecls">
+    <xsl:variable name="ns" select="@name"/>
+    <xsl:for-each select="resource/action">
+        <xsl:sort select="@name"/>
+        <xsl:if test="generate-id(key('actions', @name)[ancestor::namespace/@name=$ns][1]) = generate-id(.)">
+            <xsl:text>
+    void </xsl:text>
+            <xsl:value-of select="@name"/>
+            <xsl:text>Action(OOXMLFastContextHandler * pHandler</xsl:text>
+            <xsl:if test="@name='characters'">
+                <xsl:text>, const ::rtl::OUString &amp; sText</xsl:text>
+            </xsl:if>
+            <xsl:text>);</xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
+<!-- factoryclassname -->
+<xsl:template name="factoryclassname">
+    <xsl:text>OOXMLFactory_</xsl:text>
+    <xsl:value-of select="translate(@name, '-', '_')"/>
+</xsl:template>
+
+<!-- factorydecl -->
+<xsl:template name="factorydecl">
+    <xsl:variable name="classname">
+        <xsl:call-template name="factoryclassname"/>
+    </xsl:variable>
+    <xsl:text>
+class </xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text> : public OOXMLFactory_ns
+{
+public:
+    typedef boost::shared_ptr &lt; OOXMLFactory_ns &gt; Pointer_t;
+    
+    static Pointer_t getInstance();
+    
+    virtual AttributeToResourceMapPointer createAttributeToResourceMap(Id nId);
+    virtual ListValueMapPointer createListValueMap(Id nId);
+    virtual CreateElementMapPointer createCreateElementMap(Id nId);</xsl:text>
+    <xsl:call-template name="factoryactiondecls"/>
+    <xsl:text>
+    
+    virtual ~</xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>();
+    
+protected:
+    static Pointer_t m_pInstance;
+
+    </xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>();
+};
+    </xsl:text>
+</xsl:template>
+
+<xsl:template name="factoryincludes">
+    <xsl:for-each select="/model/namespace">
+        <xsl:text>
+#include "</xsl:text>
+        <xsl:call-template name="factoryclassname"/>
+        <xsl:text>.hxx"</xsl:text>
+    </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="getfactoryfornamespace">
+    <xsl:text>
+OOXMLFactory_ns::Pointer_t OOXMLFactory::getFactoryForNamespace(Id nId)
+{
+    OOXMLFactory_ns::Pointer_t pResult;
+    
+    switch (nId &amp; 0xffff0000)
+    {</xsl:text>
+    <xsl:for-each select="/model/namespace">
+        <xsl:text>
+    case </xsl:text>
+        <xsl:call-template name="idfornamespace"/>
+        <xsl:text>:
+        pResult.reset(</xsl:text>
+        <xsl:call-template name="factoryclassname"/>
+        <xsl:text>::getInstance());
+        break;</xsl:text>
+    </xsl:for-each>
+    <xsl:text>
+        default:
+            break;
+    }
+    
+    return aResult;
+}
+</xsl:text>
+</xsl:template>
+
+<xsl:template name="factorynamespaceiddecls">
+    <xsl:for-each select="/model/namespace">
+        <xsl:sort select="@name"/>
+        <xsl:text>
+extern const Id </xsl:text>
+        <xsl:call-template name="idfornamespace"/>
+        <xsl:text>;</xsl:text>
+    </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="factorynamespaceidimpls">
+    <xsl:for-each select="/model/namespace">
+        <xsl:sort select="@name"/>
+        <xsl:text>
+const Id </xsl:text>
+        <xsl:call-template name="idfornamespace"/>
+        <xsl:text> = </xsl:text>
+        <xsl:value-of select="position()"/>
+        <xsl:text> &lt;&lt; 16;</xsl:text>
+    </xsl:for-each>
+</xsl:template>
+
+<xsl:key name="definename" match="//rng:define" use="@name"/>
+
+<xsl:template name="factorydefineiddecls">
+    <xsl:for-each select="//rng:define">
+        <xsl:sort select="@name"/>
+        <xsl:if test="generate-id(key('definename', @name)[1]) = generate-id(.)">
+            <xsl:text>
+extern const Id </xsl:text>
+            <xsl:call-template name="localidfordefine"/>
+            <xsl:text>;</xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="factorydefineidimpls">
+    <xsl:for-each select="//rng:define">
+        <xsl:sort select="@name"/>
+        <xsl:if test="generate-id(key('definename', @name)[1]) = generate-id(.)">
+            <xsl:text>
+const Id </xsl:text>
+            <xsl:call-template name="localidfordefine"/>
+            <xsl:text> = </xsl:text>
+            <xsl:value-of select="position()"/>
+            <xsl:text>;</xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="factorymutex">
+    <xsl:call-template name="factoryclassname"/>
+    <xsl:text>_Mutex</xsl:text>
+</xsl:template>
+
+<xsl:template name="factorymutexdecl">
+    <xsl:variable name="classname">
+        <xsl:call-template name="factoryclassname"/>
+    </xsl:variable>
+    <xsl:text>
+typedef rtl::Static &lt; osl::Mutex, </xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text> &gt; </xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>_Mutex;
+</xsl:text>
+</xsl:template>
+
+<xsl:template name="factoryconstructor">
+    <xsl:variable name="classname">
+        <xsl:call-template name="factoryclassname"/>
+    </xsl:variable>
+    <xsl:text>
+</xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>::</xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>()
+{
+    // multi-thread-safe mutex for all platforms
+    
+    osl::MutexGuard aGuard(</xsl:text>
+    <xsl:call-template name="factorymutex"/>
+    <xsl:text>::get());
+}
+</xsl:text>
+</xsl:template>
+
+<xsl:template name="factorydestructor">
+    <xsl:variable name="classname">
+        <xsl:call-template name="factoryclassname"/>
+    </xsl:variable>
+    <xsl:text>
+</xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>::~</xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>()
+{
+}
+</xsl:text>
+</xsl:template>
+
+<xsl:template name="factorygetinstance">
+    <xsl:variable name="classname">
+        <xsl:call-template name="factoryclassname"/>
+    </xsl:variable>
+    <xsl:text>
+OOXMLFactory_ns::Pointer_t </xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>::m_pInstance;
+    
+OOXMLFactory_ns::Pointer_t </xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>::getInstance()
+{
+    if (m_pInstance.get() == NULL)
+        m_pInstance.reset(new </xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>());
+    
+    return m_pInstance;
+}
+</xsl:text>
+</xsl:template>
+
+<xsl:key name="resources" match="/model/namespace/resource" use="@resource"/>
+
+<xsl:template name="resources">
+    <xsl:for-each select="/model/namespace/resource">
+        <xsl:if test="generate-id(key('resources', @resource)[1])=generate-id(.)">
+            <xsl:text>RT_</xsl:text>
+            <xsl:value-of select="@resource"/>
+            <xsl:text>,&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="factorycreatecontext">
+    <xsl:text>
+uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastChildContext
+(OOXMLFastContextHandler * pHandler, Token_t Element)
+{
+    uno::Reference &gt; xml::sax::XFastContextHandler &lt; aResult;
+    Id nId = pHandler-&gt;getId();
+    
+    OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nId);
+    
+    if (pFactory.get() != NULL)
+    {
+        CreateElementMapPointer pMap = pFactory-&gt;getCreateElementMap(nId);
+        
+        if (pMap.get() != NULL)
+        {
+            CreateElement aCreateElement = (*pMap)[Element];
+            
+            switch (aCreateElement.m_nResource)
+            {</xsl:text>
+            <xsl:for-each select="/model/namespace/resource">
+                <xsl:if test="generate-id(key('resources', @resource)) = generate-id(.)">
+                    <xsl:text>
+            case RT_</xsl:text>
+                    <xsl:value-of select="@resource"/>
+                    <xsl:text>:
+                aResult.set(OOXMLFastHelper&lt;OOXMLFastContextHandler</xsl:text>
+                    <xsl:value-of select="@resource"/>
+                    <xsl:text>::createAndSetParent(pHandler, Element, aCreateElement.m_nId));
+                break;</xsl:text>
+                </xsl:if>
+            </xsl:for-each>
+            <xsl:text>
+            default:
+                break;
+            }
+        }
+    }
+    
+    return aResult;
 }
 </xsl:text>
 </xsl:template>

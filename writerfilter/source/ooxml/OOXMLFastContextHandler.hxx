@@ -191,6 +191,41 @@ public:
 
     sal_uInt32 getInstanceNumber() const;
 
+    void sendTableDepth() const;
+    void setHandle();
+
+    void startSectionGroup();
+    void setLastParagraphInSection();
+    void endSectionGroup();
+    void startParagraphGroup();
+    void endParagraphGroup();
+    void startCharacterGroup();
+    void endCharacterGroup();
+
+    void startField();
+    void fieldSeparator();
+    void endField();
+    void ftnednref();
+    void ftnedncont();
+    void ftnednsep();
+    void pgNum();
+    void tab();
+    void cr();
+    void noBreakHyphen();
+    void softHyphen();
+    void handleLastParagraphInSection();
+    void endOfParagraph();
+    void text(const ::rtl::OUString & sText);
+    virtual void propagateCharacterProperties();
+    virtual void propagateCharacterPropertiesAsSet(const Id & rId);
+    virtual bool propagatesProperties() const;
+    void sendPropertiesWithId(const Id & rId);
+    void propagateTableProperties();
+    void clearProps();
+
+    const ::rtl::OUString & getText() const;
+
+    void sendPropertyToParent();
     static void dumpOpenContexts();
 
 protected:
@@ -240,40 +275,6 @@ protected:
     virtual OOXMLPropertySet * getPicturePropSet
     (const ::rtl::OUString & rId);
     virtual void resolvePropertySetAttrs();
-
-    void sendTableDepth() const;
-    void setHandle();
-
-    void startSectionGroup();
-    void setLastParagraphInSection();
-    void endSectionGroup();
-    void startParagraphGroup();
-    void endParagraphGroup();
-    void startCharacterGroup();
-    void endCharacterGroup();
-
-    void startField();
-    void fieldSeparator();
-    void endField();
-    void ftnednref();
-    void ftnedncont();
-    void ftnednsep();
-    void pgNum();
-    void tab();
-    void cr();
-    void noBreakHyphen();
-    void softHyphen();
-    void handleLastParagraphInSection();
-    void endOfParagraph();
-    void text(const ::rtl::OUString & sText);
-    virtual void propagateCharacterProperties();
-    virtual void propagateCharacterPropertiesAsSet(const Id & rId);
-    virtual bool propagatesProperties() const;
-    void sendPropertiesWithId(const Id & rId);
-    void propagateTableProperties();
-    void clearProps();
-
-    void sendPropertyToParent();
 
     uno::Reference< uno::XComponentContext > getComponentContext();
 
