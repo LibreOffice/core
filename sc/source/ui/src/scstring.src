@@ -755,7 +755,7 @@ StringArray SCSTR_PRINT_OPTIONS
         < "The printout will be created only from the currently selected sheets."; >;
         < "Selected Cells"; >;
         < "The printout will be created only from the currently selected cells."; >;
-        < "Print range"; >;
+        < "Thereof"; >;
         < "All ~Pages"; >;
         < "Print all pages of the printable content."; >;
         < "Pa~ges"; >;

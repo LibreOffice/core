@@ -244,7 +244,10 @@ ScPrintUIOptions::ScPrintUIOptions()
                                                   bSuppress
                                                   );
     // create Subgroup for print content
-    m_aUIProperties[3].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 6 ) ), rtl::OUString(), true );
+    m_aUIProperties[3].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 6 ) ),
+                                                      rtl::OUString(),
+                                                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) )
+                                                      );
 
     // create a choice for the content to create
     uno::Sequence< rtl::OUString > aChoices( 3 ), aHelpTexts( 3 );
@@ -261,7 +264,10 @@ ScPrintUIOptions::ScPrintUIOptions()
                                                     nContent );
 
     // create Subgroup for print range
-    m_aUIProperties[5].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 13 ) ), rtl::OUString(), true , true);
+    m_aUIProperties[5].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 13 ) ),
+                                                      rtl::OUString(),
+                                                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) ),
+                                                      true);
 
     // create a choice for the range to print
     rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
