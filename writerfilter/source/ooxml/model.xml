@@ -22996,27 +22996,6 @@
       <attribute name="strokecolor" tokenid="ooxml:CT_ShapeDefaults_strokecolor"/>
       <attribute name="allowincell" tokenid="ooxml:CT_ShapeDefaults_allowincell"/>
     </resource>
-    <resource name="CT_ShapeDefaults" resource="Properties">
-      <element name="" tokenid="ooxml:CT_ShapeDefaults_"/>
-    </resource>
-    <resource name="CT_ShapeDefaults" resource="Properties">
-      <element name="v:fill" tokenid="ooxml:CT_ShapeDefaults_v_fill"/>
-      <element name="v:stroke" tokenid="ooxml:CT_ShapeDefaults_v_stroke"/>
-      <element name="v:textbox" tokenid="ooxml:CT_ShapeDefaults_v_textbox"/>
-      <element name="v:shadow" tokenid="ooxml:CT_ShapeDefaults_v_shadow"/>
-      <element name="colormru" tokenid="ooxml:CT_ShapeDefaults_colormru"/>
-      <element name="colormenu" tokenid="ooxml:CT_ShapeDefaults_colormenu"/>
-      <attribute name="spidmax" tokenid="ooxml:CT_ShapeDefaults_spidmax"/>
-      <attribute name="style" tokenid="ooxml:CT_ShapeDefaults_style"/>
-      <attribute name="fill" tokenid="ooxml:CT_ShapeDefaults_fill"/>
-      <attribute name="fillcolor" tokenid="ooxml:CT_ShapeDefaults_fillcolor"/>
-      <attribute name="stroke" tokenid="ooxml:CT_ShapeDefaults_stroke"/>
-      <attribute name="strokecolor" tokenid="ooxml:CT_ShapeDefaults_strokecolor"/>
-      <attribute name="allowincell" tokenid="ooxml:CT_ShapeDefaults_allowincell"/>
-    </resource>
-    <resource name="CT_ShapeDefaults" resource="Properties">
-      <element name="" tokenid="ooxml:CT_ShapeDefaults_"/>
-    </resource>
     <resource name="CT_Comments" resource="Stream">
       <action name="start" action="startSectionGroup"/>
       <action name="end" action="endSectionGroup"/>
