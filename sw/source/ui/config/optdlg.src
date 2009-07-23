@@ -941,17 +941,17 @@ StringArray STR_PRINTOPTUI
     ItemList [en-US] =
     {
         < "Contents"; >;
-        < "~Graphics"; >;
+        < "~Graphics and diagrams"; >;
         < "Specifies whether the graphics of your text document are printed"; >;
         < "~Tables"; >;
         < "Specifies whether the tables of the text document are printed"; >;
         < "Dra~wings"; >;
         < "Specifies whether graphics created with %PRODUCTNAME drawing functions are printed."; >;
-        < "Control~s"; >;
+        < "Form control~s"; >;
         < "Specifies whether the form control fields of the text document are printed"; >;
-        < "Ba~ckground"; >;
+        < "Page Ba~ckground"; >;
         < "Specifies whether to include colors and objects that are inserted to the background of the page (Format - Page - Background) in the printed document."; >;
-        < "Print blac~k"; >;
+        < "Print text in blac~k"; >;
         < "Specifies whether to always print text in black."; >;
         < "Hidden te~xt"; >;
         < "Enable this option to print text that is marked as hidden."; >;
@@ -959,7 +959,7 @@ StringArray STR_PRINTOPTUI
         < "Enable this option to print text placeholders. Disable this option to leave the text placeholders blank in the printout."; >;
         < "~Notes"; >;
         < "Specify where to print notes (if any)."; >;
-        < "None"; >;
+        < "Document only"; >;
         < "Notes only"; >;
         < " at end of document"; >;
         < " at end of page"; >;
@@ -986,6 +986,9 @@ StringArray STR_PRINTOPTUI
         < "Print a range of pages of the document."; >;
         < "~Selection"; >;
         < "Print only the currently selected content."; >;
+        < "Print"; >;
+        < "Color"; >;
+        < "Paper tray"; >;
     };
 };
 

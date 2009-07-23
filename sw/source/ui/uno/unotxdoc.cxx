@@ -2855,9 +2855,9 @@ void SAL_CALL SwXTextDocument::render(
         const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
         BOOL bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
         SwView::MakeOptions( NULL, aOptions, NULL, NULL, bWeb, NULL, NULL );
-        aOptions.bPrintGraphic           = m_pPrintUIOptions->getBoolValue( C2U( "PrintGraphics" ),     aOptions.bPrintGraphic );
-        aOptions.bPrintTable             = m_pPrintUIOptions->getBoolValue( C2U( "PrintTables" ),       aOptions.bPrintTable );
-        aOptions.bPrintDraw              = m_pPrintUIOptions->getBoolValue( C2U( "PrintDrawings" ),     aOptions.bPrintDraw );
+        aOptions.bPrintGraphic           = m_pPrintUIOptions->getBoolValue( C2U( "PrintGraphicsAndDiagrams" ),     aOptions.bPrintGraphic );
+        aOptions.bPrintTable             = m_pPrintUIOptions->getBoolValue( C2U( "PrintGraphicsAndDiagrams" ),       aOptions.bPrintTable );
+        aOptions.bPrintDraw              = m_pPrintUIOptions->getBoolValue( C2U( "PrintGraphicsAndDiagrams" ),     aOptions.bPrintDraw );
         aOptions.bPrintControl           = m_pPrintUIOptions->getBoolValue( C2U( "PrintControls" ),     aOptions.bPrintControl );
         aOptions.bPrintLeftPage          = m_pPrintUIOptions->getBoolValue( C2U( "PrintLeftPages" ),    aOptions.bPrintLeftPage );
         aOptions.bPrintRightPage         = m_pPrintUIOptions->getBoolValue( C2U( "PrintRightPages" ),   aOptions.bPrintRightPage );

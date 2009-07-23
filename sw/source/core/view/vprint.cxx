@@ -52,6 +52,8 @@
 #include <svx/svdview.hxx>
 #include <unotools/localedatawrapper.hxx>
 
+#include <svtools/moduleoptions.hxx>
+
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
 #include <fmtfsize.hxx>
@@ -238,38 +240,16 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
 
     // create sequence of print UI options
     // (5 options are not available for Writer-Web)
-    const int nNumProps = bWeb? 17 : 22;
+    const int nNumProps = bWeb? 19 : 23;
     m_aUIProperties.realloc( nNumProps );
     int nIdx = 0;
 
-    // create Section for Contents (results in an extra tab page in dialog)
-    m_aUIProperties[ nIdx++ ].Value = getGroupControlOpt( aLocalizedStrings.GetString( 0 ), rtl::OUString() );
+    // create "writer" section (new tab page in dialog)
+    SvtModuleOptions aOpt;
+    m_aUIProperties[ nIdx++ ].Value = getGroupControlOpt( aOpt.GetModuleName( SvtModuleOptions::E_SWRITER ), rtl::OUString() );
 
-    // create a bool option for graphics
-    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 1 ),
-                                                  aLocalizedStrings.GetString( 2 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintGraphics" ) ),
-                                                  sal_True );
-    // create a bool option for tables
-    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 3 ),
-                                                  aLocalizedStrings.GetString( 4 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintTables" ) ),
-                                                  sal_True );
-
-    if (!bWeb)
-    {
-        // create a bool option for drawings
-        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 5 ),
-                                                  aLocalizedStrings.GetString( 6 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDrawings" ) ),
-                                                  sal_True );
-    }
-
-    // create a bool option for controls
-    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 7 ),
-                                                  aLocalizedStrings.GetString( 8 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintControls" ) ),
-                                                  sal_True );
+    // create sub section for Contents
+    m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 0 ), rtl::OUString() );
 
     // create a bool option for background
     m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 9 ),
@@ -277,12 +257,11 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBackground" ) ),
                                                   sal_True );
 
-    // create a bool option for black
-    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 11 ),
-                                                  aLocalizedStrings.GetString( 12 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBlack" ) ),
-                                                  sal_False );
-
+    // create a bool option for graphics
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 1 ),
+                                                  aLocalizedStrings.GetString( 2 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintGraphicsAndDiagrams" ) ),
+                                                  sal_True );
     if (!bWeb)
     {
         // create a bool option for hidden text
@@ -298,6 +277,47 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
                                                   sal_False );
     }
 
+    // create a bool option for controls
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 7 ),
+                                                  aLocalizedStrings.GetString( 8 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintControls" ) ),
+                                                  sal_True );
+
+    // create sub section for Color
+    m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 47 ), rtl::OUString() );
+
+    // create a bool option for black
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 11 ),
+                                                  aLocalizedStrings.GetString( 12 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBlack" ) ),
+                                                  sal_False );
+
+    // create subgroup for misc options
+    m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 34 ) ), rtl::OUString() );
+
+    // create a bool option for blank pages
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 35 ),
+                                                   aLocalizedStrings.GetString( 36 ),
+                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintEmptyPages" ) ),
+                                                   sal_True );
+
+    // print content selection
+    m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 48 ) ),
+                                                           rtl::OUString(),
+                                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OptionsPage" ) )
+                                                           );
+
+    // create a bool option for paper tray
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 37 ),
+                                                   aLocalizedStrings.GetString( 38 ),
+                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PaperTray" ) ),
+                                                   sal_False );
+
+    // print content selection
+    m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 46 ) ),
+                                                           rtl::OUString(),
+                                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobPage" ) )
+                                                           );
     // create a list box for notes content
     uno::Sequence< rtl::OUString > aChoices( 4 );
     aChoices[0] = aLocalizedStrings.GetString( 19 );
@@ -315,8 +335,8 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) )
                                                     );
 
-    // create Section for Page settings (results in an extra tab page in dialog)
-    m_aUIProperties[ nIdx++ ].Value = getGroupControlOpt( aLocalizedStrings.GetString( 23 ), rtl::OUString() );
+    // create subsection for Page settings
+    m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 23 ), rtl::OUString() );
 
     if (!bWeb)
     {
@@ -332,12 +352,6 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRightPages" ) ),
                                                    sal_True );
     }
-
-    // create a bool option for reversed order (solve in vcl ?)
-    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 28 ),
-                                                   aLocalizedStrings.GetString( 29 ),
-                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintReverseOrder" ) ),
-                                                   sal_False );
 
     // create a bool option for brochure
     rtl::OUString aBrochurePropertyName( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochure" ) );
@@ -355,21 +369,6 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
                                                    -1,
                                                    sal_True
                                                    );
-
-    // create subgroup for misc options
-    m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 34 ) ), rtl::OUString() );
-
-    // create a bool option for blank pages
-    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 35 ),
-                                                   aLocalizedStrings.GetString( 36 ),
-                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintEmptyPages" ) ),
-                                                   sal_True );
-
-    // create a bool option for paper tray
-    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 37 ),
-                                                   aLocalizedStrings.GetString( 38 ),
-                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PaperTray" ) ),
-                                                   sal_False );
 
     // print range selection
     m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 39 ) ),
