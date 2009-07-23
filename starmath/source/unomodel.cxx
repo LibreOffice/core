@@ -53,6 +53,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <svtools/moduleoptions.hxx>
 
 #include <unomodel.hxx>
 #include <document.hxx>
@@ -99,7 +100,8 @@ SmPrintUIOptions::SmPrintUIOptions()
     m_aUIProperties.realloc( 8 );
     
     // create Section for formula (results in an extra tab page in dialog)
-    m_aUIProperties[0].Value = getGroupControlOpt( aLocalizedStrings.GetString( 0 ), rtl::OUString() );
+    SvtModuleOptions aOpt;
+    m_aUIProperties[0].Value = getGroupControlOpt( aOpt.GetModuleName( SvtModuleOptions::E_SMATH ), rtl::OUString() );
 
     // create subgroup for print options
     m_aUIProperties[1].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 1 ), rtl::OUString() );
