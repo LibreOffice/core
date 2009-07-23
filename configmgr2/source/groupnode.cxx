@@ -47,13 +47,8 @@ GroupNode::GroupNode(
 rtl::Reference< Node > GroupNode::clone() const {
     rtl::Reference< GroupNode > fresh(
         new GroupNode(getLayer(), extensible_, templateName_));
-    members_.clone(&fresh->members_);
+    cloneNodeMap(members_, &fresh->members_);
     return fresh.get();
-}
-
-rtl::Reference< Node > GroupNode::getMember(rtl::OUString const & name) {
-    NodeMap::iterator i(members_.find(name));
-    return i == members_.end() ? rtl::Reference< Node >() : i->second;
 }
 
 rtl::OUString GroupNode::getTemplateName() const {
@@ -69,5 +64,14 @@ NodeMap & GroupNode::getMembers() {
 }
 
 GroupNode::~GroupNode() {}
+
+void GroupNode::clear() {
+    members_.clear();
+}
+
+rtl::Reference< Node > GroupNode::findMember(rtl::OUString const & name) {
+    NodeMap::iterator i(members_.find(name));
+    return i == members_.end() ? rtl::Reference< Node >() : i->second;
+}
 
 }

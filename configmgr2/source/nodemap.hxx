@@ -32,7 +32,6 @@
 
 #include "sal/config.h"
 
-#include "boost/noncopyable.hpp"
 #include "rtl/ref.hxx"
 #include "stl/hash_map"
 
@@ -45,18 +44,11 @@ namespace configmgr {
 
 class Node;
 
-class NodeMap:
-    public std::hash_map<
-        rtl::OUString, rtl::Reference< Node >, rtl::OUStringHash >,
-    private boost::noncopyable
-{
-public:
-    NodeMap();
+typedef
+    std::hash_map< rtl::OUString, rtl::Reference< Node >, rtl::OUStringHash >
+    NodeMap;
 
-    ~NodeMap();
-
-    void clone(NodeMap * target) const;
-};
+void cloneNodeMap(NodeMap const & source, NodeMap * target);
 
 }
 

@@ -46,8 +46,6 @@ public:
 
     virtual rtl::Reference< Node > clone() const;
 
-    virtual rtl::Reference< Node > getMember(rtl::OUString const & name);
-
     virtual rtl::OUString getTemplateName() const;
 
     bool isExtensible() const;
@@ -56,6 +54,10 @@ public:
 
 private:
     virtual ~GroupNode();
+
+    virtual void clear();
+
+    virtual rtl::Reference< Node > findMember(rtl::OUString const & name);
 
     bool extensible_;
     NodeMap members_;

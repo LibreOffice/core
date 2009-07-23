@@ -55,12 +55,6 @@ rtl::Reference< Node > LocalizedPropertyValueNode::clone() const {
     return new LocalizedPropertyValueNode(getLayer(), value_);
 }
 
-rtl::Reference< Node > LocalizedPropertyValueNode::getMember(
-    rtl::OUString const &)
-{
-    return rtl::Reference< Node >();
-}
-
 rtl::OUString LocalizedPropertyValueNode::getTemplateName() const {
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
 }
@@ -69,7 +63,10 @@ css::uno::Any LocalizedPropertyValueNode::getValue() const {
     return value_;
 }
 
-void LocalizedPropertyValueNode::setValue(css::uno::Any const & value) {
+void LocalizedPropertyValueNode::setValue(
+    int layer, css::uno::Any const & value)
+{
+    resurrect(layer);
     value_ = value;
 }
 

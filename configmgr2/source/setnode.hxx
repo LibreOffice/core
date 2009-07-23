@@ -51,8 +51,6 @@ public:
 
     virtual rtl::Reference< Node > clone() const;
 
-    virtual rtl::Reference< Node > getMember(rtl::OUString const & name);
-
     virtual rtl::OUString getTemplateName() const;
 
     rtl::OUString const & getDefaultTemplateName() const;
@@ -63,6 +61,10 @@ public:
 
 private:
     virtual ~SetNode();
+
+    virtual void clear();
+
+    virtual rtl::Reference< Node > findMember(rtl::OUString const & name);
 
     rtl::OUString defaultTemplateName_;
     std::vector< rtl::OUString > additionalTemplateNames_;

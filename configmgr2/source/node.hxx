@@ -42,18 +42,31 @@ class Node: public salhelper::SimpleReferenceObject {
 public:
     virtual rtl::Reference< Node > clone() const = 0;
 
-    virtual rtl::Reference< Node > getMember(rtl::OUString const & name) = 0;
+    virtual rtl::OUString getTemplateName() const;
 
-    virtual rtl::OUString getTemplateName() const { return rtl::OUString(); }
+    void setLayer(int layer);
 
-    int getLayer() const { return layer_; }
+    int getLayer() const;
+
+    void remove(int layer);
+
+    bool isRemoved() const;
+
+    rtl::Reference< Node > getMember(rtl::OUString const & name);
 
 protected:
-    Node(int layer): layer_(layer) {}
+    explicit Node(int layer);
 
-    virtual ~Node() {}
+    virtual ~Node();
+
+    virtual void clear();
+
+    virtual rtl::Reference< Node > findMember(rtl::OUString const & name);
+
+    void resurrect(int layer);
 
     int layer_;
+    bool removed_;
 };
 
 }

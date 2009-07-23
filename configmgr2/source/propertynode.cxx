@@ -58,10 +58,6 @@ rtl::Reference< Node > PropertyNode::clone() const {
     return new PropertyNode(getLayer(), type_, nillable_, value_, extension_);
 }
 
-rtl::Reference< Node > PropertyNode::getMember(rtl::OUString const &) {
-    return rtl::Reference< Node >();
-}
-
 Type PropertyNode::getType() const {
     return type_;
 }
@@ -74,7 +70,8 @@ css::uno::Any PropertyNode::getValue() const {
     return value_;
 }
 
-void PropertyNode::setValue(css::uno::Any const & value) {
+void PropertyNode::setValue(int layer, css::uno::Any const & value) {
+    resurrect(layer);
     value_ = value;
 }
 

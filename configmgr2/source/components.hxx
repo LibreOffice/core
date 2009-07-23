@@ -37,14 +37,10 @@
 #include "boost/noncopyable.hpp"
 #include "libxml/parser.h"
 #include "rtl/ref.hxx"
-#include "stl/hash_map"
 
 #include "nodemap.hxx"
 
-namespace rtl {
-    class OUString;
-    struct OUStringHash;
-}
+namespace rtl { class OUString; }
 
 namespace configmgr {
 
@@ -121,16 +117,10 @@ private:
 
     void parseModificationLayer();
 
-    typedef
-        std::hash_map< rtl::OUString, rtl::Reference< Node>, rtl::OUStringHash >
-        TemplateMap;
-
-    TemplateMap templates_;
-
-    NodeMap components_;
-
     typedef std::list< rtl::OUString > Modifications;
 
+    NodeMap templates_;
+    NodeMap components_;
     Modifications modifications_;
 };
 

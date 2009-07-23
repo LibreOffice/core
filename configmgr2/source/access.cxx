@@ -187,7 +187,9 @@ std::vector< rtl::Reference< ChildAccess > > Access::getAllChildren() {
     std::vector< rtl::Reference< ChildAccess > > vec;
     NodeMap & members = getMemberNodes();
     for (NodeMap::iterator i(members.begin()); i != members.end(); ++i) {
-        if (modifiedChildren_.find(i->first) == modifiedChildren_.end()) {
+        if (!i->second->isRemoved() &&
+            modifiedChildren_.find(i->first) == modifiedChildren_.end())
+        {
             vec.push_back(getUnmodifiedChild(i->first));
             OSL_ASSERT(vec.back().is());
         }
@@ -277,31 +279,38 @@ void Access::reportChildChanges(
 }
 
 void Access::commitChildChanges() {
-    if (!modifiedChildren_.empty()) {
-        while (!modifiedChildren_.empty()) {
-            HardChildMap::iterator i(modifiedChildren_.begin());
-            rtl::Reference< ChildAccess > child(getModifiedChild(i));
-            NodeMap & members = getMemberNodes();
-            if (child.is()) {
-                child->commitChanges();
-                // In case the child was inserted:
-                if (members[i->first] == 0) {
-                    Components::singleton().addModification(child->getPath());
-                }
-                members[i->first] = child->getNode();
-                    //TODO: collision handling?
-            } else {
-                // Removed child node:
-                Components::singleton().addModification(
-                    getPath() +
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
-                    Components::createSegment(
-                        i->second->getNode()->getTemplateName(), i->first));
-                members.erase(i->first); //TODO: collision handling?
-            }
-            i->second->notInTransaction();
-            modifiedChildren_.erase(i);
+    while (!modifiedChildren_.empty()) {
+        HardChildMap::iterator i(modifiedChildren_.begin());
+        rtl::Reference< ChildAccess > child(getModifiedChild(i));
+        if (child.is()) {
+            child->commitChanges();
+                //TODO: currently, this is called here for directly inserted
+                // children as well as for children whose sub-children were
+                // modified (and should never be called for directly removed
+                // children); clarify what exactly should happen here for
+                // directly inserted children
         }
+        if (i->second->isModified()) {
+            if (child.is()) {
+                // Inserted:
+                getMemberNodes()[i->first] = child->getNode();
+            } else {
+                // Removed (TODO: if j == members.end(), the child probably got
+                // inserted and removed again in this transaction, so activity
+                // here could probably be cut short to preserve resources):
+                NodeMap & members = getMemberNodes();
+                NodeMap::iterator j(members.find(i->first));
+                if (j != members.end()) {
+                    j->second->remove(TOP_LAYER);
+                }
+            }
+            Components::singleton().addModification(
+                getPath() + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
+                Components::createSegment(
+                    i->second->getNode()->getTemplateName(), i->first));
+            i->second->committed();
+        }
+        modifiedChildren_.erase(i);
     }
 }
 

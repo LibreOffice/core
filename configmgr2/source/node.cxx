@@ -27,50 +27,58 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_LOCALIZEDPROPERTYNODE_HXX
-#define INCLUDED_CONFIGMGR_LOCALIZEDPROPERTYNODE_HXX
-
+#include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
+#include "osl/diagnose.h"
 #include "rtl/ref.hxx"
+#include "rtl/ustring.hxx"
 
 #include "node.hxx"
-#include "nodemap.hxx"
-#include "type.hxx"
-
-namespace com { namespace sun { namespace star { namespace uno {
-    class Any;
-} } } }
-namespace rtl { class OUString; }
 
 namespace configmgr {
 
-class LocalizedPropertyValueNode;
-
-class LocalizedPropertyNode: public Node {
-public:
-    LocalizedPropertyNode(int layer, Type type, bool nillable);
-
-    virtual rtl::Reference< Node > clone() const;
-
-    Type getType() const;
-
-    bool isNillable() const;
-
-    NodeMap & getMembers();
-
-private:
-    virtual ~LocalizedPropertyNode();
-
-    virtual void clear();
-
-    virtual rtl::Reference< Node > findMember(rtl::OUString const & name);
-
-    Type type_;
-    bool nillable_;
-    NodeMap members_;
-};
-
+rtl::OUString Node::getTemplateName() const {
+    return rtl::OUString();
 }
 
-#endif
+void Node::setLayer(int layer) {
+    OSL_ASSERT(layer >= layer_);
+    layer_ = layer;
+}
+
+int Node::getLayer() const {
+    return layer_;
+}
+
+void Node::remove(int layer) {
+    setLayer(layer);
+    removed_ = true;
+    clear();
+}
+
+bool Node::isRemoved() const {
+    return removed_;
+}
+
+rtl::Reference< Node > Node::getMember(rtl::OUString const & name) {
+    rtl::Reference< Node > node(findMember(name));
+    return node.is() && !node->isRemoved() ? node : rtl::Reference< Node >();
+}
+
+Node::Node(int layer): layer_(layer), removed_(false) {}
+
+Node::~Node() {}
+
+void Node::clear() {}
+
+rtl::Reference< Node > Node::findMember(rtl::OUString const &) {
+    return rtl::Reference< Node >();
+}
+
+void Node::resurrect(int layer) {
+    setLayer(layer);
+    removed_ = false;
+}
+
+}

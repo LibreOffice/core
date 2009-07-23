@@ -54,6 +54,7 @@
 #include "childaccess.hxx"
 #include "components.hxx"
 #include "groupnode.hxx"
+#include "layer.hxx"
 #include "localizedpropertynode.hxx"
 #include "localizedpropertyvaluenode.hxx"
 #include "lock.hxx"
@@ -86,7 +87,7 @@ ChildAccess::ChildAccess(
     rtl::Reference< RootAccess > const & root,
     rtl::Reference< Access > const & parent, rtl::OUString const & name,
     rtl::Reference< Node > const & node):
-    root_(root), parent_(parent), name_(name), node_(node),
+    root_(root), parent_(parent), name_(name), node_(node), modified_(false),
     inTransaction_(false)
 {
     OSL_ASSERT(root.is() && parent.is() && node.is());
@@ -95,7 +96,7 @@ ChildAccess::ChildAccess(
 ChildAccess::ChildAccess(
     rtl::Reference< RootAccess > const & root,
     rtl::Reference< Node > const & node):
-    root_(root), node_(node), inTransaction_(false)
+    root_(root), node_(node), modified_(false), inTransaction_(false)
 {
     OSL_ASSERT(root.is() && node.is());
 }
@@ -190,11 +191,17 @@ void ChildAccess::unbind() throw () {
 }
 
 void ChildAccess::markAsModified() {
+    modified_ = true;
     for (ChildAccess * p = this; p != 0 && p->parent_.is();
          p = dynamic_cast< ChildAccess * >(p->parent_.get()))
     {
         p->parent_->modifiedChildren_[p->name_] = p;
     }
+}
+
+void ChildAccess::committed() {
+    modified_ = false;
+    inTransaction_ = false;
 }
 
 void ChildAccess::setNode(rtl::Reference< Node > const & node) {
@@ -277,11 +284,11 @@ void ChildAccess::commitChanges() {
     if (changedValue_.get() != 0) {
         Components::singleton().addModification(getPath());
         if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get())) {
-            prop->setValue(*changedValue_);
+            prop->setValue(TOP_LAYER, *changedValue_);
         } else if (LocalizedPropertyValueNode * locval =
                    dynamic_cast< LocalizedPropertyValueNode * >(node_.get()))
         {
-            locval->setValue(*changedValue_);
+            locval->setValue(TOP_LAYER, *changedValue_);
         } else {
             OSL_ASSERT(false);
             throw css::uno::RuntimeException(

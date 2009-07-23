@@ -64,6 +64,7 @@
 #include "sal/types.h"
 #include "stl/hash_map"
 
+#include "nodemap.hxx"
 #include "type.hxx"
 
 #if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14
@@ -99,7 +100,6 @@ namespace configmgr {
 class Change;
 class ChildAccess;
 class Node;
-class NodeMap;
 class RootAccess;
 
 typedef

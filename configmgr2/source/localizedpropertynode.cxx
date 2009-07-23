@@ -57,15 +57,8 @@ LocalizedPropertyNode::LocalizedPropertyNode(
 rtl::Reference< Node > LocalizedPropertyNode::clone() const {
     rtl::Reference< LocalizedPropertyNode > fresh(
         new LocalizedPropertyNode(getLayer(), type_, nillable_));
-    members_.clone(&fresh->members_);
+    cloneNodeMap(members_, &fresh->members_);
     return fresh.get();
-}
-
-rtl::Reference< Node > LocalizedPropertyNode::getMember(
-    rtl::OUString const & name)
-{
-    NodeMap::iterator i(members_.find(name));
-    return i == members_.end() ? rtl::Reference< Node >() : i->second;
 }
 
 Type LocalizedPropertyNode::getType() const {
@@ -81,5 +74,16 @@ NodeMap & LocalizedPropertyNode::getMembers() {
 }
 
 LocalizedPropertyNode::~LocalizedPropertyNode() {}
+
+void LocalizedPropertyNode::clear() {
+    members_.clear();
+}
+
+rtl::Reference< Node > LocalizedPropertyNode::findMember(
+    rtl::OUString const & name)
+{
+    NodeMap::iterator i(members_.find(name));
+    return i == members_.end() ? rtl::Reference< Node >() : i->second;
+}
 
 }

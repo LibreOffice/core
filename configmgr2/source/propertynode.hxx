@@ -50,15 +50,13 @@ public:
 
     virtual rtl::Reference< Node > clone() const;
 
-    virtual rtl::Reference< Node > getMember(rtl::OUString const &);
-
     Type getType() const;
 
     bool isNillable() const;
 
     com::sun::star::uno::Any getValue() const;
 
-    void setValue(com::sun::star::uno::Any const & value);
+    void setValue(int layer, com::sun::star::uno::Any const & value);
 
     bool isExtension() const;
 

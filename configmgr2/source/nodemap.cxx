@@ -38,14 +38,10 @@
 
 namespace configmgr {
 
-NodeMap::NodeMap() {}
-
-NodeMap::~NodeMap() {}
-
-void NodeMap::clone(NodeMap * target) const {
+void cloneNodeMap(NodeMap const & source, NodeMap * target) {
     OSL_ASSERT(target != 0);
-    for (const_iterator i(begin()); i != end(); ++i) {
-        target->insert(value_type(i->first, i->second->clone()));
+    for (NodeMap::const_iterator i(source.begin()); i != source.end(); ++i) {
+        target->insert(NodeMap::value_type(i->first, i->second->clone()));
     }
 }
 

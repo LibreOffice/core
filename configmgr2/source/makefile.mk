@@ -48,6 +48,7 @@ SLOFILES = \
     $(SLO)$/localizedpropertynode.obj \
     $(SLO)$/localizedpropertyvaluenode.obj \
     $(SLO)$/lock.obj \
+    $(SLO)$/node.obj \
     $(SLO)$/nodemap.obj \
     $(SLO)$/propertynode.obj \
     $(SLO)$/rootaccess.obj \
