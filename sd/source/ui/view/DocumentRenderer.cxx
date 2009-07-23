@@ -60,6 +60,7 @@
 #include <tools/resary.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/msgbox.hxx>
+#include <svtools/moduleoptions.hxx>
 
 #include <vector>
 
@@ -104,12 +105,12 @@ namespace {
 
         bool IsDate (void) const
         {
-            return GetBoolValue("IsPrintDate");
+            return GetBoolValue("IsPrintDateTime");
         }
 
         bool IsTime (void) const
         {
-            return GetBoolValue("IsPrintTime");
+            return GetBoolValue("IsPrintDateTime");
         }
 
         bool IsHiddenPages (void) const
@@ -426,8 +427,17 @@ namespace {
 
         void ProcessResource (void)
         {
+            SvtModuleOptions aOpt;
             AddDialogControl( vcl::PrinterOptionsHelper::getGroupControlOpt(
-                                String( SdResId(_STR_IMPRESS_PRINT_UI_PRINT_CONTENT) ), rtl::OUString() ) );
+                                aOpt.GetModuleName( SvtModuleOptions::E_SIMPRESS ),
+                                rtl::OUString()
+                                ) );
+
+            AddDialogControl( vcl::PrinterOptionsHelper::getSubgroupControlOpt(
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_PRINT_GROUP) ),
+                                rtl::OUString(),
+                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Job" ) )
+                                ) );
 
             AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
                                 String( SdResId( _STR_IMPRESS_PRINT_UI_CONTENT ) ),
@@ -451,14 +461,15 @@ namespace {
                                 )
                             );
 
+            OUString aSubDep = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SlidesPerPage" ) );
             AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
                                 String( SdResId( _STR_IMPRESS_PRINT_UI_ORDER ) ),
                                 CreateChoice(_STR_IMPRESS_PRINT_UI_ORDER_CHOICES_HELP),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "SlidesPerPageOrder" ) ),
                                 CreateChoice(_STR_IMPRESS_PRINT_UI_ORDER_CHOICES),
                                 0,
-                                OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
-                                &aDep, 1 )
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                &aSubDep, -1, true )
                             );
 
             AddDialogControl( vcl::PrinterOptionsHelper::getSubgroupControlOpt(
@@ -476,15 +487,7 @@ namespace {
             AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_DATE) ),
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_DATE_HELP) ),
-                                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrintDate" ) ),
-                                sal_False
-                                )
-                            );
-
-            AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
-                                String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_TIME) ),
-                                String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_TIME_HELP) ),
-                                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrintTime" ) ),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrintDateTime" ) ),
                                 sal_False
                                 )
                             );
@@ -497,11 +500,11 @@ namespace {
                                 )
                             );
 
-            AddDialogControl( vcl::PrinterOptionsHelper::getGroupControlOpt(
-                                String( SdResId(_STR_IMPRESS_PRINT_UI_OUTPUT_OPTIONS_GROUP) ), rtl::OUString() ) );
+            AddDialogControl( vcl::PrinterOptionsHelper::getSubgroupControlOpt(
+                               String( SdResId(_STR_IMPRESS_PRINT_UI_QUALITY) ), rtl::OUString() ) );
 
             AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
-                                String( SdResId( _STR_IMPRESS_PRINT_UI_QUALITY ) ),
+                                rtl::OUString(),
                                 CreateChoice(_STR_IMPRESS_PRINT_UI_QUALITY_CHOICES_HELP),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ),
                                 CreateChoice(_STR_IMPRESS_PRINT_UI_QUALITY_CHOICES),
@@ -509,8 +512,11 @@ namespace {
                                 )
                             );
 
+            AddDialogControl( vcl::PrinterOptionsHelper::getSubgroupControlOpt(
+                               String( SdResId(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS) ), rtl::OUString() ) );
+
             AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
-                                String( SdResId( _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS ) ),
+                                rtl::OUString(),
                                 CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_HELP),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "PageOptions" ) ),
                                 CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES),
@@ -538,6 +544,14 @@ namespace {
                                 &aDep, 3, sal_True
                                 )
                             );
+
+            // paper tray (on options page)
+            AddDialogControl( vcl::PrinterOptionsHelper::getSubgroupControlOpt(
+                                String( SdResId( _STR_IMPRESS_PRINT_UI_PAPER_TRAY_GROUP ) ),
+                                rtl::OUString(),
+                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OptionsPage" ) ),
+                                true )
+                             );
 
             AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_PAPER_TRAY) ),

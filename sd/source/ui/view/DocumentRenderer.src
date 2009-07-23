@@ -37,6 +37,10 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     {
         Text [ en-US ] = "Print Content";
     };
+    String _STR_IMPRESS_PRINT_UI_PRINT_GROUP
+    {
+        Text [ en-US ] = "Print";
+    };
     String _STR_IMPRESS_PRINT_UI_CONTENT
     {
         Text [ en-US ] = "Content";
@@ -91,8 +95,8 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     {
         ItemList [ en-US ] =
         {
-            < "Horizontal" ; > ;
-            < "Vertical" ; > ;
+            < "Left to right, then down" ; > ;
+            < "Top to bottom, then right" ; > ;
         };
     };
     StringArray _STR_IMPRESS_PRINT_UI_ORDER_CHOICES_HELP
@@ -106,11 +110,11 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     };
     String _STR_IMPRESS_PRINT_UI_INCLUDE_CONTENT
     {
-        Text [ en-US ] = "Include content";
+        Text [ en-US ] = "~Contents";
     };
     String _STR_IMPRESS_PRINT_UI_IS_PRINT_NAME
     {
-        Text [ en-US ] = "Page name";
+        Text [ en-US ] = "~Slide name";
     };
     String _STR_IMPRESS_PRINT_UI_IS_PRINT_NAME_HELP
     {
@@ -118,19 +122,11 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     };
     String _STR_IMPRESS_PRINT_UI_IS_PRINT_DATE
     {
-        Text [ en-US ] = "Date";
+        Text [ en-US ] = "~Date and Time";
     };
     String _STR_IMPRESS_PRINT_UI_IS_PRINT_DATE_HELP
     {
-        Text [ en-US ] = "Specifies whether to print the current date.";
-    };
-    String _STR_IMPRESS_PRINT_UI_IS_PRINT_TIME
-    {
-        Text [ en-US ] = "Time";
-    };
-    String _STR_IMPRESS_PRINT_UI_IS_PRINT_TIME_HELP
-    {
-        Text [ en-US ] = "Specifies whether to print the current time.";
+        Text [ en-US ] = "Specifies whether to print the current date and time.";
     };
     String _STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN
     {
@@ -147,13 +143,13 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     };
     String _STR_IMPRESS_PRINT_UI_QUALITY
     {
-        Text [ en-US ] = "Quality";
+        Text [ en-US ] = "Color";
     };
     StringArray _STR_IMPRESS_PRINT_UI_QUALITY_CHOICES
     {
         ItemList [ en-US ] =
         {
-            < "Default" ; > ;
+            < "Original Color" ; > ;
             < "Grayscale" ; > ;
             < "Black & White" ; > ;
         };
@@ -171,13 +167,13 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
 
     String _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS
     {
-        Text [ en-US ] = "Page Options";
+        Text [ en-US ] = "~Size";
     };
     StringArray _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES
     {
         ItemList [ en-US ] =
         {
-            < "Default" ; > ;
+            < "Trim" ; > ;
             < "Fit to page" ; > ;
             < "Tile pages" ; > ;
             < "Brochure" ; > ;
@@ -211,6 +207,10 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
         Text [ en-US ] = "Select Back to print the back of a brochure.";
     };
 
+    String _STR_IMPRESS_PRINT_UI_PAPER_TRAY_GROUP
+    {
+        Text [ en-US ] = "Paper tray";
+    };
     String _STR_IMPRESS_PRINT_UI_PAPER_TRAY
     {
         Text [ en-US ] = "Paper tray from printer settings";
