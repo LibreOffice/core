@@ -768,8 +768,8 @@ template< typename T > bool parseListValue(
                 }
                 if (sepAttr.str == 0) {
                     xmlChar const * p = text;
-                    while (*p == ' ' || *p == '\t' || *p == '\0x0A' ||
-                           *p == '\0x0D')
+                    while (*p == ' ' || *p == '\t' || *p == '\x0A' ||
+                           *p == '\x0D')
                     {
                         ++p;
                     }
@@ -1109,7 +1109,7 @@ void writeValue(xmlTextWriterPtr writer, Type type, css::uno::Any const & value)
         break;
     case TYPE_BOOLEAN:
         {
-            bool val;
+            bool val = bool();
             value >>= val;
             writeBooleanValue(writer, val);
         }
@@ -2445,24 +2445,24 @@ void Components::parseFiles(
 void Components::parseXcsXcuLayer(int layer, rtl::OUString const & url) {
     parseFiles(
         layer, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcs")),
-        &parseXcsFile,
+        &Components::parseXcsFile,
         url + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/schema")), false);
     parseFiles(
         layer + 1, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcu")),
-        &parseXcuFile,
+        &Components::parseXcuFile,
         url + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/data")), false);
 }
 
 void Components::parseModuleLayer(int layer, rtl::OUString const & url) {
     parseFiles(
         layer, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcu")),
-        &parseXcuFile, url, false);
+        &Components::parseXcuFile, url, false);
 }
 
 void Components::parseResLayer(int layer, rtl::OUString const & url) {
     parseFiles(
         layer, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcu")),
-        &parseXcuFile, url, false);
+        &Components::parseXcuFile, url, false);
 }
 
 rtl::OUString Components::getModificationFileUrl() const {
