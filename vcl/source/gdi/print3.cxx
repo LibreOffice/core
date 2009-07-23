@@ -1032,7 +1032,7 @@ bool PrinterController::isUIOptionEnabled( const rtl::OUString& i_rProperty ) co
                         sal_Bool bDepVal = sal_False;
                         if( pVal->Value >>= nDepVal )
                         {
-                            bEnabled = (nDepVal == it->second.mnDependsOnEntry);
+                            bEnabled = (nDepVal == it->second.mnDependsOnEntry) || (it->second.mnDependsOnEntry == -1);
                         }
                         else if( pVal->Value >>= bDepVal )
                         {

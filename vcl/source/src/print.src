@@ -103,7 +103,7 @@ ModalDialog SV_DLG_PRINT
 
     TabPage SV_PRINT_TAB_NUP
     {
-        Text [en-US] = "N-Up";
+        Text [en-US] = "Page Layout";
         Hide = TRUE;
 
         FixedLine SV_PRINT_PRT_NUP

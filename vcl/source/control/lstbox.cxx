@@ -1286,6 +1286,21 @@ Size ListBox::CalcMinimumSize() const
     }
 
     aSz = CalcWindowSize( aSz );
+
+    if ( IsDropDownBox() ) // check minimum height of dropdown box
+    {
+        ImplControlValue aControlValue;
+        Rectangle aRect( Point( 0, 0 ), aSz );
+        Region aContent, aBound;
+        if( const_cast<ListBox*>(this)->GetNativeControlRegion(
+                       CTRL_LISTBOX, PART_ENTIRE_CONTROL, aRect, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+        {
+            Rectangle aBoundRect( aBound.GetBoundRect() );
+            if( aBoundRect.GetHeight() > aSz.Height() )
+                aSz.Height() = aBoundRect.GetHeight();
+        }
+    }
+
     return aSz;
 }
 

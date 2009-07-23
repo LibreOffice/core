@@ -353,7 +353,7 @@ void Indenter::resize()
     aPt.X() += m_nOuterBorder + m_nIndent;
     aPt.Y() += m_nOuterBorder;
     Size aSz( m_aManagedArea.GetSize() );
-    aSz.Width()  -= 2*m_nOuterBorder - m_nIndent;
+    aSz.Width()  -= 2*m_nOuterBorder + m_nIndent;
     aSz.Height() -= 2*m_nOuterBorder;
     if( m_aElement.m_pElement )
         m_aElement.m_pElement->SetPosSizePixel( aPt, aSz );

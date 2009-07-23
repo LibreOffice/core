@@ -485,10 +485,29 @@ PrintDialog::OutputOptPage::OutputOptPage( Window* i_pParent, const ResId& i_rRe
     maToFileBox.SMHID2( "OptPage", "ToFile" );
     maCollateSingleJobsBox.SMHID2( "OptPage", "SingleJobs" );
     maReverseOrderBox.SMHID2( "OptPage", "Reverse" );
+
+    setupLayout();
 }
 
 PrintDialog::OutputOptPage::~OutputOptPage()
 {
+}
+
+void PrintDialog::OutputOptPage::setupLayout()
+{
+    Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
+
+    maLayout.setParentWindow( this );
+    maLayout.setOuterBorder( aBorder.Width() );
+
+    maLayout.addWindow( &maOptionsLine );
+    boost::shared_ptr<vcl::Indenter> xIndent( new vcl::Indenter( &maLayout, aBorder.Width() ) );
+    maLayout.addChild( xIndent );
+    boost::shared_ptr<vcl::RowOrColumn> xCol( new vcl::RowOrColumn( xIndent.get(), aBorder.Height() ) );
+    xIndent->setChild( xCol );
+    xCol->addWindow( &maToFileBox );
+    xCol->addWindow( &maCollateSingleJobsBox );
+    xCol->addWindow( &maReverseOrderBox );
 }
 
 void PrintDialog::OutputOptPage::readFromSettings()
@@ -507,6 +526,11 @@ void PrintDialog::OutputOptPage::storeToSettings()
     pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToFile" ) ),
                      rtl::OUString::createFromAscii( maToFileBox.IsChecked() ? "true" : "false" ) );
+}
+
+void PrintDialog::OutputOptPage::Resize()
+{
+    maLayout.setManagedArea( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
 }
 
 
@@ -542,11 +566,9 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maPreviewCtrlRow.addWindow( &maBackwardBtn );
     maPreviewCtrlRow.addWindow( &maForwardBtn );
 
-    // insert the tab pages
+    // insert the job (general) tab page first
     maTabCtrl.InsertPage( SV_PRINT_TAB_JOB, maJobPage.GetText() );
     maTabCtrl.SetTabPage( SV_PRINT_TAB_JOB, &maJobPage );
-    maTabCtrl.InsertPage( SV_PRINT_TAB_NUP, maNUpPage.GetText() );
-    maTabCtrl.SetTabPage( SV_PRINT_TAB_NUP, &maNUpPage );
 
     // set symbols on forward and backward button
     maBackwardBtn.SetSymbol( SYMBOL_PREV );
@@ -665,7 +687,9 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maBackwardBtn.SMHID1( "BackwardBtn" );
     maTabCtrl.SMHID1( "TabPages" );
 
-    // insert options page last
+    // append further tab pages
+    maTabCtrl.InsertPage( SV_PRINT_TAB_NUP, maNUpPage.GetText() );
+    maTabCtrl.SetTabPage( SV_PRINT_TAB_NUP, &maNUpPage );
     maTabCtrl.InsertPage( SV_PRINT_TAB_OPT, maOptionsPage.GetText() );
     maTabCtrl.SetTabPage( SV_PRINT_TAB_OPT, &maOptionsPage );
 }
@@ -764,14 +788,14 @@ static void setHelpText( Window* i_pWindow, const Sequence< rtl::OUString >& i_r
 
 void PrintDialog::setupOptionalUI()
 {
-    const long nBorderWidth = maJobPage.maCopies.GetPosPixel().X();
+    Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
 
     std::vector<vcl::RowOrColumn*> aDynamicColumns;
     vcl::RowOrColumn* pCurColumn = 0;
 
     Window* pCurParent = 0, *pDynamicPageParent = 0;
     USHORT nOptPageId = 9, nCurSubGroup = 0;
-    bool bOnJobPage = false;
+    bool bOnStaticPage = false;
 
     std::multimap< rtl::OUString, vcl::RowOrColumn* > aPropertyToDependencyRowMap;
 
@@ -861,12 +885,12 @@ void PrintDialog::setupOptionalUI()
         }
 
         if( aCtrlType.equalsAscii( "Group" ) ||
-            ( ! pCurParent && ! (bOnJobPage || aGroupingHint.getLength() ) ) )
+            ( ! pCurParent && ! (bOnStaticPage || aGroupingHint.getLength() ) ) )
         {
             // add new tab page
             TabPage* pNewGroup = new TabPage( &maTabCtrl );
             maControls.push_front( pNewGroup );
-            pCurParent = pNewGroup;
+            pDynamicPageParent = pCurParent = pNewGroup;
             pNewGroup->SetText( aText );
             maTabCtrl.InsertPage( ++nOptPageId, aText );
             maTabCtrl.SetTabPage( nOptPageId, pNewGroup );
@@ -879,22 +903,21 @@ void PrintDialog::setupOptionalUI()
             // reset subgroup counter
             nCurSubGroup = 0;
 
-            aDynamicColumns.push_back( new vcl::RowOrColumn( NULL, true, nBorderWidth ) );
+            aDynamicColumns.push_back( new vcl::RowOrColumn( NULL, true, aBorder.Width() ) );
             pCurColumn = aDynamicColumns.back();
             pCurColumn->setParentWindow( pNewGroup );
-            pCurColumn->setOuterBorder( nBorderWidth );
+            pCurColumn->setOuterBorder( aBorder.Width() );
         }
         else if( aCtrlType.equalsAscii( "Subgroup" ) && (pCurParent || aGroupingHint.getLength() ) )
         {
             // change to job page or back if necessary
-            if( (bOnJobPage && ! aGroupingHint.getLength() ) ||
-                (! bOnJobPage && aGroupingHint.getLength() ) )
+            if( (bOnStaticPage && ! aGroupingHint.getLength() ) ||
+                (! bOnStaticPage && aGroupingHint.getLength() ) )
             {
-                bOnJobPage = (aGroupingHint.getLength() != 0);
-                if( bOnJobPage )
+                bOnStaticPage = (aGroupingHint.getLength() != 0);
+                if( bOnStaticPage )
                 {
                     pDynamicPageParent = pCurParent;    // save current parent
-                    pCurParent = &maJobPage;            // set job page as current parent
                 }
                 else
                 {
@@ -902,12 +925,23 @@ void PrintDialog::setupOptionalUI()
                 }
             }
 
-            if( bOnJobPage )
+            if( bOnStaticPage )
             {
                 if( aGroupingHint.equalsAscii( "PrintRange" ) )
+                {
                     pCurColumn = maJobPage.mxPrintRange.get();
+                    pCurParent = &maJobPage;            // set job page as current parent
+                }
+                else if( aGroupingHint.equalsAscii( "OptionsPage" ) )
+                {
+                    pCurColumn = &maOptionsPage.maLayout;
+                    pCurParent = &maOptionsPage;        // set options page as current parent
+                }
                 else
+                {
                     pCurColumn = &maJobPage.maLayout;
+                    pCurParent = &maJobPage;            // set job page as current parent
+                }
             }
             else
                 pCurColumn = aDynamicColumns.back();
@@ -929,6 +963,13 @@ void PrintDialog::setupOptionalUI()
                 // add group to current column
                 pCurColumn->addWindow( pNewSub );
             }
+
+            // add an indent to the current column
+            vcl::Indenter* pIndent = new vcl::Indenter( pCurColumn, aBorder.Width() );
+            pCurColumn->addChild( pIndent );
+            // and create a column inside the indent
+            pCurColumn = new vcl::RowOrColumn( pIndent );
+            pIndent->setChild( pCurColumn );
         }
         else
         {

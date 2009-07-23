@@ -158,11 +158,17 @@ namespace vcl
             CheckBox                            maCollateSingleJobsBox;
             CheckBox                            maReverseOrderBox;
 
+            vcl::RowOrColumn                    maLayout;
+
             OutputOptPage( Window*, const ResId& );
             virtual ~OutputOptPage();
 
             void readFromSettings();
             void storeToSettings();
+
+            virtual void Resize();
+
+            void setupLayout();
         };
 
         OKButton                                maOKButton;
