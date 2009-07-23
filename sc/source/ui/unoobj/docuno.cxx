@@ -43,6 +43,7 @@
 #include <svtools/numuno.hxx>
 #include <svtools/smplhint.hxx>
 #include <svtools/undoopt.hxx>
+#include <svtools/moduleoptions.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
@@ -232,7 +233,8 @@ ScPrintUIOptions::ScPrintUIOptions()
     m_aUIProperties.realloc( 8 );
 
     // create Section for spreadsheet (results in an extra tab page in dialog)
-    m_aUIProperties[0].Value = getGroupControlOpt( rtl::OUString( String( ScResId( SCSTR_HUMAN_SCDOC_NAME ) ) ), rtl::OUString() );
+    SvtModuleOptions aOpt;
+    m_aUIProperties[0].Value = getGroupControlOpt( aOpt.GetModuleName( SvtModuleOptions::E_SCALC ), rtl::OUString() );
 
     // create subgroup for pages
     m_aUIProperties[1].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 0 ) ), rtl::OUString() );
