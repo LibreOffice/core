@@ -103,7 +103,15 @@ if ( defined $ENV{USE_SHELL} && $ENV{USE_SHELL} eq '4nt' ) {
    $DELIMITER = "/";
 }
 
-my $binpath = $ENV{SOLARVER}.$DELIMITER.$ENV{INPATH}.$DELIMITER."bin".$ENV{UPDMINOREXT}.$DELIMITER ;
+my $binpath = '';
+if( defined $ENV{UPDMINOREXT} )
+{
+    $binpath = $ENV{SOLARVER}.$DELIMITER.$ENV{INPATH}.$DELIMITER."bin".$ENV{UPDMINOREXT}.$DELIMITER ;
+}
+else
+{
+    $binpath = $ENV{SOLARVER}.$DELIMITER.$ENV{INPATH}.$DELIMITER."bin".$DELIMITER ;
+}
 
 #%sl_modules = fetch_sourcelanguage_dirlist();
 
