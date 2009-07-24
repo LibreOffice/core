@@ -85,17 +85,7 @@ File gid_File_Lib_Cached1
   #endif
 End
 
-File gid_File_Lib_Configmgr2
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(configmgr2.uno,UNXSUFFIX));
-  #else
-    Name = "configmgr2.uno.dll";
-  #endif
-End
+SPECIAL_UNO_LIB_FILE(gid_File_Lib_Configmgr, configmgr)
 
 #ifdef WITH_LDAP
 File gid_File_Lib_Ldapbe2

@@ -272,7 +272,7 @@ Module gid_Module_Root_Files_5
     gid_File_Lib_Index_Data,
     gid_File_Lib_Textconv_Dict,
 	gid_File_Lib_Basprov,
-	gid_File_Lib_Configmgr2,
+	gid_File_Lib_Configmgr,
 	gid_File_Lib_Crypto,
 	gid_File_Lib_Dlgprov,
 	gid_File_Lib_Stringresource,
