@@ -218,8 +218,8 @@ xmlChar const * unescapeText(
                     (text[3] == 'E' || text[3] == 'e' ||
                      text[3] == 'F' || text[3] == 'f'))
                 {
-                    buf.append(static_cast< char >(0xEF));
-                    buf.append(static_cast< char >(0xBF));
+                    buf.append(char(static_cast< unsigned char >(0xEF)));
+                    buf.append(char(static_cast< unsigned char >(0xBF)));
                     buf.append(
                         static_cast< char >(
                             0xBE + (text[3] == 'F' || text[3] == 'f' ? 1 : 0)));
