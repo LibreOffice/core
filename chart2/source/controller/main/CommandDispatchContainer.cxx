@@ -98,15 +98,6 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
     const util::URL & rURL )
 {
     Reference< frame::XDispatch > xResult;
-
-    // #i12587# support for shapes in chart
-    if ( m_pChartController && m_pChartController->isShapeContext() &&
-         rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "TransformDialog" ) ) )
-    {
-        xResult.set( m_pShapeController );
-        return xResult;
-    }
-
     tDispatchMap::const_iterator aIt( m_aCachedDispatches.find( rURL.Complete ));
     if( aIt != m_aCachedDispatches.end())
     {

@@ -41,6 +41,9 @@
 namespace chart
 {
 
+class ChartController;
+class CommandDispatchContainer;
+
 namespace impl
 {
 struct ModelState;
@@ -67,8 +70,7 @@ public:
     explicit ControllerCommandDispatch(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > & xContext,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XController > & xController );
+        ChartController* pController, CommandDispatchContainer* pContainer );
     virtual ~ControllerCommandDispatch();
 
     // late initialisation, especially for adding as listener
@@ -112,6 +114,7 @@ private:
     bool commandAvailable( const ::rtl::OUString & rCommand );
     void updateCommandAvailability();
 
+    ChartController* m_pChartController;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XController > m_xController;
     ::com::sun::star::uno::Reference<
@@ -124,6 +127,8 @@ private:
 
     mutable ::std::map< ::rtl::OUString, bool > m_aCommandAvailability;
     mutable ::std::map< ::rtl::OUString, ::com::sun::star::uno::Any > m_aCommandArguments;
+
+    CommandDispatchContainer* m_pDispatchContainer;
 };
 
 } //  namespace chart

@@ -571,7 +571,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
 
     // set new model at dispatchers
     m_aDispatchContainer.setModel( aNewModelRef->getModel());
-    ControllerCommandDispatch * pDispatch = new ControllerCommandDispatch( m_xCC, this );
+    ControllerCommandDispatch * pDispatch = new ControllerCommandDispatch( m_xCC, this, &m_aDispatchContainer );
     pDispatch->initialize();
 
     // the dispatch container will return "this" for all commands returned by
@@ -1063,7 +1063,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
 
     void SAL_CALL ChartController
 ::dispatch( const util::URL& rURL
-            , const uno::Sequence< beans::PropertyValue >& /* rArgs */ )
+            , const uno::Sequence< beans::PropertyValue >& rArgs )
             throw (uno::RuntimeException)
 {
     //@todo avoid OString (see Mathias mail on bug #104387#)
@@ -1125,7 +1125,21 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
     else if( aCommand.equals("DiagramObjects"))
         this->executeDispatch_ObjectProperties();
     else if( aCommand.equals("TransformDialog"))
-        this->executeDispatch_PositionAndSize();
+    {
+        if ( isShapeContext() )
+        {
+            // #i12587# support for shapes in chart
+            uno::Reference< frame::XDispatch > xDispatch( m_aDispatchContainer.getShapeController() );
+            if ( xDispatch.is() )
+            {
+                xDispatch->dispatch( rURL, rArgs );
+            }
+        }
+        else
+        {
+            this->executeDispatch_PositionAndSize();
+        }
+    }
     else if( lcl_isFormatObjectCommand(aCommand) )
         this->executeDispatch_FormatObject(rURL.Path);
     //more format

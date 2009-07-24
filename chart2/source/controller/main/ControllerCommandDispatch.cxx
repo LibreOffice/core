@@ -45,6 +45,7 @@
 #include "RegressionCurveHelper.hxx"
 #include "DataSeriesHelper.hxx"
 #include "StatisticsHelper.hxx"
+#include "ShapeController.hxx"
 
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -421,13 +422,15 @@ DBG_NAME(ControllerCommandDispatch)
 
 ControllerCommandDispatch::ControllerCommandDispatch(
     const Reference< uno::XComponentContext > & xContext,
-    const Reference< frame::XController > & xController ) :
+    ChartController* pController, CommandDispatchContainer* pContainer ) :
         impl::ControllerCommandDispatch_Base( xContext ),
-        m_xController( xController ),
-        m_xSelectionSupplier( xController, uno::UNO_QUERY ),
-        m_xDispatch( xController, uno::UNO_QUERY ),
+        m_pChartController( pController ),
+        m_xController( Reference< frame::XController >( pController ) ),
+        m_xSelectionSupplier( Reference< view::XSelectionSupplier >( pController ) ),
+        m_xDispatch( Reference< frame::XDispatch >( pController ) ),
         m_apModelState( new impl::ModelState() ),
-                m_apControllerState( new impl::ControllerState() )
+        m_apControllerState( new impl::ControllerState() ),
+        m_pDispatchContainer( pContainer )
 {
     DBG_CTOR(ControllerCommandDispatch,NULL);
 }
@@ -524,7 +527,23 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ C2U(".uno:Legend")] = bIsWritable && m_apModelState->bHasLegend;
     m_aCommandAvailability[ C2U(".uno:DiagramWall")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasWall;
     m_aCommandAvailability[ C2U(".uno:DiagramArea")] = bIsWritable;
-    m_aCommandAvailability[ C2U(".uno:TransformDialog")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bHasSelectedObject && m_apControllerState->bIsDraggableObject;
+
+    bool bTransformDialog = false;
+    if ( m_pChartController && m_pChartController->isShapeContext() )
+    {
+        // #i12587# support for shapes in chart
+        ShapeController* pShapeController = ( m_pDispatchContainer ? m_pDispatchContainer->getShapeController() : NULL );
+        if ( pShapeController )
+        {
+            FeatureState aFeatureState( pShapeController->getState( C2U( ".uno:TransformDialog" ) ) );
+            bTransformDialog = aFeatureState.bEnabled;
+        }
+    }
+    else
+    {
+        bTransformDialog = ( bIsWritable && bControllerStateIsValid && m_apControllerState->bHasSelectedObject && m_apControllerState->bIsDraggableObject );
+    }
+    m_aCommandAvailability[ C2U(".uno:TransformDialog")] = bTransformDialog;
 
     // 3d commands
     m_aCommandAvailability[ C2U(".uno:View3D")] = bIsWritable && bModelStateIsValid && m_apModelState->bIsThreeD;

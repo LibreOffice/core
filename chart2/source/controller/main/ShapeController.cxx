@@ -61,7 +61,7 @@ namespace chart
 //.............................................................................
 
 ShapeController::ShapeController( const Reference< uno::XComponentContext >& rxContext,
-    ChartController* pController )
+        ChartController* pController )
     :FeatureCommandDispatchBase( rxContext )
     ,m_pChartController( pController )
 {

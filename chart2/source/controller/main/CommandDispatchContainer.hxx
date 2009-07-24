@@ -126,6 +126,7 @@ public:
 
     void setDrawCommandDispatch( DrawCommandDispatch* pDispatch );
     void setShapeController( ShapeController* pController );
+    ShapeController* getShapeController() { return m_pShapeController; }
 
 private:
     typedef
