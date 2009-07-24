@@ -655,20 +655,20 @@ public:
     void                GetKerningPairs( ULONG nPairs, KerningPair* pKernPairs ) const;
 
     BOOL                GetTextBoundRect( Rectangle& rRect,
-                            const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
-                            xub_StrLen nLen = STRING_LEN ) const;
+                            const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
+                            ULONG nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     BOOL                GetTextOutline( PolyPolygon&,
                             const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
                             xub_StrLen nLen = STRING_LEN, BOOL bOptimize = TRUE,
-                const ULONG nWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                            ULONG nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     BOOL                GetTextOutlines( PolyPolyVector&,
                             const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
                             xub_StrLen nLen = STRING_LEN, BOOL bOptimize = TRUE,
-                const ULONG nWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                            ULONG nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     BOOL                GetTextOutlines( ::basegfx::B2DPolyPolygonVector&,
                             const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
                             xub_StrLen nLen = STRING_LEN, BOOL bOptimize = TRUE,
-                const ULONG nWidth = 0, const sal_Int32* pDXArray = NULL ) const;
+                            ULONG nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     BOOL                GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex,
                             int nLen, int nBase, MetricVector& rVector );
 

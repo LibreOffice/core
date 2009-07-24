@@ -431,8 +431,8 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
             if( rAquaGraphics.mnATSUIRotation != 0 )
             {
                 const double fRadians = rAquaGraphics.mnATSUIRotation * (M_PI/0xB40000);
-                nXOfsFixed = +rSubPortion.mnXOffset * cos( fRadians );
-                nYOfsFixed = +rSubPortion.mnXOffset * sin( fRadians );
+                nXOfsFixed = static_cast<Fixed>(static_cast<double>(+rSubPortion.mnXOffset) * cos( fRadians ));
+                nYOfsFixed = static_cast<Fixed>(static_cast<double>(+rSubPortion.mnXOffset) * sin( fRadians ));
             }
 
             // draw sub-portions

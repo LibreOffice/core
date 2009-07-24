@@ -245,8 +245,8 @@ NSDragOperation DropTarget::draggingEntered(id sender)
 
       CocoaToVCL(dragLocation, bounds);
 
-      sal_Int32 posX = dragLocation.x;
-      sal_Int32 posY = dragLocation.y;
+      sal_Int32 posX = static_cast<sal_Int32>(dragLocation.x);
+      sal_Int32 posY = static_cast<sal_Int32>(dragLocation.y);
 
       NSPasteboard* dragPboard = [sender draggingPasteboard];
       mXCurrentDragClipboard = new AquaClipboard(mXComponentContext, dragPboard, false);
@@ -284,8 +284,8 @@ NSDragOperation DropTarget::draggingUpdated(id sender)
 
       CocoaToVCL(dragLocation, bounds);
 
-      sal_Int32 posX = dragLocation.x;
-      sal_Int32 posY = dragLocation.y;
+      sal_Int32 posX = static_cast<sal_Int32>(dragLocation.x);
+      sal_Int32 posY = static_cast<sal_Int32>(dragLocation.y);
 
       DropTargetDragEvent dtde(static_cast<OWeakObject*>(this),
                                0,
@@ -350,8 +350,8 @@ MacOSBOOL DropTarget::performDragOperation(id sender)
 
       CocoaToVCL(dragLocation, bounds);
 
-      sal_Int32 posX = dragLocation.x;
-      sal_Int32 posY = dragLocation.y;
+      sal_Int32 posX = static_cast<sal_Int32>(dragLocation.x);
+      sal_Int32 posY = static_cast<sal_Int32>(dragLocation.y);
 
       DropTargetDropEvent dtde(static_cast<OWeakObject*>(this),
                                0,
