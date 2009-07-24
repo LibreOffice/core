@@ -45,6 +45,7 @@
 #include "vcl/tabctrl.hxx"
 #include "vcl/tabpage.hxx"
 #include "vcl/arrange.hxx"
+#include "vcl/virdev.hxx"
 
 #include <boost/shared_ptr.hpp>
 #include <map>
@@ -56,17 +57,17 @@ namespace vcl
         class PrintPreviewWindow : public Window
         {
             GDIMetaFile         maMtf;
-            double              mfScaleX;
-            double              mfScaleY;
+            Size                maOrigSize;
+            VirtualDevice       maPageVDev;
         public:
             PrintPreviewWindow( Window* pParent, const ResId& );
             virtual ~PrintPreviewWindow();
 
             virtual void Paint( const Rectangle& rRect );
             virtual void Command( const CommandEvent& );
+            virtual void Resize();
 
-            void setPreview( const GDIMetaFile& );
-            void setScale( double fScaleX, double fScaleY );
+            void setPreview( const GDIMetaFile&, const Size& );
         };
 
         class NUpTabPage : public TabPage
@@ -192,7 +193,6 @@ namespace vcl
         rtl::OUString                           maNoPageStr;
         sal_Int32                               mnCurPage;
         sal_Int32                               mnCachedPages;
-        Rectangle                               maPreviewSpace;
         Size                                    maCurPageSize;
 
         std::list< Window* >                    maControls;
@@ -206,8 +206,7 @@ namespace vcl
         rtl::OUString                           maPrintToFileText;
         rtl::OUString                           maPrintText;
 
-        vcl::RowOrColumn                        maPreviewCtrlRow;
-        Rectangle                               maPreviewBackground;
+        vcl::RowOrColumn                        maLayout;
 
         void updateNup();
         void preparePreview( bool i_bPrintChanged = true, bool i_bMayUseCache = false );
@@ -221,7 +220,6 @@ namespace vcl
         com::sun::star::beans::PropertyValue* getValueForWindow( Window* ) const;
 
         virtual void Resize();
-        virtual void Paint( const Rectangle& );
         virtual void Command( const CommandEvent& );
 
         DECL_LINK( SelectHdl, ListBox* );
@@ -234,6 +232,7 @@ namespace vcl
         DECL_LINK( UIOption_SelectHdl, ListBox* );
         DECL_LINK( UIOption_ModifyHdl, Edit* );
 
+        void setupLayout();
     public:
         PrintDialog( Window*, const boost::shared_ptr< PrinterController >& );
         virtual ~PrintDialog();

@@ -87,6 +87,7 @@
 #define SV_PRINT_PRT_STATUS                 10
 #define SV_PRINT_PRT_LOCATION               11
 #define SV_PRINT_PRT_COMMENT                12
+#define SV_PRINT_TOFILE_TXT                 13
 
 #define SV_PRINT_TAB_NUP                    1
 #define SV_PRINT_PRT_NUP                    1

@@ -89,6 +89,7 @@ struct ImplTabCtrlData
     Point                           maItemsOffset;       // offset of the tabitems
     std::vector< ImplTabItem >      maItemList;
     ListBox*                        mpListBox;
+    Size                            maMinSize;
 };
 
 // -----------------------------------------------------------------------
@@ -2303,3 +2304,25 @@ Point TabControl::GetItemsOffset() const
 }
 
 // -----------------------------------------------------------------------
+
+Size TabControl::GetOptimalSize(WindowSizeType eType) const
+{
+    switch (eType) {
+    case WINDOWSIZE_MINIMUM:
+        return mpTabCtrlData ? mpTabCtrlData->maMinSize : Size();
+    default:
+        return Control::GetOptimalSize( eType );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void TabControl::SetMinimumSizePixel( const Size& i_rSize )
+{
+    if( mpTabCtrlData )
+        mpTabCtrlData->maMinSize = i_rSize;
+}
+
+// -----------------------------------------------------------------------
+
+

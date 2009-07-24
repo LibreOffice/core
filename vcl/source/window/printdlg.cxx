@@ -61,32 +61,66 @@ using namespace com::sun::star::beans;
 #define SMHID1( a ) SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX  ":" a ) ) ) )
 
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const ResId& i_rId )
-    : Window( i_pParent, i_rId ),
-      mfScaleX( 1 ),
-      mfScaleY( 1 )
+    : Window( i_pParent, i_rId )
+    , maOrigSize( 10, 10 )
+    , maPageVDev( *this )
 {
+    SetPaintTransparent( TRUE );
+    SetBackground();
+    maPageVDev.SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
 }
 
 PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
 {
 }
 
+void PrintDialog::PrintPreviewWindow::Resize()
+{
+    Size aNewSize( GetSizePixel() );
+    Size aScaledSize;
+    double fScale = 1.0;
+    if( maOrigSize.Width() > maOrigSize.Height() )
+    {
+        aScaledSize = Size( aNewSize.Width(), aNewSize.Width() * maOrigSize.Height() / maOrigSize.Width() );
+        if( aScaledSize.Height() > aNewSize.Height() )
+            fScale = double(aNewSize.Height())/double(aScaledSize.Height());
+    }
+    else
+    {
+        aScaledSize = Size( aNewSize.Height() * maOrigSize.Width() / maOrigSize.Height(), aNewSize.Height() );
+        if( aScaledSize.Width() > aNewSize.Width() )
+            fScale = double(aNewSize.Width())/double(aScaledSize.Width());
+    }
+    aScaledSize.Width() = long(aScaledSize.Width()*fScale);
+    aScaledSize.Height() = long(aScaledSize.Height()*fScale);
+    maPageVDev.SetOutputSizePixel( aScaledSize, FALSE );
+}
+
 void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& i_rRect )
 {
-    Window::Paint( i_rRect );
-
     GDIMetaFile aMtf( maMtf );
 
-    SetFillColor( Color( COL_WHITE ) );
-    SetLineColor();
-    DrawRect( Rectangle( Point( 0, 0 ), GetSizePixel() ));
-    Push();
-    SetMapMode( MAP_100TH_MM );
+    Size aPreviewSize = maPageVDev.GetOutputSizePixel();
+    Size aSize( GetSizePixel() );
+    Point aOffset( (aSize.Width() - aPreviewSize.Width()) / 2,
+                   (aSize.Height() - aPreviewSize.Height()) / 2 );
+
+    const Size aLogicSize( maPageVDev.PixelToLogic( aPreviewSize, MapMode( MAP_100TH_MM ) ) );
+    double fScale = double(aLogicSize.Width())/double(maOrigSize.Width());
+
+
+    maPageVDev.Erase();
+    maPageVDev.Push();
+    maPageVDev.SetMapMode( MAP_100TH_MM );
     aMtf.WindStart();
-    aMtf.Scale( mfScaleX, mfScaleY );
+    aMtf.Scale( fScale, fScale );
     aMtf.WindStart();
-    aMtf.Play( this, Point( 0, 0 ), PixelToLogic( GetSizePixel() ) );
-    Pop();
+    aMtf.Play( &maPageVDev, Point( 0, 0 ), aLogicSize );
+    maPageVDev.Pop();
+
+    SetMapMode( MAP_PIXEL );
+    maPageVDev.SetMapMode( MAP_PIXEL );
+    DrawOutDev( aOffset, aPreviewSize, Point( 0, 0 ), aPreviewSize, maPageVDev );
 }
 
 void PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
@@ -109,16 +143,10 @@ void PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
     }
 }
 
-void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPreview )
+void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPreview, const Size& i_rOrigSize )
 {
     maMtf = i_rNewPreview;
-    Invalidate();
-}
-
-void PrintDialog::PrintPreviewWindow::setScale( double fScaleX, double fScaleY )
-{
-    mfScaleX = fScaleX;
-    mfScaleY = fScaleY;
+    maOrigSize = i_rOrigSize;
     Invalidate();
 }
 
@@ -481,6 +509,7 @@ PrintDialog::OutputOptPage::OutputOptPage( Window* i_pParent, const ResId& i_rRe
     , maCollateSingleJobsBox( this, VclResId( SV_PRINT_OPT_SINGLEJOBS ) )
     , maReverseOrderBox( this, VclResId( SV_PRINT_OPT_REVERSE ) )
 {
+    FreeResource();
     maOptionsLine.SMHID2( "OptPage", "Options" );
     maToFileBox.SMHID2( "OptPage", "ToFile" );
     maCollateSingleJobsBox.SMHID2( "OptPage", "SingleJobs" );
@@ -552,19 +581,16 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     , maNoPageStr( String( VclResId( SV_PRINT_NOPAGES ) ) )
     , mnCurPage( 0 )
     , mnCachedPages( 0 )
-    , maPreviewCtrlRow( NULL, false )
+    , maPrintToFileText( String( VclResId( SV_PRINT_TOFILE_TXT ) ) )
 {
     FreeResource();
+
+    // save printbutton text, gets exchanged occasionally with print to file
+    maPrintText = maOKButton.GetText();
 
     // setup preview controls
     maForwardBtn.SetStyle( maForwardBtn.GetStyle() | WB_BEVELBUTTON );
     maBackwardBtn.SetStyle( maBackwardBtn.GetStyle() | WB_BEVELBUTTON );
-    maPreviewCtrlRow.setParentWindow( this );
-    maPreviewCtrlRow.addWindow( &maPageEdit );
-    maPreviewCtrlRow.addWindow( &maNumPagesText );
-    maPreviewCtrlRow.addChild( new vcl::Spacer( &maPreviewCtrlRow ) );
-    maPreviewCtrlRow.addWindow( &maBackwardBtn );
-    maPreviewCtrlRow.addWindow( &maForwardBtn );
 
     // insert the job (general) tab page first
     maTabCtrl.InsertPage( SV_PRINT_TAB_JOB, maJobPage.GetText() );
@@ -577,8 +603,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maForwardBtn.ImplSetSmallSymbol( TRUE );
 
     maPageStr = maNumPagesText.GetText();
-    // save space for the preview window
-    maPreviewSpace = Rectangle( maPreviewWindow.GetPosPixel(), maPreviewWindow.GetSizePixel() );
+
     // get the first page
     preparePreview( true, true );
 
@@ -648,6 +673,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maNUpPage.maNupPortrait.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.maNupLandscape.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.maBorderCB.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maOptionsPage.maToFileBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
 
     // setup modify hdl
     maPageEdit.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
@@ -661,6 +687,9 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maNUpPage.maBottomMarginEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maNUpPage.maHSpaceEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maNUpPage.maVSpaceEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+
+    // setup the layout
+    setupLayout();
 
     // setup optional UI options set by application
     setupOptionalUI();
@@ -703,6 +732,48 @@ PrintDialog::~PrintDialog()
     }
 }
 
+void PrintDialog::setupLayout()
+{
+    Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
+
+    maLayout.setParentWindow( this );
+    maLayout.setOuterBorder( aBorder.Width() );
+
+    boost::shared_ptr< vcl::RowOrColumn > xPreviewAndTab( new vcl::RowOrColumn( &maLayout, false ) );
+    maLayout.addChild( xPreviewAndTab, 5 );
+
+    // setup column for preview and sub controls
+    boost::shared_ptr< vcl::RowOrColumn > xPreview( new vcl::RowOrColumn( xPreviewAndTab.get() ) );
+    xPreviewAndTab->addChild( xPreview, 5 );
+    xPreview->addWindow( &maPreviewWindow, 5 );
+    // get a row for the preview controls
+    boost::shared_ptr< vcl::RowOrColumn > xPreviewCtrls( new vcl::RowOrColumn( xPreview.get(), false ) );
+    xPreview->addChild( xPreviewCtrls );
+    xPreviewCtrls->addWindow( &maPageEdit );
+    xPreviewCtrls->addWindow( &maNumPagesText );
+    boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( xPreviewCtrls.get(), 2 ) );
+    xPreviewCtrls->addChild( xSpacer );
+    xPreviewCtrls->addWindow( &maBackwardBtn );
+    xPreviewCtrls->addWindow( &maForwardBtn );
+
+    // continue with the tab ctrl
+    xPreviewAndTab->addWindow( &maTabCtrl );
+
+    // add the button line
+    maLayout.addWindow( &maButtonLine );
+
+    // add the row for the buttons
+    boost::shared_ptr< vcl::RowOrColumn > xButtons( new vcl::RowOrColumn( &maLayout, false ) );
+    maLayout.addChild( xButtons );
+
+    // insert a spacer, buttons are right aligned
+    xSpacer.reset( new vcl::Spacer( xButtons.get(), 2 ) );
+    xButtons->addChild( xSpacer );
+    Size aMinSize( maCancelButton.GetSizePixel() );
+    xButtons->setMinimumSize( xButtons->addWindow( &maOKButton ), aMinSize );
+    xButtons->setMinimumSize( xButtons->addWindow( &maCancelButton ), aMinSize );
+}
+
 void PrintDialog::readFromSettings()
 {
     maJobPage.readFromSettings();
@@ -723,6 +794,7 @@ void PrintDialog::readFromSettings()
             break;
         }
     }
+    maOKButton.SetText( maOptionsPage.maToFileBox.IsChecked() ? maPrintToFileText : maPrintText );
 }
 
 void PrintDialog::storeToSettings()
@@ -1222,6 +1294,7 @@ void PrintDialog::setupOptionalUI()
 
     // resize dialog if necessary
     Size aTabSize = maTabCtrl.GetTabPageSizePixel();
+    maTabCtrl.SetMinimumSizePixel( maTabCtrl.GetSizePixel() );
     if( aMaxSize.Height() > aTabSize.Height() || aMaxSize.Width() > aTabSize.Width() )
     {
         Size aCurSize( GetSizePixel() );
@@ -1233,6 +1306,7 @@ void PrintDialog::setupOptionalUI()
             // and the tab ctrl needs more space, too
             aTabSize.Width() = aMaxSize.Width();
             maTabCtrl.SetSizePixel( aTabSize );
+            maTabCtrl.SetMinimumSizePixel( maTabCtrl.GetSizePixel() );
         }
         SetSizePixel( aCurSize );
     }
@@ -1375,32 +1449,11 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
         GDIMetaFile aMtf;
         if( nPages > 0 )
             maCurPageSize = maPController->getFilteredPageFile( mnCurPage, aMtf, i_bMayUseCache );
+        else
+            maCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
 
-        maPreviewWindow.setPreview( aMtf );
+        maPreviewWindow.setPreview( aMtf, maCurPageSize );
     }
-    // catch corner case of strange page size
-    if( maCurPageSize.Width() == 0 || maCurPageSize.Height() == 0 )
-        maCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
-
-    Size aPreviewSize;
-    Point aPreviewPos = maPreviewSpace.TopLeft();
-    const long nW = maPreviewSpace.GetSize().Width();
-    const long nH = maPreviewSpace.GetSize().Height();
-    if( maCurPageSize.Width() > maCurPageSize.Height() )
-    {
-        aPreviewSize = Size( nW, nW * maCurPageSize.Height() / maCurPageSize.Width() );
-        aPreviewPos.Y() += (maPreviewSpace.GetHeight() - aPreviewSize.Height())/2;
-    }
-    else
-    {
-        aPreviewSize = Size( nH * maCurPageSize.Width() / maCurPageSize.Height(), nH );
-        aPreviewPos.X() += (maPreviewSpace.GetWidth() - aPreviewSize.Width())/2;
-    }
-
-    maPreviewWindow.SetPosSizePixel( aPreviewPos, aPreviewSize );
-    const Size aLogicSize( maPreviewWindow.PixelToLogic( maPreviewWindow.GetSizePixel(), MapMode( MAP_100TH_MM ) ) );
-    maPreviewWindow.setScale( double(aLogicSize.Width())/double(maCurPageSize.Width()),
-                              double(aLogicSize.Height())/double(maCurPageSize.Height()) );
 }
 
 void PrintDialog::updateNup()
@@ -1458,6 +1511,11 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     else if( pButton == &maBackwardBtn )
     {
         previewBackward();
+    }
+    else if( pButton == &maOptionsPage.maToFileBox )
+    {
+        maOKButton.SetText( maOptionsPage.maToFileBox.IsChecked() ? maPrintToFileText : maPrintText );
+        maLayout.resize();
     }
     else if( pButton == &maJobPage.maCollateBox )
     {
@@ -1613,34 +1671,6 @@ IMPL_LINK( PrintDialog, UIOption_ModifyHdl, Edit*, i_pBox )
     return 0;
 }
 
-void PrintDialog::Paint( const Rectangle& i_rRect )
-{
-    ModalDialog::Paint( i_rRect );
-
-    #if 0
-    // sadly Tab panes are not a reliable choice for a grouping background
-    // since they depend on the tab items above in some themes
-    if( IsNativeControlSupported( CTRL_TAB_PANE, PART_ENTIRE_CONTROL) )
-    {
-        Rectangle aPrevBg( maPreviewBackground );
-        #ifdef QUARTZ
-        // FIXME: this interacts with vcl/aqua/source/gdi/salnativewidgets.cxx where
-        // some magic offsets are added to the area
-        aPrevBg.Top() += 10;
-        #endif
-        const ImplControlValue aControlValue( BUTTONVALUE_DONTKNOW, rtl::OUString(), 0 );
-
-        ControlState nState = CTRL_STATE_ENABLED;
-        Region aCtrlRegion( aPrevBg );
-        DrawNativeControl( CTRL_TAB_PANE, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
-                           aControlValue, rtl::OUString() );
-    }
-    #else
-    DecorationView aVw( this );
-    aVw.DrawFrame( maPreviewBackground, FRAME_DRAW_IN );
-    #endif
-}
-
 void PrintDialog::Command( const CommandEvent& rEvt )
 {
     if( rEvt.GetCommand() == COMMAND_WHEEL )
@@ -1659,6 +1689,7 @@ void PrintDialog::Command( const CommandEvent& rEvt )
 
 void PrintDialog::Resize()
 {
+    #if 0
     Size aPixDiff( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
     Size aWindowSize( GetOutputSizePixel() );
 
@@ -1705,6 +1736,9 @@ void PrintDialog::Resize()
     maPreviewBackground.Top() = aPixDiff.Height() - 2;
     maPreviewBackground.Right() = aPixDiff.Width() + nPreviewLength + 2;
     maPreviewBackground.Bottom() = maPreviewCtrlRow.getManagedArea().Bottom() + aPixDiff.Height();
+    #else
+    maLayout.setManagedArea( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
+    #endif
 
     // and do the preview; however the metafile does not need to be gotten anew
     preparePreview( false );

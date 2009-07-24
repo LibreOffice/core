@@ -89,7 +89,6 @@ ModalDialog SV_DLG_PRINT
     {
         Pos = MAP_APPFONT( 140, 5 );
         Size = MAP_APPFONT( 205, 175 );
-//      DropDown = TRUE;
     };
     FixedLine SV_PRINT_BUTTONLINE
     {
@@ -99,6 +98,11 @@ ModalDialog SV_DLG_PRINT
     String SV_PRINT_NOPAGES
     {
         Text [en-US] = "No pages";
+    };
+
+    String SV_PRINT_TOFILE_TXT
+    {
+        Text [en-US] = "Print to file...";
     };
 
     TabPage SV_PRINT_TAB_NUP
