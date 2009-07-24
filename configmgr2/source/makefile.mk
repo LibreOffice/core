@@ -36,7 +36,7 @@ VISIBILITY_HIDDEN = TRUE
 
 .INCLUDE: settings.mk
 
-DLLPRE =
+CDEFS += -DOOO_DLLIMPLEMENTATION_CONFIGMGR
 
 SLOFILES = \
     $(SLO)$/access.obj \
@@ -54,7 +54,8 @@ SLOFILES = \
     $(SLO)$/rootaccess.obj \
     $(SLO)$/services.obj \
     $(SLO)$/setnode.obj \
-    $(SLO)$/type.obj
+    $(SLO)$/type.obj \
+    $(SLO)$/update.obj
 
 SHL1OBJS = $(SLOFILES)
 SHL1STDLIBS = \
@@ -64,8 +65,7 @@ SHL1STDLIBS = \
     $(LIBXML2LIB) \
     $(SALHELPERLIB) \
     $(SALLIB)
-SHL1TARGET = configmgr2.uno
-SHL1VERSIONMAP = version.map
+SHL1TARGET = configmgr
 DEF1NAME = $(SHL1TARGET)
 
 .INCLUDE: target.mk

@@ -40,7 +40,10 @@
 
 #include "nodemap.hxx"
 
-namespace rtl { class OUString; }
+namespace rtl {
+    class Bootstrap;
+    class OUString;
+}
 
 namespace configmgr {
 
@@ -71,6 +74,10 @@ public:
     void addModification(rtl::OUString const & path);
 
     void writeModifications();
+
+    void insertXcsFile(int layer, rtl::OUString const & fileUri);
+
+    void insertXcuFile(int layer, rtl::OUString const & fileUri);
 
 private:
     Components();
@@ -107,7 +114,13 @@ private:
         void (Components::* parseFile)(int, rtl::OUString const &),
         rtl::OUString const & url, bool recursive);
 
+    void parseFileList(
+        int layer, void (Components::* parseFile)(int, rtl::OUString const &),
+        rtl::OUString const & urls, rtl::Bootstrap const & ini);
+
     void parseXcsXcuLayer(int layer, rtl::OUString const & url);
+
+    void parseXcsXcuIniLayer(int layer, rtl::OUString const & url);
 
     void parseModuleLayer(int layer, rtl::OUString const & url);
 

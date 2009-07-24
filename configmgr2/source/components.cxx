@@ -1526,9 +1526,10 @@ void Components::writeModifications() {
     XmlTextWriter writer(
         xmlNewTextWriterFilename(convertToFilepath(url).getStr(), 0));
     if (writer.writer == 0) {
-        throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot write ")) + url,
-            css::uno::Reference< css::uno::XInterface >());
+        //TODO: As long as there is no UserInstallation directory yet,
+        // xmlNewTextWriterFilename will legitimately fail (but also print noise
+        // to stderr):
+        return;
     }
     xmlTextWriterSetIndent(writer.writer, 1);
         //TODO: more readable, but potentially slower?
@@ -1621,6 +1622,14 @@ void Components::writeModifications() {
     }
 }
 
+void Components::insertXcsFile(int layer, rtl::OUString const & fileUri) {
+    parseXcsFile(layer, fileUri);
+}
+
+void Components::insertXcuFile(int layer, rtl::OUString const & fileUri) {
+    parseXcuFile(layer + 1, fileUri);
+}
+
 Components::Components() {
     parseXcsXcuLayer(
         0,
@@ -1650,7 +1659,7 @@ Components::Components() {
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "$BRAND_BASE_DIR/share/registry/modules"))));
-    parseXcsXcuLayer(
+    parseXcsXcuLayer( //TODO: migrate
         7,
         expand(
             rtl::OUString(
@@ -1658,17 +1667,33 @@ Components::Components() {
                     "${$OOO_BASE_DIR/program/unorc:UNO_SHARED_PACKAGES_CACHE}/"
                     "registry/com.sun.star.comp.deployment.configuration."
                     "PackageRegistryBackend/registry"))));
-    parseSystemLayer();
-    parseXcsXcuLayer(
+    parseXcsXcuIniLayer(
         9,
+        expand(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "${$OOO_BASE_DIR/program/unorc:UNO_SHARED_PACKAGES_CACHE}/"
+                    "registry/com.sun.star.comp.deployment.configuration."
+                    "PackageRegistryBackend/configmgrrc"))));
+    parseSystemLayer();
+    parseXcsXcuLayer( //TODO: migrate
+        11,
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "${$OOO_BASE_DIR/program/unorc:UNO_USER_PACKAGES_CACHE}/"
                     "registry/com.sun.star.comp.deployment.configuration."
                     "PackageRegistryBackend/registry"))));
+    parseXcsXcuIniLayer(
+        13,
+        expand(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "${$OOO_BASE_DIR/program/unorc:UNO_USER_PACKAGES_CACHE}/"
+                    "registry/com.sun.star.comp.deployment.configuration."
+                    "PackageRegistryBackend/configmgrrc"))));
     parseXcsXcuLayer(
-        11,
+        15,
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -2459,6 +2484,22 @@ void Components::parseFiles(
     }
 }
 
+void Components::parseFileList(
+    int layer, void (Components::* parseFile)(int, rtl::OUString const &),
+    rtl::OUString const & urls, rtl::Bootstrap const & ini)
+{
+    for (sal_Int32 i = 0;;) {
+        rtl::OUString url(urls.getToken(0, ' ', i));
+        if (url.getLength() != 0) {
+            ini.expandMacrosFrom(url);
+            (this->*parseFile)(layer, url);
+        }
+        if (i == -1) {
+            break;
+        }
+    }
+}
+
 void Components::parseXcsXcuLayer(int layer, rtl::OUString const & url) {
     parseFiles(
         layer, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcs")),
@@ -2468,6 +2509,21 @@ void Components::parseXcsXcuLayer(int layer, rtl::OUString const & url) {
         layer + 1, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcu")),
         &Components::parseXcuFile,
         url + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/data")), false);
+}
+
+void Components::parseXcsXcuIniLayer(int layer, rtl::OUString const & url) {
+    //TODO: rtl::Bootstrap::getFrom "first trie[s] to retrieve the value via the
+    // global function"
+    rtl::Bootstrap ini(url);
+    rtl::OUString urls;
+    if (ini.getFrom(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SCHEMA")), urls))
+    {
+        parseFileList(layer, &Components::parseXcsFile, urls, ini);
+    }
+    if (ini.getFrom(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATA")), urls))
+    {
+        parseFileList(layer + 1, &Components::parseXcuFile, urls, ini);
+    }
 }
 
 void Components::parseModuleLayer(int layer, rtl::OUString const & url) {

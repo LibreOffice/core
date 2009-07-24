@@ -1,3 +1,7 @@
-..\%__SRC%\bin\configmgr2.uno.dll %_DEST%\bin%_EXT%\configmgr2.uno.dll
-..\%__SRC%\lib\configmgr2.uno.dylib %_DEST%\bin%_EXT%\configmgr2.uno.dylib
-..\%__SRC%\lib\configmgr2.uno.so %_DEST%\bin%_EXT%\configmgr2.uno.so
+mkdir: %_DEST%\inc%_EXT%\configmgr
+mkdir: %_DEST%\inc%_EXT%\configmgr\detail
+..\%__SRC%\bin\configmgr.dll %_DEST%\bin%_EXT%\configmgr.dll
+..\%__SRC%\lib\libconfigmgr.dylib %_DEST%\lib%_EXT%\libconfigmgr.dylib
+..\%__SRC%\lib\libconfigmgr.so %_DEST%\lib%_EXT%\libconfigmgr.so
+..\inc\configmgr\detail\configmgrdllapi.hxx %_DEST%\inc%_EXT%\configmgr\detail\configmgrdllapi.hxx
+..\inc\configmgr\update.hxx %_DEST%\inc%_EXT%\configmgr\update.hxx
