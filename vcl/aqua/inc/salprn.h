@@ -120,7 +120,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     sal_Int32 getCurPageRangeCount() const { return mnCurPageRangeCount; }
 
     // match width/height against known paper formats, possibly switching orientation
-    const vcl::PaperInfo* matchPaper( long i_nWidth, long i_nHeight, Orientation& o_rOrientation ) const;
+    const PaperInfo* matchPaper( long i_nWidth, long i_nHeight, Orientation& o_rOrientation ) const;
     void setPaperSize( long i_nWidth, long i_nHeight, Orientation i_eSetOrientation );
 
     private:

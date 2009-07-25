@@ -87,7 +87,7 @@ namespace vcl
         Rectangle                   m_aManagedArea;
         long                        m_nOuterBorder;
 
-        virtual Element* getElement( size_t i_nIndex ) = NULL;
+        virtual Element* getElement( size_t i_nIndex ) = 0;
         const Element* getConstElement( size_t i_nIndex ) const
         { return const_cast<WindowArranger*>(this)->getElement( i_nIndex ); }
 

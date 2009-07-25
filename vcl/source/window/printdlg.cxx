@@ -96,7 +96,7 @@ void PrintDialog::PrintPreviewWindow::Resize()
     maPageVDev.SetOutputSizePixel( aScaledSize, FALSE );
 }
 
-void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& i_rRect )
+void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
 {
     GDIMetaFile aMtf( maMtf );
 

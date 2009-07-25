@@ -128,6 +128,7 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
             long nDPIX = 720, nDPIY = 720;
             NSSize aPaperSize = [mpPrintInfo paperSize];
 
+            NSRect aImageRect = [mpPrintInfo imageablePageBounds];
             if( mePageOrientation == ORIENTATION_PORTRAIT )
             {
                 // move mirrored CTM back into paper
@@ -303,11 +304,11 @@ void AquaSalInfoPrinter::setPaperSize( long i_nWidth, long i_nHeight, Orientatio
 {
 
     Orientation ePaperOrientation = ORIENTATION_PORTRAIT;
-    const vcl::PaperInfo* pPaper = matchPaper( (i_nWidth+50)/100, (i_nHeight+50)/100, ePaperOrientation );
+    const PaperInfo* pPaper = matchPaper( (i_nWidth+50)/100, (i_nHeight+50)/100, ePaperOrientation );
 
     if( pPaper )
     {
-        NSString* pPaperName = [CreateNSString( pPaper->m_aPaperName ) autorelease];
+        NSString* pPaperName = [CreateNSString( rtl::OStringToOUString(PaperInfo::toPSName(pPaper->getPaper()), RTL_TEXTENCODING_ASCII_US) ) autorelease];
         [mpPrintInfo setPaperName: pPaperName];
     }
     else if( i_nWidth > 0 && i_nHeight > 0 )
@@ -809,10 +810,8 @@ void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* i_pSetupData )
                     NSSize aPaperSize = [mpPrinter pageSizeForPaper: pPaper];
                     if( aPaperSize.width > 0 && aPaperSize.height > 0 )
                     {
-                        vcl::PaperInfo aInfo;
-                        aInfo.m_aPaperName = GetOUString( pPaper );
-                        aInfo.m_nPaperWidth = (PtTo10Mu( aPaperSize.width ) + 50 ) / 100;
-                        aInfo.m_nPaperHeight = (PtTo10Mu( aPaperSize.height ) + 50 ) / 100;
+                        PaperInfo aInfo( (PtTo10Mu( aPaperSize.width ) + 50 ) / 100,
+                                        (PtTo10Mu( aPaperSize.height ) + 50 ) / 100 );
                         m_aPaperFormats.push_back( aInfo );
                     }
                 }
@@ -821,19 +820,19 @@ void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* i_pSetupData )
     }
 }
 
-const vcl::PaperInfo* AquaSalInfoPrinter::matchPaper( long i_nWidth, long i_nHeight, Orientation& o_rOrientation ) const
+const PaperInfo* AquaSalInfoPrinter::matchPaper( long i_nWidth, long i_nHeight, Orientation& o_rOrientation ) const
 {
     if( ! m_bPapersInit )
         const_cast<AquaSalInfoPrinter*>(this)->InitPaperFormats( NULL );
 
-    const vcl::PaperInfo* pMatch = NULL;
+    const PaperInfo* pMatch = NULL;
     o_rOrientation = ORIENTATION_PORTRAIT;
     for( int n = 0; n < 2 ; n++ )
     {
         for( size_t i = 0; i < m_aPaperFormats.size(); i++ )
         {
-            if( abs( m_aPaperFormats[i].m_nPaperWidth - i_nWidth ) < 2 &&
-                abs( m_aPaperFormats[i].m_nPaperHeight - i_nHeight ) < 2 )
+            if( abs( m_aPaperFormats[i].getWidth() - i_nWidth ) < 2 &&
+                abs( m_aPaperFormats[i].getHeight() - i_nHeight ) < 2 )
             {
                 pMatch = &m_aPaperFormats[i];
                 return pMatch;
