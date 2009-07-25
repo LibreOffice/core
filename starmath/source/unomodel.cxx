@@ -956,18 +956,18 @@ static Size lcl_GuessPaperSize()
     LocaleDataWrapper aLocWrp( xMgr, AllSettings().GetLocale() );
     if( MEASURE_METRIC == aLocWrp.getMeasurementSystemEnum() )
     {
-        // in Twip
-        aRes.Width()  = lA4Width;
-        aRes.Height() = lA4Height;
+        // in 100th mm
+        PaperInfo aInfo( PAPER_A4 );
+        aRes.Width()  = aInfo.getWidth();
+        aRes.Height() = aInfo.getHeight();
     }
     else
     {
-        // in Twip
-        aRes.Width()  = lLetterWidth;
-        aRes.Height() = lLetterHeight;
+        // in 100th mm
+        PaperInfo aInfo( PAPER_LETTER );
+        aRes.Width()  = aInfo.getWidth();
+        aRes.Height() = aInfo.getHeight();
     }
-    aRes = OutputDevice::LogicToLogic( aRes, MapMode(MAP_TWIP),
-                                             MapMode(MAP_100TH_MM) );
     return aRes;
 }
 
