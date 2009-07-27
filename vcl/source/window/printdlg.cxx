@@ -147,39 +147,33 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
 {
     maMtf = i_rNewPreview;
     maOrigSize = i_rOrigSize;
+    Resize();
     Invalidate();
 }
 
 PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     : TabPage( i_pParent, rResId )
-    , maNupLine( this, VclResId( SV_PRINT_PRT_NUP ) )
-    , maNupRowsTxt( this, VclResId( SV_PRINT_PRT_NUP_ROWS_TXT ) )
+    , maNupLine( this, VclResId( SV_PRINT_PRT_NUP_LAYOUT_FL ) )
+    , maNupPagesTxt( this, VclResId( SV_PRINT_PRT_NUP_PAGES_TXT ) )
+    , maNupPagesBox( this, VclResId( SV_PRINT_PRT_NUP_PAGES_BOX ) )
+    , maNupNumPagesTxt( this, VclResId( SV_PRINT_PRT_NUP_NUM_PAGES_TXT ) )
+    , maNupColEdt( this, VclResId( SV_PRINT_PRT_NUP_COLS_EDT ) )
+    , maNupTimesTxt( this, VclResId( SV_PRINT_PRT_NUP_TIMES_TXT ) )
     , maNupRowsEdt( this, VclResId( SV_PRINT_PRT_NUP_ROWS_EDT ) )
-    , maNupColTxt( this, VclResId( SV_PRINT_PRT_NUP_COLUMNS_TXT ) )
-    , maNupColEdt( this, VclResId( SV_PRINT_PRT_NUP_COLUMNS_EDT ) )
-    , maNupRepTxt( this, VclResId( SV_PRINT_PRT_NUP_PAGEREPEAT_TXT ) )
-    , maNupRepEdt( this, VclResId( SV_PRINT_PRT_NUP_PAGEREPEAT_EDT ) )
+    , maPageMarginTxt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_PAGES_TXT ) )
+    , maPageMarginEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_PAGES_EDT ) )
+    , maSheetMarginTxt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_SHEET_TXT ) )
+    , maSheetMarginEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_SHEET_EDT ) )
+    , maNupOrientationTxt( this, VclResId( SV_PRINT_PRT_NUP_ORIENTATION_TXT ) )
+    , maNupOrientationBox( this, VclResId( SV_PRINT_PRT_NUP_ORIENTATION_BOX ) )
+    , maNupOrderTxt( this, VclResId( SV_PRINT_PRT_NUP_ORDER_TXT ) )
+    , maNupOrderBox( this, VclResId( SV_PRINT_PRT_NUP_ORDER_BOX ) )
     , maBorderCB( this, VclResId( SV_PRINT_PRT_NUP_BORDER_CB ) )
-    , maNupPortrait( this, VclResId( SV_PRINT_PRT_NUP_PORTRAIT ) )
-    , maNupLandscape( this, VclResId( SV_PRINT_PRT_NUP_LANDSCAPE ) )
-    , maMargins( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_FL ) )
-    , maLeftMarginTxt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_LEFT_TXT ) )
-    , maLeftMarginEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_LEFT_EDT) )
-    , maRightMarginTxt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_RIGHT_TXT ) )
-    , maRightMarginEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_RIGHT_EDT ) )
-    , maTopMarginTxt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_TOP_TXT ) )
-    , maTopMarginEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_TOP_EDT ) )
-    , maBottomMarginTxt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_BOTTOM_TXT ) )
-    , maBottomMarginEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_BOTTOM_EDT ) )
-    , maHSpaceTxt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_HSPACE_TXT ) )
-    , maHSpaceEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_HSPACE_EDT ) )
-    , maVSpaceTxt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_VSPACE_TXT ) )
-    , maVSpaceEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_VSPACE_EDT ) )
 {
     FreeResource();
 
     // setup field units for metric fields
-    const LocaleDataWrapper& rLocWrap( maLeftMarginEdt.GetLocaleDataWrapper() );
+    const LocaleDataWrapper& rLocWrap( maPageMarginEdt.GetLocaleDataWrapper() );
     FieldUnit eUnit = FUNIT_MM;
     USHORT nDigits = 0;
     if( rLocWrap.getMeasurementSystemEnum() == MEASURE_US )
@@ -188,162 +182,105 @@ PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
         nDigits = 2;
     }
     // set units
-    maLeftMarginEdt.SetUnit( eUnit );
-    maTopMarginEdt.SetUnit( eUnit );
-    maRightMarginEdt.SetUnit( eUnit );
-    maBottomMarginEdt.SetUnit( eUnit );
-    maHSpaceEdt.SetUnit( eUnit );
-    maVSpaceEdt.SetUnit( eUnit );
+    maPageMarginEdt.SetUnit( eUnit );
+    maSheetMarginEdt.SetUnit( eUnit );
 
     // set precision
-    maLeftMarginEdt.SetDecimalDigits( nDigits );
-    maTopMarginEdt.SetDecimalDigits( nDigits );
-    maRightMarginEdt.SetDecimalDigits( nDigits );
-    maBottomMarginEdt.SetDecimalDigits( nDigits );
-    maHSpaceEdt.SetDecimalDigits( nDigits );
-    maVSpaceEdt.SetDecimalDigits( nDigits );
+    maPageMarginEdt.SetDecimalDigits( nDigits );
+    maSheetMarginEdt.SetDecimalDigits( nDigits );
 
-    maNupLine.SMHID2( "NUpPage", "NUPline" );
-    maNupRowsTxt.SMHID2( "NUpPage", "NUPRowsText" );
-    maNupRowsEdt.SMHID2( "NUpPage", "NUPRows" );
-    maNupColTxt.SMHID2( "NUpPage", "NUPColumnsText" );
-    maNupColEdt.SMHID2( "NUpPage", "NUPColumns" );
-    maNupRepTxt.SMHID2( "NUpPage", "NUPRepeatText" );
-    maNupRepEdt.SMHID2( "NUpPage", "NUPRepeat" );
-    maNupPortrait.SMHID2( "NUpPage", "NUPPortrait" );
-    maNupLandscape.SMHID2( "NUpPage", "NUPLandscape" );
-    maBorderCB.SMHID2( "NUpPage", "NUPBorder" );
-    maMargins.SMHID2( "NUpPage", "NUPMargins" );
-    maLeftMarginTxt.SMHID2( "NUpPage", "NUPLeftText" );
-    maLeftMarginEdt.SMHID2( "NUpPage", "NUPLeft" );
-    maTopMarginTxt.SMHID2( "NUpPage", "NUPTopText" );
-    maTopMarginEdt.SMHID2( "NUpPage", "NUPTop" );
-    maRightMarginTxt.SMHID2( "NUpPage", "NUPRightText" );
-    maRightMarginEdt.SMHID2( "NUpPage", "NUPRight" );
-    maBottomMarginTxt.SMHID2( "NUpPage", "NUPBottomText" );
-    maBottomMarginEdt.SMHID2( "NUpPage", "NUPBottom" );
-    maHSpaceTxt.SMHID2( "NUpPage", "NUPHSpaceText" );
-    maHSpaceEdt.SMHID2( "NUpPage", "NUPHSpace" );
-    maVSpaceTxt.SMHID2( "NUpPage", "NUPVSpaceText" );
-    maVSpaceEdt.SMHID2( "NUpPage", "NUPVSpace" );
+    maNupLine.SMHID2("NUpPage", "Layout");
+    maNupPagesTxt.SMHID2( "NUpPage", "PagesPerSheet" );
+    maNupPagesBox.SMHID2( "NUpPage", "PagesPerSheetBox" );
+    maNupNumPagesTxt.SMHID2( "NUpPage", "Columns" );
+    maNupColEdt.SMHID2( "NUpPage", "ColumnsBox" );
+    maNupTimesTxt.SMHID2( "NUpPage", "Rows" );
+    maNupRowsEdt.SMHID2( "NUpPage", "RowsBox" );
+    maPageMarginTxt.SMHID2( "NUpPage", "PageMargin" );
+    maPageMarginEdt.SMHID2( "NUpPage", "PageMarginBox" );
+    maSheetMarginTxt.SMHID2( "NUpPage", "SheetMargin" );
+    maSheetMarginEdt.SMHID2( "NUpPage", "SheetMarginBox" );
+    maNupOrientationTxt.SMHID2( "NUpPage", "Orientation" );
+    maNupOrientationBox.SMHID2( "NUpPage", "OrientationBox" );
+    maNupOrderTxt.SMHID2( "NUpPage", "Order" );
+    maNupOrderBox.SMHID2( "NUpPage", "OrderBox" );
+    maBorderCB.SMHID2( "NUpPage", "BorderBox" );
+
+    setupLayout();
 }
 
 PrintDialog::NUpTabPage::~NUpTabPage()
 {
 }
 
-void PrintDialog::NUpTabPage::Resize()
+void PrintDialog::NUpTabPage::setupLayout()
 {
     Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
 
-    boost::shared_ptr<vcl::RowOrColumn> aPage( new vcl::RowOrColumn() );
-    aPage->setParentWindow( this );
-    aPage->setOuterBorder( aBorder.Width() );
-    aPage->addWindow( &maNupLine );
+    maLayout.setParentWindow( this );
+    maLayout.setOuterBorder( aBorder.Width() );
 
-    boost::shared_ptr<vcl::Indenter> aNupIndent( new vcl::Indenter( aPage.get(), aBorder.Width() ) );
-    aPage->addChild( aNupIndent );
-    boost::shared_ptr<vcl::RowOrColumn> aNupColumn( new vcl::RowOrColumn( aNupIndent.get() ) );
-    aNupIndent->setChild( aNupColumn );
+    maLayout.addWindow( &maNupLine );
+    boost::shared_ptr< vcl::RowOrColumn > xRow( new vcl::RowOrColumn( &maLayout, false ) );
+    maLayout.addChild( xRow );
+    xRow->addWindow( &maNupPagesTxt );
+    xRow->addWindow( &maNupPagesBox );
 
-    boost::shared_ptr<vcl::RowOrColumn> aNupRow( new vcl::RowOrColumn( aNupColumn.get(), false ) );
-    aNupColumn->addChild( aNupRow );
-    boost::shared_ptr<vcl::MatrixArranger> aNupMat( new vcl::MatrixArranger( aNupRow.get(), aBorder.Width(), aBorder.Height() ) );
-    aNupRow->addChild( aNupMat );
-    aNupMat->addWindow( &maNupRowsTxt, 0, 0 );
-    aNupMat->addWindow( &maNupRowsEdt, 1, 0 );
-    aNupMat->addWindow( &maNupColTxt, 0, 1 );
-    aNupMat->addWindow( &maNupColEdt, 1, 1 );
-    aNupMat->addWindow( &maNupRepTxt, 0, 2 );
-    aNupMat->addWindow( &maNupRepEdt, 1, 2 );
-    boost::shared_ptr<vcl::RowOrColumn> aOriCol( new vcl::RowOrColumn( aNupRow.get() ) );
-    aNupRow->addChild( aOriCol );
-    aOriCol->addWindow( &maNupPortrait );
-    aOriCol->addWindow( &maNupLandscape );
+    boost::shared_ptr< vcl::Indenter > xIndent( new vcl::Indenter( &maLayout ) );
+    maLayout.addChild( xIndent );
+    boost::shared_ptr< vcl::RowOrColumn > xCol( new vcl::RowOrColumn( xIndent.get() ) );
+    xIndent->setChild( xCol );
 
-    aNupColumn->addWindow( &maBorderCB );
+    xRow.reset( new vcl::RowOrColumn( xCol.get(), false ) );
+    xCol->addChild( xRow );
+    xRow->addWindow( &maNupNumPagesTxt );
+    xRow->addWindow( &maNupColEdt );
+    xRow->addWindow( &maNupTimesTxt );
+    xRow->addWindow( &maNupRowsEdt );
 
-    aPage->addWindow( &maMargins );
+    xRow.reset( new vcl::RowOrColumn( xCol.get(), false ) );
+    xCol->addChild( xRow );
+    xRow->addWindow( &maPageMarginTxt );
+    xRow->addWindow( &maPageMarginEdt );
 
-    boost::shared_ptr<vcl::Indenter> aMargIndent( new vcl::Indenter( aPage.get(), aBorder.Width() ) );
-    aPage->addChild( aMargIndent );
-    boost::shared_ptr<vcl::RowOrColumn> aMargColumn( new vcl::RowOrColumn( aMargIndent.get(), true, 2*aBorder.Height() ) );
-    aMargIndent->setChild( aMargColumn );
+    xRow.reset( new vcl::RowOrColumn( xCol.get(), false ) );
+    xCol->addChild( xRow );
+    xRow->addWindow( &maSheetMarginTxt );
+    xRow->addWindow( &maSheetMarginEdt );
 
-    boost::shared_ptr<vcl::MatrixArranger> aMargMat( new vcl::MatrixArranger( aMargIndent.get(), aBorder.Width(), aBorder.Height() ) );
-    aMargColumn->addChild( aMargMat );
-    aMargMat->addWindow( &maLeftMarginTxt, 0, 0 );
-    aMargMat->addWindow( &maLeftMarginEdt, 1, 0 );
-    aMargMat->addWindow( &maRightMarginTxt, 3, 0 );
-    aMargMat->addWindow( &maRightMarginEdt, 4, 0 );
-    aMargMat->addWindow( &maTopMarginTxt, 0, 1 );
-    aMargMat->addWindow( &maTopMarginEdt, 1, 1 );
-    aMargMat->addWindow( &maBottomMarginTxt, 3, 1 );
-    aMargMat->addWindow( &maBottomMarginEdt, 4, 1 );
+    xRow.reset( new vcl::RowOrColumn( xCol.get(), false ) );
+    xCol->addChild( xRow );
+    xRow->addWindow( &maNupOrientationTxt );
+    xRow->addWindow( &maNupOrientationBox );
 
-    boost::shared_ptr<vcl::MatrixArranger> aSpacingMat( new vcl::MatrixArranger( aPage.get(), aBorder.Width(), aBorder.Height() ) );
-    aMargColumn->addChild( aSpacingMat );
-    aSpacingMat->addWindow( &maHSpaceTxt, 0, 0 );
-    aSpacingMat->addWindow( &maHSpaceEdt, 1, 0 );
-    aSpacingMat->addWindow( &maVSpaceTxt, 0, 1 );
-    aSpacingMat->addWindow( &maVSpaceEdt, 1, 1 );
+    xRow.reset( new vcl::RowOrColumn( &maLayout, false ) );
+    maLayout.addChild( xRow );
+    xRow->addWindow( &maNupOrderTxt );
+    xRow->addWindow( &maNupOrderBox );
 
-    aPage->setManagedArea( Rectangle( Point(), GetOutputSizePixel() ) );
+    maLayout.addWindow( &maBorderCB );
+}
+
+void PrintDialog::NUpTabPage::Resize()
+{
+    maLayout.setManagedArea( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
 }
 
 void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& i_rMPS )
 {
-    maLeftMarginEdt.SetValue( maLeftMarginEdt.Normalize( i_rMPS.nLeftMargin ), FUNIT_100TH_MM );
-    maTopMarginEdt.SetValue( maTopMarginEdt.Normalize( i_rMPS.nTopMargin ), FUNIT_100TH_MM );
-    maRightMarginEdt.SetValue( maRightMarginEdt.Normalize( i_rMPS.nRightMargin ), FUNIT_100TH_MM );
-    maBottomMarginEdt.SetValue( maBottomMarginEdt.Normalize( i_rMPS.nBottomMargin ), FUNIT_100TH_MM );
-    maHSpaceEdt.SetValue( maHSpaceEdt.Normalize( i_rMPS.nHorizontalSpacing ), FUNIT_100TH_MM );
-    maVSpaceEdt.SetValue( maVSpaceEdt.Normalize( i_rMPS.nVerticalSpacing ), FUNIT_100TH_MM );
+    maSheetMarginEdt.SetValue( maSheetMarginEdt.Normalize( i_rMPS.nLeftMargin ), FUNIT_100TH_MM );
+    maPageMarginEdt.SetValue( maPageMarginEdt.Normalize( i_rMPS.nHorizontalSpacing ), FUNIT_100TH_MM );
     maBorderCB.Check( i_rMPS.bDrawBorder );
     maNupRowsEdt.SetValue( i_rMPS.nRows );
     maNupColEdt.SetValue( i_rMPS.nColumns );
-    maNupRepEdt.SetValue( i_rMPS.nRepeat );
 }
 
 void PrintDialog::NUpTabPage::readFromSettings()
 {
-    #if 0
-    SettingsConfigItem* pItem = SettingsConfigItem::get();
-    rtl::OUString aValue;
-
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Rows" ) ) );
-    sal_Int32 nVal = aValue.toInt32();
-    maNupRowsEdt.SetValue( sal_Int64( nVal > 1 ? nVal : 1) );
-
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Columns" ) ) );
-    nVal = aValue.toInt32();
-    maNupColEdt.SetValue( sal_Int64(nVal > 1 ? nVal : 1) );
-
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Portrait" ) ) );
-    if( aValue.equalsIgnoreAsciiCaseAscii( "true" ) )
-        maNupPortrait.Check();
-    else
-        maNupLandscape.Check();
-    #endif
 }
 
 void PrintDialog::NUpTabPage::storeToSettings()
 {
-    #if 0
-    SettingsConfigItem* pItem = SettingsConfigItem::get();
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Rows" ) ),
-                     maNupRowsEdt.GetText() );
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Columns" ) ),
-                     maNupColEdt.GetText() );
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Portrait" ) ),
-                     rtl::OUString::createFromAscii( maNupPortrait.IsChecked() ? "true" : "false" ) );
-    #endif
 }
 
 PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
@@ -650,13 +587,11 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     {
         maNupLandscapeSize = aNupSize;
         maNupPortraitSize = Size( aNupSize.Height(), aNupSize.Width() );
-        maNUpPage.maNupLandscape.Check();
     }
     else
     {
         maNupPortraitSize = aNupSize;
         maNupLandscapeSize = Size( aNupSize.Height(), aNupSize.Width() );
-        maNUpPage.maNupPortrait.Check();
     }
     maNUpPage.initFromMultiPageSetup( maPController->getMultipage() );
 
@@ -670,8 +605,6 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maBackwardBtn.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maJobPage.maCollateBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maJobPage.maSetupButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maNUpPage.maNupPortrait.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maNUpPage.maNupLandscape.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.maBorderCB.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maOptionsPage.maToFileBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
 
@@ -680,13 +613,13 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maJobPage.maCopyCountField.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maNUpPage.maNupRowsEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maNUpPage.maNupColEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
-    maNUpPage.maNupRepEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
-    maNUpPage.maLeftMarginEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
-    maNUpPage.maTopMarginEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
-    maNUpPage.maRightMarginEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
-    maNUpPage.maBottomMarginEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
-    maNUpPage.maHSpaceEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
-    maNUpPage.maVSpaceEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maNUpPage.maPageMarginEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maNUpPage.maSheetMarginEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+
+    // setup select hdl
+    maNUpPage.maNupPagesBox.SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
+    maNUpPage.maNupOrientationBox.SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
+    maNUpPage.maNupOrderBox.SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
 
     // setup the layout
     setupLayout();
@@ -1456,27 +1389,61 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
     }
 }
 
+Size PrintDialog::getJobPageSize()
+{
+    if( maFirstPageSize.Width() == 0 && maFirstPageSize.Height() == 0)
+    {
+        maFirstPageSize = maNupPortraitSize;
+        GDIMetaFile aMtf;
+        if( maPController->getPageCount() > 0 )
+            maFirstPageSize = maPController->getPageFile( 0, aMtf, true );
+    }
+    return maFirstPageSize;
+}
+
 void PrintDialog::updateNup()
 {
-    int nRows   = int(maNUpPage.maNupRowsEdt.GetValue());
-    int nCols   = int(maNUpPage.maNupColEdt.GetValue());
-    int nRepeat = int(maNUpPage.maNupRepEdt.GetValue());
+    int nRows         = int(maNUpPage.maNupRowsEdt.GetValue());
+    int nCols         = int(maNUpPage.maNupColEdt.GetValue());
+    long nPageMargin  = long(maNUpPage.maPageMarginEdt.Denormalize(maNUpPage.maPageMarginEdt.GetValue( FUNIT_100TH_MM )));
+    long nSheetMargin = long(maNUpPage.maSheetMarginEdt.Denormalize(maNUpPage.maSheetMarginEdt.GetValue( FUNIT_100TH_MM )));
 
     PrinterController::MultiPageSetup aMPS;
     aMPS.nRows         = nRows;
     aMPS.nColumns      = nCols;
-    aMPS.nRepeat       = nRepeat;
-    aMPS.aPaperSize    = maNUpPage.maNupPortrait.IsChecked()
-                         ? maNupPortraitSize : maNupLandscapeSize;
-    aMPS.nLeftMargin   = long(maNUpPage.maLeftMarginEdt.Denormalize(maNUpPage.maLeftMarginEdt.GetValue( FUNIT_100TH_MM )));
-    aMPS.nTopMargin    = long(maNUpPage.maTopMarginEdt.Denormalize(maNUpPage.maTopMarginEdt.GetValue( FUNIT_100TH_MM )));
-    aMPS.nRightMargin  = long(maNUpPage.maRightMarginEdt.Denormalize(maNUpPage.maRightMarginEdt.GetValue( FUNIT_100TH_MM )));
-    aMPS.nBottomMargin = long(maNUpPage.maBottomMarginEdt.Denormalize(maNUpPage.maBottomMarginEdt.GetValue( FUNIT_100TH_MM )));
+    aMPS.nRepeat       = 1;
+    aMPS.nLeftMargin   =
+    aMPS.nTopMargin    =
+    aMPS.nRightMargin  =
+    aMPS.nBottomMargin = nSheetMargin;
 
-    aMPS.nHorizontalSpacing = long(maNUpPage.maHSpaceEdt.Denormalize(maNUpPage.maHSpaceEdt.GetValue( FUNIT_100TH_MM )));
-    aMPS.nVerticalSpacing   = long(maNUpPage.maVSpaceEdt.Denormalize(maNUpPage.maVSpaceEdt.GetValue( FUNIT_100TH_MM )));
+    aMPS.nHorizontalSpacing =
+    aMPS.nVerticalSpacing   = nPageMargin;
 
     aMPS.bDrawBorder        = maNUpPage.maBorderCB.IsChecked();
+
+    int nOrientationMode = int(maNUpPage.maNupOrientationBox.GetEntryData(
+                                 maNUpPage.maNupOrientationBox.GetSelectEntryPos() ));
+    if( nOrientationMode == SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE )
+    {
+        aMPS.aPaperSize = maNupLandscapeSize;
+    }
+    else if( nOrientationMode == SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT )
+    {
+        aMPS.aPaperSize = maNupPortraitSize;
+    }
+    else // automatic mode
+    {
+        // get size of first real page to see if it is portrait or landscape
+        // we assume same page sizes for all the pages for this
+        Size aPageSize = getJobPageSize();
+
+        Size aMultiSize( aPageSize.Width() * nCols, aPageSize.Height() * nRows );
+        if( aMultiSize.Width() > aMultiSize.Height() ) // fits better on landscape
+            aMPS.aPaperSize = maNupLandscapeSize;
+        else
+            aMPS.aPaperSize = maNupPortraitSize;
+    }
 
     maPController->setMultipage( aMPS );
 
@@ -1494,6 +1461,52 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
         // update text fields
         updatePrinterText();
     }
+    else if( pBox == &maNUpPage.maNupOrientationBox )
+    {
+        updateNup();
+    }
+    else if( pBox == &maNUpPage.maNupPagesBox )
+    {
+        long nPages = long(maNUpPage.maNupPagesBox.GetEntryData(maNUpPage.maNupPagesBox.GetSelectEntryPos()));
+        int nRows   = int(maNUpPage.maNupRowsEdt.GetValue());
+        int nCols   = int(maNUpPage.maNupColEdt.GetValue());
+        bool bCustom = false;
+
+        if( nPages == 1 )
+            nRows = nCols = 1;
+        else if( nPages == 2 || nPages == 4 || nPages == 6 || nPages == 9 || nPages == 16 )
+        {
+            Size aJobPageSize( getJobPageSize() );
+            bool bPortrait = aJobPageSize.Width() < aJobPageSize.Height();
+            if( nPages == 2 )
+            {
+                if( bPortrait )
+                    nRows = 1, nCols = 2;
+                else
+                    nRows = 2, nCols = 1;
+            }
+            else if( nPages == 4 )
+                nRows = nCols = 2;
+            else if( nPages == 6 )
+            {
+                if( bPortrait )
+                    nRows = 2, nCols = 3;
+                else
+                    nRows = 3, nCols = 2;
+            }
+            else if( nPages == 9 )
+                nRows = nCols = 3;
+            else if( nPages == 16 )
+                nRows = nCols = 4;
+        }
+        else
+            bCustom = true;
+
+        maNUpPage.maNupRowsEdt.SetValue( nRows );
+        maNUpPage.maNupColEdt.SetValue( nCols );
+        updateNup();
+    }
+
     return 0;
 }
 
@@ -1530,7 +1543,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
             maPController->getPrinter()->Setup( this );
         }
         checkControlDependencies();
-        if( pButton == &maNUpPage.maNupPortrait || pButton == &maNUpPage.maNupLandscape || pButton == &maNUpPage.maBorderCB )
+        if( pButton == &maNUpPage.maBorderCB )
             updateNup();
     }
     return 0;
@@ -1539,10 +1552,8 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
 IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
 {
     checkControlDependencies();
-    if( pEdit == &maNUpPage.maNupRowsEdt || pEdit == &maNUpPage.maNupColEdt || pEdit == &maNUpPage.maNupRepEdt ||
-        pEdit == &maNUpPage.maLeftMarginEdt || pEdit == &maNUpPage.maTopMarginEdt ||
-        pEdit == &maNUpPage.maRightMarginEdt || pEdit == &maNUpPage.maBottomMarginEdt ||
-        pEdit == &maNUpPage.maHSpaceEdt || pEdit == &maNUpPage.maVSpaceEdt
+    if( pEdit == &maNUpPage.maNupRowsEdt || pEdit == &maNUpPage.maNupColEdt ||
+        pEdit == &maNUpPage.maSheetMarginEdt || pEdit == &maNUpPage.maPageMarginEdt
        )
     {
         updateNup();

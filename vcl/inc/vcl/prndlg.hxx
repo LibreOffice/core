@@ -74,30 +74,30 @@ namespace vcl
         {
         public:
             FixedLine                               maNupLine;
-            FixedText                               maNupRowsTxt;
-            NumericField                            maNupRowsEdt;
-            FixedText                               maNupColTxt;
+            FixedText                               maNupPagesTxt;
+            ListBox                                 maNupPagesBox;
+
+            // controls for "Custom" page mode
+            FixedText                               maNupNumPagesTxt;
             NumericField                            maNupColEdt;
-            FixedText                               maNupRepTxt;
-            NumericField                            maNupRepEdt;
+            FixedText                               maNupTimesTxt;
+            NumericField                            maNupRowsEdt;
+            FixedText                               maPageMarginTxt;
+            MetricField                             maPageMarginEdt;
+            FixedText                               maSheetMarginTxt;
+            MetricField                             maSheetMarginEdt;
+            FixedText                               maNupOrientationTxt;
+            ListBox                                 maNupOrientationBox;
+
+            // page order ("left to right, then down")
+            FixedText                               maNupOrderTxt;
+            ListBox                                 maNupOrderBox;
+            // border around each page
             CheckBox                                maBorderCB;
-            RadioButton                             maNupPortrait;
-            RadioButton                             maNupLandscape;
 
-            FixedLine                               maMargins;
-            FixedText                               maLeftMarginTxt;
-            MetricField                             maLeftMarginEdt;
-            FixedText                               maRightMarginTxt;
-            MetricField                             maRightMarginEdt;
-            FixedText                               maTopMarginTxt;
-            MetricField                             maTopMarginEdt;
-            FixedText                               maBottomMarginTxt;
-            MetricField                             maBottomMarginEdt;
+            vcl::RowOrColumn                        maLayout;
 
-            FixedText                               maHSpaceTxt;
-            MetricField                             maHSpaceEdt;
-            FixedText                               maVSpaceTxt;
-            MetricField                             maVSpaceEdt;
+            void setupLayout();
 
             NUpTabPage( Window*, const ResId& );
             virtual ~NUpTabPage();
@@ -203,11 +203,15 @@ namespace vcl
         Size                                    maNupPortraitSize;
         Size                                    maNupLandscapeSize;
 
+        // internal, used for automatic Nup-Portrait/landscape
+        Size                                    maFirstPageSize;
+
         rtl::OUString                           maPrintToFileText;
         rtl::OUString                           maPrintText;
 
         vcl::RowOrColumn                        maLayout;
 
+        Size getJobPageSize();
         void updateNup();
         void preparePreview( bool i_bPrintChanged = true, bool i_bMayUseCache = false );
         void setPreviewText( sal_Int32 );

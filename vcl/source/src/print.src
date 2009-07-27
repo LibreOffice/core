@@ -110,19 +110,43 @@ ModalDialog SV_DLG_PRINT
         Text [en-US] = "Page Layout";
         Hide = TRUE;
 
-        FixedLine SV_PRINT_PRT_NUP
+        FixedLine SV_PRINT_PRT_NUP_LAYOUT_FL
         {
             Pos = MAP_APPFONT( 5, 5 );
             Size = MAP_APPFONT( 150, 10 );
-            Text [en-US] = "N-Up printing";
+            Text [en-US] = "Layout";
         };
-        FixedText SV_PRINT_PRT_NUP_ROWS_TXT
+        FixedText SV_PRINT_PRT_NUP_PAGES_TXT
         {
             Pos = MAP_APPFONT( 10, 20 );
             Size = MAP_APPFONT( 40, 10 );
-            Text [en-US] = "~Rows";
+            Text [en-US] = "Pages per ~sheet";
         };
-        NumericField SV_PRINT_PRT_NUP_ROWS_EDT
+        ListBox SV_PRINT_PRT_NUP_PAGES_BOX
+        {
+            Pos = MAP_APPFONT( 0, 0 );
+            Size = MAP_APPFONT( 10, 80 );
+            Border = TRUE;
+            DropDown = TRUE;
+            CurPos = 0;
+            StringList [en-US] =
+            {
+                < "1"; 1; >;
+                < "2"; 2; >;
+                < "4"; 4; >;
+                < "6"; 6; >;
+                < "9"; 9; >;
+                < "16"; 16; >;
+                < "Custom"; 0xffff; >;
+            };
+        };
+        FixedText SV_PRINT_PRT_NUP_NUM_PAGES_TXT
+        {
+            Pos = MAP_APPFONT( 0, 0 );
+            Size = MAP_APPFONT( 10, 10 );
+            Text [en-US] = "P~ages";
+        };
+        NumericField SV_PRINT_PRT_NUP_COLS_EDT
         {
             Pos = MAP_APPFONT( 55, 20 );
             Size = MAP_APPFONT( 40, 12 );
@@ -132,13 +156,13 @@ ModalDialog SV_DLG_PRINT
             Maximum = 32;
             Value = 1;
         };
-        FixedText SV_PRINT_PRT_NUP_COLUMNS_TXT
+        FixedText SV_PRINT_PRT_NUP_TIMES_TXT
         {
             Pos = MAP_APPFONT( 10, 35 );
             Size = MAP_APPFONT( 40, 10 );
-            Text [en-US] = "C~olumns";
+            Text [en-US] = "~by";
         };
-        NumericField SV_PRINT_PRT_NUP_COLUMNS_EDT
+        NumericField SV_PRINT_PRT_NUP_ROWS_EDT
         {
             Pos = MAP_APPFONT( 55, 35 );
             Size = MAP_APPFONT( 40, 12 );
@@ -148,53 +172,13 @@ ModalDialog SV_DLG_PRINT
             Maximum = 32;
             Value = 1;
         };
-        FixedText SV_PRINT_PRT_NUP_PAGEREPEAT_TXT
-        {
-            Pos = MAP_APPFONT( 10, 50 );
-            Size = MAP_APPFONT( 40, 10 );
-            Text [en-US] = "~Repeat";
-        };
-        NumericField SV_PRINT_PRT_NUP_PAGEREPEAT_EDT
-        {
-            Pos = MAP_APPFONT( 55, 50 );
-            Size = MAP_APPFONT( 40, 12 );
-            Border = TRUE;
-            Spin = TRUE;
-            Minimum = 1;
-            Maximum = 32;
-            Value = 1;
-        };
-        CheckBox SV_PRINT_PRT_NUP_BORDER_CB
-        {
-            Pos = MAP_APPFONT( 10, 65 );
-            Size = MAP_APPFONT( 150, 12 );
-            Text [en-US] = "~Draw a Border around each page";
-        };
-        RadioButton SV_PRINT_PRT_NUP_PORTRAIT
-        {
-            Pos = MAP_APPFONT( 110, 20 );
-            Size = MAP_APPFONT( 90, 10 );
-            Text [en-US] = "Po~rtrait";
-        };
-        RadioButton SV_PRINT_PRT_NUP_LANDSCAPE
-        {
-            Pos = MAP_APPFONT( 110, 30 );
-            Size = MAP_APPFONT( 90, 10 );
-            Text [en-US] = "~Landscape";
-        };
-        FixedLine SV_PRINT_PRT_NUP_MARGINS_FL
-        {
-            Pos = MAP_APPFONT( 5, 80 );
-            Size = MAP_APPFONT( 150, 10 );
-            Text [en-US] = "Margins";
-        };
-        FixedText SV_PRINT_PRT_NUP_MARGINS_LEFT_TXT
+        FixedText SV_PRINT_PRT_NUP_MARGINS_PAGES_TXT
         {
             Pos = MAP_APPFONT( 10, 95 );
             Size = MAP_APPFONT( 40, 10 );
-            Text [en-US] = "~Left";
+            Text [en-US] = "~Margin between pages";
         };
-        MetricField SV_PRINT_PRT_NUP_MARGINS_LEFT_EDT
+        MetricField SV_PRINT_PRT_NUP_MARGINS_PAGES_EDT
         {
             Pos = MAP_APPFONT( 55, 95 );
             Size = MAP_APPFONT( 40, 12 );
@@ -203,13 +187,13 @@ ModalDialog SV_DLG_PRINT
             Value = 0;
             Unit = FUNIT_MM;
         };
-        FixedText SV_PRINT_PRT_NUP_MARGINS_RIGHT_TXT
+        FixedText SV_PRINT_PRT_NUP_MARGINS_SHEET_TXT
         {
             Pos = MAP_APPFONT( 110, 95 );
             Size = MAP_APPFONT( 40, 10 );
-            Text [en-US] = "~Right";
+            Text [en-US] = "Ma~rgin to sheet border";
         };
-        MetricField SV_PRINT_PRT_NUP_MARGINS_RIGHT_EDT
+        MetricField SV_PRINT_PRT_NUP_MARGINS_SHEET_EDT
         {
             Pos = MAP_APPFONT( 155, 95 );
             Size = MAP_APPFONT( 40, 12 );
@@ -218,66 +202,50 @@ ModalDialog SV_DLG_PRINT
             Value = 0;
             Unit = FUNIT_MM;
         };
-        FixedText SV_PRINT_PRT_NUP_MARGINS_TOP_TXT
+        FixedText SV_PRINT_PRT_NUP_ORIENTATION_TXT
         {
-            Pos = MAP_APPFONT( 10, 110 );
-            Size = MAP_APPFONT( 40, 10 );
-            Text [en-US] = "~Top";
+            Pos = MAP_APPFONT( 0, 0 );
+            Size = MAP_APPFONT( 10, 10 );
+            Text [en-US] = "~Orientation";
         };
-        MetricField SV_PRINT_PRT_NUP_MARGINS_TOP_EDT
+        ListBox SV_PRINT_PRT_NUP_ORIENTATION_BOX
         {
-            Pos = MAP_APPFONT( 55, 110 );
-            Size = MAP_APPFONT( 40, 12 );
-            Spin = TRUE;
+            Pos = MAP_APPFONT( 0, 0 );
+            Size = MAP_APPFONT( 10, 40 );
             Border = TRUE;
-            Value = 0;
-            Unit = FUNIT_MM;
+            DropDown = TRUE;
+            CurPos = 0;
+            StringList [en-US] =
+            {
+                < "Automatic"; SV_PRINT_PRT_NUP_ORIENTATION_AUTOMATIC; >;
+                < "Portrait"; SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT; >;
+                < "Landscape"; SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE; >;
+            };
         };
-        FixedText SV_PRINT_PRT_NUP_MARGINS_BOTTOM_TXT
+        FixedText SV_PRINT_PRT_NUP_ORDER_TXT
         {
-            Pos = MAP_APPFONT( 110, 110 );
-            Size = MAP_APPFONT( 40, 10 );
-            Text [en-US] = "~Bottom";
+            Pos = MAP_APPFONT( 0, 0 );
+            Size = MAP_APPFONT( 10, 10 );
+            Text [en-US] = "Order";
         };
-        MetricField SV_PRINT_PRT_NUP_MARGINS_BOTTOM_EDT
+        ListBox SV_PRINT_PRT_NUP_ORDER_BOX
         {
-            Pos = MAP_APPFONT( 155, 110 );
-            Size = MAP_APPFONT( 40, 12 );
-            Spin = TRUE;
+            Pos = MAP_APPFONT( 0, 0 );
+            Size = MAP_APPFONT( 10, 20 );
+            DropDown = TRUE;
             Border = TRUE;
-            Value = 0;
-            Unit = FUNIT_MM;
+            CurPos = 0;
+            StringList [en-US] =
+            {
+                < "left to right, then down"; 1; >;
+                < "top to bottom, then right"; 2; >;
+            };
         };
-
-        FixedText SV_PRINT_PRT_NUP_MARGINS_HSPACE_TXT
+        CheckBox SV_PRINT_PRT_NUP_BORDER_CB
         {
-            Pos = MAP_APPFONT( 10, 130 );
-            Size = MAP_APPFONT( 80, 10 );
-            Text [en-US] = "~Horizontal spacing";
-        };
-        MetricField SV_PRINT_PRT_NUP_MARGINS_HSPACE_EDT
-        {
-            Pos = MAP_APPFONT( 95, 130 );
-            Size = MAP_APPFONT( 40, 12 );
-            Spin = TRUE;
-            Border = TRUE;
-            Value = 0;
-            Unit = FUNIT_MM;
-        };
-        FixedText SV_PRINT_PRT_NUP_MARGINS_VSPACE_TXT
-        {
-            Pos = MAP_APPFONT( 10, 145 );
-            Size = MAP_APPFONT( 80, 10 );
-            Text [en-US] = "~Vertical spacing";
-        };
-        MetricField SV_PRINT_PRT_NUP_MARGINS_VSPACE_EDT
-        {
-            Pos = MAP_APPFONT( 95, 145 );
-            Size = MAP_APPFONT( 40, 12 );
-            Spin = TRUE;
-            Border = TRUE;
-            Value = 0;
-            Unit = FUNIT_MM;
+            Pos = MAP_APPFONT( 10, 65 );
+            Size = MAP_APPFONT( 150, 12 );
+            Text [en-US] = "~Draw a Border around each page";
         };
     };
 
@@ -382,7 +350,7 @@ ModalDialog SV_DLG_PRINT
         Text [en-US] = "Options";
         Hide = TRUE;
 
-        FixedLine SV_PRINT_PRT_NUP
+        FixedLine SV_PRINT_OPT_PRINT_FL
         {
             Pos = MAP_APPFONT( 5, 5 );
             Size = MAP_APPFONT( 150, 10 );
