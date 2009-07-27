@@ -1751,9 +1751,12 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                         rSh.GetGraphic(FALSE);  // start the loading
                                 }
                                 else if( rSh.IsFrmSelected() )
-                                    bDisable = GRAPHIC_NONE ==
-                                            rSh.GetIMapGraphic().GetType()||
-                                            nSel & nsSelectionType::SEL_FRM;
+                                {
+                                    // #i102253# applied patch from OD (see task)
+                                    bDisable =
+                                        nSel & nsSelectionType::SEL_FRM ||
+                                        GRAPHIC_NONE == rSh.GetIMapGraphic().GetType();
+                                }
                             }
                             bSet = bDisable ? FALSE : rWrap.IsContour();
 
