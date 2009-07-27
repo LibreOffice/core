@@ -1044,6 +1044,22 @@
                     </info>
                     <value>true</value>
                 </prop>
+                <prop oor:name="DetectSpecialNumbers" oor:type="xs:boolean">
+                    <info>
+                        <author>kyoshida</author>
+                        <desc>If true, Calc tries to detect special number format, such as date and scientific notation.</desc>
+                        <label>DetectSpecialNumbers</label>
+                    </info>
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Language" oor:type="xs:int">
+                    <info>
+                        <author>kyoshida</author>
+                        <desc>Language to use for CSV import.  This determines how the numbers are parsed.</desc>
+                        <label>Language</label>
+                    </info>
+                    <value>0</value>
+                </prop>
                 <prop oor:name="Separators" oor:type="xs:string">
                     <info>
                         <author>muthusuba</author>
