@@ -19,7 +19,7 @@
 	<xsl:variable name="nsname" select="@name"/>
 	<xsl:for-each select="rng:grammar/rng:define">
 		<xsl:variable name="defname" select="@name"/>
-		<xsl:for-each select="rng:attribute|rng:element">
+		<xsl:for-each select=".//rng:attribute|.//rng:element">
 			<xsl:choose>
 				<xsl:when test="local-name()='element'">					
 					<element>
