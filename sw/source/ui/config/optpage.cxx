@@ -1945,7 +1945,7 @@ BOOL SwRedlineOptionsTabPage::FillItemSet( SfxItemSet& )
     AuthorCharAttr aOldDeletedAttr(pOpt->GetDeletedAuthorAttr());
     AuthorCharAttr aOldChangedAttr(pOpt->GetFormatAuthorAttr());
 
-    ULONG nOldMarkColor = pOpt->GetMarkAlignColor().GetColor();
+    ColorData nOldMarkColor = pOpt->GetMarkAlignColor().GetColor();
     USHORT nOldMarkMode = pOpt->GetMarkAlignMode();
 
     USHORT nPos = aInsertLB.GetSelectEntryPos();
@@ -2105,7 +2105,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
     aChangedColorLB.SetUpdateMode( TRUE );
     aMarkColorLB.SetUpdateMode( TRUE );
 
-    ULONG nColor = rInsertAttr.nColor;
+    ColorData nColor = rInsertAttr.nColor;
 
     switch (nColor)
     {
