@@ -148,6 +148,11 @@ namespace drawinglayer
         bool SdrTextAttribute::operator==(const SdrTextAttribute& rCandidate) const
         {
             return (getOutlinerParaObject() == rCandidate.getOutlinerParaObject()
+                // #i102062# for primitive visualisation, the WrongList (SpellChecking)
+                // is important, too, so use isWrongListEqual since there is no WrongList
+                // comparison in the regular OutlinerParaObject compare (since it's
+                // not-persistent data)
+                && getOutlinerParaObject().isWrongListEqual(rCandidate.getOutlinerParaObject())
                 && pointerOrContentEqual(getSdrFormTextAttribute(), rCandidate.getSdrFormTextAttribute())
                 && getTextLeftDistance() == rCandidate.getTextLeftDistance()
                 && getTextUpperDistance() == rCandidate.getTextUpperDistance()

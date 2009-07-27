@@ -793,6 +793,15 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, BOOL bFull*/)
             // overlay objects instead.
             sal_Bool bUseSolidDragging(IsSolidDragging());
 
+            // #i101648# check if dragged object is a naked SdrObject (no
+            // derivation of). This is e.g. used in SW Frame construction
+            // as placeholder. Do not use SolidDragging for naked SDrObjects,
+            // they cannot have a valid optical representation
+            if(bUseSolidDragging && OBJ_NONE == pAktCreate->GetObjIdentifier())
+            {
+                bUseSolidDragging = false;
+            }
+
             // check for objects with no fill and no line
             if(bUseSolidDragging)
             {

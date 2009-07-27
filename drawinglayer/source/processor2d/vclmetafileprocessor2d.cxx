@@ -247,8 +247,8 @@ namespace drawinglayer
             if(rB2DPolygon.count() && !mnSvtGraphicStrokeCount)
             {
                 basegfx::BColor aStrokeColor;
-                PolyPolygon aStartPolyPolygon;
-                PolyPolygon aEndPolyPolygon;
+                basegfx::B2DPolyPolygon aStartArrow;
+                basegfx::B2DPolyPolygon aEndArrow;
 
                 if(pColor)
                 {
@@ -271,11 +271,9 @@ namespace drawinglayer
                     {
                         fPolyLength = basegfx::tools::getLength(rB2DPolygon);
 
-                        const basegfx::B2DPolyPolygon aStartArrow(basegfx::tools::createAreaGeometryForLineStartEnd(
+                        aStartArrow = basegfx::tools::createAreaGeometryForLineStartEnd(
                             rB2DPolygon, pStart->getB2DPolyPolygon(), true, pStart->getWidth(),
-                            fPolyLength, pStart->isCentered() ? 0.5 : 0.0, 0));
-
-                        aStartPolyPolygon = PolyPolygon(aStartArrow);
+                            fPolyLength, pStart->isCentered() ? 0.5 : 0.0, 0);
                     }
 
                     if(pEnd && pEnd->isActive())
@@ -285,11 +283,9 @@ namespace drawinglayer
                             fPolyLength = basegfx::tools::getLength(rB2DPolygon);
                         }
 
-                        const basegfx::B2DPolyPolygon aEndArrow(basegfx::tools::createAreaGeometryForLineStartEnd(
+                        aEndArrow = basegfx::tools::createAreaGeometryForLineStartEnd(
                             rB2DPolygon, pEnd->getB2DPolyPolygon(), false, pEnd->getWidth(),
-                            fPolyLength, pEnd->isCentered() ? 0.5 : 0.0, 0));
-
-                        aEndPolyPolygon = PolyPolygon(aEndArrow);
+                            fPolyLength, pEnd->isCentered() ? 0.5 : 0.0, 0);
                     }
                 }
 
@@ -341,10 +337,23 @@ namespace drawinglayer
                     aDashArray = pStrokeAttribute->getDotDashArray();
                 }
 
+                // #i101734# apply current object transformation to created geometry.
+                // This is a partial fix. When a object transformation is used which
+                // e.g. contains a scaleX != scaleY, an unproportional scaling would
+                // have to be applied to the evtl. existing fat line. The current
+                // concept of PDF export and SvtGraphicStroke usage does simply not
+                // allow handling such definitions. The only clean way would be to
+                // add the transformation to SvtGraphicStroke and to handle it there
+                basegfx::B2DPolygon aB2DPolygon(rB2DPolygon);
+
+                aB2DPolygon.transform(maCurrentTransformation);
+                aStartArrow.transform(maCurrentTransformation);
+                aEndArrow.transform(maCurrentTransformation);
+
                 pRetval = new SvtGraphicStroke(
-                    Polygon(rB2DPolygon),
-                    aStartPolyPolygon,
-                    aEndPolyPolygon,
+                    Polygon(aB2DPolygon),
+                    PolyPolygon(aStartArrow),
+                    PolyPolygon(aEndArrow),
                     mfCurrentUnifiedTransparence,
                     fLineWidth,
                     SvtGraphicStroke::capButt,
@@ -1623,7 +1632,10 @@ namespace drawinglayer
                     // ChartPrimitive2D
                     const primitive2d::ChartPrimitive2D& rChartPrimitive = static_cast< const primitive2d::ChartPrimitive2D& >(rCandidate);
 
-                    if(!renderChartPrimitive2D(rChartPrimitive, *mpOutputDevice))
+                    if(!renderChartPrimitive2D(
+                        rChartPrimitive,
+                        *mpOutputDevice,
+                        getViewInformation2D()))
                     {
                         // fallback to decomposition (MetaFile)
                         process(rChartPrimitive.get2DDecomposition(getViewInformation2D()));

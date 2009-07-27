@@ -476,6 +476,31 @@ WrongList*  WrongList::Clone() const
     return pNew;
 }
 
+// #i102062#
+bool WrongList::operator==(const WrongList& rCompare) const
+{
+    // cleck direct members
+    if(GetInvalidStart() != rCompare.GetInvalidStart()
+        || GetInvalidEnd() != rCompare.GetInvalidEnd()
+        || Count() != rCompare.Count())
+    {
+        return false;
+    }
+
+    for(USHORT a(0); a < Count(); a++)
+    {
+        const WrongRange& rCandA(GetObject(a));
+        const WrongRange& rCandB(rCompare.GetObject(a));
+
+        if(rCandA.nStart != rCandB.nStart
+            || rCandA.nEnd != rCandB.nEnd)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
 
 #ifdef DBG_UTIL
 sal_Bool WrongList::DbgIsBuggy() const

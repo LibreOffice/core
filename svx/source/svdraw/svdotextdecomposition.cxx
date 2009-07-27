@@ -657,7 +657,11 @@ namespace
 
 bool SdrTextObj::impCheckSpellCheckForDecomposeTextPrimitive() const
 {
-    return false;
+    // #i102062# asked TL who killed this feature (CWS tl56). Obviously, there
+    // is no more support for EE_CNTRL_NOREDLINES anymore; redlining is always
+    // on nowadays. Unfortunately, not false, but true should be returned then.
+    // Trying if this is all...
+    return true;
 }
 
 bool SdrTextObj::impDecomposeContourTextPrimitive(
@@ -930,6 +934,16 @@ bool SdrTextObj::impDecomposeStretchTextPrimitive(
     // prepare matrices to apply to newly created primitives
     basegfx::B2DHomMatrix aNewTransformA;
     basegfx::B2DHomMatrix aNewTransformB;
+
+    // #i101957# Check for vertical text. If used, aNewTransformA
+    // needs to translate the text initially around object width to orient
+    // it relative to the topper right instead of the topper left
+    const bool bVertical(rSdrStretchTextPrimitive.getOutlinerParaObject().IsVertical());
+
+    if(bVertical)
+    {
+        aNewTransformA.translate(aScale.getX(), 0.0);
+    }
 
     // calculate global char stretching scale parameters. Use non-mirrored sizes
     // to layout without mirroring

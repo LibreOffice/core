@@ -239,17 +239,19 @@ namespace drawinglayer
         {
             if(getB2DPolygon().count())
             {
+                // #i102241# try to simplify before usage
+                const basegfx::B2DPolygon aB2DPolygon(basegfx::tools::simplifyCurveSegments(getB2DPolygon()));
                 basegfx::B2DPolyPolygon aHairLinePolyPolygon;
 
                 if(0.0 == getStrokeAttribute().getFullDotDashLen())
                 {
                     // no line dashing, just copy
-                    aHairLinePolyPolygon.append(getB2DPolygon());
+                    aHairLinePolyPolygon.append(aB2DPolygon);
                 }
                 else
                 {
                     // apply LineStyle
-                    basegfx::tools::applyLineDashing(getB2DPolygon(), getStrokeAttribute().getDotDashArray(), &aHairLinePolyPolygon, 0, getStrokeAttribute().getFullDotDashLen());
+                    basegfx::tools::applyLineDashing(aB2DPolygon, getStrokeAttribute().getDotDashArray(), &aHairLinePolyPolygon, 0, getStrokeAttribute().getFullDotDashLen());
                 }
 
                 const sal_uInt32 nCount(aHairLinePolyPolygon.count());
@@ -263,12 +265,9 @@ namespace drawinglayer
 
                     for(sal_uInt32 a(0L); a < nCount; a++)
                     {
-                        // AW: New version of createAreaGeometry; now creates bezier polygons
+                        // New version of createAreaGeometry; now creates bezier polygons
                         aAreaPolyPolygon.append(basegfx::tools::createAreaGeometry(
                             aHairLinePolyPolygon.getB2DPolygon(a), fHalfLineWidth, aLineJoin));
-                        //const basegfx::B2DPolyPolygon aNewPolyPolygon(basegfx::tools::createAreaGeometryForPolygon(
-                        //  aHairLinePolyPolygon.getB2DPolygon(a), fHalfLineWidth, aLineJoin, fMiterMinimumAngle));
-                        //aAreaPolyPolygon.append(aNewPolyPolygon);
                     }
 
                     // prepare return value

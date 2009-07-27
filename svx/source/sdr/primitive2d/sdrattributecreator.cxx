@@ -473,7 +473,14 @@ namespace drawinglayer
             return pRetval;
         }
 
-        attribute::SdrTextAttribute* createNewSdrTextAttribute(const SfxItemSet& rSet, const SdrText& rText)
+        // #i101508# Support handing over given text-to-border distances
+        attribute::SdrTextAttribute* createNewSdrTextAttribute(
+            const SfxItemSet& rSet,
+            const SdrText& rText,
+            const sal_Int32* pLeft,
+            const sal_Int32* pUpper,
+            const sal_Int32* pRight,
+            const sal_Int32* pLower)
         {
             attribute::SdrTextAttribute* pRetval(0);
             const SdrTextObj& rTextObj = rText.GetObject();
@@ -519,10 +526,10 @@ namespace drawinglayer
                     rText,
                     aOutlinerParaObject,
                     ((const XFormTextStyleItem&)rSet.Get(XATTR_FORMTXTSTYLE)).GetValue(),
-                    rTextObj.GetTextLeftDistance(),
-                    rTextObj.GetTextUpperDistance(),
-                    rTextObj.GetTextRightDistance(),
-                    rTextObj.GetTextLowerDistance(),
+                    pLeft ? *pLeft : rTextObj.GetTextLeftDistance(),
+                    pUpper ? *pUpper : rTextObj.GetTextUpperDistance(),
+                    pRight ? *pRight : rTextObj.GetTextRightDistance(),
+                    pLower ? *pLower : rTextObj.GetTextLowerDistance(),
                     ((const SdrTextContourFrameItem&)rSet.Get(SDRATTR_TEXT_CONTOURFRAME)).GetValue(),
                     (SDRTEXTFIT_PROPORTIONAL == eFit || SDRTEXTFIT_ALLLINES == eFit),
                     ((const XFormTextHideFormItem&)rSet.Get(XATTR_FORMTXTHIDEFORM)).GetValue(),
@@ -1031,7 +1038,14 @@ namespace drawinglayer
             }
         }
 
-        attribute::SdrFillTextAttribute* createNewSdrFillTextAttribute(const SfxItemSet& rSet, const SdrText* pSdrText)
+        // #i101508# Support handing over given text-to-border distances
+        attribute::SdrFillTextAttribute* createNewSdrFillTextAttribute(
+            const SfxItemSet& rSet,
+            const SdrText* pSdrText,
+            const sal_Int32* pLeft,
+            const sal_Int32* pUpper,
+            const sal_Int32* pRight,
+            const sal_Int32* pLower)
         {
             attribute::SdrFillTextAttribute* pRetval(0L);
             attribute::SdrFillAttribute* pFill(0L);
@@ -1042,7 +1056,7 @@ namespace drawinglayer
             // look for text first
             if(pSdrText)
             {
-                pText = createNewSdrTextAttribute(rSet, *pSdrText);
+                pText = createNewSdrTextAttribute(rSet, *pSdrText, pLeft, pUpper, pRight, pLower);
             }
 
             // when object has text and text is fontwork and hide contour is set for fontwork, force

@@ -71,7 +71,16 @@ namespace drawinglayer
         attribute::SdrLineStartEndAttribute* createNewSdrLineStartEndAttribute(const SfxItemSet& rSet, double fWidth);
         attribute::SdrShadowAttribute* createNewSdrShadowAttribute(const SfxItemSet& rSet);
         attribute::SdrFillAttribute* createNewSdrFillAttribute(const SfxItemSet& rSet);
-        attribute::SdrTextAttribute* createNewSdrTextAttribute(const SfxItemSet& rSet, const SdrText& rText);
+
+        // #i101508# Support handing over given text-to-border distances
+        attribute::SdrTextAttribute* createNewSdrTextAttribute(
+            const SfxItemSet& rSet,
+            const SdrText& rText,
+            const sal_Int32* pLeft = 0,
+            const sal_Int32* pUpper = 0,
+            const sal_Int32* pRight = 0,
+            const sal_Int32* pLower = 0);
+
         attribute::FillGradientAttribute* createNewTransparenceGradientAttribute(const SfxItemSet& rSet);
         attribute::SdrFillBitmapAttribute* createNewSdrFillBitmapAttribute(const SfxItemSet& rSet);
         attribute::SdrShadowTextAttribute* createNewSdrShadowTextAttribute(
@@ -83,7 +92,15 @@ namespace drawinglayer
         attribute::SdrLineFillShadowAttribute* createNewSdrLineFillShadowAttribute(const SfxItemSet& rSet, bool bSuppressFill);
         attribute::SdrSceneAttribute* createNewSdrSceneAttribute(const SfxItemSet& rSet);
         attribute::SdrLightingAttribute* createNewSdrLightingAttribute(const SfxItemSet& rSet);
-        attribute::SdrFillTextAttribute* createNewSdrFillTextAttribute(const SfxItemSet& rSet, const SdrText* pSdrText);
+
+        // #i101508# Support handing over given text-to-border distances
+        attribute::SdrFillTextAttribute* createNewSdrFillTextAttribute(
+            const SfxItemSet& rSet,
+            const SdrText* pSdrText,
+            const sal_Int32* pLeft = 0,
+            const sal_Int32* pUpper = 0,
+            const sal_Int32* pRight = 0,
+            const sal_Int32* pLower = 0);
 
         // helpers
         void calculateRelativeCornerRadius(sal_Int32 nRadius, const ::basegfx::B2DRange& rObjectRange, double& rfCornerRadiusX, double& rfCornerRadiusY);
