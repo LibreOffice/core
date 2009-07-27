@@ -96,6 +96,7 @@ namespace vcl
             CheckBox                                maBorderCB;
 
             vcl::RowOrColumn                        maLayout;
+            boost::shared_ptr< vcl::WindowArranger >mxAdvancedControls;
 
             void setupLayout();
 
@@ -114,6 +115,8 @@ namespace vcl
         public:
             FixedLine                               maPrinterFL;
             ListBox                                 maPrinters;
+            PushButton                              maDetailsBtn;
+            FixedText                               maDetailsTxt;
             FixedText                               maStatusLabel;
             FixedText                               maStatusTxt;
             FixedText                               maLocationLabel;
@@ -139,6 +142,7 @@ namespace vcl
 
             vcl::RowOrColumn                        maLayout;
             boost::shared_ptr<vcl::RowOrColumn>     mxPrintRange;
+            boost::shared_ptr<vcl::WindowArranger>  mxDetails;
 
             JobTabPage( Window*, const ResId& );
             virtual ~JobTabPage();

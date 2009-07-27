@@ -53,6 +53,31 @@ void WindowArranger::setParent( WindowArranger* i_pParent )
     setParentWindow( m_pParentWindow );
 }
 
+void WindowArranger::show( bool i_bShow, bool i_bImmediateUpdate )
+{
+    size_t nEle = countElements();
+    for( size_t i = 0; i < nEle; i++ )
+    {
+        Element* pEle = getElement( i );
+        if( pEle ) // sanity check
+        {
+            pEle->m_bHidden = ! i_bShow;
+            if( pEle->m_pElement )
+                pEle->m_pElement->Show( i_bShow );
+            if( pEle->m_pChild.get() )
+                pEle->m_pChild->show( i_bShow, false );
+        }
+    }
+    if( i_bImmediateUpdate )
+    {
+        // find the topmost parent
+        WindowArranger* pResize = this;
+        while( pResize->m_pParentArranger )
+            pResize = pResize->m_pParentArranger;
+        pResize->resize();
+    }
+}
+
 sal_Int32 WindowArranger::Element::getExpandPriority() const
 {
     sal_Int32 nPrio = m_nExpandPriority;
@@ -72,14 +97,17 @@ sal_Int32 WindowArranger::Element::getExpandPriority() const
 Size WindowArranger::Element::getOptimalSize( WindowSizeType i_eType ) const
 {
     Size aResult;
-    if( m_pElement )
-        aResult = m_pElement->GetOptimalSize( i_eType );
-    else if( m_pChild )
-        aResult = m_pChild->getOptimalSize( i_eType );
-    if( aResult.Width() < m_aMinSize.Width() )
-        aResult.Width() = m_aMinSize.Width();
-    if( aResult.Height() < m_aMinSize.Height() )
-        aResult.Height() = m_aMinSize.Height();
+    if( ! m_bHidden )
+    {
+        if( m_pElement && m_pElement->IsVisible() )
+            aResult = m_pElement->GetOptimalSize( i_eType );
+        else if( m_pChild )
+            aResult = m_pChild->getOptimalSize( i_eType );
+        if( aResult.Width() < m_aMinSize.Width() )
+            aResult.Width() = m_aMinSize.Width();
+        if( aResult.Height() < m_aMinSize.Height() )
+            aResult.Height() = m_aMinSize.Height();
+    }
 
     return aResult;
 }

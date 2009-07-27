@@ -228,6 +228,9 @@ void PrintDialog::NUpTabPage::setupLayout()
 
     boost::shared_ptr< vcl::Indenter > xIndent( new vcl::Indenter( &maLayout ) );
     maLayout.addChild( xIndent );
+    // remember advanced controls to show/hide
+    mxAdvancedControls = xIndent;
+
     boost::shared_ptr< vcl::RowOrColumn > xCol( new vcl::RowOrColumn( xIndent.get() ) );
     xIndent->setChild( xCol );
 
@@ -259,6 +262,9 @@ void PrintDialog::NUpTabPage::setupLayout()
     xRow->addWindow( &maNupOrderBox );
 
     maLayout.addWindow( &maBorderCB );
+
+    // initially advanced controls are not show, rows=columns=1
+    mxAdvancedControls->show( false, false );
 }
 
 void PrintDialog::NUpTabPage::Resize()
@@ -287,6 +293,8 @@ PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
     : TabPage( i_pParent, rResId )
     , maPrinterFL( this, VclResId( SV_PRINT_PRINTERS_FL ) )
     , maPrinters( this, VclResId( SV_PRINT_PRINTERS ) )
+    , maDetailsBtn( this, VclResId( SV_PRINT_DETAILS_BTN ) )
+    , maDetailsTxt( this, VclResId( SV_PRINT_DETAILS_TXT ) )
     , maStatusLabel( this, VclResId( SV_PRINT_STATUS_TXT ) )
     , maStatusTxt( this, 0 )
     , maLocationLabel( this, VclResId( SV_PRINT_LOCATION_TXT ) )
@@ -351,9 +359,25 @@ void PrintDialog::JobTabPage::setupLayout()
     // add print LB
     maLayout.addWindow( &maPrinters );
 
+    // create a row for details button/text and properties button
+    boost::shared_ptr< vcl::RowOrColumn > xDetRow( new vcl::RowOrColumn( &maLayout, false ) );
+    maLayout.addChild( xDetRow );
+    xDetRow->addWindow( &maDetailsBtn );
+    xDetRow->addWindow( &maDetailsTxt );
+    xDetRow->addChild( new vcl::Spacer( xDetRow.get(), 2 ) );
+    xDetRow->addWindow( &maSetupButton );
+
+    // create an indent for details
+    boost::shared_ptr< vcl::Indenter > xIndent( new vcl::Indenter( &maLayout ) );
+    maLayout.addChild( xIndent );
+    // remember details controls
+    mxDetails = xIndent;
+    // create a column for the details
+    boost::shared_ptr< vcl::RowOrColumn > xDetCol( new vcl::RowOrColumn( xIndent.get() ) );
+    xIndent->setChild( xDetCol );
     // create a row for stati and properties button
-    boost::shared_ptr< vcl::RowOrColumn > xStateRow( new vcl::RowOrColumn( &maLayout, false ) );
-    maLayout.addChild( xStateRow );
+    boost::shared_ptr< vcl::RowOrColumn > xStateRow( new vcl::RowOrColumn( xDetCol.get(), false ) );
+    xDetCol->addChild( xStateRow );
     boost::shared_ptr< vcl::RowOrColumn > xLabelCol( new vcl::RowOrColumn( xStateRow.get(), true, aBorder.Height() ) );
     xStateRow->addChild( xLabelCol );
     xLabelCol->addWindow( &maStatusLabel );
@@ -365,8 +389,6 @@ void PrintDialog::JobTabPage::setupLayout()
     xStatusCol->addWindow( &maStatusTxt );
     xStatusCol->addWindow( &maLocationTxt );
     xStatusCol->addWindow( &maCommentTxt );
-
-    xStateRow->addWindow( &maSetupButton );
 
     // add print range and copies columns
     maLayout.addWindow( &maCopies );
@@ -390,6 +412,11 @@ void PrintDialog::JobTabPage::setupLayout()
     xCopyCollateCol->addChild( xCollateRow );
     xCollateRow->addWindow( &maCollateBox );
     xCollateRow->addWindow( &maCollateImage );
+
+    maDetailsBtn.SetSymbol( SYMBOL_SPIN_DOWN );
+    maDetailsBtn.SetSmallSymbol();
+    maDetailsBtn.SetStyle( maDetailsBtn.GetStyle() | (WB_SMALLSTYLE | WB_BEVELBUTTON) );
+    mxDetails->show( false, false );
 }
 
 void PrintDialog::JobTabPage::readFromSettings()
@@ -605,6 +632,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maBackwardBtn.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maJobPage.maCollateBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maJobPage.maSetupButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maJobPage.maDetailsBtn.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.maBorderCB.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maOptionsPage.maToFileBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
 
@@ -1283,6 +1311,7 @@ void PrintDialog::checkControlDependencies()
             aPrinterSize.Width() = aSetupPos.X() - aPrinterPos.X() - LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ).Width();
             maJobPage.maPrinters.SetSizePixel( aPrinterSize );
             maJobPage.maSetupButton.Show();
+            maLayout.resize();
         }
     }
     else
@@ -1296,6 +1325,7 @@ void PrintDialog::checkControlDependencies()
             aPrinterSize.Width() = aSetupPos.X() + aSetupSize.Width() - aPrinterPos.X();
             maJobPage.maPrinters.SetSizePixel( aPrinterSize );
             maJobPage.maSetupButton.Hide();
+            maLayout.resize();
         }
     }
 }
@@ -1455,7 +1485,6 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
     if(  pBox == &maJobPage.maPrinters )
     {
         String aNewPrinter( pBox->GetSelectEntry() );
-        maJobPage.maPrinters.SelectEntry( aNewPrinter );
         // set new printer
         maPController->setPrinter( boost::shared_ptr<Printer>( new Printer( aNewPrinter ) ) );
         // update text fields
@@ -1505,6 +1534,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
         maNUpPage.maNupRowsEdt.SetValue( nRows );
         maNUpPage.maNupColEdt.SetValue( nCols );
         updateNup();
+        maNUpPage.mxAdvancedControls->show( bCustom );
     }
 
     return 0;
@@ -1529,6 +1559,12 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     {
         maOKButton.SetText( maOptionsPage.maToFileBox.IsChecked() ? maPrintToFileText : maPrintText );
         maLayout.resize();
+    }
+    else if( pButton == &maJobPage.maDetailsBtn )
+    {
+        bool bShow = ! maJobPage.maStatusTxt.IsVisible();
+        maJobPage.maDetailsBtn.SetSymbol( bShow ? SYMBOL_SPIN_UP : SYMBOL_SPIN_DOWN );
+        maJobPage.mxDetails->show( bShow );
     }
     else if( pButton == &maJobPage.maCollateBox )
     {

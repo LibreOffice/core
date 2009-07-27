@@ -266,6 +266,17 @@ ModalDialog SV_DLG_PRINT
             Size = MAP_APPFONT( 100, 80 );
             Border = TRUE;
         };
+        PushButton SV_PRINT_DETAILS_BTN
+        {
+            Pos = MAP_APPFONT( 5, 5 );
+            Size = MAP_APPFONT( 5, 5 );
+        };
+        FixedText SV_PRINT_DETAILS_TXT
+        {
+            Pos = MAP_APPFONT( 5, 5 );
+            Size = MAP_APPFONT( 10, 10 );
+            Text [en-US] = "Printer details";
+        };
         FixedText SV_PRINT_STATUS_TXT
         {
             Pos = MAP_APPFONT( 5, 5 );

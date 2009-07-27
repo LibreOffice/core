@@ -60,11 +60,13 @@ namespace vcl
             boost::shared_ptr<WindowArranger>  m_pChild;
             sal_Int32                          m_nExpandPriority;
             Size                               m_aMinSize;
+            bool                               m_bHidden;
 
             Element()
             : m_pElement( NULL )
             , m_pChild()
             , m_nExpandPriority( 0 )
+            , m_bHidden( false )
             {}
 
             Element( Window* i_pWin,
@@ -74,6 +76,7 @@ namespace vcl
             : m_pElement( i_pWin )
             , m_pChild( i_pChild )
             , m_nExpandPriority( i_nExpandPriority )
+            , m_bHidden( false )
             {}
 
             void deleteChild() { m_pChild.reset(); }
@@ -146,6 +149,8 @@ namespace vcl
             }
             return pEle != NULL;
         }
+
+        void show( bool i_bShow = true, bool i_bImmediateUpdate = true );
 
         void setManagedArea( const Rectangle& i_rArea )
         {

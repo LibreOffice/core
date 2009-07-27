@@ -135,6 +135,8 @@
 #define SV_PRINT_STATUS_TXT                 20
 #define SV_PRINT_LOCATION_TXT               21
 #define SV_PRINT_COMMENT_TXT                22
+#define SV_PRINT_DETAILS_BTN                23
+#define SV_PRINT_DETAILS_TXT                24
 
 #define SV_PRINT_TAB_OPT                    3
 #define SV_PRINT_OPT_PRINT_FL               1

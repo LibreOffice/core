@@ -1991,8 +1991,11 @@ Size PushButton::CalcMinimumSize( long nMaxWidth ) const
     }
 
     // cf. ImplDrawPushButton ...
-    aSize.Width() += 8;
-    aSize.Height() += 8;
+    if( (GetStyle() & WB_SMALLSTYLE) == 0 )
+    {
+        aSize.Width() += 8;
+        aSize.Height() += 8;
+    }
 
     return CalcWindowSize( aSize );
 }
