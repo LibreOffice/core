@@ -56,6 +56,7 @@ ScAsciiOptions::ScAsciiOptions() :
     bFixedLen       ( FALSE ),
     aFieldSeps      ( ';' ),
     bMergeFieldSeps ( FALSE ),
+    bQuotedFieldAsText(false),
     cTextSep        ( cDefaultTextSep ),
     eCharSet        ( gsl_getSystemTextEncoding() ),
     bCharSetSystem  ( FALSE ),
@@ -71,6 +72,7 @@ ScAsciiOptions::ScAsciiOptions(const ScAsciiOptions& rOpt) :
     bFixedLen       ( rOpt.bFixedLen ),
     aFieldSeps      ( rOpt.aFieldSeps ),
     bMergeFieldSeps ( rOpt.bMergeFieldSeps ),
+    bQuotedFieldAsText(rOpt.bQuotedFieldAsText),
     cTextSep        ( rOpt.cTextSep ),
     eCharSet        ( rOpt.eCharSet ),
     bCharSetSystem  ( rOpt.bCharSetSystem ),
@@ -155,6 +157,7 @@ ScAsciiOptions& ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
     bFixedLen       = rCpy.bFixedLen;
     aFieldSeps      = rCpy.aFieldSeps;
     bMergeFieldSeps = rCpy.bMergeFieldSeps;
+    bQuotedFieldAsText = rCpy.bQuotedFieldAsText;
     cTextSep        = rCpy.cTextSep;
     eCharSet        = rCpy.eCharSet;
     bCharSetSystem  = rCpy.bCharSetSystem;
@@ -169,6 +172,7 @@ BOOL ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
     if ( bFixedLen       == rCmp.bFixedLen &&
          aFieldSeps      == rCmp.aFieldSeps &&
          bMergeFieldSeps == rCmp.bMergeFieldSeps &&
+         bQuotedFieldAsText == rCmp.bQuotedFieldAsText &&
          cTextSep        == rCmp.cTextSep &&
          eCharSet        == rCmp.eCharSet &&
          bCharSetSystem  == rCmp.bCharSetSystem &&
@@ -286,6 +290,13 @@ void ScAsciiOptions::ReadFromString( const String& rString )
             pColFormat = NULL;
         }
     }
+
+    // Import quoted field as text.
+    if (nCount >= 6)
+    {
+        aToken = rString.GetToken(5, ',');
+        bQuotedFieldAsText = aToken.EqualsAscii("true") ? true : false;
+    }
 }
 
 
@@ -356,6 +367,11 @@ String ScAsciiOptions::WriteToString() const
         aOutStr += '/';
         aOutStr += String::CreateFromInt32(pColFormat[nInfo]);
     }
+
+    aOutStr += ',';
+
+    // Import quoted field as text.
+    aOutStr += String::CreateFromAscii(bQuotedFieldAsText ? "true" : "false");
 
     return aOutStr;
 }

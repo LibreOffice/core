@@ -737,7 +737,8 @@ void ScCsvGrid::ImplSetTextLineSep(
     while( *pChar && (nColIx < sal::static_int_cast<sal_uInt32>(CSV_MAXCOLCOUNT)) )
     {
         // scan for next cell text
-        pChar = ScImportExport::ScanNextFieldFromString( pChar, aCellText, cTextSep, pSepChars, bMergeSep );
+        bool bIsQuoted = false;
+        pChar = ScImportExport::ScanNextFieldFromString( pChar, aCellText, cTextSep, pSepChars, bMergeSep, bIsQuoted );
 
         // update column width
         sal_Int32 nWidth = Max( CSV_MINCOLWIDTH, aCellText.Len() + sal_Int32( 1 ) );

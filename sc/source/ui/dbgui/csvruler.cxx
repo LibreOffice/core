@@ -37,7 +37,75 @@
 #include "AccessibleCsvControl.hxx"
 
 
+#include <optutil.hxx>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include "miscuno.hxx"
+
+using namespace rtl;
+using namespace com::sun::star::uno;
+
+
+
 // ============================================================================
+#define SEP_PATH            "Office.Calc/Dialogs/CSVImport"
+#define FIXED_WIDTH_LIST    "FixedWidthList"
+
+
+// ============================================================================
+
+static void load_FixedWidthList(ScCsvSplits &aSplits)
+{
+    String sSplits;
+    OUString sFixedWidthLists;
+
+    Sequence<Any>aValues;
+    const Any *pProperties;
+    Sequence<OUString> aNames(1);
+    OUString* pNames = aNames.getArray();
+    ScLinkConfigItem aItem( OUString::createFromAscii( SEP_PATH ) );
+
+    pNames[0] = OUString::createFromAscii( FIXED_WIDTH_LIST );
+    aValues = aItem.GetProperties( aNames );
+    pProperties = aValues.getConstArray();
+
+    if( pProperties[0].hasValue() )
+    {
+        aSplits.Clear();
+        pProperties[0] >>= sFixedWidthLists;
+
+        sSplits = String( sFixedWidthLists );
+
+        // String ends with a semi-colon so there is no 'int' after the last one.
+        for(int i=0;i<sSplits.GetTokenCount()-1;i++ )
+            aSplits.Insert( sSplits.GetToken(i).ToInt32() );
+    }
+}
+static void save_FixedWidthList(ScCsvSplits aSplits)
+{
+    String sSplits;
+    // Create a semi-colon separated string to save the splits
+    sal_uInt32 n = aSplits.Count();
+    for (sal_uInt32 i = 0; i < n; ++i)
+    {
+        sSplits.Append( String::CreateFromInt32( aSplits[i] ) );
+        sSplits.Append((char)';');
+    }
+
+    OUString sFixedWidthLists = OUString( sSplits );
+    Sequence<Any> aValues;
+    Any *pProperties;
+    Sequence<OUString> aNames(1);
+    OUString* pNames = aNames.getArray();
+    ScLinkConfigItem aItem( OUString::createFromAscii( SEP_PATH ) );
+
+    pNames[0] = OUString::createFromAscii( FIXED_WIDTH_LIST );
+    aValues = aItem.GetProperties( aNames );
+    pProperties = aValues.getArray();
+    pProperties[0] <<= sFixedWidthLists;
+
+    aItem.PutProperties(aNames, aValues);
+}
 
 ScCsvRuler::ScCsvRuler( ScCsvControl& rParent ) :
     ScCsvControl( rParent ),
@@ -48,6 +116,13 @@ ScCsvRuler::ScCsvRuler( ScCsvControl& rParent ) :
     InitSizeData();
     maBackgrDev.SetFont( GetFont() );
     maRulerDev.SetFont( GetFont() );
+
+    load_FixedWidthList( maSplits );
+}
+
+ScCsvRuler::~ScCsvRuler()
+{
+    save_FixedWidthList( maSplits );
 }
 
 

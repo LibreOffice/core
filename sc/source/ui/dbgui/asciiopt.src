@@ -34,24 +34,24 @@ ModalDialog RID_SCDLG_ASCII
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 320 , 247 ) ;
+    Size = MAP_APPFONT ( 320 , 264 ) ;
     Text [ en-US ] = "Text Import" ;
     Moveable = TRUE ;
     FixedLine FL_WIDTH
     {
-        Pos = MAP_APPFONT ( 6 , 132 ) ;
+        Pos = MAP_APPFONT ( 6 , 147 ) ;
         Size = MAP_APPFONT ( 252 , 8 ) ;
         Text [ en-US ] = "Fields" ;
     };
     FixedText FT_TYPE
     {
-        Pos = MAP_APPFONT ( 12 , 145 ) ;
+        Pos = MAP_APPFONT ( 12 , 160 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Text [ en-US ] = "Column t~ype";
     };
     ListBox LB_TYPE1
     {
-        Pos = MAP_APPFONT ( 76 , 143 ) ;
+        Pos = MAP_APPFONT ( 76 , 158 ) ;
         Size = MAP_APPFONT ( 60 , 68 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -194,7 +194,7 @@ ModalDialog RID_SCDLG_ASCII
         HelpId = HID_SC_ASCII_TABCTR ;
         Border = TRUE ;
         DialogControl = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 159 ) ;
+        Pos = MAP_APPFONT ( 12 , 176 ) ;
         Size = MAP_APPFONT ( 243 , 82 ) ;
     };
     CheckBox CB_ASONCE
@@ -203,6 +203,13 @@ ModalDialog RID_SCDLG_ASCII
         Size = MAP_APPFONT ( 130 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Merge ~delimiters" ;
+    };
+    CheckBox CB_QUOTED_AS_TEXT
+    {
+        Pos = MAP_APPFONT ( 20 , 129 ) ;
+        Size = MAP_APPFONT ( 130 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Quoted field as text" ;
     };
     String STR_TEXTTOCOLUMNS
     {

@@ -64,6 +64,7 @@ class ScImportAsciiDlg : public ModalDialog
     CheckBox                    aCkbOther;
     Edit                        aEdOther;
     CheckBox                    aCkbAsOnce;
+    CheckBox                    aCkbQuotedAsText;
     FixedText                   aFtTextSep;
     ComboBox                    aCbTextSep;
 
@@ -87,6 +88,7 @@ class ScImportAsciiDlg : public ModalDialog
 
     CharSet                     meCharSet;          /// Selected char set.
     bool                        mbCharSetSystem;    /// Is System char set selected?
+    bool                        mbFileImport;       /// Is this dialog involked for csv file import ?
 
 public:
                                 ScImportAsciiDlg(

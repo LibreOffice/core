@@ -56,4 +56,5 @@
 #define FT_AT_ROW 59
 #define NF_AT_ROW 60
 #define CB_ASONCE 90
+#define CB_QUOTED_AS_TEXT 91
 #define STR_TEXTTOCOLUMNS 100

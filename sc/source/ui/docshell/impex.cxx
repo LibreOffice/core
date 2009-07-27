@@ -905,12 +905,10 @@ BOOL ScImportExport::Text2Doc( SvStream& rStrm )
         //
 
 
-bool lcl_PutString( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
-                    const String& rStr, BYTE nColFormat,
-                    ::utl::TransliterationWrapper& rTransliteration,
-                    CalendarWrapper& rCalendar,
-                    ::utl::TransliterationWrapper* pSecondTransliteration,
-                    CalendarWrapper* pSecondCalendar )
+static bool lcl_PutString(
+    ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rStr, BYTE nColFormat,
+    ::utl::TransliterationWrapper& rTransliteration, CalendarWrapper& rCalendar,
+    ::utl::TransliterationWrapper* pSecondTransliteration, CalendarWrapper* pSecondCalendar )
 {
     bool bMultiLine = false;
     if ( nColFormat == SC_COL_SKIP || !rStr.Len() || !ValidCol(nCol) || !ValidRow(nRow) )
@@ -1281,7 +1279,8 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
                 // SC_COL_SKIP.
                 while (*p && nCol <= MAXCOL+1)
                 {
-                    p = ScImportExport::ScanNextFieldFromString( p, aCell, cStr, pSeps, bMerge );
+                    bool bIsQuoted = false;
+                    p = ScImportExport::ScanNextFieldFromString( p, aCell, cStr, pSeps, bMerge, bIsQuoted );
 
                     BYTE nFmt = SC_COL_STANDARD;
                     for ( i=nInfoStart; i<nInfoCount; i++ )
@@ -1298,10 +1297,15 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
                         if (nCol > MAXCOL)
                             bOverflow = TRUE;       // display warning on import
                         else if (!bDetermineRange)
+                        {
+                            if (bIsQuoted && pExtOptions && pExtOptions->IsQuotedAsText())
+                                nFmt = SC_COL_TEXT;
+
                             bMultiLine |= lcl_PutString( pDoc, nCol, nRow,
                                     nTab, aCell, nFmt, aTransliteration,
                                     aCalendar, pEnglishTransliteration,
                                     pEnglishCalendar);
+                        }
                         ++nCol;
                     }
 
@@ -1375,11 +1379,13 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
 
 // static
 const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p,
-        String& rField, sal_Unicode cStr, const sal_Unicode* pSeps, BOOL bMergeSeps )
+        String& rField, sal_Unicode cStr, const sal_Unicode* pSeps, bool bMergeSeps, bool& rbIsQuoted )
 {
+    rbIsQuoted = false;
     rField.Erase();
     if ( *p == cStr )           // String in Anfuehrungszeichen
     {
+        rbIsQuoted = true;
         const sal_Unicode* p1;
         p1 = p = lcl_ScanString( p, rField, cStr, DQM_ESCAPE );
         while ( *p && !ScGlobal::UnicodeStrChr( pSeps, *p ) )

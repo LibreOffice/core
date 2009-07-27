@@ -65,6 +65,7 @@ private:
     BOOL        bFixedLen;
     String      aFieldSeps;
     BOOL        bMergeFieldSeps;
+    bool        bQuotedFieldAsText;
     sal_Unicode cTextSep;
     CharSet     eCharSet;
     BOOL        bCharSetSystem;
@@ -93,6 +94,7 @@ public:
     BOOL                GetCharSetSystem() const    { return bCharSetSystem; }
     const String&       GetFieldSeps() const    { return aFieldSeps; }
     BOOL                IsMergeSeps() const     { return bMergeFieldSeps; }
+    bool                IsQuotedAsText() const  { return bQuotedFieldAsText; }
     sal_Unicode         GetTextSep() const      { return cTextSep; }
     BOOL                IsFixedLen() const      { return bFixedLen; }
     USHORT              GetInfoCount() const    { return nInfoCount; }
@@ -105,6 +107,7 @@ public:
     void    SetFixedLen( BOOL bSet )            { bFixedLen = bSet; }
     void    SetFieldSeps( const String& rStr )  { aFieldSeps = rStr; }
     void    SetMergeSeps( BOOL bSet )           { bMergeFieldSeps = bSet; }
+    void    SetQuotedAsText(bool bSet)          { bQuotedFieldAsText = bSet; }
     void    SetTextSep( sal_Unicode c )         { cTextSep = c; }
     void    SetStartRow( long nRow)             { nStartRow= nRow; }
 

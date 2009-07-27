@@ -71,6 +71,7 @@ private:
     // ------------------------------------------------------------------------
 public:
     explicit                    ScCsvRuler( ScCsvControl& rParent );
+                                ~ScCsvRuler();
 
     // common ruler handling --------------------------------------------------
 public:

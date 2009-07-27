@@ -44,12 +44,32 @@
 // ause
 #include "editutil.hxx"
 
+#include <optutil.hxx>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include "miscuno.hxx"
+
+
 //! TODO make dynamic
 #ifdef WIN
 const SCSIZE ASCIIDLG_MAXROWS                = 10000;
 #else
 const SCSIZE ASCIIDLG_MAXROWS                = MAXROWCOUNT;
 #endif
+
+
+using namespace rtl;
+using namespace com::sun::star::uno;
+
+// Defines - CSV Import Preserve Options
+#define FIXED_WIDTH         "FixedWidth"
+#define FROM_ROW            "FromRow"
+#define CHAR_SET            "CharSet"
+#define SEPARATORS          "Separators"
+#define TEXT_SEPARATORS     "TextSeparators"
+#define MERGE_DELIMITERS    "MergeDelimiters"
+#define QUOTED_AS_TEXT      "QuotedFieldAsText"
+#define SEP_PATH            "Office.Calc/Dialogs/CSVImport"
 
 // ============================================================================
 
@@ -98,11 +118,82 @@ sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const String& rList )
     return c;
 }
 
+static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparators,
+                             bool &bMergeDelimiters, bool& bQuotedAsText, bool &bFixedWidth,
+                             sal_Int32 &nFromRow, sal_Int32 &nCharSet )
+{
+    Sequence<Any>aValues;
+    const Any *pProperties;
+    Sequence<OUString> aNames(7);
+    OUString* pNames = aNames.getArray();
+    ScLinkConfigItem aItem( OUString::createFromAscii( SEP_PATH ) );
+
+    pNames[0] = OUString::createFromAscii( MERGE_DELIMITERS );
+    pNames[1] = OUString::createFromAscii( SEPARATORS );
+    pNames[2] = OUString::createFromAscii( TEXT_SEPARATORS );
+    pNames[3] = OUString::createFromAscii( FIXED_WIDTH );
+    pNames[4] = OUString::createFromAscii( FROM_ROW );
+    pNames[5] = OUString::createFromAscii( CHAR_SET );
+    pNames[6] = OUString::createFromAscii( QUOTED_AS_TEXT );
+    aValues = aItem.GetProperties( aNames );
+    pProperties = aValues.getConstArray();
+    if( pProperties[1].hasValue() )
+        pProperties[1] >>= sFieldSeparators;
+
+    if( pProperties[2].hasValue() )
+        pProperties[2] >>= sTextSeparators;
+
+    if( pProperties[0].hasValue() )
+        bMergeDelimiters = ScUnoHelpFunctions::GetBoolFromAny( pProperties[0] );
+
+    if( pProperties[3].hasValue() )
+        bFixedWidth = ScUnoHelpFunctions::GetBoolFromAny( pProperties[3] );
+
+    if( pProperties[4].hasValue() )
+        pProperties[4] >>= nFromRow;
+
+    if( pProperties[5].hasValue() )
+        pProperties[5] >>= nCharSet;
+
+    if ( pProperties[6].hasValue() )
+        pProperties[6] >>= bQuotedAsText;
+}
+
+static void save_Separators( String maSeparators, String maTxtSep, bool bMergeDelimiters, bool bQuotedAsText,
+                             bool bFixedWidth, sal_Int32 nFromRow, sal_Int32 nCharSet )
+{
+    OUString sFieldSeparators = OUString( maSeparators );
+    OUString sTextSeparators = OUString( maTxtSep );
+    Sequence<Any> aValues;
+    Any *pProperties;
+    Sequence<OUString> aNames(7);
+    OUString* pNames = aNames.getArray();
+    ScLinkConfigItem aItem( OUString::createFromAscii( SEP_PATH ) );
+
+    pNames[0] = OUString::createFromAscii( MERGE_DELIMITERS );
+    pNames[1] = OUString::createFromAscii( SEPARATORS );
+    pNames[2] = OUString::createFromAscii( TEXT_SEPARATORS );
+    pNames[3] = OUString::createFromAscii( FIXED_WIDTH );
+    pNames[4] = OUString::createFromAscii( FROM_ROW );
+    pNames[5] = OUString::createFromAscii( CHAR_SET );
+    pNames[6] = OUString::createFromAscii( QUOTED_AS_TEXT );
+    aValues = aItem.GetProperties( aNames );
+    pProperties = aValues.getArray();
+    pProperties[1] <<= sFieldSeparators;
+    pProperties[2] <<= sTextSeparators;
+    ScUnoHelpFunctions::SetBoolInAny( pProperties[0], bMergeDelimiters );
+    ScUnoHelpFunctions::SetBoolInAny( pProperties[3], bFixedWidth );
+    pProperties[4] <<= nFromRow;
+    pProperties[5] <<= nCharSet;
+    pProperties[6] <<= static_cast<sal_Bool>(bQuotedAsText);
+
+    aItem.PutProperties(aNames, aValues);
+}
 
 // ----------------------------------------------------------------------------
 
 ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
-                                    SvStream* pInStream, sal_Unicode cSep ) :
+                                    SvStream* pInStream, sal_Unicode /*cSep*/ ) :
         ModalDialog ( pParent, ScResId( RID_SCDLG_ASCII ) ),
         mpDatStream  ( pInStream ),
         mnStreamPos( pInStream ? pInStream->Tell() : 0 ),
@@ -128,6 +219,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         aCkbOther   ( this, ScResId( CKB_OTHER ) ),
         aEdOther    ( this, ScResId( ED_OTHER ) ),
         aCkbAsOnce  ( this, ScResId( CB_ASONCE) ),
+        aCkbQuotedAsText( this, ScResId(CB_QUOTED_AS_TEXT) ),
         aFtTextSep  ( this, ScResId( FT_TEXTSEP ) ),
         aCbTextSep  ( this, ScResId( CB_TEXTSEP ) ),
 
@@ -146,14 +238,15 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         aFldSepList ( ScResId( SCSTR_FIELDSEP ) ),
         aTextSepList( ScResId( SCSTR_TEXTSEP ) ),
         mcTextSep   ( ScAsciiOptions::cDefaultTextSep ),
-        maStrTextToColumns( ScResId( STR_TEXTTOCOLUMNS ) )
+        maStrTextToColumns( ScResId( STR_TEXTTOCOLUMNS ) ),
+        mbFileImport(true)
 {
     FreeResource();
+    mbFileImport = aDatName.Len() > 0;
 
     String aName = GetText();
     // aDatName is empty if invoked during paste from clipboard.
-    BOOL bClipboard = (aDatName.Len() == 0);
-    if (!bClipboard)
+    if (mbFileImport)
     {
         aName.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" - ["));
         aName += aDatName;
@@ -161,20 +254,51 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     }
     SetText( aName );
 
-    switch(cSep)
+
+    OUString sFieldSeparators;
+    OUString sTextSeparators;
+    bool bMergeDelimiters = false;
+    bool bFixedWidth = false;
+    bool bQuotedFieldAsText = true;
+    sal_Int32 nFromRow = 1;
+    sal_Int32 nCharSet = -1;
+    if (mbFileImport)
+        // load separators only when importing csv files.
+        load_Separators (sFieldSeparators, sTextSeparators, bMergeDelimiters,
+                         bQuotedFieldAsText, bFixedWidth, nFromRow, nCharSet);
+    maFieldSeparators = String(sFieldSeparators);
+
+    if( bMergeDelimiters )
+        aCkbAsOnce.Check();
+    if (bQuotedFieldAsText)
+        aCkbQuotedAsText.Check();
+    if( bFixedWidth )
+        aRbFixed.Check();
+    if( nFromRow != 1 )
+        aNfRow.SetValue( nFromRow );
+
+    ByteString bString(maFieldSeparators,RTL_TEXTENCODING_MS_1252);
+    const sal_Char *aSep = bString.GetBuffer();
+    int len = maFieldSeparators.Len();
+    for (int i = 0; i < len; ++i)
     {
-        case '\t':  aCkbTab.Check();        break;
-        case ';':   aCkbSemicolon.Check();  break;
-        case ',':   aCkbComma.Check();      break;
-        case ' ':   aCkbSpace.Check();      break;
-        default:
-            aCkbOther.Check();
-            aEdOther.SetText( cSep );
+        switch( aSep[i] )
+        {
+            case '\t':  aCkbTab.Check();        break;
+            case ';':   aCkbSemicolon.Check();  break;
+            case ',':   aCkbComma.Check();      break;
+            case ' ':   aCkbSpace.Check();      break;
+            default:
+                aCkbOther.Check();
+                aEdOther.SetText( aEdOther.GetText() + OUString( aSep[i] ) );
+        }
     }
+
+    // Get Separators from the dialog
     maFieldSeparators = GetSeparators();
 
     // Clipboard is always Unicode, else detect.
-    BOOL bPreselectUnicode = bClipboard;
+    bool bPreselectUnicode = !mbFileImport;
     // Sniff for Unicode / not
     if( !bPreselectUnicode && mpDatStream )
     {
@@ -210,6 +334,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
 
     // *** Separator characters ***
     lcl_FillCombo( aCbTextSep, aTextSepList, mcTextSep );
+    aCbTextSep.SetText( sTextSeparators );
 
     Link aSeparatorHdl =LINK( this, ScImportAsciiDlg, SeparatorHdl );
     aCbTextSep.SetSelectHdl( aSeparatorHdl );
@@ -218,6 +343,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     aCkbSemicolon.SetClickHdl( aSeparatorHdl );
     aCkbComma.SetClickHdl( aSeparatorHdl );
     aCkbAsOnce.SetClickHdl( aSeparatorHdl );
+    aCkbQuotedAsText.SetClickHdl( aSeparatorHdl );
     aCkbSpace.SetClickHdl( aSeparatorHdl );
     aCkbOther.SetClickHdl( aSeparatorHdl );
     aEdOther.SetModifyHdl( aSeparatorHdl );
@@ -230,6 +356,10 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     aLbCharSet.InsertTextEncoding( RTL_TEXTENCODING_DONTKNOW, aCharSetUser );
     aLbCharSet.SelectTextEncoding( bPreselectUnicode ?
         RTL_TEXTENCODING_UNICODE : gsl_getSystemTextEncoding() );
+
+    if( nCharSet >= 0 )
+        aLbCharSet.SelectEntryPos( nCharSet );
+
     SetSelectedCharSet();
     aLbCharSet.SetSelectHdl( LINK( this, ScImportAsciiDlg, CharSetHdl ) );
 
@@ -261,6 +391,10 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
 
 ScImportAsciiDlg::~ScImportAsciiDlg()
 {
+    if (mbFileImport)
+        save_Separators( maFieldSeparators, aCbTextSep.GetText(), aCkbAsOnce.IsChecked(),
+                         aCkbQuotedAsText.IsChecked(), aRbFixed.IsChecked(),
+                         aNfRow.GetValue(), aLbCharSet.GetSelectEntryPos());
     delete[] mpRowPosArray;
 }
 
@@ -346,6 +480,7 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
     {
         rOpt.SetFieldSeps( GetSeparators() );
         rOpt.SetMergeSeps( aCkbAsOnce.IsChecked() );
+        rOpt.SetQuotedAsText(aCkbQuotedAsText.IsChecked());
         rOpt.SetTextSep( lcl_CharFromCombo( aCbTextSep, aTextSepList ) );
     }
 }
@@ -357,6 +492,10 @@ void ScImportAsciiDlg::SetTextToColumnsMode()
     aLbCharSet.Disable();
     aFtRow.Disable();
     aNfRow.Disable();
+
+    // Quoted field as text option is not used for text to columns mode.
+    aCkbQuotedAsText.Check(false);
+    aCkbQuotedAsText.Disable();
 }
 
 void ScImportAsciiDlg::SetSelectedCharSet()
@@ -393,6 +532,7 @@ void ScImportAsciiDlg::SetupSeparatorCtrls()
     aCkbOther.Enable( bEnable );
     aEdOther.Enable( bEnable );
     aCkbAsOnce.Enable( bEnable );
+    aCkbQuotedAsText.Enable( bEnable );
     aFtTextSep.Enable( bEnable );
     aCbTextSep.Enable( bEnable );
 }
