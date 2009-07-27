@@ -54,12 +54,12 @@ BOOL ScOptionsUtil::IsMetricSystem()
 
 //------------------------------------------------------------------
 
-ScLinkConfigItem::ScLinkConfigItem( const rtl::OUString rSubTree ) :
+ScLinkConfigItem::ScLinkConfigItem( const rtl::OUString& rSubTree ) :
     ConfigItem( rSubTree )
 {
 }
 
-ScLinkConfigItem::ScLinkConfigItem( const rtl::OUString rSubTree, sal_Int16 nMode ) :
+ScLinkConfigItem::ScLinkConfigItem( const rtl::OUString& rSubTree, sal_Int16 nMode ) :
     ConfigItem( rSubTree, nMode )
 {
 }

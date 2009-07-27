@@ -33,6 +33,7 @@
 
 #include <unotools/configitem.hxx>
 #include <tools/link.hxx>
+#include "scdllapi.h"
 
 
 class ScOptionsUtil
@@ -44,13 +45,13 @@ public:
 
 //  ConfigItem for classes that use items from several sub trees
 
-class ScLinkConfigItem : public utl::ConfigItem
+class SC_DLLPUBLIC ScLinkConfigItem : public utl::ConfigItem
 {
     Link    aCommitLink;
 
 public:
-            ScLinkConfigItem( const rtl::OUString rSubTree );
-            ScLinkConfigItem( const rtl::OUString rSubTree, sal_Int16 nMode );
+            ScLinkConfigItem( const rtl::OUString& rSubTree );
+            ScLinkConfigItem( const rtl::OUString& rSubTree, sal_Int16 nMode );
     void    SetCommitLink( const Link& rLink );
 
     virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
