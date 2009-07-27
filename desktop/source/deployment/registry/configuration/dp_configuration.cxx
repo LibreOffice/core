@@ -448,6 +448,10 @@ bool BackendImpl::removeFromConfigmgrRc(
     const ::osl::MutexGuard guard( getMutex() );
     configmgrrc_verify_init( xCmdEnv );
     getFiles(isSchema).remove( rcterm );
+    if (!isSchema) { //TODO: see replaceOrigin()
+        getFiles(isSchema).remove(
+            rcterm + OUString(RTL_CONSTASCII_USTRINGPARAM(".mod")));
+    }
     // write immediately:
     m_configmgrrc_modified = true;
     configmgrrc_flush( xCmdEnv );
@@ -461,7 +465,12 @@ bool BackendImpl::hasInConfigmgrRc(
     const OUString rcterm( makeRcTerm(url_) );
     const ::osl::MutexGuard guard( getMutex() );
     t_stringlist const & rSet = getFiles(isSchema);
-    return ::std::find( rSet.begin(), rSet.end(), rcterm ) != rSet.end();
+    return ::std::find( rSet.begin(), rSet.end(), rcterm ) != rSet.end()
+        || (!isSchema && //TODO: see replaceOrigin()
+            ::std::find(
+                rSet.begin(), rSet.end(),
+                rcterm + OUString(RTL_CONSTASCII_USTRINGPARAM(".mod"))) !=
+            rSet.end());
 }
 
 //##############################################################################
@@ -497,6 +506,118 @@ BackendImpl::PackageImpl::isRegistered_(
             false /* IsAmbiguous */ ) );
 }
 
+//------------------------------------------------------------------------------
+OUString encodeForXml( OUString const & text )
+{
+    // encode conforming xml:
+    sal_Int32 len = text.getLength();
+    ::rtl::OUStringBuffer buf;
+    for ( sal_Int32 pos = 0; pos < len; ++pos )
+    {
+        sal_Unicode c = text[ pos ];
+        switch (c) {
+        case '<':
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("&lt;") );
+            break;
+        case '>':
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("&gt;") );
+            break;
+        case '&':
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("&amp;") );
+            break;
+        case '\'':
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("&apos;") );
+            break;
+        case '\"':
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("&quot;") );
+            break;
+        default:
+            buf.append( c );
+            break;
+        }
+    }
+    return buf.makeStringAndClear();
+}
+
+//______________________________________________________________________________
+OUString replaceOrigin(
+    OUString const & url, Reference< XCommandEnvironment > const & xCmdEnv )
+{
+    // looking for %origin%:
+    ::ucbhelper::Content ucb_content( url, xCmdEnv );
+    ::rtl::ByteSequence bytes( readFile( ucb_content ) );
+    ::rtl::ByteSequence filtered( bytes.getLength() * 2,
+                                  ::rtl::BYTESEQ_NODEFAULT );
+    bool use_filtered = false;
+    ::rtl::OString origin;
+    sal_Char const * pBytes = reinterpret_cast<sal_Char const *>(
+        bytes.getConstArray());
+    sal_Size nBytes = bytes.getLength();
+    sal_Int32 write_pos = 0;
+    while (nBytes > 0)
+    {
+        sal_Int32 index = rtl_str_indexOfChar_WithLength( pBytes, nBytes, '%' );
+        if (index < 0) {
+            if (! use_filtered) // opt
+                break;
+            index = nBytes;
+        }
+
+        if ((write_pos + index) > filtered.getLength())
+            filtered.realloc( (filtered.getLength() + index) * 2 );
+        rtl_copyMemory( filtered.getArray() + write_pos, pBytes, index );
+        write_pos += index;
+        pBytes += index;
+        nBytes -= index;
+        if (nBytes == 0)
+            break;
+
+        // consume %:
+        ++pBytes;
+        --nBytes;
+        sal_Char const * pAdd = "%";
+        sal_Int32 nAdd = 1;
+        if (nBytes > 1 && pBytes[ 0 ] == '%')
+        {
+            // %% => %
+            ++pBytes;
+            --nBytes;
+            use_filtered = true;
+        }
+        else if (rtl_str_shortenedCompare_WithLength(
+                     pBytes, nBytes,
+                     RTL_CONSTASCII_STRINGPARAM("origin%"),
+                     sizeof ("origin%") - 1 ) == 0)
+        {
+            if (origin.getLength() == 0) {
+                // encode only once
+                origin = ::rtl::OUStringToOString(
+                    encodeForXml( url.copy( 0, url.lastIndexOf( '/' ) ) ),
+                    // xxx todo: encode always for UTF-8? => lookup doc-header?
+                    RTL_TEXTENCODING_UTF8 );
+            }
+            pAdd = origin.getStr();
+            nAdd = origin.getLength();
+            pBytes += (sizeof ("origin%") - 1);
+            nBytes -= (sizeof ("origin%") - 1);
+            use_filtered = true;
+        }
+        if ((write_pos + nAdd) > filtered.getLength())
+            filtered.realloc( (filtered.getLength() + nAdd) * 2 );
+        rtl_copyMemory( filtered.getArray() + write_pos, pAdd, nAdd );
+        write_pos += nAdd;
+    }
+    if (!use_filtered)
+        return url;
+    if (write_pos < filtered.getLength())
+        filtered.realloc( write_pos );
+    rtl::OUString newUrl(url + OUString(RTL_CONSTASCII_USTRINGPARAM(".mod")));
+        //TODO: unique name
+    ucbhelper::Content(newUrl, xCmdEnv).writeStream(
+        xmlscript::createInputStream(filtered), true);
+    return newUrl;
+}
+
 //______________________________________________________________________________
 void BackendImpl::PackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
@@ -505,7 +626,7 @@ void BackendImpl::PackageImpl::processPackage_(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     BackendImpl * that = getMyBackend();
-    const OUString url( getURL() );
+    OUString url( getURL() );
 
     if (doRegisterPackage)
     {
@@ -515,7 +636,7 @@ void BackendImpl::PackageImpl::processPackage_(
         }
         else
         {
-            //TODO: %origin handling
+            url = replaceOrigin(url, xCmdEnv);
             configmgr::update::insertXcuFile(13/*TODO*/, expandUnoRcUrl(url));
         }
 
