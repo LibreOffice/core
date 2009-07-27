@@ -907,6 +907,7 @@ BOOL ScImportExport::Text2Doc( SvStream& rStrm )
 
 static bool lcl_PutString(
     ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rStr, BYTE nColFormat,
+    SvNumberFormatter* pFormatter, bool bDetectNumFormat,
     ::utl::TransliterationWrapper& rTransliteration, CalendarWrapper& rCalendar,
     ::utl::TransliterationWrapper* pSecondTransliteration, CalendarWrapper* pSecondCalendar )
 {
@@ -924,10 +925,10 @@ static bool lcl_PutString(
     {
         //! SetString mit Extra-Flag ???
 
-        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-        sal_uInt32 nEnglish = pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
+        SvNumberFormatter* pDocFormatter = pDoc->GetFormatTable();
+        sal_uInt32 nEnglish = pDocFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
         double fVal;
-        if ( pFormatter->IsNumberFormat( rStr, nEnglish, fVal ) )
+        if ( pDocFormatter->IsNumberFormat( rStr, nEnglish, fVal ) )
         {
             //  Zahlformat wird nicht auf englisch gesetzt
             pDoc->SetValue( nCol, nRow, nTab, fVal );
@@ -1063,9 +1064,9 @@ static bool lcl_PutString(
                 }
             }
 
-            SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+            SvNumberFormatter* pDocFormatter = pDoc->GetFormatTable();
             if ( nYear < 100 )
-                nYear = pFormatter->ExpandTwoDigitYear( nYear );
+                nYear = pDocFormatter->ExpandTwoDigitYear( nYear );
 
             CalendarWrapper* pCalendar = (bSecondCal ? pSecondCalendar : &rCalendar);
             sal_Int16 nNumMonths = pCalendar->getNumberOfMonthsInYear();
@@ -1101,7 +1102,7 @@ static bool lcl_PutString(
                 pCalendar->setValue( i18n::CalendarFieldIndex::MILLISECOND, nMilli );
                 if ( pCalendar->isValid() )
                 {
-                    double fDiff = DateTime(*pFormatter->GetNullDate()) -
+                    double fDiff = DateTime(*pDocFormatter->GetNullDate()) -
                         pCalendar->getEpochStart();
                     // #i14974# must use getLocalDateTime to get the same
                     // date values as set above
@@ -1113,10 +1114,10 @@ static bool lcl_PutString(
                     LanguageType eDocLang = eLatin;     //! which language for date formats?
 
                     short nType = (nFound > 3 ? NUMBERFORMAT_DATETIME : NUMBERFORMAT_DATE);
-                    ULONG nFormat = pFormatter->GetStandardFormat( nType, eDocLang );
+                    ULONG nFormat = pDocFormatter->GetStandardFormat( nType, eDocLang );
                     // maybe there is a special format including seconds or milliseconds
                     if (nFound > 5)
-                        nFormat = pFormatter->GetStandardFormat( fDays, nFormat, nType, eDocLang);
+                        nFormat = pDocFormatter->GetStandardFormat( fDays, nFormat, nType, eDocLang);
 
                     pDoc->PutCell( nCol, nRow, nTab, new ScValueCell(fDays), nFormat, FALSE );
 
@@ -1128,7 +1129,7 @@ static bool lcl_PutString(
 
     // Standard or date not determined -> SetString / EditCell
     if( rStr.Search( _LF ) == STRING_NOTFOUND )
-        pDoc->SetString( nCol, nRow, nTab, rStr );
+        pDoc->SetString( nCol, nRow, nTab, rStr, pFormatter, bDetectNumFormat );
     else
     {
         bMultiLine = true;
@@ -1138,7 +1139,7 @@ static bool lcl_PutString(
 }
 
 
-String lcl_GetFixed( const String& rLine, xub_StrLen nStart, xub_StrLen nNext )
+String lcl_GetFixed( const String& rLine, xub_StrLen nStart, xub_StrLen nNext, bool& rbIsQuoted )
 {
     xub_StrLen nLen = rLine.Len();
     if (nNext > nLen)
@@ -1152,7 +1153,11 @@ String lcl_GetFixed( const String& rLine, xub_StrLen nStart, xub_StrLen nNext )
     while ( nSpace > nStart && pStr[nSpace-1] == ' ' )
         --nSpace;
 
-    return rLine.Copy( nStart, nSpace-nStart );
+    rbIsQuoted = (pStr[nStart] == sal_Unicode('"') && pStr[nSpace-1] == sal_Unicode('"'));
+    if (rbIsQuoted)
+        return rLine.Copy(nStart+1, nSpace-nStart-2);
+    else
+        return rLine.Copy(nStart, nSpace-nStart);
 }
 
 BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
@@ -1185,9 +1190,9 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
     const BYTE* pColFormat  = pExtOptions->GetColFormat();
     long nSkipLines = pExtOptions->GetStartRow();
 
-    LanguageType eLatin, eCjk, eCtl;
-    pDoc->GetLanguage( eLatin, eCjk, eCtl );
-    LanguageType eDocLang = eLatin;                 //! which language for date formats?
+    LanguageType eDocLang = pExtOptions->GetLanguage();
+    SvNumberFormatter aNumFormatter(pDoc->GetServiceManager(), eDocLang);
+    bool bDetectNumFormat = pExtOptions->IsDetectSpecialNumber();
 
     // For date recognition
     ::utl::TransliterationWrapper aTransliteration(
@@ -1229,6 +1234,8 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
     // survives the toggle of bDetermineRange down at the end of the do{} loop.
     bool bRangeIsDetermined = bDetermineRange;
 
+    bool bQuotedAsText = pExtOptions && pExtOptions->IsQuotedAsText();
+
     ULONG nOriginalStreamPos = rStrm.Tell();
 
     do
@@ -1250,7 +1257,8 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
                 // SC_COL_SKIP.
                 for ( i=0; i<nInfoCount && nCol <= MAXCOL+1; i++ )
                 {
-                    if ( pColFormat[i] != SC_COL_SKIP )     // sonst auch nCol nicht hochzaehlen
+                    BYTE nFmt = pColFormat[i];
+                    if (nFmt != SC_COL_SKIP)        // sonst auch nCol nicht hochzaehlen
                     {
                         if (nCol > MAXCOL)
                             bOverflow = TRUE;       // display warning on import
@@ -1258,11 +1266,15 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
                         {
                             xub_StrLen nStart = pColStart[i];
                             xub_StrLen nNext = ( i+1 < nInfoCount ) ? pColStart[i+1] : nLineLen;
-                            aCell = lcl_GetFixed( aLine, nStart, nNext );
-                            bMultiLine |= lcl_PutString( pDoc, nCol, nRow,
-                                    nTab, aCell, pColFormat[i],
-                                    aTransliteration, aCalendar,
-                                    pEnglishTransliteration, pEnglishCalendar);
+                            bool bIsQuoted = false;
+                            aCell = lcl_GetFixed( aLine, nStart, nNext, bIsQuoted );
+                            if (bIsQuoted && bQuotedAsText)
+                                nFmt = SC_COL_TEXT;
+
+                            bMultiLine |= lcl_PutString(
+                                pDoc, nCol, nRow, nTab, aCell, nFmt,
+                                &aNumFormatter, bDetectNumFormat, aTransliteration, aCalendar,
+                                pEnglishTransliteration, pEnglishCalendar);
                         }
                         ++nCol;
                     }
@@ -1298,13 +1310,13 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
                             bOverflow = TRUE;       // display warning on import
                         else if (!bDetermineRange)
                         {
-                            if (bIsQuoted && pExtOptions && pExtOptions->IsQuotedAsText())
+                            if (bIsQuoted && bQuotedAsText)
                                 nFmt = SC_COL_TEXT;
 
-                            bMultiLine |= lcl_PutString( pDoc, nCol, nRow,
-                                    nTab, aCell, nFmt, aTransliteration,
-                                    aCalendar, pEnglishTransliteration,
-                                    pEnglishCalendar);
+                            bMultiLine |= lcl_PutString(
+                                pDoc, nCol, nRow, nTab, aCell, nFmt,
+                                &aNumFormatter, bDetectNumFormat, aTransliteration,
+                                aCalendar, pEnglishTransliteration, pEnglishCalendar);
                         }
                         ++nCol;
                     }

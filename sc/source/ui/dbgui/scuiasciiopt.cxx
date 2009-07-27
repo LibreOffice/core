@@ -69,6 +69,8 @@ using namespace com::sun::star::uno;
 #define TEXT_SEPARATORS     "TextSeparators"
 #define MERGE_DELIMITERS    "MergeDelimiters"
 #define QUOTED_AS_TEXT      "QuotedFieldAsText"
+#define DETECT_SPECIAL_NUM  "DetectSpecialNumbers"
+#define LANGUAGE            "Language"
 #define SEP_PATH            "Office.Calc/Dialogs/CSVImport"
 
 // ============================================================================
@@ -119,12 +121,13 @@ sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const String& rList )
 }
 
 static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparators,
-                             bool &bMergeDelimiters, bool& bQuotedAsText, bool &bFixedWidth,
-                             sal_Int32 &nFromRow, sal_Int32 &nCharSet )
+                             bool &bMergeDelimiters, bool& bQuotedAsText, bool& bDetectSpecialNum,
+                             bool &bFixedWidth, sal_Int32 &nFromRow, sal_Int32 &nCharSet,
+                             sal_Int32& nLanguage )
 {
     Sequence<Any>aValues;
     const Any *pProperties;
-    Sequence<OUString> aNames(7);
+    Sequence<OUString> aNames(9);
     OUString* pNames = aNames.getArray();
     ScLinkConfigItem aItem( OUString::createFromAscii( SEP_PATH ) );
 
@@ -135,6 +138,8 @@ static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparato
     pNames[4] = OUString::createFromAscii( FROM_ROW );
     pNames[5] = OUString::createFromAscii( CHAR_SET );
     pNames[6] = OUString::createFromAscii( QUOTED_AS_TEXT );
+    pNames[7] = OUString::createFromAscii( DETECT_SPECIAL_NUM );
+    pNames[8] = OUString::createFromAscii( LANGUAGE );
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getConstArray();
     if( pProperties[1].hasValue() )
@@ -157,16 +162,23 @@ static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparato
 
     if ( pProperties[6].hasValue() )
         pProperties[6] >>= bQuotedAsText;
+
+    if ( pProperties[7].hasValue() )
+        pProperties[7] >>= bDetectSpecialNum;
+
+    if ( pProperties[8].hasValue() )
+        pProperties[8] >>= nLanguage;
 }
 
-static void save_Separators( String maSeparators, String maTxtSep, bool bMergeDelimiters, bool bQuotedAsText,
-                             bool bFixedWidth, sal_Int32 nFromRow, sal_Int32 nCharSet )
+static void save_Separators(
+    String maSeparators, String maTxtSep, bool bMergeDelimiters, bool bQuotedAsText,
+    bool bDetectSpecialNum, bool bFixedWidth, sal_Int32 nFromRow, sal_Int32 nCharSet, sal_Int32 nLanguage )
 {
     OUString sFieldSeparators = OUString( maSeparators );
     OUString sTextSeparators = OUString( maTxtSep );
     Sequence<Any> aValues;
     Any *pProperties;
-    Sequence<OUString> aNames(7);
+    Sequence<OUString> aNames(9);
     OUString* pNames = aNames.getArray();
     ScLinkConfigItem aItem( OUString::createFromAscii( SEP_PATH ) );
 
@@ -177,6 +189,8 @@ static void save_Separators( String maSeparators, String maTxtSep, bool bMergeDe
     pNames[4] = OUString::createFromAscii( FROM_ROW );
     pNames[5] = OUString::createFromAscii( CHAR_SET );
     pNames[6] = OUString::createFromAscii( QUOTED_AS_TEXT );
+    pNames[7] = OUString::createFromAscii( DETECT_SPECIAL_NUM );
+    pNames[8] = OUString::createFromAscii( LANGUAGE );
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getArray();
     pProperties[1] <<= sFieldSeparators;
@@ -186,6 +200,8 @@ static void save_Separators( String maSeparators, String maTxtSep, bool bMergeDe
     pProperties[4] <<= nFromRow;
     pProperties[5] <<= nCharSet;
     pProperties[6] <<= static_cast<sal_Bool>(bQuotedAsText);
+    pProperties[7] <<= static_cast<sal_Bool>(bDetectSpecialNum);
+    pProperties[8] <<= nLanguage;
 
     aItem.PutProperties(aNames, aValues);
 }
@@ -204,6 +220,8 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) ),
         aFtCharSet  ( this, ScResId( FT_CHARSET ) ),
         aLbCharSet  ( this, ScResId( LB_CHARSET ) ),
+        aFtCustomLang( this, ScResId( FT_CUSTOMLANG ) ),
+        aLbCustomLang( this, ScResId( LB_CUSTOMLANG ) ),
 
         aFtRow      ( this, ScResId( FT_AT_ROW  ) ),
         aNfRow      ( this, ScResId( NF_AT_ROW  ) ),
@@ -219,7 +237,10 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         aCkbOther   ( this, ScResId( CKB_OTHER ) ),
         aEdOther    ( this, ScResId( ED_OTHER ) ),
         aCkbAsOnce  ( this, ScResId( CB_ASONCE) ),
+        aFlOtherOpt ( this, ScResId( FL_OTHER_OPTIONS ) ),
+
         aCkbQuotedAsText( this, ScResId(CB_QUOTED_AS_TEXT) ),
+        aCkbDetectNumber( this, ScResId(CB_DETECT_SPECIAL_NUMBER) ),
         aFtTextSep  ( this, ScResId( FT_TEXTSEP ) ),
         aCbTextSep  ( this, ScResId( CB_TEXTSEP ) ),
 
@@ -260,18 +281,22 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     bool bMergeDelimiters = false;
     bool bFixedWidth = false;
     bool bQuotedFieldAsText = true;
+    bool bDetectSpecialNum = false;
     sal_Int32 nFromRow = 1;
     sal_Int32 nCharSet = -1;
+    sal_Int32 nLanguage = 0;
     if (mbFileImport)
         // load separators only when importing csv files.
         load_Separators (sFieldSeparators, sTextSeparators, bMergeDelimiters,
-                         bQuotedFieldAsText, bFixedWidth, nFromRow, nCharSet);
+                         bQuotedFieldAsText, bDetectSpecialNum, bFixedWidth, nFromRow, nCharSet, nLanguage);
     maFieldSeparators = String(sFieldSeparators);
 
     if( bMergeDelimiters )
         aCkbAsOnce.Check();
     if (bQuotedFieldAsText)
         aCkbQuotedAsText.Check();
+    if (bDetectSpecialNum)
+        aCkbDetectNumber.Check();
     if( bFixedWidth )
         aRbFixed.Check();
     if( nFromRow != 1 )
@@ -344,6 +369,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     aCkbComma.SetClickHdl( aSeparatorHdl );
     aCkbAsOnce.SetClickHdl( aSeparatorHdl );
     aCkbQuotedAsText.SetClickHdl( aSeparatorHdl );
+    aCkbDetectNumber.SetClickHdl( aSeparatorHdl );
     aCkbSpace.SetClickHdl( aSeparatorHdl );
     aCkbOther.SetClickHdl( aSeparatorHdl );
     aEdOther.SetModifyHdl( aSeparatorHdl );
@@ -362,6 +388,11 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
 
     SetSelectedCharSet();
     aLbCharSet.SetSelectHdl( LINK( this, ScImportAsciiDlg, CharSetHdl ) );
+
+    aLbCustomLang.SetLanguageList(
+        LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN, false, false);
+    aLbCustomLang.InsertLanguage(LANGUAGE_SYSTEM);
+    aLbCustomLang.SelectLanguage(static_cast<LanguageType>(nLanguage), true);
 
     // *** column type ListBox ***
     xub_StrLen nCount = aColumnUser.GetTokenCount();
@@ -393,8 +424,9 @@ ScImportAsciiDlg::~ScImportAsciiDlg()
 {
     if (mbFileImport)
         save_Separators( maFieldSeparators, aCbTextSep.GetText(), aCkbAsOnce.IsChecked(),
-                         aCkbQuotedAsText.IsChecked(), aRbFixed.IsChecked(),
-                         aNfRow.GetValue(), aLbCharSet.GetSelectEntryPos());
+                         aCkbQuotedAsText.IsChecked(), aCkbDetectNumber.IsChecked(),
+                         aRbFixed.IsChecked(), aNfRow.GetValue(), aLbCharSet.GetSelectEntryPos(),
+                         static_cast<sal_Int32>(aLbCustomLang.GetSelectLanguage()) );
     delete[] mpRowPosArray;
 }
 
@@ -473,6 +505,7 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
 {
     rOpt.SetCharSet( meCharSet );
     rOpt.SetCharSetSystem( mbCharSetSystem );
+    rOpt.SetLanguage(aLbCustomLang.GetSelectLanguage());
     rOpt.SetFixedLen( aRbFixed.IsChecked() );
     rOpt.SetStartRow( (long)aNfRow.GetValue() );
     maTableBox.FillColumnData( rOpt );
@@ -480,9 +513,11 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
     {
         rOpt.SetFieldSeps( GetSeparators() );
         rOpt.SetMergeSeps( aCkbAsOnce.IsChecked() );
-        rOpt.SetQuotedAsText(aCkbQuotedAsText.IsChecked());
         rOpt.SetTextSep( lcl_CharFromCombo( aCbTextSep, aTextSepList ) );
     }
+
+    rOpt.SetQuotedAsText(aCkbQuotedAsText.IsChecked());
+    rOpt.SetDetectSpecialNumber(aCkbDetectNumber.IsChecked());
 }
 
 void ScImportAsciiDlg::SetTextToColumnsMode()
@@ -490,12 +525,19 @@ void ScImportAsciiDlg::SetTextToColumnsMode()
     SetText( maStrTextToColumns );
     aFtCharSet.Disable();
     aLbCharSet.Disable();
+    aFtCustomLang.Disable();
+    aLbCustomLang.SelectLanguage(LANGUAGE_SYSTEM);
+    aLbCustomLang.Disable();
     aFtRow.Disable();
     aNfRow.Disable();
 
-    // Quoted field as text option is not used for text to columns mode.
+    // Quoted field as text option is not used for text-to-columns mode.
     aCkbQuotedAsText.Check(false);
     aCkbQuotedAsText.Disable();
+
+    // Always detect special numbers for text-to-columns mode.
+    aCkbDetectNumber.Check();
+    aCkbDetectNumber.Disable();
 }
 
 void ScImportAsciiDlg::SetSelectedCharSet()
@@ -532,7 +574,6 @@ void ScImportAsciiDlg::SetupSeparatorCtrls()
     aCkbOther.Enable( bEnable );
     aEdOther.Enable( bEnable );
     aCkbAsOnce.Enable( bEnable );
-    aCkbQuotedAsText.Enable( bEnable );
     aFtTextSep.Enable( bEnable );
     aCbTextSep.Enable( bEnable );
 }

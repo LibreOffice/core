@@ -55,7 +55,7 @@
 #include <tools/stream.hxx>
 #include <svx/txencbox.hxx>
 #include "csvtablebox.hxx"
-
+#include "i18npool/lang.h"
 
 // ============================================================================
 
@@ -66,8 +66,10 @@ private:
     String      aFieldSeps;
     BOOL        bMergeFieldSeps;
     bool        bQuotedFieldAsText;
+    bool        bDetectSpecialNumber;
     sal_Unicode cTextSep;
     CharSet     eCharSet;
+    LanguageType eLang;
     BOOL        bCharSetSystem;
     long        nStartRow;
     USHORT      nInfoCount;
@@ -95,12 +97,14 @@ public:
     const String&       GetFieldSeps() const    { return aFieldSeps; }
     BOOL                IsMergeSeps() const     { return bMergeFieldSeps; }
     bool                IsQuotedAsText() const  { return bQuotedFieldAsText; }
+    bool                IsDetectSpecialNumber() const { return bDetectSpecialNumber; }
     sal_Unicode         GetTextSep() const      { return cTextSep; }
     BOOL                IsFixedLen() const      { return bFixedLen; }
     USHORT              GetInfoCount() const    { return nInfoCount; }
     const xub_StrLen*   GetColStart() const     { return pColStart; }
     const BYTE*         GetColFormat() const    { return pColFormat; }
     long                GetStartRow() const     { return nStartRow; }
+    LanguageType        GetLanguage() const     { return eLang; }
 
     void    SetCharSet( CharSet eNew )          { eCharSet = eNew; }
     void    SetCharSetSystem( BOOL bSet )       { bCharSetSystem = bSet; }
@@ -108,8 +112,10 @@ public:
     void    SetFieldSeps( const String& rStr )  { aFieldSeps = rStr; }
     void    SetMergeSeps( BOOL bSet )           { bMergeFieldSeps = bSet; }
     void    SetQuotedAsText(bool bSet)          { bQuotedFieldAsText = bSet; }
+    void    SetDetectSpecialNumber(bool bSet)   { bDetectSpecialNumber = bSet; }
     void    SetTextSep( sal_Unicode c )         { cTextSep = c; }
     void    SetStartRow( long nRow)             { nStartRow= nRow; }
+    void    SetLanguage(LanguageType e)         { eLang = e; }
 
     void    SetColInfo( USHORT nCount, const xub_StrLen* pStart, const BYTE* pFormat );
     void    SetColumnInfo( const ScCsvExpDataVec& rDataVec );

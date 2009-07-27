@@ -35,6 +35,8 @@
 
 
 #include "asciiopt.hxx"
+#include "svx/langbox.hxx"
+
 // ============================================================================
 
 class ScImportAsciiDlg : public ModalDialog
@@ -49,6 +51,8 @@ class ScImportAsciiDlg : public ModalDialog
     FixedLine                   aFlFieldOpt;
     FixedText                   aFtCharSet;
     SvxTextEncodingBox          aLbCharSet;
+    FixedText                   aFtCustomLang;
+    SvxLanguageBox              aLbCustomLang;
 
     FixedText                   aFtRow;
     NumericField                aNfRow;
@@ -64,7 +68,12 @@ class ScImportAsciiDlg : public ModalDialog
     CheckBox                    aCkbOther;
     Edit                        aEdOther;
     CheckBox                    aCkbAsOnce;
+
+    FixedLine                   aFlOtherOpt;
+
     CheckBox                    aCkbQuotedAsText;
+    CheckBox                    aCkbDetectNumber;
+
     FixedText                   aFtTextSep;
     ComboBox                    aCbTextSep;
 
