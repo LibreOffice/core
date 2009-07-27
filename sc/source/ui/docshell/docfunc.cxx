@@ -1446,8 +1446,8 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                 pDoc->ExtendMerge( nMergeStartX, nMergeStartY, nMergeEndX, nMergeEndY, i );
                 pDoc->ExtendOverlapped( nMergeStartX, nMergeStartY, nMergeEndX, nMergeEndY, i );
 
-                if(( eCmd == INS_CELLSDOWN && ( nMergeStartX != nMergeTestStartX || nMergeEndX != nMergeTestEndX ))||
-                    eCmd == INS_CELLSRIGHT && ( nMergeStartY != nMergeTestStartY || nMergeEndY != nMergeTestEndY ) )
+                if(( eCmd == INS_CELLSDOWN && ( nMergeStartX != nMergeTestStartX || nMergeEndX != nMergeTestEndX )) ||
+                    (eCmd == INS_CELLSRIGHT && ( nMergeStartY != nMergeTestStartY || nMergeEndY != nMergeTestEndY )) )
                 {
                     if (!bApi)
                         rDocShell.ErrorMessage(STR_MSSG_INSERTCELLS_0);
