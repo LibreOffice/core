@@ -41,6 +41,7 @@
 #include "sc.hrc"
 #include "global.hxx"
 #include "pivot.hxx"
+#include "i18npool/lang.h"
 
 class ScAsciiOptions;
 class ScAutoFormat;
@@ -289,6 +290,14 @@ class AbstractScImportOptionsDlg : public VclAbstractDialog  //add for ScImportO
 public:
     virtual void GetImportOptions( ScImportOptions& rOptions ) const = 0;
 };
+
+class AbstractScLangChooserDlg : public VclAbstractDialog //add for ScLangChooserDlg
+{
+public:
+    virtual LanguageType GetLanguageType() const = 0;
+    virtual bool IsDateConversionSet() const = 0;
+};
+
 //-------Scabstract fractory ---------------------------
 class ScAbstractDialogFactory
 {
@@ -298,6 +307,8 @@ public:
     virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, String aDatName, //add for ScImportAsciiDlg
                                                                     SvStream* pInStream, int nId,
                                                                     sal_Unicode cSep = '\t') = 0;
+
+    virtual     AbstractScLangChooserDlg * CreateScLangChooserDlg( Window* pParent, int nId ) = 0;
 
     virtual     AbstractScAutoFormatDlg * CreateScAutoFormatDlg( Window*                    pParent, //add for ScAutoFormatDlg
                                                                 ScAutoFormat*               pAutoFormat,

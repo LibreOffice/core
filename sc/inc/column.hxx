@@ -241,7 +241,9 @@ public:
 
                 //  TRUE = Zahlformat gesetzt
     BOOL        SetString( SCROW nRow, SCTAB nTab, const String& rString,
-                           formula::FormulaGrammar::AddressConvention conv = formula::FormulaGrammar::CONV_OOO );
+                           formula::FormulaGrammar::AddressConvention conv = formula::FormulaGrammar::CONV_OOO,
+                           SvNumberFormatter* pFormatter = NULL,
+                           bool bDetectNumberFormat = true );
     void        SetValue( SCROW nRow, const double& rVal);
     void        SetError( SCROW nRow, const USHORT nError);
 

@@ -63,7 +63,9 @@ public:
     virtual ULONG    Read( SvStream& rStream, const String& rBaseURL );
     virtual ScRange  GetRange() { return maRange; }
     virtual void     WriteToDocument( BOOL bSizeColsRows = FALSE,
-                                      double nOutputFactor = 1.0 );
+                                      double nOutputFactor = 1.0,
+                                      SvNumberFormatter* pFormatter = NULL,
+                                      bool bConvertDate = true );
 };
 
 #endif

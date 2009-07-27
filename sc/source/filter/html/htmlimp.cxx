@@ -63,13 +63,14 @@
 //------------------------------------------------------------------------
 
 FltError ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const String& rBaseURL, ScDocument *pDoc,
-        ScRange& rRange, double nOutputFactor, BOOL bCalcWidthHeight )
+        ScRange& rRange, double nOutputFactor, BOOL bCalcWidthHeight, SvNumberFormatter* pFormatter,
+        bool bConvertDate )
 {
     ScHTMLImport aImp( pDoc, rBaseURL, rRange, bCalcWidthHeight );
     FltError nErr = (FltError) aImp.Read( rStream, rBaseURL );
     ScRange aR = aImp.GetRange();
     rRange.aEnd = aR.aEnd;
-    aImp.WriteToDocument( TRUE, nOutputFactor );
+    aImp.WriteToDocument( TRUE, nOutputFactor, pFormatter, bConvertDate );
     return nErr;
 }
 
@@ -137,9 +138,10 @@ void ScHTMLImport::InsertRangeName( ScDocument* pDoc, const String& rName, const
         delete pRangeData;
 }
 
-void ScHTMLImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
+void ScHTMLImport::WriteToDocument(
+    BOOL bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate )
 {
-    ScEEImport::WriteToDocument( bSizeColsRows, nOutputFactor );
+    ScEEImport::WriteToDocument( bSizeColsRows, nOutputFactor, pFormatter, bConvertDate );
 
     const ScHTMLParser* pParser = GetParser();
     const ScHTMLTable* pGlobTable = pParser->GetGlobalTable();

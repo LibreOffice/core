@@ -53,6 +53,7 @@ SLOFILES =	\
     $(SLO)$/pfiltdlg.obj	\
     $(SLO)$/dbnamdlg.obj	\
     $(SLO)$/expftext.obj	\
+    $(SLO)$/langchooser.obj \
     $(SLO)$/subtdlg.obj		\
     $(SLO)$/tpsubt.obj		\
     $(SLO)$/fieldwnd.obj	\
@@ -85,6 +86,7 @@ EXCEPTIONSFILES= \
 
 SRS1NAME=$(TARGET)
 SRC1FILES =  \
+    langchooser.src		\
         pivot.src		\
         pvfundlg.src	\
         dpgroupdlg.src	\
@@ -114,7 +116,8 @@ LIB1OBJFILES =  \
     $(SLO)$/csvruler.obj	\
     $(SLO)$/csvgrid.obj		\
     $(SLO)$/csvtablebox.obj	\
-    $(SLO)$/asciiopt.obj
+    $(SLO)$/asciiopt.obj \
+    $(SLO)$/langchooser.obj
 
 # --- Tagets -------------------------------------------------------
 

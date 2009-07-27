@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: htmlimp.hxx,v $
- * $Revision: 1.7 $
+ * $RCSfile: retypepassdlg.src,v $
+ * $Revision: 1.1.2.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,28 +28,15 @@
  *
  ************************************************************************/
 
-#ifndef SC_HTMLIMP_HXX
-#define SC_HTMLIMP_HXX
+#include <sc.hrc>
 
-#include "eeimport.hxx"
+#define BTN_OK                   1
+#define BTN_CANCEL               2
+#define BTN_HELP                 3
 
-class ScHTMLParser;
-
-class ScHTMLImport : public ScEEImport
-{
-private:
-    static void         InsertRangeName( ScDocument* pDoc, const String& rName, const ScRange& rRange );
-
-public:
-    ScHTMLImport( ScDocument* pDoc, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight = TRUE );
-    virtual ~ScHTMLImport();
-    const ScHTMLParser* GetParser() const { return (ScHTMLParser*)mpParser; }
-
-    virtual void        WriteToDocument( BOOL bSizeColsRows = FALSE, double nOutputFactor = 1.0,
-                                         SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true );
-
-    static String       GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName );
-};
-
-
-#endif
+#define FL_CHOOSE_LANG           4
+#define RB_AUTOMATIC             5
+#define RB_CUSTOM                6
+#define LB_CUSTOM_LANG           7
+#define FL_OPTION                8
+#define BTN_CONVERT_DATE         9

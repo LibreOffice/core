@@ -1650,6 +1650,9 @@
 #define MID_3   3
 #define MID_4   4
 
+// Language chooser for text import filters.
+#define RID_SCDLG_LANG_CHOOSER           (SC_OOO_BUILD_START + 12)
+
 #endif
 
 

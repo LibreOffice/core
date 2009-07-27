@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: htmlimp.hxx,v $
- * $Revision: 1.7 $
+ * $RCSfile: langbox.hxx,v $
+ * $Revision: 1.4.242.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,27 +28,48 @@
  *
  ************************************************************************/
 
-#ifndef SC_HTMLIMP_HXX
-#define SC_HTMLIMP_HXX
+#ifndef SC_UI_LANGCHOOSER_HXX
+#define SC_UI_LANGCHOOSER_HXX
 
-#include "eeimport.hxx"
+#include "vcl/dialog.hxx"
+#include "vcl/button.hxx"
+#include "vcl/fixed.hxx"
+#include "i18npool/lang.h"
+#include "svx/langbox.hxx"
 
-class ScHTMLParser;
-
-class ScHTMLImport : public ScEEImport
+class ScLangChooserDlg : public ModalDialog
 {
-private:
-    static void         InsertRangeName( ScDocument* pDoc, const String& rName, const ScRange& rRange );
-
 public:
-    ScHTMLImport( ScDocument* pDoc, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight = TRUE );
-    virtual ~ScHTMLImport();
-    const ScHTMLParser* GetParser() const { return (ScHTMLParser*)mpParser; }
+    ScLangChooserDlg(Window* pParent);
+    virtual ~ScLangChooserDlg();
 
-    virtual void        WriteToDocument( BOOL bSizeColsRows = FALSE, double nOutputFactor = 1.0,
-                                         SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true );
+    virtual short Execute();
 
-    static String       GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName );
+    LanguageType getLanguageType() const;
+    bool isDateConversionSet() const;
+
+private:
+    void init();
+
+private:
+    OKButton        maBtnOk;
+    CancelButton    maBtnCancel;
+    HelpButton      maBtnHelp;
+
+    FixedLine       maFlChooseLang;
+
+    RadioButton     maRbAutomatic;
+    RadioButton     maRbCustom;
+
+    SvxLanguageBox  maLbCustomLang;
+
+    FixedLine       maFlOption;
+
+    CheckBox        maBtnConvertDate;
+
+    DECL_LINK( OKHdl, OKButton* );
+
+    DECL_LINK( RadioHdl, RadioButton* );
 };
 
 

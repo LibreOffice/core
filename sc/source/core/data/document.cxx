@@ -2343,10 +2343,11 @@ void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell, BOOL bForceT
 }
 
 
-BOOL ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString )
+BOOL ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
+                            SvNumberFormatter* pFormatter, bool bDetectNumberFormat )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
-        return pTab[nTab]->SetString( nCol, nRow, nTab, rString );
+        return pTab[nTab]->SetString( nCol, nRow, nTab, rString, pFormatter, bDetectNumberFormat );
     else
         return FALSE;
 }

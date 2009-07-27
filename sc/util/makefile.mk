@@ -277,6 +277,7 @@ LIB8OBJFILES = \
         $(SLO)$/dapidata.obj	\
         $(SLO)$/crdlg.obj			\
         $(SLO)$/scuiasciiopt.obj	\
+        $(SLO)$/langchooser.obj	\
         $(SLO)$/scuiautofmt.obj	\
         $(SLO)$/dpgroupdlg.obj	\
         $(SLO)$/editfield.obj

@@ -2044,7 +2044,7 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress&,
                  const CharSet, UINT32 ) RETURN_ERROR
     virtual FltError ScImportRTF( SvStream&, const String&, ScDocument*, ScRange& ) RETURN_ERROR
-    virtual FltError ScImportHTML( SvStream&, const String&, ScDocument*, ScRange&, double, BOOL ) RETURN_ERROR
+    virtual FltError ScImportHTML( SvStream&, const String&, ScDocument*, ScRange&, double, BOOL, SvNumberFormatter*, bool ) RETURN_ERROR
 
     virtual ScEEAbsImport *CreateRTFImport( ScDocument*, const ScRange& ) { return NULL; }
     virtual ScEEAbsImport *CreateHTMLImport( ScDocument*, const String&, const ScRange&, BOOL ) { return NULL; }

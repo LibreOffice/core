@@ -846,10 +846,12 @@ void ScTable::PutCell( const ScAddress& rPos, ULONG nFormatIndex, ScBaseCell* pC
 }
 
 
-BOOL ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const String& rString )
+BOOL ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const String& rString,
+                         SvNumberFormatter* pFormatter, bool bDetectNumberFormat )
 {
     if (ValidColRow(nCol,nRow))
-        return aCol[nCol].SetString( nRow, nTabP, rString );
+        return aCol[nCol].SetString(
+            nRow, nTabP, rString, pDocument->GetAddressConvention(), pFormatter, bDetectNumberFormat );
     else
         return FALSE;
 }

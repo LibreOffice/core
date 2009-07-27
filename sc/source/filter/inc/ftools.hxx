@@ -522,7 +522,9 @@ class ScFormatFilterPluginImpl : public ScFormatFilterPlugin {
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
                  const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, UINT32 nDifOption = SC_DIFOPT_EXCEL );
     virtual FltError ScImportRTF( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange );
-    virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0, BOOL bCalcWidthHeight = TRUE );
+    virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange,
+                                   double nOutputFactor = 1.0, BOOL bCalcWidthHeight = TRUE,
+                                   SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true );
 
     virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange );
     virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight );

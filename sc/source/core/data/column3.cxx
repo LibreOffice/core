@@ -54,6 +54,13 @@
 #include "markdata.hxx"
 #include "detfunc.hxx"          // fuer Notizen bei DeleteRange
 #include "postit.hxx"
+#include "stringutil.hxx"
+
+#include <com/sun/star/i18n/LocaleDataItem.hpp>
+
+using ::com::sun::star::i18n::LocaleDataItem;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // Err527 Workaround
 extern const ScFormulaCell* pLastFormulaTreeTop;    // in cellform.cxx
@@ -1244,7 +1251,8 @@ void ScColumn::StartListeningInArea( SCROW nRow1, SCROW nRow2 )
 
 //  TRUE = Zahlformat gesetzt
 BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
-                          formula::FormulaGrammar::AddressConvention eConv )
+                          formula::FormulaGrammar::AddressConvention eConv,
+                          SvNumberFormatter* pFormatter, bool bDetectNumberFormat )
 {
     BOOL bNumFmtSet = FALSE;
     if (VALIDROW(nRow))
@@ -1256,7 +1264,8 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
             double nVal;
             sal_uInt32 nIndex, nOldIndex = 0;
             sal_Unicode cFirstChar;
-            SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
+            if (!pFormatter)
+                pFormatter = pDocument->GetFormatTable();
             SfxObjectShell* pDocSh = pDocument->GetDocumentShell();
             if ( pDocSh )
                 bIsLoading = pDocSh->IsLoading();
@@ -1323,46 +1332,78 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                     if ( !bIsText )
                         nIndex = nOldIndex = pFormatter->GetStandardIndex();
                 }
-                if ( !bIsText &&
-                        pFormatter->IsNumberFormat(rString, nIndex, nVal) )
-                {                                               // Zahl
-                    pNewCell = new ScValueCell( nVal );
-                    if ( nIndex != nOldIndex)
-                    {
-                        // #i22345# New behavior: Apply the detected number format only if
-                        // the old one was the default number, date, time or boolean format.
-                        // Exception: If the new format is boolean, always apply it.
 
-                        BOOL bOverwrite = FALSE;
-                        const SvNumberformat* pOldFormat = pFormatter->GetEntry( nOldIndex );
-                        if ( pOldFormat )
+                do
+                {
+                    if (bIsText)
+                        break;
+
+                    if (bDetectNumberFormat)
+                    {
+                        if (!pFormatter->IsNumberFormat(rString, nIndex, nVal))
+                            break;
+
+                        pNewCell = new ScValueCell( nVal );
+                        if ( nIndex != nOldIndex)
                         {
-                            short nOldType = pOldFormat->GetType() & ~NUMBERFORMAT_DEFINED;
-                            if ( nOldType == NUMBERFORMAT_NUMBER || nOldType == NUMBERFORMAT_DATE ||
-                                 nOldType == NUMBERFORMAT_TIME || nOldType == NUMBERFORMAT_LOGICAL )
+                            // #i22345# New behavior: Apply the detected number format only if
+                            // the old one was the default number, date, time or boolean format.
+                            // Exception: If the new format is boolean, always apply it.
+
+                            BOOL bOverwrite = FALSE;
+                            const SvNumberformat* pOldFormat = pFormatter->GetEntry( nOldIndex );
+                            if ( pOldFormat )
                             {
-                                if ( nOldIndex == pFormatter->GetStandardFormat(
-                                                    nOldType, pOldFormat->GetLanguage() ) )
+                                short nOldType = pOldFormat->GetType() & ~NUMBERFORMAT_DEFINED;
+                                if ( nOldType == NUMBERFORMAT_NUMBER || nOldType == NUMBERFORMAT_DATE ||
+                                     nOldType == NUMBERFORMAT_TIME || nOldType == NUMBERFORMAT_LOGICAL )
                                 {
-                                    bOverwrite = TRUE;      // default of these types can be overwritten
+                                    if ( nOldIndex == pFormatter->GetStandardFormat(
+                                                        nOldType, pOldFormat->GetLanguage() ) )
+                                    {
+                                        bOverwrite = TRUE;      // default of these types can be overwritten
+                                    }
                                 }
                             }
-                        }
-                        if ( !bOverwrite && pFormatter->GetType( nIndex ) == NUMBERFORMAT_LOGICAL )
-                        {
-                            bOverwrite = TRUE;              // overwrite anything if boolean was detected
-                        }
+                            if ( !bOverwrite && pFormatter->GetType( nIndex ) == NUMBERFORMAT_LOGICAL )
+                            {
+                                bOverwrite = TRUE;              // overwrite anything if boolean was detected
+                            }
 
-                        if ( bOverwrite )
-                        {
-                            ApplyAttr( nRow, SfxUInt32Item( ATTR_VALUE_FORMAT,
-                                (UINT32) nIndex) );
-                            bNumFmtSet = TRUE;
+                            if ( bOverwrite )
+                            {
+                                ApplyAttr( nRow, SfxUInt32Item( ATTR_VALUE_FORMAT,
+                                    (UINT32) nIndex) );
+                                bNumFmtSet = TRUE;
+                            }
                         }
                     }
+                    else
+                    {
+                        // Only check if the string is a regular number.
+                        const LocaleDataWrapper* pLocale = pFormatter->GetLocaleData();
+                        if (!pLocale)
+                            break;
+
+                        LocaleDataItem aLocaleItem = pLocale->getLocaleItem();
+                        const OUString& rDecSep = aLocaleItem.decimalSeparator;
+                        const OUString& rGroupSep = aLocaleItem.thousandSeparator;
+                        if (rDecSep.getLength() != 1 || rGroupSep.getLength() != 1)
+                            break;
+
+                        sal_Unicode dsep = rDecSep.getStr()[0];
+                        sal_Unicode gsep = rGroupSep.getStr()[0];
+
+                        if (!ScStringUtil::parseSimpleNumber(rString, dsep, gsep, nVal))
+                            break;
+
+                        pNewCell = new ScValueCell(nVal);
+                    }
                 }
-                else                                            // Text
-                    pNewCell = new ScStringCell( rString );
+                while (false);
+
+                if (!pNewCell)
+                    pNewCell = new ScStringCell(rString);
             }
         }
 

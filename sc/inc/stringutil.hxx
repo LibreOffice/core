@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: htmlimp.hxx,v $
- * $Revision: 1.7 $
+ * $RCSfile: table.hxx,v $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,27 +28,28 @@
  *
  ************************************************************************/
 
-#ifndef SC_HTMLIMP_HXX
-#define SC_HTMLIMP_HXX
+#ifndef SC_STRINGUTIL_HXX
+#define SC_STRINGUTIL_HXX
 
-#include "eeimport.hxx"
+#include "rtl/ustring.hxx"
 
-class ScHTMLParser;
-
-class ScHTMLImport : public ScEEImport
+class ScStringUtil
 {
-private:
-    static void         InsertRangeName( ScDocument* pDoc, const String& rName, const ScRange& rRange );
-
 public:
-    ScHTMLImport( ScDocument* pDoc, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight = TRUE );
-    virtual ~ScHTMLImport();
-    const ScHTMLParser* GetParser() const { return (ScHTMLParser*)mpParser; }
-
-    virtual void        WriteToDocument( BOOL bSizeColsRows = FALSE, double nOutputFactor = 1.0,
-                                         SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true );
-
-    static String       GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName );
+    /**
+     * Check if a given string is a simple decimal number (e.g. 12.345). We
+     * don't do any elaborate parsing here; we only check for the simplest
+     * case of decimal number format.
+     *
+     * @param rStr string to parse
+     * @param dsep decimal separator
+     * @param gsep group separator (aka thousands separator)
+     * @param rVal value of successfully parsed number
+     *
+     * @return true if the string is a valid number, false otherwise.
+     */
+    static bool parseSimpleNumber(
+        const ::rtl::OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, double& rVal);
 };
 
 

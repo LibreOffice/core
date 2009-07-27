@@ -721,7 +721,9 @@ public:
     SC_DLLPUBLIC void           PutCell(SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell,
                             ULONG nFormatIndex, BOOL bForceTab = FALSE);
                     //  return TRUE = Zahlformat gesetzt
-    SC_DLLPUBLIC BOOL           SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString );
+    SC_DLLPUBLIC BOOL           SetString(
+        SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
+        SvNumberFormatter* pFormatter = NULL, bool bDetectNumberFormat = true );
     SC_DLLPUBLIC void           SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVal );
     void            SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const USHORT nError);
 

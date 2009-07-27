@@ -260,7 +260,8 @@ public:
     void        PutCell( SCCOL nCol, SCROW nRow, ScBaseCell* pCell );
     void        PutCell(SCCOL nCol, SCROW nRow, ULONG nFormatIndex, ScBaseCell* pCell);
                 //  TRUE = Zahlformat gesetzt
-    BOOL        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString );
+    BOOL        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
+                           SvNumberFormatter* pFormatter = NULL, bool bDetectNumberFormat = true );
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
     void        SetError( SCCOL nCol, SCROW nRow, USHORT nError);
 
