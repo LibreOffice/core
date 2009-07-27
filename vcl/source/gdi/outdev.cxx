@@ -68,6 +68,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -2285,8 +2286,35 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     if ( mbInitLineColor )
         ImplInitLineColor();
 
-    Point aStartPt = ImplLogicToDevicePixel( rStartPt );
-    Point aEndPt = ImplLogicToDevicePixel( rEndPt );
+    // #i101598# support AA and snap for lines, too
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+        && ROP_OVERPAINT == GetRasterOp()
+        && IsLineColor())
+    {
+        // at least transform with double precision to device coordinates; this will
+        // avoid pixel snap of single, appended lines
+        const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
+        const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+        basegfx::B2DPolygon aB2DPolyLine;
+
+        aB2DPolyLine.append(basegfx::B2DPoint(rStartPt.X(), rStartPt.Y()));
+        aB2DPolyLine.append(basegfx::B2DPoint(rEndPt.X(), rEndPt.Y()));
+        aB2DPolyLine.transform( aTransform );
+
+        if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
+        {
+            aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
+        }
+
+        if(mpGraphics->DrawPolyLine(aB2DPolyLine, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this))
+        {
+            return;
+        }
+    }
+
+    const Point aStartPt(ImplLogicToDevicePixel(rStartPt));
+    const Point aEndPt(ImplLogicToDevicePixel(rEndPt));
 
     mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), this );
 
@@ -2445,21 +2473,27 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         ImplInitLineColor();
 
     // use b2dpolygon drawing if possible
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+        && ROP_OVERPAINT == GetRasterOp()
+        && IsLineColor())
     {
-        ::basegfx::B2DPolygon aB2DPolyLine = rPoly.getB2DPolygon();
+        basegfx::B2DPolygon aB2DPolyLine(rPoly.getB2DPolygon());
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
-        aB2DPolyLine.transform( aTransform );
         const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
 
-        if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && (mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE))
+        // transform the polygon
+        aB2DPolyLine.transform( aTransform );
+
+        if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
         {
-            // #i98289#
             aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
         }
 
-        if( mpGraphics->DrawPolyLine( aB2DPolyLine, aB2DLineWidth, basegfx::B2DLINEJOIN_ROUND, this ) )
+        if(mpGraphics->DrawPolyLine(aB2DPolyLine, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this))
+        {
             return;
+        }
     }
 
     Polygon aPoly = ImplLogicToDevicePixel( rPoly );
@@ -2598,13 +2632,40 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
         ImplInitFillColor();
 
     // use b2dpolygon drawing if possible
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+        && ROP_OVERPAINT == GetRasterOp()
+        && (IsLineColor() || IsFillColor()))
     {
-        ::basegfx::B2DPolyPolygon aB2DPolyPolygon( rPoly.getB2DPolygon() );
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
-        aB2DPolyPolygon.transform( aTransform );
-        if( mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, 0.0, this ) )
+        basegfx::B2DPolygon aB2DPolygon(rPoly.getB2DPolygon());
+        bool bSuccess(true);
+
+        // transform the polygon and ensure closed
+        aB2DPolygon.transform(aTransform);
+        aB2DPolygon.setClosed(true);
+
+        if(IsFillColor())
+        {
+            bSuccess = mpGraphics->DrawPolyPolygon(basegfx::B2DPolyPolygon(aB2DPolygon), 0.0, this);
+        }
+
+        if(bSuccess && IsLineColor())
+        {
+            const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+
+            if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
+            {
+                aB2DPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
+            }
+
+            bSuccess = mpGraphics->DrawPolyLine(aB2DPolygon, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this);
+        }
+
+        if(bSuccess)
+        {
             return;
+        }
     }
 
     Polygon aPoly = ImplLogicToDevicePixel( rPoly );
@@ -2661,13 +2722,43 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
         ImplInitFillColor();
 
     // use b2dpolygon drawing if possible
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+        && ROP_OVERPAINT == GetRasterOp()
+        && (IsLineColor() || IsFillColor()))
     {
-        ::basegfx::B2DPolyPolygon aB2DPolyPolygon = rPolyPoly.getB2DPolyPolygon();
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
-        aB2DPolyPolygon.transform( aTransform );
-        if( mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, 0.0, this ) )
+        basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPoly.getB2DPolyPolygon());
+        bool bSuccess(true);
+
+        // transform the polygon and ensure closed
+        aB2DPolyPolygon.transform(aTransform);
+        aB2DPolyPolygon.setClosed(true);
+
+        if(IsFillColor())
+        {
+            bSuccess = mpGraphics->DrawPolyPolygon(aB2DPolyPolygon, 0.0, this);
+        }
+
+        if(bSuccess && IsLineColor())
+        {
+            const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+
+            if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
+            {
+                aB2DPolyPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyPolygon);
+            }
+
+            for(sal_uInt32 a(0); bSuccess && a < aB2DPolyPolygon.count(); a++)
+            {
+                bSuccess = mpGraphics->DrawPolyLine(aB2DPolyPolygon.getB2DPolygon(a), aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this);
+            }
+        }
+
+        if(bSuccess)
+        {
             return;
+        }
     }
 
     if ( nPoly == 1 )
@@ -2748,13 +2839,43 @@ void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly 
     if( mbInitFillColor )
         ImplInitFillColor();
 
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+        && ROP_OVERPAINT == GetRasterOp()
+        && (IsLineColor() || IsFillColor()))
     {
-        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
-        ::basegfx::B2DPolyPolygon aB2DPP = rB2DPolyPoly;
-        aB2DPP.transform( aTransform );
-        if( mpGraphics->DrawPolyPolygon( aB2DPP, 0.0, this ) )
+        const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
+        basegfx::B2DPolyPolygon aB2DPolyPolygon(rB2DPolyPoly);
+        bool bSuccess(true);
+
+        // transform the polygon and ensure closed
+        aB2DPolyPolygon.transform(aTransform);
+        aB2DPolyPolygon.setClosed(true);
+
+        if(IsFillColor())
+        {
+            bSuccess = mpGraphics->DrawPolyPolygon(aB2DPolyPolygon, 0.0, this);
+        }
+
+        if(bSuccess && IsLineColor())
+        {
+            const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+
+            if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
+            {
+                aB2DPolyPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyPolygon);
+            }
+
+            for(sal_uInt32 a(0);bSuccess && a < aB2DPolyPolygon.count(); a++)
+            {
+                bSuccess = mpGraphics->DrawPolyLine(aB2DPolyPolygon.getB2DPolygon(a), aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this);
+            }
+        }
+
+        if(bSuccess)
+        {
             return;
+        }
     }
 
     // fallback to old polygon drawing if needed
@@ -2809,28 +2930,34 @@ void OutputDevice::DrawPolyLine(
         ImplInitLineColor();
 
     // #i98289# use b2dpolygon drawing if possible
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+        && ROP_OVERPAINT == GetRasterOp()
+        && IsLineColor())
     {
-        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
-        ::basegfx::B2DVector aB2DLineWidth(1.0, 1.0);
-
-        // transform the line width if used
-        if( fLineWidth != 0.0 )
-            aB2DLineWidth = aTransform * ::basegfx::B2DVector( fLineWidth, fLineWidth );
+        const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
+        basegfx::B2DPolygon aB2DPolygon(rB2DPolygon);
+        basegfx::B2DVector aB2DLineWidth(1.0, 1.0);
 
         // transform the polygon
-        ::basegfx::B2DPolygon aB2DPL = rB2DPolygon;
-        aB2DPL.transform( aTransform );
+        aB2DPolygon.transform(aTransform);
 
-        if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && (mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE))
+        // transform the line width if used
+        if(fLineWidth != 0.0)
         {
-            // #i98289#
-            aB2DPL = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPL);
+            aB2DLineWidth = aTransform * ::basegfx::B2DVector(fLineWidth, fLineWidth);
+        }
+
+        if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
+        {
+            aB2DPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
         }
 
         // draw the polyline
-        if( mpGraphics->DrawPolyLine( aB2DPL, aB2DLineWidth, eLineJoin, this ) )
+        if(mpGraphics->DrawPolyLine(aB2DPolygon, aB2DLineWidth, eLineJoin, this))
+        {
             return;
+        }
     }
 
     // fallback to old polygon drawing if needed
