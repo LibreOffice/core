@@ -494,9 +494,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
         }
     }
 
-#ifdef WNT
-        LeaveModalMode();
-#endif
+    LeaveModalMode();
     return 0;
 }
 
