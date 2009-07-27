@@ -41,18 +41,28 @@ namespace configmgr {
 
 GroupNode::GroupNode(
     int layer, bool extensible, rtl::OUString const & templateName):
-    Node(layer), extensible_(extensible), templateName_(templateName)
+    Node(layer), extensible_(extensible), templateName_(templateName),
+    mandatory_(true)
 {}
 
 rtl::Reference< Node > GroupNode::clone() const {
     rtl::Reference< GroupNode > fresh(
         new GroupNode(getLayer(), extensible_, templateName_));
     cloneNodeMap(members_, &fresh->members_);
+    fresh->setMandatory(mandatory_);
     return fresh.get();
 }
 
 rtl::OUString GroupNode::getTemplateName() const {
     return templateName_;
+}
+
+void GroupNode::setMandatory(bool mandatory) {
+    mandatory_ = mandatory;
+}
+
+bool GroupNode::isMandatory() const {
+    return mandatory_;
 }
 
 bool GroupNode::isExtensible() const {

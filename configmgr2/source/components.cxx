@@ -1558,6 +1558,8 @@ void Components::writeModifications() {
                 xmlString(
                     convertToUtf8(escapeText(parentPath, false)).getStr()));
             writeNode(writer.writer, parent, name, node);
+            // It is never necessary to write the oor:mandatory attribute, as it
+            // cannot be set via the UNO API.
         } else {
             parent = resolvePath(parentPath, 0, 0, 0, 0);
             if (dynamic_cast< LocalizedPropertyNode * >(parent.get()) != 0) {
@@ -2018,7 +2020,7 @@ void Components::parseXcuNode(
                         css::uno::Reference< css::uno::XInterface >());
                 }
                 Operation op(getOperationAttribute(doc, p));
-                //TODO: oor:finalized attributes
+                //TODO: oor:finalized attribute
                 xmlNodePtr q(skipBlank(p->xmlChildrenNode));
                 LocalizedValues values;
                 while (isOorElement(q, "value")) {
@@ -2255,7 +2257,7 @@ void Components::parseXcuNode(
                          fromXmlString(doc->URL)),
                         css::uno::Reference< css::uno::XInterface >());
                 }
-                //TODO: oor:component, oor:finalized, oor:mandatory, oor:node-type attributes
+                //TODO: oor:finalized attribute
                 rtl::Reference< Node > subgroup(
                     findNode(
                         layer, group->getMembers(), getNameAttribute(doc, p)));
@@ -2292,6 +2294,7 @@ void Components::parseXcuNode(
                      fromXmlString(doc->URL)),
                     css::uno::Reference< css::uno::XInterface >());
             }
+            //TODO: oor:finalized attribute
             rtl::OUString name(getNameAttribute(doc, p));
             rtl::OUString templateName(
                 parseTemplateReference(
@@ -2315,9 +2318,17 @@ void Components::parseXcuNode(
                      fromXmlString(doc->URL)),
                     css::uno::Reference< css::uno::XInterface >());
             }
+            bool mandatory = getBooleanAttribute(
+                doc, p, "mandatory", "http://openoffice.org/2001/registry",
+                false);
             NodeMap::iterator j(set->getMembers().find(name));
-            if (j != set->getMembers().end() && j->second->getLayer() > layer) {
-                continue;
+            if (j != set->getMembers().end()) {
+                if (mandatory) {
+                    j->second->setMandatory(true);
+                }
+                if (j->second->getLayer() > layer) {
+                    continue;
+                }
             }
             switch (getOperationAttribute(doc, p)) {
             case OPERATION_MODIFY:
@@ -2337,6 +2348,7 @@ void Components::parseXcuNode(
             case OPERATION_REPLACE:
                 {
                     rtl::Reference< Node > member(tmpl->clone());
+                    node->setMandatory(mandatory);
                     parseXcuNode(
                         layer, componentName, doc, p, member, false,
                         rtl::OUString());
@@ -2346,6 +2358,7 @@ void Components::parseXcuNode(
             case OPERATION_FUSE:
                 if (j == set->getMembers().end() || j->second->isRemoved()) {
                     rtl::Reference< Node > member(tmpl->clone());
+                    node->setMandatory(mandatory);
                     parseXcuNode(
                         layer, componentName, doc, p, member, false,
                         rtl::OUString());
@@ -2357,8 +2370,8 @@ void Components::parseXcuNode(
                 }
                 break;
             case OPERATION_REMOVE:
-                // Ignore unknown members:
-                if (j != set->getMembers().end()) {
+                // Ignore unknown members as well as removal of mandatory ones:
+                if (j != set->getMembers().end() && !j->second->isMandatory()) {
                     j->second->remove(layer);
                 }
                 break;
@@ -2491,7 +2504,7 @@ void Components::parseFileList(
     for (sal_Int32 i = 0;;) {
         rtl::OUString url(urls.getToken(0, ' ', i));
         if (url.getLength() != 0) {
-            ini.expandMacrosFrom(url);
+            ini.expandMacrosFrom(url); //TODO: detect failure
             (this->*parseFile)(layer, url);
         }
         if (i == -1) {

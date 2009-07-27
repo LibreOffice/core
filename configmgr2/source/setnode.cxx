@@ -48,7 +48,7 @@ SetNode::SetNode(
     rtl::OUString const & templateName):
     Node(layer), defaultTemplateName_(defaultTemplateName),
     additionalTemplateNames_(additionalTemplateNames),
-    templateName_(templateName)
+    templateName_(templateName), mandatory_(true)
 {
     OSL_ASSERT(
         defaultTemplateName.getLength() != 0 &&
@@ -64,11 +64,20 @@ rtl::Reference< Node > SetNode::clone() const {
             getLayer(), defaultTemplateName_, additionalTemplateNames_,
             templateName_));
     cloneNodeMap(members_, &fresh->members_);
+    fresh->setMandatory(mandatory_);
     return fresh.get();
 }
 
 rtl::OUString SetNode::getTemplateName() const {
     return templateName_;
+}
+
+void SetNode::setMandatory(bool mandatory) {
+    mandatory_ = mandatory;
+}
+
+bool SetNode::isMandatory() const {
+    return mandatory_;
 }
 
 rtl::OUString const & SetNode::getDefaultTemplateName() const {

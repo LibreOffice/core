@@ -44,6 +44,10 @@ public:
 
     virtual rtl::OUString getTemplateName() const;
 
+    virtual void setMandatory(bool mandatory);
+
+    virtual bool isMandatory() const;
+
     void setLayer(int layer);
 
     int getLayer() const;

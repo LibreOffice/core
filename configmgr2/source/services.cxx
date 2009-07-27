@@ -115,7 +115,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
     return true;
 }
 
-/*
+/*TODO:
 com.sun.star.configuration.AdministrationProvider
 com.sun.star.configuration.ConfigurationRegistry
 com.sun.star.configuration.backend.Backend

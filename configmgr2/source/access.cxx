@@ -291,16 +291,18 @@ void Access::commitChildChanges() {
                 // directly inserted children
         }
         if (i->second->isModified()) {
+            NodeMap & members = getMemberNodes();
+            NodeMap::iterator j(members.find(i->first));
             if (child.is()) {
                 // Inserted:
+                child->getNode()->setMandatory(
+                    j != members.end() && j->second->isMandatory());
                 getMemberNodes()[i->first] = child->getNode();
             } else {
                 // Removed (TODO: if j == members.end(), the child probably got
                 // inserted and removed again in this transaction, so activity
                 // here could probably be cut short to preserve resources):
-                NodeMap & members = getMemberNodes();
-                NodeMap::iterator j(members.find(i->first));
-                if (j != members.end()) {
+                if (j != members.end() && !j->second->isMandatory()) {
                     j->second->remove(TOP_LAYER);
                 }
             }
@@ -942,7 +944,7 @@ void Access::removeByName(rtl::OUString const & aName)
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
     rtl::Reference< ChildAccess > child(getChild(aName));
-    if (!child.is()) {
+    if (!child.is() || child->getNode()->isMandatory()) {
         throw css::container::NoSuchElementException(
             aName, static_cast< cppu::OWeakObject * >(this));
     }

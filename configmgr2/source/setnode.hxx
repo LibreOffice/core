@@ -53,6 +53,10 @@ public:
 
     virtual rtl::OUString getTemplateName() const;
 
+    virtual void setMandatory(bool mandatory);
+
+    virtual bool isMandatory() const;
+
     rtl::OUString const & getDefaultTemplateName() const;
 
     bool isValidTemplate(rtl::OUString const & templateName) const;
@@ -71,6 +75,7 @@ private:
     NodeMap members_;
     rtl::OUString templateName_;
         // non-empty iff this node is a template, free node, or set member
+    bool mandatory_;
 };
 
 }

@@ -42,6 +42,15 @@ rtl::OUString Node::getTemplateName() const {
     return rtl::OUString();
 }
 
+void Node::setMandatory(bool mandatory) {
+    (void) mandatory; // avoid warnings
+    OSL_ASSERT(!mandatory);
+}
+
+bool Node::isMandatory() const {
+    return false;
+}
+
 void Node::setLayer(int layer) {
     OSL_ASSERT(layer >= layer_);
     layer_ = layer;
