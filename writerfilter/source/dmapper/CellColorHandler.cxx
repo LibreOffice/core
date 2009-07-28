@@ -69,32 +69,32 @@ void CellColorHandler::attribute(Id rName, Value & rVal)
     /* WRITERFILTERSTATUS: table: CellColor_attributedata */
     switch( rName )
     {
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_cellTopColor:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_cellLeftColor:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_cellBottomColor:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_cellRightColor:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             // nIntValue contains the color, directly
         break;
-        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Shd_val:
+            /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         {
             //might be clear, pct5...90, some hatch types
             //TODO: The values need symbolic names!
             m_nShadowType = nIntValue; //clear == 0, solid: 1, pct5: 2, pct50:8, pct95: x3c, horzStripe:0x0e, thinVertStripe: 0x15
         }
         break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Shd_fill:
+            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             if( nIntValue == OOXML_COLOR_AUTO )
                 nIntValue = 0xffffff; //fill color auto means white
             m_nFillColor = nIntValue;
         break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Shd_color:
+            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             if( nIntValue == OOXML_COLOR_AUTO )
                 nIntValue = 0; //shading color auto means black
             //color of the shading
