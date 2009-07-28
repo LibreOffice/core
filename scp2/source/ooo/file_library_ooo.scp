@@ -894,6 +894,17 @@ End
 
 #endif
 
+#ifdef WNT
+
+File gid_File_Lib_Rebasemsi
+    TXT_FILE_BODY;
+    Name = "rebase.dll";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED,PATCH,BINARYTABLE,BINARYTABLE_ONLY,DONTRENAMEINPATCH);
+End
+
+#endif
+
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Lng, lng)
 
 File gid_File_Lib_Localedata_En
