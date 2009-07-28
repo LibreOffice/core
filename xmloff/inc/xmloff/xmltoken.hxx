@@ -3081,6 +3081,13 @@ namespace xmloff { namespace token {
         XML_MATHWEIGHT,
         XML_MATHCOLOR,
 
+        XML_CONTAINS,
+        XML_DOES_NOT_CONTAIN,
+        XML_BEGINS_WITH,
+        XML_DOES_NOT_BEGIN_WITH,
+        XML_ENDS_WITH,
+        XML_DOES_NOT_END_WITH,
+
         XML_TOKEN_END
     };
 
