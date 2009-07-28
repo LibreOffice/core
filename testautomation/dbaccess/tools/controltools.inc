@@ -119,6 +119,7 @@ function fSetControlProperty(sControlType, sPropertyName, sPropertyValue as stri
                     Align.select(Cint(sPropertyValue))
                 elseif sPropertyName = "AdditionalInfo" then
                     Information.setText(sPropertyValue)
+                    Information.TypeKeys("<RETURN>",true)
                 elseif sPropertyName = "AutoComplete" then
                     AutoComplete.select(Cint(sPropertyValue))
                 elseif sPropertyName = "Background" then

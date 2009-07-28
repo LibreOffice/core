@@ -51,7 +51,7 @@ testcase tLowerCaseMetaInf
     dim irc as integer
     
     printlog( "Install extension: " & cExtensionPath )
-    irc = hExtensionAddGUI( cExtensionPath, "AcceptLicense" )
+    irc = hExtensionAddGUI( cExtensionPath, "AcceptLicense,InstallForUser" )
 
     if ( irc > 0 ) then
     
