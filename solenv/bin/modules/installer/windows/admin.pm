@@ -79,10 +79,11 @@ sub unpack_cabinet_file
     my $systemcall = "";
     if ( $^O =~ /cygwin/i ) {
         my $localunpackdir = qx{cygpath -w "$unpackdir"};
+        chomp ($localunpackdir);
         $localunpackdir =~ s/\\/\\\\/g;
         $cabfilename =~ s/\\/\\\\/g;
         $cabfilename =~ s/\s*$//g;
-        $systemcall = $expandfile . " " . $cabfilename . " -F:\* " . $localunpackdir;
+        $systemcall = $expandfile . " " . $cabfilename . " -F:\* " . $localunpackdir . " \> " . $expandlogfile;
     }
     else
     {
