@@ -2733,7 +2733,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
 /* -----------------------------28.10.02 16:00--------------------------------
 
  ---------------------------------------------------------------------------*/
-SfxViewShell * SwXTextDocument::GuessViewShell()
+SfxViewShell * SwXTextDocument::GuessViewShell(
+    const uno::Reference< css::frame::XController > xController )
 {
     // #130810# SfxViewShell::Current() / SfxViewShell::GetObjectShell()
     // must not be used (see comment from MBA)
@@ -2742,18 +2743,30 @@ SfxViewShell * SwXTextDocument::GuessViewShell()
     SwView          *pSwView = 0;
     SwPagePreView   *pSwPagePreView = 0;
     SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( pDocShell, 0, sal_False );
+
+    // look for the view shell with the same controller in use,
+    // otherwise look for a suitable view, preferably a SwView,
+    // if that one is not found use a SwPagePreView if found.
     while (pFrame)
     {
         pView = pFrame->GetViewShell();
         pSwView = dynamic_cast< SwView * >(pView);
-        if (pSwView)
-            break;
         if (!pSwPagePreView)
             pSwPagePreView = dynamic_cast< SwPagePreView * >(pView);
+        if (xController.is())
+        {
+            if (pView && pView->GetController() == xController)
+                break;
+        }
+        else if (pSwView)
+            break;
         pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell, 0, sal_False );
     }
 
-    return pSwView ? pSwView : dynamic_cast< SwView * >(pSwPagePreView);
+    DBG_ASSERT( pSwView || pSwPagePreView, "failed to get view shell" );
+    return pSwView ?
+            dynamic_cast< SfxViewShell * >(pSwView) :
+            dynamic_cast< SfxViewShell * >(pSwPagePreView);
 }
 
 /* -----------------------------23.08.02 16:00--------------------------------
@@ -2788,15 +2801,8 @@ void SAL_CALL SwXTextDocument::render(
         uno::Reference< frame::XController > xController;
         if (aTmp >>= xController)
         {
-            uno::Reference< lang::XUnoTunnel > xTunnel( xController, uno::UNO_QUERY );
-            if (xTunnel.is())
-            {
-                SwXTextView *pTextView = reinterpret_cast< SwXTextView * >(
-                        sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething( SwXTextView::getUnoTunnelId()) ));
-                if (pTextView)
-                    pView = pTextView->GetView();
-            }
-
+            DBG_ASSERT( xController.is(), "controller is empty!" );
+            pView = GuessViewShell( xController );
         }
     }
 
@@ -2808,18 +2814,26 @@ void SAL_CALL SwXTextDocument::render(
     // due to #110067# (document page count changes sometimes during
     // PDF export/printing) we can not check for the upper bound properly.
     // Thus instead of throwing the exception we silently return.
-    if (!(0 <= nRenderer /* &&  nRenderer < pDoc->GetPageCount()*/))
+    if (0 > nRenderer)
         throw IllegalArgumentException();
-    if (nRenderer >= pDoc->GetPageCount())
+    const sal_Int32 nMaxCount = bIsPDFExport?
+        static_cast< sal_Int32 >(pDoc->GetPageCount()) :
+        static_cast< sal_Int32 >(m_pPrintUIOptions->GetPagesToPrint().size());
+    if (nRenderer >= nMaxCount)
         return;
 
     // the view shell should be SwView for documents PDF export
     // or SwPagePreView for PDF export of the page preview
     //!! (check for SwView first as in GuessViewShell) !!
+    DBG_ASSERT( pView, "!! view missing !!" );
     const TypeId aSwViewTypeId = TYPE(SwView);
-    ViewShell* pVwSh = pView->IsA(aSwViewTypeId) ?
-             ((SwView*)pView)->GetWrtShellPtr() :
-            ((SwPagePreView*)pView)->GetViewShell();
+    ViewShell* pVwSh = 0;
+    if (pView)
+    {
+        pVwSh = pView->IsA(aSwViewTypeId) ?
+                    ((SwView*)pView)->GetWrtShellPtr() :
+                    ((SwPagePreView*)pView)->GetViewShell();
+    }
 
     uno::Reference< awt::XDevice >  xRenderDevice;
     bool bFirstPage = false;

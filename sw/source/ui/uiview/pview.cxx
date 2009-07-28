@@ -45,6 +45,7 @@
 #include <svtools/stritem.hxx>
 #include <svtools/eitem.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/topfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -2415,65 +2416,9 @@ void SwPagePreView::ScrollDocSzChg()
 
 USHORT  SwPagePreView::Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pDlg )
 {
-    ViewShell* pSh = aViewWin.GetViewShell();
-    SfxPrinter* pPrinter = GetPrinter();
-    if( !pPrinter || !pPrinter->InitJob( &aViewWin,
-                pSh->HasDrawView() && !bIsAPI && pSh->GetDrawView()->GetModel()->HasTransparentObjects() ))
-        return ERRCODE_IO_ABORT;
-
-    SwWait aWait( *GetDocShell(), TRUE );
-
-    USHORT nRowCol = ( aViewWin.GetRow() << 8 ) +
-                        aViewWin.GetCol();  // Zeilen / DoppelSeiten
-
-    {
-        // die Felder aktualisieren
-        // ACHTUNG: hochcasten auf die EditShell, um die SS zu nutzen.
-        //          In den Methoden wird auf die akt. Shell abgefragt!
-        SwEditShell* pESh = (SwEditShell*)pSh;
-        SwDocStat aDocStat;
-        BOOL bIsModified = pESh->IsModified();
-
-        pESh->StartAllAction();
-        pESh->UpdateDocStat( aDocStat );
-        pSh->UpdateFlds();
-        pESh->EndAllAction();
-
-        if( !bIsModified )
-            pESh->ResetModified();
-    }
-
-    // Druckauftrag starten
-    SfxObjectShell *pObjShell = GetViewFrame()->GetObjectShell();
-    SwPrtOptions aOpts( pObjShell->GetTitle(0) );
-
-    BOOL bPrtPros;
-    BOOL bPrtPros_RTL;
-    SwView::MakeOptions( pDlg, aOpts, &bPrtPros, &bPrtPros_RTL, FALSE, GetPrinter(), GetDocShell()->GetDoc()->getPrintData() );
-
-    if( bNormalPrint )
-    {
-        if( bPrtPros )
-            pSh->PrintProspect( aOpts, rProgress, bPrtPros_RTL );
-        else
-        {
-#ifdef TL_NOT_NOW /*TLPDF*/  //!! Currently broken beyond repair since we will not have a printer                          
-            pSh->Prt( pPrinter, aOpts, &rProgress );    /*TLPDF*/
-#endif // TL_NOT_NOW /*TLPDF*/  //!! Currently broken beyond repair since we will not have a printer                          
-        }
-    }
-    else
-    {
-        const SwPagePreViewPrtData* pPPVPD = pSh->GetDoc()->GetPreViewPrtData();
-        if( pPPVPD && pPPVPD->GetCol() && pPPVPD->GetRow() )
-        {
-            // Zeilen / Seiten
-            nRowCol = ( pPPVPD->GetRow() << 8 ) + pPPVPD->GetCol();
-        }
-        else
-            pPPVPD = 0;
-        pSh->PrintPreViewPage( aOpts, nRowCol, rProgress, pPPVPD );
-    }
+    (void) rProgress; (void) bIsAPI; (void) pDlg;
+    // TLPDF no longer needed in new print UI
+    // TLPDF TODO: clean-up
 
     return 0; // OK
 }
