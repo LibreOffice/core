@@ -138,6 +138,7 @@ IDLFILES=\
     FillMode.idl\
     FilterConnection.idl\
     FilterOperator.idl\
+    FilterOperator2.idl\
     FormulaLanguage.idl\
     FormulaMapGroup.idl\
     FormulaMapGroupSpecialOffset.idl\
@@ -219,6 +220,7 @@ IDLFILES=\
     TableConditionalEntryEnumeration.idl\
     TableConditionalFormat.idl\
     TableFilterField.idl\
+    TableFilterField2.idl\
     TableOperationMode.idl\
     TablePageBreakData.idl\
     TablePageStyle.idl\
@@ -315,6 +317,7 @@ IDLFILES=\
     XSheetConditionalEntries.idl\
     XSheetConditionalEntry.idl\
     XSheetFilterDescriptor.idl\
+    XSheetFilterDescriptor2.idl\
     XSheetFilterable.idl\
     XSheetFilterableEx.idl\
     XSheetLinkable.idl\
