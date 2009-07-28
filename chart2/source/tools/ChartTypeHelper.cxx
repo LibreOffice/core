@@ -641,6 +641,22 @@ bool ChartTypeHelper::shouldLabelNumberFormatKeyBeDetectedFromYAxis( const uno::
     return bRet;
 }
 
+bool ChartTypeHelper::isSupportingOnlyDeepStackingFor3D( const uno::Reference< XChartType >& xChartType )
+{
+    bool bRet = false;
+    if( !xChartType.is() )
+        return bRet;
+
+    rtl::OUString aChartTypeName = xChartType->getChartType();
+    if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE) ||
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) ||
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA) )
+    {
+        bRet = true;
+    }
+    return bRet;
+}
+
 //.............................................................................
 } //namespace chart
 //.............................................................................

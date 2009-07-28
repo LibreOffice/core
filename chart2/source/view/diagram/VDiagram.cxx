@@ -553,13 +553,13 @@ void VDiagram::createShapes_3d()
             CuboidPlanePosition eLeftWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
             if( CuboidPlanePosition_Right==eLeftWallPos )
                 xPos = FIXED_SIZE_FOR_3D_CHART_VOLUME;
-            Stripe aStripe( drawing::Position3D(xPos,0,0)
-                , drawing::Direction3D(0,FIXED_SIZE_FOR_3D_CHART_VOLUME,0)
+            Stripe aStripe( drawing::Position3D(xPos,FIXED_SIZE_FOR_3D_CHART_VOLUME,0)
+                , drawing::Direction3D(0,-FIXED_SIZE_FOR_3D_CHART_VOLUME,0)
                 , drawing::Direction3D(0,0,FIXED_SIZE_FOR_3D_CHART_VOLUME) );
 
             uno::Reference< drawing::XShape > xShape =
                 m_pShapeFactory->createStripe( xWallGroup_Shapes, aStripe
-                    , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), true );
+                    , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), true, true );
             if( !bAddFloorAndWall )
             {
                 //we always need this object as dummy object for correct scene dimensions
@@ -573,9 +573,9 @@ void VDiagram::createShapes_3d()
             CuboidPlanePosition eBackWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBackWall( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
             if( CuboidPlanePosition_Front==eBackWallPos )
                     zPos = FIXED_SIZE_FOR_3D_CHART_VOLUME;
-            Stripe aStripe( drawing::Position3D(0,0,zPos)
+            Stripe aStripe( drawing::Position3D(0,FIXED_SIZE_FOR_3D_CHART_VOLUME,zPos)
                 , drawing::Direction3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,0,0)
-                , drawing::Direction3D(0,FIXED_SIZE_FOR_3D_CHART_VOLUME,0) );
+                , drawing::Direction3D(0,-FIXED_SIZE_FOR_3D_CHART_VOLUME,0) );
 
             uno::Reference< drawing::XShape > xShape =
                 m_pShapeFactory->createStripe(xWallGroup_Shapes, aStripe
