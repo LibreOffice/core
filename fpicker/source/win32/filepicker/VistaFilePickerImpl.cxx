@@ -401,7 +401,6 @@ void VistaFilePickerImpl::impl_sta_CreateOpenDialog(const RequestRef& rRequest)
     nFlags |=  FOS_FILEMUSTEXIST;
     nFlags |=  FOS_OVERWRITEPROMPT;
     nFlags |=  FOS_DONTADDTORECENT;
-    nFlags |=  FOS_ALLOWMULTISELECT;
 
     iDialog->SetOptions ( nFlags );
 

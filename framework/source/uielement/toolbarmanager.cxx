@@ -336,11 +336,21 @@ void ToolBarManager::Destroy()
             delete static_cast< AddonsParams* >( m_pToolBar->GetItemData( nItemId ));
     }
 
-    /* #i99167# removed change for i93173 since there is some weird crash
+    /* #i99167# removed change for i93173 since there is some weird crash */
         // #i93173# delete toolbar lazily as we can still be in one of its handlers
         m_pToolBar->doLazyDelete();
-    */
-    delete m_pToolBar;
+
+    Link aEmpty;
+    m_pToolBar->SetSelectHdl( aEmpty );
+    m_pToolBar->SetActivateHdl( aEmpty );
+    m_pToolBar->SetDeactivateHdl( aEmpty );
+    m_pToolBar->SetClickHdl( aEmpty );
+    m_pToolBar->SetDropdownClickHdl( aEmpty );
+    m_pToolBar->SetDoubleClickHdl( aEmpty );
+    m_pToolBar->SetStateChangedHdl( aEmpty );
+    m_pToolBar->SetDataChangedHdl( aEmpty );
+
+//    delete m_pToolBar;
     m_pToolBar = 0;
 }
 

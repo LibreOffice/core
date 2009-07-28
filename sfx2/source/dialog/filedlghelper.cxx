@@ -1358,6 +1358,7 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
 //On MacOSX the native file picker has to run in the primordial thread because of drawing issues
 //On Linux the native gtk file picker, when backed by gnome-vfs2, needs to be run in the same
 //primordial thread as the ucb gnome-vfs2 provider was initialized in.
+/*
 #ifdef WNT
     if ( mbSystemPicker )
     {
@@ -1371,9 +1372,18 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
     }
     else
 #endif
+*/
     {
         try
         {
+#ifdef WNT
+            if ( mbSystemPicker )
+            {
+                OReleaseSolarMutex aSolarMutex;
+                nRet = mxFileDlg->execute();
+            }
+            else
+#endif
             nRet = mxFileDlg->execute();
         }
         catch( const Exception& )
@@ -2579,6 +2589,46 @@ Sequence < OUString > FileDialogHelper::GetMPath() const
         Sequence < OUString > aEmpty;
         return aEmpty;
     }
+}
+
+// ------------------------------------------------------------------------
+Sequence< ::rtl::OUString > FileDialogHelper::GetSelectedFiles() const
+{
+    // a) the new way (optional!)
+    uno::Sequence< ::rtl::OUString > aResultSeq;
+    uno::Reference< XFilePicker2 > xPickNew(mpImp->mxFileDlg, UNO_QUERY);
+    if (xPickNew.is())
+    {
+        aResultSeq = xPickNew->getSelectedFiles();
+    }
+    // b) the olde way ... non optional.
+    else
+    {
+        uno::Reference< XFilePicker > xPickOld(mpImp->mxFileDlg, UNO_QUERY_THROW);
+        Sequence< OUString > lFiles = xPickOld->getFiles();
+        ::sal_Int32          nFiles = lFiles.getLength();
+        if ( nFiles > 1 )
+        {
+            aResultSeq = Sequence< ::rtl::OUString >( nFiles-1 );
+
+            INetURLObject aPath( lFiles[0] );
+            aPath.setFinalSlash();
+
+            for (::sal_Int32 i = 1; i < nFiles; i++)
+            {
+                if (i == 1)
+                    aPath.Append( lFiles[i] );
+                else
+                    aPath.setName( lFiles[i] );
+
+                aResultSeq[i-1] = ::rtl::OUString(aPath.GetMainURL( INetURLObject::NO_DECODE ));
+            }
+        }
+        else
+            aResultSeq = lFiles;
+    }
+
+    return aResultSeq;
 }
 
 // ------------------------------------------------------------------------
