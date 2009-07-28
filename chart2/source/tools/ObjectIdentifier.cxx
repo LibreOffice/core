@@ -308,12 +308,17 @@ ObjectIdentifier& ObjectIdentifier::operator=( const ObjectIdentifier& rOID )
 
 bool ObjectIdentifier::operator==( const ObjectIdentifier& rOID ) const
 {
-    if ( m_aObjectCID.equals( rOID.m_aObjectCID ) &&
+    if ( areIdenticalObjects( m_aObjectCID, rOID.m_aObjectCID ) &&
          ( m_xAdditionalShape == rOID.m_xAdditionalShape ) )
     {
         return true;
     }
     return false;
+}
+
+bool ObjectIdentifier::operator!=( const ObjectIdentifier& rOID ) const
+{
+    return !operator==( rOID );
 }
 
 bool ObjectIdentifier::operator<( const ObjectIdentifier& rOID ) const
