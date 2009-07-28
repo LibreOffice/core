@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: salatslayout.cxx,v $
- * $Revision: 1.12 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -745,6 +742,8 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
 
     // get a quick overview on what could fit
     const long nPixelWidth = (nMaxWidth - (nCharExtra * mnCharCount)) / nFactor;
+    if( nPixelWidth <= 0 )
+        return mnMinCharPos;
 
     // check assumptions
     DBG_ASSERT( !mnTrailingSpaceWidth, "ATSLayout::GetTextBreak() with nTSW!=0" );

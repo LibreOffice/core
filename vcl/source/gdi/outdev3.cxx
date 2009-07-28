@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev3.cxx,v $
- * $Revision: 1.240.14.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -6484,7 +6483,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
             nRTLOffset = nPixelWidth;
         else
             nRTLOffset = pSalLayout->GetTextWidth() / pSalLayout->GetUnitsPerPixel();
-        pSalLayout->DrawOffset().X() = -nRTLOffset;
+        pSalLayout->DrawOffset().X() = 1 - nRTLOffset;
     }
 
     return pSalLayout;
@@ -6919,13 +6918,13 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
                 nStyle &= ~TEXT_DRAW_CLIP;
         }
 
-        // Vertikales Alignment
+        // horizontal text alignment
         if ( nStyle & TEXT_DRAW_RIGHT )
             aPos.X() += nWidth-nTextWidth;
         else if ( nStyle & TEXT_DRAW_CENTER )
             aPos.X() += (nWidth-nTextWidth)/2;
 
-        // Font Alignment
+        // vertical font alignment
         if ( eAlign == ALIGN_BOTTOM )
             aPos.Y() += nTextHeight;
         else if ( eAlign == ALIGN_BASELINE )
