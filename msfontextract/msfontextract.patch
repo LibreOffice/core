@@ -1,6 +1,6 @@
 --- misc/libmspack/mspack/makefile.mk	Mon Mar 31 11:34:58 2008
 +++ misc/build/libmspack/mspack/makefile.mk	Mon Mar 31 11:34:31 2008
-@@ -1 +1,82 @@
+@@ -1 +1,83 @@
 -dummy
 +#*************************************************************************
 +#
@@ -42,6 +42,7 @@
 +NO_DEFAULT_STL=TRUE
 +LIBSALCPPRT=
 +EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
++UWINAPILIB=
 +
 +# --- Settings -----------------------------------------------------
 +

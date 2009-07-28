@@ -3263,7 +3263,7 @@ Nur in misc/build/cppunit-1.8.0/include/cppunit: taghelper.hxx.dummy.
 Nur in misc/build/cppunit-1.8.0/include/cppunit: tagvalues.hxx.dummy.
 --- misc/cppunit-1.8.0/include/makefile.mk	2008-12-10 20:46:08.530624271 +0100
 +++ misc/build/cppunit-1.8.0/include/makefile.mk	2008-07-14 07:25:14.000000000 +0200
-@@ -1 +1,52 @@
+@@ -1 +1,53 @@
 -dummy
 +#*************************************************************************
 +#
@@ -3300,6 +3300,7 @@ Nur in misc/build/cppunit-1.8.0/include/cppunit: tagvalues.hxx.dummy.
 +
 +PRJNAME=cppunit
 +TARGET=inc
++UWINAPILIB=
 +
 +# --- Settings -----------------------------------------------------
 +

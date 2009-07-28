@@ -18,7 +18,7 @@
 +
 --- misc/redland-1.0.7/librdf/makefile.mk	2008-12-26 17:24:00.000000000 +0100
 +++ misc/build/redland-1.0.7/librdf/makefile.mk	2008-12-26 17:20:46.000000000 +0100
-@@ -1 +1,124 @@
+@@ -1 +1,125 @@
 -dummy
 +#*************************************************************************
 +#
@@ -56,6 +56,7 @@
 +PRJNAME=redland
 +TARGET=librdf
 +LIBTARGET=NO
++UWINAPILIB=
 +
 +EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
 +

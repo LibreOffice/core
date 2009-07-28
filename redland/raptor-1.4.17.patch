@@ -18,7 +18,7 @@
 +
 --- misc/raptor-1.4.17/src/makefile.mk	Mon Jun 16 17:24:23 2008
 +++ misc/build/raptor-1.4.17/src/makefile.mk	Mon Jun 16 19:25:14 2008
-@@ -1,1 +1,128 @@
+@@ -1,1 +1,129 @@
 -dummy
 +#*************************************************************************
 +#
@@ -56,6 +56,7 @@
 +PRJNAME=redland
 +TARGET=raptor
 +LIBTARGET=NO
++UWINAPILIB=
 +
 +EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
 +

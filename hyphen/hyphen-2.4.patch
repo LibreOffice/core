@@ -110,7 +110,7 @@ diff -u misc/hyphen-2.4/Makefile.in misc/build/hyphen-2.4/Makefile.in
 diff -u misc/hyphen-2.4/makefile.mk misc/build/hyphen-2.4/makefile.mk
 --- misc/hyphen-2.4/makefile.mk	2008-06-04 10:43:21.000000000 +0200
 +++ misc/build/hyphen-2.4/makefile.mk	2008-06-04 12:40:46.000000000 +0200
-@@ -1 +1,57 @@
+@@ -1 +1,58 @@
 -dummy
 +#*************************************************************************
 +#
@@ -151,6 +151,7 @@ diff -u misc/hyphen-2.4/makefile.mk misc/build/hyphen-2.4/makefile.mk
 +
 +USE_DEFFILE=TRUE
 +EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++UWINAPILIB=
 +
 +.INCLUDE : settings.mk
 +
