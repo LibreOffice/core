@@ -34,6 +34,7 @@
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
+#include "layer.hxx"
 #include "node.hxx"
 
 namespace configmgr {
@@ -42,13 +43,13 @@ rtl::OUString Node::getTemplateName() const {
     return rtl::OUString();
 }
 
-void Node::setMandatory(bool mandatory) {
-    (void) mandatory; // avoid warnings
-    OSL_ASSERT(!mandatory);
+void Node::setMandatory(int layer) {
+    (void) layer; // avoid warnings
+    OSL_ASSERT(layer == NO_LAYER);
 }
 
-bool Node::isMandatory() const {
-    return false;
+int Node::getMandatory() const {
+    return NO_LAYER;
 }
 
 void Node::setLayer(int layer) {

@@ -30,6 +30,7 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
+#include <algorithm>
 #include <vector>
 
 #include "boost/noncopyable.hpp"
@@ -2321,11 +2322,12 @@ void Components::parseXcuNode(
             bool mandatory = getBooleanAttribute(
                 doc, p, "mandatory", "http://openoffice.org/2001/registry",
                 false);
+            int mandatoryLayer = mandatory ? layer : NO_LAYER;
             NodeMap::iterator j(set->getMembers().find(name));
             if (j != set->getMembers().end()) {
-                if (mandatory) {
-                    j->second->setMandatory(true);
-                }
+                mandatoryLayer = std::min(
+                    mandatoryLayer, j->second->getMandatory());
+                j->second->setMandatory(mandatoryLayer);
                 if (j->second->getLayer() > layer) {
                     continue;
                 }
@@ -2348,7 +2350,7 @@ void Components::parseXcuNode(
             case OPERATION_REPLACE:
                 {
                     rtl::Reference< Node > member(tmpl->clone());
-                    node->setMandatory(mandatory);
+                    node->setMandatory(mandatoryLayer);
                     parseXcuNode(
                         layer, componentName, doc, p, member, false,
                         rtl::OUString());
@@ -2358,7 +2360,7 @@ void Components::parseXcuNode(
             case OPERATION_FUSE:
                 if (j == set->getMembers().end() || j->second->isRemoved()) {
                     rtl::Reference< Node > member(tmpl->clone());
-                    node->setMandatory(mandatory);
+                    node->setMandatory(mandatoryLayer);
                     parseXcuNode(
                         layer, componentName, doc, p, member, false,
                         rtl::OUString());
@@ -2371,7 +2373,9 @@ void Components::parseXcuNode(
                 break;
             case OPERATION_REMOVE:
                 // Ignore unknown members as well as removal of mandatory ones:
-                if (j != set->getMembers().end() && !j->second->isMandatory()) {
+                if (j != set->getMembers().end() &&
+                    j->second->getMandatory() > layer)
+                {
                     j->second->remove(layer);
                 }
                 break;
@@ -2625,7 +2629,7 @@ void Components::parseModificationLayer() {
                     css::uno::Reference< css::uno::XInterface >());
             }
             parseXcuNode(
-                TOP_LAYER, componentName, doc.doc, p, node, true,
+                NO_LAYER, componentName, doc.doc, p, node, true,
                 (canonicalPath +
                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"))));
         } else {

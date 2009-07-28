@@ -44,9 +44,9 @@ public:
 
     virtual rtl::OUString getTemplateName() const;
 
-    virtual void setMandatory(bool mandatory);
+    virtual void setMandatory(int layer);
 
-    virtual bool isMandatory() const;
+    virtual int getMandatory() const;
 
     void setLayer(int layer);
 

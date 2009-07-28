@@ -284,11 +284,11 @@ void ChildAccess::commitChanges() {
     if (changedValue_.get() != 0) {
         Components::singleton().addModification(getPath());
         if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get())) {
-            prop->setValue(TOP_LAYER, *changedValue_);
+            prop->setValue(NO_LAYER, *changedValue_);
         } else if (LocalizedPropertyValueNode * locval =
                    dynamic_cast< LocalizedPropertyValueNode * >(node_.get()))
         {
-            locval->setValue(TOP_LAYER, *changedValue_);
+            locval->setValue(NO_LAYER, *changedValue_);
         } else {
             OSL_ASSERT(false);
             throw css::uno::RuntimeException(

@@ -255,7 +255,7 @@ void Access::insertLocalizedPropertyValueChild(
     rtl::Reference< ChildAccess > child(
         new ChildAccess(
             getRootAccess(), this, name,
-            new LocalizedPropertyValueNode(TOP_LAYER, value)));
+            new LocalizedPropertyValueNode(NO_LAYER, value)));
     child->markAsModified();
     //TODO notify change
 }
@@ -295,15 +295,17 @@ void Access::commitChildChanges() {
             NodeMap::iterator j(members.find(i->first));
             if (child.is()) {
                 // Inserted:
-                child->getNode()->setMandatory(
-                    j != members.end() && j->second->isMandatory());
+                if (j != members.end()) {
+                    child->getNode()->setMandatory(j->second->getMandatory());
+                }
                 getMemberNodes()[i->first] = child->getNode();
             } else {
                 // Removed (TODO: if j == members.end(), the child probably got
                 // inserted and removed again in this transaction, so activity
                 // here could probably be cut short to preserve resources):
-                if (j != members.end() && !j->second->isMandatory()) {
-                    j->second->remove(TOP_LAYER);
+                if (j != members.end() && j->second->getMandatory() == NO_LAYER)
+                {
+                    j->second->remove(NO_LAYER);
                 }
             }
             Components::singleton().addModification(
@@ -881,7 +883,7 @@ void Access::insertByName(
         rtl::Reference< ChildAccess > child(
             new ChildAccess(
                 getRootAccess(), this, aName,
-                new PropertyNode(TOP_LAYER, TYPE_ANY, true, aElement, true)));
+                new PropertyNode(NO_LAYER, TYPE_ANY, true, aElement, true)));
         child->markAsModified();
         //TODO notify change
     } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
@@ -944,7 +946,7 @@ void Access::removeByName(rtl::OUString const & aName)
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
     rtl::Reference< ChildAccess > child(getChild(aName));
-    if (!child.is() || child->getNode()->isMandatory()) {
+    if (!child.is() || child->getNode()->getMandatory() != NO_LAYER) {
         throw css::container::NoSuchElementException(
             aName, static_cast< cppu::OWeakObject * >(this));
     }
@@ -970,7 +972,7 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
     rtl::OUString tmplName(
         dynamic_cast< SetNode * >(getNode().get())->getDefaultTemplateName());
     rtl::Reference< Node > p(
-        Components::singleton().getTemplate(TOP_LAYER, tmplName));
+        Components::singleton().getTemplate(NO_LAYER, tmplName));
     if (!p.is()) {
         throw css::uno::Exception(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unknown template ")) +

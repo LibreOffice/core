@@ -36,6 +36,7 @@
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
+#include "layer.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
 #include "setnode.hxx"
@@ -48,7 +49,7 @@ SetNode::SetNode(
     rtl::OUString const & templateName):
     Node(layer), defaultTemplateName_(defaultTemplateName),
     additionalTemplateNames_(additionalTemplateNames),
-    templateName_(templateName), mandatory_(true)
+    templateName_(templateName), mandatory_(NO_LAYER)
 {
     OSL_ASSERT(
         defaultTemplateName.getLength() != 0 &&
@@ -72,11 +73,11 @@ rtl::OUString SetNode::getTemplateName() const {
     return templateName_;
 }
 
-void SetNode::setMandatory(bool mandatory) {
-    mandatory_ = mandatory;
+void SetNode::setMandatory(int layer) {
+    mandatory_ = layer;
 }
 
-bool SetNode::isMandatory() const {
+int SetNode::getMandatory() const {
     return mandatory_;
 }
 

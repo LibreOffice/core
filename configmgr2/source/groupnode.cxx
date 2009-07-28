@@ -34,6 +34,7 @@
 #include "rtl/ustring.hxx"
 
 #include "groupnode.hxx"
+#include "layer.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
 
@@ -42,7 +43,7 @@ namespace configmgr {
 GroupNode::GroupNode(
     int layer, bool extensible, rtl::OUString const & templateName):
     Node(layer), extensible_(extensible), templateName_(templateName),
-    mandatory_(true)
+    mandatory_(NO_LAYER)
 {}
 
 rtl::Reference< Node > GroupNode::clone() const {
@@ -57,11 +58,11 @@ rtl::OUString GroupNode::getTemplateName() const {
     return templateName_;
 }
 
-void GroupNode::setMandatory(bool mandatory) {
-    mandatory_ = mandatory;
+void GroupNode::setMandatory(int layer) {
+    mandatory_ = layer;
 }
 
-bool GroupNode::isMandatory() const {
+int GroupNode::getMandatory() const {
     return mandatory_;
 }
 

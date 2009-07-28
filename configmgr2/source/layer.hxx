@@ -36,7 +36,7 @@
 
 namespace configmgr {
 
-enum { TOP_LAYER = INT_MAX };
+enum { NO_LAYER = INT_MAX };
 
 }
 
