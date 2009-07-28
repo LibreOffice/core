@@ -419,10 +419,10 @@ public:
 
         MultiPageSetup()
         : nRows( 1 ), nColumns( 1 ), nRepeat( 1 ), aPaperSize( 21000, 29700 )
-        , nLeftMargin( 500 ), nTopMargin( 500 )
-        , nRightMargin( 500 ), nBottomMargin( 500 )
+        , nLeftMargin( 0 ), nTopMargin( 0 )
+        , nRightMargin( 0 ), nBottomMargin( 0 )
         , nHorizontalSpacing( 500 ), nVerticalSpacing( 500 )
-        , bDrawBorder( true )
+        , bDrawBorder( false )
         {
         }
     };

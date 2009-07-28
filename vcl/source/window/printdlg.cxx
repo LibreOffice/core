@@ -1499,10 +1499,15 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
         long nPages = long(maNUpPage.maNupPagesBox.GetEntryData(maNUpPage.maNupPagesBox.GetSelectEntryPos()));
         int nRows   = int(maNUpPage.maNupRowsEdt.GetValue());
         int nCols   = int(maNUpPage.maNupColEdt.GetValue());
+        long nPageMargin  = long(maNUpPage.maPageMarginEdt.Denormalize(maNUpPage.maPageMarginEdt.GetValue( FUNIT_100TH_MM )));
+        long nSheetMargin = long(maNUpPage.maSheetMarginEdt.Denormalize(maNUpPage.maSheetMarginEdt.GetValue( FUNIT_100TH_MM )));
         bool bCustom = false;
 
         if( nPages == 1 )
+        {
             nRows = nCols = 1;
+            nSheetMargin = 0;
+        }
         else if( nPages == 2 || nPages == 4 || nPages == 6 || nPages == 9 || nPages == 16 )
         {
             Size aJobPageSize( getJobPageSize() );
@@ -1527,12 +1532,16 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
                 nRows = nCols = 3;
             else if( nPages == 16 )
                 nRows = nCols = 4;
+            nPageMargin = 500;
+            nSheetMargin = 500;
         }
         else
             bCustom = true;
 
         maNUpPage.maNupRowsEdt.SetValue( nRows );
         maNUpPage.maNupColEdt.SetValue( nCols );
+        maNUpPage.maPageMarginEdt.SetValue( maNUpPage.maPageMarginEdt.Normalize( nPageMargin ), FUNIT_100TH_MM );
+        maNUpPage.maSheetMarginEdt.SetValue( maNUpPage.maSheetMarginEdt.Normalize( nSheetMargin ), FUNIT_100TH_MM );
         updateNup();
         maNUpPage.mxAdvancedControls->show( bCustom );
     }
