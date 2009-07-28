@@ -558,8 +558,8 @@ testcase tFormatPage_10
     RecheckCTLSupport = gCTLSup
     RecheckAsianSupport = gAsianSup
     
-    PrintLog "- when Asian support and CTL are all enabled , 3 entries should be in Text Direction listbox"
-    '/// when Asian support and CTL are all enabled , 3 entries should be in Text Direction listbox
+    PrintLog "- when Asian support and CTL are all enabled , 4 entries should be in Text Direction listbox"
+    '/// when Asian support and CTL are all enabled , 4 entries should be in Text Direction listbox
     
     Call hNewDocument
     
@@ -567,10 +567,10 @@ testcase tFormatPage_10
     Call ActiveDeactivateAsianSupport(TRUE)
     Call ActiveDeactivateCTLSupport(TRUE)
     
-    '/// Check if there are 3 entires in Text Direction listbox
+    '/// Check if there are 4 entires in Text Direction listbox
     fFormatPageWriter("TabSeite")
-    if Textfluss.GetItemCount <> 3 then
-        Warnlog "There should be 3 entries in Text direction listbox , but get " & Textfluss.GetItemCount
+    if Textfluss.GetItemCount <> 4 then
+        Warnlog "There should be 4 entries in Text direction listbox , but get " & Textfluss.GetItemCount
     end if
     TabSeite.Cancel
 
