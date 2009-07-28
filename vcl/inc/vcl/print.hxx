@@ -547,17 +547,34 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     { return getStringValue( rtl::OUString::createFromAscii( i_pPropName ), i_rDefault ); }
 
     // helper functions for user to create a single control
+    struct UIControlOptions
+    {
+        rtl::OUString   maDependsOnName;
+        sal_Int32       mnDependsOnEntry;
+        sal_Bool        mbAttachToDependency;
+        rtl::OUString   maGroupHint;
+        sal_Bool        mbInternalOnly;
+        com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > maAddProps;
+
+        UIControlOptions( const rtl::OUString& i_rDependsOnName = rtl::OUString(),
+                          sal_Int32 i_nDependsOnEntry = -1,
+                          sal_Bool i_bAttachToDependency = sal_False,
+                          const rtl::OUString& i_rGroupHint = rtl::OUString(),
+                          sal_Bool i_bInternalOnly = sal_False
+                         )
+        : maDependsOnName( i_rDependsOnName )
+        , mnDependsOnEntry( i_nDependsOnEntry )
+        , mbAttachToDependency( i_bAttachToDependency )
+        , maGroupHint( i_rGroupHint )
+        , mbInternalOnly( sal_False ) {}
+    };
 
     // general control
     static com::sun::star::uno::Any getUIControlOpt( const rtl::OUString& i_rTitle,
                                                      const com::sun::star::uno::Sequence< rtl::OUString >& i_rHelpText,
                                                      const rtl::OUString& i_rType,
                                                      const com::sun::star::beans::PropertyValue* i_pValue = NULL,
-                                                     const rtl::OUString* i_pDependsOnName = NULL,
-                                                     sal_Int32 i_nDependsOnEntry = -1,
-                                                     sal_Bool i_bAttachToDependency = sal_False,
-                                                     const com::sun::star::beans::PropertyValue* i_pAddProps = NULL,
-                                                     sal_Int32 i_nAddProps = 0
+                                                     const UIControlOptions& i_rControlOptions = UIControlOptions()
                                                      );
     // create a group (e.g. a TabPage); following controls will be grouped in it until the next
     // group begins
@@ -566,16 +583,17 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     // create a subgroup (e.g. a FixedLine); following controls will be grouped in it until the next
     // subgroup or group begins
     // setting bJobPage = true will make the subgroup appear on the first page of the print dialog
-    static com::sun::star::uno::Any getSubgroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpText, const rtl::OUString& i_rGroupHint = rtl::OUString(), bool i_bInternalOnly = false );
+    static com::sun::star::uno::Any getSubgroupControlOpt( const rtl::OUString& i_rTitle,
+                                                           const rtl::OUString& i_rHelpText,
+                                                           const UIControlOptions& i_rControlOptions = UIControlOptions()
+                                                           );
 
     // create a bool option (usually a checkbox)
     static com::sun::star::uno::Any getBoolControlOpt( const rtl::OUString& i_rTitle,
                                                        const rtl::OUString& i_rHelpText,
                                                        const rtl::OUString& i_rProperty,
                                                        sal_Bool i_bValue,
-                                                       const rtl::OUString* i_pDependsOnName = NULL,
-                                                       sal_Int32 i_nDependsOnEntry = -1,
-                                                       sal_Bool i_bAttachToDependency = sal_False
+                                                       const UIControlOptions& i_rControlOptions = UIControlOptions()
                                                        );
 
     // create a set of choices (either a radio button group or a list box)
@@ -585,9 +603,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
                                                          const com::sun::star::uno::Sequence< rtl::OUString >& i_rChoices,
                                                          sal_Int32 i_nValue,
                                                          const rtl::OUString& i_rType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
-                                                         const rtl::OUString* i_pDependsOnName = NULL,
-                                                         sal_Int32 i_nDependsOnEntry = -1,
-                                                         sal_Bool i_bAttachToDependency = sal_False
+                                                         const UIControlOptions& i_rControlOptions = UIControlOptions()
                                                          );
 
     // create an integer range (e.g. a spin field)
@@ -598,9 +614,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
                                                         sal_Int32 i_nValue,
                                                         sal_Int32 i_nMinValue = -1,
                                                         sal_Int32 i_nMaxValue = -2,
-                                                        const rtl::OUString* i_pDependsOnName = NULL,
-                                                        sal_Int32 i_nDependsOnEntry = -1,
-                                                        sal_Bool i_bAttachToDependency = sal_False
+                                                        const UIControlOptions& i_rControlOptions = UIControlOptions()
                                                         );
 
     // create a string field
@@ -609,9 +623,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
                                                        const rtl::OUString& i_rHelpText,
                                                        const rtl::OUString& i_rProperty,
                                                        const rtl::OUString& i_rValue,
-                                                       const rtl::OUString* i_pDependsOnName = NULL,
-                                                       sal_Int32 i_nDependsOnEntry = -1,
-                                                       sal_Bool i_bAttachToDependency = sal_False
+                                                       const UIControlOptions& i_rControlOptions = UIControlOptions()
                                                        );
 };
 

@@ -164,6 +164,7 @@ namespace vcl
             CheckBox                            maReverseOrderBox;
 
             vcl::RowOrColumn                    maLayout;
+            boost::shared_ptr<vcl::RowOrColumn> mxOptGroup;
 
             OutputOptPage( Window*, const ResId& );
             virtual ~OutputOptPage();

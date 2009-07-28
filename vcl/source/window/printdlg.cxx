@@ -498,6 +498,7 @@ void PrintDialog::OutputOptPage::setupLayout()
     maLayout.addChild( xIndent );
     boost::shared_ptr<vcl::RowOrColumn> xCol( new vcl::RowOrColumn( xIndent.get(), aBorder.Height() ) );
     xIndent->setChild( xCol );
+    mxOptGroup = xCol;
     xCol->addWindow( &maToFileBox );
     xCol->addWindow( &maCollateSingleJobsBox );
     xCol->addWindow( &maReverseOrderBox );
@@ -829,6 +830,7 @@ void PrintDialog::setupOptionalUI()
     Window* pCurParent = 0, *pDynamicPageParent = 0;
     USHORT nOptPageId = 9, nCurSubGroup = 0;
     bool bOnStaticPage = false;
+    bool bSubgroupOnStaticPage = false;
 
     std::multimap< rtl::OUString, vcl::RowOrColumn* > aPropertyToDependencyRowMap;
 
@@ -917,6 +919,52 @@ void PrintDialog::setupOptionalUI()
             }
         }
 
+        // is it necessary to switch between static and dynamic pages ?
+        bool bSwitchPage = false;
+        if( aGroupingHint.getLength() )
+            bSwitchPage = true;
+        else if( aCtrlType.equalsAscii( "Subgroup" ) || (bOnStaticPage && ! bSubgroupOnStaticPage )  )
+            bSwitchPage = true;
+        if( bSwitchPage )
+        {
+            // restore to dynamic
+            pCurParent = pDynamicPageParent;
+            pCurColumn = aDynamicColumns.empty() ? NULL : aDynamicColumns.back();
+            bOnStaticPage = false;
+            bSubgroupOnStaticPage = false;
+
+            if( aGroupingHint.equalsAscii( "PrintRange" ) )
+            {
+                pCurColumn = maJobPage.mxPrintRange.get();
+                pCurParent = &maJobPage;            // set job page as current parent
+                bOnStaticPage = true;
+            }
+            else if( aGroupingHint.equalsAscii( "OptionsPage" ) )
+            {
+                pCurColumn = &maOptionsPage.maLayout;
+                pCurParent = &maOptionsPage;        // set options page as current parent
+                bOnStaticPage = true;
+            }
+            else if( aGroupingHint.equalsAscii( "OptionsPageOptGroup" ) )
+            {
+                pCurColumn = maOptionsPage.mxOptGroup.get();
+                pCurParent = &maOptionsPage;        // set options page as current parent
+                bOnStaticPage = true;
+            }
+            else if( aGroupingHint.equalsAscii( "LayoutPage" ) )
+            {
+                pCurColumn = &maNUpPage.maLayout;
+                pCurParent = &maNUpPage;            // set layout page as current parent
+                bOnStaticPage = true;
+            }
+            else if( aGroupingHint.getLength() )
+            {
+                pCurColumn = &maJobPage.maLayout;
+                pCurParent = &maJobPage;            // set job page as current parent
+                bOnStaticPage = true;
+            }
+        }
+
         if( aCtrlType.equalsAscii( "Group" ) ||
             ( ! pCurParent && ! (bOnStaticPage || aGroupingHint.getLength() ) ) )
         {
@@ -940,45 +988,12 @@ void PrintDialog::setupOptionalUI()
             pCurColumn = aDynamicColumns.back();
             pCurColumn->setParentWindow( pNewGroup );
             pCurColumn->setOuterBorder( aBorder.Width() );
+            bSubgroupOnStaticPage = false;
+            bOnStaticPage = false;
         }
         else if( aCtrlType.equalsAscii( "Subgroup" ) && (pCurParent || aGroupingHint.getLength() ) )
         {
-            // change to job page or back if necessary
-            if( (bOnStaticPage && ! aGroupingHint.getLength() ) ||
-                (! bOnStaticPage && aGroupingHint.getLength() ) )
-            {
-                bOnStaticPage = (aGroupingHint.getLength() != 0);
-                if( bOnStaticPage )
-                {
-                    pDynamicPageParent = pCurParent;    // save current parent
-                }
-                else
-                {
-                    pCurParent = pDynamicPageParent;    // set current tab page as parent
-                }
-            }
-
-            if( bOnStaticPage )
-            {
-                if( aGroupingHint.equalsAscii( "PrintRange" ) )
-                {
-                    pCurColumn = maJobPage.mxPrintRange.get();
-                    pCurParent = &maJobPage;            // set job page as current parent
-                }
-                else if( aGroupingHint.equalsAscii( "OptionsPage" ) )
-                {
-                    pCurColumn = &maOptionsPage.maLayout;
-                    pCurParent = &maOptionsPage;        // set options page as current parent
-                }
-                else
-                {
-                    pCurColumn = &maJobPage.maLayout;
-                    pCurParent = &maJobPage;            // set job page as current parent
-                }
-            }
-            else
-                pCurColumn = aDynamicColumns.back();
-
+            bSubgroupOnStaticPage = (aGroupingHint.getLength() != 0);
             // create group FixedLine
             if( ! aGroupingHint.equalsAscii( "PrintRange" ) ||
                 ! pCurColumn->countElements() == 0
@@ -1235,6 +1250,13 @@ void PrintDialog::setupOptionalUI()
         }
     }
 
+    // print range empty (currently math only) -> hide print range and spacer line
+    if( maJobPage.mxPrintRange->countElements() == 0 )
+    {
+        maJobPage.mxPrintRange->show( false, false );
+        maJobPage.maCopySpacer.Show( FALSE );
+    }
+
     // calculate job page
     Size aMaxSize = maJobPage.maLayout.getOptimalSize( WINDOWSIZE_PREFERRED );
 
@@ -1404,7 +1426,6 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
     maPageEdit.SetMax( nPages );
 
     boost::shared_ptr<Printer> aPrt( maPController->getPrinter() );
-
 
     if( i_bNewPage )
     {

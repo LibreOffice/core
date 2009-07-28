@@ -1195,11 +1195,7 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
                                            const Sequence< rtl::OUString >& i_rHelpTexts,
                                            const rtl::OUString& i_rType,
                                            const PropertyValue* i_pVal,
-                                           const rtl::OUString* i_pDependsOnName,
-                                           sal_Int32 i_nDependsOnEntry,
-                                           sal_Bool i_bAttachToDependency,
-                                           const PropertyValue* i_pAddProps,
-                                           sal_Int32 i_nAddProps
+                                           const PrinterOptionsHelper::UIControlOptions& i_rControlOptions
                                            )
 {
     sal_Int32 nElements =
@@ -1207,10 +1203,18 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
         + (i_rTitle.getLength() ? 1 : 0)                                // Text
         + (i_rHelpTexts.getLength() ? 1 : 0)                            // HelpText
         + (i_pVal ? 1 : 0)                                              // Property
-        + (i_pDependsOnName ? (i_nDependsOnEntry != -1 ? 2 : 1) : 0)    // dependencies
-        + (i_pDependsOnName && i_bAttachToDependency ? 1 : 0)           // attach to dependency
-        + i_nAddProps
+        + i_rControlOptions.maAddProps.getLength()                      // additional props
+        + (i_rControlOptions.maGroupHint.getLength() ? 1 : 0)           // grouping
+        + (i_rControlOptions.mbInternalOnly ? 1 : 0)                    // internal hint
         ;
+    if( i_rControlOptions.maDependsOnName.getLength() )
+    {
+        nElements += 1;
+        if( i_rControlOptions.mnDependsOnEntry != -1 )
+            nElements += 1;
+        if( i_rControlOptions.mbAttachToDependency )
+            nElements += 1;
+    }
 
     Sequence< PropertyValue > aCtrl( nElements );
     sal_Int32 nUsed = 0;
@@ -1231,23 +1235,35 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
         aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property" ) );
         aCtrl[nUsed++].Value = makeAny( *i_pVal );
     }
-    if( i_pDependsOnName )
+    if( i_rControlOptions.maDependsOnName.getLength() )
     {
         aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DependsOnName" ) );
-        aCtrl[nUsed++].Value = makeAny( *i_pDependsOnName );
-        if( i_nDependsOnEntry != -1 )
+        aCtrl[nUsed++].Value = makeAny( i_rControlOptions.maDependsOnName );
+        if( i_rControlOptions.mnDependsOnEntry != -1 )
         {
             aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DependsOnEntry" ) );
-            aCtrl[nUsed++].Value = makeAny( i_nDependsOnEntry );
+            aCtrl[nUsed++].Value = makeAny( i_rControlOptions.mnDependsOnEntry );
         }
-        if( i_bAttachToDependency )
+        if( i_rControlOptions.mbAttachToDependency )
         {
             aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AttachToDependency" ) );
-            aCtrl[nUsed++].Value = makeAny( i_bAttachToDependency );
+            aCtrl[nUsed++].Value = makeAny( i_rControlOptions.mbAttachToDependency );
         }
     }
-    for( sal_Int32 i = 0; i < i_nAddProps; i++ )
-        aCtrl[ nUsed++ ] = i_pAddProps[i];
+    if( i_rControlOptions.maGroupHint.getLength() )
+    {
+        aCtrl[nUsed  ].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GroupingHint" ) );
+        aCtrl[nUsed++].Value <<= i_rControlOptions.maGroupHint;
+    }
+    if( i_rControlOptions.mbInternalOnly )
+    {
+        aCtrl[nUsed  ].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InternalUIOnly" ) );
+        aCtrl[nUsed++].Value <<= sal_True;
+    }
+
+    sal_Int32 nAddProps = i_rControlOptions.maAddProps.getLength();
+    for( sal_Int32 i = 0; i < nAddProps; i++ )
+        aCtrl[ nUsed++ ] = i_rControlOptions.maAddProps[i];
 
     DBG_ASSERT( nUsed == nElements, "nUsed != nElements, probable heap corruption" );
 
@@ -1265,21 +1281,11 @@ Any PrinterOptionsHelper::getGroupControlOpt( const rtl::OUString& i_rTitle, con
     return getUIControlOpt( i_rTitle, aHelpText, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Group" ) ) );
 }
 
-Any PrinterOptionsHelper::getSubgroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpText,
-                                                 const rtl::OUString& i_rGroupHint, bool i_bInternalOnly )
+Any PrinterOptionsHelper::getSubgroupControlOpt( const rtl::OUString& i_rTitle,
+                                                 const rtl::OUString& i_rHelpText,
+                                                 const PrinterOptionsHelper::UIControlOptions& i_rControlOptions
+                                                 )
 {
-    PropertyValue aAddProps[2];
-    sal_Int32 nUsed = 0;
-    if( i_rGroupHint.getLength() )
-    {
-        aAddProps[nUsed  ].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GroupingHint" ) );
-        aAddProps[nUsed++].Value <<= i_rGroupHint;
-    }
-    if( i_bInternalOnly )
-    {
-        aAddProps[nUsed  ].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InternalUIOnly" ) );
-        aAddProps[nUsed++].Value <<= sal_True;
-    }
     Sequence< rtl::OUString > aHelpText;
     if( i_rHelpText.getLength() > 0 )
     {
@@ -1287,16 +1293,14 @@ Any PrinterOptionsHelper::getSubgroupControlOpt( const rtl::OUString& i_rTitle, 
         *aHelpText.getArray() = i_rHelpText;
     }
     return getUIControlOpt( i_rTitle, aHelpText, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Subgroup" ) ),
-                            NULL, NULL, -1, sal_False, aAddProps, nUsed );
+                            NULL, i_rControlOptions );
 }
 
 Any PrinterOptionsHelper::getBoolControlOpt( const rtl::OUString& i_rTitle,
                                              const rtl::OUString& i_rHelpText,
                                              const rtl::OUString& i_rProperty,
                                              sal_Bool i_bValue,
-                                             const rtl::OUString* i_pDependsOnName,
-                                             sal_Int32 i_nDependsOnEntry,
-                                             sal_Bool i_bAttachToDependency
+                                             const PrinterOptionsHelper::UIControlOptions& i_rControlOptions
                                              )
 {
     Sequence< rtl::OUString > aHelpText;
@@ -1308,7 +1312,7 @@ Any PrinterOptionsHelper::getBoolControlOpt( const rtl::OUString& i_rTitle,
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_bValue );
-    return getUIControlOpt( i_rTitle, aHelpText, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bool" ) ), &aVal, i_pDependsOnName, i_nDependsOnEntry, i_bAttachToDependency );
+    return getUIControlOpt( i_rTitle, aHelpText, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bool" ) ), &aVal, i_rControlOptions );
 }
 
 Any PrinterOptionsHelper::getChoiceControlOpt( const rtl::OUString& i_rTitle,
@@ -1317,20 +1321,19 @@ Any PrinterOptionsHelper::getChoiceControlOpt( const rtl::OUString& i_rTitle,
                                                const Sequence< rtl::OUString >& i_rChoices,
                                                sal_Int32 i_nValue,
                                                const rtl::OUString& i_rType,
-                                               const rtl::OUString* i_pDependsOnName,
-                                               sal_Int32 i_nDependsOnEntry,
-                                               sal_Bool i_bAttachToDependency
+                                               const PrinterOptionsHelper::UIControlOptions& i_rControlOptions
                                                )
 {
-    PropertyValue aAddProps[2];
-    sal_Int32 nUsed = 0;
-    aAddProps[nUsed  ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Choices" ) );
-    aAddProps[nUsed++].Value = makeAny( i_rChoices );
+    UIControlOptions aOpt( i_rControlOptions );
+    sal_Int32 nUsed = aOpt.maAddProps.getLength();
+    aOpt.maAddProps.realloc( nUsed + 1 );
+    aOpt.maAddProps[nUsed].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Choices" ) );
+    aOpt.maAddProps[nUsed].Value = makeAny( i_rChoices );
 
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_nValue );
-    return getUIControlOpt( i_rTitle, i_rHelpText, i_rType, &aVal, i_pDependsOnName, i_nDependsOnEntry, i_bAttachToDependency, aAddProps, nUsed );
+    return getUIControlOpt( i_rTitle, i_rHelpText, i_rType, &aVal, aOpt );
 }
 
 Any PrinterOptionsHelper::getRangeControlOpt( const rtl::OUString& i_rTitle,
@@ -1339,19 +1342,18 @@ Any PrinterOptionsHelper::getRangeControlOpt( const rtl::OUString& i_rTitle,
                                               sal_Int32 i_nValue,
                                               sal_Int32 i_nMinValue,
                                               sal_Int32 i_nMaxValue,
-                                              const rtl::OUString* i_pDependsOnName,
-                                              sal_Int32 i_nDependsOnEntry,
-                                              sal_Bool i_bAttachToDependency
+                                              const PrinterOptionsHelper::UIControlOptions& i_rControlOptions
                                             )
 {
-    PropertyValue aAddProps[2];
-    sal_Int32 nUsed = 0;
+    UIControlOptions aOpt( i_rControlOptions );
     if( i_nMaxValue >= i_nMinValue )
     {
-        aAddProps[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MinValue" ) );
-        aAddProps[nUsed++].Value = makeAny( i_nMinValue );
-        aAddProps[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxValue" ) );
-        aAddProps[nUsed++].Value = makeAny( i_nMaxValue );
+        sal_Int32 nUsed = aOpt.maAddProps.getLength();
+        aOpt.maAddProps.realloc( nUsed + 2 );
+        aOpt.maAddProps[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MinValue" ) );
+        aOpt.maAddProps[nUsed++].Value = makeAny( i_nMinValue );
+        aOpt.maAddProps[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxValue" ) );
+        aOpt.maAddProps[nUsed++].Value = makeAny( i_nMaxValue );
     }
 
     Sequence< rtl::OUString > aHelpText;
@@ -1367,19 +1369,15 @@ Any PrinterOptionsHelper::getRangeControlOpt( const rtl::OUString& i_rTitle,
                             aHelpText,
                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Range" ) ),
                             &aVal,
-                            i_pDependsOnName,
-                            i_nDependsOnEntry,
-                            i_bAttachToDependency,
-                            aAddProps, nUsed );
+                            aOpt
+                            );
 }
 
 Any PrinterOptionsHelper::getEditControlOpt( const rtl::OUString& i_rTitle,
                                              const rtl::OUString& i_rHelpText,
                                              const rtl::OUString& i_rProperty,
                                              const rtl::OUString& i_rValue,
-                                             const rtl::OUString* i_pDependsOnName,
-                                             sal_Int32 i_nDependsOnEntry,
-                                             sal_Bool i_bAttachToDependency
+                                             const PrinterOptionsHelper::UIControlOptions& i_rControlOptions
                                            )
 {
     Sequence< rtl::OUString > aHelpText;
@@ -1395,8 +1393,6 @@ Any PrinterOptionsHelper::getEditControlOpt( const rtl::OUString& i_rTitle,
                             aHelpText,
                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Edit" ) ),
                             &aVal,
-                            i_pDependsOnName,
-                            i_nDependsOnEntry,
-                            i_bAttachToDependency,
-                            0, 0 );
+                            i_rControlOptions
+                            );
 }

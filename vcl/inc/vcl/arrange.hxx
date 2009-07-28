@@ -83,6 +83,7 @@ namespace vcl
 
             sal_Int32 getExpandPriority() const;
             Size getOptimalSize( WindowSizeType ) const;
+            bool isVisible() const;
         };
 
         Window*                     m_pParentWindow;

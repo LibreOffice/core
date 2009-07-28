@@ -68,6 +68,19 @@ void WindowArranger::show( bool i_bShow, bool i_bImmediateUpdate )
                 pEle->m_pChild->show( i_bShow, false );
         }
     }
+    if( m_pParentArranger )
+    {
+        nEle = m_pParentArranger->countElements();
+        for( size_t i = 0; i < nEle; i++ )
+        {
+            Element* pEle = m_pParentArranger->getElement( i );
+            if( pEle && pEle->m_pChild.get() == this )
+            {
+                pEle->m_bHidden = ! i_bShow;
+                break;
+            }
+        }
+    }
     if( i_bImmediateUpdate )
     {
         // find the topmost parent
@@ -76,6 +89,18 @@ void WindowArranger::show( bool i_bShow, bool i_bImmediateUpdate )
             pResize = pResize->m_pParentArranger;
         pResize->resize();
     }
+}
+
+bool WindowArranger::Element::isVisible() const
+{
+    bool bVisible = false;
+    if( ! m_bHidden )
+    {
+        bVisible = true;
+        if( m_pElement )
+            bVisible = m_pElement->IsVisible();
+    }
+    return bVisible;
 }
 
 sal_Int32 WindowArranger::Element::getExpandPriority() const
@@ -178,19 +203,22 @@ void RowOrColumn::distributeRowWidth( std::vector<Size>& io_rSizes, long /*i_nUs
         sal_Int32 nHighPrio = 0;
         for( size_t i = 0; i < nElements; i++ )
         {
-            sal_Int32 nCurPrio = m_aElements[ i ].getExpandPriority();
-            if( nCurPrio > nHighPrio )
+            if( m_aElements[ i ].isVisible() )
             {
-                aIndices.clear();
-                nHighPrio = nCurPrio;
+                sal_Int32 nCurPrio = m_aElements[ i ].getExpandPriority();
+                if( nCurPrio > nHighPrio )
+                {
+                    aIndices.clear();
+                    nHighPrio = nCurPrio;
+                }
+                if( nCurPrio == nHighPrio )
+                    aIndices.push_back( i );
             }
-            if( nCurPrio == nHighPrio )
-                aIndices.push_back( i );
         }
 
-        // distribute extra space evenly among elements
+        // distribute extra space evenly among collected elements
         nElements = aIndices.size();
-        if( nElements > 0 ) // sanity check
+        if( nElements > 0 )
         {
             long nDelta = i_nExtraWidth / nElements;
             for( size_t i = 0; i < nElements; i++ )
@@ -215,19 +243,22 @@ void RowOrColumn::distributeColumnHeight( std::vector<Size>& io_rSizes, long /*i
         sal_Int32 nHighPrio = 3;
         for( size_t i = 0; i < nElements; i++ )
         {
-            sal_Int32 nCurPrio = m_aElements[ i ].getExpandPriority();
-            if( nCurPrio > nHighPrio )
+            if( m_aElements[ i ].isVisible() )
             {
-                aIndices.clear();
-                nHighPrio = nCurPrio;
+                sal_Int32 nCurPrio = m_aElements[ i ].getExpandPriority();
+                if( nCurPrio > nHighPrio )
+                {
+                    aIndices.clear();
+                    nHighPrio = nCurPrio;
+                }
+                if( nCurPrio == nHighPrio )
+                    aIndices.push_back( i );
             }
-            if( nCurPrio == nHighPrio )
-                aIndices.push_back( i );
         }
 
-        // distribute extra space evenly among elements
+        // distribute extra space evenly among collected elements
         nElements = aIndices.size();
-        if( nElements > 0 ) // sanity check
+        if( nElements > 0 )
         {
             long nDelta = i_nExtraHeight / nElements;
             for( size_t i = 0; i < nElements; i++ )
