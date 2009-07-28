@@ -999,8 +999,8 @@ void SwDoc::GetValidPagesForPrinting(
         return;
 
     // properties to take into account when calcualting the set of pages
-    const bool bPrintLeftPage   = rPrintUIOptions.getBoolValue( C2U( "PrintLeftPages" ),    false );
-    const bool bPrintRightPage  = rPrintUIOptions.getBoolValue( C2U( "PrintRightPages" ),   false );
+    const bool bPrintLeftPage   = rPrintUIOptions.isPrintLeftPages();
+    const bool bPrintRightPage  = rPrintUIOptions.isPrintRightPages();
     const bool bPrintReverse    = rPrintUIOptions.getBoolValue( C2U( "PrintReverseOrder" ), false );
     const bool bPrintEmptyPages = rPrintUIOptions.getBoolValue( C2U( "PrintEmptyPages" ),   false );
 

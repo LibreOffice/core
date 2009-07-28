@@ -120,6 +120,8 @@ public:
     const ValidStartFramesMap_t &    GetValidStartFrms() const      { return aValidStartFrms; }
     std::vector< sal_Int32 > &          GetPagesToPrint()           { return aPagesToPrint; }
     const std::vector< sal_Int32 > &    GetPagesToPrint() const     { return aPagesToPrint; }
+    bool isPrintLeftPages() const;
+    bool isPrintRightPages() const;
 };
 
 

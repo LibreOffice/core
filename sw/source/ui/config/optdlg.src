@@ -989,6 +989,11 @@ StringArray STR_PRINTOPTUI
         < "Print"; >;
         < "Color"; >;
         < "Paper tray"; >;
+        < "Include"; >;
+        < "Specify which pages to include in the output"; >;
+        < "left and right pages"; >;
+        < "left pages"; >;
+        < "right pages"; >;
     };
 };
 

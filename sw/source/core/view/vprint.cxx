@@ -240,7 +240,7 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
 
     // create sequence of print UI options
     // (5 options are not available for Writer-Web)
-    const int nNumProps = bWeb? 19 : 23;
+    const int nNumProps = bWeb? 18 : 21;
     m_aUIProperties.realloc( nNumProps );
     int nIdx = 0;
 
@@ -301,22 +301,22 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintEmptyPages" ) ),
                                                    sal_True );
 
-    // print content selection
-    m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 48 ) ),
-                                                           rtl::OUString(),
-                                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OptionsPage" ) )
-                                                           );
-
     // create a bool option for paper tray
+    vcl::PrinterOptionsHelper::UIControlOptions aPaperTrayOpt;
+    aPaperTrayOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OptionsPageOptGroup" ) );
     m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 37 ),
                                                    aLocalizedStrings.GetString( 38 ),
                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PaperTray" ) ),
-                                                   sal_False );
+                                                   sal_False,
+                                                   aPaperTrayOpt
+                                                   );
 
     // print content selection
+    vcl::PrinterOptionsHelper::UIControlOptions aContentsOpt;
+    aContentsOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobPage" ) );
     m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 46 ) ),
                                                            rtl::OUString(),
-                                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobPage" ) )
+                                                           aContentsOpt
                                                            );
     // create a list box for notes content
     uno::Sequence< rtl::OUString > aChoices( 4 );
@@ -336,21 +336,24 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
                                                     );
 
     // create subsection for Page settings
-    m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 23 ), rtl::OUString() );
+    vcl::PrinterOptionsHelper::UIControlOptions aPageSetOpt;
+    aPageSetOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutPage" ) );
 
     if (!bWeb)
     {
-        // create a bool option for left pages
-        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 24 ),
-                                                   aLocalizedStrings.GetString( 25 ),
-                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintLeftPages" ) ),
-                                                   sal_True );
-
-        // create a bool option for right pages
-        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 26 ),
-                                                   aLocalizedStrings.GetString( 27 ),
-                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRightPages" ) ),
-                                                   sal_True );
+        uno::Sequence< rtl::OUString > aRLChoices( 3 );
+        aRLChoices[0] = aLocalizedStrings.GetString( 51 );
+        aRLChoices[1] = aLocalizedStrings.GetString( 52 );
+        aRLChoices[2] = aLocalizedStrings.GetString( 53 );
+        uno::Sequence< rtl::OUString > aRLHelp( 1 );
+        aRLHelp[0] = aLocalizedStrings.GetString( 50 );
+        // create a choice option for all/left/right pages
+        m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( aLocalizedStrings.GetString( 49 ),
+                                                   aRLHelp,
+                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintLeftRightPages" ) ),
+                                                   aRLChoices, 0, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                                   aPageSetOpt
+                                                   );
     }
 
     // create a bool option for brochure
@@ -358,23 +361,28 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
     m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 30 ),
                                                    aLocalizedStrings.GetString( 31 ),
                                                    aBrochurePropertyName,
-                                                   sal_False );
+                                                   sal_False,
+                                                   aPageSetOpt
+                                                   );
 
     // create a bool option for brochure RTL dependent on brochure
+    vcl::PrinterOptionsHelper::UIControlOptions aBrochureRTLOpt( aBrochurePropertyName, -1, sal_True );
+    aBrochureRTLOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutPage" ) );
     m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 32 ),
                                                    aLocalizedStrings.GetString( 33 ),
                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochureRTL" ) ),
                                                    sal_False,
-                                                   &aBrochurePropertyName,
-                                                   -1,
-                                                   sal_True
+                                                   aBrochureRTLOpt
                                                    );
 
     // print range selection
+    vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
+    aPrintRangeOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
+    aPrintRangeOpt.mbInternalOnly = sal_True;
     m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 39 ) ),
                                                            rtl::OUString(),
-                                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) ),
-                                                           true );
+                                                           aPrintRangeOpt
+                                                           );
 
     // create a choice for the content to create
     rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
@@ -392,17 +400,29 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
                                                          aChoices,
                                                          0 );
     // create a an Edit dependent on "Pages" selected
+    vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, sal_True );
     m_aUIProperties[nIdx++].Value = getEditControlOpt( rtl::OUString(),
                                                        rtl::OUString(),
                                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
                                                        rtl::OUString(),
-                                                       &aPrintRangeName, 1, sal_True
-                                                     );
+                                                       aPageRangeOpt
+                                                       );
 
 
     DBG_ASSERT( nIdx == nNumProps, "number of added properties is not as expected" );
 }
 
+bool SwPrintUIOptions::isPrintLeftPages() const
+{
+    sal_Int64 nLRPages = getIntValue( "PrintLeftRightPages", 0 );
+    return nLRPages == 0 || nLRPages == 1;
+}
+
+bool SwPrintUIOptions::isPrintRightPages() const
+{
+    sal_Int64 nLRPages = getIntValue( "PrintLeftRightPages", 0 );
+    return nLRPages == 0 || nLRPages == 2;
+}
 
 bool SwPrintUIOptions::processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp )
 {

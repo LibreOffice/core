@@ -2869,12 +2869,18 @@ void SAL_CALL SwXTextDocument::render(
         const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
         BOOL bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
         SwView::MakeOptions( NULL, aOptions, NULL, NULL, bWeb, NULL, NULL );
+        sal_Int64 nLeftRightPages = 0;
+        if( ! aOptions.bPrintLeftPage )
+            nLeftRightPages = 2;
+        if( ! aOptions.bPrintRightPage )
+            nLeftRightPages = 1;
+        nLeftRightPages = m_pPrintUIOptions->getIntValue( "PrintLeftRightPages", nLeftRightPages );
         aOptions.bPrintGraphic           = m_pPrintUIOptions->getBoolValue( C2U( "PrintGraphicsAndDiagrams" ),     aOptions.bPrintGraphic );
         aOptions.bPrintTable             = m_pPrintUIOptions->getBoolValue( C2U( "PrintGraphicsAndDiagrams" ),       aOptions.bPrintTable );
         aOptions.bPrintDraw              = m_pPrintUIOptions->getBoolValue( C2U( "PrintGraphicsAndDiagrams" ),     aOptions.bPrintDraw );
         aOptions.bPrintControl           = m_pPrintUIOptions->getBoolValue( C2U( "PrintControls" ),     aOptions.bPrintControl );
-        aOptions.bPrintLeftPage          = m_pPrintUIOptions->getBoolValue( C2U( "PrintLeftPages" ),    aOptions.bPrintLeftPage );
-        aOptions.bPrintRightPage         = m_pPrintUIOptions->getBoolValue( C2U( "PrintRightPages" ),   aOptions.bPrintRightPage );
+        aOptions.bPrintLeftPage          = nLeftRightPages == 0 || nLeftRightPages == 1;
+        aOptions.bPrintRightPage         = nLeftRightPages == 0 || nLeftRightPages == 2;
         aOptions.bPrintPageBackground    = m_pPrintUIOptions->getBoolValue( C2U( "PrintBackground" ),   aOptions.bPrintPageBackground );
         aOptions.bPrintEmptyPages        = m_pPrintUIOptions->getBoolValue( C2U( "PrintEmptyPages" ),   aOptions.bPrintEmptyPages );
         // bUpdateFieldsInPrinting  <-- not set here    // TLPDF: TODO: remove this from SwPrintData?? Get rid of SwPrtOptions??
