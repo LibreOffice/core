@@ -246,9 +246,11 @@ ScPrintUIOptions::ScPrintUIOptions()
                                                   bSuppress
                                                   );
     // create Subgroup for print content
+    vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
+    aPrintRangeOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
     m_aUIProperties[3].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 6 ) ),
                                                       rtl::OUString(),
-                                                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) )
+                                                      aPrintRangeOpt
                                                       );
 
     // create a choice for the content to create
@@ -266,10 +268,11 @@ ScPrintUIOptions::ScPrintUIOptions()
                                                     nContent );
 
     // create Subgroup for print range
+    aPrintRangeOpt.mbInternalOnly = sal_True;
     m_aUIProperties[5].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 13 ) ),
                                                       rtl::OUString(),
-                                                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) ),
-                                                      true);
+                                                      aPrintRangeOpt
+                                                      );
 
     // create a choice for the range to print
     rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
@@ -286,11 +289,12 @@ ScPrintUIOptions::ScPrintUIOptions()
                                                     0 );
 
     // create a an Edit dependent on "Pages" selected
+    vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, sal_True );
     m_aUIProperties[7].Value = getEditControlOpt( rtl::OUString(),
                                                   rtl::OUString(),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
                                                   rtl::OUString(),
-                                                  &aPrintRangeName, 1, sal_True
+                                                  aPageRangeOpt
                                                   );
 
     // "Print only selected sheets" isn't needed because of the "Selected Sheets" choice in "Print content"
