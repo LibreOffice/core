@@ -233,13 +233,6 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > & xChartDoc );
 
-    // if no data provider exists by, now the model (as XChild) is asked for its
-    // parent which creates the data provider that is finally set at the chart
-    // document
-    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >
-        GetDataProvider( const ::com::sun::star::uno::Reference<
-                             ::com::sun::star::chart2::XChartDocument > & xChartDoc );
-
     ::com::sun::star::awt::Size getPageSize(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > & xChartDoc ) const;
