@@ -584,6 +584,7 @@ sub get_size_value
             }
         }
         my ($rpmout, $error) = make_systemcall_allowing_error($systemcall, 0, 1);
+        $ENV{LD_LIBRARY_PATH} = $ld_library_backup;
         # Evaluating an error, because of rpm problems with removed LD_LIBRARY_PATH
         if ( $error )
         {
@@ -592,7 +593,6 @@ sub get_size_value
             ($rpmout, $error) = make_systemcall_allowing_error($systemcall, 0, 0);
             if ( $error ) { installer::exiter::exit_program("ERROR: rpm failed to query package!", "get_size_value"); }
         }
-        $ENV{LD_LIBRARY_PATH} = $ld_library_backup;
         $value = do_sum($rpmout);       # adding all filesizes in bytes
         $value = $value/1000;
 
@@ -722,6 +722,7 @@ sub get_fullpkgname_value
             }
         }
         my ($returnarray, $error) = make_systemcall_allowing_error($systemcall, 0, 1);
+        $ENV{LD_LIBRARY_PATH} = $ld_library_backup;
         # Evaluating an error, because of rpm problems with removed LD_LIBRARY_PATH
         if ( $error )
         {
@@ -731,7 +732,6 @@ sub get_fullpkgname_value
             if ( $error ) { installer::exiter::exit_program("ERROR: rpm failed to query package!", "get_fullpkgname_value"); }
         }
         $value = ${$returnarray}[0];
-        $ENV{LD_LIBRARY_PATH} = $ld_library_backup;
         installer::remover::remove_leading_and_ending_whitespaces(\$value);
 
         my $rpmname = $packagename;
