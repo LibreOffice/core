@@ -616,7 +616,7 @@ private:
         // Kopieren eines Bereiches im oder in ein anderes Dokument !
         // Die Position darf nicht im Bereich liegen !!
     sal_Bool _Copy( SwPaM&, SwPosition&,
-                sal_Bool MakeNewFrms = sal_True, SwPaM* pCpyRng = 0 ) const;    // in ndcopy.cxx
+                sal_Bool MakeNewFrms /*= sal_True*/, bool bCopyAll, SwPaM* pCpyRng /*= 0*/ ) const; // in ndcopy.cxx
 
     SwFlyFrmFmt* _MakeFlySection( const SwPosition& rAnchPos,
                                 const SwCntntNode& rNode, RndStdIds eRequestId,
@@ -628,7 +628,8 @@ private:
                                 const SfxItemSet* pGrfAttrSet,
                                 SwFrmFmt* = 0 );
 
-    void _CopyFlyInFly( const SwNodeRange& rRg, const SwNodeIndex& rSttIdx,
+    void _CopyFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndContentIndex,
+                        const SwNodeIndex& rSttIdx,
                         sal_Bool bCopyFlyAtFly = sal_False ) const; // steht im ndcopy.cxx
     sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, sal_Bool bNewFrms );
 
@@ -701,6 +702,7 @@ private:
      SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, BOOL, BOOL );
 
      void InitTOXTypes();
+     void   Paste( const SwDoc& );
 public:
 
     /** Life cycle
@@ -877,7 +879,7 @@ public:
 
     /** IDocumentContentOperations
     */
-    virtual bool Copy(SwPaM&, SwPosition&) const;
+    virtual bool Copy(SwPaM&, SwPosition&, bool bCopyAll) const;
     virtual void DeleteSection(SwNode* pNode);
     virtual bool Delete(SwPaM&);
     virtual bool DelFullPara(SwPaM&);
@@ -1080,6 +1082,7 @@ public:
                                 SwFrmFmt *pParent = 0 );
 
     void CopyWithFlyInFly( const SwNodeRange& rRg,
+                            const xub_StrLen nEndContentIndex,
                             const SwNodeIndex& rInsPos,
                             sal_Bool bMakeNewFrms = sal_True,
                             sal_Bool bDelRedlines = sal_True,
@@ -2082,6 +2085,7 @@ public:
     }
 
     ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
+    SwDoc* CreateCopy() const;
 };
 
 

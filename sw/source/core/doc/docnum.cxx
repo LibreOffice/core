@@ -2277,7 +2277,7 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
                 }
             }
 
-            Copy( aPam, aInsPos );
+            Copy( aPam, aInsPos, false );
             if( bDelLastPara )
             {
                 // dann muss der letzte leere Node wieder entfernt werden

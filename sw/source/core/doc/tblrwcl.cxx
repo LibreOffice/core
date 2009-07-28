@@ -2103,7 +2103,7 @@ BOOL lcl_CopyBoxToDoc( const _FndBox*& rpFndBox, void* pPara )
                             *rpFndBox->GetBox()->GetSttNd()->EndOfSectionNode() );
                 SwNodeIndex aInsIdx( *pBox->GetSttNd(), 1 );
 
-                pFromDoc->CopyWithFlyInFly( aCpyRg, aInsIdx, FALSE );
+                pFromDoc->CopyWithFlyInFly( aCpyRg, 0, aInsIdx, FALSE );
                 // den initialen TextNode loeschen
                 pCpyPara->pDoc->GetNodes().Delete( aInsIdx, 1 );
             }
