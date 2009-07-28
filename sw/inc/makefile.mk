@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@ TARGET=inc
 
 .INCLUDE :  target.mk
 
-.IF "$(ENABLE_PCH)"!="" && ( "$(PRJNAME)"!="sw" || "$(BUILD_SPECIAL)"!="TRUE" )
+.IF "$(ENABLE_PCH)"!="" # && ( "$(PRJNAME)"!="sw" || "$(BUILD_SPECIAL)"!="TRUE" )
 ALLTAR : \
     $(SLO)$/precompiled.pch \
     $(SLO)$/precompiled_ex.pch
-    
+
 .ENDIF			# "$(ENABLE_PCH)"!=""
 
