@@ -599,6 +599,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
                     }
                     else
                     {
+                        DELETEZ(pUndoData);
                         ScFormulaCell* pCell = new ScFormulaCell( aCell, *pDoc, aPos );
                         if ( nError )
                         {
@@ -751,12 +752,13 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
         ScPatternAttr* pCellAttrs = NULL;
         EditTextObject* pNewData = NULL;
         String aString;
+
+        const ScPatternAttr* pOldPattern = pDoc->GetPattern( nCol, nRow, nTab );
+        ScTabEditEngine aEngine( *pOldPattern, pDoc->GetEnginePool() );
+        aEngine.SetText(*pData);
+
         if (bTestSimple)                    // Testen, ob einfacher String ohne Attribute
         {
-            const ScPatternAttr* pOldPattern = pDoc->GetPattern( nCol, nRow, nTab );
-            ScTabEditEngine aEngine( *pOldPattern, pDoc->GetEnginePool() );
-            aEngine.SetText(*pData);
-
             ScEditAttrTester aAttrTester( &aEngine );
             bSimple = !aAttrTester.NeedsObject();
             bCommon = aAttrTester.NeedsCellAttr();
@@ -777,10 +779,10 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
                 pCellAttrs->GetFromEditItemSet( &aAttrTester.GetAttribs() );
                 //! remove common attributes from EditEngine?
             }
-
-            if (bSimple)
-                aString = aEngine.GetText();
         }
+
+        // #i97726# always get text for "repeat" of undo action
+        aString = ScEditUtil::GetSpaceDelimitedString(aEngine);
 
         //
         //      Undo
@@ -838,7 +840,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
             {   // wg. ChangeTrack erst jetzt
                 pDocSh->GetUndoManager()->AddUndoAction(
                     new ScUndoEnterData( pDocSh, nCol, nRow, nTab, nPos, pTabs,
-                                        ppOldCells, NULL, NULL, String(),
+                                        ppOldCells, NULL, NULL, aString,
                                         pUndoData ) );
             }
 

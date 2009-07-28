@@ -5633,7 +5633,15 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
 
     ScDocShell* pDocSh = GetDocShell();
     ScFilterDescriptor aImpl(pDocSh);
-    aImpl.setFilterFields( xDescriptor->getFilterFields() );
+    uno::Reference< sheet::XSheetFilterDescriptor2 > xDescriptor2( xDescriptor, uno::UNO_QUERY );
+    if ( xDescriptor2.is() )
+    {
+        aImpl.setFilterFields2( xDescriptor2->getFilterFields2() );
+    }
+    else
+    {
+        aImpl.setFilterFields( xDescriptor->getFilterFields() );
+    }
     //  Rest sind jetzt Properties...
 
     uno::Reference<beans::XPropertySet> xPropSet( xDescriptor, uno::UNO_QUERY );

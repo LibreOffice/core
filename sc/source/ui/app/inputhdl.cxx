@@ -741,7 +741,7 @@ void ScInputHandler::ShowTipCursor()
                 nLeftParentPos = lcl_MatchParenthesis( aSelText, aSelText.Len()-1 );
                 if( nLeftParentPos != STRING_NOTFOUND )
                 {
-                    sal_Unicode c = aSelText.GetChar( nLeftParentPos-1 );
+                    sal_Unicode c = ( nLeftParentPos > 0 ) ? aSelText.GetChar( nLeftParentPos-1 ) : 0;
                     if( !((c >= 'A' && c<= 'Z') || (c>= 'a' && c<= 'z' )) )
                         continue;
                     nNextFStart = aHelper.GetFunctionStart( aSelText, nLeftParentPos, TRUE);
@@ -983,7 +983,8 @@ void ScInputHandler::UseFormulaData()
                 if( nLeftParentPos == STRING_NOTFOUND )
                     break;
 
-                sal_Unicode c = aFormula.GetChar( nLeftParentPos-1 );
+                // #160063# nLeftParentPos can be 0 if a parenthesis is inserted before the formula
+                sal_Unicode c = ( nLeftParentPos > 0 ) ? aFormula.GetChar( nLeftParentPos-1 ) : 0;
                 if( !((c >= 'A' && c<= 'Z') || (c>= 'a' && c<= 'z') ) )
                     continue;
                 nNextFStart = aHelper.GetFunctionStart( aFormula, nLeftParentPos, TRUE);

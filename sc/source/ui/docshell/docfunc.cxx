@@ -2073,6 +2073,12 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                 nUndoPos ++;
             }
         }
+
+        if( !bDeletingMerge )
+        {
+            rDocShell.GetUndoManager()->LeaveListAction();
+        }
+
         rDocShell.GetUndoManager()->AddUndoAction( new ScUndoDeleteCells(
             &rDocShell, ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab ),nUndoPos, pTabs, pScenarios,
             eCmd, pUndoDoc, pUndoData ) );

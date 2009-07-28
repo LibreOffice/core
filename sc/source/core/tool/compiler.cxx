@@ -1811,9 +1811,11 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArra
         aPos( rPos ),
         pCharClass( ScGlobal::pCharClass ),
         mnPredetectedReference(0),
+        mnRangeOpPosInSymbol(-1),
         pConv( pConvOOO_A1 ),
         mbCloseBrackets( true ),
-        mbExtendedErrorDetection( false )
+        mbExtendedErrorDetection( false ),
+        mbRewind( false )
 {
     nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
 }
@@ -1824,9 +1826,11 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)
         aPos( rPos ),
         pCharClass( ScGlobal::pCharClass ),
         mnPredetectedReference(0),
+        mnRangeOpPosInSymbol(-1),
         pConv( pConvOOO_A1 ),
         mbCloseBrackets( true ),
-        mbExtendedErrorDetection( false )
+        mbExtendedErrorDetection( false ),
+        mbRewind( false )
 {
     nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
 }
@@ -1962,7 +1966,7 @@ xub_StrLen ScCompiler::NextSymbol(bool bInArray)
     sal_Unicode c = *pSrc;
     sal_Unicode cLast = 0;
     bool bQuote = false;
-    bool bRangeOp = false;
+    mnRangeOpPosInSymbol = -1;
     ScanState eState = ssGetChar;
     xub_StrLen nSpaces = 0;
     sal_Unicode cSep = mxSymbols->getSymbol( ocSep).GetChar(0);
@@ -2110,11 +2114,11 @@ Label_MaskStateMachine:
                     else
                         *pSym++ = c;
                 }
-                else if (c == ':' && !bRangeOp)
+                else if (c == ':' && mnRangeOpPosInSymbol < 0)
                 {
                     // One range operator may form Sheet1.A:A, which we need to
                     // pass as one entity to IsReference().
-                    bRangeOp = true;
+                    mnRangeOpPosInSymbol = pSym - &cSymbol[0];
                     if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
                     {
                         SetError(errStringOverflow);
@@ -2409,7 +2413,7 @@ Label_MaskStateMachine:
     {
         nSrcPos = sal::static_int_cast<xub_StrLen>( nSrcPos + nSpaces );
         String aSymbol;
-        bRangeOp = false;
+        mnRangeOpPosInSymbol = -1;
         USHORT nErr = 0;
         do
         {
@@ -2438,9 +2442,9 @@ Label_MaskStateMachine:
                     bi18n = (c == cSheetSep || c == SC_COMPILER_FILE_TAB_SEP);
                 }
                 // One range operator restarts parsing for second reference.
-                if (c == ':' && !bRangeOp)
+                if (c == ':' && mnRangeOpPosInSymbol < 0)
                 {
-                    bRangeOp = true;
+                    mnRangeOpPosInSymbol = aSymbol.Len();
                     bi18n = true;
                 }
                 if ( bi18n )
@@ -2459,6 +2463,14 @@ Label_MaskStateMachine:
     {
         nSrcPos = sal::static_int_cast<xub_StrLen>( pSrc - pStart );
         *pSym = 0;
+    }
+    if (mnRangeOpPosInSymbol >= 0 && mnRangeOpPosInSymbol == (pSym-1) - &cSymbol[0])
+    {
+        // This is a trailing range operator, which is nonsense. Will be caught
+        // in next round.
+        mnRangeOpPosInSymbol = -1;
+        *--pSym = 0;
+        --nSrcPos;
     }
     if ( bAutoCorrect )
         aCorrectedSymbol = cSymbol;
@@ -2835,8 +2847,21 @@ BOOL ScCompiler::IsReference( const String& rName )
     // Though the range operator is handled explicitly, when encountering
     // something like Sheet1.A:A we will have to treat it as one entity if it
     // doesn't pass as single cell reference.
-    if (ScGlobal::FindUnquoted( rName, ':') != STRING_NOTFOUND)
-        return IsDoubleReference( rName);
+    if (mnRangeOpPosInSymbol > 0)   // ":foo" would be nonsense
+    {
+        if (IsDoubleReference( rName))
+            return true;
+        // Now try with a symbol up to the range operator, rewind source
+        // position.
+        sal_Int32 nLen = mnRangeOpPosInSymbol;
+        while (cSymbol[++nLen])
+            ;
+        cSymbol[mnRangeOpPosInSymbol] = 0;
+        nSrcPos -= static_cast<xub_StrLen>(nLen - mnRangeOpPosInSymbol);
+        mnRangeOpPosInSymbol = -1;
+        mbRewind = true;
+        return true;    // end all checks
+    }
     return false;
 }
 
@@ -3551,54 +3576,65 @@ BOOL ScCompiler::NextNewToken( bool bInArray )
     // #42016# Italian ARCTAN.2 resulted in #REF! => IsOpcode() before
     // IsReference().
 
-    const String aOrg( cSymbol );
-
-    if (bAsciiNonAlnum && IsOpCode( aOrg, bInArray ))
-        return true;
-
     String aUpper;
-    bool bAsciiUpper = false;
-    if (bMayBeFuncName)
+
+    do
     {
-        bAsciiUpper = lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
-        if (IsOpCode( aUpper, bInArray ))
+        mbRewind = false;
+        const String aOrg( cSymbol );
+
+        if (bAsciiNonAlnum && IsOpCode( aOrg, bInArray ))
             return true;
-    }
 
-    // Column 'DM' ("Deutsche Mark", German currency) couldn't be
-    // referred => IsReference() before IsValue().
-    // Preserve case of file names in external references.
-    if (IsReference( aOrg ))
-        return true;
+        aUpper.Erase();
+        bool bAsciiUpper = false;
+        if (bMayBeFuncName)
+        {
+            bAsciiUpper = lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
+            if (IsOpCode( aUpper, bInArray ))
+                return true;
+        }
 
-    if (!aUpper.Len())
-        bAsciiUpper = lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
+        // Column 'DM' ("Deutsche Mark", German currency) couldn't be
+        // referred => IsReference() before IsValue().
+        // Preserve case of file names in external references.
+        if (IsReference( aOrg ))
+        {
+            if (mbRewind)   // Range operator, but no direct reference.
+                continue;   // do; up to range operator.
+            return true;
+        }
 
-    // IsBoolean() before IsValue() to catch inline bools without the kludge
-    //    for inline arrays.
-    if (bAllowBooleans && IsBoolean( aUpper ))
-        return true;
+        if (!aUpper.Len())
+            bAsciiUpper = lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
 
-    if (IsValue( aUpper ))
-        return true;
+        // IsBoolean() before IsValue() to catch inline bools without the kludge
+        //    for inline arrays.
+        if (bAllowBooleans && IsBoolean( aUpper ))
+            return true;
 
-    // User defined names and such do need i18n upper also in ODF.
-    if (bAsciiUpper)
-        aUpper = ScGlobal::pCharClass->upper( aOrg );
+        if (IsValue( aUpper ))
+            return true;
 
-    if (IsNamedRange( aUpper ))
-        return true;
-    // Preserve case of file names in external references.
-    if (IsExternalNamedRange( aOrg ))
-        return true;
-    if (IsDBRange( aUpper ))
-        return true;
-    if (IsColRowName( aUpper ))
-        return true;
-    if (bMayBeFuncName && IsMacro( aUpper ))
-        return true;
-    if (bMayBeFuncName && IsOpCode2( aUpper ))
-        return true;
+        // User defined names and such do need i18n upper also in ODF.
+        if (bAsciiUpper)
+            aUpper = ScGlobal::pCharClass->upper( aOrg );
+
+        if (IsNamedRange( aUpper ))
+            return true;
+        // Preserve case of file names in external references.
+        if (IsExternalNamedRange( aOrg ))
+            return true;
+        if (IsDBRange( aUpper ))
+            return true;
+        if (IsColRowName( aUpper ))
+            return true;
+        if (bMayBeFuncName && IsMacro( aUpper ))
+            return true;
+        if (bMayBeFuncName && IsOpCode2( aUpper ))
+            return true;
+
+    } while (mbRewind);
 
     if ( mbExtendedErrorDetection )
     {

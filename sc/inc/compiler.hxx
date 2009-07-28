@@ -311,9 +311,11 @@ private:
     const CharClass*    pCharClass;         // which character classification is used for parseAnyToken
     USHORT      mnPredetectedReference;     // reference when reading ODF, 0 (none), 1 (single) or 2 (double)
     SCsTAB      nMaxTab;                    // last sheet in document
+    sal_Int32   mnRangeOpPosInSymbol;       // if and where a range operator is in symbol
     const Convention *pConv;
     bool        mbCloseBrackets;            // whether to close open brackets automatically, default TRUE
     bool        mbExtendedErrorDetection;
+    bool        mbRewind;                   // whether symbol is to be rewound to some step during lexical analysis
 
     BOOL   NextNewToken(bool bInArray = false);
 

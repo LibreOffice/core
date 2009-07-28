@@ -143,7 +143,8 @@ private:
 // ============================================================================
 
 ScExternalRefCache::Table::Table()
-    : mbReferenced( true)   // Prevent accidental data loss due to lack of knowledge.
+    : meReferenced( REFERENCED_MARKED )
+      // Prevent accidental data loss due to lack of knowledge.
 {
 }
 
@@ -151,14 +152,25 @@ ScExternalRefCache::Table::~Table()
 {
 }
 
+void ScExternalRefCache::Table::setReferencedFlag( ScExternalRefCache::Table::ReferencedFlag eFlag )
+{
+    meReferenced = eFlag;
+}
+
 void ScExternalRefCache::Table::setReferenced( bool bReferenced )
 {
-    mbReferenced = bReferenced;
+    if (meReferenced != REFERENCED_PERMANENT)
+        meReferenced = (bReferenced ? REFERENCED_MARKED : UNREFERENCED);
+}
+
+ScExternalRefCache::Table::ReferencedFlag ScExternalRefCache::Table::getReferencedFlag() const
+{
+    return meReferenced;
 }
 
 bool ScExternalRefCache::Table::isReferenced() const
 {
-    return mbReferenced;
+    return meReferenced != UNREFERENCED;
 }
 
 void ScExternalRefCache::Table::setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex)
@@ -737,19 +749,55 @@ bool ScExternalRefCache::setCacheDocReferenced( sal_uInt16 nFileId )
     return areAllCacheTablesReferenced();
 }
 
-bool ScExternalRefCache::setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName )
+bool ScExternalRefCache::setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName, size_t nSheets, bool bPermanent )
 {
-    size_t nIndex = 0;
-    TableTypeRef pTab = getCacheTable( nFileId, rTabName, false, &nIndex);
-    if (pTab.get())
+    DocItem* pDoc = getDocItem(nFileId);
+    if (pDoc)
     {
-        if (!pTab->isReferenced())
+        size_t nIndex = 0;
+        String aTabNameUpper = ScGlobal::pCharClass->upper( rTabName);
+        if (lcl_getTableDataIndex( pDoc->maTableNameIndex, aTabNameUpper, nIndex))
         {
-            pTab->setReferenced( true);
-            addCacheTableToReferenced( nFileId, nIndex);
+            size_t nStop = ::std::min( nIndex + nSheets, pDoc->maTables.size());
+            for (size_t i = nIndex; i < nStop; ++i)
+            {
+                TableTypeRef pTab = pDoc->maTables[i];
+                if (pTab.get())
+                {
+                    Table::ReferencedFlag eNewFlag = (bPermanent ?
+                            Table::REFERENCED_PERMANENT :
+                            Table::REFERENCED_MARKED);
+                    Table::ReferencedFlag eOldFlag = pTab->getReferencedFlag();
+                    if (eOldFlag != Table::REFERENCED_PERMANENT && eNewFlag != eOldFlag)
+                    {
+                        pTab->setReferencedFlag( eNewFlag);
+                        addCacheTableToReferenced( nFileId, i);
+                    }
+                }
+            }
         }
     }
     return areAllCacheTablesReferenced();
+}
+
+void ScExternalRefCache::setCacheTableReferencedPermanently( sal_uInt16 nFileId, const String& rTabName, size_t nSheets )
+{
+    DocItem* pDoc = getDocItem(nFileId);
+    if (pDoc)
+    {
+        size_t nIndex = 0;
+        String aTabNameUpper = ScGlobal::pCharClass->upper( rTabName);
+        if (lcl_getTableDataIndex( pDoc->maTableNameIndex, aTabNameUpper, nIndex))
+        {
+            size_t nStop = ::std::min( nIndex + nSheets, pDoc->maTables.size());
+            for (size_t i = nIndex; i < nStop; ++i)
+            {
+                TableTypeRef pTab = pDoc->maTables[i];
+                if (pTab.get())
+                    pTab->setReferencedFlag( Table::REFERENCED_PERMANENT);
+            }
+        }
+    }
 }
 
 void ScExternalRefCache::setAllCacheTableReferencedStati( bool bReferenced )
@@ -791,9 +839,17 @@ void ScExternalRefCache::setAllCacheTableReferencedStati( bool bReferenced )
                 TableTypeRef & xTab = rDocItem.maTables[i];
                 if (xTab.get())
                 {
-                    xTab->setReferenced( false);
-                    rDocReferenced.maTables[i] = false;
-                    rDocReferenced.mbAllTablesReferenced = false;
+                    if (xTab->getReferencedFlag() == Table::REFERENCED_PERMANENT)
+                        addCacheTableToReferenced( nFileId, i);
+                    else
+                    {
+                        xTab->setReferencedFlag( Table::UNREFERENCED);
+                        rDocReferenced.maTables[i] = false;
+                        rDocReferenced.mbAllTablesReferenced = false;
+                        // An addCacheTableToReferenced() actually may have
+                        // resulted in mbAllReferenced been set. Clear it.
+                        maReferenced.mbAllReferenced = false;
+                    }
                 }
             }
         }
@@ -1481,9 +1537,19 @@ bool ScExternalRefManager::setCacheDocReferenced( sal_uInt16 nFileId )
     return maRefCache.setCacheDocReferenced( nFileId);
 }
 
-bool ScExternalRefManager::setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName )
+bool ScExternalRefManager::setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName, size_t nSheets )
 {
-    return maRefCache.setCacheTableReferenced( nFileId, rTabName);
+    return maRefCache.setCacheTableReferenced( nFileId, rTabName, nSheets, false);
+}
+
+void ScExternalRefManager::setCacheTableReferencedPermanently( sal_uInt16 nFileId, const String& rTabName, size_t nSheets )
+{
+    if (isInReferenceMarking())
+        // Do all maintenance work.
+        maRefCache.setCacheTableReferenced( nFileId, rTabName, nSheets, true);
+    else
+        // Set only the permanent flag.
+        maRefCache.setCacheTableReferencedPermanently( nFileId, rTabName, nSheets);
 }
 
 void ScExternalRefManager::setAllCacheTableReferencedStati( bool bReferenced )

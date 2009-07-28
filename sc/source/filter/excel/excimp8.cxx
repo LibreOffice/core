@@ -427,6 +427,38 @@ void XclImpAutoFilterData::InsertQueryParam()
     }
 }
 
+static void ExcelQueryToOooQuery( ScQueryEntry& rEntry )
+{
+    if( ( rEntry.eOp != SC_EQUAL && rEntry.eOp != SC_NOT_EQUAL ) || rEntry.pStr == NULL )
+        return;
+    else
+    {
+        xub_StrLen nLen = rEntry.pStr->Len();
+        sal_Unicode nStart = rEntry.pStr->GetChar( 0 );
+        sal_Unicode nEnd   = rEntry.pStr->GetChar( nLen-1 );
+        if( nLen >2 && nStart == '*' && nEnd == '*' )
+        {
+            rEntry.pStr->Erase( nLen-1, 1 );
+            rEntry.pStr->Erase( 0, 1 );
+            rEntry.eOp = ( rEntry.eOp == SC_EQUAL ) ? SC_CONTAINS : SC_DOES_NOT_CONTAIN;
+        }
+        else if( nLen > 1 && nStart == '*' && nEnd != '*' )
+        {
+            rEntry.pStr->Erase( 0, 1 );
+            rEntry.eOp = ( rEntry.eOp == SC_EQUAL ) ? SC_ENDS_WITH : SC_DOES_NOT_END_WITH;
+        }
+        else if( nLen > 1 && nStart != '*' && nEnd == '*' )
+        {
+            rEntry.pStr->Erase( nLen-1, 1 );
+            rEntry.eOp = ( rEntry.eOp == SC_EQUAL ) ? SC_BEGINS_WITH : SC_DOES_NOT_BEGIN_WITH;
+        }
+        else if( nLen == 2 && nStart == '*' && nEnd == '*' )
+        {
+            rEntry.pStr->Erase( 0, 1 );
+        }
+    }
+}
+
 void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
 {
     UINT16 nCol, nFlags;
@@ -464,14 +496,14 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
         BOOL    bIgnore;
 
         UINT8   nStrLen[ 2 ]    = { 0, 0 };
-        String* pEntryStr[ 2 ]  = { NULL, NULL };
+        ScQueryEntry *pQueryEntries[ 2 ] = { NULL, NULL };
 
         for( nE = 0; nE < 2; nE++ )
         {
             if( nFirstEmpty < nCount )
             {
                 ScQueryEntry& aEntry = aParam.GetEntry( nFirstEmpty );
-                pEntryStr[ nE ] = aEntry.pStr;
+                pQueryEntries[ nE ] = &aEntry;
                 bIgnore = FALSE;
 
                 rStrm >> nType >> nOper;
@@ -559,8 +591,12 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
         }
 
         for( nE = 0; nE < 2; nE++ )
-            if( nStrLen[ nE ] && pEntryStr[ nE ] )
-                pEntryStr[ nE ]->Assign( rStrm.ReadUniString( nStrLen[ nE ] ) );
+            if( nStrLen[ nE ] && pQueryEntries[ nE ] )
+            {
+                pQueryEntries[ nE ]->pStr->Assign ( rStrm.ReadUniString( nStrLen[ nE ] ) );
+                ExcelQueryToOooQuery( *pQueryEntries[ nE ] );
+            }
+
     }
 }
 
