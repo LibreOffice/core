@@ -260,6 +260,11 @@ uno::Reference< sheet::XFormulaOpCodeMapper> FormulaDialog::getFormulaOpCodeMapp
     return m_xOpCodeMapper;
 }
 // -----------------------------------------------------------------------------
+table::CellAddress FormulaDialog::getReferencePosition() const
+{
+    return table::CellAddress();
+}
+// -----------------------------------------------------------------------------
 ::std::auto_ptr<formula::FormulaTokenArray> FormulaDialog::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
 {
     ::std::auto_ptr<formula::FormulaTokenArray> pArray(new FormulaTokenArray());
