@@ -56,23 +56,25 @@ import helper.ConfigHelper;
 import java.util.Vector;
 import lib.StatusException;
 
-
 /**
  * contains helper methods for the Desktop
  */
-public class DesktopTools {
+public class DesktopTools
+{
+
     /**
      * Queries the XComponentLoader
      *
      * @param xMSF the MultiServiceFactory
      * @return the gained XComponentLoader
-    */
-    public static XComponentLoader getCLoader(XMultiServiceFactory xMSF) {
+     */
+    public static XComponentLoader getCLoader(XMultiServiceFactory xMSF)
+    {
         XDesktop oDesktop = (XDesktop) UnoRuntime.queryInterface(
-                                    XDesktop.class, createDesktop(xMSF));
+                XDesktop.class, createDesktop(xMSF));
 
         XComponentLoader oCLoader = (XComponentLoader) UnoRuntime.queryInterface(
-                                            XComponentLoader.class, oDesktop);
+                XComponentLoader.class, oDesktop);
 
         return oCLoader;
     } // finish getCLoader
@@ -82,13 +84,17 @@ public class DesktopTools {
      *
      * @param xMSF the MultiServiceFactory
      * @return the gained Object
-    */
-    public static Object createDesktop(XMultiServiceFactory xMSF) {
+     */
+    public static Object createDesktop(XMultiServiceFactory xMSF)
+    {
         Object oInterface;
 
-        try {
+        try
+        {
             oInterface = xMSF.createInstance("com.sun.star.comp.framework.Desktop");
-        } catch (com.sun.star.uno.Exception e) {
+        }
+        catch (com.sun.star.uno.Exception e)
+        {
             throw new IllegalArgumentException("Desktop Service not available");
         }
 
@@ -100,9 +106,10 @@ public class DesktopTools {
      * @param xMSF the XMultiServiceFactory
      * @return XEnumeration of all components on the desktop
      */
-    public static XEnumeration getAllComponents(XMultiServiceFactory xMSF) {
+    public static XEnumeration getAllComponents(XMultiServiceFactory xMSF)
+    {
         XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
-                                    XDesktop.class, createDesktop(xMSF));
+                XDesktop.class, createDesktop(xMSF));
         return xDesktop.getComponents().createEnumeration();
     }
 
@@ -111,9 +118,10 @@ public class DesktopTools {
      * @param xMSF the XMultiServiceFactory
      * @return XComponent of the current component on the desktop
      */
-    public static XComponent getCurrentComponent(XMultiServiceFactory xMSF) {
+    public static XComponent getCurrentComponent(XMultiServiceFactory xMSF)
+    {
         XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
-                                    XDesktop.class, createDesktop(xMSF));
+                XDesktop.class, createDesktop(xMSF));
         return xDesktop.getCurrentComponent();
     }
 
@@ -122,9 +130,10 @@ public class DesktopTools {
      * @param xMSF the XMultiServiceFactory
      * @return XComponent of the current component on the desktop
      */
-    public static XFrame getCurrentFrame(XMultiServiceFactory xMSF) {
+    public static XFrame getCurrentFrame(XMultiServiceFactory xMSF)
+    {
         XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
-                                    XDesktop.class, createDesktop(xMSF));
+                XDesktop.class, createDesktop(xMSF));
         return xDesktop.getCurrentFrame();
     }
 
@@ -138,22 +147,33 @@ public class DesktopTools {
      * @param xMSF the XMultiSerivceFactory
      * @return returns an array of all open documents
      */
-    public static Object[] getAllOpenDocuments(XMultiServiceFactory xMSF) {
+    public static Object[] getAllOpenDocuments(XMultiServiceFactory xMSF)
+    {
         Vector components = new Vector();
         XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
-                                    XDesktop.class, createDesktop(xMSF));
+                XDesktop.class, createDesktop(xMSF));
 
         XEnumeration allComp = getAllComponents(xMSF);
 
-        while (allComp.hasMoreElements()){
-            try{
+        while (allComp.hasMoreElements())
+        {
+            try
+            {
                 XComponent xComponent = (XComponent) UnoRuntime.queryInterface(
-                                       XComponent.class, allComp.nextElement());
+                        XComponent.class, allComp.nextElement());
 
-                if (getDocumentType(xComponent) != null) components.add(xComponent);
+                if (getDocumentType(xComponent) != null)
+                {
+                    components.add(xComponent);
+                }
 
-            } catch (com.sun.star.container.NoSuchElementException e) {
-            } catch ( com.sun.star.lang.WrappedTargetException e) {}
+            }
+            catch (com.sun.star.container.NoSuchElementException e)
+            {
+            }
+            catch (com.sun.star.lang.WrappedTargetException e)
+            {
+            }
         }
         return components.toArray();
     }
@@ -170,27 +190,40 @@ public class DesktopTools {
      * </ul>
      * or <CODE>null</CODE>
      */
-    public static String getDocumentType(XComponent xComponent) {
-        XServiceInfo sInfo = (XServiceInfo)UnoRuntime.queryInterface(
+    public static String getDocumentType(XComponent xComponent)
+    {
+        XServiceInfo sInfo = (XServiceInfo) UnoRuntime.queryInterface(
                 XServiceInfo.class, xComponent);
 
-        if (sInfo == null) {
+        if (sInfo == null)
+        {
             return "";
-        } else if (sInfo.supportsService("com.sun.star.sheet.SpreadsheetDocument")) {
+        }
+        else if (sInfo.supportsService("com.sun.star.sheet.SpreadsheetDocument"))
+        {
             return "scalc";
-        } else if (sInfo.supportsService("com.sun.star.text.TextDocument")) {
+        }
+        else if (sInfo.supportsService("com.sun.star.text.TextDocument"))
+        {
             return "swriter";
-        } else if (sInfo.supportsService("com.sun.star.drawing.DrawingDocument")) {
+        }
+        else if (sInfo.supportsService("com.sun.star.drawing.DrawingDocument"))
+        {
             return "sdraw";
-        } else if (sInfo.supportsService("com.sun.star.presentation.PresentationDocument")) {
+        }
+        else if (sInfo.supportsService("com.sun.star.presentation.PresentationDocument"))
+        {
             return "simpress";
-        } else if (sInfo.supportsService("com.sun.star.formula.FormulaProperties")) {
+        }
+        else if (sInfo.supportsService("com.sun.star.formula.FormulaProperties"))
+        {
             return "smath";
-        } else {
+        }
+        else
+        {
             return null;
         }
     }
-
 
     /**
      * Opens a new document of a given kind
@@ -208,14 +241,17 @@ public class DesktopTools {
      * @param xMSF the MultiServiceFactory
      */
     public static XComponent openNewDoc(XMultiServiceFactory xMSF, String kind,
-                                        PropertyValue[] Args) {
+            PropertyValue[] Args)
+    {
         XComponent oDoc = null;
 
-        try {
-            oDoc = getCLoader(xMSF)
-                       .loadComponentFromURL("private:factory/" + kind,
-                                             "_blank", 0, Args);
-        } catch (com.sun.star.uno.Exception e) {
+        try
+        {
+            oDoc = getCLoader(xMSF).loadComponentFromURL("private:factory/" + kind,
+                    "_blank", 0, Args);
+        }
+        catch (com.sun.star.uno.Exception e)
+        {
             throw new IllegalArgumentException("Document could not be opened");
         }
 
@@ -231,7 +267,8 @@ public class DesktopTools {
      * @param xMSF the MultiServiceFactory
      */
     public static XComponent loadDoc(XMultiServiceFactory xMSF, String url,
-                                     PropertyValue[] Args) {
+            PropertyValue[] Args)
+    {
         XComponent oDoc = null;
         if (Args == null)
         {
@@ -254,34 +291,48 @@ public class DesktopTools {
      * closes a given document
      * @param DocumentToClose the document to close
      */
-    public static void closeDoc(XInterface DocumentToClose) {
+    public static void closeDoc(XInterface DocumentToClose)
+    {
         if (DocumentToClose == null)
         {
             return;
         }
 
         String kd = System.getProperty("KeepDocument");
-        if (kd != null ) {
+        if (kd != null)
+        {
             System.out.println("The property 'KeepDocument' is set and so the document won't be disposed");
             return;
         }
-        XModifiable modified = (XModifiable) UnoRuntime.queryInterface(
-                                       XModifiable.class, DocumentToClose);
-        XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                    XCloseable.class, DocumentToClose);
+        XModifiable modified = (XModifiable) UnoRuntime.queryInterface(XModifiable.class, DocumentToClose);
+        XCloseable closer = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, DocumentToClose);
 
-        try {
-            if (modified != null){
+        try
+        {
+            if (modified != null)
+            {
                 modified.setModified(false);
             }
             closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
+        }
+        catch (com.sun.star.util.CloseVetoException e)
+        {
+            e.printStackTrace();
             System.out.println("Couldn't close document");
-        } catch (com.sun.star.lang.DisposedException e) {
+        }
+        catch (com.sun.star.lang.DisposedException e)
+        {
+            e.printStackTrace();
             System.out.println("Couldn't close document");
-        } catch (java.lang.NullPointerException e) {
+        }
+        catch (java.lang.NullPointerException e)
+        {
+            e.printStackTrace();
             System.out.println("Couldn't close document");
-        } catch (com.sun.star.beans.PropertyVetoException e) {
+        }
+        catch (com.sun.star.beans.PropertyVetoException e)
+        {
+            e.printStackTrace();
             System.out.println("Couldn't close document");
         }
     }
@@ -293,10 +344,12 @@ public class DesktopTools {
      * @return a floating XWindow
      */
     public static XWindowPeer createFloatingWindow(XMultiServiceFactory xMSF)
-        throws StatusException{
-            return createFloatingWindow(xMSF, 500, 100, 400, 600);
+            throws StatusException
+    {
+        return createFloatingWindow(xMSF, 500, 100, 400, 600);
     }
-     /**
+
+    /**
      * Creates a floating XWindow on the given position and size.
      * @return a floating XWindow
      * @param X the X-Postion of the floating XWindow
@@ -307,44 +360,51 @@ public class DesktopTools {
      * @throws lib.StatusException if it is not possible to create a floating window a lib.StatusException was thrown
      */
     public static XWindowPeer createFloatingWindow(XMultiServiceFactory xMSF, int X, int Y, int width, int height)
-        throws StatusException{
+            throws StatusException
+    {
 
         XInterface oObj = null;
 
-        try {
+        try
+        {
             oObj = (XInterface) xMSF.createInstance("com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
+        }
+        catch (com.sun.star.uno.Exception e)
+        {
             throw new StatusException("Couldn't get toolkit", e);
         }
 
         XToolkit tk = (XToolkit) UnoRuntime.queryInterface(
-                                      XToolkit.class, oObj);
+                XToolkit.class, oObj);
 
-    WindowDescriptor descriptor = new com.sun.star.awt.WindowDescriptor();
+        WindowDescriptor descriptor = new com.sun.star.awt.WindowDescriptor();
 
         descriptor.Type = com.sun.star.awt.WindowClass.TOP;
         descriptor.WindowServiceName = "modelessdialog";
-        descriptor.ParentIndex =  -1;
+        descriptor.ParentIndex = -1;
 
-    Rectangle bounds = new com.sun.star.awt.Rectangle();
-    bounds.X = X;
-    bounds.Y = Y;
-    bounds.Width = width;
-    bounds.Height = height;
+        Rectangle bounds = new com.sun.star.awt.Rectangle();
+        bounds.X = X;
+        bounds.Y = Y;
+        bounds.Width = width;
+        bounds.Height = height;
 
         descriptor.Bounds = bounds;
         descriptor.WindowAttributes = (com.sun.star.awt.WindowAttribute.BORDER +
-                                      com.sun.star.awt.WindowAttribute.MOVEABLE +
-                                      com.sun.star.awt.WindowAttribute.SIZEABLE +
-                                      com.sun.star.awt.WindowAttribute.CLOSEABLE +
-                                      com.sun.star.awt.VclWindowPeerAttribute.CLIPCHILDREN);
+                com.sun.star.awt.WindowAttribute.MOVEABLE +
+                com.sun.star.awt.WindowAttribute.SIZEABLE +
+                com.sun.star.awt.WindowAttribute.CLOSEABLE +
+                com.sun.star.awt.VclWindowPeerAttribute.CLIPCHILDREN);
 
         XWindowPeer xWindow = null;
 
-        try{
-            xWindow = tk.createWindow( descriptor );
-        }catch ( com.sun.star.lang.IllegalArgumentException e){
-            throw new StatusException("Could not create window",  e);
+        try
+        {
+            xWindow = tk.createWindow(descriptor);
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
+            throw new StatusException("Could not create window", e);
         }
 
         return xWindow;
@@ -355,26 +415,27 @@ public class DesktopTools {
      * zoom to have a view over the hole page
      * @param xDoc the document to zoom
      */
-    public static void zoomToEntirePage( XInterface xDoc){
-        try {
+    public static void zoomToEntirePage(XInterface xDoc)
+    {
+        try
+        {
             XModel xMod = (XModel) UnoRuntime.queryInterface(XModel.class, xDoc);
             XInterface oCont = xMod.getCurrentController();
-            XViewSettingsSupplier oVSSupp = (XViewSettingsSupplier)
-                UnoRuntime.queryInterface(XViewSettingsSupplier.class, oCont);
+            XViewSettingsSupplier oVSSupp = (XViewSettingsSupplier) UnoRuntime.queryInterface(XViewSettingsSupplier.class, oCont);
 
             XInterface oViewSettings = oVSSupp.getViewSettings();
-            XPropertySet oViewProp = (XPropertySet)
-                   UnoRuntime.queryInterface(XPropertySet.class, oViewSettings);
+            XPropertySet oViewProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oViewSettings);
             oViewProp.setPropertyValue("ZoomType",
-                     new Short(com.sun.star.view.DocumentZoomType.ENTIRE_PAGE));
+                    new Short(com.sun.star.view.DocumentZoomType.ENTIRE_PAGE));
 
             utils.shortWait(5000);
-        } catch (Exception e){
+        }
+        catch (Exception e)
+        {
             System.out.println("Could not zoom to entire page: " + e.toString());
         }
 
     }
-
 
     /**
      * This function docks the Stylist onto the right side of the window.</p>
@@ -383,31 +444,35 @@ public class DesktopTools {
      * the chage of the docking will be effective at a restart.
      * @param xMSF the XMultiServiceFactory
      */
-    public static void dockStylist(XMultiServiceFactory xMSF){
+    public static void dockStylist(XMultiServiceFactory xMSF)
+    {
         // prepare Window-Settings
-        try {
+        try
+        {
             ConfigHelper aConfig = new ConfigHelper(xMSF,
-                                    "org.openoffice.Office.Views", false);
+                    "org.openoffice.Office.Views", false);
 
             // Is node "5539" (slot-id for navigator) available? If not, insert it
             XNameReplace x5539 = aConfig.getOrInsertGroup("Windows", "5539");
 
             aConfig.updateGroupProperty(
-               "Windows",  "5539", "WindowState", "952,180,244,349;1;0,0,0,0;");
+                    "Windows", "5539", "WindowState", "952,180,244,349;1;0,0,0,0;");
 
             aConfig.insertOrUpdateExtensibleGroupProperty(
-               "Windows", "5539", "UserData", "Data","V2,V,0,AL:(5,16,0/0/244/349,244;610)");
+                    "Windows", "5539", "UserData", "Data", "V2,V,0,AL:(5,16,0/0/244/349,244;610)");
 
             // Is node "SplitWindow2" available? If not, instert it.
             aConfig.getOrInsertGroup("Windows", "SplitWindow2");
 
             aConfig.insertOrUpdateExtensibleGroupProperty(
-               "Windows", "SplitWindow2","UserData", "UserItem","V1,2,1,0,5539");
+                    "Windows", "SplitWindow2", "UserData", "UserItem", "V1,2,1,0,5539");
 
             aConfig.flush();
             aConfig = null;
 
-        } catch (com.sun.star.uno.Exception e) {
+        }
+        catch (com.sun.star.uno.Exception e)
+        {
             e.printStackTrace();
         }
     }
@@ -418,7 +483,8 @@ public class DesktopTools {
      * @deprecated
      */
     @Deprecated
-    public static void bringWindowToFromt(XModel xModel){
+    public static void bringWindowToFromt(XModel xModel)
+    {
         bringWindowToFront(xModel);
     }
 
@@ -428,7 +494,8 @@ public class DesktopTools {
      * Only the order of Office documents are changeable.
      * @param xModel the XModel of the document to bring to top
      */
-    public static void bringWindowToFront(XModel xModel){
+    public static void bringWindowToFront(XModel xModel)
+    {
         // System.out.println("DEBUG: bring to front xModel");
 
         XTopWindow xTopWindow =
@@ -439,10 +506,12 @@ public class DesktopTools {
         xTopWindow.toFront();
     }
 
-    public static void bringWindowToFront(XComponent xComponent){
+    public static void bringWindowToFront(XComponent xComponent)
+    {
         // System.out.println("DEBUG: bring to front xComponent");
         XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, xComponent);
-        if (xModel != null){
+        if (xModel != null)
+        {
             bringWindowToFront(xModel);
         }
     }
