@@ -750,7 +750,7 @@ SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef &rDocShellR
     // Wir bauen uns ein neues Dokument
     SwDoc *pPrtDoc = new SwDoc;
     pPrtDoc->acquire();
-    pPrtDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)rDocShellRef );
+    pPrtDoc->SetRefForDocShell( boost::addressof(rDocShellRef) );
     pPrtDoc->LockExpFlds();
 
     // Der Drucker wird uebernommen
@@ -838,7 +838,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     // Wir bauen uns ein neues Dokument
 //    SwDoc *pPrtDoc = new SwDoc;
 //    pPrtDoc->acquire();
-//    pPrtDoc->SetRefForDocShell( (SvEmbeddedObjectRef*)&(long&)rDocShellRef );
+//    pPrtDoc->SetRefForDocShell( boost::addressof(rDocShellRef) );
     pPrtDoc->LockExpFlds();
 
     // Der Drucker wird uebernommen
