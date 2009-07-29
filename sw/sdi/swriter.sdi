@@ -6534,31 +6534,6 @@ SfxInt16Item PasteSpecial FN_PASTESPECIAL
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem PreviewPrintOptions FN_PREVIEW_PRINT_OPTIONS
-()
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DOC;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem PreviewZoom FN_PREVIEW_ZOOM
 ( SfxUInt16Item PreviewZoom FN_PREVIEW_ZOOM )
 [

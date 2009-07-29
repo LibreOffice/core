@@ -324,7 +324,6 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_GLOBAL_OPEN          (FN_VIEW + 47)  /* oeffnen */
 #define FN_GLOBAL_SAVE_CONTENT  (FN_VIEW + 48)  /* Inhalt der Verknuepfung mitspeichern */
 #define FN_CREATE_NAVIGATION    (FN_VIEW + 49)  /* Navigations-Controller erzeugen */
-#define FN_PREVIEW_PRINT_OPTIONS (FN_VIEW + 50)  /* Optionsdialog Preview drucken */
 #define FN_PREVIEW_ZOOM          (FN_VIEW + 51)  /* der Tabellencontroller fuer den Zoom */
 
 #define FN_SET_MODOPT_TBLNUMFMT  (FN_VIEW + 52) /* Zahlenerkennung in Tabellen */

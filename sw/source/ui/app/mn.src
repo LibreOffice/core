@@ -1053,12 +1053,6 @@ Menu MN_PPREVIEW_POPUPMENU
             HelpID = FN_PRINT_PAGEPREVIEW ;
             Text [ en-US ] = "Print" ;
         };
-        MenuItem
-        {
-            Identifier = FN_PREVIEW_PRINT_OPTIONS;
-            HelpID = FN_PREVIEW_PRINT_OPTIONS;
-            Text [ en-US ] = "Print Options";
-        };
         SEPARATOR ;
         MenuItem
         {

@@ -1521,12 +1521,6 @@ MOVEPAGE:
             rReq.SetSlot( FN_PRINT_PAGEPREVIEW );
             return;
         }
-        case FN_PREVIEW_PRINT_OPTIONS :
-        {
-            SwPreviewPrintOptionsDialog aDlg(aViewWin, *this);
-            aDlg.Execute();
-        }
-        break;
         case SID_PRINTDOCDIRECT:
         case SID_PRINTDOC:
             ::SetAppPrintOptions( aViewWin.GetViewShell(), FALSE );
