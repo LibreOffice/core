@@ -39,6 +39,21 @@ namespace dump {
 
 // ============================================================================
 
+namespace {
+
+const sal_uInt16 DFF_ID_BSE                 = 0xF007;   /// BLIP store entry.
+const sal_uInt16 DFF_ID_BSTORECONTAINER     = 0xF001;   /// BLIP store container.
+const sal_uInt16 DFF_ID_CLIENTANCHOR        = 0xF010;   /// Client anchor.
+const sal_uInt16 DFF_ID_DG                  = 0xF008;   /// Drawing.
+const sal_uInt16 DFF_ID_DGG                 = 0xF006;   /// Drawing group.
+const sal_uInt16 DFF_ID_OPT                 = 0xF00B;   /// Property set.
+const sal_uInt16 DFF_ID_SP                  = 0xF00A;   /// Shape.
+const sal_uInt16 DFF_ID_SPGR                = 0xF009;   /// Shape group.
+
+} // namespace
+
+// ============================================================================
+
 void DffStreamObject::construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
 {
     SequenceRecordObjectBase::construct( rParent, rxStrm, rSysFileName, "DFF-RECORD-NAMES" );
@@ -65,10 +80,11 @@ void DffStreamObject::implWriteExtHeader()
     const sal_Char* pcListName = "DFF-RECORD-INST";
     switch( getRecId() )
     {
-        case 0xF001:    pcListName = "DFFBSTORECONT-RECORD-INST";   break;  // DFFBSTORECONTAINER contains BLIP count
-        case 0xF007:    pcListName = "DFFBSE-RECORD-INST";          break;  // DFFBSE contains BLIP type
-        case 0xF00A:    pcListName = "DFFSP-RECORD-INST";           break;  // DFFSP contains shape type
-        case 0xF00B:    pcListName = "DFFOPT-RECORD-INST";          break;  // DFFOPT contains property count
+        case DFF_ID_BSE:                pcListName = "DFFBSE-RECORD-INST";          break;  // BLIP type
+        case DFF_ID_BSTORECONTAINER:    pcListName = "DFFBSTORECONT-RECORD-INST";   break;  // BLIP count
+        case DFF_ID_DG:                 pcListName = "DFFDG-RECORD-INST";           break;  // drawing ID
+        case DFF_ID_OPT:                pcListName = "DFFOPT-RECORD-INST";          break;  // property count
+        case DFF_ID_SP:                 pcListName = "DFFSP-RECORD-INST";           break;  // shape type
     }
     MultiItemsGuard aMultiGuard( out() );
     writeHexItem( "instance", mnInstVer, pcListName );
@@ -79,7 +95,7 @@ void DffStreamObject::implDumpRecordBody()
 {
     switch( getRecId() )
     {
-        case 0xF007:    // DFFBSE
+        case DFF_ID_BSE:
             dumpDec< sal_uInt8 >( "win-type", "DFFBSE-TYPE" );
             dumpDec< sal_uInt8 >( "mac-type", "DFFBSE-TYPE" );
             dumpGuid( "guid" );
@@ -92,12 +108,34 @@ void DffStreamObject::implDumpRecordBody()
             dumpUnused( 2 );
         break;
 
-        case 0xF00A:    // DFFSP
-            dumpHex< sal_uInt32 >( "shape-id", "CONV-DEC" );
-            dumpHex< sal_uInt32 >( "shape-flags", "DFFSP-FLAGS" );
+        case DFF_ID_CLIENTANCHOR:
+            implDumpClientAnchor();
         break;
 
-        case 0xF00B:    // DFFOPT
+        case DFF_ID_DG:
+            dumpDec< sal_uInt32 >( "shape-count" );
+            dumpHex< sal_uInt32 >( "max-shape-id", "CONV-DEC" );
+        break;
+
+        case DFF_ID_DGG:
+        {
+            dumpHex< sal_uInt32 >( "max-shape-id", "CONV-DEC" );
+            sal_uInt32 nClusters = dumpDec< sal_uInt32 >( "id-cluster-count" );
+            dumpDec< sal_uInt32 >( "shape-count" );
+            dumpDec< sal_uInt32 >( "drawing-count" );
+            out().resetItemIndex( 1 );
+            TableGuard aTabGuard( out(), 15, 16 );
+            for( sal_uInt32 nCluster = 1; !in().isEof() && (nCluster < nClusters); ++nCluster )
+            {
+                MultiItemsGuard aMultiGuard( out() );
+                writeEmptyItem( "#cluster" );
+                dumpDec< sal_uInt32 >( "drawing-id" );
+                dumpHex< sal_uInt32 >( "max-shape-id", "CONV-DEC" );
+            }
+        }
+        break;
+
+        case DFF_ID_OPT:
         {
             sal_uInt16 nPropCount = getInst();
             out().resetItemIndex();
@@ -110,8 +148,16 @@ void DffStreamObject::implDumpRecordBody()
         }
         break;
 
-        case 0xF010:    // DFFCLIENTANCHOR
-            implDumpClientAnchor();
+        case DFF_ID_SP:
+            dumpHex< sal_uInt32 >( "shape-id", "CONV-DEC" );
+            dumpHex< sal_uInt32 >( "shape-flags", "DFFSP-FLAGS" );
+        break;
+
+        case DFF_ID_SPGR:
+            dumpDec< sal_uInt32 >( "left" );
+            dumpDec< sal_uInt32 >( "top" );
+            dumpDec< sal_uInt32 >( "right" );
+            dumpDec< sal_uInt32 >( "bottom" );
         break;
     }
 }
