@@ -34,6 +34,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/sheet/AddressConvention.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/SingleReference.hpp>
 #include <com/sun/star/sheet/ComplexReference.hpp>
@@ -41,9 +42,9 @@
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
+#include <com/sun/star/sheet/XFormulaParser.hpp>
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
 #include "properties.hxx"
-#include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
@@ -58,6 +59,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
@@ -294,9 +296,9 @@ static const FunctionData saFuncTableBiff2[] =
     { "SIN",                    "SIN",                  15,     15,     1,  1,  V, { V }, 0 },
     { "COS",                    "COS",                  16,     16,     1,  1,  V, { V }, 0 },
     { "TAN",                    "TAN",                  17,     17,     1,  1,  V, { V }, 0 },
-    { "COT",                    "TAN",                  17,     17,     1,  1,  V, { V }, FUNCFLAG_EXPORTONLY },
+    { "COT",                    0,                      17,     17,     1,  1,  V, { V }, FUNCFLAG_EXPORTONLY },
     { "ATAN",                   "ATAN",                 18,     18,     1,  1,  V, { V }, 0 },
-    { "ACOT",                   "ATAN",                 18,     18,     1,  1,  V, { V }, FUNCFLAG_EXPORTONLY },
+    { "ACOT",                   0,                      18,     18,     1,  1,  V, { V }, FUNCFLAG_EXPORTONLY },
     { "PI",                     "PI",                   19,     19,     0,  0,  V, {}, 0 },
     { "SQRT",                   "SQRT",                 20,     20,     1,  1,  V, { V }, 0 },
     { "EXP",                    "EXP",                  21,     21,     1,  1,  V, { V }, 0 },
@@ -457,11 +459,11 @@ static const FunctionData saFuncTableBiff3[] =
     { "SINH",                   "SINH",                 229,    229,    1,  1,  V, { V }, 0 },
     { "COSH",                   "COSH",                 230,    230,    1,  1,  V, { V }, 0 },
     { "TANH",                   "TANH",                 231,    231,    1,  1,  V, { V }, 0 },
-    { "COTH",                   "TANH",                 231,    231,    1,  1,  V, { V }, FUNCFLAG_EXPORTONLY },
+    { "COTH",                   0,                      231,    231,    1,  1,  V, { V }, FUNCFLAG_EXPORTONLY },
     { "ASINH",                  "ASINH",                232,    232,    1,  1,  V, { V }, 0 },
     { "ACOSH",                  "ACOSH",                233,    233,    1,  1,  V, { V }, 0 },
     { "ATANH",                  "ATANH",                234,    234,    1,  1,  V, { V }, 0 },
-    { "ACOTH",                  "ATANH",                234,    234,    1,  1,  V, { V }, FUNCFLAG_EXPORTONLY },
+    { "ACOTH",                  0,                      234,    234,    1,  1,  V, { V }, FUNCFLAG_EXPORTONLY },
     { "DGET",                   "DGET",                 235,    235,    3,  3,  V, { R }, 0 },
     { "INFO",                   "INFO",                 244,    244,    1,  1,  V, { V }, FUNCFLAG_VOLATILE }
 };
@@ -790,15 +792,35 @@ FuncInfoParamClassIterator& FuncInfoParamClassIterator::operator++()
 
 // function provider ==========================================================
 
-FunctionProvider::FunctionProvider( FilterType eFilter, BiffType eBiff, bool bImportFilter ) :
-    mxFuncs( new FuncVector ),
-    mxOdfFuncs( new FuncNameMap ),
-    mxOoxFuncs( new FuncNameMap ),
-    mxOobFuncs( new FuncIdMap ),
-    mxBiffFuncs( new FuncIdMap ),
-    mxMacroFuncs( new FuncNameMap )
+struct FunctionProviderImpl
 {
-    OSL_ENSURE( bImportFilter, "FunctionProvider::FunctionProvider - need special handling for macro call functions" );
+    typedef RefMap< OUString, FunctionInfo >    FuncNameMap;
+    typedef RefMap< sal_uInt16, FunctionInfo >  FuncIdMap;
+
+    FunctionInfoVector  maFuncs;            /// All function infos in one list.
+    FuncNameMap         maOdfFuncs;         /// Maps ODF function names to function data.
+    FuncNameMap         maOoxFuncs;         /// Maps OOXML function names to function data.
+    FuncIdMap           maOobFuncs;         /// Maps OOBIN function indexes to function data.
+    FuncIdMap           maBiffFuncs;        /// Maps BIFF function indexes to function data.
+    FuncNameMap         maMacroFuncs;       /// Maps macro function names to function data.
+
+    explicit            FunctionProviderImpl( FilterType eFilter, BiffType eBiff, bool bImportFilter );
+
+private:
+    /** Creates and inserts a function info struct from the passed function data. */
+    void                initFunc( const FunctionData& rFuncData, sal_uInt8 nMaxParam );
+
+    /** Initializes the members from the passed function data list. */
+    void                initFuncs(
+                            const FunctionData* pBeg, const FunctionData* pEnd,
+                            sal_uInt8 nMaxParam, bool bImportFilter );
+};
+
+// ----------------------------------------------------------------------------
+
+FunctionProviderImpl::FunctionProviderImpl( FilterType eFilter, BiffType eBiff, bool bImportFilter )
+{
+    OSL_ENSURE( bImportFilter, "FunctionProviderImpl::FunctionProviderImpl - need special handling for macro call functions" );
     sal_uInt8 nMaxParam = 0;
     switch( eFilter )
     {
@@ -810,10 +832,10 @@ FunctionProvider::FunctionProvider( FilterType eFilter, BiffType eBiff, bool bIm
             nMaxParam = BIFF_MAX_PARAMCOUNT;
         break;
         case FILTER_UNKNOWN:
-            OSL_ENSURE( false, "FunctionProvider::FunctionProvider - invalid filter type" );
+            OSL_ENSURE( false, "FunctionProviderImpl::FunctionProviderImpl - invalid filter type" );
         break;
     }
-    OSL_ENSURE( eBiff != BIFF_UNKNOWN, "FunctionProvider::FunctionProvider - invalid BIFF type" );
+    OSL_ENSURE( eBiff != BIFF_UNKNOWN, "FunctionProviderImpl::FunctionProviderImpl - invalid BIFF type" );
 
     /*  Add functions supported in the current BIFF version only. Function
         tables from later BIFF versions may overwrite single functions from
@@ -832,38 +854,7 @@ FunctionProvider::FunctionProvider( FilterType eFilter, BiffType eBiff, bool bIm
         initFuncs( saFuncTableOox, STATIC_ARRAY_END( saFuncTableOox ), nMaxParam, bImportFilter );
 }
 
-FunctionProvider::~FunctionProvider()
-{
-}
-
-const FunctionInfo* FunctionProvider::getFuncInfoFromOdfFuncName( const OUString& rFuncName ) const
-{
-    return mxOdfFuncs->get( rFuncName ).get();
-}
-
-const FunctionInfo* FunctionProvider::getFuncInfoFromOoxFuncName( const OUString& rFuncName ) const
-{
-    return mxOoxFuncs->get( rFuncName ).get();
-}
-
-const FunctionInfo* FunctionProvider::getFuncInfoFromOobFuncId( sal_uInt16 nFuncId ) const
-{
-    return mxOobFuncs->get( nFuncId ).get();
-}
-
-const FunctionInfo* FunctionProvider::getFuncInfoFromBiffFuncId( sal_uInt16 nFuncId ) const
-{
-    return mxBiffFuncs->get( nFuncId ).get();
-}
-
-const FunctionInfo* FunctionProvider::getFuncInfoFromMacroName( const OUString& rFuncName ) const
-{
-    return mxMacroFuncs->get( rFuncName ).get();
-}
-
-// private --------------------------------------------------------------------
-
-void FunctionProvider::initFunc( const FunctionData& rFuncData, sal_uInt8 nMaxParam )
+void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nMaxParam )
 {
     // create a function info object
     FunctionInfoRef xFuncInfo( new FunctionInfo );
@@ -895,38 +886,122 @@ void FunctionProvider::initFunc( const FunctionData& rFuncData, sal_uInt8 nMaxPa
     setFlag( xFuncInfo->mnBiffFuncId, BIFF_TOK_FUNCVAR_CMD, bMacroCmd );
 
     // insert the function info into the member maps
-    mxFuncs->push_back( xFuncInfo );
+    maFuncs.push_back( xFuncInfo );
     if( xFuncInfo->maOdfFuncName.getLength() > 0 )
-        (*mxOdfFuncs)[ xFuncInfo->maOdfFuncName ] = xFuncInfo;
+        maOdfFuncs[ xFuncInfo->maOdfFuncName ] = xFuncInfo;
     if( xFuncInfo->maOoxFuncName.getLength() > 0 )
-        (*mxOoxFuncs)[ xFuncInfo->maOoxFuncName ] = xFuncInfo;
+        maOoxFuncs[ xFuncInfo->maOoxFuncName ] = xFuncInfo;
     if( xFuncInfo->mnOobFuncId != NOID )
-        (*mxOobFuncs)[ xFuncInfo->mnOobFuncId ] = xFuncInfo;
+        maOobFuncs[ xFuncInfo->mnOobFuncId ] = xFuncInfo;
     if( xFuncInfo->mnBiffFuncId != NOID )
-        (*mxBiffFuncs)[ xFuncInfo->mnBiffFuncId ] = xFuncInfo;
+        maBiffFuncs[ xFuncInfo->mnBiffFuncId ] = xFuncInfo;
     if( xFuncInfo->maBiffMacroName.getLength() > 0 )
-        (*mxMacroFuncs)[ xFuncInfo->maBiffMacroName ] = xFuncInfo;
+        maMacroFuncs[ xFuncInfo->maBiffMacroName ] = xFuncInfo;
 }
 
-void FunctionProvider::initFuncs( const FunctionData* pBeg, const FunctionData* pEnd, sal_uInt8 nMaxParam, bool bImportFilter )
+void FunctionProviderImpl::initFuncs( const FunctionData* pBeg, const FunctionData* pEnd, sal_uInt8 nMaxParam, bool bImportFilter )
 {
     for( const FunctionData* pIt = pBeg; pIt != pEnd; ++pIt )
         if( pIt->isSupported( bImportFilter ) )
             initFunc( *pIt, nMaxParam );
 }
 
+// ----------------------------------------------------------------------------
+
+FunctionProvider::FunctionProvider( FilterType eFilter, BiffType eBiff, bool bImportFilter ) :
+    mxFuncImpl( new FunctionProviderImpl( eFilter, eBiff, bImportFilter ) )
+{
+}
+
+FunctionProvider::~FunctionProvider()
+{
+}
+
+const FunctionInfo* FunctionProvider::getFuncInfoFromOdfFuncName( const OUString& rFuncName ) const
+{
+    return mxFuncImpl->maOdfFuncs.get( rFuncName ).get();
+}
+
+const FunctionInfo* FunctionProvider::getFuncInfoFromOoxFuncName( const OUString& rFuncName ) const
+{
+    return mxFuncImpl->maOoxFuncs.get( rFuncName ).get();
+}
+
+const FunctionInfo* FunctionProvider::getFuncInfoFromOobFuncId( sal_uInt16 nFuncId ) const
+{
+    return mxFuncImpl->maOobFuncs.get( nFuncId ).get();
+}
+
+const FunctionInfo* FunctionProvider::getFuncInfoFromBiffFuncId( sal_uInt16 nFuncId ) const
+{
+    return mxFuncImpl->maBiffFuncs.get( nFuncId ).get();
+}
+
+const FunctionInfo* FunctionProvider::getFuncInfoFromMacroName( const OUString& rFuncName ) const
+{
+    return mxFuncImpl->maMacroFuncs.get( rFuncName ).get();
+}
+
+FunctionLibraryType FunctionProvider::getFuncLibTypeFromLibraryName( const OUString& rLibraryName ) const
+{
+#define OOX_XLS_IS_LIBNAME( libname, basename ) (libname.equalsIgnoreAsciiCaseAscii( basename ".XLA" ) || libname.equalsIgnoreAsciiCaseAscii( basename ".XLAM" ))
+
+    // the EUROTOOL add-in containing the EUROCONVERT function
+    if( OOX_XLS_IS_LIBNAME( rLibraryName, "EUROTOOL" ) )
+        return FUNCLIB_EUROTOOL;
+
+#undef OOX_XLS_IS_LIBNAME
+
+    // default: unknown library
+    return FUNCLIB_UNKNOWN;
+}
+
+const FunctionInfoVector& FunctionProvider::getFuncs() const
+{
+    return mxFuncImpl->maFuncs;
+}
+
 // op-code and function provider ==============================================
 
-OpCodeProvider::OpCodeProvider( const WorkbookHelper& rHelper ) :
-    FunctionProvider( rHelper.getFilterType(), rHelper.getBiff(), rHelper.getBaseFilter().isImportFilter() ),
-    WorkbookHelper( rHelper ),
-    mxOpCodeFuncs( new OpCodeFuncMap ),
-    mxExtProgFuncs( new FuncNameMap ),
-    mxParserMap( new OpCodeEntryVector )
+struct OpCodeProviderImpl : public ApiOpCodes
 {
-    try
+    typedef RefMap< sal_Int32, FunctionInfo >       OpCodeFuncMap;
+    typedef RefMap< OUString, FunctionInfo >        FuncNameMap;
+    typedef ::std::vector< FormulaOpCodeMapEntry >  OpCodeEntryVector;
+
+    OpCodeFuncMap       maOpCodeFuncs;      /// Maps API function op-codes to function data.
+    FuncNameMap         maExtProgFuncs;     /// Maps programmatical API function names to function data.
+    OpCodeEntryVector   maParserMap;        /// OOXML token mapping for formula parser service.
+
+    explicit            OpCodeProviderImpl(
+                            const FunctionInfoVector& rFuncInfos,
+                            const Reference< XMultiServiceFactory >& rxFactory );
+
+private:
+    typedef ::std::map< OUString, ApiToken >    ApiTokenMap;
+    typedef Sequence< FormulaOpCodeMapEntry >   OpCodeEntrySequence;
+
+    static bool         fillEntrySeq( OpCodeEntrySequence& orEntrySeq, const Reference< XFormulaOpCodeMapper >& rxMapper, sal_Int32 nMapGroup );
+    static bool         fillTokenMap( ApiTokenMap& orTokenMap, OpCodeEntrySequence& orEntrySeq, const Reference< XFormulaOpCodeMapper >& rxMapper, sal_Int32 nMapGroup );
+    bool                fillFuncTokenMaps( ApiTokenMap& orIntFuncTokenMap, ApiTokenMap& orExtFuncTokenMap, OpCodeEntrySequence& orEntrySeq, const Reference< XFormulaOpCodeMapper >& rxMapper ) const;
+
+    static bool         initOpCode( sal_Int32& ornOpCode, const OpCodeEntrySequence& rEntrySeq, sal_Int32 nSpecialId );
+    bool                initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, const OUString& rOdfName, const OUString& rOoxName );
+    bool                initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, const sal_Char* pcOdfName, const sal_Char* pcOoxName );
+    bool                initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, sal_Unicode cOdfName, sal_Unicode cOoxName );
+
+    bool                initFuncOpCode( FunctionInfo& orFuncInfo, const ApiTokenMap& rFuncTokenMap );
+    bool                initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, const ApiTokenMap& rExtFuncTokenMap, const FunctionInfoVector& rFuncInfos );
+};
+
+// ----------------------------------------------------------------------------
+
+OpCodeProviderImpl::OpCodeProviderImpl( const FunctionInfoVector& rFuncInfos,
+        const Reference< XMultiServiceFactory >& rxFactory )
+{
+    if( rxFactory.is() ) try
     {
-        Reference< XFormulaOpCodeMapper > xMapper( getDocumentFactory()->createInstance(
+        Reference< XFormulaOpCodeMapper > xMapper( rxFactory->createInstance(
             CREATE_OUSTRING( "com.sun.star.sheet.FormulaOpCodeMapper" ) ), UNO_QUERY_THROW );
 
         // op-codes provided as attributes
@@ -985,61 +1060,22 @@ OpCodeProvider::OpCodeProvider( const WorkbookHelper& rHelper ) :
             initOpCode( OPCODE_RANGE,         aTokenMap, ':',  ':'  ) &&
             // functions
             fillFuncTokenMaps( aTokenMap, aExtFuncTokenMap, aEntrySeq, xMapper ) &&
-            initFuncOpCodes( aTokenMap, aExtFuncTokenMap ) &&
+            initFuncOpCodes( aTokenMap, aExtFuncTokenMap, rFuncInfos ) &&
             initOpCode( OPCODE_DDE,           aTokenMap, "DDE", 0 );
 
-        OSL_ENSURE( bIsValid, "OpCodeProvider::OpCodeProvider - opcodes not initialized" );
+        OSL_ENSURE( bIsValid, "OpCodeProviderImpl::OpCodeProviderImpl - opcodes not initialized" );
         (void)bIsValid;
 
         // OPCODE_PLUS_SIGN and OPCODE_ADD should be equal, otherwise "+" has to be passed above
-        OSL_ENSURE( OPCODE_PLUS_SIGN == OPCODE_ADD, "OpCodeProvider::OpCodeProvider - need opcode mapping for OPCODE_PLUS_SIGN" );
+        OSL_ENSURE( OPCODE_PLUS_SIGN == OPCODE_ADD, "OpCodeProviderImpl::OpCodeProviderImpl - need opcode mapping for OPCODE_PLUS_SIGN" );
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "OpCodeProvider::OpCodeProvider - cannot receive formula opcode mapper" );
+        OSL_ENSURE( false, "OpCodeProviderImpl::OpCodeProviderImpl - cannot receive formula opcode mapper" );
     }
 }
 
-OpCodeProvider::~OpCodeProvider()
-{
-}
-
-const FunctionInfo* OpCodeProvider::getFuncInfoFromApiToken( const ApiToken& rToken ) const
-{
-    const FunctionInfo* pFuncInfo = 0;
-    if( (rToken.OpCode == OPCODE_EXTERNAL) && rToken.Data.hasValue() )
-    {
-        OUString aProgFuncName;
-        if( rToken.Data >>= aProgFuncName )
-            pFuncInfo = mxExtProgFuncs->get( aProgFuncName ).get();
-    }
-    else if( (rToken.OpCode == OPCODE_MACRO) && rToken.Data.hasValue() )
-    {
-        OUString aMacroName;
-        if( rToken.Data >>= aMacroName )
-            pFuncInfo = getFuncInfoFromMacroName( aMacroName );
-    }
-    else if( (rToken.OpCode == OPCODE_BAD) && rToken.Data.hasValue() )
-    {
-        OUString aOoxFuncName;
-        if( rToken.Data >>= aOoxFuncName )
-            pFuncInfo = getFuncInfoFromOoxFuncName( aOoxFuncName );
-    }
-    else
-    {
-        pFuncInfo = mxOpCodeFuncs->get( rToken.OpCode ).get();
-    }
-    return pFuncInfo;
-}
-
-Sequence< FormulaOpCodeMapEntry > OpCodeProvider::getOoxParserMap() const
-{
-    return ContainerHelper::vectorToSequence( *mxParserMap );
-}
-
-// private --------------------------------------------------------------------
-
-bool OpCodeProvider::fillEntrySeq( OpCodeEntrySequence& orEntrySeq,
+bool OpCodeProviderImpl::fillEntrySeq( OpCodeEntrySequence& orEntrySeq,
         const Reference< XFormulaOpCodeMapper >& rxMapper, sal_Int32 nMapGroup )
 {
     try
@@ -1053,7 +1089,7 @@ bool OpCodeProvider::fillEntrySeq( OpCodeEntrySequence& orEntrySeq,
     return false;
 }
 
-bool OpCodeProvider::fillTokenMap( ApiTokenMap& orTokenMap, OpCodeEntrySequence& orEntrySeq,
+bool OpCodeProviderImpl::fillTokenMap( ApiTokenMap& orTokenMap, OpCodeEntrySequence& orEntrySeq,
         const Reference< XFormulaOpCodeMapper >& rxMapper, sal_Int32 nMapGroup )
 {
     orTokenMap.clear();
@@ -1067,7 +1103,7 @@ bool OpCodeProvider::fillTokenMap( ApiTokenMap& orTokenMap, OpCodeEntrySequence&
     return orEntrySeq.hasElements();
 }
 
-bool OpCodeProvider::fillFuncTokenMaps( ApiTokenMap& orIntFuncTokenMap, ApiTokenMap& orExtFuncTokenMap, OpCodeEntrySequence& orEntrySeq, const Reference< XFormulaOpCodeMapper >& rxMapper ) const
+bool OpCodeProviderImpl::fillFuncTokenMaps( ApiTokenMap& orIntFuncTokenMap, ApiTokenMap& orExtFuncTokenMap, OpCodeEntrySequence& orEntrySeq, const Reference< XFormulaOpCodeMapper >& rxMapper ) const
 {
     orIntFuncTokenMap.clear();
     orExtFuncTokenMap.clear();
@@ -1081,7 +1117,7 @@ bool OpCodeProvider::fillFuncTokenMaps( ApiTokenMap& orIntFuncTokenMap, ApiToken
     return orEntrySeq.hasElements();
 }
 
-bool OpCodeProvider::initOpCode( sal_Int32& ornOpCode, const OpCodeEntrySequence& rEntrySeq, sal_Int32 nSpecialId )
+bool OpCodeProviderImpl::initOpCode( sal_Int32& ornOpCode, const OpCodeEntrySequence& rEntrySeq, sal_Int32 nSpecialId )
 {
     if( (0 <= nSpecialId) && (nSpecialId < rEntrySeq.getLength()) )
     {
@@ -1089,12 +1125,12 @@ bool OpCodeProvider::initOpCode( sal_Int32& ornOpCode, const OpCodeEntrySequence
         return true;
     }
     OSL_ENSURE( false,
-        OStringBuffer( "OpCodeProvider::initOpCode - opcode for special offset " ).
+        OStringBuffer( "OpCodeProviderImpl::initOpCode - opcode for special offset " ).
         append( nSpecialId ).append( " not found" ).getStr() );
     return false;
 }
 
-bool OpCodeProvider::initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, const OUString& rOdfName, const OUString& rOoxName )
+bool OpCodeProviderImpl::initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, const OUString& rOdfName, const OUString& rOoxName )
 {
     ApiTokenMap::const_iterator aIt = rTokenMap.find( rOdfName );
     if( aIt != rTokenMap.end() )
@@ -1105,32 +1141,32 @@ bool OpCodeProvider::initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rToken
             FormulaOpCodeMapEntry aEntry;
             aEntry.Name = rOoxName;
             aEntry.Token.OpCode = ornOpCode;
-            mxParserMap->push_back( aEntry );
+            maParserMap.push_back( aEntry );
         }
         return true;
     }
     OSL_ENSURE( false,
-        OStringBuffer( "OpCodeProvider::initOpCode - opcode for \"" ).
+        OStringBuffer( "OpCodeProviderImpl::initOpCode - opcode for \"" ).
         append( OUStringToOString( rOdfName, RTL_TEXTENCODING_ASCII_US ) ).
         append( "\" not found" ).getStr() );
     return false;
 }
 
-bool OpCodeProvider::initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, const sal_Char* pcOdfName, const sal_Char* pcOoxName )
+bool OpCodeProviderImpl::initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, const sal_Char* pcOdfName, const sal_Char* pcOoxName )
 {
     OUString aOoxName;
     if( pcOoxName ) aOoxName = OUString::createFromAscii( pcOoxName );
     return initOpCode( ornOpCode, rTokenMap, OUString::createFromAscii( pcOdfName ), aOoxName );
 }
 
-bool OpCodeProvider::initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, sal_Unicode cOdfName, sal_Unicode cOoxName )
+bool OpCodeProviderImpl::initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, sal_Unicode cOdfName, sal_Unicode cOoxName )
 {
     OUString aOoxName;
     if( cOoxName ) aOoxName = OUString( cOoxName );
     return initOpCode( ornOpCode, rTokenMap, OUString( cOdfName ), aOoxName );
 }
 
-bool OpCodeProvider::initFuncOpCode( FunctionInfo& orFuncInfo, const ApiTokenMap& rFuncTokenMap )
+bool OpCodeProviderImpl::initFuncOpCode( FunctionInfo& orFuncInfo, const ApiTokenMap& rFuncTokenMap )
 {
     bool bIsValid = false;
     if( orFuncInfo.maOdfFuncName.getLength() > 0 )
@@ -1142,10 +1178,9 @@ bool OpCodeProvider::initFuncOpCode( FunctionInfo& orFuncInfo, const ApiTokenMap
             bIsValid =
                 (orFuncInfo.mnApiOpCode >= 0) &&
                 (orFuncInfo.mnApiOpCode != OPCODE_UNKNOWN) &&
-                (orFuncInfo.mnApiOpCode != OPCODE_NONAME) &&
-                (orFuncInfo.maOoxFuncName.getLength() > 0);
+                (orFuncInfo.mnApiOpCode != OPCODE_NONAME);
             OSL_ENSURE( bIsValid,
-                OStringBuffer( "OpCodeProvider::initFuncOpCode - no valid opcode or missing OOX function name for ODF function \"" ).
+                OStringBuffer( "OpCodeProviderImpl::initFuncOpCode - no valid opcode for ODF function \"" ).
                 append( OUStringToOString( orFuncInfo.maOdfFuncName, RTL_TEXTENCODING_ASCII_US ) ).
                 append( '"' ).getStr() );
 
@@ -1153,18 +1188,19 @@ bool OpCodeProvider::initFuncOpCode( FunctionInfo& orFuncInfo, const ApiTokenMap
             {
                 bIsValid = (aIt->second.Data >>= orFuncInfo.maExtProgName) && (orFuncInfo.maExtProgName.getLength() > 0);
                 OSL_ENSURE( bIsValid,
-                    OStringBuffer( "OpCodeProvider::initFuncOpCode - no programmatical name for external function \"" ).
+                    OStringBuffer( "OpCodeProviderImpl::initFuncOpCode - no programmatical name for external function \"" ).
                     append( OUStringToOString( orFuncInfo.maOdfFuncName, RTL_TEXTENCODING_ASCII_US ) ).
                     append( '"' ).getStr() );
             }
 
-            if( bIsValid )
+            // add to parser map, if OOX function name exists
+            if( bIsValid && (orFuncInfo.maOoxFuncName.getLength() > 0) )
             {
                 // create the parser map entry
                 FormulaOpCodeMapEntry aEntry;
                 aEntry.Name = orFuncInfo.maOoxFuncName;
                 aEntry.Token = aIt->second;
-                mxParserMap->push_back( aEntry );
+                maParserMap.push_back( aEntry );
             }
         }
     }
@@ -1184,10 +1220,10 @@ bool OpCodeProvider::initFuncOpCode( FunctionInfo& orFuncInfo, const ApiTokenMap
     return bIsValid;
 }
 
-bool OpCodeProvider::initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, const ApiTokenMap& rExtFuncTokenMap )
+bool OpCodeProviderImpl::initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, const ApiTokenMap& rExtFuncTokenMap, const FunctionInfoVector& rFuncInfos )
 {
     bool bIsValid = true;
-    for( FuncVector::const_iterator aIt = getFuncs().begin(), aEnd = getFuncs().end(); aIt != aEnd; ++aIt )
+    for( FunctionInfoVector::const_iterator aIt = rFuncInfos.begin(), aEnd = rFuncInfos.end(); aIt != aEnd; ++aIt )
     {
         FunctionInfoRef xFuncInfo = *aIt;
         // set API opcode from ODF function name
@@ -1196,12 +1232,83 @@ bool OpCodeProvider::initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, const
         if( xFuncInfo->mnApiOpCode != OPCODE_NONAME )
         {
             if( (xFuncInfo->mnApiOpCode == OPCODE_EXTERNAL) && (xFuncInfo->maExtProgName.getLength() > 0) )
-                (*mxExtProgFuncs)[ xFuncInfo->maExtProgName ] = xFuncInfo;
+                maExtProgFuncs[ xFuncInfo->maExtProgName ] = xFuncInfo;
             else
-                (*mxOpCodeFuncs)[ xFuncInfo->mnApiOpCode ] = xFuncInfo;
+                maOpCodeFuncs[ xFuncInfo->mnApiOpCode ] = xFuncInfo;
         }
     }
     return bIsValid;
+}
+
+// ----------------------------------------------------------------------------
+
+OpCodeProvider::OpCodeProvider( const Reference< XMultiServiceFactory >& rxFactory,
+        FilterType eFilter, BiffType eBiff, bool bImportFilter ) :
+    FunctionProvider( eFilter, eBiff, bImportFilter ),
+    mxOpCodeImpl( new OpCodeProviderImpl( getFuncs(), rxFactory ) )
+{
+}
+
+OpCodeProvider::~OpCodeProvider()
+{
+}
+
+const ApiOpCodes& OpCodeProvider::getOpCodes() const
+{
+    return *mxOpCodeImpl;
+}
+
+const FunctionInfo* OpCodeProvider::getFuncInfoFromApiToken( const ApiToken& rToken ) const
+{
+    const FunctionInfo* pFuncInfo = 0;
+    if( (rToken.OpCode == mxOpCodeImpl->OPCODE_EXTERNAL) && rToken.Data.has< OUString >() )
+        pFuncInfo = mxOpCodeImpl->maExtProgFuncs.get( rToken.Data.get< OUString >() ).get();
+    else if( (rToken.OpCode == mxOpCodeImpl->OPCODE_MACRO) && rToken.Data.has< OUString >() )
+        pFuncInfo = getFuncInfoFromMacroName( rToken.Data.get< OUString >() );
+    else if( (rToken.OpCode == mxOpCodeImpl->OPCODE_BAD) && rToken.Data.has< OUString >() )
+        pFuncInfo = getFuncInfoFromOoxFuncName( rToken.Data.get< OUString >() );
+    else
+        pFuncInfo = mxOpCodeImpl->maOpCodeFuncs.get( rToken.OpCode ).get();
+    return pFuncInfo;
+}
+
+Sequence< FormulaOpCodeMapEntry > OpCodeProvider::getOoxParserMap() const
+{
+    return ContainerHelper::vectorToSequence( mxOpCodeImpl->maParserMap );
+}
+
+// API formula parser wrapper =================================================
+
+ApiParserWrapper::ApiParserWrapper(
+        const Reference< XMultiServiceFactory >& rxFactory, const OpCodeProvider& rOpCodeProv ) :
+    OpCodeProvider( rOpCodeProv )
+{
+    if( rxFactory.is() ) try
+    {
+        mxParser.set( rxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.sheet.FormulaParser" ) ), UNO_QUERY_THROW );
+    }
+    catch( Exception& )
+    {
+    }
+    OSL_ENSURE( mxParser.is(), "ApiParserWrapper::ApiParserWrapper - cannot create API formula parser object" );
+    maParserProps.set( mxParser );
+    maParserProps.setProperty( PROP_CompileEnglish, true );
+    maParserProps.setProperty( PROP_FormulaConvention, ::com::sun::star::sheet::AddressConvention::XL_OOX );
+    maParserProps.setProperty( PROP_IgnoreLeadingSpaces, false );
+    maParserProps.setProperty( PROP_OpCodeMap, getOoxParserMap() );
+}
+
+ApiTokenSequence ApiParserWrapper::parseFormula( const OUString& rFormula, const CellAddress& rRefPos )
+{
+    ApiTokenSequence aTokenSeq;
+    if( mxParser.is() ) try
+    {
+        aTokenSeq = mxParser->parseFormula( rFormula, rRefPos );
+    }
+    catch( Exception& )
+    {
+    }
+    return aTokenSeq;
 }
 
 // formula contexts ===========================================================
@@ -1249,7 +1356,7 @@ void SimpleFormulaContext::setTokens( const ApiTokenSequence& rTokens )
     mxTokens->setTokens( rTokens );
 }
 
-// formula parser/formula compiler base class =================================
+// formula parser/printer base class for filters ==============================
 
 namespace {
 
@@ -1321,7 +1428,9 @@ TokenToRangeListState lclProcessClose( sal_Int32& ornParenLevel )
 // ----------------------------------------------------------------------------
 
 FormulaProcessorBase::FormulaProcessorBase( const WorkbookHelper& rHelper ) :
-    OpCodeProvider( rHelper )
+    OpCodeProvider( rHelper.getDocumentFactory(), rHelper.getFilterType(), rHelper.getBiff(), rHelper.getBaseFilter().isImportFilter() ),
+    ApiOpCodes( getOpCodes() ),
+    WorkbookHelper( rHelper )
 {
 }
 

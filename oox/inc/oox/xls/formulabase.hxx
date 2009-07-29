@@ -37,9 +37,11 @@
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include "oox/helper/containerhelper.hxx"
+#include "oox/helper/propertyset.hxx"
 #include "oox/xls/addressconverter.hxx"
 
 namespace com { namespace sun { namespace star {
+    namespace sheet { class XFormulaParser; }
     namespace sheet { class XFormulaTokens; }
     namespace sheet { class XFormulaOpCodeMapper; }
 } } }
@@ -409,6 +411,8 @@ struct FunctionInfo
     bool                mbVarParam;         /// True = use a tFuncVar token, also if min/max are equal.
 };
 
+typedef RefVector< FunctionInfo > FunctionInfoVector;
+
 // function info parameter class iterator =====================================
 
 /** Iterator working on the mpnParamClass member of the FunctionInfo struct.
@@ -437,8 +441,7 @@ private:
 
 // base function provider =====================================================
 
-class FunctionProviderImpl;
-namespace { struct FunctionData; }
+struct FunctionProviderImpl;
 
 /** Provides access to function info structs for all available sheet functions.
  */
@@ -464,46 +467,37 @@ public:
         EXTERN.CALL function, or 0 on error. */
     const FunctionInfo* getFuncInfoFromMacroName( const ::rtl::OUString& rFuncName ) const;
 
+    /** Returns the library type associated with the passed URL of a function
+        library (function add-in). */
+    FunctionLibraryType getFuncLibTypeFromLibraryName( const ::rtl::OUString& rLibraryName ) const;
+
 protected:
-    typedef RefVector< FunctionInfo >               FuncVector;
-    typedef RefMap< ::rtl::OUString, FunctionInfo > FuncNameMap;
-    typedef RefMap< sal_uInt16, FunctionInfo >      FuncIdMap;
-
-    typedef ::boost::shared_ptr< FuncVector >       FuncVectorRef;
-    typedef ::boost::shared_ptr< FuncNameMap >      FuncNameMapRef;
-    typedef ::boost::shared_ptr< FuncIdMap >        FuncIdMapRef;
-
     /** Returns the list of all function infos. */
-    inline const FuncVector& getFuncs() const { return *mxFuncs; }
+    const FunctionInfoVector& getFuncs() const;
 
 private:
-    /** Creates and inserts a function info struct from the passed function data. */
-    void                initFunc( const FunctionData& rFuncData, sal_uInt8 nMaxParam );
-
-    /** Initializes the members from the passed function data list. */
-    void                initFuncs(
-                            const FunctionData* pBeg, const FunctionData* pEnd,
-                            sal_uInt8 nMaxParam, bool bImportFilter );
-
-private:
-    FuncVectorRef       mxFuncs;            /// All function infos in one list.
-    FuncNameMapRef      mxOdfFuncs;         /// Maps ODF function names to function data.
-    FuncNameMapRef      mxOoxFuncs;         /// Maps OOXML function names to function data.
-    FuncIdMapRef        mxOobFuncs;         /// Maps OOBIN function indexes to function data.
-    FuncIdMapRef        mxBiffFuncs;        /// Maps BIFF function indexes to function data.
-    FuncNameMapRef      mxMacroFuncs;       /// Maps macro function names to function data.
+    typedef ::boost::shared_ptr< FunctionProviderImpl > FunctionProviderImplRef;
+    FunctionProviderImplRef mxFuncImpl;     /// Shared implementation between all copies of the provider.
 };
 
 // op-code and function provider ==============================================
 
+struct OpCodeProviderImpl;
+
 /** Provides access to API op-codes for all available formula tokens and to
     function info structs for all available sheet functions.
  */
-class OpCodeProvider : public ApiOpCodes, public FunctionProvider, public WorkbookHelper
+class OpCodeProvider : public FunctionProvider // not derived from WorkbookHelper to make it usable as UNO service
 {
 public:
-    explicit            OpCodeProvider( const WorkbookHelper& rHelper );
+    explicit            OpCodeProvider(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            FilterType eFilter, BiffType eBiff, bool bImportFilter );
     virtual             ~OpCodeProvider();
+
+    /** Returns the structure containing all token op-codes for operators and
+        special tokens used by the Calc document and its formula parser. */
+    const ApiOpCodes&   getOpCodes() const;
 
     /** Returns the function info for an API token, or 0 on error. */
     const FunctionInfo* getFuncInfoFromApiToken( const ApiToken& rToken ) const;
@@ -513,30 +507,32 @@ public:
                         getOoxParserMap() const;
 
 private:
-    typedef ::std::map< ::rtl::OUString, ApiToken >                                             ApiTokenMap;
-    typedef ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaOpCodeMapEntry >   OpCodeEntrySequence;
-    typedef ::std::vector< ::com::sun::star::sheet::FormulaOpCodeMapEntry >                     OpCodeEntryVector;
+    typedef ::boost::shared_ptr< OpCodeProviderImpl > OpCodeProviderImplRef;
+    OpCodeProviderImplRef mxOpCodeImpl;     /// Shared implementation between all copies of the provider.
+};
 
-    static bool         fillEntrySeq( OpCodeEntrySequence& orEntrySeq, const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper >& rxMapper, sal_Int32 nMapGroup );
-    static bool         fillTokenMap( ApiTokenMap& orTokenMap, OpCodeEntrySequence& orEntrySeq, const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper >& rxMapper, sal_Int32 nMapGroup );
-    bool                fillFuncTokenMaps( ApiTokenMap& orIntFuncTokenMap, ApiTokenMap& orExtFuncTokenMap, OpCodeEntrySequence& orEntrySeq, const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper >& rxMapper ) const;
+// API formula parser wrapper =================================================
 
-    static bool         initOpCode( sal_Int32& ornOpCode, const OpCodeEntrySequence& rEntrySeq, sal_Int32 nSpecialId );
-    bool                initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, const ::rtl::OUString& rOdfName, const ::rtl::OUString& rOoxName );
-    bool                initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, const sal_Char* pcOdfName, const sal_Char* pcOoxName );
-    bool                initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, sal_Unicode cOdfName, sal_Unicode cOoxName );
+/** A wrapper around the FormulaParser service provided by the Calc document. */
+class ApiParserWrapper : public OpCodeProvider
+{
+public:
+    explicit            ApiParserWrapper(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const OpCodeProvider& rOpCodeProv );
 
-    bool                initFuncOpCode( FunctionInfo& orFuncInfo, const ApiTokenMap& rFuncTokenMap );
-    bool                initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, const ApiTokenMap& rExtFuncTokenMap );
+    /** Returns read/write access to the formula parser property set. */
+    inline PropertySet& getParserProperties() { return maParserProps; }
+
+    /** Calls the XFormulaParser::parseFormula() function of the API parser. */
+    ApiTokenSequence    parseFormula(
+                            const ::rtl::OUString& rFormula,
+                            const ::com::sun::star::table::CellAddress& rRefPos );
 
 private:
-    typedef RefMap< sal_Int32, FunctionInfo >           OpCodeFuncMap;
-    typedef ::boost::shared_ptr< OpCodeFuncMap >        OpCodeFuncMapRef;
-    typedef ::boost::shared_ptr< OpCodeEntryVector >    OpCodeEntryVectorRef;
-
-    OpCodeFuncMapRef    mxOpCodeFuncs;      /// Maps API op-codes to function data.
-    FuncNameMapRef      mxExtProgFuncs;     /// Maps programmatical API function names to function data.
-    OpCodeEntryVectorRef mxParserMap;       /// OOXML token mapping for formula parser service.
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser >
+                        mxParser;
+    PropertySet         maParserProps;
 };
 
 // formula contexts ===========================================================
@@ -606,10 +602,10 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaTokens > mxTokens;
 };
 
-// formula parser/formula compiler base class =================================
+// formula parser/printer base class for filters ==============================
 
 /** Base class for import formula parsers and export formula compilers. */
-class FormulaProcessorBase : public OpCodeProvider
+class FormulaProcessorBase : public OpCodeProvider, protected ApiOpCodes, public WorkbookHelper
 {
 public:
     explicit            FormulaProcessorBase( const WorkbookHelper& rHelper );
