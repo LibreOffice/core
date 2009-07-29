@@ -566,7 +566,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
         , mnDependsOnEntry( i_nDependsOnEntry )
         , mbAttachToDependency( i_bAttachToDependency )
         , maGroupHint( i_rGroupHint )
-        , mbInternalOnly( sal_False ) {}
+        , mbInternalOnly( i_bInternalOnly ) {}
     };
 
     // general control
