@@ -68,11 +68,14 @@
 #include "cell.hxx"
 #include "dociter.hxx"
 #include "docoptio.hxx"
-#include "formula/errorcodes.hxx"
+#include <formula/errorcodes.hxx>
 #include "parclass.hxx"
 #include "autonamecache.hxx"
 #include "externalrefmgr.hxx"
 #include "rangeutl.hxx"
+#include "convuno.hxx"
+#include "tokenuno.hxx"
+#include "formulaparserpool.hxx"
 
 using namespace formula;
 using namespace ::com::sun::star;
@@ -408,28 +411,36 @@ void ScCompiler::InitCharClassEnglish()
 
 void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
 {
-    DBG_ASSERT( eGrammar != FormulaGrammar::GRAM_UNSPECIFIED, "ScCompiler::SetGrammar: don't passFormulaGrammar::GRAM_UNSPECIFIED");
+    DBG_ASSERT( eGrammar != FormulaGrammar::GRAM_UNSPECIFIED, "ScCompiler::SetGrammar: don't pass FormulaGrammar::GRAM_UNSPECIFIED");
     if (eGrammar == GetGrammar())
         return;     // nothing to be done
 
-    FormulaGrammar::Grammar eMyGrammar = eGrammar;
-    const sal_Int32 nFormulaLanguage = FormulaGrammar::extractFormulaLanguage( eMyGrammar);
-    OpCodeMapPtr xMap( GetOpCodeMap( nFormulaLanguage));
-    DBG_ASSERT( xMap, "ScCompiler::SetGrammar: unknown formula language");
-    if (!xMap)
+    if( eGrammar == FormulaGrammar::GRAM_EXTERNAL )
     {
-        xMap = GetOpCodeMap( ::com::sun::star::sheet::FormulaLanguage::NATIVE);
-        eMyGrammar = xMap->getGrammar();
+        meGrammar = eGrammar;
+        mxSymbols = GetOpCodeMap( ::com::sun::star::sheet::FormulaLanguage::NATIVE);
     }
+    else
+    {
+        FormulaGrammar::Grammar eMyGrammar = eGrammar;
+        const sal_Int32 nFormulaLanguage = FormulaGrammar::extractFormulaLanguage( eMyGrammar);
+        OpCodeMapPtr xMap = GetOpCodeMap( nFormulaLanguage);
+        DBG_ASSERT( xMap, "ScCompiler::SetGrammar: unknown formula language");
+        if (!xMap)
+        {
+            xMap = GetOpCodeMap( ::com::sun::star::sheet::FormulaLanguage::NATIVE);
+            eMyGrammar = xMap->getGrammar();
+        }
 
-    // Save old grammar for call to SetGrammarAndRefConvention().
-    FormulaGrammar::Grammar eOldGrammar = GetGrammar();
-    // This also sets the grammar associated with the map!
-    SetFormulaLanguage( xMap);
+        // Save old grammar for call to SetGrammarAndRefConvention().
+        FormulaGrammar::Grammar eOldGrammar = GetGrammar();
+        // This also sets the grammar associated with the map!
+        SetFormulaLanguage( xMap);
 
-    // Override if necessary.
-    if (eMyGrammar != GetGrammar())
-        SetGrammarAndRefConvention( eMyGrammar, eOldGrammar);
+        // Override if necessary.
+        if (eMyGrammar != GetGrammar())
+            SetGrammarAndRefConvention( eMyGrammar, eOldGrammar);
+    }
 }
 
 
@@ -3656,12 +3667,31 @@ BOOL ScCompiler::NextNewToken( bool bInArray )
     return true;
 }
 
+void ScCompiler::CreateStringFromXMLTokenArray( String& rFormula, String& rFormulaNmsp )
+{
+    bool bExternal = GetGrammar() == FormulaGrammar::GRAM_EXTERNAL;
+    USHORT nExpectedCount = bExternal ? 2 : 1;
+    DBG_ASSERT( pArr->GetLen() == nExpectedCount, "ScCompiler::CreateStringFromXMLTokenArray - wrong number of tokens" );
+    if( pArr->GetLen() == nExpectedCount )
+    {
+        FormulaToken** ppTokens = pArr->GetArray();
+        // string tokens expected, GetString() will assert if token type is wrong
+        rFormula = ppTokens[ 0 ]->GetString();
+        if( bExternal )
+            rFormulaNmsp = ppTokens[ 1 ]->GetString();
+    }
+}
+
 ScTokenArray* ScCompiler::CompileString( const String& rFormula )
 {
 #if 0
     fprintf( stderr, "CompileString '%s'\n",
              rtl::OUStringToOString( rFormula, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
+
+    OSL_ENSURE( meGrammar != FormulaGrammar::GRAM_EXTERNAL, "ScCompiler::CompileString - unexpected grammar GRAM_EXTERNAL" );
+    if( meGrammar == FormulaGrammar::GRAM_EXTERNAL )
+        SetGrammar( FormulaGrammar::GRAM_PODF );
 
     ScTokenArray aArr;
     pArr = &aArr;
@@ -3862,6 +3892,34 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
     ScTokenArray* pNew = new ScTokenArray( aArr );
     pArr = pNew;
     return pNew;
+}
+
+
+ScTokenArray* ScCompiler::CompileString( const String& rFormula, const String& rFormulaNmsp )
+{
+    DBG_ASSERT( (GetGrammar() == FormulaGrammar::GRAM_EXTERNAL) || (rFormulaNmsp.Len() == 0),
+        "ScCompiler::CompileString - unexpected formula namespace for internal grammar" );
+    if( GetGrammar() == FormulaGrammar::GRAM_EXTERNAL ) try
+    {
+        ScFormulaParserPool& rParserPool = pDoc->GetFormulaParserPool();
+        uno::Reference< sheet::XFormulaParser > xParser( rParserPool.getFormulaParser( rFormulaNmsp ), uno::UNO_SET_THROW );
+        table::CellAddress aReferencePos;
+        ScUnoConversion::FillApiAddress( aReferencePos, aPos );
+        uno::Sequence< sheet::FormulaToken > aTokenSeq = xParser->parseFormula( rFormula, aReferencePos );
+        ScTokenArray aTokenArray;
+        if( ScTokenConversion::ConvertToTokenArray( *pDoc, aTokenArray, aTokenSeq ) )
+        {
+            // remember pArr, in case a subsequent CompileTokenArray() is executed.
+            ScTokenArray* pNew = new ScTokenArray( aTokenArray );
+            pArr = pNew;
+            return pNew;
+        }
+    }
+    catch( uno::Exception& )
+    {
+    }
+    // no success - fallback to some internal grammar and hope the best
+    return CompileString( rFormula );
 }
 
 

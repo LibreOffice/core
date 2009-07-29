@@ -354,8 +354,8 @@ public:
                                 const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO );
 
     static BOOL EnQuote( String& rStr );
-
     sal_Unicode GetNativeAddressSymbol( Convention::SpecialSymbolType eType ) const;
+
 
     // Check if it is a valid english function name
     bool IsEnglishSymbol( const String& rName );
@@ -396,6 +396,8 @@ public:
         maExternalLinks = rLinks;
     }
 
+    void            CreateStringFromXMLTokenArray( String& rFormula, String& rFormulaNmsp );
+
     void            SetExtendedErrorDetection( bool bVal ) { mbExtendedErrorDetection = bVal; }
 
     BOOL            IsCorrected() { return bCorrected; }
@@ -403,6 +405,7 @@ public:
 
     // Use convention from this->aPos by default
     ScTokenArray* CompileString( const String& rFormula );
+    ScTokenArray* CompileString( const String& rFormula, const String& rFormulaNmsp );
     const ScDocument* GetDoc() const { return pDoc; }
     const ScAddress& GetPos() const { return aPos; }
 

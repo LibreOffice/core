@@ -1016,15 +1016,15 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
 
     ScCompiler aComp( pDocument, aPos, *pCode);
     aComp.SetGrammar(eTempGrammar);
-    String aFormula;
-    aComp.CreateStringFromTokenArray( aFormula );
+    String aFormula, aFormulaNmsp;
+    aComp.CreateStringFromXMLTokenArray( aFormula, aFormulaNmsp );
     pDocument->DecXMLImportedFormulaCount( aFormula.Len() );
     rProgress.SetStateCountDownOnPercent( pDocument->GetXMLImportedFormulaCount() );
     // pCode darf fuer Abfragen noch nicht geloescht, muss aber leer sein
     if ( pCode )
         pCode->Clear();
     ScTokenArray* pCodeOld = pCode;
-    pCode = aComp.CompileString( aFormula );
+    pCode = aComp.CompileString( aFormula, aFormulaNmsp );
     delete pCodeOld;
     if( !pCode->GetCodeError() )
     {

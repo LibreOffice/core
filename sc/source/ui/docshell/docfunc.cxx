@@ -960,16 +960,18 @@ BOOL ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
 }
 
 
-ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const String& rText )
+ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const String& rText, const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScTokenArray* pCode = new ScTokenArray;
     pCode->AddString( rText );
+    if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && (rFormulaNmsp.Len() > 0) )
+        pCode->AddString( rFormulaNmsp );
     return pCode;
 }
 
 
 ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos,
-        const String& rText, const formula::FormulaGrammar::Grammar eGrammar )
+        const String& rText, const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     ScBaseCell* pNewCell = NULL;
@@ -979,7 +981,7 @@ ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos,
         ScTokenArray* pCode;
         if ( pDoc->IsImportingXML() )
         {   // temporary formula string as string tokens
-            pCode = lcl_ScDocFunc_CreateTokenArrayXML( rText );
+            pCode = lcl_ScDocFunc_CreateTokenArrayXML( rText, rFormulaNmsp, eGrammar );
             pDoc->IncXMLImportedFormulaCount( rText.Len() );
         }
         else
@@ -1016,8 +1018,8 @@ ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos,
 
 
 BOOL ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
-                                BOOL bInterpret, BOOL bEnglish, BOOL bApi,
-                                const formula::FormulaGrammar::Grammar eGrammar )
+        BOOL bInterpret, BOOL bEnglish, BOOL bApi,
+        const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
     //  SetCellText ruft PutCell oder SetNormalString
 
@@ -1030,12 +1032,15 @@ BOOL ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
             //  code moved to own method InterpretEnglishString because it is also used in
             //  ScCellRangeObj::setFormulaArray
 
-            pNewCell = InterpretEnglishString( rPos, rText, eGrammar );
+            pNewCell = InterpretEnglishString( rPos, rText, rFormulaNmsp, eGrammar );
         }
         // sonst Null behalten -> SetString mit lokalen Formeln/Zahlformat
     }
     else if ( rText.Len() )
+    {
+        OSL_ENSURE( rFormulaNmsp.Len() == 0, "ScDocFunc::SetCellText - formula namespace, but do not interpret?" );
         pNewCell = ScBaseCell::CreateTextCell( rText, pDoc );   // immer Text
+    }
 
     if (pNewCell)
         return PutCell( rPos, pNewCell, bApi );
@@ -3516,9 +3521,8 @@ BOOL ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
 //------------------------------------------------------------------------
 
 BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
-                                const ScTokenArray* pTokenArray,
-                                const String& rString, BOOL bApi, BOOL bEnglish,
-                                const formula::FormulaGrammar::Grammar eGrammar )
+        const ScTokenArray* pTokenArray, const String& rString, BOOL bApi, BOOL bEnglish,
+        const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -3565,7 +3569,7 @@ BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         }
         else if ( pDoc->IsImportingXML() )
         {
-            ScTokenArray* pCode = lcl_ScDocFunc_CreateTokenArrayXML( rString );
+            ScTokenArray* pCode = lcl_ScDocFunc_CreateTokenArrayXML( rString, rFormulaNmsp, eGrammar );
             pDoc->InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
                     aMark, EMPTY_STRING, pCode, eGrammar);
             delete pCode;
@@ -4495,11 +4499,11 @@ BOOL ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
         if ( DeleteContents( aMark, IDF_CONTENTS, TRUE, bApi ) )
         {
             // GRAM_PODF_A1 for API compatibility.
-            bRet = EnterMatrix( aNewRange, &aMark, NULL, aFormula, bApi, FALSE,formula::FormulaGrammar::GRAM_PODF_A1 );
+            bRet = EnterMatrix( aNewRange, &aMark, NULL, aFormula, bApi, FALSE, EMPTY_STRING, formula::FormulaGrammar::GRAM_PODF_A1 );
             if (!bRet)
             {
                 //  versuchen, alten Zustand wiederherzustellen
-                EnterMatrix( rOldRange, &aMark, NULL, aFormula, bApi, FALSE,formula::FormulaGrammar::GRAM_PODF_A1 );
+                EnterMatrix( rOldRange, &aMark, NULL, aFormula, bApi, FALSE, EMPTY_STRING, formula::FormulaGrammar::GRAM_PODF_A1 );
             }
         }
 

@@ -926,7 +926,7 @@ void ScViewFunc::EnterMatrix( const String& rString )
     if (pData->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = pData->GetDocShell();
-        BOOL bSuccess = pDocSh->GetDocFunc().EnterMatrix( aRange, &rMark, NULL, rString, FALSE, FALSE,formula::FormulaGrammar::GRAM_DEFAULT );
+        BOOL bSuccess = pDocSh->GetDocFunc().EnterMatrix( aRange, &rMark, NULL, rString, FALSE, FALSE, EMPTY_STRING, formula::FormulaGrammar::GRAM_DEFAULT );
         if (bSuccess)
             pDocSh->UpdateOle(GetViewData());
     }
