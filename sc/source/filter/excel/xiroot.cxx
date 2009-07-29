@@ -207,10 +207,10 @@ XclImpObjectManager& XclImpRoot::GetObjectManager() const
     return *mrImpData.mxObjMgr;
 }
 
-XclImpSheetDrawingManager& XclImpRoot::GetDrawingManager() const
+XclImpSheetDrawing& XclImpRoot::GetSheetDrawing() const
 {
-    DBG_ASSERT( !IsInGlobals(), "XclImpRoot::GetDrawingManager - must not be called from workbook globals" );
-    return mrImpData.mxObjMgr->GetDrawingManager( GetCurrScTab() );
+    DBG_ASSERT( !IsInGlobals(), "XclImpRoot::GetSheetDrawing - must not be called from workbook globals" );
+    return mrImpData.mxObjMgr->GetSheetDrawing( GetCurrScTab() );
 }
 
 XclImpCondFormatManager& XclImpRoot::GetCondFormatManager() const

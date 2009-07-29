@@ -144,14 +144,11 @@ ExportBiff8::ExportBiff8( XclExpRootData& rExpData, SvStream& rStrm ) :
     ExportBiff5( rExpData, rStrm )
 {
     pExcRoot->eDateiTyp = Biff8;
-    pExcRoot->pEscher = new XclEscher( GetRoot(), GetDoc().GetTableCount() );
 }
 
 
 ExportBiff8::~ExportBiff8()
 {
-    delete pExcRoot->pEscher;
-    pExcRoot->pEscher = NULL;
 }
 
 
@@ -162,16 +159,12 @@ ExportXml2007::ExportXml2007( XclExpRootData& rExpData, SvStream& rStrm )
     pExcRoot = &GetOldRoot();
     pExcRoot->pER = this;
     pExcRoot->eDateiTyp = Biff8;
-    pExcRoot->pEscher = new XclEscher( *pExcRoot->pER, GetDoc().GetTableCount() );
     pExcDoc = new ExcDocument( *this );
 }
 
 
 ExportXml2007::~ExportXml2007()
 {
-    delete pExcRoot->pEscher;
-    pExcRoot->pEscher = NULL;
-
     delete pExcDoc;
 }
 

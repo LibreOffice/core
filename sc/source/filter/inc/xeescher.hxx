@@ -240,6 +240,24 @@ private:
     XclExpNoteList&     mrNotes;
 };
 
+// object manager =============================================================
+
+class XclExpObjectManager : protected XclExpRoot
+{
+public:
+    explicit            XclExpObjectManager( const XclExpRoot& rRoot );
+    virtual             ~XclExpObjectManager();
+
+    inline XclEscherEx& GetEx() { return *mxEx; }
+    inline SvStream&    GetStrm() { return maDffStrm; }
+
+    void                AddSdrPage();
+
+private:
+    SvMemoryStream      maDffStrm;
+    ::std::auto_ptr< XclEscherEx > mxEx;
+};
+
 // ============================================================================
 
 #endif

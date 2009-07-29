@@ -81,7 +81,6 @@ RootData::RootData( void )
     pUserBViewList = NULL;
 
     pObjRecs = NULL;
-    pEscher = NULL;
 
     pIR = NULL;
     pER = NULL;

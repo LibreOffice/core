@@ -1402,11 +1402,11 @@ typedef ScfRef< XclImpChChart > XclImpChChartRef;
 
 // ----------------------------------------------------------------------------
 
-/** Drawing manager of a chart. */
-class XclImpChartDrawingManager : public XclImpDrawingManager
+/** Drawing container of a chart. */
+class XclImpChartDrawing : public XclImpDrawing
 {
 public:
-    explicit            XclImpChartDrawingManager( const XclImpRoot& rRoot, bool bOwnTab );
+    explicit            XclImpChartDrawing( const XclImpRoot& rRoot, bool bOwnTab );
 
     /** Converts all objects and inserts them into the chart drawing page. */
     void                ConvertObjects(
@@ -1454,16 +1454,16 @@ public:
     void                Convert( XModelRef xModel, XclImpDffConverter& rDffConv, const Rectangle& rChartRect ) const;
 
 private:
-    /** Returns (initially creates) the drawing manager containing embedded shapes. **/
-    XclImpChartDrawingManager& GetDrawingManager();
+    /** Returns (initially creates) the drawing container for embedded shapes. **/
+    XclImpChartDrawing& GetChartDrawing();
     /** Reads the CHCHART group (entire chart data). */
     void                ReadChChart( XclImpStream& rStrm );
 
 private:
-    typedef ScfRef< XclImpChartDrawingManager > XclImpDrawingMgrRef;
+    typedef ScfRef< XclImpChartDrawing > XclImpChartDrawingRef;
 
     XclImpChChartRef    mxChartData;        /// The chart data (CHCHART group).
-    XclImpDrawingMgrRef mxDrawingMgr;       /// Drawing manager for embedded shapes.
+    XclImpChartDrawingRef mxChartDrawing;   /// Drawing container for embedded shapes.
     bool                mbOwnTab;           /// true = own sheet; false = embedded object.
     bool                mbIsPivotChart;     /// true = chart is based on a pivot table.
 };

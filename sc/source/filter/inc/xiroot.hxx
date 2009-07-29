@@ -54,7 +54,7 @@ class XclImpTabInfo;
 class XclImpNameManager;
 class XclImpLinkManager;
 class XclImpObjectManager;
-class XclImpSheetDrawingManager;
+class XclImpSheetDrawing;
 class XclImpCondFormatManager;
 class XclImpAutoFilterBuffer;
 class XclImpWebQueryBuffer;
@@ -174,8 +174,8 @@ public:
 
     /** Returns the drawing object manager. */
     XclImpObjectManager& GetObjectManager() const;
-    /** Returns the drawing manager of the current sheet. */
-    XclImpSheetDrawingManager& GetDrawingManager() const;
+    /** Returns the drawing container of the current sheet. */
+    XclImpSheetDrawing& GetSheetDrawing() const;
     /** Returns the conditional formattings manager. */
     XclImpCondFormatManager& GetCondFormatManager() const;
     /** Returns the filter manager. */

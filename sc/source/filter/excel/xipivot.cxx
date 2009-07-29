@@ -1271,7 +1271,7 @@ void XclImpPivotTable::ReadSxpi( XclImpStream& rStrm )
             maPageFields.push_back( aPageInfo.mnField );
             pField->SetPageFieldInfo( aPageInfo );
         }
-        GetDrawingManager().SetSkipObj( aPageInfo.mnObjId );
+        GetSheetDrawing().SetSkipObj( aPageInfo.mnObjId );
     }
 }
 

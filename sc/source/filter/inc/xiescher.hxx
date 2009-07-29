@@ -50,7 +50,7 @@ class ScfProgressBar;
 class ScfPropertySet;
 class XclImpChart;
 class XclImpDffConverter;
-class XclImpDrawingManager;
+class XclImpDrawing;
 
 // Drawing objects ============================================================
 
@@ -1000,7 +1000,7 @@ public:
     void                Progress( sal_Size nDelta = 1 );
 
     /** Initially called before the objects of the passed drawing manager are converted. */
-    void                InitializeDrawing( XclImpDrawingManager& rDrawingManager, SdrModel& rSdrModel, SdrPage& rSdrPage );
+    void                InitializeDrawing( XclImpDrawing& rDrawing, SdrModel& rSdrModel, SdrPage& rSdrPage );
     /** Processes BIFF5 drawing objects without DFF data, inserts into the passed object list. */
     void                ProcessObject( SdrObjList& rObjList, const XclImpDrawObjBase& rDrawObj );
     /** Processes all objects in the passed list. */
@@ -1054,7 +1054,7 @@ private:
     /** Data per registered drawing manager, will be stacked for recursive calls. */
     struct XclImpDffConvData
     {
-        XclImpDrawingManager& mrDrawingMgr;     /// Current drawing manager containing drawing objects.
+        XclImpDrawing&      mrDrawing;          /// Current drawing container with all drawing objects.
         SdrModel&           mrSdrModel;         /// The SdrModel of the drawing manager.
         SdrPage&            mrSdrPage;          /// The SdrPage of the drawing manager.
         XclImpSolverContainer maSolverCont;     /// The solver container for connector rules.
@@ -1063,8 +1063,7 @@ private:
         sal_Int32           mnLastCtrlIndex;    /// Last insertion index of a form control (for macro events).
         bool                mbHasCtrlForm;      /// True = mxCtrlForm is initialized (but maybe still null).
 
-        explicit            XclImpDffConvData(
-                                XclImpDrawingManager& rDrawingMgr,
+        explicit            XclImpDffConvData( XclImpDrawing& rDrawing,
                                 SdrModel& rSdrModel, SdrPage& rSdrPage );
     };
 
@@ -1105,13 +1104,13 @@ private:
 
 // Drawing manager ============================================================
 
-/** Base class for a manager for all objects on a drawing (spreadsheet or
+/** Base class for a container for all objects on a drawing (spreadsheet or
     embedded chart object). */
-class XclImpDrawingManager : protected XclImpRoot
+class XclImpDrawing : protected XclImpRoot
 {
 public:
-    explicit            XclImpDrawingManager( const XclImpRoot& rRoot, bool bOleObjects );
-    virtual             ~XclImpDrawingManager();
+    explicit            XclImpDrawing( const XclImpRoot& rRoot, bool bOleObjects );
+    virtual             ~XclImpDrawing();
 
     /** Reads and returns a bitmap from the IMGDATA record. */
     static Graphic      ReadImgData( const XclImpRoot& rRoot, XclImpStream& rStrm );
@@ -1177,10 +1176,10 @@ private:
 // ----------------------------------------------------------------------------
 
 /** Drawing manager of a single sheet. */
-class XclImpSheetDrawingManager : public XclImpDrawingManager
+class XclImpSheetDrawing : public XclImpDrawing
 {
 public:
-    explicit            XclImpSheetDrawingManager( const XclImpRoot& rRoot, SCTAB nScTab );
+    explicit            XclImpSheetDrawing( const XclImpRoot& rRoot, SCTAB nScTab );
 
     /** Reads the NOTE record. */
     void                ReadNote( XclImpStream& rStrm );
@@ -1221,7 +1220,7 @@ public:
     void                ReadMsoDrawingGroup( XclImpStream& rStrm );
 
     /** Returns (initially creates) the drawing manager of the specified sheet. */
-    XclImpSheetDrawingManager& GetDrawingManager( SCTAB nScTab );
+    XclImpSheetDrawing& GetSheetDrawing( SCTAB nScTab );
     /** Inserts all objects into the Calc document. */
     void                ConvertObjects();
 
@@ -1233,12 +1232,12 @@ public:
     // ------------------------------------------------------------------------
 private:
     typedef ::std::map< sal_uInt16, String >            DefObjNameMap;
-    typedef ScfRef< XclImpSheetDrawingManager >         XclImpDrawingMgrRef;
-    typedef ::std::map< SCTAB, XclImpDrawingMgrRef >    XclImpDrawingMgrMap;
+    typedef ScfRef< XclImpSheetDrawing >                XclImpSheetDrawingRef;
+    typedef ::std::map< SCTAB, XclImpSheetDrawingRef >  XclImpSheetDrawingMap;
 
     DefObjNameMap       maDefObjNames;      /// Default base names for all object types.
     SvMemoryStream      maDggStrm;          /// Copy of global DFF data (DGG container) in memory.
-    XclImpDrawingMgrMap maDrawingMgrs;      /// Drawing managers of all sheets.
+    XclImpSheetDrawingMap maSheetDrawings;  /// Drawing managers of all sheets.
 };
 
 // DFF property set helper ====================================================

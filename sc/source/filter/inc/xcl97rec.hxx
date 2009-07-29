@@ -37,90 +37,72 @@
 
 // --- class XclMsodrawing_Base --------------------------------------
 
-class XclMsodrawing_Base
+class XclExpMsoDrawingBase : protected XclExpRoot
 {
-protected:
-        XclEscher*              pEscher;
-        sal_Size                nStartPos;      // position in OffsetMap
-        sal_Size                nStopPos;       // position in OffsetMap
-
 public:
-                                XclMsodrawing_Base( XclEscher& rEscher, sal_Size nInitialSize = 0 );
-    virtual                     ~XclMsodrawing_Base();
+    explicit            XclExpMsoDrawingBase( const XclExpRoot& rRoot, sal_Size nInitialSize = 0 );
+    virtual             ~XclExpMsoDrawingBase();
 
-    inline  XclEscher*          GetEscher() const   { return pEscher; }
-    inline  XclEscherEx*        GetEscherEx() const { return pEscher->GetEx(); }
-            void                UpdateStopPos();
-            sal_Size            GetDataLen() const;
+    XclEscherEx&        GetEscherEx() const;
+    void                UpdateStopPos();
+    sal_Size            GetDataLen() const;
+
+protected:
+    sal_Size            nStartPos;      // position in OffsetMap
+    sal_Size            nStopPos;       // position in OffsetMap
 };
 
 
 // --- class XclMsodrawinggroup --------------------------------------
 
-class XclMsodrawinggroup : public XclMsodrawing_Base, public ExcRecord
+class XclExpMsoDrawingGroup : public XclExpMsoDrawingBase, public XclExpRecord
 {
-private:
-
-    virtual void                SaveCont( XclExpStream& rStrm );
-
 public:
-                                XclMsodrawinggroup( RootData& rRoot,
-                                    UINT16 nEscherType = 0 );
-    virtual                     ~XclMsodrawinggroup();
+    explicit            XclExpMsoDrawingGroup( const XclExpRoot& rRoot );
 
-    virtual UINT16              GetNum() const;
-    virtual sal_Size            GetLen() const;
+private:
+    virtual void        WriteBody( XclExpStream& rStrm );
 };
-
 
 // --- class XclMsodrawing -------------------------------------------
 
-class XclMsodrawing : public XclMsodrawing_Base, public ExcRecord
+class XclExpMsoDrawing : public XclExpMsoDrawingBase, public XclExpRecord
 {
-private:
-
-    virtual void                SaveCont( XclExpStream& rStrm );
-
 public:
-                                XclMsodrawing(
-                                    const XclExpRoot& rRoot,
-                                    UINT16 nEscherType = 0,
-                                    sal_Size nInitialSize = 0 );
-    virtual                     ~XclMsodrawing();
+    explicit            XclExpMsoDrawing( const XclExpRoot& rRoot, UINT16 nEscherType = 0, sal_Size nInitialSize = 0 );
 
-    virtual UINT16              GetNum() const;
-    virtual sal_Size            GetLen() const;
+private:
+    virtual void        WriteBody( XclExpStream& rStrm );
 };
 
 
-// --- class XclObjList ----------------------------------------------
+// --- class XclExpObjList ----------------------------------------------
 
 class XclObj;
-class XclMsodrawing;
 
-class XclObjList : public List, public ExcEmptyRec, protected XclExpRoot
+class XclExpObjList : public List, public ExcEmptyRec, protected XclExpRoot
 {
-private:
-        XclMsodrawing*          pMsodrawingPerSheet;
-        XclMsodrawing*          pSolverContainer;
-
 public:
-                                XclObjList( const XclExpRoot& rRoot );
-    virtual                     ~XclObjList();
+    explicit            XclExpObjList( const XclExpRoot& rRoot );
+    virtual             ~XclExpObjList();
 
-            XclObj*             First() { return (XclObj*) List::First(); }
-            XclObj*             Next()  { return (XclObj*) List::Next(); }
+    XclObj*             First() { return (XclObj*) List::First(); }
+    XclObj*             Next() { return (XclObj*) List::Next(); }
 
-                                /// return: 1-based ObjId
-                                ///! count>=0xFFFF: Obj will be deleted, return 0
-            UINT16              Add( XclObj* );
+    /// return: 1-based ObjId
+    ///! count>=0xFFFF: Obj will be deleted, return 0
+    UINT16              Add( XclObj* );
 
-    inline  XclMsodrawing*      GetMsodrawingPerSheet() { return pMsodrawingPerSheet; }
+    inline XclExpMsoDrawing* GetMsodrawingPerSheet() { return pMsodrawingPerSheet; }
 
                                 /// close groups and DgContainer opened in ctor
-            void                EndSheet();
+    void                EndSheet();
 
-    virtual void                Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm );
+
+private:
+    XclExpMsoDrawing*   pMsodrawingPerSheet;
+    XclExpMsoDrawing*   pSolverContainer;
 };
 
 
@@ -132,8 +114,8 @@ class SdrTextObj;
 class XclObj : public XclExpRecord
 {
 protected:
-        XclMsodrawing*      pMsodrawing;
-        XclMsodrawing*      pClientTextbox;
+        XclExpMsoDrawing*   pMsodrawing;
+        XclExpMsoDrawing*   pClientTextbox;
         XclTxo*             pTxo;
         sal_uInt16          mnObjType;
         UINT16              nObjId;

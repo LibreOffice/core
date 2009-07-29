@@ -3678,14 +3678,14 @@ Reference< XDiagram > XclImpChChart::CreateDiagram() const
 
 // ----------------------------------------------------------------------------
 
-XclImpChartDrawingManager::XclImpChartDrawingManager( const XclImpRoot& rRoot, bool bOwnTab ) :
-    XclImpDrawingManager( rRoot, bOwnTab ), // sheet charts may contain OLE objects
+XclImpChartDrawing::XclImpChartDrawing( const XclImpRoot& rRoot, bool bOwnTab ) :
+    XclImpDrawing( rRoot, bOwnTab ), // sheet charts may contain OLE objects
     mnScTab( rRoot.GetCurrScTab() ),
     mbOwnTab( bOwnTab )
 {
 }
 
-void XclImpChartDrawingManager::ConvertObjects( XclImpDffConverter& rDffConv,
+void XclImpChartDrawing::ConvertObjects( XclImpDffConverter& rDffConv,
         const Reference< XModel >& rxModel, const Rectangle& rChartRect )
 {
     maChartRect = rChartRect;   // needed in CalcAnchorRect() callback
@@ -3717,7 +3717,7 @@ void XclImpChartDrawingManager::ConvertObjects( XclImpDffConverter& rDffConv,
         ImplConvertObjects( rDffConv, *pSdrModel, *pSdrPage );
 }
 
-Rectangle XclImpChartDrawingManager::CalcAnchorRect( const XclObjAnchor& rAnchor, bool bDffAnchor ) const
+Rectangle XclImpChartDrawing::CalcAnchorRect( const XclObjAnchor& rAnchor, bool bDffAnchor ) const
 {
     /*  In objects with DFF client anchor, the position of the shape is stored
         in the cell address components of the client anchor. In old BIFF3-BIFF5
@@ -3734,7 +3734,7 @@ Rectangle XclImpChartDrawingManager::CalcAnchorRect( const XclObjAnchor& rAnchor
     return aRect;
 }
 
-void XclImpChartDrawingManager::OnObjectInserted( const XclImpDrawObjBase& )
+void XclImpChartDrawing::OnObjectInserted( const XclImpDrawObjBase& )
 {
 }
 
@@ -3804,14 +3804,14 @@ void XclImpChart::ReadChartSubStream( XclImpStream& rStrm )
             {
                 case EXC_BIFF5: switch( rStrm.GetRecId() )
                 {
-                    case EXC_ID_OBJ:        GetDrawingManager().ReadObj( rStrm );           break;
+                    case EXC_ID_OBJ:        GetChartDrawing().ReadObj( rStrm );         break;
                 }
                 break;
                 case EXC_BIFF8: switch( rStrm.GetRecId() )
                 {
-                    case EXC_ID_MSODRAWING: GetDrawingManager().ReadMsoDrawing( rStrm );    break;
+                    case EXC_ID_MSODRAWING: GetChartDrawing().ReadMsoDrawing( rStrm );  break;
                     // #i61786# weird documents: OBJ without MSODRAWING -> read in BIFF5 format
-                    case EXC_ID_OBJ:        GetDrawingManager().ReadObj( rStrm );           break;
+                    case EXC_ID_OBJ:        GetChartDrawing().ReadObj( rStrm );         break;
                 }
                 break;
                 default:;
@@ -3831,7 +3831,7 @@ sal_Size XclImpChart::GetProgressSize() const
 {
     return
         (mxChartData.is() ? mxChartData->GetProgressSize() : 0) +
-        (mxDrawingMgr.is() ? mxDrawingMgr->GetProgressSize() : 0);
+        (mxChartDrawing.is() ? mxChartDrawing->GetProgressSize() : 0);
 }
 
 void XclImpChart::Convert( Reference< XModel > xModel, XclImpDffConverter& rDffConv, const Rectangle& rChartRect ) const
@@ -3841,16 +3841,16 @@ void XclImpChart::Convert( Reference< XModel > xModel, XclImpDffConverter& rDffC
     {
         if( mxChartData.is() )
             mxChartData->Convert( xChartDoc, rDffConv );
-        if( mxDrawingMgr.is() )
-            mxDrawingMgr->ConvertObjects( rDffConv, xModel, rChartRect );
+        if( mxChartDrawing.is() )
+            mxChartDrawing->ConvertObjects( rDffConv, xModel, rChartRect );
     }
 }
 
-XclImpChartDrawingManager& XclImpChart::GetDrawingManager()
+XclImpChartDrawing& XclImpChart::GetChartDrawing()
 {
-    if( !mxDrawingMgr )
-        mxDrawingMgr.reset( new XclImpChartDrawingManager( GetRoot(), mbOwnTab ) );
-    return *mxDrawingMgr;
+    if( !mxChartDrawing )
+        mxChartDrawing.reset( new XclImpChartDrawing( GetRoot(), mbOwnTab ) );
+    return *mxChartDrawing;
 }
 
 void XclImpChart::ReadChChart( XclImpStream& rStrm )

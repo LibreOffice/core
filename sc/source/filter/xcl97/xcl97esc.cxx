@@ -457,38 +457,6 @@ void XclEscherEx::ConvertTbxMacro( XclExpTbxControlObj& rTbxCtrlObj, Reference< 
 
 #endif
 
-// --- class XclEscher -----------------------------------------------
-
-XclEscher::XclEscher( const XclExpRoot& rRoot, UINT32 nDrawings ) :
-    XclExpRoot( rRoot )
-{
-    pTempFile = new utl::TempFile;
-    pTempFile->EnableKillingFile();
-    pStrm = utl::UcbStreamHelper::CreateStream( pTempFile->GetURL(), STREAM_STD_READWRITE );
-    pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-    pEx = new XclEscherEx( rRoot, *pStrm, nDrawings );
-}
-
-
-XclEscher::~XclEscher()
-{
-    delete pEx;
-    delete pStrm;
-    delete pTempFile;
-}
-
-
-void XclEscher::AddSdrPage()
-{
-    if( SdrPage* pPage = GetSdrPage( GetCurrScTab() ) )
-        pEx->AddSdrPage( *pPage );
-    // #106213# the first dummy object may still be open
-    DBG_ASSERT( pEx->GetGroupLevel() <= 1, "XclEscher::AddSdrPage - still groups open?" );
-    while( pEx->GetGroupLevel() )
-        pEx->LeaveGroup();
-}
-
-
 // Escher client anchor =======================================================
 
 XclExpDffAnchor::XclExpDffAnchor( const XclExpRoot& rRoot, sal_uInt16 nFlags ) :

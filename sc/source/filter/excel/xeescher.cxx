@@ -55,6 +55,7 @@
 #include <svx/outlobj.hxx>
 #include <svx/editobj.hxx>
 
+#include "document.hxx"
 #include "editutil.hxx"
 #include "unonames.hxx"
 #include "convuno.hxx"
@@ -387,7 +388,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( const XclExpRoot& rRoot, Reference< XS
     SetAutoLine( FALSE );
 
     // fill DFF property set
-    XclEscherEx& rEscherEx = *pMsodrawing->GetEscherEx();
+    XclEscherEx& rEscherEx = pMsodrawing->GetEscherEx();
     rEscherEx.OpenContainer( ESCHER_SpContainer );
     rEscherEx.AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
     EscherPropertyContainer aPropOpt;
@@ -419,8 +420,8 @@ XclExpTbxControlObj::XclExpTbxControlObj( const XclExpRoot& rRoot, Reference< XS
         /*  Be sure to construct the MSODRAWING record containing the
             ClientTextbox atom after the base OBJ's MSODRAWING record data is
             completed. */
-        pClientTextbox = new XclMsodrawing( GetRoot() );
-        pClientTextbox->GetEscherEx()->AddAtom( 0, ESCHER_ClientTextbox );  // TXO record
+        pClientTextbox = new XclExpMsoDrawing( GetRoot() );
+        pClientTextbox->GetEscherEx().AddAtom( 0, ESCHER_ClientTextbox );  // TXO record
         pClientTextbox->UpdateStopPos();
 
         sal_uInt16 nXclFont = EXC_FONT_APP;
@@ -768,7 +769,7 @@ XclExpChartObj::XclExpChartObj( const XclExpRoot& rRoot, Reference< XShape > xSh
     XclExpRoot( rRoot )
 {
     // create the MSODRAWING record contents for the chart object
-    XclEscherEx& rEscherEx = *pMsodrawing->GetEscherEx();
+    XclEscherEx& rEscherEx = pMsodrawing->GetEscherEx();
     rEscherEx.OpenContainer( ESCHER_SpContainer );
     rEscherEx.AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
     EscherPropertyContainer aPropOpt;
@@ -1005,6 +1006,28 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
     rComments->endElement( XML_comments );
 
     rStrm.PopStream();
+}
+
+// object manager =============================================================
+
+XclExpObjectManager::XclExpObjectManager( const XclExpRoot& rRoot ) :
+    XclExpRoot( rRoot ),
+    mxEx( new XclEscherEx( rRoot, maDffStrm, rRoot.GetDoc().GetTableCount() ) )
+{
+}
+
+XclExpObjectManager::~XclExpObjectManager()
+{
+}
+
+void XclExpObjectManager::AddSdrPage()
+{
+    if( SdrPage* pPage = GetSdrPage( GetCurrScTab() ) )
+        mxEx->AddSdrPage( *pPage );
+    // #106213# the first dummy object may still be open
+    DBG_ASSERT( mxEx->GetGroupLevel() <= 1, "XclExpObjectManager::AddSdrPage - still groups open?" );
+    while( mxEx->GetGroupLevel() )
+        mxEx->LeaveGroup();
 }
 
 // ============================================================================

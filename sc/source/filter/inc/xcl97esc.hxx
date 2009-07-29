@@ -130,28 +130,6 @@ inline ULONG XclEscherEx::GetLastOffsetMapPos() const
 }
 
 
-// --- class XclEscher -----------------------------------------------
-
-struct RootData;
-
-class XclEscher : protected XclExpRoot
-{
-private:
-        utl::TempFile*      pTempFile;
-        SvStream*           pStrm;
-        XclEscherEx*        pEx;
-
-public:
-                                XclEscher( const XclExpRoot& rRoot, UINT32 nDrawings );
-                                ~XclEscher();
-
-    inline  XclEscherEx*        GetEx() const       { return pEx; }
-    inline  SvStream&           GetStrm() const     { return *pStrm; }
-
-    void                        AddSdrPage();
-};
-
-
 // --- class XclEscherHostAppData ------------------------------------
 
 class XclEscherHostAppData : public EscherExHostAppData
@@ -178,24 +156,24 @@ class XclExpDffAnchor : public EscherExClientAnchor_Base, protected XclExpRoot
 {
 public:
     /** Constructs a dummy client anchor. */
-    explicit                    XclExpDffAnchor( const XclExpRoot& rRoot, sal_uInt16 nFlags = 0 );
+    explicit            XclExpDffAnchor( const XclExpRoot& rRoot, sal_uInt16 nFlags = 0 );
     /** Constructs a client anchor directly from an SdrObject. */
-    explicit                    XclExpDffAnchor( const XclExpRoot& rRoot, const SdrObject& rSdrObj );
+    explicit            XclExpDffAnchor( const XclExpRoot& rRoot, const SdrObject& rSdrObj );
 
     /** Sets the flags according to the passed SdrObject. */
-    void                        SetFlags( const SdrObject& rSdrObj );
+    void                SetFlags( const SdrObject& rSdrObj );
 
     /** Called from SVX Escher exporter.
         @param rRect  The object anchor rectangle to be exported (in twips). */
-    virtual void                WriteData( EscherEx& rEx, const Rectangle& rRect );
+    virtual void        WriteData( EscherEx& rEx, const Rectangle& rRect );
 
     /** Writes the anchor structure with the current anchor position. */
-    void                        WriteData( EscherEx& rEx ) const;
+    void                WriteData( EscherEx& rEx ) const;
 
 protected:  // for access in derived classes
-    XclObjAnchor                maAnchor;       /// The client anchor data.
-    SCTAB                       mnScTab;        /// Calc sheet index.
-    sal_uInt16                  mnFlags;        /// Flags for DFF stream export.
+    XclObjAnchor        maAnchor;       /// The client anchor data.
+    SCTAB               mnScTab;        /// Calc sheet index.
+    sal_uInt16          mnFlags;        /// Flags for DFF stream export.
 };
 
 // ----------------------------------------------------------------------------
@@ -204,7 +182,7 @@ protected:  // for access in derived classes
 class XclExpDffNoteAnchor : public XclExpDffAnchor
 {
 public:
-    explicit                    XclExpDffNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect );
+    explicit            XclExpDffNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect );
 };
 
 
@@ -214,7 +192,7 @@ public:
 class XclExpDffDropDownAnchor : public XclExpDffAnchor
 {
 public:
-    explicit                    XclExpDffDropDownAnchor( const XclExpRoot& rRoot, const ScAddress& rScPos );
+    explicit            XclExpDffDropDownAnchor( const XclExpRoot& rRoot, const ScAddress& rScPos );
 };
 
 
@@ -225,8 +203,8 @@ public:
 class XclEscherClientData : public EscherExClientRecord_Base
 {
 public:
-                                XclEscherClientData() {}
-    virtual void                WriteData( EscherEx& rEx ) const;
+                        XclEscherClientData() {}
+    virtual void        WriteData( EscherEx& rEx ) const;
 };
 
 
@@ -237,20 +215,19 @@ class SdrTextObj;
 class XclEscherClientTextbox : public EscherExClientRecord_Base, protected XclExpRoot
 {
 private:
-        const SdrTextObj&       rTextObj;
-        XclObj*                 pXclObj;
+    const SdrTextObj&   rTextObj;
+    XclObj*             pXclObj;
 
 public:
-                                XclEscherClientTextbox(
-                                    const XclExpRoot& rRoot,
-                                    const SdrTextObj& rObj,
-                                    XclObj* pObj
-                                    );
+                        XclEscherClientTextbox(
+                            const XclExpRoot& rRoot,
+                            const SdrTextObj& rObj,
+                            XclObj* pObj );
 
                                 //! ONLY for the AdditionalText mimic
-    inline  void                SetXclObj( XclObj* p )  { pXclObj = p; }
+    inline  void        SetXclObj( XclObj* p )  { pXclObj = p; }
 
-    virtual void                WriteData( EscherEx& rEx ) const;
+    virtual void        WriteData( EscherEx& rEx ) const;
 };
 
 
