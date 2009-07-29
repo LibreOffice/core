@@ -87,7 +87,8 @@ class ControllerProperties
     NSTextField*                        mpPageEdit;
     NSStepper*                          mpStepper;
     NSTextView*                         mpPagesLabel;
-    
+    ResStringArray                      maLocalizedStrings;        
+
     public:
     ControllerProperties( vcl::PrinterController* i_pController,
                           NSPrintOperation* i_pOp,
@@ -105,9 +106,18 @@ class ControllerProperties
       mpPreview( nil ),
       mpPageEdit( nil ),
       mpStepper( nil ),
-      mpPagesLabel( nil )
+      mpPagesLabel( nil ),
+      maLocalizedStrings( VclResId( SV_PRINT_NATIVE_STRINGS ) )
     {
         mpState->bNeedRestart = false;
+        DBG_ASSERT( maLocalizedStrings.Count() >= 4, "resources not found !" );
+    }
+    
+    rtl::OUString getMoreString()
+    {
+        return maLocalizedStrings.Count() >= 4
+               ? rtl::OUString( maLocalizedStrings.GetString( 3 ) )
+               : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "More" ) );
     }
     
     void updatePrintJob()
@@ -131,7 +141,7 @@ class ControllerProperties
         {
             #if 0
             // Warning: bad hack ahead
-            // Apple does not give as a chance of changing the page count,
+            // Apple does not give us a chance of changing the page count,
             // and they don't let us cancel the dialog either
             // hack: send a cancel message to the window displaying our views.
             // this is ugly.
@@ -324,11 +334,7 @@ class ControllerProperties
 
     void setupPreview( ControlTarget* i_pCtrlTarget )
     {
-        // get some needed resources
-        ResStringArray aStrings( VclResId( SV_PRINT_NATIVE_STRINGS ) );
-        
-        DBG_ASSERT( aStrings.Count() >= 3, "resources not found !" );
-        if( aStrings.Count() < 3 )
+        if( maLocalizedStrings.Count() < 3 )
             return;
         
         // get the preview control
@@ -340,7 +346,7 @@ class ControllerProperties
 
         // create a box to put the preview controls in
         mpPreviewBox = [[NSBox alloc] initWithFrame: aPreviewFrame];
-        [mpPreviewBox setTitle: [CreateNSString( aStrings.GetString( 0 ) ) autorelease]];
+        [mpPreviewBox setTitle: [CreateNSString( maLocalizedStrings.GetString( 0 ) ) autorelease]];
         [mpAccessoryView addSubview: [mpPreviewBox autorelease]];
 
         // now create the image view of the preview
@@ -368,7 +374,7 @@ class ControllerProperties
         [mpPagesLabel setSelectable: NO];
         [mpPagesLabel setDrawsBackground: NO];
         [mpPagesLabel setString: [pText autorelease]];
-        [mpPagesLabel setToolTip: [CreateNSString( aStrings.GetString( 2 ) ) autorelease]];
+        [mpPagesLabel setToolTip: [CreateNSString( maLocalizedStrings.GetString( 2 ) ) autorelease]];
         [mpPreviewBox addSubview: [mpPagesLabel autorelease]];
     
         NSRect aFieldRect = { { 45, 5 }, { 35, 25 } };
@@ -376,7 +382,7 @@ class ControllerProperties
         [mpPageEdit setEditable: YES];
         [mpPageEdit setSelectable: YES];
         [mpPageEdit setDrawsBackground: YES];
-        [mpPageEdit setToolTip: [CreateNSString( aStrings.GetString( 1 ) ) autorelease]];
+        [mpPageEdit setToolTip: [CreateNSString( maLocalizedStrings.GetString( 1 ) ) autorelease]];
         [mpPreviewBox addSubview: [mpPageEdit autorelease]];
     
         // add a stepper control
@@ -570,6 +576,37 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
         rMaxSize.height = aUnion.size.height;
 }
 
+static void adjustTabViews( NSTabView* pTabView, NSSize aTabSize )
+{
+    // loop over all contained tab pages
+    NSArray* pTabbedViews = [pTabView tabViewItems];
+    int nViews = [pTabbedViews count];
+    for( int i = 0; i < nViews; i++ )
+    {
+        NSTabViewItem* pItem = (NSTabViewItem*)[pTabbedViews objectAtIndex: i];
+        NSView* pView = [pItem view];
+        if( pView )
+        {
+            NSRect aRect = [pView frame];
+            double nDiff = aTabSize.height - aRect.size.height;
+            aRect.size = aTabSize;
+            [pView setFrame: aRect];
+            
+            NSArray* pSubViews = [pView subviews];
+            unsigned int nSubViews = [pSubViews count];
+
+            // move everything up
+            for( unsigned int n = 0; n < nSubViews; n++ )
+            {
+                NSView* pCurSubView = [pSubViews objectAtIndex: n];
+                NSRect aFrame = [pCurSubView frame];
+                aFrame.origin.y += nDiff;
+                [pCurSubView setFrame: aFrame];
+            }
+        }
+    }
+}
+
 
 @implementation AquaPrintAccessoryView
 +(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withController: (vcl::PrinterController*)pController  withState: (PrintAccessoryViewState*)pState;
@@ -664,8 +701,14 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
         {
             // since our build target is MacOSX 10.4 we can have only one accessory view
             // so we have a single accessory view that is tabbed for grouping
-            if( aCtrlType.equalsAscii( "Group" ) || ! pCurParent )
+            if( aCtrlType.equalsAscii( "Group" )
+                || ! pCurParent
+                || ( aCtrlType.equalsAscii( "Subgroup" ) && nCurY < -200 && ! bIgnore ) 
+               )
             {
+                rtl::OUString aGroupTitle( aText );
+                if( aCtrlType.equalsAscii( "Subgroup" ) )
+                    aGroupTitle = pControllerProperties->getMoreString();
                 // set size of current parent
                 if( pCurParent )
                     adjustViewAndChildren( pCurParent, aMaxTabSize );
@@ -673,7 +716,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 // new tab item
                 if( ! aText.getLength() )
                     aText = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OOo" ) );
-                NSString* pLabel = CreateNSString( aText );
+                NSString* pLabel = CreateNSString( aGroupTitle );
                 NSTabViewItem* pItem = [[NSTabViewItem alloc] initWithIdentifier: pLabel ];
                 [pItem setLabel: pLabel];
                 [pTabView addTabViewItem: pItem];
@@ -682,7 +725,9 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 [pLabel release];
                 
                 // reset indent
-                nCurX = 0;
+                nCurX = 20;
+                // reset Y
+                nCurY = 0;
             }
             
             if( aCtrlType.equalsAscii( "Subgroup" ) && pCurParent )
@@ -690,6 +735,19 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 bIgnoreSubgroup = bIgnore;
                 if( bIgnore )
                     continue;
+                
+                // if this is not the first view on the page
+                // insert a separator
+                NSArray* pArray = [pCurParent subviews];
+                if( pArray && [pArray count] > 0 )
+                {
+                    NSRect aSepRect = { { 0, nCurY - 15 }, { 300, 15 } };
+                    NSBox* pBox = [[NSBox alloc] initWithFrame: aSepRect];
+                    [pBox setBoxType: NSBoxSeparator];
+                    [pCurParent addSubview: pBox];
+                    
+                    nCurY -= 15;
+                }
 
                 NSString* pText = CreateNSString( aText );
                 NSRect aTextRect = { { 0, 0 }, { 300, 15 } };
@@ -833,21 +891,17 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 NSString* pText = CreateNSString( aText );
                 
                 // measure the text
-                NSFont* pFont = [NSFont labelFontOfSize: 0];
+                NSFont* pFont = [NSFont controlContentFontOfSize: 0];
                 NSDictionary* pDict = [NSDictionary dictionaryWithObject: pFont
                                                     forKey: NSFontAttributeName];
                              
                 NSSize aTextSize = [pText sizeWithAttributes: pDict];
-                // FIXME: the only thing reliable about sizeWithAttributes is
-                // that the size it outputs is way too small for our NSTextView
-                // that would not matter so much if NSTextView's fitToSize actually
-                // did something out of the box, alas it doesn't. This probably needs more
-                // fiddling with NSTextView's and NSTextContainer's parameters, however
-                // since this already almost cost me my sanity a Murphy factor of 1.5
-                // will have to suffice for the time being.
-                aTextSize.width *= 1.5;
+                // leave a little space
+                aTextSize.width += 10;
                 aTextSize.height += 3;
-                NSRect aTextRect = { { nCurX + nAttachOffset, 0 }, aTextSize };
+                
+                // don't indent attached lists, looks bad in the existing cases
+                NSRect aTextRect = { { nCurX /* + nAttachOffset*/, 0 }, aTextSize };
                 NSTextView* pTextView = [[NSTextView alloc] initWithFrame: aTextRect];
                 [pTextView setFont: [NSFont controlContentFontOfSize: 0]];
                 [pTextView setEditable: NO];
@@ -861,7 +915,8 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 aTextRect = [pTextView frame];
 
 
-                NSRect aBtnRect = { { nCurX + nAttachOffset + aTextRect.size.width, 0 }, { 0, 15 } };
+                // don't indent attached lists, looks bad in the existing cases
+                NSRect aBtnRect = { { nCurX /*+ nAttachOffset*/ + aTextRect.size.width, 0 }, { 0, 15 } };
                 NSPopUpButton* pBtn = [[NSPopUpButton alloc] initWithFrame: aBtnRect pullsDown: NO];
 
                 // iterate options
@@ -915,20 +970,15 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 {
                     // add a label
                     NSString* pText = CreateNSString( aText );
-                    NSFont* pFont = [NSFont labelFontOfSize: 0];
+                    NSFont* pFont = [NSFont controlContentFontOfSize: 0];
                     NSDictionary* pDict = [NSDictionary dictionaryWithObject: pFont
                                                         forKey: NSFontAttributeName];
                                  
                     NSSize aTextSize = [pText sizeWithAttributes: pDict];
-                    // FIXME: the only thing reliable about sizeWithAttributes is
-                    // that the size it outputs is way too small for our NSTextView
-                    // that would not matter so much if NSTextView's fitToSize actually
-                    // did something out of the box, alas it doesn't. This probably needs more
-                    // fiddling with NSTextView's and NSTextContainer's parameters, however
-                    // since this already almost cost me my sanity a Murphy factor of 1.5
-                    // will have to suffice for the time being.
-                    aTextSize.width *= 1.5;
+                    // leave a little space
+                    aTextSize.width += 10;
                     aTextSize.height += 3;
+                    
                     NSRect aTextRect = { { nCurX + nAttachOffset, 0 }, aTextSize };
                     NSTextView* pTextView = [[NSTextView alloc] initWithFrame: aTextRect];
                     [pTextView setFont: [NSFont controlContentFontOfSize: 0]];
@@ -1049,7 +1099,10 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
     }
     pControllerProperties->updateEnableState();
     adjustViewAndChildren( pCurParent, aMaxTabSize );
-        
+    
+    // now reposition everything again so it is upper bound
+    adjustTabViews( pTabView, aMaxTabSize );
+    
     // find the minimum needed tab size
     NSSize aTabCtrlSize = [pTabView minimumSize];
     aTabCtrlSize.height += aMaxTabSize.height + 10;

@@ -419,5 +419,6 @@ StringArray SV_PRINT_NATIVE_STRINGS
         < "Preview"; >;
         < "Page Number"; >;
         < "Number of pages"; >;
+        < "More"; >;
     };
 };
