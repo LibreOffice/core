@@ -108,12 +108,16 @@ rtl::OUString ChildAccess::getPath() {
         path = parent->getPath() +
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     }
-    return path +
-        Components::createSegment(getNode()->getTemplateName(), name_);
+    return path + Components::createSegment(node_->getTemplateName(), name_);
 }
 
 rtl::Reference< Node > ChildAccess::getNode() {
     return node_;
+}
+
+bool ChildAccess::isFinalized() {
+    return node_->getFinalized() != NO_LAYER ||
+        (parent_.is() && parent_->isFinalized());
 }
 
 rtl::Reference< RootAccess > ChildAccess::getRootAccess() {
@@ -279,9 +283,9 @@ css::uno::Any ChildAccess::asValue() {
             static_cast< cppu::OWeakObject * >(this)));
 }
 
-void ChildAccess::commitChanges() {
-    commitChildChanges();
-    if (changedValue_.get() != 0) {
+void ChildAccess::commitChanges(bool valid) {
+    commitChildChanges(valid);
+    if (valid && changedValue_.get() != 0) {
         Components::singleton().addModification(getPath());
         if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get())) {
             prop->setValue(NO_LAYER, *changedValue_);
@@ -296,8 +300,8 @@ void ChildAccess::commitChanges() {
                     RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
                 static_cast< cppu::OWeakObject * >(this));
         }
-        changedValue_.reset();
     }
+    changedValue_.reset();
 }
 
 ChildAccess::~ChildAccess() {

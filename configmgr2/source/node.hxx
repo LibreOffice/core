@@ -52,6 +52,10 @@ public:
 
     int getLayer() const;
 
+    void setFinalized(int layer);
+
+    int getFinalized() const;
+
     void remove(int layer);
 
     bool isRemoved() const;
@@ -60,6 +64,8 @@ public:
 
 protected:
     explicit Node(int layer);
+
+    Node(const Node & other);
 
     virtual ~Node();
 
@@ -70,6 +76,7 @@ protected:
     void resurrect(int layer);
 
     int layer_;
+    int finalized_;
     bool removed_;
 };
 

@@ -55,7 +55,7 @@ PropertyNode::PropertyNode(
 {}
 
 rtl::Reference< Node > PropertyNode::clone() const {
-    return new PropertyNode(getLayer(), type_, nillable_, value_, extension_);
+    return new PropertyNode(*this);
 }
 
 Type PropertyNode::getType() const {
@@ -78,6 +78,11 @@ void PropertyNode::setValue(int layer, css::uno::Any const & value) {
 bool PropertyNode::isExtension() const {
     return extension_;
 }
+
+PropertyNode::PropertyNode(PropertyNode const & other):
+    Node(other), type_(other.type_), nillable_(other.nillable_),
+    value_(other.value_), extension_(other.extension_)
+{}
 
 PropertyNode::~PropertyNode() {}
 

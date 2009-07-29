@@ -61,6 +61,14 @@ int Node::getLayer() const {
     return layer_;
 }
 
+void Node::setFinalized(int layer) {
+    finalized_ = layer;
+}
+
+int Node::getFinalized() const {
+    return finalized_;
+}
+
 void Node::remove(int layer) {
     setLayer(layer);
     removed_ = true;
@@ -76,7 +84,11 @@ rtl::Reference< Node > Node::getMember(rtl::OUString const & name) {
     return node.is() && !node->isRemoved() ? node : rtl::Reference< Node >();
 }
 
-Node::Node(int layer): layer_(layer), removed_(false) {}
+Node::Node(int layer): layer_(layer), finalized_(NO_LAYER), removed_(false) {}
+
+Node::Node(const Node & other):
+    layer_(other.layer_), finalized_(other.finalized_), removed_(other.removed_)
+{}
 
 Node::~Node() {}
 

@@ -55,10 +55,7 @@ LocalizedPropertyNode::LocalizedPropertyNode(
 {}
 
 rtl::Reference< Node > LocalizedPropertyNode::clone() const {
-    rtl::Reference< LocalizedPropertyNode > fresh(
-        new LocalizedPropertyNode(getLayer(), type_, nillable_));
-    cloneNodeMap(members_, &fresh->members_);
-    return fresh.get();
+    return new LocalizedPropertyNode(*this);
 }
 
 Type LocalizedPropertyNode::getType() const {
@@ -71,6 +68,13 @@ bool LocalizedPropertyNode::isNillable() const {
 
 NodeMap & LocalizedPropertyNode::getMembers() {
     return members_;
+}
+
+LocalizedPropertyNode::LocalizedPropertyNode(
+    LocalizedPropertyNode const & other):
+    Node(other), type_(other.type_), nillable_(other.nillable_)
+{
+    cloneNodeMap(other.members_, &members_);
 }
 
 LocalizedPropertyNode::~LocalizedPropertyNode() {}

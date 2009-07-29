@@ -52,7 +52,7 @@ LocalizedPropertyValueNode::LocalizedPropertyValueNode(
 {}
 
 rtl::Reference< Node > LocalizedPropertyValueNode::clone() const {
-    return new LocalizedPropertyValueNode(getLayer(), value_);
+    return new LocalizedPropertyValueNode(*this);
 }
 
 rtl::OUString LocalizedPropertyValueNode::getTemplateName() const {
@@ -69,6 +69,11 @@ void LocalizedPropertyValueNode::setValue(
     resurrect(layer);
     value_ = value;
 }
+
+LocalizedPropertyValueNode::LocalizedPropertyValueNode(
+    LocalizedPropertyValueNode const & other):
+    Node(other), value_(other.value_)
+{}
 
 LocalizedPropertyValueNode::~LocalizedPropertyValueNode() {}
 

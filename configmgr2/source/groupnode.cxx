@@ -47,11 +47,7 @@ GroupNode::GroupNode(
 {}
 
 rtl::Reference< Node > GroupNode::clone() const {
-    rtl::Reference< GroupNode > fresh(
-        new GroupNode(getLayer(), extensible_, templateName_));
-    cloneNodeMap(members_, &fresh->members_);
-    fresh->setMandatory(mandatory_);
-    return fresh.get();
+    return new GroupNode(*this);
 }
 
 rtl::OUString GroupNode::getTemplateName() const {
@@ -72,6 +68,13 @@ bool GroupNode::isExtensible() const {
 
 NodeMap & GroupNode::getMembers() {
     return members_;
+}
+
+GroupNode::GroupNode(GroupNode const & other):
+    Node(other), extensible_(other.extensible_),
+    templateName_(other.templateName_), mandatory_(other.mandatory_)
+{
+    cloneNodeMap(other.members_, &members_);
 }
 
 GroupNode::~GroupNode() {}

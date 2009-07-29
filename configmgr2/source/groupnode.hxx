@@ -57,6 +57,8 @@ public:
     NodeMap & getMembers();
 
 private:
+    GroupNode(GroupNode const & other);
+
     virtual ~GroupNode();
 
     virtual void clear();

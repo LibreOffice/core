@@ -60,6 +60,8 @@ public:
     NodeMap & getMembers();
 
 private:
+    LocalizedPropertyNode(LocalizedPropertyNode const & other);
+
     virtual ~LocalizedPropertyNode();
 
     virtual void clear();

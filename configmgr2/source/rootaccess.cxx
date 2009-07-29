@@ -48,6 +48,7 @@
 
 #include "childaccess.hxx"
 #include "components.hxx"
+#include "layer.hxx"
 #include "lock.hxx"
 #include "node.hxx"
 #include "rootaccess.hxx"
@@ -82,16 +83,23 @@ rtl::OUString RootAccess::getPath() {
 
 rtl::Reference< Node > RootAccess::getNode() {
     if (!node_.is()) {
+        int finalizedLayer;
         node_ = Components::singleton().resolvePath(
-            path_, 0, &name_, &path_, 0);
+            path_, 0, &name_, &path_, 0, &finalizedLayer);
         if (!node_.is()) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot find ")) +
                  path_),
                 static_cast< cppu::OWeakObject * >(this));
         }
+        finalized_ = finalizedLayer != NO_LAYER;
     }
     return node_;
+}
+
+bool RootAccess::isFinalized() {
+    getNode();
+    return finalized_;
 }
 
 rtl::Reference< RootAccess > RootAccess::getRootAccess() {
@@ -171,7 +179,11 @@ void RootAccess::commitChanges()
     OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
-    commitChildChanges();
+    int finalizedLayer;
+    commitChildChanges(
+        (Components::singleton().resolvePath(path_, 0, 0, 0, 0, &finalizedLayer)
+         == node_) &&
+        finalizedLayer == NO_LAYER);
     Components::singleton().writeModifications();
 }
 

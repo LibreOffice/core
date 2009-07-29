@@ -61,6 +61,8 @@ public:
     bool isExtension() const;
 
 private:
+    PropertyNode(PropertyNode const & other);
+
     virtual ~PropertyNode();
 
     Type type_;

@@ -78,6 +78,8 @@ private:
 
     virtual rtl::Reference< Node > getNode();
 
+    virtual bool isFinalized();
+
     virtual rtl::Reference< RootAccess > getRootAccess();
 
     virtual rtl::Reference< Access > getParentAccess();
@@ -116,6 +118,7 @@ private:
     rtl::OUString path_;
     rtl::OUString locale_;
     bool update_;
+    bool finalized_;
     rtl::Reference< Node > node_;
     rtl::OUString name_;
 };

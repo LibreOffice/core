@@ -55,6 +55,8 @@ public:
     void setValue(int layer, com::sun::star::uno::Any const & value);
 
 private:
+    LocalizedPropertyValueNode(LocalizedPropertyValueNode const & other);
+
     virtual ~LocalizedPropertyValueNode();
 
     com::sun::star::uno::Any value_;

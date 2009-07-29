@@ -79,6 +79,8 @@ public:
 
     virtual rtl::Reference< Node > getNode();
 
+    virtual bool isFinalized();
+
     virtual rtl::Reference< RootAccess > getRootAccess();
 
     virtual rtl::Reference< Access > getParentAccess();
@@ -126,7 +128,7 @@ public:
 
     com::sun::star::uno::Any asValue();
 
-    void commitChanges();
+    void commitChanges(bool valid);
 
 private:
     virtual ~ChildAccess();

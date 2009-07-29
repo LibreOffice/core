@@ -60,13 +60,7 @@ SetNode::SetNode(
 }
 
 rtl::Reference< Node > SetNode::clone() const {
-    rtl::Reference< SetNode > fresh(
-        new SetNode(
-            getLayer(), defaultTemplateName_, additionalTemplateNames_,
-            templateName_));
-    cloneNodeMap(members_, &fresh->members_);
-    fresh->setMandatory(mandatory_);
-    return fresh.get();
+    return new SetNode(*this);
 }
 
 rtl::OUString SetNode::getTemplateName() const {
@@ -95,6 +89,14 @@ bool SetNode::isValidTemplate(rtl::OUString const & templateName) const {
 
 NodeMap & SetNode::getMembers() {
     return members_;
+}
+
+SetNode::SetNode(SetNode const & other):
+    Node(other), defaultTemplateName_(other.defaultTemplateName_),
+    additionalTemplateNames_(other.additionalTemplateNames_),
+    templateName_(other.templateName_), mandatory_(other.mandatory_)
+{
+    cloneNodeMap(other.members_, &members_);
 }
 
 SetNode::~SetNode() {}

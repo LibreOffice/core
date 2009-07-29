@@ -278,12 +278,14 @@ void Access::reportChildChanges(
     }
 }
 
-void Access::commitChildChanges() {
+void Access::commitChildChanges(bool valid) {
     while (!modifiedChildren_.empty()) {
+        bool childValid = valid;
         HardChildMap::iterator i(modifiedChildren_.begin());
         rtl::Reference< ChildAccess > child(getModifiedChild(i));
         if (child.is()) {
-            child->commitChanges();
+            childValid = childValid && !child->isFinalized();
+            child->commitChanges(childValid);
                 //TODO: currently, this is called here for directly inserted
                 // children as well as for children whose sub-children were
                 // modified (and should never be called for directly removed
@@ -296,22 +298,32 @@ void Access::commitChildChanges() {
             if (child.is()) {
                 // Inserted:
                 if (j != members.end()) {
-                    child->getNode()->setMandatory(j->second->getMandatory());
+                    childValid = childValid &&
+                        j->second->getFinalized() == NO_LAYER;
+                    if (childValid) {
+                        child->getNode()->setMandatory(
+                            j->second->getMandatory());
+                    }
                 }
-                getMemberNodes()[i->first] = child->getNode();
+                if (childValid) {
+                    getMemberNodes()[i->first] = child->getNode();
+                }
             } else {
-                // Removed (TODO: if j == members.end(), the child probably got
-                // inserted and removed again in this transaction, so activity
-                // here could probably be cut short to preserve resources):
-                if (j != members.end() && j->second->getMandatory() == NO_LAYER)
-                {
+                // Removed:
+                childValid = childValid && j != members.end() &&
+                    j->second->getFinalized() == NO_LAYER &&
+                    j->second->getMandatory() == NO_LAYER;
+                if (childValid) {
                     j->second->remove(NO_LAYER);
                 }
             }
-            Components::singleton().addModification(
-                getPath() + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
-                Components::createSegment(
-                    i->second->getNode()->getTemplateName(), i->first));
+            if (childValid) {
+                Components::singleton().addModification(
+                    getPath() +
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
+                    Components::createSegment(
+                        i->second->getNode()->getTemplateName(), i->first));
+            }
             i->second->committed();
         }
         modifiedChildren_.erase(i);
@@ -637,6 +649,7 @@ void Access::setPropertyValue(
         throw css::beans::UnknownPropertyException(
             aPropertyName, static_cast< cppu::OWeakObject * >(this));
     }
+    child->checkFinalized();
     child->setProperty(aValue);
 }
 
@@ -873,6 +886,7 @@ void Access::insertByName(
     OSL_ASSERT(thisIs(IS_EXTENSIBLE|IS_UPDATE));
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
+    checkFinalized();
     if (getChild(aName).is()) {
         throw css::container::ElementExistException(
             aName, static_cast< cppu::OWeakObject * >(this));
@@ -946,7 +960,9 @@ void Access::removeByName(rtl::OUString const & aName)
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
     rtl::Reference< ChildAccess > child(getChild(aName));
-    if (!child.is() || child->getNode()->getMandatory() != NO_LAYER) {
+    if (!child.is() || child->isFinalized() ||
+        child->getNode()->getMandatory() != NO_LAYER)
+    {
         throw css::container::NoSuchElementException(
             aName, static_cast< cppu::OWeakObject * >(this));
     }
@@ -971,16 +987,18 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
     OSL_ASSERT(thisIs(IS_SET|IS_UPDATE));
     rtl::OUString tmplName(
         dynamic_cast< SetNode * >(getNode().get())->getDefaultTemplateName());
-    rtl::Reference< Node > p(
+    rtl::Reference< Node > tmpl(
         Components::singleton().getTemplate(NO_LAYER, tmplName));
-    if (!p.is()) {
+    if (!tmpl.is()) {
         throw css::uno::Exception(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unknown template ")) +
              tmplName),
             static_cast< cppu::OWeakObject * >(this));
     }
+    rtl::Reference< Node > node(tmpl->clone());
+    node->setLayer(NO_LAYER);
     return static_cast< cppu::OWeakObject * >(
-        new ChildAccess(getRootAccess(), p->clone()));
+        new ChildAccess(getRootAccess(), node));
 }
 
 css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
@@ -1130,6 +1148,16 @@ css::beans::Property Access::asProperty() {
          (getRootAccess()->isUpdate()
           ? (removable ? css::beans::PropertyAttribute::REMOVEABLE : 0)
           : css::beans::PropertyAttribute::READONLY))); //TODO: MAYBEDEFAULT
+}
+
+void Access::checkFinalized() {
+    if (isFinalized()) {
+        throw css::lang::IllegalArgumentException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "configmgr modification of finalized item")),
+            static_cast< cppu::OWeakObject * >(this), -1);
+    }
 }
 
 #if OSL_DEBUG_LEVEL > 0

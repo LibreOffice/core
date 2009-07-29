@@ -1399,7 +1399,7 @@ sal_Int32 Components::parseSegment(
 rtl::Reference< Node > Components::resolvePath(
     rtl::OUString const & path, rtl::OUString * firstSegment,
     rtl::OUString * lastSegment, rtl::OUString * canonicalPath,
-    rtl::Reference< Node > * parent)
+    rtl::Reference< Node > * parent, int * finalizedLayer)
 {
     if (path.getLength() == 0 || path[0] != '/') {
         throw css::uno::RuntimeException(
@@ -1416,22 +1416,39 @@ rtl::Reference< Node > Components::resolvePath(
     if (firstSegment != 0) {
         *firstSegment = seg;
     }
-    rtl::OUStringBuffer canonic;
-    if (canonicalPath != 0) {
-        canonic.append(sal_Unicode('/'));
-        canonic.append(seg);
-    }
     NodeMap::iterator i(components_.find(seg));
+    rtl::OUStringBuffer canonic;
     rtl::Reference< Node > par;
-    rtl::Reference< Node > p(i == components_.end() ? 0 : i->second);
-    while (p != 0 && n != path.getLength()) {
-        if (path[n++] != '/') {
+    int finalized = NO_LAYER;
+    for (rtl::Reference< Node > p(i == components_.end() ? 0 : i->second);;) {
+        if (!p.is()) {
+            return p;
+        }
+        if (canonicalPath != 0) {
+            canonic.append(sal_Unicode('/'));
+            canonic.append(createSegment(p->getTemplateName(), seg));
+        }
+        finalized = std::min(finalized, p->getFinalized());
+        if (n != path.getLength() && path[n++] != '/') {
             throw css::uno::RuntimeException(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path,
                 css::uno::Reference< css::uno::XInterface >());
         }
+        // for backwards compatibility, ignore a final slash
         if (n == path.getLength()) {
-            break; // for backwards compatibility, ignore a final slash
+            if (lastSegment != 0) {
+                *lastSegment = seg;
+            }
+            if (canonicalPath != 0) {
+                *canonicalPath = canonic.makeStringAndClear();
+            }
+            if (parent != 0) {
+                *parent = par;
+            }
+            if (finalizedLayer != 0) {
+                *finalizedLayer = finalized;
+            }
+            return p;
         }
         par = p;
         rtl::OUString templateName;
@@ -1480,23 +1497,7 @@ rtl::Reference< Node > Components::resolvePath(
             // with simple path segments, like group members:
             p = p->getMember(seg);
         }
-        if (p != 0 && canonicalPath != 0) {
-            canonic.append(sal_Unicode('/'));
-            canonic.append(createSegment(p->getTemplateName(), seg));
-        }
     }
-    if (p != 0) {
-        if (lastSegment != 0) {
-            *lastSegment = seg;
-        }
-        if (canonicalPath != 0) {
-            *canonicalPath = canonic.makeStringAndClear();
-        }
-        if (parent != 0) {
-            *parent = par;
-        }
-    }
-    return p;
 }
 
 rtl::Reference< Node > Components::getTemplate(
@@ -1552,7 +1553,7 @@ void Components::writeModifications() {
         rtl::OUString name;
         rtl::OUString parentPath(parseLastSegment(*i, &name));
         rtl::Reference< Node > parent;
-        rtl::Reference< Node > node(resolvePath(*i, 0, 0, 0, &parent));
+        rtl::Reference< Node > node(resolvePath(*i, 0, 0, 0, &parent, 0));
         if (node.is()) {
             xmlTextWriterWriteAttribute(
                 writer.writer, xmlString("path"),
@@ -1562,7 +1563,7 @@ void Components::writeModifications() {
             // It is never necessary to write the oor:mandatory attribute, as it
             // cannot be set via the UNO API.
         } else {
-            parent = resolvePath(parentPath, 0, 0, 0, 0);
+            parent = resolvePath(parentPath, 0, 0, 0, 0, 0);
             if (dynamic_cast< LocalizedPropertyNode * >(parent.get()) != 0) {
                 rtl::OUString parentName;
                 rtl::OUString grandparentPath(
@@ -1803,6 +1804,7 @@ void Components::parseXcsGroupContent(
                     css::uno::Reference< css::uno::XInterface >());
             }
             member = tmpl->clone();
+            member->setLayer(layer);
         } else if (isOorElement(p, "group")) {
             member = parseXcsGroup(
                 layer, componentName, doc, p, rtl::OUString());
@@ -1951,7 +1953,6 @@ void Components::parseXcsFile(int layer, rtl::OUString const & url) {
     buf.append(sal_Unicode('.'));
     buf.append(getNameAttribute(doc.doc, root));
     rtl::OUString comp(buf.makeStringAndClear());
-    //TODO: root xml:lang attribute
     xmlNodePtr p(skipBlank(root->xmlChildrenNode));
     if (isOorElement(p, "info")) {
         p = skipBlank(p->next);
@@ -1977,7 +1978,8 @@ void Components::parseXcsFile(int layer, rtl::OUString const & url) {
 
 void Components::parseXcuNode(
     int layer, rtl::OUString const & componentName, xmlDocPtr doc,
-    xmlNodePtr xmlNode, rtl::Reference< Node > const & node, bool modifications,
+    xmlNodePtr xmlNode, rtl::Reference< Node > const & node,
+    bool inheritedFinalized, bool modifications,
     rtl::OUString const & pathPrefix)
 {
     if (GroupNode * group = dynamic_cast< GroupNode * >(node.get())) {
@@ -1986,10 +1988,17 @@ void Components::parseXcuNode(
         {
             if (isOorElement(p, "prop")) {
                 rtl::OUString name(getNameAttribute(doc, p));
+                bool finalized = getBooleanAttribute(
+                    doc, p, "finalized", "http://openoffice.org/2001/registry",
+                    false);
+                int finalizedLayer = finalized ? layer : NO_LAYER;
                 PropertyNode * property = 0;
                 LocalizedPropertyNode * localized = 0;
                 NodeMap::iterator i(group->getMembers().find(name));
                 if (i != group->getMembers().end()) {
+                    finalizedLayer = std::min(
+                        finalizedLayer, i->second->getFinalized());
+                    i->second->setFinalized(finalizedLayer);
                     if (i->second->getLayer() > layer) {
                         continue;
                     }
@@ -2021,7 +2030,6 @@ void Components::parseXcuNode(
                         css::uno::Reference< css::uno::XInterface >());
                 }
                 Operation op(getOperationAttribute(doc, p));
-                //TODO: oor:finalized attribute
                 xmlNodePtr q(skipBlank(p->xmlChildrenNode));
                 LocalizedValues values;
                 while (isOorElement(q, "value")) {
@@ -2062,8 +2070,9 @@ void Components::parseXcuNode(
                              fromXmlString(doc->URL)),
                             css::uno::Reference< css::uno::XInterface >());
                     }
-                    XmlString lang(xmlNodeGetLang(q));
-                    if (lang.str != 0 && localized == 0) {
+                    XmlString langAttr(xmlNodeGetLang(q));
+                    rtl::OUString lang(fromXmlString(langAttr.str));
+                    if (lang.getLength() != 0 && localized == 0) {
                         throw css::uno::RuntimeException(
                             (rtl::OUString(
                                 RTL_CONSTASCII_USTRINGPARAM(
@@ -2097,8 +2106,7 @@ void Components::parseXcuNode(
                     // is simply ignored for now:
                     if (!values.insert(
                             LocalizedValues::value_type(
-                                (lang.str == 0
-                                 ? rtl::OUString() : fromXmlString(lang.str)),
+                                lang,
                                 (remove
                                  ? css::uno::makeAny(
                                      cppu::UnoType< cppu::UnoVoidType >::get())
@@ -2125,15 +2133,80 @@ void Components::parseXcuNode(
                          fromXmlString(doc->URL)),
                         css::uno::Reference< css::uno::XInterface >());
                 }
-                if (property != 0) {
-                    switch (op) {
-                    case OPERATION_MODIFY:
-                    case OPERATION_REPLACE:
-                    case OPERATION_FUSE:
-                        property->setValue(layer, values[rtl::OUString()]);
-                        break;
-                    case OPERATION_REMOVE:
-                        if (!property->isExtension()) {
+                if (!inheritedFinalized && finalizedLayer >= layer) {
+                    if (property != 0) {
+                        switch (op) {
+                        case OPERATION_MODIFY:
+                        case OPERATION_REPLACE:
+                        case OPERATION_FUSE:
+                            {
+                                LocalizedValues::iterator j(
+                                    values.find(rtl::OUString()));
+                                if (j != values.end()) {
+                                    property->setValue(
+                                        layer, j->second);
+                                }
+                            }
+                            break;
+                        case OPERATION_REMOVE:
+                            if (!property->isExtension()) {
+                                throw css::uno::RuntimeException(
+                                    (rtl::OUString(
+                                        RTL_CONSTASCII_USTRINGPARAM(
+                                            "xcu: invalid remove of"
+                                            " non-extension property in ")) +
+                                     fromXmlString(doc->URL)),
+                                    css::uno::Reference<
+                                        css::uno::XInterface >());
+                            }
+                            property->remove(layer);
+                            break;
+                        }
+                    } else if (localized != 0) {
+                        switch (op) {
+                        case OPERATION_REPLACE:
+                            for (NodeMap::iterator j(
+                                     localized->getMembers().begin());
+                                 j != localized->getMembers().end(); ++j)
+                            {
+                                if (layer >= j->second->getLayer()) {
+                                    j->second->remove(layer);
+                                }
+                            }
+                            // fall through
+                        case OPERATION_MODIFY:
+                        case OPERATION_FUSE:
+                            for (LocalizedValues::iterator j(values.begin());
+                                 j != values.end(); ++j)
+                            {
+                                NodeMap::iterator k(
+                                    localized->getMembers().find(j->first));
+                                if (k != localized->getMembers().end() &&
+                                    k->second->getLayer() > layer)
+                                {
+                                    continue;
+                                }
+                                if (isRemovedValue(j->second)) {
+                                    if (k != localized->getMembers().end()) {
+                                        k->second->remove(layer);
+                                    }
+                                } else {
+                                    if (k == localized->getMembers().end()) {
+                                        localized->getMembers().insert(
+                                            NodeMap::value_type(
+                                                j->first,
+                                                new LocalizedPropertyValueNode(
+                                                    layer, j->second)));
+                                    } else {
+                                        dynamic_cast<
+                                            LocalizedPropertyValueNode * >(
+                                                k->second.get())->
+                                            setValue(layer, j->second);
+                                    }
+                                }
+                            }
+                            break;
+                        case OPERATION_REMOVE:
                             throw css::uno::RuntimeException(
                                 (rtl::OUString(
                                     RTL_CONSTASCII_USTRINGPARAM(
@@ -2142,89 +2215,41 @@ void Components::parseXcuNode(
                                  fromXmlString(doc->URL)),
                                 css::uno::Reference< css::uno::XInterface >());
                         }
-                        property->remove(layer);
-                        break;
-                    }
-                } else if (localized != 0) {
-                    switch (op) {
-                    case OPERATION_REPLACE:
-                        for (NodeMap::iterator j(
-                                 localized->getMembers().begin());
-                             j != localized->getMembers().end(); ++j)
-                        {
-                            if (layer >= j->second->getLayer()) {
-                                j->second->remove(layer);
-                            }
+                    } else {
+                        if (!group->isExtensible()) {
+                            throw css::uno::RuntimeException(
+                                (rtl::OUString(
+                                    RTL_CONSTASCII_USTRINGPARAM(
+                                        "xcu: unknown prop name in ")) +
+                                 fromXmlString(doc->URL)),
+                                css::uno::Reference< css::uno::XInterface >());
                         }
-                        // fall through
-                    case OPERATION_MODIFY:
-                    case OPERATION_FUSE:
-                        for (LocalizedValues::iterator j(values.begin());
-                             j != values.end(); ++j)
-                        {
-                            NodeMap::iterator k(
-                                localized->getMembers().find(j->first));
-                            if (k != localized->getMembers().end() &&
-                                k->second->getLayer() > layer)
+                        switch (op) {
+                        case OPERATION_MODIFY:
+                            throw css::uno::RuntimeException(
+                                (rtl::OUString(
+                                    RTL_CONSTASCII_USTRINGPARAM(
+                                        "xcu: invalid modify of extension"
+                                        " property in ")) +
+                                 fromXmlString(doc->URL)),
+                                css::uno::Reference< css::uno::XInterface >());
+                        case OPERATION_REPLACE:
+                        case OPERATION_FUSE:
                             {
-                                continue;
-                            }
-                            if (isRemovedValue(j->second)) {
-                                if (k != localized->getMembers().end()) {
-                                    k->second->remove(layer);
+                                rtl::Reference< Node > prop(
+                                    new PropertyNode(
+                                        layer, TYPE_ANY, true,
+                                        values[rtl::OUString()], true));
+                                if (finalized) {
+                                    prop->setFinalized(layer);
                                 }
-                            } else {
-                                if (k == localized->getMembers().end()) {
-                                    localized->getMembers().insert(
-                                        NodeMap::value_type(
-                                            j->first,
-                                            new LocalizedPropertyValueNode(
-                                                layer, j->second)));
-                                } else {
-                                    dynamic_cast<
-                                        LocalizedPropertyValueNode * >(
-                                            k->second.get())->
-                                        setValue(layer, j->second);
-                                }
+                                group->getMembers()[name] = prop;
                             }
+                            break;
+                        case OPERATION_REMOVE:
+                            // ignore unknown (presumably extension) properties
+                            break;
                         }
-                        break;
-                    case OPERATION_REMOVE:
-                        throw css::uno::RuntimeException(
-                            (rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(
-                                    "xcu: invalid remove of non-extension"
-                                    " property in ")) +
-                             fromXmlString(doc->URL)),
-                            css::uno::Reference< css::uno::XInterface >());
-                    }
-                } else {
-                    if (!group->isExtensible()) {
-                        throw css::uno::RuntimeException(
-                            (rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(
-                                    "xcu: unknown prop name in ")) +
-                             fromXmlString(doc->URL)),
-                            css::uno::Reference< css::uno::XInterface >());
-                    }
-                    switch (op) {
-                    case OPERATION_MODIFY:
-                        throw css::uno::RuntimeException(
-                            (rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(
-                                    "xcu: invalid modify of extension property"
-                                    " in ")) +
-                             fromXmlString(doc->URL)),
-                            css::uno::Reference< css::uno::XInterface >());
-                    case OPERATION_REPLACE:
-                    case OPERATION_FUSE:
-                        group->getMembers()[name] = new PropertyNode(
-                            layer, TYPE_ANY, true, values[rtl::OUString()],
-                            true);
-                        break;
-                    case OPERATION_REMOVE:
-                        // ignore unknown (presumably extension) properties
-                        break;
                     }
                 }
                 if (modifications) {
@@ -2258,7 +2283,6 @@ void Components::parseXcuNode(
                          fromXmlString(doc->URL)),
                         css::uno::Reference< css::uno::XInterface >());
                 }
-                //TODO: oor:finalized attribute
                 rtl::Reference< Node > subgroup(
                     findNode(
                         layer, group->getMembers(), getNameAttribute(doc, p)));
@@ -2270,8 +2294,15 @@ void Components::parseXcuNode(
                          fromXmlString(doc->URL)),
                         css::uno::Reference< css::uno::XInterface >());
                 }
+                bool finalized = getBooleanAttribute(
+                    doc, p, "finalized", "http://openoffice.org/2001/registry",
+                    false);
+                int finalizedLayer = std::min(
+                    finalized ? layer : NO_LAYER, subgroup->getFinalized());
+                subgroup->setFinalized(finalizedLayer);
                 parseXcuNode(
-                    layer, componentName, doc, p, subgroup, false,
+                    layer, componentName, doc, p, subgroup,
+                    inheritedFinalized || finalizedLayer < layer, false,
                     rtl::OUString());
             } else {
                 throw css::uno::RuntimeException(
@@ -2295,7 +2326,6 @@ void Components::parseXcuNode(
                      fromXmlString(doc->URL)),
                     css::uno::Reference< css::uno::XInterface >());
             }
-            //TODO: oor:finalized attribute
             rtl::OUString name(getNameAttribute(doc, p));
             rtl::OUString templateName(
                 parseTemplateReference(
@@ -2319,12 +2349,19 @@ void Components::parseXcuNode(
                      fromXmlString(doc->URL)),
                     css::uno::Reference< css::uno::XInterface >());
             }
+            bool finalized = getBooleanAttribute(
+                doc, p, "finalized", "http://openoffice.org/2001/registry",
+                false);
+            int finalizedLayer = finalized ? layer : NO_LAYER;
             bool mandatory = getBooleanAttribute(
                 doc, p, "mandatory", "http://openoffice.org/2001/registry",
                 false);
             int mandatoryLayer = mandatory ? layer : NO_LAYER;
             NodeMap::iterator j(set->getMembers().find(name));
             if (j != set->getMembers().end()) {
+                finalizedLayer = std::min(
+                    finalizedLayer, j->second->getFinalized());
+                j->second->setFinalized(finalizedLayer);
                 mandatoryLayer = std::min(
                     mandatoryLayer, j->second->getMandatory());
                 j->second->setMandatory(mandatoryLayer);
@@ -2344,37 +2381,47 @@ void Components::parseXcuNode(
                         css::uno::Reference< css::uno::XInterface >());
                 }
                 parseXcuNode(
-                    layer, componentName, doc, p, j->second, false,
+                    layer, componentName, doc, p, j->second,
+                    inheritedFinalized || finalizedLayer < layer, false,
                     rtl::OUString());
                 break;
             case OPERATION_REPLACE:
-                {
+                if (!inheritedFinalized && finalizedLayer >= layer) {
                     rtl::Reference< Node > member(tmpl->clone());
-                    node->setMandatory(mandatoryLayer);
+                    member->setLayer(layer);
+                    member->setFinalized(finalizedLayer);
+                    member->setMandatory(mandatoryLayer);
                     parseXcuNode(
-                        layer, componentName, doc, p, member, false,
+                        layer, componentName, doc, p, member, false, false,
                         rtl::OUString());
                     set->getMembers()[name] = member;
                 }
                 break;
             case OPERATION_FUSE:
                 if (j == set->getMembers().end() || j->second->isRemoved()) {
-                    rtl::Reference< Node > member(tmpl->clone());
-                    node->setMandatory(mandatoryLayer);
-                    parseXcuNode(
-                        layer, componentName, doc, p, member, false,
-                        rtl::OUString());
-                    set->getMembers()[name] = member;
+                    if (!inheritedFinalized && finalizedLayer >= layer) {
+                        rtl::Reference< Node > member(tmpl->clone());
+                        member->setLayer(layer);
+                        member->setFinalized(finalizedLayer);
+                        member->setMandatory(mandatoryLayer);
+                        parseXcuNode(
+                            layer, componentName, doc, p, member, false, false,
+                            rtl::OUString());
+                        set->getMembers()[name] = member;
+                    }
                 } else {
                     parseXcuNode(
-                        layer, componentName, doc, p, j->second, false,
+                        layer, componentName, doc, p, j->second,
+                        inheritedFinalized || finalizedLayer < layer, false,
                         rtl::OUString());
                 }
                 break;
             case OPERATION_REMOVE:
-                // Ignore unknown members as well as removal of mandatory ones:
-                if (j != set->getMembers().end() &&
-                    j->second->getMandatory() > layer)
+                // Ignore removal of unknown members, members finalized in a
+                // lower layer, and members made mandatory in this or a lower
+                // layer:
+                if (j != set->getMembers().end() && !inheritedFinalized &&
+                    finalizedLayer >= layer && mandatoryLayer > layer)
                 {
                     j->second->remove(layer);
                 }
@@ -2431,7 +2478,7 @@ void Components::parseXcuFile(int layer, rtl::OUString const & url) {
     buf.append(sal_Unicode('.'));
     buf.append(getNameAttribute(doc.doc, root));
     rtl::OUString comp(buf.makeStringAndClear());
-    //TODO: root oor:finalized, oor:op attributes
+    //TODO: root oor:op attribute
     rtl::Reference< Node > node(findNode(layer, components_, comp));
     if (!node.is()) {
         throw css::uno::RuntimeException(
@@ -2441,7 +2488,15 @@ void Components::parseXcuFile(int layer, rtl::OUString const & url) {
              fromXmlString(doc.doc->URL)),
             css::uno::Reference< css::uno::XInterface >());
     }
-    parseXcuNode(layer, comp, doc.doc, root, node, false, rtl::OUString());
+    bool finalized = getBooleanAttribute(
+        doc.doc, root, "finalized", "http://openoffice.org/2001/registry",
+        false);
+    int finalizedLayer = std::min(
+        finalized ? layer : NO_LAYER, node->getFinalized());
+    node->setFinalized(finalizedLayer);
+    parseXcuNode(
+        layer, comp, doc.doc, root, node, finalizedLayer < layer, false,
+        rtl::OUString());
 }
 
 void Components::parseFiles(
@@ -2616,10 +2671,11 @@ void Components::parseModificationLayer() {
             }
             rtl::OUString componentName;
             rtl::OUString canonicalPath;
+            int finalizedLayer;
             rtl::Reference< Node > node(
                 resolvePath(
                     rtl::OStringToOUString(unescPath, RTL_TEXTENCODING_UTF8),
-                    &componentName, 0, &canonicalPath, 0));
+                    &componentName, 0, &canonicalPath, 0, &finalizedLayer));
             if (!node.is()) {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(
@@ -2629,7 +2685,8 @@ void Components::parseModificationLayer() {
                     css::uno::Reference< css::uno::XInterface >());
             }
             parseXcuNode(
-                NO_LAYER, componentName, doc.doc, p, node, true,
+                NO_LAYER, componentName, doc.doc, p, node,
+                finalizedLayer != NO_LAYER, true,
                 (canonicalPath +
                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"))));
         } else {

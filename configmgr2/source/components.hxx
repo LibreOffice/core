@@ -66,7 +66,7 @@ public:
     rtl::Reference< Node > resolvePath(
         rtl::OUString const & path, rtl::OUString * firstSegment,
         rtl::OUString * lastSegment, rtl::OUString * canonicalPath,
-        rtl::Reference< Node > * parent);
+        rtl::Reference< Node > * parent, int * finalizedLayer);
 
     rtl::Reference< Node > getTemplate(
         int layer, rtl::OUString const & fullName) const;
@@ -105,7 +105,8 @@ private:
     void parseXcuNode(
         int layer, rtl::OUString const & componentName, xmlDocPtr doc,
         xmlNodePtr xmlNode, rtl::Reference< Node > const & node,
-        bool modifications, rtl::OUString const & pathPrefix);
+        bool inheritedFinalized, bool modifications,
+        rtl::OUString const & pathPrefix);
 
     void parseXcuFile(int layer, rtl::OUString const & url);
 

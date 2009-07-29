@@ -64,6 +64,8 @@ public:
     NodeMap & getMembers();
 
 private:
+    SetNode(SetNode const & other);
+
     virtual ~SetNode();
 
     virtual void clear();

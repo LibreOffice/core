@@ -130,6 +130,8 @@ public:
 
     virtual rtl::Reference< Node > getNode() = 0;
 
+    virtual bool isFinalized() = 0;
+
 protected:
     Access();
 
@@ -163,7 +165,7 @@ protected:
     void reportChildChanges(
         std::vector< com::sun::star::util::ElementChange > * changes);
 
-    void commitChildChanges();
+    void commitChildChanges(bool valid);
 
 public: //TODO
     typedef
@@ -436,6 +438,8 @@ private:
     rtl::Reference< ChildAccess > getSubChild(rtl::OUString const & path);
 
     com::sun::star::beans::Property asProperty();
+
+    void checkFinalized();
 
     typedef std::hash_map< rtl::OUString, ChildAccess *, rtl::OUStringHash >
         WeakChildMap;
