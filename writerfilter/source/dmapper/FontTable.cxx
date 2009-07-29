@@ -497,14 +497,14 @@ void FontTable::attribute(Id Name, Value & val)
 //        case NS_rtf::LN_LFO: break;
         case NS_rtf::LN_F:
         break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_ALTFONTNAME:
+            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             m_pImpl->pCurrentEntry->sAlternativeFont = sValue;
         break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_XSZFFN:
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
+            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Font_name:
+            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             m_pImpl->pCurrentEntry->sFontName = sValue;
         break;
 //        case NS_rtf::LN_XSTZNAME: break;
