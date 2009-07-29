@@ -155,7 +155,7 @@ public final class SOFormulaParser extends ComponentBase
     ;
 
     // com.sun.star.sheet.XFormulaParser:
-    public com.sun.star.sheet.FormulaToken[] parseFormula(String aFormula)
+    public com.sun.star.sheet.FormulaToken[] parseFormula(String aFormula, com.sun.star.table.CellAddress aReferencePos)
     {
         final ArrayList tokens = new ArrayList();
         if ( !"=".equals(aFormula) )
@@ -239,7 +239,7 @@ public final class SOFormulaParser extends ComponentBase
         return (FormulaToken[]) tokens.toArray(new FormulaToken[tokens.size()]);
     }
 
-    public String printFormula(com.sun.star.sheet.FormulaToken[] aTokens)
+    public String printFormula(com.sun.star.sheet.FormulaToken[] aTokens, com.sun.star.table.CellAddress aReferencePos)
     {
         final StringBuffer ret = new StringBuffer();
         for (int i = 0; i < aTokens.length; i++)
