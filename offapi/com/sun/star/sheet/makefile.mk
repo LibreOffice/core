@@ -137,6 +137,7 @@ IDLFILES=\
     FillDirection.idl\
     FillMode.idl\
     FilterConnection.idl\
+    FilterFormulaParser.idl\
     FilterOperator.idl\
     FilterOperator2.idl\
     FormulaLanguage.idl\
@@ -276,6 +277,7 @@ IDLFILES=\
     XExternalSheetCache.idl\
     XExternalSheetName.idl\
     XFillAcrossSheet.idl\
+    XFilterFormulaParser.idl\
     XFormulaOpCodeMapper.idl\
     XFormulaParser.idl\
     XFormulaQuery.idl\
