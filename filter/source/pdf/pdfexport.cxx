@@ -891,7 +891,10 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     }
                 }
 
-                bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aMultiSelection, aRenderOptions, nPageCount );
+                if( nPageCount > 0 )
+                    bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aMultiSelection, aRenderOptions, nPageCount );
+                else
+                    bRet = FALSE;
 
                 if ( bRet && bSecondPassForImpressNotes )
                 {
