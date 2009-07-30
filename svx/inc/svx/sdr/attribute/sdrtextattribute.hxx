@@ -65,6 +65,9 @@ namespace drawinglayer
             sal_Int32                               maTextRightDistance;
             sal_Int32                               maTextLowerDistance;
 
+            // #i101556# use versioning from text attributes to detect changes
+            sal_uInt32                              maPropertiesVersion;
+
             // bitfield
             unsigned                                mbContour : 1;
             unsigned                                mbFitToSize : 1;
@@ -111,6 +114,7 @@ namespace drawinglayer
             sal_Int32 getTextUpperDistance() const { return maTextUpperDistance; }
             sal_Int32 getTextRightDistance() const { return maTextRightDistance; }
             sal_Int32 getTextLowerDistance() const { return maTextLowerDistance; }
+            sal_uInt32 getPropertiesVersion() const { return maPropertiesVersion; }
 
             // animation timing generation
             void getBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const;

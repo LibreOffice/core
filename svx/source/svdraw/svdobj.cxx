@@ -1165,6 +1165,11 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
 
         SfxItemSet aNewSet(*GetObjectItemPool());
 
+        // #i101980# ignore LineWidth; that's what the old implementation
+        // did. With linewidth, the result may be huge due to fat/thick
+        // line decompositions
+        aNewSet.Put(XLineWidthItem(0));
+
         // solid black lines and no fill
         aNewSet.Put(XLineStyleItem(XLINE_SOLID));
         aNewSet.Put(XLineColorItem(String(), Color(COL_BLACK)));

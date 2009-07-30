@@ -824,13 +824,15 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, BOOL bFull*/)
                 }
             }
 
-            // #i68562# Force to non-solid dragging when not creating a full circle and up to step three
-            if(bUseSolidDragging
-                && pAktCreate->ISA(SdrCircObj)
-                && OBJ_CIRC != (SdrObjKind)(static_cast< SdrCircObj* >(pAktCreate)->GetObjIdentifier())
-                && aDragStat.GetPointAnz() < 4L)
+              // #i101781# force to non-solid dragging when not creating a full circle
+            if(bUseSolidDragging)
             {
-                bUseSolidDragging = false;
+                SdrCircObj* pCircObj = dynamic_cast< SdrCircObj* >(pAktCreate);
+
+                if(pCircObj && OBJ_CIRC != pCircObj->GetObjIdentifier())
+                {
+                    bUseSolidDragging = false;
+                }
             }
 
             if(bUseSolidDragging)

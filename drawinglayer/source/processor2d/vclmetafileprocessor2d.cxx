@@ -1010,7 +1010,68 @@ namespace drawinglayer
                     adaptLineToFillDrawMode();
 
                     impStartSvtGraphicStroke(pSvtGraphicStroke);
-                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+
+                    // #i101491#
+                    // Change default of fat line generation for MetaFiles: Create MetaPolyLineAction
+                    // instead of decomposing all geometries when the polygon has more than given amount of
+                    // points; else the decomposition will get too expensive quiclky. OTOH
+                    // the decomposition provides the better quality e.g. taking edge roundings
+                    // into account which will NOT be taken into account with LineInfo-based actions
+                    const sal_uInt32 nSubPolygonCount(rStrokePrimitive.getB2DPolygon().count());
+                    bool bDone(0 == nSubPolygonCount);
+
+                    if(!bDone && nSubPolygonCount > 1000)
+                    {
+                        // create MetaPolyLineActions, but without LINE_DASH
+                        const attribute::LineAttribute& rLine = rStrokePrimitive.getLineAttribute();
+
+                        if(basegfx::fTools::more(rLine.getWidth(), 0.0))
+                        {
+                            const attribute::StrokeAttribute& rStroke = rStrokePrimitive.getStrokeAttribute();
+                            basegfx::B2DPolyPolygon aHairLinePolyPolygon;
+
+                            if(0.0 == rStroke.getFullDotDashLen())
+                            {
+                                aHairLinePolyPolygon.append(rStrokePrimitive.getB2DPolygon());
+                            }
+                            else
+                            {
+                                basegfx::tools::applyLineDashing(
+                                    rStrokePrimitive.getB2DPolygon(), rStroke.getDotDashArray(),
+                                    &aHairLinePolyPolygon, 0, rStroke.getFullDotDashLen());
+                            }
+
+                            const basegfx::BColor aHairlineColor(maBColorModifierStack.getModifiedColor(rLine.getColor()));
+                            mpOutputDevice->SetLineColor(Color(aHairlineColor));
+                            mpOutputDevice->SetFillColor();
+
+                            aHairLinePolyPolygon.transform(maCurrentTransformation);
+
+                            const LineInfo aLineInfo(LINE_SOLID, basegfx::fround(rLine.getWidth()));
+
+                            for(sal_uInt32 a(0); a < aHairLinePolyPolygon.count(); a++)
+                            {
+                                const basegfx::B2DPolygon aCandidate(aHairLinePolyPolygon.getB2DPolygon(a));
+
+                                if(aCandidate.count() > 1)
+                                {
+                                    const Polygon aToolsPolygon(aCandidate);
+
+                                    mrMetaFile.AddAction(new MetaPolyLineAction(aToolsPolygon, aLineInfo));
+                                }
+                            }
+
+                            bDone = true;
+                        }
+                    }
+
+                    if(!bDone)
+                    {
+                        // use decomposition (creates line geometry as filled polygon
+                        // geometry)
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    }
+
                     impEndSvtGraphicStroke(pSvtGraphicStroke);
 
                     // restore DrawMode
