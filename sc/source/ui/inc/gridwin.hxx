@@ -37,7 +37,7 @@
 #include "viewdata.hxx"
 #include "cbutton.hxx"
 #include <svx/sdr/overlay/overlayobject.hxx>
-
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <vector>
 #include <memory>
 
@@ -380,9 +380,11 @@ public:
 
     void            DoAutoFilterMenue( SCCOL nCol, SCROW nRow, BOOL bDataSelect );
     void            DoScenarioMenue( const ScRange& rScenRange );
-    void            DoPageFieldMenue( SCCOL nCol, SCROW nRow );
 
-    BOOL            HasPageFieldData( SCCOL nCol, SCROW nRow ) const;
+    void            LaunchPageFieldMenu( SCCOL nCol, SCROW nRow );
+    void            LaunchDPFieldMenu( SCCOL nCol, SCROW nRow );
+
+    ::com::sun::star::sheet::DataPilotFieldOrientation GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const;
 
     void            DrawButtons( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     ScTableInfo& rTabInfo, OutputDevice* pContentDev );

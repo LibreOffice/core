@@ -200,6 +200,8 @@
 #include "AccessibilityHints.hxx"
 #include "appoptio.hxx"
 
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+
 #include <string>
 #include <algorithm>
 
@@ -211,6 +213,8 @@
 
 //  fuer Rad-Maus
 #define SC_DELTA_ZOOM   10
+
+using namespace ::com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -2477,7 +2481,7 @@ sal_Bool ScTabView::HasPageFieldDataAtCursor() const
     SCCOL nCol = aViewData.GetCurX();
     SCROW nRow = aViewData.GetCurY();
     if (pWin)
-        return pWin->HasPageFieldData( nCol, nRow );
+        return pWin->GetDPFieldOrientation( nCol, nRow ) == sheet::DataPilotFieldOrientation_PAGE;
 
     return sal_False;
 }
@@ -2487,15 +2491,23 @@ void ScTabView::StartDataSelect()
     ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()];
     SCCOL nCol = aViewData.GetCurX();
     SCROW nRow = aViewData.GetCurY();
-    if (pWin)
-    {
-        //  #i36598# If the cursor is on a page field's data cell,
-        //  no meaningful input is possible anyway, so this function
-        //  can be used to select a page field entry.
 
-        if ( pWin->HasPageFieldData( nCol, nRow ) )
-            pWin->DoPageFieldMenue( nCol, nRow );
-        else
+    if (!pWin)
+        return;
+
+    switch (pWin->GetDPFieldOrientation(nCol, nRow))
+    {
+        case sheet::DataPilotFieldOrientation_PAGE:
+            //  #i36598# If the cursor is on a page field's data cell,
+            //  no meaningful input is possible anyway, so this function
+            //  can be used to select a page field entry.
+            pWin->LaunchPageFieldMenu( nCol, nRow );
+        break;
+        case sheet::DataPilotFieldOrientation_COLUMN:
+        case sheet::DataPilotFieldOrientation_ROW:
+            pWin->LaunchDPFieldMenu( nCol, nRow );
+        break;
+        default:
             pWin->DoAutoFilterMenue( nCol, nRow, TRUE );
     }
 }

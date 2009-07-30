@@ -513,7 +513,7 @@ void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, BOOL bHasSelecti
     }
 }
 
-void ScGridWindow::DoPageFieldMenue( SCCOL nCol, SCROW nRow )
+void ScGridWindow::LaunchPageFieldMenu( SCCOL nCol, SCROW nRow )
 {
     //! merge position/size handling with DoAutoFilterMenue
 
@@ -662,6 +662,22 @@ void ScGridWindow::DoPageFieldMenue( SCCOL nCol, SCROW nRow )
 
     nMouseStatus = SC_GM_FILTER;
     CaptureMouse();
+}
+
+void ScGridWindow::LaunchDPFieldMenu( SCCOL nCol, SCROW nRow )
+{
+    SCTAB nTab = pViewData->GetTabNo();
+    ScDPObject* pDPObj = pViewData->GetDocument()->GetDPAtCursor(nCol, nRow, nTab);
+    if (!pDPObj)
+        return;
+
+    // Get the geometry of the cell.
+    Point aSrcPos = pViewData->GetScrPos(nCol, nRow, eWhich);
+    long nSizeX, nSizeY;
+    pViewData->GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
+    Size aSrcSize(nSizeX-1, nSizeY-1);
+
+    DPLaunchFieldPopupMenu(OutputToScreenPixel(aSrcPos), aSrcSize, ScAddress(nCol, nRow, nTab), pDPObj);
 }
 
 void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )

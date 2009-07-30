@@ -67,6 +67,7 @@
 #include <hash_map>
 
 using namespace com::sun::star;
+using ::com::sun::star::sheet::DataPilotFieldOrientation;
 using ::std::vector;
 using ::std::auto_ptr;
 using ::std::hash_map;
@@ -77,33 +78,53 @@ using ::rtl::OUStringHash;
 
 // -----------------------------------------------------------------------
 
-BOOL ScGridWindow::HasPageFieldData( SCCOL nCol, SCROW nRow ) const
+DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const
 {
+    using namespace ::com::sun::star::sheet;
+
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     ScDPObject* pDPObj = pDoc->GetDPAtCursor(nCol, nRow, nTab);
-    if ( pDPObj && nCol > 0 )
+    if (!pDPObj)
+        return DataPilotFieldOrientation_HIDDEN;
+
+    USHORT nOrient = DataPilotFieldOrientation_HIDDEN;
+
+    // Check for page field first.
+    if (nCol > 0)
     {
         // look for the dimension header left of the drop-down arrow
-        USHORT nOrient = sheet::DataPilotFieldOrientation_HIDDEN;
         long nField = pDPObj->GetHeaderDim( ScAddress( nCol-1, nRow, nTab ), nOrient );
-        if ( nField >= 0 && nOrient == sheet::DataPilotFieldOrientation_PAGE )
+        if ( nField >= 0 && nOrient == DataPilotFieldOrientation_PAGE )
         {
             BOOL bIsDataLayout = FALSE;
             String aFieldName = pDPObj->GetDimName( nField, bIsDataLayout );
             if ( aFieldName.Len() && !bIsDataLayout )
-                return TRUE;
+                return DataPilotFieldOrientation_PAGE;
         }
     }
-    return FALSE;
+
+    nOrient = sheet::DataPilotFieldOrientation_HIDDEN;
+
+    // Now, check for row/column field.
+    long nField = pDPObj->GetHeaderDim(ScAddress(nCol, nRow, nTab), nOrient);
+    if (nField >= 0 && (nOrient == DataPilotFieldOrientation_COLUMN || nOrient == DataPilotFieldOrientation_ROW) )
+    {
+        BOOL bIsDataLayout = FALSE;
+        String aFieldName = pDPObj->GetDimName(nField, bIsDataLayout);
+        if (aFieldName.Len() && !bIsDataLayout)
+            return static_cast<DataPilotFieldOrientation>(nOrient);
+    }
+
+    return DataPilotFieldOrientation_HIDDEN;
 }
 
 // private method for mouse button handling
 BOOL ScGridWindow::DoPageFieldSelection( SCCOL nCol, SCROW nRow )
 {
-    if ( HasPageFieldData( nCol, nRow ) )
+    if (GetDPFieldOrientation( nCol, nRow ) == sheet::DataPilotFieldOrientation_PAGE)
     {
-        DoPageFieldMenue( nCol, nRow );
+        LaunchPageFieldMenu( nCol, nRow );
         return TRUE;
     }
     return FALSE;
