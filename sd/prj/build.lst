@@ -1,4 +1,4 @@
-sd	sd	:    l10n animations svx stoc uui canvas NULL
+sd      sd      :    l10n animations svx stoc canvas NULL
 sd	sd										usr1	-	all	sd_mkout NULL
 sd	sd\inc									nmake		-	all	sd_inc NULL
 sd	sd\prj									get		-	all	sd_prj NULL
