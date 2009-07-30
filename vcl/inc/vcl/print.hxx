@@ -402,20 +402,23 @@ class VCL_DLLPUBLIC PrinterController
 protected:
     PrinterController( const boost::shared_ptr<Printer>& );
 public:
+    enum NupOrderType
+    { LRTB, TBLR };
     struct MultiPageSetup
     {
         // all metrics in 100th mm
-        int         nRows;
-        int         nColumns;
-        int         nRepeat;
-        Size        aPaperSize;
-        long        nLeftMargin;
-        long        nTopMargin;
-        long        nRightMargin;
-        long        nBottomMargin;
-        long        nHorizontalSpacing;
-        long        nVerticalSpacing;
-        bool        bDrawBorder;
+        int                                    nRows;
+        int                                    nColumns;
+        int                                    nRepeat;
+        Size                                   aPaperSize;
+        long                                   nLeftMargin;
+        long                                   nTopMargin;
+        long                                   nRightMargin;
+        long                                   nBottomMargin;
+        long                                   nHorizontalSpacing;
+        long                                   nVerticalSpacing;
+        bool                                   bDrawBorder;
+        PrinterController::NupOrderType        nOrder;
 
         MultiPageSetup()
         : nRows( 1 ), nColumns( 1 ), nRepeat( 1 ), aPaperSize( 21000, 29700 )
@@ -423,6 +426,7 @@ public:
         , nRightMargin( 0 ), nBottomMargin( 0 )
         , nHorizontalSpacing( 500 ), nVerticalSpacing( 500 )
         , bDrawBorder( false )
+        , nOrder( LRTB )
         {
         }
     };

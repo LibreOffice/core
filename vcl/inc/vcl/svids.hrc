@@ -111,6 +111,8 @@
 #define SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT     1
 #define SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE    2
 
+#define SV_PRINT_PRT_NUP_ORDER_LRTD               0
+#define SV_PRINT_PRT_NUP_ORDER_TDLR               1
 
 #define SV_PRINT_TAB_JOB                    2
 #define SV_PRINT_PRINTERS_FL                1

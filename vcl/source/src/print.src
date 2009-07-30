@@ -237,8 +237,8 @@ ModalDialog SV_DLG_PRINT
             CurPos = 0;
             StringList [en-US] =
             {
-                < "left to right, then down"; 1; >;
-                < "top to bottom, then right"; 2; >;
+                < "left to right, then down"; SV_PRINT_PRT_NUP_ORDER_LRTD; >;
+                < "top to bottom, then right"; SV_PRINT_PRT_NUP_ORDER_TDLR; >;
             };
         };
         CheckBox SV_PRINT_PRT_NUP_BORDER_CB

@@ -70,6 +70,27 @@ namespace vcl
             void setPreview( const GDIMetaFile&, const Size& );
         };
 
+        class ShowNupOrderWindow : public Window
+        {
+            int mnOrderMode;
+            int mnRows;
+            int mnColumns;
+            void ImplInitSettings();
+        public:
+            ShowNupOrderWindow( Window* pParent );
+            virtual ~ShowNupOrderWindow();
+
+            virtual void Paint( const Rectangle& );
+
+            void setValues( int i_nOrderMode, int i_nColumns, int i_nRows )
+            {
+                mnOrderMode = i_nOrderMode;
+                mnRows = i_nRows;
+                mnColumns = i_nColumns;
+                Invalidate();
+            }
+        };
+
         class NUpTabPage : public TabPage
         {
         public:
@@ -92,11 +113,13 @@ namespace vcl
             // page order ("left to right, then down")
             FixedText                               maNupOrderTxt;
             ListBox                                 maNupOrderBox;
+            ShowNupOrderWindow                      maNupOrderWin;
             // border around each page
             CheckBox                                maBorderCB;
 
             vcl::RowOrColumn                        maLayout;
             boost::shared_ptr< vcl::WindowArranger >mxAdvancedControls;
+            boost::shared_ptr< vcl::RowOrColumn >   mxLayoutGroup;
 
             void setupLayout();
 

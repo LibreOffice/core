@@ -106,7 +106,7 @@ bool WindowArranger::Element::isVisible() const
 sal_Int32 WindowArranger::Element::getExpandPriority() const
 {
     sal_Int32 nPrio = m_nExpandPriority;
-    if( m_pChild )
+    if( m_pChild && m_nExpandPriority >= 0 )
     {
         size_t nElements = m_pChild->countElements();
         for( size_t i = 0; i < nElements; i++ )

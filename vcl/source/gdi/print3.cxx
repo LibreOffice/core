@@ -689,6 +689,18 @@ Size PrinterController::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o
             Size aPageSize = getPageFile( nPage, aPageFile, i_bMayUseCache );
             if( aPageSize.Width() && aPageSize.Height() )
             {
+                long nCellX = 0, nCellY = 0;
+                switch( rMPS.nOrder )
+                {
+                case PrinterController::LRTB:
+                    nCellX = (nSubPage % rMPS.nColumns);
+                    nCellY = (nSubPage / rMPS.nColumns);
+                    break;
+                case PrinterController::TBLR:
+                    nCellX = (nSubPage / rMPS.nRows);
+                    nCellY = (nSubPage % rMPS.nRows);
+                    break;
+                }
                 // scale the metafile down to a sub page size
                 double fScaleX = double(aSubPageSize.Width())/double(aPageSize.Width());
                 double fScaleY = double(aSubPageSize.Height())/double(aPageSize.Height());
@@ -699,8 +711,8 @@ Size PrinterController::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o
                 // move the subpage so it is centered in its "cell"
                 long nOffX = (aSubPageSize.Width() - long(double(aPageSize.Width()) * fScale)) / 2;
                 long nOffY = (aSubPageSize.Height() - long(double(aPageSize.Height()) * fScale)) / 2;
-                long nX = rMPS.nLeftMargin + nOffX + nAdvX * (nSubPage % rMPS.nColumns);
-                long nY = rMPS.nTopMargin + nOffY + nAdvY * (nSubPage / rMPS.nColumns);
+                long nX = rMPS.nLeftMargin + nOffX + nAdvX * nCellX;
+                long nY = rMPS.nTopMargin + nOffY + nAdvY * nCellY;
                 aPageFile.Move( nX, nY );
                 aPageFile.WindStart();
                 // calculate border rectangle

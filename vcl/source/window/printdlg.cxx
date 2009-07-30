@@ -151,6 +151,70 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     Invalidate();
 }
 
+PrintDialog::ShowNupOrderWindow::ShowNupOrderWindow( Window* i_pParent )
+    : Window( i_pParent, WB_BORDER )
+    , mnOrderMode( 0 )
+    , mnRows( 1 )
+    , mnColumns( 1 )
+{
+    ImplInitSettings();
+}
+
+PrintDialog::ShowNupOrderWindow::~ShowNupOrderWindow()
+{
+}
+
+void PrintDialog::ShowNupOrderWindow::ImplInitSettings()
+{
+    SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFieldColor() ) );
+}
+
+void PrintDialog::ShowNupOrderWindow::Paint( const Rectangle& i_rRect )
+{
+    Window::Paint( i_rRect );
+    SetMapMode( MAP_PIXEL );
+    SetTextColor( GetSettings().GetStyleSettings().GetFieldTextColor() );
+
+    int nPages = mnRows * mnColumns;
+    Font aFont( GetSettings().GetStyleSettings().GetFieldFont() );
+    aFont.SetSize( Size( 0, 24 ) );
+    SetFont( aFont );
+    Size aTextSize( GetTextWidth( rtl::OUString::valueOf( sal_Int32(nPages+1) ) ), GetTextHeight() );
+
+    Size aOutSize( GetOutputSizePixel() );
+    Size aSubSize( aOutSize.Width() / mnColumns, aOutSize.Height() / mnRows );
+    // calculate font size: shrink the sample text so it fits
+    double fX = double(aSubSize.Width())/double(aTextSize.Width());
+    double fY = double(aSubSize.Height())/double(aTextSize.Height());
+    double fScale = (fX < fY) ? fX : fY;
+    long nFontHeight = long(24.0*fScale) - 3;
+    if( nFontHeight < 5 )
+        nFontHeight = 5;
+    aFont.SetSize( Size( 0, nFontHeight ) );
+    SetFont( aFont );
+    long nTextHeight = GetTextHeight();
+    for( int i = 0; i < nPages; i++ )
+    {
+        rtl::OUString aPageText( rtl::OUString::valueOf( sal_Int32(i+1) ) );
+        int nX = 0, nY = 0;
+        switch( mnOrderMode )
+        {
+        case SV_PRINT_PRT_NUP_ORDER_LRTD:
+            nX = (i % mnColumns); nY = (i / mnColumns);
+            break;
+        case SV_PRINT_PRT_NUP_ORDER_TDLR:
+            nX = (i / mnRows); nY = (i % mnRows);
+            break;
+        }
+        Size aTextSize( GetTextWidth( aPageText ), nTextHeight );
+        int nDeltaX = (aSubSize.Width() - aTextSize.Width()) / 2;
+        int nDeltaY = (aSubSize.Height() - aTextSize.Height()) / 2;
+        DrawText( Point( nX * aSubSize.Width() + nDeltaX,
+                         nY * aSubSize.Height() + nDeltaY ),
+                  aPageText );
+    }
+}
+
 PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     : TabPage( i_pParent, rResId )
     , maNupLine( this, VclResId( SV_PRINT_PRT_NUP_LAYOUT_FL ) )
@@ -168,9 +232,12 @@ PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     , maNupOrientationBox( this, VclResId( SV_PRINT_PRT_NUP_ORIENTATION_BOX ) )
     , maNupOrderTxt( this, VclResId( SV_PRINT_PRT_NUP_ORDER_TXT ) )
     , maNupOrderBox( this, VclResId( SV_PRINT_PRT_NUP_ORDER_BOX ) )
+    , maNupOrderWin( this )
     , maBorderCB( this, VclResId( SV_PRINT_PRT_NUP_BORDER_CB ) )
 {
     FreeResource();
+
+    maNupOrderWin.Show();
 
     // setup field units for metric fields
     const LocaleDataWrapper& rLocWrap( maPageMarginEdt.GetLocaleDataWrapper() );
@@ -223,15 +290,29 @@ void PrintDialog::NUpTabPage::setupLayout()
     maLayout.addWindow( &maNupLine );
     boost::shared_ptr< vcl::RowOrColumn > xRow( new vcl::RowOrColumn( &maLayout, false ) );
     maLayout.addChild( xRow );
+    boost::shared_ptr< vcl::Indenter > xIndent( new vcl::Indenter( xRow.get() ) );
+    xRow->addChild( xIndent );
+
+    boost::shared_ptr< vcl::RowOrColumn > xShowNupCol( new vcl::RowOrColumn( xRow.get() ) );
+    xRow->addChild( xShowNupCol, -1 );
+    xShowNupCol->setMinimumSize( xShowNupCol->addWindow( &maNupOrderWin ), Size( 70, 70 ) );
+    boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( xShowNupCol.get() ) );
+    xShowNupCol->addChild( xSpacer );
+
+    boost::shared_ptr< vcl::RowOrColumn > xCol( new vcl::RowOrColumn( xIndent.get() ) );
+    xIndent->setChild( xCol );
+    xRow.reset( new vcl::RowOrColumn( xCol.get(), false ) );
+    xCol->addChild( xRow );
     xRow->addWindow( &maNupPagesTxt );
     xRow->addWindow( &maNupPagesBox );
 
-    boost::shared_ptr< vcl::Indenter > xIndent( new vcl::Indenter( &maLayout ) );
-    maLayout.addChild( xIndent );
+    xIndent.reset( new vcl::Indenter( xCol.get() ) );
+    xCol->addChild( xIndent );
     // remember advanced controls to show/hide
     mxAdvancedControls = xIndent;
 
-    boost::shared_ptr< vcl::RowOrColumn > xCol( new vcl::RowOrColumn( xIndent.get() ) );
+    mxLayoutGroup = xCol;
+    xCol.reset( new vcl::RowOrColumn( xIndent.get() ) );
     xIndent->setChild( xCol );
 
     xRow.reset( new vcl::RowOrColumn( xCol.get(), false ) );
@@ -256,12 +337,12 @@ void PrintDialog::NUpTabPage::setupLayout()
     xRow->addWindow( &maNupOrientationTxt );
     xRow->addWindow( &maNupOrientationBox );
 
-    xRow.reset( new vcl::RowOrColumn( &maLayout, false ) );
-    maLayout.addChild( xRow );
+    xRow.reset( new vcl::RowOrColumn( mxLayoutGroup.get(), false ) );
+    mxLayoutGroup->addChild( xRow );
     xRow->addWindow( &maNupOrderTxt );
     xRow->addWindow( &maNupOrderBox );
 
-    maLayout.addWindow( &maBorderCB );
+    mxLayoutGroup->addWindow( &maBorderCB );
 
     // initially advanced controls are not show, rows=columns=1
     mxAdvancedControls->show( false, false );
@@ -953,7 +1034,7 @@ void PrintDialog::setupOptionalUI()
             }
             else if( aGroupingHint.equalsAscii( "LayoutPage" ) )
             {
-                pCurColumn = &maNUpPage.maLayout;
+                pCurColumn = maNUpPage.mxLayoutGroup.get();
                 pCurParent = &maNUpPage;            // set layout page as current parent
                 bOnStaticPage = true;
             }
@@ -1473,16 +1554,19 @@ void PrintDialog::updateNup()
 
     aMPS.bDrawBorder        = maNUpPage.maBorderCB.IsChecked();
 
+    int nOrderMode = int(maNUpPage.maNupOrderBox.GetEntryData(
+                           maNUpPage.maNupOrderBox.GetSelectEntryPos() ));
+    if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_LRTD )
+        aMPS.nOrder = PrinterController::LRTB;
+    else if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_TDLR )
+        aMPS.nOrder = PrinterController::TBLR;
+
     int nOrientationMode = int(maNUpPage.maNupOrientationBox.GetEntryData(
                                  maNUpPage.maNupOrientationBox.GetSelectEntryPos() ));
     if( nOrientationMode == SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE )
-    {
         aMPS.aPaperSize = maNupLandscapeSize;
-    }
     else if( nOrientationMode == SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT )
-    {
         aMPS.aPaperSize = maNupPortraitSize;
-    }
     else // automatic mode
     {
         // get size of first real page to see if it is portrait or landscape
@@ -1498,6 +1582,8 @@ void PrintDialog::updateNup()
 
     maPController->setMultipage( aMPS );
 
+    maNUpPage.maNupOrderWin.setValues( nOrderMode, nCols, nRows );
+
     preparePreview( true, true );
 }
 
@@ -1511,7 +1597,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
         // update text fields
         updatePrinterText();
     }
-    else if( pBox == &maNUpPage.maNupOrientationBox )
+    else if( pBox == &maNUpPage.maNupOrientationBox || pBox == &maNUpPage.maNupOrderBox )
     {
         updateNup();
     }
