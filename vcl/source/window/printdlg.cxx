@@ -179,13 +179,13 @@ void PrintDialog::ShowNupOrderWindow::Paint( const Rectangle& i_rRect )
     Font aFont( GetSettings().GetStyleSettings().GetFieldFont() );
     aFont.SetSize( Size( 0, 24 ) );
     SetFont( aFont );
-    Size aTextSize( GetTextWidth( rtl::OUString::valueOf( sal_Int32(nPages+1) ) ), GetTextHeight() );
+    Size aSampleTextSize( GetTextWidth( rtl::OUString::valueOf( sal_Int32(nPages+1) ) ), GetTextHeight() );
 
     Size aOutSize( GetOutputSizePixel() );
     Size aSubSize( aOutSize.Width() / mnColumns, aOutSize.Height() / mnRows );
     // calculate font size: shrink the sample text so it fits
-    double fX = double(aSubSize.Width())/double(aTextSize.Width());
-    double fY = double(aSubSize.Height())/double(aTextSize.Height());
+    double fX = double(aSubSize.Width())/double(aSampleTextSize.Width());
+    double fY = double(aSubSize.Height())/double(aSampleTextSize.Height());
     double fScale = (fX < fY) ? fX : fY;
     long nFontHeight = long(24.0*fScale) - 3;
     if( nFontHeight < 5 )
