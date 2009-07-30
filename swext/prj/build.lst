@@ -1,4 +1,4 @@
-swext swext :   l10n javaunohelper ridljar unoil jurt APACHE_COMMONS:apache-commons officecfg readlicense_oo xsltml filter NULL
+swext swext :   l10n javaunohelper ridljar unoil jurt APACHE_COMMONS:apache-commons readlicense_oo xsltml filter NULL
 swext swext             usr1    -    all    swext_mkout NULL
 swext swext\mediawiki\help                                              nmake   -    all    swext_mwhelp NULL
 swext swext\mediawiki\src\registry\schema\org\openoffice\Office\Custom  nmake   -    all    swext_mwschema NULL
