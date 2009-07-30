@@ -47,10 +47,8 @@
 
 static ResMgr& getPDFFilterResMgr()
 {
-    static boost::shared_ptr< ResMgr > xPDFFilterMgr(
-         ResMgr::CreateResMgr( "pdffilter", Application::GetSettings().GetUILocale() )
-         );
-    return *xPDFFilterMgr.get();
+    static ResMgr *pRes = ResMgr::CreateResMgr( "pdffilter", Application::GetSettings().GetUILocale());
+    return *pRes;
 }
 
 PDFFilterResId::PDFFilterResId( sal_uInt32 nId ) : ResId( nId, getPDFFilterResMgr() )
