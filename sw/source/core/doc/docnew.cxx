@@ -278,7 +278,6 @@ SwDoc::SwDoc() :
     mIdleBlockCount(0),
     nLockExpFld( 0 ),
     mbReadlineChecked(false),
-    mbWinEncryption(sal_False),
     // --> OD 2005-02-11 #i38810#
     mbLinksUpdated( sal_False ),
     mbClipBoard( false ),

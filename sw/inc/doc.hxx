@@ -480,7 +480,6 @@ private:
     bool mbPurgeOLE              : 1;    // TRUE: Purge OLE-Objects
     bool mbKernAsianPunctuation  : 1;    // TRUE: kerning also for ASIAN punctuation
     bool mbReadlineChecked       : 1;    // TRUE: if the query was already shown
-    bool mbWinEncryption         : 1;    // imported document password encrypted?
     bool mbLinksUpdated          : 1;    // OD 2005-02-11 #i38810#
                                          // flag indicating, that the links have been updated.
     bool mbClipBoard             : 1;    // true: this document represents the clipboard
@@ -1957,9 +1956,6 @@ public:
                         USHORT nMode );
     USHORT SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         USHORT nMode );
-
-    inline void SetWinEncryption(const bool bImportWinEncryption) {mbWinEncryption = bImportWinEncryption; }
-    inline bool IsWinEncrypted() const         { return mbWinEncryption; }
 
     void ReadLayoutCache( SvStream& rStream );
     void WriteLayoutCache( SvStream& rStream );

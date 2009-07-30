@@ -405,6 +405,8 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     USHORT nUniqueList;         // current number for creating unique list names
     unsigned int mnHdFtIndex;
 
+    SfxMedium*          mpMedium;
+
     virtual ULONG WriteStorage();
     virtual ULONG WriteMedium( SfxMedium& );
 
@@ -520,6 +522,9 @@ public:
     BYTE bHasFtr : 1;
 
 
+    virtual ULONG Write( SwPaM&, SfxMedium&, const String* = 0 );
+    virtual ULONG Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* = 0, SfxMedium* = 0 );
+    virtual ULONG Write( SwPaM&, SotStorage&, const String* = 0 );
 
 
     SvxMSExportOLEObjects& GetOLEExp()      { return *pOLEExp; }
