@@ -2346,6 +2346,13 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				</info>
 				<value>true</value>
 			</prop>
+			<prop oor:name="ShowOfficeUpdateDialog" oor:type="xs:boolean">
+				<info>
+					<author>MAV</author>
+					<desc>Specifies whether the office update dialog should be shown in case the loaded document has newer ODF version than the maximal supported one.</desc>
+				</info>
+				<value>true</value>
+			</prop>
 		</group>
 		<group oor:name="Security">
 			<info>
