@@ -36,7 +36,7 @@
 
 //=============================================================================
 
-module com { module sun { module star { module text { module FieldMaster {
+module com { module sun { module star { module text { module fieldmaster {
 
 //=============================================================================
 /** specifies service of a DDE field master.

@@ -58,7 +58,7 @@ interface XProofreader;
 //=============================================================================
 /** holds the results from proofreading a sentence.
 
-    @since  OOo 3.01
+    @since  OOo 3.0.1
 */
 struct ProofreadingResult
 {

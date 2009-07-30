@@ -41,13 +41,13 @@ module com {   module sun {   module star {   module rdf {
 
     <p>
     These constants are mainly for use with
-    <method>XRepository::importGraph</method>
-    and <method>XRepository::exportGraph</method>.
+    <member>XRepository::importGraph</member>
+    and <member>XRepository::exportGraph</member>.
     </p>
 
     <p>
-    Note that these are integers because UNO IDL does not permit string
-    constants.
+    Note that these are integers because UNO IDL does not permit
+    <atom>string</atom> constants.
     </p>
 
     @since OOo 3.0

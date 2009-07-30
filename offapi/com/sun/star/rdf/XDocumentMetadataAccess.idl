@@ -55,6 +55,10 @@
 #include <com/sun/star/io/IOException.idl>
 #endif
 
+#ifndef __com_sun_star_io_XInputStream_idl__
+#include <com/sun/star/io/XInputStream.idl>
+#endif
+
 #ifndef __com_sun_star_datatransfer_UnsupportedFlavorException_idl__
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.idl>
 #endif
@@ -63,8 +67,8 @@
 #include <com/sun/star/embed/XStorage.idl>
 #endif
 
-#ifndef __com_sun_star_io_XInputStream_idl__
-#include <com/sun/star/io/XInputStream.idl>
+#ifndef __com_sun_star_task_XInteractionHandler_idl__
+#include <com/sun/star/task/XInteractionHandler.idl>
 #endif
 
 #ifndef __com_sun_star_rdf_FileFormat_idl__
@@ -100,20 +104,15 @@ module com {   module sun {   module star {   module rdf {
     the content and the RDF metadata of an ODF document.
     The main idea is to make querying and manipulating the
     data in the metadata manifest easier.
-    Among other things, the metadata manifest contains a mapping between ODF
-    elements (in the "content.xml" and "styles.xml" streams) and URIs.
-    Such a mapping works by associating the XML ID of the ODF element with
-    the URI by an RDF statement of the form:
-    <code>URI pkg:idref XmlId.</code>
     </p>
 
     <p>
-    Note that this interface inherits from <type>XResource</type>: the
-    UUID of the package is the string value of the RDF node.
-    This is so that you can easily make RDF statements about the package.
+    Note that this interface inherits from <type>XURI</type>: the
+    base URI of the document is the string value of the RDF node.
+    This is so that you can easily make RDF statements about the document.
     </p>
 
-    @since OOo 3.0
+    @since OOo 3.2
 
     @see XDocumentRepository
  */
@@ -123,32 +122,21 @@ interface XDocumentMetadataAccess
     interface XRepositorySupplier;
 
     //-------------------------------------------------------------------------
-    /** get the UUID for the ODF package.
+    /** get the unique ODF element with the given metadata reference.
+
+        @param MetadataReference
+            a metadata reference, comprising the stream name and the XML ID
+            For example: Pair("content.xml", "foo-element-1")
 
         @returns
-            a universally unique ID that identifies this ODF package
+            the ODF element with the given metadata references if it exists,
+            else <NULL/>
      */
-    string getPackageUUID();
-
-    //-------------------------------------------------------------------------
-    /** get the unique ODF element with the given XML ID.
-
-        @param XmlId
-            an XML ID, comprising the stream name and the "xml:id" attribute.
-            For example: "content.xml#foo-element-1"
-
-        @returns
-            the ODF element with the given XML ID if it exists, else <NULL/>
-     */
-    XMetadatable getElementByXmlId([in] string XmlId);
+    XMetadatable getElementByMetadataReference(
+        [in] com::sun::star::beans::StringPair MetadataReference);
 
     //-------------------------------------------------------------------------
     /** get the ODF element that corresponds to an URI.
-
-        <p>
-        Convenience method that uses the mapping established in the
-        "manifest.rdf" to locate the ODF element corresponding to an URI.
-        </p>
 
         @param URI
             an URI that may identify an ODF element
@@ -160,94 +148,6 @@ interface XDocumentMetadataAccess
             if the given URI is <NULL/>
      */
     XMetadatable getElementByURI([in] XURI URI)
-        raises( com::sun::star::lang::IllegalArgumentException );
-
-    //-------------------------------------------------------------------------
-    /** find the URI that is associated with an ODF element in the manifest.
-
-        @param Element
-            the ODF element for which the URI should be returned
-
-        @returns
-            the URI associated with the element, or <NULL/>
-
-        @throws com::sun::star::lang::IllegalArgumentException
-            if the given Element is <NULL/>
-     */
-    XURI getURIForElement([in] XMetadatable Element)
-        raises( com::sun::star::lang::IllegalArgumentException );
-
-    //-------------------------------------------------------------------------
-    /** create an URI for an ODF element.
-
-        <p>
-        Convenience method that generates an URI for the given ODF element,
-        and inserts a mapping between the URI and the XML ID of the ODF element
-        into the manifest.
-        If the element does not have a XML ID yet, a new XML ID will be
-        generated.
-        If an URI for the element already exists, it will be returned.
-        </p>
-
-        @param Element
-            the ODF element for which an URI should be created.
-
-        @returns
-            the URI associated with the element
-
-        @throws com::sun::star::lang::IllegalArgumentException
-            if the given Element is <NULL/>
-     */
-    XURI getOrCreateURIForElement([in] XMetadatable Element)
-        raises( com::sun::star::lang::IllegalArgumentException );
-
-    //-------------------------------------------------------------------------
-    /** establish mapping between an ODF Element and an URI in the manifest.
-
-        <p>
-        This method Convenience method that generates an URI for the given
-        ODF element, and inserts a mapping between the URI and the XML ID
-        of the ODF element into the manifest.
-        If the element does not have a XML ID yet, a new XML ID will be
-        generated.
-        If there already exists an URI for the element, the mapping will not
-        be changed, and an
-        <type scope="com::sun::star::container">ElementExistException</type>
-        will be thrown.
-        </p>
-
-        <p>
-        Note that the mapping maintained by this method is a one-to-one
-        mapping, even though the specification technically permits
-        mapping an XML ID to multiple URIs.
-        </p>
-
-        @param Element
-            the ODF element with which an URI should be associated
-
-        @param URI
-            the URI which should be associated with the Element
-
-        @throws com::sun::star::lang::IllegalArgumentException
-            if any argument is <NULL/>
-
-        @throws com::sun::star::container::ElementExistException
-            if either the URI or the XML ID of the Element is already mapped
-     */
-    void createMappingForElement([in] XMetadatable Element, [in] XURI URI)
-        raises( com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::container::ElementExistException );
-
-    //-------------------------------------------------------------------------
-    /** removes mapping for an ODF element from the manifest.
-
-        @param Element
-            the ODF element for which the mapping should be removed
-
-        @throws com::sun::star::lang::IllegalArgumentException
-            if the given Element is <NULL/>
-     */
-    void removeMappingForElement([in] XMetadatable Element)
         raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
@@ -272,8 +172,8 @@ interface XDocumentMetadataAccess
         <p>
         This convenience method does the following:
         <ul>
-        <li>create a new graph with the given GraphName in the repository</li>
-        <li>insert the required statements declaring the new graph to be a
+        <li>create a new graph with the given name in the repository</li>
+        <li>insert statements declaring the new graph to be a
             metadata file into the manifest graph</li>
         <li>insert statements declaring <code>rdf:type</code> properties
             for the new graph into the manifest graph</li>
@@ -281,24 +181,23 @@ interface XDocumentMetadataAccess
         </p>
 
         @param FileName
-            the name of the stream in the ODF package where the graph will
+            the name of the stream in the ODF storage where the graph will
             be stored
-
-        @param GraphName
-            the name of the graph that is to be created
 
         @param Types
             a list of types that will be inserted as <code>rdf:type</code>
             properties for the graph
 
+        @returns
+            the name of the new graph
+
         @throws com::sun::star::lang::IllegalArgumentException
-            if the given GraphName is <NULL/>, or the FileName is invalid
+            if the FileName is invalid
 
         @throws com::sun::star::container::ElementExistException
-            if a graph with the given GraphName, or a stream with the given
-            FileName, already exists
+            if a stream with the given FileName already exists
      */
-    void addMetadataFile([in] string FileName, [in] XURI GraphName,
+    XURI addMetadataFile([in] string FileName,
             [in] sequence<XURI> Types )
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::container::ElementExistException );
@@ -309,18 +208,17 @@ interface XDocumentMetadataAccess
 
         <p>
         This convenience method does the following:
-        <li>import the given file into a graph with the given GraphName
+        <li>import the given file into a graph with the given name
             in the repository</li>
-        <li>insert the required statements declaring the new graph to be a
+        <li>insert statements declaring the new graph to be a
             metadata file into the manifest graph</li>
+        <li>insert statements declaring <code>rdf:type</code> properties
+            for the new graph into the manifest graph</li>
         </p>
 
         @param FileName
-            the name of the stream in the ODF package where the graph will
+            the name of the stream in the ODF storage where the graph will
             be stored
-
-        @param GraphName
-            the name of the graph that is to be created
 
         @param BaseURI
             a base URI to resolve relative URI references
@@ -329,8 +227,11 @@ interface XDocumentMetadataAccess
             a list of types that will be inserted as <code>rdf:type</code>
             properties for the graph
 
+        @returns
+            the name of the new graph
+
         @throws com::sun::star::lang::IllegalArgumentException
-            if the given stream or the GraphName is <NULL/>,
+            if the given stream is <NULL/>,
             or BaseURI is <NULL/> and the format requires use of a base URI,
             or the FileName is invalid
 
@@ -338,8 +239,7 @@ interface XDocumentMetadataAccess
             if the format requested is unknown or not supported
 
         @throws com::sun::star::container::ElementExistException
-            if a graph with the given GraphName, or a stream with the given
-            FileName, already exists
+            if a stream with the given FileName already exists
 
         @throws ParseException
             if the input does not conform to the specified file format.
@@ -349,9 +249,9 @@ interface XDocumentMetadataAccess
 
         @see FileFormat
      */
-    void importMetadataFile( [in] /*FileFormat*/ short Format,
+    XURI importMetadataFile( [in] /*FileFormat*/ short Format,
             [in] com::sun::star::io::XInputStream InStream,
-            [in] string FileName, [in] XURI GraphName, [in] XURI BaseURI,
+            [in] string FileName, [in] XURI BaseURI,
             [in] sequence<XURI> Types )
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::datatransfer::UnsupportedFlavorException,
@@ -398,7 +298,7 @@ interface XDocumentMetadataAccess
         </p>
 
         @param FileName
-            the name of the stream in the ODF package
+            the name of the stream in the ODF storage
 
         @throws com::sun::star::lang::IllegalArgumentException
             if the FileName is invalid
@@ -415,12 +315,11 @@ interface XDocumentMetadataAccess
 
         <p>
         This convenience method removes the statements declaring a
-        content or styles file from the manifest graph, as well as
-        all mappings that refer to the file.
+        content or styles file from the manifest graph.
         </p>
 
         @param FileName
-            the name of the stream in the ODF package
+            the name of the stream in the ODF storage
 
         @throws com::sun::star::lang::IllegalArgumentException
             if the FileName is invalid
@@ -447,22 +346,35 @@ interface XDocumentMetadataAccess
         In this case, the document metadata will be default initialized.
         </p>
 
+        <p>
+        If an InteractionHandler argument is given, it will be used for
+        error reporting. Otherwise, errors will be reported as exceptions.
+        </p>
+
         @param Storage
-            a storage, representing e.g. an ODF package file
+            a storage, representing e.g. an ODF package file, or sub-document
 
         @param BaseURI
             a base URI to resolve relative URI references
+            <p>N.B.: when loading from an ODF package, the base URI is not the
+               URI of the package, but the URI of the directory in the package
+               that contains the metadata.rdf</p>
+
+        @param InteractionHandler
+            an InteractionHandler, used for error reporting
 
         @throws com::sun::star::lang::IllegalArgumentException
             if any argument is <NULL/>
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs while loading and no InteractionHandler given
      */
-//FIXME: how to do error handling??? this thing must be able to report any number of errors in any number of streams... XInteractionHandler???
     void loadMetadataFromStorage(
             [in] com::sun::star::embed::XStorage Storage,
-            [in] XURI BaseURI)
-        raises( com::sun::star::lang::IllegalArgumentException );
-//                com::sun::star::io::IOException,
-//                com::sun::star::);
+            [in] XURI BaseURI,
+            [in] com::sun::star::task::XInteractionHandler InteractionHandler )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::WrappedTargetException );
 
     //-------------------------------------------------------------------------
     /** store document metadata to a storage.
@@ -474,27 +386,28 @@ interface XDocumentMetadataAccess
 
         <p>
         Note that to be stored correctly, a named graph must have a complete
-        entry in the manifest graph, with a <code>pkg:path</code> property
-        that denotes a legal stream name.
+        entry in the manifest graph.
         </p>
 
         @param Storage
-            a storage, representing e.g. an ODF package file
+            a storage, representing e.g. an ODF package file, or sub-document
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if any argument is <NULL/>
-     */
-//FIXME error handling
-    void storeMetadataToStorage(
-            [in] com::sun::star::embed::XStorage Storage)
-        raises( com::sun::star::lang::IllegalArgumentException );
-//                com::sun::star::io::IOException,
-//                com::sun::star:: );
+            if Storage argument is <NULL/>
 
-//FIXME error handling for these?
-//Note: any errors when accessing individual streams in the medium (including the manifest) will not be reported to the caller unless an XInteractionHandler is supplied.
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs while loading
+     */
+    void storeMetadataToStorage(
+            [in] com::sun::star::embed::XStorage Storage )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::WrappedTargetException );
+
     //-------------------------------------------------------------------------
     /** loads document metadata from a medium.
+
+        <p>If the Medium contains an InteractionHandler, it will be used for
+        error reporting.</p>
 
         @param Medium
             the <type>com::sun::star::document::MediaDescriptor</type>
@@ -504,18 +417,14 @@ interface XDocumentMetadataAccess
             if the argument does not contain a URL or Stream property
 
         @throws com::sun::star::lang::WrappedTargetException
-            if thrown when trying to access the medium
-
-        @throws com::sun::star::io::IOException
-            if thrown when trying to access the medium
+            if an error occurs while loading
 
         @see com::sun::star::document::MediaDescriptor
      */
     void loadMetadataFromMedium(
             [in] sequence < com::sun::star::beans::PropertyValue > Medium )
         raises( com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::lang::WrappedTargetException,
-                com::sun::star::io::IOException );
+                com::sun::star::lang::WrappedTargetException );
 
     //-------------------------------------------------------------------------
     /** stores document metadata to a medium.
@@ -528,18 +437,14 @@ interface XDocumentMetadataAccess
             if the argument does not contain a URL or Stream property
 
         @throws com::sun::star::lang::WrappedTargetException
-            if thrown when trying to access the medium
-
-        @throws com::sun::star::io::IOException
-            if thrown when trying to access the medium
+            if an error occurs while storing
 
         @see com::sun::star::document::MediaDescriptor
      */
     void storeMetadataToMedium(
             [in] sequence < com::sun::star::beans::PropertyValue > Medium )
         raises( com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::lang::WrappedTargetException,
-                com::sun::star::io::IOException );
+                com::sun::star::lang::WrappedTargetException );
 
 };
 

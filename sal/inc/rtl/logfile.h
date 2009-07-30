@@ -67,6 +67,14 @@ void SAL_CALL rtl_logfile_trace( const sal_Char* pszFormat, ... );
 */
 void SAL_CALL rtl_logfile_longTrace(char const * format, ...);
 
+/** Return if a log file is written.
+
+    @return true if a log file is written
+
+    @since UDK 3.2.11
+*/
+sal_Bool SAL_CALL rtl_logfile_hasLogFile( void );
+
 #ifdef __cplusplus
 }
 #endif
