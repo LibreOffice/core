@@ -432,11 +432,12 @@ bool MSCodec_Std97::CreateSaltDigest( const sal_uInt8 nSaltData[16], sal_uInt8 n
     return (result);
 }
 
-bool MSCodec_Std97::Encode(
+bool MSCodec_Std97::Encode (
     const void *pData,   sal_Size nDatLen,
     sal_uInt8  *pBuffer, sal_Size nBufLen)
 {
     rtlCipherError result;
+
     result = rtl_cipher_encode (
         m_hCipher, pData, nDatLen, pBuffer, nBufLen);
 
@@ -496,6 +497,38 @@ void MSCodec_Std97::GetDigestFromSalt( const sal_uInt8 pSaltData[16], sal_uInt8 
         m_hDigest, pDigestLocal, sizeof(pDigestLocal));
 
     memcpy(pDigest, pDigestLocal, 16);
+}
+
+void MSCodec_Std97::GetEncryptKey (
+    const sal_uInt8 pSalt[16],
+    sal_uInt8 pSaltData[16],
+    sal_uInt8 pSaltDigest[16])
+{
+    if (InitCipher(0))
+    {
+        sal_uInt8 pDigest[RTL_DIGEST_LENGTH_MD5];
+        sal_uInt8 pBuffer[64];
+
+        rtl_cipher_encode (
+            m_hCipher, pSalt, 16, pSaltData, sizeof(pBuffer));
+
+        (void)memcpy( pBuffer, pSalt, 16 );
+
+        pBuffer[16] = 0x80;
+        (void)memset (pBuffer + 17, 0, sizeof(pBuffer) - 17);
+        pBuffer[56] = 0x80;
+
+        rtl_digest_updateMD5 (
+            m_hDigest, pBuffer, sizeof(pBuffer));
+        rtl_digest_rawMD5 (
+            m_hDigest, pDigest, sizeof(pDigest));
+
+        rtl_cipher_encode (
+            m_hCipher, pDigest, 16, pSaltDigest, 16);
+
+        (void)memset (pBuffer, 0, sizeof(pBuffer));
+        (void)memset (pDigest, 0, sizeof(pDigest));
+    }
 }
 
 // ============================================================================

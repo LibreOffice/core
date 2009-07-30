@@ -87,6 +87,7 @@
 #endif
 #include <svtools/pickerhelper.hxx>
 #include <svtools/docpasswdrequest.hxx>
+#include <svtools/docmspasswdrequest.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -556,6 +557,15 @@ void FileDialogHelper_Impl::updateSelectionBox()
 }
 
 // ------------------------------------------------------------------------
+struct CheckMSPasswordCapability
+{
+    sal_Bool operator() ( const String rFilterName )
+    {
+        return rFilterName.EqualsAscii("MS Word 97");
+    }
+};
+
+// ------------------------------------------------------------------------
 struct CheckPasswordCapability
 {
     sal_Bool operator() ( const SfxFilter* _pFilter )
@@ -572,8 +582,9 @@ struct CheckPasswordCapability
             return true;
 #endif
 
-        return _pFilter->IsOwnFormat() && _pFilter->UsesStorage()
-            && ( SOFFICE_FILEFORMAT_60 <= _pFilter->GetVersion() );
+        return  ( _pFilter->IsOwnFormat() && _pFilter->UsesStorage()
+            &&  ( SOFFICE_FILEFORMAT_60 <= _pFilter->GetVersion() ) )
+            || CheckMSPasswordCapability()( _pFilter->GetFilterName() );
     }
 };
 
@@ -1660,15 +1671,30 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                     if( xInteractionHandler.is() )
                     {
                         // TODO: find out a way to set the 1-15 char limits on MS Excel 97 filter.
-                        RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword(
-                            ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)) );
+                        if ( CheckMSPasswordCapability()( rFilter ) )
+                        {
+                            RequestMSDocumentPassword* pMSPasswordRequest = new RequestMSDocumentPassword(
+                                ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)) );
 
-                        uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest );
-                        xInteractionHandler->handle( rRequest );
-                        if ( pPasswordRequest->isPassword() )
-                            rpSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
+                            uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pMSPasswordRequest );
+                            xInteractionHandler->handle( rRequest );
+                            if ( pMSPasswordRequest->isPassword() )
+                                rpSet->Put( SfxStringItem( SID_PASSWORD, pMSPasswordRequest->getPassword() ) );
+                            else
+                                return ERRCODE_ABORT;
+                        }
                         else
-                            return ERRCODE_ABORT;
+                        {
+                            RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword(
+                                ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)) );
+
+                            uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest );
+                            xInteractionHandler->handle( rRequest );
+                            if ( pPasswordRequest->isPassword() )
+                                rpSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
+                            else
+                                return ERRCODE_ABORT;
+                        }
                     }
                 }
             }
