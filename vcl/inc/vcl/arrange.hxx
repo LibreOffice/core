@@ -113,7 +113,8 @@ namespace vcl
         // there can be only one parent window and all managed windows MUST
         // be direct children of that window
         // violating that condition will result in undefined behavior
-        virtual void setParentWindow( Window* ) = 0;
+        virtual void setParentWindow( Window* );
+
         virtual void setParent( WindowArranger* );
 
         virtual size_t countElements() const = 0;
@@ -192,7 +193,6 @@ namespace vcl
 
         virtual Size getOptimalSize( WindowSizeType ) const;
         virtual void resize();
-        virtual void setParentWindow( Window* );
         virtual size_t countElements() const { return m_aElements.size(); }
 
         // add a managed window at the given index
@@ -205,6 +205,39 @@ namespace vcl
         size_t addChild( WindowArranger* i_pNewChild, sal_Int32 i_nExpandPrio = 0, size_t i_nIndex = ~0 )
         { return addChild( boost::shared_ptr<WindowArranger>( i_pNewChild ), i_nExpandPrio, i_nIndex ); }
         void remove( boost::shared_ptr<WindowArranger> const & );
+    };
+
+    class LabeledElement : public WindowArranger
+    {
+        WindowArranger::Element m_aLabel;
+        WindowArranger::Element m_aElement;
+        long                    m_nDistance;
+    protected:
+        virtual Element* getElement( size_t i_nIndex )
+        {
+            if( i_nIndex == 0 )
+                return &m_aLabel;
+            else if( i_nIndex == 1 )
+                return &m_aElement;
+            return 0;
+        }
+
+    public:
+        LabeledElement( WindowArranger* i_pParent = NULL, long i_nDistance = 5 )
+        : WindowArranger( i_pParent )
+        , m_nDistance( i_nDistance )
+        {}
+
+        virtual ~LabeledElement();
+
+        virtual Size getOptimalSize( WindowSizeType ) const;
+        virtual void resize();
+        virtual size_t countElements() const { return 2; }
+
+        void setLabel( Window* );
+        void setLabel( boost::shared_ptr<WindowArranger> const & );
+        void setElement( Window* );
+        void setElement( boost::shared_ptr<WindowArranger> const & );
     };
 
     class Indenter : public WindowArranger
@@ -226,7 +259,6 @@ namespace vcl
 
         virtual Size getOptimalSize( WindowSizeType ) const;
         virtual void resize();
-        virtual void setParentWindow( Window* );
         virtual size_t countElements() const { return (m_aElement.m_pElement != 0 || m_aElement.m_pChild != 0) ? 1 : 0; }
 
         void setIndent( long i_nIndent )
@@ -319,7 +351,6 @@ namespace vcl
 
         virtual Size getOptimalSize( WindowSizeType ) const;
         virtual void resize();
-        virtual void setParentWindow( Window* );
         virtual size_t countElements() const { return m_aElements.size(); }
 
         // add a managed window at the given matrix position

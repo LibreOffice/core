@@ -53,6 +53,28 @@ void WindowArranger::setParent( WindowArranger* i_pParent )
     setParentWindow( m_pParentWindow );
 }
 
+void WindowArranger::setParentWindow( Window* i_pNewParent )
+{
+    m_pParentWindow = i_pNewParent;
+
+    size_t nEle = countElements();
+    for( size_t i = 0; i < nEle; i++ )
+    {
+        Element* pEle = getElement( i );
+        if( pEle ) // sanity check
+        {
+            #if OSL_DEBUG_LEVEL > 0
+            if( pEle->m_pElement )
+            {
+                OSL_VERIFY( pEle->m_pElement->GetParent() == i_pNewParent );
+            }
+            #endif
+            if( pEle->m_pChild )
+                pEle->m_pChild->setParentWindow( i_pNewParent );
+        }
+    }
+}
+
 void WindowArranger::show( bool i_bShow, bool i_bImmediateUpdate )
 {
     size_t nEle = countElements();
@@ -341,23 +363,6 @@ void RowOrColumn::resize()
     }
 }
 
-void RowOrColumn::setParentWindow( Window* i_pNewParent )
-{
-    m_pParentWindow = i_pNewParent;
-    for( std::vector< WindowArranger::Element >::const_iterator it = m_aElements.begin();
-         it != m_aElements.end(); ++it )
-    {
-        #if OSL_DEBUG_LEVEL > 0
-        if( it->m_pElement )
-        {
-            OSL_VERIFY( it->m_pElement->GetParent() == i_pNewParent );
-        }
-        #endif
-        if( it->m_pChild )
-            it->m_pChild->setParentWindow( i_pNewParent );
-    }
-}
-
 size_t RowOrColumn::addWindow( Window* i_pWindow, sal_Int32 i_nExpandPrio, size_t i_nIndex )
 {
     size_t nIndex = i_nIndex;
@@ -427,6 +432,85 @@ void RowOrColumn::remove( boost::shared_ptr<WindowArranger> const & i_pChild )
 }
 
 // ----------------------------------------
+// vcl::LabeledElement
+//-----------------------------------------
+
+LabeledElement::~LabeledElement()
+{
+    m_aLabel.deleteChild();
+    m_aElement.deleteChild();
+}
+
+Size LabeledElement::getOptimalSize( WindowSizeType i_eType ) const
+{
+    Size aRet( m_aLabel.getOptimalSize( WINDOWSIZE_MINIMUM ) );
+    if( aRet.Width() != 0 )
+        aRet.Width() += m_nDistance;
+    Size aElementSize( m_aElement.getOptimalSize( i_eType ) );
+    aRet.Width() += aElementSize.Width();
+    if( aElementSize.Height() > aRet.Height() )
+        aRet.Height() = aElementSize.Height();
+    if( aRet.Height() != 0 )
+        aRet.Height() += 2*m_nOuterBorder;
+
+    return aRet;
+}
+
+void LabeledElement::resize()
+{
+    Size aLabelSize( m_aLabel.getOptimalSize( WINDOWSIZE_MINIMUM ) );
+    Size aElementSize( m_aElement.getOptimalSize( WINDOWSIZE_PREFERRED ) );
+    if( m_nDistance + aLabelSize.Width() + aElementSize.Width() > m_aManagedArea.GetWidth() )
+        aElementSize = m_aElement.getOptimalSize( WINDOWSIZE_MINIMUM );
+
+    // align label and element vertically in LabeledElement
+    long nYOff = (m_aManagedArea.GetHeight() - 2*m_nOuterBorder - aLabelSize.Height()) / 2;
+    Point aPos( m_aManagedArea.Left(),
+                m_aManagedArea.Top() + m_nOuterBorder + nYOff );
+    Size aSize( aLabelSize );
+    if( m_aLabel.m_pElement )
+        m_aLabel.m_pElement->SetPosSizePixel( aPos, aSize );
+    else if( m_aLabel.m_pChild.get() )
+        m_aLabel.m_pChild->setManagedArea( Rectangle( aPos, aSize ) );
+
+    aPos.X() += aSize.Width() + m_nDistance;
+    nYOff = (m_aManagedArea.GetHeight() - 2*m_nOuterBorder - aElementSize.Height()) / 2;
+    aPos.Y() = m_aManagedArea.Top() + m_nOuterBorder + nYOff;
+    aSize.Width() = aElementSize.Width();
+    aSize.Height() = m_aManagedArea.GetHeight() - 2*m_nOuterBorder;
+    if( aPos.X() + aSize.Width() < m_aManagedArea.Right() )
+        aSize.Width() = m_aManagedArea.Right() - aPos.X();
+    if( m_aElement.m_pElement )
+        m_aElement.m_pElement->SetPosSizePixel( aPos, aSize );
+    else if( m_aElement.m_pChild.get() )
+        m_aElement.m_pChild->setManagedArea( Rectangle( aPos, aSize ) );
+}
+
+void LabeledElement::setLabel( Window* i_pLabel )
+{
+    m_aLabel.m_pElement = i_pLabel;
+    m_aLabel.m_pChild.reset();
+}
+
+void LabeledElement::setLabel( boost::shared_ptr<WindowArranger> const & i_pLabel )
+{
+    m_aLabel.m_pElement = NULL;
+    m_aLabel.m_pChild = i_pLabel;
+}
+
+void LabeledElement::setElement( Window* i_pElement )
+{
+    m_aElement.m_pElement = i_pElement;
+    m_aElement.m_pChild.reset();
+}
+
+void LabeledElement::setElement( boost::shared_ptr<WindowArranger> const & i_pElement )
+{
+    m_aElement.m_pElement = NULL;
+    m_aElement.m_pChild = i_pElement;
+}
+
+// ----------------------------------------
 // vcl::Indenter
 //-----------------------------------------
 
@@ -470,19 +554,6 @@ void Indenter::setChild( boost::shared_ptr<WindowArranger> const & i_pChild, sal
     OSL_VERIFY( (m_aElement.m_pElement == 0 && m_aElement.m_pChild == 0 ) || i_pChild == 0 );
     m_aElement.m_pChild = i_pChild;
     m_aElement.m_nExpandPriority = i_nExpandPrio;
-}
-
-void Indenter::setParentWindow( Window* i_pNewParent )
-{
-    m_pParentWindow = i_pNewParent;
-    #if OSL_DEBUG_LEVEL > 0
-    if( m_aElement.m_pElement )
-    {
-        OSL_VERIFY( m_aElement.m_pElement->GetParent() == i_pNewParent );
-    }
-    #endif
-    if( m_aElement.m_pChild )
-        m_aElement.m_pChild->setParentWindow( i_pNewParent );
 }
 
 // ----------------------------------------
@@ -585,23 +656,6 @@ void MatrixArranger::resize()
             it->m_pElement->SetPosSizePixel( aCellPos, aCellSize );
         else if( it->m_pChild )
             it->m_pChild->setManagedArea( Rectangle( aCellPos, aCellSize ) );
-    }
-}
-
-void MatrixArranger::setParentWindow( Window* i_pNewParent )
-{
-    m_pParentWindow = i_pNewParent;
-    for( std::vector< MatrixElement >::const_iterator it = m_aElements.begin();
-         it != m_aElements.end(); ++it )
-    {
-        #if OSL_DEBUG_LEVEL > 0
-        if( it->m_pElement )
-        {
-            OSL_VERIFY( it->m_pElement->GetParent() == i_pNewParent );
-        }
-        #endif
-        if( it->m_pChild )
-            it->m_pChild->setParentWindow( i_pNewParent );
     }
 }
 

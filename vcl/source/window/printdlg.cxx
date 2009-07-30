@@ -301,10 +301,10 @@ void PrintDialog::NUpTabPage::setupLayout()
 
     boost::shared_ptr< vcl::RowOrColumn > xCol( new vcl::RowOrColumn( xIndent.get() ) );
     xIndent->setChild( xCol );
-    xRow.reset( new vcl::RowOrColumn( xCol.get(), false ) );
-    xCol->addChild( xRow );
-    xRow->addWindow( &maNupPagesTxt );
-    xRow->addWindow( &maNupPagesBox );
+    boost::shared_ptr< vcl::LabeledElement > xLabel( new vcl::LabeledElement( xCol.get() ) );
+    xCol->addChild( xLabel );
+    xLabel->setLabel( &maNupPagesTxt );
+    xLabel->setElement( &maNupPagesBox );
 
     xIndent.reset( new vcl::Indenter( xCol.get() ) );
     xCol->addChild( xIndent );
@@ -322,25 +322,25 @@ void PrintDialog::NUpTabPage::setupLayout()
     xRow->addWindow( &maNupTimesTxt );
     xRow->addWindow( &maNupRowsEdt );
 
-    xRow.reset( new vcl::RowOrColumn( xCol.get(), false ) );
-    xCol->addChild( xRow );
-    xRow->addWindow( &maPageMarginTxt );
-    xRow->addWindow( &maPageMarginEdt );
+    xLabel.reset( new vcl::LabeledElement( xCol.get() ) );
+    xCol->addChild( xLabel );
+    xLabel->setLabel( &maPageMarginTxt );
+    xLabel->setElement( &maPageMarginEdt );
 
-    xRow.reset( new vcl::RowOrColumn( xCol.get(), false ) );
-    xCol->addChild( xRow );
-    xRow->addWindow( &maSheetMarginTxt );
-    xRow->addWindow( &maSheetMarginEdt );
+    xLabel.reset( new vcl::LabeledElement( xCol.get() ) );
+    xCol->addChild( xLabel );
+    xLabel->setLabel( &maSheetMarginTxt );
+    xLabel->setElement( &maSheetMarginEdt );
 
-    xRow.reset( new vcl::RowOrColumn( xCol.get(), false ) );
-    xCol->addChild( xRow );
-    xRow->addWindow( &maNupOrientationTxt );
-    xRow->addWindow( &maNupOrientationBox );
+    xLabel.reset( new vcl::LabeledElement( xCol.get() ) );
+    xCol->addChild( xLabel );
+    xLabel->setLabel( &maNupOrientationTxt );
+    xLabel->setElement( &maNupOrientationBox );
 
-    xRow.reset( new vcl::RowOrColumn( mxLayoutGroup.get(), false ) );
-    mxLayoutGroup->addChild( xRow );
-    xRow->addWindow( &maNupOrderTxt );
-    xRow->addWindow( &maNupOrderBox );
+    xLabel.reset( new vcl::LabeledElement( xCol.get() ) );
+    xCol->addChild( xLabel );
+    xLabel->setLabel( &maNupOrderTxt );
+    xLabel->setElement( &maNupOrderBox );
 
     mxLayoutGroup->addWindow( &maBorderCB );
 
@@ -485,14 +485,14 @@ void PrintDialog::JobTabPage::setupLayout()
     xRangeRow->addChild( xCopyCollateCol );
 
     // add copies row to copy/collate column
-    boost::shared_ptr< vcl::RowOrColumn > xCopiesRow( new vcl::RowOrColumn( xCopyCollateCol.get(), false, 0 ) );
+    boost::shared_ptr< vcl::LabeledElement > xCopiesRow( new vcl::LabeledElement( xCopyCollateCol.get() ) );
     xCopyCollateCol->addChild( xCopiesRow );
-    xCopiesRow->addWindow( &maCopyCount );
-    xCopiesRow->addWindow( &maCopyCountField );
-    boost::shared_ptr< vcl::RowOrColumn > xCollateRow( new vcl::RowOrColumn( xCopyCollateCol.get(), false, 0 ) );
+    xCopiesRow->setLabel( &maCopyCount );
+    xCopiesRow->setElement( &maCopyCountField );
+    boost::shared_ptr< vcl::LabeledElement > xCollateRow( new vcl::LabeledElement( xCopyCollateCol.get() ) );
     xCopyCollateCol->addChild( xCollateRow );
-    xCollateRow->addWindow( &maCollateBox );
-    xCollateRow->addWindow( &maCollateImage );
+    xCollateRow->setLabel( &maCollateBox );
+    xCollateRow->setElement( &maCollateImage );
 
     maDetailsBtn.SetSymbol( SYMBOL_SPIN_DOWN );
     maDetailsBtn.SetSmallSymbol();
@@ -1222,6 +1222,7 @@ void PrintDialog::setupOptionalUI()
                 pCurColumn->addChild( pFieldColumn );
                 aPropertyToDependencyRowMap.insert( std::pair< rtl::OUString, vcl::RowOrColumn* >( aPropertyName, pFieldColumn ) );
 
+                vcl::LabeledElement* pLabel = NULL;
                 if( aText.getLength() )
                 {
                     // add a FixedText:
@@ -1234,7 +1235,9 @@ void PrintDialog::setupOptionalUI()
                     setSmartId( pHeading, "FixedText", -1, aPropertyName );
 
                     // add to row
-                    pFieldColumn->addWindow( pHeading );
+                    pLabel = new vcl::LabeledElement( pFieldColumn );
+                    pFieldColumn->addChild( pLabel );
+                    pLabel->setLabel( pHeading );
                 }
 
                 if( aCtrlType.equalsAscii( "List" ) )
@@ -1266,7 +1269,10 @@ void PrintDialog::setupOptionalUI()
                     maControlToPropertyMap[pList] = aPropertyName;
 
                     // finish the pair
-                    pFieldColumn->addWindow( pList );
+                    if( pLabel )
+                        pLabel->setElement( pList );
+                    else
+                        pFieldColumn->addWindow( pList );
                 }
                 else if( aCtrlType.equalsAscii( "Range" ) )
                 {
@@ -1298,7 +1304,10 @@ void PrintDialog::setupOptionalUI()
                     maControlToPropertyMap[pField] = aPropertyName;
 
                     // add to row
-                    pFieldColumn->addWindow( pField );
+                    if( pLabel )
+                        pLabel->setElement( pField );
+                    else
+                        pFieldColumn->addWindow( pField );
                 }
                 else if( aCtrlType.equalsAscii( "Edit" ) )
                 {
@@ -1323,7 +1332,10 @@ void PrintDialog::setupOptionalUI()
                     maControlToPropertyMap[pField] = aPropertyName;
 
                     // add to row
-                    pFieldColumn->addWindow( pField, 2 );
+                    if( pLabel )
+                        pLabel->setElement( pField );
+                    else
+                        pFieldColumn->addWindow( pField, 2 );
                 }
             }
             else

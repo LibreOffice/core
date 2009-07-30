@@ -145,6 +145,7 @@ ModalDialog SV_DLG_PRINT
             Pos = MAP_APPFONT( 0, 0 );
             Size = MAP_APPFONT( 10, 10 );
             Text [en-US] = "P~ages";
+            VCenter = TRUE;
         };
         NumericField SV_PRINT_PRT_NUP_COLS_EDT
         {
@@ -161,6 +162,7 @@ ModalDialog SV_DLG_PRINT
             Pos = MAP_APPFONT( 10, 35 );
             Size = MAP_APPFONT( 40, 10 );
             Text [en-US] = "~by";
+            VCenter = TRUE;
         };
         NumericField SV_PRINT_PRT_NUP_ROWS_EDT
         {
