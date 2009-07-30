@@ -3093,91 +3093,12 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
     rTextRect=Rectangle(aTextPos,aTextSiz);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void SdrObjCustomShape::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
 {
     SdrTextObj::NbcSetOutlinerParaObject( pTextObject );
     SetBoundRectDirty();
     SetRectsDirty(TRUE);
     InvalidateRenderGeometry();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-SdrObject* SdrObjCustomShape::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    SdrObject* pHitObj = NULL;
-    const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
-    if ( pSdrObject )
-    {
-        SdrObjList* pOL = pSdrObject->GetSubList();
-        if ( pOL )
-        {
-            ULONG nObjNum = pOL->GetObjCount();
-            while ( ( pHitObj == NULL ) && nObjNum )
-            {
-                nObjNum--;
-                SdrObject* pObj = pOL->GetObj( nObjNum );
-                if ( pObj->CheckHit( rPnt, nTol, pVisiLayer ) )
-                    pHitObj = (SdrObject*)this;
-            }
-        }
-        else if ( pSdrObject->CheckHit( rPnt, nTol, pVisiLayer ) )
-            pHitObj = (SdrObject*)this;
-    }
-
-    if ( !pHitObj && HasText() )
-    {
-        // paint text over object
-        double fTextRotation = GetExtraTextRotation();
-        if ( fTextRotation != 0.0 )
-        {
-            GeoStat aOldGeoStat( aGeo );
-            Rectangle aOldRect( aRect );
-            Rectangle aTextBound( aRect );
-            GetTextBounds( aTextBound );
-
-            // determining the correct refpoint
-            Point aRef( aTextBound.Center() );
-            Rectangle aUnrotatedSnapRect( aOutRect );
-            RotatePoint( aRef, aUnrotatedSnapRect.Center(), -aGeo.nSin, -aGeo.nCos );
-
-            long dx = aRect.Right()-aRect.Left();
-            long dy = aRect.Bottom()-aRect.Top();
-            Point aP( aRect.TopLeft() );
-            double sn = sin( F_PI180 * fTextRotation );
-            double cs = cos( F_PI180 * fTextRotation );
-            RotatePoint( aP, aRef, sn, cs );
-            ((SdrObjCustomShape*)this)->aRect.Left()=aP.X();
-            ((SdrObjCustomShape*)this)->aRect.Top()=aP.Y();
-            ((SdrObjCustomShape*)this)->aRect.Right()=aRect.Left()+dx;
-            ((SdrObjCustomShape*)this)->aRect.Bottom()=aRect.Top()+dy;
-            if ( aGeo.nDrehWink == 0 )
-            {
-                ((SdrObjCustomShape*)this)->aGeo.nDrehWink=NormAngle360( (sal_Int32)( fTextRotation * 100.0 ) );
-                ((SdrObjCustomShape*)this)->aGeo.nSin = sn;
-                ((SdrObjCustomShape*)this)->aGeo.nCos = cs;
-            }
-            else
-            {
-                ((SdrObjCustomShape*)this)->aGeo.nDrehWink=NormAngle360( aGeo.nDrehWink + (sal_Int32)( fTextRotation * 100.0 ) );
-                ((SdrObjCustomShape*)this)->aGeo.RecalcSinCos();
-            }
-            pHitObj = SdrTextObj::CheckHit( rPnt, nTol, pVisiLayer );
-            ((SdrObjCustomShape*)this)->aGeo = aOldGeoStat;
-            ((SdrObjCustomShape*)this)->aRect = aOldRect;
-
-        }
-        else
-            pHitObj = SdrTextObj::CheckHit( rPnt, nTol, pVisiLayer );
-    }
-
-    return pHitObj;
 }
 
 void SdrObjCustomShape::operator=(const SdrObject& rObj)

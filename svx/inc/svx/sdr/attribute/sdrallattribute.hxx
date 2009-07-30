@@ -32,6 +32,8 @@
 #ifndef _SDR_ATTRIBUTE_SDRALLATTRIBUTE_HXX
 #define _SDR_ATTRIBUTE_SDRALLATTRIBUTE_HXX
 
+#include <sal/types.h>
+
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
@@ -57,7 +59,9 @@ namespace drawinglayer
             SdrTextAttribute*                       mpTextAttribute;            // text and text attributes (if used)
 
         public:
-            SdrShadowTextAttribute(SdrShadowAttribute* pShadow = 0L, SdrTextAttribute* pTextAttribute = 0L);
+            SdrShadowTextAttribute(
+                SdrShadowAttribute* pShadow = 0,
+                SdrTextAttribute* pTextAttribute = 0);
             ~SdrShadowTextAttribute();
 
             // copy constructor and assigment operator
@@ -68,7 +72,7 @@ namespace drawinglayer
             bool operator==(const SdrShadowTextAttribute& rCandidate) const;
 
             // bool access
-            bool isVisible() const { return (0L != mpTextAttribute); }
+            bool isVisible() const { return (0 != mpTextAttribute); }
 
             // data access
             const SdrShadowAttribute* getShadow() const { return mpShadow; }
@@ -91,7 +95,10 @@ namespace drawinglayer
             SdrTextAttribute*                       mpTextAttribute;            // text and text attributes (if used)
 
         public:
-            SdrFillTextAttribute(SdrFillAttribute* pFill = 0L, FillGradientAttribute* pFillFloatTransGradient = 0L, SdrTextAttribute* pTextAttribute = 0L);
+            SdrFillTextAttribute(
+                SdrFillAttribute* pFill = 0,
+                FillGradientAttribute* pFillFloatTransGradient = 0,
+                SdrTextAttribute* pTextAttribute = 0);
             ~SdrFillTextAttribute();
 
             // copy constructor and assigment operator
@@ -126,8 +133,10 @@ namespace drawinglayer
 
         public:
             SdrLineShadowTextAttribute(
-                SdrLineAttribute* pLine = 0L, SdrLineStartEndAttribute* pLineStartEnd = 0L,
-                SdrShadowAttribute* pShadow = 0L, SdrTextAttribute* pTextAttribute = 0L);
+                SdrLineAttribute* pLine = 0,
+                SdrLineStartEndAttribute* pLineStartEnd = 0,
+                SdrShadowAttribute* pShadow = 0,
+                SdrTextAttribute* pTextAttribute = 0);
             ~SdrLineShadowTextAttribute();
 
             // copy constructor and assigment operator
@@ -161,8 +170,12 @@ namespace drawinglayer
 
         public:
             SdrLineFillShadowTextAttribute(
-                SdrLineAttribute* pLine = 0L, SdrFillAttribute* pFill = 0L, SdrLineStartEndAttribute* pLineStartEnd = 0L,
-                SdrShadowAttribute* pShadow = 0L, FillGradientAttribute* pFillFloatTransGradient = 0L, SdrTextAttribute* pTextAttribute = 0L);
+                SdrLineAttribute* pLine = 0,
+                SdrFillAttribute* pFill = 0,
+                SdrLineStartEndAttribute* pLineStartEnd = 0,
+                SdrShadowAttribute* pShadow = 0,
+                FillGradientAttribute* pFillFloatTransGradient = 0,
+                SdrTextAttribute* pTextAttribute = 0);
             ~SdrLineFillShadowTextAttribute();
 
             // copy constructor and assigment operator

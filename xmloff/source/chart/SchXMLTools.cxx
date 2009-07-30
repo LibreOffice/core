@@ -185,6 +185,9 @@ const tMakeStringStringMap& lcl_getChartTypeNameMap()
         ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.StockDiagram" )
         , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.CandleStickChartType" ) )
 
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.BubbleDiagram" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.BubbleChartType" ) )
+
         ;
     return g_aChartTypeNameMap;
 }
@@ -241,6 +244,9 @@ OUString GetChartTypeByClassName(
         else
             aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Scatter"));
     }
+
+    else if( IsXMLToken( rClassName, XML_BUBBLE ))
+        aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Bubble"));
     else if( IsXMLToken( rClassName, XML_RADAR ))
         aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Net"));
     else if( IsXMLToken( rClassName, XML_STOCK ))
@@ -306,6 +312,8 @@ XMLTokenEnum getTokenByChartType(
             else if( (bUseOldNames && aServiceName.equalsAscii("XY")) ||
                      (!bUseOldNames && aServiceName.equalsAscii("Scatter")))
                 eResult = XML_SCATTER;
+            else if( aServiceName.equalsAscii("Bubble"))
+                eResult = XML_BUBBLE;
             else if( aServiceName.equalsAscii("Net"))
                 eResult = XML_RADAR;
             else if( (bUseOldNames && aServiceName.equalsAscii("Stock")) ||

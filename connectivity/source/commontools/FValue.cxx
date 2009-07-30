@@ -37,6 +37,7 @@
 #include <connectivity/dbconversion.hxx>
 #include <cppuhelper/extract.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/logfile.hxx>
 
 using namespace connectivity;
@@ -984,12 +985,13 @@ Any ORowSetValue::makeAny() const
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
                 {
-                    aRet = ::rtl::OUString::createFromAscii("0x");
+                    ::rtl::OUStringBuffer sVal = ::rtl::OUString::createFromAscii("0x");
                     Sequence<sal_Int8> aSeq(getSequence());
                     const sal_Int8* pBegin  = aSeq.getConstArray();
                     const sal_Int8* pEnd    = pBegin + aSeq.getLength();
                     for(;pBegin != pEnd;++pBegin)
-                        aRet += ::rtl::OUString::valueOf((sal_Int32)*pBegin,16);
+                        sVal.append((sal_Int32)*pBegin,16);
+                    aRet = sVal.makeStringAndClear();
                 }
                 break;
             case DataType::BIT:

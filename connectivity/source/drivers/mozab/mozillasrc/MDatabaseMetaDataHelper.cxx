@@ -48,10 +48,12 @@
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 
+#include <nsIAbDirFactoryService.h>
 #include <MNSInit.hxx>
 #include <MNameMapper.hxx>
 #include "MNSMozabProxy.hxx"
 #include <MNSDeclares.hxx>
+
 static ::osl::Mutex m_aMetaMutex;
 
 #include <osl/diagnose.h>

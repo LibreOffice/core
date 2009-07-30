@@ -91,6 +91,7 @@ SLOFILES=\
          $(SLO)$/svdedtv2.obj        \
          $(SLO)$/svdedxv.obj         \
          $(SLO)$/svdetc.obj          \
+         $(SLO)$/sdrhittesthelper.obj          \
          $(SLO)$/svdfmtf.obj		\
          $(SLO)$/svdglev.obj         \
          $(SLO)$/svdglue.obj         \
@@ -106,9 +107,7 @@ SLOFILES=\
          $(SLO)$/sdrpaintwindow.obj         \
          $(SLO)$/svdpoev.obj         \
          $(SLO)$/svdscrol.obj        \
-         $(SLO)$/svdtouch.obj        \
          $(SLO)$/svdtrans.obj        \
-         $(SLO)$/svdtxhdl.obj        \
          $(SLO)$/svdundo.obj         \
          $(SLO)$/svdviter.obj        \
          $(SLO)$/clonelist.obj		 \

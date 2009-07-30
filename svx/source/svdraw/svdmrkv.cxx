@@ -48,26 +48,19 @@
 #include <svx/svdoole2.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xflgrit.hxx>
-
 #include "gradtrns.hxx"
 #include <svx/xflftrit.hxx>
-
 #include <svx/dialmgr.hxx>
 #include "svdstr.hrc"
 #include <svx/svdundo.hxx>
-
-// #105722#
 #include <svx/svdopath.hxx>
-
-// #i13033#
 #include <svx/scene3d.hxx>
-
-// OD 30.06.2003 #108784#
 #include <svx/svdovirt.hxx>
 #include <svx/sdr/overlay/overlayrollingrectangle.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <sdrpaintwindow.hxx>
 #include <svx/sdrpagewindow.hxx>
+#include <svx/sdrhittesthelper.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -109,7 +102,7 @@ ImplMarkingOverlay::ImplMarkingOverlay(const SdrPaintView& rView, const basegfx:
         if(pTargetOverlay)
         {
             ::sdr::overlay::OverlayRollingRectangleStriped* pNew = new ::sdr::overlay::OverlayRollingRectangleStriped(
-                rStartPos, rStartPos, sal_False);
+                rStartPos, rStartPos, false);
             pTargetOverlay->add(*pNew);
             maObjects.append(*pNew);
         }
@@ -1290,7 +1283,7 @@ BOOL SdrMarkView::IsMarkedObjHit(const Point& rPnt, short nTol) const
     Point aPt(rPnt);
     for (ULONG nm=0; nm<GetMarkedObjectCount() && !bRet; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
-        bRet=ImpIsObjHit(aPt,USHORT(nTol),pM->GetMarkedSdrObj(),pM->GetPageView(),0);
+        bRet = 0 != CheckSingleSdrObjectHit(aPt,USHORT(nTol),pM->GetMarkedSdrObj(),pM->GetPageView(),0,0);
     }
     return bRet;
 }
@@ -1391,7 +1384,8 @@ BOOL SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, BOOL bPrev)
     for (nm=nMarkAnz; nm>0 && pTopMarkHit==NULL;) {
         nm--;
         SdrMark* pM=GetSdrMarkByIndex(nm);
-        if (ImpIsObjHit(aPt,USHORT(nTol),pM->GetMarkedSdrObj(),pM->GetPageView(),0)) {
+        if(CheckSingleSdrObjectHit(aPt,USHORT(nTol),pM->GetMarkedSdrObj(),pM->GetPageView(),0,0))
+        {
             pTopMarkHit=pM;
             nTopMarkHit=nm;
         }
@@ -1407,7 +1401,8 @@ BOOL SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, BOOL bPrev)
     for (nm=0; nm<nMarkAnz && pBtmMarkHit==NULL; nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrPageView* pPV2=pM->GetPageView();
-        if (pPV2==pPV && ImpIsObjHit(aPt,USHORT(nTol),pM->GetMarkedSdrObj(),pPV2,0)) {
+        if (pPV2==pPV && CheckSingleSdrObjectHit(aPt,USHORT(nTol),pM->GetMarkedSdrObj(),pPV2,0,0))
+        {
             pBtmMarkHit=pM;
             nBtmMarkHit=nm;
         }
@@ -1464,7 +1459,8 @@ BOOL SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, BOOL bPrev)
             pObj = pObjList->GetObj(no);
         }
 
-        if (ImpIsObjHit(aPt,USHORT(nTol),pObj,pPV,SDRSEARCH_TESTMARKABLE)) {
+        if (CheckSingleSdrObjectHit(aPt,USHORT(nTol),pObj,pPV,SDRSEARCH_TESTMARKABLE,0))
+        {
             if (TryToFindMarkedObject(pObj)==CONTAINER_ENTRY_NOTFOUND) {
                 pFndObj=pObj;
             } else {
@@ -1590,7 +1586,7 @@ void SdrMarkView::SetMarkHdlSizePixel(USHORT nSiz)
 }
 
 #define SDRSEARCH_IMPISMASTER 0x80000000 /* MasterPage wird gerade durchsucht */
-SdrObject* SdrMarkView::ImpCheckObjHit(const Point& rPnt, USHORT nTol, SdrObject* pObj, SdrPageView* pPV, ULONG nOptions, const SetOfByte* pMVisLay) const
+SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, USHORT nTol, SdrObject* pObj, SdrPageView* pPV, ULONG nOptions, const SetOfByte* pMVisLay) const
 {
     if((nOptions & SDRSEARCH_IMPISMASTER) && pObj->IsNotVisibleAsMaster())
     {
@@ -1636,15 +1632,13 @@ SdrObject* SdrMarkView::ImpCheckObjHit(const Point& rPnt, USHORT nTol, SdrObject
                     aPnt.Move( -aOffset.X(), -aOffset.Y() );
                 }
 
-                pRet=ImpCheckObjHit(aPnt,nTol,pOL,pPV,nOptions,pMVisLay,pTmpObj);
+                pRet=CheckSingleSdrObjectHit(aPnt,nTol,pOL,pPV,nOptions,pMVisLay,pTmpObj);
             }
             else
             {
-                SdrLayerID nLay=pObj->GetLayer();
-
-                if(pPV->GetVisibleLayers().IsSet(nLay) && (pMVisLay==NULL || pMVisLay->IsSet(nLay)))
+                if(!pMVisLay || pMVisLay->IsSet(pObj->GetLayer()))
                 {
-                    pRet=pObj->CheckHit(rPnt,nTol2,&pPV->GetVisibleLayers());
+                    pRet = SdrObjectPrimitiveHit(*pObj, rPnt, nTol2, *pPV, &pPV->GetVisibleLayers(), false);
                 }
             }
         }
@@ -1658,7 +1652,7 @@ SdrObject* SdrMarkView::ImpCheckObjHit(const Point& rPnt, USHORT nTol, SdrObject
     return pRet;
 }
 
-SdrObject* SdrMarkView::ImpCheckObjHit(const Point& rPnt, USHORT nTol, SdrObjList* pOL, SdrPageView* pPV, ULONG nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj) const
+SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, USHORT nTol, SdrObjList* pOL, SdrPageView* pPV, ULONG nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj) const
 {
     BOOL bBack=(nOptions & SDRSEARCH_BACKWARD)!=0;
     SdrObject* pRet=NULL;
@@ -1685,7 +1679,7 @@ SdrObject* SdrMarkView::ImpCheckObjHit(const Point& rPnt, USHORT nTol, SdrObjLis
                 pObj = pOL->GetObj(nObjNum);
             }
 
-            pRet=ImpCheckObjHit(rPnt,nTol,pObj,pPV,nOptions,pMVisLay);
+            pRet=CheckSingleSdrObjectHit(rPnt,nTol,pObj,pPV,nOptions,pMVisLay);
             if (pRet!=NULL) rpRootObj=pObj;
             if (bBack) nObjNum++;
         }
@@ -1733,7 +1727,7 @@ BOOL SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrP
             SdrMark* pM=GetSdrMarkByIndex(nMrkNum);
             pObj=pM->GetMarkedSdrObj();
             pPV=pM->GetPageView();
-            pHitObj=ImpCheckObjHit(aPt,nTol,pObj,pPV,nOptions,NULL);
+            pHitObj=CheckSingleSdrObjectHit(aPt,nTol,pObj,pPV,nOptions,NULL);
             if (bBack) nMrkNum++;
         }
     }
@@ -1778,7 +1772,7 @@ BOOL SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrP
                     if (pnPassNum!=NULL) *pnPassNum|=SDRSEARCHPASS_MASTERPAGE;
                     nTmpOptions=nTmpOptions | SDRSEARCH_IMPISMASTER;
                 }
-                pHitObj=ImpCheckObjHit(aPt,nTol,pObjList,pPV,nTmpOptions,pMVisLay,pObj);
+                pHitObj=CheckSingleSdrObjectHit(aPt,nTol,pObjList,pPV,nTmpOptions,pMVisLay,pObj);
                 if (bBack) nPgNum++;
             }
         }
@@ -1801,8 +1795,12 @@ BOOL SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrP
             if (!pObj->HasMacro() || !pObj->IsMacroHit(aHitRec)) pObj=NULL;
         }
         if (pObj!=NULL && (nOptions & SDRSEARCH_WITHTEXT) !=0 && pObj->GetOutlinerParaObject()==NULL) pObj=NULL;
-        if (pObj!=NULL && (nOptions & SDRSEARCH_TESTTEXTAREA) !=0) {
-            if (!pObj->IsTextEditHit(aPt,0/*nTol*/,NULL)) pObj=NULL;
+        if (pObj!=NULL && (nOptions & SDRSEARCH_TESTTEXTAREA) !=0)
+        {
+            if(!SdrObjectPrimitiveHit(*pObj, aPt, 0, *pPV, 0, true))
+            {
+                pObj = 0;
+            }
         }
         if (pObj!=NULL) {
             rpObj=pObj;
@@ -1831,7 +1829,7 @@ BOOL SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
         SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
         SdrPageView* pPV=pM->GetPageView();
         SdrObject* pObj=pM->GetMarkedSdrObj();
-        bFnd=ImpIsObjHit(aPt,nTol,pObj,pPV,SDRSEARCH_TESTMARKABLE);
+        bFnd = 0 != CheckSingleSdrObjectHit(aPt,nTol,pObj,pPV,SDRSEARCH_TESTMARKABLE,0);
         if (bFnd) {
             rpObj=pObj;
             rpPV=pPV;

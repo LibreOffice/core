@@ -54,6 +54,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include "connectivity/ParameterCont.hxx"
+#include <rtl/ustrbuf.hxx>
 
 //........................................................................
 namespace dbtools
@@ -394,24 +395,24 @@ namespace dbtools
             // did we find links where the detail field refers to a detail column (instead of a parameter name)?
             if ( !aAdditionalFilterComponents.empty() )
             {
+                const static ::rtl::OUString s_sAnd( RTL_CONSTASCII_USTRINGPARAM( " AND " ) );
                 // build a conjunction of all the filter components
-                ::rtl::OUString sAdditionalFilter;
+                ::rtl::OUStringBuffer sAdditionalFilter;
                 for (   ::std::vector< ::rtl::OUString >::const_iterator aComponent = aAdditionalFilterComponents.begin();
                         aComponent != aAdditionalFilterComponents.end();
                         ++aComponent
                     )
                 {
-                    ::rtl::OUString sBracketed( RTL_CONSTASCII_USTRINGPARAM( "( " ) );
-                    sBracketed += *aComponent;
-                    sBracketed += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " )" ) );
-
                     if ( sAdditionalFilter.getLength() )
-                        sAdditionalFilter += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " AND " ) );
-                    sAdditionalFilter += sBracketed;
+                        sAdditionalFilter.append(s_sAnd);
+
+                    sAdditionalFilter.appendAscii("( ",((sal_Int32)(sizeof("( ")-1)));
+                    sAdditionalFilter.append(*aComponent);
+                    sAdditionalFilter.appendAscii(" )",((sal_Int32)(sizeof(" )")-1)));
                 }
 
                 // now set this filter at the 's filter manager
-                _rFilterManager.setFilterComponent( FilterManager::fcLinkFilter, sAdditionalFilter );
+                _rFilterManager.setFilterComponent( FilterManager::fcLinkFilter, sAdditionalFilter.makeStringAndClear() );
 
                 _rColumnsInLinkDetails = true;
             }
@@ -1119,3 +1120,4 @@ namespace dbtools
 //........................................................................
 }   // namespace frm
 //........................................................................
+

@@ -246,7 +246,7 @@ void SdrObjEditView::ModelHasChanged()
                 eNewAnchor=(EVAnchorMode)pTextObj->GetOutlinerViewAnchorMode();
                 bAnchorChg=eOldAnchor!=eNewAnchor;
                 Color aOldColor(pTextEditOutlinerView->GetBackgroundColor());
-                aNewColor=ImpGetTextEditBackgroundColor();
+                aNewColor = GetTextEditBackgroundColor(*this);
                 bColorChg=aOldColor!=aNewColor;
             }
             // #104082# refresh always when it's a contour frame. That
@@ -425,52 +425,10 @@ void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView& rOutlView) const
     }
 }
 
-Color SdrObjEditView::ImpGetTextEditBackgroundColor() const
-{
-    // #108759# Extracted significant parts to SdrPaintView::CalcBackgroundColor()
-    svtools::ColorConfig aColorConfig;
-    Color aBackground(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-
-    if(!rStyleSettings.GetHighContrastMode())
-    {
-        bool bFound=false;
-        SdrTextObj* pText = dynamic_cast< SdrTextObj * >( mxTextEditObj.get());
-        if (pText!=NULL && pText->IsClosedObj())
-        {
-            ::sdr::table::SdrTableObj* pTable = dynamic_cast< ::sdr::table::SdrTableObj * >( pText );
-            if( pTable )
-                bFound = GetDraftFillColor(pTable->GetActiveCellItemSet(), aBackground );
-
-            if( !bFound )
-                bFound=GetDraftFillColor(pText->GetMergedItemSet(), aBackground);
-        }
-        if (!bFound && pTextEditPV!=NULL && pText)
-        {
-            // #108784#
-            Point aPvOfs(pText->GetTextEditOffset());
-
-            const SdrPage* pPg=pTextEditPV->GetPage();
-
-            // #112690#
-            // Test existance of the page before using CalcBackgroundColor
-            if(pPg)
-            {
-                Rectangle aSnapRect( pText->GetSnapRect() );
-                aSnapRect.Move(aPvOfs.X(), aPvOfs.Y());
-
-                return CalcBackgroundColor( aSnapRect, pTextEditPV->GetVisibleLayers(), *pPg );
-            }
-        }
-    }
-
-    return aBackground;
-}
-
 OutlinerView* SdrObjEditView::ImpMakeOutlinerView(Window* pWin, BOOL /*bNoPaint*/, OutlinerView* pGivenView) const
 {
     // Hintergrund
-    Color aBackground(ImpGetTextEditBackgroundColor());
+    Color aBackground(GetTextEditBackgroundColor(*this));
     SdrTextObj* pText = dynamic_cast< SdrTextObj * >( mxTextEditObj.get() );
     BOOL bTextFrame=pText!=NULL && pText->IsTextFrame();
     BOOL bContourFrame=pText!=NULL && pText->IsContourTextFrame();

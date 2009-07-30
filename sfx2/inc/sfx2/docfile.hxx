@@ -183,7 +183,8 @@ public:
 #endif
 
     void                CheckFileDate( const ::com::sun::star::util::DateTime& aInitDate );
-    ::com::sun::star::util::DateTime GetInitFileDate();
+    sal_Bool            DocNeedsFileDateCheck();
+    ::com::sun::star::util::DateTime GetInitFileDate( sal_Bool bIgnoreOldValue );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > GetContent() const;
     const String&       GetPhysicalName() const;

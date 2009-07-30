@@ -189,6 +189,7 @@ namespace svxform
     IMPLEMENT_CONSTASCII_USTRING( FM_PROP_INPUT_REQUIRED, "InputRequired" );
 
     IMPLEMENT_CONSTASCII_USTRING( FM_PROP_WRITING_MODE, "WritingMode" );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_MOUSE_WHEEL_BEHAVIOR, "MouseWheelBehavior" );
 
 }   // namespace svxform
 

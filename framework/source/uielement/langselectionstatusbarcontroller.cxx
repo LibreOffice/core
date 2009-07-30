@@ -75,6 +75,8 @@
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <dispatch/uieventloghelper.hxx>
 
+#include "helper/mischelper.hxx"
+
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -99,17 +101,6 @@ LangSelectionStatusbarController::LangSelectionStatusbarController( const uno::R
     m_bShowMenu( sal_True ),
     m_nScriptType( 7 )
 {
-    if (!m_xLanguageGuesser.is())
-    {
-        uno::Reference< lang::XMultiServiceFactory > xMgr ( comphelper::getProcessServiceFactory() );
-        if (xMgr.is())
-        {
-            m_xLanguageGuesser = uno::Reference< linguistic2::XLanguageGuessing >(
-                    xMgr->createInstance(
-                        rtl::OUString::createFromAscii( "com.sun.star.linguistic2.LanguageGuessing" ) ),
-                        uno::UNO_QUERY );
-        }
-    }
 }
 
 // XInterface
@@ -183,12 +174,6 @@ throw (::com::sun::star::uno::RuntimeException)
     return sal_False;
 }
 
-//match ScriptType
-bool checkScriptType( sal_Int16 nScriptType, LanguageType nLang )
-{
-    return 0 != ( nScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ));
-}
-
 void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::RuntimeException)
 {
     if (!m_bShowMenu)
@@ -215,7 +200,7 @@ void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::R
     LanguageType rSystemLanguage = rAllSettings.GetLanguage();
     if( rSystemLanguage != LANGUAGE_DONTKNOW )
     {
-        if ( checkScriptType( m_nScriptType, rSystemLanguage ))
+        if ( IsScriptTypeMatchingToLanguage( m_nScriptType, rSystemLanguage ))
             LangItems.insert( ::rtl::OUString( aLangTable.GetString( rSystemLanguage )) );
     }
 
@@ -223,24 +208,25 @@ void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::R
     LanguageType rUILanguage = rAllSettings.GetUILanguage();
     if( rUILanguage != LANGUAGE_DONTKNOW )
     {
-        if ( checkScriptType( m_nScriptType, rUILanguage ))
+        if ( IsScriptTypeMatchingToLanguage( m_nScriptType, rUILanguage ))
             LangItems.insert( ::rtl::OUString( aLangTable.GetString( rUILanguage )) );
     }
 
     //4--guessed language
-    if ( m_xLanguageGuesser.is() && m_aGuessedText.getLength() > 0)
+    uno::Reference< linguistic2::XLanguageGuessing > xLangGuesser( m_aLangGuessHelper.GetGuesser() );
+    if ( xLangGuesser.is() && m_aGuessedText.getLength() > 0)
     {
-        ::com::sun::star::lang::Locale aLocale(m_xLanguageGuesser->guessPrimaryLanguage( m_aGuessedText, 0, m_aGuessedText.getLength()) );
+        ::com::sun::star::lang::Locale aLocale(xLangGuesser->guessPrimaryLanguage( m_aGuessedText, 0, m_aGuessedText.getLength()) );
         LanguageType nLang = MsLangId::convertLocaleToLanguageWithFallback( aLocale );
-        if (( nLang != LANGUAGE_DONTKNOW ) && ( nLang != LANGUAGE_NONE ) && (nLang != LANGUAGE_SYSTEM)
-            && ( checkScriptType( m_nScriptType, nLang )))
+        if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_NONE && nLang != LANGUAGE_SYSTEM
+            && IsScriptTypeMatchingToLanguage( m_nScriptType, nLang ))
             LangItems.insert( aLangTable.GetString( nLang ));
     }
 
     //5--keyboard language
     if( m_aKeyboardLang != ::rtl::OUString::createFromAscii( "" ))
     {
-        if ( checkScriptType( m_nScriptType, aLanguageTable.GetType( m_aKeyboardLang )))
+        if ( IsScriptTypeMatchingToLanguage( m_nScriptType, aLanguageTable.GetType( m_aKeyboardLang )))
             LangItems.insert( m_aKeyboardLang );
     }
 
@@ -274,7 +260,7 @@ void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::R
                 if ( LangItems.size() == 7 )
                     break;
                 const Locale& rLocale=rLocales[i];
-                if( checkScriptType( m_nScriptType, aLangTable.GetType( rLocale.Language )))
+                if( IsScriptTypeMatchingToLanguage( m_nScriptType, aLangTable.GetType( rLocale.Language )))
                     LangItems.insert( ::rtl::OUString( rLocale.Language ) );
             }
         }

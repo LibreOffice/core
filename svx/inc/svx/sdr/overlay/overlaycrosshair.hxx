@@ -42,39 +42,15 @@ namespace sdr
         class OverlayCrosshairStriped : public OverlayObjectWithBasePosition
         {
         protected:
-            // Draw geometry
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-            // Create the BaseRange. This method needs to calculate maBaseRange.
-            virtual void createBaseRange(OutputDevice& rOutputDevice);
+            // geometry creation for OverlayObject
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
         public:
             OverlayCrosshairStriped(const basegfx::B2DPoint& rBasePos);
             virtual ~OverlayCrosshairStriped();
 
-            // Hittest with logical coordinates
-            virtual sal_Bool isHit(const basegfx::B2DPoint& rPos, double fTol = 0.0) const;
-        };
-    } // end of namespace overlay
-} // end of namespace sdr
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace sdr
-{
-    namespace overlay
-    {
-        class OverlayCrosshair : public OverlayCrosshairStriped
-        {
-        protected:
-            // Draw geometry
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-        public:
-            OverlayCrosshair(
-                const basegfx::B2DPoint& rBasePos,
-                Color aLineColor = Color(COL_BLACK));
-            virtual ~OverlayCrosshair();
+            // react on stripe definition change
+            virtual void stripeDefinitionHasChanged();
         };
     } // end of namespace overlay
 } // end of namespace sdr

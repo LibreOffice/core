@@ -42,7 +42,7 @@ namespace sdr
 {
     namespace overlay
     {
-        enum CellOverlayType { CELL_OVERLAY_INVERT, CELL_OVERLAY_HATCH, CELL_OVERLAY_TRANSPARENT, CELL_OVERLAY_LIGHT_TRANSPARENT };
+        enum CellOverlayType { CELL_OVERLAY_INVERT, CELL_OVERLAY_TRANSPARENT };
 
         // OverlayObjectCell - used for cell cursor, selection and AutoFill handle
 
@@ -55,14 +55,12 @@ namespace sdr
             CellOverlayType mePaintType;
             RangeVector     maRectangles;
 
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-            virtual void createBaseRange(OutputDevice& rOutputDevice);
+            // geometry creation for OverlayObject
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
         public:
             OverlayObjectCell( CellOverlayType eType, const Color& rColor, const RangeVector& rRects);
             virtual ~OverlayObjectCell();
-
-            virtual void transform(const basegfx::B2DHomMatrix& rMatrix);
         };
 
     } // end of namespace overlay

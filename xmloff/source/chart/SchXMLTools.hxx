@@ -67,7 +67,7 @@ namespace SchXMLTools
         XML_CHART_CLASS_RADAR,
         XML_CHART_CLASS_BAR,
         XML_CHART_CLASS_STOCK,
-        XML_CHART_CLASS_BUBBLE, // not yet implemented
+        XML_CHART_CLASS_BUBBLE,
         XML_CHART_CLASS_ADDIN,
         XML_CHART_CLASS_UNKNOWN
     };

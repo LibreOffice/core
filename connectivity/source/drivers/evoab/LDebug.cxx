@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: overlaylinestriped.cxx,v $
- * $Revision: 1.4 $
+ * $RCSfile: LDebug.cxx,v $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,19 +29,17 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
-#include <svx/sdr/overlay/overlaylinestriped.hxx>
-#include <tools/gen.hxx>
-#include <vcl/outdev.hxx>
+#include "precompiled_connectivity.hxx"
 
-//////////////////////////////////////////////////////////////////////////////
+#ifndef CONNECTIVITY_EVOAB_DEBUG_HELPER_HXX
+#include "LDebug.hxx"
+#endif
+#include <osl/diagnose.h>
 
-namespace sdr
+void evo_traceStringMessage( const sal_Char* _pFormat, const ::rtl::OUString& _rAsciiString )
 {
-    namespace overlay
-    {
-    } // end of namespace overlay
-} // end of namespace sdr
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
+    ::rtl::OString sByteStringMessage( _rAsciiString.getStr(), _rAsciiString.getLength(), RTL_TEXTENCODING_ASCII_US );
+    if ( !sByteStringMessage.getLength() )
+        sByteStringMessage = "<empty>";
+    OSL_TRACE( _pFormat, sByteStringMessage.getStr() );
+}

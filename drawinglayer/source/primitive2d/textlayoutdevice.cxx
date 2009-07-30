@@ -239,8 +239,25 @@ namespace drawinglayer
             basegfx::B2DPolyPolygonVector& rB2DPolyPolyVector,
             const String& rText,
             xub_StrLen nIndex,
-            xub_StrLen nLength)
+            xub_StrLen nLength,
+            // #i89784# added suppirt for DXArray for justified text
+            const ::std::vector< double >& rDXArray,
+            double fFontScaleWidth)
         {
+            std::vector< sal_Int32 > aTransformedDXArray;
+            const sal_uInt32 nDXArraySize(rDXArray.size());
+
+            if(nDXArraySize && basegfx::fTools::more(fFontScaleWidth, 0.0))
+            {
+                OSL_ENSURE(nDXArraySize == nLength, "DXArray size does not correspond to text portion size (!)");
+                aTransformedDXArray.reserve(nDXArraySize);
+
+                for(std::vector< double >::const_iterator aStart(rDXArray.begin()); aStart != rDXArray.end(); aStart++)
+                {
+                    aTransformedDXArray.push_back(basegfx::fround((*aStart) * fFontScaleWidth));
+                }
+            }
+
             return mrDevice.GetTextOutlines(
                 rB2DPolyPolyVector,
                 rText,
@@ -249,7 +266,7 @@ namespace drawinglayer
                 nLength,
                 true,
                 0,
-                0);
+                nDXArraySize ? &(aTransformedDXArray[0]) : 0);
         }
 
         basegfx::B2DRange TextLayouterDevice::getTextBoundRect(

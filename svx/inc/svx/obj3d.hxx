@@ -308,9 +308,6 @@ public :
     virtual UINT16 GetObjIdentifier() const;
     virtual void RecalcSnapRect();
 
-    // Hittest, wird an Geometrie weitergegeben
-    virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
-
     // Parameter Geometrieerzeugung setzen/lesen
     BOOL GetCreateNormals() const { return bCreateNormals; }
     void SetCreateNormals(BOOL bNew);

@@ -363,11 +363,13 @@ namespace drawinglayer
             basegfx::B2DRange aDiscreteRange;
             basegfx::B2DRange aUnitVisibleRange;
             bool bNeedNewDecomposition(false);
+            bool bDiscreteSizesAreCalculated(false);
 
             if(getLocalDecomposition().hasElements())
             {
                 basegfx::B2DRange aVisibleDiscreteRange;
                 calculateDsicreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
+                bDiscreteSizesAreCalculated = true;
 
                 // display has changed and cannot be reused when resolution did change
                 if(!basegfx::fTools::equal(aDiscreteRange.getWidth(), mfOldDiscreteSizeX) ||
@@ -395,6 +397,12 @@ namespace drawinglayer
 
             if(!getLocalDecomposition().hasElements())
             {
+                if(!bDiscreteSizesAreCalculated)
+                {
+                    basegfx::B2DRange aVisibleDiscreteRange;
+                    calculateDsicreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
+                }
+
                 // remember last used NewDiscreteSize and NewUnitVisiblePart
                 ScenePrimitive2D* pThat = const_cast< ScenePrimitive2D* >(this);
                 pThat->mfOldDiscreteSizeX = aDiscreteRange.getWidth();

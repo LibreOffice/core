@@ -1493,6 +1493,20 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
         }
         if ( bNotFound )
         {
+            sal_Int32 nType = DataType::VARCHAR;
+            OSQLParseNode* pParent = _pColumnRef ? _pColumnRef->getParent() : NULL;
+            if ( pParent && (SQL_ISRULE(pParent,general_set_fct) || SQL_ISRULE(pParent,set_fct_spec)) )
+            {
+                const sal_uInt32 nCount = _pColumnRef->count();
+                sal_uInt32 i = 0;
+                for(; i < nCount;++i)
+                {
+                    if ( _pColumnRef->getChild(i) == _pParseNode )
+                        break;
+                }
+                nType = ::connectivity::OSQLParser::getFunctionParameterType( pParent->getChild(0)->getTokenID(), i+1);
+            }
+
             ::rtl::OUString aNewColName( getUniqueColumnName( sParameterName ) );
 
             OParseColumn* pColumn = new OParseColumn(aNewColName,
@@ -1501,7 +1515,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
                                                     ColumnValue::NULLABLE_UNKNOWN,
                                                     0,
                                                     0,
-                                                    DataType::VARCHAR,
+                                                    nType,
                                                     sal_False,
                                                     sal_False,
                                                     isCaseSensitive() );

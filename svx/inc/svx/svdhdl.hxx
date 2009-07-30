@@ -245,7 +245,7 @@ public:
     sal_uInt32 GetSourceHdlNum() const { return nSourceHdlNum; }
 
     virtual Pointer GetPointer() const;
-    virtual bool IsHdlHit(const Point& rPnt) const;
+    bool IsHdlHit(const Point& rPnt) const;
 
     // #97016# II
     virtual BOOL IsFocusHdl() const;
@@ -363,7 +363,6 @@ public:
     virtual ~SdrHdlLine();
 
     virtual Pointer GetPointer() const;
-    virtual bool IsHdlHit(const Point& rPnt) const;
 };
 
 // Ein SdrHdlBezWgt hat Kenntnis von seinem "BasisHandle". Seine Draw-Methode
