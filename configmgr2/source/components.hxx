@@ -100,6 +100,8 @@ private:
         int layer, xmlDocPtr doc, rtl::OUString const & component,
         xmlNodePtr node);
 
+    void parseXcsContent(int layer, xmlDocPtr doc, xmlNodePtr root);
+
     void parseXcsFile(int layer, rtl::OUString const & url);
 
     void parseXcuNode(
@@ -108,7 +110,11 @@ private:
         bool inheritedFinalized, bool modifications,
         rtl::OUString const & pathPrefix);
 
+    void parseXcuContent(int layer, xmlDocPtr doc, xmlNodePtr root);
+
     void parseXcuFile(int layer, rtl::OUString const & url);
+
+    void parseDataFile(int layer, rtl::OUString const & url);
 
     void parseFiles(
         int layer, rtl::OUString const & extension,

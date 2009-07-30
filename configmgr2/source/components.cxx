@@ -383,6 +383,21 @@ rtl::OString convertToFilepath(rtl::OUString const & url) {
     return path2;
 }
 
+//TODO: atomic check for existence
+bool fileExists(rtl::OUString const & url) {
+    osl::DirectoryItem di;
+    switch (osl::DirectoryItem::get(url, di)) {
+    case osl::FileBase::E_None:
+        return true;
+    case osl::FileBase::E_NOENT:
+        return false;
+    default:
+        throw css::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot stat ")) + url,
+            css::uno::Reference< css::uno::XInterface >());
+    }
+}
+
 xmlDocPtr parseXmlFile(rtl::OUString const & url) {
     XmlParserContext context;
     xmlDocPtr doc(
@@ -1915,6 +1930,46 @@ xmlNodePtr Components::parseXcsComponent(
     return node->next;
 }
 
+void Components::parseXcsContent(int layer, xmlDocPtr doc, xmlNodePtr root) {
+    XmlString package(
+        xmlGetNsProp(
+            root, xmlString("package"),
+            xmlString("http://openoffice.org/2001/registry")));
+    if (package.str == 0) {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "xcs: no root package attribute in ")) +
+             fromXmlString(doc->URL)),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    rtl::OUStringBuffer buf(fromXmlString(package.str));
+    buf.append(sal_Unicode('.'));
+    buf.append(getNameAttribute(doc, root));
+    rtl::OUString comp(buf.makeStringAndClear());
+    xmlNodePtr p(skipBlank(root->xmlChildrenNode));
+    if (isOorElement(p, "info")) {
+        p = skipBlank(p->next);
+    }
+    //TODO: process import/uses so that node-refs can always be resolved
+    while (isOorElement(p, "import")) {
+        p = skipBlank(p->next);
+    }
+    while (isOorElement(p, "uses")) {
+        p = skipBlank(p->next);
+    }
+    p = skipBlank(parseXcsTemplates(layer, comp, doc, p));
+    p = skipBlank(parseXcsComponent(layer, doc, comp, p));
+    if (p != 0) {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "xcs: bad component-schema content in ")) +
+             fromXmlString(doc->URL)),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+}
+
 void Components::parseXcsFile(int layer, rtl::OUString const & url) {
     XmlDoc doc(parseXmlFile(url));
     xmlNodePtr root(xmlDocGetRootElement(doc.doc));
@@ -1937,43 +1992,7 @@ void Components::parseXcsFile(int layer, rtl::OUString const & url) {
              fromXmlString(doc.doc->URL)),
             css::uno::Reference< css::uno::XInterface >());
     }
-    XmlString package(
-        xmlGetNsProp(
-            root, xmlString("package"),
-            xmlString("http://openoffice.org/2001/registry")));
-    if (package.str == 0) {
-        throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "xcs: no root package attribute in ")) +
-             fromXmlString(doc.doc->URL)),
-            css::uno::Reference< css::uno::XInterface >());
-    }
-    rtl::OUStringBuffer buf(fromXmlString(package.str));
-    buf.append(sal_Unicode('.'));
-    buf.append(getNameAttribute(doc.doc, root));
-    rtl::OUString comp(buf.makeStringAndClear());
-    xmlNodePtr p(skipBlank(root->xmlChildrenNode));
-    if (isOorElement(p, "info")) {
-        p = skipBlank(p->next);
-    }
-    //TODO: process import/uses so that node-refs can always be resolved
-    while (isOorElement(p, "import")) {
-        p = skipBlank(p->next);
-    }
-    while (isOorElement(p, "uses")) {
-        p = skipBlank(p->next);
-    }
-    p = skipBlank(parseXcsTemplates(layer, comp, doc.doc, p));
-    p = skipBlank(parseXcsComponent(layer, doc.doc, comp, p));
-    if (p != 0) {
-        throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "xcs: bad component-schema content in ")) +
-             fromXmlString(doc.doc->URL)),
-            css::uno::Reference< css::uno::XInterface >());
-    }
+    parseXcsContent(layer, doc.doc, root);
 }
 
 void Components::parseXcuNode(
@@ -2440,6 +2459,43 @@ void Components::parseXcuNode(
     }
 }
 
+void Components::parseXcuContent(int layer, xmlDocPtr doc, xmlNodePtr root) {
+    XmlString package(
+        xmlGetNsProp(
+            root, xmlString("package"),
+            xmlString("http://openoffice.org/2001/registry")));
+    if (package.str == 0) {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "xcu: no root package attribute in ")) +
+             fromXmlString(doc->URL)),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    rtl::OUStringBuffer buf(fromXmlString(package.str));
+    buf.append(sal_Unicode('.'));
+    buf.append(getNameAttribute(doc, root));
+    rtl::OUString comp(buf.makeStringAndClear());
+    //TODO: root oor:op attribute
+    rtl::Reference< Node > node(findNode(layer, components_, comp));
+    if (!node.is()) {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "xcu: unknown component-data name in ")) +
+             fromXmlString(doc->URL)),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    bool finalized = getBooleanAttribute(
+        doc, root, "finalized", "http://openoffice.org/2001/registry", false);
+    int finalizedLayer = std::min(
+        finalized ? layer : NO_LAYER, node->getFinalized());
+    node->setFinalized(finalizedLayer);
+    parseXcuNode(
+        layer, comp, doc, root, node, finalizedLayer < layer, false,
+        rtl::OUString());
+}
+
 void Components::parseXcuFile(int layer, rtl::OUString const & url) {
     XmlDoc doc(parseXmlFile(url));
     xmlNodePtr root(xmlDocGetRootElement(doc.doc));
@@ -2462,41 +2518,50 @@ void Components::parseXcuFile(int layer, rtl::OUString const & url) {
              fromXmlString(doc.doc->URL)),
             css::uno::Reference< css::uno::XInterface >());
     }
-    XmlString package(
-        xmlGetNsProp(
-            root, xmlString("package"),
-            xmlString("http://openoffice.org/2001/registry")));
-    if (package.str == 0) {
+    parseXcuContent(layer, doc.doc, root);
+}
+
+void Components::parseDataFile(int layer, rtl::OUString const & url) {
+    if (!fileExists(url)) {
+        return;
+    }
+    XmlDoc doc(parseXmlFile(url));
+    xmlNodePtr root(xmlDocGetRootElement(doc.doc));
+    if (root == 0) {
         throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "xcu: no root package attribute in ")) +
+            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no root element in ")) +
              fromXmlString(doc.doc->URL)),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::OUStringBuffer buf(fromXmlString(package.str));
-    buf.append(sal_Unicode('.'));
-    buf.append(getNameAttribute(doc.doc, root));
-    rtl::OUString comp(buf.makeStringAndClear());
-    //TODO: root oor:op attribute
-    rtl::Reference< Node > node(findNode(layer, components_, comp));
-    if (!node.is()) {
+    if (!xmlStrEqual(root->name, xmlString("data")) || root->ns != 0) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "xcu: unknown component-data name in ")) +
+                RTL_CONSTASCII_USTRINGPARAM("non data root element in ")) +
              fromXmlString(doc.doc->URL)),
             css::uno::Reference< css::uno::XInterface >());
     }
-    bool finalized = getBooleanAttribute(
-        doc.doc, root, "finalized", "http://openoffice.org/2001/registry",
-        false);
-    int finalizedLayer = std::min(
-        finalized ? layer : NO_LAYER, node->getFinalized());
-    node->setFinalized(finalizedLayer);
-    parseXcuNode(
-        layer, comp, doc.doc, root, node, finalizedLayer < layer, false,
-        rtl::OUString());
+    for (xmlNodePtr p(skipBlank(root->xmlChildrenNode)); p != 0;
+         p = skipBlank(p->next))
+    {
+        if (xmlStrEqual(p->name, xmlString("component-schema")) && p->ns != 0 &&
+            xmlStrEqual(
+                p->ns->href, xmlString("http://openoffice.org/2001/registry")))
+        {
+            parseXcsContent(layer, doc.doc, p);
+        } else if (xmlStrEqual(p->name, xmlString("component-data")) &&
+                   p->ns != 0 &&
+                   xmlStrEqual(
+                       p->ns->href,
+                       xmlString("http://openoffice.org/2001/registry")))
+        {
+            parseXcuContent(layer + 1, doc.doc, p);
+        } else {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad content in ")) +
+                 fromXmlString(doc.doc->URL)),
+                css::uno::Reference< css::uno::XInterface >());
+        }
+    }
 }
 
 void Components::parseFiles(
@@ -2573,6 +2638,9 @@ void Components::parseFileList(
 }
 
 void Components::parseXcsXcuLayer(int layer, rtl::OUString const & url) {
+    parseDataFile(
+        layer,
+        url + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/registrydata")));
     parseFiles(
         layer, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcs")),
         &Components::parseXcsFile,
@@ -2607,7 +2675,8 @@ void Components::parseModuleLayer(int layer, rtl::OUString const & url) {
 void Components::parseResLayer(int layer, rtl::OUString const & url) {
     parseFiles(
         layer, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcu")),
-        &Components::parseXcuFile, url, false);
+        &Components::parseXcuFile,
+        url + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/res")), false);
 }
 
 rtl::OUString Components::getModificationFileUrl() const {
@@ -2620,18 +2689,10 @@ rtl::OUString Components::getModificationFileUrl() const {
 
 void Components::parseModificationLayer() {
     rtl::OUString url(getModificationFileUrl());
-    osl::DirectoryItem di;
-    switch (osl::DirectoryItem::get(url, di)) {
-    case osl::FileBase::E_None:
-        break;
-    case osl::FileBase::E_NOENT:
+    if (!fileExists(url)) {
         return;
-    default:
-        throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot stat ")) + url,
-            css::uno::Reference< css::uno::XInterface >());
     }
-    XmlDoc doc(parseXmlFile(url)); //TODO: atomic check for existence
+    XmlDoc doc(parseXmlFile(url));
     xmlNodePtr root(xmlDocGetRootElement(doc.doc));
     if (root == 0) {
         throw css::uno::RuntimeException(
