@@ -943,14 +943,8 @@ void PDFExport::showErrors( const std::set< PDFWriter::ErrorCode >& rErrors )
 {
     if( ! rErrors.empty() )
     {
-        ByteString aResMgrName( "pdffilter" );
-        ResMgr* pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-        if ( pResMgr )
-        {
-            ImplErrorDialog aDlg( rErrors, *pResMgr );
-            aDlg.Execute();
-            delete pResMgr;
-        }
+        ImplErrorDialog aDlg( rErrors );
+        aDlg.Execute();
     }
 }
 

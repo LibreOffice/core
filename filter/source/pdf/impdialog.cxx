@@ -33,15 +33,29 @@
 
 #include "impdialog.hxx"
 #include "impdialog.hrc"
-#include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
-#include <sfx2/passwd.hxx>
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
+#include "vcl/svapp.hxx"
+#include "vcl/msgbox.hxx"
+#include "sfx2/passwd.hxx"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "com/sun/star/text/XTextRange.hpp"
+#include "com/sun/star/drawing/XShapes.hpp"
+#include "com/sun/star/container/XIndexAccess.hpp"
+#include "com/sun/star/frame/XController.hpp"
+#include "com/sun/star/view/XSelectionSupplier.hpp"
+
+#include <boost/shared_ptr.hpp>
+
+static ResMgr& getPDFFilterResMgr()
+{
+    static boost::shared_ptr< ResMgr > xPDFFilterMgr(
+         ResMgr::CreateResMgr( "pdffilter", Application::GetSettings().GetUILocale() )
+         );
+    return *xPDFFilterMgr.get();
+}
+
+PDFFilterResId::PDFFilterResId( sal_uInt32 nId ) : ResId( nId, getPDFFilterResMgr() )
+{
+}
 
 // ----------------
 // - ImpPDFDialog -
@@ -55,12 +69,11 @@ using namespace ::com::sun::star;
 // they should be the same in  PDFFilter::implExport and  in PDFExport::PDFExport
 // -----------------------------------------------------------------------------
 ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
-                                  ResMgr& rResMgr,
                                   Sequence< PropertyValue >& rFilterData,
                                   const Reference< XComponent >& rxDoc,
                                   const Reference< lang::XMultiServiceFactory >& xFact
                                   ) :
-    SfxTabDialog( pParent, ResId( RID_PDF_EXPORT_DLG, rResMgr ), 0, FALSE, 0 ),
+    SfxTabDialog( pParent, PDFFilterResId( RID_PDF_EXPORT_DLG ), 0, FALSE, 0 ),
     mxMSF( xFact ),
     maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/PDF/Export/" ) ), &rFilterData ),
     maConfigI18N( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/I18N/CTL/" ) ) ),
@@ -113,7 +126,6 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbExportBmkToPDFDestination( sal_False )
 {
     FreeResource();
-    mprResMgr = &rResMgr;
 // check for selection
     try
     {
@@ -240,7 +252,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
 //change text on the Ok button: get the relevant string from resources, update it on the button
 //according to the exported pdf file destination: send as e-mail or write to file?
     GetOKButton().SetText( ( sOkButtonText.getLength() > 0 ) ?
-                            sOkButtonText : OUString( String( ResId( STR_PDF_EXPORT, rResMgr ) ) ));
+                            sOkButtonText : OUString( String( PDFFilterResId( STR_PDF_EXPORT ) ) ));
 
 //remove the reset button, not needed in this tabbed dialog
     RemoveResetButton();
@@ -404,44 +416,43 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 
 // -----------------------------------------------------------------------------
 ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
-                                            const SfxItemSet& rCoreSet,
-                                            ResMgr* paResMgr ) :
-    SfxTabPage( pParent, ResId( RID_PDF_TAB_GENER, *paResMgr ), rCoreSet ),
+                                            const SfxItemSet& rCoreSet
+                                            ) :
+    SfxTabPage( pParent, PDFFilterResId( RID_PDF_TAB_GENER ), rCoreSet ),
 
-    maFlPages( this, ResId( FL_PAGES, *paResMgr ) ),
-    maRbAll( this, ResId( RB_ALL, *paResMgr) ),
-    maRbRange( this, ResId( RB_RANGE, *paResMgr ) ),
-    maRbSelection( this, ResId( RB_SELECTION, *paResMgr ) ),
-    maEdPages( this, ResId( ED_PAGES, *paResMgr ) ),
+    maFlPages( this, PDFFilterResId( FL_PAGES ) ),
+    maRbAll( this, PDFFilterResId( RB_ALL ) ),
+    maRbRange( this, PDFFilterResId( RB_RANGE ) ),
+    maRbSelection( this, PDFFilterResId( RB_SELECTION ) ),
+    maEdPages( this, PDFFilterResId( ED_PAGES ) ),
 
-    maFlCompression( this, ResId( FL_IMAGES, *paResMgr ) ),
-    maRbLosslessCompression( this, ResId( RB_LOSSLESSCOMPRESSION, *paResMgr ) ),
-    maRbJPEGCompression( this, ResId( RB_JPEGCOMPRESSION, *paResMgr ) ),
-    maFtQuality( this, ResId( FT_QUALITY, *paResMgr ) ),
-    maNfQuality( this, ResId( NF_QUALITY, *paResMgr ) ),
-    maCbReduceImageResolution( this, ResId( CB_REDUCEIMAGERESOLUTION, *paResMgr ) ),
-    maCoReduceImageResolution( this, ResId( CO_REDUCEIMAGERESOLUTION, *paResMgr ) ),
+    maFlCompression( this, PDFFilterResId( FL_IMAGES ) ),
+    maRbLosslessCompression( this, PDFFilterResId( RB_LOSSLESSCOMPRESSION ) ),
+    maRbJPEGCompression( this, PDFFilterResId( RB_JPEGCOMPRESSION ) ),
+    maFtQuality( this, PDFFilterResId( FT_QUALITY ) ),
+    maNfQuality( this, PDFFilterResId( NF_QUALITY ) ),
+    maCbReduceImageResolution( this, PDFFilterResId( CB_REDUCEIMAGERESOLUTION ) ),
+    maCoReduceImageResolution( this, PDFFilterResId( CO_REDUCEIMAGERESOLUTION ) ),
 
-    maFlGeneral( this, ResId( FL_GENERAL, *paResMgr ) ),
-    maCbPDFA1b( this, ResId( CB_PDFA_1B_SELECT, *paResMgr ) ),
+    maFlGeneral( this, PDFFilterResId( FL_GENERAL ) ),
+    maCbPDFA1b( this, PDFFilterResId( CB_PDFA_1B_SELECT ) ),
 
-    maCbTaggedPDF( this, ResId( CB_TAGGEDPDF, *paResMgr ) ),
+    maCbTaggedPDF( this, PDFFilterResId( CB_TAGGEDPDF ) ),
     mbTaggedPDFUserSelection( sal_False ),
 
-    maCbExportFormFields( this, ResId( CB_EXPORTFORMFIELDS, *paResMgr ) ),
+    maCbExportFormFields( this, PDFFilterResId( CB_EXPORTFORMFIELDS ) ),
     mbExportFormFieldsUserSelection( sal_False ),
-    maFtFormsFormat( this, ResId( FT_FORMSFORMAT, *paResMgr ) ),
-    maLbFormsFormat( this, ResId( LB_FORMSFORMAT, *paResMgr ) ),
+    maFtFormsFormat( this, PDFFilterResId( FT_FORMSFORMAT ) ),
+    maLbFormsFormat( this, PDFFilterResId( LB_FORMSFORMAT ) ),
 
-    maCbExportBookmarks( this, ResId( CB_EXPORTBOOKMARKS, *paResMgr ) ),
-    maCbExportNotes( this, ResId( CB_EXPORTNOTES, *paResMgr ) ),
-    maCbExportEmptyPages( this, ResId( CB_EXPORTEMPTYPAGES, *paResMgr ) ),
-    maCbAddStream( this, ResId( CB_ADDSTREAM, *paResMgr ) ),
+    maCbExportBookmarks( this, PDFFilterResId( CB_EXPORTBOOKMARKS ) ),
+    maCbExportNotes( this, PDFFilterResId( CB_EXPORTNOTES ) ),
+    maCbExportEmptyPages( this, PDFFilterResId( CB_EXPORTEMPTYPAGES ) ),
+    maCbAddStream( this, PDFFilterResId( CB_ADDSTREAM ) ),
     mbIsPresentation( sal_False ),
     mbIsWriter( sal_False),
     mpaParent( 0 )
 {
-    mpaResMgr = paResMgr;
     FreeResource();
 
     // pb: #i91991# maCbExportEmptyPages double-spaced if necessary
@@ -461,7 +472,6 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
 // -----------------------------------------------------------------------------
 ImpPDFTabGeneralPage::~ImpPDFTabGeneralPage()
 {
-    delete mpaResMgr;
 }
 
 // -----------------------------------------------------------------------------
@@ -611,9 +621,7 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
 SfxTabPage*  ImpPDFTabGeneralPage::Create( Window* pParent,
                                            const SfxItemSet& rAttrSet)
 {
-    ByteString aResMgrName( "pdffilter" );
-    ResMgr* paResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-    return ( new  ImpPDFTabGeneralPage( pParent, rAttrSet, paResMgr ) );
+    return ( new  ImpPDFTabGeneralPage( pParent, rAttrSet ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -710,34 +718,32 @@ IMPL_LINK( ImpPDFTabGeneralPage, ToggleExportPDFAHdl, void*, EMPTYARG )
 // the option features tab page
 // -----------------------------------------------------------------------------
 ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage( Window* pParent,
-                                          const SfxItemSet& rCoreSet,
-                                          ResMgr* paResMgr ) :
-    SfxTabPage( pParent, ResId( RID_PDF_TAB_OPNFTR, *paResMgr ), rCoreSet ),
+                                          const SfxItemSet& rCoreSet ) :
+    SfxTabPage( pParent, PDFFilterResId( RID_PDF_TAB_OPNFTR ), rCoreSet ),
 
-    maFlInitialView( this, ResId( FL_INITVIEW, *paResMgr ) ),
-    maRbOpnPageOnly( this, ResId( RB_OPNMODE_PAGEONLY, *paResMgr ) ),
-    maRbOpnOutline( this, ResId( RB_OPNMODE_OUTLINE, *paResMgr ) ),
-    maRbOpnThumbs( this, ResId( RB_OPNMODE_THUMBS, *paResMgr ) ),
-    maFtInitialPage( this, ResId( FT_MAGNF_INITIAL_PAGE, *paResMgr ) ),
-    maNumInitialPage( this, ResId( NUM_MAGNF_INITIAL_PAGE, *paResMgr ) ),
+    maFlInitialView( this, PDFFilterResId( FL_INITVIEW ) ),
+    maRbOpnPageOnly( this, PDFFilterResId( RB_OPNMODE_PAGEONLY ) ),
+    maRbOpnOutline( this, PDFFilterResId( RB_OPNMODE_OUTLINE ) ),
+    maRbOpnThumbs( this, PDFFilterResId( RB_OPNMODE_THUMBS ) ),
+    maFtInitialPage( this, PDFFilterResId( FT_MAGNF_INITIAL_PAGE ) ),
+    maNumInitialPage( this, PDFFilterResId( NUM_MAGNF_INITIAL_PAGE ) ),
 
-    maFlMagnification( this, ResId( FL_MAGNIFICATION, *paResMgr ) ),
-    maRbMagnDefault( this, ResId( RB_MAGNF_DEFAULT, *paResMgr ) ),
-    maRbMagnFitWin( this, ResId( RB_MAGNF_WIND, *paResMgr ) ),
-    maRbMagnFitWidth( this, ResId( RB_MAGNF_WIDTH, *paResMgr ) ),
-    maRbMagnFitVisible( this, ResId( RB_MAGNF_VISIBLE, *paResMgr ) ),
-    maRbMagnZoom( this, ResId( RB_MAGNF_ZOOM, *paResMgr ) ),
-    maNumZoom( this, ResId( NUM_MAGNF_ZOOM, *paResMgr ) ),
+    maFlMagnification( this, PDFFilterResId( FL_MAGNIFICATION ) ),
+    maRbMagnDefault( this, PDFFilterResId( RB_MAGNF_DEFAULT ) ),
+    maRbMagnFitWin( this, PDFFilterResId( RB_MAGNF_WIND ) ),
+    maRbMagnFitWidth( this, PDFFilterResId( RB_MAGNF_WIDTH ) ),
+    maRbMagnFitVisible( this, PDFFilterResId( RB_MAGNF_VISIBLE ) ),
+    maRbMagnZoom( this, PDFFilterResId( RB_MAGNF_ZOOM ) ),
+    maNumZoom( this, PDFFilterResId( NUM_MAGNF_ZOOM ) ),
 
-    maFlPageLayout( this, ResId( FL_PAGE_LAYOUT, *paResMgr ) ),
-    maRbPgLyDefault( this, ResId( RB_PGLY_DEFAULT, *paResMgr ) ),
-    maRbPgLySinglePage( this, ResId( RB_PGLY_SINGPG, *paResMgr ) ),
-    maRbPgLyContinue( this, ResId( RB_PGLY_CONT, *paResMgr ) ),
-    maRbPgLyContinueFacing( this, ResId( RB_PGLY_CONTFAC, *paResMgr ) ),
-    maCbPgLyFirstOnLeft( this, ResId( CB_PGLY_FIRSTLEFT, *paResMgr ) ),
+    maFlPageLayout( this, PDFFilterResId( FL_PAGE_LAYOUT ) ),
+    maRbPgLyDefault( this, PDFFilterResId( RB_PGLY_DEFAULT ) ),
+    maRbPgLySinglePage( this, PDFFilterResId( RB_PGLY_SINGPG ) ),
+    maRbPgLyContinue( this, PDFFilterResId( RB_PGLY_CONT ) ),
+    maRbPgLyContinueFacing( this, PDFFilterResId( RB_PGLY_CONTFAC ) ),
+    maCbPgLyFirstOnLeft( this, PDFFilterResId( CB_PGLY_FIRSTLEFT ) ),
     mbUseCTLFont( sal_False )
 {
-    mpaResMgr = paResMgr;
     FreeResource();
 
     maRbMagnDefault.SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
@@ -750,16 +756,13 @@ ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage( Window* pParent,
 // -----------------------------------------------------------------------------
 ImpPDFTabOpnFtrPage::~ImpPDFTabOpnFtrPage()
 {
-    delete mpaResMgr;
 }
 
 // -----------------------------------------------------------------------------
 SfxTabPage*  ImpPDFTabOpnFtrPage::Create( Window* pParent,
                                           const SfxItemSet& rAttrSet)
 {
-    ByteString aResMgrName( "pdffilter" );
-    ResMgr* paResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-    return ( new  ImpPDFTabOpnFtrPage( pParent, rAttrSet, paResMgr ) );
+    return ( new  ImpPDFTabOpnFtrPage( pParent, rAttrSet ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -887,29 +890,27 @@ IMPL_LINK( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, void*, )
 // The Viewer preferences tab page
 // -----------------------------------------------------------------------------
 ImpPDFTabViewerPage::ImpPDFTabViewerPage( Window* pParent,
-                                          const SfxItemSet& rCoreSet,
-                                          ResMgr* paResMgr ) :
-    SfxTabPage( pParent, ResId( RID_PDF_TAB_VPREFER, *paResMgr ), rCoreSet ),
+                                          const SfxItemSet& rCoreSet ) :
+    SfxTabPage( pParent, PDFFilterResId( RID_PDF_TAB_VPREFER ), rCoreSet ),
 
-    maFlWindowOptions( this, ResId( FL_WINOPT, *paResMgr ) ),
-    maCbResWinInit( this, ResId( CB_WNDOPT_RESINIT, *paResMgr ) ),
-    maCbCenterWindow( this, ResId( CB_WNDOPT_CNTRWIN, *paResMgr ) ),
-    maCbOpenFullScreen( this, ResId( CB_WNDOPT_OPNFULL, *paResMgr ) ),
-    maCbDispDocTitle( this, ResId( CB_DISPDOCTITLE, *paResMgr ) ),
+    maFlWindowOptions( this, PDFFilterResId( FL_WINOPT ) ),
+    maCbResWinInit( this, PDFFilterResId( CB_WNDOPT_RESINIT ) ),
+    maCbCenterWindow( this, PDFFilterResId( CB_WNDOPT_CNTRWIN ) ),
+    maCbOpenFullScreen( this, PDFFilterResId( CB_WNDOPT_OPNFULL ) ),
+    maCbDispDocTitle( this, PDFFilterResId( CB_DISPDOCTITLE ) ),
 
-    maFlUIOptions( this, ResId( FL_USRIFOPT, *paResMgr ) ),
-    maCbHideViewerMenubar( this, ResId( CB_UOP_HIDEVMENUBAR, *paResMgr ) ),
-    maCbHideViewerToolbar( this, ResId( CB_UOP_HIDEVTOOLBAR, *paResMgr ) ),
-    maCbHideViewerWindowControls( this, ResId( CB_UOP_HIDEVWINCTRL, *paResMgr ) ),
-    maFlTransitions( this, ResId( FL_TRANSITIONS, *paResMgr ) ),
-    maCbTransitionEffects( this, ResId( CB_TRANSITIONEFFECTS, *paResMgr ) ),
+    maFlUIOptions( this, PDFFilterResId( FL_USRIFOPT ) ),
+    maCbHideViewerMenubar( this, PDFFilterResId( CB_UOP_HIDEVMENUBAR ) ),
+    maCbHideViewerToolbar( this, PDFFilterResId( CB_UOP_HIDEVTOOLBAR ) ),
+    maCbHideViewerWindowControls( this, PDFFilterResId( CB_UOP_HIDEVWINCTRL ) ),
+    maFlTransitions( this, PDFFilterResId( FL_TRANSITIONS ) ),
+    maCbTransitionEffects( this, PDFFilterResId( CB_TRANSITIONEFFECTS ) ),
     mbIsPresentation( sal_True ),
-    maFlBookmarks( this, ResId( FL_BOOKMARKS, *paResMgr ) ),
-    maRbAllBookmarkLevels( this, ResId( RB_ALLBOOKMARKLEVELS, *paResMgr ) ),
-    maRbVisibleBookmarkLevels( this, ResId( RB_VISIBLEBOOKMARKLEVELS, *paResMgr ) ),
-    maNumBookmarkLevels( this, ResId( NUM_BOOKMARKLEVELS, *paResMgr ) )
+    maFlBookmarks( this, PDFFilterResId( FL_BOOKMARKS ) ),
+    maRbAllBookmarkLevels( this, PDFFilterResId( RB_ALLBOOKMARKLEVELS ) ),
+    maRbVisibleBookmarkLevels( this, PDFFilterResId( RB_VISIBLEBOOKMARKLEVELS ) ),
+    maNumBookmarkLevels( this, PDFFilterResId( NUM_BOOKMARKLEVELS ) )
 {
-    mpaResMgr = paResMgr;
     FreeResource();
     maRbAllBookmarkLevels.SetToggleHdl( LINK( this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl ) );
     maRbVisibleBookmarkLevels.SetToggleHdl( LINK( this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl ) );
@@ -918,7 +919,6 @@ ImpPDFTabViewerPage::ImpPDFTabViewerPage( Window* pParent,
 // -----------------------------------------------------------------------------
 ImpPDFTabViewerPage::~ImpPDFTabViewerPage()
 {
-    delete mpaResMgr;
 }
 
 // -----------------------------------------------------------------------------
@@ -931,9 +931,7 @@ IMPL_LINK( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, void*, )
 SfxTabPage*  ImpPDFTabViewerPage::Create( Window* pParent,
                                           const SfxItemSet& rAttrSet)
 {
-    ByteString aResMgrName( "pdffilter" );
-    ResMgr* paResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-    return ( new  ImpPDFTabViewerPage( pParent, rAttrSet, paResMgr ) );
+    return ( new  ImpPDFTabViewerPage( pParent, rAttrSet ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -982,51 +980,48 @@ void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
 // The Security preferences tab page
 // -----------------------------------------------------------------------------
 ImpPDFTabSecurityPage::ImpPDFTabSecurityPage( Window* i_pParent,
-                                              const SfxItemSet& i_rCoreSet,
-                                              ResMgr* i_pResMgr ) :
-    SfxTabPage( i_pParent, ResId( RID_PDF_TAB_SECURITY, *i_pResMgr ), i_rCoreSet ),
-    maPbUserPwd( this, ResId( BTN_USER_PWD, *i_pResMgr ) ),
-    maFtUserPwd( this, ResId( FT_USER_PWD, *i_pResMgr ) ),
-    maUserPwdSet( ResId( STR_USER_PWD_SET, *i_pResMgr ) ),
-    maUserPwdUnset( ResId( STR_USER_PWD_UNSET, *i_pResMgr ) ),
+                                              const SfxItemSet& i_rCoreSet ) :
+    SfxTabPage( i_pParent, PDFFilterResId( RID_PDF_TAB_SECURITY ), i_rCoreSet ),
+    maPbUserPwd( this, PDFFilterResId( BTN_USER_PWD ) ),
+    maFtUserPwd( this, PDFFilterResId( FT_USER_PWD ) ),
+    maUserPwdSet( PDFFilterResId( STR_USER_PWD_SET ) ),
+    maUserPwdUnset( PDFFilterResId( STR_USER_PWD_UNSET ) ),
 
-    maPbOwnerPwd( this, ResId( BTN_OWNER_PWD, *i_pResMgr ) ),
-    maFtOwnerPwd( this, ResId( FT_OWNER_PWD, *i_pResMgr ) ),
-    maOwnerPwdSet( ResId( STR_OWNER_PWD_SET, *i_pResMgr ) ),
-    maOwnerPwdUnset( ResId( STR_OWNER_PWD_UNSET, *i_pResMgr ) ),
+    maPbOwnerPwd( this, PDFFilterResId( BTN_OWNER_PWD ) ),
+    maFtOwnerPwd( this, PDFFilterResId( FT_OWNER_PWD ) ),
+    maOwnerPwdSet( PDFFilterResId( STR_OWNER_PWD_SET ) ),
+    maOwnerPwdUnset( PDFFilterResId( STR_OWNER_PWD_UNSET ) ),
 
-    maFlPrintPermissions( this, ResId( FL_PRINT_PERMISSIONS , *i_pResMgr ) ),
-    maRbPrintNone( this, ResId( RB_PRINT_NONE, *i_pResMgr ) ),
-    maRbPrintLowRes( this, ResId( RB_PRINT_LOWRES , *i_pResMgr ) ),
-    maRbPrintHighRes( this, ResId( RB_PRINT_HIGHRES , *i_pResMgr ) ),
+    maFlPrintPermissions( this, PDFFilterResId( FL_PRINT_PERMISSIONS ) ),
+    maRbPrintNone( this, PDFFilterResId( RB_PRINT_NONE ) ),
+    maRbPrintLowRes( this, PDFFilterResId( RB_PRINT_LOWRES ) ),
+    maRbPrintHighRes( this, PDFFilterResId( RB_PRINT_HIGHRES ) ),
 
-    maFlChangesAllowed( this, ResId( FL_CHANGES_ALLOWED , *i_pResMgr ) ),
-    maRbChangesNone( this, ResId( RB_CHANGES_NONE , *i_pResMgr ) ),
-    maRbChangesInsDel( this, ResId( RB_CHANGES_INSDEL , *i_pResMgr ) ),
-    maRbChangesFillForm( this, ResId( RB_CHANGES_FILLFORM , *i_pResMgr ) ),
-    maRbChangesComment( this, ResId( RB_CHANGES_COMMENT , *i_pResMgr ) ),
-    maRbChangesAnyNoCopy( this, ResId( RB_CHANGES_ANY_NOCOPY , *i_pResMgr ) ),
+    maFlChangesAllowed( this, PDFFilterResId( FL_CHANGES_ALLOWED ) ),
+    maRbChangesNone( this, PDFFilterResId( RB_CHANGES_NONE ) ),
+    maRbChangesInsDel( this, PDFFilterResId( RB_CHANGES_INSDEL ) ),
+    maRbChangesFillForm( this, PDFFilterResId( RB_CHANGES_FILLFORM ) ),
+    maRbChangesComment( this, PDFFilterResId( RB_CHANGES_COMMENT ) ),
+    maRbChangesAnyNoCopy( this, PDFFilterResId( RB_CHANGES_ANY_NOCOPY ) ),
 
-    maCbEnableCopy( this, ResId( CB_ENDAB_COPY , *i_pResMgr ) ),
-    maCbEnableAccessibility( this, ResId( CB_ENAB_ACCESS , *i_pResMgr ) ),
+    maCbEnableCopy( this, PDFFilterResId( CB_ENDAB_COPY ) ),
+    maCbEnableAccessibility( this, PDFFilterResId( CB_ENAB_ACCESS ) ),
 
-    msUserPwdTitle( ResId( STR_PDF_EXPORT_UDPWD, *i_pResMgr ) ),
+    msUserPwdTitle( PDFFilterResId( STR_PDF_EXPORT_UDPWD ) ),
 
-    msOwnerPwdTitle( ResId( STR_PDF_EXPORT_ODPWD, *i_pResMgr ) )
+    msOwnerPwdTitle( PDFFilterResId( STR_PDF_EXPORT_ODPWD ) )
 {
-    mpaResMgr = i_pResMgr;
-
     maUserPwdSet.Append( sal_Unicode( '\n' ) );
-    maUserPwdSet.Append( String( ResId( STR_USER_PWD_ENC, *i_pResMgr ) ) );
+    maUserPwdSet.Append( String( PDFFilterResId( STR_USER_PWD_ENC ) ) );
 
     maUserPwdUnset.Append( sal_Unicode( '\n' ) );
-    maUserPwdUnset.Append( String( ResId( STR_USER_PWD_UNENC, *i_pResMgr ) ) );
+    maUserPwdUnset.Append( String( PDFFilterResId( STR_USER_PWD_UNENC ) ) );
 
     maOwnerPwdSet.Append( sal_Unicode( '\n' ) );
-    maOwnerPwdSet.Append( String( ResId( STR_OWNER_PWD_REST, *i_pResMgr ) ) );
+    maOwnerPwdSet.Append( String( PDFFilterResId( STR_OWNER_PWD_REST ) ) );
 
     maOwnerPwdUnset.Append( sal_Unicode( '\n' ) );
-    maOwnerPwdUnset.Append( String( ResId( STR_OWNER_PWD_UNREST, *i_pResMgr ) ) );
+    maOwnerPwdUnset.Append( String( PDFFilterResId( STR_OWNER_PWD_UNREST ) ) );
 
     FreeResource();
 
@@ -1056,16 +1051,13 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage( Window* i_pParent,
 // -----------------------------------------------------------------------------
 ImpPDFTabSecurityPage::~ImpPDFTabSecurityPage()
 {
-    delete mpaResMgr;
 }
 
 // -----------------------------------------------------------------------------
 SfxTabPage*  ImpPDFTabSecurityPage::Create( Window* pParent,
                                           const SfxItemSet& rAttrSet)
 {
-    ByteString aResMgrName( "pdffilter" );
-    ResMgr* paResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-    return ( new  ImpPDFTabSecurityPage( pParent, rAttrSet, paResMgr ) );
+    return ( new  ImpPDFTabSecurityPage( pParent, rAttrSet ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -1228,23 +1220,21 @@ void    ImpPDFTabSecurityPage::ImplPDFASecurityControl( sal_Bool bEnableSecurity
 // The link preferences tab page (relative and other stuff)
 // -----------------------------------------------------------------------------
 ImpPDFTabLinksPage::ImpPDFTabLinksPage( Window* pParent,
-                                              const SfxItemSet& rCoreSet,
-                                              ResMgr& rResMgr ) :
-    SfxTabPage( pParent, ResId( RID_PDF_TAB_LINKS, rResMgr ), rCoreSet ),
+                                              const SfxItemSet& rCoreSet ) :
+    SfxTabPage( pParent, PDFFilterResId( RID_PDF_TAB_LINKS ), rCoreSet ),
 
-    maCbExprtBmkrToNmDst( this, ResId( CB_EXP_BMRK_TO_DEST , rResMgr ) ),
-    maCbOOoToPDFTargets( this,  ResId( CB_CNV_OOO_DOCTOPDF , rResMgr ) ),
-     maCbExportRelativeFsysLinks( this, ResId( CB_ENAB_RELLINKFSYS , rResMgr ) ),
+    maCbExprtBmkrToNmDst( this, PDFFilterResId( CB_EXP_BMRK_TO_DEST ) ),
+    maCbOOoToPDFTargets( this,  PDFFilterResId( CB_CNV_OOO_DOCTOPDF ) ),
+     maCbExportRelativeFsysLinks( this, PDFFilterResId( CB_ENAB_RELLINKFSYS ) ),
 
-    maFlDefaultTitle( this,  ResId( FL_DEFAULT_LINK_ACTION , rResMgr ) ),
-    maRbOpnLnksDefault( this, ResId( CB_VIEW_PDF_DEFAULT , rResMgr ) ),
+    maFlDefaultTitle( this,  PDFFilterResId( FL_DEFAULT_LINK_ACTION ) ),
+    maRbOpnLnksDefault( this, PDFFilterResId( CB_VIEW_PDF_DEFAULT ) ),
     mbOpnLnksDefaultUserState( sal_False ),
-    maRbOpnLnksLaunch( this, ResId( CB_VIEW_PDF_APPLICATION , rResMgr ) ),
+    maRbOpnLnksLaunch( this, PDFFilterResId( CB_VIEW_PDF_APPLICATION ) ),
     mbOpnLnksLaunchUserState( sal_False ),
-    maRbOpnLnksBrowser( this,  ResId( CB_VIEW_PDF_BROWSER , rResMgr ) ),
+    maRbOpnLnksBrowser( this,  PDFFilterResId( CB_VIEW_PDF_BROWSER ) ),
     mbOpnLnksBrowserUserState( sal_False )
 {
-    mpaResMgr = &rResMgr;
     FreeResource();
 
     // pb: #i91991# checkboxes only double-spaced if necessary
@@ -1301,16 +1291,13 @@ ImpPDFTabLinksPage::ImpPDFTabLinksPage( Window* pParent,
 // -----------------------------------------------------------------------------
 ImpPDFTabLinksPage::~ImpPDFTabLinksPage()
 {
-    delete mpaResMgr;
 }
 
 // -----------------------------------------------------------------------------
 SfxTabPage*  ImpPDFTabLinksPage::Create( Window* pParent,
                                           const SfxItemSet& rAttrSet)
 {
-    ByteString aResMgrName( "pdffilter" );
-    ResMgr * paResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-    return ( new  ImpPDFTabLinksPage( pParent, rAttrSet, *paResMgr ) );
+    return ( new  ImpPDFTabLinksPage( pParent, rAttrSet ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -1426,18 +1413,18 @@ IMPL_LINK( ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl, void*, EMPTYARG )
     return 0;
 }
 
-ImplErrorDialog::ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& rErrors, ResMgr& rResMgr ) :
-    ModalDialog( NULL, ResId( RID_PDF_ERROR_DLG, rResMgr ) ),
+ImplErrorDialog::ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& rErrors ) :
+    ModalDialog( NULL, PDFFilterResId( RID_PDF_ERROR_DLG ) ),
     maFI( this, 0 ),
-    maProcessText( this, ResId( FT_PROCESS, rResMgr ) ),
+    maProcessText( this, PDFFilterResId( FT_PROCESS ) ),
     maErrors( this, WB_BORDER | WB_AUTOVSCROLL ),
     maExplanation( this, WB_WORDBREAK ),
     maButton( this, WB_DEFBUTTON )
 
 {
     // load images
-    Image aWarnImg( BitmapEx( ResId( IMG_WARN, rResMgr ) ) );
-    Image aErrImg( BitmapEx( ResId( IMG_ERR, rResMgr ) ) );
+    Image aWarnImg( BitmapEx( PDFFilterResId( IMG_WARN ) ) );
+    Image aErrImg( BitmapEx( PDFFilterResId( IMG_ERR ) ) );
 
     for( std::set<vcl::PDFWriter::ErrorCode>::const_iterator it = rErrors.begin();
          it != rErrors.end(); ++it )
@@ -1446,30 +1433,30 @@ ImplErrorDialog::ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& r
         {
         case vcl::PDFWriter::Warning_Transparency_Omitted_PDFA:
         {
-            USHORT nPos = maErrors.InsertEntry( String( ResId( STR_WARN_TRANSP_PDFA_SHORT, rResMgr ) ),
+            USHORT nPos = maErrors.InsertEntry( String( PDFFilterResId( STR_WARN_TRANSP_PDFA_SHORT ) ),
                                                 aWarnImg );
-            maErrors.SetEntryData( nPos, new String( ResId( STR_WARN_TRANSP_PDFA, rResMgr ) ) );
+            maErrors.SetEntryData( nPos, new String( PDFFilterResId( STR_WARN_TRANSP_PDFA ) ) );
         }
         break;
         case vcl::PDFWriter::Warning_Transparency_Omitted_PDF13:
         {
-            USHORT nPos = maErrors.InsertEntry( String( ResId( STR_WARN_TRANSP_VERSION_SHORT, rResMgr ) ),
+            USHORT nPos = maErrors.InsertEntry( String( PDFFilterResId( STR_WARN_TRANSP_VERSION_SHORT ) ),
                                                 aWarnImg );
-            maErrors.SetEntryData( nPos, new String( ResId( STR_WARN_TRANSP_VERSION, rResMgr ) ) );
+            maErrors.SetEntryData( nPos, new String( PDFFilterResId( STR_WARN_TRANSP_VERSION ) ) );
         }
         break;
         case vcl::PDFWriter::Warning_FormAction_Omitted_PDFA:
         {
-            USHORT nPos = maErrors.InsertEntry( String( ResId( STR_WARN_FORMACTION_PDFA_SHORT, rResMgr ) ),
+            USHORT nPos = maErrors.InsertEntry( String( PDFFilterResId( STR_WARN_FORMACTION_PDFA_SHORT ) ),
                                                 aWarnImg );
-            maErrors.SetEntryData( nPos, new String( ResId( STR_WARN_FORMACTION_PDFA, rResMgr ) ) );
+            maErrors.SetEntryData( nPos, new String( PDFFilterResId( STR_WARN_FORMACTION_PDFA ) ) );
         }
         break;
         case vcl::PDFWriter::Warning_Transparency_Converted:
         {
-            USHORT nPos = maErrors.InsertEntry( String( ResId( STR_WARN_TRANSP_CONVERTED_SHORT, rResMgr ) ),
+            USHORT nPos = maErrors.InsertEntry( String( PDFFilterResId( STR_WARN_TRANSP_CONVERTED_SHORT ) ),
                                                 aWarnImg );
-            maErrors.SetEntryData( nPos, new String( ResId( STR_WARN_TRANSP_CONVERTED, rResMgr ) ) );
+            maErrors.SetEntryData( nPos, new String( PDFFilterResId( STR_WARN_TRANSP_CONVERTED ) ) );
         }
         break;
         default:

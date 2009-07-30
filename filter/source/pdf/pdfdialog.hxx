@@ -38,17 +38,12 @@
 // - PDFDialog -
 // -------------
 
-class Window;
-class ResMgr;
-
 class PDFDialog : public ::svt::OGenericUnoDialog,
                   public ::comphelper::OPropertyArrayUsageHelper< PDFDialog >,
                   public XPropertyAccess,
                   public XExporter
 {
 private:
-
-    ResMgr*                     mpResMgr;
     Sequence< PropertyValue >   maMediaDescriptor;
     Sequence< PropertyValue >   maFilterData;
     Reference< XComponent >     mxSrcDoc;
