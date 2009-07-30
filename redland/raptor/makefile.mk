@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.6.4.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -48,22 +48,33 @@ all:
 
 .INCLUDE :	../redlandversion.mk
 
-RAPTORVERSION=$(RAPTOR_MAJOR).4.17
+RAPTORVERSION=$(RAPTOR_MAJOR).4.18
 
 TARFILE_NAME=raptor-$(RAPTORVERSION)
-PATCH_FILES=..$/$(TARFILE_NAME).patch
 
 ADDITIONAL_FILES=src/makefile.mk src/raptor_config.h
+
+OOO_PATCH_FILES= \
+    $(TARFILE_NAME).patch.legal \
+    $(TARFILE_NAME).patch.autotools \
+    $(TARFILE_NAME).patch.ooo_build \
+    $(TARFILE_NAME).patch.dmake \
+    $(TARFILE_NAME).patch.win32 \
+
+
+PATCH_FILES=$(OOO_PATCH_FILES)
+
 
 .IF "$(OS)"=="OS2"
 BUILD_ACTION=dmake
 BUILD_DIR=$(CONFIGURE_DIR)$/src
-
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
+OOO_PATCH_FILES+=$(TARFILE_NAME).patch.mingw
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-openssl-digests --with-xml-parser=libxml --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CFLAGS=-D_MT CPPFLAGS="-nostdinc $(INCLUDE)" LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc,--export-all-symbols  -L$(ILIB:s/;/ -L/)" LIBS=-lmingwthrd OBJDUMP="$(WRAPCMD) objdump" LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB) XSLTLIB="$(XSLTLIB)"
+# do not enable grddl parser (#i93768#)
+CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-openssl-digests --with-xml-parser=libxml --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CFLAGS=-D_MT CPPFLAGS="-nostdinc $(INCLUDE)" LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc,--export-all-symbols  -L$(ILIB:s/;/ -L/)" LIBS=-lmingwthrd OBJDUMP="$(WRAPCMD) objdump" LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB) XSLTLIB="$(XSLTLIB)"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -100,7 +111,7 @@ LDFLAGS+:=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -lpthread -ldl
 
 CPPFLAGS+:=$(EXTRA_CFLAGS)
 LDFLAGS+:=$(EXTRA_LINKFLAGS)
-XSLTLIB!:=$(XSLTLIB) # expand variable for (internal) xslt-config
+XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
 
 .EXPORT: CPPFLAGS
 .EXPORT: LDFLAGS
@@ -110,7 +121,8 @@ XSLTLIB!:=$(XSLTLIB) # expand variable for (internal) xslt-config
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
+# do not enable grddl parser (#i93768#)
+CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -122,7 +134,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 OUT2INC+=src$/raptor.h
 
 .IF "$(OS)"=="MACOSX"
-OUT2LIB+=src$/.libs$/libraptor.1.dylib src$/.libs$/libraptor.dylib
+OUT2LIB+=src$/.libs$/libraptor.$(RAPTOR_MAJOR).dylib src$/.libs$/libraptor.dylib
 OUT2BIN+=src/raptor-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -132,12 +144,10 @@ OUT2BIN+=src/raptor-config
 .ELSE
 # if we use dmake, this is done automagically
 .ENDIF
-
 .ELIF "$(GUI)"=="OS2"
 # if we use dmake, this is done automagically
-
 .ELSE
-OUT2LIB+=src$/.libs$/libraptor.so.1 src$/.libs$/libraptor.so
+OUT2LIB+=src$/.libs$/libraptor.so.$(RAPTOR_MAJOR) src$/.libs$/libraptor.so
 OUT2BIN+=src/raptor-config
 .ENDIF
 
