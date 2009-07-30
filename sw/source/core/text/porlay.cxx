@@ -45,15 +45,9 @@
 #include <porrst.hxx>       // SwHangingPortion
 #include <pormulti.hxx>     // SwMultiPortion
 #include <breakit.hxx>
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
-#ifndef _COM_SUN_STAR_I18N_CTLSCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/CTLScriptType.hdl>
-#endif
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
-#endif
 #include <paratr.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/scripttypeitem.hxx>
@@ -1113,7 +1107,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         // we search for connecting opportunities (kashida)
         else if ( bAdjustBlock && i18n::ScriptType::COMPLEX == nScript )
         {
-            SwScanner aScanner( rNode, rNode.aText, 0, 0,
+            SwScanner aScanner( rNode, rNode.GetTxt(), 0, 0,
                                 i18n::WordType::DICTIONARY_WORD,
                                 nLastKashida, nChg );
 

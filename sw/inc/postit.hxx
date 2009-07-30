@@ -85,22 +85,20 @@ class SwPostItAnkor: public sdr::overlay::OverlayObjectWithBasePosition
         void implEnsureGeometry();
         void implResetGeometry();
 
-        // helpers to paint geometry
-        void implDrawGeometry(OutputDevice& rOutputDevice, Color aColor, double fOffX, double fOffY);
-        Color implBlendColor(const Color aOriginal, sal_Int16 nChange);
-
-        virtual void drawGeometry(OutputDevice& rOutputDevice);
-        virtual void createBaseRange(OutputDevice& rOutputDevice);
+        // geometry creation for OverlayObject
+        virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
     private:
         // object's geometry
         basegfx::B2DPolygon                     maTriangle;
         basegfx::B2DPolygon                     maLine;
         basegfx::B2DPolygon                     maLineTop;
-        LineInfo                                mLineInfo;
         unsigned long                           mHeight;
-        bool                                    mbShadowedEffect;
         AnkorState                              mAnkorState;
+
+        // bitfield
+        unsigned                                mbShadowedEffect : 1;
+        unsigned                                mbLineSolid : 1;
 
     public:
         SwPostItAnkor(const basegfx::B2DPoint& rBasePos,
@@ -111,8 +109,8 @@ class SwPostItAnkor: public sdr::overlay::OverlayObjectWithBasePosition
                         const basegfx::B2DPoint& rSixthPos,
                         const basegfx::B2DPoint& rSeventhPos,
                         Color aBaseColor,
-                        const LineInfo &aLineInfo,
-                        bool bShadowedEffect);
+                        bool bShadowedEffect,
+                        bool bLineSolid);
         virtual ~SwPostItAnkor();
 
         const basegfx::B2DPoint& GetSecondPosition() const { return maSecondPosition; }
@@ -129,7 +127,8 @@ class SwPostItAnkor: public sdr::overlay::OverlayObjectWithBasePosition
         void SetSixthPosition(const basegfx::B2DPoint& rNew);
         void SetSeventhPosition(const basegfx::B2DPoint& rNew);
 
-        void SetLineInfo(const LineInfo &aLineInfo);
+        bool getLineSolid() const { return mbLineSolid; }
+        void setLineSolid(bool bNew);
 
         void SetHeight(const unsigned long aHeight) {mHeight = aHeight;};
 
@@ -137,12 +136,6 @@ class SwPostItAnkor: public sdr::overlay::OverlayObjectWithBasePosition
 
         void SetAnkorState(AnkorState aState);
         AnkorState GetAnkorState() const {return mAnkorState;}
-        virtual void Trigger(sal_uInt32 nTime);
-
-        //sal_Bool isHit(const basegfx::B2DPoint& rPos, double fTol) const;
-        // transform object coordinates. Transforms maBasePosition
-        // and invalidates on change
-        virtual void transform(const basegfx::B2DHomMatrix& rMatrix);
 };
 
 enum ShadowState {SS_NORMAL, SS_VIEW, SS_EDIT};
@@ -150,8 +143,8 @@ enum ShadowState {SS_NORMAL, SS_VIEW, SS_EDIT};
 class SwPostItShadow: public sdr::overlay::OverlayObjectWithBasePosition
 {
     protected:
-        virtual void drawGeometry(OutputDevice& rOutputDevice);
-        virtual void createBaseRange(OutputDevice& rOutputDevice);
+        // geometry creation for OverlayObject
+        virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
     private:
         basegfx::B2DPoint                       maSecondPosition;
@@ -167,9 +160,6 @@ class SwPostItShadow: public sdr::overlay::OverlayObjectWithBasePosition
         const basegfx::B2DPoint& GetSecondPosition() const { return maSecondPosition; }
         void SetSecondPosition(const basegfx::B2DPoint& rNew);
         void SetPosition(const basegfx::B2DPoint& rPoint1,const basegfx::B2DPoint& rPoint2);
-
-        virtual void Trigger(sal_uInt32 nTime);
-        virtual void transform(const basegfx::B2DHomMatrix& rMatrix);
 };
 
 class PostItTxt : public Window

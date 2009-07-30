@@ -35,9 +35,7 @@
 #include <errhdl.hxx>   // ASSERT
 #include <atrhndl.hxx>
 #include <svtools/itemiter.hxx>
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <svx/cmapitem.hxx>
 #include <svx/colritem.hxx>
 #include <svx/cntritem.hxx>
@@ -56,9 +54,7 @@
 #include <svx/akrnitem.hxx>
 #include <svx/blnkitem.hxx>
 #include <svx/charrotateitem.hxx>
-#ifndef _SVX_EMPHITEM_HXX
 #include <svx/emphitem.hxx>
-#endif
 #include <svx/charscaleitem.hxx>
 #include <svx/twolinesitem.hxx>
 #include <svx/charhiddenitem.hxx>
@@ -250,12 +246,14 @@ bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
             if ( pColor )
             {
                 // take color from character format 'unvisited link'
-                ((SwTxtINetFmt&)rAttr).SetVisited( FALSE );
+                SwTxtINetFmt& rInetAttr( const_cast<SwTxtINetFmt&>(
+                    static_cast<const SwTxtINetFmt&>(rAttr)) );
+                rInetAttr.SetVisited( false );
                 const SwCharFmt* pTmpFmt = ((SwTxtINetFmt&)rAttr).GetCharFmt();
                 const SfxPoolItem* pItem;
                 pTmpFmt->GetItemState( RES_CHRATR_COLOR, TRUE, &pItem );
                 *pColor = ((SvxColorItem*)pItem)->GetValue();
-                ((SwTxtINetFmt&)rAttr).SetVisited( TRUE );
+                rInetAttr.SetVisited( true );
             }
             return true;
         }
@@ -446,7 +444,7 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
         while( TRUE )
         {
             nWhich = pItem->Which();
-            if( RES_CHRATR_BEGIN <= nWhich && RES_CHRATR_END > nWhich )
+            if (isCHRATR(nWhich))
             {
                 pDefaultArray[ StackPos[ nWhich ] ] = pItem;
                 FontChg( *pItem, rFnt, sal_True );

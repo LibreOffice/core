@@ -2303,7 +2303,7 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
         SwpHints& rHints = pTxtNd->GetSwpHints();
         for( sal_uInt16 i=0; i < nCntAttr; i++ )
         {
-            SwTxtAttr *pHt = rHints.GetHt( i );
+            SwTxtAttr *pHt = rHints.GetTextHint( i );
             sal_uInt16 nWhich = pHt->Which();
             sal_Int16 nIdx = -1;
             if( RES_CHRATR_CJK_FONT <= nWhich &&
@@ -2613,8 +2613,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                        ( !pAttr->IsLikePara() &&
                          nEndParaIdx == rEndIdx.GetIndex() &&
                          pAttr->GetEndCnt() < nEndCnt &&
-                         RES_CHRATR_BEGIN <= nWhich &&
-                         RES_TXTATR_WITHEND_END > nWhich ) ||
+                         (isCHRATR(nWhich) || isTXTATR_WITHEND(nWhich)) ) ||
                        ( bBeforeTable &&
                          nEndParaIdx == rEndIdx.GetIndex() &&
                          !pAttr->GetEndCnt() );
@@ -2663,9 +2662,8 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                 {
                     // durch die elende Loescherei von Nodes kann auch mal
                     // ein Index auf einen End-Node zeigen :-(
-                    if( pAttr->GetSttPara() == pAttr->GetEndPara() &&
-                        (nWhich < RES_TXTATR_NOEND_BEGIN ||
-                         nWhich >= RES_TXTATR_NOEND_END) )
+                    if ( (pAttr->GetSttPara() == pAttr->GetEndPara()) &&
+                         !isTXTATR_NOEND(nWhich) )
                     {
                         // wenn der End-Index auch auf den Node zeigt
                         // brauchen wir auch kein Attribut mehr zu setzen,
@@ -2696,9 +2694,8 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                 pAttrPam->GetPoint()->nContent.Assign( pCNd, pAttr->nSttCntnt );
 
                 pAttrPam->SetMark();
-                if( pAttr->GetSttPara() != pAttr->GetEndPara() &&
-                    (nWhich < RES_TXTATR_NOEND_BEGIN ||
-                     nWhich >= RES_TXTATR_NOEND_END) )
+                if ( (pAttr->GetSttPara() != pAttr->GetEndPara()) &&
+                         !isTXTATR_NOEND(nWhich) )
                 {
                     pCNd = pDoc->GetNodes()[ pAttr->nEndPara ]->GetCntntNode();
                     if( !pCNd )
@@ -2738,8 +2735,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                     // muessen wir es im Node davor beenden oder wegschmeissen,
                     // wenn es erst in dem Node beginnt
                     if( nWhich != RES_BREAK && nWhich != RES_PAGEDESC &&
-                        (nWhich < RES_TXTATR_NOEND_BEGIN ||
-                         nWhich >= RES_TXTATR_NOEND_END) )
+                         !isTXTATR_NOEND(nWhich) )
                     {
                         if( pAttrPam->GetMark()->nNode.GetIndex() !=
                             rEndIdx.GetIndex() )

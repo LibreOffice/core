@@ -35,9 +35,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>
@@ -1411,8 +1409,9 @@ uno::Reference< text::XTextRange > SwXText::finishOrAppendParagraph(
                 throw aEx;
             }
         }
-        SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(*aPam.Start(), sal_False);
-        xRet = new SwXParagraph(this, pUnoCrsr);
+        SwTxtNode * pTxtNode( aPam.Start()->nNode.GetNode().GetTxtNode() );
+        OSL_ENSURE(pTxtNode, "no SwTxtNode?");
+        xRet = new SwXParagraph(this, pTxtNode);
     }
 
     return xRet;

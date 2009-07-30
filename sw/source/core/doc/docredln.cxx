@@ -2678,7 +2678,8 @@ BOOL SwRedlineTbl::InsertWithValidRanges( SwRedlinePtr& p, USHORT* pInsPos )
             { // but our Mark was outside the table => Correction
                 do
                 {
-                    *pNew->GetPoint() = *pTab; // We want to be before the table
+                    // We want to be before the table
+                    *pNew->GetPoint() = SwPosition(*pTab);
                     pC = GoPreviousNds( &pNew->GetPoint()->nNode, FALSE ); // here we are.
                     if( pC )
                         pNew->GetPoint()->nContent.Assign( pC, 0 );

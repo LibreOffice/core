@@ -68,8 +68,11 @@
 #include <unochart.hxx>
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
+#include <unocrsr.hxx>
+
 
 using namespace com::sun::star;
+
 
 SV_IMPL_PTRARR(SwGetINetAttrs, SwGetINetAttr*)
 
@@ -123,7 +126,7 @@ void SwEditShell::Insert(const String &rStr)
     // calculate cursor bidi level
     SwCursor* pTmpCrsr = _GetCrsr();
     const BOOL bDoNotSetBidiLevel = ! pTmpCrsr ||
-                                    ( 0 != (SwUnoCrsr*)*pTmpCrsr );
+                                ( 0 != dynamic_cast<SwUnoCrsr*>(pTmpCrsr) );
 
     if ( ! bDoNotSetBidiLevel )
     {

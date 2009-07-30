@@ -43,7 +43,7 @@
 class SwDoc;
 class SwFmt;
 class SwFmtColl;
-class SwHstryHint;
+class SwHistoryHint;
 class SwTxtAttr;
 class SfxPoolItem;
 class SwTxtNode;
@@ -72,10 +72,12 @@ class SwCharFmt;
 #include <IDocumentMarkAccess.hxx>
 // <--
 
+#include <memory>
+
 #ifdef DBG_UTIL
 class Writer;
-#define OUT_HSTR_HINT( name )   \
-    friend Writer& OutUndo_Hstr_ ## name( Writer&, const SwHstryHint& );
+#define OUT_HSTR_HINT( name )    \
+    friend Writer& OutUndo_Hstr_ ## name( Writer&, const SwHistoryHint& );
 #else
 #define OUT_HSTR_HINT( name )
 #endif
@@ -99,169 +101,187 @@ enum HISTORY_HINT {
     HSTRY_CHGCHARFMT, // #i27615#
     HSTRY_END
 };
-class SwHstryHint
+
+class SwHistoryHint
 {
-    HISTORY_HINT eWhichId;
+    const HISTORY_HINT m_eWhichId;
+
 public:
-    SwHstryHint( HISTORY_HINT eWh ) : eWhichId( eWh ) {}
-    virtual ~SwHstryHint() {}       // jetzt inline
-    virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet ) = 0;
-    HISTORY_HINT Which() const                  { return eWhichId; }
+    SwHistoryHint( HISTORY_HINT eWhich ) : m_eWhichId( eWhich ) {}
+    virtual ~SwHistoryHint() {}
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) = 0;
+    HISTORY_HINT Which() const                     { return m_eWhichId; }
     virtual String GetDescription() const;
 };
 
-class SwSetFmtHint : public SwHstryHint
+class SwHistorySetFmt : public SwHistoryHint
 {
-    SfxPoolItem* pAttr;
-    ULONG nNode;
+    ::std::auto_ptr<SfxPoolItem> m_pAttr;
+    const ULONG m_nNodeIndex;
+
 public:
-    SwSetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNode );
-    virtual ~SwSetFmtHint();
-    virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
+    SwHistorySetFmt( const SfxPoolItem* pFmtHt, ULONG nNode );
+    virtual ~SwHistorySetFmt();
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
     virtual String GetDescription() const;
 
     OUT_HSTR_HINT(SetFmtHnt)
 };
 
-class SwResetFmtHint : public SwHstryHint
+class SwHistoryResetFmt : public SwHistoryHint
 {
-    ULONG nNode;
-    USHORT nWhich;
+    const ULONG m_nNodeIndex;
+    const USHORT m_nWhich;
+
 public:
     // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
-    SwResetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNodeIdx );
+    SwHistoryResetFmt( const SfxPoolItem* pFmtHt, ULONG nNodeIdx );
     // <--
-    virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
+
     OUT_HSTR_HINT(ResetFmtHnt)
 };
 
-class SwSetTxtHint : public SwHstryHint
+class SwHistorySetTxt : public SwHistoryHint
 {
-    SfxPoolItem *pAttr;
-    ULONG nNode;
-    xub_StrLen nStart, nEnd;
+    ::std::auto_ptr<SfxPoolItem> m_pAttr;
+    const ULONG m_nNodeIndex;
+    const xub_StrLen m_nStart;
+    const xub_StrLen m_nEnd;
+
 public:
-    SwSetTxtHint( /*const*/ SwTxtAttr* pTxtHt, ULONG nNode );
-    virtual ~SwSetTxtHint();
-    virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
+    SwHistorySetTxt( SwTxtAttr* pTxtHt, ULONG nNode );
+    virtual ~SwHistorySetTxt();
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
     OUT_HSTR_HINT(SetTxtHnt)
 };
 
-class SwSetTxtFldHint : public SwHstryHint
+class SwHistorySetTxtFld : public SwHistoryHint
 {
-    SwFmtFld* pFld;
-    SwFieldType* pFldType;
-    ULONG nNode;
-    xub_StrLen nPos;
-    USHORT nFldWhich;
+    const ::std::auto_ptr<SwFmtFld> m_pFld;
+    ::std::auto_ptr<SwFieldType> m_pFldType;
+    ULONG m_nNodeIndex;
+    xub_StrLen m_nPos;
+    USHORT m_nFldWhich;
+
 public:
-    SwSetTxtFldHint( SwTxtFld* pTxtFld, ULONG nNode );
-    virtual ~SwSetTxtFldHint();
-    virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
+    SwHistorySetTxtFld( SwTxtFld* pTxtFld, ULONG nNode );
+    virtual ~SwHistorySetTxtFld();
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
     virtual String GetDescription() const;
 
     OUT_HSTR_HINT(SetTxtFldHnt)
 };
 
-class SwSetRefMarkHint : public SwHstryHint
+class SwHistorySetRefMark : public SwHistoryHint
 {
-    String aRefName;
-    ULONG nNode;
-    xub_StrLen nStart, nEnd;
+    const String m_RefName;
+    const ULONG m_nNodeIndex;
+    const xub_StrLen m_nStart;
+    const xub_StrLen m_nEnd;
+
 public:
-    SwSetRefMarkHint( SwTxtRefMark* pTxtHt, ULONG nNode );
-    virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
+    SwHistorySetRefMark( SwTxtRefMark* pTxtHt, ULONG nNode );
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
+
     OUT_HSTR_HINT(SetRefMarkHnt)
 };
 
-class SwSetTOXMarkHint : public SwHstryHint
+class SwHistorySetTOXMark : public SwHistoryHint
 {
-    String aTOXName;
-    TOXTypes eTOXTypes;
-    SwTOXMark aTOXMark;
-    ULONG nNode;
-    xub_StrLen nStart, nEnd;
+    SwTOXMark m_TOXMark;
+    const String m_TOXName;
+    const TOXTypes m_eTOXTypes;
+    const ULONG m_nNodeIndex;
+    const xub_StrLen m_nStart;
+    const xub_StrLen m_nEnd;
+
 public:
-    SwSetTOXMarkHint( SwTxtTOXMark* pTxtHt, ULONG nNode );
-    virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
+    SwHistorySetTOXMark( SwTxtTOXMark* pTxtHt, ULONG nNode );
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
     int IsEqual( const SwTOXMark& rCmp ) const;
+
     OUT_HSTR_HINT(SetToxMarkHnt)
 };
 
-class SwResetTxtHint : public SwHstryHint
+class SwHistoryResetTxt : public SwHistoryHint
 {
-    ULONG nNode;
-    xub_StrLen nStart, nEnd;
-    USHORT nAttr;
-public:
-    SwResetTxtHint( USHORT nWhich, xub_StrLen nStt, xub_StrLen nEnd, ULONG nNode );
-    virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
+    const ULONG m_nNodeIndex;
+    const xub_StrLen m_nStart;
+    const xub_StrLen m_nEnd;
+    const USHORT m_nAttr;
 
-    USHORT GetWhich() const         { return nAttr; }
-    ULONG GetNode() const           { return nNode; }
-    xub_StrLen GetCntnt() const     { return nStart; }
+public:
+    SwHistoryResetTxt( USHORT nWhich, xub_StrLen nStt, xub_StrLen nEnd,
+                       ULONG nNode );
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
+
+    USHORT GetWhich() const         { return m_nAttr; }
+    ULONG GetNode() const           { return m_nNodeIndex; }
+    xub_StrLen GetCntnt() const     { return m_nStart; }
+
     OUT_HSTR_HINT(ResetTxtHnt)
 };
 
-class SwSetFtnHint : public SwHstryHint
+class SwHistorySetFootnote : public SwHistoryHint
 {
-    String aFtnStr;
-    SwUndoSaveSection* pUndo;
-    ULONG nNode;
-    xub_StrLen nStart;
-    BOOL   bEndNote;
+    const ::std::auto_ptr<SwUndoSaveSection> m_pUndo;
+    const String m_FootnoteNumber;
+    ULONG m_nNodeIndex;
+    const xub_StrLen m_nStart;
+    const bool m_bEndNote;
+
 public:
-    SwSetFtnHint( SwTxtFtn* pTxtFtn, ULONG nNode );
-    SwSetFtnHint( const SwTxtFtn& );
-    ~SwSetFtnHint();
-    virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
+    SwHistorySetFootnote( SwTxtFtn* pTxtFtn, ULONG nNode );
+    SwHistorySetFootnote( const SwTxtFtn& );
+    virtual ~SwHistorySetFootnote();
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
     virtual String GetDescription() const;
 
     OUT_HSTR_HINT(SetFtnHnt)
 };
 
-class SwChgFmtColl : public SwHstryHint
+class SwHistoryChangeFmtColl : public SwHistoryHint
 {
-    const SwFmtColl* pColl;
-    ULONG nNode;
-    BYTE nNdWhich;
-    // --> OD 2007-07-09 #i77372#
-    // adjust (naming and type) and extend (add <mbIsCounted>) numbering attributes
-    int mnNumLvl;
-    bool mbIsRestart;
-    SwNumberTree::tSwNumTreeNumber mnRestartVal;
-    bool mbIsCounted;
-    // <--
+    SwFmtColl * const m_pColl;
+    const ULONG m_nNodeIndex;
+    const BYTE m_nNodeType;
+
 public:
-    SwChgFmtColl( const SwFmtColl* pColl, ULONG nNode, BYTE nNodeWhich );
-    virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
-    OUT_HSTR_HINT(ChgFmtColl)
+    SwHistoryChangeFmtColl( SwFmtColl* pColl, ULONG nNode, BYTE nNodeWhich );
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
+
+    OUT_HSTR_HINT(ChangeFmtColl)
 };
 
-class SwHstryTxtFlyCnt : public SwHstryHint
+class SwHistoryTxtFlyCnt : public SwHistoryHint
 {
-    SwUndoDelLayFmt* pUndo;
+    ::std::auto_ptr<SwUndoDelLayFmt> m_pUndo;
+
 public:
-    SwHstryTxtFlyCnt( SwTxtFlyCnt* pTxtFly );       // fuer Zeichengebundene
-    SwHstryTxtFlyCnt( SwFlyFrmFmt* pFlyFmt );       // fuer Absatzgebundene
-    ~SwHstryTxtFlyCnt();
-    virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
-    SwUndoDelLayFmt* GetUDelLFmt() { return pUndo; }
+    SwHistoryTxtFlyCnt( SwFrmFmt* const pFlyFmt );
+    virtual ~SwHistoryTxtFlyCnt();
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
+    SwUndoDelLayFmt* GetUDelLFmt() { return m_pUndo.get(); }
+
     OUT_HSTR_HINT(FlyCnt)
 };
 
-class SwHstryBookmark : public SwHstryHint
+class SwHistoryBookmark : public SwHistoryHint
 {
     public:
-        SwHstryBookmark(const ::sw::mark::IMark& rBkmk, bool bSavePos, bool bSaveOtherPos);
-        virtual void SetInDoc(SwDoc * pDoc, BOOL);
+        SwHistoryBookmark(const ::sw::mark::IMark& rBkmk,
+                        bool bSavePos, bool bSaveOtherPos);
+        virtual void SetInDoc(SwDoc * pDoc, bool);
+
+        bool IsEqualBookmark(const ::sw::mark::IMark& rBkmk);
+        const ::rtl::OUString& GetName() const;
+
         OUT_HSTR_HINT(Bookmark)
 
-        BOOL IsEqualBookmark(const ::sw::mark::IMark& rBkmk);
-        const ::rtl::OUString& GetName() const;
     private:
         const ::rtl::OUString m_aName;
         ::rtl::OUString m_aShortName;
@@ -276,129 +296,135 @@ class SwHstryBookmark : public SwHstryHint
         const IDocumentMarkAccess::MarkType m_eBkmkType;
 };
 
-class SwHstrySetAttrSet : public SwHstryHint
+class SwHistorySetAttrSet : public SwHistoryHint
 {
-    SfxItemSet aOldSet;
-    SvUShorts aResetArr;
-    ULONG nNode;
-    // --> OD 2007-07-09 #i77372#
-    // adjust (naming and type) and extend (add <mbIsCounted>) numbering attributes
-    int mnNumLvl;
-    bool mbIsRestart;
-    SwNumberTree::tSwNumTreeNumber mnRestartVal;
-    bool mbIsCounted;
-    // <--
+    SfxItemSet m_OldSet;
+    SvUShorts m_ResetArray;
+    const ULONG m_nNodeIndex;
+
 public:
-    SwHstrySetAttrSet( const SfxItemSet& rSet, ULONG nNode,
-                        const SvUShortsSort& rSetArr );
-    virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
+    SwHistorySetAttrSet( const SfxItemSet& rSet, ULONG nNode,
+                         const SvUShortsSort& rSetArr );
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
+
     OUT_HSTR_HINT(SetAttrSet)
 };
 
 
-class SwHstryResetAttrSet : public SwHstryHint
+class SwHistoryResetAttrSet : public SwHistoryHint
 {
-    ULONG nNode;
-    xub_StrLen nStart, nEnd;
-    SvUShorts aArr;
+    const ULONG m_nNodeIndex;
+    const xub_StrLen m_nStart;
+    const xub_StrLen m_nEnd;
+    SvUShorts m_Array;
+
 public:
-    SwHstryResetAttrSet( const SfxItemSet& rSet, ULONG nNode,
+    SwHistoryResetAttrSet( const SfxItemSet& rSet, ULONG nNode,
                         xub_StrLen nStt = STRING_MAXLEN,
                         xub_StrLen nEnd = STRING_MAXLEN );
-    virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
-    const SvUShorts& GetArr() const     { return aArr; }
-    ULONG GetNode() const               { return nNode; }
-    xub_StrLen GetCntnt() const         { return nStart; }
+    const SvUShorts& GetArr() const     { return m_Array; }
+    ULONG GetNode() const               { return m_nNodeIndex; }
+    xub_StrLen GetCntnt() const         { return m_nStart; }
+
     OUT_HSTR_HINT(ResetAttrSet)
 };
 
-class SwHstryChgFlyAnchor : public SwHstryHint
+class SwHistoryChangeFlyAnchor : public SwHistoryHint
 {
-    SwFrmFmt* pFmt;
-    ULONG nOldPos;
-    xub_StrLen nOldCnt;
+    SwFrmFmt & m_rFmt;
+    const ULONG m_nOldNodeIndex;
+    const xub_StrLen m_nOldContentIndex;
+
 public:
-    SwHstryChgFlyAnchor( const SwFrmFmt& rFmt );
-    virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
+    SwHistoryChangeFlyAnchor( SwFrmFmt& rFmt );
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 };
 
-class SwHstryChgFlyChain : public SwHstryHint
+class SwHistoryChangeFlyChain : public SwHistoryHint
 {
-    SwFlyFrmFmt *pPrevFmt, *pNextFmt, *pFlyFmt;
+    SwFlyFrmFmt * const m_pPrevFmt;
+    SwFlyFrmFmt * const m_pNextFmt;
+    SwFlyFrmFmt * const m_pFlyFmt;
+
 public:
-    SwHstryChgFlyChain( const SwFlyFrmFmt& rFmt, const SwFmtChain& rAttr );
-    virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
+    SwHistoryChangeFlyChain( SwFlyFrmFmt& rFmt, const SwFmtChain& rAttr );
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 };
 
 // #i27615#
-class SwHstryChgCharFmt : public SwHstryHint
+class SwHistoryChangeCharFmt : public SwHistoryHint
 {
-    SfxItemSet aOldSet;
-    String sFmt;
+    const SfxItemSet m_OldSet;
+    const String m_Fmt;
+
 public:
-    SwHstryChgCharFmt( const SfxItemSet& rSet, const String & sFmt);
-    virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
+    SwHistoryChangeCharFmt( const SfxItemSet& rSet, const String & sFmt);
+    virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
+
     OUT_HSTR_HINT(SetAttrSet)
 };
 
 
 #endif
 
-typedef SwHstryHint* SwHstryHintPtr;
-SV_DECL_PTRARR_DEL( SwpHstry, SwHstryHintPtr, 0, 2 )
+typedef SwHistoryHint* SwHistoryHintPtr;
+SV_DECL_PTRARR_DEL( SwpHstry, SwHistoryHintPtr, 0, 2 )
 
-class SwHistory : private SwpHstry
+class SwHistory
 {
-    friend class SwDoc;     // eig. darf nur SwDoc::DelUndoObj zugreifen
-    friend class SwUndoWriter;  // fuer den Undo/Redo-Writer
-    friend class SwRegHistory;  // fuer Insert, von Histoy-Attributen
+    friend class SwDoc;         // actually only SwDoc::DelUndoObj may access
+    friend class SwUndoWriter;  // for Undo/Redo Writer
+    friend class SwRegHistory;  // for inserting History attributes
 
-    USHORT nEndDiff;
+    SwpHstry m_SwpHstry;
+    USHORT m_nEndDiff;
+
 public:
     SwHistory( USHORT nInitSz = 0, USHORT nGrowSz = 2 );
     ~SwHistory();
-    // loesche die History ab Start bis zum Ende
+
+    // delete History from nStart to array end
     void Delete( USHORT nStart = 0 );
-    // alle Objecte zwischen nStart und Array-Ende aufrufen und loeschen
-    BOOL Rollback( SwDoc* pDoc, USHORT nStart = 0 );
-    // alle Objecte zwischen nStart und temporaeren Ende aufrufen und
-    // den Start als temporaeres Ende speichern
-    BOOL TmpRollback( SwDoc* pDoc, USHORT nStart, BOOL ToFirst = TRUE );
+    // call and delete all objects between nStart and array end
+    bool Rollback( SwDoc* pDoc, USHORT nStart = 0 );
+    // call all objects between nStart and TmpEnd; store nStart as TmpEnd
+    bool TmpRollback( SwDoc* pDoc, USHORT nStart, bool ToFirst = true );
 
     // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
     void Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
               ULONG nNodeIdx );
     // <--
-    void Add( const SwTxtAttr* pTxtHt, ULONG nNodeIdx,
-                BOOL bNewAttr = TRUE );
-    void Add( const SwFmtColl*, ULONG nNodeIdx, BYTE nWhichNd );
+    void Add( SwTxtAttr* pTxtHt, ULONG nNodeIdx, bool bNewAttr = true );
+    void Add( SwFmtColl*, ULONG nNodeIdx, BYTE nWhichNd );
     void Add( const ::sw::mark::IMark&, bool bSavePos, bool bSaveOtherPos );
-    void Add( const SwFrmFmt& rFmt );
-    void Add( const SwFlyFrmFmt&, USHORT& rSetPos );
+    void Add( SwFrmFmt& rFmt );
+    void Add( SwFlyFrmFmt&, USHORT& rSetPos );
     void Add( const SwTxtFtn& );
     void Add( const SfxItemSet & rSet, const SwCharFmt & rCharFmt); // #i27615#
 
-    USHORT Count() const { return SwpHstry::Count(); }
-    USHORT GetTmpEnd() const { return SwpHstry::Count() - nEndDiff; }
-    USHORT SetTmpEnd( USHORT nTmpEnd );     // returne alten Wert
-    SwHstryHint* operator[]( USHORT nPos ) const { return SwpHstry::operator[](nPos); }
+    USHORT Count() const { return m_SwpHstry.Count(); }
+    USHORT GetTmpEnd() const { return m_SwpHstry.Count() - m_nEndDiff; }
+    USHORT SetTmpEnd( USHORT nTmpEnd );        // return previous value
+    SwHistoryHint      * operator[]( USHORT nPos ) { return m_SwpHstry[nPos]; }
+    SwHistoryHint const* operator[]( USHORT nPos ) const
+        { return m_SwpHstry[nPos]; }
 
-    // fuer SwUndoDelete::Undo/Redo
+    // for SwUndoDelete::Undo/Redo
     void Move( USHORT nPos, SwHistory *pIns,
-                USHORT nStart = 0, USHORT nEnd = USHRT_MAX )
+               USHORT nStart = 0, USHORT nEnd = USHRT_MAX )
     {
-        SwpHstry::Insert( pIns, nPos, nStart, nEnd );
-        SwpHstry* pDel = pIns;
-        pDel->Remove( nStart,  nEnd == USHRT_MAX
-                                    ? pDel->Count() - nStart
-                                    : nEnd );
+        m_SwpHstry.Insert( &pIns->m_SwpHstry, nPos, nStart, nEnd );
+        pIns->m_SwpHstry.Remove( nStart, (nEnd == USHRT_MAX)
+                                            ? pIns->Count() - nStart
+                                            : nEnd );
     }
 
-        // Hilfs-Methoden zum Sichern von Attributen in der History.
-        // Wird von UndoKlasse benutzt (Delete/Overwrite/Inserts)
-    void CopyAttr( const SwpHints* pHts, ULONG nNodeIdx, xub_StrLen nStt,
-                    xub_StrLen nEnd, BOOL bFields );
+    // helper methods for recording attribute in History
+    // used by Undo classes (Delete/Overwrite/Inserts)
+    void CopyAttr( SwpHints* pHts, ULONG nNodeIdx, xub_StrLen nStart,
+                    xub_StrLen nEnd, bool bFields );
     // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
     void CopyFmtAttr( const SfxItemSet& rSet, ULONG nNodeIdx );
     // <--
@@ -408,11 +434,13 @@ public:
 
 class SwRegHistory : public SwClient
 {
-    SvUShortsSort aSetWhichIds;
-    SwHistory* pHstry;
-    ULONG nNodeIdx;
+private:
+    SvUShortsSort m_WhichIdSet;
+    SwHistory * const m_pHistory;
+    ULONG m_nNodeIndex;
 
     void _MakeSetWhichIds();
+
 public:
     // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
     SwRegHistory( SwHistory* pHst );
@@ -424,10 +452,10 @@ public:
     SwRegHistory( SwModify* pRegIn, const SwNode& rNd, SwHistory* pHst );
 
     virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
-    void Add( SwTxtAttr* pHt, const BOOL bNew = FALSE );
+    void AddHint( SwTxtAttr* pHt, const bool bNew = false );
 
     void RegisterInModify( SwModify* pRegIn, const SwNode& rNd );
-    void ChangeNodeIndex( ULONG nNew ) { nNodeIdx = nNew; }
+    void ChangeNodeIndex( ULONG nNew ) { m_nNodeIndex = nNew; }
 };
 
 #endif

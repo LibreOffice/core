@@ -81,6 +81,8 @@
 
 #include <frmatr.hxx>
 
+#include <iostream>
+
 #define MAX_COL 64  // WW6-Beschreibung: 32, WW6-UI: 31 & WW8-UI: 63!
 
 using namespace ::com::sun::star;
@@ -1399,14 +1401,34 @@ void WW8TabBandDesc::ProcessSprmTInsert(const BYTE* pParamsTInsert)
     if( nWwCols && pParamsTInsert )        // set one or more cell length(s)
     {
         BYTE nitcInsert = pParamsTInsert[0]; // position at which to insert
+        if (nitcInsert >= MAX_COL)  // cannot insert into cell outside max possible index
+            return;
         BYTE nctc  = pParamsTInsert[1];      // number of cells
         USHORT ndxaCol = SVBT16ToShort( pParamsTInsert+2 );
 
         short nNewWwCols;
         if (nitcInsert > nWwCols)
+        {
             nNewWwCols = nitcInsert+nctc;
+            //if new count would be outside max possible count, clip it, and calc a new replacement
+            //legal nctc
+            if (nNewWwCols > MAX_COL)
+            {
+                nNewWwCols = MAX_COL;
+                nctc = ::sal::static_int_cast<BYTE>(nNewWwCols-nitcInsert);
+            }
+        }
         else
+        {
             nNewWwCols = nWwCols+nctc;
+            //if new count would be outside max possible count, clip it, and calc a new replacement
+            //legal nctc
+            if (nNewWwCols > MAX_COL)
+            {
+                nNewWwCols = MAX_COL;
+                nctc = ::sal::static_int_cast<BYTE>(nNewWwCols-nWwCols);
+            }
+        }
 
         WW8_TCell *pTC2s = new WW8_TCell[nNewWwCols];
         setcelldefaults(pTC2s, nNewWwCols);
@@ -1542,25 +1564,42 @@ void WW8TabBandDesc::ProcessSprmTDelete(const BYTE* pParamsTDelete)
     if( nWwCols && pParamsTDelete )        // set one or more cell length(s)
     {
         BYTE nitcFirst= pParamsTDelete[0]; // first col to be deleted
+        if (nitcFirst >= nWwCols) // first index to delete from doesn't exist
+            return;
         BYTE nitcLim  = pParamsTDelete[1]; // (last col to be deleted)+1
+        if (nitcLim <= nitcFirst) // second index to delete to is not greater than first index
+            return;
 
-        BYTE nShlCnt  = static_cast< BYTE >(nWwCols - nitcLim); // count of cells to be shifted
+        /*
+         * sprmTDelete causes any rgdxaCenter and rgtc entries whose index is
+         * greater than or equal to itcLim to be moved
+         */
+        int nShlCnt  = nWwCols - nitcLim; // count of cells to be shifted
 
-
-        WW8_TCell* pAktTC  = pTCs + nitcFirst;
-        int i = 0;
-        for( ; i < nShlCnt; i++, ++pAktTC )
+        if (nShlCnt >= 0) //There exist entries whose index is greater than or equal to itcLim
         {
-            // adjust the left x-position
+            WW8_TCell* pAktTC  = pTCs + nitcFirst;
+            int i = 0;
+            while( i < nShlCnt )
+            {
+                // adjust the left x-position
+                nCenter[nitcFirst + i] = nCenter[nitcLim + i];
+
+                // adjust the cell's borders
+                *pAktTC = pTCs[ nitcLim + i];
+
+                ++i;
+                ++pAktTC;
+            }
+            // adjust the left x-position of the dummy at the very end
             nCenter[nitcFirst + i] = nCenter[nitcLim + i];
-
-            // adjust the cell's borders
-            *pAktTC = pTCs[ nitcLim + i];
         }
-        // adjust the left x-position of the dummy at the very end
-        nCenter[nitcFirst + i] = nCenter[nitcLim + i];
 
-        nWwCols -= (nitcLim - nitcFirst);
+        short nCellsDeleted = nitcLim - nitcFirst;
+        //clip delete request to available number of cells
+        if (nCellsDeleted > nWwCols)
+            nCellsDeleted = nWwCols;
+        nWwCols -= nCellsDeleted;
     }
 }
 
@@ -2509,9 +2548,15 @@ void WW8TabDesc::CreateSwTable()
             //ability to set the margin.
             SvxLRSpaceItem aL( RES_LR_SPACE );
             // set right to original DxaLeft (i28656)
-            aL.SetLeft( !bIsBiDi ?
-                static_cast<long>(GetMinLeft()) :
-                static_cast<long>(pIo->maSectionManager.GetTextAreaWidth() - nPreferredWidth  - nOrgDxaLeft) );
+
+            long nLeft = 0;
+            if (!bIsBiDi)
+                nLeft = GetMinLeft();
+            else
+                nLeft = pIo->maSectionManager.GetTextAreaWidth() - nPreferredWidth  - nOrgDxaLeft;
+
+            aL.SetLeft(nLeft);
+
             aItemSet.Put(aL);
         }
     }

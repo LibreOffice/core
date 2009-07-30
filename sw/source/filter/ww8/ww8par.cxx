@@ -2220,39 +2220,60 @@ void SwWW8ImplReader::PostProcessAttrs()
  case they default to CP1252. If not then its perhaps that the font encoding
  is only in use for 6/7 and for 8+ if we are in 8bit mode then the encoding
  is always 1252.
+
+ So a encoding converter that on an undefined character attempts to
+ convert from 1252 on the undefined character
 */
-sal_Unicode Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
-    sal_Char cChar)
+sal_Size Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
+    sal_Char *pIn, sal_Size nInLen, sal_Unicode *pOut, sal_Size nOutLen)
 {
     const sal_uInt32 nFlags =
+        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+        RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
+        RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE |
+        RTL_TEXTTOUNICODE_FLAGS_FLUSH;
+
+    const sal_uInt32 nFlags2 =
         RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE |
         RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_IGNORE |
         RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE |
         RTL_TEXTTOUNICODE_FLAGS_FLUSH;
 
-    sal_Unicode nConvChar;
-    sal_uInt32 nInfo=0;
-    sal_Size nSrcBytes=0;
-    sal_Size nDestChars = rtl_convertTextToUnicode(hConverter, 0,
-        &cChar, 1, &nConvChar, 1, nFlags, &nInfo, &nSrcBytes );
+    sal_Size nDestChars=0;
+    sal_Size nConverted=0;
 
-    if (nInfo & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE)
+    do
     {
-        rtl_TextToUnicodeConverter hCP1252Converter =
-            rtl_createTextToUnicodeConverter(RTL_TEXTENCODING_MS_1252);
-        nDestChars = rtl_convertTextToUnicode(hCP1252Converter, 0,
-            &cChar, 1, &nConvChar, 1, nFlags, &nInfo, &nSrcBytes );
-        rtl_destroyTextToUnicodeConverter(hCP1252Converter);
-    }
+        sal_uInt32 nInfo = 0;
+        sal_Size nThisConverted=0;
 
-    ASSERT(nDestChars == 1, "impossible to get more than 1 char");
+        nDestChars += rtl_convertTextToUnicode(hConverter, 0,
+            pIn+nConverted, nInLen-nConverted,
+            pOut+nDestChars, nOutLen-nDestChars,
+            nFlags, &nInfo, &nThisConverted);
 
-    ASSERT(nInfo == 0, "A character conversion failed, gulp!");
+        ASSERT(nInfo == 0, "A character conversion failed!");
 
-    if (nDestChars == 1)
-        return nConvChar;
-    else
-        return cChar;
+        nConverted += nThisConverted;
+
+        if (
+            nInfo & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR ||
+            nInfo & RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+           )
+        {
+            sal_Size nOtherConverted;
+            rtl_TextToUnicodeConverter hCP1252Converter =
+                rtl_createTextToUnicodeConverter(RTL_TEXTENCODING_MS_1252);
+            nDestChars += rtl_convertTextToUnicode(hCP1252Converter, 0,
+                pIn+nConverted, 1,
+                pOut+nDestChars, nOutLen-nDestChars,
+                nFlags2, &nInfo, &nOtherConverted);
+            rtl_destroyTextToUnicodeConverter(hCP1252Converter);
+            nConverted+=1;
+        }
+    } while (nConverted < nInLen);
+
+    return nDestChars;
 }
 
 bool SwWW8ImplReader::LangUsesHindiNumbers(USHORT nLang)
@@ -2318,11 +2339,17 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
     // (re)alloc UniString data
     String sPlainCharsBuf;
 
-    sal_Unicode* pWork = sPlainCharsBuf.AllocBuffer( nLen );
+    sal_Unicode* pBuffer = sPlainCharsBuf.AllocBuffer( nLen );
+    sal_Unicode* pWork = pBuffer;
+
+    sal_Char* p8Bits = NULL;
 
     rtl_TextToUnicodeConverter hConverter = 0;
     if (!bIsUnicode || bVer67)
         hConverter = rtl_createTextToUnicodeConverter(eSrcCharSet);
+
+    if (!bIsUnicode)
+        p8Bits = new sal_Char[nLen];
 
     // read the stream data
     BYTE   nBCode = 0;
@@ -2354,7 +2381,6 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
         if ((32 > nUCode) || (0xa0 == nUCode))
         {
             pStrm->SeekRel( bIsUnicode ? -2 : -1 );
-            sPlainCharsBuf.ReleaseBufferAccess( nL2 );
             break;              // Sonderzeichen < 32, == 0xa0 gefunden
         }
 
@@ -2375,21 +2401,28 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
                 }
                 else
                 {
-                    *pWork = Custom8BitToUnicode(hConverter, static_cast< sal_Char >(nUCode & 0x00FF));
+                    sal_Char cTest = static_cast< sal_Char >(nUCode & 0x00FF);
+                    Custom8BitToUnicode(hConverter, &cTest, 1, pWork, 1);
                 }
             }
         }
         else
-            *pWork = Custom8BitToUnicode(hConverter, nBCode);
-
-        if (m_bRegardHindiDigits && bBidi && LangUsesHindiNumbers(nCTLLang))
-        {
-            *pWork = TranslateToHindiNumbers(*pWork);
-        }
+            p8Bits[nL2] = nBCode;
     }
 
     if (nL2)
     {
+        xub_StrLen nEndUsed = nL2;
+
+        if (!bIsUnicode)
+            nEndUsed = Custom8BitToUnicode(hConverter, p8Bits, nL2, pBuffer, nLen);
+
+        for( xub_StrLen nI = 0; nI < nLen; ++nI, ++pBuffer )
+            if (m_bRegardHindiDigits && bBidi && LangUsesHindiNumbers(nCTLLang))
+                *pBuffer = TranslateToHindiNumbers(*pBuffer);
+
+        sPlainCharsBuf.ReleaseBufferAccess( nEndUsed );
+
         AddTextToParagraph(sPlainCharsBuf);
         rPos += nL2;
         if (!maApos.back()) //a para end in apo doesn't count
@@ -2398,6 +2431,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
 
     if (hConverter)
         rtl_destroyTextToUnicodeConverter(hConverter);
+    delete [] p8Bits;
     return nL2 >= nLen;
 }
 

@@ -2160,7 +2160,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
         // --> FME 2004-11-15 #i37084# FindLastCntnt does not necessarily
         // have to have a result != 0
         SwFrm* pRef = 0;
-        const BOOL bEndnote = pFtn->GetAttr()->GetFtn().IsEndNote();
+        const bool bEndnote = pFtn->GetAttr()->GetFtn().IsEndNote();
         if( bEndnote && pFtn->IsInSct() )
         {
             SwSectionFrm* pSect = pFtn->FindSctFrm();

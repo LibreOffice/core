@@ -201,6 +201,9 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         aLang >>= aLocale;
         pRet->Put(SvxLanguageItem(SvxLocaleToLanguage( aLocale ), SID_ATTR_CHAR_CJK_LANGUAGE));
 
+        aLang = aLinguCfg.GetProperty(C2U("DefaultLocale_CTL"));
+        aLang >>= aLocale;
+        pRet->Put(SvxLanguageItem(SvxLocaleToLanguage( aLocale ), SID_ATTR_CHAR_CTL_LANGUAGE));
     }
     if(bTextDialog)
         pRet->Put(SwPtrItem(FN_PARAM_STDFONTS, GetStdFontConfig()));

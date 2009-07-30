@@ -57,12 +57,8 @@
 #include <svtools/stritem.hxx>
 #include <svtools/ctloptions.hxx>
 #include <svtools/useroptions.hxx>
-#ifndef _VCL_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _VCL_WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <svx/insctrl.hxx>
 #include <svx/selctrl.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
@@ -73,46 +69,32 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/app.hxx>
 
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <pview.hxx>
-#ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #ifndef _CMDID_H
 #include <cmdid.h>          // Funktion-Ids
 #endif
 #include <initui.hxx>
 #include <uitool.hxx>
 #include <swmodule.hxx>
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <usrpref.hxx>
 #include <gloslst.hxx>      // SwGlossaryList
 #include <glosdoc.hxx>      // SwGlossaryList
 #include <doc.hxx>
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
 #include <globals.h>        // globale Konstanten z.B.
 #ifndef _APP_HRC
 #include <app.hrc>
 #endif
 #include <fontcfg.hxx>
-#ifndef _BARCFG_HXX
 #include <barcfg.hxx>
-#endif
 #include <uinums.hxx>
 #include <dbconfig.hxx>
 #include <mmconfigitem.hxx>
@@ -155,7 +137,7 @@ using namespace ::com::sun::star;
 #define PrintSettings
 #define _ExecAddress ExecOther
 #define _StateAddress StateOther
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include <svx/svxslots.hxx>
 #include "swslots.hxx"
 #include <cfgid.h>

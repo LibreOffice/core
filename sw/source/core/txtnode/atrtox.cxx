@@ -38,21 +38,21 @@
 #include <tox.hxx>
 #include <ndtxt.hxx>
 
-SwTxtTOXMark::SwTxtTOXMark( const SwTOXMark& rAttr,
-                    xub_StrLen nStartPos, xub_StrLen* pEnde )
-    : SwTxtAttrEnd( rAttr, nStartPos, nStartPos ),
-    pEnd( 0 ),
-    pMyTxtNd( 0 )
+SwTxtTOXMark::SwTxtTOXMark( SwTOXMark& rAttr,
+                    xub_StrLen nStartPos, xub_StrLen* pEnd )
+    : SwTxtAttrEnd( rAttr, nStartPos, nStartPos )
+    , m_pTxtNode( 0 )
+    , m_pEnd( 0 )
 {
-    ((SwTOXMark&)rAttr).pTxtAttr = this;
-    if( !rAttr.GetAlternativeText().Len() )
+    rAttr.pTxtAttr = this;
+    if ( !rAttr.GetAlternativeText().Len() )
     {
-        nEnd = *pEnde;
-        pEnd = &nEnd;
+        m_nEnd = *pEnd;
+        m_pEnd = & m_nEnd;
     }
-    SetDontMergeAttr( TRUE );
-    SetDontMoveAttr( TRUE );
-    SetOverlapAllowedAttr( TRUE );
+    SetDontMergeAttr( true );
+    SetDontMoveAttr( true );
+    SetOverlapAllowedAttr( true );
 }
 
 SwTxtTOXMark::~SwTxtTOXMark()
@@ -61,7 +61,7 @@ SwTxtTOXMark::~SwTxtTOXMark()
 
 xub_StrLen* SwTxtTOXMark::GetEnd()
 {
-    return pEnd;
+    return m_pEnd;
 }
 
 void SwTxtTOXMark::CopyTOXMark( SwDoc* pDoc )

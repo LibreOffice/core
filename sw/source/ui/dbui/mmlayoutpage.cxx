@@ -802,7 +802,8 @@ IMPL_LINK(SwMailMergeLayoutPage, GreetingsHdl_Impl, PushButton*, pButton)
 {
     bool bDown = pButton == &m_aDownPB;
     BOOL bMoved = m_pExampleWrtShell->MoveParagraph( bDown ? 1 : -1 );
-    m_pWizard->GetConfigItem().MoveGreeting(bDown ? 1 : -1 );
+    if (bMoved || bDown)
+        m_pWizard->GetConfigItem().MoveGreeting(bDown ? 1 : -1 );
     if(!bMoved && bDown)
     {
         //insert a new paragraph before the greeting line

@@ -46,12 +46,8 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
 
-#ifndef _SFXMACITEM_HXX //autogen
-    #include <svtools/macitem.hxx>
-#endif
-#ifndef _SVX_SVXIDS_HRC
+#include <svtools/macitem.hxx>
 #include <svx/svxids.hrc>
-#endif
 #include <svx/linkmgr.hxx>
 #include <svx/forbiddencharacterstable.hxx>
 #include <svtools/zforlist.hxx>
@@ -79,18 +75,12 @@
 #include <frmfmt.hxx>
 #include <rolbck.hxx>           // Undo-Attr, SwHistory
 #include <poolfmt.hxx>          // fuer die Pool-Vorlage
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <acorrect.hxx>         // fuer die autom. Aufnahme von Ausnahmen
 #include <visiturl.hxx>         // fuer die URL-Change Benachrichtigung
 #include <docary.hxx>
-#ifndef _LINEINFO_HXX
 #include <lineinfo.hxx>
-#endif
 #include <drawdoc.hxx>
 #include <linkenum.hxx>
 #include <fldupde.hxx>
@@ -109,9 +99,7 @@
 
 #include <unochart.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>              // fuer den dflt - Printer in SetJob
-#endif
 
 
 // --> OD 2006-04-19 #b6375613#
@@ -119,7 +107,6 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-using namespace ::com::sun::star;
 // <--
 
 // --> OD 2007-03-16 #i73788#
@@ -133,6 +120,10 @@ using namespace ::com::sun::star;
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
+#include <sfx2/Metadatable.hxx>
+
+
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
 
 const sal_Char __FAR_DATA sFrmFmtStr[] = "Frameformat";
@@ -271,6 +262,7 @@ SwDoc::SwDoc() :
     // --> OD 2007-10-31 #i83479#
     mpListItemsList( new tImplSortedNodeNumList() ),
     // <--
+    m_pXmlIdRegistry(),
     nUndoPos( 0 ),
     nUndoSavePos( 0 ),
     nUndoCnt( 0 ),
@@ -438,22 +430,7 @@ SwDoc::SwDoc() :
     pNewDBMgr = new SwNewDBMgr;
 
     // create TOXTypes
-    ShellResource* pShellRes = ViewShell::GetShellRes();
-
-    SwTOXType * pNew = new SwTOXType(TOX_CONTENT,   pShellRes->aTOXContentName        );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-    pNew = new SwTOXType(TOX_INDEX,                 pShellRes->aTOXIndexName  );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-    pNew = new SwTOXType(TOX_USER,                  pShellRes->aTOXUserName  );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-    pNew = new SwTOXType(TOX_ILLUSTRATIONS,         pShellRes->aTOXIllustrationsName );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-    pNew = new SwTOXType(TOX_OBJECTS,               pShellRes->aTOXObjectsName       );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-    pNew = new SwTOXType(TOX_TABLES,                pShellRes->aTOXTablesName        );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-    pNew = new SwTOXType(TOX_AUTHORITIES,           pShellRes->aTOXAuthoritiesName   );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+    InitTOXTypes();
 
     // --> OD 2008-03-07 #refactorlists#
     // pass empty item set containing the paragraph's list attributes
@@ -824,7 +801,7 @@ void SwDoc::ClearDoc()
     // in den BookMarks sind Indizies auf den Content. Diese muessen vorm
     // loesche der Nodes geloescht werden.
     pMarkManager->clearAllMarks();
-    pTOXTypes->DeleteAndDestroy( 0, pTOXTypes->Count() );
+    InitTOXTypes();
 
     // create a dummy pagedesc for the layout
     sal_uInt16 nDummyPgDsc = MakePageDesc( String::CreateFromAscii( "?DUMMY?" ));
@@ -1049,3 +1026,34 @@ void SwDoc::SetApplyWorkaroundForB6375613( bool p_bApplyWorkaroundForB6375613 )
     }
 }
 // <--
+
+::sfx2::IXmlIdRegistry&
+SwDoc::GetXmlIdRegistry()
+{
+    // UGLY: this relies on SetClipBoard being called before GetXmlIdRegistry!
+    if (!m_pXmlIdRegistry.get())
+    {
+        m_pXmlIdRegistry.reset( ::sfx2::createXmlIdRegistry( IsClipBoard() ) );
+    }
+    return *m_pXmlIdRegistry;
+}
+
+void SwDoc::InitTOXTypes()
+{
+   ShellResource* pShellRes = ViewShell::GetShellRes();
+   SwTOXType * pNew = new SwTOXType(TOX_CONTENT,   pShellRes->aTOXContentName        );
+   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pNew = new SwTOXType(TOX_INDEX,                 pShellRes->aTOXIndexName  );
+   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pNew = new SwTOXType(TOX_USER,                  pShellRes->aTOXUserName  );
+   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pNew = new SwTOXType(TOX_ILLUSTRATIONS,         pShellRes->aTOXIllustrationsName );
+   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pNew = new SwTOXType(TOX_OBJECTS,               pShellRes->aTOXObjectsName       );
+   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pNew = new SwTOXType(TOX_TABLES,                pShellRes->aTOXTablesName        );
+   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+   pNew = new SwTOXType(TOX_AUTHORITIES,           pShellRes->aTOXAuthoritiesName   );
+   pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+}
+

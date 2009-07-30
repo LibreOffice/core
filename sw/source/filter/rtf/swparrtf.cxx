@@ -1650,7 +1650,8 @@ void fixKeepAndSplitAttributes(SwTableNode *pTableNode)
                 SwTableLine* pSplitLine = rLns[ nLines-2 ];
                 SwTableBox* pSplitBox = pSplitLine->GetTabBoxes()[ 0 ];
                 SwNodeIndex aSplitIdx( *pSplitBox->GetSttNd() );
-                pDoc->SplitTable( aSplitIdx, HEADLINE_NONE, !isTableKeep );
+                pDoc->SplitTable( SwPosition(aSplitIdx), HEADLINE_NONE,
+                    !isTableKeep );
                 SwTable& rSplitTable=aSplitIdx.GetNode().FindTableNode()->GetTable();
                 aSplitIdx-=2;
                 pDoc->GetNodes().Delete(aSplitIdx);
@@ -1668,7 +1669,7 @@ void fixKeepAndSplitAttributes(SwTableNode *pTableNode)
         if (isTableKeep)
         {
             SwNodeIndex aTmpIdx( *pBox->GetSttNd() );
-            pDoc->SplitTable( aTmpIdx, HEADLINE_NONE, FALSE );
+            pDoc->SplitTable( SwPosition(aTmpIdx), HEADLINE_NONE, FALSE );
             SwTable& rSplitTable=aTmpIdx.GetNode().FindTableNode()->GetTable();
             aTmpIdx-=2;
             pDoc->GetNodes().Delete(aTmpIdx);

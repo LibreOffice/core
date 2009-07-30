@@ -62,18 +62,22 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
     if( pTxtNd )
     {
         pHistory->Add( pTxtNd->GetTxtColl(), nSttNode, ND_TEXTNODE );
-        if( pTxtNd->GetpSwpHints() )
+        if ( pTxtNd->GetpSwpHints() )
+        {
             pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode,
-                                0, pTxtNd->GetTxt().Len(), FALSE );
+                                0, pTxtNd->GetTxt().Len(), false );
+        }
         if( pTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nSttNode );
     }
     if( pEndTxtNd && pEndTxtNd != pTxtNd )
     {
         pHistory->Add( pEndTxtNd->GetTxtColl(), nEndNode, ND_TEXTNODE );
-        if( pEndTxtNd->GetpSwpHints() )
+        if ( pEndTxtNd->GetpSwpHints() )
+        {
             pHistory->CopyAttr( pEndTxtNd->GetpSwpHints(), nEndNode,
-                                0, pEndTxtNd->GetTxt().Len(), FALSE );
+                                0, pEndTxtNd->GetTxt().Len(), false );
+        }
         if( pEndTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pEndTxtNd->GetpSwAttrSet(), nEndNode );
     }
@@ -81,9 +85,11 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
     if( 0 != (pTxtNd = rRange.GetDoc()->GetNodes()[ rMvPos.nNode ]->GetTxtNode() ))
     {
         pHistory->Add( pTxtNd->GetTxtColl(), nMvDestNode, ND_TEXTNODE );
-        if( pTxtNd->GetpSwpHints() )
+        if ( pTxtNd->GetpSwpHints() )
+        {
             pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nMvDestNode,
-                                0, pTxtNd->GetTxt().Len(), FALSE );
+                                0, pTxtNd->GetTxt().Len(), false );
+        }
         if( pTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nMvDestNode );
     }

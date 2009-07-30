@@ -57,9 +57,7 @@
 #include <svx/svxdlg.hxx>
 #include <svtools/zformat.hxx>
 #include <sfx2/bindings.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
@@ -72,28 +70,20 @@
 #include <fmtfsize.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <frmatr.hxx>
 #include <uitool.hxx>
-#ifndef _INPUTWIN_HXX
 #include <inputwin.hxx>
-#endif
 #include <uiitems.hxx>
 #include <usrpref.hxx>
-#ifndef _TABSH_HXX
 #include <tabsh.hxx>
-#endif
 #include "swtablerep.hxx"
 #include <tablemgr.hxx>
 #include <cellatr.hxx>
 #include <frmfmt.hxx>
 #include <swundo.hxx>
 #include <swtable.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <tblsel.hxx>
 
 #include <dialog.hrc>
@@ -130,12 +120,8 @@
 #include <unoobj.hxx>
 
 #define SwTableShell
-#ifndef _ITEMDEF_HXX
-#include <itemdef.hxx>
-#endif
-#ifndef _SWSLOTS_HXX
+#include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#endif
 
 #include "swabstdlg.hxx"
 #include <table.hrc>

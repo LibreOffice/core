@@ -1650,9 +1650,9 @@ Sequence< OUString > SwXFootnotes::getSupportedServiceNames(void) throw( Runtime
 /*-- 14.01.99 09:03:52---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXFootnotes::SwXFootnotes(sal_Bool bEnd, SwDoc* _pDoc) :
-    SwUnoCollection(_pDoc),
-    bEndnote(bEnd)
+SwXFootnotes::SwXFootnotes(sal_Bool bEnd, SwDoc* _pDoc)
+    : SwUnoCollection(_pDoc)
+    , m_bEndnote(bEnd)
 {
 }
 /*-- 14.01.99 09:03:52---------------------------------------------------
@@ -1676,7 +1676,7 @@ sal_Int32 SwXFootnotes::getCount(void) throw( uno::RuntimeException )
     {
         pTxtFtn = GetDoc()->GetFtnIdxs()[ n ];
         const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
-        if ( rFtn.IsEndNote() != bEndnote )
+        if ( rFtn.IsEndNote() != m_bEndnote )
             continue;
         nCount++;
     }
@@ -1700,7 +1700,7 @@ uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
         {
             pTxtFtn = GetDoc()->GetFtnIdxs()[ n ];
             const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
-            if( rFtn.IsEndNote() != bEndnote )
+            if ( rFtn.IsEndNote() != m_bEndnote )
                 continue;
 
             if(nCount == nIndex)

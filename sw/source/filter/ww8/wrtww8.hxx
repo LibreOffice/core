@@ -473,6 +473,7 @@ public:
     WW8_WrPlcFld* pFldHdFt;         // Felder in Header/Footer
     WW8_WrPlcFld* pFldFtn;          // Felder in FootNotes
     WW8_WrPlcFld* pFldEdn;          // Felder in EndNotes
+    WW8_WrPlcFld* pFldAtn;          // Felder in Annotations
     WW8_WrPlcFld* pFldTxtBxs;       // fields in textboxes
     WW8_WrPlcFld* pFldHFTxtBxs;     // fields in header/footer textboxes
     WW8_WrMagicTable *pMagicTable;  // keeps track of table cell positions, and
@@ -482,6 +483,7 @@ public:
     SwWW8WrGrf* pGrf;
     const SwAttrSet* pStyAttr;      // StyleAttr fuer Tabulatoren
     const SwModify* pOutFmtNode;    // write Format or Node
+    const SwFmt *pCurrentStyle;     // iff bStyDef=true, then this store the current style
 
     MainTxtPlcDrawObj *pSdrObjs;   // Draw-/Fly-Objects
     HdFtPlcDrawObj *pHFSdrObjs;     // Draw-/Fly-Objects in header or footer

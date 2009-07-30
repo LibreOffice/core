@@ -645,6 +645,11 @@ bool WW8_WrPlcFld::Write(SwWW8Writer& rWrt)
             plc = &rWrt.pFib->lcbPlcffldEdn;
             break;
 
+        case TXT_ATN:
+            pfc = &rWrt.pFib->fcPlcffldAtn;
+            plc = &rWrt.pFib->lcbPlcffldAtn;
+            break;
+
         case TXT_TXTBOX:
             pfc = &rWrt.pFib->fcPlcffldTxbx;
             plc = &rWrt.pFib->lcbPlcffldTxbx;
@@ -2463,6 +2468,7 @@ void SwWW8Writer::WriteFkpPlcUsw()
         pFldHdFt->Write( *this );               // Fields ( Header/Footer )
         pFldFtn->Write( *this );                // Fields ( FootNotes )
         pFldEdn->Write( *this );                // Fields ( EndNotes )
+        pFldAtn->Write( *this );                // Fields ( Annotations )
         pBkmks->Write( *this );                 // Bookmarks - sttbfBkmk/
                                                 // plcfBkmkf/plcfBkmkl
         WriteDop( *this );                      // Document-Properties
@@ -2498,6 +2504,7 @@ void SwWW8Writer::WriteFkpPlcUsw()
         pFldHdFt->Write( *this );               // Fields ( Header/Footer )
         pFldFtn->Write( *this );                // Fields ( FootNotes )
         pFldEdn->Write( *this );                // Fields ( EndNotes )
+        pFldAtn->Write( *this );                // Fields ( Annotations )
         pFldTxtBxs->Write( *this );             // Fields ( Textboxes )
         pFldHFTxtBxs->Write( *this );           // Fields ( Head/Foot-Textboxes )
 
@@ -2701,6 +2708,7 @@ ULONG SwWW8Writer::StoreDoc()
     // <--
     nStyleBeforeFly = nLastFmtId = 0;
     pStyAttr = 0;
+    pCurrentStyle = NULL;
     pOutFmtNode = 0;
     pEscher = 0;
     pRedlAuthors = 0;
@@ -2842,6 +2850,7 @@ ULONG SwWW8Writer::StoreDoc()
     pFldHdFt = new WW8_WrPlcFld( 2, TXT_HDFT );
     pFldFtn = new WW8_WrPlcFld( 2, TXT_FTN );
     pFldEdn = new WW8_WrPlcFld( 2, TXT_EDN );
+    pFldAtn = new WW8_WrPlcFld( 2, TXT_ATN );
     pFldTxtBxs = new WW8_WrPlcFld( 2, TXT_TXTBOX );
     pFldHFTxtBxs = new WW8_WrPlcFld( 2, TXT_HFTXTBOX );
 
@@ -2891,6 +2900,7 @@ ULONG SwWW8Writer::StoreDoc()
     DELETEZ( pFldFtn );
     DELETEZ( pFldTxtBxs );
     DELETEZ( pFldHFTxtBxs );
+    DELETEZ( pFldAtn );
     DELETEZ( pFldEdn );
     DELETEZ( pFldHdFt );
     DELETEZ( pFldMain );
@@ -3118,7 +3128,11 @@ void WW8_WrPlcFtnEdn::WritePlc( SwWW8Writer& rWrt ) const
 
 bool WW8_WrPlcPostIt::WriteTxt(SwWW8Writer& rWrt)
 {
-    return WriteGenericTxt( rWrt, TXT_ATN, rWrt.pFib->ccpAtn );
+    bool bRet = WriteGenericTxt( rWrt, TXT_ATN, rWrt.pFib->ccpAtn );
+    rWrt.pFldAtn->Finish( rWrt.Fc2Cp( rWrt.Strm().Tell() ),
+                        rWrt.pFib->ccpText + rWrt.pFib->ccpFtn
+                        + rWrt.pFib->ccpHdr );
+    return bRet;
 }
 
 void WW8_WrPlcPostIt::WritePlc( SwWW8Writer& rWrt ) const
