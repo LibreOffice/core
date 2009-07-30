@@ -1455,6 +1455,18 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				<author>MBA</author>
 				<desc>Contains the current and default path settings used by the Office.</desc>
 			</info>
+      <group oor:name="Info">
+        <info>
+          <author>CD</author>
+          <desc>Contains various properties information purpose only.</desc>
+        </info>
+        <prop oor:name="WorkPathChanged" oor:type="xs:boolean">
+          <info>
+            <desc>A flag which is set by the tools options dialog whenever a user changed the work path.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+      </group>
 			<group oor:name="Current">
 				<info>
 					<author>MBA</author>

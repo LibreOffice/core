@@ -494,6 +494,12 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
         }
     }
 
+#ifdef WNT
+    // #103346 Destroy dialog to prevent problems with custom controls
+    delete pThis->m_pFileDlg;
+    pThis->m_pFileDlg = NULL;
+#endif
+
     LeaveModalMode();
     return 0;
 }

@@ -40,6 +40,7 @@
 #include <comphelper/sequenceasvector.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
+#include "..\misc\WinImplHelper.hxx"
 
  inline bool is_current_process_window(HWND hwnd)
 {
@@ -461,6 +462,14 @@ static const ::sal_Int32 GROUP_IMAGETEMPLATE   =   3;
 static const ::sal_Int32 GROUP_CHECKBOXES      =   4;
 
 //-------------------------------------------------------------------------------
+static void setLabelToControl(CResourceProvider& rResourceProvider, TFileDialogCustomize iCustom, sal_uInt16 nControlId)
+{
+    ::rtl::OUString aLabel = rResourceProvider.getResString(nControlId);
+    aLabel = SOfficeToWindowsLabel(aLabel);
+    iCustom->SetControlLabel(nControlId, reinterpret_cast<LPCWSTR>(aLabel.getStr()) );
+}
+
+//-------------------------------------------------------------------------------
 void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_Int32 nTemplate)
 {
     GUID aGUID = {};
@@ -535,23 +544,48 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
 
     iCustom->StartVisualGroup (GROUP_CHECKBOXES, L"");
 
+    sal_uInt16 nControlId(0);
     if ((nFeatures & FEATURE_AUTOEXTENSION) == FEATURE_AUTOEXTENSION)
-        iCustom->AddCheckButton (css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, L"Auto Extension", true);
+    {
+        nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION;
+        iCustom->AddCheckButton (nControlId, L"Auto Extension", true);
+        setLabelToControl(m_ResProvider, iCustom, nControlId);
+    }
 
     if ((nFeatures & FEATURE_PASSWORD) == FEATURE_PASSWORD)
-        iCustom->AddCheckButton (css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, L"Password", false);
+    {
+        nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PASSWORD;
+        iCustom->AddCheckButton (nControlId, L"Password", false);
+        setLabelToControl(m_ResProvider, iCustom, nControlId);
+    }
 
     if ((nFeatures & FEATURE_READONLY) == FEATURE_READONLY)
-        iCustom->AddCheckButton (css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_READONLY, L"Readonly", false);
+    {
+        nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_READONLY;
+        iCustom->AddCheckButton (nControlId, L"Readonly", false);
+        setLabelToControl(m_ResProvider, iCustom, nControlId);
+    }
 
     if ((nFeatures & FEATURE_FILTEROPTIONS) == FEATURE_FILTEROPTIONS)
-        iCustom->AddCheckButton (css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, L"Filter Options", false);
+    {
+        nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS;
+        iCustom->AddCheckButton (nControlId, L"Filter Options", false);
+        setLabelToControl(m_ResProvider, iCustom, nControlId);
+    }
 
     if ((nFeatures & FEATURE_LINK) == FEATURE_LINK)
-        iCustom->AddCheckButton (css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, L"Link", false);
+    {
+        nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK;
+        iCustom->AddCheckButton (nControlId, L"Link", false);
+        setLabelToControl(m_ResProvider, iCustom, nControlId);
+    }
 
     if ((nFeatures & FEATURE_SELECTION) == FEATURE_SELECTION)
-        iCustom->AddCheckButton (css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION, L"Selection", false);
+    {
+        nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION;
+        iCustom->AddCheckButton (nControlId, L"Selection", false);
+        setLabelToControl(m_ResProvider, iCustom, nControlId);
+    }
 
     /* can be ignored ... new COM dialog supports preview native now  !
     if ((nFeatures & FEATURE_PREVIEW) == FEATURE_PREVIEW)
@@ -619,8 +653,9 @@ void VistaFilePickerImpl::impl_sta_SetFileName(const RequestRef& rRequest)
 void VistaFilePickerImpl::impl_sta_SetDirectory(const RequestRef& rRequest)
 {
     ::rtl::OUString sDirectory = rRequest->getArgumentOrDefault(PROP_DIRECTORY, ::rtl::OUString());
+    bool            bForce     = rRequest->getArgumentOrDefault(PROP_FORCE, false);
 
-    if( !m_bInExecute )
+    if( !m_bInExecute)
     {
         // Vista stores last used folders for file dialogs
         // so we don't want the application to change the folder
@@ -628,7 +663,6 @@ void VistaFilePickerImpl::impl_sta_SetDirectory(const RequestRef& rRequest)
         // Store the requested folder in the mean time and decide later
         // what to do
         m_sDirectory = sDirectory;
-        return;
     }
 
     // SYNCHRONIZED->
@@ -646,7 +680,13 @@ void VistaFilePickerImpl::impl_sta_SetDirectory(const RequestRef& rRequest)
     if ( FAILED(hResult) )
         return;
 
-    iDialog->SetFolder(pFolder);
+    if ( m_bInExecute || bForce )
+        iDialog->SetFolder(pFolder);
+    else
+    {
+        // Use set default folder as Microsoft recommends in the IFileDialog documentation.
+        iDialog->SetDefaultFolder(pFolder);
+    }
 }
 
 void VistaFilePickerImpl::impl_sta_GetDirectory(const RequestRef& rRequest)
@@ -814,21 +854,62 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
     aLock.clear();
     // <- SYNCHRONIZED
 
+    // we set the directory only if we have a save dialog and a filename
+    // for the other cases, the file dialog remembers its last location
+    // according to its client guid.
     if( m_sDirectory.getLength())
     {
-        // we set the directory only if we have a save dialog and a filename
-        // for the other cases, the file dialog remembers its last location
-        // according to its client guid.
-        if (iSave.is() && m_sFilename.getLength())
+        ComPtr< IShellItem > pFolder;
+        #ifdef __MINGW32__
+            HRESULT hResult = SHCreateItemFromParsingName ( reinterpret_cast<LPCTSTR>(m_sDirectory.getStr()), NULL, IID_IShellItem, (void**)(&pFolder) );
+        #else
+            HRESULT hResult = SHCreateItemFromParsingName ( m_sDirectory, NULL, IID_PPV_ARGS(&pFolder) );
+        #endif
+        if ( SUCCEEDED(hResult) )
         {
-            ComPtr< IShellItem > pFolder;
-            #ifdef __MINGW32__
-                HRESULT hResult = SHCreateItemFromParsingName ( reinterpret_cast<LPCTSTR>(m_sDirectory.getStr()), NULL, IID_IShellItem, (void**)(&pFolder) );
-            #else
-                HRESULT hResult = SHCreateItemFromParsingName ( m_sDirectory, NULL, IID_PPV_ARGS(&pFolder) );
-            #endif
-            if ( SUCCEEDED(hResult) )
-                iDialog->SetFolder(pFolder);
+            if (m_sFilename.getLength())
+            {
+                ::rtl::OUString aFileURL(m_sDirectory);
+                sal_Int32 nIndex = aFileURL.lastIndexOf('/');
+                if (nIndex != aFileURL.getLength()-1)
+                    aFileURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/"));
+                aFileURL += m_sFilename;
+                
+                TFileDialogCustomize iCustom = impl_getCustomizeInterface();
+
+                BOOL bValue = FALSE;
+                HRESULT hResult = iCustom->GetCheckButtonState( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, &bValue);
+                if ( bValue )
+                {
+                    ::rtl::OUString aExt;
+                    UINT nFileType;
+                    hResult = iDialog->GetFileTypeIndex(&nFileType);
+                    if ( SUCCEEDED(hResult) )
+                    {
+                        ::std::vector< COMDLG_FILTERSPEC > lFilters = lcl_buildFilterList(m_lFilters);
+                        LPCWSTR lpFilterExt = lFilters[nFileType].pszSpec;
+
+                        lpFilterExt = wcsrchr( lpFilterExt, '.' );
+                        if ( lpFilterExt )
+                            aFileURL += reinterpret_cast<const sal_Unicode*>(lpFilterExt);
+                    }
+                }
+
+                // Check existence of file. Set folder only for this special case
+                ::rtl::OUString aSystemPath;
+                osl_getSystemPathFromFileURL( aFileURL.pData, &aSystemPath.pData );
+
+                WIN32_FIND_DATA aFindFileData;
+                HANDLE  hFind = FindFirstFile( reinterpret_cast<LPCWSTR>(aSystemPath.getStr()), &aFindFileData );
+                if (hFind != INVALID_HANDLE_VALUE)
+                    iDialog->SetFolder(pFolder);
+                else
+                    hResult = iDialog->AddPlace(pFolder, FDAP_TOP);
+
+                FindClose( hFind );
+            }
+            else
+                hResult = iDialog->AddPlace(pFolder, FDAP_TOP);
         }
     }
 
@@ -1047,7 +1128,7 @@ void VistaFilePickerImpl::impl_sta_SetControlLabel(const RequestRef& rRequest)
 }
 
 //-------------------------------------------------------------------------------
-void VistaFilePickerImpl::impl_sta_GetControlLabel(const RequestRef& rRequest)
+void VistaFilePickerImpl::impl_sta_GetControlLabel(const RequestRef& /*rRequest*/)
 {
 }
 
