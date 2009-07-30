@@ -242,8 +242,6 @@ private:
         ScDPFieldPopupWindow* mpParent;
     };
 
-    ::std::vector<Member>& getMembers();
-
     enum SectionType {
         WHOLE,          // entire window
         LISTBOX_AREA_OUTER,   // box enclosing the check box items.

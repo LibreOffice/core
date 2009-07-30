@@ -758,11 +758,6 @@ ScDPFieldPopupWindow::~ScDPFieldPopupWindow()
 {
 }
 
-vector<ScDPFieldPopupWindow::Member>& ScDPFieldPopupWindow::getMembers()
-{
-    return maMembers;
-}
-
 void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionType eType) const
 {
     const sal_uInt16 nListBoxMargin = 5;
