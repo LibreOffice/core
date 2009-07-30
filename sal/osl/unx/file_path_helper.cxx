@@ -125,16 +125,6 @@
  }
 
  /******************************************
-  *  osl_systemPathIsAbsolutePath
-  *****************************************/
-
- sal_Bool SAL_CALL osl_systemPathIsAbsolutePath(const rtl_uString* pustrPath)
- {
-     OSL_PRECOND(pustrPath, "osl_systemPathIsAbsolutePath: Invalid parameter");
-     return (!osl_systemPathIsRelativePath(pustrPath));
- }
-
- /******************************************
     osl_systemPathMakeAbsolutePath
   *****************************************/
 

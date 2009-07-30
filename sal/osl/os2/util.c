@@ -32,11 +32,6 @@
 
 
 
-extern sal_Bool osl_getEtherAddr(sal_Char* pszAddr, sal_uInt16 BufferSize)
-{
-    return sal_False;
-}
-
 extern sal_Bool osl_getEthernetAddress( sal_uInt8 * pTargetAddress )
 {
     return sal_False;
