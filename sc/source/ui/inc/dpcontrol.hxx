@@ -248,10 +248,8 @@ private:
         WHOLE,          // entire window
         LISTBOX_AREA_OUTER,   // box enclosing the check box items.
         LISTBOX_AREA_INNER,   // box enclosing the check box items.
-        FIRST_LISTITEM, // first list item at the top
         BTN_OK,         // OK button
         BTN_CANCEL,     // Cancel button
-        SCROLL_BAR_V,   // vertical scroll bar along the right edge of the list box.
     };
     void getSectionPosSize(Point& rPos, Size& rSize, SectionType eType) const;
 

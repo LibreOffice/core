@@ -770,8 +770,6 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
     const sal_uInt16 nTopMargin = 5;
     const sal_uInt16 nMenuHeight = 60;
     const sal_uInt16 nBottomBtnAreaHeight = 50;
-    const sal_uInt16 nInnerItemMargin = 5;
-    const sal_uInt16 nScrollBarWidth = 17;
     const sal_uInt16 nBtnWidth = 60;
     const sal_uInt16 nBtnHeight = getLabelFont().GetHeight()*2;
     const sal_uInt16 nBottomMargin = 10;
@@ -804,15 +802,6 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
                 aWndSize.Height() - nTopMargin - nMenuHeight - nMenuListMargin - nBottomBtnAreaHeight - nListBoxInnerPadding*2);
         }
         break;
-        case FIRST_LISTITEM:
-        {
-            rPos = Point(nListBoxMargin + nInnerItemMargin,
-                         nTopMargin + nMenuHeight + nMenuListMargin + nInnerItemMargin);
-            rSize = Size(
-                aWndSize.Width() - nListBoxMargin*2 - nInnerItemMargin - nScrollBarWidth - 10,
-                17);
-        }
-        break;
         case BTN_OK:
         {
             long x = (aWndSize.Width() - nBtnWidth*2)/3;
@@ -827,15 +816,6 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
             long y = aWndSize.Height() - nBottomMargin - nBtnHeight;
             rPos = Point(x, y);
             rSize = Size(nBtnWidth, nBtnHeight);
-        }
-        break;
-        case SCROLL_BAR_V:
-        {
-            long x = aWndSize.Width() - nListBoxMargin - nInnerItemMargin - nScrollBarWidth;
-            long y = nTopMargin + nMenuHeight + nMenuListMargin + nInnerItemMargin;
-            rPos = Point(x, y);
-            long h = aWndSize.Height() - nTopMargin - nMenuHeight - nMenuListMargin - nBottomBtnAreaHeight - nInnerItemMargin*2;
-            rSize = Size(nScrollBarWidth, h);
         }
         break;
         default:
