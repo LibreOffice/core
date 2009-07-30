@@ -927,9 +927,11 @@ void ScDPFieldPopupWindow::Paint(const Rectangle& rRect)
 
     const StyleSettings& rStyle = GetSettings().GetStyleSettings();
     Color aMemberBackColor = rStyle.GetFieldColor();
+    Color aBorderColor = rStyle.GetShadowColor();
 
     // Member list box background
     SetFillColor(aMemberBackColor);
+    SetLineColor(aBorderColor);
     Point aPos;
     Size aSize;
     getSectionPosSize(aPos, aSize, LISTBOX_AREA);
