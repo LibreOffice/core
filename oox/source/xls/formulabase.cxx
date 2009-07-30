@@ -55,6 +55,7 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::rtl::OStringToOUString;
 using ::rtl::OUStringToOString;
+using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
