@@ -497,6 +497,8 @@ public:
     SAL_DLLPRIVATE void setMultipage( const MultiPageSetup& );
     SAL_DLLPRIVATE const MultiPageSetup& getMultipage() const;
     SAL_DLLPRIVATE void setLastPage( sal_Bool i_bLastPage );
+    SAL_DLLPRIVATE void setReversePrint( sal_Bool i_bReverse );
+    SAL_DLLPRIVATE bool getReversePrint() const;
     SAL_DLLPRIVATE void pushPropertiesToPrinter();
     SAL_DLLPRIVATE void setJobState( com::sun::star::view::PrintableState );
 };

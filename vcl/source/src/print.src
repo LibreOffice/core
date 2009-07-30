@@ -305,7 +305,7 @@ ModalDialog SV_DLG_PRINT
         {
             Pos = MAP_APPFONT( 5, 35 );
             Size = MAP_APPFONT( 150, 10 );
-            Text [en-US] = "Print Range and Copies";
+            Text [en-US] = "Range and Copies";
         };
         FixedText SV_PRINT_COPYCOUNT
         {

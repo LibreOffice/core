@@ -152,6 +152,7 @@ public:
     Link                                                        maOptionChangeHdl;
     ControlDependencyMap                                        maControlDependencies;
     sal_Bool                                                    mbLastPage;
+    sal_Bool                                                    mbReversePageOrder;
     view::PrintableState                                        meJobState;
 
     vcl::PrinterController::MultiPageSetup                      maMultiPage;
@@ -162,6 +163,7 @@ public:
 
     ImplPrinterControllerData() :
         mbLastPage( sal_False ),
+        mbReversePageOrder( sal_False ),
         meJobState( view::PrintableState_JOB_STARTED ),
         mpProgress( NULL )
     {}
@@ -313,6 +315,14 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
                 i_pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ), pPagesVal->Value );
             }
         }
+    }
+
+    beans::PropertyValue* pReverseVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintReverse" ) ) );
+    if( pReverseVal )
+    {
+        sal_Bool bReverse = sal_False;
+        pReverseVal->Value >>= bReverse;
+        pController->setReversePrint( bReverse );
     }
 
     // check if the printer brings up its own dialog
@@ -654,6 +664,11 @@ Size PrinterController::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o
         rMPS.nLeftMargin == 0 && rMPS.nRightMargin == 0 &&
         rMPS.nTopMargin == 0 && rMPS.nBottomMargin == 0 )
     {
+        if( mpImplData->mbReversePageOrder )
+        {
+            int nDocPages = getPageCount();
+            i_nFilteredPage = nDocPages - 1 - i_nFilteredPage;
+        }
         return getPageFile( i_nFilteredPage, o_rMtf, i_bMayUseCache );
     }
 
@@ -683,7 +698,9 @@ Size PrinterController::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o
     {
         // map current sub page to real page
         int nPage = (i_nFilteredPage * nSubPages + nSubPage) / rMPS.nRepeat;
-        if( nPage < nDocPages )
+        if( mpImplData->mbReversePageOrder )
+            nPage = nDocPages - 1 - nPage;
+        if( nPage >= 0 && nPage < nDocPages )
         {
             GDIMetaFile aPageFile;
             Size aPageSize = getPageFile( nPage, aPageFile, i_bMayUseCache );
@@ -844,6 +861,16 @@ void PrinterController::abortJob()
 void PrinterController::setLastPage( sal_Bool i_bLastPage )
 {
     mpImplData->mbLastPage = i_bLastPage;
+}
+
+void PrinterController::setReversePrint( sal_Bool i_bReverse )
+{
+    mpImplData->mbReversePageOrder = i_bReverse;
+}
+
+bool PrinterController::getReversePrint() const
+{
+    return mpImplData->mbReversePageOrder;
 }
 
 Sequence< PropertyValue > PrinterController::getJobProperties( const Sequence< PropertyValue >& i_rMergeList ) const

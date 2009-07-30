@@ -650,6 +650,9 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
 
     maPageStr = maNumPagesText.GetText();
 
+    // init reverse print
+    maOptionsPage.maReverseOrderBox.Check( maPController->getReversePrint() );
+
     // get the first page
     preparePreview( true, true );
 
@@ -717,6 +720,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maJobPage.maDetailsBtn.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.maBorderCB.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maOptionsPage.maToFileBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maOptionsPage.maReverseOrderBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
 
     // setup modify hdl
     maPageEdit.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
@@ -1696,6 +1700,14 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
         maPController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ),
                                  makeAny( sal_Bool(isCollate()) ) );
         checkControlDependencies();
+    }
+    else if( pButton == &maOptionsPage.maReverseOrderBox )
+    {
+        sal_Bool bChecked = maOptionsPage.maReverseOrderBox.IsChecked();
+        maPController->setReversePrint( bChecked );
+        maPController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintReverse" ) ),
+                                 makeAny( bChecked ) );
+        preparePreview( true, true );
     }
     else
     {
