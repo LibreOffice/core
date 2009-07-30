@@ -724,17 +724,7 @@ void ScDPFieldPopupWindow::CancelButton::Click()
 
 ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent) :
     ScMenuFloatingWindow(pParent),
-    maCheck0(this, 0),
-    maCheck1(this, 0),
-    maCheck2(this, 0),
-    maCheck3(this, 0),
-    maCheck4(this, 0),
-    maCheck5(this, 0),
-    maCheck6(this, 0),
-    maCheck7(this, 0),
-    maCheck8(this, 0),
-    maCheck9(this, 0),
-    maScrollBar(this, WB_VERT),
+    maChecks(this, 0),
     maBtnOk(this),
     maBtnCancel(this),
     mpExtendedData(NULL),
@@ -747,29 +737,6 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent) :
     SetOutputSizePixel(aSize);
     Size aOutSize = GetOutputSizePixel();
 
-    mpCheckPtr.reserve(10);
-    mpCheckPtr.push_back(&maCheck0);
-    mpCheckPtr.push_back(&maCheck1);
-    mpCheckPtr.push_back(&maCheck2);
-    mpCheckPtr.push_back(&maCheck3);
-    mpCheckPtr.push_back(&maCheck4);
-    mpCheckPtr.push_back(&maCheck5);
-    mpCheckPtr.push_back(&maCheck6);
-    mpCheckPtr.push_back(&maCheck7);
-    mpCheckPtr.push_back(&maCheck8);
-    mpCheckPtr.push_back(&maCheck9);
-
-    getSectionPosSize(aPos, aSize, FIRST_LISTITEM);
-    for (vector<CheckBox*>::iterator itr = mpCheckPtr.begin(), itrEnd = mpCheckPtr.end();
-          itr != itrEnd; ++itr)
-    {
-        CheckBox* p = *itr;
-        p->SetPosSizePixel(aPos, aSize);
-        p->SetFont(getLabelFont());
-        p->SetClickHdl( LINK(this, ScDPFieldPopupWindow, CheckBoxHdl) );
-        aPos.Y() += aSize.Height() + 1;
-    }
-
     getSectionPosSize(aPos, aSize, BTN_OK);
     maBtnOk.SetPosSizePixel(aPos, aSize);
     maBtnOk.SetFont(getLabelFont());
@@ -781,13 +748,10 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent) :
     maBtnCancel.SetFont(getLabelFont());
     maBtnCancel.Show();
 
-    getSectionPosSize(aPos, aSize, SCROLL_BAR_V);
-    maScrollBar.SetPosSizePixel(aPos, aSize);
-    maScrollBar.SetPageSize(mpCheckPtr.size());
-    maScrollBar.SetVisibleSize(mpCheckPtr.size());
-    maScrollBar.SetLineSize(1);
-    maScrollBar.SetScrollHdl( LINK(this, ScDPFieldPopupWindow, ScrollHdl) );
-    maScrollBar.EnableDrag(true);
+    getSectionPosSize(aPos, aSize, LISTBOX_AREA_INNER);
+    maChecks.SetPosSizePixel(aPos, aSize);
+    maChecks.SetFont(getLabelFont());
+    maChecks.Show();
 }
 
 ScDPFieldPopupWindow::~ScDPFieldPopupWindow()
@@ -802,6 +766,7 @@ vector<ScDPFieldPopupWindow::Member>& ScDPFieldPopupWindow::getMembers()
 void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionType eType) const
 {
     const sal_uInt16 nListBoxMargin = 5;
+    const sal_uInt16 nListBoxInnerPadding = 5;
     const sal_uInt16 nTopMargin = 5;
     const sal_uInt16 nMenuHeight = 60;
     const sal_uInt16 nBottomBtnAreaHeight = 50;
@@ -822,12 +787,21 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
             rSize = aWndSize;
         }
         break;
-        case LISTBOX_AREA:
+        case LISTBOX_AREA_OUTER:
         {
             rPos = Point(nListBoxMargin, nTopMargin + nMenuHeight + nMenuListMargin);
             rSize = Size(
                 aWndSize.Width() - nListBoxMargin*2,
                 aWndSize.Height() - nTopMargin - nMenuHeight - nMenuListMargin - nBottomBtnAreaHeight);
+        }
+        break;
+        case LISTBOX_AREA_INNER:
+        {
+            rPos = Point(nListBoxMargin + nListBoxInnerPadding,
+                         nTopMargin + nMenuHeight + nMenuListMargin + nListBoxInnerPadding);
+            rSize = Size(
+                aWndSize.Width() - nListBoxMargin*2 - nListBoxInnerPadding*2,
+                aWndSize.Height() - nTopMargin - nMenuHeight - nMenuListMargin - nBottomBtnAreaHeight - nListBoxInnerPadding*2);
         }
         break;
         case FIRST_LISTITEM:
@@ -869,46 +843,9 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
     }
 }
 
-void ScDPFieldPopupWindow::resetDisplayedItems()
-{
-    long nScrollPos = maScrollBar.GetThumbPos();
-    if (nScrollPos < 0)
-        return;
-
-    mnScrollPos = static_cast<size_t>(nScrollPos);
-    size_t nCheckCount = mpCheckPtr.size();
-    for (size_t i = 0; i < nCheckCount; ++i)
-    {
-        CheckBox* p = mpCheckPtr[i];
-        p->SetText(maMembers[i+mnScrollPos].maName);
-        TriState nNewState = maMembers[i+mnScrollPos].mbVisible ? STATE_CHECK : STATE_NOCHECK;
-        p->SetState(nNewState);
-    }
-}
-
-IMPL_LINK( ScDPFieldPopupWindow, CheckBoxHdl, CheckBox*, pCheck )
-{
-    vector<CheckBox*>::const_iterator itr, itrBeg = mpCheckPtr.begin(), itrEnd = mpCheckPtr.end();
-    for (itr = itrBeg; itr != itrEnd; ++itr)
-    {
-        if (*itr == pCheck)
-        {
-            size_t nIndex = ::std::distance(itrBeg, itr);
-            maMembers[nIndex+mnScrollPos].mbVisible = !maMembers[nIndex+mnScrollPos].mbVisible;
-        }
-    }
-    return 0;
-}
-
 IMPL_LINK( ScDPFieldPopupWindow, OKButtonHdl, OKButton*, EMPTYARG )
 {
     close(true);
-    return 0;
-}
-
-IMPL_LINK( ScDPFieldPopupWindow, ScrollHdl, ScrollBar*, EMPTYARG )
-{
-    resetDisplayedItems();
     return 0;
 }
 
@@ -929,12 +866,13 @@ void ScDPFieldPopupWindow::Paint(const Rectangle& rRect)
     Color aMemberBackColor = rStyle.GetFieldColor();
     Color aBorderColor = rStyle.GetShadowColor();
 
+    Point aPos;
+    Size aSize;
+    getSectionPosSize(aPos, aSize, LISTBOX_AREA_OUTER);
+
     // Member list box background
     SetFillColor(aMemberBackColor);
     SetLineColor(aBorderColor);
-    Point aPos;
-    Size aSize;
-    getSectionPosSize(aPos, aSize, LISTBOX_AREA);
     DrawRect(Rectangle(aPos,aSize));
 }
 
@@ -954,25 +892,10 @@ void ScDPFieldPopupWindow::addMember(const OUString& rName, bool bVisible)
 void ScDPFieldPopupWindow::initMembers()
 {
     size_t nMemCount = maMembers.size();
-    size_t nCheckCount = mpCheckPtr.size();
-    bool bNeedsScroll = false;
-    if (nMemCount > nCheckCount)
-    {
-        nMemCount = nCheckCount;
-        bNeedsScroll = true;
-    }
-
     for (size_t i = 0; i < nMemCount; ++i)
     {
-        CheckBox* p = mpCheckPtr[i];
-        p->SetText(maMembers[i].maName);
-        p->Show();
-        p->SetState(maMembers[i].mbVisible ? STATE_CHECK : STATE_NOCHECK);
-    }
-    if (bNeedsScroll)
-    {
-        maScrollBar.SetRange(Range(0, maMembers.size()));
-        maScrollBar.Show();
+        maChecks.InsertEntry(maMembers[i].maName);
+        maChecks.CheckEntryPos(i, maMembers[i].mbVisible);
     }
 }
 
@@ -980,9 +903,12 @@ void ScDPFieldPopupWindow::getResult(hash_map<OUString, bool, OUStringHash>& rRe
 {
     typedef hash_map<OUString, bool, OUStringHash> ResultMap;
     ResultMap aResult;
-    vector<Member>::const_iterator itr = maMembers.begin(), itrEnd = maMembers.end();
-    for (; itr != itrEnd; ++itr)
-        aResult.insert(ResultMap::value_type(itr->maName, itr->mbVisible));
+    size_t n = maMembers.size();
+    for (size_t i = 0; i < n; ++i)
+    {
+        bool bState = maChecks.IsChecked(i);
+        aResult.insert(ResultMap::value_type(maMembers[i].maName, bState));
+    }
     rResult.swap(aResult);
 }
 

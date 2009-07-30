@@ -37,6 +37,7 @@
 #include "vcl/button.hxx"
 #include "vcl/scrbar.hxx"
 #include "vcl/timer.hxx"
+#include "svx/checklbx.hxx"
 
 #include <boost/shared_ptr.hpp>
 #include <memory>
@@ -245,7 +246,8 @@ private:
 
     enum SectionType {
         WHOLE,          // entire window
-        LISTBOX_AREA,   // box enclosing the check box items.
+        LISTBOX_AREA_OUTER,   // box enclosing the check box items.
+        LISTBOX_AREA_INNER,   // box enclosing the check box items.
         FIRST_LISTITEM, // first list item at the top
         BTN_OK,         // OK button
         BTN_CANCEL,     // Cancel button
@@ -253,31 +255,14 @@ private:
     };
     void getSectionPosSize(Point& rPos, Size& rSize, SectionType eType) const;
 
-    void resetDisplayedItems();
-
-    DECL_LINK( CheckBoxHdl, CheckBox* );
     DECL_LINK( OKButtonHdl, OKButton* );
     DECL_LINK( ScrollHdl, ScrollBar* );
 
 private:
-
-    CheckBox maCheck0;
-    CheckBox maCheck1;
-    CheckBox maCheck2;
-    CheckBox maCheck3;
-    CheckBox maCheck4;
-    CheckBox maCheck5;
-    CheckBox maCheck6;
-    CheckBox maCheck7;
-    CheckBox maCheck8;
-    CheckBox maCheck9;
-
-    ScrollBar   maScrollBar;
+    SvxCheckListBox maChecks;
 
     OKButton        maBtnOk;
     CancelButton    maBtnCancel;
-
-    ::std::vector<CheckBox*> mpCheckPtr;
 
     ::std::vector<Member>           maMembers;
     ::std::auto_ptr<ExtendedData>   mpExtendedData;
