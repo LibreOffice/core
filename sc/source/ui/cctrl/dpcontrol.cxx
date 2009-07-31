@@ -52,6 +52,7 @@ using ::std::hash_map;
 ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle) :
     mpOutDev(pOutDev),
     mpStyle(pStyle),
+    mbBaseButton(true),
     mbPopupButton(false),
     mbHasHiddenMember(false)
 {
@@ -72,6 +73,11 @@ void ScDPFieldButton::setBoundingBox(const Point& rPos, const Size& rSize)
     maSize = rSize;
 }
 
+void ScDPFieldButton::setDrawBaseButton(bool b)
+{
+    mbBaseButton = b;
+}
+
 void ScDPFieldButton::setDrawPopupButton(bool b)
 {
     mbPopupButton = b;
@@ -86,33 +92,36 @@ void ScDPFieldButton::draw()
 {
     const long nMargin = 2;
 
-    // Background
-    Rectangle aRect(maPos, maSize);
-    mpOutDev->SetLineColor(mpStyle->GetFaceColor());
-    mpOutDev->SetFillColor(mpStyle->GetFaceColor());
-    mpOutDev->DrawRect(aRect);
+    if (mbBaseButton)
+    {
+        // Background
+        Rectangle aRect(maPos, maSize);
+        mpOutDev->SetLineColor(mpStyle->GetFaceColor());
+        mpOutDev->SetFillColor(mpStyle->GetFaceColor());
+        mpOutDev->DrawRect(aRect);
 
-    // Border lines
-    mpOutDev->SetLineColor(mpStyle->GetLightColor());
-    mpOutDev->DrawLine(Point(maPos), Point(maPos.X(), maPos.Y()+maSize.Height()-1));
-    mpOutDev->DrawLine(Point(maPos), Point(maPos.X()+maSize.Width()-1, maPos.Y()));
+        // Border lines
+        mpOutDev->SetLineColor(mpStyle->GetLightColor());
+        mpOutDev->DrawLine(Point(maPos), Point(maPos.X(), maPos.Y()+maSize.Height()-1));
+        mpOutDev->DrawLine(Point(maPos), Point(maPos.X()+maSize.Width()-1, maPos.Y()));
 
-    mpOutDev->SetLineColor(mpStyle->GetShadowColor());
-    mpOutDev->DrawLine(Point(maPos.X(), maPos.Y()+maSize.Height()-1),
-                       Point(maPos.X()+maSize.Width()-1, maPos.Y()+maSize.Height()-1));
-    mpOutDev->DrawLine(Point(maPos.X()+maSize.Width()-1, maPos.Y()),
-                       Point(maPos.X()+maSize.Width()-1, maPos.Y()+maSize.Height()-1));
+        mpOutDev->SetLineColor(mpStyle->GetShadowColor());
+        mpOutDev->DrawLine(Point(maPos.X(), maPos.Y()+maSize.Height()-1),
+                           Point(maPos.X()+maSize.Width()-1, maPos.Y()+maSize.Height()-1));
+        mpOutDev->DrawLine(Point(maPos.X()+maSize.Width()-1, maPos.Y()),
+                           Point(maPos.X()+maSize.Width()-1, maPos.Y()+maSize.Height()-1));
 
-    // Field name
-    Font aTextFont( mpStyle->GetLabelFont() );
-    aTextFont.SetHeight(12);
-    mpOutDev->SetFont(aTextFont);
+        // Field name
+        Font aTextFont( mpStyle->GetLabelFont() );
+        aTextFont.SetHeight(12);
+        mpOutDev->SetFont(aTextFont);
 
-    Point aTextPos = maPos;
-    long nTHeight = mpOutDev->GetTextHeight();
-    aTextPos.setX(maPos.getX() + nMargin);
-    aTextPos.setY(maPos.getY() + (maSize.Height()-nTHeight)/2);
-    mpOutDev->DrawText(aTextPos, maText);
+        Point aTextPos = maPos;
+        long nTHeight = mpOutDev->GetTextHeight();
+        aTextPos.setX(maPos.getX() + nMargin);
+        aTextPos.setY(maPos.getY() + (maSize.Height()-nTHeight)/2);
+        mpOutDev->DrawText(aTextPos, maText);
+    }
 
     if (mbPopupButton)
         drawPopupButton();
@@ -122,8 +131,8 @@ void ScDPFieldButton::getPopupBoundingBox(Point& rPos, Size& rSize) const
 {
     long nW = maSize.getWidth()*0.5;
     long nH = maSize.getHeight();
-    if (nW > 16)
-        nW = 16;
+    if (nW > 18)
+        nW = 18;
     if (nH > 18)
         nH = 18;
 
@@ -144,9 +153,9 @@ void ScDPFieldButton::drawPopupButton()
     Size aSize;
     getPopupBoundingBox(aPos, aSize);
 
-    // outer black border
+    // Background & outer black border
     mpOutDev->SetLineColor(COL_BLACK);
-    mpOutDev->SetFillColor();
+    mpOutDev->SetFillColor(mpStyle->GetFaceColor());
     mpOutDev->DrawRect(Rectangle(aPos, aSize));
 
     // border lines

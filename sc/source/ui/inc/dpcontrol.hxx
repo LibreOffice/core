@@ -61,6 +61,7 @@ public:
 
     void setText(const ::rtl::OUString& rText);
     void setBoundingBox(const Point& rPos, const Size& rSize);
+    void setDrawBaseButton(bool b);
     void setDrawPopupButton(bool b);
     void setHasHiddenMember(bool b);
     void draw();
@@ -77,6 +78,7 @@ private:
     ::rtl::OUString         maText;
     OutputDevice*           mpOutDev;
     const StyleSettings*    mpStyle;
+    bool                    mbBaseButton;
     bool                    mbPopupButton;
     bool                    mbHasHiddenMember;
 };

@@ -1204,7 +1204,7 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
 {
     aComboButton.SetOutputDevice( pContentDev );
 
-    ScDPFieldButton aDPFieldBtn(pContentDev, &GetSettings().GetStyleSettings());
+    ScDPFieldButton aCellBtn(pContentDev, &GetSettings().GetStyleSettings());
 
     SCCOL nCol;
     SCROW nRow;
@@ -1287,14 +1287,13 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
                     bool bArrowState = bSimpleQuery && bColumnFound;
                     long    nSizeX;
                     long    nSizeY;
-
                     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
-                    aComboButton.SetOptSizePixel();
-                    DrawComboButton( pViewData->GetScrPos( nCol, nRow, eWhich ),
-                                     nSizeX, nSizeY, bArrowState );
+                    Point aScrPos = pViewData->GetScrPos( nCol, nRow, eWhich );
 
-                    aComboButton.SetPosPixel( aOldPos );    // alten Zustand
-                    aComboButton.SetSizePixel( aOldSize );  // fuer MouseUp/Down
+                    aCellBtn.setBoundingBox(aScrPos, Size(nSizeX-1, nSizeY-1));
+                    aCellBtn.setDrawBaseButton(false);
+                    aCellBtn.setDrawPopupButton(true);
+                    aCellBtn.draw();
                 }
             }
         }
@@ -1323,11 +1322,12 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
 
                     String aStr;
                     pDoc->GetString(nCol, nRow, nTab, aStr);
-                    aDPFieldBtn.setText(aStr);
-                    aDPFieldBtn.setBoundingBox(Point(nPosX,nPosY), Size(nSizeX-1, nSizeY-1));
-                    aDPFieldBtn.setDrawPopupButton(pInfo->bPopupButton);
-                    aDPFieldBtn.setHasHiddenMember(pInfo->bFilterActive);
-                    aDPFieldBtn.draw();
+                    aCellBtn.setText(aStr);
+                    aCellBtn.setBoundingBox(Point(nPosX, nPosY), Size(nSizeX-1, nSizeY-1));
+                    aCellBtn.setDrawBaseButton(true);
+                    aCellBtn.setDrawPopupButton(pInfo->bPopupButton);
+                    aCellBtn.setHasHiddenMember(pInfo->bFilterActive);
+                    aCellBtn.draw();
                 }
             }
         }
