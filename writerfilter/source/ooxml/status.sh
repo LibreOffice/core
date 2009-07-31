@@ -21,6 +21,6 @@ sed 's#^.*-[0-9][0-9]*-.*$#<nostatus/>#' |
 grep -v "^--"
 
 echo "</stage1>"
-) > stage1.xml &&
-xsltproc analyzestage2.xsl stage1.xml > stage2.xml &&
-xsltproc analyzestage3.xsl stage2.xml > stage3.xml
+) |
+xsltproc analyzestage2.xsl - |
+xsltproc analyzestage3.xsl -
