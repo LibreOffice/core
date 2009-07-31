@@ -144,16 +144,21 @@ void ScDPFieldButton::drawPopupButton()
     Size aSize;
     getPopupBoundingBox(aPos, aSize);
 
+    // outer black border
+    mpOutDev->SetLineColor(COL_BLACK);
+    mpOutDev->SetFillColor();
+    mpOutDev->DrawRect(Rectangle(aPos, aSize));
+
     // border lines
     mpOutDev->SetLineColor(mpStyle->GetLightColor());
-    mpOutDev->DrawLine(aPos, Point(aPos.X(), aPos.Y()+aSize.Height()-1));
-    mpOutDev->DrawLine(aPos, Point(aPos.X()+aSize.Width()-1, aPos.Y()));
+    mpOutDev->DrawLine(Point(aPos.X()+1, aPos.Y()+1), Point(aPos.X()+1, aPos.Y()+aSize.Height()-2));
+    mpOutDev->DrawLine(Point(aPos.X()+1, aPos.Y()+1), Point(aPos.X()+aSize.Width()-2, aPos.Y()+1));
 
     mpOutDev->SetLineColor(mpStyle->GetShadowColor());
-    mpOutDev->DrawLine(Point(aPos.X(), aPos.Y()+aSize.Height()-1),
-                       Point(aPos.X()+aSize.Width()-1, aPos.Y()+aSize.Height()-1));
-    mpOutDev->DrawLine(Point(aPos.X()+aSize.Width()-1, aPos.Y()),
-                       Point(aPos.X()+aSize.Width()-1, aPos.Y()+aSize.Height()-1));
+    mpOutDev->DrawLine(Point(aPos.X()+1, aPos.Y()+aSize.Height()-2),
+                       Point(aPos.X()+aSize.Width()-2, aPos.Y()+aSize.Height()-2));
+    mpOutDev->DrawLine(Point(aPos.X()+aSize.Width()-2, aPos.Y()+1),
+                       Point(aPos.X()+aSize.Width()-2, aPos.Y()+aSize.Height()-2));
 
     // the arrowhead
     Color aArrowColor = mbHasHiddenMember ? mpStyle->GetHighlightLinkColor() : mpStyle->GetButtonTextColor();
