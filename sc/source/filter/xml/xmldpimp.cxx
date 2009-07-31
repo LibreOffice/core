@@ -285,7 +285,7 @@ SvXMLImportContext *ScXMLDataPilotTableContext::CreateChildContext( USHORT nPref
 
 void ScXMLDataPilotTableContext::SetButtons()
 {
-    ScDPOutputGeometry aGeometry(aTargetRangeAddress, bShowFilter);
+    ScDPOutputGeometry aGeometry(aTargetRangeAddress, bShowFilter, ScDPOutputGeometry::ODF);
     aGeometry.setColumnFieldCount(mnColFieldCount);
     aGeometry.setRowFieldCount(mnRowFieldCount);
     aGeometry.setPageFieldCount(mnPageFieldCount);

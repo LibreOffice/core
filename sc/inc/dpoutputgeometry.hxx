@@ -40,8 +40,9 @@ class SC_DLLPUBLIC ScDPOutputGeometry
 {
 public:
     enum FieldType { Column, Row, Page, Data, None };
+    enum ImportType { ODF, XLS };
 
-    ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilter);
+    ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilter, ImportType eImportType);
     ~ScDPOutputGeometry();
 
     /**
@@ -70,6 +71,8 @@ private:
     sal_uInt32  mnColumnFields;
     sal_uInt32  mnPageFields;
     sal_uInt32  mnDataFields;
+
+    ImportType  meImportType;
 
     bool        mbShowFilter;
 };

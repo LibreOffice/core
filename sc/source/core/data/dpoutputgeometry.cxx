@@ -42,12 +42,13 @@
 
 using ::std::vector;
 
-ScDPOutputGeometry::ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilter) :
+ScDPOutputGeometry::ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilter, ImportType eImportType) :
     maOutRange(rOutRange),
     mnRowFields(0),
     mnColumnFields(0),
     mnPageFields(0),
     mnDataFields(0),
+    meImportType(eImportType),
     mbShowFilter(bShowFilter)
 {
 }
@@ -172,7 +173,7 @@ ScDPOutputGeometry::FieldType ScDPOutputGeometry::getFieldButtonType(const ScAdd
 {
     // We will ignore the table position for now.
 
-    bool bExtraTitleRow = (mnColumnFields == 0);
+    bool bExtraTitleRow = (mnColumnFields == 0 && meImportType == ScDPOutputGeometry::XLS);
     bool bDataLayout = mnDataFields > 1;
 
     SCROW nCurRow = maOutRange.aStart.Row();
