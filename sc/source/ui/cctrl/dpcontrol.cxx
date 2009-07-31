@@ -34,11 +34,13 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "dpcontrol.hxx"
+#include "dpcontrol.hrc"
 
 #include "vcl/outdev.hxx"
 #include "vcl/settings.hxx"
 #include "vcl/wintypes.hxx"
 #include "vcl/decoview.hxx"
+#include "strload.hxx"
 
 #define MENU_NOT_SELECTED 999
 
@@ -725,12 +727,15 @@ void ScDPFieldPopupWindow::CancelButton::Click()
 ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent) :
     ScMenuFloatingWindow(pParent),
     maChecks(this, 0),
+    maChkToggleAll(this, 0),
     maBtnOk(this),
     maBtnCancel(this),
     mpExtendedData(NULL),
     mpOKAction(NULL),
-    mnScrollPos(0)
+    mePrevToggleAllState(STATE_DONTKNOW)
 {
+    const StyleSettings& rStyle = GetSettings().GetStyleSettings();
+
     Point aPos;
     Size aSize;
     getSectionPosSize(aPos, aSize, WHOLE);
@@ -751,7 +756,16 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent) :
     getSectionPosSize(aPos, aSize, LISTBOX_AREA_INNER);
     maChecks.SetPosSizePixel(aPos, aSize);
     maChecks.SetFont(getLabelFont());
+    maChecks.SetCheckButtonHdl( LINK(this, ScDPFieldPopupWindow, CheckHdl) );
     maChecks.Show();
+
+    getSectionPosSize(aPos, aSize, CHECK_TOGGLE_ALL);
+    maChkToggleAll.SetPosSizePixel(aPos, aSize);
+    maChkToggleAll.SetFont(getLabelFont());
+    maChkToggleAll.SetText(ScRscStrLoader(RID_POPUP_FILTER, STR_BTN_TOGGLE_ALL).GetString());
+    maChkToggleAll.SetControlBackground(rStyle.GetMenuColor());
+    maChkToggleAll.SetClickHdl( LINK(this, ScDPFieldPopupWindow, TriStateHdl) );
+    maChkToggleAll.Show();
 }
 
 ScDPFieldPopupWindow::~ScDPFieldPopupWindow()
@@ -760,17 +774,27 @@ ScDPFieldPopupWindow::~ScDPFieldPopupWindow()
 
 void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionType eType) const
 {
-    const sal_uInt16 nListBoxMargin = 5;
+    // constant parameters.
+    const sal_uInt16 nListBoxMargin = 5;            // horizontal distance from the side of the dialog to the listbox border.
     const sal_uInt16 nListBoxInnerPadding = 5;
     const sal_uInt16 nTopMargin = 5;
     const sal_uInt16 nMenuHeight = 60;
-    const sal_uInt16 nBottomBtnAreaHeight = 50;
+    const sal_uInt16 nSingleItemBtnAreaHeight = 30; // height of the middle area below the list box where the single-action buttons are.
+    const sal_uInt16 nBottomBtnAreaHeight = 50;     // height of the bottom area where the OK and Cancel buttons are.
     const sal_uInt16 nBtnWidth = 60;
-    const sal_uInt16 nBtnHeight = getLabelFont().GetHeight()*2;
+    const sal_uInt16 nLabelHeight = getLabelFont().GetHeight();
+    const sal_uInt16 nBtnHeight = nLabelHeight*2;
     const sal_uInt16 nBottomMargin = 10;
     const sal_uInt16 nMenuListMargin = 20;
 
     Size aWndSize = Size(160, 330);
+
+    // parameters calculated from constants.
+    const sal_uInt16 nListBoxWidth = aWndSize.Width() - nListBoxMargin*2;
+    const sal_uInt16 nListBoxHeight = aWndSize.Height() - nTopMargin - nMenuHeight -
+        nMenuListMargin - nSingleItemBtnAreaHeight - nBottomBtnAreaHeight;
+
+    const sal_uInt16 nSingleBtnAreaY = nTopMargin + nMenuHeight + nListBoxHeight + nMenuListMargin - 1;
 
     switch (eType)
     {
@@ -783,18 +807,33 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
         case LISTBOX_AREA_OUTER:
         {
             rPos = Point(nListBoxMargin, nTopMargin + nMenuHeight + nMenuListMargin);
-            rSize = Size(
-                aWndSize.Width() - nListBoxMargin*2,
-                aWndSize.Height() - nTopMargin - nMenuHeight - nMenuListMargin - nBottomBtnAreaHeight);
+            rSize = Size(nListBoxWidth, nListBoxHeight);
         }
         break;
         case LISTBOX_AREA_INNER:
         {
-            rPos = Point(nListBoxMargin + nListBoxInnerPadding,
-                         nTopMargin + nMenuHeight + nMenuListMargin + nListBoxInnerPadding);
-            rSize = Size(
-                aWndSize.Width() - nListBoxMargin*2 - nListBoxInnerPadding*2,
-                aWndSize.Height() - nTopMargin - nMenuHeight - nMenuListMargin - nBottomBtnAreaHeight - nListBoxInnerPadding*2);
+            rPos = Point(nListBoxMargin, nTopMargin + nMenuHeight + nMenuListMargin);
+            rPos.X() += nListBoxInnerPadding;
+            rPos.Y() += nListBoxInnerPadding;
+
+            rSize = Size(nListBoxWidth, nListBoxHeight);
+            rSize.Width()  -= nListBoxInnerPadding*2;
+            rSize.Height() -= nListBoxInnerPadding*2;
+        }
+        break;
+        case SINGLE_BTN_AREA:
+        {
+            rPos = Point(nListBoxMargin, nSingleBtnAreaY);
+            rSize = Size(nListBoxWidth, nSingleItemBtnAreaHeight);
+        }
+        break;
+        case CHECK_TOGGLE_ALL:
+        {
+            long h = nLabelHeight*3/2; // check box height is heuristically 150% of the text height.
+            rPos = Point(nListBoxMargin, nSingleBtnAreaY);
+            rPos.X() += 5;
+            rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
+            rSize = Size(70, h);
         }
         break;
         case BTN_OK:
@@ -818,9 +857,55 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
     }
 }
 
+void ScDPFieldPopupWindow::setAllMemberState(bool bSet)
+{
+    size_t n = maMembers.size();
+    for (size_t i = 0; i < n; ++i)
+        maChecks.CheckEntryPos(i, bSet);
+}
+
 IMPL_LINK( ScDPFieldPopupWindow, OKButtonHdl, OKButton*, EMPTYARG )
 {
     close(true);
+    return 0;
+}
+
+IMPL_LINK( ScDPFieldPopupWindow, TriStateHdl, TriStateBox*, EMPTYARG )
+{
+    switch (mePrevToggleAllState)
+    {
+        case STATE_NOCHECK:
+            maChkToggleAll.SetState(STATE_CHECK);
+            setAllMemberState(true);
+        break;
+        case STATE_CHECK:
+            maChkToggleAll.SetState(STATE_NOCHECK);
+            setAllMemberState(false);
+        break;
+        case STATE_DONTKNOW:
+        default:
+            maChkToggleAll.SetState(STATE_CHECK);
+            setAllMemberState(true);
+        break;
+    }
+
+    mePrevToggleAllState = maChkToggleAll.GetState();
+    return 0;
+}
+
+IMPL_LINK( ScDPFieldPopupWindow, CheckHdl, SvTreeListBox*, EMPTYARG )
+{
+    size_t nNumChecked = maChecks.GetCheckedEntryCount();
+    if (nNumChecked == maMembers.size())
+        // all members visible
+        maChkToggleAll.SetState(STATE_CHECK);
+    else if (nNumChecked == 0)
+        // no members visible
+        maChkToggleAll.SetState(STATE_NOCHECK);
+    else
+        maChkToggleAll.SetState(STATE_DONTKNOW);
+
+    mePrevToggleAllState = maChkToggleAll.GetState();
     return 0;
 }
 
@@ -849,6 +934,11 @@ void ScDPFieldPopupWindow::Paint(const Rectangle& rRect)
     SetFillColor(aMemberBackColor);
     SetLineColor(aBorderColor);
     DrawRect(Rectangle(aPos,aSize));
+
+    // Single-action button box
+    getSectionPosSize(aPos, aSize, SINGLE_BTN_AREA);
+    SetFillColor(rStyle.GetMenuColor());
+    DrawRect(Rectangle(aPos,aSize));
 }
 
 void ScDPFieldPopupWindow::setMemberSize(size_t n)
@@ -866,11 +956,31 @@ void ScDPFieldPopupWindow::addMember(const OUString& rName, bool bVisible)
 
 void ScDPFieldPopupWindow::initMembers()
 {
-    size_t nMemCount = maMembers.size();
-    for (size_t i = 0; i < nMemCount; ++i)
+    size_t n = maMembers.size();
+    size_t nVisMemCount = 0;
+    for (size_t i = 0; i < n; ++i)
     {
         maChecks.InsertEntry(maMembers[i].maName);
         maChecks.CheckEntryPos(i, maMembers[i].mbVisible);
+        if (maMembers[i].mbVisible)
+            ++nVisMemCount;
+    }
+    if (nVisMemCount == n)
+    {
+        // all members visible
+        maChkToggleAll.SetState(STATE_CHECK);
+        mePrevToggleAllState = STATE_CHECK;
+    }
+    else if (nVisMemCount == 0)
+    {
+        // no members visible
+        maChkToggleAll.SetState(STATE_NOCHECK);
+        mePrevToggleAllState = STATE_NOCHECK;
+    }
+    else
+    {
+        maChkToggleAll.SetState(STATE_DONTKNOW);
+        mePrevToggleAllState = STATE_DONTKNOW;
     }
 }
 

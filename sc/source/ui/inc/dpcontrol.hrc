@@ -36,5 +36,6 @@
 #define STR_MENU_SORT_ASC       1
 #define STR_MENU_SORT_DESC      2
 #define STR_MENU_SORT_CUSTOM    3
+#define STR_BTN_TOGGLE_ALL      4
 
 #endif

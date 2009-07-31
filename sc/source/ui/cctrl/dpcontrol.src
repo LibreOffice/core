@@ -46,4 +46,9 @@ Resource RID_POPUP_FILTER
     {
         Text [ en-US ] = "Custom Sort" ;
     };
+
+    String STR_BTN_TOGGLE_ALL
+    {
+        Text [ en-US ] = "All" ;
+    };
 };

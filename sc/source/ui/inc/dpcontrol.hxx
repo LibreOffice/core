@@ -243,19 +243,26 @@ private:
     };
 
     enum SectionType {
-        WHOLE,          // entire window
+        WHOLE,                // entire window
         LISTBOX_AREA_OUTER,   // box enclosing the check box items.
         LISTBOX_AREA_INNER,   // box enclosing the check box items.
-        BTN_OK,         // OK button
-        BTN_CANCEL,     // Cancel button
+        SINGLE_BTN_AREA,      // box enclosing the single-action buttons.
+        CHECK_TOGGLE_ALL,     // check box for toggling all items.
+        BTN_OK,               // OK button
+        BTN_CANCEL,           // Cancel button
     };
     void getSectionPosSize(Point& rPos, Size& rSize, SectionType eType) const;
 
+    void setAllMemberState(bool bSet);
+
     DECL_LINK( OKButtonHdl, OKButton* );
-    DECL_LINK( ScrollHdl, ScrollBar* );
+    DECL_LINK( TriStateHdl, TriStateBox* );
+    DECL_LINK( CheckHdl, SvTreeListBox* );
 
 private:
     SvxCheckListBox maChecks;
+
+    TriStateBox     maChkToggleAll;
 
     OKButton        maBtnOk;
     CancelButton    maBtnCancel;
@@ -264,7 +271,7 @@ private:
     ::std::auto_ptr<ExtendedData>   mpExtendedData;
     ::std::auto_ptr<Action>         mpOKAction;
 
-    size_t  mnScrollPos;
+    TriState mePrevToggleAllState;
 };
 
 #endif
