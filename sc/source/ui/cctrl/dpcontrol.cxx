@@ -910,9 +910,15 @@ IMPL_LINK( ScDPFieldPopupWindow, ButtonHdl, Button*, pBtn )
     if (pBtn == &maBtnOk)
         close(true);
     else if (pBtn == &maBtnSelectSingle)
+    {
         selectCurrentMemberOnly(true);
+        CheckHdl(&maChecks);
+    }
     else if (pBtn == &maBtnUnselectSingle)
+    {
         selectCurrentMemberOnly(false);
+        CheckHdl(&maChecks);
+    }
     return 0;
 }
 
@@ -939,8 +945,11 @@ IMPL_LINK( ScDPFieldPopupWindow, TriStateHdl, TriStateBox*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScDPFieldPopupWindow, CheckHdl, SvTreeListBox*, EMPTYARG )
+IMPL_LINK( ScDPFieldPopupWindow, CheckHdl, SvTreeListBox*, pChecks )
 {
+    if (pChecks != &maChecks)
+        return 0;
+
     size_t nNumChecked = maChecks.GetCheckedEntryCount();
     if (nNumChecked == maMembers.size())
         // all members visible
