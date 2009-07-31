@@ -77,9 +77,9 @@ using ::com::sun::star::script::XEventAttacherManager;
 
 // --- class XclEscherEx ---------------------------------------------
 
-XclEscherEx::XclEscherEx( const XclExpRoot& rRoot, SvStream& rStrm, UINT32 nDrawings )
+XclEscherEx::XclEscherEx( const XclExpRoot& rRoot, SvStream& rStrm )
         :
-        EscherEx( rStrm, nDrawings ),
+        EscherEx( rStrm ),
         XclExpRoot( rRoot ),
         pPicTempFile( NULL ),
         pPicStrm( NULL ),
@@ -135,7 +135,7 @@ SvStream* XclEscherEx::QueryPicStream()
 }
 
 
-void XclEscherEx::InsertAtCurrentPos( UINT32 nBytes, BOOL bCont )
+void XclEscherEx::InsertAtCurrentPos( UINT32 nBytes, bool bExpandEndOfAtom )
 {
     ULONG nPos = GetStreamPos();
     ULONG nCnt = aOffsetMap.Count();
@@ -146,7 +146,7 @@ void XclEscherEx::InsertAtCurrentPos( UINT32 nBytes, BOOL bCont )
         if ( nOff >= nPos )
             aOffsetMap.Replace( (void*) (nOff + nBytes) );
     }
-    EscherEx::InsertAtCurrentPos( nBytes, bCont );
+    EscherEx::InsertAtCurrentPos( nBytes, bExpandEndOfAtom );
 }
 
 

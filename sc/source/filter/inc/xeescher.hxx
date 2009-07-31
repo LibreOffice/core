@@ -248,13 +248,14 @@ public:
     explicit            XclExpObjectManager( const XclExpRoot& rRoot );
     virtual             ~XclExpObjectManager();
 
-    inline XclEscherEx& GetEx() { return *mxEx; }
-    inline SvStream&    GetStrm() { return maDffStrm; }
+    inline XclEscherEx& GetEx() const { return *mxEx; }
+    inline SvStream&    GetStrm() const { return *mxDffStrm; }
 
     void                AddSdrPage();
 
 private:
-    SvMemoryStream      maDffStrm;
+    ::std::auto_ptr< ::utl::TempFile > mxTempFile;
+    ::std::auto_ptr< SvStream > mxDffStrm;
     ::std::auto_ptr< XclEscherEx > mxEx;
 };
 

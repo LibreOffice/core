@@ -54,8 +54,9 @@
 #include <svx/svdocapt.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/editobj.hxx>
+#include <unotools/tempfile.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
-#include "document.hxx"
 #include "editutil.hxx"
 #include "unonames.hxx"
 #include "convuno.hxx"
@@ -1011,9 +1012,13 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
 // object manager =============================================================
 
 XclExpObjectManager::XclExpObjectManager( const XclExpRoot& rRoot ) :
-    XclExpRoot( rRoot ),
-    mxEx( new XclEscherEx( rRoot, maDffStrm, rRoot.GetDoc().GetTableCount() ) )
+    XclExpRoot( rRoot )
 {
+    mxTempFile.reset( new ::utl::TempFile );
+    mxTempFile->EnableKillingFile();
+    mxDffStrm.reset( ::utl::UcbStreamHelper::CreateStream( mxTempFile->GetURL(), STREAM_STD_READWRITE ) );
+    mxDffStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    mxEx.reset( new XclEscherEx( rRoot, *mxDffStrm ) );
 }
 
 XclExpObjectManager::~XclExpObjectManager()

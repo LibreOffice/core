@@ -71,11 +71,11 @@ private:
             void                DeleteCurrAppData();
 
 public:
-                                XclEscherEx( const XclExpRoot& rRoot, SvStream& rStrm, UINT32 nDrawings );
+                                XclEscherEx( const XclExpRoot& rRoot, SvStream& rStrm );
     virtual                     ~XclEscherEx();
 
                                 /// maintains OffsetMap
-    virtual void                InsertAtCurrentPos( UINT32 nBytes, BOOL bCont = FALSE );
+    virtual void                InsertAtCurrentPos( UINT32 nBytes, bool bExpandEndOfAtom );
 
     virtual SvStream*           QueryPicStream();
     virtual EscherExHostAppData*    StartShape( const com::sun::star::uno::Reference<
