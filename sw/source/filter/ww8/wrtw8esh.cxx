@@ -1339,9 +1339,8 @@ void SwEscherEx::WritePictures()
 
 // Output- Routines for Escher Export
 
-SwBasicEscherEx::SwBasicEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt,
-    UINT32 nDrawings)
-    : EscherEx(*pStrm, nDrawings), rWrt(rWW8Wrt), pEscherStrm(pStrm),
+SwBasicEscherEx::SwBasicEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt)
+    : EscherEx(*pStrm), rWrt(rWW8Wrt), pEscherStrm(pStrm),
     pPictStrm(0)
 {
     Init();
@@ -1939,7 +1938,7 @@ void SwBasicEscherEx::WritePictures()
 }
 
 SwEscherEx::SwEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt)
-    : SwBasicEscherEx(pStrm, rWW8Wrt, rWW8Wrt.pHFSdrObjs->size() ? 2 : 1),
+    : SwBasicEscherEx(pStrm, rWW8Wrt),
     pTxtBxs(0)
 {
     aHostData.SetClientData(&aWinwordAnchoring);

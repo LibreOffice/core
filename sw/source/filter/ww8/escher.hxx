@@ -121,7 +121,7 @@ protected:
     SdrLayerID GetInvisibleHellId() const;
 
 public:
-    SwBasicEscherEx(SvStream* pStrm, SwWW8Writer& rWrt, UINT32 nDrawings = 1);
+    SwBasicEscherEx(SvStream* pStrm, SwWW8Writer& rWrt);
     INT32 WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
     INT32 WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
     void WriteEmptyFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
