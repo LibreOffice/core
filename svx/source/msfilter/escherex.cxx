@@ -4327,7 +4327,7 @@ void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )
             /*  The DGG record is still not written. ESCHER_Persist_Dgg seeks
                 to the place where the complete record has to be inserted. */
             sal_uInt32 nAddBytes = GetDggAtomSize();
-            InsertAtCurrentPos( nAddBytes, true );
+            InsertAtCurrentPos( nAddBytes, false );
             WriteDggAtom( *mpOutStrm );
 
             if ( HasGraphics() )
@@ -4338,7 +4338,7 @@ void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )
                 sal_uInt32 nAddBytes = GetBlibStoreContainerSize( pPicStreamMergeBSE );
                 if ( nAddBytes > 0 )
                 {
-                    InsertAtCurrentPos( nAddBytes, true );
+                    InsertAtCurrentPos( nAddBytes, false );
                     WriteBlibStoreContainer( *mpOutStrm, pPicStreamMergeBSE );
                 }
             }
@@ -4361,7 +4361,7 @@ EscherEx::~EscherEx()
 
 // ---------------------------------------------------------------------------------------------
 
-void EscherEx::InsertAtCurrentPos( UINT32 nBytes, bool bExpandEndOfRecord )
+void EscherEx::InsertAtCurrentPos( UINT32 nBytes, bool bExpandEndOfAtom )
 {
     UINT32  nSize, nType, nSource, nBufSize, nToCopy, nCurPos = mpOutStrm->Tell();
     BYTE*   pBuf;
@@ -4379,13 +4379,16 @@ void EscherEx::InsertAtCurrentPos( UINT32 nBytes, bool bExpandEndOfRecord )
     while ( mpOutStrm->Tell() < nCurPos )
     {
         *mpOutStrm >> nType >> nSize;
-        /*  If bExpandEndOfRecord is true, add one byte to make the insertion
-            position being a part of the current record. */
-        if ( ( mpOutStrm->Tell() + nSize ) >= ( bExpandEndOfRecord ? (nCurPos + 1) : nCurPos ) )
+        sal_uInt32 nEndOfRecord = mpOutStrm->Tell() + nSize;
+        bool bContainer = (nType & 0x0F) == 0x0F;
+        /*  Expand the record, if the insertion position is inside, or if the
+            position is at the end of a container (expands always), or at the
+            end of an atom and bExpandEndOfAtom is set. */
+        if ( (nCurPos < nEndOfRecord) || ((nCurPos == nEndOfRecord) && (bContainer || bExpandEndOfAtom)) )
         {
             mpOutStrm->SeekRel( -4 );
             *mpOutStrm << (UINT32)( nSize + nBytes );
-            if ( ( nType & 0xf ) != 0xf )
+            if ( !bContainer )
                 mpOutStrm->SeekRel( nSize );
         }
         else
@@ -4515,7 +4518,7 @@ void EscherEx::OpenContainer( UINT16 nEscherContainer, int nRecInstance )
                 {
                     mbEscherDg = TRUE;
                     ++mnDrawings;
-                    mnCurrentDg++;
+                    mnCurrentDg = mnDrawings;
                     mnTotalShapesDg = 0;
                     mnTotalShapeIdUsedDg = 0;
                     mnCurrentShapeID = ( mnCurrentShapeMaximumID &~0x3ff ) + 0x400; // eine neue Seite bekommt immer eine neue ShapeId die ein vielfaches von 1024 ist,

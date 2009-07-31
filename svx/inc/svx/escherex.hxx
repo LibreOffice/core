@@ -1358,15 +1358,16 @@ class SVX_DLLPUBLIC EscherEx : public EscherPersistTable, public EscherGraphicPr
 
         @param nBytes  The number of bytes to be inserted into the stream.
 
-        @param bExpandEndOfRecord  If set to true, a record that currently ends
+        @param bExpandEndOfAtom  If set to true, an atom that currently ends
             exactly at the current stream position will be expanded to include
-            the inserted data (should be used to insert new data into an
-            existing record). If set to false, a record that currently ends
+            the inserted data. If set to false, an atom that currently ends
             exactly at the current stream position will not be expanded to
-            include the inserted data (should be used for new records or
-            containers only).
+            include the inserted data (used to insert e.g. a new atom after an
+            existing atom). Note that containers that end exactly at the
+            current stream position are always expanded to include the inserted
+            data.
      */
-    virtual void    InsertAtCurrentPos( UINT32 nBytes, bool bExpandEndOfRecord );
+    virtual void    InsertAtCurrentPos( UINT32 nBytes, bool bExpandEndOfAtom );
 
         void    InsertPersistOffset( UINT32 nKey, UINT32 nOffset ); // Es wird nicht geprueft, ob sich jener schluessel schon in der PersistantTable befindet
         BOOL    SeekToPersistOffset( UINT32 nKey );
