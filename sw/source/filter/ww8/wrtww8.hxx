@@ -525,6 +525,7 @@ public:
     virtual ULONG Write( SwPaM&, SfxMedium&, const String* = 0 );
     virtual ULONG Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* = 0, SfxMedium* = 0 );
     virtual ULONG Write( SwPaM&, SotStorage&, const String* = 0 );
+    virtual ULONG Write( SwPaM&, SvStream&, const String* = 0 );
 
 
     SvxMSExportOLEObjects& GetOLEExp()      { return *pOLEExp; }

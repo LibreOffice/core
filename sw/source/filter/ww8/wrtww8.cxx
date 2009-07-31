@@ -3188,8 +3188,9 @@ ULONG SwWW8Writer::Write( SwPaM& rPaM, SfxMedium& rMed,
                                const String* pFileName )
 {
     mpMedium = &rMed;
-    return StgWriter::Write( rPaM, rMed, pFileName );
+    ULONG nRet = StgWriter::Write( rPaM, rMed, pFileName );
     mpMedium = NULL;
+    return nRet;
 }
 
 ULONG SwWW8Writer::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >& xStorage, const String* pFileName, SfxMedium* pMedium )
@@ -3202,6 +3203,12 @@ ULONG SwWW8Writer::Write( SwPaM& rPaM, SotStorage& rStorage, const String* pFile
 {
     // this method was added to let the windows compiler be happy, otherwise it shows warning
     return StgWriter::Write( rPaM, rStorage, pFileName );
+}
+
+ULONG SwWW8Writer::Write( SwPaM& rPaM, SvStream& rStream, const String* pFileName )
+{
+    // this method was added to let the solaris compiler be happy, otherwise it shows warning
+    return StgWriter::Write( rPaM, rStream, pFileName );
 }
 
 SwWW8Writer::SwWW8Writer(const String& rFltName, const String& rBaseURL)
