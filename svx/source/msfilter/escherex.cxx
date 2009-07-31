@@ -4326,8 +4326,8 @@ void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )
         {
             /*  The DGG record is still not written. ESCHER_Persist_Dgg seeks
                 to the place where the complete record has to be inserted. */
-            sal_uInt32 nAddBytes = GetDggAtomSize();
-            InsertAtCurrentPos( nAddBytes, false );
+            sal_uInt32 nBytes = GetDggAtomSize();
+            InsertAtCurrentPos( nBytes, false );
             WriteDggAtom( *mpOutStrm );
 
             if ( HasGraphics() )
