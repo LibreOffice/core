@@ -40,10 +40,9 @@
 // ---------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------
 
-PptEscherEx::PptEscherEx( SvStream& rOutStrm, UINT32 nDrawings ) :
-    EscherEx                ( rOutStrm, nDrawings )
+PptEscherEx::PptEscherEx( SvStream& rOutStrm ) :
+    EscherEx( rOutStrm )
 {
-    mnFIDCLs = nDrawings;
     mnCurrentDg = 0;
     mnCurrentShapeID = 0;
     mnTotalShapesDgg = 0;
@@ -72,7 +71,7 @@ sal_uInt32 PptEscherEx::ImplDggContainerSize()
 {
     UINT32 nSize;
 
-    nSize  = ImplDggAtomSize();
+    nSize  = GetDggAtomSize();
     nSize += GetBlibStoreContainerSize();
     nSize += ImplOptAtomSize();
     nSize += ImplSplitMenuColorsAtomSize();
@@ -88,33 +87,10 @@ void PptEscherEx::ImplWriteDggContainer( SvStream& rSt )
         rSt << (sal_uInt32)( 0xf | ( ESCHER_DggContainer << 16 ) )
             << (sal_uInt32)( nSize - 8 );
 
-        ImplWriteDggAtom( rSt );
+        WriteDggAtom( rSt );
         WriteBlibStoreContainer( rSt );
         ImplWriteOptAtom( rSt );
         ImplWriteSplitMenuColorsAtom( rSt );
-    }
-}
-
-// ---------------------------------------------------------------------------------------------
-
-sal_uInt32 PptEscherEx::ImplDggAtomSize()
-{
-    return maFIDCLs.Tell() + 24;
-}
-
-void PptEscherEx::ImplWriteDggAtom( SvStream& rSt )
-{
-    sal_uInt32 nSize = ImplDggAtomSize();
-    if ( nSize )
-    {
-        rSt << (sal_uInt32)( ESCHER_Dgg << 16 )
-            << (sal_uInt32)( nSize - 8 )
-            << mnCurrentShapeID
-            << (sal_uInt32)( mnFIDCLs + 1 )
-            << mnTotalShapesDgg
-            << mnDrawings;
-
-        rSt.Write( maFIDCLs.GetData(), nSize - 24 );
     }
 }
 
@@ -194,7 +170,8 @@ void PptEscherEx::OpenContainer( UINT16 n_EscherContainer, int nRecInstance )
             if ( !mbEscherDg )
             {
                 mbEscherDg = TRUE;
-                mnCurrentDg++;
+                ++mnDrawings;
+                mnCurrentDg = mnDrawings;
                 mnTotalShapesDg = 0;
                 mnTotalShapeIdUsedDg = 0;
                 mnCurrentShapeID = ( mnCurrentShapeMaximumID &~0x3ff ) + 0x400; // eine neue Seite bekommt immer eine neue ShapeId die ein vielfaches von 1024 ist,
@@ -253,34 +230,7 @@ void PptEscherEx::CloseContainer()
                         // shapeanzahl des drawings setzen
                         mnTotalShapesDgg += mnTotalShapesDg;
                         *mpOutStrm << mnTotalShapesDg << mnCurrentShapeMaximumID;
-
-                        if ( !mnTotalShapesDg )
-                        {
-                            maFIDCLs << (UINT32)0
-                                    << (UINT32)0;
-                        }
-                        else
-                        {
-                            if ( mnTotalShapeIdUsedDg )
-                            {
-                                UINT32 i, nFIDCL = ( ( mnTotalShapeIdUsedDg - 1 ) / 0x400 );
-                                if ( nFIDCL )
-                                    mnFIDCLs += nFIDCL;
-                                for ( i = 0; i <= nFIDCL; i++ )
-                                {
-                                    maFIDCLs << mnCurrentDg;            // drawing number
-                                    if ( i < nFIDCL )
-                                        maFIDCLs << 0x400;
-                                    else
-                                    {
-                                        UINT32 nShapesLeft = mnTotalShapeIdUsedDg % 0x400;
-                                        if ( !nShapesLeft )
-                                            nShapesLeft = 0x400;        // shape count in this IDCL
-                                        maFIDCLs << (UINT32)nShapesLeft;
-                                    }
-                                }
-                            }
-                        }
+                        UpdateFIDCL();
                     }
                 }
             }
