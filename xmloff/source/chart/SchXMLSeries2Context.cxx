@@ -665,7 +665,10 @@ void SchXMLSeries2Context::EndElement()
         }
     }
 
-    Reference< chart2::data::XDataProvider > xDataProvider( mrImportHelper.GetDataProvider( mxNewDoc ));
+    Reference< chart2::data::XDataProvider > xDataProvider;
+    if ( mxNewDoc.is() ) {
+        xDataProvider = mxNewDoc->getDataProvider();
+    }
     for( std::vector< DomainInfo >::reverse_iterator aIt( aDomainInfos.rbegin() ); aIt!= aDomainInfos.rend(); ++aIt )
     {
         DomainInfo aDomainInfo( *aIt );
