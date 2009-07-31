@@ -181,7 +181,6 @@ ContextHandlerRef ChartDrawingFragment::onCreateContext( sal_Int32 nElement, con
                         return 0;
                     mxShape.reset( new Shape( "com.sun.star.drawing.OLE2Shape" ) );
                     return new GraphicalObjectFrameContext( *this, ShapePtr(), mxShape, true );
-                break;
                 case CDR_TOKEN( grpSp ):
                     mxShape.reset( new Shape( "com.sun.star.drawing.GroupShape" ) );
                     return new ShapeGroupContext( *this, ShapePtr(), mxShape );
