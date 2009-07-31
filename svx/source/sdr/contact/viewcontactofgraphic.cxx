@@ -302,7 +302,7 @@ namespace sdr
 
                     // directly create temp SdrBlockTextPrimitive2D
                     drawinglayer::primitive2d::SdrBlockTextPrimitive2D aBlockTextPrimitive(
-                        *pSdrText,
+                        pSdrText,
                         *pOPO,
                         aTextRangeTransform,
                         false,
