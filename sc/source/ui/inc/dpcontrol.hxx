@@ -248,14 +248,17 @@ private:
         LISTBOX_AREA_INNER,   // box enclosing the check box items.
         SINGLE_BTN_AREA,      // box enclosing the single-action buttons.
         CHECK_TOGGLE_ALL,     // check box for toggling all items.
+        BTN_SINGLE_SELECT,
+        BTN_SINGLE_UNSELECT,
         BTN_OK,               // OK button
         BTN_CANCEL,           // Cancel button
     };
     void getSectionPosSize(Point& rPos, Size& rSize, SectionType eType) const;
 
     void setAllMemberState(bool bSet);
+    void selectCurrentMemberOnly(bool bSet);
 
-    DECL_LINK( OKButtonHdl, OKButton* );
+    DECL_LINK( ButtonHdl, Button* );
     DECL_LINK( TriStateHdl, TriStateBox* );
     DECL_LINK( CheckHdl, SvTreeListBox* );
 
@@ -263,6 +266,8 @@ private:
     SvxCheckListBox maChecks;
 
     TriStateBox     maChkToggleAll;
+    ImageButton     maBtnSelectSingle;
+    ImageButton     maBtnUnselectSingle;
 
     OKButton        maBtnOk;
     CancelButton    maBtnCancel;

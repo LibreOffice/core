@@ -728,6 +728,8 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent) :
     ScMenuFloatingWindow(pParent),
     maChecks(this, 0),
     maChkToggleAll(this, 0),
+    maBtnSelectSingle  (this, 0),
+    maBtnUnselectSingle(this, 0),
     maBtnOk(this),
     maBtnCancel(this),
     mpExtendedData(NULL),
@@ -745,7 +747,7 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent) :
     getSectionPosSize(aPos, aSize, BTN_OK);
     maBtnOk.SetPosSizePixel(aPos, aSize);
     maBtnOk.SetFont(getLabelFont());
-    maBtnOk.SetClickHdl( LINK(this, ScDPFieldPopupWindow, OKButtonHdl) );
+    maBtnOk.SetClickHdl( LINK(this, ScDPFieldPopupWindow, ButtonHdl) );
     maBtnOk.Show();
 
     getSectionPosSize(aPos, aSize, BTN_CANCEL);
@@ -766,6 +768,18 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent) :
     maChkToggleAll.SetControlBackground(rStyle.GetMenuColor());
     maChkToggleAll.SetClickHdl( LINK(this, ScDPFieldPopupWindow, TriStateHdl) );
     maChkToggleAll.Show();
+
+    getSectionPosSize(aPos, aSize, BTN_SINGLE_SELECT);
+    maBtnSelectSingle.SetPosSizePixel(aPos, aSize);
+    maBtnSelectSingle.SetModeImage(Image(ScResId(RID_IMG_SELECT_CURRENT)), BMP_COLOR_NORMAL);
+    maBtnSelectSingle.SetClickHdl( LINK(this, ScDPFieldPopupWindow, ButtonHdl) );
+    maBtnSelectSingle.Show();
+
+    getSectionPosSize(aPos, aSize, BTN_SINGLE_UNSELECT);
+    maBtnUnselectSingle.SetPosSizePixel(aPos, aSize);
+    maBtnUnselectSingle.SetModeImage(Image(ScResId(RID_IMG_UNSELECT_CURRENT)), BMP_COLOR_NORMAL);
+    maBtnUnselectSingle.SetClickHdl( LINK(this, ScDPFieldPopupWindow, ButtonHdl) );
+    maBtnUnselectSingle.Show();
 }
 
 ScDPFieldPopupWindow::~ScDPFieldPopupWindow()
@@ -779,7 +793,7 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
     const sal_uInt16 nListBoxInnerPadding = 5;
     const sal_uInt16 nTopMargin = 5;
     const sal_uInt16 nMenuHeight = 60;
-    const sal_uInt16 nSingleItemBtnAreaHeight = 30; // height of the middle area below the list box where the single-action buttons are.
+    const sal_uInt16 nSingleItemBtnAreaHeight = 32; // height of the middle area below the list box where the single-action buttons are.
     const sal_uInt16 nBottomBtnAreaHeight = 50;     // height of the bottom area where the OK and Cancel buttons are.
     const sal_uInt16 nBtnWidth = 60;
     const sal_uInt16 nLabelHeight = getLabelFont().GetHeight();
@@ -836,6 +850,24 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
             rSize = Size(70, h);
         }
         break;
+        case BTN_SINGLE_SELECT:
+        {
+            long h = 26;
+            rPos = Point(nListBoxMargin, nSingleBtnAreaY);
+            rPos.X() += 75;
+            rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
+            rSize = Size(h, h);
+        }
+        break;
+        case BTN_SINGLE_UNSELECT:
+        {
+            long h = 26;
+            rPos = Point(nListBoxMargin, nSingleBtnAreaY);
+            rPos.X() += 75 + h + 10;
+            rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
+            rSize = Size(h, h);
+        }
+        break;
         case BTN_OK:
         {
             long x = (aWndSize.Width() - nBtnWidth*2)/3;
@@ -864,9 +896,21 @@ void ScDPFieldPopupWindow::setAllMemberState(bool bSet)
         maChecks.CheckEntryPos(i, bSet);
 }
 
-IMPL_LINK( ScDPFieldPopupWindow, OKButtonHdl, OKButton*, EMPTYARG )
+void ScDPFieldPopupWindow::selectCurrentMemberOnly(bool bSet)
 {
-    close(true);
+    setAllMemberState(!bSet);
+    sal_uInt16 nSelected = maChecks.GetSelectEntryPos();
+    maChecks.CheckEntryPos(nSelected, bSet);
+}
+
+IMPL_LINK( ScDPFieldPopupWindow, ButtonHdl, Button*, pBtn )
+{
+    if (pBtn == &maBtnOk)
+        close(true);
+    else if (pBtn == &maBtnSelectSingle)
+        selectCurrentMemberOnly(true);
+    else if (pBtn == &maBtnUnselectSingle)
+        selectCurrentMemberOnly(false);
     return 0;
 }
 

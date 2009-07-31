@@ -52,3 +52,21 @@ Resource RID_POPUP_FILTER
         Text [ en-US ] = "All" ;
     };
 };
+
+Image RID_IMG_SELECT_CURRENT
+{
+    ImageBitmap = Bitmap
+    {
+        File = "popup_select_current.png";
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+
+Image RID_IMG_UNSELECT_CURRENT
+{
+    ImageBitmap = Bitmap
+    {
+        File = "popup_unselect_current.png";
+    };
+    MaskColor = STD_MASKCOLOR;
+};
