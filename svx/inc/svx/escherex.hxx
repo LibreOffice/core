@@ -946,9 +946,7 @@ enum ESCHER_LineCap
 
 #define ESCHER_Persist_PrivateEntry         0x80000000
 #define ESCHER_Persist_Dgg                  0x00010000
-#define ESCHER_Persist_Dgg_FIDCL            0x00010001
 #define ESCHER_Persist_Dg                   0x00020000
-#define ESCHER_Persist_BlibStoreContainer   0x00030000
 #define ESCHER_Persist_CurrentPosition      0x00040000
 #define ESCHER_Persist_Grouping_Snap        0x00050000
 #define ESCHER_Persist_Grouping_Logic       0x00060000
@@ -1006,13 +1004,11 @@ struct EscherPersistEntry
 
 // ---------------------------------------------------------------------------------------------
 
-class SvMemoryStream;
 class EscherBlibEntry
 {
 
         friend class EscherGraphicProvider;
         friend class EscherEx;
-        friend class _EscherEx;
 
     protected:
 
@@ -1302,15 +1298,12 @@ public:
 class SdrObject;
 class SdrPage;
 class ImplEscherExSdr;
-class Color;
-
-class Graphic;
-class SvMemoryStream;
-class SvStream;
 
 class SVX_DLLPUBLIC EscherEx : public EscherPersistTable, public EscherGraphicProvider
 {
     protected :
+        typedef ::std::pair< UINT32, UINT32 >   FIDCLEntry;
+        typedef ::std::vector< FIDCLEntry >     FIDCLVector;
 
         SvStream*               mpOutStrm;
         ImplEscherExSdr*        mpImplEscherExSdr;
@@ -1319,7 +1312,7 @@ class SVX_DLLPUBLIC EscherEx : public EscherPersistTable, public EscherGraphicPr
         std::vector< sal_uInt16 > mRecTypes;
 
         UINT32                  mnDrawings;
-        UINT32                  mnFIDCLs;                   // anzahl der cluster ID's
+        FIDCLVector             maFIDCLs;                   // cluster ID's
 
         UINT32                  mnCurrentDg;
         UINT32                  mnCurrentShapeID;           // die naechste freie ID
@@ -1342,7 +1335,9 @@ class SVX_DLLPUBLIC EscherEx : public EscherPersistTable, public EscherGraphicPr
 
     public:
 
-                EscherEx( SvStream& rOut, UINT32 nDrawings );
+                EscherEx( SvStream& rOut );
+
+    virtual     ~EscherEx();
 
                 /// Fuegt in den EscherStream interne Daten ein, dieser Vorgang
                 /// darf und muss nur einmal ausgefuehrt werden.
@@ -1351,12 +1346,27 @@ class SVX_DLLPUBLIC EscherEx : public EscherPersistTable, public EscherGraphicPr
                 /// gemerged, wie es fuer Excel (und Word?) benoetigt wird.
         void    Flush( SvStream* pPicStreamMergeBSE = NULL );
 
-    virtual     ~EscherEx();
+    /** Inserts the passed number of bytes at the current position of the
+        output stream.
 
-                // Application may overload this function to maintain an offset
-                // table for specific regions but MUST call this function too.
-    virtual void    InsertAtCurrentPos( UINT32 nBytes, BOOL bCont = FALSE );// es werden nBytes an der aktuellen Stream Position eingefuegt,
-                                                                    // die PersistantTable und interne Zeiger angepasst
+        Inserts dummy bytes and moves all following stream data, and updates
+        all internal stream offsets stored in the PersistTable, which makes
+        this operation very expensive. (!)
+
+        Application may overload this function for additional maintainance but
+        MUST call this implementation too.
+
+        @param nBytes  The number of bytes to be inserted into the stream.
+
+        @param bExpandEndOfRecord  If set to true, a record that currently ends
+            exactly at the current stream position will be expanded to include
+            the inserted data (should be used to insert new data into an
+            existing record). If set to false, a record that currently ends
+            exactly at the current stream position will not be expanded to
+            include the inserted data (should be used for new records or
+            containers only).
+     */
+    virtual void    InsertAtCurrentPos( UINT32 nBytes, bool bExpandEndOfRecord );
 
         void    InsertPersistOffset( UINT32 nKey, UINT32 nOffset ); // Es wird nicht geprueft, ob sich jener schluessel schon in der PersistantTable befindet
         BOOL    SeekToPersistOffset( UINT32 nKey );
@@ -1380,8 +1390,17 @@ class SVX_DLLPUBLIC EscherEx : public EscherPersistTable, public EscherGraphicPr
 
         void    BeginAtom();
         void    EndAtom( UINT16 nRecType, int nRecVersion = 0, int nRecInstance = 0 );
-        void    AddAtom( UINT32 nAtomSitze, UINT16 nRecType, int nRecVersion = 0, int nRecInstance = 0 );
+        void    AddAtom( UINT32 nAtomSize, UINT16 nRecType, int nRecVersion = 0, int nRecInstance = 0 );
         void    AddClientAnchor( const Rectangle& rRectangle );
+
+        /** Updates the FIDCL table according to current drawing shape ID settings.
+            Must be called when closing a DGCONTAINER only! */
+        void    UpdateFIDCL();
+        /** Returns the total size of the DGG record (including header). */
+        sal_uInt32 GetDggAtomSize();
+        /** Writes the DGG record to the passed stream (overwrite).
+            Passing a custom stream is needed e.g. by the PPT filter... */
+        void    WriteDggAtom( SvStream& rStrm );
 
         UINT32  EnterGroup( const String& rShapeName, const Rectangle* pBoundRect = 0 );
         UINT32  EnterGroup( const Rectangle* pBoundRect = NULL );
