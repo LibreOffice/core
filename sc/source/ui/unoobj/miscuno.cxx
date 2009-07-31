@@ -39,6 +39,9 @@
 #include "unoguard.hxx"
 
 using namespace com::sun::star;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Any;
+using ::rtl::OUString;
 
 //------------------------------------------------------------------------
 
@@ -178,6 +181,20 @@ sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
 void ScUnoHelpFunctions::SetBoolInAny( uno::Any& rAny, sal_Bool bValue )
 {
     rAny.setValue( &bValue, getBooleanCppuType() );
+}
+
+//  static
+void ScUnoHelpFunctions::SetOptionalPropertyValue(
+    Reference<beans::XPropertySet>& rPropSet, const sal_Char* pPropName, const Any& rVal )
+{
+    try
+    {
+        rPropSet->setPropertyValue(OUString::createFromAscii(pPropName), rVal);
+    }
+    catch (const beans::UnknownPropertyException&)
+    {
+        // ignored - not supported.
+    }
 }
 
 //------------------------------------------------------------------------

@@ -61,6 +61,8 @@
 #include <hash_map>
 
 using namespace com::sun::star;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Any;
 using ::rtl::OUString;
 using ::rtl::OUStringHash;
 using ::std::hash_map;
@@ -213,28 +215,10 @@ void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMemb
                     rtl::OUString::createFromAscii(DP_PROP_SHOWDETAILS), (BOOL)nShowDetailsMode );
 
         if (mpLayoutName.get())
-        {
-            try
-            {
-                uno::Any any;
-                any <<= rtl::OUString(*mpLayoutName);
-                xMembProp->setPropertyValue(rtl::OUString::createFromAscii(SC_UNO_LAYOUTNAME), any);
-            }
-            catch (uno::Exception&)
-            {
-            }
-        }
+            ScUnoHelpFunctions::SetOptionalPropertyValue(xMembProp, SC_UNO_LAYOUTNAME, *mpLayoutName);
+
         if ( nPosition >= 0 )
-        {
-            try
-            {
-                xMembProp->setPropertyValue( rtl::OUString::createFromAscii(DP_PROP_POSITION), uno::Any(nPosition) );
-            }
-            catch ( uno::Exception& )
-            {
-                // position is optional - exception must be ignored
-            }
-        }
+            ScUnoHelpFunctions::SetOptionalPropertyValue(xMembProp, DP_PROP_POSITION, nPosition);
     }
 }
 
@@ -604,28 +588,15 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
             aFilter = uno::Sequence<sheet::TableFilterField>( &aField, 1 );
         }
         // else keep empty sequence
-        try
-        {
-            aAny <<= aFilter;
-            xDimProp->setPropertyValue( rtl::OUString::createFromAscii(DP_PROP_FILTER), aAny );
-            if (mpLayoutName.get())
-            {
-                aAny <<= *mpLayoutName;
-                xDimProp->setPropertyValue(rtl::OUString::createFromAscii(SC_UNO_LAYOUTNAME), aAny);
-            }
 
-            const OUString* pSubTotalName = GetSubtotalName();
-            if (pSubTotalName)
-            {
-                // Custom subtotal name, with '?' being replaced by the visible field name later.
-                aAny <<= *pSubTotalName;
-                xDimProp->setPropertyValue(OUString::createFromAscii(SC_UNO_FIELD_SUBTOTALNAME), aAny);
-            }
-        }
-        catch ( beans::UnknownPropertyException& )
-        {
-            // recent addition - allow source to not handle it (no error)
-        }
+        ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, DP_PROP_FILTER, aFilter);
+        if (mpLayoutName.get())
+            ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_LAYOUTNAME, *mpLayoutName);
+
+        const OUString* pSubTotalName = GetSubtotalName();
+        if (pSubTotalName)
+            // Custom subtotal name, with '?' being replaced by the visible field name later.
+            ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_FIELD_SUBTOTALNAME, *pSubTotalName);
     }
 
     //  Level loop outside of maMemberList loop
@@ -684,41 +655,13 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                         rtl::OUString::createFromAscii(DP_PROP_SHOWEMPTY), (BOOL)nShowEmptyMode );
 
                 if ( pSortInfo )
-                {
-                    aAny <<= *pSortInfo;
-                    try
-                    {
-                        xLevProp->setPropertyValue( rtl::OUString::createFromAscii(SC_UNO_SORTING), aAny );
-                    }
-                    catch ( beans::UnknownPropertyException& )
-                    {
-                        // recent addition - allow source to not handle it (no error)
-                    }
-                }
+                    ScUnoHelpFunctions::SetOptionalPropertyValue(xLevProp, SC_UNO_SORTING, *pSortInfo);
+
                 if ( pAutoShowInfo )
-                {
-                    aAny <<= *pAutoShowInfo;
-                    try
-                    {
-                        xLevProp->setPropertyValue( rtl::OUString::createFromAscii(SC_UNO_AUTOSHOW), aAny );
-                    }
-                    catch ( beans::UnknownPropertyException& )
-                    {
-                        // recent addition - allow source to not handle it (no error)
-                    }
-                }
+                    ScUnoHelpFunctions::SetOptionalPropertyValue(xLevProp, SC_UNO_AUTOSHOW, *pAutoShowInfo);
+
                 if ( pLayoutInfo )
-                {
-                    aAny <<= *pLayoutInfo;
-                    try
-                    {
-                        xLevProp->setPropertyValue( rtl::OUString::createFromAscii(SC_UNO_LAYOUT), aAny );
-                    }
-                    catch ( beans::UnknownPropertyException& )
-                    {
-                        // recent addition - allow source to not handle it (no error)
-                    }
-                }
+                    ScUnoHelpFunctions::SetOptionalPropertyValue(xLevProp, SC_UNO_LAYOUT, *pLayoutInfo);
 
                 // exceptions are caught at ScDPSaveData::WriteToSource
             }
@@ -759,12 +702,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
     }
 
     if (xDimProp.is())
-    {
-        uno::Any any;
-        any <<= bHasHiddenMember;
-        xDimProp->setPropertyValue(
-            OUString::createFromAscii(SC_UNO_HAS_HIDDEN_MEMBER), any);
-    }
+        ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_HAS_HIDDEN_MEMBER, bHasHiddenMember);
 }
 
 void ScDPSaveDimension::UpdateMemberVisibility(const hash_map<OUString, bool, OUStringHash>& rData)
@@ -1166,19 +1104,15 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
             if ( nRepeatEmptyMode != SC_DPSAVEMODE_DONTKNOW )
                 lcl_SetBoolProperty( xSourceProp,
                     rtl::OUString::createFromAscii(DP_PROP_REPEATIFEMPTY), (BOOL)nRepeatEmptyMode );
-
-            const OUString* pGrandTotalName = GetGrandTotalName();
-            if (pGrandTotalName)
-            {
-                uno::Any any;
-                any <<= *pGrandTotalName;
-                xSourceProp->setPropertyValue(OUString::createFromAscii(SC_UNO_GRANDTOTAL_NAME), any);
-            }
         }
         catch(uno::Exception&)
         {
             // no error
         }
+
+        const OUString* pGrandTotalName = GetGrandTotalName();
+        if (pGrandTotalName)
+            ScUnoHelpFunctions::SetOptionalPropertyValue(xSourceProp, SC_UNO_GRANDTOTAL_NAME, *pGrandTotalName);
     }
 
     // exceptions in the other calls are errors
