@@ -239,9 +239,6 @@ public:
     /** Provides the selected files with full path information */
     ::com::sun::star::uno::Sequence< ::rtl::OUString > GetSelectedFiles() const;
 
-    /** Provides the selected files with full path information */
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > GetSelectedFiles() const;
-
     void                     AddFilter( const String& rFilterName, const String& rExtension );
     void                     SetCurrentFilter( const String& rFilter );
 
