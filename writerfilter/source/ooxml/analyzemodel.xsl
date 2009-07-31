@@ -9,7 +9,7 @@
 
 <xsl:template match="/">
 	<analyze>
-		<xsl:for-each select="/model/namespace">
+		<xsl:for-each select="/model/namespace[not(@todo='ignore')]">
 			<xsl:call-template name="analyzegrammar"/>
 		</xsl:for-each>
 	</analyze>
@@ -67,6 +67,15 @@
 							<xsl:with-param name="id" select="@tokenid"/>
 						</xsl:call-template>
 					</xsl:attribute>
+                    <xsl:attribute name="namespace">
+                        <xsl:value-of select="$nsname"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="define">
+                        <xsl:value-of select="$defname"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="name">
+                        <xsl:value-of select="@name"/>
+                    </xsl:attribute>
 				</xsl:for-each>
 			</xsl:when>
 			<xsl:when test="$localname='element'">
@@ -77,6 +86,15 @@
 							<xsl:with-param name="id" select="@tokenid"/>
 						</xsl:call-template>
 					</xsl:attribute>
+                    <xsl:attribute name="namespace">
+                        <xsl:value-of select="$nsname"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="define">
+                        <xsl:value-of select="$defname"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="name">
+                        <xsl:value-of select="@name"/>
+                    </xsl:attribute>
 				</xsl:for-each>
 			</xsl:when>
 		</xsl:choose>
