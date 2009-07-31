@@ -51,6 +51,16 @@ Resource RID_POPUP_FILTER
     {
         Text [ en-US ] = "All" ;
     };
+
+    String STR_BTN_SELECT_CURRENT
+    {
+        Text [ en-US ] = "Show only the current item." ;
+    };
+
+    String STR_BTN_UNSELECT_CURRENT
+    {
+        Text [ en-US ] = "Hide only the current item." ;
+    };
 };
 
 Image RID_IMG_SELECT_CURRENT

@@ -771,12 +771,14 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent) :
 
     getSectionPosSize(aPos, aSize, BTN_SINGLE_SELECT);
     maBtnSelectSingle.SetPosSizePixel(aPos, aSize);
+    maBtnSelectSingle.SetQuickHelpText(ScRscStrLoader(RID_POPUP_FILTER, STR_BTN_SELECT_CURRENT).GetString());
     maBtnSelectSingle.SetModeImage(Image(ScResId(RID_IMG_SELECT_CURRENT)), BMP_COLOR_NORMAL);
     maBtnSelectSingle.SetClickHdl( LINK(this, ScDPFieldPopupWindow, ButtonHdl) );
     maBtnSelectSingle.Show();
 
     getSectionPosSize(aPos, aSize, BTN_SINGLE_UNSELECT);
     maBtnUnselectSingle.SetPosSizePixel(aPos, aSize);
+    maBtnUnselectSingle.SetQuickHelpText(ScRscStrLoader(RID_POPUP_FILTER, STR_BTN_UNSELECT_CURRENT).GetString());
     maBtnUnselectSingle.SetModeImage(Image(ScResId(RID_IMG_UNSELECT_CURRENT)), BMP_COLOR_NORMAL);
     maBtnUnselectSingle.SetClickHdl( LINK(this, ScDPFieldPopupWindow, ButtonHdl) );
     maBtnUnselectSingle.Show();
