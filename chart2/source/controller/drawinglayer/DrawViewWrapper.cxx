@@ -34,6 +34,8 @@
 #include "chartview/DrawModelWrapper.hxx"
 #include "ConfigurationAccess.hxx"
 
+#include <svtools/lingucfg.hxx>
+#include <svx/langitem.hxx>
 // header for class SdrPage
 #include <svx/svdpage.hxx>
 //header for class SdrPageView
@@ -166,11 +168,21 @@ DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut, bool 
 
     SetPagePaintingAllowed(bPaintPageForEditMode);
 
-    // #i12587# set font height without changing SdrEngineDefaults
+    // #i12587# support for shapes in chart
     SdrOutliner* pOutliner = getOutliner();
     SfxItemPool* pOutlinerPool = ( pOutliner ? pOutliner->GetEditTextObjectPool() : NULL );
     if ( pOutlinerPool )
     {
+        SvtLinguConfig aLinguConfig;
+        SvtLinguOptions aLinguOptions;
+        if ( aLinguConfig.GetOptions( aLinguOptions ) )
+        {
+            pOutlinerPool->SetPoolDefaultItem( SvxLanguageItem( aLinguOptions.nDefaultLanguage, EE_CHAR_LANGUAGE ) );
+            pOutlinerPool->SetPoolDefaultItem( SvxLanguageItem( aLinguOptions.nDefaultLanguage_CJK, EE_CHAR_LANGUAGE_CJK ) );
+            pOutlinerPool->SetPoolDefaultItem( SvxLanguageItem( aLinguOptions.nDefaultLanguage_CTL, EE_CHAR_LANGUAGE_CTL ) );
+        }
+
+        // set font height without changing SdrEngineDefaults
         pOutlinerPool->SetPoolDefaultItem( SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ) );  // 12pt
     }
 
