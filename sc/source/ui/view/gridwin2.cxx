@@ -130,6 +130,45 @@ BOOL ScGridWindow::DoPageFieldSelection( SCCOL nCol, SCROW nRow )
     return FALSE;
 }
 
+bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt )
+{
+    ScDocument* pDoc = pViewData->GetDocument();
+    SCTAB nTab = pViewData->GetTabNo();
+    Point   aScrPos  = pViewData->GetScrPos(nCol, nRow, eWhich);
+    Point   aDiffPix = rMEvt.GetPosPixel();
+
+    aDiffPix -= aScrPos;
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    if ( bLayoutRTL )
+        aDiffPix.X() = -aDiffPix.X();
+
+    long nSizeX, nSizeY;
+    pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
+
+    //  Breite des Buttons ist nicht von der Zellhoehe abhaengig
+    Size aButSize = aComboButton.GetSizePixel();
+    long nButWidth  = Min( aButSize.Width(),  nSizeX );
+    long nButHeight = Min( aButSize.Height(), nSizeY );
+
+    if ( aDiffPix.X() >= nSizeX - nButWidth &&
+         aDiffPix.Y() >= nSizeY - nButHeight )
+    {
+        if ( DoPageFieldSelection( nCol, nRow ) )
+            return true;
+
+        BOOL  bFilterActive = IsAutoFilterActive( nCol, nRow,
+                                                  pViewData->GetTabNo() );
+
+        aComboButton.SetOptSizePixel();
+        DrawComboButton( aScrPos, nSizeX, nSizeY, bFilterActive, TRUE );
+        DoAutoFilterMenue(nCol, nRow, false);
+
+        return true;
+    }
+
+    return false;
+}
+
 void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt )
 {
     ScDocument* pDoc = pViewData->GetDocument();

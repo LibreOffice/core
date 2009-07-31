@@ -1634,52 +1634,8 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
                                     pDoc->GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG );
         if (pAttr->HasAutoFilter())
         {
-            Point   aScrPos  = pViewData->GetScrPos(nPosX,nPosY,eWhich);
-            long    nSizeX;
-            long    nSizeY;
-            Point   aDiffPix = aPos;
-
-            aDiffPix -= aScrPos;
-            BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-            if ( bLayoutRTL )
-                aDiffPix.X() = -aDiffPix.X();
-
-            pViewData->GetMergeSizePixel( nPosX, nPosY, nSizeX, nSizeY );
-
-            //  Breite des Buttons ist nicht von der Zellhoehe abhaengig
-            Size aButSize = aComboButton.GetSizePixel();
-            long nButWidth  = Min( aButSize.Width(),  nSizeX );
-            long nButHeight = Min( aButSize.Height(), nSizeY );
-
-            if ( aDiffPix.X() >= nSizeX - nButWidth &&
-                 aDiffPix.Y() >= nSizeY - nButHeight )
-            {
-                if ( DoPageFieldSelection( nPosX, nPosY ) )
-                    return;
-
-                BOOL  bFilterActive = IsAutoFilterActive( nPosX, nPosY,
-                                                          pViewData->GetTabNo() );
-
-                aComboButton.SetOptSizePixel();
-                DrawComboButton( aScrPos, nSizeX, nSizeY, bFilterActive, TRUE );
-
-#if 0
-                if (   bWasFilterBox
-                    && (SCsCOL)nOldColFBox == nPosX
-                    && (SCsROW)nOldRowFBox == nPosY )
-                {
-                    // Verhindern, dass an gleicher Stelle eine
-                    // FilterBox geoeffnet wird, wenn diese gerade
-                    // geloescht wurde
-
-                    nMouseStatus = SC_GM_FILTER; // fuer ButtonDraw im MouseButtonUp();
-                    return;
-                }
-#endif
-                DoAutoFilterMenue( nPosX, nPosY, FALSE );
-
+            if (DoAutoFilterButton(nPosX, nPosY, rMEvt))
                 return;
-            }
         }
         if (pAttr->HasButton())
         {

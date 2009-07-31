@@ -236,6 +236,7 @@ private:
     BOOL            TestMouse( const MouseEvent& rMEvt, BOOL bAction );
 
     BOOL            DoPageFieldSelection( SCCOL nCol, SCROW nRow );
+    bool            DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
     void            DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
 #if OLD_PIVOT_IMPLEMENTATION
     void            PivotMouseMove( const MouseEvent& rMEvt );
