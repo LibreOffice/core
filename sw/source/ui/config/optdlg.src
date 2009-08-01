@@ -949,7 +949,7 @@ StringArray STR_PRINTOPTUI
         < "Specifies whether graphics created with %PRODUCTNAME drawing functions are printed."; >;
         < "Form control~s"; >;
         < "Specifies whether the form control fields of the text document are printed"; >;
-        < "Page Ba~ckground"; >;
+        < "Page ba~ckground"; >;
         < "Specifies whether to include colors and objects that are inserted to the background of the page (Format - Page - Background) in the printed document."; >;
         < "Print text in blac~k"; >;
         < "Specifies whether to always print text in black."; >;

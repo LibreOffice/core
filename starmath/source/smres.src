@@ -3589,7 +3589,7 @@ StringArray RID_PRINTUIOPTIONS
         < "~Title row"; >;
         < "Specifies whether you want the name of the document to be included in the printout"; >;
         < "~Formula text"; >;
-        < "Specifies whether to include the contents of the Commands window at the bottom of the printout."; >;
+        < "Specifies whether to include the contents of the \"Commands\" window at the bottom of the printout."; >;
         < "B~order"; >;
         < "Applies a thin border to the formula area in the printout."; >;
         < "Print format"; >;
