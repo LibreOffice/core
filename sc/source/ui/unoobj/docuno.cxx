@@ -226,15 +226,18 @@ ScPrintUIOptions::ScPrintUIOptions()
     sal_Bool bSuppress = rPrintOpt.GetSkipEmpty();
 
     ResStringArray aStrings( ScResId( SCSTR_PRINT_OPTIONS ) );
-    DBG_ASSERT( aStrings.Count() >= 18, "resource incomplete" );
-    if( aStrings.Count() < 18 ) // bad resource ?
+    DBG_ASSERT( aStrings.Count() >= 19, "resource incomplete" );
+    if( aStrings.Count() < 19 ) // bad resource ?
         return;
 
     m_aUIProperties.realloc( 8 );
 
     // create Section for spreadsheet (results in an extra tab page in dialog)
     SvtModuleOptions aOpt;
-    m_aUIProperties[0].Value = getGroupControlOpt( aOpt.GetModuleName( SvtModuleOptions::E_SCALC ), rtl::OUString() );
+    String aAppGroupname( aStrings.GetString( 18 ) );
+    aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
+                                    aOpt.GetModuleName( SvtModuleOptions::E_SCALC ) );
+    m_aUIProperties[0].Value = getGroupControlOpt( aAppGroupname, rtl::OUString() );
 
     // create subgroup for pages
     m_aUIProperties[1].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 0 ) ), rtl::OUString() );

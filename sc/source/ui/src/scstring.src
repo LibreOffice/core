@@ -760,6 +760,7 @@ StringArray SCSTR_PRINT_OPTIONS
         < "Print all pages of the printable content."; >;
         < "Pa~ges"; >;
         < "Print only some pages of the printable content."; >;
+        < "%PRODUCTNAME %s"; >;
     };
 };
 
