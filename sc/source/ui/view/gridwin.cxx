@@ -452,14 +452,26 @@ void __EXPORT ScGridWindow::Resize( const Size& )
 
 void ScGridWindow::ClickExtern()
 {
-    // #i81298# don't delete the filter box when called from its select handler
-    // (possible through row header size update)
-    // #i84277# when initializing the filter box, a Basic error can deactivate the view
-    if ( pFilterBox && ( pFilterBox->IsInSelect() || pFilterBox->IsInInit() ) )
-        return;
+    do
+    {
+        // #i81298# don't delete the filter box when called from its select handler
+        // (possible through row header size update)
+        // #i84277# when initializing the filter box, a Basic error can deactivate the view
+        if ( pFilterBox && ( pFilterBox->IsInSelect() || pFilterBox->IsInInit() ) )
+        {
+            break;
+        }
 
-    DELETEZ(pFilterBox);
-    DELETEZ(pFilterFloat);
+        DELETEZ(pFilterBox);
+        DELETEZ(pFilterFloat);
+    }
+    while (false);
+
+    if (mpDPFieldPopup.get())
+    {
+        mpDPFieldPopup->close(false);
+        mpDPFieldPopup.reset();
+    }
 }
 
 IMPL_LINK( ScGridWindow, PopupModeEndHdl, FloatingWindow*, EMPTYARG )
