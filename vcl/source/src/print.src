@@ -452,7 +452,7 @@ StringArray SV_PRINT_NATIVE_STRINGS
     ItemList [en-US] =
     {
         < "Preview"; >;
-        < "Page Number"; >;
+        < "Page number"; >;
         < "Number of pages"; >;
         < "More"; >;
     };
