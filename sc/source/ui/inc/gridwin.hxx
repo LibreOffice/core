@@ -50,6 +50,7 @@ class ScPivot;
 #endif
 class ScDPObject;
 class ScDPFieldPopupWindow;
+class ScDPFieldButton;
 class ScOutputData;
 class ScFilterListBox;
 class AutoFilterPopup;
@@ -162,6 +163,7 @@ private:
     ScFilterListBox*        pFilterBox;
     FloatingWindow*         pFilterFloat;
     ::std::auto_ptr<ScDPFieldPopupWindow> mpDPFieldPopup;
+    ::std::auto_ptr<ScDPFieldButton>      mpFilterButton;
 
     USHORT                  nCursorHideCount;
 

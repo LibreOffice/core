@@ -64,6 +64,7 @@ public:
     void setDrawBaseButton(bool b);
     void setDrawPopupButton(bool b);
     void setHasHiddenMember(bool b);
+    void setPopupPressed(bool b);
     void draw();
 
     void getPopupBoundingBox(Point& rPos, Size& rSize) const;
@@ -81,6 +82,7 @@ private:
     bool                    mbBaseButton;
     bool                    mbPopupButton;
     bool                    mbHasHiddenMember;
+    bool                    mbPopupPressed;
 };
 
 // ============================================================================

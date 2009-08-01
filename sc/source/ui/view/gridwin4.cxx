@@ -1293,6 +1293,7 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
                     aCellBtn.setBoundingBox(aScrPos, Size(nSizeX-1, nSizeY-1));
                     aCellBtn.setDrawBaseButton(false);
                     aCellBtn.setDrawPopupButton(true);
+                    aCellBtn.setHasHiddenMember(bArrowState);
                     aCellBtn.draw();
                 }
             }

@@ -134,8 +134,8 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
-    Point   aScrPos  = pViewData->GetScrPos(nCol, nRow, eWhich);
-    Point   aDiffPix = rMEvt.GetPosPixel();
+    Point aScrPos  = pViewData->GetScrPos(nCol, nRow, eWhich);
+    Point aDiffPix = rMEvt.GetPosPixel();
 
     aDiffPix -= aScrPos;
     BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
@@ -144,25 +144,29 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
 
     long nSizeX, nSizeY;
     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
+    Size aScrSize(nSizeX-1, nSizeY-1);
 
-    //  Breite des Buttons ist nicht von der Zellhoehe abhaengig
-    Size aButSize = aComboButton.GetSizePixel();
-    long nButWidth  = Min( aButSize.Width(),  nSizeX );
-    long nButHeight = Min( aButSize.Height(), nSizeY );
-
-    if ( aDiffPix.X() >= nSizeX - nButWidth &&
-         aDiffPix.Y() >= nSizeY - nButHeight )
+    // Check if the mouse cursor is clicking on the popup arrow box.
+    mpFilterButton.reset(new ScDPFieldButton(this, &GetSettings().GetStyleSettings()));
+    mpFilterButton->setBoundingBox(aScrPos, aScrSize);
+    Point aPopupPos;
+    Size aPopupSize;
+    mpFilterButton->getPopupBoundingBox(aPopupPos, aPopupSize);
+    Rectangle aRec(aPopupPos, aPopupSize);
+    if (aRec.IsInside(rMEvt.GetPosPixel()))
     {
         if ( DoPageFieldSelection( nCol, nRow ) )
             return true;
 
-        BOOL  bFilterActive = IsAutoFilterActive( nCol, nRow,
-                                                  pViewData->GetTabNo() );
-
-        aComboButton.SetOptSizePixel();
-        DrawComboButton( aScrPos, nSizeX, nSizeY, bFilterActive, TRUE );
+        bool bFilterActive = IsAutoFilterActive(nCol, nRow, nTab);
+        mpFilterButton->setHasHiddenMember(bFilterActive);
+        mpFilterButton->setDrawBaseButton(false);
+        mpFilterButton->setDrawPopupButton(true);
+        mpFilterButton->setPopupPressed(true);
+        HideCursor();
+        mpFilterButton->draw();
+        ShowCursor();
         DoAutoFilterMenue(nCol, nRow, false);
-
         return true;
     }
 
@@ -810,14 +814,14 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, BOOL bMove )
 bool ScGridWindow::DPTestFieldPopupArrow(const MouseEvent& rMEvt, const ScAddress& rPos, ScDPObject* pDPObj)
 {
     // Get the geometry of the cell.
-    Point aSrcPos = pViewData->GetScrPos(rPos.Col(), rPos.Row(), eWhich);
+    Point aScrPos = pViewData->GetScrPos(rPos.Col(), rPos.Row(), eWhich);
     long nSizeX, nSizeY;
     pViewData->GetMergeSizePixel(rPos.Col(), rPos.Row(), nSizeX, nSizeY);
-    Size aSrcSize(nSizeX-1, nSizeY-1);
+    Size aScrSize(nSizeX-1, nSizeY-1);
 
     // Check if the mouse cursor is clicking on the popup arrow box.
     ScDPFieldButton aBtn(this, &GetSettings().GetStyleSettings());
-    aBtn.setBoundingBox(aSrcPos, aSrcSize);
+    aBtn.setBoundingBox(aScrPos, aScrSize);
     Point aPopupPos;
     Size aPopupSize;
     aBtn.getPopupBoundingBox(aPopupPos, aPopupSize);
@@ -825,7 +829,7 @@ bool ScGridWindow::DPTestFieldPopupArrow(const MouseEvent& rMEvt, const ScAddres
     if (aRec.IsInside(rMEvt.GetPosPixel()))
     {
         // Mouse cursor inside the popup arrow box.  Launch the field menu.
-        DPLaunchFieldPopupMenu(OutputToScreenPixel(aSrcPos), aSrcSize, rPos, pDPObj);
+        DPLaunchFieldPopupMenu(OutputToScreenPixel(aScrPos), aScrSize, rPos, pDPObj);
         return true;
     }
 

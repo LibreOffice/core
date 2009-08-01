@@ -372,6 +372,7 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             pFilterBox( NULL ),
             pFilterFloat( NULL ),
             mpDPFieldPopup(NULL),
+            mpFilterButton(NULL),
             nCursorHideCount( 0 ),
             bMarking( FALSE ),
             nButtonDown( 0 ),
@@ -1765,11 +1766,17 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     {
         if ( pFilterBox && pFilterBox->GetMode() == SC_FILTERBOX_FILTER )
         {
-            BOOL  bFilterActive = IsAutoFilterActive( pFilterBox->GetCol(), pFilterBox->GetRow(),
-                pViewData->GetTabNo() );
-            HideCursor();
-            aComboButton.Draw( bFilterActive );
-            ShowCursor();
+            if (mpFilterButton.get())
+            {
+                bool bFilterActive = IsAutoFilterActive(
+                    pFilterBox->GetCol(), pFilterBox->GetRow(), pViewData->GetTabNo() );
+
+                mpFilterButton->setHasHiddenMember(bFilterActive);
+                mpFilterButton->setPopupPressed(false);
+                HideCursor();
+                mpFilterButton->draw();
+                ShowCursor();
+            }
         }
         nMouseStatus = SC_GM_NONE;
         ReleaseMouse();
@@ -2179,9 +2186,14 @@ void __EXPORT ScGridWindow::MouseMove( const MouseEvent& rMEvt )
             nMouseStatus = SC_GM_NONE;
             if ( pFilterBox->GetMode() == SC_FILTERBOX_FILTER )
             {
-                HideCursor();
-                aComboButton.Draw( FALSE );
-                ShowCursor();
+                if (mpFilterButton.get())
+                {
+                    mpFilterButton->setHasHiddenMember(false);
+                    mpFilterButton->setPopupPressed(false);
+                    HideCursor();
+                    mpFilterButton->draw();
+                    ShowCursor();
+                }
             }
             ReleaseMouse();
             pFilterBox->MouseButtonDown( MouseEvent( aRelPos, 1, MOUSE_SIMPLECLICK, MOUSE_LEFT ) );

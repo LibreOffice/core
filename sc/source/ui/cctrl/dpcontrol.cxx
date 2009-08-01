@@ -54,7 +54,8 @@ ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pSt
     mpStyle(pStyle),
     mbBaseButton(true),
     mbPopupButton(false),
-    mbHasHiddenMember(false)
+    mbHasHiddenMember(false),
+    mbPopupPressed(false)
 {
 }
 
@@ -88,9 +89,16 @@ void ScDPFieldButton::setHasHiddenMember(bool b)
     mbHasHiddenMember = b;
 }
 
+void ScDPFieldButton::setPopupPressed(bool b)
+{
+    mbPopupPressed = b;
+}
+
 void ScDPFieldButton::draw()
 {
     const long nMargin = 2;
+    bool bOldMapEnablaed = mpOutDev->IsMapModeEnabled();
+    mpOutDev->EnableMapMode(false);
 
     if (mbBaseButton)
     {
@@ -125,6 +133,8 @@ void ScDPFieldButton::draw()
 
     if (mbPopupButton)
         drawPopupButton();
+
+    mpOutDev->EnableMapMode(bOldMapEnablaed);
 }
 
 void ScDPFieldButton::getPopupBoundingBox(Point& rPos, Size& rSize) const
@@ -158,16 +168,19 @@ void ScDPFieldButton::drawPopupButton()
     mpOutDev->SetFillColor(mpStyle->GetFaceColor());
     mpOutDev->DrawRect(Rectangle(aPos, aSize));
 
-    // border lines
-    mpOutDev->SetLineColor(mpStyle->GetLightColor());
-    mpOutDev->DrawLine(Point(aPos.X()+1, aPos.Y()+1), Point(aPos.X()+1, aPos.Y()+aSize.Height()-2));
-    mpOutDev->DrawLine(Point(aPos.X()+1, aPos.Y()+1), Point(aPos.X()+aSize.Width()-2, aPos.Y()+1));
+    if (!mbPopupPressed)
+    {
+        // border lines
+        mpOutDev->SetLineColor(mpStyle->GetLightColor());
+        mpOutDev->DrawLine(Point(aPos.X()+1, aPos.Y()+1), Point(aPos.X()+1, aPos.Y()+aSize.Height()-2));
+        mpOutDev->DrawLine(Point(aPos.X()+1, aPos.Y()+1), Point(aPos.X()+aSize.Width()-2, aPos.Y()+1));
 
-    mpOutDev->SetLineColor(mpStyle->GetShadowColor());
-    mpOutDev->DrawLine(Point(aPos.X()+1, aPos.Y()+aSize.Height()-2),
-                       Point(aPos.X()+aSize.Width()-2, aPos.Y()+aSize.Height()-2));
-    mpOutDev->DrawLine(Point(aPos.X()+aSize.Width()-2, aPos.Y()+1),
-                       Point(aPos.X()+aSize.Width()-2, aPos.Y()+aSize.Height()-2));
+        mpOutDev->SetLineColor(mpStyle->GetShadowColor());
+        mpOutDev->DrawLine(Point(aPos.X()+1, aPos.Y()+aSize.Height()-2),
+                           Point(aPos.X()+aSize.Width()-2, aPos.Y()+aSize.Height()-2));
+        mpOutDev->DrawLine(Point(aPos.X()+aSize.Width()-2, aPos.Y()+1),
+                           Point(aPos.X()+aSize.Width()-2, aPos.Y()+aSize.Height()-2));
+    }
 
     // the arrowhead
     Color aArrowColor = mbHasHiddenMember ? mpStyle->GetHighlightLinkColor() : mpStyle->GetButtonTextColor();
@@ -179,6 +192,14 @@ void ScDPFieldButton::drawPopupButton()
     aPos2.X() = aCenter.X() + 4;
     aPos1.Y() = aCenter.Y() - 3;
     aPos2.Y() = aCenter.Y() - 3;
+
+    if (mbPopupPressed)
+    {
+        aPos1.X() += 1;
+        aPos2.X() += 1;
+        aPos1.Y() += 1;
+        aPos2.Y() += 1;
+    }
 
     do
     {
@@ -194,6 +215,11 @@ void ScDPFieldButton::drawPopupButton()
     {
         // tiny little box to display in presence of hidden member(s).
         Point aBoxPos(aPos.X() + aSize.Width() - 5, aPos.Y() + aSize.Height() - 5);
+        if (mbPopupPressed)
+        {
+            aBoxPos.X() += 1;
+            aBoxPos.Y() += 1;
+        }
         Size aBoxSize(3, 3);
         mpOutDev->DrawRect(Rectangle(aBoxPos, aBoxSize));
     }
