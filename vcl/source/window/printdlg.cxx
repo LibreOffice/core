@@ -1570,15 +1570,15 @@ void PrintDialog::updateNup()
 
     aMPS.bDrawBorder        = maNUpPage.maBorderCB.IsChecked();
 
-    int nOrderMode = int(maNUpPage.maNupOrderBox.GetEntryData(
-                           maNUpPage.maNupOrderBox.GetSelectEntryPos() ));
+    int nOrderMode = int(sal_IntPtr(maNUpPage.maNupOrderBox.GetEntryData(
+                           maNUpPage.maNupOrderBox.GetSelectEntryPos() )));
     if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_LRTD )
         aMPS.nOrder = PrinterController::LRTB;
     else if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_TDLR )
         aMPS.nOrder = PrinterController::TBLR;
 
-    int nOrientationMode = int(maNUpPage.maNupOrientationBox.GetEntryData(
-                                 maNUpPage.maNupOrientationBox.GetSelectEntryPos() ));
+    int nOrientationMode = int(sal_IntPtr(maNUpPage.maNupOrientationBox.GetEntryData(
+                                 maNUpPage.maNupOrientationBox.GetSelectEntryPos() )));
     if( nOrientationMode == SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE )
         aMPS.aPaperSize = maNupLandscapeSize;
     else if( nOrientationMode == SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT )
