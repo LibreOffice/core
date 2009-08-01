@@ -394,6 +394,7 @@ PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
     , maNoCollateImg( VclResId( SV_PRINT_NOCOLLATE_IMG ) )
     , maNoCollateHCImg( VclResId( SV_PRINT_NOCOLLATE_HC_IMG ) )
     , mnCollateUIMode( 0 )
+    , maLayout( NULL, true, 0 )
 {
     FreeResource();
     maPrinterFL.SMHID2( "JobPage", "Printer" );
@@ -784,10 +785,10 @@ void PrintDialog::setupLayout()
     Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
 
     maLayout.setParentWindow( this );
-    maLayout.setOuterBorder( aBorder.Width() );
 
     boost::shared_ptr< vcl::RowOrColumn > xPreviewAndTab( new vcl::RowOrColumn( &maLayout, false ) );
-    maLayout.addChild( xPreviewAndTab, 5 );
+    size_t nIndex = maLayout.addChild( xPreviewAndTab, 5 );
+    maLayout.setBorders( nIndex, aBorder.Width(), aBorder.Width(), aBorder.Width(), 0 );
 
     // setup column for preview and sub controls
     boost::shared_ptr< vcl::RowOrColumn > xPreview( new vcl::RowOrColumn( xPreviewAndTab.get() ) );
@@ -811,7 +812,8 @@ void PrintDialog::setupLayout()
 
     // add the row for the buttons
     boost::shared_ptr< vcl::RowOrColumn > xButtons( new vcl::RowOrColumn( &maLayout, false ) );
-    maLayout.addChild( xButtons );
+    nIndex = maLayout.addChild( xButtons );
+    maLayout.setBorders( nIndex, aBorder.Width(), 0, aBorder.Width(), aBorder.Width() );
 
     // insert a spacer, buttons are right aligned
     xSpacer.reset( new vcl::Spacer( xButtons.get(), 2 ) );

@@ -61,12 +61,20 @@ namespace vcl
             sal_Int32                          m_nExpandPriority;
             Size                               m_aMinSize;
             bool                               m_bHidden;
+            long                               m_nLeftBorder;
+            long                               m_nTopBorder;
+            long                               m_nRightBorder;
+            long                               m_nBottomBorder;
 
             Element()
             : m_pElement( NULL )
             , m_pChild()
             , m_nExpandPriority( 0 )
             , m_bHidden( false )
+            , m_nLeftBorder( 0 )
+            , m_nTopBorder( 0 )
+            , m_nRightBorder( 0 )
+            , m_nBottomBorder( 0 )
             {}
 
             Element( Window* i_pWin,
@@ -77,6 +85,10 @@ namespace vcl
             , m_pChild( i_pChild )
             , m_nExpandPriority( i_nExpandPriority )
             , m_bHidden( false )
+            , m_nLeftBorder( 0 )
+            , m_nTopBorder( 0 )
+            , m_nRightBorder( 0 )
+            , m_nBottomBorder( 0 )
             {}
 
             void deleteChild() { m_pChild.reset(); }
@@ -84,6 +96,7 @@ namespace vcl
             sal_Int32 getExpandPriority() const;
             Size getOptimalSize( WindowSizeType ) const;
             bool isVisible() const;
+            void setPosSize( const Point&, const Size& );
         };
 
         Window*                     m_pParentWindow;
@@ -145,11 +158,20 @@ namespace vcl
         {
             Element* pEle = getElement( i_nIndex );
             if( pEle )
-            {
                 pEle->m_aMinSize = i_rMinSize;
-                resize();
-            }
             return pEle != NULL;
+        }
+
+        void setBorders( size_t i_nIndex, long i_nLeft, long i_nTop, long i_nRight, long i_nBottom  )
+        {
+            Element* pEle = getElement( i_nIndex );
+            if( pEle )
+            {
+                pEle->m_nLeftBorder   = i_nLeft;
+                pEle->m_nRightBorder  = i_nRight;
+                pEle->m_nTopBorder    = i_nTop;
+                pEle->m_nBottomBorder = i_nBottom;
+            }
         }
 
         void show( bool i_bShow = true, bool i_bImmediateUpdate = true );

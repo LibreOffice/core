@@ -154,9 +154,25 @@ Size WindowArranger::Element::getOptimalSize( WindowSizeType i_eType ) const
             aResult.Width() = m_aMinSize.Width();
         if( aResult.Height() < m_aMinSize.Height() )
             aResult.Height() = m_aMinSize.Height();
+        aResult.Width() += m_nLeftBorder + m_nRightBorder;
+        aResult.Height() += m_nTopBorder + m_nBottomBorder;
     }
 
     return aResult;
+}
+
+void WindowArranger::Element::setPosSize( const Point& i_rPos, const Size& i_rSize )
+{
+    Point aPoint( i_rPos );
+    Size aSize( i_rSize );
+    aPoint.X() += m_nLeftBorder;
+    aPoint.Y() += m_nTopBorder;
+    aSize.Width() -= m_nLeftBorder + m_nRightBorder;
+    aSize.Height() -= m_nTopBorder + m_nBottomBorder;
+    if( m_pElement )
+        m_pElement->SetPosSizePixel( aPoint, aSize );
+    else if( m_pChild )
+        m_pChild->setManagedArea( Rectangle( aPoint, aSize ) );
 }
 
 // ----------------------------------------
@@ -332,10 +348,12 @@ void RowOrColumn::resize()
 
     long nExtraWidth = (m_bColumn ? m_aManagedArea.GetHeight() : m_aManagedArea.GetWidth()) - nUsedWidth;
     if( nExtraWidth > 0 )
+    {
         if( m_bColumn )
             distributeColumnHeight( aElementSizes, nUsedWidth, nExtraWidth );
         else
             distributeRowWidth( aElementSizes, nUsedWidth, nExtraWidth );
+    }
 
     // get starting position
     Point aElementPos( m_aManagedArea.TopLeft() );
@@ -348,14 +366,7 @@ void RowOrColumn::resize()
     {
         // get the size of type of the managed element
 
-        if( m_aElements[i].m_pElement ) // this actually is a window
-        {
-            m_aElements[i].m_pElement->SetPosSizePixel( aElementPos, aElementSizes[i] );
-        }
-        else if( m_aElements[i].m_pChild )
-        {
-            m_aElements[i].m_pChild->setManagedArea( Rectangle( aElementPos, aElementSizes[i] ) );
-        }
+        m_aElements[i].setPosSize( aElementPos, aElementSizes[i] );
         if( m_bColumn )
             aElementPos.Y() += m_nBorderWidth + aElementSizes[i].Height();
         else
@@ -468,10 +479,7 @@ void LabeledElement::resize()
     Point aPos( m_aManagedArea.Left(),
                 m_aManagedArea.Top() + m_nOuterBorder + nYOff );
     Size aSize( aLabelSize );
-    if( m_aLabel.m_pElement )
-        m_aLabel.m_pElement->SetPosSizePixel( aPos, aSize );
-    else if( m_aLabel.m_pChild.get() )
-        m_aLabel.m_pChild->setManagedArea( Rectangle( aPos, aSize ) );
+    m_aLabel.setPosSize( aPos, aSize );
 
     aPos.X() += aSize.Width() + m_nDistance;
     nYOff = (m_aManagedArea.GetHeight() - 2*m_nOuterBorder - aElementSize.Height()) / 2;
@@ -480,10 +488,7 @@ void LabeledElement::resize()
     aSize.Height() = m_aManagedArea.GetHeight() - 2*m_nOuterBorder;
     if( aPos.X() + aSize.Width() < m_aManagedArea.Right() )
         aSize.Width() = m_aManagedArea.Right() - aPos.X();
-    if( m_aElement.m_pElement )
-        m_aElement.m_pElement->SetPosSizePixel( aPos, aSize );
-    else if( m_aElement.m_pChild.get() )
-        m_aElement.m_pChild->setManagedArea( Rectangle( aPos, aSize ) );
+    m_aElement.setPosSize( aPos, aSize );
 }
 
 void LabeledElement::setLabel( Window* i_pLabel )
@@ -535,10 +540,7 @@ void Indenter::resize()
     Size aSz( m_aManagedArea.GetSize() );
     aSz.Width()  -= 2*m_nOuterBorder + m_nIndent;
     aSz.Height() -= 2*m_nOuterBorder;
-    if( m_aElement.m_pElement )
-        m_aElement.m_pElement->SetPosSizePixel( aPt, aSz );
-    else if( m_aElement.m_pChild )
-        m_aElement.m_pChild->setManagedArea( Rectangle( aPt, aSz ) );
+    m_aElement.setPosSize( aPt, aSz );
 }
 
 void Indenter::setWindow( Window* i_pWindow, sal_Int32 i_nExpandPrio )
@@ -652,10 +654,7 @@ void MatrixArranger::resize()
     {
         Point aCellPos( aColumnX[it->m_nX], aRowY[it->m_nY] );
         Size  aCellSize( aColumnWidths[it->m_nX], aRowHeights[it->m_nY] );
-        if( it->m_pElement )
-            it->m_pElement->SetPosSizePixel( aCellPos, aCellSize );
-        else if( it->m_pChild )
-            it->m_pChild->setManagedArea( Rectangle( aCellPos, aCellSize ) );
+        it->setPosSize( aCellPos, aCellSize );
     }
 }
 
