@@ -1459,7 +1459,6 @@ ULONG Window::GetHelpId() const
 
 void Window::SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode )
 {
-    mpWindowImpl->maHelpText = String();
     // create SmartId if required
     if ( (aMode == SMART_SET_STR) || (aMode == SMART_SET_ALL) || ( (aMode == SMART_SET_SMART) && aId.HasString() ) )
     {

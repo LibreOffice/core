@@ -95,7 +95,9 @@ namespace vcl
         {
         public:
             FixedLine                               maNupLine;
-            FixedText                               maNupPagesTxt;
+            RadioButton                             maDefaultBtn;
+            RadioButton                             maBrochureBtn;
+            RadioButton                             maPagesBtn;
             ListBox                                 maNupPagesBox;
 
             // controls for "Custom" page mode
@@ -120,6 +122,7 @@ namespace vcl
             vcl::RowOrColumn                        maLayout;
             boost::shared_ptr< vcl::WindowArranger >mxAdvancedControls;
             boost::shared_ptr< vcl::RowOrColumn >   mxLayoutGroup;
+            boost::shared_ptr< vcl::RowOrColumn >   mxBrochureDep;
 
             void setupLayout();
 
@@ -129,6 +132,7 @@ namespace vcl
             void readFromSettings();
             void storeToSettings();
             void initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& );
+            void enableNupControls( bool bEnable );
 
             virtual void Resize();
         };

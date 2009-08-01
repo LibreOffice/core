@@ -67,6 +67,7 @@ ModalDialog SV_DLG_PRINT
         SVLook = TRUE;
         Spin = FALSE;
         Border = TRUE;
+        HelpText [en-US] = "Select page to display in preview.";
     };
     FixedText SV_PRINT_PAGE_TXT
     {
@@ -79,11 +80,13 @@ ModalDialog SV_DLG_PRINT
     {
         Pos = MAP_APPFONT( 95, 140 );
         Size = MAP_APPFONT( 15, 12 );
+        HelpText [en-US] = "Scroll one page forward.";
     };
     PushButton SV_PRINT_PAGE_BACKWARD
     {
         Pos = MAP_APPFONT( 80, 140 );
         Size = MAP_APPFONT( 15, 12 );
+        HelpText [en-US] = "Scroll one page backward.";
     };
     TabControl SV_PRINT_TABCTRL
     {
@@ -116,11 +119,25 @@ ModalDialog SV_DLG_PRINT
             Size = MAP_APPFONT( 150, 10 );
             Text [en-US] = "Layout";
         };
-        FixedText SV_PRINT_PRT_NUP_PAGES_TXT
+        RadioButton SV_PRINT_PRT_NUP_DEFAULT_BTN
         {
-            Pos = MAP_APPFONT( 10, 20 );
-            Size = MAP_APPFONT( 40, 10 );
-            Text [en-US] = "Pages per ~sheet";
+            Pos = MAP_APPFONT( 0, 0 );
+            Size = MAP_APPFONT( 10, 10 );
+            Text [en-US] = "~Default";
+            HelpText [en-US] = "Print one page per sheet of paper.";
+        };
+        RadioButton SV_PRINT_PRT_NUP_BROCHURE_BTN
+        {
+            Pos = MAP_APPFONT( 0, 0 );
+            Size = MAP_APPFONT( 10, 10 );
+            Text = "";
+        };
+        RadioButton SV_PRINT_PRT_NUP_PAGES_BTN
+        {
+            Pos = MAP_APPFONT( 0, 0 );
+            Size = MAP_APPFONT( 10, 10 );
+            Text [en-US] = "Pa~ges per sheet";
+            HelpText [en-US] = "Print multiple pages per sheet of paper.";
         };
         ListBox SV_PRINT_PRT_NUP_PAGES_BOX
         {
@@ -129,6 +146,7 @@ ModalDialog SV_DLG_PRINT
             Border = TRUE;
             DropDown = TRUE;
             CurPos = 0;
+            HelpText [en-US] = "Select how many pages to print per sheet of paper.";
             StringList [en-US] =
             {
                 < "1"; 1; >;
@@ -156,12 +174,13 @@ ModalDialog SV_DLG_PRINT
             Minimum = 1;
             Maximum = 32;
             Value = 1;
+            HelpText [en-US] = "Select number of columns.";
         };
         FixedText SV_PRINT_PRT_NUP_TIMES_TXT
         {
             Pos = MAP_APPFONT( 10, 35 );
             Size = MAP_APPFONT( 40, 10 );
-            Text [en-US] = "~by";
+            Text [en-US] = "b~y";
             VCenter = TRUE;
         };
         NumericField SV_PRINT_PRT_NUP_ROWS_EDT
@@ -173,12 +192,13 @@ ModalDialog SV_DLG_PRINT
             Minimum = 1;
             Maximum = 32;
             Value = 1;
+            HelpText [en-US] = "Select number of rows.";
         };
         FixedText SV_PRINT_PRT_NUP_MARGINS_PAGES_TXT
         {
             Pos = MAP_APPFONT( 10, 95 );
             Size = MAP_APPFONT( 40, 10 );
-            Text [en-US] = "~Margin between pages";
+            Text [en-US] = "Margin between ~pages";
         };
         MetricField SV_PRINT_PRT_NUP_MARGINS_PAGES_EDT
         {
@@ -188,12 +208,13 @@ ModalDialog SV_DLG_PRINT
             Border = TRUE;
             Value = 0;
             Unit = FUNIT_MM;
+            HelpText [en-US] = "Select margin between individual pages on each sheet of paper.";
         };
         FixedText SV_PRINT_PRT_NUP_MARGINS_SHEET_TXT
         {
             Pos = MAP_APPFONT( 110, 95 );
             Size = MAP_APPFONT( 40, 10 );
-            Text [en-US] = "Ma~rgin to sheet border";
+            Text [en-US] = "Margin to ~sheet border";
         };
         MetricField SV_PRINT_PRT_NUP_MARGINS_SHEET_EDT
         {
@@ -203,6 +224,7 @@ ModalDialog SV_DLG_PRINT
             Border = TRUE;
             Value = 0;
             Unit = FUNIT_MM;
+            HelpText [en-US] = "Select margin between the printed pages and paper edge.";
         };
         FixedText SV_PRINT_PRT_NUP_ORIENTATION_TXT
         {
@@ -223,6 +245,7 @@ ModalDialog SV_DLG_PRINT
                 < "Portrait"; SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT; >;
                 < "Landscape"; SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE; >;
             };
+            HelpText [en-US] = "Select the orientation of the paper.";
         };
         FixedText SV_PRINT_PRT_NUP_ORDER_TXT
         {
@@ -242,12 +265,14 @@ ModalDialog SV_DLG_PRINT
                 < "left to right, then down"; SV_PRINT_PRT_NUP_ORDER_LRTD; >;
                 < "top to bottom, then right"; SV_PRINT_PRT_NUP_ORDER_TDLR; >;
             };
+            HelpText [en-US] = "Select order in which pages are to be printed.";
         };
         CheckBox SV_PRINT_PRT_NUP_BORDER_CB
         {
             Pos = MAP_APPFONT( 10, 65 );
             Size = MAP_APPFONT( 150, 12 );
-            Text [en-US] = "~Draw a Border around each page";
+            Text [en-US] = "Draw a border around each page";
+            HelpText [en-US] = "Check to draw a border around each page.";
         };
     };
 
@@ -267,11 +292,13 @@ ModalDialog SV_DLG_PRINT
             Pos = MAP_APPFONT( 5, 5 );
             Size = MAP_APPFONT( 100, 80 );
             Border = TRUE;
+            HelpText [en-US] = "Select the printer to print on.";
         };
         PushButton SV_PRINT_DETAILS_BTN
         {
             Pos = MAP_APPFONT( 5, 5 );
             Size = MAP_APPFONT( 5, 5 );
+            HelpText [en-US] = "Show/Hide detailed information of the selected printer.";
         };
         FixedText SV_PRINT_DETAILS_TXT
         {
@@ -302,6 +329,7 @@ ModalDialog SV_DLG_PRINT
             Pos = MAP_APPFONT( 115, 5 );
             Size = MAP_APPFONT( 50, 15 );
             Text [en-US] = "Properties...";
+            HelpText [en-US] = "Call the setup dialog of the selected printer.";
         };
         FixedLine SV_PRINT_COPIES
         {
@@ -324,6 +352,7 @@ ModalDialog SV_DLG_PRINT
             Minimum = 1;
             Maximum = 16384;
             Value = 1;
+            HelpText [en-US] = "Select the number of copies to be produced.";
         };
         FixedImage SV_PRINT_COLLATE_IMAGE
         {
@@ -335,6 +364,7 @@ ModalDialog SV_DLG_PRINT
             Pos = MAP_APPFONT( 95, 45 );
             Size = MAP_APPFONT( 70, 10 );
             Text [en-US] = "Collate";
+            HelpText [en-US] = "Select whether copies should be collated or not.";
         };
 
         Image SV_PRINT_COLLATE_IMG
@@ -374,18 +404,21 @@ ModalDialog SV_DLG_PRINT
             Pos = MAP_APPFONT( 10, 20 );
             Size = MAP_APPFONT( 200, 12 );
             Text [en-US] = "Print to ~file";
+            HelpText [en-US] = "Check to send output to a file instead of the actual printer.";
         };
         CheckBox SV_PRINT_OPT_SINGLEJOBS
         {
             Pos = MAP_APPFONT( 10, 35 );
             Size = MAP_APPFONT( 200, 12 );
             Text [en-US] = "~Create single print jobs for collated output";
+            HelpText [en-US] = "Check to not rely on the printer to create collated copies but create a print job for each copy instead.";
         };
         CheckBox SV_PRINT_OPT_REVERSE
         {
             Pos = MAP_APPFONT( 10, 50 );
             Size = MAP_APPFONT( 200, 12 );
             Text [en-US] = "Print in ~reverse page order";
+            HelpText [en-US] = "Check to print pages in reverse order.";
         };
     };
 };
