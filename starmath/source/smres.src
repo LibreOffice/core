@@ -114,14 +114,14 @@ ModalDialog RID_FONTSIZEDIALOG
     SVLook = TRUE ;
     HelpID = SID_FONTSIZE ;
     Size = MAP_APPFONT ( 171 , 120 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Schriftgrößen : Schriftgrößen */
+    /* ### ACHTUNG: Neuer Text in Resource? Schriftgrï¿½ï¿½en : Schriftgrï¿½ï¿½en */
     Text [ en-US ] = "Font Sizes" ;
     FixedText 1
     {
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 7 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Basisgröße: : ~Basisgröße: */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Basisgrï¿½ï¿½e: : ~Basisgrï¿½ï¿½e: */
         Text [ en-US ] = "Base ~size";
     };
     MetricField 1
@@ -246,7 +246,7 @@ ModalDialog RID_FONTSIZEDIALOG
     {
         Pos = MAP_APPFONT ( 6 , 24 ) ;
         Size = MAP_APPFONT ( 99 , 8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? relative Größen : relative Größen */
+        /* ### ACHTUNG: Neuer Text in Resource? relative Grï¿½ï¿½en : relative Grï¿½ï¿½en */
         Text [ en-US ] = "Relative sizes" ;
     };
     OKButton 1
@@ -433,7 +433,7 @@ ModalDialog RID_DISTANCEDIALOG
     SVLook = TRUE ;
     HelpID = SID_DISTANCE ;
     Size = MAP_APPFONT ( 240 , 90 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Abstände : Abstände */
+    /* ### ACHTUNG: Neuer Text in Resource? Abstï¿½nde : Abstï¿½nde */
     Text [ en-US ] = "Spacing" ;
     FixedText 1
     {
@@ -564,7 +564,7 @@ ModalDialog RID_DISTANCEDIALOG
     {
         String 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Abstände : Abstände */
+            /* ### ACHTUNG: Neuer Text in Resource? Abstï¿½nde : Abstï¿½nde */
             Text [ en-US ] = "Spacing" ;
         };
         String 2
@@ -639,12 +639,12 @@ ModalDialog RID_DISTANCEDIALOG
     {
         String 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Brüche : Br³che */
+            /* ### ACHTUNG: Neuer Text in Resource? Brï¿½che : Brï¿½che */
             Text [ en-US ] = "Fractions" ;
         };
         String 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? ~Zählerhöhe: : ~Zählerhöhe: */
+            /* ### ACHTUNG: Neuer Text in Resource? ~Zï¿½hlerhï¿½he: : ~Zï¿½hlerhï¿½he: */
             Text [ en-US ] = "~Numerator";
         };
         Bitmap 20
@@ -676,7 +676,7 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? ~Überlänge: : ~šberlänge: */
+            /* ### ACHTUNG: Neuer Text in Resource? ~ï¿½berlï¿½nge: : ~ï¿½berlï¿½nge: */
             Text [ en-US ] = "~Excess length";
         };
         Bitmap 20
@@ -689,7 +689,7 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? ~Strichstärke: : ~Strichstärke: */
+            /* ### ACHTUNG: Neuer Text in Resource? ~Strichstï¿½rke: : ~Strichstï¿½rke: */
             Text [ en-US ] = "~Weight";
         };
         Bitmap 30
@@ -709,7 +709,7 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Grenz~höhe: : Grenz~höhe: */
+            /* ### ACHTUNG: Neuer Text in Resource? Grenz~hï¿½he: : Grenz~hï¿½he: */
             Text [ en-US ] = "~Upper limit";
         };
         Bitmap 20
@@ -815,7 +815,7 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? ~Primärhöhe: : ~Primärhöhe: */
+            /* ### ACHTUNG: Neuer Text in Resource? ~Primï¿½rhï¿½he: : ~Primï¿½rhï¿½he: */
             Text [ en-US ] = "~Primary height";
         };
         Bitmap 20
@@ -847,7 +847,7 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? ~Übergröße: : ~šbergröße: */
+            /* ### ACHTUNG: Neuer Text in Resource? ~ï¿½bergrï¿½ï¿½e: : ~ï¿½bergrï¿½ï¿½e: */
             Text [ en-US ] = "~Excess size";
         };
         Bitmap 20
@@ -1127,7 +1127,7 @@ ModalDialog RID_SYMBOLDIALOG
         Pos = MAP_APPFONT ( 177 , 6 ) ;
         Size = MAP_APPFONT ( 56 , 14 ) ;
         DefButton = TRUE ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Übernehmen : ~šbernehmen */
+        /* ### ACHTUNG: Neuer Text in Resource? ~ï¿½bernehmen : ~ï¿½bernehmen */
         Text [ en-US ] = "~Insert" ;
     };
     PushButton 3
@@ -1372,7 +1372,7 @@ QueryBox RID_DEFAULTSAVEQUERY
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_YES ;
-    /* ### ACHTUNG: Neuer Text in Resource? Sollen die Änderungen als Standard gespeichert werden ?\n\nDiese Änderungen wirken sich auf alle neuen Formeln aus. : Sollen die Žnderungen als Standard gespeichert werden ?\n\nDiese Žnderungen wirken sich auf alle neuen Formeln aus. */
+    /* ### ACHTUNG: Neuer Text in Resource? Sollen die ï¿½nderungen als Standard gespeichert werden ?\n\nDiese ï¿½nderungen wirken sich auf alle neuen Formeln aus. : Sollen die ï¿½nderungen als Standard gespeichert werden ?\n\nDiese ï¿½nderungen wirken sich auf alle neuen Formeln aus. */
     Message [ en-US ] = "Should the changes be saved as defaults?\n\nThese changes will apply for all new formulas." ;
 };
 
@@ -1438,7 +1438,7 @@ Menu RID_VIEWMENU
         {
             Identifier = SID_ZOOMIN ;
             HelpID = SID_ZOOMIN ;
-            /* ### ACHTUNG: Neuer Text in Resource? Vergrößern : Vergrößern */
+            /* ### ACHTUNG: Neuer Text in Resource? Vergrï¿½ï¿½ern : Vergrï¿½ï¿½ern */
             Text [ en-US ] = "~Zoom In" ;
         };
         MenuItem
@@ -1759,7 +1759,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_XSIMEQY ;
                 HelpId = HID_SMA_XSIMEQY ;
-                /* ### ACHTUNG: Neuer Text in Resource? ist ähnlich oder gleich : ist ähnlich oder glech */
+                /* ### ACHTUNG: Neuer Text in Resource? ist ï¿½hnlich oder gleich : ist ï¿½hnlich oder glech */
                 Text [ en-US ] = "Is Similar Or Equal" ;
             };
             ToolBoxItem
@@ -1782,7 +1782,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_XLESLANTY ;
                 HelpId = HID_SMA_XLESLANTY ;
-                /* ### ACHTUNG: Neuer Text in Resource? ist kleiner gleich (schräg) : ist keiner gleich */
+                /* ### ACHTUNG: Neuer Text in Resource? ist kleiner gleich (schrï¿½g) : ist keiner gleich */
                 Text [ en-US ] = "Is Less Than Or Equal To" ;
             };
             ToolBoxItem
@@ -2051,7 +2051,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_EX ;
                 HelpId = HID_SMA_EX ;
-                /* ### ACHTUNG: Neuer Text in Resource? Exponentialfunktion : natürliche Exponentialfunktion */
+                /* ### ACHTUNG: Neuer Text in Resource? Exponentialfunktion : natï¿½rliche Exponentialfunktion */
                 Text [ en-US ] = "Exponential Function" ;
             };
             ToolBoxItem
@@ -3456,13 +3456,13 @@ String RID_ERR_FUNCEXPECTED
 
 String RID_ERR_UNOPEREXPECTED
 {
-    /* ### ACHTUNG: Neuer Text in Resource?     Unärer Operator erwartet : Un§rer Operator erwartet */
+    /* ### ACHTUNG: Neuer Text in Resource?     Unï¿½rer Operator erwartet : Unï¿½rer Operator erwartet */
     Text [ en-US ] = "Unary operator expected" ;
 };
 
 String RID_ERR_BINOPEREXPECTED
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Binärer Operator erwartet : Bin§rer Operator erwartet */
+    /* ### ACHTUNG: Neuer Text in Resource? Binï¿½rer Operator erwartet : Binï¿½rer Operator erwartet */
     Text [ en-US ] = "Binary operator expected" ;
 };
 
@@ -3526,9 +3526,9 @@ ToolBox RID_MATH_TOOLBOX
         {
             Identifier = SID_ZOOMIN ;
             HelpID = SID_ZOOMIN ;
-            /* ### ACHTUNG: Neuer Text in Resource? Größer : Größer */
+            /* ### ACHTUNG: Neuer Text in Resource? Grï¿½ï¿½er : Grï¿½ï¿½er */
             Text [ en-US ] = "Zoom In" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Stellt den Ausschnitt vergrößert dar : Stellt den Ausschnitt vergrößert dar */
+            /* ### ACHTUNG: Neuer Text in Resource? Stellt den Ausschnitt vergrï¿½ï¿½ert dar : Stellt den Ausschnitt vergrï¿½ï¿½ert dar */
         };
         ToolBoxItem
         {
@@ -3541,7 +3541,7 @@ ToolBox RID_MATH_TOOLBOX
             Identifier = SID_VIEW100 ;
             HelpID = SID_VIEW100 ;
             Text [ en-US ] = "Zoom 100%" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Stellt den Ausschnitt in tatsächlicher Größe dar : Stellt den Ausschnitt in tatsächlicher GröÃe dar */
+            /* ### ACHTUNG: Neuer Text in Resource? Stellt den Ausschnitt in tatsï¿½chlicher Grï¿½ï¿½e dar : Stellt den Ausschnitt in tatsï¿½chlicher Grï¿½ï¿½e dar */
         };
         ToolBoxItem
         {
@@ -3570,7 +3570,7 @@ ToolBox RID_MATH_TOOLBOX
             Identifier = SID_SYMBOLS_CATALOGUE ;
             HelpID = SID_SYMBOLS_CATALOGUE ;
             Text [ en-US ] = "Symbols" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Symbole einfügen und bearbeiten : Symbole einf³gen und bearbeiten */
+            /* ### ACHTUNG: Neuer Text in Resource? Symbole einfï¿½gen und bearbeiten : Symbole einfï¿½gen und bearbeiten */
         };
     };
 };
@@ -3602,6 +3602,7 @@ StringArray RID_PRINTUIOPTIONS
         < "Miscellaneous options"; >;
         < "Ig~nore ~~ and ` at the end of the line"; >;
         < "Specfies that these space wildcards will be removed if they are at the end of a line."; >;
+        < "%PRODUCTNAME %s"; >;
     };
 };
 

@@ -246,7 +246,10 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
 
     // create "writer" section (new tab page in dialog)
     SvtModuleOptions aOpt;
-    m_aUIProperties[ nIdx++ ].Value = getGroupControlOpt( aOpt.GetModuleName( SvtModuleOptions::E_SWRITER ), rtl::OUString() );
+    String aAppGroupname( aLocalizedStrings.GetString( 54 ) );
+    aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
+                                    aOpt.GetModuleName( SvtModuleOptions::E_SWRITER ) );
+    m_aUIProperties[ nIdx++ ].Value = getGroupControlOpt( aAppGroupname, rtl::OUString() );
 
     // create sub section for Contents
     m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 0 ), rtl::OUString() );
@@ -1300,7 +1303,7 @@ BOOL ViewShell::Prt(
 /* TLPDF neu: end */
 
 
-    // benötigte Seiten fuers Drucken formatieren
+    // benï¿½tigte Seiten fuers Drucken formatieren
     pShell->CalcPagesForPrint( (USHORT)nPage, pProgress, pStr,
                                 nMergeAct, nMergeCnt );
 
