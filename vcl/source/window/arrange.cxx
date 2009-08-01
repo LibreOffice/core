@@ -486,8 +486,21 @@ void LabeledElement::resize()
     aPos.Y() = m_aManagedArea.Top() + m_nOuterBorder + nYOff;
     aSize.Width() = aElementSize.Width();
     aSize.Height() = m_aManagedArea.GetHeight() - 2*m_nOuterBorder;
-    if( aPos.X() + aSize.Width() < m_aManagedArea.Right() )
-        aSize.Width() = m_aManagedArea.Right() - aPos.X();
+
+    // label style
+    // 0: position left and right
+    // 1: keep the element close to label and grow it
+    // 2: keep the element close and don't grow it
+    if( m_nLabelStyle == 0)
+    {
+        if( aPos.X() + aSize.Width() < m_aManagedArea.Right() )
+            aPos.X() = m_aManagedArea.Right() - aSize.Width();
+    }
+    else if( m_nLabelStyle == 1 )
+    {
+        if( aPos.X() + aSize.Width() < m_aManagedArea.Right() )
+            aSize.Width() = m_aManagedArea.Right() - aPos.X();
+    }
     m_aElement.setPosSize( aPos, aSize );
 }
 

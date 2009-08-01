@@ -234,6 +234,7 @@ namespace vcl
         WindowArranger::Element m_aLabel;
         WindowArranger::Element m_aElement;
         long                    m_nDistance;
+        int                     m_nLabelStyle;
     protected:
         virtual Element* getElement( size_t i_nIndex )
         {
@@ -245,9 +246,10 @@ namespace vcl
         }
 
     public:
-        LabeledElement( WindowArranger* i_pParent = NULL, long i_nDistance = 5 )
+        LabeledElement( WindowArranger* i_pParent = NULL, int i_nLabelStyle = 0, long i_nDistance = 5 )
         : WindowArranger( i_pParent )
         , m_nDistance( i_nDistance )
+        , m_nLabelStyle( i_nLabelStyle )
         {}
 
         virtual ~LabeledElement();

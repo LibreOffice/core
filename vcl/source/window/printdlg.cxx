@@ -324,10 +324,14 @@ void PrintDialog::NUpTabPage::setupLayout()
 
     xRow.reset( new vcl::RowOrColumn( xCol.get(), false ) );
     xCol->addChild( xRow );
-    xRow->addWindow( &maNupNumPagesTxt );
-    xRow->addWindow( &maNupColEdt );
-    xRow->addWindow( &maNupTimesTxt );
-    xRow->addWindow( &maNupRowsEdt );
+    xLabel.reset( new vcl::LabeledElement( xRow.get() ) );
+    xRow->addChild( xLabel, 1 );
+    xLabel->setLabel( &maNupNumPagesTxt );
+    xLabel->setElement( &maNupColEdt );
+    xLabel.reset( new vcl::LabeledElement( xRow.get() ) );
+    xRow->addChild( xLabel );
+    xLabel->setLabel( &maNupTimesTxt );
+    xLabel->setElement( &maNupRowsEdt );
 
     xLabel.reset( new vcl::LabeledElement( xCol.get() ) );
     xCol->addChild( xLabel );
@@ -1405,7 +1409,7 @@ void PrintDialog::setupOptionalUI()
     for( std::vector< vcl::RowOrColumn* >::iterator it = aDynamicColumns.begin();
          it != aDynamicColumns.end(); ++it )
     {
-        (*it)->setManagedArea( Rectangle( Point(), aMaxPageSize ) );
+        (*it)->setManagedArea( Rectangle( Point(), aTabSize ) );
         delete *it;
         *it = NULL;
     }
