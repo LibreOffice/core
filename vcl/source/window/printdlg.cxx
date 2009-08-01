@@ -77,6 +77,9 @@ PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
 void PrintDialog::PrintPreviewWindow::Resize()
 {
     Size aNewSize( GetSizePixel() );
+    // leave small space for decoration
+    aNewSize.Width() -= 2;
+    aNewSize.Height() -= 2;
     Size aScaledSize;
     double fScale = 1.0;
     if( maOrigSize.Width() > maOrigSize.Height() )
@@ -121,6 +124,10 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
     SetMapMode( MAP_PIXEL );
     maPageVDev.SetMapMode( MAP_PIXEL );
     DrawOutDev( aOffset, aPreviewSize, Point( 0, 0 ), aPreviewSize, maPageVDev );
+
+    DecorationView aVw( this );
+    aOffset.X() -= 1; aOffset.Y() -=1; aPreviewSize.Width() += 2; aPreviewSize.Height() += 2;
+    aVw.DrawFrame( Rectangle( aOffset, aPreviewSize ), FRAME_DRAW_GROUP );
 }
 
 void PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
