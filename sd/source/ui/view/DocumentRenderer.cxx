@@ -177,7 +177,7 @@ namespace {
 
         bool IsBooklet (void) const
         {
-            return GetBoolValue("PageOptions", sal_Int32(3));
+            return GetBoolValue("PrintBrochure", false);
         }
 
         bool IsPrintExcluded (void) const
@@ -428,8 +428,11 @@ namespace {
         void ProcessResource (void)
         {
             SvtModuleOptions aOpt;
+            String aAppGroupname( String( SdResId( _STR_IMPRESS_PRINT_UI_GROUP_NAME ) ) );
+            aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
+                                            aOpt.GetModuleName( SvtModuleOptions::E_SIMPRESS ) );
             AddDialogControl( vcl::PrinterOptionsHelper::getGroupControlOpt(
-                                aOpt.GetModuleName( SvtModuleOptions::E_SIMPRESS ),
+                                aAppGroupname,
                                 rtl::OUString()
                                 ) );
 
@@ -532,8 +535,20 @@ namespace {
                                 )
                             );
 
+            vcl::PrinterOptionsHelper::UIControlOptions aBrochureOpt;
+            aBrochureOpt.maGroupHint = OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutPage" ) );
+            AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE) ),
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_HELP) ),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochure" ) ),
+                                sal_False,
+                                aBrochureOpt
+                                )
+                            );
+
             vcl::PrinterOptionsHelper::UIControlOptions
-                aFrontOpt( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageOptions" ) ), 3, sal_True );
+                aFrontOpt( OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochure" ) ), -1, sal_True );
+            aFrontOpt.maGroupHint = OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutPage" ) );
             AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_FRONT) ),
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_FRONT_HELP) ),
