@@ -974,7 +974,7 @@ StringArray STR_PRINTOPTUI
         < "Select the Brochure option to print the document in brochure format."; >;
         < "Right to Left"; >;
         < "Check to print the pages of the brochure in the correct order for a right-to-left script."; >;
-        < "Other"; >;
+        < "Pages"; >;
         < "Print ~automatically inserted blank pages"; >;
         < "If this option is enabled automatically inserted blank pages are printed. This is best if you are printing double-sided. For example, in a book, a \"chapter\" paragraph style has been set to always start with an odd numbered page. If the previous chapter ends on an odd page, %PRODUCTNAME inserts an even numbered blank page. This option controls whether to print that even numbered page or not"; >;
         < "~Paper tray from printer settings"; >;
