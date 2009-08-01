@@ -807,7 +807,8 @@ void PrintDialog::setupLayout()
     xPreview->addWindow( &maPreviewWindow, 5 );
     // get a row for the preview controls
     boost::shared_ptr< vcl::RowOrColumn > xPreviewCtrls( new vcl::RowOrColumn( xPreview.get(), false ) );
-    xPreview->addChild( xPreviewCtrls );
+    nIndex = xPreview->addChild( xPreviewCtrls );
+    xPreview->setBorders( nIndex, aBorder.Width()*3, 0, aBorder.Width()*3, 0 );
     xPreviewCtrls->addWindow( &maPageEdit );
     xPreviewCtrls->addWindow( &maNumPagesText );
     boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( xPreviewCtrls.get(), 2 ) );
@@ -1097,7 +1098,11 @@ void PrintDialog::setupOptionalUI()
                 ! pCurColumn->countElements() == 0
                )
             {
-                FixedLine* pNewSub = new FixedLine( pCurParent );
+                Window* pNewSub = NULL;
+                if( aGroupingHint.equalsAscii( "PrintRange" ) )
+                    pNewSub = new FixedText( pCurParent, WB_VCENTER );
+                else
+                    pNewSub = new FixedLine( pCurParent );
                 maControls.push_front( pNewSub );
                 pNewSub->SetText( aText );
                 pNewSub->Show();
