@@ -744,19 +744,19 @@ StringArray SCSTR_PRINT_OPTIONS
     {
         < "Pages"; >;
         < "~Suppress output of empty pages"; >;
-        < "Specifies that empty pages that have no cell contents or draw objects are not printed."; >;
+        < "If checked empty pages that have no cell contents or draw objects are not printed."; >;
         < "Sheets"; >;
         < "Print ~only selected sheets"; >;
-        < "Specifies that only contents from selected sheets are printed, even if you specify a wider range in the Format - Print Ranges dialog. Content from sheets that are not selected will not be printed."; >;
+        < "If checked only contents from selected sheets are printed, even if you specify a wider range in the Format - Print Ranges dialog. Content from sheets that are not selected will not be printed."; >;
         < "Print content"; >;
-        < "~All Sheets"; >;
+        < "~All sheets"; >;
         < "The printout will be created from all sheets in the document."; >;
-        < "~Selected Sheets"; >;
+        < "~Selected sheets"; >;
         < "The printout will be created only from the currently selected sheets."; >;
-        < "Selected Cells"; >;
+        < "Selected cells"; >;
         < "The printout will be created only from the currently selected cells."; >;
         < "Thereof"; >;
-        < "All ~Pages"; >;
+        < "All ~pages"; >;
         < "Print all pages of the printable content."; >;
         < "Pa~ges"; >;
         < "Print only some pages of the printable content."; >;
