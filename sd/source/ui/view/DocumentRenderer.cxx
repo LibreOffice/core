@@ -187,12 +187,14 @@ namespace {
 
         bool IsPrintFrontPage (void) const
         {
-            return GetBoolValue("Front", true);
+            sal_Int32 nInclude = mrProperties.getIntValue( "PrintBrochureInclude", 0 );
+            return nInclude == 0 || nInclude == 1;
         }
 
         bool IsPrintBackPage (void) const
         {
-            return GetBoolValue("Back", true);
+            sal_Int32 nInclude = mrProperties.getIntValue( "PrintBrochureInclude", 0 );
+            return nInclude == 0 || nInclude == 2;
         }
 
         bool IsPaperBin (void) const
@@ -547,23 +549,16 @@ namespace {
                             );
 
             vcl::PrinterOptionsHelper::UIControlOptions
-                aFrontOpt( OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochure" ) ), -1, sal_True );
-            aFrontOpt.maGroupHint = OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutPage" ) );
-            AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
-                                String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_FRONT) ),
-                                String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_FRONT_HELP) ),
-                                OUString( RTL_CONSTASCII_USTRINGPARAM( "Front" ) ),
-                                sal_True,
-                                aFrontOpt
-                                )
-                            );
-
-            AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
-                                String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_BACK) ),
-                                String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_BACK_HELP) ),
-                                OUString( RTL_CONSTASCII_USTRINGPARAM( "Back" ) ),
-                                sal_True,
-                                aFrontOpt
+                aIncludeOpt( OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochure" ) ), -1, sal_False );
+            aIncludeOpt.maGroupHint = OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutPage" ) );
+            AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE) ),
+                                CreateChoice(_STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochureInclude" ) ),
+                                CreateChoice(_STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST_HELP),
+                                0,
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                aIncludeOpt
                                 )
                             );
 
