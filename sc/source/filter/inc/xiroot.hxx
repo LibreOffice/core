@@ -175,7 +175,7 @@ public:
     /** Returns the drawing object manager. */
     XclImpObjectManager& GetObjectManager() const;
     /** Returns the drawing container of the current sheet. */
-    XclImpSheetDrawing& GetSheetDrawing() const;
+    XclImpSheetDrawing& GetCurrSheetDrawing() const;
     /** Returns the conditional formattings manager. */
     XclImpCondFormatManager& GetCondFormatManager() const;
     /** Returns the filter manager. */

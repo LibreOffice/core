@@ -207,9 +207,9 @@ XclImpObjectManager& XclImpRoot::GetObjectManager() const
     return *mrImpData.mxObjMgr;
 }
 
-XclImpSheetDrawing& XclImpRoot::GetSheetDrawing() const
+XclImpSheetDrawing& XclImpRoot::GetCurrSheetDrawing() const
 {
-    DBG_ASSERT( !IsInGlobals(), "XclImpRoot::GetSheetDrawing - must not be called from workbook globals" );
+    DBG_ASSERT( !IsInGlobals(), "XclImpRoot::GetCurrSheetDrawing - must not be called from workbook globals" );
     return mrImpData.mxObjMgr->GetSheetDrawing( GetCurrScTab() );
 }
 
