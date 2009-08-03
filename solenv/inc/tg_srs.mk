@@ -77,7 +77,7 @@ $(SRS)$/$(SRS$(TNR)NAME).srs: $(SRC$(TNR)FILES)
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp=$@.$(INPATH) \
-        $(foreach,i,$(SRC$(TNR)FILES) $(COMMONMISC)$/$(TARGET)$/$i) \
+        $< \
     )
     -$(RM) $@
     $(RENAME) $@.$(INPATH) $@

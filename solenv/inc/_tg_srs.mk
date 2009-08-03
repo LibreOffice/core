@@ -45,7 +45,7 @@ $(SRS)$/$(SRS1NAME).srs: $(SRC1FILES)
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp=$@.$(INPATH) \
-        $(foreach,i,$(SRC1FILES) $(COMMONMISC)$/$(TARGET)$/$i) \
+        $< \
     )
     -$(RM) $@
     $(RENAME) $@.$(INPATH) $@
@@ -100,7 +100,7 @@ $(SRS)$/$(SRS2NAME).srs: $(SRC2FILES)
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp=$@.$(INPATH) \
-        $(foreach,i,$(SRC2FILES) $(COMMONMISC)$/$(TARGET)$/$i) \
+        $< \
     )
     -$(RM) $@
     $(RENAME) $@.$(INPATH) $@
@@ -155,7 +155,7 @@ $(SRS)$/$(SRS3NAME).srs: $(SRC3FILES)
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp=$@.$(INPATH) \
-        $(foreach,i,$(SRC3FILES) $(COMMONMISC)$/$(TARGET)$/$i) \
+        $< \
     )
     -$(RM) $@
     $(RENAME) $@.$(INPATH) $@
@@ -210,7 +210,7 @@ $(SRS)$/$(SRS4NAME).srs: $(SRC4FILES)
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp=$@.$(INPATH) \
-        $(foreach,i,$(SRC4FILES) $(COMMONMISC)$/$(TARGET)$/$i) \
+        $< \
     )
     -$(RM) $@
     $(RENAME) $@.$(INPATH) $@
@@ -265,7 +265,7 @@ $(SRS)$/$(SRS5NAME).srs: $(SRC5FILES)
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp=$@.$(INPATH) \
-        $(foreach,i,$(SRC5FILES) $(COMMONMISC)$/$(TARGET)$/$i) \
+        $< \
     )
     -$(RM) $@
     $(RENAME) $@.$(INPATH) $@
@@ -320,7 +320,7 @@ $(SRS)$/$(SRS6NAME).srs: $(SRC6FILES)
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp=$@.$(INPATH) \
-        $(foreach,i,$(SRC6FILES) $(COMMONMISC)$/$(TARGET)$/$i) \
+        $< \
     )
     -$(RM) $@
     $(RENAME) $@.$(INPATH) $@
@@ -375,7 +375,7 @@ $(SRS)$/$(SRS7NAME).srs: $(SRC7FILES)
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp=$@.$(INPATH) \
-        $(foreach,i,$(SRC7FILES) $(COMMONMISC)$/$(TARGET)$/$i) \
+        $< \
     )
     -$(RM) $@
     $(RENAME) $@.$(INPATH) $@
@@ -430,7 +430,7 @@ $(SRS)$/$(SRS8NAME).srs: $(SRC8FILES)
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp=$@.$(INPATH) \
-        $(foreach,i,$(SRC8FILES) $(COMMONMISC)$/$(TARGET)$/$i) \
+        $< \
     )
     -$(RM) $@
     $(RENAME) $@.$(INPATH) $@
@@ -485,7 +485,7 @@ $(SRS)$/$(SRS9NAME).srs: $(SRC9FILES)
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp=$@.$(INPATH) \
-        $(foreach,i,$(SRC9FILES) $(COMMONMISC)$/$(TARGET)$/$i) \
+        $< \
     )
     -$(RM) $@
     $(RENAME) $@.$(INPATH) $@
@@ -540,7 +540,7 @@ $(SRS)$/$(SRS10NAME).srs: $(SRC10FILES)
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp=$@.$(INPATH) \
-        $(foreach,i,$(SRC10FILES) $(COMMONMISC)$/$(TARGET)$/$i) \
+        $< \
     )
     -$(RM) $@
     $(RENAME) $@.$(INPATH) $@
