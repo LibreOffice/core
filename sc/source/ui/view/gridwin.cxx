@@ -685,12 +685,12 @@ void ScGridWindow::LaunchDPFieldMenu( SCCOL nCol, SCROW nRow )
         return;
 
     // Get the geometry of the cell.
-    Point aSrcPos = pViewData->GetScrPos(nCol, nRow, eWhich);
+    Point aScrPos = pViewData->GetScrPos(nCol, nRow, eWhich);
     long nSizeX, nSizeY;
     pViewData->GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
-    Size aSrcSize(nSizeX-1, nSizeY-1);
+    Size aScrSize(nSizeX-1, nSizeY-1);
 
-    DPLaunchFieldPopupMenu(OutputToScreenPixel(aSrcPos), aSrcSize, ScAddress(nCol, nRow, nTab), pDPObj);
+    DPLaunchFieldPopupMenu(OutputToScreenPixel(aScrPos), aScrSize, ScAddress(nCol, nRow, nTab), pDPObj);
 }
 
 void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
