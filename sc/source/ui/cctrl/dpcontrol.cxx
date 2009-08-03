@@ -48,8 +48,9 @@ using ::rtl::OUString;
 using ::rtl::OUStringHash;
 using ::std::vector;
 using ::std::hash_map;
+using ::std::auto_ptr;
 
-ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle) :
+ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX, const Fraction* pZoomY) :
     mpOutDev(pOutDev),
     mpStyle(pStyle),
     mbBaseButton(true),
@@ -57,6 +58,15 @@ ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pSt
     mbHasHiddenMember(false),
     mbPopupPressed(false)
 {
+    if (pZoomX)
+        maZoomX = *pZoomX;
+    else
+        maZoomX = Fraction(1, 1);
+
+    if (pZoomY)
+        maZoomY = *pZoomY;
+    else
+        maZoomY = Fraction(1, 1);
 }
 
 ScDPFieldButton::~ScDPFieldButton()
@@ -119,13 +129,15 @@ void ScDPFieldButton::draw()
         mpOutDev->DrawLine(Point(maPos.X()+maSize.Width()-1, maPos.Y()),
                            Point(maPos.X()+maSize.Width()-1, maPos.Y()+maSize.Height()-1));
 
-        // Field name
+        // Field name.
         Font aTextFont( mpStyle->GetLabelFont() );
-        aTextFont.SetHeight(12);
+        double fFontHeight = 12.0;
+        fFontHeight *= static_cast<double>(maZoomY.GetNumerator()) / static_cast<double>(maZoomY.GetDenominator());
+        aTextFont.SetHeight(fFontHeight);
         mpOutDev->SetFont(aTextFont);
 
         Point aTextPos = maPos;
-        long nTHeight = mpOutDev->GetTextHeight();
+        long nTHeight = static_cast<long>(fFontHeight);
         aTextPos.setX(maPos.getX() + nMargin);
         aTextPos.setY(maPos.getY() + (maSize.Height()-nTHeight)/2);
         mpOutDev->DrawText(aTextPos, maText);

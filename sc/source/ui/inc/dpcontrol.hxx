@@ -33,6 +33,7 @@
 
 #include "rtl/ustring.hxx"
 #include "tools/gen.hxx"
+#include "tools/fract.hxx"
 #include "vcl/floatwin.hxx"
 #include "vcl/button.hxx"
 #include "vcl/scrbar.hxx"
@@ -56,7 +57,7 @@ class Window;
 class ScDPFieldButton
 {
 public:
-    ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle);
+    ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX = NULL, const Fraction* pZoomY = NULL);
     ~ScDPFieldButton();
 
     void setText(const ::rtl::OUString& rText);
@@ -77,6 +78,8 @@ private:
     Point                   maPos;
     Size                    maSize;
     ::rtl::OUString         maText;
+    Fraction                maZoomX;
+    Fraction                maZoomY;
     OutputDevice*           mpOutDev;
     const StyleSettings*    mpStyle;
     bool                    mbBaseButton;
