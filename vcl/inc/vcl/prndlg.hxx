@@ -205,6 +205,7 @@ namespace vcl
 
         OKButton                                maOKButton;
         CancelButton                            maCancelButton;
+        HelpButton                              maHelpButton;
         PrintPreviewWindow                      maPreviewWindow;
         NumericField                            maPageEdit;
         FixedText                               maNumPagesText;

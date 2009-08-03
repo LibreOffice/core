@@ -44,6 +44,7 @@
 #include "vcl/configsettings.hxx"
 #include "vcl/help.hxx"
 #include "vcl/decoview.hxx"
+#include "vcl/svapp.hxx"
 
 #include "unotools/localedatawrapper.hxx"
 
@@ -393,7 +394,7 @@ void PrintDialog::NUpTabPage::setupLayout()
     xSpacer.reset( new vcl::Spacer( xMainCol.get(), 0, Size( 10, 2*aBorder.Width() ) ) );
     xMainCol->addChild( xSpacer );
 
-    // initially advanced controls are not show, rows=columns=1
+    // initially advanced controls are not shown, rows=columns=1
     mxAdvancedControls->show( false, false );
 }
 
@@ -663,6 +664,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     : ModalDialog( i_pParent, VclResId( SV_DLG_PRINT ) )
     , maOKButton( this, VclResId( SV_PRINT_OK ) )
     , maCancelButton( this, VclResId( SV_PRINT_CANCEL ) )
+    , maHelpButton( this, VclResId( SV_PRINT_HELP ) )
     , maPreviewWindow( this, VclResId( SV_PRINT_PAGE_PREVIEW ) )
     , maPageEdit( this, VclResId( SV_PRINT_PAGE_EDIT ) )
     , maNumPagesText( this, VclResId( SV_PRINT_PAGE_TXT ) )
@@ -763,6 +765,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     #if OSL_DEBUG_LEVEL > 1
     maCancelButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     #endif
+    maHelpButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maForwardBtn.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maBackwardBtn.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maJobPage.maCollateBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
@@ -866,10 +869,12 @@ void PrintDialog::setupLayout()
     nIndex = maLayout.addChild( xButtons );
     maLayout.setBorders( nIndex, aBorder.Width(), 0, aBorder.Width(), aBorder.Width() );
 
-    // insert a spacer, buttons are right aligned
+    Size aMinSize( maCancelButton.GetSizePixel() );
+    // insert help button
+    xButtons->setMinimumSize( xButtons->addWindow( &maHelpButton ), aMinSize );
+    // insert a spacer, cancel and OK buttons are right aligned
     xSpacer.reset( new vcl::Spacer( xButtons.get(), 2 ) );
     xButtons->addChild( xSpacer );
-    Size aMinSize( maCancelButton.GetSizePixel() );
     xButtons->setMinimumSize( xButtons->addWindow( &maOKButton ), aMinSize );
     xButtons->setMinimumSize( xButtons->addWindow( &maCancelButton ), aMinSize );
 }
@@ -956,6 +961,14 @@ static void setHelpText( Window* i_pWindow, const Sequence< rtl::OUString >& i_r
 {
     if( i_nIndex >= 0 && i_nIndex < i_rHelpTexts.getLength() )
         i_pWindow->SetHelpText( i_rHelpTexts.getConstArray()[i_nIndex] );
+}
+
+void updateMaxSize( const Size& i_rCheckSize, Size& o_rMaxSize )
+{
+    if( i_rCheckSize.Width() > o_rMaxSize.Width() )
+        o_rMaxSize.Width() = i_rCheckSize.Width();
+    if( i_rCheckSize.Height() > o_rMaxSize.Height() )
+        o_rMaxSize.Height() = i_rCheckSize.Height();
 }
 
 void PrintDialog::setupOptionalUI()
@@ -1436,21 +1449,17 @@ void PrintDialog::setupOptionalUI()
 
     // calculate job page
     Size aMaxSize = maJobPage.maLayout.getOptimalSize( WINDOWSIZE_PREFERRED );
+    // and layout page
+    updateMaxSize( maNUpPage.maLayout.getOptimalSize( WINDOWSIZE_PREFERRED ), aMaxSize );
+    // and options page
+    updateMaxSize( maOptionsPage.maLayout.getOptimalSize( WINDOWSIZE_PREFERRED ), aMaxSize );
 
-    Size aMaxPageSize;
     for( std::vector< vcl::RowOrColumn* >::iterator it = aDynamicColumns.begin();
          it != aDynamicColumns.end(); ++it )
     {
         Size aPageSize( (*it)->getOptimalSize( WINDOWSIZE_PREFERRED ) );
-        if( aPageSize.Width() > aMaxPageSize.Width() )
-            aMaxPageSize.Width() = aPageSize.Width();
-        if( aPageSize.Height() > aMaxPageSize.Height() )
-            aMaxPageSize.Height() = aPageSize.Height();
+        updateMaxSize( aPageSize, aMaxSize );
     }
-    if( aMaxPageSize.Width() > aMaxSize.Width() )
-        aMaxSize.Width() = aMaxPageSize.Width();
-    if( aMaxPageSize.Height() > aMaxSize.Height() )
-        aMaxSize.Height() = aMaxPageSize.Height();
 
     // resize dialog if necessary
     Size aTabSize = maTabCtrl.GetTabPageSizePixel();
@@ -1679,6 +1688,18 @@ void PrintDialog::updateNupFromPages()
     maNUpPage.maSheetMarginEdt.SetValue( maNUpPage.maSheetMarginEdt.Normalize( nSheetMargin ), FUNIT_100TH_MM );
 
     maNUpPage.mxAdvancedControls->show( bCustom );
+    if( bCustom )
+    {
+        // see if we have to enlarge the dialog to make the tab page fit
+        Size aCurSize( maNUpPage.maLayout.getOptimalSize( WINDOWSIZE_PREFERRED ) );
+        Size aTabSize( maTabCtrl.GetTabPageSizePixel() );
+        if( aTabSize.Height() < aCurSize.Height() )
+        {
+            Size aDlgSize( GetSizePixel() );
+            aDlgSize.Height() += aCurSize.Height() - aTabSize.Height();
+            SetSizePixel( aDlgSize );
+        }
+    }
 
     updateNup();
 }
@@ -1765,6 +1786,16 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     {
         storeToSettings();
         EndDialog( pButton == &maOKButton );
+    }
+    else if( pButton == &maHelpButton )
+    {
+        // start help system
+        Help* pHelp = Application::GetHelp();
+        if( pHelp )
+        {
+            // FIXME: find out proper help URL and use here
+            pHelp->Start( 0, GetParent() );
+        }
     }
     else if( pButton == &maForwardBtn )
     {
