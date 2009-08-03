@@ -225,9 +225,8 @@ void PrintDialog::ShowNupOrderWindow::Paint( const Rectangle& i_rRect )
 PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     : TabPage( i_pParent, rResId )
     , maNupLine( this, VclResId( SV_PRINT_PRT_NUP_LAYOUT_FL ) )
-    , maDefaultBtn( this, VclResId( SV_PRINT_PRT_NUP_DEFAULT_BTN ) )
-    , maBrochureBtn( this, VclResId( SV_PRINT_PRT_NUP_BROCHURE_BTN ) )
     , maPagesBtn( this, VclResId( SV_PRINT_PRT_NUP_PAGES_BTN ) )
+    , maBrochureBtn( this, VclResId( SV_PRINT_PRT_NUP_BROCHURE_BTN ) )
     , maNupPagesBox( this, VclResId( SV_PRINT_PRT_NUP_PAGES_BOX ) )
     , maNupNumPagesTxt( this, VclResId( SV_PRINT_PRT_NUP_NUM_PAGES_TXT ) )
     , maNupColEdt( this, VclResId( SV_PRINT_PRT_NUP_COLS_EDT ) )
@@ -247,9 +246,8 @@ PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     FreeResource();
 
     maNupOrderWin.Show();
-    maDefaultBtn.Check( TRUE );
+    maPagesBtn.Check( TRUE );
     maBrochureBtn.Show( FALSE );
-    enableNupControls( false );
 
     // setup field units for metric fields
     const LocaleDataWrapper& rLocWrap( maPageMarginEdt.GetLocaleDataWrapper() );
@@ -269,7 +267,6 @@ PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     maSheetMarginEdt.SetDecimalDigits( nDigits );
 
     maNupLine.SMHID2("NUpPage", "Layout");
-    maDefaultBtn.SMHID2("NUpPage", "Default" );
     maBrochureBtn.SMHID2("NUpPage", "Brochure" );
     maPagesBtn.SMHID2( "NUpPage", "PagesPerSheet" );
     maNupPagesBox.SMHID2( "NUpPage", "PagesPerSheetBox" );
@@ -323,7 +320,7 @@ void PrintDialog::NUpTabPage::setupLayout()
     maLayout.addWindow( &maNupLine );
     boost::shared_ptr< vcl::RowOrColumn > xRow( new vcl::RowOrColumn( &maLayout, false ) );
     maLayout.addChild( xRow );
-    boost::shared_ptr< vcl::Indenter > xIndent( new vcl::Indenter( xRow.get() ) );
+    boost::shared_ptr< vcl::Indenter > xIndent( new vcl::Indenter( xRow.get(), 3*aBorder.Width() ) );
     xRow->addChild( xIndent );
 
     boost::shared_ptr< vcl::RowOrColumn > xShowNupCol( new vcl::RowOrColumn( xRow.get() ) );
@@ -332,24 +329,19 @@ void PrintDialog::NUpTabPage::setupLayout()
     boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( xShowNupCol.get() ) );
     xShowNupCol->addChild( xSpacer );
 
-    boost::shared_ptr< vcl::RowOrColumn > xCol( new vcl::RowOrColumn( xIndent.get() ) );
-    xIndent->setChild( xCol );
-    xCol->addWindow( &maDefaultBtn );
-    xRow.reset( new vcl::RowOrColumn( xCol.get(), false ) );
-    xCol->addChild( xRow );
-    xRow->addWindow( &maBrochureBtn );
-    // remember brochure row for dependencies
-    mxBrochureDep = xRow;
-    boost::shared_ptr< vcl::LabeledElement > xLabel( new vcl::LabeledElement( xCol.get() ) );
-    xCol->addChild( xLabel );
+    boost::shared_ptr< vcl::RowOrColumn > xMainCol( new vcl::RowOrColumn( xIndent.get() ) );
+    xIndent->setChild( xMainCol );
+
+    boost::shared_ptr< vcl::LabeledElement > xLabel( new vcl::LabeledElement( xMainCol.get() ) );
+    xMainCol->addChild( xLabel );
     xLabel->setLabel( &maPagesBtn );
     xLabel->setElement( &maNupPagesBox );
 
-    xIndent.reset( new vcl::Indenter( xCol.get() ) );
-    xCol->addChild( xIndent );
+    xIndent.reset( new vcl::Indenter( xMainCol.get() ) );
+    xMainCol->addChild( xIndent );
 
-    mxLayoutGroup = xCol;
-    xCol.reset( new vcl::RowOrColumn( xIndent.get() ) );
+    mxLayoutGroup = xMainCol;
+    boost::shared_ptr< vcl::RowOrColumn > xCol( new vcl::RowOrColumn( xIndent.get() ) );
     xIndent->setChild( xCol );
 
     boost::shared_ptr< vcl::RowOrColumn > xAdvCol( new vcl::RowOrColumn( xCol.get() ) );
@@ -388,6 +380,15 @@ void PrintDialog::NUpTabPage::setupLayout()
     xAdvCol->addChild( xLabel );
     xLabel->setLabel( &maNupOrientationTxt );
     xLabel->setElement( &maNupOrientationBox );
+
+    xRow.reset( new vcl::RowOrColumn( xMainCol.get(), false ) );
+    xMainCol->addChild( xRow );
+    xRow->addWindow( &maBrochureBtn );
+    // remember brochure row for dependencies
+    mxBrochureDep = xRow;
+
+    xSpacer.reset( new vcl::Spacer( xMainCol.get(), 0, Size( 10, 2*aBorder.Width() ) ) );
+    xMainCol->addChild( xSpacer );
 
     // initially advanced controls are not show, rows=columns=1
     mxAdvancedControls->show( false, false );
@@ -439,7 +440,7 @@ PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
     , maNoCollateImg( VclResId( SV_PRINT_NOCOLLATE_IMG ) )
     , maNoCollateHCImg( VclResId( SV_PRINT_NOCOLLATE_HC_IMG ) )
     , mnCollateUIMode( 0 )
-    , maLayout( NULL, true, 0 )
+    , maLayout( NULL, true )
 {
     FreeResource();
     maPrinterFL.SMHID2( "JobPage", "Printer" );
@@ -767,7 +768,6 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maNUpPage.maBorderCB.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maOptionsPage.maToFileBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maOptionsPage.maReverseOrderBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maNUpPage.maDefaultBtn.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.maPagesBtn.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
 
     // setup modify hdl
@@ -1626,6 +1626,60 @@ Size PrintDialog::getJobPageSize()
     return maFirstPageSize;
 }
 
+void PrintDialog::updateNupFromPages()
+{
+    long nPages = long(maNUpPage.maNupPagesBox.GetEntryData(maNUpPage.maNupPagesBox.GetSelectEntryPos()));
+    int nRows   = int(maNUpPage.maNupRowsEdt.GetValue());
+    int nCols   = int(maNUpPage.maNupColEdt.GetValue());
+    long nPageMargin  = long(maNUpPage.maPageMarginEdt.Denormalize(maNUpPage.maPageMarginEdt.GetValue( FUNIT_100TH_MM )));
+    long nSheetMargin = long(maNUpPage.maSheetMarginEdt.Denormalize(maNUpPage.maSheetMarginEdt.GetValue( FUNIT_100TH_MM )));
+    bool bCustom = false;
+
+    if( nPages == 1 )
+    {
+        nRows = nCols = 1;
+        nSheetMargin = 0;
+    }
+    else if( nPages == 2 || nPages == 4 || nPages == 6 || nPages == 9 || nPages == 16 )
+    {
+        Size aJobPageSize( getJobPageSize() );
+        bool bPortrait = aJobPageSize.Width() < aJobPageSize.Height();
+        if( nPages == 2 )
+        {
+            if( bPortrait )
+                nRows = 1, nCols = 2;
+            else
+                nRows = 2, nCols = 1;
+        }
+        else if( nPages == 4 )
+            nRows = nCols = 2;
+        else if( nPages == 6 )
+        {
+            if( bPortrait )
+                nRows = 2, nCols = 3;
+            else
+                nRows = 3, nCols = 2;
+        }
+        else if( nPages == 9 )
+            nRows = nCols = 3;
+        else if( nPages == 16 )
+            nRows = nCols = 4;
+        nPageMargin = 500;
+        nSheetMargin = 500;
+    }
+    else
+        bCustom = true;
+
+    maNUpPage.maNupRowsEdt.SetValue( nRows );
+    maNUpPage.maNupColEdt.SetValue( nCols );
+    maNUpPage.maPageMarginEdt.SetValue( maNUpPage.maPageMarginEdt.Normalize( nPageMargin ), FUNIT_100TH_MM );
+    maNUpPage.maSheetMarginEdt.SetValue( maNUpPage.maSheetMarginEdt.Normalize( nSheetMargin ), FUNIT_100TH_MM );
+
+    maNUpPage.mxAdvancedControls->show( bCustom );
+
+    updateNup();
+}
+
 void PrintDialog::updateNup()
 {
     int nRows         = int(maNUpPage.maNupRowsEdt.GetValue());
@@ -1696,54 +1750,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
     }
     else if( pBox == &maNUpPage.maNupPagesBox )
     {
-        long nPages = long(maNUpPage.maNupPagesBox.GetEntryData(maNUpPage.maNupPagesBox.GetSelectEntryPos()));
-        int nRows   = int(maNUpPage.maNupRowsEdt.GetValue());
-        int nCols   = int(maNUpPage.maNupColEdt.GetValue());
-        long nPageMargin  = long(maNUpPage.maPageMarginEdt.Denormalize(maNUpPage.maPageMarginEdt.GetValue( FUNIT_100TH_MM )));
-        long nSheetMargin = long(maNUpPage.maSheetMarginEdt.Denormalize(maNUpPage.maSheetMarginEdt.GetValue( FUNIT_100TH_MM )));
-        bool bCustom = false;
-
-        if( nPages == 1 )
-        {
-            nRows = nCols = 1;
-            nSheetMargin = 0;
-        }
-        else if( nPages == 2 || nPages == 4 || nPages == 6 || nPages == 9 || nPages == 16 )
-        {
-            Size aJobPageSize( getJobPageSize() );
-            bool bPortrait = aJobPageSize.Width() < aJobPageSize.Height();
-            if( nPages == 2 )
-            {
-                if( bPortrait )
-                    nRows = 1, nCols = 2;
-                else
-                    nRows = 2, nCols = 1;
-            }
-            else if( nPages == 4 )
-                nRows = nCols = 2;
-            else if( nPages == 6 )
-            {
-                if( bPortrait )
-                    nRows = 2, nCols = 3;
-                else
-                    nRows = 3, nCols = 2;
-            }
-            else if( nPages == 9 )
-                nRows = nCols = 3;
-            else if( nPages == 16 )
-                nRows = nCols = 4;
-            nPageMargin = 500;
-            nSheetMargin = 500;
-        }
-        else
-            bCustom = true;
-
-        maNUpPage.maNupRowsEdt.SetValue( nRows );
-        maNUpPage.maNupColEdt.SetValue( nCols );
-        maNUpPage.maPageMarginEdt.SetValue( maNUpPage.maPageMarginEdt.Normalize( nPageMargin ), FUNIT_100TH_MM );
-        maNUpPage.maSheetMarginEdt.SetValue( maNUpPage.maSheetMarginEdt.Normalize( nSheetMargin ), FUNIT_100TH_MM );
-        updateNup();
-        maNUpPage.mxAdvancedControls->show( bCustom );
+        updateNupFromPages();
     }
 
     return 0;
@@ -1769,10 +1776,6 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
         maOKButton.SetText( maOptionsPage.maToFileBox.IsChecked() ? maPrintToFileText : maPrintText );
         maLayout.resize();
     }
-    else if( pButton == &maNUpPage.maDefaultBtn )
-    {
-        maNUpPage.enableNupControls( false );
-    }
     else if( pButton == &maNUpPage.maBrochureBtn )
     {
         PropertyValue* pVal = getValueForWindow( pButton );
@@ -1787,11 +1790,17 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
             preparePreview();
         }
         if( maNUpPage.maBrochureBtn.IsChecked() )
+        {
+            maNUpPage.maNupPagesBox.SelectEntryPos( 0 );
+            updateNupFromPages();
+            maNUpPage.mxAdvancedControls->show( false );
             maNUpPage.enableNupControls( false );
+        }
     }
     else if( pButton == &maNUpPage.maPagesBtn )
     {
         maNUpPage.enableNupControls( true );
+        updateNupFromPages();
     }
     else if( pButton == &maJobPage.maDetailsBtn )
     {

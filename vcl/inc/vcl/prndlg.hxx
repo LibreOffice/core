@@ -95,9 +95,8 @@ namespace vcl
         {
         public:
             FixedLine                               maNupLine;
-            RadioButton                             maDefaultBtn;
-            RadioButton                             maBrochureBtn;
             RadioButton                             maPagesBtn;
+            RadioButton                             maBrochureBtn;
             ListBox                                 maNupPagesBox;
 
             // controls for "Custom" page mode
@@ -245,6 +244,7 @@ namespace vcl
 
         Size getJobPageSize();
         void updateNup();
+        void updateNupFromPages();
         void preparePreview( bool i_bPrintChanged = true, bool i_bMayUseCache = false );
         void setPreviewText( sal_Int32 );
         void updatePrinterText();
