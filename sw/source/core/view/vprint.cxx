@@ -240,7 +240,7 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
 
     // create sequence of print UI options
     // (5 options are not available for Writer-Web)
-    const int nNumProps = bWeb? 18 : 21;
+    const int nNumProps = bWeb? 17 : 20;
     m_aUIProperties.realloc( nNumProps );
     int nIdx = 0;
 
@@ -369,14 +369,17 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
                                                    );
 
     // create a bool option for brochure RTL dependent on brochure
+    uno::Sequence< rtl::OUString > aBRTLChoices( 3 );
+    aBRTLChoices[0] = aLocalizedStrings.GetString( 55 );
+    aBRTLChoices[1] = aLocalizedStrings.GetString( 56 );
     vcl::PrinterOptionsHelper::UIControlOptions aBrochureRTLOpt( aBrochurePropertyName, -1, sal_True );
     aBrochureRTLOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutPage" ) );
-    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 32 ),
-                                                   aLocalizedStrings.GetString( 33 ),
-                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochureRTL" ) ),
-                                                   sal_False,
-                                                   aBrochureRTLOpt
-                                                   );
+    m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( rtl::OUString(),
+                                                           uno::Sequence< rtl::OUString >(),
+                                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochureRTL" ) ),
+                                                           aBRTLChoices, 0, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                                           aBrochureRTLOpt
+                                                           );
 
     // print range selection
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;

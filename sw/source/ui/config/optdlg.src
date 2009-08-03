@@ -995,6 +995,8 @@ StringArray STR_PRINTOPTUI
         < "left pages"; >;
         < "right pages"; >;
         < "%PRODUCTNAME %s"; >;
+        < "Left-to-right script"; >;
+        < "Right-to-left script"; >;
     };
 };
 

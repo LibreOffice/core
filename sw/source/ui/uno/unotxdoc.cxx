@@ -2887,7 +2887,7 @@ void SAL_CALL SwXTextDocument::render(
         aOptions.bPaperFromSetup         = m_pPrintUIOptions->getBoolValue( C2U( "PaperTray" ),         aOptions.bPaperFromSetup );
         aOptions.bPrintReverse           = m_pPrintUIOptions->getBoolValue( C2U( "PrintReverseOrder" ), aOptions.bPrintReverse );
         aOptions.bPrintProspect          = m_pPrintUIOptions->getBoolValue( C2U( "PrintBrochure" ),     aOptions.bPrintProspect );
-        aOptions.bPrintProspect_RTL      = m_pPrintUIOptions->getBoolValue( C2U( "PrintBrochureRTL" ),  aOptions.bPrintProspect_RTL );
+        aOptions.bPrintProspect_RTL      = m_pPrintUIOptions->getIntValue( C2U( "PrintBrochureRTL" ),  aOptions.bPrintProspect_RTL ) ? true : false;
         // bPrintSingleJobs         <-- not set here    // TLPDF: TODO: remove this from SwPrintData?? Get rid of SwPrtOptions??
         // bModified                <-- not set here    // TLPDF: TODO: remove this from SwPrintData?? Get rid of SwPrtOptions??
         aOptions.bPrintBlackFont         = m_pPrintUIOptions->getBoolValue( C2U( "PrintBlack" ),        aOptions.bPrintBlackFont );
