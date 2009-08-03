@@ -320,7 +320,7 @@ void PrintDialog::NUpTabPage::setupLayout()
     maLayout.addWindow( &maNupLine );
     boost::shared_ptr< vcl::RowOrColumn > xRow( new vcl::RowOrColumn( &maLayout, false ) );
     maLayout.addChild( xRow );
-    boost::shared_ptr< vcl::Indenter > xIndent( new vcl::Indenter( xRow.get(), 3*aBorder.Width() ) );
+    boost::shared_ptr< vcl::Indenter > xIndent( new vcl::Indenter( xRow.get() ) );
     xRow->addChild( xIndent );
 
     boost::shared_ptr< vcl::RowOrColumn > xShowNupCol( new vcl::RowOrColumn( xRow.get() ) );
@@ -337,7 +337,7 @@ void PrintDialog::NUpTabPage::setupLayout()
     xLabel->setLabel( &maPagesBtn );
     xLabel->setElement( &maNupPagesBox );
 
-    xIndent.reset( new vcl::Indenter( xMainCol.get() ) );
+    xIndent.reset( new vcl::Indenter( xMainCol.get(), 3*aBorder.Width() ) );
     xMainCol->addChild( xIndent );
 
     mxLayoutGroup = xMainCol;
@@ -380,6 +380,9 @@ void PrintDialog::NUpTabPage::setupLayout()
     xAdvCol->addChild( xLabel );
     xLabel->setLabel( &maNupOrientationTxt );
     xLabel->setElement( &maNupOrientationBox );
+
+    xSpacer.reset( new vcl::Spacer( xMainCol.get(), 0, Size( 10, aBorder.Width() ) ) );
+    xMainCol->addChild( xSpacer );
 
     xRow.reset( new vcl::RowOrColumn( xMainCol.get(), false ) );
     xMainCol->addChild( xRow );
