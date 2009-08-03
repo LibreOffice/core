@@ -786,6 +786,7 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent) :
     maBtnCancel(this),
     mpExtendedData(NULL),
     mpOKAction(NULL),
+    maWndSize(160, 330),
     mePrevToggleAllState(STATE_DONTKNOW)
 {
     const StyleSettings& rStyle = GetSettings().GetStyleSettings();
@@ -855,11 +856,9 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
     const sal_uInt16 nBottomMargin = 10;
     const sal_uInt16 nMenuListMargin = 20;
 
-    Size aWndSize = Size(160, 330);
-
     // parameters calculated from constants.
-    const sal_uInt16 nListBoxWidth = aWndSize.Width() - nListBoxMargin*2;
-    const sal_uInt16 nListBoxHeight = aWndSize.Height() - nTopMargin - nMenuHeight -
+    const sal_uInt16 nListBoxWidth = maWndSize.Width() - nListBoxMargin*2;
+    const sal_uInt16 nListBoxHeight = maWndSize.Height() - nTopMargin - nMenuHeight -
         nMenuListMargin - nSingleItemBtnAreaHeight - nBottomBtnAreaHeight;
 
     const sal_uInt16 nSingleBtnAreaY = nTopMargin + nMenuHeight + nListBoxHeight + nMenuListMargin - 1;
@@ -869,7 +868,7 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
         case WHOLE:
         {
             rPos  = Point(0, 0);
-            rSize = aWndSize;
+            rSize = maWndSize;
         }
         break;
         case LISTBOX_AREA_OUTER:
@@ -924,16 +923,16 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
         break;
         case BTN_OK:
         {
-            long x = (aWndSize.Width() - nBtnWidth*2)/3;
-            long y = aWndSize.Height() - nBottomMargin - nBtnHeight;
+            long x = (maWndSize.Width() - nBtnWidth*2)/3;
+            long y = maWndSize.Height() - nBottomMargin - nBtnHeight;
             rPos = Point(x, y);
             rSize = Size(nBtnWidth, nBtnHeight);
         }
         break;
         case BTN_CANCEL:
         {
-            long x = (aWndSize.Width() - nBtnWidth*2)/3*2 + nBtnWidth;
-            long y = aWndSize.Height() - nBottomMargin - nBtnHeight;
+            long x = (maWndSize.Width() - nBtnWidth*2)/3*2 + nBtnWidth;
+            long y = maWndSize.Height() - nBottomMargin - nBtnHeight;
             rPos = Point(x, y);
             rSize = Size(nBtnWidth, nBtnHeight);
         }
@@ -1089,6 +1088,11 @@ void ScDPFieldPopupWindow::initMembers()
         maChkToggleAll.SetState(STATE_DONTKNOW);
         mePrevToggleAllState = STATE_DONTKNOW;
     }
+}
+
+const Size& ScDPFieldPopupWindow::getWindowSize() const
+{
+    return maWndSize;
 }
 
 void ScDPFieldPopupWindow::getResult(hash_map<OUString, bool, OUStringHash>& rResult)

@@ -895,7 +895,7 @@ private:
 }
 
 void ScGridWindow::DPLaunchFieldPopupMenu(
-    const Point& rSrcPos, const Size& rSrcSize, const ScAddress& rPos, ScDPObject* pDPObj)
+    const Point& rScrPos, const Size& rScrSize, const ScAddress& rPos, ScDPObject* pDPObj)
 {
     // We need to get the list of field members.
     auto_ptr<DPFieldPopupData> pDPData(new DPFieldPopupData);
@@ -957,8 +957,16 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
         }
     }
 
+    Rectangle aCellRect(rScrPos, rScrSize);
+    const Size& rPopupSize = mpDPFieldPopup->getWindowSize();
+    if (rScrSize.getWidth() > rPopupSize.getWidth())
+    {
+        // If the cell width is larger than the popup window width, launch it
+        // right-aligned with the cell.
+        long nXOffset = rScrSize.getWidth() - rPopupSize.getWidth();
+        aCellRect.SetPos(Point(rScrPos.X() + nXOffset, rScrPos.Y()));
+    }
     mpDPFieldPopup->SetPopupModeEndHdl( LINK(this, ScGridWindow, PopupModeEndHdl) );
-    Rectangle aCellRect(rSrcPos, rSrcSize);
     mpDPFieldPopup->StartPopupMode(aCellRect, (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS));
 }
 

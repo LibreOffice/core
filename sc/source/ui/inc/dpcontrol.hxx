@@ -212,6 +212,8 @@ public:
     void addMember(const ::rtl::OUString& rName, bool bVisible);
     void initMembers();
 
+    const Size& getWindowSize() const;
+
     void getResult(::std::hash_map< ::rtl::OUString, bool, ::rtl::OUStringHash>& rResult);
     void close(bool bOK);
 
@@ -283,6 +285,7 @@ private:
     ::std::auto_ptr<ExtendedData>   mpExtendedData;
     ::std::auto_ptr<Action>         mpOKAction;
 
+    const Size      maWndSize;  /// hard-coded window size.
     TriState mePrevToggleAllState;
 };
 
