@@ -33,6 +33,7 @@
 #include "sal/config.h"
 
 #include <list>
+#include <set>
 
 #include "boost/noncopyable.hpp"
 #include "libxml/parser.h"
@@ -80,6 +81,10 @@ public:
     void insertXcuFile(int layer, rtl::OUString const & fileUri);
 
 private:
+    typedef std::set< rtl::OUString > Dependencies;
+
+    typedef std::list< rtl::OUString > Modifications;
+
     Components();
 
     ~Components();
@@ -114,8 +119,6 @@ private:
 
     void parseXcuFile(int layer, rtl::OUString const & url);
 
-    void parseDataFile(int layer, rtl::OUString const & url);
-
     void parseFiles(
         int layer, rtl::OUString const & extension,
         void (Components::* parseFile)(int, rtl::OUString const &),
@@ -124,6 +127,11 @@ private:
     void parseFileList(
         int layer, void (Components::* parseFile)(int, rtl::OUString const &),
         rtl::OUString const & urls, rtl::Bootstrap const & ini);
+
+    bool parseDataFile(
+        int layer, xmlDocPtr doc, Dependencies const & dependencies);
+
+    void parseDataFiles(int layer, rtl::OUString const & url);
 
     void parseXcsXcuLayer(int layer, rtl::OUString const & url);
 
@@ -136,8 +144,6 @@ private:
     rtl::OUString getModificationFileUrl() const;
 
     void parseModificationLayer();
-
-    typedef std::list< rtl::OUString > Modifications;
 
     NodeMap templates_;
     NodeMap components_;
