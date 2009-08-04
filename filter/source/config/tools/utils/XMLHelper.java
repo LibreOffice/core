@@ -802,7 +802,7 @@ public class XMLHelper
             sHeader.append(sVersion);
             sHeader.append("\" encoding=\"");
             sHeader.append(sEncoding);
-            sHeader.append("\"?>\n<!DOCTYPE oor:component-data SYSTEM \"../../../../component-update.dtd\">\n");
+            sHeader.append("\"?>\n");
             sHeader.append("<oor:component-data xmlns:oor=\"http://openoffice.org/2001/registry\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" oor:package=\"");
             sHeader.append(sPath);
             sHeader.append("\" oor:name=\"");
