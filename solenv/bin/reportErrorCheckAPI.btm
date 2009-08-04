@@ -1,0 +1,17 @@
+set ERRORCODE=%1%
+iff exist %SOLARENV%/bin/cwstestresult.pl then
+    iff %ERRORCODE% EQ 0 then
+        set PT_STATUS=%2%
+    else
+        iff %ERRORCODE% EQ 1 then
+            set PT_STATUS=failed
+        else       
+            set PT_STATUS=incomplete
+        endiff
+    endiff
+
+    set CWSENV=Windows
+    call perl5 %SOLARENV%/bin/cwstestresult.pl -c %CWS_WORK_STAMP% -n CWSCheckAPI -p %CWSENV% %PT_STATUS%
+else
+    echo "No cwstestresult.pl found."
+endiff

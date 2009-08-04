@@ -39,10 +39,22 @@ End
 #endif
 #if ((defined(WNT)) || (defined(LINUX)) || ((defined(SOLARIS)) && (defined(SPARC)))|| defined(NETBSD) )
 STD_UNO_LIB_FILE( gid_File_Lib_Adabas, adabas)
+File gid_File_Oo_Office_Dataaccess_Adabas_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/adabas.xcu";
+End
 #endif
 
 #if defined(WNT)
 STD_UNO_LIB_FILE( gid_File_Lib_Ado, ado)
+File gid_File_Oo_Office_Dataaccess_Ado_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/ado.xcu";
+End
 #endif
 
 STD_UNO_LIB_FILE( gid_File_Lib_Basctl, basctl)
@@ -267,10 +279,15 @@ STD_UNO_LIB_FILE( gid_File_Lib_Dbmm, dbmm)
 STD_UNO_LIB_FILE( gid_File_Lib_Dbacfg, dbacfg)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbase2, dbase )
+File gid_File_Oo_Office_Dataaccess_Dbase_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/dbase.xcu";
+End
 
 STD_LIB_FILE( gid_File_Lib_Dbfile , file)
-
-STD_LIB_FILE(gid_File_Lib_Odbcbase,odbcbase)
+STD_LIB_FILE( gid_File_Lib_Odbcbase,odbcbase)
 
 
 File gid_File_Lib_Dbpool
@@ -411,7 +428,7 @@ End
 
 #endif
 
-STD_LIB_FILE(gid_File_Lib_Drawinglayer,drawinglayer)
+STD_LIB_FILE_PATCH(gid_File_Lib_Drawinglayer,drawinglayer)
 
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Embobj,embobj)
 
@@ -435,7 +452,12 @@ End
 #ifdef UNX
 
 #ifdef ENABLE_KAB
-
+File gid_File_Oo_Office_Dataaccess_Kab_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/kab.xcu";
+End
 File gid_File_Lib_Kab_1
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
@@ -454,7 +476,12 @@ End
 #endif
 
 #ifdef MACOSX
-
+File gid_File_Oo_Office_Dataaccess_Macab_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/macab.xcu";
+End
 File gid_File_Lib_Macab_1
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
@@ -473,6 +500,12 @@ End
 #endif  // #ifdef ENABLE_KAB
 
 #ifdef ENABLE_EVOAB2
+File gid_File_Oo_Office_Dataaccess_Evoab2_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/evoab2.xcu";
+End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Evoab , evoab)
 
@@ -502,6 +535,12 @@ File gid_File_Lib_Filterconfig1
     Name = SPECIAL_NAME(filterconfig1);
 End
 
+File gid_File_Oo_Office_Dataaccess_Flat_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/flat.xcu";
+End
 STD_UNO_LIB_FILE( gid_File_Lib_Flat, flat)
 
 #ifdef WNT
@@ -557,7 +596,7 @@ End
 #ifdef QUARTZ
 File gid_File_Lib_Fps_Aqua
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
     Name = SPECIAL_COMPONENT_LIB_NAME(fps_aqua.uno);
@@ -781,11 +820,22 @@ End
 #ifdef SOLAR_JAVA
 
 STD_UNO_LIB_FILE( gid_File_Lib_Jdbc, jdbc)
+File gid_File_Oo_Office_Dataaccess_Jdbc_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/jdbc.xcu";
+End
 
 #endif
 
 #ifdef SOLAR_JAVA
-
+File gid_File_Oo_Office_Dataaccess_Hsqldb_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/hsqldb.xcu";
+End
 File gid_File_Lib_Hsqldb_2
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
@@ -840,6 +890,17 @@ File gid_File_Lib_Patchmsi
     Name = "patchmsi.dll";
     Dir = gid_Dir_Program;
     Styles = (PACKED,PATCH,PATCH_ONLY,BINARYTABLE,BINARYTABLE_ONLY,DONTRENAMEINPATCH);
+End
+
+#endif
+
+#ifdef WNT
+
+File gid_File_Lib_Rebasemsi
+    TXT_FILE_BODY;
+    Name = "rebase.dll";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED,PATCH,BINARYTABLE,BINARYTABLE_ONLY,DONTRENAMEINPATCH);
 End
 
 #endif
@@ -904,6 +965,17 @@ End
 
 #if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) && !defined(MACOSX)
                                                                 // #i91209#
+File gid_File_Oo_Office_Dataaccess_Mozab_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+#ifdef WNT
+    Name = "/registry/spool/DataAccess/mozab.xcu";
+#else
+    Name = "/registry/spool/DataAccess/mozab2.xcu";
+#endif
+End
+
 STD_UNO_LIB_FILE(gid_File_Lib_Mozab,mozab)
 STD_LIB_FILE(gid_File_Lib_Mozabdrv,mozabdrv)
 
@@ -1011,7 +1083,25 @@ End
 #endif
 
 STD_UNO_LIB_FILE(gid_File_Lib_Mysql,mysql)
+File gid_File_Oo_Office_Dataaccess_Mysql_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/mysql.xcu";
+End
 STD_UNO_LIB_FILE(gid_File_Lib_Odbc,odbc)
+File gid_File_Oo_Office_Dataaccess_Odbc_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+    Name = "/registry/spool/DataAccess/odbc.xcu";
+End
+
+File gid_File_Registry_Drivers_Zip
+    Dir = gid_Dir_Share_Registry_Res_Lang;
+    ARCHIVE_TXT_FILE_BODY;
+    EXTRA_ALL_LANG(fcfg_drivers);
+End
 
 // STD_LIB_FILE( gid_File_Lib_Ofa , ofa)
 
@@ -1088,7 +1178,7 @@ SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Productregistration, productregistr
 File gid_File_Lib_Vclplug_Gen
     Name = LIBNAME(vclplug_gen);
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Program;
 End
 #endif
@@ -1098,7 +1188,7 @@ End
 File gid_File_Lib_Vclplug_Gtk
     Name = LIBNAME(vclplug_gtk);
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Program;
 End
 #endif
@@ -1107,7 +1197,7 @@ End
 File gid_File_Lib_Vclplug_Kde
     Name = LIBNAME(vclplug_kde);
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Program;
 End
 #endif
@@ -1133,7 +1223,7 @@ End
 #endif
 
 #if defined UNX && ! defined QUARTZ
-STD_LIB_FILE( gid_File_Lib_Vclplug_Svp, vclplug_svp )
+STD_LIB_FILE_PATCH( gid_File_Lib_Vclplug_Svp, vclplug_svp )
 STD_LIB_FILE( gid_File_Lib_BaseBmp, basebmp )
 #endif
 
@@ -1432,7 +1522,7 @@ File gid_File_Lib_Ucpchelp1
 End
 
 #ifndef DISABLE_NEON
-SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucpdav1,ucpdav1)
+SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Ucpdav1,ucpdav1)
 #endif
 
 SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Ucpfile1,ucpfile1)
@@ -1692,20 +1782,17 @@ End
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Oooimprovecore , oooimprovecore)
 
-#if defined WNT && \
-    (defined M1310 || \
-     ((defined M1400 || defined M1500) && \
-      !(defined SYSTEM_MOZILLA || defined WITHOUT_MOZILLA)))
-File gid_File_Moz_Msvcp71
+#if defined WNT && !defined SYSTEM_MOZILLA && !defined WITHOUT_MOZILLA
+File gid_File_Moz_Msvcp80
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Name = SCP2_URE_DL_NORMAL("msvcp71" SCP2_STDLP_DEBUG);
+    Name = SCP2_URE_DL_NORMAL("msvcp80");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
-File gid_File_Moz_Msvcr71
+File gid_File_Moz_Msvcr80
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Name = SCP2_URE_DL_NORMAL("msvcr71" SCP2_STDLP_DEBUG);
+    Name = SCP2_URE_DL_NORMAL("msvcr80");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
 #endif
@@ -1742,7 +1829,7 @@ File gid_File_Lib_Rasqal
     #endif
   #else
    #ifdef _gcc3
-    Name = "librasqal-0.dll";
+       Name = STRING(CONCAT3(librasqal-,RASQAL_MAJOR,.dll));
    #else
     Name = "rasqal.dll";
    #endif

@@ -910,6 +910,7 @@ PERL
 HAVE_LD_HASH_STYLE
 _cc
 GNUMAKE
+NO_HIDS
 ENABLE_PCH
 HAVE_LD_BSYMBOLIC_FUNCTIONS
 GCCVER
@@ -1020,6 +1021,7 @@ enable_lockdown
 enable_vba
 with_vba_package_format
 enable_pch
+enable_hids
 enable_mozilla
 with_fonts
 with_ppds
@@ -1823,6 +1825,8 @@ Optional Features:
   --disable-vba           disables the vba compatibility feature
 
   --enable-pch            EXPERIMENTAL: Enables precompiled header support for C++.
+
+  --enable-hids            Enables generation of HelpId lists.
 
   --disable-mozilla       OO.o usually includes a strangely hacked up mozilla
                           binary for your platform, to build without this
@@ -2880,6 +2884,11 @@ fi
 # Check whether --enable-pch was given.
 if test "${enable_pch+set}" = set; then
   enableval=$enable_pch;
+fi
+
+# Check whether --enable-hids was given.
+if test "${enable_hids+set}" = set; then
+  enableval=$enable_hids;
 fi
 
 # Check whether --enable-mozilla was given.
@@ -6131,6 +6140,19 @@ $as_echo "no" >&6; }
 fi
 
 
+{ $as_echo "$as_me:$LINENO: checking whether to enable hid list feature" >&5
+$as_echo_n "checking whether to enable hid list feature... " >&6; }
+if test -n "$enable_hids" && test "$enable_hids" != "no"; then
+   NO_HIDS=""
+   { $as_echo "$as_me:$LINENO: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+   NO_HIDS="TRUE"
+   { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
 { $as_echo "$as_me:$LINENO: checking for GNU make" >&5
 $as_echo_n "checking for GNU make... " >&6; }
 for a in "$MAKE" $GNUMAKE make gmake gnumake; do
@@ -6743,14 +6765,17 @@ $as_echo_n "checking the Version of Microsoft C/C++ Compiler... " >&6; }
 $as_echo "found Compiler version $CCNUMVER." >&6; }
 			if test "$CCNUMVER" -ge "001500000000"; then
 				COMEX=12
+				MSVSVER=2008
 				{ $as_echo "$as_me:$LINENO: result: found .NET 2008 / VS 9.0." >&5
 $as_echo "found .NET 2008 / VS 9.0." >&6; }
 			elif test "$CCNUMVER" -ge "001400000000"; then
 				COMEX=11
+				MSVSVER=2005
 				{ $as_echo "$as_me:$LINENO: result: found .NET 2005." >&5
 $as_echo "found .NET 2005." >&6; }
 			elif test "$CCNUMVER" -ge "001300102240"; then
 				COMEX=10
+				MSVSVER=2003
 				{ $as_echo "$as_me:$LINENO: result: found .NET 2003." >&5
 $as_echo "found .NET 2003." >&6; }
 			else
@@ -18182,10 +18207,16 @@ fi
 { $as_echo "$as_me:$LINENO: checking for toolkit mozilla should use" >&5
 $as_echo_n "checking for toolkit mozilla should use... " >&6; }
 if test -z "$with_mozilla_toolkit"; then
-   if test "$_os" != "WINNT"; then
-      MOZILLA_TOOLKIT=gtk2
-      { $as_echo "$as_me:$LINENO: result: gtk2" >&5
+   if test "$_os" != "WINNT" ; then
+      if test "$_os" = "Darwin" ; then
+         MOZILLA_TOOLKIT=mac
+         { $as_echo "$as_me:$LINENO: result: mac" >&5
+$as_echo "mac" >&6; }
+      else
+         MOZILLA_TOOLKIT=gtk2
+         { $as_echo "$as_me:$LINENO: result: gtk2" >&5
 $as_echo "gtk2" >&6; }
+      fi
    fi
 else
    MOZILLA_TOOLKIT=$with_mozilla_toolkit
@@ -18208,8 +18239,8 @@ else
       enable_build_mozilla=
 fi
 
-{ $as_echo "$as_me:$LINENO: checking whether to build Mozilla" >&5
-$as_echo_n "checking whether to build Mozilla... " >&6; }
+{ $as_echo "$as_me:$LINENO: checking whether to build Mozilla/SeaMonkey" >&5
+$as_echo_n "checking whether to build Mozilla/SeaMonkey... " >&6; }
 if test -n "$enable_build_mozilla"; then
    BUILD_MOZAB="TRUE"
    { $as_echo "$as_me:$LINENO: result: yes" >&5
@@ -18221,18 +18252,29 @@ $as_echo "no" >&6; }
 fi
 
 if test "$BUILD_MOZAB" = "TRUE"; then
+  if test "$_os" = "WINNT"; then
+    if test "$WITH_MINGWIN" != "yes"; then
+      # compiling with MSVC. Only supported platform here is MSVS2005 at the moment.
+      if test "$MSVSVER" != "2005"; then
+        { { $as_echo "$as_me:$LINENO: error: Building SeaMonkey is supported with Microsoft Visual Studio .NET 2005 only." >&5
+$as_echo "$as_me: error: Building SeaMonkey is supported with Microsoft Visual Studio .NET 2005 only." >&2;}
+   { (exit 1); exit 1; }; }
+      fi
+    else
+      { $as_echo "$as_me:$LINENO: WARNING: Building SeaMonkey with mingwin is not tested, and likely to break." >&5
+$as_echo "$as_me: WARNING: Building SeaMonkey with mingwin is not tested, and likely to break." >&2;}
+      echo "Building SeaMonkey with mingwin is not tested, and likely to break." >> warn
+    fi
+  fi
+
    if test -z "$MOZILLA_VERSION"; then
-      MOZILLA_VERSION=1.7.5
+      MOZILLA_VERSION=1.1.14
    fi
-   if test "$MOZILLA_VERSION" = "1.7b" ; then
-      MOZILLA_SOURCE_VERSION="mozilla-source-1.7b-source"
-   else
-      MOZILLA_SOURCE_VERSION="mozilla-source-${MOZILLA_VERSION}"
-   fi
+   MOZILLA_SOURCE_VERSION="seamonkey-${MOZILLA_VERSION}.source"
    for e in gz bz2; do
       { $as_echo "$as_me:$LINENO: checking for $MOZILLA_SOURCE_VERSION.tar.$e" >&5
 $as_echo_n "checking for $MOZILLA_SOURCE_VERSION.tar.$e... " >&6; }
-      if test ! -e "./moz/download/$MOZILLA_SOURCE_VERSION.tar.$e" && test "$HAVE_MOZILLA_TARBALL" != "y"; then
+      if test ! -e "moz/download/$MOZILLA_SOURCE_VERSION.tar.$e" && test "$HAVE_MOZILLA_TARBALL" != "y"; then
          { $as_echo "$as_me:$LINENO: result: not found" >&5
 $as_echo "not found" >&6; }
          HAVE_MOZILLA_TARBALL=n
@@ -18243,34 +18285,24 @@ $as_echo "found" >&6; }
       fi
    done
    if test "$HAVE_MOZILLA_TARBALL" != "y"; then
-         { { $as_echo "$as_me:$LINENO: error: Mozilla source archive not found.
+         { { $as_echo "$as_me:$LINENO: error: Mozilla/SeaMonkey source archive not found.
 Please copy $MOZILLA_SOURCE_VERSION.tar.bz2 or $MOZILLA_SOURCE_VERSION.tar.gz to moz/download/.
 The archives can be found here:
-http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla$MOZILLA_VERSION/source/" >&5
-$as_echo "$as_me: error: Mozilla source archive not found.
+http://releases.mozilla.org/pub/mozilla.org/seamonkey/releases/$MOZILLA_VERSION/" >&5
+$as_echo "$as_me: error: Mozilla/SeaMonkey source archive not found.
 Please copy $MOZILLA_SOURCE_VERSION.tar.bz2 or $MOZILLA_SOURCE_VERSION.tar.gz to moz/download/.
 The archives can be found here:
-http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla$MOZILLA_VERSION/source/" >&2;}
+http://releases.mozilla.org/pub/mozilla.org/seamonkey/releases/$MOZILLA_VERSION/" >&2;}
    { (exit 1); exit 1; }; }
    fi
    if test "$_os" = "WINNT"; then
-      { $as_echo "$as_me:$LINENO: checking for glib and libIDL binaries" >&5
-$as_echo_n "checking for glib and libIDL binaries... " >&6; }
-      if test ! -e "./moz/download/vc71-glib-1.2.10-bin.zip" \
-           -o ! -e "./moz/download/vc71-libIDL-0.6.8-bin.zip" \
-           -o ! -e "./moz/download/wintools.zip" ; then
-{ { $as_echo "$as_me:$LINENO: error: One or more of the following archives is missing in moz/download/
-  vc71-glib-1.2.10-bin.zip
-  vc71-libIDL-0.6.8-bin.zip
-(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc71/)
-  wintools.zip
-(from http://ftp.mozilla.org/pub/mozilla.org/mozilla/source/wintools.zip)" >&5
-$as_echo "$as_me: error: One or more of the following archives is missing in moz/download/
-  vc71-glib-1.2.10-bin.zip
-  vc71-libIDL-0.6.8-bin.zip
-(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc71/)
-  wintools.zip
-(from http://ftp.mozilla.org/pub/mozilla.org/mozilla/source/wintools.zip)" >&2;}
+      { $as_echo "$as_me:$LINENO: checking for moztools binaries" >&5
+$as_echo_n "checking for moztools binaries... " >&6; }
+      if test ! -e "moz/download/vc8-moztools.zip" ; then
+        { { $as_echo "$as_me:$LINENO: error: The following file is missing in moz/download: vc8-moztools.zip
+(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc8/)" >&5
+$as_echo "$as_me: error: The following file is missing in moz/download: vc8-moztools.zip
+(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc8/)" >&2;}
    { (exit 1); exit 1; }; }
       else
          { $as_echo "$as_me:$LINENO: result: ok" >&5
