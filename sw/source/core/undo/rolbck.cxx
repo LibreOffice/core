@@ -271,8 +271,8 @@ void SwHistorySetTxt::SetInDoc( SwDoc* pDoc, bool )
 
 SwHistorySetTxtFld::SwHistorySetTxtFld( SwTxtFld* pTxtFld, ULONG nNodePos )
     : SwHistoryHint( HSTRY_SETTXTFLDHNT )
-    , m_pFld( new SwFmtFld( *pTxtFld->GetFld().GetFld() ) )
     , m_pFldType( 0 )
+    , m_pFld( new SwFmtFld( *pTxtFld->GetFld().GetFld() ) )
 {
     // only copy if not Sys-FieldType
     SwDoc* pDoc = pTxtFld->GetTxtNode().GetDoc();

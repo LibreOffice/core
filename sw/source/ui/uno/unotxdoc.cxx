@@ -2830,7 +2830,7 @@ void SAL_CALL SwXTextDocument::render(
     // Thus instead of throwing the exception we silently return.
     if (0 > nRenderer)
         throw IllegalArgumentException();
-    if (nRenderer >= m_pPrintUIOptions->GetPagesToPrint().size())
+    if (nRenderer >= sal_Int32(m_pPrintUIOptions->GetPagesToPrint().size()))
         return;
 
     // the view shell should be SwView for documents PDF export
