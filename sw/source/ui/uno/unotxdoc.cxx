@@ -2655,30 +2655,44 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     }
 
     const sal_Int32 nPageCount = pDoc->GetPageCount();
+    OUString aPageRange;
     if (bIsPDFExport)
-        nRet = nPageCount;
+    {
+//        uno::Any aSelection;
+        for( sal_Int32 i = 0, nCount = rxOptions.getLength(); i < nCount; ++i )
+        {
+            if( rxOptions[ i ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ) )
+                rxOptions[ i ].Value >>= aPageRange;
+//            else if( rxOptions[ i ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Selection" ) ) )
+//                rxOptions[ i ].Value >>= aSelection;
+        }
+    }
     else
     {
-        OUString aPageRange = m_pPrintUIOptions->getStringValue( C2U( "PageRange" ), OUString() );
-        if (aPageRange.getLength() == 0)
-        {
-            // set page range to print all pages
-            aPageRange = OUString::valueOf( (sal_Int32)1 );
-            aPageRange += OUString::valueOf( (sal_Unicode)'-');
-            aPageRange += OUString::valueOf( nPageCount );
-        }
-
-        // get set of valid pages (according to the current settings)
-        // and their start frames
-        pDoc->GetValidPagesForPrinting( *m_pPrintUIOptions, nPageCount );
-
-        // get vector of pages to print according to PageRange and valid pages from above
-        StringRangeEnumerator::getRangesFromString(
-                aPageRange, m_pPrintUIOptions->GetPagesToPrint(),
-                1, nPageCount, 0, &m_pPrintUIOptions->GetValidPagesSet() );
-
-        nRet = m_pPrintUIOptions->GetPagesToPrint().size();
+        aPageRange = m_pPrintUIOptions->getStringValue( C2U( "PageRange" ), OUString() );
     }
+
+    if (aPageRange.getLength() == 0)
+    {
+        // set page range to print to 'all pages'
+        aPageRange = OUString::valueOf( (sal_Int32)1 );
+        aPageRange += OUString::valueOf( (sal_Unicode)'-');
+        aPageRange += OUString::valueOf( nPageCount );
+    }
+
+    // get set of valid pages (according to the current settings)
+    // and their start frames
+    pDoc->GetValidPagesForPrinting( bIsPDFExport, *m_pPrintUIOptions, nPageCount );
+    DBG_ASSERT( nPageCount >= 1, "valid pages count is 0! Should not happen." );
+
+    // get vector of pages to print according to PageRange and valid pages from above
+    // (result may be an empty vector, for example if the range string is not correct)
+    StringRangeEnumerator::getRangesFromString(
+            aPageRange, m_pPrintUIOptions->GetPagesToPrint(),
+            1, nPageCount, 0, &m_pPrintUIOptions->GetValidPagesSet() );
+
+    nRet = m_pPrintUIOptions->GetPagesToPrint().size();
+    DBG_ASSERT( nRet >= 0, "negative number of pages???" );
 
     return nRet;
 }
@@ -2816,10 +2830,7 @@ void SAL_CALL SwXTextDocument::render(
     // Thus instead of throwing the exception we silently return.
     if (0 > nRenderer)
         throw IllegalArgumentException();
-    const sal_Int32 nMaxCount = bIsPDFExport?
-        static_cast< sal_Int32 >(pDoc->GetPageCount()) :
-        static_cast< sal_Int32 >(m_pPrintUIOptions->GetPagesToPrint().size());
-    if (nRenderer >= nMaxCount)
+    if (nRenderer >= m_pPrintUIOptions->GetPagesToPrint().size())
         return;
 
     // the view shell should be SwView for documents PDF export

@@ -991,6 +991,7 @@ const SwDocStat& SwDoc::GetDocStat() const
 
 
 void SwDoc::GetValidPagesForPrinting(
+    bool bIsPDFExport,
     SwPrintUIOptions &rPrintUIOptions,
     sal_Int32 nDocPageCount )
 {
@@ -999,10 +1000,21 @@ void SwDoc::GetValidPagesForPrinting(
         return;
 
     // properties to take into account when calcualting the set of pages
-    const bool bPrintLeftPage   = rPrintUIOptions.isPrintLeftPages();
-    const bool bPrintRightPage  = rPrintUIOptions.isPrintRightPages();
-    const bool bPrintReverse    = rPrintUIOptions.getBoolValue( C2U( "PrintReverseOrder" ), false );
-    const bool bPrintEmptyPages = rPrintUIOptions.getBoolValue( C2U( "PrintEmptyPages" ),   false );
+    bool bPrintLeftPage   = rPrintUIOptions.isPrintLeftPages();
+    bool bPrintRightPage  = rPrintUIOptions.isPrintRightPages();
+    bool bPrintReverse    = rPrintUIOptions.getBoolValue( C2U( "PrintReverseOrder" ), false );
+    bool bPrintEmptyPages = rPrintUIOptions.getBoolValue( C2U( "PrintEmptyPages" ),   false );
+
+    if (bIsPDFExport)
+    {
+        // PDF export UI does not allow for selecting left or right pages only or reverse print
+        bPrintLeftPage   = true;
+        bPrintRightPage  = true;
+        bPrintReverse    = false;
+        // TLPDF, TODO; take care of the option 'Export automatically inserted blank pages'
+        // from the 'Export as PDF' (aka PDF Options) dialog.
+        bPrintEmptyPages = false;
+    }
 
     Range aPages( 1, nDocPageCount );
 

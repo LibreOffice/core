@@ -1291,13 +1291,11 @@ BOOL ViewShell::Prt(
 
 /* TLPDF neu: start */
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( 0 <= nRenderer && nRenderer <= sal_Int32(rPrintUIOptions.GetPagesToPrint().size()),
-            "nRenderer out of bounds");
+    DBG_ASSERT( 0 <= nRenderer && nRenderer < (sal_Int32)rPrintUIOptions.GetPagesToPrint().size(), "nRenderer out of bounds");
 #endif
     const sal_Int32 nPage = rPrintUIOptions.GetPagesToPrint()[ nRenderer ]; /* TLPDF */
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( 0 <= nPage && nPage <= sal_Int32(rPrintUIOptions.GetValidStartFrms().size()),
-            "nPage out of bounds");
+    DBG_ASSERT( rPrintUIOptions.GetValidPagesSet().count( nPage ) == 1, "nPage not valid" );
 #endif
     const SwPrintUIOptions::ValidStartFramesMap_t &rFrms = rPrintUIOptions.GetValidStartFrms();
     SwPrintUIOptions::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( nPage ) );

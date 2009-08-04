@@ -1335,7 +1335,7 @@ public:
 
     // get the set of printable pages for the XRenderable API by
     // evaluating the respective settings (see implementation)
-    void GetValidPagesForPrinting( SwPrintUIOptions &rPrintUIOptions,
+    void GetValidPagesForPrinting( bool bIsPDFExport, SwPrintUIOptions &rPrintUIOptions,
             sal_Int32 nDocPageCount );
 
     sal_uInt16 GetPageCount() const;

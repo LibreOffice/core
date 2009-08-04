@@ -115,9 +115,10 @@ public:
 
     typedef std::map< sal_Int32, const SwPageFrm * > ValidStartFramesMap_t;
 
-    std::set< sal_Int32 > & GetValidPagesSet()                      { return aValidPages; }
-    ValidStartFramesMap_t &          GetValidStartFrms()            { return aValidStartFrms; }
-    const ValidStartFramesMap_t &    GetValidStartFrms() const      { return aValidStartFrms; }
+    std::set< sal_Int32 > &             GetValidPagesSet()          { return aValidPages; }
+    const std::set< sal_Int32 > &       GetValidPagesSet() const    { return aValidPages; }
+    ValidStartFramesMap_t &             GetValidStartFrms()         { return aValidStartFrms; }
+    const ValidStartFramesMap_t &       GetValidStartFrms() const   { return aValidStartFrms; }
     std::vector< sal_Int32 > &          GetPagesToPrint()           { return aPagesToPrint; }
     const std::vector< sal_Int32 > &    GetPagesToPrint() const     { return aPagesToPrint; }
     bool isPrintLeftPages() const;
@@ -126,18 +127,4 @@ public:
 
 
 #endif //_SWPRTOPT_HXX
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

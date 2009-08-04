@@ -52,6 +52,7 @@ class SW_DLLPUBLIC SwDBFieldType : public SwValueFieldType
 public:
 
     SwDBFieldType(SwDoc* pDocPtr, const String& rColumnName, const SwDBData& rDBData);
+    ~SwDBFieldType();
 
     virtual const String& GetName() const;
     virtual SwFieldType*  Copy() const;
