@@ -120,11 +120,11 @@ End
 
 // Scripting Framework Python configuration settings
 
-File gid_File_Registry_Spool_Oo_Scripting_Python_Xcu
+File gid_File_Share_Registry_Pyuno_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Scripting;
-    Name = "/registry/spool/org/openoffice/Office/Scripting-python.xcu";
+    Dir = gid_Dir_Share_Registry;
+    Name = "pyuno.xcd";
 End
 
 #ifndef SYSTEM_PYTHON

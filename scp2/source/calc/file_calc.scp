@@ -41,12 +41,13 @@ End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Analysis, analysis)
 
-File gid_File_Oo_Office_Dataaccess_Calc_Xcu
+File gid_File_Share_Registry_Calc_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
-    Name = "/registry/spool/DataAccess/calc.xcu";
+    Dir = gid_Dir_Share_Registry;
+    Name = "calc.xcd";
 End
+
 STD_UNO_LIB_FILE( gid_File_Lib_Calc, calc)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Date, date)
@@ -71,13 +72,6 @@ STD_RES_FILE( gid_File_Res_Sc, sc )
 
 STD_RES_FILE( gid_File_Res_Tfu, tfu )
 
-File gid_File_Registry_Spool_Oo_Office_Embedding_Calc_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Embedding;
-    Name = "/registry/spool/org/openoffice/Office/Embedding-calc.xcu";
-End
-
 File gid_File_Help_Scalc_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY;
@@ -94,69 +88,6 @@ File gid_File_Share_Config_Sofficecfg_Calc_Menubar_Xml
     Name = "/uiconfig/scalc/menubar/menubar.xml";
 End
 */
-File gid_File_Oo_Office_Ui_Calccommands_Xcs
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
-    Name = "/registry/schema/org/openoffice/Office/UI/CalcCommands.xcs";
-End
-
-File gid_File_Oo_Office_Ui_Calccommands_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
-    Name = "/registry/data/org/openoffice/Office/UI/CalcCommands.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Calc_UISort_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_UISort;
-    Name = "/registry/spool/org/openoffice/TypeDetection/UISort-calc.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Calc_Types_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_calc_types.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Calc_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_calc_filters.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_Common_Calc_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
-    Name = "/registry/spool/org/openoffice/Office/Common-calc.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_Setup_Calc_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
-    Name = "/registry/spool/org/openoffice/Setup-calc.xcu";
-End
-
-File gid_File_Oo_Office_Ui_Calcwindowstate_Xcs
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
-    Name = "/registry/schema/org/openoffice/Office/UI/CalcWindowState.xcs";
-End
-
-File gid_File_Oo_Office_Ui_Calcwindowstate_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
-    Name = "/registry/data/org/openoffice/Office/UI/CalcWindowState.xcu";
-End
-
 File gid_File_Exe_Scalc
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;

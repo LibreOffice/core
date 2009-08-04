@@ -50,20 +50,13 @@ Module gid_Module_Root_Brand
             gid_Brand_Dir_Share_Uno_Packages,
             gid_Brand_Dir_Share_Uno_Packages_Cache,
             gid_Brand_Dir_Share_Registry,
-            gid_Brand_Dir_Share_Registry_Data,
-            gid_Brand_Dir_Share_Registry_Data_Org,
-            gid_Brand_Dir_Share_Registry_Data_Org_Openoffice,
-            gid_Brand_Dir_Share_Registry_Data_Org_Openoffice_Office,
             gid_Brand_Dir_Share_Registry_Modules,
             gid_Brand_Dir_Share_Registry_Modules_Org,
             gid_Brand_Dir_Share_Registry_Modules_Oo,
             gid_Brand_Dir_Share_Registry_Modules_Oo_Inet,
             gid_Brand_Dir_Share_Registry_Modules_Oo_Office,
             gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Common,
-            gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Jobs,
-            gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Ui,
             gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Writer,
-            gid_Brand_Dir_Share_Registry_Modules_Oo_Setup,
             gid_Brand_Dir_Share_Xdg);
     Files = (gid_Brand_File_BasisLink,
              gid_Brand_File_Bin_Crashreport,
@@ -98,15 +91,11 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Msvcm80crt_Manifest,
              gid_Brand_File_Lib_Npsoplugin,
              gid_Brand_File_Lib_Subscrib_C05,
-             gid_Brand_File_Oo_Office_Compatibility_Xcu,
+             gid_Brand_File_Share_Registry_Brand_Xcd,
              gid_Brand_File_Registry_Spool_Oo_Inet_defaultsearchengine_Xcu_C01,
-             gid_Brand_File_Registry_Spool_Oo_Setup_Brand_Xcu,
-             gid_Brand_File_Registry_Spool_Oo_Office_Common_Brand_Xcu,
-             gid_Brand_File_Registry_Spool_Oo_Office_Ui_Brand_Xcu,
              gid_Brand_File_Registry_Spool_Oo_Office_Writer_directcursor_Xcu_C01,
              gid_Brand_File_Registry_Spool_Oo_Office_Writer_defaultfontarial_Xcu_C01,
              gid_Brand_File_Script_Unopkg,
-             gid_Brand_File_Share_Registry_Modules_Oo_Office_Jobs_Registration,
              gid_Brand_File_Share_Xdg_Base,
              gid_Brand_File_Share_Xdg_Calc,
              gid_Brand_File_Share_Xdg_Draw,
@@ -254,26 +243,6 @@ Directory gid_Brand_Dir_Share_Registry
     DosName = "registry";
 End
 
-Directory gid_Brand_Dir_Share_Registry_Data
-    ParentID = gid_Brand_Dir_Share_Registry;
-    HostName = "data";
-End
-
-Directory gid_Brand_Dir_Share_Registry_Data_Org
-    ParentID = gid_Brand_Dir_Share_Registry_Data;
-    HostName = "org";
-End
-
-Directory gid_Brand_Dir_Share_Registry_Data_Org_Openoffice
-    ParentID = gid_Brand_Dir_Share_Registry_Data_Org;
-    HostName = "openoffice";
-End
-
-Directory gid_Brand_Dir_Share_Registry_Data_Org_Openoffice_Office
-    ParentID = gid_Brand_Dir_Share_Registry_Data_Org_Openoffice;
-    HostName = "Office";
-End
-
 Directory gid_Brand_Dir_Share_Registry_Modules
     ParentID = gid_Brand_Dir_Share_Registry;
     HostName = "modules";
@@ -304,19 +273,9 @@ Directory gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Common
     HostName = "Common";
 End
 
-Directory gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Ui
-    ParentID = gid_Brand_Dir_Share_Registry_Modules_Oo_Office;
-    HostName = "UI";
-End
-
 Directory gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Writer
     ParentID = gid_Brand_Dir_Share_Registry_Modules_Oo_Office;
     HostName = "Writer";
-End
-
-Directory gid_Brand_Dir_Share_Registry_Modules_Oo_Setup
-    ParentID = gid_Brand_Dir_Share_Registry_Modules_Oo;
-    HostName = "Setup";
 End
 
 #if defined UNX && ! defined MACOSX
@@ -536,18 +495,11 @@ File gid_Brand_File_Images_Brand_Zip
     Styles = (PACKED);
 End
 
-File gid_Brand_File_Oo_Office_Compatibility_Xcu
+File gid_Brand_File_Share_Registry_Brand_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED, SCPZIP_REPLACE);
-    Dir = gid_Brand_Dir_Share_Registry_Data_Org_Openoffice_Office;
-    Name = "/registry/data/org/openoffice/Office/Compatibility.xcu";
-End
-
-File gid_Brand_File_Registry_Spool_Oo_Office_Common_Brand_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED, SCPZIP_REPLACE);
-    Dir = gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Common;
-    Name = "/registry/spool/org/openoffice/Office/Common-brand.xcu";
+    Dir = gid_Brand_Dir_Share_Registry;
+    Name = "brand.xcd";
 End
 
 File gid_Brand_File_Registry_Spool_Oo_Office_Common_Cjk_Xcu
@@ -567,13 +519,6 @@ File gid_Brand_File_Registry_Spool_Oo_Office_Common_Korea_Xcu
     Name (ko) = "/registry/spool/org/openoffice/Office/Common-korea.xcu";
 End
 
-File gid_Brand_File_Registry_Spool_Oo_Office_Ui_Brand_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED, SCPZIP_REPLACE);
-    Dir = gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Ui;
-    Name = "/registry/spool/org/openoffice/Office/UI-brand.xcu";
-End
-
 File gid_Brand_File_Registry_Spool_Oo_Office_Writer_Cjk_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED,MAKE_LANG_SPECIFIC);
@@ -582,13 +527,6 @@ File gid_Brand_File_Registry_Spool_Oo_Office_Writer_Cjk_Xcu
     Name (ko) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
     Name (zh-CN) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
     Name (zh-TW) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
-End
-
-File gid_Brand_File_Registry_Spool_Oo_Setup_Brand_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED, SCPZIP_REPLACE);
-    Dir = gid_Brand_Dir_Share_Registry_Modules_Oo_Setup;
-    Name = "/registry/spool/org/openoffice/Setup-brand.xcu";
 End
 
 #if defined UNX && ! defined MACOSX
@@ -1285,22 +1223,6 @@ ProfileItem gid_Brand_Profileitem_Setup_Install
     Inifiletableaction = "1";
     Styles = (INIFILETABLE);
 End
-#endif
-
-#ifdef ENABLE_SVCTAGS
-
-Directory gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Jobs
-    ParentID = gid_Brand_Dir_Share_Registry_Modules_Oo_Office;
-    HostName = "Jobs";
-End
-
-File gid_Brand_File_Share_Registry_Modules_Oo_Office_Jobs_Registration
-    TXT_FILE_BODY;
-    Styles = (PACKED, SCPZIP_REPLACE);
-    Dir = gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Jobs;
-    Name = "/registry/spool/org/openoffice/Office/Jobs/Jobs-registration.xcu";
-End
-
 #endif
 
 //TODO: This actually belongs into a module of its own:

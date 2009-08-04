@@ -46,11 +46,11 @@ STD_UNO_LIB_FILE( gid_File_Lib_Smd , smd)
 
 STD_RES_FILE( gid_File_Res_Sm, sm )
 
-File gid_File_Registry_Spool_Oo_Office_Embedding_Math_Xcu
+File gid_File_Share_Registry_Math_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Embedding;
-    Name = "/registry/spool/org/openoffice/Office/Embedding-math.xcu";
+    Dir = gid_Dir_Share_Registry;
+    Name = "math.xcd";
 End
 
 File gid_File_Help_Smath_Zip
@@ -81,67 +81,3 @@ File gid_File_Share_Config_Sofficecfg_Math_Menubar_Xml
     Name = "/uiconfig/smath/menubar/menubar.xml";
 End
 */
-
-File gid_File_Oo_Office_Ui_Mathcommands_Xcs
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
-    Name = "/registry/schema/org/openoffice/Office/UI/MathCommands.xcs";
-End
-
-File gid_File_Oo_Office_Ui_Mathcommands_Xcu
-   TXT_FILE_BODY;
-   Styles = (PACKED);
-   Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
-   Name = "/registry/data/org/openoffice/Office/UI/MathCommands.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Math_UISort_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_UISort;
-    Name = "/registry/spool/org/openoffice/TypeDetection/UISort-math.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Math_Types_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_math_types.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Math_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_math_filters.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_Common_Math_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
-    Name = "/registry/spool/org/openoffice/Office/Common-math.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_Setup_Math_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
-    Name = "/registry/spool/org/openoffice/Setup-math.xcu";
-End
-
-File gid_File_Oo_Office_Ui_Mathwindowstate_Xcs
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
-    Name = "/registry/schema/org/openoffice/Office/UI/MathWindowState.xcs";
-End
-
-File gid_File_Oo_Office_Ui_Mathwindowstate_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
-    Name = "/registry/data/org/openoffice/Office/UI/MathWindowState.xcu";
-End
-

@@ -30,11 +30,11 @@
 
 #include "macros.inc"
 
-File gid_File_Registry_Spool_Oo_Office_Embedding_Draw_Xcu
+File gid_File_Share_Registry_Draw_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Embedding;
-    Name = "/registry/spool/org/openoffice/Office/Embedding-draw.xcu";
+    Dir = gid_Dir_Share_Registry;
+    Name = "draw.xcd";
 End
 
 File gid_File_Help_Sdraw_Zip
@@ -65,53 +65,3 @@ File gid_File_Share_Config_Sofficecfg_Draw_Menubar_Xml
     Name = "/uiconfig/sdraw/menubar/menubar.xml";
 End
 */
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Draw_UISort_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_UISort;
-    Name = "/registry/spool/org/openoffice/TypeDetection/UISort-draw.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Draw_Types_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_draw_types.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_Draw_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_draw_filters.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_Common_Draw_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
-    Name = "/registry/spool/org/openoffice/Office/Common-draw.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_Setup_Draw_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
-    Name = "/registry/spool/org/openoffice/Setup-draw.xcu";
-End
-
-File gid_File_Oo_Office_Ui_Drawwindowstate_Xcs
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
-    Name = "/registry/schema/org/openoffice/Office/UI/DrawWindowState.xcs";
-End
-
-File gid_File_Oo_Office_Ui_Drawwindowstate_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
-    Name = "/registry/data/org/openoffice/Office/UI/DrawWindowState.xcu";
-End
-

@@ -138,9 +138,9 @@ sub write_DIR_IDENT_ALL_LANG
 
 sub write_EXTRA_ALL_LANG
 {
-    print OUTFILE "#define EXTRA_ALL_LANG(name) ";
+    print OUTFILE "#define EXTRA_ALL_LANG(name,ext) ";
     foreach $lang (@completelangiso) {
-        print OUTFILE "\\\n\tName ($lang) = EXTRAFILENAME(name,_$lang)";
+        print OUTFILE "\\\n\tName ($lang) = CONFIGLANGFILENAME(name,_$lang,ext)";
         print OUTFILE "; " if ( $lang ne $completelangiso[$#completelangiso]);
     }
     print OUTFILE "\n\n";
