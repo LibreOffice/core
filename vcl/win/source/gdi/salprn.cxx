@@ -1966,7 +1966,9 @@ static int lcl_StartDocA( HDC hDC, DOCINFOA* pInfo, WinSalPrinter* pPrt )
 BOOL WinSalPrinter::StartJob( const XubString* pFileName,
                            const XubString& rJobName,
                            const XubString&,
-                           ULONG nCopies, BOOL bCollate,
+                           ULONG nCopies,
+                           bool bCollate,
+                           bool bDirect,
                            ImplJobSetup* pSetupData )
 {
     mnError     = 0;

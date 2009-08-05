@@ -116,7 +116,9 @@ public:                     // public for Sal Implementation
     virtual BOOL                    StartJob( const String* pFileName,
                                               const String& rJobName,
                                               const String& rAppName,
-                                              ULONG nCopies, BOOL bCollate,
+                                              ULONG nCopies,
+                                              bool bCollate,
+                                              bool bDirect,
                                               ImplJobSetup* pSetupData ) = 0;
 
     // implement for pull model print systems only,

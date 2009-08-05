@@ -1559,7 +1559,9 @@ Os2SalPrinter::~Os2SalPrinter()
 BOOL Os2SalPrinter::StartJob( const XubString* pFileName,
                            const XubString& rJobName,
                            const XubString& rAppName,
-                           ULONG nCopies, BOOL bCollate,
+                           ULONG nCopies,
+                           bool bCollate,
+                           bool bDirect,
                            ImplJobSetup* pSetupData )
 {
     DEVOPENSTRUC    aDevOpenStruc;

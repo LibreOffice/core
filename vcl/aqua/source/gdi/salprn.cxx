@@ -519,8 +519,8 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
                                    const String& i_rJobName,
                                    const String& i_rAppName,
                                    ImplJobSetup* i_pSetupData,
-                                   vcl::PrinterController& i_rController,
-                                   bool bIsQuickJob )
+                                   vcl::PrinterController& i_rController
+                                   )
 {
     if( mbJob )
         return FALSE;
@@ -621,7 +621,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
         if( pPrintOperation )
         {
             NSObject* pReleaseAfterUse = nil;
-            bool bShowPanel = (! bIsQuickJob && getUseNativeDialog() && i_rController.isShowDialogs() );
+            bool bShowPanel = (! i_rController.isDirectPrint() && getUseNativeDialog() && i_rController.isShowDialogs() );
             [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
             [pPrintOperation setShowsProgressPanel: bShowProgressPanel ? YES : NO];
 
@@ -736,17 +736,7 @@ BOOL AquaSalPrinter::StartJob( const String* i_pFileName,
                                ImplJobSetup* i_pSetupData,
                                vcl::PrinterController& i_rController )
 {
-    bool bIsQuickJob = false;
-    std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator quick_it =
-        i_pSetupData->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ) );
-
-    if( quick_it != i_pSetupData->maValueMap.end() )
-    {
-        if( quick_it->second.equalsIgnoreAsciiCaseAscii( "true" ) )
-            bIsQuickJob = true;
-    }
-
-    return mpInfoPrinter->StartJob( i_pFileName, i_rJobName, i_rAppName, i_pSetupData, i_rController, bIsQuickJob );
+    return mpInfoPrinter->StartJob( i_pFileName, i_rJobName, i_rAppName, i_pSetupData, i_rController );
 }
 
 // -----------------------------------------------------------------------
@@ -754,7 +744,9 @@ BOOL AquaSalPrinter::StartJob( const String* i_pFileName,
 BOOL AquaSalPrinter::StartJob( const XubString* i_pFileName,
                                const XubString& i_rJobName,
                                const XubString& i_rAppName,
-                               ULONG i_nCopies, BOOL i_bCollate,
+                               ULONG i_nCopies,
+                               bool i_bCollate,
+                               bool i_bDirect,
                                ImplJobSetup* i_pSetupData )
 {
     DBG_ERROR( "should never be called" );

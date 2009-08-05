@@ -270,7 +270,6 @@ private:
 
 private:
     SAL_DLLPRIVATE void         ImplEndPrint();
-    SAL_DLLPRIVATE BOOL         StartJob( const XubString& rJobName );
     SAL_DLLPRIVATE BOOL         EndJob();
     SAL_DLLPRIVATE              Printer( const Printer& rPrinter );
     SAL_DLLPRIVATE Printer&     operator =( const Printer& rPrinter );
@@ -487,6 +486,7 @@ public:
     void abortJob();
 
     bool isShowDialogs() const;
+    bool isDirectPrint() const;
 
     // implementation details, not usable outside vcl
     SAL_DLLPRIVATE int getFilteredPageCount();

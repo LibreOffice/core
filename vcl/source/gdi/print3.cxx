@@ -327,10 +327,8 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
 
     // check if the printer brings up its own dialog
     // in that case leave the work to that dialog
-    const String& rQuick( i_rInitSetup.GetValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ) ) );
-    bool bIsQuick = rQuick.Len() && rQuick.EqualsIgnoreCaseAscii( "true" );
     if( ! pController->getPrinter()->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG ) &&
-        ! bIsQuick &&
+        ! pController->isDirectPrint() &&
         pController->isShowDialogs()
         )
     {
@@ -382,8 +380,8 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
         return FALSE;
 
     ULONG   nCopies = mnCopyCount;
-    BOOL    bCollateCopy = mbCollateCopy;
-    BOOL    bUserCopy = FALSE;
+    bool    bCollateCopy = mbCollateCopy;
+    bool    bUserCopy = FALSE;
 
     if ( nCopies > 1 )
     {
@@ -475,7 +473,9 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
         if( mpPrinter->StartJob( pPrintFile,
                                  i_rJobName,
                                  Application::GetDisplayName(),
-                                 nCopies, bCollateCopy,
+                                 nCopies,
+                                 bCollateCopy,
+                                 i_pController->isDirectPrint(),
                                  maJobSetup.ImplGetConstData() ) )
         {
             mbJobActive             = TRUE;
@@ -1150,6 +1150,15 @@ bool PrinterController::isShowDialogs() const
     if( pVal )
         pVal->Value >>= bApi;
     return ! bApi && ! Application::IsHeadlessModeEnabled();
+}
+
+bool PrinterController::isDirectPrint() const
+{
+    sal_Bool bDirect = sal_False;
+    const com::sun::star::beans::PropertyValue* pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDirect" ) ) );
+    if( pVal )
+        pVal->Value >>= bDirect;
+    return bDirect == sal_True;
 }
 
 /*

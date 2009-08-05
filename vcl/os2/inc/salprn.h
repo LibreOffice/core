@@ -135,7 +135,9 @@ public:
     virtual BOOL                    StartJob( const XubString* pFileName,
                                               const XubString& rJobName,
                                               const XubString& rAppName,
-                                              ULONG nCopies, BOOL bCollate,
+                                              ULONG nCopies,
+                                              bool bCollate,
+                                              bool bDirect,
                                               ImplJobSetup* pSetupData );
     virtual BOOL                    EndJob();
     virtual BOOL                    AbortJob();

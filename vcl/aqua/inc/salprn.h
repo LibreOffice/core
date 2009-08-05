@@ -106,8 +106,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
                                           const String& rJobName,
                                           const String& i_rAppName,
                                           ImplJobSetup* i_pSetupData,
-                                          vcl::PrinterController& i_rController,
-                                          bool bIsQuickJob );
+                                          vcl::PrinterController& i_rController );
     BOOL                        EndJob();
     BOOL                        AbortJob();
     SalGraphics*                StartPage( ImplJobSetup* i_pSetupData, BOOL i_bNewJobData );
@@ -142,7 +141,9 @@ class AquaSalPrinter : public SalPrinter
     virtual BOOL                    StartJob( const XubString* i_pFileName,
                                               const XubString& i_rJobName,
                                               const XubString& i_rAppName,
-                                              ULONG i_nCopies, BOOL i_bCollate,
+                                              ULONG i_nCopies,
+                                              bool i_bCollate,
+                                              bool i_bDirect,
                                               ImplJobSetup* i_pSetupData );
     // implement pull model print system
     virtual BOOL                    StartJob( const String* i_pFileName,

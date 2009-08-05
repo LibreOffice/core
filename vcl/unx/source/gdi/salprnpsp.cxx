@@ -928,7 +928,9 @@ BOOL PspSalPrinter::StartJob(
     const XubString* pFileName,
     const XubString& rJobName,
     const XubString& rAppName,
-    ULONG nCopies, BOOL bCollate,
+    ULONG nCopies,
+    bool bCollate,
+    bool bDirect,
     ImplJobSetup* pJobSetup )
 {
     vcl_sal::PrinterUpdate::jobStarted();
@@ -990,15 +992,6 @@ BOOL PspSalPrinter::StartJob(
     }
     m_aPrinterGfx.Init( m_aJobData );
 
-    bool bIsQuickJob = false;
-    std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator quick_it =
-        pJobSetup->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ) );
-    if( quick_it != pJobSetup->maValueMap.end() )
-    {
-        if( quick_it->second.equalsIgnoreAsciiCaseAscii( "true" ) )
-            bIsQuickJob = true;
-    }
-
     // set/clear backwards compatibility flag
     bool bStrictSO52Compatibility = false;
     std::hash_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
@@ -1011,7 +1004,7 @@ BOOL PspSalPrinter::StartJob(
     }
     m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );
 
-    return m_aPrintJob.StartJob( m_aTmpFile.Len() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx, bIsQuickJob ) ? TRUE : FALSE;
+    return m_aPrintJob.StartJob( m_aTmpFile.Len() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx, bDirect ) ? TRUE : FALSE;
 }
 
 // -----------------------------------------------------------------------
