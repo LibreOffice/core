@@ -228,6 +228,57 @@ void lcl_removeEmptyChartTypeGroups( const uno::Reference< chart2::XChartDocumen
     }
 }
 
+uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( const ::rtl::OUString& rStr, bool bAddOneToEachOldIndex )
+{
+    const sal_Unicode aSpace( ' ' );
+
+    // count number of entries
+    ::std::vector< sal_Int32 > aVec;
+    sal_Int32 nLastPos = 0;
+    sal_Int32 nPos = 0;
+    while( nPos != -1 )
+    {
+        nPos = rStr.indexOf( aSpace, nLastPos );
+        if( nPos > nLastPos )
+        {
+            aVec.push_back( rStr.copy( nLastPos, (nPos - nLastPos) ).toInt32() );
+        }
+        if( nPos != -1 )
+            nLastPos = nPos + 1;
+    }
+    // last entry
+    if( nLastPos != 0 &&
+        rStr.getLength() > nLastPos )
+    {
+        aVec.push_back( rStr.copy( nLastPos, (rStr.getLength() - nLastPos) ).toInt32() );
+    }
+
+    const sal_Int32 nVecSize = aVec.size();
+    uno::Sequence< sal_Int32 > aSeq( nVecSize );
+
+    if(!bAddOneToEachOldIndex)
+    {
+        sal_Int32* pSeqArr = aSeq.getArray();
+        for( nPos = 0; nPos < nVecSize; ++nPos )
+        {
+            pSeqArr[ nPos ] = aVec[ nPos ];
+        }
+    }
+    else if( bAddOneToEachOldIndex )
+    {
+        aSeq.realloc( nVecSize+1 );
+        aSeq[0]=0;
+
+        sal_Int32* pSeqArr = aSeq.getArray();
+        for( nPos = 0; nPos < nVecSize; ++nPos )
+        {
+            pSeqArr[ nPos+1 ] = aVec[ nPos ]+1;
+        }
+    }
+
+    return aSeq;
+}
+
 } // anonymous namespace
 
 static __FAR_DATA SvXMLEnumMapEntry aXMLLegendAlignmentMap[] =
@@ -249,7 +300,8 @@ SchXMLChartContext::SchXMLChartContext( SchXMLImportHelper& rImpHelper,
                                         SvXMLImport& rImport, const rtl::OUString& rLocalName ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mrImportHelper( rImpHelper ),
-        mbHasOwnTable( sal_True ),
+        m_bHasRangeAtPlotArea( false ),
+        m_bHasTableElement( false ),
         mbAllRangeAddressesAvailable( sal_True ),
         mbColHasLabels( sal_False ),
         mbRowHasLabels( sal_False ),
@@ -283,6 +335,10 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {
+            case XML_TOK_CHART_HREF:
+                m_aXLinkHRefAttributeToIndicateDataProvider = aValue;
+                break;
+
             case XML_TOK_CHART_CLASS:
                 {
                     rtl::OUString sClassName;
@@ -606,14 +662,21 @@ bool lcl_SpecialHandlingForDonutChartNeeded(
 
 } // anonymous namespace
 
-void SchXMLChartContext::ChangeDiagramAccordingToTemplate(
-        const uno::Reference< chart2::XChartDocument >& xNewDoc )
+
+void lcl_ApplyDataFromRectangularRangeToDiagram(
+        const uno::Reference< chart2::XChartDocument >& xNewDoc
+        , const rtl::OUString& rRectangularRange
+        , ::com::sun::star::chart::ChartDataRowSource eDataRowSource
+        , bool bRowHasLabels, bool bColHasLabels
+        , bool bSwitchOnLabelsAndCategoriesForOwnData
+        , const rtl::OUString& sColTrans
+        , const rtl::OUString& sRowTrans )
 {
     if( !xNewDoc.is() )
         return;
 
     uno::Reference< chart2::XDiagram > xNewDia( xNewDoc->getFirstDiagram());
-    uno::Reference< chart2::data::XDataProvider > xDataProvider( mrImportHelper.GetDataProvider( xNewDoc ) );
+    uno::Reference< chart2::data::XDataProvider > xDataProvider( xNewDoc->getDataProvider() );
     if( !xNewDia.is() || !xDataProvider.is() )
         return;
 
@@ -622,11 +685,11 @@ void SchXMLChartContext::ChangeDiagramAccordingToTemplate(
         return;
 
     sal_Bool bFirstCellAsLabel =
-        (meDataRowSource==chart::ChartDataRowSource_COLUMNS)? mbRowHasLabels : mbColHasLabels;
+        (eDataRowSource==chart::ChartDataRowSource_COLUMNS)? bRowHasLabels : bColHasLabels;
     sal_Bool bHasCateories =
-        (meDataRowSource==chart::ChartDataRowSource_COLUMNS)? mbColHasLabels : mbRowHasLabels;
+        (eDataRowSource==chart::ChartDataRowSource_COLUMNS)? bColHasLabels : bRowHasLabels;
 
-    if( mbHasOwnTable )
+    if( bSwitchOnLabelsAndCategoriesForOwnData )
     {
         bFirstCellAsLabel = true;
         bHasCateories = true;
@@ -635,25 +698,25 @@ void SchXMLChartContext::ChangeDiagramAccordingToTemplate(
     uno::Sequence< beans::PropertyValue > aArgs( 3 );
     aArgs[0] = beans::PropertyValue(
         ::rtl::OUString::createFromAscii("CellRangeRepresentation"),
-        -1, uno::makeAny( msChartAddress ),
+        -1, uno::makeAny( rRectangularRange ),
         beans::PropertyState_DIRECT_VALUE );
     aArgs[1] = beans::PropertyValue(
         ::rtl::OUString::createFromAscii("DataRowSource"),
-        -1, uno::makeAny( meDataRowSource ),
+        -1, uno::makeAny( eDataRowSource ),
         beans::PropertyState_DIRECT_VALUE );
     aArgs[2] = beans::PropertyValue(
         ::rtl::OUString::createFromAscii("FirstCellAsLabel"),
         -1, uno::makeAny( bFirstCellAsLabel ),
         beans::PropertyState_DIRECT_VALUE );
 
-    if( msColTrans.getLength() || msRowTrans.getLength() )
+    if( sColTrans.getLength() || sRowTrans.getLength() )
     {
         aArgs.realloc( aArgs.getLength() + 1 );
         aArgs[ aArgs.getLength() - 1 ] = beans::PropertyValue(
             ::rtl::OUString::createFromAscii("SequenceMapping"),
-            -1, uno::makeAny( msColTrans.getLength()
-                ? GetNumberSequenceFromString( msColTrans, bHasCateories && !xNewDoc->hasInternalDataProvider() )
-                : GetNumberSequenceFromString( msRowTrans, bHasCateories && !xNewDoc->hasInternalDataProvider() ) ),
+            -1, uno::makeAny( sColTrans.getLength()
+                ? lcl_getNumberSequenceFromString( sColTrans, bHasCateories && !xNewDoc->hasInternalDataProvider() )
+                : lcl_getNumberSequenceFromString( sRowTrans, bHasCateories && !xNewDoc->hasInternalDataProvider() ) ),
         beans::PropertyState_DIRECT_VALUE );
     }
 
@@ -766,21 +829,36 @@ void SchXMLChartContext::EndElement()
     if(!xNewDoc.is())
         return;
 
-    // if we already have an internal data provider, we know that we cannot have
-    // external data here.  If we can have external data but know that we have
-    // internal data due to missing ranges, we must create an internal data
-    // provider
+    bool bHasOwnData = false;
+    if( m_aXLinkHRefAttributeToIndicateDataProvider.equalsAscii( "." ) ) //data comes from the chart itself
+        bHasOwnData = true;
+    else if( m_aXLinkHRefAttributeToIndicateDataProvider.equalsAscii( ".." ) ) //data comes from the parent application
+        bHasOwnData = false;
+    else if( m_aXLinkHRefAttributeToIndicateDataProvider.getLength() ) //not supported so far to get the data by sibling objects -> fall back to chart itself if data are available
+        bHasOwnData = m_bHasTableElement;
+    else
+        bHasOwnData = !m_bHasRangeAtPlotArea;
+
     if( xNewDoc->hasInternalDataProvider())
-        mbHasOwnTable = true;
-    else if( mbHasOwnTable )
+    {
+        if( !m_bHasTableElement && !m_aXLinkHRefAttributeToIndicateDataProvider.equalsAscii( "." ) )
+        {
+            //#i103147# ODF, workaround broken files with a missing table:cell-range-address at the plot-area
+            bool bSwitchSuccessful = SchXMLTools::switchBackToDataProviderFromParent( xNewDoc, maLSequencesPerIndex );
+            bHasOwnData = !bSwitchSuccessful;
+        }
+        else
+            bHasOwnData = true;//e.g. in case of copy->paste from calc to impress
+    }
+    else if( bHasOwnData )
     {
         xNewDoc->createInternalDataProvider( sal_False /* bCloneExistingData */ );
     }
-    if( mbHasOwnTable )
+    if( bHasOwnData )
         msChartAddress = ::rtl::OUString::createFromAscii("all");
 
-    bool bPostProcessTable = false;
-    if( !mbHasOwnTable && mbAllRangeAddressesAvailable )
+    bool bSwitchRangesFromOuterToInternalIfNecessary = false;
+    if( !bHasOwnData && mbAllRangeAddressesAvailable )
     {
         // special handling for stock chart (merge series together)
         if( mbIsStockChart )
@@ -788,24 +866,28 @@ void SchXMLChartContext::EndElement()
     }
     else if( msChartAddress.getLength() )
     {
-        // in this case there are range addresses that are simply wrong.
+        //own data or only rectangular range available
+
         bool bOlderThan2_3 = SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( Reference< frame::XModel >( xNewDoc, uno::UNO_QUERY ));
-        bool bOldFileWithOwnDataFromRows = (bOlderThan2_3 && mbHasOwnTable && (meDataRowSource==chart::ChartDataRowSource_ROWS));
+        bool bOldFileWithOwnDataFromRows = (bOlderThan2_3 && bHasOwnData && (meDataRowSource==chart::ChartDataRowSource_ROWS)); // in this case there are range addresses that are simply wrong.
+
         if( mbAllRangeAddressesAvailable && !bSpecialHandlingForDonutChart && !mbIsStockChart &&
             !bOldFileWithOwnDataFromRows )
         {
-            // note: mbRowHasLabels means the first row contains labels, that
-            // means we have "column-descriptions", (analogously mbColHasLabels
-            // means we have "row-descriptions")
-            SchXMLTableHelper::applyTable( maTable, xNewDoc );
-            bPostProcessTable = true;
+            //bHasOwnData is true in this case!
+            //e.g. for normal files with own data or also in case of copy paste scenario (e.g. calc to impress)
+            if( xNewDoc->hasInternalDataProvider() )
+                SchXMLTableHelper::applyTableToInternalDataProvider( maTable, xNewDoc );
+            bSwitchRangesFromOuterToInternalIfNecessary = true;
         }
         else
         {
+            //apply data from rectangular range
+
             // apply data read from the table sub-element to the chart
             // if the data provider supports the XChartDataArray interface like
             // the internal data provider
-            uno::Reference< chart::XChartDataArray > xChartData( mrImportHelper.GetDataProvider( xNewDoc ), uno::UNO_QUERY );
+            uno::Reference< chart::XChartDataArray > xChartData( xNewDoc->getDataProvider(), uno::UNO_QUERY );
             if( xChartData.is())
                 SchXMLTableHelper::applyTableSimple( maTable, xChartData );
 
@@ -815,29 +897,32 @@ void SchXMLChartContext::EndElement()
             {
                 if( bOlderThan2_3 && xDiaProp.is() )//for older charts the hidden cells were removed by calc on the fly
                     xDiaProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IncludeHiddenCells")),uno::makeAny(false));
-                ChangeDiagramAccordingToTemplate( xNewDoc );
+
+                // note: mbRowHasLabels means the first row contains labels, that means we have "column-descriptions",
+                // (analogously mbColHasLabels means we have "row-descriptions")
+                lcl_ApplyDataFromRectangularRangeToDiagram( xNewDoc, msChartAddress, meDataRowSource, mbRowHasLabels, mbColHasLabels, bHasOwnData, msColTrans, msRowTrans );
             }
             catch( uno::Exception & )
             {
                 //try to fallback to internal data
-                DBG_ERROR( "Exception during import SchXMLChartContext::ChangeDiagramAccordingToTemplate try to fallback to internal data" );
-                if(!mbHasOwnTable)
+                DBG_ERROR( "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram try to fallback to internal data" );
+                if(!bHasOwnData)
                 {
-                    mbHasOwnTable = true;
+                    bHasOwnData = true;
                     msChartAddress = ::rtl::OUString::createFromAscii("all");
                     if( !xNewDoc->hasInternalDataProvider() )
                     {
                         xNewDoc->createInternalDataProvider( sal_False /* bCloneExistingData */ );
-                        xChartData = uno::Reference< chart::XChartDataArray >( mrImportHelper.GetDataProvider( xNewDoc ), uno::UNO_QUERY );
+                        xChartData = uno::Reference< chart::XChartDataArray >( xNewDoc->getDataProvider(), uno::UNO_QUERY );
                         if( xChartData.is())
                             SchXMLTableHelper::applyTableSimple( maTable, xChartData );
                         try
                         {
-                            ChangeDiagramAccordingToTemplate( xNewDoc );
+                            lcl_ApplyDataFromRectangularRangeToDiagram( xNewDoc, msChartAddress, meDataRowSource, mbRowHasLabels, mbColHasLabels, bHasOwnData, msColTrans, msRowTrans );
                         }
                         catch( uno::Exception & )
                         {
-                            DBG_ERROR( "Exception during import SchXMLChartContext::ChangeDiagramAccordingToTemplate fallback to internal data failed also" );
+                            DBG_ERROR( "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram fallback to internal data failed also" );
                         }
                     }
                 }
@@ -893,15 +978,22 @@ void SchXMLChartContext::EndElement()
                 SchXMLSeries2Context::setStylesToStatisticsObjects( maSeriesDefaultsAndStyles
                             , pStylesCtxt, pStyle, sCurrStyleName );
             }
+        }
 
+        //#i98319# call switchRangesFromOuterToInternalIfNecessary before the data point styles are applied, otherwise in copy->paste scenario the data point styles do get lost
+        if( bSwitchRangesFromOuterToInternalIfNecessary )
+        {
+            if( xNewDoc->hasInternalDataProvider() )
+                SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary( maTable, maLSequencesPerIndex, xNewDoc, meDataRowSource );
+        }
+
+        if( pStylesCtxt )
+        {
             // ... then iterate over data-point attributes, so the latter are not overwritten
             SchXMLSeries2Context::setStylesToDataPoints( maSeriesDefaultsAndStyles
                             , pStylesCtxt, pStyle, sCurrStyleName, mrImportHelper, GetImport(), mbIsStockChart, bSpecialHandlingForDonutChart, bSwitchOffLinesForScatter );
         }
     }
-
-    if( bPostProcessTable )
-        SchXMLTableHelper::postProcessTable( maTable, maLSequencesPerIndex, xNewDoc, meDataRowSource );
 
     if( xProp.is())
         xProp->setPropertyValue( rtl::OUString::createFromAscii( "RefreshAddInAllowed" ) , uno::makeAny( sal_True) );
@@ -1003,8 +1095,9 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
     {
         case XML_TOK_CHART_PLOT_AREA:
             pContext = new SchXMLPlotAreaContext( mrImportHelper, GetImport(), rLocalName,
+                                                  m_aXLinkHRefAttributeToIndicateDataProvider,
                                                   maSeriesAddresses, msCategoriesAddress,
-                                                  msChartAddress, mbHasOwnTable, mbAllRangeAddressesAvailable,
+                                                  msChartAddress, m_bHasRangeAtPlotArea, mbAllRangeAddressesAvailable,
                                                   mbColHasLabels, mbRowHasLabels,
                                                   meDataRowSource,
                                                   maSeriesDefaultsAndStyles,
@@ -1046,6 +1139,7 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
             {
                 SchXMLTableContext * pTableContext =
                     new SchXMLTableContext( mrImportHelper, GetImport(), rLocalName, maTable );
+                m_bHasTableElement = true;
                 // #i85913# take into account column- and row- mapping for
                 // charts with own data only for those which were not copied
                 // from a place where they got data from the container.  Note,
@@ -1060,12 +1154,12 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
                     if( msColTrans.getLength() > 0 )
                     {
                         OSL_ASSERT( msRowTrans.getLength() == 0 );
-                        pTableContext->setColumnPermutation( GetNumberSequenceFromString( msColTrans, true ));
+                        pTableContext->setColumnPermutation( lcl_getNumberSequenceFromString( msColTrans, true ));
                         msColTrans = OUString();
                     }
                     else if( msRowTrans.getLength() > 0 )
                     {
-                        pTableContext->setRowPermutation( GetNumberSequenceFromString( msRowTrans, true ));
+                        pTableContext->setRowPermutation( lcl_getNumberSequenceFromString( msRowTrans, true ));
                         msRowTrans = OUString();
                     }
                 }
@@ -1141,57 +1235,6 @@ void SchXMLChartContext::InitChart(
                 xDoc->setDiagram( xDia );
         }
     }
-}
-
-uno::Sequence< sal_Int32 > SchXMLChartContext::GetNumberSequenceFromString( const ::rtl::OUString& rStr, bool bAddOneToEachOldIndex )
-{
-    const sal_Unicode aSpace( ' ' );
-
-    // count number of entries
-    ::std::vector< sal_Int32 > aVec;
-    sal_Int32 nLastPos = 0;
-    sal_Int32 nPos = 0;
-    while( nPos != -1 )
-    {
-        nPos = rStr.indexOf( aSpace, nLastPos );
-        if( nPos > nLastPos )
-        {
-            aVec.push_back( rStr.copy( nLastPos, (nPos - nLastPos) ).toInt32() );
-        }
-        if( nPos != -1 )
-            nLastPos = nPos + 1;
-    }
-    // last entry
-    if( nLastPos != 0 &&
-        rStr.getLength() > nLastPos )
-    {
-        aVec.push_back( rStr.copy( nLastPos, (rStr.getLength() - nLastPos) ).toInt32() );
-    }
-
-    const sal_Int32 nVecSize = aVec.size();
-    uno::Sequence< sal_Int32 > aSeq( nVecSize );
-
-    if(!bAddOneToEachOldIndex)
-    {
-        sal_Int32* pSeqArr = aSeq.getArray();
-        for( nPos = 0; nPos < nVecSize; ++nPos )
-        {
-            pSeqArr[ nPos ] = aVec[ nPos ];
-        }
-    }
-    else if( bAddOneToEachOldIndex )
-    {
-        aSeq.realloc( nVecSize+1 );
-        aSeq[0]=0;
-
-        sal_Int32* pSeqArr = aSeq.getArray();
-        for( nPos = 0; nPos < nVecSize; ++nPos )
-        {
-            pSeqArr[ nPos+1 ] = aVec[ nPos ]+1;
-        }
-    }
-
-    return aSeq;
 }
 
 // ----------------------------------------

@@ -291,7 +291,8 @@ namespace sdr
             }
 
             // add a gray outline frame, except not when printing
-            if(!GetObjectContact().isOutputToPrinter())
+            // #i102637# add frame also when printing and page exists (handout pages)
+            if(!GetObjectContact().isOutputToPrinter() || pPage)
             {
                 const Color aFrameColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES).nColor);
                 basegfx::B2DPolygon aOwnOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));

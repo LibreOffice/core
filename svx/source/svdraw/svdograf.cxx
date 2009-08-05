@@ -659,6 +659,23 @@ void SdrGrafObj::TakeObjNamePlural( XubString& rName ) const
 
 // -----------------------------------------------------------------------------
 
+SdrObject* SdrGrafObj::getFullDragClone() const
+{
+    // call parent
+    SdrGrafObj* pRetval = static_cast< SdrGrafObj* >(SdrRectObj::getFullDragClone());
+
+    // #i103116# the full drag clone leads to problems
+    // with linked graphics, so reset the link in this
+    // temporary interaction object and load graphic
+    if(pRetval && IsLinkedGraphic())
+    {
+        pRetval->ForceSwapIn();
+        pRetval->ReleaseGraphicLink();
+    }
+
+    return pRetval;
+}
+
 void SdrGrafObj::operator=( const SdrObject& rObj )
 {
     SdrRectObj::operator=( rObj );
@@ -1089,6 +1106,14 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                 {
                     pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
                     pGraphic->SetUserData();
+                }
+
+                // #i102380#
+                sdr::contact::ViewContactOfGraphic* pVC = dynamic_cast< sdr::contact::ViewContactOfGraphic* >(&GetViewContact());
+
+                if(pVC)
+                {
+                    pVC->flushGraphicObjects();
                 }
             }
         }

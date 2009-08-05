@@ -341,7 +341,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
 
     Reference< chart2::data::XRangeXMLConversion > xRangeConversion;
     if( mxNewDoc.is())
-        xRangeConversion.set( mrImportHelper.GetDataProvider( mxNewDoc ), uno::UNO_QUERY );
+        xRangeConversion.set( mxNewDoc->getDataProvider(), uno::UNO_QUERY );
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
@@ -409,7 +409,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
             if( m_rGlobalSeriesImportInfo.rbAllRangeAddressesAvailable && ! bHasRange )
                 m_rGlobalSeriesImportInfo.rbAllRangeAddressesAvailable = sal_False;
 
-            Reference< chart2::data::XDataProvider > xDataProvider( mrImportHelper.GetDataProvider( mxNewDoc ));
+            Reference< chart2::data::XDataProvider > xDataProvider( mxNewDoc->getDataProvider() );
             if( xDataProvider.is())
             {
                 bool bIsCandleStick = maGlobalChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.CandleStickChartType"));
@@ -665,7 +665,10 @@ void SchXMLSeries2Context::EndElement()
         }
     }
 
-    Reference< chart2::data::XDataProvider > xDataProvider( mrImportHelper.GetDataProvider( mxNewDoc ));
+    Reference< chart2::data::XDataProvider > xDataProvider;
+    if ( mxNewDoc.is() ) {
+        xDataProvider = mxNewDoc->getDataProvider();
+    }
     for( std::vector< DomainInfo >::reverse_iterator aIt( aDomainInfos.rbegin() ); aIt!= aDomainInfos.rend(); ++aIt )
     {
         DomainInfo aDomainInfo( *aIt );

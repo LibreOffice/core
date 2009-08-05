@@ -201,6 +201,12 @@ private:
               ::rtl::OUString aDocumentName)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
+    void
+    executeMSPasswordDialog(LoginErrorInfo & rInfo,
+                          com::sun::star::task::PasswordRequestMode nMode,
+              ::rtl::OUString aDocumentName)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
     void executeCookieDialog(CntHTTPCookieRequest & rRequest)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
@@ -272,6 +278,16 @@ private:
 
     void
     handlePasswordRequest(
+        com::sun::star::task::PasswordRequestMode nMode,
+        com::sun::star::uno::Sequence<
+        com::sun::star::uno::Reference<
+            com::sun::star::task::XInteractionContinuation > > const &
+    rContinuations,
+    ::rtl::OUString aDocumentName = ::rtl::OUString())
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+     void
+    handleMSPasswordRequest(
         com::sun::star::task::PasswordRequestMode nMode,
         com::sun::star::uno::Sequence<
         com::sun::star::uno::Reference<

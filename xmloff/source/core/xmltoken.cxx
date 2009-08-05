@@ -3082,6 +3082,13 @@ namespace xmloff { namespace token {
         TOKEN( "mathweight",            XML_MATHWEIGHT ),
         TOKEN( "mathcolor",             XML_MATHCOLOR ),
 
+        TOKEN( "contains",              XML_CONTAINS ),
+        TOKEN( "does-not-contain",      XML_DOES_NOT_CONTAIN ),
+        TOKEN( "begins-with",           XML_BEGINS_WITH ),
+        TOKEN( "does-not-begin-with",   XML_DOES_NOT_BEGIN_WITH ),
+        TOKEN( "ends-with",             XML_ENDS_WITH ),
+        TOKEN( "does-not-end-with",     XML_DOES_NOT_END_WITH ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
 #else

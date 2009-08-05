@@ -2064,7 +2064,7 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
         Content aResultContent;
         if ( Content::create( aNewTemplateTargetURL, xEnv, aResultContent ) )
         {
-            ::rtl::OUString aPropertyName( RTL_CONSTASCII_USTRINGPARAM( "IsReadonly" ) );
+            ::rtl::OUString aPropertyName( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) );
             uno::Any aProperty;
             sal_Bool bReadOnly = sal_False;
             if ( getProperty( aResultContent, aPropertyName, aProperty ) && ( aProperty >>= bReadOnly ) && bReadOnly )

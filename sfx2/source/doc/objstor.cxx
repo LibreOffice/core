@@ -828,37 +828,28 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             }
         }
 
-        uno::Reference< XInteractionHandler > xHandler( pMedium->GetInteractionHandler() );
-        if ( xHandler.is() && !SFX_APP()->Get_Impl()->bODFVersionWarningLater )
+        if ( pMedium->HasStorage_Impl() )
         {
-            // scan the generator string (within meta.xml)
-            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                GetModel(), uno::UNO_QUERY_THROW);
-            uno::Reference<document::XDocumentProperties> xDocProps
-                = xDPS->getDocumentProperties();
-            if ( xDocProps.is() )
+            uno::Reference< XInteractionHandler > xHandler( pMedium->GetInteractionHandler() );
+            if ( xHandler.is() && !SFX_APP()->Get_Impl()->bODFVersionWarningLater )
             {
-                uno::Reference<beans::XPropertySet> xUserDefinedProps(
-                    xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
-                uno::Any aAny;
+                uno::Reference<beans::XPropertySet> xStorageProps( pMedium->GetStorage(), uno::UNO_QUERY_THROW );
+                ::rtl::OUString sVersion;
                 try
                 {
-                    aAny = xUserDefinedProps->getPropertyValue(
-                            DEFINE_CONST_UNICODE("ODFVersion"));
+                    xStorageProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) ) >>= sVersion;
                 }
                 catch( const uno::Exception& )
                 {
                     // Custom Property "ODFVersion" does not exist
                 }
 
-                ::rtl::OUString sVersion;
-                if ( (aAny >>= sVersion) && sVersion.getLength() )
+                if ( sVersion.getLength() )
                 {
                     double nVersion = sVersion.toDouble();
-                    if ( nVersion > 1.20001 )
+                    if ( nVersion > 1.20001  && SfxObjectShell_Impl::NeedsOfficeUpdateDialog() )
                         // ODF version greater than 1.2 - added some decimal places to be safe against floating point conversion errors (hack)
                     {
-
                         ::rtl::OUString sDocumentURL( pMedium->GetOrigURL() );
                         ::rtl::OUString aSystemFileURL;
                         if ( osl::FileBase::getSystemPathFromFileURL( sDocumentURL, aSystemFileURL ) == osl::FileBase::E_None )
@@ -2100,6 +2091,7 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
     }
 
     pMedium->ClearBackup_Impl();
+    pMedium->LockOrigFileOnDemand( sal_True, sal_False );
 
     return bOk;
 }

@@ -460,6 +460,14 @@ void SfxApplication::SetLastDir_Impl
 
 //--------------------------------------------------------------------
 
+void SfxApplication::ResetLastDir()
+{
+    String aEmpty;
+    pAppData_Impl->aLastDir = aEmpty;
+}
+
+//--------------------------------------------------------------------
+
 SfxDispatcher* SfxApplication::GetDispatcher_Impl()
 {
     return pAppData_Impl->pViewFrame? pAppData_Impl->pViewFrame->GetDispatcher(): pAppData_Impl->pAppDispat;

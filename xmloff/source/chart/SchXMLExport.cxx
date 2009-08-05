@@ -353,8 +353,10 @@ bool lcl_isSeriesAttachedToFirstAxis(
 OUString lcl_ConvertRange( const ::rtl::OUString & rRange, const Reference< chart2::XChartDocument > & xDoc )
 {
     OUString aResult = rRange;
+    if( !xDoc.is() )
+        return aResult;
     Reference< chart2::data::XRangeXMLConversion > xConversion(
-        SchXMLExportHelper::GetDataProvider( xDoc ), uno::UNO_QUERY );
+        xDoc->getDataProvider(), uno::UNO_QUERY );
     if( xConversion.is())
         aResult = xConversion->convertRangeToXML( rRange );
     return aResult;
@@ -1114,6 +1116,16 @@ void SchXMLExportHelper::parseDocument( Reference< chart::XChartDocument >& rCha
 
     if( bExportContent )
     {
+        //export data provider in xlink:href attribute
+        const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
+        if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
+        {
+            OUString aDataProviderURL( RTL_CONSTASCII_USTRINGPARAM( ".." ) );
+            if( xNewDoc->hasInternalDataProvider() )
+                aDataProviderURL = OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) );
+            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aDataProviderURL );
+        }
+
         OUString sChartType( xDiagram->getDiagramType() );
 
         // attributes
@@ -3521,7 +3533,7 @@ void SchXMLExport::_ExportContent()
             // check if we have own data.  If so we must not export the complete
             // range string, as this is our only indicator for having own or
             // external data. @todo: fix this in the file format!
-            Reference< lang::XServiceInfo > xDPServiceInfo( maExportHelper.GetDataProvider( xNewDoc ), uno::UNO_QUERY );
+            Reference< lang::XServiceInfo > xDPServiceInfo( xNewDoc->getDataProvider(), uno::UNO_QUERY );
             if( ! (xDPServiceInfo.is() &&
                    xDPServiceInfo->getImplementationName().equalsAsciiL(
                        RTL_CONSTASCII_STRINGPARAM( "com.sun.star.comp.chart.InternalDataProvider" ))))
@@ -3581,45 +3593,12 @@ void SchXMLExport::SetProgress( sal_Int32 nPercentage )
         mxStatusIndicator->setValue( nPercentage );
 }
 
-// static
-Reference< chart2::data::XDataProvider > SchXMLExportHelper::GetDataProvider(
-    const Reference< chart2::XChartDocument > & xDoc )
-{
-    Reference< chart2::data::XDataProvider > xResult;
-    if( xDoc.is())
-    {
-        xResult.set( xDoc->getDataProvider());
-        // allowed to attach a new data provider in export?
-//         if( ! xResult.is())
-//         {
-//             Reference< container::XChild > xChild( xDoc, uno::UNO_QUERY );
-//             if( xChild.is())
-//             {
-//                 Reference< lang::XMultiServiceFactory > xFact( xChild->getParent(), uno::UNO_QUERY );
-//                 if( xFact.is())
-//                 {
-//                     xResult.set(
-//                         xFact->createInstance( OUString::createFromAscii("com.sun.star.chart2.data.DataProvider")),
-//                         uno::UNO_QUERY );
-//                     if( xResult.is())
-//                     {
-//                         Reference< chart2::data::XDataReceiver > xReceiver( xDoc, uno::UNO_QUERY );
-//                         if( xReceiver.is())
-//                             xReceiver->attachDataProvider( xResult );
-//                     }
-//                 }
-//             }
-//         }
-    }
-    return xResult;
-}
-
 void SchXMLExportHelper::InitRangeSegmentationProperties( const Reference< chart2::XChartDocument > & xChartDoc )
 {
     if( xChartDoc.is())
         try
         {
-            Reference< chart2::data::XDataProvider > xDataProvider( GetDataProvider( xChartDoc ));
+            Reference< chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
             OSL_ENSURE( xDataProvider.is(), "No DataProvider" );
             if( xDataProvider.is())
             {
