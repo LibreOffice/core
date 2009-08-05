@@ -1,0 +1,106 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: TableFilterField2.idl,v $
+ * $Revision: 1.7 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_TableFilterField2_idl__
+#define __com_sun_star_sheet_TableFilterField2_idl__
+
+
+#ifndef __com_sun_star_sheet_FilterConnection_idl__
+#include <com/sun/star/sheet/FilterConnection.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_FilterOperator2_idl__
+#include <com/sun/star/sheet/FilterOperator2.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** describes a single condition in a filter descriptor.
+
+    <p>This struct has the <type>FilterOperator2</type> constants group as
+    member, whereas the <type>TableFilterField</type> struct uses the
+    <type>FilterOperator</type> enum.</p>
+
+    @see com::sun::star::sheet::SheetFilterDescriptor
+    @since OOo 3.2
+ */
+published struct TableFilterField2
+{
+    //-------------------------------------------------------------------------
+
+    /** specifies how the condition is connected to the previous condition.
+     */
+    com::sun::star::sheet::FilterConnection Connection;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies which field (column) is used for the condition.
+     */
+    long Field;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the type of the condition as defined in
+    <type>FilterOperator2</type>.
+    */
+    long Operator;
+
+    //-------------------------------------------------------------------------
+
+    /** selects whether the <member>TableFilterField2::NumericValue</member>
+        or the <member>TableFilterField2::StringValue</member> is used.
+     */
+    boolean IsNumeric;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a numeric value for the condition.
+     */
+    double NumericValue;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a string value for the condition.
+     */
+    string StringValue;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+
+#endif
+
