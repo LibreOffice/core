@@ -477,6 +477,8 @@ BEGIN
     @emptypackages = ();
     %fontpackageexists = ();
 
+    $exithandler = undef;
+
     $plat = $^O;
 
     if (( $plat =~ /MSWin/i ) || (( $plat =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} eq "4nt" )))
