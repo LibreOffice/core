@@ -166,7 +166,8 @@ protected:
                             const ::rtl::OUString& rServiceName,
                             const ThemePtr& rxTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle* pShapeRect );
+                            const ::com::sun::star::awt::Rectangle* pShapeRect,
+                            sal_Bool bClearText );
 
     void                addChildren(
                             const ::oox::core::XmlFilterBase& rFilterBase,

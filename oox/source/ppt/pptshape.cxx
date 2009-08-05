@@ -82,6 +82,7 @@ void PPTShape::addShape(
         {
             oox::drawingml::TextListStylePtr aMasterTextListStyle;
             Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
+            sal_Bool bClearText = sal_False;
 
             if ( sServiceName != OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )
             {
@@ -122,24 +123,28 @@ void PPTShape::addShape(
                     {
                         const rtl::OUString sDateTimeShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.DateTimeShape" ) );
                         sServiceName = sDateTimeShapeService;
+                        bClearText = sal_True;
                     }
                     break;
                     case XML_hdr :
                     {
                         const rtl::OUString sHeaderShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.HeaderShape" ) );
                         sServiceName = sHeaderShapeService;
+                        bClearText = sal_True;
                     }
                     break;
                     case XML_ftr :
                     {
                         const rtl::OUString sFooterShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.FooterShape" ) );
                         sServiceName = sFooterShapeService;
+                        bClearText = sal_True;
                     }
                     break;
                     case XML_sldNum :
                     {
                         const rtl::OUString sSlideNumberShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.SlideNumberShape" ) );
                         sServiceName = sSlideNumberShapeService;
+                        bClearText = sal_True;
                     }
                     break;
                     case XML_sldImg :
@@ -157,8 +162,24 @@ void PPTShape::addShape(
                 aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getOtherTextStyle() : rSlidePersist.getOtherTextStyle();
             setMasterTextListStyle( aMasterTextListStyle );
 
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, rxTheme, rxShapes, pShapeRect ) );
-
+            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, rxTheme, rxShapes, pShapeRect, bClearText ) );
+            if ( !rSlidePersist.isMasterPage() && rSlidePersist.getPage().is() && ( (sal_Int32)mnSubType == XML_title ) )
+            {
+                try
+                {
+                    rtl::OUString aTitleText;
+                    Reference< XTextRange > xText( xShape, UNO_QUERY_THROW );
+                    aTitleText = xText->getString();
+                    if ( aTitleText.getLength() && ( aTitleText.getLength() < 64 ) )    // just a magic value, but we don't want to set slide names which are too long
+                    {
+                        Reference< container::XNamed > xName( rSlidePersist.getPage(), UNO_QUERY_THROW );
+                        xName->setName( aTitleText );
+                    }
+                }
+                catch( uno::Exception& )
+                {
+                }
+            }
             if( pShapeMap && msId.getLength() )
             {
                 (*pShapeMap)[ msId ] = shared_from_this();
