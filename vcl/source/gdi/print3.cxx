@@ -267,7 +267,7 @@ void Printer::PrintJob( const boost::shared_ptr<PrinterController>& i_pControlle
                         )
 {
     sal_Bool bSynchronous = sal_False;
-    beans::PropertyValue* pVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) ) );
+    beans::PropertyValue* pVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Wait" ) ) );
     if( pVal )
         pVal->Value >>= bSynchronous;
 
@@ -329,7 +329,10 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     // in that case leave the work to that dialog
     const String& rQuick( i_rInitSetup.GetValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ) ) );
     bool bIsQuick = rQuick.Len() && rQuick.EqualsIgnoreCaseAscii( "true" );
-    if( ! pController->getPrinter()->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG ) && ! bIsQuick )
+    if( ! pController->getPrinter()->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG ) &&
+        ! bIsQuick &&
+        ! Application::IsHeadlessModeEnabled()
+        )
     {
         try
         {
@@ -1108,7 +1111,7 @@ void PrinterController::createProgressDialog()
         if( pMonitor )
             pMonitor->Value >>= bShow;
 
-        if( bShow )
+        if( bShow && ! Application::IsHeadlessModeEnabled() )
         {
             mpImplData->mpProgress = new PrintProgressDialog( NULL, getPageCount() );
             mpImplData->mpProgress->Show();

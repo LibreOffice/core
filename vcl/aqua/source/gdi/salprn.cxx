@@ -40,6 +40,7 @@
 #include "vcl/salptype.hxx"
 #include "vcl/print.hxx"
 #include "vcl/unohelp.hxx"
+#include "vcl/svapp.hxx"
 
 #include <boost/bind.hpp>
 
@@ -545,6 +546,8 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
     beans::PropertyValue* pMonitor = i_rController.getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MonitorVisible" ) ) );
     if( pMonitor )
         pMonitor->Value >>= bShowProgressPanel;
+    if( Application::IsHeadlessModeEnabled() )
+        bShowProgressPanel = sal_False;
 
     // FIXME: jobStarted() should be done after the print dialog has ended (if there is one)
     // how do I know when that might be ?
@@ -607,7 +610,10 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
         [pPrintDict setObject: [[NSNumber numberWithInt: (int)i_rController.getPrinter()->GetCopyCount()] autorelease] forKey: NSPrintCopies];
         [pPrintDict setObject: [[NSNumber numberWithBool: YES] autorelease] forKey: NSPrintDetailedErrorReporting];
         [pPrintDict setObject: [[NSNumber numberWithInt: 1] autorelease] forKey: NSPrintFirstPage];
-        [pPrintDict setObject: [[NSNumber numberWithInt: mnCurPageRangeCount] autorelease] forKey: NSPrintLastPage];
+        // #i103253# weird: for some reason, autoreleasing the value below like the others above
+        // leads do a double free malloc error. Why this value should behave differently from all the others
+        // is a mystery.
+        [pPrintDict setObject: [NSNumber numberWithInt: mnCurPageRangeCount] forKey: NSPrintLastPage];
 
 
         // create print operation
@@ -616,7 +622,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
         if( pPrintOperation )
         {
             NSObject* pReleaseAfterUse = nil;
-            bool bShowPanel = (! bIsQuickJob && getUseNativeDialog() );
+            bool bShowPanel = (! bIsQuickJob && getUseNativeDialog() && ! Application::IsHeadlessModeEnabled() );
             [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
             [pPrintOperation setShowsProgressPanel: bShowProgressPanel ? YES : NO];
 
