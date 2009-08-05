@@ -297,6 +297,7 @@ sub setglobalvariables
     {
         if ( $installer::globals::packageformat eq "bsd" )
         {
+            $installer::globals::epmoutpath = "freebsd";
             $installer::globals::isfreebsdpkgbuild = 1;
         }
     }
