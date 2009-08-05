@@ -66,6 +66,7 @@ namespace oox {
     namespace shape { SERVICE( ShapeContextHandler ); }
     namespace shape { SERVICE( FastTokenHandlerService ); }
     namespace docprop { SERVICE2( OOXMLDocPropImportImpl ); }
+    namespace xls { SERVICE2( OOXMLFormulaParser ); }
 }
 
 //
@@ -108,6 +109,7 @@ OOX_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void * , void * pRegistryKe
             WRITEINFO( ::oox::shape::ShapeContextHandler );
             WRITEINFO( ::oox::shape::FastTokenHandlerService );
             WRITEINFO( ::oox::docprop::OOXMLDocPropImportImpl );
+            WRITEINFO( ::oox::xls::OOXMLFormulaParser );
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -147,7 +149,6 @@ OOX_DLLPUBLIC void * SAL_CALL component_getFactory( const sal_Char * pImplName, 
 
         const sal_Int32 nImplNameLen = strlen( pImplName );
 
-        // impress oasis import
         SINGLEFACTORY( ::oox::core::FilterDetect )
         else SINGLEFACTORY( oox::ppt::PowerPointImport )
         else SINGLEFACTORY( ::oox::xls::BiffDetector )
@@ -156,6 +157,7 @@ OOX_DLLPUBLIC void * SAL_CALL component_getFactory( const sal_Char * pImplName, 
         else SINGLEFACTORY( ::oox::shape::ShapeContextHandler)
         else SINGLEFACTORY( ::oox::shape::FastTokenHandlerService)
         else SINGLEFACTORY2( ::oox::docprop::OOXMLDocPropImportImpl )
+        else SINGLEFACTORY2( ::oox::xls::OOXMLFormulaParser )
 
         if( xFactory.is())
         {

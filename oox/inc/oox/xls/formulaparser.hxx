@@ -36,6 +36,69 @@
 namespace oox {
 namespace xls {
 
+// formula finalizer ==========================================================
+
+/** A generic formula token array finalizer.
+
+    After building a formula token array from alien binary file formats, or
+    parsing an XML formula string using the com.sun.star.sheet.FormulaParser
+    service, the token array is still not ready to be put into the spreadsheet
+    document. There may be functions with a wrong number of parameters (missing
+    but required parameters, or unsupported parameters) or intermediate tokens
+    used to encode references to macro functions or add-in functions. This
+    helper processes a passed token array and builds a new compatible token
+    array.
+
+    Derived classes may add more functionality by overwriting the virtual
+    functions.
+ */
+class FormulaFinalizer : public OpCodeProvider, protected ApiOpCodes
+{
+public:
+    explicit            FormulaFinalizer( const OpCodeProvider& rOpCodeProv );
+
+    /** Finalizes and returns the passed token array. */
+    ApiTokenSequence    finalizeTokenArray( const ApiTokenSequence& rTokens );
+
+protected:
+    /** Derived classed may try to find a function info struct from the passed
+        string extracted from an OPCODE_BAD token.
+
+        @param rTokenData  The string that has been found in an OPCODE_BAD
+            token preceding the function parentheses.
+     */
+    virtual const FunctionInfo* resolveBadFuncName( const ::rtl::OUString& rTokenData ) const;
+
+    /** Derived classed may try to find the name of a defined name with the
+        passed index extracted from an OPCODE_NAME token.
+
+        @param nTokenIndex  The index of the defined name that has been found
+            in an OPCODE_NAME token preceding the function parentheses.
+     */
+    virtual ::rtl::OUString resolveDefinedName( sal_Int32 nTokenIndex ) const;
+
+private:
+    typedef ::std::vector< const ApiToken* > ParameterPosVector;
+
+    const FunctionInfo* getFunctionInfo( ApiToken& orFuncToken );
+    const FunctionInfo* getExternCallInfo( ApiToken& orFuncToken, const ApiToken& rECToken );
+
+    void                processTokens( const ApiToken* pToken, const ApiToken* pTokenEnd );
+    const ApiToken*     processParameters( const FunctionInfo& rFuncInfo, const ApiToken* pToken, const ApiToken* pTokenEnd );
+
+    bool                isEmptyParameter( const ApiToken* pToken, const ApiToken* pTokenEnd ) const;
+    const ApiToken*     getSingleToken( const ApiToken* pToken, const ApiToken* pTokenEnd ) const;
+    const ApiToken*     skipParentheses( const ApiToken* pToken, const ApiToken* pTokenEnd ) const;
+    const ApiToken*     findParameters( ParameterPosVector& rParams, const ApiToken* pToken, const ApiToken* pTokenEnd ) const;
+    void                appendCalcOnlyParameter( const FunctionInfo& rFuncInfo, size_t nParam );
+    void                appendRequiredParameters( const FunctionInfo& rFuncInfo, size_t nParamCount );
+
+    bool                appendFinalToken( const ApiToken& rToken );
+
+private:
+    ApiTokenVector      maTokens;
+};
+
 // ============================================================================
 
 class FormulaParserImpl;
@@ -63,7 +126,7 @@ public:
                             RecordInputStream& rStrm ) const;
 
     /** Imports and converts a BIFF token array from the passed stream.
-        @param pnFmlaSize  Size of the token array. If 0 is passed, reads
+        @param pnFmlaSize  Size of the token array. If null is passed, reads
         it from stream (1 byte in BIFF2, 2 bytes otherwise) first. */
     void                importFormula(
                             FormulaContext& rContext,
