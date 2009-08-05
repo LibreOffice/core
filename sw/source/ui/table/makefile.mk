@@ -50,7 +50,6 @@ SRC1FILES =  \
         colwd.src \
         convert.src \
         chartins.src \
-        insrc.src \
         instable.src \
         mergetbl.src \
         rowht.src \
@@ -63,7 +62,6 @@ SLOFILES =  \
         $(SLO)$/colwd.obj \
         $(SLO)$/convert.obj \
         $(SLO)$/chartins.obj \
-        $(SLO)$/insrc.obj \
         $(SLO)$/instable.obj \
         $(SLO)$/mergetbl.obj \
         $(SLO)$/rowht.obj \
