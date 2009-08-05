@@ -414,9 +414,10 @@ MY_FILES_xsltfilter = \
 
 ALLTAR: \
     $(MY_XCDS) \
-    $(MISC)$/lang$/fcfg_drivers_{$(alllangiso)}.xcd \
-    $(MISC)$/lang$/fcfg_langpack_{$(alllangiso)}.xcd \
-    $(MISC)$/lang$/registry_{$(alllangiso)}.xcd
+    $(MISC)$/lang1$/Langpack-{$(alllangiso)}.xcd \
+    $(MISC)$/lang2$/fcfg_drivers_{$(alllangiso)}.xcd \
+    $(MISC)$/lang2$/fcfg_langpack_{$(alllangiso)}.xcd \
+    $(MISC)$/lang2$/registry_{$(alllangiso)}.xcd
 
 $(MY_XCDS): packregistry.xslt
 
@@ -429,7 +430,15 @@ $(MISC)$/%.list: makefile.mk
         $(foreach,i,$(MY_FILES_$(@:b)) <filename>$i</filename>)</list>' \
         > $@
 
-$(MISC)$/lang$/%_{$(alllangiso)}.xcd .ERRREMOVE: packregistry.xslt
+$(MISC)$/lang1$/Langpack-{$(alllangiso)}.xcd .ERRREMOVE: packregistry.xslt
+    $(MKDIRHIER) $(@:d)
+    - $(RM) $(MISC)$/$(@:b).list
+    echo '<list><dependency>main</dependency>\
+        <filename>$(MY_MOD)$/$(@:b).xcu</filename></list>' \
+        > $(MISC)$/$(@:b).list
+    $(XSLTPROC) --nonet -o $@ packregistry.xslt $(MISC)$/$(@:b).list
+
+$(MISC)$/lang2$/%_{$(alllangiso)}.xcd .ERRREMOVE: packregistry.xslt
     $(MKDIRHIER) $(@:d)
     rm -rf $(MISC)$/$(@:b).unzip
     mkdir $(MISC)$/$(@:b).unzip
