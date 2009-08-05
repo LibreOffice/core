@@ -842,8 +842,7 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             pSingleObj = mpView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
         }
 
-        if ( nSlotId != SID_OBJECT_SELECT                            &&
-             (/* bTempRotation && */ nMarkCount==0)                    ||
+        if ( (nSlotId != SID_OBJECT_SELECT && nMarkCount==0)                    ||
              ( mpView->GetDragMode() == SDRDRAG_CROOK &&
               !mpView->IsCrookAllowed( mpView->IsCrookNoContortion() ) ) ||
              ( mpView->GetDragMode() == SDRDRAG_SHEAR &&

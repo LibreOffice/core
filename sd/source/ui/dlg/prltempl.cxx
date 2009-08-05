@@ -84,7 +84,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         pOutSet             ( NULL ),
         pOrgSet             ( &rStyleBase.GetItemSet() )
 {
-    if( DlgId.GetId() == TAB_PRES_LAYOUT_TEMPLATE_3 && IS_OUTLINE(ePO))
+    if( IS_OUTLINE(ePO))
     {
         // Leider sind die Itemsets unserer Stylesheets nicht discret..
         const USHORT* pPtr = pOrgSet->GetRanges();
@@ -129,29 +129,6 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
                     aInputSet.Put( *pItem );
         }
 
-/* #i35937#
-        // Jetzt noch das mapping von 10er auf 9er und des lrspace.
-        if( SFX_ITEM_SET == aInputSet.GetItemState(EE_PARA_NUMBULLET, FALSE) )
-        {
-            SdBulletMapper::PreMapNumBulletForDialog( aInputSet );
-            SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)aInputSet.GetItem(EE_PARA_NUMBULLET);
-            SvxNumRule* pRule = pBulletItem->GetNumRule();
-            if(pRule)
-            {
-                SvxLRSpaceItem aLRItem(EE_PARA_LRSPACE);
-                if( SFX_ITEM_SET == aInputSet.GetItemState(EE_PARA_LRSPACE) )
-                    aLRItem = *(SvxLRSpaceItem*)aInputSet.GetItem(EE_PARA_LRSPACE);
-
-                const SvxNumberFormat& aActFmt = pRule->GetLevel( GetOutlineLevel() );
-
-                aLRItem.SetTxtLeft( aActFmt.GetAbsLSpace() );
-                aLRItem.SetTxtFirstLineOfst( aActFmt.GetFirstLineOffset() );
-
-                aInputSet.Put(aLRItem);
-            }
-        }
-*/
-
         // gewaehlte Ebene im Dialog vorselektieren
         aInputSet.Put( SfxUInt16Item( SID_PARAM_CUR_NUM_LEVEL, 1<<GetOutlineLevel()));
 
@@ -193,60 +170,27 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
             AddTabPage( RID_SVXPAGE_CHAR_NAME );
             AddTabPage( RID_SVXPAGE_CHAR_EFFECTS );
             AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );
+            AddTabPage( RID_SVXPAGE_TEXTATTR );
+            AddTabPage( RID_SVXPAGE_TABULATOR );
         }
         break;
 
-        case TAB_PRES_LAYOUT_TEMPLATE_1:
-            AddTabPage( RID_SVXPAGE_LINE);
-        break;
-
-        case TAB_PRES_LAYOUT_TEMPLATE_2:
+        case TAB_PRES_LAYOUT_TEMPLATE_BACKGROUND:        // background
             AddTabPage( RID_SVXPAGE_AREA);
-        break;
-
-        case TAB_PRES_LAYOUT_TEMPLATE_3:
-        {
-            AddTabPage( RID_SVXPAGE_CHAR_NAME );
-            AddTabPage( RID_SVXPAGE_CHAR_EFFECTS );
-            AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );
-            if(IS_OUTLINE(ePO))
-            {
-                AddTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );
-                AddTabPage( RID_SVXPAGE_PICK_BULLET );
-                AddTabPage( RID_SVXPAGE_PICK_BMP );
-                AddTabPage( RID_SVXPAGE_NUM_OPTIONS );
-            }
-            else
-            {
-                RemoveTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );
-                RemoveTabPage( RID_SVXPAGE_PICK_BULLET );
-                RemoveTabPage( RID_SVXPAGE_PICK_BMP );
-                RemoveTabPage( RID_SVXPAGE_NUM_OPTIONS );
-            }
-        }
         break;
     }
 
     // #112490# the tabpages Alignment, Tabs and Asian Typography are very
     // usefull, except for the background style
-    if( (DlgId.GetId() == TAB_PRES_LAYOUT_TEMPLATE) || (DlgId.GetId() == TAB_PRES_LAYOUT_TEMPLATE_3) )
+    if( DlgId.GetId() != TAB_PRES_LAYOUT_TEMPLATE_BACKGROUND )
     {
         SvtCJKOptions aCJKOptions;
-        if( aCJKOptions.IsAsianTypographyEnabled() && (ePO != PO_BACKGROUND ) )
+        if( aCJKOptions.IsAsianTypographyEnabled() )
             AddTabPage( RID_SVXPAGE_PARA_ASIAN );
         else
             RemoveTabPage( RID_SVXPAGE_PARA_ASIAN );
 
-        if( ePO != PO_BACKGROUND )
-        {
-            AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );
-            AddTabPage( RID_SVXPAGE_TABULATOR );
-        }
-        else
-        {
-            RemoveTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );
-            RemoveTabPage( RID_SVXPAGE_TABULATOR );
-        }
+        AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );
     }
 
     // Titel setzen und
@@ -257,12 +201,10 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     {
         case PO_TITLE:
             aTitle = String(SdResId( STR_PSEUDOSHEET_TITLE ));
-            RemoveTabPage( TP_ENUM_BULLET );
         break;
 
         case PO_SUBTITLE:
             aTitle = String(SdResId( STR_PSEUDOSHEET_SUBTITLE ));
-            RemoveTabPage( TP_ENUM_BULLET );
         break;
 
         case PO_BACKGROUND:
@@ -289,7 +231,6 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
 
         case PO_NOTES:
             aTitle = String(SdResId( STR_PSEUDOSHEET_NOTES ));
-            RemoveTabPage( TP_ENUM_BULLET );
         break;
     }
     SetText( aTitle );
@@ -384,39 +325,6 @@ const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const
         const SvxNumBulletItem *pSvxNumBulletItem = NULL;
         if( SFX_ITEM_SET == pOutSet->GetItemState(EE_PARA_NUMBULLET, FALSE, (const SfxPoolItem**)&pSvxNumBulletItem ))
             SdBulletMapper::MapFontsInNumRule( *pSvxNumBulletItem->GetNumRule(), *pOutSet );
-
-/* #i35937#
-        // Wenn das lrspace geaendert wurde muss die Aenderung in das
-        // Bullet Item gemapt werden...
-        if( SFX_ITEM_SET == pOutSet->GetItemState( EE_PARA_LRSPACE, FALSE ) )
-        {
-            BOOL bNumBulletHasChanged = pSvxNumBulletItem != NULL;
-            if( !bNumBulletHasChanged )
-                pSvxNumBulletItem = (SvxNumBulletItem*)aInputSet.GetItem(EE_PARA_NUMBULLET);
-
-            if( pSvxNumBulletItem )
-            {
-                SvxLRSpaceItem& rLRItem = *(SvxLRSpaceItem*)pOutSet->GetItem( EE_PARA_LRSPACE );
-
-                SvxNumRule* pNumRule = pSvxNumBulletItem->GetNumRule();
-                if(pNumRule)
-                {
-                    SvxNumberFormat aFrmt( pNumRule->GetLevel( GetOutlineLevel() ));
-
-                    aFrmt.SetLSpace( (short) rLRItem.GetTxtLeft() );
-                    aFrmt.SetAbsLSpace( (short) rLRItem.GetTxtLeft() );
-                    aFrmt.SetFirstLineOffset( rLRItem.GetTxtFirstLineOfst() );
-                    pNumRule->SetLevel( GetOutlineLevel(), aFrmt );
-                }
-            }
-
-            if( !bNumBulletHasChanged && pSvxNumBulletItem )
-                pOutSet->Put( SvxNumBulletItem( *pSvxNumBulletItem->GetNumRule(), EE_PARA_NUMBULLET ) );
-        }
-
-        SdBulletMapper::PostMapNumBulletForDialog( *pOutSet );
-*/
-
         return pOutSet;
     }
     else

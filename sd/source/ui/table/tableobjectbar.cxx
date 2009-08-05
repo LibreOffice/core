@@ -43,6 +43,8 @@
 #include <svtools/itempool.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 
 #include "app.hrc"
@@ -158,8 +160,32 @@ void TableObjectBar::Execute( SfxRequest& rReq )
         SfxBindings* pBindings = &mpViewSh->GetViewFrame()->GetBindings();
 
         rtl::Reference< sdr::SelectionController > xController( mpView->getSelectionController() );
+        ULONG nSlotId = rReq.GetSlot();
         if( xController.is() )
         {
+            switch( nSlotId )
+            {
+            case SID_TABLE_INSERT_ROW_DLG:
+            case SID_TABLE_INSERT_COL_DLG:
+            {
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                ::std::auto_ptr<SvxAbstractInsRowColDlg> pDlg( pFact ? pFact->CreateSvxInsRowColDlg( mpView->GetViewShell()->GetParentWindow(), nSlotId == SID_TABLE_INSERT_COL_DLG, nSlotId) : 0);
+
+                if( pDlg.get() && (pDlg->Execute() == 1) )
+                {
+                    if( nSlotId == SID_TABLE_INSERT_ROW_DLG )
+                        nSlotId = SID_TABLE_INSERT_ROW;
+                    else
+                        nSlotId = SID_TABLE_INSERT_COL;
+
+                    rReq.AppendItem( SfxInt16Item( (USHORT)nSlotId, (sal_uInt16)pDlg->getInsertCount() ) );
+                    rReq.AppendItem( SfxBoolItem( SID_TABLE_PARAM_INSERT_AFTER, !pDlg->isInsertBefore() ) );
+
+                     rReq.SetSlot( (USHORT)nSlotId );
+                }
+            }
+            }
+
             xController->Execute( rReq );
         }
 

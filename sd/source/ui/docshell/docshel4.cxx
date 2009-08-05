@@ -759,24 +759,59 @@ BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
         DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(mpViewShell);
         ViewShellBase& rBase (mpViewShell->GetViewShellBase());
 
-        String aBookmark( rBookmark );
-
-        // Ist das Bookmark eine Seite?
-        BOOL bIsMasterPage;
-        USHORT nPageNumber = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
+        BOOL bIsMasterPage = sal_False;
+        USHORT nPageNumber = SDRPAGE_NOTFOUND;
         SdrObject* pObj = NULL;
 
-        if (nPageNumber == SDRPAGE_NOTFOUND)
+        rtl::OUString sBookmark( rBookmark );
+        const rtl::OUString sInteraction( RTL_CONSTASCII_USTRINGPARAM( "action?" ) );
+        if ( sBookmark.match( sInteraction ) )
         {
-            // Ist das Bookmark ein Objekt?
-            pObj = mpDoc->GetObj(aBookmark);
-
-            if (pObj)
+            const rtl::OUString sJump( RTL_CONSTASCII_USTRINGPARAM( "jump=" ) );
+            if ( sBookmark.match( sJump, sInteraction.getLength() ) )
             {
-                nPageNumber = pObj->GetPage()->GetPageNum();
+                rtl::OUString aDestination( sBookmark.copy( sInteraction.getLength() + sJump.getLength() ) );
+                if ( aDestination.match( String( RTL_CONSTASCII_USTRINGPARAM( "firstslide" ) ) ) )
+                {
+                    nPageNumber = 1;
+                }
+                else if ( aDestination.match( String( RTL_CONSTASCII_USTRINGPARAM( "lastslide" ) ) ) )
+                {
+                    nPageNumber = mpDoc->GetPageCount() - 2;
+                }
+                else if ( aDestination.match( String( RTL_CONSTASCII_USTRINGPARAM( "previousslide" ) ) ) )
+                {
+                    SdPage* pPage = pDrawViewShell->GetActualPage();
+                    nPageNumber = pPage->GetPageNum();
+                    nPageNumber = nPageNumber > 2 ? nPageNumber - 2 : SDRPAGE_NOTFOUND;
+                }
+                else if ( aDestination.match( String( RTL_CONSTASCII_USTRINGPARAM( "nextslide" ) ) ) )
+                {
+                    SdPage* pPage = pDrawViewShell->GetActualPage();
+                    nPageNumber = pPage->GetPageNum() + 2;
+                    if ( nPageNumber >= mpDoc->GetPageCount() )
+                        nPageNumber = SDRPAGE_NOTFOUND;
+                }
             }
         }
+        else
+        {
+            String aBookmark( rBookmark );
 
+            // Ist das Bookmark eine Seite?
+            nPageNumber = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
+
+            if (nPageNumber == SDRPAGE_NOTFOUND)
+            {
+                // Ist das Bookmark ein Objekt?
+                pObj = mpDoc->GetObj(aBookmark);
+
+                if (pObj)
+                {
+                    nPageNumber = pObj->GetPage()->GetPageNum();
+                }
+            }
+        }
         if (nPageNumber != SDRPAGE_NOTFOUND)
         {
             // Jump to the bookmarked page.  This is done in three steps.

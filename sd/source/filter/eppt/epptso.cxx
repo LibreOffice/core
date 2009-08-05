@@ -4929,9 +4929,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( mbPresObj )
                 {
                     nOutlinerCount++;
-                    if ( rLayout.bOutlinerPossible && ( nOutlinerCount == 1 ) ||
-                        ( ( rLayout.bSecOutlinerPossible && ( nOutlinerCount == 2 ) )
-                            && ( nPrevTextStyle == EPP_TEXTSTYLE_BODY ) ) )
+                    if ( (rLayout.bOutlinerPossible && ( nOutlinerCount == 1 )) ||
+                         (( rLayout.bSecOutlinerPossible && ( nOutlinerCount == 2 ) ) && ( nPrevTextStyle == EPP_TEXTSTYLE_BODY ))
+                       )
                     {
                         ImplGetText();
                         TextObj aTextObj( mXText, EPP_TEXTTYPE_Body, maFontCollection, (PPTExBulletProvider&)*this );
