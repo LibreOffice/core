@@ -486,6 +486,8 @@ public:
 
     void abortJob();
 
+    bool isShowDialogs() const;
+
     // implementation details, not usable outside vcl
     SAL_DLLPRIVATE int getFilteredPageCount();
     SAL_DLLPRIVATE Size getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf, bool i_bMayUseCache = false );

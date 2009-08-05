@@ -331,7 +331,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     bool bIsQuick = rQuick.Len() && rQuick.EqualsIgnoreCaseAscii( "true" );
     if( ! pController->getPrinter()->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG ) &&
         ! bIsQuick &&
-        ! Application::IsHeadlessModeEnabled()
+        pController->isShowDialogs()
         )
     {
         try
@@ -1141,6 +1141,15 @@ void PrinterController::pushPropertiesToPrinter()
     if( pVal )
         pVal->Value >>= bCollate;
     mpImplData->mpPrinter->SetCopyCount( static_cast<USHORT>(nCopyCount), bCollate );
+}
+
+bool PrinterController::isShowDialogs() const
+{
+    sal_Bool bApi = sal_False;
+    const com::sun::star::beans::PropertyValue* pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsApi" ) ) );
+    if( pVal )
+        pVal->Value >>= bApi;
+    return ! bApi && ! Application::IsHeadlessModeEnabled();
 }
 
 /*

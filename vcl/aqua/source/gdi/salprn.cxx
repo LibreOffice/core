@@ -40,7 +40,6 @@
 #include "vcl/salptype.hxx"
 #include "vcl/print.hxx"
 #include "vcl/unohelp.hxx"
-#include "vcl/svapp.hxx"
 
 #include <boost/bind.hpp>
 
@@ -546,7 +545,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
     beans::PropertyValue* pMonitor = i_rController.getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MonitorVisible" ) ) );
     if( pMonitor )
         pMonitor->Value >>= bShowProgressPanel;
-    if( Application::IsHeadlessModeEnabled() )
+    if( ! i_rController.isShowDialogs() )
         bShowProgressPanel = sal_False;
 
     // FIXME: jobStarted() should be done after the print dialog has ended (if there is one)
@@ -622,7 +621,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
         if( pPrintOperation )
         {
             NSObject* pReleaseAfterUse = nil;
-            bool bShowPanel = (! bIsQuickJob && getUseNativeDialog() && ! Application::IsHeadlessModeEnabled() );
+            bool bShowPanel = (! bIsQuickJob && getUseNativeDialog() && i_rController.isShowDialogs() );
             [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
             [pPrintOperation setShowsProgressPanel: bShowProgressPanel ? YES : NO];
 
