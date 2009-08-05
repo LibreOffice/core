@@ -230,7 +230,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Should not be possible to read more then requested!" ) ),
                         Reference< XInterface >() );
 
-                if ( maInflater.finished() )
+                if ( maInflater.finished() || maInflater.getLastInflateError() )
                     throw ZipIOException( OUString( RTL_CONSTASCII_USTRINGPARAM( "The stream seems to be broken!" ) ),
                                         Reference< XInterface >() );
 
@@ -244,6 +244,10 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                     mxZipSeek->seek ( mnZipCurrent );
                     sal_Int32 nToRead = std::min ( nDiff, std::max ( nRequestedBytes, static_cast< sal_Int32 >( 8192 ) ) );
                     sal_Int32 nZipRead = mxZipStream->readBytes ( maCompBuffer, nToRead );
+                    if ( nZipRead < nToRead )
+                        throw ZipIOException( OUString( RTL_CONSTASCII_USTRINGPARAM( "No expected data!" ) ),
+                                            Reference< XInterface >() );
+
                     mnZipCurrent += nZipRead;
                     // maCompBuffer now has the data, check if we need to decrypt
                     // before passing to the Inflater
