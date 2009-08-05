@@ -1243,8 +1243,8 @@ End
 File gid_File_Registry_Spool_Langpack_Lang
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
-    FILE_ALL_LANG_LETTER(/registry/spool/Langpack-,xcu);
+    Dir = gid_Dir_Share_Registry;
+    FILE_ALL_LANG_LETTER(Langpack-,xcd);
 End
 
 File gid_File_Registry_Spool_Oo_Common_Ctl_Xcu
