@@ -841,6 +841,16 @@ private:
 
     if( pUnmodifiedString && [pUnmodifiedString length] == 1 )
     {
+        /* #i103102# key events with command and alternate don't make it through
+           interpretKeyEvents (why ?). Try to dispatch them here first,
+           if not successful continue normally
+        */
+        if( (mpFrame->mnLastModifierFlags & (NSAlternateKeyMask | NSCommandKeyMask))
+                    == (NSAlternateKeyMask | NSCommandKeyMask) )
+        {
+            if( [self sendSingleCharacter: mpLastEvent] )
+                return YES;
+        }
         unichar keyChar = [pUnmodifiedString characterAtIndex: 0];
         USHORT nKeyCode = ImplMapCharCode( keyChar );
         

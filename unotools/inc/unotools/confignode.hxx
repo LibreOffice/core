@@ -86,7 +86,7 @@ namespace utl
         const OConfigurationNode& operator=(const OConfigurationNode& _rSource);
 
         /// dtor
-        ~OConfigurationNode();
+        ~OConfigurationNode() {}
 
         /** open a sub node
             @param      _rPath      access path of the to-be-opened sub node. May be a hierarchical path.

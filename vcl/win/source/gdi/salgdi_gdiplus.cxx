@@ -85,7 +85,7 @@ void impAddB2DPolygonToGDIPlusGraphicsPath(Gdiplus::GraphicsPath& rPath, const b
                 const basegfx::B2DPoint aCb(rPolygon.getPrevControlPoint(nNextIndex));
 
                 rPath.AddBezier(
-                    aFCurr, 
+                    aFCurr,
                     Gdiplus::PointF(Gdiplus::REAL(aCa.getX()), Gdiplus::REAL(aCa.getY())),
                     Gdiplus::PointF(Gdiplus::REAL(aCb.getX()), Gdiplus::REAL(aCb.getY())),
                     aFNext);
@@ -118,7 +118,11 @@ bool WinSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
 
         for(sal_uInt32 a(0); a < nCount; a++)
         {
-            aPath.StartFigure();
+            if(0 != a)
+            {
+                aPath.StartFigure(); // #i101491# not needed for first run
+            }
+
             impAddB2DPolygonToGDIPlusGraphicsPath(aPath, rPolyPolygon.getB2DPolygon(a));
             aPath.CloseFigure();
         }
@@ -176,7 +180,13 @@ bool WinSalGraphics::drawPolyLine(const basegfx::B2DPolygon& rPolygon, const bas
         }
 
         impAddB2DPolygonToGDIPlusGraphicsPath(aPath, rPolygon);
-        
+
+        if(rPolygon.isClosed())
+        {
+            // #i101491# needed to create the correct line joins
+            aPath.CloseFigure();
+        }
+
         if(getAntiAliasB2DDraw())
         {
             aGraphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);

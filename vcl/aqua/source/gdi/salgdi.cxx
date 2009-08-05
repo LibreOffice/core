@@ -974,6 +974,11 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
     if( rLineWidths.getX() != rLineWidths.getY() )
         return false;
 
+    // #i101491# Aqua does not support B2DLINEJOIN_NONE; return false to use
+    // the fallback (own geometry preparation)
+    if(basegfx::B2DLINEJOIN_NONE == eLineJoin)
+        return false;
+
     // setup line attributes
     CGLineJoin aCGLineJoin = kCGLineJoinMiter;
     switch( eLineJoin ) {

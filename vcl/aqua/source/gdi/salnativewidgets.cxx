@@ -612,7 +612,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
             aPushInfo.animation.time.start = 0;
             aPushInfo.animation.time.current = 0;
             PushButtonValue* pPBVal = (PushButtonValue*)aValue.getOptionalVal();
-            int nPaintHeight = rc.size.height;
+            int nPaintHeight = static_cast<int>(rc.size.height);
 
             if( pPBVal && pPBVal->mbBevelButton )
             {
@@ -1162,8 +1162,10 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
         if( mxClipPath )
             aRect = CGPathGetBoundingBox( mxClipPath );
         if( aRect.size.width != 0 && aRect.size.height != 0 )
-            buttonRect.Intersection( Rectangle( Point( aRect.origin.x, aRect.origin.y ),
-                                                Size( aRect.size.width, aRect.size.height ) ) );
+            buttonRect.Intersection( Rectangle( Point( static_cast<long int>(aRect.origin.x),
+                            static_cast<long int>(aRect.origin.y) ),
+                                                Size(   static_cast<long int>(aRect.size.width),
+                            static_cast<long int>(aRect.size.height) ) ) );
     }
 
     RefreshRect( buttonRect.Left(), buttonRect.Top(), buttonRect.GetWidth(), buttonRect.GetHeight() );
