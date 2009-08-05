@@ -36,6 +36,9 @@ import java.io.PrintStream;
 import java.io.LineNumberReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import lib.TestParameters;
 import util.PropertyName;
 import util.utils;
@@ -492,6 +495,29 @@ public class ProcessHandler
         isStarted = false;
     }
 
+    /**
+     * Returns the time in seconds since 1st January 1970
+     * @return
+     */
+    public static long getSystemTime()
+    {
+        // Calendar cal = new GregorianCalendar();
+        // final long nTime = cal.getTimeInMillis();
+        final long nTime = System.currentTimeMillis();
+        return nTime;
+    }
+    private long m_nExactStartTimeInMillisec;
+
+    private void initialExactStartTime()
+    {
+        m_nExactStartTimeInMillisec = getSystemTime();
+    }
+
+    public long getProcessStartTime()
+    {
+        return m_nExactStartTimeInMillisec;
+    }
+
     protected void execute()
     {
         if (isStarted())
@@ -511,7 +537,7 @@ public class ProcessHandler
                     log.print(" ");
                 }
                 log.println("");
-
+                initialExactStartTime();
                 m_aProcess = runtime.exec(cmdLineArray, envVars);
             }
             else
@@ -546,6 +572,9 @@ public class ProcessHandler
         stdout = new Pump(m_aProcess.getInputStream(), log, "out > ");
         stderr = new Pump(m_aProcess.getErrorStream(), log, "err > ");
         stdIn = new PrintStream(m_aProcess.getOutputStream());
+
+        // int nExitValue = m_aProcess.exitValue();
+        // int dummy = 0;
 
         dbg("execute: flush io-streams");
 
@@ -583,10 +612,10 @@ public class ProcessHandler
      * @return <code>true</code> if process correctly exited
      * (exit code doesn't affect to this result).
      */
-     public boolean waitFor(long timeout)
-     {
-         return waitFor(timeout, true);
-     }
+    public boolean waitFor(long timeout)
+    {
+        return waitFor(timeout, true);
+    }
 
     private boolean waitFor(long timeout, boolean bKillProcessAfterTimeout)
     {
