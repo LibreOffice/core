@@ -524,6 +524,6 @@ PYUNOLIB=ipyuno.lib
 LPSOLVELIB=lpsolve55.lib
 SOFFICELIB=isofficeapp.lib
 UNOPKGAPPLIB=iunopkgapp.lib
-CONFIGMGRLIB=configmgr.lib
+CONFIGMGRLIB=iconfigmgr.lib
 
 .ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
