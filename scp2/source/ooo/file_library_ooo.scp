@@ -894,6 +894,17 @@ End
 
 #endif
 
+#ifdef WNT
+
+File gid_File_Lib_Rebasemsi
+    TXT_FILE_BODY;
+    Name = "rebase.dll";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED,PATCH,BINARYTABLE,BINARYTABLE_ONLY,DONTRENAMEINPATCH);
+End
+
+#endif
+
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Lng, lng)
 
 File gid_File_Lib_Localedata_En
@@ -958,7 +969,11 @@ File gid_File_Oo_Office_Dataaccess_Mozab_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_DataAccess_Drivers;
+#ifdef WNT
     Name = "/registry/spool/DataAccess/mozab.xcu";
+#else
+    Name = "/registry/spool/DataAccess/mozab2.xcu";
+#endif
 End
 
 STD_UNO_LIB_FILE(gid_File_Lib_Mozab,mozab)
@@ -1547,11 +1562,7 @@ STD_LIB_FILE( gid_File_Lib_BaseGfx, basegfx )
 File gid_File_Lib_Vcl
     Name = LIBNAME(vcl);
     TXT_FILE_BODY;
-<<<<<<< .working
     Styles = (PACKED,UNO_COMPONENT,PATCH);
-=======
-    Styles = (PACKED,PATCH,UNO_COMPONENT);
->>>>>>> .merge-right.r273775
     Dir = gid_Dir_Program;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -1771,20 +1782,17 @@ End
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Oooimprovecore , oooimprovecore)
 
-#if defined WNT && \
-    (defined M1310 || \
-     ((defined M1400 || defined M1500) && \
-      !(defined SYSTEM_MOZILLA || defined WITHOUT_MOZILLA)))
-File gid_File_Moz_Msvcp71
+#if defined WNT && !defined SYSTEM_MOZILLA && !defined WITHOUT_MOZILLA
+File gid_File_Moz_Msvcp80
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Name = SCP2_URE_DL_NORMAL("msvcp71" SCP2_STDLP_DEBUG);
+    Name = SCP2_URE_DL_NORMAL("msvcp80");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
-File gid_File_Moz_Msvcr71
+File gid_File_Moz_Msvcr80
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Name = SCP2_URE_DL_NORMAL("msvcr71" SCP2_STDLP_DEBUG);
+    Name = SCP2_URE_DL_NORMAL("msvcr80");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
 #endif

@@ -71,9 +71,11 @@ sub cleandie
 sub setcompiler
 {
     my $whichcom = $ENV{COM};
+    my $extra_cflags = $ENV{EXTRA_CFLAGS};
+    $extra_cflags = "" if (!$extra_cflags);
     if ( "$whichcom" eq "GCC" ) {
         $appext = ""; # windows for now
-        $compiler = "gcc -x c";
+        $compiler = "gcc -x c $extra_cflags";
         $outbin_flag = "-o ";
         $outobj_flag = "";
         $objext = ".o";

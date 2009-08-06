@@ -287,18 +287,34 @@ sub check_and_save_tables
 }
 
 ####################################################################
+# Setting the languages for the service packs
+####################################################################
+
+sub create_langstring
+{
+    my ( $languagesarrayref ) = @_;
+
+    my $langstring = "";
+    for ( my $i = 0; $i <= $#{$languagesarrayref}; $i++ ) { $langstring = $langstring . "_" . ${$languagesarrayref}[$i]; }
+
+    return $langstring;
+}
+
+####################################################################
 # Setting the name of the msp database
 ####################################################################
 
 sub set_mspfilename
 {
-    my ($allvariables, $mspdir) = @_;
+    my ($allvariables, $mspdir, $languagesarrayref) = @_;
 
-    my $databasename = $allvariables->{'PRODUCTNAME'} . $allvariables->{'PRODUCTVERSION'};
+    my $databasename = $allvariables->{'PRODUCTNAME'};
     $databasename = lc($databasename);
     $databasename =~ s/\.//g;
     $databasename =~ s/\-//g;
     $databasename =~ s/\s//g;
+
+    if ( $allvariables->{'MSPPRODUCTVERSION'} ) { $databasename = $databasename . $allvariables->{'MSPPRODUCTVERSION'}; }
 
     # possibility to overwrite the name with variable DATABASENAME
     # if ( $allvariables->{'DATABASENAME'} ) { $databasename = $allvariables->{'DATABASENAME'}; }
@@ -312,8 +328,10 @@ sub set_mspfilename
     if (( $allvariables->{'SERVICEPACK'} ) && ( $allvariables->{'SERVICEPACK'} == 1 ))
     {
         my $windowspatchlevel = 0;
-        if ( $allvariables->{'WINDOWSPATCHLEVEL'} ) { $windowspatchlevel = $allvariables->{'WINDOWSPATCHLEVEL'}; }
+        if ( $allvariables->{'MSPPATCHLEVEL'} ) { $windowspatchlevel = $allvariables->{'MSPPATCHLEVEL'}; }
         $databasename = $databasename . "_servicepack_" . $windowspatchlevel;
+        my $languagestring = create_langstring($languagesarrayref);
+        $databasename = $databasename . $languagestring;
     }
     else
     {
@@ -1139,7 +1157,7 @@ sub analyze_msimsp_logfile
 
 sub create_msp_patch
 {
-    my ($installationdir, $includepatharrayref, $allvariables, $languagestringref, $filesarray) = @_;
+    my ($installationdir, $includepatharrayref, $allvariables, $languagestringref, $languagesarrayref, $filesarray) = @_;
 
     my $force = 1; # print this message even in 'quiet' mode
     installer::logger::print_message( "\n******************************************\n" );
@@ -1221,7 +1239,7 @@ sub create_msp_patch
     check_and_save_tables($tablelist, $localmspdir);
 
     # Setting the name of the new msp file
-    my $mspfilename = set_mspfilename($allvariables, $mspdir);
+    my $mspfilename = set_mspfilename($allvariables, $mspdir, $languagesarrayref);
 
     # Editing tables
     edit_tables($tablelist, $localmspdir, $olddatabase, $newdatabase, $mspfilename, $allvariables, $languagestringref);
