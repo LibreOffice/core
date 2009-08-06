@@ -419,7 +419,7 @@ public class FileAccess
      **/
     public static void combinePaths(XMultiServiceFactory xMSF, ArrayList _aFirstPath, String _sSecondPath) throws NoValidPathException
     {
-        for (int i = 0; i < _aFirstPath.size(); i++)
+        for (int i = 0; i < _aFirstPath.size(); ++i)
         {
             String sOnePath = (String) _aFirstPath.get(i);
             sOnePath = addPath(sOnePath, _sSecondPath);
@@ -431,6 +431,7 @@ public class FileAccess
             else
             {
                 _aFirstPath.remove(i);
+                --i;
             }
         }
     }
