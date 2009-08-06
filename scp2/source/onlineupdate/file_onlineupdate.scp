@@ -36,7 +36,7 @@ File gid_File_Share_Registry_Onlineupdate_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry;
-    Name = "draw.xcd";
+    Name = "onlineupdate.xcd";
 End
 
 #if defined LINUX || defined SOLARIS
