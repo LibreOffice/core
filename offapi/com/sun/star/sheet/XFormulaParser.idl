@@ -31,13 +31,9 @@
 #ifndef __com_sun_star_sheet_XFormulaParser_idl__
 #define __com_sun_star_sheet_XFormulaParser_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_FormulaToken_idl__
 #include <com/sun/star/sheet/FormulaToken.idl>
-#endif
+#include <com/sun/star/table/CellAddress.idl>
 
 //=============================================================================
 
@@ -53,13 +49,17 @@ interface XFormulaParser
 
     /** parses a formula into a sequence of tokens.
      */
-    sequence< FormulaToken > parseFormula( [in] string aFormula );
+    sequence< FormulaToken > parseFormula(
+        [in] string aFormula,
+        [in] ::com::sun::star::table::CellAddress aReferencePos );
 
     //-------------------------------------------------------------------------
 
     /** converts a formula into a string.
      */
-    string printFormula( [in] sequence< FormulaToken > aTokens );
+    string printFormula(
+        [in] sequence< FormulaToken > aTokens,
+        [in] ::com::sun::star::table::CellAddress aReferencePos );
 
 };
 

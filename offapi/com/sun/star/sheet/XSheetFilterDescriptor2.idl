@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XFastShapeContextHandler.idl,v $
- * $Revision: 1.4 $
+ * $RCSfile: XSheetFilterDescriptor2.idl,v $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,39 +27,53 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_xml_sax_XFastShapeContextHandler_idl__
-#define __com_sun_star_xml_sax_XFastShapeContextHandler_idl__
 
-#include <com/sun/star/xml/sax/XFastContextHandler.idl>
-#include <com/sun/star/drawing/XShape.idl>
-#include <com/sun/star/drawing/XDrawPage.idl>
-#include <com/sun/star/frame/XModel.idl>
-#include <com/sun/star/io/XInputStream.idl>
+#ifndef __com_sun_star_sheet_XSheetFilterDescriptor2_idl__
+#define __com_sun_star_sheet_XSheetFilterDescriptor2_idl__
+
+#ifndef __com_sun_star_sheet_TableFilterField2_idl__
+#include <com/sun/star/sheet/TableFilterField2.idl>
+#endif
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
 
 //=============================================================================
 
-module com {  module sun {  module star {  module xml {  module sax {
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
-/** receives notification of sax document events from a
-    <type>XFastParser</type>.
+/** provides access to a collection of filter conditions (filter fields).
 
-    @see XFastDocumentHandler
+    <p>This interface uses the <type>TableFilterField2</type> struct,
+    whereas the <type>XSheetFilterDescriptor</type> interface uses the
+    <type>TableFilterField</type> struct.</p>
+
+    @see com::sun::star::sheet::SheetFilterDescriptor
+    @since OOo 3.2
  */
-interface XFastShapeContextHandler: com::sun::star::xml::sax::XFastContextHandler
+published interface XSheetFilterDescriptor2: com::sun::star::uno::XInterface
 {
-    [attribute, readonly] com::sun::star::drawing::XShape Shape;
-    [attribute] com::sun::star::drawing::XDrawPage DrawPage;
-    [attribute] com::sun::star::frame::XModel Model;
-    [attribute] com::sun::star::io::XInputStream InputStream;
-    [attribute] string RelationFragmentPath;
-    [attribute] long StartToken;
-  };
+    //-------------------------------------------------------------------------
+
+    /** returns the collection of filter fields.
+     */
+    sequence< com::sun::star::sheet::TableFilterField2 > getFilterFields2();
+
+    //-------------------------------------------------------------------------
+
+    /** sets a new collection of filter fields.
+     */
+    void setFilterFields2(
+        [in] sequence< com::sun::star::sheet::TableFilterField2 > aFilterFields );
+
+};
 
 //=============================================================================
 
-}; }; }; }; };
+}; }; }; };
 
 #endif
 

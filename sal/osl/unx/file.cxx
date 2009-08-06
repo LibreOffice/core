@@ -131,6 +131,42 @@ static const sal_Char* MOUNTTAB="/etc/mtab";
 
 #endif
 
+#ifdef _DIRENT_HAVE_D_TYPE
+#include "file_impl.hxx"
+    oslDirectoryItemImpl* oslDirectoryItemImpl_CreateNew( rtl_uString* _ustrFilePath, bool _bHasDType, unsigned char _DType )
+    {
+        oslDirectoryItemImpl *pItemObject = (oslDirectoryItemImpl*) malloc( sizeof( oslDirectoryItemImpl ) );
+        pItemObject->RefCount = 1;
+        pItemObject->bHasType = _bHasDType;
+        pItemObject->DType = _DType;
+        pItemObject->ustrFilePath = _ustrFilePath;
+
+        return pItemObject;
+    }
+
+    void oslDirectoryItemImpl_Destroy( oslDirectoryItemImpl* pItem )
+    {
+        if( pItem->ustrFilePath ) {
+            rtl_uString_release( pItem->ustrFilePath );
+            pItem->ustrFilePath = NULL;
+        }
+        free( pItem );
+    }
+
+    void oslDirectoryItemImpl_acquire( oslDirectoryItemImpl* pItem )
+    {
+        pItem->RefCount ++;
+    }
+
+    void oslDirectoryItemImpl_release( oslDirectoryItemImpl* pItem )
+    {
+        pItem->RefCount --;
+
+        if( pItem->RefCount <= 0 )
+            oslDirectoryItemImpl_Destroy( pItem );
+    }
+#endif
+
 #if OSL_DEBUG_LEVEL > 1
 
     extern void debug_ustring(rtl_uString*);
@@ -467,8 +503,15 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
     osl_systemPathMakeAbsolutePath(pDirImpl->ustrPath, ustrFileName, &ustrFilePath);
     rtl_uString_release( ustrFileName );
 
-    /* use path as directory item */
-    *pItem = (oslDirectoryItem) ustrFilePath;
+#ifdef _DIRENT_HAVE_D_TYPE
+    if(*pItem)
+        oslDirectoryItemImpl_release( ( oslDirectoryItemImpl* )( *pItem ) );
+
+     *pItem = (oslDirectoryItem) oslDirectoryItemImpl_CreateNew( ustrFilePath, true, pEntry->d_type );
+#else
+     /* use path as directory item */
+     *pItem = (oslDirectoryItem) ustrFilePath;
+#endif
 
     return osl_File_E_None;
 }
@@ -497,7 +540,11 @@ oslFileError SAL_CALL osl_getDirectoryItem( rtl_uString* ustrFileURL, oslDirecto
 
     if (0 == access_u(ustrSystemPath, F_OK))
     {
+#ifdef _DIRENT_HAVE_D_TYPE
+        *pItem = (oslDirectoryItem) oslDirectoryItemImpl_CreateNew( ustrSystemPath, false );
+#else
         *pItem = (oslDirectoryItem)ustrSystemPath;
+#endif
         osl_error = osl_File_E_None;
     }
     else
@@ -515,12 +562,21 @@ oslFileError SAL_CALL osl_getDirectoryItem( rtl_uString* ustrFileURL, oslDirecto
 
 oslFileError osl_acquireDirectoryItem( oslDirectoryItem Item )
 {
+#ifdef _DIRENT_HAVE_D_TYPE
+    oslDirectoryItemImpl* pImpl = (oslDirectoryItemImpl*) Item;
+#else
     rtl_uString* ustrFilePath = (rtl_uString *) Item;
+#endif
 
     OSL_ASSERT( Item );
 
+#ifdef _DIRENT_HAVE_D_TYPE
+    if( pImpl )
+        oslDirectoryItemImpl_acquire( pImpl );
+#else
     if( ustrFilePath )
         rtl_uString_acquire( ustrFilePath );
+#endif
 
     return osl_File_E_None;
 }
@@ -531,12 +587,21 @@ oslFileError osl_acquireDirectoryItem( oslDirectoryItem Item )
 
 oslFileError osl_releaseDirectoryItem( oslDirectoryItem Item )
 {
+#ifdef _DIRENT_HAVE_D_TYPE
+    oslDirectoryItemImpl* pImpl = (oslDirectoryItemImpl*) Item;
+#else
     rtl_uString* ustrFilePath = (rtl_uString *) Item;
+#endif
 
     OSL_ASSERT( Item );
 
+#ifdef _DIRENT_HAVE_D_TYPE
+    if( pImpl )
+        oslDirectoryItemImpl_release( pImpl );
+#else
     if( ustrFilePath )
         rtl_uString_release( ustrFilePath );
+#endif
 
     return osl_File_E_None;
 }

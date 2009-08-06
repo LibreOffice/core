@@ -60,6 +60,11 @@ module com { module sun { module star { module ui { module dialogs {
 //=============================================================================
 /** A FilePicker.
 
+    It is <strong>NOT</strong> recommended to cache a reference to a file
+    picker instance. Due to restrictions by the underlying system there can
+    be specific limitations possible. To overcome these problems it'
+    s recommended to create a new instance on demand.
+
     @see XFilePicker
 */
 

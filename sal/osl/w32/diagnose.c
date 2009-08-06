@@ -73,6 +73,7 @@ void SAL_CALL osl_breakDebug(void)
 void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
 {
     va_list args;
+    int written = 0;
 
     va_start(args, lpszFormat);
 
@@ -90,7 +91,8 @@ void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
     {
         sal_Char    szMessage[512];
         szMessage[sizeof(szMessage)-1] = 0;
-        _vsnprintf( szMessage, sizeof(szMessage) -1, lpszFormat, args );
+        written = _vsnprintf( szMessage, sizeof(szMessage) - 2, lpszFormat, args );
+        szMessage[ written == -1 ? sizeof(szMessage) - 2 : written ] = '\n';
         OutputDebugString( szMessage );
     }
 
