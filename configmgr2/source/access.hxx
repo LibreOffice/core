@@ -32,6 +32,7 @@
 
 #include "sal/config.h"
 
+#include <map>
 #include <vector>
 
 #include "boost/noncopyable.hpp"
@@ -62,7 +63,6 @@
 #include "com/sun/star/uno/Sequence.hxx"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
-#include "stl/hash_map"
 
 #include "nodemap.hxx"
 #include "type.hxx"
@@ -90,10 +90,7 @@ namespace com { namespace sun { namespace star {
     }
     namespace util { struct ElementChange; }
 } } }
-namespace rtl {
-    class OUString;
-    struct OUStringHash;
-}
+namespace rtl { class OUString; }
 
 namespace configmgr {
 
@@ -168,9 +165,7 @@ protected:
     void commitChildChanges(bool valid);
 
 public: //TODO
-    typedef
-        std::hash_map<
-            rtl::OUString, rtl::Reference< ChildAccess >, rtl::OUStringHash >
+    typedef std::map< rtl::OUString, rtl::Reference< ChildAccess > >
         HardChildMap;
 
     HardChildMap modifiedChildren_;
@@ -441,8 +436,7 @@ private:
 
     void checkFinalized();
 
-    typedef std::hash_map< rtl::OUString, ChildAccess *, rtl::OUStringHash >
-        WeakChildMap;
+    typedef std::map< rtl::OUString, ChildAccess * > WeakChildMap;
 
     WeakChildMap cachedChildren_;
 

@@ -32,6 +32,7 @@
 
 #include <algorithm>
 #include <list>
+#include <map>
 #include <vector>
 
 #include "boost/noncopyable.hpp"
@@ -58,7 +59,6 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
-#include "stl/hash_map"
 
 #include "components.hxx"
 #include "groupnode.hxx"
@@ -77,8 +77,7 @@ namespace {
 
 namespace css = com::sun::star;
 
-typedef std::hash_map< rtl::OUString, css::uno::Any, rtl::OUStringHash >
-    LocalizedValues;
+typedef std::map< rtl::OUString, css::uno::Any > LocalizedValues;
 
 bool isRemovedValue(css::uno::Any const & value) {
     // An ANY of type TYPE whose value is VOID is used within a LocalizedValues

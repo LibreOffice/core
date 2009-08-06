@@ -32,21 +32,17 @@
 
 #include "sal/config.h"
 
-#include "rtl/ref.hxx"
-#include "stl/hash_map"
+#include <map>
 
-namespace rtl {
-    class OUString;
-    struct OUStringHash;
-}
+#include "rtl/ref.hxx"
+
+namespace rtl { class OUString; }
 
 namespace configmgr {
 
 class Node;
 
-typedef
-    std::hash_map< rtl::OUString, rtl::Reference< Node >, rtl::OUStringHash >
-    NodeMap;
+typedef std::map< rtl::OUString, rtl::Reference< Node > > NodeMap;
 
 void cloneNodeMap(NodeMap const & source, NodeMap * target);
 
