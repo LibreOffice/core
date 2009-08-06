@@ -38,39 +38,39 @@ ModalDialog DLG_COL_WIDTH
     HelpID = FN_TABLE_SET_COL_WIDTH ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 149 , 60 ) ;
+    Size = MAP_APPFONT ( 159 , 60 ) ;
     Text [ en-US ] = "Column Width" ;
     Moveable = TRUE ;
     OKButton BT_OK
     {
-        Pos = MAP_APPFONT ( 94 , 6 ) ;
+        Pos = MAP_APPFONT ( 104 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BT_CANCEL
     {
-        Pos = MAP_APPFONT ( 94 , 23 ) ;
+        Pos = MAP_APPFONT ( 104 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BT_HELP
     {
-        Pos = MAP_APPFONT ( 94 , 43 ) ;
+        Pos = MAP_APPFONT ( 104 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_WIDTH
     {
         Pos = MAP_APPFONT ( 12 , 31 ) ;
-        Size = MAP_APPFONT ( 22 , 8 ) ;
+        Size = MAP_APPFONT ( 35 , 8 ) ;
         Text [ en-US ] = "~Width" ;
         Left = TRUE ;
     };
     MetricField ED_WIDTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 41 , 30 ) ;
+        Pos = MAP_APPFONT ( 51 , 30 ) ;
         Size = MAP_APPFONT ( 38 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -88,20 +88,20 @@ ModalDialog DLG_COL_WIDTH
     FixedLine FL_WIDTH
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 81 , 8 ) ;
+        Size = MAP_APPFONT ( 91 , 8 ) ;
         Text [ en-US ] = "Width" ;
     };
     FixedText FT_COL
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 29 , 8 ) ;
+        Size = MAP_APPFONT ( 35 , 8 ) ;
         Text [ en-US ] = "~Column" ;
         Left = TRUE ;
     };
     NumericField ED_COL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 41 , 14 ) ;
+        Pos = MAP_APPFONT ( 51 , 14 ) ;
         Size = MAP_APPFONT ( 38 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;

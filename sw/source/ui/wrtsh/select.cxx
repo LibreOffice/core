@@ -701,6 +701,13 @@ void SwWrtShell::SetInsMode( BOOL bOn )
     StartAction();
     EndAction();
 }
+//Overwrite mode is incompatible with red-lining
+void SwWrtShell::SetRedlineModeAndCheckInsMode( USHORT eMode )
+{
+   SetRedlineMode( eMode );
+   if (IsRedlineOn())
+       SetInsMode( true );
+}
 
 /*
  * Rahmen bearbeiten
