@@ -91,6 +91,20 @@ private:
 
 };
 
+class SwEscherExGlobal : public EscherExGlobal
+{
+public:
+    explicit            SwEscherExGlobal();
+    virtual             ~SwEscherExGlobal();
+
+private:
+    /** Overloaded to create a new memory stream for picture data. */
+    virtual SvStream*   ImplQueryPictureStream();
+
+private:
+    ::std::auto_ptr< SvStream > mxPicStrm;
+};
+
 class SwBasicEscherEx : public EscherEx
 {
 private:
@@ -98,7 +112,6 @@ private:
 protected:
     SwWW8Writer& rWrt;
     SvStream* pEscherStrm;
-    SvStream* pPictStrm;
     long mnEmuMul, mnEmuDiv;
 
     virtual INT32 WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
@@ -114,8 +127,6 @@ protected:
         { return BigMulDiv(nVal, mnEmuMul, mnEmuDiv); }
 
     INT32 ToFract16(INT32 nVal, UINT32 nMax) const;
-
-    SvStream* QueryPicStream();
 
     virtual void SetPicId(const SdrObject &, UINT32, EscherPropertyContainer &);
     SdrLayerID GetInvisibleHellId() const;
@@ -169,7 +180,7 @@ public:
     virtual void WriteFrmExtraData(const SwFrmFmt& rFmt);
 
     EscherExHostAppData* StartShape(const com::sun::star::uno::Reference<
-        com::sun::star::drawing::XShape > &) {return &aHostData;}
+        com::sun::star::drawing::XShape > &, const Rectangle*) {return &aHostData;}
 private:
     //No copying
     SwEscherEx(const SwEscherEx&);
