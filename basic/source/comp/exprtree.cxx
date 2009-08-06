@@ -701,12 +701,6 @@ SbiExprNode* SbiExpression::Comp()
             pNd = new SbiExprNode( pParser, pNd, eTok, Cat() );
             nCount++;
         }
-        // Mehrere Operatoren hintereinander gehen nicht
-        if( nCount > 1 )
-        {
-            pParser->Error( SbERR_SYNTAX );
-            bError = TRUE;
-        }
     }
     return pNd;
 }

@@ -1357,6 +1357,12 @@ void StarBASIC::FatalError( SbError n )
         pINST->FatalError( n );
 }
 
+void StarBASIC::FatalError( SbError _errCode, const String& _details )
+{
+    if( pINST )
+        pINST->FatalError( _errCode, _details );
+}
+
 SbError StarBASIC::GetErrBasic()
 {
     if( pINST )
