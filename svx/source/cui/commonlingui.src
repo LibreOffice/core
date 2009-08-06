@@ -47,7 +47,7 @@ Window RID_SVX_WND_COMMON_LINGU
     {
         HelpId=HID_SPELLDLG_SETWORD;
         Pos = MAP_APPFONT( 51, 9 );
-        Size = MAP_APPFONT( 149, 10 );
+        Size = MAP_APPFONT( 164, 10 );
         Border =FALSE;
         TabStop = TRUE;
     };
@@ -62,7 +62,7 @@ Window RID_SVX_WND_COMMON_LINGU
     Edit ED_NEWWORD
     {
         Pos = MAP_APPFONT( 51, 24 );
-        Size = MAP_APPFONT( 122, 12 );
+        Size = MAP_APPFONT( 137, 12 );
         Border = TRUE;
     };
 
@@ -75,21 +75,21 @@ Window RID_SVX_WND_COMMON_LINGU
 
     PushButton BTN_IGNORE
     {
-        Pos = MAP_APPFONT( 209, 6 );
+        Pos = MAP_APPFONT( 224, 6 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "~Ignore" ;
     };
 
     PushButton BTN_IGNOREALL
     {
-        Pos = MAP_APPFONT( 209, 22 );
+        Pos = MAP_APPFONT( 224, 22 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "Always I~gnore" ;
     };
 
     PushButton BTN_CHANGE
     {
-        Pos = MAP_APPFONT( 209, 40 );
+        Pos = MAP_APPFONT( 224, 40 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "~Replace" ;
         DefButton = TRUE ;
@@ -97,14 +97,14 @@ Window RID_SVX_WND_COMMON_LINGU
 
     PushButton BTN_CHANGEALL
     {
-        Pos = MAP_APPFONT( 209, 56 );
+        Pos = MAP_APPFONT( 224, 56 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "Always R~eplace" ;
     };
 
     PushButton BTN_OPTIONS
     {
-        Pos = MAP_APPFONT( 209, 129 );
+        Pos = MAP_APPFONT( 224, 129 );
         Size = MAP_APPFONT( 55, 14 );
         Hide = TRUE ;
         Text [ en-US ] = "Options..." ;
@@ -119,19 +119,19 @@ Window RID_SVX_WND_COMMON_LINGU
     GroupBox GB_AUDIT
     {
         Pos = MAP_APPFONT( 1, 1 );
-        Size = MAP_APPFONT( 268, 148 );
+        Size = MAP_APPFONT( 283, 148 );
         Hide=TRUE;
     };
 
     HelpButton BTN_SPL_HELP
     {
-        Pos = MAP_APPFONT( 145, 153 );
+        Pos = MAP_APPFONT( 160, 153 );
         Size = MAP_APPFONT( 55, 14 );
     };
 
     CancelButton BTN_SPL_CANCEL
     {
-        Pos = MAP_APPFONT ( 209 , 153 ) ;
+        Pos = MAP_APPFONT ( 224 , 153 ) ;
         Size = MAP_APPFONT ( 55 , 14 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Close" ;

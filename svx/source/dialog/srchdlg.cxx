@@ -394,7 +394,7 @@ void SvxJSearchOptionsDialog::SetTransliterationFlags( INT32 nSettings )
     aCalcStr        ( THIS_SVX_RES( STR_WORDCALC ) ),                       \
     pImpl           ( NULL ),                                               \
     pSearchList     ( NULL ),                                               \
-    pReplaceList    ( NULL ),                                               \
+    pReplaceList    ( new SearchAttrItemList ),                             \
     pSearchItem     ( NULL ),                                               \
     pSearchController       ( NULL ),                                       \
     pOptionsController      ( NULL ),                                       \
