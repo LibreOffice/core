@@ -41,12 +41,9 @@
 // ---------------------------------------------------------------------------------------------
 
 PptEscherEx::PptEscherEx( SvStream& rOutStrm ) :
-    EscherEx( rOutStrm )
+    EscherEx( EscherExGlobalRef( new EscherExGlobal ), rOutStrm )
 {
     mnCurrentDg = 0;
-    mnCurrentShapeID = 0;
-    mnTotalShapesDgg = 0;
-    mnCurrentShapeMaximumID = 0;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -71,8 +68,8 @@ sal_uInt32 PptEscherEx::ImplDggContainerSize()
 {
     UINT32 nSize;
 
-    nSize  = GetDggAtomSize();
-    nSize += GetBlibStoreContainerSize();
+    nSize  = mxGlobal->GetDggAtomSize();
+    nSize += mxGlobal->GetBlibStoreContainerSize();
     nSize += ImplOptAtomSize();
     nSize += ImplSplitMenuColorsAtomSize();
 
@@ -87,8 +84,9 @@ void PptEscherEx::ImplWriteDggContainer( SvStream& rSt )
         rSt << (sal_uInt32)( 0xf | ( ESCHER_DggContainer << 16 ) )
             << (sal_uInt32)( nSize - 8 );
 
-        WriteDggAtom( rSt );
-        WriteBlibStoreContainer( rSt );
+        mxGlobal->SetDggContainer();
+        mxGlobal->WriteDggAtom( rSt );
+        mxGlobal->WriteBlibStoreContainer( rSt );
         ImplWriteOptAtom( rSt );
         ImplWriteSplitMenuColorsAtom( rSt );
     }
@@ -170,12 +168,7 @@ void PptEscherEx::OpenContainer( UINT16 n_EscherContainer, int nRecInstance )
             if ( !mbEscherDg )
             {
                 mbEscherDg = TRUE;
-                ++mnDrawings;
-                mnCurrentDg = mnDrawings;
-                mnTotalShapesDg = 0;
-                mnTotalShapeIdUsedDg = 0;
-                mnCurrentShapeID = ( mnCurrentShapeMaximumID &~0x3ff ) + 0x400; // eine neue Seite bekommt immer eine neue ShapeId die ein vielfaches von 1024 ist,
-                                                                                // damit ist erste aktuelle Shape ID 0x400
+                mnCurrentDg = mxGlobal->GenerateDrawingId();
                 AddAtom( 8, ESCHER_Dg, 0, mnCurrentDg );
                 PtReplaceOrInsert( ESCHER_Persist_Dg | mnCurrentDg, mpOutStrm->Tell() );
                 *mpOutStrm << (UINT32)0     // The number of shapes in this drawing
@@ -226,12 +219,7 @@ void PptEscherEx::CloseContainer()
                 {
                     mbEscherDg = FALSE;
                     if ( DoSeek( ESCHER_Persist_Dg | mnCurrentDg ) )
-                    {
-                        // shapeanzahl des drawings setzen
-                        mnTotalShapesDgg += mnTotalShapesDg;
-                        *mpOutStrm << mnTotalShapesDg << mnCurrentShapeMaximumID;
-                        UpdateFIDCL();
-                    }
+                        *mpOutStrm << mxGlobal->GetDrawingShapeCount( mnCurrentDg ) << mxGlobal->GetLastShapeId( mnCurrentDg );
                 }
             }
             break;
@@ -279,7 +267,7 @@ sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClie
                     << (INT32)aRect.Right()
                     << (INT32)aRect.Bottom();
 
-        nShapeId = GetShapeID();
+        nShapeId = GenerateShapeId();
         if ( !mnGroupLevel )
             AddShape( ESCHER_ShpInst_Min, 5, nShapeId );                    // Flags: Group | Patriarch
         else
