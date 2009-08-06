@@ -232,14 +232,6 @@ SvLBoxEntry* BasicCheckBox::DoInsertEntry( const String& rStr, ULONG nPos )
 
 //----------------------------------------------------------------------------
 
-void BasicCheckBox::RemoveEntry( ULONG nPos )
-{
-    if ( nPos < GetEntryCount() )
-        SvTreeListBox::GetModel()->Remove( GetEntry( nPos ) );
-}
-
-//----------------------------------------------------------------------------
-
 SvLBoxEntry* BasicCheckBox::FindEntry( const String& rName )
 {
     ULONG nCount = GetEntryCount();
@@ -251,29 +243,6 @@ SvLBoxEntry* BasicCheckBox::FindEntry( const String& rName )
             return pEntry;
     }
     return 0;
-}
-
-//----------------------------------------------------------------------------
-
-ULONG BasicCheckBox::GetSelectEntryPos() const
-{
-    return GetModel()->GetAbsPos( FirstSelected() );
-}
-
-//----------------------------------------------------------------------------
-
-ULONG BasicCheckBox::GetCheckedEntryCount() const
-{
-    ULONG   nCheckCount = 0;
-    ULONG   nCount      = GetEntryCount();
-
-    for (ULONG i=0; i<nCount; i++ )
-    {
-        if ( IsChecked( i ) )
-            nCheckCount++;
-    }
-
-    return nCheckCount;
 }
 
 //----------------------------------------------------------------------------
