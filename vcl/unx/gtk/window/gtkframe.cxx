@@ -834,7 +834,7 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
         }
         if( (nStyle & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN ) )
         {
-            eType = GDK_WINDOW_TYPE_HINT_DOCK;
+            eType = GDK_WINDOW_TYPE_HINT_TOOLBAR;
             gtk_window_set_keep_above( GTK_WINDOW(m_pWindow), true );
         }
 

@@ -3480,11 +3480,6 @@ USHORT PopupMenu::Execute( Window* pExecWindow, const Rectangle& rRect, USHORT n
 
 USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupModeFlags, Menu* pSFrom, BOOL bPreSelectFirst )
 {
-
-    // #59614# Mit TH abgesprochen dass die ASSERTION raus kommt,
-    // weil es evtl. legitim ist...
-//  DBG_ASSERT( !PopupMenu::IsInExecute() || pSFrom, "PopupMenu::Execute() called in PopupMenu::Execute()" );
-
     if ( !pSFrom && ( PopupMenu::IsInExecute() || !GetItemCount() ) )
         return 0;
 
@@ -3660,7 +3655,15 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     {
         pWin->ImplAddDel( &aDelData );
 
+        ImplDelData aModalWinDel;
+        pW->ImplAddDel( &aModalWinDel );
+        pW->ImplIncModalCount();
+
         pWin->Execute();
+
+        DBG_ASSERT( ! aModalWinDel.IsDead(), "window for popup died, modal count incorrect !" );
+        if( ! aModalWinDel.IsDead() )
+            pW->ImplDecModalCount();
 
         if ( !aDelData.IsDelete() )
             pWin->ImplRemoveDel( &aDelData );

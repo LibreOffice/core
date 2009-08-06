@@ -483,7 +483,7 @@ BOOL ImpGraphic::ImplIsAnimated() const
 
 // ------------------------------------------------------------------------
 
-Bitmap ImpGraphic::ImplGetBitmap( const Size* pSizePixel, BOOL bUnlimited ) const
+Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters) const
 {
     Bitmap aRetBmp;
 
@@ -494,8 +494,8 @@ Bitmap ImpGraphic::ImplGetBitmap( const Size* pSizePixel, BOOL bUnlimited ) cons
 
         aRetBmp = rRetBmpEx.GetBitmap( &aReplaceColor );
 
-        if( pSizePixel )
-            aRetBmp.Scale( *pSizePixel );
+        if(rParameters.getSizePixel().Width() || rParameters.getSizePixel().Height())
+            aRetBmp.Scale(rParameters.getSizePixel());
     }
     else if( ( meType != GRAPHIC_DEFAULT ) && ImplIsSupportedGraphic() )
     {
@@ -508,16 +508,18 @@ Bitmap ImpGraphic::ImplGetBitmap( const Size* pSizePixel, BOOL bUnlimited ) cons
         Size            aDrawSize( aVDev.LogicToPixel( maMetaFile.GetPrefSize(), maMetaFile.GetPrefMapMode() ) );
         Size            aSizePix( labs( aBRPix.X() - aTLPix.X() ) + 1, labs( aBRPix.Y() - aTLPix.Y() ) + 1 );
 
-        if( pSizePixel && aSizePix.Width() && aSizePix.Height() )
+        if(rParameters.getSizePixel().Width() && rParameters.getSizePixel().Height())
         {
-            aDrawSize.Width() = FRound( (double) pSizePixel->Width() * (double) aDrawSize.Width() / (double) aSizePix.Width() );
-            aDrawSize.Height() = FRound( (double) pSizePixel->Height() * (double) aDrawSize.Height() / (double) aSizePix.Height() );
+            aDrawSize.Width() = FRound((double)rParameters.getSizePixel().Width() *
+                (double)aDrawSize.Width() / (double)aSizePix.Width());
+            aDrawSize.Height() = FRound((double)rParameters.getSizePixel().Height() *
+                (double)aDrawSize.Height() / (double)aSizePix.Height());
 
-            aSizePix = *pSizePixel;
+            aSizePix = rParameters.getSizePixel();
         }
 
-        if( aSizePix.Width() && aSizePix.Height() && !bUnlimited &&
-            ( aSizePix.Width() > GRAPHIC_MTFTOBMP_MAXEXT || aSizePix.Height() > GRAPHIC_MTFTOBMP_MAXEXT ) )
+        if( aSizePix.Width() && aSizePix.Height() && !rParameters.getUnlimitedSize()
+            && (aSizePix.Width() > GRAPHIC_MTFTOBMP_MAXEXT || aSizePix.Height() > GRAPHIC_MTFTOBMP_MAXEXT))
         {
             const Size  aOldSizePix( aSizePix );
             double      fWH = (double) aSizePix.Width() / aSizePix.Height();
@@ -533,6 +535,16 @@ Bitmap ImpGraphic::ImplGetBitmap( const Size* pSizePixel, BOOL bUnlimited ) cons
 
         if( aVDev.SetOutputSizePixel( aSizePix ) )
         {
+            if(rParameters.getAntiAliase())
+            {
+                aVDev.SetAntialiasing(aVDev.GetAntialiasing() | ANTIALIASING_ENABLE_B2DDRAW);
+            }
+
+            if(rParameters.getSnapHorVerLines())
+            {
+                aVDev.SetAntialiasing(aVDev.GetAntialiasing() | ANTIALIASING_PIXELSNAPHAIRLINE);
+            }
+
             ImplDraw( &aVDev, aNullPt, aDrawSize );
             aRetBmp =  aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() );
         }
@@ -549,7 +561,7 @@ Bitmap ImpGraphic::ImplGetBitmap( const Size* pSizePixel, BOOL bUnlimited ) cons
 
 // ------------------------------------------------------------------------
 
-BitmapEx ImpGraphic::ImplGetBitmapEx( const Size* pSizePixel, BOOL bUnlimited ) const
+BitmapEx ImpGraphic::ImplGetBitmapEx(const GraphicConversionParameters& rParameters) const
 {
     BitmapEx aRetBmpEx;
 
@@ -557,13 +569,13 @@ BitmapEx ImpGraphic::ImplGetBitmapEx( const Size* pSizePixel, BOOL bUnlimited ) 
     {
         aRetBmpEx = ( mpAnimation ? mpAnimation->GetBitmapEx() : maEx );
 
-        if( pSizePixel )
-            aRetBmpEx.Scale( *pSizePixel );
+        if(rParameters.getSizePixel().Width() || rParameters.getSizePixel().Height())
+            aRetBmpEx.Scale(rParameters.getSizePixel());
     }
     else if( ( meType != GRAPHIC_DEFAULT ) && ImplIsSupportedGraphic() )
     {
         const ImpGraphic aMonoMask( maMetaFile.GetMonochromeMtf( COL_BLACK ) );
-        aRetBmpEx = BitmapEx( ImplGetBitmap( pSizePixel, bUnlimited ), aMonoMask.ImplGetBitmap( pSizePixel, bUnlimited ) );
+        aRetBmpEx = BitmapEx(ImplGetBitmap(rParameters), aMonoMask.ImplGetBitmap(rParameters));
     }
 
     return aRetBmpEx;

@@ -58,6 +58,9 @@
 {
     NSSize aPaperSize =  [mpInfoPrinter->getPrintInfo() paperSize];
     int nWidth = (int)aPaperSize.width;
+    // #i101108# sanity check
+    if( nWidth < 1 )
+        nWidth = 1;
     NSRect aRect = { { page % nWidth, page / nWidth }, aPaperSize };
     return aRect;
 }
@@ -71,7 +74,7 @@
 -(void)drawRect: (NSRect)rect
 {
     NSPoint aPoint = [self locationOfPrintRect: rect];
-    mpInfoPrinter->setStartPageOffset( rect.origin.x, rect.origin.y );
+    mpInfoPrinter->setStartPageOffset( static_cast<int>(rect.origin.x), static_cast<int>(rect.origin.y) );
     NSSize aPaperSize =  [mpInfoPrinter->getPrintInfo() paperSize];
     int nPage = (int)(aPaperSize.width * rect.origin.y + rect.origin.x);
     

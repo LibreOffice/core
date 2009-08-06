@@ -515,6 +515,15 @@ SelectionManager::~SelectionManager()
         // destroy message window
         if( m_aWindow )
             XDestroyWindow( m_pDisplay, m_aWindow );
+        // release cursors
+        if (m_aMoveCursor != None)
+            XFreeCursor(m_pDisplay, m_aMoveCursor);
+        if (m_aCopyCursor != None)
+            XFreeCursor(m_pDisplay, m_aCopyCursor);
+        if (m_aLinkCursor != None)
+            XFreeCursor(m_pDisplay, m_aLinkCursor);
+        if (m_aNoneCursor != None)
+            XFreeCursor(m_pDisplay, m_aNoneCursor);
 
         // paranoia setting, the drag thread should have
         // done that already
