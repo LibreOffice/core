@@ -1274,7 +1274,11 @@ Size ListBox::CalcMinimumSize() const
     else
     {
         aSz.Height() = mpImplLB->CalcSize( 1 ).Height();
-        aSz.Width() = mpImplLB->GetMaxEntryWidth();
+        // size to maxmimum entry width and add a little breathing space
+        aSz.Width() = mpImplLB->GetMaxEntryWidth() + 4;
+        // do not create ultrathin ListBoxes, it doesn't look good
+        if( aSz.Width() < GetSettings().GetStyleSettings().GetScrollBarSize() )
+            aSz.Width() = GetSettings().GetStyleSettings().GetScrollBarSize();
 
         // try native borders; scrollbar size may not be a good indicator
         // see how large the edit area inside is to estimate what is needed for the dropdown

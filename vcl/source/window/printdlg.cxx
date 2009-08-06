@@ -1467,22 +1467,23 @@ void PrintDialog::setupOptionalUI()
     maTabCtrl.SetMinimumSizePixel( maTabCtrl.GetSizePixel() );
     if( aMaxSize.Height() > aTabSize.Height() || aMaxSize.Width() > aTabSize.Width() )
     {
-        Size aCurSize( GetSizePixel() );
+        Size aCurSize( GetOutputSizePixel() );
         if( aMaxSize.Height() > aTabSize.Height() )
+        {
             aCurSize.Height() += aMaxSize.Height() - aTabSize.Height();
+            aTabSize.Height() = aMaxSize.Height();
+        }
         if( aMaxSize.Width() > aTabSize.Width() )
         {
             aCurSize.Width() += aMaxSize.Width() - aTabSize.Width();
             // and the tab ctrl needs more space, too
             aTabSize.Width() = aMaxSize.Width();
-            maTabCtrl.SetSizePixel( aTabSize );
-            maTabCtrl.SetMinimumSizePixel( maTabCtrl.GetSizePixel() );
         }
-        SetSizePixel( aCurSize );
+        maTabCtrl.SetTabPageSizePixel( aTabSize );
+        maTabCtrl.SetMinimumSizePixel( maTabCtrl.GetSizePixel() );
     }
 
     // and finally arrange controls
-    aTabSize = maTabCtrl.GetTabPageSizePixel();
     for( std::vector< vcl::RowOrColumn* >::iterator it = aDynamicColumns.begin();
          it != aDynamicColumns.end(); ++it )
     {
@@ -1493,7 +1494,9 @@ void PrintDialog::setupOptionalUI()
     maJobPage.Resize();
     maNUpPage.Resize();
     maOptionsPage.Resize();
-    Resize();
+
+    Size aSz = maLayout.getOptimalSize( WINDOWSIZE_PREFERRED );
+    SetOutputSizePixel( aSz );
 }
 
 void PrintDialog::checkControlDependencies()

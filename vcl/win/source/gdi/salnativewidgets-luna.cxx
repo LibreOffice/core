@@ -337,7 +337,7 @@ BOOL ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, cons
 }
 
 
-Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const Rectangle& aRect )
+Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const Rectangle& aRect, THEMESIZE eTS = TS_TRUE )
 {
     SIZE aSz;
     RECT rc;
@@ -345,7 +345,7 @@ Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const
     rc.right = aRect.nRight;
     rc.top = aRect.nTop;
     rc.bottom = aRect.nBottom;
-    HRESULT hr = vsAPI.GetThemePartSize( hTheme, hDC, iPart, iState, NULL, TS_TRUE, &aSz ); // TS_TRUE returns optimal size
+    HRESULT hr = vsAPI.GetThemePartSize( hTheme, hDC, iPart, iState, NULL, eTS, &aSz ); // TS_TRUE returns optimal size
     if( hr == S_OK )
         return Rectangle( 0, 0, aSz.cx, aSz.cy );
     else
@@ -1109,6 +1109,29 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
                 bRet = TRUE;
         }
     }
+
+    if( (nType == CTRL_LISTBOX || nType == CTRL_COMBOBOX ) && nPart == PART_ENTIRE_CONTROL )
+    {
+        HTHEME hTheme = getThemeHandle( mhWnd, L"Combobox");
+        if( hTheme )
+        {
+            Rectangle aBoxRect( rControlRegion.GetBoundRect() );
+            Rectangle aRect( ImplGetThemeRect( hTheme, hDC, CP_DROPDOWNBUTTON,
+                                               CBXS_NORMAL, aBoxRect ) );
+            Rectangle aBrdRect( ImplGetThemeRect( hTheme, hDC, CP_BORDER,
+                                                  CBB_HOT, aBoxRect ) );
+            aRect.Top() -= aBrdRect.GetHeight();
+            if( aRect.GetHeight() > aBoxRect.GetHeight() )
+                aBoxRect.Bottom() = aBoxRect.Top() + aRect.GetHeight();
+            if( aRect.GetWidth() > aBoxRect.GetWidth() )
+                aBoxRect.Right() = aBoxRect.Left() + aRect.GetWidth();
+            rNativeContentRegion = aBoxRect;
+            rNativeBoundingRegion = rNativeContentRegion;
+            if( !aRect.IsEmpty() )
+                bRet = TRUE;
+        }
+    }
+
     ReleaseDC( mhWnd, hDC );
     return( bRet );
 }
