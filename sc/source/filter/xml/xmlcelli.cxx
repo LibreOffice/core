@@ -129,7 +129,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     bSolarMutexLocked(sal_False),
     bFormulaTextResult(sal_False)
 {
-    formula::FormulaGrammar::Grammar eStorageGrammar = eGrammar = GetScImport().GetDocument()->GetStorageGrammar();
     rXMLImport.SetRemoveLastChar(sal_False);
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -232,25 +231,9 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 if (sValue.getLength())
                 {
                     DBG_ASSERT(!pOUFormula, "here should be only one formula");
-                    rtl::OUString sFormula;
-                    sal_uInt16 nFormulaPrefix = GetImport().GetNamespaceMap().
-                            _GetKeyByAttrName( sValue, &sFormula, sal_False );
-
-                    if (ScXMLImport::IsAcceptedFormulaNamespace(
-                                nFormulaPrefix, sValue, eGrammar,
-                                eStorageGrammar))
-                    {
-                        // Namespaces we accept.
-                        pOUFormula.reset( sFormula);
-                    }
-                    else
-                    {
-                        // No namespace => entire string.
-                        // Also unknown namespace included in formula,
-                        // so hopefully will result in string or
-                        // compile error.
-                        pOUFormula.reset( sValue);
-                    }
+                    rtl::OUString aFormula, aFormulaNmsp;
+                    rXMLImport.ExtractFormulaNamespaceGrammar( aFormula, aFormulaNmsp, eGrammar, sValue );
+                    pOUFormula.reset( FormulaWithNamespace( aFormula, aFormulaNmsp ) );
                 }
             }
             break;
@@ -530,7 +513,7 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
     if (pContentValidationName)
     {
         ScMyImportValidation aValidation;
-        aValidation.eGrammar = GetScImport().GetDocument()->GetStorageGrammar();
+        aValidation.eGrammar1 = aValidation.eGrammar2 = GetScImport().GetDocument()->GetStorageGrammar();
         if (rXMLImport.GetValidation(*pContentValidationName, aValidation))
         {
             uno::Reference<beans::XPropertySet> xPropertySet(xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIXML))), uno::UNO_QUERY);
@@ -559,8 +542,11 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
                     // #b4974740# source position must be set as string, because it may
                     // refer to a sheet that hasn't been loaded yet.
                     xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCESTR)), uno::makeAny(aValidation.sBaseCellAddress));
-                    // Transport grammar.
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_GRAMMAR)), uno::makeAny(static_cast<sal_Int32>(aValidation.eGrammar)));
+                    // Transport grammar and formula namespace
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FORMULANMSP1)), uno::makeAny(aValidation.sFormulaNmsp1));
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FORMULANMSP2)), uno::makeAny(aValidation.sFormulaNmsp2));
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_GRAMMAR1)), uno::makeAny(static_cast<sal_Int32>(aValidation.eGrammar1)));
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_GRAMMAR2)), uno::makeAny(static_cast<sal_Int32>(aValidation.eGrammar2)));
                 }
             }
             xPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIXML)), uno::makeAny(xPropertySet));
@@ -1046,7 +1032,7 @@ void ScXMLTableRowCellContext::EndElement()
                     //SetType(xTempCell);
                 }
             }
-            else
+            else // if ( !pOUFormula )
             {
                 if (CellExists(aCellPos))
                 {
@@ -1059,7 +1045,7 @@ void ScXMLTableRowCellContext::EndElement()
                     {
                         DBG_ERRORFILE("It seems here are to many columns or rows");
                     }
-                    if (xCell.is() && pOUFormula)
+                    if (xCell.is())
                     {
                         SetCellProperties(xCell); // set now only the validation
                         DBG_ASSERT(((nCellsRepeated == 1) && (nRepeatedRows == 1)), "repeated cells with formula not possible now");
@@ -1072,7 +1058,7 @@ void ScXMLTableRowCellContext::EndElement()
                                             xCell));
                             if (pCellObj)
                             {
-                                pCellObj->SetFormulaWithGrammar( *pOUFormula, eGrammar);
+                                pCellObj->SetFormulaWithGrammar( pOUFormula->first, pOUFormula->second, eGrammar);
                                 if (bFormulaTextResult && pOUTextValue && pOUTextValue->getLength())
                                     pCellObj->SetFormulaResultString( *pOUTextValue);
                                 else if (fValue != 0.0)
@@ -1087,7 +1073,7 @@ void ScXMLTableRowCellContext::EndElement()
                                         aCellPos.Column, aCellPos.Row,
                                         aCellPos.Column + nMatrixCols - 1,
                                         aCellPos.Row + nMatrixRows - 1,
-                                        *pOUFormula, eGrammar);
+                                        pOUFormula->first, pOUFormula->second, eGrammar);
                             }
                         }
                         SetAnnotation( aCellPos );
@@ -1104,7 +1090,7 @@ void ScXMLTableRowCellContext::EndElement()
                         rXMLImport.SetRangeOverflowType(SCWARN_IMPORT_COLUMN_OVERFLOW);
                 }
 
-            }
+            } // if ( !pOUFormula )
         }
         UnlockSolarMutex();
     }

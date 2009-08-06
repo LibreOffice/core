@@ -1023,7 +1023,8 @@ uno::Reference< drawing::XShape >
                     , const Stripe& rStripe
                     , const uno::Reference< beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
-                    , sal_Bool bDoubleSided )
+                    , sal_Bool bDoubleSided
+                    , bool bRotatedTexture )
 {
     if( !xTarget.is() )
         return 0;
@@ -1047,7 +1048,7 @@ uno::Reference< drawing::XShape >
 
             //TexturePolygon
             xProp->setPropertyValue( C2U( UNO_NAME_3D_TEXTUREPOLYGON3D )
-                , rStripe.getTexturePolygon() );
+                , rStripe.getTexturePolygon( bRotatedTexture ) );
 
 
             //Normals Polygon

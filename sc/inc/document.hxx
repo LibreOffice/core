@@ -139,6 +139,7 @@ class ScTemporaryChartLock;
 class ScLookupCache;
 struct ScLookupCacheMapImpl;
 class SfxUndoManager;
+class ScFormulaParserPool;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -291,6 +292,11 @@ private:
     ::std::auto_ptr<ScDocProtection> pDocProtection;
 
     ::std::auto_ptr<ScExternalRefManager> pExternalRefMgr;
+
+    // mutable for lazy construction
+    mutable ::std::auto_ptr< ScFormulaParserPool >
+                        mxFormulaParserPool;            /// Pool for all external formula parsers used by this document.
+
     String              aDocName;                       // opt: Dokumentname
     ScRangePairListRef  xColNameRanges;
     ScRangePairListRef  xRowNameRanges;
@@ -618,6 +624,10 @@ public:
     bool            IsInExternalReferenceMarking() const;
     void            MarkUsedExternalReferences();
     bool            MarkUsedExternalReferences( ScTokenArray & rArr );
+
+    /** Returns the pool containing external formula parsers. Creates the pool
+        on first call. */
+    ScFormulaParserPool& GetFormulaParserPool() const;
 
     BOOL            HasDdeLinks() const;
     BOOL            HasAreaLinks() const;

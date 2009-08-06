@@ -814,7 +814,7 @@ void ExcDocument::WriteXml( SvStream& rStrm )
 
         rWorkbook->endElement( XML_workbook );
         rWorkbook.reset();
-        aStrm.commit();
+        aStrm.commitStorage();
     }
 #if 0
     if( pExpChangeTrack )

@@ -724,7 +724,31 @@ BOOL XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
     String  sText;
 
     if( rEntry.pStr )
+    {
         sText.Assign( *rEntry.pStr );
+        switch( rEntry.eOp )
+        {
+            case SC_CONTAINS:
+            case SC_DOES_NOT_CONTAIN:
+            {
+                sText.InsertAscii( "*" , 0 );
+                sText.AppendAscii( "*" );
+            }
+            break;
+            case SC_BEGINS_WITH:
+            case SC_DOES_NOT_BEGIN_WITH:
+                sText.AppendAscii( "*" );
+            break;
+            case SC_ENDS_WITH:
+            case SC_DOES_NOT_END_WITH:
+                sText.InsertAscii( "*" , 0 );
+            break;
+            default:
+            {
+                //nothing
+            }
+        }
+    }
 
     BOOL bLen = sText.Len() > 0;
 
@@ -784,6 +808,14 @@ BOOL XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
                     case SC_LESS_EQUAL:     nOper = EXC_AFOPER_LESSEQUAL;       break;
                     case SC_GREATER_EQUAL:  nOper = EXC_AFOPER_GREATEREQUAL;    break;
                     case SC_NOT_EQUAL:      nOper = EXC_AFOPER_NOTEQUAL;        break;
+                    case SC_CONTAINS:
+                    case SC_BEGINS_WITH:
+                    case SC_ENDS_WITH:
+                                            nOper = EXC_AFOPER_EQUAL;           break;
+                    case SC_DOES_NOT_CONTAIN:
+                    case SC_DOES_NOT_BEGIN_WITH:
+                    case SC_DOES_NOT_END_WITH:
+                                            nOper = EXC_AFOPER_NOTEQUAL;        break;
                     default:;
                 }
                 bConflict = !AddCondition( rEntry.eConnect, nType, nOper, fVal, pText );

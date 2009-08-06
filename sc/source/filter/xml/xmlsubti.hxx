@@ -97,10 +97,12 @@ public:
 struct ScMatrixRange
 {
     rtl::OUString sFormula;
+    rtl::OUString sFormulaNmsp;
     formula::FormulaGrammar::Grammar eGrammar;
     com::sun::star::table::CellRangeAddress aRange;
-    ScMatrixRange(const com::sun::star::table::CellRangeAddress& rRange, const rtl::OUString& rFormula, const formula::FormulaGrammar::Grammar eGrammarP) :
+    ScMatrixRange(const com::sun::star::table::CellRangeAddress& rRange, const rtl::OUString& rFormula, const rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammarP) :
         sFormula(rFormula),
+        sFormulaNmsp(rFormulaNmsp),
         eGrammar(eGrammarP),
         aRange(rRange)
     {
@@ -181,11 +183,13 @@ public:
                                                 sal_Int32 nEndColumn,
                                                 sal_Int32 nEndRow,
                                                 const rtl::OUString& rFormula,
+                                                const rtl::OUString& rFormulaNmsp,
                                                 const formula::FormulaGrammar::Grammar );
 
     sal_Bool                            IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow);
     void                                SetMatrix( const com::sun::star::table::CellRangeAddress& rRange,
                                                 const rtl::OUString& rFormula,
+                                                const rtl::OUString& rFormulaNmsp,
                                                 const formula::FormulaGrammar::Grammar );
 };
 

@@ -89,11 +89,12 @@ public:
                                 BOOL bInterpret, BOOL bApi );
     BOOL            SetCellText( const ScAddress& rPos, const String& rText,
                                     BOOL bInterpret, BOOL bEnglish, BOOL bApi,
+                                    const String& rFormulaNmsp,
                                     const formula::FormulaGrammar::Grammar eGrammar );
 
                     // creates a new cell for use with PutCell
     ScBaseCell*     InterpretEnglishString( const ScAddress& rPos, const String& rText,
-                                            const formula::FormulaGrammar::Grammar eGrammar );
+                        const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar );
 
     bool            ShowNote( const ScAddress& rPos, bool bShow = true );
     inline bool     HideNote( const ScAddress& rPos ) { return ShowNote( rPos, false ); }
@@ -147,6 +148,7 @@ public:
     BOOL            EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
                                     const ScTokenArray* pTokenArray,
                                     const String& rString, BOOL bApi, BOOL bEnglish,
+                                    const String& rFormulaNmsp,
                                     const formula::FormulaGrammar::Grammar );
 
     BOOL            TabOp( const ScRange& rRange, const ScMarkData* pTabMark,

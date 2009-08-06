@@ -728,7 +728,13 @@ enum ScQueryOp
         SC_TOPVAL,
         SC_BOTVAL,
         SC_TOPPERC,
-        SC_BOTPERC
+        SC_BOTPERC,
+        SC_CONTAINS,
+        SC_DOES_NOT_CONTAIN,
+        SC_BEGINS_WITH,
+        SC_DOES_NOT_BEGIN_WITH,
+        SC_ENDS_WITH,
+        SC_DOES_NOT_END_WITH
     };
 
 // -----------------------------------------------------------------------

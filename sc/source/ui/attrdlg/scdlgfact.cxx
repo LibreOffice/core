@@ -714,6 +714,24 @@ VclAbstractDialog *  ScAbstractDialogFactory_Impl::CreateScColOrRowDlg(Window*  
 }
 //add for ScColOrRowDlg end
 
+//add for ScSortWarningDlg begin
+VclAbstractDialog * ScAbstractDialogFactory_Impl::CreateScSortWarningDlg( Window* pParent, const String& rExtendText,
+                                                                          const String& rCurrentText, int nId )
+{
+    Dialog * pDlg=NULL;
+    switch ( nId )
+    {
+    case RID_SCDLG_SORT_WARNING:
+        pDlg = new ScSortWarningDlg( pParent, rExtendText, rCurrentText );
+        break;
+    default:
+        break;
+    }
+    if( pDlg )
+        return new VclAbstractDialog_Impl( pDlg );
+    return 0;
+}
+//add for ScSortWarningDlg end
 
 //add for ScDataPilotDatabaseDlg begin
 

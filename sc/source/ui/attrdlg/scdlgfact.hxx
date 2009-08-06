@@ -63,6 +63,7 @@ class ScShowTabDlg;
 class ScStringInputDlg;
 class ScImportOptionsDlg;
 class SfxTabDialog;
+class ScSortWarningDlg;
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
     DialogClass*        pDlg;                       \
@@ -398,6 +399,9 @@ public:
                                                     const String&   rStrLabel,
                                                     int nId,
                                                     BOOL                bColDefault = TRUE );
+
+    virtual VclAbstractDialog * CreateScSortWarningDlg( Window* pParent, const String& rExtendText, const String& rCurrentText, int nId );
+
     virtual AbstractScDataPilotDatabaseDlg * CreateScDataPilotDatabaseDlg (Window* pParent ,int nId ); //add for ScDataPilotDatabaseDlg
 
     virtual AbstractScDataPilotSourceTypeDlg * CreateScDataPilotSourceTypeDlg (  Window* pParent, BOOL bEnableExternal, int nId ) ; //add for ScDataPilotSourceTypeDlg

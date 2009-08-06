@@ -122,7 +122,7 @@ public:
                     , const Stripe& rStripe
                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
-                    , sal_Bool bDoubleSided = true);
+                    , sal_Bool bDoubleSided = true, bool bRotatedTexture=false );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createArea3D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
