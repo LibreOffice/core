@@ -194,7 +194,8 @@ public:
                                 ImplEscherExSdr( EscherEx& rEx );
     virtual                     ~ImplEscherExSdr();
 
-            SvxDrawPage*        ImplInitPage( const SdrPage& rPage );
+            bool                ImplInitPage( const SdrPage& rPage );
+            bool                ImplInitUnoShapes( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
             void                ImplWriteCurrentPage();
 
             UINT32              ImplWriteTheShape( ImplEESdrObject& rObj );
