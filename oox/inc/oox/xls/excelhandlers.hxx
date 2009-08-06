@@ -34,12 +34,6 @@
 #include "oox/core/fragmenthandler2.hxx"
 #include "oox/xls/worksheethelper.hxx"
 
-#define XML_TOKEN( token )          (::oox::NMSP_XML | XML_##token)
-#define R_TOKEN( token )            (::oox::NMSP_RELATIONSHIPS | XML_##token)
-#define XLS_TOKEN( token )          (::oox::NMSP_XLS | XML_##token)
-#define XDR_TOKEN( token )          (::oox::NMSP_XDR | XML_##token)
-#define XM_TOKEN( token )           (::oox::NMSP_XM | XML_##token)
-
 namespace oox {
 namespace xls {
 

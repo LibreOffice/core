@@ -374,7 +374,7 @@ public:
         @param nSheet  Sheet index to be inserted into orAddress.
         @return  true = Cell address could be parsed from the passed string.
      */
-    bool                convertToCellAddressUnckecked(
+    bool                convertToCellAddressUnchecked(
                             ::com::sun::star::table::CellAddress& orAddress,
                             const ::rtl::OUString& rString,
                             sal_Int16 nSheet );
@@ -414,7 +414,7 @@ public:
         @param rBinAddress  Binary cell address struct.
         @param nSheet  Sheet index to be inserted into orAddress.
      */
-    void                convertToCellAddressUnckecked(
+    void                convertToCellAddressUnchecked(
                             ::com::sun::star::table::CellAddress& orAddress,
                             const BinAddress& rBinAddress,
                             sal_Int16 nSheet );

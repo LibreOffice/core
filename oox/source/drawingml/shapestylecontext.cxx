@@ -33,7 +33,6 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/drawingml/colorchoicecontext.hxx"
-#include "oox/drawingml/stylematrixreferencecontext.hxx"
 #include "tokens.hxx"
 
 using ::rtl::OUString;
@@ -79,7 +78,7 @@ Reference< XFastContextHandler > ShapeStyleContext::createFastChildContext( sal_
             sal_Int32 nToken = getToken( aElementToken );
             ShapeStyleRef& rStyleRef = mrShape.getShapeStyleRefs()[ nToken ];
             rStyleRef.mnThemedIdx = (nToken == XML_fontRef) ? aAttribs.getToken( XML_idx, XML_none ) : aAttribs.getInteger( XML_idx, 0 );
-            xRet.set( new StyleMatrixReferenceContext( *this, rStyleRef.maPhClr ) );
+            xRet.set( new ColorContext( *this, rStyleRef.maPhClr ) );
         }
         break;
     }

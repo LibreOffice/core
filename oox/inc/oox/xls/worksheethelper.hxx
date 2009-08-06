@@ -32,6 +32,7 @@
 #define OOX_XLS_WORKSHEETHELPER_HXX
 
 #include "oox/helper/progressbar.hxx"
+#include "oox/ole/olehelper.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/formulabase.hxx"
 
@@ -39,6 +40,7 @@ namespace com { namespace sun { namespace star {
     namespace awt { struct Point; }
     namespace awt { struct Size; }
     namespace util { struct DateTime; }
+    namespace drawing { class XDrawPage; }
     namespace table { class XTableColumns; }
     namespace table { class XTableRows; }
     namespace table { class XCell; }
@@ -59,6 +61,7 @@ class CondFormatBuffer;
 class CommentsBuffer;
 class PageSettings;
 class SheetViewSettings;
+class VmlDrawing;
 
 // ============================================================================
 // ============================================================================
@@ -170,13 +173,9 @@ struct PageBreakModel
 // ----------------------------------------------------------------------------
 
 /** Stores data about a hyperlink range. */
-struct HyperlinkModel
+struct HyperlinkModel : public ::oox::ole::StdHlinkInfo
 {
     ::com::sun::star::table::CellRangeAddress maRange;
-    ::rtl::OUString     maTarget;
-    ::rtl::OUString     maLocation;
-    ::rtl::OUString     maDisplay;
-    ::rtl::OUString     maFrame;
     ::rtl::OUString     maTooltip;
 
     explicit            HyperlinkModel();
@@ -210,33 +209,6 @@ struct ValidationModel
     void                setBinOperator( sal_uInt8 nOperator );
     /** Sets the passed OOBIN or BIFF error style. */
     void                setBinErrorStyle( sal_uInt8 nErrorStyle );
-};
-
-// ----------------------------------------------------------------------------
-
-/** Stores data about embedded objects. */
-struct OleObjectModel
-{
-    ::rtl::OUString     maProgId;
-    ::rtl::OUString     maStoragePath;
-    sal_Int32           mnAspect;
-    sal_Int32           mnUpdateMode;
-    sal_Int32           mnShapeId;
-    bool                mbAutoLoad;
-
-    explicit            OleObjectModel();
-};
-
-// ----------------------------------------------------------------------------
-
-/** Stores data about embedded form controls. */
-struct FormControlModel
-{
-    ::rtl::OUString     maStoragePath;
-    ::rtl::OUString     maName;
-    sal_Int32           mnShapeId;
-
-    explicit            FormControlModel();
 };
 
 // ============================================================================
@@ -324,6 +296,10 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XTableRows >
                         getRows( sal_Int32 nFirstRow, sal_Int32 nLastRow ) const;
 
+    /** Returns the XDrawPage interface of the draw page of the current sheet. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
+                        getDrawPage() const;
+
     /** Returns the absolute cell position in 1/100 mm. */
     ::com::sun::star::awt::Point getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const;
     /** Returns the cell size in 1/100 mm. */
@@ -343,6 +319,8 @@ public:
     PageSettings&       getPageSettings() const;
     /** Returns the view settings for this sheet. */
     SheetViewSettings&  getSheetViewSettings() const;
+    /** Returns the VML drawing page for this sheet. */
+    VmlDrawing&         getVmlDrawing() const;
 
     /** Sets the passed string to the cell. */
     void                setStringCell(
@@ -403,10 +381,6 @@ public:
     void                setDrawingPath( const ::rtl::OUString& rDrawingPath );
     /** Sets the path to the legacy VML drawing fragment of this sheet. */
     void                setVmlDrawingPath( const ::rtl::OUString& rVmlDrawingPath );
-    /** Sets additional data for an OLE object. */
-    void                setOleObject( const OleObjectModel& rModel );
-    /** Sets additional data for an OCX form control. */
-    void                setFormControl( const FormControlModel& rModel );
 
     /** Sets base width for all columns (without padding pixels). This value
         is only used, if width has not been set with setDefaultColumnWidth(). */

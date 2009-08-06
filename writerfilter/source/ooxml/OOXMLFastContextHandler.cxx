@@ -2007,9 +2007,7 @@ OOXMLFastContextHandlerShape::OOXMLFastContextHandlerShape
         if (mrShapeContext.is())
         {
             mrShapeContext->setModel(getDocument()->getModel());
-
-            uno::Reference<drawing::XShapes> xShapes(getDocument()->getShapes());
-            mrShapeContext->setShapes(xShapes);
+            mrShapeContext->setDrawPage(getDocument()->getDrawPage());
             mrShapeContext->setInputStream(getDocument()->getStorageStream());
 
 #ifdef DEBUG_ELEMENT

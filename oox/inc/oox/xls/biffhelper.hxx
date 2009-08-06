@@ -31,13 +31,12 @@
 #ifndef OOX_XLS_BIFFHELPER_HXX
 #define OOX_XLS_BIFFHELPER_HXX
 
-#include "oox/helper/helper.hxx"
+#include "oox/helper/binarystreambase.hxx"
 
 namespace oox {
 namespace xls {
 
 class BiffInputStream;
-class BiffOutputStream;
 
 // OOBIN record identifiers ===================================================
 
@@ -137,6 +136,7 @@ const sal_Int32 OOBIN_ID_HEADERFOOTER       = 0x01DF;
 const sal_Int32 OOBIN_ID_HYPERLINK          = 0x01EE;
 const sal_Int32 OOBIN_ID_ICONSET            = 0x01D1;
 const sal_Int32 OOBIN_ID_INDEXEDCOLORS      = 0x0235;
+const sal_Int32 OOBIN_ID_INPUTCELLS         = 0x01F8;
 const sal_Int32 OOBIN_ID_LEGACYDRAWING      = 0x0227;
 const sal_Int32 OOBIN_ID_MERGECELL          = 0x00B0;
 const sal_Int32 OOBIN_ID_MERGECELLS         = 0x00B1;
@@ -209,6 +209,8 @@ const sal_Int32 OOBIN_ID_PTROWFIELDS        = 0x0135;
 const sal_Int32 OOBIN_ID_RGBCOLOR           = 0x01DB;
 const sal_Int32 OOBIN_ID_ROW                = 0x0000;
 const sal_Int32 OOBIN_ID_ROWBREAKS          = 0x0188;
+const sal_Int32 OOBIN_ID_SCENARIO           = 0x01F6;
+const sal_Int32 OOBIN_ID_SCENARIOS          = 0x01F4;
 const sal_Int32 OOBIN_ID_SELECTION          = 0x0098;
 const sal_Int32 OOBIN_ID_SHAREDFMLA         = 0x01AB;
 const sal_Int32 OOBIN_ID_SHEET              = 0x009C;
@@ -449,6 +451,8 @@ const sal_uInt16 BIFF2_ID_ROW               = 0x0008;
 const sal_uInt16 BIFF3_ID_ROW               = 0x0208;
 const sal_uInt16 BIFF_ID_RSTRING            = 0x00D6;
 const sal_uInt16 BIFF_ID_SAVERECALC         = 0x005F;
+const sal_uInt16 BIFF_ID_SCENARIO           = 0x00AF;
+const sal_uInt16 BIFF_ID_SCENARIOS          = 0x00AE;
 const sal_uInt16 BIFF_ID_SCL                = 0x00A0;
 const sal_uInt16 BIFF_ID_SCENPROTECT        = 0x00DD;
 const sal_uInt16 BIFF_ID_SCREENTIP          = 0x0800;
@@ -530,40 +534,12 @@ const sal_uInt8 BIFF_STRF_PHONETIC          = 0x04;
 const sal_uInt8 BIFF_STRF_RICH              = 0x08;
 const sal_uInt8 BIFF_STRF_UNKNOWN           = 0xF2;
 
-// GUID =======================================================================
-
-/** This struct stores a GUID (class ID) and supports reading, writing and comparison.
- */
-struct BiffGuid
-{
-    sal_uInt8           mpnData[ 16 ];      /// Stores the GUID, always in little-endian.
-
-    explicit            BiffGuid();
-    explicit            BiffGuid(
-                            sal_uInt32 nData1,
-                            sal_uInt16 nData2, sal_uInt16 nData3,
-                            sal_uInt8 nData41, sal_uInt8 nData42,
-                            sal_uInt8 nData43, sal_uInt8 nData44,
-                            sal_uInt8 nData45, sal_uInt8 nData46,
-                            sal_uInt8 nData47, sal_uInt8 nData48 );
-};
-
-bool operator==( const BiffGuid& rGuid1, const BiffGuid& rGuid2 );
-bool operator<( const BiffGuid& rGuid1, const BiffGuid& rGuid2 );
-
-BiffInputStream& operator>>( BiffInputStream& rStrm, BiffGuid& rGuid );
-BiffOutputStream& operator<<( BiffOutputStream& rStrm, const BiffGuid& rGuid );
-
 // ============================================================================
 
 /** Static helper functions for BIFF filters. */
 class BiffHelper
 {
 public:
-    static const BiffGuid maGuidStdHlink;       /// GUID of StdHlink (HLINK record).
-    static const BiffGuid maGuidUrlMoniker;     /// GUID of URL moniker (HLINK record).
-    static const BiffGuid maGuidFileMoniker;    /// GUID of file moniker (HLINK record).
-
     // conversion -------------------------------------------------------------
 
     /** Converts the passed packed number to a double. */
@@ -579,6 +555,13 @@ public:
     static rtl_TextEncoding calcTextEncodingFromCodePage( sal_uInt16 nCodePage );
     /** Returns a Windows code page from a text encoding. */
     static sal_uInt16   calcCodePageFromTextEncoding( rtl_TextEncoding eTextEnc );
+
+    /** Imports a picture from an IMGDATA record. */
+    static void         importImgData( StreamDataSequence& orDataSeq, BiffInputStream& rStrm, BiffType eBiff );
+
+private:
+                        BiffHelper();   // not implemented
+                        ~BiffHelper();  // not implemented
 };
 
 // ============================================================================

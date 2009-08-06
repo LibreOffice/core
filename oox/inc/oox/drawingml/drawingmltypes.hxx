@@ -49,6 +49,9 @@ typedef ::boost::shared_ptr< LineProperties > LinePropertiesPtr;
 struct FillProperties;
 typedef ::boost::shared_ptr< FillProperties > FillPropertiesPtr;
 
+struct GraphicProperties;
+typedef ::boost::shared_ptr< GraphicProperties > GraphicPropertiesPtr;
+
 struct TextCharacterProperties;
 typedef ::boost::shared_ptr< TextCharacterProperties > TextCharacterPropertiesPtr;
 

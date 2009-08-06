@@ -29,30 +29,25 @@
  ************************************************************************/
 
 #include "oox/core/xmlfilterbase.hxx"
-#include <set>
 #include <stdio.h>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <sax/fshelper.hxx>
+#include "properties.hxx"
 #include "oox/helper/containerhelper.hxx"
+#include "oox/helper/propertyset.hxx"
 #include "oox/helper/zipstorage.hxx"
 #include "oox/core/fasttokenhandler.hxx"
 #include "oox/core/fragmenthandler.hxx"
-#include "oox/core/modelobjectcontainer.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/recordparser.hxx"
 #include "oox/core/relationshandler.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::StringPair;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -60,16 +55,14 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::makeAny;
+using ::com::sun::star::uno::UNO_SET_THROW;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::embed::XRelationshipAccess;
 using ::com::sun::star::embed::XStorage;
-using ::com::sun::star::embed::XTransactedObject;
 using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::io::XOutputStream;
 using ::com::sun::star::io::XStream;
 using ::com::sun::star::container::XNameContainer;
-using ::com::sun::star::document::XDocumentSubStorageSupplier;
 using ::com::sun::star::xml::sax::XFastParser;
 using ::com::sun::star::xml::sax::XFastTokenHandler;
 using ::com::sun::star::xml::sax::XFastDocumentHandler;
@@ -91,10 +84,6 @@ struct XmlFilterBaseImpl
     Reference< XFastTokenHandler >
                         mxTokenHandler;
     RelationsMap        maRelationsMap;
-    ::std::set< OUString > maPictureSet;        /// Already copied picture stream names.
-    Reference< XStorage > mxPictureStorage;     /// Target model picture storage.
-    ::boost::shared_ptr< ModelObjectContainer >
-                        mxObjContainer;         /// Tables to create new named drawing objects.
 
     explicit            XmlFilterBaseImpl();
 };
@@ -109,8 +98,8 @@ XmlFilterBaseImpl::XmlFilterBaseImpl() :
 
 // ============================================================================
 
-XmlFilterBase::XmlFilterBase( const Reference< XMultiServiceFactory >& rxFactory ) :
-    FilterBase( rxFactory ),
+XmlFilterBase::XmlFilterBase( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
+    FilterBase( rxGlobalFactory ),
     mxImpl( new XmlFilterBaseImpl ),
     mnRelId( 1 ),
     mnMaxDocId( 0 )
@@ -123,9 +112,10 @@ XmlFilterBase::~XmlFilterBase()
 
 // ----------------------------------------------------------------------------
 
-OUString XmlFilterBase::getFragmentPathFromType( const OUString& rType )
+OUString XmlFilterBase::getFragmentPathFromFirstType( const OUString& rType )
 {
-    return importRelations( OUString() )->getTargetFromType( rType );
+    // importRelations() caches the relations map for subsequence calls
+    return importRelations( OUString() )->getFragmentPathFromFirstType( rType );
 }
 
 bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& rxHandler )
@@ -140,17 +130,15 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
     if( aFragmentPath.getLength() == 0 )
         return false;
 
-    // try to open the fragment stream (this may fail - do not assert)
-    Reference< XInputStream > xInStrm = openInputStream( aFragmentPath );
-    if( !xInStrm.is() )
-        return false;
-
     // try to import binary streams (fragment extension must be '.bin')
     sal_Int32 nBinSuffixPos = aFragmentPath.getLength() - mxImpl->maBinSuffix.getLength();
     if( (nBinSuffixPos >= 0) && aFragmentPath.match( mxImpl->maBinSuffix, nBinSuffixPos ) )
     {
         try
         {
+            // try to open the fragment stream (this may fail - do not assert)
+            Reference< XInputStream > xInStrm( openInputStream( aFragmentPath ), UNO_SET_THROW );
+
             // create the record parser
             RecordParser aParser;
             aParser.setFragmentHandler( rxHandler );
@@ -176,6 +164,9 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
     // try to import XML stream
     try
     {
+        // try to open the fragment stream (this may fail - do not assert)
+        Reference< XInputStream > xInStrm( rxHandler->openFragmentStream(), UNO_SET_THROW );
+
         // create the fast parser
         Reference< XFastParser > xParser( getGlobalFactory()->createInstance(
             CREATE_OUSTRING( "com.sun.star.xml.sax.FastParser" ) ), UNO_QUERY_THROW );
@@ -225,142 +216,83 @@ RelationsRef XmlFilterBase::importRelations( const OUString& rFragmentPath )
     {
         // import and cache relations
         rxRelations.reset( new Relations( rFragmentPath ) );
-        importFragment( new RelationsFragmentHandler( *this, rxRelations ) );
+        importFragment( new RelationsFragment( *this, rxRelations ) );
     }
     return rxRelations;
 }
 
-OUString XmlFilterBase::copyPictureStream( const OUString& rPicturePath )
+Reference< XOutputStream > XmlFilterBase::openFragmentStream( const OUString& rStreamName, const OUString& rMediaType )
 {
-    // split source path into source storage path and stream name
-    sal_Int32 nIndex = rPicturePath.lastIndexOf( sal_Unicode( '/' ) );
-    OUString sPictureName;
-    OUString sSourceStorageName;
-    if( nIndex < 0 )
-    {
-        // root stream
-        sPictureName = rPicturePath;
-    }
-    else
-    {
-        // sub stream
-        sPictureName = rPicturePath.copy( nIndex + 1 );
-        sSourceStorageName = rPicturePath.copy( 0, nIndex );
-    }
-
-    // check if we already copied this one!
-    if( mxImpl->maPictureSet.find( rPicturePath ) == mxImpl->maPictureSet.end() ) try
-    {
-        // ok, not yet, copy stream to documents picture storage
-
-        // first get the picture storage from our target model
-        if( !mxImpl->mxPictureStorage.is() )
-        {
-            static const OUString sPictures = CREATE_OUSTRING( "Pictures" );
-            Reference< XDocumentSubStorageSupplier > xDSSS( getModel(), UNO_QUERY_THROW );
-            mxImpl->mxPictureStorage.set( xDSSS->getDocumentSubStorage(
-                sPictures, ::com::sun::star::embed::ElementModes::WRITE ), UNO_QUERY_THROW );
-        }
-
-        StorageRef xSourceStorage = openSubStorage( sSourceStorageName, false );
-        if( xSourceStorage.get() )
-        {
-            Reference< XStorage > xSourceXStorage = xSourceStorage->getXStorage();
-            if( xSourceXStorage.is() )
-            {
-                xSourceXStorage->copyElementTo( sPictureName, mxImpl->mxPictureStorage, sPictureName );
-                Reference< XTransactedObject > xTO( mxImpl->mxPictureStorage, UNO_QUERY_THROW );
-                xTO->commit();
-            }
-        }
-    }
-    catch( Exception& )
-    {
-    }
-
-    static const OUString sUrlPrefix = CREATE_OUSTRING( "vnd.sun.star.Package:Pictures/" );
-    return sUrlPrefix + sPictureName;
-}
-
-ModelObjectContainer& XmlFilterBase::getModelObjectContainer() const
-{
-    if( !mxImpl->mxObjContainer )
-        mxImpl->mxObjContainer.reset( new ModelObjectContainer( getModel() ) );
-    return *mxImpl->mxObjContainer;
-}
-
-StorageRef XmlFilterBase::implCreateStorage(
-        Reference< XInputStream >& rxInStream, Reference< XStream >& rxStream ) const
-{
-    StorageRef xStorage;
-    if( rxInStream.is() )
-        xStorage.reset( new ZipStorage( getGlobalFactory(), rxInStream ) );
-    else if( rxStream.is() )
-        xStorage.reset( new ZipStorage( getGlobalFactory(), rxStream ) );
-
-    return xStorage;
-}
-
-Reference< XOutputStream > XmlFilterBase::openOutputStream( const OUString& rStreamName, const OUString& rMediaType )
-{
-    Reference< XOutputStream > xOutputStream = FilterBase::openOutputStream( rStreamName );
-    Reference< XPropertySet > xPropSet( xOutputStream, UNO_QUERY_THROW );
-
-    if( xPropSet.is() )
-        xPropSet->setPropertyValue( CREATE_OUSTRING( "MediaType" ),
-                                    makeAny( rMediaType ) );
-
+    Reference< XOutputStream > xOutputStream = openOutputStream( rStreamName );
+    PropertySet aPropSet( xOutputStream );
+    aPropSet.setProperty( PROP_MediaType, rMediaType );
     return xOutputStream;
 }
 
-FSHelperPtr XmlFilterBase::openOutputStreamWithSerializer( const OUString& rStreamName, const OUString& rMediaType )
+FSHelperPtr XmlFilterBase::openFragmentStreamWithSerializer( const OUString& rStreamName, const OUString& rMediaType )
 {
-    return FSHelperPtr( new FastSerializerHelper ( openOutputStream( rStreamName, rMediaType ) ) );
+    return FSHelperPtr( new FastSerializerHelper( openFragmentStream( rStreamName, rMediaType ) ) );
 }
 
-static OUString addRelation_impl( const Reference< XRelationshipAccess > xRelations, sal_Int32 nId, const OUString& rType, const OUString& rTarget, const OUString& rTargetMode )
+namespace {
+
+OUString lclAddRelation( const Reference< XRelationshipAccess > xRelations, sal_Int32 nId, const OUString& rType, const OUString& rTarget, bool bExternal )
 {
     OUString sId = OUStringBuffer().appendAscii( "rId" ).append( nId ).makeStringAndClear();
 
-    Sequence< StringPair > aEntry( rTargetMode.getLength() > 0 ? 3 : 2 );
+    Sequence< StringPair > aEntry( bExternal ? 3 : 2 );
     aEntry[0].First = CREATE_OUSTRING( "Type" );
     aEntry[0].Second = rType;
     aEntry[1].First = CREATE_OUSTRING( "Target" );
     aEntry[1].Second = rTarget;
-    if( rTargetMode.getLength() > 0 )
+    if( bExternal )
     {
         aEntry[2].First = CREATE_OUSTRING( "TargetMode" );
-        aEntry[2].Second = rTargetMode;
+        aEntry[2].Second = CREATE_OUSTRING( "External" );
     }
-    xRelations->insertRelationshipByID( sId, aEntry, true );
+    xRelations->insertRelationshipByID( sId, aEntry, sal_True );
 
     return sId;
 }
 
-OUString XmlFilterBase::addRelation( const OUString& rType, const OUString& rTarget, const OUString& rTargetMode )
+} // namespace
+
+OUString XmlFilterBase::addRelation( const OUString& rType, const OUString& rTarget, bool bExternal )
 {
     Reference< XRelationshipAccess > xRelations( getStorage()->getXStorage(), UNO_QUERY );
     if( xRelations.is() )
-        return addRelation_impl( xRelations, mnRelId ++, rType, rTarget, rTargetMode );
+        return lclAddRelation( xRelations, mnRelId ++, rType, rTarget, bExternal );
 
     return OUString();
 }
 
-OUString XmlFilterBase::addRelation( const Reference< XOutputStream > xOutputStream, const OUString& rType, const OUString& rTarget, const OUString& rTargetMode )
+OUString XmlFilterBase::addRelation( const Reference< XOutputStream > xOutputStream, const OUString& rType, const OUString& rTarget, bool bExternal )
 {
     sal_Int32 nId = 0;
 
-    Reference< XPropertySet > xPropertySet( xOutputStream, UNO_QUERY );
-    if( xPropertySet.is() )
-        xPropertySet->getPropertyValue( CREATE_OUSTRING( "RelId" ) ) >>= nId;
+    PropertySet aPropSet( xOutputStream );
+    if( aPropSet.is() )
+        aPropSet.getProperty( nId, PROP_RelId );
     else
-        nId = mnRelId ++;
+        nId = mnRelId++;
 
     Reference< XRelationshipAccess > xRelations( xOutputStream, UNO_QUERY );
     if( xRelations.is() )
-        return addRelation_impl( xRelations, nId, rType, rTarget, rTargetMode );
+        return lclAddRelation( xRelations, nId, rType, rTarget, bExternal );
 
     return OUString();
+}
+
+StorageRef XmlFilterBase::implCreateStorage(
+        Reference< XInputStream >& rxInStream, Reference< XStream >& rxOutStream ) const
+{
+    StorageRef xStorage;
+    if( rxInStream.is() )
+        xStorage.reset( new ZipStorage( getGlobalFactory(), rxInStream ) );
+    else if( rxOutStream.is() )
+        xStorage.reset( new ZipStorage( getGlobalFactory(), rxOutStream ) );
+
+    return xStorage;
 }
 
 // ============================================================================

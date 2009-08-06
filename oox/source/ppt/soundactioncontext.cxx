@@ -115,7 +115,7 @@ namespace oox { namespace ppt {
                 drawingml::EmbeddedWAVAudioFile aAudio;
                 drawingml::getEmbeddedWAVAudioFile( getRelations(), xAttribs, aAudio);
 
-                msSndName = ( aAudio.mbBuiltIn ? aAudio.msName : aAudio.msLink );
+                msSndName = ( aAudio.mbBuiltIn ? aAudio.msName : aAudio.msEmbed );
             }
             break;
         case NMSP_PPT|XML_endSnd:

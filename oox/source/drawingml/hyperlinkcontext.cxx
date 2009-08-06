@@ -37,7 +37,6 @@
 #include "oox/helper/propertymap.hxx"
 #include "oox/core/relations.hxx"
 #include "oox/core/namespaces.hxx"
-#include "oox/core/skipcontext.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/embeddedwavaudiofile.hxx"
 #include "properties.hxx"
@@ -58,7 +57,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
 {
     OUString aRelId = xAttributes->getOptionalValue( NMSP_RELATIONSHIPS|XML_id );
     OSL_TRACE("OOX: URI rId %s", ::rtl::OUStringToOString (aRelId, RTL_TEXTENCODING_UTF8).pData->buffer);
-    const OUString& sHref = getRelations().getTargetFromRelId( aRelId );
+    const OUString& sHref = getRelations().getExternalTargetFromRelId( aRelId );
     if( sHref.getLength() > 0 )
     {
         OSL_TRACE("OOX: URI href %s", ::rtl::OUStringToOString (sHref, RTL_TEXTENCODING_UTF8).pData->buffer);
@@ -96,8 +95,7 @@ Reference< XFastContextHandler > HyperLinkContext::createFastChildContext(
     switch( aElement )
     {
     case NMSP_DRAWINGML|XML_extLst:
-        xRet.set( new SkipContext( *this ) );
-        break;
+        return xRet;
     case NMSP_DRAWINGML|XML_snd:
         EmbeddedWAVAudioFile aAudio;
         getEmbeddedWAVAudioFile( getRelations(), xAttribs, aAudio );

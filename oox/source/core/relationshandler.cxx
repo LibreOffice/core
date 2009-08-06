@@ -30,8 +30,9 @@
 
 #include "oox/core/relationshandler.hxx"
 #include <rtl/ustrbuf.hxx>
-#include "oox/core/namespaces.hxx"
 #include "tokens.hxx"
+#include "oox/helper/attributelist.hxx"
+#include "oox/core/namespaces.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -45,7 +46,7 @@ namespace core {
 
 namespace {
 
-/*  Build path to relations file from passed path, e.g.:
+/*  Build path to relations file from passed fragment path, e.g.:
         'path/path/file.xml'    -> 'path/path/_rels/file.xml.rels'
         'file.xml'              -> '_rels/file.xml.rels'
         ''                      -> '_rels/.rels'
@@ -65,26 +66,36 @@ OUString lclGetRelationsPath( const OUString& rFragmentPath )
 
 // ============================================================================
 
-RelationsFragmentHandler::RelationsFragmentHandler( XmlFilterBase& rFilter, RelationsRef xRelations ) :
-    FragmentHandler( rFilter, lclGetRelationsPath( xRelations->getBasePath() ), xRelations ),
+RelationsFragment::RelationsFragment( XmlFilterBase& rFilter, RelationsRef xRelations ) :
+    FragmentHandler( rFilter, lclGetRelationsPath( xRelations->getFragmentPath() ), xRelations ),
     mxRelations( xRelations )
 {
 }
 
-Reference< XFastContextHandler > RelationsFragmentHandler::createFastChildContext(
+Reference< XFastContextHandler > RelationsFragment::createFastChildContext(
         sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs ) throw (SAXException, RuntimeException)
 {
     Reference< XFastContextHandler > xRet;
+    AttributeList aAttribs( rxAttribs );
     switch( nElement )
     {
         case NMSP_PACKAGE_RELATIONSHIPS|XML_Relationship:
         {
             Relation aRelation;
-            aRelation.maId     = rxAttribs->getOptionalValue( XML_Id );
-            aRelation.maType   = rxAttribs->getOptionalValue( XML_Type );
-            aRelation.maTarget = rxAttribs->getOptionalValue( XML_Target );
+            aRelation.maId     = aAttribs.getString( XML_Id, OUString() );
+            aRelation.maType   = aAttribs.getString( XML_Type, OUString() );
+            aRelation.maTarget = aAttribs.getString( XML_Target, OUString() );
             if( (aRelation.maId.getLength() > 0) && (aRelation.maType.getLength() > 0) && (aRelation.maTarget.getLength() > 0) )
-                (*mxRelations)[ aRelation.maId ] = aRelation;
+            {
+                sal_Int32 nTargetMode = aAttribs.getToken( XML_TargetMode, XML_Internal );
+                OSL_ENSURE( (nTargetMode == XML_Internal) || (nTargetMode == XML_External),
+                    "RelationsFragment::createFastChildContext - unexpected target mode, assuming external" );
+                aRelation.mbExternal = nTargetMode != XML_Internal;
+
+                OSL_ENSURE( mxRelations->count( aRelation.maId ) == 0,
+                    "RelationsFragment::createFastChildContext - relation identifier exists already" );
+                mxRelations->insert( Relations::value_type( aRelation.maId, aRelation ) );
+            }
         }
         break;
         case NMSP_PACKAGE_RELATIONSHIPS|XML_Relationships:

@@ -30,23 +30,41 @@
 
 #include "oox/xls/drawingfragment.hxx"
 #include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/form/binding/XBindableValue.hpp>
+#include <com/sun/star/form/binding/XListEntrySink.hpp>
+#include <com/sun/star/form/binding/XListEntrySource.hpp>
+#include <com/sun/star/form/binding/XValueBinding.hpp>
+#include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/propertyset.hxx"
 #include "oox/drawingml/connectorshapecontext.hxx"
 #include "oox/drawingml/graphicshapecontext.hxx"
 #include "oox/drawingml/shapecontext.hxx"
 #include "oox/drawingml/shapegroupcontext.hxx"
+#include "oox/vml/vmlshape.hxx"
+#include "oox/xls/formulaparser.hxx"
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
 
 using ::rtl::OUString;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::awt::Point;
-using ::com::sun::star::awt::Size;
 using ::com::sun::star::awt::Rectangle;
-using ::com::sun::star::drawing::XDrawPageSupplier;
+using ::com::sun::star::awt::Size;
+using ::com::sun::star::awt::XControlModel;
+using ::com::sun::star::form::binding::XBindableValue;
+using ::com::sun::star::form::binding::XListEntrySink;
+using ::com::sun::star::form::binding::XListEntrySource;
+using ::com::sun::star::form::binding::XValueBinding;
 using ::com::sun::star::table::CellAddress;
+using ::com::sun::star::table::CellRangeAddress;
 using ::oox::core::ContextHandlerRef;
 using ::oox::drawingml::ConnectorShapeContext;
 using ::oox::drawingml::GraphicalObjectFrameContext;
@@ -55,9 +73,23 @@ using ::oox::drawingml::Shape;
 using ::oox::drawingml::ShapePtr;
 using ::oox::drawingml::ShapeContext;
 using ::oox::drawingml::ShapeGroupContext;
+// no using's for ::oox::vml, that may clash with ::oox::drawingml types
 
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+namespace {
+
+/** Converts the passed 64-bit integer value from the passed unit to EMUs. */
+sal_Int64 lclCalcEmu( const UnitConverter& rUnitConv, sal_Int64 nValue, Unit eFromUnit )
+{
+    return (eFromUnit == UNIT_EMU) ? nValue :
+        static_cast< sal_Int64 >( rUnitConv.scaleValue( static_cast< double >( nValue ), eFromUnit, UNIT_EMU ) + 0.5 );
+}
+
+} // namespace
 
 // ============================================================================
 
@@ -124,15 +156,15 @@ void ShapeAnchor::importAnchor( sal_Int32 nElement, const AttributeList& rAttrib
 void ShapeAnchor::importPos( const AttributeList& rAttribs )
 {
     OSL_ENSURE( meType == ANCHOR_ABSOLUTE, "ShapeAnchor::importPos - unexpected 'xdr:pos' element" );
-    maPos.mnX = rAttribs.getInteger64( XML_x, 0 );
-    maPos.mnY = rAttribs.getInteger64( XML_y, 0 );
+    maPos.mnX = rAttribs.getHyper( XML_x, 0 );
+    maPos.mnY = rAttribs.getHyper( XML_y, 0 );
 }
 
 void ShapeAnchor::importExt( const AttributeList& rAttribs )
 {
     OSL_ENSURE( (meType == ANCHOR_ABSOLUTE) || (meType == ANCHOR_ONECELL), "ShapeAnchor::importExt - unexpected 'xdr:ext' element" );
-    maSize.mnWidth = rAttribs.getInteger64( XML_cx, 0 );
-    maSize.mnHeight = rAttribs.getInteger64( XML_cy, 0 );
+    maSize.mnWidth = rAttribs.getHyper( XML_cx, 0 );
+    maSize.mnHeight = rAttribs.getHyper( XML_cy, 0 );
 }
 
 void ShapeAnchor::importClientData( const AttributeList& rAttribs )
@@ -167,6 +199,29 @@ void ShapeAnchor::setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, cons
     }
 }
 
+void ShapeAnchor::importVmlAnchor( const OUString& rAnchor )
+{
+    meType = ANCHOR_VML;
+
+    ::std::vector< OUString > aTokens;
+    sal_Int32 nIndex = 0;
+    while( nIndex >= 0 )
+        aTokens.push_back( rAnchor.getToken( 0, ',', nIndex ).trim() );
+
+    OSL_ENSURE( aTokens.size() >= 8, "ShapeAnchor::importVmlAnchor - missing anchor tokens" );
+    if( aTokens.size() >= 8 )
+    {
+        maFrom.mnCol       = aTokens[ 0 ].toInt32();
+        maFrom.mnColOffset = aTokens[ 1 ].toInt32();
+        maFrom.mnRow       = aTokens[ 2 ].toInt32();
+        maFrom.mnRowOffset = aTokens[ 3 ].toInt32();
+        maTo.mnCol         = aTokens[ 4 ].toInt32();
+        maTo.mnColOffset   = aTokens[ 5 ].toInt32();
+        maTo.mnRow         = aTokens[ 6 ].toInt32();
+        maTo.mnRowOffset   = aTokens[ 7 ].toInt32();
+    }
+}
+
 bool ShapeAnchor::isValidAnchor() const
 {
     bool bValid = false;
@@ -183,6 +238,7 @@ bool ShapeAnchor::isValidAnchor() const
             bValid = maFrom.isValid() && maSize.isValid() && (maSize.mnWidth > 0) && (maSize.mnHeight > 0);
         break;
         case ANCHOR_TWOCELL:
+        case ANCHOR_VML:
             OSL_ENSURE( maFrom.isValid(), "ShapeAnchor::isValidAnchor - invalid from position" );
             OSL_ENSURE( maTo.isValid(), "ShapeAnchor::isValidAnchor - invalid to position" );
             bValid = maFrom.isValid() && maTo.isValid() &&
@@ -196,12 +252,13 @@ bool ShapeAnchor::isValidAnchor() const
     return bValid;
 }
 
-#if 0 // unused code
 Rectangle ShapeAnchor::calcApiLocation( const Size& rApiSheetSize, const AnchorSizeModel& rEmuSheetSize ) const
 {
     AddressConverter& rAddrConv = getAddressConverter();
     UnitConverter& rUnitConv = getUnitConverter();
     Rectangle aApiLoc( -1, -1, -1, -1 );
+    Unit eUnitX = (meType == ANCHOR_VML) ? UNIT_SCREENX : UNIT_EMU;
+    Unit eUnitY = (meType == ANCHOR_VML) ? UNIT_SCREENY : UNIT_EMU;
 
     // calculate shape position
     switch( meType )
@@ -216,12 +273,13 @@ Rectangle ShapeAnchor::calcApiLocation( const Size& rApiSheetSize, const AnchorS
         break;
         case ANCHOR_ONECELL:
         case ANCHOR_TWOCELL:
+        case ANCHOR_VML:
             OSL_ENSURE( maFrom.isValid(), "ShapeAnchor::calcApiLocation - invalid position" );
             if( maFrom.isValid() && rAddrConv.checkCol( maFrom.mnCol, true ) && rAddrConv.checkRow( maFrom.mnRow, true ) )
             {
                 Point aPoint = getCellPosition( maFrom.mnCol, maFrom.mnRow );
-                aApiLoc.X = aPoint.X + rUnitConv.scaleToMm100( static_cast< double >( maFrom.mnColOffset ), UNIT_EMU );
-                aApiLoc.Y = aPoint.Y + rUnitConv.scaleToMm100( static_cast< double >( maFrom.mnRowOffset ), UNIT_EMU );
+                aApiLoc.X = aPoint.X + rUnitConv.scaleToMm100( static_cast< double >( maFrom.mnColOffset ), eUnitX );
+                aApiLoc.Y = aPoint.Y + rUnitConv.scaleToMm100( static_cast< double >( maFrom.mnRowOffset ), eUnitY );
             }
         break;
         case ANCHOR_INVALID:
@@ -246,6 +304,7 @@ Rectangle ShapeAnchor::calcApiLocation( const Size& rApiSheetSize, const AnchorS
             }
         break;
         case ANCHOR_TWOCELL:
+        case ANCHOR_VML:
             OSL_ENSURE( maTo.isValid(), "ShapeAnchor::calcApiLocation - invalid position" );
             if( maTo.isValid() )
             {
@@ -257,14 +316,14 @@ Rectangle ShapeAnchor::calcApiLocation( const Size& rApiSheetSize, const AnchorS
                 aApiLoc.Width = rApiSheetSize.Width - aApiLoc.X;
                 if( aToCell.Column == maTo.mnCol )
                 {
-                    aPoint.X += rUnitConv.scaleToMm100( static_cast< double >( maTo.mnColOffset ), UNIT_EMU );
+                    aPoint.X += rUnitConv.scaleToMm100( static_cast< double >( maTo.mnColOffset ), eUnitX );
                     aApiLoc.Width = ::std::min< sal_Int32 >( aPoint.X - aApiLoc.X + 1, aApiLoc.Width );
                 }
                 // height
                 aApiLoc.Height = rApiSheetSize.Height - aApiLoc.Y;
                 if( aToCell.Row == maTo.mnRow )
                 {
-                    aPoint.Y += rUnitConv.scaleToMm100( static_cast< double >( maTo.mnRowOffset ), UNIT_EMU );
+                    aPoint.Y += rUnitConv.scaleToMm100( static_cast< double >( maTo.mnRowOffset ), eUnitY );
                     aApiLoc.Height = ::std::min< sal_Int32 >( aPoint.Y - aApiLoc.Y + 1, aApiLoc.Height );
                 }
             }
@@ -275,7 +334,6 @@ Rectangle ShapeAnchor::calcApiLocation( const Size& rApiSheetSize, const AnchorS
 
     return aApiLoc;
 }
-#endif
 
 Rectangle ShapeAnchor::calcEmuLocation( const AnchorSizeModel& rEmuSheetSize ) const
 {
@@ -286,6 +344,8 @@ Rectangle ShapeAnchor::calcEmuLocation( const AnchorSizeModel& rEmuSheetSize ) c
         getLimitedValue< sal_Int32, sal_Int64 >( rEmuSheetSize.mnWidth, 0, SAL_MAX_INT32 ),
         getLimitedValue< sal_Int32, sal_Int64 >( rEmuSheetSize.mnHeight, 0, SAL_MAX_INT32 ) );
     Rectangle aLoc( -1, -1, -1, -1 );
+    Unit eUnitX = (meType == ANCHOR_VML) ? UNIT_SCREENX : UNIT_EMU;
+    Unit eUnitY = (meType == ANCHOR_VML) ? UNIT_SCREENY : UNIT_EMU;
 
     // calculate shape position
     switch( meType )
@@ -300,12 +360,13 @@ Rectangle ShapeAnchor::calcEmuLocation( const AnchorSizeModel& rEmuSheetSize ) c
         break;
         case ANCHOR_ONECELL:
         case ANCHOR_TWOCELL:
+        case ANCHOR_VML:
             OSL_ENSURE( maFrom.isValid(), "ShapeAnchor::calcEmuLocation - invalid position" );
             if( maFrom.isValid() && rAddrConv.checkCol( maFrom.mnCol, true ) && rAddrConv.checkRow( maFrom.mnRow, true ) )
             {
                 Point aPoint = getCellPosition( maFrom.mnCol, maFrom.mnRow );
-                sal_Int64 nX = static_cast< sal_Int64 >( rUnitConv.scaleFromMm100( aPoint.X, UNIT_EMU ) ) + maFrom.mnColOffset;
-                sal_Int64 nY = static_cast< sal_Int64 >( rUnitConv.scaleFromMm100( aPoint.Y, UNIT_EMU ) ) + maFrom.mnRowOffset;
+                sal_Int64 nX = static_cast< sal_Int64 >( rUnitConv.scaleFromMm100( aPoint.X, UNIT_EMU ) ) + lclCalcEmu( rUnitConv, maFrom.mnColOffset, eUnitX );
+                sal_Int64 nY = static_cast< sal_Int64 >( rUnitConv.scaleFromMm100( aPoint.Y, UNIT_EMU ) ) + lclCalcEmu( rUnitConv, maFrom.mnRowOffset, eUnitY );
                 if( (nX < aSheetSize.Width) && (nY < aSheetSize.Height) )
                 {
                     aLoc.X = static_cast< sal_Int32 >( nX );
@@ -331,6 +392,7 @@ Rectangle ShapeAnchor::calcEmuLocation( const AnchorSizeModel& rEmuSheetSize ) c
             }
         break;
         case ANCHOR_TWOCELL:
+        case ANCHOR_VML:
             OSL_ENSURE( maTo.isValid(), "ShapeAnchor::calcEmuLocation - invalid position" );
             if( maTo.isValid() )
             {
@@ -344,14 +406,14 @@ Rectangle ShapeAnchor::calcEmuLocation( const AnchorSizeModel& rEmuSheetSize ) c
                 aLoc.Width = aSheetSize.Width - aLoc.X;
                 if( aToCell.Column == maTo.mnCol )
                 {
-                    nX += maTo.mnColOffset;
+                    nX += lclCalcEmu( rUnitConv, maTo.mnColOffset, eUnitX );
                     aLoc.Width = static_cast< sal_Int32 >( ::std::min< sal_Int64 >( nX - aLoc.X + 1, aLoc.Width ) );
                 }
                 // height
                 aLoc.Height = aSheetSize.Height - aLoc.Y;
                 if( aToCell.Row == maTo.mnRow )
                 {
-                    nY += maTo.mnRowOffset;
+                    nY += lclCalcEmu( rUnitConv, maTo.mnRowOffset, eUnitY );
                     aLoc.Height = static_cast< sal_Int32 >( ::std::min< sal_Int64 >( nY - aLoc.Y + 1, aLoc.Height ) );
                 }
             }
@@ -373,13 +435,10 @@ Rectangle ShapeAnchor::calcEmuLocation( const AnchorSizeModel& rEmuSheetSize ) c
 // ============================================================================
 
 OoxDrawingFragment::OoxDrawingFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
-    OoxWorksheetFragmentBase( rHelper, rFragmentPath )
+    OoxWorksheetFragmentBase( rHelper, rFragmentPath ),
+    mxDrawPage( rHelper.getDrawPage(), UNO_QUERY )
 {
-    Reference< XDrawPageSupplier > xDrawPageSupp( getSheet(), UNO_QUERY );
-    if( xDrawPageSupp.is() )
-        mxDrawPage.set( xDrawPageSupp->getDrawPage(), UNO_QUERY );
     OSL_ENSURE( mxDrawPage.is(), "OoxDrawingFragment::OoxDrawingFragment - missing drawing page" );
-
     maApiSheetSize = getDrawPageSize();
     maEmuSheetSize.mnWidth = static_cast< sal_Int64 >( getUnitConverter().scaleFromMm100( maApiSheetSize.Width, UNIT_EMU ) );
     maEmuSheetSize.mnHeight = static_cast< sal_Int64 >( getUnitConverter().scaleFromMm100( maApiSheetSize.Height, UNIT_EMU ) );
@@ -474,6 +533,110 @@ void OoxDrawingFragment::onEndElement( const OUString& rChars )
             mxAnchor.reset();
         break;
     }
+}
+
+// ============================================================================
+
+VmlDrawing::VmlDrawing( const WorksheetHelper& rHelper ) :
+    ::oox::vml::Drawing( rHelper.getOoxFilter(), rHelper.getDrawPage(), ::oox::vml::VMLDRAWING_EXCEL ),
+    WorksheetHelper( rHelper )
+{
+}
+
+bool VmlDrawing::convertShapeClientAnchor( Rectangle& orShapeRect, const OUString& rShapeAnchor ) const
+{
+    if( rShapeAnchor.getLength() == 0 )
+        return false;
+    ShapeAnchor aAnchor( *this );
+    aAnchor.importVmlAnchor( rShapeAnchor );
+    orShapeRect = aAnchor.calcApiLocation( getDrawPageSize(), AnchorSizeModel() );
+    return (orShapeRect.Width >= 0) && (orShapeRect.Height >= 0);
+}
+
+void VmlDrawing::convertControlClientData( const Reference< XControlModel >& rxCtrlModel,
+        const ::oox::vml::ShapeClientData& rClientData ) const
+{
+    if( rxCtrlModel.is() )
+    {
+        PropertySet aPropSet( rxCtrlModel );
+
+        // printable
+        aPropSet.setProperty( PROP_Printable, rClientData.mbPrintObject );
+
+        // linked cell
+        if( rClientData.maLinkedCell.getLength() > 0 ) try
+        {
+            Reference< XBindableValue > xBindable( rxCtrlModel, UNO_QUERY_THROW );
+
+            // convert formula string to cell address
+            FormulaParser& rParser = getFormulaParser();
+            TokensFormulaContext aContext( true, false );
+            aContext.setBaseAddress( CellAddress( getSheetIndex(), 0, 0 ) );
+            rParser.importFormula( aContext, rClientData.maLinkedCell );
+            CellAddress aAddress;
+            if( rParser.extractCellAddress( aAddress, aContext.getTokens(), true ) )
+            {
+                // create argument sequence for createInstanceWithArguments()
+                NamedValue aValue;
+                aValue.Name = CREATE_OUSTRING( "BoundCell" );
+                aValue.Value <<= aAddress;
+                Sequence< Any > aArgs( 1 );
+                aArgs[ 0 ] <<= aValue;
+
+                // create the CellValueBinding instance and set at the control model
+                Reference< XValueBinding > xBinding( getDocumentFactory()->createInstanceWithArguments(
+                    CREATE_OUSTRING( "com.sun.star.table.CellValueBinding" ), aArgs ), UNO_QUERY_THROW );
+                xBindable->setValueBinding( xBinding );
+            }
+        }
+        catch( Exception& )
+        {
+        }
+
+        // source range
+        if( rClientData.maSourceRange.getLength() > 0 ) try
+        {
+            Reference< XListEntrySink > xEntrySink( rxCtrlModel, UNO_QUERY_THROW );
+
+            // convert formula string to cell range
+            FormulaParser& rParser = getFormulaParser();
+            TokensFormulaContext aContext( true, false );
+            aContext.setBaseAddress( CellAddress( getSheetIndex(), 0, 0 ) );
+            rParser.importFormula( aContext, rClientData.maSourceRange );
+            CellRangeAddress aRange;
+            if( rParser.extractCellRange( aRange, aContext.getTokens(), true ) )
+            {
+                // create argument sequence for createInstanceWithArguments()
+                NamedValue aValue;
+                aValue.Name = CREATE_OUSTRING( "CellRange" );
+                aValue.Value <<= aRange;
+                Sequence< Any > aArgs( 1 );
+                aArgs[ 0 ] <<= aValue;
+
+                // create the EntrySource instance and set at the control model
+                Reference< XListEntrySource > xEntrySource( getDocumentFactory()->createInstanceWithArguments(
+                    CREATE_OUSTRING( "com.sun.star.table.CellRangeListSource"  ), aArgs ), UNO_QUERY_THROW );
+                xEntrySink->setListEntrySource( xEntrySource );
+            }
+        }
+        catch( Exception& )
+        {
+        }
+    }
+}
+
+// ============================================================================
+
+OoxVmlDrawingFragment::OoxVmlDrawingFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
+    ::oox::vml::DrawingFragment( rHelper.getOoxFilter(), rFragmentPath, rHelper.getVmlDrawing() ),
+    WorksheetHelper( rHelper )
+{
+}
+
+void OoxVmlDrawingFragment::finalizeImport()
+{
+    ::oox::vml::DrawingFragment::finalizeImport();
+    getVmlDrawing().convertAndInsert();
 }
 
 // ============================================================================

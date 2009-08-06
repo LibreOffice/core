@@ -454,6 +454,13 @@ public:
     explicit            OcxGuidControlObject(
                             const InputObjectBase& rParent,
                             sal_Int64 nLength );
+    explicit            OcxGuidControlObject(
+                            const OutputObjectBase& rParent,
+                            const BinaryInputStreamRef& rxStrm );
+    explicit            OcxGuidControlObject(
+                            const ObjectBase& rParent,
+                            const BinaryInputStreamRef& rxStrm,
+                            const ::rtl::OUString& rSysFileName );
 
 protected:
     virtual void        implDump();

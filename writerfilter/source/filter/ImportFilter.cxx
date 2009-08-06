@@ -94,9 +94,9 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
 
         uno::Reference<drawing::XDrawPageSupplier> xDrawings
             (m_xDoc, uno::UNO_QUERY_THROW);
-        uno::Reference<drawing::XShapes> xShapes
-            (xDrawings->getDrawPage(), uno::UNO_QUERY_THROW);
-        pDocument->setShapes(xShapes);
+        uno::Reference<drawing::XDrawPage> xDrawPage
+            (xDrawings->getDrawPage(), uno::UNO_SET_THROW);
+        pDocument->setDrawPage(xDrawPage);
 
         pDocument->resolve(*pStream);
     }

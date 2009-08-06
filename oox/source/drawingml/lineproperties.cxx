@@ -38,14 +38,14 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/core/modelobjectcontainer.hxx"
-#include "oox/core/namespaces.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/helper/propertymap.hxx"
-#include "oox/helper/propertyset.hxx"
 #include "properties.hxx"
 #include "tokens.hxx"
+#include "oox/helper/modelobjecthelper.hxx"
+#include "oox/helper/propertymap.hxx"
+#include "oox/helper/propertyset.hxx"
+#include "oox/core/namespaces.hxx"
+#include "oox/core/xmlfilterbase.hxx"
+#include "oox/drawingml/drawingmltypes.hxx"
 
 using namespace ::com::sun::star::drawing;
 
@@ -55,7 +55,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::awt::Point;
 using ::com::sun::star::container::XNameContainer;
-using ::oox::core::ModelObjectContainer;
 using ::oox::core::XmlFilterBase;
 
 namespace oox {
@@ -123,7 +122,7 @@ sal_Int32 lclGetArrowSize( sal_Int32 nToken )
 // ----------------------------------------------------------------------------
 
 void lclPushMarkerProperties( PropertyMap& rPropMap, const LineArrowProperties& rArrowProps,
-        const LinePropertyIds& rPropIds, ModelObjectContainer& rObjContainer, sal_Int32 nLineWidth, bool bLineEnd )
+        const LinePropertyIds& rPropIds, ModelObjectHelper& rModelObjHelper, sal_Int32 nLineWidth, bool bLineEnd )
 {
     PolyPolygonBezierCoords aMarker;
     OUString aMarkerName;
@@ -182,7 +181,7 @@ void lclPushMarkerProperties( PropertyMap& rPropMap, const LineArrowProperties& 
         nMarkerWidth = static_cast< sal_Int32 >( fArrowWidth * nApiLineWidth );
 
         // test if the arrow already exists, do not create it again in this case
-        if( !rPropIds.mbNamedLineMarker || !rObjContainer.hasLineMarker( aMarkerName ) )
+        if( !rPropIds.mbNamedLineMarker || !rModelObjHelper.hasLineMarker( aMarkerName ) )
         {
 // pass X and Y as percentage to OOX_ARROW_POINT
 #define OOX_ARROW_POINT( x, y ) Point( static_cast< sal_Int32 >( fArrowWidth * x ), static_cast< sal_Int32 >( fArrowLength * y ) )
@@ -247,7 +246,7 @@ void lclPushMarkerProperties( PropertyMap& rPropMap, const LineArrowProperties& 
                 aMarker.Flags.realloc( 1 );
                 aMarker.Flags[ 0 ] = ContainerHelper::vectorToSequence( aFlags );
 
-                if( rPropIds.mbNamedLineMarker && !rObjContainer.insertLineMarker( aMarkerName, aMarker ) )
+                if( rPropIds.mbNamedLineMarker && !rModelObjHelper.insertLineMarker( aMarkerName, aMarker ) )
                     aMarkerName = OUString();
             }
             else
@@ -318,7 +317,7 @@ void LineProperties::assignUsed( const LineProperties& rSourceProps )
 }
 
 void LineProperties::pushToPropMap( PropertyMap& rPropMap, const LinePropertyIds& rPropIds,
-        const XmlFilterBase& rFilter, ModelObjectContainer& rObjContainer, sal_Int32 nPhClr ) const
+        const XmlFilterBase& rFilter, ModelObjectHelper& rModelObjHelper, sal_Int32 nPhClr ) const
 {
     // line fill type must exist, otherwise ignore other properties
     if( maLineFill.moFillType.has() )
@@ -375,7 +374,7 @@ void LineProperties::pushToPropMap( PropertyMap& rPropMap, const LinePropertyIds
 
             if( rPropIds.mbNamedLineDash )
             {
-                OUString aDashName = rObjContainer.insertLineDash( aLineDash );
+                OUString aDashName = rModelObjHelper.insertLineDash( aLineDash );
                 if( aDashName.getLength() > 0 )
                 {
                     rPropMap.setProperty( rPropIds[ LineDashId ], aDashName );
@@ -410,16 +409,16 @@ void LineProperties::pushToPropMap( PropertyMap& rPropMap, const LinePropertyIds
         }
 
         // line markers
-        lclPushMarkerProperties( rPropMap, maStartArrow, rPropIds, rObjContainer, moLineWidth.get( 0 ), false );
-        lclPushMarkerProperties( rPropMap, maEndArrow,   rPropIds, rObjContainer, moLineWidth.get( 0 ), true );
+        lclPushMarkerProperties( rPropMap, maStartArrow, rPropIds, rModelObjHelper, moLineWidth.get( 0 ), false );
+        lclPushMarkerProperties( rPropMap, maEndArrow,   rPropIds, rModelObjHelper, moLineWidth.get( 0 ), true );
     }
 }
 
 void LineProperties::pushToPropSet( PropertySet& rPropSet, const LinePropertyIds& rPropIds,
-        const XmlFilterBase& rFilter, ModelObjectContainer& rObjContainer, sal_Int32 nPhClr ) const
+        const XmlFilterBase& rFilter, ModelObjectHelper& rModelObjHelper, sal_Int32 nPhClr ) const
 {
     PropertyMap aPropMap;
-    pushToPropMap( aPropMap, rPropIds, rFilter, rObjContainer, nPhClr );
+    pushToPropMap( aPropMap, rPropIds, rFilter, rModelObjHelper, nPhClr );
     rPropSet.setProperties( aPropMap );
 }
 

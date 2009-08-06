@@ -41,7 +41,7 @@ namespace oox {
 class RecordInputStream : public SequenceInputStream
 {
 public:
-    explicit            RecordInputStream( StreamDataSequence& rData );
+    explicit            RecordInputStream( const StreamDataSequence& rData );
 
     /** Reads a string with leading 16-bit or 32-bit length field. */
     ::rtl::OUString     readString( bool b32BitLen = true );

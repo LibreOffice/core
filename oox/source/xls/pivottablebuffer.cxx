@@ -221,7 +221,7 @@ OUString lclReadPivotString( const WorkbookHelper& rHelper, BiffInputStream& rSt
 {
     if( nLen == BIFF_PT_NOSTRING )
         return OUString();
-    return (rHelper.getBiff() == BIFF8) ? rStrm.readUniString( nLen ) : rStrm.readCharArray( nLen, rHelper.getTextEncoding() );
+    return (rHelper.getBiff() == BIFF8) ? rStrm.readUniString( nLen ) : rStrm.readCharArrayUC( nLen, rHelper.getTextEncoding() );
 }
 
 } // namespace
@@ -381,7 +381,7 @@ void PivotTableField::importItem( const AttributeList& rAttribs )
 void PivotTableField::importReference( const AttributeList& rAttribs )
 {
     // field index is stored as unsigned integer
-    maModel.mnSortRefField = static_cast< sal_Int32 >( rAttribs.getUnsignedInteger( XML_field, SAL_MAX_UINT32 ) );
+    maModel.mnSortRefField = static_cast< sal_Int32 >( rAttribs.getUnsigned( XML_field, SAL_MAX_UINT32 ) );
 }
 
 void PivotTableField::importReferenceItem( const AttributeList& rAttribs )
@@ -891,10 +891,10 @@ PivotTableFilter::PivotTableFilter( const PivotTable& rPivotTable ) :
 
 void PivotTableFilter::importFilter( const AttributeList& rAttribs )
 {
-    maModel.maName         = rAttribs.getString( XML_name, OUString() );
-    maModel.maDescription  = rAttribs.getString( XML_description, OUString() );
-    maModel.maStrValue1    = rAttribs.getString( XML_stringValue1, OUString() );
-    maModel.maStrValue2    = rAttribs.getString( XML_stringValue2, OUString() );
+    maModel.maName         = rAttribs.getXString( XML_name, OUString() );
+    maModel.maDescription  = rAttribs.getXString( XML_description, OUString() );
+    maModel.maStrValue1    = rAttribs.getXString( XML_stringValue1, OUString() );
+    maModel.maStrValue2    = rAttribs.getXString( XML_stringValue2, OUString() );
     maModel.mnField        = rAttribs.getInteger( XML_fld, -1 );
     maModel.mnMemPropField = rAttribs.getInteger( XML_mpFld, -1 );
     maModel.mnType         = rAttribs.getToken( XML_type, XML_TOKEN_INVALID );
@@ -1040,17 +1040,17 @@ PivotTable::PivotTable( const WorkbookHelper& rHelper ) :
 
 void PivotTable::importPivotTableDefinition( const AttributeList& rAttribs )
 {
-    maDefModel.maName                = rAttribs.getString( XML_name, OUString() );
-    maDefModel.maDataCaption         = rAttribs.getString( XML_dataCaption , OUString() );
-    maDefModel.maGrandTotalCaption   = rAttribs.getString( XML_grandTotalCaption, OUString() );
-    maDefModel.maRowHeaderCaption    = rAttribs.getString( XML_rowHeaderCaption, OUString() );
-    maDefModel.maColHeaderCaption    = rAttribs.getString( XML_colHeaderCaption, OUString() );
-    maDefModel.maErrorCaption        = rAttribs.getString( XML_errorCaption, OUString() );
-    maDefModel.maMissingCaption      = rAttribs.getString( XML_missingCaption, OUString() );
-    maDefModel.maPageStyle           = rAttribs.getString( XML_pageStyle, OUString() );
-    maDefModel.maPivotTableStyle     = rAttribs.getString( XML_pivotTableStyle, OUString() );
-    maDefModel.maVacatedStyle        = rAttribs.getString( XML_vacatedStyle, OUString() );
-    maDefModel.maTag                 = rAttribs.getString( XML_tag, OUString() );
+    maDefModel.maName                = rAttribs.getXString( XML_name, OUString() );
+    maDefModel.maDataCaption         = rAttribs.getXString( XML_dataCaption , OUString() );
+    maDefModel.maGrandTotalCaption   = rAttribs.getXString( XML_grandTotalCaption, OUString() );
+    maDefModel.maRowHeaderCaption    = rAttribs.getXString( XML_rowHeaderCaption, OUString() );
+    maDefModel.maColHeaderCaption    = rAttribs.getXString( XML_colHeaderCaption, OUString() );
+    maDefModel.maErrorCaption        = rAttribs.getXString( XML_errorCaption, OUString() );
+    maDefModel.maMissingCaption      = rAttribs.getXString( XML_missingCaption, OUString() );
+    maDefModel.maPageStyle           = rAttribs.getXString( XML_pageStyle, OUString() );
+    maDefModel.maPivotTableStyle     = rAttribs.getXString( XML_pivotTableStyle, OUString() );
+    maDefModel.maVacatedStyle        = rAttribs.getXString( XML_vacatedStyle, OUString() );
+    maDefModel.maTag                 = rAttribs.getXString( XML_tag, OUString() );
     maDefModel.mnCacheId             = rAttribs.getInteger( XML_cacheId, -1 );
     maDefModel.mnDataPosition        = rAttribs.getInteger( XML_dataPosition, 0 );
     maDefModel.mnPageWrap            = rAttribs.getInteger( XML_pageWrap, 0 );
@@ -1104,7 +1104,7 @@ void PivotTable::importColField( const AttributeList& rAttribs )
 void PivotTable::importPageField( const AttributeList& rAttribs )
 {
     PTPageFieldModel aModel;
-    aModel.maName      = rAttribs.getString( XML_name, OUString() );
+    aModel.maName      = rAttribs.getXString( XML_name, OUString() );
     aModel.mnField     = rAttribs.getInteger( XML_fld, -1 );
     // specification is wrong, XML_item is not the cache item, but the field item
     aModel.mnItem      = rAttribs.getInteger( XML_item, OOBIN_PTPAGEFIELD_MULTIITEMS );
@@ -1114,7 +1114,7 @@ void PivotTable::importPageField( const AttributeList& rAttribs )
 void PivotTable::importDataField( const AttributeList& rAttribs )
 {
     PTDataFieldModel aModel;
-    aModel.maName       = rAttribs.getString( XML_name, OUString() );
+    aModel.maName       = rAttribs.getXString( XML_name, OUString() );
     aModel.mnField      = rAttribs.getInteger( XML_fld, -1 );
     aModel.mnSubtotal   = rAttribs.getToken( XML_subtotal, XML_sum );
     aModel.mnShowDataAs = rAttribs.getToken( XML_showDataAs, XML_normal );
@@ -1378,7 +1378,7 @@ void PivotTable::finalizeImport()
                 aDescProp.setProperty( PROP_DrillDownOnDoubleClick, maDefModel.mbEnableDrill );
 
                 // finalize all fields, this finds field names and creates grouping fields
-                maFields.forEachMem( &PivotTableField::finalizeImport, mxDPDescriptor );
+                maFields.forEachMem( &PivotTableField::finalizeImport, ::boost::cref( mxDPDescriptor ) );
 
                 // all row fields
                 for( IndexVector::iterator aIt = maRowFields.begin(), aEnd = maRowFields.end(); aIt != aEnd; ++aIt )
@@ -1434,7 +1434,7 @@ void PivotTable::finalizeImport()
 void PivotTable::finalizeDateGroupingImport( const Reference< XDataPilotField >& rxBaseDPField, sal_Int32 nBaseFieldIdx )
 {
     // process all fields, there is no chaining information in the cache fields
-    maFields.forEachMem( &PivotTableField::finalizeDateGroupingImport, rxBaseDPField, nBaseFieldIdx );
+    maFields.forEachMem( &PivotTableField::finalizeDateGroupingImport, ::boost::cref( rxBaseDPField ), nBaseFieldIdx );
 }
 
 void PivotTable::finalizeParentGroupingImport( const Reference< XDataPilotField >& rxBaseDPField,

@@ -507,7 +507,7 @@ void BiffExternalLinkFragment::importCrn()
             break;
             case BIFF_DATATYPE_STRING:
             {
-                OUString aText = (getBiff() == BIFF8) ? mrStrm.readUniString() : mrStrm.readByteString( false, getTextEncoding() );
+                OUString aText = (getBiff() == BIFF8) ? mrStrm.readUniString() : mrStrm.readByteStringUC( false, getTextEncoding() );
                 setCellValue( aBinAddr, Any( aText ) );
             }
             break;
