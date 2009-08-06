@@ -184,7 +184,7 @@ struct SwMergeDescriptor
         rDescriptor(rDesc),
         bSendAsHTML( sal_True ),
         bSendAsAttachment( sal_False ),
-        bPrintAsync( sal_True ),
+        bPrintAsync( sal_False ),
         bCreateSingleFile( sal_False ),
         pMailMergeConfigItem(0)
         {}

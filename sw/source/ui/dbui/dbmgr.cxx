@@ -500,12 +500,11 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
             if(IsMergeSilent())
             {
                 aPrintArgs.Put( SfxBoolItem(SID_SILENT, TRUE) );
-                // #i25686# printing should be done asynchronously to prevent dangling offices
-                // when mail merge is called as command line macro
-                // #i52629# aynchronous printing should only be done in silent mode - otherwise
-                // the printer dialog does not come up
-                aPrintArgs.Put( SfxBoolItem( SID_ASYNCHRON, rMergeDesc.bPrintAsync ));
             }
+            // #i52629# aynchronous printing should only be done in silent mode - otherwise
+            // the printer dialog does not come up
+            aPrintArgs.Put( SfxBoolItem( SID_ASYNCHRON, rMergeDesc.bPrintAsync ));
+
             // convert PropertyValues
             const beans::PropertyValue* pPrintOptions = rMergeDesc.aPrintOptions.getConstArray();
             for( sal_Int32 nOption = 0; nOption < rMergeDesc.aPrintOptions.getLength(); ++nOption)
