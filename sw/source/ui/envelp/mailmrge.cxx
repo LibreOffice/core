@@ -76,6 +76,8 @@
 
 #include <unomid.h>
 
+#include <algorithm>
+
 using namespace rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
@@ -387,6 +389,8 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aLk = LINK(this, SwMailMergeDlg, ModifyHdl);
     aFromNF.SetModifyHdl(aLk);
     aToNF.SetModifyHdl(aLk);
+    aFromNF.SetMax(SAL_MAX_INT32);
+    aToNF.SetMax(SAL_MAX_INT32);
 
     SwNewDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
     if(_xConnection.is())
@@ -768,19 +772,16 @@ bool SwMailMergeDlg::ExecQryShell()
 
     if (aFromRB.IsChecked())    // Liste Einfuegen
     {
-        ULONG nStart = static_cast< ULONG >(aFromNF.GetValue());
-        ULONG nEnd   = static_cast< ULONG >(aToNF.GetValue());
+        // Safe: the maximal value of the fields is limited
+        sal_Int32 nStart = sal::static_int_cast<sal_Int32>(aFromNF.GetValue());
+        sal_Int32 nEnd = sal::static_int_cast<sal_Int32>(aToNF.GetValue());
 
         if (nEnd < nStart)
-        {
-            ULONG nZw = nEnd;
-            nEnd = nStart;
-            nStart = nZw;
-        }
+            std::swap(nEnd, nStart);
 
         m_aSelection.realloc(nEnd - nStart + 1);
         Any* pSelection = m_aSelection.getArray();
-        for (ULONG i = nStart; i <= nEnd; ++i, ++pSelection)
+        for (sal_Int32 i = nStart; i != nEnd; ++i, ++pSelection)
             *pSelection <<= i;
     }
     else if (aAllRB.IsChecked() )

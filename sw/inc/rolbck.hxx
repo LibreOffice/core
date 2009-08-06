@@ -263,8 +263,7 @@ class SwHistoryTxtFlyCnt : public SwHistoryHint
     ::std::auto_ptr<SwUndoDelLayFmt> m_pUndo;
 
 public:
-    SwHistoryTxtFlyCnt( SwTxtFlyCnt* pTxtFly ); // for character-bound
-    SwHistoryTxtFlyCnt( SwFlyFrmFmt* pFlyFmt ); // for paragraph-bound
+    SwHistoryTxtFlyCnt( SwFrmFmt* const pFlyFmt );
     virtual ~SwHistoryTxtFlyCnt();
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
     SwUndoDelLayFmt* GetUDelLFmt() { return m_pUndo.get(); }

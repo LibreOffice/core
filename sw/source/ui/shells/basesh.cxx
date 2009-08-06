@@ -370,6 +370,41 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             }
             break;
 
+        case SID_PASTE_UNFORMATTED:
+            {
+                TransferableDataHelper aDataHelper(
+                    TransferableDataHelper::CreateFromSystemClipboard(
+                        &rSh.GetView().GetEditWin()) );
+                if( aDataHelper.GetXTransferable().is() &&
+                    SwTransferable::IsPaste( rSh, aDataHelper ))
+                {
+                    // temp. Variablen, da die Shell nach dem Paste schon
+                    // zerstoert sein kann
+                    SwView* pView = &rView;
+                    rReq.Ignore();
+                    bIgnore = sal_True;
+                    int nRet = SwTransferable::PasteUnformatted( rSh, aDataHelper );
+                    if(nRet)// && rReq.IsRecording() )
+                    {
+                        SfxViewFrame* pViewFrame = pView->GetViewFrame();
+                        uno::Reference< frame::XDispatchRecorder > xRecorder =
+                            pViewFrame->GetBindings().GetRecorder();
+                        if(xRecorder.is()) {
+                            SfxRequest aReq( pViewFrame, SID_CLIPBOARD_FORMAT_ITEMS );
+                            aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, SOT_FORMAT_STRING ) );
+                            aReq.Done();
+                        }
+                    }
+
+                    if (rSh.IsFrmSelected() || rSh.IsObjSelected())
+                        rSh.EnterSelFrmMode();
+                    pView->AttrChangedNotify( &rSh );
+                }
+                else
+                    return;
+            }
+            break;
+
         case FN_PASTESPECIAL:
             {
                 TransferableDataHelper aDataHelper(
@@ -448,7 +483,10 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
 
         case FN_PASTESPECIAL:
             if( !GetView().IsPasteSpecialAllowed() )
+            {
                 rSet.DisableItem( FN_PASTESPECIAL );
+                rSet.DisableItem( SID_PASTE_UNFORMATTED );
+            }
             break;
 
         case SID_CLIPBOARD_FORMAT_ITEMS:
@@ -1713,9 +1751,12 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                         rSh.GetGraphic(FALSE);  // start the loading
                                 }
                                 else if( rSh.IsFrmSelected() )
-                                    bDisable = GRAPHIC_NONE ==
-                                            rSh.GetIMapGraphic().GetType()||
-                                            nSel & nsSelectionType::SEL_FRM;
+                                {
+                                    // #i102253# applied patch from OD (see task)
+                                    bDisable =
+                                        nSel & nsSelectionType::SEL_FRM ||
+                                        GRAPHIC_NONE == rSh.GetIMapGraphic().GetType();
+                                }
                             }
                             bSet = bDisable ? FALSE : rWrap.IsContour();
 

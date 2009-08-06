@@ -310,7 +310,7 @@ void SwTxtFtn::CopyFtn( SwTxtFtn *pDest )
         SwNodeIndex aEnd( *aStart.GetNode().EndOfSectionNode() );
         ULONG  nDestLen = aEnd.GetIndex() - aStart.GetIndex() - 1;
 
-        m_pTxtNode->GetDoc()->CopyWithFlyInFly( aRg, aEnd, TRUE );
+        m_pTxtNode->GetDoc()->CopyWithFlyInFly( aRg, 0, aEnd, TRUE );
 
         // Wenn die Dest-Sektion nicht leer war, so muessen die alten
         // Nodes geloescht werden:

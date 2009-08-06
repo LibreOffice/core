@@ -35,7 +35,7 @@
 #endif
 
 #include <stdio.h>
-
+#include <unotxdoc.hxx>
 #include <com/sun/star/text/NotePrintMode.hpp>
 #include <sfx2/app.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -43,17 +43,13 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#ifndef _COM_SUN_STAR_UTIL_iXNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#ifndef _COM_SUN_STAR_TEXT_MAILMERGEEVENT_
 #include <com/sun/star/text/MailMergeEvent.hpp>
-#endif
 #include <com/sun/star/frame/XStorable.hpp>
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
@@ -65,9 +61,7 @@
 #include <dbconfig.hxx>
 #include <swdbtoolsclient.hxx>
 #include <pagedesc.hxx>
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <unotools/tempfile.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/urihelper.hxx>
@@ -86,39 +80,25 @@
 #include <goodies/mailenum.hxx>
 #include <cmdid.h>
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <edtwin.hxx>
 #include <wrtsh.hxx>
 #include <fldbas.hxx>
 #include <initui.hxx>
 #include <swundo.hxx>
 #include <flddat.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
 #include <swprtopt.hxx>
 #include <shellio.hxx>
 #include <dbui.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <doc.hxx>
 #include <swwait.hxx>
 #include <swunohelper.hxx>
-#ifndef _DBUI_HRC
 #include <dbui.hrc>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
 #include <mmconfigitem.hxx>
 #include <sfx2/request.hxx>
 #include <hintids.hxx>
@@ -3185,7 +3165,6 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
 
     SwWrtShell& rSourceShell = rSourceView.GetWrtShell();
     BOOL bSynchronizedDoc = rSourceShell.IsLabelDoc() && rSourceShell.GetSectionFmtCount() > 1;
-    String sSourceDocURL;
     //save the settings of the first
     rSourceShell.SttEndDoc(TRUE);
     USHORT nStartingPageNo = rSourceShell.GetVirtPageNum();
@@ -3195,22 +3174,6 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
 
     try
     {
-        // save the working document into a temporary location
-        sSourceDocURL = URIHelper::SmartRel2Abs(
-            INetURLObject(), utl::TempFile::CreateTempName(),
-            URIHelper::GetMaybeFileHdl());
-        const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
-                String::CreateFromAscii( FILTER_XML ),
-                SwDocShell::Factory().GetFilterContainer() );
-
-        SfxStringItem aFilterName( SID_FILTER_NAME, pSfxFlt->GetFilterName());
-        uno::Sequence< beans::PropertyValue > aValues(1);
-        beans::PropertyValue* pValues = aValues.getArray();
-        pValues[0].Name = C2U("FilterName");
-        pValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
-        uno::Reference< frame::XStorable > xStore( rSourceView.GetDocShell()->GetModel(), uno::UNO_QUERY);
-        xStore->storeToURL( sSourceDocURL, aValues );
-
         // create a target docshell to put the merged document into
         SfxObjectShellRef xTargetDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
         xTargetDocShell->DoInitNew( 0 );
@@ -3259,116 +3222,120 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                     Application::Reschedule();
             }
 
-            // create a new docshell from the temporary document
-            SfxBoolItem aHidden( SID_HIDDEN, TRUE );
-            SfxStringItem aReferer( SID_REFERER, String::CreateFromAscii(URL_PREFIX_PRIV_SOFFICE ));
-            SfxStringItem aTarget( SID_TARGETNAME, String::CreateFromAscii("_blank") );
-            SfxStringItem aURL( SID_FILE_NAME, sSourceDocURL );
-            const SfxPoolItem* pReturnValue =
-                            rSourceView.GetViewFrame()->GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
-                                    &aURL, &aFilterName, &aHidden, &aReferer, &aTarget, 0L);
-            if(pReturnValue)
+            // copy the source document
+            SfxObjectShellRef xWorkDocSh;
+            if(nDocNo == 1 )
             {
-                SfxViewFrameItem* pVItem = (SfxViewFrameItem*)pReturnValue;
-                SwView* pWorkView = (SwView*) pVItem->GetFrame()->GetViewShell();
-                SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
-                pWorkView->AttrChangedNotify( &rWorkShell );//Damit SelectShell gerufen wird.
-
-                // merge the data
-                SwDoc* pWorkDoc = rWorkShell.GetDoc();
-                SwNewDBMgr* pWorkDBMgr = pWorkDoc->GetNewDBMgr();
-                pWorkDoc->SetNewDBMgr( this );
-                pWorkDoc->EmbedAllLinks();
-                if(UNDO_UI_DELETE_INVISIBLECNTNT == rWorkShell.GetUndoIds())
-                    rWorkShell.Undo();
-                // create a layout
-                rWorkShell.CalcLayout();
-                SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
-                rWorkShell.ViewShell::UpdateFlds();
-                SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
-
-                // strip invisible content and convert fields to text
-                rWorkShell.RemoveInvisibleContent();
-                rWorkShell.ConvertFieldsToText();
-                rWorkShell.SetNumberingRestart();
-
-
-                // insert the document into the target document
-                rWorkShell.SttEndDoc(FALSE);
-                rWorkShell.SttEndDoc(TRUE);
-                rWorkShell.SelAll();
-                pTargetShell->SttEndDoc(FALSE);
-
-                //#i63806# put the styles to the target document
-                //if the source uses headers or footers each new copy need to copy a new page styles
-                if(bPageStylesWithHeaderFooter)
-                {
-                    //create a new pagestyle
-                    //copy the pagedesc from the current document to the new document and change the name of the to-be-applied style
-
-                    SwDoc* pTargetDoc = pTargetShell->GetDoc();
-                    String sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
-                    pTargetShell->GetDoc()->MakePageDesc( sNewPageDescName );
-                    SwPageDesc* pTargetPageDesc = pTargetShell->FindPageDescByName( sNewPageDescName );
-                    if(pSourcePageDesc && pTargetPageDesc)
-                    {
-                        pTargetDoc->CopyPageDesc( *pSourcePageDesc, *pTargetPageDesc, sal_False );
-                        sModifiedStartingPageDesc = sNewPageDescName;
-                        lcl_CopyFollowPageDesc( *pTargetShell, *pSourcePageDesc, *pTargetPageDesc, nDocNo );
-                    }
-                }
-                if(nDocNo == 1 || bPageStylesWithHeaderFooter)
-                {
-                    pTargetView->GetDocShell()->_LoadStyles( *pWorkView->GetDocShell(), sal_True );
-                }
-                if(nDocNo > 1)
-                {
-                    pTargetShell->InsertPageBreak( &sModifiedStartingPageDesc, nStartingPageNo );
-                }
-                else
-                {
-                    pTargetShell->SetPageStyle(sModifiedStartingPageDesc);
-                }
-                USHORT nPageCountBefore = pTargetShell->GetPageCnt();
-                DBG_ASSERT(!pTargetShell->GetTableFmt(),"target document ends with a table - paragraph should be appended");
-                //#i51359# add a second paragraph in case there's only one
-                {
-                    SwNodeIndex aIdx( pWorkDoc->GetNodes().GetEndOfExtras(), 2 );
-                  SwPosition aTestPos( aIdx );
-                  SwCursor aTestCrsr(aTestPos,0,false);
-                    if(!aTestCrsr.MovePara(fnParaNext, fnParaStart))
-                    {
-                        //append a paragraph
-                        pWorkDoc->AppendTxtNode( aTestPos );
-                    }
-                }
-                pTargetShell->Paste( rWorkShell.GetDoc(), sal_True );
-                //convert fields in page styles (header/footer - has to be done after the first document has been pasted
-                if(1 == nDocNo)
-                {
-                    pTargetShell->CalcLayout();
-                    pTargetShell->ConvertFieldsToText();
-                }
-                //add the document info to the config item
-                SwDocMergeInfo aMergeInfo;
-                aMergeInfo.nStartPageInTarget = nPageCountBefore;
-                //#i72820# calculate layout to be able to find the correct page index
-                pTargetShell->CalcLayout();
-                aMergeInfo.nEndPageInTarget = pTargetShell->GetPageCnt();
-                aMergeInfo.nDBRow = nStartRow;
-                rMMConfig.AddMergedDocument( aMergeInfo );
-                ++nRet;
-
-                // the print monitor needs some time to act
-                for( USHORT i = 0; i < 25; i++)
-                    Application::Reschedule();
-
-                //restore the ole DBMgr
-                pWorkDoc->SetNewDBMgr( pWorkDBMgr );
-                //now the temporary document should be closed
-                SfxObjectShellRef xDocSh(pWorkView->GetDocShell());
-                xDocSh->DoClose();
+                uno::Reference< util::XCloneable > xClone( rSourceView.GetDocShell()->GetModel(), uno::UNO_QUERY);
+                uno::Reference< lang::XUnoTunnel > xWorkDocShell( xClone->createClone(), uno::UNO_QUERY);
+                SwXTextDocument* pWorkModel = reinterpret_cast<SwXTextDocument*>(xWorkDocShell->getSomething(SwXTextDocument::getUnoTunnelId()));
+                xWorkDocSh = pWorkModel->GetDocShell();
             }
+            else
+            {
+                SwDoc* pNewDoc = rSourceView.GetDocShell()->GetDoc()->CreateCopy();
+                xWorkDocSh = new SwDocShell( pNewDoc, SFX_CREATE_MODE_STANDARD );
+                xWorkDocSh->DoInitNew();
+            }
+            //create a ViewFrame
+            SwView* pWorkView = static_cast< SwView* >( SfxViewFrame::CreateViewFrame( *xWorkDocSh, 0, sal_True )->GetViewShell() );
+            SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
+            pWorkView->AttrChangedNotify( &rWorkShell );//Damit SelectShell gerufen wird.
+
+            // merge the data
+            SwDoc* pWorkDoc = rWorkShell.GetDoc();
+            SwNewDBMgr* pWorkDBMgr = pWorkDoc->GetNewDBMgr();
+            pWorkDoc->SetNewDBMgr( this );
+            pWorkDoc->EmbedAllLinks();
+            if(UNDO_UI_DELETE_INVISIBLECNTNT == rWorkShell.GetUndoIds())
+                rWorkShell.Undo();
+            // create a layout
+            rWorkShell.CalcLayout();
+            SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
+            rWorkShell.ViewShell::UpdateFlds();
+            SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
+
+            // strip invisible content and convert fields to text
+            rWorkShell.RemoveInvisibleContent();
+            rWorkShell.ConvertFieldsToText();
+            rWorkShell.SetNumberingRestart();
+
+
+            // insert the document into the target document
+            rWorkShell.SttEndDoc(FALSE);
+            rWorkShell.SttEndDoc(TRUE);
+            rWorkShell.SelAll();
+            pTargetShell->SttEndDoc(FALSE);
+
+            //#i63806# put the styles to the target document
+            //if the source uses headers or footers each new copy need to copy a new page styles
+            if(bPageStylesWithHeaderFooter)
+            {
+                //create a new pagestyle
+                //copy the pagedesc from the current document to the new document and change the name of the to-be-applied style
+
+                SwDoc* pTargetDoc = pTargetShell->GetDoc();
+                String sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
+                pTargetShell->GetDoc()->MakePageDesc( sNewPageDescName );
+                SwPageDesc* pTargetPageDesc = pTargetShell->FindPageDescByName( sNewPageDescName );
+                if(pSourcePageDesc && pTargetPageDesc)
+                {
+                    pTargetDoc->CopyPageDesc( *pSourcePageDesc, *pTargetPageDesc, sal_False );
+                    sModifiedStartingPageDesc = sNewPageDescName;
+                    lcl_CopyFollowPageDesc( *pTargetShell, *pSourcePageDesc, *pTargetPageDesc, nDocNo );
+                }
+            }
+            if(nDocNo == 1 || bPageStylesWithHeaderFooter)
+            {
+                pTargetView->GetDocShell()->_LoadStyles( *pWorkView->GetDocShell(), sal_True );
+            }
+            if(nDocNo > 1)
+            {
+                pTargetShell->InsertPageBreak( &sModifiedStartingPageDesc, nStartingPageNo );
+            }
+            else
+            {
+                pTargetShell->SetPageStyle(sModifiedStartingPageDesc);
+            }
+            USHORT nPageCountBefore = pTargetShell->GetPageCnt();
+            DBG_ASSERT(!pTargetShell->GetTableFmt(),"target document ends with a table - paragraph should be appended");
+            //#i51359# add a second paragraph in case there's only one
+            {
+                SwNodeIndex aIdx( pWorkDoc->GetNodes().GetEndOfExtras(), 2 );
+              SwPosition aTestPos( aIdx );
+              SwCursor aTestCrsr(aTestPos,0,false);
+                if(!aTestCrsr.MovePara(fnParaNext, fnParaStart))
+                {
+                    //append a paragraph
+                    pWorkDoc->AppendTxtNode( aTestPos );
+                }
+            }
+            pTargetShell->Paste( rWorkShell.GetDoc(), sal_True );
+            //convert fields in page styles (header/footer - has to be done after the first document has been pasted
+            if(1 == nDocNo)
+            {
+                pTargetShell->CalcLayout();
+                pTargetShell->ConvertFieldsToText();
+            }
+            //add the document info to the config item
+            SwDocMergeInfo aMergeInfo;
+            aMergeInfo.nStartPageInTarget = nPageCountBefore;
+            //#i72820# calculate layout to be able to find the correct page index
+            pTargetShell->CalcLayout();
+            aMergeInfo.nEndPageInTarget = pTargetShell->GetPageCnt();
+            aMergeInfo.nDBRow = nStartRow;
+            rMMConfig.AddMergedDocument( aMergeInfo );
+            ++nRet;
+
+            // the print monitor needs some time to act
+            for( USHORT i = 0; i < 25; i++)
+                Application::Reschedule();
+
+            //restore the ole DBMgr
+            pWorkDoc->SetNewDBMgr( pWorkDBMgr );
+            //now the temporary document should be closed
+            SfxObjectShellRef xDocSh(pWorkView->GetDocShell());
+            xDocSh->DoClose();
             nEndRow = pImpl->pMergeData->xResultSet->getRow();
             ++nDocNo;
         } while( !bCancel &&
@@ -3390,8 +3357,6 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     {
         DBG_ERROR("exception caught in SwNewDBMgr::MergeDocuments");
     }
-    if(sSourceDocURL.Len())
-        File::remove( sSourceDocURL );
     DELETEZ(pImpl->pMergeData);
     bInMerge = FALSE;
     return nRet;

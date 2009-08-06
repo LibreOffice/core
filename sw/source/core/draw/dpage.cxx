@@ -203,8 +203,8 @@ BOOL SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                     aPt -= pFly->Frm().Pos();
                     // ohne MapMode-Offset !!!!!
                     // ohne MapMode-Offset, ohne Offset, o ... !!!!!
-                    aPt = (Point&)(const Size&)pWindow->LogicToPixel(
-                            (const Size&)aPt, MapMode( MAP_TWIP ) );
+                    aPt = pWindow->LogicToPixel(
+                            aPt, MapMode( MAP_TWIP ) );
                     ((( sTxt += '?' ) += String::CreateFromInt32( aPt.X() ))
                              += ',' ) += String::CreateFromInt32( aPt.Y() );
                 }

@@ -1040,6 +1040,7 @@ public:
     UINT16 fExtChar :1; // 1000 =1, when using extended character set in file
     UINT16 fFarEast :1; // 4000 =1, probably, when far-East language vaiants of Word is used to create a file #i90932#
 
+    UINT16 fObfuscated :1; // 8000=1. specifies whether the document is obfuscated using XOR obfuscation. otherwise this bit MUST be ignored.
 
     UINT16 nFibBack;    // 0xc
     UINT16 nHash;       // 0xe  file encrypted hash
@@ -1434,6 +1435,7 @@ public:
 
     /* leider falsch, man braucht auch noch einen fuer den Export */
     WW8Fib( BYTE nVersion = 6 );
+    bool WriteHeader(SvStream& rStrm);
     bool Write(SvStream& rStrm);
     static rtl_TextEncoding GetFIBCharset(UINT16 chs);
     ww::WordVersion GetFIBVersion() const;

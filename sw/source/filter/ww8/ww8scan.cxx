@@ -5624,13 +5624,14 @@ WW8Fib::WW8Fib(BYTE nVer)
     // <-- #i90932#
 }
 
-bool WW8Fib::Write(SvStream& rStrm)
+bool WW8Fib::WriteHeader(SvStream& rStrm)
 {
-    BYTE *pDataPtr = new BYTE[ fcMin ];
-    BYTE *pData = pDataPtr;
-    memset( pData, 0, fcMin );
-
     bool bVer8 = 8 == nVersion;
+
+    size_t nUnencryptedHdr = bVer8 ? 0x44 : 0x24;
+    BYTE *pDataPtr = new BYTE[ nUnencryptedHdr ];
+    BYTE *pData = pDataPtr;
+    memset( pData, 0, nUnencryptedHdr );
 
     ULONG nPos = rStrm.Tell();
     cbMac = rStrm.Seek( STREAM_SEEK_TO_END );
@@ -5652,6 +5653,7 @@ bool WW8Fib::Write(SvStream& rStrm)
     if( fWhichTblStm )  nBits16 |= 0x0200;
     if( fExtChar )      nBits16 |= 0x1000;
     if( fFarEast )      nBits16 |= 0x4000;  // #i90932#
+    if( fObfuscated )   nBits16 |= 0x8000;
     Set_UInt16( pData, nBits16 );
 
     Set_UInt16( pData, nFibBack );
@@ -5696,6 +5698,27 @@ bool WW8Fib::Write(SvStream& rStrm)
 
     // Marke: "rglw"  Beginning of the array of longs
     Set_UInt32( pData, cbMac );
+
+    rStrm.Write( pDataPtr, nUnencryptedHdr );
+    delete[] pDataPtr;
+    return 0 == rStrm.GetError();
+}
+
+bool WW8Fib::Write(SvStream& rStrm)
+{
+    bool bVer8 = 8 == nVersion;
+
+    WriteHeader( rStrm );
+
+    size_t nUnencryptedHdr = bVer8 ? 0x44 : 0x24;
+
+    BYTE *pDataPtr = new BYTE[ fcMin - nUnencryptedHdr ];
+    BYTE *pData = pDataPtr;
+    memset( pData, 0, fcMin - nUnencryptedHdr );
+
+    ULONG nPos = rStrm.Tell();
+    cbMac = rStrm.Seek( STREAM_SEEK_TO_END );
+    rStrm.Seek( nPos );
 
     // 2 Longs uebergehen, da unwichtiger Quatsch
     pData += 2 * sizeof( INT32);
@@ -5905,7 +5928,7 @@ bool WW8Fib::Write(SvStream& rStrm)
         Set_UInt32( pData, 0);
     }
 
-    rStrm.Write( pDataPtr, fcMin );
+    rStrm.Write( pDataPtr, fcMin - nUnencryptedHdr );
     delete[] pDataPtr;
     return 0 == rStrm.GetError();
 }

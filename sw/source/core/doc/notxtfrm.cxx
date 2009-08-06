@@ -799,6 +799,34 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     }
 }
 
+void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, OutputDevice* pOut )
+{
+    if(!pOut)
+        return;
+    Rectangle aPxRect = pOut->LogicToPixel( rInArea.SVRect() );
+    Rectangle aNewPxRect( aPxRect );
+    while( aNewPxRect.Left() < aPxRect.Left() )
+    {
+        rAlignedGrfArea.Left( rAlignedGrfArea.Left()+1 );
+        aNewPxRect = pOut->LogicToPixel( rAlignedGrfArea.SVRect() );
+    }
+    while( aNewPxRect.Top() < aPxRect.Top() )
+    {
+        rAlignedGrfArea.Top( rAlignedGrfArea.Top()+1 );
+        aNewPxRect = pOut->LogicToPixel( rAlignedGrfArea.SVRect() );
+    }
+    while( aNewPxRect.Bottom() > aPxRect.Bottom() )
+    {
+        rAlignedGrfArea.Bottom( rAlignedGrfArea.Bottom()-1 );
+        aNewPxRect = pOut->LogicToPixel( rAlignedGrfArea.SVRect() );
+    }
+    while( aNewPxRect.Right() > aPxRect.Right() )
+    {
+        rAlignedGrfArea.Right( rAlignedGrfArea.Right()-1 );
+        aNewPxRect = pOut->LogicToPixel( rAlignedGrfArea.SVRect() );
+    }
+}
+
 // Ausgabe der Grafik. Hier wird entweder eine QuickDraw-Bmp oder
 // eine Grafik vorausgesetzt. Ist nichts davon vorhanden, wird
 // eine Ersatzdarstellung ausgegeben.
@@ -816,15 +844,30 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
     const BOOL bPrn = pOut == rNoTNd.getIDocumentDeviceAccess()->getPrinter( false ) ||
                           pOut->GetConnectMetaFile();
 
+    const bool bIsChart = pOLENd && ChartPrettyPainter::IsChart( pOLENd->GetOLEObj().GetObject() );
+
     /// OD 25.09.2002 #99739# - calculate aligned rectangle from parameter <rGrfArea>.
     ///     Use aligned rectangle <aAlignedGrfArea> instead of <rGrfArea> in
     ///     the following code.
     SwRect aAlignedGrfArea = rGrfArea;
     ::SwAlignRect( aAlignedGrfArea,  pShell );
-    /// OD 25.09.2002 #99739#
-    /// Because for drawing a graphic left-top-corner and size coordinations are
-    /// used, these coordinations have to be determined on pixel level.
-    ::SwAlignGrfRect( &aAlignedGrfArea, *pOut );
+
+    if( !bIsChart )
+    {
+        /// OD 25.09.2002 #99739#
+        /// Because for drawing a graphic left-top-corner and size coordinations are
+        /// used, these coordinations have to be determined on pixel level.
+        ::SwAlignGrfRect( &aAlignedGrfArea, *pOut );
+    }
+    else //if( bIsChart )
+    {
+        //#i78025# charts own borders are not completely visible
+        //the above pixel correction is not correct - at least not for charts
+        //so a different pixel correction is choosen here
+        //this might be a good idea for all other OLE objects also,
+        //but as I cannot oversee the consequences I fix it only for charts for now
+        lcl_correctlyAlignRect( aAlignedGrfArea, rGrfArea, pOut );
+     }
 
     if( pGrfNd )
     {
@@ -946,9 +989,8 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         if( bForceSwap )
             pGrfNd->SwapOut();
     }
-    else if( pOLENd
+    else if( bIsChart
         //charts must be painted resolution dependent!! #i82893#, #i75867#
-        && ChartPrettyPainter::IsChart(pOLENd->GetOLEObj().GetObject())
         && ChartPrettyPainter::ShouldPrettyPaintChartOnThisDevice( pOut )
         && svt::EmbeddedObjectRef::TryRunningState( pOLENd->GetOLEObj().GetOleRef() )
         && ChartPrettyPainter::DoPrettyPaintChart( uno::Reference< frame::XModel >(
