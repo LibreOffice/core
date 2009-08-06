@@ -5,7 +5,7 @@ HOSTNAME=`hostname`
 CURRENTDIR=`/bin/pwd`
 SDKTMPDIR=`dirname $0`
 OO_SDK_HOME=`(cd $SDKTMPDIR && pwd && cd $CURRENTDIR) | head -n 1`
-OOVERSION=`cat $OO_SDK_HOME/settings/dk.mk | tail -n +2 | head -n 1 | cut -d"=" -f2 | cut -d"." -f1,2`
+OOVERSION=`cat $OO_SDK_HOME/settings/dk.mk | tail -2 | head -n 1 | cut -d"=" -f2 | cut -d"." -f1,2`
 if [ "$OSTYPE" = "Darwin" ] 
 then
     OO_SDK_NAME=`basename $OO_SDK_HOME`
@@ -54,6 +54,7 @@ else
     echo " *"
     echo " ************************************************************************"
     echo 
+
     perl $OO_SDK_HOME/configure.pl $HOSTNAME $OO_SDK_HOME $OO_SDK_NAME
 
     . $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.sh

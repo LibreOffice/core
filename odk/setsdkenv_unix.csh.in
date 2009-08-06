@@ -112,9 +112,9 @@ switch (`${OO_SDK_HOME}/config.guess | cut -d"-" -f3,4`)
 
     # set LD_LIBRARY_PATH
     if ( $?LD_LIBARY_PATH == 0) then
-	setenv LD_LIBRARY_PATH ${OO_SDK_OUT}/${directoryname}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.
+	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.
     else
-	setenv LD_LIBRARY_PATH ${OO_SDK_OUT}/${directoryname}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
+	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
     endif
   breaksw
 
@@ -134,9 +134,9 @@ switch (`${OO_SDK_HOME}/config.guess | cut -d"-" -f3,4`)
 
     # set LD_LIBRARY_PATH
     if ( $?LD_LIBARY_PATH == 0) then
-	setenv LD_LIBRARY_PATH ${OO_SDK_OUT}/${directoryname}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.
+	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.
     else
-	setenv LD_LIBRARY_PATH ${OO_SDK_OUT}/${directoryname}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
+	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
     endif
   breaksw
 
@@ -178,9 +178,9 @@ switch (`${OO_SDK_HOME}/config.guess | cut -d"-" -f3,4`)
 
     # set LD_LIBRARY_PATH
     if ( $?LD_LIBARY_PATH == 0) then
-	setenv LD_LIBRARY_PATH ${OO_SDK_OUT}/${directoryname}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.
+	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.
     else
-	setenv LD_LIBRARY_PATH ${OO_SDK_OUT}/${directoryname}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
+	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
     endif
 
     if ( -e "/sbin/sysctl" ) then
@@ -246,7 +246,8 @@ if [ "${platform}" == "MacOSX" ] then
     rm -f "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppu.so" \
 	"${OO_SDK_OUT}/${directoryname}/lib/libuno_cppuhelper${comid}.${soext}" \
 	"${OO_SDK_OUT}/${directoryname}/lib/libuno_sal.${soext}" \
-	"${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}"
+	"${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}" \
+	"${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}"
 
     if ( -e "${OO_SDK_OUT}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}" ) then
 	rm -rf "${OO_SDK_OUT}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}"
@@ -262,6 +263,8 @@ if [ "${platform}" == "MacOSX" ] then
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_sal.${soext}"
 	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_salhelper${comid}.${soext}.3" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}"
+	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_purpenvhelper${comid}.${soext}.3" \
+	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}"
 
 	if ( -r "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}${STLDEBUG}.${soext}" ) then
 	    ln -s "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}${STLDEBUG}.${soext}" \
