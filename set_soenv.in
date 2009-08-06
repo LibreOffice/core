@@ -86,7 +86,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $SHELL,
      $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $FRAMEWORKSHOME, $COMEX, $PERL, 
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME, 
-     $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TEMP,
+     $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB,
 	 $PROEXT,
@@ -1942,9 +1942,12 @@ ToFile( "CRYPT_LINK",        "@CRYPT_LINK@",       "e" );
 ToFile( "XAU_LIBS",          "@XAU_LIBS@",         "e" );
 ToFile( "GXX_INCLUDE_PATH",  PathFormat("@GXX_INCLUDE_PATH@"), "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );
-if ($platform !~ m/cygwin|os2/)
-{  ToFile( "TEMP",              $TEMP,              "e" );
-   ToFile( "TMP",               $TEMP,              "e" );
+if ($platform !~ m/cygwin|os2/) {
+   if ( $ENV{"TMPDIR"} eq "" ) {
+      ToFile( "TMPDIR",      "/tmp",               "e" );
+   } else {
+      ToFile( "TMPDIR",      "$ENV{'TMPDIR'}",     "e" );
+   }
 }
 ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
 if ( $platform =~ m/cygwin/ )

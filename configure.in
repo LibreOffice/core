@@ -2122,6 +2122,10 @@ if test "$GXX" = "yes"; then
          with_gxx_include_path=`cygpath -d "$with_gxx_include_path"`
          with_gxx_include_path=`cygpath -u "$with_gxx_include_path"`
       fi
+      if echo $with_gxx_include_path | grep -q linux; then
+         # workaround for Mandriva - issue 100049
+         with_gxx_include_path=`cd $with_gxx_include_path && pwd`
+      fi
    fi
 fi
 dnl This is the original code...
