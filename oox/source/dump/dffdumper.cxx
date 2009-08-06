@@ -43,12 +43,14 @@ namespace {
 
 const sal_uInt16 DFF_ID_BSE                 = 0xF007;   /// BLIP store entry.
 const sal_uInt16 DFF_ID_BSTORECONTAINER     = 0xF001;   /// BLIP store container.
+const sal_uInt16 DFF_ID_CHILDANCHOR         = 0xF00F;   /// Child anchor (in groups).
 const sal_uInt16 DFF_ID_CLIENTANCHOR        = 0xF010;   /// Client anchor.
 const sal_uInt16 DFF_ID_DG                  = 0xF008;   /// Drawing.
 const sal_uInt16 DFF_ID_DGG                 = 0xF006;   /// Drawing group.
 const sal_uInt16 DFF_ID_OPT                 = 0xF00B;   /// Property set.
 const sal_uInt16 DFF_ID_SP                  = 0xF00A;   /// Shape.
 const sal_uInt16 DFF_ID_SPGR                = 0xF009;   /// Shape group.
+const sal_uInt16 DFF_ID_SPLITMENUCOLORS     = 0xF11E;   /// Current toolbar colors.
 
 } // namespace
 
@@ -85,6 +87,7 @@ void DffStreamObject::implWriteExtHeader()
         case DFF_ID_DG:                 pcListName = "DFFDG-RECORD-INST";           break;  // drawing ID
         case DFF_ID_OPT:                pcListName = "DFFOPT-RECORD-INST";          break;  // property count
         case DFF_ID_SP:                 pcListName = "DFFSP-RECORD-INST";           break;  // shape type
+        case DFF_ID_SPLITMENUCOLORS:    pcListName = "DFFSPLITMENUC-RECORD-INST";   break;  // number of colors
     }
     MultiItemsGuard aMultiGuard( out() );
     writeHexItem( "instance", mnInstVer, pcListName );
@@ -106,6 +109,13 @@ void DffStreamObject::implDumpRecordBody()
             dumpDec< sal_uInt8 >( "blip-usage", "DFFBSE-USAGE" );
             dumpDec< sal_uInt8 >( "blip-name-len" );
             dumpUnused( 2 );
+        break;
+
+        case DFF_ID_CHILDANCHOR:
+            dumpDec< sal_uInt32 >( "left" );
+            dumpDec< sal_uInt32 >( "top" );
+            dumpDec< sal_uInt32 >( "right" );
+            dumpDec< sal_uInt32 >( "bottom" );
         break;
 
         case DFF_ID_CLIENTANCHOR:
@@ -130,7 +140,7 @@ void DffStreamObject::implDumpRecordBody()
                 MultiItemsGuard aMultiGuard( out() );
                 writeEmptyItem( "#cluster" );
                 dumpDec< sal_uInt32 >( "drawing-id" );
-                dumpHex< sal_uInt32 >( "max-shape-id", "CONV-DEC" );
+                dumpHex< sal_uInt32 >( "next-free-id", "CONV-DEC" );
             }
         }
         break;
@@ -159,6 +169,13 @@ void DffStreamObject::implDumpRecordBody()
             dumpDec< sal_uInt32 >( "right" );
             dumpDec< sal_uInt32 >( "bottom" );
         break;
+
+        case DFF_ID_SPLITMENUCOLORS:
+            dumpDffColor( "fill-color" );
+            dumpDffColor( "line-color" );
+            dumpDffColor( "shadow-color" );
+            dumpDffColor( "3d-color" );
+        break;
     }
 }
 
@@ -170,6 +187,11 @@ void DffStreamObject::constructDffObj()
 {
     mnInstVer = 0;
     mnRealSize = 0;
+}
+
+sal_uInt32 DffStreamObject::dumpDffColor( const String& rName )
+{
+    return dumpHex< sal_uInt32 >( rName, "DFF-COLOR" );
 }
 
 sal_uInt16 DffStreamObject::dumpDffOptPropHeader()

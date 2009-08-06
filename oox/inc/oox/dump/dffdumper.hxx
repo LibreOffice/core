@@ -62,6 +62,8 @@ protected:
 private:
     void                constructDffObj();
 
+    sal_uInt32          dumpDffColor( const String& rName );
+
     sal_uInt16          dumpDffOptPropHeader();
     void                dumpDffOptPropValue( sal_uInt16 nPropId, sal_uInt32 nValue );
 
