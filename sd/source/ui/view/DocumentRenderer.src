@@ -124,6 +124,14 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     {
         Text [ en-US ] = "Specifies whether to print the page name of a document.";
     };
+    String _STR_DRAW_PRINT_UI_IS_PRINT_NAME
+    {
+        Text [ en-US ] = "P~age name";
+    };
+    String _STR_DRAW_PRINT_UI_IS_PRINT_NAME_HELP
+    {
+        Text [ en-US ] = "Specifies whether to print the page name of a document.";
+    };
     String _STR_IMPRESS_PRINT_UI_IS_PRINT_DATE
     {
         Text [ en-US ] = "~Date and time";
