@@ -674,40 +674,38 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 break;
 
             uno::Sequence < beans::PropertyValue > aProps;
-            if ( bIsAPI )
+            
+            // supported properties:
+            // String PrinterName 
+            // String FileName
+            // Int16 From 
+            // Int16 To 
+            // In16 Copies
+            // String RangeText
+            // bool Selection 
+            // bool Asynchron
+            // bool Collate 
+            // bool Silent
+            TransformItems( nId, *rReq.GetArgs(), aProps, GetInterface()->GetSlot(nId) );
+            for ( sal_Int32 nProp=0; nProp<aProps.getLength(); nProp++ )
             {
-                // supported properties:
-                // String PrinterName 
-                // String FileName
-                // Int16 From 
-                // Int16 To 
-                // In16 Copies
-                // String RangeText
-                // bool Selection 
-                // bool Asynchron
-                // bool Collate 
-                // bool Silent
-                TransformItems( nId, *rReq.GetArgs(), aProps, GetInterface()->GetSlot(nId) );
-                for ( sal_Int32 nProp=0; nProp<aProps.getLength(); nProp++ )
+                if ( aProps[nProp].Name.equalsAscii("Copies") )
+                    aProps[nProp]. Name = rtl::OUString::createFromAscii("CopyCount");
+                else if ( aProps[nProp].Name.equalsAscii("RangeText") )
+                    aProps[nProp]. Name = rtl::OUString::createFromAscii("Pages");
+                if ( aProps[nProp].Name.equalsAscii("Asynchron") )
                 {
-                    if ( aProps[nProp].Name.equalsAscii("Copies") )
-                        aProps[nProp]. Name = rtl::OUString::createFromAscii("CopyCount");
-                    else if ( aProps[nProp].Name.equalsAscii("RangeText") )
-                        aProps[nProp]. Name = rtl::OUString::createFromAscii("Pages");
-                    if ( aProps[nProp].Name.equalsAscii("Asynchron") )
-                    {
-                        aProps[nProp]. Name = rtl::OUString::createFromAscii("Wait");
-                        sal_Bool bAsynchron = sal_False;
-                        aProps[nProp].Value >>= bAsynchron;
-                        aProps[nProp].Value <<= (sal_Bool) (!bAsynchron);
-                    }
-                    if ( aProps[nProp].Name.equalsAscii("Silent") )
-                    {
-                        aProps[nProp]. Name = rtl::OUString::createFromAscii("MonitorVisible");
-                        sal_Bool bPrintSilent = sal_False;
-                        aProps[nProp].Value >>= bPrintSilent;
-                        aProps[nProp].Value <<= (sal_Bool) (!bPrintSilent);
-                    }
+                    aProps[nProp]. Name = rtl::OUString::createFromAscii("Wait");
+                    sal_Bool bAsynchron = sal_False;
+                    aProps[nProp].Value >>= bAsynchron;
+                    aProps[nProp].Value <<= (sal_Bool) (!bAsynchron);
+                }
+                if ( aProps[nProp].Name.equalsAscii("Silent") )
+                {
+                    aProps[nProp]. Name = rtl::OUString::createFromAscii("MonitorVisible");
+                    sal_Bool bPrintSilent = sal_False;
+                    aProps[nProp].Value >>= bPrintSilent;
+                    aProps[nProp].Value <<= (sal_Bool) (!bPrintSilent);
                 }
             }
 
