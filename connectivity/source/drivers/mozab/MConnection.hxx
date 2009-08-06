@@ -51,7 +51,6 @@ namespace connectivity
     namespace mozab
     {
 
-        class OStatement_Base;
         class MozabDriver;
         class ODatabaseMetaData;
         class MNameMapper;

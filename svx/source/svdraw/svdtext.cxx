@@ -61,10 +61,19 @@ void SdrText::CheckPortionInfo( SdrOutliner& rOutliner )
 {
     if(!mbPortionInfoChecked)
     {
+        // #i102062# no action when the Outliner is the HitTestOutliner,
+        // this will remove WrongList info at the OPO
+        if(mpModel && &rOutliner == &mpModel->GetHitTestOutliner())
+            return;
+
         // Optimierung: ggf. BigTextObject erzeugen
         mbPortionInfoChecked=true;
         if(mpOutlinerParaObject!=NULL && rOutliner.ShouldCreateBigTextObject())
-            mpOutlinerParaObject= rOutliner.CreateParaObject();
+        {
+            // #i102062# MemoryLeak closed
+            delete mpOutlinerParaObject;
+            mpOutlinerParaObject = rOutliner.CreateParaObject();
+        }
     }
 }
 

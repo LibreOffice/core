@@ -305,6 +305,8 @@ public:
 
         //---------------------------------------------------------------------
         oslThreadIdentifier m_nFilePickerThreadId;
+
+        bool m_bInitialized;
 };
 
 } // namespace vista

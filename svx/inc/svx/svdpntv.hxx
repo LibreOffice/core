@@ -320,8 +320,8 @@ public:
     USHORT GetHitTolerancePixel() const { return (USHORT)nHitTolPix; }
 
     // data read access on logic HitTolerance and MinMoveTolerance
-    const USHORT getHitTolLog() const { return nHitTolLog; }
-    const USHORT getMinMovLog() const { return nMinMovLog; }
+    USHORT getHitTolLog() const { return nHitTolLog; }
+    USHORT getMinMovLog() const { return nMinMovLog; }
 
     // Flag zur Visualisierung von Gruppen abfragen/testen
     BOOL DoVisualizeEnteredGroup() const { return bVisualizeEnteredGroup; }

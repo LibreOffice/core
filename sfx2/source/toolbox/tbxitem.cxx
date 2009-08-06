@@ -1029,6 +1029,25 @@ void SfxToolBoxControl::Select( USHORT nModifier )
 
 void SfxToolBoxControl::Select( BOOL /*bMod1*/ )
 {
+    if(::comphelper::UiEventsLogger::isEnabled()) //#i88653# #i102805#
+    {
+        ::rtl::OUString sAppName;
+        try
+        {
+            static ::rtl::OUString our_aModuleManagerName = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager =
+                ::comphelper::getProcessServiceFactory();
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleManager(
+                xServiceManager->createInstance(our_aModuleManagerName)
+                , ::com::sun::star::uno::UNO_QUERY_THROW);
+            sAppName = xModuleManager->identify(m_xFrame);
+        } catch(::com::sun::star::uno::Exception&) {}
+        Sequence<PropertyValue> vSource;
+        ::comphelper::UiEventsLogger::appendDispatchOrigin(vSource, sAppName, ::rtl::OUString::createFromAscii("SfxToolBoxControl"));
+        URL aURL;
+        aURL.Complete = m_aCommandURL;
+        ::comphelper::UiEventsLogger::logDispatch(aURL, vSource);
+    }
     svt::ToolboxController::execute( pImpl->nSelectModifier );
 }
 

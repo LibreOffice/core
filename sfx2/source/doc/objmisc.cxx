@@ -84,6 +84,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/configurationhelper.hxx>
 
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -2246,6 +2247,33 @@ sal_Bool SfxObjectShell::UseInteractionToHandleError(
         }
         catch( uno::Exception& )
         {}
+    }
+
+    return bResult;
+}
+
+sal_Bool SfxObjectShell_Impl::NeedsOfficeUpdateDialog()
+{
+    // if the configuration is not available for any reason, the default behavior is to show the message
+    sal_Bool bResult = sal_True;
+
+    try
+    {
+        uno::Reference< lang::XMultiServiceFactory > xServiceManager( ::comphelper::getProcessServiceFactory(), uno::UNO_SET_THROW );
+        uno::Reference< uno::XInterface > xCommonConfig(
+                        ::comphelper::ConfigurationHelper::openConfig(
+                            xServiceManager,
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common" ) ),
+                            ::comphelper::ConfigurationHelper::E_STANDARD ),
+                        uno::UNO_SET_THROW );
+
+        ::comphelper::ConfigurationHelper::readRelativeKey(
+                        xCommonConfig,
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Load/" ) ),
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ShowOfficeUpdateDialog" ) ) ) >>= bResult;
+    }
+    catch( uno::Exception& )
+    {
     }
 
     return bResult;

@@ -568,7 +568,7 @@ long SfxMedium::GetFileVersion() const
 //------------------------------------------------------------------
 void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
 {
-    GetInitFileDate();
+    GetInitFileDate( sal_True );
     if ( pImp->m_aDateTime.Seconds != aInitDate.Seconds
       || pImp->m_aDateTime.Minutes != aInitDate.Minutes
       || pImp->m_aDateTime.Hours != aInitDate.Hours
@@ -576,40 +576,43 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
       || pImp->m_aDateTime.Month != aInitDate.Month
       || pImp->m_aDateTime.Year != aInitDate.Year )
     {
-        if ( !IsSystemFileLockingUsed() )
+        uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
+
+        if ( xHandler.is() )
         {
-            uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
-
-            if ( xHandler.is() )
+            try
             {
-                try
+                ::rtl::Reference< ::ucbhelper::InteractionRequest > xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
+                    document::ChangedByOthersRequest() ) );
+                uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
+                aContinuations[0] = new ::ucbhelper::InteractionAbort( xInteractionRequestImpl.get() );
+                aContinuations[1] = new ::ucbhelper::InteractionApprove( xInteractionRequestImpl.get() );
+                xInteractionRequestImpl->setContinuations( aContinuations );
+
+                xHandler->handle( xInteractionRequestImpl.get() );
+
+                ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xInteractionRequestImpl->getSelection();
+                if ( uno::Reference< task::XInteractionAbort >( xSelected.get(), uno::UNO_QUERY ).is() )
                 {
-                    ::rtl::Reference< ::ucbhelper::InteractionRequest > xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
-                        document::ChangedByOthersRequest() ) );
-                    uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
-                    aContinuations[0] = new ::ucbhelper::InteractionAbort( xInteractionRequestImpl.get() );
-                    aContinuations[1] = new ::ucbhelper::InteractionApprove( xInteractionRequestImpl.get() );
-                    xInteractionRequestImpl->setContinuations( aContinuations );
-
-                    xHandler->handle( xInteractionRequestImpl.get() );
-
-                    ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xInteractionRequestImpl->getSelection();
-                    if ( uno::Reference< task::XInteractionAbort >( xSelected.get(), uno::UNO_QUERY ).is() )
-                    {
-                        SetError( ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
-                    }
+                    SetError( ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                 }
-                catch ( uno::Exception& )
-                {}
             }
+            catch ( uno::Exception& )
+            {}
         }
     }
 }
 
 //------------------------------------------------------------------
-util::DateTime SfxMedium::GetInitFileDate()
+sal_Bool SfxMedium::DocNeedsFileDateCheck()
 {
-    if ( !pImp->m_bGotDateTime && GetContent().is() )
+    return ( !IsReadOnly() && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) );
+}
+
+//------------------------------------------------------------------
+util::DateTime SfxMedium::GetInitFileDate( sal_Bool bIgnoreOldValue )
+{
+    if ( ( bIgnoreOldValue || !pImp->m_bGotDateTime ) && GetContent().is() )
     {
         try
         {
@@ -866,11 +869,8 @@ sal_Bool SfxMedium::Commit()
 
     sal_Bool bResult = ( GetError() == SVSTREAM_OK );
 
-    if ( bResult )
-    {
-        pImp->m_bGotDateTime = sal_False;
-        GetInitFileDate();
-    }
+    if ( bResult && DocNeedsFileDateCheck() )
+        GetInitFileDate( sal_True );
 
     // remove truncation mode from the flags
     nStorOpenMode &= (~STREAM_TRUNC);
@@ -1399,6 +1399,10 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
         else
             GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
     }
+
+    // when the file is locked, get the current file date
+    if ( bResult && DocNeedsFileDateCheck() )
+        GetInitFileDate( sal_True );
 
     return bResult;
 }
@@ -2661,8 +2665,6 @@ void SfxMedium::GetMedium_Impl()
             else if ( pImp->xInputStream.is() )
                 pInStream = utl::UcbStreamHelper::CreateStream( pImp->xInputStream );
         }
-
-        GetInitFileDate();
 
         pImp->bDownloadDone = sal_True;
         pImp->aDoneLink.ClearPendingCall();

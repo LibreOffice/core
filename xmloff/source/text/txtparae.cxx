@@ -966,23 +966,29 @@ void XMLTextParagraphExport::exportListChange(
                 // <text:list-header> or <text:list-item>
                 GetExport().CheckAttrList();
 
-                if ( nListLevelsToBeOpened == 1 &&
-                     rNextInfo.HasStartValue() )
+                // --> OD 2009-06-24 #i97309#
+                // export start value in case of <bRestartNumberingAtContinuedRootList>
+                // at correct list item
+                if ( nListLevelsToBeOpened == 1 )
                 {
-                    OUStringBuffer aBuffer;
-                    aBuffer.append( (sal_Int32)rNextInfo.GetStartValue() );
-                    GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
-                                  aBuffer.makeStringAndClear() );
+                    if ( rNextInfo.HasStartValue() )
+                    {
+                        OUStringBuffer aBuffer;
+                        aBuffer.append( (sal_Int32)rNextInfo.GetStartValue() );
+                        GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
+                                      aBuffer.makeStringAndClear() );
+                    }
+                    else if ( bRestartNumberingAtContinuedRootList )
+                    {
+                        OUStringBuffer aBuffer;
+                        aBuffer.append( (sal_Int32)nRestartValueForContinuedRootList );
+                        GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                                  XML_START_VALUE,
+                                                  aBuffer.makeStringAndClear() );
+                        bRestartNumberingAtContinuedRootList = false;
+                    }
                 }
-                else if ( bRestartNumberingAtContinuedRootList )
-                {
-                    OUStringBuffer aBuffer;
-                    aBuffer.append( (sal_Int32)nRestartValueForContinuedRootList );
-                    GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                              XML_START_VALUE,
-                                              aBuffer.makeStringAndClear() );
-                    bRestartNumberingAtContinuedRootList = false;
-                }
+                // <--
 
                 eLName = ( rNextInfo.IsNumbered() || nListLevelsToBeOpened > 1 )
                          ? XML_LIST_ITEM

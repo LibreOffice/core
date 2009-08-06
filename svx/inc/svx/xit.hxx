@@ -54,7 +54,7 @@ typedef BOOL (*SvxCompareValueFunc)( const NameOrIndex* p1, const NameOrIndex* p
 //-------------------
 class SVX_DLLPUBLIC NameOrIndex : public SfxStringItem
 {
-    long    nPalIndex;
+    INT32    nPalIndex;
 
 protected:
     void    Detach()    { nPalIndex = -1; }
@@ -62,7 +62,7 @@ protected:
 public:
             TYPEINFO();
             NameOrIndex() { nPalIndex = -1; }
-            NameOrIndex(USHORT nWhich, long nIndex);
+            NameOrIndex(USHORT nWhich, INT32 nIndex);
             NameOrIndex(USHORT nWhich,
                         const String& rName= String());
             NameOrIndex(USHORT nWhich, SvStream& rIn);
@@ -76,8 +76,8 @@ public:
 
             String       GetName() const              { return GetValue();   }
             void         SetName(const String& rName) { SetValue(rName);     }
-            long         GetIndex() const             { return nPalIndex;    }
-            void         SetIndex(long nIndex)        { nPalIndex = nIndex;  }
+            INT32        GetIndex() const             { return nPalIndex;    }
+            void         SetIndex(INT32 nIndex)        { nPalIndex = nIndex;  }
             BOOL         IsIndex() const          { return (nPalIndex >= 0); }
 
     /** this static checks if the given NameOrIndex item has a unique name for its value.

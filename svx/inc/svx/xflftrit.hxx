@@ -50,7 +50,7 @@ public:
                             TYPEINFO();
 
                             XFillFloatTransparenceItem();
-                            XFillFloatTransparenceItem( long nIndex, const XGradient& rGradient, BOOL bEnable = TRUE );
+                            XFillFloatTransparenceItem( INT32 nIndex, const XGradient& rGradient, BOOL bEnable = TRUE );
                             XFillFloatTransparenceItem(const String& rName, const XGradient& rGradient, BOOL bEnable = TRUE );
                             XFillFloatTransparenceItem(SfxItemPool* pPool, const XGradient& rTheGradient, BOOL bEnable = TRUE );
                             XFillFloatTransparenceItem(SfxItemPool* pPool );

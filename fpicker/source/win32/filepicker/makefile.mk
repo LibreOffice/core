@@ -79,7 +79,8 @@ SLOFILES=$(SLO)$/FileOpenDlg.obj\
          $(SLO)$/asyncrequests.obj\
          $(SLO)$/VistaFilePickerEventHandler.obj\
          $(SLO)$/VistaFilePickerImpl.obj\
-         $(SLO)$/VistaFilePicker.obj
+         $(SLO)$/VistaFilePicker.obj\
+         $(SLO)$/SolarMutex.obj
 
 # --- Targets ------------------------------------------------------
 

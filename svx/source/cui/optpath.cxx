@@ -41,6 +41,7 @@
 #include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <sfx2/app.hxx>
 #include <svtools/pickerhelper.hxx>
 #include <svtools/aeitem.hxx>
 #include <svtools/svtabbx.hxx>
@@ -52,6 +53,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/moduleoptions.hxx>
+#include <svtools/viewoptions.hxx>
 
 #define _SVX_OPTPATH_CXX
 
@@ -62,6 +64,7 @@
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
 #include <comphelper/processfactory.hxx>
+#include <comphelper/configurationhelper.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -91,6 +94,7 @@ using namespace svx;
 #define POSTFIX_WRITABLE    String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_writable" ) )
 #define POSTFIX_READONLY    String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_readonly" ) )
 #define VAR_ONE             String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "%1" ) )
+#define IODLG_CONFIGNAME    String(DEFINE_CONST_UNICODE("FilePicker_Save"))
 
 // struct OptPath_Impl ---------------------------------------------------
 
@@ -536,6 +540,26 @@ void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
         pPathImpl = (PathUserData_Impl*)pPathBox->GetEntry(nPos)->GetUserData();
         pPathImpl->eState = SFX_ITEM_SET;
         pPathImpl->sWritablePath = sNewPathStr;
+        if ( SvtPathOptions::PATH_WORK == pPathImpl->nRealId )
+        {
+            // Remove view options entry so the new work path
+            // will be used for the next open dialog.
+            SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
+            aDlgOpt.Delete();
+            // Reset also last used dir in the sfx application instance
+            SfxApplication *pSfxApp = SFX_APP();
+            pSfxApp->ResetLastDir();
+
+            // Set configuration flag to notify file picker that it's necessary
+            // to take over the path provided.
+            Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+            ::comphelper::ConfigurationHelper::writeDirectKey(xFactory,
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/")),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Path/Info")),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WorkPathChanged")),
+                ::com::sun::star::uno::makeAny(true),
+                ::comphelper::ConfigurationHelper::E_STANDARD);
+        }
     }
 }
 

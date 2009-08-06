@@ -538,6 +538,19 @@ void E3dScene::operator=(const SdrObject& rObj)
 
     // #110988#
     ImpCleanup3DDepthMapper();
+
+    // #i101941#
+    // After a Scene as model object is cloned, the used
+    // ViewContactOfE3dScene is created and partially used
+    // to calculate Bound/SnapRects, but - since quite some
+    // values are buffered at the VC - not really well
+    // initialized. It would be possible to always watch for
+    // preconditions of buffered data, but this would be expensive
+    // and would create a lot of short living data structures.
+    // It is currently better to flush that data, e.g. by using
+    // ActionChanged at the VC which will for this class
+    // flush that cached data and initalize it's valid reconstruction
+    GetViewContact().ActionChanged();
 }
 
 /*************************************************************************

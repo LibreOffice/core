@@ -30,6 +30,7 @@
 
 #include "asyncrequests.hxx"
 #include <vcl/svapp.hxx>
+#include <vos/mutex.hxx>
 
 //-----------------------------------------------------------------------------
 // namespace
@@ -53,7 +54,7 @@ void lcl_sleep(::osl::Condition& aCondition   ,
     {
         TimeValue aTime;
         aTime.Seconds = (nMilliSeconds / 1000);
-        aTime.Nanosec = (nMilliSeconds % 1000);
+        aTime.Nanosec = (nMilliSeconds % 1000) * 1000000;
         aCondition.wait(&aTime);
     }
 
@@ -68,6 +69,7 @@ void Request::wait(::sal_Int32 nMilliSeconds)
 
 void Request::waitProcessMessages()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     while (!m_aJoiner.check())
         Application::Yield();
 }

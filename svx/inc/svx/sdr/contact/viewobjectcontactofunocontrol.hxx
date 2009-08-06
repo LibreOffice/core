@@ -153,6 +153,8 @@ namespace sdr { namespace contact {
         UnoControlPrintOrPreviewContact();                                                 // never implemented
         UnoControlPrintOrPreviewContact( const UnoControlPrintOrPreviewContact& );            // never implemented
         UnoControlPrintOrPreviewContact& operator=( const UnoControlPrintOrPreviewContact& ); // never implemented
+
+        virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo ) const;
     };
 
     //====================================================================
