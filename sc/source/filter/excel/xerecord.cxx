@@ -49,16 +49,10 @@ void XclExpRecordBase::SaveXml( XclExpXmlStream& /*rStrm*/ )
 {
 }
 
-//UNUSED2008-05  void XclExpRecordBase::SaveRepeated( XclExpStream& rStrm, size_t nCount )
-//UNUSED2008-05  {
-//UNUSED2008-05      for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
-//UNUSED2008-05          Save( rStrm );
-//UNUSED2008-05  }
-
 // ----------------------------------------------------------------------------
 
-XclExpDelegatingRecord::XclExpDelegatingRecord( XclExpRecordBase* pRecord )
-    : mpRecord( pRecord )
+XclExpDelegatingRecord::XclExpDelegatingRecord( XclExpRecordBase* pRecord ) :
+    mpRecord( pRecord )
 {
 }
 
@@ -70,9 +64,8 @@ XclExpDelegatingRecord::~XclExpDelegatingRecord()
 
 void XclExpDelegatingRecord::SaveXml( XclExpXmlStream& rStrm )
 {
-    if( !mpRecord )
-        return;
-    mpRecord->SaveXml( rStrm );
+    if( mpRecord )
+        mpRecord->SaveXml( rStrm );
 }
 
 // ----------------------------------------------------------------------------

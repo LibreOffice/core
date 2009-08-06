@@ -324,8 +324,12 @@ struct XclObjAnchor : public XclRange
 
     /** Calculates a rectangle from the contained coordinates. */
     Rectangle           GetRect( ScDocument& rDoc, SCTAB nScTab, MapUnit eMapUnit ) const;
-    /** Initializes the anchor coordinates from a rectangle. */
+    /** Initializes the anchor coordinates for a sheet. */
     void                SetRect( ScDocument& rDoc, SCTAB nScTab, const Rectangle& rRect, MapUnit eMapUnit );
+
+    /** Initializes the anchor coordinates for an embedded draw page. */
+    void                SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY,
+                            const Rectangle& rRect, MapUnit eMapUnit, bool bDffAnchor );
 };
 
 template< typename StreamType >

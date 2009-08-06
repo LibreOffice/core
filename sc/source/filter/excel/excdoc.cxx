@@ -203,8 +203,6 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     UINT16  nExcTabCount    = rTabInfo.GetXclTabCount();
     UINT16  nCodenames      = static_cast< UINT16 >( GetExtDocOptions().GetCodeNameCount() );
 
-    rR.pObjRecs = NULL;             // per sheet
-
     if( GetBiff() <= EXC_BIFF5 )
         Add( new ExcDummy_00 );
     else
@@ -362,7 +360,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
             lcl_AddCalcPr( aRecList, *this );
 
         // MSODRAWINGGROUP per-document data
-        Add( new XclExpMsoDrawingGroup( GetRoot() ) );
+        aRecList.AppendRecord( GetObjectManager().CreateDrawingGroup() );
         // Shared string table: SST, EXTSST
         aRecList.AppendRecord( CreateRecord( EXC_ID_SST ) );
     }
@@ -382,9 +380,8 @@ void ExcTable::FillAsTable( size_t nCodeNameIdx )
     DBG_ASSERT( (mnScTab >= 0L) && (mnScTab <= MAXTAB), "-ExcTable::Table(): mnScTab - no ordinary table!" );
     DBG_ASSERT( nExcTab <= static_cast<sal_uInt16>(MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
 
-    if ( eBiff == EXC_BIFF8 )
-        // list holding OBJ records and creating MSODRAWING per-sheet data
-        rR.pObjRecs = new XclExpObjList( GetRoot() );
+    // create a new OBJ list for this sheet (may be used by notes, autofilter, data validation)
+    GetObjectManager().StartSheet();
 
     // cell table: DEFROWHEIGHT, DEFCOLWIDTH, COLINFO, DIMENSIONS, ROW, cell records
     mxCellTable.reset( new XclExpCellTable( GetRoot() ) );
@@ -448,13 +445,8 @@ void ExcTable::FillAsTable( size_t nCodeNameIdx )
 
     if( eBiff == EXC_BIFF8 )
     {
-        GetObjectManager().AddSdrPage();
-        //! close Escher group shape and ESCHER_DgContainer
-        //! opened by XclExpObjList ctor MSODRAWING
-        rR.pObjRecs->EndSheet();
         // all MSODRAWING and OBJ stuff of this sheet goes here
-        Add( rR.pObjRecs );
-
+        aRecList.AppendRecord( GetObjectManager().ProcessDrawing( GetSdrPage( mnScTab ) ) );
         // pivot tables
         aRecList.AppendRecord( GetPivotTableManager().CreatePivotTablesRecord( mnScTab ) );
     }
@@ -690,7 +682,7 @@ void ExcDocument::ReadDoc( void )
     if ( GetBiff() == EXC_BIFF8 )
     {
         // complete temporary Escher stream
-        GetObjectManager().GetEx().EndDocument();
+        GetObjectManager().EndDocument();
 
         // change tracking
         if ( GetDoc().GetChangeTrack() )
@@ -704,9 +696,6 @@ void ExcDocument::Write( SvStream& rSvStrm )
     if( !maTableList.IsEmpty() )
     {
         InitializeSave();
-
-        if( GetBiff() == EXC_BIFF8 )
-            GetObjectManager().GetStrm().Seek(0);   // ready for take off
 
         XclExpStream aXclStrm( rSvStrm, GetRoot() );
 
@@ -740,9 +729,6 @@ void ExcDocument::WriteXml( SvStream& rStrm )
         InitializeSave();
 
         XclExpXmlStream aStrm( ::comphelper::getProcessServiceFactory(), rStrm, GetRoot() );
-
-        // DFF not needed in MSOOXML export
-//        GetObjectManager().GetStrm().Seek(0);   // ready for take off
 
         sax_fastparser::FSHelperPtr& rWorkbook = aStrm.GetCurrentStream();
         rWorkbook->startElement( XML_workbook,

@@ -31,6 +31,7 @@
 #ifndef SC_XCL97ESC_HXX
 #define SC_XCL97ESC_HXX
 
+#include <memory>
 #include <svx/escherex.hxx>
 #include <tools/table.hxx>
 #include <tools/stack.hxx>
@@ -42,10 +43,28 @@
 
 namespace utl { class TempFile; }
 
-// --- class XclEscherEx ---------------------------------------------
+// ============================================================================
 
 class SvStream;
+
+class XclEscherExGlobal : public EscherExGlobal, protected XclExpRoot
+{
+public:
+    explicit            XclEscherExGlobal( const XclExpRoot& rRoot );
+
+private:
+    /** Overloaded to create a new temporary file and return its stream. */
+    virtual SvStream*   ImplQueryPictureStream();
+
+private:
+    ::std::auto_ptr< ::utl::TempFile > mxPicTempFile;
+    ::std::auto_ptr< SvStream > mxPicStrm;
+};
+
+// ============================================================================
+
 class XclObj;
+class XclExpDffAnchorBase;
 class XclEscherHostAppData;
 class XclEscherClientData;
 class XclEscherClientTextbox;
@@ -57,40 +76,38 @@ class XclExpTbxControlObj;
 
 class XclEscherEx : public EscherEx, protected XclExpRoot
 {
-private:
-        List                aOffsetMap;
-        Stack               aStack;
-        utl::TempFile*      pPicTempFile;
-        SvStream*           pPicStrm;
-        XclObj*             pCurrXclObj;
-        XclEscherHostAppData*   pCurrAppData;
-        XclEscherClientData*    pTheClientData; // always the same
-        XclEscherClientTextbox* pAdditionalText;
-        USHORT                  nAdditionalText;
-
-            void                DeleteCurrAppData();
-
 public:
-                                XclEscherEx( const XclExpRoot& rRoot, SvStream& rStrm );
-    virtual                     ~XclEscherEx();
+    explicit            XclEscherEx(
+                            const XclExpRoot& rRoot,
+                            XclExpObjectManager& rObjMgr,
+                            SvStream& rStrm,
+                            const XclEscherEx* pParent = 0 );
+    virtual             ~XclEscherEx();
 
-                                /// maintains OffsetMap
-    virtual void                InsertAtCurrentPos( UINT32 nBytes, bool bExpandEndOfAtom );
+    /** Called by MSODRAWING record constructors to initialize the DFF stream
+        fragment they will own. returns the DFF fragment identifier. */
+    sal_uInt32          InitNextDffFragment();
+    /** Called after some data has been written to the DFF stream, to update
+        the end position of the DFF fragment owned by an MSODRAWING record. */
+    void                UpdateDffFragmentEnd();
 
-    virtual SvStream*           QueryPicStream();
-    virtual EscherExHostAppData*    StartShape( const com::sun::star::uno::Reference<
-                                        com::sun::star::drawing::XShape>& rShape );
+    /** Returns the position of the specified DFF stream fragment. */
+    sal_uInt32          GetDffFragmentPos( sal_uInt32 nFragmentKey );
+    /** Returns the size of the specified DFF stream fragment. */
+    sal_uInt32          GetDffFragmentSize( sal_uInt32 nFragmentKey );
+    /** Returns true, if there is more data left in the DFF stream than owned
+        by the last MSODRAWING record. */
+    bool                HasPendingDffData();
+
+    /** Creates a new DFF client anchor object and calculates the anchor
+        position of the passed object. Caller takes ownership! */
+    XclExpDffAnchorBase* CreateDffAnchor( const SdrObject& rSdrObj ) const;
+
+    virtual EscherExHostAppData* StartShape(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& rxShape,
+                            const Rectangle* pChildAnchor );
     virtual void                EndShape( UINT16 nShapeType, UINT32 nShapeID );
     virtual EscherExHostAppData*    EnterAdditionalTextGroup();
-
-                                /// appends stream offset to list and returns position in list
-            ULONG               AddCurrentOffsetToMap();
-                                /// replaces position in list with current stream offset
-            void                ReplaceCurrentOffsetInMap( ULONG nPos );
-                                /// returns stream offset for position in list
-    inline  ULONG               GetOffsetFromMap( ULONG nPos ) const;
-                                /// last position in list (count-1)
-    inline  ULONG               GetLastOffsetMapPos() const;
 
                                 /// Flush and merge PicStream into EscherStream
             void                EndDocument();
@@ -98,15 +115,17 @@ public:
 #if EXC_EXP_OCX_CTRL
     /** Creates an OCX form control OBJ record from the passed form control.
         @descr  Writes the form control data to the 'Ctls' stream. */
-    XclExpOcxControlObj* CreateCtrlObj( ::com::sun::star::uno::Reference<
-                            ::com::sun::star::drawing::XShape > xShape );
+    XclExpOcxControlObj* CreateCtrlObj(
+                            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
+                            const Rectangle* pChildAnchor );
 
 private:
     SotStorageStreamRef  mxCtlsStrm;         /// The 'Ctls' stream.
 #else
     /** Creates a TBX form control OBJ record from the passed form control. */
-    XclExpTbxControlObj* CreateCtrlObj( ::com::sun::star::uno::Reference<
-                            ::com::sun::star::drawing::XShape > xShape );
+    XclExpTbxControlObj* CreateCtrlObj(
+                            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
+                            const Rectangle* pChildAnchor );
 
 private:
     /** Tries to get the name of a Basic macro from a control. */
@@ -115,20 +134,20 @@ private:
                             ::com::sun::star::uno::Reference<
                                 ::com::sun::star::awt::XControlModel > xCtrlModel );
 #endif
+
+    void                DeleteCurrAppData();
+
+private:
+    XclExpObjectManager& mrObjMgr;
+        Stack               aStack;
+        XclObj*             pCurrXclObj;
+        XclEscherHostAppData*   pCurrAppData;
+        XclEscherClientData*    pTheClientData; // always the same
+        XclEscherClientTextbox* pAdditionalText;
+        USHORT                  nAdditionalText;
+    sal_uInt32          mnNextKey;
+    bool                mbIsRootDff;
 };
-
-
-inline ULONG XclEscherEx::GetOffsetFromMap( ULONG nPos ) const
-{
-    return (ULONG) aOffsetMap.GetObject( nPos );
-}
-
-
-inline ULONG XclEscherEx::GetLastOffsetMapPos() const
-{
-    return aOffsetMap.Count() - 1;
-}
-
 
 // --- class XclEscherHostAppData ------------------------------------
 
@@ -144,56 +163,6 @@ public:
     inline  BOOL                IsStackedGroup() const  { return bStackedGroup; }
 };
 
-
-// DFF client anchor ==========================================================
-
-class Rectangle;
-class SdrObject;
-class ScAddress;
-
-/** Represents the position (anchor) of an object in a Calc document. */
-class XclExpDffAnchor : public EscherExClientAnchor_Base, protected XclExpRoot
-{
-public:
-    /** Constructs a dummy client anchor. */
-    explicit            XclExpDffAnchor( const XclExpRoot& rRoot, sal_uInt16 nFlags = 0 );
-    /** Constructs a client anchor directly from an SdrObject. */
-    explicit            XclExpDffAnchor( const XclExpRoot& rRoot, const SdrObject& rSdrObj );
-
-    /** Sets the flags according to the passed SdrObject. */
-    void                SetFlags( const SdrObject& rSdrObj );
-
-    /** Called from SVX Escher exporter.
-        @param rRect  The object anchor rectangle to be exported (in twips). */
-    virtual void        WriteData( EscherEx& rEx, const Rectangle& rRect );
-
-    /** Writes the anchor structure with the current anchor position. */
-    void                WriteData( EscherEx& rEx ) const;
-
-protected:  // for access in derived classes
-    XclObjAnchor        maAnchor;       /// The client anchor data.
-    SCTAB               mnScTab;        /// Calc sheet index.
-    sal_uInt16          mnFlags;        /// Flags for DFF stream export.
-};
-
-// ----------------------------------------------------------------------------
-
-/** Represents the position (anchor) of a note object. */
-class XclExpDffNoteAnchor : public XclExpDffAnchor
-{
-public:
-    explicit            XclExpDffNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect );
-};
-
-
-// ----------------------------------------------------------------------------
-
-/** Represents the position (anchor) of a cell dropdown object. */
-class XclExpDffDropDownAnchor : public XclExpDffAnchor
-{
-public:
-    explicit            XclExpDffDropDownAnchor( const XclExpRoot& rRoot, const ScAddress& rScPos );
-};
 
 
 // ============================================================================

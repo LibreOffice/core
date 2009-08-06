@@ -35,55 +35,15 @@
 #include "xcl97esc.hxx"
 #include "xlstyle.hxx"
 
-// --- class XclMsodrawing_Base --------------------------------------
-
-class XclExpMsoDrawingBase : protected XclExpRoot
-{
-public:
-    explicit            XclExpMsoDrawingBase( const XclExpRoot& rRoot, sal_Size nInitialSize = 0 );
-    virtual             ~XclExpMsoDrawingBase();
-
-    XclEscherEx&        GetEscherEx() const;
-    void                UpdateStopPos();
-    sal_Size            GetDataLen() const;
-
-protected:
-    sal_Size            nStartPos;      // position in OffsetMap
-    sal_Size            nStopPos;       // position in OffsetMap
-};
-
-
-// --- class XclMsodrawinggroup --------------------------------------
-
-class XclExpMsoDrawingGroup : public XclExpMsoDrawingBase, public XclExpRecord
-{
-public:
-    explicit            XclExpMsoDrawingGroup( const XclExpRoot& rRoot );
-
-private:
-    virtual void        WriteBody( XclExpStream& rStrm );
-};
-
-// --- class XclMsodrawing -------------------------------------------
-
-class XclExpMsoDrawing : public XclExpMsoDrawingBase, public XclExpRecord
-{
-public:
-    explicit            XclExpMsoDrawing( const XclExpRoot& rRoot, UINT16 nEscherType = 0, sal_Size nInitialSize = 0 );
-
-private:
-    virtual void        WriteBody( XclExpStream& rStrm );
-};
-
-
-// --- class XclExpObjList ----------------------------------------------
+// ============================================================================
 
 class XclObj;
+class XclExpMsoDrawing;
 
 class XclExpObjList : public List, public ExcEmptyRec, protected XclExpRoot
 {
 public:
-    explicit            XclExpObjList( const XclExpRoot& rRoot );
+    explicit            XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx );
     virtual             ~XclExpObjList();
 
     XclObj*             First() { return (XclObj*) List::First(); }
@@ -101,6 +61,7 @@ public:
     virtual void        Save( XclExpStream& rStrm );
 
 private:
+    XclEscherEx&        mrEscherEx;
     XclExpMsoDrawing*   pMsodrawingPerSheet;
     XclExpMsoDrawing*   pSolverContainer;
 };
@@ -114,6 +75,7 @@ class SdrTextObj;
 class XclObj : public XclExpRecord
 {
 protected:
+        XclEscherEx&        mrEscherEx;
         XclExpMsoDrawing*   pMsodrawing;
         XclExpMsoDrawing*   pClientTextbox;
         XclTxo*             pTxo;
@@ -126,7 +88,9 @@ protected:
 
     /** @param bOwnEscher  If set to true, this object will create its escher data.
         See SetOwnEscher() for details. */
-    explicit                    XclObj( const XclExpRoot& rRoot, sal_uInt16 nObjType, bool bOwnEscher = false );
+    explicit                    XclObj( XclExpObjectManager& rObjMgr, sal_uInt16 nObjType, bool bOwnEscher = false );
+
+    void                        ImplWriteAnchor( const XclExpRoot& rRoot, const SdrObject* pSdrObj, const Rectangle* pChildAnchor );
 
                                 // overwritten for writing MSODRAWING record
     virtual void                WriteBody( XclExpStream& rStrm );
@@ -168,27 +132,15 @@ public:
                                 //! actually writes ESCHER_ClientTextbox
             void                SetText( const XclExpRoot& rRoot, const SdrTextObj& rObj );
 
-    inline  void                UpdateStopPos();
-
     virtual void                Save( XclExpStream& rStrm );
 };
-
-
-inline void XclObj::UpdateStopPos()
-{
-    if ( pClientTextbox )
-        pClientTextbox->UpdateStopPos();
-    else
-        pMsodrawing->UpdateStopPos();
-}
-
 
 // --- class XclObjComment -------------------------------------------
 
 class XclObjComment : public XclObj
 {
 public:
-                                XclObjComment( const XclExpRoot& rRoot,
+                                XclObjComment( XclExpObjectManager& rObjMgr,
                                     const Rectangle& rRect, const EditTextObject& rEditObj, SdrObject* pCaption, bool bVisible );
     virtual                     ~XclObjComment();
 
@@ -213,7 +165,7 @@ private:
 
 protected:
 public:
-                                XclObjDropDown( const XclExpRoot& rRoot, const ScAddress& rPos, BOOL bFilt );
+                                XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& rPos, BOOL bFilt );
     virtual                     ~XclObjDropDown();
 };
 
@@ -260,7 +212,7 @@ private:
     virtual void                WriteSubRecs( XclExpStream& rStrm );
 
 public:
-                                XclObjOle( const XclExpRoot& rRoot, const SdrObject& rObj );
+                                XclObjOle( XclExpObjectManager& rObjMgr, const SdrObject& rObj );
     virtual                     ~XclObjOle();
 
     virtual void                Save( XclExpStream& rStrm );
@@ -275,7 +227,7 @@ private:
     virtual void                WriteSubRecs( XclExpStream& rStrm );
 
 public:
-                                XclObjAny( const XclExpRoot& rRoot );
+                                XclObjAny( XclExpObjectManager& rObjMgr );
     virtual                     ~XclObjAny();
 
     virtual void                Save( XclExpStream& rStrm );

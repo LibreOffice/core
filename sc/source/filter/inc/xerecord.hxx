@@ -51,9 +51,6 @@ public:
     /** Overwrite this method to do any operation while saving the record. */
     virtual void        Save( XclExpStream& rStrm );
     virtual void        SaveXml( XclExpXmlStream& rStrm );
-
-//UNUSED2008-05  /** Calls Save(XclExpStream&) nCount times. */
-//UNUSED2008-05  void                SaveRepeated( XclExpStream& rStrm, size_t nCount );
 };
 
 // ----------------------------------------------------------------------------

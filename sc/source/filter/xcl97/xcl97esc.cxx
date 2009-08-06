@@ -62,9 +62,11 @@
 #include "xechart.hxx"
 #include "xcl97esc.hxx"
 
+using ::rtl::OUString;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::container::XIndexAccess;
@@ -75,24 +77,40 @@ using ::com::sun::star::form::XFormsSupplier;
 using ::com::sun::star::script::ScriptEventDescriptor;
 using ::com::sun::star::script::XEventAttacherManager;
 
-// --- class XclEscherEx ---------------------------------------------
+// ============================================================================
 
-XclEscherEx::XclEscherEx( const XclExpRoot& rRoot, SvStream& rStrm )
-        :
-        EscherEx( rStrm ),
-        XclExpRoot( rRoot ),
-        pPicTempFile( NULL ),
-        pPicStrm( NULL ),
-        pCurrXclObj( NULL ),
-        pCurrAppData( NULL ),
-        pTheClientData( new XclEscherClientData ),
-        pAdditionalText( NULL ),
-        nAdditionalText( 0 )
+XclEscherExGlobal::XclEscherExGlobal( const XclExpRoot& rRoot ) :
+    XclExpRoot( rRoot )
 {
-    aOffsetMap.Insert( (void*) 0, LIST_APPEND );        // start of stream
-    // Xcl forgets OLE objects completely if the Escher object is not EMF and
-    // the corresponding OLE application is opened and nothing is changed.
-    SetOleEmf( TRUE );
+}
+
+SvStream* XclEscherExGlobal::ImplQueryPictureStream()
+{
+    mxPicTempFile.reset( new ::utl::TempFile );
+    if( mxPicTempFile->IsValid() )
+    {
+        mxPicTempFile->EnableKillingFile();
+        mxPicStrm.reset( ::utl::UcbStreamHelper::CreateStream( mxPicTempFile->GetURL(), STREAM_STD_READWRITE ) );
+        mxPicStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    }
+    return mxPicStrm.get();
+}
+
+// ============================================================================
+
+XclEscherEx::XclEscherEx( const XclExpRoot& rRoot, XclExpObjectManager& rObjMgr, SvStream& rStrm, const XclEscherEx* pParent ) :
+    EscherEx( pParent ? pParent->mxGlobal : EscherExGlobalRef( new XclEscherExGlobal( rRoot ) ), rStrm ),
+    XclExpRoot( rRoot ),
+    mrObjMgr( rObjMgr ),
+    pCurrXclObj( NULL ),
+    pCurrAppData( NULL ),
+    pTheClientData( new XclEscherClientData ),
+    pAdditionalText( NULL ),
+    nAdditionalText( 0 ),
+    mnNextKey( 0 ),
+    mbIsRootDff( pParent == 0 )
+{
+    InsertPersistOffset( mnNextKey, 0 );
 }
 
 
@@ -101,86 +119,83 @@ XclEscherEx::~XclEscherEx()
     DBG_ASSERT( !aStack.Count(), "~XclEscherEx: stack not empty" );
     DeleteCurrAppData();
     delete pTheClientData;
-    if ( pPicStrm )
+}
+
+
+sal_uInt32 XclEscherEx::InitNextDffFragment()
+{
+    /*  Current value of mnNextKey will be used by caller to refer to the
+        starting point of the DFF fragment. The key exists already in the
+        PersistTable (has been inserted by c'tor of previous call of
+        InitNextDffFragment(), has been updated by UpdateDffFragmentEnd(). */
+    sal_uInt32 nPersistKey = mnNextKey;
+
+    /*  Prepare the next key that is used by caller as end point of the DFF
+        fragment. Will be updated by caller when writing to the DFF stream,
+        using the UpdateDffFragmentEnd() function. This is needed to find DFF
+        data written by the SVX base class implementation without interaction,
+        e.g. the solver container that will be written after the last shape. */
+    ++mnNextKey;
+    InsertPersistOffset( mnNextKey, mpOutStrm->Tell() );
+
+    return nPersistKey;
+}
+
+void XclEscherEx::UpdateDffFragmentEnd()
+{
+    // update existing fragment key with new stream position
+    ReplacePersistOffset( mnNextKey, mpOutStrm->Tell() );
+}
+
+sal_uInt32 XclEscherEx::GetDffFragmentPos( sal_uInt32 nFragmentKey )
+{
+    /*  TODO: this function is non-const because PersistTable::PtGetOffsetByID()
+        is non-const due to tools/List usage. */
+    return GetPersistOffset( nFragmentKey );
+}
+
+sal_uInt32 XclEscherEx::GetDffFragmentSize( sal_uInt32 nFragmentKey )
+{
+    /*  TODO: this function is non-const because PersistTable::PtGetOffsetByID()
+        is non-const due to tools/List usage. */
+    return GetDffFragmentPos( nFragmentKey + 1 ) - GetDffFragmentPos( nFragmentKey );
+}
+
+bool XclEscherEx::HasPendingDffData()
+{
+    /*  TODO: this function is non-const because PersistTable::PtGetOffsetByID()
+        is non-const due to tools/List usage. */
+    return GetDffFragmentPos( mnNextKey ) < GetStreamPos();
+}
+
+XclExpDffAnchorBase* XclEscherEx::CreateDffAnchor( const SdrObject& rSdrObj ) const
+{
+    // the object manager creates the correct anchor type according to context
+    XclExpDffAnchorBase* pAnchor = mrObjMgr.CreateDffAnchor();
+    // pass the drawing object, that will calculate the anchor position
+    pAnchor->SetSdrObject( rSdrObj );
+    return pAnchor;
+}
+
+namespace {
+
+bool lcl_IsFontwork( const SdrObject* pObj )
+{
+    bool bIsFontwork = false;
+    if( pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE )
     {
-        delete pPicStrm;
-    }
-    if ( pPicTempFile )
-        delete pPicTempFile;
-}
-
-
-SvStream* XclEscherEx::QueryPicStream()
-{
-    if ( !pPicStrm )
-    {
-        if ( !pPicTempFile )
-        {
-            pPicTempFile = new utl::TempFile;
-            if ( pPicTempFile->IsValid() )
-                pPicTempFile->EnableKillingFile();
-            else
-            {
-                delete pPicTempFile;
-                pPicTempFile = NULL;
-            }
-        }
-        if ( pPicTempFile )
-        {
-            pPicStrm = utl::UcbStreamHelper::CreateStream( pPicTempFile->GetURL(), STREAM_STD_READWRITE );
-            pPicStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-        }
-    }
-    return pPicStrm;
-}
-
-
-void XclEscherEx::InsertAtCurrentPos( UINT32 nBytes, bool bExpandEndOfAtom )
-{
-    ULONG nPos = GetStreamPos();
-    ULONG nCnt = aOffsetMap.Count();
-    ULONG j, nOff;
-    for ( j=0, nOff = (ULONG) aOffsetMap.First(); j<nCnt;
-            j++, nOff = (ULONG) aOffsetMap.Next() )
-    {
-        if ( nOff >= nPos )
-            aOffsetMap.Replace( (void*) (nOff + nBytes) );
-    }
-    EscherEx::InsertAtCurrentPos( nBytes, bExpandEndOfAtom );
-}
-
-
-ULONG XclEscherEx::AddCurrentOffsetToMap()
-{
-    aOffsetMap.Insert( (void*) GetStreamPos(), LIST_APPEND );
-    return aOffsetMap.Count() - 1;
-}
-
-
-void XclEscherEx::ReplaceCurrentOffsetInMap( ULONG nPos )
-{
-    aOffsetMap.Replace( (void*) GetStreamPos(), nPos );
-}
-
-sal_Bool ImplXclEscherExIsFontwork( const SdrObject* pObj )
-{
-    const rtl::OUString sTextPath( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
-
-    sal_Bool bIsFontwork = sal_False;
-    if ( pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE )
-    {
+        const OUString aTextPath = CREATE_OUSTRING( "TextPath" );
         SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)
             pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-
-        com::sun::star::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
-        if ( pAny )
+        if( Any* pAny = rGeometryItem.GetPropertyValueByName( aTextPath, aTextPath ) )
             *pAny >>= bIsFontwork;
     }
     return bIsFontwork;
 }
 
-EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Reference<
-                                                com::sun::star::drawing::XShape >& rShape )
+} // namespace
+
+EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape, const Rectangle* pChildAnchor )
 {
     if ( nAdditionalText )
         nAdditionalText++;
@@ -188,17 +203,17 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
     if ( bInGroup )
     {   // stacked recursive group object
         if ( !pCurrAppData->IsStackedGroup() )
-        {   //! UpdateStopPos only once
+        {   //! UpdateDffFragmentEnd only once
             pCurrAppData->SetStackedGroup( TRUE );
-            pCurrXclObj->UpdateStopPos();
+            UpdateDffFragmentEnd();
         }
     }
     aStack.Push( pCurrXclObj );
     aStack.Push( pCurrAppData );
     pCurrAppData = new XclEscherHostAppData;
-    SdrObject* pObj = GetSdrObjectFromXShape( rShape );
+    SdrObject* pObj = GetSdrObjectFromXShape( rxShape );
     if ( !pObj )
-        pCurrXclObj = new XclObjAny( GetRoot() );  // just what is it?!?
+        pCurrXclObj = new XclObjAny( mrObjMgr );  // just what is it?!?
     else
     {
         pCurrXclObj = NULL;
@@ -206,38 +221,50 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
 
         if( nObjType == OBJ_OLE2 )
         {
-            //! not-const because GetObjRef may load the OLE object
-            Reference < XClassifiedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef(), UNO_QUERY );
-            if ( xObj.is() )
+            // no OLE objects in embedded drawings (chart shapes)
+            if( mbIsRootDff )
             {
-                SvGlobalName aObjClsId( xObj->getClassID() );
-                if ( SotExchange::IsChart( aObjClsId ) )
-                {   // yes, it's a chart diagram
-                    GetOldRoot().pObjRecs->Add( new XclExpChartObj( GetRoot(), rShape ) );
-                    pCurrXclObj = NULL;     // no metafile or whatsoever
+                //! not-const because GetObjRef may load the OLE object
+                Reference < XClassifiedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef(), UNO_QUERY );
+                if ( xObj.is() )
+                {
+                    SvGlobalName aObjClsId( xObj->getClassID() );
+                    if ( SotExchange::IsChart( aObjClsId ) )
+                    {   // yes, it's a chart diagram
+                        mrObjMgr.AddObj( new XclExpChartObj( mrObjMgr, rxShape, pChildAnchor ) );
+                        pCurrXclObj = NULL;     // no metafile or whatsoever
+                    }
+                    else    // metafile and OLE object
+                        pCurrXclObj = new XclObjOle( mrObjMgr, *pObj );
                 }
-                else    // metafile and OLE object
-                    pCurrXclObj = new XclObjOle( GetRoot(), *pObj );
+                else    // just a metafile
+                    pCurrXclObj = new XclObjAny( mrObjMgr );
             }
-            else    // just a metafile
-                pCurrXclObj = new XclObjAny( GetRoot() );
+            else
+                pCurrXclObj = new XclObjAny( mrObjMgr );
         }
         else if( nObjType == OBJ_UNO )
         {
-            pCurrXclObj = CreateCtrlObj( rShape );
+#if EXC_EXP_OCX_CTRL
+            // no ActiveX controls in embedded drawings (chart shapes)
+            if( mbIsRootDff )
+                pCurrXclObj = CreateCtrlObj( rxShape, pChildAnchor );
+#else
+            pCurrXclObj = CreateCtrlObj( rxShape, pChildAnchor );
+#endif
             if( !pCurrXclObj )
-                pCurrXclObj = new XclObjAny( GetRoot() );   // just a metafile
+                pCurrXclObj = new XclObjAny( mrObjMgr );   // just a metafile
         }
         else if( !ScDrawLayer::IsNoteCaption( pObj ) )
         {
             // #107540# ignore permanent note shapes
             // #i12190# do not ignore callouts (do not filter by object type ID)
-            pCurrXclObj = new XclObjAny( GetRoot() );   // just a metafile
+            pCurrXclObj = new XclObjAny( mrObjMgr );   // just a metafile
         }
     }
     if ( pCurrXclObj )
     {
-        if ( !GetOldRoot().pObjRecs->Add( pCurrXclObj ) )
+        if ( !mrObjMgr.AddObj( pCurrXclObj ) )
         {   // maximum count reached, object got deleted
             pCurrXclObj = NULL;
         }
@@ -250,14 +277,15 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
                 {
                     if ( !bInGroup )
                     {
-                        /*  Create a dummy anchor carrying the flags. Real coordinates are
-                            calculated later in WriteData(EscherEx&,const Rectangle&). */
-                        XclExpDffAnchor* pAnchor = new XclExpDffAnchor( GetRoot() );
+                        /*  Create a dummy anchor carrying the flags. Real
+                            coordinates are calculated later in virtual call of
+                            WriteData(EscherEx&,const Rectangle&). */
+                        XclExpDffAnchorBase* pAnchor = mrObjMgr.CreateDffAnchor();
                         pAnchor->SetFlags( *pObj );
                         pCurrAppData->SetClientAnchor( pAnchor );
                     }
                     const SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pObj );
-                    if ( pTextObj && !ImplXclEscherExIsFontwork( pTextObj ) && ( pObj->GetObjIdentifier() != OBJ_CAPTION ) )
+                    if( pTextObj && !lcl_IsFontwork( pTextObj ) && (pObj->GetObjIdentifier() != OBJ_CAPTION) )
                     {
                         const OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
                         if( pParaObj )
@@ -268,7 +296,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
                 else
                 {
                     if ( !bInGroup )
-                        pCurrAppData->SetClientAnchor( new XclExpDffAnchor( GetRoot() ) );
+                        pCurrAppData->SetClientAnchor( mrObjMgr.CreateDffAnchor() );
                 }
             }
             else if ( nAdditionalText == 3 )
@@ -298,13 +326,10 @@ void XclEscherEx::EndShape( UINT16 nShapeType, UINT32 nShapeID )
         // escher data of last shape not written? -> delete it from object list
         if( nShapeID == 0 )
         {
-            XclObj* pLastObj = static_cast< XclObj* >( GetOldRoot().pObjRecs->Last() );
+            XclObj* pLastObj = mrObjMgr.RemoveLastObj();
             DBG_ASSERT( pLastObj == pCurrXclObj, "XclEscherEx::EndShape - wrong object" );
-            if ( pLastObj == pCurrXclObj )
-            {
-                GetOldRoot().pObjRecs->Remove();
-                DELETEZ( pCurrXclObj );
-            }
+            DELETEZ( pLastObj );
+            pCurrXclObj = 0;
         }
 
         if( pCurrXclObj )
@@ -315,7 +340,7 @@ void XclEscherEx::EndShape( UINT16 nShapeType, UINT32 nShapeID )
             else
             {
                 pCurrXclObj->SetEscherShapeType( nShapeType );
-                pCurrXclObj->UpdateStopPos();
+                UpdateDffFragmentEnd();
             }
         }
     }
@@ -338,26 +363,18 @@ EscherExHostAppData* XclEscherEx::EnterAdditionalTextGroup()
 }
 
 
-void XclEscherEx::DeleteCurrAppData()
-{
-    if ( pCurrAppData )
-    {
-        delete pCurrAppData->GetClientAnchor();
-//      delete pCurrAppData->GetClientData();
-        delete pCurrAppData->GetClientTextbox();
-        delete pCurrAppData;
-    }
-}
-
-
 void XclEscherEx::EndDocument()
 {
-    Flush( pPicStrm );
+    if( mbIsRootDff )
+        Flush( static_cast< XclEscherExGlobal& >( *mxGlobal ).GetPictureStream() );
+
+    // seek back DFF stream to prepare saving the MSODRAWING[GROUP] records
+    mpOutStrm->Seek( 0 );
 }
 
 #if EXC_EXP_OCX_CTRL
 
-XclExpOcxControlObj* XclEscherEx::CreateCtrlObj( Reference< XShape > xShape )
+XclExpOcxControlObj* XclEscherEx::CreateCtrlObj( Reference< XShape > xShape, const Rectangle* pChildAnchor )
 {
     ::std::auto_ptr< XclExpOcxControlObj > xOcxCtrl;
 
@@ -378,7 +395,7 @@ XclExpOcxControlObj* XclEscherEx::CreateCtrlObj( Reference< XShape > xShape )
                 sal_uInt32 nStrmSize = static_cast< sal_uInt32 >( mxCtlsStrm->Tell() - nStrmStart );
                 // adjust the class name to "Forms.***.1"
                 aClassName.InsertAscii( "Forms.", 0 ).AppendAscii( ".1" );
-                xOcxCtrl.reset( new XclExpOcxControlObj( GetRoot(), xShape, aClassName, nStrmStart, nStrmSize ) );
+                xOcxCtrl.reset( new XclExpOcxControlObj( mrObjMgr, xShape, pChildAnchor, aClassName, nStrmStart, nStrmSize ) );
             }
         }
     }
@@ -387,9 +404,9 @@ XclExpOcxControlObj* XclEscherEx::CreateCtrlObj( Reference< XShape > xShape )
 
 #else
 
-XclExpTbxControlObj* XclEscherEx::CreateCtrlObj( Reference< XShape > xShape )
+XclExpTbxControlObj* XclEscherEx::CreateCtrlObj( Reference< XShape > xShape, const Rectangle* pChildAnchor )
 {
-    ::std::auto_ptr< XclExpTbxControlObj > xTbxCtrl( new XclExpTbxControlObj( GetRoot(), xShape ) );
+    ::std::auto_ptr< XclExpTbxControlObj > xTbxCtrl( new XclExpTbxControlObj( mrObjMgr, xShape, pChildAnchor ) );
     if( xTbxCtrl->GetObjType() == EXC_OBJTYPE_UNKNOWN )
         xTbxCtrl.reset();
 
@@ -457,65 +474,16 @@ void XclEscherEx::ConvertTbxMacro( XclExpTbxControlObj& rTbxCtrlObj, Reference< 
 
 #endif
 
-// Escher client anchor =======================================================
-
-XclExpDffAnchor::XclExpDffAnchor( const XclExpRoot& rRoot, sal_uInt16 nFlags ) :
-    XclExpRoot( rRoot ),
-    mnScTab( rRoot.GetCurrScTab() ),
-    mnFlags( nFlags )
+void XclEscherEx::DeleteCurrAppData()
 {
+    if ( pCurrAppData )
+    {
+        delete pCurrAppData->GetClientAnchor();
+//      delete pCurrAppData->GetClientData();
+        delete pCurrAppData->GetClientTextbox();
+        delete pCurrAppData;
+    }
 }
-
-XclExpDffAnchor::XclExpDffAnchor( const XclExpRoot& rRoot, const SdrObject& rSdrObj ) :
-    XclExpRoot( rRoot ),
-    mnScTab( rRoot.GetCurrScTab() )
-{
-    SetFlags( rSdrObj );
-    maAnchor.SetRect( GetDoc(), mnScTab, rSdrObj.GetCurrentBoundRect(), MAP_100TH_MM );
-}
-
-void XclExpDffAnchor::SetFlags( const SdrObject& rSdrObj )
-{
-    // Special case "page anchor" (X==0,Y==1) -> lock pos and size.
-    const Point& rPos = rSdrObj.GetAnchorPos();
-    mnFlags = ((rPos.X() == 0) && (rPos.Y() == 1)) ? EXC_ESC_ANCHOR_LOCKED : 0;
-}
-
-void XclExpDffAnchor::WriteData( EscherEx& rEx, const Rectangle& rRect )
-{
-    // the rectangle is already in twips
-    maAnchor.SetRect( GetDoc(), mnScTab, rRect, MAP_TWIP );
-    WriteData( rEx );
-}
-
-
-void XclExpDffAnchor::WriteData( EscherEx& rEx ) const
-{
-    rEx.AddAtom( 18, ESCHER_ClientAnchor );
-    rEx.GetStream() << mnFlags << maAnchor;
-}
-
-
-// ----------------------------------------------------------------------------
-
-XclExpDffNoteAnchor::XclExpDffNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect ) :
-    XclExpDffAnchor( rRoot, EXC_ESC_ANCHOR_SIZELOCKED )
-{
-    maAnchor.SetRect( GetDoc(), mnScTab, rRect, MAP_100TH_MM );
-}
-
-
-// ----------------------------------------------------------------------------
-
-XclExpDffDropDownAnchor::XclExpDffDropDownAnchor( const XclExpRoot& rRoot, const ScAddress& rScPos ) :
-    XclExpDffAnchor( rRoot, EXC_ESC_ANCHOR_POSLOCKED )
-{
-    GetAddressConverter().ConvertAddress( maAnchor.maFirst, rScPos, true );
-    maAnchor.maLast.mnCol = maAnchor.maFirst.mnCol + 1;
-    maAnchor.maLast.mnRow = maAnchor.maFirst.mnRow + 1;
-    maAnchor.mnLX = maAnchor.mnTY = maAnchor.mnRX = maAnchor.mnBY = 0;
-}
-
 
 // ============================================================================
 

@@ -91,6 +91,7 @@
 #include "formula/errorcodes.hxx"
 
 #include "excdoc.hxx"
+#include "xeescher.hxx"
 #include "xeformula.hxx"
 #include "xelink.hxx"
 #include "xename.hxx"
@@ -956,8 +957,8 @@ void ExcAutoFilterRecs::AddObjRecs()
         ScAddress aAddr( pFilterInfo->GetStartPos() );
         for( SCCOL nObj = 0, nCount = pFilterInfo->GetColCount(); nObj < nCount; nObj++ )
         {
-            XclObjDropDown* pObj = new XclObjDropDown( GetRoot(), aAddr, IsFiltered( nObj ) );
-            GetOldRoot().pObjRecs->Add( pObj );
+            XclObj* pObjRec = new XclObjDropDown( GetObjectManager(), aAddr, IsFiltered( nObj ) );
+            GetObjectManager().AddObj( pObjRec );
             aAddr.IncCol( 1 );
         }
     }

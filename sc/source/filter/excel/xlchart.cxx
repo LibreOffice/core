@@ -311,7 +311,7 @@ XclChTypeGroup::XclChTypeGroup() :
 // ----------------------------------------------------------------------------
 
 XclChProperties::XclChProperties() :
-    mnFlags( EXC_CHPROPS_MANSERIES ),
+    mnFlags( 0 ),
     mnEmptyMode( EXC_CHPROPS_EMPTY_SKIP )
 {
 }

@@ -39,6 +39,127 @@ namespace com { namespace sun { namespace star {
     namespace script { struct ScriptEventDescriptor; }
 } } }
 
+// DFF client anchor ==========================================================
+
+/** Base class for DFF client anchor atoms used in spreadsheets. */
+class XclExpDffAnchorBase : public EscherExClientAnchor_Base, protected XclExpRoot
+{
+public:
+    /** Constructs a dummy client anchor. */
+    explicit            XclExpDffAnchorBase( const XclExpRoot& rRoot, sal_uInt16 nFlags = 0 );
+
+    /** Sets the flags according to the passed SdrObject. */
+    void                SetFlags( const SdrObject& rSdrObj );
+    /** Sets the anchor position and flags according to the passed SdrObject. */
+    void                SetSdrObject( const SdrObject& rSdrObj );
+
+    /** Writes the DFF client anchor structure with the current anchor position. */
+    void                WriteDffData( EscherEx& rEscherEx ) const;
+
+    /** Called from SVX DFF converter.
+        @param rRect  The object anchor rectangle to be exported (in twips). */
+    virtual void        WriteData( EscherEx& rEscherEx, const Rectangle& rRect );
+
+private:
+    virtual void        ImplSetFlags( const SdrObject& rSdrObj );
+    virtual void        ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit );
+
+protected:  // for access in derived classes
+    XclObjAnchor        maAnchor;       /// The client anchor data.
+    sal_uInt16          mnFlags;        /// Flags for DFF stream export.
+};
+
+// ----------------------------------------------------------------------------
+
+/** Represents the position (anchor) of an object in a Calc sheet. */
+class XclExpDffSheetAnchor : public XclExpDffAnchorBase
+{
+public:
+    explicit            XclExpDffSheetAnchor( const XclExpRoot& rRoot );
+
+private:
+    virtual void        ImplSetFlags( const SdrObject& rSdrObj );
+    virtual void        ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit );
+
+private:
+    SCTAB               mnScTab;        /// Calc sheet index.
+};
+
+// ----------------------------------------------------------------------------
+
+/** Represents the position (anchor) of a shape in an embedded draw page. */
+class XclExpDffEmbeddedAnchor : public XclExpDffAnchorBase
+{
+public:
+    explicit            XclExpDffEmbeddedAnchor( const XclExpRoot& rRoot,
+                            const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY );
+
+private:
+    virtual void        ImplSetFlags( const SdrObject& rSdrObj );
+    virtual void        ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit );
+
+private:
+    Size                maPageSize;
+    sal_Int32           mnScaleX;
+    sal_Int32           mnScaleY;
+};
+
+// ----------------------------------------------------------------------------
+
+/** Represents the position (anchor) of a note object. */
+class XclExpDffNoteAnchor : public XclExpDffAnchorBase
+{
+public:
+    explicit            XclExpDffNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect );
+};
+
+// ----------------------------------------------------------------------------
+
+/** Represents the position (anchor) of a cell dropdown object. */
+class XclExpDffDropDownAnchor : public XclExpDffAnchorBase
+{
+public:
+    explicit            XclExpDffDropDownAnchor( const XclExpRoot& rRoot, const ScAddress& rScPos );
+};
+
+// MSODRAWING* records ========================================================
+
+/** Base class for records holding DFF stream fragments. */
+class XclExpMsoDrawingBase : public XclExpRecord
+{
+public:
+    explicit            XclExpMsoDrawingBase( XclEscherEx& rEscherEx, sal_uInt16 nRecId );
+
+private:
+    virtual void        WriteBody( XclExpStream& rStrm );
+
+protected:
+    XclEscherEx&        mrEscherEx;         /// Reference to the DFF converter containing the DFF stream.
+    sal_uInt32          mnFragmentKey;      /// The key of the DFF stream fragment to be written by this record.
+};
+
+// ----------------------------------------------------------------------------
+
+/** The MSODRAWINGGROUP record contains the DGGCONTAINER with global DFF data
+    such as the picture container.
+ */
+class XclExpMsoDrawingGroup : public XclExpMsoDrawingBase
+{
+public:
+    explicit            XclExpMsoDrawingGroup( XclEscherEx& rEscherEx );
+};
+
+// ----------------------------------------------------------------------------
+
+/** One or more MSODRAWING records contain the DFF stream data for a drawing
+    shape.
+ */
+class XclExpMsoDrawing : public XclExpMsoDrawingBase
+{
+public:
+    explicit            XclExpMsoDrawing( XclEscherEx& rEscherEx );
+};
+
 // ============================================================================
 
 /** Provides export of bitmap data to an IMGDATA record. */
@@ -97,8 +218,9 @@ class XclExpOcxControlObj : public XclObj, public XclExpControlHelper
 {
 public:
     explicit            XclExpOcxControlObj(
-                            const XclExpRoot& rRoot,
+                            XclExpObjectManager& rObjMgr,
                             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
+                            const Rectangle* pChildAnchor,
                             const String& rClassName,
                             sal_uInt32 nStrmStart, sal_uInt32 nStrmSize );
 
@@ -118,8 +240,9 @@ class XclExpTbxControlObj : public XclObj, public XclExpControlHelper
 {
 public:
     explicit            XclExpTbxControlObj(
-                            const XclExpRoot& rRoot,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+                            XclExpObjectManager& rObjMgr,
+                            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
+                            const Rectangle* pChildAnchor );
 
     /** Sets the name of a macro attached to this control.
         @return  true = The passed event descriptor was valid, macro name has been found. */
@@ -164,10 +287,10 @@ class XclExpChart;
 class XclExpChartObj : public XclObj, protected XclExpRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > XShapeRef;
-
-public:
-    explicit            XclExpChartObj( const XclExpRoot& rRoot, XShapeRef xShape );
+    explicit            XclExpChartObj(
+                            XclExpObjectManager& rObjMgr,
+                            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
+                            const Rectangle* pChildAnchor );
     virtual             ~XclExpChartObj();
 
     /** Writes the OBJ record and the entire chart substream. */
@@ -242,21 +365,70 @@ private:
 
 // object manager =============================================================
 
-class XclExpObjectManager : protected XclExpRoot
+class XclExpObjectManager : public XclExpRoot
 {
 public:
     explicit            XclExpObjectManager( const XclExpRoot& rRoot );
     virtual             ~XclExpObjectManager();
 
-    inline XclEscherEx& GetEx() const { return *mxEx; }
-    inline SvStream&    GetStrm() const { return *mxDffStrm; }
+    /** Creates a new DFF client anchor object. Caller takes ownership! May be
+        overwritten in derived  classes. */
+    virtual XclExpDffAnchorBase* CreateDffAnchor() const;
 
-    void                AddSdrPage();
+    /** Creates and returns the MSODRAWINGGROUP record containing global DFF
+        data in the DGGCONTAINER. */
+    ScfRef< XclExpRecordBase > CreateDrawingGroup();
+
+    /** Initializes the object manager for a new sheet. */
+    void                StartSheet();
+
+    /** Processes a drawing page and returns the record block containing all
+        related records (MSODRAWING, OBJ, TXO, charts, etc.). */
+    ScfRef< XclExpRecordBase > ProcessDrawing( SdrPage* pSdrPage );
+    /** Processes a collection of UNO shapes and returns the record block
+        containing all related records (MSODRAWING, OBJ, TXO, charts, etc.). */
+    ScfRef< XclExpRecordBase > ProcessDrawing( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
+
+    /** Finalizes the object manager after conversion of all sheets. */
+    void                EndDocument();
+
+    inline XclEscherEx& GetEscherEx() { return *mxEscherEx; }
+    XclExpMsoDrawing*   GetMsodrawingPerSheet();
+    bool                HasObj() const;
+    sal_uInt16          AddObj( XclObj* pObjRec );
+    XclObj*             RemoveLastObj();
+
+protected:
+    explicit            XclExpObjectManager( const XclExpObjectManager& rParent );
 
 private:
-    ::std::auto_ptr< ::utl::TempFile > mxTempFile;
-    ::std::auto_ptr< SvStream > mxDffStrm;
-    ::std::auto_ptr< XclEscherEx > mxEx;
+    void                InitStream( bool bTempFile );
+
+private:
+    ScfRef< ::utl::TempFile > mxTempFile;
+    ScfRef< SvStream >  mxDffStrm;
+    ScfRef< XclEscherEx > mxEscherEx;
+    ScfRef< XclExpObjList > mxObjList;
+};
+
+// ----------------------------------------------------------------------------
+
+class XclExpEmbeddedObjectManager : public XclExpObjectManager
+{
+public:
+    explicit            XclExpEmbeddedObjectManager(
+                            const XclExpObjectManager& rParent,
+                            const Size& rPageSize,
+                            sal_Int32 nScaleX, sal_Int32 nScaleY );
+
+    /** Creates a new DFF client anchor object for embedded objects according
+        to the scaling data passed to the constructor. Caller takes ownership! */
+    virtual XclExpDffAnchorBase* CreateDffAnchor() const;
+
+private:
+    Size                maPageSize;
+    sal_Int32           mnScaleX;
+    sal_Int32           mnScaleY;
 };
 
 // ============================================================================

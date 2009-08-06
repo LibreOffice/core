@@ -80,8 +80,6 @@ RootData::RootData( void )
     pTabId = NULL;
     pUserBViewList = NULL;
 
-    pObjRecs = NULL;
-
     pIR = NULL;
     pER = NULL;
 }
