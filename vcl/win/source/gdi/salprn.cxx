@@ -1968,7 +1968,7 @@ BOOL WinSalPrinter::StartJob( const XubString* pFileName,
                            const XubString&,
                            ULONG nCopies,
                            bool bCollate,
-                           bool bDirect,
+                           bool /*bDirect*/,
                            ImplJobSetup* pSetupData )
 {
     mnError     = 0;
