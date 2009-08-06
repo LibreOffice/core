@@ -57,6 +57,7 @@ SLOFILES = \
     $(SLO)$/type.obj \
     $(SLO)$/update.obj
 
+SHL1IMPLIB = i$(SHL1TARGET)
 SHL1OBJS = $(SLOFILES)
 SHL1STDLIBS = \
     $(COMPHELPERLIB) \
@@ -66,6 +67,7 @@ SHL1STDLIBS = \
     $(SALHELPERLIB) \
     $(SALLIB)
 SHL1TARGET = configmgr
+SHL1USE_EXPORTS = name
 DEF1NAME = $(SHL1TARGET)
 
 .INCLUDE: target.mk
