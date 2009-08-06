@@ -291,7 +291,7 @@ public:
     virtual void GetImportOptions( ScImportOptions& rOptions ) const = 0;
 };
 
-class AbstractScLangChooserDlg : public VclAbstractDialog //add for ScLangChooserDlg
+class AbstractScTextImportOptionsDlg : public VclAbstractDialog //add for ScLangChooserDlg
 {
 public:
     virtual LanguageType GetLanguageType() const = 0;
@@ -308,7 +308,7 @@ public:
                                                                     SvStream* pInStream, int nId,
                                                                     sal_Unicode cSep = '\t') = 0;
 
-    virtual     AbstractScLangChooserDlg * CreateScLangChooserDlg( Window* pParent, int nId ) = 0;
+    virtual     AbstractScTextImportOptionsDlg * CreateScTextImportOptionsDlg( Window* pParent, int nId ) = 0;
 
     virtual     AbstractScAutoFormatDlg * CreateScAutoFormatDlg( Window*                    pParent, //add for ScAutoFormatDlg
                                                                 ScAutoFormat*               pAutoFormat,

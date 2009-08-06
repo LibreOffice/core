@@ -188,8 +188,8 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
     else if ( aFilterString == ScDocShell::GetWebQueryFilterName() || aFilterString == ScDocShell::GetHtmlFilterName() )
     {
         // HTML import.
-        ::std::auto_ptr<AbstractScLangChooserDlg> pDlg(
-            pFact->CreateScLangChooserDlg(NULL, RID_SCDLG_LANG_CHOOSER));
+        ::std::auto_ptr<AbstractScTextImportOptionsDlg> pDlg(
+            pFact->CreateScTextImportOptionsDlg(NULL, RID_SCDLG_TEXT_IMPORT_OPTIONS));
 
         if (pDlg->Execute() == RET_OK)
         {

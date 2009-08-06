@@ -74,7 +74,7 @@
 #include "validate.hxx" //add for ScValidationDlg
 #include "validate.hrc" //add for ScValidationDlg
 #include "sortdlg.hxx" //add for ScSortDlg
-#include "langchooser.hxx"
+#include "textimportoptions.hxx"
 #include "opredlin.hxx" //add for  ScRedlineOptionsTabPage
 #include "tpcalc.hxx" //add for ScTpCalcOptions
 #include "tpprint.hxx" //add for ScTpPrintOptions
@@ -116,7 +116,7 @@ IMPL_ABSTDLG_BASE(AbstractScNewScenarioDlg_Impl); //add for ScNewScenarioDlg
 IMPL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl); //add for ScShowTabDlg
 IMPL_ABSTDLG_BASE(AbstractScStringInputDlg_Impl); //add for ScStringInputDlg
 IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl); //add for ScImportOptionsDlg
-IMPL_ABSTDLG_BASE(AbstractScLangChooserDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractScTextImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl); //add for ScAttrDlg, ScHFEditDlg, ScStyleDlg, ScSubTotalDlg,ScCharDlg, ScParagraphDlg, ScValidationDlg, ScSortDlg
 
 // AbstractTabDialog_Impl begin
@@ -624,12 +624,12 @@ void AbstractScImportOptionsDlg_Impl::GetImportOptions( ScImportOptions& rOption
 // add for AbstractScImportOptionsDlg_Impl end
 
 //add for AbstractScLangChooserDlg_Impl begin
-LanguageType AbstractScLangChooserDlg_Impl::GetLanguageType() const
+LanguageType AbstractScTextImportOptionsDlg_Impl::GetLanguageType() const
 {
     return pDlg->getLanguageType();
 }
 
-bool AbstractScLangChooserDlg_Impl::IsDateConversionSet() const
+bool AbstractScTextImportOptionsDlg_Impl::IsDateConversionSet() const
 {
     return pDlg->isDateConversionSet();
 }
@@ -658,19 +658,19 @@ AbstractScImportAsciiDlg * ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg 
 }
 // ScImportAsciiDlg end
 
-AbstractScLangChooserDlg * ScAbstractDialogFactory_Impl::CreateScLangChooserDlg( Window* pParent, int nId )
+AbstractScTextImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScTextImportOptionsDlg( Window* pParent, int nId )
 {
-    ScLangChooserDlg* pDlg = NULL;
+    ScTextImportOptionsDlg* pDlg = NULL;
     switch (nId)
     {
-        case RID_SCDLG_LANG_CHOOSER:
-            pDlg = new ScLangChooserDlg(pParent);
+        case RID_SCDLG_TEXT_IMPORT_OPTIONS:
+            pDlg = new ScTextImportOptionsDlg(pParent);
         break;
         default:
             ;
     }
 
-    return pDlg ? new AbstractScLangChooserDlg_Impl(pDlg) : NULL;
+    return pDlg ? new AbstractScTextImportOptionsDlg_Impl(pDlg) : NULL;
 }
 
 //add for ScAutoFormatDlg begin

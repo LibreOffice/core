@@ -64,7 +64,7 @@ class ScStringInputDlg;
 class ScImportOptionsDlg;
 class SfxTabDialog;
 class ScSortWarningDlg;
-class ScLangChooserDlg;
+class ScTextImportOptionsDlg;
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
     DialogClass*        pDlg;                       \
@@ -344,9 +344,9 @@ class AbstractScImportOptionsDlg_Impl : public AbstractScImportOptionsDlg  //add
     virtual void GetImportOptions( ScImportOptions& rOptions ) const;
 };
 
-class AbstractScLangChooserDlg_Impl : public AbstractScLangChooserDlg
+class AbstractScTextImportOptionsDlg_Impl : public AbstractScTextImportOptionsDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScLangChooserDlg_Impl, ScLangChooserDlg)
+    DECL_ABSTDLG_BASE( AbstractScTextImportOptionsDlg_Impl, ScTextImportOptionsDlg)
     virtual LanguageType GetLanguageType() const;
     virtual bool IsDateConversionSet() const;
 };
@@ -392,7 +392,7 @@ public:
                                                                     SvStream* pInStream, int nId,
                                                                     sal_Unicode cSep = '\t');
 
-    virtual AbstractScLangChooserDlg * CreateScLangChooserDlg( Window* pParent, int nId );
+    virtual AbstractScTextImportOptionsDlg * CreateScTextImportOptionsDlg( Window* pParent, int nId );
 
     virtual     AbstractScAutoFormatDlg * CreateScAutoFormatDlg( Window*                    pParent, //add for ScAutoFormatDlg
                                                                 ScAutoFormat*               pAutoFormat,
