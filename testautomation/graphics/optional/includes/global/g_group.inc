@@ -40,60 +40,73 @@
 '\********************************************************************
 
 testcase tiGruppierung
-    Dim PosX 		 'Variable fuer PositionX
+ Dim PosX 		 'Variable fuer PositionX
 
-    sleep 3
-    Kontext "DocumentImpress"
-    sleep 2
-    sleep 1
-    sleep 1
-    sleep 1
+ Call hNewDocument								   '/// new document  ///'
+  sleep 3
+  Kontext "DocumentImpress"
+  sleep 2
+  hRechteckErstellen (20,20,40,40)				   '/// create rectangle  ///'
+  sleep 1
+  hRechteckErstellen (60,60,70,10)				   '/// create 2nd rectangle ///'
+  sleep 1
+  hRechteckErstellen (50,90,70,40)				   '/// create 3rd rectangle ///'
+  sleep 1
     Printlog "- Created 3 rectangles for group testing"
-    if (gApplication = "DRAW") then
-        hOpenContextMenu
+  gMouseClick (50,50)                              '/// Put the mouse-marker in the middle of the screen ///'
+  EditSelectAll 						   '/// select all rectangles ///'
+  if (gApplication = "DRAW") then
+     hOpenContextMenu
         sleep(2)
         hMenuSelectNr(12) ' Select "Group"
         sleep(2)
-    else
-    endif
-    sleep 1
+  else
+     FormatGroupDraw							   '/// open context menue and group rectangles ///'
+  endif
+  sleep 1
     Printlog "- Get position and dimensions of elements"
-    sleep 1
-    Kontext
-    Active.SetPage TabPositionAndSize
-    Kontext "TabPositionAndSize"
-    sleep 1
-    PosX=PositionX.GetText
-    TabPositionAndSize.OK
-    sleep 1
-    Kontext "DocumentImpress"
-    gMouseClick 35,35
-    sleep 1
-    sleep 3
-    try
-        sleep 1
-        Warnlog "- Entering the group, no object within the group should have been selected"
-    catch
-        Printlog "- entered group, nothing selected"
-    endcatch
-    gMouseClick (35,35)
-    gMouseMove (30,30,60,60)
-    sleep 1
-    Printlog "- Exit group"
-    '  sleep 1
-    '  hMenuSelectNr (13)
-    ' would be better to call the slot TBO!
-    ContextPositionAndSize
-    sleep 1
-    Kontext
-    Active.SetPage TabPositionAndSize
-    Kontext "TabPositionAndSize"
-    sleep 1
-    if PosX = PositionX.GetText then
-        Warnlog "- No change in position for X axis, even we changed position of 1 object within the group"
-        TabPositionAndSize.OK
-    else
-        Printlog "- Moving within the group works"
-        TabPositionAndSize.OK
-    end if
+  ContextPositionAndSize								'/// get dimensions of group ///'
+  sleep 1
+  Kontext
+  Active.SetPage TabPositionAndSize
+  Kontext "TabPositionAndSize"
+  sleep 1
+  PosX=PositionX.GetText
+  TabPositionAndSize.OK
+  sleep 1
+  Kontext "DocumentImpress"
+  gMouseClick 35,35
+  sleep 1
+  hTypeKeys "<F3>"							'/// entering group using key "F3" ///'
+  sleep 3
+   try
+      EditCut										'/// cut rectangle out of document ///'
+      sleep 1
+      Warnlog "- Entering the group, no object within the group should have been selected"
+   catch
+      Printlog "- entered group, nothing selected"
+   endcatch
+  gMouseClick (35,35)
+  gMouseMove (30,30,60,60)
+  sleep 1
+   Printlog "- Exit group"
+'  DocumentImpress.OpenContextMenu							'/// leave group, compare dimensions ///'
+'  sleep 1
+'  hMenuSelectNr (13)
+  hTypeKeys "<mod1 F3>"							'/// exit group using key "strg F3" ///'
+  ' would be better to call the slot TBO!
+  ContextPositionAndSize
+  sleep 1
+  Kontext
+  Active.SetPage TabPositionAndSize
+  Kontext "TabPositionAndSize"
+  sleep 1
+   if PosX = PositionX.GetText then
+      Warnlog "- No change in position for X axis, even we changed position of 1 object within the group"
+      TabPositionAndSize.OK
+   else
+      Printlog "- Moving within the group works"
+      TabPositionAndSize.OK
+   end if
+  Call hCloseDocument									'/// close document  ///'
 endcase

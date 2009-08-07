@@ -75,19 +75,15 @@ testcase tExtensionFileOpen
         Add.click()
         Kontext "OeffnenDlg"
         if ( OeffnenDlg.exists( 2 ) ) then
-            if ( Dateiauswahl.getItemCount() <> 1 ) then
-                warnlog( "There should be exactly one item visible in the File Picker" )
+            DateiAuswahl.select( DateiAuswahl.getItemCount() ) 
+            cString = DateiAuswahl.getSelText()
+            if ( cString <> EXTENSION_NAME ) then
+                warnlog( "Incorrect extension listed. Please check path and filename" )
+                printlog( "Expected: " & EXTENSION_NAME )
+                printlog( "Found...: " & cString )
+                printlog( "Issues: #i67122, #i92234" )
             else
-                DateiAuswahl.select( 1 )
-                cString = DateiAuswahl.getSelText()
-                if ( cString <> EXTENSION_NAME ) then
-                    warnlog( "Incorrect extension listed. Please check path and filename" )
-                    printlog( "Expected: " & EXTENSION_NAME )
-                    printlog( "Found...: " & cString )
-                    printlog( "Issues: #i67122, #i92234" )
-                else
-                    printlog( "Found correct extension, the dialog remembers the path" )
-                endif
+                printlog( "Found correct extension, the dialog remembers the path" )
             endif
             kontext "OeffnenDlg"
             OeffnenDlg.cancel()

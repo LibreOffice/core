@@ -154,7 +154,7 @@ testcase tExtensionOptions1
     else
         irc = hSelectOptionsItem( OPTIONS_ITEM , ITEM_POS_2 )
     endif
-    if ( irc > 0 ) then
+    if ( irc > 1 ) then
         warnlog( "Node <" & OPTIONS_ITEM & "> was not found in Tools/Options" )
     else
         printlog( "Node is present. Good." )

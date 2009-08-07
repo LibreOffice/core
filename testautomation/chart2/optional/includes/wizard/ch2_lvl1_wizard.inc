@@ -721,9 +721,9 @@ testcase tCreateNewBubbleChart
     dim sInputFile as STRING
     dim sOutputFile as STRING
     dim sControlString as STRING
-    sInputFile = convertpath ( gTesttoolPath & "chart2/optional/input/ods/BubbleChartData.ods" )
+    sInputFile = convertpath ( gTesttoolPath & "chart2/optional/input/BubbleChartData.ods" )
     sOutputFile = convertpath ( gOfficepath & "user/work/tCreateNewBubbleChart.ods" )    
-    printlog "File / Load TesttoolPath/chart2/optional/input/ods/BubbleChartData.ods"
+    printlog "File / Load TesttoolPath/chart2/optional/input/BubbleChartData.ods"
     call hFileOpen(sInputFile)
     sleep(2)    
     printlog "Save document as Officepath/user/work/tCreateNewBubbleChart.ods"

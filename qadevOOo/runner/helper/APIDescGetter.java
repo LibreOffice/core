@@ -430,8 +430,8 @@ public class APIDescGetter extends DescGetter
 
         return getDescArray(makeArray(ifc_names));
     }
-
     private static String entryType;
+
     private static DescEntry createDescEntry(String meth_name, String ifc_name, DescEntry parent)
     {
         entryType = "service";
@@ -472,8 +472,8 @@ public class APIDescGetter extends DescGetter
 
     private static void createIfcName(String ifc_name, ArrayList meth_names, DescEntry ifcDesc)
     {
-
     }
+
     /**
      * This method ensures that XComponent will be the last in the list of interfaces
      */

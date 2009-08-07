@@ -324,7 +324,7 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
     printlog "     - 'add all' for the rest of the files"
     DateiListe.Select 1
     HinzufuegenAlle.Click
-    sleep (1)
+    sleep (8)
     printlog "     - apply-dialog -> cancel"
     Kontext "ApplyGallery"
     for j=1 to 100
@@ -341,7 +341,7 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
         printlog "     - 'add all' for the rest of the files"
         DateiListe.Select 1
         HinzufuegenAlle.Click
-        sleep (2)
+        sleep (8)
         Kontext "ApplyGallery"
         for j=1 to 100
             If ApplyGallery.Exists then
