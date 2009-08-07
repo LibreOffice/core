@@ -1,0 +1,58 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2009 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#pragma once
+
+#include <saldisp.hxx>
+#include <salframe.h>
+
+class KDESalFrame : public X11SalFrame
+{
+    private:
+        static const int nMaxGraphics = 2;
+
+        struct GraphicsHolder
+        {
+            X11SalGraphics* pGraphics;
+            bool bInUse;
+
+            GraphicsHolder() : pGraphics(0),bInUse( false ) {}
+            ~GraphicsHolder();
+        };
+
+        GraphicsHolder m_aGraphics[ nMaxGraphics ];
+
+    public:
+        KDESalFrame( SalFrame* pParent, ULONG nStyle );
+        virtual ~KDESalFrame();
+
+        virtual SalGraphics* GetGraphics();
+        virtual void ReleaseGraphics( SalGraphics *pGraphics );
+        virtual void updateGraphics();
+        virtual void UpdateSettings( AllSettings& rSettings );
+        virtual void Show( BOOL bVisible, BOOL bNoActivate );
+};
