@@ -503,6 +503,7 @@ public:
     SAL_DLLPRIVATE bool getReversePrint() const;
     SAL_DLLPRIVATE void pushPropertiesToPrinter();
     SAL_DLLPRIVATE void setJobState( com::sun::star::view::PrintableState );
+    SAL_DLLPRIVATE bool setupPrinter( Window* i_pDlgParent );
 };
 
 class VCL_DLLPUBLIC PrinterOptionsHelper

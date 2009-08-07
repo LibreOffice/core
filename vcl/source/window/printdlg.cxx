@@ -1884,15 +1884,18 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
                                  makeAny( bChecked ) );
         preparePreview( true, true );
     }
+    else if( pButton == &maNUpPage.maBorderCB )
+    {
+        updateNup();
+    }
     else
     {
         if( pButton == &maJobPage.maSetupButton )
         {
-            maPController->getPrinter()->Setup( this );
+            maPController->setupPrinter( this );
+            preparePreview( true, true );
         }
         checkControlDependencies();
-        if( pButton == &maNUpPage.maBorderCB )
-            updateNup();
     }
     return 0;
 }

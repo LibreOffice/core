@@ -161,6 +161,10 @@ public:
 
     ImplPageCache                                               maPageCache;
 
+    // set by user through printer config dialog
+    // if set, pages are centered and trimmed onto the fixed page
+    Size                                                        maFixedPageSize;
+
     ImplPrinterControllerData() :
         mbLastPage( sal_False ),
         mbReversePageOrder( sal_False ),
@@ -168,6 +172,15 @@ public:
         mpProgress( NULL )
     {}
     ~ImplPrinterControllerData() { delete mpProgress; }
+
+    Size getRealPaperSize( const Size& i_rPageSize ) const
+    {
+        if( maFixedPageSize.Width() > 0 && maFixedPageSize.Height() > 0 )
+            return maFixedPageSize;
+        if( maMultiPage.nRows * maMultiPage.nColumns > 1 )
+            return maMultiPage.aPaperSize;
+        return i_rPageSize;
+    }
 };
 
 PrinterController::PrinterController()
@@ -540,9 +553,30 @@ const boost::shared_ptr<Printer>& PrinterController::getPrinter() const
 void PrinterController::setPrinter( const boost::shared_ptr<Printer>& i_rPrinter )
 {
     mpImplData->mpPrinter = i_rPrinter;
-    Size aPaperSize( i_rPrinter->PixelToLogic( i_rPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
     setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ),
               makeAny( rtl::OUString( i_rPrinter->GetName() ) ) );
+}
+
+bool PrinterController::setupPrinter( Window* i_pParent )
+{
+    bool bRet = false;
+    if( mpImplData->mpPrinter.get() )
+    {
+        Size aPaperSize( mpImplData->mpPrinter->PixelToLogic(
+            mpImplData->mpPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
+        bRet = mpImplData->mpPrinter->Setup( i_pParent );
+        if( bRet )
+        {
+            // was the papersize overridden ? if so we need to take action
+            Size aNewPaperSize( mpImplData->mpPrinter->PixelToLogic(
+                mpImplData->mpPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
+            if( aNewPaperSize != aPaperSize )
+            {
+                mpImplData->maFixedPageSize = aNewPaperSize;
+            }
+        }
+    }
+    return bRet;
 }
 
 static Size modifyJobSetup( Printer* pPrinter, const Sequence< PropertyValue >& i_rProps )
@@ -660,7 +694,7 @@ Size PrinterController::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o
     if( nSubPages < 1 )
         nSubPages = 1;
 
-    // there is no filtering to be done (and especially the page size of the
+    // there is no filtering to be done (and possibly the page size of the
     // original page is to be set), when N-Up is "neutral" that is there is
     // only one subpage and the margins are 0
     if( nSubPages == 1 &&
@@ -672,10 +706,22 @@ Size PrinterController::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o
             int nDocPages = getPageCount();
             i_nFilteredPage = nDocPages - 1 - i_nFilteredPage;
         }
-        return getPageFile( i_nFilteredPage, o_rMtf, i_bMayUseCache );
+        Size aPageSize = getPageFile( i_nFilteredPage, o_rMtf, i_bMayUseCache );
+        Size aPaperSize = mpImplData->getRealPaperSize( aPageSize );
+        if( aPaperSize != aPageSize )
+        {
+            // user overridden page size, center Metafile
+            o_rMtf.WindStart();
+            long nDX = (aPaperSize.Width() - aPageSize.Width()) / 2;
+            long nDY = (aPaperSize.Height() - aPageSize.Height()) / 2;
+            o_rMtf.Move( nDX, nDY );
+            o_rMtf.WindStart();
+            o_rMtf.SetPrefSize( aPaperSize );
+        }
+        return aPaperSize;
     }
 
-    Size aPaperSize( mpImplData->maMultiPage.aPaperSize );
+    Size aPaperSize( mpImplData->getRealPaperSize( mpImplData->maMultiPage.aPaperSize ) );
     // multi page area: paper size minus margins + one time spacing right and down
     // the added spacing is so each subpage can be calculated including its spacing
     Size aMPArea( aPaperSize );
@@ -832,8 +878,8 @@ void PrinterController::printFilteredPage( int i_nPage )
 
     // in N-Up printing set the correct page size
     mpImplData->mpPrinter->SetMapMode( MAP_100TH_MM );
-    if( bMultiPageOutput )
-        mpImplData->mpPrinter->SetPaperSizeUser( aPageSize = mpImplData->maMultiPage.aPaperSize );
+    // aPageSize was filtered through mpImplData->getRealPaperSize already by getFilteredPageFile()
+    mpImplData->mpPrinter->SetPaperSizeUser( aPageSize );
 
     // actually print the page
     mpImplData->mpPrinter->ImplStartPage();
