@@ -2836,7 +2836,21 @@ Size Edit::CalcMinimumSize() const
     Size aMinSize ( CalcSize( 3 ) );
     if( aSize.Width() < aMinSize.Width() )
         aSize.Width() = aMinSize.Width();
-    return CalcWindowSize( aSize );
+    aSize = CalcWindowSize( aSize );
+
+    // ask NWF what if it has an opinion, too
+    ImplControlValue aControlValue;
+    Rectangle aRect( Point( 0, 0 ), aSize );
+    Region aContent, aBound;
+    if( const_cast<Edit*>(this)->GetNativeControlRegion(
+                   CTRL_EDITBOX, PART_ENTIRE_CONTROL,
+                   aRect, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+    {
+        Rectangle aBoundRect( aBound.GetBoundRect() );
+        if( aBoundRect.GetHeight() > aSize.Height() )
+            aSize.Height() = aBoundRect.GetHeight();
+    }
+    return aSize;
 }
 
 // -----------------------------------------------------------------------

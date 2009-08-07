@@ -1448,6 +1448,17 @@ void PrintDialog::setupOptionalUI()
         maJobPage.maCopySpacer.Show( FALSE );
     }
 
+#ifdef WNT
+    // FIXME: the GetNativeControlRegion call on Windows has some issues
+    // (which skew the results of GetOptimalSize())
+    // however fixing this thoroughly needs to take interaction with paint into
+    // acoount, making the right fix less simple. Fix this the right way
+    // at some point. For now simply add some space at the lowest element
+    size_t nIndex = maJobPage.maLayout.countElements();
+    if( nIndex > 0 ) // sanity check
+        maJobPage.maLayout.setBorders( nIndex-1, 0, 0, 0, aBorder.Width()  );
+#endif
+
     // calculate job page
     Size aMaxSize = maJobPage.maLayout.getOptimalSize( WINDOWSIZE_PREFERRED );
     // and layout page

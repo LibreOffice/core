@@ -1132,6 +1132,40 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
         }
     }
 
+    if( (nType == CTRL_EDITBOX || nType == CTRL_SPINBOX) && nPart == PART_ENTIRE_CONTROL )
+    {
+        HTHEME hTheme = getThemeHandle( mhWnd, L"Edit");
+        if( hTheme )
+        {
+            // get borderr size
+            Rectangle aBoxRect( rControlRegion.GetBoundRect() );
+            Rectangle aRect( ImplGetThemeRect( hTheme, hDC, EP_BACKGROUNDWITHBORDER,
+                                               EBWBS_HOT, aBoxRect ) );
+            // ad app font height
+            NONCLIENTMETRICSW aNonClientMetrics;
+            aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
+            if ( SystemParametersInfoW( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
+            {
+                long nFontHeight = aNonClientMetrics.lfMessageFont.lfHeight;
+                if( nFontHeight < 0 )
+                    nFontHeight = -nFontHeight;
+
+                if( aRect.GetHeight() && nFontHeight )
+                {
+                    aRect.Bottom() += aRect.GetHeight();
+                    aRect.Bottom() += nFontHeight;
+                    if( aRect.GetHeight() > aBoxRect.GetHeight() )
+                        aBoxRect.Bottom() = aBoxRect.Top() + aRect.GetHeight();
+                    if( aRect.GetWidth() > aBoxRect.GetWidth() )
+                        aBoxRect.Right() = aBoxRect.Left() + aRect.GetWidth();
+                    rNativeContentRegion = aBoxRect;
+                    rNativeBoundingRegion = rNativeContentRegion;
+                        bRet = TRUE;
+                }
+            }
+        }
+    }
+
     ReleaseDC( mhWnd, hDC );
     return( bRet );
 }
