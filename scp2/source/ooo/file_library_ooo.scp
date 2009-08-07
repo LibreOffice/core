@@ -590,6 +590,18 @@ File gid_File_Lib_Fps_Gnome
 End
 #endif
 #endif
+#ifdef ENABLE_KDE4
+#ifndef MACOSX
+File gid_File_Lib_Fps_Kde4
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = gid_Dir_Program;
+    Name = SPECIAL_COMPONENT_LIB_NAME(fps_kde4.uno);
+    Regmergefile = "fps-kde4-ucd.txt";
+End
+#endif
+#endif
 #endif
 
 #ifdef MACOSX
@@ -1198,6 +1210,16 @@ File gid_File_Lib_Vclplug_Kde
     Name = LIBNAME(vclplug_kde);
     TXT_FILE_BODY;
     Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Program;
+End
+#endif
+#endif
+#ifdef ENABLE_KDE4
+#ifndef MACOSX
+File gid_File_Lib_Vclplug_Kde4
+    Name = LIBNAME(vclplug_kde4);
+    TXT_FILE_BODY;
+    Styles = (PACKED);
     Dir = gid_Dir_Program;
 End
 #endif

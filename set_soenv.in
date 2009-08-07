@@ -1689,8 +1689,12 @@ ToFile( "ENABLE_GIO",        "@ENABLE_GIO@",       "e" );
 ToFile( "ENABLE_KDE",        "@ENABLE_KDE@",       "e" );
 ToFile( "KDE_CFLAGS",        "@KDE_CFLAGS@",       "e" );
 ToFile( "KDE_LIBS",          "@KDE_LIBS@",         "e" );
-ToFile( "ENABLE_KAB",        "@ENABLE_KAB@",       "e" );
 ToFile( "MOC",               "@MOC@",              "e" );
+ToFile( "ENABLE_KDE4",       "@ENABLE_KDE4@",      "e" );
+ToFile( "KDE4_CFLAGS",       "@KDE4_CFLAGS@",      "e" );
+ToFile( "KDE4_LIBS",         "@KDE4_LIBS@",        "e" );
+ToFile( "MOC4",              "@MOC4@",             "e" );
+ToFile( "ENABLE_KAB",        "@ENABLE_KAB@",       "e" );
 ToFile( "PSPRINT",           "TRUE",             "e" );
 ToFile( "MKDEPENDSOLVER",    "TRUE",             "e" );
 #
