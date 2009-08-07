@@ -750,15 +750,14 @@ void ExternalLink::setExternalTargetUrl( const OUString& rTargetUrl, const OUStr
     meLinkType = LINKTYPE_UNKNOWN;
     if( rTargetType == OOX_TARGETTYPE_EXTLINK )
     {
-    maTargetUrl = getBaseFilter().getAbsoluteUrl( rTargetUrl );
+        maTargetUrl = getBaseFilter().getAbsoluteUrl( rTargetUrl );
         if( maTargetUrl.getLength() > 0 )
             meLinkType = LINKTYPE_EXTERNAL;
     }
     else if( rTargetType == OOX_TARGETTYPE_LIBRARY )
     {
         meLinkType = LINKTYPE_LIBRARY;
-        if( rTargetUrl.equalsIgnoreAsciiCaseAscii( "EUROTOOL.XLA" ) || rTargetUrl.equalsIgnoreAsciiCaseAscii( "EUROTOOL.XLAM" ) )
-            meFuncLibType = FUNCLIB_EUROTOOL;
+        meFuncLibType = getFormulaParser().getFuncLibTypeFromLibraryName( rTargetUrl );
     }
     OSL_ENSURE( meLinkType != LINKTYPE_UNKNOWN, "ExternalLink::setExternalTargetUrl - empty target URL or unknown target type" );
 

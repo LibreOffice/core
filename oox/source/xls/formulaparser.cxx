@@ -30,16 +30,12 @@
 
 #include "oox/xls/formulaparser.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/sheet/AddressConvention.hpp>
 #include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/ExternalReference.hpp>
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/SingleReference.hpp>
-#include <com/sun/star/sheet/XFormulaParser.hpp>
 #include "properties.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/core/filterbase.hxx"
 #include "oox/xls/addressconverter.hxx"
@@ -78,12 +74,351 @@ sal_uInt16 lclReadFmlaSize( BiffInputStream& rStrm, BiffType eBiff, const sal_uI
 
 } // namespace
 
+// formula finalizer ==========================================================
+
+FormulaFinalizer::FormulaFinalizer( const OpCodeProvider& rOpCodeProv ) :
+    OpCodeProvider( rOpCodeProv ),
+    ApiOpCodes( getOpCodes() )
+{
+    maTokens.reserve( 0x2000 );
+}
+
+ApiTokenSequence FormulaFinalizer::finalizeTokenArray( const ApiTokenSequence& rTokens )
+{
+    maTokens.clear();
+    if( rTokens.hasElements() )
+    {
+        const ApiToken* pToken = rTokens.getConstArray();
+        processTokens( pToken, pToken + rTokens.getLength() );
+    }
+    return ContainerHelper::vectorToSequence( maTokens );
+}
+
+const FunctionInfo* FormulaFinalizer::resolveBadFuncName( const OUString& ) const
+{
+    return 0;
+}
+
+OUString FormulaFinalizer::resolveDefinedName( sal_Int32 ) const
+{
+    return OUString();
+}
+
+const FunctionInfo* FormulaFinalizer::getFunctionInfo( ApiToken& orFuncToken )
+{
+    // first, try to find a regular function info from token op-code
+    if( const FunctionInfo* pRegFuncInfo = getFuncInfoFromApiToken( orFuncToken ) )
+        return pRegFuncInfo;
+
+    // try to recognize a function from an external library
+    if( (orFuncToken.OpCode == OPCODE_BAD) && orFuncToken.Data.has< OUString >() )
+    {
+        // virtual call to resolveBadFuncName()
+        if( const FunctionInfo* pLibFuncInfo = resolveBadFuncName( orFuncToken.Data.get< OUString >() ) )
+        {
+            // write function op-code to the OPCODE_BAD token
+            orFuncToken.OpCode = pLibFuncInfo->mnApiOpCode;
+            // if it is an external function, insert programmatic function name
+            if( (orFuncToken.OpCode == OPCODE_EXTERNAL) && (pLibFuncInfo->maExtProgName.getLength() > 0) )
+                orFuncToken.Data <<= pLibFuncInfo->maExtProgName;
+            else
+                orFuncToken.Data.clear();   // clear string from OPCODE_BAD
+            return pLibFuncInfo;
+        }
+    }
+
+    // no success - return null
+    return 0;
+
+}
+
+const FunctionInfo* FormulaFinalizer::getExternCallInfo( ApiToken& orFuncToken, const ApiToken& rECToken )
+{
+    // try to resolve the passed token to a supported sheet function
+    if( const FunctionInfo* pFuncInfo = getFuncInfoFromApiToken( rECToken ) )
+    {
+        orFuncToken.OpCode = pFuncInfo->mnApiOpCode;
+        // programmatic add-in function name
+        if( (pFuncInfo->mnApiOpCode == OPCODE_EXTERNAL) && (pFuncInfo->maExtProgName.getLength() > 0) )
+            orFuncToken.Data <<= pFuncInfo->maExtProgName;
+        // name of unsupported function, convert to OPCODE_BAD to preserve the name
+        else if( (pFuncInfo->mnApiOpCode == OPCODE_BAD) && (pFuncInfo->maOoxFuncName.getLength() > 0) )
+            orFuncToken.Data <<= pFuncInfo->maOoxFuncName;
+        return pFuncInfo;
+    }
+
+    // macro call or unknown function name, move data to function token
+    if( (rECToken.OpCode == OPCODE_MACRO) || (rECToken.OpCode == OPCODE_BAD) )
+        orFuncToken = rECToken;
+
+    // defined name used as function call, convert to OPCODE_BAD to preserve the name
+    if( (rECToken.OpCode == OPCODE_NAME) && rECToken.Data.has< sal_Int32 >() )
+    {
+        OUString aDefName = resolveDefinedName( rECToken.Data.get< sal_Int32 >() );
+        if( aDefName.getLength() > 0 )
+        {
+            orFuncToken.OpCode = OPCODE_BAD;
+            orFuncToken.Data <<= aDefName;
+        }
+    }
+
+    return 0;
+}
+
+void FormulaFinalizer::processTokens( const ApiToken* pToken, const ApiToken* pTokenEnd )
+{
+    while( pToken < pTokenEnd )
+    {
+        // push the current token into the vector
+        bool bValid = appendFinalToken( *pToken );
+        // try to process a function
+        if( const FunctionInfo* pFuncInfo = bValid ? getFunctionInfo( maTokens.back() ) : 0 )
+            pToken = processParameters( *pFuncInfo, pToken + 1, pTokenEnd );
+        // otherwise, go to next token
+        else
+            ++pToken;
+    }
+}
+
+const ApiToken* FormulaFinalizer::processParameters(
+        const FunctionInfo& rFuncInfo, const ApiToken* pToken, const ApiToken* pTokenEnd )
+{
+    // remember position of the token containing the function op-code
+    size_t nFuncNameIdx = maTokens.size() - 1;
+
+    // process a function, if an OPCODE_OPEN token is following
+    OSL_ENSURE( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_OPEN), "FormulaFinalizer::processParameters - OPCODE_OPEN expected" );
+    if( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_OPEN) )
+    {
+        // append the OPCODE_OPEN token to the vector
+        maTokens.append( OPCODE_OPEN );
+
+        // store positions of OPCODE_OPEN, parameter separators, and OPCODE_CLOSE
+        ParameterPosVector aParams;
+        pToken = findParameters( aParams, pToken, pTokenEnd );
+        OSL_ENSURE( aParams.size() >= 2, "FormulaFinalizer::processParameters - missing tokens" );
+        size_t nParamCount = aParams.size() - 1;
+
+        if( (nParamCount == 1) && isEmptyParameter( aParams[ 0 ] + 1, aParams[ 1 ] ) )
+        {
+            /*  Empty pair of parentheses -> function call without parameters,
+                process parameter, there might be spaces between parentheses. */
+            processTokens( aParams[ 0 ] + 1, aParams[ 1 ] );
+        }
+        else
+        {
+            const FunctionInfo* pRealFuncInfo = &rFuncInfo;
+            ParameterPosVector::const_iterator aPosIt = aParams.begin();
+
+            /*  Preprocess EXTERN.CALL functions. The actual function name is
+                contained as reference to a defined name in the first (hidden)
+                parameter. */
+            if( rFuncInfo.mnBiffFuncId == BIFF_FUNC_EXTERNCALL )
+            {
+                ApiToken& rFuncToken = maTokens[ nFuncNameIdx ];
+                rFuncToken.OpCode = OPCODE_NONAME;
+
+                // try to initialize function token from first parameter
+                if( const ApiToken* pECToken = getSingleToken( *aPosIt + 1, *(aPosIt + 1) ) )
+                    if( const FunctionInfo* pECFuncInfo = getExternCallInfo( rFuncToken, *pECToken ) )
+                        pRealFuncInfo = pECFuncInfo;
+
+                /*  On success (something has been inserted into rFuncToken),
+                    skip the first parameter. */
+                if( rFuncToken.OpCode != OPCODE_NONAME )
+                {
+                    --nParamCount;
+                    ++aPosIt;
+                }
+            }
+
+            // process all parameters
+            FuncInfoParamClassIterator aClassIt( *pRealFuncInfo );
+            size_t nLastValidSize = maTokens.size();
+            size_t nLastValidCount = 0;
+            for( size_t nParam = 0; nParam < nParamCount; ++nParam, ++aPosIt, ++aClassIt )
+            {
+                // add embedded Calc-only parameters
+                if( aClassIt.isCalcOnlyParam() )
+                {
+                    appendCalcOnlyParameter( *pRealFuncInfo, nParam );
+                    while( aClassIt.isCalcOnlyParam() ) ++aClassIt;
+                }
+
+                const ApiToken* pParamBegin = *aPosIt + 1;
+                const ApiToken* pParamEnd = *(aPosIt + 1);
+                bool bIsEmpty = isEmptyParameter( pParamBegin, pParamEnd );
+
+                if( !aClassIt.isExcelOnlyParam() )
+                {
+                    // replace empty second and third parameter in IF function with zeros
+                    if( (pRealFuncInfo->mnOobFuncId == OOBIN_FUNC_IF) && ((nParam == 1) || (nParam == 2)) && bIsEmpty )
+                    {
+                        maTokens.append< double >( OPCODE_PUSH, 0.0 );
+                        bIsEmpty = false;
+                    }
+                    else
+                    {
+                        // process all tokens of the parameter
+                        processTokens( pParamBegin, pParamEnd );
+                    }
+                    // append parameter separator token
+                    maTokens.append( OPCODE_SEP );
+                }
+
+                /*  #84453# Update size of new token sequence with valid parameters
+                    to be able to remove trailing optional empty parameters. */
+                if( !bIsEmpty || (nParam < pRealFuncInfo->mnMinParamCount) )
+                {
+                    nLastValidSize = maTokens.size();
+                    nLastValidCount = nParam + 1;
+                }
+            }
+
+            // #84453# remove trailing optional empty parameters
+            maTokens.resize( nLastValidSize );
+
+            // add trailing Calc-only parameters
+            if( aClassIt.isCalcOnlyParam() )
+                appendCalcOnlyParameter( *pRealFuncInfo, nLastValidCount );
+
+            // add optional parameters that are required in Calc
+            appendRequiredParameters( *pRealFuncInfo, nLastValidCount );
+
+            // remove last parameter separator token
+            if( maTokens.back().OpCode == OPCODE_SEP )
+                maTokens.pop_back();
+        }
+
+        /*  Append the OPCODE_CLOSE token to the vector, but only if there is
+            no OPCODE_BAD token at the end, this token already contains the
+            trailing closing parentheses. */
+        if( (pTokenEnd - 1)->OpCode != OPCODE_BAD )
+            maTokens.append( OPCODE_CLOSE );
+    }
+
+    /*  Replace OPCODE_EXTERNAL with OPCODE_NONAME to get #NAME! error in cell,
+        if no matching add-in function was found. */
+    ApiToken& rFuncNameToken = maTokens[ nFuncNameIdx ];
+    if( (rFuncNameToken.OpCode == OPCODE_EXTERNAL) && !rFuncNameToken.Data.hasValue() )
+        rFuncNameToken.OpCode = OPCODE_NONAME;
+
+    return pToken;
+}
+
+bool FormulaFinalizer::isEmptyParameter( const ApiToken* pToken, const ApiToken* pTokenEnd ) const
+{
+    while( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_SPACES) ) ++pToken;
+    if( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_MISSING) ) ++pToken;
+    while( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_SPACES) ) ++pToken;
+    return pToken == pTokenEnd;
+}
+
+const ApiToken* FormulaFinalizer::getSingleToken( const ApiToken* pToken, const ApiToken* pTokenEnd ) const
+{
+    const ApiToken* pSingleToken = 0;
+    // skip leading whitespace tokens
+    while( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_SPACES) ) ++pToken;
+    // remember first non-whitespace token
+    if( pToken < pTokenEnd ) pSingleToken = pToken++;
+    // skip trailing whitespace tokens
+    while( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_SPACES) ) ++pToken;
+    // return null, if other non-whitespace tokens follow
+    return (pToken == pTokenEnd) ? pSingleToken : 0;
+}
+
+const ApiToken* FormulaFinalizer::skipParentheses( const ApiToken* pToken, const ApiToken* pTokenEnd ) const
+{
+    // skip tokens between OPCODE_OPEN and OPCODE_CLOSE
+    OSL_ENSURE( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_OPEN), "skipParentheses - OPCODE_OPEN expected" );
+    ++pToken;
+    while( (pToken < pTokenEnd) && (pToken->OpCode != OPCODE_CLOSE) )
+    {
+        if( pToken->OpCode == OPCODE_OPEN )
+            pToken = skipParentheses( pToken, pTokenEnd );
+        else
+            ++pToken;
+    }
+    // skip the OPCODE_CLOSE token
+    OSL_ENSURE( ((pToken < pTokenEnd) && (pToken->OpCode == OPCODE_CLOSE)) || ((pTokenEnd - 1)->OpCode == OPCODE_BAD), "skipParentheses - OPCODE_CLOSE expected" );
+    return (pToken < pTokenEnd) ? (pToken + 1) : pTokenEnd;
+}
+
+const ApiToken* FormulaFinalizer::findParameters( ParameterPosVector& rParams,
+        const ApiToken* pToken, const ApiToken* pTokenEnd ) const
+{
+    // push position of OPCODE_OPEN
+    OSL_ENSURE( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_OPEN), "FormulaFinalizer::findParameters - OPCODE_OPEN expected" );
+    rParams.push_back( pToken++ );
+
+    // find positions of parameter separators
+    while( (pToken < pTokenEnd) && (pToken->OpCode != OPCODE_CLOSE) )
+    {
+        if( pToken->OpCode == OPCODE_OPEN )
+            pToken = skipParentheses( pToken, pTokenEnd );
+        else if( pToken->OpCode == OPCODE_SEP )
+            rParams.push_back( pToken++ );
+        else
+            ++pToken;
+    }
+
+    // push position of OPCODE_CLOSE
+    OSL_ENSURE( ((pToken < pTokenEnd) && (pToken->OpCode == OPCODE_CLOSE)) || ((pTokenEnd - 1)->OpCode == OPCODE_BAD), "FormulaFinalizer::findParameters - OPCODE_CLOSE expected" );
+    rParams.push_back( pToken );
+    return (pToken < pTokenEnd) ? (pToken + 1) : pTokenEnd;
+}
+
+void FormulaFinalizer::appendCalcOnlyParameter( const FunctionInfo& rFuncInfo, size_t nParam )
+{
+    (void)nParam;   // prevent 'unused' warning
+    switch( rFuncInfo.mnOobFuncId )
+    {
+        case OOBIN_FUNC_FLOOR:
+        case OOBIN_FUNC_CEILING:
+            OSL_ENSURE( nParam == 2, "FormulaFinalizer::appendCalcOnlyParameter - unexpected parameter index" );
+            maTokens.append< double >( OPCODE_PUSH, 1.0 );
+            maTokens.append( OPCODE_SEP );
+        break;
+    }
+}
+
+void FormulaFinalizer::appendRequiredParameters( const FunctionInfo& rFuncInfo, size_t nParamCount )
+{
+    switch( rFuncInfo.mnOobFuncId )
+    {
+        case OOBIN_FUNC_WEEKNUM:
+            if( nParamCount == 1 )
+            {
+                maTokens.append< double >( OPCODE_PUSH, 1.0 );
+                maTokens.append( OPCODE_SEP );
+            }
+        break;
+    }
+}
+
+bool FormulaFinalizer::appendFinalToken( const ApiToken& rToken )
+{
+    // replace OPCODE_MACRO without macro name with #NAME? error code
+    bool bValid = (rToken.OpCode != OPCODE_MACRO) || rToken.Data.hasValue();
+    if( bValid )
+    {
+        maTokens.push_back( rToken );
+    }
+    else
+    {
+        maTokens.append( OPCODE_ARRAY_OPEN );
+        maTokens.append( OPCODE_PUSH, BiffHelper::calcDoubleFromError( BIFF_ERR_NAME ) );
+        maTokens.append( OPCODE_ARRAY_CLOSE );
+    }
+    return bValid;
+}
+
 // parser implementation base =================================================
 
-class FormulaParserImpl : public OpCodeProvider
+class FormulaParserImpl : public FormulaFinalizer, public WorkbookHelper
 {
 public:
-    explicit            FormulaParserImpl( const OpCodeProvider& rOpCodeProv );
+    explicit            FormulaParserImpl( const FormulaParser& rParent );
 
     /** Converts an XML formula string. */
     virtual void        importOoxFormula(
@@ -208,23 +543,11 @@ private:
     void                convertReference3d( SingleReference& orApiRef, sal_Int32 nSheet, bool bSameSheet, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset ) const;
     void                convertReference3d( ComplexReference& orApiRef, const LinkSheetRange& rSheetRange, const BinSingleRef2d& rRef1, const BinSingleRef2d& rRef2, bool bDeleted, bool bRelativeAsOffset ) const;
 
+private:
     // finalize token sequence ------------------------------------------------
 
-    typedef ::std::vector< const ApiToken* > ParameterPosVector;
-
-    void                processTokens( const ApiToken* pToken, const ApiToken* pTokenEnd );
-    const ApiToken*     processParameters( const FunctionInfo& rFuncInfo, const ApiToken* pToken, const ApiToken* pTokenEnd );
-
-    const FunctionInfo* getFuncInfoFromLibFuncName( const ApiToken& rToken ) const;
-    bool                isEmptyParameter( const ApiToken* pToken, const ApiToken* pTokenEnd ) const;
-    const ApiToken*     getExternCallToken( const ApiToken* pToken, const ApiToken* pTokenEnd ) const;
-    const FunctionInfo* convertExternCallParam( ApiToken& orFuncToken, const ApiToken& rECToken ) const;
-    const ApiToken*     skipParentheses( const ApiToken* pToken, const ApiToken* pTokenEnd ) const;
-    const ApiToken*     findParameters( ParameterPosVector& rParams, const ApiToken* pToken, const ApiToken* pTokenEnd ) const;
-    void                appendCalcOnlyParameter( const FunctionInfo& rFuncInfo, size_t nParam );
-    void                appendRequiredParameters( const FunctionInfo& rFuncInfo, size_t nParamCount );
-
-    void                appendFinalToken( const ApiToken& rToken );
+    virtual const FunctionInfo* resolveBadFuncName( const OUString& rTokenData ) const;
+    virtual ::rtl::OUString resolveDefinedName( sal_Int32 nTokenIndex ) const;
 
 protected:
     const sal_Int32     mnMaxApiCol;                /// Maximum column index in own document.
@@ -246,12 +569,13 @@ private:
 
 // ----------------------------------------------------------------------------
 
-FormulaParserImpl::FormulaParserImpl( const OpCodeProvider& rOpCodeProv ) :
-    OpCodeProvider( rOpCodeProv ),
-    mnMaxApiCol( rOpCodeProv.getAddressConverter().getMaxApiAddress().Column ),
-    mnMaxApiRow( rOpCodeProv.getAddressConverter().getMaxApiAddress().Row ),
-    mnMaxXlsCol( rOpCodeProv.getAddressConverter().getMaxXlsAddress().Column ),
-    mnMaxXlsRow( rOpCodeProv.getAddressConverter().getMaxXlsAddress().Row ),
+FormulaParserImpl::FormulaParserImpl( const FormulaParser& rParent ) :
+    FormulaFinalizer( rParent ),
+    WorkbookHelper( rParent ),
+    mnMaxApiCol( rParent.getAddressConverter().getMaxApiAddress().Column ),
+    mnMaxApiRow( rParent.getAddressConverter().getMaxApiAddress().Row ),
+    mnMaxXlsCol( rParent.getAddressConverter().getMaxXlsAddress().Column ),
+    mnMaxXlsRow( rParent.getAddressConverter().getMaxXlsAddress().Row ),
     mpContext( 0 )
 {
     // reserve enough space to make resize(), push_back() etc. cheap
@@ -303,11 +627,9 @@ void FormulaParserImpl::initializeImport( FormulaContext& rContext )
 
 void FormulaParserImpl::finalizeImport( const ApiTokenSequence& rTokens )
 {
-    maTokenStorage.clear();
-    const ApiToken* pToken = rTokens.getConstArray();
-    processTokens( pToken, pToken + rTokens.getLength() );
-    if( !maTokenStorage.empty() )
-        mpContext->setTokens( ContainerHelper::vectorToSequence( maTokenStorage ) );
+    ApiTokenSequence aFinalTokens = finalizeTokenArray( rTokens );
+    if( aFinalTokens.hasElements() )
+        mpContext->setTokens( aFinalTokens );
 }
 
 void FormulaParserImpl::finalizeImport()
@@ -885,342 +1207,34 @@ void FormulaParserImpl::convertReference3d( ComplexReference& orApiRef, const Li
 
 // finalize token sequence ----------------------------------------------------
 
-void FormulaParserImpl::processTokens( const ApiToken* pToken, const ApiToken* pTokenEnd )
+const FunctionInfo* FormulaParserImpl::resolveBadFuncName( const OUString& rTokenData ) const
 {
-    while( pToken < pTokenEnd )
+    /*  Try to parse calls to library functions. The format of such a function
+        call is "[n]!funcname", n>0 being the link identifier of the function
+        library spreadsheet file. */
+    sal_Int32 nBracketOpen = rTokenData.indexOf( '[' );
+    sal_Int32 nBracketClose = rTokenData.indexOf( ']' );
+    sal_Int32 nExclamation = rTokenData.indexOf( '!' );
+    if( (0 == nBracketOpen) && (nBracketOpen + 1 < nBracketClose) && (nBracketClose + 1 == nExclamation) && (nExclamation + 1 < rTokenData.getLength()) )
     {
-        // push the current token into the vector
-        appendFinalToken( *pToken );
-        const FunctionInfo* pFuncInfo;
-        // try to process a function
-        if( (pFuncInfo = getFuncInfoFromApiToken( *pToken )) != 0 )
+        sal_Int32 nRefId = rTokenData.copy( nBracketOpen + 1, nBracketClose - nBracketOpen - 1 ).toInt32();
+        const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId ).get();
+        if( pExtLink && (pExtLink->getLinkType() == LINKTYPE_LIBRARY) )
         {
-            pToken = processParameters( *pFuncInfo, pToken + 1, pTokenEnd );
-        }
-        // try to process a function from an external library
-        else if( (pFuncInfo = getFuncInfoFromLibFuncName( *pToken )) != 0 )
-        {
-            ApiToken& rFuncToken = maTokenStorage.back();
-            rFuncToken.OpCode = pFuncInfo->mnApiOpCode;
-            if( (rFuncToken.OpCode == OPCODE_EXTERNAL) && (pFuncInfo->maExtProgName.getLength() > 0) )
-                rFuncToken.Data <<= pFuncInfo->maExtProgName;
-            else
-                rFuncToken.Data.clear();    // clear string from OPCODE_BAD
-            pToken = processParameters( *pFuncInfo, pToken + 1, pTokenEnd );
-        }
-        // otherwise, go to next token
-        else
-        {
-            ++pToken;
-        }
-    }
-}
-
-namespace {
-
-bool lclTokenHasChar( const ApiToken& rToken, sal_Int32 nOpCode, sal_Unicode cChar )
-{
-    return (rToken.OpCode == nOpCode) && rToken.Data.has< OUString >() && (rToken.Data.get< OUString >() == OUString( cChar ));
-}
-
-bool lclTokenHasDouble( const ApiToken& rToken, sal_Int32 nOpCode )
-{
-    return (rToken.OpCode == nOpCode) && rToken.Data.has< double >();
-}
-
-} // namespace
-
-const ApiToken* FormulaParserImpl::processParameters(
-        const FunctionInfo& rFuncInfo, const ApiToken* pToken, const ApiToken* pTokenEnd )
-{
-    /*  OOXML import of library functions pushes the external reference "[n]!"
-        as BAD/PUSH/BAD/BAD tokens in front of the function name. Try to find
-        and remove them here. TODO: This will change with CWS mooxlsc, there,
-        the reference ID and function name are passed together in a BAD token,
-        see getFuncInfoFromLibFuncName(). */
-    if( (rFuncInfo.meFuncLibType != FUNCLIB_UNKNOWN) && (maTokenStorage.size() >= 5) )
-    {
-        sal_Size nSize = maTokenStorage.size();
-        if( lclTokenHasChar(   maTokenStorage[ nSize - 5 ], OPCODE_BAD, '[' ) &&
-            lclTokenHasDouble( maTokenStorage[ nSize - 4 ], OPCODE_PUSH     ) &&
-            lclTokenHasChar(   maTokenStorage[ nSize - 3 ], OPCODE_BAD, ']' ) &&
-            lclTokenHasChar(   maTokenStorage[ nSize - 2 ], OPCODE_BAD, '!' ) )
-        {
-            maTokenStorage.erase( maTokenStorage.end() - 5, maTokenStorage.end() - 1 );
-        }
-    }
-
-    // remember position of the token containing the function op-code
-    size_t nFuncNameIdx = maTokenStorage.size() - 1;
-
-    // process a function, if an OPCODE_OPEN token is following
-    OSL_ENSURE( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_OPEN), "FormulaParserImpl::processParameters - OPCODE_OPEN expected" );
-    if( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_OPEN) )
-    {
-        // append the OPCODE_OPEN token to the vector
-        maTokenStorage.append( OPCODE_OPEN );
-
-        // store positions of OPCODE_OPEN, parameter separators, and OPCODE_CLOSE
-        ParameterPosVector aParams;
-        pToken = findParameters( aParams, pToken, pTokenEnd );
-        OSL_ENSURE( aParams.size() >= 2, "FormulaParserImpl::processParameters - missing tokens" );
-        size_t nParamCount = aParams.size() - 1;
-
-        if( (nParamCount == 1) && isEmptyParameter( aParams[ 0 ] + 1, aParams[ 1 ] ) )
-        {
-            /*  Empty pair of parentheses -> function call without parameters,
-                process parameter, there might be spaces between parentheses. */
-            processTokens( aParams[ 0 ] + 1, aParams[ 1 ] );
-        }
-        else
-        {
-            const FunctionInfo* pRealFuncInfo = &rFuncInfo;
-            ParameterPosVector::const_iterator aPosIt = aParams.begin();
-
-            // preprocess add-ins, first parameter is reference to function name
-            if( rFuncInfo.mnBiffFuncId == BIFF_FUNC_EXTERNCALL )
-            {
-                maTokenStorage[ nFuncNameIdx ].OpCode = OPCODE_NONAME;
-                // try to initialize function token from first parameter
-                if( const ApiToken* pECToken = getExternCallToken( *aPosIt + 1, *(aPosIt + 1) ) )
-                    if( const FunctionInfo* pECFuncInfo = convertExternCallParam( maTokenStorage[ nFuncNameIdx ], *pECToken ) )
-                        pRealFuncInfo = pECFuncInfo;
-                // on success, ignore first parameter
-                if( maTokenStorage[ nFuncNameIdx ].OpCode != OPCODE_NONAME )
-                {
-                    --nParamCount;
-                    ++aPosIt;
-                }
-            }
-
-            // process all parameters
-            FuncInfoParamClassIterator aClassIt( *pRealFuncInfo );
-            size_t nLastValidSize = maTokenStorage.size();
-            size_t nLastValidCount = 0;
-            for( size_t nParam = 0; nParam < nParamCount; ++nParam, ++aPosIt, ++aClassIt )
-            {
-                // add embedded Calc-only parameters
-                if( aClassIt.isCalcOnlyParam() )
-                {
-                    appendCalcOnlyParameter( *pRealFuncInfo, nParam );
-                    while( aClassIt.isCalcOnlyParam() ) ++aClassIt;
-                }
-
-                const ApiToken* pParamBegin = *aPosIt + 1;
-                const ApiToken* pParamEnd = *(aPosIt + 1);
-                bool bIsEmpty = isEmptyParameter( pParamBegin, pParamEnd );
-
-                if( !aClassIt.isExcelOnlyParam() )
-                {
-                    // replace empty second and third parameter in IF function with zeros
-                    if( (pRealFuncInfo->mnOobFuncId == OOBIN_FUNC_IF) && ((nParam == 1) || (nParam == 2)) && bIsEmpty )
-                    {
-                        maTokenStorage.append< double >( OPCODE_PUSH, 0.0 );
-                        bIsEmpty = false;
-                    }
-                    else
-                    {
-                        // process all tokens of the parameter
-                        processTokens( pParamBegin, pParamEnd );
-                    }
-                    // append parameter separator token
-                    maTokenStorage.append( OPCODE_SEP );
-                }
-
-                /*  #84453# Update size of new token sequence with valid parameters
-                    to be able to remove trailing optional empty parameters. */
-                if( !bIsEmpty || (nParam < pRealFuncInfo->mnMinParamCount) )
-                {
-                    nLastValidSize = maTokenStorage.size();
-                    nLastValidCount = nParam + 1;
-                }
-            }
-
-            // #84453# remove trailing optional empty parameters
-            maTokenStorage.resize( nLastValidSize );
-
-            // add trailing Calc-only parameters
-            if( aClassIt.isCalcOnlyParam() )
-                appendCalcOnlyParameter( *pRealFuncInfo, nLastValidCount );
-
-            // add optional parameters that are required in Calc
-            appendRequiredParameters( *pRealFuncInfo, nLastValidCount );
-
-            // remove last parameter separator token
-            if( maTokenStorage.back().OpCode == OPCODE_SEP )
-                maTokenStorage.pop_back();
-        }
-
-        /*  Append the OPCODE_CLOSE token to the vector, but only if there is
-            no OPCODE_BAD token at the end, this token already contains the
-            trailing closing parentheses. */
-        if( (pTokenEnd - 1)->OpCode != OPCODE_BAD )
-            maTokenStorage.append( OPCODE_CLOSE );
-    }
-
-    /*  Replace OPCODE_EXTERNAL with OPCODE_NONAME to get #NAME! error in cell,
-        if no matching add-in function was found. */
-    ApiToken& rFuncNameToken = maTokenStorage[ nFuncNameIdx ];
-    if( (rFuncNameToken.OpCode == OPCODE_EXTERNAL) && !rFuncNameToken.Data.hasValue() )
-        rFuncNameToken.OpCode = OPCODE_NONAME;
-
-    return pToken;
-}
-
-const FunctionInfo* FormulaParserImpl::getFuncInfoFromLibFuncName( const ApiToken& rToken ) const
-{
-    // try to parse calls to library functions
-    if( (rToken.OpCode == OPCODE_BAD) && rToken.Data.has< OUString >() )
-    {
-        // format of the function call is "[n]!funcname", n being the link to the library
-        OUString aString = rToken.Data.get< OUString >();
-        sal_Int32 nBracketOpen = aString.indexOf( '[' );
-        sal_Int32 nBracketClose = aString.indexOf( ']' );
-        sal_Int32 nExclamation = aString.indexOf( '!' );
-        if( (0 == nBracketOpen) && (nBracketOpen + 1 < nBracketClose) && (nBracketClose + 1 == nExclamation) && (nExclamation + 1 < aString.getLength()) )
-        {
-            sal_Int32 nRefId = aString.copy( nBracketOpen + 1, nBracketClose - nBracketOpen - 1 ).toInt32();
-            const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId ).get();
-            if( pExtLink && (pExtLink->getLinkType() == LINKTYPE_LIBRARY) )
-                if( const FunctionInfo* pFuncInfo = getFuncInfoFromOoxFuncName( aString.copy( nExclamation + 1 ).toAsciiUpperCase() ) )
-                    if( (pFuncInfo->meFuncLibType != FUNCLIB_UNKNOWN) && (pFuncInfo->meFuncLibType == pExtLink->getFuncLibraryType()) )
-                        return pFuncInfo;
+            OUString aFuncName = rTokenData.copy( nExclamation + 1 ).toAsciiUpperCase();
+            if( const FunctionInfo* pFuncInfo = getFuncInfoFromOoxFuncName( aFuncName ) )
+                if( (pFuncInfo->meFuncLibType != FUNCLIB_UNKNOWN) && (pFuncInfo->meFuncLibType == pExtLink->getFuncLibraryType()) )
+                    return pFuncInfo;
         }
     }
     return 0;
 }
 
-bool FormulaParserImpl::isEmptyParameter( const ApiToken* pToken, const ApiToken* pTokenEnd ) const
+OUString FormulaParserImpl::resolveDefinedName( sal_Int32 nTokenIndex ) const
 {
-    while( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_SPACES) ) ++pToken;
-    if( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_MISSING) ) ++pToken;
-    while( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_SPACES) ) ++pToken;
-    return pToken == pTokenEnd;
-}
-
-const ApiToken* FormulaParserImpl::getExternCallToken( const ApiToken* pToken, const ApiToken* pTokenEnd ) const
-{
-    const ApiToken* pECToken = 0;
-    while( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_SPACES) ) ++pToken;
-    if( pToken < pTokenEnd ) pECToken = pToken++;
-    while( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_SPACES) ) ++pToken;
-    return (pToken == pTokenEnd) ? pECToken : 0;
-}
-
-const FunctionInfo* FormulaParserImpl::convertExternCallParam( ApiToken& orFuncToken, const ApiToken& rECToken ) const
-{
-    if( const FunctionInfo* pFuncInfo = getFuncInfoFromApiToken( rECToken ) )
-    {
-        orFuncToken.OpCode = pFuncInfo->mnApiOpCode;
-        // programmatic add-in function name
-        if( (pFuncInfo->mnApiOpCode == OPCODE_EXTERNAL) && (pFuncInfo->maExtProgName.getLength() > 0) )
-            orFuncToken.Data <<= pFuncInfo->maExtProgName;
-        // name of unsupported function, convert to OPCODE_BAD to preserve the name
-        else if( (pFuncInfo->mnApiOpCode == OPCODE_BAD) && (pFuncInfo->maOoxFuncName.getLength() > 0) )
-            orFuncToken.Data <<= pFuncInfo->maOoxFuncName;
-        return pFuncInfo;
-    }
-
-    if( (rECToken.OpCode == OPCODE_MACRO) || (rECToken.OpCode == OPCODE_BAD) )
-    {
-        // macro call or unknown function name, move data to function token
-        orFuncToken = rECToken;
-    }
-    else if( rECToken.OpCode == OPCODE_NAME )
-    {
-        // defined name used as function call, convert to OPCODE_BAD to preserve the name
-        sal_Int32 nTokenIndex = 0;
-        if( rECToken.Data >>= nTokenIndex )
-        {
-            if( const DefinedName* pDefName = getDefinedNames().getByTokenIndex( nTokenIndex ).get() )
-            {
-                orFuncToken.OpCode = OPCODE_BAD;
-                orFuncToken.Data <<= pDefName->getCalcName();
-            }
-        }
-    }
-    return 0;
-}
-
-const ApiToken* FormulaParserImpl::skipParentheses( const ApiToken* pToken, const ApiToken* pTokenEnd ) const
-{
-    // skip tokens between OPCODE_OPEN and OPCODE_CLOSE
-    OSL_ENSURE( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_OPEN), "skipParentheses - OPCODE_OPEN expected" );
-    ++pToken;
-    while( (pToken < pTokenEnd) && (pToken->OpCode != OPCODE_CLOSE) )
-    {
-        if( pToken->OpCode == OPCODE_OPEN )
-            pToken = skipParentheses( pToken, pTokenEnd );
-        else
-            ++pToken;
-    }
-    // skip the OPCODE_CLOSE token
-    OSL_ENSURE( ((pToken < pTokenEnd) && (pToken->OpCode == OPCODE_CLOSE)) || ((pTokenEnd - 1)->OpCode == OPCODE_BAD), "skipParentheses - OPCODE_CLOSE expected" );
-    return (pToken < pTokenEnd) ? (pToken + 1) : pTokenEnd;
-}
-
-const ApiToken* FormulaParserImpl::findParameters( ParameterPosVector& rParams,
-        const ApiToken* pToken, const ApiToken* pTokenEnd ) const
-{
-    // push position of OPCODE_OPEN
-    OSL_ENSURE( (pToken < pTokenEnd) && (pToken->OpCode == OPCODE_OPEN), "FormulaParserImpl::findParameters - OPCODE_OPEN expected" );
-    rParams.push_back( pToken++ );
-
-    // find positions of parameter separators
-    while( (pToken < pTokenEnd) && (pToken->OpCode != OPCODE_CLOSE) )
-    {
-        if( pToken->OpCode == OPCODE_OPEN )
-            pToken = skipParentheses( pToken, pTokenEnd );
-        else if( pToken->OpCode == OPCODE_SEP )
-            rParams.push_back( pToken++ );
-        else
-            ++pToken;
-    }
-
-    // push position of OPCODE_CLOSE
-    OSL_ENSURE( ((pToken < pTokenEnd) && (pToken->OpCode == OPCODE_CLOSE)) || ((pTokenEnd - 1)->OpCode == OPCODE_BAD), "FormulaParserImpl::findParameters - OPCODE_CLOSE expected" );
-    rParams.push_back( pToken );
-    return (pToken < pTokenEnd) ? (pToken + 1) : pTokenEnd;
-}
-
-void FormulaParserImpl::appendCalcOnlyParameter( const FunctionInfo& rFuncInfo, size_t nParam )
-{
-    (void)nParam;   // prevent 'unused' warning
-    switch( rFuncInfo.mnOobFuncId )
-    {
-        case OOBIN_FUNC_FLOOR:
-        case OOBIN_FUNC_CEILING:
-            OSL_ENSURE( nParam == 2, "FormulaParserImpl::appendCalcOnlyParameter - unexpected parameter index" );
-            maTokenStorage.append< double >( OPCODE_PUSH, 1.0 );
-            maTokenStorage.append( OPCODE_SEP );
-        break;
-    }
-}
-
-void FormulaParserImpl::appendRequiredParameters( const FunctionInfo& rFuncInfo, size_t nParamCount )
-{
-    switch( rFuncInfo.mnOobFuncId )
-    {
-        case OOBIN_FUNC_WEEKNUM:
-            if( nParamCount == 1 )
-            {
-                maTokenStorage.append< double >( OPCODE_PUSH, 1.0 );
-                maTokenStorage.append( OPCODE_SEP );
-            }
-        break;
-    }
-}
-
-void FormulaParserImpl::appendFinalToken( const ApiToken& rToken )
-{
-    if( (rToken.OpCode == OPCODE_MACRO) && !rToken.Data.hasValue() )
-    {
-        maTokenStorage.append( OPCODE_ARRAY_OPEN );
-        maTokenStorage.append( OPCODE_PUSH, BiffHelper::calcDoubleFromError( BIFF_ERR_NAME ) );
-        maTokenStorage.append( OPCODE_ARRAY_CLOSE );
-    }
-    else
-        maTokenStorage.push_back( rToken );
+    if( const DefinedName* pDefName = getDefinedNames().getByTokenIndex( nTokenIndex ).get() )
+        return pDefName->getCalcName();
+    return OUString();
 }
 
 // OOX parser implementation ==================================================
@@ -1228,7 +1242,7 @@ void FormulaParserImpl::appendFinalToken( const ApiToken& rToken )
 class OoxFormulaParserImpl : public FormulaParserImpl
 {
 public:
-    explicit            OoxFormulaParserImpl( const OpCodeProvider& rOpCodeProv );
+    explicit            OoxFormulaParserImpl( const FormulaParser& rParent );
 
     virtual void        importOoxFormula(
                             FormulaContext& rContext,
@@ -1270,48 +1284,30 @@ private:
     bool                pushOobFunction( sal_uInt16 nFuncId, sal_uInt8 nParamCount );
 
 private:
-    Reference< XFormulaParser > mxParser;
-    PropertySet         maParserProps;
+    ApiParserWrapper    maApiParser;        /// Wrapper for the API formula parser object.
     sal_Int64           mnAddDataPos;       /// Current stream position for additional data (tExp, tArray, tMemArea).
     bool                mbNeedExtRefs;      /// True = parser needs initialization of external reference info.
 };
 
 // ----------------------------------------------------------------------------
 
-OoxFormulaParserImpl::OoxFormulaParserImpl( const OpCodeProvider& rOpCodeProv ) :
-    FormulaParserImpl( rOpCodeProv ),
+OoxFormulaParserImpl::OoxFormulaParserImpl( const FormulaParser& rParent ) :
+    FormulaParserImpl( rParent ),
+    maApiParser( rParent.getDocumentFactory(), rParent ),
     mnAddDataPos( 0 ),
     mbNeedExtRefs( true )
 {
-    try
-    {
-        mxParser.set( getDocumentFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.sheet.FormulaParser" ) ), UNO_QUERY_THROW );
-    }
-    catch( Exception& )
-    {
-    }
-    OSL_ENSURE( mxParser.is(), "OoxFormulaParserImpl::OoxFormulaParserImpl - cannot create formula parser" );
-    maParserProps.set( mxParser );
-    maParserProps.setProperty( PROP_CompileEnglish, true );
-    maParserProps.setProperty( PROP_FormulaConvention, ::com::sun::star::sheet::AddressConvention::XL_OOX );
-    maParserProps.setProperty( PROP_IgnoreLeadingSpaces, false );
-    maParserProps.setProperty( PROP_OpCodeMap, getOoxParserMap() );
 }
 
-void OoxFormulaParserImpl::importOoxFormula(
-        FormulaContext& rContext, const OUString& rFormulaString )
+void OoxFormulaParserImpl::importOoxFormula( FormulaContext& rContext, const OUString& rFormulaString )
 {
-    if( mxParser.is() )
+    if( mbNeedExtRefs )
     {
-        if( mbNeedExtRefs )
-        {
-            maParserProps.setProperty( PROP_ExternalLinks, getExternalLinks().getLinkInfos() );
-            mbNeedExtRefs = false;
-        }
-        maParserProps.setProperty( PROP_ReferencePosition, rContext.getBaseAddress() );
-        initializeImport( rContext );
-        finalizeImport( mxParser->parseFormula( rFormulaString ) );
+        maApiParser.getParserProperties().setProperty( PROP_ExternalLinks, getExternalLinks().getLinkInfos() );
+        mbNeedExtRefs = false;
     }
+    initializeImport( rContext );
+    finalizeImport( maApiParser.parseFormula( rFormulaString, rContext.getBaseAddress() ) );
 }
 
 void OoxFormulaParserImpl::importOobFormula( FormulaContext& rContext, RecordInputStream& rStrm )
@@ -1848,7 +1844,7 @@ bool lclIsValidNlrRange( const BiffNlr& rNlr, const BinRange& rRange, bool bRow 
 class BiffFormulaParserImpl : public FormulaParserImpl
 {
 public:
-    explicit            BiffFormulaParserImpl( const OpCodeProvider& rOpCodeProv );
+    explicit            BiffFormulaParserImpl( const FormulaParser& rParent );
 
     virtual void        importBiffFormula(
                             FormulaContext& rContext,
@@ -1949,8 +1945,8 @@ private:
 
 // ----------------------------------------------------------------------------
 
-BiffFormulaParserImpl::BiffFormulaParserImpl( const OpCodeProvider& rOpCodeProv ) :
-    FormulaParserImpl( rOpCodeProv ),
+BiffFormulaParserImpl::BiffFormulaParserImpl( const FormulaParser& rParent ) :
+    FormulaParserImpl( rParent ),
     mnAddDataPos( 0 ),
     mnCurrRefId( 0 )
 {
