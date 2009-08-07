@@ -37,6 +37,7 @@
 #include <svx/outlobj.hxx>
 #include <svx/editobj.hxx>
 #include <svx/flditem.hxx>
+#include <svx/sdr/properties/properties.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // pointer compare define
@@ -69,6 +70,7 @@ namespace drawinglayer
             maTextUpperDistance(aTextUpperDistance),
             maTextRightDistance(aTextRightDistance),
             maTextLowerDistance(aTextLowerDistance),
+            maPropertiesVersion(0),
             mbContour(bContour),
             mbFitToSize(bFitToSize),
             mbHideContour(bHideContour),
@@ -82,6 +84,11 @@ namespace drawinglayer
                 const SfxItemSet& rSet = getSdrText().GetItemSet();
                 mpSdrFormTextAttribute = new SdrFormTextAttribute(rSet);
             }
+
+            // #i101556# init with version number to detect changes of single text
+            // attribute and/or style sheets in primitive data without having to
+            // copy that data locally (which would be better from principle)
+            maPropertiesVersion = rSdrText.GetObject().GetProperties().getVersion();
         }
 
         SdrTextAttribute::~SdrTextAttribute()
@@ -148,11 +155,17 @@ namespace drawinglayer
         bool SdrTextAttribute::operator==(const SdrTextAttribute& rCandidate) const
         {
             return (getOutlinerParaObject() == rCandidate.getOutlinerParaObject()
+                // #i102062# for primitive visualisation, the WrongList (SpellChecking)
+                // is important, too, so use isWrongListEqual since there is no WrongList
+                // comparison in the regular OutlinerParaObject compare (since it's
+                // not-persistent data)
+                && getOutlinerParaObject().isWrongListEqual(rCandidate.getOutlinerParaObject())
                 && pointerOrContentEqual(getSdrFormTextAttribute(), rCandidate.getSdrFormTextAttribute())
                 && getTextLeftDistance() == rCandidate.getTextLeftDistance()
                 && getTextUpperDistance() == rCandidate.getTextUpperDistance()
                 && getTextRightDistance() == rCandidate.getTextRightDistance()
                 && getTextLowerDistance() == rCandidate.getTextLowerDistance()
+                && getPropertiesVersion() == rCandidate.getPropertiesVersion()
                 && isContour() == rCandidate.isContour()
                 && isFitToSize() == rCandidate.isFitToSize()
                 && isHideContour() == rCandidate.isHideContour()

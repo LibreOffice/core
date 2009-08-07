@@ -114,7 +114,9 @@ private:
 
     ::rtl::OUString maMainTitle, maSubTitle;
     com::sun::star::awt::Point maMainTitlePos, maSubTitlePos, maLegendPos;
-    sal_Bool mbHasOwnTable;
+    ::rtl::OUString m_aXLinkHRefAttributeToIndicateDataProvider;
+    bool m_bHasRangeAtPlotArea;
+    bool m_bHasTableElement;
     sal_Bool mbAllRangeAddressesAvailable;
     sal_Bool mbColHasLabels;
     sal_Bool mbRowHasLabels;
@@ -147,9 +149,6 @@ private:
                         const ::rtl::OUString & rChartTypeServiceName,
                         sal_Bool bSetSwitchData);
 
-    void ChangeDiagramAccordingToTemplate(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xNewDoc );
-    ::com::sun::star::uno::Sequence< sal_Int32 > GetNumberSequenceFromString( const ::rtl::OUString& rStr, bool bAddOneToEachOldIndex );
     void MergeSeriesForStockChart();
 };
 

@@ -793,6 +793,15 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, BOOL bFull*/)
             // overlay objects instead.
             sal_Bool bUseSolidDragging(IsSolidDragging());
 
+            // #i101648# check if dragged object is a naked SdrObject (no
+            // derivation of). This is e.g. used in SW Frame construction
+            // as placeholder. Do not use SolidDragging for naked SDrObjects,
+            // they cannot have a valid optical representation
+            if(bUseSolidDragging && OBJ_NONE == pAktCreate->GetObjIdentifier())
+            {
+                bUseSolidDragging = false;
+            }
+
             // check for objects with no fill and no line
             if(bUseSolidDragging)
             {
@@ -815,13 +824,15 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, BOOL bFull*/)
                 }
             }
 
-            // #i68562# Force to non-solid dragging when not creating a full circle and up to step three
-            if(bUseSolidDragging
-                && pAktCreate->ISA(SdrCircObj)
-                && OBJ_CIRC != (SdrObjKind)(static_cast< SdrCircObj* >(pAktCreate)->GetObjIdentifier())
-                && aDragStat.GetPointAnz() < 4L)
+              // #i101781# force to non-solid dragging when not creating a full circle
+            if(bUseSolidDragging)
             {
-                bUseSolidDragging = false;
+                SdrCircObj* pCircObj = dynamic_cast< SdrCircObj* >(pAktCreate);
+
+                if(pCircObj && OBJ_CIRC != pCircObj->GetObjIdentifier())
+                {
+                    bUseSolidDragging = false;
+                }
             }
 
             if(bUseSolidDragging)

@@ -102,6 +102,7 @@ enum SchXMLAxisElemTokenMap
 
 enum SchXMLChartAttrMap
 {
+    XML_TOK_CHART_HREF,
     XML_TOK_CHART_CLASS,
     XML_TOK_CHART_WIDTH,
     XML_TOK_CHART_HEIGHT,
