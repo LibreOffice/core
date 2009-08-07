@@ -95,6 +95,7 @@
 #include "lookupcache.hxx"
 #include "externalrefmgr.hxx"
 #include "tabprotection.hxx"
+#include "formulaparserpool.hxx"
 
 // pImpl because including lookupcache.hxx in document.hxx isn't wanted, and
 // dtor plus helpers are convenient.
@@ -154,7 +155,6 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pScriptTypeData( NULL ),
         pCacheFieldEditEngine( NULL ),
         pDocProtection( NULL ),
-        pExternalRefMgr( NULL ),
         pViewOptions( NULL ),
         pDocOptions( NULL ),
         pExtDocOptions( NULL ),
@@ -384,15 +384,14 @@ ScDocument::~ScDocument()
             pLinkManager->Remove( 0, pLinkManager->GetLinks().Count() );
     }
 
-    if (pExternalRefMgr.get())
-        // Destroy the external ref mgr instance here because it has a timer
-        // which needs to be stopped before the app closes.
-        pExternalRefMgr.reset(NULL);
+    mxFormulaParserPool.reset();
+    // Destroy the external ref mgr instance here because it has a timer
+    // which needs to be stopped before the app closes.
+    pExternalRefMgr.reset();
 
     ScAddInAsync::RemoveDocument( this );
     ScAddInListener::RemoveDocument( this );
-    delete pChartListenerCollection;    // vor pBASM wg. evtl. Listener!
-    pChartListenerCollection = NULL;
+    DELETEZ( pChartListenerCollection);   // vor pBASM wg. evtl. Listener!
     DELETEZ( pLookupCacheMapImpl);  // before pBASM because of listeners
     // BroadcastAreas vor allen Zellen zerstoeren um unnoetige
     // Einzel-EndListenings der Formelzellen zu vermeiden

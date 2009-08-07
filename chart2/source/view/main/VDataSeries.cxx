@@ -124,20 +124,28 @@ struct lcl_LessXOfPoint
     }
 };
 
-void lcl_clearIfTextIsContained( VDataSequence& rData, const uno::Reference<data::XDataSequence>& xDataSequence )
+void lcl_clearIfNoValuesButTextIsContained( VDataSequence& rData, const uno::Reference<data::XDataSequence>& xDataSequence )
 {
-    uno::Sequence< rtl::OUString > aStrings( DataSequenceToStringSequence( xDataSequence ) );
-    for( sal_Int32 i = 0; i < rData.Doubles.getLength(); ++i )
+    //#i71686#, #i101968#, #i102428#
+    sal_Int32 nCount = rData.Doubles.getLength();
+    for( sal_Int32 i = 0; i < nCount; ++i )
     {
-        if( ::rtl::math::isNan( rData.Doubles[i] ) )
+        if( !::rtl::math::isNan( rData.Doubles[i] ) )
+            return;
+    }
+    //no double value is countained
+    //is there any text?
+    uno::Sequence< rtl::OUString > aStrings( DataSequenceToStringSequence( xDataSequence ) );
+    sal_Int32 nTextCount = aStrings.getLength();
+    for( sal_Int32 j = 0; j < nTextCount; ++j )
+    {
+        if( aStrings[j].getLength() )
         {
-            if( i < aStrings.getLength() && aStrings[i].getLength() )
-            {
-                rData.clear();
-                break;
-            }
+            rData.clear();
+            return;
         }
     }
+    //no content at all
 }
 
 void lcl_maybeReplaceNanWithZero( double& rfValue, sal_Int32 nMissingValueTreatment )
@@ -228,7 +236,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
                 if( aRole.equals(C2U("values-x")) )
                 {
                     m_aValues_X.init( xDataSequence );
-                    lcl_clearIfTextIsContained( m_aValues_X, xDataSequence );
+                    lcl_clearIfNoValuesButTextIsContained( m_aValues_X, xDataSequence );
                 }
                 else if( aRole.equals(C2U("values-y")) )
                     m_aValues_Y.init( xDataSequence );

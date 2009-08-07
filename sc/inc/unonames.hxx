@@ -318,7 +318,10 @@
 #define SC_UNONAME_FORMULA2         "Formula2"
 #define SC_UNONAME_SOURCEPOS        "SourcePosition"
 #define SC_UNONAME_SOURCESTR        "SourcePositionAsString" // only for use in XML filter
-#define SC_UNONAME_GRAMMAR          "Grammar" // only for use in XML filter
+#define SC_UNONAME_FORMULANMSP1     "FormulaNamespace1" // only for use in XML filter
+#define SC_UNONAME_FORMULANMSP2     "FormulaNamespace2" // only for use in XML filter
+#define SC_UNONAME_GRAMMAR1         "Grammar1" // only for use in XML filter
+#define SC_UNONAME_GRAMMAR2         "Grammar2" // only for use in XML filter
 #define SC_UNONAME_STYLENAME        "StyleName"
 
 //  validation
@@ -599,7 +602,6 @@
 // <--
 
 // FormulaParser
-#define SC_UNO_REFERENCEPOS         "ReferencePosition"
 #define SC_UNO_COMPILEENGLISH       "CompileEnglish"
 #define SC_UNO_FORMULACONVENTION    "FormulaConvention"
 #define SC_UNO_IGNORELEADING        "IgnoreLeadingSpaces"

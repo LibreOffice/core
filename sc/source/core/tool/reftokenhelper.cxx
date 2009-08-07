@@ -54,8 +54,9 @@ void ScRefTokenHelper::compileRangeRepresentation(
     const sal_Unicode cSep = ';';
     const sal_Unicode cQuote = '\'';
 
+    bool bFailure = false;
     sal_Int32 nOffset = 0;
-    while (nOffset >= 0)
+    while (nOffset >= 0 && !bFailure)
     {
         OUString aToken;
         ScRangeStringConverter::GetTokenByOffset(aToken, rRangeStr, nOffset, cSep, cQuote);
@@ -66,14 +67,49 @@ void ScRefTokenHelper::compileRangeRepresentation(
         aCompiler.SetGrammar(eGrammar);
         auto_ptr<ScTokenArray> pArray(aCompiler.CompileString(aToken));
 
-        // There should only be one reference per range token.
-        pArray->Reset();
-        FormulaToken* p = pArray->GetNextReference();
-        if (!p)
-            continue;
+        // There MUST be exactly one reference per range token and nothing
+        // else, and it MUST be a valid reference, not some #REF!
+        USHORT nLen = pArray->GetLen();
+        if (!nLen)
+            continue;   // Should a missing range really be allowed?
+        if (nLen != 1)
+            bFailure = true;
+        else
+        {
+            pArray->Reset();
+            const FormulaToken* p = pArray->GetNextReference();
+            if (!p)
+                bFailure = true;
+            else
+            {
+                const ScToken* pT = static_cast<const ScToken*>(p);
+                switch (pT->GetType())
+                {
+                    case svSingleRef:
+                        if (!pT->GetSingleRef().Valid())
+                            bFailure = true;
+                        break;
+                    case svDoubleRef:
+                        if (!pT->GetDoubleRef().Valid())
+                            bFailure = true;
+                        break;
+                    case svExternalSingleRef:
+                        if (!pT->GetSingleRef().ValidExternal())
+                            bFailure = true;
+                        break;
+                    case svExternalDoubleRef:
+                        if (!pT->GetDoubleRef().ValidExternal())
+                            bFailure = true;
+                        break;
+                    default:
+                        ;
+                }
+                if (!bFailure)
+                    rRefTokens.push_back(
+                            ScSharedTokenRef(static_cast<ScToken*>(p->Clone())));
+            }
+        }
 
-        rRefTokens.push_back(
-            ScSharedTokenRef(static_cast<ScToken*>(p->Clone())));
 #if 0
         switch (p->GetType())
         {
@@ -93,7 +129,10 @@ void ScRefTokenHelper::compileRangeRepresentation(
                 ;
         }
 #endif
+
     }
+    if (bFailure)
+        rRefTokens.clear();
 }
 
 bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScSharedTokenRef& pToken, bool bExternal)

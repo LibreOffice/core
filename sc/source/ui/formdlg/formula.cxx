@@ -126,7 +126,6 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
     m_xParser.set(ScServiceProvider::MakeInstance(SC_SERVICE_FORMULAPARS,(ScDocShell*)pDoc->GetDocumentShell()),uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet> xSet(m_xParser,uno::UNO_QUERY);
     xSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_COMPILEFAP)),uno::makeAny(sal_True));
-    xSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_REFERENCEPOS)),uno::makeAny(table::CellAddress(aCursorPos.Tab(),aCursorPos.Col(),aCursorPos.Row())));
 
     m_xOpCodeMapper.set(ScServiceProvider::MakeInstance(SC_SERVICE_OPCODEMAPPER,(ScDocShell*)pDoc->GetDocumentShell()),uno::UNO_QUERY);
 
@@ -657,6 +656,12 @@ uno::Reference< sheet::XFormulaOpCodeMapper> ScFormulaDlg::getFormulaOpCodeMappe
 {
     return m_xOpCodeMapper;
 }
+
+table::CellAddress ScFormulaDlg::getReferencePosition() const
+{
+    return table::CellAddress(aCursorPos.Tab(),aCursorPos.Col(),aCursorPos.Row());
+}
+
 ::std::auto_ptr<formula::FormulaTokenArray> ScFormulaDlg::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
 {
     ::std::auto_ptr<formula::FormulaTokenArray> pArray(new ScTokenArray());

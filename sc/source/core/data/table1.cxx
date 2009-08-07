@@ -870,6 +870,10 @@ BOOL ScTable::ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
     if (!ValidCol(nCol) || !ValidRow(nRow))
         return FALSE;
 
+    if (pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_OVERLAPPED))
+        // Skip an overlapped cell.
+        return false;
+
     if (bMarked && !rMark.IsCellMarked(nCol,nRow))
         return FALSE;
 
@@ -912,7 +916,8 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
     {
         BOOL bUp = ( nMovY < 0 );
         nRow = rMark.GetNextMarked( nCol, nRow, bUp );
-        while ( VALIDROW(nRow) && pRowFlags && (pRowFlags->GetValue(nRow) & CR_HIDDEN) )
+        while ( VALIDROW(nRow) && ((pRowFlags && (pRowFlags->GetValue(nRow) & CR_HIDDEN)) ||
+                pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_OVERLAPPED)) )
         {
             //  #53697# ausgeblendete ueberspringen (s.o.)
             nRow += nMovY;
@@ -941,7 +946,8 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
             else if (nRow > MAXROW)
                 nRow = 0;
             nRow = rMark.GetNextMarked( nCol, nRow, bUp );
-            while ( VALIDROW(nRow) && pRowFlags && (pRowFlags->GetValue(nRow) & CR_HIDDEN) )
+            while ( VALIDROW(nRow) && ((pRowFlags && (pRowFlags->GetValue(nRow) & CR_HIDDEN)) ||
+                    pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_OVERLAPPED)) )
             {
                 //  #53697# ausgeblendete ueberspringen (s.o.)
                 nRow += nMovY;

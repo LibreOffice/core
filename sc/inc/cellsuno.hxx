@@ -629,9 +629,10 @@ protected:
                                 throw(::com::sun::star::lang::IndexOutOfBoundsException,
                                     ::com::sun::star::uno::RuntimeException);
 
-            void            SetArrayFormula_Impl( const rtl::OUString& aFormula,
-                                                    const formula::FormulaGrammar::Grammar eGrammar )
-                                throw(::com::sun::star::uno::RuntimeException);
+            void            SetArrayFormula_Impl( const rtl::OUString& rFormula,
+                                const rtl::OUString& rFormulaNmsp,
+                                const formula::FormulaGrammar::Grammar eGrammar )
+                                    throw(::com::sun::star::uno::RuntimeException);
 
 public:
                             ScCellRangeObj(ScDocShell* pDocSh, const ScRange& rR);
@@ -650,7 +651,8 @@ public:
     virtual void            RefChanged();
 
                             // via getImplementation()
-    virtual void            SetArrayFormulaWithGrammar( const ::rtl::OUString& aFormula,
+    virtual void            SetArrayFormulaWithGrammar( const ::rtl::OUString& rFormula,
+                                    const ::rtl::OUString& rFormulaNmsp,
                                     const formula::FormulaGrammar::Grammar )
                                 throw(::com::sun::star::uno::RuntimeException);
 
@@ -869,7 +871,7 @@ public:
     void                    SetFormulaResultString( const ::rtl::OUString& rResult );
     void                    SetFormulaResultDouble( double fResult );
     void                    SetFormulaWithGrammar( const ::rtl::OUString& rFormula,
-                                                    const formula::FormulaGrammar::Grammar );
+                                const ::rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar );
     const ScAddress&        GetPosition() const { return aCellPos; }
 
                             // XText

@@ -2485,7 +2485,7 @@ void ScDocument::GetCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
 ScBaseCell* ScDocument::GetCell( const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();
-    if ( pTab[nTab] )
+    if (ValidTab(nTab) && pTab[nTab])
         return pTab[nTab]->GetCell( rPos );
 
     DBG_ERROR("GetCell ohne Tabelle");

@@ -268,16 +268,28 @@ public:
     void        GetString( SCCOL nCol, SCROW nRow, String& rString );
     void        GetInputString( SCCOL nCol, SCROW nRow, String& rString );
     double      GetValue( const ScAddress& rPos ) const
-                    { return aCol[rPos.Col()].GetValue( rPos.Row() ); }
+                    {
+                        return ValidColRow(rPos.Col(),rPos.Row()) ?
+                            aCol[rPos.Col()].GetValue( rPos.Row() ) :
+                            0.0;
+                    }
     double      GetValue( SCCOL nCol, SCROW nRow );
     void        GetFormula( SCCOL nCol, SCROW nRow, String& rFormula,
                             BOOL bAsciiExport = FALSE );
 
     CellType    GetCellType( const ScAddress& rPos ) const
-                    { return aCol[rPos.Col()].GetCellType( rPos.Row() ); }
+                    {
+                        return ValidColRow(rPos.Col(),rPos.Row()) ?
+                            aCol[rPos.Col()].GetCellType( rPos.Row() ) :
+                            CELLTYPE_NONE;
+                    }
     CellType    GetCellType( SCCOL nCol, SCROW nRow ) const;
     ScBaseCell* GetCell( const ScAddress& rPos ) const
-                    { return aCol[rPos.Col()].GetCell( rPos.Row() ); }
+                    {
+                        return ValidColRow(rPos.Col(),rPos.Row()) ?
+                            aCol[rPos.Col()].GetCell( rPos.Row() ) :
+                            NULL;
+                    }
     ScBaseCell* GetCell( SCCOL nCol, SCROW nRow ) const;
 
     void        GetLastDataPos(SCCOL& rCol, SCROW& rRow) const;
@@ -379,7 +391,11 @@ public:
                                 SCCOL nEndCol, SCROW nEndRow ) const;
 
     USHORT      GetErrCode( const ScAddress& rPos ) const
-                    { return aCol[rPos.Col()].GetErrCode( rPos.Row() ); }
+                    {
+                        return ValidColRow(rPos.Col(),rPos.Row()) ?
+                            aCol[rPos.Col()].GetErrCode( rPos.Row() ) :
+                            0;
+                    }
 //UNUSED2008-05  USHORT     GetErrCode( SCCOL nCol, SCROW nRow ) const;
 
     void        ResetChanged( const ScRange& rRange );
@@ -455,7 +471,11 @@ public:
     const ScPatternAttr*    GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const;
 
     ULONG                   GetNumberFormat( const ScAddress& rPos ) const
-                                { return aCol[rPos.Col()].GetNumberFormat( rPos.Row() ); }
+                                {
+                                    return ValidColRow(rPos.Col(),rPos.Row()) ?
+                                        aCol[rPos.Col()].GetNumberFormat( rPos.Row() ) :
+                                        0;
+                                }
     ULONG                   GetNumberFormat( SCCOL nCol, SCROW nRow ) const;
     void                    MergeSelectionPattern( ScMergePatternState& rState,
                                                 const ScMarkData& rMark, BOOL bDeep ) const;
@@ -474,7 +494,10 @@ public:
     void        ApplyPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr );
     void        ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, const ScPatternAttr& rAttr );
     void        SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr, BOOL bPutToPool = FALSE )
-                    { aCol[rPos.Col()].SetPattern( rPos.Row(), rAttr, bPutToPool ); }
+                    {
+                        if (ValidColRow(rPos.Col(),rPos.Row()))
+                            aCol[rPos.Col()].SetPattern( rPos.Row(), rAttr, bPutToPool );
+                    }
     void        SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr, BOOL bPutToPool = FALSE );
     void        ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
                             const ScPatternAttr& rPattern, short nNewType );

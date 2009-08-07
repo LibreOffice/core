@@ -2703,7 +2703,7 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
                     pCell = aCol[nCol].GetCell( nRow );
                     if (pCell)
                         if ( pCell->GetCellType() == CELLTYPE_FORMULA )
-                            if (((ScFormulaCell*)pCell)->HasOneReference( aRef ))
+                            if (((ScFormulaCell*)pCell)->HasRefListExpressibleAsOneReference( aRef ))
                                 if ( aRef.aStart.Col() == nCol && aRef.aEnd.Col() == nCol &&
                                      aRef.aStart.Tab() == nTab && aRef.aEnd.Tab() == nTab &&
                                      DiffSign( aRef.aStart.Row(), nRow ) ==
@@ -2734,7 +2734,7 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
             while ( aIter.Next( nRow, pCell ) && !bFound )
             {
                 if ( pCell->GetCellType() == CELLTYPE_FORMULA )
-                    if (((ScFormulaCell*)pCell)->HasOneReference( aRef ))
+                    if (((ScFormulaCell*)pCell)->HasRefListExpressibleAsOneReference( aRef ))
                         if ( aRef.aStart.Row() == nRow && aRef.aEnd.Row() == nRow &&
                              aRef.aStart.Tab() == nTab && aRef.aEnd.Tab() == nTab &&
                              DiffSign( aRef.aStart.Col(), nCol ) ==
