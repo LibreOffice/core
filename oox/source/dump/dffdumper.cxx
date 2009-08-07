@@ -48,6 +48,8 @@ const sal_uInt16 DFF_ID_CLIENTANCHOR        = 0xF010;   /// Client anchor.
 const sal_uInt16 DFF_ID_DG                  = 0xF008;   /// Drawing.
 const sal_uInt16 DFF_ID_DGG                 = 0xF006;   /// Drawing group.
 const sal_uInt16 DFF_ID_OPT                 = 0xF00B;   /// Property set.
+const sal_uInt16 DFF_ID_OPT2                = 0xF121;   /// Secondary property set.
+const sal_uInt16 DFF_ID_OPT3                = 0xF122;   /// Ternary property set.
 const sal_uInt16 DFF_ID_SP                  = 0xF00A;   /// Shape.
 const sal_uInt16 DFF_ID_SPGR                = 0xF009;   /// Shape group.
 const sal_uInt16 DFF_ID_SPLITMENUCOLORS     = 0xF11E;   /// Current toolbar colors.
@@ -146,6 +148,8 @@ void DffStreamObject::implDumpRecordBody()
         break;
 
         case DFF_ID_OPT:
+        case DFF_ID_OPT2:
+        case DFF_ID_OPT3:
         {
             sal_uInt16 nPropCount = getInst();
             out().resetItemIndex();
@@ -206,21 +210,32 @@ void DffStreamObject::dumpDffOptPropValue( sal_uInt16 nPropId, sal_uInt32 nValue
 {
     switch( nPropId & 0x3FFF )
     {
-        case 127:   writeHexItem( "flags", nValue, "DFFOPT-LOCK-FLAGS" );       break;
-        case 191:   writeHexItem( "flags", nValue, "DFFOPT-TEXT-FLAGS" );       break;
-        case 255:   writeHexItem( "flags", nValue, "DFFOPT-TEXTGEO-FLAGS" );    break;
-        case 319:   writeHexItem( "flags", nValue, "DFFOPT-PICTURE-FLAGS" );    break;
-        case 383:   writeHexItem( "flags", nValue, "DFFOPT-GEO-FLAGS" );        break;
-        case 447:   writeHexItem( "flags", nValue, "DFFOPT-FILL-FLAGS" );       break;
-        case 511:   writeHexItem( "flags", nValue, "DFFOPT-LINE-FLAGS" );       break;
-        case 575:   writeHexItem( "flags", nValue, "DFFOPT-SHADOW-FLAGS" );     break;
-        case 639:   writeHexItem( "flags", nValue, "DFFOPT-PERSP-FLAGS" );      break;
-        case 703:   writeHexItem( "flags", nValue, "DFFOPT-3DOBJ-FLAGS" );      break;
-        case 767:   writeHexItem( "flags", nValue, "DFFOPT-3DSTYLE-FLAGS" );    break;
-        case 831:   writeHexItem( "flags", nValue, "DFFOPT-SHAPE1-FLAGS" );     break;
-        case 895:   writeHexItem( "flags", nValue, "DFFOPT-CALLOUT-FLAGS" );    break;
-        case 959:   writeHexItem( "flags", nValue, "DFFOPT-SHAPE2-FLAGS" );     break;
-        default:    writeHexItem( "value", nValue );
+        case 0x003F:    writeHexItem( "flags", nValue, "DFFOPT-TRANSFORM-FLAGS" );  break;
+        case 0x007F:    writeHexItem( "flags", nValue, "DFFOPT-PROTECTION-FLAGS" ); break;
+        case 0x00BF:    writeHexItem( "flags", nValue, "DFFOPT-TEXT-FLAGS" );       break;
+        case 0x00FF:    writeHexItem( "flags", nValue, "DFFOPT-TEXTGEO-FLAGS" );    break;
+        case 0x013F:    writeHexItem( "flags", nValue, "DFFOPT-BLIP-FLAGS" );       break;
+        case 0x017F:    writeHexItem( "flags", nValue, "DFFOPT-GEO-FLAGS" );        break;
+        case 0x01BF:    writeHexItem( "flags", nValue, "DFFOPT-FILL-FLAGS" );       break;
+        case 0x01FF:    writeHexItem( "flags", nValue, "DFFOPT-LINE-FLAGS" );       break;
+        case 0x023F:    writeHexItem( "flags", nValue, "DFFOPT-SHADOW-FLAGS" );     break;
+        case 0x027F:    writeHexItem( "flags", nValue, "DFFOPT-PERSP-FLAGS" );      break;
+        case 0x02BF:    writeHexItem( "flags", nValue, "DFFOPT-3DOBJ-FLAGS" );      break;
+        case 0x02FF:    writeHexItem( "flags", nValue, "DFFOPT-3DSTYLE-FLAGS" );    break;
+        case 0x033F:    writeHexItem( "flags", nValue, "DFFOPT-SHAPE-FLAGS" );      break;
+        case 0x037F:    writeHexItem( "flags", nValue, "DFFOPT-CALLOUT-FLAGS" );    break;
+        case 0x03BF:    writeHexItem( "flags", nValue, "DFFOPT-GROUP-FLAGS" );      break;
+        case 0x03FF:    writeHexItem( "flags", nValue, "DFFOPT-TRANSFORM-FLAGS" );  break;
+        case 0x043F:    writeHexItem( "flags", nValue, "DFFOPT-UHTML-FLAGS" );      break;
+        case 0x053F:    writeHexItem( "flags", nValue, "DFFOPT-DIAGRAM-FLAGS" );    break;
+        case 0x057F:    writeHexItem( "flags", nValue, "DFFOPT-LINE-FLAGS" );       break;
+        case 0x05BF:    writeHexItem( "flags", nValue, "DFFOPT-LINE-FLAGS" );       break;
+        case 0x05FF:    writeHexItem( "flags", nValue, "DFFOPT-LINE-FLAGS" );       break;
+        case 0x063F:    writeHexItem( "flags", nValue, "DFFOPT-LINE-FLAGS" );       break;
+        case 0x06BF:    writeHexItem( "flags", nValue, "DFFOPT-WEBCOMP-FLAGS" );    break;
+        case 0x073F:    writeHexItem( "flags", nValue, "DFFOPT-INK-FLAGS" );        break;
+        case 0x07BF:    writeHexItem( "flags", nValue, "DFFOPT-SIGLINE-FLAGS" );    break;
+        default:        writeHexItem( "value", nValue );
     }
 }
 
