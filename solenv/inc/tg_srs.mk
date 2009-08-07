@@ -60,7 +60,7 @@ $(MISC)$/$(TARGET).$(SRS$(TNR)NAME).dprr: $(SRC$(TNR)FILES) $(HIDSRS$(TNR)PARTIC
 $(foreach,i,$(SRC$(TNR)FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)  
     -$(MKDIR) $(@:d)
     -$(RM) $@
-    -$(MKDIRHIER) $(SOLARSRC)$/$(PRJNAME)$/common$(PROEXT)$/misc$/$(PRJNAME)
+    -$(MKDIRHIER) $(COMMONMISC)$/$(PRJNAME)
     $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)

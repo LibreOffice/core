@@ -1389,24 +1389,26 @@ $(UNIXTEXT) : $(UNIXTEXT:f)
 .ENDIF			# "$(UNIXTEXT)"!=""
 
 .IF "$(WITH_LANG)"!=""
-.IF "$(LOCALIZATION_FOUND)"==""
 .IF "$(LOCALIZESDF)"!=""
-"$(LOCALIZESDF)" : $(SOLARCOMMONSDFDIR)$/$(PRJNAME).zip
+
+# dummy target to keep the build happy if not even the .zip exists. localization tools deal with not existing
+# localize.sdf themself
+$(LOCALIZESDF)%:
+    @echo $(LOCALIZESDF)
+    @@-$(MKDIRHIER) $(@:d)
+
+.IF "$(LOCALIZATION_FOUND)"==""
+.IF "$(LOCALSDFFILE)"!=""
+$(LOCALSDFFILE) : $(SOLARCOMMONSDFDIR)$/$(PRJNAME).zip
     @@-$(MKDIRHIER) $(@:d)
     @@-$(MKDIRHIER) $(COMMONMISC)$/$(PRJNAME)_$(TARGET)
-    @@$(IFNOTEXIST) $(LOCALIZESDF) $(THEN) unzip -o -d $(COMMONMISC)$/$(PRJNAME)_$(TARGET) $(SOLARCOMMONSDFDIR)$/$(PRJNAME).zip 
-    @@-cp -r $(COMMONMISC)/$(PRJNAME)_$(TARGET)$/* $(COMMONMISC)$/$(PRJNAME)
-    @@-$(RM) -rf $(COMMONMISC)$/$(PRJNAME)_$(TARGET)
-.ENDIF			# "$(LOCALIZESDF)"!=""
-.ENDIF			# "$(LOCALIZATION_FOUND)"==""
-.ENDIF			# "$(WITH_LANG)"!=""
+    -unzip -o -d $(COMMONMISC)$/$(PRJNAME) $(SOLARCOMMONSDFDIR)$/$(PRJNAME).zip $(subst,$(COMMONMISC)$/$(PRJNAME)$/, $@)
+    $(TOUCH) $@
 
-.IF "$(LOCALIZESDF)"!=""
-"$(LOCALIZESDF)%" :
-    echo $(LOCALIZESDF)
-    @@-$(MKDIRHIER) $(@:d)
-    @$(TOUCH) $(LOCALIZESDF)
+.ENDIF			# "$(LOCALSDFFILE)"!=""
+.ENDIF			# "$(LOCALIZATION_FOUND)"==""
 .ENDIF			# "$(LOCALIZESDF)"!=""
+.ENDIF			# "$(WITH_LANG)"!=""
 
 .IF "$(EXTUPDATEINFO_NAME)"!=""
 $(EXTUPDATEINFO_DEST) : $(EXTUPDATEINFO_SOURCE)
