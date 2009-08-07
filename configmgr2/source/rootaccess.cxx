@@ -85,7 +85,7 @@ rtl::Reference< Node > RootAccess::getNode() {
     if (!node_.is()) {
         int finalizedLayer;
         node_ = Components::singleton().resolvePath(
-            path_, 0, &name_, &path_, 0, &finalizedLayer);
+            path_, &name_, &path_, &finalizedLayer);
         if (!node_.is()) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot find ")) +
@@ -181,7 +181,7 @@ void RootAccess::commitChanges()
     checkLocalizedPropertyAccess();
     int finalizedLayer;
     commitChildChanges(
-        (Components::singleton().resolvePath(path_, 0, 0, 0, 0, &finalizedLayer)
+        (Components::singleton().resolvePath(path_, 0, 0, &finalizedLayer)
          == node_) &&
         finalizedLayer == NO_LAYER);
     Components::singleton().writeModifications();

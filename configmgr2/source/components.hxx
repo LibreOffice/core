@@ -32,14 +32,10 @@
 
 #include "sal/config.h"
 
-#include <list>
-#include <set>
-
 #include "boost/noncopyable.hpp"
-#include "libxml/parser.h"
 #include "rtl/ref.hxx"
 
-#include "nodemap.hxx"
+#include "data.hxx"
 
 namespace rtl {
     class Bootstrap;
@@ -48,7 +44,6 @@ namespace rtl {
 
 namespace configmgr {
 
-class GroupNode;
 class Node;
 
 class Components: private boost::noncopyable {
@@ -57,17 +52,9 @@ public:
 
     static bool allLocales(rtl::OUString const & locale);
 
-    static rtl::OUString createSegment(
-        rtl::OUString const & templateName, rtl::OUString const & name);
-
-    static sal_Int32 parseSegment(
-        rtl::OUString const & path, sal_Int32 index, rtl::OUString * name,
-        bool * setElement, rtl::OUString * templateName);
-
     rtl::Reference< Node > resolvePath(
-        rtl::OUString const & path, rtl::OUString * firstSegment,
-        rtl::OUString * lastSegment, rtl::OUString * canonicalPath,
-        rtl::Reference< Node > * parent, int * finalizedLayer);
+        rtl::OUString const & path, rtl::OUString * lastSegment,
+        rtl::OUString * canonicalPath, int * finalizedLayer) const;
 
     rtl::Reference< Node > getTemplate(
         int layer, rtl::OUString const & fullName) const;
@@ -81,57 +68,20 @@ public:
     void insertXcuFile(int layer, rtl::OUString const & fileUri);
 
 private:
-    typedef std::set< rtl::OUString > Dependencies;
-
-    typedef std::list< rtl::OUString > Modifications;
-
     Components();
 
     ~Components();
 
-    void parseXcsGroupContent(
-        int layer, rtl::OUString const & componentName, xmlDocPtr doc,
-        xmlNodePtr node, rtl::Reference< GroupNode > const & group);
-
-    rtl::Reference< Node > parseXcsGroup(
-        int layer, rtl::OUString const & componentName, xmlDocPtr doc,
-        xmlNodePtr node, rtl::OUString const & templateName);
-
-    xmlNodePtr parseXcsTemplates(
-        int layer, rtl::OUString const & componentName, xmlDocPtr doc,
-        xmlNodePtr node);
-
-    xmlNodePtr parseXcsComponent(
-        int layer, xmlDocPtr doc, rtl::OUString const & component,
-        xmlNodePtr node);
-
-    void parseXcsContent(int layer, xmlDocPtr doc, xmlNodePtr root);
-
-    void parseXcsFile(int layer, rtl::OUString const & url);
-
-    void parseXcuNode(
-        int layer, rtl::OUString const & componentName, xmlDocPtr doc,
-        xmlNodePtr xmlNode, rtl::Reference< Node > const & node,
-        bool inheritedFinalized, bool modifications,
-        rtl::OUString const & pathPrefix);
-
-    void parseXcuContent(int layer, xmlDocPtr doc, xmlNodePtr root);
-
-    void parseXcuFile(int layer, rtl::OUString const & url);
-
     void parseFiles(
         int layer, rtl::OUString const & extension,
-        void (Components::* parseFile)(int, rtl::OUString const &),
+        void (* parseFile)(rtl::OUString const &, int, Data *),
         rtl::OUString const & url, bool recursive);
 
     void parseFileList(
-        int layer, void (Components::* parseFile)(int, rtl::OUString const &),
+        int layer, void (* parseFile)(rtl::OUString const &, int, Data *),
         rtl::OUString const & urls, rtl::Bootstrap const & ini);
 
-    bool parseDataFile(
-        int layer, xmlDocPtr doc, Dependencies const & dependencies);
-
-    void parseDataFiles(int layer, rtl::OUString const & url);
+    void parseXcdFiles(int layer, rtl::OUString const & url);
 
     void parseXcsXcuLayer(int layer, rtl::OUString const & url);
 
@@ -145,9 +95,7 @@ private:
 
     void parseModificationLayer();
 
-    NodeMap templates_;
-    NodeMap components_;
-    Modifications modifications_;
+    Data data_;
 };
 
 }

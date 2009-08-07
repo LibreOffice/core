@@ -43,6 +43,7 @@ SLOFILES = \
     $(SLO)$/childaccess.obj \
     $(SLO)$/components.obj \
     $(SLO)$/configurationprovider.obj \
+    $(SLO)$/data.obj \
     $(SLO)$/defaultprovider.obj \
     $(SLO)$/groupnode.obj \
     $(SLO)$/localizedpropertynode.obj \
@@ -55,7 +56,8 @@ SLOFILES = \
     $(SLO)$/services.obj \
     $(SLO)$/setnode.obj \
     $(SLO)$/type.obj \
-    $(SLO)$/update.obj
+    $(SLO)$/update.obj \
+    $(SLO)$/xml.obj
 
 SHL1IMPLIB = i$(SHL1TARGET)
 SHL1OBJS = $(SLOFILES)

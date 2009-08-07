@@ -53,6 +53,7 @@
 #include "access.hxx"
 #include "childaccess.hxx"
 #include "components.hxx"
+#include "data.hxx"
 #include "groupnode.hxx"
 #include "layer.hxx"
 #include "localizedpropertynode.hxx"
@@ -108,7 +109,7 @@ rtl::OUString ChildAccess::getPath() {
         path = parent->getPath() +
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     }
-    return path + Components::createSegment(node_->getTemplateName(), name_);
+    return path + Data::createSegment(node_->getTemplateName(), name_);
 }
 
 rtl::Reference< Node > ChildAccess::getNode() {

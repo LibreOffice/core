@@ -68,6 +68,7 @@
 #include "access.hxx"
 #include "childaccess.hxx"
 #include "components.hxx"
+#include "data.hxx"
 #include "groupnode.hxx"
 #include "layer.hxx"
 #include "localizedpropertynode.hxx"
@@ -321,7 +322,7 @@ void Access::commitChildChanges(bool valid) {
                 Components::singleton().addModification(
                     getPath() +
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
-                    Components::createSegment(
+                    Data::createSegment(
                         i->second->getNode()->getTemplateName(), i->first));
             }
             i->second->committed();
@@ -1074,7 +1075,7 @@ rtl::Reference< ChildAccess > Access::getSubChild(rtl::OUString const & path) {
     rtl::OUString name;
     bool setElement;
     rtl::OUString templateName;
-    sal_Int32 i = Components::parseSegment(
+    sal_Int32 i = Data::parseSegment(
         path, 0, &name, &setElement, &templateName);
     if (i == -1 || (i != path.getLength() && path[i] != '/')) {
         return rtl::Reference< ChildAccess >();
