@@ -418,13 +418,13 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
     DBG_ASSERT( nIdx == nNumProps, "number of added properties is not as expected" );
 }
 
-bool SwPrintUIOptions::isPrintLeftPages() const
+bool SwPrintUIOptions::IsPrintLeftPages() const
 {
     sal_Int64 nLRPages = getIntValue( "PrintLeftRightPages", 0 );
     return nLRPages == 0 || nLRPages == 1;
 }
 
-bool SwPrintUIOptions::isPrintRightPages() const
+bool SwPrintUIOptions::IsPrintRightPages() const
 {
     sal_Int64 nLRPages = getIntValue( "PrintLeftRightPages", 0 );
     return nLRPages == 0 || nLRPages == 2;
@@ -890,14 +890,6 @@ void ViewShell::ChgAllPageSize( Size &rSz )
     }
 }
 
-/******************************************************************************
- *  Methode     :   void ViewShell::CalcPagesForPrint( short nMax, BOOL ...
- *  Beschreibung:
- *  Erstellt    :   OK 04.11.94 15:33
- *  Aenderung   :   MA 07. Jun. 95
- ******************************************************************************/
-
-
 
 void lcl_SetState( SfxProgress& rProgress, ULONG nPage, ULONG nMax,
     const XubString *pStr, ULONG nAct, ULONG nCnt, ULONG nOffs, ULONG nPageNo )
@@ -1179,24 +1171,16 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     return pPrtDoc;
 }
 
-/******************************************************************************
- *  Methode     :   void ViewShell::Prt
- *  Beschreibung:
- *  Erstellt    :   OK 04.11.94 15:33
- *  Aenderung   :   MA 10. May. 95
- ******************************************************************************/
 
-
-BOOL ViewShell::Prt(
+sal_Bool ViewShell::PrintOrPDFExport(
     OutputDevice* pOutDev,
     SwPrtOptions& rOptions,
     const SwPrintUIOptions &rPrintUIOptions, /* TLPDF keep this or the above? */
     sal_Int32 nRenderer,
-    SfxProgress* pProgress, /* TLPDF superfluous ??? */
     bool bIsPDFExport )
 {
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//Immer die Druckroutine in viewpg.cxx (fuer Seitenvorschau) mitpflegen!!
+//Immer die Druckroutinen in viewpg.cxx (PrintPreViewPage und PrintProspect) mitpflegen!!
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     BOOL bStartJob = FALSE;
@@ -1209,7 +1193,7 @@ BOOL ViewShell::Prt(
 // TLPDF: this one should hold just one page now. Thus clean-up should be possible
     MultiSelection aMulti( rOptions.aMulti );
 
-    if ( !aMulti.GetSelectCount() )
+    if ( !pOutDev || !aMulti.GetSelectCount() )
         return bStartJob;
 
     // save settings of OutputDevice (should be done always now since the
@@ -1305,7 +1289,7 @@ BOOL ViewShell::Prt(
 
 
     // ben�tigte Seiten fuers Drucken formatieren
-    pShell->CalcPagesForPrint( (USHORT)nPage, pProgress, pStr,
+    pShell->CalcPagesForPrint( (USHORT)nPage, 0 /*TLPDF*/, pStr,
                                 nMergeAct, nMergeCnt );
 
     // Some field types, can require a valid layout
@@ -1523,7 +1507,7 @@ BOOL ViewShell::Prt(
     if (bSelection )
     {
          // damit das Dokument nicht den Drucker mit ins Grab nimmt
-        pOutDevDoc->setPrinter( 0, false, false );
+//        pOutDevDoc->setPrinter( 0, false, false );  /*TLPDF should not be needed anymore*/
 
         if ( !pOutDevDoc->release() )
             delete pOutDevDoc;

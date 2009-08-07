@@ -365,9 +365,15 @@ public:
 
     //Druckauftrag abwickeln.
     // bIsPDFExport == true is: do PDF Export (no printing!)
-    sal_Bool Prt( OutputDevice* pOutDev, SwPrtOptions& rOptions,
-            const SwPrintUIOptions &rPrintUIOptions, sal_Int32 nRenderer /* offset in vector of pages to print */,
-            SfxProgress* pProgress, bool bIsPDFExport = false );
+    sal_Bool PrintOrPDFExport( OutputDevice* pOutDev, SwPrtOptions& rOptions,
+            const SwPrintUIOptions &rPrintUIOptions,
+            sal_Int32 nRenderer, /* offset in vector of pages to print */
+            bool bIsPDFExport = sal_False );
+
+    // Prospekt-Format drucken
+    void PrintProspect( OutputDevice* pOutDev, SwPrtOptions& rOptions,
+            const SwPrintUIOptions &rPrintUIOptions,
+            sal_Int32 nRenderer /* offset in vector of page pairs for prospect  */ );
 
     //"Drucken" fuer OLE 2.0
     static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, SwPrtOptions& rOptions,
@@ -482,9 +488,6 @@ public:
     void PrintPreViewPage( SwPrtOptions& rOptions, sal_uInt16 nRowCol,
                            SfxProgress& rProgress,
                            const SwPagePreViewPrtData* = 0 );
-
-    // Prospekt-Format drucken
-    void PrintProspect( SwPrtOptions&, SfxProgress& , BOOL bRTL);
 
     sal_Bool IsViewLocked() const { return bViewLocked; }
     void LockView( sal_Bool b )   { bViewLocked = b;    }

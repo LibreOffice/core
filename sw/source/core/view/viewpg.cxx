@@ -413,7 +413,7 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
                     SwPaintQueue::Repaint();
 
                     memset( aPageArr, 0, sizeof( SwPageFrm* ) * nPages );
-                   nCntPage = 0;
+                    nCntPage = 0;
                     nMaxRowSz = nMaxColSz = nCalcH = nCalcW = 0;
                 }
             }
@@ -450,18 +450,44 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
 // print brochure
 // OD 05.05.2003 #i14016# - consider empty pages on calculation of the scaling
 // for a page to be printed.
-void ViewShell::PrintProspect( SwPrtOptions& rOptions,
-                               SfxProgress& rProgress , BOOL bRTL)
+void ViewShell::PrintProspect( 
+    OutputDevice* pOutDev,
+    SwPrtOptions& rOptions,
+    const SwPrintUIOptions & rPrintUIOptions, /* TLPDF keep this or the above? */
+    sal_Int32 nRenderer )
 {
-    if( !rOptions.aMulti.GetSelectCount() )
+// TLPDF   if( !rOptions.aMulti.GetSelectCount() )
+    Printer *pPrinter = dynamic_cast< Printer * >(pOutDev);
+    if (!pPrinter || rPrintUIOptions.GetPagePairsForProspectPrinting().size() <= 0)
         return;
 
+#ifdef TL_NOT_NOW /*TLPDF*/
     // wenn kein Drucker vorhanden ist, wird nicht gedruckt
     SfxPrinter* pPrt = getIDocumentDeviceAccess()->getPrinter(false);
     if( !pPrt || !pPrt->GetName().Len() ||
         ( !rOptions.bPrintLeftPage && !rOptions.bPrintRightPage ))
         return;
+#endif // TL_NOT_NOW /*TLPDF*/
 
+    // save settings of OutputDevice (should be done always now since the
+    // output device is now provided by a call from outside the Writer)
+    pPrinter->Push();
+
+/* TLPDF neu: start */
+#if OSL_DEBUG_LEVEL > 1
+    DBG_ASSERT( 0 <= nRenderer && nRenderer < (sal_Int32)rPrintUIOptions.GetPagePairsForProspectPrinting().size(), "nRenderer out of bounds");
+#endif
+    std::pair< sal_Int32, sal_Int32 > rPagesToPrint =
+            rPrintUIOptions.GetPagePairsForProspectPrinting()[ nRenderer ];
+    const USHORT nPageMax = static_cast< USHORT >(rPagesToPrint.first > rPagesToPrint.second ?
+            rPagesToPrint.first : rPagesToPrint.second);
+#if OSL_DEBUG_LEVEL > 1
+    DBG_ASSERT( rPagesToPrint.first  == -1 || rPrintUIOptions.GetValidPagesSet().count( rPagesToPrint.first ) == 1, "first Page not valid" );
+    DBG_ASSERT( rPagesToPrint.second == -1 || rPrintUIOptions.GetValidPagesSet().count( rPagesToPrint.second ) == 1, "second Page not valid" );
+#endif
+/* TLPDF neu: end */
+
+#ifdef TL_NOT_NOW /*TLPDF*/
     MultiSelection aMulti( rOptions.aMulti );
     Range aPages( aMulti.FirstSelected(), aMulti.LastSelected() );
     if ( aPages.Max() > USHRT_MAX )
@@ -471,11 +497,15 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
             "Seite 0 Drucken?" );
     ASSERT( aPages.Min() <= aPages.Max(),
             "MinSeite groesser MaxSeite." );
+#endif  // TL_NOT_NOW /*TLPDF*/
 
     // eine neue Shell fuer den Printer erzeugen
-    ViewShell aShell( *this, 0 );
+// TLPDF   ViewShell aShell( *this, 0 );
+    ViewShell aShell( *this, 0, pPrinter );
+#ifdef TL_NOT_NOW /*TLPDF*/
     if ( &GetRefDev() == pPrt )
         aShell.mpTmpRef = new SfxPrinter( *pPrt );
+#endif  // TL_NOT_NOW /*TLPDF*/
 
     SET_CURR_SHELL( &aShell );
 
@@ -497,8 +527,9 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
     }
 
     // Seiten fuers Drucken formatieren
-    aShell.CalcPagesForPrint( (USHORT)aPages.Max(), &rProgress );
+    aShell.CalcPagesForPrint( nPageMax, 0 /*(USHORT)aPages.Max(), &rProgress*/ );
 
+#ifdef TL_NOT_NOW /*TLPDF*/
     USHORT nCopyCnt = rOptions.bCollate ? rOptions.nCopyCount : 1;
 
     const SwPageFrm *pStPage  = (SwPageFrm*)GetLayout()->Lower();
@@ -506,23 +537,30 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
 
     for( i = 1; pStPage && i < (USHORT)aPages.Min(); ++i )
         pStPage = (SwPageFrm*)pStPage->GetNext();
+#endif  // TL_NOT_NOW /*TLPDF*/
 
-    if( !pStPage )          // dann wars das
+#ifdef TL_NOT_NOW /*TLPDF*/
+   should not happen any more since the test
+        rPrintUIOptions.GetPagePairsForProspectPrinting().size() <= 0
+   above should have taken care that there is at least one page to print
+   if( !pStPage )          // dann wars das
     {
         if( bHiddenFlds )
         {
             SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );
             pFldType->Modify( &aHnt, 0);
-            CalcPagesForPrint( (USHORT)aPages.Max() );
+            CalcPagesForPrint( nPageMax /*(USHORT)aPages.Max()*/ );
         }
         return;
     }
+#endif  // TL_NOT_NOW /*TLPDF*/
 
+#ifdef TL_NOT_NOW /*TLPDF*/
     // unsere SttPage haben wir, dann die EndPage suchen
     SvPtrarr aArr( 255, 255 );
     aArr.Insert( (void*)pStPage, aArr.Count() );
 
-    while( pStPage->GetNext() && i < (USHORT)aPages.Max() )
+    while( pStPage->GetNext() && i < nPageMax (USHORT)aPages.Max() )
     {
         pStPage = (SwPageFrm*)pStPage->GetNext();
         if( aMulti.IsSelected( ++i ) )
@@ -569,17 +607,17 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
             }
         }
     }
+#endif  // TL_NOT_NOW /*TLPDF*/
 
-    BOOL bStartJob = FALSE;
+//TLPDF   BOOL bStartJob = FALSE;
 
-    for( USHORT nCnt = 0; nCnt < nCopyCnt; nCnt++ )
+    for( USHORT nCnt = 0; nCnt <= 0 /*< 1 TLPDF nCopyCnt*/; nCnt++ )
     {
+#ifdef TL_NOT_NOW /*TLPDF*/
         if( rOptions.IsPrintSingleJobs() && rOptions.GetJobName().Len() &&
             ( bStartJob || rOptions.bJobStartet ) )
         {
-#ifdef TL_NOT_NOW /*TLPDF*/
             pPrt->EndJob();
-#endif
             rOptions.bJobStartet = TRUE;
 
             // Reschedule statt Yield, da Yield keine Events abarbeitet
@@ -607,31 +645,55 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
         }
 
         USHORT nCntPage = (( nEPg - nSPg ) / ( 2 * nStep )) + 1;
+#endif  // TL_NOT_NOW /*TLPDF*/
 
-        MapMode aOld( pPrt->GetMapMode() );
+        MapMode aOld( /*TLPDF pPrt*/pPrinter->GetMapMode() );
         MapMode aMapMode( MAP_TWIP );
-        Size aPrtSize( pPrt->PixelToLogic( pPrt->GetPaperSizePixel(), aMapMode ) );
+// TLPDF        Size aPrtSize( pPrt->PixelToLogic( pPrt->GetPaperSizePixel(), aMapMode ) );
+        Size aPrtSize( pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), aMapMode ) ); /* TLPDF */
 
+#ifdef TL_NOT_NOW /*TLPDF*/
         const XubString aTmp( SW_RES( STR_STATSTR_PRINT ) );
         rProgress.SetText( aTmp );
         //HACK, damit die Anzeige nicht durcheinander kommt:
         rProgress.SetState( 1, nCntPage );
         rProgress.SetText( aTmp );
+#endif  // TL_NOT_NOW /*TLPDF*/
 
-        for( USHORT nPrintCount = 0; nSPg < nEPg &&
-                nPrintCount < nCntPage; ++nPrintCount )
+        for( USHORT nPrintCount = 0; nPrintCount <= 0 /*nSPg < nEPg && nPrintCount < nCntPage*/; ++nPrintCount )
         {
+#ifdef TL_NOT_NOW /*TLPDF*/
             // Mag der Anwender noch ?
             rProgress.Reschedule();
 
             if ( !pPrt->IsJobActive() )
                 break;
 
-            SwTwips nMaxRowSz, nMaxColSz;
             pStPage = (SwPageFrm*)aArr[ nSPg ];
             const SwPageFrm* pNxtPage = nEPg < aArr.Count()
                                 ? (SwPageFrm*)aArr[ nEPg ]
                                 : 0;
+#endif  // TL_NOT_NOW /*TLPDF*/
+
+            SwTwips nMaxRowSz, nMaxColSz;
+
+/* TLPDF neu: start */
+            const SwPageFrm *pStPage    = 0;
+            const SwPageFrm *pNxtPage   = 0;
+            const SwPrintUIOptions::ValidStartFramesMap_t &rFrms = rPrintUIOptions.GetValidStartFrms();
+            if (rPagesToPrint.first > 0)
+            {
+                SwPrintUIOptions::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( rPagesToPrint.first ) );
+                DBG_ASSERT( aIt != rFrms.end(), "failed to find start frame" );
+                pStPage = aIt->second;
+            }
+            if (rPagesToPrint.second > 0)
+            {
+                SwPrintUIOptions::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( rPagesToPrint.second ) );
+                DBG_ASSERT( aIt != rFrms.end(), "failed to find start frame" );
+                pNxtPage = aIt->second;
+            }
+/* TLPDF neu: end */
 
             // OD 05.05.2003 #i14016# - consider empty pages on calculation
             // of page size, used for calculation of scaling.
@@ -684,6 +746,7 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
                                  aSttPageSize.Height() );
             }
 
+#ifdef TL_NOT_NOW /*TLPDF*/
             short nRtlOfs = bRTL ? 1 : 0;
             if( 0 == (( nSPg + nRtlOfs) & 1 ) )     // switch for odd number in LTR, even number in RTL
             {
@@ -691,6 +754,7 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
                 pStPage = pNxtPage;
                 pNxtPage = pTmp;
             }
+#endif  // TL_NOT_NOW /*TLPDF*/
 
             // den MapMode einstellen
             aMapMode.SetOrigin( Point() );
@@ -716,14 +780,14 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
                 aMapMode.SetScaleX( aScY );
             }
 
-            Point aPrtOff( pPrt->PixelToLogic(
-                                pPrt->GetPageOffsetPixel(), aMapMode ) );
-            Size aTmpPrtSize( pPrt->PixelToLogic(
-                                pPrt->GetPaperSizePixel(), aMapMode ) );
+// TLPDF            Point aPrtOff( pPrt->PixelToLogic( pPrt->GetPageOffsetPixel(), aMapMode ) );
+// TLPDF            Size aTmpPrtSize( pPrt->PixelToLogic( pPrt->GetPaperSizePixel(), aMapMode ) );
+            Point aPrtOff( pPrinter->PixelToLogic( pPrinter->GetPageOffsetPixel(), aMapMode ) );      /* TLPDF */
+            Size aTmpPrtSize( pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), aMapMode ) );    /* TLPDF */
 
             // dann kann das drucken losgehen
-            bStartJob = TRUE;
-            rProgress.SetState( nPrintCount, nCntPage );
+//TLPDF           bStartJob = TRUE;
+//TLPDF           rProgress.SetState( nPrintCount, nCntPage );
 
 #ifdef TL_NOT_NOW /*TLPDF*/
             pPrt->StartPage();
@@ -741,7 +805,7 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
                     aPos -= aShell.aVisArea.Pos();
                     aPos -= aPrtOff;
                     aMapMode.SetOrigin( aPos );
-                    pPrt->SetMapMode( aMapMode );
+                    pPrinter->SetMapMode( aMapMode );
                     pStPage->GetUpper()->Paint( pStPage->Frm() );
                 }
 
@@ -753,20 +817,31 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
             pPrt->EndPage();
 #endif
             SwPaintQueue::Repaint();
+
+#ifdef TL_NOT_NOW /*TLPDF*/
             nSPg = nSPg + nStep;
             nEPg = nEPg - nStep;
+#endif  // TL_NOT_NOW /*TLPDF*/
         }
-        pPrt->SetMapMode( aOld );
+        pPrinter->SetMapMode( aOld );
 
         if( bHiddenFlds )
         {
             SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );
             pFldType->Modify( &aHnt, 0);
-            CalcPagesForPrint( (USHORT)aPages.Max() );
+            CalcPagesForPrint( nPageMax /*(USHORT)aPages.Max()*/ );
         }
 
+#ifdef TL_NOT_NOW /*TLPDF*/
         if( bStartJob )
             rOptions.bJobStartet = TRUE;
+#endif  // TL_NOT_NOW /*TLPDF*/
     }
     pFntCache->Flush();
+
+    // restore settings of OutputDevice (should be done always now since the
+    // output device is now provided by a call from outside the Writer)
+    pPrinter->Pop();
 }
+
+

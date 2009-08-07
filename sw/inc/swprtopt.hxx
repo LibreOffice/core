@@ -38,6 +38,7 @@
 #include <set>
 #include <map>
 #include <vector>
+#include <utility>
 
 #define POSTITS_NONE    0
 #define POSTITS_ONLY    1
@@ -99,8 +100,9 @@ class SwPrintUIOptions : public vcl::PrinterOptionsHelper
 {
     OutputDevice* mpLast;
 
-    // pages valid for printing (accoridng to the current settings)
+    // pages valid for printing (according to the current settings)
     // and their respective start frames (see getRendererCount in unotxdoc.cxx)
+    // This set of pages does NOT depend on the 'PageRange' that is used as a printing option!
     std::set< sal_Int32 > aValidPages;       // the set of possible pages (see StringRangeEnumerator::getRangesFromString )
     std::map< sal_Int32, const SwPageFrm * > aValidStartFrms;    // the map of start frames for those pages
 
@@ -108,21 +110,33 @@ class SwPrintUIOptions : public vcl::PrinterOptionsHelper
     // (see 'render' in unotxdoc.cxx)
     std::vector< sal_Int32 > aPagesToPrint;
 
+    // for prospect printing: the pairs of pages to be printed together on a single prospect page.
+    // -1 indicates a half page to be left empty.
+    std::vector< std::pair< sal_Int32, sal_Int32 > >    aPagePairs;
+
 public:
     SwPrintUIOptions( BOOL bWeb );
 
     bool processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp );
 
-    typedef std::map< sal_Int32, const SwPageFrm * > ValidStartFramesMap_t;
+    typedef std::map< sal_Int32, const SwPageFrm * >            ValidStartFramesMap_t;
+    typedef std::vector< std::pair< sal_Int32, sal_Int32 > >    PagePairsVec_t;
 
     std::set< sal_Int32 > &             GetValidPagesSet()          { return aValidPages; }
     const std::set< sal_Int32 > &       GetValidPagesSet() const    { return aValidPages; }
     ValidStartFramesMap_t &             GetValidStartFrms()         { return aValidStartFrms; }
     const ValidStartFramesMap_t &       GetValidStartFrms() const   { return aValidStartFrms; }
+
+    // used for 'normal' printing
     std::vector< sal_Int32 > &          GetPagesToPrint()           { return aPagesToPrint; }
     const std::vector< sal_Int32 > &    GetPagesToPrint() const     { return aPagesToPrint; }
-    bool isPrintLeftPages() const;
-    bool isPrintRightPages() const;
+
+    // used for prospect printing only
+    PagePairsVec_t &                    GetPagePairsForProspectPrinting()           { return aPagePairs; }
+    const PagePairsVec_t &              GetPagePairsForProspectPrinting() const     { return aPagePairs; }
+
+    bool IsPrintLeftPages() const;
+    bool IsPrintRightPages() const;
 };
 
 

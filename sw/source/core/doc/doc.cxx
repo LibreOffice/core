@@ -47,6 +47,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/poly.hxx>
 #include <tools/multisel.hxx>
+#include <rtl/ustring.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/itemiter.hxx>
 #include <sfx2/printer.hxx>
@@ -990,7 +991,7 @@ const SwDocStat& SwDoc::GetDocStat() const
 }
 
 
-void SwDoc::GetValidPagesForPrinting(
+void SwDoc::CalculatePagesForPrinting(
     bool bIsPDFExport,
     SwPrintUIOptions &rPrintUIOptions,
     sal_Int32 nDocPageCount )
@@ -1000,8 +1001,9 @@ void SwDoc::GetValidPagesForPrinting(
         return;
 
     // properties to take into account when calcualting the set of pages
-    bool bPrintLeftPage   = rPrintUIOptions.isPrintLeftPages();
-    bool bPrintRightPage  = rPrintUIOptions.isPrintRightPages();
+    bool bPrintLeftPage   = rPrintUIOptions.IsPrintLeftPages();
+    bool bPrintRightPage  = rPrintUIOptions.IsPrintRightPages();
+    // TLPDF, TODO: remove bPrintReverse, should be handled by PLs framework now
     bool bPrintReverse    = rPrintUIOptions.getBoolValue( C2U( "PrintReverseOrder" ), false );
     bool bPrintEmptyPages = rPrintUIOptions.getBoolValue( C2U( "PrintEmptyPages" ),   false );
 
@@ -1123,6 +1125,164 @@ void SwDoc::GetValidPagesForPrinting(
 }
 
 
+void SwDoc::CalculatePagePairsForProspectPrinting(
+    SwPrintUIOptions &rPrintUIOptions,
+    sal_Int32 nDocPageCount )
+{
+    std::set< sal_Int32 > &rValidPagesSet   = rPrintUIOptions.GetValidPagesSet();
+    std::map< sal_Int32, const SwPageFrm * > &rValidStartFrms  = rPrintUIOptions.GetValidStartFrms();
+    std::vector< std::pair< sal_Int32, sal_Int32 > > &rPagePairs = rPrintUIOptions.GetPagePairsForProspectPrinting();
+
+    rPagePairs.clear();
+    rValidPagesSet.clear();
+    rValidStartFrms.clear();
+
+    rtl::OUString aPageRange = rPrintUIOptions.getStringValue( C2U( "PageRange" ), rtl::OUString() );
+    StringRangeEnumerator aRange( aPageRange, 1, nDocPageCount, 0 );
+
+    DBG_ASSERT( pLayout, "no layout present" );
+    if (!pLayout || aRange.size() <= 0)
+        return;
+
+    const SwPageFrm *pStPage  = (SwPageFrm*)pLayout->Lower();
+    sal_Int32 i = 0;
+    for ( i = 1; pStPage && i < nDocPageCount; ++i )
+        pStPage = (SwPageFrm*)pStPage->GetNext();
+    if ( !pStPage )          // dann wars das
+        return;
+
+    // currently for prospect printing all pages are valid to be printed
+    // thus we add them all to the respective map and set for later use
+    sal_Int32 nPageNum = 0;
+    const SwPageFrm *pPageFrm = (SwPageFrm*)pLayout->Lower();
+    while( pPageFrm && nPageNum < nDocPageCount )
+    {
+        DBG_ASSERT( pPageFrm, "Empty page frame. How are we gpoing to print this?" );
+        ++nPageNum;
+        rValidPagesSet.insert( nPageNum );
+        rValidStartFrms[ nPageNum ] = pPageFrm;
+        pPageFrm = (SwPageFrm*)pPageFrm->GetNext();
+    }
+    DBG_ASSERT( nPageNum == nDocPageCount, "unexpected number of pages" );
+
+    // properties to take into account when calcualting the set of pages
+    // Note: here bPrintLeftPage and bPrintRightPage refer to the (virtual) resulting pages
+    //      of the prospect!
+    bool bPrintLeftPage     = rPrintUIOptions.IsPrintLeftPages();
+    bool bPrintRightPage    = rPrintUIOptions.IsPrintRightPages();
+    // TLPDF, TODO: remove bPrintReverse, should be handled by PLs framework now
+    bool bPrintReverse      = rPrintUIOptions.getBoolValue( C2U( "PrintReverseOrder" ), false );
+    // TLPDF: this one seems not to be used in prospect printing: bool bPrintEmptyPages   = rPrintUIOptions.getBoolValue( C2U( "PrintEmptyPages" ),   false );
+    bool bPrintProspect_RTL = rPrintUIOptions.getIntValue( C2U( "PrintBrochureRTL" ),  0 ) ? true : false;
+
+    // get pages for prospect printing according to the 'PageRange'
+    // (duplicates and any order allowed!)
+    std::vector< sal_Int32 > aPagesToPrint;
+    StringRangeEnumerator::getRangesFromString(
+            aPageRange, aPagesToPrint, 1, nDocPageCount, 0 );
+
+    // now fill the vector for calculating the page pairs with the start frames
+    // from the above obtained vector
+    std::vector< const SwPageFrm * > aVec;
+    for (sal_Int32 i = 0; i < aPagesToPrint.size(); ++i)
+    {
+        const sal_Int32 nPage = aPagesToPrint[i];
+        const SwPageFrm *pFrm = rValidStartFrms[ nPage ];
+        aVec.push_back( pFrm );
+    }
+
+    // auf Doppelseiten auffuellen
+    if ( 1 == aVec.size() )    // eine Seite ist ein Sonderfall
+        aVec.insert( aVec.begin() + 1, 0 );
+    else
+    {
+        while( aVec.size() & 3 )
+            aVec.push_back( 0 );
+
+        if ( bPrintReverse && 4 < aVec.size() )
+        {
+            // das Array umsortieren
+            // Array:    1 2 3 4 5 6 7 8
+            // soll:     3 4 1 2 7 8 5 6
+            // Algorhitmus:
+            // vordere Haelfte: Austausch von 2 Pointer von Vorne vor die Haelfte
+            // hintere Haelfte: Austausch von 2 Pointer von der Haelfte nach hinten
+
+            USHORT nHalf = aVec.size() / 2;
+            USHORT nSwapCount = nHalf / 4;
+
+            const SwPageFrm ** ppArrStt = &aVec[ 0 ];
+            const SwPageFrm ** ppArrHalf = &aVec[ nHalf ];
+
+            for ( int k = 0; k < 2; ++k )
+            {
+                for ( USHORT n = 0; n < nSwapCount; ++n )
+                {
+                    const SwPageFrm * pTmp = *ppArrStt;
+                    *ppArrStt++ = *(ppArrHalf-2);
+                    *(ppArrHalf-2) = pTmp;
+
+                    pTmp = *ppArrStt;
+                    *ppArrStt++ = *--ppArrHalf;
+                    *ppArrHalf-- = pTmp;
+                }
+                ppArrStt = &aVec[ nHalf ];
+                ppArrHalf = &aVec[ 0 ] + aVec.size();
+            }
+        }
+    }
+
+    // dann sorge mal dafuer, das alle Seiten in der richtigen
+    // Reihenfolge stehen:
+    USHORT nSPg = 0, nEPg = aVec.size(), nStep = 1;
+    if ( 0 == (nEPg & 1 ))      // ungerade gibt es nicht!
+        --nEPg;
+
+    if ( !bPrintLeftPage )
+        ++nStep;
+    else if ( !bPrintRightPage )
+    {
+        ++nStep;
+        ++nSPg, --nEPg;
+    }
+
+    sal_Int32 nCntPage = (( nEPg - nSPg ) / ( 2 * nStep )) + 1;
+    DBG_ASSERT( nCntPage * 2 == aVec.size(), "vector size vs. page count mismatch" );
+
+    for ( USHORT nPrintCount = 0; nSPg < nEPg &&
+            nPrintCount < nCntPage; ++nPrintCount )
+    {
+        pStPage = aVec[ nSPg ];
+        const SwPageFrm* pNxtPage = nEPg < aVec.size() ? aVec[ nEPg ] : 0;
+
+        short nRtlOfs = bPrintProspect_RTL ? 1 : 0;
+        if ( 0 == (( nSPg + nRtlOfs) & 1 ) )     // switch for odd number in LTR, even number in RTL
+        {
+            const SwPageFrm* pTmp = pStPage;
+            pStPage = pNxtPage;
+            pNxtPage = pTmp;
+        }
+
+        sal_Int32 nFirst, nSecond = -1;
+        for ( int nC = 0; nC < 2; ++nC )
+        {
+            sal_Int32 nPageNum = -1;
+            if ( pStPage )
+                nPageNum = pStPage->GetPhyPageNum();
+            if (nC == 0)
+                nFirst  = nPageNum;
+            else
+                nSecond = nPageNum;
+
+            pStPage = pNxtPage;
+        }
+        rPagePairs.push_back( std::pair< sal_Int32, sal_Int32 >(nFirst, nSecond) );
+
+        nSPg = nSPg + nStep;
+        nEPg = nEPg - nStep;
+    }
+    DBG_ASSERT( nCntPage == rPagePairs.size(), "size mismatch for number of page pairs" );
+}
 
 
 sal_uInt16 SwDoc::GetPageCount() const

@@ -2614,7 +2614,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         m_pPrintUIOptions = new SwPrintUIOptions( bWebDoc );
     }
     bool bFormat = m_pPrintUIOptions->processPropertiesAndCheckFormat( rxOptions );
-    const bool bIsPDFExport = !m_pPrintUIOptions->hasProperty( "IsPrinter" );
+    const bool bPrintProspect   = m_pPrintUIOptions->getBoolValue( C2U( "PrintBrochure" ), false );
+    const bool bIsPDFExport     = !m_pPrintUIOptions->hasProperty( "IsPrinter" );
 
     SfxViewShell *pView = 0;
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
@@ -2655,6 +2656,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     }
 
     const sal_Int32 nPageCount = pDoc->GetPageCount();
+
+    // get PageRange option
     OUString aPageRange;
     if (bIsPDFExport)
     {
@@ -2671,7 +2674,6 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     {
         aPageRange = m_pPrintUIOptions->getStringValue( C2U( "PageRange" ), OUString() );
     }
-
     if (aPageRange.getLength() == 0)
     {
         // set page range to print to 'all pages'
@@ -2680,18 +2682,27 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         aPageRange += OUString::valueOf( nPageCount );
     }
 
-    // get set of valid pages (according to the current settings)
-    // and their start frames
-    pDoc->GetValidPagesForPrinting( bIsPDFExport, *m_pPrintUIOptions, nPageCount );
-    DBG_ASSERT( nPageCount >= 1, "valid pages count is 0! Should not happen." );
+    // get number of pages to be rendered
+    if(bPrintProspect)
+    {
+        pDoc->CalculatePagePairsForProspectPrinting( *m_pPrintUIOptions, nPageCount );
+        nRet = m_pPrintUIOptions->GetPagePairsForProspectPrinting().size();
+    }
+    else
+    {
+        // get set of valid pages (according to the current settings)
+        // and their start frames
+        pDoc->CalculatePagesForPrinting( bIsPDFExport, *m_pPrintUIOptions, nPageCount );
+        DBG_ASSERT( nPageCount >= 1, "valid pages count is 0! Should not happen." );
 
-    // get vector of pages to print according to PageRange and valid pages from above
-    // (result may be an empty vector, for example if the range string is not correct)
-    StringRangeEnumerator::getRangesFromString(
-            aPageRange, m_pPrintUIOptions->GetPagesToPrint(),
-            1, nPageCount, 0, &m_pPrintUIOptions->GetValidPagesSet() );
+        // get vector of pages to print according to PageRange and valid pages from above
+        // (result may be an empty vector, for example if the range string is not correct)
+        StringRangeEnumerator::getRangesFromString(
+                aPageRange, m_pPrintUIOptions->GetPagesToPrint(),
+                1, nPageCount, 0, &m_pPrintUIOptions->GetValidPagesSet() );
 
-    nRet = m_pPrintUIOptions->GetPagesToPrint().size();
+        nRet = m_pPrintUIOptions->GetPagesToPrint().size();
+    }
     DBG_ASSERT( nRet >= 0, "negative number of pages???" );
 
     return nRet;
@@ -2803,7 +2814,8 @@ void SAL_CALL SwXTextDocument::render(
         m_pPrintUIOptions = new SwPrintUIOptions( bWebDoc );
     }
     m_pPrintUIOptions->processProperties( rxOptions );
-    const bool bIsPDFExport = !m_pPrintUIOptions->hasProperty( "IsPrinter" );
+    const bool bPrintProspect   = m_pPrintUIOptions->getBoolValue( C2U( "PrintBrochure" ), false );
+    const bool bIsPDFExport     = !m_pPrintUIOptions->hasProperty( "IsPrinter" );
 
     // get view shell to use
     SfxViewShell *pView = 0;
@@ -2830,7 +2842,8 @@ void SAL_CALL SwXTextDocument::render(
     // Thus instead of throwing the exception we silently return.
     if (0 > nRenderer)
         throw IllegalArgumentException();
-    if (nRenderer >= sal_Int32(m_pPrintUIOptions->GetPagesToPrint().size()))
+    if ( (bPrintProspect && nRenderer >= m_pPrintUIOptions->GetPagePairsForProspectPrinting().size())
+        || (!bPrintProspect && nRenderer >= m_pPrintUIOptions->GetPagesToPrint().size()))
         return;
 
     // the view shell should be SwView for documents PDF export
@@ -2943,7 +2956,10 @@ void SAL_CALL SwXTextDocument::render(
         // <--
 
         // TLPDF OutputDevice *pOldDev = pVwSh->GetOut();   // TLPDF
-        pVwSh->Prt( pOut, aOptions, *m_pPrintUIOptions, nRenderer, 0, bIsPDFExport );
+        if (bPrintProspect)
+            pVwSh->PrintProspect( pOut, aOptions, *m_pPrintUIOptions, nRenderer );
+        else    // normal printing and PDF export
+            pVwSh->PrintOrPDFExport( pOut, aOptions, *m_pPrintUIOptions, nRenderer, bIsPDFExport );
 
         // --> FME 2004-10-08 #i35176#
         //
