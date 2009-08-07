@@ -2846,7 +2846,7 @@ Size Edit::CalcMinimumSize() const
                    CTRL_EDITBOX, PART_ENTIRE_CONTROL,
                    aRect, 0, aControlValue, rtl::OUString(), aBound, aContent) )
     {
-        Rectangle aBoundRect( aBound.GetBoundRect() );
+        Rectangle aBoundRect( aContent.GetBoundRect() );
         if( aBoundRect.GetHeight() > aSize.Height() )
             aSize.Height() = aBoundRect.GetHeight();
     }
