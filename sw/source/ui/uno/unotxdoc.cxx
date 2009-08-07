@@ -2744,6 +2744,11 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     bool bSkipEmptyPages = m_pPrintUIOptions->getBoolValue( "IsSkipEmptyPages", sal_False );
     Size aPgSize( pDoc->GetPageSize( sal_uInt16(nRenderer + 1), bSkipEmptyPages ) );
 
+    if( m_pPrintUIOptions->getBoolValue( C2U( "PrintBrochure" ), sal_False ) )
+    {
+        aPgSize = Size( aPgSize.Height(), aPgSize.Width() );
+    }
+
     awt::Size aPageSize( TWIP_TO_MM100( aPgSize.Width() ),
                          TWIP_TO_MM100( aPgSize.Height() ));
     uno::Sequence< beans::PropertyValue > aRenderer(1);
@@ -2842,8 +2847,8 @@ void SAL_CALL SwXTextDocument::render(
     // Thus instead of throwing the exception we silently return.
     if (0 > nRenderer)
         throw IllegalArgumentException();
-    if ( (bPrintProspect && nRenderer >= m_pPrintUIOptions->GetPagePairsForProspectPrinting().size())
-        || (!bPrintProspect && nRenderer >= m_pPrintUIOptions->GetPagesToPrint().size()))
+    if ( (bPrintProspect && size_t(nRenderer) >= m_pPrintUIOptions->GetPagePairsForProspectPrinting().size())
+        || (!bPrintProspect && size_t(nRenderer) >= m_pPrintUIOptions->GetPagesToPrint().size()))
         return;
 
     // the view shell should be SwView for documents PDF export

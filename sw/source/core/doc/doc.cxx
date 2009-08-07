@@ -1184,7 +1184,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     // now fill the vector for calculating the page pairs with the start frames
     // from the above obtained vector
     std::vector< const SwPageFrm * > aVec;
-    for (sal_Int32 i = 0; i < aPagesToPrint.size(); ++i)
+    for (size_t i = 0; i < aPagesToPrint.size(); ++i)
     {
         const sal_Int32 nPage = aPagesToPrint[i];
         const SwPageFrm *pFrm = rValidStartFrms[ nPage ];
@@ -1247,7 +1247,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     }
 
     sal_Int32 nCntPage = (( nEPg - nSPg ) / ( 2 * nStep )) + 1;
-    DBG_ASSERT( nCntPage * 2 == aVec.size(), "vector size vs. page count mismatch" );
+    DBG_ASSERT( size_t(nCntPage * 2) == aVec.size(), "vector size vs. page count mismatch" );
 
     for ( USHORT nPrintCount = 0; nSPg < nEPg &&
             nPrintCount < nCntPage; ++nPrintCount )
@@ -1281,7 +1281,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
         nSPg = nSPg + nStep;
         nEPg = nEPg - nStep;
     }
-    DBG_ASSERT( nCntPage == rPagePairs.size(), "size mismatch for number of page pairs" );
+    DBG_ASSERT( size_t(nCntPage) == rPagePairs.size(), "size mismatch for number of page pairs" );
 }
 
 
