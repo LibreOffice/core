@@ -125,7 +125,7 @@ namespace {
 
         sal_Int32 GetHandoutPageCount (void) const
         {
-            sal_uInt32 nIndex = mrProperties.getIntValue("SlidesPerPage", sal_Int32(4));
+            sal_uInt32 nIndex = static_cast<sal_Int32>(mrProperties.getIntValue("SlidesPerPage", sal_Int32(4)));
             if (nIndex<maSlidesPerPage.size())
                 return maSlidesPerPage[nIndex];
             else if ( ! maSlidesPerPage.empty())
@@ -156,7 +156,7 @@ namespace {
 
         ULONG GetOutputQuality (void) const
         {
-            sal_Int32 nQuality = mrProperties.getIntValue( "Quality", sal_Int32(0) );
+            sal_Int32 nQuality = static_cast<sal_Int32>(mrProperties.getIntValue( "Quality", sal_Int32(0) ));
             return nQuality;
         }
 
@@ -187,13 +187,13 @@ namespace {
 
         bool IsPrintFrontPage (void) const
         {
-            sal_Int32 nInclude = mrProperties.getIntValue( "PrintBrochureInclude", 0 );
+            sal_Int32 nInclude = static_cast<sal_Int32>(mrProperties.getIntValue( "PrintBrochureInclude", 0 ));
             return nInclude == 0 || nInclude == 1;
         }
 
         bool IsPrintBackPage (void) const
         {
-            sal_Int32 nInclude = mrProperties.getIntValue( "PrintBrochureInclude", 0 );
+            sal_Int32 nInclude = static_cast<sal_Int32>(mrProperties.getIntValue( "PrintBrochureInclude", 0 ));
             return nInclude == 0 || nInclude == 2;
         }
 
@@ -204,7 +204,7 @@ namespace {
 
         OUString GetPrinterSelection (void) const
         {
-            sal_Int32 nContent = mrProperties.getIntValue( "PrintContent", 0 );
+            sal_Int32 nContent = static_cast<sal_Int32>(mrProperties.getIntValue( "PrintContent", 0 ));
             OUString sValue( A2S("all") );
             if( nContent == 1 )
                 sValue = mrProperties.getStringValue( "PageRange", A2S( "all" ) );
@@ -254,7 +254,7 @@ namespace {
             const sal_Char* pName,
             const sal_Int32 nTriggerValue) const
         {
-            sal_Int32 nValue = mrProperties.getIntValue( pName );
+            sal_Int32 nValue = static_cast<sal_Int32>(mrProperties.getIntValue( pName ));
             return nValue == nTriggerValue;
         }
     };
