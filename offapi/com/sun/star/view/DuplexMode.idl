@@ -57,7 +57,7 @@ constants DuplexMode
     const short LONGEDGE = 2;
 
     //-------------------------------------------------------------------------
-    /** specifies the paper format as A4.
+    /** specifies a short edge duplex mode
      */
     const short SHORTEDGE = 3;
 };
