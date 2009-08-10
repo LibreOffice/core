@@ -519,13 +519,16 @@ namespace {
                                 )
                             );
 
-            AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
-                                String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN) ),
-                                String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN_HELP) ),
-                                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrintHidden" ) ),
-                                sal_False
-                                )
-                            );
+            if( mbImpress )
+            {
+                AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
+                                    String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN) ),
+                                    String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN_HELP) ),
+                                    OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrintHidden" ) ),
+                                    sal_False
+                                    )
+                                );
+            }
 
             AddDialogControl( vcl::PrinterOptionsHelper::getSubgroupControlOpt(
                                String( SdResId(_STR_IMPRESS_PRINT_UI_QUALITY) ), rtl::OUString() ) );
