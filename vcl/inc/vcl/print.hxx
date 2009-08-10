@@ -504,6 +504,9 @@ public:
     SAL_DLLPRIVATE void pushPropertiesToPrinter();
     SAL_DLLPRIVATE void setJobState( com::sun::star::view::PrintableState );
     SAL_DLLPRIVATE bool setupPrinter( Window* i_pDlgParent );
+
+    SAL_DLLPRIVATE int getPageCountProtected() const;
+    SAL_DLLPRIVATE com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getPageParametersProtected( int i_nPage ) const;
 };
 
 class VCL_DLLPUBLIC PrinterOptionsHelper

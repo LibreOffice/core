@@ -352,7 +352,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             {
                 GDIMetaFile aPageFile;
                 i_pController->setLastPage( sal_True );
-                if( i_pController->getPageCount() > 0 )
+                if( i_pController->getPageCountProtected() > 0 )
                     i_pController->getFilteredPageFile( 0, aPageFile );
                 return;
             }
@@ -599,6 +599,28 @@ static Size modifyJobSetup( Printer* pPrinter, const Sequence< PropertyValue >& 
     return aPageSize;
 }
 
+int PrinterController::getPageCountProtected() const
+{
+    const MapMode aMapMode( MAP_100TH_MM );
+
+    mpImplData->mpPrinter->Push();
+    mpImplData->mpPrinter->SetMapMode( aMapMode );
+    int nPages = getPageCount();
+    mpImplData->mpPrinter->Pop();
+    return nPages;
+}
+
+Sequence< beans::PropertyValue > PrinterController::getPageParametersProtected( int i_nPage ) const
+{
+    const MapMode aMapMode( MAP_100TH_MM );
+
+    mpImplData->mpPrinter->Push();
+    mpImplData->mpPrinter->SetMapMode( aMapMode );
+    Sequence< beans::PropertyValue > aResult( getPageParameters( i_nPage ) );
+    mpImplData->mpPrinter->Pop();
+    return aResult;
+}
+
 Size PrinterController::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache )
 {
     // update progress if necessary
@@ -626,7 +648,7 @@ Size PrinterController::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf,
     o_rMtf.Clear();
 
     // get page parameters
-    Sequence< PropertyValue > aPageParm( getPageParameters( i_nUnfilteredPage ) );
+    Sequence< PropertyValue > aPageParm( getPageParametersProtected( i_nUnfilteredPage ) );
     const MapMode aMapMode( MAP_100TH_MM );
 
     mpImplData->mpPrinter->Push();
@@ -677,7 +699,7 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
     }
 
     // clip to page rect
-    o_rMtf.AddAction( new MetaClipRegionAction( Region( i_rClipRect ), TRUE ) );
+    // o_rMtf.AddAction( new MetaClipRegionAction( Region( i_rClipRect ), TRUE ) );
 
     // append the subpage
     io_rSubPage.WindStart();
@@ -703,7 +725,7 @@ Size PrinterController::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o
     {
         if( mpImplData->mbReversePageOrder )
         {
-            int nDocPages = getPageCount();
+            int nDocPages = getPageCountProtected();
             i_nFilteredPage = nDocPages - 1 - i_nFilteredPage;
         }
         Size aPageSize = getPageFile( i_nFilteredPage, o_rMtf, i_bMayUseCache );
@@ -742,7 +764,7 @@ Size PrinterController::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o
     o_rMtf.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
     o_rMtf.AddAction( new MetaMapModeAction( MapMode( MAP_100TH_MM ) ) );
 
-    int nDocPages = getPageCount();
+    int nDocPages = getPageCountProtected();
     for( int nSubPage = 0; nSubPage < nSubPages; nSubPage++ )
     {
         // map current sub page to real page
@@ -801,7 +823,7 @@ int PrinterController::getFilteredPageCount()
     int nDiv = mpImplData->maMultiPage.nRows * mpImplData->maMultiPage.nColumns;
     if( nDiv < 1 )
         nDiv = 1;
-    return (getPageCount() * mpImplData->maMultiPage.nRepeat + (nDiv-1)) / nDiv;
+    return (getPageCountProtected() * mpImplData->maMultiPage.nRepeat + (nDiv-1)) / nDiv;
 }
 
 void PrinterController::printFilteredPage( int i_nPage )
@@ -822,7 +844,6 @@ void PrinterController::printFilteredPage( int i_nPage )
         }
     }
 
-    bool bMultiPageOutput = mpImplData->maMultiPage.nRows != 1 || mpImplData->maMultiPage.nColumns != 1;
     ULONG nRestoreDrawMode = mpImplData->mpPrinter->GetDrawMode();
     sal_Int32 nMaxBmpDPIX = mpImplData->mpPrinter->ImplGetDPIX();
     sal_Int32 nMaxBmpDPIY = mpImplData->mpPrinter->ImplGetDPIY();
@@ -1159,7 +1180,7 @@ void PrinterController::createProgressDialog()
 
         if( bShow && ! Application::IsHeadlessModeEnabled() )
         {
-            mpImplData->mpProgress = new PrintProgressDialog( NULL, getPageCount() );
+            mpImplData->mpProgress = new PrintProgressDialog( NULL, getPageCountProtected() );
             mpImplData->mpProgress->Show();
         }
     }

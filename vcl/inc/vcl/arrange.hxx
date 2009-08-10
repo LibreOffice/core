@@ -142,6 +142,8 @@ namespace vcl
             return pEle ? pEle->m_pElement : NULL;
         }
 
+        virtual bool isVisible() const; // true if any element is visible
+
         sal_Int32 getExpandPriority( size_t i_nIndex ) const
         {
             const Element* pEle = getConstElement( i_nIndex );
@@ -227,6 +229,8 @@ namespace vcl
         size_t addChild( WindowArranger* i_pNewChild, sal_Int32 i_nExpandPrio = 0, size_t i_nIndex = ~0 )
         { return addChild( boost::shared_ptr<WindowArranger>( i_pNewChild ), i_nExpandPrio, i_nIndex ); }
         void remove( boost::shared_ptr<WindowArranger> const & );
+
+        long getBorderWidth() const { return m_nBorderWidth; }
     };
 
     class LabeledElement : public WindowArranger
@@ -234,6 +238,7 @@ namespace vcl
         WindowArranger::Element m_aLabel;
         WindowArranger::Element m_aElement;
         long                    m_nDistance;
+        long                    m_nLabelColumnWidth;
         int                     m_nLabelStyle;
     protected:
         virtual Element* getElement( size_t i_nIndex )
@@ -249,6 +254,7 @@ namespace vcl
         LabeledElement( WindowArranger* i_pParent = NULL, int i_nLabelStyle = 0, long i_nDistance = 5 )
         : WindowArranger( i_pParent )
         , m_nDistance( i_nDistance )
+        , m_nLabelColumnWidth( 0 )
         , m_nLabelStyle( i_nLabelStyle )
         {}
 
@@ -262,6 +268,30 @@ namespace vcl
         void setLabel( boost::shared_ptr<WindowArranger> const & );
         void setElement( Window* );
         void setElement( boost::shared_ptr<WindowArranger> const & );
+        void setLabelColumnWidth( long i_nWidth )
+        { m_nLabelColumnWidth = i_nWidth; }
+
+        Size getLabelSize( WindowSizeType i_eType ) const
+        { return m_aLabel.getOptimalSize( i_eType ); }
+        Size getElementSize( WindowSizeType i_eType ) const
+        { return m_aElement.getOptimalSize( i_eType ); }
+    };
+
+    class LabelColumn : public RowOrColumn
+    {
+        long getLabelWidth() const;
+    public:
+        LabelColumn( WindowArranger* i_pParent = NULL, long i_nBorderWidth = 5 )
+        : RowOrColumn( i_pParent, true, i_nBorderWidth )
+        {}
+        virtual ~LabelColumn();
+
+        virtual Size getOptimalSize( WindowSizeType ) const;
+        virtual void resize();
+
+        // returns the index of the added label
+        size_t addRow( Window* i_pLabel, boost::shared_ptr<WindowArranger> const& i_rElement, long i_nIndent = 0 );
+        size_t addRow( Window* i_pLabel, Window* i_pElement, long i_nIndent = 0 );
     };
 
     class Indenter : public WindowArranger
@@ -321,6 +351,7 @@ namespace vcl
         virtual void resize() {}
         virtual void setParentWindow( Window* ) {}
         virtual size_t countElements() const { return 1; }
+        virtual bool isVisible() const { return true; }
     };
 
     class MatrixArranger : public WindowArranger

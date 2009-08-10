@@ -113,14 +113,27 @@ void WindowArranger::show( bool i_bShow, bool i_bImmediateUpdate )
     }
 }
 
+bool WindowArranger::isVisible() const
+{
+    size_t nEle = countElements();
+    for( size_t i = 0; i < nEle; i++ )
+    {
+        const Element* pEle = getConstElement( i );
+        if( pEle->isVisible() )
+            return true;
+    }
+    return false;
+}
+
 bool WindowArranger::Element::isVisible() const
 {
     bool bVisible = false;
     if( ! m_bHidden )
     {
-        bVisible = true;
         if( m_pElement )
             bVisible = m_pElement->IsVisible();
+        else if( m_pChild )
+            bVisible = m_pChild->isVisible();
     }
     return bVisible;
 }
@@ -191,42 +204,46 @@ RowOrColumn::~RowOrColumn()
 Size RowOrColumn::getOptimalSize( WindowSizeType i_eType ) const
 {
     Size aRet( 0, 0 );
-    if( ! m_aElements.empty() )
+    for( std::vector< WindowArranger::Element >::const_iterator it = m_aElements.begin();
+         it != m_aElements.end(); ++it )
     {
+        if( it->isVisible() )
+        {
+            // get the size of type of the managed element
+            Size aElementSize( it->getOptimalSize( i_eType ) );
+            if( m_bColumn )
+            {
+                // add the distance between elements
+                aRet.Height() += m_nBorderWidth;
+                // check if the width needs adjustment
+                if( aRet.Width() < aElementSize.Width() )
+                    aRet.Width() = aElementSize.Width();
+                aRet.Height() += aElementSize.Height();
+            }
+            else
+            {
+                // add the distance between elements
+                aRet.Width() += m_nBorderWidth;
+                // check if the height needs adjustment
+                if( aRet.Height() < aElementSize.Height() )
+                    aRet.Height() = aElementSize.Height();
+                aRet.Width() += aElementSize.Width();
+            }
+        }
+    }
+
+    if( aRet.Width() != 0 || aRet.Height() != 0 )
+    {
+        // subtract the border for the first element
         if( m_bColumn )
             aRet.Height() -= m_nBorderWidth;
         else
             aRet.Width() -= m_nBorderWidth;
-    }
 
-    for( std::vector< WindowArranger::Element >::const_iterator it = m_aElements.begin();
-         it != m_aElements.end(); ++it )
-    {
-        // get the size of type of the managed element
-        Size aElementSize( it->getOptimalSize( i_eType ) );
-        if( m_bColumn )
-        {
-            // add the distance between elements
-            aRet.Height() += m_nBorderWidth;
-            // check if the width needs adjustment
-            if( aRet.Width() < aElementSize.Width() )
-                aRet.Width() = aElementSize.Width();
-            aRet.Height() += aElementSize.Height();
-        }
-        else
-        {
-            // add the distance between elements
-            aRet.Width() += m_nBorderWidth;
-            // check if the height needs adjustment
-            if( aRet.Height() < aElementSize.Height() )
-                aRet.Height() = aElementSize.Height();
-            aRet.Width() += aElementSize.Width();
-        }
+        // add the outer border
+        aRet.Width() += 2*m_nOuterBorder;
+        aRet.Height() += 2*m_nOuterBorder;
     }
-
-    // add the outer border
-    aRet.Width() += 2*m_nOuterBorder;
-    aRet.Height() += 2*m_nOuterBorder;
 
     return aRet;
 }
@@ -333,16 +350,19 @@ void RowOrColumn::resize()
     long nUsedWidth = 2*m_nOuterBorder - (nElements ? m_nBorderWidth : 0);
     for( size_t i = 0; i < nElements; i++ )
     {
-        aElementSizes[i] = m_aElements[i].getOptimalSize( eType );
-        if( m_bColumn )
+        if( m_aElements[i].isVisible() )
         {
-            aElementSizes[i].Width() = m_aManagedArea.GetWidth() - 2* m_nOuterBorder;
-            nUsedWidth += aElementSizes[i].Height() + m_nBorderWidth;
-        }
-        else
-        {
-            aElementSizes[i].Height() = m_aManagedArea.GetHeight() - 2* m_nOuterBorder;
-            nUsedWidth += aElementSizes[i].Width() + m_nBorderWidth;
+            aElementSizes[i] = m_aElements[i].getOptimalSize( eType );
+            if( m_bColumn )
+            {
+                aElementSizes[i].Width() = m_aManagedArea.GetWidth() - 2* m_nOuterBorder;
+                nUsedWidth += aElementSizes[i].Height() + m_nBorderWidth;
+            }
+            else
+            {
+                aElementSizes[i].Height() = m_aManagedArea.GetHeight() - 2* m_nOuterBorder;
+                nUsedWidth += aElementSizes[i].Width() + m_nBorderWidth;
+            }
         }
     }
 
@@ -365,12 +385,14 @@ void RowOrColumn::resize()
     for( size_t i = 0; i < nElements; i++ )
     {
         // get the size of type of the managed element
-
-        m_aElements[i].setPosSize( aElementPos, aElementSizes[i] );
-        if( m_bColumn )
-            aElementPos.Y() += m_nBorderWidth + aElementSizes[i].Height();
-        else
-            aElementPos.X() += m_nBorderWidth + aElementSizes[i].Width();
+        if( m_aElements[i].isVisible() )
+        {
+            m_aElements[i].setPosSize( aElementPos, aElementSizes[i] );
+            if( m_bColumn )
+                aElementPos.Y() += m_nBorderWidth + aElementSizes[i].Height();
+            else
+                aElementPos.X() += m_nBorderWidth + aElementSizes[i].Width();
+        }
     }
 }
 
@@ -456,7 +478,12 @@ Size LabeledElement::getOptimalSize( WindowSizeType i_eType ) const
 {
     Size aRet( m_aLabel.getOptimalSize( WINDOWSIZE_MINIMUM ) );
     if( aRet.Width() != 0 )
-        aRet.Width() += m_nDistance;
+    {
+        if( m_nLabelColumnWidth != 0 )
+            aRet.Width() = m_nLabelColumnWidth;
+        else
+            aRet.Width() += m_nDistance;
+    }
     Size aElementSize( m_aElement.getOptimalSize( i_eType ) );
     aRet.Width() += aElementSize.Width();
     if( aElementSize.Height() > aRet.Height() )
@@ -479,6 +506,8 @@ void LabeledElement::resize()
     Point aPos( m_aManagedArea.Left(),
                 m_aManagedArea.Top() + m_nOuterBorder + nYOff );
     Size aSize( aLabelSize );
+    if( m_nLabelColumnWidth != 0 )
+        aSize.Width() = m_nLabelColumnWidth;
     m_aLabel.setPosSize( aPos, aSize );
 
     aPos.X() += aSize.Width() + m_nDistance;
@@ -526,6 +555,130 @@ void LabeledElement::setElement( boost::shared_ptr<WindowArranger> const & i_pEl
 {
     m_aElement.m_pElement = NULL;
     m_aElement.m_pChild = i_pElement;
+}
+
+// ----------------------------------------
+// vcl::LabelColumn
+//-----------------------------------------
+LabelColumn::~LabelColumn()
+{
+}
+
+long LabelColumn::getLabelWidth() const
+{
+    long nWidth = 0;
+
+    size_t nEle = countElements();
+    for( size_t i = 0; i < nEle; i++ )
+    {
+        const Element* pEle = getConstElement( i );
+        if( pEle && pEle->m_pChild.get() )
+        {
+            const LabeledElement* pLabel = dynamic_cast< const LabeledElement* >(pEle->m_pChild.get());
+            if( pLabel )
+            {
+                Window* pLW = pLabel->getWindow( 0 );
+                if( pLW )
+                {
+                    Size aLabSize( pLW->GetOptimalSize( WINDOWSIZE_MINIMUM ) );
+                    if( aLabSize.Width() > nWidth )
+                        nWidth = aLabSize.Width();
+                }
+            }
+        }
+    }
+    return nWidth + getBorderWidth();
+}
+
+Size LabelColumn::getOptimalSize( WindowSizeType i_eType ) const
+{
+    long nWidth = getLabelWidth();
+    Size aColumnSize;
+
+    // every child is a LabeledElement
+    size_t nEle = countElements();
+    for( size_t i = 0; i < nEle; i++ )
+    {
+        Size aElementSize;
+        const Element* pEle = getConstElement( i );
+        if( pEle && pEle->m_pChild.get() )
+        {
+            const LabeledElement* pLabel = dynamic_cast< const LabeledElement* >(pEle->m_pChild.get());
+            if( pLabel ) // we have a label
+            {
+                aElementSize = pLabel->getLabelSize( WINDOWSIZE_MINIMUM );
+                if( aElementSize.Width() )
+                    aElementSize.Width() = nWidth;
+                Size aSize( pLabel->getElementSize( i_eType ) );
+                aElementSize.Width() += aSize.Width();
+                if( aSize.Height() > aElementSize.Height() )
+                    aElementSize.Height() = aSize.Height();
+            }
+            else // a non label, just treat it as a row
+            {
+                aElementSize = pEle->getOptimalSize( i_eType );
+            }
+        }
+        else if( pEle && pEle->m_pElement ) // a general window, treat is as a row
+        {
+            aElementSize = pEle->getOptimalSize( i_eType );
+        }
+        if( aElementSize.Width() )
+        {
+            aElementSize.Width() += 2*m_nOuterBorder;
+            if( aElementSize.Width() > aColumnSize.Width() )
+                aColumnSize.Width() = aElementSize.Width();
+        }
+        if( aElementSize.Height() )
+        {
+            aColumnSize.Height() += getBorderWidth() + aElementSize.Height();
+        }
+    }
+    if( nEle > 0 && aColumnSize.Height() )
+    {
+        aColumnSize.Height() -= getBorderWidth(); // for the first element
+        aColumnSize.Height() += 2*m_nOuterBorder;
+    }
+    return aColumnSize;
+}
+
+void LabelColumn::resize()
+{
+    long nWidth = getLabelWidth();
+    size_t nEle = countElements();
+    for( size_t i = 0; i < nEle; i++ )
+    {
+        Element* pEle = getElement( i );
+        if( pEle && pEle->m_pChild.get() )
+        {
+            LabeledElement* pLabel = dynamic_cast< LabeledElement* >(pEle->m_pChild.get());
+            if( pLabel )
+                pLabel->setLabelColumnWidth( nWidth );
+        }
+    }
+    RowOrColumn::resize();
+}
+
+size_t LabelColumn::addRow( Window* i_pLabel, boost::shared_ptr<WindowArranger> const& i_rElement, long i_nIndent )
+{
+    boost::shared_ptr< LabeledElement > xLabel( new LabeledElement( this, 2 ) );
+    xLabel->setLabel( i_pLabel );
+    xLabel->setBorders( 0, i_nIndent, 0, 0, 0 );
+    xLabel->setElement( i_rElement );
+    size_t nIndex = addChild( xLabel );
+    resize();
+    return nIndex;
+}
+
+size_t LabelColumn::addRow( Window* i_pLabel, Window* i_pElement, long i_nIndent )
+{
+    boost::shared_ptr< LabeledElement > xLabel( new LabeledElement( this, 2 ) );
+    xLabel->setLabel( i_pLabel );
+    xLabel->setBorders( 0, i_nIndent, 0, 0, 0 );
+    xLabel->setElement( i_pElement );
+    size_t nIndex = addChild( xLabel );
+    resize();
+    return nIndex;
 }
 
 // ----------------------------------------

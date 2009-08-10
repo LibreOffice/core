@@ -233,10 +233,12 @@ PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     , maNupColEdt( this, VclResId( SV_PRINT_PRT_NUP_COLS_EDT ) )
     , maNupTimesTxt( this, VclResId( SV_PRINT_PRT_NUP_TIMES_TXT ) )
     , maNupRowsEdt( this, VclResId( SV_PRINT_PRT_NUP_ROWS_EDT ) )
-    , maPageMarginTxt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_PAGES_TXT ) )
+    , maPageMarginTxt1( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_PAGES_1_TXT ) )
     , maPageMarginEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_PAGES_EDT ) )
-    , maSheetMarginTxt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_SHEET_TXT ) )
+    , maPageMarginTxt2( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_PAGES_2_TXT ) )
+    , maSheetMarginTxt1( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_SHEET_1_TXT ) )
     , maSheetMarginEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_SHEET_EDT ) )
+    , maSheetMarginTxt2( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_SHEET_2_TXT ) )
     , maNupOrientationTxt( this, VclResId( SV_PRINT_PRT_NUP_ORIENTATION_TXT ) )
     , maNupOrientationBox( this, VclResId( SV_PRINT_PRT_NUP_ORIENTATION_BOX ) )
     , maNupOrderTxt( this, VclResId( SV_PRINT_PRT_NUP_ORDER_TXT ) )
@@ -275,10 +277,12 @@ PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     maNupColEdt.SMHID2( "NUpPage", "ColumnsBox" );
     maNupTimesTxt.SMHID2( "NUpPage", "Rows" );
     maNupRowsEdt.SMHID2( "NUpPage", "RowsBox" );
-    maPageMarginTxt.SMHID2( "NUpPage", "PageMargin" );
+    maPageMarginTxt1.SMHID2( "NUpPage", "PageMargin" );
     maPageMarginEdt.SMHID2( "NUpPage", "PageMarginBox" );
-    maSheetMarginTxt.SMHID2( "NUpPage", "SheetMargin" );
+    maPageMarginTxt2.SMHID2( "NUpPage", "PageMarginCont" );
+    maSheetMarginTxt1.SMHID2( "NUpPage", "SheetMargin" );
     maSheetMarginEdt.SMHID2( "NUpPage", "SheetMarginBox" );
+    maSheetMarginTxt2.SMHID2( "NUpPage", "SheetMarginCont" );
     maNupOrientationTxt.SMHID2( "NUpPage", "Orientation" );
     maNupOrientationBox.SMHID2( "NUpPage", "OrientationBox" );
     maNupOrderTxt.SMHID2( "NUpPage", "Order" );
@@ -299,10 +303,12 @@ void PrintDialog::NUpTabPage::enableNupControls( bool bEnable )
     maNupColEdt.Enable( bEnable );
     maNupTimesTxt.Enable( bEnable );
     maNupRowsEdt.Enable( bEnable );
-    maPageMarginTxt.Enable( bEnable );
+    maPageMarginTxt1.Enable( bEnable );
     maPageMarginEdt.Enable( bEnable );
-    maSheetMarginTxt.Enable( bEnable );
+    maPageMarginTxt2.Enable( bEnable );
+    maSheetMarginTxt1.Enable( bEnable );
     maSheetMarginEdt.Enable( bEnable );
+    maSheetMarginTxt2.Enable( bEnable );
     maNupOrientationTxt.Enable( bEnable );
     maNupOrientationBox.Enable( bEnable );
     maNupOrderTxt.Enable( bEnable );
@@ -311,9 +317,27 @@ void PrintDialog::NUpTabPage::enableNupControls( bool bEnable )
     maBorderCB.Enable( bEnable );
 }
 
+void PrintDialog::NUpTabPage::showAdvancedControls( bool i_bShow )
+{
+    maNupNumPagesTxt.Show( i_bShow );
+    maNupColEdt.Show( i_bShow );
+    maNupTimesTxt.Show( i_bShow );
+    maNupRowsEdt.Show( i_bShow );
+    maPageMarginTxt1.Show( i_bShow );
+    maPageMarginEdt.Show( i_bShow );
+    maPageMarginTxt2.Show( i_bShow );
+    maSheetMarginTxt1.Show( i_bShow );
+    maSheetMarginEdt.Show( i_bShow );
+    maSheetMarginTxt2.Show( i_bShow );
+    maNupOrientationTxt.Show( i_bShow );
+    maNupOrientationBox.Show( i_bShow );
+    maLayout.resize();
+}
+
 void PrintDialog::NUpTabPage::setupLayout()
 {
     Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
+    long nIndent = 3*aBorder.Width();
 
     maLayout.setParentWindow( this );
     maLayout.setOuterBorder( aBorder.Width() );
@@ -330,72 +354,41 @@ void PrintDialog::NUpTabPage::setupLayout()
     boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( xShowNupCol.get() ) );
     xShowNupCol->addChild( xSpacer );
 
-    boost::shared_ptr< vcl::RowOrColumn > xMainCol( new vcl::RowOrColumn( xIndent.get() ) );
+    boost::shared_ptr< vcl::LabelColumn > xMainCol( new vcl::LabelColumn( xIndent.get() ) );
     xIndent->setChild( xMainCol );
 
-    boost::shared_ptr< vcl::LabeledElement > xLabel( new vcl::LabeledElement( xMainCol.get() ) );
-    xMainCol->addChild( xLabel );
-    xLabel->setLabel( &maPagesBtn );
-    xLabel->setElement( &maNupPagesBox );
+    xMainCol->addRow( &maPagesBtn, &maNupPagesBox );
 
-    xIndent.reset( new vcl::Indenter( xMainCol.get(), 3*aBorder.Width() ) );
-    xMainCol->addChild( xIndent );
+    xRow.reset( new vcl::RowOrColumn( xMainCol.get(), false ) );
+    xMainCol->addRow( &maNupNumPagesTxt, xRow, nIndent );
+    xRow->addWindow( &maNupColEdt );
+    xRow->addWindow( &maNupTimesTxt );
+    xRow->addWindow( &maNupRowsEdt );
 
-    mxLayoutGroup = xMainCol;
-    boost::shared_ptr< vcl::RowOrColumn > xCol( new vcl::RowOrColumn( xIndent.get() ) );
-    xIndent->setChild( xCol );
+    boost::shared_ptr< vcl::LabeledElement > xLab( new vcl::LabeledElement( xMainCol.get(), 2 ) );
+    xLab->setLabel( &maPageMarginEdt );
+    xLab->setElement( &maPageMarginTxt2 );
+    xMainCol->addRow( &maPageMarginTxt1, xLab, nIndent );
 
-    boost::shared_ptr< vcl::RowOrColumn > xAdvCol( new vcl::RowOrColumn( xCol.get() ) );
-    xCol->addChild( xAdvCol );
-    // remember advanced controls to show/hide
-    mxAdvancedControls = xAdvCol;
+    xLab.reset( new vcl::LabeledElement( xMainCol.get(), 2 ) );
+    xLab->setLabel( &maSheetMarginEdt );
+    xLab->setElement( &maSheetMarginTxt2 );
+    xMainCol->addRow( &maSheetMarginTxt1, xLab, nIndent );
 
-    xLabel.reset( new vcl::LabeledElement( xCol.get() ) );
-    xCol->addChild( xLabel );
-    xLabel->setLabel( &maNupOrderTxt );
-    xLabel->setElement( &maNupOrderBox );
-    xCol->addWindow( &maBorderCB );
-
-    xRow.reset( new vcl::RowOrColumn( xAdvCol.get(), false ) );
-    xAdvCol->addChild( xRow );
-    xLabel.reset( new vcl::LabeledElement( xRow.get() ) );
-    xRow->addChild( xLabel, 1 );
-    xLabel->setLabel( &maNupNumPagesTxt );
-    xLabel->setElement( &maNupColEdt );
-    xLabel.reset( new vcl::LabeledElement( xRow.get() ) );
-    xRow->addChild( xLabel );
-    xLabel->setLabel( &maNupTimesTxt );
-    xLabel->setElement( &maNupRowsEdt );
-
-    xLabel.reset( new vcl::LabeledElement( xAdvCol.get() ) );
-    xAdvCol->addChild( xLabel );
-    xLabel->setLabel( &maPageMarginTxt );
-    xLabel->setElement( &maPageMarginEdt );
-
-    xLabel.reset( new vcl::LabeledElement( xAdvCol.get() ) );
-    xAdvCol->addChild( xLabel );
-    xLabel->setLabel( &maSheetMarginTxt );
-    xLabel->setElement( &maSheetMarginEdt );
-
-    xLabel.reset( new vcl::LabeledElement( xAdvCol.get() ) );
-    xAdvCol->addChild( xLabel );
-    xLabel->setLabel( &maNupOrientationTxt );
-    xLabel->setElement( &maNupOrientationBox );
+    xMainCol->addRow( &maNupOrientationTxt, &maNupOrientationBox, nIndent );
+    xMainCol->addRow( &maNupOrderTxt, &maNupOrderBox, nIndent );
+    xMainCol->setBorders( xMainCol->addWindow( &maBorderCB ), nIndent, 0, 0, 0 );
 
     xSpacer.reset( new vcl::Spacer( xMainCol.get(), 0, Size( 10, aBorder.Width() ) ) );
     xMainCol->addChild( xSpacer );
 
     xRow.reset( new vcl::RowOrColumn( xMainCol.get(), false ) );
-    xMainCol->addChild( xRow );
-    xRow->addWindow( &maBrochureBtn );
+    xMainCol->addRow( &maBrochureBtn, xRow );
     // remember brochure row for dependencies
     mxBrochureDep = xRow;
 
-    xSpacer.reset( new vcl::Spacer( xMainCol.get(), 0, Size( 10, 2*aBorder.Width() ) ) );
-    xMainCol->addChild( xSpacer );
-
     // initially advanced controls are not shown, rows=columns=1
-    mxAdvancedControls->show( false, false );
+    showAdvancedControls( false );
 }
 
 void PrintDialog::NUpTabPage::Resize()
@@ -1105,7 +1098,7 @@ void PrintDialog::setupOptionalUI()
             }
             else if( aGroupingHint.equalsAscii( "LayoutPage" ) )
             {
-                pCurColumn = maNUpPage.mxLayoutGroup.get();
+                pCurColumn = &maNUpPage.maLayout;
                 pCurParent = &maNUpPage;            // set layout page as current parent
                 bOnStaticPage = true;
             }
@@ -1329,7 +1322,7 @@ void PrintDialog::setupOptionalUI()
                     setSmartId( pHeading, "FixedText", -1, aPropertyName );
 
                     // add to row
-                    pLabel = new vcl::LabeledElement( pFieldColumn );
+                    pLabel = new vcl::LabeledElement( pFieldColumn, 2 );
                     pFieldColumn->addChild( pLabel );
                     pLabel->setLabel( pHeading );
                 }
@@ -1651,7 +1644,7 @@ Size PrintDialog::getJobPageSize()
     {
         maFirstPageSize = maNupPortraitSize;
         GDIMetaFile aMtf;
-        if( maPController->getPageCount() > 0 )
+        if( maPController->getPageCountProtected() > 0 )
             maFirstPageSize = maPController->getPageFile( 0, aMtf, true );
     }
     return maFirstPageSize;
@@ -1706,7 +1699,7 @@ void PrintDialog::updateNupFromPages()
     maNUpPage.maPageMarginEdt.SetValue( maNUpPage.maPageMarginEdt.Normalize( nPageMargin ), FUNIT_100TH_MM );
     maNUpPage.maSheetMarginEdt.SetValue( maNUpPage.maSheetMarginEdt.Normalize( nSheetMargin ), FUNIT_100TH_MM );
 
-    maNUpPage.mxAdvancedControls->show( bCustom );
+    maNUpPage.showAdvancedControls( bCustom );
     if( bCustom )
     {
         // see if we have to enlarge the dialog to make the tab page fit
@@ -1846,7 +1839,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
         {
             maNUpPage.maNupPagesBox.SelectEntryPos( 0 );
             updateNupFromPages();
-            maNUpPage.mxAdvancedControls->show( false );
+            maNUpPage.showAdvancedControls( false );
             maNUpPage.enableNupControls( false );
         }
     }

@@ -104,10 +104,12 @@ namespace vcl
             NumericField                            maNupColEdt;
             FixedText                               maNupTimesTxt;
             NumericField                            maNupRowsEdt;
-            FixedText                               maPageMarginTxt;
+            FixedText                               maPageMarginTxt1;
             MetricField                             maPageMarginEdt;
-            FixedText                               maSheetMarginTxt;
+            FixedText                               maPageMarginTxt2;
+            FixedText                               maSheetMarginTxt1;
             MetricField                             maSheetMarginEdt;
+            FixedText                               maSheetMarginTxt2;
             FixedText                               maNupOrientationTxt;
             ListBox                                 maNupOrientationBox;
 
@@ -119,8 +121,6 @@ namespace vcl
             CheckBox                                maBorderCB;
 
             vcl::RowOrColumn                        maLayout;
-            boost::shared_ptr< vcl::WindowArranger >mxAdvancedControls;
-            boost::shared_ptr< vcl::RowOrColumn >   mxLayoutGroup;
             boost::shared_ptr< vcl::RowOrColumn >   mxBrochureDep;
 
             void setupLayout();
@@ -132,6 +132,8 @@ namespace vcl
             void storeToSettings();
             void initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& );
             void enableNupControls( bool bEnable );
+
+            void showAdvancedControls( bool );
 
             virtual void Resize();
         };

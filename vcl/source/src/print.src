@@ -199,11 +199,11 @@ ModalDialog SV_DLG_PRINT
             Value = 1;
             HelpText [en-US] = "Select number of rows.";
         };
-        FixedText SV_PRINT_PRT_NUP_MARGINS_PAGES_TXT
+        FixedText SV_PRINT_PRT_NUP_MARGINS_PAGES_1_TXT
         {
             Pos = MAP_APPFONT( 10, 95 );
             Size = MAP_APPFONT( 40, 10 );
-            Text [en-US] = "Margin between ~pages";
+            Text [en-US] = "~Distance";
         };
         MetricField SV_PRINT_PRT_NUP_MARGINS_PAGES_EDT
         {
@@ -215,11 +215,17 @@ ModalDialog SV_DLG_PRINT
             Unit = FUNIT_MM;
             HelpText [en-US] = "Select margin between individual pages on each sheet of paper.";
         };
-        FixedText SV_PRINT_PRT_NUP_MARGINS_SHEET_TXT
+        FixedText SV_PRINT_PRT_NUP_MARGINS_PAGES_2_TXT
+        {
+            Pos = MAP_APPFONT( 10, 95 );
+            Size = MAP_APPFONT( 40, 10 );
+            Text [en-US] = "between pages";
+        };
+        FixedText SV_PRINT_PRT_NUP_MARGINS_SHEET_1_TXT
         {
             Pos = MAP_APPFONT( 110, 95 );
             Size = MAP_APPFONT( 40, 10 );
-            Text [en-US] = "Margin to ~sheet border";
+            Text [en-US] = "~Margin";
         };
         MetricField SV_PRINT_PRT_NUP_MARGINS_SHEET_EDT
         {
@@ -230,6 +236,12 @@ ModalDialog SV_DLG_PRINT
             Value = 0;
             Unit = FUNIT_MM;
             HelpText [en-US] = "Select margin between the printed pages and paper edge.";
+        };
+        FixedText SV_PRINT_PRT_NUP_MARGINS_SHEET_2_TXT
+        {
+            Pos = MAP_APPFONT( 110, 95 );
+            Size = MAP_APPFONT( 40, 10 );
+            Text [en-US] = "to sheet border";
         };
         FixedText SV_PRINT_PRT_NUP_ORIENTATION_TXT
         {
