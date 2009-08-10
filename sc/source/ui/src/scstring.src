@@ -743,7 +743,7 @@ StringArray SCSTR_PRINT_OPTIONS
     ItemList [en-US] =
     {
         < "Pages"; >;
-        < "~Suppress output of empty pages"; >;
+        < "~Include output of empty pages"; >;
         < "If checked empty pages that have no cell contents or draw objects are not printed."; >;
         < "Sheets"; >;
         < "Print ~only selected sheets"; >;
@@ -755,7 +755,7 @@ StringArray SCSTR_PRINT_OPTIONS
         < "The printout will be created only from the currently selected sheets."; >;
         < "Selected cells"; >;
         < "The printout will be created only from the currently selected cells."; >;
-        < "Thereof"; >;
+        < "Thereof print"; >;
         < "All ~pages"; >;
         < "Print all pages of the printable content."; >;
         < "Pa~ges"; >;
