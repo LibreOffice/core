@@ -160,7 +160,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
 }
 
 PrintDialog::ShowNupOrderWindow::ShowNupOrderWindow( Window* i_pParent )
-    : Window( i_pParent, WB_BORDER )
+    : Window( i_pParent, WB_NOBORDER )
     , mnOrderMode( 0 )
     , mnRows( 1 )
     , mnColumns( 1 )
@@ -221,6 +221,8 @@ void PrintDialog::ShowNupOrderWindow::Paint( const Rectangle& i_rRect )
                          nY * aSubSize.Height() + nDeltaY ),
                   aPageText );
     }
+    DecorationView aVw( this );
+    aVw.DrawFrame( Rectangle( Point( 0, 0), aOutSize ), FRAME_DRAW_GROUP );
 }
 
 PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
@@ -487,8 +489,10 @@ void PrintDialog::JobTabPage::setupLayout()
     // create a row for details button/text and properties button
     boost::shared_ptr< vcl::RowOrColumn > xDetRow( new vcl::RowOrColumn( &maLayout, false ) );
     maLayout.addChild( xDetRow );
-    xDetRow->addWindow( &maDetailsBtn );
-    xDetRow->addWindow( &maDetailsTxt );
+    boost::shared_ptr< vcl::LabeledElement > xDetLbl( new vcl::LabeledElement( xDetRow.get() ) );
+    xDetRow->addChild( xDetLbl );
+    xDetLbl->setLabel( &maDetailsBtn );
+    xDetLbl->setElement( &maDetailsTxt );
     xDetRow->addChild( new vcl::Spacer( xDetRow.get(), 2 ) );
     xDetRow->addWindow( &maSetupButton );
 
@@ -1635,6 +1639,10 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
             maCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
 
         maPreviewWindow.setPreview( aMtf, maCurPageSize );
+
+        maForwardBtn.Enable( mnCurPage < nPages-1 );
+        maBackwardBtn.Enable( mnCurPage != 0 );
+        maPageEdit.Enable( nPages > 1 );
     }
 }
 
