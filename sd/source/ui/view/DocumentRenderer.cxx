@@ -585,14 +585,17 @@ namespace {
                                 )
                             );
 
+            AddDialogControl( vcl::PrinterOptionsHelper::getSubgroupControlOpt(
+                               String( SdResId(_STR_IMPRESS_PRINT_UI_PAGE_SIDES) ), rtl::OUString(),
+                               aBrochureOpt ) );
+
             vcl::PrinterOptionsHelper::UIControlOptions
                 aIncludeOpt( OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochure" ) ), -1, sal_False );
-            aIncludeOpt.maGroupHint = OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutPage" ) );
             AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE) ),
-                                CreateChoice(_STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST),
-                                OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochureInclude" ) ),
                                 CreateChoice(_STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST_HELP),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochureInclude" ) ),
+                                CreateChoice(_STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST),
                                 0,
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
                                 aIncludeOpt

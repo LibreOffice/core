@@ -47,7 +47,7 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     };
     String _STR_IMPRESS_PRINT_UI_CONTENT
     {
-        Text [ en-US ] = "Content";
+        Text [ en-US ] = "Document";
     };
     StringArray _STR_IMPRESS_PRINT_UI_CONTENT_HELP
     {
@@ -161,7 +161,7 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     {
         ItemList [ en-US ] =
         {
-            < "Original color" ; > ;
+            < "Original colors" ; > ;
             < "Grayscale" ; > ;
             < "Black & White" ; > ;
         };
@@ -185,9 +185,9 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     {
         ItemList [ en-US ] =
         {
-            < "Trim" ; > ;
-            < "Fit to page" ; > ;
-            < "Tile pages" ; > ;
+            < "Original size" ; > ;
+            < "Fit to printable page" ; > ;
+            < "Distribute on multiple pages" ; > ;
         };
     };
     StringArray _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_HELP
@@ -208,6 +208,10 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     {
         Text [en-US] = "Select the \"Brochure\" option to print the document in brochure format.";
     };
+    String _STR_IMPRESS_PRINT_UI_PAGE_SIDES
+    {
+        Text [ en-US ] = "Page sides";
+    };
     String _STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE
     {
         Text [ en-US ] = "Include";
@@ -220,9 +224,9 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     {
         ItemList [ en-US ] =
         {
-            < "front and back pages" ; > ;
-            < "front pages" ; > ;
-            < "back pages" ; > ;
+            < "All pages" ; > ;
+            < "Front sides / right pages" ; > ;
+            < "Back sides / left pages" ; > ;
         };
     };
     StringArray _STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST_HELP
@@ -241,7 +245,7 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     };
     String _STR_IMPRESS_PRINT_UI_PAPER_TRAY
     {
-        Text [ en-US ] = "Paper tray from printer settings";
+        Text [ en-US ] = "~Use only paper tray from printer preferences";
     };
     String _STR_IMPRESS_PRINT_UI_PAPER_TRAY_HELP
     {
@@ -257,7 +261,7 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
         {
             < "~All slides"; >;
             < "~Slides"; >;
-            < "~Selection"; >;
+            < "Se~lection"; >;
         };
     };
 
