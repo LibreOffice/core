@@ -42,6 +42,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/view/DuplexMode.hpp>
 
 #include <svtools/lstner.hxx>
 #include <svtools/stritem.hxx>
@@ -604,7 +605,8 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
 
     uno::Sequence < beans::PropertyValue > aCheckedArgs( rOptions.getLength() );
     sal_Int32 nProps = 0;
-    sal_Bool bWaitUntilEnd = sal_False;
+    sal_Bool  bWaitUntilEnd = sal_False;
+    sal_Int16 nDuplexMode = ::com::sun::star::view::DuplexMode::UNKNOWN;
     for ( int n = 0; n < rOptions.getLength(); ++n )
     {
         // get Property-Value from options
@@ -731,6 +733,14 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 throw ::com::sun::star::lang::IllegalArgumentException();
             aCheckedArgs[nProps].Name = rProp.Name;
             aCheckedArgs[nProps++].Value <<= bWaitUntilEnd;
+        }
+
+        else if ( rProp.Name.compareToAscii( "DuplexMode" ) == 0 )
+        {
+            if ( !(rProp.Value >>= nDuplexMode ) )
+                throw ::com::sun::star::lang::IllegalArgumentException();
+            aCheckedArgs[nProps].Name = rProp.Name;
+            aCheckedArgs[nProps++].Value <<= nDuplexMode;
         }
     }
 
