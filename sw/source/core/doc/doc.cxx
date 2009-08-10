@@ -1004,15 +1004,15 @@ void SwDoc::CalculatePagesForPrinting(
     bool bPrintLeftPage   = rPrintUIOptions.IsPrintLeftPages();
     bool bPrintRightPage  = rPrintUIOptions.IsPrintRightPages();
     // TLPDF, TODO: remove bPrintReverse, should be handled by PLs framework now
-    bool bPrintReverse    = rPrintUIOptions.getBoolValue( C2U( "PrintReverseOrder" ), false );
-    bool bPrintEmptyPages = rPrintUIOptions.getBoolValue( C2U( "PrintEmptyPages" ),   false );
+//TLPDF    bool bPrintReverse    = rPrintUIOptions.getBoolValue( C2U( "PrintReverseOrder" ), false );
+    bool bPrintEmptyPages = rPrintUIOptions.getBoolValue( "PrintEmptyPages",   false );
 
     if (bIsPDFExport)
     {
         // PDF export UI does not allow for selecting left or right pages only or reverse print
         bPrintLeftPage   = true;
         bPrintRightPage  = true;
-        bPrintReverse    = false;
+//        bPrintReverse    = false;
         // TLPDF, TODO; take care of the option 'Export automatically inserted blank pages'
         // from the 'Export as PDF' (aka PDF Options) dialog.
         bPrintEmptyPages = false;
@@ -1076,6 +1076,7 @@ void SwDoc::CalculatePagesForPrinting(
         aMulti = aTmpMulti;
 // Ende des HACKs
 
+#ifdef TL_NOT_NOW /*TLPDF*/
         if (bPrintReverse)
         {
             const SwFrm *pTmp = pStPage;
@@ -1084,6 +1085,7 @@ void SwDoc::CalculatePagesForPrinting(
             nPageNo  = nLastPageNo;
         }
         else
+#endif  // TL_NOT_NOW /*TLPDF*/
             nPageNo = nFirstPageNo;
 
         std::set< sal_Int32 > &rValidPages = rPrintUIOptions.GetValidPagesSet();
@@ -1111,11 +1113,13 @@ void SwDoc::CalculatePagesForPrinting(
             {
                 pStPage = 0;
             }
+#ifdef TL_NOT_NOW /*TLPDF*/
             else if ( bPrintReverse )
             {
                 --nPageNo;
                 pStPage = (SwPageFrm*)pStPage->GetPrev();
             }
+#endif  // TL_NOT_NOW /*TLPDF*/
             else
             {   ++nPageNo;
                 pStPage = (SwPageFrm*)pStPage->GetNext();
@@ -1137,7 +1141,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     rValidPagesSet.clear();
     rValidStartFrms.clear();
 
-    rtl::OUString aPageRange = rPrintUIOptions.getStringValue( C2U( "PageRange" ), rtl::OUString() );
+    rtl::OUString aPageRange = rPrintUIOptions.getStringValue( "PageRange", rtl::OUString() );
     StringRangeEnumerator aRange( aPageRange, 1, nDocPageCount, 0 );
 
     DBG_ASSERT( pLayout, "no layout present" );
@@ -1171,9 +1175,9 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     bool bPrintLeftPage     = rPrintUIOptions.IsPrintLeftPages();
     bool bPrintRightPage    = rPrintUIOptions.IsPrintRightPages();
     // TLPDF, TODO: remove bPrintReverse, should be handled by PLs framework now
-    bool bPrintReverse      = rPrintUIOptions.getBoolValue( C2U( "PrintReverseOrder" ), false );
+//TLPDF    bool bPrintReverse      = rPrintUIOptions.getBoolValue( C2U( "PrintReverseOrder" ), false );
     // TLPDF: this one seems not to be used in prospect printing: bool bPrintEmptyPages   = rPrintUIOptions.getBoolValue( C2U( "PrintEmptyPages" ),   false );
-    bool bPrintProspect_RTL = rPrintUIOptions.getIntValue( C2U( "PrintBrochureRTL" ),  0 ) ? true : false;
+    bool bPrintProspect_RTL = rPrintUIOptions.getIntValue( "PrintBrochureRTL",  0 ) ? true : false;
 
     // get pages for prospect printing according to the 'PageRange'
     // (duplicates and any order allowed!)
@@ -1191,14 +1195,18 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
         aVec.push_back( pFrm );
     }
 
-    // auf Doppelseiten auffuellen
-    if ( 1 == aVec.size() )    // eine Seite ist ein Sonderfall
-        aVec.insert( aVec.begin() + 1, 0 );
+    // just one page is special ...
+    if ( 1 == aVec.size() )
+        aVec.insert( aVec.begin() + 1, 0 ); // insert a second empty page
     else
     {
+        // now extend the number of pages to fit a multiple of 4
+        // (4 'normal' pages are needed for a single prospect paper
+        //  with back and front)
         while( aVec.size() & 3 )
             aVec.push_back( 0 );
 
+#ifdef TL_NOT_NOW /*TLPDF*/
         if ( bPrintReverse && 4 < aVec.size() )
         {
             // das Array umsortieren
@@ -1230,6 +1238,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
                 ppArrHalf = &aVec[ 0 ] + aVec.size();
             }
         }
+#endif  // TL_NOT_NOW /*TLPDF*/
     }
 
     // dann sorge mal dafuer, das alle Seiten in der richtigen
@@ -1246,8 +1255,8 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
         ++nSPg, --nEPg;
     }
 
+    // the number of 'virtual' pages to be printed
     sal_Int32 nCntPage = (( nEPg - nSPg ) / ( 2 * nStep )) + 1;
-    DBG_ASSERT( size_t(nCntPage * 2) == aVec.size(), "vector size vs. page count mismatch" );
 
     for ( USHORT nPrintCount = 0; nSPg < nEPg &&
             nPrintCount < nCntPage; ++nPrintCount )

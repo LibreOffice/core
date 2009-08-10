@@ -2614,7 +2614,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         m_pPrintUIOptions = new SwPrintUIOptions( bWebDoc );
     }
     bool bFormat = m_pPrintUIOptions->processPropertiesAndCheckFormat( rxOptions );
-    const bool bPrintProspect   = m_pPrintUIOptions->getBoolValue( C2U( "PrintBrochure" ), false );
+    const bool bPrintProspect   = m_pPrintUIOptions->getBoolValue( "PrintBrochure", false );
     const bool bIsPDFExport     = !m_pPrintUIOptions->hasProperty( "IsPrinter" );
 
     SfxViewShell *pView = 0;
@@ -2657,7 +2657,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
 
     const sal_Int32 nPageCount = pDoc->GetPageCount();
 
-    // get PageRange option
+    // get PageRange value to use
     OUString aPageRange;
     if (bIsPDFExport)
     {
@@ -2672,9 +2672,14 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     }
     else
     {
-        aPageRange = m_pPrintUIOptions->getStringValue( C2U( "PageRange" ), OUString() );
+        // PageContent :
+        // 0 -> print all pages
+        // 1 -> print range according to PageRange
+        // 2 -> print selection
+        if (1 == m_pPrintUIOptions->getIntValue( "PrintContent", 0 ))
+            aPageRange = m_pPrintUIOptions->getStringValue( "PageRange", OUString() );
     }
-    if (aPageRange.getLength() == 0)
+    if (aPageRange.getLength() == 0)    // empty string -> print all
     {
         // set page range to print to 'all pages'
         aPageRange = OUString::valueOf( (sal_Int32)1 );
@@ -2683,7 +2688,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     }
 
     // get number of pages to be rendered
-    if(bPrintProspect)
+    if (bPrintProspect)
     {
         pDoc->CalculatePagePairsForProspectPrinting( *m_pPrintUIOptions, nPageCount );
         nRet = m_pPrintUIOptions->GetPagePairsForProspectPrinting().size();
@@ -2746,7 +2751,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     awt::Size aPageSize( TWIP_TO_MM100( aPgSize.Width() ),
                          TWIP_TO_MM100( aPgSize.Height() ));
     // prospect printing should be landscape, thus switching width and height
-    if (m_pPrintUIOptions->getBoolValue( C2U( "PrintBrochure" ), sal_False ))
+    if (m_pPrintUIOptions->getBoolValue( "PrintBrochure", sal_False ))
         aPageSize = awt::Size( aPageSize.Height, aPageSize.Width );
     uno::Sequence< beans::PropertyValue > aRenderer(1);
     PropertyValue  &rValue = aRenderer.getArray()[0];
@@ -2816,7 +2821,7 @@ void SAL_CALL SwXTextDocument::render(
         m_pPrintUIOptions = new SwPrintUIOptions( bWebDoc );
     }
     m_pPrintUIOptions->processProperties( rxOptions );
-    const bool bPrintProspect   = m_pPrintUIOptions->getBoolValue( C2U( "PrintBrochure" ), false );
+    const bool bPrintProspect   = m_pPrintUIOptions->getBoolValue( "PrintBrochure", false );
     const bool bIsPDFExport     = !m_pPrintUIOptions->hasProperty( "IsPrinter" );
 
     // get view shell to use
@@ -2825,7 +2830,7 @@ void SAL_CALL SwXTextDocument::render(
         pView = GuessViewShell();
     else
     {
-        uno::Any aTmp( m_pPrintUIOptions->getValue( C2U("View") ) );
+        uno::Any aTmp( m_pPrintUIOptions->getValue( C2U( "View" ) ));
         uno::Reference< frame::XController > xController;
         if (aTmp >>= xController)
         {
@@ -2901,25 +2906,25 @@ void SAL_CALL SwXTextDocument::render(
         if( ! aOptions.bPrintRightPage )
             nLeftRightPages = 1;
         nLeftRightPages = m_pPrintUIOptions->getIntValue( "PrintLeftRightPages", nLeftRightPages );
-        aOptions.bPrintGraphic           = m_pPrintUIOptions->getBoolValue( C2U( "PrintGraphicsAndDiagrams" ),     aOptions.bPrintGraphic );
-        aOptions.bPrintTable             = m_pPrintUIOptions->getBoolValue( C2U( "PrintGraphicsAndDiagrams" ),       aOptions.bPrintTable );
-        aOptions.bPrintDraw              = m_pPrintUIOptions->getBoolValue( C2U( "PrintGraphicsAndDiagrams" ),     aOptions.bPrintDraw );
-        aOptions.bPrintControl           = m_pPrintUIOptions->getBoolValue( C2U( "PrintControls" ),     aOptions.bPrintControl );
+        aOptions.bPrintGraphic           = m_pPrintUIOptions->getBoolValue( "PrintGraphicsAndDiagrams",     aOptions.bPrintGraphic );
+        aOptions.bPrintTable             = m_pPrintUIOptions->getBoolValue( "PrintGraphicsAndDiagrams",     aOptions.bPrintTable );
+        aOptions.bPrintDraw              = m_pPrintUIOptions->getBoolValue( "PrintGraphicsAndDiagrams",     aOptions.bPrintDraw );
+        aOptions.bPrintControl           = m_pPrintUIOptions->getBoolValue( "PrintControls",                aOptions.bPrintControl );
         aOptions.bPrintLeftPage          = nLeftRightPages == 0 || nLeftRightPages == 1;
         aOptions.bPrintRightPage         = nLeftRightPages == 0 || nLeftRightPages == 2;
-        aOptions.bPrintPageBackground    = m_pPrintUIOptions->getBoolValue( C2U( "PrintBackground" ),   aOptions.bPrintPageBackground );
-        aOptions.bPrintEmptyPages        = m_pPrintUIOptions->getBoolValue( C2U( "PrintEmptyPages" ),   aOptions.bPrintEmptyPages );
+        aOptions.bPrintPageBackground    = m_pPrintUIOptions->getBoolValue( "PrintBackground",   aOptions.bPrintPageBackground );
+        aOptions.bPrintEmptyPages        = m_pPrintUIOptions->getBoolValue( "PrintEmptyPages",   aOptions.bPrintEmptyPages );
         // bUpdateFieldsInPrinting  <-- not set here    // TLPDF: TODO: remove this from SwPrintData?? Get rid of SwPrtOptions??
-        aOptions.bPaperFromSetup         = m_pPrintUIOptions->getBoolValue( C2U( "PaperTray" ),         aOptions.bPaperFromSetup );
-        aOptions.bPrintReverse           = m_pPrintUIOptions->getBoolValue( C2U( "PrintReverseOrder" ), aOptions.bPrintReverse );
-        aOptions.bPrintProspect          = m_pPrintUIOptions->getBoolValue( C2U( "PrintBrochure" ),     aOptions.bPrintProspect );
-        aOptions.bPrintProspect_RTL      = m_pPrintUIOptions->getIntValue( C2U( "PrintBrochureRTL" ),  aOptions.bPrintProspect_RTL ) ? true : false;
+        aOptions.bPaperFromSetup         = m_pPrintUIOptions->getBoolValue( "PaperTray",         aOptions.bPaperFromSetup );
+        aOptions.bPrintReverse           = m_pPrintUIOptions->getBoolValue( "PrintReverseOrder", aOptions.bPrintReverse );
+        aOptions.bPrintProspect          = m_pPrintUIOptions->getBoolValue( "PrintBrochure",     aOptions.bPrintProspect );
+        aOptions.bPrintProspect_RTL      = m_pPrintUIOptions->getIntValue( "PrintBrochureRTL",   aOptions.bPrintProspect_RTL ) ? true : false;
         // bPrintSingleJobs         <-- not set here    // TLPDF: TODO: remove this from SwPrintData?? Get rid of SwPrtOptions??
         // bModified                <-- not set here    // TLPDF: TODO: remove this from SwPrintData?? Get rid of SwPrtOptions??
-        aOptions.bPrintBlackFont         = m_pPrintUIOptions->getBoolValue( C2U( "PrintBlack" ),        aOptions.bPrintBlackFont );
-        aOptions.bPrintHiddenText        = m_pPrintUIOptions->getBoolValue( C2U( "PrintHiddenText" ),   aOptions.bPrintHiddenText );
-        aOptions.bPrintTextPlaceholder   = m_pPrintUIOptions->getBoolValue( C2U( "PrintPlaceholder" ),  aOptions.bPrintTextPlaceholder );
-        aOptions.nPrintPostIts           = static_cast< sal_Int16 >(m_pPrintUIOptions->getIntValue( C2U( "PrintNotes" ), aOptions.nPrintPostIts ));
+        aOptions.bPrintBlackFont         = m_pPrintUIOptions->getBoolValue( "PrintBlack",        aOptions.bPrintBlackFont );
+        aOptions.bPrintHiddenText        = m_pPrintUIOptions->getBoolValue( "PrintHiddenText",   aOptions.bPrintHiddenText );
+        aOptions.bPrintTextPlaceholder   = m_pPrintUIOptions->getBoolValue( "PrintPlaceholder",  aOptions.bPrintTextPlaceholder );
+        aOptions.nPrintPostIts           = static_cast< sal_Int16 >(m_pPrintUIOptions->getIntValue( "PrintNotes", aOptions.nPrintPostIts ));
 
         Range aPageRange( nRenderer+1, nRenderer+1 );
         MultiSelection aPage( aPageRange );
