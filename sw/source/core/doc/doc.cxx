@@ -1272,7 +1272,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
             pNxtPage = pTmp;
         }
 
-        sal_Int32 nFirst, nSecond = -1;
+        sal_Int32 nFirst = -1, nSecond = -1;
         for ( int nC = 0; nC < 2; ++nC )
         {
             sal_Int32 nPageNum = -1;
