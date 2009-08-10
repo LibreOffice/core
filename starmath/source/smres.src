@@ -3584,15 +3584,15 @@ StringArray RID_PRINTUIOPTIONS
 {
     ItemList [en-US] =
     {
-        <"Formula"; >;
-        < "Print options"; >;
+        < "%PRODUCTNAME %s"; >;
+        < "Contents"; >;
         < "~Title row"; >;
         < "Specifies whether you want the name of the document to be included in the printout"; >;
         < "~Formula text"; >;
         < "Specifies whether to include the contents of the \"Commands\" window at the bottom of the printout."; >;
-        < "B~order"; >;
+        < "B~orders"; >;
         < "Applies a thin border to the formula area in the printout."; >;
-        < "Print format"; >;
+        < "Size"; >;
         < "O~riginal size"; >;
         < "Prints the formula without adjusting the current font size."; >;
         < "Fit to ~page"; >;
@@ -3602,7 +3602,6 @@ StringArray RID_PRINTUIOPTIONS
         < "Miscellaneous options"; >;
         < "Ig~nore ~~ and ` at the end of the line"; >;
         < "Specfies that these space wildcards will be removed if they are at the end of a line."; >;
-        < "%PRODUCTNAME %s"; >;
     };
 };
 

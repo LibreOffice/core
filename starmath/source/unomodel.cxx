@@ -85,8 +85,8 @@ using namespace ::com::sun::star::script;
 SmPrintUIOptions::SmPrintUIOptions()
 {
     ResStringArray      aLocalizedStrings( SmResId( RID_PRINTUIOPTIONS ) );
-    DBG_ASSERT( aLocalizedStrings.Count() >= 19, "resource incomplete" );
-    if( aLocalizedStrings.Count() < 19 ) // bad resource ?
+    DBG_ASSERT( aLocalizedStrings.Count() >= 18, "resource incomplete" );
+    if( aLocalizedStrings.Count() < 18 ) // bad resource ?
         return;
 
     SmModule *pp = SM_MOD1();
@@ -101,7 +101,7 @@ SmPrintUIOptions::SmPrintUIOptions()
     
     // create Section for formula (results in an extra tab page in dialog)
     SvtModuleOptions aOpt;
-    String aAppGroupname( aLocalizedStrings.GetString( 18 ) );
+    String aAppGroupname( aLocalizedStrings.GetString( 0 ) );
     aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
                                     aOpt.GetModuleName( SvtModuleOptions::E_SMATH ) ); 
     m_aUIProperties[0].Value = getGroupControlOpt( aAppGroupname, rtl::OUString() );
