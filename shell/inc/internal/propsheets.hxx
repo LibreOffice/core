@@ -92,7 +92,6 @@ private:
 private:
     long m_RefCnt;
     char m_szFileName[MAX_PATH];
-    std::auto_ptr<CMetaInfoReader> m_pMetaInfo;
 };
 
 #endif
