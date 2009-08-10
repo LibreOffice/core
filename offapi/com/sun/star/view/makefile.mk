@@ -73,7 +73,8 @@ IDLFILES=\
     XPrintJobBroadcaster.idl\
     XPrintJobListener.idl\
     XMultiSelectionSupplier.idl\
-    SelectionType.idl
+    SelectionType.idl\
+    DuplexMode.idl
 
 # ------------------------------------------------------------------
 
