@@ -180,23 +180,27 @@ function GetDirList ( sPath$, sMatch$ ,lsFile() as String ) as integer
     '/// Get Subdirectories from a directory and append them to a list (<b>with</b> path)
     '/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *; List
     '/// <u>Return</u>: count of appended entries; updated list
-    Dim Count%
-    Dim i as Integer
-    Dim Verzeichnis as String
+    Dim iFolderCount as integer
+    Dim Folder as String
     ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
     if right ( sPath$, 1 ) <> gPathSigne then sPath$ = sPath$ + gPathSigne
-    Verzeichnis = app.Dir( sPath$ + sMatch$ , 16)
-    Count% = 0
+    Folder = app.Dir( sPath$ + sMatch$ , 16)
+    iFolderCount = 0
 
-    do until Len(Verzeichnis) = 0
-        if Verzeichnis <> "." AND Verzeichnis <> ".." AND Lcase(Verzeichnis) <> ".svn" then
+    do until Len( Folder ) = 0
+        select case ( lcase( Folder ) )
+        case "."
+        case ".."
+        case ".svn"
+        case ".hg"
+        case default
             lsFile(0) = Val(lsFile(0)) + 1
-            lsFile( lsFile(0) ) = sPath$  + Verzeichnis + gPathSigne
-            Count% = Count% + 1
-        end if
-        Verzeichnis = app.Dir
+            lsFile( lsFile(0) ) = sPath$  + Folder + gPathSigne
+            iFolderCount = iFolderCount + 1
+        end select
+        Folder = app.Dir
     loop
-    GetDirList = Count%
+    GetDirList = iFolderCount
 end function
 '
 '-------------------------------------------------------------------------------
