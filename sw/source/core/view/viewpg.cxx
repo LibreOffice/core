@@ -782,7 +782,7 @@ void ViewShell::PrintProspect(
 
 // TLPDF            Point aPrtOff( pPrt->PixelToLogic( pPrt->GetPageOffsetPixel(), aMapMode ) );
 // TLPDF            Size aTmpPrtSize( pPrt->PixelToLogic( pPrt->GetPaperSizePixel(), aMapMode ) );
-            Point aPrtOff( pPrinter->PixelToLogic( pPrinter->GetPageOffsetPixel(), aMapMode ) );      /* TLPDF */
+// TLPDF            Point aPrtOff( pPrinter->PixelToLogic( pPrinter->GetPageOffsetPixel(), aMapMode ) );      /* TLPDF */
             Size aTmpPrtSize( pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), aMapMode ) );    /* TLPDF */
 
             // dann kann das drucken losgehen
@@ -793,7 +793,9 @@ void ViewShell::PrintProspect(
             pPrt->StartPage();
 #endif
 
-            Point aSttPt;
+            // calculate start point for equal border on all sides
+            Point aSttPt( (aTmpPrtSize.Width() - nMaxColSz) / 2,
+                          (aTmpPrtSize.Height() - nMaxRowSz) / 2 );
             for( int nC = 0; nC < 2; ++nC )
             {
                 if( pStPage )
@@ -803,7 +805,7 @@ void ViewShell::PrintProspect(
 
                     Point aPos( aSttPt );
                     aPos -= aShell.aVisArea.Pos();
-                    aPos -= aPrtOff;
+// TLPDF                    aPos -= aPrtOff;
                     aMapMode.SetOrigin( aPos );
                     pPrinter->SetMapMode( aMapMode );
                     pStPage->GetUpper()->Paint( pStPage->Frm() );

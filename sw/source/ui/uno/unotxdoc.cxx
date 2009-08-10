@@ -2743,14 +2743,11 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
 
     bool bSkipEmptyPages = m_pPrintUIOptions->getBoolValue( "IsSkipEmptyPages", sal_False );
     Size aPgSize( pDoc->GetPageSize( sal_uInt16(nRenderer + 1), bSkipEmptyPages ) );
-
-    if( m_pPrintUIOptions->getBoolValue( C2U( "PrintBrochure" ), sal_False ) )
-    {
-        aPgSize = Size( aPgSize.Height(), aPgSize.Width() );
-    }
-
     awt::Size aPageSize( TWIP_TO_MM100( aPgSize.Width() ),
                          TWIP_TO_MM100( aPgSize.Height() ));
+    // prospect printing should be landscape, thus switching width and height
+    if (m_pPrintUIOptions->getBoolValue( C2U( "PrintBrochure" ), sal_False ))
+        aPageSize = awt::Size( aPageSize.Height, aPageSize.Width );
     uno::Sequence< beans::PropertyValue > aRenderer(1);
     PropertyValue  &rValue = aRenderer.getArray()[0];
     rValue.Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
