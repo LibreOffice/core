@@ -167,16 +167,16 @@ void ControllerState::update(
     Reference< view::XSelectionSupplier > xSelectionSupplier(
         xController, uno::UNO_QUERY );
 
-    OUString aSelObjCID;
-
     // Update ControllerState variables.
     if( xSelectionSupplier.is())
     {
         uno::Any aSelObj( xSelectionSupplier->getSelection() );
+        ObjectIdentifier aSelOID( aSelObj );
+        OUString aSelObjCID( aSelOID.getObjectCID() );
 
-        bHasSelectedObject = ((aSelObj >>= aSelObjCID) && aSelObjCID.getLength() > 0);
+        bHasSelectedObject = aSelOID.isValid();
 
-        bIsDraggableObject = ObjectIdentifier::isDragableObject( aSelObjCID );
+        bIsDraggableObject = aSelOID.isDragableObject();
 
         ObjectType aObjectType(ObjectIdentifier::getObjectType( aSelObjCID ));
         bIsTextObject = OBJECTTYPE_TITLE == aObjectType;
@@ -528,22 +528,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ C2U(".uno:DiagramWall")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasWall;
     m_aCommandAvailability[ C2U(".uno:DiagramArea")] = bIsWritable;
 
-    bool bTransformDialog = false;
-    if ( m_pChartController && m_pChartController->isShapeContext() )
-    {
-        // #i12587# support for shapes in chart
-        ShapeController* pShapeController = ( m_pDispatchContainer ? m_pDispatchContainer->getShapeController() : NULL );
-        if ( pShapeController )
-        {
-            FeatureState aFeatureState( pShapeController->getState( C2U( ".uno:TransformDialog" ) ) );
-            bTransformDialog = aFeatureState.bEnabled;
-        }
-    }
-    else
-    {
-        bTransformDialog = ( bIsWritable && bControllerStateIsValid && m_apControllerState->bHasSelectedObject && m_apControllerState->bIsDraggableObject );
-    }
-    m_aCommandAvailability[ C2U(".uno:TransformDialog")] = bTransformDialog;
+    m_aCommandAvailability[ C2U(".uno:TransformDialog")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bHasSelectedObject && m_apControllerState->bIsDraggableObject;
 
     // 3d commands
     m_aCommandAvailability[ C2U(".uno:View3D")] = bIsWritable && bModelStateIsValid && m_apModelState->bIsThreeD;

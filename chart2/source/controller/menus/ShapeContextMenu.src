@@ -30,7 +30,6 @@
 #include "MenuResIds.hrc"
 #include "ShapeController.hrc"
 
-#include <svx/globlmn.hrc>
 #include <svx/svxids.hrc>
 
 
@@ -78,15 +77,18 @@ Menu RID_CONTEXTMENU_SHAPE
         };
         MenuItem
         {
-            ITEM_EDIT_CUT
+            Identifier = COMMAND_ID_CUT;
+            Command = ".uno:Cut";
         };
         MenuItem
         {
-            ITEM_EDIT_COPY
+            Identifier = COMMAND_ID_COPY;
+            Command = ".uno:Copy";
         };
         MenuItem
         {
-            ITEM_EDIT_PASTE
+            Identifier = COMMAND_ID_PASTE;
+            Command = ".uno:Paste";
         };
     };
 };

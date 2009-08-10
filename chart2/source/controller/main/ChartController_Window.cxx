@@ -1596,7 +1596,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
                 aMousePos, pWindow, nModifier, bLeftDown );
             bool bForceArrowPointer = false;
 
-            ::rtl::OUString aObjectCID = m_aSelection.getSelectedCID();
+            ObjectIdentifier aOID( m_aSelection.getSelectedOID() );
 
             switch( aPointer.GetStyle())
             {
@@ -1612,7 +1612,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
                         bForceArrowPointer = true;
                     break;
                 case POINTER_MOVE:
-                    if( ! ObjectIdentifier::isDragableObject( aObjectCID ))
+                    if ( !aOID.isDragableObject() )
                         bForceArrowPointer = true;
                     break;
                 case POINTER_MOVEPOINT:

@@ -47,7 +47,7 @@ namespace chart
 class ChartTransferable : public TransferableHelper
 {
 public:
-    explicit ChartTransferable( SdrModel * pDrawModel, SdrObject * pSelectedObj );
+    explicit ChartTransferable( SdrModel* pDrawModel, SdrObject* pSelectedObj, bool bDrawing = false );
     virtual ~ChartTransferable();
 
 protected:
@@ -55,9 +55,13 @@ protected:
     // implementation of TransferableHelper methods
     virtual void        AddSupportedFormats();
     virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual sal_Bool    WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
+                                        const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > m_xMetaFileGraphic;
+    SdrModel* m_pMarkedObjModel;
+    bool m_bDrawing;
 };
 
 } //  namespace chart

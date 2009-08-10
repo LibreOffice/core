@@ -186,6 +186,7 @@ public:
     static rtl::OUString getDragMethodServiceName( const rtl::OUString& rClassifiedIdentifier );
     static rtl::OUString getDragParameterString( const rtl::OUString& rCID );
     static bool isDragableObject( const rtl::OUString& rClassifiedIdentifier );
+    bool isDragableObject();
     static bool isRotateableObject( const rtl::OUString& rClassifiedIdentifier );
     static bool isMultiClickObject( const rtl::OUString& rClassifiedIdentifier );
     static bool areSiblings( const rtl::OUString& rCID1, const rtl::OUString& rCID2 );//identical object is no sibling

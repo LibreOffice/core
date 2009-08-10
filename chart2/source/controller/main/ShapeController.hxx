@@ -46,8 +46,6 @@ class ChartController;
  */
 class ShapeController: public FeatureCommandDispatchBase
 {
-    friend class ControllerCommandDispatch;
-
 public:
     ShapeController( const ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext >& rxContext, ChartController* pController );

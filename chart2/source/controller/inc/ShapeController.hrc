@@ -38,7 +38,10 @@
 #define COMMAND_ID_TRANSFORM_DIALOG             4
 #define COMMAND_ID_OBJECT_TITLE_DESCRIPTION     5
 #define COMMAND_ID_RENAME_OBJECT                6
-#define COMMAND_ID_FONT_DIALOG                  7
+#define COMMAND_ID_CUT                          7
+#define COMMAND_ID_COPY                         8
+#define COMMAND_ID_PASTE                        9
+#define COMMAND_ID_FONT_DIALOG                 10
 
 // CHART_SHAPECONTROLLER_HRC
 #endif

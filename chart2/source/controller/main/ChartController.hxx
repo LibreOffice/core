@@ -693,6 +693,7 @@ private:
 
     void impl_PasteGraphic( ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > & xGraphic,
                             const ::Point & aPosition );
+    void impl_PasteShapes( SdrModel* pModel );
     void impl_SetMousePointer( const MouseEvent & rEvent );
 
     void impl_ClearSelection();

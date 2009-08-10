@@ -33,11 +33,20 @@
 
 #include "ChartTransferable.hxx"
 
+#include <unotools/streamwrap.hxx>
 #include <vcl/graph.hxx>
+#include <svtools/itempool.hxx>
+#include <svx/eeitem.hxx>
+#include <svx/fhgtitem.hxx>
+#include <svx/svditer.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/unomodel.hxx>
 
 // header for class SdrView
 #include <svx/svdview.hxx>
+
+#define CHARTTRANSFER_OBJECTTYPE_DRAWMODEL      1
 
 using namespace ::com::sun::star;
 
@@ -48,7 +57,9 @@ using ::rtl::OUString;
 namespace chart
 {
 
-ChartTransferable::ChartTransferable( SdrModel * pDrawModel, SdrObject * pSelectedObj )
+ChartTransferable::ChartTransferable( SdrModel* pDrawModel, SdrObject* pSelectedObj, bool bDrawing )
+    :m_pMarkedObjModel( NULL )
+    ,m_bDrawing( bDrawing )
 {
     SdrExchangeView * pExchgView( new SdrView( pDrawModel ));
     SdrPageView* pPv = pExchgView->ShowSdrPage( pDrawModel->GetPage( 0 ));
@@ -58,6 +69,10 @@ ChartTransferable::ChartTransferable( SdrModel * pDrawModel, SdrObject * pSelect
         pExchgView->MarkAllObj( pPv );
     Graphic aGraphic( pExchgView->GetMarkedObjMetaFile( TRUE ));
     m_xMetaFileGraphic.set( aGraphic.GetXGraphic());
+    if ( m_bDrawing )
+    {
+        m_pMarkedObjModel = ( pExchgView ? pExchgView->GetAllMarkedModel() : NULL );
+    }
     delete pExchgView;
 }
 
@@ -66,6 +81,10 @@ ChartTransferable::~ChartTransferable()
 
 void ChartTransferable::AddSupportedFormats()
 {
+    if ( m_bDrawing )
+    {
+        AddFormat( SOT_FORMATSTR_ID_DRAWING );
+    }
     AddFormat( SOT_FORMAT_GDIMETAFILE );
     AddFormat( SOT_FORMAT_BITMAP );
 }
@@ -77,7 +96,11 @@ sal_Bool ChartTransferable::GetData( const ::com::sun::star::datatransfer::DataF
 
     if( HasFormat( nFormat ))
     {
-        if( nFormat == FORMAT_GDIMETAFILE )
+        if ( nFormat == SOT_FORMATSTR_ID_DRAWING )
+        {
+            bResult = SetObject( m_pMarkedObjModel, CHARTTRANSFER_OBJECTTYPE_DRAWMODEL, rFlavor );
+        }
+        else if ( nFormat == FORMAT_GDIMETAFILE )
         {
             Graphic aGraphic( m_xMetaFileGraphic );
             bResult = SetGDIMetaFile( aGraphic.GetGDIMetaFile(), rFlavor );
@@ -92,5 +115,61 @@ sal_Bool ChartTransferable::GetData( const ::com::sun::star::datatransfer::DataF
     return bResult;
 }
 
+sal_Bool ChartTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
+    const datatransfer::DataFlavor& /* rFlavor */ )
+{
+    // called from SetObject, put data into stream
+
+    sal_Bool bRet = sal_False;
+    switch ( nUserObjectId )
+    {
+        case CHARTTRANSFER_OBJECTTYPE_DRAWMODEL:
+            {
+                SdrModel* pMarkedObjModel = reinterpret_cast< SdrModel* >( pUserObject );
+                if ( pMarkedObjModel )
+                {
+                    rxOStm->SetBufferSize( 0xff00 );
+
+                    // #108584#
+                    // for the changed pool defaults from drawing layer pool set those
+                    // attributes as hard attributes to preserve them for saving
+                    const SfxItemPool& rItemPool = pMarkedObjModel->GetItemPool();
+                    const SvxFontHeightItem& rDefaultFontHeight = static_cast< const SvxFontHeightItem& >(
+                        rItemPool.GetDefaultItem( EE_CHAR_FONTHEIGHT ) );
+                    sal_uInt16 nCount = pMarkedObjModel->GetPageCount();
+                    for ( sal_uInt16 i = 0; i < nCount; ++i )
+                    {
+                        const SdrPage* pPage = pMarkedObjModel->GetPage( i );
+                        SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+                        while ( aIter.IsMore() )
+                        {
+                            SdrObject* pObj = aIter.Next();
+                            const SvxFontHeightItem& rItem = static_cast< const SvxFontHeightItem& >(
+                                pObj->GetMergedItem( EE_CHAR_FONTHEIGHT ) );
+                            if ( rItem.GetHeight() == rDefaultFontHeight.GetHeight() )
+                            {
+                                pObj->SetMergedItem( rDefaultFontHeight );
+                            }
+                        }
+                    }
+
+                    Reference< io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
+                    if ( SvxDrawingLayerExport( pMarkedObjModel, xDocOut ) )
+                    {
+                        rxOStm->Commit();
+                    }
+
+                    bRet = ( rxOStm->GetError() == ERRCODE_NONE );
+                }
+            }
+            break;
+        default:
+            {
+                DBG_ERROR( "ChartTransferable::WriteObject: unknown object id" );
+            }
+            break;
+    }
+    return bRet;
+}
 
 } //  namespace chart

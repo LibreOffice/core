@@ -62,8 +62,6 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 
-// #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-
 #include <svx/ActionDescriptionProvider.hxx>
 // for TransferableDataHelper/TransferableHelper
 #include <svtools/transfer.hxx>
@@ -82,6 +80,12 @@
 #include <vos/mutex.hxx>
 // for OutlinerView
 #include <svx/outliner.hxx>
+#include <svx/svditer.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/unoapi.hxx>
+#include <svx/unopage.hxx>
+
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -337,22 +341,21 @@ void ChartController::executeDispatch_Paste()
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( m_pChartWindow ));
         if( aDataHelper.GetTransferable().is())
         {
-//             if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ))
-//             {
-//                 SotStorageStreamRef xStm;
-//                 if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xStm ))
-//                 {
-//                     xStm->Seek( 0 );
-//                     uno::Reference< io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ));
-//                     SdrModel * pModel = new SdrModel();
-//                     DrawModelWrapper * pDrawModelWrapper( this->GetDrawModelWrapper());
-//                     if( SvxDrawingLayerImport( pModel, xInputStream ))
-//                         lcl_CopyShapesToChart( *pModel, m_pDrawModelWrapper->getSdrModel());
-//                     delete pModel;
-//                 }
-//             }
-//             else
-            if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ))
+            if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ) )
+            {
+                SotStorageStreamRef xStm;
+                if ( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xStm ) )
+                {
+                    xStm->Seek( 0 );
+                    Reference< io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
+                    ::boost::scoped_ptr< SdrModel > spModel( new SdrModel() );
+                    if ( SvxDrawingLayerImport( spModel.get(), xInputStream ) )
+                    {
+                        impl_PasteShapes( spModel.get() );
+                    }
+                }
+            }
+            else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) )
             {
                 // graphic exchange format (graphic manager bitmap format?)
                 SotStorageStreamRef xStm;
@@ -462,33 +465,98 @@ void ChartController::impl_PasteGraphic(
     }
 }
 
-void ChartController::executeDispatch_Copy()
+void ChartController::impl_PasteShapes( SdrModel* pModel )
 {
-
-    Reference< datatransfer::XTransferable > xTransferable;
-
+    DrawModelWrapper* pDrawModelWrapper( this->GetDrawModelWrapper() );
+    if ( pDrawModelWrapper )
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
-        SdrObject * pSelectedObj = 0;
-        if( m_pDrawViewWrapper && m_pDrawModelWrapper )
+        Reference< drawing::XDrawPage > xDestPage( pDrawModelWrapper->getMainDrawPage() );
+        SdrPage* pDestPage = GetSdrPageFromXDrawPage( xDestPage );
+        if ( pDestPage )
         {
-            if( m_aSelection.getSelectedCID().getLength() )
-                pSelectedObj = m_pDrawModelWrapper->getNamedSdrObject( m_aSelection.getSelectedCID() );
-            else
-                pSelectedObj = DrawViewWrapper::getSdrObject( m_aSelection.getSelectedAdditionalShape() );
-
-            if( pSelectedObj )
+            Reference< drawing::XShape > xSelShape;
+            sal_uInt16 nCount = pModel->GetPageCount();
+            for ( sal_uInt16 i = 0; i < nCount; ++i )
             {
-                xTransferable = Reference< datatransfer::XTransferable >( new ChartTransferable(
-                        & m_pDrawModelWrapper->getSdrModel(), pSelectedObj ));
+                const SdrPage* pPage = pModel->GetPage( i );
+                SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+                while ( aIter.IsMore() )
+                {
+                    SdrObject* pObj = aIter.Next();
+                    SdrObject* pNewObj = ( pObj ? pObj->Clone() : NULL );
+                    if ( pNewObj )
+                    {
+                        pNewObj->SetModel( &pDrawModelWrapper->getSdrModel() );
+                        pNewObj->SetPage( pDestPage );
+
+                        // set position
+                        Reference< drawing::XShape > xShape( pNewObj->getUnoShape(), uno::UNO_QUERY );
+                        if ( xShape.is() )
+                        {
+                            xShape->setPosition( awt::Point( 0, 0 ) );
+                        }
+
+                        pDestPage->InsertObject( pNewObj );
+                        xSelShape = xShape;
+                    }
+                }
             }
+
+            Reference< util::XModifiable > xModifiable( m_aModel->getModel(), uno::UNO_QUERY );
+            if ( xModifiable.is() )
+            {
+                xModifiable->setModified( true );
+            }
+
+            // select last inserted shape
+            m_aSelection.setSelection( xSelShape );
+            m_aSelection.applySelection( m_pDrawViewWrapper );
         }
     }
-    if( xTransferable.is() )
+}
+
+void ChartController::executeDispatch_Copy()
+{
+    if ( m_pDrawViewWrapper )
     {
-        Reference< datatransfer::clipboard::XClipboard > xClipboard( TransferableHelper::GetSystemClipboard());
-        if( xClipboard.is())
-            xClipboard->setContents( xTransferable, Reference< datatransfer::clipboard::XClipboardOwner >() );
+        OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+        if ( pOutlinerView )
+        {
+            pOutlinerView->Copy();
+        }
+        else
+        {
+            Reference< datatransfer::XTransferable > xTransferable;
+            {
+                ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+                SdrObject* pSelectedObj = 0;
+                if ( m_pDrawModelWrapper )
+                {
+                    ObjectIdentifier aSelOID( m_aSelection.getSelectedOID() );
+                    if ( aSelOID.isAutoGeneratedObject() )
+                    {
+                        pSelectedObj = m_pDrawModelWrapper->getNamedSdrObject( aSelOID.getObjectCID() );
+                    }
+                    else if ( aSelOID.isAdditionalShape() )
+                    {
+                        pSelectedObj = DrawViewWrapper::getSdrObject( aSelOID.getAdditionalShape() );
+                    }
+                    if ( pSelectedObj )
+                    {
+                        xTransferable = Reference< datatransfer::XTransferable >( new ChartTransferable(
+                                &m_pDrawModelWrapper->getSdrModel(), pSelectedObj, aSelOID.isAdditionalShape() ) );
+                    }
+                }
+            }
+            if ( xTransferable.is() )
+            {
+                Reference< datatransfer::clipboard::XClipboard > xClipboard( TransferableHelper::GetSystemClipboard() );
+                if ( xClipboard.is() )
+                {
+                    xClipboard->setContents( xTransferable, Reference< datatransfer::clipboard::XClipboardOwner >() );
+                }
+            }
+        }
     }
 }
 
@@ -501,9 +569,10 @@ void ChartController::executeDispatch_Cut()
 //static
 bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
 {
-    OUString aSelObjCID;
-    if( (rSelection >>= aSelObjCID) && aSelObjCID.getLength() > 0 )
+    ObjectIdentifier aSelOID( rSelection );
+    if ( aSelOID.isAutoGeneratedObject() )
     {
+        OUString aSelObjCID( aSelOID.getObjectCID() );
         ObjectType aObjectType(ObjectIdentifier::getObjectType( aSelObjCID ));
         if( (OBJECTTYPE_TITLE == aObjectType) || (OBJECTTYPE_LEGEND == aObjectType)
                 || (OBJECTTYPE_DATA_SERIES == aObjectType) )
@@ -515,6 +584,10 @@ bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
             return true;
         if( (OBJECTTYPE_DATA_LABELS == aObjectType) || (OBJECTTYPE_DATA_LABEL == aObjectType) )
             return true;
+    }
+    else if ( aSelOID.isAdditionalShape() )
+    {
+        return true;
     }
 
     return false;

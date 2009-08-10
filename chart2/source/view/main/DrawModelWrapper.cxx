@@ -134,7 +134,7 @@ DrawModelWrapper::DrawModelWrapper(
 
     SetScaleUnit(MAP_100TH_MM);
     SetScaleFraction(Fraction(1, 1));
-    SetDefaultFontHeight(847);     // 24pt
+    SetDefaultFontHeight(423);     // 12pt
 
     SfxItemPool* pMasterPool = &GetItemPool();
     pMasterPool->SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
