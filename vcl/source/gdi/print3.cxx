@@ -1241,6 +1241,11 @@ Any PrinterOptionsHelper::getValue( const rtl::OUString& i_rPropertyName ) const
     return aRet;
 }
 
+void PrinterOptionsHelper::setValue( const rtl::OUString& i_rPropertyName, const Any& i_rValue )
+{
+    m_aPropertyMap[ i_rPropertyName ] = i_rValue;
+}
+
 bool PrinterOptionsHelper::hasProperty( const rtl::OUString& i_rPropertyName ) const
 {
     Any aRet;

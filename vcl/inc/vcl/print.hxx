@@ -542,6 +542,11 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
 
     // returns an empty Any for not existing properties
     com::sun::star::uno::Any getValue( const rtl::OUString& i_rPropertyName ) const;
+    // change a value in the property set; this will not have an effect to an eventual PrinterController
+    // the user of setValue must decide whether it is necessary to set the value there also
+    void setValue( const rtl::OUString& i_rPropertyName, const com::sun::star::uno::Any& i_rValue );
+    void setValue( const char* i_pPropertyName, const com::sun::star::uno::Any& i_rValue )
+    { setValue( rtl::OUString::createFromAscii( i_pPropertyName ), i_rValue ); }
 
     sal_Bool getBoolValue( const rtl::OUString& i_rPropertyName, sal_Bool i_bDefault = sal_False ) const;
     // convenience for fixed strings
