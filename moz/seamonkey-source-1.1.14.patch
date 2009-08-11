@@ -328,15 +328,6 @@
  *)
  	echo $ac_n "checking for gethostbyname_r in -lc_r""... $ac_c" 1>&6
  echo "configure:8620: checking for gethostbyname_r in -lc_r" >&5
-@@ -12259,7 +12283,7 @@
- gtk2)
-     MOZ_ENABLE_GTK2=1
-     MOZ_ENABLE_XREMOTE=1
--    MOZ_ENABLE_COREXFONTS=${MOZ_ENABLE_COREXFONTS-}
-+    MOZ_ENABLE_COREXFONTS=${MOZ_ENABLE_COREXFONTS-1}
-     TK_CFLAGS='$(MOZ_GTK2_CFLAGS)'
-     TK_LIBS='$(MOZ_GTK2_LIBS)'
-     cat >> confdefs.h <<\EOF
 @@ -19233,7 +19257,8 @@
             MOZ_CAIRO_LIBS="-lmozcairo -lmozlibpixman $CAIRO_FT_LIBS"
  
