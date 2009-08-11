@@ -1188,7 +1188,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     // now fill the vector for calculating the page pairs with the start frames
     // from the above obtained vector
     std::vector< const SwPageFrm * > aVec;
-    for (size_t i = 0; i < aPagesToPrint.size(); ++i)
+    for ( i = 0; i < sal_Int32(aPagesToPrint.size()); ++i)
     {
         const sal_Int32 nPage = aPagesToPrint[i];
         const SwPageFrm *pFrm = rValidStartFrms[ nPage ];
@@ -1275,13 +1275,13 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
         sal_Int32 nFirst = -1, nSecond = -1;
         for ( int nC = 0; nC < 2; ++nC )
         {
-            sal_Int32 nPageNum = -1;
+            sal_Int32 nPage = -1;
             if ( pStPage )
-                nPageNum = pStPage->GetPhyPageNum();
+                nPage = pStPage->GetPhyPageNum();
             if (nC == 0)
-                nFirst  = nPageNum;
+                nFirst  = nPage;
             else
-                nSecond = nPageNum;
+                nSecond = nPage;
 
             pStPage = pNxtPage;
         }
