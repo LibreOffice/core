@@ -60,7 +60,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
     if ( aRelId.getLength() )
     {
         OSL_TRACE("OOX: URI rId %s", ::rtl::OUStringToOString (aRelId, RTL_TEXTENCODING_UTF8).pData->buffer);
-        sHref = getRelations().getTargetFromRelId( aRelId );
+        sHref = getRelations().getExternalTargetFromRelId( aRelId );
         if( sHref.getLength() > 0 )
         {
             OSL_TRACE("OOX: URI href %s", ::rtl::OUStringToOString (sHref, RTL_TEXTENCODING_UTF8).pData->buffer);
