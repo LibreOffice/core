@@ -59,6 +59,7 @@ namespace vcl
             GDIMetaFile         maMtf;
             Size                maOrigSize;
             VirtualDevice       maPageVDev;
+            rtl::OUString       maReplacementString;
         public:
             PrintPreviewWindow( Window* pParent, const ResId& );
             virtual ~PrintPreviewWindow();
@@ -67,7 +68,7 @@ namespace vcl
             virtual void Command( const CommandEvent& );
             virtual void Resize();
 
-            void setPreview( const GDIMetaFile&, const Size& );
+            void setPreview( const GDIMetaFile&, const Size&, const rtl::OUString& );
         };
 
         class ShowNupOrderWindow : public Window

@@ -102,33 +102,49 @@ void PrintDialog::PrintPreviewWindow::Resize()
 
 void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
 {
-    GDIMetaFile aMtf( maMtf );
-
-    Size aPreviewSize = maPageVDev.GetOutputSizePixel();
     Size aSize( GetSizePixel() );
-    Point aOffset( (aSize.Width() - aPreviewSize.Width()) / 2,
-                   (aSize.Height() - aPreviewSize.Height()) / 2 );
+    if( maReplacementString.getLength() != 0 )
+    {
+        // replacement is active
+        Push();
+        Rectangle aTextRect( Point( 0, 0 ), aSize );
+        Font aFont( GetSettings().GetStyleSettings().GetFieldFont() );
+        aFont.SetSize( Size( 0, aSize.Height()/12 ) );
+        SetFont( aFont );
+        DrawText( aTextRect, maReplacementString,
+                  TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE
+                 );
+        Pop();
+    }
+    else
+    {
+        GDIMetaFile aMtf( maMtf );
 
-    const Size aLogicSize( maPageVDev.PixelToLogic( aPreviewSize, MapMode( MAP_100TH_MM ) ) );
-    double fScale = double(aLogicSize.Width())/double(maOrigSize.Width());
+        Size aPreviewSize = maPageVDev.GetOutputSizePixel();
+        Point aOffset( (aSize.Width() - aPreviewSize.Width()) / 2,
+                       (aSize.Height() - aPreviewSize.Height()) / 2 );
+
+        const Size aLogicSize( maPageVDev.PixelToLogic( aPreviewSize, MapMode( MAP_100TH_MM ) ) );
+        double fScale = double(aLogicSize.Width())/double(maOrigSize.Width());
 
 
-    maPageVDev.Erase();
-    maPageVDev.Push();
-    maPageVDev.SetMapMode( MAP_100TH_MM );
-    aMtf.WindStart();
-    aMtf.Scale( fScale, fScale );
-    aMtf.WindStart();
-    aMtf.Play( &maPageVDev, Point( 0, 0 ), aLogicSize );
-    maPageVDev.Pop();
+        maPageVDev.Erase();
+        maPageVDev.Push();
+        maPageVDev.SetMapMode( MAP_100TH_MM );
+        aMtf.WindStart();
+        aMtf.Scale( fScale, fScale );
+        aMtf.WindStart();
+        aMtf.Play( &maPageVDev, Point( 0, 0 ), aLogicSize );
+        maPageVDev.Pop();
 
-    SetMapMode( MAP_PIXEL );
-    maPageVDev.SetMapMode( MAP_PIXEL );
-    DrawOutDev( aOffset, aPreviewSize, Point( 0, 0 ), aPreviewSize, maPageVDev );
+        SetMapMode( MAP_PIXEL );
+        maPageVDev.SetMapMode( MAP_PIXEL );
+        DrawOutDev( aOffset, aPreviewSize, Point( 0, 0 ), aPreviewSize, maPageVDev );
 
-    DecorationView aVw( this );
-    aOffset.X() -= 1; aOffset.Y() -=1; aPreviewSize.Width() += 2; aPreviewSize.Height() += 2;
-    aVw.DrawFrame( Rectangle( aOffset, aPreviewSize ), FRAME_DRAW_GROUP );
+        DecorationView aVw( this );
+        aOffset.X() -= 1; aOffset.Y() -=1; aPreviewSize.Width() += 2; aPreviewSize.Height() += 2;
+        aVw.DrawFrame( Rectangle( aOffset, aPreviewSize ), FRAME_DRAW_GROUP );
+    }
 }
 
 void PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
@@ -151,10 +167,14 @@ void PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
     }
 }
 
-void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPreview, const Size& i_rOrigSize )
+void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPreview,
+                                                  const Size& i_rOrigSize,
+                                                  const rtl::OUString& i_rReplacement
+                                                 )
 {
     maMtf = i_rNewPreview;
     maOrigSize = i_rOrigSize;
+    maReplacementString = i_rReplacement;
     Resize();
     Invalidate();
 }
@@ -1602,13 +1622,8 @@ void PrintDialog::updatePrinterText()
 
 void PrintDialog::setPreviewText( sal_Int32 )
 {
-    if( mnCachedPages != 0 )
-    {
-        rtl::OUString aNewText( searchAndReplace( maPageStr, "%n", 2, rtl::OUString::valueOf( mnCachedPages )  ) );
-        maNumPagesText.SetText( aNewText );
-    }
-    else
-        maNumPagesText.SetText( maNoPageStr );
+    rtl::OUString aNewText( searchAndReplace( maPageStr, "%n", 2, rtl::OUString::valueOf( mnCachedPages )  ) );
+    maNumPagesText.SetText( aNewText );
 }
 
 void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
@@ -1638,7 +1653,7 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
         else
             maCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
 
-        maPreviewWindow.setPreview( aMtf, maCurPageSize );
+        maPreviewWindow.setPreview( aMtf, maCurPageSize, nPages > 0 ? rtl::OUString() : maNoPageStr );
 
         maForwardBtn.Enable( mnCurPage < nPages-1 );
         maBackwardBtn.Enable( mnCurPage != 0 );
