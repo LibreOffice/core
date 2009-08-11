@@ -2614,7 +2614,6 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         m_pPrintUIOptions = new SwPrintUIOptions( bWebDoc );
     }
     bool bFormat = m_pPrintUIOptions->processPropertiesAndCheckFormat( rxOptions );
-    const bool bPrintProspect   = m_pPrintUIOptions->getBoolValue( "PrintBrochure", false );
     const bool bIsPDFExport     = !m_pPrintUIOptions->hasProperty( "IsPrinter" );
 
     SfxViewShell *pView = 0;
@@ -2661,14 +2660,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     OUString aPageRange;
     if (bIsPDFExport)
     {
-//        uno::Any aSelection;
-        for( sal_Int32 i = 0, nCount = rxOptions.getLength(); i < nCount; ++i )
-        {
-            if( rxOptions[ i ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ) )
-                rxOptions[ i ].Value >>= aPageRange;
-//            else if( rxOptions[ i ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Selection" ) ) )
-//                rxOptions[ i ].Value >>= aSelection;
-        }
+// TLPDF ??        m_pPrintUIOptions->getValue( C2U("Selection") );
+        aPageRange = m_pPrintUIOptions->getStringValue( "PageRange", OUString() );
     }
     else
     {
@@ -2688,6 +2681,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     }
 
     // get number of pages to be rendered
+    const bool bPrintProspect = m_pPrintUIOptions->getBoolValue( "PrintBrochure", false );
     if (bPrintProspect)
     {
         pDoc->CalculatePagePairsForProspectPrinting( *m_pPrintUIOptions, nPageCount );
@@ -2746,8 +2740,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     if (nRenderer >= pDoc->GetPageCount())
         return uno::Sequence< beans::PropertyValue >();
 
-    bool bSkipEmptyPages = m_pPrintUIOptions->getBoolValue( "IsSkipEmptyPages", sal_False );
-    Size aPgSize( pDoc->GetPageSize( sal_uInt16(nRenderer + 1), bSkipEmptyPages ) );
+    const bool bIsSkipEmptyPages = m_pPrintUIOptions->getBoolValue( "IsSkipEmptyPages", sal_False );
+    Size aPgSize( pDoc->GetPageSize( sal_uInt16(nRenderer + 1), bIsSkipEmptyPages ) );
     awt::Size aPageSize( TWIP_TO_MM100( aPgSize.Width() ),
                          TWIP_TO_MM100( aPgSize.Height() ));
     // prospect printing should be landscape, thus switching width and height
@@ -2866,24 +2860,9 @@ void SAL_CALL SwXTextDocument::render(
                     ((SwPagePreView*)pView)->GetViewShell();
     }
 
+    uno::Any aAny( m_pPrintUIOptions->getValue( C2U( "RenderDevice" ) ));
     uno::Reference< awt::XDevice >  xRenderDevice;
-    bool bFirstPage = false;
-    bool bLastPage = false;
-    rtl::OUString aPages;
-    bool bSkipEmptyPages = false;
-    for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
-    {
-        if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) )
-            rxOptions[ nProperty].Value >>= xRenderDevice;
-        else if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFirstPage" ) ) )
-            rxOptions[ nProperty].Value >>= bFirstPage;
-        else if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "IsLastPage" ) ) )
-            rxOptions[ nProperty].Value >>= bLastPage;
-        else if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ) )
-            rxOptions[ nProperty].Value >>= aPages;
-        else if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ) )
-            rxOptions[ nProperty].Value >>= bSkipEmptyPages;
-    }
+    aAny >>= xRenderDevice;
 
     OutputDevice*   pOut = 0;
     if (xRenderDevice.is())
@@ -2894,6 +2873,11 @@ void SAL_CALL SwXTextDocument::render(
 
     if(pVwSh && pOut)
     {
+        const bool bFirstPage           = m_pPrintUIOptions->getBoolValue( "IsFirstPage", sal_False );
+        const bool bLastPage            = m_pPrintUIOptions->getBoolValue( "IsLastPage", sal_False );
+        const bool bIsSkipEmptyPages    = m_pPrintUIOptions->getBoolValue( "IsSkipEmptyPages", sal_False );
+        const rtl::OUString aPageRange  = m_pPrintUIOptions->getStringValue( "PageRange", OUString() );
+
         SwPrtOptions    aOptions( C2U("PDF export") );
 
         // get print options to use from provided properties
@@ -2926,11 +2910,11 @@ void SAL_CALL SwXTextDocument::render(
         aOptions.bPrintTextPlaceholder   = m_pPrintUIOptions->getBoolValue( "PrintPlaceholder",  aOptions.bPrintTextPlaceholder );
         aOptions.nPrintPostIts           = static_cast< sal_Int16 >(m_pPrintUIOptions->getIntValue( "PrintNotes", aOptions.nPrintPostIts ));
 
-        Range aPageRange( nRenderer+1, nRenderer+1 );
-        MultiSelection aPage( aPageRange );
-        aPage.SetTotalRange( Range( 0, RANGE_MAX ) );
-        aPage.Select( aPageRange );
-        aOptions.aMulti = aPage;
+        Range aRange( nRenderer+1, nRenderer+1 );
+        MultiSelection aPages( aRange );
+        aPages.SetTotalRange( Range( 0, RANGE_MAX ) );
+        aPages.Select( aRange );
+        aOptions.aMulti = aPages;
 
         //! Note: Since for PDF export of (multi-)selection a temporary
         //! document is created that contains only the selects parts,
@@ -2958,7 +2942,7 @@ void SAL_CALL SwXTextDocument::render(
 
         if (bIsPDFExport && bFirstPage && pWrtShell)    /*TLPDF*/
         {
-            SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPages, bSkipEmptyPages, sal_False );
+            SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages, sal_False );
         }
         // <--
 
@@ -2976,7 +2960,7 @@ void SAL_CALL SwXTextDocument::render(
         //
         if (bIsPDFExport && bLastPage && pWrtShell) /*TLPDF*/
         {
-            SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPages, bSkipEmptyPages,  sal_True );
+            SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages,  sal_True );
         }
         // <--
 
