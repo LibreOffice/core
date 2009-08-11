@@ -906,9 +906,8 @@ End
 
 #endif
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Lng, lng)
-
 #ifdef WNT
+
 File gid_File_Lib_Rebasemsi
     TXT_FILE_BODY;
     Name = "rebase.dll";
