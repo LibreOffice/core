@@ -120,8 +120,13 @@ if ( $ENV{NO_HID_FILES} ) {
     $no_hid_files = $ENV{"NO_HID_FILES"};
 }
 $solarincludes = $ENV{SOLARINCLUDES};
-$tmpdir = $ENV{TMPDIR};
-die "ERROR - \"TMPDIR\" environment variable not set\n" if ( !defined $tmpdir );
+if (defined $ENV{TMPDIR}) {
+    $tmpdir = $ENV{TMPDIR};
+} elsif (defined $ENV{TMP}) {
+    $tmpdir = $ENV{TMP};
+} else {
+    die "ERROR - \"TMPDIR\" & \"TMP\" environment variables not set\n";
+};
 die "ERROR - \"$tmpdir\" doesn't exist\n" if ( ! -d $tmpdir );
 
 setcompiler();
