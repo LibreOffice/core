@@ -60,6 +60,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XModeChangeListener.hpp>
+#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XLayoutManagerListener.hpp>
@@ -694,6 +695,7 @@ private:
     void impl_PasteGraphic( ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > & xGraphic,
                             const ::Point & aPosition );
     void impl_PasteShapes( SdrModel* pModel );
+    void impl_PasteStringAsTextShape( const ::rtl::OUString& rString, const ::com::sun::star::awt::Point& rPosition );
     void impl_SetMousePointer( const MouseEvent & rEvent );
 
     void impl_ClearSelection();

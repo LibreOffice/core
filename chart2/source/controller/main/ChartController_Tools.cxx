@@ -191,50 +191,6 @@ bool lcl_deleteDataCurve(
 
 } // anonymous namespace
 
-namespace
-{
-void lcl_InsertStringAsTextShapeIntoDrawPage(
-    const Reference< lang::XMultiServiceFactory > & xShapeFactory,
-    const Reference< drawing::XDrawPage > & xDrawPage,
-    OUString & rString,
-    const awt::Point & aPosition )
-{
-    OSL_ASSERT( xShapeFactory.is() && xDrawPage.is());
-    if( ! (xShapeFactory.is()  && xDrawPage.is()))
-        return;
-
-    try
-    {
-        Reference< drawing::XShape > xTextShape(
-            xShapeFactory->createInstance( C2U("com.sun.star.drawing.TextShape")), uno::UNO_QUERY_THROW );
-        xDrawPage->add( xTextShape );
-
-        Reference< text::XTextRange > xRange( xTextShape, uno::UNO_QUERY_THROW );
-        xRange->setString( rString );
-
-        float fCharHeight = 10.0;
-        Reference< beans::XPropertySet > xProperties( xTextShape, uno::UNO_QUERY_THROW );
-        xProperties->setPropertyValue( C2U("TextAutoGrowHeight"), uno::makeAny( true ));
-        xProperties->setPropertyValue( C2U("TextAutoGrowWidth"), uno::makeAny( true ));
-        xProperties->setPropertyValue( C2U("CharHeight"), uno::makeAny( fCharHeight ));
-        xProperties->setPropertyValue( C2U("CharHeightAsian"), uno::makeAny( fCharHeight ));
-        xProperties->setPropertyValue( C2U("CharHeightComplex"), uno::makeAny( fCharHeight ));
-        xProperties->setPropertyValue( C2U("TextVerticalAdjust"), uno::makeAny( drawing::TextVerticalAdjust_CENTER ));
-        xProperties->setPropertyValue( C2U("TextHorizontalAdjust"), uno::makeAny( drawing::TextHorizontalAdjust_CENTER ));
-        xProperties->setPropertyValue( C2U("CharFontName"), uno::makeAny( C2U( "Albany" )));
-
-        awt::Point aAdaptedPos( aPosition );
-        aAdaptedPos.Y -= (xTextShape->getSize().Height / 2);
-        aAdaptedPos.X -= (xTextShape->getSize().Width / 2);
-        xTextShape->setPosition( aAdaptedPos );
-    }
-    catch( const uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-}
-
-} // anonymous namespace
 
 namespace chart
 {
@@ -388,14 +344,7 @@ void ChartController::executeDispatch_Paste()
                             pOutlinerView->InsertText( aString );
                         else
                         {
-                            awt::Point aTextPos;
-                            awt::Size aPageSize( ChartModelHelper::getPageSize( m_aModel->getModel()));
-                            aTextPos.X = (aPageSize.Width / 2);
-                            aTextPos.Y = (aPageSize.Height / 2);
-                            lcl_InsertStringAsTextShapeIntoDrawPage(
-                                m_pDrawModelWrapper->getShapeFactory(),
-                                m_pDrawModelWrapper->getMainDrawPage(),
-                                aString, aTextPos );
+                            impl_PasteStringAsTextShape( aString, awt::Point( 0, 0 ) );
                         }
                     }
                 }
@@ -447,7 +396,6 @@ void ChartController::impl_PasteGraphic(
         uno::Reference< beans::XPropertySet > xGraphicProp( xGraphic, uno::UNO_QUERY );
 
         awt::Size aGraphicSize( 1000, 1000 );
-        awt::Point aShapePos( 100,100 );
         // first try size in 100th mm, then pixel size
         if( ! ( xGraphicProp->getPropertyValue( C2U("Size100thMM")) >>= aGraphicSize ) &&
             ( ( xGraphicProp->getPropertyValue( C2U("SizePixel")) >>= aGraphicSize ) && m_pChartWindow ))
@@ -457,11 +405,7 @@ void ChartController::impl_PasteGraphic(
             aGraphicSize.Height = aVCLSize.getHeight();
         }
         xGraphicShape->setSize( aGraphicSize );
-
-        awt::Size aPageSize( ChartModelHelper::getPageSize( m_aModel->getModel()));
-        aShapePos.X = (aPageSize.Width / 2)  - (aGraphicSize.Width / 2);
-        aShapePos.Y = (aPageSize.Height / 2) - (aGraphicSize.Height / 2);
-        xGraphicShape->setPosition( aShapePos );
+        xGraphicShape->setPosition( awt::Point( 0, 0 ) );
     }
 }
 
@@ -511,6 +455,50 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
             // select last inserted shape
             m_aSelection.setSelection( xSelShape );
             m_aSelection.applySelection( m_pDrawViewWrapper );
+        }
+    }
+}
+
+void ChartController::impl_PasteStringAsTextShape( const OUString& rString, const awt::Point& rPosition )
+{
+    DrawModelWrapper* pDrawModelWrapper( this->GetDrawModelWrapper() );
+    if ( pDrawModelWrapper )
+    {
+        const Reference< lang::XMultiServiceFactory >& xShapeFactory( pDrawModelWrapper->getShapeFactory() );
+        const Reference< drawing::XDrawPage >& xDrawPage( pDrawModelWrapper->getMainDrawPage() );
+        OSL_ASSERT( xShapeFactory.is() && xDrawPage.is() );
+
+        if ( xShapeFactory.is() && xDrawPage.is() )
+        {
+            try
+            {
+                Reference< drawing::XShape > xTextShape(
+                    xShapeFactory->createInstance( C2U( "com.sun.star.drawing.TextShape" ) ), uno::UNO_QUERY_THROW );
+                xDrawPage->add( xTextShape );
+
+                Reference< text::XTextRange > xRange( xTextShape, uno::UNO_QUERY_THROW );
+                xRange->setString( rString );
+
+                float fCharHeight = 10.0;
+                Reference< beans::XPropertySet > xProperties( xTextShape, uno::UNO_QUERY_THROW );
+                xProperties->setPropertyValue( C2U( "TextAutoGrowHeight" ), uno::makeAny( true ) );
+                xProperties->setPropertyValue( C2U( "TextAutoGrowWidth" ), uno::makeAny( true ) );
+                xProperties->setPropertyValue( C2U( "CharHeight" ), uno::makeAny( fCharHeight ) );
+                xProperties->setPropertyValue( C2U( "CharHeightAsian" ), uno::makeAny( fCharHeight ) );
+                xProperties->setPropertyValue( C2U( "CharHeightComplex" ), uno::makeAny( fCharHeight ) );
+                xProperties->setPropertyValue( C2U( "TextVerticalAdjust" ), uno::makeAny( drawing::TextVerticalAdjust_CENTER ) );
+                xProperties->setPropertyValue( C2U( "TextHorizontalAdjust" ), uno::makeAny( drawing::TextHorizontalAdjust_CENTER ) );
+                xProperties->setPropertyValue( C2U( "CharFontName" ), uno::makeAny( C2U( "Albany" ) ) );
+
+                xTextShape->setPosition( rPosition );
+
+                m_aSelection.setSelection( xTextShape );
+                m_aSelection.applySelection( m_pDrawViewWrapper );
+            }
+            catch ( const uno::Exception& ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
         }
     }
 }
