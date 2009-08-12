@@ -291,6 +291,7 @@ PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     maPageMarginEdt.SetDecimalDigits( nDigits );
     maSheetMarginEdt.SetDecimalDigits( nDigits );
 
+    SMHID1( "NUpPage" );
     maNupLine.SMHID2("NUpPage", "Layout");
     maBrochureBtn.SMHID2("NUpPage", "Brochure" );
     maPagesBtn.SMHID2( "NUpPage", "PagesPerSheet" );
@@ -462,6 +463,8 @@ PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
     , maLayout( NULL, true )
 {
     FreeResource();
+
+    SMHID1( "JobPage" );
     maPrinterFL.SMHID2( "JobPage", "Printer" );
     maPrinters.SMHID2( "JobPage", "PrinterList" );
     maStatusLabel.SMHID2( "JobPage", "StatusLabel" );
@@ -624,6 +627,7 @@ PrintDialog::OutputOptPage::OutputOptPage( Window* i_pParent, const ResId& i_rRe
     , maReverseOrderBox( this, VclResId( SV_PRINT_OPT_REVERSE ) )
 {
     FreeResource();
+    SMHID1( "OptPage" );
     maOptionsLine.SMHID2( "OptPage", "Options" );
     maToFileBox.SMHID2( "OptPage", "ToFile" );
     maCollateSingleJobsBox.SMHID2( "OptPage", "SingleJobs" );
@@ -826,6 +830,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     checkControlDependencies();
 
     // set HelpIDs
+    SMHID1( "Dialog" );
     maOKButton.SMHID1( "OK" );
     maCancelButton.SMHID1( "Cancel" );
     maPreviewWindow.SMHID1( "Preview" );
