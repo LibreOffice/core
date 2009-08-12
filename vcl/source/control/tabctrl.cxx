@@ -30,26 +30,23 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <tools/debug.hxx>
+#include "tools/debug.hxx"
 
-#ifndef _SV_RC_H
-#include <tools/rc.h>
-#endif
-#include <vcl/svdata.hxx>
-#ifndef _SV_APP_HXX
-#include <vcl/svapp.hxx>
-#endif
-#include <vcl/help.hxx>
-#include <vcl/event.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/button.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/tabctrl.hxx>
-#include <vcl/controllayout.hxx>
-#include <vcl/sound.hxx>
-#include <vcl/lstbox.hxx>
+#include "tools/rc.h"
+#include "vcl/svdata.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/help.hxx"
+#include "vcl/event.hxx"
+#include "vcl/menu.hxx"
+#include "vcl/button.hxx"
+#include "vcl/tabpage.hxx"
+#include "vcl/tabctrl.hxx"
+#include "vcl/controllayout.hxx"
+#include "vcl/sound.hxx"
+#include "vcl/lstbox.hxx"
+#include "vcl/smartid.hxx"
 
-#include <vcl/window.h>
+#include "vcl/window.h"
 
 #include <hash_map>
 #include <vector>
@@ -156,7 +153,7 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
     mbRestoreUnqId              = FALSE;
     mbSingleLine                = FALSE;
     mbScroll                    = FALSE;
-    mbColored                   = FALSE;
+    mbRestoreSmartId            = FALSE;
     mbSmallInvalidate           = FALSE;
     mbExtraSpace                = FALSE;
     mpTabCtrlData               = new ImplTabCtrlData;
@@ -713,6 +710,8 @@ void TabControl::ImplChangeTabPage( USHORT nId, USHORT nOldId )
             pCtrlParent->SetHelpId( 0 );
         if ( mbRestoreUnqId )
             pCtrlParent->SetUniqueId( 0 );
+        if( mbRestoreSmartId )
+            pCtrlParent->SetSmartHelpId( SmartId() );
         pOldPage->DeactivatePage();
     }
 
@@ -720,8 +719,8 @@ void TabControl::ImplChangeTabPage( USHORT nId, USHORT nOldId )
     {
         pPage->SetPosSizePixel( aRect.TopLeft(), aRect.GetSize() );
 
-        // Hier Page aktivieren, damit die Controls entsprechend umgeschaltet
-        // werden koennen und HilfeId gegebenenfalls beim Parent umsetzen
+        // activate page here so the conbtrols can be switched
+        // also set the help id of the parent window to that of the tab page
         if ( !GetHelpId() )
         {
             mbRestoreHelpId = TRUE;
@@ -731,6 +730,11 @@ void TabControl::ImplChangeTabPage( USHORT nId, USHORT nOldId )
         {
             mbRestoreUnqId = TRUE;
             pCtrlParent->SetUniqueId( pPage->GetUniqueId() );
+        }
+        if( ! GetSmartHelpId().HasAny() )
+        {
+            mbRestoreSmartId = TRUE;
+            pCtrlParent->SetSmartHelpId( pPage->GetSmartHelpId() );
         }
 
         pPage->ActivatePage();

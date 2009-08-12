@@ -73,7 +73,7 @@ private:
     BOOL                mbRestoreUnqId;
     BOOL                mbSingleLine;
     BOOL                mbScroll;
-    BOOL                mbColored;
+    BOOL                mbRestoreSmartId;
     BOOL                mbSmallInvalidate;
     BOOL                mbExtraSpace;
     Link                maActivateHdl;
