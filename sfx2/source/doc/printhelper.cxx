@@ -644,6 +644,10 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                     throw ::com::sun::star::lang::IllegalArgumentException();
                 aCheckedArgs[nProps].Name = rProp.Name;
                 aCheckedArgs[nProps++].Value <<= sFileURL;
+                // and append the local filename
+                aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
+                aCheckedArgs[nProps].Name = rtl::OUString::createFromAscii("LocalFileName");
+                aCheckedArgs[nProps++].Value <<= ::rtl::OUString( sTemp );
             }
             else
             // It's a valid URL. but now we must know, if it is a local one or not.
@@ -656,6 +660,10 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // the end of this method.
                 aCheckedArgs[nProps].Name = rProp.Name;
                 aCheckedArgs[nProps++].Value <<= sTemp;
+                // and append the local filename
+                aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
+                aCheckedArgs[nProps].Name = rtl::OUString::createFromAscii("LocalFileName");
+                aCheckedArgs[nProps++].Value <<= ::rtl::OUString( sPath );
             }
             else
             {
