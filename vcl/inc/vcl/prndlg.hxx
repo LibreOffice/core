@@ -228,7 +228,6 @@ namespace vcl
         rtl::OUString                           maNoPageStr;
         sal_Int32                               mnCurPage;
         sal_Int32                               mnCachedPages;
-        Size                                    maCurPageSize;
 
         std::list< Window* >                    maControls;
         std::map< Window*, rtl::OUString >      maControlToPropertyMap;

@@ -1647,18 +1647,16 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
     maPageEdit.SetMin( 1 );
     maPageEdit.SetMax( nPages );
 
-    boost::shared_ptr<Printer> aPrt( maPController->getPrinter() );
-
     if( i_bNewPage )
     {
         const MapMode aMapMode( MAP_100TH_MM );
         GDIMetaFile aMtf;
         if( nPages > 0 )
-            maCurPageSize = maPController->getFilteredPageFile( mnCurPage, aMtf, i_bMayUseCache );
-        else
-            maCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
+            maPController->getFilteredPageFile( mnCurPage, aMtf, i_bMayUseCache );
 
-        maPreviewWindow.setPreview( aMtf, maCurPageSize, nPages > 0 ? rtl::OUString() : maNoPageStr );
+        boost::shared_ptr<Printer> aPrt( maPController->getPrinter() );
+        Size aCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
+        maPreviewWindow.setPreview( aMtf, aCurPageSize, nPages > 0 ? rtl::OUString() : maNoPageStr );
 
         maForwardBtn.Enable( mnCurPage < nPages-1 );
         maBackwardBtn.Enable( mnCurPage != 0 );

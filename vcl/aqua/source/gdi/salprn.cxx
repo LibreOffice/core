@@ -304,7 +304,7 @@ void AquaSalInfoPrinter::setPaperSize( long i_nWidth, long i_nHeight, Orientatio
 {
 
     Orientation ePaperOrientation = ORIENTATION_PORTRAIT;
-    const PaperInfo* pPaper = matchPaper( (i_nWidth+50)/100, (i_nHeight+50)/100, ePaperOrientation );
+    const PaperInfo* pPaper = matchPaper( i_nWidth, i_nHeight, ePaperOrientation );
 
     if( pPaper )
     {
@@ -807,8 +807,8 @@ void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* i_pSetupData )
                     NSSize aPaperSize = [mpPrinter pageSizeForPaper: pPaper];
                     if( aPaperSize.width > 0 && aPaperSize.height > 0 )
                     {
-                        PaperInfo aInfo( (PtTo10Mu( aPaperSize.width ) + 50 ) / 100,
-                                        (PtTo10Mu( aPaperSize.height ) + 50 ) / 100 );
+                        PaperInfo aInfo( PtTo10Mu( aPaperSize.width ),
+                                         PtTo10Mu( aPaperSize.height ) );
                         m_aPaperFormats.push_back( aInfo );
                     }
                 }
@@ -828,8 +828,8 @@ const PaperInfo* AquaSalInfoPrinter::matchPaper( long i_nWidth, long i_nHeight, 
     {
         for( size_t i = 0; i < m_aPaperFormats.size(); i++ )
         {
-            if( abs( m_aPaperFormats[i].getWidth() - i_nWidth ) < 2 &&
-                abs( m_aPaperFormats[i].getHeight() - i_nHeight ) < 2 )
+            if( abs( m_aPaperFormats[i].getWidth() - i_nWidth ) < 50 &&
+                abs( m_aPaperFormats[i].getHeight() - i_nHeight ) < 50 )
             {
                 pMatch = &m_aPaperFormats[i];
                 return pMatch;
