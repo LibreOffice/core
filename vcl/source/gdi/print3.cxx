@@ -45,6 +45,7 @@
 #include "com/sun/star/ui/dialogs/XFilterManager.hpp"
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
+#include "com/sun/star/view/DuplexMode.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/awt/Size.hpp"
 #include "comphelper/processfactory.hxx"
@@ -1208,6 +1209,20 @@ void PrinterController::pushPropertiesToPrinter()
     if( pVal )
         pVal->Value >>= bCollate;
     mpImplData->mpPrinter->SetCopyCount( static_cast<USHORT>(nCopyCount), bCollate );
+
+    // duplex mode
+    pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DuplexMode" ) ) );
+    if( pVal )
+    {
+        sal_Int16 nDuplex = view::DuplexMode::UNKNOWN;
+        pVal->Value >>= nDuplex;
+        switch( nDuplex )
+        {
+        case view::DuplexMode::OFF: mpImplData->mpPrinter->SetDuplexMode( DUPLEX_OFF ); break;
+        case view::DuplexMode::LONGEDGE: mpImplData->mpPrinter->SetDuplexMode( DUPLEX_LONGEDGE ); break;
+        case view::DuplexMode::SHORTEDGE: mpImplData->mpPrinter->SetDuplexMode( DUPLEX_SHORTEDGE ); break;
+        }
+    }
 }
 
 bool PrinterController::isShowDialogs() const
