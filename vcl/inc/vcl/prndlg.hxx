@@ -68,7 +68,9 @@ namespace vcl
             virtual void Command( const CommandEvent& );
             virtual void Resize();
 
-            void setPreview( const GDIMetaFile&, const Size&, const rtl::OUString& );
+            void setPreview( const GDIMetaFile&, const Size&, const rtl::OUString&,
+                             sal_Int32 i_nDPIX, sal_Int32 i_nDPIY
+                            );
         };
 
         class ShowNupOrderWindow : public Window

@@ -74,7 +74,6 @@ private:
     #define REFDEV_FORCE_ZERO_EXTLEAD 0x80
     SAL_DLLPRIVATE bool ForceZeroExtleadBug() const
         { return ((meRefDevMode & REFDEV_FORCE_ZERO_EXTLEAD) != 0); }
-
 public:
                         VirtualDevice( USHORT nBitCount = 0 );
                         VirtualDevice( const OutputDevice& rCompDev,
@@ -115,11 +114,19 @@ public:
                         REFDEV_MODE06 = 1,      // 600 dpi
                         REFDEV_MODE48 = 2,      // 4800 dpi
                         REFDEV_MODE_MSO1 = 3,
-                        REFDEV_MODE_PDF1 = 4 };
+                        REFDEV_MODE_PDF1 = 4,
+                        REFDEV_CUSTOM = 5
+                    };
 
     void                SetReferenceDevice( RefDevMode );
 
     void                Compat_ZeroExtleadBug(); // enable workaround for #i60495#
+
+    void                SetReferenceDevice( sal_Int32 i_nDPIX, sal_Int32 i_nDPIY );
+
+private:
+    SAL_DLLPRIVATE void ImplSetReferenceDevice( RefDevMode, sal_Int32 i_nDPIX, sal_Int32 i_nDPIY );
+
 };
 
 #endif // _SV_VIRDEV_HXX

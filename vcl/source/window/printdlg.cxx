@@ -169,12 +169,16 @@ void PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
 
 void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPreview,
                                                   const Size& i_rOrigSize,
-                                                  const rtl::OUString& i_rReplacement
+                                                  const rtl::OUString& i_rReplacement,
+                                                  sal_Int32 i_nDPIX,
+                                                  sal_Int32 i_nDPIY
                                                  )
 {
     maMtf = i_rNewPreview;
     maOrigSize = i_rOrigSize;
     maReplacementString = i_rReplacement;
+    maPageVDev.SetReferenceDevice( i_nDPIX, i_nDPIY );
+    maPageVDev.EnableOutput( TRUE );
     Resize();
     Invalidate();
 }
@@ -1656,7 +1660,9 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
 
         boost::shared_ptr<Printer> aPrt( maPController->getPrinter() );
         Size aCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
-        maPreviewWindow.setPreview( aMtf, aCurPageSize, nPages > 0 ? rtl::OUString() : maNoPageStr );
+        maPreviewWindow.setPreview( aMtf, aCurPageSize, nPages > 0 ? rtl::OUString() : maNoPageStr,
+                                    aPrt->ImplGetDPIX(), aPrt->ImplGetDPIY()
+                                   );
 
         maForwardBtn.Enable( mnCurPage < nPages-1 );
         maBackwardBtn.Enable( mnCurPage != 0 );
