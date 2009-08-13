@@ -816,6 +816,9 @@ Size PrinterController::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o
     }
     o_rMtf.WindStart();
 
+    mpImplData->mpPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
+    mpImplData->mpPrinter->SetPaperSizeUser( aPaperSize );
+
     return aPaperSize;
 }
 
