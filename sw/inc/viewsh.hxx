@@ -97,7 +97,7 @@ class SdrPaintWindow;
 namespace vcl
 {
     class PrinterController;
-};
+}
 
 
 //JP 19.07.98: - Bug 52312
