@@ -230,7 +230,7 @@ const XubString& SwPrtOptions::MakeNextJobName()
 /*****************************************************************************/
 
 SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
-    mpLast( NULL )
+    m_pLast( NULL )
 {
     ResStringArray aLocalizedStrings( SW_RES( STR_PRINTOPTUI ) );
 
@@ -257,13 +257,13 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
     // create a bool option for background
     m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 2 ),
                                                   aLocalizedStrings.GetString( 3 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBackground" ) ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintPageBackground" ) ),
                                                   sal_True );
 
     // create a bool option for graphics
     m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 4 ),
                                                   aLocalizedStrings.GetString( 5 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintGraphicsAndDiagrams" ) ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintTablesGraphicsAndDiagrams" ) ),
                                                   sal_True );
     if (!bWeb)
     {
@@ -276,7 +276,7 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
         // create a bool option for place holder
         m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 8 ),
                                                   aLocalizedStrings.GetString( 9 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintPlaceholder" ) ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintTextPlaceholder" ) ),
                                                   sal_False );
     }
 
@@ -292,7 +292,7 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
     // create a bool option for black
     m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 13 ),
                                                   aLocalizedStrings.GetString( 14 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBlack" ) ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBlackFonts" ) ),
                                                   sal_False );
 
     // create subgroup for misc options
@@ -309,7 +309,7 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
     aPaperTrayOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OptionsPageOptGroup" ) );
     m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 18 ),
                                                    aLocalizedStrings.GetString( 19 ),
-                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PaperTray" ) ),
+                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintPaperFromSetup" ) ),
                                                    sal_False,
                                                    aPaperTrayOpt
                                                    );
@@ -332,7 +332,7 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
     aHelpText[1] = aLocalizedStrings.GetString( 25 );
     m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( aLocalizedStrings.GetString( 26 ),
                                                     aHelpText,
-                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintNotes" ) ),
+                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintAnnotationMode" ) ),
                                                     aChoices,
                                                     0,
                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) )
@@ -363,7 +363,7 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
     }
 
     // create a bool option for brochure
-    rtl::OUString aBrochurePropertyName( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochure" ) );
+    rtl::OUString aBrochurePropertyName( RTL_CONSTASCII_USTRINGPARAM( "PrintProspect" ) );
     m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 33 ),
                                                    aLocalizedStrings.GetString( 34 ),
                                                    aBrochurePropertyName,
@@ -379,7 +379,7 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
     aBrochureRTLOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutPage" ) );
     m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( rtl::OUString(),
                                                            uno::Sequence< rtl::OUString >(),
-                                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochureRTL" ) ),
+                                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintProspectRTL" ) ),
                                                            aBRTLChoices, 0, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
                                                            aBrochureRTLOpt
                                                            );
@@ -417,20 +417,77 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
                                                        aPageRangeOpt
                                                        );
 
-
     DBG_ASSERT( nIdx == nNumProps, "number of added properties is not as expected" );
+}
+
+
+SwPrintUIOptions::~SwPrintUIOptions()
+{
 }
 
 bool SwPrintUIOptions::IsPrintLeftPages() const
 {
-    sal_Int64 nLRPages = getIntValue( "PrintLeftRightPages", 0 );
-    return nLRPages == 0 || nLRPages == 1;
+    // take care of different property names for the option.
+    // for compatibility the old name should win
+
+    // 0: left and right pages
+    // 1: left pages only
+    // 2: right pages only
+    sal_Int64 nLRPages = getIntValue( "PrintLeftRightPages", 0 /* default: all */ );
+    bool bRes = nLRPages == 0 || nLRPages == 1;
+    bRes = getBoolValue( "PrintLeftPages", bRes /* <- default value if property is not found */ );
+    return bRes;
 }
 
 bool SwPrintUIOptions::IsPrintRightPages() const
 {
-    sal_Int64 nLRPages = getIntValue( "PrintLeftRightPages", 0 );
-    return nLRPages == 0 || nLRPages == 2;
+    // take care of different property names for the option.
+    // for compatibility the old name should win
+
+    sal_Int64 nLRPages = getIntValue( "PrintLeftRightPages", 0 /* default: all */ );
+    bool bRes = nLRPages == 0 || nLRPages == 2;
+    bRes = getBoolValue( "PrintRightPages", bRes /* <- default value if property is not found */ );
+    return bRes;
+}
+
+bool SwPrintUIOptions::IsPrintEmptyPages( bool bIsPDFExport ) const
+{
+    // take care of different property names for the option.
+
+    bool bRes = bIsPDFExport ?
+            !getBoolValue( "IsSkipEmptyPages", sal_True ) : 
+            getBoolValue( "PrintEmptyPages", sal_True );
+    return bRes;
+}
+
+bool SwPrintUIOptions::IsPrintTables() const
+{
+    // take care of different property names for the option.
+    // for compatibility the old name should win
+
+    bool bRes = getBoolValue( "PrintTablesGraphicsAndDiagrams", sal_True );
+    bRes = getBoolValue( "PrintTables", bRes );
+    return bRes;
+}
+
+bool SwPrintUIOptions::IsPrintGraphics() const
+{
+    // take care of different property names for the option.
+    // for compatibility the old name should win
+
+    bool bRes = getBoolValue( "PrintTablesGraphicsAndDiagrams", sal_True );
+    bRes = getBoolValue( "PrintGraphics", bRes );
+    return bRes;
+}
+
+bool SwPrintUIOptions::IsPrintDrawings() const
+{
+    // take care of different property names for the option.
+    // for compatibility the old name should win
+
+    bool bRes = getBoolValue( "PrintTablesGraphicsAndDiagrams", sal_True );
+    bRes = getBoolValue( "PrintDDrawings", bRes );
+    return bRes;
 }
 
 bool SwPrintUIOptions::processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp )
@@ -447,9 +504,9 @@ bool SwPrintUIOptions::processPropertiesAndCheckFormat( const com::sun::star::un
         VCLXDevice*     pDevice = VCLXDevice::GetImplementation( xRenderDevice );
         pOut = pDevice ? pDevice->GetOutputDevice() : 0;
     }
-    bChanged = bChanged || (pOut != mpLast);
+    bChanged = bChanged || (pOut != m_pLast);
     if( pOut )
-        mpLast = pOut;
+        m_pLast = pOut;
 
     return bChanged;
 }
@@ -938,6 +995,9 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
     const SwFrm *pPage = pLayout->Lower();
     SwLayAction aAction( pLayout, Imp() );
 
+#ifdef TL_NOT_NOW /*TLPDF*/
+//Currently we have no progress bar here. It is handled in the new Print UI now.
+//Not year clear: what about Progressbar in MailMerge
     if( pProgress )
     {
         // HACK, damit die Anzeige sich nicht verschluckt.
@@ -947,6 +1007,7 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
         pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
         aAction.SetProgress(pProgress);
     }
+#endif  // TL_NOT_NOW /*TLPDF*/
 
     pLayout->StartAllAction();
     for ( USHORT i = 1; pPage && i <= nMax; pPage = pPage->GetNext(), ++i )
@@ -954,6 +1015,7 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
         if ( ( bPrtJob && !pPrt->IsJobActive() ) || Imp()->IsStopPrt() )
             break;
 
+#ifdef TL_NOT_NOW /*TLPDF*/
         if( pProgress )
         {
             //HACK, damit die Anzeige sich nicht verschluckt.
@@ -961,6 +1023,7 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
             lcl_SetState( *pProgress, i, nStatMax, pStr, nMergeAct, nMergeCnt, 0, i );
             pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
         }
+#endif  // TL_NOT_NOW /*TLPDF*/
 
         if ( ( bPrtJob && !pPrt->IsJobActive() ) || Imp()->IsStopPrt() )
             break;
@@ -980,8 +1043,10 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
         Imp()->SetFirstVisPageInvalid();
         SwPaintQueue::Repaint();
 
+#ifdef TL_NOT_NOW /*TLPDF*/
         if ( pProgress )
             pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
+#endif  // TL_NOT_NOW /*TLPDF*/
     }
 
     if (pProgress)
@@ -1175,11 +1240,23 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 }
 
 
+sal_Bool ViewShell::PrintOrPDFExportMM(
+    const boost::shared_ptr< vcl::PrinterController > & rpPrinterController,
+    const SwPrtOptions &rPrintData, /* TLPDF can't we make use of just SwPrintData only as it is the case in PrintProspect???  */
+    bool bIsPDFExport )
+{
+    (void) rpPrinterController; (void) rPrintData; (void) bIsPDFExport;
+
+
+    Printer::PrintJob( rpPrinterController, JobSetup() );
+    return sal_True;
+}
+
+
 sal_Bool ViewShell::PrintOrPDFExport(
     OutputDevice* pOutDev,
-    SwPrtOptions& rOptions,
-    const SwPrintUIOptions &rPrintUIOptions, /* TLPDF keep this or the above? */
-    sal_Int32 nRenderer,
+    const SwPrtOptions &rPrintData, /* TLPDF can't we make use of just SwPrintData only as it is the case in PrintProspect???  */
+    sal_Int32 nRenderer,    // the index in the vector of pages to be printed
     bool bIsPDFExport )
 {
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1190,11 +1267,11 @@ sal_Bool ViewShell::PrintOrPDFExport(
     //! Note: Since for PDF export of (multi-)selection a temporary
     //! document is created that contains only the selects parts,
     //! and thus that document is to printed in whole the,
-    //! rOptions.bPrintSelection parameter will be false.
-    BOOL bSelection = rOptions.bPrintSelection;
+    //! rPrintData.bPrintSelection parameter will be false.
+    BOOL bSelection = rPrintData.bPrintSelection;
 
 // TLPDF: this one should hold just one page now. Thus clean-up should be possible
-    MultiSelection aMulti( rOptions.aMulti );
+    MultiSelection aMulti( rPrintData.aMulti );
 
     if ( !pOutDev || !aMulti.GetSelectCount() )
         return bStartJob;
@@ -1270,21 +1347,21 @@ sal_Bool ViewShell::PrintOrPDFExport(
     // save options at draw view:
     SwDrawViewSave aDrawViewSave( pShell->GetDrawView() );
 
-    pShell->PrepareForPrint( rOptions );
+    pShell->PrepareForPrint( rPrintData );
 
     XubString* pStr = 0;
-    ULONG nMergeAct = rOptions.nMergeAct, nMergeCnt = rOptions.nMergeCnt;
+//TLPDF    ULONG nMergeAct = rPrintData.nMergeAct, nMergeCnt = rPrintData.nMergeCnt;
 
 
 /* TLPDF neu: start */
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( 0 <= nRenderer && nRenderer < (sal_Int32)rPrintUIOptions.GetPagesToPrint().size(), "nRenderer out of bounds");
+    DBG_ASSERT( 0 <= nRenderer && nRenderer < (sal_Int32)rPrintData.GetPrintUIOptions().GetPagesToPrint().size(), "nRenderer out of bounds");
 #endif
-    const sal_Int32 nPage = rPrintUIOptions.GetPagesToPrint()[ nRenderer ]; /* TLPDF */
+    const sal_Int32 nPage = rPrintData.GetPrintUIOptions().GetPagesToPrint()[ nRenderer ]; /* TLPDF */
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( rPrintUIOptions.GetValidPagesSet().count( nPage ) == 1, "nPage not valid" );
+    DBG_ASSERT( rPrintData.GetPrintUIOptions().GetValidPagesSet().count( nPage ) == 1, "nPage not valid" );
 #endif
-    const SwPrintUIOptions::ValidStartFramesMap_t &rFrms = rPrintUIOptions.GetValidStartFrms();
+    const SwPrintUIOptions::ValidStartFramesMap_t &rFrms = rPrintData.GetPrintUIOptions().GetValidStartFrms();
     SwPrintUIOptions::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( nPage ) );
     DBG_ASSERT( aIt != rFrms.end(), "failed to find start frame" );
     const SwPageFrm *pStPage = aIt->second;
@@ -1293,7 +1370,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
 
     // ben�tigte Seiten fuers Drucken formatieren
     pShell->CalcPagesForPrint( (USHORT)nPage, 0 /*TLPDF*/, pStr,
-                                nMergeAct, nMergeCnt );
+                                0, 0 /* TLPDF, there is no progressbar right now nMergeAct, nMergeCnt */ );
 
     // Some field types, can require a valid layout
     // (expression fields in tables). For these we do an UpdateFlds
@@ -1301,19 +1378,19 @@ sal_Bool ViewShell::PrintOrPDFExport(
     // --> FME 2004-06-21 #i9684# For performance reasons, we do not update
     //                            the fields during pdf export.
     // #i56195# prevent update of fields (for mail merge)
-    if ( !bIsPDFExport && rOptions.bUpdateFieldsInPrinting )
+    if ( !bIsPDFExport && rPrintData.bUpdateFieldsInPrinting )
     // <--
         pShell->UpdateFlds(TRUE);
 
 // TLPDF   if( !pShell->Imp()->IsStopOutDev() &&
-// TLPDF       ( bIsPDFExport || rOptions.GetJobName().Len() || pOutDev->IsJobActive()) )
+// TLPDF       ( bIsPDFExport || rPrintData.GetJobName().Len() || pOutDev->IsJobActive()) )
     if( /*!pShell->Imp()->IsStopOutDev() && */
-        ( bIsPDFExport || rOptions.GetJobName().Len() /*TLPDF|| pOutDev->IsJobActive()*/) )
+        ( bIsPDFExport || rPrintData.GetJobName().Len() /*TLPDF|| pOutDev->IsJobActive()*/) )
     {
         BOOL bStop = FALSE;
         int nJobStartError = JOBSET_ERR_DEFAULT;
 
-        XubString sJobName( rOptions.GetJobName() );
+        XubString sJobName( rPrintData.GetJobName() );
 
 // HACK: Hier muss von der MultiSelection noch eine akzeptable Moeglichkeit
 // geschaffen werden, alle Seiten von Seite x an zu deselektieren.
@@ -1342,7 +1419,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
             _SetGetExpFlds aPostItFields;
             SwDoc*     pPostItDoc   = 0;
             ViewShell* pPostItShell = 0;
-            if( rOptions.nPrintPostIts != POSTITS_NONE )
+            if( rPrintData.nPrintPostIts != POSTITS_NONE )
             {
                 lcl_GetPostIts( pDoc, aPostItFields );
                 pPostItDoc   = new SwDoc;
@@ -1354,11 +1431,11 @@ sal_Bool ViewShell::PrintOrPDFExport(
                                                pShell->GetViewOptions() );
                 // Wenn PostIts am Dokumentenende gedruckt werden sollen,
                 // die Druckreihenfolge allerdings umgekehrt ist, dann hier
-                if ( ( rOptions.nPrintPostIts == POSTITS_ENDDOC ) &&
-                        rOptions.bPrintReverse )
+                if ( ( rPrintData.nPrintPostIts == POSTITS_ENDDOC ) &&
+                        rPrintData.bPrintReverse )
                         lcl_PrintPostItsEndDoc( pPostItShell, aPostItFields,
                         aMulti, sJobName, bStartJob, nJobStartError,
-                        rOptions.bPrintRightPage, rOptions.bPrintLeftPage, TRUE );
+                        rPrintData.bPrintRightPage, rPrintData.bPrintLeftPage, TRUE );
 
             }
 
@@ -1370,7 +1447,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
             // BOOL bSetPaperSz  = FALSE;
             BOOL bSetPrt      = FALSE;
 
-            if ( rOptions.nPrintPostIts != POSTITS_ONLY )
+            if ( rPrintData.nPrintPostIts != POSTITS_ONLY )
             {
 //TLPDF                while( pStPage && !bStop )
                 {
@@ -1381,7 +1458,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
                     {
                         aOldMapMode = pOutDev->GetMapMode();
                         Point aNewOrigin = pOutDev->GetMapMode().GetOrigin();
-                        aNewOrigin += rOptions.aOffset;
+                        aNewOrigin += rPrintData.aOffset;
                         MapMode aTmp( pOutDev->GetMapMode() );
                         aTmp.SetOrigin( aNewOrigin );
                         pOutDev->SetMapMode( aTmp );
@@ -1437,12 +1514,12 @@ sal_Bool ViewShell::PrintOrPDFExport(
 
                         // Wenn PostIts nach Seite gedruckt werden sollen,
                         // jedoch Reverse eingestellt ist ...
-                        if( rOptions.bPrintReverse &&
-                            rOptions.nPrintPostIts == POSTITS_ENDPAGE )
+                        if( rPrintData.bPrintReverse &&
+                            rPrintData.nPrintPostIts == POSTITS_ENDPAGE )
                                 lcl_PrintPostItsEndPage( pPostItShell, aPostItFields,
                                     nPage /* TLPDF nPageNo*/, aMulti, sJobName, bStartJob, nJobStartError,
-                                    rOptions.bPrintRightPage, rOptions.bPrintLeftPage,
-                                    rOptions.bPrintReverse );
+                                    rPrintData.bPrintRightPage, rPrintData.bPrintLeftPage,
+                                    rPrintData.bPrintReverse );
 
 
                         if( !bStartJob && JOBSET_ERR_DEFAULT == nJobStartError
@@ -1456,7 +1533,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
                             nJobStartError = JOBSET_ERR_ISSTARTET;
                         }
                         // --> FME 2005-12-12 #b6354161# Feature - Print empty pages
-// TLPDF                        if ( rOptions.bPrintEmptyPages || pStPage->Frm().Height() )
+// TLPDF                        if ( rPrintData.bPrintEmptyPages || pStPage->Frm().Height() )
                         // <--
                         {
                             pStPage->GetUpper()->Paint( pStPage->Frm() );
@@ -1464,12 +1541,12 @@ sal_Bool ViewShell::PrintOrPDFExport(
                         SwPaintQueue::Repaint();
 
                         // Wenn PostIts nach Seite gedruckt werden sollen ...
-                        if( (!rOptions.bPrintReverse) &&
-                            rOptions.nPrintPostIts == POSTITS_ENDPAGE )
+                        if( (!rPrintData.bPrintReverse) &&
+                            rPrintData.nPrintPostIts == POSTITS_ENDPAGE )
                                 lcl_PrintPostItsEndPage( pPostItShell, aPostItFields,
                                     nPage /* TLPDF nPageNo */, aMulti, sJobName, bStartJob, nJobStartError,
-                                    rOptions.bPrintRightPage, rOptions.bPrintLeftPage,
-                                    rOptions.bPrintReverse );
+                                    rPrintData.bPrintRightPage, rPrintData.bPrintLeftPage,
+                                    rPrintData.bPrintReverse );
                     }
 
                     // den eventl. fuer Umschlaege modifizierte OutDevOffset wieder
@@ -1483,12 +1560,12 @@ sal_Bool ViewShell::PrintOrPDFExport(
             if (!bStop) // TLPDF: see break above
             {
                 // Wenn PostIts am Dokumentenende gedruckt werden sollen, dann hier machen
-                if( ((rOptions.nPrintPostIts == POSTITS_ENDDOC) && !rOptions.bPrintReverse)
-                    || (rOptions.nPrintPostIts == POSTITS_ONLY) )
+                if( ((rPrintData.nPrintPostIts == POSTITS_ENDDOC) && !rPrintData.bPrintReverse)
+                    || (rPrintData.nPrintPostIts == POSTITS_ONLY) )
                         lcl_PrintPostItsEndDoc( pPostItShell, aPostItFields, aMulti,
                             sJobName, bStartJob, nJobStartError,
-                            rOptions.bPrintRightPage, rOptions.bPrintLeftPage,
-                            rOptions.bPrintReverse );
+                            rPrintData.bPrintRightPage, rPrintData.bPrintLeftPage,
+                            rPrintData.bPrintReverse );
 
                 if( pPostItShell )
                 {
@@ -1496,8 +1573,8 @@ sal_Bool ViewShell::PrintOrPDFExport(
                     delete pPostItShell;        //Nimmt das PostItDoc mit ins Grab.
                 }
 
-                if( bStartJob )
-                    rOptions.bJobStartet = TRUE;
+//TLPDF                if( bStartJob )
+//TLPDF                    rPrintData.bJobStartet = TRUE;
             }   // TLPDF: if (!bStop) see break above
 
     }
@@ -1532,7 +1609,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
 
 
 
-void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, SwPrtOptions& rOptions,
+void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
                          OutputDevice* pOleOut, const Rectangle& rRect )
 {
   //Wir brauchen eine Shell fuer das Drucken. Entweder hat das Doc schon
@@ -1679,7 +1756,7 @@ SwDrawViewSave::~SwDrawViewSave()
 
 
 // OD 09.01.2003 #i6467# - method also called for page preview
-void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
+void ViewShell::PrepareForPrint( const SwPrintData &rOptions )
 {
     // Viewoptions fuer den Drucker setzen
     pOpt->SetGraphic ( TRUE == rOptions.bPrintGraphic );

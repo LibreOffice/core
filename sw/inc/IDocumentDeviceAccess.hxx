@@ -33,7 +33,7 @@
 
  class SfxPrinter;
  class JobSetup;
- struct SwPrintData;
+ class SwPrintData;
  class VirtualDevice;
  class OutputDevice;
 

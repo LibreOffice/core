@@ -33,9 +33,75 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include <vcl/print.hxx>
 
-struct SwPrintData
+#include <set>
+#include <map>
+#include <vector>
+#include <utility>
+
+class SwPageFrm;
+
+////////////////////////////////////////////////////////////
+
+class SwPrintUIOptions : public vcl::PrinterOptionsHelper
 {
+    OutputDevice* m_pLast;
+
+    // pages valid for printing (according to the current settings)
+    // and their respective start frames (see getRendererCount in unotxdoc.cxx)
+    // This set of pages does NOT depend on the 'PageRange' that is used as a printing option!
+    std::set< sal_Int32 > aValidPages;       // the set of possible pages (see StringRangeEnumerator::getRangesFromString )
+    std::map< sal_Int32, const SwPageFrm * > aValidStartFrms;    // the map of start frames for those pages
+
+    // vector of pages and their order to be printed (duplicates and any order allowed!)
+    // (see 'render' in unotxdoc.cxx)
+    std::vector< sal_Int32 > aPagesToPrint;
+
+    // for prospect printing: the pairs of pages to be printed together on a single prospect page.
+    // -1 indicates a half page to be left empty.
+    std::vector< std::pair< sal_Int32, sal_Int32 > >    aPagePairs;
+
+public:
+    SwPrintUIOptions( BOOL bWeb = FALSE );
+    ~SwPrintUIOptions();
+
+    bool processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp );
+
+    typedef std::map< sal_Int32, const SwPageFrm * >            ValidStartFramesMap_t;
+    typedef std::vector< std::pair< sal_Int32, sal_Int32 > >    PagePairsVec_t;
+
+    std::set< sal_Int32 > &             GetValidPagesSet()          { return aValidPages; }
+    const std::set< sal_Int32 > &       GetValidPagesSet() const    { return aValidPages; }
+    ValidStartFramesMap_t &             GetValidStartFrms()         { return aValidStartFrms; }
+    const ValidStartFramesMap_t &       GetValidStartFrms() const   { return aValidStartFrms; }
+
+    // used for 'normal' printing
+    std::vector< sal_Int32 > &          GetPagesToPrint()           { return aPagesToPrint; }
+    const std::vector< sal_Int32 > &    GetPagesToPrint() const     { return aPagesToPrint; }
+
+    // used for prospect printing only
+    PagePairsVec_t &                    GetPagePairsForProspectPrinting()           { return aPagePairs; }
+    const PagePairsVec_t &              GetPagePairsForProspectPrinting() const     { return aPagePairs; }
+
+    bool IsPrintLeftPages() const;
+    bool IsPrintRightPages() const;
+    bool IsPrintEmptyPages( bool bIsPDFExport ) const;
+    bool IsPrintTables() const;
+    bool IsPrintGraphics() const;
+    bool IsPrintDrawings() const;
+};
+
+
+////////////////////////////////////////////////////////////
+
+
+class SwPrintData
+{
+    const SwPrintUIOptions *  m_pPrintUIOptions;
+
+public:
+
     sal_Bool bPrintGraphic, bPrintTable, bPrintDraw, bPrintControl, bPrintPageBackground,
              bPrintBlackFont,
              //#i81434# - printing of hidden text
@@ -55,6 +121,8 @@ struct SwPrintData
 
     SwPrintData()
     {
+        m_pPrintUIOptions       = NULL;
+
         bPrintGraphic           =
         bPrintTable             =
         bPrintDraw              =
@@ -103,6 +171,12 @@ struct SwPrintData
         bPrintHiddenText       ==   rData.bPrintHiddenText &&
         bPrintTextPlaceholder   ==   rData.bPrintTextPlaceholder;
     }
+
+    // Note:  int the conntext where this class ist used the pointer should always be valid
+    // during the lifetime of this object
+    const SwPrintUIOptions &    GetPrintUIOptions() const       { return *m_pPrintUIOptions; }
+    void SetPrintUIOptions( const SwPrintUIOptions *pOpt )      { m_pPrintUIOptions = pOpt; }
+
     sal_Bool IsPrintGraphic()   const { return bPrintGraphic; }
     sal_Bool IsPrintTable()     const { return bPrintTable; }
     sal_Bool IsPrintDraw()      const { return bPrintDraw; }
@@ -139,8 +213,11 @@ struct SwPrintData
     void SetFaxName(const rtl::OUString& rSet){sFaxName = rSet;}
     void SetPrintHiddenText(sal_Bool b){ doSetModified(); bPrintHiddenText = b;}
     void SetPrintTextPlaceholder(sal_Bool b){ doSetModified(); bPrintTextPlaceholder = b;}
+
     virtual void doSetModified () { bModified = sal_True;}
 };
+
+////////////////////////////////////////////////////////////
 
 #endif  //_SW_PRINTDATA_HXX
 

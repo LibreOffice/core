@@ -447,18 +447,30 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
     pFntCache->Flush();
 }
 
+
+void ViewShell::PrintProspectMM(
+    const boost::shared_ptr< vcl::PrinterController > & rpPrinterController,
+    const SwPrintData & rPrintData,
+    bool bProspectRTL )
+{
+    (void) rpPrinterController; (void) rPrintData; (void) bProspectRTL;
+
+    Printer::PrintJob( rpPrinterController, JobSetup() );
+}
+
+
 // print brochure
 // OD 05.05.2003 #i14016# - consider empty pages on calculation of the scaling
 // for a page to be printed.
 void ViewShell::PrintProspect( 
     OutputDevice* pOutDev,
-    SwPrtOptions& rOptions,
-    const SwPrintUIOptions & rPrintUIOptions, /* TLPDF keep this or the above? */
-    sal_Int32 nRenderer )
+    const SwPrintData & rPrintData,
+    sal_Int32 nRenderer // the index in the vector of prospect pages to be printed
+    )
 {
 // TLPDF   if( !rOptions.aMulti.GetSelectCount() )
     Printer *pPrinter = dynamic_cast< Printer * >(pOutDev);
-    if (!pPrinter || rPrintUIOptions.GetPagePairsForProspectPrinting().size() <= 0)
+    if (!pPrinter || rPrintData.GetPrintUIOptions().GetPagePairsForProspectPrinting().size() <= 0)
         return;
 
 #ifdef TL_NOT_NOW /*TLPDF*/
@@ -475,15 +487,15 @@ void ViewShell::PrintProspect(
 
 /* TLPDF neu: start */
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( 0 <= nRenderer && nRenderer < (sal_Int32)rPrintUIOptions.GetPagePairsForProspectPrinting().size(), "nRenderer out of bounds");
+    DBG_ASSERT( 0 <= nRenderer && nRenderer < (sal_Int32)rPrintData.GetPrintUIOptions().GetPagePairsForProspectPrinting().size(), "nRenderer out of bounds");
 #endif
     std::pair< sal_Int32, sal_Int32 > rPagesToPrint =
-            rPrintUIOptions.GetPagePairsForProspectPrinting()[ nRenderer ];
+            rPrintData.GetPrintUIOptions().GetPagePairsForProspectPrinting()[ nRenderer ];
     const USHORT nPageMax = static_cast< USHORT >(rPagesToPrint.first > rPagesToPrint.second ?
             rPagesToPrint.first : rPagesToPrint.second);
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( rPagesToPrint.first  == -1 || rPrintUIOptions.GetValidPagesSet().count( rPagesToPrint.first ) == 1, "first Page not valid" );
-    DBG_ASSERT( rPagesToPrint.second == -1 || rPrintUIOptions.GetValidPagesSet().count( rPagesToPrint.second ) == 1, "second Page not valid" );
+    DBG_ASSERT( rPagesToPrint.first  == -1 || rPrintData.GetPrintUIOptions().GetValidPagesSet().count( rPagesToPrint.first ) == 1, "first Page not valid" );
+    DBG_ASSERT( rPagesToPrint.second == -1 || rPrintData.GetPrintUIOptions().GetValidPagesSet().count( rPagesToPrint.second ) == 1, "second Page not valid" );
 #endif
 /* TLPDF neu: end */
 
@@ -509,7 +521,7 @@ void ViewShell::PrintProspect(
 
     SET_CURR_SHELL( &aShell );
 
-    aShell.PrepareForPrint( rOptions );
+    aShell.PrepareForPrint( rPrintData );
 
     // gibt es versteckte Absatzfelder, unnoetig wenn die Absaetze bereits
     // ausgeblendet sind.
@@ -541,7 +553,7 @@ void ViewShell::PrintProspect(
 
 #ifdef TL_NOT_NOW /*TLPDF*/
    should not happen any more since the test
-        rPrintUIOptions.GetPagePairsForProspectPrinting().size() <= 0
+        rPrintData.GetPagePairsForProspectPrinting().size() <= 0
    above should have taken care that there is at least one page to print
    if( !pStPage )          // dann wars das
     {
@@ -680,7 +692,7 @@ void ViewShell::PrintProspect(
 /* TLPDF neu: start */
             const SwPageFrm *pStPage    = 0;
             const SwPageFrm *pNxtPage   = 0;
-            const SwPrintUIOptions::ValidStartFramesMap_t &rFrms = rPrintUIOptions.GetValidStartFrms();
+            const SwPrintUIOptions::ValidStartFramesMap_t &rFrms = rPrintData.GetPrintUIOptions().GetValidStartFrms();
             if (rPagesToPrint.first > 0)
             {
                 SwPrintUIOptions::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( rPagesToPrint.first ) );

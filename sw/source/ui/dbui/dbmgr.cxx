@@ -79,7 +79,8 @@
 #include <svtools/zformat.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/eitem.hxx>
-#include <sfx2/printer.hxx>
+#include <vcl/oldprintadaptor.hxx>
+//#include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/dispatch.hxx>
@@ -877,11 +878,11 @@ SwNewDBMgr::~SwNewDBMgr()
  --------------------------------------------------------------------*/
 
 
-BOOL SwNewDBMgr::MergePrint( SwView& rView,
-                             SwPrtOptions& rOpt, SfxProgress& rProgress, BOOL bIsAPI )
+BOOL SwNewDBMgr::MergePrint( SwView& /*rView*/,
+                             SwPrtOptions& /*rOpt*/, SfxProgress& /*rProgress*/, BOOL /*bIsAPI*/ )
 {
-    (void) rView;  (void) rOpt;  (void) rProgress;  (void) bIsAPI;  /* TLPDF */
-#ifdef TL_NOT_NOW /*TLPDF*/  //!! Currently broken beyond repair since we will not have a printer
+    return TRUE;
+#ifdef TL_NOT_NOW /*TLPDF*/
     SwWrtShell* pSh = &rView.GetWrtShell();
     //check if the doc is synchronized and contains at least one linked section
     BOOL bSynchronizedDoc = pSh->IsLabelDoc() && pSh->GetSectionFmtCount() > 1;
@@ -904,12 +905,12 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
     pModOpt->SetSinglePrintJob(rOpt.IsPrintSingleJobs());
 
-    SfxPrinter *pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( false );
-#ifdef TL_NOT_NOW /*TLPDF*/
-    Link aSfxSaveLnk = pPrt->GetEndPrintHdl();
-    if( rOpt.IsPrintSingleJobs()  )
-        pPrt->SetEndPrintHdl( Link() );
-#endif
+//TLPDF    SfxPrinter *pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( false );
+    const boost::shared_ptr< Printer > pPrt( new Printer /* Printer( const JobSetup& rJobSetup ) */ );     // TLPDF
+    vcl::OldStylePrintAdaptor aPrtAdaptor( pPrt );                    // TLPDF
+//TLPDF   Link aSfxSaveLnk = pPrt->GetEndPrintHdl();
+//TLPDF    if( rOpt.IsPrintSingleJobs()  )
+//TLPDF     pPrt->SetEndPrintHdl( Link() );
 
     BOOL bUserBreak = FALSE,
          bRet = FALSE;
@@ -986,23 +987,27 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
                                        String( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
                     pPrt->StartJob( rOpt.GetJobName() );
                 }
-#endif
                 if( pPrt->IsJobActive() )
                 {
-                    pSh->PrintProspect( rOpt, rProgress, rOpt.IsPrintProspect_RTL() );
+                    pSh->PrintProspectMM( aPrtAdaptor, rOpt, rOpt.IsPrintProspect_RTL() );  /* TLPDF */
                     bRet = TRUE;
                 }
+#endif  // TL_NOT_NOW /*TLPDF*/
+                pSh->PrintProspectMM( aPrtAdaptor, rOpt, rOpt.IsPrintProspect_RTL() );  // TLPDF
+                bRet = TRUE;                                                        // TLPDF
             }
-            else if( pSh->Prt( pPrt, rOpt, &rProgress ) )   /* TLPDF */
+            else if( pSh->PrintOrPDFExportMM( aPrtAdaptor, rOpt ) /* TLPDF */ )
                 bRet = TRUE;
             bMergeLock = FALSE;
 
+#ifdef TL_NOT_NOW /*TLPDF*/
             if( !pPrt->IsJobActive() )
             {
                 bUserBreak = TRUE;
                 bRet = FALSE;
                 break;
             }
+#endif  // TL_NOT_NOW /*TLPDF*/
             if( !rOpt.IsPrintSingleJobs() )
             {
                 String& rJNm = (String&)rOpt.GetJobName();
@@ -1012,15 +1017,16 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
         nEndRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
     } while( bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord());
 
-#ifdef TL_NOT_NOW /*TLPDF*/
     if( rOpt.IsPrintSingleJobs() )
     {
-        SfxPrinter* pTmpPrinter = pSh->getIDocumentDeviceAccess()->getPrinter( true );
-        pTmpPrinter->SetEndPrintHdl( aSfxSaveLnk );
-        if ( !bUserBreak && !pTmpPrinter->IsJobActive() )        //Schon zu spaet?
-            aSfxSaveLnk.Call( pTmpPrinter );
+//TLPDF        SfxPrinter* pTmpPrinter = pSh->getIDocumentDeviceAccess()->getPrinter( true );
+//TLPDF        const boost::shared_ptr< Printer > pTmpPrinter( new Printer /* Printer( const JobSetup& rJobSetup ) */ );     // TLPDF
+//TLPDF        vcl::OldStylePrintAdaptor aPrtAdaptor( pTmpPrinter );
+                            // TLPDF
+//TLPDF        pTmpPrinter->SetEndPrintHdl( aSfxSaveLnk );
+//TLPDF        if ( !bUserBreak && !pTmpPrinter->IsJobActive() )        //Schon zu spaet?
+//TLPDF            aSfxSaveLnk.Call( pTmpPrinter );
     }
-#endif
 
     rOpt.nMergeCnt = 0;
     rOpt.nMergeAct = 0;
@@ -1039,29 +1045,28 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
     }
 
     return bRet;
-#endif // TL_NOT_NOW /*TLPDF*/  //!! Currently broken beyond repair since we will not have a printer
-    return TRUE; /* TLPDF */
+#endif // TL_NOT_NOW /*TLPDF*/
 }
 /*-- 21.06.2004 09:08:16---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
-                                SwPrtOptions& rOpt, SfxProgress& rProgress, BOOL bIsAPI )
+BOOL SwNewDBMgr::MergePrintDocuments( SwView& /*rView*/,
+                                SwPrtOptions& /*rOpt*/, SfxProgress& /*rProgress*/, BOOL /*bIsAPI*/ )
 {
-    (void) rView;  (void) rOpt;  (void) rProgress;  (void) bIsAPI;  /* TLPDF */
-#ifdef TL_NOT_NOW /*TLPDF*/  //!! Currently broken beyond repair since we will not have a printer
+    return TRUE;
+#ifdef TL_NOT_NOW /*TLPDF*/
     SwWrtShell* pSh = &rView.GetWrtShell();
     //check if the doc is synchronized and contains at least one linked section
     //merge source is already open
     rOpt.nMergeCnt = 0;
     rOpt.SetPrintSingleJobs( sal_True );
 
-    SfxPrinter *pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( false );
-#ifdef TL_NOT_NOW /*TLPDF*/
-    Link aSfxSaveLnk = pPrt->GetEndPrintHdl();
-    if( rOpt.IsPrintSingleJobs()  )
-        pPrt->SetEndPrintHdl( Link() );
-#endif
+//TLPDF    SfxPrinter *pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( false );
+    const boost::shared_ptr< Printer > pPrt( new Printer /* Printer( const JobSetup& rJobSetup ) */ );     // TLPDF
+    vcl::OldStylePrintAdaptor aPrtAdaptor( pPrt );                    // TLPDF
+//TLPDF    Link aSfxSaveLnk = pPrt->GetEndPrintHdl();
+//TLPDF    if( rOpt.IsPrintSingleJobs()  )
+//TLPDF        pPrt->SetEndPrintHdl( Link() );
 
     BOOL bUserBreak = FALSE,
          bRet = FALSE;
@@ -1152,17 +1157,13 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
         bMergeLock = TRUE;
         if(rOpt.IsPrintProspect())
         {
-            if( pPrt->IsJobActive()
-#ifdef TL_NOT_NOW /*TLPDF*/
-               || pPrt->StartJob( rOpt.GetJobName() )
-#endif
-               )
-            {
-                pSh->PrintProspect( rOpt, rProgress,  rOpt.IsPrintProspect_RTL() );
+//TLPDF            if( pPrt->IsJobActive() || pPrt->StartJob( rOpt.GetJobName() ))
+//TLPDF            {
+                pSh->PrintProspectMM( aPrtAdaptor, rOpt, rOpt.IsPrintProspect_RTL() );
                 bRet = TRUE;
-            }
+//TLPDF            }
         }
-        else if( pSh->Prt( pPrt, rOpt, &rProgress ) )   /* TLPDF */
+        else if( pSh->PrintOrPDFExportMM( aPrtAdaptor, rOpt ) /* TLPDF */ )
             bRet = TRUE;
         bMergeLock = FALSE;
 
@@ -1179,15 +1180,15 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
         }
     }
 
-#ifdef TL_NOT_NOW /*TLPDF*/
     if( rOpt.IsPrintSingleJobs() )
     {
+#ifdef TL_NOT_NOW /*TLPDF*/
         SfxPrinter* pTmpPrinter = pSh->getIDocumentDeviceAccess()->getPrinter( true );
         pTmpPrinter->SetEndPrintHdl( aSfxSaveLnk );
         if ( !bUserBreak && !pTmpPrinter->IsJobActive() )     //Schon zu spaet?
             aSfxSaveLnk.Call( pTmpPrinter );
+#endif  // TL_NOT_NOW /*TLPDF*/
     }
-#endif
 
     rOpt.nMergeCnt = 0;
     rOpt.nMergeAct = 0;
@@ -1206,8 +1207,7 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
     }
 
     return bRet;
-#endif // TL_NOT_NOW /*TLPDF*/  //!! Currently broken beyond repair since we will not have a printer
-    return TRUE; /* TLPDF */
+#endif // TL_NOT_NOW /*TLPDF*/
 }
 
 

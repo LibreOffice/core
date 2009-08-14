@@ -88,7 +88,7 @@ class SwPrtOptions;
 class SwTransferable;
 class SwMailMergeConfigItem;
 class SwTxtNode; // #i23726#
-struct SwPrintData;
+class SwPrintData;
 class SwFormatClipboard;
 struct SwConversionArgs;
 class Graphic;

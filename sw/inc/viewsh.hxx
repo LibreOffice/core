@@ -71,7 +71,7 @@ class SfxViewShell;
 class SwViewOption;
 class SwViewImp;
 class SwPrtOptions;
-class SwPrintUIOptions;
+class SwPrintData;
 class SwPagePreViewPrtData;
 class Window;
 class OutputDevice;
@@ -94,11 +94,18 @@ class SwPostItMgr;
 // #i74769#
 class SdrPaintWindow;
 
+namespace vcl
+{
+    class PrinterController;
+};
+
+
 //JP 19.07.98: - Bug 52312
 // define fuer Flags, die im CTOR oder den darunter liegenden Schichten
 // benoetigt werden.
 // Zur Zeit wird fuer die DrawPage das PreView Flag benoetigt
 #define VSHELLFLAG_ISPREVIEW            ((long)0x1)
+
 
 class SW_DLLPUBLIC ViewShell : public Ring
 {
@@ -188,7 +195,7 @@ class SW_DLLPUBLIC ViewShell : public Ring
     SW_DLLPRIVATE void Scroll();    //Scrollen wenn sich aus der LayAction Scrollmoeglichkeiten
                     //ergaben.
 
-    SW_DLLPRIVATE void PrepareForPrint( const SwPrtOptions &rOptions );
+    SW_DLLPRIVATE void PrepareForPrint( const SwPrintData &rOptions );
 
     SW_DLLPRIVATE void ImplApplyViewOptions( const SwViewOption &rOpt );
 
@@ -363,20 +370,27 @@ public:
     void   ChgAllPageOrientation( sal_uInt16 eOri );
     void   ChgAllPageSize( Size &rSz );
 
-    //Druckauftrag abwickeln.
+    // printing of one page.
     // bIsPDFExport == true is: do PDF Export (no printing!)
-    sal_Bool PrintOrPDFExport( OutputDevice* pOutDev, SwPrtOptions& rOptions,
-            const SwPrintUIOptions &rPrintUIOptions,
+    sal_Bool PrintOrPDFExport( OutputDevice *pOutDev, const SwPrtOptions &rPrintData,
             sal_Int32 nRenderer, /* offset in vector of pages to print */
             bool bIsPDFExport = sal_False );
 
-    // Prospekt-Format drucken
-    void PrintProspect( OutputDevice* pOutDev, SwPrtOptions& rOptions,
-            const SwPrintUIOptions &rPrintUIOptions,
-            sal_Int32 nRenderer /* offset in vector of page pairs for prospect  */ );
+    // printing of one brochure page
+    void PrintProspect( OutputDevice *pOutDev, const SwPrintData &rPrintData,
+            sal_Int32 nRenderer /* offset in vector of page pairs for prospect printing */ );
 
-    //"Drucken" fuer OLE 2.0
-    static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, SwPrtOptions& rOptions,
+    // printing of a complete document for mail merge
+    // bIsPDFExport == true is: do PDF Export (no printing!)
+    sal_Bool PrintOrPDFExportMM( const boost::shared_ptr< vcl::PrinterController > & rpPrinterController,
+            const SwPrtOptions &rPrintData, bool bIsPDFExport = sal_False );
+
+    // printing of a complete brochure for mail merge
+    void PrintProspectMM( const boost::shared_ptr< vcl::PrinterController > & rpPrinterController,
+            const SwPrintData &rPrintData, bool bProspectRTL );
+
+    // printing for OLE 2.0
+    static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
                          OutputDevice* pOleOut, const Rectangle& rRect );
 
     // creates temporary doc with selected text for PDF export

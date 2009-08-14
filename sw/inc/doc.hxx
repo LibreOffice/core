@@ -208,7 +208,8 @@ struct SwDocStat;
 struct SwHash;
 struct SwSortOptions;
 struct SwDefTOXBase_Impl;
-struct SwPrintData;
+class SwPrintData;
+class SwPrintUIOptions;
 class SdrPageView;
 struct SwConversionArgs;
 class SwRewriter;
@@ -216,7 +217,7 @@ class SwMsgPoolItem;
 class SwChartDataProvider;
 class SwChartLockController_Helper;
 class IGrammarContact;
-class SwPrintUIOptions;
+class SwPrintData;
 class SwPageFrm;
 
 namespace sw { namespace mark {
@@ -1335,9 +1336,9 @@ public:
 
     // get the set of printable pages for the XRenderable API by
     // evaluating the respective settings (see implementation)
-    void CalculatePagesForPrinting( bool bIsPDFExport, SwPrintUIOptions &rPrintUIOptions,
+    void CalculatePagesForPrinting( bool bIsPDFExport, SwPrintUIOptions &rOptions,
             sal_Int32 nDocPageCount );
-    void CalculatePagePairsForProspectPrinting( SwPrintUIOptions &rPrintUIOptions,
+    void CalculatePagePairsForProspectPrinting( SwPrintUIOptions &rOptions,
             sal_Int32 nDocPageCount );
 
     sal_uInt16 GetPageCount() const;

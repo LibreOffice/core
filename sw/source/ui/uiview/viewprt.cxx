@@ -47,6 +47,7 @@
 #endif
 #include <sfx2/request.hxx>
 
+#include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/flagitem.hxx>
 #include <vcl/msgbox.hxx>
@@ -174,9 +175,8 @@ USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool  )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-ErrCode SwView::DoPrint( SfxPrinter* /*pPrinter*/, PrintDialog* /*pDlg*/, BOOL /*bSilent*/, BOOL /*bIsAPI*/ )
+ErrCode SwView::DoPrint( SfxPrinter* pPrinter, PrintDialog* pDlg, BOOL bSilent, BOOL bIsAPI )
 {
-    #if 0
     // First test
     SwWrtShell* pSh = &GetWrtShell();
     SwNewDBMgr* pMgr = pSh->GetNewDBMgr();
@@ -200,10 +200,10 @@ ErrCode SwView::DoPrint( SfxPrinter* /*pPrinter*/, PrintDialog* /*pDlg*/, BOOL /
     }
 
 //  Der PrintProgress stellt Handler am Printer der ViewShell ein.
-//  Das kann natuerlich erste nach dem evtl. Umschalten des Druckers korrekt
+//  Das kann natuerlich erst nach dem evtl. Umschalten des Druckers korrekt
 //  funktionieren. #55210#
 //  SfxPrintProgress *pProgress = new SfxPrintProgress( this, !bSilent );
-    SfxPrintProgress *pProgress = 0;
+    /* TLPDF SfxPrintProgress */ SfxProgress *pProgress = 0;
     SfxPrinter *pDocPrinter = GetPrinter(TRUE);
     if ( !pPrinter )
         pPrinter = pDocPrinter;
@@ -211,13 +211,17 @@ ErrCode SwView::DoPrint( SfxPrinter* /*pPrinter*/, PrintDialog* /*pDlg*/, BOOL /
     {
         //Da der Doc-Drucker beim SetPrinter geloescht wird,
         // muss man ihn vorher clonen
-        SfxPrinter* pClone = pDocPrinter->Clone();
-        SetPrinter( pPrinter, SFX_PRINTER_PRINTER );
-        pProgress = new SfxPrintProgress( this, !bSilent );
-        pProgress->RestoreOnEndPrint( pClone );
+//TLPDF     SfxPrinter* pClone = pDocPrinter->Clone();
+//TLPDF     SetPrinter( pPrinter, SFX_PRINTER_PRINTER );
+//TLPDF        pProgress = new SfxPrintProgress( this, !bSilent );
+//TLPDF        pProgress->RestoreOnEndPrint( pClone );
     }
     if(!pProgress)
-        pProgress = new SfxPrintProgress( this, !bSilent );
+//TLPDF       pProgress = new SfxPrintProgress( this, !bSilent );
+    {
+        SfxObjectShell *pObjShell = GetViewFrame()->GetObjectShell();   // TLPDF ??
+        pProgress = new SfxProgress( pObjShell, String(), 1 );       // TLPDF ??
+    }
     pProgress->SetWaitMode(FALSE);
 
     BOOL bStartJob = pPrinter->InitJob( &GetEditWin(),
@@ -384,16 +388,16 @@ ErrCode SwView::DoPrint( SfxPrinter* /*pPrinter*/, PrintDialog* /*pDlg*/, BOOL /
             SetAdditionalPrintOptions(aViewProperties);
 
             SfxViewShell::Print(*pProgress, bIsAPI );
-            if ( !pProgress->IsAborted() )
+//TLPDF           if ( !pProgress->IsAborted() )
             {
                 if( bPrtPros )
                 {
-                    bStartJob = pPrinter->StartJob( aOpts.GetJobName() );
-                    if( bStartJob )
-                        pSh->PrintProspect( aOpts, *pProgress, bPrtPros_RTL );
+//TLPDF                   bStartJob = pPrinter->StartJob( aOpts.GetJobName() );
+//TLPDF                 if( bStartJob )
+                       pSh->PrintProspectMM( aPrtAdaptor, aOpts, bPrtPros_RTL );  /* TLPDF */
                 }
                 else
-                    bStartJob = pSh->Prt( pPrinter, aOpts, pProgress );   /*TLPDF*/
+                    bStartJob = pSh->PrintOrPDFExportMM( aPrtAdaptor, aOpts );   /*TLPDF*/
 
                 if ( bBrowse )
                 {
@@ -404,8 +408,8 @@ ErrCode SwView::DoPrint( SfxPrinter* /*pPrinter*/, PrintDialog* /*pDlg*/, BOOL /
                     pSh->UnlockPaint();
                 }
             }
-            else
-                bStartJob = FALSE;
+//TLPDF           else
+//TLPDF             bStartJob = FALSE;
 
             pSh->LockView( bLockedView );
         }
@@ -432,13 +436,9 @@ ErrCode SwView::DoPrint( SfxPrinter* /*pPrinter*/, PrintDialog* /*pDlg*/, BOOL /
     }
 
     pProgress->Stop();
-    pProgress->DeleteOnEndPrint();
-    pPrinter->EndJob();
+//TLPDF   pProgress->DeleteOnEndPrint();
+//TLPDF   pPrinter->EndJob();
     return pPrinter->GetError();
-    #else
-    DBG_ERROR( "dead code" );
-    return ERRCODE_IO_NOTSUPPORTED;
-    #endif
 }
 
 

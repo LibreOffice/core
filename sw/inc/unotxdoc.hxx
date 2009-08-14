@@ -127,6 +127,7 @@ class SwUnoCrsr;
 class SwXDocumentPropertyHelper;
 class SfxViewFrame;
 class SwPrintUIOptions;
+class SwPrintData;
 
 typedef UnoActionContext* UnoActionContextPtr;
 SV_DECL_PTRARR(ActionContextArr, UnoActionContextPtr, 4, 4)
@@ -216,11 +217,11 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
     css::uno::Reference< css::container::XNameContainer>        xXFormsContainer;
 
     //temporary frame to enable PDF export if no valid view is available
-    SfxViewFrame*                                                                       m_pHiddenViewFrame;
-    css::uno::Reference< css::uno::XInterface>                    xPropertyHelper;
-    SwXDocumentPropertyHelper*                                                              pPropertyHelper;
+    SfxViewFrame*                                   m_pHiddenViewFrame;
+    css::uno::Reference< css::uno::XInterface>      xPropertyHelper;
+    SwXDocumentPropertyHelper*                      pPropertyHelper;
 
-    SwPrintUIOptions*                                                                   m_pPrintUIOptions;
+    SwPrintUIOptions*                               m_pPrintUIOprions;
 
     void                    GetBodyText();
     void                    GetNumberFormatter();

@@ -993,7 +993,7 @@ const SwDocStat& SwDoc::GetDocStat() const
 
 void SwDoc::CalculatePagesForPrinting(
     bool bIsPDFExport,
-    SwPrintUIOptions &rPrintUIOptions,
+    SwPrintUIOptions &rOptions,
     sal_Int32 nDocPageCount )
 {
     DBG_ASSERT( pLayout, "no layout present" );
@@ -1001,22 +1001,12 @@ void SwDoc::CalculatePagesForPrinting(
         return;
 
     // properties to take into account when calcualting the set of pages
-    bool bPrintLeftPage   = rPrintUIOptions.IsPrintLeftPages();
-    bool bPrintRightPage  = rPrintUIOptions.IsPrintRightPages();
+    // (PDF export UI does not allow for selecting left or right pages only)
+    bool bPrintLeftPages    = bIsPDFExport ? true : rOptions.IsPrintLeftPages();
+    bool bPrintRightPages   = bIsPDFExport ? true : rOptions.IsPrintRightPages();
     // TLPDF, TODO: remove bPrintReverse, should be handled by PLs framework now
-//TLPDF    bool bPrintReverse    = rPrintUIOptions.getBoolValue( C2U( "PrintReverseOrder" ), false );
-    bool bPrintEmptyPages = rPrintUIOptions.getBoolValue( "PrintEmptyPages",   false );
-
-    if (bIsPDFExport)
-    {
-        // PDF export UI does not allow for selecting left or right pages only or reverse print
-        bPrintLeftPage   = true;
-        bPrintRightPage  = true;
-//        bPrintReverse    = false;
-        // TLPDF, TODO; take care of the option 'Export automatically inserted blank pages'
-        // from the 'Export as PDF' (aka PDF Options) dialog.
-        bPrintEmptyPages = false;
-    }
+//TLPDF    bool bPrintReverse    = rOptions.getBoolValue( C2U( "PrintReverseOrder" ), false );
+    bool bPrintEmptyPages   = rOptions.IsPrintEmptyPages( bIsPDFExport );
 
     Range aPages( 1, nDocPageCount );
 
@@ -1088,16 +1078,16 @@ void SwDoc::CalculatePagesForPrinting(
 #endif  // TL_NOT_NOW /*TLPDF*/
             nPageNo = nFirstPageNo;
 
-        std::set< sal_Int32 > &rValidPages = rPrintUIOptions.GetValidPagesSet();
-        std::map< sal_Int32, const SwPageFrm * > &rValidStartFrms = rPrintUIOptions.GetValidStartFrms();
+        std::set< sal_Int32 > &rValidPages = rOptions.GetValidPagesSet();
+        std::map< sal_Int32, const SwPageFrm * > &rValidStartFrms = rOptions.GetValidStartFrms();
         rValidPages.clear();
         rValidStartFrms.clear();
         while ( pStPage )
         {
             const BOOL bRightPg = pStPage->OnRightPage();
             if ( aMulti.IsSelected( nPageNo ) &&
-                ( (bRightPg && bPrintRightPage) ||
-                    (!bRightPg && bPrintLeftPage) ) )
+                ( (bRightPg && bPrintRightPages) ||
+                    (!bRightPg && bPrintLeftPages) ) )
             {
                 // --> FME 2005-12-12 #b6354161# Feature - Print empty pages
                 if ( bPrintEmptyPages || pStPage->Frm().Height() )
@@ -1130,18 +1120,18 @@ void SwDoc::CalculatePagesForPrinting(
 
 
 void SwDoc::CalculatePagePairsForProspectPrinting(
-    SwPrintUIOptions &rPrintUIOptions,
+    SwPrintUIOptions &rOptions,
     sal_Int32 nDocPageCount )
 {
-    std::set< sal_Int32 > &rValidPagesSet   = rPrintUIOptions.GetValidPagesSet();
-    std::map< sal_Int32, const SwPageFrm * > &rValidStartFrms  = rPrintUIOptions.GetValidStartFrms();
-    std::vector< std::pair< sal_Int32, sal_Int32 > > &rPagePairs = rPrintUIOptions.GetPagePairsForProspectPrinting();
+    std::set< sal_Int32 > &rValidPagesSet   = rOptions.GetValidPagesSet();
+    std::map< sal_Int32, const SwPageFrm * > &rValidStartFrms  = rOptions.GetValidStartFrms();
+    std::vector< std::pair< sal_Int32, sal_Int32 > > &rPagePairs = rOptions.GetPagePairsForProspectPrinting();
 
     rPagePairs.clear();
     rValidPagesSet.clear();
     rValidStartFrms.clear();
 
-    rtl::OUString aPageRange = rPrintUIOptions.getStringValue( "PageRange", rtl::OUString() );
+    rtl::OUString aPageRange = rOptions.getStringValue( "PageRange", rtl::OUString() );
     StringRangeEnumerator aRange( aPageRange, 1, nDocPageCount, 0 );
 
     DBG_ASSERT( pLayout, "no layout present" );
@@ -1170,14 +1160,14 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     DBG_ASSERT( nPageNum == nDocPageCount, "unexpected number of pages" );
 
     // properties to take into account when calcualting the set of pages
-    // Note: here bPrintLeftPage and bPrintRightPage refer to the (virtual) resulting pages
+    // Note: here bPrintLeftPages and bPrintRightPages refer to the (virtual) resulting pages
     //      of the prospect!
-    bool bPrintLeftPage     = rPrintUIOptions.IsPrintLeftPages();
-    bool bPrintRightPage    = rPrintUIOptions.IsPrintRightPages();
+    bool bPrintLeftPages     = rOptions.IsPrintLeftPages();
+    bool bPrintRightPages    = rOptions.IsPrintRightPages();
     // TLPDF, TODO: remove bPrintReverse, should be handled by PLs framework now
-//TLPDF    bool bPrintReverse      = rPrintUIOptions.getBoolValue( C2U( "PrintReverseOrder" ), false );
-    // TLPDF: this one seems not to be used in prospect printing: bool bPrintEmptyPages   = rPrintUIOptions.getBoolValue( C2U( "PrintEmptyPages" ),   false );
-    bool bPrintProspect_RTL = rPrintUIOptions.getIntValue( "PrintBrochureRTL",  0 ) ? true : false;
+//TLPDF    bool bPrintReverse      = rOptions.getBoolValue( C2U( "PrintReverseOrder" ), false );
+    // TLPDF: this one seems not to be used in prospect printing: bool bPrintEmptyPages   = rOptions.getBoolValue( C2U( "PrintEmptyPages" ),   false );
+    bool bPrintProspect_RTL = rOptions.getIntValue( "PrintBrochureRTL",  0 ) ? true : false;
 
     // get pages for prospect printing according to the 'PageRange'
     // (duplicates and any order allowed!)
@@ -1247,9 +1237,9 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     if ( 0 == (nEPg & 1 ))      // ungerade gibt es nicht!
         --nEPg;
 
-    if ( !bPrintLeftPage )
+    if ( !bPrintLeftPages )
         ++nStep;
-    else if ( !bPrintRightPage )
+    else if ( !bPrintRightPages )
     {
         ++nStep;
         ++nSPg, --nEPg;
