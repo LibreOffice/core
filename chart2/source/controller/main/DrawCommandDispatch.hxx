@@ -34,6 +34,8 @@
 
 #include <tools/solar.h>
 
+class SdrObject;
+
 //.............................................................................
 namespace chart
 {
@@ -72,6 +74,7 @@ protected:
 
 private:
     void setInsertObj( USHORT eObj, const ::rtl::OUString& rShapeType = ::rtl::OUString() );
+    SdrObject* createDefaultObject( const sal_uInt16 nID );
 
     ChartController* m_pChartController;
 };

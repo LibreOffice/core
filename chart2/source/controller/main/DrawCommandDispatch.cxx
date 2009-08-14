@@ -34,14 +34,48 @@
 #include "DrawCommandDispatch.hxx"
 #include "ChartController.hxx"
 #include "DrawViewWrapper.hxx"
+#include "chartview/DrawModelWrapper.hxx"
+#include "macros.hxx"
 
+#include <vos/mutex.hxx>
+#include <vcl/svapp.hxx>
+#include <svx/svdopath.hxx>
+#include <svx/svdpage.hxx>
 #include <svx/svxids.hrc>
+#include <svx/unoapi.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+
+#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
+
+
+//.............................................................................
+namespace
+{
+//.............................................................................
+
+    // comparing two PropertyValue instances
+    struct PropertyValueCompare : public ::std::binary_function< beans::PropertyValue, ::rtl::OUString, bool >
+    {
+        bool operator() ( const beans::PropertyValue& rPropValue, const ::rtl::OUString& rName ) const
+        {
+            return rPropValue.Name.equals( rName );
+        }
+        bool operator() ( const ::rtl::OUString& rName, const beans::PropertyValue& rPropValue ) const
+        {
+            return rName.equals( rPropValue.Name );
+        }
+    };
+
+//.............................................................................
+} // anonymous namespace
+//.............................................................................
+
 
 //.............................................................................
 namespace chart
@@ -150,14 +184,44 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
 
     if ( m_pChartController )
     {
-        m_pChartController->setDrawMode( eDrawMode );
-        setInsertObj( sal::static_int_cast< USHORT >( eKind ) );
-        if ( bCreate )
+        DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
+        if ( pDrawViewWrapper )
         {
-            DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
-            if ( pDrawViewWrapper )
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            m_pChartController->setDrawMode( eDrawMode );
+            setInsertObj( sal::static_int_cast< USHORT >( eKind ) );
+            if ( bCreate )
             {
                 pDrawViewWrapper->SetCreateMode();
+            }
+
+            const ::rtl::OUString sKeyModifier( C2U( "KeyModifier" ) );
+            const beans::PropertyValue* pIter = rArgs.getConstArray();
+            const beans::PropertyValue* pEnd  = pIter + rArgs.getLength();
+            const beans::PropertyValue* pKeyModifier = ::std::find_if(
+                pIter, pEnd, ::std::bind2nd( PropertyValueCompare(), boost::cref( sKeyModifier ) ) );
+            sal_Int16 nKeyModifier = 0;
+            if ( pKeyModifier && ( pKeyModifier->Value >>= nKeyModifier ) && nKeyModifier == KEY_MOD1 )
+            {
+                if ( eDrawMode == CHARTDRAW_INSERT )
+                {
+                    SdrObject* pObj = createDefaultObject( nFeatureId );
+                    if ( pObj )
+                    {
+                        SdrPageView* pPageView = pDrawViewWrapper->GetSdrPageView();
+                        pDrawViewWrapper->InsertObjectAtView( pObj, *pPageView );
+                        Reference< drawing::XShape > xShape( pObj->getUnoShape(), uno::UNO_QUERY );
+                        if ( xShape.is() )
+                        {
+                            m_pChartController->m_aSelection.setSelection( xShape );
+                            m_pChartController->m_aSelection.applySelection( pDrawViewWrapper );
+                        }
+                        if ( nFeatureId == SID_DRAW_TEXT )
+                        {
+                            m_pChartController->StartTextEdit();
+                        }
+                    }
+                }
             }
         }
     }
@@ -165,10 +229,10 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
 
 void DrawCommandDispatch::describeSupportedFeatures()
 {
-    implDescribeSupportedFeature( ".uno:SelectObject",  SID_OBJECT_SELECT,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Line",          SID_DRAW_LINE,      CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Rect",          SID_DRAW_RECT,      CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:DrawText",      SID_DRAW_TEXT,      CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SelectObject",  SID_OBJECT_SELECT,      CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Line",          SID_DRAW_LINE,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Rect",          SID_DRAW_RECT,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DrawText",      SID_DRAW_TEXT,          CommandGroup::INSERT );
 }
 
 void DrawCommandDispatch::setInsertObj( USHORT eObj, const ::rtl::OUString& rShapeType )
@@ -180,6 +244,89 @@ void DrawCommandDispatch::setInsertObj( USHORT eObj, const ::rtl::OUString& rSha
     {
         pDrawViewWrapper->SetCurrentObj( eObj /*, Inventor */);
     }
+}
+
+SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
+{
+    SdrObject* pObj = NULL;
+    DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : NULL );
+    DrawModelWrapper* pDrawModelWrapper = ( m_pChartController ? m_pChartController->GetDrawModelWrapper() : NULL );
+
+    if ( pDrawViewWrapper && pDrawModelWrapper )
+    {
+        Reference< drawing::XDrawPage > xDrawPage( pDrawModelWrapper->getMainDrawPage() );
+        SdrPage* pPage = GetSdrPageFromXDrawPage( xDrawPage );
+        if ( pPage )
+        {
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            pObj = SdrObjFactory::MakeNewObject( pDrawViewWrapper->GetCurrentObjInventor(),
+                pDrawViewWrapper->GetCurrentObjIdentifier(), pPage );
+            if ( pObj )
+            {
+                long nDefaultObjectSizeWidth = 4000;
+                long nDefaultObjectSizeHeight = 2500;
+                Size aObjectSize( nDefaultObjectSizeWidth, nDefaultObjectSizeHeight );
+                Rectangle aPageRect( Rectangle( Point( 0, 0 ), pPage->GetSize() ) );
+                Point aObjectPos = aPageRect.Center();
+                aObjectPos.X() -= aObjectSize.Width() / 2;
+                aObjectPos.Y() -= aObjectSize.Height() / 2;
+                Rectangle aRect( aObjectPos, aObjectSize );
+
+                switch ( nID )
+                {
+                    case SID_DRAW_LINE:
+                        {
+                            if ( pObj->ISA( SdrPathObj ) )
+                            {
+                                Point aStart = aRect.TopLeft();
+                                Point aEnd = aRect.BottomRight();
+                                sal_Int32 nYMiddle( ( aRect.Top() + aRect.Bottom() ) / 2 );
+                                basegfx::B2DPolygon aPoly;
+                                aPoly.append( basegfx::B2DPoint( aStart.X(), nYMiddle ) );
+                                aPoly.append( basegfx::B2DPoint( aEnd.X(), nYMiddle ) );
+                                ( dynamic_cast< SdrPathObj* >( pObj ) )->SetPathPoly( basegfx::B2DPolyPolygon( aPoly ) );
+                                SfxItemSet aSet( pDrawModelWrapper->GetItemPool() );
+                                pObj->SetMergedItemSet( aSet );
+                            }
+                        }
+                        break;
+                    case SID_DRAW_TEXT:
+                    case SID_DRAW_TEXT_VERTICAL:
+                        {
+                            if ( pObj->ISA( SdrTextObj ) )
+                            {
+                                SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
+                                if ( pTextObj )
+                                {
+                                    pTextObj->SetLogicRect( aRect );
+                                    BOOL bVertical = ( nID == SID_DRAW_TEXT_VERTICAL );
+                                    pTextObj->SetVerticalWriting( bVertical );
+                                    if ( bVertical )
+                                    {
+                                        SfxItemSet aSet( pDrawModelWrapper->GetItemPool() );
+                                        aSet.Put( SdrTextAutoGrowWidthItem( TRUE ) );
+                                        aSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
+                                        aSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_TOP ) );
+                                        aSet.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_RIGHT ) );
+                                        pTextObj->SetMergedItemSet( aSet );
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        {
+                            pObj->SetLogicRect( aRect );
+                            SfxItemSet aSet( pDrawModelWrapper->GetItemPool() );
+                            pObj->SetMergedItemSet( aSet );
+                        }
+                        break;
+                }
+            }
+        }
+    }
+
+    return pObj;
 }
 
 //.............................................................................
