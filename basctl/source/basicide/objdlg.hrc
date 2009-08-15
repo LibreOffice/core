@@ -30,7 +30,7 @@
 #ifndef _OBJDLG_HRC
 #define _OBJDLG_HRC
 
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 
 #define RID_BASICIDE_OBJCAT     ( RID_BASICIDE_START + 70 )
 #define RID_FT_MACRODESCR   8

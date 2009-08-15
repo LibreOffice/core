@@ -27,7 +27,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 
 #define RID_TBXCONTROLS         ( RID_BASICIDE_START + 65 )
 #define RID_TOOLBOX             ( RID_BASICIDE_START + 66 )

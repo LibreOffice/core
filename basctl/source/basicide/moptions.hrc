@@ -30,7 +30,7 @@
 #ifndef _MOPTIONS_HRC
 #define _MOPTIONS_HRC
 
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 
 #define RID_MACROOPTIONS        ( RID_BASICIDE_START + 55 )
 
