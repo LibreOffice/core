@@ -36,7 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/fixed.hxx>
 #include <svtools/stdctrl.hxx>
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #include <svtools/syslocale.hxx>
 
 
