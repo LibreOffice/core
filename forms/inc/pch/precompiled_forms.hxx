@@ -343,7 +343,7 @@
 #include "svtools/lingucfg.hxx"
 #include "svtools/numuno.hxx"
 #include "svtools/poolitem.hxx"
-#include "svtools/solar.hrc"
+#include "vcl/solar.hrc"
 #include "svtools/transfer.hxx"
 
 #include "svx/editdata.hxx"
