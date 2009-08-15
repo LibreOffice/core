@@ -46,7 +46,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/gradient.hxx>
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #include <svtools/fltcall.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <vcl/graphictools.hxx>

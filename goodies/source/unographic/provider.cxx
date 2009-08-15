@@ -46,7 +46,7 @@
 #include <tools/resmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #include <vcl/salbtype.hxx>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/io/XStream.hpp>

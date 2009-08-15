@@ -37,7 +37,7 @@
 #include "invader.hrc"
 #include "strings.hrc"
 #include "score.hxx"
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #include <cppuhelper/servicefactory.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/msgbox.hxx>

@@ -31,7 +31,7 @@
 #define _GOODIES_HRC
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #endif
 
 // Dialoge ---------------------------------------------------------------

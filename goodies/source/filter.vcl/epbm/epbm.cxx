@@ -35,7 +35,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #include <svtools/fltcall.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include "strings.hrc"
