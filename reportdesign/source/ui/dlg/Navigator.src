@@ -36,7 +36,7 @@
 #ifndef _SBASLTID_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 
 #define RID_SVXIMG_COLLAPSEDNODE                    (RID_FORMS_START + 2)
 #define RID_SVXIMG_EXPANDEDNODE                     (RID_FORMS_START + 3)

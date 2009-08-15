@@ -42,7 +42,7 @@
 #include <rtl/uri.hxx>
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #endif
 #include "ModuleHelper.hxx"
 //.........................................................................

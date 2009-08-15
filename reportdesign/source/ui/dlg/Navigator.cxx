@@ -55,7 +55,7 @@
 #include "cppuhelper/basemutex.hxx"
 #include "comphelper/SelectionMultiplex.hxx"
 #include <svtools/svtreebx.hxx>
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #include "ReportVisitor.hxx"
 #include "ModuleHelper.hxx"
 #include <rtl/ref.hxx>
