@@ -32,7 +32,7 @@
 #define _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #endif
 
 // TODO: create a new help id range in <svtools/solar.hrc>

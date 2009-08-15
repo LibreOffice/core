@@ -31,7 +31,7 @@
 #include "componentmodule.hxx"
 #include <tools/resmgr.hxx>
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #endif
 #include <comphelper/sequence.hxx>
 #include <tools/debug.hxx>
