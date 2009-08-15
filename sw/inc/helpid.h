@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #endif
 
 #define HID_BASE                    HID_APP_START
