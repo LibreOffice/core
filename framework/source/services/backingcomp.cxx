@@ -75,7 +75,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #endif
 #include <svtools/urihelper.hxx>
 #include <osl/file.hxx>
