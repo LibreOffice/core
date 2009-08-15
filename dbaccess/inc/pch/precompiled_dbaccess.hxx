@@ -467,7 +467,7 @@
 #include "svtools/miscopt.hxx"
 #include "svtools/rtfkeywd.hxx"
 #include "svtools/rtftoken.h"
-#include "svtools/solar.hrc"
+#include "vcl/solar.hrc"
 #include "svtools/toolboxcontroller.hxx"
 #include "svtools/viewoptions.hxx"
 

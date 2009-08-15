@@ -32,7 +32,7 @@
 #define _DBA_DBACCESS_HELPID_HRC_
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>    // HID_DBACCESS_START
+#include <vcl/solar.hrc>    // HID_DBACCESS_START
 #endif
 
 #define HID_DSADMIN_CHARSET                         (HID_DBACCESS_START +  9)
