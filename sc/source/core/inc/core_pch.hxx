@@ -71,7 +71,7 @@
 #include <svtools/lstner.hxx>
 #include <svtools/poolitem.hxx>
 #include <tools/time.hxx>
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #include <tools/date.hxx>
 #include <svtools/brdcst.hxx>
 #include <svx/svxids.hrc>

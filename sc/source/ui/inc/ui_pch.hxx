@@ -43,7 +43,7 @@
 
 #include <tools/solar.h>
 #include <tools/string.hxx>
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #include <tools/rtti.hxx>
 #include <string.h>
 #include <tools/contnr.hxx>

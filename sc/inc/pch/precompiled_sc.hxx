@@ -157,7 +157,7 @@
 #include <svtools/listener.hxx>
 #include <svtools/lstner.hxx>
 #include <svtools/pathoptions.hxx>
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #include <svtools/useroptions.hxx>
 #include <svx/editobj.hxx>
 #include <svx/eeitem.hxx>
