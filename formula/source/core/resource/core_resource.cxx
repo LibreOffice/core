@@ -37,7 +37,7 @@
 
 // ---- needed as long as we have no contexts for components ---
 #include <vcl/svapp.hxx>
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 
 //.........................................................................
 namespace formula

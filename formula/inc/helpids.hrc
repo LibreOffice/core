@@ -31,7 +31,7 @@
 #define FORMULA_HELPID_HRC
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>    // HID_FORMULA_START
+#include <vcl/solar.hrc>    // HID_FORMULA_START
 #endif
 
 #define HID_FORMULADLG_FORMULA                          (HID_FORMULA_START + 0)
