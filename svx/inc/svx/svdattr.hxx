@@ -32,7 +32,7 @@
 #define _SVDATTR_HXX
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #endif
 #include <tools/solar.h>
 #include <svx/sdangitm.hxx>

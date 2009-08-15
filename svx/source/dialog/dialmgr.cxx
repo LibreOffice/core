@@ -39,7 +39,7 @@
 
 #include <svx/dialmgr.hxx>
 #include <tools/rc.hxx>
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #include <vcl/svapp.hxx>
 
 static ResMgr* pResMgr=0;

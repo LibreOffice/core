@@ -31,7 +31,7 @@
 #ifndef _EDITDBG_HXX
 #define _EDITDBG_HXX
 
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #include <tools/string.hxx>
 #include <stdio.h>
 

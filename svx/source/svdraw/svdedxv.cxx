@@ -33,7 +33,7 @@
 #include <svtools/accessibilityoptions.hxx>
 
 #include <svx/svdedxv.hxx>
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 
 //#include <tools/string.h>
 #include <svtools/itemiter.hxx>

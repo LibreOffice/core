@@ -32,7 +32,7 @@
 #define _SVDUNDO_HXX
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #endif
 #include <svtools/undo.hxx>
 #include <tools/contnr.hxx>
