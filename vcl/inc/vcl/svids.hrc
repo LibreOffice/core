@@ -31,6 +31,8 @@
 #ifndef _SV_SVIDS_HRC
 #define _SV_SVIDS_HRC
 
+#include "vcl/solar.hrc"
+
 #define SV_RESID_STDOFFSET                  0
 #define SV_RESID_WINOFFSET                  1
 #define SV_RESID_OS2OFFSET                  2
@@ -248,5 +250,7 @@
 #define SV_ICON_ID_TEMPLATE                    16
 #define SV_ICON_ID_MACRO                       17
 #define SV_ICON_ID_PRINTERADMIN               501
+
+#define HID_PRINTDLG                        HID_VCL_START
 
 #endif  // _SV_SVIDS_HRC
