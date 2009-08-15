@@ -183,7 +183,7 @@
 #include "svtools/pathoptions.hxx"
 #include "svtools/sfxecode.hxx"
 #include "svtools/smplhint.hxx"
-#include "svtools/solar.hrc"
+#include "vcl/solar.hrc"
 #include "svtools/stringtransfer.hxx"
 #include "svtools/svarray.hxx"
 #include "svtools/svdde.hxx"

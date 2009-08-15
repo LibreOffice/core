@@ -66,7 +66,7 @@
 
 // Ohne Includeschutz
 #include <svtools/svtdata.hxx>
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 
 
 #include <basic/dispdefs.hxx>
