@@ -33,7 +33,7 @@
 
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #endif
 
 //! Um den Überblick über alle benutzten HelpID's zu behalten sind diese

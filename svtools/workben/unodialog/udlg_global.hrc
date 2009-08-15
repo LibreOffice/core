@@ -31,7 +31,7 @@
 #ifndef SVTOOLS_UDLG_GLOBAL_HRC
 #define SVTOOLS_UDLG_GLOBAL_HRC
 
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 
 //=====================================================================
 //= bases

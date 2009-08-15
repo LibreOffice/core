@@ -117,7 +117,6 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\inc\svtools\cnclhint.hxx %_DEST%\inc%_EXT%\svtools\cnclhint.hxx
 ..\inc\svtools\inettype.hxx %_DEST%\inc%_EXT%\svtools\inettype.hxx
 ..\inc\svtools\brwhead.hxx %_DEST%\inc%_EXT%\svtools\brwhead.hxx
-..\inc\svtools\solar.hrc %_DEST%\inc%_EXT%\svtools\solar.hrc
 ..\inc\scriptedtext.hxx %_DEST%\inc%_EXT%\svtools\scriptedtext.hxx
 ..\inc\svtools\stdctrl.hxx %_DEST%\inc%_EXT%\svtools\stdctrl.hxx
 ..\inc\svtools\stritem.hxx %_DEST%\inc%_EXT%\svtools\stritem.hxx

@@ -30,7 +30,7 @@
 #ifndef _SVTOOLS_HRC
 #define _SVTOOLS_HRC "$Revision:   1.0"
 
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 
 #define RID_SVTOOLS_BITMAP_START        (RID_SVTOOLS_START + 0)
 #define RID_SVTOOLS_IMAGELIST_START     (RID_SVTOOLS_START + 0)

@@ -37,7 +37,7 @@
 #include "FilterConfigCache.hxx"
 #include <osl/file.hxx>
 #include <osl/module.hxx>
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 #include <svtools/fltcall.hxx>
 #include "dlgexpor.hxx"
 #include "dlgejpg.hxx"
