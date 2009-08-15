@@ -542,7 +542,7 @@
 #include "svtools/slstitm.hxx"
 #include "svtools/smplhint.hxx"
 #include "svtools/soerr.hxx"
-#include "svtools/solar.hrc"
+#include "vcl/solar.hrc"
 #include "svtools/sores.hxx"
 #include "svtools/stdctrl.hxx"
 #include "svtools/stritem.hxx"
