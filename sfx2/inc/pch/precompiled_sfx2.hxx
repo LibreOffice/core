@@ -565,7 +565,7 @@
 #include "svtools/slstitm.hxx"
 #include "svtools/smplhint.hxx"
 #include "svtools/soerr.hxx"
-#include "svtools/solar.hrc"
+#include "vcl/solar.hrc"
 #include "svtools/startoptions.hxx"
 #include "svtools/statusbarcontroller.hxx"
 #include "svtools/stritem.hxx"
