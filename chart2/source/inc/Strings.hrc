@@ -31,7 +31,7 @@
 #define CHART_STRINGS_HRC
 
 // this includes no link dependency
-#include <svtools/solar.hrc>
+#include <vcl/solar.hrc>
 
 //next free is 285
 //single free is: 134
