@@ -979,7 +979,7 @@ void lcl_SetState( SfxProgress& rProgress, ULONG nPage, ULONG nMax,
 
 
 void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
-    const XubString* /*pStr*/, ULONG nMergeAct, ULONG nMergeCnt )
+    const XubString* /*pStr*/, ULONG nMergeAct, ULONG /*nMergeCnt*/ )
 {
     SET_CURR_SHELL( this );
 
@@ -990,7 +990,7 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
     SfxPrinter* pPrt = getIDocumentDeviceAccess()->getPrinter( false );
     BOOL bPrtJob = pPrt ? pPrt->IsJobActive() : FALSE;
     SwRootFrm* pLayout = GetLayout();
-    ULONG nStatMax = pLayout->GetPageNum();
+    // ULONG nStatMax = pLayout->GetPageNum();
 
     const SwFrm *pPage = pLayout->Lower();
     SwLayAction aAction( pLayout, Imp() );
