@@ -1838,7 +1838,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
         if( pHelp )
         {
             // FIXME: find out proper help URL and use here
-            pHelp->Start( 0, GetParent() );
+            pHelp->Start( HID_PRINTDLG, GetParent() );
         }
     }
     else if( pButton == &maForwardBtn )
