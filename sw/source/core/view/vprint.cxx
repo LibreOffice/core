@@ -314,6 +314,38 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
                                                    aPaperTrayOpt
                                                    );
 
+    // print range selection
+    vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
+    aPrintRangeOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
+    aPrintRangeOpt.mbInternalOnly = sal_True;
+    m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 37 ) ),
+                                                           rtl::OUString(),
+                                                           aPrintRangeOpt
+                                                           );
+
+    // create a choice for the content to create
+    rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
+    uno::Sequence< rtl::OUString > aChoices( 3 );
+    uno::Sequence< rtl::OUString > aHelpText( 3 );
+    aChoices[0] = aLocalizedStrings.GetString( 38 );
+    aHelpText[0] = aLocalizedStrings.GetString( 39 );
+    aChoices[1] = aLocalizedStrings.GetString( 40 );
+    aHelpText[1] = aLocalizedStrings.GetString( 41 );
+    aChoices[2] = aLocalizedStrings.GetString( 42 );
+    aHelpText[2] = aLocalizedStrings.GetString( 43 );
+    m_aUIProperties[nIdx++].Value = getChoiceControlOpt( rtl::OUString(),
+                                                         aHelpText,
+                                                         aPrintRangeName,
+                                                         aChoices,
+                                                         0 );
+    // create a an Edit dependent on "Pages" selected
+    vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, sal_True );
+    m_aUIProperties[nIdx++].Value = getEditControlOpt( rtl::OUString(),
+                                                       rtl::OUString(),
+                                                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
+                                                       rtl::OUString(),
+                                                       aPageRangeOpt
+                                                       );
     // print content selection
     vcl::PrinterOptionsHelper::UIControlOptions aContentsOpt;
     aContentsOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobPage" ) );
@@ -322,12 +354,12 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
                                                            aContentsOpt
                                                            );
     // create a list box for notes content
-    uno::Sequence< rtl::OUString > aChoices( 4 );
+    aChoices.realloc( 4 );
     aChoices[0] = aLocalizedStrings.GetString( 21 );
     aChoices[1] = aLocalizedStrings.GetString( 22 );
     aChoices[2] = aLocalizedStrings.GetString( 23 );
     aChoices[3] = aLocalizedStrings.GetString( 24 );
-    uno::Sequence< rtl::OUString > aHelpText( 2 );
+    aHelpText.realloc( 2 );
     aHelpText[0] = aLocalizedStrings.GetString( 25 );
     aHelpText[1] = aLocalizedStrings.GetString( 25 );
     m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( aLocalizedStrings.GetString( 26 ),
@@ -384,38 +416,6 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
                                                            aBrochureRTLOpt
                                                            );
 
-    // print range selection
-    vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
-    aPrintRangeOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
-    aPrintRangeOpt.mbInternalOnly = sal_True;
-    m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 37 ) ),
-                                                           rtl::OUString(),
-                                                           aPrintRangeOpt
-                                                           );
-
-    // create a choice for the content to create
-    rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
-    aChoices.realloc( 3 );
-    aHelpText.realloc( 3 );
-    aChoices[0] = aLocalizedStrings.GetString( 38 );
-    aHelpText[0] = aLocalizedStrings.GetString( 39 );
-    aChoices[1] = aLocalizedStrings.GetString( 40 );
-    aHelpText[1] = aLocalizedStrings.GetString( 41 );
-    aChoices[2] = aLocalizedStrings.GetString( 42 );
-    aHelpText[2] = aLocalizedStrings.GetString( 43 );
-    m_aUIProperties[nIdx++].Value = getChoiceControlOpt( rtl::OUString(),
-                                                         aHelpText,
-                                                         aPrintRangeName,
-                                                         aChoices,
-                                                         0 );
-    // create a an Edit dependent on "Pages" selected
-    vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, sal_True );
-    m_aUIProperties[nIdx++].Value = getEditControlOpt( rtl::OUString(),
-                                                       rtl::OUString(),
-                                                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
-                                                       rtl::OUString(),
-                                                       aPageRangeOpt
-                                                       );
 
     DBG_ASSERT( nIdx == nNumProps, "number of added properties is not as expected" );
 }

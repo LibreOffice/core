@@ -948,7 +948,7 @@ StringArray STR_PRINTOPTUI
         < "Specifies whether the graphics of your text document are printed"; >;
         < "Hidden te~xt"; >;
         < "Enable this option to print text that is marked as hidden."; >;
-        < "Text ~placeholder"; >;
+        < "~Text placeholder"; >;
         < "Enable this option to print text placeholders. Disable this option to leave the text placeholders blank in the printout."; >;
         < "Form control~s"; >;
         < "Specifies whether the form control fields of the text document are printed"; >;
