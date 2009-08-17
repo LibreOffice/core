@@ -979,11 +979,7 @@ void lcl_SetState( SfxProgress& rProgress, ULONG nPage, ULONG nMax,
 
 
 void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
-<<<<<<< .mine
     const XubString* /*TLPDF pStr*/, ULONG /*TLPDF nMergeAct*/, ULONG /*TLPDF nMergeCnt*/ )
-=======
-    const XubString* /*pStr*/, ULONG /*nMergeAct*/, ULONG /*nMergeCnt*/ )
->>>>>>> .r275036
 {
     SET_CURR_SHELL( this );
 
