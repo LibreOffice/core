@@ -455,7 +455,7 @@ bool SwPrintUIOptions::IsPrintEmptyPages( bool bIsPDFExport ) const
     // take care of different property names for the option.
 
     bool bRes = bIsPDFExport ?
-            !getBoolValue( "IsSkipEmptyPages", sal_True ) : 
+            !getBoolValue( "IsSkipEmptyPages", sal_True ) :
             getBoolValue( "PrintEmptyPages", sal_True );
     return bRes;
 }
@@ -486,7 +486,7 @@ bool SwPrintUIOptions::IsPrintDrawings() const
     // for compatibility the old name should win
 
     bool bRes = getBoolValue( "PrintTablesGraphicsAndDiagrams", sal_True );
-    bRes = getBoolValue( "PrintDDrawings", bRes );
+    bRes = getBoolValue( "PrintDrawings", bRes );
     return bRes;
 }
 
