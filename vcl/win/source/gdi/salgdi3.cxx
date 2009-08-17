@@ -74,6 +74,11 @@
 #include <algorithm>
 #endif
 
+#ifdef ENABLE_GRAPHITE
+#include <graphite/GrClient.h>
+#include <graphite/WinFont.h>
+#endif
+
 #include <vector>
 #include <set>
 #include <map>
@@ -807,6 +812,9 @@ ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
     mbDisableGlyphApi( false ),
     mbHasKoreanRange( false ),
     mbHasCJKSupport( false ),
+#ifdef ENABLE_GRAPHITE
+    mbHasGraphiteSupport( false ),
+#endif
     mbHasArabicSupport ( false ),
     mbAliasSymbolsLow( false ),
     mbAliasSymbolsHigh( false ),
@@ -865,6 +873,13 @@ void ImplWinFontData::UpdateFromHDC( HDC hDC ) const
 
     ReadCmapTable( hDC );
     ReadOs2Table( hDC );
+#ifdef ENABLE_GRAPHITE
+    static const char* pDisableGraphiteText = getenv( "SAL_DISABLE_GRAPHITE" );
+    if( !pDisableGraphiteText || (pDisableGraphiteText[0] == '0') )
+    {
+        mbHasGraphiteSupport = gr::WinFont::FontHasGraphiteTables(hDC);
+    }
+#endif
 
     // even if the font works some fonts have problems with the glyph API
     // => the heuristic below tries to figure out which fonts have the problem

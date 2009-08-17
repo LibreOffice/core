@@ -54,6 +54,27 @@ SLOFILES=\
         $(SLO)$/gcach_rbmp.obj		\
         $(SLO)$/gcach_layout.obj	\
         $(SLO)$/gcach_ftyp.obj
+
+.IF "$(ENABLE_GRAPHITE)" != ""
+CFLAGS+=-DENABLE_GRAPHITE
+SLOFILES+=	$(SLO)$/graphite_adaptors.obj	\
+        $(SLO)$/graphite_features.obj	\
+        $(SLO)$/graphite_cache.obj	\
+        $(SLO)$/graphite_textsrc.obj	\
+        $(SLO)$/graphite_serverfont.obj	\
+        $(SLO)$/graphite_layout.obj
+.ENDIF
+
+.ELSE
+.IF "$(ENABLE_GRAPHITE)" == "TRUE"
+# make use of stlport headerfiles
+EXT_USE_STLPORT=TRUE
+SLOFILES=\
+        $(SLO)$/graphite_textsrc.obj	\
+        $(SLO)$/graphite_cache.obj	\
+        $(SLO)$/graphite_features.obj	\
+        $(SLO)$/graphite_layout.obj
+.ENDIF
 .ENDIF
 
 # --- Targets ------------------------------------------------------

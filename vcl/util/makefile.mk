@@ -6,10 +6,6 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.111.36.3 $
-#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -184,6 +180,16 @@ SHL1STDLIBS+=\
             $(ICUDATALIB)		\
             $(ICULELIB)			\
             $(JVMACCESSLIB)
+
+.IF "$(GUI)" == "UNX"
+.IF "$(ENABLE_GRAPHITE)" != ""
+.IF "$(SYSTEM_GRAPHITE)" == "YES"
+SHL1STDLIBS+= $(GRAPHITE_LIBS)
+.ELSE
+SHL1STDLIBS+= $(SOLARVERSION)/$(INPATH)/lib$(UPDMINOREXT)/libgraphite.a
+.ENDIF
+.ENDIF
+.ENDIF
 SHL1USE_EXPORTS=name
 
 .IF "$(GUIBASE)"=="aqua"
@@ -198,6 +204,10 @@ LIB1FILES+= \
 .IF "$(USE_BUILTIN_RASTERIZER)"!=""
     LIB1FILES +=    $(SLB)$/glyphs.lib
     SHL1STDLIBS+=   $(FREETYPELIB)
+.ELSE
+.IF "$(ENABLE_GRAPHITE)" == "TRUE"
+    LIB1FILES +=    $(SLB)$/glyphs.lib
+.ENDIF
 .ENDIF # USE_BUILTIN_RASTERIZER
 
 SHL1LIBS=   $(LIB1TARGET)
@@ -222,6 +232,14 @@ DEFLIB1NAME =vcl
 # --- W32 ----------------------------------------------------------------
 
 .IF "$(GUI)" == "WNT"
+
+.IF "$(ENABLE_GRAPHITE)" == "TRUE"
+.IF "$(COM)" == "GCC"
+SHL1STDLIBS += -lgraphite
+.ELSE
+SHL1STDLIBS += graphite_dll.lib
+.ENDIF
+.ENDIF
 
 SHL1STDLIBS += $(UWINAPILIB)      \
                $(GDI32LIB)        \

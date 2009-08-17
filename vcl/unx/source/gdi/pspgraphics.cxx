@@ -51,6 +51,11 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#ifdef ENABLE_GRAPHITE
+#include <vcl/graphite_layout.hxx>
+#include <vcl/graphite_serverfont.hxx>
+#endif
+
 using namespace psp;
 using namespace rtl;
 
@@ -699,9 +704,30 @@ static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx
 
     Point aPos;
     long nUnitsPerPixel = rLayout.GetUnitsPerPixel();
-    const sal_Unicode* pText = bIsPspServerFontLayout ? static_cast<const PspServerFontLayout&>(rLayout).getTextPtr() : NULL;
-    int nMinCharPos = bIsPspServerFontLayout ? static_cast<const PspServerFontLayout&>(rLayout).getMinCharPos() : 0;
-    int nMaxCharPos = bIsPspServerFontLayout ? static_cast<const PspServerFontLayout&>(rLayout).getMaxCharPos() : 0;
+    const sal_Unicode* pText = NULL;
+    int nMinCharPos = 0;
+    int nMaxCharPos = 0;
+    if (bIsPspServerFontLayout)
+    {
+        const PspServerFontLayout * pPspLayout = dynamic_cast<const PspServerFontLayout*>(&rLayout);
+#ifdef ENABLE_GRAPHITE
+        const GraphiteServerFontLayout * pGrLayout = dynamic_cast<const GraphiteServerFontLayout*>(&rLayout);
+#endif
+        if (pPspLayout)
+        {
+            pText = pPspLayout->getTextPtr();
+            nMinCharPos = pPspLayout->getMinCharPos();
+            nMaxCharPos = pPspLayout->getMaxCharPos();
+        }
+#ifdef ENABLE_GRAPHITE
+        else if (pGrLayout)
+        {
+            pText = pGrLayout->getTextPtr();
+            nMinCharPos = pGrLayout->getMinCharPos();
+            nMaxCharPos = pGrLayout->getMaxCharPos();
+        }
+#endif
+    }
     for( int nStart = 0;; )
     {
         int nGlyphCount = rLayout.GetNextGlyphs( nMaxGlyphs, aGlyphAry, aPos, nStart, aWidthAry, bIsPspServerFontLayout ? aCharPosAry : NULL );
@@ -961,7 +987,21 @@ SalLayout* PspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel
 
     if( m_pServerFont[ nFallbackLevel ]
         && !(rArgs.mnFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) )
-        pLayout = new PspServerFontLayout( *m_pPrinterGfx, *m_pServerFont[nFallbackLevel], rArgs );
+    {
+#ifdef ENABLE_GRAPHITE
+        // Is this a Graphite font?
+        if (GraphiteFontAdaptor::IsGraphiteEnabledFont(*m_pServerFont[nFallbackLevel]))
+        {
+            sal_Int32 xdpi, ydpi;
+            GetResolution(xdpi, ydpi);
+            GraphiteFontAdaptor * pGrfont = new GraphiteFontAdaptor( *m_pServerFont[nFallbackLevel], xdpi, ydpi);
+            if (!pGrfont) return NULL;
+            pLayout = new GraphiteServerFontLayout(pGrfont);
+        }
+        else
+#endif
+            pLayout = new PspServerFontLayout( *m_pPrinterGfx, *m_pServerFont[nFallbackLevel], rArgs );
+    }
     else
         pLayout = new PspFontLayout( *m_pPrinterGfx );
 
