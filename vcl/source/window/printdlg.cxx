@@ -58,8 +58,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
 #define HELPID_PREFIX ".HelpId:vcl:PrintDialog"
-#define SMHID2( a, b ) SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX ":" a ":" b ) ) ) )
-#define SMHID1( a ) SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX  ":" a ) ) ) )
+#define SMHID2( a, b ) SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX ":" a ":" b ) ), HID_PRINTDLG ) )
+#define SMHID1( a ) SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX  ":" a ) ), HID_PRINTDLG ) )
 
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const ResId& i_rId )
     : Window( i_pParent, i_rId )
@@ -477,7 +477,7 @@ PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
     maLocationTxt.SMHID2( "JobPage", "LocationText" );
     maCommentLabel.SMHID2( "JobPage", "CommentLabel" );
     maCommentTxt.SMHID2( "JobPage", "CommentText" );
-    maSetupButton.SMHID2( "JobPage", "Setup" );
+    maSetupButton.SMHID2( "JobPage", "Properties" );
     maCopies.SMHID2( "JobPage", "CopiesLine" );
     maCopySpacer.SMHID2( "JobPage", "CopySpacer" );
     maCopyCount.SMHID2( "JobPage", "CopiesText" );
@@ -981,7 +981,7 @@ static void setSmartId( Window* i_pWindow, const char* i_pType, sal_Int32 i_nId 
         aBuf.append( sal_Unicode( ':' ) );
         aBuf.append( i_nId );
     }
-    i_pWindow->SetSmartHelpId( SmartId( aBuf.makeStringAndClear() ) );
+    i_pWindow->SetSmartHelpId( SmartId( aBuf.makeStringAndClear(), HID_PRINTDLG ) );
 }
 
 static void setHelpText( Window* i_pWindow, const Sequence< rtl::OUString >& i_rHelpTexts, sal_Int32 i_nIndex )
@@ -1204,7 +1204,7 @@ void PrintDialog::setupOptionalUI()
         // EVIL
         else if( aCtrlType.equalsAscii( "Bool" ) &&
                  aGroupingHint.equalsAscii( "LayoutPage" ) &&
-                 aPropertyName.equalsAscii( "PrintBrochure" )
+                 aPropertyName.equalsAscii( "PrintProspect" )
                  )
         {
             maNUpPage.maBrochureBtn.SetText( aText );
