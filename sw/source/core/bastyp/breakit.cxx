@@ -32,6 +32,7 @@
 #include "precompiled_sw.hxx"
 
 #include "breakit.hxx"
+#include <unicode/uchar.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
@@ -119,6 +120,18 @@ USHORT SwBreakIt::GetRealScriptOfText( const String& rTxt,
             --nPos;
         nScript = xBreak->getScriptType( rTxt, nPos );
         sal_Int32 nChgPos = 0;
+        if ( i18n::ScriptType::WEAK == nScript && nPos + 1 < rTxt.Len() )
+        {
+            // A weak character followed by a mark may be meant to combine with
+            // the mark, so prefer the following character's script
+            switch ( u_charType(rTxt.GetChar(nPos + 1) ) ) {
+            case U_NON_SPACING_MARK:
+            case U_ENCLOSING_MARK:
+            case U_COMBINING_SPACING_MARK:
+                nScript = xBreak->getScriptType( rTxt, nPos+1 );
+                break;
+            }
+        }
         if( i18n::ScriptType::WEAK == nScript && nPos &&
             0 < (nChgPos = xBreak->beginOfScript( rTxt, nPos, nScript )) )
             nScript = xBreak->getScriptType( rTxt, nChgPos-1 );
