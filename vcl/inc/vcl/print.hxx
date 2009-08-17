@@ -430,6 +430,16 @@ public:
         }
     };
 
+    struct PageSize
+    {
+        Size        aSize;          // in 100th mm
+        bool        bFullPaper;     // full paper, not only imageable area is printed
+
+        PageSize( const Size& i_rSize = Size( 21000, 29700 ),
+                  bool i_bFullPaper = false
+                  ) : aSize( i_rSize ), bFullPaper( i_bFullPaper ) {}
+    };
+
     PrinterController();
     virtual ~PrinterController();
 
@@ -490,8 +500,8 @@ public:
 
     // implementation details, not usable outside vcl
     SAL_DLLPRIVATE int getFilteredPageCount();
-    SAL_DLLPRIVATE Size getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf, bool i_bMayUseCache = false );
-    SAL_DLLPRIVATE Size getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache = false );
+    SAL_DLLPRIVATE PageSize getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf, bool i_bMayUseCache = false );
+    SAL_DLLPRIVATE PageSize getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache = false );
     SAL_DLLPRIVATE void printFilteredPage( int i_nPage );
     SAL_DLLPRIVATE void setPrinter( const boost::shared_ptr<Printer>& );
     SAL_DLLPRIVATE void setOptionChangeHdl( const Link& );

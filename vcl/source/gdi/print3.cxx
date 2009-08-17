@@ -60,7 +60,13 @@ using namespace vcl;
 
 class ImplPageCache
 {
-    std::vector< GDIMetaFile >  maPages;
+    struct CacheEntry
+    {
+        GDIMetaFile                 aPage;
+        PrinterController::PageSize aSize;
+    };
+
+    std::vector< CacheEntry >  maPages;
     std::vector< sal_Int32 >    maPageNumbers;
     std::vector< sal_Int32 >    maCacheRanking;
 
@@ -92,10 +98,11 @@ public:
     }
 
     // caution: does not ensure uniqueness
-    void insert( sal_Int32 i_nPageNo, const GDIMetaFile& i_rPage )
+    void insert( sal_Int32 i_nPageNo, const GDIMetaFile& i_rPage, const PrinterController::PageSize& i_rSize )
     {
         sal_Int32 nReplacePage = maCacheRanking.back();
-        maPages[ nReplacePage ] = i_rPage;
+        maPages[ nReplacePage ].aPage = i_rPage;
+        maPages[ nReplacePage ].aSize = i_rSize;
         maPageNumbers[ nReplacePage ] = i_nPageNo;
         // cache insertion means in our case, the page was just queried
         // so update the ranking
@@ -105,19 +112,19 @@ public:
     // caution: bad algorithm; should there ever be reason to increase the cache size beyond 6
     // this needs to be urgently rewritten. However do NOT increase the cache size lightly,
     // whole pages can be rather memory intensive
-    const GDIMetaFile* get( sal_Int32 i_nPageNo )
+    bool get( sal_Int32 i_nPageNo, GDIMetaFile& o_rPageFile, PrinterController::PageSize& o_rSize )
     {
-        const GDIMetaFile* pRet = NULL;
         for( sal_Int32 i = 0; i < nCacheSize; ++i )
         {
             if( maPageNumbers[i] == i_nPageNo )
             {
                 updateRanking( i );
-                pRet = &maPages[i];
-                break;
+                o_rPageFile = maPages[i].aPage;
+                o_rSize = maPages[i].aSize;
+                return true;
             }
         }
-        return pRet;
+        return false;
     }
 
     void invalidate()
@@ -125,7 +132,7 @@ public:
         for( sal_Int32 i = 0; i < nCacheSize; ++i )
         {
             maPageNumbers[i] = -1;
-            maPages[i].Clear();
+            maPages[i].aPage.Clear();
             maCacheRanking[i] = nCacheSize - i - 1;
         }
     }
@@ -580,21 +587,28 @@ bool PrinterController::setupPrinter( Window* i_pParent )
     return bRet;
 }
 
-static Size modifyJobSetup( Printer* pPrinter, const Sequence< PropertyValue >& i_rProps )
+static PrinterController::PageSize modifyJobSetup( Printer* pPrinter, const Sequence< PropertyValue >& i_rProps )
 {
-    Size aPageSize = pPrinter->GetPaperSize();
+    PrinterController::PageSize aPageSize;
+    aPageSize.aSize = pPrinter->GetPaperSize();
     for( sal_Int32 nProperty = 0, nPropertyCount = i_rProps.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
         if( i_rProps[ nProperty ].Name.equalsAscii( "PageSize" ) )
         {
             awt::Size aSize;
             i_rProps[ nProperty].Value >>= aSize;
-            aPageSize.Width() = aSize.Width;
-            aPageSize.Height() = aSize.Height;
+            aPageSize.aSize.Width() = aSize.Width;
+            aPageSize.aSize.Height() = aSize.Height;
 
             Size aCurSize( pPrinter->GetPaperSize() );
-            if( aPageSize != aCurSize )
-                pPrinter->SetPaperSizeUser( aPageSize );
+            if( aPageSize.aSize != aCurSize )
+                pPrinter->SetPaperSizeUser( aPageSize.aSize );
+        }
+        if( i_rProps[ nProperty ].Name.equalsAscii( "PageIncludesNonprintableArea" ) )
+        {
+            sal_Bool bVal = sal_False;
+            i_rProps[ nProperty].Value >>= bVal;
+            aPageSize.bFullPaper = static_cast<bool>(bVal);
         }
     }
     return aPageSize;
@@ -622,25 +636,24 @@ Sequence< beans::PropertyValue > PrinterController::getPageParametersProtected( 
     return aResult;
 }
 
-Size PrinterController::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache )
+PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache )
 {
     // update progress if necessary
     if( mpImplData->mpProgress )
     {
         // do nothing if printing is canceled
         if( mpImplData->mpProgress->isCanceled() )
-           return Size();
+            return PrinterController::PageSize();
         mpImplData->mpProgress->tick();
         Application::Reschedule( true );
     }
 
     if( i_bMayUseCache )
     {
-        const GDIMetaFile* pCached = mpImplData->maPageCache.get( i_nUnfilteredPage );
-        if( pCached )
+        PrinterController::PageSize aPageSize;
+        if( mpImplData->maPageCache.get( i_nUnfilteredPage, o_rMtf, aPageSize ) )
         {
-            o_rMtf = *pCached;
-            return pCached->GetPrefSize();
+            return aPageSize;
         }
     }
     else
@@ -656,9 +669,9 @@ Size PrinterController::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf,
     mpImplData->mpPrinter->SetMapMode( aMapMode );
 
     // modify job setup if necessary
-    Size aPageSize = modifyJobSetup( mpImplData->mpPrinter.get(), aPageParm );
+    PrinterController::PageSize aPageSize = modifyJobSetup( mpImplData->mpPrinter.get(), aPageParm );
 
-    o_rMtf.SetPrefSize( aPageSize );
+    o_rMtf.SetPrefSize( aPageSize.aSize );
     o_rMtf.SetPrefMapMode( aMapMode );
 
     mpImplData->mpPrinter->EnableOutput( FALSE );
@@ -672,7 +685,7 @@ Size PrinterController::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf,
     mpImplData->mpPrinter->Pop();
 
     if( i_bMayUseCache )
-        mpImplData->maPageCache.insert( i_nUnfilteredPage, o_rMtf );
+        mpImplData->maPageCache.insert( i_nUnfilteredPage, o_rMtf, aPageSize );
 
     return aPageSize;
 }
@@ -710,7 +723,7 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
     o_rMtf.AddAction( new MetaPopAction() );
 }
 
-Size PrinterController::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache )
+PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache )
 {
     const MultiPageSetup& rMPS( mpImplData->maMultiPage );
     int nSubPages = rMPS.nRows * rMPS.nColumns;
@@ -729,19 +742,20 @@ Size PrinterController::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o
             int nDocPages = getPageCountProtected();
             i_nFilteredPage = nDocPages - 1 - i_nFilteredPage;
         }
-        Size aPageSize = getPageFile( i_nFilteredPage, o_rMtf, i_bMayUseCache );
-        Size aPaperSize = mpImplData->getRealPaperSize( aPageSize );
-        if( aPaperSize != aPageSize )
+        PrinterController::PageSize aPageSize = getPageFile( i_nFilteredPage, o_rMtf, i_bMayUseCache );
+        Size aPaperSize = mpImplData->getRealPaperSize( aPageSize.aSize );
+        if( aPaperSize != aPageSize.aSize )
         {
             // user overridden page size, center Metafile
             o_rMtf.WindStart();
-            long nDX = (aPaperSize.Width() - aPageSize.Width()) / 2;
-            long nDY = (aPaperSize.Height() - aPageSize.Height()) / 2;
+            long nDX = (aPaperSize.Width() - aPageSize.aSize.Width()) / 2;
+            long nDY = (aPaperSize.Height() - aPageSize.aSize.Height()) / 2;
             o_rMtf.Move( nDX, nDY );
             o_rMtf.WindStart();
             o_rMtf.SetPrefSize( aPaperSize );
+            aPageSize.aSize = aPaperSize;
         }
-        return aPaperSize;
+        return aPageSize;
     }
 
     Size aPaperSize( mpImplData->getRealPaperSize( mpImplData->maMultiPage.aPaperSize ) );
@@ -775,8 +789,8 @@ Size PrinterController::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o
         if( nPage >= 0 && nPage < nDocPages )
         {
             GDIMetaFile aPageFile;
-            Size aPageSize = getPageFile( nPage, aPageFile, i_bMayUseCache );
-            if( aPageSize.Width() && aPageSize.Height() )
+            PrinterController::PageSize aPageSize = getPageFile( nPage, aPageFile, i_bMayUseCache );
+            if( aPageSize.aSize.Width() && aPageSize.aSize.Height() )
             {
                 long nCellX = 0, nCellY = 0;
                 switch( rMPS.nOrder )
@@ -791,23 +805,23 @@ Size PrinterController::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o
                     break;
                 }
                 // scale the metafile down to a sub page size
-                double fScaleX = double(aSubPageSize.Width())/double(aPageSize.Width());
-                double fScaleY = double(aSubPageSize.Height())/double(aPageSize.Height());
+                double fScaleX = double(aSubPageSize.Width())/double(aPageSize.aSize.Width());
+                double fScaleY = double(aSubPageSize.Height())/double(aPageSize.aSize.Height());
                 double fScale  = std::min( fScaleX, fScaleY );
                 aPageFile.Scale( fScale, fScale );
                 aPageFile.WindStart();
 
                 // move the subpage so it is centered in its "cell"
-                long nOffX = (aSubPageSize.Width() - long(double(aPageSize.Width()) * fScale)) / 2;
-                long nOffY = (aSubPageSize.Height() - long(double(aPageSize.Height()) * fScale)) / 2;
+                long nOffX = (aSubPageSize.Width() - long(double(aPageSize.aSize.Width()) * fScale)) / 2;
+                long nOffY = (aSubPageSize.Height() - long(double(aPageSize.aSize.Height()) * fScale)) / 2;
                 long nX = rMPS.nLeftMargin + nOffX + nAdvX * nCellX;
                 long nY = rMPS.nTopMargin + nOffY + nAdvY * nCellY;
                 aPageFile.Move( nX, nY );
                 aPageFile.WindStart();
                 // calculate border rectangle
                 Rectangle aSubPageRect( Point( nX, nY ),
-                                        Size( long(double(aPageSize.Width())*fScale),
-                                              long(double(aPageSize.Height())*fScale) ) );
+                                        Size( long(double(aPageSize.aSize.Width())*fScale),
+                                              long(double(aPageSize.aSize.Height())*fScale) ) );
 
                 // append subpage to page
                 appendSubPage( o_rMtf, aSubPageRect, aPageFile, rMPS.bDrawBorder );
@@ -819,7 +833,7 @@ Size PrinterController::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o
     mpImplData->mpPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
     mpImplData->mpPrinter->SetPaperSizeUser( aPaperSize );
 
-    return aPaperSize;
+    return PrinterController::PageSize( aPaperSize );
 }
 
 int PrinterController::getFilteredPageCount()
@@ -836,7 +850,7 @@ void PrinterController::printFilteredPage( int i_nPage )
         return;
 
     GDIMetaFile aPageFile;
-    Size aPageSize = getFilteredPageFile( i_nPage, aPageFile );
+    PrinterController::PageSize aPageSize = getFilteredPageFile( i_nPage, aPageFile );
 
     if( mpImplData->mpProgress )
     {
@@ -904,7 +918,14 @@ void PrinterController::printFilteredPage( int i_nPage )
     // in N-Up printing set the correct page size
     mpImplData->mpPrinter->SetMapMode( MAP_100TH_MM );
     // aPageSize was filtered through mpImplData->getRealPaperSize already by getFilteredPageFile()
-    mpImplData->mpPrinter->SetPaperSizeUser( aPageSize );
+    mpImplData->mpPrinter->SetPaperSizeUser( aPageSize.aSize );
+    // if full paper are is meant, move the output to accomodate for pageoffset
+    if( aPageSize.bFullPaper )
+    {
+        Point aPageOffset( mpImplData->mpPrinter->GetPageOffset() );
+        aCleanedFile.WindStart();
+        aCleanedFile.Move( -aPageOffset.X(), -aPageOffset.Y() );
+    }
 
     // actually print the page
     mpImplData->mpPrinter->ImplStartPage();

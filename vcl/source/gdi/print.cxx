@@ -510,6 +510,26 @@ void Printer::ImplUpdatePageData()
                                 mnOutWidth, mnOutHeight,
                                 maPageOffset.X(), maPageOffset.Y(),
                                 maPaperSize.Width(), maPaperSize.Height() );
+    static const char* pDebugOffset = getenv( "SAL_DBG_PAGEOFFSET" );
+    if( pDebugOffset )
+    {
+        rtl::OString aLine( pDebugOffset );
+        sal_Int32 nIndex = 0;
+        rtl::OString aToken( aLine.getToken( 0, ',', nIndex ) );
+        sal_Int32 nLeft = aToken.toInt32();
+        sal_Int32 nTop = nLeft;
+        if( nIndex > 0 )
+        {
+            rtl::OString aToken( aLine.getToken( 0, ',', nIndex ) );
+            nTop = aToken.toInt32();
+        }
+        maPageOffset = LogicToPixel( Point( static_cast<long>(nLeft),
+                                            static_cast<long>(nTop) ),
+                                     MapMode( MAP_100TH_MM )
+                                     );
+        mnOutWidth = maPaperSize.Width() - 2*maPageOffset.X();
+        mnOutWidth = maPaperSize.Width() - 2*maPageOffset.Y();
+    }
 }
 
 // -----------------------------------------------------------------------

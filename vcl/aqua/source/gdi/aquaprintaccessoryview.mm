@@ -307,17 +307,17 @@ class ControllerProperties
         if( i_nPage >= 0 && nPages > i_nPage )
         {
             GDIMetaFile aMtf;
-            Size aPageSize( mpController->getFilteredPageFile( i_nPage, aMtf, false ) );
+            PrinterController::PageSize aPageSize( mpController->getFilteredPageFile( i_nPage, aMtf, false ) );
             VirtualDevice aDev;
             Size aLogicSize( aDev.PixelToLogic( aPixelSize, MapMode( MAP_100TH_MM ) ) );
-            double fScaleX = double(aLogicSize.Width())/double(aPageSize.Width());
-            double fScaleY = double(aLogicSize.Height())/double(aPageSize.Height());
+            double fScaleX = double(aLogicSize.Width())/double(aPageSize.aSize.Width());
+            double fScaleY = double(aLogicSize.Height())/double(aPageSize.aSize.Height());
             double fScale = (fScaleX < fScaleY) ? fScaleX : fScaleY;
             aMtf.WindStart();
             aMtf.Scale( fScale, fScale );
             aMtf.WindStart();
-            aLogicSize.Width() = long(double(aPageSize.Width()) * fScale);
-            aLogicSize.Height() = long(double(aPageSize.Height()) * fScale);
+            aLogicSize.Width() = long(double(aPageSize.aSize.Width()) * fScale);
+            aLogicSize.Height() = long(double(aPageSize.aSize.Height()) * fScale);
             aPixelSize = aDev.LogicToPixel( aLogicSize, MapMode( MAP_100TH_MM ) );
             aDev.SetOutputSizePixel( aPixelSize );
             aMtf.WindStart();
