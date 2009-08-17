@@ -51,6 +51,7 @@
 #include <sfx2/app.hxx>
 #include <svtools/flagitem.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/oldprintadaptor.hxx>
 #include <svtools/printdlg.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/prnmon.hxx>
@@ -371,7 +372,7 @@ ErrCode SwView::DoPrint( SfxPrinter* pPrinter, PrintDialog* pDlg, BOOL bSilent, 
             pViewProperties[10].Value <<= (text::NotePrintMode) aOpts.GetPrintPostIts();
             pViewProperties[11].Name = C2U("PrintProspect");
             pViewProperties[11].Value <<= (sal_Bool)aOpts.IsPrintProspect();
-            pViewProperties[12].Name = C2U("PrintPageBackground");
+                    pViewProperties[12].Name = C2U("PrintPageBackground");
             pViewProperties[12].Value <<= (sal_Bool)aOpts.IsPrintPageBackground();
             pViewProperties[13].Name = C2U("PrintBlackFonts");
             pViewProperties[13].Value <<= (sal_Bool)aOpts.IsPrintBlackFont();
@@ -390,14 +391,18 @@ ErrCode SwView::DoPrint( SfxPrinter* pPrinter, PrintDialog* pDlg, BOOL bSilent, 
             SfxViewShell::Print(*pProgress, bIsAPI );
 //TLPDF           if ( !pProgress->IsAborted() )
             {
+                const boost::shared_ptr< Printer > pPrt( pPrinter );    // TLPDF
+                vcl::OldStylePrintAdaptor aPrtAdaptor( pPrt );          // TLPDF
+                const boost::shared_ptr< vcl::PrinterController > pPrtController( &aPrtAdaptor );
+
                 if( bPrtPros )
                 {
 //TLPDF                   bStartJob = pPrinter->StartJob( aOpts.GetJobName() );
 //TLPDF                 if( bStartJob )
-                       pSh->PrintProspectMM( aPrtAdaptor, aOpts, bPrtPros_RTL );  /* TLPDF */
+                    pSh->PrintProspectMM( pPrtController, aOpts, bPrtPros_RTL );  /* TLPDF */
                 }
                 else
-                    bStartJob = pSh->PrintOrPDFExportMM( aPrtAdaptor, aOpts );   /*TLPDF*/
+                    bStartJob = pSh->PrintOrPDFExportMM( pPrtController, aOpts );   /*TLPDF*/
 
                 if ( bBrowse )
                 {

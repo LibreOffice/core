@@ -908,6 +908,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& /*rView*/,
 //TLPDF    SfxPrinter *pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( false );
     const boost::shared_ptr< Printer > pPrt( new Printer /* Printer( const JobSetup& rJobSetup ) */ );     // TLPDF
     vcl::OldStylePrintAdaptor aPrtAdaptor( pPrt );                    // TLPDF
+    const boost::shared_ptr< vcl::PrinterController > pPrtController( &aPrtAdaptor );
 //TLPDF   Link aSfxSaveLnk = pPrt->GetEndPrintHdl();
 //TLPDF    if( rOpt.IsPrintSingleJobs()  )
 //TLPDF     pPrt->SetEndPrintHdl( Link() );
@@ -993,10 +994,10 @@ BOOL SwNewDBMgr::MergePrint( SwView& /*rView*/,
                     bRet = TRUE;
                 }
 #endif  // TL_NOT_NOW /*TLPDF*/
-                pSh->PrintProspectMM( aPrtAdaptor, rOpt, rOpt.IsPrintProspect_RTL() );  // TLPDF
+                pSh->PrintProspectMM( pPrtController, rOpt, rOpt.IsPrintProspect_RTL() );  // TLPDF
                 bRet = TRUE;                                                        // TLPDF
             }
-            else if( pSh->PrintOrPDFExportMM( aPrtAdaptor, rOpt ) /* TLPDF */ )
+            else if( pSh->PrintOrPDFExportMM( pPrtController, rOpt ) /* TLPDF */ )
                 bRet = TRUE;
             bMergeLock = FALSE;
 
@@ -1064,6 +1065,7 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& /*rView*/,
 //TLPDF    SfxPrinter *pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( false );
     const boost::shared_ptr< Printer > pPrt( new Printer /* Printer( const JobSetup& rJobSetup ) */ );     // TLPDF
     vcl::OldStylePrintAdaptor aPrtAdaptor( pPrt );                    // TLPDF
+    const boost::shared_ptr< vcl::PrinterController > pPrtController( &aPrtAdaptor );
 //TLPDF    Link aSfxSaveLnk = pPrt->GetEndPrintHdl();
 //TLPDF    if( rOpt.IsPrintSingleJobs()  )
 //TLPDF        pPrt->SetEndPrintHdl( Link() );
@@ -1159,11 +1161,11 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& /*rView*/,
         {
 //TLPDF            if( pPrt->IsJobActive() || pPrt->StartJob( rOpt.GetJobName() ))
 //TLPDF            {
-                pSh->PrintProspectMM( aPrtAdaptor, rOpt, rOpt.IsPrintProspect_RTL() );
+                pSh->PrintProspectMM( pPrtController, rOpt, rOpt.IsPrintProspect_RTL() );
                 bRet = TRUE;
 //TLPDF            }
         }
-        else if( pSh->PrintOrPDFExportMM( aPrtAdaptor, rOpt ) /* TLPDF */ )
+        else if( pSh->PrintOrPDFExportMM( pPrtController, rOpt ) /* TLPDF */ )
             bRet = TRUE;
         bMergeLock = FALSE;
 

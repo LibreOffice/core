@@ -221,7 +221,7 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
     css::uno::Reference< css::uno::XInterface>      xPropertyHelper;
     SwXDocumentPropertyHelper*                      pPropertyHelper;
 
-    SwPrintUIOptions*                               m_pPrintUIOprions;
+    SwPrintUIOptions*                               m_pPrintUIOptions;
 
     void                    GetBodyText();
     void                    GetNumberFormatter();
