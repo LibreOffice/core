@@ -1266,13 +1266,17 @@ public:
     {
         (void)rOptions;
 
-        css::uno::Sequence<css::beans::PropertyValue> aProperties (2);
+        css::uno::Sequence<css::beans::PropertyValue> aProperties (3);
 
         aProperties[0].Name = A2S("ExtraPrintUIOptions");
         aProperties[0].Value <<= m_aUIProperties;
 
         aProperties[1].Name = A2S("PageSize");
         aProperties[1].Value <<= maPrintSize;
+
+        // FIXME: is this always true ?
+        aProperties[2].Name = A2S("PageIncludesNonprintableArea");
+        aProperties[2].Value = makeAny( sal_True );
 
         return aProperties;
     }
@@ -1654,7 +1658,7 @@ private:
     {
         MapMode aMap (rInfo.maMap);
         Point aPageOfs (rInfo.mpPrinter->GetPageOffset() );
-        aMap.SetOrigin(Point() - aPageOfs);
+        // aMap.SetOrigin(Point() - aPageOfs);
         aMap.SetScaleX(Fraction(1,2));
         aMap.SetScaleY(Fraction(1,2));
         mpPrinter->SetMapMode(aMap);
@@ -1819,7 +1823,7 @@ private:
         const Point aPageOfs (rInfo.mpPrinter->GetPageOffset());
         //DrawView* pPrintView;
 
-        aMap.SetOrigin(Point() - aPageOfs);
+        // aMap.SetOrigin(Point() - aPageOfs);
 
         if ( bScalePage )
         {
@@ -1912,7 +1916,7 @@ private:
             return;
 
         MapMode aMap (rInfo.maMap);
-        aMap.SetOrigin(Point() - rInfo.mpPrinter->GetPageOffset());
+        // aMap.SetOrigin(Point() - rInfo.mpPrinter->GetPageOffset());
         rInfo.maMap = aMap;
 
         if (mpOptions->IsBooklet())
@@ -2196,10 +2200,12 @@ private:
 
             // if CutPage is set then do not move it, otherwise move the
             // scaled page to printable area
+            #if 0
             if (bCutPage)
                 aMap.SetOrigin(Point(-aPageOffset.X(), -aPageOffset.Y()));
             else
                 aMap.SetOrigin(Point(0,0));
+            #endif
             maPrinterPages.push_back(
                 ::boost::shared_ptr<PrinterPage>(
                     new RegularPrinterPage(
@@ -2224,9 +2230,13 @@ private:
                 rInfo.maPageSize.Width() - rPage.GetLftBorder() - rPage.GetRgtBorder());
             const long nPageHeight (
                 rInfo.maPageSize.Height() - rPage.GetUppBorder() - rPage.GetLwrBorder());
+            #if 0
             Point aOrigin (
                 nPageWidth < rInfo.maPrintSize.Width() ? -aPageOffset.X() : 0,
                 nPageHeight < rInfo.maPrintSize.Height() ? -aPageOffset.Y() : 0);
+            #else
+            Point aOrigin ( 0, 0 );
+            #endif
             for (Point aPageOrigin = aOrigin;
                  -aPageOrigin.Y()<nPageHeight;
                  aPageOrigin.Y() -= rInfo.maPrintSize.Height())
