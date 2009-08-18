@@ -1087,6 +1087,19 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         rNativeContentRegion = Region( aIndicatorRect );
         returnVal = TRUE;
     }
+    if( (nType == CTRL_EDITBOX || nType == CTRL_SPINBOX) && nPart == PART_ENTIRE_CONTROL )
+    {
+        NWEnsureGTKEditBox( m_nScreen );
+        GtkWidget* widget = gWidgetData[m_nScreen].gEditBoxWidget;
+        GtkRequisition aReq;
+        gtk_widget_size_request( widget, &aReq );
+        Rectangle aEditRect = rControlRegion.GetBoundRect();
+        aEditRect = Rectangle( aEditRect.TopLeft(),
+                               Size( aEditRect.GetWidth(), aReq.height+1 ) );
+        rNativeBoundingRegion = Region( aEditRect );
+        rNativeContentRegion = rNativeBoundingRegion;
+        returnVal = TRUE;
+    }
 
     return( returnVal );
 }
