@@ -335,50 +335,59 @@ Operation parseOperation(xmlChar const * text) {
     }
 }
 
-Type parseType(xmlChar const * text) {
+Type parseType(Reader const * reader, xmlChar const * text) {
     if (text == 0) {
         return TYPE_ERROR;
     }
-    xmlChar const * p = text;
-    while (*p != '\0' && *p != ':') {
-        ++p;
-    }
-    if (*p != '\0') {
-        if (equal(text, p, RTL_CONSTASCII_STRINGPARAM("xs"))) {
-                //TODO: "http://www.w3.org/2001/XMLSchema" URI vs. "xs" prefix
-            if (xmlStrEqual(p + 1, xmlString("boolean"))) {
-                return TYPE_BOOLEAN;
-            } else if (xmlStrEqual(p + 1, xmlString("short"))) {
-                return TYPE_SHORT;
-            } else if (xmlStrEqual(p + 1, xmlString("int"))) {
-                return TYPE_INT;
-            } else if (xmlStrEqual(p + 1, xmlString("long"))) {
-                return TYPE_LONG;
-            } else if (xmlStrEqual(p + 1, xmlString("double"))) {
-                return TYPE_DOUBLE;
-            } else if (xmlStrEqual(p + 1, xmlString("string"))) {
-                return TYPE_STRING;
-            } else if (xmlStrEqual(p + 1, xmlString("hexBinary"))) {
-                return TYPE_HEXBINARY;
-            }
-        } else if (equal(text, p, RTL_CONSTASCII_STRINGPARAM("oor"))) {
-              //TODO: "http://openoffice.org/2001/registry" URI vs. "oor" prefix
-            if (xmlStrEqual(p + 1, xmlString("any"))) {
-                return TYPE_ANY;
-            } else if (xmlStrEqual(p + 1, xmlString("boolean-list"))) {
-                return TYPE_BOOLEAN_LIST;
-            } else if (xmlStrEqual(p + 1, xmlString("short-list"))) {
-                return TYPE_SHORT_LIST;
-            } else if (xmlStrEqual(p + 1, xmlString("int-list"))) {
-                return TYPE_INT_LIST;
-            } else if (xmlStrEqual(p + 1, xmlString("long-list"))) {
-                return TYPE_LONG_LIST;
-            } else if (xmlStrEqual(p + 1, xmlString("double-list"))) {
-                return TYPE_DOUBLE_LIST;
-            } else if (xmlStrEqual(p + 1, xmlString("string-list"))) {
-                return TYPE_STRING_LIST;
-            } else if (xmlStrEqual(p + 1, xmlString("hexBinary-list"))) {
-                return TYPE_HEXBINARY_LIST;
+    xmlChar const * p = xmlStrchr(text, ':');
+    if (p != 0) {
+        XmlString uri(
+            xmlTextReaderLookupNamespace(
+                reader->getReader(),
+                reinterpret_cast< xmlChar const * >(
+                    rtl::OString(
+                        reinterpret_cast< char const * >(text), p - text).
+                    getStr())));
+        if (uri.str != 0) {
+            if (xmlStrEqual(
+                    uri.str, xmlString("http://www.w3.org/2001/XMLSchema")))
+            {
+                if (xmlStrEqual(p + 1, xmlString("boolean"))) {
+                    return TYPE_BOOLEAN;
+                } else if (xmlStrEqual(p + 1, xmlString("short"))) {
+                    return TYPE_SHORT;
+                } else if (xmlStrEqual(p + 1, xmlString("int"))) {
+                    return TYPE_INT;
+                } else if (xmlStrEqual(p + 1, xmlString("long"))) {
+                    return TYPE_LONG;
+                } else if (xmlStrEqual(p + 1, xmlString("double"))) {
+                    return TYPE_DOUBLE;
+                } else if (xmlStrEqual(p + 1, xmlString("string"))) {
+                    return TYPE_STRING;
+                } else if (xmlStrEqual(p + 1, xmlString("hexBinary"))) {
+                    return TYPE_HEXBINARY;
+                }
+            } else if (xmlStrEqual(
+                           uri.str,
+                           xmlString("http://openoffice.org/2001/registry")))
+            {
+                if (xmlStrEqual(p + 1, xmlString("any"))) {
+                    return TYPE_ANY;
+                } else if (xmlStrEqual(p + 1, xmlString("boolean-list"))) {
+                    return TYPE_BOOLEAN_LIST;
+                } else if (xmlStrEqual(p + 1, xmlString("short-list"))) {
+                    return TYPE_SHORT_LIST;
+                } else if (xmlStrEqual(p + 1, xmlString("int-list"))) {
+                    return TYPE_INT_LIST;
+                } else if (xmlStrEqual(p + 1, xmlString("long-list"))) {
+                    return TYPE_LONG_LIST;
+                } else if (xmlStrEqual(p + 1, xmlString("double-list"))) {
+                    return TYPE_DOUBLE_LIST;
+                } else if (xmlStrEqual(p + 1, xmlString("string-list"))) {
+                    return TYPE_STRING_LIST;
+                } else if (xmlStrEqual(p + 1, xmlString("hexBinary-list"))) {
+                    return TYPE_HEXBINARY_LIST;
+                }
             }
         }
     }
@@ -1591,7 +1600,7 @@ void XcsParser::handleProp(Reader const * reader) {
         xmlTextReaderGetAttributeNs(
             reader->getReader(), xmlString("type"),
             xmlString("http://openoffice.org/2001/registry")));
-    valueType_ = parseType(attrType.str);
+    valueType_ = parseType(reader, attrType.str);
     if (valueType_ == TYPE_ERROR) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -2217,7 +2226,7 @@ void XcuParser::handleGroupProp(Reader const * reader, GroupNode * group) {
         xmlTextReaderGetAttributeNs(
             reader->getReader(), xmlString("type"),
             xmlString("http://openoffice.org/2001/registry")));
-    Type type(parseType(attrType.str));
+    Type type(parseType(reader, attrType.str));
     if (type == TYPE_ANY) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
