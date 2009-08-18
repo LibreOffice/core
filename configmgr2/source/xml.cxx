@@ -564,12 +564,13 @@ bool parseHexbinaryValue(
     return true;
 }
 
-template< typename T > xmlChar const * parseEscapedValue(
-    xmlChar const * text, bool (* parse)(xmlChar const *, xmlChar const *, T *),
+template< typename T > char const * parseEscapedValue(
+    char const * text, bool (* parse)(xmlChar const *, xmlChar const *, T *),
     T * value)
 {
     rtl::OString unesc;
-    text = unescapeText(text, true, &unesc);
+    text = reinterpret_cast< char const * >(
+        unescapeText(reinterpret_cast< xmlChar const * >(text), true, &unesc));
     return
         (text != 0 &&
          (*parse)(
@@ -581,74 +582,78 @@ template< typename T > xmlChar const * parseEscapedValue(
 }
 
 template< typename T > bool parseListValue(
-    xmlChar const * separator, bool escaped, xmlChar const * text,
+    xmlChar const * separator, bool escaped, rtl::OStringBuffer const & text,
     bool (* parse)(xmlChar const *, xmlChar const *, T *),
     css::uno::Sequence< T > * value)
 {
     OSL_ASSERT(parse != 0 && value != 0);
     comphelper::SequenceAsVector< T > seq;
-    if (text != 0) {
-        if (escaped) {
-            for (;;) {
+    if (escaped) {
+        if (text.getLength() != 0) {
+            for (char const * p = text.getStr();;) {
                 T val;
-                text = parseEscapedValue(text, parse, &val);
-                if (text == 0) {
+                p = parseEscapedValue(p, parse, &val);
+                if (p == 0) {
                     return false;
                 }
                 seq.push_back(val);
-                if (*text == 0) {
+                if (*p == 0) {
                     break;
                 }
                 if (separator == 0) {
-                    xmlChar const * p = text;
-                    while (*p == ' ' || *p == '\t' || *p == '\x0A' ||
-                           *p == '\x0D')
+                    char const * q = p;
+                    while (*q == ' ' || *q == '\t' || *q == '\x0A' ||
+                           *q == '\x0D')
                     {
-                        ++p;
+                        ++q;
                     }
-                    if (p == text) {
+                    if (q == p) {
                         return false;
                     }
-                    text = p;
+                    p = q;
                 } else {
                     int sepLen = xmlStrlen(separator);
-                    if (xmlStrncmp(text, separator, sepLen) != 0) {
+                    if (xmlStrncmp(
+                            reinterpret_cast< xmlChar const * >(p), separator,
+                            sepLen) !=
+                        0)
+                    {
                         return false;
                     }
-                    text += sepLen;
+                    p += sepLen;
                 }
             }
+        }
+    } else {
+        XmlString col;
+        xmlChar const * p = reinterpret_cast< xmlChar const * >(text.getStr());
+        xmlChar const * sep;
+        int sepLen;
+        if (separator == 0) {
+            col = xmlSchemaCollapseString(p);
+            if (col.str != 0) {
+                p = col.str;
+            }
+            sep = xmlString(" ");
+            sepLen = RTL_CONSTASCII_LENGTH(" ");
         } else {
-            XmlString col;
-            xmlChar const * p;
-            xmlChar const * sep;
-            int sepLen;
-            if (separator == 0) {
-                col = xmlSchemaCollapseString(text);
-                p = col.str == 0 ? text : col.str;
-                sep = xmlString(" ");
-                sepLen = RTL_CONSTASCII_LENGTH(" ");
-            } else {
-                p = text;
-                sep = separator;
-                sepLen = xmlStrlen(separator);
-            }
-            if (*p != '\0') {
-                for (;;) {
-                    sal_Int32 i = rtl_str_indexOfStr_WithLength(
-                        reinterpret_cast< char const * >(p), xmlStrlen(p),
-                        reinterpret_cast< char const * >(sep), sepLen);
-                    xmlChar const * q = xmlStrstr(p, sep);
-                    T val;
-                    if (!(*parse)(p, i == -1 ? 0 : p + i, &val)) {
-                        return false;
-                    }
-                    seq.push_back(val);
-                    if (i == -1) {
-                        break;
-                    }
-                    p += i + sepLen;
+            sep = separator;
+            sepLen = xmlStrlen(separator);
+        }
+        if (*p != '\0') {
+            for (;;) {
+                sal_Int32 i = rtl_str_indexOfStr_WithLength(
+                    reinterpret_cast< char const * >(p), xmlStrlen(p),
+                    reinterpret_cast< char const * >(sep), sepLen);
+                T val;
+                if (!(*parse)(p, i == -1 ? 0 : p + i, &val)) {
+                    return false;
                 }
+                seq.push_back(val);
+                if (i == -1) {
+                    break;
+                }
+                p += i + sepLen;
             }
         }
     }
@@ -657,7 +662,8 @@ template< typename T > bool parseListValue(
 }
 
 css::uno::Any parseValue(
-    xmlChar const * separator, bool escaped, rtl::OStringBuffer text, Type type)
+    xmlChar const * separator, bool escaped, rtl::OStringBuffer const & text,
+    Type type)
 {
     switch (type) {
     case TYPE_ANY:
@@ -748,9 +754,8 @@ css::uno::Any parseValue(
     case TYPE_STRING:
         if (escaped) {
             rtl::OUString val;
-            xmlChar const * p = parseEscapedValue(
-                reinterpret_cast< xmlChar const * >(text.getStr()),
-                &parseStringValue, &val);
+            char const * p = parseEscapedValue(
+                text.getStr(), &parseStringValue, &val);
             if (p != 0 && *p == '\0') {
                 return css::uno::makeAny(val);
             }
@@ -784,9 +789,7 @@ css::uno::Any parseValue(
         {
             css::uno::Sequence< sal_Bool > val;
             if (parseListValue(
-                    separator, escaped,
-                    reinterpret_cast< xmlChar const * >(text.getStr()),
-                    &parseBooleanValue, &val))
+                    separator, escaped, text, &parseBooleanValue, &val))
             {
                 return css::uno::makeAny(val);
             }
@@ -796,9 +799,7 @@ css::uno::Any parseValue(
         {
             css::uno::Sequence< sal_Int16 > val;
             if (parseListValue(
-                    separator, escaped,
-                    reinterpret_cast< xmlChar const * >(text.getStr()),
-                    &parseShortValue, &val))
+                    separator, escaped, text, &parseShortValue, &val))
             {
                 return css::uno::makeAny(val);
             }
@@ -807,10 +808,7 @@ css::uno::Any parseValue(
     case TYPE_INT_LIST:
         {
             css::uno::Sequence< sal_Int32 > val;
-            if (parseListValue(
-                    separator, escaped,
-                    reinterpret_cast< xmlChar const * >(text.getStr()),
-                    &parseIntValue, &val))
+            if (parseListValue(separator, escaped, text, &parseIntValue, &val))
             {
                 return css::uno::makeAny(val);
             }
@@ -819,10 +817,7 @@ css::uno::Any parseValue(
     case TYPE_LONG_LIST:
         {
             css::uno::Sequence< sal_Int64 > val;
-            if (parseListValue(
-                    separator, escaped,
-                    reinterpret_cast< xmlChar const * >(text.getStr()),
-                    &parseLongValue, &val))
+            if (parseListValue(separator, escaped, text, &parseLongValue, &val))
             {
                 return css::uno::makeAny(val);
             }
@@ -832,9 +827,7 @@ css::uno::Any parseValue(
         {
             css::uno::Sequence< double > val;
             if (parseListValue(
-                    separator, escaped,
-                    reinterpret_cast< xmlChar const * >(text.getStr()),
-                    &parseDoubleValue, &val))
+                    separator, escaped, text, &parseDoubleValue, &val))
             {
                 return css::uno::makeAny(val);
             }
@@ -844,9 +837,7 @@ css::uno::Any parseValue(
         {
             css::uno::Sequence< rtl::OUString > val;
             if (parseListValue(
-                    separator, escaped,
-                    reinterpret_cast< xmlChar const * >(text.getStr()),
-                    &parseStringValue, &val))
+                    separator, escaped, text, &parseStringValue, &val))
             {
                 return css::uno::makeAny(val);
             }
@@ -856,9 +847,7 @@ css::uno::Any parseValue(
         {
             css::uno::Sequence< css::uno::Sequence< sal_Int8 > > val;
             if (parseListValue(
-                    separator, escaped,
-                    reinterpret_cast< xmlChar const * >(text.getStr()),
-                    &parseHexbinaryValue, &val))
+                    separator, escaped, text, &parseHexbinaryValue, &val))
             {
                 return css::uno::makeAny(val);
             }
@@ -1409,6 +1398,9 @@ bool XcsParser::startElement(
             }
             break;
         case STATE_COMPONENT_DONE:
+            break;
+        default: // STATE_START
+            OSL_ASSERT(false); // this cannot happen
             break;
         }
     }
@@ -2751,6 +2743,9 @@ bool XcdParser::startElement(
             return nestedParser_->startElement(reader, name, nsUri);
         }
         break;
+    default: // STATE_DEPENDENCY
+        OSL_ASSERT(false); // this cannot happen
+        break;
     }
     throw css::uno::RuntimeException(
         (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad member <")) +
@@ -2879,17 +2874,18 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
     for (Data::Modifications::const_iterator i(data.modifications.begin());
          i != data.modifications.end(); ++i)
     {
-        xmlTextWriterStartElement(writer.writer, xmlString("oor:item"));
         rtl::OUString name;
         rtl::OUString parentPath(parseLastSegment(*i, &name));
         rtl::Reference< Node > parent;
         rtl::Reference< Node > node(data.resolvePath(*i, 0, 0, 0, &parent, 0));
         if (node.is()) {
+            xmlTextWriterStartElement(writer.writer, xmlString("oor:item"));
             xmlTextWriterWriteAttribute(
                 writer.writer, xmlString("oor:path"),
                 xmlString(
                     convertToUtf8(escapeText(parentPath, false)).getStr()));
             writeNode(writer.writer, parent, name, node, true);
+            xmlTextWriterEndElement(writer.writer);
             // It is never necessary to write the oor:mandatory attribute, as it
             // cannot be set via the UNO API.
         } else {
@@ -2905,6 +2901,8 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
                     rtl::OUString parentName;
                     rtl::OUString grandparentPath(
                         parseLastSegment(parentPath, &parentName));
+                    xmlTextWriterStartElement(
+                        writer.writer, xmlString("oor:item"));
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("oor:path"),
                         xmlString(
@@ -2927,6 +2925,7 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
                         xmlString("remove"));
                     xmlTextWriterEndElement(writer.writer);
                     xmlTextWriterEndElement(writer.writer);
+                    xmlTextWriterEndElement(writer.writer);
                 }
             } else if (GroupNode * group = dynamic_cast< GroupNode * >(
                            parent.get()))
@@ -2937,6 +2936,8 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
                     j->second->getLayer() == NO_LAYER)
                 {
                     OSL_ASSERT(j->second->isRemoved());
+                    xmlTextWriterStartElement(
+                        writer.writer, xmlString("oor:item"));
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("oor:path"),
                         xmlString(
@@ -2951,6 +2952,7 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
                         writer.writer, xmlString("oor:op"),
                         xmlString("remove"));
                     xmlTextWriterEndElement(writer.writer);
+                    xmlTextWriterEndElement(writer.writer);
                 }
             } else if (SetNode * set = dynamic_cast< SetNode * >(parent.get()))
             {
@@ -2959,6 +2961,8 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
                     j->second->getLayer() == NO_LAYER)
                 {
                     OSL_ASSERT(j->second->isRemoved());
+                    xmlTextWriterStartElement(
+                        writer.writer, xmlString("oor:item"));
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("oor:path"),
                         xmlString(
@@ -2973,12 +2977,12 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
                         writer.writer, xmlString("oor:op"),
                         xmlString("remove"));
                     xmlTextWriterEndElement(writer.writer);
+                    xmlTextWriterEndElement(writer.writer);
                 }
             } else {
                 OSL_ASSERT(false); // this cannot happen
             }
         }
-        xmlTextWriterEndElement(writer.writer);
     }
     if (xmlTextWriterEndDocument(writer.writer) == -1) { //TODO: check all -1?
         throw css::uno::RuntimeException(
