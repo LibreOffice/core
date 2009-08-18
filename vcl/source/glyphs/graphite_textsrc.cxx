@@ -69,7 +69,7 @@ size_t  TextSourceAdaptor::fetch(gr::toffset, size_t, gr::utf32 *)
 
 size_t  TextSourceAdaptor::fetch(gr::toffset offset, size_t char_count, gr::utf16 * char_buffer)
 {
-  assert(char_buf);
+  assert(char_buffer);
 
   size_t copy_count =  std::min(size_t(maLayoutArgs.mnLength), char_count);
   std::copy(maLayoutArgs.mpStr + offset, maLayoutArgs.mpStr + offset + copy_count, char_buffer);
