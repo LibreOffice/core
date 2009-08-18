@@ -71,9 +71,13 @@ TARGET=so_graphite
 .INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------
-
+.IF "$(OS)"=="WNT" ||  "$(OS)"=="LINUX" 
 TARFILE_NAME=silgraphite-2.3.1
 PATCH_FILES=graphite-2.3.1.patch
+.ELSE
+dummy:
+    echo Nothing to do for non Linux / Windows here
+.ENDIF
 
 # convert line-endings to avoid problems when patching
 CONVERTFILES=\
