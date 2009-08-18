@@ -34,10 +34,12 @@
 
 #include <set>
 
-#include "libxml/parser.h"
+#include "libxml/xmlreader.h"
+#include "libxml/xmlstring.h"
+#include "rtl/ref.hxx"
+#include "rtl/ustring.hxx"
 #include "sal/types.h"
-
-namespace rtl { class OUString; }
+#include "salhelper/simplereferenceobject.hxx"
 
 namespace configmgr {
 
@@ -45,28 +47,75 @@ struct Data;
 
 namespace xml {
 
-typedef std::set< rtl::OUString > Dependencies;
+class Parser;
 
-struct XmlDoc: private boost::noncopyable {
-    xmlDocPtr doc;
+class Reader: public salhelper::SimpleReferenceObject {
+public:
+    Reader(rtl::OUString const & url, rtl::Reference< Parser > const & parser);
 
-    explicit XmlDoc(xmlDocPtr theDoc): doc(theDoc) {}
+    bool parse();
 
-    ~XmlDoc() { xmlFreeDoc(doc); }
+    rtl::OUString getUrl() const;
+
+    xmlTextReaderPtr getReader() const;
+
+private:
+    virtual ~Reader();
+
+    rtl::OUString url_;
+    rtl::Reference< Parser > parser_;
+    xmlTextReaderPtr reader_;
+};
+
+class Parser: public salhelper::SimpleReferenceObject {
+public:
+    virtual bool startElement(
+        Reader const * reader, xmlChar const * name, xmlChar const * nsUri) = 0;
+
+    virtual void endElement(Reader const * reader) = 0;
+
+    virtual void characters(Reader const * reader) = 0;
+
+protected:
+    Parser();
+
+    virtual ~Parser();
+};
+
+class XcdParser: public Parser {
+public:
+    typedef std::set< rtl::OUString > Dependencies;
+
+    XcdParser(int layer, Dependencies const & dependencies, Data * data);
+
+private:
+    virtual ~XcdParser();
+
+    virtual bool startElement(
+        Reader const * reader, xmlChar const * name, xmlChar const * nsUri);
+
+    virtual void endElement(Reader const * reader);
+
+    virtual void characters(Reader const * reader);
+
+    enum State {
+        STATE_START, STATE_DEPENDENCIES, STATE_DEPENDENCY, STATE_COMPONENTS };
+
+    int layer_;
+    Dependencies const & dependencies_;
+    Data * data_;
+    State state_;
+    rtl::Reference< Parser > nestedParser_;
+    long nesting_;
 };
 
 bool decodeXml(
     rtl::OUString const & encoded, sal_Int32 begin, sal_Int32 end,
     rtl::OUString * decoded);
 
-xmlDocPtr parseXmlFile(rtl::OUString const & url);
-
 void parseXcsFile(rtl::OUString const & url, int layer, Data * data);
 
 void parseXcuFile(rtl::OUString const & url, int layer, Data * data);
-
-bool parseXcdFile(
-    xmlDocPtr doc, int layer, Dependencies const & dependencies, Data * data);
 
 void parseModFile(rtl::OUString const & url, Data * data);
 

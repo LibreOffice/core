@@ -45,19 +45,10 @@ namespace configmgr {
 
 SetNode::SetNode(
     int layer, rtl::OUString const & defaultTemplateName,
-    std::vector< rtl::OUString > const & additionalTemplateNames,
     rtl::OUString const & templateName):
     Node(layer), defaultTemplateName_(defaultTemplateName),
-    additionalTemplateNames_(additionalTemplateNames),
     templateName_(templateName), mandatory_(NO_LAYER)
-{
-    OSL_ASSERT(
-        defaultTemplateName.getLength() != 0 &&
-        (std::find(
-            additionalTemplateNames.begin(), additionalTemplateNames.end(),
-            rtl::OUString()) ==
-         additionalTemplateNames.end()));
-}
+{}
 
 rtl::Reference< Node > SetNode::clone() const {
     return new SetNode(*this);
@@ -77,6 +68,10 @@ int SetNode::getMandatory() const {
 
 rtl::OUString const & SetNode::getDefaultTemplateName() const {
     return defaultTemplateName_;
+}
+
+std::vector< rtl::OUString > & SetNode::getAdditionalTemplateNames() {
+    return additionalTemplateNames_;
 }
 
 bool SetNode::isValidTemplate(rtl::OUString const & templateName) const {

@@ -46,7 +46,6 @@ class SetNode: public Node {
 public:
     SetNode(
         int layer, rtl::OUString const & defaultTemplateName,
-        std::vector< rtl::OUString > const & additionalTemplateNames,
         rtl::OUString const & templateName);
 
     virtual rtl::Reference< Node > clone() const;
@@ -58,6 +57,8 @@ public:
     virtual int getMandatory() const;
 
     rtl::OUString const & getDefaultTemplateName() const;
+
+    std::vector< rtl::OUString > & getAdditionalTemplateNames();
 
     bool isValidTemplate(rtl::OUString const & templateName) const;
 

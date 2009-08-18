@@ -35,7 +35,6 @@
 
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "libxml/parser.h"
 #include "osl/file.hxx"
 #include "rtl/bootstrap.hxx"
 #include "rtl/ref.hxx"
@@ -57,22 +56,14 @@ namespace css = com::sun::star;
 
 struct UnresolvedListItem {
     rtl::OUString name;
-    xmlDocPtr doc;
+    rtl::Reference< xml::Reader > reader;
 
-    explicit UnresolvedListItem(rtl::OUString const & theName):
-        name(theName), doc(0) {}
+    UnresolvedListItem(
+        rtl::OUString const & theName, rtl::Reference< xml::Reader > theReader):
+        name(theName), reader(theReader) {}
 };
 
-class UnresolvedList: public std::list< UnresolvedListItem > {
-public:
-    ~UnresolvedList();
-};
-
-UnresolvedList::~UnresolvedList() {
-    for (iterator i(begin()); i != end(); ++i) {
-        xmlFreeDoc(i->doc);
-    }
-}
+typedef std::list< UnresolvedListItem > UnresolvedList;
 
 void parseSystemLayer() {
     //TODO
@@ -287,7 +278,7 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
             css::uno::Reference< css::uno::XInterface >());
     }
     UnresolvedList unres;
-    xml::Dependencies deps;
+    xml::XcdParser::Dependencies deps;
     for (;;) {
         osl::DirectoryItem i;
         osl::FileBase::RC rc = dir.getNextItem(i, SAL_MAX_UINT32);
@@ -321,12 +312,14 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
                 rtl::OUString name(
                     file.copy(
                         0, file.getLength() - RTL_CONSTASCII_LENGTH(".xcd")));
-                xml::XmlDoc doc(xml::parseXmlFile(stat.getFileURL()));
-                if (xml::parseXcdFile(doc.doc, layer, deps, &data_)) {
+                rtl::Reference< xml::Reader > reader(
+                    new xml::Reader(
+                        stat.getFileURL(),
+                        new xml::XcdParser(layer, deps, &data_)));
+                if (reader->parse()) {
                     deps.insert(name);
                 } else {
-                    unres.push_back(UnresolvedListItem(name));
-                    std::swap(unres.back().doc, doc.doc);
+                    unres.push_back(UnresolvedListItem(name, reader));
                 }
             }
         }
@@ -334,12 +327,9 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
     while (!unres.empty()) {
         bool resolved = false;
         for (UnresolvedList::iterator i(unres.begin()); i != unres.end();) {
-            if (xml::parseXcdFile(i->doc, layer, deps, &data_)) {
+            if (i->reader->parse()) {
                 deps.insert(i->name);
-                UnresolvedList::iterator j(i++);
-                xmlFreeDoc(j->doc);
-                j->doc = 0;
-                unres.erase(j);
+                unres.erase(i++);
                 resolved = true;
             } else {
                 ++i;
@@ -403,7 +393,7 @@ rtl::OUString Components::getModificationFileUrl() const {
         rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(
                 "${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/"
-                "registrymodifications")));
+                "registrymodifications.xcu")));
 }
 
 void Components::parseModificationLayer() {
