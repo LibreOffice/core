@@ -71,6 +71,80 @@ Currency HID_DLGDEPOT_LSTMARKETS
 OKButton HID_DLGDEPOT_0_CMDGOON_HISTORY
 CancelButton HID_DLGDEPOT_0_CMDCANCEL_HISTORY
 
+' CWS printerpullpages ---- printdialog begin ----
+
+*Printing                   .HelpId:vcl:PrintDialog:Dialog
+    PreviewWindow               .HelpId:vcl:PrintDialog:Preview
+    PreviewPageNumber           .HelpId:vcl:PrintDialog:PageEdit
+    ScrollBackward              .HelpId:vcl:PrintDialog:BackwardBtn
+    ScrollForward               .HelpId:vcl:PrintDialog:ForwardBtn
+    Print                       .HelpId:vcl:PrintDialog:OK
+    Cancel                      .HelpId:vcl:PrintDialog:Cancel
+    PageCount                   .HelpId:vcl:PrintDialog:NumPagesText
+
+    PrintingTabControl          .HelpId:vcl:PrintDialog:TabPages
+        TabPrintGeneral             .HelpId:vcl:PrintDialog:JobPage
+            PrinterList                 .HelpId:vcl:PrintDialog:JobPage:PrinterList
+            PrinterSetup                .HelpId:vcl:PrintDialog:JobPage:Setup
+            ' PrinterProperties are not available on Mac!
+            Properties                  .HelpId:vcl:PrintDialog:JobPage:Properties
+            NumberOfCopies              .HelpId:vcl:PrintDialog:JobPage:Copies
+            Collate                     .HelpId:vcl:PrintDialog:JobPage:Collate
+            PrintNotes                  .HelpId:vcl:PrintDialog:PrintNotes:ListBox
+            AllPages                    .HelpId:vcl:PrintDialog:PrintContent:RadioButton:0
+            Pages                       .HelpId:vcl:PrintDialog:PrintContent:RadioButton:1
+            PageRange                   .HelpId:vcl:PrintDialog:PageRange:Edit
+            Selection                   .HelpId:vcl:PrintDialog:PrintContent:RadioButton:2
+        TabAppPrintOptions          .HelpId:vcl:PrintDialog:TabPage:10
+            ' Writer only
+            PageBackground              .HelpId:vcl:PrintDialog:PrintBackground:CheckBox
+            GraphicsAndDiagrams         .HelpId:vcl:PrintDialog:PrintGraphicsAndDiagrams:CheckBox
+            HiddenText                  .HelpId:vcl:PrintDialog:PrintHiddenText:CheckBox
+            TextPlaceholder             .HelpId:vcl:PrintDialog:PrintPlaceholder:CheckBox
+            FormControls                .HelpId:vcl:PrintDialog:PrintControls:CheckBox
+            PrintTextInBlack            .HelpId:vcl:PrintDialog:PrintBlack:CheckBox
+            AddBlankPages               .HelpId:vcl:PrintDialog:PrintEmptyPages:CheckBox
+            ' Calc only
+            IncludeEmptyPages           .HelpId:vcl:PrintDialog:IsIncludeEmptyPages:CheckBox
+            ' Impress only
+            SlideName                   .HelpId:vcl:PrintDialog:IsPrintName:CheckBox
+            DateAndTime                 .HelpId:vcl:PrintDialog:IsPrintDateTime:CheckBox
+            HiddenPages                 .HelpId:vcl:PrintDialog:IsPrintHidden:CheckBox
+            OriginalColors              .HelpId:vcl:PrintDialog:Quality:RadioButton:0
+            Grayscale                   .HelpId:vcl:PrintDialog:Quality:RadioButton:1
+            BlackAndWhite               .HelpId:vcl:PrintDialog:Quality:RadioButton:2
+            OriginalSize                .HelpId:vcl:PrintDialog:PageOptions:RadioButton:0
+            FitToPage                   .HelpId:vcl:PrintDialog:PageOptions:RadioButton:1
+            MultiplePages               .HelpId:vcl:PrintDialog:PageOptions:RadioButton:2
+            ' Math only
+            TitleRow                    .HelpId:vcl:PrintDialog:TitleRow:CheckBox
+            FormulaText                 .HelpId:vcl:PrintDialog:FormulaText:CheckBox
+            Borders                     .HelpId:vcl:PrintDialog:Border:CheckBox
+            OriginalSize                .HelpId:vcl:PrintDialog:PrintFormat:RadioButton:0
+            FitToPage                   .HelpId:vcl:PrintDialog:PrintFormat:RadioButton:1
+            Scaling                     .HelpId:vcl:PrintDialog:PrintFormat:RadioButton:2
+            ScalingFactor               .HelpId:vcl:PrintDialog:PrintScale:NumericField
+        TabPrintLayout              .HelpId:vcl:PrintDialog:NUpPage
+            PagesPerSheet               .HelpId:vcl:PrintDialog:NUpPage:PagesPerSheet
+            NumberOfPages               .HelpId:vcl:PrintDialog:NUpPage:PagesPerSheetBox
+            NumberOfColumns             .HelpId:vcl:PrintDialog:NUpPage:ColumnsBox
+            NumberOfRows                .HelpId:vcl:PrintDialog:NUpPage:RowsBox
+            BorderAroundPages           .HelpId:vcl:PrintDialog:NUpPage:BorderBox
+            Brochure                    .HelpId:vcl:PrintDialog:NUpPage:Brochure
+            DistanceBetweenPages        .HelpId:vcl:PrintDialog:NUpPage:PageMarginBox
+            MarginToSheetBorder         .HelpId:vcl:PrintDialog:NUpPage:SheetMarginBox
+            PaperOrientation            .HelpId:vcl:PrintDialog:NUpPage:OrientationBox
+            PrintOrder                  .HelpId:vcl:PrintDialog:NUpPage:OrderBox
+            IncludePages                .HelpId:vcl:PrintDialog:PrintLeftRightPages:ListBox
+            PrintBrochureRTL            .HelpId:vcl:PrintDialog:PrintBrochureRTL:ListBox
+        TabPrintOptions             .HelpId:vcl:PrintDialog:OptPage
+            PrintToFile                 .HelpId:vcl:PrintDialog:OptPage:ToFile
+            PrintAsSingeleJobs          .HelpId:vcl:PrintDialog:OptPage:SingleJobs
+            PrintReverse                .HelpId:vcl:PrintDialog:OptPage:Reverse
+            UsePaperTrayFromPreferences .HelpId:vcl:PrintDialog:PaperTray:CheckBox
+
+' CWS printerpullpages ---- printdialog end ----
+
 *PurchaseStarOffice HID_LICENSING_DIALOG
 TabPurchase HID_TP_PURCHASE
 getSerialNumber tab:PushButton:TP_PURCHASE:PB_PURCHASE_GET
