@@ -426,14 +426,14 @@ $(MISC)$/%.xcd .ERRREMOVE: $(MISC)$/%.list
 
 $(MISC)$/%.list: makefile.mk
     - $(RM) $@
-    echo '<list>$(foreach,i,$(MY_DEPS_$(@:b)) <dependency>$i</dependency>) \
+    echo '<list>$(foreach,i,$(MY_DEPS_$(@:b)) <dependency file="$i"/>) \
         $(foreach,i,$(MY_FILES_$(@:b)) <filename>$i</filename>)</list>' \
         > $@
 
 $(MISC)$/lang1$/Langpack-{$(alllangiso)}.xcd .ERRREMOVE: packregistry.xslt
     $(MKDIRHIER) $(@:d)
     - $(RM) $(MISC)$/$(@:b).list
-    echo '<list><dependency>main</dependency>\
+    echo '<list><dependency file="main"/>\
         <filename>$(MY_MOD)$/$(@:b).xcu</filename></list>' \
         > $(MISC)$/$(@:b).list
     $(XSLTPROC) --nonet -o $@ packregistry.xslt $(MISC)$/$(@:b).list
