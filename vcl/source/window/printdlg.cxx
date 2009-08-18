@@ -1309,9 +1309,11 @@ void PrintDialog::setupOptionalUI()
                     pVal->Value >>= nSelectVal;
                 for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
                 {
-                    vcl::RowOrColumn* pDependencyRow = new vcl::RowOrColumn( pCurColumn, false );
-                    pRadioColumn->addChild( pDependencyRow );
-                    aPropertyToDependencyRowMap.insert( std::pair< rtl::OUString, vcl::RowOrColumn* >( aPropertyName, pDependencyRow ) );
+                    boost::shared_ptr<vcl::LabeledElement> pLabel( new vcl::LabeledElement( pRadioColumn, 1 ) );
+                    pRadioColumn->addChild( pLabel );
+                    boost::shared_ptr<vcl::RowOrColumn> pDependencyRow( new vcl::RowOrColumn( pLabel.get(), false ) );
+                    pLabel->setElement( pDependencyRow );
+                    aPropertyToDependencyRowMap.insert( std::pair< rtl::OUString, vcl::RowOrColumn* >( aPropertyName, pDependencyRow.get() ) );
 
                     RadioButton* pBtn = new RadioButton( pCurParent, m == 0 ? WB_GROUP : 0 );
                     maControls.push_front( pBtn );
@@ -1329,7 +1331,7 @@ void PrintDialog::setupOptionalUI()
                     // set help text
                     setHelpText( pBtn, aHelpTexts, nCurHelpText++ );
                     // add the radio button to the column
-                    pDependencyRow->addWindow( pBtn );
+                    pLabel->setLabel( pBtn );
                 }
             }
             else if( ( aCtrlType.equalsAscii( "List" )   ||
