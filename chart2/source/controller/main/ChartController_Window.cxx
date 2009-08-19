@@ -701,8 +701,16 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                 }
                 else
                 {
-                    m_aSelection.adaptSelectionToNewPos( aMPos, pDrawViewWrapper, rMEvt.IsRight(), m_bWaitingForDoubleClick );
-                    m_aSelection.applySelection( pDrawViewWrapper );
+                    SdrObject* pObj = pDrawViewWrapper->getSelectedObject();
+                    if ( pObj )
+                    {
+                        uno::Reference< drawing::XShape > xShape( pObj->getUnoShape(), uno::UNO_QUERY );
+                        if ( xShape.is() )
+                        {
+                            m_aSelection.setSelection( xShape );
+                            m_aSelection.applySelection( pDrawViewWrapper );
+                        }
+                    }
                 }
             }
             else
@@ -1615,6 +1623,11 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
                     case OBJ_RECT:
                         {
                             ePointerStyle = POINTER_DRAW_RECT;
+                        }
+                        break;
+                    case OBJ_CIRC:
+                        {
+                            ePointerStyle = POINTER_DRAW_ELLIPSE;
                         }
                         break;
                     case OBJ_TEXT:

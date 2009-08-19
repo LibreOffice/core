@@ -121,6 +121,7 @@ FeatureState DrawCommandDispatch::getState( const ::rtl::OUString& rCommand ) co
         case SID_OBJECT_SELECT:
         case SID_DRAW_LINE:
         case SID_DRAW_RECT:
+        case SID_DRAW_ELLIPSE:
         case SID_DRAW_TEXT:
             {
                 aReturn.bEnabled = true;
@@ -165,6 +166,12 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
             {
                 eDrawMode = CHARTDRAW_INSERT;
                 eKind = OBJ_RECT;
+            }
+            break;
+        case SID_DRAW_ELLIPSE:
+            {
+                eDrawMode = CHARTDRAW_INSERT;
+                eKind = OBJ_CIRC;
             }
             break;
         case SID_DRAW_TEXT:
@@ -229,10 +236,11 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
 
 void DrawCommandDispatch::describeSupportedFeatures()
 {
-    implDescribeSupportedFeature( ".uno:SelectObject",  SID_OBJECT_SELECT,      CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Line",          SID_DRAW_LINE,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Rect",          SID_DRAW_RECT,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:DrawText",      SID_DRAW_TEXT,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SelectObject",  SID_OBJECT_SELECT,  CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Line",          SID_DRAW_LINE,      CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Rect",          SID_DRAW_RECT,      CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Ellipse",       SID_DRAW_ELLIPSE,   CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DrawText",      SID_DRAW_TEXT,      CommandGroup::INSERT );
 }
 
 void DrawCommandDispatch::setInsertObj( USHORT eObj, const ::rtl::OUString& rShapeType )
