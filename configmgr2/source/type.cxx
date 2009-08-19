@@ -49,6 +49,10 @@ namespace css = com::sun::star;
 
 }
 
+bool isListType(Type type) {
+    return type >= TYPE_BOOLEAN_LIST;
+}
+
 css::uno::Type mapType(Type type) {
     switch (type) {
     default: // TYPE_ERROR //TODO: can happen?

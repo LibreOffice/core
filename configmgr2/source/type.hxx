@@ -45,6 +45,8 @@ enum Type {
     TYPE_SHORT_LIST, TYPE_INT_LIST, TYPE_LONG_LIST, TYPE_DOUBLE_LIST,
     TYPE_STRING_LIST, TYPE_HEXBINARY_LIST };
 
+bool isListType(Type type);
+
 com::sun::star::uno::Type mapType(Type type);
 
 Type mapType(com::sun::star::uno::Any const & value);

@@ -31,10 +31,13 @@
 #include "sal/config.h"
 
 #include <algorithm>
+#include <climits>
 #include <stack>
+#include <vector>
 
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
@@ -78,117 +81,6 @@ namespace {
 
 namespace css = com::sun::star;
 
-rtl::OUString escapeText(rtl::OUString const & text, bool escapeClosingBracket)
-{
-    rtl::OUStringBuffer buf;
-    for (sal_Int32 i = 0; i < text.getLength(); ++i) {
-        sal_Unicode c = text[i];
-        if (c < 0x0009 || c == 0x000B || c == 0x000C ||
-            (c > 0x000D && c <= 0x001F) || c == 0xFFFE || c == 0xFFFF)
-        {
-            static sal_Unicode const hexDigit[16] = {
-                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C',
-                'D', 'E', 'F' };
-            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("\\u"));
-            buf.append(hexDigit[(c >> 12) & 0xF]);
-            buf.append(hexDigit[(c >> 8) & 0xF]);
-            buf.append(hexDigit[(c >> 4) & 0xF]);
-            buf.append(hexDigit[c & 0xF]);
-        } else {
-            if (c == '\\' || (c == ']' && escapeClosingBracket)) {
-                buf.append(sal_Unicode('\\'));
-            }
-            buf.append(c);
-        }
-    }
-    return buf.makeStringAndClear();
-}
-
-xmlChar const * unescapeText(
-    xmlChar const * text, bool enclosingBrackets, rtl::OString * unescaped)
-{
-    OSL_ASSERT(text != 0 && unescaped != 0);
-    if (enclosingBrackets && *text++ != '[') {
-        return 0;
-    }
-    rtl::OStringBuffer buf;
-    for (;;) {
-        xmlChar c = *text++;
-        switch (c) {
-        case '\0':
-            if (enclosingBrackets) {
-                return 0;
-            }
-            *unescaped = buf.makeStringAndClear();
-            return text;
-        case '\\':
-            c = *text++;
-            switch (c) {
-            case ']':
-                if (!enclosingBrackets) {
-                    return 0;
-                }
-                // fall through
-            case '\\':
-                buf.append(static_cast< char >(c));
-                break;
-            case 'u':
-                if (text[0] == '0' && text[1] == '0' &&
-                    (text[2] == '0' || text[2] == '1') &&
-                    ((text[3] >= '0' && text[3] <= '9') ||
-                     (text[3] >= 'A' && text[3] <= 'F') ||
-                     (text[3] >= 'a' && text[3] <= 'f')))
-                {
-                    char n = static_cast< char >(
-                        ((text[2] - '0') << 4) |
-                        (text[3] <= '9'
-                         ? text[3] - '0'
-                         : (text[3] - (text[3] <= 'F' ? 'A' : 'a') + 10)));
-                    switch (n) {
-                    case '\x09':
-                    case '\x0A':
-                    case '\x0D':
-                        return 0;
-                    default:
-                        break;
-                    }
-                    buf.append(n);
-                    text += 4;
-                    break;
-                }
-                if ((text[0] == 'F' || text[0] == 'f') &&
-                    (text[1] == 'F' || text[1] == 'f') &&
-                    (text[2] == 'F' || text[2] == 'f') &&
-                    (text[3] == 'E' || text[3] == 'e' ||
-                     text[3] == 'F' || text[3] == 'f'))
-                {
-                    buf.append(char(static_cast< unsigned char >(0xEF)));
-                    buf.append(char(static_cast< unsigned char >(0xBF)));
-                    buf.append(
-                        static_cast< char >(
-                            0xBE +
-                            (text[3] == 'F' || text[3] == 'f' ? 1 : 0)));
-                    text += 4;
-                    break;
-                }
-                // fall through
-            default:
-                return 0;
-            }
-            break;
-        case ']':
-            if (enclosingBrackets) {
-                *unescaped = buf.makeStringAndClear();
-                return text;
-            }
-            // fall through
-        default:
-            buf.append(static_cast< char >(c));
-            break;
-        }
-    }
-}
-
 rtl::OUString parseLastSegment(
     rtl::OUString const & path, rtl::OUString * name)
 {
@@ -209,36 +101,21 @@ rtl::OUString parseLastSegment(
     return path.copy(0, i);
 }
 
-bool equal(
-    xmlChar const * begin1, xmlChar const * end1, char const * begin2,
-    sal_Int32 length2)
-{
-    OSL_ASSERT(begin1 != 0 && end1 != 0);
-    return
-        rtl_str_compare_WithLength(
-            reinterpret_cast< char const * >(begin1), end1 - begin1, begin2,
-            length2) ==
-        0;
-}
-
 xmlChar const * xmlString(char const * str) {
     return reinterpret_cast< xmlChar const * >(str);
 }
 
-rtl::OUString fromXmlString(xmlChar const * str) {
-    char const * s = reinterpret_cast< char const * >(str);
-    return s == 0
-        ? rtl::OUString()
-        : rtl::OUString(s, rtl_str_getLength(s), RTL_TEXTENCODING_UTF8);
+rtl::OUString convertUtf8String(char const * text, sal_Int32 length) {
+    return rtl::OUString(text, length, RTL_TEXTENCODING_UTF8);
+        // conversion cannot fail as XML parser guarantees that text is legal
+        // UTF-8
 }
 
-rtl::OUString fromXmlString(xmlChar const * str, xmlChar const * end) {
-    OSL_ASSERT(str == 0 || end != 0);
-    return str == 0
-        ? rtl::OUString()
-        : rtl::OUString(
-            reinterpret_cast< char const * >(str), end - str,
-            RTL_TEXTENCODING_UTF8);
+rtl::OUString fromXmlString(xmlChar const * str) {
+    OSL_ASSERT(str != 0);
+    return convertUtf8String(
+        reinterpret_cast< char const * >(str),
+        rtl_str_getLength(reinterpret_cast< char const * >(str)));
 }
 
 struct XmlString: private boost::noncopyable {
@@ -274,10 +151,15 @@ rtl::OUString fullTemplateName(
     return buf.makeStringAndClear();
 }
 
-rtl::OString convertToUtf8(rtl::OUString const & text) {
+rtl::OString convertToUtf8(
+    rtl::OUString const & text, sal_Int32 offset, sal_Int32 length)
+{
+    OSL_ASSERT(
+        offset <= text.getLength() && text.getLength() - offset >= length);
     rtl::OString utf8;
-    if (!text.convertToString(
-            &utf8, RTL_TEXTENCODING_UTF8,
+    if (!rtl_convertUStringToString(
+            &utf8.pData, text.pData->buffer + offset, length,
+            RTL_TEXTENCODING_UTF8,
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
@@ -287,6 +169,10 @@ rtl::OString convertToUtf8(rtl::OUString const & text) {
             css::uno::Reference< css::uno::XInterface >());
     }
     return utf8;
+}
+
+rtl::OString convertToUtf8(rtl::OUString const & text) {
+    return convertToUtf8(text, 0, text.getLength());
 }
 
 rtl::OString convertToFilepath(rtl::OUString const & url) {
@@ -344,7 +230,7 @@ Type parseType(Reader const * reader, xmlChar const * text) {
         XmlString uri(
             xmlTextReaderLookupNamespace(
                 reader->getReader(),
-                reinterpret_cast< xmlChar const * >(
+                xmlString(
                     rtl::OString(
                         reinterpret_cast< char const * >(text), p - text).
                     getStr())));
@@ -413,52 +299,35 @@ bool parseBoolean(xmlChar const * text, bool deflt) {
         css::uno::Reference< css::uno::XInterface >());
 }
 
-bool parseBooleanValue(
-    xmlChar const * text, xmlChar const * end, sal_Bool * value)
-{
-    OSL_ASSERT(text != 0 && value != 0);
-    if (end == 0) {
-        if (xmlStrEqual(text, xmlString("true")) ||
-            xmlStrEqual(text, xmlString("1")))
-        {
-            *value = true;
-            return true;
-        }
-        if (xmlStrEqual(text, xmlString("false")) ||
-            xmlStrEqual(text, xmlString("0")))
-        {
-            *value = false;
-            return true;
-        }
-    } else {
-        if (equal(text, end, RTL_CONSTASCII_STRINGPARAM("true")) ||
-            equal(text, end, RTL_CONSTASCII_STRINGPARAM("1")))
-        {
-            *value = true;
-            return true;
-        }
-        if (equal(text, end, RTL_CONSTASCII_STRINGPARAM("false")) ||
-            equal(text, end, RTL_CONSTASCII_STRINGPARAM("0")))
-        {
-            *value = false;
-            return true;
-        }
+bool parseBooleanValue(char const * text, sal_Int32 length, sal_Bool * value) {
+    OSL_ASSERT(value != 0);
+    if ((rtl_str_compare_WithLength(
+             text, length, RTL_CONSTASCII_STRINGPARAM("true")) ==
+         0) ||
+        (rtl_str_compare_WithLength(
+            text, length, RTL_CONSTASCII_STRINGPARAM("1")) ==
+         0))
+    {
+        *value = true;
+        return true;
+    }
+    if ((rtl_str_compare_WithLength(
+             text, length, RTL_CONSTASCII_STRINGPARAM("false")) ==
+         0) ||
+        (rtl_str_compare_WithLength(
+            text, length, RTL_CONSTASCII_STRINGPARAM("0")) ==
+         0))
+    {
+        *value = false;
+        return true;
     }
     return false;
 }
 
-bool parseShortValue(
-    xmlChar const * text, xmlChar const * end, sal_Int16 * value)
-{
-    OSL_ASSERT(text != 0 && value != 0);
-    sal_Int32 n;
-    if (end == 0) {
-        n = rtl_str_toInt32(reinterpret_cast< char const * >(text), 10);
-            //TODO: check valid lexical representation
-    } else {
-        n = fromXmlString(text, end).toInt32();
-            //TODO: check valid lexical representation
-    }
+bool parseShortValue(char const * text, sal_Int32 length, sal_Int16 * value) {
+    OSL_ASSERT(value != 0);
+    sal_Int32 n = rtl::OString(text, length).toInt32();
+        //TODO: check valid lexical representation
     if (n >= SAL_MIN_INT16 && n <= SAL_MAX_INT16) {
         *value = static_cast< sal_Int16 >(n);
         return true;
@@ -466,213 +335,139 @@ bool parseShortValue(
     return false;
 }
 
-bool parseIntValue(
-    xmlChar const * text, xmlChar const * end, sal_Int32 * value)
-{
-    OSL_ASSERT(text != 0 && value != 0);
-    if (end == 0) {
-        *value = rtl_str_toInt32(reinterpret_cast< char const * >(text), 10);
-            //TODO: check valid lexical representation
-        return true;
-    }
-    *value = fromXmlString(text, end).toInt32();
+bool parseIntValue(char const * text, sal_Int32 length, sal_Int32 * value) {
+    OSL_ASSERT(value != 0);
+    *value = rtl::OString(text, length).toInt32();
         //TODO: check valid lexical representation
     return true;
 }
 
-bool parseLongValue(
-    xmlChar const * text, xmlChar const * end, sal_Int64 * value)
-{
-    OSL_ASSERT(text != 0 && value != 0);
-    if (end == 0) {
-        *value = rtl_str_toInt64(reinterpret_cast< char const * >(text), 10);
-            //TODO: check valid lexical representation
-        return true;
-    }
-    *value = fromXmlString(text, end).toInt64();
+bool parseLongValue(char const * text, sal_Int32 length, sal_Int64 * value) {
+    OSL_ASSERT(value != 0);
+    *value = rtl::OString(text, length).toInt64();
         //TODO: check valid lexical representation
     return true;
 }
 
-bool parseDoubleValue(xmlChar const * text, xmlChar const * end, double * value)
-{
-    OSL_ASSERT(text != 0 && value != 0);
-    if (end == 0) {
-        *value = rtl_str_toDouble(reinterpret_cast< char const * >(text));
-            //TODO: check valid lexical representation
-        return true;
-    }
-    *value = fromXmlString(text, end).toDouble();
+bool parseDoubleValue(char const * text, sal_Int32 length, double * value) {
+    OSL_ASSERT(value != 0);
+    *value = rtl::OString(text, length).toDouble();
         //TODO: check valid lexical representation
     return true;
 }
 
 bool parseStringValue(
-    xmlChar const * text, xmlChar const * end, rtl::OUString * value)
+    char const * text, sal_Int32 length, rtl::OUString * value)
 {
-    OSL_ASSERT((text != 0 || end == 0) && value != 0);
-    if (end == 0) {
-        *value = fromXmlString(text);
-        return true;
-    }
-    *value = fromXmlString(text, end);
+    OSL_ASSERT(value != 0);
+    *value = convertUtf8String(text, length);
     return true;
 }
 
-enum ParseResult { PARSE_END, PARSE_GOOD, PARSE_BAD };
-
-ParseResult parseHexDigit(
-    xmlChar const * text, xmlChar const * end, int * value)
-{
-    OSL_ASSERT(text != 0 && value != 0);
-    if (end == 0 ? *text == '\0' : text == end) {
-        return PARSE_END;
-    }
-    xmlChar c = *text;
+bool parseHexDigit(char c, int * value) {
+    OSL_ASSERT(value != 0);
     if (c >= '0' && c <= '9') {
         *value = c - '0';
-        return PARSE_GOOD;
+        return true;
     }
     if (c >= 'A' && c <= 'F') {
         *value = c - 'A' + 10;
-        return PARSE_GOOD;
+        return true;
     }
     if (c >= 'a' && c <= 'f') {
         *value = c - 'a' + 10;
-        return PARSE_GOOD;
+        return true;
     }
-    return PARSE_BAD;
+    return false;
 }
 
 bool parseHexbinaryValue(
-    xmlChar const * text, xmlChar const * end,
-    css::uno::Sequence< sal_Int8 > * value)
+    char const * text, sal_Int32 length, css::uno::Sequence< sal_Int8 > * value)
 {
-    OSL_ASSERT((text != 0 || end == 0) && value != 0);
+    OSL_ASSERT(length >= 0 && value != 0);
+    if ((length & 1) != 0) {
+        return false;
+    }
     comphelper::SequenceAsVector< sal_Int8 > seq;
-    if (text != 0) {
-        for (xmlChar const * p = text;;) {
-            int n1;
-            switch (parseHexDigit(p++, end, &n1)) {
-            case PARSE_END:
-                goto done;
-            case PARSE_GOOD:
-                break;
-            case PARSE_BAD:
-                return false;
-            }
-            int n2;
-            if (parseHexDigit(p++, end, &n2) != PARSE_GOOD) {
-                return false;
-            }
-            seq.push_back(static_cast< sal_Int8 >((n1 << 4) | n2));
+    for (sal_Int32 i = 0; i != length;) {
+        int n1;
+        int n2;
+        if (!(parseHexDigit(text[i++], &n1) && parseHexDigit(text[i++], &n2))) {
+            return false;
         }
-    done:;
+        seq.push_back(static_cast< sal_Int8 >((n1 << 4) | n2));
     }
     *value = seq.getAsConstList();
     return true;
 }
 
-template< typename T > char const * parseEscapedValue(
-    char const * text, bool (* parse)(xmlChar const *, xmlChar const *, T *),
-    T * value)
+template< typename T > css::uno::Any parseNormalizedValue(
+    rtl::OStringBuffer const & text,
+    bool (* parse)(char const *, sal_Int32, T *))
 {
-    rtl::OString unesc;
-    text = reinterpret_cast< char const * >(
-        unescapeText(reinterpret_cast< xmlChar const * >(text), true, &unesc));
-    return
-        (text != 0 &&
-         (*parse)(
-             reinterpret_cast< xmlChar const * >(unesc.getStr()),
-             (reinterpret_cast< xmlChar const * >(unesc.getStr()) +
-              unesc.getLength()),
-             value))
-        ? text : 0;
-}
-
-template< typename T > bool parseListValue(
-    xmlChar const * separator, bool escaped, rtl::OStringBuffer const & text,
-    bool (* parse)(xmlChar const *, xmlChar const *, T *),
-    css::uno::Sequence< T > * value)
-{
-    OSL_ASSERT(parse != 0 && value != 0);
-    comphelper::SequenceAsVector< T > seq;
-    if (escaped) {
-        if (text.getLength() != 0) {
-            for (char const * p = text.getStr();;) {
-                T val;
-                p = parseEscapedValue(p, parse, &val);
-                if (p == 0) {
-                    return false;
-                }
-                seq.push_back(val);
-                if (*p == 0) {
-                    break;
-                }
-                if (separator == 0) {
-                    char const * q = p;
-                    while (*q == ' ' || *q == '\t' || *q == '\x0A' ||
-                           *q == '\x0D')
-                    {
-                        ++q;
-                    }
-                    if (q == p) {
-                        return false;
-                    }
-                    p = q;
-                } else {
-                    int sepLen = xmlStrlen(separator);
-                    if (xmlStrncmp(
-                            reinterpret_cast< xmlChar const * >(p), separator,
-                            sepLen) !=
-                        0)
-                    {
-                        return false;
-                    }
-                    p += sepLen;
-                }
-            }
-        }
+    XmlString col(xmlSchemaCollapseString(xmlString(text.getStr())));
+    char const * p;
+    sal_Int32 n;
+    if (col.str == 0) {
+        p = text.getStr();
+        n = text.getLength();
     } else {
-        XmlString col;
-        xmlChar const * p = reinterpret_cast< xmlChar const * >(text.getStr());
-        xmlChar const * sep;
-        int sepLen;
-        if (separator == 0) {
-            col = xmlSchemaCollapseString(p);
-            if (col.str != 0) {
-                p = col.str;
-            }
-            sep = xmlString(" ");
-            sepLen = RTL_CONSTASCII_LENGTH(" ");
-        } else {
-            sep = separator;
-            sepLen = xmlStrlen(separator);
+        p = reinterpret_cast< char const * >(col.str);
+        n = rtl_str_getLength(p);
+    }
+    T val;
+    if (!(*parse)(p, n, &val)) {
+        throw css::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid value")),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    return css::uno::makeAny(val);
+}
+
+template< typename T > css::uno::Any parseListValue(
+    xmlChar const * separator, rtl::OStringBuffer const & text,
+    bool (* parse)(char const *, sal_Int32, T *))
+{
+    comphelper::SequenceAsVector< T > seq;
+    XmlString col;
+    char const * p = text.getStr();
+    sal_Int32 n = text.getLength();
+    char const * sep;
+    sal_Int32 sepLen;
+    if (separator == 0) {
+        col = xmlSchemaCollapseString(xmlString(p));
+        if (col.str != 0) {
+            p = reinterpret_cast< char const * >(col.str);
+            n = rtl_str_getLength(p);
         }
-        if (*p != '\0') {
-            for (;;) {
-                sal_Int32 i = rtl_str_indexOfStr_WithLength(
-                    reinterpret_cast< char const * >(p), xmlStrlen(p),
-                    reinterpret_cast< char const * >(sep), sepLen);
-                T val;
-                if (!(*parse)(p, i == -1 ? 0 : p + i, &val)) {
-                    return false;
-                }
-                seq.push_back(val);
-                if (i == -1) {
-                    break;
-                }
-                p += i + sepLen;
+        sep = " ";
+        sepLen = RTL_CONSTASCII_LENGTH(" ");
+    } else {
+        sep = reinterpret_cast< char const * >(separator);
+        sepLen = rtl_str_getLength(sep);
+    }
+    if (n != 0) {
+        for (;;) {
+            sal_Int32 i = rtl_str_indexOfStr_WithLength(p, n, sep, sepLen);
+            T val;
+            if (!(*parse)(p, i == -1 ? n : i, &val)) {
+                throw css::uno::RuntimeException(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid value")),
+                    css::uno::Reference< css::uno::XInterface >());
             }
+            seq.push_back(val);
+            if (i == -1) {
+                break;
+            }
+            p += i + sepLen;
+            n -= i + sepLen;
         }
     }
-    *value = seq.getAsConstList();
-    return true;
+    return css::uno::makeAny(seq.getAsConstList());
 }
 
 css::uno::Any parseValue(
-    xmlChar const * separator, bool escaped, rtl::OStringBuffer const & text,
-    Type type)
+    xmlChar const * separator, rtl::OStringBuffer const & text, Type type)
 {
     switch (type) {
     case TYPE_ANY:
@@ -681,194 +476,85 @@ css::uno::Any parseValue(
                 RTL_CONSTASCII_USTRINGPARAM("invalid value of type any")),
             css::uno::Reference< css::uno::XInterface >());
     case TYPE_BOOLEAN:
-        {
-            XmlString col(
-                xmlSchemaCollapseString(
-                    reinterpret_cast< xmlChar const * >(text.getStr())));
-            sal_Bool val;
-            if (parseBooleanValue(
-                    (col.str == 0
-                     ? reinterpret_cast< xmlChar const * >(text.getStr())
-                     : col.str),
-                    0, &val))
-            {
-                return css::uno::makeAny(val);
-            }
-        }
-        break;
+        return parseNormalizedValue(text, &parseBooleanValue);
     case TYPE_SHORT:
-        {
-            XmlString col(
-                xmlSchemaCollapseString(
-                    reinterpret_cast< xmlChar const * >(text.getStr())));
-            sal_Int16 val;
-            if (parseShortValue(
-                    (col.str == 0
-                     ? reinterpret_cast< xmlChar const * >(text.getStr())
-                     : col.str),
-                    0, &val))
-            {
-                return css::uno::makeAny(val);
-            }
-        }
-        break;
+        return parseNormalizedValue(text, &parseShortValue);
     case TYPE_INT:
-        {
-            XmlString col(
-                xmlSchemaCollapseString(
-                    reinterpret_cast< xmlChar const * >(text.getStr())));
-            sal_Int32 val;
-            if (parseIntValue(
-                    (col.str == 0
-                     ? reinterpret_cast< xmlChar const * >(text.getStr())
-                     : col.str),
-                    0, &val))
-            {
-                return css::uno::makeAny(val);
-            }
-        }
-        break;
+        return parseNormalizedValue(text, &parseIntValue);
     case TYPE_LONG:
-        {
-            XmlString col(
-                xmlSchemaCollapseString(
-                    reinterpret_cast< xmlChar const * >(text.getStr())));
-            sal_Int64 val;
-            if (parseLongValue(
-                    (col.str == 0
-                     ? reinterpret_cast< xmlChar const * >(text.getStr())
-                     : col.str),
-                    0, &val))
-            {
-                return css::uno::makeAny(val);
-            }
-        }
-        break;
+        return parseNormalizedValue(text, &parseLongValue);
     case TYPE_DOUBLE:
-        {
-            XmlString col(
-                xmlSchemaCollapseString(
-                    reinterpret_cast< xmlChar const * >(text.getStr())));
-            double val;
-            if (parseDoubleValue(
-                    (col.str == 0
-                     ? reinterpret_cast< xmlChar const * >(text.getStr())
-                     : col.str),
-                    0, &val))
-            {
-                return css::uno::makeAny(val);
-            }
-        }
-        break;
+        return parseNormalizedValue(text, &parseDoubleValue);
     case TYPE_STRING:
-        if (escaped) {
-            rtl::OUString val;
-            char const * p = parseEscapedValue(
-                text.getStr(), &parseStringValue, &val);
-            if (p != 0 && *p == '\0') {
-                return css::uno::makeAny(val);
-            }
-        } else {
-            rtl::OUString val;
-            if (parseStringValue(
-                    reinterpret_cast< xmlChar const * >(text.getStr()), 0,
-                    &val))
-            {
-                return css::uno::makeAny(val);
-            }
-        }
-        break;
+        return css::uno::makeAny(
+            convertUtf8String(text.getStr(), text.getLength()));
     case TYPE_HEXBINARY:
-        {
-            XmlString col(
-                xmlSchemaCollapseString(
-                    reinterpret_cast< xmlChar const * >(text.getStr())));
-            css::uno::Sequence< sal_Int8 > val;
-            if (parseHexbinaryValue(
-                    (col.str == 0
-                     ? reinterpret_cast< xmlChar const * >(text.getStr())
-                     : col.str),
-                    0, &val))
-            {
-                return css::uno::makeAny(val);
-            }
-        }
-        break;
+        return parseNormalizedValue(text, &parseHexbinaryValue);
     case TYPE_BOOLEAN_LIST:
-        {
-            css::uno::Sequence< sal_Bool > val;
-            if (parseListValue(
-                    separator, escaped, text, &parseBooleanValue, &val))
-            {
-                return css::uno::makeAny(val);
-            }
-        }
-        break;
+        return parseListValue(separator, text, &parseBooleanValue);
     case TYPE_SHORT_LIST:
-        {
-            css::uno::Sequence< sal_Int16 > val;
-            if (parseListValue(
-                    separator, escaped, text, &parseShortValue, &val))
-            {
-                return css::uno::makeAny(val);
-            }
-        }
-        break;
+        return parseListValue(separator, text, &parseShortValue);
     case TYPE_INT_LIST:
-        {
-            css::uno::Sequence< sal_Int32 > val;
-            if (parseListValue(separator, escaped, text, &parseIntValue, &val))
-            {
-                return css::uno::makeAny(val);
-            }
-        }
-        break;
+        return parseListValue(separator, text, &parseIntValue);
     case TYPE_LONG_LIST:
-        {
-            css::uno::Sequence< sal_Int64 > val;
-            if (parseListValue(separator, escaped, text, &parseLongValue, &val))
-            {
-                return css::uno::makeAny(val);
-            }
-        }
-        break;
+        return parseListValue(separator, text, &parseLongValue);
     case TYPE_DOUBLE_LIST:
-        {
-            css::uno::Sequence< double > val;
-            if (parseListValue(
-                    separator, escaped, text, &parseDoubleValue, &val))
-            {
-                return css::uno::makeAny(val);
-            }
-        }
-        break;
+        return parseListValue(separator, text, &parseDoubleValue);
     case TYPE_STRING_LIST:
-        {
-            css::uno::Sequence< rtl::OUString > val;
-            if (parseListValue(
-                    separator, escaped, text, &parseStringValue, &val))
-            {
-                return css::uno::makeAny(val);
-            }
-        }
-        break;
+        return parseListValue(separator, text, &parseStringValue);
     case TYPE_HEXBINARY_LIST:
-        {
-            css::uno::Sequence< css::uno::Sequence< sal_Int8 > > val;
-            if (parseListValue(
-                    separator, escaped, text, &parseHexbinaryValue, &val))
-            {
-                return css::uno::makeAny(val);
-            }
-        }
-        break;
+        return parseListValue(separator, text, &parseHexbinaryValue);
     default:
         OSL_ASSERT(false);
-        break;
+        throw css::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+            css::uno::Reference< css::uno::XInterface >());
     }
-    throw css::uno::RuntimeException(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid value")),
-        css::uno::Reference< css::uno::XInterface >());
+}
+
+template< typename T > css::uno::Any parseValueList(
+    std::vector< rtl::OString > const & items,
+    bool (* parse)(char const *, sal_Int32, T *))
+{
+    comphelper::SequenceAsVector< T > seq;
+    for (std::vector< rtl::OString >::const_iterator i(items.begin());
+         i != items.end(); ++i)
+    {
+        T val;
+        if (!(*parse)(i->getStr(), i->getLength(), &val)) {
+            throw css::uno::RuntimeException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid value")),
+                css::uno::Reference< css::uno::XInterface >());
+        }
+        seq.push_back(val);
+    }
+    return css::uno::makeAny(seq.getAsConstList());
+}
+
+css::uno::Any parseValueList(
+    std::vector< rtl::OString > const & items, Type type)
+{
+    switch (type) {
+    case TYPE_BOOLEAN_LIST:
+        return parseValueList(items, &parseBooleanValue);
+    case TYPE_SHORT_LIST:
+        return parseValueList(items, &parseShortValue);
+    case TYPE_INT_LIST:
+        return parseValueList(items, &parseIntValue);
+    case TYPE_LONG_LIST:
+        return parseValueList(items, &parseLongValue);
+    case TYPE_DOUBLE_LIST:
+        return parseValueList(items, &parseDoubleValue);
+    case TYPE_STRING_LIST:
+        return parseValueList(items, &parseStringValue);
+    case TYPE_HEXBINARY_LIST:
+        return parseValueList(items, &parseHexbinaryValue);
+    default:
+        OSL_ASSERT(false);
+        throw css::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+            css::uno::Reference< css::uno::XInterface >());
+    }
 }
 
 rtl::OUString parseTemplateReference(
@@ -929,19 +615,43 @@ void writeDoubleValue(xmlTextWriterPtr writer, double const & value) {
 }
 
 void writeStringValue(xmlTextWriterPtr writer, rtl::OUString const & value) {
-    rtl::OUStringBuffer buf;
-    buf.append(sal_Unicode('['));
-    buf.append(escapeText(value, true));
-    buf.append(sal_Unicode(']'));
-    xmlTextWriterWriteString(
-        writer, xmlString(convertToUtf8(buf.makeStringAndClear()).getStr()));
+    sal_Int32 i = 0;
+    sal_Int32 j = i;
+    for (; j < value.getLength(); ++j) {
+        sal_Unicode c = value[j];
+        if ((c < 0x0020 && c != 0x0009 && c != 0x000A && c != 0x000D) ||
+            c == 0xFFFE || c == 0xFFFF)
+        {
+            if (j > i) {
+                xmlTextWriterWriteString(
+                    writer,
+                    xmlString(convertToUtf8(value, i, j - i).getStr()));
+            }
+            xmlTextWriterSetIndent(writer, 0);
+                //TODO: see xmlTextWriterSetIndent in writeModFile
+            xmlTextWriterStartElement(writer, xmlString("unicode"));
+            xmlTextWriterWriteAttribute(
+                writer, xmlString("oor:scalar"),
+                xmlString(
+                    convertToUtf8(
+                        rtl::OUString::valueOf(static_cast< sal_Int32 >(c))).
+                    getStr()));
+            xmlTextWriterEndElement(writer);
+            xmlTextWriterSetIndent(writer, 1);
+                //TODO: see xmlTextWriterSetIndent above
+            i = j + 1;
+        }
+    }
+    if (j > i) {
+        xmlTextWriterWriteString(
+            writer, xmlString(convertToUtf8(value, i, j - i).getStr()));
+    }
 }
 
 void writeHexbinaryValue(
     xmlTextWriterPtr writer, css::uno::Sequence< sal_Int8 > const & value)
 {
     rtl::OStringBuffer buf;
-    buf.append('[');
     for (sal_Int32 i = 0; i < value.getLength(); ++i) {
         static char const hexDigit[16] = {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C',
@@ -949,7 +659,6 @@ void writeHexbinaryValue(
         buf.append(hexDigit[(value[i] >> 4) & 0xF]);
         buf.append(hexDigit[value[i] & 0xF]);
     }
-    buf.append(']');
     xmlTextWriterWriteString(
         writer, xmlString(buf.makeStringAndClear().getStr()));
 }
@@ -965,6 +674,19 @@ template< typename T > void writeListValue(
             xmlTextWriterWriteString(writer, xmlString(" "));
         }
         (*write)(writer, val[i]);
+    }
+}
+
+template< typename T > void writeItemListValue(
+    xmlTextWriterPtr writer, void (* write)(xmlTextWriterPtr, T const &),
+    css::uno::Any const & value)
+{
+    css::uno::Sequence< T > val;
+    value >>= val;
+    for (sal_Int32 i = 0; i < val.getLength(); ++i) {
+        xmlTextWriterStartElement(writer, xmlString("it"));
+        (*write)(writer, val[i]);
+        xmlTextWriterEndElement(writer);
     }
 }
 
@@ -1012,8 +734,6 @@ void writeValue(xmlTextWriterPtr writer, Type type, css::uno::Any const & value)
         break;
     case TYPE_STRING:
         {
-            xmlTextWriterWriteAttribute(
-                writer, xmlString("oor:escaped"), xmlString("true"));
             rtl::OUString val;
             value >>= val;
             writeStringValue(writer, val);
@@ -1021,10 +741,6 @@ void writeValue(xmlTextWriterPtr writer, Type type, css::uno::Any const & value)
         break;
     case TYPE_HEXBINARY:
         {
-            // Written in escaped form to be able to share writeHexbinaryValue
-            // with the TYPE_HEXBINARY_LIST case (see there):
-            xmlTextWriterWriteAttribute(
-                writer, xmlString("oor:escaped"), xmlString("true"));
             css::uno::Sequence< sal_Int8 > val;
             value >>= val;
             writeHexbinaryValue(writer, val);
@@ -1046,16 +762,10 @@ void writeValue(xmlTextWriterPtr writer, Type type, css::uno::Any const & value)
         writeListValue(writer, &writeDoubleValue, value);
         break;
     case TYPE_STRING_LIST:
-        xmlTextWriterWriteAttribute(
-            writer, xmlString("oor:escaped"), xmlString("true"));
-        writeListValue(writer, &writeStringValue, value);
+        writeItemListValue(writer, &writeStringValue, value);
         break;
     case TYPE_HEXBINARY_LIST:
-        // Written in escaped form to distinguish an empty list from a list with
-        // one empty hexbinary element:
-        xmlTextWriterWriteAttribute(
-            writer, xmlString("oor:escaped"), xmlString("true"));
-        writeListValue(writer, &writeHexbinaryValue, value);
+        writeItemListValue(writer, &writeHexbinaryValue, value);
         break;
     default: // TYPE_ERROR, TYPE_ANY
         OSL_ASSERT(false);
@@ -1198,10 +908,195 @@ void writeNode(
     }
 }
 
+class ValueParser: private boost::noncopyable {
+public:
+    ValueParser(int layer): layer_(layer) {}
+
+    ~ValueParser() {}
+
+    bool startElement(
+        Reader const * reader, xmlChar const * name, xmlChar const * nsUri);
+
+    bool endElement();
+
+    void characters(Reader const * reader);
+
+    void start(
+        rtl::Reference< Node > const & property,
+        rtl::OUString const & localizedName = rtl::OUString());
+
+    int getLayer() const { return layer_; }
+
+    Type type_;
+    XmlString separator_;
+
+private:
+    enum State { STATE_TEXT, STATE_TEXT_UNICODE, STATE_IT, STATE_IT_UNICODE };
+
+    int layer_;
+    rtl::Reference< Node > node_;
+    rtl::OUString localizedName_;
+    State state_;
+    rtl::OStringBuffer text_;
+    std::vector< rtl::OString > items_;
+};
+
+bool ValueParser::startElement(
+    Reader const * reader, xmlChar const * name, xmlChar const * nsUri)
+{
+    if (!node_.is()) {
+        return false;
+    }
+    switch (state_) {
+    case STATE_TEXT:
+        if (xmlStrEqual(name, xmlString("it")) && nsUri == 0 &&
+            isListType(type_) && separator_.str == 0)
+        {
+            text_.setLength(0); //TODO: handle invalid non-whitespace text
+            state_ = STATE_IT;
+            return true;
+        }
+        // fall through
+    case STATE_IT:
+        if (xmlStrEqual(name, xmlString("unicode")) && nsUri == 0 &&
+            type_ == (state_ == STATE_TEXT ? TYPE_STRING : TYPE_STRING_LIST))
+        {
+            XmlString attrScalar(
+                xmlTextReaderGetAttributeNs(
+                    reader->getReader(), xmlString("scalar"),
+                    xmlString("http://openoffice.org/2001/registry")));
+            if (attrScalar.str == 0) {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "no unicode scalar attribute in ")) +
+                     reader->getUrl()),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            sal_Int32 scalar;
+            if (!parseIntValue(
+                    reinterpret_cast< char const * >(attrScalar.str),
+                    rtl_str_getLength(
+                        reinterpret_cast< char const * >(attrScalar.str)),
+                    &scalar))
+            {
+                scalar = -1;
+            }
+            if (scalar >= 0 && scalar < 0x20 && scalar != 0x09 &&
+                scalar != 0x0A && scalar != 0x0D)
+            {
+                text_.append(static_cast< char >(scalar));
+            } else if (scalar == 0xFFFE) {
+                text_.append(RTL_CONSTASCII_STRINGPARAM("\xEF\xBF\xBE"));
+            } else if (scalar == 0xFFFF) {
+                text_.append(RTL_CONSTASCII_STRINGPARAM("\xEF\xBF\xBF"));
+            } else {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "bad unicode scalar attribute in ")) +
+                     reader->getUrl()),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            state_ = State(state_ + 1);
+            return true;
+        }
+        break;
+    default:
+        break;
+    }
+    throw css::uno::RuntimeException(
+        (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad member <")) +
+         fromXmlString(name) +
+         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
+         reader->getUrl()),
+        css::uno::Reference< css::uno::XInterface >());
+}
+
+bool ValueParser::endElement() {
+    if (!node_.is()) {
+        return false;
+    }
+    switch (state_) {
+    case STATE_TEXT:
+        {
+            css::uno::Any value;
+            if (items_.empty()) {
+                value = parseValue(separator_.str, text_, type_);
+            } else {
+                value = parseValueList(items_, type_);
+            }
+            if (PropertyNode * prop = dynamic_cast< PropertyNode * >(
+                    node_.get()))
+            {
+                prop->setValue(layer_, value);
+            } else if (LocalizedPropertyNode * locprop =
+                       dynamic_cast< LocalizedPropertyNode * >(node_.get()))
+            {
+                NodeMap::iterator i(locprop->getMembers().find(localizedName_));
+                if (i == locprop->getMembers().end()) {
+                    locprop->getMembers().insert(
+                        NodeMap::value_type(
+                            localizedName_,
+                            new LocalizedPropertyValueNode(layer_, value)));
+                } else {
+                    dynamic_cast< LocalizedPropertyValueNode * >(
+                        i->second.get())->setValue(layer_, value);
+                }
+            } else {
+                OSL_ASSERT(false); // this cannot happen
+            }
+            separator_.clear();
+            node_.clear();
+            text_.setLength(0);
+            items_.clear();
+        }
+        break;
+    case STATE_TEXT_UNICODE:
+    case STATE_IT_UNICODE:
+        state_ = State(state_ - 1);
+        break;
+    case STATE_IT:
+        items_.push_back(text_.makeStringAndClear());
+        state_ = STATE_TEXT;
+        break;
+    }
+    return true;
+}
+
+void ValueParser::characters(Reader const * reader) {
+    if (node_.is()) {
+        switch (state_) {
+        case STATE_TEXT:
+        case STATE_IT:
+            text_.append(
+                reinterpret_cast< char const * >(
+                    xmlTextReaderConstValue(reader->getReader())));
+            break;
+        case STATE_TEXT_UNICODE:
+        case STATE_IT_UNICODE:
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("bad <unicode> content in ")) +
+                 reader->getUrl()),
+                css::uno::Reference< css::uno::XInterface >());
+        }
+    }
+}
+
+void ValueParser::start(
+    rtl::Reference< Node > const & node, rtl::OUString const & localizedName)
+{
+    OSL_ASSERT(node.is() && !node_.is());
+    node_ = node;
+    localizedName_ = localizedName;
+    state_ = STATE_TEXT;
+}
+
 class XcsParser: public Parser {
 public:
     XcsParser(int layer, Data * data):
-        layer_(layer), data_(data), state_(STATE_START) {}
+        valueParser_(layer), data_(data), state_(STATE_START) {}
 
 private:
     virtual ~XcsParser() {}
@@ -1244,22 +1139,20 @@ private:
 
     typedef std::stack< Element > ElementStack;
 
-    int layer_;
+    ValueParser valueParser_;
     Data * data_;
     rtl::OUString componentName_;
     State state_;
     long ignoring_;
     ElementStack elements_;
-    rtl::Reference< Node > valueNode_;
-    XmlString valueSeparator_;
-    bool valueEscaped_;
-    Type valueType_;
-    rtl::OStringBuffer value_;
 };
 
 bool XcsParser::startElement(
     Reader const * reader, xmlChar const * name, xmlChar const * nsUri)
 {
+    if (valueParser_.startElement(reader, name, nsUri)) {
+        return true;
+    }
     if (state_ == STATE_START) {
         if (xmlStrEqual(name, xmlString("component-schema")) && nsUri != 0 &&
             xmlStrEqual(
@@ -1298,7 +1191,8 @@ bool XcsParser::startElement(
                 OSL_ASSERT(elements_.empty());
                 elements_.push(
                     Element(
-                        new GroupNode(layer_, false, rtl::OUString()),
+                        new GroupNode(
+                            valueParser_.getLayer(), false, rtl::OUString()),
                         componentName_));
                 return true;
             }
@@ -1318,18 +1212,19 @@ bool XcsParser::startElement(
             // fall through
         case STATE_COMPONENT:
             OSL_ASSERT(!elements_.empty());
-            if ((dynamic_cast< PropertyNode * >(elements_.top().node.get())
-                 != 0) ||
+            if ((dynamic_cast< PropertyNode * >(elements_.top().node.get()) !=
+                 0) ||
                 (dynamic_cast< LocalizedPropertyNode * >(
-                    elements_.top().node.get())
-                 != 0))
+                    elements_.top().node.get()) !=
+                 0))
             {
                 if (xmlStrEqual(name, xmlString("value")) && nsUri == 0) {
                     handlePropValue(reader, elements_.top().node);
                     return true;
                 }
-            } else if (dynamic_cast< GroupNode * >(elements_.top().node.get())
-                       != 0)
+            } else if (dynamic_cast< GroupNode * >(
+                           elements_.top().node.get()) !=
+                       0)
             {
                 if (xmlStrEqual(name, xmlString("prop")) && nsUri == 0) {
                     handleProp(reader);
@@ -1372,26 +1267,11 @@ bool XcsParser::startElement(
 }
 
 void XcsParser::endElement(Reader const * reader) {
+    if (valueParser_.endElement()) {
+        return;
+    }
     if (ignoring_ > 0) {
         --ignoring_;
-    } else if (valueNode_.is()) {
-        css::uno::Any val(
-            parseValue(valueSeparator_.str, valueEscaped_, value_, valueType_));
-        if (PropertyNode * prop = dynamic_cast< PropertyNode * >(
-                valueNode_.get()))
-        {
-            prop->setValue(layer_, val);
-        } else if (LocalizedPropertyNode * locprop =
-                   dynamic_cast< LocalizedPropertyNode * >(valueNode_.get()))
-        {
-            locprop->getMembers()[rtl::OUString()] =
-                new LocalizedPropertyValueNode(layer_, val);
-        } else {
-            OSL_ASSERT(false); // this cannot happen
-        }
-        valueNode_.clear();
-        valueSeparator_.clear();
-        value_.setLength(0);
     } else if (!elements_.empty()) {
         rtl::Reference< Node > node(elements_.top().node);
         rtl::OUString name(elements_.top().name);
@@ -1452,11 +1332,7 @@ void XcsParser::endElement(Reader const * reader) {
 }
 
 void XcsParser::characters(Reader const * reader) {
-    if (valueNode_.is()) {
-        value_.append(
-            reinterpret_cast< char const * >(
-                xmlTextReaderConstValue(reader->getReader())));
-    }
+    valueParser_.characters(reader);
 }
 
 void XcsParser::handleComponentSchema(Reader const * reader) {
@@ -1515,7 +1391,7 @@ void XcsParser::handleNodeRef(Reader const * reader) {
             xmlString("http://openoffice.org/2001/registry")));
     rtl::Reference< Node > tmpl(
         data_->getTemplate(
-            layer_,
+            valueParser_.getLayer(),
             parseTemplateReference(
                 attrComponent.str, attrNodeType.str, componentName_, 0)));
     if (!tmpl.is()) {
@@ -1530,7 +1406,7 @@ void XcsParser::handleNodeRef(Reader const * reader) {
             css::uno::Reference< css::uno::XInterface >());
     }
     rtl::Reference< Node > node(tmpl->clone());
-    node->setLayer(layer_);
+    node->setLayer(valueParser_.getLayer());
     elements_.push(Element(node, fromXmlString(attrName.str)));
 }
 
@@ -1550,8 +1426,8 @@ void XcsParser::handleProp(Reader const * reader) {
         xmlTextReaderGetAttributeNs(
             reader->getReader(), xmlString("type"),
             xmlString("http://openoffice.org/2001/registry")));
-    valueType_ = parseType(reader, attrType.str);
-    if (valueType_ == TYPE_ERROR) {
+    valueParser_.type_ = parseType(reader, attrType.str);
+    if (valueParser_.type_ == TYPE_ERROR) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("no prop type attribute in ")) +
@@ -1572,25 +1448,22 @@ void XcsParser::handleProp(Reader const * reader) {
         Element(
             (localized
              ? rtl::Reference< Node >(
-                 new LocalizedPropertyNode(layer_, valueType_, nillable))
+                 new LocalizedPropertyNode(
+                     valueParser_.getLayer(), valueParser_.type_, nillable))
              : rtl::Reference< Node >(
                  new PropertyNode(
-                     layer_, valueType_, nillable, css::uno::Any(), false))),
+                     valueParser_.getLayer(), valueParser_.type_, nillable,
+                     css::uno::Any(), false))),
             fromXmlString(attrName.str)));
 }
 
 void XcsParser::handlePropValue(
     Reader const * reader, rtl::Reference< Node > const & property)
 {
-    valueNode_ = property;
-    valueSeparator_ = xmlTextReaderGetAttributeNs(
+    valueParser_.start(property);
+    valueParser_.separator_ = xmlTextReaderGetAttributeNs(
         reader->getReader(), xmlString("separator"),
         xmlString("http://openoffice.org/2001/registry"));
-    XmlString attrEscaped(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("escaped"),
-            xmlString("http://openoffice.org/2001/registry")));
-    valueEscaped_ = parseBoolean(attrEscaped.str, false);
 }
 
 void XcsParser::handleGroup(Reader const * reader, bool isTemplate) {
@@ -1616,7 +1489,8 @@ void XcsParser::handleGroup(Reader const * reader, bool isTemplate) {
     elements_.push(
         Element(
             new GroupNode(
-                layer_, parseBoolean(attrExtensible.str, false),
+                valueParser_.getLayer(),
+                parseBoolean(attrExtensible.str, false),
                 isTemplate ? name : rtl::OUString()),
             name));
 }
@@ -1648,7 +1522,7 @@ void XcsParser::handleSet(Reader const * reader, bool isTemplate) {
     elements_.push(
         Element(
             new SetNode(
-                layer_,
+                valueParser_.getLayer(),
                 parseTemplateReference(
                     attrComponent.str, attrNodeType.str, componentName_, 0),
                 isTemplate ? name : rtl::OUString()),
@@ -1671,7 +1545,7 @@ void XcsParser::handleSetItem(Reader const * reader, SetNode * set) {
 
 class XcuParser: public Parser {
 public:
-    XcuParser(int layer, Data * data): layer_(layer), data_(data) {}
+    XcuParser(int layer, Data * data): valueParser_(layer), data_(data) {}
 
 private:
     virtual ~XcuParser() {}
@@ -1737,15 +1611,10 @@ private:
 
     typedef std::stack< State > StateStack;
 
-    int layer_;
+    ValueParser valueParser_;
     Data * data_;
     rtl::OUString componentName_;
     StateStack state_;
-    rtl::Reference< Node > valueNode_;
-    XmlString valueSeparator_;
-    bool valueEscaped_;
-    Type valueType_;
-    rtl::OStringBuffer value_;
     rtl::OUString pathPrefix_;
     rtl::OUString path_;
 };
@@ -1753,9 +1622,9 @@ private:
 bool XcuParser::startElement(
     Reader const * reader, xmlChar const * name, xmlChar const * nsUri)
 {
-#if OSL_DEBUG_LEVEL > 0
-    StateStack::size_type oldStateSize = state_.size();
-#endif
+    if (valueParser_.startElement(reader, name, nsUri)) {
+        return true;
+    }
     if (state_.empty()) {
         if (xmlStrEqual(name, xmlString("component-data")) && nsUri != 0 &&
             xmlStrEqual(
@@ -1858,31 +1727,14 @@ bool XcuParser::startElement(
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    OSL_ASSERT(!state_.empty() && state_.size() - 1 == oldStateSize);
     return true;
 }
 
 void XcuParser::endElement(Reader const *) {
-    OSL_ASSERT(!state_.empty());
-    if (valueNode_.is()) {
-        css::uno::Any val(
-            parseValue(valueSeparator_.str, valueEscaped_, value_, valueType_));
-        if (PropertyNode * prop = dynamic_cast< PropertyNode * >(
-                valueNode_.get()))
-        {
-            prop->setValue(layer_, val);
-        } else if (LocalizedPropertyValueNode * locval =
-                   dynamic_cast< LocalizedPropertyValueNode * >(
-                       valueNode_.get()))
-        {
-            locval->setValue(layer_, val);
-        } else {
-            OSL_ASSERT(false); // this cannot happen
-        }
-        valueNode_.clear();
-        valueSeparator_.clear();
-        value_.setLength(0);
+    if (valueParser_.endElement()) {
+        return;
     }
+    OSL_ASSERT(!state_.empty());
     rtl::Reference< Node > insert;
     rtl::OUString name;
     if (state_.top().insert) {
@@ -1912,11 +1764,7 @@ void XcuParser::endElement(Reader const *) {
 }
 
 void XcuParser::characters(Reader const * reader) {
-    if (valueNode_.is()) {
-        value_.append(
-            reinterpret_cast< char const * >(
-                xmlTextReaderConstValue(reader->getReader())));
-    }
+    valueParser_.characters(reader);
 }
 
 void XcuParser::handleComponentData(Reader const * reader) {
@@ -1951,7 +1799,8 @@ void XcuParser::handleComponentData(Reader const * reader) {
     componentName_ = rtl::OUString(
         buf.getStr(), buf.getLength(), RTL_TEXTENCODING_UTF8);
     rtl::Reference< Node > node(
-        Data::findNode(layer_, data_->components, componentName_));
+        Data::findNode(
+            valueParser_.getLayer(), data_->components, componentName_));
     if (!node.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unknown component ")) +
@@ -1981,10 +1830,11 @@ void XcuParser::handleComponentData(Reader const * reader) {
             reader->getReader(), xmlString("finalized"),
             xmlString("http://openoffice.org/2001/registry")));
     int finalizedLayer = std::min(
-        (parseBoolean(attrFinalized.str, false) ? layer_ : NO_LAYER),
+        (parseBoolean(attrFinalized.str, false)
+         ? valueParser_.getLayer() : NO_LAYER),
         node->getFinalized());
     node->setFinalized(finalizedLayer);
-    state_.push(State(node, finalizedLayer < layer_, false));
+    state_.push(State(node, finalizedLayer < valueParser_.getLayer(), false));
 }
 
 void XcuParser::handleItem(Reader const * reader) {
@@ -1999,20 +1849,11 @@ void XcuParser::handleItem(Reader const * reader) {
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::OString unescPath;
-    if (unescapeText(attrPath.str, false, &unescPath) == 0) {
-        throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "badly escaped path attribute in ")) +
-             reader->getUrl()),
-            css::uno::Reference< css::uno::XInterface >());
-    }
     int finalizedLayer;
     rtl::Reference< Node > node(
         data_->resolvePath(
-            rtl::OStringToOUString(unescPath, RTL_TEXTENCODING_UTF8),
-            &componentName_, 0, &pathPrefix_, 0, &finalizedLayer));
+            fromXmlString(attrPath.str), &componentName_, 0, &pathPrefix_, 0,
+            &finalizedLayer));
     pathPrefix_ += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     if (!node.is()) {
         throw css::uno::RuntimeException(
@@ -2021,7 +1862,10 @@ void XcuParser::handleItem(Reader const * reader) {
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    state_.push(State(node, finalizedLayer < layer_, layer_ == NO_LAYER));
+    state_.push(
+        State(
+            node, finalizedLayer < valueParser_.getLayer(),
+            valueParser_.getLayer() == NO_LAYER));
 }
 
 void XcuParser::handlePropValue(Reader const * reader, PropertyNode * prop) {
@@ -2039,29 +1883,29 @@ void XcuParser::handlePropValue(Reader const * reader, PropertyNode * prop) {
                  reader->getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
         }
-        prop->setValue(layer_, css::uno::Any());
+        prop->setValue(valueParser_.getLayer(), css::uno::Any());
+        state_.push(State());
     } else {
-        valueNode_ = prop;
-        valueSeparator_ = xmlTextReaderGetAttributeNs(
+        valueParser_.separator_ = xmlTextReaderGetAttributeNs(
             reader->getReader(), xmlString("separator"),
             xmlString("http://openoffice.org/2001/registry"));
-        XmlString attrEscaped(
-            xmlTextReaderGetAttributeNs(
-                reader->getReader(), xmlString("escaped"),
-                xmlString("http://openoffice.org/2001/registry")));
-        valueEscaped_ = parseBoolean(attrEscaped.str, false);
+        valueParser_.start(prop);
     }
-    state_.push(State());
 }
 
 void XcuParser::handleLocpropValue(
     Reader const * reader, LocalizedPropertyNode * locprop)
 {
     OSL_ASSERT(!state_.top().record);
-    rtl::OUString name(
-        fromXmlString(xmlTextReaderConstXmlLang(reader->getReader())));
+    rtl::OUString name;
+    xmlChar const * lang = xmlTextReaderConstXmlLang(reader->getReader());
+    if (lang != 0) {
+        name = fromXmlString(lang);
+    }
     NodeMap::iterator i(locprop->getMembers().find(name));
-    if (i != locprop->getMembers().end() && i->second->getLayer() > layer_) {
+    if (i != locprop->getMembers().end() &&
+        i->second->getLayer() > valueParser_.getLayer())
+    {
         state_.push(State()); // ignored
         return;
     }
@@ -2087,36 +1931,24 @@ void XcuParser::handleLocpropValue(
         if (nil) {
             if (i == locprop->getMembers().end()) {
                 locprop->getMembers()[name] = new LocalizedPropertyValueNode(
-                    layer_, css::uno::Any());
+                    valueParser_.getLayer(), css::uno::Any());
             } else {
                 dynamic_cast< LocalizedPropertyValueNode * >(i->second.get())->
-                    setValue(layer_, css::uno::Any());
+                    setValue(valueParser_.getLayer(), css::uno::Any());
             }
             state_.push(State());
         } else {
-            valueSeparator_ = xmlTextReaderGetAttributeNs(
+            valueParser_.separator_ = xmlTextReaderGetAttributeNs(
                 reader->getReader(), xmlString("separator"),
                 xmlString("http://openoffice.org/2001/registry"));
-            XmlString attrEscaped(
-                xmlTextReaderGetAttributeNs(
-                    reader->getReader(), xmlString("escaped"),
-                    xmlString("http://openoffice.org/2001/registry")));
-            valueEscaped_ = parseBoolean(attrEscaped.str, false);
-            if (i == locprop->getMembers().end()) {
-                valueNode_ = new LocalizedPropertyValueNode(
-                    layer_, css::uno::Any());
-                state_.push(State(valueNode_, name, false, false));
-            } else {
-                valueNode_ = i->second;
-                state_.push(State());
-            }
+            valueParser_.start(locprop, name);
         }
         break;
     case OPERATION_REMOVE:
         //TODO: only allow if parent.op == OPERATION_FUSE
         //TODO: disallow removing when e.g. lang=""?
         if (i != locprop->getMembers().end()) {
-            i->second->remove(layer_);
+            i->second->remove(valueParser_.getLayer());
         }
         state_.push(State());
         break;
@@ -2222,12 +2054,13 @@ void XcuParser::handleUnknownGroupProp(
                  reader->getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
             }
-            valueType_ = type;
+            valueParser_.type_ = type;
             rtl::Reference< Node > prop(
                 new PropertyNode(
-                    layer_, TYPE_ANY, true, css::uno::Any(), true));
+                    valueParser_.getLayer(), TYPE_ANY, true, css::uno::Any(),
+                    true));
             if (finalized) {
-                prop->setFinalized(layer_);
+                prop->setFinalized(valueParser_.getLayer());
             }
             state_.push(State(prop, name, state_.top().locked, false));
         }
@@ -2243,12 +2076,13 @@ void XcuParser::handlePlainGroupProp(
     Reader const * reader, PropertyNode * property, rtl::OUString const & name,
     Type type, Operation operation, bool finalized)
 {
-    if (property->getLayer() > layer_) {
+    if (property->getLayer() > valueParser_.getLayer()) {
         state_.push(State()); // ignored
         return;
     }
     int finalizedLayer = std::min(
-        finalized ? layer_ : NO_LAYER, property->getFinalized());
+        finalized ? valueParser_.getLayer() : NO_LAYER,
+        property->getFinalized());
     property->setFinalized(finalizedLayer);
     if (type != TYPE_ERROR && property->getType() != TYPE_ANY &&
         type != property->getType())
@@ -2260,14 +2094,15 @@ void XcuParser::handlePlainGroupProp(
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    valueType_ = type == TYPE_ERROR ? property->getType() : type;
+    valueParser_.type_ = type == TYPE_ERROR ? property->getType() : type;
     switch (operation) {
     case OPERATION_MODIFY:
     case OPERATION_REPLACE:
     case OPERATION_FUSE:
         state_.push(
             State(
-                property, state_.top().locked || finalizedLayer < layer_,
+                property,
+                state_.top().locked || finalizedLayer < valueParser_.getLayer(),
                 false));
         break;
     case OPERATION_REMOVE:
@@ -2280,7 +2115,7 @@ void XcuParser::handlePlainGroupProp(
                  reader->getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
         }
-        property->remove(layer_);
+        property->remove(valueParser_.getLayer());
         state_.push(State()); // ignore children
         break;
     }
@@ -2290,12 +2125,13 @@ void XcuParser::handleLocalizedGroupProp(
     Reader const * reader, LocalizedPropertyNode * property,
     rtl::OUString const & name, Type type, Operation operation, bool finalized)
 {
-    if (property->getLayer() > layer_) {
+    if (property->getLayer() > valueParser_.getLayer()) {
         state_.push(State()); // ignored
         return;
     }
     int finalizedLayer = std::min(
-        finalized ? layer_ : NO_LAYER, property->getFinalized());
+        finalized ? valueParser_.getLayer() : NO_LAYER,
+        property->getFinalized());
     property->setFinalized(finalizedLayer);
     if (type != TYPE_ERROR && property->getType() != TYPE_ANY &&
         type != property->getType())
@@ -2307,25 +2143,29 @@ void XcuParser::handleLocalizedGroupProp(
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    valueType_ = type == TYPE_ERROR ? property->getType() : type;
+    valueParser_.type_ = type == TYPE_ERROR ? property->getType() : type;
     switch (operation) {
     case OPERATION_MODIFY:
     case OPERATION_FUSE:
         state_.push(
             State(
-                property, state_.top().locked || finalizedLayer < layer_,
+                property,
+                state_.top().locked || finalizedLayer < valueParser_.getLayer(),
                 false));
         break;
     case OPERATION_REPLACE:
         {
             rtl::Reference< Node > replacement(
                 new LocalizedPropertyNode(
-                    layer_, property->getType(), property->isNillable()));
+                    valueParser_.getLayer(), property->getType(),
+                    property->isNillable()));
             replacement->setFinalized(property->getFinalized());
             state_.push(
                 State(
                     replacement, name,
-                    state_.top().locked || finalizedLayer < layer_, false));
+                    (state_.top().locked ||
+                     finalizedLayer < valueParser_.getLayer()),
+                    false));
         }
         break;
     case OPERATION_REMOVE:
@@ -2354,7 +2194,7 @@ void XcuParser::handleGroupNode(Reader const * reader, GroupNode * group) {
     }
     rtl::OUString name(fromXmlString(attrName.str));
     rtl::Reference< Node > subgroup(
-        Data::findNode(layer_, group->getMembers(), name));
+        Data::findNode(valueParser_.getLayer(), group->getMembers(), name));
     if (!subgroup.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unknown node ")) +
@@ -2381,11 +2221,15 @@ void XcuParser::handleGroupNode(Reader const * reader, GroupNode * group) {
             reader->getReader(), xmlString("finalized"),
             xmlString("http://openoffice.org/2001/registry")));
     int finalizedLayer = std::min(
-        parseBoolean(attrFinalized.str, false) ? layer_ : NO_LAYER,
+        (parseBoolean(attrFinalized.str, false)
+         ? valueParser_.getLayer() : NO_LAYER),
         subgroup->getFinalized());
     subgroup->setFinalized(finalizedLayer);
     state_.push(
-        State(subgroup, state_.top().locked || finalizedLayer < layer_, false));
+        State(
+            subgroup,
+            state_.top().locked || finalizedLayer < valueParser_.getLayer(),
+            false));
 }
 
 void XcuParser::handleSetNode(Reader const * reader, SetNode * set) {
@@ -2427,7 +2271,8 @@ void XcuParser::handleSetNode(Reader const * reader, SetNode * set) {
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::Reference< Node > tmpl(data_->getTemplate(layer_, templateName));
+    rtl::Reference< Node > tmpl(
+        data_->getTemplate(valueParser_.getLayer(), templateName));
     if (!tmpl.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("set member node ")) +
@@ -2449,20 +2294,20 @@ void XcuParser::handleSetNode(Reader const * reader, SetNode * set) {
             reader->getReader(), xmlString("finalized"),
             xmlString("http://openoffice.org/2001/registry")));
     int finalizedLayer = parseBoolean(attrFinalized.str, false)
-        ? layer_ : NO_LAYER;
+        ? valueParser_.getLayer() : NO_LAYER;
     XmlString attrMandatory(
         xmlTextReaderGetAttributeNs(
             reader->getReader(), xmlString("mandatory"),
             xmlString("http://openoffice.org/2001/registry")));
     int mandatoryLayer = parseBoolean(attrMandatory.str, false)
-        ? layer_ : NO_LAYER;
+        ? valueParser_.getLayer() : NO_LAYER;
     NodeMap::iterator i(set->getMembers().find(name));
     if (i != set->getMembers().end()) {
         finalizedLayer = std::min(finalizedLayer, i->second->getFinalized());
         i->second->setFinalized(finalizedLayer);
         mandatoryLayer = std::min(mandatoryLayer, i->second->getMandatory());
         i->second->setMandatory(mandatoryLayer);
-        if (i->second->getLayer() > layer_) {
+        if (i->second->getLayer() > valueParser_.getLayer()) {
             state_.push(State()); // ignored
             return;
         }
@@ -2480,15 +2325,16 @@ void XcuParser::handleSetNode(Reader const * reader, SetNode * set) {
         }
         state_.push(
             State(
-                i->second, state_.top().locked || finalizedLayer < layer_,
+                i->second,
+                state_.top().locked || finalizedLayer < valueParser_.getLayer(),
                 false));
         break;
     case OPERATION_REPLACE:
-        if (state_.top().locked || finalizedLayer < layer_) {
+        if (state_.top().locked || finalizedLayer < valueParser_.getLayer()) {
             state_.push(State()); // ignored
         } else {
             rtl::Reference< Node > member(tmpl->clone());
-            member->setLayer(layer_);
+            member->setLayer(valueParser_.getLayer());
             member->setFinalized(finalizedLayer);
             member->setMandatory(mandatoryLayer);
             state_.push(State(member, name, false, false));
@@ -2496,11 +2342,12 @@ void XcuParser::handleSetNode(Reader const * reader, SetNode * set) {
         break;
     case OPERATION_FUSE:
         if (i == set->getMembers().end() || i->second->isRemoved()) {
-            if (state_.top().locked || finalizedLayer < layer_) {
+            if (state_.top().locked || finalizedLayer < valueParser_.getLayer())
+            {
                 state_.push(State()); // ignored
             } else {
                 rtl::Reference< Node > member(tmpl->clone());
-                member->setLayer(layer_);
+                member->setLayer(valueParser_.getLayer());
                 member->setFinalized(finalizedLayer);
                 member->setMandatory(mandatoryLayer);
                 state_.push(State(member, name, false, false));
@@ -2508,7 +2355,9 @@ void XcuParser::handleSetNode(Reader const * reader, SetNode * set) {
         } else {
             state_.push(
                 State(
-                    i->second, state_.top().locked || finalizedLayer < layer_,
+                    i->second,
+                    (state_.top().locked ||
+                     finalizedLayer < valueParser_.getLayer()),
                     false));
         }
         break;
@@ -2516,9 +2365,10 @@ void XcuParser::handleSetNode(Reader const * reader, SetNode * set) {
         // Ignore removal of unknown members, members finalized in a lower
         // layer, and members made mandatory in this or a lower layer:
         if (i != set->getMembers().end() && !state_.top().locked &&
-            finalizedLayer >= layer_ && mandatoryLayer > layer_)
+            finalizedLayer >= valueParser_.getLayer() &&
+            mandatoryLayer > valueParser_.getLayer())
         {
-            i->second->remove(layer_);
+            i->second->remove(valueParser_.getLayer());
         }
         state_.push(State());
         break;
@@ -2818,8 +2668,7 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
             xmlTextWriterStartElement(writer.writer, xmlString("item"));
             xmlTextWriterWriteAttribute(
                 writer.writer, xmlString("oor:path"),
-                xmlString(
-                    convertToUtf8(escapeText(parentPath, false)).getStr()));
+                xmlString(convertToUtf8(parentPath).getStr()));
             writeNode(writer.writer, parent, name, node, true);
             xmlTextWriterEndElement(writer.writer);
             // It is never necessary to write the oor:mandatory attribute, as it
@@ -2840,9 +2689,7 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
                     xmlTextWriterStartElement(writer.writer, xmlString("item"));
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("oor:path"),
-                        xmlString(
-                            convertToUtf8(escapeText(grandparentPath, false)).
-                            getStr()));
+                        xmlString(convertToUtf8(grandparentPath).getStr()));
                     xmlTextWriterStartElement(writer.writer, xmlString("prop"));
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("oor:name"),
@@ -2873,9 +2720,7 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
                     xmlTextWriterStartElement(writer.writer, xmlString("item"));
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("oor:path"),
-                        xmlString(
-                            convertToUtf8(escapeText(parentPath, false)).
-                            getStr()));
+                        xmlString(convertToUtf8(parentPath).getStr()));
                     xmlTextWriterStartElement(writer.writer, xmlString("prop"));
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("oor:name"),
@@ -2896,9 +2741,7 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
                     xmlTextWriterStartElement(writer.writer, xmlString("item"));
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("oor:path"),
-                        xmlString(
-                            convertToUtf8(escapeText(parentPath, false)).
-                            getStr()));
+                        xmlString(convertToUtf8(parentPath).getStr()));
                     xmlTextWriterStartElement(writer.writer, xmlString("node"));
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("oor:name"),
