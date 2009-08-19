@@ -520,7 +520,7 @@ void Printer::ImplUpdatePageData()
         sal_Int32 nTop = nLeft;
         if( nIndex > 0 )
         {
-            rtl::OString aToken( aLine.getToken( 0, ',', nIndex ) );
+            aToken = aLine.getToken( 0, ',', nIndex );
             nTop = aToken.toInt32();
         }
         maPageOffset = LogicToPixel( Point( static_cast<long>(nLeft),
