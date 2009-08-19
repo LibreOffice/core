@@ -82,7 +82,7 @@ public:
                                 ScComplexRefData& rRef, BOOL bWrap, BOOL bAbsolute );
 
     static void MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
-                                ScComplexRefData& rRef );
+                             SCCOL nMaxCol, SCROW nMaxRow, ScComplexRefData& rRef );
 
     /// Before calling, the absolute references must be up-to-date!
     static ScRefUpdateRes UpdateTranspose( ScDocument* pDoc,

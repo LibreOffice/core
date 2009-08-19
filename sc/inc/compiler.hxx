@@ -409,9 +409,9 @@ public:
     const ScDocument* GetDoc() const { return pDoc; }
     const ScAddress& GetPos() const { return aPos; }
 
-    void MoveRelWrap();
-    static void MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc,
-                             const ScAddress& rPos );
+    void MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow );
+    static void MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,
+                             SCCOL nMaxCol, SCROW nMaxRow );
 
     BOOL UpdateNameReference( UpdateRefMode eUpdateRefMode,
                               const ScRange&,
