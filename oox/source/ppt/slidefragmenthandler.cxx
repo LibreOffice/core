@@ -38,6 +38,7 @@
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include "headerfootercontext.hxx"
 #include "oox/ppt/backgroundproperties.hxx"
 #include "oox/ppt/slidefragmenthandler.hxx"
 #include "oox/ppt/slidetimingcontext.hxx"
@@ -121,6 +122,9 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
         break;
     case NMSP_PPT|XML_transition: // CT_SlideTransition
         xRet.set( new SlideTransitionContext( *this, xAttribs, maSlideProperties ) );
+        break;
+    case NMSP_PPT|XML_hf:
+        xRet.set( new HeaderFooterContext( *this, xAttribs, mpSlidePersistPtr->getHeaderFooter() ) );
         break;
 
     // BackgroundGroup

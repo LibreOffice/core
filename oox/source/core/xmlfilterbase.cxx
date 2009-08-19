@@ -84,7 +84,7 @@ struct XmlFilterBaseImpl
     Reference< XFastTokenHandler >
                         mxTokenHandler;
     RelationsMap        maRelationsMap;
-
+    TextFieldStack      maTextFieldStack;
     explicit            XmlFilterBaseImpl();
 };
 
@@ -232,6 +232,11 @@ Reference< XOutputStream > XmlFilterBase::openFragmentStream( const OUString& rS
 FSHelperPtr XmlFilterBase::openFragmentStreamWithSerializer( const OUString& rStreamName, const OUString& rMediaType )
 {
     return FSHelperPtr( new FastSerializerHelper( openFragmentStream( rStreamName, rMediaType ) ) );
+}
+
+TextFieldStack& XmlFilterBase::getTextFieldStack() const
+{
+    return mxImpl->maTextFieldStack;
 }
 
 namespace {

@@ -169,19 +169,21 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
         }
 
         Sequence < OUString > elementNames = xName->getElementNames();
-        Sequence<com::sun::star::beans::PropertyValue> pValue=xstyleLoader->getStyleLoaderOptions();
+        if(xstyleLoader.is()){
+            Sequence<com::sun::star::beans::PropertyValue> pValue=xstyleLoader->getStyleLoaderOptions();
 
-        //Load the Styles from the Template URL Supplied in the TypeDetection file
-        if(msTemplateName.indexOf(OUString::createFromAscii("file:"))==-1)
-        {
-            Reference< XConfigManager >xCfgMgr ( mxMSF->createInstance(
-                OUString::createFromAscii("com.sun.star.config.SpecialConfigManager") ), UNO_QUERY );
-            OUString PathString=xCfgMgr->substituteVariables(OUString::createFromAscii("$(progurl)"));
-            PathString=PathString.concat(OUString::createFromAscii("/"));
-            msTemplateName=PathString.concat(msTemplateName);
+            //Load the Styles from the Template URL Supplied in the TypeDetection file
+            if(msTemplateName.indexOf(OUString::createFromAscii("file:"))==-1)
+            {
+                Reference< XConfigManager >xCfgMgr ( mxMSF->createInstance(
+                    OUString::createFromAscii("com.sun.star.config.SpecialConfigManager") ), UNO_QUERY );
+                OUString PathString=xCfgMgr->substituteVariables(OUString::createFromAscii("$(progurl)"));
+                PathString=PathString.concat(OUString::createFromAscii("/"));
+                msTemplateName=PathString.concat(msTemplateName);
+            }
+
+            xstyleLoader->loadStylesFromURL(msTemplateName,pValue);
         }
-
-        xstyleLoader->loadStylesFromURL(msTemplateName,pValue);
     }
 
 //    sal_Bool xconv_ret = sal_True;
@@ -265,6 +267,14 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
         sal_Bool bPrettyPrint =
             (msUserData.getLength() > 6 && msUserData[6].equalsIgnoreAsciiCaseAscii("true"));
 
+        // --> OD 2008-11-25 #b6761284#
+        // export of <text:number> element for <text:list-item> elements are
+        // needed for certain filters.
+        sal_Bool bExportTextNumberElementForListItems =
+                            ( msUserData.getLength() > 7 &&
+                              msUserData[7].equalsIgnoreAsciiCaseAscii("true") );
+        // <--
+
         // get the base URI, so we can use relative links
         OUString aBaseURI;
         if (aMediaMap.find(OUString::createFromAscii("URL"))->second >>= aBaseURI)
@@ -279,6 +289,9 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
          PropertyMapEntry aImportInfoMap[] =
          {
              { MAP_LEN( "UsePrettyPrinting" ), 0, &::getCppuType((const sal_Bool*)0), PropertyAttribute::MAYBEVOID, 0},
+            // --> OD 2008-11-25 #b6761284#
+            { MAP_LEN( "ExportTextNumberElement" ), 0, &::getCppuType((const sal_Bool*)0), PropertyAttribute::MAYBEVOID, 0},
+            // <--
             { MAP_LEN( "BaseURI" ), 0, &::getCppuType((const OUString*)0), PropertyAttribute::MAYBEVOID, 0},
              { NULL, 0, 0, NULL, 0, 0 }
          };
@@ -287,6 +300,11 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
             GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
          xInfoSet->setPropertyValue(
             OUString::createFromAscii( "UsePrettyPrinting" ), makeAny( bPrettyPrint ));
+        // --> OD 2008-11-25 #b6761284#
+        xInfoSet->setPropertyValue(
+                        OUString::createFromAscii( "ExportTextNumberElement" ),
+                        makeAny( bExportTextNumberElementForListItems ));
+        // <--
          xInfoSet->setPropertyValue(
             OUString::createFromAscii( "BaseURI" ), makeAny( aBaseURI ));
         aAnys[1] <<= xInfoSet;
