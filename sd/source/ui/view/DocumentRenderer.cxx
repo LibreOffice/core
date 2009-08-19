@@ -167,7 +167,7 @@ namespace {
 
         bool IsTilePage (void) const
         {
-            return GetBoolValue("PageOptions", sal_Int32(2));
+            return GetBoolValue("PageOptions", sal_Int32(2)) || GetBoolValue("PageOptions", sal_Int32(3));
         }
 
         bool IsCutPage (void) const
