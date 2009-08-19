@@ -54,7 +54,7 @@ ModalDialog DLG_ASS
         Pos = MAP_APPFONT ( 144 , 140  );
         Size = MAP_APPFONT ( 122 , 10 );
         TabStop = TRUE;
-        Text [ en-US ] = "~Preview";
+        Text [ en-US ] = "Previe~w";
     };
 
     CheckBox CB_STARTWITH
@@ -104,7 +104,7 @@ ModalDialog DLG_ASS
     {
         Pos = MAP_APPFONT ( 12 , 76  );
         Size = MAP_APPFONT ( 130 , 10 );
-        Text [ en-US ] = "~Open existing presentation";
+        Text [ en-US ] = "O~pen existing presentation";
     };
 
     PushButton PB_PAGE1_OPEN
@@ -531,6 +531,16 @@ ModalDialog DLG_ASS
         Pos = MAP_APPFONT ( 218 , 170 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
+        Text [ en-US ] = "~Create" ;
+    };
+
+    String STR_OPEN
+    {
+        Text [ en-US ] = "~Open";
+    };
+
+    String STR_CREATE
+    {
         Text [ en-US ] = "~Create" ;
     };
 };
