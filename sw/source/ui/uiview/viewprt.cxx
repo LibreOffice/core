@@ -178,6 +178,10 @@ USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool  )
 
 ErrCode SwView::DoPrint( SfxPrinter* pPrinter, PrintDialog* pDlg, BOOL bSilent, BOOL bIsAPI )
 {
+    (void) pPrinter; (void) pDlg; (void) bSilent; (void) bIsAPI;
+    DBG_ASSERT( 0, "not implemented" );
+    return 0;
+#ifdef TL_NOT_NOW   /* TLPDF */
     // First test
     SwWrtShell* pSh = &GetWrtShell();
     SwNewDBMgr* pMgr = pSh->GetNewDBMgr();
@@ -393,16 +397,15 @@ ErrCode SwView::DoPrint( SfxPrinter* pPrinter, PrintDialog* pDlg, BOOL bSilent, 
             {
                 const boost::shared_ptr< Printer > pPrt( pPrinter );    // TLPDF
                 vcl::OldStylePrintAdaptor aPrtAdaptor( pPrt );          // TLPDF
-                const boost::shared_ptr< vcl::PrinterController > pPrtController( &aPrtAdaptor );
 
                 if( bPrtPros )
                 {
 //TLPDF                   bStartJob = pPrinter->StartJob( aOpts.GetJobName() );
 //TLPDF                 if( bStartJob )
-                    pSh->PrintProspectMM( pPrtController, aOpts, bPrtPros_RTL );  /* TLPDF */
+                    pSh->PrintProspectMM( aPrtAdaptor, aViewProperties, aOpts, bPrtPros_RTL );  /* TLPDF */
                 }
                 else
-                    bStartJob = pSh->PrintOrPDFExportMM( pPrtController, aOpts );   /*TLPDF*/
+                    bStartJob = pSh->PrintOrPDFExportMM( aPrtAdaptor, aViewProperties, aOpts );   /*TLPDF*/
 
                 if ( bBrowse )
                 {
@@ -444,6 +447,7 @@ ErrCode SwView::DoPrint( SfxPrinter* pPrinter, PrintDialog* pDlg, BOOL bSilent, 
 //TLPDF   pProgress->DeleteOnEndPrint();
 //TLPDF   pPrinter->EndJob();
     return pPrinter->GetError();
+#endif  // TL_NOT_NOW   /* TLPDF */
 }
 
 

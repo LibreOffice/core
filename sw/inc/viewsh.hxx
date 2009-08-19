@@ -96,7 +96,7 @@ class SdrPaintWindow;
 
 namespace vcl
 {
-    class PrinterController;
+    class OldStylePrintAdaptor;
 }
 
 
@@ -382,11 +382,13 @@ public:
 
     // printing of a complete document for mail merge
     // bIsPDFExport == true is: do PDF Export (no printing!)
-    sal_Bool PrintOrPDFExportMM( const boost::shared_ptr< vcl::PrinterController > & rpPrinterController,
+    sal_Bool PrintOrPDFExportMM( vcl::OldStylePrintAdaptor &rAdaptor,
+            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > &rOptions,
             const SwPrtOptions &rPrintData, bool bIsPDFExport = sal_False );
 
     // printing of a complete brochure for mail merge
-    void PrintProspectMM( const boost::shared_ptr< vcl::PrinterController > & rpPrinterController,
+    void PrintProspectMM( vcl::OldStylePrintAdaptor &rAdaptor,
+            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > &rOptions,
             const SwPrintData &rPrintData, bool bProspectRTL );
 
     // printing for OLE 2.0

@@ -31,9 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include <hintids.hxx>
 #include <vcl/window.hxx>
+#include <vcl/oldprintadaptor.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/progress.hxx>
 #include <pvprtdat.hxx>
@@ -58,6 +60,10 @@
 
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+
+
+using namespace ::com::sun::star;
+
 
 // OD 12.12.2002 #103492#
 SwPagePreviewLayout* ViewShell::PagePreviewLayout()
@@ -449,13 +455,18 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
 
 
 void ViewShell::PrintProspectMM(
-    const boost::shared_ptr< vcl::PrinterController > & rpPrinterController,
+    vcl::OldStylePrintAdaptor &rAdaptor,
+    const uno::Sequence< beans::PropertyValue > &rOptions,  /* TLPDF: this or the above ? */
     const SwPrintData & rPrintData,
     bool bProspectRTL )
 {
-    (void) rpPrinterController; (void) rPrintData; (void) bProspectRTL;
+    (void) rOptions; (void) rAdaptor; (void) rPrintData; (void) bProspectRTL;
+    // to be removed (not needed)
+#ifdef TL_NOT_NOW   /* TLPDF */
 
-    Printer::PrintJob( rpPrinterController, JobSetup() );
+    const boost::shared_ptr< vcl::PrinterController > pPrtController( &rAdaptor );
+    Printer::PrintJob( pPrtController, JobSetup() );
+#endif  // TL_NOT_NOW   /* TLPDF */
 }
 
 

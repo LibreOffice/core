@@ -36,6 +36,7 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include <hintids.hxx>
+#include <vcl/oldprintadaptor.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/resary.hxx>
@@ -54,6 +55,12 @@
 
 #include <svtools/moduleoptions.hxx>
 
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/view/XRenderable.hpp>
+
+#include <unotxdoc.hxx>
+
+#include <docsh.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
 #include <fmtfsize.hxx>
@@ -596,13 +603,6 @@ USHORT _PostItFld::GetPageNo( MultiSelection &rMulti, BOOL bRgt, BOOL bLft,
     return 0;
 }
 
-/******************************************************************************
- *  Methode     :   void lcl_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds& ...
- *  Beschreibung:
- *  Erstellt    :   OK 07.11.94 10:20
- *  Aenderung   :
- ******************************************************************************/
-
 
 void lcl_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds& rSrtLst )
 {
@@ -626,13 +626,6 @@ void lcl_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds& rSrtLst )
             }
     }
 }
-
-/******************************************************************************
- *  Methode     :   void lcl_FormatPostIt( IDocumentContentOperations* pIDCO, SwPaM& aPam, ...
- *  Beschreibung:
- *  Erstellt    :   OK 07.11.94 10:20
- *  Aenderung   :
- ******************************************************************************/
 
 
 void lcl_FormatPostIt( IDocumentContentOperations* pIDCO, SwPaM& aPam, SwPostItField* pField,
@@ -671,13 +664,6 @@ void lcl_FormatPostIt( IDocumentContentOperations* pIDCO, SwPaM& aPam, SwPostItF
     pIDCO->SplitNode( *aPam.GetPoint(), false );
     pIDCO->SplitNode( *aPam.GetPoint(), false );
 }
-
-/******************************************************************************
- *  Methode     :   void lcl_PrintPostIts( ViewShell* pPrtShell )
- *  Beschreibung:
- *  Erstellt    :   OK 07.11.94 10:21
- *  Aenderung   :   MA 10. May. 95
- ******************************************************************************/
 
 
 void lcl_PrintPostIts( ViewShell* pPrtShell, const XubString& rJobName,
@@ -739,13 +725,6 @@ void lcl_PrintPostIts( ViewShell* pPrtShell, const XubString& rJobName,
 #endif
 }
 
-/******************************************************************************
- *  Methode     :   void lcl_PrintPostItsEndDoc( ViewShell* pPrtShell, ...
- *  Beschreibung:
- *  Erstellt    :   OK 07.11.94 10:21
- *  Aenderung   :   MA 10. May. 95
- ******************************************************************************/
-
 
 void lcl_PrintPostItsEndDoc( ViewShell* pPrtShell,
             _SetGetExpFlds& rPostItFields, MultiSelection &rMulti,
@@ -778,13 +757,6 @@ void lcl_PrintPostItsEndDoc( ViewShell* pPrtShell,
 
     lcl_PrintPostIts( pPrtShell, rJobName, rStartJob, rJobStartError, bRev );
 }
-
-/******************************************************************************
- *  Methode     :   void lcl_PrintPostItsEndPage( ViewShell* pPrtShell, ...
- *  Beschreibung:
- *  Erstellt    :   OK 07.11.94 10:22
- *  Aenderung   :
- ******************************************************************************/
 
 
 void lcl_PrintPostItsEndPage( ViewShell* pPrtShell,
@@ -1241,15 +1213,59 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 
 
 sal_Bool ViewShell::PrintOrPDFExportMM(
-    const boost::shared_ptr< vcl::PrinterController > & rpPrinterController,
-    const SwPrtOptions &rPrintData, /* TLPDF can't we make use of just SwPrintData only as it is the case in PrintProspect???  */
-    bool bIsPDFExport )
+    vcl::OldStylePrintAdaptor &/*rAdaptor*/,
+    const uno::Sequence< beans::PropertyValue > &/*rOptions*/,  /* TLPDF: this or the above ? */
+    const SwPrtOptions &/*rPrintData*/, /* TLPDF can't we make use of just SwPrintData only as it is the case in PrintProspect???  */
+    bool /*bIsPDFExport*/ )
 {
-    (void) rpPrinterController; (void) rPrintData; (void) bIsPDFExport;
+    return false;
+    // to be removed (not needed)
+#ifdef TL_NOT_NOW   /* TLPDF */
+    (void) rPrintData; (void) bIsPDFExport;
 
+    uno::Reference< frame::XModel >         xModel( GetDoc()->GetDocShell()->GetModel() );
+    uno::Reference< view::XRenderable >     xTextDoc( xModel, uno::UNO_QUERY );
+    if (!xModel.is() || xTextDoc.is())
+        return sal_False;
 
-    Printer::PrintJob( rpPrinterController, JobSetup() );
-    return sal_True;
+    bool bRes = sal_True;
+    try
+    {
+        // print the whole document and not just a selection
+        uno::Any    aSelection;
+        aSelection <<= xModel;
+
+        const sal_Int32 nPages = xTextDoc->getRendererCount( aSelection, rOptions );
+        for (sal_Int32 i = 0; i < nPages; ++i)
+        {
+            uno::Sequence< beans::PropertyValue > aRenderProps( xTextDoc->getRenderer( i, aSelection, rOptions ) );
+            if (i == 0 || i == nPages - 1)
+            {
+                rtl::OUString aName( rtl::OUString::createFromAscii( i == 0 ? "IsFirstPage" : "IsLastPage" ) );
+                const sal_Int32 nProps = aRenderProps.getLength();
+                aRenderProps.realloc( nProps + 1 );
+                aRenderProps[ nProps ].Name = aName;
+                aRenderProps[ nProps ].Value <<= sal_True;
+            }
+
+            rAdaptor.StartPage();
+            xTextDoc->render( i, aSelection, aRenderProps );
+            rAdaptor.EndPage();
+        }
+    }
+    catch (uno::Exception &r)
+    {
+        (void) r;
+        bRes = sal_False;
+    }
+
+    if (bRes)
+    {
+        const boost::shared_ptr< vcl::PrinterController > pPrtController( &rAdaptor );
+        Printer::PrintJob( pPrtController, JobSetup() );
+    }
+    return bRes;
+#endif  // TL_NOT_NOW   /* TLPDF */
 }
 
 

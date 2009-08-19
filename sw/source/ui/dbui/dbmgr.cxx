@@ -881,8 +881,9 @@ SwNewDBMgr::~SwNewDBMgr()
 BOOL SwNewDBMgr::MergePrint( SwView& /*rView*/,
                              SwPrtOptions& /*rOpt*/, SfxProgress& /*rProgress*/, BOOL /*bIsAPI*/ )
 {
-    return TRUE;
-#ifdef TL_NOT_NOW /*TLPDF*/
+    DBG_ASSERT( 0, "not implemented" );
+    return FALSE;
+#ifdef TL_NOT_NOW   /* TLPDF */
     SwWrtShell* pSh = &rView.GetWrtShell();
     //check if the doc is synchronized and contains at least one linked section
     BOOL bSynchronizedDoc = pSh->IsLabelDoc() && pSh->GetSectionFmtCount() > 1;
@@ -990,14 +991,14 @@ BOOL SwNewDBMgr::MergePrint( SwView& /*rView*/,
                 }
                 if( pPrt->IsJobActive() )
                 {
-                    pSh->PrintProspectMM( aPrtAdaptor, rOpt, rOpt.IsPrintProspect_RTL() );  /* TLPDF */
+                    pSh->PrintProspectMM( aPrtAdaptor, aViewProperties, rOpt, rOpt.IsPrintProspect_RTL() );  /* TLPDF */
                     bRet = TRUE;
                 }
 #endif  // TL_NOT_NOW /*TLPDF*/
-                pSh->PrintProspectMM( pPrtController, rOpt, rOpt.IsPrintProspect_RTL() );  // TLPDF
+                pSh->PrintProspectMM( aPrtAdaptor, aViewProperties, rOpt, rOpt.IsPrintProspect_RTL() );  // TLPDF
                 bRet = TRUE;                                                        // TLPDF
             }
-            else if( pSh->PrintOrPDFExportMM( pPrtController, rOpt ) /* TLPDF */ )
+            else if( pSh->PrintOrPDFExportMM( aPrtAdaptor, aViewProperties, rOpt ) /* TLPDF */ )
                 bRet = TRUE;
             bMergeLock = FALSE;
 
@@ -1046,7 +1047,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& /*rView*/,
     }
 
     return bRet;
-#endif // TL_NOT_NOW /*TLPDF*/
+#endif  // TL_NOT_NOW   /* TLPDF */
 }
 /*-- 21.06.2004 09:08:16---------------------------------------------------
 
@@ -1054,8 +1055,9 @@ BOOL SwNewDBMgr::MergePrint( SwView& /*rView*/,
 BOOL SwNewDBMgr::MergePrintDocuments( SwView& /*rView*/,
                                 SwPrtOptions& /*rOpt*/, SfxProgress& /*rProgress*/, BOOL /*bIsAPI*/ )
 {
-    return TRUE;
-#ifdef TL_NOT_NOW /*TLPDF*/
+    DBG_ASSERT( 0, "not implemented" );
+    return FALSE;
+#ifdef TL_NOT_NOW   /* TLPDF */
     SwWrtShell* pSh = &rView.GetWrtShell();
     //check if the doc is synchronized and contains at least one linked section
     //merge source is already open
@@ -1149,6 +1151,7 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& /*rView*/,
         pAddViewProperties[0].Value <<= ::rtl::OUString( aTmp );
         rView.SetAdditionalPrintOptions(aAddViewProperties);
 
+        // TLPDF: What abou this line ???
         rView.SfxViewShell::Print( rProgress, bIsAPI ); // ggf Basic-Macro ausfuehren
         if( rOpt.IsPrintSingleJobs() && bRet )
         {
@@ -1161,11 +1164,11 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& /*rView*/,
         {
 //TLPDF            if( pPrt->IsJobActive() || pPrt->StartJob( rOpt.GetJobName() ))
 //TLPDF            {
-                pSh->PrintProspectMM( pPrtController, rOpt, rOpt.IsPrintProspect_RTL() );
-                bRet = TRUE;
+            pSh->PrintProspectMM( aPrtAdaptor, aAddViewProperties, rOpt, rOpt.IsPrintProspect_RTL() );
+            bRet = TRUE;
 //TLPDF            }
         }
-        else if( pSh->PrintOrPDFExportMM( pPrtController, rOpt ) /* TLPDF */ )
+        else if( pSh->PrintOrPDFExportMM( aPrtAdaptor, aAddViewProperties, rOpt ) /* TLPDF */ )
             bRet = TRUE;
         bMergeLock = FALSE;
 
@@ -1209,7 +1212,7 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& /*rView*/,
     }
 
     return bRet;
-#endif // TL_NOT_NOW /*TLPDF*/
+#endif  // TL_NOT_NOW   /* TLPDF */
 }
 
 
