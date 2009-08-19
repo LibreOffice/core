@@ -1087,7 +1087,7 @@ void writeNode(
         "oor:string-list", // TYPE_STRING_LIST
         "oor:hexBinary-list" }; // TYPE_HEXBINARY_LIST
     if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node.get())) {
-        xmlTextWriterStartElement(writer, xmlString("oor:prop"));
+        xmlTextWriterStartElement(writer, xmlString("prop"));
         xmlTextWriterWriteAttribute(
             writer, xmlString("oor:name"),
             xmlString(convertToUtf8(name).getStr()));
@@ -1101,14 +1101,14 @@ void writeNode(
                     writer, xmlString("oor:type"), xmlString(typeNames[type]));
             }
         }
-        xmlTextWriterStartElement(writer, xmlString("oor:value"));
+        xmlTextWriterStartElement(writer, xmlString("value"));
         writeValue(writer, type, prop->getValue());
         xmlTextWriterEndElement(writer);
         xmlTextWriterEndElement(writer);
     } else if (LocalizedPropertyNode * locprop =
                dynamic_cast< LocalizedPropertyNode * >(node.get()))
     {
-        xmlTextWriterStartElement(writer, xmlString("oor:prop"));
+        xmlTextWriterStartElement(writer, xmlString("prop"));
         xmlTextWriterWriteAttribute(
             writer, xmlString("oor:name"),
             xmlString(convertToUtf8(name).getStr()));
@@ -1131,7 +1131,7 @@ void writeNode(
             ? topLevel && locval->getLayer() == NO_LAYER
             : !topLevel || locval->getLayer() == NO_LAYER)
         {
-            xmlTextWriterStartElement(writer, xmlString("oor:value"));
+            xmlTextWriterStartElement(writer, xmlString("value"));
             if (name.getLength() != 0) {
                 xmlTextWriterWriteAttribute(
                     writer, xmlString("xml:lang"),
@@ -1157,7 +1157,7 @@ void writeNode(
             xmlTextWriterEndElement(writer);
         }
     } else if (GroupNode * group = dynamic_cast< GroupNode * >(node.get())) {
-        xmlTextWriterStartElement(writer, xmlString("oor:node"));
+        xmlTextWriterStartElement(writer, xmlString("node"));
         xmlTextWriterWriteAttribute(
             writer, xmlString("oor:name"),
             xmlString(convertToUtf8(name).getStr()));
@@ -1174,7 +1174,7 @@ void writeNode(
         }
         xmlTextWriterEndElement(writer);
     } else if (SetNode * set = dynamic_cast< SetNode * >(node.get())) {
-        xmlTextWriterStartElement(writer, xmlString("oor:node"));
+        xmlTextWriterStartElement(writer, xmlString("node"));
         xmlTextWriterWriteAttribute(
             writer, xmlString("oor:name"),
             xmlString(convertToUtf8(name).getStr()));
@@ -1279,9 +1279,7 @@ bool XcsParser::startElement(
               xmlStrEqual(name, xmlString("import")) ||
               xmlStrEqual(name, xmlString("uses")) ||
               xmlStrEqual(name, xmlString("constraints"))) &&
-             (nsUri == 0 ||
-              xmlStrEqual(
-                  nsUri, xmlString("http://openoffice.org/2001/registry")))))
+             nsUri == 0))
         {
             OSL_ASSERT(ignoring_ < LONG_MAX);
             ++ignoring_;
@@ -1289,21 +1287,13 @@ bool XcsParser::startElement(
         }
         switch (state_) {
         case STATE_COMPONENT_SCHEMA:
-            if (xmlStrEqual(name, xmlString("templates")) &&
-                (nsUri == 0 ||
-                 xmlStrEqual(
-                     nsUri, xmlString("http://openoffice.org/2001/registry"))))
-            {
+            if (xmlStrEqual(name, xmlString("templates")) && nsUri == 0) {
                 state_ = STATE_TEMPLATES;
                 return true;
             }
             // fall through
         case STATE_TEMPLATES_DONE:
-            if (xmlStrEqual(name, xmlString("component")) &&
-                (nsUri == 0 ||
-                 xmlStrEqual(
-                     nsUri, xmlString("http://openoffice.org/2001/registry"))))
-            {
+            if (xmlStrEqual(name, xmlString("component")) && nsUri == 0) {
                 state_ = STATE_COMPONENT;
                 OSL_ASSERT(elements_.empty());
                 elements_.push(
@@ -1315,21 +1305,11 @@ bool XcsParser::startElement(
             break;
         case STATE_TEMPLATES:
             if (elements_.empty()) {
-                if (xmlStrEqual(name, xmlString("group")) &&
-                    (nsUri == 0 ||
-                     xmlStrEqual(
-                         nsUri,
-                         xmlString("http://openoffice.org/2001/registry"))))
-                {
+                if (xmlStrEqual(name, xmlString("group")) && nsUri == 0) {
                     handleGroup(reader, true);
                     return true;
                 }
-                if (xmlStrEqual(name, xmlString("set")) &&
-                    (nsUri == 0 ||
-                     xmlStrEqual(
-                         nsUri,
-                         xmlString("http://openoffice.org/2001/registry"))))
-                {
+                if (xmlStrEqual(name, xmlString("set")) && nsUri == 0) {
                     handleSet(reader, true);
                     return true;
                 }
@@ -1344,63 +1324,33 @@ bool XcsParser::startElement(
                     elements_.top().node.get())
                  != 0))
             {
-                if (xmlStrEqual(name, xmlString("value")) &&
-                    (nsUri == 0 ||
-                     xmlStrEqual(
-                         nsUri,
-                         xmlString("http://openoffice.org/2001/registry"))))
-                {
+                if (xmlStrEqual(name, xmlString("value")) && nsUri == 0) {
                     handlePropValue(reader, elements_.top().node);
                     return true;
                 }
             } else if (dynamic_cast< GroupNode * >(elements_.top().node.get())
                        != 0)
             {
-                if (xmlStrEqual(name, xmlString("prop")) &&
-                    (nsUri == 0 ||
-                     xmlStrEqual(
-                         nsUri,
-                         xmlString("http://openoffice.org/2001/registry"))))
-                {
+                if (xmlStrEqual(name, xmlString("prop")) && nsUri == 0) {
                     handleProp(reader);
                     return true;
                 }
-                if (xmlStrEqual(name, xmlString("node-ref")) &&
-                    (nsUri == 0 ||
-                     xmlStrEqual(
-                         nsUri,
-                         xmlString("http://openoffice.org/2001/registry"))))
-                {
+                if (xmlStrEqual(name, xmlString("node-ref")) && nsUri == 0) {
                     handleNodeRef(reader);
                     return true;
                 }
-                if (xmlStrEqual(name, xmlString("group")) &&
-                    (nsUri == 0 ||
-                     xmlStrEqual(
-                         nsUri,
-                         xmlString("http://openoffice.org/2001/registry"))))
-                {
+                if (xmlStrEqual(name, xmlString("group")) && nsUri == 0) {
                     handleGroup(reader, false);
                     return true;
                 }
-                if (xmlStrEqual(name, xmlString("set")) &&
-                    (nsUri == 0 ||
-                     xmlStrEqual(
-                         nsUri,
-                         xmlString("http://openoffice.org/2001/registry"))))
-                {
+                if (xmlStrEqual(name, xmlString("set")) && nsUri == 0) {
                     handleSet(reader, false);
                     return true;
                 }
             } else if (SetNode * set = dynamic_cast< SetNode * >(
                            elements_.top().node.get()))
             {
-                if (xmlStrEqual(name, xmlString("item")) &&
-                    (nsUri == 0 ||
-                     xmlStrEqual(
-                         nsUri,
-                         xmlString("http://openoffice.org/2001/registry"))))
-                {
+                if (xmlStrEqual(name, xmlString("item")) && nsUri == 0) {
                     handleSetItem(reader, set);
                     return true;
                 }
@@ -1830,11 +1780,7 @@ bool XcuParser::startElement(
     } else if (state_.top().ignore) {
         state_.push(state_.top());
     } else if (!state_.top().node.is()) {
-        if (xmlStrEqual(name, xmlString("item")) &&
-            (nsUri == 0 ||
-             xmlStrEqual(
-                 nsUri, xmlString("http://openoffice.org/2001/registry"))))
-        {
+        if (xmlStrEqual(name, xmlString("item")) && nsUri == 0) {
             handleItem(reader);
         } else {
             throw css::uno::RuntimeException(
@@ -1848,11 +1794,7 @@ bool XcuParser::startElement(
     } else if (PropertyNode * prop = dynamic_cast< PropertyNode * >(
                    state_.top().node.get()))
     {
-        if (xmlStrEqual(name, xmlString("value")) &&
-            (nsUri == 0 ||
-             xmlStrEqual(
-                 nsUri, xmlString("http://openoffice.org/2001/registry"))))
-        {
+        if (xmlStrEqual(name, xmlString("value")) && nsUri == 0) {
             handlePropValue(reader, prop);
         } else {
             throw css::uno::RuntimeException(
@@ -1866,11 +1808,7 @@ bool XcuParser::startElement(
     } else if (LocalizedPropertyNode * locprop =
                dynamic_cast< LocalizedPropertyNode * >(state_.top().node.get()))
     {
-        if (xmlStrEqual(name, xmlString("value")) &&
-            (nsUri == 0 ||
-             xmlStrEqual(
-                 nsUri, xmlString("http://openoffice.org/2001/registry"))))
-        {
+        if (xmlStrEqual(name, xmlString("value")) && nsUri == 0) {
             handleLocpropValue(reader, locprop);
         } else {
             throw css::uno::RuntimeException(
@@ -1885,18 +1823,9 @@ bool XcuParser::startElement(
     } else if (GroupNode * group = dynamic_cast< GroupNode * >(
                    state_.top().node.get()))
     {
-        if (xmlStrEqual(name, xmlString("prop")) &&
-            (nsUri == 0 ||
-             xmlStrEqual(
-                 nsUri, xmlString("http://openoffice.org/2001/registry"))))
-        {
+        if (xmlStrEqual(name, xmlString("prop")) && nsUri == 0) {
             handleGroupProp(reader, group);
-        } else if (xmlStrEqual(name, xmlString("node")) &&
-                   (nsUri == 0 ||
-                    xmlStrEqual(
-                        nsUri,
-                        xmlString("http://openoffice.org/2001/registry"))))
-        {
+        } else if (xmlStrEqual(name, xmlString("node")) && nsUri == 0) {
             handleGroupNode(reader, group);
         } else {
             throw css::uno::RuntimeException(
@@ -1910,12 +1839,7 @@ bool XcuParser::startElement(
     } else if (SetNode * set = dynamic_cast< SetNode * >(
                    state_.top().node.get()))
     {
-        if (xmlStrEqual(name, xmlString("node")) &&
-                   (nsUri == 0 ||
-                    xmlStrEqual(
-                        nsUri,
-                        xmlString("http://openoffice.org/2001/registry"))))
-        {
+        if (xmlStrEqual(name, xmlString("node")) && nsUri == 0) {
             handleSetNode(reader, set);
         } else {
             throw css::uno::RuntimeException(
@@ -2613,7 +2537,8 @@ Reader::Reader(
 bool Reader::parse() {
     bool skip = false;
     if (reader_ == 0) {
-        reader_ = xmlReaderForFile(convertToFilepath(url_), 0, 0);
+        reader_ = xmlReaderForFile(
+            convertToFilepath(url_), 0, XML_PARSE_NONET | XML_PARSE_NOCDATA);
             //TODO: pass (external) file URL instead of filepath?
         if (reader_ == 0) {
             throw css::uno::RuntimeException(
@@ -2663,7 +2588,6 @@ bool Reader::parse() {
             parser_->endElement(this);
             break;
         case XML_READER_TYPE_TEXT:
-        case XML_READER_TYPE_CDATA:
         case XML_READER_TYPE_SIGNIFICANT_WHITESPACE:
             {
                 parser_->characters(this);
@@ -2706,7 +2630,10 @@ bool XcdParser::startElement(
     }
     switch (state_) {
     case STATE_START:
-        if (xmlStrEqual(name, xmlString("data")) && nsUri == 0) {
+        if (xmlStrEqual(name, xmlString("data")) && nsUri != 0 &&
+            xmlStrEqual(
+                nsUri, xmlString("http://openoffice.org/2001/registry")))
+        {
             state_ = STATE_DEPENDENCIES;
             return true;
         }
@@ -2888,7 +2815,7 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
         rtl::Reference< Node > parent;
         rtl::Reference< Node > node(data.resolvePath(*i, 0, 0, 0, &parent, 0));
         if (node.is()) {
-            xmlTextWriterStartElement(writer.writer, xmlString("oor:item"));
+            xmlTextWriterStartElement(writer.writer, xmlString("item"));
             xmlTextWriterWriteAttribute(
                 writer.writer, xmlString("oor:path"),
                 xmlString(
@@ -2910,22 +2837,20 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
                     rtl::OUString parentName;
                     rtl::OUString grandparentPath(
                         parseLastSegment(parentPath, &parentName));
-                    xmlTextWriterStartElement(
-                        writer.writer, xmlString("oor:item"));
+                    xmlTextWriterStartElement(writer.writer, xmlString("item"));
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("oor:path"),
                         xmlString(
                             convertToUtf8(escapeText(grandparentPath, false)).
                             getStr()));
-                    xmlTextWriterStartElement(
-                        writer.writer, xmlString("oor:prop"));
+                    xmlTextWriterStartElement(writer.writer, xmlString("prop"));
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("oor:name"),
                         xmlString(convertToUtf8(parentName).getStr()));
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("oor:op"), xmlString("fuse"));
                     xmlTextWriterStartElement(
-                        writer.writer, xmlString("oor:value"));
+                        writer.writer, xmlString("value"));
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("xml:lang"),
                         xmlString(convertToUtf8(name).getStr()));
@@ -2945,15 +2870,13 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
                     j->second->getLayer() == NO_LAYER)
                 {
                     OSL_ASSERT(j->second->isRemoved());
-                    xmlTextWriterStartElement(
-                        writer.writer, xmlString("oor:item"));
+                    xmlTextWriterStartElement(writer.writer, xmlString("item"));
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("oor:path"),
                         xmlString(
                             convertToUtf8(escapeText(parentPath, false)).
                             getStr()));
-                    xmlTextWriterStartElement(
-                        writer.writer, xmlString("oor:prop"));
+                    xmlTextWriterStartElement(writer.writer, xmlString("prop"));
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("oor:name"),
                         xmlString(convertToUtf8(name).getStr()));
@@ -2970,15 +2893,13 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
                     j->second->getLayer() == NO_LAYER)
                 {
                     OSL_ASSERT(j->second->isRemoved());
-                    xmlTextWriterStartElement(
-                        writer.writer, xmlString("oor:item"));
+                    xmlTextWriterStartElement(writer.writer, xmlString("item"));
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("oor:path"),
                         xmlString(
                             convertToUtf8(escapeText(parentPath, false)).
                             getStr()));
-                    xmlTextWriterStartElement(
-                        writer.writer, xmlString("oor:node"));
+                    xmlTextWriterStartElement(writer.writer, xmlString("node"));
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("oor:name"),
                         xmlString(convertToUtf8(name).getStr()));
