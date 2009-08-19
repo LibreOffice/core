@@ -114,7 +114,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             {
                 String sGrfNm, sFilterNm;
                 rSh.GetGrfNms( &sGrfNm, &sFilterNm );
-                ExportGraphic( *pGraphic, sGrfNm, sGrfNm );
+                ExportGraphic( *pGraphic, sGrfNm );
             }
         }
         break;

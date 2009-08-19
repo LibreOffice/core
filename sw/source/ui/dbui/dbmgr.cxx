@@ -1736,6 +1736,7 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
         uno::Reference< XConnection> xConnection;
         sal_Bool bUseMergeData = sal_False;
         uno::Reference< XColumnsSupplier> xColsSupp;
+        bool bDisposeConnection = false;
         if(pImpl->pMergeData &&
             pImpl->pMergeData->sDataSource.equals(rDBName) && pImpl->pMergeData->sCommand.equals(rTableName))
         {
@@ -1760,6 +1761,7 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
             {
                 rtl::OUString sDBName(rDBName);
                 xConnection = RegisterConnection( sDBName );
+                bDisposeConnection = true;
             }
             if(bUseMergeData)
                 pImpl->pMergeData->xConnection = xConnection;
@@ -1789,6 +1791,10 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
             if(bDispose)
             {
                 ::comphelper::disposeComponent( xColsSupp );
+            }
+            if(bDisposeConnection)
+            {
+                ::comphelper::disposeComponent( xConnection );
             }
         }
         else

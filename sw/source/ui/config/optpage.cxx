@@ -1688,7 +1688,7 @@ struct CharAttr
 };
 
 // Editieren entspricht Einfuegen-Attributen
-static CharAttr __FAR_DATA aInsertAttr[] =
+static CharAttr __FAR_DATA aRedlineAttr[] =
 {
     { SID_ATTR_CHAR_CASEMAP,        SVX_CASEMAP_NOT_MAPPED },
     { SID_ATTR_CHAR_WEIGHT,         WEIGHT_BOLD },
@@ -1702,7 +1702,17 @@ static CharAttr __FAR_DATA aInsertAttr[] =
     { SID_ATTR_CHAR_CASEMAP,        SVX_CASEMAP_TITEL },
     { SID_ATTR_BRUSH,               0 }
 };
+// Items from aRedlineAttr relevant for InsertAttr: strikethrough is
+// not used
+static USHORT aInsertAttrMap[] = { 0, 1, 2, 3, 4, 6, 7, 8, 9, 10 };
 
+// Items from aRedlineAttr relevant for DeleteAttr: underline and
+// double underline is not used
+static USHORT aDeletedAttrMap[] = { 0, 1, 2, 5, 6, 7, 8, 9, 10 };
+
+// Items from aRedlineAttr relevant for ChangeAttr: strikethrough is
+// not used
+static USHORT aChangedAttrMap[] = { 0, 1, 2, 3, 4, 6, 7, 8, 9, 10 };
 
 /*-----------------------------------------------------------------------
     Beschreibung: Markierungsvorschau
@@ -1860,6 +1870,23 @@ void SwMarkPreview::DrawRect(const Rectangle &rRect, const Color &rFillColor, co
     Window::DrawRect(rRect);
 }
 
+namespace
+{
+    void lcl_FillRedlineAttrListBox(
+            ListBox& rLB, const AuthorCharAttr& rAttrToSelect,
+            const USHORT* pAttrMap, const USHORT nAttrMapSize)
+    {
+        for (USHORT i = 0; i != nAttrMapSize; ++i)
+        {
+            CharAttr& rAttr(aRedlineAttr[pAttrMap[i]]);
+            rLB.SetEntryData(i, &rAttr);
+            if (rAttr.nItemId == rAttrToSelect.nItemId &&
+                rAttr.nAttr == rAttrToSelect.nAttr)
+                rLB.SelectEntryPos(i);
+        }
+    }
+}
+
 SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )
     : SfxTabPage(pParent, SW_RES(TP_REDLINE_OPT), rSet),
@@ -1907,6 +1934,13 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
         aDeletedLB.InsertEntry(sEntry);
         aChangedLB.InsertEntry(sEntry);
     };
+
+    // remove strikethrough from insert and change and underline + double
+    // underline from delete
+    aInsertLB.RemoveEntry(5);
+    aChangedLB.RemoveEntry(5);
+    aDeletedLB.RemoveEntry(4);
+    aDeletedLB.RemoveEntry(3);
 
     Link aLk = LINK(this, SwRedlineOptionsTabPage, AttribHdl);
     aInsertLB.SetSelectHdl( aLk );
@@ -2149,41 +2183,16 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
 
     aMarkColorLB.SelectEntry(pOpt->GetMarkAlignColor());
 
-    // Attributlistboxen initialisieren
-    USHORT nNum = sizeof(aInsertAttr) / sizeof(CharAttr);
-
     aInsertLB.SelectEntryPos(0);
     aDeletedLB.SelectEntryPos(0);
     aChangedLB.SelectEntryPos(0);
-    for (i = 0; i < nNum; i++)
-    {
-        aInsertLB.SetEntryData(i, &aInsertAttr[i]);
-        if (aInsertAttr[i].nItemId == rInsertAttr.nItemId &&
-            aInsertAttr[i].nAttr == rInsertAttr.nAttr)
-            aInsertLB.SelectEntryPos(i);
-    }
 
-    for (i = 0; i < nNum; i++)
-    {
-        aDeletedLB.SetEntryData(i, &aInsertAttr[i]);
-        if (aInsertAttr[i].nItemId == rDeletedAttr.nItemId &&
-            aInsertAttr[i].nAttr == rDeletedAttr.nAttr)
-            aDeletedLB.SelectEntryPos(i);
-    }
-
-    for (i = 0; i < nNum; i++)
-    {
-        aChangedLB.SetEntryData(i, &aInsertAttr[i]);
-        if (aInsertAttr[i].nItemId == rChangedAttr.nItemId &&
-            aInsertAttr[i].nAttr == rChangedAttr.nAttr)
-            aChangedLB.SelectEntryPos(i);
-    }
-    //remove strikethrough from insert and delete and underline+double underline from delete
-    aInsertLB.RemoveEntry(5);
-    aChangedLB.RemoveEntry(5);
-    aDeletedLB.RemoveEntry(4);
-    aDeletedLB.RemoveEntry(3);
-
+    lcl_FillRedlineAttrListBox(aInsertLB, rInsertAttr, aInsertAttrMap,
+            sizeof(aInsertAttrMap) / sizeof(USHORT));
+    lcl_FillRedlineAttrListBox(aDeletedLB, rDeletedAttr, aDeletedAttrMap,
+            sizeof(aDeletedAttrMap) / sizeof(USHORT));
+    lcl_FillRedlineAttrListBox(aChangedLB, rChangedAttr, aChangedAttrMap,
+            sizeof(aChangedAttrMap) / sizeof(USHORT));
 
     USHORT nPos = 0;
     switch (pOpt->GetMarkAlignMode())
@@ -2266,7 +2275,8 @@ IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox *, pLB )
         nPos = 0;
 
     CharAttr*   pAttr = ( CharAttr* ) pLB->GetEntryData( nPos );
-
+    //switch off preview background color
+    pPrev->ResetColor();
     switch (pAttr->nItemId)
     {
         case SID_ATTR_CHAR_WEIGHT:

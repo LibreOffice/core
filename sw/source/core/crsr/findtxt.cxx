@@ -623,7 +623,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
                 p->MoveTo( (Ring*)pRegion );
             } while( p != pPrev );
         }
-        rSttCntIdx = nSttCnt;
+        pCrsr->Start()->nContent = nSttCnt;
         return FIND_NO_RING;
     }
     return bFnd ? FIND_FOUND : FIND_NOT_FOUND;

@@ -2382,7 +2382,8 @@ void WW8TabDesc::CalcDefaults()
         }
     } */
 
-    if (nMinLeft && ((!bIsBiDi && text::HoriOrientation::LEFT == eOri) || (bIsBiDi && text::HoriOrientation::RIGHT == eOri)))
+    if ((nMinLeft && !bIsBiDi && text::HoriOrientation::LEFT == eOri) ||
+        (nMinLeft != -108 && bIsBiDi && text::HoriOrientation::RIGHT == eOri)) // Word sets the first nCenter value to -108 when no indent is used
         eOri = text::HoriOrientation::LEFT_AND_WIDTH; //  absolutely positioned
 
     nDefaultSwCols = nMinCols;  // da Zellen einfuegen billiger ist als Mergen
@@ -2553,7 +2554,12 @@ void WW8TabDesc::CreateSwTable()
             if (!bIsBiDi)
                 nLeft = GetMinLeft();
             else
-                nLeft = pIo->maSectionManager.GetTextAreaWidth() - nPreferredWidth  - nOrgDxaLeft;
+            {
+                if (nPreferredWidth)
+                    nLeft = pIo->maSectionManager.GetTextAreaWidth() - nPreferredWidth  - nOrgDxaLeft;
+                else
+                    nLeft = -GetMinLeft();
+            }
 
             aL.SetLeft(nLeft);
 

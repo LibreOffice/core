@@ -255,7 +255,6 @@ LIB3OBJFILES = \
     $(SLO)$/glossary.obj \
     $(SLO)$/inpdlg.obj \
     $(SLO)$/insfnote.obj \
-    $(SLO)$/insrc.obj \
     $(SLO)$/instable.obj \
     $(SLO)$/insrule.obj \
     $(SLO)$/javaedit.obj \

@@ -33,7 +33,7 @@
 #define DLG_INSERT_TABLE        RC_TABLE_BEGIN
 #define DLG_FORMAT_TABLE        (RC_TABLE_BEGIN + 1)
 #define DLG_CONV_TEXT_TABLE     (RC_TABLE_BEGIN + 2)
-#define DLG_INS_ROW_COL         (RC_TABLE_BEGIN + 3)
+//#define DLG_INS_ROW_COL           (RC_TABLE_BEGIN + 3) moved to svx
 #define DLG_ROW_HEIGHT          (RC_TABLE_BEGIN + 4)
 #define DLG_SPLIT           (RC_TABLE_BEGIN + 5)
 #define DLG_COL_WIDTH           (RC_TABLE_BEGIN + 6)

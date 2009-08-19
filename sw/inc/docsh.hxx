@@ -305,6 +305,6 @@ public:
 
 class Graphic;
 //implemented in source/ui/docvw/romenu.cxx
-String ExportGraphic( const Graphic &rGraphic, const String &rGrfName, const String &rName );
+String ExportGraphic( const Graphic &rGraphic, const String &rGrfName );
 
 #endif
