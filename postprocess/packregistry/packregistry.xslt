@@ -31,7 +31,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:oor="http://openoffice.org/2001/registry">
   <xsl:template match="/">
-    <xsl:element name="data">
+    <xsl:element name="oor:data">
       <xsl:copy-of select="list/dependency"/>
 <!--
       <xsl:copy-of select="document(list/filename)/oor:component-schema"/>
