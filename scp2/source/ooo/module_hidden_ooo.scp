@@ -242,6 +242,7 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Vclplug_Gen,
 	gid_File_Lib_Vclplug_Gtk,
 	gid_File_Lib_Vclplug_Kde,
+	gid_File_Lib_Vclplug_Kde4,
 	gid_File_Lib_Vclplug_Svp,
 	gid_File_Lib_Basctl,
 	gid_File_Lib_CanvasTools,
