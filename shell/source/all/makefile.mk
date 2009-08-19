@@ -35,6 +35,7 @@ PRJNAME=shell
 TARGET=xmlparser
 ENABLE_EXCEPTIONS=TRUE
 
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -61,6 +62,7 @@ CFLAGS+=-DSYSTEM_EXPAT
 .ENDIF
 
 SLOFILES=$(SLO)$/xml_parser.obj
+          
 .IF "$(BUILD_X64)"!=""
 SLOFILES_X64=$(SLO_X64)$/xml_parser.obj
 .ENDIF # "$(BUILD_X64)"!=""

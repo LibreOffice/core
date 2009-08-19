@@ -531,6 +531,7 @@ void ClearUnoObjectsInRTL_Impl( StarBASIC* pBasic )
 {
     // #67781 Rueckgabewerte der Uno-Methoden loeschen
     clearUnoMethods();
+    clearUnoServiceCtors();
 
     ClearUnoObjectsInRTL_Impl_Rek( pBasic );
 

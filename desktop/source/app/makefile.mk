@@ -56,6 +56,7 @@ SHL1OBJS = \
     $(SLO)$/appsys.obj \
     $(SLO)$/cfgfilter.obj \
     $(SLO)$/checkinstall.obj \
+    $(SLO)$/check_ext_deps.obj \
     $(SLO)$/cmdlineargs.obj \
     $(SLO)$/cmdlinehelp.obj \
     $(SLO)$/configinit.obj \

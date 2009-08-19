@@ -751,30 +751,9 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
         }
         break;
         case mso_sptCurvedLeftArrow :
-        {
-            if ( ( seqAdjustmentValues.getLength() > 2 ) && ( seqAdjustmentValues[ 2 ].State == com::sun::star::beans::PropertyState_DIRECT_VALUE ) )
-            {
-                double fValue;
-                seqAdjustmentValues[ 2 ].Value >>= fValue;
-                fValue = 21600 - fValue;
-                seqAdjustmentValues[ 2 ].Value <<= fValue;
-            }
-            nFlags |= DFF_CUSTOMSHAPE_FLIP_H;
-        }
-        break;
+        case mso_sptCurvedRightArrow :
         case mso_sptCurvedUpArrow :
-        {
-            if ( ( seqAdjustmentValues.getLength() > 2 ) && ( seqAdjustmentValues[ 2 ].State == com::sun::star::beans::PropertyState_DIRECT_VALUE ) )
-            {
-                double fValue;
-                seqAdjustmentValues[ 2 ].Value >>= fValue;
-                fValue = 21600 - fValue;
-                seqAdjustmentValues[ 2 ].Value <<= fValue;
-            }
-            nFlags |= DFF_CUSTOMSHAPE_FLIP_V | DFF_CUSTOMSHAPE_EXCH;
-        }
-        break;
-        case mso_sptCurvedDownArrow :           nFlags |= DFF_CUSTOMSHAPE_EXCH; break;
+        case mso_sptCurvedDownArrow :           nColorData = 0x2d000000; break;
         case mso_sptRibbon2 :                   nColorData = 0x30dd0000; break;
         case mso_sptRibbon :                    nColorData = 0x30dd0000; break;
 

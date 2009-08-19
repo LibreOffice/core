@@ -95,7 +95,7 @@ private:
     SVX_DLLPRIVATE sal_Bool                 ImplWriteGraphic( const ::rtl::OUString& rPictureStorageName,
                                                   const ::rtl::OUString& rPictureStreamName,
                                                   const ::rtl::OUString& rGraphicId );
-    SVX_DLLPRIVATE void                     ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, sal_uInt32 nInsertPos );
+    SVX_DLLPRIVATE void                     ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, sal_uInt32 nInsertPos, rtl::OUString& rRequestedFileName );
 
 protected:
                                 SvXMLGraphicHelper();
