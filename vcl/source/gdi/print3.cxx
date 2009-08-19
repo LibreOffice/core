@@ -581,6 +581,7 @@ bool PrinterController::setupPrinter( Window* i_pParent )
             if( aNewPaperSize != aPaperSize )
             {
                 mpImplData->maFixedPageSize = aNewPaperSize;
+                mpImplData->maPageCache.invalidate();
             }
         }
     }
