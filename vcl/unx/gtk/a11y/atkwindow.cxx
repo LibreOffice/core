@@ -33,6 +33,7 @@
 
 #include <plugins/gtk/gtkframe.hxx>
 #include <vcl/window.hxx>
+#include "vcl/floatwin.hxx"
 
 #include "atkwindow.hxx"
 #include "atkwrapper.hxx"
@@ -108,12 +109,15 @@ init_from_window( AtkObject *accessible, Window *pWindow )
                     pChild->SetAccessibleRole( AccessibleRole::LABEL );
                     accessible->name = g_strdup( rtl::OUStringToOString( pChild->GetText(), RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
-                else if (WINDOW_FLOATINGWINDOW == pChild->GetType())
+                else if ( pWindow->GetType() == WINDOW_BORDERWINDOW && pChild->GetType() == WINDOW_FLOATINGWINDOW )
                 {
-                    // TODO: This is a hack.  Figure out a way to do this a little cleaner.
-                    role = ATK_ROLE_WINDOW;
-                    pChild->SetAccessibleRole( AccessibleRole::WINDOW );
-                    accessible->name = g_strdup( rtl::OUStringToOString( pChild->GetText(), RTL_TEXTENCODING_UTF8 ).getStr() );
+                    sal_uInt16 nStackLevel = static_cast<FloatingWindow*>(pChild)->GetMenuStackLevel();
+                    if (nStackLevel == 0)
+                    {
+                        role = ATK_ROLE_POPUP_MENU;
+                        pChild->SetAccessibleRole( AccessibleRole::POPUP_MENU );
+                        accessible->name = g_strdup( rtl::OUStringToOString( pChild->GetText(), RTL_TEXTENCODING_UTF8 ).getStr() );
+                    }
                 }
             }
             break;
