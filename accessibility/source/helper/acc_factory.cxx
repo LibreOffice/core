@@ -376,7 +376,18 @@ inline bool hasFloatingChild(Window *pWindow)
             }
             else if ( nType == WINDOW_BORDERWINDOW && hasFloatingChild( pWindow ) )
             {
-                xContext = new FloatingWindowAccessible( _pXWindow );
+                // TODO: better way to handle this?
+                Window* pChild = pWindow->GetAccessibleChildWindow(0);
+                if ( pChild->IsMenuFloatingWindow() )
+                    // Menu popup window handles accessibility differently.
+                    xContext = new FloatingWindowAccessible( _pXWindow );
+                else
+                {
+                    // Get the accessible context from the child window.
+                    Reference<XAccessible> xAccessible = pChild->CreateAccessible();
+                    if (xAccessible.is())
+                        xContext = xAccessible->getAccessibleContext();
+                }
             }
             else if ( nType == WINDOW_HELPTEXTWINDOW )
             {
