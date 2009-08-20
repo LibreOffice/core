@@ -108,6 +108,13 @@ init_from_window( AtkObject *accessible, Window *pWindow )
                     pChild->SetAccessibleRole( AccessibleRole::LABEL );
                     accessible->name = g_strdup( rtl::OUStringToOString( pChild->GetText(), RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
+                else if (WINDOW_FLOATINGWINDOW == pChild->GetType())
+                {
+                    // TODO: This is a hack.  Figure out a way to do this a little cleaner.
+                    role = ATK_ROLE_WINDOW;
+                    pChild->SetAccessibleRole( AccessibleRole::WINDOW );
+                    accessible->name = g_strdup( rtl::OUStringToOString( pChild->GetText(), RTL_TEXTENCODING_UTF8 ).getStr() );
+                }
             }
             break;
         }
