@@ -70,48 +70,6 @@ using ::std::for_each;
 using ::std::vector;
 using ::std::set;
 
-#include <stdio.h>
-#include <string>
-#include <sys/time.h>
-
-namespace {
-
-class StackPrinter
-{
-public:
-    explicit StackPrinter(const char* msg) :
-        msMsg(msg)
-    {
-        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
-        mfStartTime = getTime();
-    }
-
-    ~StackPrinter()
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
-    }
-
-    void printTime(int line) const
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
-    }
-
-private:
-    double getTime() const
-    {
-        timeval tv;
-        gettimeofday(&tv, NULL);
-        return tv.tv_sec + tv.tv_usec / 1000000.0;
-    }
-
-    ::std::string msMsg;
-    double mfStartTime;
-};
-
-}
-
 // ============================================================================
 
 namespace {
@@ -169,12 +127,7 @@ public:
 
     void operator() (ScAccessibleFilterMenu::MenuItem& rItem)
     {
-//      if (rItem.mbSelected)
-//          ++mnCount;
-//
         ScAccessibleFilterMenuItem* p = static_cast<ScAccessibleFilterMenuItem*>(rItem.mxAccessible.get());
-//      fprintf(stdout, "CountSelectedMenuItem::():   name = '%s'  selected = %d\n",
-//              rtl::OUStringToOString(p->getAccessibleName(), RTL_TEXTENCODING_UTF8).getStr(), p->isSelected());
         if (p->isSelected())
             ++mnCount;
     }
@@ -203,14 +156,11 @@ ScAccessibleFilterMenu::ScAccessibleFilterMenu(const Reference<XAccessible>& rxP
     mbEnabled(true),
     mbSelected(false)
 {
-    fprintf(stdout, "ScAccessibleFilterMenu::ScAccessibleFilterMenu:   ctor (%p)\n", this);
     SetName(rName);
-//  SetDescription(OUString::createFromAscii("parent filter menu description"));
 }
 
 ScAccessibleFilterMenu::~ScAccessibleFilterMenu()
 {
-    fprintf(stdout, "ScAccessibleFilterMenu::~ScAccessibleFilterMenu:   dtor (%p)\n", this);
 }
 
 // XAccessibleComponent
@@ -218,33 +168,28 @@ ScAccessibleFilterMenu::~ScAccessibleFilterMenu()
 Reference<XAccessible> ScAccessibleFilterMenu::getAccessibleAtPoint( const ::com::sun::star::awt::Point& rPoint )
         throw (RuntimeException)
 {
-    fprintf(stdout, "ScAccessibleFilterMenu::getAccessibleAtPoint:   point = (%ld,%ld)\n", rPoint.X, rPoint.Y);
     return this;
 }
 
 sal_Bool ScAccessibleFilterMenu::isVisible() throw (RuntimeException)
 {
-    fprintf(stdout, "ScAccessibleFilterMenu::isVisible:   called\n");
     return true;
 }
 
 void ScAccessibleFilterMenu::grabFocus()
     throw (RuntimeException)
 {
-    fprintf(stdout, "ScAccessibleFilterMenu::grabFocus:   called\n");
 }
 
 sal_Int32 ScAccessibleFilterMenu::getForeground()
     throw (RuntimeException)
 {
-    fprintf(stdout, "ScAccessibleFilterMenu::getForeground:   called\n");
     return 0;
 }
 
 sal_Int32 ScAccessibleFilterMenu::getBackground()
     throw (RuntimeException)
 {
-    fprintf(stdout, "ScAccessibleFilterMenu::getBackground:   called\n");
     return 0;
 }
 
@@ -280,7 +225,7 @@ Reference<XAccessibleStateSet> ScAccessibleFilterMenu::getAccessibleStateSet()
 OUString ScAccessibleFilterMenu::getImplementationName()
     throw (RuntimeException)
 {
-    return OUString::createFromAscii("ScAccessibleFilterMenu - implementation name");
+    return OUString::createFromAscii("ScAccessibleFilterMenu name");
 }
 
 // XAccessibleEventBroadcaster
@@ -334,7 +279,6 @@ sal_Bool ScAccessibleFilterMenu::containsAll(const Sequence<sal_Int16>& aStateSe
 
 Sequence<sal_Int16> ScAccessibleFilterMenu::getStates() throw (RuntimeException)
 {
-    StackPrinter __stack_printer__("ScAccessibleFilterMenu::getStates");
     updateStates();
     Sequence<sal_Int16> aSeq(0);
     set<sal_Int16>::const_iterator itr = maStates.begin(), itrEnd = maStates.end();
@@ -343,10 +287,6 @@ Sequence<sal_Int16> ScAccessibleFilterMenu::getStates() throw (RuntimeException)
         aSeq.realloc(i+1);
         aSeq[i] = *itr;
     }
-    if (maStates.count(FOCUSED))
-        fprintf(stdout, "ScAccessibleFilterMenu::getStates:   focused\n");
-    else
-        fprintf(stdout, "ScAccessibleFilterMenu::getStates:   not focused\n");
     return aSeq;
 }
 
@@ -355,8 +295,6 @@ Sequence<sal_Int16> ScAccessibleFilterMenu::getStates() throw (RuntimeException)
 void ScAccessibleFilterMenu::selectAccessibleChild(sal_Int32 nChildIndex)
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    StackPrinter __stack_printer__("********** ScAccessibleFilterMenu::selectAccessibleChild **********");
-    fprintf(stdout, "ScAccessibleFilterMenu::selectAccessibleChild:   index = %ld\n", nChildIndex);
     if (nChildIndex >= maMenuItems.size())
         throw IndexOutOfBoundsException();
 
@@ -367,7 +305,6 @@ void ScAccessibleFilterMenu::selectAccessibleChild(sal_Int32 nChildIndex)
 sal_Bool ScAccessibleFilterMenu::isAccessibleChildSelected(sal_Int32 nChildIndex)
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    fprintf(stdout, "ScAccessibleFilterMenu::isAccessibleChildSelected:   index = %ld\n", nChildIndex);
     if (nChildIndex >= maMenuItems.size())
         throw IndexOutOfBoundsException();
 
@@ -376,7 +313,6 @@ sal_Bool ScAccessibleFilterMenu::isAccessibleChildSelected(sal_Int32 nChildIndex
 
 void ScAccessibleFilterMenu::clearAccessibleSelection() throw (RuntimeException)
 {
-    fprintf(stdout, "ScAccessibleFilterMenu::clearAccessibleSelection:   called\n");
     for_each(maMenuItems.begin(), maMenuItems.end(), SelectMenuItem(false));
     mpWindow->clearSelectedMenuItem(false);
 }
@@ -384,22 +320,17 @@ void ScAccessibleFilterMenu::clearAccessibleSelection() throw (RuntimeException)
 void ScAccessibleFilterMenu::selectAllAccessibleChildren() throw (RuntimeException)
 {
     // not suported - this is a menu, you can't select all menu items.
-
-//  fprintf(stdout, "ScAccessibleFilterMenu::selectAllAccessibleChildren:   called\n");
-//  for_each(maMenuItems.begin(), maMenuItems.end(), SelectMenuItem(true));
 }
 
 sal_Int32 ScAccessibleFilterMenu::getSelectedAccessibleChildCount() throw (RuntimeException)
 {
     sal_Int32 n = for_each(maMenuItems.begin(), maMenuItems.end(), CountSelectedMenuItem()).getCount();
-    fprintf(stdout, "ScAccessibleFilterMenu::getSelectedAccessibleChildCount:   count = %ld\n", n);
     return n;
 }
 
 Reference<XAccessible> ScAccessibleFilterMenu::getSelectedAccessibleChild(sal_Int32 nChildIndex)
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    fprintf(stdout, "ScAccessibleFilterMenu::getSelectedAccessibleChild:   index = %ld\n", nChildIndex);
     if (static_cast<size_t>(nChildIndex) >= maMenuItems.size())
         throw IndexOutOfBoundsException();
 
@@ -408,7 +339,6 @@ Reference<XAccessible> ScAccessibleFilterMenu::getSelectedAccessibleChild(sal_In
 
 void ScAccessibleFilterMenu::deselectAccessibleChild(sal_Int32 nChildIndex) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    fprintf(stdout, "ScAccessibleFilterMenu::deselectAccessibleChild:   index = %ld\n", nChildIndex);
     if (static_cast<size_t>(nChildIndex) >= maMenuItems.size())
         throw IndexOutOfBoundsException();
 
@@ -453,8 +383,6 @@ Sequence<sal_Int8> ScAccessibleFilterMenu::getImplementationId()
 
 void ScAccessibleFilterMenu::selectMenuItem(size_t nIndex, bool bSelect)
 {
-    StackPrinter __stack_printer__("ScAccessibleFilterMenu::selectMenuItem");
-    fprintf(stdout, "ScAccessibleFilterMenu::selectMenuItem:   index = %d  select = %d\n", nIndex, bSelect);
     if (maMenuItems.size() <= nIndex)
         return;
 
@@ -471,8 +399,6 @@ void ScAccessibleFilterMenu::selectMenuItem(size_t nIndex, bool bSelect)
         p->unselect();
 
     isSelected();
-//  aEvent.EventId = AccessibleEventId::STATE_CHANGED;
-//  CommitChange(aEvent);
 }
 
 void ScAccessibleFilterMenu::appendMenuItem(const OUString& rName, bool bEnabled, size_t nMenuPos)
@@ -504,15 +430,13 @@ void ScAccessibleFilterMenu::setEnabled(bool bEnabled)
 
 bool ScAccessibleFilterMenu::isFocused()
 {
-    return true;
-//  return isSelected();
+    return isSelected();
 }
 
 bool ScAccessibleFilterMenu::isSelected()
 {
     // Check to see if any of the child menu items is selected.
     size_t nSelectCount = for_each(maMenuItems.begin(), maMenuItems.end(), CountSelectedMenuItem()).getCount();
-//  fprintf(stdout, "ScAccessibleFilterMenu::isSelected:   selected count = %d\n", nSelectCount);
     return nSelectCount == 0;
 }
 

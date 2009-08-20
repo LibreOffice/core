@@ -56,48 +56,6 @@ using ::com::sun::star::uno::RuntimeException;
 using ::rtl::OUString;
 using ::std::vector;
 
-#include <stdio.h>
-#include <string>
-#include <sys/time.h>
-
-namespace {
-
-class StackPrinter
-{
-public:
-    explicit StackPrinter(const char* msg) :
-        msMsg(msg)
-    {
-        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
-        mfStartTime = getTime();
-    }
-
-    ~StackPrinter()
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
-    }
-
-    void printTime(int line) const
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
-    }
-
-private:
-    double getTime() const
-    {
-        timeval tv;
-        gettimeofday(&tv, NULL);
-        return tv.tv_sec + tv.tv_usec / 1000000.0;
-    }
-
-    ::std::string msMsg;
-    double mfStartTime;
-};
-
-}
-
 ScAccessibleFilterMenuItem::ScAccessibleFilterMenuItem(
     const Reference<XAccessible>& rxParent, ScMenuFloatingWindow* pWin, const OUString& rName, size_t nMenuPos) :
     ScAccessibleContextBase(rxParent, AccessibleRole::MENU_ITEM),
@@ -130,7 +88,6 @@ Reference<XAccessible> ScAccessibleFilterMenuItem::getAccessibleChild(sal_Int32 
 Reference<XAccessibleStateSet> ScAccessibleFilterMenuItem::getAccessibleStateSet()
     throw (RuntimeException)
 {
-    fprintf(stdout, "ScAccessibleFilterMenuItem::getAccessibleStateSet:   called\n");
     return this;
 }
 
@@ -144,14 +101,12 @@ OUString ScAccessibleFilterMenuItem::getImplementationName()
 
 sal_Bool ScAccessibleFilterMenuItem::isEmpty() throw (RuntimeException)
 {
-    fprintf(stdout, "ScAccessibleFilterMenuItem::isEmpty:   called\n");
     return (mbEnabled || mbSelected);
 }
 
 sal_Bool ScAccessibleFilterMenuItem::contains(sal_Int16 nState) throw (RuntimeException)
 {
     using namespace ::com::sun::star::accessibility::AccessibleStateType;
-    fprintf(stdout, "ScAccessibleFilterMenuItem::contains:   state = %d\n", nState);
     if (mbEnabled)
     {
         switch (nState)
@@ -180,7 +135,6 @@ sal_Bool ScAccessibleFilterMenuItem::containsAll(const Sequence<sal_Int16>& aSta
     throw (RuntimeException)
 {
     using namespace ::com::sun::star::accessibility::AccessibleStateType;
-    fprintf(stdout, "ScAccessibleFilterMenuItem::containsAll:   called\n");
     sal_Int32 n = aStateSet.getLength();
     for (sal_Int32 i = 0; i < n; ++i)
     {
@@ -212,9 +166,6 @@ sal_Bool ScAccessibleFilterMenuItem::containsAll(const Sequence<sal_Int16>& aSta
 
 Sequence<sal_Int16> ScAccessibleFilterMenuItem::getStates() throw (RuntimeException)
 {
-    fprintf(stdout, "ScAccessibleFilterMenuItem::getStates:   name = '%s'  enabled = %d  selected = %d\n",
-            rtl::OUStringToOString(getAccessibleName(), RTL_TEXTENCODING_UTF8).getStr(),
-            mbEnabled, mbSelected);
     using namespace ::com::sun::star::accessibility::AccessibleStateType;
     vector<sal_Int16> aStates;
     if (mbEnabled)
@@ -249,7 +200,6 @@ sal_Int32 ScAccessibleFilterMenuItem::getAccessibleActionCount() throw (RuntimeE
 sal_Bool ScAccessibleFilterMenuItem::doAccessibleAction(sal_Int32 nIndex)
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    fprintf(stdout, "ScAccessibleFilterMenuItem::doAccessibleAction:   called\n");
     return false;
 }
 

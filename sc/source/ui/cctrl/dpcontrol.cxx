@@ -57,70 +57,6 @@ using ::rtl::OUStringHash;
 using ::std::vector;
 using ::std::hash_map;
 using ::std::auto_ptr;
-//using ::std::for_each;
-
-
-#include <stdio.h>
-#include <string>
-#include <sys/time.h>
-
-namespace {
-
-class StackPrinter
-{
-public:
-    explicit StackPrinter(const char* msg) :
-        msMsg(msg)
-    {
-        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
-        mfStartTime = getTime();
-    }
-
-    ~StackPrinter()
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
-    }
-
-    void printTime(int line) const
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
-    }
-
-private:
-    double getTime() const
-    {
-        timeval tv;
-        gettimeofday(&tv, NULL);
-        return tv.tv_sec + tv.tv_usec / 1000000.0;
-    }
-
-    ::std::string msMsg;
-    double mfStartTime;
-};
-
-}
-
-//namespace {
-//
-//class AppendAccessibleMenuItems : public ::std::unary_function<ScMenuFloatingWindow::MenuItem, void>
-//{
-//public:
-//    explicit AppendAccessibleMenuItems(ScAccessibleFilterMenu* pAccMenu) :
-//        mnPos(0), mpAccMenu(pAccMenu) {}
-//
-//    void operator() (const ScMenuFloatingWindow::MenuItem& rItem)
-//    {
-//        mpAccMenu->appendMenuItem(rItem.maText, rItem.mbEnabled, mnPos++);
-//    }
-//
-//private:
-//    size_t mnPos;
-//    ScAccessibleFilterMenu* mpAccMenu;
-//};
-//
-//}
 
 ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX, const Fraction* pZoomY) :
     mpOutDev(pOutDev),
@@ -344,7 +280,7 @@ IMPL_LINK( ScMenuFloatingWindow::SubMenuItem, TimeoutHdl, void*, EMPTYARG )
 
 // ----------------------------------------------------------------------------
 
-ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc) :
+ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, USHORT nMenuStackLevel) :
     FloatingWindow(pParent, (WB_SYSTEMFLOATWIN|WB_SYSTEMWINDOW|WB_NOBORDER)),
     maOpenTimer(this),
     maCloseTimer(this),
@@ -356,7 +292,8 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc) :
     mpActiveSubMenu(NULL),
     mbActionFired(false)
 {
-    fprintf(stdout, "***** ScMenuFloatingWindow::ScMenuFloatingWindow:   ctor (%p)  parent = %p\n", this, pParent);
+    SetMenuStackLevel(nMenuStackLevel);
+
     // TODO: How do we get the right font to use here ?
     const sal_uInt16 nPopupFontHeight = 12;
     const StyleSettings& rStyle = GetSettings().GetStyleSettings();
@@ -484,7 +421,6 @@ Reference<XAccessible> ScMenuFloatingWindow::CreateAccessible()
 {
     if (!mxAccessible.is())
     {
-        StackPrinter __stack_printer__("ScMenuFloatingWindow::CreateAccessible (create new)");
         Reference<XAccessible> xAccParent = mpParentMenu ?
             mpParentMenu->GetAccessible() : GetAccessibleParentWindow()->GetAccessible();
 
@@ -492,7 +428,6 @@ Reference<XAccessible> ScMenuFloatingWindow::CreateAccessible()
         ScAccessibleFilterMenu* p = static_cast<ScAccessibleFilterMenu*>(
             mxAccessible.get());
 
-//      for_each(maMenuItems.begin(), maMenuItems.end(), AppendAccessibleMenuItems(p));
         vector<MenuItem>::const_iterator itr, itrBeg = maMenuItems.begin(), itrEnd = maMenuItems.end();
         for (itr = itrBeg; itr != itrEnd; ++itr)
         {
@@ -518,7 +453,7 @@ ScMenuFloatingWindow* ScMenuFloatingWindow::addSubMenuItem(const OUString& rText
     MenuItem aItem;
     aItem.maText = rText;
     aItem.mbEnabled = bEnabled;
-    aItem.mpSubMenuWin.reset(new ScMenuFloatingWindow(this, mpDoc));
+    aItem.mpSubMenuWin.reset(new ScMenuFloatingWindow(this, mpDoc, GetMenuStackLevel()+1));
     aItem.mpSubMenuWin->setName(rText);
     maMenuItems.push_back(aItem);
     return aItem.mpSubMenuWin.get();
@@ -579,8 +514,6 @@ void ScMenuFloatingWindow::executeMenu(size_t nPos)
 
 void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, bool bNotifyAccessible)
 {
-    StackPrinter __stack_printer__("******************** ScMenuFloatingWindow::setSelectedMenuItem ********************");
-    fprintf(stdout, "ScMenuFloatingWindow::setSelectedMenuItem:   pos = %d\n", nPos);
     if (mnSelectedMenu != nPos)
     {
         selectMenuItem(mnSelectedMenu, false, bSubMenuTimer, bNotifyAccessible);
@@ -752,7 +685,6 @@ void ScMenuFloatingWindow::resizeToFitMenuItems()
 
 void ScMenuFloatingWindow::selectMenuItem(size_t nPos, bool bSelected, bool bSubMenuTimer, bool bNotifyAccessible)
 {
-    fprintf(stdout, "ScMenuFloatingWindow::selectMenuItem:   pos = %d  selected = %d\n", nPos, bSelected);
     if (nPos >= maMenuItems.size() || nPos == MENU_NOT_SELECTED)
     {
         queueCloseSubMenu();
