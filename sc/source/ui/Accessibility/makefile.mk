@@ -53,6 +53,9 @@ SLOFILES =  										\
         $(SLO)$/AccessibleDocumentBase.obj			\
         $(SLO)$/AccessibleCellBase.obj				\
         $(SLO)$/AccessibleDocumentPagePreview.obj	\
+        $(SLO)$/AccessibleFilterMenu.obj	\
+        $(SLO)$/AccessibleFilterMenuItem.obj	\
+        $(SLO)$/AccessibleFilterTopWindow.obj	\
         $(SLO)$/AccessiblePreviewTable.obj			\
         $(SLO)$/AccessiblePreviewCell.obj			\
         $(SLO)$/AccessiblePreviewHeaderCell.obj		\
@@ -73,6 +76,9 @@ EXCEPTIONSFILES=									\
         $(SLO)$/AccessibleDocumentBase.obj			\
         $(SLO)$/AccessibleCellBase.obj				\
         $(SLO)$/AccessibleDocumentPagePreview.obj	\
+        $(SLO)$/AccessibleFilterMenu.obj	\
+        $(SLO)$/AccessibleFilterMenuItem.obj	\
+        $(SLO)$/AccessibleFilterTopWindow.obj	\
         $(SLO)$/AccessiblePreviewTable.obj			\
         $(SLO)$/AccessiblePreviewCell.obj			\
         $(SLO)$/AccessiblePreviewHeaderCell.obj		\

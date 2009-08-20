@@ -44,11 +44,21 @@
 #include <memory>
 #include <hash_map>
 
+namespace com { namespace sun { namespace star {
+
+    namespace accessibility {
+        class XAccessible;
+    }
+
+}}}
+
 class OutputDevice;
 class Point;
 class Size;
 class StyleSettings;
 class Window;
+class ScDocument;
+class ScAccessibleFilterMenu;
 
 /**
  * This class takes care of physically drawing field button controls inside
@@ -103,7 +113,7 @@ public:
         virtual void execute() = 0;
     };
 
-    explicit ScMenuFloatingWindow(Window* pParent);
+    explicit ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc);
     virtual ~ScMenuFloatingWindow();
 
     virtual void MouseMove(const MouseEvent& rMEvt);
@@ -111,22 +121,41 @@ public:
     virtual void MouseButtonUp(const MouseEvent& rMEvt);
     virtual void KeyInput(const KeyEvent& rKEvt);
     virtual void Paint(const Rectangle& rRect);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     void addMenuItem(const ::rtl::OUString& rText, bool bEnabled, Action* pAction);
     ScMenuFloatingWindow* addSubMenuItem(const ::rtl::OUString& rText, bool bEnabled);
+    void setSelectedMenuItem(size_t nPos, bool bSubMenuTimer = true, bool bNotifyAccessible = true);
+    void selectMenuItem(size_t nPos, bool bSelected, bool bSubMenuTimer, bool bNotifyAccessible);
+    void clearSelectedMenuItem(bool bNotifyAccessible);
+    ScMenuFloatingWindow* getSubMenuWindow(size_t nPos) const;
+    size_t getMenuItemCount() const;
+    ::rtl::OUString getMenuItemName(size_t nPos) const;
+    bool isMenuItemEnabled(size_t nPos) const;
+
+    void setName(const ::rtl::OUString& rName);
+    const ::rtl::OUString& getName() const;
 
 protected:
+
     void drawMenuItem(size_t nPos);
     void drawAllMenuItems();
     const Font& getLabelFont() const;
 
     void executeMenu(size_t nPos);
-    void setSelectedMenuItem(size_t nPos, bool bSubMenuTimer = true);
-    size_t getSelectedMenuItem() const;
+    size_t getSelectedMenuPos() const;
     void queueLaunchSubMenu(size_t nPos, ScMenuFloatingWindow* pMenu);
     void queueCloseSubMenu();
     void launchSubMenu(bool bSetMenuPos);
     void endSubMenu();
+
+    void fillMenuItemsToAccessible(ScAccessibleFilterMenu* pAccMenu) const;
+
+    ScDocument* getDoc();
+
+protected:
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible > mxAccessible;
 
 private:
     struct SubMenuItem;
@@ -137,15 +166,15 @@ private:
 
     void resetMenu(bool bSetMenuPos);
     void resizeToFitMenuItems();
-    void selectMenuItem(size_t nPos, bool bSelected, bool bSubMenuTimer);
     void highlightMenuItem(size_t nPos, bool bSelected);
 
-    void getMenuItemPosSize(Point& rPos, Size& rSize, size_t nPos) const;
+    void getMenuItemPosSize(size_t nPos, Point& rPos, Size& rSize) const;
     size_t getEnclosingMenuItem(const Point& rPos) const;
 
     DECL_LINK( EndPopupHdl, void* );
 
 private:
+
     struct MenuItem
     {
         ::rtl::OUString maText;
@@ -178,8 +207,15 @@ private:
 
     Font    maLabelFont;
 
+    // Name of this menu window, taken from the menu item of the parent window
+    // that launches it (if this is a sub menu).  If this is a top-level menu
+    // window, then this name can be anything.
+    ::rtl::OUString maName;
+
     size_t  mnSelectedMenu;
     size_t  mnClickedMenu;
+
+    ScDocument* mpDoc;
 
     ScMenuFloatingWindow* mpParentMenu;
     ScMenuFloatingWindow* mpActiveSubMenu;
@@ -202,11 +238,12 @@ public:
      */
     struct ExtendedData {};
 
-    explicit ScDPFieldPopupWindow(Window* pParent);
+    explicit ScDPFieldPopupWindow(Window* pParent, ScDocument* pDoc);
     virtual ~ScDPFieldPopupWindow();
 
     virtual void MouseMove(const MouseEvent& rMEvt);
     virtual void Paint(const Rectangle& rRect);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     void setMemberSize(size_t n);
     void addMember(const ::rtl::OUString& rName, bool bVisible);

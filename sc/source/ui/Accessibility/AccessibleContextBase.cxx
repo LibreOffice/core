@@ -628,3 +628,8 @@ void ScAccessibleContextBase::IsObjectValid() const
     if (rBHelper.bDisposed || rBHelper.bInDispose)
         throw lang::DisposedException();
 }
+
+void ScAccessibleContextBase::SetRole(sal_Int16 nRole)
+{
+    maRole = nRole;
+}

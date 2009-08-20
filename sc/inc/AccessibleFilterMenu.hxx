@@ -1,0 +1,191 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: AccessibleDataPilotControl.hxx,v $
+ * $Revision: 1.6 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef SC_ACCESSIBLEFILTERMENU_HXX
+#define SC_ACCESSIBLEFILTERMENU_HXX
+
+#include "AccessibleContextBase.hxx"
+#include "cppuhelper/implbase2.hxx"
+
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
+#include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
+#include <com/sun/star/accessibility/XAccessibleText.hpp>
+#include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
+#include <com/sun/star/accessibility/TextSegment.hpp>
+
+#include <vector>
+#include <set>
+
+namespace com { namespace sun { namespace star {
+    namespace accessibility {
+        struct AccessibleEventObject;
+    }
+}}}
+
+class ScDocument;
+class ScMenuFloatingWindow;
+
+typedef ::cppu::ImplHelper2<
+        ::com::sun::star::accessibility::XAccessibleStateSet,
+        ::com::sun::star::accessibility::XAccessibleSelection > ScAccessibleFilterMenu_BASE;
+
+class ScAccessibleFilterMenu :
+    public ScAccessibleContextBase,
+    public ScAccessibleFilterMenu_BASE
+{
+public:
+    struct MenuItem
+    {
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::accessibility::XAccessible > mxAccessible;
+        bool mbSelected;
+
+        MenuItem();
+    };
+
+    ScAccessibleFilterMenu(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::accessibility::XAccessible>& rxParent,
+            ScMenuFloatingWindow* pWin, const ::rtl::OUString& rName, ScDocument* pDoc);
+    virtual ~ScAccessibleFilterMenu();
+
+    // XAccessibleComponent
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        SAL_CALL getAccessibleAtPoint( const ::com::sun::star::awt::Point& rPoint )
+            throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL isVisible()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL grabFocus()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getForeground()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getBackground()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // XAccessibleContext
+
+    virtual ::rtl::OUString SAL_CALL getAccessibleName()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
+        getAccessibleChild(sal_Int32 nIndex)
+            throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException);
+
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
+        getAccessibleStateSet()
+            throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // XAccessibleEventBroadcaster
+
+    virtual void SAL_CALL
+        addEventListener(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
+        throw (com::sun::star::uno::RuntimeException);
+
+    //  Remove an existing event listener.
+    virtual void SAL_CALL
+        removeEventListener(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
+        throw (com::sun::star::uno::RuntimeException);
+
+    // XAccessibleStateSet
+
+    virtual ::sal_Bool SAL_CALL isEmpty() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL contains(sal_Int16 nState) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL containsAll(const ::com::sun::star::uno::Sequence< ::sal_Int16 >& aStateSet) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence<sal_Int16> SAL_CALL getStates() throw (::com::sun::star::uno::RuntimeException);
+
+    // XAccessibleSelection
+
+    virtual void SAL_CALL selectAccessibleChild( ::sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isAccessibleChildSelected( ::sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL clearAccessibleSelection(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL selectAllAccessibleChildren(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
+        getSelectedAccessibleChild(sal_Int32 nChildIndex)
+            throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL deselectAccessibleChild( ::sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+    // XInterface
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+        ::com::sun::star::uno::Type const & rType )
+            throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL acquire() throw ();
+    virtual void SAL_CALL release() throw ();
+
+    // XTypeProvider
+
+    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // non-UNO methods
+
+    void selectMenuItem(size_t nIndex, bool bSelect);
+    void appendMenuItem(const ::rtl::OUString& rName, bool bEnabled, size_t nMenuPos);
+
+    void setEnabled(bool bEnabled);
+
+private:
+    bool isFocused();
+    bool isSelected();
+
+    void updateStates();
+
+private:
+    ::std::vector<MenuItem> maMenuItems;
+    ::std::set<sal_Int16>   maStates;
+
+    ScMenuFloatingWindow* mpWindow;
+    ScDocument* mpDoc;
+
+    bool mbEnabled:1;
+    bool mbSelected:1;
+};
+
+#endif

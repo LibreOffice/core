@@ -41,14 +41,86 @@
 #include "vcl/wintypes.hxx"
 #include "vcl/decoview.hxx"
 #include "strload.hxx"
+#include "global.hxx"
+
+#include "AccessibleFilterMenu.hxx"
+#include "AccessibleFilterTopWindow.hxx"
+
+#include <com/sun/star/accessibility/XAccessible.hpp>
 
 #define MENU_NOT_SELECTED 999
 
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::accessibility::XAccessible;
 using ::rtl::OUString;
 using ::rtl::OUStringHash;
 using ::std::vector;
 using ::std::hash_map;
 using ::std::auto_ptr;
+//using ::std::for_each;
+
+
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+
+namespace {
+
+class StackPrinter
+{
+public:
+    explicit StackPrinter(const char* msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~StackPrinter()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
+    }
+
+    void printTime(int line) const
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
+
+//namespace {
+//
+//class AppendAccessibleMenuItems : public ::std::unary_function<ScMenuFloatingWindow::MenuItem, void>
+//{
+//public:
+//    explicit AppendAccessibleMenuItems(ScAccessibleFilterMenu* pAccMenu) :
+//        mnPos(0), mpAccMenu(pAccMenu) {}
+//
+//    void operator() (const ScMenuFloatingWindow::MenuItem& rItem)
+//    {
+//        mpAccMenu->appendMenuItem(rItem.maText, rItem.mbEnabled, mnPos++);
+//    }
+//
+//private:
+//    size_t mnPos;
+//    ScAccessibleFilterMenu* mpAccMenu;
+//};
+//
+//}
 
 ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX, const Fraction* pZoomY) :
     mpOutDev(pOutDev),
@@ -272,16 +344,19 @@ IMPL_LINK( ScMenuFloatingWindow::SubMenuItem, TimeoutHdl, void*, EMPTYARG )
 
 // ----------------------------------------------------------------------------
 
-ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent) :
+ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc) :
     FloatingWindow(pParent, (WB_SYSTEMFLOATWIN|WB_SYSTEMWINDOW|WB_NOBORDER)),
     maOpenTimer(this),
     maCloseTimer(this),
+    maName(OUString::createFromAscii("ScMenuFloatingWindow")),
     mnSelectedMenu(MENU_NOT_SELECTED),
     mnClickedMenu(MENU_NOT_SELECTED),
+    mpDoc(pDoc),
     mpParentMenu(dynamic_cast<ScMenuFloatingWindow*>(pParent)),
     mpActiveSubMenu(NULL),
     mbActionFired(false)
 {
+    fprintf(stdout, "***** ScMenuFloatingWindow::ScMenuFloatingWindow:   ctor (%p)  parent = %p\n", this, pParent);
     // TODO: How do we get the right font to use here ?
     const sal_uInt16 nPopupFontHeight = 12;
     const StyleSettings& rStyle = GetSettings().GetStyleSettings();
@@ -289,6 +364,7 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent) :
     maLabelFont.SetHeight(nPopupFontHeight);
     SetFont(maLabelFont);
 
+    SetText(OUString::createFromAscii("ScMenuFloatingWindow"));
     SetPopupModeEndHdl( LINK(this, ScMenuFloatingWindow, EndPopupHdl) );
 }
 
@@ -404,6 +480,30 @@ void ScMenuFloatingWindow::Paint(const Rectangle& /*rRect*/)
     drawAllMenuItems();
 }
 
+Reference<XAccessible> ScMenuFloatingWindow::CreateAccessible()
+{
+    if (!mxAccessible.is())
+    {
+        StackPrinter __stack_printer__("ScMenuFloatingWindow::CreateAccessible (create new)");
+        Reference<XAccessible> xAccParent = mpParentMenu ?
+            mpParentMenu->GetAccessible() : GetAccessibleParentWindow()->GetAccessible();
+
+        mxAccessible.set(new ScAccessibleFilterMenu(xAccParent, this, maName, getDoc()));
+        ScAccessibleFilterMenu* p = static_cast<ScAccessibleFilterMenu*>(
+            mxAccessible.get());
+
+//      for_each(maMenuItems.begin(), maMenuItems.end(), AppendAccessibleMenuItems(p));
+        vector<MenuItem>::const_iterator itr, itrBeg = maMenuItems.begin(), itrEnd = maMenuItems.end();
+        for (itr = itrBeg; itr != itrEnd; ++itr)
+        {
+            size_t nPos = ::std::distance(itrBeg, itr);
+            p->appendMenuItem(itr->maText, itr->mbEnabled, nPos);
+        }
+    }
+
+    return mxAccessible;
+}
+
 void ScMenuFloatingWindow::addMenuItem(const OUString& rText, bool bEnabled, Action* pAction)
 {
     MenuItem aItem;
@@ -418,7 +518,8 @@ ScMenuFloatingWindow* ScMenuFloatingWindow::addSubMenuItem(const OUString& rText
     MenuItem aItem;
     aItem.maText = rText;
     aItem.mbEnabled = bEnabled;
-    aItem.mpSubMenuWin.reset(new ScMenuFloatingWindow(this));
+    aItem.mpSubMenuWin.reset(new ScMenuFloatingWindow(this, mpDoc));
+    aItem.mpSubMenuWin->setName(rText);
     maMenuItems.push_back(aItem);
     return aItem.mpSubMenuWin.get();
 }
@@ -430,7 +531,7 @@ void ScMenuFloatingWindow::drawMenuItem(size_t nPos)
 
     Point aPos;
     Size aSize;
-    getMenuItemPosSize(aPos, aSize, nPos);
+    getMenuItemPosSize(nPos, aPos, aSize);
 
     DecorationView aDecoView(this);
     long nXOffset = 5;
@@ -476,17 +577,19 @@ void ScMenuFloatingWindow::executeMenu(size_t nPos)
     EndPopupMode();
 }
 
-void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer)
+void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, bool bNotifyAccessible)
 {
+    StackPrinter __stack_printer__("******************** ScMenuFloatingWindow::setSelectedMenuItem ********************");
+    fprintf(stdout, "ScMenuFloatingWindow::setSelectedMenuItem:   pos = %d\n", nPos);
     if (mnSelectedMenu != nPos)
     {
-        selectMenuItem(mnSelectedMenu, false, bSubMenuTimer);
-        selectMenuItem(nPos, true, bSubMenuTimer);
+        selectMenuItem(mnSelectedMenu, false, bSubMenuTimer, bNotifyAccessible);
+        selectMenuItem(nPos, true, bSubMenuTimer, bNotifyAccessible);
         mnSelectedMenu = nPos;
     }
 }
 
-size_t ScMenuFloatingWindow::getSelectedMenuItem() const
+size_t ScMenuFloatingWindow::getSelectedMenuPos() const
 {
     return mnSelectedMenu;
 }
@@ -563,7 +666,7 @@ void ScMenuFloatingWindow::launchSubMenu(bool bSetMenuPos)
 {
     Point aPos;
     Size aSize;
-    getMenuItemPosSize(aPos, aSize, maOpenTimer.mnMenuPos);
+    getMenuItemPosSize(maOpenTimer.mnMenuPos, aPos, aSize);
     ScMenuFloatingWindow* pSubMenu = maOpenTimer.mpSubMenu;
 
     if (!pSubMenu)
@@ -588,6 +691,21 @@ void ScMenuFloatingWindow::endSubMenu()
     }
 }
 
+void ScMenuFloatingWindow::fillMenuItemsToAccessible(ScAccessibleFilterMenu* pAccMenu) const
+{
+    vector<MenuItem>::const_iterator itr, itrBeg = maMenuItems.begin(), itrEnd = maMenuItems.end();
+    for (itr = itrBeg; itr != itrEnd; ++itr)
+    {
+        size_t nPos = ::std::distance(itrBeg, itr);
+        pAccMenu->appendMenuItem(itr->maText, itr->mbEnabled, nPos);
+    }
+}
+
+ScDocument* ScMenuFloatingWindow::getDoc()
+{
+    return mpDoc;
+}
+
 void ScMenuFloatingWindow::notify(NotificationType eType)
 {
     switch (eType)
@@ -608,8 +726,9 @@ void ScMenuFloatingWindow::notify(NotificationType eType)
 
 void ScMenuFloatingWindow::resetMenu(bool bSetMenuPos)
 {
-    mnSelectedMenu = bSetMenuPos ? 0 : MENU_NOT_SELECTED;
     resizeToFitMenuItems();
+    if (bSetMenuPos)
+        setSelectedMenuItem(0, false, true);
 }
 
 void ScMenuFloatingWindow::resizeToFitMenuItems()
@@ -625,14 +744,15 @@ void ScMenuFloatingWindow::resizeToFitMenuItems()
     size_t nLastPos = maMenuItems.size()-1;
     Point aPos;
     Size aSize;
-    getMenuItemPosSize(aPos, aSize, nLastPos);
+    getMenuItemPosSize(nLastPos, aPos, aSize);
     aPos.X() += nTextWidth + 15;
     aPos.Y() += aSize.Height() + 5;
     SetOutputSizePixel(Size(aPos.X(), aPos.Y()));
 }
 
-void ScMenuFloatingWindow::selectMenuItem(size_t nPos, bool bSelected, bool bSubMenuTimer)
+void ScMenuFloatingWindow::selectMenuItem(size_t nPos, bool bSelected, bool bSubMenuTimer, bool bNotifyAccessible)
 {
+    fprintf(stdout, "ScMenuFloatingWindow::selectMenuItem:   pos = %d  selected = %d\n", nPos, bSelected);
     if (nPos >= maMenuItems.size() || nPos == MENU_NOT_SELECTED)
     {
         queueCloseSubMenu();
@@ -663,6 +783,64 @@ void ScMenuFloatingWindow::selectMenuItem(size_t nPos, bool bSelected, bool bSub
                 queueCloseSubMenu();
         }
     }
+
+    if (bNotifyAccessible && mxAccessible.is())
+    {
+        ScAccessibleFilterMenu* p = static_cast<ScAccessibleFilterMenu*>(mxAccessible.get());
+        p->selectMenuItem(nPos, bSelected);
+    }
+}
+
+void ScMenuFloatingWindow::clearSelectedMenuItem(bool bNotifyAccessible)
+{
+    selectMenuItem(mnSelectedMenu, false, false, bNotifyAccessible);
+
+    if (bNotifyAccessible && mxAccessible.is())
+    {
+        ScAccessibleFilterMenu* p = static_cast<ScAccessibleFilterMenu*>(mxAccessible.get());
+        p->selectMenuItem(mnSelectedMenu, false);
+    }
+
+    mnSelectedMenu = MENU_NOT_SELECTED;
+}
+
+ScMenuFloatingWindow* ScMenuFloatingWindow::getSubMenuWindow(size_t nPos) const
+{
+    if (maMenuItems.size() <= nPos)
+        return NULL;
+
+    return maMenuItems[nPos].mpSubMenuWin.get();
+}
+
+size_t ScMenuFloatingWindow::getMenuItemCount() const
+{
+    return maMenuItems.size();
+}
+
+OUString ScMenuFloatingWindow::getMenuItemName(size_t nPos) const
+{
+    if (maMenuItems.size() <= nPos)
+        return ScGlobal::GetEmptyString();
+
+    return maMenuItems[nPos].maText;
+}
+
+bool ScMenuFloatingWindow::isMenuItemEnabled(size_t nPos) const
+{
+    if (maMenuItems.size() <= nPos)
+        return false;
+
+    return maMenuItems[nPos].mbEnabled;
+}
+
+void ScMenuFloatingWindow::setName(const OUString& rName)
+{
+    maName = rName;
+}
+
+const OUString& ScMenuFloatingWindow::getName() const
+{
+    return maName;
 }
 
 void ScMenuFloatingWindow::highlightMenuItem(size_t nPos, bool bSelected)
@@ -674,7 +852,7 @@ void ScMenuFloatingWindow::highlightMenuItem(size_t nPos, bool bSelected)
 
     Point aPos;
     Size aSize;
-    getMenuItemPosSize(aPos, aSize, nPos);
+    getMenuItemPosSize(nPos, aPos, aSize);
     Region aRegion(Rectangle(aPos,aSize));
 
     if (IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
@@ -717,7 +895,7 @@ void ScMenuFloatingWindow::highlightMenuItem(size_t nPos, bool bSelected)
     drawMenuItem(nPos);
 }
 
-void ScMenuFloatingWindow::getMenuItemPosSize(Point& rPos, Size& rSize, size_t nPos) const
+void ScMenuFloatingWindow::getMenuItemPosSize(size_t nPos, Point& rPos, Size& rSize) const
 {
     const sal_uInt16 nLeftMargin = 5;
     const sal_uInt16 nTopMargin = 5;
@@ -740,7 +918,7 @@ size_t ScMenuFloatingWindow::getEnclosingMenuItem(const Point& rPos) const
     {
         Point aPos;
         Size aSize;
-        getMenuItemPosSize(aPos, aSize, i);
+        getMenuItemPosSize(i, aPos, aSize);
         Rectangle aRect(aPos, aSize);
         if (aRect.IsInside(rPos))
             return i;
@@ -776,8 +954,8 @@ void ScDPFieldPopupWindow::CancelButton::Click()
 
 // ----------------------------------------------------------------------------
 
-ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent) :
-    ScMenuFloatingWindow(pParent),
+ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent, ScDocument* pDoc) :
+    ScMenuFloatingWindow(pParent, pDoc),
     maChecks(this, 0),
     maChkToggleAll(this, 0),
     maBtnSelectSingle  (this, 0),
@@ -1019,7 +1197,7 @@ void ScDPFieldPopupWindow::MouseMove(const MouseEvent& rMEvt)
 {
     ScMenuFloatingWindow::MouseMove(rMEvt);
 
-    size_t nSelectedMenu = getSelectedMenuItem();
+    size_t nSelectedMenu = getSelectedMenuPos();
     if (nSelectedMenu == MENU_NOT_SELECTED)
         queueCloseSubMenu();
 }
@@ -1045,6 +1223,23 @@ void ScDPFieldPopupWindow::Paint(const Rectangle& rRect)
     getSectionPosSize(aPos, aSize, SINGLE_BTN_AREA);
     SetFillColor(rStyle.GetMenuColor());
     DrawRect(Rectangle(aPos,aSize));
+}
+
+Reference<XAccessible> ScDPFieldPopupWindow::CreateAccessible()
+{
+    if (!mxAccessible.is())
+    {
+        mxAccessible.set(new ScAccessibleFilterTopWindow(
+            GetAccessibleParentWindow()->GetAccessible(), this, getName(), getDoc()));
+        ScAccessibleFilterTopWindow* pAccTop = static_cast<ScAccessibleFilterTopWindow*>(mxAccessible.get());
+        Reference<XAccessible> xAccMenu = pAccTop->getAccessibleChildMenu();
+        ScAccessibleFilterMenu* pAccMenu = static_cast<ScAccessibleFilterMenu*>(xAccMenu.get());
+        fillMenuItemsToAccessible(pAccMenu);
+
+        pAccTop->setAccessibleChildListBox(maChecks.CreateAccessible());
+    }
+
+    return mxAccessible;
 }
 
 void ScDPFieldPopupWindow::setMemberSize(size_t n)

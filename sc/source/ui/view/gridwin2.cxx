@@ -911,7 +911,8 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
 
     const ScDPLabelData& rLabelData = *pDPData->maDPParam.maLabelArray[pDPData->mnDim];
 
-    mpDPFieldPopup.reset(new ScDPFieldPopupWindow(this));
+    mpDPFieldPopup.reset(new ScDPFieldPopupWindow(this, pViewData->GetDocument()));
+    mpDPFieldPopup->setName(OUString::createFromAscii("DataPilot field member popup"));
     mpDPFieldPopup->setExtendedData(pDPData.release());
     mpDPFieldPopup->setOKAction(new DPFieldPopupOKAction(this));
     {
