@@ -63,15 +63,37 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
         getAccessibleChildMenu();
 
-    void setAccessibleChildListBox(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rAccessible);
+    enum ChildControlType {
+        LISTBOX, TOGGLE_ALL, SINGLE_ON_BTN, SINGLE_OFF_BTN, OK_BTN, CANCEL_BTN
+    };
+    void setAccessibleChild(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rAccessible,
+        ChildControlType eType);
 
 private:
+    /** The top menu part */
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-        mxAccessibleMenu;
+        mxAccMenu;
+
+    /** check list box for field member visibility */
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        mxAccListBox;
+
+    /** check box for toggling all field member's visibility. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        mxAccToggleAll;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-        mxAccessibleListBox;
+        mxAccSingleOnBtn;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        mxAccSingleOffBtn;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        mxAccOkBtn;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        mxAccCancelBtn;
 
     ScDPFieldPopupWindow* mpWindow;
     ScDocument* mpDoc;

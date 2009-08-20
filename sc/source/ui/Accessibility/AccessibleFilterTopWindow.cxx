@@ -61,20 +61,34 @@ ScAccessibleFilterTopWindow::~ScAccessibleFilterTopWindow()
 
 sal_Int32 ScAccessibleFilterTopWindow::getAccessibleChildCount() throw (RuntimeException)
 {
-    return 2;
+    return 7;
 }
 
 Reference<XAccessible> ScAccessibleFilterTopWindow::getAccessibleChild(
     sal_Int32 nIndex) throw (RuntimeException, IndexOutOfBoundsException)
 {
-    if (nIndex >= 2)
+    if (nIndex >= 7)
         throw IndexOutOfBoundsException();
 
-    if (nIndex == 0)
-        return getAccessibleChildMenu();
-
-    if (nIndex == 1)
-        return mxAccessibleListBox;
+    switch (nIndex)
+    {
+        case 0:
+            return getAccessibleChildMenu();
+        case 1:
+            return mxAccListBox;
+        case 2:
+            return mxAccToggleAll;
+        case 3:
+            return mxAccSingleOnBtn;
+        case 4:
+            return mxAccSingleOffBtn;
+        case 5:
+            return mxAccOkBtn;
+        case 6:
+            return mxAccCancelBtn;
+        default:
+            ;
+    }
 
     return Reference<XAccessible>();
 }
@@ -86,13 +100,34 @@ OUString ScAccessibleFilterTopWindow::getImplementationName() throw (RuntimeExce
 
 Reference<XAccessible> ScAccessibleFilterTopWindow::getAccessibleChildMenu()
 {
-    if (!mxAccessibleMenu.is())
-        mxAccessibleMenu.set(new ScAccessibleFilterMenu(this, mpWindow, getAccessibleName(), mpDoc));
-    return mxAccessibleMenu;
+    if (!mxAccMenu.is())
+        mxAccMenu.set(new ScAccessibleFilterMenu(this, mpWindow, getAccessibleName(), mpDoc));
+    return mxAccMenu;
 }
 
-void ScAccessibleFilterTopWindow::setAccessibleChildListBox(const Reference<XAccessible>& rAccessible)
+void ScAccessibleFilterTopWindow::setAccessibleChild(
+    const Reference<XAccessible>& rAccessible, ChildControlType eType)
 {
-    mxAccessibleListBox = rAccessible;
+    switch (eType)
+    {
+        case LISTBOX:
+            mxAccListBox = rAccessible;
+        break;
+        case TOGGLE_ALL:
+            mxAccToggleAll = rAccessible;
+        break;
+        case SINGLE_ON_BTN:
+            mxAccSingleOnBtn = rAccessible;
+        break;
+        case SINGLE_OFF_BTN:
+            mxAccSingleOffBtn = rAccessible;
+        break;
+        case OK_BTN:
+            mxAccOkBtn = rAccessible;
+        break;
+        case CANCEL_BTN:
+            mxAccCancelBtn = rAccessible;
+        break;
+    }
 }
 

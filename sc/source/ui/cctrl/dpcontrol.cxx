@@ -1236,7 +1236,18 @@ Reference<XAccessible> ScDPFieldPopupWindow::CreateAccessible()
         ScAccessibleFilterMenu* pAccMenu = static_cast<ScAccessibleFilterMenu*>(xAccMenu.get());
         fillMenuItemsToAccessible(pAccMenu);
 
-        pAccTop->setAccessibleChildListBox(maChecks.CreateAccessible());
+        pAccTop->setAccessibleChild(
+            maChecks.CreateAccessible(), ScAccessibleFilterTopWindow::LISTBOX);
+        pAccTop->setAccessibleChild(
+            maChkToggleAll.CreateAccessible(), ScAccessibleFilterTopWindow::TOGGLE_ALL);
+        pAccTop->setAccessibleChild(
+            maBtnSelectSingle.CreateAccessible(), ScAccessibleFilterTopWindow::SINGLE_ON_BTN);
+        pAccTop->setAccessibleChild(
+            maBtnUnselectSingle.CreateAccessible(), ScAccessibleFilterTopWindow::SINGLE_OFF_BTN);
+        pAccTop->setAccessibleChild(
+            maBtnOk.CreateAccessible(), ScAccessibleFilterTopWindow::OK_BTN);
+        pAccTop->setAccessibleChild(
+            maBtnCancel.CreateAccessible(), ScAccessibleFilterTopWindow::CANCEL_BTN);
     }
 
     return mxAccessible;
