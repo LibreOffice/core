@@ -138,7 +138,7 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
                 dY -= aPaperSize.height - aImageRect.size.height - aImageRect.origin.y;
                 CGContextTranslateCTM( i_rContext, dX + mnStartPageOffsetX, dY - mnStartPageOffsetY );
                 // scale to be top/down and reflect our "virtual" DPI
-                CGContextScaleCTM( i_rContext, 0.1, -0.1 );
+                CGContextScaleCTM( i_rContext, 72.0/double(nDPIX), -(72.0/double(nDPIY)) );
             }
             else
             {
@@ -152,7 +152,7 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
                 dY = -aPaperSize.width;
                 CGContextTranslateCTM( i_rContext, dX + mnStartPageOffsetY, dY - mnStartPageOffsetX );
                 // scale to be top/down and reflect our "virtual" DPI
-                CGContextScaleCTM( i_rContext, -0.1, 0.1 );
+                CGContextScaleCTM( i_rContext, -(72.0/double(nDPIY)), (72.0/double(nDPIX)) );
             }
             mpGraphics->SetPrinterGraphics( i_rContext, nDPIX, nDPIY, 1.0 );
         }
@@ -705,6 +705,7 @@ SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, BOOL i_b
 
 BOOL AquaSalInfoPrinter::EndPage()
 {
+    mpGraphics->UnsetState();
     return TRUE;
 }
 

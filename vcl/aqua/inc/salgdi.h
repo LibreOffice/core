@@ -175,6 +175,7 @@ public:
     void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
 
     void                SetState();
+    void                UnsetState();
 
     virtual BOOL        unionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual bool        unionClipRegion( const ::basegfx::B2DPolyPolygon& );

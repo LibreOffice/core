@@ -126,6 +126,12 @@ void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContex
 
 // ----------------------------------------------------------------------
 
+void AquaSalGraphics::UnsetState()
+{
+    if( mrContext )
+        CGContextRestoreGState( mrContext );
+}
+
 void AquaSalGraphics::SetState()
 {
     CGContextRestoreGState( mrContext );
