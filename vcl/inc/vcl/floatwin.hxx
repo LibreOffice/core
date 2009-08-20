@@ -160,6 +160,7 @@ public:
 
     sal_uInt16      GetMenuStackLevel() const;
     void            SetMenuStackLevel( sal_uInt16 nLevel );
+    bool            IsPopupMenu() const;
 };
 
 #endif // _SV_FLOATWIN_HXX
