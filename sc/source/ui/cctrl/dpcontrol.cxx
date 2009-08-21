@@ -58,6 +58,49 @@ using ::std::vector;
 using ::std::hash_map;
 using ::std::auto_ptr;
 
+
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+
+namespace {
+
+class StackPrinter
+{
+public:
+    explicit StackPrinter(const char* msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~StackPrinter()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
+    }
+
+    void printTime(int line) const
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
+
 ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX, const Fraction* pZoomY) :
     mpOutDev(pOutDev),
     mpStyle(pStyle),
@@ -314,7 +357,7 @@ void ScMenuFloatingWindow::MouseMove(const MouseEvent& rMEvt)
 {
     const Point& rPos = rMEvt.GetPosPixel();
     size_t nSelectedMenu = getEnclosingMenuItem(rPos);
-    setSelectedMenuItem(nSelectedMenu);
+    setSelectedMenuItem(nSelectedMenu, true, false);
 
     Window::MouseMove(rMEvt);
 }
@@ -346,14 +389,14 @@ void ScMenuFloatingWindow::KeyInput(const KeyEvent& rKEvt)
                 nSelectedMenu = nLastMenuPos;
             else
                 --nSelectedMenu;
-            setSelectedMenuItem(nSelectedMenu, false);
+            setSelectedMenuItem(nSelectedMenu, false, false);
         break;
         case KEY_DOWN:
             if (nSelectedMenu == MENU_NOT_SELECTED || nSelectedMenu == nLastMenuPos)
                 nSelectedMenu = 0;
             else
                 ++nSelectedMenu;
-            setSelectedMenuItem(nSelectedMenu, false);
+            setSelectedMenuItem(nSelectedMenu, false, false);
         break;
         case KEY_LEFT:
             if (mpParentMenu)
@@ -512,14 +555,35 @@ void ScMenuFloatingWindow::executeMenu(size_t nPos)
     EndPopupMode();
 }
 
-void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer)
+void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, bool bEnsureSubMenu)
 {
-    if (mnSelectedMenu != nPos)
+    StackPrinter __stack_printer__("ScMenuFloatingWindow::setSelectedMenuItem");
+    if (mnSelectedMenu == nPos)
+        // nothing to do.
+        return;
+
+    if (bEnsureSubMenu)
     {
-        selectMenuItem(mnSelectedMenu, false, bSubMenuTimer);
-        selectMenuItem(nPos, true, bSubMenuTimer);
-        mnSelectedMenu = nPos;
+        fprintf(stdout, "ScMenuFloatingWindow::setSelectedMenuItem:   (ensuring...) selected menu = %d\n", mnSelectedMenu);
+        // Dismiss any child popup menu windows.
+        if (mnSelectedMenu < maMenuItems.size() &&
+            maMenuItems[mnSelectedMenu].mpSubMenuWin &&
+            maMenuItems[mnSelectedMenu].mpSubMenuWin->IsVisible())
+        {
+            maMenuItems[mnSelectedMenu].mpSubMenuWin->ensureSubMenuNotVisible();
+        }
+
+        // The popup is not visible, yet a menu item is selected.  The request
+        // most likely comes from the accessible object.  Make sure this
+        // window, as well as all its parent windows are visible.
+        if (!IsVisible() && mpParentMenu)
+            mpParentMenu->ensureSubMenuVisible(this);
     }
+
+    selectMenuItem(mnSelectedMenu, false, bSubMenuTimer);
+    selectMenuItem(nPos, true, bSubMenuTimer);
+    mnSelectedMenu = nPos;
+    fprintf(stdout, "ScMenuFloatingWindow::setSelectedMenuItem:   selected menu = %d\n", mnSelectedMenu);
 }
 
 size_t ScMenuFloatingWindow::getSelectedMenuPos() const
@@ -607,10 +671,12 @@ void ScMenuFloatingWindow::launchSubMenu(bool bSetMenuPos)
 
     sal_uInt32 nOldFlags = GetPopupModeFlags();
     SetPopupModeFlags(nOldFlags | FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE);
-    pSubMenu->resetMenu(bSetMenuPos);
+    pSubMenu->resizeToFitMenuItems(); // set the size before launching the popup to get it positioned correctly.
     pSubMenu->StartPopupMode(
         Rectangle(aPos,aSize), (FLOATWIN_POPUPMODE_RIGHT | FLOATWIN_POPUPMODE_GRABFOCUS));
     pSubMenu->AddPopupModeWindow(this);
+    if (bSetMenuPos)
+        pSubMenu->setSelectedMenuItem(0, false, false); // select menu item after the popup becomes fully visible.
     SetPopupModeFlags(nOldFlags);
 }
 
@@ -637,31 +703,6 @@ void ScMenuFloatingWindow::fillMenuItemsToAccessible(ScAccessibleFilterMenu* pAc
 ScDocument* ScMenuFloatingWindow::getDoc()
 {
     return mpDoc;
-}
-
-void ScMenuFloatingWindow::notify(NotificationType eType)
-{
-    switch (eType)
-    {
-        case SUBMENU_FOCUSED:
-            // Cancel any request for ending submenu.
-            maCloseTimer.reset();
-            if (mnSelectedMenu != maOpenTimer.mnMenuPos)
-            {
-                highlightMenuItem(maOpenTimer.mnMenuPos, true);
-                mnSelectedMenu = maOpenTimer.mnMenuPos;
-            }
-        break;
-        default:
-            ;
-    }
-}
-
-void ScMenuFloatingWindow::resetMenu(bool bSetMenuPos)
-{
-    resizeToFitMenuItems();
-    if (bSetMenuPos)
-        setSelectedMenuItem(0, false);
 }
 
 void ScMenuFloatingWindow::resizeToFitMenuItems()
@@ -702,7 +743,7 @@ void ScMenuFloatingWindow::selectMenuItem(size_t nPos, bool bSelected, bool bSub
     if (bSelected)
     {
         if (mpParentMenu)
-            mpParentMenu->notify(SUBMENU_FOCUSED);
+            mpParentMenu->setSubMenuFocused(this);
 
         if (bSubMenuTimer)
         {
@@ -721,6 +762,7 @@ void ScMenuFloatingWindow::clearSelectedMenuItem()
 {
     selectMenuItem(mnSelectedMenu, false, false);
     mnSelectedMenu = MENU_NOT_SELECTED;
+    fprintf(stdout, "ScMenuFloatingWindow::clearSelectedMenuItem:   here\n");
 }
 
 ScMenuFloatingWindow* ScMenuFloatingWindow::getSubMenuWindow(size_t nPos) const
@@ -769,6 +811,9 @@ const OUString& ScMenuFloatingWindow::getName() const
 
 void ScMenuFloatingWindow::highlightMenuItem(size_t nPos, bool bSelected)
 {
+    if (nPos == MENU_NOT_SELECTED)
+        return;
+
     const StyleSettings& rStyle = GetSettings().GetStyleSettings();
     Color aBackColor = rStyle.GetMenuColor();
     SetFillColor(aBackColor);
@@ -848,6 +893,69 @@ size_t ScMenuFloatingWindow::getEnclosingMenuItem(const Point& rPos) const
             return i;
     }
     return MENU_NOT_SELECTED;
+}
+
+size_t ScMenuFloatingWindow::getSubMenuPos(ScMenuFloatingWindow* pSubMenu)
+{
+    size_t n = maMenuItems.size();
+    for (size_t i = 0; i < n; ++i)
+    {
+        if (maMenuItems[i].mpSubMenuWin.get() == pSubMenu)
+            return i;
+    }
+    return MENU_NOT_SELECTED;
+}
+
+void ScMenuFloatingWindow::setSubMenuFocused(ScMenuFloatingWindow* pSubMenu)
+{
+    maCloseTimer.reset();
+    size_t nMenuPos = getSubMenuPos(pSubMenu);
+    if (mnSelectedMenu != nMenuPos)
+    {
+        highlightMenuItem(nMenuPos, true);
+        mnSelectedMenu = nMenuPos;
+    }
+}
+
+void ScMenuFloatingWindow::ensureSubMenuVisible(ScMenuFloatingWindow* pSubMenu)
+{
+    StackPrinter __stack_printer__("ScMenuFloatingWindow::ensureSubMenuVisible");
+    if (mpParentMenu)
+        mpParentMenu->ensureSubMenuVisible(this);
+
+    if (pSubMenu->IsVisible())
+        return;
+
+    // Find the menu position of the submenu.
+    size_t nMenuPos = getSubMenuPos(pSubMenu);
+    if (nMenuPos != MENU_NOT_SELECTED)
+    {
+        setSelectedMenuItem(nMenuPos, false, false);
+
+        Point aPos;
+        Size aSize;
+        getMenuItemPosSize(nMenuPos, aPos, aSize);
+
+        sal_uInt32 nOldFlags = GetPopupModeFlags();
+        SetPopupModeFlags(nOldFlags | FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE);
+        pSubMenu->resizeToFitMenuItems(); // set the size before launching the popup to get it positioned correctly.
+        pSubMenu->StartPopupMode(
+            Rectangle(aPos,aSize), (FLOATWIN_POPUPMODE_RIGHT | FLOATWIN_POPUPMODE_GRABFOCUS));
+        pSubMenu->AddPopupModeWindow(this);
+        SetPopupModeFlags(nOldFlags);
+    }
+}
+
+void ScMenuFloatingWindow::ensureSubMenuNotVisible()
+{
+    if (mnSelectedMenu <= maMenuItems.size() &&
+        maMenuItems[mnSelectedMenu].mpSubMenuWin &&
+        maMenuItems[mnSelectedMenu].mpSubMenuWin->IsVisible())
+    {
+        maMenuItems[mnSelectedMenu].mpSubMenuWin->ensureSubMenuNotVisible();
+    }
+
+    EndPopupMode();
 }
 
 IMPL_LINK( ScMenuFloatingWindow, EndPopupHdl, void*, EMPTYARG )

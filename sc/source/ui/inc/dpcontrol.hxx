@@ -125,7 +125,7 @@ public:
 
     void addMenuItem(const ::rtl::OUString& rText, bool bEnabled, Action* pAction);
     ScMenuFloatingWindow* addSubMenuItem(const ::rtl::OUString& rText, bool bEnabled);
-    void setSelectedMenuItem(size_t nPos, bool bSubMenuTimer = true);
+    void setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, bool bEnsureSubMenu);
     void selectMenuItem(size_t nPos, bool bSelected, bool bSubMenuTimer);
     void clearSelectedMenuItem();
     ScMenuFloatingWindow* getSubMenuWindow(size_t nPos) const;
@@ -162,15 +162,32 @@ private:
     struct SubMenuItemData;
     void handleMenuTimeout(SubMenuItemData* pTimer);
 
-    enum NotificationType { SUBMENU_FOCUSED };
-    void notify(NotificationType eType);
-
-    void resetMenu(bool bSetMenuPos);
     void resizeToFitMenuItems();
     void highlightMenuItem(size_t nPos, bool bSelected);
 
     void getMenuItemPosSize(size_t nPos, Point& rPos, Size& rSize) const;
     size_t getEnclosingMenuItem(const Point& rPos) const;
+    size_t getSubMenuPos(ScMenuFloatingWindow* pSubMenu);
+
+    /**
+     * Make sure that the specified submenu is permanently up, the submenu
+     * close timer is not active, and the correct menu item associated with
+     * the submenu is highlighted.
+     */
+    void setSubMenuFocused(ScMenuFloatingWindow* pSubMenu);
+
+    /**
+     * When a menu item of an invisible submenu is selected, we need to make
+     * sure that all its parent menu(s) are visible, with the right menu item
+     * highlighted in each of the parents.  Calling this method ensures it.
+     */
+    void ensureSubMenuVisible(ScMenuFloatingWindow* pSubMenu);
+
+    /**
+     * Dismiss any visible child submenus when a menu item of a parent menu is
+     * selected.
+     */
+    void ensureSubMenuNotVisible();
 
     DECL_LINK( EndPopupHdl, void* );
 

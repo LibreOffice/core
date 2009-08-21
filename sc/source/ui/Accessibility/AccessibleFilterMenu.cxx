@@ -295,7 +295,7 @@ void ScAccessibleFilterMenu::selectAccessibleChild(sal_Int32 nChildIndex)
         throw IndexOutOfBoundsException();
 
     maMenuItems[nChildIndex].mbSelected = true;
-    mpWindow->setSelectedMenuItem(nChildIndex, false);
+    mpWindow->setSelectedMenuItem(nChildIndex, false, true);
 }
 
 sal_Bool ScAccessibleFilterMenu::isAccessibleChildSelected(sal_Int32 nChildIndex)
