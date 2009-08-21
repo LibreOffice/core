@@ -80,7 +80,7 @@ protected:
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xSingleListener );
 
     // state of a feature
-    virtual FeatureState getState( const ::rtl::OUString& rCommand ) const = 0;
+    virtual FeatureState getState( const ::rtl::OUString& rCommand ) = 0;
 
     // execute a feature
     virtual void execute( const ::rtl::OUString& rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs ) = 0;

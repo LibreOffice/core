@@ -38,6 +38,9 @@
 #include "ViewElementListProvider.hxx"
 #include "dlg_ShapeFont.hxx"
 #include "chartview/DrawModelWrapper.hxx"
+#include "macros.hxx"
+
+#include <com/sun/star/frame/XStorable.hpp>
 
 #include <vos/mutex.hxx>
 #include <vcl/msgbox.hxx>
@@ -87,11 +90,22 @@ void ShapeController::disposing( const lang::EventObject& /* Source */ )
 {
 }
 
-FeatureState ShapeController::getState( const ::rtl::OUString& rCommand ) const
+FeatureState ShapeController::getState( const ::rtl::OUString& rCommand )
 {
     FeatureState aReturn;
     aReturn.bEnabled = false;
     aReturn.aState <<= false;
+
+    bool bWritable = false;
+    if ( m_pChartController )
+    {
+        Reference< frame::XStorable > xStorable( m_pChartController->getModel(), uno::UNO_QUERY );
+        if ( xStorable.is() )
+        {
+            bWritable = !xStorable->isReadonly();
+        }
+    }
+
     sal_uInt16 nFeatureId = m_aSupportedFeatures[ rCommand ].nFeatureId;
 
     switch ( nFeatureId )
@@ -102,9 +116,29 @@ FeatureState ShapeController::getState( const ::rtl::OUString& rCommand ) const
         case COMMAND_ID_TRANSFORM_DIALOG:
         case COMMAND_ID_OBJECT_TITLE_DESCRIPTION:
         case COMMAND_ID_RENAME_OBJECT:
+            {
+                aReturn.bEnabled = bWritable;
+                aReturn.aState <<= false;
+            }
+            break;
+        case COMMAND_ID_BRING_TO_FRONT:
+        case COMMAND_ID_FORWARD:
+            {
+                aReturn.bEnabled = ( bWritable && isForwardPossible() );
+                aReturn.aState <<= false;
+            }
+            break;
+        case COMMAND_ID_BACKWARD:
+        case COMMAND_ID_SEND_TO_BACK:
+            {
+
+                aReturn.bEnabled = ( bWritable && isBackwardPossible() );
+                aReturn.aState <<= false;
+            }
+            break;
         case COMMAND_ID_FONT_DIALOG:
             {
-                aReturn.bEnabled = true;
+                aReturn.bEnabled = bWritable;
                 aReturn.aState <<= false;
             }
             break;
@@ -157,6 +191,14 @@ void ShapeController::execute( const ::rtl::OUString& rCommand, const Sequence< 
                 executeDispatch_RenameObject();
             }
             break;
+        case COMMAND_ID_BRING_TO_FRONT:
+        case COMMAND_ID_FORWARD:
+        case COMMAND_ID_BACKWARD:
+        case COMMAND_ID_SEND_TO_BACK:
+            {
+                executeDispatch_ChangeZOrder( nFeatureId );
+            }
+            break;
         case COMMAND_ID_FONT_DIALOG:
             {
                 executeDispatch_FontDialog();
@@ -177,6 +219,10 @@ void ShapeController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:TransformDialog",           COMMAND_ID_TRANSFORM_DIALOG,            CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:ObjectTitleDescription",    COMMAND_ID_OBJECT_TITLE_DESCRIPTION,    CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:RenameObject",              COMMAND_ID_RENAME_OBJECT,               CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:BringToFront",              COMMAND_ID_BRING_TO_FRONT,              CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:Forward",                   COMMAND_ID_FORWARD,                     CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:Backward",                  COMMAND_ID_BACKWARD,                    CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:SendToBack",                COMMAND_ID_SEND_TO_BACK,                CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:FontDialog",                COMMAND_ID_FONT_DIALOG,                 CommandGroup::EDIT );
 }
 
@@ -445,6 +491,55 @@ void ShapeController::executeDispatch_RenameObject()
     }
 }
 
+void ShapeController::executeDispatch_ChangeZOrder( sal_uInt16 nId )
+{
+    DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : NULL );
+    if ( pDrawViewWrapper )
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        switch ( nId )
+        {
+            case COMMAND_ID_BRING_TO_FRONT:
+                {
+                    if ( isForwardPossible() )
+                    {
+                        pDrawViewWrapper->PutMarkedToTop();
+                    }
+                }
+                break;
+            case COMMAND_ID_FORWARD:
+                {
+                    if ( isForwardPossible() )
+                    {
+                        pDrawViewWrapper->MovMarkedToTop();
+                    }
+                }
+                break;
+            case COMMAND_ID_BACKWARD:
+                {
+                    if ( isBackwardPossible() )
+                    {
+                        pDrawViewWrapper->MovMarkedToBtm();
+                    }
+                }
+                break;
+            case COMMAND_ID_SEND_TO_BACK:
+                {
+                    if ( isBackwardPossible() )
+                    {
+                        SdrObject* pFirstObj = getFirstAdditionalShape();
+                        pDrawViewWrapper->PutMarkedBehindObj( pFirstObj );
+                    }
+                }
+                break;
+            default:
+                {
+                }
+                break;
+        }
+    }
+}
+
 void ShapeController::executeDispatch_FontDialog()
 {
     if ( m_pChartController )
@@ -466,6 +561,122 @@ void ShapeController::executeDispatch_FontDialog()
             }
         }
     }
+}
+
+SdrObject* ShapeController::getFirstAdditionalShape()
+{
+    SdrObject* pFirstObj = NULL;
+
+    try
+    {
+        DrawModelWrapper* pDrawModelWrapper = ( m_pChartController ? m_pChartController->GetDrawModelWrapper() : NULL );
+        if ( pDrawModelWrapper )
+        {
+            Reference< drawing::XShape > xFirstShape;
+            Reference< drawing::XDrawPage > xDrawPage( pDrawModelWrapper->getMainDrawPage() );
+            Reference< drawing::XShapes > xDrawPageShapes( xDrawPage, uno::UNO_QUERY_THROW );
+            Reference< drawing::XShapes > xChartRoot( DrawModelWrapper::getChartRootShape( xDrawPage ) );
+            sal_Int32 nCount = xDrawPageShapes->getCount();
+            for ( sal_Int32 i = 0; i < nCount; ++i )
+            {
+                Reference< drawing::XShape > xShape;
+                if ( xDrawPageShapes->getByIndex( i ) >>= xShape )
+                {
+                    if ( xShape.is() && xShape != xChartRoot )
+                    {
+                        xFirstShape = xShape;
+                        break;
+                    }
+                }
+            }
+            if ( xFirstShape.is() )
+            {
+                pFirstObj = DrawViewWrapper::getSdrObject( xFirstShape );
+            }
+        }
+    }
+    catch ( uno::Exception& ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return pFirstObj;
+}
+
+SdrObject* ShapeController::getLastAdditionalShape()
+{
+    SdrObject* pLastObj = NULL;
+
+    try
+    {
+        DrawModelWrapper* pDrawModelWrapper = ( m_pChartController ? m_pChartController->GetDrawModelWrapper() : NULL );
+        if ( pDrawModelWrapper )
+        {
+            Reference< drawing::XShape > xLastShape;
+            Reference< drawing::XDrawPage > xDrawPage( pDrawModelWrapper->getMainDrawPage() );
+            Reference< drawing::XShapes > xDrawPageShapes( xDrawPage, uno::UNO_QUERY_THROW );
+            Reference< drawing::XShapes > xChartRoot( DrawModelWrapper::getChartRootShape( xDrawPage ) );
+            sal_Int32 nCount = xDrawPageShapes->getCount();
+            for ( sal_Int32 i = nCount - 1; i >= 0; --i )
+            {
+                Reference< drawing::XShape > xShape;
+                if ( xDrawPageShapes->getByIndex( i ) >>= xShape )
+                {
+                    if ( xShape.is() && xShape != xChartRoot )
+                    {
+                        xLastShape = xShape;
+                        break;
+                    }
+                }
+            }
+            if ( xLastShape.is() )
+            {
+                pLastObj = DrawViewWrapper::getSdrObject( xLastShape );
+            }
+        }
+    }
+    catch ( uno::Exception& ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return pLastObj;
+}
+
+bool ShapeController::isBackwardPossible()
+{
+    if ( m_pChartController && m_pChartController->m_aSelection.isAdditionalShapeSelected() )
+    {
+        DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
+        if ( pDrawViewWrapper )
+        {
+            SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
+            SdrObject* pFirstObj = getFirstAdditionalShape();
+            if ( pSelectedObj && pFirstObj && pSelectedObj != pFirstObj )
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool ShapeController::isForwardPossible()
+{
+    if ( m_pChartController && m_pChartController->m_aSelection.isAdditionalShapeSelected() )
+    {
+        DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
+        if ( pDrawViewWrapper )
+        {
+            SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
+            SdrObject* pLastObj = getLastAdditionalShape();
+            if ( pSelectedObj && pLastObj && pSelectedObj != pLastObj )
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 //.............................................................................

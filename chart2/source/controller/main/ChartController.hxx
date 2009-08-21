@@ -652,6 +652,9 @@ private:
     void                executeDispatch_ToggleLegend();
     void                executeDispatch_ToggleGridHorizontal();
 
+    void impl_ShapeControllerDispatch( const ::com::sun::star::util::URL& rURL,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
+
     //
     DECL_LINK( DoubleClickWaitingHdl, void* );
     void execute_DoubleClick( const Point* pMousePixel = NULL );

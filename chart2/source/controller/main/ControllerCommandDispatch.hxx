@@ -114,6 +114,8 @@ private:
     bool commandAvailable( const ::rtl::OUString & rCommand );
     void updateCommandAvailability();
 
+    bool isShapeControllerCommandAvailable( const ::rtl::OUString& rCommand );
+
     ChartController* m_pChartController;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XController > m_xController;

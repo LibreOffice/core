@@ -34,6 +34,7 @@
 #include <tools/link.hxx>
 
 class AbstractSvxNameDialog;
+class SdrObject;
 
 //.............................................................................
 namespace chart
@@ -46,6 +47,8 @@ class ChartController;
  */
 class ShapeController: public FeatureCommandDispatchBase
 {
+    friend class ControllerCommandDispatch;
+
 public:
     ShapeController( const ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext >& rxContext, ChartController* pController );
@@ -63,7 +66,7 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // state of a feature
-    virtual FeatureState getState( const ::rtl::OUString& rCommand ) const;
+    virtual FeatureState getState( const ::rtl::OUString& rCommand );
 
     // execute a feature
     virtual void execute( const ::rtl::OUString& rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs );
@@ -80,7 +83,13 @@ private:
     void executeDispatch_TransformDialog();
     void executeDispatch_ObjectTitleDescription();
     void executeDispatch_RenameObject();
+    void executeDispatch_ChangeZOrder( sal_uInt16 nId );
     void executeDispatch_FontDialog();
+
+    SdrObject* getFirstAdditionalShape();
+    SdrObject* getLastAdditionalShape();
+    bool       isBackwardPossible();
+    bool       isForwardPossible();
 
     ChartController* m_pChartController;
 };

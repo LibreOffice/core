@@ -109,7 +109,7 @@ void DrawCommandDispatch::disposing( const lang::EventObject& /* Source */ )
 {
 }
 
-FeatureState DrawCommandDispatch::getState( const ::rtl::OUString& rCommand ) const
+FeatureState DrawCommandDispatch::getState( const ::rtl::OUString& rCommand )
 {
     FeatureState aReturn;
     aReturn.bEnabled = false;

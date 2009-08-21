@@ -1128,12 +1128,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
     {
         if ( isShapeContext() )
         {
-            // #i12587# support for shapes in chart
-            uno::Reference< frame::XDispatch > xDispatch( m_aDispatchContainer.getShapeController() );
-            if ( xDispatch.is() )
-            {
-                xDispatch->dispatch( rURL, rArgs );
-            }
+            this->impl_ShapeControllerDispatch( rURL, rArgs );
         }
         else
         {
@@ -1149,10 +1144,28 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         this->executeDispatch_ChartType();
     else if( aCommand.equals("View3D"))
         this->executeDispatch_View3D();
-    else if( aCommand.equals("Forward"))
-        this->executeDispatch_MoveSeries( sal_True );
-    else if( aCommand.equals("Backward"))
-        this->executeDispatch_MoveSeries( sal_False );
+    else if ( aCommand.equals( "Forward" ) )
+    {
+        if ( isShapeContext() )
+        {
+            this->impl_ShapeControllerDispatch( rURL, rArgs );
+        }
+        else
+        {
+            this->executeDispatch_MoveSeries( sal_True );
+        }
+    }
+    else if ( aCommand.equals( "Backward" ) )
+    {
+        if ( isShapeContext() )
+        {
+            this->impl_ShapeControllerDispatch( rURL, rArgs );
+        }
+        else
+        {
+            this->executeDispatch_MoveSeries( sal_False );
+        }
+    }
     else if( aCommand.equals("NewArrangement"))
         this->executeDispatch_NewArrangement();
     else if( aCommand.equals("ToggleLegend"))

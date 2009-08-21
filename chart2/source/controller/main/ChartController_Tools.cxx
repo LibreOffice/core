@@ -51,6 +51,7 @@
 #include "LegendHelper.hxx"
 #include "AxisHelper.hxx"
 #include "RegressionCurveHelper.hxx"
+#include "ShapeController.hxx"
 
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -852,6 +853,15 @@ void ChartController::executeDispatch_ToggleGridHorizontal()
             AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, bIsMainGrid, xDiagram, m_xCC );
 
         aUndoGuard.commitAction();
+    }
+}
+
+void ChartController::impl_ShapeControllerDispatch( const util::URL& rURL, const Sequence< beans::PropertyValue >& rArgs )
+{
+    Reference< frame::XDispatch > xDispatch( m_aDispatchContainer.getShapeController() );
+    if ( xDispatch.is() )
+    {
+        xDispatch->dispatch( rURL, rArgs );
     }
 }
 

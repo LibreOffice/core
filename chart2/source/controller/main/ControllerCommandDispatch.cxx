@@ -490,6 +490,8 @@ void ControllerCommandDispatch::updateCommandAvailability()
     // @todo: determine correctly
     bool bHasSuitableClipboardContent = true;
 
+    bool bShapeContext = ( m_pChartController ? m_pChartController->isShapeContext() : false );
+
     // edit commands
     m_aCommandAvailability[ C2U(".uno:Cut")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bIsDeleteableObjectSelected;
     m_aCommandAvailability[ C2U(".uno:Copy")] = bControllerStateIsValid && m_apControllerState->bHasSelectedObject;
@@ -571,8 +573,10 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ C2U(".uno:DiagramGridAll")] = bIsWritable && bModelStateIsValid && m_apModelState->HasAnyGrid();
 
     // series arrangement
-    m_aCommandAvailability[ C2U(".uno:Forward")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayMoveSeriesForward;
-    m_aCommandAvailability[ C2U(".uno:Backward")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayMoveSeriesBackward;
+    m_aCommandAvailability[ C2U(".uno:Forward")] = ( bShapeContext ? isShapeControllerCommandAvailable( C2U( ".uno:Forward" ) ) :
+        ( bIsWritable && bControllerStateIsValid && m_apControllerState->bMayMoveSeriesForward ) );
+    m_aCommandAvailability[ C2U(".uno:Backward")] = ( bShapeContext ? isShapeControllerCommandAvailable( C2U( ".uno:Backward" ) ) :
+        ( bIsWritable && bControllerStateIsValid && m_apControllerState->bMayMoveSeriesBackward ) );
 
     m_aCommandAvailability[ C2U(".uno:InsertMeanValue")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddMeanValue;
     m_aCommandAvailability[ C2U(".uno:InsertTrendline")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendline;
@@ -590,6 +594,17 @@ bool ControllerCommandDispatch::commandAvailable( const OUString & rCommand )
     if( aIt != m_aCommandAvailability.end())
         return aIt->second;
     OSL_ENSURE( false, "commandAvailable: command not in availability map" );
+    return false;
+}
+
+bool ControllerCommandDispatch::isShapeControllerCommandAvailable( const ::rtl::OUString& rCommand )
+{
+    ShapeController* pShapeController = ( m_pDispatchContainer ? m_pDispatchContainer->getShapeController() : NULL );
+    if ( pShapeController )
+    {
+        FeatureState aState( pShapeController->getState( rCommand ) );
+        return aState.bEnabled;
+    }
     return false;
 }
 

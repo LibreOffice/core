@@ -77,6 +77,41 @@ Menu RID_CONTEXTMENU_SHAPE
         };
         MenuItem
         {
+            Identifier = COMMAND_ID_ARRANGE_ROW;
+            Command = ".uno:ArrangeRow";
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = COMMAND_ID_BRING_TO_FRONT;
+                        Command = ".uno:BringToFront";
+                    };
+                    MenuItem
+                    {
+                        Identifier = COMMAND_ID_FORWARD;
+                        Command = ".uno:Forward";
+                    };
+                    MenuItem
+                    {
+                        Identifier = COMMAND_ID_BACKWARD;
+                        Command = ".uno:Backward";
+                    };
+                    MenuItem
+                    {
+                        Identifier = COMMAND_ID_SEND_TO_BACK;
+                        Command = ".uno:SendToBack";
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
             Identifier = COMMAND_ID_CUT;
             Command = ".uno:Cut";
         };
