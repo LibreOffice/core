@@ -336,11 +336,15 @@ BOOL AquaSalInfoPrinter::SetData( ULONG i_nFlags, ImplJobSetup* io_pSetupData )
         if( (i_nFlags & SAL_JOBSET_PAPERSIZE) !=  0)
         {
             // set paper format
-            long width = 0, height = 0;
+            long width = 21000, height = 29700;
             if( io_pSetupData->mePaperFormat == PAPER_USER )
             {
-                width = io_pSetupData->mnPaperWidth;
-                height = io_pSetupData->mnPaperHeight;
+                // #i101108# sanity check
+                if( io_pSetupData->mnPaperWidth && io_pSetupData->mnPaperHeight )
+                {
+                    width = io_pSetupData->mnPaperWidth;
+                    height = io_pSetupData->mnPaperHeight;
+                }
             }
             else
             {

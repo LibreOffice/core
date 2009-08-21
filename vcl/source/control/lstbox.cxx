@@ -31,21 +31,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_RC_H
-#include <tools/rc.h>
-#endif
-#include <vcl/svdata.hxx>
-#include <vcl/decoview.hxx>
-#include <vcl/event.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/subedit.hxx>
-#include <vcl/ilstbox.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/controllayout.hxx>
-#include <tools/debug.hxx>
+#include "tools/rc.h"
+
+#include "vcl/svdata.hxx"
+#include "vcl/decoview.hxx"
+#include "vcl/event.hxx"
+#include "vcl/scrbar.hxx"
+#include "vcl/button.hxx"
+#include "vcl/edit.hxx"
+#include "vcl/subedit.hxx"
+#include "vcl/ilstbox.hxx"
+#include "vcl/lstbox.hxx"
+#include "vcl/combobox.hxx"
+#include "vcl/controllayout.hxx"
+
+#include "tools/debug.hxx"
 
 
 
@@ -128,9 +128,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
         GetBorder( nLeft, nTop, nRight, nBottom );
         mnDDHeight = (USHORT)(GetTextHeight() + nTop + nBottom + 4);
 
-        // FIXME: this is currently only on mac/aqua
-        if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
-            IsNativeWidgetEnabled() &&
+        if( IsNativeWidgetEnabled() &&
             IsNativeControlSupported( CTRL_LISTBOX, PART_ENTIRE_CONTROL ) )
         {
                 ImplControlValue aControlValue;
@@ -651,6 +649,7 @@ void ListBox::Resize()
         long    nTop = 0;
         long    nBottom = aOutSz.Height();
 
+        // note: in case of no border, pBorder will actually be this
         Window *pBorder = GetWindow( WINDOW_BORDER );
         ImplControlValue aControlValue;
         Point aPoint;
@@ -679,6 +678,17 @@ void ListBox::Resize()
 
                 // use the themes drop down size
                 Rectangle aContentRect = aContent.GetBoundRect();
+                if( ! (GetStyle() & WB_BORDER) && ImplGetSVData()->maNWFData.mbNoFocusRects )
+                {
+                    // no border but focus ring behavior -> we have a problem; the
+                    // native rect relies on the border to draw the focus
+                    // let's do the best we can and center vertically, so it doesn't look
+                    // completely wrong.
+                    Size aSz( GetOutputSizePixel() );
+                    long nDiff = aContentRect.Top() - (aSz.Height() - aContentRect.GetHeight())/2;
+                    aContentRect.Top() -= nDiff;
+                    aContentRect.Bottom() -= nDiff;
+                }
                 mpImplWin->SetPosSizePixel( aContentRect.TopLeft(), aContentRect.GetSize() );
             }
             else

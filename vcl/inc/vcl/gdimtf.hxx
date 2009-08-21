@@ -165,6 +165,14 @@ public:
     void            Scale( const Fraction& rScaleX, const Fraction& rScaleY );
     void            Rotate( long nAngle10 );
     void            Clip( const Rectangle& );
+    /* get the bound rect of the contained actions
+     * caveats:
+     * - clip actions will limit the contained actions,
+     *   but the current clipregion of the passed OutputDevice will not
+     * - coordinates of actions will be transformed to preferred mapmode
+     * - the returned rectangle is relative to the preferred mapmode of the metafile
+    */
+    Rectangle       GetBoundRect( OutputDevice& i_rReference );
 
     void            Adjust( short nLuminancePercent = 0, short nContrastPercent = 0,
                             short nChannelRPercent = 0, short nChannelGPercent = 0,
