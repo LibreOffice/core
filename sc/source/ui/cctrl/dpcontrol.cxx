@@ -289,8 +289,7 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, US
     mnClickedMenu(MENU_NOT_SELECTED),
     mpDoc(pDoc),
     mpParentMenu(dynamic_cast<ScMenuFloatingWindow*>(pParent)),
-    mpActiveSubMenu(NULL),
-    mbActionFired(false)
+    mpActiveSubMenu(NULL)
 {
     SetMenuStackLevel(nMenuStackLevel);
 
@@ -508,8 +507,7 @@ void ScMenuFloatingWindow::executeMenuItem(size_t nPos)
         return;
 
     maMenuItems[nPos].mpAction->execute();
-    mbActionFired = true;
-    EndPopupMode();
+    terminateAllPopupMenus();
 }
 
 void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, bool bEnsureSubMenu)
@@ -910,12 +908,11 @@ void ScMenuFloatingWindow::ensureSubMenuNotVisible()
     EndPopupMode();
 }
 
-IMPL_LINK( ScMenuFloatingWindow, EndPopupHdl, void*, EMPTYARG )
+void ScMenuFloatingWindow::terminateAllPopupMenus()
 {
-    if (mbActionFired && mpParentMenu)
-        mpParentMenu->EndPopupMode();
-
-    return 0;
+    EndPopupMode();
+    if (mpParentMenu)
+        mpParentMenu->terminateAllPopupMenus();
 }
 
 // ============================================================================

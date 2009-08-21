@@ -190,7 +190,11 @@ private:
      */
     void ensureSubMenuNotVisible();
 
-    DECL_LINK( EndPopupHdl, void* );
+    /**
+     * Dismiss all visible popup menus and set focus back to the application
+     * window.  This method is called e.g. when a menu action is fired.
+     */
+    void terminateAllPopupMenus();
 
 private:
 
@@ -238,8 +242,6 @@ private:
 
     ScMenuFloatingWindow* mpParentMenu;
     ScMenuFloatingWindow* mpActiveSubMenu;
-
-    bool    mbActionFired;
 };
 
 // ============================================================================
