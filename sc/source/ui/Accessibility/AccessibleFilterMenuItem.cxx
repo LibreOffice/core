@@ -65,13 +65,11 @@ ScAccessibleFilterMenuItem::ScAccessibleFilterMenuItem(
     mbSelected(false),
     mbEnabled(true)
 {
-    fprintf(stdout, "ScAccessibleFilterMenuItem::ScAccessibleFilterMenuItem:   ctor (%p)\n", this);
     SetName(rName);
 }
 
 ScAccessibleFilterMenuItem::~ScAccessibleFilterMenuItem()
 {
-    fprintf(stdout, "ScAccessibleFilterMenuItem::~ScAccessibleFilterMenuItem:   dtor (%p)\n", this);
 }
 
 sal_Int32 ScAccessibleFilterMenuItem::getAccessibleChildCount()
