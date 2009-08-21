@@ -247,7 +247,7 @@ void ScDPFieldButton::drawPopupButton()
 
 // ============================================================================
 
-ScMenuFloatingWindow::MenuItem::MenuItem() :
+ScMenuFloatingWindow::MenuItemData::MenuItemData() :
     mbEnabled(true),
     mpAction(static_cast<ScDPFieldPopupWindow::Action*>(NULL)),
     mpSubMenuWin(static_cast<ScMenuFloatingWindow*>(NULL))
@@ -256,23 +256,23 @@ ScMenuFloatingWindow::MenuItem::MenuItem() :
 
 // ----------------------------------------------------------------------------
 
-ScMenuFloatingWindow::SubMenuItem::SubMenuItem(ScMenuFloatingWindow* pParent) :
+ScMenuFloatingWindow::SubMenuItemData::SubMenuItemData(ScMenuFloatingWindow* pParent) :
     mpSubMenu(NULL),
     mnMenuPos(MENU_NOT_SELECTED),
     mpParent(pParent)
 {
-    maTimer.SetTimeoutHdl( LINK(this, ScMenuFloatingWindow::SubMenuItem, TimeoutHdl) );
+    maTimer.SetTimeoutHdl( LINK(this, ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl) );
     maTimer.SetTimeout(mpParent->GetSettings().GetMouseSettings().GetMenuDelay());
 }
 
-void ScMenuFloatingWindow::SubMenuItem::reset()
+void ScMenuFloatingWindow::SubMenuItemData::reset()
 {
     mpSubMenu = NULL;
     mnMenuPos = MENU_NOT_SELECTED;
     maTimer.Stop();
 }
 
-IMPL_LINK( ScMenuFloatingWindow::SubMenuItem, TimeoutHdl, void*, EMPTYARG )
+IMPL_LINK( ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl, void*, EMPTYARG )
 {
     mpParent->handleMenuTimeout(this);
     return 0;
@@ -364,7 +364,7 @@ void ScMenuFloatingWindow::KeyInput(const KeyEvent& rKEvt)
             if (mnSelectedMenu >= maMenuItems.size() || mnSelectedMenu == MENU_NOT_SELECTED)
                 break;
 
-            const MenuItem& rMenu = maMenuItems[mnSelectedMenu];
+            const MenuItemData& rMenu = maMenuItems[mnSelectedMenu];
             if (!rMenu.mbEnabled || !rMenu.mpSubMenuWin)
                 break;
 
@@ -428,7 +428,7 @@ Reference<XAccessible> ScMenuFloatingWindow::CreateAccessible()
         ScAccessibleFilterMenu* p = static_cast<ScAccessibleFilterMenu*>(
             mxAccessible.get());
 
-        vector<MenuItem>::const_iterator itr, itrBeg = maMenuItems.begin(), itrEnd = maMenuItems.end();
+        vector<MenuItemData>::const_iterator itr, itrBeg = maMenuItems.begin(), itrEnd = maMenuItems.end();
         for (itr = itrBeg; itr != itrEnd; ++itr)
         {
             size_t nPos = ::std::distance(itrBeg, itr);
@@ -441,7 +441,7 @@ Reference<XAccessible> ScMenuFloatingWindow::CreateAccessible()
 
 void ScMenuFloatingWindow::addMenuItem(const OUString& rText, bool bEnabled, Action* pAction)
 {
-    MenuItem aItem;
+    MenuItemData aItem;
     aItem.maText = rText;
     aItem.mbEnabled = bEnabled;
     aItem.mpAction.reset(pAction);
@@ -450,7 +450,7 @@ void ScMenuFloatingWindow::addMenuItem(const OUString& rText, bool bEnabled, Act
 
 ScMenuFloatingWindow* ScMenuFloatingWindow::addSubMenuItem(const OUString& rText, bool bEnabled)
 {
-    MenuItem aItem;
+    MenuItemData aItem;
     aItem.maText = rText;
     aItem.mbEnabled = bEnabled;
     aItem.mpSubMenuWin.reset(new ScMenuFloatingWindow(this, mpDoc, GetMenuStackLevel()+1));
@@ -527,7 +527,7 @@ size_t ScMenuFloatingWindow::getSelectedMenuPos() const
     return mnSelectedMenu;
 }
 
-void ScMenuFloatingWindow::handleMenuTimeout(SubMenuItem* pTimer)
+void ScMenuFloatingWindow::handleMenuTimeout(SubMenuItemData* pTimer)
 {
     if (pTimer == &maOpenTimer)
     {
@@ -626,7 +626,7 @@ void ScMenuFloatingWindow::endSubMenu()
 
 void ScMenuFloatingWindow::fillMenuItemsToAccessible(ScAccessibleFilterMenu* pAccMenu) const
 {
-    vector<MenuItem>::const_iterator itr, itrBeg = maMenuItems.begin(), itrEnd = maMenuItems.end();
+    vector<MenuItemData>::const_iterator itr, itrBeg = maMenuItems.begin(), itrEnd = maMenuItems.end();
     for (itr = itrBeg; itr != itrEnd; ++itr)
     {
         size_t nPos = ::std::distance(itrBeg, itr);
@@ -669,7 +669,7 @@ void ScMenuFloatingWindow::resizeToFitMenuItems()
     if (maMenuItems.empty())
         return;
 
-    vector<MenuItem>::const_iterator itr = maMenuItems.begin(), itrEnd = maMenuItems.end();
+    vector<MenuItemData>::const_iterator itr = maMenuItems.begin(), itrEnd = maMenuItems.end();
     long nTextWidth = 0;
     for (; itr != itrEnd; ++itr)
         nTextWidth = ::std::max(GetTextWidth(itr->maText), nTextWidth);

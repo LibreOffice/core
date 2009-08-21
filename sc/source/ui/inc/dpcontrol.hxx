@@ -113,6 +113,16 @@ public:
         virtual void execute() = 0;
     };
 
+    class MenuItem : public Window
+    {
+    public:
+        explicit MenuItem(Window* pParent);
+
+    private:
+        bool mbSelected:1;
+        bool mbEnabled:1;
+    };
+
     explicit ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, USHORT nMenuStackLevel = 0);
     virtual ~ScMenuFloatingWindow();
 
@@ -159,8 +169,8 @@ protected:
         ::com::sun::star::accessibility::XAccessible > mxAccessible;
 
 private:
-    struct SubMenuItem;
-    void handleMenuTimeout(SubMenuItem* pTimer);
+    struct SubMenuItemData;
+    void handleMenuTimeout(SubMenuItemData* pTimer);
 
     enum NotificationType { SUBMENU_FOCUSED };
     void notify(NotificationType eType);
@@ -176,7 +186,7 @@ private:
 
 private:
 
-    struct MenuItem
+    struct MenuItemData
     {
         ::rtl::OUString maText;
         bool            mbEnabled;
@@ -184,12 +194,12 @@ private:
         ::boost::shared_ptr<Action> mpAction;
         ::boost::shared_ptr<ScMenuFloatingWindow> mpSubMenuWin;
 
-        MenuItem();
+        MenuItemData();
     };
 
-    ::std::vector<MenuItem>         maMenuItems;
+    ::std::vector<MenuItemData>         maMenuItems;
 
-    struct SubMenuItem
+    struct SubMenuItemData
     {
         Timer                   maTimer;
         ScMenuFloatingWindow*   mpSubMenu;
@@ -197,14 +207,14 @@ private:
 
         DECL_LINK( TimeoutHdl, void* );
 
-        SubMenuItem(ScMenuFloatingWindow* pParent);
+        SubMenuItemData(ScMenuFloatingWindow* pParent);
         void reset();
 
     private:
         ScMenuFloatingWindow* mpParent;
     };
-    SubMenuItem   maOpenTimer;
-    SubMenuItem   maCloseTimer;
+    SubMenuItemData   maOpenTimer;
+    SubMenuItemData   maCloseTimer;
 
     Font    maLabelFont;
 
