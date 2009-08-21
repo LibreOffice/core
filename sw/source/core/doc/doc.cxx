@@ -1095,7 +1095,10 @@ static void lcl_FormatPostIt(
     DBG_ASSERT( ViewShell::GetShellRes(), "missing ShellRes" );
 
     if (bNewPage)
-        pIDCO->Insert( aPam, SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ), 0 );
+    {
+        pIDCO->Insert( aPam, SvxFmtBreakItem( SVX_BREAK_PAGE_AFTER, RES_BREAK ), 0 );
+        pIDCO->SplitNode( *aPam.GetPoint(), false );
+    }
     else if (!bIsFirstPostIt)
     {
         // add an empty line between different notes
@@ -1407,25 +1410,71 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
             // document that should be printed for a given physical page of the document
             std::map< sal_Int32, std::vector< const SwPageFrm * > > aPhysPageToPostItFrames;
 
-            // collect all post-it doc start frames in a vector
+            // ... thus, first collect all post-it doc start frames in a vector
             std::vector< const SwPageFrm * > aAllPostItStartFrames;
             const SwPageFrm * pPageFrm = (SwPageFrm*)rOptions.m_pPostItShell->GetLayout()->Lower();
             while( pPageFrm && aAllPostItStartFrames.size() < nPostItDocPageCount )
             {
                 DBG_ASSERT( pPageFrm, "Empty page frame. How are we going to print this?" );
-                pPageFrm = (SwPageFrm*)pPageFrm->GetNext();
                 aAllPostItStartFrames.push_back( pPageFrm );
+                pPageFrm = (SwPageFrm*)pPageFrm->GetNext();
             }
             DBG_ASSERT( aAllPostItStartFrames.size() == nPostItDocPageCount,
                     "unexpected number of frames; does not match number of pages" );
 
+            // get a map that holds all post-it frames to be printed for a
+            // given physical page from the document
             std::map< sal_Int32, sal_Int32 >::const_iterator  aIt;
             for (aIt = aPostItStartPageNum.begin();  aIt != aPostItStartPageNum.end();  ++aIt)
             {
                 const sal_Int32 nStartPageNum = aIt->second;
+                DBG_ASSERT( 1 <= nStartPageNum && nStartPageNum <= nPostItDocPageCount,
+                        "page number for first frame out of range" );
+                const sal_Int32 nFrames = 1; // TLPDF2DO: get the correct number of frames
                 std::vector<  const SwPageFrm * > aStartFrames;
-                aPhysPageToPostItFrames[ aIt->first ] = aStartFrames;
+                for (sal_Int32 i = 0; i < nFrames; ++i)
+                {
+                    const sal_Int32 nIdx = nStartPageNum - 1 + i;   // -1 because lowest page num is 1
+                    DBG_ASSERT( 0 <= nIdx && nIdx < aAllPostItStartFrames.size(),
+                            "index out of range" );
+                    aStartFrames.push_back( aAllPostItStartFrames[ nIdx ] );
+                }
+                aPhysPageToPostItFrames[ aIt->first /* phys page num */ ] = aStartFrames;
             }
+
+
+            // ok, now that aPhysPageToPostItFrames can give the start frames for all
+            // post-it pages to be printed we need to merge those at the correct
+            // position into the GetPagesToPrint vector and build and maintain the
+            // GetPostItStartFrame vector as well.
+            // Since inserting a larger number of entries in the middle of a vector
+            // isn't that efficient we will create new vectors by copying the required data
+            std::vector< sal_Int32 >            aTmpPagesToPrint;
+            std::vector< const SwPageFrm * >    aTmpPostItStartFrames;
+            const size_t nNum = rOptions.GetPagesToPrint().size();
+            for (size_t i = 0 ;  i < nNum;  ++i)
+            {
+                // add the physical page to print from the document
+                const sal_Int32 nPhysPage = rOptions.GetPagesToPrint()[i];
+                aTmpPagesToPrint.push_back( nPhysPage );
+                aTmpPostItStartFrames.push_back( NULL );
+
+                // add the post-it document pages to print, i.e those
+                // post-it pages that have the data for the above physical page
+                const std::vector< const SwPageFrm * > &rPostItFrames = aPhysPageToPostItFrames[ nPhysPage ];
+                const size_t nPostItFrames = rPostItFrames.size();
+                for (size_t k = 0;  k < nPostItFrames;  ++k)
+                {
+                    aTmpPagesToPrint.push_back( 0 );
+                    aTmpPostItStartFrames.push_back( rPostItFrames[k] );
+                }
+            }
+
+            // finally we need to assign those vectors to the resulting ones.
+            // swapping the data should be more efficient than assigning since
+            // we won't need the temporary vectors anymore
+            rOptions.GetPagesToPrint().swap( aTmpPagesToPrint );
+            rOptions.GetPostItStartFrame().swap( aTmpPostItStartFrames );
         }
     }
 }
