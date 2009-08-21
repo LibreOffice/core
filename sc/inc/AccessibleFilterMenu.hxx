@@ -169,10 +169,10 @@ public:
     void appendMenuItem(const ::rtl::OUString& rName, bool bEnabled, size_t nMenuPos);
     void setMenuPos(size_t nMenuPos);
     void setEnabled(bool bEnabled);
+    bool isSelected();
 
 private:
     bool isFocused();
-    bool isSelected();
 
     void updateStates();
 

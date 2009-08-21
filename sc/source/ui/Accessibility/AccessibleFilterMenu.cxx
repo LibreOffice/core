@@ -70,49 +70,6 @@ using ::std::for_each;
 using ::std::vector;
 using ::std::set;
 
-
-#include <stdio.h>
-#include <string>
-#include <sys/time.h>
-
-namespace {
-
-class StackPrinter
-{
-public:
-    explicit StackPrinter(const char* msg) :
-        msMsg(msg)
-    {
-        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
-        mfStartTime = getTime();
-    }
-
-    ~StackPrinter()
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
-    }
-
-    void printTime(int line) const
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
-    }
-
-private:
-    double getTime() const
-    {
-        timeval tv;
-        gettimeofday(&tv, NULL);
-        return tv.tv_sec + tv.tv_usec / 1000000.0;
-    }
-
-    ::std::string msMsg;
-    double mfStartTime;
-};
-
-}
-
 // ============================================================================
 
 namespace {
@@ -152,9 +109,19 @@ public:
 
     void operator() (ScAccessibleFilterMenu::MenuItem& rItem)
     {
-        ScAccessibleFilterMenuItem* p = static_cast<ScAccessibleFilterMenuItem*>(rItem.mxAccessible.get());
-        if (p->isSelected())
-            ++mnCount;
+        {
+            ScAccessibleFilterMenuItem* p = dynamic_cast<ScAccessibleFilterMenuItem*>(
+                rItem.mxAccessible.get());
+            if (p && p->isSelected())
+                ++mnCount;
+        }
+
+        {
+            ScAccessibleFilterMenu* p = dynamic_cast<ScAccessibleFilterMenu*>(
+                rItem.mxAccessible.get());
+            if (p && p->isSelected())
+                ++mnCount;
+        }
     }
 
     size_t getCount() const { return mnCount; }
@@ -406,7 +373,6 @@ Sequence<sal_Int8> ScAccessibleFilterMenu::getImplementationId()
 
 void ScAccessibleFilterMenu::appendMenuItem(const OUString& rName, bool bEnabled, size_t nMenuPos)
 {
-//  StackPrinter __stack_printer__("ScAccessibleFilterMenu::appendMenuItem");
     // Check weather this menu item is a sub menu or a regular menu item.
     ScMenuFloatingWindow* pSubMenu = mpWindow->getSubMenuWindow(nMenuPos);
     MenuItem aItem;
