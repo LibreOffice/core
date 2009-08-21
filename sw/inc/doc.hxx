@@ -219,6 +219,7 @@ class SwChartLockController_Helper;
 class IGrammarContact;
 class SwPrintData;
 class SwPageFrm;
+class SwViewOption;
 
 namespace sw { namespace mark {
     class MarkManager;
@@ -1336,9 +1337,11 @@ public:
 
     // get the set of printable pages for the XRenderable API by
     // evaluating the respective settings (see implementation)
-    void CalculatePagesForPrinting( bool bIsPDFExport, SwPrintUIOptions &rOptions,
+    void CalculatePagesForPrinting( /* out */ SwPrintUIOptions &rOptions, bool bIsPDFExport,
             sal_Int32 nDocPageCount );
-    void CalculatePagePairsForProspectPrinting( SwPrintUIOptions &rOptions,
+    void UpdatePagesForPrintingWithPostItData( /* out */ SwPrintUIOptions &rOptions, bool bIsPDFExport,
+            sal_Int32 nDocPageCount );
+    void CalculatePagePairsForProspectPrinting( /* out */ SwPrintUIOptions &rOptions,
             sal_Int32 nDocPageCount );
 
     sal_uInt16 GetPageCount() const;

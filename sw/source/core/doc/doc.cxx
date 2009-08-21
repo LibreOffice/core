@@ -58,6 +58,8 @@
 #include <svx/forbiddencharacterstable.hxx>
 #include <svx/svdmodel.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/localedatawrapper.hxx>
+
 #include <swmodule.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtanchr.hxx>
@@ -105,6 +107,12 @@
 #include <SwUndoFmt.hxx>
 #include <unocrsr.hxx>
 #include <docsh.hxx>
+#include <docfld.hxx>           // _SetGetExpFld
+#include <docufld.hxx>          // SwPostItField
+#include <viewsh.hxx>
+#include <shellres.hxx >
+#include <txtfrm.hxx>
+
 #include <vector>
 
 #include <osl/diagnose.h>
@@ -118,6 +126,8 @@
 // <--
 
 using namespace ::com::sun::star;
+using ::rtl::OUString;
+
 
 // Seiten-Deskriptoren
 SV_IMPL_PTRARR(SwPageDescs,SwPageDescPtr);
@@ -990,10 +1000,132 @@ const SwDocStat& SwDoc::GetDocStat() const
     return *pDocStat;
 }
 
+/*************************************************************************/
+
+
+struct _PostItFld : public _SetGetExpFld
+{
+    _PostItFld( const SwNodeIndex& rNdIdx, const SwTxtFld* pFld,  const SwIndex* pIdx = 0 )
+        : _SetGetExpFld( rNdIdx, pFld, pIdx ) {}
+
+    USHORT GetPageNo( const StringRangeEnumerator &rRangeEnum,
+            const std::set< sal_Int32 > &rPossiblePages,
+            BOOL bRgt, BOOL bLft,
+            USHORT& rVirtPgNo, USHORT& rLineNo );
+
+    SwPostItField* GetPostIt() const
+    {
+        return (SwPostItField*) GetFld()->GetFld().GetFld();
+    }
+};
+
+
+USHORT _PostItFld::GetPageNo(
+    const StringRangeEnumerator &rRangeEnum,
+    const std::set< sal_Int32 > &rPossiblePages,
+    BOOL bRgt, BOOL bLft,   /* TLPDF both should not be needed since rMulti should only include the correct pages as stored in GetValidPagesSet */
+    /* out */ USHORT& rVirtPgNo, /* out */ USHORT& rLineNo )
+{
+    //Problem: Wenn ein PostItFld in einem Node steht, der von mehr als
+    //einer Layout-Instanz repraesentiert wird, steht die Frage im Raum,
+    //ob das PostIt nur ein- oder n-mal gedruck werden soll.
+    //Wahrscheinlich nur einmal, als Seitennummer soll hier keine Zufaellige
+    //sondern die des ersten Auftretens des PostIts innerhalb des selektierten
+    //Bereichs ermittelt werden.
+    rVirtPgNo = 0;
+    USHORT nPos = GetCntnt();
+    SwClientIter aIter( (SwModify &)GetFld()->GetTxtNode() );
+    for( SwTxtFrm* pFrm = (SwTxtFrm*)aIter.First( TYPE( SwFrm ));
+            pFrm;  pFrm = (SwTxtFrm*)aIter.Next() )
+    {
+        if( pFrm->GetOfst() > nPos ||
+            (pFrm->HasFollow() && pFrm->GetFollow()->GetOfst() <= nPos) )
+            continue;
+        USHORT nPgNo = pFrm->GetPhyPageNum();
+        BOOL bRight = pFrm->OnRightPage();
+        if( rRangeEnum.hasValue( nPgNo, &rPossiblePages ) &&
+            ( (bRight && bRgt) || (!bRight && bLft) ) )
+        {
+            rLineNo = (USHORT)(pFrm->GetLineCount( nPos ) +
+                      pFrm->GetAllLines() - pFrm->GetThisLines());
+            rVirtPgNo = pFrm->GetVirtPageNum();
+            return nPgNo;
+        }
+    }
+    return 0;
+}
+
+
+void lcl_GetPostIts(
+    IDocumentFieldsAccess* pIDFA,
+    _SetGetExpFlds& rSrtLst )
+{
+    SwFieldType* pFldType = pIDFA->GetSysFldType( RES_POSTITFLD );
+    DBG_ASSERT( pFldType, "kein PostItType ? ");
+
+    if( pFldType->GetDepends() )
+    {
+        // Modify-Object gefunden, trage alle Felder ins Array ein
+        SwClientIter aIter( *pFldType );
+        SwClient* pLast;
+        const SwTxtFld* pTxtFld;
+
+        for( pLast = aIter.First( TYPE(SwFmtFld)); pLast; pLast = aIter.Next() )
+            if( 0 != ( pTxtFld = ((SwFmtFld*)pLast)->GetTxtFld() ) &&
+                pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
+            {
+                SwNodeIndex aIdx( pTxtFld->GetTxtNode() );
+                _PostItFld* pNew = new _PostItFld( aIdx, pTxtFld );
+                rSrtLst.Insert( pNew );
+            }
+    }
+}
+
+
+static void lcl_FormatPostIt(
+    IDocumentContentOperations* pIDCO,
+    SwPaM& aPam,
+    SwPostItField* pField,
+    USHORT nPageNo, USHORT nLineNo )
+{
+    static char __READONLY_DATA sTmp[] = " : ";
+
+    DBG_ASSERT( ViewShell::GetShellRes(), "missing ShellRes" );
+
+    String aStr(    ViewShell::GetShellRes()->aPostItPage   );
+    aStr.AppendAscii(sTmp);
+
+    aStr += XubString::CreateFromInt32( nPageNo );
+    aStr += ' ';
+    if( nLineNo )
+    {
+        aStr += ViewShell::GetShellRes()->aPostItLine;
+        aStr.AppendAscii(sTmp);
+        aStr += XubString::CreateFromInt32( nLineNo );
+        aStr += ' ';
+    }
+    aStr += ViewShell::GetShellRes()->aPostItAuthor;
+    aStr.AppendAscii(sTmp);
+    aStr += pField->GetPar1();
+    aStr += ' ';
+    aStr += GetAppLocaleData().getDate( pField->GetDate() );
+    pIDCO->Insert( aPam, aStr, true );
+
+    pIDCO->SplitNode( *aPam.GetPoint(), false );
+    aStr = pField->GetPar2();
+#if defined( WIN ) || defined( WNT ) || defined( PM2 )
+    // Bei Windows und Co alle CR rausschmeissen
+    aStr.EraseAllChars( '\r' );
+#endif
+    pIDCO->Insert( aPam, aStr, true );
+    pIDCO->SplitNode( *aPam.GetPoint(), false );
+    pIDCO->SplitNode( *aPam.GetPoint(), false );
+}
+
 
 void SwDoc::CalculatePagesForPrinting(
+    /* out */ SwPrintUIOptions &rOptions,
     bool bIsPDFExport,
-    SwPrintUIOptions &rOptions,
     sal_Int32 nDocPageCount )
 {
     DBG_ASSERT( pLayout, "no layout present" );
@@ -1116,6 +1248,121 @@ void SwDoc::CalculatePagesForPrinting(
             }
         }
     }
+
+
+    //
+    // now that we have identified the valid pages for printing according
+    // to the print settings we need to get the PageRange to use and
+    // use both results to get the actual pages to be printed
+    // (post-it settings need to be taken into account later on!)
+    //
+
+    // get PageRange value to use
+    OUString aPageRange;
+    if (bIsPDFExport)
+    {
+// TLPDF ??        m_pPrintUIOptions->getValue( C2U("Selection") );
+        aPageRange = rOptions.getStringValue( "PageRange", OUString() );
+    }
+    else
+    {
+        // PageContent :
+        // 0 -> print all pages
+        // 1 -> print range according to PageRange
+        // 2 -> print selection
+        if (1 == rOptions.getIntValue( "PrintContent", 0 ))
+            aPageRange = rOptions.getStringValue( "PageRange", OUString() );
+    }
+    if (aPageRange.getLength() == 0)    // empty string -> print all
+    {
+        // set page range to print to 'all pages'
+        aPageRange = OUString::valueOf( (sal_Int32)1 );
+        aPageRange += OUString::valueOf( (sal_Unicode)'-');
+        aPageRange += OUString::valueOf( nDocPageCount );
+    }
+    rOptions.SetPageRange( aPageRange );
+
+    // get vector of pages to print according to PageRange and valid pages set from above
+    // (result may be an empty vector, for example if the range string is not correct)
+    StringRangeEnumerator::getRangesFromString(
+            aPageRange, rOptions.GetPagesToPrint(),
+            1, nDocPageCount, 0, &rOptions.GetValidPagesSet() );
+}
+
+
+void SwDoc::UpdatePagesForPrintingWithPostItData(
+    /* out */ SwPrintUIOptions &rOptions,
+    bool bIsPDFExport,
+    sal_Int32 nDocPageCount )
+{
+
+    sal_Int16 nPostItMode = (sal_Int16) rOptions.getIntValue( "PrintAnnotationMode", 0 );
+    DBG_ASSERT(nPostItMode == POSTITS_NONE || rOptions.HasPostItData(),
+            "print post-its without post-it data?" );
+    const USHORT nPostItCount = rOptions.HasPostItData() ? rOptions.m_pPostItFields->Count() : 0;
+    if (nPostItMode != POSTITS_NONE && nPostItCount > 0)
+    {
+        SET_CURR_SHELL( rOptions.m_pPostItShell );
+
+        // clear document and move to end of it
+        SwPaM aPam( rOptions.m_pPostItDoc->GetNodes().GetEndOfContent() );
+        aPam.Move( fnMoveBackward, fnGoDoc );
+        aPam.SetMark();
+        aPam.Move( fnMoveForward, fnGoDoc );
+        rOptions.m_pPostItDoc->Delete( aPam );
+
+        const StringRangeEnumerator aRangeEnum( rOptions.GetPageRange(), 1, nDocPageCount, 0 );
+
+        USHORT nVirtPg = 0, nLineNo = 0;
+        for (USHORT i = 0; i < nPostItCount; ++i)
+        {
+            _PostItFld& rPostIt = (_PostItFld&)*(*rOptions.m_pPostItFields)[ i ];
+            const USHORT nPhyPageNum = rPostIt.GetPageNo(
+                    aRangeEnum, rOptions.GetValidPagesSet(),
+                    true /*TLPDF bRgt*/, true /*TLPDF bLft*/, nVirtPg, nLineNo );
+            if (nPhyPageNum)
+                lcl_FormatPostIt( rOptions.m_pPostItShell->GetDoc(), aPam,
+                               rPostIt.GetPostIt(), nVirtPg, nLineNo );
+        }
+
+        // format post-it doc to get correct number of pages
+        rOptions.m_pPostItShell->CalcLayout();
+        const sal_Int32 nPostItDocPageCount = rOptions.m_pPostItDoc->GetPageCount();
+
+        // now add those post-it pages to the vector of pages to print
+        // or replace them if only post-its should be printed
+        if (nPostItMode == POSTITS_ONLY || nPostItMode == POSTITS_ENDDOC)
+        {
+            rOptions.GetPostItStartFrame().clear();
+            if (nPostItMode == POSTITS_ENDDOC)
+            {
+                // set all values up to number of pages to print currently known to NULL,
+                // meaning none of the pages currently in the vector is from the
+                // post-it document, they are the documents pages.
+                rOptions.GetPostItStartFrame().resize( rOptions.GetPagesToPrint().size() );
+            }
+            else if (nPostItMode == POSTITS_ONLY)
+            {
+                // no document page to be printed
+                rOptions.GetPagesToPrint().clear();
+            }
+
+            // now we just need to add the post-it pages to be printed to the end
+            // of the vector of pages to print and keep the GetPostItStartFrame
+            // data conform with it
+            sal_Int32 nPageNum = 0;
+            const SwPageFrm *pPageFrm = (SwPageFrm*)rOptions.m_pPostItShell->GetLayout()->Lower();
+            while( pPageFrm && nPageNum < nPostItDocPageCount )
+            {
+                DBG_ASSERT( pPageFrm, "Empty page frame. How are we going to print this?" );
+                ++nPageNum;
+                rOptions.GetPagesToPrint().push_back( 0 );  // a page number of 0 indicates this page is from the post-it doc
+                rOptions.GetPostItStartFrame().push_back( pPageFrm );
+                pPageFrm = (SwPageFrm*)pPageFrm->GetNext();
+            }
+            DBG_ASSERT( nPageNum == nPostItDocPageCount, "unexpected number of pages" );
+        }
+    }
 }
 
 
@@ -1151,7 +1398,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     const SwPageFrm *pPageFrm = (SwPageFrm*)pLayout->Lower();
     while( pPageFrm && nPageNum < nDocPageCount )
     {
-        DBG_ASSERT( pPageFrm, "Empty page frame. How are we gpoing to print this?" );
+        DBG_ASSERT( pPageFrm, "Empty page frame. How are we going to print this?" );
         ++nPageNum;
         rValidPagesSet.insert( nPageNum );
         rValidStartFrms[ nPageNum ] = pPageFrm;
@@ -1281,6 +1528,9 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
         nEPg = nEPg - nStep;
     }
     DBG_ASSERT( size_t(nCntPage) == rPagePairs.size(), "size mismatch for number of page pairs" );
+
+    // luckily prospect printing does not make use of post-its so far,
+    // thus we are done here.
 }
 
 

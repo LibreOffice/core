@@ -2544,6 +2544,24 @@ SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
 /* -----------------------------23.08.02 16:00--------------------------------
 
  ---------------------------------------------------------------------------*/
+
+static OutputDevice * lcl_GetOutputDevice( const SwPrintUIOptions &rPrintUIOptions )
+{
+    OutputDevice *pOut = 0;
+
+    uno::Any aAny( rPrintUIOptions.getValue( C2U( "RenderDevice" ) ));
+    uno::Reference< awt::XDevice >  xRenderDevice;
+    aAny >>= xRenderDevice;
+    if (xRenderDevice.is())
+    {
+        VCLXDevice*     pDevice = VCLXDevice::GetImplementation( xRenderDevice );
+        pOut = pDevice ? pDevice->GetOutputDevice() : 0;
+    }
+
+    return pOut;
+}
+
+
 /*
  *  GetRenderDoc:
  *  returns the document to be rendered, usually this will be the 'regular'
@@ -2656,31 +2674,9 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
 
     const sal_Int32 nPageCount = pDoc->GetPageCount();
 
-    // get PageRange value to use
-    OUString aPageRange;
-    if (bIsPDFExport)
-    {
-// TLPDF ??        m_pPrintUIOptions->getValue( C2U("Selection") );
-        aPageRange = m_pPrintUIOptions->getStringValue( "PageRange", OUString() );
-    }
-    else
-    {
-        // PageContent :
-        // 0 -> print all pages
-        // 1 -> print range according to PageRange
-        // 2 -> print selection
-        if (1 == m_pPrintUIOptions->getIntValue( "PrintContent", 0 ))
-            aPageRange = m_pPrintUIOptions->getStringValue( "PageRange", OUString() );
-    }
-    if (aPageRange.getLength() == 0)    // empty string -> print all
-    {
-        // set page range to print to 'all pages'
-        aPageRange = OUString::valueOf( (sal_Int32)1 );
-        aPageRange += OUString::valueOf( (sal_Unicode)'-');
-        aPageRange += OUString::valueOf( nPageCount );
-    }
-
+    //
     // get number of pages to be rendered
+    //
     const bool bPrintProspect = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
     if (bPrintProspect)
     {
@@ -2689,16 +2685,22 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     }
     else
     {
-        // get set of valid pages (according to the current settings)
-        // and their start frames
-        pDoc->CalculatePagesForPrinting( bIsPDFExport, *m_pPrintUIOptions, nPageCount );
-        DBG_ASSERT( nPageCount >= 1, "valid pages count is 0! Should not happen." );
+        const sal_Int16 nPostItMode = (sal_Int16) m_pPrintUIOptions->getIntValue( "PrintAnnotationMode", 0 );
+        if (nPostItMode != POSTITS_NONE)
+        {
+            OutputDevice *pOutDev = lcl_GetOutputDevice( *m_pPrintUIOptions );
+            m_pPrintUIOptions->CreatePostItData( pDoc, pWrtShell->GetViewOptions(), pOutDev );
+        }
 
-        // get vector of pages to print according to PageRange and valid pages from above
-        // (result may be an empty vector, for example if the range string is not correct)
-        StringRangeEnumerator::getRangesFromString(
-                aPageRange, m_pPrintUIOptions->GetPagesToPrint(),
-                1, nPageCount, 0, &m_pPrintUIOptions->GetValidPagesSet() );
+        // get set of valid document pages (according to the current settings)
+        // and their start frames
+        pDoc->CalculatePagesForPrinting( *m_pPrintUIOptions, bIsPDFExport, nPageCount );
+
+        if (nPostItMode != POSTITS_NONE)
+        {
+            pDoc->UpdatePagesForPrintingWithPostItData(
+                    *m_pPrintUIOptions, bIsPDFExport, nPageCount );
+        }
 
         nRet = m_pPrintUIOptions->GetPagesToPrint().size();
     }
@@ -2862,16 +2864,8 @@ void SAL_CALL SwXTextDocument::render(
                     ((SwPagePreView*)pView)->GetViewShell();
     }
 
-    uno::Any aAny( m_pPrintUIOptions->getValue( C2U( "RenderDevice" ) ));
-    uno::Reference< awt::XDevice >  xRenderDevice;
-    aAny >>= xRenderDevice;
-
-    OutputDevice*   pOut = 0;
-    if (xRenderDevice.is())
-    {
-        VCLXDevice*     pDevice = VCLXDevice::GetImplementation( xRenderDevice );
-        pOut = pDevice ? pDevice->GetOutputDevice() : 0;
-    }
+    // get output device to use
+    OutputDevice*   pOut = lcl_GetOutputDevice( *m_pPrintUIOptions );
 
     if(pVwSh && pOut)
     {
@@ -2974,6 +2968,9 @@ void SAL_CALL SwXTextDocument::render(
 
         if (bLastPage)
         {
+            if (m_pPrintUIOptions->HasPostItData())
+                m_pPrintUIOptions->DeletePostItData();
+
             if (m_pHiddenViewFrame)
             {
                 lcl_DisposeView( m_pHiddenViewFrame, pDocShell );

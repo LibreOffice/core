@@ -75,8 +75,8 @@
 #include <layact.hxx>
 #include <ndtxt.hxx>
 #include <fldbas.hxx>
-#include <docufld.hxx>      // PostItFld /-Type
 #include <docfld.hxx>       // _SetGetExpFld
+#include <docufld.hxx>      // PostItFld /-Type
 #include <shellres.hxx>
 #include <viewopt.hxx>
 #include <swprtopt.hxx>     // SwPrtOptions
@@ -96,6 +96,9 @@
 #define JOBSET_ERR_DEFAULT          0
 #define JOBSET_ERR_ERROR            1
 #define JOBSET_ERR_ISSTARTET        2
+
+
+extern void lcl_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds& rSrtLst );
 
 
 using namespace ::com::sun::star;
@@ -425,6 +428,10 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
 
 
     DBG_ASSERT( nIdx == nNumProps, "number of added properties is not as expected" );
+
+    m_pPostItFields   = 0;
+    m_pPostItDoc      = 0;
+    m_pPostItShell    = 0;
 }
 
 
@@ -519,6 +526,35 @@ bool SwPrintUIOptions::processPropertiesAndCheckFormat( const com::sun::star::un
 }
 
 
+void SwPrintUIOptions::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev )
+{
+    m_pPostItFields     = new _SetGetExpFlds;
+    lcl_GetPostIts( pDoc, *m_pPostItFields );
+    m_pPostItDoc        = new SwDoc;
+
+    //!! Disable spell and grammar checking in the temporary document.
+    //!! Otherwise the grammar checker might process it and crash if we later on
+    //!! simply delete this document while he is still at it.
+    SwViewOption  aViewOpt( *pViewOpt );
+    aViewOpt.SetOnlineSpell( FALSE );
+
+    m_pPostItShell      = new ViewShell( *m_pPostItDoc, 0, &aViewOpt, pOutDev );
+}
+
+
+void SwPrintUIOptions::DeletePostItData()
+{
+    if (HasPostItData())
+    {
+        m_pPostItDoc->setPrinter( 0, false, false );  //damit am echten DOC der Drucker bleibt
+        delete m_pPostItShell;        //Nimmt das PostItDoc mit ins Grab.
+        delete m_pPostItFields;
+        m_pPostItDoc     = 0;
+        m_pPostItShell   = 0;
+        m_pPostItFields  = 0;
+    }
+}
+
 /******************************************************************************
  *  Methode     :   void SetSwVisArea( ViewShell *pSh, Point aPrtOffset, ...
  *  Beschreibung:
@@ -549,255 +585,6 @@ void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, BOOL /*bPDFExport*/ )
     MapMode aMapMode( pOut->GetMapMode() );
     aMapMode.SetOrigin( aPt );
     pOut->SetMapMode( aMapMode );
-}
-
-/******************************************************************************
- *  Methode     :   struct _PostItFld : public _SetGetExpFld
- *  Beschreibung:   Update an das PostItFeld
- *  Erstellt    :   OK 07.11.94 10:18
- *  Aenderung   :
- ******************************************************************************/
-struct _PostItFld : public _SetGetExpFld
-{
-    _PostItFld( const SwNodeIndex& rNdIdx, const SwTxtFld* pFld,
-                    const SwIndex* pIdx = 0 )
-        : _SetGetExpFld( rNdIdx, pFld, pIdx ) {}
-
-    USHORT GetPageNo( MultiSelection &rMulti, BOOL bRgt, BOOL bLft,
-                        USHORT& rVirtPgNo, USHORT& rLineNo );
-    SwPostItField* GetPostIt() const
-        { return (SwPostItField*) GetFld()->GetFld().GetFld(); }
-};
-
-
-
-USHORT _PostItFld::GetPageNo( MultiSelection &rMulti, BOOL bRgt, BOOL bLft,
-                                USHORT& rVirtPgNo, USHORT& rLineNo )
-{
-    //Problem: Wenn ein PostItFld in einem Node steht, der von mehr als
-    //einer Layout-Instanz repraesentiert wird, steht die Frage im Raum,
-    //ob das PostIt nur ein- oder n-mal gedruck werden soll.
-    //Wahrscheinlich nur einmal, als Seitennummer soll hier keine Zufaellige
-    //sondern die des ersten Auftretens des PostIts innerhalb des selektierten
-    //Bereichs ermittelt werden.
-    rVirtPgNo = 0;
-    USHORT nPos = GetCntnt();
-    SwClientIter aIter( (SwModify &)GetFld()->GetTxtNode() );
-    for( SwTxtFrm* pFrm = (SwTxtFrm*)aIter.First( TYPE( SwFrm ));
-            pFrm;  pFrm = (SwTxtFrm*)aIter.Next() )
-    {
-        if( pFrm->GetOfst() > nPos ||
-            (pFrm->HasFollow() && pFrm->GetFollow()->GetOfst() <= nPos) )
-            continue;
-        USHORT nPgNo = pFrm->GetPhyPageNum();
-        BOOL bRight = pFrm->OnRightPage();
-        if( rMulti.IsSelected( nPgNo ) &&
-            ( (bRight && bRgt) || (!bRight && bLft) ) )
-        {
-            rLineNo = (USHORT)(pFrm->GetLineCount( nPos ) +
-                      pFrm->GetAllLines() - pFrm->GetThisLines());
-            rVirtPgNo = pFrm->GetVirtPageNum();
-            return nPgNo;
-        }
-    }
-    return 0;
-}
-
-
-void lcl_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds& rSrtLst )
-{
-    SwFieldType* pFldType = pIDFA->GetSysFldType( RES_POSTITFLD );
-    ASSERT( pFldType, "kein PostItType ? ");
-
-    if( pFldType->GetDepends() )
-    {
-        // Modify-Object gefunden, trage alle Felder ins Array ein
-        SwClientIter aIter( *pFldType );
-        SwClient* pLast;
-        const SwTxtFld* pTxtFld;
-
-        for( pLast = aIter.First( TYPE(SwFmtFld)); pLast; pLast = aIter.Next() )
-            if( 0 != ( pTxtFld = ((SwFmtFld*)pLast)->GetTxtFld() ) &&
-                pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
-            {
-                SwNodeIndex aIdx( pTxtFld->GetTxtNode() );
-                _PostItFld* pNew = new _PostItFld( aIdx, pTxtFld );
-                rSrtLst.Insert( pNew );
-            }
-    }
-}
-
-
-void lcl_FormatPostIt( IDocumentContentOperations* pIDCO, SwPaM& aPam, SwPostItField* pField,
-                           USHORT nPageNo, USHORT nLineNo )
-{
-    static char __READONLY_DATA sTmp[] = " : ";
-
-    ASSERT( ViewShell::GetShellRes(), "missing ShellRes" );
-
-    String aStr(    ViewShell::GetShellRes()->aPostItPage   );
-    aStr.AppendAscii(sTmp);
-
-    aStr += XubString::CreateFromInt32( nPageNo );
-    aStr += ' ';
-    if( nLineNo )
-    {
-        aStr += ViewShell::GetShellRes()->aPostItLine;
-        aStr.AppendAscii(sTmp);
-        aStr += XubString::CreateFromInt32( nLineNo );
-        aStr += ' ';
-    }
-    aStr += ViewShell::GetShellRes()->aPostItAuthor;
-    aStr.AppendAscii(sTmp);
-    aStr += pField->GetPar1();
-    aStr += ' ';
-    aStr += GetAppLocaleData().getDate( pField->GetDate() );
-    pIDCO->Insert( aPam, aStr, true );
-
-    pIDCO->SplitNode( *aPam.GetPoint(), false );
-    aStr = pField->GetPar2();
-#if defined( WIN ) || defined( WNT ) || defined( PM2 )
-    // Bei Windows und Co alle CR rausschmeissen
-    aStr.EraseAllChars( '\r' );
-#endif
-    pIDCO->Insert( aPam, aStr, true );
-    pIDCO->SplitNode( *aPam.GetPoint(), false );
-    pIDCO->SplitNode( *aPam.GetPoint(), false );
-}
-
-
-void lcl_PrintPostIts( ViewShell* pPrtShell, const XubString& rJobName,
-                        BOOL& rStartJob, int& rJobStartError, BOOL bReverse)
-{
-#ifdef TL_NOT_NOW /* TLPDF ??? */
-    // Formatieren und Ausdrucken
-    pPrtShell->CalcLayout();
-
-    SfxPrinter* pPrn = pPrtShell->getIDocumentDeviceAccess()->getPrinter( false );
-
-    //Das Druckdokument ist ein default Dokument, mithin arbeitet es auf der
-    //StandardSeite.
-    SwFrm *pPage = pPrtShell->GetLayout()->Lower();
-
-    SwPrtOptSave aPrtSave( pPrn );
-
-    pPrn->SetOrientation( ORIENTATION_PORTRAIT );
-    pPrn->SetPaperBin( pPage->GetAttrSet()->GetPaperBin().GetValue() );
-
-    if( !rStartJob &&  JOBSET_ERR_DEFAULT == rJobStartError &&
-        rJobName.Len() )
-    {
-        if( !pPrn->IsJobActive() )
-        {
-            rStartJob = pPrn->StartJob( rJobName );
-            if( !rStartJob )
-            {
-                rJobStartError = JOBSET_ERR_ERROR;
-                return;
-            }
-        }
-        pPrtShell->InitPrt( pPrn );
-        rJobStartError = JOBSET_ERR_ISSTARTET;
-    }
-
-    // Wir koennen auch rueckwaerts:
-    if ( bReverse )
-        pPage = pPrtShell->GetLayout()->GetLastPage();
-
-    while( pPage )
-    {
-        //Mag der Anwender noch?, Abbruch erst in Prt()
-        GetpApp()->Reschedule();
-        ::SetSwVisArea( pPrtShell, pPage->Frm() );
-        pPrn->StartPage();
-        pPage->GetUpper()->Paint( pPage->Frm() );
-//      SFX_APP()->SpoilDemoOutput( *pPrtShell->GetOut(), pPage->Frm().SVRect());
-        SwPaintQueue::Repaint();
-        pPrn->EndPage();
-        pPage = bReverse ? pPage->GetPrev() : pPage->GetNext();
-    }
-#else
-(void)pPrtShell;
-(void)rJobName;
-(void)rStartJob;
-(void)rJobStartError;
-(void)bReverse;
-#endif
-}
-
-
-void lcl_PrintPostItsEndDoc( ViewShell* pPrtShell,
-            _SetGetExpFlds& rPostItFields, MultiSelection &rMulti,
-            const XubString& rJobName, BOOL& rStartJob, int& rJobStartError,
-            BOOL bRgt, BOOL bLft, BOOL bRev )
-{
-    USHORT nPostIts = rPostItFields.Count();
-    if( !nPostIts )
-        // Keine Arbeit
-        return;
-
-    SET_CURR_SHELL( pPrtShell );
-
-    SwDoc* pPrtDoc = pPrtShell->GetDoc();
-
-    // Dokument leeren und ans Dokumentende gehen
-    SwPaM aPam( pPrtDoc->GetNodes().GetEndOfContent() );
-    aPam.Move( fnMoveBackward, fnGoDoc );
-    aPam.SetMark();
-    aPam.Move( fnMoveForward, fnGoDoc );
-    pPrtDoc->Delete( aPam );
-
-    for( USHORT i = 0, nVirtPg, nLineNo; i < nPostIts; ++i )
-    {
-        _PostItFld& rPostIt = (_PostItFld&)*rPostItFields[ i ];
-        if( rPostIt.GetPageNo( rMulti, bRgt, bLft, nVirtPg, nLineNo ) )
-            lcl_FormatPostIt( pPrtShell->GetDoc(), aPam,
-                           rPostIt.GetPostIt(), nVirtPg, nLineNo );
-    }
-
-    lcl_PrintPostIts( pPrtShell, rJobName, rStartJob, rJobStartError, bRev );
-}
-
-
-void lcl_PrintPostItsEndPage( ViewShell* pPrtShell,
-            _SetGetExpFlds& rPostItFields, USHORT nPageNo, MultiSelection &rMulti,
-            const XubString& rJobName, BOOL& rStartJob, int& rJobStartError,
-            BOOL bRgt, BOOL bLft, BOOL bRev )
-{
-    USHORT nPostIts = rPostItFields.Count();
-    if( !nPostIts )
-        // Keine Arbeit
-        return;
-
-    SET_CURR_SHELL( pPrtShell );
-
-    USHORT i = 0, nVirtPg, nLineNo;
-    while( ( i < nPostIts ) &&
-           ( nPageNo != ((_PostItFld&)*rPostItFields[ i ]).
-                                GetPageNo( rMulti,bRgt, bLft, nVirtPg, nLineNo )))
-        ++i;
-    if(i == nPostIts)
-        // Nix zu drucken
-        return;
-
-    SwDoc* pPrtDoc = pPrtShell->GetDoc();
-
-    // Dokument leeren und ans Dokumentende gehen
-    SwPaM aPam( pPrtDoc->GetNodes().GetEndOfContent() );
-    aPam.Move( fnMoveBackward, fnGoDoc );
-    aPam.SetMark();
-    aPam.Move( fnMoveForward, fnGoDoc );
-    pPrtDoc->Delete( aPam );
-
-    while( i < nPostIts )
-    {
-        _PostItFld& rPostIt = (_PostItFld&)*rPostItFields[ i ];
-        if( nPageNo == rPostIt.GetPageNo( rMulti, bRgt, bLft, nVirtPg, nLineNo ) )
-            lcl_FormatPostIt( pPrtShell->GetDoc(), aPam,
-                                rPostIt.GetPostIt(), nVirtPg, nLineNo );
-        ++i;
-    }
-    lcl_PrintPostIts( pPrtShell, rJobName, rStartJob, rJobStartError, bRev );
 }
 
 /******************************************************************************
@@ -1375,16 +1162,26 @@ sal_Bool ViewShell::PrintOrPDFExport(
 #endif
     const sal_Int32 nPage = rPrintData.GetPrintUIOptions().GetPagesToPrint()[ nRenderer ]; /* TLPDF */
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( rPrintData.GetPrintUIOptions().GetValidPagesSet().count( nPage ) == 1, "nPage not valid" );
+    DBG_ASSERT( nPage == 0 || rPrintData.GetPrintUIOptions().GetValidPagesSet().count( nPage ) == 1, "nPage not valid" );
 #endif
-    const SwPrintUIOptions::ValidStartFramesMap_t &rFrms = rPrintData.GetPrintUIOptions().GetValidStartFrms();
-    SwPrintUIOptions::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( nPage ) );
-    DBG_ASSERT( aIt != rFrms.end(), "failed to find start frame" );
-    const SwPageFrm *pStPage = aIt->second;
+    const SwPageFrm *pStPage = 0;
+    if (nPage > 0)  // a 'regular' page, not one from the post-it document
+    {
+        const SwPrintUIOptions::ValidStartFramesMap_t &rFrms = rPrintData.GetPrintUIOptions().GetValidStartFrms();
+        SwPrintUIOptions::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( nPage ) );
+        DBG_ASSERT( aIt != rFrms.end(), "failed to find start frame" );
+        pStPage = aIt->second;
+    }
+    else    // a page from the post-its document ...
+    {
+        DBG_ASSERT( nPage == 0, "unexpected page number. 0 for post-it pages expected" );
+        pStPage = rPrintData.GetPrintUIOptions().GetPostItStartFrame()[ nRenderer ];
+    }
+    DBG_ASSERT( pStPage, "failed to get start page" );
 /* TLPDF neu: end */
 
 
-    // ben�tigte Seiten fuers Drucken formatieren
+    // benoetigte Seiten fuers Drucken formatieren
     pShell->CalcPagesForPrint( (USHORT)nPage, 0 /*TLPDF*/, pStr,
                                 0, 0 /* TLPDF, there is no progressbar right now nMergeAct, nMergeCnt */ );
 
@@ -1435,6 +1232,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
             _SetGetExpFlds aPostItFields;
             SwDoc*     pPostItDoc   = 0;
             ViewShell* pPostItShell = 0;
+#ifdef TL_NOT_NOW /*TLPDF*/
             if( rPrintData.nPrintPostIts != POSTITS_NONE )
             {
                 lcl_GetPostIts( pDoc, aPostItFields );
@@ -1454,6 +1252,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
                         rPrintData.bPrintRightPage, rPrintData.bPrintLeftPage, TRUE );
 
             }
+#endif  // TL_NOT_NOW /*TLPDF*/
 
             // aOldMapMode wird fuer das Drucken von Umschlaegen gebraucht.
             MapMode aOldMapMode;
@@ -1463,11 +1262,14 @@ sal_Bool ViewShell::PrintOrPDFExport(
             // BOOL bSetPaperSz  = FALSE;
             BOOL bSetPrt      = FALSE;
 
-            if ( rPrintData.nPrintPostIts != POSTITS_ONLY )
+//TLPDF            if ( rPrintData.nPrintPostIts != POSTITS_ONLY )
             {
 //TLPDF                while( pStPage && !bStop )
                 {
-                    ::SetSwVisArea( pShell, pStPage->Frm(), bIsPDFExport );
+                    if (nPage == 0) // post-it page
+                        ::SetSwVisArea( rPrintData.GetPrintUIOptions().m_pPostItShell , pStPage->Frm() );
+                    else
+                        ::SetSwVisArea( pShell, pStPage->Frm(), bIsPDFExport );
 
                     //  wenn wir einen Umschlag drucken wird ein Offset beachtet
                     if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
@@ -1528,6 +1330,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
                             }
                         }
 
+#ifdef TL_NOT_NOW /*TLPDF*/
                         // Wenn PostIts nach Seite gedruckt werden sollen,
                         // jedoch Reverse eingestellt ist ...
                         if( rPrintData.bPrintReverse &&
@@ -1536,16 +1339,20 @@ sal_Bool ViewShell::PrintOrPDFExport(
                                     nPage /* TLPDF nPageNo*/, aMulti, sJobName, bStartJob, nJobStartError,
                                     rPrintData.bPrintRightPage, rPrintData.bPrintLeftPage,
                                     rPrintData.bPrintReverse );
+#endif  // TL_NOT_NOW /*TLPDF*/
 
 
-                        if( !bStartJob && JOBSET_ERR_DEFAULT == nJobStartError
-                            && sJobName.Len() )
+// TLPDF                       if( !bStartJob && JOBSET_ERR_DEFAULT == nJobStartError
+// TLPDF                            && sJobName.Len() )
                         {
 
 // TLPDF                            pShell->InitPrt( pOutDev, bIsPDFExport ? pOutDev : 0 );
                            pShell->InitPrt( pOutDev );
 
-                            ::SetSwVisArea( pShell, pStPage->Frm(), bIsPDFExport );     // TLPDF
+                            if (nPage == 0) // post-it page
+                                ::SetSwVisArea( rPrintData.GetPrintUIOptions().m_pPostItShell , pStPage->Frm() );
+                            else
+                                ::SetSwVisArea( pShell, pStPage->Frm(), bIsPDFExport );     // TLPDF
                             nJobStartError = JOBSET_ERR_ISSTARTET;
                         }
                         // --> FME 2005-12-12 #b6354161# Feature - Print empty pages
@@ -1556,6 +1363,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
                         }
                         SwPaintQueue::Repaint();
 
+#ifdef TL_NOT_NOW /*TLPDF*/
                         // Wenn PostIts nach Seite gedruckt werden sollen ...
                         if( (!rPrintData.bPrintReverse) &&
                             rPrintData.nPrintPostIts == POSTITS_ENDPAGE )
@@ -1563,6 +1371,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
                                     nPage /* TLPDF nPageNo */, aMulti, sJobName, bStartJob, nJobStartError,
                                     rPrintData.bPrintRightPage, rPrintData.bPrintLeftPage,
                                     rPrintData.bPrintReverse );
+#endif  // TL_NOT_NOW /*TLPDF*/
                     }
 
                     // den eventl. fuer Umschlaege modifizierte OutDevOffset wieder
@@ -1573,6 +1382,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
                 }  // TLPDF loop end: while( pStPage && !bStop )
             }
 
+#ifdef TL_NOT_NOW /*TLPDF*/
             if (!bStop) // TLPDF: see break above
             {
                 // Wenn PostIts am Dokumentenende gedruckt werden sollen, dann hier machen
@@ -1592,6 +1402,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
 //TLPDF                if( bStartJob )
 //TLPDF                    rPrintData.bJobStartet = TRUE;
             }   // TLPDF: if (!bStop) see break above
+#endif  // TL_NOT_NOW /*TLPDF*/
 
     }
     delete pStr;
