@@ -58,49 +58,6 @@ using ::std::vector;
 using ::std::hash_map;
 using ::std::auto_ptr;
 
-
-#include <stdio.h>
-#include <string>
-#include <sys/time.h>
-
-namespace {
-
-class StackPrinter
-{
-public:
-    explicit StackPrinter(const char* msg) :
-        msMsg(msg)
-    {
-        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
-        mfStartTime = getTime();
-    }
-
-    ~StackPrinter()
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
-    }
-
-    void printTime(int line) const
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
-    }
-
-private:
-    double getTime() const
-    {
-        timeval tv;
-        gettimeofday(&tv, NULL);
-        return tv.tv_sec + tv.tv_usec / 1000000.0;
-    }
-
-    ::std::string msMsg;
-    double mfStartTime;
-};
-
-}
-
 ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX, const Fraction* pZoomY) :
     mpOutDev(pOutDev),
     mpStyle(pStyle),
@@ -557,14 +514,12 @@ void ScMenuFloatingWindow::executeMenu(size_t nPos)
 
 void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, bool bEnsureSubMenu)
 {
-    StackPrinter __stack_printer__("ScMenuFloatingWindow::setSelectedMenuItem");
     if (mnSelectedMenu == nPos)
         // nothing to do.
         return;
 
     if (bEnsureSubMenu)
     {
-        fprintf(stdout, "ScMenuFloatingWindow::setSelectedMenuItem:   (ensuring...) selected menu = %d\n", mnSelectedMenu);
         // Dismiss any child popup menu windows.
         if (mnSelectedMenu < maMenuItems.size() &&
             maMenuItems[mnSelectedMenu].mpSubMenuWin &&
@@ -583,7 +538,6 @@ void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, 
     selectMenuItem(mnSelectedMenu, false, bSubMenuTimer);
     selectMenuItem(nPos, true, bSubMenuTimer);
     mnSelectedMenu = nPos;
-    fprintf(stdout, "ScMenuFloatingWindow::setSelectedMenuItem:   selected menu = %d\n", mnSelectedMenu);
 }
 
 size_t ScMenuFloatingWindow::getSelectedMenuPos() const
@@ -762,7 +716,6 @@ void ScMenuFloatingWindow::clearSelectedMenuItem()
 {
     selectMenuItem(mnSelectedMenu, false, false);
     mnSelectedMenu = MENU_NOT_SELECTED;
-    fprintf(stdout, "ScMenuFloatingWindow::clearSelectedMenuItem:   here\n");
 }
 
 ScMenuFloatingWindow* ScMenuFloatingWindow::getSubMenuWindow(size_t nPos) const
@@ -919,7 +872,6 @@ void ScMenuFloatingWindow::setSubMenuFocused(ScMenuFloatingWindow* pSubMenu)
 
 void ScMenuFloatingWindow::ensureSubMenuVisible(ScMenuFloatingWindow* pSubMenu)
 {
-    StackPrinter __stack_printer__("ScMenuFloatingWindow::ensureSubMenuVisible");
     if (mpParentMenu)
         mpParentMenu->ensureSubMenuVisible(this);
 

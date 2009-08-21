@@ -150,13 +150,11 @@ ScAccessibleFilterMenu::ScAccessibleFilterMenu(const Reference<XAccessible>& rxP
     mbEnabled(true),
     mbSelected(false)
 {
-    fprintf(stdout, "ScAccessibleFilterMenu::ScAccessibleFilterMenu:   ctor (%p)\n", this);
     SetName(rName);
 }
 
 ScAccessibleFilterMenu::~ScAccessibleFilterMenu()
 {
-    fprintf(stdout, "ScAccessibleFilterMenu::~ScAccessibleFilterMenu:   dtor (%p)\n", this);
 }
 
 // XAccessibleComponent
