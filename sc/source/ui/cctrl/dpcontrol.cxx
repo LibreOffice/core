@@ -301,7 +301,6 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, US
     SetFont(maLabelFont);
 
     SetText(OUString::createFromAscii("ScMenuFloatingWindow"));
-    SetPopupModeEndHdl( LINK(this, ScMenuFloatingWindow, EndPopupHdl) );
 }
 
 ScMenuFloatingWindow::~ScMenuFloatingWindow()
