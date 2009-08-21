@@ -528,9 +528,9 @@ bool SwPrintUIOptions::processPropertiesAndCheckFormat( const com::sun::star::un
 
 void SwPrintUIOptions::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev )
 {
-    m_pPostItFields     = new _SetGetExpFlds;
+    m_pPostItFields = new _SetGetExpFlds;
     lcl_GetPostIts( pDoc, *m_pPostItFields );
-    m_pPostItDoc        = new SwDoc;
+    m_pPostItDoc    = new SwDoc;
 
     //!! Disable spell and grammar checking in the temporary document.
     //!! Otherwise the grammar checker might process it and crash if we later on
@@ -538,7 +538,7 @@ void SwPrintUIOptions::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewO
     SwViewOption  aViewOpt( *pViewOpt );
     aViewOpt.SetOnlineSpell( FALSE );
 
-    m_pPostItShell      = new ViewShell( *m_pPostItDoc, 0, &aViewOpt, pOutDev );
+    m_pPostItShell  = new ViewShell( *m_pPostItDoc, 0, &aViewOpt, pOutDev );
 }
 
 
@@ -549,9 +549,9 @@ void SwPrintUIOptions::DeletePostItData()
         m_pPostItDoc->setPrinter( 0, false, false );  //damit am echten DOC der Drucker bleibt
         delete m_pPostItShell;        //Nimmt das PostItDoc mit ins Grab.
         delete m_pPostItFields;
-        m_pPostItDoc     = 0;
-        m_pPostItShell   = 0;
-        m_pPostItFields  = 0;
+        m_pPostItDoc    = 0;
+        m_pPostItShell  = 0;
+        m_pPostItFields = 0;
     }
 }
 

@@ -75,7 +75,7 @@ class SwPrintUIOptions : public vcl::PrinterOptionsHelper
 public:
 
     // PostIt relevant data
-    _SetGetExpFlds  *   m_pPostItFields;
+    _SetGetExpFlds *    m_pPostItFields;    // an array of "_SetGetExpFld *" sorted by page and line numbers
     SwDoc *             m_pPostItDoc;
     ViewShell *         m_pPostItShell;
 

@@ -114,6 +114,7 @@
 #include <txtfrm.hxx>
 
 #include <vector>
+#include <map>
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
@@ -1086,13 +1087,23 @@ static void lcl_FormatPostIt(
     IDocumentContentOperations* pIDCO,
     SwPaM& aPam,
     SwPostItField* pField,
+    bool bNewPage, bool bIsFirstPostIt,
     USHORT nPageNo, USHORT nLineNo )
 {
     static char __READONLY_DATA sTmp[] = " : ";
 
     DBG_ASSERT( ViewShell::GetShellRes(), "missing ShellRes" );
 
-    String aStr(    ViewShell::GetShellRes()->aPostItPage   );
+    if (bNewPage)
+        pIDCO->Insert( aPam, SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ), 0 );
+    else if (!bIsFirstPostIt)
+    {
+        // add an empty line between different notes
+        pIDCO->SplitNode( *aPam.GetPoint(), false );
+        pIDCO->SplitNode( *aPam.GetPoint(), false );
+    }
+
+    String aStr( ViewShell::GetShellRes()->aPostItPage );
     aStr.AppendAscii(sTmp);
 
     aStr += XubString::CreateFromInt32( nPageNo );
@@ -1118,8 +1129,6 @@ static void lcl_FormatPostIt(
     aStr.EraseAllChars( '\r' );
 #endif
     pIDCO->Insert( aPam, aStr, true );
-    pIDCO->SplitNode( *aPam.GetPoint(), false );
-    pIDCO->SplitNode( *aPam.GetPoint(), false );
 }
 
 
@@ -1313,26 +1322,56 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
 
         const StringRangeEnumerator aRangeEnum( rOptions.GetPageRange(), 1, nDocPageCount, 0 );
 
-        USHORT nVirtPg = 0, nLineNo = 0;
+        // For mode POSTITS_ENDPAGE:
+        // maps a physical page number to the page number in post-it document that holds
+        // the first post-it for that physical page . Needed to relate the correct start frames
+        // from the post-it doc to the physical page of the document
+        std::map< sal_Int32, sal_Int32 >  aPostItStartPageNum;
+
+        // add all post-its on valid pages within the the page range to the
+        // temporary post-it document.
+        // Since the array of post-it fileds is sorted by page and line number we will
+        // already get them in the correct order
+        USHORT nVirtPg = 0, nLineNo = 0, nLastPageNum = 0, nPhyPageNum = 0;
+        bool bIsFirstPostIt = true;
         for (USHORT i = 0; i < nPostItCount; ++i)
         {
             _PostItFld& rPostIt = (_PostItFld&)*(*rOptions.m_pPostItFields)[ i ];
-            const USHORT nPhyPageNum = rPostIt.GetPageNo(
+            nLastPageNum = nPhyPageNum;
+            nPhyPageNum = rPostIt.GetPageNo(
                     aRangeEnum, rOptions.GetValidPagesSet(),
                     true /*TLPDF bRgt*/, true /*TLPDF bLft*/, nVirtPg, nLineNo );
             if (nPhyPageNum)
+            {
+                // need to insert a page break?
+                // In POSTITS_ENDPAGE mode for each document page the following
+                // post-it page needs to start on a new page
+                const bool bNewPage = nPostItMode == POSTITS_ENDPAGE &&
+                        !bIsFirstPostIt && nPhyPageNum != nLastPageNum;
+
                 lcl_FormatPostIt( rOptions.m_pPostItShell->GetDoc(), aPam,
-                               rPostIt.GetPostIt(), nVirtPg, nLineNo );
+                        rPostIt.GetPostIt(), bNewPage, bIsFirstPostIt, nVirtPg, nLineNo );
+                bIsFirstPostIt = false;
+
+                if (nPostItMode == POSTITS_ENDPAGE)
+                {
+                    // get the correct number of current pages for the post-it document
+                    rOptions.m_pPostItShell->CalcLayout();
+                    const sal_Int32 nPages = rOptions.m_pPostItDoc->GetPageCount();
+                    aPostItStartPageNum[ nPhyPageNum ] = nPages;
+                }
+            }
         }
 
         // format post-it doc to get correct number of pages
         rOptions.m_pPostItShell->CalcLayout();
         const sal_Int32 nPostItDocPageCount = rOptions.m_pPostItDoc->GetPageCount();
 
-        // now add those post-it pages to the vector of pages to print
-        // or replace them if only post-its should be printed
         if (nPostItMode == POSTITS_ONLY || nPostItMode == POSTITS_ENDDOC)
         {
+            // now add those post-it pages to the vector of pages to print
+            // or replace them if only post-its should be printed
+
             rOptions.GetPostItStartFrame().clear();
             if (nPostItMode == POSTITS_ENDDOC)
             {
@@ -1351,7 +1390,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
             // of the vector of pages to print and keep the GetPostItStartFrame
             // data conform with it
             sal_Int32 nPageNum = 0;
-            const SwPageFrm *pPageFrm = (SwPageFrm*)rOptions.m_pPostItShell->GetLayout()->Lower();
+            const SwPageFrm * pPageFrm = (SwPageFrm*)rOptions.m_pPostItShell->GetLayout()->Lower();
             while( pPageFrm && nPageNum < nPostItDocPageCount )
             {
                 DBG_ASSERT( pPageFrm, "Empty page frame. How are we going to print this?" );
@@ -1361,6 +1400,32 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
                 pPageFrm = (SwPageFrm*)pPageFrm->GetNext();
             }
             DBG_ASSERT( nPageNum == nPostItDocPageCount, "unexpected number of pages" );
+        }
+        else if (nPostItMode == POSTITS_ENDPAGE)
+        {
+            // the next step is to find all the start frames from the post-it
+            // document that should be printed for a given physical page of the document
+            std::map< sal_Int32, std::vector< const SwPageFrm * > > aPhysPageToPostItFrames;
+
+            // collect all post-it doc start frames in a vector
+            std::vector< const SwPageFrm * > aAllPostItStartFrames;
+            const SwPageFrm * pPageFrm = (SwPageFrm*)rOptions.m_pPostItShell->GetLayout()->Lower();
+            while( pPageFrm && aAllPostItStartFrames.size() < nPostItDocPageCount )
+            {
+                DBG_ASSERT( pPageFrm, "Empty page frame. How are we going to print this?" );
+                pPageFrm = (SwPageFrm*)pPageFrm->GetNext();
+                aAllPostItStartFrames.push_back( pPageFrm );
+            }
+            DBG_ASSERT( aAllPostItStartFrames.size() == nPostItDocPageCount,
+                    "unexpected number of frames; does not match number of pages" );
+
+            std::map< sal_Int32, sal_Int32 >::const_iterator  aIt;
+            for (aIt = aPostItStartPageNum.begin();  aIt != aPostItStartPageNum.end();  ++aIt)
+            {
+                const sal_Int32 nStartPageNum = aIt->second;
+                std::vector<  const SwPageFrm * > aStartFrames;
+                aPhysPageToPostItFrames[ aIt->first ] = aStartFrames;
+            }
         }
     }
 }
