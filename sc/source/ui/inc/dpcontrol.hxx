@@ -113,16 +113,6 @@ public:
         virtual void execute() = 0;
     };
 
-    class MenuItem : public Window
-    {
-    public:
-        explicit MenuItem(Window* pParent);
-
-    private:
-        bool mbSelected:1;
-        bool mbEnabled:1;
-    };
-
     explicit ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, USHORT nMenuStackLevel = 0);
     virtual ~ScMenuFloatingWindow();
 
