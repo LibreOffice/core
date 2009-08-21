@@ -94,8 +94,6 @@ public:
 
     // Non-UNO Methods
 
-    void select();
-    void unselect();
     bool isSelected() const;
 
     void setEnabled(bool bEnabled);

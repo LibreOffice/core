@@ -424,7 +424,7 @@ Reference<XAccessible> ScMenuFloatingWindow::CreateAccessible()
         Reference<XAccessible> xAccParent = mpParentMenu ?
             mpParentMenu->GetAccessible() : GetAccessibleParentWindow()->GetAccessible();
 
-        mxAccessible.set(new ScAccessibleFilterMenu(xAccParent, this, maName, getDoc()));
+        mxAccessible.set(new ScAccessibleFilterMenu(xAccParent, this, maName, 999, getDoc()));
         ScAccessibleFilterMenu* p = static_cast<ScAccessibleFilterMenu*>(
             mxAccessible.get());
 
@@ -512,12 +512,12 @@ void ScMenuFloatingWindow::executeMenu(size_t nPos)
     EndPopupMode();
 }
 
-void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, bool bNotifyAccessible)
+void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer)
 {
     if (mnSelectedMenu != nPos)
     {
-        selectMenuItem(mnSelectedMenu, false, bSubMenuTimer, bNotifyAccessible);
-        selectMenuItem(nPos, true, bSubMenuTimer, bNotifyAccessible);
+        selectMenuItem(mnSelectedMenu, false, bSubMenuTimer);
+        selectMenuItem(nPos, true, bSubMenuTimer);
         mnSelectedMenu = nPos;
     }
 }
@@ -661,7 +661,7 @@ void ScMenuFloatingWindow::resetMenu(bool bSetMenuPos)
 {
     resizeToFitMenuItems();
     if (bSetMenuPos)
-        setSelectedMenuItem(0, false, true);
+        setSelectedMenuItem(0, false);
 }
 
 void ScMenuFloatingWindow::resizeToFitMenuItems()
@@ -683,7 +683,7 @@ void ScMenuFloatingWindow::resizeToFitMenuItems()
     SetOutputSizePixel(Size(aPos.X(), aPos.Y()));
 }
 
-void ScMenuFloatingWindow::selectMenuItem(size_t nPos, bool bSelected, bool bSubMenuTimer, bool bNotifyAccessible)
+void ScMenuFloatingWindow::selectMenuItem(size_t nPos, bool bSelected, bool bSubMenuTimer)
 {
     if (nPos >= maMenuItems.size() || nPos == MENU_NOT_SELECTED)
     {
@@ -715,24 +715,11 @@ void ScMenuFloatingWindow::selectMenuItem(size_t nPos, bool bSelected, bool bSub
                 queueCloseSubMenu();
         }
     }
-
-    if (bNotifyAccessible && mxAccessible.is())
-    {
-        ScAccessibleFilterMenu* p = static_cast<ScAccessibleFilterMenu*>(mxAccessible.get());
-        p->selectMenuItem(nPos, bSelected);
-    }
 }
 
-void ScMenuFloatingWindow::clearSelectedMenuItem(bool bNotifyAccessible)
+void ScMenuFloatingWindow::clearSelectedMenuItem()
 {
-    selectMenuItem(mnSelectedMenu, false, false, bNotifyAccessible);
-
-    if (bNotifyAccessible && mxAccessible.is())
-    {
-        ScAccessibleFilterMenu* p = static_cast<ScAccessibleFilterMenu*>(mxAccessible.get());
-        p->selectMenuItem(mnSelectedMenu, false);
-    }
-
+    selectMenuItem(mnSelectedMenu, false, false);
     mnSelectedMenu = MENU_NOT_SELECTED;
 }
 
@@ -763,6 +750,11 @@ bool ScMenuFloatingWindow::isMenuItemEnabled(size_t nPos) const
         return false;
 
     return maMenuItems[nPos].mbEnabled;
+}
+
+bool ScMenuFloatingWindow::isMenuItemSelected(size_t nPos) const
+{
+    return nPos == mnSelectedMenu;
 }
 
 void ScMenuFloatingWindow::setName(const OUString& rName)

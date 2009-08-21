@@ -73,7 +73,7 @@ public:
     ScAccessibleFilterMenu(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>& rxParent,
-            ScMenuFloatingWindow* pWin, const ::rtl::OUString& rName, ScDocument* pDoc);
+            ScMenuFloatingWindow* pWin, const ::rtl::OUString& rName, size_t nMenuPos, ScDocument* pDoc);
     virtual ~ScAccessibleFilterMenu();
 
     // XAccessibleComponent
@@ -166,9 +166,8 @@ public:
 
     // non-UNO methods
 
-    void selectMenuItem(size_t nIndex, bool bSelect);
     void appendMenuItem(const ::rtl::OUString& rName, bool bEnabled, size_t nMenuPos);
-
+    void setMenuPos(size_t nMenuPos);
     void setEnabled(bool bEnabled);
 
 private:
@@ -181,6 +180,7 @@ private:
     ::std::vector<MenuItem> maMenuItems;
     ::std::set<sal_Int16>   maStates;
 
+    size_t mnMenuPos;
     ScMenuFloatingWindow* mpWindow;
     ScDocument* mpDoc;
 

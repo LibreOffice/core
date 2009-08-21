@@ -125,13 +125,14 @@ public:
 
     void addMenuItem(const ::rtl::OUString& rText, bool bEnabled, Action* pAction);
     ScMenuFloatingWindow* addSubMenuItem(const ::rtl::OUString& rText, bool bEnabled);
-    void setSelectedMenuItem(size_t nPos, bool bSubMenuTimer = true, bool bNotifyAccessible = true);
-    void selectMenuItem(size_t nPos, bool bSelected, bool bSubMenuTimer, bool bNotifyAccessible);
-    void clearSelectedMenuItem(bool bNotifyAccessible);
+    void setSelectedMenuItem(size_t nPos, bool bSubMenuTimer = true);
+    void selectMenuItem(size_t nPos, bool bSelected, bool bSubMenuTimer);
+    void clearSelectedMenuItem();
     ScMenuFloatingWindow* getSubMenuWindow(size_t nPos) const;
     size_t getMenuItemCount() const;
     ::rtl::OUString getMenuItemName(size_t nPos) const;
     bool isMenuItemEnabled(size_t nPos) const;
+    bool isMenuItemSelected(size_t nPos) const;
 
     void setName(const ::rtl::OUString& rName);
     const ::rtl::OUString& getName() const;

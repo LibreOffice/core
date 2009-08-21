@@ -50,11 +50,13 @@ ScAccessibleFilterTopWindow::ScAccessibleFilterTopWindow(
     mpWindow(pWin),
     mpDoc(pDoc)
 {
+    fprintf(stdout, "ScAccessibleFilterTopWindow::ScAccessibleFilterTopWindow:   ctor (%p)\n", this);
     SetName(rName);
 }
 
 ScAccessibleFilterTopWindow::~ScAccessibleFilterTopWindow()
 {
+    fprintf(stdout, "ScAccessibleFilterTopWindow::~ScAccessibleFilterTopWindow:   dtor (%p)\n", this);
 }
 
 // XAccessibleContext
@@ -101,7 +103,7 @@ OUString ScAccessibleFilterTopWindow::getImplementationName() throw (RuntimeExce
 Reference<XAccessible> ScAccessibleFilterTopWindow::getAccessibleChildMenu()
 {
     if (!mxAccMenu.is())
-        mxAccMenu.set(new ScAccessibleFilterMenu(this, mpWindow, getAccessibleName(), mpDoc));
+        mxAccMenu.set(new ScAccessibleFilterMenu(this, mpWindow, getAccessibleName(), 999, mpDoc));
     return mxAccMenu;
 }
 

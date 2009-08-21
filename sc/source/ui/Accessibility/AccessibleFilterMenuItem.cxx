@@ -65,11 +65,13 @@ ScAccessibleFilterMenuItem::ScAccessibleFilterMenuItem(
     mbSelected(false),
     mbEnabled(true)
 {
+    fprintf(stdout, "ScAccessibleFilterMenuItem::ScAccessibleFilterMenuItem:   ctor (%p)\n", this);
     SetName(rName);
 }
 
 ScAccessibleFilterMenuItem::~ScAccessibleFilterMenuItem()
 {
+    fprintf(stdout, "ScAccessibleFilterMenuItem::~ScAccessibleFilterMenuItem:   dtor (%p)\n", this);
 }
 
 sal_Int32 ScAccessibleFilterMenuItem::getAccessibleChildCount()
@@ -78,7 +80,7 @@ sal_Int32 ScAccessibleFilterMenuItem::getAccessibleChildCount()
     return 0;
 }
 
-Reference<XAccessible> ScAccessibleFilterMenuItem::getAccessibleChild(sal_Int32 nIndex)
+Reference<XAccessible> ScAccessibleFilterMenuItem::getAccessibleChild(sal_Int32 /*nIndex*/)
     throw (RuntimeException, IndexOutOfBoundsException)
 {
     throw IndexOutOfBoundsException();
@@ -197,20 +199,20 @@ sal_Int32 ScAccessibleFilterMenuItem::getAccessibleActionCount() throw (RuntimeE
     return 1;
 }
 
-sal_Bool ScAccessibleFilterMenuItem::doAccessibleAction(sal_Int32 nIndex)
+sal_Bool ScAccessibleFilterMenuItem::doAccessibleAction(sal_Int32 /*nIndex*/)
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     return false;
 }
 
-OUString ScAccessibleFilterMenuItem::getAccessibleActionDescription(sal_Int32 nIndex)
+OUString ScAccessibleFilterMenuItem::getAccessibleActionDescription(sal_Int32 /*nIndex*/)
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     return OUString::createFromAscii("Add some action here...");
 }
 
 Reference<XAccessibleKeyBinding> ScAccessibleFilterMenuItem::getAccessibleActionKeyBinding(
-    sal_Int32 nIndex) throw (IndexOutOfBoundsException, RuntimeException)
+    sal_Int32 /*nIndex*/) throw (IndexOutOfBoundsException, RuntimeException)
 {
     return Reference<XAccessibleKeyBinding>();
 }
@@ -235,21 +237,9 @@ void SAL_CALL ScAccessibleFilterMenuItem::release() throw ()
     ScAccessibleContextBase::release();
 }
 
-void ScAccessibleFilterMenuItem::select()
-{
-    mbSelected = true;
-    CommitFocusGained();
-}
-
-void ScAccessibleFilterMenuItem::unselect()
-{
-    mbSelected = false;
-    CommitFocusLost();
-}
-
 bool ScAccessibleFilterMenuItem::isSelected() const
 {
-    return mbSelected;
+    return mpWindow->isMenuItemSelected(mnMenuPos);
 }
 
 void ScAccessibleFilterMenuItem::setEnabled(bool bEnabled)
