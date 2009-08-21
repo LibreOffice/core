@@ -137,13 +137,14 @@ public:
     void setName(const ::rtl::OUString& rName);
     const ::rtl::OUString& getName() const;
 
+    void executeMenuItem(size_t nPos);
+
 protected:
 
     void drawMenuItem(size_t nPos);
     void drawAllMenuItems();
     const Font& getLabelFont() const;
 
-    void executeMenu(size_t nPos);
     size_t getSelectedMenuPos() const;
     void queueLaunchSubMenu(size_t nPos, ScMenuFloatingWindow* pMenu);
     void queueCloseSubMenu();

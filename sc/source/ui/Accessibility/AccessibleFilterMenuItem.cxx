@@ -200,13 +200,14 @@ sal_Int32 ScAccessibleFilterMenuItem::getAccessibleActionCount() throw (RuntimeE
 sal_Bool ScAccessibleFilterMenuItem::doAccessibleAction(sal_Int32 /*nIndex*/)
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    return false;
+    mpWindow->executeMenuItem(mnMenuPos);
+    return true;
 }
 
 OUString ScAccessibleFilterMenuItem::getAccessibleActionDescription(sal_Int32 /*nIndex*/)
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    return OUString::createFromAscii("Add some action here...");
+    return OUString::createFromAscii("click");
 }
 
 Reference<XAccessibleKeyBinding> ScAccessibleFilterMenuItem::getAccessibleActionKeyBinding(

@@ -328,7 +328,7 @@ void ScMenuFloatingWindow::MouseButtonDown(const MouseEvent& rMEvt)
 
 void ScMenuFloatingWindow::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    executeMenu(mnClickedMenu);
+    executeMenuItem(mnClickedMenu);
     mnClickedMenu = MENU_NOT_SELECTED;
     Window::MouseButtonUp(rMEvt);
 }
@@ -375,7 +375,7 @@ void ScMenuFloatingWindow::KeyInput(const KeyEvent& rKEvt)
         break;
         case KEY_RETURN:
             if (nSelectedMenu != MENU_NOT_SELECTED)
-                executeMenu(nSelectedMenu);
+                executeMenuItem(nSelectedMenu);
         break;
         default:
             bHandled = false;
@@ -498,7 +498,7 @@ const Font& ScMenuFloatingWindow::getLabelFont() const
     return maLabelFont;
 }
 
-void ScMenuFloatingWindow::executeMenu(size_t nPos)
+void ScMenuFloatingWindow::executeMenuItem(size_t nPos)
 {
     if (nPos >= maMenuItems.size())
         return;
