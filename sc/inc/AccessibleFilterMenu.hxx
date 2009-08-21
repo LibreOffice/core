@@ -131,24 +131,41 @@ public:
 
     // XAccessibleStateSet
 
-    virtual ::sal_Bool SAL_CALL isEmpty() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL contains(sal_Int16 nState) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL containsAll(const ::com::sun::star::uno::Sequence< ::sal_Int16 >& aStateSet) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence<sal_Int16> SAL_CALL getStates() throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isEmpty() throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL contains(sal_Int16 nState)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL containsAll(
+        const ::com::sun::star::uno::Sequence<sal_Int16>& aStateSet)
+            throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Sequence<sal_Int16> SAL_CALL getStates()
+        throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleSelection
 
-    virtual void SAL_CALL selectAccessibleChild( ::sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL isAccessibleChildSelected( ::sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL clearAccessibleSelection(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL selectAllAccessibleChildren(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL selectAccessibleChild(sal_Int32 nChildIndex)
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL isAccessibleChildSelected(sal_Int32 nChildIndex)
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL clearAccessibleSelection()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL selectAllAccessibleChildren()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::sal_Int32 SAL_CALL getSelectedAccessibleChildCount()
+        throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
         getSelectedAccessibleChild(sal_Int32 nChildIndex)
             throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL deselectAccessibleChild( ::sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL deselectAccessibleChild(sal_Int32 nChildIndex)
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
     // XInterface
 
