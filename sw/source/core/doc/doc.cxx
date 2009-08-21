@@ -1414,7 +1414,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     // TLPDF, TODO: remove bPrintReverse, should be handled by PLs framework now
 //TLPDF    bool bPrintReverse      = rOptions.getBoolValue( C2U( "PrintReverseOrder" ), false );
     // TLPDF: this one seems not to be used in prospect printing: bool bPrintEmptyPages   = rOptions.getBoolValue( C2U( "PrintEmptyPages" ),   false );
-    bool bPrintProspect_RTL = rOptions.getIntValue( "PrintBrochureRTL",  0 ) ? true : false;
+    bool bPrintProspect_RTL = rOptions.getIntValue( "PrintProspectRTL",  0 ) ? true : false;
 
     // get pages for prospect printing according to the 'PageRange'
     // (duplicates and any order allowed!)
