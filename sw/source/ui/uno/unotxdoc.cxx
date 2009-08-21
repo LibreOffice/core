@@ -3002,7 +3002,27 @@ uno::Reference< text::XFlatParagraphIterator > SAL_CALL SwXTextDocument::getFlat
 {
     return new SwXFlatParagraphIterator( *pDocShell->GetDoc(), nTextMarkupType, bAutomatic );
 }
+/*-- 07.05.2009 09:21:12---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+uno::Reference< util::XCloneable > SwXTextDocument::createClone(  ) throw (uno::RuntimeException)
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!IsValid())
+        throw RuntimeException();
+    //create a new document - hidden - copy the storage and return it
+    SwDoc* pCopyDoc = pDocShell->GetDoc()->CreateCopy();
+    SfxObjectShell* pShell = new SwDocShell( pCopyDoc, SFX_CREATE_MODE_STANDARD );
+    pShell->DoInitNew();
+
+    uno::Reference< embed::XStorage > xSourceStorage = getDocumentStorage();
+    uno::Reference< frame::XModel > xNewModel = pShell->GetModel();
+    //copy this storage
+    uno::Reference< document::XStorageBasedDocument > xStorageDoc( xNewModel, uno::UNO_QUERY );
+    uno::Reference< embed::XStorage > xNewStorage = xStorageDoc->getDocumentStorage();
+    xSourceStorage->copyToStorage( xNewStorage );
+    return uno::Reference< util::XCloneable >( xNewModel, UNO_QUERY );
+}
 /* -----------------------------20.06.00 09:54--------------------------------
 
  ---------------------------------------------------------------------------*/
