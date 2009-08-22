@@ -110,7 +110,7 @@
 #include <docfld.hxx>           // _SetGetExpFld
 #include <docufld.hxx>          // SwPostItField
 #include <viewsh.hxx>
-#include <shellres.hxx >
+#include <shellres.hxx>
 #include <txtfrm.hxx>
 
 #include <vector>
@@ -1304,7 +1304,7 @@ void SwDoc::CalculatePagesForPrinting(
 
 void SwDoc::UpdatePagesForPrintingWithPostItData(
     /* out */ SwPrintUIOptions &rOptions,
-    bool bIsPDFExport,
+    bool /*bIsPDFExport*/,
     sal_Int32 nDocPageCount )
 {
 
@@ -1413,7 +1413,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
             // ... thus, first collect all post-it doc start frames in a vector
             std::vector< const SwPageFrm * > aAllPostItStartFrames;
             const SwPageFrm * pPageFrm = (SwPageFrm*)rOptions.m_pPostItShell->GetLayout()->Lower();
-            while( pPageFrm && aAllPostItStartFrames.size() < nPostItDocPageCount )
+            while( pPageFrm && aAllPostItStartFrames.size() < size_t(nPostItDocPageCount) )
             {
                 DBG_ASSERT( pPageFrm, "Empty page frame. How are we going to print this?" );
                 aAllPostItStartFrames.push_back( pPageFrm );
