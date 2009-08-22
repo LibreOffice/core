@@ -48,8 +48,6 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-#define MENU_NOT_SELECTED 999
-
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::accessibility::XAccessible;
 using ::rtl::OUString;
@@ -279,6 +277,8 @@ IMPL_LINK( ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl, void*, EMPTYARG )
 }
 
 // ----------------------------------------------------------------------------
+
+size_t ScMenuFloatingWindow::MENU_NOT_SELECTED = 999;
 
 ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, USHORT nMenuStackLevel) :
     FloatingWindow(pParent, (WB_SYSTEMFLOATWIN|WB_SYSTEMWINDOW|WB_NOBORDER)),
@@ -537,7 +537,7 @@ void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, 
     mnSelectedMenu = nPos;
 }
 
-size_t ScMenuFloatingWindow::getSelectedMenuPos() const
+size_t ScMenuFloatingWindow::getSelectedMenuItem() const
 {
     return mnSelectedMenu;
 }
@@ -1177,7 +1177,7 @@ void ScDPFieldPopupWindow::MouseMove(const MouseEvent& rMEvt)
 {
     ScMenuFloatingWindow::MouseMove(rMEvt);
 
-    size_t nSelectedMenu = getSelectedMenuPos();
+    size_t nSelectedMenu = getSelectedMenuItem();
     if (nSelectedMenu == MENU_NOT_SELECTED)
         queueCloseSubMenu();
 }
@@ -1240,6 +1240,8 @@ void ScDPFieldPopupWindow::setMemberSize(size_t n)
 
 void ScDPFieldPopupWindow::addMember(const OUString& rName, bool bVisible)
 {
+    fprintf(stdout, "ScDPFieldPopupWindow::addMember:   name = '%s'  visible = %d\n",
+            rtl::OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr(), bVisible);
     Member aMember;
     aMember.maName = rName;
     aMember.mbVisible = bVisible;

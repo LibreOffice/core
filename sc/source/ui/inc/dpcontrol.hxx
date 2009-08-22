@@ -103,6 +103,7 @@ private:
 class ScMenuFloatingWindow : public FloatingWindow
 {
 public:
+    static size_t MENU_NOT_SELECTED;
     /**
      * Action to perform when an event takes place.  Create a sub-class of
      * this to implement the desired action.
@@ -133,6 +134,7 @@ public:
     ::rtl::OUString getMenuItemName(size_t nPos) const;
     bool isMenuItemEnabled(size_t nPos) const;
     bool isMenuItemSelected(size_t nPos) const;
+    size_t getSelectedMenuItem() const;
 
     void setName(const ::rtl::OUString& rName);
     const ::rtl::OUString& getName() const;
@@ -145,7 +147,6 @@ protected:
     void drawAllMenuItems();
     const Font& getLabelFont() const;
 
-    size_t getSelectedMenuPos() const;
     void queueLaunchSubMenu(size_t nPos, ScMenuFloatingWindow* pMenu);
     void queueCloseSubMenu();
     void launchSubMenu(bool bSetMenuPos);

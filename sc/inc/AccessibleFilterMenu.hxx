@@ -61,16 +61,7 @@ class ScAccessibleFilterMenu :
     public ScAccessibleFilterMenu_BASE
 {
 public:
-    struct MenuItem
-    {
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible > mxAccessible;
-        bool mbSelected;
-
-        MenuItem();
-    };
-
-    ScAccessibleFilterMenu(
+    explicit ScAccessibleFilterMenu(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>& rxParent,
             ScMenuFloatingWindow* pWin, const ::rtl::OUString& rName, size_t nMenuPos, ScDocument* pDoc);
@@ -194,7 +185,7 @@ private:
     void updateStates();
 
 private:
-    ::std::vector<MenuItem> maMenuItems;
+    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > > maMenuItems;
     ::std::set<sal_Int16>   maStates;
 
     size_t mnMenuPos;
@@ -202,7 +193,6 @@ private:
     ScDocument* mpDoc;
 
     bool mbEnabled:1;
-    bool mbSelected:1;
 };
 
 #endif
