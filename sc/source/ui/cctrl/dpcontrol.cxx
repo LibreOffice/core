@@ -1240,8 +1240,6 @@ void ScDPFieldPopupWindow::setMemberSize(size_t n)
 
 void ScDPFieldPopupWindow::addMember(const OUString& rName, bool bVisible)
 {
-    fprintf(stdout, "ScDPFieldPopupWindow::addMember:   name = '%s'  visible = %d\n",
-            rtl::OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr(), bVisible);
     Member aMember;
     aMember.maName = rName;
     aMember.mbVisible = bVisible;
