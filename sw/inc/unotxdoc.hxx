@@ -168,7 +168,7 @@ typedef cppu::WeakImplHelper32
     css::view::XRenderable,
     css::xforms::XFormsSupplier,
     css::text::XFlatParagraphIteratorProvider,
-    css::document::XDocumentLanguages
+    css::document::XDocumentLanguages,
     css::util::XCloneable
 >
 SwXTextDocumentBaseClass;
