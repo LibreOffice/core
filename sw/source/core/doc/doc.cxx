@@ -1419,7 +1419,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
                 aAllPostItStartFrames.push_back( pPageFrm );
                 pPageFrm = (SwPageFrm*)pPageFrm->GetNext();
             }
-            DBG_ASSERT( aAllPostItStartFrames.size() == nPostItDocPageCount,
+            DBG_ASSERT( aAllPostItStartFrames.size() == size_t(nPostItDocPageCount),
                     "unexpected number of frames; does not match number of pages" );
 
             // get a map that holds all post-it frames to be printed for a
@@ -1435,7 +1435,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
                 for (sal_Int32 i = 0; i < nFrames; ++i)
                 {
                     const sal_Int32 nIdx = nStartPageNum - 1 + i;   // -1 because lowest page num is 1
-                    DBG_ASSERT( 0 <= nIdx && nIdx < aAllPostItStartFrames.size(),
+                    DBG_ASSERT( 0 <= nIdx && size_t(nIdx) < aAllPostItStartFrames.size(),
                             "index out of range" );
                     aStartFrames.push_back( aAllPostItStartFrames[ nIdx ] );
                 }
