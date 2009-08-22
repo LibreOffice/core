@@ -40,7 +40,6 @@
 #include <com/sun/star/accessibility/TextSegment.hpp>
 
 #include <vector>
-#include <set>
 
 namespace com { namespace sun { namespace star {
     namespace accessibility {

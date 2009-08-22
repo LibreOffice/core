@@ -47,8 +47,6 @@
 #include "vcl/unohelp.hxx"
 #include "dpcontrol.hxx"
 
-#include <vector>
-
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -69,7 +67,6 @@ using ::com::sun::star::uno::RuntimeException;
 using ::rtl::OUString;
 using ::std::for_each;
 using ::std::vector;
-using ::std::set;
 
 // ============================================================================
 

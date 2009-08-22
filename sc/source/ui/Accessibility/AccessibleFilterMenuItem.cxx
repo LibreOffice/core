@@ -43,8 +43,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 
-#include <vector>
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::accessibility::AccessibleStateType;
@@ -56,7 +54,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::com::sun::star::uno::RuntimeException;
 using ::rtl::OUString;
-using ::std::vector;
 
 ScAccessibleFilterMenuItem::ScAccessibleFilterMenuItem(
     const Reference<XAccessible>& rxParent, ScMenuFloatingWindow* pWin, const OUString& rName, size_t nMenuPos) :
@@ -96,7 +93,7 @@ Reference<XAccessibleStateSet> ScAccessibleFilterMenuItem::getAccessibleStateSet
 OUString ScAccessibleFilterMenuItem::getImplementationName()
     throw (RuntimeException)
 {
-    return OUString::createFromAscii("ScAccessibleFilterMenuItem - implementation name");
+    return OUString::createFromAscii("ScAccessibleFilterMenuItem");
 }
 
 // XAccessibleAction
