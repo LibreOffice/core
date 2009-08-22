@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 
 #include "precompiled_sc.hxx"
+#include "AccessibleGlobal.hxx"
 #include "AccessibleFilterMenuItem.hxx"
 #include "dpcontrol.hxx"
 
@@ -46,6 +47,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility::AccessibleStateType;
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
@@ -87,106 +89,14 @@ Reference<XAccessible> ScAccessibleFilterMenuItem::getAccessibleChild(sal_Int32 
 Reference<XAccessibleStateSet> ScAccessibleFilterMenuItem::getAccessibleStateSet()
     throw (RuntimeException)
 {
-    return this;
+    updateStateSet();
+    return mxStateSet;
 }
 
 OUString ScAccessibleFilterMenuItem::getImplementationName()
     throw (RuntimeException)
 {
     return OUString::createFromAscii("ScAccessibleFilterMenuItem - implementation name");
-}
-
-// XAccessibleStateSet
-
-sal_Bool ScAccessibleFilterMenuItem::isEmpty() throw (RuntimeException)
-{
-    return false;
-}
-
-sal_Bool ScAccessibleFilterMenuItem::contains(sal_Int16 nState) throw (RuntimeException)
-{
-    using namespace ::com::sun::star::accessibility::AccessibleStateType;
-    if (mbEnabled)
-    {
-        switch (nState)
-        {
-            case ENABLED:
-            case FOCUSABLE:
-            case SELECTABLE:
-            case SENSITIVE:
-                return true;
-        }
-    }
-
-    if (isSelected())
-    {
-        switch (nState)
-        {
-            case FOCUSED:
-            case SELECTED:
-                return true;
-        }
-    }
-    return false;
-}
-
-sal_Bool ScAccessibleFilterMenuItem::containsAll(const Sequence<sal_Int16>& aStateSet)
-    throw (RuntimeException)
-{
-    using namespace ::com::sun::star::accessibility::AccessibleStateType;
-    sal_Int32 n = aStateSet.getLength();
-    for (sal_Int32 i = 0; i < n; ++i)
-    {
-        sal_Int16 nState = aStateSet[i];
-        if (mbEnabled)
-        {
-            switch (nState)
-            {
-                case ENABLED:
-                case FOCUSABLE:
-                case SELECTABLE:
-                case SENSITIVE:
-                    continue;
-            }
-        }
-        if (isSelected())
-        {
-            switch (nState)
-            {
-                case FOCUSED:
-                case SELECTED:
-                    continue;
-            }
-        }
-        return false;
-    }
-    return true;
-}
-
-Sequence<sal_Int16> ScAccessibleFilterMenuItem::getStates() throw (RuntimeException)
-{
-    using namespace ::com::sun::star::accessibility::AccessibleStateType;
-    vector<sal_Int16> aStates;
-    if (mbEnabled)
-    {
-        aStates.push_back(ENABLED);
-        aStates.push_back(FOCUSABLE);
-        aStates.push_back(SELECTABLE);
-        aStates.push_back(SENSITIVE);
-    }
-
-    if (isSelected())
-    {
-        aStates.push_back(FOCUSED);
-        aStates.push_back(SELECTED);
-    }
-
-    size_t n = aStates.size();
-    Sequence<sal_Int16> aSeq(aStates.size());
-    for (size_t i = 0; i < n; ++i)
-        aSeq[i] = aStates[i];
-
-    return aSeq;
 }
 
 // XAccessibleAction
@@ -240,8 +150,36 @@ bool ScAccessibleFilterMenuItem::isSelected() const
     return mpWindow->isMenuItemSelected(mnMenuPos);
 }
 
+bool ScAccessibleFilterMenuItem::isFocused() const
+{
+    return isSelected();
+}
+
 void ScAccessibleFilterMenuItem::setEnabled(bool bEnabled)
 {
     mbEnabled = bEnabled;
+}
+
+void ScAccessibleFilterMenuItem::updateStateSet()
+{
+    if (!mxStateSet.is())
+        mxStateSet.set(new ScAccessibleStateSet);
+
+    ScAccessibleStateSet* p = static_cast<ScAccessibleStateSet*>(
+        mxStateSet.get());
+
+    p->clear();
+
+    p->insert(ENABLED);
+    p->insert(FOCUSABLE);
+    p->insert(SELECTABLE);
+    p->insert(SENSITIVE);
+    p->insert(OPAQUE);
+
+    if (isFocused())
+        p->insert(FOCUSED);
+
+    if (isSelected())
+        p->insert(SELECTED);
 }
 

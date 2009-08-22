@@ -36,6 +36,9 @@
 
 #include <set>
 
+/**
+ * Generic XAccessibleStateSet implementation.
+ */
 class ScAccessibleStateSet : public ::cppu::WeakImplHelper1< ::com::sun::star::accessibility::XAccessibleStateSet >
 {
 public:

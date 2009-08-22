@@ -32,10 +32,9 @@
 #define SC_ACCESSIBLEFILTERMENU_HXX
 
 #include "AccessibleContextBase.hxx"
-#include "cppuhelper/implbase2.hxx"
+#include "cppuhelper/implbase1.hxx"
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
@@ -52,8 +51,7 @@ namespace com { namespace sun { namespace star {
 class ScDocument;
 class ScMenuFloatingWindow;
 
-typedef ::cppu::ImplHelper2<
-        ::com::sun::star::accessibility::XAccessibleStateSet,
+typedef ::cppu::ImplHelper1<
         ::com::sun::star::accessibility::XAccessibleSelection > ScAccessibleFilterMenu_BASE;
 
 class ScAccessibleFilterMenu :
@@ -120,20 +118,6 @@ public:
                 ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
         throw (com::sun::star::uno::RuntimeException);
 
-    // XAccessibleStateSet
-
-    virtual sal_Bool SAL_CALL isEmpty() throw (::com::sun::star::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL contains(sal_Int16 nState)
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL containsAll(
-        const ::com::sun::star::uno::Sequence<sal_Int16>& aStateSet)
-            throw (::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::uno::Sequence<sal_Int16> SAL_CALL getStates()
-        throw (::com::sun::star::uno::RuntimeException);
-
     // XAccessibleSelection
 
     virtual void SAL_CALL selectAccessibleChild(sal_Int32 nChildIndex)
@@ -177,16 +161,16 @@ public:
     void appendMenuItem(const ::rtl::OUString& rName, bool bEnabled, size_t nMenuPos);
     void setMenuPos(size_t nMenuPos);
     void setEnabled(bool bEnabled);
-    bool isSelected();
 
 private:
-    bool isFocused();
+    bool isSelected() const;
+    bool isFocused() const;
 
     void updateStates();
 
 private:
     ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > > maMenuItems;
-    ::std::set<sal_Int16>   maStates;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > mxStateSet;
 
     size_t mnMenuPos;
     ScMenuFloatingWindow* mpWindow;

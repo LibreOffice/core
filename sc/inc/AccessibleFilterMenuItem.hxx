@@ -32,16 +32,14 @@
 #define SC_ACCESSIBLEFILTERMENUITEM_HXX
 
 #include "AccessibleContextBase.hxx"
-#include "cppuhelper/implbase2.hxx"
+#include "cppuhelper/implbase1.hxx"
 
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
-#include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 
 class ScMenuFloatingWindow;
 
-typedef ::cppu::ImplHelper2<
-    ::com::sun::star::accessibility::XAccessibleAction,
-    ::com::sun::star::accessibility::XAccessibleStateSet > ScAccessibleFilterMenuItem_BASE;
+typedef ::cppu::ImplHelper1<
+    ::com::sun::star::accessibility::XAccessibleAction > ScAccessibleFilterMenuItem_BASE;
 
 class ScAccessibleFilterMenuItem :
     public ScAccessibleContextBase,
@@ -72,21 +70,6 @@ public:
     virtual ::rtl::OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException);
 
-    // XAccessibleStateSet
-
-    virtual ::sal_Bool SAL_CALL isEmpty()
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual ::sal_Bool SAL_CALL contains(sal_Int16 nState)
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual ::sal_Bool SAL_CALL containsAll(
-        const ::com::sun::star::uno::Sequence<sal_Int16>& aStateSet)
-            throw (::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::uno::Sequence<sal_Int16> SAL_CALL getStates()
-        throw (::com::sun::star::uno::RuntimeException);
-
     // XAccessibleAction
 
     virtual ::sal_Int32 SAL_CALL getAccessibleActionCount()
@@ -114,11 +97,17 @@ public:
 
     // Non-UNO Methods
 
-    bool isSelected() const;
 
     void setEnabled(bool bEnabled);
 
 private:
+    bool isSelected() const;
+    bool isFocused() const;
+    void updateStateSet();
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > mxStateSet;
+
     ScMenuFloatingWindow* mpWindow;
     ::rtl::OUString maName;
     size_t mnMenuPos;

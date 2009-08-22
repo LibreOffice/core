@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 
 #include "precompiled_sc.hxx"
+#include "AccessibleGlobal.hxx"
 #include "AccessibleFilterMenu.hxx"
 #include "AccessibleFilterMenuItem.hxx"
 #include "unoguard.hxx"
@@ -173,7 +174,7 @@ Reference<XAccessibleStateSet> ScAccessibleFilterMenu::getAccessibleStateSet()
     throw (RuntimeException)
 {
     updateStates();
-    return this;
+    return mxStateSet;
 }
 
 OUString ScAccessibleFilterMenu::getImplementationName()
@@ -200,45 +201,6 @@ void ScAccessibleFilterMenu::removeEventListener(
 {
     ScAccessibleContextBase::removeEventListener(xListener);
     for_each(maMenuItems.begin(), maMenuItems.end(), AddRemoveEventListener(xListener, false));
-}
-
-// XAccessibleStateSet
-
-sal_Bool ScAccessibleFilterMenu::isEmpty() throw (RuntimeException)
-{
-    return maStates.empty();
-}
-
-sal_Bool ScAccessibleFilterMenu::contains(sal_Int16 nState) throw (RuntimeException)
-{
-    return maStates.count(nState) > 0;
-}
-
-sal_Bool ScAccessibleFilterMenu::containsAll(const Sequence<sal_Int16>& aStateSet)
-    throw (RuntimeException)
-{
-    sal_Int32 n = aStateSet.getLength();
-    for (sal_Int32 i = 0; i < n; ++i)
-    {
-        if (!maStates.count(aStateSet[i]))
-            // This state is not set.
-            return false;
-    }
-    // All specified states are set.
-    return true;
-}
-
-Sequence<sal_Int16> ScAccessibleFilterMenu::getStates() throw (RuntimeException)
-{
-    updateStates();
-    Sequence<sal_Int16> aSeq(0);
-    set<sal_Int16>::const_iterator itr = maStates.begin(), itrEnd = maStates.end();
-    for (size_t i = 0; itr != itrEnd; ++itr, ++i)
-    {
-        aSeq.realloc(i+1);
-        aSeq[i] = *itr;
-    }
-    return aSeq;
 }
 
 // XAccessibleSelection
@@ -358,28 +320,36 @@ void ScAccessibleFilterMenu::setEnabled(bool bEnabled)
     mbEnabled = bEnabled;
 }
 
-bool ScAccessibleFilterMenu::isFocused()
-{
-    return isSelected();
-}
-
-bool ScAccessibleFilterMenu::isSelected()
+bool ScAccessibleFilterMenu::isSelected() const
 {
     // Check to see if any of the child menu items is selected.
     return mpWindow->isMenuItemSelected(mnMenuPos);
 }
 
+bool ScAccessibleFilterMenu::isFocused() const
+{
+    return isSelected();
+}
+
 void ScAccessibleFilterMenu::updateStates()
 {
-    maStates.clear();
-    maStates.insert(ENABLED);
-    maStates.insert(FOCUSABLE);
-    maStates.insert(SELECTABLE);
-    maStates.insert(SENSITIVE);
-    maStates.insert(OPAQUE);
+    if (!mxStateSet.is())
+        mxStateSet.set(new ScAccessibleStateSet);
+
+    ScAccessibleStateSet* p = static_cast<ScAccessibleStateSet*>(
+        mxStateSet.get());
+
+    p->clear();
+
+    p->insert(ENABLED);
+    p->insert(FOCUSABLE);
+    p->insert(SELECTABLE);
+    p->insert(SENSITIVE);
+    p->insert(OPAQUE);
 
     if (isFocused())
-        maStates.insert(FOCUSED);
+        p->insert(FOCUSED);
+
     if (isSelected())
-        maStates.insert(SELECTED);
+        p->insert(SELECTED);
 }
