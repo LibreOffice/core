@@ -47,6 +47,7 @@ SLOFILES =  										\
         $(SLO)$/AccessibleContextBase.obj			\
         $(SLO)$/AccessibleTableBase.obj				\
         $(SLO)$/AccessibleDocument.obj				\
+        $(SLO)$/AccessibleGlobal.obj				\
         $(SLO)$/AccessibleSpreadsheet.obj			\
         $(SLO)$/AccessibleCell.obj					\
         $(SLO)$/AccessibilityHints.obj				\
@@ -71,6 +72,7 @@ EXCEPTIONSFILES=									\
         $(SLO)$/AccessibleContextBase.obj			\
         $(SLO)$/AccessibleTableBase.obj				\
         $(SLO)$/AccessibleDocument.obj				\
+        $(SLO)$/AccessibleGlobal.obj				\
         $(SLO)$/AccessibleSpreadsheet.obj			\
         $(SLO)$/AccessibleCell.obj					\
         $(SLO)$/AccessibleDocumentBase.obj			\

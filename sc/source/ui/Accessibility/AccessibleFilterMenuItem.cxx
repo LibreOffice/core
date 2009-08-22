@@ -62,7 +62,6 @@ ScAccessibleFilterMenuItem::ScAccessibleFilterMenuItem(
     mpWindow(pWin),
     maName(rName),
     mnMenuPos(nMenuPos),
-    mbSelected(false),
     mbEnabled(true)
 {
     SetName(rName);
@@ -101,7 +100,7 @@ OUString ScAccessibleFilterMenuItem::getImplementationName()
 
 sal_Bool ScAccessibleFilterMenuItem::isEmpty() throw (RuntimeException)
 {
-    return (mbEnabled || mbSelected);
+    return false;
 }
 
 sal_Bool ScAccessibleFilterMenuItem::contains(sal_Int16 nState) throw (RuntimeException)
@@ -119,7 +118,7 @@ sal_Bool ScAccessibleFilterMenuItem::contains(sal_Int16 nState) throw (RuntimeEx
         }
     }
 
-    if (mbSelected)
+    if (isSelected())
     {
         switch (nState)
         {
@@ -150,7 +149,7 @@ sal_Bool ScAccessibleFilterMenuItem::containsAll(const Sequence<sal_Int16>& aSta
                     continue;
             }
         }
-        if (mbSelected)
+        if (isSelected())
         {
             switch (nState)
             {
@@ -176,7 +175,7 @@ Sequence<sal_Int16> ScAccessibleFilterMenuItem::getStates() throw (RuntimeExcept
         aStates.push_back(SENSITIVE);
     }
 
-    if (mbSelected)
+    if (isSelected())
     {
         aStates.push_back(FOCUSED);
         aStates.push_back(SELECTED);

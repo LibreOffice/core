@@ -122,8 +122,7 @@ private:
     ScMenuFloatingWindow* mpWindow;
     ::rtl::OUString maName;
     size_t mnMenuPos;
-    bool mbSelected:1;
-    bool mbEnabled:1;
+    bool mbEnabled;
 };
 
 #endif
