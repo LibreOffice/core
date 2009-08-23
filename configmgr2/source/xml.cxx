@@ -42,9 +42,6 @@
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "comphelper/sequenceasvector.hxx"
-#include "libxml/parser.h"
-#include "libxml/xmlreader.h"
-#include "libxml/xmlschemastypes.h"
 #include "libxml/xmlstring.h"
 #include "libxml/xmlwriter.h"
 #include "osl/diagnose.h"
@@ -70,8 +67,10 @@
 #include "nodemap.hxx"
 #include "propertynode.hxx"
 #include "setnode.hxx"
+#include "span.hxx"
 #include "type.hxx"
 #include "xml.hxx"
+#include "xmlreader.hxx"
 
 namespace configmgr {
 
@@ -105,40 +104,12 @@ xmlChar const * xmlString(char const * str) {
     return reinterpret_cast< xmlChar const * >(str);
 }
 
-rtl::OUString convertUtf8String(char const * text, sal_Int32 length) {
-    return rtl::OUString(text, length, RTL_TEXTENCODING_UTF8);
+rtl::OUString convertUtf8String(Span const & text) {
+    OSL_ASSERT(text.is());
+    return rtl::OUString(text.begin, text.length, RTL_TEXTENCODING_UTF8);
         // conversion cannot fail as XML parser guarantees that text is legal
         // UTF-8
-}
-
-rtl::OUString fromXmlString(xmlChar const * str) {
-    OSL_ASSERT(str != 0);
-    return convertUtf8String(
-        reinterpret_cast< char const * >(str),
-        rtl_str_getLength(reinterpret_cast< char const * >(str)));
-}
-
-struct XmlString: private boost::noncopyable {
-    xmlChar * str;
-
-    explicit XmlString(xmlChar * theStr = 0): str(theStr) {}
-
-    ~XmlString() { xmlFree(str); }
-
-    void clear();
-
-    XmlString & operator =(xmlChar * theStr);
-};
-
-void XmlString::clear() {
-    xmlFree(str);
-    str = 0;
-}
-
-XmlString & XmlString::operator =(xmlChar * theStr) {
-    OSL_ASSERT(str == 0);
-    str = theStr;
-    return *this;
+        //TODO
 }
 
 rtl::OUString fullTemplateName(
@@ -204,119 +175,132 @@ rtl::OString convertToFilepath(rtl::OUString const & url) {
 enum Operation {
     OPERATION_MODIFY, OPERATION_REPLACE, OPERATION_FUSE, OPERATION_REMOVE };
 
-Operation parseOperation(xmlChar const * text) {
-    if (text == 0 || xmlStrEqual(text, xmlString("modify"))) {
+Operation parseOperation(Span const & text) {
+    if (!text.is() || text.equals(RTL_CONSTASCII_STRINGPARAM("modify"))) {
         return OPERATION_MODIFY;
-    } else if (xmlStrEqual(text, xmlString("replace"))) {
+    } else if (text.equals(RTL_CONSTASCII_STRINGPARAM("replace"))) {
         return OPERATION_REPLACE;
-    } else if (xmlStrEqual(text, xmlString("fuse"))) {
+    } else if (text.equals(RTL_CONSTASCII_STRINGPARAM("fuse"))) {
         return OPERATION_FUSE;
-    } else if (xmlStrEqual(text, xmlString("remove"))) {
+    } else if (text.equals(RTL_CONSTASCII_STRINGPARAM("remove"))) {
         return OPERATION_REMOVE;
     } else {
         throw css::uno::RuntimeException(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid op ")) +
-             fromXmlString(text)),
+             convertUtf8String(text)),
             css::uno::Reference< css::uno::XInterface >());
     }
 }
 
-Type parseType(Reader const * reader, xmlChar const * text) {
-    if (text == 0) {
+Type parseType(XmlReader const * reader, Span const & text) {
+    if (!text.is()) {
         return TYPE_ERROR;
     }
-    xmlChar const * p = xmlStrchr(text, ':');
-    if (p != 0) {
-        XmlString uri(
-            xmlTextReaderLookupNamespace(
-                reader->getReader(),
-                xmlString(
-                    rtl::OString(
-                        reinterpret_cast< char const * >(text), p - text).
-                    getStr())));
-        if (uri.str != 0) {
-            if (xmlStrEqual(
-                    uri.str, xmlString("http://www.w3.org/2001/XMLSchema")))
+    sal_Int32 i = rtl_str_indexOfChar_WithLength(text.begin, text.length, ':');
+    if (i >= 0) {
+        switch (reader->getNamespace(Span(text.begin, i))) {
+        case XmlReader::NAMESPACE_OOR:
+            if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
+                    RTL_CONSTASCII_STRINGPARAM("any")))
             {
-                if (xmlStrEqual(p + 1, xmlString("boolean"))) {
-                    return TYPE_BOOLEAN;
-                } else if (xmlStrEqual(p + 1, xmlString("short"))) {
-                    return TYPE_SHORT;
-                } else if (xmlStrEqual(p + 1, xmlString("int"))) {
-                    return TYPE_INT;
-                } else if (xmlStrEqual(p + 1, xmlString("long"))) {
-                    return TYPE_LONG;
-                } else if (xmlStrEqual(p + 1, xmlString("double"))) {
-                    return TYPE_DOUBLE;
-                } else if (xmlStrEqual(p + 1, xmlString("string"))) {
-                    return TYPE_STRING;
-                } else if (xmlStrEqual(p + 1, xmlString("hexBinary"))) {
-                    return TYPE_HEXBINARY;
-                }
-            } else if (xmlStrEqual(
-                           uri.str,
-                           xmlString("http://openoffice.org/2001/registry")))
+                return TYPE_ANY;
+            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
+                           RTL_CONSTASCII_STRINGPARAM("boolean-list")))
             {
-                if (xmlStrEqual(p + 1, xmlString("any"))) {
-                    return TYPE_ANY;
-                } else if (xmlStrEqual(p + 1, xmlString("boolean-list"))) {
-                    return TYPE_BOOLEAN_LIST;
-                } else if (xmlStrEqual(p + 1, xmlString("short-list"))) {
-                    return TYPE_SHORT_LIST;
-                } else if (xmlStrEqual(p + 1, xmlString("int-list"))) {
-                    return TYPE_INT_LIST;
-                } else if (xmlStrEqual(p + 1, xmlString("long-list"))) {
-                    return TYPE_LONG_LIST;
-                } else if (xmlStrEqual(p + 1, xmlString("double-list"))) {
-                    return TYPE_DOUBLE_LIST;
-                } else if (xmlStrEqual(p + 1, xmlString("string-list"))) {
-                    return TYPE_STRING_LIST;
-                } else if (xmlStrEqual(p + 1, xmlString("hexBinary-list"))) {
-                    return TYPE_HEXBINARY_LIST;
-                }
+                return TYPE_BOOLEAN_LIST;
+            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
+                           RTL_CONSTASCII_STRINGPARAM("short-list")))
+            {
+                return TYPE_SHORT_LIST;
+            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
+                           RTL_CONSTASCII_STRINGPARAM("int-list")))
+            {
+                return TYPE_INT_LIST;
+            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
+                           RTL_CONSTASCII_STRINGPARAM("long-list")))
+            {
+                return TYPE_LONG_LIST;
+            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
+                           RTL_CONSTASCII_STRINGPARAM("double-list")))
+            {
+                return TYPE_DOUBLE_LIST;
+            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
+                           RTL_CONSTASCII_STRINGPARAM("string-list")))
+            {
+                return TYPE_STRING_LIST;
+            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
+                           RTL_CONSTASCII_STRINGPARAM("hexBinary-list")))
+            {
+                return TYPE_HEXBINARY_LIST;
             }
+            break;
+        case XmlReader::NAMESPACE_XS:
+            if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
+                    RTL_CONSTASCII_STRINGPARAM("boolean")))
+            {
+                return TYPE_BOOLEAN;
+            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
+                           RTL_CONSTASCII_STRINGPARAM("short")))
+            {
+                return TYPE_SHORT;
+            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
+                           RTL_CONSTASCII_STRINGPARAM("int")))
+            {
+                return TYPE_INT;
+            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
+                           RTL_CONSTASCII_STRINGPARAM("long")))
+            {
+                return TYPE_LONG;
+            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
+                           RTL_CONSTASCII_STRINGPARAM("double")))
+            {
+                return TYPE_DOUBLE;
+            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
+                           RTL_CONSTASCII_STRINGPARAM("string")))
+            {
+                return TYPE_STRING;
+            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
+                           RTL_CONSTASCII_STRINGPARAM("hexBinary")))
+            {
+                return TYPE_HEXBINARY;
+            }
+            break;
+        default:
+            break;
         }
     }
     throw css::uno::RuntimeException(
         (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid type ")) +
-         fromXmlString(text)),
+         convertUtf8String(text)),
         css::uno::Reference< css::uno::XInterface >());
 }
 
-bool parseBoolean(xmlChar const * text, bool deflt) {
-    if (text == 0) {
+bool parseBoolean(Span const & text, bool deflt) {
+    if (!text.is()) {
         return deflt;
     }
-    if (xmlStrEqual(text, xmlString("true"))) {
+    if (text.equals(RTL_CONSTASCII_STRINGPARAM("true"))) {
         return true;
     }
-    if (xmlStrEqual(text, xmlString("false"))) {
+    if (text.equals(RTL_CONSTASCII_STRINGPARAM("false"))) {
         return false;
     }
     throw css::uno::RuntimeException(
         (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid boolean ")) +
-         fromXmlString(text)),
+         convertUtf8String(text)),
         css::uno::Reference< css::uno::XInterface >());
 }
 
-bool parseBooleanValue(char const * text, sal_Int32 length, sal_Bool * value) {
-    OSL_ASSERT(value != 0);
-    if ((rtl_str_compare_WithLength(
-             text, length, RTL_CONSTASCII_STRINGPARAM("true")) ==
-         0) ||
-        (rtl_str_compare_WithLength(
-            text, length, RTL_CONSTASCII_STRINGPARAM("1")) ==
-         0))
+bool parseBooleanValue(Span const & text, sal_Bool * value) {
+    OSL_ASSERT(text.is() && value != 0);
+    if (text.equals(RTL_CONSTASCII_STRINGPARAM("true")) ||
+        text.equals(RTL_CONSTASCII_STRINGPARAM("1")))
     {
         *value = true;
         return true;
     }
-    if ((rtl_str_compare_WithLength(
-             text, length, RTL_CONSTASCII_STRINGPARAM("false")) ==
-         0) ||
-        (rtl_str_compare_WithLength(
-            text, length, RTL_CONSTASCII_STRINGPARAM("0")) ==
-         0))
+    if (text.equals(RTL_CONSTASCII_STRINGPARAM("false")) ||
+        text.equals(RTL_CONSTASCII_STRINGPARAM("0")))
     {
         *value = false;
         return true;
@@ -324,9 +308,9 @@ bool parseBooleanValue(char const * text, sal_Int32 length, sal_Bool * value) {
     return false;
 }
 
-bool parseShortValue(char const * text, sal_Int32 length, sal_Int16 * value) {
-    OSL_ASSERT(value != 0);
-    sal_Int32 n = rtl::OString(text, length).toInt32();
+bool parseShortValue(Span const & text, sal_Int16 * value) {
+    OSL_ASSERT(text.is() && value != 0);
+    sal_Int32 n = rtl::OString(text.begin, text.length).toInt32();
         //TODO: check valid lexical representation
     if (n >= SAL_MIN_INT16 && n <= SAL_MAX_INT16) {
         *value = static_cast< sal_Int16 >(n);
@@ -335,32 +319,30 @@ bool parseShortValue(char const * text, sal_Int32 length, sal_Int16 * value) {
     return false;
 }
 
-bool parseIntValue(char const * text, sal_Int32 length, sal_Int32 * value) {
-    OSL_ASSERT(value != 0);
-    *value = rtl::OString(text, length).toInt32();
+bool parseIntValue(Span const & text, sal_Int32 * value) {
+    OSL_ASSERT(text.is() && value != 0);
+    *value = rtl::OString(text.begin, text.length).toInt32();
         //TODO: check valid lexical representation
     return true;
 }
 
-bool parseLongValue(char const * text, sal_Int32 length, sal_Int64 * value) {
-    OSL_ASSERT(value != 0);
-    *value = rtl::OString(text, length).toInt64();
+bool parseLongValue(Span const & text, sal_Int64 * value) {
+    OSL_ASSERT(text.is() && value != 0);
+    *value = rtl::OString(text.begin, text.length).toInt64();
         //TODO: check valid lexical representation
     return true;
 }
 
-bool parseDoubleValue(char const * text, sal_Int32 length, double * value) {
-    OSL_ASSERT(value != 0);
-    *value = rtl::OString(text, length).toDouble();
+bool parseDoubleValue(Span const & text, double * value) {
+    OSL_ASSERT(text.is() && value != 0);
+    *value = rtl::OString(text.begin, text.length).toDouble();
         //TODO: check valid lexical representation
     return true;
 }
 
-bool parseStringValue(
-    char const * text, sal_Int32 length, rtl::OUString * value)
-{
-    OSL_ASSERT(value != 0);
-    *value = convertUtf8String(text, length);
+bool parseStringValue(Span const & text, rtl::OUString * value) {
+    OSL_ASSERT(text.is() && value != 0);
+    *value = convertUtf8String(text);
     return true;
 }
 
@@ -382,17 +364,19 @@ bool parseHexDigit(char c, int * value) {
 }
 
 bool parseHexbinaryValue(
-    char const * text, sal_Int32 length, css::uno::Sequence< sal_Int8 > * value)
+    Span const & text, css::uno::Sequence< sal_Int8 > * value)
 {
-    OSL_ASSERT(length >= 0 && value != 0);
-    if ((length & 1) != 0) {
+    OSL_ASSERT(text.is() && value != 0);
+    if ((text.length & 1) != 0) {
         return false;
     }
     comphelper::SequenceAsVector< sal_Int8 > seq;
-    for (sal_Int32 i = 0; i != length;) {
+    for (sal_Int32 i = 0; i != text.length;) {
         int n1;
         int n2;
-        if (!(parseHexDigit(text[i++], &n1) && parseHexDigit(text[i++], &n2))) {
+        if (!parseHexDigit(text.begin[i++], &n1) ||
+            !parseHexDigit(text.begin[i++], &n2))
+        {
             return false;
         }
         seq.push_back(static_cast< sal_Int8 >((n1 << 4) | n2));
@@ -402,21 +386,11 @@ bool parseHexbinaryValue(
 }
 
 template< typename T > css::uno::Any parseNormalizedValue(
-    rtl::OStringBuffer const & text,
-    bool (* parse)(char const *, sal_Int32, T *))
+    Span const & text, bool (* parse)(Span const &, T *))
 {
-    XmlString col(xmlSchemaCollapseString(xmlString(text.getStr())));
-    char const * p;
-    sal_Int32 n;
-    if (col.str == 0) {
-        p = text.getStr();
-        n = text.getLength();
-    } else {
-        p = reinterpret_cast< char const * >(col.str);
-        n = rtl_str_getLength(p);
-    }
+    //TODO: normalize
     T val;
-    if (!(*parse)(p, n, &val)) {
+    if (!(*parse)(text, &val)) {
         throw css::uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid value")),
             css::uno::Reference< css::uno::XInterface >());
@@ -425,50 +399,39 @@ template< typename T > css::uno::Any parseNormalizedValue(
 }
 
 template< typename T > css::uno::Any parseListValue(
-    xmlChar const * separator, rtl::OStringBuffer const & text,
-    bool (* parse)(char const *, sal_Int32, T *))
+    Span const & separator, Span const & text,
+    bool (* parse)(Span const &, T *))
 {
     comphelper::SequenceAsVector< T > seq;
-    XmlString col;
-    char const * p = text.getStr();
-    sal_Int32 n = text.getLength();
-    char const * sep;
-    sal_Int32 sepLen;
-    if (separator == 0) {
-        col = xmlSchemaCollapseString(xmlString(p));
-        if (col.str != 0) {
-            p = reinterpret_cast< char const * >(col.str);
-            n = rtl_str_getLength(p);
-        }
-        sep = " ";
-        sepLen = RTL_CONSTASCII_LENGTH(" ");
+    Span sep;
+    if (separator.is()) {
+        sep = separator;
     } else {
-        sep = reinterpret_cast< char const * >(separator);
-        sepLen = rtl_str_getLength(sep);
+        //TODO: normalize
+        sep = Span(RTL_CONSTASCII_STRINGPARAM(" "));
     }
-    if (n != 0) {
-        for (;;) {
-            sal_Int32 i = rtl_str_indexOfStr_WithLength(p, n, sep, sepLen);
+    if (text.length != 0) {
+        for (Span t(text);;) {
+            sal_Int32 i = rtl_str_indexOfStr_WithLength(
+                t.begin, t.length, sep.begin, sep.length);
             T val;
-            if (!(*parse)(p, i == -1 ? n : i, &val)) {
+            if (!(*parse)(Span(t.begin, i == -1 ? t.length : i), &val)) {
                 throw css::uno::RuntimeException(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid value")),
                     css::uno::Reference< css::uno::XInterface >());
             }
             seq.push_back(val);
-            if (i == -1) {
+            if (i < 0) {
                 break;
             }
-            p += i + sepLen;
-            n -= i + sepLen;
+            t.begin += i + sep.length;
+            t.length -= i + sep.length;
         }
     }
     return css::uno::makeAny(seq.getAsConstList());
 }
 
-css::uno::Any parseValue(
-    xmlChar const * separator, rtl::OStringBuffer const & text, Type type)
-{
+css::uno::Any parseValue(Span const & separator, Span const & text, Type type) {
     switch (type) {
     case TYPE_ANY:
         throw css::uno::RuntimeException(
@@ -486,8 +449,7 @@ css::uno::Any parseValue(
     case TYPE_DOUBLE:
         return parseNormalizedValue(text, &parseDoubleValue);
     case TYPE_STRING:
-        return css::uno::makeAny(
-            convertUtf8String(text.getStr(), text.getLength()));
+        return css::uno::makeAny(convertUtf8String(text));
     case TYPE_HEXBINARY:
         return parseNormalizedValue(text, &parseHexbinaryValue);
     case TYPE_BOOLEAN_LIST:
@@ -514,14 +476,14 @@ css::uno::Any parseValue(
 
 template< typename T > css::uno::Any parseValueList(
     std::vector< rtl::OString > const & items,
-    bool (* parse)(char const *, sal_Int32, T *))
+    bool (* parse)(Span const &, T *))
 {
     comphelper::SequenceAsVector< T > seq;
     for (std::vector< rtl::OString >::const_iterator i(items.begin());
          i != items.end(); ++i)
     {
         T val;
-        if (!(*parse)(i->getStr(), i->getLength(), &val)) {
+        if (!(*parse)(Span(i->getStr(), i->getLength()), &val)) {
             throw css::uno::RuntimeException(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid value")),
                 css::uno::Reference< css::uno::XInterface >());
@@ -558,11 +520,11 @@ css::uno::Any parseValueList(
 }
 
 rtl::OUString parseTemplateReference(
-    xmlChar const * component, xmlChar const * nodeType,
+    Span const & component, Span const & nodeType,
     rtl::OUString const & componentName,
     rtl::OUString const * defaultTemplateName)
 {
-    if (nodeType == 0) {
+    if (!nodeType.is()) {
         if (defaultTemplateName != 0) {
             return *defaultTemplateName;
         }
@@ -572,8 +534,8 @@ rtl::OUString parseTemplateReference(
             css::uno::Reference< css::uno::XInterface >());
     }
     return fullTemplateName(
-        component == 0 ? componentName : fromXmlString(component),
-        fromXmlString(nodeType));
+        component.is() ? convertUtf8String(component) : componentName,
+        convertUtf8String(nodeType));
 }
 
 struct XmlTextWriter: private boost::noncopyable {
@@ -915,11 +877,12 @@ public:
     ~ValueParser() {}
 
     bool startElement(
-        Reader const * reader, xmlChar const * name, xmlChar const * nsUri);
+        XmlReader * reader, XmlReader::Namespace ns, Span const & name);
 
     bool endElement();
 
-    void characters(Reader const * reader);
+    void characters(
+        XmlReader const * reader, Span const & text);
 
     void start(
         rtl::Reference< Node > const & property,
@@ -928,7 +891,7 @@ public:
     int getLayer() const { return layer_; }
 
     Type type_;
-    XmlString separator_;
+    Span separator_;
 
 private:
     enum State { STATE_TEXT, STATE_TEXT_UNICODE, STATE_IT, STATE_IT_UNICODE };
@@ -942,15 +905,16 @@ private:
 };
 
 bool ValueParser::startElement(
-    Reader const * reader, xmlChar const * name, xmlChar const * nsUri)
+    XmlReader * reader, XmlReader::Namespace ns, Span const & name)
 {
     if (!node_.is()) {
         return false;
     }
     switch (state_) {
     case STATE_TEXT:
-        if (xmlStrEqual(name, xmlString("it")) && nsUri == 0 &&
-            isListType(type_) && separator_.str == 0)
+        if (ns == XmlReader::NAMESPACE_NONE &&
+            name.equals(RTL_CONSTASCII_STRINGPARAM("it")) &&
+            isListType(type_) && !separator_.is())
         {
             text_.setLength(0); //TODO: handle invalid non-whitespace text
             state_ = STATE_IT;
@@ -958,29 +922,27 @@ bool ValueParser::startElement(
         }
         // fall through
     case STATE_IT:
-        if (xmlStrEqual(name, xmlString("unicode")) && nsUri == 0 &&
+        if (ns == XmlReader::NAMESPACE_NONE &&
+            name.equals(RTL_CONSTASCII_STRINGPARAM("unicode")) &&
             type_ == (state_ == STATE_TEXT ? TYPE_STRING : TYPE_STRING_LIST))
         {
-            XmlString attrScalar(
-                xmlTextReaderGetAttributeNs(
-                    reader->getReader(), xmlString("scalar"),
-                    xmlString("http://openoffice.org/2001/registry")));
-            if (attrScalar.str == 0) {
-                throw css::uno::RuntimeException(
-                    (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "no unicode scalar attribute in ")) +
-                     reader->getUrl()),
-                    css::uno::Reference< css::uno::XInterface >());
-            }
-            sal_Int32 scalar;
-            if (!parseIntValue(
-                    reinterpret_cast< char const * >(attrScalar.str),
-                    rtl_str_getLength(
-                        reinterpret_cast< char const * >(attrScalar.str)),
-                    &scalar))
-            {
-                scalar = -1;
+            sal_Int32 scalar = -1;
+            for (;;) {
+                XmlReader::Namespace attrNs;
+                Span attrLn;
+                if (!reader->nextAttribute(&attrNs, &attrLn)) {
+                    break;
+                }
+                if (attrNs == XmlReader::NAMESPACE_OOR &&
+                    attrLn.equals(RTL_CONSTASCII_STRINGPARAM("scalar")))
+                {
+                    if (!parseIntValue(
+                            reader->getAttributeValue(true), &scalar))
+                    {
+                        scalar = -1;
+                    }
+                    break;
+                }
             }
             if (scalar >= 0 && scalar < 0x20 && scalar != 0x09 &&
                 scalar != 0x0A && scalar != 0x0D)
@@ -1007,7 +969,7 @@ bool ValueParser::startElement(
     }
     throw css::uno::RuntimeException(
         (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad member <")) +
-         fromXmlString(name) +
+         convertUtf8String(name) +
          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
          reader->getUrl()),
         css::uno::Reference< css::uno::XInterface >());
@@ -1022,7 +984,8 @@ bool ValueParser::endElement() {
         {
             css::uno::Any value;
             if (items_.empty()) {
-                value = parseValue(separator_.str, text_, type_);
+                value = parseValue(
+                    separator_, Span(text_.getStr(), text_.getLength()), type_);
             } else {
                 value = parseValueList(items_, type_);
             }
@@ -1046,7 +1009,7 @@ bool ValueParser::endElement() {
             } else {
                 OSL_ASSERT(false); // this cannot happen
             }
-            separator_.clear();
+            separator_.begin = 0;
             node_.clear();
             text_.setLength(0);
             items_.clear();
@@ -1064,14 +1027,12 @@ bool ValueParser::endElement() {
     return true;
 }
 
-void ValueParser::characters(Reader const * reader) {
+void ValueParser::characters(XmlReader const * reader, Span const & text) {
     if (node_.is()) {
         switch (state_) {
         case STATE_TEXT:
         case STATE_IT:
-            text_.append(
-                reinterpret_cast< char const * >(
-                    xmlTextReaderConstValue(reader->getReader())));
+            text_.append(text.begin, text.length);
             break;
         case STATE_TEXT_UNICODE:
         case STATE_IT_UNICODE:
@@ -1102,26 +1063,26 @@ private:
     virtual ~XcsParser() {}
 
     virtual bool startElement(
-        Reader const * reader, xmlChar const * name, xmlChar const * nsUri);
+        XmlReader * reader, XmlReader::Namespace ns, Span const & name);
 
-    virtual void endElement(Reader const * reader);
+    virtual void endElement(XmlReader const * reader);
 
-    virtual void characters(Reader const * reader);
+    virtual void characters(XmlReader const * reader, Span const & text);
 
-    void handleComponentSchema(Reader const * reader);
+    void handleComponentSchema(XmlReader * reader);
 
-    void handleNodeRef(Reader const * reader);
+    void handleNodeRef(XmlReader * reader);
 
-    void handleProp(Reader const * reader);
+    void handleProp(XmlReader * reader);
 
     void handlePropValue(
-        Reader const * reader, rtl::Reference< Node > const & property);
+        XmlReader * reader, rtl::Reference< Node > const & property);
 
-    void handleGroup(Reader const * reader, bool isTemplate);
+    void handleGroup(XmlReader * reader, bool isTemplate);
 
-    void handleSet(Reader const * reader, bool isTemplate);
+    void handleSet(XmlReader * reader, bool isTemplate);
 
-    void handleSetItem(Reader const * reader, SetNode * set);
+    void handleSetItem(XmlReader * reader, SetNode * set);
 
     enum State {
         STATE_START, STATE_COMPONENT_SCHEMA, STATE_TEMPLATES,
@@ -1148,16 +1109,14 @@ private:
 };
 
 bool XcsParser::startElement(
-    Reader const * reader, xmlChar const * name, xmlChar const * nsUri)
+    XmlReader * reader, XmlReader::Namespace ns, Span const & name)
 {
-    if (valueParser_.startElement(reader, name, nsUri)) {
+    if (valueParser_.startElement(reader, ns, name)) {
         return true;
     }
     if (state_ == STATE_START) {
-        if (xmlStrEqual(name, xmlString("component-schema")) && nsUri != 0 &&
-            xmlStrEqual(
-                nsUri, xmlString("http://openoffice.org/2001/registry")))
-        {
+        if (ns == XmlReader::NAMESPACE_OOR &&
+            name.equals(RTL_CONSTASCII_STRINGPARAM("component-schema"))) {
             handleComponentSchema(reader);
             state_ = STATE_COMPONENT_SCHEMA;
             ignoring_ = 0;
@@ -1168,11 +1127,11 @@ bool XcsParser::startElement(
         // prop constraints; accepting all four at illegal places (and with
         // illegal content):
         if (ignoring_ > 0 ||
-            ((xmlStrEqual(name, xmlString("info")) ||
-              xmlStrEqual(name, xmlString("import")) ||
-              xmlStrEqual(name, xmlString("uses")) ||
-              xmlStrEqual(name, xmlString("constraints"))) &&
-             nsUri == 0))
+            (ns == XmlReader::NAMESPACE_NONE &&
+             (name.equals(RTL_CONSTASCII_STRINGPARAM("info")) ||
+              name.equals(RTL_CONSTASCII_STRINGPARAM("import")) ||
+              name.equals(RTL_CONSTASCII_STRINGPARAM("uses")) ||
+              name.equals(RTL_CONSTASCII_STRINGPARAM("constraints")))))
         {
             OSL_ASSERT(ignoring_ < LONG_MAX);
             ++ignoring_;
@@ -1180,13 +1139,17 @@ bool XcsParser::startElement(
         }
         switch (state_) {
         case STATE_COMPONENT_SCHEMA:
-            if (xmlStrEqual(name, xmlString("templates")) && nsUri == 0) {
+            if (ns == XmlReader::NAMESPACE_NONE &&
+                name.equals(RTL_CONSTASCII_STRINGPARAM("templates")))
+            {
                 state_ = STATE_TEMPLATES;
                 return true;
             }
             // fall through
         case STATE_TEMPLATES_DONE:
-            if (xmlStrEqual(name, xmlString("component")) && nsUri == 0) {
+            if (ns == XmlReader::NAMESPACE_NONE &&
+                name.equals(RTL_CONSTASCII_STRINGPARAM("component")))
+            {
                 state_ = STATE_COMPONENT;
                 OSL_ASSERT(elements_.empty());
                 elements_.push(
@@ -1199,11 +1162,15 @@ bool XcsParser::startElement(
             break;
         case STATE_TEMPLATES:
             if (elements_.empty()) {
-                if (xmlStrEqual(name, xmlString("group")) && nsUri == 0) {
+                if (ns == XmlReader::NAMESPACE_NONE &&
+                    name.equals(RTL_CONSTASCII_STRINGPARAM("group")))
+                {
                     handleGroup(reader, true);
                     return true;
                 }
-                if (xmlStrEqual(name, xmlString("set")) && nsUri == 0) {
+                if (ns == XmlReader::NAMESPACE_NONE &&
+                    name.equals(RTL_CONSTASCII_STRINGPARAM("set")))
+                {
                     handleSet(reader, true);
                     return true;
                 }
@@ -1218,7 +1185,9 @@ bool XcsParser::startElement(
                     elements_.top().node.get()) !=
                  0))
             {
-                if (xmlStrEqual(name, xmlString("value")) && nsUri == 0) {
+                if (ns == XmlReader::NAMESPACE_NONE &&
+                    name.equals(RTL_CONSTASCII_STRINGPARAM("value")))
+                {
                     handlePropValue(reader, elements_.top().node);
                     return true;
                 }
@@ -1226,26 +1195,36 @@ bool XcsParser::startElement(
                            elements_.top().node.get()) !=
                        0)
             {
-                if (xmlStrEqual(name, xmlString("prop")) && nsUri == 0) {
+                if (ns == XmlReader::NAMESPACE_NONE &&
+                    name.equals(RTL_CONSTASCII_STRINGPARAM("prop")))
+                {
                     handleProp(reader);
                     return true;
                 }
-                if (xmlStrEqual(name, xmlString("node-ref")) && nsUri == 0) {
+                if (ns == XmlReader::NAMESPACE_NONE &&
+                    name.equals(RTL_CONSTASCII_STRINGPARAM("node-ref")))
+                {
                     handleNodeRef(reader);
                     return true;
                 }
-                if (xmlStrEqual(name, xmlString("group")) && nsUri == 0) {
+                if (ns == XmlReader::NAMESPACE_NONE &&
+                    name.equals(RTL_CONSTASCII_STRINGPARAM("group")))
+                {
                     handleGroup(reader, false);
                     return true;
                 }
-                if (xmlStrEqual(name, xmlString("set")) && nsUri == 0) {
+                if (ns == XmlReader::NAMESPACE_NONE &&
+                    name.equals(RTL_CONSTASCII_STRINGPARAM("set")))
+                {
                     handleSet(reader, false);
                     return true;
                 }
             } else if (SetNode * set = dynamic_cast< SetNode * >(
                            elements_.top().node.get()))
             {
-                if (xmlStrEqual(name, xmlString("item")) && nsUri == 0) {
+                if (ns == XmlReader::NAMESPACE_NONE &&
+                    name.equals(RTL_CONSTASCII_STRINGPARAM("item")))
+                {
                     handleSetItem(reader, set);
                     return true;
                 }
@@ -1260,13 +1239,13 @@ bool XcsParser::startElement(
     }
     throw css::uno::RuntimeException(
         (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad member <")) +
-         fromXmlString(name) +
+         convertUtf8String(name) +
          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
          reader->getUrl()),
         css::uno::Reference< css::uno::XInterface >());
 }
 
-void XcsParser::endElement(Reader const * reader) {
+void XcsParser::endElement(XmlReader const * reader) {
     if (valueParser_.endElement()) {
         return;
     }
@@ -1331,17 +1310,31 @@ void XcsParser::endElement(Reader const * reader) {
     }
 }
 
-void XcsParser::characters(Reader const * reader) {
-    valueParser_.characters(reader);
+void XcsParser::characters(XmlReader const * reader, Span const & text) {
+    valueParser_.characters(reader, text);
 }
 
-void XcsParser::handleComponentSchema(Reader const * reader) {
+void XcsParser::handleComponentSchema(XmlReader * reader) {
     //TODO: oor:version, xml:lang attributes
-    XmlString attrPackage(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("package"),
-            xmlString("http://openoffice.org/2001/registry")));
-    if (attrPackage.str == 0) {
+    Span attrPackage;
+    Span attrName;
+    for (;;) {
+        XmlReader::Namespace attrNs;
+        Span attrLn;
+        if (!reader->nextAttribute(&attrNs, &attrLn)) {
+            break;
+        }
+        if (attrNs == XmlReader::NAMESPACE_OOR &&
+            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("package")))
+        {
+            attrPackage = reader->getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+        {
+            attrName = reader->getAttributeValue(false);
+        }
+    }
+    if (!attrPackage.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -1349,11 +1342,7 @@ void XcsParser::handleComponentSchema(Reader const * reader) {
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    XmlString attrName(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("name"),
-            xmlString("http://openoffice.org/2001/registry")));
-    if (attrName.str == 0) {
+    if (!attrName.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -1362,71 +1351,101 @@ void XcsParser::handleComponentSchema(Reader const * reader) {
             css::uno::Reference< css::uno::XInterface >());
     }
     rtl::OStringBuffer buf;
-    buf.append(reinterpret_cast< char const * >(attrPackage.str));
+    buf.append(attrPackage.begin, attrPackage.length);
     buf.append('.');
-    buf.append(reinterpret_cast< char const * >(attrName.str));
-    componentName_ = rtl::OUString(
-        buf.getStr(), buf.getLength(), RTL_TEXTENCODING_UTF8);
+    buf.append(attrName.begin, attrName.length);
+    componentName_ = convertUtf8String(Span(buf.getStr(), buf.getLength()));
 }
 
-void XcsParser::handleNodeRef(Reader const * reader) {
-    XmlString attrName(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("name"),
-            xmlString("http://openoffice.org/2001/registry")));
-    if (attrName.str == 0) {
+void XcsParser::handleNodeRef(XmlReader * reader) {
+    Span attrName;
+    Span attrComponent;
+    Span attrNodeType;
+    for (;;) {
+        XmlReader::Namespace attrNs;
+        Span attrLn;
+        if (!reader->nextAttribute(&attrNs, &attrLn)) {
+            break;
+        }
+        if (attrNs == XmlReader::NAMESPACE_OOR &&
+            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+        {
+            attrName = reader->getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("component")))
+        {
+            attrComponent = reader->getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("node-type")))
+        {
+            attrNodeType = reader->getAttributeValue(false);
+        }
+    }
+    if (!attrName.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("no node-ref name attribute in ")) +
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    XmlString attrComponent(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("component"),
-            xmlString("http://openoffice.org/2001/registry")));
-    XmlString attrNodeType(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("node-type"),
-            xmlString("http://openoffice.org/2001/registry")));
     rtl::Reference< Node > tmpl(
         data_->getTemplate(
             valueParser_.getLayer(),
             parseTemplateReference(
-                attrComponent.str, attrNodeType.str, componentName_, 0)));
+                attrComponent, attrNodeType, componentName_, 0)));
     if (!tmpl.is()) {
         //TODO: this can erroneously happen as long as import/uses attributes
         // are not correctly processed
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("unknown node-ref ")) +
-             fromXmlString(attrName.str) +
+             convertUtf8String(attrName) +
              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" in ")) +
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
     rtl::Reference< Node > node(tmpl->clone());
     node->setLayer(valueParser_.getLayer());
-    elements_.push(Element(node, fromXmlString(attrName.str)));
+    elements_.push(Element(node, convertUtf8String(attrName)));
 }
 
-void XcsParser::handleProp(Reader const * reader) {
-    XmlString attrName(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("name"),
-            xmlString("http://openoffice.org/2001/registry")));
-    if (attrName.str == 0) {
+void XcsParser::handleProp(XmlReader * reader) {
+    Span attrName;
+    Span attrType;
+    Span attrLocalized;
+    Span attrNillable;
+    for (;;) {
+        XmlReader::Namespace attrNs;
+        Span attrLn;
+        if (!reader->nextAttribute(&attrNs, &attrLn)) {
+            break;
+        }
+        if (attrNs == XmlReader::NAMESPACE_OOR &&
+            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+        {
+            attrName = reader->getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("type")))
+        {
+            attrType = reader->getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("localized")))
+        {
+            attrLocalized = reader->getAttributeValue(true);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("nillable")))
+        {
+            attrNillable = reader->getAttributeValue(true);
+        }
+    }
+    if (!attrName.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("no prop name attribute in ")) +
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    XmlString attrType(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("type"),
-            xmlString("http://openoffice.org/2001/registry")));
-    valueParser_.type_ = parseType(reader, attrType.str);
+    valueParser_.type_ = parseType(reader, attrType);
     if (valueParser_.type_ == TYPE_ERROR) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -1434,16 +1453,8 @@ void XcsParser::handleProp(Reader const * reader) {
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    XmlString attrLocalized(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("localized"),
-            xmlString("http://openoffice.org/2001/registry")));
-    bool localized = parseBoolean(attrLocalized.str, false);
-    XmlString attrNillable(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("nillable"),
-            xmlString("http://openoffice.org/2001/registry")));
-    bool nillable = parseBoolean(attrNillable.str, true);
+    bool localized = parseBoolean(attrLocalized, false);
+    bool nillable = parseBoolean(attrNillable, true);
     elements_.push(
         Element(
             (localized
@@ -1454,93 +1465,133 @@ void XcsParser::handleProp(Reader const * reader) {
                  new PropertyNode(
                      valueParser_.getLayer(), valueParser_.type_, nillable,
                      css::uno::Any(), false))),
-            fromXmlString(attrName.str)));
+            convertUtf8String(attrName)));
 }
 
 void XcsParser::handlePropValue(
-    Reader const * reader, rtl::Reference< Node > const & property)
+    XmlReader * reader, rtl::Reference< Node > const & property)
 {
+    Span attrSeparator;
+    for (;;) {
+        XmlReader::Namespace attrNs;
+        Span attrLn;
+        if (!reader->nextAttribute(&attrNs, &attrLn)) {
+            break;
+        }
+        if (attrNs == XmlReader::NAMESPACE_OOR &&
+            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("separator")))
+        {
+            attrSeparator = reader->getAttributeValue(false);
+        }
+    }
+    valueParser_.separator_ = attrSeparator;
     valueParser_.start(property);
-    valueParser_.separator_ = xmlTextReaderGetAttributeNs(
-        reader->getReader(), xmlString("separator"),
-        xmlString("http://openoffice.org/2001/registry"));
 }
 
-void XcsParser::handleGroup(Reader const * reader, bool isTemplate) {
-    XmlString attrName(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("name"),
-            xmlString("http://openoffice.org/2001/registry")));
-    if (attrName.str == 0) {
+void XcsParser::handleGroup(XmlReader * reader, bool isTemplate) {
+    Span attrName;
+    Span attrExtensible;
+    for (;;) {
+        XmlReader::Namespace attrNs;
+        Span attrLn;
+        if (!reader->nextAttribute(&attrNs, &attrLn)) {
+            break;
+        }
+        if (attrNs == XmlReader::NAMESPACE_OOR &&
+            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+        {
+            attrName = reader->getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("extensible")))
+        {
+            attrExtensible = reader->getAttributeValue(true);
+        }
+    }
+    if (!attrName.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("no group name attribute in ")) +
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::OUString name(fromXmlString(attrName.str));
+    rtl::OUString name(convertUtf8String(attrName));
     if (isTemplate) {
         name = fullTemplateName(componentName_, name);
     }
-    XmlString attrExtensible(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("extensible"),
-            xmlString("http://openoffice.org/2001/registry")));
     elements_.push(
         Element(
             new GroupNode(
-                valueParser_.getLayer(),
-                parseBoolean(attrExtensible.str, false),
+                valueParser_.getLayer(), parseBoolean(attrExtensible, false),
                 isTemplate ? name : rtl::OUString()),
             name));
 }
 
-void XcsParser::handleSet(Reader const * reader, bool isTemplate) {
-    XmlString attrName(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("name"),
-            xmlString("http://openoffice.org/2001/registry")));
-    if (attrName.str == 0) {
+void XcsParser::handleSet(XmlReader * reader, bool isTemplate) {
+    Span attrName;
+    Span attrComponent;
+    Span attrNodeType;
+    for (;;) {
+        XmlReader::Namespace attrNs;
+        Span attrLn;
+        if (!reader->nextAttribute(&attrNs, &attrLn)) {
+            break;
+        }
+        if (attrNs == XmlReader::NAMESPACE_OOR &&
+            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+        {
+            attrName = reader->getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("component")))
+        {
+            attrComponent = reader->getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("node-type")))
+        {
+            attrNodeType = reader->getAttributeValue(false);
+        }
+    }
+    if (!attrName.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("no set name attribute in ")) +
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::OUString name(fromXmlString(attrName.str));
+    rtl::OUString name(convertUtf8String(attrName));
     if (isTemplate) {
         name = fullTemplateName(componentName_, name);
     }
-    XmlString attrComponent(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("component"),
-            xmlString("http://openoffice.org/2001/registry")));
-    XmlString attrNodeType(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("node-type"),
-            xmlString("http://openoffice.org/2001/registry")));
     elements_.push(
         Element(
             new SetNode(
                 valueParser_.getLayer(),
                 parseTemplateReference(
-                    attrComponent.str, attrNodeType.str, componentName_, 0),
+                    attrComponent, attrNodeType, componentName_, 0),
                 isTemplate ? name : rtl::OUString()),
             name));
 }
 
-void XcsParser::handleSetItem(Reader const * reader, SetNode * set) {
-    XmlString attrComponent(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("component"),
-            xmlString("http://openoffice.org/2001/registry")));
-    XmlString attrNodeType(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("node-type"),
-            xmlString("http://openoffice.org/2001/registry")));
+void XcsParser::handleSetItem(XmlReader * reader, SetNode * set) {
+    Span attrComponent;
+    Span attrNodeType;
+    for (;;) {
+        XmlReader::Namespace attrNs;
+        Span attrLn;
+        if (!reader->nextAttribute(&attrNs, &attrLn)) {
+            break;
+        }
+        if (attrNs == XmlReader::NAMESPACE_OOR &&
+            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("component")))
+        {
+            attrComponent = reader->getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("node-type")))
+        {
+            attrNodeType = reader->getAttributeValue(false);
+        }
+    }
     set->getAdditionalTemplateNames().push_back(
-        parseTemplateReference(
-            attrComponent.str, attrNodeType.str, componentName_, 0));
+        parseTemplateReference(attrComponent, attrNodeType, componentName_, 0));
 }
 
 class XcuParser: public Parser {
@@ -1551,40 +1602,40 @@ private:
     virtual ~XcuParser() {}
 
     virtual bool startElement(
-        Reader const * reader, xmlChar const * name, xmlChar const * nsUri);
+        XmlReader * reader, XmlReader::Namespace ns, Span const & name);
 
-    virtual void endElement(Reader const * reader);
+    virtual void endElement(XmlReader const * reader);
 
-    virtual void characters(Reader const * reader);
+    virtual void characters(XmlReader const * reader, Span const & span);
 
-    void handleComponentData(Reader const * reader);
+    void handleComponentData(XmlReader * reader);
 
-    void handleItem(Reader const * reader);
+    void handleItem(XmlReader * reader);
 
-    void handlePropValue(Reader const * reader, PropertyNode * prop);
+    void handlePropValue(XmlReader * reader, PropertyNode * prop);
 
     void handleLocpropValue(
-        Reader const * reader, LocalizedPropertyNode * locprop);
+        XmlReader * reader, LocalizedPropertyNode * locprop);
 
-    void handleGroupProp(Reader const * reader, GroupNode * group);
+    void handleGroupProp(XmlReader * reader, GroupNode * group);
 
     void handleUnknownGroupProp(
-        Reader const * reader, GroupNode * group, rtl::OUString const & name,
+        XmlReader const * reader, GroupNode * group, rtl::OUString const & name,
         Type type, Operation operation, bool finalized);
 
     void handlePlainGroupProp(
-        Reader const * reader, PropertyNode * property,
+        XmlReader const * reader, PropertyNode * property,
         rtl::OUString const & name, Type type, Operation operation,
         bool finalized);
 
     void handleLocalizedGroupProp(
-        Reader const * reader, LocalizedPropertyNode * property,
+        XmlReader const * reader, LocalizedPropertyNode * property,
         rtl::OUString const & name, Type type, Operation operation,
         bool finalized);
 
-    void handleGroupNode(Reader const * reader, GroupNode * group);
+    void handleGroupNode(XmlReader * reader, GroupNode * group);
 
-    void handleSetNode(Reader const * reader, SetNode * set);
+    void handleSetNode(XmlReader * reader, SetNode * set);
 
     struct State {
         rtl::Reference< Node > node; // empty iff ignore or <items>
@@ -1620,28 +1671,25 @@ private:
 };
 
 bool XcuParser::startElement(
-    Reader const * reader, xmlChar const * name, xmlChar const * nsUri)
+    XmlReader * reader, XmlReader::Namespace ns, Span const & name)
 {
-    if (valueParser_.startElement(reader, name, nsUri)) {
+    if (valueParser_.startElement(reader, ns, name)) {
         return true;
     }
     if (state_.empty()) {
-        if (xmlStrEqual(name, xmlString("component-data")) && nsUri != 0 &&
-            xmlStrEqual(
-                nsUri, xmlString("http://openoffice.org/2001/registry")))
+        if (ns == XmlReader::NAMESPACE_OOR &&
+            name.equals(RTL_CONSTASCII_STRINGPARAM("component-data")))
         {
             handleComponentData(reader);
-        } else if (xmlStrEqual(name, xmlString("items")) &&
-                   nsUri != 0 &&
-                   xmlStrEqual(
-                       nsUri, xmlString("http://openoffice.org/2001/registry")))
+        } else if (ns == XmlReader::NAMESPACE_OOR &&
+                   name.equals(RTL_CONSTASCII_STRINGPARAM("items")))
         {
             state_.push(State(rtl::Reference< Node >(), false, false));
         } else {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("bad root element <")) +
-                 fromXmlString(name) +
+                 convertUtf8String(name) +
                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
                  reader->getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
@@ -1649,13 +1697,15 @@ bool XcuParser::startElement(
     } else if (state_.top().ignore) {
         state_.push(state_.top());
     } else if (!state_.top().node.is()) {
-        if (xmlStrEqual(name, xmlString("item")) && nsUri == 0) {
+        if (ns == XmlReader::NAMESPACE_NONE &&
+            name.equals(RTL_CONSTASCII_STRINGPARAM("item")))
+        {
             handleItem(reader);
         } else {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("bad items node member <")) +
-                 fromXmlString(name) +
+                 convertUtf8String(name) +
                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
                  reader->getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
@@ -1663,13 +1713,15 @@ bool XcuParser::startElement(
     } else if (PropertyNode * prop = dynamic_cast< PropertyNode * >(
                    state_.top().node.get()))
     {
-        if (xmlStrEqual(name, xmlString("value")) && nsUri == 0) {
+        if (ns == XmlReader::NAMESPACE_NONE &&
+            name.equals(RTL_CONSTASCII_STRINGPARAM("value")))
+        {
             handlePropValue(reader, prop);
         } else {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("bad property node member <")) +
-                 fromXmlString(name) +
+                 convertUtf8String(name) +
                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
                  reader->getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
@@ -1677,14 +1729,16 @@ bool XcuParser::startElement(
     } else if (LocalizedPropertyNode * locprop =
                dynamic_cast< LocalizedPropertyNode * >(state_.top().node.get()))
     {
-        if (xmlStrEqual(name, xmlString("value")) && nsUri == 0) {
+        if (ns == XmlReader::NAMESPACE_NONE &&
+            name.equals(RTL_CONSTASCII_STRINGPARAM("value")))
+        {
             handleLocpropValue(reader, locprop);
         } else {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
                         "bad localized property node member <")) +
-                 fromXmlString(name) +
+                 convertUtf8String(name) +
                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
                  reader->getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
@@ -1692,15 +1746,19 @@ bool XcuParser::startElement(
     } else if (GroupNode * group = dynamic_cast< GroupNode * >(
                    state_.top().node.get()))
     {
-        if (xmlStrEqual(name, xmlString("prop")) && nsUri == 0) {
+        if (ns == XmlReader::NAMESPACE_NONE &&
+            name.equals(RTL_CONSTASCII_STRINGPARAM("prop")))
+        {
             handleGroupProp(reader, group);
-        } else if (xmlStrEqual(name, xmlString("node")) && nsUri == 0) {
+        } else if (ns == XmlReader::NAMESPACE_NONE &&
+                   name.equals(RTL_CONSTASCII_STRINGPARAM("node")))
+        {
             handleGroupNode(reader, group);
         } else {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("bad group node member <")) +
-                 fromXmlString(name) +
+                 convertUtf8String(name) +
                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
                  reader->getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
@@ -1708,13 +1766,15 @@ bool XcuParser::startElement(
     } else if (SetNode * set = dynamic_cast< SetNode * >(
                    state_.top().node.get()))
     {
-        if (xmlStrEqual(name, xmlString("node")) && nsUri == 0) {
+        if (ns == XmlReader::NAMESPACE_NONE &&
+            name.equals(RTL_CONSTASCII_STRINGPARAM("node")))
+        {
             handleSetNode(reader, set);
         } else {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("bad set node member <")) +
-                 fromXmlString(name) +
+                 convertUtf8String(name) +
                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
                  reader->getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
@@ -1722,7 +1782,7 @@ bool XcuParser::startElement(
     } else {
         throw css::uno::RuntimeException(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad member <")) +
-             fromXmlString(name) +
+             convertUtf8String(name) +
              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
@@ -1730,7 +1790,7 @@ bool XcuParser::startElement(
     return true;
 }
 
-void XcuParser::endElement(Reader const *) {
+void XcuParser::endElement(XmlReader const *) {
     if (valueParser_.endElement()) {
         return;
     }
@@ -1763,16 +1823,40 @@ void XcuParser::endElement(Reader const *) {
     }
 }
 
-void XcuParser::characters(Reader const * reader) {
-    valueParser_.characters(reader);
+void XcuParser::characters(XmlReader const * reader, Span const & text) {
+    valueParser_.characters(reader, text);
 }
 
-void XcuParser::handleComponentData(Reader const * reader) {
-    XmlString attrPackage(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("package"),
-            xmlString("http://openoffice.org/2001/registry")));
-    if (attrPackage.str == 0) {
+void XcuParser::handleComponentData(XmlReader * reader) {
+    Span attrPackage;
+    Span attrName;
+    Span attrOp;
+    Span attrFinalized;
+    for (;;) {
+        XmlReader::Namespace attrNs;
+        Span attrLn;
+        if (!reader->nextAttribute(&attrNs, &attrLn)) {
+            break;
+        }
+        if (attrNs == XmlReader::NAMESPACE_OOR &&
+            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("package")))
+        {
+            attrPackage = reader->getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+        {
+            attrName = reader->getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("op")))
+        {
+            attrOp = reader->getAttributeValue(true);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("finalized")))
+        {
+            attrFinalized = reader->getAttributeValue(true);
+        }
+    }
+    if (!attrPackage.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -1780,11 +1864,7 @@ void XcuParser::handleComponentData(Reader const * reader) {
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    XmlString attrName(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("name"),
-            xmlString("http://openoffice.org/2001/registry")));
-    if (attrName.str == 0) {
+    if (!attrName.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -1793,11 +1873,10 @@ void XcuParser::handleComponentData(Reader const * reader) {
             css::uno::Reference< css::uno::XInterface >());
     }
     rtl::OStringBuffer buf;
-    buf.append(reinterpret_cast< char const * >(attrPackage.str));
+    buf.append(attrPackage.begin, attrPackage.length);
     buf.append('.');
-    buf.append(reinterpret_cast< char const * >(attrName.str));
-    componentName_ = rtl::OUString(
-        buf.getStr(), buf.getLength(), RTL_TEXTENCODING_UTF8);
+    buf.append(attrName.begin, attrName.length);
+    componentName_ = convertUtf8String(Span(buf.getStr(), buf.getLength()));
     rtl::Reference< Node > node(
         Data::findNode(
             valueParser_.getLayer(), data_->components, componentName_));
@@ -1809,11 +1888,7 @@ void XcuParser::handleComponentData(Reader const * reader) {
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    XmlString attrOp(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("op"),
-            xmlString("http://openoffice.org/2001/registry")));
-    switch (parseOperation(attrOp.str)) {
+    switch (parseOperation(attrOp)) {
     case OPERATION_MODIFY:
     case OPERATION_FUSE:
         break;
@@ -1825,24 +1900,28 @@ void XcuParser::handleComponentData(Reader const * reader) {
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    XmlString attrFinalized(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("finalized"),
-            xmlString("http://openoffice.org/2001/registry")));
     int finalizedLayer = std::min(
-        (parseBoolean(attrFinalized.str, false)
-         ? valueParser_.getLayer() : NO_LAYER),
+        parseBoolean(attrFinalized, false) ? valueParser_.getLayer() : NO_LAYER,
         node->getFinalized());
     node->setFinalized(finalizedLayer);
     state_.push(State(node, finalizedLayer < valueParser_.getLayer(), false));
 }
 
-void XcuParser::handleItem(Reader const * reader) {
-    XmlString attrPath(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("path"),
-            xmlString("http://openoffice.org/2001/registry")));
-    if (attrPath.str == 0) {
+void XcuParser::handleItem(XmlReader * reader) {
+    Span attrPath;
+    for (;;) {
+        XmlReader::Namespace attrNs;
+        Span attrLn;
+        if (!reader->nextAttribute(&attrNs, &attrLn)) {
+            break;
+        }
+        if (attrNs == XmlReader::NAMESPACE_OOR &&
+            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("path")))
+        {
+            attrPath = reader->getAttributeValue(false);
+        }
+    }
+    if (!attrPath.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("missing path attribute in ")) +
@@ -1852,7 +1931,7 @@ void XcuParser::handleItem(Reader const * reader) {
     int finalizedLayer;
     rtl::Reference< Node > node(
         data_->resolvePath(
-            fromXmlString(attrPath.str), &componentName_, 0, &pathPrefix_, 0,
+            convertUtf8String(attrPath), &componentName_, 0, &pathPrefix_, 0,
             &finalizedLayer));
     pathPrefix_ += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     if (!node.is()) {
@@ -1868,13 +1947,27 @@ void XcuParser::handleItem(Reader const * reader) {
             valueParser_.getLayer() == NO_LAYER));
 }
 
-void XcuParser::handlePropValue(Reader const * reader, PropertyNode * prop) {
+void XcuParser::handlePropValue(XmlReader * reader, PropertyNode * prop) {
     OSL_ASSERT(!state_.top().record);
-    XmlString attrNil(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("nil"),
-            xmlString("http://www.w3.org/2001/XMLSchema-instance")));
-    if (parseBoolean(attrNil.str, false)) {
+    Span attrNil;
+    Span attrSeparator;
+    for (;;) {
+        XmlReader::Namespace attrNs;
+        Span attrLn;
+        if (!reader->nextAttribute(&attrNs, &attrLn)) {
+            break;
+        }
+        if (attrNs == XmlReader::NAMESPACE_XSI &&
+            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("nil")))
+        {
+            attrNil = reader->getAttributeValue(true);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("separator")))
+        {
+            attrSeparator = reader->getAttributeValue(false);
+        }
+    }
+    if (parseBoolean(attrNil, false)) {
         if (!prop->isNillable()) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
@@ -1886,21 +1979,46 @@ void XcuParser::handlePropValue(Reader const * reader, PropertyNode * prop) {
         prop->setValue(valueParser_.getLayer(), css::uno::Any());
         state_.push(State());
     } else {
-        valueParser_.separator_ = xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("separator"),
-            xmlString("http://openoffice.org/2001/registry"));
+        valueParser_.separator_ = attrSeparator;
         valueParser_.start(prop);
     }
 }
 
 void XcuParser::handleLocpropValue(
-    Reader const * reader, LocalizedPropertyNode * locprop)
+    XmlReader * reader, LocalizedPropertyNode * locprop)
 {
     OSL_ASSERT(!state_.top().record);
+    Span attrLang;
+    Span attrNil;
+    Span attrSeparator;
+    Span attrOp;
+    for (;;) {
+        XmlReader::Namespace attrNs;
+        Span attrLn;
+        if (!reader->nextAttribute(&attrNs, &attrLn)) {
+            break;
+        }
+        if (attrNs == XmlReader::NAMESPACE_XML &&
+            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("lang")))
+        {
+            attrLang = reader->getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_XSI &&
+            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("nil")))
+        {
+            attrNil = reader->getAttributeValue(true);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("separator")))
+        {
+            attrSeparator = reader->getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("op")))
+        {
+            attrOp = reader->getAttributeValue(true);
+        }
+    }
     rtl::OUString name;
-    xmlChar const * lang = xmlTextReaderConstXmlLang(reader->getReader());
-    if (lang != 0) {
-        name = fromXmlString(lang);
+    if (attrLang.is()) {
+        name = convertUtf8String(attrLang);
     }
     NodeMap::iterator i(locprop->getMembers().find(name));
     if (i != locprop->getMembers().end() &&
@@ -1909,11 +2027,7 @@ void XcuParser::handleLocpropValue(
         state_.push(State()); // ignored
         return;
     }
-    XmlString attrNil(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("nil"),
-            xmlString("http://www.w3.org/2001/XMLSchema-instance")));
-    bool nil = parseBoolean(attrNil.str, false);
+    bool nil = parseBoolean(attrNil, false);
     if (nil && !locprop->isNillable()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -1922,11 +2036,7 @@ void XcuParser::handleLocpropValue(
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    XmlString attrOp(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("op"),
-            xmlString("http://openoffice.org/2001/registry")));
-    switch (parseOperation(attrOp.str)) {
+    switch (parseOperation(attrOp)) {
     case OPERATION_MODIFY:
         if (nil) {
             if (i == locprop->getMembers().end()) {
@@ -1938,9 +2048,7 @@ void XcuParser::handleLocpropValue(
             }
             state_.push(State());
         } else {
-            valueParser_.separator_ = xmlTextReaderGetAttributeNs(
-                reader->getReader(), xmlString("separator"),
-                xmlString("http://openoffice.org/2001/registry"));
+            valueParser_.separator_ = attrSeparator;
             valueParser_.start(locprop, name);
         }
         break;
@@ -1962,27 +2070,47 @@ void XcuParser::handleLocpropValue(
     }
 }
 
-void XcuParser::handleGroupProp(Reader const * reader, GroupNode * group) {
-    XmlString attrName(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("name"),
-            xmlString("http://openoffice.org/2001/registry")));
-    if (attrName.str == 0) {
+void XcuParser::handleGroupProp(XmlReader * reader, GroupNode * group) {
+    Span attrName;
+    Span attrType;
+    Span attrOp;
+    Span attrFinalized;
+    for (;;) {
+        XmlReader::Namespace attrNs;
+        Span attrLn;
+        if (!reader->nextAttribute(&attrNs, &attrLn)) {
+            break;
+        }
+        if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+        {
+            attrName = reader->getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("type")))
+        {
+            attrType = reader->getAttributeValue(true);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("op")))
+        {
+            attrOp = reader->getAttributeValue(true);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("finalized")))
+        {
+            attrFinalized = reader->getAttributeValue(true);
+        }
+    }
+    if (!attrName.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("no prop name attribute in ")) +
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::OUString name(fromXmlString(attrName.str));
+    rtl::OUString name(convertUtf8String(attrName));
     if (state_.top().record) {
         data_->addModification(pathPrefix_ + name);
     }
-    XmlString attrType(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("type"),
-            xmlString("http://openoffice.org/2001/registry")));
-    Type type(parseType(reader, attrType.str));
+    Type type = parseType(reader, attrType);
     if (type == TYPE_ANY) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -1991,16 +2119,8 @@ void XcuParser::handleGroupProp(Reader const * reader, GroupNode * group) {
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    XmlString attrOp(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("op"),
-            xmlString("http://openoffice.org/2001/registry")));
-    Operation op(parseOperation(attrOp.str));
-    XmlString attrFinalized(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("finalized"),
-            xmlString("http://openoffice.org/2001/registry")));
-    bool finalized = parseBoolean(attrFinalized.str, false);
+    Operation op = parseOperation(attrOp);
+    bool finalized = parseBoolean(attrFinalized, false);
     NodeMap::iterator i(group->getMembers().find(name));
     if (i == group->getMembers().end()) {
         handleUnknownGroupProp(reader, group, name, type, op, finalized);
@@ -2022,7 +2142,7 @@ void XcuParser::handleGroupProp(Reader const * reader, GroupNode * group) {
 }
 
 void XcuParser::handleUnknownGroupProp(
-    Reader const * reader, GroupNode * group, rtl::OUString const & name,
+    XmlReader const * reader, GroupNode * group, rtl::OUString const & name,
     Type type, Operation operation, bool finalized)
 {
     if (!group->isExtensible()) {
@@ -2073,8 +2193,8 @@ void XcuParser::handleUnknownGroupProp(
 }
 
 void XcuParser::handlePlainGroupProp(
-    Reader const * reader, PropertyNode * property, rtl::OUString const & name,
-    Type type, Operation operation, bool finalized)
+    XmlReader const * reader, PropertyNode * property,
+    rtl::OUString const & name, Type type, Operation operation, bool finalized)
 {
     if (property->getLayer() > valueParser_.getLayer()) {
         state_.push(State()); // ignored
@@ -2122,7 +2242,7 @@ void XcuParser::handlePlainGroupProp(
 }
 
 void XcuParser::handleLocalizedGroupProp(
-    Reader const * reader, LocalizedPropertyNode * property,
+    XmlReader const * reader, LocalizedPropertyNode * property,
     rtl::OUString const & name, Type type, Operation operation, bool finalized)
 {
     if (property->getLayer() > valueParser_.getLayer()) {
@@ -2179,20 +2299,39 @@ void XcuParser::handleLocalizedGroupProp(
     }
 }
 
-void XcuParser::handleGroupNode(Reader const * reader, GroupNode * group) {
+void XcuParser::handleGroupNode(XmlReader * reader, GroupNode * group) {
     OSL_ASSERT(!state_.top().record);
-    XmlString attrName(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("name"),
-            xmlString("http://openoffice.org/2001/registry")));
-    if (attrName.str == 0) {
+    Span attrName;
+    Span attrOp;
+    Span attrFinalized;
+    for (;;) {
+        XmlReader::Namespace attrNs;
+        Span attrLn;
+        if (!reader->nextAttribute(&attrNs, &attrLn)) {
+            break;
+        }
+        if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+        {
+            attrName = reader->getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("op")))
+        {
+            attrOp = reader->getAttributeValue(true);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("finalized")))
+        {
+            attrFinalized = reader->getAttributeValue(true);
+        }
+    }
+    if (!attrName.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("no node name attribute in ")) +
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::OUString name(fromXmlString(attrName.str));
+    rtl::OUString name(convertUtf8String(attrName));
     rtl::Reference< Node > subgroup(
         Data::findNode(valueParser_.getLayer(), group->getMembers(), name));
     if (!subgroup.is()) {
@@ -2202,11 +2341,7 @@ void XcuParser::handleGroupNode(Reader const * reader, GroupNode * group) {
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    XmlString attrOp(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("op"),
-            xmlString("http://openoffice.org/2001/registry")));
-    Operation op(parseOperation(attrOp.str));
+    Operation op(parseOperation(attrOp));
     if ((op != OPERATION_MODIFY && op != OPERATION_FUSE) || state_.top().record)
     {
         throw css::uno::RuntimeException(
@@ -2216,13 +2351,8 @@ void XcuParser::handleGroupNode(Reader const * reader, GroupNode * group) {
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    XmlString attrFinalized(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("finalized"),
-            xmlString("http://openoffice.org/2001/registry")));
     int finalizedLayer = std::min(
-        (parseBoolean(attrFinalized.str, false)
-         ? valueParser_.getLayer() : NO_LAYER),
+        parseBoolean(attrFinalized, false) ? valueParser_.getLayer() : NO_LAYER,
         subgroup->getFinalized());
     subgroup->setFinalized(finalizedLayer);
     state_.push(
@@ -2232,30 +2362,56 @@ void XcuParser::handleGroupNode(Reader const * reader, GroupNode * group) {
             false));
 }
 
-void XcuParser::handleSetNode(Reader const * reader, SetNode * set) {
-    XmlString attrName(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("name"),
-            xmlString("http://openoffice.org/2001/registry")));
-    if (attrName.str == 0) {
+void XcuParser::handleSetNode(XmlReader * reader, SetNode * set) {
+    Span attrName;
+    Span attrComponent;
+    Span attrNodeType;
+    Span attrOp;
+    Span attrFinalized;
+    Span attrMandatory;
+    for (;;) {
+        XmlReader::Namespace attrNs;
+        Span attrLn;
+        if (!reader->nextAttribute(&attrNs, &attrLn)) {
+            break;
+        }
+        if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+        {
+            attrName = reader->getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("component")))
+        {
+            attrComponent = reader->getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("node-type")))
+        {
+            attrNodeType = reader->getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("op")))
+        {
+            attrOp = reader->getAttributeValue(true);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("finalized")))
+        {
+            attrFinalized = reader->getAttributeValue(true);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("mandatory")))
+        {
+            attrMandatory = reader->getAttributeValue(true);
+        }
+    }
+    if (!attrName.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("no node name attribute in ")) +
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::OUString name(fromXmlString(attrName.str));
-    XmlString attrComponent(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("component"),
-            xmlString("http://openoffice.org/2001/registry")));
-    XmlString attrNodeType(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("node-type"),
-            xmlString("http://openoffice.org/2001/registry")));
+    rtl::OUString name(convertUtf8String(attrName));
     rtl::OUString templateName(
         parseTemplateReference(
-            attrComponent.str, attrNodeType.str, componentName_,
+            attrComponent, attrNodeType, componentName_,
             &set->getDefaultTemplateName()));
     if (state_.top().record) {
         data_->addModification(
@@ -2284,22 +2440,10 @@ void XcuParser::handleSetNode(Reader const * reader, SetNode * set) {
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    XmlString attrOp(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("op"),
-            xmlString("http://openoffice.org/2001/registry")));
-    Operation op(parseOperation(attrOp.str));
-    XmlString attrFinalized(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("finalized"),
-            xmlString("http://openoffice.org/2001/registry")));
-    int finalizedLayer = parseBoolean(attrFinalized.str, false)
+    Operation op(parseOperation(attrOp));
+    int finalizedLayer = parseBoolean(attrFinalized, false)
         ? valueParser_.getLayer() : NO_LAYER;
-    XmlString attrMandatory(
-        xmlTextReaderGetAttributeNs(
-            reader->getReader(), xmlString("mandatory"),
-            xmlString("http://openoffice.org/2001/registry")));
-    int mandatoryLayer = parseBoolean(attrMandatory.str, false)
+    int mandatoryLayer = parseBoolean(attrMandatory, false)
         ? valueParser_.getLayer() : NO_LAYER;
     NodeMap::iterator i(set->getMembers().find(name));
     if (i != set->getMembers().end()) {
@@ -2385,78 +2529,38 @@ Reader::Reader(
 }
 
 bool Reader::parse() {
-    bool skip = false;
-    if (reader_ == 0) {
-        reader_ = xmlReaderForFile(
-            convertToFilepath(url_), 0, XML_PARSE_NONET | XML_PARSE_NOCDATA);
-            //TODO: pass (external) file URL instead of filepath?
-        if (reader_ == 0) {
-            throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "xmlReaderForFile failed for ")) +
-                 url_),
-                css::uno::Reference< css::uno::XInterface >());
-        }
-    } else {
-        skip = true;
+    if (reader_.get() == 0) {
+        reader_.reset(new XmlReader(url_));
     }
-    for (;; skip = false) {
-        if (!skip) {
-            switch (xmlTextReaderRead(reader_)) {
-            case -1:
-                throw css::uno::RuntimeException(
-                    (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "xmlTextReaderRead failed for ")) +
-                     url_),
-                    css::uno::Reference< css::uno::XInterface >());
-            case 0:
-                return true;
-            }
-        }
-        switch (xmlTextReaderNodeType(reader_)) {
-        case -1:
-            throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "xmlTextReaderNodeType failed for ")) +
-                 url_),
-                css::uno::Reference< css::uno::XInterface >());
-        case XML_READER_TYPE_ELEMENT:
+    for (;;) {
+        switch (elementLocalName_.is()
+                ? XmlReader::RESULT_BEGIN
+                : reader_->nextTag(
+                    &elementNamespace_, &elementLocalName_, textHandler, this))
+        {
+        case XmlReader::RESULT_BEGIN:
             if (!parser_->startElement(
-                    this, xmlTextReaderConstLocalName(reader_),
-                    xmlTextReaderConstNamespaceUri(reader_)))
+                    reader_.get(), elementNamespace_, elementLocalName_))
             {
                 return false;
             }
-            if (!xmlTextReaderIsEmptyElement(reader_)) {
-                break;
-            }
-            // fall through:
-        case XML_READER_TYPE_END_ELEMENT:
-            parser_->endElement(this);
+            elementLocalName_.clear();
             break;
-        case XML_READER_TYPE_TEXT:
-        case XML_READER_TYPE_SIGNIFICANT_WHITESPACE:
-            {
-                parser_->characters(this);
-            }
+        case XmlReader::RESULT_END:
+            parser_->endElement(reader_.get());
             break;
+        case XmlReader::RESULT_DONE:
+            return true;
         }
     }
 }
 
-rtl::OUString Reader::getUrl() const {
-    return url_;
-}
+Reader::~Reader() {}
 
-xmlTextReaderPtr Reader::getReader() const {
-    return reader_;
-}
-
-Reader::~Reader() {
-    xmlFreeTextReader(reader_);
+void Reader::textHandler(void * userData, Span const & text, bool /*TODO terminal*/)
+{
+    Reader * reader = static_cast< Reader * >(userData);
+    reader->parser_->characters(reader->reader_.get(), text);
 }
 
 Parser::Parser() {}
@@ -2471,62 +2575,81 @@ XcdParser::XcdParser(
 XcdParser::~XcdParser() {}
 
 bool XcdParser::startElement(
-    Reader const * reader, xmlChar const * name, xmlChar const * nsUri)
+    XmlReader * reader, XmlReader::Namespace ns, Span const & name)
 {
     if (nestedParser_.is()) {
         OSL_ASSERT(nesting_ != LONG_MAX);
         ++nesting_;
-        return nestedParser_->startElement(reader, name, nsUri);
+        return nestedParser_->startElement(reader, ns, name);
     }
     switch (state_) {
     case STATE_START:
-        if (xmlStrEqual(name, xmlString("data")) && nsUri != 0 &&
-            xmlStrEqual(
-                nsUri, xmlString("http://openoffice.org/2001/registry")))
+        if (ns == XmlReader::NAMESPACE_OOR &&
+            name.equals(RTL_CONSTASCII_STRINGPARAM("data")))
         {
             state_ = STATE_DEPENDENCIES;
             return true;
         }
         break;
     case STATE_DEPENDENCIES:
-        if (xmlStrEqual(name, xmlString("dependency")) && nsUri == 0) {
-            XmlString file(
-                xmlTextReaderGetAttribute(
-                    reader->getReader(), xmlString("file")));
-            if (file.str == 0) {
-                throw css::uno::RuntimeException(
-                    (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "no dependency file attribute in ")) +
-                     reader->getUrl()),
-                    css::uno::Reference< css::uno::XInterface >());
+        if (ns == XmlReader::NAMESPACE_NONE &&
+            name.equals(RTL_CONSTASCII_STRINGPARAM("dependency")))
+        {
+            if (dependency_.getLength() == 0) {
+                Span attrFile;
+                for (;;) {
+                    XmlReader::Namespace attrNs;
+                    Span attrLn;
+                    if (!reader->nextAttribute(&attrNs, &attrLn)) {
+                        break;
+                    }
+                    if (attrNs == XmlReader::NAMESPACE_NONE && //TODO: _OOR
+                        attrLn.equals(RTL_CONSTASCII_STRINGPARAM("file")))
+                    {
+                        attrFile = reader->getAttributeValue(false);
+                    }
+                }
+                if (!attrFile.is()) {
+                    throw css::uno::RuntimeException(
+                        (rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "no dependency file attribute in ")) +
+                         reader->getUrl()),
+                        css::uno::Reference< css::uno::XInterface >());
+                }
+                dependency_ = convertUtf8String(attrFile);
+                if (dependency_.getLength() == 0) {
+                    throw css::uno::RuntimeException(
+                        (rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "bad dependency file attribute in ")) +
+                         reader->getUrl()),
+                        css::uno::Reference< css::uno::XInterface >());
+                }
             }
-            if (dependencies_.find(fromXmlString(file.str)) ==
-                dependencies_.end())
-            {
+            if (dependencies_.find(dependency_) == dependencies_.end()) {
                 return false;
             }
             state_ = STATE_DEPENDENCY;
+            dependency_ = rtl::OUString();
             return true;
         }
         state_ = STATE_COMPONENTS;
         // fall through
     case STATE_COMPONENTS:
-        if (xmlStrEqual(name, xmlString("component-schema")) && nsUri != 0 &&
-            xmlStrEqual(
-                nsUri, xmlString("http://openoffice.org/2001/registry")))
+        if (ns == XmlReader::NAMESPACE_OOR &&
+            name.equals(RTL_CONSTASCII_STRINGPARAM("component-schema")))
         {
             nestedParser_ = new XcsParser(layer_, data_);
             nesting_ = 1;
-            return nestedParser_->startElement(reader, name, nsUri);
+            return nestedParser_->startElement(reader, ns, name);
         }
-        if (xmlStrEqual(name, xmlString("component-data")) && nsUri != 0 &&
-            xmlStrEqual(
-                nsUri, xmlString("http://openoffice.org/2001/registry")))
+        if (ns == XmlReader::NAMESPACE_OOR &&
+            name.equals(RTL_CONSTASCII_STRINGPARAM("component-data")))
         {
             nestedParser_ = new XcuParser(layer_ + 1, data_);
             nesting_ = 1;
-            return nestedParser_->startElement(reader, name, nsUri);
+            return nestedParser_->startElement(reader, ns, name);
         }
         break;
     default: // STATE_DEPENDENCY
@@ -2535,13 +2658,13 @@ bool XcdParser::startElement(
     }
     throw css::uno::RuntimeException(
         (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad member <")) +
-         fromXmlString(name) +
+         convertUtf8String(name) +
          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
          reader->getUrl()),
         css::uno::Reference< css::uno::XInterface >());
 }
 
-void XcdParser::endElement(Reader const * reader) {
+void XcdParser::endElement(XmlReader const * reader) {
     if (nestedParser_.is()) {
         nestedParser_->endElement(reader);
         if (--nesting_ == 0) {
@@ -2562,9 +2685,9 @@ void XcdParser::endElement(Reader const * reader) {
     }
 }
 
-void XcdParser::characters(Reader const * reader) {
+void XcdParser::characters(XmlReader const * reader, Span const & text) {
     if (nestedParser_.is()) {
-        nestedParser_->characters(reader);
+        nestedParser_->characters(reader, text);
     }
 }
 

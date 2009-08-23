@@ -38,6 +38,10 @@ VISIBILITY_HIDDEN = TRUE
 
 CDEFS += -DOOO_DLLIMPLEMENTATION_CONFIGMGR
 
+.IF "$(SYSTEM_LIBXML)" == "YES"
+CFLAGS += $(LIBXML_CFLAGS)
+.ENDIF
+
 SLOFILES = \
     $(SLO)$/access.obj \
     $(SLO)$/childaccess.obj \
@@ -57,7 +61,8 @@ SLOFILES = \
     $(SLO)$/setnode.obj \
     $(SLO)$/type.obj \
     $(SLO)$/update.obj \
-    $(SLO)$/xml.obj
+    $(SLO)$/xml.obj \
+    $(SLO)$/xmlreader.obj
 
 SHL1IMPLIB = i$(SHL1TARGET)
 SHL1OBJS = $(SLOFILES)

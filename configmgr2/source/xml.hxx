@@ -32,14 +32,16 @@
 
 #include "sal/config.h"
 
+#include <memory>
 #include <set>
 
-#include "libxml/xmlreader.h"
-#include "libxml/xmlstring.h"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "salhelper/simplereferenceobject.hxx"
+
+#include "span.hxx"
+#include "xmlreader.hxx"
 
 namespace configmgr {
 
@@ -55,26 +57,26 @@ public:
 
     bool parse();
 
-    rtl::OUString getUrl() const;
-
-    xmlTextReaderPtr getReader() const;
-
 private:
     virtual ~Reader();
 
+    static void textHandler(void * userData, Span const & text, bool terminal);
+
     rtl::OUString url_;
     rtl::Reference< Parser > parser_;
-    xmlTextReaderPtr reader_;
+    std::auto_ptr< XmlReader > reader_;
+    XmlReader::Namespace elementNamespace_;
+    Span elementLocalName_;
 };
 
 class Parser: public salhelper::SimpleReferenceObject {
 public:
     virtual bool startElement(
-        Reader const * reader, xmlChar const * name, xmlChar const * nsUri) = 0;
+        XmlReader * reader, XmlReader::Namespace ns, Span const & name) = 0;
 
-    virtual void endElement(Reader const * reader) = 0;
+    virtual void endElement(XmlReader const * reader) = 0;
 
-    virtual void characters(Reader const * reader) = 0;
+    virtual void characters(XmlReader const * reader, Span const & text) = 0;
 
 protected:
     Parser();
@@ -92,11 +94,11 @@ private:
     virtual ~XcdParser();
 
     virtual bool startElement(
-        Reader const * reader, xmlChar const * name, xmlChar const * nsUri);
+        XmlReader * reader, XmlReader::Namespace ns, Span const & name);
 
-    virtual void endElement(Reader const * reader);
+    virtual void endElement(XmlReader const * reader);
 
-    virtual void characters(Reader const * reader);
+    virtual void characters(XmlReader const * reader, Span const & text);
 
     enum State {
         STATE_START, STATE_DEPENDENCIES, STATE_DEPENDENCY, STATE_COMPONENTS };
@@ -105,11 +107,12 @@ private:
     Dependencies const & dependencies_;
     Data * data_;
     State state_;
+    rtl::OUString dependency_;
     rtl::Reference< Parser > nestedParser_;
     long nesting_;
 };
 
-bool decodeXml(
+bool decodeXml( //TODO
     rtl::OUString const & encoded, sal_Int32 begin, sal_Int32 end,
     rtl::OUString * decoded);
 
