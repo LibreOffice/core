@@ -709,7 +709,7 @@ SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, BOOL i_b
 
 BOOL AquaSalInfoPrinter::EndPage()
 {
-    mpGraphics->UnsetState();
+    mpGraphics->InvalidateContext();
     return TRUE;
 }
 

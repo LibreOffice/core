@@ -68,6 +68,13 @@ void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, lon
     mnRealDPIX  = nDPIX;
     mnRealDPIY  = nDPIY;
 
+    // a previously set clip path is now invalid
+    if( mxClipPath )
+    {
+        CGPathRelease( mxClipPath );
+        mxClipPath = NULL;
+    }
+
     if( mrContext )
     {
         CGContextSetFillColorSpace( mrContext, GetSalData()->mxRGBSpace );
@@ -126,10 +133,26 @@ void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContex
 
 // ----------------------------------------------------------------------
 
+void AquaSalGraphics::InvalidateContext()
+{
+    UnsetState();
+    mrContext = 0;
+}
+
+// ----------------------------------------------------------------------
+
 void AquaSalGraphics::UnsetState()
 {
     if( mrContext )
+    {
         CGContextRestoreGState( mrContext );
+        mrContext = 0;
+    }
+    if( mxClipPath )
+    {
+        CGPathRelease( mxClipPath );
+        mxClipPath = NULL;
+    }
 }
 
 void AquaSalGraphics::SetState()
@@ -140,9 +163,9 @@ void AquaSalGraphics::SetState()
     // setup clipping
     if( mxClipPath )
     {
-        CGContextBeginPath( mrContext );                // discard any existing path
+        CGContextBeginPath( mrContext );            // discard any existing path
         CGContextAddPath( mrContext, mxClipPath );  // set the current path to the clipping path
-        CGContextClip( mrContext );                     // use it for clipping
+        CGContextClip( mrContext );                 // use it for clipping
     }
 
     // set RGB colorspace and line and fill colors
@@ -211,7 +234,7 @@ bool AquaSalGraphics::CheckContext()
             CGContextRelease( rReleaseContext );
     }
 
-    DBG_ASSERT( mrContext, "<<<WARNING>>> AquaSalGraphics::CheckContext() FAILED!!!!\n" );
+    DBG_ASSERT( mrContext || mbPrinter, "<<<WARNING>>> AquaSalGraphics::CheckContext() FAILED!!!!\n" );
     return (mrContext != NULL);
 }
 
