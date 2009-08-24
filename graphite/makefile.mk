@@ -2,8 +2,6 @@
 #
 #   $RCSfile: graphite-makefile-mk.diff,v $
 #
-#   last change: $Author: rodo $ $Date: 2006/01/03 17:58:01 $
-#
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
 #
@@ -71,13 +69,9 @@ TARGET=so_graphite
 .INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------
-.IF "$(OS)"=="WNT" ||  "$(OS)"=="LINUX" 
+.IF "$(ENABLE_GRAPHITE)"=="TRUE"
 TARFILE_NAME=silgraphite-2.3.1
 PATCH_FILES=graphite-2.3.1.patch
-.ELSE
-dummy:
-    echo Nothing to do for non Linux / Windows here
-.ENDIF
 
 # convert line-endings to avoid problems when patching
 CONVERTFILES=\
@@ -99,12 +93,17 @@ VCNUM=8
 .ENDIF
 # make use of stlport headerfiles
 EXT_USE_STLPORT=TRUE
-BUILD_ACTION=nmake
+BUILD_ACTION=nmake VERBOSE=1
 .IF "$(debug)"=="true"
-BUILD_FLAGS= "CFG=DEBUG" "MLIB=MD" /F makefile.vc$(VCNUM) dll
-.ELSE
-BUILD_FLAGS="MLIB=MD" /F makefile.vc$(VCNUM) dll
+BUILD_FLAGS= "CFG=DEBUG"
 .ENDIF
+### convert CFLAGS as cl.exe cannot handle OOO"s generic ones directly
+### TODO: use "guw.exe" instead?
+ALLCFLAGS= $(CFLAGS) $(CFLAGSCXX) $(CFLAGSEXCEPTIONS) $(CDEFS)
+JUSTASLASH= /
+CFLAGS2MSC= $(ALLCFLAGS:s/-Z/$(JUSTASLASH)Z/)
+CFLAGS4MSC= $(CFLAGS2MSC:s/ -/ $(JUSTASLASH)/)
+BUILD_FLAGS+= "MLIB=MD" "CFLAGS4MSC=$(CFLAGS4MSC)" /F makefile.vc$(VCNUM) dll
 .ENDIF
 
 .IF "$(COM)"=="GCC"
@@ -172,7 +171,10 @@ OUTDIR2INC= \
 .IF "$(OS)"=="WNT"
 OUT2INC=wrappers$/win32$/WinFont.h
 .ENDIF
-
+.ELSE
+dddd:
+    @echo Nothing to do
+.ENDIF
 # --- Targets ------------------------------------------------------
 
 
