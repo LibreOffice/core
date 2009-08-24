@@ -78,10 +78,8 @@ rtl::OUString expand(rtl::OUString const & str) {
 }
 
 Components & Components::singleton() {
-/*SB*/try{
     static Components * c = new Components(); // leaks
     return *c;
-/*SB*/}catch(css::uno::Exception e){fprintf(stderr,"FAILED <%s>\n",rtl::OUStringToOString(e.Message,RTL_TEXTENCODING_UTF8).getStr());throw;}
 }
 
 bool Components::allLocales(rtl::OUString const & locale) {

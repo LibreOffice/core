@@ -159,10 +159,11 @@ XmlReader::Result XmlReader::nextTag(
                 char const * begin = pos_;
                 for (;;) {
                     switch (peek()) {
-                    case '\0': // i.e., '>'
+                    case '\0': // i.e., EOF
                         throw css::uno::RuntimeException(
                             (rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM("bad '>' in ")) +
+                                RTL_CONSTASCII_USTRINGPARAM(
+                                    "premature end of ")) +
                              fileUrl_),
                             css::uno::Reference< css::uno::XInterface >());
                     case '&':
@@ -266,7 +267,8 @@ void XmlReader::skipSpace() {
 }
 
 bool XmlReader::skipProcessingInstruction() {
-    sal_Int32 i = rtl_str_indexOfStr(pos_, "?>");
+    sal_Int32 i = rtl_str_indexOfStr_WithLength(
+        pos_, end_ - pos_, RTL_CONSTASCII_STRINGPARAM("?>"));
     if (i < 0) {
         return false;
     }
@@ -278,7 +280,7 @@ bool XmlReader::scanName(char const ** nameColon) {
     OSL_ASSERT(nameColon != 0 && *nameColon == 0);
     for (char const * begin = pos_;; ++pos_) {
         switch (peek()) {
-        case '\0': // i.e., '>'
+        case '\0': // i.e., EOF
         case '\x09':
         case '\x0A':
         case '\x0D':
@@ -531,7 +533,7 @@ XmlReader::Result XmlReader::handleStartTag(Namespace * ns, Span * localName) {
                 css::uno::Reference< css::uno::XInterface >());
         }
         char const * valueBegin = pos_;
-        sal_Int32 i = rtl_str_indexOfChar(pos_, del);
+        sal_Int32 i = rtl_str_indexOfChar_WithLength(pos_, end_ - pos_, del);
         if (i < 0) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
