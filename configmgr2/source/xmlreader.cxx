@@ -36,7 +36,7 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "osl/diagnose.h"
-#include "osl/file.hxx"
+#include "osl/file.h"
 #include "rtl/string.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
@@ -67,51 +67,47 @@ bool isSpace(char c) {
 XmlReader::XmlReader(rtl::OUString const & fileUrl):
     fileUrl_(fileUrl)
 {
-    osl::File f(fileUrl_);
-    osl::FileBase::RC e = f.open(OpenFlag_Read);
-    if (e != osl::FileBase::E_None) {
+    oslFileError e = osl_openFile(
+        fileUrl_.pData, &fileHandle_, osl_File_OpenFlag_Read);
+    if (e != osl_File_E_None) {
         throw css::uno::RuntimeException(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot open ")) +
              fileUrl_),
             css::uno::Reference< css::uno::XInterface >());
     }
-    sal_uInt64 size;
-    e = f.getSize(size);
-    if (e != osl::FileBase::E_None) {
-        throw css::uno::RuntimeException(
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot get size of ")) +
-             fileUrl_),
-            css::uno::Reference< css::uno::XInterface >());
+    e = osl_getFileSize(fileHandle_, &fileSize_);
+    if (e == osl_File_E_None) {
+        e = osl_mapFile(
+            fileHandle_, &fileAddress_, fileSize_, 0,
+            osl_File_MapFlag_RandomAccess);
     }
-    fileData_.reset(new char[size]);
-    sal_uInt64 read;
-    e = f.read(fileData_.get(), size, read);
-        //TODO: use private mmap (modified by write to *end_ below) instead
-    if (e != osl::FileBase::E_None || read != size) {
+    if (e != osl_File_E_None) {
+        e = osl_closeFile(fileHandle_);
+        if (e != osl_File_E_None) {
+            OSL_TRACE("osl_closeFile failed with %ld", static_cast< long >(e));
+        }
         throw css::uno::RuntimeException(
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot read ")) +
+            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot mmap ")) +
              fileUrl_),
             css::uno::Reference< css::uno::XInterface >());
     }
     namespaces_.push_back(
         NamespaceData(Span(RTL_CONSTASCII_STRINGPARAM("xml")), NAMESPACE_XML));
-    pos_ = fileData_.get();
-    end_ = pos_ + size;
-    while (end_ != pos_ && isSpace(end_[-1])) {
-        --end_;
-    }
-    if (end_ == pos_ || *--end_ != '>') {
-        throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("not well-formed XML ")) +
-             fileUrl_),
-            css::uno::Reference< css::uno::XInterface >());
-    }
-    *const_cast< char * >(end_) = '\0';
+    pos_ = static_cast< char * >(fileAddress_);
+    end_ = pos_ + fileSize_;
     state_ = STATE_START;
 }
 
-XmlReader::~XmlReader() {}
+XmlReader::~XmlReader() {
+    oslFileError e = osl_unmapFile(fileAddress_, fileSize_);
+    if (e != osl_File_E_None) {
+        OSL_TRACE("osl_unmapFile failed with %ld", static_cast< long >(e));
+    }
+    e = osl_closeFile(fileHandle_);
+    if (e != osl_File_E_None) {
+        OSL_TRACE("osl_closeFile failed with %ld", static_cast< long >(e));
+    }
+}
 
 XmlReader::Result XmlReader::nextTag(
     Namespace * ns, Span * localName,
@@ -121,14 +117,14 @@ XmlReader::Result XmlReader::nextTag(
     for (;;) {
         switch (state_) {
         case STATE_START:
-            switch (*pos_++) {
+            switch (read()) {
             case '\x09':
             case '\x0A':
             case '\x0D':
             case ' ':
                 break;
             case '<':
-                switch (*pos_) {
+                switch (peek()) {
                 case '!':
                     if(true)abort();*(char*)0=0;throw 0;//TODO
                 case '?':
@@ -162,7 +158,7 @@ XmlReader::Result XmlReader::nextTag(
                 padBuffer_.setLength(0);
                 char const * begin = pos_;
                 for (;;) {
-                    switch (*pos_) {
+                    switch (peek()) {
                     case '\0': // i.e., '>'
                         throw css::uno::RuntimeException(
                             (rtl::OUString(
@@ -178,7 +174,7 @@ XmlReader::Result XmlReader::nextTag(
                             sal_Int32 len = pos_ - begin;
                             ++pos_;
                             bool endTag = false;
-                            if (*pos_ == '/') {
+                            if (peek() == '/') {
                                 ++pos_;
                                 endTag = true;
                             }
@@ -264,7 +260,7 @@ void XmlReader::padAppend(char const * begin, sal_Int32 length, bool terminal) {
 }
 
 void XmlReader::skipSpace() {
-    while (isSpace(*pos_)) {
+    while (isSpace(peek())) {
         ++pos_;
     }
 }
@@ -281,7 +277,7 @@ bool XmlReader::skipProcessingInstruction() {
 bool XmlReader::scanName(char const ** nameColon) {
     OSL_ASSERT(nameColon != 0 && *nameColon == 0);
     for (char const * begin = pos_;; ++pos_) {
-        switch (*pos_) {
+        switch (peek()) {
         case '\0': // i.e., '>'
         case '\x09':
         case '\x0A':
@@ -505,7 +501,7 @@ XmlReader::Result XmlReader::handleStartTag(Namespace * ns, Span * localName) {
     attributes_.clear();
     for (;;) {
         skipSpace();
-        if (*pos_ == '/' || *pos_ == '>') {
+        if (peek() == '/' || peek() == '>') {
             break;
         }
         char const * attrNameBegin = pos_;
@@ -519,14 +515,14 @@ XmlReader::Result XmlReader::handleStartTag(Namespace * ns, Span * localName) {
         }
         char const * attrNameEnd = pos_;
         skipSpace();
-        if (*pos_++ != '=') {
+        if (read() != '=') {
             throw css::uno::RuntimeException(
                 (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("missing '=' in ")) +
                  fileUrl_),
                 css::uno::Reference< css::uno::XInterface >());
         }
         skipSpace();
-        char del = *pos_++;
+        char del = read();
         if (del != '\'' && del != '"') {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
@@ -571,13 +567,13 @@ XmlReader::Result XmlReader::handleStartTag(Namespace * ns, Span * localName) {
         defaultNs = elements_.top().defaultNamespace;
     }
     firstAttribute_ = true;
-    if (*pos_ == '/') {
+    if (peek() == '/') {
         state_ = STATE_EMPTY_ELEMENT_TAG;
         ++pos_;
     } else {
         state_ = STATE_CONTENT;
     }
-    if (*pos_ != '>' && (pos_ != end_ || state_ != STATE_EMPTY_ELEMENT_TAG)) {
+    if (peek() != '>') {
         throw css::uno::RuntimeException(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("missing '>' in ")) +
              fileUrl_),
@@ -612,7 +608,7 @@ XmlReader::Result XmlReader::handleEndTag() {
     }
     handleElementEnd();
     skipSpace();
-    if (*pos_ != '>' && (pos_ != end_ || state_ != STATE_DONE)) {
+    if (peek() != '>') {
         throw css::uno::RuntimeException(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("missing '>' in ")) +
              fileUrl_),

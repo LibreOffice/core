@@ -36,7 +36,7 @@
 #include <vector>
 
 #include "boost/noncopyable.hpp"
-#include "boost/scoped_array.hpp"
+#include "osl/file.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -72,6 +72,10 @@ public:
     rtl::OUString getUrl() const;
 
 private:
+    inline char read() { return pos_ == end_ ? '\0' : *pos_++; }
+
+    inline char peek() { return pos_ == end_ ? '\0' : *pos_; }
+
     void padAppend(char const * begin, sal_Int32 length, bool terminal);
 
     void skipSpace();
@@ -145,7 +149,9 @@ private:
         STATE_START, STATE_EMPTY_ELEMENT_TAG, STATE_CONTENT, STATE_DONE };
 
     rtl::OUString fileUrl_;
-    boost::scoped_array< char > fileData_;
+    oslFileHandle fileHandle_;
+    sal_uInt64 fileSize_;
+    void * fileAddress_;
     NamespaceList namespaces_;
     ElementStack elements_;
     char const * pos_;
