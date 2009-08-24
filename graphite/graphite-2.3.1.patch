@@ -1,5 +1,5 @@
---- misc/silgraphite-2.3.1/engine/include/graphite/GrCommon.h	2009-01-21 23:36:40.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/include/graphite/GrCommon.h	2009-07-21 10:41:45.828204700 +0200
+--- misc/silgraphite-2.3.1/engine/include/graphite/GrCommon.h	Thu Jan 22 00:36:40 2009
++++ misc/build/silgraphite-2.3.1/engine/include/graphite/GrCommon.h	Sat Aug 22 19:36:32 2009
 @@ -18,6 +18,8 @@
  #ifndef GRCOMMON_INCLUDED
  #define GRCOMMON_INCLUDED
@@ -26,8 +26,8 @@
  
  // Project headers
  #include "GrPlatform.h"
---- misc/silgraphite-2.3.1/engine/include/graphite/GrMstypes.h	2009-01-21 23:36:40.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/include/graphite/GrMstypes.h	2009-07-21 10:41:45.957240900 +0200
+--- misc/silgraphite-2.3.1/engine/include/graphite/GrMstypes.h	Thu Jan 22 00:36:40 2009
++++ misc/build/silgraphite-2.3.1/engine/include/graphite/GrMstypes.h	Sat Aug 22 19:36:32 2009
 @@ -24,11 +24,11 @@
  
  typedef signed long	    HRESULT;
@@ -42,8 +42,8 @@
  	return --*intr_lck;
  }
  
---- misc/silgraphite-2.3.1/engine/makefile.vc7	2008-08-21 16:24:32.000000000 +0200
-+++ misc/build/silgraphite-2.3.1/engine/makefile.vc7	2009-07-21 10:41:46.072542800 +0200
+--- misc/silgraphite-2.3.1/engine/makefile.vc7	Thu Aug 21 16:24:32 2008
++++ misc/build/silgraphite-2.3.1/engine/makefile.vc7	Sat Aug 22 19:36:32 2009
 @@ -48,11 +48,7 @@
  CPP_DEBUG=/D "TRACING" $(CPP_DEBUG)
  !ENDIF
@@ -56,9 +56,19 @@
  
  clean :
      @- rd /s/q .\release_temp
---- misc/silgraphite-2.3.1/engine/makefile.vc8	2008-08-21 16:24:32.000000000 +0200
-+++ misc/build/silgraphite-2.3.1/engine/makefile.vc8	2009-07-21 10:41:46.221522700 +0200
-@@ -6,7 +6,7 @@
+--- misc/silgraphite-2.3.1/engine/makefile.vc8	Sat Aug 22 21:58:25 2009
++++ misc/build/silgraphite-2.3.1/engine/makefile.vc8	Sat Aug 22 21:57:42 2009
+@@ -2,11 +2,16 @@
+ TARGET=graphite
+ 
+ CPP=cl.exe
+-CPPFLAGS=/Zc:wchar_t- /nologo /W4 /GR /EHsc /I "./src/font" /I "./src/painter" /I "./src/segment" /I "./src/textsource" /I "./src/generic" /I "./include/graphite" /I "../wrappers/win32" /D "GR_NAMESPACE" /D "WIN32" /D "_WINDOWS" /D "_UNICODE" /D "UNICODE" /D "TRACING"  /Fp"$(INTDIR)\graphite.pch" /Fd"$(INTDIR)\\" /FD /c
++### HDU: disabled building with the normal compile flags
++###CPPFLAGS= /Zc:wchar_t- /nologo /W4 /GR /EHsc /I "./src/font" /I "./src/painter" /I "./src/segment" /I "./src/textsource" /I "./src/generic" /I "./include/graphite" /I "../wrappers/win32" /D "GR_NAMESPACE" /D "WIN32" /D "_WINDOWS" /D "_UNICODE" /D "UNICODE" /D "TRACING"  /Fp"$(INTDIR)\graphite.pch" /Fd"$(INTDIR)\\" /FD /c
++### HDU: because for full binary compatibility with the rest of OOo all compile flags must match exactly
++###       which is especially true for template-heavy C++ code with non-default config (e.g. _STLP_DEBUG enabled)
++CPPFLAGS= $(CFLAGS4MSC) /nologo /W4 /I "./src/font" /I "./src/painter" /I "./src/segment" /I "./src/textsource" /I "./src/generic" /I "./include/graphite" /I "../wrappers/win32" /D "GR_NAMESPACE" /D "WIN32" /D "_WINDOWS" /D "_UNICODE" /D "UNICODE" /D "TRACING"  /Fp"$(INTDIR)\graphite.pch" /Fd"$(INTDIR)\\" /FD /c
++
  # /Wp62
  
  LINK=link.exe
@@ -67,7 +77,7 @@
  
  BSC32=bscmake.exe
  BSC32_FLAGS=/nologo /o"$(OUTDIR)\\$(TARGET).bsc" 
-@@ -48,11 +48,7 @@
+@@ -48,11 +52,7 @@
  CPP_DEBUG=/D "TRACING" $(CPP_DEBUG)
  !ENDIF
  
@@ -79,8 +89,33 @@
  
  clean :
      @- rd /s/q .\release_temp
---- misc/silgraphite-2.3.1/engine/src/font/FileFont.cpp	2009-01-21 23:36:42.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/font/FileFont.cpp	2009-07-21 10:41:46.344237000 +0200
+@@ -779,7 +779,7 @@
+ 	@- $(CPP) $(CPPFLAGS) $(CPP_DEBUG) /Fo"$(INTDIR)\FileFont$(OBJEXT)" $?
+ 	
+ "$(INTDIR)\FileFont_dll$(OBJEXT)" : "src/font/FileFont.cpp"
+-	@- $(CPP) $(CPPFLAGS) /D "_DLL" /Fo"$(INTDIR)\FileFont_dll$(OBJEXT)" $?
++	$(CPP) $(CPPFLAGS) /D "_DLL" /Fo"$(INTDIR)\FileFont_dll$(OBJEXT)" $?
+ 	
+ !ENDIF
+ 
+--- misc/silgraphite-2.3.1/engine/src/font/FileFont.cpp	Thu Jan 22 00:36:42 2009
++++ misc/build/silgraphite-2.3.1/engine/src/font/FileFont.cpp	Sat Aug 22 19:36:32 2009
+@@ -207,11 +207,11 @@
+ 				cch16 += cch16Used;
+ 			}
+ //		}
+-#else
++#elif 1
+ 		m_stuFaceName.assign(rgchwFace);
+-		// VS 2005 needs this:
+-		//for (int cch16 = 0; cch16 < cchw; cch16++)
+-		//	m_stuFaceName.push_back(rgchwFace[cch16]);
++#else	// VS 2005 needs this:
++		for (int cch16 = 0; cch16 < cchw; cch16++)
++			m_stuFaceName.push_back(rgchwFace[cch16]);
+ #endif
+ 		pTable = readTable(ktiHead, lSize);
+ 		if (!m_fIsValid || !pTable) 
 @@ -233,7 +233,7 @@
  FileFont::readTable(int /*TableId*/ tid, size_t & size)
  {
@@ -124,8 +159,8 @@
  	{
  		return 0;
  	}
---- misc/silgraphite-2.3.1/engine/src/font/Font.cpp	2008-05-20 08:04:16.000000000 +0200
-+++ misc/build/silgraphite-2.3.1/engine/src/font/Font.cpp	2009-07-21 10:41:46.476133500 +0200
+--- misc/silgraphite-2.3.1/engine/src/font/Font.cpp	Tue May 20 08:04:16 2008
++++ misc/build/silgraphite-2.3.1/engine/src/font/Font.cpp	Sat Aug 22 19:36:33 2009
 @@ -626,7 +626,7 @@
  		Assert(false);
  		m_ifeat = m_cfeat;
@@ -162,8 +197,8 @@
  	{
  		// Can't decrement.
  		Assert(false);
---- misc/silgraphite-2.3.1/engine/src/font/TtfUtil.cpp	2009-01-29 09:33:19.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/font/TtfUtil.cpp	2009-07-21 10:41:46.620489600 +0200
+--- misc/silgraphite-2.3.1/engine/src/font/TtfUtil.cpp	Thu Jan 29 10:33:19 2009
++++ misc/build/silgraphite-2.3.1/engine/src/font/TtfUtil.cpp	Sat Aug 22 19:36:33 2009
 @@ -492,7 +492,7 @@
  	const Sfnt::FontHeader * pTable = 
  			reinterpret_cast<const Sfnt::FontHeader *>(pHead);
@@ -213,8 +248,8 @@
  		int * prgnX, int * prgnY, bool * prgfOnCurve, size_t cnPoints)
  {
  	std::fill_n(prgnX, cnPoints, INT_MAX);
---- misc/silgraphite-2.3.1/engine/src/painter/SegmentPainter.cpp	2009-01-28 03:01:29.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/painter/SegmentPainter.cpp	2009-07-21 10:41:46.768243300 +0200
+--- misc/silgraphite-2.3.1/engine/src/painter/SegmentPainter.cpp	Wed Jan 28 04:01:29 2009
++++ misc/build/silgraphite-2.3.1/engine/src/painter/SegmentPainter.cpp	Sat Aug 22 19:36:33 2009
 @@ -353,7 +353,7 @@
  	@param bOn				- true if we are turning on (ignored in this implementation)
  ----------------------------------------------------------------------------------------------*/
@@ -311,8 +346,8 @@
  {
  	return;
  }
---- misc/silgraphite-2.3.1/engine/src/segment/FileInput.cpp	2009-01-21 23:36:42.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/segment/FileInput.cpp	2009-07-21 10:41:46.902538700 +0200
+--- misc/silgraphite-2.3.1/engine/src/segment/FileInput.cpp	Thu Jan 22 00:36:42 2009
++++ misc/build/silgraphite-2.3.1/engine/src/segment/FileInput.cpp	Sat Aug 22 19:36:33 2009
 @@ -80,7 +80,7 @@
  #ifdef GR_FW
  bool GrBufferIStream::Open(std::wstring stuFileName, int kMode)
@@ -322,8 +357,8 @@
  #endif
  {
  	Assert(false); // use OpenBuffer
---- misc/silgraphite-2.3.1/engine/src/segment/GrCharStream.cpp	2009-01-21 23:36:42.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/segment/GrCharStream.cpp	2009-07-21 10:41:47.039468200 +0200
+--- misc/silgraphite-2.3.1/engine/src/segment/GrCharStream.cpp	Thu Jan 22 00:36:42 2009
++++ misc/build/silgraphite-2.3.1/engine/src/segment/GrCharStream.cpp	Sat Aug 22 19:36:33 2009
 @@ -417,8 +417,11 @@
  	return true;
  */
@@ -337,8 +372,8 @@
  {
  	Assert(ichs >= 0);
  	Assert(ichs <= cchs);
---- misc/silgraphite-2.3.1/engine/src/segment/GrClassTable.h	2009-01-21 23:36:42.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/segment/GrClassTable.h	2009-07-21 10:41:47.171157400 +0200
+--- misc/silgraphite-2.3.1/engine/src/segment/GrClassTable.h	Thu Jan 22 00:36:42 2009
++++ misc/build/silgraphite-2.3.1/engine/src/segment/GrClassTable.h	Sat Aug 22 19:36:33 2009
 @@ -54,7 +54,11 @@
  	/*------------------------------------------------------------------------------------------
  		Copy the raw memory into the instance.
@@ -351,8 +386,8 @@
  	{
  		m_cgixBIG = pchwStart[0];
  		m_digixBIGInit = pchwStart[1];
---- misc/silgraphite-2.3.1/engine/src/segment/GrEngine.cpp	2009-01-28 03:01:29.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/segment/GrEngine.cpp	2009-07-21 10:41:47.323131300 +0200
+--- misc/silgraphite-2.3.1/engine/src/segment/GrEngine.cpp	Wed Jan 28 04:01:29 2009
++++ misc/build/silgraphite-2.3.1/engine/src/segment/GrEngine.cpp	Sat Aug 22 19:36:33 2009
 @@ -159,12 +159,12 @@
  GrEngine::~GrEngine()
  {
@@ -457,8 +492,8 @@
  	}
  
  	//	linebreak glyph ID
---- misc/silgraphite-2.3.1/engine/src/segment/GrFSM.cpp	2009-01-21 23:36:42.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/segment/GrFSM.cpp	2009-07-21 10:41:47.462405200 +0200
+--- misc/silgraphite-2.3.1/engine/src/segment/GrFSM.cpp	Thu Jan 22 00:36:42 2009
++++ misc/build/silgraphite-2.3.1/engine/src/segment/GrFSM.cpp	Sat Aug 22 19:36:33 2009
 @@ -46,7 +46,7 @@
  	Fill in the FSM by reading from the font stream.
  	Assumes the stream is in the correct position.
@@ -477,8 +512,8 @@
  {
  	int cCells = ((m_crow - m_crowFinal) * m_ccol);
  	m_prgrowTransitions = new short[cCells];
---- misc/silgraphite-2.3.1/engine/src/segment/GrFeature.cpp	2009-01-21 23:36:42.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/segment/GrFeature.cpp	2009-07-21 10:41:47.602102200 +0200
+--- misc/silgraphite-2.3.1/engine/src/segment/GrFeature.cpp	Thu Jan 22 00:36:42 2009
++++ misc/build/silgraphite-2.3.1/engine/src/segment/GrFeature.cpp	Sat Aug 22 19:36:33 2009
 @@ -186,7 +186,7 @@
  /*----------------------------------------------------------------------------------------------
  	Read the languages from the font.
@@ -513,8 +548,8 @@
  
  	return true;
  }
---- misc/silgraphite-2.3.1/engine/src/segment/GrPass.cpp	2009-01-28 03:01:29.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/segment/GrPass.cpp	2009-07-21 10:41:47.751390400 +0200
+--- misc/silgraphite-2.3.1/engine/src/segment/GrPass.cpp	Wed Jan 28 04:01:29 2009
++++ misc/build/silgraphite-2.3.1/engine/src/segment/GrPass.cpp	Sat Aug 22 19:36:34 2009
 @@ -279,9 +279,10 @@
  	@param twsh					- how we are handling trailing white-space
  	@param pnRet				- return value
@@ -597,8 +632,8 @@
  {
  	//	Because this is a positioning pass, there is a one-to-one correspondence between
  	//	the slots in the input and the slots in the output. Thus we can make simplifying
---- misc/silgraphite-2.3.1/engine/src/segment/GrPass.h	2008-08-21 16:24:32.000000000 +0200
-+++ misc/build/silgraphite-2.3.1/engine/src/segment/GrPass.h	2009-07-21 10:41:47.894201400 +0200
+--- misc/silgraphite-2.3.1/engine/src/segment/GrPass.h	Thu Aug 21 16:24:32 2008
++++ misc/build/silgraphite-2.3.1/engine/src/segment/GrPass.h	Sat Aug 22 19:36:34 2009
 @@ -197,7 +197,7 @@
  	bool ReadFromFont(GrIStream & grstrm, int fxdSilfVersion, int fxdRuleVersion, int nOffset);
  	void InitializeWithNoRules();
@@ -648,8 +683,8 @@
  	{
  		Assert(false);
  	}
---- misc/silgraphite-2.3.1/engine/src/segment/GrPassActionCode.cpp	2009-01-28 03:01:29.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/segment/GrPassActionCode.cpp	2009-07-21 10:41:48.046193000 +0200
+--- misc/silgraphite-2.3.1/engine/src/segment/GrPassActionCode.cpp	Wed Jan 28 04:01:29 2009
++++ misc/build/silgraphite-2.3.1/engine/src/segment/GrPassActionCode.cpp	Sat Aug 22 19:36:34 2009
 @@ -632,8 +632,13 @@
  /*----------------------------------------------------------------------------------------------
  	We are finished processing a slot; go on to the next slot, or possibly go backwards.
@@ -832,8 +867,8 @@
  	int nFeat, std::vector<int> & vnStack, GrSlotStream * psstrmIn, GrSlotStream * psstrmOut)
  {
  	gAssert(!fInserting);
---- misc/silgraphite-2.3.1/engine/src/segment/GrSlotState.cpp	2009-01-28 03:01:29.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/segment/GrSlotState.cpp	2009-07-21 10:41:48.198035300 +0200
+--- misc/silgraphite-2.3.1/engine/src/segment/GrSlotState.cpp	Wed Jan 28 04:01:29 2009
++++ misc/build/silgraphite-2.3.1/engine/src/segment/GrSlotState.cpp	Sat Aug 22 19:36:34 2009
 @@ -261,7 +261,7 @@
  	root or attached leaf slots.
  	OBSOLETE
@@ -999,8 +1034,8 @@
  {
  	return m_ysOffsetY;
  }
---- misc/silgraphite-2.3.1/engine/src/segment/GrSlotState.h	2009-01-28 03:01:29.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/segment/GrSlotState.h	2009-07-21 10:41:48.351654100 +0200
+--- misc/silgraphite-2.3.1/engine/src/segment/GrSlotState.h	Wed Jan 28 04:01:29 2009
++++ misc/build/silgraphite-2.3.1/engine/src/segment/GrSlotState.h	Sat Aug 22 19:36:34 2009
 @@ -308,7 +308,11 @@
  	{
  		return m_islotPosPass;
@@ -1089,8 +1124,8 @@
  	void AttachToRoot(GrTableManager * ptman, GrSlotStream *, GrSlotState * pslotNewRoot);
  	void AttachLogUnits(GrTableManager * ptman,
  		GrSlotState * pslotRoot,
---- misc/silgraphite-2.3.1/engine/src/segment/GrSlotStream.cpp	2009-02-04 06:53:26.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/segment/GrSlotStream.cpp	2009-07-21 10:41:48.503535500 +0200
+--- misc/silgraphite-2.3.1/engine/src/segment/GrSlotStream.cpp	Wed Feb 04 07:53:26 2009
++++ misc/build/silgraphite-2.3.1/engine/src/segment/GrSlotStream.cpp	Sat Aug 22 19:36:34 2009
 @@ -189,12 +189,16 @@
  	stream position when the rule is being run.
  
@@ -1265,8 +1300,8 @@
  //			Assert(pslot->m_vpslotAssoc.Size() > 0);
  			pslot->m_fNeutralAssocs = true;
  		}
---- misc/silgraphite-2.3.1/engine/src/segment/GrSlotStream.h	2009-01-21 23:36:42.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/segment/GrSlotStream.h	2009-07-21 10:41:48.661390600 +0200
+--- misc/silgraphite-2.3.1/engine/src/segment/GrSlotStream.h	Thu Jan 22 00:36:42 2009
++++ misc/build/silgraphite-2.3.1/engine/src/segment/GrSlotStream.h	Sat Aug 22 19:36:34 2009
 @@ -107,7 +107,7 @@
  		ReleaseSlots(0, m_vpslot.size());
  	}
@@ -1310,8 +1345,8 @@
  	GrSlotState * RuleInputSlot(int dislot = 0, GrSlotStream * psstrmOut = NULL,
  		bool fNullOkay = false);
  	GrSlotState * RuleOutputSlot(int dislot = 0);
---- misc/silgraphite-2.3.1/engine/src/segment/GrTableManager.cpp	2009-01-28 03:01:29.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/segment/GrTableManager.cpp	2009-07-21 10:41:48.823423600 +0200
+--- misc/silgraphite-2.3.1/engine/src/segment/GrTableManager.cpp	Wed Jan 28 04:01:29 2009
++++ misc/build/silgraphite-2.3.1/engine/src/segment/GrTableManager.cpp	Sat Aug 22 19:36:34 2009
 @@ -25,8 +25,8 @@
  DEFINE_THIS_FILE
  #ifndef _WIN32
@@ -1470,8 +1505,8 @@
  
  		//	My theory is that we don't need to adjust *pxsWidth here, because the width of
  		//	any non-base slots should be factored into the advance width of their cluster
---- misc/silgraphite-2.3.1/engine/src/segment/GrTableManager.h	2009-01-28 03:01:29.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/segment/GrTableManager.h	2009-07-21 10:41:48.943947800 +0200
+--- misc/silgraphite-2.3.1/engine/src/segment/GrTableManager.h	Wed Jan 28 04:01:29 2009
++++ misc/build/silgraphite-2.3.1/engine/src/segment/GrTableManager.h	Sat Aug 22 19:36:35 2009
 @@ -442,7 +442,7 @@
  	int LogToEmUnits(float xys);
  	bool GPointToXY(gid16 chwGlyphID, int nGPoint, float * xs, float * ys);
@@ -1481,8 +1516,8 @@
  		float * pxsWidth, float * pxsVisibleWidth);
  
  	void InitPosCache()
---- misc/silgraphite-2.3.1/engine/src/segment/Platform.cpp	2009-01-21 23:36:42.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/segment/Platform.cpp	2009-07-21 10:41:49.080902200 +0200
+--- misc/silgraphite-2.3.1/engine/src/segment/Platform.cpp	Thu Jan 22 00:36:42 2009
++++ misc/build/silgraphite-2.3.1/engine/src/segment/Platform.cpp	Sat Aug 22 19:36:35 2009
 @@ -103,7 +103,7 @@
  {
  	// assumes NULL terminated strings
@@ -1492,8 +1527,8 @@
  	
  	return s - start;
  }
---- misc/silgraphite-2.3.1/engine/src/segment/Segment.cpp	2008-08-21 16:24:32.000000000 +0200
-+++ misc/build/silgraphite-2.3.1/engine/src/segment/Segment.cpp	2009-07-21 10:41:49.243648400 +0200
+--- misc/silgraphite-2.3.1/engine/src/segment/Segment.cpp	Thu Aug 21 16:24:32 2008
++++ misc/build/silgraphite-2.3.1/engine/src/segment/Segment.cpp	Sat Aug 22 19:36:35 2009
 @@ -1178,7 +1178,7 @@
  	part of the segment.
  ----------------------------------------------------------------------------------------------*/
@@ -1614,8 +1649,8 @@
  {
  #ifdef _DEBUG
  	for (int islot = 0; islot < psstrm->WritePos(); islot++)
---- misc/silgraphite-2.3.1/engine/src/segment/TransductionLog.cpp	2009-01-28 03:01:29.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/src/segment/TransductionLog.cpp	2009-07-21 10:41:49.393543400 +0200
+--- misc/silgraphite-2.3.1/engine/src/segment/TransductionLog.cpp	Wed Jan 28 04:01:29 2009
++++ misc/build/silgraphite-2.3.1/engine/src/segment/TransductionLog.cpp	Sat Aug 22 19:36:35 2009
 @@ -175,7 +175,7 @@
  	Output a file showing a log of the transduction process and the resulting segment.
  ----------------------------------------------------------------------------------------------*/
@@ -1725,8 +1760,8 @@
  		{
  			ptman->LogDirCodeInTable(strmOut, m_dirc);
  			return;
---- misc/silgraphite-2.3.1/engine/test/ProfileHarness/GrUtfTextSrc.cpp	2009-01-21 23:36:42.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/test/ProfileHarness/GrUtfTextSrc.cpp	2009-07-21 10:41:49.530874700 +0200
+--- misc/silgraphite-2.3.1/engine/test/ProfileHarness/GrUtfTextSrc.cpp	Thu Jan 22 00:36:42 2009
++++ misc/build/silgraphite-2.3.1/engine/test/ProfileHarness/GrUtfTextSrc.cpp	Sat Aug 22 19:36:35 2009
 @@ -210,12 +210,12 @@
  }
  
@@ -1786,8 +1821,8 @@
  {
    gr::isocode unknown;
    std::fill_n(unknown.rgch, 4, '\0');
---- misc/silgraphite-2.3.1/engine/test/ProfileHarness/GrUtfTextSrc.h	2009-01-21 23:36:42.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/test/ProfileHarness/GrUtfTextSrc.h	2009-07-21 10:41:49.655662500 +0200
+--- misc/silgraphite-2.3.1/engine/test/ProfileHarness/GrUtfTextSrc.h	Thu Jan 22 00:36:42 2009
++++ misc/build/silgraphite-2.3.1/engine/test/ProfileHarness/GrUtfTextSrc.h	Sat Aug 22 19:36:35 2009
 @@ -79,7 +79,7 @@
    virtual size_t fetch(gr::toffset ichMin, size_t cch, gr::utf32 * prgchBuffer);
    virtual size_t fetch(gr::toffset ichMin, size_t cch, gr::utf16 * prgchwBuffer);
@@ -1829,8 +1864,8 @@
  
  };
  
---- misc/silgraphite-2.3.1/engine/test/ProfileHarness/ProfileHarness.cpp	2009-01-21 23:36:42.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/test/ProfileHarness/ProfileHarness.cpp	2009-07-21 10:41:49.778359100 +0200
+--- misc/silgraphite-2.3.1/engine/test/ProfileHarness/ProfileHarness.cpp	Thu Jan 22 00:36:42 2009
++++ misc/build/silgraphite-2.3.1/engine/test/ProfileHarness/ProfileHarness.cpp	Sat Aug 22 19:36:35 2009
 @@ -39,14 +39,14 @@
  typedef std::pair< gr::GlyphIterator, gr::GlyphIterator > GlyphRange;
  
@@ -1848,8 +1883,8 @@
  {
    return atol(text);
  }
---- misc/silgraphite-2.3.1/engine/test/RegressionTest/GrJustifier.cpp	2009-01-21 23:36:42.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/test/RegressionTest/GrJustifier.cpp	2009-07-21 10:41:49.903885000 +0200
+--- misc/silgraphite-2.3.1/engine/test/RegressionTest/GrJustifier.cpp	Thu Jan 22 00:36:42 2009
++++ misc/build/silgraphite-2.3.1/engine/test/RegressionTest/GrJustifier.cpp	Sat Aug 22 19:36:35 2009
 @@ -327,7 +327,7 @@
  					&dxStretchAchieved);
  				for (int iiiGlyph = 0; iiiGlyph < cStretchable; iiiGlyph++)
@@ -1859,8 +1894,8 @@
  					vdxStretchLeft[iiGlyph] = vdxStretchRem[iiiGlyph];
  					vdxWidth[iiGlyph] = vdxWidthRem[iiiGlyph];
  				}
---- misc/silgraphite-2.3.1/engine/test/RegressionTest/RegressionTest.cpp	2009-01-21 23:36:42.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/test/RegressionTest/RegressionTest.cpp	2009-07-21 10:41:50.034192400 +0200
+--- misc/silgraphite-2.3.1/engine/test/RegressionTest/RegressionTest.cpp	Thu Jan 22 00:36:42 2009
++++ misc/build/silgraphite-2.3.1/engine/test/RegressionTest/RegressionTest.cpp	Sat Aug 22 19:36:35 2009
 @@ -675,7 +675,7 @@
  	OutputErrorAux(ptcase, strErr, i, true, valueFound, valueExpected);
  }
@@ -1870,8 +1905,8 @@
  	bool showValues, int valueFound, int valueExpected)
  {
  //	if (g_debugMode)
---- misc/silgraphite-2.3.1/engine/test/RegressionTest/SimpleTextSrc.cpp	2009-01-21 23:36:42.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/test/RegressionTest/SimpleTextSrc.cpp	2009-07-21 10:41:50.160430000 +0200
+--- misc/silgraphite-2.3.1/engine/test/RegressionTest/SimpleTextSrc.cpp	Thu Jan 22 00:36:42 2009
++++ misc/build/silgraphite-2.3.1/engine/test/RegressionTest/SimpleTextSrc.cpp	Sat Aug 22 19:36:36 2009
 @@ -70,7 +70,7 @@
  /*----------------------------------------------------------------------------------------------
  	Return true if the text uses a right-to-left writing system.
@@ -1899,8 +1934,8 @@
  {
  	return 0;
  }
---- misc/silgraphite-2.3.1/engine/test/RegressionTest/SimpleTextSrc.h	2009-01-21 23:36:42.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/engine/test/RegressionTest/SimpleTextSrc.h	2009-07-21 10:41:50.284794200 +0200
+--- misc/silgraphite-2.3.1/engine/test/RegressionTest/SimpleTextSrc.h	Thu Jan 22 00:36:42 2009
++++ misc/build/silgraphite-2.3.1/engine/test/RegressionTest/SimpleTextSrc.h	Sat Aug 22 19:36:36 2009
 @@ -59,12 +59,12 @@
  	{
  		return m_cchLength;
@@ -1953,8 +1988,8 @@
  	{
  		*pclrFore = kclrBlack;
  		*pclrBack = kclrTransparent;
---- misc/silgraphite-2.3.1/wrappers/win32/WinFont.cpp	2009-01-29 09:33:19.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/wrappers/win32/WinFont.cpp	2009-07-21 10:41:50.425877300 +0200
+--- misc/silgraphite-2.3.1/wrappers/win32/WinFont.cpp	Thu Jan 29 10:33:19 2009
++++ misc/build/silgraphite-2.3.1/wrappers/win32/WinFont.cpp	Sat Aug 22 19:36:36 2009
 @@ -767,7 +767,7 @@
  ----------------------------------------------------------------------------------------------*/
  void WinFont::FontHandleCache::DeleteFont(HFONT hfont)
@@ -1964,8 +1999,8 @@
  		return;
  
  	// find the font in the hash map
---- misc/silgraphite-2.3.1/wrappers/win32/WinFont.h	2009-01-29 09:33:19.000000000 +0100
-+++ misc/build/silgraphite-2.3.1/wrappers/win32/WinFont.h	2009-07-21 10:41:50.547556200 +0200
+--- misc/silgraphite-2.3.1/wrappers/win32/WinFont.h	Thu Jan 29 10:33:19 2009
++++ misc/build/silgraphite-2.3.1/wrappers/win32/WinFont.h	Sat Aug 22 19:36:36 2009
 @@ -27,6 +27,10 @@
  #include "GrClient.h"
  #include "Font.h"
