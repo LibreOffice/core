@@ -358,7 +358,8 @@ public:
                         mbToolbarFloatingWindow:1,
                         mbCallHandlersDuringInputDisabled:1,
                         mbDisableAccessibleLabelForRelation:1,
-                        mbDisableAccessibleLabeledByRelation:1;
+                        mbDisableAccessibleLabeledByRelation:1,
+                        mbHelpTextDynamic:1;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 };

@@ -471,6 +471,7 @@ PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
     SMHID1( "JobPage" );
     maPrinterFL.SMHID2( "JobPage", "Printer" );
     maPrinters.SMHID2( "JobPage", "PrinterList" );
+    maDetailsBtn.SMHID2( "JobPage", "DetailsBtn" );
     maStatusLabel.SMHID2( "JobPage", "StatusLabel" );
     maStatusTxt.SMHID2( "JobPage", "StatusText" );
     maLocationLabel.SMHID2( "JobPage", "LocationLabel" );
@@ -837,6 +838,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     SMHID1( "Dialog" );
     maOKButton.SMHID1( "OK" );
     maCancelButton.SMHID1( "Cancel" );
+    maHelpButton.SMHID1( "Help" );
     maPreviewWindow.SMHID1( "Preview" );
     maNumPagesText.SMHID1( "NumPagesText" );
     maPageEdit.SMHID1( "PageEdit" );

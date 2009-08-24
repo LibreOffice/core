@@ -1999,6 +1999,7 @@ BOOL Window::IsZoom() const
 void Window::SetHelpText( const XubString& rHelpText )
 {
     mpWindowImpl->maHelpText = rHelpText;
+    mpWindowImpl->mbHelpTextDynamic = TRUE;
 }
 
 void Window::SetQuickHelpText( const XubString& rHelpText )

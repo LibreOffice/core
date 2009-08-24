@@ -690,6 +690,7 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbCallHandlersDuringInputDisabled = FALSE; // TRUE: call event handlers even if input is disabled
     mpWindowImpl->mbDisableAccessibleLabelForRelation = FALSE; // TRUE: do not set LabelFor relation on accessible objects
     mpWindowImpl->mbDisableAccessibleLabeledByRelation = FALSE; // TRUE: do not set LabeledBy relation on accessible objects
+    mpWindowImpl->mbHelpTextDynamic = FALSE;          // TRUE: append help id in HELP_DEBUG case
 
     mbEnableRTL         = Application::GetSettings().GetLayoutRTL();         // TRUE: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
 }
@@ -1269,7 +1270,10 @@ void Window::ImplLoadRes( const ResId& rResId )
     if ( nObjMask & WINDOW_TEXT )
         SetText( ReadStringRes() );
     if ( nObjMask & WINDOW_HELPTEXT )
+    {
         SetHelpText( ReadStringRes() );
+        mpWindowImpl->mbHelpTextDynamic = TRUE;
+    }
     if ( nObjMask & WINDOW_QUICKTEXT )
         SetQuickHelpText( ReadStringRes() );
     if ( nObjMask & WINDOW_EXTRALONG )
@@ -8099,8 +8103,25 @@ const XubString& Window::GetHelpText() const
                     ((Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( aStrHelpId, this );
                 else
                     ((Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( nNumHelpId, this );
+                mpWindowImpl->mbHelpTextDynamic = FALSE;
             }
         }
+    }
+    else if( mpWindowImpl->mbHelpTextDynamic && (nNumHelpId || bStrHelpId) )
+    {
+        static const char* pEnv = getenv( "HELP_DEBUG" );
+        if( pEnv && *pEnv )
+        {
+            rtl::OUStringBuffer aTxt( 64+mpWindowImpl->maHelpText.Len() );
+            aTxt.append( mpWindowImpl->maHelpText );
+            aTxt.appendAscii( "\n+++++++++++++++\n" );
+            if( bStrHelpId )
+                aTxt.append( rtl::OUString( aStrHelpId ) );
+            else
+                aTxt.append( sal_Int32( nNumHelpId ) );
+            mpWindowImpl->maHelpText = aTxt.makeStringAndClear();
+        }
+        mpWindowImpl->mbHelpTextDynamic = FALSE;
     }
 
     return mpWindowImpl->maHelpText;
