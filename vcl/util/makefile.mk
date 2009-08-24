@@ -213,7 +213,7 @@ LIB1FILES+= \
 SHL1LIBS=   $(LIB1TARGET)
 .IF "$(GUI)"!="UNX"
 .IF "$(COM)"!="GCC"
-SHL1OBJS=   $(SLO)$/salshl.obj
+#SHL1OBJS=   $(SLO)$/salshl.obj
 .ENDIF
 .ENDIF
 
