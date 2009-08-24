@@ -38,6 +38,8 @@
 
 struct DownloadInteractionHandler : public rtl::IReference
 {
+    virtual bool checkDownloadDestination(const rtl::OUString& rFileName) = 0;
+
     // called if the destination file already exists, but resume is false
     virtual bool downloadTargetExists(const rtl::OUString& rFileName) = 0;
 

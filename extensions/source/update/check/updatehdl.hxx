@@ -128,6 +128,9 @@ private:
     rtl::OUString           msInstallError;     // RID_UPDATE_STR_INSTALL_ERROR
     rtl::OUString           msOverwriteWarning; // RID_UPDATE_STR_OVERWRITE_WARNING
     rtl::OUString           msPercent;          // RID_UPDATE_STR_PERCENT
+    rtl::OUString           msReloadWarning;    // RID_UPDATE_STR_OVERWRITE_WARNING
+    rtl::OUString           msReloadReload;     // RID_UPDATE_STR_OVERWRITE_WARNING
+    rtl::OUString           msReloadContinue;   // RID_UPDATE_STR_OVERWRITE_WARNING
     rtl::OUString           msStatusFL;         // RID_UPDATE_FT_STATUS
     rtl::OUString           msDescription;      // RID_UPDATE_FT_DESCRIPTION
     rtl::OUString           msClose;            // RID_UPDATE_BTN_CLOSE
@@ -187,6 +190,8 @@ public:
     rtl::OUString           getBubbleTitle( UpdateState eState );
     rtl::OUString           getDefaultInstErrMsg();
     bool                    showWarning( const rtl::OUString &rWarning ) const;
+    bool                    showWarning( const rtl::OUString &rWarning, const rtl::OUString& rBtnText_1, const rtl::OUString& rBtnText_2 ) const;
+    bool                    showOverwriteWarning( const rtl::OUString &rFileName ) const;
     bool                    showOverwriteWarning() const;
 
     // Allows runtime exceptions to be thrown by const methods

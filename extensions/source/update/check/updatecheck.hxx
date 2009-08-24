@@ -114,6 +114,8 @@ public:
     virtual void downloadProgressAt(sal_Int8 nProcent);
     virtual void downloadStarted(const rtl::OUString& rLocalFileName, sal_Int64 nFileSize);
     virtual void downloadFinished(const rtl::OUString& rLocalFileName);
+    // checks if the download target already exists and asks user what to do next
+    virtual bool checkDownloadDestination( const rtl::OUString& rFile );
 
     // Cancels the download action (and resumes checking if enabled)
     void cancelDownload();

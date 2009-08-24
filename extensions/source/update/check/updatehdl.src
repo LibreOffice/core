@@ -125,6 +125,21 @@ String RID_UPDATE_STR_OVERWRITE_WARNING
     Text [ en-US ] = "A file with that name already exists! Do you want to overwrite the existing file?";
 };
 
+String RID_UPDATE_STR_RELOAD_WARNING
+{
+    Text [ en-US ] = "A file with the name '%FILENAME' already exists in '%DOWNLOAD_PATH'! Do you want to continue with the download or delete and reload the file?";
+};
+
+String RID_UPDATE_STR_RELOAD_RELOAD
+{
+    Text [ en-US ] = "Reload File";
+};
+
+String RID_UPDATE_STR_RELOAD_CONTINUE
+{
+    Text [ en-US ] = "Continue";
+};
+
 String RID_UPDATE_STR_PERCENT
 {
     Text [ en-US ] = "%PERCENT%";

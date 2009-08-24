@@ -172,7 +172,9 @@ progress_callback( void *clientp, double dltotal, double dlnow, double ultotal, 
 
     if( ! out->StopCondition.check() )
     {
-        double fPercent = (dlnow + out->Offset) * 100 / (dltotal + out->Offset);
+        double fPercent = 0;
+        if ( dltotal + out->Offset )
+            fPercent = (dlnow + out->Offset) * 100 / (dltotal + out->Offset);
         if( fPercent < 0 )
             fPercent = 0;
 
@@ -333,14 +335,52 @@ Download::start(const rtl::OUString& rURL, const rtl::OUString& rFile, const rtl
     OSL_ASSERT( m_aHandler.is() );
 
     OutData out(m_aCondition);
+    rtl::OUString aFile( rFile );
 
-    out.File = rFile;
+    // when rFile is empty, there is no remembered file name. If there is already a file with the
+    // same name ask the user if she wants to resume a download or restart the download
+    if ( !aFile.getLength() )
+    {
+        // GetFileName()
+        rtl::OUString aURL( rURL );
+        // ensure no trailing '/'
+        sal_Int32 nLen = aURL.getLength();
+        while( (nLen > 0) && ('/' == aURL[ nLen-1 ]) )
+            aURL = aURL.copy( 0, --nLen );
+
+        // extract file name last '/'
+        sal_Int32 nIndex = aURL.lastIndexOf('/');
+        aFile = rDestinationDir + aURL.copy( nIndex );
+
+        // check for existing file
+        oslFileError rc = osl_openFile( aFile.pData, &out.FileHandle, osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
+        osl_closeFile(out.FileHandle);
+        out.FileHandle = NULL;
+
+        if( osl_File_E_EXIST == rc )
+        {
+            if ( m_aHandler->checkDownloadDestination( aURL.copy( nIndex+1 ) ) )
+            {
+                osl_removeFile( aFile.pData );
+                aFile = rtl::OUString();
+            }
+            else
+                m_aHandler->downloadStarted( aFile, 1 );
+        }
+        else
+        {
+            osl_removeFile( aFile.pData );
+            aFile = rtl::OUString();
+        }
+    }
+
+    out.File = aFile;
     out.DestinationDir = rDestinationDir;
     out.Handler = m_aHandler;
 
-    if( rFile.getLength() > 0 )
+    if( aFile.getLength() > 0 )
     {
-        oslFileError rc = osl_openFile(rFile.pData, &out.FileHandle, osl_File_OpenFlag_Write);
+        oslFileError rc = osl_openFile(aFile.pData, &out.FileHandle, osl_File_OpenFlag_Write);
 
         if( osl_File_E_None == rc )
         {

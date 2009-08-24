@@ -54,6 +54,7 @@
 #include "com/sun/star/awt/XThrobber.hpp"
 #include "com/sun/star/awt/XTopWindow.hpp"
 #include "com/sun/star/awt/XVclWindowPeer.hpp"
+#include "com/sun/star/awt/XVclContainer.hpp"
 #include "com/sun/star/awt/XWindow.hpp"
 #include "com/sun/star/awt/XWindow2.hpp"
 
@@ -230,6 +231,11 @@ void UpdateHandler::setVisible( bool bVisible )
 //--------------------------------------------------------------------
 void UpdateHandler::setProgress( sal_Int32 nPercent )
 {
+    if ( nPercent > 100 )
+        nPercent = 100;
+    else if ( nPercent < 0 )
+        nPercent = 0;
+
     if ( nPercent != mnPercent )
     {
         osl::MutexGuard aGuard( maMutex );
@@ -705,6 +711,9 @@ void UpdateHandler::loadStrings()
     msInstallError  = loadString( xBundle, RID_UPDATE_STR_INSTALL_ERROR );
     msOverwriteWarning = loadString( xBundle, RID_UPDATE_STR_OVERWRITE_WARNING );
     msPercent       = loadString( xBundle, RID_UPDATE_STR_PERCENT );
+    msReloadWarning = loadString( xBundle, RID_UPDATE_STR_RELOAD_WARNING );
+    msReloadReload  = loadString( xBundle, RID_UPDATE_STR_RELOAD_RELOAD );
+    msReloadContinue = loadString( xBundle, RID_UPDATE_STR_RELOAD_CONTINUE );
 
     msStatusFL      = loadString( xBundle, RID_UPDATE_FT_STATUS );
     msDescription   = loadString( xBundle, RID_UPDATE_FT_DESCRIPTION );
@@ -954,6 +963,83 @@ bool UpdateHandler::showWarning( const rtl::OUString &rWarningText ) const
         xComponent->dispose();
 
     return bRet;
+}
+
+//--------------------------------------------------------------------
+bool UpdateHandler::showWarning( const rtl::OUString &rWarningText,
+                                 const rtl::OUString &rBtnText_1,
+                                 const rtl::OUString &rBtnText_2 ) const
+{
+    bool bRet = false;
+
+    uno::Reference< awt::XControl > xControl( mxUpdDlg, uno::UNO_QUERY );
+    if ( !xControl.is() ) return bRet;
+
+    uno::Reference< awt::XWindowPeer > xPeer = xControl->getPeer();
+    if ( !xPeer.is() ) return bRet;
+
+    uno::Reference< awt::XToolkit > xToolkit = xPeer->getToolkit();
+    if ( !xToolkit.is() ) return bRet;
+
+    awt::WindowDescriptor aDescriptor;
+
+    sal_Int32 nWindowAttributes = awt::WindowAttribute::BORDER | awt::WindowAttribute::MOVEABLE | awt::WindowAttribute::CLOSEABLE;
+    nWindowAttributes |= awt::VclWindowPeerAttribute::YES_NO;
+    nWindowAttributes |= awt::VclWindowPeerAttribute::DEF_NO;
+
+    aDescriptor.Type              = awt::WindowClass_MODALTOP;
+    aDescriptor.WindowServiceName = UNISTRING( "warningbox" );
+    aDescriptor.ParentIndex       = -1;
+    aDescriptor.Parent            = xPeer;
+    aDescriptor.Bounds            = awt::Rectangle( 10, 10, 250, 150 );
+    aDescriptor.WindowAttributes  = nWindowAttributes;
+
+    uno::Reference< awt::XMessageBox > xMsgBox( xToolkit->createWindow( aDescriptor ), uno::UNO_QUERY );
+    if ( xMsgBox.is() )
+    {
+        uno::Reference< awt::XVclContainer > xMsgBoxCtrls( xMsgBox, uno::UNO_QUERY );
+        if ( xMsgBoxCtrls.is() )
+        {
+            uno::Sequence< uno::Reference< awt::XWindow > > xChildren = xMsgBoxCtrls->getWindows();
+
+            for ( long i=0; i < xChildren.getLength(); i++ )
+            {
+                uno::Reference< awt::XVclWindowPeer > xMsgBoxCtrl( xChildren[i], uno::UNO_QUERY );
+                if ( xMsgBoxCtrl.is() )
+                {
+                    bool bIsDefault;
+                    uno::Any aValue = xMsgBoxCtrl->getProperty( UNISTRING("DefaultButton") );
+                    aValue >>= bIsDefault;
+                    if ( bIsDefault )
+                        xMsgBoxCtrl->setProperty( UNISTRING("Text"), uno::Any( rBtnText_1 ) );
+                    else
+                        xMsgBoxCtrl->setProperty( UNISTRING("Text"), uno::Any( rBtnText_2 ) );
+                }
+            }
+        }
+
+        sal_Int16 nRet;
+        // xMsgBox->setCaptionText( msCancelTitle );
+        xMsgBox->setMessageText( rWarningText );
+        nRet = xMsgBox->execute();
+        if ( nRet == 2 ) // RET_YES == 2
+            bRet = true;
+    }
+
+    uno::Reference< lang::XComponent > xComponent( xMsgBox, uno::UNO_QUERY );
+    if ( xComponent.is() )
+        xComponent->dispose();
+
+    return bRet;
+}
+
+//--------------------------------------------------------------------
+bool UpdateHandler::showOverwriteWarning( const rtl::OUString& rFileName ) const
+{
+    rtl::OUString aMsg( msReloadWarning );
+    searchAndReplaceAll( aMsg, UNISTRING( "%FILENAME" ), rFileName );
+    searchAndReplaceAll( aMsg, UNISTRING( "%DOWNLOAD_PATH" ), msDownloadPath );
+    return showWarning( aMsg, msReloadContinue, msReloadReload );
 }
 
 //--------------------------------------------------------------------

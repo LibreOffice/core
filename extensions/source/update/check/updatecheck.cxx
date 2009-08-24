@@ -785,6 +785,8 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
         aModel.getUpdateEntry(m_aUpdateInfo);
 
         bool obsoleteUpdateInfo = isObsoleteUpdateInfo(aUpdateEntryVersion);
+        bool bContinueDownload = false;
+        bool bDownloadAvailable = false;
 
         m_bHasExtensionUpdate = checkForPendingUpdates( xContext );
         m_bShowExtUpdDlg = false;
@@ -793,10 +795,7 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
 
         if( aLocalFileName.getLength() > 0 )
         {
-            bool downloadPaused = aModel.isDownloadPaused();
-
-            enableDownload(true, downloadPaused);
-            setUIState(downloadPaused ? UPDATESTATE_DOWNLOAD_PAUSED : UPDATESTATE_DOWNLOADING);
+            bContinueDownload = true;
 
             // Try to get the number of bytes already on disk
             osl::DirectoryItem aDirectoryItem;
@@ -805,16 +804,36 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
                 osl::FileStatus aFileStatus(FileStatusMask_FileSize);
                 if( osl::DirectoryItem::E_None == aDirectoryItem.getFileStatus(aFileStatus) )
                 {
-                    // Calculate initial percent value.
-                    if( aModel.getDownloadSize() > 0 )
+                    sal_Int64 nDownloadSize = aModel.getDownloadSize();
+                    sal_Int64 nFileSize = aFileStatus.getFileSize();
+
+                    if( nDownloadSize > 0 )
                     {
-                        sal_Int32 nPercent = (sal_Int32) (100 * aFileStatus.getFileSize() / aModel.getDownloadSize());
-                        getUpdateHandler()->setProgress(nPercent);
+                        if ( nDownloadSize == nFileSize ) // we have already downloaded everthing
+                        {
+                            bContinueDownload = false;
+                            bDownloadAvailable = true;
+                            m_aImageName = getImageFromFileName( aLocalFileName );
+                        }
+                        else // Calculate initial percent value.
+                        {
+                            sal_Int32 nPercent = (sal_Int32) (100 * nFileSize / nDownloadSize);
+                            getUpdateHandler()->setProgress( nPercent );
+                        }
                     }
                 }
             }
+
+            if ( bContinueDownload )
+            {
+                bool downloadPaused = aModel.isDownloadPaused();
+
+                enableDownload(true, downloadPaused);
+                setUIState(downloadPaused ? UPDATESTATE_DOWNLOAD_PAUSED : UPDATESTATE_DOWNLOADING);
+            }
+
         }
-        else
+        if ( !bContinueDownload )
         {
             // We do this intentionally only if no download is in progress ..
             if( obsoleteUpdateInfo )
@@ -827,13 +846,18 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
                 // Data is outdated, probably due to installed update
                 rtl::Reference< UpdateCheckConfig > aConfig = UpdateCheckConfig::get( xContext, *this );
                 aConfig->clearUpdateFound();
+                aConfig->clearLocalFileName();
+
 
                 m_aUpdateInfo = UpdateInfo();
             }
             else
             {
                 enableAutoCheck(aModel.isAutoCheckEnabled());
-                setUIState(getUIState(m_aUpdateInfo));
+                if ( bDownloadAvailable )
+                    setUIState( UPDATESTATE_DOWNLOAD_AVAIL );
+                else
+                    setUIState(getUIState(m_aUpdateInfo));
             }
         }
     }
@@ -922,6 +946,10 @@ UpdateCheck::install()
 
             aParameter += UNISTRING(" &");
 #endif
+
+            rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get( m_xContext );
+            rModel->clearLocalFileName();
+
             xShellExecute->execute(aInstallImage, aParameter, nFlags);
             ShutdownThread *pShutdownThread = new ShutdownThread( m_xContext );
             (void) pShutdownThread;
@@ -1087,6 +1115,23 @@ UpdateCheck::downloadTargetExists(const rtl::OUString& rFileName)
 }
 
 //------------------------------------------------------------------------------
+bool UpdateCheck::checkDownloadDestination( const rtl::OUString& rFileName )
+{
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+
+    rtl::Reference< UpdateHandler > aUpdateHandler( getUpdateHandler() );
+
+    bool bReload = false;
+
+    if( aUpdateHandler->isVisible() )
+    {
+        bReload = aUpdateHandler->showOverwriteWarning( rFileName );
+    }
+
+    return bReload;
+}
+
+//------------------------------------------------------------------------------
 
 void
 UpdateCheck::downloadStalled(const rtl::OUString& rErrorMessage)
@@ -1138,9 +1183,6 @@ UpdateCheck::downloadFinished(const rtl::OUString& rLocalFileName)
     // no more retries
     m_pThread->terminate();
 
-    rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext);
-    rModel->clearLocalFileName();
-
     m_aImageName = getImageFromFileName(rLocalFileName);
     UpdateInfo aUpdateInfo(m_aUpdateInfo);
 
@@ -1148,6 +1190,7 @@ UpdateCheck::downloadFinished(const rtl::OUString& rLocalFileName)
     setUIState(UPDATESTATE_DOWNLOAD_AVAIL);
 
     // Bring-up release note for position 2 ..
+    rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get( m_xContext );
     const rtl::OUString aURL(getReleaseNote(aUpdateInfo, 2, rModel->isAutoDownloadEnabled()));
     if( aURL.getLength() > 0 )
         showReleaseNote(aURL);
