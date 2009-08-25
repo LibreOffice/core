@@ -1007,7 +1007,7 @@ bool UpdateHandler::showWarning( const rtl::OUString &rWarningText,
                 uno::Reference< awt::XVclWindowPeer > xMsgBoxCtrl( xChildren[i], uno::UNO_QUERY );
                 if ( xMsgBoxCtrl.is() )
                 {
-                    bool bIsDefault;
+                    bool bIsDefault = true;
                     uno::Any aValue = xMsgBoxCtrl->getProperty( UNISTRING("DefaultButton") );
                     aValue >>= bIsDefault;
                     if ( bIsDefault )
