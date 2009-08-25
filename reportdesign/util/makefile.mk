@@ -54,6 +54,7 @@ LIB1FILES=\
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
+        $(SVXCORELIB)			\
         $(SVXLIB)				\
         $(FWELIB)				\
         $(SFXLIB)				\
@@ -108,6 +109,7 @@ LIB2FILES=\
 SHL2TARGET=$(TARGET2)$(DLLPOSTFIX)
 
 SHL2STDLIBS= \
+        $(SVXCORELIB)			\
         $(SVXLIB)				\
         $(SFXLIB)				\
         $(SVTOOLLIB)			\
@@ -175,7 +177,7 @@ LIB3FILES=\
 SHL3TARGET=$(TARGET3)$(DLLPOSTFIX)
 
 SHL3STDLIBS=\
-    $(SVXLIB)			\
+    $(SVXCORELIB)			\
     $(XMLOFFLIB)		\
     $(VCLLIB)			\
     $(UNOTOOLSLIB)		\

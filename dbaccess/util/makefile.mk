@@ -111,6 +111,7 @@ LIB2FILES=\
 SHL2TARGET=$(TARGET2)$(DLLPOSTFIX)
 
 SHL2STDLIBS= \
+        $(SVXCORELIB)				\
         $(SVXLIB)				\
         $(SFXLIB)				\
         $(SVTOOLLIB)			\

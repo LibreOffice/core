@@ -78,6 +78,7 @@ SHL1STDLIBS= \
         $(SVTOOLLIB)        \
         $(SVLLIB)           \
         $(VCLLIB)           \
+        $(SVXCORELIB)           \
         $(SVXLIB)           \
         $(UCBHELPERLIB)     \
         $(XMLSCRIPTLIB)
