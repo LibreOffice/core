@@ -146,9 +146,7 @@ namespace sw
         struct AuthorInfo;
         typedef AuthorInfo* AuthorInfo_Ptr;
 
-        //-----------------------------------------
-        //     Redlining Authors
-        //-----------------------------------------
+        /// Redlining Authors
         struct AuthorInfo
         {
             USHORT nWWAuthorId;

@@ -34,6 +34,8 @@
 #include <tools/color.hxx>
 #include <svtools/svarray.hxx>
 
+#include <swdllapi.h>
+
 class Color;
 class SwTableBox;
 class SwTableLine;
@@ -299,6 +301,13 @@ protected:
 
 public:
     static long GetBoxWidth( const SwTableBox *pBox );
+
+    USHORT GetRawWidth( USHORT nCol, USHORT nColSpan ) const;
+    USHORT GetAbsWidth( USHORT nCol, USHORT nColSpan ) const;
+    USHORT GetRelWidth( USHORT nCol, USHORT nColSpan ) const;
+    USHORT GetPrcWidth( USHORT nCol, USHORT nColSpan ) const;
+
+    long GetAbsHeight( long nRawWidth, USHORT nRow, USHORT nRowSpan ) const;
 protected:
 
     long GetLineHeight( const SwTableLine *pLine );
@@ -309,12 +318,6 @@ protected:
     USHORT GetLeftSpace( USHORT nCol ) const;
     USHORT GetRightSpace( USHORT nCol, USHORT nColSpan ) const;
 
-    USHORT GetRawWidth( USHORT nCol, USHORT nColSpan ) const;
-    USHORT GetAbsWidth( USHORT nCol, USHORT nColSpan ) const;
-    USHORT GetRelWidth( USHORT nCol, USHORT nColSpan ) const;
-    USHORT GetPrcWidth( USHORT nCol, USHORT nColSpan ) const;
-
-    long GetAbsHeight( long nRawWidth, USHORT nRow, USHORT nRowSpan ) const;
 
 public:
     SwWriteTable( const SwTableLines& rLines, long nWidth, USHORT nBWidth,

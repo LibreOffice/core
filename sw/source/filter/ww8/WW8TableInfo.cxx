@@ -557,8 +557,7 @@ WW8TableNodeInfo::Pointer_t WW8TableInfo::insertTableNodeInfo
 
     if (pNodeInfo.get() == NULL)
     {
-        pNodeInfo = WW8TableNodeInfo::Pointer_t
-        (new WW8TableNodeInfo(pNode));
+        pNodeInfo = WW8TableNodeInfo::Pointer_t(new WW8TableNodeInfo(pNode));
         mMap.insert(Map_t::value_type(pNode, pNodeInfo));
     }
 

@@ -54,12 +54,11 @@
 #include <utility>
 #endif
 
-#ifndef SW_TRACER
 #include "tracer.hxx"
-#endif
 #include "ww8struc.hxx"     // WW8_BRC
 #include "ww8scan.hxx"  // WW8Fib
 #include "ww8glsy.hxx"
+#include "wrtww8.hxx"
 #include "../inc/msfilter.hxx"
 
 class SwDoc;
@@ -576,7 +575,7 @@ public:
         const ::com::sun::star::awt::Size& rSize,
         com::sun::star::uno::Reference <
         com::sun::star::drawing::XShape > *pShape,BOOL bFloatingCtrl);
-    bool ExportControl(Writer &rWrt, const SdrObject *pObj);
+    bool ExportControl(WW8Export &rWrt, const SdrObject *pObj);
 };
 
 class SwMSDffManager : public SvxMSDffManager

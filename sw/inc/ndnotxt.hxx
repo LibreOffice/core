@@ -82,12 +82,12 @@ public:
     void               SetContour( const PolyPolygon *pPoly,
                                    BOOL bAutomatic = FALSE );
     const PolyPolygon *HasContour() const;
-    BOOL           _HasContour() const { return pContour!=0; };
+    BOOL               _HasContour() const { return pContour!=0; };
     void               GetContour( PolyPolygon &rPoly ) const;
     void               CreateContour();
 
     void               SetAutomaticContour( BOOL bSet ) { bAutomaticContour = bSet; }
-    BOOL         HasAutomaticContour() const { return bAutomaticContour; }
+    BOOL               HasAutomaticContour() const { return bAutomaticContour; }
 
     // set either a MM100 or pixel contour
     void               SetContourAPI( const PolyPolygon *pPoly );
@@ -96,9 +96,9 @@ public:
     BOOL               GetContourAPI( PolyPolygon &rPoly ) const;
 
     void               SetPixelContour( BOOL bSet ) { bPixelContour = bSet; }
-    BOOL         IsPixelContour() const;
+    BOOL               IsPixelContour() const;
 
-    BOOL         IsContourMapModeValid() const { return bContourMapModeValid; }
+    BOOL               IsContourMapModeValid() const { return bContourMapModeValid; }
 
     //Besorgt die Graphic, mit SwapIn fuer GrfNode, per GetData fuer OLE.
     Graphic GetGraphic() const;

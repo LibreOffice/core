@@ -2720,12 +2720,8 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             break;                  // Auto-Fussnoten-Nummer
 #if OSL_DEBUG_LEVEL > 1
         default:
-            {
-                String sUnknown( '<' );
-                sUnknown += String::CreateFromInt32( nWCharVal );
-                sUnknown += '>';
-                rDoc.Insert( *pPaM, sUnknown, true );
-            }
+            ::std::clog << "<unknownValue val=\"" << nWCharVal << "\">" << ::std::endl;
+            break;
 #endif
     }
 
