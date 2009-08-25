@@ -156,14 +156,6 @@ EscherExClientAnchor_Base::~EscherExClientAnchor_Base()
 
 // ---------------------------------------------------------------------------------------------
 
-struct EscherPropSortStruct
-{
-    sal_uInt8*  pBuf;
-    sal_uInt32  nPropSize;
-    sal_uInt32  nPropValue;
-    sal_uInt16  nPropId;
-};
-
 void EscherPropertyContainer::ImplInit()
 {
     nSortCount = 0;
@@ -275,21 +267,40 @@ void EscherPropertyContainer::AddOpt( sal_uInt16 nPropID, sal_Bool bBlib, sal_uI
     }
 }
 
-sal_Bool EscherPropertyContainer::GetOpt( sal_uInt16 nPropId, sal_uInt32& nPropValue ) const
+sal_Bool EscherPropertyContainer::GetOpt( sal_uInt16 nPropId, sal_uInt32& rPropValue ) const
 {
-    sal_Bool bRetValue = sal_False;
+    EscherPropSortStruct aPropStruct;
+
+    if ( GetOpt( nPropId, aPropStruct ) )
+    {
+        rPropValue = aPropStruct.nPropValue;
+        return sal_True;
+    }
+    return sal_False;
+}
+
+sal_Bool EscherPropertyContainer::GetOpt( sal_uInt16 nPropId, EscherPropSortStruct& rPropValue ) const
+{
     for( sal_uInt32 i = 0; i < nSortCount; i++ )
     {
         if ( ( pSortStruct[ i ].nPropId &~0xc000 ) == ( nPropId &~0xc000 ) )
         {
-            nPropValue = pSortStruct[ i ].nPropValue;
-            bRetValue = sal_True;
-            break;
+            rPropValue = pSortStruct[ i ];
+            return sal_True;
         }
     }
-    return bRetValue;
+    return sal_False;
 }
 
+EscherProperties EscherPropertyContainer::GetOpts() const
+{
+    EscherProperties aVector;
+
+    for ( sal_uInt32 i = 0; i < nSortCount; ++i )
+        aVector.push_back( pSortStruct[ i ] );
+
+    return aVector;
+}
 
 extern "C" int __LOADONCALLAPI EscherPropSortFunc( const void* p1, const void* p2 )
 {
@@ -715,7 +726,7 @@ void EscherPropertyContainer::CreateTextProperties(
         AddOpt( ESCHER_Prop_lTxid, nTextId );
 }
 
-static sal_Bool GetLineArrow( const sal_Bool bLineStart,
+sal_Bool EscherPropertyContainer::GetLineArrow( const sal_Bool bLineStart,
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
         ESCHER_LineEnd& reLineEnd, sal_Int32& rnArrowLength, sal_Int32& rnArrowWidth )
 {
@@ -2084,6 +2095,68 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
     }
 }
 
+sal_Bool EscherPropertyContainer::IsDefaultObject( SdrObjCustomShape* pCustoShape )
+{
+    sal_Bool bIsDefaultObject = sal_False;
+    if ( pCustoShape )
+    {
+    if (   pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_EQUATIONS )
+           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_VIEWBOX )
+           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_PATH )
+           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_GLUEPOINTS )
+           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_SEGMENTS )
+           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_STRETCHX )
+           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_STRETCHY )
+//                  && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_HANDLES )
+           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_TEXTFRAMES ) )
+        bIsDefaultObject = sal_True;
+    }
+
+    return bIsDefaultObject;
+}
+
+void EscherPropertyContainer::LookForPolarHandles( const MSO_SPT eShapeType, sal_Int32& nAdjustmentsWhichNeedsToBeConverted )
+{
+    const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( eShapeType );
+    if ( pDefCustomShape && pDefCustomShape->nHandles && pDefCustomShape->pHandles )
+    {
+    sal_Int32 k, nkCount = pDefCustomShape->nHandles;
+    const SvxMSDffHandle* pData = pDefCustomShape->pHandles;
+    for ( k = 0; k < nkCount; k++, pData++ )
+    {
+        if ( pData->nFlags & MSDFF_HANDLE_FLAGS_POLAR )
+        {
+        if ( ( pData->nPositionY >= 0x256 ) || ( pData->nPositionY <= 0x107 ) )
+            nAdjustmentsWhichNeedsToBeConverted |= ( 1 << k );
+        }
+    }
+    }
+}
+
+sal_Bool EscherPropertyContainer::GetAdjustmentValue( const com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue & rkProp, sal_Int32 nIndex, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, sal_Int32& nValue )
+{
+    if ( rkProp.State != beans::PropertyState_DIRECT_VALUE )
+    return FALSE;
+
+    sal_Bool bUseFixedFloat = ( nAdjustmentsWhichNeedsToBeConverted & ( 1 << nIndex ) ) != 0;
+    if ( rkProp.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
+    {
+    double fValue;
+    rkProp.Value >>= fValue;
+    if ( bUseFixedFloat )
+        fValue *= 65536.0;
+    nValue = (sal_Int32)fValue;
+    }
+    else
+    {
+    rkProp.Value >>= nValue;
+    if ( bUseFixedFloat )
+        nValue <<= 16;
+    }
+
+    return TRUE;
+}
+
 void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeType, const uno::Reference< drawing::XShape > & rXShape )
 {
     uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
@@ -2108,22 +2181,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
             sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
             uno::Sequence< beans::PropertyValues > aHandlesPropSeq;
             sal_Bool bPredefinedHandlesUsed = sal_True;
-
-
-            sal_Bool bIsDefaultObject = sal_False;
-            if ( pCustoShape )
-            {
-                if (   pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_EQUATIONS )
-                    && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_VIEWBOX )
-                    && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_PATH )
-                    && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_GLUEPOINTS )
-                    && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_SEGMENTS )
-                    && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_STRETCHX )
-                    && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_STRETCHY )
-//                  && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_HANDLES )
-                    && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_TEXTFRAMES ) )
-                    bIsDefaultObject = sal_True;
-            }
+            sal_Bool bIsDefaultObject = IsDefaultObject( pCustoShape );
 
             // convert property "Equations" into std::vector< EnhancedCustomShapeEquationEquation >
             std::vector< EnhancedCustomShapeEquation >  aEquations;
@@ -3185,46 +3243,12 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                 if ( pAdjustmentValuesProp->Value >>= aAdjustmentSeq )
                 {
                     if ( bPredefinedHandlesUsed )
-                    {
-                        const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( eShapeType );
-                        if ( pDefCustomShape && pDefCustomShape->nHandles && pDefCustomShape->pHandles )
-                        {
-                            sal_Int32 k, nkCount = pDefCustomShape->nHandles;
-                            const SvxMSDffHandle* pData = pDefCustomShape->pHandles;
-                            for ( k = 0; k < nkCount; k++, pData++ )
-                            {
-                                if ( pData->nFlags & MSDFF_HANDLE_FLAGS_POLAR )
-                                {
-                                    if ( ( pData->nPositionY >= 0x256 ) || ( pData->nPositionY <= 0x107 ) )
-                                        nAdjustmentsWhichNeedsToBeConverted |= ( 1 << k );
-                                }
-                            }
-                        }
-                    }
+                        LookForPolarHandles( eShapeType, nAdjustmentsWhichNeedsToBeConverted );
+
                     sal_Int32 k, nValue = 0, nAdjustmentValues = aAdjustmentSeq.getLength();
                     for ( k = 0; k < nAdjustmentValues; k++ )
-                    {
-                        const com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue & rkProp = aAdjustmentSeq[ k ];
-                        if ( rkProp.State == beans::PropertyState_DIRECT_VALUE )
-                        {
-                            sal_Bool bUseFixedFloat = ( nAdjustmentsWhichNeedsToBeConverted & ( 1 << k ) ) != 0;
-                            if ( rkProp.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
-                            {
-                                double fValue;
-                                rkProp.Value >>= fValue;
-                                if ( bUseFixedFloat )
-                                    fValue *= 65536.0;
-                                nValue = (sal_Int32)fValue;
-                            }
-                            else
-                            {
-                                rkProp.Value >>= nValue;
-                                if ( bUseFixedFloat )
-                                    nValue <<= 16;
-                            }
+                        if( GetAdjustmentValue( aAdjustmentSeq[ k ], k, nAdjustmentsWhichNeedsToBeConverted, nValue ) )
                             AddOpt( (sal_uInt16)( DFF_Prop_adjustValue + k ), (sal_uInt32)nValue );
-                        }
-                    }
                 }
             }
         }
@@ -3921,30 +3945,6 @@ struct EscherConnectorRule
     sal_uInt32  nShapeC;        // SPID of connector shape
     sal_uInt32  ncptiA;         // Connection site Index of shape A
     sal_uInt32  ncptiB;         // Connection site Index of shape B
-};
-
-struct EscherConnectorListEntry
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   mXConnector;
-    ::com::sun::star::awt::Point            maPointA;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   mXConnectToA;
-    ::com::sun::star::awt::Point            maPointB;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   mXConnectToB;
-
-    sal_uInt32      GetConnectorRule( sal_Bool bFirst );
-
-                    EscherConnectorListEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rC,
-                                        const ::com::sun::star::awt::Point& rPA,
-                                        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rSA ,
-                                        const ::com::sun::star::awt::Point& rPB,
-                                        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rSB ) :
-                                            mXConnector ( rC ),
-                                            maPointA    ( rPA ),
-                                            mXConnectToA( rSA ),
-                                            maPointB    ( rPB ),
-                                            mXConnectToB( rSB ) {}
-
-    sal_uInt32      GetClosestPoint( const Polygon& rPoly, const ::com::sun::star::awt::Point& rP );
 };
 
 struct EscherShapeListEntry
@@ -4650,6 +4650,17 @@ void EscherEx::AddAtom( UINT32 nAtomSize, UINT16 nRecType, int nRecVersion, int 
 
 // ---------------------------------------------------------------------------------------------
 
+void EscherEx::AddChildAnchor( const Rectangle& rRect )
+{
+    AddAtom( 16, ESCHER_ChildAnchor );
+    GetStream() << (INT32)rRect.Left()
+                << (INT32)rRect.Top()
+                << (INT32)rRect.Right()
+                << (INT32)rRect.Bottom();
+}
+
+// ---------------------------------------------------------------------------------------------
+
 void EscherEx::AddClientAnchor( const Rectangle& rRect )
 {
     AddAtom( 8, ESCHER_ClientAnchor );
@@ -4699,15 +4710,10 @@ UINT32 EscherEx::EnterGroup( const String& rShapeName, const Rectangle* pBoundRe
         if( rShapeName.Len() > 0 )
             aPropOpt.AddOpt( ESCHER_Prop_wzName, rShapeName );
 
-        aPropOpt.Commit( *mpOutStrm );
+        Commit( aPropOpt, aRect );
         if ( mnGroupLevel > 1 )
-        {
-            AddAtom( 16, ESCHER_ChildAnchor );
-            *mpOutStrm  << (INT32)aRect.Left()
-                        << (INT32)aRect.Top()
-                           << (INT32)aRect.Right()
-                        << (INT32)aRect.Bottom();
-        }
+            AddChildAnchor( aRect );
+
         EscherExHostAppData* pAppData = mpImplEscherExSdr->ImplGetHostData();
         if( pAppData )
         {
@@ -4801,6 +4807,13 @@ UINT32 EscherEx::GetShapeID()
     mnCurrentShapeID++;                         // mnCurrentShape ID auf nachste freie ID
     mnTotalShapeIdUsedDg++;
     return mnCurrentShapeMaximumID;
+}
+
+// ---------------------------------------------------------------------------------------------
+
+void EscherEx::Commit( EscherPropertyContainer& rProps, const Rectangle& )
+{
+    rProps.Commit( GetStream() );
 }
 
 // ---------------------------------------------------------------------------------------------

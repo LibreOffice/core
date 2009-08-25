@@ -10,7 +10,7 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\global\accelerator\es
 ..\%__SRC%\inc\svxslots.ilb %_DEST%\inc%_EXT%\svxslots.ilb
 ..\%__SRC%\inc\*.ilb* %_DEST%\inc%_EXT%\*.ilb*
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
-..\%__SRC%\lib\isvx.lib %_DEST%\lib%_EXT%\isvx.lib
+..\%__SRC%\lib\isvx*.lib %_DEST%\lib%_EXT%\isvx*.lib
 ..\%__SRC%\bin\gengal* %_DEST%\bin%_EXT%\gengal*
 ..\%__SRC%\bin\gengalrc %_DEST%\bin%_EXT%\gengal.ini
 ..\%__SRC%\bin\cui*.dll %_DEST%\bin%_EXT%\cui*.dll

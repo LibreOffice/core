@@ -38,13 +38,9 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-CXXFILES=	\
-            unogalthemeprovider.cxx		\
-            unogaltheme.cxx				\
-            unogalitem.cxx				
 
 SLOFILES=	\
             $(SLO)$/unogalthemeprovider.obj	\

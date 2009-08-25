@@ -673,9 +673,9 @@ public:
 
 };
 
-const SvxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSvxPropertySet();
-const SfxItemPropertyMapEntry* ImplGetSvxUnoOutlinerTextCursorPropertyMap();
-const SvxItemPropertySet* ImplGetSvxTextPortionSvxPropertySet();
-const SfxItemPropertyMapEntry* ImplGetSvxTextPortionPropertyMap();
+SVX_DLLPUBLIC const SvxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSvxPropertySet();
+SVX_DLLPUBLIC const SfxItemPropertyMapEntry* ImplGetSvxUnoOutlinerTextCursorPropertyMap();
+SVX_DLLPUBLIC const SvxItemPropertySet* ImplGetSvxTextPortionSvxPropertySet();
+SVX_DLLPUBLIC const SfxItemPropertyMapEntry* ImplGetSvxTextPortionPropertyMap();
 
 #endif

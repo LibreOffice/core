@@ -65,6 +65,7 @@
 #include "shapeimpl.hxx"
 #include "svx/unoshprp.hxx"
 #include <svx/svdoashp.hxx>
+#include "unopolyhelper.hxx"
 
 // #i29181#
 #include "svdviter.hxx"

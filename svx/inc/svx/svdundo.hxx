@@ -754,7 +754,7 @@ protected:
     SdrUndoPageMasterPage(SdrPage& rChangedPage);
 
 public:
-    virtual ~SdrUndoPageMasterPage();
+    SVX_DLLPUBLIC virtual ~SdrUndoPageMasterPage();
 };
 
 //************************************************************

@@ -86,11 +86,9 @@
 #include <vcl/help.hxx>
 #include <svx/xpoly.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#ifndef _COM_SUN_STAR_I18N_XINPUTSEQUENCECHECKER_HPP_
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
-#endif
 
-#include <srchdlg.hxx>
+#include <sfx2/srchdefs.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <svx/frmdiritem.hxx>
@@ -99,16 +97,9 @@
 
 // Spaeter -> TOOLS\STRING.H (fuer Grep: WS_TARGET)
 
-//using namespace ::rtl;
-//using namespace ::utl;
 using namespace ::com::sun::star;
-//using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
-//using namespace ::com::sun::star::lang;
-//using namespace ::com::sun::star::beans;
-//using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::linguistic2;
-
 
 
 DBG_NAME( EditEngine )
