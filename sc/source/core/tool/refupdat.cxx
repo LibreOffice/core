@@ -939,37 +939,4 @@ ScRefUpdateRes ScRefUpdate::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCRO
     return eRet;
 }
 
-#if OLD_PIVOT_IMPLEMENTATION
-ScRefUpdateRes ScRefUpdate::DoGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,
-                                    ScRange& rRef )
-{
-    //  wie UpdateGrow, nur mit Range statt RefData
-
-    ScRefUpdateRes eRet = UR_NOTHING;
-
-    BOOL bUpdateX = ( nGrowX &&
-            rRef.aStart.Col() == rArea.aStart.Col() && rRef.aEnd.Col() == rArea.aEnd.Col() &&
-            rRef.aStart.Row() >= rArea.aStart.Row() && rRef.aEnd.Row() <= rArea.aEnd.Row() &&
-            rRef.aStart.Tab() >= rArea.aStart.Tab() && rRef.aEnd.Tab() <= rArea.aEnd.Tab() );
-    BOOL bUpdateY = ( nGrowY &&
-            rRef.aStart.Col() >= rArea.aStart.Col() && rRef.aEnd.Col() <= rArea.aEnd.Col() &&
-            ( rRef.aStart.Row() == rArea.aStart.Row() || rRef.aStart.Row() == rArea.aStart.Row()+1 ) &&
-                rRef.aEnd.Row() == rArea.aEnd.Row() &&
-            rRef.aStart.Tab() >= rArea.aStart.Tab() && rRef.aEnd.Tab() <= rArea.aEnd.Tab() );
-
-    if ( bUpdateX )
-    {
-        rRef.aEnd.SetCol( rRef.aEnd.Col() + nGrowX );
-        eRet = UR_UPDATED;
-    }
-    if ( bUpdateY )
-    {
-        rRef.aEnd.SetRow( rRef.aEnd.Row() + nGrowY );
-        eRet = UR_UPDATED;
-    }
-
-    return eRet;
-}
-#endif
-
 

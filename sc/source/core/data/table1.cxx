@@ -1458,11 +1458,11 @@ void ScTable::AddPrintRange( const ScRange& rNew )
         aPrintRanges.push_back( rNew );
 }
 
-void ScTable::SetPrintRange( const ScRange& rNew )
-{
-    ClearPrintRanges();
-    AddPrintRange( rNew );
-}
+//UNUSED2009-05 void ScTable::SetPrintRange( const ScRange& rNew )
+//UNUSED2009-05 {
+//UNUSED2009-05     ClearPrintRanges();
+//UNUSED2009-05     AddPrintRange( rNew );
+//UNUSED2009-05 }
 
 void ScTable::SetPrintEntireSheet()
 {

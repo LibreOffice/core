@@ -227,7 +227,7 @@ protected:
 
 public:
                     ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
-                    ScTabView( Window* pParent, const ScTabView& rScTabView, ScTabViewShell* pViewShell );
+//UNUSED2009-05     ScTabView( Window* pParent, const ScTabView& rScTabView, ScTabViewShell* pViewShell );
                     ~ScTabView();
 
     void            MakeDrawLayer();

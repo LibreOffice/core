@@ -128,7 +128,6 @@ private:
 protected:
     virtual BOOL        DoClose( USHORT nId );
 
-    void                EnableSpreadsheets( BOOL bFlag = TRUE, BOOL bChilds = TRUE );
     void                SetDispatcherLock( BOOL bLock );
 
     virtual long        PreNotify( NotifyEvent& rNEvt );

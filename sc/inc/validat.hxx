@@ -200,8 +200,6 @@ public:
 
     ScValidationData* GetData( sal_uInt32 nKey );
 
-    void    ResetUsed();
-
     void    CompileXML();
     void    UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );

@@ -44,9 +44,6 @@
 
 struct ScTableInfo;
 class ScViewSelectionEngine;
-#if OLD_PIVOT_IMPLEMENTATION
-class ScPivot;
-#endif
 class ScDPObject;
 class ScOutputData;
 class ScFilterListBox;
@@ -170,14 +167,6 @@ private:
     BYTE                    nMouseStatus;
     BYTE                    nNestedButtonState;     // track nested button up/down calls
 
-#if OLD_PIVOT_IMPLEMENTATION
-    BOOL                    bPivotMouse;            // Pivot-D&D (alte Pivottabellen)
-    ScPivot*                pDragPivot;
-    BOOL                    bPivotColField;
-    SCCOL                   nPivotCol;
-    SCCOL                   nPivotField;
-#endif
-
     BOOL                    bDPMouse;               // DataPilot-D&D (neue Pivottabellen)
     long                    nDPField;
     ScDPObject*             pDragDPObj; //! name?
@@ -235,12 +224,6 @@ private:
 
     BOOL            DoPageFieldSelection( SCCOL nCol, SCROW nRow );
     void            DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
-#if OLD_PIVOT_IMPLEMENTATION
-    void            PivotMouseMove( const MouseEvent& rMEvt );
-    void            PivotMouseButtonUp( const MouseEvent& rMEvt );
-    BOOL            PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove );
-    void            DoPivotDrop( BOOL bDelete, BOOL bToCols, SCSIZE nDestPos );
-#endif
 
     void            DPMouseMove( const MouseEvent& rMEvt );
     void            DPMouseButtonUp( const MouseEvent& rMEvt );

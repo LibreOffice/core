@@ -383,9 +383,6 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             bEEMouse( FALSE ),
             nMouseStatus( SC_GM_NONE ),
             nNestedButtonState( SC_NESTEDBUTTON_NONE ),
-#if OLD_PIVOT_IMPLEMENTATION
-            bPivotMouse( FALSE ),
-#endif
             bDPMouse( FALSE ),
             bRFMouse( FALSE ),
             nPagebreakMouse( SC_PD_NONE ),
@@ -1844,15 +1841,6 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         return;
     }
 
-#if OLD_PIVOT_IMPLEMENTATION
-    if (bPivotMouse)
-    {
-        PivotMouseButtonUp( rMEvt );
-        bPivotMouse = FALSE;
-        return;
-    }
-#endif
-
     if (bDPMouse)
     {
         DPMouseButtonUp( rMEvt );       // resets bDPMouse
@@ -2260,14 +2248,6 @@ void __EXPORT ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         return;
     }
 
-#if OLD_PIVOT_IMPLEMENTATION
-    if (bPivotMouse)
-    {
-        PivotMouseMove( rMEvt );
-        return;
-    }
-#endif
-
     if (bDPMouse)
     {
         DPMouseMove( rMEvt );
@@ -2478,10 +2458,6 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
     {
         if (!pViewData->GetView()->IsInActivatePart())
         {
-#if OLD_PIVOT_IMPLEMENTATION
-            if (bPivotMouse)
-                bPivotMouse = FALSE;            // gezeichnet wird per bDragRect
-#endif
             if (bDPMouse)
                 bDPMouse = FALSE;               // gezeichnet wird per bDragRect
             if (bDragRect)

@@ -957,15 +957,6 @@ void lcl_convertTokensToString(OUString& rStr, const vector<ScSharedTokenRef>& r
     func.getString(rStr);
 }
 
-void lcl_convertTokenToString(OUString& rStr, const ScSharedTokenRef& rToken, ScDocument* pDoc,
-                              FormulaGrammar::Grammar eGrammar)
-{
-    const sal_Unicode cRangeSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
-    Tokens2RangeString func(pDoc, eGrammar, cRangeSep);
-    func.operator() (rToken);
-    func.getString(rStr);
-}
-
 } // anonymous namespace
 
 // DataProvider ==============================================================
@@ -992,44 +983,6 @@ void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
         m_pDocument = NULL;
-    }
-}
-
-void lcl_SeperateOneColumnRange(ScRange aR, const ScAddress& rPos, ScRangeListRef& xRanges)
-{
-    if (aR.aStart == rPos)
-    {
-        aR.aStart.SetRow(aR.aStart.Row() + 1);
-        xRanges->Join(aR);
-    }
-    else if (aR.aEnd == rPos)
-    {
-        aR.aStart.SetRow(aR.aStart.Row() - 1);
-        xRanges->Join(aR);
-    }
-    else
-    {
-        xRanges->Join(ScRange(aR.aStart, ScAddress(rPos.Col(), rPos.Row() - 1, rPos.Tab())));
-        xRanges->Join(ScRange(ScAddress(rPos.Col(), rPos.Row() + 1, rPos.Tab()), aR.aEnd ));
-    }
-}
-
-void lcl_SeperateOneRowRange(ScRange aR, const ScAddress& rPos, ScRangeListRef& xRanges)
-{
-    if (aR.aStart == rPos)
-    {
-        aR.aStart.SetCol(aR.aStart.Col() + 1);
-        xRanges->Join(aR);
-    }
-    else if (aR.aEnd == rPos)
-    {
-        aR.aStart.SetCol(aR.aStart.Col() - 1);
-        xRanges->Join(aR);
-    }
-    else
-    {
-        xRanges->Join(ScRange(aR.aStart, ScAddress(rPos.Col() - 1, rPos.Row(), rPos.Tab())));
-        xRanges->Join(ScRange(ScAddress(rPos.Col() + 1, rPos.Row(), rPos.Tab()), aR.aEnd ));
     }
 }
 

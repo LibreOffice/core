@@ -40,8 +40,6 @@
 //------------------------------------------------------------------------
 
 class ScDocument;
-class ScMultipleReadHeader;
-class ScMultipleWriteHeader;
 
 namespace rtl {
     class OUStringBuffer;
@@ -146,7 +144,7 @@ public:
     BOOL            IsReference( ScRange& rRef, const ScAddress& rPos ) const;
     BOOL            IsValidReference( ScRange& rRef ) const;
 
-    BOOL            IsRangeAtCursor( const ScAddress&, BOOL bStartOnly ) const;
+//UNUSED2009-05 BOOL            IsRangeAtCursor( const ScAddress&, BOOL bStartOnly ) const;
     BOOL            IsRangeAtBlock( const ScRange& ) const;
 
     void            UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable);
@@ -203,7 +201,7 @@ public:
     virtual short           Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
     virtual BOOL            IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
 
-    ScRangeData*            GetRangeAtCursor( const ScAddress&, BOOL bStartOnly ) const;
+//UNUSED2009-05 ScRangeData*            GetRangeAtCursor( const ScAddress&, BOOL bStartOnly ) const;
     SC_DLLPUBLIC ScRangeData*           GetRangeAtBlock( const ScRange& ) const;
 
     SC_DLLPUBLIC BOOL                   SearchName( const String& rName, USHORT& rPos ) const;
