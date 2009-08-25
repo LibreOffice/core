@@ -242,9 +242,9 @@ File gid_File_Lib_Db
     Styles = (PACKED);
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT2(libdb-4.2,UNXSUFFIX));
+    Name = STRING(CONCAT2(libdb-4.7,UNXSUFFIX));
   #else
-    Name = "libdb42.dll";
+    Name = "libdb47.dll";
   #endif
 End
 

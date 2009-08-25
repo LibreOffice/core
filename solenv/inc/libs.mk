@@ -233,10 +233,8 @@ NEON3RDLIB=$(STATIC) -lneon $(DYNAMIC)
 .ENDIF
 .IF "$(SYSTEM_DB)" == "YES"
 BERKELEYLIB=-ldb
-BERKELEYCPPLIB=-ldb_cxx
 .ELSE
-BERKELEYLIB=-ldb-4.2
-BERKELEYCPPLIB=-ldb_cxx-4.2
+BERKELEYLIB=-ldb-4.7
 .ENDIF
 CURLLIB=-lcurl
 SFX2LIB=-lsfx$(DLLPOSTFIX)
@@ -446,8 +444,7 @@ EXPATASCII3RDLIB=expat_xmltok.lib ascii_expat_xmlparse.lib
 ZLIB3RDLIB=zlib.lib
 JPEG3RDLIB=jpeglib.lib
 NEON3RDLIB=neon.lib
-BERKELEYLIB=libdb42.lib
-BERKELEYCPPLIB=
+BERKELEYLIB=libdb47.lib
 CURLLIB=libcurl.lib
 CHAOSLIB=ichaos.lib
 UUILIB=iuui.lib
