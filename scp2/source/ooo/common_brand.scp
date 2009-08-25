@@ -502,7 +502,10 @@ File gid_Brand_File_Bin_Unopkg
     Name = "unopkg.bin";
 End
 
-#if defined WNT && defined M1310
+#if defined WNT && \
+    (defined M1310 || \
+     ((defined M1400 || defined M1500) && \
+      !(defined SYSTEM_MOZILLA || defined WITHOUT_MOZILLA)))
 File gid_Brand_File_Bin_Msvcr71
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;

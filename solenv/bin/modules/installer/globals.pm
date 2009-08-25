@@ -397,7 +397,7 @@ BEGIN
     %usedtreeconditions = ();
     %moduledestination = ();
 
-    $unomaxservices = 25;
+    $unomaxservices = 1800; # regcomp -c argument length
     $javamaxservices = 15;
 
     $one_cab_file = 0;
