@@ -823,7 +823,7 @@ SwDoc * ViewShell::CreatePrtDoc( /*Printer* pPrt,*/ SfxObjectShellRef &rDocShell
     // Wir bauen uns ein neues Dokument
     SwDoc *pPrtDoc = new SwDoc;
     pPrtDoc->acquire();
-    pPrtDoc->SetRefForDocShell( boost::addressof(rDocShellRef) );
+    pPrtDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)rDocShellRef );
     pPrtDoc->LockExpFlds();
 
 /* TLPDF
@@ -913,7 +913,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     // Wir bauen uns ein neues Dokument
 //    SwDoc *pPrtDoc = new SwDoc;
 //    pPrtDoc->acquire();
-//    pPrtDoc->SetRefForDocShell( boost::addressof(rDocShellRef) );
+//    pPrtDoc->SetRefForDocShell( (SvEmbeddedObjectRef*)&(long&)rDocShellRef );
     pPrtDoc->LockExpFlds();
 
     // Der Drucker wird uebernommen
@@ -1167,15 +1167,17 @@ sal_Bool ViewShell::PrintOrPDFExport(
     const SwPageFrm *pStPage = 0;
     if (nPage > 0)  // a 'regular' page, not one from the post-it document
     {
-        const SwPrintUIOptions::ValidStartFramesMap_t &rFrms = rPrintData.GetPrintUIOptions().GetValidStartFrms();
+        const SwPrintUIOptions::ValidStartFramesMap_t &rFrms = rPrintData.GetPrintUIOptions().GetValidStartFrames();
         SwPrintUIOptions::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( nPage ) );
         DBG_ASSERT( aIt != rFrms.end(), "failed to find start frame" );
+        if (aIt == rFrms.end())
+            return sal_False;
         pStPage = aIt->second;
     }
     else    // a page from the post-its document ...
     {
         DBG_ASSERT( nPage == 0, "unexpected page number. 0 for post-it pages expected" );
-        pStPage = rPrintData.GetPrintUIOptions().GetPostItStartFrame()[ nRenderer ];
+        pStPage = rPrintData.GetPrintUIOptions().GetPostItStartFrames()[ nRenderer ];
     }
     DBG_ASSERT( pStPage, "failed to get start page" );
 /* TLPDF neu: end */
@@ -1200,7 +1202,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
     if( /*!pShell->Imp()->IsStopOutDev() && */
         ( bIsPDFExport || rPrintData.GetJobName().Len() /*TLPDF|| pOutDev->IsJobActive()*/) )
     {
-// TLPDF        BOOL bStop = FALSE;
+        BOOL bStop = FALSE;
         int nJobStartError = JOBSET_ERR_DEFAULT;
 
         XubString sJobName( rPrintData.GetJobName() );
@@ -1230,8 +1232,8 @@ sal_Bool ViewShell::PrintOrPDFExport(
 
             // PostitListe holen
             _SetGetExpFlds aPostItFields;
-// TLPDF            SwDoc*     pPostItDoc   = 0;
-// TLPDF            ViewShell* pPostItShell = 0;
+            SwDoc*     pPostItDoc   = 0;
+            ViewShell* pPostItShell = 0;
 #ifdef TL_NOT_NOW /*TLPDF*/
             if( rPrintData.nPrintPostIts != POSTITS_NONE )
             {

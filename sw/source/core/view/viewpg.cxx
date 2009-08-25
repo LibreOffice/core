@@ -703,7 +703,7 @@ void ViewShell::PrintProspect(
 /* TLPDF neu: start */
             const SwPageFrm *pStPage    = 0;
             const SwPageFrm *pNxtPage   = 0;
-            const SwPrintUIOptions::ValidStartFramesMap_t &rFrms = rPrintData.GetPrintUIOptions().GetValidStartFrms();
+            const SwPrintUIOptions::ValidStartFramesMap_t &rFrms = rPrintData.GetPrintUIOptions().GetValidStartFrames();
             if (rPagesToPrint.first > 0)
             {
                 SwPrintUIOptions::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( rPagesToPrint.first ) );

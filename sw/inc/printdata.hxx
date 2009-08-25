@@ -57,14 +57,14 @@ class SwPrintUIOptions : public vcl::PrinterOptionsHelper
     // pages valid for printing (according to the current settings)
     // and their respective start frames (see getRendererCount in unotxdoc.cxx)
     // This set of pages does NOT depend on the 'PageRange' that is used as a printing option!
-    std::set< sal_Int32 >                       m_aValidPages;       // the set of possible pages (see StringRangeEnumerator::getRangesFromString )
-    std::map< sal_Int32, const SwPageFrm * >    m_aValidStartFrms;    // the map of start frames for those pages
+    std::set< sal_Int32 >                       m_aValidPages;          // the set of possible pages (see StringRangeEnumerator::getRangesFromString )
+    std::map< sal_Int32, const SwPageFrm * >    m_aValidStartFrames;    // the map of start frames for those pages
 
     // vector of pages and their order to be printed (duplicates and any order allowed!)
     // (see 'render' in unotxdoc.cxx)
-    std::vector< sal_Int32 >                            m_aPagesToPrint;
+    std::vector< sal_Int32 >                    m_aPagesToPrint;
 
-    std::vector< const SwPageFrm * >                    m_aPostItStartFrame;
+    std::vector< const SwPageFrm * >            m_aPostItStartFrames;
 
     // for prospect printing: the pairs of pages to be printed together on a single prospect page.
     // -1 indicates a half page to be left empty.
@@ -102,8 +102,8 @@ public:
 
     std::set< sal_Int32 > &             GetValidPagesSet()          { return m_aValidPages; }
     const std::set< sal_Int32 > &       GetValidPagesSet() const    { return m_aValidPages; }
-    ValidStartFramesMap_t &             GetValidStartFrms()         { return m_aValidStartFrms; }
-    const ValidStartFramesMap_t &       GetValidStartFrms() const   { return m_aValidStartFrms; }
+    ValidStartFramesMap_t &             GetValidStartFrames()       { return m_aValidStartFrames; }
+    const ValidStartFramesMap_t &       GetValidStartFrames() const { return m_aValidStartFrames; }
 
     // used for 'normal' printing
     // A page value of 0 as entry indicates that this page is not from the document but
@@ -112,14 +112,14 @@ public:
     const std::vector< sal_Int32 > &    GetPagesToPrint() const     { return m_aPagesToPrint; }
 
     // used for 'normal' printing with post-its
-    // - if the vector entry will be NULL then the respective page to be printed is from
+    // - if the map entry will be NULL then the respective page to be printed is from
     // the document. In that case use the value from GetPagesToPrint at the same index to
     // get the phys. page number to be printed, and then retrieve the start frame to use
     // from GetValidStartFrms.
     // - If the entry is not NULL it is the start frame of the page from the post-it document
     // that is to be printed
-    std::vector< const SwPageFrm * > &           GetPostItStartFrame()              { return m_aPostItStartFrame; }
-    const std::vector< const SwPageFrm * > &     GetPostItStartFrame() const        { return m_aPostItStartFrame; }
+    std::vector< const SwPageFrm * > &          GetPostItStartFrames()          { return m_aPostItStartFrames; }
+    const std::vector< const SwPageFrm * > &    GetPostItStartFrames() const    { return m_aPostItStartFrames; }
 
     // used for prospect printing only
     PagePairsVec_t &                    GetPagePairsForProspectPrinting()           { return m_aPagePairs; }
