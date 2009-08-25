@@ -97,8 +97,15 @@ public:
 
     // Non-UNO Methods
 
-
     void setEnabled(bool bEnabled);
+
+protected:
+
+    virtual Rectangle GetBoundingBoxOnScreen() const
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual Rectangle GetBoundingBox() const
+        throw (::com::sun::star::uno::RuntimeException);
 
 private:
     bool isSelected() const;

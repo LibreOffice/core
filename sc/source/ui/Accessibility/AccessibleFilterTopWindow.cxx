@@ -46,47 +46,49 @@ using ::rtl::OUString;
 
 ScAccessibleFilterTopWindow::ScAccessibleFilterTopWindow(
     const Reference<XAccessible>& rxParent, ScDPFieldPopupWindow* pWin, const OUString& rName, ScDocument* pDoc) :
-    ScAccessibleContextBase(rxParent, AccessibleRole::PANEL),
+    ScAccessibleFilterMenu(rxParent, pWin, rName, ScMenuFloatingWindow::MENU_NOT_SELECTED, pDoc),
     mpWindow(pWin),
     mpDoc(pDoc)
 {
-    fprintf(stdout, "ScAccessibleFilterTopWindow::ScAccessibleFilterTopWindow:   ctor (%p)\n", this);
     SetName(rName);
 }
 
 ScAccessibleFilterTopWindow::~ScAccessibleFilterTopWindow()
 {
-    fprintf(stdout, "ScAccessibleFilterTopWindow::~ScAccessibleFilterTopWindow:   dtor (%p)\n", this);
 }
 
 // XAccessibleContext
 
 sal_Int32 ScAccessibleFilterTopWindow::getAccessibleChildCount() throw (RuntimeException)
 {
-    return 7;
+    sal_Int32 nMenuCount = getMenuItemCount();
+    return nMenuCount + 6;
 }
 
 Reference<XAccessible> ScAccessibleFilterTopWindow::getAccessibleChild(
     sal_Int32 nIndex) throw (RuntimeException, IndexOutOfBoundsException)
 {
-    if (nIndex >= 7)
+    if (nIndex >= getAccessibleChildCount())
         throw IndexOutOfBoundsException();
 
+    sal_Int32 nMenuCount = getMenuItemCount();
+    if (nIndex < nMenuCount)
+        return ScAccessibleFilterMenu::getAccessibleChild(nIndex);
+
+    nIndex -= nMenuCount;
     switch (nIndex)
     {
         case 0:
-            return getAccessibleChildMenu();
-        case 1:
             return mxAccListBox;
-        case 2:
+        case 1:
             return mxAccToggleAll;
-        case 3:
+        case 2:
             return mxAccSingleOnBtn;
-        case 4:
+        case 3:
             return mxAccSingleOffBtn;
-        case 5:
+        case 4:
             return mxAccOkBtn;
-        case 6:
+        case 5:
             return mxAccCancelBtn;
         default:
             ;
@@ -103,7 +105,7 @@ OUString ScAccessibleFilterTopWindow::getImplementationName() throw (RuntimeExce
 Reference<XAccessible> ScAccessibleFilterTopWindow::getAccessibleChildMenu()
 {
     if (!mxAccMenu.is())
-        mxAccMenu.set(new ScAccessibleFilterMenu(this, mpWindow, getAccessibleName(), 999, mpDoc));
+        mxAccMenu.set(new ScAccessibleFilterMenu(this, mpWindow, getAccessibleName(), ScMenuFloatingWindow::MENU_NOT_SELECTED, mpDoc));
     return mxAccMenu;
 }
 

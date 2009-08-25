@@ -830,6 +830,11 @@ void ScMenuFloatingWindow::getMenuItemPosSize(size_t nPos, Point& rPos, Size& rS
     rSize = aSize1;
 }
 
+ScMenuFloatingWindow* ScMenuFloatingWindow::getParentMenuWindow() const
+{
+    return mpParentMenu;
+}
+
 size_t ScMenuFloatingWindow::getEnclosingMenuItem(const Point& rPos) const
 {
     size_t n = maMenuItems.size();
@@ -1212,9 +1217,7 @@ Reference<XAccessible> ScDPFieldPopupWindow::CreateAccessible()
         mxAccessible.set(new ScAccessibleFilterTopWindow(
             GetAccessibleParentWindow()->GetAccessible(), this, getName(), getDoc()));
         ScAccessibleFilterTopWindow* pAccTop = static_cast<ScAccessibleFilterTopWindow*>(mxAccessible.get());
-        Reference<XAccessible> xAccMenu = pAccTop->getAccessibleChildMenu();
-        ScAccessibleFilterMenu* pAccMenu = static_cast<ScAccessibleFilterMenu*>(xAccMenu.get());
-        fillMenuItemsToAccessible(pAccMenu);
+        fillMenuItemsToAccessible(pAccTop);
 
         pAccTop->setAccessibleChild(
             maChecks.CreateAccessible(), ScAccessibleFilterTopWindow::LISTBOX);

@@ -155,7 +155,7 @@ OUString ScAccessibleFilterMenu::getAccessibleName() throw (RuntimeException)
 sal_Int32 ScAccessibleFilterMenu::getAccessibleChildCount()
     throw (RuntimeException)
 {
-    return maMenuItems.size();
+    return getMenuItemCount();
 }
 
 Reference<XAccessible> ScAccessibleFilterMenu::getAccessibleChild(sal_Int32 nIndex)
@@ -284,6 +284,51 @@ Sequence<sal_Int8> ScAccessibleFilterMenu::getImplementationId()
     return aId;
 }
 
+Rectangle ScAccessibleFilterMenu::GetBoundingBoxOnScreen() const
+    throw (RuntimeException)
+{
+    if (mnMenuPos == ScMenuFloatingWindow::MENU_NOT_SELECTED)
+        return Rectangle();
+
+    // Menu object's bounding box is the bounding box of the menu item that
+    // launches the menu, which belongs to the parent window.
+    ScMenuFloatingWindow* pParentWin = mpWindow->getParentMenuWindow();
+    if (!pParentWin)
+        return Rectangle();
+
+    if (!pParentWin->IsVisible())
+        return Rectangle();
+
+    Point aPos = pParentWin->OutputToAbsoluteScreenPixel(Point(0,0));
+    Point aMenuPos;
+    Size aMenuSize;
+    pParentWin->getMenuItemPosSize(mnMenuPos, aMenuPos, aMenuSize);
+    Rectangle aRect(aPos + aMenuPos, aMenuSize);
+    return aRect;
+}
+
+Rectangle ScAccessibleFilterMenu::GetBoundingBox() const
+    throw (RuntimeException)
+{
+    if (mnMenuPos == ScMenuFloatingWindow::MENU_NOT_SELECTED)
+        return Rectangle();
+
+    // Menu object's bounding box is the bounding box of the menu item that
+    // launches the menu, which belongs to the parent window.
+    ScMenuFloatingWindow* pParentWin = mpWindow->getParentMenuWindow();
+    if (!pParentWin)
+        return Rectangle();
+
+    if (!pParentWin->IsVisible())
+        return Rectangle();
+
+    Point aMenuPos;
+    Size aMenuSize;
+    pParentWin->getMenuItemPosSize(mnMenuPos, aMenuPos, aMenuSize);
+    Rectangle aRect(aMenuPos, aMenuSize);
+    return aRect;
+}
+
 void ScAccessibleFilterMenu::appendMenuItem(const OUString& rName, bool bEnabled, size_t nMenuPos)
 {
     // Check weather this menu item is a sub menu or a regular menu item.
@@ -315,6 +360,11 @@ void ScAccessibleFilterMenu::setMenuPos(size_t nMenuPos)
 void ScAccessibleFilterMenu::setEnabled(bool bEnabled)
 {
     mbEnabled = bEnabled;
+}
+
+sal_Int32 ScAccessibleFilterMenu::getMenuItemCount() const
+{
+    return maMenuItems.size();
 }
 
 bool ScAccessibleFilterMenu::isSelected() const

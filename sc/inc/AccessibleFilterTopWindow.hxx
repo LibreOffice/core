@@ -31,13 +31,14 @@
 #ifndef SC_ACCESSIBLEFILTERTOPWINDOW_HXX
 #define SC_ACCESSIBLEFILTERTOPWINDOW_HXX
 
-#include "AccessibleContextBase.hxx"
+//#include "AccessibleContextBase.hxx"
+#include "AccessibleFilterMenu.hxx"
 #include "cppuhelper/implbase1.hxx"
 
 class ScDPFieldPopupWindow;
 class ScDocument;
 
-class ScAccessibleFilterTopWindow : public ScAccessibleContextBase
+class ScAccessibleFilterTopWindow : public ScAccessibleFilterMenu
 {
 public:
     ScAccessibleFilterTopWindow(

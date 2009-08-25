@@ -161,6 +161,16 @@ public:
     void setMenuPos(size_t nMenuPos);
     void setEnabled(bool bEnabled);
 
+protected:
+
+    sal_Int32 getMenuItemCount() const;
+
+    virtual Rectangle GetBoundingBoxOnScreen() const
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual Rectangle GetBoundingBox() const
+        throw (::com::sun::star::uno::RuntimeException);
+
 private:
     bool isSelected() const;
     bool isFocused() const;

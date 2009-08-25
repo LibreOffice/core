@@ -140,6 +140,8 @@ public:
     const ::rtl::OUString& getName() const;
 
     void executeMenuItem(size_t nPos);
+    void getMenuItemPosSize(size_t nPos, Point& rPos, Size& rSize) const;
+    ScMenuFloatingWindow* getParentMenuWindow() const;
 
 protected:
 
@@ -167,7 +169,6 @@ private:
     void resizeToFitMenuItems();
     void highlightMenuItem(size_t nPos, bool bSelected);
 
-    void getMenuItemPosSize(size_t nPos, Point& rPos, Size& rSize) const;
     size_t getEnclosingMenuItem(const Point& rPos) const;
     size_t getSubMenuPos(ScMenuFloatingWindow* pSubMenu);
 

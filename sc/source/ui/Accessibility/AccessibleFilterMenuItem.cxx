@@ -157,6 +157,33 @@ void ScAccessibleFilterMenuItem::setEnabled(bool bEnabled)
     mbEnabled = bEnabled;
 }
 
+Rectangle ScAccessibleFilterMenuItem::GetBoundingBoxOnScreen() const
+    throw (RuntimeException)
+{
+    if (!mpWindow->IsVisible())
+        return Rectangle();
+
+    Point aPos = mpWindow->OutputToAbsoluteScreenPixel(Point(0,0));
+    Point aMenuPos;
+    Size aMenuSize;
+    mpWindow->getMenuItemPosSize(mnMenuPos, aMenuPos, aMenuSize);
+    Rectangle aRect(aPos + aMenuPos, aMenuSize);
+    return aRect;
+}
+
+Rectangle ScAccessibleFilterMenuItem::GetBoundingBox() const
+    throw (RuntimeException)
+{
+    if (!mpWindow->IsVisible())
+        return Rectangle();
+
+    Point aMenuPos;
+    Size aMenuSize;
+    mpWindow->getMenuItemPosSize(mnMenuPos, aMenuPos, aMenuSize);
+    Rectangle aRect(aMenuPos, aMenuSize);
+    return aRect;
+}
+
 void ScAccessibleFilterMenuItem::updateStateSet()
 {
     if (!mxStateSet.is())
