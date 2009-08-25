@@ -589,8 +589,6 @@ void writeStringValue(xmlTextWriterPtr writer, rtl::OUString const & value) {
                     writer,
                     xmlString(convertToUtf8(value, i, j - i).getStr()));
             }
-            xmlTextWriterSetIndent(writer, 0);
-                //TODO: see xmlTextWriterSetIndent in writeModFile
             xmlTextWriterStartElement(writer, xmlString("unicode"));
             xmlTextWriterWriteAttribute(
                 writer, xmlString("oor:scalar"),
@@ -599,8 +597,6 @@ void writeStringValue(xmlTextWriterPtr writer, rtl::OUString const & value) {
                         rtl::OUString::valueOf(static_cast< sal_Int32 >(c))).
                     getStr()));
             xmlTextWriterEndElement(writer);
-            xmlTextWriterSetIndent(writer, 1);
-                //TODO: see xmlTextWriterSetIndent above
             i = j + 1;
         }
     }
@@ -2764,8 +2760,6 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
         // to stderr):
         return;
     }
-    xmlTextWriterSetIndent(writer.writer, 1);
-        //TODO: more readable, but potentially slower?
     xmlTextWriterStartDocument(writer.writer, 0, 0, 0);
     xmlTextWriterStartElement(writer.writer, xmlString("oor:items"));
     xmlTextWriterWriteAttribute(
