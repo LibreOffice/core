@@ -29,9 +29,12 @@
 **********************************************************************-->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:oor="http://openoffice.org/2001/registry">
+   xmlns:oor="http://openoffice.org/2001/registry">
+  <xsl:strip-space elements="*"/>
+  <xsl:preserve-space elements="value"/>
   <xsl:template match="/">
-    <xsl:element name="oor:data">
+    <oor:data xmlns:xs="http://www.w3.org/2001/XMLSchema"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <xsl:copy-of select="list/dependency"/>
 <!--
       <xsl:copy-of select="document(list/filename)/oor:component-schema"/>
@@ -45,10 +48,10 @@
       <xsl:for-each select="list/filename">
         <xsl:choose>
           <xsl:when test="count(document(.)/oor:component-schema) = 1">
-            <xsl:copy-of select="document(.)/oor:component-schema"/>
+            <xsl:apply-templates select="document(.)/oor:component-schema"/>
           </xsl:when>
           <xsl:when test="count(document(.)/oor:component-data) = 1">
-            <xsl:copy-of select="document(.)/oor:component-data"/>
+            <xsl:apply-templates select="document(.)/oor:component-data"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:message terminate="yes">
@@ -58,6 +61,23 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:for-each>
-    </xsl:element>
+    </oor:data>
   </xsl:template>
+  <xsl:template
+     match="oor:component-schema|oor:component-data|templates|component|group|
+            set|node-ref|prop|item|value|node">
+    <xsl:copy copy-namespaces="no">
+      <!-- prune oor:component-data xmlns:install="..." namespaces (would only
+           work in XSLT 2.0, however) -->
+      <xsl:for-each select="@*">
+        <xsl:attribute name="{name()}">
+          <xsl:value-of select="."/>
+        </xsl:attribute>
+      </xsl:for-each>
+      <xsl:apply-templates/>
+    </xsl:copy>
+  </xsl:template>
+  <xsl:template match="info|import|uses|constraints"/>
+    <!-- TODO: no longer strip elements when they are eventually read by
+         configmgr2 implementation -->
 </xsl:stylesheet>
