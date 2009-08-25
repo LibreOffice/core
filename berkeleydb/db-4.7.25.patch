@@ -1,0 +1,1052 @@
+--- misc/db-4.7.25.NC/btree/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/btree/makefile.mk	2009-07-21 11:39:25.000000000 +0200
+@@ -1 +1,35 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=btree
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/bt_compact.obj \
++    $(SLO)$/bt_compare.obj	\
++    $(SLO)$/bt_conv.obj	\
++    $(SLO)$/bt_curadj.obj	\
++    $(SLO)$/bt_cursor.obj	\
++    $(SLO)$/bt_delete.obj	\
++    $(SLO)$/bt_method.obj	\
++    $(SLO)$/bt_open.obj	\
++    $(SLO)$/bt_put.obj	\
++    $(SLO)$/bt_rec.obj	\
++    $(SLO)$/bt_reclaim.obj	\
++    $(SLO)$/bt_recno.obj	\
++    $(SLO)$/bt_rsearch.obj	\
++    $(SLO)$/bt_search.obj	\
++    $(SLO)$/bt_split.obj	\
++    $(SLO)$/bt_stat.obj	\
++    $(SLO)$/bt_upgrade.obj	\
++    $(SLO)$/bt_verify.obj \
++    $(SLO)$/btree_auto.obj 
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/clib/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/clib/makefile.mk	2009-07-21 11:39:25.000000000 +0200
+@@ -1 +1,16 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=clib
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/dbinc ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= $(SLO)$/strsep.obj 
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/common/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/common/makefile.mk	2009-07-21 11:39:25.000000000 +0200
+@@ -1 +1,31 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=common
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/crypto_stub.obj	\
++    $(SLO)$/db_byteorder.obj \
++    $(SLO)$/db_err.obj \
++    $(SLO)$/db_getlong.obj \
++    $(SLO)$/db_idspace.obj \
++    $(SLO)$/db_log2.obj \
++    $(SLO)$/db_shash.obj \
++    $(SLO)$/dbt.obj \
++    $(SLO)$/mkpath.obj \
++    $(SLO)$/openflags.obj \
++    $(SLO)$/os_method.obj \
++    $(SLO)$/util_cache.obj \
++    $(SLO)$/util_log.obj \
++    $(SLO)$/util_sig.obj \
++    $(SLO)$/zerofill.obj 
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/cxx/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/cxx/makefile.mk	2009-07-21 11:39:25.000000000 +0200
+@@ -1 +1,27 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=cxx
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/cxx_db.obj \
++    $(SLO)$/cxx_dbc.obj \
++    $(SLO)$/cxx_dbt.obj \
++    $(SLO)$/cxx_env.obj \
++    $(SLO)$/cxx_except.obj \
++    $(SLO)$/cxx_lock.obj \
++    $(SLO)$/cxx_logc.obj \
++    $(SLO)$/cxx_mpool.obj \
++    $(SLO)$/cxx_multi.obj \
++    $(SLO)$/cxx_seq.obj \
++    $(SLO)$/cxx_txn.obj	
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/db/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/db/makefile.mk	2009-07-21 11:39:25.000000000 +0200
+@@ -1 +1,47 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=db_src
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/crdel_auto.obj \
++    $(SLO)$/crdel_rec.obj \
++    $(SLO)$/db.obj \
++    $(SLO)$/db_am.obj \
++    $(SLO)$/db_auto.obj \
++    $(SLO)$/db_cam.obj \
++    $(SLO)$/db_cds.obj \
++    $(SLO)$/db_conv.obj \
++    $(SLO)$/db_dispatch.obj \
++    $(SLO)$/db_dup.obj \
++    $(SLO)$/db_iface.obj \
++    $(SLO)$/db_join.obj \
++    $(SLO)$/db_meta.obj \
++    $(SLO)$/db_method.obj \
++    $(SLO)$/db_open.obj \
++    $(SLO)$/db_overflow.obj \
++    $(SLO)$/db_ovfl_vrfy.obj \
++    $(SLO)$/db_pr.obj \
++    $(SLO)$/db_rec.obj \
++    $(SLO)$/db_reclaim.obj \
++    $(SLO)$/db_remove.obj \
++    $(SLO)$/db_rename.obj \
++    $(SLO)$/db_ret.obj \
++    $(SLO)$/db_setid.obj \
++    $(SLO)$/db_setlsn.obj \
++    $(SLO)$/db_stati.obj \
++    $(SLO)$/db_truncate.obj \
++    $(SLO)$/db_upg.obj \
++    $(SLO)$/db_upg_opd.obj \
++    $(SLO)$/db_vrfy.obj \
++    $(SLO)$/db_vrfyutil.obj
++
++.INCLUDE: target.mk
++
+--- misc/db-4.7.25.NC/db_4_7_gcc4.map	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/db_4_7_gcc4.map	2009-07-21 11:39:25.000000000 +0200
+@@ -1 +1,147 @@
+-dummy
++DB_4_7 {
++	global:
++__bam_adj_read;
++__bam_cadjust_read;
++__bam_cdel_read;
++__bam_curadj_read;
++__bam_merge_44_read;
++__bam_merge_read;
++__bam_pgno_read;
++__bam_relink_read;
++__bam_relink_43_read;
++__bam_repl_read;
++__bam_root_read;
++__bam_rcuradj_read;
++__bam_rsplit_read;
++__bam_split_read;
++__config_split;
++__crdel_inmem_create_read;
++__crdel_inmem_rename_read;
++__crdel_inmem_remove_read;
++__crdel_metasub_read;
++__db_add_recovery_int;
++__db_addrem_read;
++__db_big_read;
++__db_cksum_read;
++__db_dbm_close;
++__db_dbm_delete;
++__db_dbm_fetch;
++__db_dbm_firstkey;
++__db_dbm_init;
++__db_dbm_nextkey;
++__db_dbm_store;
++__db_debug_read;
++__db_dispatch;
++__db_dumptree;
++__db_hcreate;
++__db_hdestroy;
++__db_hsearch;
++__db_idspace;
++__db_mkpath;
++__db_ndbm_clearerr;
++__db_ndbm_close;
++__db_ndbm_delete;
++__db_ndbm_dirfno;
++__db_ndbm_error;
++__db_ndbm_fetch;
++__db_ndbm_firstkey;
++__db_ndbm_nextkey;
++__db_ndbm_open;
++__db_ndbm_pagfno;
++__db_ndbm_rdonly;
++__db_ndbm_store;
++__db_noop_read;
++__db_pg_alloc_42_read;
++__db_pg_alloc_read;
++__db_pg_free_42_read;
++__db_pg_free_read;
++__db_pg_freedata_42_read;
++__db_pg_freedata_read;
++__db_pg_init_read;
++__db_pg_sort_read;
++__db_pr_callback;
++__db_relink_42_read;
++__db_rpath;
++__db_getlong;
++__db_getulong;
++__db_ovref_read;
++__dbreg_register_read;
++__fop_create_read;
++__fop_file_remove_read;
++__fop_remove_read;
++__fop_rename_read;
++__fop_write_read;
++__ham_chgpg_read;
++__ham_copypage_read;
++__ham_curadj_read;
++__ham_groupalloc_42_read;
++__ham_groupalloc_read;
++__ham_insdel_read;
++__ham_metagroup_42_read;
++__ham_metagroup_read;
++__ham_newpage_read;
++__ham_replace_read;
++__ham_splitdata_read;
++__lock_list_print;
++__os_abspath;
++__os_calloc;
++__os_closehandle;
++__os_ctime;
++__os_dirfree;
++__os_dirlist;
++__os_free;
++__os_fsync;
++__os_getenv;
++__os_mkdir;
++__os_open;
++__os_read;
++__os_rename;
++__os_strdup;
++__os_unlink;
++__os_write;
++__os_yield;
++__os_id;
++__qam_add_read;
++__qam_del_read;
++__qam_delext_read;
++__qam_incfirst_read;
++__qam_mvptr_read;
++__txn_ckp_read;
++__txn_ckp_42_read;
++__txn_child_read;
++__txn_recycle_read;
++__txn_regop_42_read;
++__txn_regop_read;
++__txn_xa_regop_read;
++db_create;
++db_env_create;
++db_env_set_func_close;
++db_env_set_func_dirfree;
++db_env_set_func_dirlist;
++db_env_set_func_exists;
++db_env_set_func_file_map;
++db_env_set_func_free;
++db_env_set_func_fsync;
++db_env_set_func_ftruncate;
++db_env_set_func_ioinfo;
++db_env_set_func_malloc;
++db_env_set_func_open;
++db_env_set_func_pread;
++db_env_set_func_pwrite;
++db_env_set_func_read;
++db_env_set_func_realloc;
++db_env_set_func_region_map;
++db_env_set_func_rename;
++db_env_set_func_seek;
++db_env_set_func_unlink;
++db_env_set_func_write;
++db_env_set_func_yield;
++db_sequence_create;
++db_strerror;
++db_version;
++db_xa_switch;
++log_compare;
++
++	local:
++		*;
++}; 
+--- misc/db-4.7.25.NC/dbm/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/dbm/makefile.mk	2009-07-21 11:39:25.000000000 +0200
+@@ -1 +1,16 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=dbm
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= $(SLO)$/dbm.obj
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/dbreg/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/dbreg/makefile.mk	2009-07-21 11:39:25.000000000 +0200
+@@ -1 +1,21 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=dbreg
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/dbreg.obj \
++    $(SLO)$/dbreg_auto.obj \
++    $(SLO)$/dbreg_rec.obj \
++    $(SLO)$/dbreg_stat.obj \
++    $(SLO)$/dbreg_util.obj
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/dist/Makefile.in	2008-05-06 05:03:36.000000000 +0200
++++ misc/build/db-4.7.25.NC/dist/Makefile.in	2009-07-21 11:39:25.000000000 +0200
+@@ -13,7 +13,7 @@
+ libdir=	@libdir@
+ docdir=	$(prefix)/docs
+ 
+-dmode=	755
++dmode=	775
+ emode=	555
+ fmode=	444
+ 
+@@ -56,6 +56,7 @@
+ CCLINK=		@MAKEFILE_CCLINK@ @CFLAGS@
+ 
+ LDFLAGS=	@LDFLAGS@
++LDFLAGSVERSION=  @LDFLAGSVERSION@
+ LIBS=		@LIBSO_LIBS@
+ TEST_LIBS=	@TEST_LIBS@
+ LIBCSO_LIBS=	@LIBCSO_LIBS@ @LIBSO_LIBS@
+@@ -733,7 +734,7 @@
+ 
+ # Shared C library.
+ $(libso_target): $(C_OBJS)
+-	$(SOLINK) $(SOFLAGS) $(LDFLAGS) -o $@ $(C_OBJS) $(LIBCSO_LIBS)
++	$(SOLINK) $(SOFLAGS) $(LDFLAGS) $(LDFLAGSVERSION) -o $@ $(C_OBJS) $(LIBCSO_LIBS)
+ 	$(RM) -f $(libdb)
+ 	$(LN) -s .libs/$(libdb_version) $(libdb)
+ 
+--- misc/db-4.7.25.NC/dist/configure	2008-05-15 23:12:41.000000000 +0200
++++ misc/build/db-4.7.25.NC/dist/configure	2009-07-21 11:39:25.000000000 +0200
+@@ -3757,8 +3757,10 @@
+ # Set CFLAGS/CXXFLAGS.  We MUST set the flags before we call autoconf
+ # compiler configuration macros, because if we don't, they set CFLAGS
+ # to no optimization and -g, which isn't what we want.
+-CFLAGS=${CFLAGS-$optimize_debug}
+-CXXFLAGS=${CXXFLAGS-"$CFLAGS"}
++#CFLAGS=${CFLAGS-$optimize_debug}
++#CXXFLAGS=${CXXFLAGS-"$CFLAGS"}
++CFLAGS="$CFLAGS $optimize_def"
++CXXFLAGS="$CXXFLAGS $CFLAGS"
+ 
+ # The default compiler is cc (NOT gcc), the default CFLAGS is as specified
+ # above, NOT what is set by AC_PROG_CC, as it won't set optimization flags
+@@ -12566,7 +12568,8 @@
+       # Check to see if the program is GNU ld.  I'd rather use --version,
+       # but apparently some variants of GNU ld only accept -v.
+       # Break only if it was the GNU/non-GNU ld that we prefer.
+-      case `"$lt_cv_path_LD" -v 2>&1 </dev/null` in
++#      case `"$lt_cv_path_LD" -v 2>&1 </dev/null` in
++      case `$lt_cv_path_LD -v 2>&1 </dev/null` in
+       *GNU* | *'with BFD'*)
+ 	test "$with_gnu_ld" != no && break
+ 	;;
+@@ -36624,6 +36627,7 @@
+ JAR!$JAR$ac_delim
+ JAVACFLAGS!$JAVACFLAGS$ac_delim
+ LDFLAGS!$LDFLAGS$ac_delim
++LDFLAGSVERSION!$LDFLAGSVERSION$ac_delim
+ LIBCSO_LIBS!$LIBCSO_LIBS$ac_delim
+ LIBJSO_LIBS!$LIBJSO_LIBS$ac_delim
+ LIBSO_LIBS!$LIBSO_LIBS$ac_delim
+@@ -36655,7 +36659,7 @@
+ DB_VERSION_PATCH!$DB_VERSION_PATCH$ac_delim
+ _ACEOF
+ 
+-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
++  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 98; then
+     break
+   elif $ac_last_try; then
+     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
+--- misc/db-4.7.25.NC/dist/ltmain.sh	2006-06-27 03:03:33.000000000 +0200
++++ misc/build/db-4.7.25.NC/dist/ltmain.sh	2009-07-21 11:39:25.000000000 +0200
+@@ -1700,7 +1700,9 @@
+ 	# We need an absolute path.
+ 	case $dir in
+ 	[\\/]* | [A-Za-z]:[\\/]*) ;;
+-	*)
++	# or $ORIGIN altenatively
++	*\$ORIGIN*) ;;
++        *)
+ 	  $echo "$modename: only absolute run-paths are allowed" 1>&2
+ 	  exit $EXIT_FAILURE
+ 	  ;;
+--- misc/db-4.7.25.NC/env/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/env/makefile.mk	2009-07-21 11:39:25.000000000 +0200
+@@ -1 +1,29 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=env
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/env_alloc.obj \
++    $(SLO)$/env_config.obj \
++    $(SLO)$/env_failchk.obj \
++    $(SLO)$/env_file.obj \
++    $(SLO)$/env_globals.obj \
++    $(SLO)$/env_method.obj \
++    $(SLO)$/env_name.obj \
++    $(SLO)$/env_open.obj \
++    $(SLO)$/env_recover.obj \
++    $(SLO)$/env_region.obj \
++    $(SLO)$/env_register.obj \
++    $(SLO)$/env_sig.obj \
++    $(SLO)$/env_stat.obj 
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/fileops/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/fileops/makefile.mk	2009-07-21 11:39:26.000000000 +0200
+@@ -1 +1,20 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=fileops
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/fileops_auto.obj \
++    $(SLO)$/fop_basic.obj \
++    $(SLO)$/fop_rec.obj \
++    $(SLO)$/fop_util.obj
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/hash/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/hash/makefile.mk	2009-07-21 11:39:26.000000000 +0200
+@@ -1 +1,30 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=hash
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/hash.obj \
++    $(SLO)$/hash_auto.obj \
++    $(SLO)$/hash_conv.obj \
++    $(SLO)$/hash_dup.obj \
++    $(SLO)$/hash_func.obj \
++    $(SLO)$/hash_meta.obj \
++    $(SLO)$/hash_method.obj \
++    $(SLO)$/hash_open.obj \
++    $(SLO)$/hash_page.obj \
++    $(SLO)$/hash_rec.obj \
++    $(SLO)$/hash_reclaim.obj \
++    $(SLO)$/hash_stat.obj \
++    $(SLO)$/hash_upgrade.obj \
++    $(SLO)$/hash_verify.obj
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/hmac/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/hmac/makefile.mk	2009-07-21 11:39:26.000000000 +0200
+@@ -1 +1,18 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=hmac
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/hmac.obj \
++    $(SLO)$/sha1.obj
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/hsearch/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/hsearch/makefile.mk	2009-07-21 11:39:26.000000000 +0200
+@@ -1 +1,16 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=hsearch
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= $(SLO)$/hsearch.obj
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/lock/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/lock/makefile.mk	2009-07-21 11:39:26.000000000 +0200
+@@ -1 +1,26 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=lock
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/lock.obj \
++    $(SLO)$/lock_deadlock.obj \
++    $(SLO)$/lock_failchk.obj \
++    $(SLO)$/lock_id.obj \
++    $(SLO)$/lock_list.obj \
++    $(SLO)$/lock_method.obj \
++    $(SLO)$/lock_region.obj \
++    $(SLO)$/lock_stat.obj \
++    $(SLO)$/lock_timer.obj \
++    $(SLO)$/lock_util.obj
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/log/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/log/makefile.mk	2009-07-21 11:39:26.000000000 +0200
+@@ -1 +1,24 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=log
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/log.obj	\
++    $(SLO)$/log_archive.obj	\
++    $(SLO)$/log_compare.obj	\
++    $(SLO)$/log_debug.obj \
++    $(SLO)$/log_get.obj \
++    $(SLO)$/log_method.obj \
++    $(SLO)$/log_put.obj \
++    $(SLO)$/log_stat.obj
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/makefile.mk	2009-07-21 11:39:26.000000000 +0200
+@@ -1 +1,80 @@
+-dummy
++PRJ=..$/..$/..$/..
++PRJNAME=libdb47
++TARGET=libdb47
++USE_DEFFILE=true
++
++.INCLUDE :  settings.mk
++CFLAGS+=-GS -EHsc -Gy
++
++#LINKFLAGS!:=$(LINKFLAGS:s/NODEFAULTLIB/NOLOGO/)
++.IF "$(USE_SHELL)"!="4nt"
++BUILD_ACTION_SEP=;
++.ELSE # "$(USE_SHELL)"!="4nt"
++BUILD_ACTION_SEP=^
++.ENDIF # "$(USE_SHELL)"!="4nt"
++
++CHILDREN= \
++    btree clib common cxx \
++    db dbm dbreg env fileops \
++    hash hmac hsearch lock \
++    log mp mutex os os_windows \
++    qam rep repmgr sequence \
++    txn xa 
++
++LIB1TARGET= $(SLB)$/$(TARGET).lib
++LIB1FILES= \
++    $(SLB)$/btree.lib \
++    $(SLB)$/clib.lib \
++    $(SLB)$/common.lib \
++    $(SLB)$/cxx.lib \
++    $(SLB)$/db_src.lib \
++    $(SLB)$/dbm.lib \
++    $(SLB)$/dbreg.lib \
++    $(SLB)$/env.lib \
++    $(SLB)$/fileops.lib \
++    $(SLB)$/hash.lib \
++    $(SLB)$/hmac.lib \
++    $(SLB)$/hsearch.lib \
++    $(SLB)$/lock.lib \
++    $(SLB)$/log.lib \
++    $(SLB)$/mp.lib \
++    $(SLB)$/mutex.lib \
++    $(SLB)$/os.lib \
++    $(SLB)$/os_windows.lib \
++    $(SLB)$/qam.lib \
++    $(SLB)$/rep.lib \
++    $(SLB)$/repmgr.lib \
++    $(SLB)$/sequence.lib \
++    $(SLB)$/txn.lib	\
++    $(SLB)$/xa.lib
++
++SHL1LIBS=$(LIB1TARGET)
++SHL1STDLIBS = $(WS2_32LIB) $(ADVAPI32LIB)
++SHL1TARGET	=	$(TARGET)
++SHL1DEF 	=	$(MISC)$/$(SHL1TARGET).def
++SHL1IMPLIB      = $(SHL1TARGET)
++SHL1LIBS	=	$(SLB)$/$(TARGET).lib
++SHL1DEPN	=	$(CHILDREN)
++
++#The following line prevents that the resource file is automatically generated
++use_shl_versions:=
++#use the berkeley's resource file
++RCFILES = build_windows$/libdb.rc
++SHL1RES= $(RES)$/libdb47.res
++
++#DEF1NAME=$(SHL1TARGET)
++#DEF1EXPORTFILE=$(TARGET).dxp
++
++# dmake builds the first rule
++ALLTAR : $(CHILDREN)
++
++$(CHILDREN) .PHONY :
++	cd $@ $(BUILD_ACTION_SEP) $(MAKECMD) subdmake=true $(MFLAGS) $(CALLMACROS)
++
++.INCLUDE :  target.mk
++
++$(MISC)$/$(SHL1TARGET).def : build_windows$/libdb.def
++	$(COPY) $< $@
++	
++	#$(DUMPBIN) -DIRECTIVES $(SLB)$/$(TARGET).lib | $(GREP) EXPORT: | $(GREP) -v ",DATA" | $(SED) "s/.*EXPORT://" >> $@
++
+--- misc/db-4.7.25.NC/mp/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/mp/makefile.mk	2009-07-21 11:39:26.000000000 +0200
+@@ -1 +1,31 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=mp
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/mp_alloc.obj \
++    $(SLO)$/mp_bh.obj \
++    $(SLO)$/mp_fget.obj \
++    $(SLO)$/mp_fmethod.obj \
++    $(SLO)$/mp_fopen.obj \
++    $(SLO)$/mp_fput.obj \
++    $(SLO)$/mp_fset.obj \
++    $(SLO)$/mp_method.obj \
++    $(SLO)$/mp_mvcc.obj \
++    $(SLO)$/mp_region.obj \
++    $(SLO)$/mp_register.obj \
++    $(SLO)$/mp_resize.obj \
++    $(SLO)$/mp_stat.obj \
++    $(SLO)$/mp_sync.obj \
++    $(SLO)$/mp_trickle.obj
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/mutex/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/mutex/makefile.mk	2009-07-21 11:39:26.000000000 +0200
+@@ -1 +1,23 @@
+-dummy
++
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=mutex
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=-I..$/build_windows -I..$/ -I$(COMPATH)$/include $(PSDKINC)
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/mut_alloc.obj \
++    $(SLO)$/mut_failchk.obj \
++    $(SLO)$/mut_method.obj \
++    $(SLO)$/mut_region.obj \
++    $(SLO)$/mut_stat.obj \
++    $(SLO)$/mut_win32.obj
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/os/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/os/makefile.mk	2009-07-21 11:39:26.000000000 +0200
+@@ -1 +1,26 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=os
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/os_abort.obj \
++    $(SLO)$/os_addrinfo.obj \
++    $(SLO)$/os_alloc.obj \
++    $(SLO)$/os_ctime.obj \
++    $(SLO)$/os_pid.obj \
++    $(SLO)$/os_root.obj \
++    $(SLO)$/os_rpath.obj \
++    $(SLO)$/os_stack.obj \
++    $(SLO)$/os_tmpdir.obj \
++    $(SLO)$/os_uid.obj 
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/os/os_fsync.c	2008-05-06 05:03:37.000000000 +0200
++++ misc/build/db-4.7.25.NC/os/os_fsync.c	2009-07-21 11:42:03.000000000 +0200
+@@ -79,13 +79,17 @@
+ 		ret = DB_GLOBAL(j_fsync)(fhp->fd);
+ 	else {
+ #if defined(F_FULLFSYNC)
++/* When running OOo on MacOS using an NFS mounted disk, fcntl failed with errno
++   ENOTTY (25). Since full sync only works on HFS, FAT and UDF (according to the
++   man page) and also is more time consuming we just use the fallback.
+ 		RETRY_CHK((fcntl(fhp->fd, F_FULLFSYNC, 0)), ret);
+-		/*
++*/		/*
+ 		 * On OS X, F_FULLSYNC only works on HFS+, so we need to fall
+ 		 * back to regular fsync on other filesystems.
+ 		 */
+-		if (ret == ENOTSUP)
+-			RETRY_CHK((fsync(fhp->fd)), ret);
++/*		if (ret == ENOTSUP)
++*/
++            RETRY_CHK((fsync(fhp->fd)), ret);
+ #elif defined(HAVE_QNX)
+ 		ret = __qnx_fsync(fhp);
+ #elif defined(HAVE_FDATASYNC)
+--- misc/db-4.7.25.NC/os_windows/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/os_windows/makefile.mk	2009-07-21 11:39:26.000000000 +0200
+@@ -1 +1,37 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=os_windows
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/os_abs.obj \
++    $(SLO)$/os_clock.obj \
++    $(SLO)$/os_config.obj \
++    $(SLO)$/os_cpu.obj \
++    $(SLO)$/os_dir.obj \
++    $(SLO)$/os_errno.obj \
++    $(SLO)$/os_fid.obj \
++    $(SLO)$/os_flock.obj \
++    $(SLO)$/os_fsync.obj \
++    $(SLO)$/os_getenv.obj \
++    $(SLO)$/os_handle.obj \
++    $(SLO)$/os_map.obj \
++    $(SLO)$/os_mkdir.obj \
++    $(SLO)$/os_open.obj \
++    $(SLO)$/os_rename.obj \
++    $(SLO)$/os_rw.obj \
++    $(SLO)$/os_seek.obj \
++    $(SLO)$/os_stat.obj \
++    $(SLO)$/os_truncate.obj \
++    $(SLO)$/os_unlink.obj \
++    $(SLO)$/os_yield.obj \
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/qam/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/qam/makefile.mk	2009-07-21 11:39:26.000000000 +0200
+@@ -1 +1,26 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=qam
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/qam.obj	\
++    $(SLO)$/qam_auto.obj \
++    $(SLO)$/qam_conv.obj \
++    $(SLO)$/qam_files.obj \
++    $(SLO)$/qam_method.obj \
++    $(SLO)$/qam_open.obj \
++    $(SLO)$/qam_rec.obj \
++    $(SLO)$/qam_stat.obj \
++    $(SLO)$/qam_upgrade.obj	\
++    $(SLO)$/qam_verify.obj
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/rep/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/rep/makefile.mk	2009-07-21 11:39:26.000000000 +0200
+@@ -1 +1,27 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=rep
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/rep_auto.obj \
++    $(SLO)$/rep_backup.obj \
++    $(SLO)$/rep_elect.obj \
++    $(SLO)$/rep_lease.obj \
++    $(SLO)$/rep_log.obj \
++    $(SLO)$/rep_method.obj \
++    $(SLO)$/rep_record.obj \
++    $(SLO)$/rep_region.obj \
++    $(SLO)$/rep_stat.obj \
++    $(SLO)$/rep_util.obj \
++    $(SLO)$/rep_verify.obj
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/repmgr/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/repmgr/makefile.mk	2009-07-21 11:39:26.000000000 +0200
+@@ -1 +1,26 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=repmgr
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/repmgr_auto.obj \
++    $(SLO)$/repmgr_elect.obj \
++    $(SLO)$/repmgr_method.obj \
++    $(SLO)$/repmgr_msg.obj \
++    $(SLO)$/repmgr_net.obj \
++    $(SLO)$/repmgr_queue.obj \
++    $(SLO)$/repmgr_sel.obj \
++    $(SLO)$/repmgr_stat.obj \
++    $(SLO)$/repmgr_util.obj \
++    $(SLO)$/repmgr_windows.obj 
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/sequence/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/sequence/makefile.mk	2009-07-21 11:39:26.000000000 +0200
+@@ -1 +1,18 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=sequence
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/seq_stat.obj \
++    $(SLO)$/sequence.obj
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/txn/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/txn/makefile.mk	2009-07-21 11:39:26.000000000 +0200
+@@ -1 +1,26 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=txn
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/txn.obj \
++    $(SLO)$/txn_auto.obj \
++    $(SLO)$/txn_chkpt.obj \
++    $(SLO)$/txn_failchk.obj \
++    $(SLO)$/txn_method.obj \
++    $(SLO)$/txn_rec.obj \
++    $(SLO)$/txn_recover.obj \
++    $(SLO)$/txn_region.obj \
++    $(SLO)$/txn_stat.obj \
++    $(SLO)$/txn_util.obj
++
++.INCLUDE :  target.mk
++
+--- misc/db-4.7.25.NC/xa/makefile.mk	2009-07-21 11:42:40.000000000 +0200
++++ misc/build/db-4.7.25.NC/xa/makefile.mk	2009-07-21 11:39:26.000000000 +0200
+@@ -1 +1,19 @@
+-dummy
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=berkeleydb
++TARGET=xa
++
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE :  settings.mk
++
++INCPRE+=..$/build_windows ..$/
++CDEFS+=-D_WINDLL -DUNICODE -D_UNICODE -DDB_CREATE_DLL -D_WINDOWS
++
++SLOFILES= \
++    $(SLO)$/xa.obj \
++    $(SLO)$/xa_db.obj \
++    $(SLO)$/xa_map.obj
++
++.INCLUDE :  target.mk
++
