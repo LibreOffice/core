@@ -879,13 +879,16 @@ void PrintDialog::setupLayout()
     // get a row for the preview controls
     boost::shared_ptr< vcl::RowOrColumn > xPreviewCtrls( new vcl::RowOrColumn( xPreview.get(), false ) );
     nIndex = xPreview->addChild( xPreviewCtrls );
-    xPreview->setBorders( nIndex, aBorder.Width()*3, 0, aBorder.Width()*3, 0 );
+    boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( xPreviewCtrls.get(), 2 ) );
+    xPreviewCtrls->addChild( xSpacer );
     xPreviewCtrls->addWindow( &maPageEdit );
     xPreviewCtrls->addWindow( &maNumPagesText );
-    boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( xPreviewCtrls.get(), 2 ) );
+    xSpacer.reset( new vcl::Spacer( xPreviewCtrls.get(), 2 ) );
     xPreviewCtrls->addChild( xSpacer );
     xPreviewCtrls->addWindow( &maBackwardBtn );
     xPreviewCtrls->addWindow( &maForwardBtn );
+    xSpacer.reset( new vcl::Spacer( xPreviewCtrls.get(), 2 ) );
+    xPreviewCtrls->addChild( xSpacer );
 
     // continue with the tab ctrl
     xPreviewAndTab->addWindow( &maTabCtrl );
@@ -1727,8 +1730,8 @@ void PrintDialog::updateNupFromPages()
             nRows = nCols = 3;
         else if( nPages == 16 )
             nRows = nCols = 4;
-        nPageMargin = 500;
-        nSheetMargin = 500;
+        nPageMargin = 0;
+        nSheetMargin = 0;
     }
     else
         bCustom = true;

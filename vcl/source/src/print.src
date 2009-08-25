@@ -32,7 +32,7 @@
 
 ModalDialog SV_DLG_PRINT
 {
-    Text [en-US] = "Printing";
+    Text [en-US] = "Print";
     Closeable = TRUE;
     Sizeable = TRUE;
     Moveable = TRUE;
@@ -333,7 +333,7 @@ ModalDialog SV_DLG_PRINT
         {
             Pos = MAP_APPFONT( 5, 5 );
             Size = MAP_APPFONT( 100, 10 );
-            Text [en-US] = "Location";
+            Text [en-US] = "Location:";
         };
         FixedText SV_PRINT_COMMENT_TXT
         {

@@ -423,7 +423,7 @@ public:
         : nRows( 1 ), nColumns( 1 ), nRepeat( 1 ), aPaperSize( 21000, 29700 )
         , nLeftMargin( 0 ), nTopMargin( 0 )
         , nRightMargin( 0 ), nBottomMargin( 0 )
-        , nHorizontalSpacing( 500 ), nVerticalSpacing( 500 )
+        , nHorizontalSpacing( 0 ), nVerticalSpacing( 0 )
         , bDrawBorder( false )
         , nOrder( LRTB )
         {
