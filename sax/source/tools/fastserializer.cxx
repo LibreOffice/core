@@ -326,43 +326,29 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::mark()
     {
-        maMarkStack.push( Int8Sequence() );
+        maMarkStack.push( ForMerge() );
     }
 
-    void FastSaxSerializer::mergeTopMarks( bool bPrepend )
+    void FastSaxSerializer::mergeTopMarks( sax_fastparser::MergeMarksEnum eMergeType )
     {
         if ( maMarkStack.empty() )
             return;
 
         if ( maMarkStack.size() == 1 )
         {
-            mxOutputStream->writeBytes( maMarkStack.top() );
+            mxOutputStream->writeBytes( maMarkStack.top().getData() );
             maMarkStack.pop();
+            return;
         }
-        else
+
+        const Int8Sequence aMerge( maMarkStack.top().getData() );
+        maMarkStack.pop();
+
+        switch ( eMergeType )
         {
-            const Int8Sequence aMerge( maMarkStack.top() );
-            maMarkStack.pop();
-
-            sal_Int32 nMergeLen = aMerge.getLength();
-            if ( nMergeLen > 0 )
-            {
-                Int8Sequence &rTop = maMarkStack.top();
-                sal_Int32 nTopLen = rTop.getLength();
-
-                rTop.realloc( nTopLen + nMergeLen );
-                if ( bPrepend )
-                {
-                    // prepend the aMerge to the rTop
-                    memmove( rTop.getArray() + nMergeLen, rTop.getConstArray(), nTopLen );
-                    memcpy( rTop.getArray(), aMerge.getConstArray(), nMergeLen );
-                }
-                else
-                {
-                    // append the aMerge to the rTop
-                    memcpy( rTop.getArray() + nTopLen, aMerge.getConstArray(), nMergeLen );
-                }
-            }
+            case MERGE_MARKS_APPEND:   maMarkStack.top().append( aMerge );   break;
+            case MERGE_MARKS_PREPEND:  maMarkStack.top().prepend( aMerge );  break;
+            case MERGE_MARKS_POSTPONE: maMarkStack.top().postpone( aMerge ); break;
         }
     }
 
@@ -371,15 +357,50 @@ namespace sax_fastparser {
         if ( maMarkStack.empty() )
             mxOutputStream->writeBytes( aData );
         else
-        {
-            sal_Int32 nDataLen = aData.getLength();
-            if ( nDataLen > 0 )
-            {
-                Int8Sequence &rTop = maMarkStack.top();
-                sal_Int32 nTopLen = rTop.getLength();
+            maMarkStack.top().append( aData );
+    }
 
-                rTop.realloc( nTopLen + nDataLen );
-                memcpy( rTop.getArray() + nTopLen, aData.getConstArray(), nDataLen );
+    FastSaxSerializer::Int8Sequence& FastSaxSerializer::ForMerge::getData()
+    {
+        merge( maData, maPostponed, true );
+        maPostponed.realloc( 0 );
+
+        return maData;
+    }
+
+    void FastSaxSerializer::ForMerge::prepend( const Int8Sequence &rWhat )
+    {
+        merge( maData, rWhat, false );
+    }
+
+    void FastSaxSerializer::ForMerge::append( const Int8Sequence &rWhat )
+    {
+        merge( maData, rWhat, true );
+    }
+
+    void FastSaxSerializer::ForMerge::postpone( const Int8Sequence &rWhat )
+    {
+        merge( maPostponed, rWhat, true );
+    }
+
+    void FastSaxSerializer::ForMerge::merge( Int8Sequence &rTop, const Int8Sequence &rMerge, bool bAppend )
+    {
+        sal_Int32 nMergeLen = rMerge.getLength();
+        if ( nMergeLen > 0 )
+        {
+            sal_Int32 nTopLen = rTop.getLength();
+
+            rTop.realloc( nTopLen + nMergeLen );
+            if ( bAppend )
+            {
+                // append the rMerge to the rTop
+                memcpy( rTop.getArray() + nTopLen, rMerge.getConstArray(), nMergeLen );
+            }
+            else
+            {
+                // prepend the rMerge to the rTop
+                memmove( rTop.getArray() + nMergeLen, rTop.getConstArray(), nTopLen );
+                memcpy( rTop.getArray(), rMerge.getConstArray(), nMergeLen );
             }
         }
     }
