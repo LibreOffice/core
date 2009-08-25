@@ -30,7 +30,6 @@
 
 #include <pyuno/pyuno.hxx>
 
-#include <osl/module.hxx>
 #include <osl/process.h>
 #include <osl/file.h>
 #include <osl/thread.h>
@@ -116,27 +115,6 @@ Sequence< OUString > getSupportedServiceNames()
     return Sequence< OUString > ( &serviceName, 1 );
 }
 
-static OUString getLibDir()
-{
-    static OUString *pLibDir;
-    if( !pLibDir )
-    {
-        osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        if( ! pLibDir )
-        {
-            static OUString libDir;
-
-            if( osl::Module::getUrlFromAddress(
-                    reinterpret_cast< oslGenericFunction >(getLibDir) , libDir ) )
-            {
-                libDir = OUString( libDir.getStr(), libDir.lastIndexOf('/' ) );
-            }
-            pLibDir = &libDir;
-        }
-    }
-    return *pLibDir;
-}
-
 static void setPythonHome ( const OUString & pythonHome )
 {
     OUString systemPythonHome;
@@ -190,16 +168,13 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
     {
         OUString pythonPath;
         OUString pythonHome;
-        OUString path = getLibDir();
-        if( path.getLength() )
-        {
-            path += OUString( RTL_CONSTASCII_USTRINGPARAM( "/" SAL_CONFIGFILE("pythonloader.uno" )));
-            rtl::Bootstrap bootstrap(path);
+        OUString path( RTL_CONSTASCII_USTRINGPARAM( "$OOO_BASE_DIR/program/" SAL_CONFIGFILE("pythonloader.uno" )));
+        rtl::Bootstrap::expandMacros(path); //TODO: detect failure
+        rtl::Bootstrap bootstrap(path);
 
-            // look for pythonhome
-            bootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "PYUNO_LOADER_PYTHONHOME") ), pythonHome );
-            bootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "PYUNO_LOADER_PYTHONPATH" ) ) , pythonPath );
-        }
+        // look for pythonhome
+        bootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "PYUNO_LOADER_PYTHONHOME") ), pythonHome );
+        bootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "PYUNO_LOADER_PYTHONPATH" ) ) , pythonPath );
 
         // pythonhome+pythonpath must be set before Py_Initialize(), otherwise there appear warning on the console
         // sadly, there is no api for setting the pythonpath, we have to use the environment variable
