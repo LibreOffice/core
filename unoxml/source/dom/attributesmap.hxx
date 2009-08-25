@@ -42,7 +42,7 @@
 #include "element.hxx"
 #include "attr.hxx"
 
-using namespace rtl;
+using ::rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::dom;
 

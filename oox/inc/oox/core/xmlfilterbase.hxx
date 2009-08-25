@@ -44,6 +44,7 @@
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
+    namespace document { class XDocumentProperties; }
     namespace xml { namespace sax { class XLocator; } }
     namespace xml { namespace sax { class XFastDocumentHandler; } }
 } } }
@@ -194,6 +195,14 @@ public:
     inline sal_Int32 GetUniqueId() { return mnMaxDocId++; }
     inline ::rtl::OString GetUniqueIdOString() { return ::rtl::OString::valueOf( mnMaxDocId++ ); }
     inline ::rtl::OUString GetUniqueIdOUString() { return ::rtl::OUString::valueOf( mnMaxDocId++ ); }
+
+    /** Write the document properties into into the current OPC package.
+
+        @param xProperties  The document properties to export.
+
+        @return *this
+     */
+    XmlFilterBase& exportDocumentProperties( ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > xProperties );
 
 private:
     virtual StorageRef  implCreateStorage(
