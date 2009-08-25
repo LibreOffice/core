@@ -38,6 +38,7 @@
 #include "anmdef.hxx"
 #include <svx/svdobj.hxx>
 #include <tools/color.hxx>
+#include <sddllapi.h>
 
 class Polygon;
 class Point;
@@ -46,7 +47,6 @@ class SdrObjSurrogate;
 class SdrObject;
 class SdrPathObj;
 class SdDrawDocument;
-
 
 class SdAnimationInfo : public SdrObjUserData
 {
@@ -78,8 +78,8 @@ public:
     ULONG                   mnPresOrder;
     SdrObject&              mrObject;
 
-    void                    SetBookmark( const String& rBookmark );
-    String                  GetBookmark();
+    SD_DLLPUBLIC void                    SetBookmark( const String& rBookmark );
+    SD_DLLPUBLIC String                  GetBookmark();
 public:
                             SdAnimationInfo(SdrObject& rObject);
                             SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rObject);

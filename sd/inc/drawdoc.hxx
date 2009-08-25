@@ -33,13 +33,9 @@
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HDL_
 #include <com/sun/star/frame/XModel.hdl>
-#endif
 #include <vcl/print.hxx>
-#ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
-#endif
 #include "pres.hxx"
 #include <svx/pageitem.hxx>
 #include <unotools/charclass.hxx>
@@ -246,7 +242,7 @@ public:
 
     SvxNumType          GetPageNumType() const;
     void                SetPageNumType(SvxNumType eType) { mePageNumType = eType; }
-    String              CreatePageNumValue(USHORT nNum) const;
+    SD_DLLPUBLIC String              CreatePageNumValue(USHORT nNum) const;
 
     DocumentType        GetDocumentType() const { return meDocType; }
 
@@ -260,7 +256,7 @@ public:
         for newly created slides.
     */
     SD_DLLPUBLIC void   CreateFirstPages( SdDrawDocument* pRefDocument = 0 );
-    BOOL                CreateMissingNotesAndHandoutPages();
+    SD_DLLPUBLIC BOOL                CreateMissingNotesAndHandoutPages();
 
     void                MovePage(USHORT nPgNum, USHORT nNewPos);
     void                InsertPage(SdrPage* pPage, USHORT nPos=0xFFFF);
@@ -436,7 +432,7 @@ public:
     /** deprecated*/
     SdAnimationInfo*    GetAnimationInfo(SdrObject* pObject) const;
 
-    static  SdAnimationInfo* GetShapeUserData(SdrObject& rObject, bool bCreate = false );
+    SD_DLLPUBLIC static     SdAnimationInfo* GetShapeUserData(SdrObject& rObject, bool bCreate = false );
 
     SdIMapInfo*         GetIMapInfo( SdrObject* pObject ) const;
     IMapObject*         GetHitIMapObject( SdrObject* pObject, const Point& rWinPoint, const ::Window& rCmpWnd );
@@ -588,6 +584,10 @@ public:
 
     /* converts the given western font height to a corresponding ctl font height, deppending on the system language */
     static sal_uInt32 convertFontHeightToCTL( sal_uInt32 nWesternFontHeight );
+
+    /** Get the style sheet pool if it was a SdStyleSheetPool.
+     */
+    SD_DLLPUBLIC SdStyleSheetPool* GetSdStyleSheetPool() const;
 
        void UpdatePageRelativeURLs(const String& rOldName, const String& rNewName);
 
