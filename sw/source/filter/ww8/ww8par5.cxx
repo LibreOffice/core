@@ -2634,6 +2634,28 @@ bool SwWW8ImplReader::AddExtraOutlinesAsExtraStyles(SwTOXBase& rBase)
     return bExtras;
 }
 
+static void EnsureMaxLevelForTemplates(SwTOXBase& rBase)
+{
+    //If the TOC contains Template entries at levels > the evaluation level
+    //that was initially taken from the max normal outline level of the word TOC
+    //then we cannot use that for the evaluation level because writer cuts off
+    //all styles above that level, while word just cuts off the "standard"
+    //outline styles, we have no option but to expand to the highest level
+    //Word included.
+    if ((rBase.GetLevel() != MAXLEVEL) && (nsSwTOXElement::TOX_TEMPLATE & rBase.GetCreateType()))
+    {
+        for (USHORT nI = MAXLEVEL; nI > 0; --nI)
+        {
+            String sStyles(rBase.GetStyleNames(nI-1));
+            if (rBase.GetStyleNames(nI-1).Len())
+            {
+                rBase.SetLevel(nI);
+                break;
+            }
+        }
+    }
+}
+
 void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader, SwTOXBase& rBase,
     _ReadFieldParams& rParam)
 {
@@ -2725,6 +2747,19 @@ bool wwSectionManager::WillHavePageDescHere(SwNodeIndex aIdx) const
         }
     }
     return bRet;
+}
+
+USHORT lcl_GetMaxValidWordTOCLevel(const SwForm &rForm)
+{
+    // GetFormMax() returns level + 1, hence the -1
+    USHORT nRet = rForm.GetFormMax()-1;
+
+    // If the max of this type of TOC is greater than the max of a word
+    // possible toc, then clip to the word max
+    if (nRet > WW8ListManager::nMaxLevel)
+        nRet = WW8ListManager::nMaxLevel;
+
+    return nRet;
 }
 
 eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
@@ -2883,8 +2918,8 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                 case 'o':
                     {
                         USHORT nVal;
-                        if( !aReadParam.GetTokenSttFromTo(0, &nVal, MAXLEVEL) )
-                            nVal = aOrigForm.GetFormMax()-1;
+                        if( !aReadParam.GetTokenSttFromTo(0, &nVal, WW8ListManager::nMaxLevel) )
+                            nVal = lcl_GetMaxValidWordTOCLevel(aOrigForm);
                         if( nMaxLevel < nVal )
                             nMaxLevel = nVal;
                         eCreateFrom |= nsSwTOXElement::TOX_OUTLINELEVEL;
@@ -2896,7 +2931,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                 case 'l':
                     {
                         USHORT nVal;
-                        if( aReadParam.GetTokenSttFromTo(0, &nVal, MAXLEVEL) )
+                        if( aReadParam.GetTokenSttFromTo(0, &nVal, WW8ListManager::nMaxLevel) )
                         {
                             if( nMaxLevel < nVal )
                                 nMaxLevel = nVal;
@@ -2969,7 +3004,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                         // read START and END param
                         USHORT nStart, nEnd;
                         if( !aReadParam.GetTokenSttFromTo(  &nStart, &nEnd,
-                            MAXLEVEL ) )
+                            WW8ListManager::nMaxLevel ) )
                         {
                             nStart = 1;
                             nEnd = aOrigForm.GetFormMax()-1;
@@ -3052,7 +3087,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
             }
 
             if (!nMaxLevel)
-                nMaxLevel = MAXLEVEL;
+                nMaxLevel = WW8ListManager::nMaxLevel;
             pBase->SetLevel(nMaxLevel);
 
             const TOXTypes eType = pBase->GetTOXType()->GetType();
@@ -3110,6 +3145,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 
                         if (eCreateFrom)
                             pBase->SetCreate(eCreateFrom);
+                        EnsureMaxLevelForTemplates(*pBase);
                     }
                     break;
                 case TOX_ILLUSTRATIONS:

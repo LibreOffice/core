@@ -778,6 +778,11 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
            )
         {
             SwFmtLineNumber aLN;
+            if (const SwFmtLineNumber* pLN
+                = (const SwFmtLineNumber*)GetFmtAttr(RES_LINENUMBER))
+            {
+                aLN.SetCountLines( pLN->IsCount() );
+            }
             aLN.SetStartValue(1 + rSection.maSep.lnnMin);
             NewAttr(aLN);
             pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_LINENUMBER);
@@ -3875,6 +3880,12 @@ void SwWW8ImplReader::Read_NoLineNumb(USHORT , const BYTE* pData, short nLen)
         return;
     }
     SwFmtLineNumber aLN;
+    if (const SwFmtLineNumber* pLN
+        = (const SwFmtLineNumber*)GetFmtAttr(RES_LINENUMBER))
+    {
+        aLN.SetStartValue( pLN->GetStartValue() );
+    }
+
     aLN.SetCountLines( pData && (0 == *pData) );
     NewAttr( aLN );
 }

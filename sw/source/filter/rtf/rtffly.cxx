@@ -263,20 +263,26 @@ void SwRTFParser::SetFlysInDoc()
                 pSttNd->GetIndex() + 1 == pEndNd->GetIndex()
                 && pSttNd->GetTxt().Len()>0 /* #i38227# leave drop caps with no content as fly frames */ )
             {
+                ULONG nPos = pSttNd->GetIndex();
+                SwDoc * pDoc1 = pSttNd->GetDoc();
+
                 BOOL bJoined;
                 {
-                    SwPaM aTmp( *pEndNd, 0, *pSttNd, pSttNd->GetTxt().Len() );
-                    bJoined = pDoc->DeleteAndJoin( aTmp );
+                    SwPaM aTmp( *pSttNd, pSttNd->GetTxt().Len(), *pEndNd, 0 );
+                    bJoined = pDoc1->DeleteAndJoin( aTmp );
                 }
-                if( bJoined )
+
+                SwTxtNode * pNd = (pDoc1->GetNodes()[nPos])->GetTxtNode();
+
+                if( bJoined && pNd != NULL)
                 {
                     SwFmtDrop aDropCap;
                     aDropCap.GetLines() = (BYTE)pFlySave->nDropLines;
                     aDropCap.GetChars() = 1;
 
                     SwIndex aIdx( pEndNd );
-                    pEndNd->RstAttr( aIdx, 1, RES_CHRATR_FONTSIZE );
-                    pEndNd->SetAttr( aDropCap );
+                    pNd->RstAttr( aIdx, 1, RES_CHRATR_FONTSIZE );
+                    pNd->SetAttr( aDropCap );
                 }
                 delete pFlySave;
                 continue;

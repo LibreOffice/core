@@ -1117,7 +1117,8 @@ void MSWordSections::SetFooterFlag( BYTE& rHeadFootFlags, const SwFmt& rFmt,
 }
 
 void WW8_WrPlcSepx::OutHeaderFooter( WW8Export& rWrt, bool bHeader,
-        const SwFmt& rFmt, ULONG& rCpPos, BYTE nHFFlags, BYTE nFlag )
+                     const SwFmt& rFmt, ULONG& rCpPos, BYTE nHFFlags,
+                     BYTE nFlag,  BYTE nBreakCode)
 {
     if ( nFlag & nHFFlags )
     {
@@ -1129,7 +1130,7 @@ void WW8_WrPlcSepx::OutHeaderFooter( WW8Export& rWrt, bool bHeader,
     else if ( rWrt.bWrtWW8 )
     {
         pTxtPos->Append( rCpPos );
-        if ( bHeader? rWrt.bHasHdr: rWrt.bHasFtr )
+        if (rWrt.bHasHdr && nBreakCode!=0)
         {
             rWrt.WriteStringAsPara( aEmptyStr ); // Empty paragraph for empty header/footer
             rWrt.WriteStringAsPara( aEmptyStr ); // a CR that WW8 needs for end of the stream
@@ -1702,7 +1703,6 @@ bool WW8_WrPlcSepx::WriteKFTxt( WW8Export& rWrt )
         pA->nSepxFcPos = 0xffffffff;                // Default: none
 
         WW8_SepInfo& rSepInfo = aSects[i];
-
         rWrt.SectionProperties( rSepInfo, pA );
     }
     rWrt.SetHdFtIndex( nOldIndex ); //0

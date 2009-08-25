@@ -33,6 +33,7 @@
 
 #include <ctype.h>
 #include <hintids.hxx>
+#include <hints.hxx>
 
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
@@ -175,7 +176,6 @@ BOOL SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, BOOL bCheck )
     else
         return TRUE;
 }
-
 
 SwFltControlStack::SwFltControlStack(SwDoc* pDo, ULONG nFieldFl)
     : nFieldFlags(nFieldFl), pDoc(pDo), bIsEndStack(false)
@@ -427,16 +427,20 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
     {
     case RES_FLTR_ANCHOR:
         {
-            MakePoint(pEntry, pDoc, aRegion);
             SwFrmFmt* pFmt = ((SwFltAnchor*)pEntry->pAttr)->GetFrmFmt();
-            SwFmtAnchor aAnchor(pFmt->GetAnchor());
-            aAnchor.SetAnchor(aRegion.GetPoint());
-            pFmt->SetFmtAttr(aAnchor);
-                    // Damit die Frames bei Einfuegen in existierendes Doc
-                    //  erzeugt werden (erst nach Setzen des Ankers!):
-            if(pDoc->GetRootFrm()
-                && FLY_AT_CNTNT == pFmt->GetAnchor().GetAnchorId()){
-                pFmt->MakeFrms();
+            if (pFmt != NULL)
+            {
+                MakePoint(pEntry, pDoc, aRegion);
+                SwFmtAnchor aAnchor(pFmt->GetAnchor());
+                aAnchor.SetAnchor(aRegion.GetPoint());
+                pFmt->SetFmtAttr(aAnchor);
+                // Damit die Frames bei Einfuegen in existierendes Doc
+                //  erzeugt werden (erst nach Setzen des Ankers!):
+                if(pDoc->GetRootFrm()
+                   && FLY_AT_CNTNT == pFmt->GetAnchor().GetAnchorId())
+                {
+                    pFmt->MakeFrms();
+                }
             }
         }
         break;
@@ -728,11 +732,35 @@ void SwFltControlStack::Delete(const SwPaM &rPam)
 SwFltAnchor::SwFltAnchor(SwFrmFmt* pFmt) :
     SfxPoolItem(RES_FLTR_ANCHOR), pFrmFmt(pFmt)
 {
+    pClient = new SwFltAnchorClient(this);
+    pFrmFmt->Add(pClient);
 }
 
 SwFltAnchor::SwFltAnchor(const SwFltAnchor& rCpy) :
     SfxPoolItem(RES_FLTR_ANCHOR), pFrmFmt(rCpy.pFrmFmt)
 {
+    pClient = new SwFltAnchorClient(this);
+    pFrmFmt->Add(pClient);
+}
+
+SwFltAnchor::~SwFltAnchor()
+{
+    delete pClient;
+}
+
+void SwFltAnchor::SetFrmFmt(SwFrmFmt * _pFrmFmt)
+{
+    pFrmFmt = _pFrmFmt;
+}
+
+const SwFrmFmt * SwFltAnchor::GetFrmFmt() const
+{
+    return pFrmFmt;
+}
+
+SwFrmFmt * SwFltAnchor::GetFrmFmt()
+{
+    return pFrmFmt;
 }
 
 int SwFltAnchor::operator==(const SfxPoolItem& rItem) const
@@ -743,6 +771,29 @@ int SwFltAnchor::operator==(const SfxPoolItem& rItem) const
 SfxPoolItem* __EXPORT SwFltAnchor::Clone(SfxItemPool*) const
 {
     return new SwFltAnchor(*this);
+}
+
+// SwFltAnchorClient
+
+SwFltAnchorClient::SwFltAnchorClient(SwFltAnchor * pFltAnchor)
+: m_pFltAnchor(pFltAnchor)
+{
+}
+
+void  SwFltAnchorClient::Modify(SfxPoolItem *, SfxPoolItem * pNew)
+{
+    if (pNew->Which() == RES_FMT_CHG)
+    {
+        SwFmtChg * pFmtChg = dynamic_cast<SwFmtChg *> (pNew);
+
+        if (pFmtChg != NULL)
+        {
+            SwFrmFmt * pFrmFmt = dynamic_cast<SwFrmFmt *> (pFmtChg->pChangedFmt);
+
+            if (pFrmFmt != NULL)
+                m_pFltAnchor->SetFrmFmt(pFrmFmt);
+        }
+    }
 }
 
 //------ hier stehen die Methoden von SwFltRedline -----------

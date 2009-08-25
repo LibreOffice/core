@@ -343,9 +343,23 @@ void MSWordExportBase::AbstractNumberingDefinitions()
             {
                 switch ( rFmt.GetLabelFollowedBy() )
                 {
-                    case SvxNumberFormat::LISTTAB: nFollow = 0; break;
-                    case SvxNumberFormat::SPACE:   nFollow = 1; break;
-                    case SvxNumberFormat::NOTHING: nFollow = 2; break;
+                    case SvxNumberFormat::LISTTAB:
+                    {
+            // 0 (tab) unless there would be no content before the tab, in which case 2 (nothing)
+            nFollow = (SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType()) ? 0 : 2;
+                    }
+                    break;
+                    case SvxNumberFormat::SPACE:
+                    {
+            // 1 (space) unless there would be no content before the space in which case 2 (nothing)
+            nFollow = (SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType()) ? 1 : 2;
+                    }
+                    break;
+                    case SvxNumberFormat::NOTHING:
+                    {
+                        nFollow = 2;
+                    }
+                    break;
                     default:
                     {
                         nFollow = 0;

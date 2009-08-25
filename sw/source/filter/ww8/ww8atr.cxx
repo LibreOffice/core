@@ -730,11 +730,8 @@ bool WW8Export::DisallowInheritingOutlineNumbering(const SwFmt &rFmt)
     {
         if (const SwFmt *pParent = rFmt.DerivedFrom())
         {
-            //BYTE nLvl = ((const SwTxtFmtColl*)pParent)->GetOutlineLevel();    //#outline level,removed by zhaojianwei
-            //if (MAXLEVEL > nLvl)
-            //{                                                                 //<-end, ->add by zhaojianwei
             if (((const SwTxtFmtColl*)pParent)->IsAssignedToListLevelOfOutlineStyle())
-            {                                                                   //<-end,zhaojianwei
+            {
                 if (bWrtWW8)
                 {
                     SwWW8Writer::InsUInt16(*pO, NS_sprm::LN_POutLvl);
@@ -765,12 +762,9 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
     case RES_TXTFMTCOLL:
         if( bPapFmt )
         {
-            //BYTE nLvl = ((const SwTxtFmtColl&)rFmt).GetOutlineLevel();    //#outline level,removed by zhaojianwei
-            //if (MAXLEVEL > nLvl)
-            //{                                                             //<-end, ->add by zhaojianwei
             if (((const SwTxtFmtColl&)rFmt).IsAssignedToListLevelOfOutlineStyle())
             {
-                int nLvl = ((const SwTxtFmtColl&)rFmt).GetAssignedOutlineStyleLevel();  //<-end,zhaojianwei
+                int nLvl = ((const SwTxtFmtColl&)rFmt).GetAssignedOutlineStyleLevel();
 
                 //if outline numbered
                 // if Write StyleDefinition then write the OutlineRule
@@ -2134,7 +2128,6 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                          sStr += (sal_Char)( 'A' + GetExport( ).GetId( *pTOX->GetTOXType() ) );
                          sStr.AppendAscii( sEntryEnd );
                     }
-                }
 
                 if( nsSwTOXElement::TOX_OUTLINELEVEL & pTOX->GetCreateType() )
                 {
@@ -2210,7 +2203,85 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
 //                            }
 //                        }
 //                    }
+
                 }
+
+        if( nsSwTOXElement::TOX_OUTLINELEVEL & pTOX->GetCreateType() )
+                  {
+            // Take the TOC value of the max level to evaluate to as
+            // the starting point for the \o flag, but reduce it to the
+            // value of the highest outline level filled by a *standard*
+            // Heading 1 - 9 style because \o "Builds a table of
+            // contents from paragraphs formatted with built-in heading
+            // styles". And afterward fill in any outline styles left
+            // uncovered by that range to the \t flag
+            //
+            // i.e. for
+            // Heading 1
+            // Heading 2
+            // custom-style
+            // Heading 4
+            // output
+            // \o 1-2 \tcustom-style,3,Heading 3,4
+
+            // Search over all the outline styles used and figure out
+            // what is the minimum outline level (if any) filled by a
+            // non-standard style for that level, i.e. ignore headline
+            // styles 1-9 and find the lowest valid outline level
+            BYTE nPosOfLowestNonStandardLvl = MAXLEVEL;
+            const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
+            for( n = rColls.Count(); n; )
+                      {
+            const SwTxtFmtColl* pColl = rColls[ --n ];
+            USHORT nPoolId = pColl->GetPoolFmtId();
+            if (
+                //Is a Non-Standard Outline Style
+                (RES_POOLCOLL_HEADLINE1 > nPoolId || RES_POOLCOLL_HEADLINE9 < nPoolId) &&
+                //Has a valid outline level
+                (pColl->IsAssignedToListLevelOfOutlineStyle()) &&
+                // Is less than the lowest known non-standard level
+                (pColl->GetAssignedOutlineStyleLevel() < nPosOfLowestNonStandardLvl)
+                            )
+                          {
+                              nPosOfLowestNonStandardLvl = ::sal::static_int_cast<BYTE>(pColl->GetAssignedOutlineStyleLevel());
+                          }
+                      }
+
+            BYTE nMaxMSAutoEvaluate = nPosOfLowestNonStandardLvl < nTOXLvl ? nPosOfLowestNonStandardLvl : (BYTE)nTOXLvl;
+
+            //output \o 1-X where X is the highest normal outline style to be included in the toc
+            if ( nMaxMSAutoEvaluate )
+              {
+            if (nMaxMSAutoEvaluate > WW8ListManager::nMaxLevel)
+              nMaxMSAutoEvaluate = WW8ListManager::nMaxLevel;
+
+            sStr.APPEND_CONST_ASC( "\\o \"1-" );
+            sStr += String::CreateFromInt32( nMaxMSAutoEvaluate );
+            sStr.AppendAscii(sEntryEnd);
+                      }
+
+            //collect up any other styles in the writer TOC which will
+            //not already appear in the MS TOC and place then into the
+            //\t option
+            if( nMaxMSAutoEvaluate < nTOXLvl )
+                      {
+            // collect this templates into the \t otion
+            for( n = rColls.Count(); n;)
+                          {
+                const SwTxtFmtColl* pColl = rColls[ --n ];
+                if (!pColl->IsAssignedToListLevelOfOutlineStyle())
+                  continue;
+                BYTE nTestLvl =  ::sal::static_int_cast<BYTE>(pColl->GetAssignedOutlineStyleLevel());
+                if (nTestLvl < nTOXLvl && nTestLvl >= nMaxMSAutoEvaluate)
+                  {
+                if( sTOption.Len() )
+                  sTOption += ',';
+                (( sTOption += pColl->GetName() ) += ',' )
+                  += String::CreateFromInt32( nTestLvl + 1 );
+                  }
+              }
+              }
+          }
 
                 if( nsSwTOXElement::TOX_TEMPLATE & pTOX->GetCreateType() )
                     // --> OD 2009-02-27 #i99641#
@@ -2222,16 +2293,20 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         if( rStyles.Len() )
                         {
                             xub_StrLen nPos = 0;
-                            String sLvl( ';' );
+                            String sLvl( ',' );
                             sLvl += String::CreateFromInt32( n + 1 );
                             do {
                                 String sStyle( rStyles.GetToken( 0,
                                             TOX_STYLE_DELIMITER, nPos ));
                                 if( sStyle.Len() )
                                 {
-                                    if( sTOption.Len() )
-                                        sTOption += ';';
-                                    ( sTOption += sStyle ) += sLvl;
+                                    SwTxtFmtColl* pColl = pDoc->FindTxtFmtCollByName(sStyle);
+                                    if (!pColl->IsAssignedToListLevelOfOutlineStyle() || pColl->GetAssignedOutlineStyleLevel() < nTOXLvl)
+                                    {
+                                        if( sTOption.Len() )
+                                            sTOption += ',';
+                                        ( sTOption += sStyle ) += sLvl;
+                                    }
                                 }
                             } while( STRING_NOTFOUND != nPos );
                         }
@@ -2795,7 +2870,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
             {
                 sStr = FieldString(ww::eFILLIN);
 
-                sStr.ASSIGN_CONST_ASC("\"");
+                sStr.APPEND_CONST_ASC("\"");
                 sStr += pFld->GetPar2();
                 sStr += '\"';
 
@@ -3329,8 +3404,6 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
                 else if ( GetExport().pOutFmtNode->ISA( SwTxtFmtColl ) )
                 {
                     const SwTxtFmtColl* pC = (SwTxtFmtColl*)GetExport().pOutFmtNode;
-                    //if( pC && MAXLEVEL > pC->GetOutlineLevel() )  //#outline level,removed by zhaojianwei
-                    //    nLvl = pC->GetOutlineLevel();             //<-end, ->add by zhaojianwei
                     if ( pC && pC->IsAssignedToListLevelOfOutlineStyle() )
                         nLvl = static_cast< BYTE >( pC->GetAssignedOutlineStyleLevel() ); //<-end,zhaojianwei
                 }

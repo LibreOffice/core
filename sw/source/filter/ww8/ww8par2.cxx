@@ -3579,6 +3579,45 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     return bSuccess;
 }
 
+bool lcl_PamContainsFly(SwPaM & rPam)
+{
+    bool bResult = false;
+    SwNodeRange aRg( rPam.Start()->nNode, rPam.End()->nNode );
+    SwDoc * pDoc = rPam.GetDoc();
+
+    sal_uInt16 n = 0;
+    SwSpzFrmFmts * pSpzFmts = pDoc->GetSpzFrmFmts();
+    sal_uInt16 nCount = pSpzFmts->Count();
+    while (!bResult && n < nCount)
+    {
+        SwFrmFmt* pFly = (*pSpzFmts)[n];
+        const SwFmtAnchor* pAnchor = &pFly->GetAnchor();
+
+        switch (pAnchor->GetAnchorId())
+        {
+            case FLY_AT_CNTNT:
+            case FLY_AUTO_CNTNT:
+            {
+                const SwPosition* pAPos = pAnchor->GetCntntAnchor();
+
+                if (pAPos != NULL &&
+                    aRg.aStart <= pAPos->nNode &&
+                    pAPos->nNode <= aRg.aEnd)
+                {
+                    bResult = true;
+                }
+            }
+                break;
+            default:
+                break;
+        }
+
+        ++n;
+    }
+
+    return bResult;
+}
+
 void SwWW8ImplReader::TabCellEnd()
 {
     if (nInTable && pTableDesc)
@@ -3589,12 +3628,12 @@ void SwWW8ImplReader::TabCellEnd()
             && pWFlyPara == NULL
             && mpTableEndPaM.get() != NULL
             && (! SwPaM::Overlap(*pPaM, *mpTableEndPaM))
-            && SwPaM::LessThan(*mpTableEndPaM, *pPaM))
+            && SwPaM::LessThan(*mpTableEndPaM, *pPaM)
+            && mpTableEndPaM->GetPoint()->nNode.GetNode().IsTxtNode()
+            && !lcl_PamContainsFly(*mpTableEndPaM)
+            )
         {
-            if (mpTableEndPaM->GetPoint()->nNode.GetNode().IsTxtNode())
-            {
-                rDoc.DelFullPara(*mpTableEndPaM);
-            }
+            rDoc.DelFullPara(*mpTableEndPaM);
         }
     }
 

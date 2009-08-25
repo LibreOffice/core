@@ -230,6 +230,8 @@ void OutRTF_SfxItemSet( SwRTFWriter& rWrt, const SfxItemSet& rSet,
                 ( *pItem != rPool.GetDefaultItem( nWhich )
                     || ( rSet.GetParent() &&
                         *pItem != rSet.GetParent()->Get( nWhich ) )
+                    || ( rWrt.GetAttrSet() &&
+                        *pItem != rWrt.GetAttrSet()->Get( nWhich ) )
               ) )
                 ;
             else
@@ -1895,7 +1897,12 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
         const SwWriteTableCells& rCells = pRow->GetCells();
 
         BOOL bFixRowHeight = false;
-        for( nColCnt = 0, nBox = 0; nBox < rCells.Count(); ++nColCnt )
+
+        USHORT nBoxes = rCells.Count();
+        if (nColCnt < nBoxes)
+            nBoxes = nColCnt;
+
+        for( nColCnt = 0, nBox = 0; nBox < rCells.Count() && nColCnt < nBoxes; ++nColCnt )
         {
             SwWriteTableCell* pCell = rCells[ nBox ];
             const bool bProcessCoveredCell = bNewTableModel && 0 == pCell->GetRowSpan();
@@ -1994,7 +2001,7 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
         for( nBox = 0; nBox < nColCnt; ++nBox )
         {
             SwWriteTableCell* pCell = pBoxArr[ nBox ];
-            if( nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ] )
+            if( (nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ]) || (pCell == NULL) )
                 continue;
 
             const SwFrmFmt& rFmt = *pCell->GetBox()->GetFrmFmt();
@@ -2045,15 +2052,17 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
 
         // Inhalt der Boxen ausgeben
         rWrt.Strm() << SwRTFWriter::sNewLine << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_INTBL;
-        for( nBox = 0; nBox < nColCnt; ++nBox )
+        for( nBox = 0; nBox < nBoxes; ++nBox )
         {
-            if( nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ] )
+            SwWriteTableCell * pCell = pBoxArr[nBox];
+
+            if( (nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ]) || pCell == NULL)
                 continue;
 
-            if( pBoxArr[ nBox ]->GetRowSpan() == pRowSpans[ nBox ] )
+            if( pCell->GetRowSpan() == pRowSpans[ nBox ] )
             {
                 // new Box
-                const SwStartNode* pSttNd = pBoxArr[ nBox ]->GetBox()->GetSttNd();
+                const SwStartNode* pSttNd = pCell->GetBox()->GetSttNd();
                 RTFSaveData aSaveData( rRTFWrt,
                         pSttNd->GetIndex()+1, pSttNd->EndOfSectionIndex() );
                 rRTFWrt.bOutTable = TRUE;
