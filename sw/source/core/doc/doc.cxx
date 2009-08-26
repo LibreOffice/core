@@ -110,7 +110,7 @@
 #include <docfld.hxx>           // _SetGetExpFld
 #include <docufld.hxx>          // SwPostItField
 #include <viewsh.hxx>
-#include <shellres.hxx >
+#include <shellres.hxx>
 #include <txtfrm.hxx>
 
 #include <vector>
@@ -1304,7 +1304,7 @@ void SwDoc::CalculatePagesForPrinting(
 
 void SwDoc::UpdatePagesForPrintingWithPostItData(
     /* out */ SwPrintUIOptions &rOptions,
-    bool bIsPDFExport,
+    bool /*bIsPDFExport*/,
     sal_Int32 nDocPageCount )
 {
 
@@ -1415,14 +1415,14 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
             sal_Int32 nPostItPageNum = 0;
             std::vector< const SwPageFrm * > aAllPostItStartFrames;
             const SwPageFrm * pPageFrm = (SwPageFrm*)rOptions.m_pPostItShell->GetLayout()->Lower();
-            while( pPageFrm && aAllPostItStartFrames.size() < nPostItDocPageCount )
+            while( pPageFrm && sal_Int32(aAllPostItStartFrames.size()) < nPostItDocPageCount )
             {
                 DBG_ASSERT( pPageFrm, "Empty page frame. How are we going to print this?" );
                 ++nPostItPageNum;
                 aAllPostItStartFrames.push_back( pPageFrm );
                 pPageFrm = (SwPageFrm*)pPageFrm->GetNext();
             }
-            DBG_ASSERT( aAllPostItStartFrames.size() == nPostItDocPageCount,
+            DBG_ASSERT( sal_Int32(aAllPostItStartFrames.size()) == nPostItDocPageCount,
                     "unexpected number of frames; does not match number of pages" );
 
             // get a map that holds all post-it frames to be printed for a
@@ -1440,7 +1440,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
                 for (sal_Int32 i = 0; i < nFrames; ++i)
                 {
                     const sal_Int32 nIdx = nFirstStartPageNum - 1 + i;   // -1 because lowest page num is 1
-                    DBG_ASSERT( 0 <= nIdx && nIdx < aAllPostItStartFrames.size(),
+                    DBG_ASSERT( 0 <= nIdx && nIdx < sal_Int32(aAllPostItStartFrames.size()),
                             "index out of range" );
                     aStartFrames.push_back( aAllPostItStartFrames[ nIdx ] );
                 }

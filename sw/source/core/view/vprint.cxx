@@ -1202,7 +1202,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
     if( /*!pShell->Imp()->IsStopOutDev() && */
         ( bIsPDFExport || rPrintData.GetJobName().Len() /*TLPDF|| pOutDev->IsJobActive()*/) )
     {
-        BOOL bStop = FALSE;
+// TLPDF        BOOL bStop = FALSE;
         int nJobStartError = JOBSET_ERR_DEFAULT;
 
         XubString sJobName( rPrintData.GetJobName() );
@@ -1232,8 +1232,8 @@ sal_Bool ViewShell::PrintOrPDFExport(
 
             // PostitListe holen
             _SetGetExpFlds aPostItFields;
-            SwDoc*     pPostItDoc   = 0;
-            ViewShell* pPostItShell = 0;
+// TLPDF            SwDoc*     pPostItDoc   = 0;
+// TLPDF            ViewShell* pPostItShell = 0;
 #ifdef TL_NOT_NOW /*TLPDF*/
             if( rPrintData.nPrintPostIts != POSTITS_NONE )
             {
