@@ -1668,6 +1668,14 @@ private:
         mpPrinter->SetMapMode(aMap);
 
         Rectangle aOutRect(aPageOfs, rInfo.mpPrinter->GetOutputSize());
+        if( aOutRect.GetWidth() > aOutRect.GetHeight() )
+        {
+            Size aPaperSize( rInfo.mpPrinter->PixelToLogic( rInfo.mpPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
+            maPrintSize.Width  = aPaperSize.Height();
+            maPrintSize.Height = aPaperSize.Width();
+            aOutRect = Rectangle( Point( aPageOfs.Y(), aPageOfs.X() ),
+                                  Size( aOutRect.GetHeight(), aOutRect.GetWidth() ) );
+        }
 
         Link aOldLink;
         Outliner* pOutliner = mrBase.GetDocument()->GetInternalOutliner();
