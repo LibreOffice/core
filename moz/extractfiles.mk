@@ -36,6 +36,46 @@ RUNTIME_DIR=$(MISC)$/$(MOZTARGET)runtime
 LIB_DIR=$(LB)
 INCLUDE_DIR=$(INCCOM)
 
+
+
+#If we build the NSS module then we do not need the old nss libs from here
+.IF "$(ENABLE_NSS_MODULE)"=="YES"
+
+
+.IF "$(OS)" == "SOLARIS" 
+.IF "$(CPU)" == "S" #32bit
+FREEBL_LIB=freebl_32fpu_3 freebl_32int64_3 freebl_32int_3
+.ELIF "$(CPU)" == "U" #64bit unxsolu4
+FREEBL_LIB=freebl_64int_3 freebl_64fpu_3
+.ELSE
+FREEBL_LIB=freebl3
+.ENDIF #"$(CPU)" == "S"
+
+.ELSE # "$(OS)" == "SOLARIS" 
+FREEBL_LIB=freebl3
+.ENDIF # "$(OS)" == "SOLARIS" 
+
+
+NSS_MODULE_RUNTIME_LIST:= \
+    $(FREEBL_LIB) \
+    nspr4 \
+    nss3 \
+    nssckbi \
+    nssdbm3 \
+    nssutil3 \
+    plc4 \
+    plds4 \
+    smime3 \
+    softokn3 \
+    sqlite3 \
+    ssl3
+
+BIN_RUNTIMELIST= \
+    xpcom \
+    xpcom_core \
+    xpcom_compat	
+.ELSE
+
 .IF "$(GUI)" == "WNT"
     FREEBL_LIB=freebl3
 .ELSE # "$(GUI)" == "WNT"
@@ -45,6 +85,7 @@ INCLUDE_DIR=$(INCCOM)
         FREEBL_LIB=freebl3
     .ENDIF # "$(OS)$(CPUNAME)" == "SOLARISSPARC"
 .ENDIF # "$(GUI)" == "WNT"
+
 
 BIN_RUNTIMELIST=	\
     nspr4	\
@@ -58,7 +99,8 @@ BIN_RUNTIMELIST=	\
     softokn3	\
     smime3 \
     $(FREEBL_LIB)
-    
+.ENDIF #  "$(ENABLE_NSS_MODULE)"=="YES"
+
 .IF "$(GUI)"=="WNT"
 BIN_RUNTIMELIST+=	\
     js3250 	\
@@ -87,7 +129,7 @@ COMPONENT_RUNTIMELIST=	\
     vcard	\
     i18n 	\
     pipnss
-    
+
 .IF "$(GUI)"=="WNT"
 COMPONENT_RUNTIMELIST+=	\
     xppref32	\
@@ -126,8 +168,52 @@ DEFAULTS_RUNTIMELIST=	\
     greprefs$/all.js	\
     greprefs$/security-prefs.js
 
+.IF "$(ENABLE_NSS_MODULE)"=="YES"
+#These headers come from the separate NSS module if enabled
+NSS_INCLUDE_LIST= nspr nss
+
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
+
+
+LIBLIST=        \
+        libembed_base_s.a \
+        libmozreg_s.a \
+        libnslber32v50.a \
+        libnsldap32v50.a \
+    libxpcom_core.dll.a \
+        libxpcom.dll.a 
+
+.ELSE #"$(COM)"=="GCC"
+
+LIBLIST=        \
+        embed_base_s.lib \
+        mozreg_s.lib \
+        nslber32v50.lib \
+        nsldap32v50.lib \
+    xpcom_core.lib	\
+        xpcom.lib 
+
+.ENDIF #"$(COM)"=="GCC"
+
+.ELSE   #"$(GUI)"=="WNT"
+
+LIBLIST=        \
+        libembed_base_s.a \
+        libmozreg_s.a \
+        liblber50.a \
+    libxpcom_core$(DLLPOST)	\
+        libxpcom$(DLLPOST)      \
+        libmsgbaseutil$(DLLPOST)        \
+        libldap50$(DLLPOST) \
+
+.ENDIF
+
+.ELSE # .IF"$(ENABLE_NSS_MODULE)"=="YES"
+
+.IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+
 LIBLIST=	\
     libembed_base_s.a	\
     libmozreg_s.a	\
@@ -138,7 +224,9 @@ LIBLIST=	\
     libxpcom.dll.a	\
     libnss3.a	\
     libsmime3.a
+
 .ELSE
+
 LIBLIST=	\
     embed_base_s.lib	\
     mozreg_s.lib	\
@@ -152,8 +240,11 @@ LIBLIST=	\
     nss3.lib	\
     ssl3.lib	\
     smime3.lib
+
 .ENDIF
-.ELSE	#"$(GUI)"=="WNT"
+
+.ELSE   #"$(GUI)"=="WNT"
+
 LIBLIST=	\
     libembed_base_s.a	\
     libmozreg_s.a	\
@@ -169,7 +260,9 @@ LIBLIST=	\
     libnss3$(DLLPOST)	\
     libssl3$(DLLPOST)	\
     libsmime3$(DLLPOST)
+
 .ENDIF
+.ENDIF # .IF "$(ENABLE_NSS_MODULE)"=="YES"
 
 INCLUDE_PATH=$(MOZ_DIST_DIR)$/include$/
 PUBLIC_PATH=$(MOZ_DIST_DIR)$/public$/
@@ -188,7 +281,7 @@ extract_mozab_files:	$(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) \
     $(MISC)$/build$/so_moz_runtime_files	\
     $(MISC)$/build$/so_moz_include_files	\
     $(MISC)$/build$/so_moz_lib_files
-    
+
 make_temp_dir:
     @@-$(MKDIR)	$(RUNTIME_DIR)
     @@-$(MKDIR)	$(RUNTIME_DIR)$/components
@@ -212,7 +305,21 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
     $(foreach,file,$(BIN_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/$(DLLPRE)$(file)$(DLLPOST) \
     $(LIB_DIR)$/$(DLLPRE)$(file)$(DLLPOST) &&) \
     echo >& $(NULLDEV)
+.IF "$(ENABLE_NSS_MODULE)" == "YES"
+# We add the libraries from the separate nss module
+    $(foreach,file,$(NSS_MODULE_RUNTIME_LIST) $(COPY) $(SOLARLIBDIR)$/$(DLLPRE)$(file)$(DLLPOST) \
+    $(RUNTIME_DIR)$/$(DLLPRE)$(file)$(DLLPOST) &&) \
+    echo >& $(NULLDEV)
 .ENDIF
+.ELSE # .IF "$(GUI)" == "UNX"
+.IF "$(ENABLE_NSS_MODULE)" == "YES"
+# We add the libraries from the separate nss module
+    $(foreach,file,$(NSS_MODULE_RUNTIME_LIST) $(COPY) $(SOLARBINDIR)$/$(DLLPRE)$(file)$(DLLPOST) \
+    $(RUNTIME_DIR)$/$(DLLPRE)$(file)$(DLLPOST) &&) \
+    echo >& $(NULLDEV)
+.ENDIF
+.ENDIF # .IF "$(GUI)" == "UNX"
+
 
 # copy files in RES_FILELIST
 .IF "$(OS)"=="SOLARIS"
@@ -275,12 +382,13 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
 
 # zip runtime files to mozruntime.zip
     cd $(RUNTIME_DIR) && zip -r ..$/..$/bin$/mozruntime.zip *
-    
+
     $(TOUCH) $@
 
 $(INCCOM)$/nsBuildID.h: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
     @-echo "You can delete $(INCCOM) to force it copy all include files again."
-    
+
+
 $(MISC)$/build$/so_moz_include_files: $(INCCOM)$/nsBuildID.h
 .IF "$(USE_SHELL)"=="4nt"
     $(COPY) /QSZ $(INCLUDE_PATH)* $(INCLUDE_DIR)
@@ -299,6 +407,13 @@ $(MISC)$/build$/so_moz_include_files: $(INCCOM)$/nsBuildID.h
     chmod -R 775 $(INCCOM)
 .ENDIF
     $(TOUCH) $@
+.IF "$(ENABLE_NSS_MODULE)"=="YES"
+        +$(foreach,dir,$(NSS_INCLUDE_LIST) $(RENAME:s/+//) $(INCLUDE_DIR)$/$(dir) \
+    $(INCLUDE_DIR)$/$(dir)_remove_me &&) \
+        echo >& $(NULLDEV)
+        $(foreach,dir,$(NSS_INCLUDE_LIST) rm -r -f $(INCLUDE_DIR)$/$(dir)_remove_me &&) \
+        echo >& $(NULLDEV)
+.ENDIF
 
 # On UNX the rules for so_moz_runtime_files copy files into the same directory
 # used here (LIB_DIR), and on MACOSX all those files together need to be
@@ -316,13 +431,13 @@ $(MISC)$/build$/so_moz_lib_files:		$(foreach,file,$(LIBLIST) $(LIB_DIR)$/$(file)
     chmod -R 775 $(LB)
 .ENDIF
     $(TOUCH) $@
-    
+
 $(BIN_RUNTIMELIST): $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
     @$(COPY) $(MOZ_BIN_DIR)$/$(DLLPRE)$@$(DLLPOST) $(RUNTIME_DIR)$/$(DLLPRE)$@$(DLLPOST)
 
 $(COMPONENT_RUNTIMELIST): $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
     @$(COPY) $(MOZ_BIN_DIR)$/components$/$(DLLPRE)$@$(DLLPOST) $(RUNTIME_DIR)$/components$/$(DLLPRE)$@$(DLLPOST)
-    
+
 $(COMREGISTRY_FILELIST): $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
     @$(COPY) $(MOZ_BIN_DIR)$/components$/$@ $(RUNTIME_DIR)$/components$/$@
 
@@ -336,7 +451,6 @@ RES_FILELIST: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     @echo No Res Files to copy.
 .ENDIF
 
-    
 $(LIB_DIR)$/%: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     noop
 
