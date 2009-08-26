@@ -95,10 +95,13 @@ SHL1TARGET=$(TARGET)
 SHL1LIBS=$(SLB)$/$(TARGET).lib
 
 #No default libraries
-.IF "$(COM)"=="GCC"
-STDSHL=-lmingw32 -lmsvcrt
-.ELSE
 STDSHL=
+.IF "$(COM)"=="GCC"
+SHL1STDLIBS += -lstdc++
+.IF "$(MINGW_GCCLIB_EH)"=="YES"
+SHL1STDLIBS += -lgcc_eh
+.ENDIF
+SHL1STDLIBS += -lgcc -lmingw32 -lmoldname -lmsvcrt
 .ENDIF
 
 SHL1STDLIBS +=\
