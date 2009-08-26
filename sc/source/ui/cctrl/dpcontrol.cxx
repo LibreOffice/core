@@ -1169,6 +1169,7 @@ void ScDPFieldPopupWindow::selectCurrentMemberOnly(bool bSet)
 
 void ScDPFieldPopupWindow::cycleFocus(bool bReverse)
 {
+    maTabStopCtrls[mnCurTabStop]->SetFakeFocus(false);
     maTabStopCtrls[mnCurTabStop]->LoseFocus();
     if (mnCurTabStop == 0)
         clearSelectedMenuItem();
@@ -1186,7 +1187,8 @@ void ScDPFieldPopupWindow::cycleFocus(bool bReverse)
         if (mnCurTabStop >= maTabStopCtrls.size())
             mnCurTabStop = 0;
     }
-    maTabStopCtrls[mnCurTabStop]->GetFocus();
+    maTabStopCtrls[mnCurTabStop]->SetFakeFocus(true);
+    maTabStopCtrls[mnCurTabStop]->GrabFocus();
 }
 
 IMPL_LINK( ScDPFieldPopupWindow, ButtonHdl, Button*, pBtn )
