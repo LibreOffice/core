@@ -190,7 +190,9 @@ WW8TableNodeInfo::~WW8TableNodeInfo()
     }
 
 #ifdef DEBUG
-    sResult += dbg_out(*mpNode);
+//!! does not compile with debug=t -> unresolved external (dbg_out),
+//!! sommeone who knows what he wants to get should fix this
+//    sResult += dbg_out(*mpNode);
 #endif
 
     sResult +="</tableNodeInfo>";
