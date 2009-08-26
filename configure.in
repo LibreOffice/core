@@ -29,6 +29,12 @@ AC_ARG_WITH(gpc,
 [  --without-gpc           Use the internal polygon clipping code instead of
                           the external GPC polygon clipping library.
 ],,if test ! -e ./external/gpc/gpc.c && test ! -e ./external/gpc/gpc.h; then without_gpc=yes; fi)
+AC_ARG_ENABLE(graphite,
+[  --enable-graphite       Enables the compilation of Graphite smart font rendering
+],,)
+AC_ARG_WITH(system-graphite,
+[  --with-system-graphite    use graphite library already installed on system
+],,)
 AC_ARG_ENABLE(ldap,
 [  --disable-ldap          Disables the use of LDAP backend via Netscape/Mozilla
                           or OpenLDAP LDAP SDK
@@ -4343,6 +4349,39 @@ AC_SUBST(SYSTEM_ICU)
 AC_SUBST(SYSTEM_GENBRK)
 AC_SUBST(SYSTEM_GENCCODE)
 AC_SUBST(SYSTEM_GENCMN)
+
+dnl ===================================================================
+dnl Graphite
+dnl ===================================================================
+
+AC_MSG_CHECKING([whether to enable graphite support])
+if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "z$enable_graphite" == "z" -o "$enable_graphite" != "no" ; then
+    AC_MSG_RESULT([yes])
+    ENABLE_GRAPHITE="TRUE"
+    AC_MSG_CHECKING([which graphite to use])
+    if test -n "$with_system_graphite" -o -n "$with_system_libs" && \
+        test "$with_system_graphite" != "no"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_GRAPHITE=YES
+        PKG_CHECK_MODULES( GRAPHITE, silgraphite )
+	AC_MSG_CHECKING([STL compatibility])
+	if test "$WITH_STLPORT" != "no"; then
+		AC_MSG_ERROR([to use system graphite you need to use --without-stlport])
+	else
+		AC_MSG_RESULT([OK])	
+	fi
+    else
+        AC_MSG_RESULT([internal])
+        SYSTEM_GRAPHITE=NO
+        BUILD_TYPE="$BUILD_TYPE GRAPHITE"
+    fi
+else
+   AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_GRAPHITE)
+AC_SUBST(SYSTEM_GRAPHITE)
+AC_SUBST(GRAPHITE_LIBS)
+AC_SUBST(GRAPHITE_CFLAGS)
 
 dnl ===================================================================
 dnl Checks for libraries.
