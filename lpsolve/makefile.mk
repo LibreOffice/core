@@ -56,7 +56,13 @@ CONFIGURE_FLAGS=
 BUILD_DIR=lpsolve55
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
-BUILD_ACTION=cmd /c cgcc.bat
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+lpsolve_LDFLAGS=-shared-libgcc
+.ENDIF
+.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+lpsolve_LIBS=-lstdc++_s
+.ENDIF
+BUILD_ACTION=lpsolve_LDFLAGS=$(lpsolve_LDFLAGS) lpsolve_LIBS=$(lpsolve_LIBS) cmd /c cgcc.bat
 .ELSE
 BUILD_ACTION=cmd /c cvc6.bat
 OUT2LIB=$(BUILD_DIR)$/lpsolve55.lib

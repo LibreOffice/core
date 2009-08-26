@@ -77,9 +77,17 @@ CRYPTOLIB=nss
 
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
+xmlsec_CC=$(CC)
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+xmlsec_CC+=-shared-libgcc
+.ENDIF
+xmlsec_LIBS=-lmingwthrd
+.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+xmlsec_LIBS+=-lstdc++_s
+.ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure
-CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --with-mozilla_ver=1.7.5 --with-mscrypto --build=i586-pc-mingw32 --host=i586-pc-mingw32 CFLAGS="-D_MT" LDFLAGS="-no-undefined -L$(ILIB:s/;/ -L/)" LIBS="-lmingwthrd" LIBXML2LIB="$(LIBXML2LIB)" ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --with-mozilla_ver=1.7.5 --with-mscrypto --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(xmlsec_CC)" CFLAGS="-D_MT" LDFLAGS="-no-undefined -L$(ILIB:s/;/ -L/)" LIBS="$(xmlsec_LIBS)" LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
 .IF "$(SYSTEM_MOZILLA)" != "YES"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
 .ENDIF
