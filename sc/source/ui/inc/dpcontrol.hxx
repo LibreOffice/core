@@ -152,7 +152,7 @@ protected:
     void queueLaunchSubMenu(size_t nPos, ScMenuFloatingWindow* pMenu);
     void queueCloseSubMenu();
     void launchSubMenu(bool bSetMenuPos);
-    void endSubMenu();
+    void endSubMenu(ScMenuFloatingWindow* pSubMenu);
 
     void fillMenuItemsToAccessible(ScAccessibleFilterMenu* pAccMenu) const;
 

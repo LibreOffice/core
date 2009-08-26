@@ -358,7 +358,7 @@ void ScMenuFloatingWindow::KeyInput(const KeyEvent& rKEvt)
         break;
         case KEY_LEFT:
             if (mpParentMenu)
-                mpParentMenu->endSubMenu();
+                mpParentMenu->endSubMenu(this);
         break;
         case KEY_RIGHT:
         {
@@ -636,14 +636,19 @@ void ScMenuFloatingWindow::launchSubMenu(bool bSetMenuPos)
     SetPopupModeFlags(nOldFlags);
 }
 
-void ScMenuFloatingWindow::endSubMenu()
+void ScMenuFloatingWindow::endSubMenu(ScMenuFloatingWindow* pSubMenu)
 {
+    if (!pSubMenu)
+        return;
+
+    pSubMenu->EndPopupMode();
+
+    size_t nMenuPos = getSubMenuPos(pSubMenu);
+    if (nMenuPos != MENU_NOT_SELECTED)
+        highlightMenuItem(nMenuPos, true);
+
     if (maOpenTimer.mpSubMenu)
-    {
-        maOpenTimer.mpSubMenu->EndPopupMode();
         maOpenTimer.mpSubMenu = NULL;
-        highlightMenuItem(maOpenTimer.mnMenuPos, true);
-    }
 }
 
 void ScMenuFloatingWindow::fillMenuItemsToAccessible(ScAccessibleFilterMenu* pAccMenu) const
