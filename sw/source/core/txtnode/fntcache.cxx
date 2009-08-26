@@ -152,6 +152,7 @@ SwFntObj::SwFntObj( const SwSubFont &rFont, const void *pOwn, ViewShell *pSh ) :
                  || UNDERLINE_NONE != aFont.GetOverline()
                  || STRIKEOUT_NONE != aFont.GetStrikeout() )
                  && !aFont.IsWordLineMode();
+    aFont.SetLanguage(rFont.GetLanguage());
 }
 
 SwFntObj::~SwFntObj()

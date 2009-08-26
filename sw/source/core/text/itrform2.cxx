@@ -1973,6 +1973,7 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
         nReformat -= 2;
 
 #ifndef QUARTZ
+#ifndef ENABLE_GRAPHITE
         // --> FME 2004-09-27 #i28795#, #i34607#, #i38388#
         // step back six(!) more characters for complex scripts
         // this is required e.g., for Khmer (thank you, Javier!)
@@ -1980,6 +1981,10 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
         xub_StrLen nMaxContext = 0;
         if( ::i18n::ScriptType::COMPLEX == rSI.ScriptType( nReformat ) )
             nMaxContext = 6;
+#else
+        // Some Graphite fonts need context for scripts not marked as complex
+        static const xub_StrLen nMaxContext = 10;
+#endif
 #else
         // some fonts like Quartz's Zapfino need more context
         // TODO: query FontInfo for maximum unicode context
