@@ -3300,9 +3300,9 @@ USHORT ImpEditEngine::GetLineCount( USHORT nParagraph ) const
 
 xub_StrLen ImpEditEngine::GetLineLen( USHORT nParagraph, USHORT nLine ) const
 {
-    DBG_ASSERT( nParagraph < GetParaPortions().Count(), "GetLineCount: Out of range" );
+    DBG_ASSERT( nParagraph < GetParaPortions().Count(), "GetLineLen: Out of range" );
     ParaPortion* pPPortion = GetParaPortions().SaveGetObject( nParagraph );
-    DBG_ASSERT( pPPortion, "Absatz nicht gefunden: GetLineHeight" );
+    DBG_ASSERT( pPPortion, "Absatz nicht gefunden: GetLineLen" );
     if ( pPPortion && ( nLine < pPPortion->GetLines().Count() ) )
     {
         EditLine* pLine = pPPortion->GetLines().GetObject( nLine );
@@ -3311,6 +3311,48 @@ xub_StrLen ImpEditEngine::GetLineLen( USHORT nParagraph, USHORT nLine ) const
     }
 
     return 0xFFFF;
+}
+
+void ImpEditEngine::GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nParagraph, USHORT nLine ) const
+{
+    DBG_ASSERT( nParagraph < GetParaPortions().Count(), "GetLineCount: Out of range" );
+    ParaPortion* pPPortion = GetParaPortions().SaveGetObject( nParagraph );
+    DBG_ASSERT( pPPortion, "Absatz nicht gefunden: GetLineBoundaries" );
+    rStart = rEnd = 0xFFFF;     // default values in case of error
+    if ( pPPortion && ( nLine < pPPortion->GetLines().Count() ) )
+    {
+        EditLine* pLine = pPPortion->GetLines().GetObject( nLine );
+        DBG_ASSERT( pLine, "Zeile nicht gefunden: GetLineBoundaries" );
+        rStart = pLine->GetStart();
+        rEnd   = pLine->GetEnd();
+    }
+}
+
+USHORT ImpEditEngine::GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const
+{
+    USHORT nLineNo = 0xFFFF;
+    ContentNode* pNode = GetEditDoc().SaveGetObject( nPara );
+    DBG_ASSERT( pNode, "GetLineNumberAtIndex: invalid paragraph index" );
+    if (pNode)
+    {
+        // we explicitly allow for the index to point at the character right behind the text
+        const bool bValidIndex = /*0 <= nIndex &&*/ nIndex <= pNode->Len();
+        DBG_ASSERT( bValidIndex, "GetLineNumberAtIndex: invalid index" );
+        const USHORT nLineCount = GetLineCount( nPara );
+        if (nIndex == pNode->Len())
+            nLineNo = nLineCount > 0 ? nLineCount - 1 : 0;
+        else if (bValidIndex)   // nIndex < pNode->Len()
+        {
+            USHORT nStart = USHRT_MAX, nEnd = USHRT_MAX;
+            for (USHORT i = 0;  i < nLineCount && nLineNo == 0xFFFF;  ++i)
+            {
+                GetLineBoundaries( nStart, nEnd, nPara, i );
+                if (nStart <= nIndex && nIndex < nEnd)
+                    nLineNo = i;
+            }
+        }
+    }
+    return nLineNo;
 }
 
 USHORT ImpEditEngine::GetLineHeight( USHORT nParagraph, USHORT nLine )

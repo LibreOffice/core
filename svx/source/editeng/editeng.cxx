@@ -697,13 +697,33 @@ sal_uInt16 EditEngine::GetParagraphCount() const
 sal_uInt16 EditEngine::GetLineCount( sal_uInt16 nParagraph ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
+    if ( !pImpEditEngine->IsFormatted() )
+        pImpEditEngine->FormatDoc();
     return pImpEditEngine->GetLineCount( nParagraph );
 }
 
 sal_uInt16 EditEngine::GetLineLen( sal_uInt16 nParagraph, sal_uInt16 nLine ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
+    if ( !pImpEditEngine->IsFormatted() )
+        pImpEditEngine->FormatDoc();
     return pImpEditEngine->GetLineLen( nParagraph, nLine );
+}
+
+void EditEngine::GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nParagraph, USHORT nLine ) const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    if ( !pImpEditEngine->IsFormatted() )
+        pImpEditEngine->FormatDoc();
+    return pImpEditEngine->GetLineBoundaries( rStart, rEnd, nParagraph, nLine );
+}
+
+USHORT EditEngine::GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    if ( !pImpEditEngine->IsFormatted() )
+        pImpEditEngine->FormatDoc();
+    return pImpEditEngine->GetLineNumberAtIndex( nPara, nIndex );
 }
 
 sal_uInt32 EditEngine::GetLineHeight( sal_uInt16 nParagraph, sal_uInt16 nLine )

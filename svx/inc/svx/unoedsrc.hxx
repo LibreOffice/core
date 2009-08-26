@@ -31,6 +31,8 @@
 #ifndef _SVX_UNOEDSRC_HXX
 #define _SVX_UNOEDSRC_HXX
 
+#include <com/sun/star/accessibility/TextSegment.hpp>
+
 #include <tools/solar.h>
 #include <i18npool/lang.h>
 #include <tools/link.hxx>
@@ -357,6 +359,36 @@ public:
 
      */
     virtual USHORT          GetLineLen( USHORT nPara, USHORT nLine ) const = 0;
+
+    /** Query bounds of line in paragraph
+
+        @param rStart [output param; 0 .. text_len]
+        The index in the paragraph text that belongs to the chara at the start of the line
+
+        @param rEnd [output param; 0 .. text_len]
+        The index in the paragraph text that follows the last chara in the line
+
+        @param nParagraph[0 .. n-1]
+        Index of paragraph to query line length in
+
+        @param nLine[0 .. m-1]
+        Index of line in paragraph to query line length of
+
+     */
+    virtual void            GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nParagraph, USHORT nLine ) const = 0;
+
+    /** Query the line number for a index in the paragraphs text
+
+        @param nPara[0 .. n-1]
+        Index of paragraph to query line length in
+
+        @param nIndex[0 .. m-1]
+        Index of of the chara in the paragraph text
+
+        @returns [0 .. k-1]
+        The line number of the chara in the paragraph
+     */
+    virtual USHORT          GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const = 0;
 
     /** Delete given text range and reformat text
 

@@ -209,6 +209,8 @@ public:
 
     SVX_DLLPRIVATE void notifyModified();
 
+    ::rtl::OUString getName();
+
 protected:
     SVX_DLLPRIVATE virtual const SfxItemSet& GetObjectItemSet();
     SVX_DLLPRIVATE virtual void SetObjectItem(const SfxPoolItem& rItem);
