@@ -77,7 +77,9 @@ XmlReader::XmlReader(rtl::OUString const & fileUrl):
     }
     e = osl_getFileSize(fileHandle_, &fileSize_);
     if (e == osl_File_E_None) {
-        e = osl_mapFile(fileHandle_, &fileAddress_, fileSize_, 0, 0);
+        e = osl_mapFile(
+            fileHandle_, &fileAddress_, fileSize_, 0,
+            osl_File_MapFlag_WillNeed);
     }
     if (e != osl_File_E_None) {
         e = osl_closeFile(fileHandle_);
