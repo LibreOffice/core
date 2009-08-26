@@ -258,6 +258,9 @@ AC_ARG_WITH(mozilla-toolkit,
 [  --with-mozilla-toolkit  Choose which GUI toolkit to use while building mozilla
                           components. Default: gtk2
 ],,)
+AC_ARG_ENABLE(nss_module,
+[  --disable-nss-module    Whether to use provided NSS module     
+],,enable_nss_module=yes)
 AC_ARG_ENABLE(kde,
 [  --enable-kde            Determines whether to use Qt/KDE vclplug on platforms
                           where Qt and KDE are available.
@@ -652,6 +655,12 @@ AC_ARG_WITH(directx-home,
  
                           Usage: --with-directx-home=<absolute path to Microsoft DirectX SDK>
 ],,)
+AC_ARG_WITH(mozilla-build,
+[  --with-mozilla-build   For Windows users, please supply the path to the
+                          mozilla build tools.
+ 
+                          Usage: --with-mozilla-build=<absolute path to mozilla build tools>
+],[MOZILLABUILD=$withval],)
 AC_ARG_WITH(local-solenv,
 [  --with-local-solenv     If you have solenv in a location other than ./solenv,
                           please supply the path here.
@@ -4071,6 +4080,7 @@ AC_MSG_CHECKING([whether to enable build of Mozilla/Mozilla NSS-using components
 if test "$enable_mozilla" = "no"; then
    AC_MSG_RESULT([no])
    WITH_MOZILLA=NO
+   ENABLE_NSS_MODULE=NO
 else
    AC_MSG_RESULT([yes])
    WITH_MOZILLA=YES
@@ -4140,6 +4150,8 @@ AC_MSG_CHECKING([which mozilla to use])
 if test -n "$with_system_mozilla" && test "$with_system_mozilla" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_MOZILLA=YES
+    ENABLE_NSS_MODULE=NO
+    enable_nss_module=no
     AC_MSG_CHECKING([which Mozilla flavour to use])
     if test -n "$with_system_mozilla" && test "$with_system_mozilla" = "libxul"; then
       MOZ_FLAVOUR=libxul
@@ -4226,6 +4238,8 @@ Please recompile $tmp with --enable-ldap or use --with-openldap.])
 elif test "$enable_mozilla" = "no"; then
     AC_MSG_RESULT([none])
     WITH_MOZILLA=NO
+    ENABLE_NSS_MODULE=NO
+    enable_nss_module=no
 else
     AC_MSG_RESULT([internal])
     SYSTEM_MOZILLA=NO
@@ -4278,6 +4292,37 @@ if test -n "$enable_build_mozilla"; then
    AC_MSG_RESULT([yes])
 else
    BUILD_MOZAB=""	
+   AC_MSG_RESULT([no])
+fi
+
+AC_MSG_CHECKING([whether to build provided NSS module])
+if test "$enable_nss_module" != "no"; then
+   ENABLE_NSS_MODULE="YES"
+   BUILD_TYPE="$BUILD_TYPE NSS"
+   AC_MSG_RESULT([yes])
+   if test "$_os" = "WINNT"; then
+      AC_MSG_CHECKING([for Mozilla build tooling])
+      if test -z "$MOZILLABUILD" ; then
+AC_MSG_ERROR([Mozilla build tooling not found. Use --with-mozilla-build=<absolut path to mozilla build tooling (mozilla-build)>])
+      else
+         if test \( "$WITH_MINGWIN" = "yes" \) ; then
+            if test ! -d "$MOZILLABUILD" ; then
+AC_MSG_ERROR([Mozilla build tooling incomplete!])
+            else
+               AC_MSG_RESULT([ok])
+            fi
+         else
+            if test ! -d "$MOZILLABUILD/moztools" \
+               -o ! -d "$MOZILLABUILD/msys" ; then
+AC_MSG_ERROR([Mozilla build tooling incomplete!])
+            else
+               AC_MSG_RESULT([ok])
+            fi
+         fi
+      fi
+   fi
+else
+   ENABLE_NSS_MODULE="NO"
    AC_MSG_RESULT([no])
 fi
 
@@ -4359,6 +4404,8 @@ fi
 AC_SUBST(BUILD_MOZAB)
 
 fi
+AC_SUBST(ENABLE_NSS_MODULE)
+AC_SUBST(MOZILLABUILD)
 AC_SUBST(SYSTEM_MOZILLA)
 AC_SUBST(MOZ_FLAVOUR)
 AC_SUBST(MOZ_INC)
