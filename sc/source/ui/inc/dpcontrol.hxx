@@ -173,6 +173,12 @@ private:
     size_t getSubMenuPos(ScMenuFloatingWindow* pSubMenu);
 
     /**
+     * Fire a menu highlight event since the accessibility framework needs
+     * this to track focus on menu items.
+     */
+    void fireMenuHighlightedEvent();
+
+    /**
      * Make sure that the specified submenu is permanently up, the submenu
      * close timer is not active, and the correct menu item associated with
      * the submenu is highlighted.
@@ -197,6 +203,8 @@ private:
      * window.  This method is called e.g. when a menu action is fired.
      */
     void terminateAllPopupMenus();
+
+    DECL_LINK( PopupEndHdl, void* );
 
 private:
 

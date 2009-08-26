@@ -303,6 +303,7 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, US
     SetFont(maLabelFont);
 
     SetText(OUString::createFromAscii("ScMenuFloatingWindow"));
+    SetPopupModeEndHdl( LINK(this, ScMenuFloatingWindow, PopupEndHdl) );
 }
 
 ScMenuFloatingWindow::~ScMenuFloatingWindow()
@@ -537,6 +538,8 @@ void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, 
     selectMenuItem(mnSelectedMenu, false, bSubMenuTimer);
     selectMenuItem(nPos, true, bSubMenuTimer);
     mnSelectedMenu = nPos;
+
+    fireMenuHighlightedEvent();
 }
 
 size_t ScMenuFloatingWindow::getSelectedMenuItem() const
@@ -708,26 +711,6 @@ void ScMenuFloatingWindow::selectMenuItem(size_t nPos, bool bSelected, bool bSub
             else
                 queueCloseSubMenu();
         }
-
-        if (mxAccessible.is())
-        {
-            // Fire a menu highlight event since the accessibility framework
-            // needs this to track focus on menu items.
-            do
-            {
-                Reference<XAccessibleContext> xAccCxt = mxAccessible->getAccessibleContext();
-                if (!xAccCxt.is())
-                    break;
-
-                Reference<XAccessible> xAccMenu = xAccCxt->getAccessibleChild(nPos);
-                if (!xAccMenu.is())
-                    break;
-
-                VclAccessibleEvent aEvent(VCLEVENT_MENU_HIGHLIGHT, xAccMenu);
-                FireVclEvent(&aEvent);
-            }
-            while (false);
-        }
     }
 }
 
@@ -883,6 +866,26 @@ size_t ScMenuFloatingWindow::getSubMenuPos(ScMenuFloatingWindow* pSubMenu)
     return MENU_NOT_SELECTED;
 }
 
+void ScMenuFloatingWindow::fireMenuHighlightedEvent()
+{
+    if (mnSelectedMenu == MENU_NOT_SELECTED)
+        return;
+
+    if (!mxAccessible.is())
+        return;
+
+    Reference<XAccessibleContext> xAccCxt = mxAccessible->getAccessibleContext();
+    if (!xAccCxt.is())
+        return;
+
+    Reference<XAccessible> xAccMenu = xAccCxt->getAccessibleChild(mnSelectedMenu);
+    if (!xAccMenu.is())
+        return;
+
+    VclAccessibleEvent aEvent(VCLEVENT_MENU_HIGHLIGHT, xAccMenu);
+    FireVclEvent(&aEvent);
+}
+
 void ScMenuFloatingWindow::setSubMenuFocused(ScMenuFloatingWindow* pSubMenu)
 {
     maCloseTimer.reset();
@@ -939,6 +942,12 @@ void ScMenuFloatingWindow::terminateAllPopupMenus()
     EndPopupMode();
     if (mpParentMenu)
         mpParentMenu->terminateAllPopupMenus();
+}
+
+IMPL_LINK( ScMenuFloatingWindow, PopupEndHdl, void*, EMPTYARG )
+{
+    clearSelectedMenuItem();
+    return 0;
 }
 
 // ============================================================================
