@@ -30,14 +30,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmlsecurity.hxx"
-#include <sal/config.h>
-#include <rtl/uuid.h>
-#include "x509certificate_nssimpl.hxx"
 
-#ifndef _CERTIFICATEEXTENSION_NSSIMPL_HXX_
-#include "certificateextension_xmlsecimpl.hxx"
-#endif
 
+
+#include "nssrenam.h"
 #include "nspr.h"
 #include "nss.h"
 #include "secder.h"
@@ -47,6 +43,17 @@
 #include "secoid.h"
 #include "pk11func.h"
 //MM : end
+
+
+
+#include <sal/config.h>
+#include <rtl/uuid.h>
+#include "x509certificate_nssimpl.hxx"
+
+#ifndef _CERTIFICATEEXTENSION_NSSIMPL_HXX_
+#include "certificateextension_xmlsecimpl.hxx"
+#endif
+
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
