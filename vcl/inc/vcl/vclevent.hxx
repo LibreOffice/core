@@ -146,6 +146,10 @@ class Menu;
 #define VCLEVENT_ROADMAP_ITEMSELECTED       1171
 #define VCLEVENT_TOOLBOX_FORMATCHANGED      1172        // request new layout
 #define VCLEVENT_COMBOBOX_SETTEXT           1173
+// --> OD 2009-04-01 #i92103#
+#define VCLEVENT_LISTBOX_ENTRY_EXPANDED     1174
+#define VCLEVENT_LISTBOX_ENTRY_COLLAPSED    1175
+// <--
 
 // VclMenuEvent
 #define VCLEVENT_MENU_ACTIVATE              1200
