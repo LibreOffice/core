@@ -642,13 +642,15 @@ void ScMenuFloatingWindow::endSubMenu(ScMenuFloatingWindow* pSubMenu)
         return;
 
     pSubMenu->EndPopupMode();
+    maOpenTimer.reset();
 
     size_t nMenuPos = getSubMenuPos(pSubMenu);
     if (nMenuPos != MENU_NOT_SELECTED)
+    {
         highlightMenuItem(nMenuPos, true);
-
-    if (maOpenTimer.mpSubMenu)
-        maOpenTimer.mpSubMenu = NULL;
+        mnSelectedMenu = nMenuPos;
+        fireMenuHighlightedEvent();
+    }
 }
 
 void ScMenuFloatingWindow::fillMenuItemsToAccessible(ScAccessibleFilterMenu* pAccMenu) const
