@@ -181,9 +181,6 @@ private:
     BOOL                bMoveIsShift;
     BOOL                bNewStartIfMarking;
 
-    BOOL                bOldSelection;          // old style (inverting) of selection
-
-
     void            Init();
 
     void            DoAddWin( ScGridWindow* pWin );
@@ -528,9 +525,6 @@ public:
     void            SetBrushDocument( ScDocument* pNew, BOOL bLock );
     void            SetDrawBrushSet( SfxItemSet* pNew, BOOL bLock );
     void            ResetBrushDocument();
-
-    void            UpdateSelectionType();
-    BOOL            IsOldSelection() const          { return bOldSelection; }
 };
 
 

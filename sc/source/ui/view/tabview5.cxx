@@ -148,16 +148,6 @@ void __EXPORT ScTabView::Init()
             //  Das gilt auch fuer ViewOptionsHasChanged()
 
     TestHintWindow();
-
-    UpdateSelectionType();
-}
-
-void ScTabView::UpdateSelectionType()
-{
-    // old selection in high contrast mode, or if transparent drawing isn't supported
-
-    bOldSelection = pFrameWin->GetSettings().GetStyleSettings().GetHighContrastMode() ||
-                    !pFrameWin->supportsOperation( OutDevSupport_TransparentRect );
 }
 
 __EXPORT ScTabView::~ScTabView()

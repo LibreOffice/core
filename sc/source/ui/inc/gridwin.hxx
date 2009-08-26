@@ -37,6 +37,7 @@
 #include "viewdata.hxx"
 #include "cbutton.hxx"
 #include <svx/sdr/overlay/overlayobject.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <vector>
 
@@ -94,44 +95,7 @@ public:
 
 // ---------------------------------------------------------------------------
 // predefines
-class ScGridWindow;
-
-enum ScOverlayType { SC_OVERLAY_INVERT, SC_OVERLAY_SOLID, SC_OVERLAY_BORDER_TRANSPARENT };
-
-// #114409#
-namespace sdr
-{
-    namespace overlay
-    {
-        // predefines
-        class OverlayObjectList;
-
-        // OverlayObjectCell - used for cell cursor, selection and AutoFill handle
-
-        class OverlayObjectCell : public OverlayObject
-        {
-        public:
-            typedef ::std::vector< basegfx::B2DRange > RangeVector;
-
-        protected:
-            basegfx::B2DPolyPolygon impGetOverlayPolyPolygon() const;
-
-        private:
-            ScOverlayType   mePaintType;
-            RangeVector     maRectangles;
-
-            // geometry creation for OverlayObject
-            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
-
-        public:
-            OverlayObjectCell( ScOverlayType eType, const Color& rColor, const RangeVector& rRects);
-            virtual ~OverlayObjectCell();
-        };
-
-    } // end of namespace overlay
-} // end of namespace sdr
-
-// ---------------------------------------------------------------------------
+namespace sdr { namespace overlay { class OverlayObjectList; }}
 
 class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHelper
 {

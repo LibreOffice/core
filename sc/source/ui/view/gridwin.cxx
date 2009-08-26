@@ -122,18 +122,11 @@
 #include "tabprotection.hxx"
 #include "postit.hxx"
 
-// #114409#
-#include <vcl/salbtype.hxx>     // FRound
 #include "drawview.hxx"
 #include <svx/sdrpagewindow.hxx>
-#include <svx/sdrpaintwindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <vcl/svapp.hxx>
-
-#include <drawinglayer/primitive2d/invertprimitive2d.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <svx/sdr/overlay/overlayselection.hxx>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -359,8 +352,7 @@ void lcl_UnLockComment( ScDrawView* pView, SdrPageView* pPV, SdrModel* pDrDoc, c
     }
 }
 
-//==================================================================
-
+// ---------------------------------------------------------------------------
 //  WB_DIALOGCONTROL noetig fuer UNO-Controls
 ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhichPos )
 :           Window( pParent, WB_CLIPCHILDREN | WB_DIALOGCONTROL ),
@@ -4866,7 +4858,6 @@ BOOL ScGridWindow::GetEditUrlOrError( BOOL bSpellErr, const Point& rPos,
     MapMode aEditMode = pViewData->GetLogicMode(eWhich);            // ohne Drawing-Skalierung
     Rectangle aLogicEdit = PixelToLogic( aEditRect, aEditMode );
     long nThisColLogic = aLogicEdit.Right() - aLogicEdit.Left() + 1;
-
     Size aPaperSize = Size( 1000000, 1000000 );
     if(pCell->GetCellType() == CELLTYPE_FORMULA)
     {
@@ -5181,37 +5172,30 @@ void ScGridWindow::UpdateCursorOverlay()
         }
     }
 
-    //
-    //  convert into logic units and create overlay object
-    //
-
     if ( aPixelRects.size() )
     {
-        sdr::overlay::OverlayObjectCell::RangeVector aRanges;
-
-        std::vector<Rectangle>::const_iterator aPixelEnd( aPixelRects.end() );
-        for ( std::vector<Rectangle>::const_iterator aPixelIter( aPixelRects.begin() );
-              aPixelIter != aPixelEnd; ++aPixelIter )
-        {
-            Rectangle aLogic( PixelToLogic( *aPixelIter, aDrawMode ) );
-
-            const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
-            const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
-            const basegfx::B2DRange a2DRange(aTopLeft, aBottomRight);
-
-            aRanges.push_back( a2DRange );
-        }
-
         // #i70788# get the OverlayManager safely
         ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
 
         if(pOverlayManager)
         {
-            BOOL bOld = pViewData->GetView()->IsOldSelection();
+            const Color aCursorColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+            std::vector< basegfx::B2DRange > aRanges;
+            const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
 
-            ScOverlayType eType = bOld ? SC_OVERLAY_INVERT : SC_OVERLAY_SOLID;
-            Color aCursorColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
-            sdr::overlay::OverlayObjectCell* pOverlay = new sdr::overlay::OverlayObjectCell( eType, aCursorColor, aRanges );
+            for(sal_uInt32 a(0); a < aPixelRects.size(); a++)
+            {
+                const Rectangle aRA(aPixelRects[a]);
+                basegfx::B2DRange aRB(aRA.Left(), aRA.Top(), aRA.Right() + 1, aRA.Bottom() + 1);
+                aRB.transform(aTransform);
+                aRanges.push_back(aRB);
+            }
+
+            sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+                sdr::overlay::OVERLAY_SOLID,
+                aCursorColor,
+                aRanges,
+                false);
 
             pOverlayManager->add(*pOverlay);
             mpOOCursors = new ::sdr::overlay::OverlayObjectList;
@@ -5236,50 +5220,52 @@ void ScGridWindow::UpdateSelectionOverlay()
         SetMapMode( aDrawMode );
 
     DeleteSelectionOverlay();
-
     std::vector<Rectangle> aPixelRects;
     GetSelectionRects( aPixelRects );
 
     if ( aPixelRects.size() && pViewData->IsActive() )
     {
-        SCTAB nTab = pViewData->GetTabNo();
-        BOOL bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( nTab );
-        BOOL bOld = pViewData->GetView()->IsOldSelection();
-
-        sdr::overlay::OverlayObjectCell::RangeVector aRanges;
-
-        std::vector<Rectangle>::const_iterator aPixelEnd( aPixelRects.end() );
-        for ( std::vector<Rectangle>::const_iterator aPixelIter( aPixelRects.begin() );
-              aPixelIter != aPixelEnd; ++aPixelIter )
-        {
-            Rectangle aPixel( *aPixelIter );
-            if ( !bOld )
-            {
-                // for transparent selection, add a pixel so the border is on the grid on all edges
-                if ( bLayoutRTL )
-                    aPixel.Right() += 1;
-                else
-                    aPixel.Left() -= 1;
-                aPixel.Top() -= 1;
-            }
-            Rectangle aLogic( PixelToLogic( aPixel, aDrawMode ) );
-
-            const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
-            const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
-            const basegfx::B2DRange a2DRange(aTopLeft, aBottomRight);
-
-            aRanges.push_back( a2DRange );
-        }
-
         // #i70788# get the OverlayManager safely
         ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
 
         if(pOverlayManager)
         {
-            ScOverlayType eType = bOld ? SC_OVERLAY_INVERT : SC_OVERLAY_BORDER_TRANSPARENT;
-            Color aHighlight( GetSettings().GetStyleSettings().GetHighlightColor() );
-            sdr::overlay::OverlayObjectCell* pOverlay =
-                new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
+            std::vector< basegfx::B2DRange > aRanges;
+            const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+
+            for(sal_uInt32 a(0); a < aPixelRects.size(); a++)
+            {
+                const Rectangle aRA(aPixelRects[a]);
+                basegfx::B2DRange aRB(aRA.Left() - 1, aRA.Top() - 1, aRA.Right(), aRA.Bottom());
+                aRB.transform(aTransform);
+                aRanges.push_back(aRB);
+            }
+
+            // #i97672# get the system's hilight color and limit it to the maximum
+            // allowed luminance. This is needed to react on too bright hilight colors
+            // which would otherwise vive a bad visualisation
+            Color aHighlight(GetSettings().GetStyleSettings().GetHighlightColor());
+            const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+            const basegfx::BColor aSelection(aHighlight.getBColor());
+            const double fLuminance(aSelection.luminance());
+            const double fMaxLum(aSvtOptionsDrawinglayer.GetSelectionMaximumLuminancePercent() / 100.0);
+
+            if(fLuminance > fMaxLum)
+            {
+                const double fFactor(fMaxLum / fLuminance);
+                const basegfx::BColor aNewSelection(
+                    aSelection.getRed() * fFactor,
+                    aSelection.getGreen() * fFactor,
+                    aSelection.getBlue() * fFactor);
+
+                aHighlight = Color(aNewSelection);
+            }
+
+            sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+                sdr::overlay::OVERLAY_TRANSPARENT,
+                aHighlight,
+                aRanges,
+                true);
 
             pOverlayManager->add(*pOverlay);
             mpOOSelection = new ::sdr::overlay::OverlayObjectList;
@@ -5331,31 +5317,24 @@ void ScGridWindow::UpdateAutoFillOverlay()
         aFillPos.Y() -= 2;
         Rectangle aFillRect( aFillPos, Size(6,6) );
 
-        //
-        //  convert into logic units
-        //
-
-        sdr::overlay::OverlayObjectCell::RangeVector aRanges;
-
-        Rectangle aLogic( PixelToLogic( aFillRect, aDrawMode ) );
-
-        const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
-        const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
-        const basegfx::B2DRange a2DRange(aTopLeft, aBottomRight);
-
-        aRanges.push_back( a2DRange );
-
         // #i70788# get the OverlayManager safely
         ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
 
         if(pOverlayManager)
         {
-            BOOL bOld = pViewData->GetView()->IsOldSelection();
+            const Color aHandleColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+            std::vector< basegfx::B2DRange > aRanges;
+            const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+            basegfx::B2DRange aRB(aFillRect.Left(), aFillRect.Top(), aFillRect.Right() + 1, aFillRect.Bottom() + 1);
 
-            ScOverlayType eType = bOld ? SC_OVERLAY_INVERT : SC_OVERLAY_SOLID;
-            Color aHandleColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
-            sdr::overlay::OverlayObjectCell* pOverlay =
-                new sdr::overlay::OverlayObjectCell( eType, aHandleColor, aRanges );
+            aRB.transform(aTransform);
+            aRanges.push_back(aRB);
+
+            sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+                sdr::overlay::OVERLAY_SOLID,
+                aHandleColor,
+                aRanges,
+                false);
 
             pOverlayManager->add(*pOverlay);
             mpOOAutoFill = new ::sdr::overlay::OverlayObjectList;
@@ -5466,34 +5445,28 @@ void ScGridWindow::UpdateDragRectOverlay()
             aPixelRects.push_back( Rectangle( aRect.Left()+3, aRect.Bottom()-2, aRect.Right()-3, aRect.Bottom() ) );
         }
 
-        //
-        //  convert into logic units and create overlay object
-        //
-
-        sdr::overlay::OverlayObjectCell::RangeVector aRanges;
-
-        std::vector<Rectangle>::const_iterator aPixelEnd( aPixelRects.end() );
-        for ( std::vector<Rectangle>::const_iterator aPixelIter( aPixelRects.begin() );
-              aPixelIter != aPixelEnd; ++aPixelIter )
-        {
-            Rectangle aLogic( PixelToLogic( *aPixelIter, aDrawMode ) );
-
-            const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
-            const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
-            const basegfx::B2DRange a2DRange(aTopLeft, aBottomRight);
-
-            aRanges.push_back( a2DRange );
-        }
-
         // #i70788# get the OverlayManager safely
         ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
 
         if(pOverlayManager)
         {
-            ScOverlayType eType = SC_OVERLAY_INVERT;
-            Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
-            sdr::overlay::OverlayObjectCell* pOverlay =
-                new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
+            // Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
+            std::vector< basegfx::B2DRange > aRanges;
+            const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+
+            for(sal_uInt32 a(0); a < aPixelRects.size(); a++)
+            {
+                const Rectangle aRA(aPixelRects[a]);
+                basegfx::B2DRange aRB(aRA.Left(), aRA.Top(), aRA.Right() + 1, aRA.Bottom() + 1);
+                aRB.transform(aTransform);
+                aRanges.push_back(aRB);
+            }
+
+            sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+                sdr::overlay::OVERLAY_INVERT,
+                Color(COL_BLACK),
+                aRanges,
+                false);
 
             pOverlayManager->add(*pOverlay);
             mpOODragRect = new ::sdr::overlay::OverlayObjectList;
@@ -5520,31 +5493,26 @@ void ScGridWindow::UpdateHeaderOverlay()
     DeleteHeaderOverlay();
 
     //  Pixel rectangle is in aInvertRect
-
-    //
-    //  convert into logic units and create overlay object
-    //
-
     if ( !aInvertRect.IsEmpty() )
     {
-        Rectangle aLogic( PixelToLogic( aInvertRect, aDrawMode ) );
-
-        const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
-        const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
-        const basegfx::B2DRange a2DRange(aTopLeft, aBottomRight);
-
-        sdr::overlay::OverlayObjectCell::RangeVector aRanges;
-        aRanges.push_back( a2DRange );
-
         // #i70788# get the OverlayManager safely
         ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
 
         if(pOverlayManager)
         {
-            ScOverlayType eType = SC_OVERLAY_INVERT;
-            Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
-            sdr::overlay::OverlayObjectCell* pOverlay =
-                new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
+            // Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
+            std::vector< basegfx::B2DRange > aRanges;
+            const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+            basegfx::B2DRange aRB(aInvertRect.Left(), aInvertRect.Top(), aInvertRect.Right() + 1, aInvertRect.Bottom() + 1);
+
+            aRB.transform(aTransform);
+            aRanges.push_back(aRB);
+
+            sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+                sdr::overlay::OVERLAY_INVERT,
+                Color(COL_BLACK),
+                aRanges,
+                false);
 
             pOverlayManager->add(*pOverlay);
             mpOOHeader = new ::sdr::overlay::OverlayObjectList;
@@ -5595,30 +5563,26 @@ void ScGridWindow::UpdateShrinkOverlay()
         }
     }
 
-    //
-    //  convert into logic units and create overlay object
-    //
-
     if ( !aPixRect.IsEmpty() )
     {
-        Rectangle aLogic( PixelToLogic( aPixRect, aDrawMode ) );
-
-        const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
-        const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
-        const basegfx::B2DRange a2DRange(aTopLeft, aBottomRight);
-
-        sdr::overlay::OverlayObjectCell::RangeVector aRanges;
-        aRanges.push_back( a2DRange );
-
         // #i70788# get the OverlayManager safely
         ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
 
         if(pOverlayManager)
         {
-            ScOverlayType eType = SC_OVERLAY_INVERT;
-            Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
-            sdr::overlay::OverlayObjectCell* pOverlay =
-                new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
+            // Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
+            std::vector< basegfx::B2DRange > aRanges;
+            const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+            basegfx::B2DRange aRB(aPixRect.Left(), aPixRect.Top(), aPixRect.Right() + 1, aPixRect.Bottom() + 1);
+
+            aRB.transform(aTransform);
+            aRanges.push_back(aRB);
+
+            sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+                sdr::overlay::OVERLAY_INVERT,
+                Color(COL_BLACK),
+                aRanges,
+                false);
 
             pOverlayManager->add(*pOverlay);
             mpOOShrink = new ::sdr::overlay::OverlayObjectList;
@@ -5660,121 +5624,4 @@ void ScGridWindow::flushOverlayManager()
 }
 
 // ---------------------------------------------------------------------------
-
-// #114409#
-namespace sdr
-{
-    namespace overlay
-    {
-        OverlayObjectCell::OverlayObjectCell( ScOverlayType eType, const Color& rColor, const RangeVector& rRects )
-        :   OverlayObject( rColor ),
-            mePaintType( eType ),
-            maRectangles( rRects )
-        {
-            // no AA for selection overlays
-            allowAntiAliase(false);
-        }
-
-        OverlayObjectCell::~OverlayObjectCell()
-        {
-        }
-
-        drawinglayer::primitive2d::Primitive2DSequence OverlayObjectCell::createOverlayObjectPrimitive2DSequence()
-        {
-            drawinglayer::primitive2d::Primitive2DSequence aRetval;
-            const basegfx::BColor aRGBColor(getBaseColor().getBColor());
-            const sal_uInt32 nCount(maRectangles.size());
-
-            if(nCount)
-            {
-                // create fill primities for all rectangles
-                // These ranges are meant as rectangles, so it is not sufficient to replace them
-                // using the derived polygon. That would leave out the bottom and right lines
-                // in a discrete width/height due to polygon painting conventions of leaving off those.
-                // To solve, it is either possible to create a view-dependent rectangle primitive
-                // handling this internally or to additionally create a hairline primitive to
-                // cover these areas (which i will do here)
-                const bool bIsTransparent(SC_OVERLAY_BORDER_TRANSPARENT == mePaintType);
-                aRetval.realloc(nCount * 2);
-
-                for(sal_uInt32 a(0);a < nCount; a++)
-                {
-                    const basegfx::B2DRange& rRange(maRectangles[a]);
-                    const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(rRange));
-
-                    aRetval[a * 2] = drawinglayer::primitive2d::Primitive2DReference(
-                        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                            basegfx::B2DPolyPolygon(aPolygon),
-                            aRGBColor));
-                    aRetval[(a * 2) + 1] = drawinglayer::primitive2d::Primitive2DReference(
-                        new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
-                            basegfx::B2DPolyPolygon(aPolygon),
-                            aRGBColor));
-                }
-
-                if(SC_OVERLAY_INVERT == mePaintType)
-                {
-                    // embed all in invert primitive
-                    const drawinglayer::primitive2d::Primitive2DReference aInvert(
-                        new drawinglayer::primitive2d::InvertPrimitive2D(
-                            aRetval));
-
-                    aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aInvert, 1);
-                }
-                else if(bIsTransparent)
-                {
-                    // embed all rectangles in 75% transparent paint
-                    const drawinglayer::primitive2d::Primitive2DReference aUnifiedAlpha(
-                        new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(
-                            aRetval,
-                            0.75));
-
-                    // prepare merged PolyPoygon selection outline
-                    const basegfx::B2DPolyPolygon aPolyPolygon(impGetOverlayPolyPolygon());
-                    const drawinglayer::primitive2d::Primitive2DReference aSelectionOutline(
-                        new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
-                            aPolyPolygon,
-                            aRGBColor));
-
-                    // add both to result
-                    aRetval.realloc(2);
-                    aRetval[0] = aUnifiedAlpha;
-                    aRetval[1] = aSelectionOutline;
-                }
-            }
-
-            return aRetval;
-        }
-
-        basegfx::B2DPolyPolygon OverlayObjectCell::impGetOverlayPolyPolygon() const
-        {
-            PolyPolygon aPolyPoly;
-            const sal_uInt32 nRectCount(maRectangles.size());
-
-            for(sal_uInt32 nRect(0); nRect < nRectCount; ++nRect)
-            {
-                const basegfx::B2DRange& rRange(maRectangles[nRect]);
-                const Rectangle aRectangle(
-                    FRound(rRange.getMinX()), FRound(rRange.getMinY()),
-                    FRound(rRange.getMaxX()), FRound(rRange.getMaxY()));
-
-                if ( nRectCount == 1 || nRect+1 < nRectCount )
-                {
-                    // simply add for all except the last rect
-                    aPolyPoly.Insert( Polygon( aRectangle ) );
-                }
-                else
-                {
-                    PolyPolygon aTemp( aPolyPoly );
-                    aTemp.GetUnion( PolyPolygon( Polygon( aRectangle ) ), aPolyPoly );
-                }
-            }
-
-            return aPolyPoly.getB2DPolyPolygon();
-        }
-    } // end of namespace overlay
-} // end of namespace sdr
-
-// ---------------------------------------------------------------------------
-
 // eof

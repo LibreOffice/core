@@ -384,8 +384,7 @@ BOOL lcl_HasRowOutline( const ScViewData& rViewData )
             bInActivatePart( FALSE ),                                       \
             bInZoomUpdate( FALSE ),                                         \
             bMoveIsShift( FALSE ),                                          \
-            bNewStartIfMarking( FALSE ),                                    \
-            bOldSelection( FALSE )
+            bNewStartIfMarking( FALSE )
 
 
 ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
