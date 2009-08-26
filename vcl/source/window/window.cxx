@@ -5367,6 +5367,11 @@ void Window::CallEventListeners( ULONG nEvent, void* pData )
     }
 }
 
+void Window::FireVclEvent( VclSimpleEvent* pEvent )
+{
+    ImplGetSVData()->mpApp->ImplCallEventListeners(pEvent);
+}
+
 // -----------------------------------------------------------------------
 
 void Window::AddEventListener( const Link& rEventListener )

@@ -582,7 +582,7 @@ protected:
 
             void        ImplCallEventListeners( ULONG nEvent, void* pData = NULL );
             void        CallEventListeners( ULONG nEvent, void* pData = NULL );
-
+            void        FireVclEvent( VclSimpleEvent* pEvent );
 
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void ImplAdjustNWFSizes();

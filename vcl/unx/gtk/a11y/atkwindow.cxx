@@ -114,6 +114,7 @@ init_from_window( AtkObject *accessible, Window *pWindow )
                     sal_uInt16 nStackLevel = static_cast<FloatingWindow*>(pChild)->GetMenuStackLevel();
                     if (nStackLevel == 0)
                     {
+                        // This is a top-level menu popup.  Register it.
                         role = ATK_ROLE_POPUP_MENU;
                         pChild->SetAccessibleRole( AccessibleRole::POPUP_MENU );
                         accessible->name = g_strdup( rtl::OUStringToOString( pChild->GetText(), RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -147,6 +148,19 @@ ooo_window_wrapper_real_focus_gtk (GtkWidget *, GdkEventFocus *)
 
 /*****************************************************************************/
 
+static bool
+isChildPopupMenu(Window* pWindow)
+{
+    Window* pChild = pWindow->GetAccessibleChildWindow(0);
+    if (!pChild)
+        return false;
+
+    if (WINDOW_FLOATINGWINDOW != pChild->GetType())
+        return false;
+
+    return static_cast<FloatingWindow*>(pChild)->IsPopupMenu();
+}
+
 static void
 ooo_window_wrapper_real_initialize(AtkObject *obj, gpointer data)
 {
@@ -168,8 +182,16 @@ ooo_window_wrapper_real_initialize(AtkObject *obj, gpointer data)
              */
             if( WINDOW_BORDERWINDOW == pWindow->GetType() )
             {
-                ooo_wrapper_registry_add( xAccessible, obj );
-                g_object_set_data( G_OBJECT(obj), "ooo:atk-wrapper-key", xAccessible.get() );
+                if ( isChildPopupMenu(pWindow) )
+                {
+                    AtkObject *child = atk_object_wrapper_new( xAccessible, obj );
+                    ooo_wrapper_registry_add( xAccessible, child );
+                }
+                else
+                {
+                    ooo_wrapper_registry_add( xAccessible, obj );
+                    g_object_set_data( G_OBJECT(obj), "ooo:atk-wrapper-key", xAccessible.get() );
+                }
             }
             else
             {

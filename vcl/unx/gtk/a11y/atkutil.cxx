@@ -628,7 +628,16 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
             static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
  */
     case VCLEVENT_MENU_HIGHLIGHT:
-        handle_menu_highlighted(static_cast< ::VclMenuEvent const * >(pEvent));
+        if (const VclMenuEvent* pMenuEvent = dynamic_cast<const VclMenuEvent*>(pEvent))
+        {
+            handle_menu_highlighted(pMenuEvent);
+        }
+        else if (const VclAccessibleEvent* pAccEvent = dynamic_cast<const VclAccessibleEvent*>(pEvent))
+        {
+            uno::Reference< accessibility::XAccessible > xAccessible = pAccEvent->GetAccessible();
+            if (xAccessible.is())
+                atk_wrapper_focus_tracker_notify_when_idle(xAccessible);
+        }
         break;
 
     case VCLEVENT_TOOLBOX_HIGHLIGHT:

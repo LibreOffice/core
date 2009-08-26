@@ -34,9 +34,23 @@
 #include "vcl/vclevent.hxx"
 #include "vcl/svdata.hxx"
 
+#include <com/sun/star/accessibility/XAccessible.hpp>
+
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::accessibility::XAccessible;
+
 TYPEINIT0(VclSimpleEvent);
 TYPEINIT1(VclWindowEvent, VclSimpleEvent);
 TYPEINIT1(VclMenuEvent, VclSimpleEvent);
+
+VclAccessibleEvent::VclAccessibleEvent( ULONG n, const Reference<XAccessible>& rxAccessible ) :
+    VclSimpleEvent(n),
+    mxAccessible(rxAccessible) {}
+
+Reference<XAccessible> VclAccessibleEvent::GetAccessible() const
+{
+    return mxAccessible;
+}
 
 void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
 {
