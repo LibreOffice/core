@@ -410,6 +410,13 @@ File gid_File_Dl_AffineUnoUno
     // CompID = "CF542EC3-7A51-4EAA-8480-65D5E8906D05";
 End
 
+File gid_File_Dl_LogUnoUno
+    TXT_FILE_BODY;
+    Dir = SCP2_URE_DL_DIR;
+    Name = SCP2_URE_DL_NORMAL("log_uno_uno");
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+End
+
 #if defined WNT && defined _MSC
 File gid_File_Dl_Cli_Uno
     TXT_FILE_BODY;
@@ -1147,6 +1154,7 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Dl_UrpUno,
             gid_File_Dl_UnsafeUnoUno,
             gid_File_Dl_AffineUnoUno,
+            gid_File_Dl_LogUnoUno,
             gid_File_Dl_Jpipe,
             gid_File_Dl_Juh,
             gid_File_Dl_Juhx,
