@@ -620,25 +620,29 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         mpTextForwarder->flushCache();
 
         OutlinerParaObject* pOutlinerParaObject = NULL;
-        bool bTextEditActive = false;
         SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
         if( pTextObj && pTextObj->getActiveText() == mpText )
             pOutlinerParaObject = pTextObj->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
+        bool bOwnParaObj(false);
 
         if( pOutlinerParaObject )
-            bTextEditActive = true; // text edit active
+            bOwnParaObj = true; // text edit active
         else
             pOutlinerParaObject = mpText->GetOutlinerParaObject();
 
-        if( pOutlinerParaObject && ( bTextEditActive || !mpObject->IsEmptyPresObj() || mpObject->GetPage()->IsMasterPage() ) )
+        if( pOutlinerParaObject && ( bOwnParaObj || !mpObject->IsEmptyPresObj() || mpObject->GetPage()->IsMasterPage() ) )
         {
             mpOutliner->SetText( *pOutlinerParaObject );
 
             // #91254# put text to object and set EmptyPresObj to FALSE
-            if( mpText && bTextEditActive && pOutlinerParaObject && mpObject->IsEmptyPresObj() && pTextObj->IsRealyEdited() )
+            if( mpText && bOwnParaObj && pOutlinerParaObject && mpObject->IsEmptyPresObj() && pTextObj->IsRealyEdited() )
             {
                 mpObject->SetEmptyPresObj( FALSE );
                 static_cast< SdrTextObj* >( mpObject)->NbcSetOutlinerParaObjectForText( pOutlinerParaObject, mpText );
+
+                // #i103982# Here, due to mpObject->NbcSetOutlinerParaObjectForText, we LOSE ownership of the
+                // OPO, so do NOT delete it when leaving this method (!)
+                bOwnParaObj = false;
             }
         }
         else
@@ -676,7 +680,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 
         mbDataValid = TRUE;
 
-        if( bTextEditActive )
+        if( bOwnParaObj )
             delete pOutlinerParaObject;
     }
 

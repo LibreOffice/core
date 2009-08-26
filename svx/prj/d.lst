@@ -604,6 +604,7 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\overlay
 ..\inc\svx\sdr\overlay\overlaypolypolygon.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaypolypolygon.hxx
 ..\inc\svx\sdr\overlay\overlayobjectcell.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayobjectcell.hxx
 ..\inc\svx\sdr\overlay\overlayprimitive2dsequenceobject.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayprimitive2dsequenceobject.hxx
+..\inc\svx\sdr\overlay\overlayselection.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayselection.hxx
 ..\inc\svx\sdr\overlay\overlaytools.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaytools.hxx
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\animation

@@ -29,16 +29,17 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_SDR_PRIMITIVE2D_SDRCAPTIONPRIMITIVE2D_HXX
-#define INCLUDED_SDR_PRIMITIVE2D_SDRCAPTIONPRIMITIVE2D_HXX
+#ifndef INCLUDED_SDR_PRIMITIVE2D_SDROLECONTENTPRIMITIVE2D_HXX
+#define INCLUDED_SDR_PRIMITIVE2D_SDROLECONTENTPRIMITIVE2D_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
-#include <svx/sdr/attribute/sdrallattribute.hxx>
+#include <svx/svdobj.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// predefines
+// predefinitions
+
+class SdrOle2Obj;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -46,37 +47,34 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrCaptionPrimitive2D : public BasePrimitive2D
+        class SdrOleContentPrimitive2D : public BasePrimitive2D
         {
         private:
-            ::basegfx::B2DHomMatrix                     maTransform;
-            attribute::SdrLineFillShadowTextAttribute   maSdrLFSTAttribute;
-            ::basegfx::B2DPolygon                       maTail;
-            double                                      mfCornerRadiusX;    // [0.0..1.0] relative to 1/2 width
-            double                                      mfCornerRadiusY;    // [0.0..1.0] relative to 1/2 height
+            SdrObjectWeakRef                            mpSdrOle2Obj;
+            basegfx::B2DHomMatrix                       maObjectTransform;
+
+            // bitfield
+            unsigned                                    mbHighContrast : 1;
 
         protected:
             // local decomposition.
             virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
-            SdrCaptionPrimitive2D(
-                const ::basegfx::B2DHomMatrix& rTransform,
-                const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
-                const ::basegfx::B2DPolygon& rTail,
-                double fCornerRadiusX = 0.0,
-                double fCornerRadiusY = 0.0);
+            SdrOleContentPrimitive2D(
+                const SdrOle2Obj& rSdrOle2Obj,
+                const basegfx::B2DHomMatrix& rObjectTransform,
+                bool bHighContrast);
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
+            // The default implementation will use getDecomposition results to create the range
+            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
+
             // data access
-            const ::basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
-            const attribute::SdrLineFillShadowTextAttribute& getSdrLFSTAttribute() const { return maSdrLFSTAttribute; }
-            const ::basegfx::B2DPolygon& getTail() const { return maTail; }
-            double getCornerRadiusX() const { return mfCornerRadiusX; }
-            double getCornerRadiusY() const { return mfCornerRadiusY; }
-            bool isCornerRadiusUsed() const { return (0.0 != mfCornerRadiusX || 0.0 != mfCornerRadiusY); }
+            const basegfx::B2DHomMatrix& getObjectTransform() const { return maObjectTransform; }
+            bool getHighContrast() const { return mbHighContrast; }
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()
@@ -86,6 +84,6 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //INCLUDED_SDR_PRIMITIVE2D_SDRCAPTIONPRIMITIVE2D_HXX
+#endif //INCLUDED_SDR_PRIMITIVE2D_SDROLECONTENTPRIMITIVE2D_HXX
 
 // eof
