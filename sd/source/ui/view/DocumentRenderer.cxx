@@ -1401,8 +1401,12 @@ private:
             rInfo.meOrientation = ORIENTATION_LANDSCAPE;
 
         const Size aPaperSize (rInfo.mpPrinter->GetPaperSize());
-        if (rInfo.meOrientation == ORIENTATION_LANDSCAPE &&
-            (aPaperSize.Width() < aPaperSize.Height()))
+        if( (rInfo.meOrientation == ORIENTATION_LANDSCAPE &&
+              (aPaperSize.Width() < aPaperSize.Height()))
+           ||
+            (rInfo.meOrientation == ORIENTATION_PORTRAIT &&
+              (aPaperSize.Width() > aPaperSize.Height()))
+          )
         {
             maPrintSize = awt::Size(aPaperSize.Height(), aPaperSize.Width());
             //            rInfo.maPrintSize = Size(rInfo.maPrintSize.Height(), rInfo.maPrintSize.Width());
@@ -1818,6 +1822,21 @@ private:
         // Change orientation?
         SdPage& rMaster (dynamic_cast<SdPage&>(rHandoutPage.TRG_GetMasterPage()));
         rInfo.meOrientation = rMaster.GetOrientation();
+
+        const Size aPaperSize (rInfo.mpPrinter->GetPaperSize());
+        if( (rInfo.meOrientation == ORIENTATION_LANDSCAPE &&
+              (aPaperSize.Width() < aPaperSize.Height()))
+           ||
+            (rInfo.meOrientation == ORIENTATION_PORTRAIT &&
+              (aPaperSize.Width() > aPaperSize.Height()))
+          )
+        {
+            maPrintSize = awt::Size(aPaperSize.Height(), aPaperSize.Width());
+        }
+        else
+        {
+            maPrintSize = awt::Size(aPaperSize.Width(), aPaperSize.Height());
+        }
 
         MapMode aMap (rInfo.maMap);
         const Point aPageOfs (rInfo.mpPrinter->GetPageOffset());
