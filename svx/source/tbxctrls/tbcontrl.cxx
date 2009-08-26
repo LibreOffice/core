@@ -292,6 +292,7 @@ class SvxLineWindow_Impl : public SfxPopupWindow
 {
 private:
     ValueSet            aLineSet;
+    bool                m_bIsWriter;
 
 #if _SOLAR__PRIVATE
     void            MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& rSize, String& rStr,
@@ -1335,6 +1336,14 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( USHORT nId, const Reference< XFrame >& r
 
     aLineSet( this, WinBits( WB_3DLOOK | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD | WB_NONEFIELD | WB_NO_DIRECTSELECT ) )
 {
+    try
+    {
+        Reference< lang::XServiceInfo > xServices( rFrame->getController()->getModel(), UNO_QUERY_THROW );
+        m_bIsWriter = xServices->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument")));
+    }
+    catch(const uno::Exception& )
+    {
+    }
     Size    aBmpSize( 55, 12 );
     CreateBitmaps();
 
@@ -1598,7 +1607,7 @@ IMPL_LINK( SvxLineWindow_Impl, SelectHdl, void *, EMPTYARG )
     Any a;
     Sequence< PropertyValue > aArgs( 1 );
     aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "LineStyle" ));
-    aLineItem.QueryValue( a );
+    aLineItem.QueryValue( a, m_bIsWriter ? CONVERT_TWIPS : 0 );
     aArgs[0].Value = a;
 
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
@@ -2631,7 +2640,6 @@ SfxPopupWindowType SvxFrameLineStyleToolBoxControl::GetPopupWindowType() const
 SfxPopupWindow* SvxFrameLineStyleToolBoxControl::CreatePopupWindow()
 {
     SvxLineWindow_Impl* pLineWin = new SvxLineWindow_Impl( GetSlotId(), m_xFrame, &GetToolBox() );
-
     pLineWin->StartPopupMode( &GetToolBox(), TRUE );
     pLineWin->StartSelection();
     SetPopupWindow( pLineWin );
