@@ -370,8 +370,10 @@ End
 
 ScpAction scp_Copy_Ds_Store
     Copy = "DS_Store";
+    LangPackCopy = "DS_Store_Langpack";
+    PatchCopy = "DS_Store_Patch";
     Name = ".DS_Store";
     UnixRights = 444;
-    Styles = ();
+    Styles = (FORCELANGUAGEPACK);
 End
 #endif

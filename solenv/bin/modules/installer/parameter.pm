@@ -293,6 +293,15 @@ sub setglobalvariables
             $installer::globals::isxpdplatform = 1;
         }
     }
+
+    if ( $installer::globals::compiler =~ /unxmacxi/ )
+    {
+        if ( $installer::globals::packageformat eq "dmg" )
+        {
+            $installer::globals::ismacdmgbuild = 1;
+        }
+    }
+
     if ( $installer::globals::compiler =~ /unxfbsd/ )
     {
         if ( $installer::globals::packageformat eq "bsd" )
@@ -537,7 +546,7 @@ sub control_required_parameter
     # for Solaris packages and Linux
     #######################################
 
-    if (( $installer::globals::patch ) && ( ! $installer::globals::issolarispkgbuild ) && ( ! $installer::globals::islinuxrpmbuild ) && ( ! $installer::globals::islinuxdebbuild ) && ( ! $installer::globals::iswindowsbuild ))
+    if (( $installer::globals::patch ) && ( ! $installer::globals::issolarispkgbuild ) && ( ! $installer::globals::islinuxrpmbuild ) && ( ! $installer::globals::islinuxdebbuild ) && ( ! $installer::globals::iswindowsbuild ) && ( ! $installer::globals::ismacdmgbuild ))
     {
         installer::logger::print_error( "Sorry, Patch flag currently only available for Solaris pkg, Linux RPM and Windows builds!" );
         usage();

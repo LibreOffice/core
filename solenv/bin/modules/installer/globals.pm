@@ -134,6 +134,7 @@ BEGIN
     $issolarissparcbuild = 0;
     $issolarisx86build = 0;
     $isfreebsdpkgbuild = 0;
+    $ismacdmgbuild = 0;
     $unpackpath = "";
     $idttemplatepath = "";
     $idtlanguagepath = "";
@@ -448,6 +449,7 @@ BEGIN
     @featurecollector =();
     $msiassemblyfiles = "";
     $nsisfilename = "Nsis";
+    $macinstallfilename = "macinstall.ulf";
     $nsis204 = 0;
     $nsis231 = 0;
     $unicodensis = 0;
