@@ -42,6 +42,7 @@
 #include <vcl/msgbox.hxx>
 #include <mmgreetingspage.hrc>
 #include <dbui.hrc>
+#include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <helpid.h>
@@ -117,6 +118,7 @@ IMPL_LINK(SwGreetingsHandler, IndividualHdl_Impl, CheckBox*, EMPTYARG)
         m_pWizard->UpdateRoadmap();
         m_pWizard->enableButtons(WZB_NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
     }
+    UpdatePreview();
     return 0;
 }
 /*-- 30.04.2004 10:42:57---------------------------------------------------
@@ -133,12 +135,12 @@ IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, PushButton*, pButton)
     {
         ListBox* pToInsert = pButton == m_pMalePB ? m_pMaleLB : m_pFemaleLB;
         pToInsert->SelectEntryPos(pToInsert->InsertEntry(pDlg->GetAddress()));
-        UpdatePreview();
         if(m_bIsTabPage)
         {
             m_pWizard->UpdateRoadmap();
             m_pWizard->enableButtons(WZB_NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
         }
+        UpdatePreview();
     }
     delete pDlg;
     return 0;
@@ -182,9 +184,54 @@ IMPL_LINK(SwMailMergeGreetingsPage, GreetingSelectHdl_Impl, ListBox*, EMPTYARG)
   -----------------------------------------------------------------------*/
 void SwMailMergeGreetingsPage::UpdatePreview()
 {
-    String sPreview = m_aFemaleLB.GetSelectEntry();
-    sPreview += '\n';
-    sPreview += m_aMaleLB.GetSelectEntry();
+    //find out which type of greeting should be selected:
+    bool bFemale = false;
+    bool bNoValue = !m_pFemaleColumnLB->IsEnabled();
+    if( !bNoValue )
+    {
+        ::rtl::OUString sFemaleValue = m_aFemaleFieldCB.GetText();
+        ::rtl::OUString sFemaleColumn = m_aFemaleColumnLB.GetSelectEntry();
+        Reference< sdbcx::XColumnsSupplier > xColsSupp( m_pWizard->GetConfigItem().GetResultSet(), UNO_QUERY);
+        Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
+        if(sFemaleValue.getLength() && sFemaleColumn.getLength() &&
+                xColAccess.is() &&
+                xColAccess->hasByName(sFemaleColumn))
+        {
+            //get the content and exchange it in the address string
+            Any aCol = xColAccess->getByName(sFemaleColumn);
+            Reference< sdb::XColumn > xColumn;
+            aCol >>= xColumn;
+            if(xColumn.is())
+            {
+                try
+                {
+                    ::rtl::OUString sFemaleColumnValue = xColumn->getString();
+                    bFemale = sFemaleColumnValue == sFemaleValue;
+                    //bNoValue = !sFemaleColumnValue.getLength();
+                    if( !bNoValue )
+                    {
+                        //no last name value marks the greeting also als neutral
+                        SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
+                        ::rtl::OUString sLastNameColumn = rConfig.GetAssignedColumn(MM_PART_LASTNAME);
+                        if ( xColAccess->hasByName(sLastNameColumn) )
+                        {
+                            aCol = xColAccess->getByName(sLastNameColumn);
+                            aCol >>= xColumn;
+                            ::rtl::OUString sLastNameColumnValue = xColumn->getString();
+                            bNoValue = !sLastNameColumnValue.getLength();
+                        }
+                    }
+                }
+                catch( sdbc::SQLException& )
+                {
+                    DBG_ERROR("SQLException caught");
+                }
+            }
+        }
+    }
+
+    String sPreview = bFemale ? m_aFemaleLB.GetSelectEntry() :
+        bNoValue ? m_aNeutralCB.GetText() : m_aMaleLB.GetSelectEntry();
 
     sPreview = SwAddressPreview::FillData(sPreview, m_pWizard->GetConfigItem());
     m_aPreviewWIN.SetAddress(sPreview);
@@ -284,6 +331,12 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent)
     Link aLBoxLink = LINK(this, SwMailMergeGreetingsPage, GreetingSelectHdl_Impl);
     m_aFemaleLB.SetSelectHdl(aLBoxLink);
     m_aMaleLB.SetSelectHdl(aLBoxLink);
+    m_aFemaleColumnLB.SetSelectHdl(aLBoxLink);
+    m_aFemaleFieldCB.SetSelectHdl(aLBoxLink);
+    m_aFemaleFieldCB.SetModifyHdl(aLBoxLink);
+    m_aNeutralCB.SetSelectHdl(aLBoxLink);
+    m_aNeutralCB.SetModifyHdl(aLBoxLink);
+
     Link aDataLink = LINK(this, SwMailMergeGreetingsPage, InsertDataHdl_Impl);
     m_aPrevSetIB.SetClickHdl(aDataLink);
     m_aNextSetIB.SetClickHdl(aDataLink);
@@ -348,13 +401,9 @@ sal_Bool    SwMailMergeGreetingsPage::commitPage( CommitPageReason )
     {
         const SwDBData& rDBData = rConfig.GetCurrentDBData();
         Sequence< ::rtl::OUString> aAssignment = rConfig.GetColumnAssignment( rDBData );
-        sal_Int32 nPos = m_aFemaleColumnLB.GetSelectEntryPos();
         if(aAssignment.getLength() <= MM_PART_GENDER)
             aAssignment.realloc(MM_PART_GENDER + 1);
-        if( nPos > 0 )
-            aAssignment[MM_PART_GENDER] = m_aFemaleColumnLB.GetSelectEntry();
-        else
-            aAssignment[MM_PART_GENDER] = ::rtl::OUString();
+        aAssignment[MM_PART_GENDER] = m_aFemaleColumnLB.GetSelectEntry();
         rConfig.SetColumnAssignment( rDBData, aAssignment );
     }
     if(m_aFemaleFieldCB.GetText() != m_aFemaleFieldCB.GetSavedValue())

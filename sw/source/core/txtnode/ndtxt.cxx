@@ -3581,24 +3581,6 @@ SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
     return pOldColl;
 }
 
-// #111840#
-SwPosition * SwTxtNode::GetPosition(const SwTxtAttr * pAttr)
-{
-    SwPosition * pResult = NULL;
-
-    for (xub_StrLen i = 0; i < Len(); i++)
-    {
-        if (GetTxtAttr(i, pAttr->Which()) == pAttr)
-        {
-            pResult = new SwPosition(*this, SwIndex(this, i));
-
-            break;
-        }
-    }
-
-    return pResult;
-}
-
 SwNodeNum* SwTxtNode::CreateNum() const
 {
     if ( !mpNodeNum )

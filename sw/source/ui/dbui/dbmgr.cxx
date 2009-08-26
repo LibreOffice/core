@@ -3248,18 +3248,21 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
             pWorkView->AttrChangedNotify( &rWorkShell );//Damit SelectShell gerufen wird.
 
-            // merge the data
-            SwDoc* pWorkDoc = rWorkShell.GetDoc();
-            SwNewDBMgr* pWorkDBMgr = pWorkDoc->GetNewDBMgr();
-            pWorkDoc->SetNewDBMgr( this );
-            pWorkDoc->EmbedAllLinks();
-            if(UNDO_UI_DELETE_INVISIBLECNTNT == rWorkShell.GetUndoIds())
-                rWorkShell.Undo();
-            // create a layout
-            rWorkShell.CalcLayout();
-            SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
-            rWorkShell.ViewShell::UpdateFlds();
-            SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
+                // merge the data
+                SwDoc* pWorkDoc = rWorkShell.GetDoc();
+                SwNewDBMgr* pWorkDBMgr = pWorkDoc->GetNewDBMgr();
+                pWorkDoc->SetNewDBMgr( this );
+                pWorkDoc->EmbedAllLinks();
+                if(UNDO_UI_DELETE_INVISIBLECNTNT == rWorkShell.GetUndoIds())
+                    rWorkShell.Undo();
+                // #i69485# lock fields to prevent access to the result set while calculating layout
+                rWorkShell.LockExpFlds();
+                // create a layout
+                rWorkShell.CalcLayout();
+                rWorkShell.UnlockExpFlds();
+                SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
+                rWorkShell.ViewShell::UpdateFlds();
+                SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
 
             // strip invisible content and convert fields to text
             rWorkShell.RemoveInvisibleContent();
@@ -3280,11 +3283,20 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 //create a new pagestyle
                 //copy the pagedesc from the current document to the new document and change the name of the to-be-applied style
 
-                SwDoc* pTargetDoc = pTargetShell->GetDoc();
-                String sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
-                pTargetShell->GetDoc()->MakePageDesc( sNewPageDescName );
-                SwPageDesc* pTargetPageDesc = pTargetShell->FindPageDescByName( sNewPageDescName );
-                if(pSourcePageDesc && pTargetPageDesc)
+                    SwDoc* pTargetDoc = pTargetShell->GetDoc();
+                    String sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
+                    pTargetShell->GetDoc()->MakePageDesc( sNewPageDescName );
+                    SwPageDesc* pTargetPageDesc = pTargetShell->FindPageDescByName( sNewPageDescName );
+                    const SwPageDesc* pWorkPageDesc = rWorkShell.FindPageDescByName( sStartingPageDesc );
+
+                    if(pWorkPageDesc && pTargetPageDesc)
+                    {
+                        pTargetDoc->CopyPageDesc( *pWorkPageDesc, *pTargetPageDesc, sal_False );
+                        sModifiedStartingPageDesc = sNewPageDescName;
+                        lcl_CopyFollowPageDesc( *pTargetShell, *pWorkPageDesc, *pTargetPageDesc, nDocNo );
+                    }
+                }
+                if(nDocNo == 1 || bPageStylesWithHeaderFooter)
                 {
                     pTargetDoc->CopyPageDesc( *pSourcePageDesc, *pTargetPageDesc, sal_False );
                     sModifiedStartingPageDesc = sNewPageDescName;

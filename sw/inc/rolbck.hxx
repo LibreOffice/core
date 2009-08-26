@@ -160,8 +160,8 @@ public:
 
 class SwHistorySetTxtFld : public SwHistoryHint
 {
-    const ::std::auto_ptr<SwFmtFld> m_pFld;
     ::std::auto_ptr<SwFieldType> m_pFldType;
+    const ::std::auto_ptr<SwFmtFld> m_pFld;
     ULONG m_nNodeIndex;
     xub_StrLen m_nPos;
     USHORT m_nFldWhich;

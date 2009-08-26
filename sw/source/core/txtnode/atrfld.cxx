@@ -386,9 +386,4 @@ void SwTxtFld::NotifyContentChange(SwFmtFld& rFmtFld)
     }
 }
 
-// #111840#
-SwPosition * SwTxtFld::GetPosition() const
-{
-    return GetTxtNode().GetPosition(this);
-}
 

@@ -1646,19 +1646,17 @@ void SwPostIt::UpdateData()
 {
     if ( Engine()->IsModified() )
     {
-        SwPosition * pPos = mpFmtFld->GetTxtFld()->GetPosition();
-        if ( pPos )
-        {
-            SwField* pOldField = mpFld->Copy();
-              mpFld->SetPar2(Engine()->GetEditEngine().GetText());
-            mpFld->SetTextObject(Engine()->CreateParaObject());
-            DocView()->GetDocShell()->GetDoc()->AppendUndo(new SwUndoFieldFromDoc(*pPos, *pOldField, *mpFld, 0, true));
-            delete pOldField;
-            delete pPos;
-            // so we get a new layout of notes (ankor position is still the same and we would otherwise not get one)
-            Mgr()->SetLayout();
-            DocView()->GetDocShell()->SetModified();
-        }
+        SwTxtFld* pTxtFld = mpFmtFld->GetTxtFld();
+        SwPosition aPosition( pTxtFld->GetTxtNode() );
+        aPosition.nContent = *pTxtFld->GetStart();
+        SwField* pOldField = mpFld->Copy();
+        mpFld->SetPar2(Engine()->GetEditEngine().GetText());
+        mpFld->SetTextObject(Engine()->CreateParaObject());
+        DocView()->GetDocShell()->GetDoc()->AppendUndo(new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
+        delete pOldField;
+        // so we get a new layout of notes (ankor position is still the same and we would otherwise not get one)
+        Mgr()->SetLayout();
+        DocView()->GetDocShell()->SetModified();
     }
     Engine()->ClearModifyFlag();
     Engine()->GetUndoManager().Clear();
@@ -1698,11 +1696,11 @@ sal_uInt32 SwPostIt::MoveCaret()
 //returns true, if there is another note right before this note
 bool SwPostIt::CalcFollow()
 {
-    SwPosition * pPos = mpFmtFld->GetTxtFld()->GetPosition();
-    const SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
-    SwTxtAttr* pTxtAttr = pTxtNd ? pTxtNd->GetTxtAttr( pPos->nContent.GetIndex()-1,RES_TXTATR_FIELD ) : 0;
+    SwTxtFld* pTxtFld = mpFmtFld->GetTxtFld();
+    SwPosition aPosition( pTxtFld->GetTxtNode() );
+    aPosition.nContent = *pTxtFld->GetStart();
+    SwTxtAttr* pTxtAttr = pTxtFld->GetTxtNode().GetTxtAttr( aPosition.nContent.GetIndex()-1,RES_TXTATR_FIELD );
     const SwField* pFld = pTxtAttr ? pTxtAttr->GetFld().GetFld() : 0;
-    delete pPos;
     return pFld && (pFld->Which()== RES_POSTITFLD);
 }
 
@@ -1710,18 +1708,18 @@ bool SwPostIt::CalcFollow()
 sal_uInt32 SwPostIt::CountFollowing()
 {
     sal_uInt32 aCount = 1;  // we start with 1, so we have to subtract one at the end again
-    SwPosition * pPos = mpFmtFld->GetTxtFld()->GetPosition();
-    const SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
+    SwTxtFld* pTxtFld = mpFmtFld->GetTxtFld();
+    SwPosition aPosition( pTxtFld->GetTxtNode() );
+    aPosition.nContent = *pTxtFld->GetStart();
 
-    SwTxtAttr* pTxtAttr = pTxtNd ? pTxtNd->GetTxtAttr( pPos->nContent.GetIndex()+1,RES_TXTATR_FIELD ) : 0;
+    SwTxtAttr* pTxtAttr = pTxtFld->GetTxtNode().GetTxtAttr( aPosition.nContent.GetIndex()+1,RES_TXTATR_FIELD );
     SwField* pFld = pTxtAttr ? const_cast<SwField*>(pTxtAttr->GetFld().GetFld()) : 0;
     while (pFld && (pFld->Which()== RES_POSTITFLD))
     {
         aCount++;
-        pTxtAttr = pTxtNd ? pTxtNd->GetTxtAttr( pPos->nContent.GetIndex() + aCount,RES_TXTATR_FIELD ) : 0;
+        pTxtAttr = pTxtFld->GetTxtNode().GetTxtAttr( aPosition.nContent.GetIndex() + aCount,RES_TXTATR_FIELD );
         pFld = pTxtAttr ? const_cast<SwField*>(pTxtAttr->GetFld().GetFld()) : 0;
     }
-    delete pPos;
     return aCount - 1;
 }
 
@@ -1828,16 +1826,14 @@ void SwPostIt::InitAnswer(OutlinerParaObject* pText)
     // lets insert an undo step so the initial text can be easily deleted
     // but do not use UpdateData() directly, would set modified state again and reentrance into Mgr
     Engine()->SetModifyHdl( Link() );
-    SwPosition * pPos = mpFmtFld->GetTxtFld()->GetPosition();
-    if ( pPos )
-    {
-        SwField* pOldField = mpFld->Copy();
-        mpFld->SetPar2(Engine()->GetEditEngine().GetText());
-        mpFld->SetTextObject(Engine()->CreateParaObject());
-        DocView()->GetDocShell()->GetDoc()->AppendUndo(new SwUndoFieldFromDoc(*pPos, *pOldField, *mpFld, 0, true));
-        delete pOldField;
-        delete pPos;
-    }
+    SwTxtFld* pTxtFld = mpFmtFld->GetTxtFld();
+    SwPosition aPosition( pTxtFld->GetTxtNode() );
+    aPosition.nContent = *pTxtFld->GetStart();
+    SwField* pOldField = mpFld->Copy();
+    mpFld->SetPar2(Engine()->GetEditEngine().GetText());
+    mpFld->SetTextObject(Engine()->CreateParaObject());
+    DocView()->GetDocShell()->GetDoc()->AppendUndo(new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
+    delete pOldField;
     Engine()->SetModifyHdl( LINK( this, SwPostIt, ModifyHdl ) );
     Engine()->ClearModifyFlag();
     Engine()->GetUndoManager().Clear();

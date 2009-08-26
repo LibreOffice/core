@@ -782,7 +782,9 @@ IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
                 break;
         }
         aPosBox.SelectEntryPos(pOpt->GetPos());
-        aPosBox.Enable( pOpt->GetObjType() != GRAPHIC_CAP && aPosText.IsEnabled() );
+        aPosBox.Enable( pOpt->GetObjType() != GRAPHIC_CAP &&
+                pOpt->GetObjType() != OLE_CAP &&
+                aPosText.IsEnabled() );
         aPosBox.SelectEntryPos(pOpt->GetPos());
 
         USHORT nLevelPos = ( pOpt->GetLevel() < MAXLEVEL ) ? pOpt->GetLevel() + 1 : 0;

@@ -774,16 +774,6 @@ public:
     // count words in given range
     void CountWords( SwDocStat& rStat, xub_StrLen nStart, xub_StrLen nEnd ) const;
 
-    // #111840#
-    /**
-       Returns position of certain text attribute.
-
-       @param pAttr     text attribute to search
-
-       @return position of given attribute or NULL in case of failure
-     */
-    SwPosition * GetPosition(const SwTxtAttr * pAttr);
-
     // Checks some global conditions like loading or destruction of document
     // to economize notifications
     bool IsNotificationEnabled() const;
