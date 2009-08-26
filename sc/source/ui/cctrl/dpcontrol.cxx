@@ -985,11 +985,21 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent, ScDocument* pDoc) :
     maBtnUnselectSingle(this, 0),
     maBtnOk(this),
     maBtnCancel(this),
+    mnCurTabStop(0),
     mpExtendedData(NULL),
     mpOKAction(NULL),
     maWndSize(160, 330),
     mePrevToggleAllState(STATE_DONTKNOW)
 {
+    maTabStopCtrls.reserve(7);
+    maTabStopCtrls.push_back(this);
+    maTabStopCtrls.push_back(&maChecks);
+    maTabStopCtrls.push_back(&maChkToggleAll);
+    maTabStopCtrls.push_back(&maBtnSelectSingle);
+    maTabStopCtrls.push_back(&maBtnUnselectSingle);
+    maTabStopCtrls.push_back(&maBtnOk);
+    maTabStopCtrls.push_back(&maBtnCancel);
+
     const StyleSettings& rStyle = GetSettings().GetStyleSettings();
 
     Point aPos;
@@ -1157,6 +1167,28 @@ void ScDPFieldPopupWindow::selectCurrentMemberOnly(bool bSet)
     maChecks.CheckEntryPos(nSelected, bSet);
 }
 
+void ScDPFieldPopupWindow::cycleFocus(bool bReverse)
+{
+    maTabStopCtrls[mnCurTabStop]->LoseFocus();
+    if (mnCurTabStop == 0)
+        clearSelectedMenuItem();
+
+    if (bReverse)
+    {
+        if (mnCurTabStop > 0)
+            --mnCurTabStop;
+        else
+            mnCurTabStop = maTabStopCtrls.size() - 1;
+    }
+    else
+    {
+        ++mnCurTabStop;
+        if (mnCurTabStop >= maTabStopCtrls.size())
+            mnCurTabStop = 0;
+    }
+    maTabStopCtrls[mnCurTabStop]->GetFocus();
+}
+
 IMPL_LINK( ScDPFieldPopupWindow, ButtonHdl, Button*, pBtn )
 {
     if (pBtn == &maBtnOk)
@@ -1225,6 +1257,26 @@ void ScDPFieldPopupWindow::MouseMove(const MouseEvent& rMEvt)
         queueCloseSubMenu();
 }
 
+long ScDPFieldPopupWindow::Notify(NotifyEvent& rNEvt)
+{
+    switch (rNEvt.GetType())
+    {
+        case EVENT_KEYUP:
+        {
+            const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+            const KeyCode& rCode = pKeyEvent->GetKeyCode();
+            bool bShift = rCode.IsShift();
+            if (rCode.GetCode() == KEY_TAB)
+            {
+                cycleFocus(bShift);
+                return true;
+            }
+        }
+        break;
+    }
+    return ScMenuFloatingWindow::Notify(rNEvt);
+}
+
 void ScDPFieldPopupWindow::Paint(const Rectangle& rRect)
 {
     ScMenuFloatingWindow::Paint(rRect);
@@ -1246,6 +1298,11 @@ void ScDPFieldPopupWindow::Paint(const Rectangle& rRect)
     getSectionPosSize(aPos, aSize, SINGLE_BTN_AREA);
     SetFillColor(rStyle.GetMenuColor());
     DrawRect(Rectangle(aPos,aSize));
+}
+
+Window* ScDPFieldPopupWindow::GetPreferredKeyInputWindow()
+{
+    return maTabStopCtrls[mnCurTabStop];
 }
 
 Reference<XAccessible> ScDPFieldPopupWindow::CreateAccessible()

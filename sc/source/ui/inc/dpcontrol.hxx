@@ -273,7 +273,9 @@ public:
     virtual ~ScDPFieldPopupWindow();
 
     virtual void MouseMove(const MouseEvent& rMEvt);
+    virtual long Notify(NotifyEvent& rNEvt);
     virtual void Paint(const Rectangle& rRect);
+    virtual Window* GetPreferredKeyInputWindow();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     void setMemberSize(size_t n);
@@ -334,6 +336,7 @@ private:
 
     void setAllMemberState(bool bSet);
     void selectCurrentMemberOnly(bool bSet);
+    void cycleFocus(bool bReverse = false);
 
     DECL_LINK( ButtonHdl, Button* );
     DECL_LINK( TriStateHdl, TriStateBox* );
@@ -348,6 +351,9 @@ private:
 
     OKButton        maBtnOk;
     CancelButton    maBtnCancel;
+
+    ::std::vector<Window*>          maTabStopCtrls;
+    size_t                          mnCurTabStop;
 
     ::std::vector<Member>           maMembers;
     ::std::auto_ptr<ExtendedData>   mpExtendedData;
