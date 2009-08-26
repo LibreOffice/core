@@ -95,6 +95,9 @@ BUILD_DIR=
 MYCWD=$(shell cygpath -m $(shell @pwd))/$(INPATH)/misc/build
 python_CFLAGS=-mno-cygwin -mthreads
 python_LDFLAGS=-mno-cygwin -mthreads
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+python_LDFLAGS+=-shared-libgcc
+.ENDIF
 CONFIGURE_ACTION=./configure --prefix=$(MYCWD)/python-inst --enable-shared CC="$(CC:s/guw.exe //)" CXX="$(CXX:s/guw.exe //)" MACHDEP=MINGW32 LN="cp -p" CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
 BUILD_ACTION=$(ENV_BUILD) make ; make install
 .ELSE
