@@ -166,7 +166,7 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
     }
     else if ((SQL_ISRULE(pPredicateNode,search_condition) || (SQL_ISRULE(pPredicateNode,boolean_term)))
                             &&          // AND/OR-Verknuepfung:
-             pPredicateNode->count() == 3)
+                            pPredicateNode->count() == 3)
     {
         execute(pPredicateNode->getChild(0));                           // Bearbeiten des linken Zweigs
         execute(pPredicateNode->getChild(2));                           // Bearbeiten des rechten Zweigs
@@ -182,6 +182,11 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
         {
             DBG_ERROR("OPredicateCompiler: Fehler im Parse Tree");
         }
+    }
+    else if (SQL_ISRULE(pPredicateNode,boolean_factor))
+    {
+        execute(pPredicateNode->getChild(1));
+        m_aCodeList.push_back(new OOp_NOT());
     }
     else if (SQL_ISRULE(pPredicateNode,comparison_predicate))
     {
