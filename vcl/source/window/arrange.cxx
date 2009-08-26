@@ -661,7 +661,7 @@ void LabelColumn::resize()
 
 size_t LabelColumn::addRow( Window* i_pLabel, boost::shared_ptr<WindowArranger> const& i_rElement, long i_nIndent )
 {
-    boost::shared_ptr< LabeledElement > xLabel( new LabeledElement( this, 2 ) );
+    boost::shared_ptr< LabeledElement > xLabel( new LabeledElement( this, 1 ) );
     xLabel->setLabel( i_pLabel );
     xLabel->setBorders( 0, i_nIndent, 0, 0, 0 );
     xLabel->setElement( i_rElement );
@@ -672,7 +672,7 @@ size_t LabelColumn::addRow( Window* i_pLabel, boost::shared_ptr<WindowArranger> 
 
 size_t LabelColumn::addRow( Window* i_pLabel, Window* i_pElement, long i_nIndent )
 {
-    boost::shared_ptr< LabeledElement > xLabel( new LabeledElement( this, 2 ) );
+    boost::shared_ptr< LabeledElement > xLabel( new LabeledElement( this, 1 ) );
     xLabel->setLabel( i_pLabel );
     xLabel->setBorders( 0, i_nIndent, 0, 0, 0 );
     xLabel->setElement( i_pElement );
