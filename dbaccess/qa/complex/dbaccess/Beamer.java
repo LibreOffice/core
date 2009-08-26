@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: ApplicationController.java,v $
+ * $RCSfile: Beamer.java,v $
  * $Revision: 1.1.2.1 $
  *
  * This file is part of OpenOffice.org.
@@ -29,38 +29,52 @@
  ************************************************************************/
 package complex.dbaccess;
 
+import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XEnumeration;
+import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XComponentLoader;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XDispatch;
+import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdb.CommandType;
+import com.sun.star.sdb.XDocumentDataSource;
 import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+import com.sun.star.uno.XNamingService;
+import com.sun.star.util.URL;
+import com.sun.star.util.XCloseable;
+import com.sun.star.util.XURLTransformer;
+import com.sun.star.view.XSelectionSupplier;
+import connectivity.tools.DataSource;
 import connectivity.tools.HsqlColumnDescriptor;
 import connectivity.tools.HsqlDatabase;
 import connectivity.tools.HsqlTableDescriptor;
 import helper.URLHelper;
 import java.io.File;
 import java.io.IOException;
+import util.UITools;
 
 /** complex test case for Base's application UI
  */
-public class ApplicationController extends complexlib.ComplexTestCase
+public class Beamer extends complexlib.ComplexTestCase
 {
 
-    private HsqlDatabase m_database;
-    private XOfficeDatabaseDocument m_databaseDocument;
-    private XDatabaseDocumentUI m_documentUI;
+    private XModel docModel;
 
-    public ApplicationController()
+    public Beamer()
     {
         super();
     }
@@ -87,7 +101,7 @@ public class ApplicationController extends complexlib.ComplexTestCase
     {
         return new String[]
                 {
-                    "checkSaveAs"
+                    "testBeamer"
                 };
     }
 
@@ -106,101 +120,75 @@ public class ApplicationController extends complexlib.ComplexTestCase
     // --------------------------------------------------------------------------------------------------------
     private void impl_closeDocument()
     {
-        if (m_database != null)
-        {
-            m_database.close();
-            m_database = null;
-            m_databaseDocument = null;
-            m_documentUI = null;
-        }
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    private void impl_switchToDocument(String _documentURL) throws java.lang.Exception
-    {
-        // close previous database document
-        impl_closeDocument();
-
-        // create/load the new database document
-        m_database = (_documentURL == null)
-                ? new HsqlDatabase(getORB())
-                : new HsqlDatabase(getORB(), _documentURL);
-        m_databaseDocument = m_database.getDatabaseDocument();
-
-        // load it into a frame
-        final Object object = getORB().createInstance("com.sun.star.frame.Desktop");
-        final XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, object);
-        final XComponent loadedComponent = xComponentLoader.loadComponentFromURL(m_database.getDocumentURL(), "_blank", FrameSearchFlag.ALL, new PropertyValue[0]);
-
-        assure("too many document instances!",
-                UnoRuntime.areSame(loadedComponent, m_databaseDocument));
-
-        // get the controller, which provides access to various UI operations
-        final XModel docModel = (XModel) UnoRuntime.queryInterface(XModel.class,
-                loadedComponent);
-        m_documentUI = (XDatabaseDocumentUI) UnoRuntime.queryInterface(XDatabaseDocumentUI.class,
-                docModel.getCurrentController());
     }
 
     // --------------------------------------------------------------------------------------------------------
     public void before() throws Exception, java.lang.Exception
     {
-        impl_switchToDocument(null);
+        // load it into a frame
+        final Object object = getORB().createInstance("com.sun.star.frame.Desktop");
+        final XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, object);
+        final XComponent loadedComponent = xComponentLoader.loadComponentFromURL("private:factory/swriter", "_blank", 0, new PropertyValue[0]);
+        // get the controller, which provides access to various UI operations
+        docModel = (XModel) UnoRuntime.queryInterface(XModel.class, loadedComponent);
     }
 
     // --------------------------------------------------------------------------------------------------------
     public void after()
     {
-        impl_closeDocument();
     }
     // --------------------------------------------------------------------------------------------------------
 
-    public void checkSaveAs() throws Exception, IOException, java.lang.Exception
+    public void testBeamer() throws Exception, IOException, java.lang.Exception
     {
-        // issue 93737 describes the problem that when you save-as a database document, and do changes to it,
-        // then those changes are saved in the old document, actually
-        final String oldDocumentURL = m_database.getDocumentURL();
+        final XController controller = docModel.getCurrentController();
+        final XFrame frame = controller.getFrame();
+        final XDispatchProvider dispatchP = (XDispatchProvider) UnoRuntime.queryInterface(XDispatchProvider.class, frame);
+        URL command = new URL();
+        // command.Complete = ".component:DB/DataSourceBrowser";
+        command.Complete = ".uno:ViewDataSourceBrowser";
 
-        final File documentFile = java.io.File.createTempFile(getTestObjectName(), ".odb");
-        documentFile.deleteOnExit();
-        final String newDocumentURL = URLHelper.getFileURLFromSystemPath(documentFile.getAbsoluteFile());
+        Object instance = getORB().createInstance("com.sun.star.util.URLTransformer");
+        XURLTransformer atrans = (XURLTransformer) UnoRuntime.queryInterface(XURLTransformer.class, instance);
+        com.sun.star.util.URL[] aURLA = new com.sun.star.util.URL[1];
+        aURLA[0] = command;
+        atrans.parseStrict(aURLA);
+        command = aURLA[0];
 
-        // store the doc in a new location
-        final XStorable storeDoc = (XStorable) UnoRuntime.queryInterface(XStorable.class,
-                m_databaseDocument);
-        storeDoc.storeAsURL(newDocumentURL, new PropertyValue[]
-                {
-                });
+        final XDispatch dispatch = dispatchP.queryDispatch(command, "_self", FrameSearchFlag.AUTO);
+        assure(dispatch != null);
+        dispatch.dispatch(command, new PropertyValue[0]);
 
-        // connect
-        m_documentUI.connect();
-        assure("could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected());
+        final PropertyValue[] props = new PropertyValue[]
+        {
+            new PropertyValue("DataSourceName", 0, "Bibliography", PropertyState.DIRECT_VALUE),
+            new PropertyValue("CommandType", 0, Integer.valueOf(CommandType.TABLE), PropertyState.DIRECT_VALUE),
+            new PropertyValue("Command", 0, "biblio", PropertyState.DIRECT_VALUE)
+        };
 
-        // create a table in the database
-        m_database.createTable(new HsqlTableDescriptor("abc", new HsqlColumnDescriptor[]
-                {
-                    new HsqlColumnDescriptor("a", "VARCHAR(50)"),
-                    new HsqlColumnDescriptor("b", "VARCHAR(50)"),
-                    new HsqlColumnDescriptor("c", "VARCHAR(50)")
-                }));
+        final XFrame beamer = frame.findFrame("_beamer", 0);
+        assure(beamer != null);
+        final XEnumerationAccess evtBc = (XEnumerationAccess) UnoRuntime.queryInterface(XEnumerationAccess.class, getORB().createInstance("com.sun.star.frame.GlobalEventBroadcaster"));
+        XEnumeration enumeration = evtBc.createEnumeration();
+        int count = -1;
+        while (enumeration.hasMoreElements())
+        {
+            enumeration.nextElement();
+            ++count;
+        }
+        final XSelectionSupplier selSup = (XSelectionSupplier)UnoRuntime.queryInterface(XSelectionSupplier.class, beamer.getController());
+        selSup.select(props);
+        final com.sun.star.util.XCloseable close = (com.sun.star.util.XCloseable)UnoRuntime.queryInterface(com.sun.star.util.XCloseable.class, frame);
+        close.close(false);
 
-        // load the old document, and verify there is *no* table therein
-        impl_switchToDocument(oldDocumentURL);
-        m_documentUI.connect();
-        assure("could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected());
-        XTablesSupplier suppTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class,
-                m_documentUI.getActiveConnection());
-        XNameAccess tables = suppTables.getTables();
-        assure("the table was created in the wrong database", !tables.hasByName("abc"));
+        enumeration = evtBc.createEnumeration();
+        int count2 = 0;
+        while (enumeration.hasMoreElements())
+        {
+            enumeration.nextElement();
+            ++count2;
+        }
 
-        // load the new document, and verify there *is* a table therein
-        impl_switchToDocument(newDocumentURL);
-        m_documentUI.connect();
-        assure("could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected());
-
-        suppTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class,
-                m_documentUI.getActiveConnection());
-        tables = suppTables.getTables();
-        assure("the newly created table has not been written", tables.hasByName("abc"));
+        assure("count1 = " + count + " count2 = " + count2, count == count2);
     }
 }

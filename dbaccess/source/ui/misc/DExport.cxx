@@ -353,8 +353,8 @@ void ODatabaseExport::insertValueIntoColumn()
                             {
                                 Reference< XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
                                 Reference<XNumberFormatTypes> xNumType(xSupplier->getNumberFormats(),UNO_QUERY);
-                                sal_Int16 nFormats[] = { NumberFormat::DATETIME
-                                    ,NumberFormat::DATETIME
+                                sal_Int16 nFormats[] = {
+                                    NumberFormat::DATETIME
                                     ,NumberFormat::DATE
                                     ,NumberFormat::TIME
                                     ,NumberFormat::NUMBER
@@ -393,13 +393,17 @@ void ODatabaseExport::insertValueIntoColumn()
                                     switch(nType)
                                     {
                                         case NumberFormat::DATE:
+                                            m_pUpdateHelper->updateDate(nPos,::dbtools::DBTypeConversion::toDate(fOutNumber,m_aNullDate));
+                                            break;
                                         case NumberFormat::DATETIME:
-                                            fOutNumber = ::dbtools::DBTypeConversion::toStandardDbDate(m_aNullDate,fOutNumber);
+                                            m_pUpdateHelper->updateTimestamp(nPos,::dbtools::DBTypeConversion::toDateTime(fOutNumber,m_aNullDate));
+                                            break;
+                                        case NumberFormat::TIME:
+                                            m_pUpdateHelper->updateTime(nPos,::dbtools::DBTypeConversion::toTime(fOutNumber));
                                             break;
                                         default:
-                                            ;
+                                            m_pUpdateHelper->updateDouble(nPos,fOutNumber);
                                     }
-                                    m_pUpdateHelper->updateDouble(nPos,fOutNumber);//::dbtools::DBTypeConversion::getStandardDate()
                                 }
                                 catch(Exception&)
                                 {

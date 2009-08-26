@@ -202,6 +202,7 @@ namespace dbaccess
         // called from the rowset when a updateXXX was called for the first time
         void setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRow);
         ORowSetCacheIterator createIterator(ORowSetBase* _pRowSet);
+        void deleteIterator(const ORowSetBase* _pRowSet);
         // sets the size of the matrix
         void setMaxRowSize(sal_Int32 _nSize);
 

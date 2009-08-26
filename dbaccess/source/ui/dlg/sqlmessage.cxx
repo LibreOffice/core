@@ -539,14 +539,17 @@ void OSQLMessageBox::impl_positionControls()
 {
     OSL_PRECOND( !m_pImpl->aDisplayInfo.empty(), "OSQLMessageBox::impl_positionControls: nothing to display at all?" );
 
-    const ExceptionDisplayInfo& rFirstInfo = *m_pImpl->aDisplayInfo.begin();
+
+    if ( m_pImpl->aDisplayInfo.empty() )
+        return;
     const ExceptionDisplayInfo* pSecondInfo = NULL;
+
+    const ExceptionDisplayInfo& rFirstInfo = *m_pImpl->aDisplayInfo.begin();
     if ( m_pImpl->aDisplayInfo.size() > 1 )
         pSecondInfo = &m_pImpl->aDisplayInfo[1];
-
-    // one or two texts to display?
     String sPrimary, sSecondary;
     sPrimary = rFirstInfo.sMessage;
+    // one or two texts to display?
     if ( pSecondInfo )
     {
         // we show two elements in the main dialog if and only if one of

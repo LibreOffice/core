@@ -691,6 +691,10 @@ sal_Bool ODesignView::handleKeyEvent(const KeyEvent& _rEvent)
 {
     if ( (m_pPropWin && m_pPropWin->HasChildPathFocus()) )
         return sal_False;
+    if ( (m_pAddField && m_pAddField->HasChildPathFocus()) )
+        return sal_False;
+    if ( (m_pReportExplorer && m_pReportExplorer->HasChildPathFocus()) )
+        return sal_False;
     return m_aScrollWindow.handleKeyEvent(_rEvent);
 }
 //------------------------------------------------------------------------

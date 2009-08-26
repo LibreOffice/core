@@ -80,7 +80,6 @@ SRC1FILES =	\
         advancedsettings.src\
         UserAdminDlg.src	\
         sqlmessage.src      \
-        ExtensionNotPresent.src \
         textconnectionsettings.src
 
 
@@ -119,7 +118,6 @@ EXCEPTIONSFILES=						\
         $(SLO)$/dbfindex.obj            \
         $(SLO)$/DriverSettings.obj      \
         $(SLO)$/odbcconfig.obj          \
-        $(SLO)$/ExtensionNotPresent.obj \
         $(SLO)$/advancedsettings.obj    \
         $(SLO)$/datasourceui.obj	\
         $(SLO)$/textconnectionsettings.obj

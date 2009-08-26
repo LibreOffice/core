@@ -559,7 +559,8 @@ namespace dbaui
         }
         if ( aFileDlg.Execute() == ERRCODE_NONE )
         {
-            if ( aFileDlg.GetCurrentFilter() != pFilter->GetUIName() )
+            String sPath = aFileDlg.GetPath();
+            if ( aFileDlg.GetCurrentFilter() != pFilter->GetUIName() || !pFilter->GetWildcard().Matches(sPath) )
             {
                 String sMessage(ModuleRes(STR_ERR_USE_CONNECT_TO));
                 InfoBox aError(this, sMessage);
@@ -568,7 +569,7 @@ namespace dbaui
                 OnSetupModeSelected(&m_aRB_GetExistingDatabase);
                 return 0L;
             }
-            m_aBrowsedDocument.sURL = aFileDlg.GetPath();
+            m_aBrowsedDocument.sURL = sPath;
             m_aBrowsedDocument.sFilter = String();
             m_aChooseDocumentHandler.Call( this );
             return 1L;

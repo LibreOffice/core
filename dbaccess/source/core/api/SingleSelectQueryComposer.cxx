@@ -1457,7 +1457,8 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
 
     if ( !column.is()
         || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_VALUE)
-        || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME) )
+        || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME)
+        || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_TYPE))
         throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,Any() );
 
     sal_Int32 nType = 0;

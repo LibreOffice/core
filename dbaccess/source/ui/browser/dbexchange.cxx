@@ -61,6 +61,7 @@
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
 #endif
+#include "UITools.hxx"
 
 
 namespace dbaui
@@ -141,7 +142,8 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     ODataClipboard::ODataClipboard( const Reference< XPropertySet >& _rxLivingForm,
                                     const Sequence< Any >& _rSelectedRows,
-                                    const Reference< XResultSet>& _rxResultSet)
+                                    const Reference< XResultSet>& _rxResultSet,
+                                    const Reference< XMultiServiceFactory >& _rxORB)
         :ODataAccessObjectTransferable( _rxLivingForm )
         ,m_pHtml(NULL)
         ,m_pRtf(NULL)
@@ -157,6 +159,20 @@ namespace dbaui
         getDescriptor()[daBookmarkSelection]<<= sal_False;  // by definition, it's the indicies
         getDescriptor()[daCursor]           <<= _rxResultSet;
         addCompatibleSelectionDescription( _rSelectedRows );
+
+        if ( xConnection.is() && _rxORB.is() )
+        {
+            Reference< XNumberFormatter > xFormatter( getNumberFormatter( xConnection, _rxORB ) );
+            if ( xFormatter.is() )
+            {
+                m_pHtml = new OHTMLImportExport( getDescriptor(),_rxORB, xFormatter );
+                m_aEventListeners.push_back( m_pHtml );
+
+                m_pRtf = new ORTFImportExport( getDescriptor(),_rxORB, xFormatter );
+                m_aEventListeners.push_back( m_pRtf );
+            }
+        }
+
 
         osl_decrementInterlockedCount( &m_refCount );
     }

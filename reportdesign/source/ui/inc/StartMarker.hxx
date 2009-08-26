@@ -54,6 +54,7 @@ namespace rptui
 
         sal_Bool                    m_bShowRuler;
 
+        void changeImage();
         void initDefaultNodeImages();
         void setColor();
         virtual void ImplInitSettings();

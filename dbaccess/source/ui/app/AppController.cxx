@@ -155,7 +155,7 @@
 #ifndef _DBAUI_LISTVIEWITEMS_HXX_
 #include "listviewitems.hxx"
 #endif
-#include "ExtensionNotPresent.hxx"
+
 #ifndef DBAUI_APPDETAILVIEW_HXX
 #include "AppDetailView.hxx"
 #endif

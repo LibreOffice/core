@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: Parser.java,v $
- * $Revision: 1.1.6.2 $
+ * $RCSfile: RowSetEventListener.java,v $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,21 +27,27 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package complex.dbaccess;
 
-public class FileHelper
+import com.sun.star.lib.uno.helper.WeakBase;
+import com.sun.star.task.XInteractionHandler;
+import com.sun.star.task.XInteractionRequest;
+
+/**
+ *
+ * @author oj93728
+ */
+class CopyTableInterActionHandler extends WeakBase
+        implements XInteractionHandler
 {
-    private FileHelper(){}
-    static public String getOOoCompatibleFileURL( String _javaFileURL )
+    private final CopyTableWizard test;
+    public CopyTableInterActionHandler(CopyTableWizard testCase)
     {
-        String returnURL = _javaFileURL;
-        if ( ( returnURL.indexOf( "file:/" ) == 0 ) && ( returnURL.indexOf( "file:///" ) == -1 ) )
-        {
-            // for some reason, the URLs here in Java start with "file:/" only, instead of "file:///"
-            // Some of the office code doesn't like this ...
-            returnURL = "file:///" + returnURL.substring( 6 );
-        }
-        return returnURL;
+        test = testCase;
+    }
+
+    public void handle(XInteractionRequest xRequest)
+    {
+        test.assure(xRequest.toString());
     }
 }
