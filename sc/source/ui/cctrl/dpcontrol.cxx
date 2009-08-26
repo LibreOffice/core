@@ -47,9 +47,11 @@
 #include "AccessibleFilterTopWindow.hxx"
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::accessibility::XAccessible;
+using ::com::sun::star::accessibility::XAccessibleContext;
 using ::rtl::OUString;
 using ::rtl::OUStringHash;
 using ::std::vector;
@@ -705,6 +707,26 @@ void ScMenuFloatingWindow::selectMenuItem(size_t nPos, bool bSelected, bool bSub
             }
             else
                 queueCloseSubMenu();
+        }
+
+        if (mxAccessible.is())
+        {
+            // Fire a menu highlight event since the accessibility framework
+            // needs this to track focus on menu items.
+            do
+            {
+                Reference<XAccessibleContext> xAccCxt = mxAccessible->getAccessibleContext();
+                if (!xAccCxt.is())
+                    break;
+
+                Reference<XAccessible> xAccMenu = xAccCxt->getAccessibleChild(nPos);
+                if (!xAccMenu.is())
+                    break;
+
+                VclAccessibleEvent aEvent(VCLEVENT_MENU_HIGHLIGHT, xAccMenu);
+                FireVclEvent(&aEvent);
+            }
+            while (false);
         }
     }
 }
