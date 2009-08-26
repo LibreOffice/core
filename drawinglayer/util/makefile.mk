@@ -72,6 +72,7 @@ SHL1STDLIBS=\
         $(CPPUHELPERLIB)	\
         $(CPPULIB)			\
         $(AVMEDIALIB)		\
+        $(I18NISOLANGLIB)	\
         $(COMPHELPERLIB)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def

@@ -1777,7 +1777,7 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
         ::rtl::OUString aOUText( aText );
         USHORT nTextLen = (USHORT)aOUText.getLength();
 
-        long nPos = 0;
+        sal_Int32 nPos = 0;
         short nScriptType = _xBI->getScriptType( aOUText, nPos );
         rTypes.Insert( ScriptTypePosInfo( nScriptType, (USHORT)nPos, nTextLen ), rTypes.Count() );
         nPos = _xBI->endOfScript( aOUText, nPos, nScriptType );
@@ -1795,6 +1795,17 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
             }
             else
             {
+                if ( _xBI->getScriptType( aOUText, nPos - 1 ) == i18n::ScriptType::WEAK )
+                {
+                    switch ( u_charType(aOUText.iterateCodePoints(&nPos, 0) ) ) {
+                    case U_NON_SPACING_MARK:
+                    case U_ENCLOSING_MARK:
+                    case U_COMBINING_SPACING_MARK:
+                        --nPos;
+                        rTypes[rTypes.Count()-1].nEndPos--;
+                        break;
+                    }
+                }
                 rTypes.Insert( ScriptTypePosInfo( nScriptType, (USHORT)nPos, nTextLen ), rTypes.Count() );
             }
 

@@ -189,6 +189,7 @@ namespace drawinglayer
 
                         aScale.getY(),
                         fRotate,
+                        rTextCandidate.getLocale(),
                         *mpOutputDevice));
 
                     if(!basegfx::fTools::equal(aScale.getX(), aScale.getY()))
@@ -210,6 +211,7 @@ namespace drawinglayer
                                 aScale.getX(),
                                 aScale.getY(),
                                 fRotate,
+                                rTextCandidate.getLocale(),
                                 *mpOutputDevice);
                         }
                     }
