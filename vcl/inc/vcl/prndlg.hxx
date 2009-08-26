@@ -244,6 +244,7 @@ namespace vcl
 
         rtl::OUString                           maPrintToFileText;
         rtl::OUString                           maPrintText;
+        rtl::OUString                           maDefPrtText;
 
         vcl::RowOrColumn                        maLayout;
 

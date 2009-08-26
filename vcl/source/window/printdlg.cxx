@@ -530,22 +530,11 @@ void PrintDialog::JobTabPage::setupLayout()
     // remember details controls
     mxDetails = xIndent;
     // create a column for the details
-    boost::shared_ptr< vcl::RowOrColumn > xDetCol( new vcl::RowOrColumn( xIndent.get() ) );
-    xIndent->setChild( xDetCol );
-    // create a row for stati and properties button
-    boost::shared_ptr< vcl::RowOrColumn > xStateRow( new vcl::RowOrColumn( xDetCol.get(), false ) );
-    xDetCol->addChild( xStateRow );
-    boost::shared_ptr< vcl::RowOrColumn > xLabelCol( new vcl::RowOrColumn( xStateRow.get(), true, aBorder.Height() ) );
-    xStateRow->addChild( xLabelCol );
-    xLabelCol->addWindow( &maStatusLabel );
-    xLabelCol->addWindow( &maLocationLabel );
-    xLabelCol->addWindow( &maCommentLabel );
-
-    boost::shared_ptr< vcl::RowOrColumn > xStatusCol( new vcl::RowOrColumn( xStateRow.get(), true, aBorder.Height() ) );
-    xStateRow->addChild( xStatusCol );
-    xStatusCol->addWindow( &maStatusTxt );
-    xStatusCol->addWindow( &maLocationTxt );
-    xStatusCol->addWindow( &maCommentTxt );
+    boost::shared_ptr< vcl::LabelColumn > xLabelCol( new vcl::LabelColumn( xIndent.get(), aBorder.Height() ) );
+    xIndent->setChild( xLabelCol );
+    xLabelCol->addRow( &maStatusLabel, &maStatusTxt );
+    xLabelCol->addRow( &maLocationLabel, &maLocationTxt );
+    xLabelCol->addRow( &maCommentLabel, &maCommentTxt );
 
     // add print range and copies columns
     maLayout.addWindow( &maCopies );
@@ -707,6 +696,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     , mnCurPage( 0 )
     , mnCachedPages( 0 )
     , maPrintToFileText( String( VclResId( SV_PRINT_TOFILE_TXT ) ) )
+    , maDefPrtText( String( VclResId( SV_PRINT_DEFPRT_TXT ) ) )
 {
     FreeResource();
 
@@ -1639,13 +1629,17 @@ static rtl::OUString searchAndReplace( const rtl::OUString& i_rOrig, const char*
 
 void PrintDialog::updatePrinterText()
 {
+    String aDefPrt( Printer::GetDefaultPrinterName() );
     const QueueInfo* pInfo = Printer::GetQueueInfo( maJobPage.maPrinters.GetSelectEntry(), true );
     if( pInfo )
     {
         maJobPage.maLocationTxt.SetText( pInfo->GetLocation() );
         maJobPage.maCommentTxt.SetText( pInfo->GetComment() );
         // FIXME: status text
-        maJobPage.maStatusTxt.SetText( String() );
+        rtl::OUString aStatus;
+        if( aDefPrt == pInfo->GetPrinterName() )
+            aStatus = maDefPrtText;
+        maJobPage.maStatusTxt.SetText( aStatus );
     }
     else
     {
