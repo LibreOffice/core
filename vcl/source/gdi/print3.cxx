@@ -189,6 +189,7 @@ public:
             return maMultiPage.aPaperSize;
         return i_rPageSize;
     }
+    PrinterController::PageSize modifyJobSetup( const Sequence< PropertyValue >& i_rProps );
 };
 
 PrinterController::PrinterController()
@@ -588,10 +589,10 @@ bool PrinterController::setupPrinter( Window* i_pParent )
     return bRet;
 }
 
-static PrinterController::PageSize modifyJobSetup( Printer* pPrinter, const Sequence< PropertyValue >& i_rProps )
+PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( const Sequence< PropertyValue >& i_rProps )
 {
     PrinterController::PageSize aPageSize;
-    aPageSize.aSize = pPrinter->GetPaperSize();
+    aPageSize.aSize = mpPrinter->GetPaperSize();
     for( sal_Int32 nProperty = 0, nPropertyCount = i_rProps.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
         if( i_rProps[ nProperty ].Name.equalsAscii( "PageSize" ) )
@@ -601,9 +602,10 @@ static PrinterController::PageSize modifyJobSetup( Printer* pPrinter, const Sequ
             aPageSize.aSize.Width() = aSize.Width;
             aPageSize.aSize.Height() = aSize.Height;
 
-            Size aCurSize( pPrinter->GetPaperSize() );
-            if( aPageSize.aSize != aCurSize )
-                pPrinter->SetPaperSizeUser( aPageSize.aSize );
+            Size aCurSize( mpPrinter->GetPaperSize() );
+            Size aRealPaperSize( getRealPaperSize( aPageSize.aSize ) );
+            if( aRealPaperSize != aCurSize )
+                mpPrinter->SetPaperSizeUser( aRealPaperSize );
         }
         if( i_rProps[ nProperty ].Name.equalsAscii( "PageIncludesNonprintableArea" ) )
         {
@@ -670,7 +672,7 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
     mpImplData->mpPrinter->SetMapMode( aMapMode );
 
     // modify job setup if necessary
-    PrinterController::PageSize aPageSize = modifyJobSetup( mpImplData->mpPrinter.get(), aPageParm );
+    PrinterController::PageSize aPageSize = mpImplData->modifyJobSetup( aPageParm );
 
     o_rMtf.SetPrefSize( aPageSize.aSize );
     o_rMtf.SetPrefMapMode( aMapMode );
