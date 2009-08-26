@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.21 $
+# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -31,34 +31,29 @@
 
 PRJ=..$/..
 
-PRJNAME=svtools
-TARGET=unoiface
 ENABLE_EXCEPTIONS=TRUE
+PRJNAME=svtools
+TARGET=table
+#LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE : settings.mk
-.INCLUDE : $(PRJ)$/util$/svt.pmk
+.INCLUDE :	settings.mk
+.INCLUDE :  $(PRJ)$/util$/svt.pmk
 
 # --- Files --------------------------------------------------------
 
-SRS1NAME=	uno
-SRC1FILES=  unoifac2.src
+SLOFILES=\
+        $(SLO)$/tablecontrol.obj \
+        $(SLO)$/tablecontrol_impl.obj \
+        $(SLO)$/gridtablerenderer.obj \
+        $(SLO)$/tablegeometry.obj \
+        $(SLO)$/defaultinputhandler.obj \
+        $(SLO)$/tabledatawindow.obj
 
-SLOFILES= \
-            $(SLO)$/unoiface.obj \
-            $(SLO)$/unoevent.obj \
-            $(SLO)$/unoimap.obj \
-            $(SLO)$/toolboxcontroller.obj \
-            $(SLO)$/framestatuslistener.obj \
-            $(SLO)$/statusbarcontroller.obj \
-            $(SLO)$/genericunodialog.obj \
-            $(SLO)$/generictoolboxcontroller.obj \
-            $(SLO)$/treecontrolpeer.obj \
-            $(SLO)$/unocontroltablemodel.obj \
-            $(SLO)$/registerservices.obj\
-            $(SLO)$/contextmenuhelper.obj
+#LIB1TARGET=     $(SLB)$/$(TARGET).lib
+#LIB1OBJFILES=   $(SLOFILES)
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE : target.mk
+.INCLUDE :	target.mk

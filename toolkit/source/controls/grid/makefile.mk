@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.21 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,36 +29,26 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=..$/..$/..
 
-PRJNAME=svtools
-TARGET=unoiface
+PRJNAME=toolkit
+TARGET=grid
+
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE : settings.mk
-.INCLUDE : $(PRJ)$/util$/svt.pmk
+.INCLUDE :	settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
 
-SRS1NAME=	uno
-SRC1FILES=  unoifac2.src
-
-SLOFILES= \
-            $(SLO)$/unoiface.obj \
-            $(SLO)$/unoevent.obj \
-            $(SLO)$/unoimap.obj \
-            $(SLO)$/toolboxcontroller.obj \
-            $(SLO)$/framestatuslistener.obj \
-            $(SLO)$/statusbarcontroller.obj \
-            $(SLO)$/genericunodialog.obj \
-            $(SLO)$/generictoolboxcontroller.obj \
-            $(SLO)$/treecontrolpeer.obj \
-            $(SLO)$/unocontroltablemodel.obj \
-            $(SLO)$/registerservices.obj\
-            $(SLO)$/contextmenuhelper.obj
-
+SLOFILES=   \
+            $(SLO)$/gridcontrol.obj\
+            $(SLO)$/defaultgriddatamodel.obj\
+            $(SLO)$/defaultgridcolumnmodel.obj\
+            $(SLO)$/gridcolumn.obj
+            
 # --- Targets ------------------------------------------------------
 
-.INCLUDE : target.mk
+.INCLUDE :	target.mk
