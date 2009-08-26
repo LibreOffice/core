@@ -826,7 +826,26 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maPController->setOptionChangeHdl( LINK( this, PrintDialog, UIOptionsChanged ) );
 
     // set min size pixel to current size
-    SetMinOutputSizePixel( GetOutputSizePixel() );
+    Size aOutSize( GetOutputSizePixel() );
+    SetMinOutputSizePixel( aOutSize );
+
+    // if there is space enough, enlarge the preview so it gets roughly as
+    // high as the tab control
+    if( aOutSize.Width() < 768 )
+    {
+        Size aJobPageSize( getJobPageSize() );
+        Size aTabSize( maTabCtrl.GetSizePixel() );
+        long nOptPreviewWidth = aTabSize.Height() * aJobPageSize.Width() / aJobPageSize.Height();
+        // add space for borders
+        nOptPreviewWidth += 15;
+        if( aOutSize.Width() - aTabSize.Width() < nOptPreviewWidth )
+        {
+            aOutSize.Width() = aTabSize.Width() + nOptPreviewWidth;
+            if( aOutSize.Width() > 768 ) // don't enlarge the dialog too much
+                aOutSize.Width() = 768;
+            SetOutputSizePixel( aOutSize );
+        }
+    }
 
     // restore settings from last run
     readFromSettings();
