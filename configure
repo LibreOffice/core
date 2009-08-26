@@ -892,6 +892,14 @@ HAVE_GCC_VISIBILITY_FEATURE
 USE_SYSTEM_STL
 STLPORT_VER
 STLPORT4
+EXCEPTIONS
+MINGW_GXXDLL
+MINGW_GCCDLL
+MINGW_SHARED_GXXLIB
+MINGW_GCCLIB_EH
+MINGW_SHARED_GCCLIB
+MINGW_CLIB_DIR
+MINGW_BACKWARD_INCLUDE_PATH
 MINGW_LIB_INCLUDE_PATH
 GXX_INCLUDE_PATH
 CRYPT_LINK
@@ -10798,7 +10806,75 @@ $as_echo "no mingwin runtime includes" >&6; }
       { $as_echo "$as_me:$LINENO: result: $_mingw_lib_include_path" >&5
 $as_echo "$_mingw_lib_include_path" >&6; }
    fi
-MINGW_LIB_INCLUDE_PATH="$_mingw_lib_include_path"
+  MINGW_LIB_INCLUDE_PATH="$_mingw_lib_include_path"
+
+   { $as_echo "$as_me:$LINENO: checking for mingwin c++ backward include path" >&5
+$as_echo_n "checking for mingwin c++ backward include path... " >&6; }
+   cat >conftest.$ac_ext <<_ACEOF
+#include <hash_set>
+_ACEOF
+   _mingw_backward_include_path=`$CXX -E -xc++ -Wno-deprecated conftest.$ac_ext 2>&5| $SED -n -e '/.*1*"\(.*\)\/hash_set".*/s//\1/p' | sort -u | xargs echo`
+   rm conftest.$ac_ext
+   if test -n "$_mingw_backward_include_path"; then
+      _mingw_backward_include_path=`cygpath -d $_mingw_backward_include_path`
+      _mingw_backward_include_path=`cygpath -u $_mingw_backward_include_path`
+      { $as_echo "$as_me:$LINENO: result: $_mingw_backward_include_path" >&5
+$as_echo "$_mingw_backward_include_path" >&6; }
+   else
+      _mingw_backward_include_path="NO_BACKWARD_INCLUDE"
+      { $as_echo "$as_me:$LINENO: result: no mingwin c++ backward includes" >&5
+$as_echo "no mingwin c++ backward includes" >&6; }
+   fi
+  MINGW_BACKWARD_INCLUDE_PATH="$_mingw_backward_include_path"
+
+  mingw_crtbegin=`$CC -print-file-name=crtbegin.o`
+  MINGW_CLIB_DIR=`dirname $mingw_crtbegin`
+  { $as_echo "$as_me:$LINENO: checking whether to use dynamic libgcc" >&5
+$as_echo_n "checking whether to use dynamic libgcc... " >&6; }
+  if test -e "$MINGW_CLIB_DIR/libgcc_s.a"; then
+    { $as_echo "$as_me:$LINENO: checking dynamic libgcc name" >&5
+$as_echo_n "checking dynamic libgcc name... " >&6; }
+    MINGW_GCCDLL_pattern=`nm $MINGW_CLIB_DIR/libgcc_s.a | sed -ne 's@.* _libgcc\(.*\)_dll_iname@libgcc\1.dll@p' | uniq | sed -e 's@_@?@g'`
+    MINGW_GCCDLL=`cd $COMPATH && ls $MINGW_GCCDLL_pattern 2>/dev/null`
+    if test -n "$MINGW_GCCDLL"; then
+        MINGW_SHARED_GCCLIB=YES
+        { $as_echo "$as_me:$LINENO: result: use $MINGW_GCCDLL" >&5
+$as_echo "use $MINGW_GCCDLL" >&6; }
+    else
+        { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+    fi
+  else
+    { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+  fi
+  if test -e "$MINGW_CLIB_DIR/libgcc_eh.a"; then
+      MINGW_GCCLIB_EH=YES
+  fi
+  { $as_echo "$as_me:$LINENO: checking whether to use dynamic libstdc++" >&5
+$as_echo_n "checking whether to use dynamic libstdc++... " >&6; }
+  if test -e "$MINGW_CLIB_DIR/libstdc++_s.a" ; then
+    { $as_echo "$as_me:$LINENO: checking dynamic libstdc++ name" >&5
+$as_echo_n "checking dynamic libstdc++ name... " >&6; }
+    MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/libstdc++_s.a | sed -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | sed -e 's@_@?@g'`
+    MINGW_GXXDLL=`cd $COMPATH && ls $MINGW_GXXDLL_pattern 2>/dev/null`
+    if test -n "$MINGW_GXXDLL"; then
+        MINGW_SHARED_GXXLIB=YES
+        { $as_echo "$as_me:$LINENO: result: use $MINGW_GXXDLL" >&5
+$as_echo "use $MINGW_GXXDLL" >&6; }
+    else
+        { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+    fi
+  else
+    { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+  fi
+  MINGW_CLIB_DIR=`cygpath $MINGW_CLIB_DIR`
+
+
+
+
 
 fi
 
@@ -10858,6 +10934,81 @@ $as_echo "$as_me: WARNING: found version \"$_compaqc_version\", use version 6 of
 $as_echo "checked" >&6; }
    fi
 fi
+
+{ $as_echo "$as_me:$LINENO: checking exception type" >&5
+$as_echo_n "checking exception type... " >&6; }
+ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+if test "$WITH_MINGWIN" = "yes"; then
+
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <iostream>
+
+extern "C" void _Unwind_SjLj_RaiseException(void) __attribute__ ((__noreturn__));
+
+
+int
+main ()
+{
+_Unwind_SjLj_RaiseException()
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
+$as_echo "$ac_try_echo") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext && {
+	 test "$cross_compiling" = yes ||
+	 $as_test_x conftest$ac_exeext
+       }; then
+  exceptions_type="sjlj"
+else
+  $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	exceptions_type="dwarf2"
+
+fi
+
+rm -rf conftest.dSYM
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+fi
+
+{ $as_echo "$as_me:$LINENO: result: $exceptions_type" >&5
+$as_echo "$exceptions_type" >&6; }
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+EXCEPTIONS="$exceptions_type"
+
 
 if test "$_os" = "SunOS"; then
    _temp=`showrev -p | $AWK -F" " '{ print $2 }'`

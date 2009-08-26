@@ -107,6 +107,18 @@ ScpAction SCP_COPY_MINGWM10
     Copy = "mingwm10.dll";
     Name = "mingwm10.dll";
 End
+#if defined(MINGW_GCCDLL)
+ScpAction SCP_COPY_MINGW_GCCS
+    Copy = MINGW_GCCDLL;
+    Name = MINGW_GCCDLL;
+End
+#endif
+#if defined(MINGW_GXXDLL)
+ScpAction SCP_COPY_MINGW_STDCPP
+    Copy = MINGW_GXXDLL;
+    Name = MINGW_GXXDLL;
+End
+#endif
 #endif
 
 ScpAction scp_Copy_Xpd_Javaloader

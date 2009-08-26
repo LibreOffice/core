@@ -910,6 +910,32 @@ File gid_File_Lib_Mingwm10_Ure
 End
 #endif
 
+#if defined(WNT) && defined( _gcc3 )
+
+#if defined(MINGW_GCCDLL)
+
+File gid_File_Lib_Mingw_GccS_Ure
+    TXT_FILE_BODY;
+    Dir = SCP2_URE_DL_DIR;
+    Name = MINGW_GCCDLL;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+End
+
+#endif
+
+#if defined(MINGW_GXXDLL)
+
+File gid_File_Lib_Mingw_Stdcpp_Ure
+    TXT_FILE_BODY;
+    Dir = SCP2_URE_DL_DIR;
+    Name = MINGW_GXXDLL;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+End
+
+#endif
+
+#endif
+
 #ifdef WNT
 #if defined(M1310)
 File gid_File_Dl_Msvcr71
@@ -1146,6 +1172,8 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Dl_Stlport,
             gid_File_Dl_GccS,
             gid_File_Dl_Stdcpp,
+            gid_File_Lib_Mingw_GccS_Ure,
+            gid_File_Lib_Mingw_Stdcpp_Ure,
             gid_File_Lib_Mingwm10_Ure,
             gid_File_Dl_Msvcr71,
             gid_File_Dl_Msvcp71,

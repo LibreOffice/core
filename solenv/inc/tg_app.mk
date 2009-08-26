@@ -177,11 +177,13 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @cat $(APP$(TNR)LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP$(TNR)RES)) >  $(MISC)$/$(@:b)_all.res
     windres $(MISC)$/$(@:b)_all.res $(APP$(TNR)RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP$(TNR)BASEX) $(APP$(TNR)STACKN) -o $@ $(APP$(TNR)OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP$(TNR)RESO) \
         `$(TYPE) /dev/null $(APP$(TNR)LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP$(TNR)LIBSALCPPRT) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+        $(APP_LINKTYPE) $(APP$(TNR)LIBSALCPPRT) \
+        -Wl,--start-group $(APP$(TNR)STDLIBS) -Wl,--end-group $(APP$(TNR)STDLIB) \
+        $(STDLIB$(TNR)) $(MINGWSSTDENDOBJ) > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @ls -l $@

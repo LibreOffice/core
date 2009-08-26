@@ -2179,8 +2179,65 @@ _ACEOF
    else
       AC_MSG_RESULT([$_mingw_lib_include_path])
    fi
-MINGW_LIB_INCLUDE_PATH="$_mingw_lib_include_path"
-AC_SUBST(MINGW_LIB_INCLUDE_PATH)
+  MINGW_LIB_INCLUDE_PATH="$_mingw_lib_include_path"
+  AC_SUBST(MINGW_LIB_INCLUDE_PATH)
+dnl mingw gcc 4.4.0 needs backward in include path to use hash_set/hash_map
+   AC_MSG_CHECKING([for mingwin c++ backward include path])
+   cat >conftest.$ac_ext <<_ACEOF
+#include <hash_set>
+_ACEOF
+   _mingw_backward_include_path=`$CXX -E -xc++ -Wno-deprecated conftest.$ac_ext 2>&5| $SED -n -e '/.*1*"\(.*\)\/hash_set".*/s//\1/p' | sort -u | xargs echo`
+   rm conftest.$ac_ext
+   if test -n "$_mingw_backward_include_path"; then
+      _mingw_backward_include_path=`cygpath -d $_mingw_backward_include_path`
+      _mingw_backward_include_path=`cygpath -u $_mingw_backward_include_path`
+      AC_MSG_RESULT([$_mingw_backward_include_path])
+   else
+      _mingw_backward_include_path="NO_BACKWARD_INCLUDE"
+      AC_MSG_RESULT([no mingwin c++ backward includes])
+   fi
+  MINGW_BACKWARD_INCLUDE_PATH="$_mingw_backward_include_path"
+  AC_SUBST(MINGW_BACKWARD_INCLUDE_PATH)
+  mingw_crtbegin=`$CC -print-file-name=crtbegin.o`
+  MINGW_CLIB_DIR=`dirname $mingw_crtbegin`
+  AC_MSG_CHECKING([whether to use dynamic libgcc])
+  if test -e "$MINGW_CLIB_DIR/libgcc_s.a"; then
+    AC_MSG_CHECKING([dynamic libgcc name])
+    MINGW_GCCDLL_pattern=`nm $MINGW_CLIB_DIR/libgcc_s.a | sed -ne 's@.* _libgcc\(.*\)_dll_iname@libgcc\1.dll@p' | uniq | sed -e 's@_@?@g'`
+    MINGW_GCCDLL=`cd $COMPATH && ls $MINGW_GCCDLL_pattern 2>/dev/null`
+    if test -n "$MINGW_GCCDLL"; then
+        MINGW_SHARED_GCCLIB=YES
+        AC_MSG_RESULT([use $MINGW_GCCDLL])
+    else
+        AC_MSG_RESULT([no])
+    fi
+  else
+    AC_MSG_RESULT([no])
+  fi
+  if test -e "$MINGW_CLIB_DIR/libgcc_eh.a"; then
+      MINGW_GCCLIB_EH=YES
+  fi
+  AC_MSG_CHECKING([whether to use dynamic libstdc++])
+  if test -e "$MINGW_CLIB_DIR/libstdc++_s.a" ; then
+    AC_MSG_CHECKING([dynamic libstdc++ name])
+    MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/libstdc++_s.a | sed -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | sed -e 's@_@?@g'`
+    MINGW_GXXDLL=`cd $COMPATH && ls $MINGW_GXXDLL_pattern 2>/dev/null`
+    if test -n "$MINGW_GXXDLL"; then
+        MINGW_SHARED_GXXLIB=YES
+        AC_MSG_RESULT([use $MINGW_GXXDLL])
+    else
+        AC_MSG_RESULT([no])
+    fi
+  else
+    AC_MSG_RESULT([no])
+  fi
+  MINGW_CLIB_DIR=`cygpath $MINGW_CLIB_DIR`
+  AC_SUBST(MINGW_CLIB_DIR)
+  AC_SUBST(MINGW_SHARED_GCCLIB)
+  AC_SUBST(MINGW_GCCLIB_EH)
+  AC_SUBST(MINGW_SHARED_GXXLIB)
+  AC_SUBST(MINGW_GCCDLL)
+  AC_SUBST(MINGW_GXXDLL)
 fi
 
 dnl ===================================================================
@@ -2244,6 +2301,29 @@ if test "$_os" = "OSF1"; then
       AC_MSG_RESULT([checked])
    fi
 fi
+
+dnl *************************************************************
+dnl Testing for exception handling - dwarf2 or sjlj exceptions...
+dnl *************************************************************
+AC_MSG_CHECKING([exception type])
+AC_LANG_PUSH([C++])
+if test "$WITH_MINGWIN" = "yes"; then
+  AC_TRY_LINK(
+	[#include <iostream>
+
+extern "C" void _Unwind_SjLj_RaiseException(void) __attribute__ ((__noreturn__));
+
+	],
+	[_Unwind_SjLj_RaiseException() ],
+	[exceptions_type="sjlj"],
+	[exceptions_type="dwarf2"]
+  )
+fi
+
+AC_MSG_RESULT($exceptions_type)
+AC_LANG_POP([C++])
+EXCEPTIONS="$exceptions_type"
+AC_SUBST(EXCEPTIONS)
 
 dnl **************************************************************
 dnl Testing for required  Solaris and SunStudio compiler patches...

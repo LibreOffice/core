@@ -1108,7 +1108,8 @@ if ($platform =~ m/cygwin|os2/)
       else
       {  $ILIB       .= $wps.$COMPATH.$LIB;
       }
-      $ILIB       .= $wps.$PSDK_HOME.$LIB;
+      $ILIB       .= $wps.PathFormat("@MINGW_CLIB_DIR@").
+                     $wps.$PSDK_HOME.$LIB;
       if ( '@ENABLE_DIRETX@' )
       {   $ILIB   .= $wps.PathFormat("@DIRECTXSDK_LIB@");
       }
@@ -1485,6 +1486,7 @@ elsif ($platform =~ m/cygwin/)
      else
      {  $SOLARINC    .= $I.'$COMPATH'.$ds."include"; }
      @mingw_lib_include_paths = split( / /, "@MINGW_LIB_INCLUDE_PATH@" );
+     $SOLARINC .= $I.PathFormat("@MINGW_BACKWARD_INCLUDE_PATH@");
      foreach $mingw_lib_include_path (@mingw_lib_include_paths)
        {   chomp $mingw_lib_include_path;
            if ( $mingw_lib_include_path ne $COMPATH.$ds."include" && $mingw_lib_include_path ne "" )
@@ -1963,8 +1965,15 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "ILIB",              $ILIB,              "e" );
    if ( $MINGW eq "yes" )
    {  ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
+      ToFile( "EXCEPTIONS",        "@EXCEPTIONS@",        "e" );
       ToFile( "DIRECTXSDK_HOME",    PathFormat("@DIRECTXSDK_HOME@"),    "e" );
       ToFile( "USE_MINGW",         $USE_MINGW,              "e" );
+      ToFile( "MINGW_CLIB_DIR",         PathFormat("@MINGW_CLIB_DIR@"),              "e" );
+      ToFile( "MINGW_SHARED_GCCLIB",         "@MINGW_SHARED_GCCLIB@",              "e" );
+      ToFile( "MINGW_GCCLIB_EH",      "@MINGW_GCCLIB_EH@",              "e" );
+      ToFile( "MINGW_SHARED_GXXLIB",         "@MINGW_SHARED_GXXLIB@",              "e" );
+      ToFile( "MINGW_GCCDLL",         "@MINGW_GCCDLL@",              "e" );
+      ToFile( "MINGW_GXXDLL",         "@MINGW_GXXDLL@",              "e" );
    }
    ToFile( "GREP",              $WIN_GREP,          "e" );
    ToFile( "FIND",              $WIN_FIND,          "e" );
