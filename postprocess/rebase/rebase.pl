@@ -179,6 +179,7 @@ sub get_files
     foreach my $pattern ( @target ) {
         foreach my $i ( glob( $pattern ) ) {
             my $lib = File::Basename::basename $i;
+        $lib =~ s/\+/\\\+/g;
             if ( grep /^$lib$/i, (keys %lastrun) ) {
                 push @$oldfiles_ref, $i;
             } else {
