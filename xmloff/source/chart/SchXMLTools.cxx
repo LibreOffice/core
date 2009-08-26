@@ -158,6 +158,7 @@ static __FAR_DATA SvXMLEnumMapEntry aXMLChartClassMap[] =
     { XML_RING,         XML_CHART_CLASS_RING    },
     { XML_SCATTER,      XML_CHART_CLASS_SCATTER },
     { XML_RADAR,        XML_CHART_CLASS_RADAR   },
+    { XML_FILLED_RADAR, XML_CHART_CLASS_FILLED_RADAR },
     { XML_BAR,          XML_CHART_CLASS_BAR     },
     { XML_STOCK,        XML_CHART_CLASS_STOCK   },
     { XML_BUBBLE,       XML_CHART_CLASS_BUBBLE  },
@@ -201,6 +202,9 @@ const tMakeStringStringMap& lcl_getChartTypeNameMap()
 
         ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.NetDiagram" )
         , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.NetChartType" ) )
+
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.FilledNetDiagram" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.FilledNetChartType" ) )
 
         ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.StockDiagram" )
         , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.CandleStickChartType" ) )
@@ -269,6 +273,8 @@ OUString GetChartTypeByClassName(
         aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Bubble"));
     else if( IsXMLToken( rClassName, XML_RADAR ))
         aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Net"));
+    else if( IsXMLToken( rClassName, XML_FILLED_RADAR ))
+        aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("FilledNet"));
     else if( IsXMLToken( rClassName, XML_STOCK ))
     {
         if( bUseOldNames )
@@ -336,6 +342,8 @@ XMLTokenEnum getTokenByChartType(
                 eResult = XML_BUBBLE;
             else if( aServiceName.equalsAscii("Net"))
                 eResult = XML_RADAR;
+            else if( aServiceName.equalsAscii("FilledNet"))
+                eResult = XML_FILLED_RADAR;
             else if( (bUseOldNames && aServiceName.equalsAscii("Stock")) ||
                      (!bUseOldNames && aServiceName.equalsAscii("CandleStick")))
                 eResult = XML_STOCK;
