@@ -1762,17 +1762,29 @@ static void OutSwTblBorder(SwRTFWriter& rWrt, const SvxBoxItem& rBox,
     {
         BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
     };
+#ifdef __MINGW32__
+    static const char* aBorderNames[] __attribute__((section(".data"))) =
+#else
     static const char* aBorderNames[] =
+#endif
     {
         OOO_STRING_SVTOOLS_RTF_CLBRDRT, OOO_STRING_SVTOOLS_RTF_CLBRDRL, OOO_STRING_SVTOOLS_RTF_CLBRDRB, OOO_STRING_SVTOOLS_RTF_CLBRDRR
     };
     //Yes left and top are swapped with eachother for cell padding! Because
     //that's what the thunderingly annoying rtf export/import word xp does.
+#ifdef __MINGW32__
+    static const char* aCellPadNames[] __attribute__((section(".data"))) =
+#else
     static const char* aCellPadNames[] =
+#endif
     {
         OOO_STRING_SVTOOLS_RTF_CLPADL, OOO_STRING_SVTOOLS_RTF_CLPADT, OOO_STRING_SVTOOLS_RTF_CLPADB, OOO_STRING_SVTOOLS_RTF_CLPADR
     };
+#ifdef __MINGW32__
+    static const char* aCellPadUnits[] __attribute__((section(".data"))) =
+#else
     static const char* aCellPadUnits[] =
+#endif
     {
         OOO_STRING_SVTOOLS_RTF_CLPADFL, OOO_STRING_SVTOOLS_RTF_CLPADFT, OOO_STRING_SVTOOLS_RTF_CLPADFB, OOO_STRING_SVTOOLS_RTF_CLPADFR
     };
@@ -1979,7 +1991,11 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
             {
                 BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
             };
+#ifdef __MINGW32__
+            static const char* aRowPadNames[] __attribute__((section(".data"))) =
+#else
             static const char* aRowPadNames[] =
+#endif
             {
                 OOO_STRING_SVTOOLS_RTF_TRPADDT, OOO_STRING_SVTOOLS_RTF_TRPADDL, OOO_STRING_SVTOOLS_RTF_TRPADDB, OOO_STRING_SVTOOLS_RTF_TRPADDR
             };
