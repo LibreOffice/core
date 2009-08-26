@@ -95,6 +95,7 @@ enum eServiceType
     SERVICE_NAME_DONUT_DIAGRAM,
     SERVICE_NAME_LINE_DIAGRAM,
     SERVICE_NAME_NET_DIAGRAM,
+    SERVICE_NAME_FILLED_NET_DIAGRAM,
     SERVICE_NAME_PIE_DIAGRAM,
     SERVICE_NAME_STOCK_DIAGRAM,
     SERVICE_NAME_XY_DIAGRAM,
@@ -124,6 +125,7 @@ tServiceNameMap & lcl_getStaticServiceNameMap()
         ( C2U( "com.sun.star.chart.DonutDiagram" ),                   SERVICE_NAME_DONUT_DIAGRAM )
         ( C2U( "com.sun.star.chart.LineDiagram" ),                    SERVICE_NAME_LINE_DIAGRAM )
         ( C2U( "com.sun.star.chart.NetDiagram" ),                     SERVICE_NAME_NET_DIAGRAM )
+        ( C2U( "com.sun.star.chart.FilledNetDiagram" ),               SERVICE_NAME_FILLED_NET_DIAGRAM )
         ( C2U( "com.sun.star.chart.PieDiagram" ),                     SERVICE_NAME_PIE_DIAGRAM )
         ( C2U( "com.sun.star.chart.StockDiagram" ),                   SERVICE_NAME_STOCK_DIAGRAM )
         ( C2U( "com.sun.star.chart.XYDiagram" ),                      SERVICE_NAME_XY_DIAGRAM )
@@ -1341,6 +1343,14 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                     bCreateDiagram = true;
                 }
                 break;
+            case SERVICE_NAME_FILLED_NET_DIAGRAM:
+                if( xManagerFact.is())
+                {
+                    xTemplate.set(
+                        xManagerFact->createInstance(
+                            C2U( "com.sun.star.chart2.template.FilledNet" )), uno::UNO_QUERY );
+                    bCreateDiagram = true;
+                }
             case SERVICE_NAME_PIE_DIAGRAM:
                 if( xManagerFact.is())
                 {

@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: NetChartType_Base.hxx,v $
+ * $RCSfile: FilledNetChartType.hxx,v $
  * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
@@ -27,59 +27,29 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef CHART_NETCHARTTYPE_HXX
-#define CHART_NETCHARTTYPE_HXX
+#ifndef CHART_FILLEDNETCHARTTYPE_HXX
+#define CHART_FILLEDNETCHARTTYPE_HXX
 
-#include "ChartType.hxx"
+#include "NetChartType.hxx"
 #include "ServiceMacros.hxx"
 
 namespace chart
 {
 
-class NetChartType_Base : public ChartType
+class FilledNetChartType : public NetChartType_Base
 {
 public:
-    NetChartType_Base( ::com::sun::star::uno::Reference<
+    FilledNetChartType( ::com::sun::star::uno::Reference<
                       ::com::sun::star::uno::XComponentContext > const & xContext );
-    virtual ~NetChartType_Base();
-
-protected:
-    explicit NetChartType_Base( const NetChartType_Base & rOther );
-
-    // ____ XChartType ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem > SAL_CALL
-        createCoordinateSystem( ::sal_Int32 DimensionCount )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException);
-
-    // ____ OPropertySet ____
-    virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException);
-
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-
-    // ____ XPropertySet ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException);
-};
-
-//-------------------------------------------------------------------------------------
-
-class NetChartType : public NetChartType_Base
-{
-public:
-    NetChartType( ::com::sun::star::uno::Reference<
-                      ::com::sun::star::uno::XComponentContext > const & xContext );
-    virtual ~NetChartType();
+    virtual ~FilledNetChartType();
 
     APPHELPER_XSERVICEINFO_DECL()
 
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( NetChartType )
+    APPHELPER_SERVICE_FACTORY_HELPER( FilledNetChartType )
 
 protected:
-    explicit NetChartType( const NetChartType & rOther );
+    explicit FilledNetChartType( const FilledNetChartType & rOther );
 
     // ____ XChartType ____
     virtual ::rtl::OUString SAL_CALL getChartType()
@@ -92,5 +62,5 @@ protected:
 
 } //  namespace chart
 
-// CHART_NETCHARTTYPE_HXX
+// CHART_FILLEDNETCHARTTYPE_HXX
 #endif
