@@ -66,6 +66,9 @@
 #ifndef _OSL_FILE_H
 #include <osl/file.h>
 #endif
+#ifdef ENABLE_GRAPHITE
+#include <vcl/graphite_features.hxx>
+#endif
 
 #include <vcl/unohelp.hxx>
 #include <pdfwriter_impl.hxx>
@@ -2749,6 +2752,14 @@ size_t ImplFontCache::IFSD_Hash::operator()( const ImplFontSelectData& rFSD ) co
     // TODO: does it pay off to improve this hash function?
     static FontNameHash aFontNameHash;
     size_t nHash = aFontNameHash( rFSD.maSearchName );
+#ifdef ENABLE_GRAPHITE
+    // check for features and generate a unique hash if necessary
+    if (rFSD.maTargetName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
+        != STRING_NOTFOUND)
+    {
+        nHash = aFontNameHash( rFSD.maTargetName );
+    }
+#endif
     nHash += 11 * rFSD.mnHeight;
     nHash += 19 * rFSD.meWeight;
     nHash += 29 * rFSD.meItalic;
@@ -2800,6 +2811,15 @@ bool ImplFontCache::IFSD_Equal::operator()(const ImplFontSelectData& rA, const I
             return false;
     }
 
+#ifdef ENABLE_GRAPHITE
+    // check for features
+    if ((rA.maTargetName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
+         != STRING_NOTFOUND ||
+         rB.maTargetName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
+         != STRING_NOTFOUND) && rA.maTargetName != rB.maTargetName)
+        return false;
+#endif
+
     return true;
 }
 
@@ -2837,7 +2857,12 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
         // if it is already known get its normalized search name
         FontNameList::const_iterator it_name = maFontNameList.find( aSearchName );
         if( it_name != maFontNameList.end() )
-            if( !(*it_name).second.EqualsAscii( "hg", 0, 2) )
+            if( !(*it_name).second.EqualsAscii( "hg", 0, 2)
+#ifdef ENABLE_GRAPHITE
+                && (aSearchName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
+                    == STRING_NOTFOUND)
+#endif
+            )
                 aSearchName = (*it_name).second;
     }
 
@@ -2942,6 +2967,22 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
     {
         rFSD.maTargetName = GetNextFontToken( rFSD.maName, nTokenPos );
         aSearchName = rFSD.maTargetName;
+
+#ifdef ENABLE_GRAPHITE
+        // Until features are properly supported, they are appended to the
+        // font name, so we need to strip them off so the font is found.
+        xub_StrLen nFeat = aSearchName.Search(grutils::GrFeatureParser::FEAT_PREFIX);
+        String aOrigName = rFSD.maTargetName;
+        String aBaseFontName(aSearchName, 0, (nFeat != STRING_NOTFOUND)?nFeat:aSearchName.Len());
+        if (nFeat != STRING_NOTFOUND && STRING_NOTFOUND !=
+            aSearchName.Search(grutils::GrFeatureParser::FEAT_ID_VALUE_SEPARATOR, nFeat))
+        {
+            aSearchName = aBaseFontName;
+            rFSD.maTargetName = aBaseFontName;
+        }
+
+#endif
+
         ImplGetEnglishSearchFontName( aSearchName );
         ImplFontSubstitute( aSearchName, nSubstFlags, pDevSpecific );
         // #114999# special emboldening for Ricoh fonts
@@ -2972,6 +3013,10 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
             }
         }
 
+#ifdef ENABLE_GRAPHITE
+        // restore the features to make the font selection data unique
+        rFSD.maTargetName = aOrigName;
+#endif
         // check if the current font name token or its substitute is valid
         ImplDevFontListData* pFoundData = ImplFindBySearchName( aSearchName );
         if( pFoundData )
@@ -2980,16 +3025,21 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
         // some systems provide special customization
         // e.g. they suggest "serif" as UI-font, but this name cannot be used directly
         //      because the system wants to map it to another font first, e.g. "Helvetica"
+#ifdef ENABLE_GRAPHITE
+        // use the target name to search in the prematch hook
+        rFSD.maTargetName = aBaseFontName;
+#endif
         if( mpPreMatchHook )
-        {
             if( mpPreMatchHook->FindFontSubstitute( rFSD ) )
-            {
                 ImplGetEnglishSearchFontName( aSearchName );
-                pFoundData = ImplFindBySearchName( aSearchName );
-                if( pFoundData )
-                    return pFoundData;
-            }
-        }
+#ifdef ENABLE_GRAPHITE
+        // the prematch hook uses the target name to search, but we now need
+        // to restore the features to make the font selection data unique
+        rFSD.maTargetName = aOrigName;
+#endif
+        pFoundData = ImplFindBySearchName( aSearchName );
+        if( pFoundData )
+            return pFoundData;
 
         // break after last font name token was checked unsuccessfully
         if( nTokenPos == STRING_NOTFOUND)
@@ -5440,6 +5490,7 @@ void OutputDevice::SetFont( const Font& rNewFont )
     DBG_CHKOBJ( &rNewFont, Font, NULL );
 
     Font aFont( rNewFont );
+    aFont.SetLanguage(rNewFont.GetLanguage());
     if ( mnDrawMode & (DRAWMODE_BLACKTEXT | DRAWMODE_WHITETEXT | DRAWMODE_GRAYTEXT | DRAWMODE_GHOSTEDTEXT | DRAWMODE_SETTINGSTEXT |
                        DRAWMODE_BLACKFILL | DRAWMODE_WHITEFILL | DRAWMODE_GRAYFILL | DRAWMODE_NOFILL |
                        DRAWMODE_GHOSTEDFILL | DRAWMODE_SETTINGSFILL ) )

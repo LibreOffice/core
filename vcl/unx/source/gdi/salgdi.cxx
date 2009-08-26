@@ -119,6 +119,12 @@ X11SalGraphics::X11SalGraphics()
     nTextPixel_         = 0;
     nTextColor_         = MAKE_SALCOLOR( 0x00, 0x00, 0x00 ); // Black
 
+#ifdef ENABLE_GRAPHITE
+    // check if graphite fonts have been disabled
+    static const char* pDisableGraphiteStr = getenv( "SAL_DISABLE_GRAPHITE" );
+    bDisableGraphite_       = pDisableGraphiteStr ? (pDisableGraphiteStr[0]!='0') : FALSE;
+#endif
+
     pBrushGC_           = NULL;
     nBrushPixel_            = 0;
     nBrushColor_        = MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF ); // White
@@ -1490,7 +1496,6 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
         // should use ImplLineConverter normally)
         return false;
     }
-
     const XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
     if( !rRenderPeer.AreTrapezoidsSupported() )
         return false;

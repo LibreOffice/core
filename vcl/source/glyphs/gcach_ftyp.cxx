@@ -1425,6 +1425,20 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
         FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
     }
 
+    // Check for zero area bounding boxes as this crashes some versions of FT.
+    // This also provides a handy short cut as much of the code following
+    //  becomes an expensive nop when a glyph covers no pixels.
+    FT_BBox cbox;
+    FT_Glyph_Get_CBox(pGlyphFT, ft_glyph_bbox_unscaled, &cbox);
+
+    if( (cbox.xMax - cbox.xMin) == 0 || (cbox.yMax - cbox.yMin == 0) )
+    {
+        nAngle = 0;
+        memset(&rRawBitmap, 0, sizeof rRawBitmap);
+        FT_Done_Glyph( pGlyphFT );
+        return true;
+    }
+
     if( pGlyphFT->format != FT_GLYPH_FORMAT_BITMAP )
     {
         if( pGlyphFT->format == FT_GLYPH_FORMAT_OUTLINE )

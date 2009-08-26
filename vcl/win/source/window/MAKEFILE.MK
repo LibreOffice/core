@@ -60,6 +60,10 @@ SLOFILES=   \
 EXCEPTIONSFILES=   $(SLO)$/salframe.obj
 .ENDIF
 
+.IF "$(ENABLE_GRAPHITE)" == "TRUE"
+CFLAGS+=-DENABLE_GRAPHITE
+.ENDIF
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk

@@ -83,6 +83,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/graphictools.hxx>
 #include <tools/poly.hxx>
+#include <i18npool/mslangid.hxx>
 
 #include <implrenderer.hxx>
 #include <tools.hxx>
@@ -955,6 +956,9 @@ namespace cppcanvas
                 rParms.mrParms.maFontLetterForm.isValid() ?
                 rParms.mrParms.maFontLetterForm.getValue() :
                 (rFont.GetItalic() == ITALIC_NONE) ? 0 : 9;
+
+            LanguageType aLang = rFont.GetLanguage();
+            aFontRequest.Locale = MsLangId::convertLanguageToLocale(aLang, false);
 
             // setup state-local text transformation,
             // if the font be rotated
