@@ -76,9 +76,6 @@ MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lnspr4 -lxpcom_core -lmozreg_s -lembed_base_s
 .ENDIF
 #End of mozilla specific stuff.
 
-# Disable '-z defs' due to broken libxpcom.
-LINKFLAGSDEFS=$(0)
-
 USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
 VISIBILITY_HIDDEN=TRUE
