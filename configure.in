@@ -25,10 +25,6 @@ AC_ARG_WITH(agg,
 AC_ARG_WITH(gnu-cp,
 [  --with-gnu-cp           Specify location of GNU cp on Solaris or FreeBSD
 ],,)
-AC_ARG_WITH(gpc,
-[  --without-gpc           Use the internal polygon clipping code instead of
-                          the external GPC polygon clipping library.
-],,if test ! -e ./external/gpc/gpc.c && test ! -e ./external/gpc/gpc.h; then without_gpc=yes; fi)
 AC_ARG_ENABLE(graphite,
 [  --enable-graphite       Enables the compilation of Graphite smart font rendering
 ],,)
@@ -5363,40 +5359,6 @@ As the automatic detection fails please copy the files to external/msi/.])
    fi
 fi
 fi
-
-dnl ===================================================================
-dnl Test for the presence of the right polygon clipping code
-dnl ===================================================================
-AC_MSG_CHECKING([which polygon clipping code to use])
-WITH_GPC=NO
-
-if test "$with_gpc" != "no" && test "$without_gpc" != "yes"; then
-  WITH_GPC=YES
-  AC_MSG_RESULT([GPC])
-
-  AC_MSG_CHECKING([for GPC files])
-  if test -f ./external/gpc/gpc.h; then
-	HAVE_GPC_H="yes"
-  else
-	HAVE_GPC_H="no"
-  fi
-  if test -f ./external/gpc/gpc.c; then
-	HAVE_GPC_C="yes"
-  else
-	HAVE_GPC_C="no"
-  fi
-
-  if test "$HAVE_GPC_H" = "yes" -a "$HAVE_GPC_C" = "yes"; then
-	AC_MSG_RESULT([GPC files found])
-  else
-	AC_MSG_ERROR([GPC files not found
-ftp://ftp.cs.man.ac.uk/pub/toby/gpc/gpc231.tar.Z and untar in external/gpc,
-or use basegfx' implementation using --without-gpc])
-  fi
-else
-  AC_MSG_RESULT([internal])
-fi
-AC_SUBST(WITH_GPC)
 
 dnl ===================================================================
 dnl Test which vclplugs have to be built.
