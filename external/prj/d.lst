@@ -1,6 +1,5 @@
 mkdir: %_DEST%\inc%_EXT%\external
 mkdir: %_DEST%\inc%_EXT%\external\glibc
-mkdir: %_DEST%\inc%_EXT%\external\gpc
 mkdir: %_DEST%\inc%_EXT%\external\mingw
 mkdir: %_DEST%\inc%_EXT%\external\mingw\include
 mkdir: %_DEST%\inc%_EXT%\external\mingw\include\atl
@@ -8,7 +7,6 @@ mkdir: %_DEST%\inc%_EXT%\external\mingw\include\sys
 
 ..\glibc\rtufiles\config.h %_DEST%\inc%_EXT%\external\glibc\config.h
 ..\glibc\rtufiles\getopt.h %_DEST%\inc%_EXT%\external\glibc\getopt.h
-..\gpc\gpc.h %_DEST%\inc%_EXT%\external\gpc\gpc.h
 
 ..\%__SRC%\slb\gnu_getopt.lib %_DEST%\lib%_EXT%\gnu_getopt.lib
 ..\%__SRC%\lib\libgnu_getopt.a %_DEST%\lib%_EXT%\libgnu_getopt.a
@@ -17,10 +15,6 @@ mkdir: %_DEST%\inc%_EXT%\external\mingw\include\sys
 ..\%__SRC%\misc\mingw\include\*.h %_DEST%\inc%_EXT%\external\mingw\include\*
 ..\%__SRC%\misc\mingw\include\atl\*.h %_DEST%\inc%_EXT%\external\mingw\include\atl\*
 ..\%__SRC%\misc\mingw\include\sys\*.h %_DEST%\inc%_EXT%\external\mingw\include\sys\*
-
-..\%__SRC%\slb\gpc.lib %_DEST%\lib%_EXT%\gpc.lib
-..\%__SRC%\lib\libgpc.a %_DEST%\lib%_EXT%\libgpc.a
-..\%__SRC%\lib\libgpc_static.a %_DEST%\lib%_EXT%\libgpc_static.a
 
 ..\%__SRC%\lib\libautorec*.* %_DEST%\lib%_EXT%\lib*.*
 
