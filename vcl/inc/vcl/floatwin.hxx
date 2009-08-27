@@ -157,10 +157,6 @@ public:
     const Link&     GetPopupModeEndHdl() const  { return maPopupModeEndHdl; }
 
     BOOL            GrabsFocus() const { return mbGrabFocus; }
-
-    sal_uInt16      GetMenuStackLevel() const;
-    void            SetMenuStackLevel( sal_uInt16 nLevel );
-    bool            IsPopupMenu() const;
 };
 
 #endif // _SV_FLOATWIN_HXX

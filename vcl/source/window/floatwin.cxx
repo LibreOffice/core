@@ -48,7 +48,6 @@
 #include <vcl/salframe.hxx>
 #include <tools/debug.hxx>
 
-#include <limits>
 
 // =======================================================================
 
@@ -60,11 +59,9 @@ public:
 
     ToolBox*        mpBox;
     Rectangle       maItemEdgeClipRect; // used to clip the common edge between a toolbar item and the border of this window
-    sal_uInt16      mnMenuStackLevel;  // in case it is used as a menu popup, store its stack level.  0 = top-level menu.
 };
 
-FloatingWindow::ImplData::ImplData() :
-    mnMenuStackLevel( ::std::numeric_limits<sal_uInt16>::max() )
+FloatingWindow::ImplData::ImplData()
 {
     mpBox = NULL;
 }
@@ -876,17 +873,3 @@ void FloatingWindow::RemovePopupModeWindow( Window* pWindow )
         mpFirstPopupModeWin = NULL;
 }
 
-sal_uInt16 FloatingWindow::GetMenuStackLevel() const
-{
-    return mpImplData->mnMenuStackLevel;
-}
-
-void FloatingWindow::SetMenuStackLevel( sal_uInt16 nLevel )
-{
-    mpImplData->mnMenuStackLevel = nLevel;
-}
-
-bool FloatingWindow::IsPopupMenu() const
-{
-    return mpImplData->mnMenuStackLevel != ::std::numeric_limits<sal_uInt16>::max();
-}

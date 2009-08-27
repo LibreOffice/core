@@ -84,6 +84,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl\plug\vcl
 ..\inc\vcl\octree.hxx %_DEST%\inc%_EXT%\vcl\octree.hxx
 ..\inc\vcl\outdev.hxx %_DEST%\inc%_EXT%\vcl\outdev.hxx
 ..\inc\vcl\pointr.hxx %_DEST%\inc%_EXT%\vcl\pointr.hxx
+..\inc\vcl\popupmenuwindow.hxx %_DEST%\inc%_EXT%\vcl\popupmenuwindow.hxx
 ..\inc\vcl\print.hxx %_DEST%\inc%_EXT%\vcl\print.hxx
 ..\inc\vcl\prndlg.hxx %_DEST%\inc%_EXT%\vcl\prndlg.hxx
 ..\inc\vcl\prntypes.hxx %_DEST%\inc%_EXT%\vcl\prntypes.hxx

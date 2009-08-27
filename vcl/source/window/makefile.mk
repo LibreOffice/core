@@ -69,6 +69,7 @@ SLOFILES= \
             $(SLO)$/mnemonic.obj	\
             $(SLO)$/mnemonicengine.obj  \
             $(SLO)$/msgbox.obj		\
+            $(SLO)$/popupmenuwindow.obj		\
             $(SLO)$/scrwnd.obj		\
             $(SLO)$/seleng.obj		\
             $(SLO)$/split.obj		\

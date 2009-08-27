@@ -33,7 +33,7 @@
 
 #include <plugins/gtk/gtkframe.hxx>
 #include <vcl/window.hxx>
-#include "vcl/floatwin.hxx"
+#include "vcl/popupmenuwindow.hxx"
 
 #include "atkwindow.hxx"
 #include "atkwrapper.hxx"
@@ -111,8 +111,8 @@ init_from_window( AtkObject *accessible, Window *pWindow )
                 }
                 else if ( pWindow->GetType() == WINDOW_BORDERWINDOW && pChild->GetType() == WINDOW_FLOATINGWINDOW )
                 {
-                    sal_uInt16 nStackLevel = static_cast<FloatingWindow*>(pChild)->GetMenuStackLevel();
-                    if (nStackLevel == 0)
+                    PopupMenuFloatingWindow* p = dynamic_cast<PopupMenuFloatingWindow*>(pChild);
+                    if (p && p->IsPopupMenu() && p->GetMenuStackLevel() == 0)
                     {
                         // This is a top-level menu popup.  Register it.
                         role = ATK_ROLE_POPUP_MENU;
@@ -158,7 +158,11 @@ isChildPopupMenu(Window* pWindow)
     if (WINDOW_FLOATINGWINDOW != pChild->GetType())
         return false;
 
-    return static_cast<FloatingWindow*>(pChild)->IsPopupMenu();
+    PopupMenuFloatingWindow* p = dynamic_cast<PopupMenuFloatingWindow*>(pChild);
+    if (!p)
+        return false;
+
+    return p->IsPopupMenu();
 }
 
 static void
