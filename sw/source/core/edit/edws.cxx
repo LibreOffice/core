@@ -189,13 +189,21 @@ sal_uInt16 SwEditShell::GetCntType() const
 sal_Bool SwEditShell::HasOtherCnt() const
 
 {
+    if ( GetDoc()->GetSpzFrmFmts()->Count() )
+        return sal_True;
+
     const SwNodes &rNds = GetDoc()->GetNodes();
     const SwNode *pNd;
-    return GetDoc()->GetSpzFrmFmts()->Count() ||
-            1 != (( pNd = &rNds.GetEndOfInserts() )->GetIndex() -
-                pNd->StartOfSectionIndex() ) ||
-            1 != (( pNd = &rNds.GetEndOfAutotext() )->GetIndex() -
-                pNd->StartOfSectionIndex() );
+
+    pNd = &rNds.GetEndOfInserts();
+    if ( 1 != (pNd->GetIndex() - pNd->StartOfSectionIndex()) )
+        return sal_True;
+
+    pNd = &rNds.GetEndOfAutotext();
+    if ( 1 != (pNd->GetIndex() - pNd->StartOfSectionIndex()) )
+        return sal_True;
+
+    return sal_False;
 }
 
 /******************************************************************************

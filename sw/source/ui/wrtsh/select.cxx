@@ -140,8 +140,9 @@ long SwWrtShell::SelAll()
 {
     const BOOL bLockedView = IsViewLocked();
     LockView( TRUE );
-
     {
+        if(bBlockMode)
+            LeaveBlockMode();
         MV_KONTEXT(this);
         BOOL bMoveTable = FALSE;
         SwPosition *pStartPos = 0;
@@ -191,9 +192,7 @@ long SwWrtShell::SelAll()
         }
     }
     EndSelect();
-
     LockView( bLockedView );
-
     return 1;
 }
 

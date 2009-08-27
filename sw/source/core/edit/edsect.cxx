@@ -72,8 +72,10 @@ const SwSection* SwEditShell::InsertSection( const SwSection& rNew,
 
 BOOL SwEditShell::IsInsRegionAvailable() const
 {
-    SwPaM* pCrsr;
-    if( IsTableMode() || ( pCrsr = GetCrsr() )->GetNext() != pCrsr )
+    if( IsTableMode() )
+        return FALSE;
+    SwPaM* pCrsr = GetCrsr();
+    if( pCrsr->GetNext() != pCrsr )
         return FALSE;
     if( pCrsr->HasMark() )
         return 0 != GetDoc()->IsInsRegionAvailable( *pCrsr );
