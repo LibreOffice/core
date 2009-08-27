@@ -283,7 +283,7 @@ IMPL_LINK( ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl, void*, EMPTYARG )
 size_t ScMenuFloatingWindow::MENU_NOT_SELECTED = 999;
 
 ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, USHORT nMenuStackLevel) :
-    FloatingWindow(pParent, (WB_SYSTEMFLOATWIN|WB_SYSTEMWINDOW|WB_NOBORDER)),
+    PopupMenuFloatingWindow(pParent),
     maOpenTimer(this),
     maCloseTimer(this),
     maName(OUString::createFromAscii("ScMenuFloatingWindow")),

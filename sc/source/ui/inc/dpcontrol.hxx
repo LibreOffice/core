@@ -34,7 +34,7 @@
 #include "rtl/ustring.hxx"
 #include "tools/gen.hxx"
 #include "tools/fract.hxx"
-#include "vcl/floatwin.hxx"
+#include "vcl/popupmenuwindow.hxx"
 #include "vcl/button.hxx"
 #include "vcl/scrbar.hxx"
 #include "vcl/timer.hxx"
@@ -100,7 +100,7 @@ private:
 
 // ============================================================================
 
-class ScMenuFloatingWindow : public FloatingWindow
+class ScMenuFloatingWindow : public PopupMenuFloatingWindow
 {
 public:
     static size_t MENU_NOT_SELECTED;
