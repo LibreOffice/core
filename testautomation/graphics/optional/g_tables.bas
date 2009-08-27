@@ -54,7 +54,7 @@ sub main
     PrintLog "-------------------------" + gApplication + "-------------------"
 
     call tiInsertTableUsingMenu
-    call tiInsertTableUsingButton
+    call tiInsertTableUsingToolbarbutton
     call tiTableObjectBar
 
     call hStatusOut
