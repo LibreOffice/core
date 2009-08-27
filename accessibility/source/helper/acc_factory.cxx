@@ -72,7 +72,7 @@
 #include <accessibility/extended/accessibleeditbrowseboxcell.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
-#include "vcl/floatwin.hxx"
+#include "vcl/popupmenuwindow.hxx"
 
 #include <floatingwindowaccessible.hxx>
 
@@ -377,9 +377,9 @@ inline bool hasFloatingChild(Window *pWindow)
             }
             else if ( nType == WINDOW_BORDERWINDOW && hasFloatingChild( pWindow ) )
             {
-                FloatingWindow* pChild = static_cast<FloatingWindow*>(
+                PopupMenuFloatingWindow* pChild = dynamic_cast<PopupMenuFloatingWindow*>(
                     pWindow->GetAccessibleChildWindow(0));
-                if ( pChild->IsPopupMenu() )
+                if ( pChild && pChild->IsPopupMenu() )
                 {
                     // Get the accessible context from the child window.
                     Reference<XAccessible> xAccessible = pChild->CreateAccessible();
