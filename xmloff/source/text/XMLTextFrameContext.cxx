@@ -124,44 +124,45 @@ inline XMLTextFrameContextHyperlink_Impl::XMLTextFrameContextHyperlink_Impl(
 {
 }
 
-class XMLTextFrameDescContext_Impl : public SvXMLImportContext
+// --> OD 2009-07-22 #i73249#
+class XMLTextFrameTitleOrDescContext_Impl : public SvXMLImportContext
 {
-    OUString&   rDesc;
+    OUString&   mrTitleOrDesc;
 
 public:
 
     TYPEINFO();
 
-    XMLTextFrameDescContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                  const ::rtl::OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            OUString& rD );
-    virtual ~XMLTextFrameDescContext_Impl();
+    XMLTextFrameTitleOrDescContext_Impl( SvXMLImport& rImport,
+                                         sal_uInt16 nPrfx,
+                                         const ::rtl::OUString& rLName,
+                                         OUString& rTitleOrDesc );
+    virtual ~XMLTextFrameTitleOrDescContext_Impl();
 
     virtual void Characters( const OUString& rText );
 };
 
-TYPEINIT1( XMLTextFrameDescContext_Impl, SvXMLImportContext );
+TYPEINIT1( XMLTextFrameTitleOrDescContext_Impl, SvXMLImportContext );
 
-XMLTextFrameDescContext_Impl::XMLTextFrameDescContext_Impl(
+XMLTextFrameTitleOrDescContext_Impl::XMLTextFrameTitleOrDescContext_Impl(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > &,
-        OUString& rD  ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    rDesc( rD )
+        sal_uInt16 nPrfx,
+        const OUString& rLName,
+        OUString& rTitleOrDesc )
+    : SvXMLImportContext( rImport, nPrfx, rLName )
+    , mrTitleOrDesc( rTitleOrDesc )
 {
 }
 
-XMLTextFrameDescContext_Impl::~XMLTextFrameDescContext_Impl()
+XMLTextFrameTitleOrDescContext_Impl::~XMLTextFrameTitleOrDescContext_Impl()
 {
 }
 
-void XMLTextFrameDescContext_Impl::Characters( const OUString& rText )
+void XMLTextFrameTitleOrDescContext_Impl::Characters( const OUString& rText )
 {
-    rDesc += rText;
+    mrTitleOrDesc += rText;
 }
+// <--
 
 // ------------------------------------------------------------------------
 
@@ -385,7 +386,11 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
     const ::rtl::OUString sAnchorPageNo;
     const ::rtl::OUString sGraphicURL;
     const ::rtl::OUString sGraphicFilter;
-    const ::rtl::OUString sAlternativeText;
+    // --> OD 2009-07-22 #i73249#
+//    const ::rtl::OUString sAlternativeText;
+    const ::rtl::OUString sTitle;
+    const ::rtl::OUString sDescription;
+    // <--
     const ::rtl::OUString sFrameStyleName;
     const ::rtl::OUString sGraphicRotation;
     const ::rtl::OUString sTextBoxServiceName;
@@ -461,6 +466,9 @@ public:
                        const ::rtl::OUString& rName,
                        const ::rtl::OUString& rTargetFrameName,
                        sal_Bool bMap );
+    // --> OD 2009-07-22 #i73249#
+    void SetTitle( const ::rtl::OUString& rTitle );
+    // <--
     void SetDesc( const ::rtl::OUString& rDesc );
 
     ::com::sun::star::text::TextContentAnchorType GetAnchorType() const { return eAnchorType; }
@@ -829,7 +837,11 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
 ,   sAnchorPageNo(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo"))
 ,   sGraphicURL(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))
 ,   sGraphicFilter(RTL_CONSTASCII_USTRINGPARAM("GraphicFilter"))
-,   sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText"))
+// --> OD 2009-07-22 #i73249#
+//,   sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText"))
+,   sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"))
+,   sDescription(RTL_CONSTASCII_USTRINGPARAM("Description"))
+// <--
 ,   sFrameStyleName(RTL_CONSTASCII_USTRINGPARAM("FrameStyleName"))
 ,   sGraphicRotation(RTL_CONSTASCII_USTRINGPARAM("GraphicRotation"))
 ,   sTextBoxServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"))
@@ -1262,18 +1274,31 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
     }
 }
 
+// --> OD 2009-07-22 #i73249#
+void XMLTextFrameContext_Impl::SetTitle( const OUString& rTitle )
+{
+    if ( xPropSet.is() )
+    {
+        Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+        if( xPropSetInfo->hasPropertyByName( sTitle ) )
+        {
+            xPropSet->setPropertyValue( sTitle, makeAny( rTitle ) );
+        }
+    }
+}
+
 void XMLTextFrameContext_Impl::SetDesc( const OUString& rDesc )
 {
     if ( xPropSet.is() )
     {
-        Reference< XPropertySetInfo > xPropSetInfo =
-            xPropSet->getPropertySetInfo();
-        if( xPropSetInfo->hasPropertyByName( sAlternativeText ) )
+        Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+        if( xPropSetInfo->hasPropertyByName( sDescription ) )
         {
-            xPropSet->setPropertyValue( sAlternativeText, makeAny( rDesc ) );
+            xPropSet->setPropertyValue( sDescription, makeAny( rDesc ) );
         }
     }
 }
+// <--
 
 //-----------------------------------------------------------------------------------------------------
 
@@ -1312,6 +1337,10 @@ XMLTextFrameContext::XMLTextFrameContext(
 :   SvXMLImportContext( rImport, nPrfx, rLName )
 ,   m_xAttrList( new SvXMLAttributeList( xAttrList ) )
 ,   m_pHyperlink( 0 )
+// --> OD 2009-07-22 #i73249#
+,   m_sTitle()
+,   m_sDesc()
+// <--
 ,   m_eDefaultAnchorType( eATyp )
     // --> OD 2006-03-10 #i51726#
 ,   m_HasAutomaticStyleWithoutParentStyle( sal_False )
@@ -1374,9 +1403,20 @@ void XMLTextFrameContext::EndElement()
     {
         pImpl->CreateIfNotThere();
 
-        // alternative text
+        // --> OD 2009-07-22 #i73249#
+//        // alternative text
+//        if( m_sDesc.getLength() )
+//            pImpl->SetDesc( m_sDesc );
+        // svg:title
+        if( m_sTitle.getLength() )
+        {
+            pImpl->SetTitle( m_sTitle );
+        }
         if( m_sDesc.getLength() )
+        {
             pImpl->SetDesc( m_sDesc );
+        }
+        // <--
 
         if( m_pHyperlink )
         {
@@ -1494,10 +1534,40 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
         // the child is a writer frame
         if( XML_NAMESPACE_SVG == p_nPrefix )
         {
-            bool bOld = SvXMLImport::OOo_2x >= GetImport().getGeneratorVersion();
-            if( IsXMLToken( rLocalName, bOld ? XML_DESC : XML_TITLE ) )
-                pContext = new XMLTextFrameDescContext_Impl( GetImport(), p_nPrefix, rLocalName,
-                                                            xAttrList, m_sDesc );
+            // --> OD 2009-07-22 #i73249#
+//            bool bOld = SvXMLImport::OOo_2x >= GetImport().getGeneratorVersion();
+//            if( IsXMLToken( rLocalName, bOld ? XML_DESC : XML_TITLE ) )
+//                pContext = new XMLTextFrameDescContext_Impl( GetImport(), p_nPrefix, rLocalName,
+//                                                         xAttrList, m_sDesc );
+            const bool bOld = SvXMLImport::OOo_2x >= GetImport().getGeneratorVersion();
+            if ( bOld )
+            {
+                if ( IsXMLToken( rLocalName, XML_DESC ) )
+                {
+                    pContext = new XMLTextFrameTitleOrDescContext_Impl( GetImport(),
+                                                                        p_nPrefix,
+                                                                        rLocalName,
+                                                                        m_sTitle );
+                }
+            }
+            else
+            {
+                if( IsXMLToken( rLocalName, XML_TITLE ) )
+                {
+                    pContext = new XMLTextFrameTitleOrDescContext_Impl( GetImport(),
+                                                                        p_nPrefix,
+                                                                        rLocalName,
+                                                                        m_sTitle );
+                }
+                else if ( IsXMLToken( rLocalName, XML_DESC ) )
+                {
+                    pContext = new XMLTextFrameTitleOrDescContext_Impl( GetImport(),
+                                                                        p_nPrefix,
+                                                                        rLocalName,
+                                                                        m_sDesc );
+                }
+            }
+            // <--
         }
         else if( XML_NAMESPACE_DRAW == p_nPrefix )
         {
