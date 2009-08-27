@@ -461,29 +461,91 @@ char const * XmlReader::handleReference(
 }
 
 void XmlReader::handleAttributeValue(
-    char const * begin, char const * end, bool /*TODO fullyNormalize*/)
+    char const * begin, char const * end, bool fullyNormalize)
 {
     padBuffer_.setLength(0);
-    char const * p = begin;
-    while (p != end) {
-        switch (*p) {
-        case '\x09':
-        case '\x0A':
-        case '\x0D':
-            padAppend(begin, p - begin, false);
-            begin = ++p;
-            padAppend(RTL_CONSTASCII_STRINGPARAM(" "), p == end);
-            break;
-        case '&':
-            p = handleReference(begin, p, end);
-            begin = p;
-            break;
-        default:
-            ++p;
-            break;
+    if (fullyNormalize) {
+        while (begin != end && isSpace(*begin)) {
+            ++begin;
         }
+        while (end != begin && isSpace(end[-1])) {
+            --end;
+        }
+        char const * p = begin;
+        enum Space { SPACE_NONE, SPACE_SPAN, SPACE_BREAK };
+            // a single true space character can go into the current span,
+            // everything else breaks the span
+        Space space = SPACE_NONE;
+        while (p != end) {
+            switch (*p) {
+            case '\x09':
+            case '\x0A':
+            case '\x0D':
+                switch (space) {
+                case SPACE_NONE:
+                    padAppend(begin, p - begin, false);
+                    padAppend(RTL_CONSTASCII_STRINGPARAM(" "), false);
+                    space = SPACE_BREAK;
+                    break;
+                case SPACE_SPAN:
+                    padAppend(begin, p - begin, false);
+                    space = SPACE_BREAK;
+                    break;
+                case SPACE_BREAK:
+                    break;
+                }
+                begin = ++p;
+                break;
+            case ' ':
+                switch (space) {
+                case SPACE_NONE:
+                    ++p;
+                    space = SPACE_SPAN;
+                    break;
+                case SPACE_SPAN:
+                    padAppend(begin, p - begin, false);
+                    begin = ++p;
+                    space = SPACE_BREAK;
+                    break;
+                case SPACE_BREAK:
+                    begin = ++p;
+                    break;
+                }
+                break;
+            case '&':
+                p = handleReference(begin, p, end);
+                begin = p;
+                space = SPACE_NONE;
+                break;
+            default:
+                ++p;
+                space = SPACE_NONE;
+                break;
+            }
+        }
+        padAppend(begin, p - begin, true);
+    } else {
+        char const * p = begin;
+        while (p != end) {
+            switch (*p) {
+            case '\x09':
+            case '\x0A':
+            case '\x0D':
+                padAppend(begin, p - begin, false);
+                begin = ++p;
+                padAppend(RTL_CONSTASCII_STRINGPARAM(" "), p == end);
+                break;
+            case '&':
+                p = handleReference(begin, p, end);
+                begin = p;
+                break;
+            default:
+                ++p;
+                break;
+            }
+        }
+        padAppend(begin, p - begin, true);
     }
-    padAppend(begin, p - begin, true);
 }
 
 XmlReader::Result XmlReader::handleStartTag(Namespace * ns, Span * localName) {
