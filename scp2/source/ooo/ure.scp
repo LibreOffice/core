@@ -839,7 +839,7 @@ File gid_File_Dl_Libxml2
 #else
     Name = SCP2_URE_DL_VER("xml2", "2");
 #endif
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED, PATCH, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "BE6FAD97-F84C-43E3-8392-6FE2CDA04D8E";
 End
 #endif
