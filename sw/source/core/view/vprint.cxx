@@ -1268,10 +1268,9 @@ sal_Bool ViewShell::PrintOrPDFExport(
             {
 //TLPDF                while( pStPage && !bStop )
                 {
-                    if (nPage == 0) // post-it page
-                        ::SetSwVisArea( rPrintData.GetPrintUIOptions().m_pPostItShell , pStPage->Frm() );
-                    else
-                        ::SetSwVisArea( pShell, pStPage->Frm(), bIsPDFExport );
+                    ViewShell *pViewSh2 = nPage == 0 ? /* post-it page? */
+                        rPrintData.GetPrintUIOptions().m_pPostItShell : pShell;
+                    ::SetSwVisArea( pViewSh2, pStPage->Frm() );     // TLPDF
 
                     //  wenn wir einen Umschlag drucken wird ein Offset beachtet
                     if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
@@ -1351,11 +1350,10 @@ sal_Bool ViewShell::PrintOrPDFExport(
 // TLPDF                            pShell->InitPrt( pOutDev, bIsPDFExport ? pOutDev : 0 );
                            pShell->InitPrt( pOutDev );
 
-                            if (nPage == 0) // post-it page
-                                ::SetSwVisArea( rPrintData.GetPrintUIOptions().m_pPostItShell , pStPage->Frm() );
-                            else
-                                ::SetSwVisArea( pShell, pStPage->Frm(), bIsPDFExport );     // TLPDF
-                            nJobStartError = JOBSET_ERR_ISSTARTET;
+                            ViewShell *pViewSh2 = nPage == 0 ? /* post-it page? */
+                                rPrintData.GetPrintUIOptions().m_pPostItShell : pShell;
+                            ::SetSwVisArea( pViewSh2, pStPage->Frm() );     // TLPDF
+// TLPDF                            nJobStartError = JOBSET_ERR_ISSTARTET;
                         }
                         // --> FME 2005-12-12 #b6354161# Feature - Print empty pages
 // TLPDF                        if ( rPrintData.bPrintEmptyPages || pStPage->Frm().Height() )
