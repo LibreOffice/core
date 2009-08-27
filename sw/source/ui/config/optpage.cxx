@@ -473,14 +473,14 @@ BOOL    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
         aAddPrinterAttr.bPrintHiddenText = aPrintHiddenTextCB.IsChecked();
         aAddPrinterAttr.bPrintTextPlaceholder = aPrintTextPlaceholderCB.IsChecked();
 
-        aAddPrinterAttr.bPrintLeftPage  = aLeftPageCB.IsChecked();
-        aAddPrinterAttr.bPrintRightPage = aRightPageCB.IsChecked();
-        aAddPrinterAttr.bPrintReverse   = aReverseCB.IsChecked();
-        aAddPrinterAttr.bPrintProspect  = aProspectCB.IsChecked();
-        aAddPrinterAttr.bPrintProspect_RTL  = aProspectCB_RTL.IsChecked();
-        aAddPrinterAttr.bPaperFromSetup = aPaperFromSetupCB.IsChecked();
-        aAddPrinterAttr.bPrintEmptyPages = aPrintEmptyPagesCB.IsChecked();
-        aAddPrinterAttr.bPrintSingleJobs = aSingleJobsCB.IsChecked();
+        aAddPrinterAttr.bPrintLeftPages     = aLeftPageCB.IsChecked();
+        aAddPrinterAttr.bPrintRightPages    = aRightPageCB.IsChecked();
+        aAddPrinterAttr.bPrintReverse       = aReverseCB.IsChecked();
+        aAddPrinterAttr.bPrintProspect      = aProspectCB.IsChecked();
+        aAddPrinterAttr.bPrintProspectRTL   = aProspectCB_RTL.IsChecked();
+        aAddPrinterAttr.bPaperFromSetup     = aPaperFromSetupCB.IsChecked();
+        aAddPrinterAttr.bPrintEmptyPages    = aPrintEmptyPagesCB.IsChecked();
+        aAddPrinterAttr.bPrintSingleJobs    = aSingleJobsCB.IsChecked();
 
         if (aNoRB.IsChecked())  aAddPrinterAttr.nPrintPostIts =
                                                         POSTITS_NONE;
@@ -516,13 +516,13 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet&  )
         aBlackFontCB.Check(     pAddPrinterAttr->bPrintBlackFont);
         aPrintHiddenTextCB.Check( pAddPrinterAttr->bPrintHiddenText);
         aPrintTextPlaceholderCB.Check(pAddPrinterAttr->bPrintTextPlaceholder);
-        aLeftPageCB.Check(      pAddPrinterAttr->bPrintLeftPage);
-        aRightPageCB.Check(     pAddPrinterAttr->bPrintRightPage);
+        aLeftPageCB.Check(      pAddPrinterAttr->bPrintLeftPages);
+        aRightPageCB.Check(     pAddPrinterAttr->bPrintRightPages);
         aReverseCB.Check(       pAddPrinterAttr->bPrintReverse);
         aPaperFromSetupCB.Check(pAddPrinterAttr->bPaperFromSetup);
         aPrintEmptyPagesCB.Check(pAddPrinterAttr->bPrintEmptyPages);
         aProspectCB.Check(      pAddPrinterAttr->bPrintProspect);
-        aProspectCB_RTL.Check(      pAddPrinterAttr->bPrintProspect_RTL);
+        aProspectCB_RTL.Check(      pAddPrinterAttr->bPrintProspectRTL);
         aSingleJobsCB.Check(    pAddPrinterAttr->bPrintSingleJobs);
 
         aNoRB.Check (pAddPrinterAttr->nPrintPostIts== POSTITS_NONE ) ;

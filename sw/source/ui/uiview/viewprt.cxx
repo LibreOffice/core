@@ -178,10 +178,6 @@ USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool  )
 
 ErrCode SwView::DoPrint( SfxPrinter* pPrinter, PrintDialog* pDlg, BOOL bSilent, BOOL bIsAPI )
 {
-    (void) pPrinter; (void) pDlg; (void) bSilent; (void) bIsAPI;
-    DBG_ASSERT( 0, "not implemented" );
-    return 0;
-#ifdef TL_NOT_NOW   /* TLPDF */
     // First test
     SwWrtShell* pSh = &GetWrtShell();
     SwNewDBMgr* pMgr = pSh->GetNewDBMgr();
@@ -376,7 +372,7 @@ ErrCode SwView::DoPrint( SfxPrinter* pPrinter, PrintDialog* pDlg, BOOL bSilent, 
             pViewProperties[10].Value <<= (text::NotePrintMode) aOpts.GetPrintPostIts();
             pViewProperties[11].Name = C2U("PrintProspect");
             pViewProperties[11].Value <<= (sal_Bool)aOpts.IsPrintProspect();
-                    pViewProperties[12].Name = C2U("PrintPageBackground");
+            pViewProperties[12].Name = C2U("PrintPageBackground");
             pViewProperties[12].Value <<= (sal_Bool)aOpts.IsPrintPageBackground();
             pViewProperties[13].Name = C2U("PrintBlackFonts");
             pViewProperties[13].Value <<= (sal_Bool)aOpts.IsPrintBlackFont();
@@ -447,7 +443,6 @@ ErrCode SwView::DoPrint( SfxPrinter* pPrinter, PrintDialog* pDlg, BOOL bSilent, 
 //TLPDF   pProgress->DeleteOnEndPrint();
 //TLPDF   pPrinter->EndJob();
     return pPrinter->GetError();
-#endif  // TL_NOT_NOW   /* TLPDF */
 }
 
 

@@ -218,6 +218,7 @@ class SwChartDataProvider;
 class SwChartLockController_Helper;
 class IGrammarContact;
 class SwPrintData;
+class SwRenderData;
 class SwPageFrm;
 class SwViewOption;
 
@@ -1339,11 +1340,11 @@ public:
 
     // get the set of printable pages for the XRenderable API by
     // evaluating the respective settings (see implementation)
-    void CalculatePagesForPrinting( /* out */ SwPrintUIOptions &rOptions, bool bIsPDFExport,
+    void CalculatePagesForPrinting( SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
             sal_Int32 nDocPageCount );
-    void UpdatePagesForPrintingWithPostItData( /* out */ SwPrintUIOptions &rOptions, bool bIsPDFExport,
+    void UpdatePagesForPrintingWithPostItData( SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
             sal_Int32 nDocPageCount );
-    void CalculatePagePairsForProspectPrinting( /* out */ SwPrintUIOptions &rOptions,
+    void CalculatePagePairsForProspectPrinting( SwRenderData &rData, const SwPrintUIOptions &rOptions,
             sal_Int32 nDocPageCount );
 
     sal_uInt16 GetPageCount() const;

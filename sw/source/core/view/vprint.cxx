@@ -239,6 +239,52 @@ const XubString& SwPrtOptions::MakeNextJobName()
 
 /*****************************************************************************/
 
+
+SwRenderData::SwRenderData()
+{
+    m_pPostItFields   = 0;
+    m_pPostItDoc      = 0;
+    m_pPostItShell    = 0;
+}
+
+
+SwRenderData::~SwRenderData()
+{
+}
+
+
+void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev )
+{
+    m_pPostItFields = new _SetGetExpFlds;
+    lcl_GetPostIts( pDoc, *m_pPostItFields );
+    m_pPostItDoc    = new SwDoc;
+
+    //!! Disable spell and grammar checking in the temporary document.
+    //!! Otherwise the grammar checker might process it and crash if we later on
+    //!! simply delete this document while he is still at it.
+    SwViewOption  aViewOpt( *pViewOpt );
+    aViewOpt.SetOnlineSpell( FALSE );
+
+    m_pPostItShell  = new ViewShell( *m_pPostItDoc, 0, &aViewOpt, pOutDev );
+}
+
+
+void SwRenderData::DeletePostItData()
+{
+    if (HasPostItData())
+    {
+        m_pPostItDoc->setPrinter( 0, false, false );  //damit am echten DOC der Drucker bleibt
+        delete m_pPostItShell;        //Nimmt das PostItDoc mit ins Grab.
+        delete m_pPostItFields;
+        m_pPostItDoc    = 0;
+        m_pPostItShell  = 0;
+        m_pPostItFields = 0;
+    }
+}
+
+
+/*****************************************************************************/
+
 SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
     m_pLast( NULL )
 {
@@ -428,10 +474,6 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
 
 
     DBG_ASSERT( nIdx == nNumProps, "number of added properties is not as expected" );
-
-    m_pPostItFields   = 0;
-    m_pPostItDoc      = 0;
-    m_pPostItShell    = 0;
 }
 
 
@@ -525,35 +567,6 @@ bool SwPrintUIOptions::processPropertiesAndCheckFormat( const com::sun::star::un
     return bChanged;
 }
 
-
-void SwPrintUIOptions::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev )
-{
-    m_pPostItFields = new _SetGetExpFlds;
-    lcl_GetPostIts( pDoc, *m_pPostItFields );
-    m_pPostItDoc    = new SwDoc;
-
-    //!! Disable spell and grammar checking in the temporary document.
-    //!! Otherwise the grammar checker might process it and crash if we later on
-    //!! simply delete this document while he is still at it.
-    SwViewOption  aViewOpt( *pViewOpt );
-    aViewOpt.SetOnlineSpell( FALSE );
-
-    m_pPostItShell  = new ViewShell( *m_pPostItDoc, 0, &aViewOpt, pOutDev );
-}
-
-
-void SwPrintUIOptions::DeletePostItData()
-{
-    if (HasPostItData())
-    {
-        m_pPostItDoc->setPrinter( 0, false, false );  //damit am echten DOC der Drucker bleibt
-        delete m_pPostItShell;        //Nimmt das PostItDoc mit ins Grab.
-        delete m_pPostItFields;
-        m_pPostItDoc    = 0;
-        m_pPostItShell  = 0;
-        m_pPostItFields = 0;
-    }
-}
 
 /******************************************************************************
  *  Methode     :   void SetSwVisArea( ViewShell *pSh, Point aPrtOffset, ...
@@ -1158,17 +1171,17 @@ sal_Bool ViewShell::PrintOrPDFExport(
 
 /* TLPDF neu: start */
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( 0 <= nRenderer && nRenderer < (sal_Int32)rPrintData.GetPrintUIOptions().GetPagesToPrint().size(), "nRenderer out of bounds");
+    DBG_ASSERT( 0 <= nRenderer && nRenderer < (sal_Int32)rPrintData.GetRenderData().GetPagesToPrint().size(), "nRenderer out of bounds");
 #endif
-    const sal_Int32 nPage = rPrintData.GetPrintUIOptions().GetPagesToPrint()[ nRenderer ]; /* TLPDF */
+    const sal_Int32 nPage = rPrintData.GetRenderData().GetPagesToPrint()[ nRenderer ]; /* TLPDF */
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( nPage == 0 || rPrintData.GetPrintUIOptions().GetValidPagesSet().count( nPage ) == 1, "nPage not valid" );
+    DBG_ASSERT( nPage == 0 || rPrintData.GetRenderData().GetValidPagesSet().count( nPage ) == 1, "nPage not valid" );
 #endif
     const SwPageFrm *pStPage = 0;
     if (nPage > 0)  // a 'regular' page, not one from the post-it document
     {
-        const SwPrintUIOptions::ValidStartFramesMap_t &rFrms = rPrintData.GetPrintUIOptions().GetValidStartFrames();
-        SwPrintUIOptions::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( nPage ) );
+        const SwRenderData::ValidStartFramesMap_t &rFrms = rPrintData.GetRenderData().GetValidStartFrames();
+        SwRenderData::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( nPage ) );
         DBG_ASSERT( aIt != rFrms.end(), "failed to find start frame" );
         if (aIt == rFrms.end())
             return sal_False;
@@ -1177,7 +1190,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
     else    // a page from the post-its document ...
     {
         DBG_ASSERT( nPage == 0, "unexpected page number. 0 for post-it pages expected" );
-        pStPage = rPrintData.GetPrintUIOptions().GetPostItStartFrames()[ nRenderer ];
+        pStPage = rPrintData.GetRenderData().GetPostItStartFrames()[ nRenderer ];
     }
     DBG_ASSERT( pStPage, "failed to get start page" );
 /* TLPDF neu: end */
@@ -1269,7 +1282,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
 //TLPDF                while( pStPage && !bStop )
                 {
                     ViewShell *pViewSh2 = nPage == 0 ? /* post-it page? */
-                        rPrintData.GetPrintUIOptions().m_pPostItShell : pShell;
+                        rPrintData.GetRenderData().m_pPostItShell : pShell;
                     ::SetSwVisArea( pViewSh2, pStPage->Frm() );     // TLPDF
 
                     //  wenn wir einen Umschlag drucken wird ein Offset beachtet
@@ -1351,7 +1364,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
                            pShell->InitPrt( pOutDev );
 
                             ViewShell *pViewSh2 = nPage == 0 ? /* post-it page? */
-                                rPrintData.GetPrintUIOptions().m_pPostItShell : pShell;
+                                rPrintData.GetRenderData().m_pPostItShell : pShell;
                             ::SetSwVisArea( pViewSh2, pStPage->Frm() );     // TLPDF
 // TLPDF                            nJobStartError = JOBSET_ERR_ISSTARTET;
                         }

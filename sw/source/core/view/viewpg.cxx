@@ -481,7 +481,7 @@ void ViewShell::PrintProspect(
 {
 // TLPDF   if( !rOptions.aMulti.GetSelectCount() )
     Printer *pPrinter = dynamic_cast< Printer * >(pOutDev);
-    if (!pPrinter || rPrintData.GetPrintUIOptions().GetPagePairsForProspectPrinting().size() <= 0)
+    if (!pPrinter || rPrintData.GetRenderData().GetPagePairsForProspectPrinting().size() <= 0)
         return;
 
 #ifdef TL_NOT_NOW /*TLPDF*/
@@ -498,15 +498,15 @@ void ViewShell::PrintProspect(
 
 /* TLPDF neu: start */
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( 0 <= nRenderer && nRenderer < (sal_Int32)rPrintData.GetPrintUIOptions().GetPagePairsForProspectPrinting().size(), "nRenderer out of bounds");
+    DBG_ASSERT( 0 <= nRenderer && nRenderer < (sal_Int32)rPrintData.GetRenderData().GetPagePairsForProspectPrinting().size(), "nRenderer out of bounds");
 #endif
     std::pair< sal_Int32, sal_Int32 > rPagesToPrint =
-            rPrintData.GetPrintUIOptions().GetPagePairsForProspectPrinting()[ nRenderer ];
+            rPrintData.GetRenderData().GetPagePairsForProspectPrinting()[ nRenderer ];
     const USHORT nPageMax = static_cast< USHORT >(rPagesToPrint.first > rPagesToPrint.second ?
             rPagesToPrint.first : rPagesToPrint.second);
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( rPagesToPrint.first  == -1 || rPrintData.GetPrintUIOptions().GetValidPagesSet().count( rPagesToPrint.first ) == 1, "first Page not valid" );
-    DBG_ASSERT( rPagesToPrint.second == -1 || rPrintData.GetPrintUIOptions().GetValidPagesSet().count( rPagesToPrint.second ) == 1, "second Page not valid" );
+    DBG_ASSERT( rPagesToPrint.first  == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.first ) == 1, "first Page not valid" );
+    DBG_ASSERT( rPagesToPrint.second == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.second ) == 1, "second Page not valid" );
 #endif
 /* TLPDF neu: end */
 
@@ -703,16 +703,16 @@ void ViewShell::PrintProspect(
 /* TLPDF neu: start */
             const SwPageFrm *pStPage    = 0;
             const SwPageFrm *pNxtPage   = 0;
-            const SwPrintUIOptions::ValidStartFramesMap_t &rFrms = rPrintData.GetPrintUIOptions().GetValidStartFrames();
+            const SwRenderData::ValidStartFramesMap_t &rFrms = rPrintData.GetRenderData().GetValidStartFrames();
             if (rPagesToPrint.first > 0)
             {
-                SwPrintUIOptions::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( rPagesToPrint.first ) );
+                SwRenderData::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( rPagesToPrint.first ) );
                 DBG_ASSERT( aIt != rFrms.end(), "failed to find start frame" );
                 pStPage = aIt->second;
             }
             if (rPagesToPrint.second > 0)
             {
-                SwPrintUIOptions::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( rPagesToPrint.second ) );
+                SwRenderData::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( rPagesToPrint.second ) );
                 DBG_ASSERT( aIt != rFrms.end(), "failed to find start frame" );
                 pNxtPage = aIt->second;
             }

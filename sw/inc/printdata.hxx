@@ -50,10 +50,11 @@ class OutputDevice;
 
 ////////////////////////////////////////////////////////////
 
-class SwPrintUIOptions : public vcl::PrinterOptionsHelper
+// A class that stores temporary data that is needed for rendering the document.
+// Usually this data is created when 'getRendererCount' is called and
+// and it is used in the 'render' function of that same interface
+class SwRenderData
 {
-    OutputDevice* m_pLast;
-
     // pages valid for printing (according to the current settings)
     // and their respective start frames (see getRendererCount in unotxdoc.cxx)
     // This set of pages does NOT depend on the 'PageRange' that is used as a printing option!
@@ -79,19 +80,10 @@ public:
     SwDoc *             m_pPostItDoc;
     ViewShell *         m_pPostItShell;
 
-
 public:
-    SwPrintUIOptions( BOOL bWeb = FALSE );
-    ~SwPrintUIOptions();
+    SwRenderData();
+    ~SwRenderData();
 
-    bool processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp );
-
-    bool IsPrintLeftPages() const;
-    bool IsPrintRightPages() const;
-    bool IsPrintEmptyPages( bool bIsPDFExport ) const;
-    bool IsPrintTables() const;
-    bool IsPrintGraphics() const;
-    bool IsPrintDrawings() const;
 
     bool HasPostItData() const  { return m_pPostItShell != 0 && m_pPostItDoc != 0 && m_pPostItShell != 0; }
     void CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev );
@@ -133,9 +125,32 @@ public:
 ////////////////////////////////////////////////////////////
 
 
+class SwPrintUIOptions : public vcl::PrinterOptionsHelper
+{
+    OutputDevice* m_pLast;
+
+public:
+    SwPrintUIOptions( BOOL bWeb = FALSE );
+    ~SwPrintUIOptions();
+
+    bool processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp );
+
+    bool IsPrintLeftPages() const;
+    bool IsPrintRightPages() const;
+    bool IsPrintEmptyPages( bool bIsPDFExport ) const;
+    bool IsPrintTables() const;
+    bool IsPrintGraphics() const;
+    bool IsPrintDrawings() const;
+};
+
+
+////////////////////////////////////////////////////////////
+
+
 class SwPrintData
 {
-    const SwPrintUIOptions *  m_pPrintUIOptions;
+    const SwPrintUIOptions *    m_pPrintUIOptions;  // not owner
+    const SwRenderData *        m_pRenderData;      // not owner
 
 public:
 
@@ -143,8 +158,8 @@ public:
              bPrintBlackFont,
              //#i81434# - printing of hidden text
              bPrintHiddenText, bPrintTextPlaceholder,
-             bPrintLeftPage, bPrintRightPage, bPrintReverse, bPrintProspect,
-             bPrintProspect_RTL,
+             bPrintLeftPages, bPrintRightPages, bPrintReverse, bPrintProspect,
+             bPrintProspectRTL,
              bPrintSingleJobs, bPaperFromSetup,
              // --> FME 2005-12-13 #b6354161# Print empty pages
              bPrintEmptyPages,
@@ -159,13 +174,14 @@ public:
     SwPrintData()
     {
         m_pPrintUIOptions       = NULL;
+        m_pRenderData        = NULL;
 
         bPrintGraphic           =
         bPrintTable             =
         bPrintDraw              =
         bPrintControl           =
-        bPrintLeftPage          =
-        bPrintRightPage         =
+        bPrintLeftPages         =
+        bPrintRightPages        =
         bPrintPageBackground    =
         bPrintEmptyPages        =
         bUpdateFieldsInPrinting = sal_True;
@@ -173,7 +189,7 @@ public:
         bPaperFromSetup         =
         bPrintReverse           =
         bPrintProspect          =
-        bPrintProspect_RTL      =
+        bPrintProspectRTL      =
         bPrintSingleJobs        =
         bModified               =
         bPrintBlackFont         =
@@ -194,11 +210,11 @@ public:
         bPrintControl       ==   rData.bPrintControl       &&
         bPrintPageBackground==   rData.bPrintPageBackground&&
         bPrintBlackFont     ==   rData.bPrintBlackFont     &&
-        bPrintLeftPage      ==   rData.bPrintLeftPage      &&
-        bPrintRightPage     ==   rData.bPrintRightPage     &&
+        bPrintLeftPages     ==   rData.bPrintLeftPages     &&
+        bPrintRightPages    ==   rData.bPrintRightPages    &&
         bPrintReverse       ==   rData.bPrintReverse       &&
         bPrintProspect      ==   rData.bPrintProspect      &&
-        bPrintProspect_RTL  ==   rData.bPrintProspect_RTL  &&
+        bPrintProspectRTL  ==   rData.bPrintProspectRTL  &&
         bPrintSingleJobs    ==   rData.bPrintSingleJobs    &&
         bPaperFromSetup     ==   rData.bPaperFromSetup     &&
         bPrintEmptyPages    ==   rData.bPrintEmptyPages   &&
@@ -209,22 +225,24 @@ public:
         bPrintTextPlaceholder   ==   rData.bPrintTextPlaceholder;
     }
 
-    // Note:  int the conntext where this class ist used the pointer should always be valid
+    // Note:  in the context where this class ist used the pointers should always be valid
     // during the lifetime of this object
     const SwPrintUIOptions &    GetPrintUIOptions() const       { return *m_pPrintUIOptions; }
-    void SetPrintUIOptions( const SwPrintUIOptions *pOpt )      { m_pPrintUIOptions = pOpt; }
+    void  SetPrintUIOptions( const SwPrintUIOptions *pOpt )     { m_pPrintUIOptions = pOpt; }
+    const SwRenderData &        GetRenderData() const           { return *m_pRenderData; }
+    void  SetRenderData( const SwRenderData *pData )            { m_pRenderData = pData; }
 
     sal_Bool IsPrintGraphic()   const { return bPrintGraphic; }
     sal_Bool IsPrintTable()     const { return bPrintTable; }
     sal_Bool IsPrintDraw()      const { return bPrintDraw; }
     sal_Bool IsPrintControl()   const { return bPrintControl; }
-    sal_Bool IsPrintLeftPage()  const { return bPrintLeftPage; }
-    sal_Bool IsPrintRightPage() const { return bPrintRightPage; }
+    sal_Bool IsPrintLeftPage()  const { return bPrintLeftPages; }
+    sal_Bool IsPrintRightPage() const { return bPrintRightPages; }
     sal_Bool IsPrintReverse()   const { return bPrintReverse; }
     sal_Bool IsPaperFromSetup() const { return bPaperFromSetup; }
     sal_Bool IsPrintEmptyPages() const{ return bPrintEmptyPages; }
     sal_Bool IsPrintProspect()  const { return bPrintProspect; }
-    sal_Bool IsPrintProspect_RTL()  const { return bPrintProspect_RTL; }
+    sal_Bool IsPrintProspectRTL()   const { return bPrintProspectRTL; }
     sal_Bool IsPrintPageBackground() const { return bPrintPageBackground; }
     sal_Bool IsPrintBlackFont() const { return bPrintBlackFont;}
     sal_Bool IsPrintSingleJobs() const { return bPrintSingleJobs;}
@@ -237,8 +255,8 @@ public:
     void SetPrintTable    ( sal_Bool b ) { doSetModified(); bPrintTable = b;}
     void SetPrintDraw     ( sal_Bool b ) { doSetModified(); bPrintDraw = b;}
     void SetPrintControl  ( sal_Bool b ) { doSetModified(); bPrintControl = b; }
-    void SetPrintLeftPage ( sal_Bool b ) { doSetModified(); bPrintLeftPage = b;}
-    void SetPrintRightPage( sal_Bool b ) { doSetModified(); bPrintRightPage = b;}
+    void SetPrintLeftPage ( sal_Bool b ) { doSetModified(); bPrintLeftPages = b;}
+    void SetPrintRightPage( sal_Bool b ) { doSetModified(); bPrintRightPages = b;}
     void SetPrintReverse  ( sal_Bool b ) { doSetModified(); bPrintReverse = b;}
     void SetPaperFromSetup( sal_Bool b ) { doSetModified(); bPaperFromSetup = b;}
     void SetPrintEmptyPages(sal_Bool b ) { doSetModified(); bPrintEmptyPages = b;}

@@ -360,7 +360,8 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell) :
     pxLinkTargetSupplier(0),
     pxXRedlines(0),
     m_pHiddenViewFrame(0),
-    m_pPrintUIOptions( NULL )
+    m_pPrintUIOptions( NULL ),
+    m_pRenderData( NULL )
 {
 }
 /*-- 18.12.98 11:53:00---------------------------------------------------
@@ -376,6 +377,7 @@ SwXTextDocument::~SwXTextDocument()
         xNumFmtAgg = 0;
     }
     delete m_pPrintUIOptions;
+    delete m_pRenderData;
 }
 
 
@@ -2626,6 +2628,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     if(!IsValid())
         throw RuntimeException();
 
+    if( ! m_pRenderData )
+        m_pRenderData = new SwRenderData;
     if( ! m_pPrintUIOptions )
     {
         const BOOL bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
@@ -2680,8 +2684,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     const bool bPrintProspect = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
     if (bPrintProspect)
     {
-        pDoc->CalculatePagePairsForProspectPrinting( *m_pPrintUIOptions, nPageCount );
-        nRet = m_pPrintUIOptions->GetPagePairsForProspectPrinting().size();
+        pDoc->CalculatePagePairsForProspectPrinting( *m_pRenderData, *m_pPrintUIOptions, nPageCount );
+        nRet = m_pRenderData->GetPagePairsForProspectPrinting().size();
     }
     else
     {
@@ -2689,20 +2693,20 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         if (nPostItMode != POSTITS_NONE)
         {
             OutputDevice *pOutDev = lcl_GetOutputDevice( *m_pPrintUIOptions );
-            m_pPrintUIOptions->CreatePostItData( pDoc, pWrtShell->GetViewOptions(), pOutDev );
+            m_pRenderData->CreatePostItData( pDoc, pWrtShell->GetViewOptions(), pOutDev );
         }
 
         // get set of valid document pages (according to the current settings)
         // and their start frames
-        pDoc->CalculatePagesForPrinting( *m_pPrintUIOptions, bIsPDFExport, nPageCount );
+        pDoc->CalculatePagesForPrinting( *m_pRenderData, *m_pPrintUIOptions, bIsPDFExport, nPageCount );
 
         if (nPostItMode != POSTITS_NONE)
         {
-            pDoc->UpdatePagesForPrintingWithPostItData(
+            pDoc->UpdatePagesForPrintingWithPostItData( *m_pRenderData,
                     *m_pPrintUIOptions, bIsPDFExport, nPageCount );
         }
 
-        nRet = m_pPrintUIOptions->GetPagesToPrint().size();
+        nRet = m_pRenderData->GetPagesToPrint().size();
     }
     DBG_ASSERT( nRet >= 0, "negative number of pages???" );
 
@@ -2721,6 +2725,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     if(!IsValid())
         throw RuntimeException();
 
+    if( ! m_pRenderData )
+        m_pRenderData = new SwRenderData;
     if( ! m_pPrintUIOptions )
     {
         const BOOL bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
@@ -2812,6 +2818,8 @@ void SAL_CALL SwXTextDocument::render(
     if(!IsValid())
         throw RuntimeException();
 
+    if (!m_pRenderData)
+        m_pRenderData = new SwRenderData;
     if (!m_pPrintUIOptions)
     {
         const BOOL bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
@@ -2846,8 +2854,8 @@ void SAL_CALL SwXTextDocument::render(
     // Thus instead of throwing the exception we silently return.
     if (0 > nRenderer)
         throw IllegalArgumentException();
-    if ( (bPrintProspect && size_t(nRenderer) >= m_pPrintUIOptions->GetPagePairsForProspectPrinting().size())
-        || (!bPrintProspect && size_t(nRenderer) >= m_pPrintUIOptions->GetPagesToPrint().size()))
+    if ( (bPrintProspect && size_t(nRenderer) >= m_pRenderData->GetPagePairsForProspectPrinting().size())
+        || (!bPrintProspect && size_t(nRenderer) >= m_pRenderData->GetPagesToPrint().size()))
         return;
 
     // the view shell should be SwView for documents PDF export
@@ -2885,15 +2893,15 @@ void SAL_CALL SwXTextDocument::render(
         aOptions.bPrintTable            = m_pPrintUIOptions->IsPrintTables();
         aOptions.bPrintDraw             = m_pPrintUIOptions->IsPrintDrawings();
         aOptions.bPrintControl          = m_pPrintUIOptions->getBoolValue( "PrintControls", aOptions.bPrintControl );
-        aOptions.bPrintLeftPage         = m_pPrintUIOptions->IsPrintLeftPages();
-        aOptions.bPrintRightPage        = m_pPrintUIOptions->IsPrintRightPages();
+        aOptions.bPrintLeftPages        = m_pPrintUIOptions->IsPrintLeftPages();
+        aOptions.bPrintRightPages       = m_pPrintUIOptions->IsPrintRightPages();
         aOptions.bPrintPageBackground   = m_pPrintUIOptions->getBoolValue( "PrintPageBackground",   aOptions.bPrintPageBackground );
         aOptions.bPrintEmptyPages       = !bIsSkipEmptyPages;
         // bUpdateFieldsInPrinting  <-- not set here    // TLPDF: TODO: remove this from SwPrintData?? Get rid of SwPrtOptions??
         aOptions.bPaperFromSetup        = m_pPrintUIOptions->getBoolValue( "PrintPaperFromSetup",   aOptions.bPaperFromSetup );
         aOptions.bPrintReverse          = m_pPrintUIOptions->getBoolValue( "PrintReversed",         aOptions.bPrintReverse );
         aOptions.bPrintProspect         = m_pPrintUIOptions->getBoolValue( "PrintProspect",         aOptions.bPrintProspect );
-        aOptions.bPrintProspect_RTL     = m_pPrintUIOptions->getIntValue( "PrintProspectRTL",       aOptions.bPrintProspect_RTL ) ? true : false;
+        aOptions.bPrintProspectRTL      = m_pPrintUIOptions->getIntValue( "PrintProspectRTL",       aOptions.bPrintProspectRTL ) ? true : false;
         // bPrintSingleJobs         <-- not set here    // TLPDF: TODO: remove this from SwPrintData?? Get rid of SwPrtOptions??
         // bModified                <-- not set here    // TLPDF: TODO: remove this from SwPrintData?? Get rid of SwPrtOptions??
         aOptions.bPrintBlackFont        = m_pPrintUIOptions->getBoolValue( "PrintBlackFonts",       aOptions.bPrintBlackFont );
@@ -2901,9 +2909,10 @@ void SAL_CALL SwXTextDocument::render(
         aOptions.bPrintTextPlaceholder  = m_pPrintUIOptions->getBoolValue( "PrintTextPlaceholder",  aOptions.bPrintTextPlaceholder );
         aOptions.nPrintPostIts          = static_cast< sal_Int16 >(m_pPrintUIOptions->getIntValue( "PrintAnnotationMode", aOptions.nPrintPostIts ));
 
-        //! needs to be set after MakeOptions since the assingment operation in that
-        //! function will destroy this pointer
+        //! needs to be set after MakeOptions since the assignment operation in that
+        //! function will destroy the pointers
         aOptions.SetPrintUIOptions( m_pPrintUIOptions );
+        aOptions.SetRenderData( m_pRenderData );
 
         Range aRange( nRenderer+1, nRenderer+1 );
         MultiSelection aPages( aRange );
@@ -2967,16 +2976,18 @@ void SAL_CALL SwXTextDocument::render(
 
         if (bLastPage)
         {
-            if (m_pPrintUIOptions->HasPostItData())
-                m_pPrintUIOptions->DeletePostItData();
-
+            if (m_pRenderData && m_pRenderData->HasPostItData())
+                m_pRenderData->DeletePostItData();
             if (m_pHiddenViewFrame)
             {
                 lcl_DisposeView( m_pHiddenViewFrame, pDocShell );
                 m_pHiddenViewFrame = 0;
             }
+
+            aOptions.SetRenderData( NULL );
             aOptions.SetPrintUIOptions( NULL );
-            delete m_pPrintUIOptions, m_pPrintUIOptions = NULL;
+            delete m_pRenderData;       m_pRenderData     = NULL;
+            delete m_pPrintUIOptions;   m_pPrintUIOptions = NULL;
         }
     }
 }

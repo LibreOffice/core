@@ -1975,7 +1975,7 @@ void SwView::MakeOptions( PrintDialog* pDlg, SwPrtOptions& rOpts,
     if( pPrtProspect )
         *pPrtProspect = pData->bPrintProspect;
     if( pPrtProspect_RTL )
-        *pPrtProspect_RTL = pData->bPrintProspect_RTL;
+        *pPrtProspect_RTL = pData->bPrintProspectRTL;
     rOpts.aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
     rOpts.aMulti.SelectAll( FALSE );
     rOpts.nCopyCount = 1;
