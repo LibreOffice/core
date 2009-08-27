@@ -150,16 +150,18 @@ Components::Components() {
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "${$OOO_BASE_DIR/program/unorc:UNO_SHARED_PACKAGES_CACHE}/"
-                    "registry/com.sun.star.comp.deployment.configuration."
+                    "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("uno")
+                    ":UNO_SHARED_PACKAGES_CACHE}/registry/"
+                    "com.sun.star.comp.deployment.configuration."
                     "PackageRegistryBackend/registry"))));
     parseXcsXcuIniLayer(
         9,
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "${$OOO_BASE_DIR/program/unorc:UNO_SHARED_PACKAGES_CACHE}/"
-                    "registry/com.sun.star.comp.deployment.configuration."
+                    "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("uno")
+                    ":UNO_SHARED_PACKAGES_CACHE}/registry/"
+                    "com.sun.star.comp.deployment.configuration."
                     "PackageRegistryBackend/configmgrrc"))));
     parseSystemLayer();
     parseXcsXcuLayer( //TODO: migrate
@@ -167,24 +169,26 @@ Components::Components() {
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "${$OOO_BASE_DIR/program/unorc:UNO_USER_PACKAGES_CACHE}/"
-                    "registry/com.sun.star.comp.deployment.configuration."
+                    "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("uno")
+                    ":UNO_USER_PACKAGES_CACHE}/registry/"
+                    "com.sun.star.comp.deployment.configuration."
                     "PackageRegistryBackend/registry"))));
     parseXcsXcuIniLayer(
         13,
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "${$OOO_BASE_DIR/program/unorc:UNO_USER_PACKAGES_CACHE}/"
-                    "registry/com.sun.star.comp.deployment.configuration."
+                    "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("uno")
+                    ":UNO_USER_PACKAGES_CACHE}/registry/"
+                    "com.sun.star.comp.deployment.configuration."
                     "PackageRegistryBackend/configmgrrc"))));
     parseXcsXcuLayer(
         15,
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/"
-                    "user/registry"))));
+                    "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap")
+                    ":UserInstallation}/user/registry"))));
     parseModificationLayer();
 }
 
@@ -392,8 +396,8 @@ rtl::OUString Components::getModificationFileUrl() const {
     return expand(
         rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(
-                "${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/"
-                "registrymodifications.xcu")));
+                "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap")
+                ":UserInstallation}/user/registrymodifications.xcu")));
 }
 
 void Components::parseModificationLayer() {
