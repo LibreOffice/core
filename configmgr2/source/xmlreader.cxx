@@ -315,7 +315,9 @@ XmlReader::Namespace XmlReader::scanNamespaceIri(
           XmlReader::NAMESPACE_XS },
         { RTL_CONSTASCII_STRINGPARAM(
                 "http://www.w3.org/2001/XMLSchema-instance"),
-          XmlReader::NAMESPACE_XSI } };
+          XmlReader::NAMESPACE_XSI },
+        { RTL_CONSTASCII_STRINGPARAM("http://www.w3.org/XML/1998/namespace"),
+          XmlReader::NAMESPACE_XML } };
     for (std::size_t i = 0; i < sizeof iris / sizeof iris[0]; ++i) {
         if (rtl_str_shortenedCompare_WithLength(
                 pad_.begin, pad_.length, iris[i].begin, iris[i].length,
