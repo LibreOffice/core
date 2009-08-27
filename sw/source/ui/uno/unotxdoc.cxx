@@ -2750,11 +2750,10 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     if (m_pPrintUIOptions->getBoolValue( "PrintProspect", sal_False ))
         aPageSize = awt::Size( aPageSize.Height, aPageSize.Width );
     uno::Sequence< beans::PropertyValue > aRenderer(2);
-    PropertyValue  &rValue = aRenderer.getArray()[0];
-    rValue.Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
-    rValue.Value <<= aPageSize;
-    rValue.Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageIncludesNonprintableArea" ) );
-    rValue.Value <<= sal_False;
+    aRenderer[0].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
+    aRenderer[0].Value <<= aPageSize;
+    aRenderer[1].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageIncludesNonprintableArea" ) );
+    aRenderer[1].Value <<= sal_True;
 
     m_pPrintUIOptions->appendPrintUIOptions( aRenderer );
 
