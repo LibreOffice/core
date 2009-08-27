@@ -1080,10 +1080,8 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
         // <--
     }
 
-    // --> OD 2006-01-13 #i60395#
-    // It's not allowed to apply the outline numbering rule as hard attribute
-    // to document content - typically paragraphs.
-    if ( bSetItem && pNew != GetOutlineNumRule() )
+    // --> OD 2009-08-18 #i103817#
+    if ( bSetItem )
     // <--
     {
         Insert( rPam, SwNumRuleItem( pNew->GetName() ), 0 );

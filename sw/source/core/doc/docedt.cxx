@@ -1219,20 +1219,11 @@ bool SwDoc::Move( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         {
             if( pTNd->CanJoinNext())
             {
-                SwTxtNode *pNextTNd = 0;
-                if( !pTNd->Len() )
-                {
-                    SwNodeIndex aTmpIdx( *pTNd, 1 );
-                    pNextTNd = aTmpIdx.GetNode().GetTxtNode();
-                }
-                if( pNextTNd )
-                {
-                    if( !bNullCntnt )
-                        pSavePam->Move( fnMoveForward, fnGoCntnt );
-                    pNextTNd->JoinPrev();
-                }
-                else
-                    pTNd->JoinNext();
+                // --> OD 2009-08-20 #i100466#
+                // Always join next, because <pTNd> has to stay as it is.
+                // A join previous from its next would more or less delete <pTNd>
+                pTNd->JoinNext();
+                // <--
                 bRemove = false;
             }
         }
@@ -1602,12 +1593,26 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
             }
 
             pDoc->CorrRel( aIdx, *rPam.GetPoint(), 0, sal_True );
+            // --> OD 2009-08-20 #i100466#
+            // adjust given <rPam>, if it does not belong to the cursors
+            if ( pDelNd == rPam.GetBound( sal_True ).nContent.GetIdxReg() )
+            {
+                rPam.GetBound( sal_True ) = SwPosition( SwNodeIndex( *pTxtNd ), SwIndex( pTxtNd ) );
+            }
+            if( pDelNd == rPam.GetBound( sal_False ).nContent.GetIdxReg() )
+            {
+                rPam.GetBound( sal_False ) = SwPosition( SwNodeIndex( *pTxtNd ), SwIndex( pTxtNd ) );
+            }
+            // <--
             pTxtNd->JoinNext();
         }
     }
 }
 
-bool SwDoc::DeleteAndJoin( SwPaM & rPam )
+// OD 2009-08-20 #i100466#
+// Add handling of new optional parameter <bForceJoinNext>
+bool SwDoc::DeleteAndJoin( SwPaM & rPam,
+                           const bool bForceJoinNext )
 {
     if( lcl_StrLenOverFlow( rPam ) )
         return sal_False;
@@ -1656,7 +1661,12 @@ SetRedlineMode( eOld );
 
     sal_Bool bJoinTxt, bJoinPrev;
     lcl_GetJoinFlags( rPam, bJoinTxt, bJoinPrev );
-
+    // --> OD 2009-08-20 #i100466#
+    if ( bForceJoinNext )
+    {
+        bJoinPrev = sal_False;
+    }
+    // <--
     {
         // dann eine Kopie vom Cursor erzeugen um alle Pams aus den
         // anderen Sichten aus dem Loeschbereich zu verschieben

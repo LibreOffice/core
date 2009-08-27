@@ -3488,7 +3488,12 @@ void SwRedline::DelCopyOfSection()
         }
 
         if( pCSttNd && pCEndNd )
-            pDoc->DeleteAndJoin( aPam );
+        {
+            // --> OD 2009-08-20 #i100466#
+            // force a <join next> on <delete and join> operation
+            pDoc->DeleteAndJoin( aPam, true );
+            // <--
+        }
         else if( pCSttNd || pCEndNd )
         {
             if( pCSttNd && !pCEndNd )

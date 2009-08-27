@@ -2271,17 +2271,6 @@ SwNumRule* SwTxtNode::_GetNumRule(BOOL bInParent) const
         if (sNumRuleName.Len() > 0)
         {
             pRet = GetDoc()->FindNumRulePtr( sNumRuleName );
-            // --> OD 2006-01-13 #i60395#
-            // It's not allowed to apply the outline numbering rule as hard
-            // attribute to a paragraph.
-            // Because currently not all situation are known, in which such
-            // a situation is triggered, it's asserted in order to find these.
-            ASSERT( !pRet || !HasSwAttrSet() ||
-                    pRet != GetDoc()->GetOutlineNumRule() ||
-                    SFX_ITEM_SET !=
-                      GetpSwAttrSet()->GetItemState( RES_PARATR_NUMRULE, FALSE ),
-                    "<SwTxtNode::_GetNumRule(..)> - found outline numbering rule as hard attribute at a paragraph. This isn't allowed. It's a serious defect, please inform OD" );
-            // <--
         }
         else // numbering is turned off
             bNoNumRule = true;
@@ -2556,8 +2545,8 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
         return pNode;
 
     SwTxtFmtColl *pNextColl = &pColl->GetNextTxtFmtColl();
-    ChgFmtColl( pNextColl );
-
+    // --> OD 2009-08-12 #i101870#
+    // perform action on different paragraph styles before applying the new paragraph style
     if (pNextColl != pColl)
     {
         // --> OD 2007-07-10 #i75353#
@@ -2573,6 +2562,8 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
         }
         // <--
     }
+    // <--
+    ChgFmtColl( pNextColl );
 
     return pNode;
 }

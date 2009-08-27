@@ -1347,7 +1347,15 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
     // #i75172# isolated static conditions
     const bool bOnlyYScroll(!lXDiff && Abs(lYDiff) != 0 && Abs(lYDiff) < lMax);
     const bool bAllowedWithChildWindows(GetWin()->GetWindowClipRegionPixel(WINDOW_GETCLIPREGION_NOCHILDREN|WINDOW_GETCLIPREGION_NULL).IsNull());
+// --> OD 2009-08-12 #i98766# - disable smooth scrolling for Mac port builds
+#ifdef QUARTZ
+    const bool bSmoothScrollAllowed(false);
+    (void) bOnlyYScroll;
+    (void) bAllowedWithChildWindows;
+#else
     const bool bSmoothScrollAllowed(bOnlyYScroll && bEnableSmooth && GetViewOptions()->IsSmoothScroll() &&  bAllowedWithChildWindows);
+#endif
+// <-
     const bool bIAmCursorShell(ISA(SwCrsrShell));
     (void) bIAmCursorShell;
 
@@ -1971,6 +1979,11 @@ void ViewShell::Paint(const Rectangle &rRect)
                 //angemeldet hat, so muessen Repaints ausgeloest werden.
                 if ( !CheckInvalidForPaint( aRect ) )
                 {
+                    // --> OD 2009-08-12 #i101192#
+                    // start Pre/PostPaint encapsulation to avoid screen blinking
+                    const Region aRepaintRegion(aRect.SVRect());
+                    DLPrePaint2(aRepaintRegion);
+                    // <--
                     PaintDesktop( aRect );
                     //Falls sinnvoll gleich das alte InvalidRect verarbeiten bzw.
                     //vernichten.
@@ -1979,6 +1992,10 @@ void ViewShell::Paint(const Rectangle &rRect)
                     ViewShell::bLstAct = TRUE;
                     GetLayout()->Paint( aRect );
                     ViewShell::bLstAct = FALSE;
+                    // --> OD 2009-08-12 #i101192#
+                    // end Pre/PostPaint encapsulation
+                    DLPostPaint2(true);
+                    // <--
                 }
 
                 //delete pSaveHdl;
@@ -2721,4 +2738,3 @@ const IDocumentOutlineNodes* ViewShell::getIDocumentOutlineNodesAccess() const
     return pDoc;
 }
 // <--
-

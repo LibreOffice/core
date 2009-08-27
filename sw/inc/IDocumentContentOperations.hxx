@@ -85,9 +85,14 @@
     */
     virtual bool DelFullPara(SwPaM&) = 0;
 
-    /** komplett loeschen eines Bereiches
+    /** complete delete of a given PaM
+
+        OD 2009-08-20 #i100466#
+        Add optional parameter <bForceJoinNext>, default value <false>
+        Needed for hiding of deletion redlines
     */
-    virtual bool DeleteAndJoin(SwPaM&) = 0;
+    virtual bool DeleteAndJoin( SwPaM&,
+                                const bool bForceJoinNext = false ) = 0;
 
     /** verschieben eines Bereiches
     */

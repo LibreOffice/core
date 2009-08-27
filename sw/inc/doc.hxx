@@ -882,7 +882,12 @@ public:
     virtual void DeleteSection(SwNode* pNode);
     virtual bool Delete(SwPaM&);
     virtual bool DelFullPara(SwPaM&);
-    virtual bool DeleteAndJoin(SwPaM&);
+    // --> OD 2009-08-20 #i100466#
+    // Add optional parameter <bForceJoinNext>, default value <false>
+    // Needed for hiding of deletion redlines
+    virtual bool DeleteAndJoin( SwPaM&,
+                                const bool bForceJoinNext = false );
+    // <--
     virtual bool Move(SwPaM&, SwPosition&, SwMoveFlags);
     virtual bool Move(SwNodeRange&, SwNodeIndex&, SwMoveFlags);
     virtual bool MoveAndJoin(SwPaM&, SwPosition&, SwMoveFlags);

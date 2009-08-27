@@ -1040,7 +1040,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 _InvalidateRange( SwCharRange( nPos, nLen) );
                 MSHORT nTmp = ((SwUpdateAttr*)pNew)->nWhichAttr;
 
-                if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_AUTOFMT ||
+                if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_AUTOFMT == nTmp ||
                     RES_FMT_CHG == nTmp || RES_ATTRSET_CHG == nTmp )
                 {
                     SET_WRONG( nPos, nPos + nLen, false )
