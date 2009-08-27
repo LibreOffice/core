@@ -218,8 +218,6 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAlignment
-Warnlog "#i102752# - tFormatAlignment outcommented due to bug."
-goto endsub
 
     PrintLog "- Format / Alignment"
 
@@ -416,8 +414,6 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAnchorObject
-Warnlog "#i102752# - tFormatAnchorObject outcommented due to bug."
-goto endsub
 
     PrintLog "- Format / Anchor Frame"
 
@@ -886,9 +882,6 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAlignmentArea
-
-	Warnlog "#i102752#Writer crashes if you change the anchor of a drawing object to page"
-	goto endsub
 
     PrintLog "- Format / Alignment drawing objects"
     if gApplication = "HTML" then
@@ -1418,10 +1411,8 @@ endcase
 '-----------------------------------------------------------
 
 testcase tHtmlDocFormatAlignment
-Warnlog "#i102752# - tHtmlDocFormatAlignment outcommented due to bug."
-goto endsub
 
-    gApplication = "HTML"
+	gApplication = "HTML"
     PrintLog "- Format / Alignment"
 
     printlog " Open new document"
