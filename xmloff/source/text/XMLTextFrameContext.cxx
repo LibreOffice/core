@@ -1147,12 +1147,15 @@ SvXMLImportContext *XMLTextFrameContext_Impl::CreateChildContext(
             }
         }
     }
+    // --> OD 2009-08-17 #i100480#
+    // correction of condition which also avoids warnings.
     if( !pContext &&
-            ( XML_TEXT_FRAME_OBJECT == nType &&
-              (XML_NAMESPACE_OFFICE == nPrefix &&
-               IsXMLToken( rLocalName, XML_DOCUMENT )) ||
-              (XML_NAMESPACE_MATH == nPrefix &&
-               IsXMLToken(rLocalName, XML_MATH) ) ) )
+        ( XML_TEXT_FRAME_OBJECT == nType &&
+          ( ( XML_NAMESPACE_OFFICE == nPrefix &&
+              IsXMLToken( rLocalName, XML_DOCUMENT ) ) ||
+            ( XML_NAMESPACE_MATH == nPrefix &&
+              IsXMLToken( rLocalName, XML_MATH ) ) ) ) )
+    // <--
     {
         if( !xPropSet.is() && !bCreateFailed )
         {
