@@ -318,8 +318,15 @@ testcase tEquationTextDirection
     printlog "Leave the dialog with OK"
     InsertTrendlinesDialog.OK
     Kontext "DocumentChart"
-    printlog "Type thrice in the Chart document <TAB> to select the equation"
-    DocumentChart.TypeKeys "<TAB>" , 3
+	printlog "Leave Chart by ESC and reenter Chart"
+	DocumentChart.TypeKeys "<ESC>" , 2
+	call fSelectFirstOLE
+	EditObjectEdit
+	Kontext "DocumentChart"
+	printlog "Type <TAB> thrice in the Chart document, press F3 and <TAB> to select the equation"
+	DocumentChart.TypeKeys "<TAB>" , 3
+	DocumentChart.TypeKeys "<F3>" 
+    DocumentChart.TypeKeys "<TAB>"
     printlog "Format / Object properties"
     FormatObjectProperties
     Kontext 
