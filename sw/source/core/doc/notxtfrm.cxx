@@ -281,7 +281,7 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
         if ( pSh->GetWin() && !pSh->IsPreView() )
         {
             const SwNoTxtNode* pNd = GetNode()->GetNoTxtNode();
-            String aTxt( pNd->GetAlternateText() );
+            String aTxt( pNd->GetTitle() );
             if ( !aTxt.Len() && pNd->IsGrfNode() )
                 GetRealURL( *(SwGrfNode*)pNd, aTxt );
             if( !aTxt.Len() )
@@ -906,7 +906,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                     pGrfNd->TriggerAsyncRetrieveInputStream();
                     // <--
                 }
-                String aTxt( pGrfNd->GetAlternateText() );
+                String aTxt( pGrfNd->GetTitle() );
                 if ( !aTxt.Len() )
                     GetRealURL( *pGrfNd, aTxt );
                 ::lcl_PaintReplacement( aAlignedGrfArea, aTxt, *pShell, this, FALSE );
@@ -971,7 +971,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 ((SwNoTxtFrm*)this)->nWeight = -1;
                 String aText;
                 if ( !nResId &&
-                    !(aText = pGrfNd->GetAlternateText()).Len() &&
+                     !(aText = pGrfNd->GetTitle()).Len() &&
                      (!GetRealURL( *pGrfNd, aText ) || !aText.Len()))
                 {
                     nResId = STR_COMCORE_READERROR;

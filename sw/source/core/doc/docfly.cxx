@@ -68,6 +68,10 @@
 #include <fmtcnct.hxx>
 #include <dflyobj.hxx>
 
+// --> OD 2009-07-20 #i73249#
+#include <undoflystrattr.hxx>
+// <--
+
 extern USHORT GetHtmlMode( const SwDocShell* );
 
 
@@ -469,6 +473,61 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
     return aTmpSet.Count() || MAKEFRMS == nMakeFrms;
 }
 
+// --> OD 2009-07-20 #i73249#
+void SwDoc::SetFlyFrmTitle( SwFlyFrmFmt& rFlyFrmFmt,
+                            const String& sNewTitle )
+{
+    if ( rFlyFrmFmt.GetObjTitle() == sNewTitle )
+    {
+        return;
+    }
+
+    const bool bFormerIsNoDrawUndoObj( IsNoDrawUndoObj() );
+    SetNoDrawUndoObj( true );
+
+    if ( DoesUndo() )
+    {
+        ClearRedo();
+        AppendUndo( new SwUndoFlyStrAttr( rFlyFrmFmt,
+                                          UNDO_FLYFRMFMT_TITLE,
+                                          rFlyFrmFmt.GetObjTitle(),
+                                          sNewTitle ) );
+    }
+
+    rFlyFrmFmt.SetObjTitle( sNewTitle, true );
+
+    SetNoDrawUndoObj( bFormerIsNoDrawUndoObj );
+
+    SetModified();
+}
+
+void SwDoc::SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
+                                  const String& sNewDescription )
+{
+    if ( rFlyFrmFmt.GetObjDescription() == sNewDescription )
+    {
+        return;
+    }
+
+    const bool bFormerIsNoDrawUndoObj( IsNoDrawUndoObj() );
+    SetNoDrawUndoObj( true );
+
+    if ( DoesUndo() )
+    {
+        ClearRedo();
+        AppendUndo( new SwUndoFlyStrAttr( rFlyFrmFmt,
+                                          UNDO_FLYFRMFMT_DESCRIPTION,
+                                          rFlyFrmFmt.GetObjDescription(),
+                                          sNewDescription ) );
+    }
+
+    rFlyFrmFmt.SetObjDescription( sNewDescription, true );
+
+    SetNoDrawUndoObj( bFormerIsNoDrawUndoObj );
+
+    SetModified();
+}
+// <--
 
 /***************************************************************************
  *  Methode     :   BOOL SwDoc::SetFrmFmtToFly( SwFlyFrm&, SwFrmFmt& )

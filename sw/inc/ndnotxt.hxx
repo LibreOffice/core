@@ -43,7 +43,7 @@ class SW_DLLPUBLIC SwNoTxtNode : public SwCntntNode
     friend class SwNodes;
     friend class SwNoTxtFrm;
 
-    String aAlternateText;      // alternativer Text  (HTML)
+//    String aAlternateText;      // alternativer Text  (HTML)
 
     PolyPolygon *pContour;      // Polygon fuer Konturumlauf
     BOOL bAutomaticContour : 1; // automatic contour polygon, not manipulated
@@ -75,9 +75,16 @@ public:
     virtual BOOL SavePersistentData();
     virtual BOOL RestorePersistentData();
 
-    // alternativen Text abfragen/setzen
-    const String& GetAlternateText() const      { return aAlternateText; }
-    void SetAlternateText( const String& rTxt, sal_Bool bBroadcast=sal_False );
+    const String GetTitle() const;
+    void SetTitle( const String& rTitle,
+                   bool bBroadcast = false );
+    const String GetDescription() const;
+    void SetDescription( const String& rDescription,
+                         bool bBroadcast = false );
+
+//    const String GetAlternateText() const;
+//    void SetAlternateText( const String& rTxt,
+//                           sal_Bool bBroadcast=sal_False );
 
     void               SetContour( const PolyPolygon *pPoly,
                                    BOOL bAutomatic = FALSE );

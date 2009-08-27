@@ -1258,6 +1258,10 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_IID_COLRIGHT                 (FN_FRAME + 17)
 
 #define FN_SET_FRM_ALT_NAME             (FN_FRAME + 18)
+// --> OD 2009-07-13 #i73249#
+#define FN_UNO_TITLE                    (FN_FRAME + 19)
+#define FN_UNO_DESCRIPTION              (FN_FRAME + 20)
+// <--
 
 
 //Member-Ids fuer Fill/SetVariable an Items

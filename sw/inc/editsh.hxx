@@ -622,9 +622,9 @@ public:
                   const Graphic* pGraphic = 0,
                   const GraphicObject* pGrafObj = 0 );
 
-    // alternativen Text einer Grafik/OLe-Objectes abfragen/setzen
-    const String& GetAlternateText() const;
-    void SetAlternateText( const String& rTxt );
+//    // alternativen Text einer Grafik/OLe-Objectes abfragen/setzen
+//    const String& GetAlternateText() const;
+//    void SetAlternateText( const String& rTxt );
 
     //eindeutige Identifikation des Objektes (fuer ImageMapDlg)
     void    *GetIMapInventor() const;

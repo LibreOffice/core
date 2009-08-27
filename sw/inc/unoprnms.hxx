@@ -804,7 +804,10 @@ enum SwPropNameIds
 /* 0734 */  UNO_NAME_CHAR_OVERLINE_COLOR,
 /* 0735 */  UNO_NAME_CHAR_OVERLINE_HAS_COLOR,
 /* 0736 */  UNO_NAME_OUTLINE_LEVEL,  //#outline level,add<-zhaojianwei outlinelevel
-/* 0737 */  SW_PROPNAME_END
+// --> OD 2009-07-13 #i73249#
+/* 0737 */  UNO_NAME_DESCRIPTION,
+// <--
+/* 0738 */  SW_PROPNAME_END
 };
 
 

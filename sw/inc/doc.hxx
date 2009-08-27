@@ -1091,7 +1091,12 @@ public:
 
     sal_Bool SetFrmFmtToFly( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFmt,
                         SfxItemSet* pSet = 0, sal_Bool bKeepOrient = sal_False );
-
+    // --> OD 2009-07-20 #i73249#
+    void SetFlyFrmTitle( SwFlyFrmFmt& rFlyFrmFmt,
+                         const String& sNewTitle );
+    void SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
+                               const String& sNewDescription );
+    // <--
 
     /** Footnotes
     */

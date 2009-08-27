@@ -778,7 +778,8 @@ const SwPropNameTab aPropNameTab = {
 /* 0733 CHAR_OVERLINE */               {MAP_CHAR_LEN("CharOverline")},
 /* 0734 CHAR_OVERLINE_COLOR */         {MAP_CHAR_LEN("CharOverlineColor")},
 /* 0735 CHAR_OVERLINE_HAS_COLOR */     {MAP_CHAR_LEN("CharOverlineHasColor")},
-/* 0736 UNO_NAME_OUTLINE_LEVEL */       {MAP_CHAR_LEN("OutlineLevel")}//#outline level,add<-zhaojianwei Outlinelevel
+/* 0736 UNO_NAME_OUTLINE_LEVEL */       {MAP_CHAR_LEN("OutlineLevel")},//#outline level,add<-zhaojianwei Outlinelevel
+/* 0737 UNO_NAME_DESCRIPTION */         {MAP_CHAR_LEN("Description")}
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )

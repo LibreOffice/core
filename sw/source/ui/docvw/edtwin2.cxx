@@ -94,6 +94,11 @@
 #include <PostItMgr.hxx>
 #include <fmtfld.hxx>
 
+// --> OD 2009-08-18 #i104300#
+#include <IDocumentMarkAccess.hxx>
+#include <ndtxt.hxx>
+// <--
+
 /*--------------------------------------------------------------------
     Beschreibung:   KeyEvents
  --------------------------------------------------------------------*/
@@ -205,6 +210,38 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         sSuffix.EqualsAscii( pMarkToOLE ))
                     sTxt = sTxt.Copy( 0, nFound - 1);
                 }
+                // --> OD 2009-08-18 #i104300#
+                // special handling if target is a cross-reference bookmark
+                {
+                    String sTmpSearchStr = sTxt.Copy( 1, sTxt.Len() );
+                    IDocumentMarkAccess* const pMarkAccess =
+                                                rSh.getIDocumentMarkAccess();
+                    IDocumentMarkAccess::const_iterator_t ppBkmk =
+                                    pMarkAccess->findBookmark( sTmpSearchStr );
+                    if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
+                         IDocumentMarkAccess::GetType( *(ppBkmk->get()) )
+                            == IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK )
+                    {
+                        SwTxtNode* pTxtNode = ppBkmk->get()->GetMarkStart().nNode.GetNode().GetTxtNode();
+                        if ( pTxtNode )
+                        {
+                            sTxt = pTxtNode->GetExpandTxt( 0, pTxtNode->Len(), true, true );
+
+                            if( sTxt.Len() )
+                            {
+                                sTxt.EraseAllChars( 0xad );
+                                for( sal_Unicode* p = sTxt.GetBufferAccess(); *p; ++p )
+                                {
+                                    if( *p < 0x20 )
+                                        *p = 0x20;
+                                    else if(*p == 0x2011)
+                                        *p = '-';
+                                }
+                            }
+                        }
+                    }
+                }
+                // <--
                 // --> OD 2007-07-26 #i80029#
                 BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
