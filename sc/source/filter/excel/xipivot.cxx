@@ -1435,7 +1435,7 @@ void XclImpPivotTable::MaybeRefresh()
     {
         // 'refresh table on load' flag is set.  Refresh the table now.  Some
         // Excel files contain partial table output when this flag is set.
-        mpDPObj->Output();
+        mpDPObj->Output(maOutScRange.aStart);
     }
 }
 
