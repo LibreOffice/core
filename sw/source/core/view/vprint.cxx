@@ -1216,7 +1216,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
         ( bIsPDFExport || rPrintData.GetJobName().Len() /*TLPDF|| pOutDev->IsJobActive()*/) )
     {
 // TLPDF        BOOL bStop = FALSE;
-        int nJobStartError = JOBSET_ERR_DEFAULT;
+// TLPDF        int nJobStartError = JOBSET_ERR_DEFAULT;
 
         XubString sJobName( rPrintData.GetJobName() );
 
