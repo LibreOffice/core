@@ -458,7 +458,7 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
         case DBMGR_MERGE_MAILMERGE: // Serienbrief
         {
             SwView& rView = rMergeDesc.rSh.GetView();
-#ifdef TL_NOT_NOW /*TLPDF*/                            
+#ifdef TL_NOT_NOW /*TLPDF*/
             SfxDispatcher *pDis = rView.GetViewFrame()->GetDispatcher();
             SfxItemSet aPrintArgs( rView.GetPool(),
                     SID_SILENT, SID_SILENT, //5528
@@ -523,7 +523,7 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
                 }
 
             }
-#endif  //def TL_NOT_NOW /*TLPDF*/                            
+#endif  //def TL_NOT_NOW /*TLPDF*/
 
 // TLPDF            pDis->Execute( SID_PRINTDOC,
 // TLPDF                                 SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD,
@@ -925,8 +925,8 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
 //TLPDF    if( rOpt.IsPrintSingleJobs()  )
 //TLPDF     pPrt->SetEndPrintHdl( Link() );
 
-    BOOL bUserBreak = FALSE,
-         bRet = FALSE;
+//TLPDF    BOOL bUserBreak = FALSE;
+    BOOL bRet = FALSE;
     long nStartRow, nEndRow;
     //calculate number of data sets to be printed
 

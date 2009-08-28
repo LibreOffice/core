@@ -1363,9 +1363,9 @@ sal_Bool ViewShell::PrintOrPDFExport(
 // TLPDF                            pShell->InitPrt( pOutDev, bIsPDFExport ? pOutDev : 0 );
                            pShell->InitPrt( pOutDev );
 
-                            ViewShell *pViewSh2 = nPage == 0 ? /* post-it page? */
+                            ViewShell *pViewSh3 = nPage == 0 ? /* post-it page? */
                                 rPrintData.GetRenderData().m_pPostItShell : pShell;
-                            ::SetSwVisArea( pViewSh2, pStPage->Frm() );     // TLPDF
+                            ::SetSwVisArea( pViewSh3, pStPage->Frm() );     // TLPDF
 // TLPDF                            nJobStartError = JOBSET_ERR_ISSTARTET;
                         }
                         // --> FME 2005-12-12 #b6354161# Feature - Print empty pages
