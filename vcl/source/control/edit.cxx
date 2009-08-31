@@ -2836,6 +2836,9 @@ Size Edit::CalcMinimumSize() const
     Size aMinSize ( CalcSize( 3 ) );
     if( aSize.Width() < aMinSize.Width() )
         aSize.Width() = aMinSize.Width();
+    // add some space between text entry an border
+    aSize.Height() += 4;
+
     aSize = CalcWindowSize( aSize );
 
     // ask NWF what if it has an opinion, too

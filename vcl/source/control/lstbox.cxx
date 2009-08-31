@@ -1284,6 +1284,7 @@ Size ListBox::CalcMinimumSize() const
     else
     {
         aSz.Height() = mpImplLB->CalcSize( 1 ).Height();
+        aSz.Height() += 4; // add a space between entry and border
         // size to maxmimum entry width and add a little breathing space
         aSz.Width() = mpImplLB->GetMaxEntryWidth() + 4;
         // do not create ultrathin ListBoxes, it doesn't look good
