@@ -130,7 +130,7 @@ XmlReader::Result XmlReader::nextItem(
     case STATE_EMPTY_ELEMENT_TAG:
         handleElementEnd();
         return RESULT_END;
-    case STATE_DONE:
+    default: // STATE_DONE
         return RESULT_DONE;
     }
 }
