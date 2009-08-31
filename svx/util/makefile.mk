@@ -191,7 +191,8 @@ SHL2STDLIBS= \
             $(CPPUHELPERLIB)	\
             $(CPPULIB) \
             $(VOSLIB) \
-            $(SALLIB)
+            $(SALLIB) \
+            $(ICUUCLIB)
 
 .IF "$(GUI)"=="WNT"
 SHL2STDLIBS+=$(SHELLLIB)
