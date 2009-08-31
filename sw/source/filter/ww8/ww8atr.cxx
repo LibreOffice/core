@@ -2206,6 +2206,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
 
                 }
 
+
         if( nsSwTOXElement::TOX_OUTLINELEVEL & pTOX->GetCreateType() )
                   {
             // Take the TOC value of the max level to evaluate to as
@@ -2229,7 +2230,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
             // non-standard style for that level, i.e. ignore headline
             // styles 1-9 and find the lowest valid outline level
             BYTE nPosOfLowestNonStandardLvl = MAXLEVEL;
-            const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
+            const SwTxtFmtColls& rColls = *GetExport().pDoc->GetTxtFmtColls();
             for( n = rColls.Count(); n; )
                       {
             const SwTxtFmtColl* pColl = rColls[ --n ];
@@ -2281,7 +2282,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                   }
               }
               }
-          }
+                  }
 
                 if( nsSwTOXElement::TOX_TEMPLATE & pTOX->GetCreateType() )
                     // --> OD 2009-02-27 #i99641#
@@ -2300,7 +2301,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                             TOX_STYLE_DELIMITER, nPos ));
                                 if( sStyle.Len() )
                                 {
-                                    SwTxtFmtColl* pColl = pDoc->FindTxtFmtCollByName(sStyle);
+                                    SwTxtFmtColl* pColl = GetExport().pDoc->FindTxtFmtCollByName(sStyle);
                                     if (!pColl->IsAssignedToListLevelOfOutlineStyle() || pColl->GetAssignedOutlineStyleLevel() < nTOXLvl)
                                     {
                                         if( sTOption.Len() )
@@ -2373,6 +2374,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                     sStr.APPEND_CONST_ASC("\\h");
             }
             break;
+            }
         }
 
         if( sStr.Len() )
@@ -2381,8 +2383,9 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
             GetExport( ).OutputField( 0, eCode, sStr, WRITEFIELD_START | WRITEFIELD_CMD_START |
                 WRITEFIELD_CMD_END );
         }
+
+        GetExport( ).bStartTOX = false;
     }
-    GetExport( ).bStartTOX = false;
 }
 
 void AttributeOutputBase::EndTOX( const SwSection& rSect )

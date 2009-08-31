@@ -256,8 +256,8 @@ public:
 private:
     void WriteFtnEndTxt( WW8Export& rWrt, ULONG nCpStt );
 public:
-    void OutHeaderFooter( WW8Export& rWrt, bool bHeader,
-            const SwFmt& rFmt, ULONG& rCpPos, BYTE nHFFlags, BYTE nFlag );
+    void OutHeaderFooter(WW8Export& rWrt, bool bHeader,
+            const SwFmt& rFmt, ULONG& rCpPos, BYTE nHFFlags, BYTE nFlag,  BYTE nBreakCode);
 };
 
 //--------------------------------------------------------------------------
@@ -657,7 +657,7 @@ public:
                                const SwTxtNode* pNd );
 
     /// Write header/footer text.
-    void WriteHeaderFooterText( const SwFmt& rFmt, bool bHeader );
+    void WriteHeaderFooterText( const SwFmt& rFmt, bool bHeader);
 
     /// Format of the section.
     const SwSectionFmt* GetSectionFormat( const SwNode& rNd ) const;
@@ -700,7 +700,8 @@ public:
 
     /// Output the actual headers and footers.
     virtual void WriteHeadersFooters( BYTE nHeadFootFlags,
-            const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt ) = 0;
+            const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt,
+        BYTE nBreakCode) = 0;
 
     /// Write the field
     virtual void OutputField( const SwField* pFld, ww::eField eFldType,
@@ -1090,7 +1091,8 @@ public:
 
     /// Output the actual headers and footers.
     virtual void WriteHeadersFooters( BYTE nHeadFootFlags,
-            const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt );
+            const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt,
+        BYTE nBreakCode);
 
 protected:
     /// Output SwGrfNode

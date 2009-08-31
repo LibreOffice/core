@@ -1123,7 +1123,7 @@ void WW8_WrPlcSepx::OutHeaderFooter( WW8Export& rWrt, bool bHeader,
     if ( nFlag & nHFFlags )
     {
         pTxtPos->Append( rCpPos );
-        rWrt.WriteHeaderFooterText( rFmt, bHeader );
+        rWrt.WriteHeaderFooterText( rFmt, bHeader);
         rWrt.WriteStringAsPara( aEmptyStr ); // CR ans Ende ( sonst mault WW )
         rCpPos = rWrt.Fc2Cp( rWrt.Strm().Tell() );
     }
@@ -1411,31 +1411,31 @@ void WW8Export::SetupSectionPositions( WW8_PdAttrDesc* pA )
 }
 
 void WW8Export::WriteHeadersFooters( BYTE nHeadFootFlags,
-        const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt )
+        const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, BYTE nBreakCode )
 {
     ULONG nCpPos = Fc2Cp( Strm().Tell() );
 
     IncrementHdFtIndex();
     if ( !(nHeadFootFlags & WW8_HEADER_EVEN) && pDop->fFacingPages )
-        pSepx->OutHeaderFooter( *this, true, rFmt, nCpPos, nHeadFootFlags, WW8_HEADER_ODD );
+        pSepx->OutHeaderFooter( *this, true, rFmt, nCpPos, nHeadFootFlags, WW8_HEADER_ODD, nBreakCode );
     else
-        pSepx->OutHeaderFooter( *this, true, rLeftFmt, nCpPos, nHeadFootFlags, WW8_HEADER_EVEN );
+        pSepx->OutHeaderFooter( *this, true, rLeftFmt, nCpPos, nHeadFootFlags, WW8_HEADER_EVEN, nBreakCode );
     IncrementHdFtIndex();
-    pSepx->OutHeaderFooter( *this, true, rFmt, nCpPos, nHeadFootFlags, WW8_HEADER_ODD );
+    pSepx->OutHeaderFooter( *this, true, rFmt, nCpPos, nHeadFootFlags, WW8_HEADER_ODD, nBreakCode );
 
     IncrementHdFtIndex();
     if ( !(nHeadFootFlags & WW8_FOOTER_EVEN) && pDop->fFacingPages )
-        pSepx->OutHeaderFooter( *this, false, rFmt, nCpPos, nHeadFootFlags, WW8_FOOTER_ODD );
+        pSepx->OutHeaderFooter( *this, false, rFmt, nCpPos, nHeadFootFlags, WW8_FOOTER_ODD, nBreakCode );
     else
-        pSepx->OutHeaderFooter( *this, false, rLeftFmt, nCpPos, nHeadFootFlags, WW8_FOOTER_EVEN );
+        pSepx->OutHeaderFooter( *this, false, rLeftFmt, nCpPos, nHeadFootFlags, WW8_FOOTER_EVEN, nBreakCode );
     IncrementHdFtIndex();
-    pSepx->OutHeaderFooter( *this, false, rFmt, nCpPos, nHeadFootFlags, WW8_FOOTER_ODD );
+    pSepx->OutHeaderFooter( *this, false, rFmt, nCpPos, nHeadFootFlags, WW8_FOOTER_ODD, nBreakCode );
 
     //#i24344# Drawing objects cannot be directly shared between main hd/ft
     //and title hd/ft so we need to differenciate them
     IncrementHdFtIndex();
-    pSepx->OutHeaderFooter( *this, true, rFirstPageFmt, nCpPos, nHeadFootFlags, WW8_HEADER_FIRST );
-    pSepx->OutHeaderFooter( *this, false, rFirstPageFmt, nCpPos, nHeadFootFlags, WW8_FOOTER_FIRST );
+    pSepx->OutHeaderFooter( *this, true, rFirstPageFmt, nCpPos, nHeadFootFlags, WW8_HEADER_FIRST, nBreakCode );
+    pSepx->OutHeaderFooter( *this, false, rFirstPageFmt, nCpPos, nHeadFootFlags, WW8_FOOTER_FIRST, nBreakCode );
 }
 
 void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAttrDesc* pA )
@@ -1672,7 +1672,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     const SwTxtNode *pOldPageRoot = GetHdFtPageRoot();
     SetHdFtPageRoot( rSepInfo.pPDNd ? rSepInfo.pPDNd->GetTxtNode() : 0 );
 
-    WriteHeadersFooters( nHeadFootFlags, *pPdFmt, *pPdLeftFmt, *pPdFirstPgFmt );
+    WriteHeadersFooters( nHeadFootFlags, *pPdFmt, *pPdLeftFmt, *pPdFirstPgFmt, nBreakCode );
 
     SetHdFtPageRoot( pOldPageRoot );
 
