@@ -1718,6 +1718,7 @@ void PrintDialog::updateNupFromPages()
     {
         nRows = nCols = 1;
         nSheetMargin = 0;
+        nPageMargin = 0;
     }
     else if( nPages == 2 || nPages == 4 || nPages == 6 || nPages == 9 || nPages == 16 )
     {
