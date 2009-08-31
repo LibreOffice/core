@@ -2753,7 +2753,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     awt::Size aPageSize( TWIP_TO_MM100( aPgSize.Width() ),
                          TWIP_TO_MM100( aPgSize.Height() ));
     // prospect printing should be landscape, thus switching width and height
-    if (m_pPrintUIOptions->getBoolValue( "PrintProspect", sal_False ))
+    if (m_pPrintUIOptions->getBoolValue( "PrintProspect", sal_False ) &&
+        aPageSize.Height > aPageSize.Width)
         aPageSize = awt::Size( aPageSize.Height, aPageSize.Width );
     uno::Sequence< beans::PropertyValue > aRenderer(2);
     aRenderer[0].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );

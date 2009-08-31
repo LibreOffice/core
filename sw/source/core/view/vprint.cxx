@@ -1070,8 +1070,8 @@ sal_Bool ViewShell::PrintOrPDFExportMM(
 
 
 sal_Bool ViewShell::PrintOrPDFExport(
-    OutputDevice* pOutDev,
-    const SwPrtOptions &rPrintData, /* TLPDF can't we make use of just SwPrintData only as it is the case in PrintProspect???  */
+    OutputDevice *pOutDev,
+    const SwPrtOptions &rPrintData,
     sal_Int32 nRenderer,    // the index in the vector of pages to be printed
     bool bIsPDFExport )
 {
@@ -1079,36 +1079,16 @@ sal_Bool ViewShell::PrintOrPDFExport(
 //Immer die Druckroutinen in viewpg.cxx (PrintPreViewPage und PrintProspect) mitpflegen!!
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    BOOL bStartJob = FALSE;
-    //! Note: Since for PDF export of (multi-)selection a temporary
-    //! document is created that contains only the selects parts,
-    //! and thus that document is to printed in whole the,
-    //! rPrintData.bPrintSelection parameter will be false.
-    BOOL bSelection = rPrintData.bPrintSelection;
+    const sal_Int32 nMaxRenderer = rPrintData.GetRenderData().GetPagesToPrint().size() - 1;
+#if OSL_DEBUG_LEVEL > 1
+    DBG_ASSERT( 0 <= nRenderer && nRenderer < nMaxRenderer, "nRenderer out of bounds");
+#endif
+    if (!pOutDev || nMaxRenderer <= 0 || nRenderer < 0 || nRenderer > nMaxRenderer)
+        return sal_False;
 
-// TLPDF: this one should hold just one page now. Thus clean-up should be possible
-    MultiSelection aMulti( rPrintData.aMulti );
-
-    if ( !pOutDev || !aMulti.GetSelectCount() )
-        return bStartJob;
-
-    // save settings of OutputDevice (should be done always now since the
+    // save settings of OutputDevice (should be done always since the
     // output device is now provided by a call from outside the Writer)
     pOutDev->Push();
-
-    Range aPages( aMulti.FirstSelected(), aMulti.LastSelected() );
-    if ( aPages.Max() > USHRT_MAX )
-        aPages.Max() = USHRT_MAX;
-
-    ASSERT( aPages.Min() > 0,
-            "Seite 0 Drucken?" );
-    ASSERT( aPages.Min() <= aPages.Max(),
-            "MinSeite groesser MaxSeite." );
-
-// TLPDF
-    ASSERT( aPages.Min() == aPages.Max(), "Min page should be equal to Max page now" ); /* TLPDF */
-// TLPDF TODO: clean-up aPage.Min/Max which should be identical now
-
 
     // Einstellungen am Drucker merken
 //    SwPrtOptSave aPrtSave( pOutDev );      /* TLPDF wo dann heutzutage ??? */
@@ -1121,6 +1101,12 @@ sal_Bool ViewShell::PrintOrPDFExport(
     //!! (h?ngt mit OLE Objekten im Dokument zusammen.)
     SfxObjectShellRef aDocShellRef;
 
+    //! Note: Since for PDF export of (multi-)selection a temporary
+    //! document is created that contains only the selects parts,
+    //! and thus that document is to printed in whole the,
+    //! rPrintData.bPrintSelection parameter will be false.
+    BOOL bSelection = rPrintData.bPrintSelection;
+
     // PDF export for (multi-)selection has already generated a temporary document
     // with the selected text. (see XRenderable implementation in unotxdoc.cxx)
     // Thus we like to go in the 'else' part here in that case.
@@ -1132,18 +1118,15 @@ sal_Bool ViewShell::PrintOrPDFExport(
         pOutDevDoc = CreatePrtDoc( /*TLPDF pOutDev,*/ aDocShellRef );
 
         // eine ViewShell darauf
-// TLPDF       OutputDevice *pTmpDev = bIsPDFExport ? pOutDev : 0;
-// TLPDF       pShell = new ViewShell( *pOutDevDoc, 0, pOpt, pTmpDev );
         pShell = new ViewShell( *pOutDevDoc, 0, pOpt, pOutDev );
         pOutDevDoc->SetRefForDocShell( 0 );
     }
     else
     {
         pOutDevDoc = GetDoc();
-// TLPDF        OutputDevice *pTmpDev = bIsPDFExport ? pOutDev : 0;
-// TLPDF        pShell = new ViewShell( *this, 0, pTmpDev );
         pShell = new ViewShell( *this, 0, pOutDev );
     }
+
     SdrView *pDrawView = pShell->GetDrawView();
     if (pDrawView)
     {
@@ -1154,281 +1137,81 @@ sal_Bool ViewShell::PrintOrPDFExport(
     {   //Zusaetzlicher Scope, damit die CurrShell vor dem zerstoeren der
         //Shell zurueckgesetzt wird.
 
-    SET_CURR_SHELL( pShell );
+        SET_CURR_SHELL( pShell );
 
-    //JP 01.02.99: das ReadOnly Flag wird NIE mitkopiert; Bug 61335
-    if( pOpt->IsReadonly() )
-        pShell->pOpt->SetReadonly( TRUE );
+        //JP 01.02.99: das ReadOnly Flag wird NIE mitkopiert; Bug 61335
+        if( pOpt->IsReadonly() )
+            pShell->pOpt->SetReadonly( TRUE );
 
-    // save options at draw view:
-    SwDrawViewSave aDrawViewSave( pShell->GetDrawView() );
+        // save options at draw view:
+        SwDrawViewSave aDrawViewSave( pShell->GetDrawView() );
 
-    pShell->PrepareForPrint( rPrintData );
+        pShell->PrepareForPrint( rPrintData );
 
-    XubString* pStr = 0;
-//TLPDF    ULONG nMergeAct = rPrintData.nMergeAct, nMergeCnt = rPrintData.nMergeCnt;
-
-
-/* TLPDF neu: start */
+        const sal_Int32 nPage = rPrintData.GetRenderData().GetPagesToPrint()[ nRenderer ]; /* TLPDF */
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( 0 <= nRenderer && nRenderer < (sal_Int32)rPrintData.GetRenderData().GetPagesToPrint().size(), "nRenderer out of bounds");
+        DBG_ASSERT( nPage == 0 || rPrintData.GetRenderData().GetValidPagesSet().count( nPage ) == 1, "nPage not valid" );
 #endif
-    const sal_Int32 nPage = rPrintData.GetRenderData().GetPagesToPrint()[ nRenderer ]; /* TLPDF */
-#if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( nPage == 0 || rPrintData.GetRenderData().GetValidPagesSet().count( nPage ) == 1, "nPage not valid" );
-#endif
-    const SwPageFrm *pStPage = 0;
-    if (nPage > 0)  // a 'regular' page, not one from the post-it document
-    {
-        const SwRenderData::ValidStartFramesMap_t &rFrms = rPrintData.GetRenderData().GetValidStartFrames();
-        SwRenderData::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( nPage ) );
-        DBG_ASSERT( aIt != rFrms.end(), "failed to find start frame" );
-        if (aIt == rFrms.end())
-            return sal_False;
-        pStPage = aIt->second;
-    }
-    else    // a page from the post-its document ...
-    {
-        DBG_ASSERT( nPage == 0, "unexpected page number. 0 for post-it pages expected" );
-        pStPage = rPrintData.GetRenderData().GetPostItStartFrames()[ nRenderer ];
-    }
-    DBG_ASSERT( pStPage, "failed to get start page" );
-/* TLPDF neu: end */
+        const SwPageFrm *pStPage = 0;
+        if (nPage > 0)  // a 'regular' page, not one from the post-it document
+        {
+            const SwRenderData::ValidStartFramesMap_t &rFrms = rPrintData.GetRenderData().GetValidStartFrames();
+            SwRenderData::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( nPage ) );
+            DBG_ASSERT( aIt != rFrms.end(), "failed to find start frame" );
+            if (aIt == rFrms.end())
+                return sal_False;
+            pStPage = aIt->second;
+        }
+        else    // a page from the post-its document ...
+        {
+            DBG_ASSERT( nPage == 0, "unexpected page number. 0 for post-it pages expected" );
+            pStPage = rPrintData.GetRenderData().GetPostItStartFrames()[ nRenderer ];
+        }
+        DBG_ASSERT( pStPage, "failed to get start page" );
 
+        // benoetigte Seiten fuers Drucken formatieren
+        pShell->CalcPagesForPrint( (USHORT)nPage, 0 /*TLPDF*/, 0 /*TLPDFpStr*/,
+                                    0, 0 /* TLPDF, there is no progressbar right now nMergeAct, nMergeCnt */ );
 
-    // benoetigte Seiten fuers Drucken formatieren
-    pShell->CalcPagesForPrint( (USHORT)nPage, 0 /*TLPDF*/, pStr,
-                                0, 0 /* TLPDF, there is no progressbar right now nMergeAct, nMergeCnt */ );
+        // Some field types, can require a valid layout
+        // (expression fields in tables). For these we do an UpdateFlds
+        // here after calculation of the pages.
+        // --> FME 2004-06-21 #i9684# For performance reasons, we do not update
+        //                            the fields during pdf export.
+        // #i56195# prevent update of fields (for mail merge)
+        if ( !bIsPDFExport && rPrintData.bUpdateFieldsInPrinting )
+            pShell->UpdateFlds(TRUE);
+        // <--
 
-    // Some field types, can require a valid layout
-    // (expression fields in tables). For these we do an UpdateFlds
-    // here after calculation of the pages.
-    // --> FME 2004-06-21 #i9684# For performance reasons, we do not update
-    //                            the fields during pdf export.
-    // #i56195# prevent update of fields (for mail merge)
-    if ( !bIsPDFExport && rPrintData.bUpdateFieldsInPrinting )
-    // <--
-        pShell->UpdateFlds(TRUE);
+        ViewShell *pViewSh2 = nPage == 0 ? /* post-it page? */
+                rPrintData.GetRenderData().m_pPostItShell : pShell;
+        ::SetSwVisArea( pViewSh2, pStPage->Frm() );     // TLPDF
 
-// TLPDF   if( !pShell->Imp()->IsStopOutDev() &&
-// TLPDF       ( bIsPDFExport || rPrintData.GetJobName().Len() || pOutDev->IsJobActive()) )
-    if( /*!pShell->Imp()->IsStopOutDev() && */
-        ( bIsPDFExport || rPrintData.GetJobName().Len() /*TLPDF|| pOutDev->IsJobActive()*/) )
-    {
-// TLPDF        BOOL bStop = FALSE;
-// TLPDF        int nJobStartError = JOBSET_ERR_DEFAULT;
+        //  wenn wir einen Umschlag drucken wird ein Offset beachtet
+        if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
+        {
+            Point aNewOrigin = pOutDev->GetMapMode().GetOrigin();
+            aNewOrigin += rPrintData.aOffset;
+            MapMode aTmp( pOutDev->GetMapMode() );
+            aTmp.SetOrigin( aNewOrigin );
+            pOutDev->SetMapMode( aTmp );
+        }
 
-        XubString sJobName( rPrintData.GetJobName() );
+        pShell->InitPrt( pOutDev );
 
-// HACK: Hier muss von der MultiSelection noch eine akzeptable Moeglichkeit
-// geschaffen werden, alle Seiten von Seite x an zu deselektieren.
-// Z.B. durch SetTotalRange ....
+        pViewSh2 = nPage == 0 ? /* post-it page? */
+                rPrintData.GetRenderData().m_pPostItShell : pShell;
+        ::SetSwVisArea( pViewSh2, pStPage->Frm() );     // TLPDF
 
-//          aMulti.Select( Range( nLastPageNo+1, SELECTION_MAX ), FALSE );
-// TLPDF           MultiSelection aTmpMulti( Range( 1, nLastPageNo ) );
-            MultiSelection aTmpMulti( Range( 1, nPage ) );
-            long nTmpIdx = aMulti.FirstSelected();
-            static long nEndOfSelection = SFX_ENDOFSELECTION;
-// TLPDF            while ( nEndOfSelection != nTmpIdx && nTmpIdx <= long(nLastPageNo) )
-            while ( nEndOfSelection != nTmpIdx && nTmpIdx <= long(nPage) )
-            {
-                aTmpMulti.Select( nTmpIdx );
-                nTmpIdx = aMulti.NextSelected();
-            }
-            aMulti = aTmpMulti;
-// Ende des HACKs
+        pStPage->GetUpper()->Paint( pStPage->Frm() );
 
-#if 0
-            const USHORT nSelCount = USHORT(aMulti.GetSelectCount()
-                            /* * nCopyCnt*/);
-#endif
-
-            // PostitListe holen
-            _SetGetExpFlds aPostItFields;
-// TLPDF            SwDoc*     pPostItDoc   = 0;
-// TLPDF            ViewShell* pPostItShell = 0;
-#ifdef TL_NOT_NOW /*TLPDF*/
-            if( rPrintData.nPrintPostIts != POSTITS_NONE )
-            {
-                lcl_GetPostIts( pDoc, aPostItFields );
-                pPostItDoc   = new SwDoc;
-/* TLPDF
-                if (pOutDev)
-                    pPostItDoc->setPrinter( pOutDev, true, true );
-*/
-                pPostItShell = new ViewShell( *pPostItDoc, 0,
-                                               pShell->GetViewOptions() );
-                // Wenn PostIts am Dokumentenende gedruckt werden sollen,
-                // die Druckreihenfolge allerdings umgekehrt ist, dann hier
-                if ( ( rPrintData.nPrintPostIts == POSTITS_ENDDOC ) &&
-                        rPrintData.bPrintReverse )
-                        lcl_PrintPostItsEndDoc( pPostItShell, aPostItFields,
-                        aMulti, sJobName, bStartJob, nJobStartError,
-                        rPrintData.bPrintRightPage, rPrintData.bPrintLeftPage, TRUE );
-
-            }
-#endif  // TL_NOT_NOW /*TLPDF*/
-
-            // aOldMapMode wird fuer das Drucken von Umschlaegen gebraucht.
-            MapMode aOldMapMode;
-
-            const SwPageDesc *pLastPageDesc = NULL;
-            // BOOL bSetOrient   = FALSE;
-            // BOOL bSetPaperSz  = FALSE;
-            BOOL bSetPrt      = FALSE;
-
-//TLPDF            if ( rPrintData.nPrintPostIts != POSTITS_ONLY )
-            {
-//TLPDF                while( pStPage && !bStop )
-                {
-                    ViewShell *pViewSh2 = nPage == 0 ? /* post-it page? */
-                        rPrintData.GetRenderData().m_pPostItShell : pShell;
-                    ::SetSwVisArea( pViewSh2, pStPage->Frm() );     // TLPDF
-
-                    //  wenn wir einen Umschlag drucken wird ein Offset beachtet
-                    if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
-                    {
-                        aOldMapMode = pOutDev->GetMapMode();
-                        Point aNewOrigin = pOutDev->GetMapMode().GetOrigin();
-                        aNewOrigin += rPrintData.aOffset;
-                        MapMode aTmp( pOutDev->GetMapMode() );
-                        aTmp.SetOrigin( aNewOrigin );
-                        pOutDev->SetMapMode( aTmp );
-                    }
-
-                    {
-                        if ( bSetPrt )
-                        {
-                            // check for empty page
-                            const SwPageFrm& rFormatPage = pStPage->GetFormatPage();
-
-                            if ( pLastPageDesc != rFormatPage.GetPageDesc() )
-                            {
-                                pLastPageDesc = rFormatPage.GetPageDesc();
-#if 0 // TL_PDF
-                                const BOOL bLandScp = rFormatPage.GetPageDesc()->GetLandscape();
-
-                                if( bSetPaperBin )      // Schacht einstellen.
-                                    pPrt->SetPaperBin( rFormatPage.GetFmt()->
-                                                       GetPaperBin().GetValue() );
-
-                                if (bSetOrient )
-                                 {
-                                        // Orientation einstellen: Breiter als Hoch
-                                        //  -> Landscape, sonst -> Portrait.
-                                        if( bLandScp )
-                                            pPrt->SetOrientation(ORIENTATION_LANDSCAPE);
-                                        else
-                                            pPrt->SetOrientation(ORIENTATION_PORTRAIT);
-                                 }
-
-                                 if (bSetPaperSz )
-                                 {
-                                    Size aSize = pStPage->Frm().SSize();
-                                    if ( bLandScp && bSetOrient )
-                                    {
-                                            // landscape is always interpreted as a rotation by 90 degrees !
-                                            // this leads to non WYSIWIG but at least it prints!
-                                            // #i21775#
-                                            long nWidth = aSize.Width();
-                                            aSize.Width() = aSize.Height();
-                                            aSize.Height() = nWidth;
-                                    }
-                                    Paper ePaper = SvxPaperInfo::GetSvxPaper(aSize,MAP_TWIP,TRUE);
-                                    if ( PAPER_USER == ePaper )
-                                            pPrt->SetPaperSizeUser( aSize );
-                                    else
-                                            pPrt->SetPaper( ePaper );
-                                 }
-#endif
-                            }
-                        }
-
-#ifdef TL_NOT_NOW /*TLPDF*/
-                        // Wenn PostIts nach Seite gedruckt werden sollen,
-                        // jedoch Reverse eingestellt ist ...
-                        if( rPrintData.bPrintReverse &&
-                            rPrintData.nPrintPostIts == POSTITS_ENDPAGE )
-                                lcl_PrintPostItsEndPage( pPostItShell, aPostItFields,
-                                    nPage /* TLPDF nPageNo*/, aMulti, sJobName, bStartJob, nJobStartError,
-                                    rPrintData.bPrintRightPage, rPrintData.bPrintLeftPage,
-                                    rPrintData.bPrintReverse );
-#endif  // TL_NOT_NOW /*TLPDF*/
-
-
-// TLPDF                       if( !bStartJob && JOBSET_ERR_DEFAULT == nJobStartError
-// TLPDF                            && sJobName.Len() )
-                        {
-
-// TLPDF                            pShell->InitPrt( pOutDev, bIsPDFExport ? pOutDev : 0 );
-                           pShell->InitPrt( pOutDev );
-
-                            ViewShell *pViewSh3 = nPage == 0 ? /* post-it page? */
-                                rPrintData.GetRenderData().m_pPostItShell : pShell;
-                            ::SetSwVisArea( pViewSh3, pStPage->Frm() );     // TLPDF
-// TLPDF                            nJobStartError = JOBSET_ERR_ISSTARTET;
-                        }
-                        // --> FME 2005-12-12 #b6354161# Feature - Print empty pages
-// TLPDF                        if ( rPrintData.bPrintEmptyPages || pStPage->Frm().Height() )
-                        // <--
-                        {
-                            pStPage->GetUpper()->Paint( pStPage->Frm() );
-                        }
-                        SwPaintQueue::Repaint();
-
-#ifdef TL_NOT_NOW /*TLPDF*/
-                        // Wenn PostIts nach Seite gedruckt werden sollen ...
-                        if( (!rPrintData.bPrintReverse) &&
-                            rPrintData.nPrintPostIts == POSTITS_ENDPAGE )
-                                lcl_PrintPostItsEndPage( pPostItShell, aPostItFields,
-                                    nPage /* TLPDF nPageNo */, aMulti, sJobName, bStartJob, nJobStartError,
-                                    rPrintData.bPrintRightPage, rPrintData.bPrintLeftPage,
-                                    rPrintData.bPrintReverse );
-#endif  // TL_NOT_NOW /*TLPDF*/
-                    }
-
-                    // den eventl. fuer Umschlaege modifizierte OutDevOffset wieder
-                    // zuruecksetzen.
-                    if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
-                        pOutDev->SetMapMode( aOldMapMode );
-
-                }  // TLPDF loop end: while( pStPage && !bStop )
-            }
-
-#ifdef TL_NOT_NOW /*TLPDF*/
-            if (!bStop) // TLPDF: see break above
-            {
-                // Wenn PostIts am Dokumentenende gedruckt werden sollen, dann hier machen
-                if( ((rPrintData.nPrintPostIts == POSTITS_ENDDOC) && !rPrintData.bPrintReverse)
-                    || (rPrintData.nPrintPostIts == POSTITS_ONLY) )
-                        lcl_PrintPostItsEndDoc( pPostItShell, aPostItFields, aMulti,
-                            sJobName, bStartJob, nJobStartError,
-                            rPrintData.bPrintRightPage, rPrintData.bPrintLeftPage,
-                            rPrintData.bPrintReverse );
-
-                if( pPostItShell )
-                {
-                    pPostItDoc->setPrinter( 0, false, false );  //damit am echten DOC der Drucker bleibt
-                    delete pPostItShell;        //Nimmt das PostItDoc mit ins Grab.
-                }
-
-//TLPDF                if( bStartJob )
-//TLPDF                    rPrintData.bJobStartet = TRUE;
-            }   // TLPDF: if (!bStop) see break above
-#endif  // TL_NOT_NOW /*TLPDF*/
-
-    }
-    delete pStr;
-
+        SwPaintQueue::Repaint();
     }  //Zus. Scope wg. CurShell!
 
     delete pShell;
 
     if (bSelection )
     {
-         // damit das Dokument nicht den Drucker mit ins Grab nimmt
-//        pOutDevDoc->setPrinter( 0, false, false );  /*TLPDF should not be needed anymore*/
-
         if ( !pOutDevDoc->release() )
             delete pOutDevDoc;
     }
@@ -1437,7 +1220,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
     // output device is now provided by a call from outside the Writer)
     pOutDev->Pop();
 
-    return bStartJob;
+    return sal_True;
 }
 
 /******************************************************************************

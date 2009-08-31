@@ -552,12 +552,13 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
             aOptions[ nOpts ].Value <<= sal_True ;
 
             const SwModuleOptions * pModOpt = SW_MOD()->GetModuleConfig();
-            if (pModOpt->IsSinglePrintJob())
+            if (pModOpt->IsSinglePrintJob())    // single print job per document?
             {
+                rView.ExecPrint( aOptions, sal_False, sal_False );
             }
             else
             {
-                rView.ExecPrint( aOptions, sal_False, sal_False );
+                // here use the print adaptor top get just one print job
             }
         }
         break;
