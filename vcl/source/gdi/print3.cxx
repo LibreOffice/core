@@ -159,6 +159,7 @@ public:
     PropertyToIndexMap                                          maPropertyToIndex;
     Link                                                        maOptionChangeHdl;
     ControlDependencyMap                                        maControlDependencies;
+    sal_Bool                                                    mbFirstPage;
     sal_Bool                                                    mbLastPage;
     sal_Bool                                                    mbReversePageOrder;
     view::PrintableState                                        meJobState;
@@ -174,6 +175,7 @@ public:
     Size                                                        maFixedPageSize;
 
     ImplPrinterControllerData() :
+        mbFirstPage( sal_True ),
         mbLastPage( sal_False ),
         mbReversePageOrder( sal_False ),
         meJobState( view::PrintableState_JOB_STARTED ),
@@ -690,6 +692,9 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
     if( i_bMayUseCache )
         mpImplData->maPageCache.insert( i_nUnfilteredPage, o_rMtf, aPageSize );
 
+    // reset "FirstPage" property to false now we've gotten at least our first one
+    mpImplData->mbFirstPage = sal_False;
+
     return aPageSize;
 }
 
@@ -986,6 +991,14 @@ Sequence< PropertyValue > PrinterController::getJobProperties( const Sequence< P
     {
         if( aMergeSet.find( mpImplData->maUIProperties[i].Name ) == aMergeSet.end() )
             aResult[nCur++] = mpImplData->maUIProperties[i];
+    }
+    // append IsFirstPage
+    if( aMergeSet.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFirstPage" ) ) ) == aMergeSet.end() )
+    {
+        PropertyValue aVal;
+        aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFirstPage" ) );
+        aVal.Value <<= mpImplData->mbFirstPage;
+        aResult[nCur++] = aVal;
     }
     // append IsLastPage
     if( aMergeSet.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsLastPage" ) ) ) == aMergeSet.end() )
