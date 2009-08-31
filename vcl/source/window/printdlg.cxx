@@ -1750,6 +1750,41 @@ void PrintDialog::updateNupFromPages()
     else
         bCustom = true;
 
+    if( nPages > 1 )
+    {
+        // set upper limits for margins based on job page size and rows/columns
+        Size aSize( getJobPageSize() );
+
+        // maximum sheet distance: 1/2 sheet
+        long nHorzMax = aSize.Width()/2;
+        long nVertMax = aSize.Height()/2;
+        if( nSheetMargin > nHorzMax )
+            nSheetMargin = nHorzMax;
+        if( nSheetMargin > nVertMax )
+            nSheetMargin = nVertMax;
+
+        maNUpPage.maSheetMarginEdt.SetMax(
+                  maNUpPage.maSheetMarginEdt.Normalize(
+                           nHorzMax > nVertMax ? nVertMax : nHorzMax ), FUNIT_100TH_MM );
+
+        // maximum page distance
+        nHorzMax = (aSize.Width() - 2*nSheetMargin);
+        if( nCols > 1 )
+            nHorzMax /= (nCols-1);
+        nVertMax = (aSize.Height() - 2*nSheetMargin);
+        if( nRows > 1 )
+            nHorzMax /= (nRows-1);
+
+        if( nPageMargin > nHorzMax )
+            nPageMargin = nHorzMax;
+        if( nPageMargin > nVertMax )
+            nPageMargin = nVertMax;
+
+        maNUpPage.maPageMarginEdt.SetMax(
+                 maNUpPage.maSheetMarginEdt.Normalize(
+                           nHorzMax > nVertMax ? nVertMax : nHorzMax ), FUNIT_100TH_MM );
+    }
+
     maNUpPage.maNupRowsEdt.SetValue( nRows );
     maNUpPage.maNupColEdt.SetValue( nCols );
     maNUpPage.maPageMarginEdt.SetValue( maNUpPage.maPageMarginEdt.Normalize( nPageMargin ), FUNIT_100TH_MM );
@@ -1956,7 +1991,7 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
         pEdit == &maNUpPage.maSheetMarginEdt || pEdit == &maNUpPage.maPageMarginEdt
        )
     {
-        updateNup();
+        updateNupFromPages();
     }
     else if( pEdit == &maPageEdit )
     {

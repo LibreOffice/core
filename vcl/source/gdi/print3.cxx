@@ -707,25 +707,21 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
     // save gstate
     o_rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_CLIPREGION | PUSH_MAPMODE ) );
 
-    // draw a border
-    if( i_bDrawBorder )
-    {
-        Rectangle aBorderRect( i_rClipRect );
-        aBorderRect.Left()   -= 100;
-        aBorderRect.Top()    -= 100;
-        aBorderRect.Right()  += 100;
-        aBorderRect.Bottom() += 100;
-        o_rMtf.AddAction( new MetaLineColorAction( Color( COL_BLACK ), TRUE ) );
-        o_rMtf.AddAction( new MetaFillColorAction( Color( COL_TRANSPARENT ), FALSE ) );
-        o_rMtf.AddAction( new MetaRectAction( aBorderRect ) );
-    }
-
     // clip to page rect
-    // o_rMtf.AddAction( new MetaClipRegionAction( Region( i_rClipRect ), TRUE ) );
+    o_rMtf.AddAction( new MetaClipRegionAction( Region( i_rClipRect ), TRUE ) );
 
     // append the subpage
     io_rSubPage.WindStart();
     io_rSubPage.Play( o_rMtf );
+
+    // draw a border
+    if( i_bDrawBorder )
+    {
+        Rectangle aBorderRect( i_rClipRect );
+        o_rMtf.AddAction( new MetaLineColorAction( Color( COL_BLACK ), TRUE ) );
+        o_rMtf.AddAction( new MetaFillColorAction( Color( COL_TRANSPARENT ), FALSE ) );
+        o_rMtf.AddAction( new MetaRectAction( aBorderRect ) );
+    }
 
     // restore gstate
     o_rMtf.AddAction( new MetaPopAction() );
