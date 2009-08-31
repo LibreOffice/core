@@ -31,11 +31,16 @@
 #include "sal/config.h"
 
 #include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/Type.hxx"
 #include "com/sun/star/uno/TypeClass.hpp"
+#include "com/sun/star/uno/XInterface.hpp"
 #include "cppu/unotype.hxx"
+#include "osl/diagnose.h"
 #include "rtl/string.h"
+#include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
@@ -51,6 +56,30 @@ namespace css = com::sun::star;
 
 bool isListType(Type type) {
     return type >= TYPE_BOOLEAN_LIST;
+}
+
+Type elementType(Type type) {
+    switch (type) {
+    case TYPE_BOOLEAN_LIST:
+        return TYPE_BOOLEAN;
+    case TYPE_SHORT_LIST:
+        return TYPE_SHORT;
+    case TYPE_INT_LIST:
+        return TYPE_INT;
+    case TYPE_LONG_LIST:
+        return TYPE_LONG;
+    case TYPE_DOUBLE_LIST:
+        return TYPE_DOUBLE;
+    case TYPE_STRING_LIST:
+        return TYPE_STRING;
+    case TYPE_HEXBINARY_LIST:
+        return TYPE_HEXBINARY;
+    default:
+        OSL_ASSERT(false);
+        throw css::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+            css::uno::Reference< css::uno::XInterface >());
+    }
 }
 
 css::uno::Type mapType(Type type) {

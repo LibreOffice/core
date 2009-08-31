@@ -55,6 +55,7 @@ SLOFILES = \
     $(SLO)$/lock.obj \
     $(SLO)$/node.obj \
     $(SLO)$/nodemap.obj \
+    $(SLO)$/pad.obj \
     $(SLO)$/propertynode.obj \
     $(SLO)$/rootaccess.obj \
     $(SLO)$/services.obj \

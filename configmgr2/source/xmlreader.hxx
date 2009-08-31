@@ -37,10 +37,10 @@
 
 #include "boost/noncopyable.hpp"
 #include "osl/file.h"
-#include "rtl/strbuf.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
+#include "pad.hxx"
 #include "span.hxx"
 
 namespace configmgr {
@@ -55,13 +55,14 @@ public:
         NAMESPACE_NONE, NAMESPACE_XML, NAMESPACE_OOR, NAMESPACE_XS,
         NAMESPACE_XSI, NAMESPACE_OTHER };
 
-    enum Result { RESULT_BEGIN, RESULT_END, RESULT_DONE };
+    enum Text { TEXT_NONE, TEXT_RAW, TEXT_NORMALIZED };
 
-    // Result: _BEGIN, _END, _DONE
-    Result nextTag(
-        Namespace * ns, Span * localName,
-        void (* textHandler)(void * userData, Span const & text, bool terminal),
-        void * userData);
+    enum Result { RESULT_BEGIN, RESULT_END, RESULT_TEXT, RESULT_DONE };
+
+    // RESULT_BEGIN: data = localName, ns = ns
+    // RESULT_END: data, ns unused
+    // RESULT_TEXT: data = text, ns unused
+    Result nextItem(Text reportText, Span * data, Namespace * ns);
 
     bool nextAttribute(Namespace * ns, Span * localName);
 
@@ -76,20 +77,17 @@ private:
 
     inline char peek() { return pos_ == end_ ? '\0' : *pos_; }
 
-    void padAppend(char const * begin, sal_Int32 length, bool terminal);
-
     void skipSpace();
 
-    bool skipProcessingInstruction();
+    void skipProcessingInstruction();
 
     bool scanName(char const ** nameColon);
 
     Namespace scanNamespaceIri(char const * begin, char const * end);
 
-    char const * handleReference(
-        char const * begin, char const * position, char const * end);
+    char const * handleReference(char const * position, char const * end);
 
-    void handleAttributeValue(
+    Span handleAttributeValue(
         char const * begin, char const * end, bool fullyNormalize);
 
     Result handleStartTag(Namespace * ns, Span * localName);
@@ -97,6 +95,12 @@ private:
     Result handleEndTag();
 
     void handleElementEnd();
+
+    Result handleSkippedText(Span * data, Namespace * ns);
+
+    Result handleRawText(Span * text);
+
+    Result handleNormalizedText(Span * text);
 
     struct NamespaceData {
         Span prefix;
@@ -146,7 +150,8 @@ private:
     typedef std::vector< AttributeData > Attributes;
 
     enum State {
-        STATE_START, STATE_EMPTY_ELEMENT_TAG, STATE_CONTENT, STATE_DONE };
+        STATE_CONTENT, STATE_START_TAG, STATE_END_TAG, STATE_EMPTY_ELEMENT_TAG,
+        STATE_DONE };
 
     rtl::OUString fileUrl_;
     oslFileHandle fileHandle_;
@@ -160,8 +165,7 @@ private:
     Attributes attributes_;
     Attributes::iterator currentAttribute_;
     bool firstAttribute_;
-    rtl::OStringBuffer padBuffer_;
-    Span pad_;
+    Pad pad_;
 };
 
 }

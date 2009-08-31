@@ -27,40 +27,54 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_SPAN_HXX
-#define INCLUDED_CONFIGMGR_SPAN_HXX
-
+#include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
+#include "osl/diagnose.h"
 #include "rtl/string.h"
 #include "sal/types.h"
 
+#include "pad.hxx"
+#include "span.hxx"
+
 namespace configmgr {
 
-struct Span {
-    char const * begin;
-    sal_Int32 length;
-
-    inline Span(): begin(0), length(0) {}
-        // init length to avoid compiler warnings
-
-    inline Span(char const * theBegin, sal_Int32 theLength):
-        begin(theBegin), length(theLength) {}
-
-    inline void clear() throw() { begin = 0; }
-
-    inline bool is() const { return begin != 0; }
-
-    inline bool equals(Span const & text) const {
-        return rtl_str_compare_WithLength(
-            begin, length, text.begin, text.length) == 0;
+void Pad::add(char const * begin, sal_Int32 length) {
+    OSL_ASSERT(
+        begin != 0 && length >= 0 && !(span_.is() && buffer_.getLength() != 0));
+    if (length != 0) {
+        if (span_.is()) {
+            buffer_.append(span_.begin, span_.length);
+            span_.clear();
+        }
+        if (buffer_.getLength() == 0) {
+            span_ = Span(begin, length);
+        } else {
+            buffer_.append(begin, length);
+        }
     }
-
-    inline bool equals(char const * textBegin, sal_Int32 textLength) const {
-        return equals(Span(textBegin, textLength));
-    }
-};
-
 }
 
-#endif
+void Pad::clear() {
+    OSL_ASSERT(!(span_.is() && buffer_.getLength() != 0));
+    span_.clear();
+    buffer_.setLength(0);
+}
+
+bool Pad::is() const {
+    OSL_ASSERT(!(span_.is() && buffer_.getLength() != 0));
+    return span_.is() || buffer_.getLength() != 0;
+}
+
+Span Pad::get() const {
+    OSL_ASSERT(!(span_.is() && buffer_.getLength() != 0));
+    if (span_.is()) {
+        return span_;
+    } else if (buffer_.getLength() == 0) {
+        return Span(RTL_CONSTASCII_STRINGPARAM(""));
+    } else {
+        return Span(buffer_.getStr(), buffer_.getLength());
+    }
+}
+
+}

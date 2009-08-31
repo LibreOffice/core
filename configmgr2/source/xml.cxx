@@ -65,6 +65,7 @@
 #include "localizedpropertyvaluenode.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
+#include "pad.hxx"
 #include "propertynode.hxx"
 #include "setnode.hxx"
 #include "span.hxx"
@@ -385,10 +386,9 @@ bool parseHexbinaryValue(
     return true;
 }
 
-template< typename T > css::uno::Any parseNormalizedValue(
+template< typename T > css::uno::Any parseValue(
     Span const & text, bool (* parse)(Span const &, T *))
 {
-    //TODO: normalize
     T val;
     if (!(*parse)(text, &val)) {
         throw css::uno::RuntimeException(
@@ -407,7 +407,6 @@ template< typename T > css::uno::Any parseListValue(
     if (separator.is()) {
         sep = separator;
     } else {
-        //TODO: normalize
         sep = Span(RTL_CONSTASCII_STRINGPARAM(" "));
     }
     if (text.length != 0) {
@@ -439,19 +438,19 @@ css::uno::Any parseValue(Span const & separator, Span const & text, Type type) {
                 RTL_CONSTASCII_USTRINGPARAM("invalid value of type any")),
             css::uno::Reference< css::uno::XInterface >());
     case TYPE_BOOLEAN:
-        return parseNormalizedValue(text, &parseBooleanValue);
+        return parseValue(text, &parseBooleanValue);
     case TYPE_SHORT:
-        return parseNormalizedValue(text, &parseShortValue);
+        return parseValue(text, &parseShortValue);
     case TYPE_INT:
-        return parseNormalizedValue(text, &parseIntValue);
+        return parseValue(text, &parseIntValue);
     case TYPE_LONG:
-        return parseNormalizedValue(text, &parseLongValue);
+        return parseValue(text, &parseLongValue);
     case TYPE_DOUBLE:
-        return parseNormalizedValue(text, &parseDoubleValue);
+        return parseValue(text, &parseDoubleValue);
     case TYPE_STRING:
-        return css::uno::makeAny(convertUtf8String(text));
+        return parseValue(text, &parseStringValue);
     case TYPE_HEXBINARY:
-        return parseNormalizedValue(text, &parseHexbinaryValue);
+        return parseValue(text, &parseHexbinaryValue);
     case TYPE_BOOLEAN_LIST:
         return parseListValue(separator, text, &parseBooleanValue);
     case TYPE_SHORT_LIST:
@@ -466,51 +465,6 @@ css::uno::Any parseValue(Span const & separator, Span const & text, Type type) {
         return parseListValue(separator, text, &parseStringValue);
     case TYPE_HEXBINARY_LIST:
         return parseListValue(separator, text, &parseHexbinaryValue);
-    default:
-        OSL_ASSERT(false);
-        throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-            css::uno::Reference< css::uno::XInterface >());
-    }
-}
-
-template< typename T > css::uno::Any parseValueList(
-    std::vector< rtl::OString > const & items,
-    bool (* parse)(Span const &, T *))
-{
-    comphelper::SequenceAsVector< T > seq;
-    for (std::vector< rtl::OString >::const_iterator i(items.begin());
-         i != items.end(); ++i)
-    {
-        T val;
-        if (!(*parse)(Span(i->getStr(), i->getLength()), &val)) {
-            throw css::uno::RuntimeException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid value")),
-                css::uno::Reference< css::uno::XInterface >());
-        }
-        seq.push_back(val);
-    }
-    return css::uno::makeAny(seq.getAsConstList());
-}
-
-css::uno::Any parseValueList(
-    std::vector< rtl::OString > const & items, Type type)
-{
-    switch (type) {
-    case TYPE_BOOLEAN_LIST:
-        return parseValueList(items, &parseBooleanValue);
-    case TYPE_SHORT_LIST:
-        return parseValueList(items, &parseShortValue);
-    case TYPE_INT_LIST:
-        return parseValueList(items, &parseIntValue);
-    case TYPE_LONG_LIST:
-        return parseValueList(items, &parseLongValue);
-    case TYPE_DOUBLE_LIST:
-        return parseValueList(items, &parseDoubleValue);
-    case TYPE_STRING_LIST:
-        return parseValueList(items, &parseStringValue);
-    case TYPE_HEXBINARY_LIST:
-        return parseValueList(items, &parseHexbinaryValue);
     default:
         OSL_ASSERT(false);
         throw css::uno::RuntimeException(
@@ -872,13 +826,14 @@ public:
 
     ~ValueParser() {}
 
+    XmlReader::Text getTextMode() const;
+
     bool startElement(
         XmlReader * reader, XmlReader::Namespace ns, Span const & name);
 
-    bool endElement();
+    bool endElement(XmlReader const * reader);
 
-    void characters(
-        XmlReader const * reader, Span const & text);
+    void characters(Span const & text);
 
     void start(
         rtl::Reference< Node > const & property,
@@ -890,15 +845,35 @@ public:
     Span separator_;
 
 private:
+    void checkEmptyPad(XmlReader const * reader) const;
+
+    template< typename T > css::uno::Any convertItems();
+
     enum State { STATE_TEXT, STATE_TEXT_UNICODE, STATE_IT, STATE_IT_UNICODE };
 
     int layer_;
     rtl::Reference< Node > node_;
     rtl::OUString localizedName_;
     State state_;
-    rtl::OStringBuffer text_;
-    std::vector< rtl::OString > items_;
+    Pad pad_;
+    std::vector< css::uno::Any > items_;
 };
+
+XmlReader::Text ValueParser::getTextMode() const {
+    if (node_.is()) {
+        switch (state_) {
+        case STATE_TEXT:
+        case STATE_IT:
+            return
+                (type_ == TYPE_STRING || type_ == TYPE_STRING_LIST ||
+                 separator_.is())
+                ? XmlReader::TEXT_RAW : XmlReader::TEXT_NORMALIZED;
+        default:
+            break;
+        }
+    }
+    return XmlReader::TEXT_NONE;
+}
 
 bool ValueParser::startElement(
     XmlReader * reader, XmlReader::Namespace ns, Span const & name)
@@ -912,7 +887,7 @@ bool ValueParser::startElement(
             name.equals(RTL_CONSTASCII_STRINGPARAM("it")) &&
             isListType(type_) && !separator_.is())
         {
-            text_.setLength(0); //TODO: handle invalid non-whitespace text
+            checkEmptyPad(reader);
             state_ = STATE_IT;
             return true;
         }
@@ -920,7 +895,7 @@ bool ValueParser::startElement(
     case STATE_IT:
         if (ns == XmlReader::NAMESPACE_NONE &&
             name.equals(RTL_CONSTASCII_STRINGPARAM("unicode")) &&
-            type_ == (state_ == STATE_TEXT ? TYPE_STRING : TYPE_STRING_LIST))
+            (type_ == TYPE_STRING || type_ == TYPE_STRING_LIST))
         {
             sal_Int32 scalar = -1;
             for (;;) {
@@ -943,11 +918,12 @@ bool ValueParser::startElement(
             if (scalar >= 0 && scalar < 0x20 && scalar != 0x09 &&
                 scalar != 0x0A && scalar != 0x0D)
             {
-                text_.append(static_cast< char >(scalar));
+                char c = static_cast< char >(scalar);
+                pad_.add(&c, 1);
             } else if (scalar == 0xFFFE) {
-                text_.append(RTL_CONSTASCII_STRINGPARAM("\xEF\xBF\xBE"));
+                pad_.add(RTL_CONSTASCII_STRINGPARAM("\xEF\xBF\xBE"));
             } else if (scalar == 0xFFFF) {
-                text_.append(RTL_CONSTASCII_STRINGPARAM("\xEF\xBF\xBF"));
+                pad_.add(RTL_CONSTASCII_STRINGPARAM("\xEF\xBF\xBF"));
             } else {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(
@@ -971,7 +947,7 @@ bool ValueParser::startElement(
         css::uno::Reference< css::uno::XInterface >());
 }
 
-bool ValueParser::endElement() {
+bool ValueParser::endElement(XmlReader const * reader) {
     if (!node_.is()) {
         return false;
     }
@@ -980,10 +956,37 @@ bool ValueParser::endElement() {
         {
             css::uno::Any value;
             if (items_.empty()) {
-                value = parseValue(
-                    separator_, Span(text_.getStr(), text_.getLength()), type_);
+                value = parseValue(separator_, pad_.get(), type_);
+                pad_.clear();
             } else {
-                value = parseValueList(items_, type_);
+                checkEmptyPad(reader);
+                switch (type_) {
+                case TYPE_BOOLEAN_LIST:
+                    value = convertItems< sal_Bool >();
+                    break;
+                case TYPE_SHORT_LIST:
+                    value = convertItems< sal_Int16 >();
+                    break;
+                case TYPE_INT_LIST:
+                    value = convertItems< sal_Int32 >();
+                    break;
+                case TYPE_LONG_LIST:
+                    value = convertItems< sal_Int64 >();
+                    break;
+                case TYPE_DOUBLE_LIST:
+                    value = convertItems< double >();
+                    break;
+                case TYPE_STRING_LIST:
+                    value = convertItems< rtl::OUString >();
+                    break;
+                case TYPE_HEXBINARY_LIST:
+                    value = convertItems< css::uno::Sequence< sal_Int8 > >();
+                    break;
+                default:
+                    OSL_ASSERT(false); // this cannot happen
+                    break;
+                }
+                items_.clear();
             }
             if (PropertyNode * prop = dynamic_cast< PropertyNode * >(
                     node_.get()))
@@ -1005,10 +1008,8 @@ bool ValueParser::endElement() {
             } else {
                 OSL_ASSERT(false); // this cannot happen
             }
-            separator_.begin = 0;
+            separator_.clear();
             node_.clear();
-            text_.setLength(0);
-            items_.clear();
         }
         break;
     case STATE_TEXT_UNICODE:
@@ -1016,28 +1017,18 @@ bool ValueParser::endElement() {
         state_ = State(state_ - 1);
         break;
     case STATE_IT:
-        items_.push_back(text_.makeStringAndClear());
+        items_.push_back(parseValue(Span(), pad_.get(), elementType(type_)));
+        pad_.clear();
         state_ = STATE_TEXT;
         break;
     }
     return true;
 }
 
-void ValueParser::characters(XmlReader const * reader, Span const & text) {
+void ValueParser::characters(Span const & text) {
     if (node_.is()) {
-        switch (state_) {
-        case STATE_TEXT:
-        case STATE_IT:
-            text_.append(text.begin, text.length);
-            break;
-        case STATE_TEXT_UNICODE:
-        case STATE_IT_UNICODE:
-            throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("bad <unicode> content in ")) +
-                 reader->getUrl()),
-                css::uno::Reference< css::uno::XInterface >());
-        }
+        OSL_ASSERT(state_ == STATE_TEXT || state_ == STATE_IT);
+        pad_.add(text.begin, text.length);
     }
 }
 
@@ -1050,6 +1041,25 @@ void ValueParser::start(
     state_ = STATE_TEXT;
 }
 
+void ValueParser::checkEmptyPad(XmlReader const * reader) const {
+    if (pad_.is()) {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "mixed text and <it> elements in ")) +
+             reader->getUrl()),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+}
+
+template< typename T > css::uno::Any ValueParser::convertItems() {
+    css::uno::Sequence< T > seq(items_.size());
+    for (sal_Int32 i = 0; i < seq.getLength(); ++i) {
+        OSL_VERIFY(items_[i] >>= seq[i]);
+    }
+    return css::uno::makeAny(seq);
+}
+
 class XcsParser: public Parser {
 public:
     XcsParser(int layer, Data * data):
@@ -1058,12 +1068,14 @@ public:
 private:
     virtual ~XcsParser() {}
 
+    virtual XmlReader::Text getTextMode();
+
     virtual bool startElement(
         XmlReader * reader, XmlReader::Namespace ns, Span const & name);
 
     virtual void endElement(XmlReader const * reader);
 
-    virtual void characters(XmlReader const * reader, Span const & text);
+    virtual void characters(Span const & text);
 
     void handleComponentSchema(XmlReader * reader);
 
@@ -1103,6 +1115,10 @@ private:
     long ignoring_;
     ElementStack elements_;
 };
+
+XmlReader::Text XcsParser::getTextMode() {
+    return valueParser_.getTextMode();
+}
 
 bool XcsParser::startElement(
     XmlReader * reader, XmlReader::Namespace ns, Span const & name)
@@ -1242,7 +1258,7 @@ bool XcsParser::startElement(
 }
 
 void XcsParser::endElement(XmlReader const * reader) {
-    if (valueParser_.endElement()) {
+    if (valueParser_.endElement(reader)) {
         return;
     }
     if (ignoring_ > 0) {
@@ -1306,8 +1322,8 @@ void XcsParser::endElement(XmlReader const * reader) {
     }
 }
 
-void XcsParser::characters(XmlReader const * reader, Span const & text) {
-    valueParser_.characters(reader, text);
+void XcsParser::characters(Span const & text) {
+    valueParser_.characters(text);
 }
 
 void XcsParser::handleComponentSchema(XmlReader * reader) {
@@ -1597,12 +1613,14 @@ public:
 private:
     virtual ~XcuParser() {}
 
+    virtual XmlReader::Text getTextMode();
+
     virtual bool startElement(
         XmlReader * reader, XmlReader::Namespace ns, Span const & name);
 
     virtual void endElement(XmlReader const * reader);
 
-    virtual void characters(XmlReader const * reader, Span const & span);
+    virtual void characters(Span const & span);
 
     void handleComponentData(XmlReader * reader);
 
@@ -1665,6 +1683,10 @@ private:
     rtl::OUString pathPrefix_;
     rtl::OUString path_;
 };
+
+XmlReader::Text XcuParser::getTextMode() {
+    return valueParser_.getTextMode();
+}
 
 bool XcuParser::startElement(
     XmlReader * reader, XmlReader::Namespace ns, Span const & name)
@@ -1786,8 +1808,8 @@ bool XcuParser::startElement(
     return true;
 }
 
-void XcuParser::endElement(XmlReader const *) {
-    if (valueParser_.endElement()) {
+void XcuParser::endElement(XmlReader const * reader) {
+    if (valueParser_.endElement(reader)) {
         return;
     }
     OSL_ASSERT(!state_.empty());
@@ -1819,8 +1841,8 @@ void XcuParser::endElement(XmlReader const *) {
     }
 }
 
-void XcuParser::characters(XmlReader const * reader, Span const & text) {
-    valueParser_.characters(reader, text);
+void XcuParser::characters(Span const & text) {
+    valueParser_.characters(text);
 }
 
 void XcuParser::handleComponentData(XmlReader * reader) {
@@ -2529,35 +2551,32 @@ bool Reader::parse() {
         reader_.reset(new XmlReader(url_));
     }
     for (;;) {
-        switch (elementLocalName_.is()
+        switch (itemData_.is()
                 ? XmlReader::RESULT_BEGIN
-                : reader_->nextTag(
-                    &elementNamespace_, &elementLocalName_, textHandler, this))
+                : reader_->nextItem(
+                    parser_->getTextMode(), &itemData_, &itemNamespace_))
         {
         case XmlReader::RESULT_BEGIN:
             if (!parser_->startElement(
-                    reader_.get(), elementNamespace_, elementLocalName_))
+                    reader_.get(), itemNamespace_, itemData_))
             {
                 return false;
             }
-            elementLocalName_.clear();
             break;
         case XmlReader::RESULT_END:
             parser_->endElement(reader_.get());
             break;
+        case XmlReader::RESULT_TEXT:
+            parser_->characters(itemData_);
+            break;
         case XmlReader::RESULT_DONE:
             return true;
         }
+        itemData_.clear();
     }
 }
 
 Reader::~Reader() {}
-
-void Reader::textHandler(void * userData, Span const & text, bool /*TODO terminal*/)
-{
-    Reader * reader = static_cast< Reader * >(userData);
-    reader->parser_->characters(reader->reader_.get(), text);
-}
 
 Parser::Parser() {}
 
@@ -2569,6 +2588,11 @@ XcdParser::XcdParser(
 {}
 
 XcdParser::~XcdParser() {}
+
+XmlReader::Text XcdParser::getTextMode() {
+    return nestedParser_.is()
+        ? nestedParser_->getTextMode() : XmlReader::TEXT_NONE;
+}
 
 bool XcdParser::startElement(
     XmlReader * reader, XmlReader::Namespace ns, Span const & name)
@@ -2681,9 +2705,9 @@ void XcdParser::endElement(XmlReader const * reader) {
     }
 }
 
-void XcdParser::characters(XmlReader const * reader, Span const & text) {
+void XcdParser::characters(Span const & text) {
     if (nestedParser_.is()) {
-        nestedParser_->characters(reader, text);
+        nestedParser_->characters(text);
     }
 }
 

@@ -60,23 +60,23 @@ public:
 private:
     virtual ~Reader();
 
-    static void textHandler(void * userData, Span const & text, bool terminal);
-
     rtl::OUString url_;
     rtl::Reference< Parser > parser_;
     std::auto_ptr< XmlReader > reader_;
-    XmlReader::Namespace elementNamespace_;
-    Span elementLocalName_;
+    Span itemData_;
+    XmlReader::Namespace itemNamespace_;
 };
 
 class Parser: public salhelper::SimpleReferenceObject {
 public:
+    virtual XmlReader::Text getTextMode() = 0;
+
     virtual bool startElement(
         XmlReader * reader, XmlReader::Namespace ns, Span const & name) = 0;
 
     virtual void endElement(XmlReader const * reader) = 0;
 
-    virtual void characters(XmlReader const * reader, Span const & text) = 0;
+    virtual void characters(Span const & text) = 0;
 
 protected:
     Parser();
@@ -93,12 +93,14 @@ public:
 private:
     virtual ~XcdParser();
 
+    virtual XmlReader::Text getTextMode();
+
     virtual bool startElement(
         XmlReader * reader, XmlReader::Namespace ns, Span const & name);
 
     virtual void endElement(XmlReader const * reader);
 
-    virtual void characters(XmlReader const * reader, Span const & text);
+    virtual void characters(Span const & text);
 
     enum State {
         STATE_START, STATE_DEPENDENCIES, STATE_DEPENDENCY, STATE_COMPONENTS };

@@ -41,6 +41,7 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
+#include "pad.hxx"
 #include "span.hxx"
 #include "xmlreader.hxx"
 
@@ -95,7 +96,7 @@ XmlReader::XmlReader(rtl::OUString const & fileUrl):
         NamespaceData(Span(RTL_CONSTASCII_STRINGPARAM("xml")), NAMESPACE_XML));
     pos_ = static_cast< char * >(fileAddress_);
     end_ = pos_ + fileSize_;
-    state_ = STATE_START;
+    state_ = STATE_CONTENT;
 }
 
 XmlReader::~XmlReader() {
@@ -109,93 +110,28 @@ XmlReader::~XmlReader() {
     }
 }
 
-XmlReader::Result XmlReader::nextTag(
-    Namespace * ns, Span * localName,
-    void (* textHandler)(void * userData, Span const & text, bool terminal),
-    void * userData)
+XmlReader::Result XmlReader::nextItem(
+    Text reportText, Span * data, Namespace * ns)
 {
-    for (;;) {
-        switch (state_) {
-        case STATE_START:
-            switch (read()) {
-            case '\x09':
-            case '\x0A':
-            case '\x0D':
-            case ' ':
-                break;
-            case '<':
-                switch (peek()) {
-                case '!':
-                    if(true)abort();*(char*)0=0;throw 0;//TODO
-                case '?':
-                    ++pos_;
-                    if (!skipProcessingInstruction()) {
-                        throw css::uno::RuntimeException(
-                            (rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM("bad '<?' in ")) +
-                             fileUrl_),
-                            css::uno::Reference< css::uno::XInterface >());
-                    }
-                    break;
-                default:
-                    return handleStartTag(ns, localName);
-                }
-                break;
-            default:
-                throw css::uno::RuntimeException(
-                    (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "bad character at start of ")) +
-                     fileUrl_),
-                    css::uno::Reference< css::uno::XInterface >());
-            }
-            break;
-        case STATE_EMPTY_ELEMENT_TAG:
-            handleElementEnd();
-            return RESULT_END;
-        case STATE_CONTENT:
-            {
-                padBuffer_.setLength(0);
-                char const * begin = pos_;
-                for (;;) {
-                    switch (peek()) {
-                    case '\0': // i.e., EOF
-                        throw css::uno::RuntimeException(
-                            (rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(
-                                    "premature end of ")) +
-                             fileUrl_),
-                            css::uno::Reference< css::uno::XInterface >());
-                    case '&':
-                        pos_ = handleReference(begin, pos_, end_);
-                        begin = pos_;
-                        break;
-                    case '<':
-                        {
-                            sal_Int32 len = pos_ - begin;
-                            ++pos_;
-                            bool endTag = false;
-                            if (peek() == '/') {
-                                ++pos_;
-                                endTag = true;
-                            }
-                            if (textHandler != 0) {
-                                padAppend(begin, len, true);
-                                (*textHandler)(userData, pad_, endTag);
-                            }
-                            return endTag
-                                ? handleEndTag()
-                                : handleStartTag(ns, localName);
-                        }
-                    default:
-                        ++pos_;
-                        break;
-                    }
-                }
-            }
-        case STATE_DONE:
-            return RESULT_DONE;
+    switch (state_) {
+    case STATE_CONTENT:
+        switch (reportText) {
+        case TEXT_NONE:
+            return handleSkippedText(data, ns);
+        case TEXT_RAW:
+            return handleRawText(data);
+        case TEXT_NORMALIZED:
+            return handleNormalizedText(data);
         }
+    case STATE_START_TAG:
+        return handleStartTag(ns, data);
+    case STATE_END_TAG:
+        return handleEndTag();
+    case STATE_EMPTY_ELEMENT_TAG:
+        handleElementEnd();
+        return RESULT_END;
+    case STATE_DONE:
+        return RESULT_DONE;
     }
 }
 
@@ -228,10 +164,9 @@ bool XmlReader::nextAttribute(Namespace * ns, Span * localName) {
 }
 
 Span XmlReader::getAttributeValue(bool fullyNormalize) {
-    handleAttributeValue(
+    return handleAttributeValue(
         currentAttribute_->valueBegin, currentAttribute_->valueEnd,
         fullyNormalize);
-    return pad_;
 }
 
 XmlReader::Namespace XmlReader::getNamespace(Span const & prefix) const {
@@ -249,31 +184,23 @@ rtl::OUString XmlReader::getUrl() const {
     return fileUrl_;
 }
 
-void XmlReader::padAppend(char const * begin, sal_Int32 length, bool terminal) {
-    if (terminal && padBuffer_.getLength() == 0) {
-        pad_ = Span(begin, length);
-    } else {
-        padBuffer_.append(begin, length);
-        if (terminal) {
-            pad_ = Span(padBuffer_.getStr(), padBuffer_.getLength());
-        }
-    }
-}
-
 void XmlReader::skipSpace() {
     while (isSpace(peek())) {
         ++pos_;
     }
 }
 
-bool XmlReader::skipProcessingInstruction() {
+void XmlReader::skipProcessingInstruction() {
+    ++pos_; // skip leading '?'
     sal_Int32 i = rtl_str_indexOfStr_WithLength(
         pos_, end_ - pos_, RTL_CONSTASCII_STRINGPARAM("?>"));
     if (i < 0) {
-        return false;
+        throw css::uno::RuntimeException(
+            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad '<?' in ")) +
+             fileUrl_),
+            css::uno::Reference< css::uno::XInterface >());
     }
     pos_ += i + RTL_CONSTASCII_LENGTH("?>");
-    return true;
 }
 
 bool XmlReader::scanName(char const ** nameColon) {
@@ -302,7 +229,7 @@ XmlReader::Namespace XmlReader::scanNamespaceIri(
     char const * begin, char const * end)
 {
     OSL_ASSERT(begin != 0 && begin <= end);
-    handleAttributeValue(begin, end, false);
+    Span iri(handleAttributeValue(begin, end, false));
     struct Iri {
         char const * begin;
         sal_Int32 length;
@@ -319,9 +246,8 @@ XmlReader::Namespace XmlReader::scanNamespaceIri(
         { RTL_CONSTASCII_STRINGPARAM("http://www.w3.org/XML/1998/namespace"),
           XmlReader::NAMESPACE_XML } };
     for (std::size_t i = 0; i < sizeof iris / sizeof iris[0]; ++i) {
-        if (rtl_str_shortenedCompare_WithLength(
-                pad_.begin, pad_.length, iris[i].begin, iris[i].length,
-                iris[i].length) ==
+        if (rtl_str_compare_WithLength(
+                iri.begin, iri.length, iris[i].begin, iris[i].length) ==
             0)
         {
             return iris[i].ns;
@@ -330,13 +256,9 @@ XmlReader::Namespace XmlReader::scanNamespaceIri(
     return XmlReader::NAMESPACE_OTHER;
 }
 
-char const * XmlReader::handleReference(
-    char const * begin, char const * position, char const * end)
+char const * XmlReader::handleReference(char const * position, char const * end)
 {
-    OSL_ASSERT(
-        begin != 0 && begin <= position && *position == '&' &&
-        position < end);
-    padAppend(begin, position - begin, false);
+    OSL_ASSERT(position != 0 && *position == '&' && position < end);
     ++position;
     if (*position == '#') {
         ++position;
@@ -423,7 +345,7 @@ char const * XmlReader::handleReference(
             buf[3] = static_cast< char >((val & 0x3F) | 0x80);
             len = 4;
         }
-        padAppend(buf, len, position == end);
+        pad_.add(buf, len);
         return position;
     } else {
         struct EntityRef {
@@ -450,7 +372,7 @@ char const * XmlReader::handleReference(
                 0)
             {
                 position += refs[i].inLength;
-                padAppend(refs[i].outBegin, refs[i].outLength, position == end);
+                pad_.add(refs[i].outBegin, refs[i].outLength);
                 return position;
             }
         }
@@ -462,10 +384,10 @@ char const * XmlReader::handleReference(
     }
 }
 
-void XmlReader::handleAttributeValue(
+Span XmlReader::handleAttributeValue(
     char const * begin, char const * end, bool fullyNormalize)
 {
-    padBuffer_.setLength(0);
+    pad_.clear();
     if (fullyNormalize) {
         while (begin != end && isSpace(*begin)) {
             ++begin;
@@ -485,12 +407,12 @@ void XmlReader::handleAttributeValue(
             case '\x0D':
                 switch (space) {
                 case SPACE_NONE:
-                    padAppend(begin, p - begin, false);
-                    padAppend(RTL_CONSTASCII_STRINGPARAM(" "), false);
+                    pad_.add(begin, p - begin);
+                    pad_.add(RTL_CONSTASCII_STRINGPARAM(" "));
                     space = SPACE_BREAK;
                     break;
                 case SPACE_SPAN:
-                    padAppend(begin, p - begin, false);
+                    pad_.add(begin, p - begin);
                     space = SPACE_BREAK;
                     break;
                 case SPACE_BREAK:
@@ -505,7 +427,7 @@ void XmlReader::handleAttributeValue(
                     space = SPACE_SPAN;
                     break;
                 case SPACE_SPAN:
-                    padAppend(begin, p - begin, false);
+                    pad_.add(begin, p - begin);
                     begin = ++p;
                     space = SPACE_BREAK;
                     break;
@@ -515,7 +437,8 @@ void XmlReader::handleAttributeValue(
                 }
                 break;
             case '&':
-                p = handleReference(begin, p, end);
+                pad_.add(begin, p - begin);
+                p = handleReference(p, end);
                 begin = p;
                 space = SPACE_NONE;
                 break;
@@ -525,20 +448,29 @@ void XmlReader::handleAttributeValue(
                 break;
             }
         }
-        padAppend(begin, p - begin, true);
+        pad_.add(begin, p - begin);
     } else {
         char const * p = begin;
         while (p != end) {
             switch (*p) {
             case '\x09':
             case '\x0A':
-            case '\x0D':
-                padAppend(begin, p - begin, false);
+                pad_.add(begin, p - begin);
                 begin = ++p;
-                padAppend(RTL_CONSTASCII_STRINGPARAM(" "), p == end);
+                pad_.add(RTL_CONSTASCII_STRINGPARAM(" "));
+                break;
+            case '\x0D':
+                pad_.add(begin, p - begin);
+                ++p;
+                if (peek() == '\x0A') {
+                    ++p;
+                }
+                begin = p;
+                pad_.add(RTL_CONSTASCII_STRINGPARAM(" "));
                 break;
             case '&':
-                p = handleReference(begin, p, end);
+                pad_.add(begin, p - begin);
+                p = handleReference(p, end);
                 begin = p;
                 break;
             default:
@@ -546,8 +478,9 @@ void XmlReader::handleAttributeValue(
                 break;
             }
         }
-        padAppend(begin, p - begin, true);
+        pad_.add(begin, p - begin);
     }
+    return pad_.get();
 }
 
 XmlReader::Result XmlReader::handleStartTag(Namespace * ns, Span * localName) {
@@ -661,7 +594,13 @@ XmlReader::Result XmlReader::handleStartTag(Namespace * ns, Span * localName) {
 }
 
 XmlReader::Result XmlReader::handleEndTag() {
-    OSL_ASSERT(!elements_.empty());
+    if (elements_.empty()) {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("spurious end tag in ")) +
+             fileUrl_),
+            css::uno::Reference< css::uno::XInterface >());
+    }
     char const * nameBegin = pos_;
     char const * nameColon = 0;
     if (!scanName(&nameColon) ||
@@ -689,6 +628,188 @@ void XmlReader::handleElementEnd() {
     namespaces_.resize(elements_.top().inheritedNamespaces);
     elements_.pop();
     state_ = elements_.empty() ? STATE_DONE : STATE_CONTENT;
+}
+
+XmlReader::Result XmlReader::handleSkippedText(Span * data, Namespace * ns) {
+    for (;;) {
+        sal_Int32 i = rtl_str_indexOfChar_WithLength(pos_, end_ - pos_, '<');
+        if (i < 0) {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("premature end of ")) +
+                 fileUrl_),
+                css::uno::Reference< css::uno::XInterface >());
+        }
+        pos_ += i + 1;
+        switch (peek()) {
+        case '!':
+            if(true)abort();*(char*)0=0;throw 0;//TODO
+        case '/':
+            ++pos_;
+            return handleEndTag();
+        case '?':
+            skipProcessingInstruction();
+            break;
+        default:
+            return handleStartTag(ns, data);
+        }
+    }
+}
+
+XmlReader::Result XmlReader::handleRawText(Span * text) {
+    pad_.clear();
+    for (char const * begin = pos_;;) {
+        switch (peek()) {
+        case '\0': // i.e., EOF
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("premature end of ")) +
+                 fileUrl_),
+                css::uno::Reference< css::uno::XInterface >());
+        case '\x0D':
+            pad_.add(begin, pos_ - begin);
+            ++pos_;
+            if (peek() != '\x0A') {
+                pad_.add(RTL_CONSTASCII_STRINGPARAM("\x0A"));
+            }
+            begin = pos_;
+            break;
+        case '&':
+            pad_.add(begin, pos_ - begin);
+            pos_ = handleReference(pos_, end_);
+            begin = pos_;
+            break;
+        case '<':
+            pad_.add(begin, pos_ - begin);
+            ++pos_;
+            switch (peek()) {
+            case '!':
+                if(true)abort();*(char*)0=0;throw 0;//TODO
+            case '/':
+                *text = pad_.get();
+                ++pos_;
+                state_ = STATE_END_TAG;
+                return RESULT_TEXT;
+            case '?':
+                skipProcessingInstruction();
+                begin = pos_;
+                break;
+            default:
+                *text = pad_.get();
+                state_ = STATE_START_TAG;
+                return RESULT_TEXT;
+            }
+            break;
+        default:
+            ++pos_;
+            break;
+        }
+    }
+}
+
+XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
+    pad_.clear();
+    char const * flowBegin = pos_;
+    char const * flowEnd = pos_;
+    enum Space { SPACE_START, SPACE_NONE, SPACE_SPAN, SPACE_BREAK };
+        // a single true space character can go into the current flow,
+        // everything else breaks the flow
+    Space space = SPACE_START;
+    for (;;) {
+        switch (peek()) {
+        case '\0': // i.e., EOF
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("premature end of ")) +
+                 fileUrl_),
+                css::uno::Reference< css::uno::XInterface >());
+        case '\x09':
+        case '\x0A':
+        case '\x0D':
+            switch (space) {
+            case SPACE_START:
+            case SPACE_BREAK:
+                break;
+            case SPACE_NONE:
+            case SPACE_SPAN:
+                space = SPACE_BREAK;
+                break;
+            }
+            ++pos_;
+            break;
+        case ' ':
+            switch (space) {
+            case SPACE_START:
+            case SPACE_BREAK:
+                break;
+            case SPACE_NONE:
+                space = SPACE_SPAN;
+                break;
+            case SPACE_SPAN:
+                space = SPACE_BREAK;
+                break;
+            }
+            ++pos_;
+            break;
+        case '&':
+            switch (space) {
+            case SPACE_START:
+                break;
+            case SPACE_NONE:
+            case SPACE_SPAN:
+                pad_.add(flowBegin, pos_ - flowBegin);
+                break;
+            case SPACE_BREAK:
+                pad_.add(flowBegin, flowEnd - flowBegin);
+                pad_.add(RTL_CONSTASCII_STRINGPARAM(" "));
+                break;
+            }
+            pos_ = handleReference(pos_, end_);
+            flowBegin = pos_;
+            flowEnd = pos_;
+            space = SPACE_NONE;
+            break;
+        case '<':
+            ++pos_;
+            switch (peek()) {
+            case '!':
+                if(true)abort();*(char*)0=0;throw 0;//TODO
+            case '/':
+                ++pos_;
+                pad_.add(flowBegin, flowEnd - flowBegin);
+                *text = pad_.get();
+                state_ = STATE_END_TAG;
+                return RESULT_TEXT;
+            case '?':
+                skipProcessingInstruction();
+                space = SPACE_BREAK;
+                break;
+            default:
+                pad_.add(flowBegin, flowEnd - flowBegin);
+                *text = pad_.get();
+                state_ = STATE_START_TAG;
+                return RESULT_TEXT;
+            }
+            break;
+        default:
+            switch (space) {
+            case SPACE_START:
+                flowBegin = pos_;
+                break;
+            case SPACE_NONE:
+            case SPACE_SPAN:
+                break;
+            case SPACE_BREAK:
+                pad_.add(flowBegin, flowEnd - flowBegin);
+                pad_.add(RTL_CONSTASCII_STRINGPARAM(" "));
+                flowBegin = pos_;
+                break;
+            }
+            flowEnd = ++pos_;
+            space = SPACE_NONE;
+            break;
+        }
+    }
 }
 
 }

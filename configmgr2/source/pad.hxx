@@ -27,31 +27,32 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_TYPE_HXX
-#define INCLUDED_CONFIGMGR_TYPE_HXX
+#ifndef INCLUDED_CONFIGMGR_PAD_HXX
+#define INCLUDED_CONFIGMGR_PAD_HXX
 
 #include "sal/config.h"
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class Any;
-    class Type;
-} } } }
+#include "rtl/strbuf.hxx"
+#include "sal/types.h"
+
+#include "span.hxx"
 
 namespace configmgr {
 
-enum Type {
-    TYPE_ERROR, TYPE_NIL, TYPE_ANY, TYPE_BOOLEAN, TYPE_SHORT, TYPE_INT,
-    TYPE_LONG, TYPE_DOUBLE, TYPE_STRING, TYPE_HEXBINARY, TYPE_BOOLEAN_LIST,
-    TYPE_SHORT_LIST, TYPE_INT_LIST, TYPE_LONG_LIST, TYPE_DOUBLE_LIST,
-    TYPE_STRING_LIST, TYPE_HEXBINARY_LIST };
+class Pad {
+public:
+    void add(char const * begin, sal_Int32 length);
 
-bool isListType(Type type);
+    void clear();
 
-Type elementType(Type type);
+    bool is() const;
 
-com::sun::star::uno::Type mapType(Type type);
+    Span get() const;
 
-Type mapType(com::sun::star::uno::Any const & value);
+private:
+    Span span_;
+    rtl::OStringBuffer buffer_;
+};
 
 }
 
