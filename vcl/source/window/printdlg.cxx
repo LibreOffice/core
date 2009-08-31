@@ -550,11 +550,11 @@ void PrintDialog::JobTabPage::setupLayout()
     xRangeRow->addChild( xCopyCollateCol );
 
     // add copies row to copy/collate column
-    boost::shared_ptr< vcl::LabeledElement > xCopiesRow( new vcl::LabeledElement( xCopyCollateCol.get() ) );
+    boost::shared_ptr< vcl::LabeledElement > xCopiesRow( new vcl::LabeledElement( xCopyCollateCol.get(), 2 ) );
     xCopyCollateCol->addChild( xCopiesRow );
     xCopiesRow->setLabel( &maCopyCount );
     xCopiesRow->setElement( &maCopyCountField );
-    boost::shared_ptr< vcl::LabeledElement > xCollateRow( new vcl::LabeledElement( xCopyCollateCol.get() ) );
+    boost::shared_ptr< vcl::LabeledElement > xCollateRow( new vcl::LabeledElement( xCopyCollateCol.get(), 2 ) );
     xCopyCollateCol->addChild( xCollateRow );
     xCollateRow->setLabel( &maCollateBox );
     xCollateRow->setElement( &maCollateImage );
