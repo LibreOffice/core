@@ -1218,6 +1218,16 @@ void PrinterController::createProgressDialog()
         beans::PropertyValue* pMonitor = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MonitorVisible" ) ) );
         if( pMonitor )
             pMonitor->Value >>= bShow;
+        else
+        {
+            const com::sun::star::beans::PropertyValue* pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsApi" ) ) );
+            if( pVal )
+            {
+                sal_Bool bApi = sal_False;
+                pVal->Value >>= bApi;
+                bShow = ! bApi;
+            }
+        }
 
         if( bShow && ! Application::IsHeadlessModeEnabled() )
         {
