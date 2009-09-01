@@ -762,6 +762,11 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
         return aPageSize;
     }
 
+    // set last page property really only on the very last page to be rendered
+    // that is on the last subpage of a NUp run
+    sal_Bool bIsLastPage = mpImplData->mbLastPage;
+    mpImplData->mbLastPage = sal_False;
+
     Size aPaperSize( mpImplData->getRealPaperSize( mpImplData->maMultiPage.aPaperSize ) );
     // multi page area: paper size minus margins + one time spacing right and down
     // the added spacing is so each subpage can be calculated including its spacing
@@ -789,7 +794,16 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
         // map current sub page to real page
         int nPage = (i_nFilteredPage * nSubPages + nSubPage) / rMPS.nRepeat;
         if( mpImplData->mbReversePageOrder )
+        {
             nPage = nDocPages - 1 - nPage;
+            if( nPage == 0 )
+                mpImplData->mbLastPage = bIsLastPage;
+        }
+        else
+        {
+            if( nPage == nDocPages-1 )
+                mpImplData->mbLastPage = bIsLastPage;
+        }
         if( nPage >= 0 && nPage < nDocPages )
         {
             GDIMetaFile aPageFile;
