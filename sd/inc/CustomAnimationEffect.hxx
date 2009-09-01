@@ -75,7 +75,7 @@ class CustomAnimationEffect
 
 public:
     SD_DLLPUBLIC CustomAnimationEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
-    virtual ~CustomAnimationEffect();
+    SD_DLLPUBLIC virtual ~CustomAnimationEffect();
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& getNode() const { return mxNode; }
     void setNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
