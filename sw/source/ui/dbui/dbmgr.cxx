@@ -1503,7 +1503,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         }
                     }
 
-                    const SwModuleOptions * pModOpt = SW_MOD()->GetModuleConfig();
+//                    const SwModuleOptions * pModOpt = SW_MOD()->GetModuleConfig();
 //                    if (pModOpt->IsSinglePrintJob())
 //                    {
 //                    }

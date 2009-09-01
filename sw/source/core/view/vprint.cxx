@@ -1071,7 +1071,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
     OutputDevice *pOutDev,
     const SwPrtOptions &rPrintData,
     sal_Int32 nRenderer,    // the index in the vector of pages to be printed
-    bool bIsPDFExport )
+    bool /* TLPDF bIsPDFExport*/ )
 {
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //Immer die Druckroutinen in viewpg.cxx (PrintPreViewPage und PrintProspect) mitpflegen!!
