@@ -190,8 +190,6 @@
     my %lost_client_jobs = (); # hash containing lost jobs
     my %job_jobdir = (); # hash containing job-dir pairs
     my %module_paths = (); # hash with absolute module paths
-    my $source_config = SourceConfig -> new();
-    my $source_config_file = $source_config->get_config_file_path();
     my %active_modules = ();
     my $generate_config = 0;
     my %add_to_config = ();
@@ -332,6 +330,8 @@ sub rename_file {
 };
 
 sub generate_config_file {
+    my $source_config = SourceConfig -> new();
+    my $source_config_file = $source_config->get_config_file_path();
     my $temp_config_file = File::Temp::tmpnam($ENV{TMP});
     my @config_content_new = ();
     my $addition_message;
@@ -1404,6 +1404,8 @@ sub get_options {
 };
 
 sub get_module_and_buildlist_paths {
+    my $source_config = SourceConfig -> new($StandDir);
+    my $source_config_file = $source_config->get_config_file_path();
     $active_modules{$_}++ foreach ($source_config->get_active_modules());
     my %active_modules_copy = %active_modules;
     foreach ($source_config->get_all_modules()) {
