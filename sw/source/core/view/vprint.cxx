@@ -69,6 +69,7 @@
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
 #include <doc.hxx>
+#include <wdocsh.hxx>
 #include <fesh.hxx>
 #include <pam.hxx>
 #include <viewimp.hxx>      // Imp->SetFirstVisPageInvalid()
@@ -239,22 +240,30 @@ const XubString& SwPrtOptions::MakeNextJobName()
 
 /*****************************************************************************/
 
-
 SwRenderData::SwRenderData()
 {
     m_pPostItFields   = 0;
     m_pPostItDoc      = 0;
     m_pPostItShell    = 0;
+
+    m_pViewOptionAdjust = 0;
+    m_pPrtOptions       = 0;
 }
 
 
 SwRenderData::~SwRenderData()
 {
+    delete m_pViewOptionAdjust;     m_pViewOptionAdjust = 0;
+    delete m_pPrtOptions;           m_pPrtOptions = 0;
+    DBG_ASSERT( !m_pPostItShell, "m_pPostItShell should already have been deleted" );
+    DBG_ASSERT( !m_pPostItDoc, "m_pPostItDoc should already have been deleted" );
+    DBG_ASSERT( !m_pPostItFields, " should already have been deleted" );
 }
 
 
 void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev )
 {
+    DBG_ASSERT( !m_pPostItFields && !m_pPostItDoc && !m_pPostItShell, "some post-it data already exists" );
     m_pPostItFields = new _SetGetExpFlds;
     lcl_GetPostIts( pDoc, *m_pPostItFields );
     m_pPostItDoc    = new SwDoc;
@@ -280,6 +289,81 @@ void SwRenderData::DeletePostItData()
         m_pPostItShell  = 0;
         m_pPostItFields = 0;
     }
+}
+
+
+void SwRenderData::ViewOptionAdjustStart( SwWrtShell& rSh )
+{
+    DBG_ASSERT( !m_pViewOptionAdjust, "m_pViewOptionAdjust already exists" );
+    m_pViewOptionAdjust = new SwViewOptionAdjust_Impl( rSh );
+}
+
+
+void SwRenderData::ViewOptionAdjustStop()
+{
+    if (IsViewOptionAdjust())
+    {
+        delete m_pViewOptionAdjust;
+        m_pViewOptionAdjust = 0;
+    }
+}
+
+
+void SwRenderData::MakeSwPrtOptions(
+    SwPrtOptions &rOptions,
+    const SwDocShell *pDocShell,
+    const SwPrintUIOptions *pOpt,
+    const SwRenderData *pData,
+    bool bIsSkipEmptyPages,
+    bool bIsPDFExport )
+{
+    if (!pDocShell || !pOpt || !pData)
+        return;
+
+    // get default print options
+    const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
+    BOOL bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
+    rOptions.MakeOptions( NULL, NULL, NULL, bWeb, NULL, NULL );
+
+    // get print options to use from provided properties
+    rOptions.bPrintGraphic          = pOpt->IsPrintGraphics();
+    rOptions.bPrintTable            = pOpt->IsPrintTables();
+    rOptions.bPrintDraw             = pOpt->IsPrintDrawings();
+    rOptions.bPrintControl          = pOpt->getBoolValue( "PrintControls", rOptions.bPrintControl );
+    rOptions.bPrintLeftPages        = pOpt->IsPrintLeftPages();
+    rOptions.bPrintRightPages       = pOpt->IsPrintRightPages();
+    rOptions.bPrintPageBackground   = pOpt->getBoolValue( "PrintPageBackground",   rOptions.bPrintPageBackground );
+    rOptions.bPrintEmptyPages       = !bIsSkipEmptyPages;
+    // bUpdateFieldsInPrinting  <-- not set here    // TLPDF: TODO: remove this from SwPrintData?? Get rid of SwPrtOptions??
+    rOptions.bPaperFromSetup        = pOpt->getBoolValue( "PrintPaperFromSetup",   rOptions.bPaperFromSetup );
+    rOptions.bPrintReverse          = pOpt->getBoolValue( "PrintReversed",         rOptions.bPrintReverse );
+    rOptions.bPrintProspect         = pOpt->getBoolValue( "PrintProspect",         rOptions.bPrintProspect );
+    rOptions.bPrintProspectRTL      = pOpt->getIntValue( "PrintProspectRTL",       rOptions.bPrintProspectRTL ) ? true : false;
+    // bPrintSingleJobs         <-- not set here    // TLPDF: TODO: remove this from SwPrintData?? Get rid of SwPrtOptions??
+    // bModified                <-- not set here    // TLPDF: TODO: remove this from SwPrintData?? Get rid of SwPrtOptions??
+    rOptions.bPrintBlackFont        = pOpt->getBoolValue( "PrintBlackFonts",       rOptions.bPrintBlackFont );
+    rOptions.bPrintHiddenText       = pOpt->getBoolValue( "PrintHiddenText",       rOptions.bPrintHiddenText );
+    rOptions.bPrintTextPlaceholder  = pOpt->getBoolValue( "PrintTextPlaceholder",  rOptions.bPrintTextPlaceholder );
+    rOptions.nPrintPostIts          = static_cast< sal_Int16 >(pOpt->getIntValue( "PrintAnnotationMode", rOptions.nPrintPostIts ));
+
+    //! needs to be set after MakeOptions since the assignment operation in that
+    //! function will destroy the pointers
+    rOptions.SetPrintUIOptions( pOpt );
+    rOptions.SetRenderData( pData );
+
+    // rOptions.aMulti is not used anymore in the XRenderable API but it is still
+    // used in ViewShell::PrintPreViewPage. Thus we set it to a dummy value here.
+    MultiSelection aPages( Range( 1, 1 ) );
+//    aPages.SetTotalRange( Range( 0, RANGE_MAX ) );
+//    aPages.Select( aRange );
+    rOptions.aMulti = aPages;
+
+    //! Note: Since for PDF export of (multi-)selection a temporary
+    //! document is created that contains only the selects parts,
+    //! and thus that document is to printed in whole the,
+    //! rOptions.bPrintSelection parameter will be false.
+    if (bIsPDFExport)
+        rOptions.bPrintSelection = FALSE;
 }
 
 
@@ -1012,63 +1096,6 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 }
 
 
-sal_Bool ViewShell::PrintOrPDFExportMM(
-    vcl::OldStylePrintAdaptor &/*rAdaptor*/,
-    const uno::Sequence< beans::PropertyValue > &/*rOptions*/,  /* TLPDF: this or the above ? */
-    const SwPrtOptions &/*rPrintData*/, /* TLPDF can't we make use of just SwPrintData only as it is the case in PrintProspect???  */
-    bool /*bIsPDFExport*/ )
-{
-    return false;
-    // to be removed (not needed)
-#ifdef TL_NOT_NOW   /* TLPDF */
-    (void) rPrintData; (void) bIsPDFExport;
-
-    uno::Reference< frame::XModel >         xModel( GetDoc()->GetDocShell()->GetModel() );
-    uno::Reference< view::XRenderable >     xTextDoc( xModel, uno::UNO_QUERY );
-    if (!xModel.is() || xTextDoc.is())
-        return sal_False;
-
-    bool bRes = sal_True;
-    try
-    {
-        // print the whole document and not just a selection
-        uno::Any    aSelection;
-        aSelection <<= xModel;
-
-        const sal_Int32 nPages = xTextDoc->getRendererCount( aSelection, rOptions );
-        for (sal_Int32 i = 0; i < nPages; ++i)
-        {
-            uno::Sequence< beans::PropertyValue > aRenderProps( xTextDoc->getRenderer( i, aSelection, rOptions ) );
-            if (i == 0 || i == nPages - 1)
-            {
-                rtl::OUString aName( rtl::OUString::createFromAscii( i == 0 ? "IsFirstPage" : "IsLastPage" ) );
-                const sal_Int32 nProps = aRenderProps.getLength();
-                aRenderProps.realloc( nProps + 1 );
-                aRenderProps[ nProps ].Name = aName;
-                aRenderProps[ nProps ].Value <<= sal_True;
-            }
-
-            rAdaptor.StartPage();
-            xTextDoc->render( i, aSelection, aRenderProps );
-            rAdaptor.EndPage();
-        }
-    }
-    catch (uno::Exception &r)
-    {
-        (void) r;
-        bRes = sal_False;
-    }
-
-    if (bRes)
-    {
-        const boost::shared_ptr< vcl::PrinterController > pPrtController( &rAdaptor );
-        Printer::PrintJob( pPrtController, JobSetup() );
-    }
-    return bRes;
-#endif  // TL_NOT_NOW   /* TLPDF */
-}
-
-
 sal_Bool ViewShell::PrintOrPDFExport(
     OutputDevice *pOutDev,
     const SwPrtOptions &rPrintData,
@@ -1169,6 +1196,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
         }
         DBG_ASSERT( pStPage, "failed to get start page" );
 
+#ifdef TL_NOT_NOW   // TLPDF: applying view options and formatting the dcoument should now only be done in getRendererCount!
         // benoetigte Seiten fuers Drucken formatieren
         pShell->CalcPagesForPrint( (USHORT)nPage, 0 /*TLPDF*/, 0 /*TLPDFpStr*/,
                                     0, 0 /* TLPDF, there is no progressbar right now nMergeAct, nMergeCnt */ );
@@ -1182,6 +1210,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
         if ( !bIsPDFExport && rPrintData.bUpdateFieldsInPrinting )
             pShell->UpdateFlds(TRUE);
         // <--
+#endif  // TL_NOT_NOW   // TLPDF
 
         ViewShell *pViewSh2 = nPage == 0 ? /* post-it page? */
                 rPrintData.GetRenderData().m_pPostItShell : pShell;

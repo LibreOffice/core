@@ -45,6 +45,10 @@
 #define POSTITS_ENDPAGE 3
 
 
+class PrintDialog;
+class SfxPrinter;
+
+
 ////////////////////////////////////////////////////////////
 
 
@@ -84,11 +88,15 @@ public:
 #endif
 
 
-        SwPrtOptions& operator=(const SwPrintData& rData)
-            {
-                SwPrintData::operator=(rData);
-                return *this;
-            }
+    SwPrtOptions& operator=(const SwPrintData& rData)
+        {
+            SwPrintData::operator=(rData);
+            return *this;
+        }
+
+    // get print options
+    void MakeOptions( PrintDialog* pDlg,
+            BOOL* pPrtProspect, BOOL* pPrtProspect_RTL, BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData );
 };
 
 

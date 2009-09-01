@@ -630,10 +630,6 @@ public:
     //apply Accessiblity options
     void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
 
-    // get print options (SwPrtOptions)
-    static void MakeOptions( PrintDialog* pDlg, SwPrtOptions& rOpts,
-            BOOL* pPrtProspect, BOOL* pPrtProspect_RTL, BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData );
-
     SwView(SfxViewFrame* pFrame, SfxViewShell*);
     ~SwView();
 

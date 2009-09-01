@@ -128,9 +128,14 @@ class SfxViewFrame;
 class SwPrintUIOptions;
 class SwPrintData;
 class SwRenderData;
+class SwPrtOptions;
+class SwViewOption;
+class SwWrtShell;
+
 
 typedef UnoActionContext* UnoActionContextPtr;
 SV_DECL_PTRARR(ActionContextArr, UnoActionContextPtr, 4, 4)
+
 
 /******************************************************************************
  *
@@ -231,6 +236,7 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
     // used for XRenderable implementation
     SfxViewShell *  GuessViewShell( const css::uno::Reference< css::frame::XController > xController = css::uno::Reference< css::frame::XController >() );
     SwDoc *         GetRenderDoc( SfxViewShell *&rpView, const css::uno::Any& rSelection, bool bIsPDFExport );
+    SfxViewShell *  GetRenderView( const SwPrintUIOptions &rOpt, bool bIsPDFExport );
 
     rtl::OUString           maBuildId;
 
@@ -432,6 +438,7 @@ public:
     SwXDrawPage*                GetDrawPage();
     SwDocShell*                 GetDocShell() {return pDocShell;}
 
+
     void * SAL_CALL operator new( size_t ) throw();
     void SAL_CALL operator delete( void * ) throw();
 
@@ -579,3 +586,27 @@ public:
 
     virtual void onChange();
 };
+
+
+/*-- 06.01.2004 15:08:34---------------------------------------------------
+    The class SwViewOptionAdjust_Impl is used to adjust the SwViewOption of
+    the current ViewShell so that fields are not printed as commands and
+    hidden text and hidden characters are always invisible.
+    After printing the view options are restored
+  -----------------------------------------------------------------------*/
+class SwViewOptionAdjust_Impl
+{
+    bool m_bSwitchOff_IsFldName;
+    bool m_bSwitchOff_PlaceHolderView;
+    bool m_bSwitchOff_HiddenChar;
+    bool m_bSwitchOff_HiddenParagraphs;
+    bool m_bSwitchOff_IsShowHiddenField;
+
+    SwViewOption* m_pViewOption;
+    SwWrtShell& m_rShell;
+public:
+    SwViewOptionAdjust_Impl(SwWrtShell& rSh);
+    ~SwViewOptionAdjust_Impl();
+};
+
+

@@ -42,10 +42,36 @@
 
 class SwPageFrm;
 class SwDoc;
+class SwDocShell;
 class ViewShell;
 class _SetGetExpFlds;
 class SwViewOption;
 class OutputDevice;
+class SwViewOptionAdjust_Impl;
+class SwPrtOptions;
+class SwWrtShell;
+
+
+////////////////////////////////////////////////////////////
+
+
+class SwPrintUIOptions : public vcl::PrinterOptionsHelper
+{
+    OutputDevice* m_pLast;
+
+public:
+    SwPrintUIOptions( BOOL bWeb = FALSE );
+    ~SwPrintUIOptions();
+
+    bool processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp );
+
+    bool IsPrintLeftPages() const;
+    bool IsPrintRightPages() const;
+    bool IsPrintEmptyPages( bool bIsPDFExport ) const;
+    bool IsPrintTables() const;
+    bool IsPrintGraphics() const;
+    bool IsPrintDrawings() const;
+};
 
 
 ////////////////////////////////////////////////////////////
@@ -71,7 +97,12 @@ class SwRenderData
     // -1 indicates a half page to be left empty.
     std::vector< std::pair< sal_Int32, sal_Int32 > >    m_aPagePairs;
 
-    rtl::OUString       m_PageRange;
+    rtl::OUString               m_aPageRange;
+
+    // the view options to be applied for printing
+    SwViewOptionAdjust_Impl *   m_pViewOptionAdjust;
+
+    SwPrtOptions *              m_pPrtOptions;
 
 public:
 
@@ -88,6 +119,19 @@ public:
     bool HasPostItData() const  { return m_pPostItShell != 0 && m_pPostItDoc != 0 && m_pPostItShell != 0; }
     void CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev );
     void DeletePostItData();
+
+    bool IsViewOptionAdjust() const  { return m_pViewOptionAdjust != 0; }
+    void ViewOptionAdjustStart( SwWrtShell& rSh );
+    void ViewOptionAdjustStop();
+
+    bool HasSwPrtOptions() const    { return m_pPrtOptions != 0; }
+    void SetSwPrtOptions( SwPrtOptions * pOpt )     { m_pPrtOptions = pOpt; }
+    const SwPrtOptions *    GetSwPrtOptions() const { return m_pPrtOptions; }
+    SwPrtOptions &          GetSwPrtOptionsRef()    { return *m_pPrtOptions; }
+    void MakeSwPrtOptions( SwPrtOptions &rOptions, const SwDocShell *pDocShell,
+            const SwPrintUIOptions *pOpt, const SwRenderData *pData,
+            bool bIsSkipEmptyPages, bool bIsPDFExport );
+
 
     typedef std::map< sal_Int32, const SwPageFrm * >            ValidStartFramesMap_t;
     typedef std::vector< std::pair< sal_Int32, sal_Int32 > >    PagePairsVec_t;
@@ -117,30 +161,8 @@ public:
     PagePairsVec_t &                    GetPagePairsForProspectPrinting()           { return m_aPagePairs; }
     const PagePairsVec_t &              GetPagePairsForProspectPrinting() const     { return m_aPagePairs; }
 
-    rtl::OUString   GetPageRange() const                            { return m_PageRange; }
-    void            SetPageRange( const rtl::OUString &rRange )     { m_PageRange = rRange; }
-};
-
-
-////////////////////////////////////////////////////////////
-
-
-class SwPrintUIOptions : public vcl::PrinterOptionsHelper
-{
-    OutputDevice* m_pLast;
-
-public:
-    SwPrintUIOptions( BOOL bWeb = FALSE );
-    ~SwPrintUIOptions();
-
-    bool processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp );
-
-    bool IsPrintLeftPages() const;
-    bool IsPrintRightPages() const;
-    bool IsPrintEmptyPages( bool bIsPDFExport ) const;
-    bool IsPrintTables() const;
-    bool IsPrintGraphics() const;
-    bool IsPrintDrawings() const;
+    rtl::OUString   GetPageRange() const                            { return m_aPageRange; }
+    void            SetPageRange( const rtl::OUString &rRange )     { m_aPageRange = rRange; }
 };
 
 

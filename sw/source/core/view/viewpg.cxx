@@ -454,22 +454,6 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
 }
 
 
-void ViewShell::PrintProspectMM(
-    vcl::OldStylePrintAdaptor &rAdaptor,
-    const uno::Sequence< beans::PropertyValue > &rOptions,  /* TLPDF: this or the above ? */
-    const SwPrintData & rPrintData,
-    bool bProspectRTL )
-{
-    (void) rOptions; (void) rAdaptor; (void) rPrintData; (void) bProspectRTL;
-    // to be removed (not needed)
-#ifdef TL_NOT_NOW   /* TLPDF */
-
-    const boost::shared_ptr< vcl::PrinterController > pPrtController( &rAdaptor );
-    Printer::PrintJob( pPrtController, JobSetup() );
-#endif  // TL_NOT_NOW   /* TLPDF */
-}
-
-
 // print brochure
 // OD 05.05.2003 #i14016# - consider empty pages on calculation of the scaling
 // for a page to be printed.
@@ -507,6 +491,7 @@ void ViewShell::PrintProspect(
 
     aShell.PrepareForPrint( rPrintData );
 
+#ifdef TL_NOT_NOW   // TLPDF: applying view options and formatting the dcoument should now only be done in getRendererCount!
     // gibt es versteckte Absatzfelder, unnoetig wenn die Absaetze bereits
     // ausgeblendet sind.
     int bHiddenFlds = FALSE;
@@ -524,6 +509,7 @@ void ViewShell::PrintProspect(
 
     // Seiten fuers Drucken formatieren
     aShell.CalcPagesForPrint( nPageMax, 0 /*(USHORT)aPages.Max(), &rProgress*/ );
+#endif // TL_NOT_NOW   // TLPDF
 
     MapMode aMapMode( MAP_TWIP );
     Size aPrtSize( pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), aMapMode ) ); /* TLPDF */
@@ -645,12 +631,14 @@ void ViewShell::PrintProspect(
 
     SwPaintQueue::Repaint();
 
+#ifdef TL_NOT_NOW   // TLPDF: applying view options and formatting the dcoument should now only be done in getRendererCount!
     if( bHiddenFlds )
     {
         SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );
         pFldType->Modify( &aHnt, 0);
         CalcPagesForPrint( nPageMax /*(USHORT)aPages.Max()*/ );
     }
+#endif  // TL_NOT_NOW   // TLPDF
     pFntCache->Flush();
 
     // restore settings of OutputDevice (should be done always now since the

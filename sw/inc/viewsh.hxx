@@ -218,8 +218,7 @@ public:
     const SwNodes& GetNodes() const;
 
     //Nach Druckerwechsel, vom Doc
-    //pPDFOut != NULL is used for PDF export.
-    void            InitPrt( /*TLPDF Printer * ,*/ OutputDevice *pOutDev /* = NULL */ );
+    void            InitPrt( OutputDevice *pOutDev );
 
     //Klammerung von zusammengehoerenden Aktionen.
     inline void StartAction();
@@ -379,17 +378,6 @@ public:
     // printing of one brochure page
     void PrintProspect( OutputDevice *pOutDev, const SwPrintData &rPrintData,
             sal_Int32 nRenderer /* offset in vector of page pairs for prospect printing */ );
-
-    // printing of a complete document for mail merge
-    // bIsPDFExport == true is: do PDF Export (no printing!)
-    sal_Bool PrintOrPDFExportMM( vcl::OldStylePrintAdaptor &rAdaptor,
-            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > &rOptions,
-            const SwPrtOptions &rPrintData, bool bIsPDFExport = sal_False );
-
-    // printing of a complete brochure for mail merge
-    void PrintProspectMM( vcl::OldStylePrintAdaptor &rAdaptor,
-            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > &rOptions,
-            const SwPrintData &rPrintData, bool bProspectRTL );
 
     // printing for OLE 2.0
     static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,

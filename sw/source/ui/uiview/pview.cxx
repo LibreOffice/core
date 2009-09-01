@@ -1779,7 +1779,7 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
 
     // OD 09.01.2003 #i6467# - adjust view shell option to the same as for print
     SwPrtOptions aPrintOptions( GetViewFrame()->GetObjectShell()->GetTitle(0) );
-    SwView::MakeOptions( 0, aPrintOptions, 0, 0, false, 0, 0 );
+    aPrintOptions.MakeOptions( 0, 0, 0, false, 0, 0 );
     GetViewShell()->AdjustOptionsForPagePreview( aPrintOptions );
 
     IDocumentSettingAccess* pIDSA = pESh->getIDocumentSettingAccess();

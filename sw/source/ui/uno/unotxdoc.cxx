@@ -2452,100 +2452,6 @@ Any SAL_CALL SwXTextDocument::getPropertyDefault( const OUString& rPropertyName 
     }
     return aAny;
 }
-/*-- 06.01.2004 15:08:34---------------------------------------------------
-    The class SwViewOptionAdjust_Impl is used to adjust the SwViewOption of
-    the current ViewShell so that fields are not printed as commands and
-    hidden text and hidden characters are always invisible.
-    After printing the view options are restored
-  -----------------------------------------------------------------------*/
-class SwViewOptionAdjust_Impl
-{
-    bool m_bSwitchOff_IsFldName;
-    bool m_bSwitchOff_PlaceHolderView;
-    bool m_bSwitchOff_HiddenChar;
-    bool m_bSwitchOff_HiddenParagraphs;
-    bool m_bSwitchOff_IsShowHiddenField;
-
-    SwViewOption* m_pViewOption;
-    SwWrtShell& m_rShell;
-public:
-    SwViewOptionAdjust_Impl(SwWrtShell& rSh);
-    ~SwViewOptionAdjust_Impl();
-};
-/*-- 06.01.2004 15:08:34---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl(SwWrtShell& rSh) :
-    m_pViewOption(0),
-    m_rShell(rSh)
-{
-    const SwViewOption* pCurrentViewOptions = m_rShell.GetViewOptions();
-    m_bSwitchOff_IsFldName = pCurrentViewOptions->IsFldName() && m_rShell.IsAnyFieldInDoc();
-    bool bApplyViewOptions = m_bSwitchOff_IsFldName;
-    //switch off painting of placeholder fields
-    m_bSwitchOff_PlaceHolderView = pCurrentViewOptions->IsShowPlaceHolderFields();
-    //switch off display of hidden characters if on and hidden characters are in use
-    m_bSwitchOff_HiddenChar = pCurrentViewOptions->IsShowHiddenChar() && m_rShell.GetDoc()->ContainsHiddenChars();
-    //switch off display of hidden paragraphs if on and hidden paragraphs are in use
-    m_bSwitchOff_HiddenParagraphs = pCurrentViewOptions->IsShowHiddenPara();
-    if(m_bSwitchOff_HiddenParagraphs)
-    {
-        const SwFieldType* pFldType = m_rShell.GetDoc()->GetSysFldType(RES_HIDDENPARAFLD);
-        if(!pFldType || !pFldType->GetDepends())
-            m_bSwitchOff_HiddenParagraphs = false;
-    }
-    m_bSwitchOff_IsShowHiddenField = pCurrentViewOptions->IsShowHiddenField();
-    if(m_bSwitchOff_IsShowHiddenField)
-    {
-        const SwFieldType* pFldType = m_rShell.GetDoc()->GetSysFldType(RES_HIDDENTXTFLD);
-        if( !pFldType || !pFldType->GetDepends())
-            m_bSwitchOff_IsShowHiddenField = false;
-    }
-
-    bApplyViewOptions |= m_bSwitchOff_PlaceHolderView;
-    bApplyViewOptions |= m_bSwitchOff_HiddenChar;
-    bApplyViewOptions |= m_bSwitchOff_HiddenParagraphs;
-    bApplyViewOptions |= m_bSwitchOff_IsShowHiddenField;
-    if(bApplyViewOptions)
-    {
-        m_pViewOption = new SwViewOption(*m_rShell.GetViewOptions());
-        if(m_bSwitchOff_IsFldName)
-            m_pViewOption->SetFldName(FALSE);
-        if(m_bSwitchOff_PlaceHolderView)
-            m_pViewOption->SetShowPlaceHolderFields(FALSE);
-        if(m_bSwitchOff_HiddenChar)
-            m_pViewOption->SetShowHiddenChar(FALSE);
-        if(m_bSwitchOff_HiddenParagraphs)
-            m_pViewOption->SetShowHiddenPara(FALSE);
-        if(m_bSwitchOff_IsShowHiddenField)
-            m_pViewOption->SetShowHiddenField(FALSE);
-        SW_MOD()->ApplyUsrPref(*m_pViewOption, &m_rShell.GetView(), VIEWOPT_DEST_VIEW_ONLY );
-    }
-}
-/*-- 06.01.2004 15:08:34---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
-{
-    if(m_pViewOption)
-    {
-        if(m_bSwitchOff_IsFldName)
-            m_pViewOption->SetFldName(TRUE);
-        if(m_bSwitchOff_PlaceHolderView)
-            m_pViewOption->SetShowPlaceHolderFields(TRUE);
-        if(m_bSwitchOff_HiddenChar)
-            m_pViewOption->SetShowHiddenChar(TRUE);
-        if(m_bSwitchOff_HiddenParagraphs)
-            m_pViewOption->SetShowHiddenPara(TRUE);
-        if(m_bSwitchOff_IsShowHiddenField)
-            m_pViewOption->SetShowHiddenField(TRUE);
-        SW_MOD()->ApplyUsrPref(*m_pViewOption, &m_rShell.GetView(), VIEWOPT_DEST_VIEW_ONLY );
-        delete m_pViewOption;
-    }
-}
-/* -----------------------------23.08.02 16:00--------------------------------
-
- ---------------------------------------------------------------------------*/
 
 static OutputDevice * lcl_GetOutputDevice( const SwPrintUIOptions &rPrintUIOptions )
 {
@@ -2561,6 +2467,26 @@ static OutputDevice * lcl_GetOutputDevice( const SwPrintUIOptions &rPrintUIOptio
     }
 
     return pOut;
+}
+
+
+SfxViewShell * SwXTextDocument::GetRenderView( const SwPrintUIOptions &rOpt, bool bIsPDFExport )
+{
+    // get view shell to use
+    SfxViewShell *pView = 0;
+    if (bIsPDFExport)
+        pView = GuessViewShell();
+    else
+    {
+        uno::Any aTmp( rOpt.getValue( C2U( "View" ) ));
+        uno::Reference< frame::XController > xController;
+        if (aTmp >>= xController)
+        {
+            DBG_ASSERT( xController.is(), "controller is empty!" );
+            pView = GuessViewShell( xController );
+        }
+    }
+    return pView;
 }
 
 
@@ -2628,19 +2554,27 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     if(!IsValid())
         throw RuntimeException();
 
-    if( ! m_pRenderData )
+    // actually m_pRenderData and m_pPrintUIOptions should have already been
+    // destroyed in 'render' when IsLastPage was set (or should have been set)
+    if (m_pRenderData)
+        delete m_pRenderData, m_pRenderData = 0;
+    if (m_pPrintUIOptions)
+        delete m_pPrintUIOptions, m_pPrintUIOptions = 0;
+
+    if (! m_pRenderData)
         m_pRenderData = new SwRenderData;
-    if( ! m_pPrintUIOptions )
+    if (! m_pPrintUIOptions)
     {
         const BOOL bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
         m_pPrintUIOptions = new SwPrintUIOptions( bWebDoc );
     }
     bool bFormat = m_pPrintUIOptions->processPropertiesAndCheckFormat( rxOptions );
-    const bool bIsPDFExport     = !m_pPrintUIOptions->hasProperty( "IsPrinter" );
+    const bool bIsPDFExport         = !m_pPrintUIOptions->hasProperty( "IsPrinter" );
+    const bool bIsSkipEmptyPages    = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
 
-    SfxViewShell *pView = 0;
+    SfxViewShell *pView = GetRenderView( *m_pPrintUIOptions, bIsPDFExport );
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
-    if (!pDoc)
+    if (!pDoc || !pView)
         throw RuntimeException();
 
     SwDocShell *pRenderDocShell = pDoc->GetDocShell();
@@ -2661,7 +2595,15 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         pWrtShell = pSwView->GetWrtShellPtr();
     }
 
-    SwViewOptionAdjust_Impl aAdjust(*pWrtShell);
+    m_pRenderData->SetSwPrtOptions( new SwPrtOptions( C2U( bIsPDFExport ? "PDF export" : "Printing" ) ) );
+    m_pRenderData->MakeSwPrtOptions( m_pRenderData->GetSwPrtOptionsRef(), pRenderDocShell,
+            m_pPrintUIOptions, m_pRenderData, bIsSkipEmptyPages, bIsPDFExport );
+
+    //SwViewOptionAdjust_Impl aAdjust(*pWrtShell);
+    const TypeId aSwViewTypeId = TYPE(SwView);
+    if (pView->IsA(aSwViewTypeId))
+        m_pRenderData->ViewOptionAdjustStart( *((SwView*)pView)->GetWrtShellPtr() );
+
     if( bFormat )
     {
         // since printing now also use the API for PDF export this option
@@ -2671,7 +2613,12 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         // --> FME 2005-05-23 #122919# Force field update before PDF export:
         pWrtShell->ViewShell::UpdateFlds(TRUE);
         // <--
+
+        // there is some redundancy between those two fucntion calls, but right now
+        // there is no time to sort this out.
+        //TODO: check what exatly needs to be done and make just one function for that
         pWrtShell->CalcLayout();
+        pWrtShell->CalcPagesForPrint( pDoc->GetPageCount() );
 
         pWrtShell->SetPDFExportOption( sal_False );
     }
@@ -2725,8 +2672,10 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     if(!IsValid())
         throw RuntimeException();
 
-    if( ! m_pRenderData )
-        m_pRenderData = new SwRenderData;
+    DBG_ASSERT( m_pRenderData, "data should have been created already in getRendererCount..." );
+    DBG_ASSERT( m_pPrintUIOptions, "data should have been created already in getRendererCount..." );
+//    if( ! m_pRenderData )
+//        m_pRenderData = new SwRenderData;
     if( ! m_pPrintUIOptions )
     {
         const BOOL bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
@@ -2735,9 +2684,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     m_pPrintUIOptions->processProperties( rxOptions );
     const bool bIsPDFExport = !m_pPrintUIOptions->hasProperty( "IsPrinter" );
 
-    SfxViewShell *pView = 0;
+    SfxViewShell *pView = GetRenderView( *m_pPrintUIOptions, bIsPDFExport );
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
-    if (!pDoc)
+    if (!pDoc || !pView)
         throw RuntimeException();
 
     // due to #110067# (document page count changes sometimes during
@@ -2805,9 +2754,6 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
             dynamic_cast< SfxViewShell * >(pSwPagePreView);
 }
 
-/* -----------------------------23.08.02 16:00--------------------------------
-
- ---------------------------------------------------------------------------*/
 
 void SAL_CALL SwXTextDocument::render(
         sal_Int32 nRenderer,
@@ -2819,6 +2765,8 @@ void SAL_CALL SwXTextDocument::render(
     if(!IsValid())
         throw RuntimeException();
 
+    DBG_ASSERT( m_pRenderData, "data should have been created already in getRendererCount..." );
+    DBG_ASSERT( m_pPrintUIOptions, "data should have been created already in getRendererCount..." );
     if (!m_pRenderData)
         m_pRenderData = new SwRenderData;
     if (!m_pPrintUIOptions)
@@ -2830,21 +2778,7 @@ void SAL_CALL SwXTextDocument::render(
     const bool bPrintProspect   = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
     const bool bIsPDFExport     = !m_pPrintUIOptions->hasProperty( "IsPrinter" );
 
-    // get view shell to use
-    SfxViewShell *pView = 0;
-    if (bIsPDFExport)
-        pView = GuessViewShell();
-    else
-    {
-        uno::Any aTmp( m_pPrintUIOptions->getValue( C2U( "View" ) ));
-        uno::Reference< frame::XController > xController;
-        if (aTmp >>= xController)
-        {
-            DBG_ASSERT( xController.is(), "controller is empty!" );
-            pView = GuessViewShell( xController );
-        }
-    }
-
+    SfxViewShell *pView = GetRenderView( *m_pPrintUIOptions, bIsPDFExport );
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
 
     if (!pDoc || !pView)
@@ -2873,63 +2807,18 @@ void SAL_CALL SwXTextDocument::render(
     }
 
     // get output device to use
-    OutputDevice*   pOut = lcl_GetOutputDevice( *m_pPrintUIOptions );
+    OutputDevice * pOut = lcl_GetOutputDevice( *m_pPrintUIOptions );
 
-    if(pVwSh && pOut)
+    if(pVwSh && pOut && m_pRenderData->HasSwPrtOptions())
     {
-        // TLPDF2DO: clean-up, need to check if only one of aOptions and m_pPrintUIOptions should be used
-        SwPrtOptions    aOptions( C2U( bIsPDFExport ? "PDF export" : "Printing" ) );
-
-        // get default print options
-        const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
-        BOOL bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
-        SwView::MakeOptions( NULL, aOptions, NULL, NULL, bWeb, NULL, NULL );
-
-        // get print options to use from provided properties
         const rtl::OUString aPageRange  = m_pPrintUIOptions->getStringValue( "PageRange", OUString() );
         const bool bFirstPage           = m_pPrintUIOptions->getBoolValue( "IsFirstPage", sal_False );
         const bool bLastPage            = m_pPrintUIOptions->getBoolValue( "IsLastPage", sal_False );
         bool bIsSkipEmptyPages          = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
-        aOptions.bPrintGraphic          = m_pPrintUIOptions->IsPrintGraphics();
-        aOptions.bPrintTable            = m_pPrintUIOptions->IsPrintTables();
-        aOptions.bPrintDraw             = m_pPrintUIOptions->IsPrintDrawings();
-        aOptions.bPrintControl          = m_pPrintUIOptions->getBoolValue( "PrintControls", aOptions.bPrintControl );
-        aOptions.bPrintLeftPages        = m_pPrintUIOptions->IsPrintLeftPages();
-        aOptions.bPrintRightPages       = m_pPrintUIOptions->IsPrintRightPages();
-        aOptions.bPrintPageBackground   = m_pPrintUIOptions->getBoolValue( "PrintPageBackground",   aOptions.bPrintPageBackground );
-        aOptions.bPrintEmptyPages       = !bIsSkipEmptyPages;
-        // bUpdateFieldsInPrinting  <-- not set here    // TLPDF: TODO: remove this from SwPrintData?? Get rid of SwPrtOptions??
-        aOptions.bPaperFromSetup        = m_pPrintUIOptions->getBoolValue( "PrintPaperFromSetup",   aOptions.bPaperFromSetup );
-        aOptions.bPrintReverse          = m_pPrintUIOptions->getBoolValue( "PrintReversed",         aOptions.bPrintReverse );
-        aOptions.bPrintProspect         = m_pPrintUIOptions->getBoolValue( "PrintProspect",         aOptions.bPrintProspect );
-        aOptions.bPrintProspectRTL      = m_pPrintUIOptions->getIntValue( "PrintProspectRTL",       aOptions.bPrintProspectRTL ) ? true : false;
-        // bPrintSingleJobs         <-- not set here    // TLPDF: TODO: remove this from SwPrintData?? Get rid of SwPrtOptions??
-        // bModified                <-- not set here    // TLPDF: TODO: remove this from SwPrintData?? Get rid of SwPrtOptions??
-        aOptions.bPrintBlackFont        = m_pPrintUIOptions->getBoolValue( "PrintBlackFonts",       aOptions.bPrintBlackFont );
-        aOptions.bPrintHiddenText       = m_pPrintUIOptions->getBoolValue( "PrintHiddenText",       aOptions.bPrintHiddenText );
-        aOptions.bPrintTextPlaceholder  = m_pPrintUIOptions->getBoolValue( "PrintTextPlaceholder",  aOptions.bPrintTextPlaceholder );
-        aOptions.nPrintPostIts          = static_cast< sal_Int16 >(m_pPrintUIOptions->getIntValue( "PrintAnnotationMode", aOptions.nPrintPostIts ));
 
-        //! needs to be set after MakeOptions since the assignment operation in that
-        //! function will destroy the pointers
-        aOptions.SetPrintUIOptions( m_pPrintUIOptions );
-        aOptions.SetRenderData( m_pRenderData );
-
-        Range aRange( nRenderer+1, nRenderer+1 );
-        MultiSelection aPages( aRange );
-        aPages.SetTotalRange( Range( 0, RANGE_MAX ) );
-        aPages.Select( aRange );
-        aOptions.aMulti = aPages;
-
-        //! Note: Since for PDF export of (multi-)selection a temporary
-        //! document is created that contains only the selects parts,
-        //! and thus that document is to printed in whole the,
-        //! aOptions.bPrintSelection parameter will be false.
-        if (bIsPDFExport)
-            aOptions.bPrintSelection = FALSE;
-
-        SwViewOptionAdjust_Impl*  pViewOptionAdjust = pView->IsA(aSwViewTypeId) ?
-            new SwViewOptionAdjust_Impl(*((SwView*)pView)->GetWrtShellPtr()) : 0;
+        DBG_ASSERT(( pView->IsA(aSwViewTypeId) &&  m_pRenderData->IsViewOptionAdjust())
+                || (!pView->IsA(aSwViewTypeId) && !m_pRenderData->IsViewOptionAdjust()),
+                "SwView / SwViewOptionAdjust_Impl availability mismatch" );
 
         // since printing now also use the API for PDF export this option
         // should be set for printing as well ...
@@ -2945,17 +2834,17 @@ void SAL_CALL SwXTextDocument::render(
                                 ((SwView*)pView)->GetWrtShellPtr() :
                                 0;
 
-        if (bIsPDFExport && bFirstPage && pWrtShell)    /*TLPDF*/
+        if (bIsPDFExport && bFirstPage && pWrtShell)
         {
             SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages, sal_False );
         }
         // <--
 
-        // TLPDF OutputDevice *pOldDev = pVwSh->GetOut();   // TLPDF
+        const SwPrtOptions &rSwPrtOptions = *m_pRenderData->GetSwPrtOptions();
         if (bPrintProspect)
-            pVwSh->PrintProspect( pOut, aOptions, nRenderer );
+            pVwSh->PrintProspect( pOut, rSwPrtOptions, nRenderer );
         else    // normal printing and PDF export
-            pVwSh->PrintOrPDFExport( pOut, aOptions, nRenderer, bIsPDFExport );
+            pVwSh->PrintOrPDFExport( pOut, rSwPrtOptions, nRenderer, bIsPDFExport );
 
         // --> FME 2004-10-08 #i35176#
         //
@@ -2963,7 +2852,7 @@ void SAL_CALL SwXTextDocument::render(
         // from the EditEngine. The links are generated during the painting
         // process, but the destinations are still missing.
         //
-        if (bIsPDFExport && bLastPage && pWrtShell) /*TLPDF*/
+        if (bIsPDFExport && bLastPage && pWrtShell)
         {
             SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages,  sal_True );
         }
@@ -2971,12 +2860,15 @@ void SAL_CALL SwXTextDocument::render(
 
         pVwSh->SetPDFExportOption( sal_False );
 
-        // #i96167# haggai: delete pViewOptionsAdjust here because it makes use
-        // of the shell, which might get destroyed in lcl_DisposeView!
-        delete pViewOptionAdjust;
-
+        // last page to be rendered? (not necessarily the last page of the document)
+        // -> do clean-up of data
         if (bLastPage)
         {
+            // #i96167# haggai: delete pViewOptionsAdjust here because it makes use
+            // of the shell, which might get destroyed in lcl_DisposeView!
+            if (m_pRenderData && m_pRenderData->IsViewOptionAdjust())
+                m_pRenderData->ViewOptionAdjustStop();
+
             if (m_pRenderData && m_pRenderData->HasPostItData())
                 m_pRenderData->DeletePostItData();
             if (m_pHiddenViewFrame)
@@ -2985,8 +2877,6 @@ void SAL_CALL SwXTextDocument::render(
                 m_pHiddenViewFrame = 0;
             }
 
-            aOptions.SetRenderData( NULL );
-            aOptions.SetPrintUIOptions( NULL );
             delete m_pRenderData;       m_pRenderData     = NULL;
             delete m_pPrintUIOptions;   m_pPrintUIOptions = NULL;
         }
@@ -3948,3 +3838,78 @@ void SwXDocumentPropertyHelper::onChange()
     if(m_pDoc)
        m_pDoc->SetModified();
 }
+
+
+/*****************************************************************************/
+
+SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl(SwWrtShell& rSh) :
+    m_pViewOption(0),
+    m_rShell(rSh)
+{
+    const SwViewOption* pCurrentViewOptions = m_rShell.GetViewOptions();
+    m_bSwitchOff_IsFldName = pCurrentViewOptions->IsFldName() && m_rShell.IsAnyFieldInDoc();
+    bool bApplyViewOptions = m_bSwitchOff_IsFldName;
+    //switch off painting of placeholder fields
+    m_bSwitchOff_PlaceHolderView = pCurrentViewOptions->IsShowPlaceHolderFields();
+    //switch off display of hidden characters if on and hidden characters are in use
+    m_bSwitchOff_HiddenChar = pCurrentViewOptions->IsShowHiddenChar() && m_rShell.GetDoc()->ContainsHiddenChars();
+    //switch off display of hidden paragraphs if on and hidden paragraphs are in use
+    m_bSwitchOff_HiddenParagraphs = pCurrentViewOptions->IsShowHiddenPara();
+    if(m_bSwitchOff_HiddenParagraphs)
+    {
+        const SwFieldType* pFldType = m_rShell.GetDoc()->GetSysFldType(RES_HIDDENPARAFLD);
+        if(!pFldType || !pFldType->GetDepends())
+            m_bSwitchOff_HiddenParagraphs = false;
+    }
+    m_bSwitchOff_IsShowHiddenField = pCurrentViewOptions->IsShowHiddenField();
+    if(m_bSwitchOff_IsShowHiddenField)
+    {
+        const SwFieldType* pFldType = m_rShell.GetDoc()->GetSysFldType(RES_HIDDENTXTFLD);
+        if( !pFldType || !pFldType->GetDepends())
+            m_bSwitchOff_IsShowHiddenField = false;
+    }
+
+    bApplyViewOptions |= m_bSwitchOff_PlaceHolderView;
+    bApplyViewOptions |= m_bSwitchOff_HiddenChar;
+    bApplyViewOptions |= m_bSwitchOff_HiddenParagraphs;
+    bApplyViewOptions |= m_bSwitchOff_IsShowHiddenField;
+    if(bApplyViewOptions)
+    {
+        m_pViewOption = new SwViewOption(*m_rShell.GetViewOptions());
+        if(m_bSwitchOff_IsFldName)
+            m_pViewOption->SetFldName(FALSE);
+        if(m_bSwitchOff_PlaceHolderView)
+            m_pViewOption->SetShowPlaceHolderFields(FALSE);
+        if(m_bSwitchOff_HiddenChar)
+            m_pViewOption->SetShowHiddenChar(FALSE);
+        if(m_bSwitchOff_HiddenParagraphs)
+            m_pViewOption->SetShowHiddenPara(FALSE);
+        if(m_bSwitchOff_IsShowHiddenField)
+            m_pViewOption->SetShowHiddenField(FALSE);
+        SW_MOD()->ApplyUsrPref(*m_pViewOption, &m_rShell.GetView(), VIEWOPT_DEST_VIEW_ONLY );
+    }
+}
+
+
+SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
+{
+    if(m_pViewOption)
+    {
+        if(m_bSwitchOff_IsFldName)
+            m_pViewOption->SetFldName(TRUE);
+        if(m_bSwitchOff_PlaceHolderView)
+            m_pViewOption->SetShowPlaceHolderFields(TRUE);
+        if(m_bSwitchOff_HiddenChar)
+            m_pViewOption->SetShowHiddenChar(TRUE);
+        if(m_bSwitchOff_HiddenParagraphs)
+            m_pViewOption->SetShowHiddenPara(TRUE);
+        if(m_bSwitchOff_IsShowHiddenField)
+            m_pViewOption->SetShowHiddenField(TRUE);
+        SW_MOD()->ApplyUsrPref(*m_pViewOption, &m_rShell.GetView(), VIEWOPT_DEST_VIEW_ONLY );
+        delete m_pViewOption;
+    }
+}
+
+/*****************************************************************************/
+
+
