@@ -424,8 +424,6 @@ public:
 
     virtual USHORT          SetPrinter( SfxPrinter* pNew,
                                         USHORT nDiff = SFX_PRINTER_ALL, bool bIsAPI=false);
-    virtual ErrCode         DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog,
-                                     BOOL bSilent, BOOL bIsAPI );
     ShellModes              GetShellMode();
 
     com::sun::star::view::XSelectionSupplier*       GetUNOObject();
