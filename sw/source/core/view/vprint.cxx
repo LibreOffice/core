@@ -851,35 +851,11 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
     const SwFrm *pPage = pLayout->Lower();
     SwLayAction aAction( pLayout, Imp() );
 
-#ifdef TL_NOT_NOW /*TLPDF*/
-//Currently we have no progress bar here. It is handled in the new Print UI now.
-//Not year clear: what about Progressbar in MailMerge
-    if( pProgress )
-    {
-        // HACK, damit die Anzeige sich nicht verschluckt.
-        const XubString aTmp( SW_RES( STR_STATSTR_FORMAT ) );
-        pProgress->SetText( aTmp );
-        lcl_SetState( *pProgress, 1, nStatMax, pStr, nMergeAct, nMergeCnt, 0, 1 );
-        pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
-        aAction.SetProgress(pProgress);
-    }
-#endif  // TL_NOT_NOW /*TLPDF*/
-
     pLayout->StartAllAction();
     for ( USHORT i = 1; pPage && i <= nMax; pPage = pPage->GetNext(), ++i )
     {
         if ( ( bPrtJob && !pPrt->IsJobActive() ) || Imp()->IsStopPrt() )
             break;
-
-#ifdef TL_NOT_NOW /*TLPDF*/
-        if( pProgress )
-        {
-            //HACK, damit die Anzeige sich nicht verschluckt.
-            if ( i > nStatMax ) nStatMax = i;
-            lcl_SetState( *pProgress, i, nStatMax, pStr, nMergeAct, nMergeCnt, 0, i );
-            pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
-        }
-#endif  // TL_NOT_NOW /*TLPDF*/
 
         if ( ( bPrtJob && !pPrt->IsJobActive() ) || Imp()->IsStopPrt() )
             break;
@@ -898,11 +874,6 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
         aVisArea = aOldVis;             //Zuruecksetzen wg. der Paints!
         Imp()->SetFirstVisPageInvalid();
         SwPaintQueue::Repaint();
-
-#ifdef TL_NOT_NOW /*TLPDF*/
-        if ( pProgress )
-            pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
-#endif  // TL_NOT_NOW /*TLPDF*/
     }
 
     if (pProgress)

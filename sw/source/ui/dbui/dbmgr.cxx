@@ -900,10 +900,10 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
                     bRet = TRUE;
                 }
 #endif  // TL_NOT_NOW /*TLPDF*/
-                pSh->PrintProspectMM( aPrtAdaptor, aViewProperties, rOpt, rOpt.IsPrintProspectRTL() );  // TLPDF
+//TLPDFXX                pSh->PrintProspectMM( aPrtAdaptor, aViewProperties, rOpt, rOpt.IsPrintProspectRTL() );  // TLPDF
                 bRet = TRUE;                                                        // TLPDF
             }
-            else if( pSh->PrintOrPDFExportMM( aPrtAdaptor, aViewProperties, rOpt ) /* TLPDF */ )
+            else if( 1 /*TLPDFXX pSh->PrintOrPDFExportMM( aPrtAdaptor, aViewProperties, rOpt ) */ )
                 bRet = TRUE;
             bMergeLock = FALSE;
 

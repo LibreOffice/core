@@ -1149,8 +1149,6 @@ void SwDoc::CalculatePagesForPrinting(
     // (PDF export UI does not allow for selecting left or right pages only)
     bool bPrintLeftPages    = bIsPDFExport ? true : rOptions.IsPrintLeftPages();
     bool bPrintRightPages   = bIsPDFExport ? true : rOptions.IsPrintRightPages();
-    // TLPDF, TODO: remove bPrintReverse, should be handled by PLs framework now
-//TLPDF    bool bPrintReverse    = rOptions.getBoolValue( C2U( "PrintReverseOrder" ), false );
     bool bPrintEmptyPages   = rOptions.IsPrintEmptyPages( bIsPDFExport );
 
     Range aPages( 1, nDocPageCount );
@@ -1211,17 +1209,7 @@ void SwDoc::CalculatePagesForPrinting(
         aMulti = aTmpMulti;
 // Ende des HACKs
 
-#ifdef TL_NOT_NOW /*TLPDF*/
-        if (bPrintReverse)
-        {
-            const SwFrm *pTmp = pStPage;
-            pStPage  = (SwPageFrm*)pEndPage;
-            pEndPage = pTmp;
-            nPageNo  = nLastPageNo;
-        }
-        else
-#endif  // TL_NOT_NOW /*TLPDF*/
-            nPageNo = nFirstPageNo;
+        nPageNo = nFirstPageNo;
 
         std::set< sal_Int32 > &rValidPages = rData.GetValidPagesSet();
         std::map< sal_Int32, const SwPageFrm * > &rValidStartFrms = rData.GetValidStartFrames();
@@ -1248,13 +1236,6 @@ void SwDoc::CalculatePagesForPrinting(
             {
                 pStPage = 0;
             }
-#ifdef TL_NOT_NOW /*TLPDF*/
-            else if ( bPrintReverse )
-            {
-                --nPageNo;
-                pStPage = (SwPageFrm*)pStPage->GetPrev();
-            }
-#endif  // TL_NOT_NOW /*TLPDF*/
             else
             {   ++nPageNo;
                 pStPage = (SwPageFrm*)pStPage->GetNext();
@@ -1565,40 +1546,6 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
         //  with back and front)
         while( aVec.size() & 3 )
             aVec.push_back( 0 );
-
-#ifdef TL_NOT_NOW /*TLPDF*/
-        if ( bPrintReverse && 4 < aVec.size() )
-        {
-            // das Array umsortieren
-            // Array:    1 2 3 4 5 6 7 8
-            // soll:     3 4 1 2 7 8 5 6
-            // Algorhitmus:
-            // vordere Haelfte: Austausch von 2 Pointer von Vorne vor die Haelfte
-            // hintere Haelfte: Austausch von 2 Pointer von der Haelfte nach hinten
-
-            USHORT nHalf = aVec.size() / 2;
-            USHORT nSwapCount = nHalf / 4;
-
-            const SwPageFrm ** ppArrStt = &aVec[ 0 ];
-            const SwPageFrm ** ppArrHalf = &aVec[ nHalf ];
-
-            for ( int k = 0; k < 2; ++k )
-            {
-                for ( USHORT n = 0; n < nSwapCount; ++n )
-                {
-                    const SwPageFrm * pTmp = *ppArrStt;
-                    *ppArrStt++ = *(ppArrHalf-2);
-                    *(ppArrHalf-2) = pTmp;
-
-                    pTmp = *ppArrStt;
-                    *ppArrStt++ = *--ppArrHalf;
-                    *ppArrHalf-- = pTmp;
-                }
-                ppArrStt = &aVec[ nHalf ];
-                ppArrHalf = &aVec[ 0 ] + aVec.size();
-            }
-        }
-#endif  // TL_NOT_NOW /*TLPDF*/
     }
 
     // dann sorge mal dafuer, das alle Seiten in der richtigen
