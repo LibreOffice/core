@@ -468,7 +468,7 @@ void ViewShell::PrintProspect(
     DBG_ASSERT( 0 <= nRenderer && nRenderer < nMaxRenderer, "nRenderer out of bounds");
 #endif
     Printer *pPrinter = dynamic_cast< Printer * >(pOutDev);
-    if (!pPrinter || nMaxRenderer <= 0 || nRenderer < 0 || nRenderer > nMaxRenderer)
+    if (!pPrinter || nMaxRenderer < 0 || nRenderer < 0 || nRenderer > nMaxRenderer)
         return;
 
     // save settings of OutputDevice (should be done always since the

@@ -1081,7 +1081,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT( 0 <= nRenderer && nRenderer < nMaxRenderer, "nRenderer out of bounds");
 #endif
-    if (!pOutDev || nMaxRenderer <= 0 || nRenderer < 0 || nRenderer > nMaxRenderer)
+    if (!pOutDev || nMaxRenderer < 0 || nRenderer < 0 || nRenderer > nMaxRenderer)
         return sal_False;
 
     // save settings of OutputDevice (should be done always since the

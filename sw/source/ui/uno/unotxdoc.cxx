@@ -2556,10 +2556,10 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
 
     // actually m_pRenderData and m_pPrintUIOptions should have already been
     // destroyed in 'render' when IsLastPage was set (or should have been set)
-    if (m_pRenderData)
-        delete m_pRenderData, m_pRenderData = 0;
-    if (m_pPrintUIOptions)
-        delete m_pPrintUIOptions, m_pPrintUIOptions = 0;
+//    if (m_pRenderData)
+//        delete m_pRenderData, m_pRenderData = 0;
+//    if (m_pPrintUIOptions)
+//        delete m_pPrintUIOptions, m_pPrintUIOptions = 0;
 
     if (! m_pRenderData)
         m_pRenderData = new SwRenderData;
