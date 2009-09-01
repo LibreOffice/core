@@ -227,6 +227,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     m_aDialogSize( GetSizePixel() )
 {
     FreeResource();
+    aSingleJobsCB.Show(sal_False); // not supported in since cws printerpullpages anymore
     //task #97066# mailing of form letters is currently not supported
     aMailingRB.Show(FALSE);
     aSubjectFT.Show(FALSE);
@@ -347,7 +348,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
 
     pModOpt = SW_MOD()->GetModuleConfig();
 
-    aSingleJobsCB.Check(pModOpt->IsSinglePrintJob());
+    //aSingleJobsCB.Check(pModOpt->IsSinglePrintJob());// not supported in since cws printerpullpages anymore
 
     sal_Int16 nMailingMode(pModOpt->GetMailingFormats());
     aFormatSwCB.Check((nMailingMode & TXTFORMAT_OFFICE) != 0);
@@ -940,5 +941,4 @@ SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(Window* pParent) 
 SwMailMergeFieldConnectionsDlg::~SwMailMergeFieldConnectionsDlg()
 {
 }
-
 
