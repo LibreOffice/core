@@ -44,19 +44,17 @@
 #include <vcl/waitobj.hxx>
 #include <svtools/zforlist.hxx>
 #include <sfx2/app.hxx>
-#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
-#include <com/sun/star/sheet/MemberResultFlags.hpp>
-
-#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>
-#include <com/sun/star/sheet/MemberResultFlags.hpp>
-#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
-#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
-#include <com/sun/star/sheet/XDrillDownDataSupplier.hpp>
-#include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
+#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
+#include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>
+#include <com/sun/star/sheet/GeneralFunction.hpp>
+#include <com/sun/star/sheet/MemberResultFlags.hpp>
+#include <com/sun/star/sheet/XDimensionsSupplier.hpp>
+#include <com/sun/star/sheet/XDrillDownDataSupplier.hpp>
 
 #include "global.hxx"
 #include "globstr.hrc"
@@ -1618,6 +1616,13 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
                         {
                             // Change subtotal only when the table has one data dimension.
                             if (aData.GetDataDimensionCount() > 1)
+                                break;
+
+                            // display name for subtotal is allowed only if the subtotal type is 'Automatic'.
+                            if (pDim->GetSubTotalsCount() != 1)
+                                break;
+
+                            if (pDim->GetSubTotalFunc(0) != sheet::GeneralFunction_AUTO)
                                 break;
 
                             const OUString* pLayoutName = pMem->GetLayoutName();
