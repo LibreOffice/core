@@ -991,6 +991,13 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
             nEnd = rConfigItem.GetMergedDocumentCount();
     }
     rConfigItem.SetPrintRange( (USHORT)nBegin, (USHORT)nEnd );
+    SwDocMergeInfo& rStartInfo = rConfigItem.GetDocumentMergeInfo(nBegin);
+    SwDocMergeInfo& rEndInfo = rConfigItem.GetDocumentMergeInfo(nEnd - 1);
+
+    rtl::OUString sPages(rtl::OUString::valueOf( rStartInfo.nStartPageInTarget ));
+    sPages += rtl::OUString::createFromAscii( " - ");
+    sPages += rtl::OUString::valueOf(  rEndInfo.nEndPageInTarget );
+
     SwWrtShell& rSh = pTargetView->GetWrtShell();
     pTargetView->SetMailMergeConfigItem(&rConfigItem, 0, sal_False);
     if(m_pTempPrinter)
@@ -1005,8 +1012,14 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
     SfxDispatcher *pDis = pTargetView->GetViewFrame()->GetDispatcher();
     SfxBoolItem aMergeSilent(SID_SILENT, sal_False);
     m_pWizard->enableButtons(WZB_CANCEL, sal_False);
-    pDis->Execute(SID_PRINTDOCDIRECT,
-            SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aMergeSilent, 0L);
+
+    uno::Sequence < beans::PropertyValue > aProps( 2 );
+    aProps[0]. Name = rtl::OUString::createFromAscii("MonitorVisible");
+    aProps[0].Value <<= sal_True;
+    aProps[1]. Name = rtl::OUString::createFromAscii("Pages");
+    aProps[1]. Value <<= sPages;
+
+    pTargetView->ExecPrint( aProps, false, true );
     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, pObjSh));
 
     pTargetView->SetMailMergeConfigItem(0, 0, sal_False);
