@@ -3283,24 +3283,17 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 //create a new pagestyle
                 //copy the pagedesc from the current document to the new document and change the name of the to-be-applied style
 
-                    SwDoc* pTargetDoc = pTargetShell->GetDoc();
-                    String sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
-                    pTargetShell->GetDoc()->MakePageDesc( sNewPageDescName );
-                    SwPageDesc* pTargetPageDesc = pTargetShell->FindPageDescByName( sNewPageDescName );
-                    const SwPageDesc* pWorkPageDesc = rWorkShell.FindPageDescByName( sStartingPageDesc );
+                SwDoc* pTargetDoc = pTargetShell->GetDoc();
+                String sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
+                pTargetShell->GetDoc()->MakePageDesc( sNewPageDescName );
+                SwPageDesc* pTargetPageDesc = pTargetShell->FindPageDescByName( sNewPageDescName );
+                const SwPageDesc* pWorkPageDesc = rWorkShell.FindPageDescByName( sStartingPageDesc );
 
-                    if(pWorkPageDesc && pTargetPageDesc)
-                    {
-                        pTargetDoc->CopyPageDesc( *pWorkPageDesc, *pTargetPageDesc, sal_False );
-                        sModifiedStartingPageDesc = sNewPageDescName;
-                        lcl_CopyFollowPageDesc( *pTargetShell, *pWorkPageDesc, *pTargetPageDesc, nDocNo );
-                    }
-                }
-                if(nDocNo == 1 || bPageStylesWithHeaderFooter)
+                if(pWorkPageDesc && pTargetPageDesc)
                 {
-                    pTargetDoc->CopyPageDesc( *pSourcePageDesc, *pTargetPageDesc, sal_False );
+                    pTargetDoc->CopyPageDesc( *pWorkPageDesc, *pTargetPageDesc, sal_False );
                     sModifiedStartingPageDesc = sNewPageDescName;
-                    lcl_CopyFollowPageDesc( *pTargetShell, *pSourcePageDesc, *pTargetPageDesc, nDocNo );
+                    lcl_CopyFollowPageDesc( *pTargetShell, *pWorkPageDesc, *pTargetPageDesc, nDocNo );
                 }
             }
             if(nDocNo == 1 || bPageStylesWithHeaderFooter)
@@ -3408,4 +3401,3 @@ void SwConnectionDisposedListener_Impl::disposing( const EventObject& rSource )
         }
     }
 }
-

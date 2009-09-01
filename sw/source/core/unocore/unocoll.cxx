@@ -999,19 +999,6 @@ uno::Any SwXFrames::getByIndex(sal_Int32 nIndex)
     throw(IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-<<<<<<< /export/home/vg/mercurial/bjm02/sw/source/core/unocore/unocoll.cxx
-    if(!IsValid())
-        throw uno::RuntimeException();
-    if(nIndex < 0 || nIndex >= USHRT_MAX) throw IndexOutOfBoundsException();
-    const Reference<XEnumeration> xEnum = createEnumeration();
-    while(xEnum->hasMoreElements())
-    {
-        uno::Any aCurrent = xEnum->nextElement();
-        if(nIndex-- == 0)
-            return aCurrent;
-    }
-    throw IndexOutOfBoundsException();
-=======
     if(!IsValid())
         throw uno::RuntimeException();
     if(nIndex < 0 || nIndex >= USHRT_MAX)
@@ -1020,23 +1007,15 @@ uno::Any SwXFrames::getByIndex(sal_Int32 nIndex)
     if(!pFmt)
         throw IndexOutOfBoundsException();
     return lcl_UnoWrapFrame(pFmt, eType);
->>>>>>> /tmp/unocoll.cxx~other.S_OqFC
 }
 uno::Any SwXFrames::getByName(const OUString& rName)
     throw(NoSuchElementException, WrappedTargetException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-<<<<<<< /export/home/vg/mercurial/bjm02/sw/source/core/unocore/unocoll.cxx
-    if(!IsValid())
-        throw uno::RuntimeException();
-    const Reference<XEnumeration> xEnum = createEnumeration();
-    while(xEnum->hasMoreElements())
-=======
     if(!IsValid())
         throw uno::RuntimeException();
     const SwFrmFmt* pFmt;
     switch(eType)
->>>>>>> /tmp/unocoll.cxx~other.S_OqFC
     {
         case FLYCNTTYPE_GRF:
             pFmt = GetDoc()->FindFlyByName(rName, ND_GRFNODE);
@@ -1102,15 +1081,9 @@ uno::Type SAL_CALL SwXFrames::getElementType() throw(uno::RuntimeException)
 sal_Bool SwXFrames::hasElements(void) throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-<<<<<<< /export/home/vg/mercurial/bjm02/sw/source/core/unocore/unocoll.cxx
-    if(!IsValid())
-        throw uno::RuntimeException();
-    return createEnumeration()->hasMoreElements();
-=======
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->GetFlyCount(eType) > 0;
->>>>>>> /tmp/unocoll.cxx~other.S_OqFC
 }
 
 SwXFrame* SwXFrames::GetObject(SwFrmFmt& rFmt, FlyCntType eType)
