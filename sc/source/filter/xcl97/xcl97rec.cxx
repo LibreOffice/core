@@ -181,7 +181,7 @@ XclObj::~XclObj()
     delete pTxo;
 }
 
-void XclObj::ImplWriteAnchor( const XclExpRoot& rRoot, const SdrObject* pSdrObj, const Rectangle* pChildAnchor )
+void XclObj::ImplWriteAnchor( const XclExpRoot& /*rRoot*/, const SdrObject* pSdrObj, const Rectangle* pChildAnchor )
 {
     if( pChildAnchor )
     {
