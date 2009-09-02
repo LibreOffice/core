@@ -153,12 +153,16 @@ SfxPrinterController::SfxPrinterController( const Any& i_rComplete,
             now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),
             now.GetDay(), now.GetMonth(), now.GetYear() ) );
     }
-
+    
     // initialize extra ui options
     if( mxRenderable.is() )
     {
-        Sequence< beans::PropertyValue > aRenderOptions( 1 );
+        Sequence< beans::PropertyValue > aRenderOptions( 3 );
         aRenderOptions[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExtraPrintUIOptions" ) );
+        aRenderOptions[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "View" ) );
+        aRenderOptions[1].Value = i_rViewProp;
+        aRenderOptions[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrinter" ) );
+        aRenderOptions[2].Value <<= sal_True;
         Sequence< beans::PropertyValue > aRenderParms( mxRenderable->getRenderer( 0 , getSelectionObject(), aRenderOptions ) );
         int nProps = aRenderParms.getLength();
         for( int i = 0; i < nProps; i++ )
@@ -172,12 +176,12 @@ SfxPrinterController::SfxPrinterController( const Any& i_rComplete,
             }
         }
     }
-    
+
     // set some job parameters
     setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsApi" ) ), makeAny( i_bApi ) );
     setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDirect" ) ), makeAny( i_bDirect ) );
     setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrinter" ) ), makeAny( sal_True ) );
-    setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "View" ) ), makeAny( i_rViewProp ) );
+    setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "View" ) ), i_rViewProp );
 }
 
 void SfxPrinterController::Notify( SfxBroadcaster& , const SfxHint& rHint )
