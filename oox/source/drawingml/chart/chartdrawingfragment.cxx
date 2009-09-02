@@ -60,8 +60,8 @@ ShapeAnchor::ShapeAnchor( bool bRelSize ) :
 void ShapeAnchor::importExt( const AttributeList& rAttribs )
 {
     OSL_ENSURE( !mbRelSize, "ShapeAnchor::importExt - unexpected 'cdr:ext' element" );
-    maSize.Width = rAttribs.getInteger64( XML_cx, 0 );
-    maSize.Height = rAttribs.getInteger64( XML_cy, 0 );
+    maSize.Width = rAttribs.getHyper( XML_cx, 0 );
+    maSize.Height = rAttribs.getHyper( XML_cy, 0 );
 }
 
 void ShapeAnchor::setPos( sal_Int32 nElement, sal_Int32 nParentContext, const OUString& rValue )
