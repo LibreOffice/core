@@ -2966,6 +2966,9 @@ void ScChart2DataSequence::BuildDataCache()
     ::std::list<sal_Int32>::const_iterator itr = aHiddenValues.begin(), itrEnd = aHiddenValues.end();
     for (;itr != itrEnd; ++itr, ++pArr)
         *pArr = *itr;
+
+    // Clear the data series cache when the array is re-built.
+    m_aMixedDataCache.realloc(0);
 }
 
 void ScChart2DataSequence::RebuildDataCache()
@@ -3158,7 +3161,6 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             if ( m_bGotDataChangedHint && m_pDocument )
             {
                 m_aDataArray.clear();
-                m_aDataArray.clear();
                 lang::EventObject aEvent;
                 aEvent.Source.set((cppu::OWeakObject*)this);
 
@@ -3333,19 +3335,24 @@ uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
         throw uno::RuntimeException();
 
     BuildDataCache();
-    sal_Int32 nCount = m_aDataArray.size();
-    uno::Sequence<uno::Any> aSeq(nCount);
-    uno::Any* pArr = aSeq.getArray();
-    ::std::list<Item>::const_iterator itr = m_aDataArray.begin(), itrEnd = m_aDataArray.end();
-    for (; itr != itrEnd; ++itr, ++pArr)
-    {
-        if (itr->mbIsValue)
-            *pArr <<= itr->mfValue;
-        else
-            *pArr <<= itr->maString;
-    }
 
-    return aSeq;
+    if (!m_aMixedDataCache.getLength())
+    {
+        // Build a cache for the 1st time...
+
+        sal_Int32 nCount = m_aDataArray.size();
+        m_aMixedDataCache.realloc(nCount);
+        uno::Any* pArr = m_aMixedDataCache.getArray();
+        ::std::list<Item>::const_iterator itr = m_aDataArray.begin(), itrEnd = m_aDataArray.end();
+        for (; itr != itrEnd; ++itr, ++pArr)
+        {
+            if (itr->mbIsValue)
+                *pArr <<= itr->mfValue;
+            else
+                *pArr <<= itr->maString;
+        }
+    }
+    return m_aMixedDataCache;
 }
 
 // XNumericalDataSequence --------------------------------------------------
