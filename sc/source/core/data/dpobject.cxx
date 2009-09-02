@@ -601,11 +601,15 @@ void ScDPObject::BuildAllDimensionMembers()
 bool ScDPObject::GetMemberNames( sal_Int32 nDim, Sequence<OUString>& rNames )
 {
     vector<ScDPLabelData::Member> aMembers;
-    GetMembers(nDim, GetUsedHierarchy(nDim), aMembers);
+    if (!GetMembers(nDim, GetUsedHierarchy(nDim), aMembers))
+        return false;
+
     size_t n = aMembers.size();
     rNames.realloc(n);
     for (size_t i = 0; i < n; ++i)
         rNames[i] = aMembers[i].maName;
+
+    return true;
 }
 
 bool ScDPObject::GetMembers( sal_Int32 nDim, sal_Int32 nHier, vector<ScDPLabelData::Member>& rMembers )
@@ -1913,7 +1917,6 @@ BOOL ScDPObject::FillLabelData(ScPivotParam& rParam)
     for (long nDim=0; nDim < nDimCount; nDim++)
     {
         String aFieldName;
-        OUString aLayoutName;
         uno::Reference<uno::XInterface> xIntDim =
             ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
         uno::Reference<container::XNamed> xDimName( xIntDim, uno::UNO_QUERY );
@@ -1935,13 +1938,13 @@ BOOL ScDPObject::FillLabelData(ScPivotParam& rParam)
                 uno::Reference<uno::XInterface> xIntOrig;
                 if ( (aOrigAny >>= xIntOrig) && xIntOrig.is() )
                     bDuplicated = TRUE;
-
-                aOrigAny = xDimProp->getPropertyValue(OUString::createFromAscii(SC_UNO_LAYOUTNAME));
-                aOrigAny >>= aLayoutName;
             }
             catch(uno::Exception&)
             {
             }
+
+            OUString aLayoutName = ScUnoHelpFunctions::GetStringProperty(
+                xDimProp, OUString::createFromAscii(SC_UNO_LAYOUTNAME), OUString());
 
             if ( aFieldName.Len() && !bData && !bDuplicated )
             {

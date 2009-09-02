@@ -196,10 +196,6 @@ void ScDPSaveMember::RemoveLayoutName()
 
 void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMember, sal_Int32 nPosition )
 {
-    //  nothing to do?
-    if ( nVisibleMode == SC_DPSAVEMODE_DONTKNOW && nShowDetailsMode == SC_DPSAVEMODE_DONTKNOW && nPosition < 0 )
-        return;
-
     uno::Reference<beans::XPropertySet> xMembProp( xMember, uno::UNO_QUERY );
     DBG_ASSERT( xMembProp.is(), "no properties at member" );
     if ( xMembProp.is() )
