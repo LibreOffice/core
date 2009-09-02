@@ -275,10 +275,7 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScDPFuncData&
     maLbFunc.SetSelection( nFuncMask );
 
     // field name
-    if (rLabelData.maLayoutName.getLength())
-        maFtName.SetText(rLabelData.maLayoutName);
-    else
-        maFtName.SetText(rLabelData.maName);
+    maFtName.SetText(rLabelData.getDisplayName());
 
     // "More button" controls
     maBtnMore.AddWindow( &maFlDisplay );
@@ -447,10 +444,7 @@ void ScDPSubtotalDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 void ScDPSubtotalDlg::Init( const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData )
 {
     // field name
-    if (rLabelData.maLayoutName.getLength())
-        maFtName.SetText( rLabelData.maLayoutName );
-    else
-        maFtName.SetText( rLabelData.maName );
+    maFtName.SetText(rLabelData.getDisplayName());
 
     // radio buttons
     maRbNone.SetClickHdl( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
@@ -588,10 +582,7 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
     sal_Int32 nSortMode = maLabelData.maSortInfo.Mode;
 
     // sort fields list box
-    if (maLabelData.maLayoutName.getLength())
-        maLbSortBy.InsertEntry( maLabelData.maLayoutName );
-    else
-        maLbSortBy.InsertEntry( maLabelData.maName );
+    maLbSortBy.InsertEntry(maLabelData.getDisplayName());
 
     for( ScDPNameVec::const_iterator aIt = rDataFields.begin(), aEnd = rDataFields.end(); aIt != aEnd; ++aIt )
     {
