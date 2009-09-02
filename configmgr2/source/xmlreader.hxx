@@ -77,9 +77,17 @@ private:
 
     inline char peek() { return pos_ == end_ ? '\0' : *pos_; }
 
+    void normalizeLineEnds(Span const & text);
+
     void skipSpace();
 
+    bool skipComment();
+
     void skipProcessingInstruction();
+
+    void skipDocumentTypeDeclaration();
+
+    Span scanCdataSection();
 
     bool scanName(char const ** nameColon);
 

@@ -184,14 +184,62 @@ rtl::OUString XmlReader::getUrl() const {
     return fileUrl_;
 }
 
+void XmlReader::normalizeLineEnds(Span const & text) {
+    char const * p = text.begin;
+    sal_Int32 n = text.length;
+    for (;;) {
+        sal_Int32 i = rtl_str_indexOfChar_WithLength(p, n, '\x0D');
+        if (i < 0) {
+            break;
+        }
+        pad_.add(p, i);
+        p += i + 1;
+        n -= i + 1;
+        if (n == 0 || *p != '\x0A') {
+            pad_.add(RTL_CONSTASCII_STRINGPARAM("\x0A"));
+        }
+    }
+    pad_.add(p, n);
+}
+
 void XmlReader::skipSpace() {
     while (isSpace(peek())) {
         ++pos_;
     }
 }
 
+bool XmlReader::skipComment() {
+    if (rtl_str_shortenedCompare_WithLength(
+            pos_, end_ - pos_, RTL_CONSTASCII_STRINGPARAM("--"),
+            RTL_CONSTASCII_LENGTH("--")) !=
+        0)
+    {
+        return false;
+    }
+    pos_ += RTL_CONSTASCII_LENGTH("--");
+    sal_Int32 i = rtl_str_indexOfStr_WithLength(
+        pos_, end_ - pos_, RTL_CONSTASCII_STRINGPARAM("--"));
+    if (i < 0) {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "premature end (within comment) of ")) +
+             fileUrl_),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    pos_ += i + RTL_CONSTASCII_LENGTH("--");
+    if (read() != '>') {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "illegal \"--\" within comment in ")) +
+             fileUrl_),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    return true;
+}
+
 void XmlReader::skipProcessingInstruction() {
-    ++pos_; // skip leading '?'
     sal_Int32 i = rtl_str_indexOfStr_WithLength(
         pos_, end_ - pos_, RTL_CONSTASCII_STRINGPARAM("?>"));
     if (i < 0) {
@@ -201,6 +249,128 @@ void XmlReader::skipProcessingInstruction() {
             css::uno::Reference< css::uno::XInterface >());
     }
     pos_ += i + RTL_CONSTASCII_LENGTH("?>");
+}
+
+void XmlReader::skipDocumentTypeDeclaration() {
+    // Neither is it checked that the doctypedecl is at the correct position in
+    // the document, nor that it is well-formed:
+    for (;;) {
+        char c = read();
+        switch (c) {
+        case '\0': // i.e., EOF
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "premature end (within DTD) of ")) +
+                 fileUrl_),
+                css::uno::Reference< css::uno::XInterface >());
+        case '"':
+        case '\'':
+            {
+                sal_Int32 i = rtl_str_indexOfChar_WithLength(
+                    pos_, end_ - pos_, c);
+                if (i < 0) {
+                    throw css::uno::RuntimeException(
+                        (rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "premature end (within DTD) of ")) +
+                         fileUrl_),
+                        css::uno::Reference< css::uno::XInterface >());
+                }
+                pos_ += i + 1;
+            }
+            break;
+        case '>':
+            return;
+        case '[':
+            for (;;) {
+                c = read();
+                switch (c) {
+                case '\0': // i.e., EOF
+                    throw css::uno::RuntimeException(
+                        (rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "premature end (within DTD) of ")) +
+                         fileUrl_),
+                        css::uno::Reference< css::uno::XInterface >());
+                case '"':
+                case '\'':
+                    {
+                        sal_Int32 i = rtl_str_indexOfChar_WithLength(
+                            pos_, end_ - pos_, c);
+                        if (i < 0) {
+                            throw css::uno::RuntimeException(
+                            (rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM(
+                                    "premature end (within DTD) of ")) +
+                             fileUrl_),
+                            css::uno::Reference< css::uno::XInterface >());
+                        }
+                        pos_ += i + 1;
+                    }
+                    break;
+                case '<':
+                    switch (read()) {
+                    case '\0': // i.e., EOF
+                        throw css::uno::RuntimeException(
+                            (rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM(
+                                    "premature end (within DTD) of ")) +
+                             fileUrl_),
+                            css::uno::Reference< css::uno::XInterface >());
+                    case '!':
+                        skipComment();
+                        break;
+                    case '?':
+                        skipProcessingInstruction();
+                        break;
+                    default:
+                        break;
+                    }
+                    break;
+                case ']':
+                    skipSpace();
+                    if (read() != '>') {
+                        throw css::uno::RuntimeException(
+                            (rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM(
+                                    "missing \">\" of DTD in ")) +
+                             fileUrl_),
+                            css::uno::Reference< css::uno::XInterface >());
+                    }
+                    return;
+                default:
+                    break;
+                }
+            }
+        default:
+            break;
+        }
+    }
+}
+
+Span XmlReader::scanCdataSection() {
+    if (rtl_str_shortenedCompare_WithLength(
+            pos_, end_ - pos_, RTL_CONSTASCII_STRINGPARAM("[CDATA["),
+            RTL_CONSTASCII_LENGTH("[CDATA[")) !=
+        0)
+    {
+        return Span();
+    }
+    pos_ += RTL_CONSTASCII_LENGTH("[CDATA[");
+    char const * begin = pos_;
+    sal_Int32 i = rtl_str_indexOfStr_WithLength(
+        pos_, end_ - pos_, RTL_CONSTASCII_STRINGPARAM("]]>"));
+    if (i < 0) {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "premature end (within CDATA section) of ")) +
+             fileUrl_),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    pos_ += i + RTL_CONSTASCII_LENGTH("]]>");
+    return Span(begin, i);
 }
 
 bool XmlReader::scanName(char const ** nameColon) {
@@ -643,11 +813,16 @@ XmlReader::Result XmlReader::handleSkippedText(Span * data, Namespace * ns) {
         pos_ += i + 1;
         switch (peek()) {
         case '!':
-            if(true)abort();*(char*)0=0;throw 0;//TODO
+            ++pos_;
+            if (!skipComment() && !scanCdataSection().is()) {
+                skipDocumentTypeDeclaration();
+            }
+            break;
         case '/':
             ++pos_;
             return handleEndTag();
         case '?':
+            ++pos_;
             skipProcessingInstruction();
             break;
         default:
@@ -684,13 +859,24 @@ XmlReader::Result XmlReader::handleRawText(Span * text) {
             ++pos_;
             switch (peek()) {
             case '!':
-                if(true)abort();*(char*)0=0;throw 0;//TODO
+                ++pos_;
+                if (!skipComment()) {
+                    Span cdata(scanCdataSection());
+                    if (cdata.is()) {
+                        normalizeLineEnds(cdata);
+                    } else {
+                        skipDocumentTypeDeclaration();
+                    }
+                }
+                begin = pos_;
+                break;
             case '/':
                 *text = pad_.get();
                 ++pos_;
                 state_ = STATE_END_TAG;
                 return RESULT_TEXT;
             case '?':
+                ++pos_;
                 skipProcessingInstruction();
                 begin = pos_;
                 break;
@@ -773,7 +959,36 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
             ++pos_;
             switch (peek()) {
             case '!':
-                if(true)abort();*(char*)0=0;throw 0;//TODO
+                ++pos_;
+                if (skipComment()) {
+                    space = SPACE_BREAK;
+                } else {
+                    Span cdata(scanCdataSection());
+                    if (cdata.is()) {
+                        // CDATA is not normalized (similar to character
+                        // references; it keeps the code simple), but it might
+                        // arguably be better to normalize it:
+                        switch (space) {
+                        case SPACE_START:
+                            break;
+                        case SPACE_NONE:
+                        case SPACE_SPAN:
+                            pad_.add(flowBegin, pos_ - flowBegin);
+                            break;
+                        case SPACE_BREAK:
+                            pad_.add(flowBegin, flowEnd - flowBegin);
+                            pad_.add(RTL_CONSTASCII_STRINGPARAM(" "));
+                            break;
+                        }
+                        normalizeLineEnds(cdata);
+                        flowBegin = pos_;
+                        flowEnd = pos_;
+                        space = SPACE_NONE;
+                    } else {
+                        skipDocumentTypeDeclaration();
+                    }
+                }
+                break;
             case '/':
                 ++pos_;
                 pad_.add(flowBegin, flowEnd - flowBegin);
@@ -781,6 +996,7 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
                 state_ = STATE_END_TAG;
                 return RESULT_TEXT;
             case '?':
+                ++pos_;
                 skipProcessingInstruction();
                 space = SPACE_BREAK;
                 break;
