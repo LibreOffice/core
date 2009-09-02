@@ -357,7 +357,15 @@ void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim, bool bHas
             }
 
             if (bHasHiddenMember)
-                maHiddenMemberFields.insert(pDim->GetName());
+            {
+                // the layout name takes priority over the original name,
+                // since this data is used against cell values.
+                const OUString* pLayoutName = pDim->GetLayoutName();
+                if (pLayoutName)
+                    maHiddenMemberFields.insert(*pLayoutName);
+                else
+                    maHiddenMemberFields.insert(pDim->GetName());
+            }
         }
         pDPSave->AddDimension(pDim);
     }
