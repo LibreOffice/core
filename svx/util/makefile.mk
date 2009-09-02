@@ -100,7 +100,10 @@ LIB5FILES=\
     $(SLB)$/gal.lib \
     $(SLB)$/items-core.lib \
     $(SLB)$/msfilter-core.lib \
-    $(SLB)$/options-core.lib   \
+    $(SLB)$/options-core.lib
+
+LIB6TARGET= $(SLB)$/$(TARGET)_6.lib
+LIB6FILES=\
     $(SLB)$/outliner.lib \
     $(SLB)$/overlay.lib \
     $(SLB)$/primitive2d.lib \
@@ -118,8 +121,8 @@ LIB5FILES=\
     $(SLB)$/xout.lib
 
 # Objects needed for the svxmsfilter library.
-LIB6TARGET= $(SLB)$/$(TARGET)_6.lib
-LIB6FILES=\
+LIB7TARGET= $(SLB)$/$(TARGET)_7.lib
+LIB7FILES=\
     $(SLB)$/msfilter-msfilter.lib \
     $(SLB)$/svdraw-msfilter.lib \
     $(SLB)$/svxrtf.lib
@@ -130,7 +133,7 @@ HELPIDFILES=    ..$/inc$/helpid.hrc
 SHL1TARGET= svxcore$(DLLPOSTFIX)
 SHL1IMPLIB= isvxcore
 SHL1USE_EXPORTS=name
-SHL1LIBS= $(LIB5TARGET)
+SHL1LIBS= $(LIB5TARGET) $(LIB6TARGET)
 
 SHL1STDLIBS= \
              $(AVMEDIALIB) \
@@ -253,7 +256,7 @@ SHL4TARGET= svxmsfilter$(DLLPOSTFIX)
 SHL4IMPLIB= isvxmsfilter
 SHL4USE_EXPORTS=name
 SHL4DEPN=$(SHL1TARGETN)
-SHL4LIBS= $(LIB6TARGET)
+SHL4LIBS= $(LIB7TARGET)
 
 SHL4STDLIBS= \
              $(SVXCORELIB) \
