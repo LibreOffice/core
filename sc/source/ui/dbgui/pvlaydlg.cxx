@@ -395,7 +395,10 @@ void ScDPLayoutDlg::InitWndSelect( const vector<ScDPLabelDataRef>& rLabels )
 
         if ( i <= nLast )
         {
-            aWndSelect.AddField( aLabelDataArr[i].maName, i );
+            OUString aFieldName = aLabelDataArr[i].maName;
+            if (aLabelDataArr[i].maLayoutName.getLength())
+                aFieldName = aLabelDataArr[i].maLayoutName;
+            aWndSelect.AddField(aFieldName, i);
             aSelectArr[i].reset( new ScDPFuncData( aLabelDataArr[i].mnCol, aLabelDataArr[i].mnFuncMask ) );
         }
     }
@@ -596,7 +599,7 @@ void ScDPLayoutDlg::AddField( size_t nFromIndex, ScDPFieldType eToType, const Po
 
         if ( !bDataArr )
         {
-            if ( toWnd->AddField( rData.maName,
+            if ( toWnd->AddField( rData.maLayoutName.getLength() ? rData.maLayoutName : rData.maName,
                                   DlgPos2WndPos( rAtPos, *toWnd ),
                                   nAddedAt ) )
             {
@@ -607,9 +610,12 @@ void ScDPLayoutDlg::AddField( size_t nFromIndex, ScDPFieldType eToType, const Po
         else
         {
             USHORT nMask = fData.mnFuncMask;
-            String aStr( GetFuncString( nMask, rData.mbIsValue ) );
+            OUString aStr = GetFuncString( nMask, rData.mbIsValue );
 
-            aStr += rData.maName;
+            if (rData.maLayoutName.getLength())
+                aStr += rData.maLayoutName;
+            else
+                aStr += rData.maName;
 
             if ( toWnd->AddField( aStr,
                                   DlgPos2WndPos( rAtPos, *toWnd ),
@@ -1217,7 +1223,7 @@ String ScDPLayoutDlg::GetLabelString( SCsCOL nCol )
     ScDPLabelData* pData = GetLabelData( nCol );
     DBG_ASSERT( pData, "LabelData not found" );
     if (pData)
-        return pData->maName;
+        return pData->maLayoutName.getLength() ? pData->maLayoutName : pData->maName;
     return String();
 }
 
@@ -1756,7 +1762,10 @@ IMPL_LINK( ScDPLayoutDlg, ScrollHdl, ScrollBar *, EMPTYARG )
     for ( i=0; i<nFields; i++ )
     {
         const ScDPLabelData& rData = aLabelDataArr[nOffset+i];
-        aWndSelect.AddField( rData.maName, i );
+        String aFieldName = rData.maName;
+        if (rData.maLayoutName.getLength())
+            aFieldName = rData.maLayoutName;
+        aWndSelect.AddField(aFieldName, i);
         aSelectArr[i].reset( new ScDPFuncData( rData.mnCol, rData.mnFuncMask ) );
     }
     for ( ; i<aSelectArr.size(); i++ )

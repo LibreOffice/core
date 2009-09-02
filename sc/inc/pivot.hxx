@@ -368,7 +368,7 @@ public:
 
 struct ScDPLabelData
 {
-    String              maName;         /// Original name of the dimension.
+    ::rtl::OUString     maName;         /// Original name of the dimension.
     ::rtl::OUString     maLayoutName;   /// Layout name (display name)
     SCsCOL              mnCol;
     USHORT              mnFuncMask;     /// Page/Column/Row subtotal function.

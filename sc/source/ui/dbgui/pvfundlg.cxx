@@ -297,7 +297,12 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScDPFuncData&
 
     // base field list box
     for( ScDPLabelDataVec::const_iterator aIt = mrLabelVec.begin(), aEnd = mrLabelVec.end(); aIt != aEnd; ++aIt )
-        maLbBaseField.InsertEntry( aIt->maName );
+    {
+        if (aIt->maLayoutName.getLength())
+            maLbBaseField.InsertEntry( aIt->maLayoutName );
+        else
+            maLbBaseField.InsertEntry( aIt->maName );
+    }
 
     // base item list box
     maLbBaseItem.SetSeparatorPos( SC_BASEITEM_USER_POS - 1 );
@@ -448,7 +453,10 @@ void ScDPSubtotalDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 void ScDPSubtotalDlg::Init( const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData )
 {
     // field name
-    maFtName.SetText( rLabelData.maName );
+    if (rLabelData.maLayoutName.getLength())
+        maFtName.SetText( rLabelData.maLayoutName );
+    else
+        maFtName.SetText( rLabelData.maName );
 
     // radio buttons
     maRbNone.SetClickHdl( LINK( this, ScDPSubtotalDlg, RadioClickHdl ) );
@@ -586,7 +594,11 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
     sal_Int32 nSortMode = maLabelData.maSortInfo.Mode;
 
     // sort fields list box
-    maLbSortBy.InsertEntry( maLabelData.maName );
+    if (maLabelData.maLayoutName.getLength())
+        maLbSortBy.InsertEntry( maLabelData.maLayoutName );
+    else
+        maLbSortBy.InsertEntry( maLabelData.maName );
+
     for( ScDPNameVec::const_iterator aIt = rDataFields.begin(), aEnd = rDataFields.end(); aIt != aEnd; ++aIt )
     {
         maLbSortBy.InsertEntry( *aIt );
