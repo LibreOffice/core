@@ -96,10 +96,9 @@ bool lclFillListBox( ListBoxType& rLBox, const vector<ScDPLabelData::Member>& rM
     vector<ScDPLabelData::Member>::const_iterator itr = rMembers.begin(), itrEnd = rMembers.end();
     for (; itr != itrEnd; ++itr)
     {
-        if (itr->maLayoutName.getLength())
-            rLBox.InsertEntry(itr->maLayoutName);
-        else if (itr->maName.getLength())
-            rLBox.InsertEntry(itr->maName);
+        OUString aName = itr->getDisplayName();
+        if (aName.getLength())
+            rLBox.InsertEntry(aName);
         else
         {
             rLBox.InsertEntry(ScGlobal::GetRscString(STR_EMPTYDATA), nEmptyPos);
@@ -297,12 +296,7 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScDPFuncData&
 
     // base field list box
     for( ScDPLabelDataVec::const_iterator aIt = mrLabelVec.begin(), aEnd = mrLabelVec.end(); aIt != aEnd; ++aIt )
-    {
-        if (aIt->maLayoutName.getLength())
-            maLbBaseField.InsertEntry( aIt->maLayoutName );
-        else
-            maLbBaseField.InsertEntry( aIt->maName );
-    }
+        maLbBaseField.InsertEntry(aIt->getDisplayName());
 
     // base item list box
     maLbBaseItem.SetSeparatorPos( SC_BASEITEM_USER_POS - 1 );

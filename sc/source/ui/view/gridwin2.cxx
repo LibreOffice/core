@@ -922,10 +922,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
         for (size_t i = 0; i < n; ++i)
         {
             const ScDPLabelData::Member& rMem = rLabelData.maMembers[i];
-            if (rMem.maLayoutName.getLength())
-                mpDPFieldPopup->addMember(rMem.maLayoutName, rMem.mbVisible);
-            else
-                mpDPFieldPopup->addMember(rMem.maName, rMem.mbVisible);
+            mpDPFieldPopup->addMember(rMem.getDisplayName(), rMem.mbVisible);
         }
         mpDPFieldPopup->initMembers();
     }

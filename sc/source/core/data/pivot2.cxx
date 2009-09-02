@@ -61,6 +61,7 @@
 #include "stlsheet.hxx"
 
 using ::com::sun::star::sheet::DataPilotFieldReference;
+using ::rtl::OUString;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -493,6 +494,14 @@ ScDPLabelData::Member::Member() :
 {
 }
 
+OUString ScDPLabelData::Member::getDisplayName() const
+{
+    if (maLayoutName.getLength())
+        return maLayoutName;
+
+    return maName;
+}
+
 ScDPLabelData::ScDPLabelData( const String& rName, short nCol, bool bIsValue ) :
     maName( rName ),
     mnCol( nCol ),
@@ -501,6 +510,14 @@ ScDPLabelData::ScDPLabelData( const String& rName, short nCol, bool bIsValue ) :
     mbShowAll( false ),
     mbIsValue( bIsValue )
 {
+}
+
+OUString ScDPLabelData::getDisplayName() const
+{
+    if (maLayoutName.getLength())
+        return maLayoutName;
+
+    return maName;
 }
 
 // ============================================================================
