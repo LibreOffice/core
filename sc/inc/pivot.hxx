@@ -368,17 +368,25 @@ public:
 
 struct ScDPLabelData
 {
-    String              maName;         /// Visible name of the dimension.
+    String              maName;         /// Original name of the dimension.
+    ::rtl::OUString     maLayoutName;   /// Layout name (display name)
     SCsCOL              mnCol;
     USHORT              mnFuncMask;     /// Page/Column/Row subtotal function.
     sal_Int32           mnUsedHier;     /// Used hierarchy.
     bool                mbShowAll;      /// true = Show all (also empty) results.
     bool                mbIsValue;      /// true = Sum or count in data field.
 
+    struct Member
+    {
+        ::rtl::OUString maName;
+        ::rtl::OUString maLayoutName;
+        bool mbVisible;
+        bool mbShowDetails;
+
+        Member();
+    };
+    ::std::vector<Member>                               maMembers;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  maHiers;        /// Hierarchies.
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  maMembers;      /// Members.
-    ::com::sun::star::uno::Sequence< sal_Bool >         maVisible;      /// Visibility of members.
-    ::com::sun::star::uno::Sequence< sal_Bool >         maShowDet;      /// Show details of members.
     ::com::sun::star::sheet::DataPilotFieldSortInfo     maSortInfo;     /// Sorting info.
     ::com::sun::star::sheet::DataPilotFieldLayoutInfo   maLayoutInfo;   /// Layout info.
     ::com::sun::star::sheet::DataPilotFieldAutoShowInfo maShowInfo;     /// AutoShow info.

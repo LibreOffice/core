@@ -3074,7 +3074,7 @@ Sequence<OUString> SAL_CALL ScDataPilotItemsObj::getElementNames()
     ScUnoGuard aGuard;
     Sequence< OUString > aSeq;
     if( ScDPObject* pDPObj = GetDPObject() )
-        pDPObj->GetMembers( lcl_GetObjectIndex( pDPObj, maFieldId ), aSeq );
+        pDPObj->GetMemberNames( lcl_GetObjectIndex( pDPObj, maFieldId ), aSeq );
     return aSeq;
 }
 

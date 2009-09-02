@@ -916,10 +916,17 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
     mpDPFieldPopup->setExtendedData(pDPData.release());
     mpDPFieldPopup->setOKAction(new DPFieldPopupOKAction(this));
     {
-        sal_Int32 n = rLabelData.maMembers.getLength();
+        // Populate field members.
+        size_t n = rLabelData.maMembers.size();
         mpDPFieldPopup->setMemberSize(n);
-        for (sal_Int32 i = 0; i < n; ++i)
-            mpDPFieldPopup->addMember(rLabelData.maMembers[i], rLabelData.maVisible[i]);
+        for (size_t i = 0; i < n; ++i)
+        {
+            const ScDPLabelData::Member& rMem = rLabelData.maMembers[i];
+            if (rMem.maLayoutName.getLength())
+                mpDPFieldPopup->addMember(rMem.maLayoutName, rMem.mbVisible);
+            else
+                mpDPFieldPopup->addMember(rMem.maName, rMem.mbVisible);
+        }
         mpDPFieldPopup->initMembers();
     }
 
@@ -973,6 +980,9 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
 
 void ScGridWindow::UpdateDPFromFieldPopupMenu()
 {
+    typedef hash_map<OUString, OUString, OUStringHash> MemNameMapType;
+    typedef hash_map<OUString, bool, OUStringHash> MemVisibilityType;
+
     if (!mpDPFieldPopup.get())
         return;
 
@@ -991,8 +1001,30 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     if (!pDim)
         return;
 
-    hash_map<OUString, bool, OUStringHash> aResult;
-    mpDPFieldPopup->getResult(aResult);
+    // Build a map of layout names to original names.
+    const ScDPLabelData& rLabelData = *pDPData->maDPParam.maLabelArray[pDPData->mnDim];
+    MemNameMapType aMemNameMap;
+    for (vector<ScDPLabelData::Member>::const_iterator itr = rLabelData.maMembers.begin(), itrEnd = rLabelData.maMembers.end();
+           itr != itrEnd; ++itr)
+        aMemNameMap.insert(MemNameMapType::value_type(itr->maLayoutName, itr->maName));
+
+    // The raw result may contain a mixture of layout names and original names.
+    MemVisibilityType aRawResult;
+    mpDPFieldPopup->getResult(aRawResult);
+
+    MemVisibilityType aResult;
+    for (MemVisibilityType::const_iterator itr = aRawResult.begin(), itrEnd = aRawResult.end(); itr != itrEnd; ++itr)
+    {
+        MemNameMapType::const_iterator itrNameMap = aMemNameMap.find(itr->first);
+        if (itrNameMap == aMemNameMap.end())
+            // This is an original member name.  Use it as-is.
+            aResult.insert(MemVisibilityType::value_type(itr->first, itr->second));
+        else
+        {
+            // This is a layout name.  Get the original member name and use it.
+            aResult.insert(MemVisibilityType::value_type(itrNameMap->second, itr->second));
+        }
+    }
     pDim->UpdateMemberVisibility(aResult);
 
     ScDBDocFunc aFunc(*pViewData->GetDocShell());

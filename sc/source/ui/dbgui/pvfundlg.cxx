@@ -48,12 +48,15 @@
 #include "pvfundlg.hrc"
 #include "globstr.hrc"
 
+#include <vector>
+
 // ============================================================================
 
 using namespace ::com::sun::star::sheet;
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Sequence;
+using ::std::vector;
 
 // ============================================================================
 
@@ -81,6 +84,26 @@ bool lclFillListBox( ListBoxType& rLBox, const Sequence< OUString >& rStrings, U
                 rLBox.InsertEntry( ScGlobal::GetRscString( STR_EMPTYDATA ), nEmptyPos );
                 bEmpty = true;
             }
+        }
+    }
+    return bEmpty;
+}
+
+template< typename ListBoxType >
+bool lclFillListBox( ListBoxType& rLBox, const vector<ScDPLabelData::Member>& rMembers, USHORT nEmptyPos = LISTBOX_APPEND )
+{
+    bool bEmpty = false;
+    vector<ScDPLabelData::Member>::const_iterator itr = rMembers.begin(), itrEnd = rMembers.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        if (itr->maLayoutName.getLength())
+            rLBox.InsertEntry(itr->maLayoutName);
+        else if (itr->maName.getLength())
+            rLBox.InsertEntry(itr->maName);
+        else
+        {
+            rLBox.InsertEntry(ScGlobal::GetRscString(STR_EMPTYDATA), nEmptyPos);
+            bEmpty = true;
         }
     }
     return bEmpty;
@@ -253,7 +276,10 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScDPFuncData&
     maLbFunc.SetSelection( nFuncMask );
 
     // field name
-    maFtName.SetText( rLabelData.maName );
+    if (rLabelData.maLayoutName.getLength())
+        maFtName.SetText(rLabelData.maLayoutName);
+    else
+        maFtName.SetText(rLabelData.maName);
 
     // "More button" controls
     maBtnMore.AddWindow( &maFlDisplay );
@@ -414,8 +440,6 @@ void ScDPSubtotalDlg::FillLabelData( ScDPLabelData& rLabelData ) const
     rLabelData.mnUsedHier = maLabelData.mnUsedHier;
     rLabelData.mbShowAll = maCbShowAll.IsChecked();
     rLabelData.maMembers = maLabelData.maMembers;
-    rLabelData.maVisible = maLabelData.maVisible;
-    rLabelData.maShowDet = maLabelData.maShowDet;
     rLabelData.maSortInfo = maLabelData.maSortInfo;
     rLabelData.maLayoutInfo = maLabelData.maLayoutInfo;
     rLabelData.maShowInfo = maLabelData.maShowInfo;
@@ -547,9 +571,8 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 
     rLabelData.maMembers = maLabelData.maMembers;
     ULONG nVisCount = maLbHide.GetEntryCount();
-    rLabelData.maVisible.realloc( nVisCount );
     for( USHORT nPos = 0; nPos < nVisCount; ++nPos )
-        rLabelData.maVisible[ nPos ] = !maLbHide.IsChecked( nPos );
+        rLabelData.maMembers[nPos].mbVisible = !maLbHide.IsChecked(nPos);
 
     // *** HIERARCHY ***
 
@@ -656,8 +679,9 @@ void ScDPSubtotalOptDlg::InitHideListBox()
 {
     maLbHide.Clear();
     lclFillListBox( maLbHide, maLabelData.maMembers );
-    for( sal_Int32 nVisIdx = 0, nVisSize = maLabelData.maVisible.getLength(); nVisIdx < nVisSize; ++nVisIdx )
-        maLbHide.CheckEntryPos( static_cast< USHORT >( nVisIdx ), !maLabelData.maVisible[ nVisIdx ] );
+    size_t n = maLabelData.maMembers.size();
+    for (size_t i = 0; i < n; ++i)
+        maLbHide.CheckEntryPos(static_cast<USHORT>(i), !maLabelData.maMembers[i].mbVisible);
     bool bEnable = maLbHide.GetEntryCount() > 0;
     maFlHide.Enable( bEnable );
     maLbHide.Enable( bEnable );
@@ -690,8 +714,7 @@ IMPL_LINK( ScDPSubtotalOptDlg, SelectHdl, ListBox*, pLBox )
 {
     if( pLBox == &maLbHierarchy )
     {
-        mrDPObj.GetMembers( maLabelData.mnCol, maLbHierarchy.GetSelectEntryPos(),
-            maLabelData.maMembers, &maLabelData.maVisible, &maLabelData.maShowDet );
+        mrDPObj.GetMembers(maLabelData.mnCol, maLbHierarchy.GetSelectEntryPos(), maLabelData.maMembers);
         InitHideListBox();
     }
     return 0;

@@ -285,6 +285,9 @@ public:
     static sal_Int32        GetEnumProperty( const com::sun::star::uno::Reference<
                                                 com::sun::star::beans::XPropertySet>& xProp,
                                             const ::rtl::OUString& rName, long nDefault );
+    static ::rtl::OUString  GetStringProperty(
+        const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xProp,
+        const ::rtl::OUString& rName, const ::rtl::OUString& rDefault );
 
     static sal_Bool         GetBoolFromAny( const com::sun::star::uno::Any& aAny );
     static sal_Int16        GetInt16FromAny( const com::sun::star::uno::Any& aAny );

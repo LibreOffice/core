@@ -487,6 +487,12 @@ ScDataObject*   ScPivotCollection::Clone() const
 
 // ============================================================================
 
+ScDPLabelData::Member::Member() :
+    mbVisible(true),
+    mbShowDetails(true)
+{
+}
+
 ScDPLabelData::ScDPLabelData( const String& rName, short nCol, bool bIsValue ) :
     maName( rName ),
     mnCol( nCol ),

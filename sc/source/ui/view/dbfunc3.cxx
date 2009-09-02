@@ -1868,7 +1868,7 @@ BOOL ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
 
                 // get all member names in source order
                 uno::Sequence<rtl::OUString> aMemberNames;
-                pDPObj->GetMembers( aDestData.Dimension, aMemberNames );
+                pDPObj->GetMemberNames( aDestData.Dimension, aMemberNames );
 
                 bool bInserted = false;
 

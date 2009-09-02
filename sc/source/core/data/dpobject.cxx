@@ -75,6 +75,7 @@
 #include <svtools/zforlist.hxx>     // IsNumberFormat
 
 #include <vector>
+#include <stdio.h>
 
 using namespace com::sun::star;
 using ::std::vector;
@@ -595,6 +596,51 @@ void ScDPObject::BuildAllDimensionMembers()
         return;
 
     pSaveData->BuildAllDimensionMembers(GetTableData());
+}
+
+bool ScDPObject::GetMemberNames( sal_Int32 nDim, Sequence<OUString>& rNames )
+{
+    vector<ScDPLabelData::Member> aMembers;
+    GetMembers(nDim, GetUsedHierarchy(nDim), aMembers);
+    size_t n = aMembers.size();
+    rNames.realloc(n);
+    for (size_t i = 0; i < n; ++i)
+        rNames[i] = aMembers[i].maName;
+}
+
+bool ScDPObject::GetMembers( sal_Int32 nDim, sal_Int32 nHier, vector<ScDPLabelData::Member>& rMembers )
+{
+    Reference< container::XNameAccess > xMembersNA;
+    if (!GetMembersNA( nDim, nHier, xMembersNA ))
+        return false;
+
+    Reference<container::XIndexAccess> xMembersIA( new ScNameToIndexAccess(xMembersNA) );
+    sal_Int32 nCount = xMembersIA->getCount();
+    vector<ScDPLabelData::Member> aMembers;
+    aMembers.reserve(nCount);
+
+    for (sal_Int32 i = 0; i < nCount; ++i)
+    {
+        Reference<container::XNamed> xMember(xMembersIA->getByIndex(i), UNO_QUERY);
+        ScDPLabelData::Member aMem;
+
+        if (xMember.is())
+            aMem.maName = xMember->getName();
+
+        Reference<beans::XPropertySet> xMemProp(xMember, UNO_QUERY);
+        if (xMemProp.is())
+        {
+            aMem.mbVisible     = ScUnoHelpFunctions::GetBoolProperty(xMemProp, OUString::createFromAscii(SC_UNO_ISVISIBL));
+            aMem.mbShowDetails = ScUnoHelpFunctions::GetBoolProperty(xMemProp, OUString::createFromAscii(SC_UNO_SHOWDETA));
+
+            aMem.maLayoutName = ScUnoHelpFunctions::GetStringProperty(
+                xMemProp, OUString::createFromAscii(SC_UNO_LAYOUTNAME), OUString());
+        }
+
+        aMembers.push_back(aMem);
+    }
+    rMembers.swap(aMembers);
+    return true;
 }
 
 void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -1867,6 +1913,7 @@ BOOL ScDPObject::FillLabelData(ScPivotParam& rParam)
     for (long nDim=0; nDim < nDimCount; nDim++)
     {
         String aFieldName;
+        OUString aLayoutName;
         uno::Reference<uno::XInterface> xIntDim =
             ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
         uno::Reference<container::XNamed> xDimName( xIntDim, uno::UNO_QUERY );
@@ -1888,6 +1935,9 @@ BOOL ScDPObject::FillLabelData(ScPivotParam& rParam)
                 uno::Reference<uno::XInterface> xIntOrig;
                 if ( (aOrigAny >>= xIntOrig) && xIntOrig.is() )
                     bDuplicated = TRUE;
+
+                aOrigAny = xDimProp->getPropertyValue(OUString::createFromAscii(SC_UNO_LAYOUTNAME));
+                aOrigAny >>= aLayoutName;
             }
             catch(uno::Exception&)
             {
@@ -1899,8 +1949,9 @@ BOOL ScDPObject::FillLabelData(ScPivotParam& rParam)
                 bool bIsValue = true;                               //! check
 
                 ScDPLabelDataRef pNewLabel(new ScDPLabelData(aFieldName, nCol, bIsValue));
+                pNewLabel->maLayoutName = aLayoutName;
                 GetHierarchies(nDim, pNewLabel->maHiers);
-                GetMembers(nDim, pNewLabel->maMembers, &pNewLabel->maVisible, &pNewLabel->maShowDet);
+                GetMembers(nDim, GetUsedHierarchy(nDim), pNewLabel->maMembers);
                 lcl_FillLabelData(*pNewLabel, xDimProp);
                 rParam.maLabelArray.push_back(pNewLabel);
             }
@@ -1955,14 +2006,6 @@ BOOL ScDPObject::GetMembersNA( sal_Int32 nDim, uno::Reference< container::XNameA
     return GetMembersNA( nDim, GetUsedHierarchy( nDim ), xMembers );
 }
 
-BOOL ScDPObject::GetMembers( sal_Int32 nDim,
-        uno::Sequence< rtl::OUString >& rMembers,
-        uno::Sequence< sal_Bool >* pVisible,
-        uno::Sequence< sal_Bool >* pShowDet )
-{
-    return GetMembers( nDim, GetUsedHierarchy( nDim ), rMembers, pVisible, pShowDet );
-}
-
 BOOL ScDPObject::GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, uno::Reference< container::XNameAccess >& xMembers )
 {
     BOOL bRet = FALSE;
@@ -1994,55 +2037,6 @@ BOOL ScDPObject::GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, uno::Reference< 
                 }
             }
         }
-    }
-    return bRet;
-}
-
-BOOL ScDPObject::GetMembers( sal_Int32 nDim, sal_Int32 nHier,
-        uno::Sequence< rtl::OUString >& rMembers,
-        uno::Sequence< sal_Bool >* pVisible,
-        uno::Sequence< sal_Bool >* pShowDet )
-{
-    BOOL bRet = FALSE;
-    uno::Reference< container::XNameAccess > xMembersNA;
-    if( GetMembersNA( nDim, nHier, xMembersNA ) )
-    {
-        uno::Reference< container::XIndexAccess > xMembersIA( new ScNameToIndexAccess( xMembersNA ) );
-        sal_Int32 nCount = xMembersIA->getCount();
-        rMembers.realloc( nCount );
-        if( pVisible )
-            pVisible->realloc( nCount );
-        if( pShowDet )
-            pShowDet->realloc( nCount );
-
-        rtl::OUString* pAry = rMembers.getArray();
-        for( sal_Int32 nItem = 0; nItem < nCount; ++nItem )
-        {
-            uno::Reference< container::XNamed > xMember( xMembersIA->getByIndex( nItem ), uno::UNO_QUERY );
-            if( xMember.is() )
-                pAry[ nItem ] = xMember->getName();
-            if( pVisible || pShowDet )
-            {
-                uno::Reference< beans::XPropertySet > xMemProp( xMember, uno::UNO_QUERY );
-                if( pVisible )
-                {
-                    sal_Bool bVis = sal_True;
-                    if( xMemProp.is() )
-                        bVis = ScUnoHelpFunctions::GetBoolProperty( xMemProp,
-                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_ISVISIBL ) ) );
-                    (*pVisible)[ nItem ] = bVis;
-                }
-                if( pShowDet )
-                {
-                    sal_Bool bShow = sal_True;
-                    if( xMemProp.is() )
-                        bShow = ScUnoHelpFunctions::GetBoolProperty( xMemProp,
-                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_SHOWDETA ) ) );
-                    (*pShowDet)[ nItem ] = bShow;
-                }
-            }
-        }
-        bRet = TRUE;
     }
     return bRet;
 }

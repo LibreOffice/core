@@ -1546,33 +1546,27 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
                     bool bManualSort = ( aIt->maSortInfo.Mode == sheet::DataPilotFieldSortMode::MANUAL );
 
                     // visibility of members
-                    if( const rtl::OUString* pItem = aIt->maMembers.getConstArray() )
+                    for (vector<ScDPLabelData::Member>::const_iterator itr = aIt->maMembers.begin(), itrEnd = aIt->maMembers.end();
+                          itr != itrEnd; ++itr)
                     {
-                        sal_Int32 nIdx = 0;
-                        sal_Int32 nVisSize = aIt->maVisible.getLength();
-                        sal_Int32 nShowSize = aIt->maShowDet.getLength();
-                        for( const rtl::OUString* pEnd = pItem + aIt->maMembers.getLength(); pItem != pEnd; ++pItem, ++nIdx )
+                        ScDPSaveMember* pMember = pDim->GetMemberByName(itr->maName);
+
+                        // #i40054# create/access members only if flags are not default
+                        // (or in manual sorting mode - to keep the order)
+                        if (bManualSort || !itr->mbVisible || !itr->mbShowDetails)
                         {
-                            // #i40054# create/access members only if flags are not default
-                            // (or in manual sorting mode - to keep the order)
-                            bool bIsVisible = (nIdx >= nVisSize) || aIt->maVisible[ nIdx ];
-                            bool bShowDetails = (nIdx >= nShowSize) || aIt->maShowDet[ nIdx ];
-                            if( bManualSort || !bIsVisible || !bShowDetails )
+                            pMember->SetIsVisible(itr->mbVisible);
+                            pMember->SetShowDetails(itr->mbShowDetails);
+                        }
+                        if (pOldDim)
+                        {
+                            // Transfer the existing layout name.
+                            ScDPSaveMember* pOldMember = pOldDim->GetMemberByName(itr->maName);
+                            if (pOldMember)
                             {
-                                ScDPSaveMember* pMember = pDim->GetMemberByName( *pItem );
-                                pMember->SetIsVisible( bIsVisible );
-                                pMember->SetShowDetails( bShowDetails );
-                                if (pOldDim)
-                                {
-                                    // Transfer the existing layout name.
-                                    ScDPSaveMember* pOldMember = pOldDim->GetMemberByName(*pItem);
-                                    if (pOldMember)
-                                    {
-                                        const OUString* pLayoutName = pOldMember->GetLayoutName();
-                                        if (pLayoutName)
-                                            pMember->SetLayoutName(*pLayoutName);
-                                    }
-                                }
+                                const OUString* pLayoutName = pOldMember->GetLayoutName();
+                                if (pLayoutName)
+                                    pMember->SetLayoutName(*pLayoutName);
                             }
                         }
                     }

@@ -140,6 +140,26 @@ sal_Int32 ScUnoHelpFunctions::GetEnumProperty( const uno::Reference<beans::XProp
     return nRet;
 }
 
+// static
+OUString ScUnoHelpFunctions::GetStringProperty(
+    const Reference<beans::XPropertySet>& xProp, const OUString& rName, const OUString& rDefault )
+{
+    OUString aRet = rDefault;
+    if (!xProp.is())
+        return aRet;
+
+    try
+    {
+        Any any = xProp->getPropertyValue(rName);
+        any >>= aRet;
+    }
+    catch (const uno::Exception&)
+    {
+    }
+
+    return aRet;
+}
+
 //  static
 sal_Bool ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
 {
