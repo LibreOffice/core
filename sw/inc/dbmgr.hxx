@@ -252,9 +252,6 @@ public:
     // Mischen von Datensaetzen in Felder
     BOOL            MergeNew( const SwMergeDescriptor& rMergeDesc );
     BOOL            Merge(SwWrtShell* pSh);
-    // Mischen von Datensaetzen in Felder, dann drucken
-    BOOL            MergePrint( SwView& rView,
-                                SwPrtOptions& rOpt, SfxProgress& rProgress, BOOL bIsAPI );
     // printing parts of a merge result document
     BOOL            MergePrintDocuments( SwView& rView,
                                 SwPrtOptions& rOpt, SfxProgress& rProgress, BOOL bIsAPI );

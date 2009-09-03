@@ -32,6 +32,8 @@
 
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>
+#include <vcl/outdev.hxx>
+
 #include "srcedtw.hxx"
 #include "shellid.hxx"
 
@@ -92,10 +94,10 @@ public:
 
     void            Load(SwDocShell* pDocShell);
 
-    virtual USHORT  SetPrinter( SfxPrinter* pNew,
-                                        USHORT nDiff = SFX_PRINTER_ALL, bool bIsAPI=false );
-    virtual ErrCode DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog, BOOL bSilent, BOOL bIsAPI );
+    virtual USHORT  SetPrinter( SfxPrinter* pNew, USHORT nDiff = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual         SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
+
+    sal_Int32       PrintSource( OutputDevice *pOutDev, sal_Int32 nPage, bool bCalcNumPagesOnly );
 
     void            SourceSaved() {bSourceSaved = TRUE;}
     BOOL            HasSourceSaved() const {return bSourceSaved;}

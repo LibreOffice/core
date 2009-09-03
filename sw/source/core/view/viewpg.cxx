@@ -508,7 +508,7 @@ void ViewShell::PrintProspect(
     }
 
     // Seiten fuers Drucken formatieren
-    aShell.CalcPagesForPrint( nPageMax, 0 /*(USHORT)aPages.Max(), &rProgress*/ );
+    aShell.CalcPagesForPrint( nPageMax, 0 );
 #endif // TL_NOT_NOW   // TLPDF
 
     MapMode aMapMode( MAP_TWIP );
@@ -636,7 +636,7 @@ void ViewShell::PrintProspect(
     {
         SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );
         pFldType->Modify( &aHnt, 0);
-        CalcPagesForPrint( nPageMax /*(USHORT)aPages.Max()*/ );
+        CalcPagesForPrint( nPageMax );
     }
 #endif  // TL_NOT_NOW   // TLPDF
     pFntCache->Flush();

@@ -388,8 +388,7 @@ public:
     SwDoc * FillPrtDoc( SwDoc* pPrtDoc, const SfxPrinter* pPrt );
 
     //Wird intern fuer die Shell gerufen die Druckt. Formatiert die Seiten.
-    void CalcPagesForPrint( sal_uInt16 nMax, SfxProgress* pProgress = 0,
-        const String* pStr = NULL, ULONG nMergeAct = 0, ULONG nMergeCnt = 0 );
+    void CalcPagesForPrint( sal_uInt16 nMax, SfxProgress* pProgress = 0 );
 
     //All about fields.
     void UpdateFlds(sal_Bool bCloseDB = sal_False);

@@ -369,7 +369,7 @@ void SwRenderData::MakeSwPrtOptions(
 
 /*****************************************************************************/
 
-SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
+SwPrintUIOptions::SwPrintUIOptions( bool bWeb,  bool bSwSrcView ) :
     m_pLast( NULL )
 {
     ResStringArray aLocalizedStrings( SW_RES( STR_PRINTOPTUI ) );
@@ -377,6 +377,14 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
     DBG_ASSERT( aLocalizedStrings.Count() >= 44, "resource incomplete" );
     if( aLocalizedStrings.Count() < 44 ) // bad resource ?
         return;
+
+    // printing HTML sources does not have any valid UI options.
+    // Its just the source code that gets printed ...
+    if (bSwSrcView)
+    {
+        m_aUIProperties.realloc( 0 );
+        return;
+    }
 
     // create sequence of print UI options
     // (5 options are not available for Writer-Web)
@@ -502,12 +510,14 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
     aHelpText.realloc( 2 );
     aHelpText[0] = aLocalizedStrings.GetString( 25 );
     aHelpText[1] = aLocalizedStrings.GetString( 25 );
+    vcl::PrinterOptionsHelper::UIControlOptions aAnnotOpt( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintProspect" ) ), 1, sal_False );
     m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( aLocalizedStrings.GetString( 26 ),
                                                     aHelpText,
                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintAnnotationMode" ) ),
                                                     aChoices,
                                                     0,
-                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) )
+                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                                    aAnnotOpt
                                                     );
 
     // create subsection for Page settings
@@ -834,8 +844,7 @@ void lcl_SetState( SfxProgress& rProgress, ULONG nPage, ULONG nMax,
 
 
 
-void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
-    const XubString* /*TLPDF pStr*/, ULONG /*TLPDF nMergeAct*/, ULONG /*TLPDF nMergeCnt*/ )
+void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress )
 {
     SET_CURR_SHELL( this );
 
@@ -1169,8 +1178,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
 
 #ifdef TL_NOT_NOW   // TLPDF: applying view options and formatting the dcoument should now only be done in getRendererCount!
         // benoetigte Seiten fuers Drucken formatieren
-        pShell->CalcPagesForPrint( (USHORT)nPage, 0 /*TLPDF*/, 0 /*TLPDFpStr*/,
-                                    0, 0 /* TLPDF, there is no progressbar right now nMergeAct, nMergeCnt */ );
+        pShell->CalcPagesForPrint( (USHORT)nPage, 0 );
 
         // Some field types, can require a valid layout
         // (expression fields in tables). For these we do an UpdateFlds

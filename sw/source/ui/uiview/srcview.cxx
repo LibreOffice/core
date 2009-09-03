@@ -151,23 +151,23 @@ TYPEINIT1(SwSrcView, SfxViewShell)
 --------------------------------------------------*/
 
 
-void lcl_PrintHeader( Printer* pPrinter, USHORT nPages, USHORT nCurPage, const String& rTitle )
+void lcl_PrintHeader( OutputDevice &rOutDev, USHORT nPages, USHORT nCurPage, const String& rTitle )
 {
     short nLeftMargin   = LMARGPRN;
-    Size aSz = pPrinter->GetOutputSize();
+    Size aSz = rOutDev.GetOutputSize();
     short nBorder = BORDERPRN;
 
-    Color aOldFillColor( pPrinter->GetFillColor() );
-    Font aOldFont( pPrinter->GetFont() );
+    Color aOldFillColor( rOutDev.GetFillColor() );
+    Font aOldFont( rOutDev.GetFont() );
 
-    pPrinter->SetFillColor( Color(COL_TRANSPARENT) );
+    rOutDev.SetFillColor( Color(COL_TRANSPARENT) );
 
     Font aFont( aOldFont );
     aFont.SetWeight( WEIGHT_BOLD );
     aFont.SetAlign( ALIGN_BOTTOM );
-    pPrinter->SetFont( aFont );
+    rOutDev.SetFont( aFont );
 
-    long nFontHeight = pPrinter->GetTextHeight();
+    long nFontHeight = rOutDev.GetTextHeight();
 
     // 1.Border => Strich, 2+3 Border = Freiraum.
     long nYTop = TMARGPRN-3*nBorder-nFontHeight;
@@ -175,34 +175,34 @@ void lcl_PrintHeader( Printer* pPrinter, USHORT nPages, USHORT nCurPage, const S
     long nXLeft = nLeftMargin-nBorder;
     long nXRight = aSz.Width()-RMARGPRN+nBorder;
 
-    pPrinter->DrawRect( Rectangle(
+    rOutDev.DrawRect( Rectangle(
         Point( nXLeft, nYTop ),
         Size( nXRight-nXLeft, aSz.Height() - nYTop - BMARGPRN + nBorder ) ) );
 
 
     long nY = TMARGPRN-2*nBorder;
     Point aPos( nLeftMargin, nY );
-    pPrinter->DrawText( aPos, rTitle );
+    rOutDev.DrawText( aPos, rTitle );
     if ( nPages != 1 )
     {
         aFont.SetWeight( WEIGHT_NORMAL );
-        pPrinter->SetFont( aFont );
+        rOutDev.SetFont( aFont );
         String aPageStr( C2S(" [") );
         aPageStr += String( SW_RES( STR_PAGE ) );
         aPageStr += ' ';
         aPageStr += String::CreateFromInt32( nCurPage );
         aPageStr += ']';
-        aPos.X() += pPrinter->GetTextWidth( rTitle );
-        pPrinter->DrawText( aPos, aPageStr );
+        aPos.X() += rOutDev.GetTextWidth( rTitle );
+        rOutDev.DrawText( aPos, aPageStr );
     }
 
 
     nY = TMARGPRN-nBorder;
 
-    pPrinter->DrawLine( Point( nXLeft, nY ), Point( nXRight, nY ) );
+    rOutDev.DrawLine( Point( nXLeft, nY ), Point( nXRight, nY ) );
 
-    pPrinter->SetFont( aOldFont );
-    pPrinter->SetFillColor( aOldFillColor );
+    rOutDev.SetFont( aOldFont );
+    rOutDev.SetFillColor( aOldFillColor );
 }
 /* -----------------13.11.2003 16:24-----------------
 
@@ -725,9 +725,10 @@ USHORT SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
     return nFound;
 }
 
-/*-----------------02.07.97 09:29-------------------
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
 
---------------------------------------------------*/
 USHORT SwSrcView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool )
 {
     SwDocShell* pDocSh = GetDocShell();
@@ -753,114 +754,87 @@ USHORT SwSrcView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-ErrCode SwSrcView::DoPrint( SfxPrinter * /*pPrinter*/, PrintDialog * /*pDlg*/, BOOL /*bSilent*/, BOOL /*bIsAPI*/ )
+SfxPrinter* SwSrcView::GetPrinter( BOOL bCreate )
 {
-    #if 0
-    SfxPrintProgress *pProgress = new SfxPrintProgress( this, !bSilent );
-    SfxPrinter *pDocPrinter = GetPrinter(TRUE);
-    if ( !pPrinter )
-        pPrinter = pDocPrinter;
-    else if ( pDocPrinter != pPrinter )
-    {
-        pProgress->RestoreOnEndPrint( pDocPrinter->Clone() );
-        SetPrinter( pPrinter, SFX_PRINTER_PRINTER );
-    }
-    pProgress->SetWaitMode(FALSE);
-
-    // Drucker starten
-    PreparePrint( pDlg );
-
-    SfxViewShell::Print(*pProgress, bIsAPI, pDlg ); //???
-
-    MapMode eOldMapMode( pPrinter->GetMapMode() );
-    Font aOldFont( pPrinter->Printer::GetFont() );
-
-    TextEngine* pTextEngine = aEditWin.GetTextEngine();
-    pPrinter->SetMapMode(MAP_100TH_MM);
-    Font aFont(aEditWin.GetOutWin()->GetFont());
-    Size aSize(aFont.GetSize());
-    aSize = aEditWin.GetOutWin()->PixelToLogic(aSize, MAP_100TH_MM);
-    aFont.SetSize(aSize);
-    aFont.SetColor(COL_BLACK);
-    pPrinter->SetFont( aFont );
-
-    String aTitle( GetViewFrame()->GetWindow().GetText() );
-
-    USHORT nLineHeight = (USHORT) pPrinter->GetTextHeight(); // etwas mehr.
-    USHORT nParaSpace = 10;
-
-    Size aPaperSz = pPrinter->GetOutputSize();
-    aPaperSz.Width() -= (LMARGPRN+RMARGPRN);
-    aPaperSz.Height() -= (TMARGPRN+BMARGPRN);
-
-    // nLinepPage stimmt nicht, wenn Zeilen umgebrochen werden muessen...
-    USHORT nLinespPage = (USHORT) (aPaperSz.Height()/nLineHeight);
-    USHORT nCharspLine = (USHORT) (aPaperSz.Width() / pPrinter->GetTextWidth( 'X' ));
-    USHORT nParas = static_cast< USHORT >( pTextEngine->GetParagraphCount() );
-
-    USHORT nPages = (USHORT) (nParas/nLinespPage+1 );
-    USHORT nCurPage = 1;
-
-    BOOL bStartJob = pPrinter->StartJob( aTitle );
-    if( bStartJob )
-    {
-        pPrinter->StartPage();
-        // Header drucken...
-        lcl_PrintHeader( pPrinter, nPages, nCurPage, aTitle );
-        Point aPos( LMARGPRN, TMARGPRN );
-        for ( USHORT nPara = 0; nPara < nParas; nPara++ )
-        {
-            String aLine( pTextEngine->GetText( nPara ) );
-            lcl_ConvertTabsToSpaces( aLine );
-            USHORT nLines = aLine.Len()/nCharspLine+1;
-            for ( USHORT nLine = 0; nLine < nLines; nLine++ )
-            {
-                String aTmpLine( aLine, nLine*nCharspLine, nCharspLine );
-                aPos.Y() += nLineHeight;
-                if ( aPos.Y() > ( aPaperSz.Height()+TMARGPRN ) )
-                {
-                    nCurPage++;
-                    pPrinter->EndPage();
-                    pPrinter->StartPage();
-                    lcl_PrintHeader( pPrinter, nPages, nCurPage, aTitle );
-                    aPos = Point( LMARGPRN, TMARGPRN+nLineHeight );
-                }
-                pPrinter->DrawText( aPos, aTmpLine );
-            }
-            aPos.Y() += nParaSpace;
-        }
-        pPrinter->EndPage();
-    }
-
-    pPrinter->SetFont( aOldFont );
-    pPrinter->SetMapMode( eOldMapMode );
-
-    if ( !bStartJob )
-    {
-        // Printer konnte nicht gestartet werden
-        delete pProgress;
-        return ERRCODE_IO_ABORT;
-    }
-
-    pProgress->Stop();
-    pProgress->DeleteOnEndPrint();
-    pPrinter->EndJob();
-    return pPrinter->GetError();
-    #else
-    DBG_ERROR( "dead code" );
-    return ERRCODE_IO_NOTSUPPORTED;
-    #endif
+    return  GetDocShell()->GetDoc()->getPrinter( bCreate );
 }
 
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
-
-SfxPrinter* SwSrcView::GetPrinter( BOOL bCreate )
+sal_Int32 SwSrcView::PrintSource(
+    OutputDevice *pOutDev,
+    sal_Int32 nPage,
+    bool bCalcNumPagesOnly )
 {
-    return  GetDocShell()->GetDoc()->getPrinter( bCreate );
+    if (!pOutDev || nPage <= 0)
+        return 0;
+
+    //! this a lgorithm for printing the n-th page is very poor since it
+    //! needs to go over the text of all previous pages to get to the correct one.
+    //! But since HTML source code is expected to be just a small number of pages
+    //! even this poor algorithm should be enough...
+
+    pOutDev->Push();
+
+    TextEngine* pTextEngine = aEditWin.GetTextEngine();
+    pOutDev->SetMapMode( MAP_100TH_MM );
+    Font aFont( aEditWin.GetOutWin()->GetFont() );
+    Size aSize( aFont.GetSize() );
+    aSize = aEditWin.GetOutWin()->PixelToLogic( aSize, MAP_100TH_MM );
+    aFont.SetSize( aSize );
+    aFont.SetColor( COL_BLACK );
+    pOutDev->SetFont( aFont );
+
+    String aTitle( GetViewFrame()->GetWindow().GetText() );
+
+    USHORT nLineHeight = (USHORT) pOutDev->GetTextHeight(); // etwas mehr.
+    USHORT nParaSpace = 10;
+
+    Size aPaperSz = pOutDev->GetOutputSize();
+    aPaperSz.Width() -= (LMARGPRN + RMARGPRN);
+    aPaperSz.Height() -= (TMARGPRN + BMARGPRN);
+
+    // nLinepPage stimmt nicht, wenn Zeilen umgebrochen werden muessen...
+    USHORT nLinespPage = (USHORT) (aPaperSz.Height() / nLineHeight);
+    USHORT nCharspLine = (USHORT) (aPaperSz.Width()  / pOutDev->GetTextWidth( 'X' ));
+    USHORT nParas = static_cast< USHORT >( pTextEngine->GetParagraphCount() );
+
+    USHORT nPages = (USHORT) (nParas / nLinespPage + 1 );
+    USHORT nCurPage = 1;
+
+    // Header drucken...
+    if (!bCalcNumPagesOnly && nPage == nCurPage)
+        lcl_PrintHeader( *pOutDev, nPages, nCurPage, aTitle );
+    Point aPos( LMARGPRN, TMARGPRN );
+    for ( USHORT nPara = 0; nPara < nParas; ++nPara )
+    {
+        String aLine( pTextEngine->GetText( nPara ) );
+        lcl_ConvertTabsToSpaces( aLine );
+        USHORT nLines = aLine.Len() / nCharspLine + 1;
+        for ( USHORT nLine = 0; nLine < nLines; ++nLine )
+        {
+            String aTmpLine( aLine, nLine * nCharspLine, nCharspLine );
+            aPos.Y() += nLineHeight;
+            if ( aPos.Y() > ( aPaperSz.Height() + TMARGPRN ) )
+            {
+                ++nCurPage;
+                if (!bCalcNumPagesOnly && nPage == nCurPage)
+                    lcl_PrintHeader( *pOutDev, nPages, nCurPage, aTitle );
+                aPos = Point( LMARGPRN, TMARGPRN + nLineHeight );
+            }
+            if (!bCalcNumPagesOnly && nPage == nCurPage)
+                pOutDev->DrawText( aPos, aTmpLine );
+        }
+        aPos.Y() += nParaSpace;
+    }
+
+    pOutDev->Pop();
+
+    DBG_ASSERT( bCalcNumPagesOnly || nPage <= nCurPage, "page number out of range" );
+    return nCurPage;
 }
+
 
 /*--------------------------------------------------------------------
     Beschreibung:

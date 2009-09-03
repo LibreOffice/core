@@ -234,9 +234,9 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
     void                    GetNumberFormatter();
 
     // used for XRenderable implementation
-    SfxViewShell *  GuessViewShell( const css::uno::Reference< css::frame::XController > xController = css::uno::Reference< css::frame::XController >() );
+    SfxViewShell *  GuessViewShell( /* out */ bool &rbIsSwSrcView, const css::uno::Reference< css::frame::XController > xController = css::uno::Reference< css::frame::XController >() );
     SwDoc *         GetRenderDoc( SfxViewShell *&rpView, const css::uno::Any& rSelection, bool bIsPDFExport );
-    SfxViewShell *  GetRenderView( const SwPrintUIOptions &rOpt, bool bIsPDFExport );
+    SfxViewShell *  GetRenderView( bool &rbIsSwSrcView, const css::uno::Sequence< css::beans::PropertyValue >& rxOptions, bool bIsPDFExport );
 
     rtl::OUString           maBuildId;
 

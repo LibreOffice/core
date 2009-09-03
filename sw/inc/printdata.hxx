@@ -60,7 +60,7 @@ class SwPrintUIOptions : public vcl::PrinterOptionsHelper
     OutputDevice* m_pLast;
 
 public:
-    SwPrintUIOptions( BOOL bWeb = FALSE );
+    SwPrintUIOptions( bool bWeb, bool bSwSrcView );
     ~SwPrintUIOptions();
 
     bool processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp );
