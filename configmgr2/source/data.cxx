@@ -218,18 +218,7 @@ rtl::Reference< Node > Data::resolvePath(
             }
             p = set->getMember(seg);
             if (templateName.getLength() != 0 && p != 0) {
-                rtl::OUString name;
-                if (GroupNode * mg = dynamic_cast< GroupNode * >(p.get())) {
-                    name = mg->getTemplateName();
-                } else if (SetNode * ms = dynamic_cast< SetNode * >(p.get())) {
-                    name = ms->getTemplateName();
-                } else {
-                    OSL_ASSERT(false);
-                    throw css::uno::RuntimeException(
-                        rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-                        css::uno::Reference< css::uno::XInterface >());
-                }
+                rtl::OUString name(p->getTemplateName());
                 OSL_ASSERT(name.getLength() != 0);
                 if (templateName != name) {
                     throw css::uno::RuntimeException(
