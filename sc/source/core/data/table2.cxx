@@ -962,6 +962,14 @@ ScBaseCell* ScTable::GetCell( SCCOL nCol, SCROW nRow ) const
     return NULL;
 }
 
+void ScTable::GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const
+{
+    rCol = 0;
+    rRow = 0;
+    while (aCol[rCol].IsEmptyData() && rCol < MAXCOL)
+        ++rCol;
+    rRow = aCol[rCol].GetFirstDataPos();
+}
 
 void ScTable::GetLastDataPos(SCCOL& rCol, SCROW& rRow) const
 {

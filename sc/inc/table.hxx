@@ -291,6 +291,7 @@ public:
                     }
     ScBaseCell* GetCell( SCCOL nCol, SCROW nRow ) const;
 
+    void        GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const;
     void        GetLastDataPos(SCCOL& rCol, SCROW& rRow) const;
 
     /** Returns the pointer to a cell note object at the passed cell address. */

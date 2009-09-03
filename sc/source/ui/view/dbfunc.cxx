@@ -107,14 +107,30 @@ void ScDBFunc::GotoDBArea( const String& rDBName )
 
 //  aktuellen Datenbereich fuer Sortieren / Filtern suchen
 
-ScDBData* ScDBFunc::GetDBData( BOOL bMark, ScGetDBMode eMode )
+ScDBData* ScDBFunc::GetDBData( BOOL bMark, ScGetDBMode eMode, bool bShrinkToData )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDBData* pData = NULL;
     ScRange aRange;
     ScMarkType eMarkType = GetViewData()->GetSimpleArea(aRange);
     if ( eMarkType == SC_MARK_SIMPLE || eMarkType == SC_MARK_SIMPLE_FILTERED )
+    {
+        if (bShrinkToData)
+        {
+            // Shrink the range to only include data area.
+            ScDocument* pDoc = pDocSh->GetDocument();
+            SCCOL nCol1 = aRange.aStart.Col(), nCol2 = aRange.aEnd.Col();
+            SCROW nRow1 = aRange.aStart.Row(), nRow2 = aRange.aEnd.Row();
+            if (pDoc->ShrinkToDataArea(aRange.aStart.Tab(), nCol1, nRow1, nCol2, nRow2))
+            {
+                aRange.aStart.SetCol(nCol1);
+                aRange.aEnd.SetCol(nCol2);
+                aRange.aStart.SetRow(nRow1);
+                aRange.aEnd.SetRow(nRow2);
+            }
+        }
         pData = pDocSh->GetDBData( aRange, eMode, FALSE );
+    }
     else if ( eMode != SC_DB_OLD )
         pData = pDocSh->GetDBData(
                     ScRange( GetViewData()->GetCurX(), GetViewData()->GetCurY(),
