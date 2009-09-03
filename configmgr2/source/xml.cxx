@@ -1240,6 +1240,8 @@ bool XcsParser::startElement(
                     handleSetItem(reader, set);
                     return true;
                 }
+            } else {
+                OSL_ASSERT(false); // this cannot happen
             }
             break;
         case STATE_COMPONENT_DONE:
@@ -1264,43 +1266,45 @@ void XcsParser::endElement(XmlReader const * reader) {
     if (ignoring_ > 0) {
         --ignoring_;
     } else if (!elements_.empty()) {
-        rtl::Reference< Node > node(elements_.top().node);
-        rtl::OUString name(elements_.top().name);
+        Element top(elements_.top());
         elements_.pop();
-        NodeMap * map;
-        if (elements_.empty()) {
-            switch (state_) {
-            case STATE_TEMPLATES:
-                map = &data_->templates;
-                break;
-            case STATE_COMPONENT:
-                map = &data_->components;
-                state_ = STATE_COMPONENT_DONE;
-                break;
-            default:
+        if (top.node.is()) {
+            NodeMap * map;
+            if (elements_.empty()) {
+                switch (state_) {
+                case STATE_TEMPLATES:
+                    map = &data_->templates;
+                    break;
+                case STATE_COMPONENT:
+                    map = &data_->components;
+                    state_ = STATE_COMPONENT_DONE;
+                    break;
+                default:
+                    OSL_ASSERT(false);
+                    throw css::uno::RuntimeException(
+                        rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+                        css::uno::Reference< css::uno::XInterface >());
+                }
+            } else if (GroupNode * group = dynamic_cast< GroupNode * >(
+                           elements_.top().node.get()))
+            {
+                map = &group->getMembers();
+            } else {
                 OSL_ASSERT(false);
                 throw css::uno::RuntimeException(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
                     css::uno::Reference< css::uno::XInterface >());
             }
-        } else if (GroupNode * group = dynamic_cast< GroupNode * >(
-                       elements_.top().node.get()))
-        {
-            map = &group->getMembers();
-        } else {
-            OSL_ASSERT(false);
-            throw css::uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-                css::uno::Reference< css::uno::XInterface >());
-        }
-        if (!map->insert(NodeMap::value_type(name, node)).second) {
-            throw css::uno::RuntimeException(
-                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("duplicate ")) +
-                 name + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" in ")) +
-                 reader->getUrl()),
-                css::uno::Reference< css::uno::XInterface >());
+            if (!map->insert(NodeMap::value_type(top.name, top.node)).second) {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("duplicate ")) +
+                     top.name +
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" in ")) +
+                     reader->getUrl()),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
         }
     } else {
         switch (state_) {
@@ -1604,6 +1608,7 @@ void XcsParser::handleSetItem(XmlReader * reader, SetNode * set) {
     }
     set->getAdditionalTemplateNames().push_back(
         parseTemplateReference(attrComponent, attrNodeType, componentName_, 0));
+    elements_.push(Element(rtl::Reference< Node >(), rtl::OUString()));
 }
 
 class XcuParser: public Parser {
