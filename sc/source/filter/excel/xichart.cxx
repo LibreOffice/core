@@ -34,6 +34,7 @@
 #include "xichart.hxx"
 
 #include <algorithm>
+#include <memory>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
@@ -72,6 +73,8 @@
 #include "tokenarray.hxx"
 #include "token.hxx"
 #include "compiler.hxx"
+#include "reftokenhelper.hxx"
+#include "chartlis.hxx"
 #include "fprogressbar.hxx"
 #include "xltracer.hxx"
 #include "xistream.hxx"
@@ -122,6 +125,8 @@ using ::com::sun::star::chart2::data::XDataSequence;
 
 using ::formula::FormulaToken;
 using ::formula::StackVar;
+
+using ::std::vector;
 
 // Helpers ====================================================================
 
@@ -789,6 +794,22 @@ Sequence< Reference< XFormattedString > > XclImpChSourceLink::CreateStringSequen
         }
     }
     return ScfApiHelper::VectorToSequence( aStringVec );
+}
+
+void XclImpChSourceLink::FillSourceLink(vector<ScSharedTokenRef>& rTokens) const
+{
+    if (!mxTokenArray.is())
+        // no links to fill.
+        return;
+
+    mxTokenArray->Reset();
+    for (FormulaToken* p = mxTokenArray->First(); p; p = mxTokenArray->Next())
+    {
+        ScSharedTokenRef pToken(static_cast<ScToken*>(p->Clone()));
+        if (ScRefTokenHelper::isRef(pToken))
+            // This is a reference token.  Store it.
+            ScRefTokenHelper::join(rTokens, pToken);
+    }
 }
 
 // Text =======================================================================
@@ -1835,6 +1856,14 @@ Reference< XDataSeries > XclImpChSeries::CreateDataSeries() const
         }
     }
     return xDataSeries;
+}
+
+void XclImpChSeries::FillAllSourceLinks(vector<ScSharedTokenRef>& rTokens) const
+{
+    mxValueLink->FillSourceLink(rTokens);
+    mxCategLink->FillSourceLink(rTokens);
+    mxTitleLink->FillSourceLink(rTokens);
+    mxBubbleLink->FillSourceLink(rTokens);
 }
 
 void XclImpChSeries::ReadChSourceLink( XclImpStream& rStrm )
@@ -3481,7 +3510,7 @@ XclImpChTextRef XclImpChChart::GetDefaultText( XclChTextType eTextType ) const
     return maDefTexts.get( nDefTextId );
 }
 
-void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressBar& rProgress ) const
+void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressBar& rProgress, const OUString& rObjName ) const
 {
     // initialize conversion (locks the model to suppress any internal updates)
     InitConversion( xChartDoc );
@@ -3524,6 +3553,28 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressB
 
     // unlock the model
     FinishConversion( rProgress );
+
+    ScDocument* pDoc = &GetRoot().GetDoc();
+    ScChartListenerCollection* pChartCollection = pDoc->GetChartListenerCollection();
+    if (pChartCollection)
+    {
+        // Now, start listening to this chart.
+        ::std::auto_ptr< vector<ScSharedTokenRef> > pRefTokens(new vector<ScSharedTokenRef>);
+        for (XclImpChSeriesVec::const_iterator itr = maSeries.begin(), itrEnd = maSeries.end(); itr != itrEnd; ++itr)
+        {
+            const XclImpChSeriesRef& rSeries = *itr;
+            rSeries->FillAllSourceLinks(*pRefTokens);
+        }
+        if (!pRefTokens->empty())
+        {
+            ::std::auto_ptr<ScChartListener> pListener(
+                new ScChartListener(rObjName, pDoc, pRefTokens.release()));
+            pListener->SetDirty(true);
+            pListener->StartListeningTo();
+            pChartCollection->Insert(pListener.release());
+
+        }
+    }
 }
 
 void XclImpChChart::ReadChSeries( XclImpStream& rStrm )
@@ -3749,11 +3800,11 @@ sal_Size XclImpChart::GetProgressSize() const
     return mxChartData.is() ? mxChartData->GetProgressSize() : 0;
 }
 
-void XclImpChart::Convert( Reference< XModel > xModel, ScfProgressBar& rProgress ) const
+void XclImpChart::Convert( Reference< XModel > xModel, ScfProgressBar& rProgress, const OUString& rObjName ) const
 {
     Reference< XChartDocument > xChartDoc( xModel, UNO_QUERY );
     if( mxChartData.is() && xChartDoc.is() )
-        mxChartData->Convert( xChartDoc, rProgress );
+        mxChartData->Convert( xChartDoc, rProgress, rObjName );
 }
 
 void XclImpChart::ReadChChart( XclImpStream& rStrm )

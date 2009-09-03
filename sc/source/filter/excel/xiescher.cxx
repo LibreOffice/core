@@ -1579,7 +1579,7 @@ SdrObject* XclImpChartObj::DoCreateSdrObj( const Rectangle& rAnchorRect, ScfProg
         if( svt::EmbeddedObjectRef::TryRunningState( xEmbObj ) )
         {
             Reference< XModel > xModel( xEmbObj->getComponent(), UNO_QUERY );
-            mxChart->Convert( xModel, rProgress );
+            mxChart->Convert( xModel, rProgress, aEmbObjName );
 
             Reference< XEmbedPersist > xPers( xEmbObj, UNO_QUERY );
             if( xPers.is() )

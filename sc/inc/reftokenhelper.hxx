@@ -70,12 +70,12 @@ public:
 
     static void getTokensFromRangeList(::std::vector<ScSharedTokenRef>& pTokens, const ScRangeList& rRanges);
 
-    static bool isRef(const ScSharedTokenRef& pToken);
-    static bool isExternalRef(const ScSharedTokenRef& pToken);
+    static bool SC_DLLPUBLIC isRef(const ScSharedTokenRef& pToken);
+    static bool SC_DLLPUBLIC isExternalRef(const ScSharedTokenRef& pToken);
 
-    static bool intersects(const ::std::vector<ScSharedTokenRef>& rTokens, const ScSharedTokenRef& pToken);
+    static bool SC_DLLPUBLIC intersects(const ::std::vector<ScSharedTokenRef>& rTokens, const ScSharedTokenRef& pToken);
 
-    static void join(::std::vector<ScSharedTokenRef>& rTokens, const ScSharedTokenRef& pToken);
+    static void SC_DLLPUBLIC join(::std::vector<ScSharedTokenRef>& rTokens, const ScSharedTokenRef& pToken);
 
     static bool getDoubleRefDataFromToken(ScComplexRefData& rData, const ScSharedTokenRef& pToken);
 };
