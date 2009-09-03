@@ -401,9 +401,8 @@ struct ScDPLabelData
     explicit            ScDPLabelData( const String& rName, short nCol, bool bIsValue );
 
     /**
-     * return the name that should be displayed in the dp dialogs i.e.
-     * when the layout name is present, use it, or else use the original
-     * name.
+     * return the name that should be displayed in the dp dialogs i.e. when
+     * the layout name is present, use it, or else use the original name.
      */
     ::rtl::OUString SC_DLLPUBLIC getDisplayName() const;
 };
