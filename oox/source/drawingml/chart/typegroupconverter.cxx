@@ -70,34 +70,35 @@ namespace chart {
 namespace {
 
 // chart type service names
-const sal_Char SERVICE_CHART2_AREA[]    = "com.sun.star.chart2.AreaChartType";
-const sal_Char SERVICE_CHART2_CANDLE[]  = "com.sun.star.chart2.CandleStickChartType";
-const sal_Char SERVICE_CHART2_COLUMN[]  = "com.sun.star.chart2.ColumnChartType";
-const sal_Char SERVICE_CHART2_LINE[]    = "com.sun.star.chart2.LineChartType";
-const sal_Char SERVICE_CHART2_NET[]     = "com.sun.star.chart2.NetChartType";
-const sal_Char SERVICE_CHART2_PIE[]     = "com.sun.star.chart2.PieChartType";
-const sal_Char SERVICE_CHART2_SCATTER[] = "com.sun.star.chart2.ScatterChartType";
-const sal_Char SERVICE_CHART2_BUBBLE[]  = "com.sun.star.chart2.BubbleChartType";
-const sal_Char SERVICE_CHART2_SURFACE[] = "com.sun.star.chart2.ColumnChartType";    // Todo
+const sal_Char SERVICE_CHART2_AREA[]      = "com.sun.star.chart2.AreaChartType";
+const sal_Char SERVICE_CHART2_CANDLE[]    = "com.sun.star.chart2.CandleStickChartType";
+const sal_Char SERVICE_CHART2_COLUMN[]    = "com.sun.star.chart2.ColumnChartType";
+const sal_Char SERVICE_CHART2_LINE[]      = "com.sun.star.chart2.LineChartType";
+const sal_Char SERVICE_CHART2_NET[]       = "com.sun.star.chart2.NetChartType";
+const sal_Char SERVICE_CHART2_FILLEDNET[] = "com.sun.star.chart2.FilledNetChartType";
+const sal_Char SERVICE_CHART2_PIE[]       = "com.sun.star.chart2.PieChartType";
+const sal_Char SERVICE_CHART2_SCATTER[]   = "com.sun.star.chart2.ScatterChartType";
+const sal_Char SERVICE_CHART2_BUBBLE[]    = "com.sun.star.chart2.BubbleChartType";
+const sal_Char SERVICE_CHART2_SURFACE[]   = "com.sun.star.chart2.ColumnChartType";    // Todo
 
 namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
 
 static const TypeGroupInfo spTypeInfos[] =
 {
-    // type-id          type-category         service                 varied-point-color   default label pos     comb2d supp3d polar  area2d 1stvis xcateg swap   stack  revers betw   picopt
-    { TYPEID_BAR,       TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,  VARPOINTMODE_SINGLE, csscd::OUTSIDE,       true,  true,  false, true,  false, true,  false, true,  false, true,  true  },
-    { TYPEID_HORBAR,    TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,  VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, true,  true,  true,  false, true,  true  },
-    { TYPEID_LINE,      TYPECATEGORY_LINE,    SERVICE_CHART2_LINE,    VARPOINTMODE_SINGLE, csscd::RIGHT,         true,  true,  false, false, false, true,  false, true,  false, true,  false },
-    { TYPEID_AREA,      TYPECATEGORY_LINE,    SERVICE_CHART2_AREA,    VARPOINTMODE_NONE,   csscd::CENTER,        true,  true,  false, true,  false, true,  false, true,  true,  false, false },
-    { TYPEID_STOCK,     TYPECATEGORY_LINE,    SERVICE_CHART2_CANDLE,  VARPOINTMODE_NONE,   csscd::RIGHT,         true,  false, false, false, false, true,  false, true,  false, true,  false },
-    { TYPEID_RADARLINE, TYPECATEGORY_RADAR,   SERVICE_CHART2_NET,     VARPOINTMODE_SINGLE, csscd::TOP,           false, false, true,  false, false, true,  false, false, false, false, false },
-    { TYPEID_RADARAREA, TYPECATEGORY_RADAR,   SERVICE_CHART2_NET,     VARPOINTMODE_NONE,   csscd::TOP,           false, false, true,  true,  false, true,  false, false, false, false, false },
-    { TYPEID_PIE,       TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,     VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  true,  false, false, false, false, false },
-    { TYPEID_DOUGHNUT,  TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,     VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  false, true,  false, false, false, false, false },
-    { TYPEID_OFPIE,     TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,     VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  true,  false, false, false, false, false },
-    { TYPEID_SCATTER,   TYPECATEGORY_SCATTER, SERVICE_CHART2_SCATTER, VARPOINTMODE_SINGLE, csscd::RIGHT,         true,  true,  false, false, false, false, false, false, false, false, false },
-    { TYPEID_BUBBLE,    TYPECATEGORY_SCATTER, SERVICE_CHART2_BUBBLE,  VARPOINTMODE_SINGLE, csscd::RIGHT,         false, false, false, true,  false, false, false, false, false, false, false },
-    { TYPEID_SURFACE,   TYPECATEGORY_SURFACE, SERVICE_CHART2_SURFACE, VARPOINTMODE_NONE,   csscd::RIGHT,         false, true,  false, true,  false, true,  false, false, false, false, false }
+    // type-id          type-category         service                   varied-point-color   default label pos     comb2d supp3d polar  area2d 1stvis xcateg swap   stack  revers betw   picopt
+    { TYPEID_BAR,       TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       true,  true,  false, true,  false, true,  false, true,  false, true,  true  },
+    { TYPEID_HORBAR,    TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, true,  true,  true,  false, true,  true  },
+    { TYPEID_LINE,      TYPECATEGORY_LINE,    SERVICE_CHART2_LINE,      VARPOINTMODE_SINGLE, csscd::RIGHT,         true,  true,  false, false, false, true,  false, true,  false, true,  false },
+    { TYPEID_AREA,      TYPECATEGORY_LINE,    SERVICE_CHART2_AREA,      VARPOINTMODE_NONE,   csscd::CENTER,        true,  true,  false, true,  false, true,  false, true,  true,  false, false },
+    { TYPEID_STOCK,     TYPECATEGORY_LINE,    SERVICE_CHART2_CANDLE,    VARPOINTMODE_NONE,   csscd::RIGHT,         true,  false, false, false, false, true,  false, true,  false, true,  false },
+    { TYPEID_RADARLINE, TYPECATEGORY_RADAR,   SERVICE_CHART2_NET,       VARPOINTMODE_SINGLE, csscd::TOP,           false, false, true,  false, false, true,  false, false, false, false, false },
+    { TYPEID_RADARAREA, TYPECATEGORY_RADAR,   SERVICE_CHART2_FILLEDNET, VARPOINTMODE_NONE,   csscd::TOP,           false, false, true,  true,  false, true,  false, false, true,  false, false },
+    { TYPEID_PIE,       TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,       VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  true,  false, false, false, false, false },
+    { TYPEID_DOUGHNUT,  TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,       VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  false, true,  false, false, false, false, false },
+    { TYPEID_OFPIE,     TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,       VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  true,  false, false, false, false, false },
+    { TYPEID_SCATTER,   TYPECATEGORY_SCATTER, SERVICE_CHART2_SCATTER,   VARPOINTMODE_SINGLE, csscd::RIGHT,         true,  true,  false, false, false, false, false, false, false, false, false },
+    { TYPEID_BUBBLE,    TYPECATEGORY_SCATTER, SERVICE_CHART2_BUBBLE,    VARPOINTMODE_SINGLE, csscd::RIGHT,         false, false, false, true,  false, false, false, false, false, false, false },
+    { TYPEID_SURFACE,   TYPECATEGORY_SURFACE, SERVICE_CHART2_SURFACE,   VARPOINTMODE_NONE,   csscd::RIGHT,         false, true,  false, true,  false, true,  false, false, false, false, false }
 };
 
 static const TypeGroupInfo saUnknownTypeInfo =
@@ -485,7 +486,7 @@ void TypeGroupConverter::convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSym
 
 void TypeGroupConverter::convertLineSmooth( PropertySet& rPropSet, bool bOoxSmooth ) const
 {
-    if( !isSeriesFrameFormat() )
+    if( !isSeriesFrameFormat() && (maTypeInfo.meTypeCategory != TYPECATEGORY_RADAR) )
     {
         namespace cssc = ::com::sun::star::chart2;
         cssc::CurveStyle eCurveStyle = bOoxSmooth ? cssc::CurveStyle_CUBIC_SPLINES : cssc::CurveStyle_LINES;

@@ -148,7 +148,7 @@ void Shape::addShape(
         rtl::OUString sServiceName( msServiceName );
         if( sServiceName.getLength() )
         {
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, rxTheme, rxShapes, pShapeRect ) );
+            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, rxTheme, rxShapes, pShapeRect, sal_False ) );
 
             if( pShapeMap && msId.getLength() )
             {
@@ -247,7 +247,8 @@ Reference< XShape > Shape::createAndInsert(
         const rtl::OUString& rServiceName,
         const ThemePtr& rxTheme,
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-        const awt::Rectangle* pShapeRect )
+        const awt::Rectangle* pShapeRect,
+        sal_Bool bClearText )
 {
     awt::Size aSize( pShapeRect ? awt::Size( pShapeRect->Width, pShapeRect->Height ) : maSize );
     awt::Point aPosition( pShapeRect ? awt::Point( pShapeRect->X, pShapeRect->Y ) : maPosition );
@@ -366,6 +367,17 @@ Reference< XShape > Shape::createAndInsert(
                 xNamed->setName( msName );
         }
         rxShapes->add( mxShape );
+
+        // sj: removing default text of placeholder objects such as SlideNumberShape or HeaderShape
+        if ( bClearText )
+        {
+            uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
+            if ( xText.is() )
+            {
+                OUString aEmpty;
+                xText->setString( aEmpty );
+            }
+        }
 
         LineProperties aLineProperties;
         aLineProperties.maLineFill.moFillType = XML_noFill;
