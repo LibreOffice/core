@@ -1260,7 +1260,7 @@ long DispatcherUpdate_Impl( void*, void* pArg )
 void SfxShell::UIFeatureChanged()
 {
     SfxViewFrame *pFrame = GetFrame();
-    if ( pFrame && pFrame->IsVisible_Impl() )
+    if ( pFrame && pFrame->IsVisible() )
     {
         // Auch dann Update erzwingen, wenn Dispatcher schon geupdated ist,
         // sonst bleibt evtl. irgendwas in den gebunkerten Tools stecken.

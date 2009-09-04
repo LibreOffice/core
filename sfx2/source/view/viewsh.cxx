@@ -1495,7 +1495,7 @@ SfxViewShell* SfxViewShell::GetFirst
                 if ( pFrame == pShell->GetViewFrame() )
                 {
                     // only ViewShells with a valid ViewFrame will be returned
-                    if ( ( !bOnlyVisible || pFrame->IsVisible_Impl() ) && ( !pType || pShell->IsA(*pType) ) )
+                    if ( ( !bOnlyVisible || pFrame->IsVisible() ) && ( !pType || pShell->IsA(*pType) ) )
                         return pShell;
                     break;
                 }
@@ -1537,7 +1537,7 @@ SfxViewShell* SfxViewShell::GetNext
                 if ( pFrame == pShell->GetViewFrame() )
                 {
                     // only ViewShells with a valid ViewFrame will be returned
-                    if ( ( !bOnlyVisible || pFrame->IsVisible_Impl() ) && ( !pType || pShell->IsA(*pType) ) )
+                    if ( ( !bOnlyVisible || pFrame->IsVisible() ) && ( !pType || pShell->IsA(*pType) ) )
                         return pShell;
                     break;
                 }

@@ -367,7 +367,7 @@ void SfxTopViewWin_Impl::StateChanged( StateChangedType nStateChange )
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
         SfxObjectShell* pDoc = pFrame->GetObjectShell();
-        if ( pDoc && !pFrame->IsVisible_Impl() )
+        if ( pDoc && !pFrame->IsVisible() )
             pFrame->Show();
 
         pFrame->Resize();
