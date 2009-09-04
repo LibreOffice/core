@@ -296,24 +296,21 @@ $(SHL1TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL1ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+    @echo dlltool --input-def $(SHL1DEF) \
+        --dllname $(SHL1TARGET)$(DLLPOST) \
+        --kill-at \\ > $(MISC)$/$(TARGET).$(@:b)_1.cmd
 .IF "$(DEFLIB1NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL1DEF) \
-        --dllname $(SHL1TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @echo 	--output-exp $(MISC)$/$(@:b)_exp.o >> $(MISC)$/$(TARGET).$(@:b)_1.cmd
 .ELSE			# "$(DEFLIB1NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL1DEF) \
-        --dllname $(SHL1TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o \
+    @echo	--output-exp $(MISC)$/$(@:b)_exp.o \
         $(STDOBJ) $(SHL1OBJS) $(SHL1LINKRESO) \
-        `$(TYPE) /dev/null $(SHL1LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_1.cmd
+        `$(TYPE) /dev/null $(SHL1LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  >> $(MISC)$/$(TARGET).$(@:b)_1.cmd
 .ENDIF			# "$(DEFLIB1NAME)"!=""
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) $(SHL1OBJS) $(SHL1LINKRESO) \
         `$(TYPE) /dev/null $(SHL1LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--exclude-libs,ALL $(SHL1STDLIBS) $(SHL1STDSHL) $(STDSHL1) \
-        $(MISC)$/$(@:b)_exp.o \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL1STDLIBS) -Wl,--end-group \
+        $(SHL1STDSHL) $(STDSHL1) $(MISC)$/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_1.cmd
@@ -844,24 +841,21 @@ $(SHL2TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL2ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+    @echo dlltool --input-def $(SHL2DEF) \
+        --dllname $(SHL2TARGET)$(DLLPOST) \
+        --kill-at \\ > $(MISC)$/$(TARGET).$(@:b)_2.cmd
 .IF "$(DEFLIB2NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL2DEF) \
-        --dllname $(SHL2TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @echo 	--output-exp $(MISC)$/$(@:b)_exp.o >> $(MISC)$/$(TARGET).$(@:b)_2.cmd
 .ELSE			# "$(DEFLIB2NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL2DEF) \
-        --dllname $(SHL2TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o \
+    @echo	--output-exp $(MISC)$/$(@:b)_exp.o \
         $(STDOBJ) $(SHL2OBJS) $(SHL2LINKRESO) \
-        `$(TYPE) /dev/null $(SHL2LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_2.cmd
+        `$(TYPE) /dev/null $(SHL2LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  >> $(MISC)$/$(TARGET).$(@:b)_2.cmd
 .ENDIF			# "$(DEFLIB2NAME)"!=""
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) $(SHL2OBJS) $(SHL2LINKRESO) \
         `$(TYPE) /dev/null $(SHL2LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--exclude-libs,ALL $(SHL2STDLIBS) $(SHL2STDSHL) $(STDSHL2) \
-        $(MISC)$/$(@:b)_exp.o \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL2STDLIBS) -Wl,--end-group \
+        $(SHL2STDSHL) $(STDSHL2) $(MISC)$/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_2.cmd
@@ -1392,24 +1386,21 @@ $(SHL3TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL3ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+    @echo dlltool --input-def $(SHL3DEF) \
+        --dllname $(SHL3TARGET)$(DLLPOST) \
+        --kill-at \\ > $(MISC)$/$(TARGET).$(@:b)_3.cmd
 .IF "$(DEFLIB3NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL3DEF) \
-        --dllname $(SHL3TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @echo 	--output-exp $(MISC)$/$(@:b)_exp.o >> $(MISC)$/$(TARGET).$(@:b)_3.cmd
 .ELSE			# "$(DEFLIB3NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL3DEF) \
-        --dllname $(SHL3TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o \
+    @echo	--output-exp $(MISC)$/$(@:b)_exp.o \
         $(STDOBJ) $(SHL3OBJS) $(SHL3LINKRESO) \
-        `$(TYPE) /dev/null $(SHL3LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_3.cmd
+        `$(TYPE) /dev/null $(SHL3LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  >> $(MISC)$/$(TARGET).$(@:b)_3.cmd
 .ENDIF			# "$(DEFLIB3NAME)"!=""
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) $(SHL3OBJS) $(SHL3LINKRESO) \
         `$(TYPE) /dev/null $(SHL3LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--exclude-libs,ALL $(SHL3STDLIBS) $(SHL3STDSHL) $(STDSHL3) \
-        $(MISC)$/$(@:b)_exp.o \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL3STDLIBS) -Wl,--end-group \
+        $(SHL3STDSHL) $(STDSHL3) $(MISC)$/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_3.cmd
@@ -1940,24 +1931,21 @@ $(SHL4TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL4ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+    @echo dlltool --input-def $(SHL4DEF) \
+        --dllname $(SHL4TARGET)$(DLLPOST) \
+        --kill-at \\ > $(MISC)$/$(TARGET).$(@:b)_4.cmd
 .IF "$(DEFLIB4NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL4DEF) \
-        --dllname $(SHL4TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @echo 	--output-exp $(MISC)$/$(@:b)_exp.o >> $(MISC)$/$(TARGET).$(@:b)_4.cmd
 .ELSE			# "$(DEFLIB4NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL4DEF) \
-        --dllname $(SHL4TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o \
+    @echo	--output-exp $(MISC)$/$(@:b)_exp.o \
         $(STDOBJ) $(SHL4OBJS) $(SHL4LINKRESO) \
-        `$(TYPE) /dev/null $(SHL4LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_4.cmd
+        `$(TYPE) /dev/null $(SHL4LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  >> $(MISC)$/$(TARGET).$(@:b)_4.cmd
 .ENDIF			# "$(DEFLIB4NAME)"!=""
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) $(SHL4OBJS) $(SHL4LINKRESO) \
         `$(TYPE) /dev/null $(SHL4LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--exclude-libs,ALL $(SHL4STDLIBS) $(SHL4STDSHL) $(STDSHL4) \
-        $(MISC)$/$(@:b)_exp.o \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL4STDLIBS) -Wl,--end-group \
+        $(SHL4STDSHL) $(STDSHL4) $(MISC)$/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_4.cmd
@@ -2488,24 +2476,21 @@ $(SHL5TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL5ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+    @echo dlltool --input-def $(SHL5DEF) \
+        --dllname $(SHL5TARGET)$(DLLPOST) \
+        --kill-at \\ > $(MISC)$/$(TARGET).$(@:b)_5.cmd
 .IF "$(DEFLIB5NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL5DEF) \
-        --dllname $(SHL5TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @echo 	--output-exp $(MISC)$/$(@:b)_exp.o >> $(MISC)$/$(TARGET).$(@:b)_5.cmd
 .ELSE			# "$(DEFLIB5NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL5DEF) \
-        --dllname $(SHL5TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o \
+    @echo	--output-exp $(MISC)$/$(@:b)_exp.o \
         $(STDOBJ) $(SHL5OBJS) $(SHL5LINKRESO) \
-        `$(TYPE) /dev/null $(SHL5LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_5.cmd
+        `$(TYPE) /dev/null $(SHL5LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  >> $(MISC)$/$(TARGET).$(@:b)_5.cmd
 .ENDIF			# "$(DEFLIB5NAME)"!=""
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) $(SHL5OBJS) $(SHL5LINKRESO) \
         `$(TYPE) /dev/null $(SHL5LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--exclude-libs,ALL $(SHL5STDLIBS) $(SHL5STDSHL) $(STDSHL5) \
-        $(MISC)$/$(@:b)_exp.o \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL5STDLIBS) -Wl,--end-group \
+        $(SHL5STDSHL) $(STDSHL5) $(MISC)$/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_5.cmd
@@ -3036,24 +3021,21 @@ $(SHL6TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL6ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+    @echo dlltool --input-def $(SHL6DEF) \
+        --dllname $(SHL6TARGET)$(DLLPOST) \
+        --kill-at \\ > $(MISC)$/$(TARGET).$(@:b)_6.cmd
 .IF "$(DEFLIB6NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL6DEF) \
-        --dllname $(SHL6TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @echo 	--output-exp $(MISC)$/$(@:b)_exp.o >> $(MISC)$/$(TARGET).$(@:b)_6.cmd
 .ELSE			# "$(DEFLIB6NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL6DEF) \
-        --dllname $(SHL6TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o \
+    @echo	--output-exp $(MISC)$/$(@:b)_exp.o \
         $(STDOBJ) $(SHL6OBJS) $(SHL6LINKRESO) \
-        `$(TYPE) /dev/null $(SHL6LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_6.cmd
+        `$(TYPE) /dev/null $(SHL6LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  >> $(MISC)$/$(TARGET).$(@:b)_6.cmd
 .ENDIF			# "$(DEFLIB6NAME)"!=""
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) $(SHL6OBJS) $(SHL6LINKRESO) \
         `$(TYPE) /dev/null $(SHL6LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--exclude-libs,ALL $(SHL6STDLIBS) $(SHL6STDSHL) $(STDSHL6) \
-        $(MISC)$/$(@:b)_exp.o \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL6STDLIBS) -Wl,--end-group \
+        $(SHL6STDSHL) $(STDSHL6) $(MISC)$/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_6.cmd
@@ -3584,24 +3566,21 @@ $(SHL7TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL7ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+    @echo dlltool --input-def $(SHL7DEF) \
+        --dllname $(SHL7TARGET)$(DLLPOST) \
+        --kill-at \\ > $(MISC)$/$(TARGET).$(@:b)_7.cmd
 .IF "$(DEFLIB7NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL7DEF) \
-        --dllname $(SHL7TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @echo 	--output-exp $(MISC)$/$(@:b)_exp.o >> $(MISC)$/$(TARGET).$(@:b)_7.cmd
 .ELSE			# "$(DEFLIB7NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL7DEF) \
-        --dllname $(SHL7TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o \
+    @echo	--output-exp $(MISC)$/$(@:b)_exp.o \
         $(STDOBJ) $(SHL7OBJS) $(SHL7LINKRESO) \
-        `$(TYPE) /dev/null $(SHL7LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_7.cmd
+        `$(TYPE) /dev/null $(SHL7LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  >> $(MISC)$/$(TARGET).$(@:b)_7.cmd
 .ENDIF			# "$(DEFLIB7NAME)"!=""
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) $(SHL7OBJS) $(SHL7LINKRESO) \
         `$(TYPE) /dev/null $(SHL7LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--exclude-libs,ALL $(SHL7STDLIBS) $(SHL7STDSHL) $(STDSHL7) \
-        $(MISC)$/$(@:b)_exp.o \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL7STDLIBS) -Wl,--end-group \
+        $(SHL7STDSHL) $(STDSHL7) $(MISC)$/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_7.cmd
@@ -4132,24 +4111,21 @@ $(SHL8TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL8ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+    @echo dlltool --input-def $(SHL8DEF) \
+        --dllname $(SHL8TARGET)$(DLLPOST) \
+        --kill-at \\ > $(MISC)$/$(TARGET).$(@:b)_8.cmd
 .IF "$(DEFLIB8NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL8DEF) \
-        --dllname $(SHL8TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @echo 	--output-exp $(MISC)$/$(@:b)_exp.o >> $(MISC)$/$(TARGET).$(@:b)_8.cmd
 .ELSE			# "$(DEFLIB8NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL8DEF) \
-        --dllname $(SHL8TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o \
+    @echo	--output-exp $(MISC)$/$(@:b)_exp.o \
         $(STDOBJ) $(SHL8OBJS) $(SHL8LINKRESO) \
-        `$(TYPE) /dev/null $(SHL8LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_8.cmd
+        `$(TYPE) /dev/null $(SHL8LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  >> $(MISC)$/$(TARGET).$(@:b)_8.cmd
 .ENDIF			# "$(DEFLIB8NAME)"!=""
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) $(SHL8OBJS) $(SHL8LINKRESO) \
         `$(TYPE) /dev/null $(SHL8LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--exclude-libs,ALL $(SHL8STDLIBS) $(SHL8STDSHL) $(STDSHL8) \
-        $(MISC)$/$(@:b)_exp.o \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL8STDLIBS) -Wl,--end-group \
+        $(SHL8STDSHL) $(STDSHL8) $(MISC)$/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_8.cmd
@@ -4680,24 +4656,21 @@ $(SHL9TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL9ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+    @echo dlltool --input-def $(SHL9DEF) \
+        --dllname $(SHL9TARGET)$(DLLPOST) \
+        --kill-at \\ > $(MISC)$/$(TARGET).$(@:b)_9.cmd
 .IF "$(DEFLIB9NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL9DEF) \
-        --dllname $(SHL9TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @echo 	--output-exp $(MISC)$/$(@:b)_exp.o >> $(MISC)$/$(TARGET).$(@:b)_9.cmd
 .ELSE			# "$(DEFLIB9NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL9DEF) \
-        --dllname $(SHL9TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o \
+    @echo	--output-exp $(MISC)$/$(@:b)_exp.o \
         $(STDOBJ) $(SHL9OBJS) $(SHL9LINKRESO) \
-        `$(TYPE) /dev/null $(SHL9LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_9.cmd
+        `$(TYPE) /dev/null $(SHL9LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  >> $(MISC)$/$(TARGET).$(@:b)_9.cmd
 .ENDIF			# "$(DEFLIB9NAME)"!=""
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) $(SHL9OBJS) $(SHL9LINKRESO) \
         `$(TYPE) /dev/null $(SHL9LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--exclude-libs,ALL $(SHL9STDLIBS) $(SHL9STDSHL) $(STDSHL9) \
-        $(MISC)$/$(@:b)_exp.o \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL9STDLIBS) -Wl,--end-group \
+        $(SHL9STDSHL) $(STDSHL9) $(MISC)$/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_9.cmd
@@ -5228,24 +5201,21 @@ $(SHL10TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL10ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+    @echo dlltool --input-def $(SHL10DEF) \
+        --dllname $(SHL10TARGET)$(DLLPOST) \
+        --kill-at \\ > $(MISC)$/$(TARGET).$(@:b)_10.cmd
 .IF "$(DEFLIB10NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL10DEF) \
-        --dllname $(SHL10TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @echo 	--output-exp $(MISC)$/$(@:b)_exp.o >> $(MISC)$/$(TARGET).$(@:b)_10.cmd
 .ELSE			# "$(DEFLIB10NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL10DEF) \
-        --dllname $(SHL10TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o \
+    @echo	--output-exp $(MISC)$/$(@:b)_exp.o \
         $(STDOBJ) $(SHL10OBJS) $(SHL10LINKRESO) \
-        `$(TYPE) /dev/null $(SHL10LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_10.cmd
+        `$(TYPE) /dev/null $(SHL10LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  >> $(MISC)$/$(TARGET).$(@:b)_10.cmd
 .ENDIF			# "$(DEFLIB10NAME)"!=""
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) $(SHL10OBJS) $(SHL10LINKRESO) \
         `$(TYPE) /dev/null $(SHL10LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--exclude-libs,ALL $(SHL10STDLIBS) $(SHL10STDSHL) $(STDSHL10) \
-        $(MISC)$/$(@:b)_exp.o \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL10STDLIBS) -Wl,--end-group \
+        $(SHL10STDSHL) $(STDSHL10) $(MISC)$/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_10.cmd

@@ -77,7 +77,7 @@ $(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
     .ENDIF
 .ELSE
     TARFILE_NAME=STLport-4.0
-    PATCH_FILES=STLport-4.0.patch
+    PATCH_FILES=STLport-4.0.patch STLport-4.0-sunstudio12u1.patch
         # To disable warnings from within STLport headers on unxsoli4 and
         # unxsols4, STLport-4.0.patch had to be extended mechanically by
         #

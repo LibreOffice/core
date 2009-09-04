@@ -61,7 +61,7 @@ $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
 # Extract RTTI symbols from all the objects that will be used to build a shared library
     nm -gP $(SHL$(TNR)OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL$(TNR)LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
     $(RENAME) $@.exported-symbols $@

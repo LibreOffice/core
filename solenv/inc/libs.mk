@@ -57,9 +57,6 @@ I18NUTILLIB=-li18nutil$(COMID)
 .INCLUDE .IGNORE : i18npool$/version.mk
 I18NISOLANGLIB=-li18nisolang$(ISOLANG_MAJOR)$(COMID)
 I18NPAPERLIB=-li18npaper$(DLLPOSTFIX)
-.IF "$(WITH_GPC)"!="NO"
-GPC3RDLIB=-lgpc
-.ENDIF
 .IF "$(GUI)$(COM)"=="WNTGCC"
 SALHELPERLIB=-lsalhelper$(UDK_MAJOR)$(COMID)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
@@ -233,10 +230,8 @@ NEON3RDLIB=$(STATIC) -lneon $(DYNAMIC)
 .ENDIF
 .IF "$(SYSTEM_DB)" == "YES"
 BERKELEYLIB=-ldb
-BERKELEYCPPLIB=-ldb_cxx
 .ELSE
-BERKELEYLIB=-ldb-4.2
-BERKELEYCPPLIB=-ldb_cxx-4.2
+BERKELEYLIB=-ldb-4.7
 .ENDIF
 CURLLIB=-lcurl
 SFX2LIB=-lsfx$(DLLPOSTFIX)
@@ -245,6 +240,8 @@ EGGTRAYLIB=-leggtray$(DLLPOSTFIX)
 SFXDEBUGLIB=
 FWELIB=-lfwe$(DLLPOSTFIX)
 FWILIB=-lfwi$(DLLPOSTFIX)
+SVXCORELIB=-lsvxcore$(DLLPOSTFIX)
+SVXMSFILTERLIB=-lsvxmsfilter$(DLLPOSTFIX)
 SVXLIB=-lsvx$(DLLPOSTFIX)
 BASCTLLIB=-lbasctl$(DLLPOSTFIX)
 BASICIDELIB=-lybctl
@@ -358,9 +355,6 @@ ICUDATALIB=icudata.lib
 I18NUTILLIB=ii18nutil.lib
 I18NISOLANGLIB=ii18nisolang.lib
 I18NPAPERLIB=ii18npaper.lib
-.IF "$(WITH_GPC)"!="NO"
-GPC3RDLIB=gpc.lib
-.ENDIF
 SALHELPERLIB=isalhelper.lib
 XMLSCRIPTLIB=ixcr.lib
 COMPHELPERLIB=icomphelp.lib
@@ -429,6 +423,8 @@ DOCMGRLIB=docmgr.lib
 BASICLIB=basic.lib
 TKTLIB=tkt.lib
 SJLIB=sj.lib
+SVXCORELIB=isvxcore.lib
+SVXMSFILTERLIB=isvxmsfilter.lib
 SVXLIB=isvx.lib
 BASCTLLIB=basctl.lib
 BASICIDELIB=ybctl.lib
@@ -443,8 +439,7 @@ EXPATASCII3RDLIB=expat_xmltok.lib ascii_expat_xmlparse.lib
 ZLIB3RDLIB=zlib.lib
 JPEG3RDLIB=jpeglib.lib
 NEON3RDLIB=neon.lib
-BERKELEYLIB=libdb42.lib
-BERKELEYCPPLIB=
+BERKELEYLIB=libdb47.lib
 CURLLIB=libcurl.lib
 CHAOSLIB=ichaos.lib
 UUILIB=iuui.lib
