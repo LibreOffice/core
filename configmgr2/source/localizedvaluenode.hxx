@@ -27,58 +27,42 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#include "precompiled_configmgr.hxx"
+#ifndef INCLUDED_CONFIGMGR_LOCALIZEDVALUENODE_HXX
+#define INCLUDED_CONFIGMGR_LOCALIZEDVALUENODE_HXX
+
 #include "sal/config.h"
 
 #include "com/sun/star/uno/Any.hxx"
 #include "rtl/ref.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
 
-#include "localizedpropertyvaluenode.hxx"
 #include "node.hxx"
+
+namespace rtl { class OUString; }
 
 namespace configmgr {
 
-namespace {
+class LocalizedValueNode: public Node {
+public:
+    LocalizedValueNode(int layer, com::sun::star::uno::Any const & value);
 
-namespace css = com::sun::star;
+    virtual rtl::Reference< Node > clone() const;
 
-}
+    virtual rtl::OUString getTemplateName() const;
 
-LocalizedPropertyValueNode::LocalizedPropertyValueNode(
-    int layer, css::uno::Any const & value):
-    Node(layer), value_(value)
-{}
+    com::sun::star::uno::Any getValue() const;
 
-rtl::Reference< Node > LocalizedPropertyValueNode::clone() const {
-    return new LocalizedPropertyValueNode(*this);
-}
+    void setValue(int layer, com::sun::star::uno::Any const & value);
 
-rtl::OUString LocalizedPropertyValueNode::getTemplateName() const {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
-}
+private:
+    LocalizedValueNode(LocalizedValueNode const & other);
 
-css::uno::Any LocalizedPropertyValueNode::getValue() const {
-    return value_;
-}
+    virtual ~LocalizedValueNode();
 
-void LocalizedPropertyValueNode::setValue(
-    int layer, css::uno::Any const & value)
-{
-    resurrect(layer);
-    value_ = value;
-}
+    virtual Kind kind() const;
 
-LocalizedPropertyValueNode::LocalizedPropertyValueNode(
-    LocalizedPropertyValueNode const & other):
-    Node(other), value_(other.value_)
-{}
-
-LocalizedPropertyValueNode::~LocalizedPropertyValueNode() {}
-
-Node::Kind LocalizedPropertyValueNode::kind() const {
-    return KIND_LOCALIZED_VALUE;
-}
+    com::sun::star::uno::Any value_;
+};
 
 }
+
+#endif

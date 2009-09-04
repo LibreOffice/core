@@ -51,7 +51,7 @@ SLOFILES = \
     $(SLO)$/defaultprovider.obj \
     $(SLO)$/groupnode.obj \
     $(SLO)$/localizedpropertynode.obj \
-    $(SLO)$/localizedpropertyvaluenode.obj \
+    $(SLO)$/localizedvaluenode.obj \
     $(SLO)$/lock.obj \
     $(SLO)$/node.obj \
     $(SLO)$/nodemap.obj \

@@ -27,43 +27,54 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_LOCALIZEDPROPERTYVALUENODE_HXX
-#define INCLUDED_CONFIGMGR_LOCALIZEDPROPERTYVALUENODE_HXX
-
+#include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
 #include "com/sun/star/uno/Any.hxx"
 #include "rtl/ref.hxx"
+#include "rtl/ustring.h"
+#include "rtl/ustring.hxx"
 
+#include "localizedvaluenode.hxx"
 #include "node.hxx"
-
-namespace rtl { class OUString; }
 
 namespace configmgr {
 
-class LocalizedPropertyValueNode: public Node {
-public:
-    LocalizedPropertyValueNode(
-        int layer, com::sun::star::uno::Any const & value);
+namespace {
 
-    virtual rtl::Reference< Node > clone() const;
-
-    virtual rtl::OUString getTemplateName() const;
-
-    com::sun::star::uno::Any getValue() const;
-
-    void setValue(int layer, com::sun::star::uno::Any const & value);
-
-private:
-    LocalizedPropertyValueNode(LocalizedPropertyValueNode const & other);
-
-    virtual ~LocalizedPropertyValueNode();
-
-    virtual Kind kind() const;
-
-    com::sun::star::uno::Any value_;
-};
+namespace css = com::sun::star;
 
 }
 
-#endif
+LocalizedValueNode::LocalizedValueNode(int layer, css::uno::Any const & value):
+    Node(layer), value_(value)
+{}
+
+rtl::Reference< Node > LocalizedValueNode::clone() const {
+    return new LocalizedValueNode(*this);
+}
+
+rtl::OUString LocalizedValueNode::getTemplateName() const {
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+}
+
+css::uno::Any LocalizedValueNode::getValue() const {
+    return value_;
+}
+
+void LocalizedValueNode::setValue(int layer, css::uno::Any const & value) {
+    resurrect(layer);
+    value_ = value;
+}
+
+LocalizedValueNode::LocalizedValueNode(LocalizedValueNode const & other):
+    Node(other), value_(other.value_)
+{}
+
+LocalizedValueNode::~LocalizedValueNode() {}
+
+Node::Kind LocalizedValueNode::kind() const {
+    return KIND_LOCALIZED_VALUE;
+}
+
+}

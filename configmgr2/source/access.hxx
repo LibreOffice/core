@@ -155,7 +155,7 @@ protected:
     void checkValue(
         com::sun::star::uno::Any const & value, Type type, bool nillable);
 
-    void insertLocalizedPropertyValueChild(
+    void insertLocalizedValueChild(
         rtl::OUString const & name, com::sun::star::uno::Any const & value);
 
     void reportChildChanges(

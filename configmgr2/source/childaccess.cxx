@@ -57,7 +57,7 @@
 #include "groupnode.hxx"
 #include "layer.hxx"
 #include "localizedpropertynode.hxx"
-#include "localizedpropertyvaluenode.hxx"
+#include "localizedvaluenode.hxx"
 #include "lock.hxx"
 #include "node.hxx"
 #include "propertynode.hxx"
@@ -232,7 +232,7 @@ void ChildAccess::setProperty(css::uno::Any const & value) {
                 if (child.is()) {
                     child->setProperty(value);
                 } else {
-                    insertLocalizedPropertyValueChild(locale, value);
+                    insertLocalizedValueChild(locale, value);
                 }
                 return;
             }
@@ -289,8 +289,7 @@ css::uno::Any ChildAccess::asValue() {
         }
         break;
     case Node::KIND_LOCALIZED_VALUE:
-        return dynamic_cast< LocalizedPropertyValueNode * >(node_.get())->
-            getValue();
+        return dynamic_cast< LocalizedValueNode * >(node_.get())->getValue();
     default:
         break;
     }
@@ -309,7 +308,7 @@ void ChildAccess::commitChanges(bool valid) {
                 NO_LAYER, *changedValue_);
             break;
         case Node::KIND_LOCALIZED_VALUE:
-            dynamic_cast< LocalizedPropertyValueNode * >(node_.get())->setValue(
+            dynamic_cast< LocalizedValueNode * >(node_.get())->setValue(
                 NO_LAYER, *changedValue_);
             break;
         default:

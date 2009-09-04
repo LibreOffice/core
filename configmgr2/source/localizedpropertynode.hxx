@@ -45,8 +45,6 @@ namespace rtl { class OUString; }
 
 namespace configmgr {
 
-class LocalizedPropertyValueNode;
-
 class LocalizedPropertyNode: public Node {
 public:
     LocalizedPropertyNode(int layer, Type type, bool nillable);

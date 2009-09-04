@@ -36,7 +36,6 @@
 #include "rtl/ustring.hxx"
 
 #include "localizedpropertynode.hxx"
-#include "localizedpropertyvaluenode.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
 #include "type.hxx"

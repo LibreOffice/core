@@ -62,7 +62,7 @@
 #include "groupnode.hxx"
 #include "layer.hxx"
 #include "localizedpropertynode.hxx"
-#include "localizedpropertyvaluenode.hxx"
+#include "localizedvaluenode.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
 #include "pad.hxx"
@@ -755,8 +755,8 @@ void writeNode(
         break;
     case Node::KIND_LOCALIZED_VALUE:
         {
-            LocalizedPropertyValueNode * locval =
-                dynamic_cast< LocalizedPropertyValueNode * >(node.get());
+            LocalizedValueNode * locval = dynamic_cast< LocalizedValueNode * >(
+                node.get());
             if (locval->isRemoved()
                 ? topLevel && locval->getLayer() == NO_LAYER
                 : !topLevel || locval->getLayer() == NO_LAYER)
@@ -1011,10 +1011,10 @@ bool ValueParser::endElement(XmlReader const * reader) {
                         node_->getMembers().insert(
                             NodeMap::value_type(
                                 localizedName_,
-                                new LocalizedPropertyValueNode(layer_, value)));
+                                new LocalizedValueNode(layer_, value)));
                     } else {
-                        dynamic_cast< LocalizedPropertyValueNode * >(
-                            i->second.get())->setValue(layer_, value);
+                        dynamic_cast< LocalizedValueNode * >(i->second.get())->
+                            setValue(layer_, value);
                     }
                 }
                 break;
@@ -2062,11 +2062,11 @@ void XcuParser::handleLocpropValue(
     case OPERATION_MODIFY:
         if (nil) {
             if (i == locprop->getMembers().end()) {
-                locprop->getMembers()[name] = new LocalizedPropertyValueNode(
+                locprop->getMembers()[name] = new LocalizedValueNode(
                     valueParser_.getLayer(), css::uno::Any());
             } else {
-                dynamic_cast< LocalizedPropertyValueNode * >(i->second.get())->
-                    setValue(valueParser_.getLayer(), css::uno::Any());
+                dynamic_cast< LocalizedValueNode * >(i->second.get())->setValue(
+                    valueParser_.getLayer(), css::uno::Any());
             }
             state_.push(State());
         } else {

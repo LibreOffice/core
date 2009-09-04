@@ -72,7 +72,7 @@
 #include "groupnode.hxx"
 #include "layer.hxx"
 #include "localizedpropertynode.hxx"
-#include "localizedpropertyvaluenode.hxx"
+#include "localizedvaluenode.hxx"
 #include "lock.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
@@ -253,7 +253,7 @@ void Access::checkValue(
     }
 }
 
-void Access::insertLocalizedPropertyValueChild(
+void Access::insertLocalizedValueChild(
     rtl::OUString const & name, com::sun::star::uno::Any const & value)
 {
     LocalizedPropertyNode * locprop = dynamic_cast< LocalizedPropertyNode * >(
@@ -262,7 +262,7 @@ void Access::insertLocalizedPropertyValueChild(
     rtl::Reference< ChildAccess > child(
         new ChildAccess(
             getRootAccess(), this, name,
-            new LocalizedPropertyValueNode(NO_LAYER, value)));
+            new LocalizedValueNode(NO_LAYER, value)));
     child->markAsModified();
     //TODO notify change
 }
@@ -900,7 +900,7 @@ void Access::insertByName(
     rtl::Reference< Node > p(getNode());
     switch (p->kind()) {
     case Node::KIND_LOCALIZED_PROPERTY:
-        insertLocalizedPropertyValueChild(aName, aElement);
+        insertLocalizedValueChild(aName, aElement);
         break;
     case Node::KIND_GROUP:
         checkValue(aElement, TYPE_ANY, true);
