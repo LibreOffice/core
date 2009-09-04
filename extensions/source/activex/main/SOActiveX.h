@@ -163,7 +163,7 @@ public:
     HRESULT GetUrlStruct( OLECHAR* sUrl, CComPtr<IDispatch>& pdispUrl );
     HRESULT Cleanup();
     HRESULT TerminateOffice();
-    HRESULT CSOActiveX::GetURL( const OLECHAR* url,
+    HRESULT GetURL( const OLECHAR* url,
                                 const OLECHAR* target );
 
     void CallbackCreateXInputStream( CBindStatusCallback<CSOActiveX>* pbsc, BYTE* pBytes, DWORD dwSize );

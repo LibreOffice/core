@@ -195,7 +195,7 @@ String RID_STR_APPENDLIBS
 String RID_STR_QUERYDELMACRO
 {
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie das Makro XX löschen ? : M÷chten Sie das Makro XX l÷schen ? */
-    Text [ en-US ] = "Do you want to delete the macro XX ?" ;
+    Text [ en-US ] = "Do you want to delete the macro XX?" ;
 };
 String RID_STR_QUERYDELDIALOG
 {

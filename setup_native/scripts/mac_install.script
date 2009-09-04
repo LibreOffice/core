@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# shell script as a workaraound since it is hard to impossible to store compiled
+# applescript in CVS and running osacompile would require a GUI session while
+# building (or root privileges)
+# using osascript only works when the shell script is camouflaged as application
+
+MY_DIR=$(dirname "$0")
+
+osascript "$MY_DIR/osx_install.applescript"

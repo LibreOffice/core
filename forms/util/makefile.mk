@@ -73,7 +73,7 @@ SHL1STDLIBS= \
         $(COMPHELPERLIB) \
         $(DBTOOLSLIB) \
         $(TKLIB) \
-        $(SVXLIB) \
+        $(SVXCORELIB) \
         $(UCBHELPERLIB) \
         $(LIBXML2LIB) \
         $(ICUUCLIB) \

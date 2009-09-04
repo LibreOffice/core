@@ -126,7 +126,8 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
         maKeyImg.SetImage( Image( XMLSEC_RES( IMG_KEY_HC ) ) );
 
     //Verify the certificate
-    sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(mpDlg->mxCert);
+    sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(mpDlg->mxCert,
+         Sequence<Reference<css::security::XCertificate> >());
     //We currently have two status
     //These errors are alloweds
     sal_Int32 validCertErrors = css::security::CertificateValidity::VALID
@@ -481,7 +482,8 @@ void CertificateViewerCertPathTP::ActivatePage()
             const Reference< security::XCertificate > rCert = pCertPath[ --i ];
             String sName = XmlSec::GetContentPart( rCert->getSubjectName() );
             //Verify the certificate
-            sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(rCert);
+            sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(rCert,
+                 Sequence<Reference<css::security::XCertificate> >());
             //We currently have two status
             //These errors are alloweds
             sal_Int32 validCertErrors = css::security::CertificateValidity::VALID
