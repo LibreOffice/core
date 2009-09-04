@@ -2592,9 +2592,9 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     bool bIsSwSrcView = false;
     SfxViewShell *pView = GetRenderView( bIsSwSrcView, rxOptions, bIsPDFExport );
 
-    if (! m_pRenderData)
+    if (!bIsSwSrcView && !m_pRenderData)
         m_pRenderData = new SwRenderData;
-    if (! m_pPrintUIOptions)
+    if (!m_pPrintUIOptions)
     {
         const BOOL bWebDoc = (0 != PTR_CAST(SwWebDocShell, pDocShell));
         m_pPrintUIOptions = new SwPrintUIOptions( bWebDoc, bIsSwSrcView );
@@ -2855,7 +2855,7 @@ void SAL_CALL SwXTextDocument::render(
 
     DBG_ASSERT( m_pRenderData, "data should have been created already in getRendererCount..." );
     DBG_ASSERT( m_pPrintUIOptions, "data should have been created already in getRendererCount..." );
-    if (!m_pRenderData)
+    if (!bIsSwSrcView && !m_pRenderData)
         m_pRenderData = new SwRenderData;
     if (!m_pPrintUIOptions)
     {
