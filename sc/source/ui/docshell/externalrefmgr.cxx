@@ -1045,8 +1045,11 @@ void ScExternalRefLink::DataChanged(const String& /*rMimeType*/, const Any& /*rV
     else
     {
         // The source document has changed.
+        ScDocShell* pDocShell = ScDocShell::GetViewData()->GetDocShell();
+        ScDocShellModificator aMod(*pDocShell);
         pMgr->switchSrcFile(mnFileId, aFile);
         maFilterName = aFilter;
+        aMod.SetDocumentModified();
     }
 }
 
