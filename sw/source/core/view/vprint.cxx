@@ -294,7 +294,8 @@ void SwRenderData::DeletePostItData()
 
 void SwRenderData::ViewOptionAdjustStart( SwWrtShell& rSh )
 {
-    DBG_ASSERT( !m_pViewOptionAdjust, "m_pViewOptionAdjust already exists" );
+    if (m_pViewOptionAdjust)
+        delete m_pViewOptionAdjust;
     m_pViewOptionAdjust = new SwViewOptionAdjust_Impl( rSh );
 }
 
@@ -1088,7 +1089,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
 
     const sal_Int32 nMaxRenderer = rPrintData.GetRenderData().GetPagesToPrint().size() - 1;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( 0 <= nRenderer && nRenderer < nMaxRenderer, "nRenderer out of bounds");
+    DBG_ASSERT( 0 <= nRenderer && nRenderer <= nMaxRenderer, "nRenderer out of bounds");
 #endif
     if (!pOutDev || nMaxRenderer < 0 || nRenderer < 0 || nRenderer > nMaxRenderer)
         return sal_False;

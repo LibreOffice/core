@@ -2617,33 +2617,32 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     else
     {
         SwDocShell *pRenderDocShell = pDoc->GetDocShell();
-        // #i38289
-        if(pDoc->get(IDocumentSettingAccess::BROWSE_MODE))
-        {
-            pRenderDocShell->ToggleBrowserMode(false,NULL);
-        }
-
         SwWrtShell *pWrtShell = pRenderDocShell->GetWrtShell();
-
-        if( !pWrtShell )
+        if (bFormat)
         {
-            //create a hidden view to be able to export as PDF also in print preview
-            m_pHiddenViewFrame = SfxViewFrame::CreateViewFrame( *pRenderDocShell, 2, TRUE );
-            SwView* pSwView = (SwView*) m_pHiddenViewFrame->GetViewShell();
-            pWrtShell = pSwView->GetWrtShellPtr();
-        }
+            // #i38289
+            if(pDoc->get(IDocumentSettingAccess::BROWSE_MODE))
+            {
+                pRenderDocShell->ToggleBrowserMode(false,NULL);
+            }
 
-        m_pRenderData->SetSwPrtOptions( new SwPrtOptions( C2U( bIsPDFExport ? "PDF export" : "Printing" ) ) );
-        m_pRenderData->MakeSwPrtOptions( m_pRenderData->GetSwPrtOptionsRef(), pRenderDocShell,
-                m_pPrintUIOptions, m_pRenderData, bIsSkipEmptyPages, bIsPDFExport );
+            if (!pWrtShell)
+            {
+                //create a hidden view to be able to export as PDF also in print preview
+                m_pHiddenViewFrame = SfxViewFrame::CreateViewFrame( *pRenderDocShell, 2, TRUE );
+                SwView* pSwView = (SwView*) m_pHiddenViewFrame->GetViewShell();
+                pWrtShell = pSwView->GetWrtShellPtr();
+            }
 
-        //SwViewOptionAdjust_Impl aAdjust(*pWrtShell);
-        const TypeId aSwViewTypeId = TYPE(SwView);
-        if (pView->IsA(aSwViewTypeId))
-            m_pRenderData->ViewOptionAdjustStart( *((SwView*)pView)->GetWrtShellPtr() );
+            m_pRenderData->SetSwPrtOptions( new SwPrtOptions( C2U( bIsPDFExport ? "PDF export" : "Printing" ) ) );
+            m_pRenderData->MakeSwPrtOptions( m_pRenderData->GetSwPrtOptionsRef(), pRenderDocShell,
+                    m_pPrintUIOptions, m_pRenderData, bIsSkipEmptyPages, bIsPDFExport );
 
-        if( bFormat )
-        {
+            //SwViewOptionAdjust_Impl aAdjust(*pWrtShell);
+            const TypeId aSwViewTypeId = TYPE(SwView);
+            if (pView->IsA(aSwViewTypeId))
+                m_pRenderData->ViewOptionAdjustStart( *((SwView*)pView)->GetWrtShellPtr() );
+
             // since printing now also use the API for PDF export this option
             // should be set for printing as well ...
             pWrtShell->SetPDFExportOption( sal_True );

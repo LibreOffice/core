@@ -465,7 +465,7 @@ void ViewShell::PrintProspect(
 {
     const sal_Int32 nMaxRenderer = rPrintData.GetRenderData().GetPagePairsForProspectPrinting().size() - 1;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( 0 <= nRenderer && nRenderer < nMaxRenderer, "nRenderer out of bounds");
+    DBG_ASSERT( 0 <= nRenderer && nRenderer <= nMaxRenderer, "nRenderer out of bounds");
 #endif
     Printer *pPrinter = dynamic_cast< Printer * >(pOutDev);
     if (!pPrinter || nMaxRenderer < 0 || nRenderer < 0 || nRenderer > nMaxRenderer)
