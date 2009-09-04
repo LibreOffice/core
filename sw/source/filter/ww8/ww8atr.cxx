@@ -2383,9 +2383,9 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
             GetExport( ).OutputField( 0, eCode, sStr, WRITEFIELD_START | WRITEFIELD_CMD_START |
                 WRITEFIELD_CMD_END );
         }
-    }
 
-    GetExport( ).bStartTOX = false;
+        GetExport( ).bStartTOX = false;
+    }
 }
 
 void AttributeOutputBase::EndTOX( const SwSection& rSect )
