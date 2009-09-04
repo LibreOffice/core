@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: metric.cxx,v $
- * $Revision: 1.23 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -236,50 +233,80 @@ BOOL FontMetric::operator==( const FontMetric& rMetric ) const
 
 // =======================================================================
 
-ImplFontCharMap::ImplFontCharMap( int nRangePairs,
-    const sal_uInt32* pRangeCodes, const int* pStartGlyphs )
-:   mpRangeCodes( pRangeCodes ),
-    mpStartGlyphs( pStartGlyphs ),
-    mnRangeCount( nRangePairs ),
-    mnCharCount( 0 ),
-    mnRefCount( 1 )
+CmapResult::CmapResult( bool bSymbolic,
+    const sal_uInt32* pRangeCodes, int nRangeCount,
+    const int* pStartGlyphs, const USHORT* pExtraGlyphIds )
+:   mpRangeCodes( pRangeCodes)
+,   mpStartGlyphs( pStartGlyphs)
+,   mpGlyphIds( pExtraGlyphIds)
+,   mnRangeCount( nRangeCount)
+,   mbSymbolic( bSymbolic)
+,   mbRecoded( false)
+{}
+
+// =======================================================================
+
+ImplFontCharMap::ImplFontCharMap( const CmapResult& rCR )
+:   mpRangeCodes( rCR.mpRangeCodes )
+,   mpStartGlyphs( rCR.mpStartGlyphs )
+,   mpGlyphIds( rCR.mpGlyphIds )
+,   mnRangeCount( rCR.mnRangeCount )
+,   mnCharCount( 0 )
+,   mnRefCount( 1 )
 {
-    while( --nRangePairs >= 0 )
+    const sal_uInt32* pRangePtr = mpRangeCodes;
+    for( int i = mnRangeCount; --i >= 0; pRangePtr += 2 )
     {
-        sal_uInt32 cFirst = *(pRangeCodes++);
-        sal_uInt32 cLast  = *(pRangeCodes++);
+        sal_uInt32 cFirst = pRangePtr[0];
+        sal_uInt32 cLast  = pRangePtr[1];
         mnCharCount += cLast - cFirst;
     }
 }
 
 static ImplFontCharMap* pDefaultImplFontCharMap = NULL;
-static const sal_uInt32 pDefaultRangeCodes[] = {0x0020,0xD800, 0xE000,0xFFF0};
-
-// -----------------------------------------------------------------------
-
-ImplFontCharMap::~ImplFontCharMap()
-{
-    if( mpRangeCodes != pDefaultRangeCodes )
-        delete[] mpRangeCodes;
-    delete[] mpStartGlyphs;
-}
-
-// -----------------------------------------------------------------------
-
-ImplFontCharMap* ImplFontCharMap::GetDefaultMap()
-{
-    if( pDefaultImplFontCharMap )
-        pDefaultImplFontCharMap->AddReference();
-    else
-        pDefaultImplFontCharMap = new ImplFontCharMap( 2, pDefaultRangeCodes, NULL );
-    return pDefaultImplFontCharMap;
-}
+static const sal_uInt32 aDefaultUnicodeRanges[] = {0x0020,0xD800, 0xE000,0xFFF0};
+static const sal_uInt32 aDefaultSymbolRanges[] = {0x0020,0x0100, 0xF020,0xF100};
 
 // -----------------------------------------------------------------------
 
 bool ImplFontCharMap::IsDefaultMap() const
 {
-    return (mpRangeCodes == pDefaultRangeCodes);
+    const bool bIsDefault = (mpRangeCodes == aDefaultUnicodeRanges) || (mpRangeCodes == aDefaultSymbolRanges);
+    return bIsDefault;
+}
+
+// -----------------------------------------------------------------------
+
+ImplFontCharMap::~ImplFontCharMap()
+{
+    if( IsDefaultMap() )
+        return;
+    delete[] mpRangeCodes;
+    delete[] mpStartGlyphs;
+    delete[] mpGlyphIds;
+}
+
+// -----------------------------------------------------------------------
+
+ImplFontCharMap* ImplFontCharMap::GetDefaultMap( bool bSymbols)
+{
+    if( pDefaultImplFontCharMap )
+        pDefaultImplFontCharMap->AddReference();
+    else
+    {
+        const sal_uInt32* pRangeCodes = aDefaultUnicodeRanges;
+        int nCodesCount = sizeof(aDefaultUnicodeRanges) / sizeof(*pRangeCodes);
+        if( bSymbols )
+        {
+            pRangeCodes = aDefaultSymbolRanges;
+            nCodesCount = sizeof(aDefaultSymbolRanges) / sizeof(*pRangeCodes);
+        }
+
+        CmapResult aDefaultCR( bSymbols, pRangeCodes, nCodesCount/2 );
+        pDefaultImplFontCharMap = new ImplFontCharMap( aDefaultCR );
+    }
+
+    return pDefaultImplFontCharMap;
 }
 
 // -----------------------------------------------------------------------
@@ -328,15 +355,24 @@ int ImplFontCharMap::ImplFindRangeIndex( sal_uInt32 cChar ) const
 
 bool ImplFontCharMap::HasChar( sal_uInt32 cChar ) const
 {
-    int nRange = ImplFindRangeIndex( cChar );
-    if( nRange==0 && cChar<mpRangeCodes[0] )
-        return false;
-    return ((nRange & 1) == 0);
+    bool bHasChar = false;
+
+    if( mpStartGlyphs  == NULL ) { // only the char-ranges are known
+        const int nRange = ImplFindRangeIndex( cChar );
+        if( nRange==0 && cChar<mpRangeCodes[0] )
+            return false;
+        bHasChar = ((nRange & 1) == 0); // inside a range
+    } else { // glyph mapping is available
+        const int nGlyphIndex = GetGlyphIndex( cChar );
+        bHasChar = (nGlyphIndex != 0); // not the notdef-glyph
+    }
+
+    return bHasChar;
 }
 
 // -----------------------------------------------------------------------
 
-int ImplFontCharMap::GetGlyphIndex( sal_uInt32 cChar )
+int ImplFontCharMap::GetGlyphIndex( sal_uInt32 cChar ) const
 {
     // return -1 if the object doesn't know the glyph ids
     if( !mpStartGlyphs )
@@ -344,14 +380,30 @@ int ImplFontCharMap::GetGlyphIndex( sal_uInt32 cChar )
 
     // return 0 if the unicode doesn't have a matching glyph
     int nRange = ImplFindRangeIndex( cChar );
-    if( nRange==0 && cChar<mpRangeCodes[0] )
-        return 0;
-    if( nRange & 1 )
+    // check that we are inside any range
+    if( (nRange == 0) && (cChar < mpRangeCodes[0]) ) {
+        // symbol aliasing gives symbol fonts a second chance
+        const bool bSymbolic = (mpRangeCodes[0]>=0xF000) & (mpRangeCodes[1]<=0xF0FF);
+        if( !bSymbolic )
+            return 0;
+        // check for symbol aliasing (U+F0xx -> U+00xx)
+        nRange = ImplFindRangeIndex( cChar | 0xF000 );
+    }
+    // check that we are inside a range
+    if( (nRange & 1) != 0 )
         return 0;
 
-    // calculate the glyph index with the range' start code and start glyph
-    int nGlyphIndex = mpStartGlyphs[ nRange/2 ];
-    nGlyphIndex += cChar - mpRangeCodes[ nRange ];
+    // get glyph index directly or indirectly
+    int nGlyphIndex = cChar - mpRangeCodes[ nRange ];
+    const int nStartIndex = mpStartGlyphs[ nRange/2 ];
+    if( nStartIndex >= 0 ) {
+        // the glyph index can be calculated
+        nGlyphIndex += nStartIndex;
+    } else {
+        // the glyphid array has the glyph index
+        nGlyphIndex = mpGlyphIds[ nGlyphIndex - nStartIndex];
+    }
+
     return nGlyphIndex;
 }
 
@@ -478,16 +530,22 @@ static int GetSShort( const unsigned char* p ){ return((static_cast<signed char>
 // TODO: move CMAP parsing directly into the ImplFontCharMap class
 bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 {
+    rResult.mpRangeCodes = NULL;
+    rResult.mpStartGlyphs= NULL;
+    rResult.mpGlyphIds   = NULL;
+    rResult.mnRangeCount = 0;
+    rResult.mbRecoded    = false;
+    rResult.mbSymbolic   = false;
+
+    // parse the table header and check for validity
     if( !pCmap || (nLength < 24) )
         return false;
 
-    rResult.mpPairCodes = NULL;
-    rResult.mpStartGlyphs= NULL;
-    rResult.mnPairCount = 0;
-    rResult.mbRecoded   = false;
-    rResult.mbSymbolic  = false;
-
     if( GetUShort( pCmap ) != 0x0000 ) // simple check for CMAP corruption
+        return false;
+
+    int nSubTables = GetUShort( pCmap + 2 );
+    if( (nSubTables <= 0) || (nLength < (24 + 8*nSubTables)) )
         return false;
 
     // find the most interesting subtable in the CMAP
@@ -495,7 +553,6 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     int nOffset = 0;
     int nFormat = -1;
     int nBestVal = 0;
-    int nSubTables = GetUShort( pCmap + 2 );
     for( const unsigned char* p = pCmap + 4; --nSubTables >= 0; p += 8 )
     {
         int nPlatform = GetUShort( p );
@@ -548,6 +605,11 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     sal_uInt32* pCodePairs = NULL;
     int* pStartGlyphs = NULL;
 
+    typedef std::vector<USHORT> U16Vector;
+    U16Vector aGlyphIdArray;
+    aGlyphIdArray.reserve( 0x1000 );
+    aGlyphIdArray.push_back( 0 );
+
     // format 4, the most common 16bit char mapping table
     if( (nFormat == 4) && ((nOffset+16) < nLength) )
     {
@@ -557,20 +619,33 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
         pStartGlyphs = new int[ nRangeCount ];
         const unsigned char* pLimitBase = pCmap + nOffset + 14;
         const unsigned char* pBeginBase = pLimitBase + nSegCountX2 + 2;
-        const unsigned char* pGlyphBase = pBeginBase + nSegCountX2;
+        const unsigned char* pDeltaBase = pBeginBase + nSegCountX2;
+        const unsigned char* pOffsetBase = pDeltaBase + nSegCountX2;
         sal_uInt32* pCP = pCodePairs;
         for( int i = 0; i < nRangeCount; ++i )
         {
-            sal_uInt32 cMinChar = GetUShort( pBeginBase + 2*i );
-            sal_uInt32 cMaxChar = GetUShort( pLimitBase + 2*i );
-            int nStartGlyph = cMinChar + GetSShort( pGlyphBase + 2*i );
+            const sal_uInt32 cMinChar = GetUShort( pBeginBase + 2*i );
+            const sal_uInt32 cMaxChar = GetUShort( pLimitBase + 2*i );
+            const int nGlyphDelta  = GetSShort( pDeltaBase + 2*i );
+            const int nRangeOffset = GetUShort( pOffsetBase + 2*i );
             if( cMinChar > cMaxChar )   // no sane font should trigger this
                 break;
             if( cMaxChar == 0xFFFF )
                 break;
             *(pCP++) = cMinChar;
             *(pCP++) = cMaxChar + 1;
-            pStartGlyphs[i] = nStartGlyph;
+            if( !nRangeOffset ) {
+                // glyphid can be calculated directly
+                pStartGlyphs[i] = (cMinChar + nGlyphDelta) & 0xFFFF;
+            } else {
+                // update the glyphid-array with the glyphs in this range
+                pStartGlyphs[i] = -(int)aGlyphIdArray.size();
+                const unsigned char* pGlyphIdPtr = pOffsetBase + 2*i + nRangeOffset;
+                for( sal_uInt32 c = cMinChar; c <= cMaxChar; ++c, pGlyphIdPtr+=2 ) {
+                    const int nGlyphIndex = GetUShort( pGlyphIdPtr ) + nGlyphDelta;
+                    aGlyphIdArray.push_back( static_cast<USHORT>(nGlyphIndex) );
+                }
+            }
         }
         nRangeCount = (pCP - pCodePairs) / 2;
     }
@@ -604,6 +679,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
         nRangeCount = (pCP - pCodePairs) / 2;
     }
 
+    // check if any subtable resulted in something usable
     if( nRangeCount <= 0 )
     {
         delete[] pCodePairs;
@@ -617,8 +693,8 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             pCodePairs[1] = 0x0100;
             pCodePairs[2] = 0xF020;    // original symbols
             pCodePairs[3] = 0xF100;
-            rResult.mpPairCodes = pCodePairs;
-            rResult.mnPairCount = 2;
+            rResult.mpRangeCodes = pCodePairs;
+            rResult.mnRangeCount = 2;
             return true;
         }
 
@@ -701,6 +777,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
         // glyph mapping for non-unicode fonts not implemented
         delete[] pStartGlyphs;
         pStartGlyphs = NULL;
+        aGlyphIdArray.clear();
 
         // make a pCodePairs array using the vector from above
         delete[] pCodePairs;
@@ -713,9 +790,23 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             *(pCP++) = *itInt;
     }
 
-    rResult.mpPairCodes = pCodePairs;
+    // prepare the glyphid-array if needed
+    // TODO: merge ranges if they are close enough?
+    USHORT* pGlyphIds = NULL;
+    if( !aGlyphIdArray.empty())
+    {
+        pGlyphIds = new USHORT[ aGlyphIdArray.size() ];
+        USHORT* pOut = pGlyphIds;
+        U16Vector::const_iterator it = aGlyphIdArray.begin();
+        while( it != aGlyphIdArray.end() )
+            *(pOut++) = *(it++);
+    }
+
+    // update the result struct
+    rResult.mpRangeCodes = pCodePairs;
     rResult.mpStartGlyphs = pStartGlyphs;
-    rResult.mnPairCount = nRangeCount;
+    rResult.mnRangeCount = nRangeCount;
+    rResult.mpGlyphIds = pGlyphIds;
     return true;
 }
 
@@ -821,3 +912,4 @@ sal_uInt32 FontCharMap::GetCharFromIndex( int nIndex ) const
 }
 
 // =======================================================================
+

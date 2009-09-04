@@ -45,6 +45,9 @@ TARGET=gdi
 .IF "$(COM)"=="ICC"
 CDEFS+=-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
 .ENDIF
+.IF "$(ENABLE_GRAPHITE)" == "TRUE"
+CDEFS+=-DENABLE_GRAPHITE
+.ENDIF
 
 # --- Files --------------------------------------------------------
 

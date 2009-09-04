@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: glyphcache.cxx,v $
- * $Revision: 1.44 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -40,6 +37,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/outfont.hxx>
+
+#ifdef ENABLE_GRAPHITE
+#include <vcl/graphite_features.hxx>
+#endif
 
 #include <rtl/ustring.hxx>      // used only for string=>hashvalue
 #include <osl/file.hxx>
@@ -85,12 +86,23 @@ size_t GlyphCache::IFSD_Hash::operator()( const ImplFontSelectData& rFontSelData
 {
     // TODO: is it worth to improve this hash function?
     sal_IntPtr nFontId = reinterpret_cast<sal_IntPtr>( rFontSelData.mpFontData );
+#ifdef ENABLE_GRAPHITE
+    if (rFontSelData.maTargetName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
+        != STRING_NOTFOUND)
+    {
+        rtl::OString aFeatName = rtl::OUStringToOString( rFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
+        nFontId ^= aFeatName.hashCode();
+    }
+#endif
     size_t nHash = nFontId << 8;
     nHash   += rFontSelData.mnHeight;
     nHash   += rFontSelData.mnOrientation;
     nHash   += rFontSelData.mbVertical;
     nHash   += rFontSelData.meItalic;
     nHash   += rFontSelData.meWeight;
+#ifdef ENABLE_GRAPHITE
+    nHash   += rFontSelData.meLanguage;
+#endif
     return nHash;
 }
 
@@ -121,7 +133,16 @@ bool GlyphCache::IFSD_Equal::operator()( const ImplFontSelectData& rA, const Imp
     if( (rA.mnWidth != rB.mnWidth)
     && ((rA.mnHeight != rB.mnWidth) || (rA.mnWidth != 0)) )
         return false;
-
+#ifdef ENABLE_GRAPHITE
+   if (rA.meLanguage != rB.meLanguage)
+        return false;
+   // check for features
+   if ((rA.maTargetName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
+        != STRING_NOTFOUND ||
+        rB.maTargetName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
+        != STRING_NOTFOUND) && rA.maTargetName != rB.maTargetName)
+        return false;
+#endif
     return true;
 }
 

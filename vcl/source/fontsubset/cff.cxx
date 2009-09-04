@@ -1,0 +1,2418 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2009 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_vcl.hxx"
+
+#include <cstdio>
+#include <cstring>
+#include <assert.h>
+
+#include <vcl/fontsubset.hxx>
+
+//#define IGNORE_HINTS
+
+typedef unsigned char U8;
+typedef unsigned short U16;
+typedef long long S64;
+
+typedef sal_Int32 GlyphWidth;
+
+#include <vector>
+typedef std::vector<int> IntVector;
+
+// ====================================================================
+
+static const char* pStringIds[] = {
+/*0*/   ".notdef",      "space",            "exclam",           "quotedbl",
+    "numbersign",       "dollar",           "percent",          "ampersand",
+    "quoteright",       "parenleft",        "parenright",       "asterisk",
+    "plus",             "comma",            "hyphen",           "period",
+/*16*/  "slash",        "zero",             "one",              "two",
+    "three",            "four",             "five",             "six",
+    "seven",            "eight",            "nine",             "colon",
+    "semicolon",        "less",             "equal",            "greater",
+/*32*/  "question",     "at",               "A",                "B",
+    "C",                "D",                "E",                "F",
+    "G",                "H",                "I",                "J",
+    "K",                "L",                "M",                "N",
+/*48*/  "O",            "P",                "Q",                "R",
+    "S",                "T",                "U",                "V",
+    "W",                "X",                "Y",                "Z",
+    "bracketleft",      "backslash",        "bracketright",     "asciicircum",
+/*64*/  "underscore",   "quoteleft",        "a",                "b",
+    "c",                "d",                "e",                "f",
+    "g",                "h",                "i",                "j",
+    "k",                "l",                "m",                "n",
+/*80*/  "o",            "p",                "q",                "r",
+    "s",                "t",                "u",                "v",
+    "w",                "x",                "y",                "z",
+    "braceleft",        "bar",              "braceright",       "asciitilde",
+/*96*/  "exclamdown",   "cent",             "sterlin",          "fraction",
+    "yen",              "florin",           "section",          "currency",
+    "quotesingle",      "quotedblleft",     "guillemotleft",    "guilsinglleft",
+    "guilsinglright",   "fi",               "fl",               "endash",
+/*112*/ "dagger",       "daggerdbl",        "periodcentered",   "paragraph",
+    "bullet",           "quotesinglbase",   "quotedblbase",     "quotedblright",
+    "guillemotright",   "ellipsis",         "perthousand",      "questiondown",
+    "grave",            "acute",            "circumflex",       "tilde",
+/*128*/ "macron",       "breve",            "dotaccent",        "dieresis",
+    "ring",             "cedilla",          "hungarumlaut",     "ogonek",
+    "caron",            "endash",           "AE",               "ordfeminine",
+    "Lslash",           "Oslash",           "OE",               "ordmasculine",
+/*144*/ "ae",           "dotlessi",         "lslash",           "oslash",
+    "oe",               "germandbls",       "onesuperior",      "logicalnot",
+    "mu",               "trademark",        "Eth",              "onehalf",
+    "plusminus",        "Thorn",            "onequarter",       "divide",
+/*160*/ "brokenbar",    "degree",           "thorn",            "threequarters",
+    "twosuperior",      "registered",       "minus",            "eth",
+    "multiply",         "threesuperior",    "copyright",        "Aacute",
+    "Acircumflex",      "Adieresis",        "Agrave",           "Aring",
+/*176*/ "Atilde",       "Ccedilla",         "Eacute",           "Ecircumflex",
+    "Edieresis",        "Egrave",           "Iacute",           "Icircumflex",
+    "Idieresis",        "Igrave",           "Ntilde",           "Oacute",
+    "Ocircumflex",      "Odieresis",        "Ograve",           "Otilde",
+/*192*/ "Scaron",       "Uacute",           "Ucircumflex",      "Udieresis",
+    "Ugrave",           "Yacute",           "Ydieresis",        "Zcaron",
+    "aacute",           "acircumflex",      "adieresis",        "agrave",
+    "aring",            "atilde",           "ccedilla",         "eacute",
+/*208*/ "ecircumflex",  "edieresis",        "egrave",           "iacute",
+    "icircumflex",      "idieresis",        "igrave",           "ntilde",
+    "oacute",           "ocircumflex",      "odieresis",        "ograve",
+    "otilde",           "scaron",           "uacute",           "ucircumflex",
+/*224*/ "udieresis",    "ugrave",           "yacute",           "ydieresis",
+    "zcaron",           "exclamsmall",      "Hungarumlautsmall","dollaroldstyle",
+    "dollarsuperior",   "ampersandsmall",   "Acutesmall",       "parenleftsuperior",
+    "parenrightsuperior","twodotenleader",  "onedotenleader",   "zerooldstyle",
+/*240*/ "oneoldstyle",  "twooldstyle",      "threeoldstyle",    "fouroldstyle",
+    "fiveoldstyle",     "sixoldstyle",      "sevenoldstyle",    "eightoldstyle",
+    "nineoldstile",     "commasuperior",    "threequartersemdash","periodsuperior",
+    "questionsmall",    "asuperior",        "bsuperior",        "centsuperior",
+/*256*/ "dsuperior",    "esuperior",        "isuperior",        "lsuperior",
+    "msuperior",        "nsuperior",        "osuperior",        "rsuperior",
+    "ssuperior",        "tsuperior",        "ff",               "ffi",
+    "ffl",              "parenleftinferior","parenrightinferior","Circumflexsmall",
+/*272*/ "hyphensuperior","Gravesmall",      "Asmall",           "Bsmall",
+    "Csmall",           "Dsmall",           "Esmall",           "Fsmall",
+    "Gsmall",           "Hsmall",           "Ismall",           "Jsmall",
+    "Ksmall",           "Lsmall",           "Msmall",           "Nsmall",
+/*288*/ "Osmall",       "Psmall",           "Qsmall",           "Rsmall",
+    "Ssmall",           "Tsmall",           "Usmall",           "Vsmall",
+    "Wsmall",           "Xsmall",           "Ysmall",           "Zsmall",
+    "colonmonetary",    "onefitted",        "rupia",            "Tildesmall",
+/*304*/ "exclamdownsmall","centoldstyle",   "Lslashsmall",      "Scaronsmall",
+    "Zcaronsmall",      "Dieresissmall",    "Brevesmall",       "Caronsmall",
+    "Dotaccentsmall",   "Macronsmall",      "figuredash",       "hypheninferior",
+    "Ogoneksmall",      "Ringsmall",        "Cedillasmall",     "questiondownsmall",
+/*320*/ "oneeight",     "threeeights",      "fiveeights",       "seveneights",
+    "onethird",         "twothirds",        "zerosuperior",     "foursuperior",
+    "fivesuperior",     "sixsuperior",      "sevensuperior",    "eightsuperior",
+    "ninesuperior",     "zeroinferior",     "oneinferior",      "twoinferior",
+/*336*/ "threeinferior","fourinferior",     "fiveinferior",     "sixinferior",
+    "seveninferior",    "eightinferior",    "nineinferior",     "centinferior",
+    "dollarinferior",   "periodinferior",   "commainferior",    "Agravesmall",
+    "Aacutesmall",      "Acircumflexsmall", "Atildesmall",      "Adieresissmall",
+/*352*/ "Aringsmall",   "AEsmall",          "Ccedillasmall",    "Egravesmall",
+    "Eacutesmall",      "Ecircumflexsmall", "Edieresissmall",   "Igravesmall",
+    "Iacutesmall",      "Icircumflexsmall", "Idieresissmall",   "Ethsmall",
+    "Ntildesmall",      "Ogravesmall",      "Oacutesmall",      "Ocircumflexsmall",
+/*368*/ "Otildesmall",  "Odieressissmall",  "OEsmall",          "Oslashsmall",
+    "Ugravesmall",      "Uacutesmall",      "Ucircumflexsmall", "Udieresissmall",
+    "Yacutesmall",      "Thornsmall",       "Ydieresissmall",   "001.000",
+    "001.001",          "001.002",          "001.003",          "Black",
+/*384*/ "Bold",         "Book",             "Light",            "Medium",
+    "Regular",          "Roman",            "Semibold"
+};
+
+// --------------------------------------------------------------------
+
+#if 0 // TODO: use them
+static const char* pStdEncNames[] = {
+    "ISOAdobe", "Expert",   "ExpertSubSet"
+};
+#endif
+
+// --------------------------------------------------------------------
+
+// TOP DICT keywords (also covers PRIV DICT keywords)
+static const char* pDictOps[] = {
+    "sVersion",         "sNotice",              "sFullName",        "sFamilyName",
+    "sWeight",          "aFontBBox",            "dBlueValues",      "dOtherBlues",
+    "dFamilyBlues",     "dFamilyOtherBlues",    "nStdHW",           "nStdVW",
+    "xESC",             "nUniqueID",            "aXUID",            "nCharset",
+    "nEncoding",        "nCharStrings",         "PPrivate",         "nSubrs",
+    "nDefaultWidthX",   "nNominalWidthX",       NULL,               NULL,
+    NULL,               NULL,                   NULL,               NULL,
+    "shortint",         "longint",              "BCD",              NULL
+};
+
+// --------------------------------------------------------------------
+
+// TOP DICT escapes (also covers PRIV DICT escapes)
+static const char* pDictEscs[] = {
+    "sCopyright",           "bIsFixedPitch",    "nItalicAngle",     "nUnderlinePosition",
+    "nUnderlineThickness",  "nPaintType",       "tCharstringType",  "aFontMatrix",
+    "nStrokeWidth",         "nBlueScale",       "nBlueShift",       "nBlueFuzz",
+    "dStemSnapH",           "dStemSnapV",       "bForceBold",       NULL,
+    NULL,                   "nLanguageGroup",   "nExpansionFactor", "nInitialRandomSeed",
+    "nSyntheticBase",       "sPostScript",      "sBaseFontName",    "dBaseFontBlend",
+    NULL,                   NULL,               NULL,               NULL,
+    NULL,                   NULL,               "rROS",             "nCIDFontVersion",
+    "nCIDFontRevision",     "nCIDFontType",     "nCIDCount",        "nUIDBase",
+    "nFDArray",             "nFDSelect",        "sFontName"
+};
+
+// --------------------------------------------------------------------
+
+static const char* pType1Ops[] = {
+    NULL,               "2hstem",           NULL,               "2vstem",
+    "1vmoveto",         "Arlineto",         "1hlineto",         "1vlineto",
+    "Crrcurveto",       "0closepath",       "Lcallsubr",        "0return",
+    "xT1ESC",           "2hsbw",            "0endchar",         NULL,
+    NULL,               NULL,               NULL,               NULL,
+    NULL,               "2rmoveto",         "1hmoveto",         NULL,
+    NULL,               NULL,               NULL,               NULL,
+    NULL,               NULL,               "4vhcurveto",       "4hvcurveto"
+};
+
+// --------------------------------------------------------------------
+
+static const char* pT1EscOps[] = {
+    "0dotsection",      "6vstem3",          "6hstem3",          NULL,
+    NULL,               NULL,               "5seac",            "4sbw",
+    NULL,               "1abs",             "2add",             "2sub",
+    "2div",             NULL,               NULL,               NULL,
+    "Gcallothersubr",   "1pop",             NULL,               NULL,
+    NULL,               NULL,               NULL,               NULL,
+    NULL,               NULL,               NULL,               NULL,
+    NULL,               NULL,               NULL,               NULL,
+    NULL,               "2setcurrentpoint"
+};
+
+// --------------------------------------------------------------------
+
+struct TYPE1OP
+{
+    enum OPS
+    {
+        HSTEM=1,        VSTEM=3,        VMOVETO=4,      RLINETO=5,
+        HLINETO=6,      VLINETO=7,      RCURVETO=8,     CLOSEPATH=9,
+        CALLSUBR=10,    RETURN=11,      T1ESC=12,       HSBW=13,
+        ENDCHAR=14,     RMOVETO=21,     HMOVETO=22,     VHCURVETO=30,
+        HVCURVETO=31
+    };
+
+    enum ESCS
+    {
+        DOTSECTION=0,   VSTEM3=1,           HSTEM3=2,   SEAC=6,
+        SBW=7,          ABS=9,              ADD=10,     SUB=11,
+        DIV=12,         CALLOTHERSUBR=16,   POP=17,     SETCURRENTPOINT=33
+    };
+};
+
+// --------------------------------------------------------------------
+
+static const char* pType2Ops[] = {
+    NULL,           "hhstem",       NULL,           "vvstem",
+    "mvmoveto",     "Arlineto",     "Ehlineto",     "Evlineto",
+    "Crrcurveto",   NULL,           "Lcallsubr",    "Xreturn",
+    "xT2ESC",       NULL,           "eendchar",     NULL,
+    NULL,           NULL,           "Hhstemhm",     "Khintmask",
+    "Kcntrmask",    "Mrmoveto",     "mhmoveto",     "Vvstemhm",
+    ".rcurveline",  ".rlinecurve",  ".vvcurveto",   ".hhcurveto",
+    ".shortint",    "Gcallgsubr",   ".vhcurveto",   ".hvcurveto"
+};
+
+// --------------------------------------------------------------------
+
+static const char* pT2EscOps[] = {
+    NULL,       NULL,       NULL,       "2and",
+    "2or",      "1not",     NULL,       NULL,
+    NULL,       "1abs",     "2add",     "2sub",
+    "2div",     NULL,       "1neg",     "2eq",
+    NULL,       NULL,       "1drop",    NULL,
+    "1put",     "1get",     "4ifelse",  "0random",
+    "2mul",     NULL,       "1sqrt",    "1dup",
+    "2exch",    "Iindex",   "Rroll",    NULL,
+    NULL,       NULL,       "7hflex",   "Fflex",
+    "9hflex1",  "fflex1"
+};
+
+// --------------------------------------------------------------------
+
+struct TYPE2OP
+{
+    enum OPS
+    {
+        HSTEM=1,        VSTEM=3,        VMOVETO=4,      RLINETO=5,
+        HLINETO=6,      VLINETO=7,      RCURVETO=8,     CALLSUBR=10,
+        RETURN=11,      T2ESC=12,       ENDCHAR=14,     HSTEMHM=18,
+        HINTMASK=19,    CNTRMASK=20,    RMOVETO=21,     HMOVETO=22,
+        VSTEMHM=23,     RCURVELINE=24,  RLINECURVE=25,  VVCURVETO=26,
+        HHCURVETO=27,   SHORTINT=28,    CALLGSUBR=29,   VHCURVETO=30,
+        HVCURVETO=31
+    };
+
+    enum ESCS
+    {
+        AND=3,      OR=4,       NOT=5,      ABS=9,
+        ADD=10,     SUB=11,     DIV=12,     NEG=14,
+        EQ=15,      DROP=18,    PUT=20,     GET=21,
+        IFELSE=22,  RANDOM=23,  MUL=24,     SQRT=26,
+        DUP=27,     EXCH=28,    INDEX=29,   ROLL=30,
+        HFLEX=34,   FLEX=35,    HFLEX1=36,  FLEX1=37
+    };
+};
+
+// ====================================================================
+
+struct CffGlobal
+{
+    explicit CffGlobal();
+
+    int     mnNameIdxBase;
+    int     mnNameIdxCount;
+    int     mnStringIdxBase;
+    int     mnStringIdxCount;
+    bool    mbCIDFont;
+    int     mnCharStrBase;
+    int     mnCharStrCount;
+    int     mnEncodingBase;
+    int     mnCharsetBase;
+    int     mnGlobalSubrBase;
+    int     mnGlobalSubrCount;
+    int     mnGlobalSubrBias;
+    int     mnFDSelectBase;
+    int     mnFontDictBase;
+    int     mnFDAryCount;
+
+    IntVector   maFontBBox;
+    //FloatVector   maFontMatrix;
+
+    int     mnFontNameSID;
+    int     mnFullNameSID;
+    int     mnFamilyNameSID;
+};
+
+// ====================================================================
+
+struct CffLocal
+{
+    explicit CffLocal();
+
+    int     mnPrivDictBase;
+    int     mnPrivDictSize;
+    int     mnLocalSubrOffs;
+    int     mnLocalSubrBase;
+    int     mnLocalSubrCount;
+    int     mnLocalSubrBias;
+    int     mnNominalWidth;
+    int     mnDefaultWidth;
+
+    // ATM hinting related values
+    int         mnStemStdHW;
+    int         mnStemStdVW;
+    IntVector   maStemSnapH;
+    IntVector   maStemSnapV;
+    IntVector   maBlueValues;
+    IntVector   maOtherBlues;
+    IntVector   maFamilyBlues;
+    IntVector   maFamilyOtherBlues;
+    double      mfBlueScale;
+    double      mfBlueShift;
+    double      mfBlueFuzz;
+    double      mfExpFactor;
+    int         mnLangGroup;
+    bool        mbForceBold;
+};
+
+// ====================================================================
+
+class SubsetterContext
+{
+public:
+    virtual ~SubsetterContext( void);
+    virtual bool emitAsType1( class Type1Emitter&,
+                const long* pGlyphIDs, const U8* pEncoding,
+                GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& ) = 0;
+};
+
+// --------------------------------------------------------------------
+
+SubsetterContext::~SubsetterContext( void)
+{}
+
+// ====================================================================
+
+class CffSubsetterContext
+:   public SubsetterContext
+,   private CffGlobal
+{
+public:
+    static const int NMAXSTACK = 48;    // see CFF.appendixB
+    static const int NMAXHINTS = 2*96;  // see CFF.appendixB
+    static const int NMAXTRANS = 32;    // see CFF.appendixB
+public:
+    explicit CffSubsetterContext( const U8* pBasePtr, int nBaseLen);
+    virtual ~CffSubsetterContext( void);
+
+    void    initialCffRead( void);
+    bool    emitAsType1( class Type1Emitter&,
+                const long* pGlyphIDs, const U8* pEncoding,
+                GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& );
+
+    // used by charstring converter
+    void    setCharStringType( int);
+    void    fakeLocalSubrCount( int nLocalSubrs ) { maCffLocal[0].mnLocalSubrCount=nLocalSubrs;}
+    void    readCharString( const U8* pTypeOps, int nTypeLen);
+protected:
+    int     convert2Type1Ops( CffLocal*, const U8* pType2Ops, int nType2Len, U8* pType1Ops);
+private:
+    void    readTypeOp( CffSubsetterContext&);
+    void    convertOneTypeOp( void);
+    void    convertOneTypeEsc( void);
+    void    callType2Subr( bool bGlobal, int nSubrNumber);
+    long    getReadOfs( void) const { return (long)(mpReadPtr - mpBasePtr);}
+
+    const U8* mpBasePtr;
+    const U8* mpBaseEnd;
+
+    const U8* mpReadPtr;
+    const U8* mpReadEnd;
+
+    U8*     mpWritePtr;
+    bool    mbSawError;
+    bool    mbNeedClose;
+    bool    mbIgnoreHints;
+    long    mnCntrMask;
+
+private:
+    int     seekIndexData( int nIndexBase, int nDataIndex);
+    void    seekIndexEnd( int nIndexBase);
+
+private:
+    const char**    mpCharStringOps;
+    const char**    mpCharStringEscs;
+
+    CffLocal    maCffLocal[16];
+    CffLocal*   mpCffLocal;
+
+    void        readDictOp( void);
+    double      readRealVal( void);
+    const char* getString( int nStringID);
+    int         getFDSelect( int nGlyphIndex) const;
+    int         getGlyphSID( int nGlyphIndex) const;
+    const char* getGlyphName( int nGlyphIndex);
+
+    void    readTypeOp( void);
+    void    read2push( void);
+    void    pop2write( void);
+    void    writeType1Val( int/*TODO: double*/ nVal);
+    void    writeTypeOp( int nTypeOp);
+    void    writeTypeEsc( int nTypeOp);
+    void    writeCurveTo( int nStackPos, int nIX1, int nIY1, int nIX2, int nIY2, int nIX3, int nIY3);
+    void    pop2MultiWrite( int nArgsPerTypo, int nTypeOp, int nTypeXor=0);
+    void    popAll2Write( int nTypeOp);
+
+public: // TODO: is public really needed?
+    // accessing the value stack
+    // TODO: add more checks
+    void    push( int nVal) { mnValStack[ mnStackIdx++] = nVal;}
+    int     pop( void) { return ((mnStackIdx>0) ? mnValStack[ --mnStackIdx] : 0);}
+    int     peek( void) { return ((mnStackIdx>0) ? mnValStack[ mnStackIdx-1] : 0);}
+    int     get( int nIndex) { return mnValStack[ nIndex];}
+    int     size( void) const { return mnStackIdx;}
+    bool    empty( void) const { return !mnStackIdx;}
+    void    clear( void) { mnStackIdx = 0;}
+
+    // accessing the charstring hints
+    void    addHints( bool bVerticalHints);
+    int     getHorzHintCount( void) const { return (mnHorzHintSize/2);}
+    int     getVertHintCount( void) const { return (mnHintSize-mnHorzHintSize)/2;}
+    void    getHintPair( int nIndex, int* nMin, int* nEnd) const;
+
+    // accessing other charstring specifics
+    bool    hasCharWidth( void) const { return (mnCharWidth != -1);}
+    int     getCharWidth( void) const { return mnCharWidth;}
+    void    setNominalWidth( int nWidth) { mpCffLocal->mnNominalWidth = nWidth;}
+    void    setDefaultWidth( int nWidth) { mpCffLocal->mnDefaultWidth = nWidth;}
+    void    updateWidth( bool bUseFirstVal);
+
+private:
+    // typeop exceution context
+    int mnStackIdx;
+    int mnValStack[ NMAXSTACK];
+    int mnTransVals[ NMAXTRANS];
+
+    int mnHintSize;
+    int mnHorzHintSize;
+    int mnHintStack[ NMAXHINTS];
+
+    int mnCharWidth;
+};
+
+// --------------------------------------------------------------------
+
+CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
+:   mpBasePtr( pBasePtr)
+,   mpBaseEnd( pBasePtr+nBaseLen)
+,   mnStackIdx(0)
+,   mnHintSize(0)
+,   mnHorzHintSize(0)
+,   mnCharWidth(-1)
+{
+//  setCharStringType( 1);
+    // TODO: new CffLocal[ mnFDAryCount];
+    mpCffLocal = &maCffLocal[0];
+}
+
+// --------------------------------------------------------------------
+
+CffSubsetterContext::~CffSubsetterContext( void)
+{
+    // TODO: delete[] maCffLocal;
+}
+
+// --------------------------------------------------------------------
+
+inline void CffSubsetterContext::updateWidth( bool bUseFirstVal)
+{
+#if 1 // TODO: is this still needed?
+    // the first value is not a hint but the charwidth
+    if( hasCharWidth())
+        return;
+#endif
+    if( bUseFirstVal) {
+        mnCharWidth = mpCffLocal->mnNominalWidth + mnValStack[0];
+        // remove bottom stack entry
+        --mnStackIdx;
+        for( int i = 0; i < mnStackIdx; ++i)
+            mnValStack[ i] = mnValStack[ i+1];
+    } else {
+        mnCharWidth = mpCffLocal->mnDefaultWidth;
+    }
+}
+
+// --------------------------------------------------------------------
+
+void CffSubsetterContext::addHints( bool bVerticalHints)
+{
+    // the first charstring value may a charwidth instead of a charwidth
+    updateWidth( (mnStackIdx & 1) != 0);
+    // return early (e.g. no implicit hints for hintmask)
+    if( !mnStackIdx)
+        return;
+
+    // copy the remaining values to the hint arrays
+    // assert( (mnStackIdx & 1) == 0); // depends on called subrs
+    if( mnStackIdx & 1) --mnStackIdx;//#######
+    // TODO: if( !bSubr) assert( mnStackIdx >= 2);
+
+    assert( (mnHintSize + mnStackIdx) <= 2*NMAXHINTS);
+
+#ifdef IGNORE_HINTS
+    mnHorzHintSize += mnStackIdx;
+#else
+    int nHintOfs = 0;
+    for( int i = 0; i < mnStackIdx; ++i) {
+        nHintOfs += mnValStack[ i];
+        mnHintStack[ mnHintSize++] = nHintOfs;
+    }
+    if( !bVerticalHints)
+        mnHorzHintSize = mnHintSize;
+#endif // IGNORE_HINTS
+
+    // clear all values from the stack
+    mnStackIdx = 0;
+}
+
+// --------------------------------------------------------------------
+
+void CffSubsetterContext::getHintPair( int nIndex, int* pMin, int* pEnd) const
+{
+    nIndex *= 2;
+    assert( nIndex < mnHintSize);
+    assert( nIndex >= 0);
+    const int* pHint = &mnHintStack[ nIndex];
+    *pMin = pHint[0];
+    *pEnd = pHint[1];
+}
+
+// --------------------------------------------------------------------
+
+void CffSubsetterContext::setCharStringType( int nVal)
+{
+    switch( nVal) {
+        case 1: mpCharStringOps=pType1Ops; mpCharStringEscs=pT1EscOps; break;
+        case 2: mpCharStringOps=pType2Ops; mpCharStringEscs=pT2EscOps; break;
+        default: fprintf( stderr, "Unknown CharstringType=%d\n",nVal); break;
+    }
+}
+
+// --------------------------------------------------------------------
+
+void CffSubsetterContext::readCharString( const U8* pTypeOps, int nTypeLen)
+{
+    mnStackIdx = 0;
+    mnHintSize = 0;
+    mnHorzHintSize = 0;
+    mnCharWidth = -1;
+
+    assert( nTypeLen >= 0);
+//  assert( nEnd <= getLength());
+    mpReadPtr = pTypeOps;
+    mpReadEnd = mpReadPtr + nTypeLen;
+    // reset the execution context
+    while( mpReadPtr < mpReadEnd)
+        readTypeOp();
+//###   assert( tellRel() == nEnd);
+}
+
+// --------------------------------------------------------------------
+
+void CffSubsetterContext::readDictOp( void)
+{
+    int nVal = 0;
+    const U8 c = *mpReadPtr;
+    if( c <= 21 ) {
+        int nOpId = *(mpReadPtr++);
+        const char* pCmdName;
+        if( nOpId != 12)
+            pCmdName = pDictOps[ nOpId];
+        else {
+            const U8 nExtId = *(mpReadPtr++);
+            pCmdName = pDictEscs[ nExtId];
+            nOpId = 900 + nExtId;
+        }
+
+        //TODO: if( nStackIdx > 0)
+        switch( *pCmdName) {
+        default: fprintf( stderr, "unsupported DictOp.type=\'%c\'\n", *pCmdName); break;
+        case 'b':   // bool
+            nVal = pop();
+            switch( nOpId) {
+            case 915: mpCffLocal->mbForceBold = nVal; break;    // "ForceBold"
+            default: break; // TODO: handle more boolean dictops?
+            }
+            break;
+        case 'n':   // dict-op number
+            nVal = pop();
+            switch( nOpId) {
+            case  10: mpCffLocal->mnStemStdHW = nVal;  break;   // "StdHW"
+            case  11: mpCffLocal->mnStemStdVW = nVal; break;    // "StdVW"
+            case  15: mnCharsetBase = nVal; break;              // "charset"
+            case  16: mnEncodingBase = nVal; break;             // "nEncoding"
+            case  17: mnCharStrBase = nVal; break;              // "nCharStrings"
+            case  19: mpCffLocal->mnLocalSubrOffs = nVal; break;// "nSubrs"
+            case  20: setDefaultWidth( nVal); break;            // "defaultWidthX"
+            case  21: setNominalWidth( nVal); break;            // "nominalWidthX"
+            case 909: mpCffLocal->mfBlueScale = nVal; break;    // "BlueScale"
+            case 910: mpCffLocal->mfBlueShift = nVal; break;    // "BlueShift"
+            case 911: mpCffLocal->mfBlueFuzz = nVal; break;     // "BlueFuzz"
+            case 912: mpCffLocal->mfExpFactor = nVal; break;    // "ExpansionFactor"
+            case 917: mpCffLocal->mnLangGroup = nVal; break;    // "LanguageGroup"
+            case 936: mnFontDictBase = nVal; break;             // "nFDArray"
+            case 937: mnFDSelectBase = nVal; break;             // "nFDSelect"
+            default: break; // TODO: handle more numeric dictops?
+            }
+            break;
+        case 'a': { // array
+            for( int i = 0; i < size(); ++i ) {
+                nVal = get(i);
+                switch( nOpId) {
+                case   5: maFontBBox.push_back( nVal); break;     // "FontBBox"
+#if 0 // TODO
+                case 907: maFontMatrix.push_back( nVal); break; // "FontMatrix"
+#endif
+                default: break; // TODO: handle more array dictops?
+                }
+            }
+            clear();
+            } break;
+        case 'd': { // delta array
+            nVal = 0;
+            for( int i = 0; i < size(); ++i ) {
+                nVal += get(i);
+                switch( nOpId) {
+                case   6: mpCffLocal->maBlueValues.push_back( nVal); break;     // "BlueValues"
+                case   7: mpCffLocal->maOtherBlues.push_back( nVal); break;     // "OtherBlues"
+                case   8: mpCffLocal->maFamilyBlues.push_back( nVal); break;    // "FamilyBlues"
+                case   9: mpCffLocal->maFamilyOtherBlues.push_back( nVal); break;// "FamilyOtherBlues"
+                case 912: mpCffLocal->maStemSnapH.push_back( nVal); break;      // "StemSnapH"
+                case 913: mpCffLocal->maStemSnapV.push_back( nVal); break;      // "StemSnapV"
+                default: break; // TODO: handle more delta-array dictops?
+                }
+            }
+            clear();
+            } break;
+        case 's':   // stringid (SID)
+            nVal = pop();
+            switch( nOpId) {
+            case   2: mnFullNameSID = nVal; break;      // "FullName"
+            case   3: mnFamilyNameSID = nVal; break;    // "FamilyName"
+            case 938: mnFontNameSID = nVal; break;      // "FontName"
+            default: break; // TODO: handle more string dictops?
+            }
+            break;
+        case 'P':   // private dict
+            mpCffLocal->mnPrivDictBase = pop();
+            mpCffLocal->mnPrivDictSize = pop();
+            break;
+        case 'r': { // ROS operands
+            int nSid1 = pop();
+            int nSid2 = pop();
+            (void)nSid1; // TODO: use
+            (void)nSid2; // TODO: use
+            nVal = pop();
+            mbCIDFont = true;
+            } break;
+        case 't':   // CharstringType
+            nVal = pop();
+            setCharStringType( nVal);
+            break;
+        }
+
+        return;
+    }
+
+    if( (c >= 32) || (c == 28)) {
+//      --mpReadPtr;
+        read2push();
+    } else if( c == 29) {       // longint
+        ++mpReadPtr;            // skip 29
+        int nS32 = mpReadPtr[0] << 24;
+        nS32 += mpReadPtr[1] << 16;
+        nS32 += mpReadPtr[2] << 8;
+        nS32 += mpReadPtr[3] << 0;
+        if( (sizeof(nS32) != 4) && (nS32 & (1<<31)))
+            nS32 |= (~0U) << 31;    // assuming 2s complement
+        mpReadPtr += 4;
+        nVal = nS32;
+        push( nVal);
+    } else if( c == 30) {       // real number
+        ++mpReadPtr; // skip 30
+        const double fReal = readRealVal();
+        // push value onto stack
+        nVal = static_cast<int>(fReal+0.5); //TODO!!! allow float on operand stack!
+        push( nVal);
+    }
+}
+
+// --------------------------------------------------------------------
+
+void CffSubsetterContext::readTypeOp( void)
+{
+    int nVal = 0;
+    const U8 c = *mpReadPtr;
+    if( (c <= 31) && (c != 28) ) {
+        const int nOpId = *(mpReadPtr++);
+        const char* pCmdName;
+        if( nOpId != 12)
+            pCmdName = mpCharStringOps[ nOpId];
+        else {
+            const int nExtId = *(mpReadPtr++);
+            pCmdName = mpCharStringEscs[ nExtId];
+        }
+
+        if( !pCmdName )
+            pCmdName = ".NULL";
+        // handle typeop parameters
+        int nMinStack = -1, nMaxStack = -1;
+        switch( *pCmdName) {
+        default: fprintf( stderr, "unsupported TypeOp.type=\'%c\'\n", *pCmdName); break;
+        case '.': nMinStack = 0; nMaxStack = 999; break;
+        case '0': nMinStack = nMaxStack = 0; break;
+        case '1': nMinStack = nMaxStack = 1; break;
+        case '2': nMinStack = nMaxStack = 2; break;
+        case '4': nMinStack = nMaxStack = 4; break;
+        case '5': nMinStack = nMaxStack = 5; break; // not used for Type2 ops
+        case '6': nMinStack = nMaxStack = 6; break;
+        case '7': nMinStack = nMaxStack = 7; break;
+        case '9': nMinStack = nMaxStack = 9; break;
+        case 'f': nMinStack = nMaxStack = 11; break;
+        case 'F': nMinStack = nMaxStack = 13; break;
+        case 'A': nMinStack = 2; nMaxStack = 999; break;
+        case 'C': nMinStack = 6; nMaxStack = 999; break;
+        case 'E': nMinStack = 1; nMaxStack = 999; break;
+        case 'G': nMinStack = 1; nMaxStack = 999; // global subr
+            nVal = peek();
+            // TODO global subr
+            break;
+        case 'L':   // local subr
+            nMinStack = 1; nMaxStack = 999;
+            nVal = peek();
+            // TODO local subr
+            break;
+        case 'I':   // operands for "index"
+#if 0
+            nMinStack = nValStack[ nStackIdx-1];
+            if( nMinStack < 0) nMinStack = 0;
+            nMinStack += 1;
+#else
+            fprintf( stderr, "TODO: Iindex op\n");
+#endif
+            break;
+        case 'R':   // operands for "rol"
+#if 0
+            nMinStack = nValStack[ nStackIdx-2];
+#else
+            fprintf( stderr, "TODO: Rrol op\n");
+#endif
+        case 'X':   // operands for "return"
+            nMinStack = 0;
+            nMaxStack = /*### (!bInSubrs)? 0 :###*/999;
+            break;
+        case 'H':   // "hstemhm"
+        case 'h':   // "hstem"
+            addHints( false);
+            nMinStack = nMaxStack = 0;
+            break;
+        case 'V':   // "vstemhm"
+        case 'v':   // "vstem"
+            addHints( true);
+            nMinStack = nMaxStack = 0;
+            break;
+        case 'K':   // "hintmask" or "cntrmask"
+            addHints( true);    // implicit vstemhm
+            nMinStack = nMaxStack = 0;
+            break;
+        case 'e':   // endchar
+            updateWidth( (size() >= 1) && (size() != 4));
+            nMinStack = nMaxStack = 0;
+            if( size() == 4)
+                fprintf( stderr,"Deprecated SEAC-like endchar is not supported for CFF subsetting!\n"); // TODO: handle deprecated op
+            break;
+        case 'm':   // hmoveto or vmoveto
+            updateWidth( size() > 1);
+            nMinStack = 1;
+            nMaxStack = nMinStack;
+            break;
+        case 'M':   // rmoveto
+            updateWidth( size() > 2);
+            nMinStack = 2;
+            nMaxStack = nMinStack;
+            break;
+        }
+
+        clear();
+        return;
+    }
+
+    if( (c >= 32) || (c == 28)) {
+//      --mpReadPtr;
+        read2push();
+    }
+}
+
+// --------------------------------------------------------------------
+
+void CffSubsetterContext::read2push( void)
+{
+    int nVal = 0;
+
+    const U8*& p = mpReadPtr;
+    const U8 c = *p;
+    if( c == 28) {
+        short nS16 = (p[1] << 8) + p[2];
+        if( (sizeof(nS16) != 2) && (nS16 & (1<<15)))
+            nS16 |= (~0U) << 15;    // assuming 2s complement
+        nVal = nS16;
+        p += 3;
+    } else if( c <= 246) {      // -107..+107
+        nVal = p[0] - 139;
+        p += 1;
+    } else if( c <= 250) {      // +108..+1131
+        nVal = ((p[0] << 8) + p[1]) - 63124;
+        p += 2;
+    } else if( c <= 254) {      // -108..-1131
+        nVal = 64148 - ((p[0] << 8) + p[1]);
+        p += 2;
+    } else /*if( c == 255)*/ {  // Fixed16.16
+        nVal = (p[1] << 8) + p[2];
+        // TODO: read non-integer part
+        p += 5;
+    }
+
+    push( nVal);
+}
+
+// --------------------------------------------------------------------
+
+void CffSubsetterContext::writeType1Val( int/*TODO: double*/ nVal)
+{
+    U8* pOut = mpWritePtr;
+    if( (nVal >= -107) && (nVal <= +107)) {
+        *(pOut++) = static_cast<U8>(nVal + 139);    // -107..+107
+    } else if( (nVal >= -1131) && (nVal <= +1131)) {
+        if( nVal >= 0)
+            nVal += 63124;                          // +108..+1131
+        else
+            nVal = 64148 - nVal;                    // -108..-1131
+        *(pOut++) = static_cast<U8>(nVal >> 8);
+        *(pOut++) = static_cast<U8>(nVal);
+    } else {
+        // numtype==255 means int32 for Type1, but 16.16 for Type2 charstrings!!!
+        *(pOut++) = 255;
+        *(pOut++) = static_cast<U8>(nVal >> 24);
+        *(pOut++) = static_cast<U8>(nVal >> 16);
+        *(pOut++) = static_cast<U8>(nVal >> 8);
+        *(pOut++) = static_cast<U8>(nVal);
+    }
+
+    mpWritePtr = pOut;
+}
+
+// --------------------------------------------------------------------
+
+inline void CffSubsetterContext::pop2write( void)
+{
+    int nVal = pop();
+    writeType1Val( nVal);
+}
+
+// --------------------------------------------------------------------
+
+inline void CffSubsetterContext::writeTypeOp( int nTypeOp)
+{
+    *(mpWritePtr++) = static_cast<U8>(nTypeOp);
+}
+
+// --------------------------------------------------------------------
+
+inline void CffSubsetterContext::writeTypeEsc( int nTypeEsc)
+{
+    *(mpWritePtr++) = TYPE1OP::T1ESC;
+    *(mpWritePtr++) = static_cast<U8>(nTypeEsc);
+}
+
+// --------------------------------------------------------------------
+
+void CffSubsetterContext::pop2MultiWrite( int nArgsPerTypo, int nTypeOp, int nTypeXor)
+{
+    for( int i = 0; i < mnStackIdx;) {
+        for( int j = 0; j < nArgsPerTypo; ++j) {
+            int nVal = mnValStack[i+j];
+            writeType1Val( nVal);
+        }
+        i += nArgsPerTypo;
+        writeTypeOp( nTypeOp);
+        nTypeOp ^= nTypeXor;    // for toggling vlineto/hlineto
+    }
+    clear();
+}
+
+// --------------------------------------------------------------------
+
+void CffSubsetterContext::popAll2Write( int nTypeOp)
+{
+    // pop in reverse order, then write
+    for( int i = 0; i < mnStackIdx; ++i) {
+        int nVal = mnValStack[i];
+        writeType1Val( nVal);
+    }
+    clear();
+    writeTypeOp( nTypeOp);
+}
+
+// --------------------------------------------------------------------
+
+void CffSubsetterContext::writeCurveTo( int nStackPos,
+    int nIX1, int nIY1, int nIX2, int nIY2, int nIX3, int nIY3)
+{
+    // get the values from the stack
+    const int nDX1 = nIX1 ? mnValStack[ nStackPos+nIX1] : 0;
+    const int nDY1 = nIY1 ? mnValStack[ nStackPos+nIY1] : 0;
+    const int nDX2 = nIX2 ? mnValStack[ nStackPos+nIX2] : 0;
+    const int nDY2 = nIY2 ? mnValStack[ nStackPos+nIY2] : 0;
+    const int nDX3 = nIX3 ? mnValStack[ nStackPos+nIX3] : 0;
+    const int nDY3 = nIY3 ? mnValStack[ nStackPos+nIY3] : 0;
+
+    // emit the curveto operator and operands
+    // TODO: determine the most efficient curveto operator
+    // TODO: depending on type1op or type2op target
+    writeType1Val( nDX1);
+    writeType1Val( nDY1);
+    writeType1Val( nDX2);
+    writeType1Val( nDY2);
+    writeType1Val( nDX3);
+    writeType1Val( nDY3);
+    writeTypeOp( TYPE1OP::RCURVETO);
+}
+
+// --------------------------------------------------------------------
+
+void CffSubsetterContext::convertOneTypeOp( void)
+{
+    const int nType2Op = *(mpReadPtr++);
+
+    int i, nVal; // prevent WAE for declarations inside switch cases
+    // convert each T2op
+    switch( nType2Op) {
+    case TYPE2OP::T2ESC:
+        convertOneTypeEsc();
+        break;
+    case TYPE2OP::HSTEM:
+    case TYPE2OP::VSTEM:
+        addHints( nType2Op == TYPE2OP::VSTEM);
+#ifndef IGNORE_HINTS
+        for( i = 0; i < mnHintSize; i+=2) {
+            writeType1Val( mnHintStack[i]);
+            writeType1Val( mnHintStack[i+1] - mnHintStack[i]);
+            writeTypeOp( nType2Op);
+        }
+#endif // IGNORE_HINTS
+        break;
+    case TYPE2OP::HSTEMHM:
+    case TYPE2OP::VSTEMHM:
+        addHints( nType2Op == TYPE2OP::VSTEMHM);
+        break;
+    case TYPE2OP::CNTRMASK:
+        // TODO: replace cntrmask with vstem3/hstem3
+        addHints( true);
+#ifdef IGNORE_HINTS
+        mpReadPtr += (mnHintSize + 15) / 16;
+        mbIgnoreHints = true;
+#else
+        {
+        U8 nMaskBit = 0;
+        U8 nMaskByte = 0;
+        for( i = 0; i < mnHintSize; i+=2, nMaskBit>>=1) {
+            if( !nMaskBit) {
+                nMaskByte = *(mpReadPtr++);
+                nMaskBit = 0x80;
+            }
+            if( !(nMaskByte & nMaskBit))
+                continue;
+            if( i >= 8*(int)sizeof(mnCntrMask))
+                mbIgnoreHints = true;
+            if( mbIgnoreHints)
+                continue;
+            mnCntrMask |= (1U << i);
+        }
+        }
+#endif
+        break;
+    case TYPE2OP::HINTMASK:
+        addHints( true);
+#ifdef IGNORE_HINTS
+        mpReadPtr += (mnHintSize + 15) / 16;
+#else
+        {
+        long nHintMask = 0;
+        int nCntrBits[2] = {0,0};
+        U8 nMaskBit = 0;
+        U8 nMaskByte = 0;
+        for( i = 0; i < mnHintSize; i+=2, nMaskBit>>=1) {
+            if( !nMaskBit) {
+                nMaskByte = *(mpReadPtr++);
+                nMaskBit = 0x80;
+            }
+            if( !(nMaskByte & nMaskBit))
+                continue;
+            if( i >= 8*(int)sizeof(nHintMask))
+                mbIgnoreHints = true;
+            if( mbIgnoreHints)
+                continue;
+            nHintMask |= (1U << i);
+            nCntrBits[ i < mnHorzHintSize] += (mnCntrMask >> i) & 1;
+        }
+
+        mbIgnoreHints |= (nCntrBits[0] && (nCntrBits[0] != 3));
+        mbIgnoreHints |= (nCntrBits[1] && (nCntrBits[1] != 3));
+        if( mbIgnoreHints)
+            break;
+
+        for( i = 0; i < mnHintSize; i+=2) {
+            if( !(nHintMask & (1U << i)))
+                continue;
+            writeType1Val( mnHintStack[i]);
+            writeType1Val( mnHintStack[i+1] - mnHintStack[i]);
+            const bool bHorz = (i < mnHorzHintSize);
+            if( !nCntrBits[ bHorz])
+                writeTypeOp( bHorz ? TYPE1OP::HSTEM : TYPE1OP::VSTEM);
+            else if( !--nCntrBits[ bHorz])
+                writeTypeEsc( bHorz ? TYPE1OP::HSTEM3 : TYPE1OP::VSTEM3);
+        }
+        }
+#endif
+        break;
+    case TYPE2OP::CALLSUBR:
+    case TYPE2OP::CALLGSUBR:
+        {
+        nVal = pop();
+        const bool bGlobal = (nType2Op == TYPE2OP::CALLGSUBR);
+        callType2Subr( bGlobal, nVal);
+        }
+        break;
+    case TYPE2OP::RETURN:
+        // TODO: check that we are in a subroutine
+        return;
+    case TYPE2OP::VMOVETO:
+    case TYPE2OP::HMOVETO:
+        if( mbNeedClose)
+            writeTypeOp( TYPE1OP::CLOSEPATH);
+        else
+            updateWidth( size() > 1);
+        mbNeedClose = true;
+        pop2MultiWrite( 1, nType2Op);
+        break;
+    case TYPE2OP::VLINETO:
+    case TYPE2OP::HLINETO:
+        pop2MultiWrite( 1, nType2Op,
+            TYPE1OP::VLINETO ^ TYPE1OP::HLINETO);
+        break;
+    case TYPE2OP::RMOVETO:
+        // TODO: convert rmoveto to vlineto/hlineto if possible
+        if( mbNeedClose)
+            writeTypeOp( TYPE1OP::CLOSEPATH);
+        else
+            updateWidth( size() > 2);
+        mbNeedClose = true;
+        pop2MultiWrite( 2, nType2Op);
+        break;
+    case TYPE2OP::RLINETO:
+        // TODO: convert rlineto to vlineto/hlineto if possible
+        pop2MultiWrite( 2, nType2Op);
+        break;
+    case TYPE2OP::RCURVETO:
+        // TODO: convert rcurveto to vh/hv/hh/vv-curveto if possible
+        pop2MultiWrite( 6, nType2Op);
+        break;
+    case TYPE2OP::RCURVELINE:
+        i = 0;
+        while( (i += 6) <= mnStackIdx)
+            writeCurveTo( i, -6, -5, -4, -3, -2, -1 );
+        i -= 6;
+        while( (i += 2) <= mnStackIdx) {
+            writeType1Val( mnValStack[i-2]);
+            writeType1Val( mnValStack[i-1]);
+            writeTypeOp( TYPE2OP::RLINETO);
+        }
+        clear();
+        break;
+    case TYPE2OP::RLINECURVE:
+        i = 0;
+        while( (i += 2) <= mnStackIdx-6) {
+            writeType1Val( mnValStack[i-2]);
+            writeType1Val( mnValStack[i-1]);
+            writeTypeOp( TYPE2OP::RLINETO);
+        }
+        i -= 2;
+        while( (i += 6) <= mnStackIdx)
+            writeCurveTo( i, -6, -5, -4, -3, -2, -1 );
+        clear();
+        break;
+    case TYPE2OP::VHCURVETO:
+    case TYPE2OP::HVCURVETO:
+        {
+        bool bVert = (nType2Op == TYPE2OP::VHCURVETO);
+        i = 0;
+        nVal = 0;
+        if( mnStackIdx & 1)
+            nVal = mnValStack[ --mnStackIdx];
+        while( (i += 4) <= mnStackIdx) {
+            // TODO: use writeCurveTo()
+            if( bVert) writeType1Val( 0);
+            writeType1Val( mnValStack[i-4]);
+            if( !bVert) writeType1Val( 0);
+            writeType1Val( mnValStack[i-3]);
+            writeType1Val( mnValStack[i-2]);
+            if( !bVert) writeType1Val( (i==mnStackIdx) ? nVal : 0);
+            writeType1Val( mnValStack[i-1]);
+            if( bVert) writeType1Val( (i==mnStackIdx) ? nVal : 0 );
+            bVert = !bVert;
+            writeTypeOp( TYPE2OP::RCURVETO);
+        }
+        }
+        clear();
+        break;
+    case TYPE2OP::HHCURVETO:
+        i = (mnStackIdx & 1);
+        while( (i += 4) <= mnStackIdx) {
+            if( i != 5)
+                writeCurveTo( i, -4,  0, -3, -2, -1, 0);
+            else
+                writeCurveTo( i, -4, -5, -3, -2, -1, 0);
+        }
+        clear();
+        break;
+    case TYPE2OP::VVCURVETO:
+        i = (mnStackIdx & 1);
+        while( (i += 4) <= mnStackIdx) {
+            if( i != 5)
+                writeCurveTo( i,  0, -4, -3, -2, 0, -1);
+            else
+                writeCurveTo( i, -5, -4, -3, -2, 0, -1);
+        }
+        clear();
+        break;
+    case TYPE2OP::ENDCHAR:
+        if( mbNeedClose)
+            writeTypeOp( TYPE1OP::CLOSEPATH);
+        else
+            updateWidth( size() >= 1);
+        // mbNeedClose = true;
+        writeTypeOp( TYPE1OP::ENDCHAR);
+        break;
+    default:
+        if( ((nType2Op >= 32) && (nType2Op <= 255)) || (nType2Op == 28)) {
+            --mpReadPtr;
+            read2push();
+        } else {
+            popAll2Write( nType2Op);
+            assert( false); // TODO?
+        }
+        break;
+    }
+}
+
+// --------------------------------------------------------------------
+
+void CffSubsetterContext::convertOneTypeEsc( void)
+{
+    const int nType2Esc = *(mpReadPtr++);
+    int* pTop = &mnValStack[ mnStackIdx-1];
+    // convert each T2op
+    switch( nType2Esc) {
+    case TYPE2OP::AND:
+        assert( mnStackIdx >= 2);
+        pTop[0] &= pTop[-1];
+        --mnStackIdx;
+        break;
+    case TYPE2OP::OR:
+        assert( mnStackIdx >= 2);
+        pTop[0] |= pTop[-1];
+        --mnStackIdx;
+        break;
+    case TYPE2OP::NOT:
+        assert( mnStackIdx >= 1);
+        pTop[0] = !pTop[0];
+        break;
+    case TYPE2OP::ABS:
+        assert( mnStackIdx >= 1);
+        if( pTop[0] >= 0)
+            break;
+        // fall through
+    case TYPE2OP::NEG:
+        assert( mnStackIdx >= 1);
+        pTop[0] = -pTop[0];
+        break;
+    case TYPE2OP::ADD:
+        assert( mnStackIdx >= 2);
+        pTop[0] += pTop[-1];
+        --mnStackIdx;
+        break;
+    case TYPE2OP::SUB:
+        assert( mnStackIdx >= 2);
+        pTop[0] -= pTop[-1];
+        --mnStackIdx;
+        break;
+    case TYPE2OP::MUL:
+        assert( mnStackIdx >= 2);
+        if( pTop[-1])
+            pTop[0] *= pTop[-1];
+        --mnStackIdx;
+        break;
+    case TYPE2OP::DIV:
+        assert( mnStackIdx >= 2);
+        if( pTop[-1])
+            pTop[0] /= pTop[-1];
+        --mnStackIdx;
+        break;
+    case TYPE2OP::EQ:
+        assert( mnStackIdx >= 2);
+        pTop[0] = (pTop[0] == pTop[-1]);
+        --mnStackIdx;
+        break;
+    case TYPE2OP::DROP:
+        assert( mnStackIdx >= 1);
+        --mnStackIdx;
+        break;
+    case TYPE2OP::PUT: {
+        assert( mnStackIdx >= 2);
+        const int nIdx = pTop[0];
+        assert( nIdx >= 0);
+        assert( nIdx < NMAXTRANS);
+        mnTransVals[ nIdx] = pTop[-1];
+        mnStackIdx -= 2;
+        break;
+        }
+    case TYPE2OP::GET: {
+        assert( mnStackIdx >= 1);
+        const int nIdx = pTop[0];
+        assert( nIdx >= 0);
+        assert( nIdx < NMAXTRANS);
+        pTop[0] = mnTransVals[ nIdx];
+        break;
+        }
+    case TYPE2OP::IFELSE: {
+        assert( mnStackIdx >= 4);
+        if( pTop[-1] > pTop[0])
+            pTop[-3] = pTop[-2];
+        mnStackIdx -= 3;
+        break;
+        }
+    case TYPE2OP::RANDOM:
+        pTop[+1] = 1234; // TODO
+        ++mnStackIdx;
+        break;
+    case TYPE2OP::SQRT:
+        // TODO: implement
+        break;
+    case TYPE2OP::DUP:
+        assert( mnStackIdx >= 1);
+        pTop[+1] = pTop[0];
+        ++mnStackIdx;
+        break;
+    case TYPE2OP::EXCH: {
+        assert( mnStackIdx >= 2);
+        const int nVal = pTop[0];
+        pTop[0] = pTop[-1];
+        pTop[-1] = nVal;
+        break;
+        }
+    case TYPE2OP::INDEX: {
+        assert( mnStackIdx >= 1);
+        const int nVal = pTop[0];
+        assert( nVal >= 0);
+        assert( nVal < mnStackIdx-1);
+        pTop[0] = pTop[-1-nVal];
+        break;
+        }
+    case TYPE2OP::ROLL: {
+        assert( mnStackIdx >= 1);
+        const int nNum = pTop[0];
+        assert( nNum >= 0);
+        assert( nNum < mnStackIdx-2);
+        (void)nNum; // TODO: implement
+        const int nOfs = pTop[-1];
+        mnStackIdx -= 2;
+        (void)nOfs;// TODO: implement
+        break;
+        }
+    case TYPE2OP::HFLEX1: {
+            assert( mnStackIdx == 9);
+            writeCurveTo( mnStackIdx, -9, -8, -7, -6, -5, -6);
+            writeCurveTo( mnStackIdx, -4, -6, -3, -2, -1, -8);
+            mnStackIdx -= 9;
+        }
+        break;
+    case TYPE2OP::HFLEX: {
+            assert( mnStackIdx == 7);
+            writeCurveTo( mnStackIdx, -7,  0, -6, -5, -4, -5);
+            writeCurveTo( mnStackIdx, -3, -5, -2,  0, -1,  0);
+            mnStackIdx -= 7;
+        }
+        break;
+    case TYPE2OP::FLEX: {
+            assert( mnStackIdx == 13);
+            writeCurveTo( mnStackIdx, -13, -12, -11, -10, -9, -8);
+            writeCurveTo( mnStackIdx,  -7,  -6,  -5,  -4, -3, -2);
+            const int nFlexDepth =  mnValStack[ mnStackIdx-1];
+            (void)nFlexDepth; // ignoring nFlexDepth
+            mnStackIdx -= 13;
+        }
+        break;
+    case TYPE2OP::FLEX1: {
+            assert( mnStackIdx == 11);
+            // write the first part of the flex1-hinted curve
+            writeCurveTo( mnStackIdx, -11, -10, -9, -8, -7, -6);
+
+            // determine if nD6 is horizontal or vertical
+            const int i = mnStackIdx;
+            int nDeltaX = mnValStack[i-11] + mnValStack[i-9] + mnValStack[i-7] + mnValStack[i-5] + mnValStack[i-3];
+            if( nDeltaX < 0 ) nDeltaX = -nDeltaX;
+            int nDeltaY = mnValStack[i-10] + mnValStack[i-8] + mnValStack[i-6] + mnValStack[i-4] + mnValStack[i-2];
+            if( nDeltaY < 0 ) nDeltaY = -nDeltaY;
+            const bool bVertD6 = (nDeltaY > nDeltaX);
+
+            // write the second part of the flex1-hinted curve
+            if( !bVertD6 )
+                writeCurveTo( mnStackIdx, -5, -4, -3, -2, -1, 0);
+            else
+                writeCurveTo( mnStackIdx, -5, -4, -3, -2, 0, -1);
+            mnStackIdx -= 11;
+        }
+        break;
+    default:
+        fprintf( stderr,"unhandled type2esc %d\n", nType2Esc);
+        assert( false);
+        break;
+    }
+}
+
+// --------------------------------------------------------------------
+
+void CffSubsetterContext::callType2Subr( bool bGlobal, int nSubrNumber)
+{
+    const U8* const pOldReadPtr = mpReadPtr;
+    const U8* const pOldReadEnd = mpReadEnd;
+
+    int nLen = 0;
+    if( bGlobal ) {
+        nSubrNumber += mnGlobalSubrBias;
+        nLen = seekIndexData( mnGlobalSubrBase, nSubrNumber);
+    } else {
+        nSubrNumber += mpCffLocal->mnLocalSubrBias;
+        nLen = seekIndexData( mpCffLocal->mnLocalSubrBase, nSubrNumber);
+    }
+
+    while( mpReadPtr < mpReadEnd)
+        convertOneTypeOp();
+
+    mpReadPtr = pOldReadPtr;
+    mpReadEnd = pOldReadEnd;
+}
+
+// --------------------------------------------------------------------
+
+static const int MAX_T1OPS_SIZE = 81920; // TODO: use dynamic value
+
+int CffSubsetterContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const pT2Ops, int nT2Len, U8* const pT1Ops)
+{
+    mpCffLocal = pCffLocal;
+
+    // prepare the charstring conversion
+    mpWritePtr = pT1Ops;
+#if 1   // TODO: update caller
+    U8 aType1Ops[ MAX_T1OPS_SIZE];
+    if( !pT1Ops)
+        mpWritePtr = aType1Ops;
+    *const_cast<U8**>(&pT1Ops) = mpWritePtr;
+#else
+    assert( pT1Ops);
+#endif
+
+    // prepend random seed for T1crypt
+    *(mpWritePtr++) = 0x48;
+    *(mpWritePtr++) = 0x44;
+    *(mpWritePtr++) = 0x55;
+    *(mpWritePtr++) = ' ';
+#if 1 // convert the Type2 charstring to Type1
+    mpReadPtr = pT2Ops;
+    mpReadEnd = pT2Ops + nT2Len;
+    // prepend "hsbw" or "sbw"
+    // TODO: only emit hsbw when charwidth is known
+    // TODO: remove charwidth from T2 stack
+    writeType1Val( 0); // TODO: aSubsetterContext.getLeftSideBearing();
+    writeType1Val( 1000/*###getCharWidth()###*/);
+    writeTypeOp( TYPE1OP::HSBW);
+mbSawError = false;
+mbNeedClose = false;
+mbIgnoreHints = false;
+mnHintSize=mnHorzHintSize=mnStackIdx=0; mnCharWidth=-1;//#######
+mnCntrMask = 0;
+    while( mpReadPtr < mpReadEnd)
+        convertOneTypeOp();
+//  if( bActivePath)
+//      writeTypeOp( TYPE1OP::CLOSEPATH);
+//  if( bSubRoutine)
+//      writeTypeOp( TYPE1OP::RETURN);
+if( mbSawError) {
+    mpWritePtr = pT1Ops+4;
+     // create an "idiotproof" charstring
+    writeType1Val( 0);
+    writeType1Val( 800);
+    writeTypeOp( TYPE1OP::HSBW);
+    writeType1Val( 50);
+    writeTypeOp( TYPE1OP::HMOVETO);
+    writeType1Val( 650);
+    writeType1Val( 100);
+    writeTypeOp( TYPE1OP::RLINETO);
+    writeType1Val( -350);
+    writeType1Val( 700);
+    writeTypeOp( TYPE1OP::RLINETO);
+#if 0
+    writeType1Val( -300);
+    writeType1Val( -800);
+    writeTypeOp( TYPE1OP::RLINETO);
+#else
+    writeTypeOp( TYPE1OP::CLOSEPATH);
+#endif
+    writeTypeOp( TYPE1OP::ENDCHAR);
+}
+#else // useful for manually encoding charstrings
+    mpWritePtr = pT1Ops;
+    mpWritePtr += sprintf( (char*)mpWritePtr, "OOo_\x8b\x8c\x0c\x10\x0b");
+#endif
+    const int nType1Len = mpWritePtr - pT1Ops;
+
+    // encrypt the Type1 charstring
+    int nRDCryptR = 4330; // TODO: mnRDCryptSeed;
+    for( U8* p = pT1Ops; p < mpWritePtr; ++p) {
+        *p ^= (nRDCryptR >> 8);
+        nRDCryptR = (*(U8*)p + nRDCryptR) * 52845 + 22719;
+    }
+
+    return nType1Len;
+}
+
+// --------------------------------------------------------------------
+
+double CffSubsetterContext::readRealVal()
+{
+    // TODO: more thorough number validity test
+    bool bComma = false;
+    int nExpVal = 0;
+    int nExpSign = 0;
+    S64 nNumber = 0;
+    double fReal = +1.0;
+    for(;;){
+        const U8 c = *(mpReadPtr++); // read nibbles
+        // parse high nibble
+        const U8 nH = c >> 4U;
+        if( nH <= 9) {
+            nNumber = nNumber * 10 + nH;
+            --nExpVal;
+        } else if( nH == 10) {  // comma
+            nExpVal = 0;
+            bComma = true;
+        } else if( nH == 11) {  // +exp
+            fReal *= nNumber;
+            nExpSign = +1;
+            nNumber = 0;
+        } else if( nH == 12) {  // -exp
+            fReal *= nNumber;
+            nExpSign = -1;
+            nNumber = 0;
+        } else if( nH == 13) {  // reserved
+            // TODO: ignore or error?
+        } else if( nH == 14)    // minus
+            fReal = -fReal;
+        else if( nH == 15)  // end
+            break;
+        // parse low nibble
+        const U8 nL = c & 0x0F;
+        if( nL <= 9) {
+            nNumber = nNumber * 10 + nL;
+            --nExpVal;
+        } else if( nL == 10) {  // comma
+            nExpVal = 0;
+            bComma = true;
+        } else if( nL == 11) {  // +exp
+            fReal *= nNumber;
+            nNumber = 0;
+            nExpSign = +1;
+        } else if( nL == 12) {  // -exp
+            fReal *= nNumber;
+            nNumber = 0;
+            nExpSign = -1;
+        } else if( nL == 13) {  // reserved
+            // TODO: ignore or error?
+        } else if( nL == 14)    // minus
+            fReal = -fReal;
+        else if( nL == 15)  // end
+            break;
+    }
+
+    // merge exponents
+    if( !bComma)
+        nExpVal = 0;
+    if( !nExpSign) { fReal *= nNumber;}
+    else if( nExpSign > 0) { nExpVal += static_cast<int>(nNumber);}
+    else if( nExpSign < 0) { nExpVal -= static_cast<int>(nNumber);}
+
+    // apply exponents
+    if( !nExpVal) { /*nothing to apply*/}
+    else if( nExpVal > 0) { while( --nExpVal >= 0) fReal *= 10.0;}
+    else if( nExpVal < 0) { while( ++nExpVal <= 0) fReal /= 10.0;}
+    return fReal;
+}
+
+// --------------------------------------------------------------------
+
+// prepare to access an element inside a CFF/CID index table
+int CffSubsetterContext::seekIndexData( int nIndexBase, int nDataIndex)
+{
+    if( nDataIndex < 0)
+        return -1;
+    mpReadPtr = mpBasePtr + nIndexBase;
+    const int nDataCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
+    if( nDataIndex >= nDataCount)
+        return -1;
+    const int nDataOfsSz = mpReadPtr[2];
+    mpReadPtr += 3 + (nDataOfsSz * nDataIndex);
+    int nOfs1 = 0;
+    switch( nDataOfsSz) {
+        default: fprintf( stderr, "\tINVALID nDataOfsSz=%d\n\n", nDataOfsSz); return -1;
+        case 1: nOfs1 = mpReadPtr[0]; break;
+        case 2: nOfs1 = (mpReadPtr[0]<<8) + mpReadPtr[1]; break;
+        case 3: nOfs1 = (mpReadPtr[0]<<16) + (mpReadPtr[1]<<8) + mpReadPtr[2]; break;
+        case 4: nOfs1 = (mpReadPtr[0]<<24) + (mpReadPtr[1]<<16) + (mpReadPtr[2]<<8) + mpReadPtr[3]; break;
+    }
+    mpReadPtr += nDataOfsSz;
+
+    int nOfs2 = 0;
+    switch( nDataOfsSz) {
+        case 1: nOfs2 = mpReadPtr[0]; break;
+        case 2: nOfs2 = (mpReadPtr[0]<<8) + mpReadPtr[1]; break;
+        case 3: nOfs2 = (mpReadPtr[0]<<16) + (mpReadPtr[1]<<8) + mpReadPtr[2]; break;
+        case 4: nOfs2 = (mpReadPtr[0]<<24) + (mpReadPtr[1]<<16) + (mpReadPtr[2]<<8) + mpReadPtr[3]; break;
+    }
+
+    mpReadPtr = mpBasePtr + (nIndexBase + 2) + nDataOfsSz * (nDataCount + 1) + nOfs1;
+    mpReadEnd = mpReadPtr + (nOfs2 - nOfs1);
+    assert( nOfs1 >= 0);
+    assert( nOfs2 >= nOfs1);
+    assert( mpReadEnd <= mpBaseEnd);
+    return (nOfs2 - nOfs1);
+}
+
+// --------------------------------------------------------------------
+
+// skip over a CFF/CID index table
+void CffSubsetterContext::seekIndexEnd( int nIndexBase)
+{
+    mpReadPtr = mpBasePtr + nIndexBase;
+    const int nDataCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
+    const int nDataOfsSz = mpReadPtr[2];
+    mpReadPtr += 3 + nDataOfsSz * nDataCount;
+    int nEndOfs = 0;
+    switch( nDataOfsSz) {
+        default: fprintf( stderr, "\tINVALID nDataOfsSz=%d\n\n", nDataOfsSz); return;
+        case 1: nEndOfs = mpReadPtr[0]; break;
+        case 2: nEndOfs = (mpReadPtr[0]<<8) + mpReadPtr[1]; break;
+        case 3: nEndOfs = (mpReadPtr[0]<<16) + (mpReadPtr[1]<<8) + mpReadPtr[2];break;
+        case 4: nEndOfs = (mpReadPtr[0]<<24) + (mpReadPtr[1]<<16) + (mpReadPtr[2]<<8) + mpReadPtr[3]; break;
+    }
+    mpReadPtr += nDataOfsSz;
+    mpReadPtr += nEndOfs - 1;
+    mpReadEnd = mpBaseEnd;
+}
+
+// ====================================================================
+
+// initialize FONTDICT specific values
+CffLocal::CffLocal( void)
+:   mnPrivDictBase( 0)
+,   mnPrivDictSize( 0)
+,   mnLocalSubrOffs( 0)
+,   mnLocalSubrBase( 0)
+,   mnLocalSubrCount( 0)
+,   mnLocalSubrBias( 0)
+,   mnNominalWidth( 0)
+,   mnDefaultWidth( 0)
+,   mnStemStdHW( 0)
+,   mnStemStdVW( 0)
+,   mfBlueScale( 0.0)
+,   mfBlueShift( 0.0)
+,   mfBlueFuzz( 0.0)
+,   mfExpFactor( 0.0)
+,   mnLangGroup( 0)
+,   mbForceBold( false)
+{
+    maStemSnapH.clear();
+    maStemSnapV.clear();
+    maBlueValues.clear();
+    maOtherBlues.clear();
+    maFamilyBlues.clear();
+    maFamilyOtherBlues.clear();
+}
+
+// --------------------------------------------------------------------
+
+CffGlobal::CffGlobal( void)
+:   mnNameIdxBase( 0)
+,   mnNameIdxCount( 0)
+,   mnStringIdxBase( 0)
+,   mnStringIdxCount( 0)
+,   mbCIDFont( false)
+,   mnCharStrBase( 0)
+,   mnCharStrCount( 0)
+,   mnEncodingBase( 0)
+,   mnCharsetBase( 0)
+,   mnGlobalSubrBase( 0)
+,   mnGlobalSubrCount( 0)
+,   mnGlobalSubrBias( 0)
+,   mnFDSelectBase( 0)
+,   mnFontDictBase( 0)
+,   mnFDAryCount( 1)
+,   mnFontNameSID( 0)
+,   mnFullNameSID( 0)
+,   mnFamilyNameSID( 0)
+{
+    maFontBBox.clear();
+    // TODO; maFontMatrix.clear();
+}
+
+// --------------------------------------------------------------------
+
+void CffSubsetterContext::initialCffRead( void)
+{
+    // get the CFFHeader
+    mpReadPtr = mpBasePtr;
+    const U8 nVerMajor = *(mpReadPtr++);
+    const U8 nVerMinor = *(mpReadPtr++);
+    const U8 nHeaderSize = *(mpReadPtr++);
+    const U8 nOffsetSize = *(mpReadPtr++);
+    // TODO: is the version number useful for anything else?
+    assert( (nVerMajor == 1) && (nVerMinor == 0));
+    (void)(nVerMajor + nVerMinor + nOffsetSize); // avoid compiler warnings
+
+    // prepare access to the NameIndex
+    mnNameIdxBase = nHeaderSize;
+    mpReadPtr = mpBasePtr + nHeaderSize;
+    mnNameIdxCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
+    seekIndexEnd( mnNameIdxBase);
+
+    // get the TopDict index
+    const long nTopDictBase = getReadOfs();
+    const int nTopDictCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
+    if( nTopDictCount) {
+        for( int i = 0; i < nTopDictCount; ++i) {
+            seekIndexData( nTopDictBase, i);
+            while( mpReadPtr < mpReadEnd)
+                readDictOp();
+            assert( mpReadPtr == mpReadEnd);
+        }
+    }
+
+    // prepare access to the String index
+    mnStringIdxBase =  getReadOfs();
+    mnStringIdxCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
+    seekIndexEnd( mnStringIdxBase);
+
+    // prepare access to the GlobalSubr index
+    mnGlobalSubrBase =  getReadOfs();
+    mnGlobalSubrCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
+    mnGlobalSubrBias = (mnGlobalSubrCount<1240)?107:(mnGlobalSubrCount<33900)?1131:32768;
+    // skip past the last GlobalSubr entry
+//  seekIndexEnd( mnGlobalSubrBase);
+
+    // get/skip the Encodings (we got mnEncodingBase from TOPDICT)
+//  seekEncodingsEnd( mnEncodingBase);
+    // get/skip the Charsets (we got mnCharsetBase from TOPDICT)
+//  seekCharsetsEnd( mnCharStrBase);
+    // get/skip FDSelect (CID only) data
+
+    // prepare access to the CharStrings index (we got the base from TOPDICT)
+    mpReadPtr = mpBasePtr + mnCharStrBase;
+    mnCharStrCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
+//  seekIndexEnd( mnCharStrBase);
+
+    // read the FDArray index (CID only)
+    if( mbCIDFont) {
+//      assert( mnFontDictBase == tellRel());
+        mpReadPtr = mpBasePtr + mnFontDictBase;
+        mnFDAryCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
+        assert( mnFDAryCount < (int)(sizeof(maCffLocal)/sizeof(*maCffLocal)));
+
+        // read FDArray details to get access to the PRIVDICTs
+        for( int i = 0; i < mnFDAryCount; ++i) {
+            mpCffLocal = &maCffLocal[i];
+            seekIndexData( mnFontDictBase, i);
+            while( mpReadPtr < mpReadEnd)
+                readDictOp();
+            assert( mpReadPtr == mpReadEnd);
+        }
+    }
+
+    for( int i = 0; i < mnFDAryCount; ++i) {
+        mpCffLocal = &maCffLocal[i];
+
+        // get the PrivateDict index
+        // (we got mnPrivDictSize and mnPrivDictBase from TOPDICT or FDArray)
+        if( mpCffLocal->mnPrivDictSize != 0) {
+            assert( mpCffLocal->mnPrivDictSize > 0);
+            // get the PrivDict data
+            mpReadPtr = mpBasePtr + mpCffLocal->mnPrivDictBase;
+            mpReadEnd = mpReadPtr + mpCffLocal->mnPrivDictSize;
+            assert( mpReadEnd <= mpBaseEnd);
+            // read PrivDict details
+            while( mpReadPtr < mpReadEnd)
+                readDictOp();
+        }
+
+        // prepare access to the LocalSubrs (we got mnLocalSubrOffs from PRIVDICT)
+        if( mpCffLocal->mnLocalSubrOffs) {
+            // read LocalSubrs summary
+            mpCffLocal->mnLocalSubrBase = mpCffLocal->mnPrivDictBase + mpCffLocal->mnLocalSubrOffs;
+            mpReadPtr = mpBasePtr + mpCffLocal->mnLocalSubrBase;
+            const int nSubrCount = (mpReadPtr[0] << 8) + mpReadPtr[1];
+            mpCffLocal->mnLocalSubrCount = nSubrCount;
+            mpCffLocal->mnLocalSubrBias = (nSubrCount<1240)?107:(nSubrCount<33900)?1131:32768;
+//          seekIndexEnd( mpCffLocal->mnLocalSubrBase);
+        }
+    }
+
+    // ignore the Notices info
+}
+
+// --------------------------------------------------------------------
+
+// get a cstring from a StringID
+const char* CffSubsetterContext::getString( int nStringID)
+{
+    // get a standard string if possible
+    const static int nStdStrings = sizeof(pStringIds)/sizeof(*pStringIds);
+    if( (nStringID >= 0) && (nStringID < nStdStrings))
+        return pStringIds[ nStringID];
+
+    // else get the string from the StringIndex table
+    const U8* pReadPtr = mpReadPtr;
+    const U8* pReadEnd = mpReadEnd;
+    nStringID -= nStdStrings;
+    int nLen = seekIndexData( mnStringIdxBase, nStringID);
+    // assert( nLen >= 0);
+    // TODO: just return the undecorated name
+    // TODO: get rid of static char buffer
+    static char aNameBuf[ 2560];
+    if( nLen < 0) {
+        sprintf( aNameBuf, "name[%d].notfound!", nStringID);
+    } else {
+        const int nMaxLen = sizeof(aNameBuf) - 1;
+        if( nLen >= nMaxLen)
+            nLen = nMaxLen;
+        for( int i = 0; i < nLen; ++i)
+            aNameBuf[i] = *(mpReadPtr++);
+        aNameBuf[ nLen] = '\0';
+    }
+    mpReadPtr = pReadPtr;
+    mpReadEnd = pReadEnd;
+    return aNameBuf;
+}
+
+// --------------------------------------------------------------------
+
+// access a CID's FDSelect table
+int CffSubsetterContext::getFDSelect( int nGlyphIndex) const
+{
+    assert( nGlyphIndex >= 0);
+    assert( nGlyphIndex < mnCharStrCount);
+    if( !mbCIDFont)
+        return 0;
+
+    const U8* pReadPtr = mpBasePtr + mnFDSelectBase;
+    const U8 nFDSelFormat = *(pReadPtr++);
+    switch( nFDSelFormat) {
+        case 0: { // FDSELECT format 0
+                pReadPtr += nGlyphIndex;
+                const U8 nFDIdx = *(pReadPtr++);
+                return nFDIdx;
+            } //break;
+        case 3: { // FDSELECT format 3
+                const U16 nRangeCount = (pReadPtr[0]<<8) + pReadPtr[1];
+                assert( nRangeCount > 0);
+                assert( nRangeCount <= mnCharStrCount);
+                U16 nPrev = (pReadPtr[2]<<8) + pReadPtr[3];
+                assert( nPrev == 0);
+                pReadPtr += 4;
+                // TODO? binary search
+                for( int i = 0; i < nRangeCount; ++i) {
+                    const U8 nFDIdx = pReadPtr[0];
+                    const U16 nNext = (pReadPtr[1]<<8) + pReadPtr[2];
+                    assert( nPrev < nNext);
+                    if( nGlyphIndex < nNext)
+                        return nFDIdx;
+                    pReadPtr += 3;
+                    nPrev = nNext;
+                }
+            } break;
+        default:    // invalid FDselect format
+            fprintf( stderr, "invalid CFF.FdselType=%d\n", nFDSelFormat);
+            break;
+    }
+
+    assert( false);
+    return -1;
+}
+
+// --------------------------------------------------------------------
+
+int CffSubsetterContext::getGlyphSID( int nGlyphIndex) const
+{
+    if( nGlyphIndex == 0)
+        return 0;       // ".notdef"
+    assert( nGlyphIndex >= 0);
+    assert( nGlyphIndex < mnCharStrCount);
+    if( (nGlyphIndex < 0) || (nGlyphIndex >= mnCharStrCount))
+        return -1;
+
+    // get the SID/CID from the Charset table
+     const U8* pReadPtr = mpBasePtr + mnCharsetBase;
+    const U8 nCSetFormat = *(pReadPtr++);
+    int nGlyphsToSkip = nGlyphIndex - 1;
+    switch( nCSetFormat) {
+        case 0: // charset format 0
+            pReadPtr += 2 * nGlyphsToSkip;
+            nGlyphsToSkip = 0;
+            break;
+        case 1: // charset format 1
+            while( nGlyphsToSkip >= 0) {
+                const int nLeft = pReadPtr[2];
+                if( nGlyphsToSkip <= nLeft)
+                    break;
+                nGlyphsToSkip -= nLeft + 1;
+                pReadPtr += 3;
+            }
+            break;
+        case 2: // charset format 2
+            while( nGlyphsToSkip >= 0) {
+                const int nLeft = (pReadPtr[2]<<8) + pReadPtr[3];
+                if( nGlyphsToSkip <= nLeft)
+                    break;
+                nGlyphsToSkip -= nLeft + 1;
+                pReadPtr += 4;
+            }
+            break;
+        default:
+            fprintf( stderr, "ILLEGAL CFF-Charset format %d\n", nCSetFormat);
+            return -2;
+    }
+
+    int nSID = (pReadPtr[0]<<8) + pReadPtr[1];
+    nSID += nGlyphsToSkip;
+    // NOTE: for CID-fonts the resulting SID is interpreted as CID
+    return nSID;
+}
+
+// --------------------------------------------------------------------
+
+// NOTE: the result becomes invalid with the next call to this method
+const char* CffSubsetterContext::getGlyphName( int nGlyphIndex)
+{
+    // the first glyph is always the .notdef glyph
+    const char* pGlyphName = ".notdef";
+    if( nGlyphIndex == 0)
+        return pGlyphName;
+
+    // prepare a result buffer
+    // TODO: get rid of static buffer
+    static char aDefaultGlyphName[64];
+    pGlyphName = aDefaultGlyphName;
+
+    // get the glyph specific name
+    const int nSID = getGlyphSID( nGlyphIndex);
+    if( nSID < 0)           // default glyph name
+        sprintf( aDefaultGlyphName, "gly%03d", nGlyphIndex);
+    else if( mbCIDFont)     // default glyph name in CIDs
+         sprintf( aDefaultGlyphName, "cid%03d", nSID);
+    else {                  // glyph name from string table
+        const char* pSidName = getString( nSID);
+        // check validity of glyph name
+        if( pSidName) {
+            const char* p = pSidName;
+            while( (*p >= '0') && (*p <= 'z')) ++p;
+            if( (p >= pSidName+1) && (*p == '\0'))
+                pGlyphName = pSidName;
+        }
+        // if needed invent a fallback name
+        if( pGlyphName != pSidName)
+             sprintf( aDefaultGlyphName, "bad%03d", nSID);
+    }
+
+     return pGlyphName;
+}
+
+// --------------------------------------------------------------------
+
+class Type1Emitter
+{
+public:
+    explicit    Type1Emitter( const char* pOutFileName, bool bPfbSubset = true);
+    explicit    Type1Emitter( FILE* pOutFile, bool bPfbSubset = true);
+    /*virtual*/ ~Type1Emitter( void);
+    void        setSubsetName( const char* );
+
+    void        emitRawData( const char* pData, int nLength) const;
+    void        emitAllRaw( void);
+    void        emitAllHex( void);
+    void        emitAllCrypted( void);
+    int         tellPos( void) const;
+    void        updateLen( int nTellPos, int nLength);
+    void        emitIntVector( const char* pLineHead, const char* pLineTail, const IntVector&);
+private:
+    FILE*       mpFileOut;
+    bool        mbCloseOutfile;
+    char        maBuffer[MAX_T1OPS_SIZE];   // TODO: dynamic allocation
+    int         mnEECryptR;
+public:
+    char*       mpPtr;
+
+    char        maSubsetName[256];
+    bool        mbPfbSubset;
+    int         mnHexLineCol;
+};
+
+// --------------------------------------------------------------------
+
+Type1Emitter::Type1Emitter( const char* pPfbFileName, bool bPfbSubset)
+:   mpFileOut( NULL)
+,   mbCloseOutfile( true)
+,   mnEECryptR( 55665)  // default eexec seed, TODO: mnEECryptSeed
+,   mpPtr( maBuffer)
+,   mbPfbSubset( bPfbSubset)
+,   mnHexLineCol( 0)
+{
+    mpFileOut = fopen( pPfbFileName, "wb");
+    maSubsetName[0] = '\0';
+}
+
+// --------------------------------------------------------------------
+
+Type1Emitter::Type1Emitter( FILE* pOutFile, bool bPfbSubset)
+:   mpFileOut( pOutFile)
+,   mbCloseOutfile( false)
+,   mnEECryptR( 55665)  // default eexec seed, TODO: mnEECryptSeed
+,   mpPtr( maBuffer)
+,   mbPfbSubset( bPfbSubset)
+,   mnHexLineCol( 0)
+{
+    maSubsetName[0] = '\0';
+}
+
+// --------------------------------------------------------------------
+
+Type1Emitter::~Type1Emitter( void)
+{
+    if( !mpFileOut)
+        return;
+    if( mbCloseOutfile )
+        fclose( mpFileOut);
+    mpFileOut = NULL;
+}
+
+// --------------------------------------------------------------------
+
+void Type1Emitter::setSubsetName( const char* pSubsetName)
+{
+    maSubsetName[0] = '\0';
+    if( pSubsetName)
+        strncpy( maSubsetName, pSubsetName, sizeof(maSubsetName));
+    maSubsetName[sizeof(maSubsetName)-1] = '\0';
+}
+
+// --------------------------------------------------------------------
+
+int Type1Emitter::tellPos( void) const
+{
+    int nTellPos = ftell( mpFileOut);
+    return nTellPos;
+}
+
+// --------------------------------------------------------------------
+
+void Type1Emitter::updateLen( int nTellPos, int nLength)
+{
+    // update PFB segment header length
+    U8 cData[4];
+    cData[0] = static_cast<U8>(nLength >>  0);
+    cData[1] = static_cast<U8>(nLength >>  8);
+    cData[2] = static_cast<U8>(nLength >> 16);
+    cData[3] = static_cast<U8>(nLength >> 24);
+    const int nCurrPos = ftell( mpFileOut);
+    fseek( mpFileOut, nTellPos, SEEK_SET);
+    fwrite( cData, 1, sizeof(cData), mpFileOut);
+    fseek( mpFileOut, nCurrPos, SEEK_SET);
+}
+
+// --------------------------------------------------------------------
+
+inline void Type1Emitter::emitRawData( const char* pData, int nLength) const
+{
+    fwrite( pData, 1, nLength, mpFileOut);
+}
+
+// --------------------------------------------------------------------
+
+inline void Type1Emitter::emitAllRaw( void)
+{
+    // writeout raw data
+    assert( (mpPtr - maBuffer) < (int)sizeof(maBuffer));
+    emitRawData( maBuffer, mpPtr - maBuffer);
+    // reset the raw buffer
+    mpPtr = maBuffer;
+}
+
+// --------------------------------------------------------------------
+
+inline void Type1Emitter::emitAllHex( void)
+{
+    assert( (mpPtr - maBuffer) < (int)sizeof(maBuffer));
+    for( const char* p = maBuffer; p < mpPtr;) {
+        // convert binary chunk to hex
+        char aHexBuf[0x4000];
+        char* pOut = aHexBuf;
+        while( (p < mpPtr) && (pOut < aHexBuf+sizeof(aHexBuf)-4)) {
+            // convert each byte to hex
+            char cNibble = (*p >> 4) & 0x0F;
+            cNibble += (cNibble < 10) ? '0' : 'A'-10;
+            *(pOut++) = cNibble;
+            cNibble = *(p++) & 0x0F;
+            cNibble += (cNibble < 10) ? '0' : 'A'-10;
+            *(pOut++) = cNibble;
+            // limit the line length
+            if( (++mnHexLineCol & 0x3F) == 0)
+                *(pOut++) = '\n';
+        }
+        // writeout hex-converted chunk
+        emitRawData( aHexBuf, pOut-aHexBuf);
+    }
+    // reset the raw buffer
+    mpPtr = maBuffer;
+}
+
+// --------------------------------------------------------------------
+
+void Type1Emitter::emitAllCrypted( void)
+{
+    // apply t1crypt
+    for( char* p = maBuffer; p < mpPtr; ++p) {
+        *p ^= (mnEECryptR >> 8);
+        mnEECryptR = (*(U8*)p + mnEECryptR) * 52845 + 22719;
+    }
+
+    // emit the t1crypt result
+    if( mbPfbSubset)
+        emitAllRaw();
+    else
+        emitAllHex();
+}
+
+// --------------------------------------------------------------------
+
+void Type1Emitter::emitIntVector( const char* pLineHead, const char* pLineTail,
+    const IntVector& rVector)
+{
+    // ignore empty vectors
+    if( rVector.empty())
+        return;
+
+    // emit the line head
+    mpPtr += sprintf( mpPtr, pLineHead);
+    // emit the vector values
+    IntVector::value_type nVal = 0;
+    for( IntVector::const_iterator it = rVector.begin();;) {
+        nVal = *it;
+        if( ++it == rVector.end() )
+            break;
+        mpPtr += sprintf( mpPtr, "%d ", nVal);
+    }
+    // emit the last value
+    mpPtr += sprintf( mpPtr, "%d", nVal);
+    // emit the line tail
+    mpPtr += sprintf( mpPtr, pLineTail);
+}
+
+// --------------------------------------------------------------------
+
+bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
+    const long* pReqGlyphIDs, const U8* pReqEncoding,
+    GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rFSInfo)
+{
+    // prepare some fontdirectory details
+    static const int nUniqueIdBase = 4100000; // using private-interchange UniqueIds
+    static int nUniqueId = nUniqueIdBase;
+    ++nUniqueId;
+
+    char* pFontName = rEmitter.maSubsetName;
+    if( !*pFontName ) {
+        if( mnFontNameSID) {
+            // get the fontname directly if available
+            strncpy( pFontName, getString( mnFontNameSID), sizeof(rEmitter.maSubsetName));
+        } else if( mnFullNameSID) {
+            // approximate fontname as fullname-whitespace
+            const char* pI = getString( mnFullNameSID);
+            char* pO = pFontName;
+            const char* pLimit = pFontName + sizeof(rEmitter.maSubsetName) - 1;
+            while( pO < pLimit) {
+                const char c = *(pI++);
+                if( c != ' ')
+                    *(pO++) = c;
+                if( !c)
+                    break;
+            }
+            *pO = '\0';
+        } else {
+            // fallback name of last resort
+            strncpy( pFontName, "DummyName", sizeof(rEmitter.maSubsetName));
+        }
+    }
+    const char* pFullName = pFontName;
+    const char* pFamilyName = pFontName;
+
+    char*& pOut = rEmitter.mpPtr; // convenience reference, TODO: cleanup
+
+    // create a PFB+Type1 header
+    if( rEmitter.mbPfbSubset ) {
+        static const char aPfbHeader[] = "\x80\x01\x00\x00\x00\x00";
+        rEmitter.emitRawData( aPfbHeader, sizeof(aPfbHeader)-1);
+    }
+
+    pOut += sprintf( pOut, "%%!FontType1-1.0: %s 001.003\n", rEmitter.maSubsetName);
+    // emit TOPDICT
+#if 0 // improve PS Type1 caching?
+    nOfs += sprintf( &aT1Str[nOfs],
+        "FontDirectory/%s known{/%s findfont dup/UniqueID known{dup\n"
+        "/UniqueID get %d eq exch/FontType get 1 eq and}{pop false}ifelse\n"
+        "{save true}{false}ifelse}\n{false}ifelse\n",
+            pFamilyName, pFamilyName, nUniqueId);
+#endif
+    pOut += sprintf( pOut,
+        "11 dict begin\n"   // TODO: dynamic entry count for TOPDICT
+        "/FontType 1 def\n"
+        "/PaintType 0 def\n");
+    pOut += sprintf( pOut, "/FontName /%s def\n", rEmitter.maSubsetName);
+    pOut += sprintf( pOut, "/UniqueID %d def\n", nUniqueId);
+    pOut += sprintf( pOut, "/FontMatrix [0.001 0 0 0.001 0 0 ]readonly def\n");
+    if( maFontBBox.size() == 4)
+        pOut += sprintf( pOut, "/FontBBox [%d %d %d %d ]readonly def\n",
+            maFontBBox[0], maFontBBox[1], maFontBBox[2], maFontBBox[3]);
+    else
+        pOut += sprintf( pOut, "/FontBBox [0 0 999 999]readonly def\n");
+    // emit FONTINFO into TOPDICT
+    pOut += sprintf( pOut,
+        "/FontInfo 2 dict dup begin\n"  // TODO: check fontinfo entry count
+        " /FullName (%s) readonly def\n"
+        " /FamilyName (%s) readonly def\n"
+        "end readonly def\n",
+            pFullName, pFamilyName);
+#if 0   // TODO: use an standard Type1 encoding if possible
+    pOut += sprintf( pOut,
+        "/Encoding StandardEncoding def\n");
+#else
+    pOut += sprintf( pOut,
+        "/Encoding 256 array\n"
+        "0 1 255 {1 index exch /.notdef put} for\n");
+    for( int i = 1; (i < nGlyphCount) && (i < 256); ++i) {
+        const char* pGlyphName = getGlyphName( pReqGlyphIDs[i]);
+        pOut += sprintf( pOut, "dup %d /%s put\n", pReqEncoding[i], pGlyphName);
+    }
+    pOut += sprintf( pOut, "readonly def\n");
+#endif
+    pOut += sprintf( pOut,
+        // TODO: more topdict entries
+        "currentdict end\n"
+        "currentfile eexec\n");
+
+    // emit PFB header
+    rEmitter.emitAllRaw();
+    if( rEmitter.mbPfbSubset) {
+        // update PFB header segment
+        const int nPfbHeaderLen = rEmitter.tellPos() - 6;
+        rEmitter.updateLen( 2, nPfbHeaderLen);
+
+        // prepare start of eexec segment
+        rEmitter.emitRawData( "\x80\x02\x00\x00\x00\x00", 6);   // segment start
+    }
+    const int nEExecSegTell = rEmitter.tellPos();
+
+    // which always starts with a privdict
+    // count the privdict entries
+    int nPrivEntryCount = 9;
+#if !defined(IGNORE_HINTS)
+    // emit blue hints only if non-default values
+    nPrivEntryCount += !mpCffLocal->maOtherBlues.empty();
+    nPrivEntryCount += !mpCffLocal->maFamilyBlues.empty();
+    nPrivEntryCount += !mpCffLocal->maFamilyOtherBlues.empty();
+    nPrivEntryCount += (mpCffLocal->mfBlueScale != 0.0);
+    nPrivEntryCount += (mpCffLocal->mfBlueShift != 0.0);
+    nPrivEntryCount += (mpCffLocal->mfBlueFuzz != 0.0);
+    // emit stem hints only if non-default values
+    nPrivEntryCount += (mpCffLocal->mnStemStdHW != 0);
+    nPrivEntryCount += (mpCffLocal->mnStemStdVW != 0);
+    nPrivEntryCount += !mpCffLocal->maStemSnapH.empty();
+    nPrivEntryCount += !mpCffLocal->maStemSnapV.empty();
+    // emit other hints only if non-default values
+    nPrivEntryCount += (mpCffLocal->mfExpFactor != 0.0);
+    nPrivEntryCount += (mpCffLocal->mnLangGroup != 0);
+    nPrivEntryCount += (mpCffLocal->mnLangGroup == 1);
+    nPrivEntryCount += (mpCffLocal->mbForceBold != false);
+#endif // IGNORE_HINTS
+    // emit the privdict header
+    pOut += sprintf( pOut,
+        "\110\104\125 "
+        "dup\n/Private %d dict dup begin\n"
+        "/RD{string currentfile exch readstring pop}executeonly def\n"
+        "/ND{noaccess def}executeonly def\n"
+        "/NP{noaccess put}executeonly def\n"
+        "/MinFeature{16 16}ND\n"
+        "/password 5839 def\n",     // TODO: mnRDCryptSeed?
+            nPrivEntryCount);
+
+#if defined(IGNORE_HINTS)
+    pOut += sprintf( pOut, "/BlueValues []ND\n");   // BlueValues are mandatory
+#else
+    // emit blue hint related privdict entries
+    if( !mpCffLocal->maBlueValues.empty())
+        rEmitter.emitIntVector( "/BlueValues [", "]ND\n", mpCffLocal->maBlueValues);
+    else
+        pOut += sprintf( pOut, "/BlueValues []ND\n"); // default to empty BlueValues
+    rEmitter.emitIntVector( "/OtherBlues [", "]ND\n", mpCffLocal->maOtherBlues);
+    rEmitter.emitIntVector( "/FamilyBlues [", "]ND\n", mpCffLocal->maFamilyBlues);
+    rEmitter.emitIntVector( "/FamilyOtherBlues [", "]ND\n", mpCffLocal->maFamilyOtherBlues);
+
+    if( mpCffLocal->mfBlueScale)
+        pOut += sprintf( pOut, "/BlueScale %.6f def\n", mpCffLocal->mfBlueScale);
+    if( mpCffLocal->mfBlueShift)    // default BlueShift==7
+        pOut += sprintf( pOut, "/BlueShift %.1f def\n", mpCffLocal->mfBlueShift);
+    if( mpCffLocal->mfBlueFuzz)     // default BlueFuzz==1
+        pOut += sprintf( pOut, "/BlueFuzz %.1f def\n", mpCffLocal->mfBlueFuzz);
+
+    // emit stem hint related privdict entries
+    if( mpCffLocal->mnStemStdHW)
+        pOut += sprintf( pOut, "/StdHW [%d] def\n", mpCffLocal->mnStemStdHW);
+    if( mpCffLocal->mnStemStdVW)
+        pOut += sprintf( pOut, "/StdVW [%d] def\n", mpCffLocal->mnStemStdVW);
+    rEmitter.emitIntVector( "/StemSnapH [", "]ND\n", mpCffLocal->maStemSnapH);
+    rEmitter.emitIntVector( "/StemSnapV [", "]ND\n", mpCffLocal->maStemSnapV);
+
+    // emit other hints
+    if( mpCffLocal->mbForceBold)
+        pOut += sprintf( pOut, "/ForceBold true def\n");
+    if( mpCffLocal->mnLangGroup != 0)
+        pOut += sprintf( pOut, "/LanguageGroup %d def\n", mpCffLocal->mnLangGroup);
+    if( mpCffLocal->mnLangGroup == 1) // compatibility with ancient printers
+        pOut += sprintf( pOut, "/RndStemUp false def\n");
+    if( mpCffLocal->mfExpFactor)
+        pOut += sprintf( pOut, "/ExpansionFactor %.2f def\n", mpCffLocal->mfExpFactor);
+#endif // IGNORE_HINTS
+
+    // emit remaining privdict entries
+    pOut += sprintf( pOut, "/UniqueID %d def\n", nUniqueId);
+    // TODO?: more privdict entries?
+
+    static const char aOtherSubrs[] =
+        "/OtherSubrs\n"
+        "% Dummy code for faking flex hints\n"
+        "[ {} {} {} {systemdict /internaldict known not {pop 3}\n"
+        "{1183615869 systemdict /internaldict get exec\n"
+        "dup /startlock known\n"
+        "{/startlock get exec}\n"
+        "{dup /strtlck known\n"
+        "{/strtlck get exec}\n"
+        "{pop 3}\nifelse}\nifelse}\nifelse\n} executeonly\n"
+        "] ND\n";
+    memcpy( pOut, aOtherSubrs, sizeof(aOtherSubrs)-1);
+    pOut += sizeof(aOtherSubrs)-1;
+
+    // emit used GlobalSubr charstrings
+    // these are the just the default subrs
+    static const char aSubrs[] =
+        "/Subrs 5 array\n"
+        "dup 0 15 RD \x5F\x3D\x6B\xAC\x3C\xBD\x74\x3D\x3E\x17\xA0\x86\x58\x08\x85 NP\n"
+        "dup 1 9 RD \x5F\x3D\x6B\xD8\xA6\xB5\x68\xB6\xA2 NP\n"
+        "dup 2 9 RD \x5F\x3D\x6B\xAC\x39\x46\xB9\x43\xF9 NP\n"
+        "dup 3 5 RD \x5F\x3D\x6B\xAC\xB9 NP\n"
+        "dup 4 12 RD \x5F\x3D\x6B\xAC\x3E\x5D\x48\x54\x62\x76\x39\x03 NP\n"
+        "ND\n";
+    memcpy( pOut, aSubrs, sizeof(aSubrs)-1);
+    pOut += sizeof(aSubrs)-1;
+
+    // TODO: emit more GlobalSubr charstrings?
+    // TODO: emit used LocalSubr charstrings?
+
+    // emit the CharStrings for the requested glyphs
+    pOut += sprintf( pOut,
+        "2 index /CharStrings %d dict dup begin\n", nGlyphCount);
+    rEmitter.emitAllCrypted();
+    for( int i = 0; i < nGlyphCount; ++i) {
+        const int nGlyphId = pReqGlyphIDs[i];
+        assert( (nGlyphId >= 0) && (nGlyphId < mnCharStrCount));
+        // get privdict context matching to the glyph
+        const int nFDSelect = getFDSelect( nGlyphId);
+        mpCffLocal = &maCffLocal[ nFDSelect];
+        // convert the Type2op charstring to its Type1op counterpart
+        const int nT2Len = seekIndexData( mnCharStrBase, nGlyphId);
+        assert( nT2Len > 0);
+        U8 aType1Ops[ MAX_T1OPS_SIZE]; // TODO: dynamic allocation
+        const int nT1Len = convert2Type1Ops( mpCffLocal, mpReadPtr, nT2Len, aType1Ops);
+        // get the glyph name
+        const char* pGlyphName = getGlyphName( nGlyphId);
+        // emit the encrypted Type1op charstring
+        pOut += sprintf( pOut, "/%s %d RD ", pGlyphName, nT1Len);
+        memcpy( pOut, aType1Ops, nT1Len);
+        pOut += nT1Len;
+        pOut += sprintf( pOut, " ND\n");
+        rEmitter.emitAllCrypted();
+        // provide individual glyphwidths if requested
+        if( pGlyphWidths )
+            pGlyphWidths[i] = getCharWidth();
+    }
+    pOut += sprintf( pOut, "end end\nreadonly put\nput\n");
+    pOut += sprintf( pOut, "dup/FontName get exch definefont pop\n");
+    pOut += sprintf( pOut, "mark currentfile closefile\n");
+    rEmitter.emitAllCrypted();
+
+    // mark stop of eexec encryption
+     if( rEmitter.mbPfbSubset) {
+        const int nEExecLen = rEmitter.tellPos() - nEExecSegTell;
+        rEmitter.updateLen( nEExecSegTell-4, nEExecLen);
+     }
+
+    // create PFB footer
+    static const char aPfxFooter[] = "\x80\x01\x14\x02\x00\x00\n" // TODO: check segment len
+        "0000000000000000000000000000000000000000000000000000000000000000\n"
+        "0000000000000000000000000000000000000000000000000000000000000000\n"
+        "0000000000000000000000000000000000000000000000000000000000000000\n"
+        "0000000000000000000000000000000000000000000000000000000000000000\n"
+        "0000000000000000000000000000000000000000000000000000000000000000\n"
+        "0000000000000000000000000000000000000000000000000000000000000000\n"
+        "0000000000000000000000000000000000000000000000000000000000000000\n"
+        "0000000000000000000000000000000000000000000000000000000000000000\n"
+        "cleartomark\n"
+        "\x80\x03";
+     if( rEmitter.mbPfbSubset)
+        rEmitter.emitRawData( aPfxFooter, sizeof(aPfxFooter)-1);
+    else
+        rEmitter.emitRawData( aPfxFooter+6, sizeof(aPfxFooter)-9);
+
+    // provide details to the subset requesters, TODO: move into own method?
+    // note: Top and Bottom are flipped between Type1 and VCL
+    rFSInfo.m_aFontBBox = Rectangle( Point( maFontBBox[0], maFontBBox[1] ), Point( maFontBBox[2], maFontBBox[3] ) );
+    // PDF-Spec says the values below mean the ink bounds!
+    // TODO: use better approximations for these ink bounds
+    rFSInfo.m_nAscent  = +rFSInfo.m_aFontBBox.Bottom(); // for capital letters
+    rFSInfo.m_nDescent = -rFSInfo.m_aFontBBox.Top();    // for all letters
+    rFSInfo.m_nCapHeight = rFSInfo.m_nAscent;           // for top-flat capital letters
+
+    rFSInfo.m_nFontType = rEmitter.mbPfbSubset ? FontSubsetInfo::TYPE1_PFB : FontSubsetInfo::TYPE1_PFA;
+    rFSInfo.m_aPSName   = String( rEmitter.maSubsetName, RTL_TEXTENCODING_UTF8 );
+
+    return true;
+}
+
+// ====================================================================
+
+bool FontSubsetInfo::CreateFontSubsetFromCff( GlyphWidth* pOutGlyphWidths )
+{
+    CffSubsetterContext aCff( mpInFontBytes, mnInByteLength);
+    aCff.initialCffRead();
+
+    // emit Type1 subset from the CFF input
+    // TODO: also support CFF->CFF subsetting (when PDF-export and PS-printing need it)
+    const bool bPfbSubset = (0 != (mnReqFontTypeMask & FontSubsetInfo::TYPE1_PFB));
+    Type1Emitter aType1Emitter( mpOutFile, bPfbSubset);
+    aType1Emitter.setSubsetName( mpReqFontName);
+    bool bRC = aCff.emitAsType1( aType1Emitter,
+        mpReqGlyphIds, mpReqEncodedIds,
+        pOutGlyphWidths, mnReqGlyphCount, *this);
+    return bRC;
+}
+
+// ====================================================================
+

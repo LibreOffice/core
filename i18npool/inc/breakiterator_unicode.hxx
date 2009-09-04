@@ -86,12 +86,16 @@ protected:
     const sal_Char *cBreakIterator, *wordRule, *lineRule;
     Boundary result; // for word break iterator
 
-    struct {
+    struct BI_Data {
         UnicodeString aICUText;
         icu::BreakIterator *aBreakIterator;
+
+        BI_Data() : aICUText(), aBreakIterator(NULL) {}
     } character, word, sentence, line, *icuBI;
+
     com::sun::star::lang::Locale aLocale;
     sal_Int16 aBreakType, aWordType;
+
     void SAL_CALL loadICUBreakIterator(const com::sun::star::lang::Locale& rLocale,
         sal_Int16 rBreakType, sal_Int16 rWordType, const sal_Char* name, const rtl::OUString& rText) throw(com::sun::star::uno::RuntimeException);
 };

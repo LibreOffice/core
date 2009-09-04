@@ -989,7 +989,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nR
             m_aAccessibleChildren.assign( nCount, Reference< XAccessible >() );
         }
 
-        nIndex = ( _nRow * GetColumnCount() ) + _nColumnPos + GetColumnCount();
+        nIndex = ( _nRow * nColumnCount ) + _nColumnPos + nColumnCount;
         xChild = m_aAccessibleChildren[ nIndex ];
     }
 
@@ -1084,15 +1084,10 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Poin
     switch( _eType )
     {
         case ::svt::BBTYPE_BROWSEBOX:
-            aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HeaderTabListBox" ) );
-            break;
-
         case ::svt::BBTYPE_TABLE:
-            aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HeaderTabListBoxTable" ) );
-            break;
-
         case ::svt::BBTYPE_COLUMNHEADERBAR:
-            aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnHeaderBar of HeaderTabListBox" ) );
+            // should be empty now (see #i63983)
+            aRetText = ::rtl::OUString();
             break;
 
         case ::svt::BBTYPE_TABLECELL:

@@ -35,7 +35,7 @@
 
 #include <rtl/math.hxx>
 #include <basegfx/numeric/ftools.hxx>
-
+#include <i18npool/mslangid.hxx>
 #include <vcl/metric.hxx>
 
 #include "canvasfont.hxx"
@@ -66,6 +66,8 @@ namespace vclcanvas
         // TODO(F2): improve panose->vclenum conversion
         maFont->SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
         maFont->SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
+
+        maFont->SetLanguage(MsLangId::convertLocaleToLanguage(rFontRequest.Locale));
 
         // adjust to stretched/shrinked font
         if( !::rtl::math::approxEqual( rFontMatrix.m00, rFontMatrix.m11) )

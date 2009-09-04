@@ -127,9 +127,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
         GetBorder( nLeft, nTop, nRight, nBottom );
         mnDDHeight = (USHORT)(GetTextHeight() + nTop + nBottom + 4);
 
-        // FIXME: this is currently only on mac/aqua
-        if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
-            IsNativeWidgetEnabled() &&
+        if( IsNativeWidgetEnabled() &&
             IsNativeControlSupported( CTRL_LISTBOX, PART_ENTIRE_CONTROL ) )
         {
                 ImplControlValue aControlValue;

@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: salatsuifontutils.cxx,v $
- * $Revision: 1.13.138.6 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -210,12 +207,8 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
     rDFA.meItalic     = ITALIC_NONE;
     rDFA.mbSymbolFlag = false;
 
-    // get the embeddable + subsettable status
-    // TODO: remove test after PS-OpenType subsetting is implemented
-    ATSFontRef rATSFontRef = FMGetATSFontRefFromFont( nFontID );
-    ByteCount nGlyfLen  = 0;
-    OSStatus rc = ATSFontGetTable( rATSFontRef, 0x676c7966/*glyf*/, 0, 0, NULL, &nGlyfLen);
-    rDFA.mbSubsettable  = ((rc == noErr) && (nGlyfLen > 0));
+    // all scalable fonts on this platform are subsettable
+    rDFA.mbSubsettable  = true;
     rDFA.mbEmbeddable   = false;
     // TODO: these members are needed only for our X11 platform targets
     rDFA.meAntiAlias    = ANTIALIAS_DONTKNOW;
@@ -223,7 +216,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
 
     // prepare iterating over all name strings of the font
     ItemCount nFontNameCount = 0;
-    rc = ATSUCountFontNames( nFontID, &nFontNameCount );
+    OSStatus rc = ATSUCountFontNames( nFontID, &nFontNameCount );
     if( rc != noErr )
         return false;
     int nBestNameValue = 0;
@@ -269,7 +262,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
             case 0x30A: nNameValue += 0;            // Win-UCS-4
                         eEncoding = RTL_TEXTENCODING_UCS4;
                         break;
-            case 0x100: nNameValue += 21;       // Mac Roman
+            case 0x100: nNameValue += 21;           // Mac Roman
                         eEncoding = RTL_TEXTENCODING_APPLE_ROMAN;
                         break;
             case 0x300: nNameValue =  0;            // Win Symbol encoded name!
