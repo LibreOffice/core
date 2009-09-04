@@ -806,7 +806,8 @@ sal_Int32 SwSrcView::PrintSource(
     // Header drucken...
     if (!bCalcNumPagesOnly && nPage == nCurPage)
         lcl_PrintHeader( *pOutDev, nPages, nCurPage, aTitle );
-    Point aPos( LMARGPRN, TMARGPRN );
+    const Point aStartPos( LMARGPRN, TMARGPRN );
+    Point aPos( aStartPos );
     for ( USHORT nPara = 0; nPara < nParas; ++nPara )
     {
         String aLine( pTextEngine->GetText( nPara ) );
@@ -816,12 +817,12 @@ sal_Int32 SwSrcView::PrintSource(
         {
             String aTmpLine( aLine, nLine * nCharspLine, nCharspLine );
             aPos.Y() += nLineHeight;
-            if ( aPos.Y() > ( aPaperSz.Height() + TMARGPRN ) )
+            if ( aPos.Y() > ( aPaperSz.Height() + TMARGPRN - nLineHeight/2 ) )
             {
                 ++nCurPage;
                 if (!bCalcNumPagesOnly && nPage == nCurPage)
                     lcl_PrintHeader( *pOutDev, nPages, nCurPage, aTitle );
-                aPos = Point( LMARGPRN, TMARGPRN + nLineHeight );
+                aPos = aStartPos;
             }
             if (!bCalcNumPagesOnly && nPage == nCurPage)
                 pOutDev->DrawText( aPos, aTmpLine );
