@@ -211,11 +211,11 @@ public:
         bPaperFromSetup         =
         bPrintReverse           =
         bPrintProspect          =
-        bPrintProspectRTL      =
+        bPrintProspectRTL       =
         bPrintSingleJobs        =
         bModified               =
         bPrintBlackFont         =
-        bPrintHiddenText       =
+        bPrintHiddenText        =
         bPrintTextPlaceholder   = sal_False;
 
         nPrintPostIts           = 0;
@@ -226,24 +226,24 @@ public:
     sal_Bool operator==(const SwPrintData& rData)const
     {
         return
-        bPrintGraphic       ==   rData.bPrintGraphic       &&
-        bPrintTable         ==   rData.bPrintTable         &&
-        bPrintDraw          ==   rData.bPrintDraw          &&
-        bPrintControl       ==   rData.bPrintControl       &&
-        bPrintPageBackground==   rData.bPrintPageBackground&&
-        bPrintBlackFont     ==   rData.bPrintBlackFont     &&
-        bPrintLeftPages     ==   rData.bPrintLeftPages     &&
-        bPrintRightPages    ==   rData.bPrintRightPages    &&
-        bPrintReverse       ==   rData.bPrintReverse       &&
-        bPrintProspect      ==   rData.bPrintProspect      &&
-        bPrintProspectRTL  ==   rData.bPrintProspectRTL  &&
-        bPrintSingleJobs    ==   rData.bPrintSingleJobs    &&
-        bPaperFromSetup     ==   rData.bPaperFromSetup     &&
-        bPrintEmptyPages    ==   rData.bPrintEmptyPages   &&
+        bPrintGraphic       ==   rData.bPrintGraphic        &&
+        bPrintTable         ==   rData.bPrintTable          &&
+        bPrintDraw          ==   rData.bPrintDraw           &&
+        bPrintControl       ==   rData.bPrintControl        &&
+        bPrintPageBackground==   rData.bPrintPageBackground &&
+        bPrintBlackFont     ==   rData.bPrintBlackFont      &&
+        bPrintLeftPages     ==   rData.bPrintLeftPages      &&
+        bPrintRightPages    ==   rData.bPrintRightPages     &&
+        bPrintReverse       ==   rData.bPrintReverse        &&
+        bPrintProspect      ==   rData.bPrintProspect       &&
+        bPrintProspectRTL   ==   rData.bPrintProspectRTL    &&
+        bPrintSingleJobs    ==   rData.bPrintSingleJobs     &&
+        bPaperFromSetup     ==   rData.bPaperFromSetup      &&
+        bPrintEmptyPages    ==   rData.bPrintEmptyPages     &&
         bUpdateFieldsInPrinting == rData.bUpdateFieldsInPrinting &&
-        nPrintPostIts       ==   rData.nPrintPostIts       &&
-        sFaxName            ==   rData.sFaxName         &&
-        bPrintHiddenText       ==   rData.bPrintHiddenText &&
+        nPrintPostIts       ==   rData.nPrintPostIts        &&
+        sFaxName            ==   rData.sFaxName             &&
+        bPrintHiddenText    ==   rData.bPrintHiddenText     &&
         bPrintTextPlaceholder   ==   rData.bPrintTextPlaceholder;
     }
 
@@ -266,12 +266,12 @@ public:
     sal_Bool IsPrintProspect()  const { return bPrintProspect; }
     sal_Bool IsPrintProspectRTL()   const { return bPrintProspectRTL; }
     sal_Bool IsPrintPageBackground() const { return bPrintPageBackground; }
-    sal_Bool IsPrintBlackFont() const { return bPrintBlackFont;}
-    sal_Bool IsPrintSingleJobs() const { return bPrintSingleJobs;}
+    sal_Bool IsPrintBlackFont() const { return bPrintBlackFont; }
+    sal_Bool IsPrintSingleJobs() const { return bPrintSingleJobs; }
     sal_Int16 GetPrintPostIts() const { return nPrintPostIts; }
-    const rtl::OUString     GetFaxName() const{return sFaxName;}
+    const rtl::OUString     GetFaxName() const{return sFaxName; }
     sal_Bool IsPrintHiddenText() const {return bPrintHiddenText;}
-    sal_Bool IsPrintTextPlaceholder() const {return bPrintTextPlaceholder;}
+    sal_Bool IsPrintTextPlaceholder() const {return bPrintTextPlaceholder; }
 
     void SetPrintGraphic  ( sal_Bool b ) { doSetModified(); bPrintGraphic = b;}
     void SetPrintTable    ( sal_Bool b ) { doSetModified(); bPrintTable = b;}

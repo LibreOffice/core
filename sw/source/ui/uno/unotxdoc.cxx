@@ -2946,7 +2946,7 @@ void SAL_CALL SwXTextDocument::render(
             if (bPrintProspect)
                 pVwSh->PrintProspect( pOut, rSwPrtOptions, nRenderer );
             else    // normal printing and PDF export
-                pVwSh->PrintOrPDFExport( pOut, rSwPrtOptions, nRenderer, bIsPDFExport );
+                pVwSh->PrintOrPDFExport( pOut, rSwPrtOptions, nRenderer );
 
             // --> FME 2004-10-08 #i35176#
             //

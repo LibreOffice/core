@@ -95,8 +95,7 @@ public:
         }
 
     // get print options
-    void MakeOptions( PrintDialog* pDlg,
-            BOOL* pPrtProspect, BOOL* pPrtProspect_RTL, BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData );
+    void MakeOptions( BOOL bWeb );
 };
 
 

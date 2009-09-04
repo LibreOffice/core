@@ -372,8 +372,7 @@ public:
     // printing of one page.
     // bIsPDFExport == true is: do PDF Export (no printing!)
     sal_Bool PrintOrPDFExport( OutputDevice *pOutDev, const SwPrtOptions &rPrintData,
-            sal_Int32 nRenderer, /* offset in vector of pages to print */
-            bool bIsPDFExport = sal_False );
+            sal_Int32 nRenderer /* offset in vector of pages to print */ );
 
     // printing of one brochure page
     void PrintProspect( OutputDevice *pOutDev, const SwPrintData &rPrintData,
@@ -384,7 +383,7 @@ public:
                          OutputDevice* pOleOut, const Rectangle& rRect );
 
     // creates temporary doc with selected text for PDF export
-    SwDoc * CreatePrtDoc( /*Printer* pPrt,*/ SfxObjectShellRef& );
+    SwDoc * CreatePrtDoc( SfxObjectShellRef& );
     SwDoc * FillPrtDoc( SwDoc* pPrtDoc, const SfxPrinter* pPrt );
 
     //Wird intern fuer die Shell gerufen die Druckt. Formatiert die Seiten.
@@ -486,11 +485,6 @@ public:
         view option will be adjusted.
     */
     void AdjustOptionsForPagePreview( const SwPrtOptions &_rPrintOptions );
-
-    // print page/print preview
-    void PrintPreViewPage( SwPrtOptions& rOptions, sal_uInt16 nRowCol,
-                           SfxProgress& rProgress,
-                           const SwPagePreViewPrtData* = 0 );
 
     sal_Bool IsViewLocked() const { return bViewLocked; }
     void LockView( sal_Bool b )   { bViewLocked = b;    }

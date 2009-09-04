@@ -1779,7 +1779,7 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
 
     // OD 09.01.2003 #i6467# - adjust view shell option to the same as for print
     SwPrtOptions aPrintOptions( GetViewFrame()->GetObjectShell()->GetTitle(0) );
-    aPrintOptions.MakeOptions( 0, 0, 0, false, 0, 0 );
+    aPrintOptions.MakeOptions( false );
     GetViewShell()->AdjustOptionsForPagePreview( aPrintOptions );
 
     IDocumentSettingAccess* pIDSA = pESh->getIDocumentSettingAccess();
@@ -2407,20 +2407,6 @@ void SwPagePreView::ScrollDocSzChg()
 
 
 // alles zum Thema Drucken
-
-USHORT  SwPagePreView::Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pDlg )
-{
-    (void) rProgress; (void) bIsAPI; (void) pDlg;
-    // TLPDF no longer needed in new print UI
-    // TLPDF TODO: clean-up
-
-    return 0; // OK
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 SfxPrinter*  SwPagePreView::GetPrinter( BOOL bCreate )
 {

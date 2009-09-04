@@ -108,8 +108,6 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
 
     // --> FME 2007-11-06 #i82967#
     OutputDevice* pPDFOut = 0;
-// TLPDF    if ( pOut && pOut->GetPDFWriter() )
-// TLPDF        pPDFOut = pOut;
     if ( pOut && pOut->GetPDFWriter() )
         pPDFOut = pOut;
     // <--
@@ -118,11 +116,6 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
     // Only setup the printer if we need one:
     const IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
     const bool bBrowseMode = pIDSA->get(IDocumentSettingAccess::BROWSE_MODE);
-// TLPDF    const bool bCreatePrinter = !bBrowseMode &&
-// TLPDF                                !pIDSA->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE);
-// TLPDF    SfxPrinter* pPrinter = getIDocumentDeviceAccess()->getPrinter( bCreatePrinter );
-// TLPDF    if( pPrinter )
-// TLPDF       InitPrt( pPrinter, pPDFOut );
     if( pPDFOut )
         InitPrt( pPDFOut );
     // <--

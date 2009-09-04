@@ -1989,51 +1989,17 @@ void SwView::AddTransferable(SwTransferable& rTransferable)
 
 /* --------------------------------------------------*/
 
-void SwPrtOptions::MakeOptions( PrintDialog* pDlg,
-         BOOL* pPrtProspect, BOOL* pPrtProspect_RTL, BOOL bWeb,
-         SfxPrinter* pPrt, SwPrintData* pData )
+void SwPrtOptions::MakeOptions( BOOL bWeb )
 {
-    SwAddPrinterItem* pAddPrinterAttr;
-    if( pPrt && SFX_ITEM_SET == pPrt->GetOptions().GetItemState(
-        FN_PARAM_ADDPRINTER, FALSE, (const SfxPoolItem**)&pAddPrinterAttr ))
-    {
-        pData = pAddPrinterAttr;
-    }
-    else if(!pData)
-    {
-        pData = SW_MOD()->GetPrtOptions(bWeb);
-    }
-    *this = *pData;
-    if( pPrtProspect )
-        *pPrtProspect = pData->bPrintProspect;
-    if( pPrtProspect_RTL )
-        *pPrtProspect_RTL = pData->bPrintProspectRTL;
-    aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
-    aMulti.SelectAll( FALSE );
+    *this = *SW_MOD()->GetPrtOptions(bWeb);
+
     nCopyCount = 1;
     bCollate = FALSE;
     bPrintSelection = FALSE;
     bJobStartet = FALSE;
 
-    if ( pDlg )
-    {
-        nCopyCount = pDlg->GetCopyCount();
-        bCollate = pDlg->IsCollateChecked();
-        if ( pDlg->GetCheckedRange() == PRINTDIALOG_SELECTION )
-        {
-            aMulti.SelectAll();
-            bPrintSelection = TRUE;
-        }
-        else if ( PRINTDIALOG_ALL == pDlg->GetCheckedRange() )
-            aMulti.SelectAll();
-        else
-        {
-            aMulti = MultiSelection( pDlg->GetRangeText() );
-            aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
-        }
-    }
-    else
-        aMulti.SelectAll();
+    aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
+    aMulti.SelectAll();
     aMulti.Select( 0, FALSE );
 }
 

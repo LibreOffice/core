@@ -122,19 +122,6 @@ public:
 
 SwQueuedPaint *SwPaintQueue::pQueue = 0;
 
-//Klasse zum Speichern einiger Druckereinstellungen
-class SwPrtOptSave
-{
-    Printer *pPrt;
-    Size aSize;
-    Paper ePaper;
-    Orientation eOrientation;
-    USHORT nPaperBin;
-public:
-    SwPrtOptSave( Printer *pPrinter );
-    ~SwPrtOptSave();
-};
-
 // saves some settings from the draw view
 class SwDrawViewSave
 {
@@ -324,7 +311,7 @@ void SwRenderData::MakeSwPrtOptions(
     // get default print options
     const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
     BOOL bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
-    rOptions.MakeOptions( NULL, NULL, NULL, bWeb, NULL, NULL );
+    rOptions.MakeOptions( bWeb );
 
     // get print options to use from provided properties
     rOptions.bPrintGraphic          = pOpt->IsPrintGraphics();
@@ -335,13 +322,13 @@ void SwRenderData::MakeSwPrtOptions(
     rOptions.bPrintRightPages       = pOpt->IsPrintRightPages();
     rOptions.bPrintPageBackground   = pOpt->getBoolValue( "PrintPageBackground",   rOptions.bPrintPageBackground );
     rOptions.bPrintEmptyPages       = !bIsSkipEmptyPages;
-    // bUpdateFieldsInPrinting  <-- not set here    // TLPDF: TODO: remove this from SwPrintData?? Get rid of SwPrtOptions??
+    // bUpdateFieldsInPrinting  <-- not set here; mail merge only
     rOptions.bPaperFromSetup        = pOpt->getBoolValue( "PrintPaperFromSetup",   rOptions.bPaperFromSetup );
     rOptions.bPrintReverse          = pOpt->getBoolValue( "PrintReversed",         rOptions.bPrintReverse );
     rOptions.bPrintProspect         = pOpt->getBoolValue( "PrintProspect",         rOptions.bPrintProspect );
     rOptions.bPrintProspectRTL      = pOpt->getIntValue( "PrintProspectRTL",       rOptions.bPrintProspectRTL ) ? true : false;
-    // bPrintSingleJobs         <-- not set here    // TLPDF: TODO: remove this from SwPrintData?? Get rid of SwPrtOptions??
-    // bModified                <-- not set here    // TLPDF: TODO: remove this from SwPrintData?? Get rid of SwPrtOptions??
+    // bPrintSingleJobs         <-- not set here; mail merge and or configuration
+    // bModified                <-- not set here; mail merge only
     rOptions.bPrintBlackFont        = pOpt->getBoolValue( "PrintBlackFonts",       rOptions.bPrintBlackFont );
     rOptions.bPrintHiddenText       = pOpt->getBoolValue( "PrintHiddenText",       rOptions.bPrintHiddenText );
     rOptions.bPrintTextPlaceholder  = pOpt->getBoolValue( "PrintTextPlaceholder",  rOptions.bPrintTextPlaceholder );
@@ -352,12 +339,9 @@ void SwRenderData::MakeSwPrtOptions(
     rOptions.SetPrintUIOptions( pOpt );
     rOptions.SetRenderData( pData );
 
-    // rOptions.aMulti is not used anymore in the XRenderable API but it is still
-    // used in ViewShell::PrintPreViewPage. Thus we set it to a dummy value here.
-    MultiSelection aPages( Range( 1, 1 ) );
-//    aPages.SetTotalRange( Range( 0, RANGE_MAX ) );
-//    aPages.Select( aRange );
-    rOptions.aMulti = aPages;
+    // rOptions.aMulti is not used anymore in the XRenderable API
+    // Thus we set it to a dummy value here.
+    rOptions.aMulti = MultiSelection( Range( 1, 1 ) );
 
     //! Note: Since for PDF export of (multi-)selection a temporary
     //! document is created that contains only the selects parts,
@@ -681,13 +665,8 @@ void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, BOOL /*bPDFExport*/ )
     // move the start point of the output operation to a position
     // such that in the output device all pages will be painted
     // at the same position
-// TLPDF    if (!bPDFExport)
-// TLPDF        aPt += pSh->aPrtOffst;
     aPt.X() = -aPt.X(); aPt.Y() = -aPt.Y();
 
-// TLPDF   OutputDevice *pOut = bPDFExport ?
-// TLPDF                        pSh->GetOut() :
-// TLPDF                        pSh->getIDocumentDeviceAccess()->getPrinter( false );
     OutputDevice *pOut = pSh->GetOut();
 
     MapMode aMapMode( pOut->GetMapMode() );
@@ -695,38 +674,31 @@ void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, BOOL /*bPDFExport*/ )
     pOut->SetMapMode( aMapMode );
 }
 
-/******************************************************************************
- *  Methode     :   void ViewShell::InitPrt( Printer *pNew, OutputDevice *pPDFOut )
- *  Beschreibung:
- *  Erstellt    :   OK 07.11.94 10:22
- *  Aenderung   :
- ******************************************************************************/
+/******************************************************************************/
 
-void ViewShell::InitPrt( /*Printer *pPrt,*/ OutputDevice *pOutDev ) /* TLPDF */
+void ViewShell::InitPrt( OutputDevice *pOutDev )
 {
     //Fuer den Printer merken wir uns einen negativen Offset, der
     //genau dem Offset de OutputSize entspricht. Das ist notwendig,
     //weil unser Ursprung der linken ober Ecke der physikalischen
     //Seite ist, die Ausgaben (SV) aber den Outputoffset als Urstprung
     //betrachten.
-    OutputDevice *pTmpDev = pOutDev; // TLPDF pPDFOut ? pPDFOut : (OutputDevice *) pPrt;
-    if ( pTmpDev )
+    if ( pOutDev )
     {
-// TLPDF        aPrtOffst = pPrt ? pPrt->GetPageOffset() : Point();
         aPrtOffst = Point();
 
-        aPrtOffst += pTmpDev->GetMapMode().GetOrigin();
-        MapMode aMapMode( pTmpDev->GetMapMode() );
+        aPrtOffst += pOutDev->GetMapMode().GetOrigin();
+        MapMode aMapMode( pOutDev->GetMapMode() );
         aMapMode.SetMapUnit( MAP_TWIP );
-        pTmpDev->SetMapMode( aMapMode );
-        pTmpDev->SetLineColor();
-        pTmpDev->SetFillColor();
+        pOutDev->SetMapMode( aMapMode );
+        pOutDev->SetLineColor();
+        pOutDev->SetFillColor();
     }
     else
         aPrtOffst.X() = aPrtOffst.Y() = 0;
 
     if ( !pWin )
-        pOut = pTmpDev;    //Oder was sonst?
+        pOut = pOutDev;    //Oder was sonst?
 }
 
 /******************************************************************************
@@ -894,7 +866,7 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress )
 
 /******************************************************************************/
 
-SwDoc * ViewShell::CreatePrtDoc( /*Printer* pPrt,*/ SfxObjectShellRef &rDocShellRef)    // TLPDF
+SwDoc * ViewShell::CreatePrtDoc( SfxObjectShellRef &rDocShellRef)
 {
     ASSERT( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
     SwFEShell* pFESh = (SwFEShell*)this;
@@ -904,11 +876,6 @@ SwDoc * ViewShell::CreatePrtDoc( /*Printer* pPrt,*/ SfxObjectShellRef &rDocShell
     pPrtDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)rDocShellRef );
     pPrtDoc->LockExpFlds();
 
-/* TLPDF
-    // Der Drucker wird uebernommen
-    if (pPrt)
-        pPrtDoc->setPrinter( pPrt, true, true );
-*/
     const SfxPoolItem* pCpyItem;
     const SfxItemPool& rPool = GetAttrPool();
     for( USHORT nWh = POOLATTR_BEGIN; nWh < POOLATTR_END; ++nWh )
@@ -1080,12 +1047,11 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 sal_Bool ViewShell::PrintOrPDFExport(
     OutputDevice *pOutDev,
     const SwPrtOptions &rPrintData,
-    sal_Int32 nRenderer,    // the index in the vector of pages to be printed
-    bool /* TLPDF bIsPDFExport*/ )
+    sal_Int32 nRenderer     /* the index in the vector of pages to be printed */ )
 {
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//Immer die Druckroutinen in viewpg.cxx (PrintPreViewPage und PrintProspect) mitpflegen!!
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//Immer die Druckroutinen in viewpg.cxx (PrintProspect) mitpflegen!!
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     const sal_Int32 nMaxRenderer = rPrintData.GetRenderData().GetPagesToPrint().size() - 1;
 #if OSL_DEBUG_LEVEL > 1
@@ -1097,9 +1063,6 @@ sal_Bool ViewShell::PrintOrPDFExport(
     // save settings of OutputDevice (should be done always since the
     // output device is now provided by a call from outside the Writer)
     pOutDev->Push();
-
-    // Einstellungen am Drucker merken
-//    SwPrtOptSave aPrtSave( pOutDev );      /* TLPDF wo dann heutzutage ??? */
 
     // eine neue Shell fuer den Printer erzeugen
     ViewShell *pShell;
@@ -1123,7 +1086,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
     // to be created that often here in the 'then' part.
     if ( bSelection )
     {
-        pOutDevDoc = CreatePrtDoc( /*TLPDF pOutDev,*/ aDocShellRef );
+        pOutDevDoc = CreatePrtDoc( aDocShellRef );
 
         // eine ViewShell darauf
         pShell = new ViewShell( *pOutDevDoc, 0, pOpt, pOutDev );
@@ -1138,8 +1101,8 @@ sal_Bool ViewShell::PrintOrPDFExport(
     SdrView *pDrawView = pShell->GetDrawView();
     if (pDrawView)
     {
-        pDrawView->SetBufferedOutputAllowed( false );  // TLPDF
-        pDrawView->SetBufferedOverlayAllowed( false ); // TLPDF
+        pDrawView->SetBufferedOutputAllowed( false );
+        pDrawView->SetBufferedOverlayAllowed( false );
     }
 
     {   //Zusaetzlicher Scope, damit die CurrShell vor dem zerstoeren der
@@ -1156,7 +1119,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
 
         pShell->PrepareForPrint( rPrintData );
 
-        const sal_Int32 nPage = rPrintData.GetRenderData().GetPagesToPrint()[ nRenderer ]; /* TLPDF */
+        const sal_Int32 nPage = rPrintData.GetRenderData().GetPagesToPrint()[ nRenderer ];
 #if OSL_DEBUG_LEVEL > 1
         DBG_ASSERT( nPage == 0 || rPrintData.GetRenderData().GetValidPagesSet().count( nPage ) == 1, "nPage not valid" );
 #endif
@@ -1177,7 +1140,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
         }
         DBG_ASSERT( pStPage, "failed to get start page" );
 
-#ifdef TL_NOT_NOW   // TLPDF: applying view options and formatting the dcoument should now only be done in getRendererCount!
+#if 0   // applying view options and formatting the dcoument should now only be done in getRendererCount!
         // benoetigte Seiten fuers Drucken formatieren
         pShell->CalcPagesForPrint( (USHORT)nPage, 0 );
 
@@ -1190,11 +1153,11 @@ sal_Bool ViewShell::PrintOrPDFExport(
         if ( !bIsPDFExport && rPrintData.bUpdateFieldsInPrinting )
             pShell->UpdateFlds(TRUE);
         // <--
-#endif  // TL_NOT_NOW   // TLPDF
+#endif
 
         ViewShell *pViewSh2 = nPage == 0 ? /* post-it page? */
                 rPrintData.GetRenderData().m_pPostItShell : pShell;
-        ::SetSwVisArea( pViewSh2, pStPage->Frm() );     // TLPDF
+        ::SetSwVisArea( pViewSh2, pStPage->Frm() );
 
         //  wenn wir einen Umschlag drucken wird ein Offset beachtet
         if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
@@ -1210,7 +1173,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
 
         pViewSh2 = nPage == 0 ? /* post-it page? */
                 rPrintData.GetRenderData().m_pPostItShell : pShell;
-        ::SetSwVisArea( pViewSh2, pStPage->Frm() );     // TLPDF
+        ::SetSwVisArea( pViewSh2, pStPage->Frm() );
 
         pStPage->GetUpper()->Paint( pStPage->Frm() );
 
@@ -1314,52 +1277,6 @@ BOOL ViewShell::IsAnyFieldInDoc() const
     return FALSE;
 }
 
-
-
-/******************************************************************************
- *  Klasse      :   SwPrtOptSave
- *  Erstellt    :   AMA 12.07.95
- *  Aenderung   :   AMA 12.07.95
- *  Holt sich im Ctor folgende Einstellungen des Druckers, die im Dtor dann
- *  wieder im Drucker gesetzt werden (falls sie sich ueberhaupt geaendert haben)
- *  - PaperBin - Orientation - PaperSize -
- ******************************************************************************/
-
-
-
-SwPrtOptSave::SwPrtOptSave( Printer *pPrinter )
-    : pPrt( pPrinter )
-{
-    if ( pPrt )
-    {
-        ePaper = pPrt->GetPaper();
-        if ( PAPER_USER == ePaper )
-            aSize = pPrt->GetPaperSize();
-        eOrientation = pPrt->GetOrientation();
-        nPaperBin = pPrt->GetPaperBin();
-
-    }
-}
-
-
-
-SwPrtOptSave::~SwPrtOptSave()
-{
-    if ( pPrt )
-    {
-        if ( PAPER_USER == ePaper )
-        {
-            if( pPrt->GetPaperSize() != aSize )
-                pPrt->SetPaperSizeUser( aSize );
-        }
-        else if ( pPrt->GetPaper() != ePaper )
-            pPrt->SetPaper( ePaper );
-        if ( pPrt->GetOrientation() != eOrientation)
-            pPrt->SetOrientation( eOrientation );
-        if ( pPrt->GetPaperBin() != nPaperBin )
-            pPrt->SetPaperBin( nPaperBin );
-    }
-}
 
 
 /******************************************************************************

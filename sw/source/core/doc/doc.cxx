@@ -1011,7 +1011,6 @@ struct _PostItFld : public _SetGetExpFld
 
     USHORT GetPageNo( const StringRangeEnumerator &rRangeEnum,
             const std::set< sal_Int32 > &rPossiblePages,
-            BOOL bRgt, BOOL bLft,
             USHORT& rVirtPgNo, USHORT& rLineNo );
 
     SwPostItField* GetPostIt() const
@@ -1024,7 +1023,6 @@ struct _PostItFld : public _SetGetExpFld
 USHORT _PostItFld::GetPageNo(
     const StringRangeEnumerator &rRangeEnum,
     const std::set< sal_Int32 > &rPossiblePages,
-    BOOL bRgt, BOOL bLft,   /* TLPDF both should not be needed since rMulti should only include the correct pages as stored in GetValidPagesSet */
     /* out */ USHORT& rVirtPgNo, /* out */ USHORT& rLineNo )
 {
     //Problem: Wenn ein PostItFld in einem Node steht, der von mehr als
@@ -1044,8 +1042,7 @@ USHORT _PostItFld::GetPageNo(
             continue;
         USHORT nPgNo = pFrm->GetPhyPageNum();
         BOOL bRight = pFrm->OnRightPage();
-        if( rRangeEnum.hasValue( nPgNo, &rPossiblePages ) &&
-            ( (bRight && bRgt) || (!bRight && bLft) ) )
+        if( rRangeEnum.hasValue( nPgNo, &rPossiblePages ))
         {
             rLineNo = (USHORT)(pFrm->GetLineCount( nPos ) +
                       pFrm->GetAllLines() - pFrm->GetThisLines());
@@ -1255,7 +1252,7 @@ void SwDoc::CalculatePagesForPrinting(
     OUString aPageRange;
     if (bIsPDFExport)
     {
-// TLPDF ??        m_pPrintUIOptions->getValue( C2U("Selection") );
+        // ?? rOptions.getValue( C2U("Selection") );
         aPageRange = rOptions.getStringValue( "PageRange", OUString() );
     }
     else
@@ -1325,8 +1322,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
             _PostItFld& rPostIt = (_PostItFld&)*(*rData.m_pPostItFields)[ i ];
             nLastPageNum = nPhyPageNum;
             nPhyPageNum = rPostIt.GetPageNo(
-                    aRangeEnum, rData.GetValidPagesSet(),
-                    true /*TLPDF bRgt*/, true /*TLPDF bLft*/, nVirtPg, nLineNo );
+                    aRangeEnum, rData.GetValidPagesSet(), nVirtPg, nLineNo );
             if (nPhyPageNum)
             {
                 // need to insert a page break?
@@ -1515,9 +1511,6 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     //      of the prospect!
     bool bPrintLeftPages     = rOptions.IsPrintLeftPages();
     bool bPrintRightPages    = rOptions.IsPrintRightPages();
-    // TLPDF, TODO: remove bPrintReverse, should be handled by PLs framework now
-//TLPDF    bool bPrintReverse      = rOptions.getBoolValue( C2U( "PrintReverseOrder" ), false );
-    // TLPDF: this one seems not to be used in prospect printing: bool bPrintEmptyPages   = rOptions.getBoolValue( C2U( "PrintEmptyPages" ),   false );
     bool bPrintProspectRTL = rOptions.getIntValue( "PrintProspectRTL",  0 ) ? true : false;
 
     // get pages for prospect printing according to the 'PageRange'
