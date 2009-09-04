@@ -513,17 +513,36 @@ void lcl_InsertVectors(ListBox& rBox,
 /* -----------------------------20.08.2002 16:12------------------------------
 
  ---------------------------------------------------------------------------*/
-SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString::StringId eStringId, BOOL bVertical, BOOL bRTL)
+// --> OD 2009-08-31 #mongolianlayout#
+// add input parameter
+SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
+        SvxSwFramePosString::StringId eStringId,
+        const BOOL bVertical,
+        const BOOL bVerticalL2R,
+        const BOOL bRTL)
 {
     //special handling of STR_FROMLEFT
-    if(SwFPos::FROMLEFT == eStringId)
+    if ( SwFPos::FROMLEFT == eStringId )
     {
-        eStringId = bVertical ?
-            bRTL ? SwFPos::FROMBOTTOM : SwFPos::FROMTOP :
-            bRTL ? SwFPos::FROMRIGHT : SwFPos::FROMLEFT;
+        eStringId = bVertical
+                    ? ( bRTL
+                        ? SwFPos::FROMBOTTOM
+                        : SwFPos::FROMTOP )
+                    : ( bRTL
+                        ? SwFPos::FROMRIGHT
+                        : SwFPos::FROMLEFT );
         return eStringId;
     }
-    if(bVertical)
+    // --> OD 2009-08-31 #mongolianlayout#
+    // special handling of STR_FROMTOP in case of mongolianlayout (vertical left-to-right)
+    if ( SwFPos::FROMTOP == eStringId &&
+         bVertical && bVerticalL2R )
+    {
+        eStringId = SwFPos::FROMLEFT;
+        return eStringId;
+    }
+    // <--
+    if ( bVertical )
     {
         //exchange horizontal strings with vertical strings and vice versa
         static const StringIdPair_Impl aHoriIds[] =
@@ -548,6 +567,19 @@ SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString
             {SwFPos::REL_FRM_TOP,    SwFPos::REL_FRM_LEFT },
             {SwFPos::REL_FRM_BOTTOM, SwFPos::REL_FRM_RIGHT }
         };
+        // --> OD 2009-08-31 #monglianlayout#
+        static const StringIdPair_Impl aVertL2RIds[] =
+        {
+            {SwFPos::TOP,            SwFPos::LEFT },
+            {SwFPos::BOTTOM,         SwFPos::RIGHT },
+            {SwFPos::CENTER_VERT,    SwFPos::CENTER_HORI },
+            {SwFPos::FROMTOP,        SwFPos::FROMLEFT },
+            {SwFPos::REL_PG_TOP,     SwFPos::REL_PG_LEFT },
+            {SwFPos::REL_PG_BOTTOM,  SwFPos::REL_PG_RIGHT } ,
+            {SwFPos::REL_FRM_TOP,    SwFPos::REL_FRM_LEFT },
+            {SwFPos::REL_FRM_BOTTOM, SwFPos::REL_FRM_RIGHT }
+        };
+        // <--
         USHORT nIndex;
         for(nIndex = 0; nIndex < sizeof(aHoriIds) / sizeof(StringIdPair_Impl); ++nIndex)
         {
@@ -560,11 +592,24 @@ SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString
         nIndex = 0;
         for(nIndex = 0; nIndex < sizeof(aVertIds) / sizeof(StringIdPair_Impl); ++nIndex)
         {
-            if(aVertIds[nIndex].eHori == eStringId)
+            // --> OD 2009-08-31 #mongolianlayout#
+            if ( !bVerticalL2R )
             {
-                eStringId = aVertIds[nIndex].eVert;
-                break;
+                if(aVertIds[nIndex].eHori == eStringId)
+                {
+                    eStringId = aVertIds[nIndex].eVert;
+                    break;
+                }
             }
+            else
+            {
+                if(aVertL2RIds[nIndex].eHori == eStringId)
+                {
+                    eStringId = aVertL2RIds[nIndex].eVert;
+                    break;
+                }
+            }
+            // <--
         }
     }
     return eStringId;
@@ -673,8 +718,13 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     bFormat(FALSE),
     bNew(TRUE),
     bNoModifyHdl(TRUE),
-    bVerticalChanged(FALSE),
+    // --> OD 2009-08-31 #mongolianlayout# - no used
+//    bVerticalChanged(FALSE),
+    // <--
     bIsVerticalFrame(FALSE),
+    // --> OD 2009-08-31 #mongolianlayou#
+    bIsVerticalL2R( FALSE ),
+    // <--
     bIsInRightToLeft(FALSE),
     bHtmlMode(FALSE),
     nHtmlMode(0),
@@ -813,7 +863,10 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     {
         if (rAnchor.GetAnchorId() != FLY_AT_FLY && !pSh->IsFlyInFly())
             aAnchorAtFrameRB.Hide();
-        if(!bVerticalChanged && pSh->IsFrmVertical(TRUE, bIsInRightToLeft))
+        // --> OD 2009-08-31 #mongolianlayout#
+//        if ( !bVerticalChanged && pSh->IsFrmVertical(TRUE, bIsInRightToLeft) )
+        if ( pSh->IsFrmVertical( TRUE, bIsInRightToLeft, bIsVerticalL2R ) )
+        // <--
         {
             String sHLabel = aHorizontalFT.GetText();
             aHorizontalFT.SetText(aVerticalFT.GetText());
@@ -1324,7 +1377,12 @@ USHORT SwFrmPage::FillPosLB(const FrmMap* _pMap,
 //      if (!bFormat || (pMap[i].eStrId != SwFPos::FROMLEFT && pMap[i].eStrId != SwFPos::FROMTOP))
         {
             SvxSwFramePosString::StringId eStrId = aMirrorPagesCB.IsChecked() ? _pMap[i].eMirrorStrId : _pMap[i].eStrId;
-            eStrId = lcl_ChangeResIdToVerticalOrRTL(eStrId, bIsVerticalFrame, bIsInRightToLeft);
+            // --> OD 2009-08-31 #mongolianlayout#
+            eStrId = lcl_ChangeResIdToVerticalOrRTL( eStrId,
+                                                     bIsVerticalFrame,
+                                                     bIsVerticalL2R,
+                                                     bIsInRightToLeft);
+            // <--
             String sEntry(aFramePosString.GetString(eStrId));
             if (_rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
             {
@@ -1388,7 +1446,13 @@ ULONG SwFrmPage::FillRelLB( const FrmMap* _pMap,
                         {
                             SvxSwFramePosString::StringId sStrId1 = aAsCharRelationMap[nRelPos].eStrId;
 
-                            sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, bIsVerticalFrame, bIsInRightToLeft);
+                            // --> OD 2009-08-31 #mongolianlayout#
+                            sStrId1 =
+                                lcl_ChangeResIdToVerticalOrRTL( sStrId1,
+                                                                bIsVerticalFrame,
+                                                                bIsVerticalL2R,
+                                                                bIsInRightToLeft);
+                            // <--
                             String sEntry = aFramePosString.GetString(sStrId1);
                             USHORT nPos = _rLB.InsertEntry(sEntry);
                             _rLB.SetEntryData(nPos, &aAsCharRelationMap[nRelPos]);
@@ -1448,7 +1512,13 @@ ULONG SwFrmPage::FillRelLB( const FrmMap* _pMap,
                         {
                             SvxSwFramePosString::StringId eStrId1 = aMirrorPagesCB.IsChecked() ?
                                             aRelationMap[nRelPos].eMirrorStrId : aRelationMap[nRelPos].eStrId;
-                            eStrId1 = lcl_ChangeResIdToVerticalOrRTL(eStrId1, bIsVerticalFrame, bIsInRightToLeft);
+                            // --> OD 2009-08-31 #mongolianlayout#
+                            eStrId1 =
+                                lcl_ChangeResIdToVerticalOrRTL( eStrId1,
+                                                                bIsVerticalFrame,
+                                                                bIsVerticalL2R,
+                                                                bIsInRightToLeft);
+                            // <--
                             String sEntry = aFramePosString.GetString(eStrId1);
                             USHORT nPos = _rLB.InsertEntry(sEntry);
                             _rLB.SetEntryData(nPos, &aRelationMap[nRelPos]);

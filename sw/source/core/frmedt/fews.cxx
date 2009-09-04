@@ -775,8 +775,11 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     _bMirror = _bMirror && !pPage->OnRightPage();
 
     Point aPos;
-    BOOL bVertic = FALSE;
+    bool bVertic = false;
     BOOL bRTL = FALSE;
+    // --> OD 2009-09-01 #mongolianlayout#
+    bool bVerticalL2R = false;
+    // <--
 
     if( FLY_PAGE == _nAnchorId || FLY_AT_FLY == _nAnchorId ) // LAYER_IMPL
     {
@@ -801,9 +804,14 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         else
             aPos = (pFrm->Frm().*fnRect->fnGetPos)();
 
-        if( bVert )
+        // --> OD 2009-09-01 #mongolianlayout#
+        if( bVert || bVertL2R )
+        // <--
         {
-            bVertic = TRUE;
+            // --> OD 2009-09-01 #mongolianlayout#
+            bVertic = bVert ? true : false;
+            bVerticalL2R = bVertL2R ? true : false;
+            // <--
             _bMirror = false; // no mirroring in vertical environment
             switch ( _eHoriRelOrient )
             {
@@ -852,8 +860,9 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 default:break;
             }
         }
-        // --> OD 2006-12-12 #i67221# - proposed patch
-        if( bVert )
+        // --> OD 2009-09-01 #mongolianlayout#
+        if ( bVert && !bVertL2R )
+        // <--
         {
             switch ( _eVertRelOrient )
             {
@@ -865,6 +874,20 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 break;
             }
         }
+        // --> OD 2009-09-01 #mongolianlayout#
+        else if ( bVertL2R )
+        {
+            switch ( _eVertRelOrient )
+            {
+                case text::RelOrientation::PRINT_AREA:
+                case text::RelOrientation::PAGE_PRINT_AREA:
+                {
+                    aPos.X() += pFrm->GetLeftMargin();
+                }
+                break;
+            }
+        }
+        // <--
         else
         {
             switch ( _eVertRelOrient )
@@ -929,9 +952,16 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 // to page areas.
                 if ( _eVertRelOrient == text::RelOrientation::PAGE_FRAME || _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
                 {
-                    if ( bVert )
+                    // --> OD 2009-09-01 #mongolianlayout#
+                    if ( bVert && !bVertL2R )
+                    // <--
                     {
                         aPos.X() = aVertEnvironRect.Right();
+                    }
+                    // --> OD 2009-09-01 #mongolianlayout#
+                    else if ( bVertL2R )
+                    {
+                        aPos.X() = aVertEnvironRect.Left();
                     }
                     else
                     {
@@ -949,7 +979,9 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 // to page areas.
                 if ( _eVertRelOrient == text::RelOrientation::PAGE_FRAME || _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
                 {
-                    if ( bVert )
+                    // --> OD 2009-09-01 #mongolianlayout#
+                    if ( bVert && !bVertL2R )
+                    // <--
                     {
                         aPos.X() = aVertEnvironRect.Right();
                         if ( _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
@@ -957,6 +989,16 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                             aPos.X() -= rVertEnvironLayFrm.GetRightMargin();
                         }
                     }
+                    // --> OD 2009-09-01 #mongolianlayout#
+                    else if ( bVertL2R )
+                    {
+                        aPos.X() = aVertEnvironRect.Left();
+                        if ( _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
+                        {
+                            aPos.X() += rVertEnvironLayFrm.GetLeftMargin();
+                        }
+                    }
+                    // <--
                     else
                     {
                         aPos.Y() = aVertEnvironRect.Top();
@@ -1016,10 +1058,12 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                         pTxtFrm->GetTopOfLine( nTop, aDefaultCntntPos );
                     }
                 }
-                if ( bVert )
+                // --> OD 2009-09-01 #mongolianlayout#
+                if ( bVert || bVertL2R )
                 {
                     aPos.X() = nTop;
                 }
+                // <--
                 else
                 {
                     aPos.Y() = nTop;
@@ -1046,10 +1090,12 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                     pTxtFrm->GetAutoPos( aChRect, aDefaultCntntPos );
                 }
                 nLeft = (aChRect.*fnRect->fnGetLeft)();
-                if ( bVert )
+                // --> OD 2009-09-01 #mongolianlayout#
+                if ( bVert || bVertL2R )
                 {
                     aPos.Y() = nLeft;
                 }
+                // <--
                 else
                 {
                     aPos.X() = nLeft;
@@ -1057,7 +1103,9 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             }
             // <--
 
-            if ( bVert )
+            // --> OD 2009-09-01 #mongolianlayout#
+            if ( bVert || bVertL2R )
+            // <--
             {
                 _orRect = SwRect( aVertEnvironRect.Left(),
                                   aHoriEnvironRect.Top(),
@@ -1091,7 +1139,9 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             }
             // bei zeichengebundenen lieber nur 90% der Hoehe ausnutzen
             {
-                if( bVert )
+                // --> OD 2009-09-01 #mongolianlayout#
+                if( bVert || bVertL2R )
+                // <--
                     _orRect.Width( (_orRect.Width()*9)/10 );
                 else
                     _orRect.Height( (_orRect.Height()*9)/10 );
@@ -1101,26 +1151,51 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         const SwTwips nBaseOfstForFly = ( pFrm->IsTxtFrm() && pFly ) ?
                                         ((SwTxtFrm*)pFrm)->GetBaseOfstForFly( !bWrapThrough ) :
                                          0;
-        if( bVert )
+        // --> OD 2009-09-01 #mongolianlayout#
+        if( bVert || bVertL2R )
+        // <--
         {
-            bVertic = TRUE;
+            // --> OD 2009-09-01 #mongolianlayout#
+            bVertic = bVert ? true : false;
+            bVerticalL2R = bVertL2R ? true : false;
+            // <--
             _bMirror = false;
 
             switch ( _eHoriRelOrient )
             {
-                case text::RelOrientation::FRAME_RIGHT: aPos.Y() += pFrm->Prt().Height();
-                                    aPos += (pFrm->Prt().*fnRect->fnGetPos)();
-                                    break;
-                case text::RelOrientation::PRINT_AREA: aPos += (pFrm->Prt().*fnRect->fnGetPos)();
-                              aPos.Y() += nBaseOfstForFly;
-                              break;
-                case text::RelOrientation::PAGE_RIGHT: aPos.Y() = pPage->Frm().Top()
-                                            + pPage->Prt().Bottom(); break;
-                case text::RelOrientation::PAGE_PRINT_AREA: aPos.Y() = pPage->Frm().Top()
-                                              + pPage->Prt().Top(); break;
+                case text::RelOrientation::FRAME_RIGHT:
+                {
+                    aPos.Y() += pFrm->Prt().Height();
+                    aPos += (pFrm->Prt().*fnRect->fnGetPos)();
+                    break;
+                }
+                case text::RelOrientation::PRINT_AREA:
+                {
+                    aPos += (pFrm->Prt().*fnRect->fnGetPos)();
+                    aPos.Y() += nBaseOfstForFly;
+                    break;
+                }
+                case text::RelOrientation::PAGE_RIGHT:
+                {
+                    aPos.Y() = pPage->Frm().Top() + pPage->Prt().Bottom();
+                    break;
+                }
+                case text::RelOrientation::PAGE_PRINT_AREA:
+                {
+                    aPos.Y() = pPage->Frm().Top() + pPage->Prt().Top();
+                    break;
+                }
                 case text::RelOrientation::PAGE_LEFT:
-                case text::RelOrientation::PAGE_FRAME: aPos.Y() = pPage->Frm().Top(); break;
-                case text::RelOrientation::FRAME: aPos.Y() += nBaseOfstForFly; break;
+                case text::RelOrientation::PAGE_FRAME:
+                {
+                    aPos.Y() = pPage->Frm().Top();
+                    break;
+                }
+                case text::RelOrientation::FRAME:
+                {
+                    aPos.Y() += nBaseOfstForFly;
+                    break;
+                }
                 default: break;
             }
         }
@@ -1178,19 +1253,27 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         {
             switch ( _eHoriRelOrient )
             {
-                case text::RelOrientation::FRAME_RIGHT:   aPos.X() += pFrm->Prt().Width();
-                                    aPos += pFrm->Prt().Pos();
-                                    break;
-                case text::RelOrientation::PRINT_AREA: aPos += pFrm->Prt().Pos();
-                              aPos.X() += nBaseOfstForFly;
-                              break;
-                case text::RelOrientation::PAGE_RIGHT: aPos.X() = pPage->Frm().Left()
-                                            + pPage->Prt().Right(); break;
-                case text::RelOrientation::PAGE_PRINT_AREA: aPos.X() = pPage->Frm().Left()
-                                              + pPage->Prt().Left(); break;
+                case text::RelOrientation::FRAME_RIGHT:
+                    aPos.X() += pFrm->Prt().Width();
+                    aPos += pFrm->Prt().Pos();
+                    break;
+                case text::RelOrientation::PRINT_AREA:
+                    aPos += pFrm->Prt().Pos();
+                    aPos.X() += nBaseOfstForFly;
+                    break;
+                case text::RelOrientation::PAGE_RIGHT:
+                    aPos.X() = pPage->Frm().Left() + pPage->Prt().Right();
+                    break;
+                case text::RelOrientation::PAGE_PRINT_AREA:
+                    aPos.X() = pPage->Frm().Left() + pPage->Prt().Left();
+                    break;
                 case text::RelOrientation::PAGE_LEFT:
-                case text::RelOrientation::PAGE_FRAME: aPos.X() = pPage->Frm().Left(); break;
-                case text::RelOrientation::FRAME: aPos.X() += nBaseOfstForFly; break;
+                case text::RelOrientation::PAGE_FRAME:
+                    aPos.X() = pPage->Frm().Left();
+                    break;
+                case text::RelOrientation::FRAME:
+                    aPos.X() += nBaseOfstForFly;
+                    break;
                 default: break;
             }
         }
@@ -1198,8 +1281,12 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     }
     if( !_opRef )
     {
-        if( bVertic )
+        if( bVertic && !bVerticalL2R )
             _orRect.Pos( aPos.X() - _orRect.Width() - _orRect.Left(), _orRect.Top() - aPos.Y() );
+        // --> OD 2009-09-01 #mongolianlayout#
+        else if( bVerticalL2R )
+            _orRect.Pos( _orRect.Left() - aPos.X(), _orRect.Top() - aPos.Y() );
+        // <--
         else if ( bRTL )
             _orRect.Pos( - ( _orRect.Right() - aPos.X() ), _orRect.Top() - aPos.Y() );
         else
@@ -1242,10 +1329,15 @@ Size SwFEShell::GetGraphicDefaultSize() const
 /* -----------------------------12.08.2002 12:51------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwFEShell::IsFrmVertical(BOOL bEnvironment, BOOL& bRTL) const
+// --> OD 2009-08-31 #mongolianlayou#
+// add output parameter <bVertL2R>
+BOOL SwFEShell::IsFrmVertical( const BOOL bEnvironment,
+                               BOOL& bRTL,
+                               BOOL& bVertL2R ) const
 {
     BOOL bVert = FALSE;
     bRTL = FALSE;
+    bVertL2R = FALSE;
 
     if ( Imp()->HasDrawView() )
     {
@@ -1287,10 +1379,12 @@ BOOL SwFEShell::IsFrmVertical(BOOL bEnvironment, BOOL& bRTL) const
 
         bVert = pRef->IsVertical();
         bRTL = pRef->IsRightToLeft();
+        bVertL2R = pRef->IsVertLR();
     }
 
     return bVert;
 }
+// <--
 
 void SwFEShell::MoveObjectIfActive( svt::EmbeddedObjectRef&, const Point& )
 {

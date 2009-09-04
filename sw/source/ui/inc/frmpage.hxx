@@ -122,6 +122,9 @@ class SwFrmPage: public SfxTabPage
     BOOL            bNoModifyHdl;
     BOOL            bVerticalChanged;  //check done whether frame is in vertical environment
     BOOL            bIsVerticalFrame;  //current frame is in vertical environment - strings are exchanged
+    // --> OD 2009-08-31 #mongolianlayou#
+    BOOL            bIsVerticalL2R;
+    // <--
     BOOL            bIsInRightToLeft; // current frame is in right-to-left environment - strings are exchanged
     BOOL            bHtmlMode;
     USHORT          nHtmlMode;

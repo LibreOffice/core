@@ -68,6 +68,9 @@ class SW_DLLPUBLIC SwFlyFrmAttrMgr
     BOOL        bAbsPos,
                 bNewFrm;
     BOOL        bIsInVertical;
+    // --> OD 2009-09-01 #mongolianlayout#
+    BOOL        bIsInVerticalL2R;
+    // <--
 
     // interne Verrechnung fuer Umrandung
     SW_DLLPRIVATE SwTwips           CalcTopSpace();

@@ -271,7 +271,8 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_ANCHOR, nAnchor));
                         BOOL bRTL;
-                        aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT, pSh->IsFrmVertical(TRUE, bRTL)));
+                        BOOL bVertL2R;
+                        aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT, pSh->IsFrmVertical(TRUE, bRTL, bVertL2R)));
                         aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_IN_RTL_TEXT, bRTL));
 
                         SwFrmFmt* pFrmFmt = FindFrmFmt( pObj );
@@ -837,8 +838,12 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
                            pValidation->bFollowTextFlow,
                            pValidation->bMirror, NULL, &pValidation->aPercentSize);
 
-    BOOL bRTL;
-    BOOL bIsInVertical = pSh->IsFrmVertical(TRUE, bRTL);
+    BOOL bIsInVertical( FALSE );
+    {
+        BOOL bRTL;
+        BOOL bVertL2R;
+        bIsInVertical = pSh->IsFrmVertical(TRUE, bRTL, bVertL2R);
+    }
     if(bIsInVertical)
     {
         Point aPos(aBoundRect.Pos());

@@ -316,8 +316,14 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             SwFrmFmt* pFmt = ((SwFrmFmt*)rSh.GetFlyFrmFmt());
             const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED);
 
-            BOOL bRTL;
-            BOOL bVerticalFrame = (bFrmSelection && rSh.IsFrmVertical(TRUE, bRTL))|| (!bFrmSelection && bVerticalWriting);
+            BOOL bVerticalFrame( FALSE );
+            {
+                BOOL bRTL;
+                BOOL bVertL2R;
+                bVerticalFrame = ( bFrmSelection &&
+                                   rSh.IsFrmVertical(TRUE, bRTL, bVertL2R) ) ||
+                                 ( !bFrmSelection && bVerticalWriting);
+            }
             long nDeltaX = bVerticalFrame ?
                 rRect.Right() - rPageRect.Right() + aLongLR.GetRight() :
                 rPageRect.Left() + aLongLR.GetLeft() - rRect.Left();
@@ -454,7 +460,10 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                                         RES_VERT_ORIENT, RES_HORI_ORIENT, 0 );
             //which of the orientation attributes is to be put depends on the frame's environment
             BOOL bRTL;
-            if((bFrmSelection && rSh.IsFrmVertical(TRUE, bRTL))|| (!bFrmSelection && bVerticalWriting))
+            BOOL bVertL2R;
+            if ( ( bFrmSelection &&
+                   rSh.IsFrmVertical(TRUE, bRTL, bVertL2R ) ) ||
+                 ( !bFrmSelection && bVerticalWriting ) )
             {
                 SwFmtHoriOrient aHoriOrient(pFmt->GetHoriOrient());
                 aHoriOrient.SetHoriOrient(text::HoriOrientation::NONE);
@@ -1276,8 +1285,13 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         case SID_RULER_BORDERS_VERTICAL:
         case SID_RULER_BORDERS:
         {
-            BOOL bFrameRTL;
-            BOOL bFrameHasVerticalColumns =  rSh.IsFrmVertical(FALSE, bFrameRTL) && bFrmSelection;
+            BOOL bFrameHasVerticalColumns(FALSE);
+            {
+                BOOL bFrameRTL;
+                BOOL bFrameVertL2R;
+                bFrameHasVerticalColumns = rSh.IsFrmVertical(FALSE, bFrameRTL, bFrameVertL2R) &&
+                                           bFrmSelection;
+            }
             BOOL bHasTable = ( IsTabColFromDoc() ||
                     ( rSh.GetTableFmt() && !bFrmSelection &&
                     !(nFrmType & FRMTYPE_COLSECT ) ) );
@@ -1500,8 +1514,13 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         case SID_RULER_ROWS :
         case SID_RULER_ROWS_VERTICAL:
         {
-            BOOL bFrameRTL;
-            BOOL bFrameHasVerticalColumns =  rSh.IsFrmVertical(FALSE, bFrameRTL) && bFrmSelection;
+            BOOL bFrameHasVerticalColumns(FALSE);
+            {
+                BOOL bFrameRTL;
+                BOOL bFrameVertL2R;
+                bFrameHasVerticalColumns = rSh.IsFrmVertical(FALSE, bFrameRTL, bFrameVertL2R) &&
+                                           bFrmSelection;
+            }
 
             if((SID_RULER_ROWS == nWhich) &&
                     ((!bVerticalWriting && !bFrmSelection) || (bFrmSelection && !bFrameHasVerticalColumns)) ||
