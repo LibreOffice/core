@@ -59,6 +59,8 @@ private:
 
     virtual ~LocalizedPropertyValueNode();
 
+    virtual Kind kind() const;
+
     com::sun::star::uno::Any value_;
 };
 

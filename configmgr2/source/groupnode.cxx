@@ -50,6 +50,10 @@ rtl::Reference< Node > GroupNode::clone() const {
     return new GroupNode(*this);
 }
 
+NodeMap & GroupNode::getMembers() {
+    return members_;
+}
+
 rtl::OUString GroupNode::getTemplateName() const {
     return templateName_;
 }
@@ -66,10 +70,6 @@ bool GroupNode::isExtensible() const {
     return extensible_;
 }
 
-NodeMap & GroupNode::getMembers() {
-    return members_;
-}
-
 GroupNode::GroupNode(GroupNode const & other):
     Node(other), extensible_(other.extensible_),
     templateName_(other.templateName_), mandatory_(other.mandatory_)
@@ -78,6 +78,10 @@ GroupNode::GroupNode(GroupNode const & other):
 }
 
 GroupNode::~GroupNode() {}
+
+Node::Kind GroupNode::kind() const {
+    return KIND_GROUP;
+}
 
 void GroupNode::clear() {
     members_.clear();

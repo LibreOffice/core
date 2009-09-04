@@ -77,4 +77,8 @@ LocalizedPropertyValueNode::LocalizedPropertyValueNode(
 
 LocalizedPropertyValueNode::~LocalizedPropertyValueNode() {}
 
+Node::Kind LocalizedPropertyValueNode::kind() const {
+    return KIND_LOCALIZED_VALUE;
+}
+
 }

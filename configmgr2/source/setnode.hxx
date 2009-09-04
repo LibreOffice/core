@@ -50,6 +50,8 @@ public:
 
     virtual rtl::Reference< Node > clone() const;
 
+    virtual NodeMap & getMembers();
+
     virtual rtl::OUString getTemplateName() const;
 
     virtual void setMandatory(int layer);
@@ -62,12 +64,12 @@ public:
 
     bool isValidTemplate(rtl::OUString const & templateName) const;
 
-    NodeMap & getMembers();
-
 private:
     SetNode(SetNode const & other);
 
     virtual ~SetNode();
+
+    virtual Kind kind() const;
 
     virtual void clear();
 

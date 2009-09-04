@@ -53,16 +53,18 @@ public:
 
     virtual rtl::Reference< Node > clone() const;
 
+    virtual NodeMap & getMembers();
+
     Type getType() const;
 
     bool isNillable() const;
-
-    NodeMap & getMembers();
 
 private:
     LocalizedPropertyNode(LocalizedPropertyNode const & other);
 
     virtual ~LocalizedPropertyNode();
+
+    virtual Kind kind() const;
 
     virtual void clear();
 

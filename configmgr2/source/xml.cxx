@@ -708,115 +708,125 @@ void writeNode(
         "oor:double-list", // TYPE_DOUBLE_LIST
         "oor:string-list", // TYPE_STRING_LIST
         "oor:hexBinary-list" }; // TYPE_HEXBINARY_LIST
-    if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node.get())) {
-        xmlTextWriterStartElement(writer, xmlString("prop"));
-        xmlTextWriterWriteAttribute(
-            writer, xmlString("oor:name"),
-            xmlString(convertToUtf8(name).getStr()));
-        xmlTextWriterWriteAttribute(
-            writer, xmlString("oor:op"), xmlString("fuse"));
-        Type type = prop->getType();
-        if (type == TYPE_ANY) {
-            type = mapType(prop->getValue());
-            if (type != TYPE_ERROR) { //TODO
-                xmlTextWriterWriteAttribute(
-                    writer, xmlString("oor:type"), xmlString(typeNames[type]));
-            }
-        }
-        xmlTextWriterStartElement(writer, xmlString("value"));
-        writeValue(writer, type, prop->getValue());
-        xmlTextWriterEndElement(writer);
-        xmlTextWriterEndElement(writer);
-    } else if (LocalizedPropertyNode * locprop =
-               dynamic_cast< LocalizedPropertyNode * >(node.get()))
-    {
-        xmlTextWriterStartElement(writer, xmlString("prop"));
-        xmlTextWriterWriteAttribute(
-            writer, xmlString("oor:name"),
-            xmlString(convertToUtf8(name).getStr()));
-        xmlTextWriterWriteAttribute(
-            writer, xmlString("oor:op"), xmlString("fuse"));
-        for (NodeMap::iterator i(locprop->getMembers().begin());
-             i != locprop->getMembers().end(); ++i)
+    switch (node->kind()) {
+    case Node::KIND_PROPERTY:
         {
-            if (!i->second->isRemoved()) {
-                writeNode(
-                    writer, node, i->first, i->second,
-                    topLevel && locprop->getLayer() != NO_LAYER);
-            }
-        }
-        xmlTextWriterEndElement(writer);
-    } else if (LocalizedPropertyValueNode * locval =
-               dynamic_cast< LocalizedPropertyValueNode * >(node.get()))
-    {
-        if (locval->isRemoved()
-            ? topLevel && locval->getLayer() == NO_LAYER
-            : !topLevel || locval->getLayer() == NO_LAYER)
-        {
-            xmlTextWriterStartElement(writer, xmlString("value"));
-            if (name.getLength() != 0) {
-                xmlTextWriterWriteAttribute(
-                    writer, xmlString("xml:lang"),
-                    xmlString(convertToUtf8(name).getStr()));
-            }
-            if (locval->isRemoved()) {
-                xmlTextWriterWriteAttribute(
-                    writer, xmlString("oor:op"), xmlString("remove"));
-            } else {
-                Type type =
-                    dynamic_cast< LocalizedPropertyNode * >(parent.get())->
-                    getType();
-                if (type == TYPE_ANY) {
-                    type = mapType(locval->getValue());
-                    if (type != TYPE_ERROR) { // TODO
-                        xmlTextWriterWriteAttribute(
-                            writer, xmlString("oor:type"),
-                            xmlString(typeNames[type]));
-                    }
+            PropertyNode * prop = dynamic_cast< PropertyNode * >(node.get());
+            xmlTextWriterStartElement(writer, xmlString("prop"));
+            xmlTextWriterWriteAttribute(
+                writer, xmlString("oor:name"),
+                xmlString(convertToUtf8(name).getStr()));
+            xmlTextWriterWriteAttribute(
+                writer, xmlString("oor:op"), xmlString("fuse"));
+            Type type = prop->getType();
+            if (type == TYPE_ANY) {
+                type = mapType(prop->getValue());
+                if (type != TYPE_ERROR) { //TODO
+                    xmlTextWriterWriteAttribute(
+                        writer, xmlString("oor:type"),
+                        xmlString(typeNames[type]));
                 }
-                writeValue(writer, type, locval->getValue());
+            }
+            xmlTextWriterStartElement(writer, xmlString("value"));
+            writeValue(writer, type, prop->getValue());
+            xmlTextWriterEndElement(writer);
+            xmlTextWriterEndElement(writer);
+        }
+        break;
+    case Node::KIND_LOCALIZED_PROPERTY:
+        {
+            xmlTextWriterStartElement(writer, xmlString("prop"));
+            xmlTextWriterWriteAttribute(
+                writer, xmlString("oor:name"),
+                xmlString(convertToUtf8(name).getStr()));
+            xmlTextWriterWriteAttribute(
+                writer, xmlString("oor:op"), xmlString("fuse"));
+            for (NodeMap::iterator i(node->getMembers().begin());
+                 i != node->getMembers().end(); ++i)
+            {
+                if (!i->second->isRemoved()) {
+                    writeNode(
+                        writer, node, i->first, i->second,
+                        topLevel && node->getLayer() != NO_LAYER);
+                }
             }
             xmlTextWriterEndElement(writer);
         }
-    } else if (GroupNode * group = dynamic_cast< GroupNode * >(node.get())) {
-        xmlTextWriterStartElement(writer, xmlString("node"));
-        xmlTextWriterWriteAttribute(
-            writer, xmlString("oor:name"),
-            xmlString(convertToUtf8(name).getStr()));
-        if (group->getTemplateName().getLength() != 0) { // set member
-            xmlTextWriterWriteAttribute(
-                writer, xmlString("oor:op"), xmlString("replace"));
-        }
-        for (NodeMap::iterator i(group->getMembers().begin());
-             i != group->getMembers().end(); ++i)
+        break;
+    case Node::KIND_LOCALIZED_VALUE:
         {
-            if (!i->second->isRemoved()) {
-                writeNode(writer, node, i->first, i->second, false);
+            LocalizedPropertyValueNode * locval =
+                dynamic_cast< LocalizedPropertyValueNode * >(node.get());
+            if (locval->isRemoved()
+                ? topLevel && locval->getLayer() == NO_LAYER
+                : !topLevel || locval->getLayer() == NO_LAYER)
+            {
+                xmlTextWriterStartElement(writer, xmlString("value"));
+                if (name.getLength() != 0) {
+                    xmlTextWriterWriteAttribute(
+                        writer, xmlString("xml:lang"),
+                        xmlString(convertToUtf8(name).getStr()));
+                }
+                if (locval->isRemoved()) {
+                    xmlTextWriterWriteAttribute(
+                        writer, xmlString("oor:op"), xmlString("remove"));
+                } else {
+                    Type type = dynamic_cast< LocalizedPropertyNode * >(
+                        parent.get())->getType();
+                    if (type == TYPE_ANY) {
+                        type = mapType(locval->getValue());
+                        if (type != TYPE_ERROR) { // TODO
+                            xmlTextWriterWriteAttribute(
+                                writer, xmlString("oor:type"),
+                                xmlString(typeNames[type]));
+                        }
+                    }
+                    writeValue(writer, type, locval->getValue());
+                }
+                xmlTextWriterEndElement(writer);
             }
         }
-        xmlTextWriterEndElement(writer);
-    } else if (SetNode * set = dynamic_cast< SetNode * >(node.get())) {
-        xmlTextWriterStartElement(writer, xmlString("node"));
-        xmlTextWriterWriteAttribute(
-            writer, xmlString("oor:name"),
-            xmlString(convertToUtf8(name).getStr()));
-        if (set->getTemplateName().getLength() != 0) { // set member
-            xmlTextWriterWriteAttribute(
-                writer, xmlString("oor:op"), xmlString("replace"));
-        }
-        for (NodeMap::iterator i(set->getMembers().begin());
-             i != set->getMembers().end(); ++i)
+        break;
+    case Node::KIND_GROUP:
         {
-            if (!i->second->isRemoved()) {
-                writeNode(writer, node, i->first, i->second, false);
+            xmlTextWriterStartElement(writer, xmlString("node"));
+            xmlTextWriterWriteAttribute(
+                writer, xmlString("oor:name"),
+                xmlString(convertToUtf8(name).getStr()));
+            if (node->getTemplateName().getLength() != 0) { // set member
+                xmlTextWriterWriteAttribute(
+                    writer, xmlString("oor:op"), xmlString("replace"));
             }
+            for (NodeMap::iterator i(node->getMembers().begin());
+                 i != node->getMembers().end(); ++i)
+            {
+                if (!i->second->isRemoved()) {
+                    writeNode(writer, node, i->first, i->second, false);
+                }
+            }
+            xmlTextWriterEndElement(writer);
         }
-        xmlTextWriterEndElement(writer);
-    } else {
-        OSL_ASSERT(false);
-        throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-            css::uno::Reference< css::uno::XInterface >());
+        break;
+    case Node::KIND_SET:
+        {
+            xmlTextWriterStartElement(writer, xmlString("node"));
+            xmlTextWriterWriteAttribute(
+                writer, xmlString("oor:name"),
+                xmlString(convertToUtf8(name).getStr()));
+            if (node->getTemplateName().getLength() != 0) { // set member
+                xmlTextWriterWriteAttribute(
+                    writer, xmlString("oor:op"), xmlString("replace"));
+            }
+            for (NodeMap::iterator i(node->getMembers().begin());
+                 i != node->getMembers().end(); ++i)
+            {
+                if (!i->second->isRemoved()) {
+                    writeNode(writer, node, i->first, i->second, false);
+                }
+            }
+            xmlTextWriterEndElement(writer);
+        }
+        break;
     }
 }
 
@@ -988,24 +998,27 @@ bool ValueParser::endElement(XmlReader const * reader) {
                 }
                 items_.clear();
             }
-            if (PropertyNode * prop = dynamic_cast< PropertyNode * >(
-                    node_.get()))
-            {
-                prop->setValue(layer_, value);
-            } else if (LocalizedPropertyNode * locprop =
-                       dynamic_cast< LocalizedPropertyNode * >(node_.get()))
-            {
-                NodeMap::iterator i(locprop->getMembers().find(localizedName_));
-                if (i == locprop->getMembers().end()) {
-                    locprop->getMembers().insert(
-                        NodeMap::value_type(
-                            localizedName_,
-                            new LocalizedPropertyValueNode(layer_, value)));
-                } else {
-                    dynamic_cast< LocalizedPropertyValueNode * >(
-                        i->second.get())->setValue(layer_, value);
+            switch (node_->kind()) {
+            case Node::KIND_PROPERTY:
+                dynamic_cast< PropertyNode * >(node_.get())->setValue(
+                    layer_, value);
+                break;
+            case Node::KIND_LOCALIZED_PROPERTY:
+                {
+                    NodeMap::iterator i(
+                        node_->getMembers().find(localizedName_));
+                    if (i == node_->getMembers().end()) {
+                        node_->getMembers().insert(
+                            NodeMap::value_type(
+                                localizedName_,
+                                new LocalizedPropertyValueNode(layer_, value)));
+                    } else {
+                        dynamic_cast< LocalizedPropertyValueNode * >(
+                            i->second.get())->setValue(layer_, value);
+                    }
                 }
-            } else {
+                break;
+            default:
                 OSL_ASSERT(false); // this cannot happen
             }
             separator_.clear();
@@ -1191,22 +1204,17 @@ bool XcsParser::startElement(
             // fall through
         case STATE_COMPONENT:
             OSL_ASSERT(!elements_.empty());
-            if ((dynamic_cast< PropertyNode * >(elements_.top().node.get()) !=
-                 0) ||
-                (dynamic_cast< LocalizedPropertyNode * >(
-                    elements_.top().node.get()) !=
-                 0))
-            {
+            switch (elements_.top().node->kind()) {
+            case Node::KIND_PROPERTY:
+            case Node::KIND_LOCALIZED_PROPERTY:
                 if (ns == XmlReader::NAMESPACE_NONE &&
                     name.equals(RTL_CONSTASCII_STRINGPARAM("value")))
                 {
                     handlePropValue(reader, elements_.top().node);
                     return true;
                 }
-            } else if (dynamic_cast< GroupNode * >(
-                           elements_.top().node.get()) !=
-                       0)
-            {
+                break;
+            case Node::KIND_GROUP:
                 if (ns == XmlReader::NAMESPACE_NONE &&
                     name.equals(RTL_CONSTASCII_STRINGPARAM("prop")))
                 {
@@ -1231,17 +1239,20 @@ bool XcsParser::startElement(
                     handleSet(reader, false);
                     return true;
                 }
-            } else if (SetNode * set = dynamic_cast< SetNode * >(
-                           elements_.top().node.get()))
-            {
+                break;
+            case Node::KIND_SET:
                 if (ns == XmlReader::NAMESPACE_NONE &&
                     name.equals(RTL_CONSTASCII_STRINGPARAM("item")))
                 {
-                    handleSetItem(reader, set);
+                    handleSetItem(
+                        reader,
+                        dynamic_cast< SetNode * >(elements_.top().node.get()));
                     return true;
                 }
-            } else {
+                break;
+            default: // Node::KIND_LOCALIZED_VALUE
                 OSL_ASSERT(false); // this cannot happen
+                break;
             }
             break;
         case STATE_COMPONENT_DONE:
@@ -1286,16 +1297,8 @@ void XcsParser::endElement(XmlReader const * reader) {
                             RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
                         css::uno::Reference< css::uno::XInterface >());
                 }
-            } else if (GroupNode * group = dynamic_cast< GroupNode * >(
-                           elements_.top().node.get()))
-            {
-                map = &group->getMembers();
             } else {
-                OSL_ASSERT(false);
-                throw css::uno::RuntimeException(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-                    css::uno::Reference< css::uno::XInterface >());
+                map = &elements_.top().node->getMembers();
             }
             if (!map->insert(NodeMap::value_type(top.name, top.node)).second) {
                 throw css::uno::RuntimeException(
@@ -1652,7 +1655,8 @@ private:
         rtl::OUString const & name, Type type, Operation operation,
         bool finalized);
 
-    void handleGroupNode(XmlReader * reader, GroupNode * group);
+    void handleGroupNode(
+        XmlReader * reader, rtl::Reference< Node > const & group);
 
     void handleSetNode(XmlReader * reader, SetNode * set);
 
@@ -1733,82 +1737,91 @@ bool XcuParser::startElement(
                  reader->getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
         }
-    } else if (PropertyNode * prop = dynamic_cast< PropertyNode * >(
-                   state_.top().node.get()))
-    {
-        if (ns == XmlReader::NAMESPACE_NONE &&
-            name.equals(RTL_CONSTASCII_STRINGPARAM("value")))
-        {
-            handlePropValue(reader, prop);
-        } else {
-            throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("bad property node member <")) +
-                 convertUtf8String(name) +
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
-                 reader->getUrl()),
-                css::uno::Reference< css::uno::XInterface >());
-        }
-    } else if (LocalizedPropertyNode * locprop =
-               dynamic_cast< LocalizedPropertyNode * >(state_.top().node.get()))
-    {
-        if (ns == XmlReader::NAMESPACE_NONE &&
-            name.equals(RTL_CONSTASCII_STRINGPARAM("value")))
-        {
-            handleLocpropValue(reader, locprop);
-        } else {
-            throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "bad localized property node member <")) +
-                 convertUtf8String(name) +
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
-                 reader->getUrl()),
-                css::uno::Reference< css::uno::XInterface >());
-        }
-    } else if (GroupNode * group = dynamic_cast< GroupNode * >(
-                   state_.top().node.get()))
-    {
-        if (ns == XmlReader::NAMESPACE_NONE &&
-            name.equals(RTL_CONSTASCII_STRINGPARAM("prop")))
-        {
-            handleGroupProp(reader, group);
-        } else if (ns == XmlReader::NAMESPACE_NONE &&
-                   name.equals(RTL_CONSTASCII_STRINGPARAM("node")))
-        {
-            handleGroupNode(reader, group);
-        } else {
-            throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("bad group node member <")) +
-                 convertUtf8String(name) +
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
-                 reader->getUrl()),
-                css::uno::Reference< css::uno::XInterface >());
-        }
-    } else if (SetNode * set = dynamic_cast< SetNode * >(
-                   state_.top().node.get()))
-    {
-        if (ns == XmlReader::NAMESPACE_NONE &&
-            name.equals(RTL_CONSTASCII_STRINGPARAM("node")))
-        {
-            handleSetNode(reader, set);
-        } else {
-            throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("bad set node member <")) +
-                 convertUtf8String(name) +
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
-                 reader->getUrl()),
-                css::uno::Reference< css::uno::XInterface >());
-        }
     } else {
-        throw css::uno::RuntimeException(
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad member <")) +
-             convertUtf8String(name) +
-             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
-             reader->getUrl()),
-            css::uno::Reference< css::uno::XInterface >());
+        switch (state_.top().node->kind()) {
+        case Node::KIND_PROPERTY:
+            if (ns == XmlReader::NAMESPACE_NONE &&
+                name.equals(RTL_CONSTASCII_STRINGPARAM("value")))
+            {
+                handlePropValue(
+                    reader,
+                    dynamic_cast< PropertyNode * >(state_.top().node.get()));
+            } else {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "bad property node member <")) +
+                     convertUtf8String(name) +
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
+                     reader->getUrl()),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            break;
+        case Node::KIND_LOCALIZED_PROPERTY:
+            if (ns == XmlReader::NAMESPACE_NONE &&
+                name.equals(RTL_CONSTASCII_STRINGPARAM("value")))
+            {
+                handleLocpropValue(
+                    reader,
+                    dynamic_cast< LocalizedPropertyNode * >(
+                        state_.top().node.get()));
+            } else {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "bad localized property node member <")) +
+                     convertUtf8String(name) +
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
+                     reader->getUrl()),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            break;
+        case Node::KIND_LOCALIZED_VALUE:
+            throw css::uno::RuntimeException(
+                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad member <")) +
+                 convertUtf8String(name) +
+                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
+                 reader->getUrl()),
+                css::uno::Reference< css::uno::XInterface >());
+        case Node::KIND_GROUP:
+            if (ns == XmlReader::NAMESPACE_NONE &&
+                name.equals(RTL_CONSTASCII_STRINGPARAM("prop")))
+            {
+                handleGroupProp(
+                    reader,
+                    dynamic_cast< GroupNode * >(state_.top().node.get()));
+            } else if (ns == XmlReader::NAMESPACE_NONE &&
+                       name.equals(RTL_CONSTASCII_STRINGPARAM("node")))
+            {
+                handleGroupNode(reader, state_.top().node);
+            } else {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "bad group node member <")) +
+                     convertUtf8String(name) +
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
+                     reader->getUrl()),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            break;
+        case Node::KIND_SET:
+            if (ns == XmlReader::NAMESPACE_NONE &&
+                name.equals(RTL_CONSTASCII_STRINGPARAM("node")))
+            {
+                handleSetNode(
+                    reader, dynamic_cast< SetNode * >(state_.top().node.get()));
+            } else {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM("bad set node member <")) +
+                     convertUtf8String(name) +
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
+                     reader->getUrl()),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            break;
+        }
     }
     return true;
 }
@@ -1828,21 +1841,7 @@ void XcuParser::endElement(XmlReader const * reader) {
     state_.pop();
     if (insert.is()) {
         OSL_ASSERT(!state_.empty() && state_.top().node.is());
-        if (LocalizedPropertyNode * locprop =
-            dynamic_cast< LocalizedPropertyNode * >(state_.top().node.get()))
-        {
-            locprop->getMembers()[name] = insert;
-        } else if (GroupNode * group =
-                   dynamic_cast< GroupNode * >(state_.top().node.get()))
-        {
-            group->getMembers()[name] = insert;
-        } else if (SetNode * set =
-                   dynamic_cast< SetNode * >(state_.top().node.get()))
-        {
-            set->getMembers()[name] = insert;
-        } else {
-            OSL_ASSERT(false); // this cannot happen
-        }
+        state_.top().node->getMembers()[name] = insert;
     }
 }
 
@@ -2147,20 +2146,27 @@ void XcuParser::handleGroupProp(XmlReader * reader, GroupNode * group) {
     NodeMap::iterator i(group->getMembers().find(name));
     if (i == group->getMembers().end()) {
         handleUnknownGroupProp(reader, group, name, type, op, finalized);
-    } else if (PropertyNode * prop = dynamic_cast< PropertyNode * >(
-                   i->second.get()))
-    {
-        handlePlainGroupProp(reader, prop, name, type, op, finalized);
-    } else if (LocalizedPropertyNode * locprop =
-               dynamic_cast< LocalizedPropertyNode * >(i->second.get()))
-    {
-        handleLocalizedGroupProp(reader, locprop, name, type, op, finalized);
     } else {
-        throw css::uno::RuntimeException(
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("inappropriate prop ")) +
-             name + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" in ")) +
-             reader->getUrl()),
-            css::uno::Reference< css::uno::XInterface >());
+        switch (i->second->kind()) {
+        case Node::KIND_PROPERTY:
+            handlePlainGroupProp(
+                reader, dynamic_cast< PropertyNode * >(i->second.get()), name,
+                type, op, finalized);
+            break;
+        case Node::KIND_LOCALIZED_PROPERTY:
+            handleLocalizedGroupProp(
+                reader,
+                dynamic_cast< LocalizedPropertyNode * >(i->second.get()), name,
+                type, op, finalized);
+            break;
+        default:
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("inappropriate prop ")) +
+                 name + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" in ")) +
+                 reader->getUrl()),
+                css::uno::Reference< css::uno::XInterface >());
+        }
     }
 }
 
@@ -2322,7 +2328,9 @@ void XcuParser::handleLocalizedGroupProp(
     }
 }
 
-void XcuParser::handleGroupNode(XmlReader * reader, GroupNode * group) {
+void XcuParser::handleGroupNode(
+    XmlReader * reader, rtl::Reference< Node > const & group)
+{
     OSL_ASSERT(!state_.top().record);
     Span attrName;
     Span attrOp;
@@ -2821,49 +2829,45 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
             // cannot be set via the UNO API.
         } else {
             parent = data.resolvePath(parentPath, 0, 0, 0, 0, 0);
-            if (LocalizedPropertyNode * locprop =
-                dynamic_cast< LocalizedPropertyNode * >(parent.get()))
+            NodeMap::iterator j(parent->getMembers().find(name));
+            if (j != parent->getMembers().end() &&
+                j->second->getLayer() == NO_LAYER)
             {
-                NodeMap::iterator j(locprop->getMembers().find(name));
-                if (j != locprop->getMembers().end() &&
-                    j->second->getLayer() == NO_LAYER)
-                {
-                    OSL_ASSERT(j->second->isRemoved());
-                    rtl::OUString parentName;
-                    rtl::OUString grandparentPath(
-                        parseLastSegment(parentPath, &parentName));
-                    xmlTextWriterStartElement(writer.writer, xmlString("item"));
-                    xmlTextWriterWriteAttribute(
-                        writer.writer, xmlString("oor:path"),
-                        xmlString(convertToUtf8(grandparentPath).getStr()));
-                    xmlTextWriterStartElement(writer.writer, xmlString("prop"));
-                    xmlTextWriterWriteAttribute(
-                        writer.writer, xmlString("oor:name"),
-                        xmlString(convertToUtf8(parentName).getStr()));
-                    xmlTextWriterWriteAttribute(
-                        writer.writer, xmlString("oor:op"), xmlString("fuse"));
-                    xmlTextWriterStartElement(
-                        writer.writer, xmlString("value"));
-                    xmlTextWriterWriteAttribute(
-                        writer.writer, xmlString("xml:lang"),
-                        xmlString(convertToUtf8(name).getStr()));
-                    xmlTextWriterWriteAttribute(
-                        writer.writer, xmlString("oor:op"),
-                        xmlString("remove"));
-                    xmlTextWriterEndElement(writer.writer);
-                    xmlTextWriterEndElement(writer.writer);
-                    xmlTextWriterEndElement(writer.writer);
-                }
-            } else if (GroupNode * group = dynamic_cast< GroupNode * >(
-                           parent.get()))
-            {
-                OSL_ASSERT(dynamic_cast< GroupNode * >(group)->isExtensible());
-                NodeMap::iterator j(group->getMembers().find(name));
-                if (j != group->getMembers().end() &&
-                    j->second->getLayer() == NO_LAYER)
-                {
-                    OSL_ASSERT(j->second->isRemoved());
-                    xmlTextWriterStartElement(writer.writer, xmlString("item"));
+                OSL_ASSERT(j->second->isRemoved());
+                xmlTextWriterStartElement(writer.writer, xmlString("item"));
+                switch (parent->kind()) {
+                case Node::KIND_LOCALIZED_PROPERTY:
+                    {
+                        rtl::OUString parentName;
+                        rtl::OUString grandparentPath(
+                            parseLastSegment(parentPath, &parentName));
+                        xmlTextWriterWriteAttribute(
+                            writer.writer, xmlString("oor:path"),
+                            xmlString(convertToUtf8(grandparentPath).getStr()));
+                        xmlTextWriterStartElement(
+                            writer.writer, xmlString("prop"));
+                        xmlTextWriterWriteAttribute(
+                            writer.writer, xmlString("oor:name"),
+                            xmlString(convertToUtf8(parentName).getStr()));
+                        xmlTextWriterWriteAttribute(
+                            writer.writer, xmlString("oor:op"),
+                            xmlString("fuse"));
+                        xmlTextWriterStartElement(
+                            writer.writer, xmlString("value"));
+                        xmlTextWriterWriteAttribute(
+                            writer.writer, xmlString("xml:lang"),
+                            xmlString(convertToUtf8(name).getStr()));
+                        xmlTextWriterWriteAttribute(
+                            writer.writer, xmlString("oor:op"),
+                            xmlString("remove"));
+                        xmlTextWriterEndElement(writer.writer);
+                        xmlTextWriterEndElement(writer.writer);
+                    }
+                    break;
+                case Node::KIND_GROUP:
+                    OSL_ASSERT(
+                        dynamic_cast< GroupNode * >(parent.get())->
+                        isExtensible());
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("oor:path"),
                         xmlString(convertToUtf8(parentPath).getStr()));
@@ -2875,16 +2879,8 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
                         writer.writer, xmlString("oor:op"),
                         xmlString("remove"));
                     xmlTextWriterEndElement(writer.writer);
-                    xmlTextWriterEndElement(writer.writer);
-                }
-            } else if (SetNode * set = dynamic_cast< SetNode * >(parent.get()))
-            {
-                NodeMap::iterator j(set->getMembers().find(name));
-                if (j != set->getMembers().end() &&
-                    j->second->getLayer() == NO_LAYER)
-                {
-                    OSL_ASSERT(j->second->isRemoved());
-                    xmlTextWriterStartElement(writer.writer, xmlString("item"));
+                    break;
+                case Node::KIND_SET:
                     xmlTextWriterWriteAttribute(
                         writer.writer, xmlString("oor:path"),
                         xmlString(convertToUtf8(parentPath).getStr()));
@@ -2896,10 +2892,12 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
                         writer.writer, xmlString("oor:op"),
                         xmlString("remove"));
                     xmlTextWriterEndElement(writer.writer);
-                    xmlTextWriterEndElement(writer.writer);
+                    break;
+                default:
+                    OSL_ASSERT(false); // this cannot happen
+                    break;
                 }
-            } else {
-                OSL_ASSERT(false); // this cannot happen
+                xmlTextWriterEndElement(writer.writer);
             }
         }
     }

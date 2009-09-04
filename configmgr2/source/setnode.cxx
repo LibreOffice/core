@@ -54,6 +54,10 @@ rtl::Reference< Node > SetNode::clone() const {
     return new SetNode(*this);
 }
 
+NodeMap & SetNode::getMembers() {
+    return members_;
+}
+
 rtl::OUString SetNode::getTemplateName() const {
     return templateName_;
 }
@@ -82,10 +86,6 @@ bool SetNode::isValidTemplate(rtl::OUString const & templateName) const {
          additionalTemplateNames_.end());
 }
 
-NodeMap & SetNode::getMembers() {
-    return members_;
-}
-
 SetNode::SetNode(SetNode const & other):
     Node(other), defaultTemplateName_(other.defaultTemplateName_),
     additionalTemplateNames_(other.additionalTemplateNames_),
@@ -95,6 +95,10 @@ SetNode::SetNode(SetNode const & other):
 }
 
 SetNode::~SetNode() {}
+
+Node::Kind SetNode::kind() const {
+    return KIND_SET;
+}
 
 void SetNode::clear() {
     members_.clear();

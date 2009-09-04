@@ -64,7 +64,6 @@
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 
-#include "nodemap.hxx"
 #include "type.hxx"
 
 #if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14
@@ -421,8 +420,6 @@ private:
         throw (
             com::sun::star::uno::Exception,
             com::sun::star::uno::RuntimeException);
-
-    NodeMap & getMemberNodes();
 
     rtl::Reference< ChildAccess > getModifiedChild(
         HardChildMap::iterator const & childIterator);

@@ -86,4 +86,8 @@ PropertyNode::PropertyNode(PropertyNode const & other):
 
 PropertyNode::~PropertyNode() {}
 
+Node::Kind PropertyNode::kind() const {
+    return KIND_PROPERTY;
+}
+
 }

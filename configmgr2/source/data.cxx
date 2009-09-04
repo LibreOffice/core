@@ -206,17 +206,17 @@ rtl::Reference< Node > Data::resolvePath(
                 css::uno::Reference< css::uno::XInterface >());
         }
         if (setElement) {
-            SetNode * set = dynamic_cast< SetNode * >(p.get());
-            if (set == 0 ||
+            if (p->kind() != Node::KIND_SET ||
                 (templateName.getLength() != 0 &&
-                 !set->isValidTemplate(templateName)))
+                 !dynamic_cast< SetNode * >(p.get())->isValidTemplate(
+                     templateName)))
             {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) +
                      path),
                     css::uno::Reference< css::uno::XInterface >());
             }
-            p = set->getMember(seg);
+            p = p->getMember(seg);
             if (templateName.getLength() != 0 && p != 0) {
                 rtl::OUString name(p->getTemplateName());
                 OSL_ASSERT(name.getLength() != 0);

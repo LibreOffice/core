@@ -216,26 +216,38 @@ void ChildAccess::setNode(rtl::Reference< Node > const & node) {
 void ChildAccess::setProperty(css::uno::Any const & value) {
     Type type = TYPE_ERROR;
     bool nillable = false;
-    if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get())) {
-        type = prop->getType();
-        nillable = prop->isNillable();
-    } else if (dynamic_cast< LocalizedPropertyValueNode * >(node_.get()) != 0) {
-        LocalizedPropertyNode * locprop =
-            dynamic_cast< LocalizedPropertyNode * >(getParentNode().get());
-        OSL_ASSERT(locprop != 0);
-        type = locprop->getType();
-        nillable = locprop->isNillable();
-    } else if (dynamic_cast< LocalizedPropertyNode * >(node_.get()) != 0) {
-        rtl::OUString locale(getRootAccess()->getLocale());
-        if (!Components::allLocales(locale)) {
-            rtl::Reference< ChildAccess > child(getChild(locale));
-            if (child.is()) {
-                child->setProperty(value);
-            } else {
-                insertLocalizedPropertyValueChild(locale, value);
-            }
-            return;
+    switch (node_->kind()) {
+    case Node::KIND_PROPERTY:
+        {
+            PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get());
+            type = prop->getType();
+            nillable = prop->isNillable();
         }
+        break;
+    case Node::KIND_LOCALIZED_PROPERTY:
+        {
+            rtl::OUString locale(getRootAccess()->getLocale());
+            if (!Components::allLocales(locale)) {
+                rtl::Reference< ChildAccess > child(getChild(locale));
+                if (child.is()) {
+                    child->setProperty(value);
+                } else {
+                    insertLocalizedPropertyValueChild(locale, value);
+                }
+                return;
+            }
+        }
+        break;
+    case Node::KIND_LOCALIZED_VALUE:
+        {
+            LocalizedPropertyNode * locprop =
+                dynamic_cast< LocalizedPropertyNode * >(getParentNode().get());
+            type = locprop->getType();
+            nillable = locprop->isNillable();
+        }
+        break;
+    default:
+        break;
     }
     checkValue(value, type, nillable);
     markAsModified();
@@ -244,40 +256,43 @@ void ChildAccess::setProperty(css::uno::Any const & value) {
 }
 
 css::uno::Any ChildAccess::asValue() {
-    if (changedValue_.get() != 0)
-    {
+    if (changedValue_.get() != 0) {
         return *changedValue_;
     }
-    if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get())) {
-        return prop->getValue();
-    }
-    if (LocalizedPropertyValueNode * locval =
-        dynamic_cast< LocalizedPropertyValueNode * >(node_.get()))
-    {
-        return locval->getValue();
-    }
-    if (dynamic_cast< LocalizedPropertyNode * >(node_.get()) != 0) {
-        rtl::OUString locale(getRootAccess()->getLocale());
-        if (!Components::allLocales(locale)) {
-            rtl::Reference< ChildAccess > child(getChild(locale));
-            if (!child.is()) {
-                //TODO: find best match
-                child = getChild(rtl::OUString());
+    switch (node_->kind()) {
+    case Node::KIND_PROPERTY:
+        return dynamic_cast< PropertyNode * >(node_.get())->getValue();
+    case Node::KIND_LOCALIZED_PROPERTY:
+        {
+            rtl::OUString locale(getRootAccess()->getLocale());
+            if (!Components::allLocales(locale)) {
+                rtl::Reference< ChildAccess > child(getChild(locale));
                 if (!child.is()) {
-                    child = getChild(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US")));
+                    //TODO: find best match
+                    child = getChild(rtl::OUString());
                     if (!child.is()) {
-                        std::vector< rtl::Reference< ChildAccess > > all(
-                            getAllChildren());
-                        if (all.empty()) {
-                            return css::uno::Any();
+                        child = getChild(
+                            rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM("en-US")));
+                        if (!child.is()) {
+                            std::vector< rtl::Reference< ChildAccess > > all(
+                                getAllChildren());
+                            if (all.empty()) {
+                                return css::uno::Any();
+                            }
+                            child = all.front();
                         }
-                        child = all.front();
                     }
                 }
+                return child->asValue();
             }
-            return child->asValue();
         }
+        break;
+    case Node::KIND_LOCALIZED_VALUE:
+        return dynamic_cast< LocalizedPropertyValueNode * >(node_.get())->
+            getValue();
+    default:
+        break;
     }
     return css::uno::makeAny(
         css::uno::Reference< css::uno::XInterface >(
@@ -288,18 +303,18 @@ void ChildAccess::commitChanges(bool valid) {
     commitChildChanges(valid);
     if (valid && changedValue_.get() != 0) {
         Components::singleton().addModification(getPath());
-        if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get())) {
-            prop->setValue(NO_LAYER, *changedValue_);
-        } else if (LocalizedPropertyValueNode * locval =
-                   dynamic_cast< LocalizedPropertyValueNode * >(node_.get()))
-        {
-            locval->setValue(NO_LAYER, *changedValue_);
-        } else {
-            OSL_ASSERT(false);
-            throw css::uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-                static_cast< cppu::OWeakObject * >(this));
+        switch (node_->kind()) {
+        case Node::KIND_PROPERTY:
+            dynamic_cast< PropertyNode * >(node_.get())->setValue(
+                NO_LAYER, *changedValue_);
+            break;
+        case Node::KIND_LOCALIZED_VALUE:
+            dynamic_cast< LocalizedPropertyValueNode * >(node_.get())->setValue(
+                NO_LAYER, *changedValue_);
+            break;
+        default:
+            OSL_ASSERT(false); // this cannot happen
+            break;
         }
     }
     changedValue_.reset();
@@ -317,13 +332,13 @@ void ChildAccess::addSupportedServiceNames(
 {
     OSL_ASSERT(services != 0);
     services->push_back(
-        dynamic_cast< GroupNode * >(getParentNode().get()) == 0
+        getParentNode()->kind() == Node::KIND_GROUP
         ? rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.SetElement"))
+                "com.sun.star.configuration.GroupElement"))
         : rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.GroupElement")));
+                "com.sun.star.configuration.SetElement")));
 }
 
 }

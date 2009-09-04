@@ -46,6 +46,8 @@ public:
 
     virtual rtl::Reference< Node > clone() const;
 
+    virtual NodeMap & getMembers();
+
     virtual rtl::OUString getTemplateName() const;
 
     virtual void setMandatory(int layer);
@@ -54,12 +56,12 @@ public:
 
     bool isExtensible() const;
 
-    NodeMap & getMembers();
-
 private:
     GroupNode(GroupNode const & other);
 
     virtual ~GroupNode();
+
+    virtual Kind kind() const;
 
     virtual void clear();
 

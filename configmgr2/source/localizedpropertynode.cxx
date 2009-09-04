@@ -58,16 +58,16 @@ rtl::Reference< Node > LocalizedPropertyNode::clone() const {
     return new LocalizedPropertyNode(*this);
 }
 
+NodeMap & LocalizedPropertyNode::getMembers() {
+    return members_;
+}
+
 Type LocalizedPropertyNode::getType() const {
     return type_;
 }
 
 bool LocalizedPropertyNode::isNillable() const {
     return nillable_;
-}
-
-NodeMap & LocalizedPropertyNode::getMembers() {
-    return members_;
 }
 
 LocalizedPropertyNode::LocalizedPropertyNode(
@@ -78,6 +78,10 @@ LocalizedPropertyNode::LocalizedPropertyNode(
 }
 
 LocalizedPropertyNode::~LocalizedPropertyNode() {}
+
+Node::Kind LocalizedPropertyNode::kind() const {
+    return KIND_LOCALIZED_PROPERTY;
+}
 
 void LocalizedPropertyNode::clear() {
     members_.clear();

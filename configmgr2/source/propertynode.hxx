@@ -65,6 +65,8 @@ private:
 
     virtual ~PropertyNode();
 
+    virtual Kind kind() const;
+
     Type type_;
     bool nillable_;
     com::sun::star::uno::Any value_;

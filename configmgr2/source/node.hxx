@@ -36,11 +36,21 @@
 #include "rtl/ustring.hxx"
 #include "salhelper/simplereferenceobject.hxx"
 
+#include "nodemap.hxx"
+
 namespace configmgr {
 
 class Node: public salhelper::SimpleReferenceObject {
 public:
+    enum Kind {
+        KIND_PROPERTY, KIND_LOCALIZED_PROPERTY, KIND_LOCALIZED_VALUE,
+        KIND_GROUP, KIND_SET };
+
+    virtual Kind kind() const = 0;
+
     virtual rtl::Reference< Node > clone() const = 0;
+
+    virtual NodeMap & getMembers();
 
     virtual rtl::OUString getTemplateName() const;
 

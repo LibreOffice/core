@@ -30,14 +30,32 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/XInterface.hpp"
 #include "osl/diagnose.h"
 #include "rtl/ref.hxx"
+#include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
 #include "layer.hxx"
 #include "node.hxx"
+#include "nodemap.hxx"
 
 namespace configmgr {
+
+namespace {
+
+namespace css = com::sun::star;
+
+}
+
+NodeMap & Node::getMembers() {
+    OSL_ASSERT(false);
+    throw css::uno::RuntimeException(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+        css::uno::Reference< css::uno::XInterface >());
+}
 
 rtl::OUString Node::getTemplateName() const {
     return rtl::OUString();
