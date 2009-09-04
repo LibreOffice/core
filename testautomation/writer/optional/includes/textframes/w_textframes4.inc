@@ -364,8 +364,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_57
-Warnlog "#i102752# - tTextframes_57 outcommented due to bug."
-goto endsub
 
     Dim sTestFile   as String
     Dim iVertical   as Integer
@@ -445,8 +443,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_58
-Warnlog "#i102752# - tTextframes_58 outcommented due to bug."
-goto endsub
 
     Dim sTestFile   as String
     Dim iVertical   as Integer
@@ -525,8 +521,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_59
-Warnlog "#i102752# - tTextframes_57 outcommented due to bug."
-goto endsub
 
     Dim sTestFile   as String
     Dim sPositionY1 as String
@@ -613,8 +607,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_60
-Warnlog "#i102752# - tTextframes_60 outcommented due to bug."
-goto endsub
 
     Dim sTestFile   as String
     Dim sPositionY1 as String
@@ -707,8 +699,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_61
-Warnlog "#i102752# - tTextframes_61 outcommented due to bug."
-goto endsub
 
     Dim sTestFile   as String
     Dim iVertical   as Integer
@@ -787,8 +777,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_62
-Warnlog "#i102752# - tTextframes_62 outcommented due to bug."
-goto endsub
 
     Dim sTestFile   as String
     Dim iVertical   as Integer
@@ -867,8 +855,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_63
-Warnlog "#i102752# - tTextframes_63 outcommented due to bug."
-goto endsub
 
     Dim sTestFile     as String
     Dim iHorizontal   as Integer
@@ -959,8 +945,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_64
-Warnlog "#i102752# - tTextframes_64 outcommented due to bug."
-goto endsub
 
     Dim sTestFile     as String
     Dim iHorizontal   as Integer
@@ -1051,10 +1035,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_65
-Warnlog "#i102752# - tTextframes_65 outcommented due to bug."
-goto endsub
 
-    Dim sTestFile     as String
+	Dim sTestFile     as String
     Dim iHorizontal   as Integer
     Dim sHorizontalBy as String
     Dim sPositionX1   as String
@@ -1132,8 +1114,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_66
-Warnlog "#i102752# - tTextframes_66 outcommented due to bug."
-goto endsub
 
     Dim sTestFile     as String
     Dim iHorizontal   as Integer
@@ -1213,8 +1193,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_67
-Warnlog "#i102752# - tTextframes_67 outcommented due to bug."
-goto endsub
 
     Dim sTestFile     as String
     Dim iHorizontal   as Integer
@@ -1305,8 +1283,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_68
-Warnlog "#i102752# - tTextframes_68 outcommented due to bug."
-goto endsub
 
     Dim sTestFile     as String
     Dim iHorizontal   as Integer
@@ -1397,8 +1373,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_69
-Warnlog "#i102752# - tTextframes_69 outcommented due to bug."
-goto endsub
 
     Dim sTestFile     as String
     Dim iHorizontal   as Integer
@@ -1478,8 +1452,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_70
-Warnlog "#i102752# - tTextframes_70 outcommented due to bug."
-goto endsub
 
     Dim sTestFile     as String
     Dim iHorizontal   as Integer

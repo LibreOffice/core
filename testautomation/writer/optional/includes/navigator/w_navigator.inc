@@ -217,7 +217,7 @@ endcase
 ' **********************************************************************
 
 testcase tViewNavigator3
-    QaErrorLog "#i94614 + i102752# - tViewNavigator3 outcommented"
+    WarnLog "#i94614# - tViewNavigator3 outcommented"
     goto endsub
 
     Dim NavigationTearOff as boolean

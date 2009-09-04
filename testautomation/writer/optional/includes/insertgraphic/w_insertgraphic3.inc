@@ -51,8 +51,6 @@
 '\***********************************************************************
 
 testcase tInsertGraphic_21
-Warnlog "#i102752# - tInsertGraphic_21 outcommented due to bug."
-goto endsub
 
   Dim iLeft as Integer , iRight as Integer  , iCenterHorizontal as Integer
   Dim iTop  as Integer , iBottom as Integer , iCenterVertical   as Integer
@@ -152,8 +150,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tInsertGraphic_22
-Warnlog "#i102752# - tInsertGraphic_22 outcommented due to bug."
-goto endsub
 
   Dim iLeft as Integer , iRight  as Integer , iCenterHorizontal as Integer
   Dim iTop  as Integer , iBottom as Integer , iCenterVertical   as Integer
@@ -253,8 +249,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tInsertGraphic_23
-Warnlog "#i102752# - tInsertGraphic_23 outcommented due to bug."
-goto endsub
 
   Dim iLeft as Integer , iRight  as Integer , iCenterHorizontal as Integer
   Dim iTop  as Integer , iBottom as Integer , iCenterVertical   as Integer
@@ -354,8 +348,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tInsertGraphic_24
-Warnlog "#i102752# - tInsertGraphic_24 outcommented due to bug."
-goto endsub
 
   Dim iTop as Integer  , iBottom as Integer , iCenterVertical as Integer
 
@@ -416,8 +408,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tInsertGraphic_25
-Warnlog "#i102752# - tInsertGraphic_25 outcommented due to bug."
-goto endsub
 
   Dim iLeft as Integer , iRight  as Integer , iCenterHorizontal as Integer
   Dim iTop  as Integer , iBottom as Integer , iCenterVertical   as Integer
@@ -538,8 +528,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tInsertGraphic_26
-Warnlog "#i102752# - tInsertGraphic_26 outcommented due to bug."
-goto endsub
 
   Dim iLeft as Integer , iRight  as Integer , iCenterHorizontal as Integer
   Dim iTop  as Integer , iBottom as Integer , iCenterVertical   as Integer
@@ -660,8 +648,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tInsertGraphic_27
-Warnlog "#i102752# - tInsertGraphic_27 outcommented due to bug."
-goto endsub
 
   Dim iLeft as Integer , iRight  as Integer , iCenterHorizontal as Integer
   Dim iTop  as Integer , iBottom as Integer , iCenterVertical   as Integer
@@ -782,8 +768,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tInsertGraphic_28
-Warnlog "#i102752# - tInsertGraphic_28 outcommented due to bug."
-goto endsub
 
   Dim iTop as Integer , iBottom as Integer , iCenterVertical as Integer
 

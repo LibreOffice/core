@@ -254,8 +254,8 @@ function fSetChartTypeVariant ( iChartTypeVariant as INTEGER ) as INTEGER
                                 iMaximumVariant = 3
                             endif
 		case 7          :   iMaximumVariant = 1							
-        case 4, 8       :   iMaximumVariant = 3
-        case 3, 5, 6, 9 :   iMaximumVariant = 4
+        case 4       :   iMaximumVariant = 3
+        case 3, 5, 6, 8 ,9 :   iMaximumVariant = 4
         case 10         :   iMaximumVariant = 2
     end select
 

@@ -1,16 +1,15 @@
-'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
+'* 
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
 '*
-'* $RCSfile: g_tables.bas,v $
+'* $RCSfile: w_alternative_text.bas,v $
 '*
 '* $Revision: 1.1 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:37 $
+'* last change: $Author: hde $ $Date: 2008-06-18 09:11:25 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -31,41 +30,36 @@
 '*
 '/************************************************************************
 '*
-'* owner : wolfram.garten@sun.com
+'* owner : helge.delfs@sun.com
 '*
-'* short description : Testing of impress tables
+'* short description : Alternative Texts For Writer Objects
 '*
 '\***********************************************************************
 
 sub main
-    Printlog "------------------- Impress Tables Test -------------------------"
-    call hStatusIn ("Graphics","i_tables.bas")
+    Dim StartTime
+    StartTime = Now()
 
-    use "graphics\optional\includes\global\g_tables.inc"
+    use "writer\tools\includes\w_tools.inc"
 
-    PrintLog "-------------------------" + gApplication + "-------------------"
+    use "writer\optional\includes\alternative_text\w_alternative_text.inc"
 
-    call tiInsertTableUsingMenu
-    call tiInsertTableUsingButton
-    call tiInsertTableUsingToolbarbutton
-    call tiTableObjectBar
-    gApplication = "DRAW"
+    printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartTime )
+    printlog Chr(13) + "******* Writer - Alternative Text - Test *******"
 
-    PrintLog "-------------------------" + gApplication + "-------------------"
+    Call hStatusIn ( "writer", "w_alternative_text.bas" )
+    Call w_alternative_text
+    Call hStatusOut
 
-    call tiInsertTableUsingMenu
-    call tiInsertTableUsingToolbarbutton
-    call tiTableObjectBar
-
-    call hStatusOut
+    Printlog Chr(13) + "End of Autotest:"
+    Printlog "Duration: "+ WieLange ( StartTime )
+    Printlog "Date: " +  Date + "    Time: " + Time
 
 end sub
 
-'----------------------------------------------
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "IMPRESS"
-    Call getUseFiles
+    Call GetUseFiles
+    gApplication = "WRITER"
 end sub
-

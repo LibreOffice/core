@@ -234,9 +234,14 @@ endcase
 testcase tAssignComponentFunction
     dim x,i,a as integer
     dim sTemp as string
+    dim sPath as string
+        sPath = gTesttoolPath & "framework\optional\input/eventbinding/"
+    dim sExtension as string
+        sExtension = "DialogComponent.oxt"
     
     sExtensionCLI("list","")
-    sExtensionCLI("add","DialogComponent.oxt",convertPath(gTestToolPath + "framework\optional\input/eventbinding/") )
+    'sExtensionCLI("add","DialogComponent.oxt",convertPath(gTestToolPath + "framework\optional\input/eventbinding/") )
+    hExtensionAddGUI( sPath & sExtension, "" )
     hFileOpen(convertPath(gTestToolPath + "framework\optional\input/eventbinding/DialogComponent.odt"))
     kontext "SecurityWarning"
     if SecurityWarning.exists(5) then
@@ -312,5 +317,6 @@ testcase tAssignComponentFunction
    ' vnd.sun.star.UNO:copyText
     
     sExtensionCLI("remove","DialogComponent.oxt" )
+    'hExtension RemoveGUI( sExtension )
     hCloseDocument()
 endcase

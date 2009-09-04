@@ -1,16 +1,16 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
+'* 
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
 '*
-'* $RCSfile: g_tables.bas,v $
+'* $RCSfile: c_solver.bas,v $
 '*
 '* $Revision: 1.1 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:37 $
+'* last change: $Author: oc $ $Date: 2009/08/03 08:05:48 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -29,43 +29,40 @@
 '* <http://www.openoffice.org/license.html>
 '* for a copy of the LGPLv3 License.
 '*
-'/************************************************************************
+'/***********************************************************************
 '*
-'* owner : wolfram.garten@sun.com
+'* owner : oliver.craemer@sun.com
 '*
-'* short description : Testing of impress tables
+'* short description : Functionality Test - Solver in Spreadsheet
 '*
 '\***********************************************************************
 
-sub main
-    Printlog "------------------- Impress Tables Test -------------------------"
-    call hStatusIn ("Graphics","i_tables.bas")
 
-    use "graphics\optional\includes\global\g_tables.inc"
-
-    PrintLog "-------------------------" + gApplication + "-------------------"
-
-    call tiInsertTableUsingMenu
-    call tiInsertTableUsingButton
-    call tiInsertTableUsingToolbarbutton
-    call tiTableObjectBar
-    gApplication = "DRAW"
-
-    PrintLog "-------------------------" + gApplication + "-------------------"
-
-    call tiInsertTableUsingMenu
-    call tiInsertTableUsingToolbarbutton
-    call tiTableObjectBar
-
-    call hStatusOut
-
+sub main       
+    use "spreadsheet/optional/includes/solver/c_solver.inc"
+    use "spreadsheet/tools/includes/c_select_tools.inc"
+    use "spreadsheet/tools/includes/c_cell_tools.inc"
+    use "spreadsheet/tools/includes/c_l10n_tools.inc"
+    
+    Printlog "--------------------------------------------------"
+    Printlog "---  Test for Solver in calc    ---"
+    Printlog "--------------------------------------------------"
+    
+    Call hStatusIn("spreadsheet", "c_solver.bas")                
+    
+    Call tExampleCalculation
+	Call tExampleCalculation2
+        
+    Call hStatusOut
 end sub
-
-'----------------------------------------------
+'
+'-------------------------------------------------------------------------------
+'
 sub LoadIncludeFiles
-    use "global\system\includes\master.inc"
-    use "global\system\includes\gvariabl.inc"
-    gApplication = "IMPRESS"
-    Call getUseFiles
+    use "global/system/includes/master.inc"
+    use "global/system/includes/gvariabl.inc"
+    use "global/tools/includes/optional/t_spreadsheet_tools1.inc"
+    gApplication   = "CALC"
+    call getusefiles
+    
 end sub
-
