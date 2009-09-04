@@ -45,6 +45,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssauth.db \
     $(UCR)$/cssawt.db \
     $(UCR)$/cssawttree.db \
+    $(UCR)$/cssawtgrid.db \
     $(UCR)$/csschart.db \
     $(UCR)$/csschart2.db \
     $(UCR)$/csschart2data.db \
@@ -152,6 +153,7 @@ REGISTRYCHECKFLAG=$(MISC)$/registrycheck.flag
 
 UNOTYPE_STATISTICS=$(MISC)$/unotype_statistics.txt
 
+REGVIEWTOOL=$(SOLARBINDIR)$/regview$(EXECPOST)
 
 # --- Targets ------------------------------------------------------
 
@@ -183,6 +185,6 @@ $(REGISTRYCHECKFLAG) : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
 #JSC: new target to prepare some UNO type statistics, the ouput will be later used
 #     for versioning of UNO cli type libraries
 $(UNOTYPE_STATISTICS) : $(REGISTRYCHECKFLAG)
-    $(AUGMENT_LIBRARY_PATH) $(PERL) checknewapi.pl $(UCR)$/types.db $(REFERENCE_RDB) "$(RSCREVISION)" > $@
+    $(AUGMENT_LIBRARY_PATH) $(PERL) checknewapi.pl $(UCR)$/types.db $(REFERENCE_RDB) "$(RSCREVISION)" "$(REGVIEWTOOL)" > $@
 
 .INCLUDE :  target.mk

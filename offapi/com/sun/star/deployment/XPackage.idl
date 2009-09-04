@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XPackage.idl,v $
- * $Revision: 1.14 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -101,6 +98,25 @@ interface XPackage
         raises (DeploymentException,
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException);
+
+    /** checks if the dependencies for this package are still satisfied
+
+        After updateing the OpenOffice.org, some dependencies for packages might
+        no longer be satisfied.
+
+        @since OOo 3.2.0
+
+        @param xCmdEnv
+               command environment for error handling and other interaction.
+
+        @return
+            true - all dependencies are satisfied
+            false - at least one dependency failed.
+     */
+    boolean checkDependencies(
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException);
 
 
     /** determines whether the package is currently is registered, i.e.

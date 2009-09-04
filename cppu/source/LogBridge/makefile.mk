@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,45 +29,20 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..$/..$/..
+PRJ     := ..$/..
+PRJNAME := cppu
+TARGET  := LogBridge
 
-PRJNAME=offapi
+ENABLE_EXCEPTIONS  := TRUE
+NO_BSYMBOLIC       := TRUE
+USE_DEFFILE        := FALSE
 
-TARGET=csssax
-PACKAGE=com$/sun$/star$/xml$/sax
 
-# --- Settings -----------------------------------------------------
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+.INCLUDE: settings.mk
 
-# ------------------------------------------------------------------------
 
-IDLFILES=\
-    InputSource.idl\
-    SAXException.idl\
-    SAXInvalidCharacterException.idl\
-    SAXParseException.idl\
-    XAttributeList.idl\
-    XDocumentHandler.idl\
-    XDTDHandler.idl\
-    XEntityResolver.idl\
-    XErrorHandler.idl\
-    XExtendedDocumentHandler.idl\
-    XLocator.idl\
-    XParser.idl\
-    XSAXSerializable.idl\
-    XFastParser.idl\
-    XFastDocumentHandler.idl\
-    XFastContextHandler.idl\
-    XFastSAXSerializable.idl\
-    XFastSerializer.idl\
-    XFastShapeContextHandler.idl\
-    XFastTokenHandler.idl\
-    XFastAttributeList.idl\
-    FastToken.idl \
-    FastShapeContextHandler.idl \
-    FastTokenHandler.idl
+SLOFILES := $(SLO)$/LogBridge.obj
 
-# ------------------------------------------------------------------
 
-.INCLUDE :  target.mk
-.INCLUDE :  $(PRJ)$/util$/target.pmk
+.INCLUDE: target.mk
+
