@@ -71,3 +71,15 @@ SHL1LIBS=$(SLB)$/$(TARGET).lib
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+# ------------------------------------------------------------------
+
+ALLTAR : \
+        $(MISC)$/$(TARGET).don \
+
+$(SLOFILES) : $(MISC)$/$(TARGET).don
+
+$(MISC)$/$(TARGET).don : $(SOLARBINDIR)$/oovbaapi.rdb
+        +$(CPPUMAKER) -O$(INCCOM)$/$(TARGET) -BUCR $(SOLARBINDIR)$/oovbaapi.rdb -X$(SOLARBINDIR)$/types.rdb && echo > $@
+        echo $@
+ 
