@@ -329,24 +329,21 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL$(TNR)ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+    @echo dlltool --input-def $(SHL$(TNR)DEF) \
+        --dllname $(SHL$(TNR)TARGET)$(DLLPOST) \
+        --kill-at \\ > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
 .IF "$(DEFLIB$(TNR)NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL$(TNR)DEF) \
-        --dllname $(SHL$(TNR)TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @echo 	--output-exp $(MISC)$/$(@:b)_exp.o >> $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
 .ELSE			# "$(DEFLIB$(TNR)NAME)"!=""	# do not have to include objs
-    @echo dlltool --input-def $(SHL$(TNR)DEF) \
-        --dllname $(SHL$(TNR)TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)$/$(@:b)_exp.o \
+    @echo	--output-exp $(MISC)$/$(@:b)_exp.o \
         $(STDOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) \
-        `$(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+        `$(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`  >> $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
 .ENDIF			# "$(DEFLIB$(TNR)NAME)"!=""
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) \
         `$(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        -Wl,--exclude-libs,ALL $(SHL$(TNR)STDLIBS) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) \
-        $(MISC)$/$(@:b)_exp.o \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL$(TNR)STDLIBS) -Wl,--end-group \
+        $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) $(MISC)$/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
         -Wl,-Map,$(MISC)$/$(@:b).map >> $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd

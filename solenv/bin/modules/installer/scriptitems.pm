@@ -591,6 +591,66 @@ sub get_children
 }
 
 ################################################################################
+# Using different HostName for language packs
+################################################################################
+
+sub use_langpack_hostname
+{
+    my ($dirsref) = @_;
+
+    for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
+    {
+        my $onedir = ${$dirsref}[$i];
+        if (( $onedir->{'LangPackHostName'} ) && ( $onedir->{'LangPackHostName'} ne "" )) { $onedir->{'HostName'} = $onedir->{'LangPackHostName'}; }
+    }
+}
+
+################################################################################
+# Using different HostName for language packs
+################################################################################
+
+sub use_patch_hostname
+{
+    my ($dirsref) = @_;
+
+    for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
+    {
+        my $onedir = ${$dirsref}[$i];
+        if (( $onedir->{'PatchHostName'} ) && ( $onedir->{'PatchHostName'} ne "" )) { $onedir->{'HostName'} = $onedir->{'PatchHostName'}; }
+    }
+}
+
+################################################################################
+# Using different HostName for language packs
+################################################################################
+
+sub use_langpack_copy_scpaction
+{
+    my ($scpactionsref) = @_;
+
+    for ( my $i = 0; $i <= $#{$scpactionsref}; $i++ )
+    {
+        my $onescpaction = ${$scpactionsref}[$i];
+        if (( $onescpaction->{'LangPackCopy'} ) && ( $onescpaction->{'LangPackCopy'} ne "" )) { $onescpaction->{'Copy'} = $onescpaction->{'LangPackCopy'}; }
+    }
+}
+
+################################################################################
+# Using different HostName for language packs
+################################################################################
+
+sub use_patch_copy_scpaction
+{
+    my ($scpactionsref) = @_;
+
+    for ( my $i = 0; $i <= $#{$scpactionsref}; $i++ )
+    {
+        my $onescpaction = ${$scpactionsref}[$i];
+        if (( $onescpaction->{'PatchCopy'} ) && ( $onescpaction->{'PatchCopy'} ne "" )) { $onescpaction->{'Copy'} = $onescpaction->{'PatchCopy'}; }
+    }
+}
+
+################################################################################
 # Shifting parent directories of URE and Basis layer, so that
 # these directories are located below the Brand layer.
 # Style: SHIFT_BASIS_INTO_BRAND_LAYER

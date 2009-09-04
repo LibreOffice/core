@@ -3,7 +3,7 @@
 #define INS         32768   /* input buffer                             */
 #define OBS         8092    /* outbut buffer                            */
 #define NARG        32      /* Max number arguments to a macro          */
-#define NINCLUDE    32      /* Max number of include directories (-I)   */
+#define NINCLUDE    48      /* Max number of include directories (-I)   */
 #define NIF         64      /* depth of nesting of #if                  */
 #define NINC        32      /* depth of nesting of #include             */
 
