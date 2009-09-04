@@ -53,6 +53,9 @@ class XMLTextFrameContext : public SvXMLImportContext
     SvXMLAttributeList *m_pAttrList;
 
     XMLTextFrameContextHyperlink_Impl   *m_pHyperlink;
+    // --> OD 2009-07-22 #i73249#
+    ::rtl::OUString m_sTitle;
+    // <--
     ::rtl::OUString m_sDesc;
 
     ::com::sun::star::text::TextContentAnchorType   m_eDefaultAnchorType;

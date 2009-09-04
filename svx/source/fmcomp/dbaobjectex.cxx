@@ -60,7 +60,6 @@ namespace svx
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::datatransfer;
-    using namespace ::svxform;
     using namespace ::comphelper;
 
     //====================================================================

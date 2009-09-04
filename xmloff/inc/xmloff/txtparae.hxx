@@ -123,7 +123,11 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
 protected:
 
     const ::rtl::OUString sActualSize;
-    const ::rtl::OUString sAlternativeText;
+    // --> OD 2009-07-22 #i73249#
+//    const ::rtl::OUString sAlternativeText;
+    const ::rtl::OUString sTitle;
+    const ::rtl::OUString sDescription;
+    // <--
     const ::rtl::OUString sAnchorCharStyleName;
     const ::rtl::OUString sAnchorPageNo;
     const ::rtl::OUString sAnchorType;
@@ -605,8 +609,12 @@ public:
     virtual void exportTextAutoStyles();
 
     void exportEvents( const ::com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > & rPropSet );
-    void exportAlternativeText( const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & rPropSet,
-                                const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo );
+    // --> OD 2009-07-22 #i73249#
+//    void exportAlternativeText( const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & rPropSet,
+//                                const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo );
+    void exportTitleAndDescription( const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & rPropSet,
+                                    const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo );
+    // <--
 
     // This method exports the given XText
     void exportText(

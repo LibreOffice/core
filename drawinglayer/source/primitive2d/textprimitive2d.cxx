@@ -145,7 +145,7 @@ namespace drawinglayer
 
                     // prepare textlayoutdevice
                     TextLayouterDevice aTextLayouter;
-                    aTextLayouter.setFontAttributes(getFontAttributes(), aFontScale.getX(), aFontScale.getY());
+                    aTextLayouter.setFontAttributes(getFontAttributes(), aFontScale.getX(), aFontScale.getY(), getLocale());
 #ifdef WIN32
                     // when under Windows and the font is unequally scaled, need to correct font X-Scaling factor
                     if(bCorrectScale)
@@ -308,30 +308,35 @@ namespace drawinglayer
 
                     // prepare textlayoutdevice
                     TextLayouterDevice aTextLayouter;
-                    aTextLayouter.setFontAttributes(getFontAttributes(), aFontScale.getX(), aFontScale.getY());
+                    aTextLayouter.setFontAttributes(getFontAttributes(), aFontScale.getX(), aFontScale.getY(), getLocale());
 
                     // get basic text range
                     basegfx::B2DRange aNewRange(aTextLayouter.getTextBoundRect(getText(), getTextPosition(), getTextLength()));
-#ifdef WIN32
-                    // when under Windows and the font is unequally scaled, need to correct font X-Scaling factor
-                    if(bCorrectScale)
+
+                    // #i102556# take empty results into account
+                    if(!aNewRange.isEmpty())
                     {
-                        aScale.setX(aScale.getX() * aTextLayouter.getCurrentFontRelation());
-                    }
+#ifdef WIN32
+                        // when under Windows and the font is unequally scaled, need to correct font X-Scaling factor
+                        if(bCorrectScale)
+                        {
+                            aScale.setX(aScale.getX() * aTextLayouter.getCurrentFontRelation());
+                        }
 #endif
-                    // prepare object transformation for range
-                    basegfx::B2DHomMatrix aRangeTransformation;
+                        // prepare object transformation for range
+                        basegfx::B2DHomMatrix aRangeTransformation;
 
-                    aRangeTransformation.scale(aScale.getX(), aScale.getY());
-                    aRangeTransformation.shearX(fShearX);
-                    aRangeTransformation.rotate(fRotate);
-                    aRangeTransformation.translate(aTranslate.getX(), aTranslate.getY());
+                        aRangeTransformation.scale(aScale.getX(), aScale.getY());
+                        aRangeTransformation.shearX(fShearX);
+                        aRangeTransformation.rotate(fRotate);
+                        aRangeTransformation.translate(aTranslate.getX(), aTranslate.getY());
 
-                    // apply range transformation to it
-                    aNewRange.transform(aRangeTransformation);
+                        // apply range transformation to it
+                        aNewRange.transform(aRangeTransformation);
 
-                    // assign to buffered value
-                    const_cast< TextSimplePortionPrimitive2D* >(this)->maB2DRange = aNewRange;
+                        // assign to buffered value
+                        const_cast< TextSimplePortionPrimitive2D* >(this)->maB2DRange = aNewRange;
+                    }
                 }
             }
 

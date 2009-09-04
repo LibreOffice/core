@@ -189,6 +189,7 @@ namespace drawinglayer
 
                         aScale.getY(),
                         fRotate,
+                        rTextCandidate.getLocale(),
                         *mpOutputDevice));
 
                     if(!basegfx::fTools::equal(aScale.getX(), aScale.getY()))
@@ -210,6 +211,7 @@ namespace drawinglayer
                                 aScale.getX(),
                                 aScale.getY(),
                                 fRotate,
+                                rTextCandidate.getLocale(),
                                 *mpOutputDevice);
                         }
                     }
@@ -680,6 +682,15 @@ namespace drawinglayer
             double fRotate, fShearX;
             aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
+            if(basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
+            {
+                // #i102175# handle special case: If scale is negative in (x,y) (3rd quadrant), it can
+                // be expressed as rotation by PI. This needs to be done for Metafiles since
+                // these can be rotated, but not really mirrored
+                aScale = basegfx::absolute(aScale);
+                fRotate += F_PI;
+            }
+
             // get BoundRect
             basegfx::B2DRange aOutlineRange(rMetaCandidate.getB2DRange(getViewInformation2D()));
             aOutlineRange.transform(maCurrentTransformation);
@@ -713,8 +724,18 @@ namespace drawinglayer
             // rotation
             if(!basegfx::fTools::equalZero(fRotate))
             {
-                double fRotation((fRotate / F_PI180) * -10.0);
-                aMetaFile.Rotate((sal_uInt16)(fRotation));
+                // #i103530#
+                // MetaFile::Rotate has no input parameter check, so the parameter needs to be
+                // well-aligned to the old range [0..3600] 10th degrees with inverse orientation
+                sal_Int16 nRotation((sal_Int16)((fRotate / F_PI180) * -10.0));
+
+                while(nRotation < 0)
+                    nRotation += 3600;
+
+                while(nRotation >= 3600)
+                    nRotation -= 3600;
+
+                aMetaFile.Rotate(nRotation);
             }
 
             // Prepare target output size

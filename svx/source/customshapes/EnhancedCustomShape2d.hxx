@@ -32,28 +32,19 @@
 #define _ENHANCEDCUSTOMSHAPE2D_HXX
 
 #include <svx/msdffdef.hxx>
-#include <svx/msdffimp.hxx>
 #include <svx/sdasitm.hxx>
 #include <com/sun/star/uno/Sequence.h>
-#ifndef _com_sun_star_beans_PropertyValues_hpp__
 #include <com/sun/star/beans/PropertyValues.hpp>
-#endif
 #include <com/sun/star/awt/Point.hpp>
 #include <svtools/itemset.hxx>
-#ifndef __com_sun_star_drawing_EnhancedCustomShapeParameterPair_hpp__
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
-#endif
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
-#ifndef __COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTFRAME_HPP__
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
-#endif
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <EnhancedCustomShapeFunctionParser.hxx>
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 #include <vector>
 
 #define DFF_CUSTOMSHAPE_FLIP_V      1
@@ -84,6 +75,7 @@ class SvxMSDffAdjustmentHandle;
 // between X_RANGE and Y_RANGE
 
 class SdrPathObj;
+
 class EnhancedCustomShape2d : public SfxItemSet
 {
         SdrObject*                  pCustomShapeObj;
@@ -164,17 +156,17 @@ class EnhancedCustomShape2d : public SfxItemSet
         sal_Bool                    IsFlipHorz() { return bFlipH; };
         sal_Int32                   GetRotateAngle() { return nRotateAngle; };
 
-        SdrObject*                  CreateLineGeometry();
-        SdrObject*                  CreateObject( sal_Bool bLineGeometryNeededOnly );
-        void                        ApplyGluePoints( SdrObject* pObj );
-        Rectangle                   GetTextRect() const;
+        SVX_DLLPUBLIC SdrObject*                    CreateLineGeometry();
+        SVX_DLLPUBLIC SdrObject*                    CreateObject( sal_Bool bLineGeometryNeededOnly );
+        SVX_DLLPUBLIC void                      ApplyGluePoints( SdrObject* pObj );
+        SVX_DLLPUBLIC Rectangle                 GetTextRect() const;
 
-        sal_uInt32                  GetHdlCount() const;
-        sal_Bool                    GetHandlePosition( const sal_uInt32 nIndex, Point& rReturnPosition ) const;
-        sal_Bool                    SetHandleControllerPosition( const sal_uInt32 nIndex, const com::sun::star::awt::Point& rPosition );
+        SVX_DLLPUBLIC sal_uInt32                    GetHdlCount() const;
+        SVX_DLLPUBLIC sal_Bool                  GetHandlePosition( const sal_uInt32 nIndex, Point& rReturnPosition ) const;
+        SVX_DLLPUBLIC sal_Bool                  SetHandleControllerPosition( const sal_uInt32 nIndex, const com::sun::star::awt::Point& rPosition );
 
-        EnhancedCustomShape2d( SdrObject* pSdrObjCustomShape );
-        ~EnhancedCustomShape2d();
+        SVX_DLLPUBLIC EnhancedCustomShape2d( SdrObject* pSdrObjCustomShape );
+        SVX_DLLPUBLIC ~EnhancedCustomShape2d();
 
         enum EnumFunc
         {
@@ -198,15 +190,15 @@ class EnhancedCustomShape2d : public SfxItemSet
         double                      GetEquationValueAsDouble( const sal_Int32 nIndex ) const;
         sal_Int32                   GetAdjustValueAsInteger( const sal_Int32 nIndex, const sal_Int32 nDefault = 0 ) const;
 
-        static rtl::OUString        GetEquation( const sal_uInt16 nFlags, sal_Int16 nPara1, sal_Int16 nPara2, sal_Int16 nPara3 );
+        SVX_DLLPUBLIC static rtl::OUString      GetEquation( const sal_uInt16 nFlags, sal_Int16 nPara1, sal_Int16 nPara2, sal_Int16 nPara3 );
 
         static void                 AppendEnhancedCustomShapeEquationParameter( rtl::OUString& rParameter, const sal_Int16 nPara, const sal_Bool bIsSpecialValue );
 
         static void                 SetEnhancedCustomShapeEquationParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&
                                         rParameter, const sal_Int16 nPara, const sal_Bool bIsSpecialValue );
-        static void                 SetEnhancedCustomShapeParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&
+        SVX_DLLPUBLIC static void                   SetEnhancedCustomShapeParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&
                                         rParameter, const sal_Int32 nValue );
-        static void                 SetEnhancedCustomShapeHandleParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&
+        SVX_DLLPUBLIC static void                   SetEnhancedCustomShapeHandleParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&
                                         rParameter, const sal_Int32 nPara, const sal_Bool bIsSpecialValue, sal_Bool bHorz );
         static sal_Bool             ConvertSequenceToEnhancedCustomShape2dHandle( const com::sun::star::beans::PropertyValues& rHandleProperties,
                                         EnhancedCustomShape2d::Handle& rDestinationHandle );

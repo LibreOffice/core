@@ -92,7 +92,12 @@ namespace drawinglayer
             basegfx::B3DPoint                       maBack;
 
             // the found cut points
-            ::std::vector< basegfx::B3DPoint >      mo_rResult;
+            ::std::vector< basegfx::B3DPoint >      maResult;
+
+            // #i102956# the transformation change from TransformPrimitive3D processings
+            // needs to be remembered to be able to transform found cuts to the
+            // basic coordinate system the processor starts with
+            basegfx::B3DHomMatrix                   maCombinedTransform;
 
             // as tooling, the process() implementation takes over API handling and calls this
             // virtual render method when the primitive implementation is BasePrimitive3D-based.
@@ -105,11 +110,12 @@ namespace drawinglayer
             :   BaseProcessor3D(rViewInformation),
                 maFront(rFront),
                 maBack(rBack),
-                mo_rResult()
+                maResult(),
+                maCombinedTransform()
             {}
 
             // data access
-            const ::std::vector< basegfx::B3DPoint >& getCutPoints() const { return mo_rResult; }
+            const ::std::vector< basegfx::B3DPoint >& getCutPoints() const { return maResult; }
         };
 
         void CutFindProcessor::processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate)
@@ -119,9 +125,8 @@ namespace drawinglayer
             {
                 case PRIMITIVE3D_ID_TRANSFORMPRIMITIVE3D :
                 {
-                    // transform group. Remember current transformations
+                    // transform group.
                     const primitive3d::TransformPrimitive3D& rPrimitive = static_cast< const primitive3d::TransformPrimitive3D& >(rCandidate);
-                    const geometry::ViewInformation3D aLastViewInformation3D(getViewInformation3D());
 
                     // remember old and transform front, back to object coordinates
                     const basegfx::B3DPoint aLastFront(maFront);
@@ -131,7 +136,8 @@ namespace drawinglayer
                     maFront *= aInverseTrans;
                     maBack *= aInverseTrans;
 
-                    // create new transformation; add new object transform from right side
+                    // remember current and create new transformation; add new object transform from right side
+                    const geometry::ViewInformation3D aLastViewInformation3D(getViewInformation3D());
                     const geometry::ViewInformation3D aNewViewInformation3D(
                         aLastViewInformation3D.getObjectTransformation() * rPrimitive.getTransformation(),
                         aLastViewInformation3D.getOrientation(),
@@ -141,10 +147,15 @@ namespace drawinglayer
                         aLastViewInformation3D.getExtendedInformationSequence());
                     updateViewInformation(aNewViewInformation3D);
 
+                    // #i102956# remember needed back-transform for found cuts (combine from right side)
+                    const basegfx::B3DHomMatrix aLastCombinedTransform(maCombinedTransform);
+                    maCombinedTransform = maCombinedTransform * rPrimitive.getTransformation();
+
                     // let break down
                     process(rPrimitive.getChildren());
 
                     // restore transformations and front, back
+                    maCombinedTransform = aLastCombinedTransform;
                     updateViewInformation(aLastViewInformation3D);
                     maFront = aLastFront;
                     maBack = aLastBack;
@@ -207,7 +218,10 @@ namespace drawinglayer
 
                                         if(basegfx::tools::isInside(rPolyPolygon, aCutPoint, false))
                                         {
-                                            mo_rResult.push_back(aCutPoint);
+                                            // #i102956# add result. Do not forget to do this in the coordinate
+                                            // system the processor get started with, so use the collected
+                                            // combined transformation from processed TransformPrimitive3D's
+                                            maResult.push_back(maCombinedTransform * aCutPoint);
                                         }
                                     }
                                 }
@@ -376,9 +390,9 @@ SVX_DLLPUBLIC void getAllHit3DObjectsSortedFrontToBack(
                         ::std::vector< basegfx::B3DPoint > aHitsWithObject;
                         getAllHit3DObjectWithRelativePoint(aFront, aBack, *pCandidate, aViewInfo3D, aHitsWithObject);
 
-                        if(aHitsWithObject.size())
+                        for(sal_uInt32 a(0); a < aHitsWithObject.size(); a++)
                         {
-                            const basegfx::B3DPoint aPointInViewCoordinates(aViewInfo3D.getObjectToView() * aHitsWithObject[0]);
+                            const basegfx::B3DPoint aPointInViewCoordinates(aViewInfo3D.getObjectToView() * aHitsWithObject[a]);
                             aDepthAndObjectResults.push_back(ImplPairDephAndObject(pCandidate, aPointInViewCoordinates.getZ()));
                         }
                     }

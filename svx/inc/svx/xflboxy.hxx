@@ -45,12 +45,12 @@ class SVX_DLLPUBLIC XFillBmpPosOffsetXItem : public SfxUInt16Item
 public:
                             TYPEINFO();
                             XFillBmpPosOffsetXItem( USHORT nOffPosX = 0 );
-                            XFillBmpPosOffsetXItem( SvStream& rIn );
+                            SVX_DLLPRIVATE XFillBmpPosOffsetXItem( SvStream& rIn );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
@@ -68,12 +68,12 @@ class SVX_DLLPUBLIC XFillBmpPosOffsetYItem : public SfxUInt16Item
 public:
                             TYPEINFO();
                             XFillBmpPosOffsetYItem( USHORT nOffPosY = 0 );
-                            XFillBmpPosOffsetYItem( SvStream& rIn );
+                            SVX_DLLPRIVATE XFillBmpPosOffsetYItem( SvStream& rIn );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;

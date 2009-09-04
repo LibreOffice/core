@@ -651,10 +651,10 @@ void DbCellControl::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(R
 
     Reference< XPropertySet > xSourceProps( _rEvent.Source, UNO_QUERY );
 
-    if  (   _rEvent.PropertyName.equalsAscii( FM_PROP_VALUE )
-        ||  _rEvent.PropertyName.equalsAscii( FM_PROP_STATE )
-        ||  _rEvent.PropertyName.equalsAscii( FM_PROP_TEXT )
-        ||  _rEvent.PropertyName.equalsAscii( FM_PROP_EFFECTIVE_VALUE )
+    if  (   _rEvent.PropertyName.equals( FM_PROP_VALUE )
+        ||  _rEvent.PropertyName.equals( FM_PROP_STATE )
+        ||  _rEvent.PropertyName.equals( FM_PROP_TEXT )
+        ||  _rEvent.PropertyName.equals( FM_PROP_EFFECTIVE_VALUE )
         )
     {   // it was one of the known "value" properties
         if ( !isValuePropertyLocked() )
@@ -662,11 +662,11 @@ void DbCellControl::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(R
             implValuePropertyChanged( );
         }
     }
-    else if ( _rEvent.PropertyName.equalsAscii( FM_PROP_READONLY ) )
+    else if ( _rEvent.PropertyName.equals( FM_PROP_READONLY ) )
     {
         implAdjustReadOnly( xSourceProps );
     }
-    else if ( _rEvent.PropertyName.equalsAscii( FM_PROP_ENABLED ) )
+    else if ( _rEvent.PropertyName.equals( FM_PROP_ENABLED ) )
     {
         implAdjustEnabled( xSourceProps );
     }
@@ -2429,7 +2429,7 @@ DbComboBox::DbComboBox(DbGridColumn& _rColumn)
 //------------------------------------------------------------------------------
 void DbComboBox::_propertyChanged( const PropertyChangeEvent& _rEvent ) throw( RuntimeException )
 {
-    if ( _rEvent.PropertyName.equalsAscii( FM_PROP_STRINGITEMLIST ) )
+    if ( _rEvent.PropertyName.equals( FM_PROP_STRINGITEMLIST ) )
     {
         SetList(_rEvent.NewValue);
     }
@@ -2558,7 +2558,7 @@ DbListBox::DbListBox(DbGridColumn& _rColumn)
 //------------------------------------------------------------------------------
 void DbListBox::_propertyChanged( const ::com::sun::star::beans::PropertyChangeEvent& _rEvent ) throw( RuntimeException )
 {
-    if ( _rEvent.PropertyName.equalsAscii( FM_PROP_STRINGITEMLIST ) )
+    if ( _rEvent.PropertyName.equals( FM_PROP_STRINGITEMLIST ) )
     {
         SetList(_rEvent.NewValue);
     }

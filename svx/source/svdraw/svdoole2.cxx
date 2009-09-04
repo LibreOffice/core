@@ -2208,14 +2208,7 @@ sal_Bool SdrOle2Obj::AddOwnLightClient()
 
 //////////////////////////////////////////////////////////////////////////////
 
-bool SdrOle2Obj::executeOldDoPaintPreparations(SdrPageView* /*pPageVew*/) const
-{
-    //#i101925# moved this stuff to method ViewObjectContactOfSdrOle2Obj::createPrimitive2DSequence and reorganized it further to avoid superfluous metafile creation for charts
-    //this method can be removed with the next incompatible build
-    return false;
-}
-
-Bitmap SdrOle2Obj::GetEmtyOLEReplacementBitmap() const
+Bitmap SdrOle2Obj::GetEmtyOLEReplacementBitmap()
 {
     return Bitmap(ResId(BMP_SVXOLEOBJ, *ImpGetResMgr()));
 }

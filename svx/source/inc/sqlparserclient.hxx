@@ -43,7 +43,7 @@ namespace svxform
     //====================================================================
     //= OSQLParserClient
     //====================================================================
-    class OSQLParserClient : public ODbtoolsClient
+    class SVX_DLLPUBLIC OSQLParserClient : public ODbtoolsClient
                             ,public ::svxform::OParseContextClient
     {
     private:

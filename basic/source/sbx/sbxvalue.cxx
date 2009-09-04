@@ -1572,7 +1572,10 @@ BOOL SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
         else
         {
             aL.eType = aR.eType = SbxDOUBLE;
-            if( Get( aL ) && rOp.Get( aR ) )
+            //if( Get( aL ) && rOp.Get( aR ) )
+            bool bGetL = Get( aL );
+            bool bGetR = rOp.Get( aR );
+            if( bGetL && bGetR )
               switch( eOp )
             {
                 case SbxEQ:
@@ -1589,6 +1592,17 @@ BOOL SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
                     bRes = BOOL( aL.nDouble >= aR.nDouble ); break;
                 default:
                     SetError( SbxERR_NOTIMP );
+            }
+            // at least one value was got
+            // if this is VBA then a conversion error for one
+            // side will yield a false result of an equality test
+            else if ( bGetR || bGetL )
+            {
+                if ( bVBAInterop && eOp == SbxEQ && GetError() == SbxERR_CONVERSION )
+                {
+                    ResetError();
+                    bRes = FALSE;
+                }
             }
         }
     }

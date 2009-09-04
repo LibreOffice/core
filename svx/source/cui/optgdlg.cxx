@@ -136,7 +136,6 @@ int OfaMiscTabPage::DeactivatePage( SfxItemSet* pSet_ )
     return LEAVE_PAGE;
 }
 
-#   ifdef ENABLE_GTK
 namespace
 {
         ::rtl::OUString impl_SystemFileOpenServiceName()
@@ -146,13 +145,33 @@ namespace
 
             if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "gnome" ) )
             {
+                #ifdef ENABLE_GTK
                 return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.GtkFilePicker" );
+                #else
+                return rtl::OUString();
+                #endif
+            }
+            else if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde4" ) )
+            {
+                #ifdef ENABLE_KDE4
+                return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.KDE4FilePicker" );
+                #else
+                return rtl::OUString();
+                #endif
             }
             else if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde" ) )
             {
+                #ifdef ENABLE_KDE
                 return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.KDEFilePicker" );
+                #else
+                return rtl::OUString();
+                #endif
             }
+            #if defined WNT || (defined MACOSX && defined QUARTZ)
             return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFilePicker" );
+            #else
+            return rtl::OUString();
+            #endif
         }
 
         sal_Bool lcl_HasSystemFilePicker()
@@ -179,8 +198,6 @@ namespace
             return bRet;
         }
 }
-
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -210,20 +227,11 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 {
     FreeResource();
 
-    //system fileopen only available in Windows and with gtk vclplug based
-    //picker and on MacOSX (aqua version)
-#if !defined( WNT ) && !defined( ENABLE_GTK ) && !(defined(MACOSX) && defined(QUARTZ))
-    aFileDlgFL.Hide();
-    aFileDlgCB.Hide();
-#else
-#   ifdef ENABLE_GTK
     if (!lcl_HasSystemFilePicker())
     {
         aFileDlgFL.Hide();
         aFileDlgCB.Hide();
     }
-#   endif
-#endif
 
     #if ! defined(QUARTZ)
     aPrintDlgFL.Hide();
@@ -691,6 +699,12 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aMousePosLB         ( this, SVX_RES( LB_MOUSEPOS ) ),
     aMouseMiddleFT      ( this, SVX_RES( FT_MOUSEMIDDLE ) ),
     aMouseMiddleLB      ( this, SVX_RES( LB_MOUSEMIDDLE ) ),
+
+    // #i97672#
+    maSelectionFL(this, SVX_RES(FL_SELECTION)),
+    maSelectionCB(this, SVX_RES(CB_SELECTION)),
+    maSelectionMF(this, SVX_RES(MF_SELECTION)),
+
     nSizeLB_InitialSelection(0),
     nStyleLB_InitialSelection(0),
     pAppearanceCfg(new SvtTabAppearanceCfg),
@@ -753,6 +767,9 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
 #endif
 
+    // #i97672#
+    maSelectionCB.SetToggleHdl( LINK( this, OfaViewTabPage, OnSelectionToggled ) );
+
     FreeResource();
 
     if( ! Application::ValidateSystemFont() )
@@ -807,6 +824,15 @@ IMPL_LINK( OfaViewTabPage, OnAntialiasingToggled, void*, NOTINTERESTEDIN )
 }
 #endif
 
+// #i97672#
+IMPL_LINK( OfaViewTabPage, OnSelectionToggled, void*, NOTINTERESTEDIN )
+{
+    (void)NOTINTERESTEDIN;
+    const bool bSelectionEnabled(maSelectionCB.IsChecked());
+    maSelectionMF.Enable(bSelectionEnabled);
+    return 0;
+}
+
 /*-----------------06.12.96 11.50-------------------
 
 --------------------------------------------------*/
@@ -828,6 +854,7 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
 
     BOOL bModified = FALSE;
     BOOL bMenuOptModified = FALSE;
+    bool bRepaintWindows(false);
 
     SvtMiscOptions aMiscOptions;
     UINT16 nSizeLB_NewSelection = aIconSizeLB.GetSelectEntryPos();
@@ -953,16 +980,30 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
         {
             mpDrawinglayerOpt->SetAntiAliasing(aUseAntiAliase.IsChecked());
             bModified = TRUE;
+            bRepaintWindows = true;
+        }
+    }
 
-            // react on AA change; invalidate all windows to force
-            // a repaint when changing from AA to non-AA or vice-versa
-            Window* pAppWindow = Application::GetFirstTopLevelWindow();
+    // #i97672#
+    if(maSelectionCB.IsEnabled())
+    {
+        const bool bNewSelection(maSelectionCB.IsChecked());
+        const sal_uInt16 nNewTransparence((sal_uInt16)maSelectionMF.GetValue());
 
-            while(pAppWindow)
-            {
-                pAppWindow->Invalidate();
-                pAppWindow = Application::GetNextTopLevelWindow(pAppWindow);
-            }
+        if(bNewSelection != (bool)mpDrawinglayerOpt->IsTransparentSelection())
+        {
+            mpDrawinglayerOpt->SetTransparentSelection(maSelectionCB.IsChecked());
+            bModified = TRUE;
+            bRepaintWindows = true;
+        }
+
+        // #i104150# even read the value when maSelectionMF is disabled; it may have been
+        // modified by enabling-modify-disabling by the user
+        if(nNewTransparence != mpDrawinglayerOpt->GetTransparentSelectionPercent())
+        {
+            mpDrawinglayerOpt->SetTransparentSelectionPercent(nNewTransparence);
+            bModified = TRUE;
+            bRepaintWindows = true;
         }
     }
 
@@ -991,6 +1032,17 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
     {
         pAppearanceCfg->Commit();
         pAppearanceCfg->SetApplicationDefaults ( GetpApp() );
+    }
+
+    if(bRepaintWindows)
+    {
+        Window* pAppWindow = Application::GetFirstTopLevelWindow();
+
+        while(pAppWindow)
+        {
+            pAppWindow->Invalidate();
+            pAppWindow = Application::GetNextTopLevelWindow(pAppWindow);
+        }
     }
 
     return bModified;
@@ -1080,6 +1132,27 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
         }
 
         aUseAntiAliase.SaveValue();
+    }
+
+    {
+        // #i97672# Selection
+        // check if transparent selection is possible on this system
+        const bool bTransparentSelectionPossible(
+            !GetSettings().GetStyleSettings().GetHighContrastMode()
+            && supportsOperation(OutDevSupport_TransparentRect));
+
+        // enter values
+        if(bTransparentSelectionPossible)
+        {
+            maSelectionCB.Check(mpDrawinglayerOpt->IsTransparentSelection());
+        }
+        else
+        {
+            maSelectionCB.Enable(false);
+        }
+
+        maSelectionMF.SetValue(mpDrawinglayerOpt->GetTransparentSelectionPercent());
+        maSelectionMF.Enable(mpDrawinglayerOpt->IsTransparentSelection() && bTransparentSelectionPossible);
     }
 
 #if defined( UNX )

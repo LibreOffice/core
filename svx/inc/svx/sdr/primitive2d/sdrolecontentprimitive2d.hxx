@@ -1,0 +1,89 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: sdrcaptionprimitive2d.hxx,v $
+ *
+ * $Revision: 1.2 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef INCLUDED_SDR_PRIMITIVE2D_SDROLECONTENTPRIMITIVE2D_HXX
+#define INCLUDED_SDR_PRIMITIVE2D_SDROLECONTENTPRIMITIVE2D_HXX
+
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svx/svdobj.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+// predefinitions
+
+class SdrOle2Obj;
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        class SdrOleContentPrimitive2D : public BasePrimitive2D
+        {
+        private:
+            SdrObjectWeakRef                            mpSdrOle2Obj;
+            basegfx::B2DHomMatrix                       maObjectTransform;
+
+            // bitfield
+            unsigned                                    mbHighContrast : 1;
+
+        protected:
+            // local decomposition.
+            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+
+        public:
+            SdrOleContentPrimitive2D(
+                const SdrOle2Obj& rSdrOle2Obj,
+                const basegfx::B2DHomMatrix& rObjectTransform,
+                bool bHighContrast);
+
+            // compare operator
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+
+            // The default implementation will use getDecomposition results to create the range
+            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
+
+            // data access
+            const basegfx::B2DHomMatrix& getObjectTransform() const { return maObjectTransform; }
+            bool getHighContrast() const { return mbHighContrast; }
+
+            // provide unique ID
+            DeclPrimitrive2DIDBlock()
+        };
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+
+#endif //INCLUDED_SDR_PRIMITIVE2D_SDROLECONTENTPRIMITIVE2D_HXX
+
+// eof

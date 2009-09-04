@@ -77,8 +77,8 @@ namespace drawinglayer
             bool bCellText,
             bool bWordWrap);
 
-        Primitive2DReference createShadowPrimitive(
-            const Primitive2DSequence& rSource,
+        Primitive2DSequence createEmbeddedShadowPrimitive(
+            const Primitive2DSequence& rContent,
             const attribute::SdrShadowAttribute& rShadow);
 
     } // end of namespace primitive2d

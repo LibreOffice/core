@@ -44,6 +44,7 @@
 
 
 class SvxEditSource;
+class SvxEditViewForwarder;
 
 namespace accessibility
 {
@@ -266,6 +267,9 @@ namespace accessibility
 
     protected:
         Rectangle GetParagraphBoundingBox() const;
+        sal_Int32 GetParagraphCount() const;
+        sal_Int32 GetParagraphIndex() const;
+        sal_Int32 GetLineCount( sal_Int32 nParagraph ) const;
 
     private:
 

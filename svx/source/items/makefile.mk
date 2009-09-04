@@ -38,6 +38,7 @@ PROJECTPCHSOURCE=$(PRJ)$/util$/svxpch
 
 PRJNAME=svx
 TARGET=items
+LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
@@ -51,41 +52,45 @@ SRC1FILES =  \
         svxerr.src		\
         svxitems.src
 
-SLOFILES=	\
-        $(SLO)$/ofaitem.obj \
+LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
+LIB1OBJFILES= \
         $(SLO)$/writingmodeitem.obj \
         $(SLO)$/frmitems.obj \
         $(SLO)$/paraitem.obj \
         $(SLO)$/textitem.obj \
-        $(SLO)$/postattr.obj	\
         $(SLO)$/flditem.obj \
-        $(SLO)$/hlnkitem.obj \
         $(SLO)$/svxfont.obj \
-        $(SLO)$/pageitem.obj	\
-                $(SLO)$/viewlayoutitem.obj    \
-                $(SLO)$/paperinf.obj    \
+        $(SLO)$/paperinf.obj    \
         $(SLO)$/drawitem.obj	\
-        $(SLO)$/algitem.obj \
         $(SLO)$/itemtype.obj	\
-        $(SLO)$/rotmodit.obj \
-        $(SLO)$/numinf.obj	\
-        $(SLO)$/svxerr.obj	\
-        $(SLO)$/numfmtsh.obj	\
-        $(SLO)$/zoomitem.obj \
         $(SLO)$/chrtitem.obj	\
         $(SLO)$/bulitem.obj \
         $(SLO)$/e3ditem.obj \
         $(SLO)$/numitem.obj \
         $(SLO)$/grfitem.obj \
         $(SLO)$/clipfmtitem.obj \
-        $(SLO)$/svxempty.obj \
         $(SLO)$/xmlcnitm.obj \
         $(SLO)$/customshapeitem.obj \
-        $(SLO)$/charhiddenitem.obj \
+        $(SLO)$/charhiddenitem.obj
+
+LIB2TARGET= $(SLB)$/$(TARGET).lib
+LIB2OBJFILES= \
+        $(SLO)$/ofaitem.obj \
+        $(SLO)$/postattr.obj	\
+        $(SLO)$/hlnkitem.obj \
+        $(SLO)$/pageitem.obj	\
+                $(SLO)$/viewlayoutitem.obj    \
+        $(SLO)$/algitem.obj \
+        $(SLO)$/rotmodit.obj \
+        $(SLO)$/numinf.obj	\
+        $(SLO)$/svxerr.obj	\
+        $(SLO)$/numfmtsh.obj	\
+        $(SLO)$/zoomitem.obj \
+        $(SLO)$/svxempty.obj \
         $(SLO)$/SmartTagItem.obj \
         $(SLO)$/zoomslideritem.obj \
 
-
+SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 EXCEPTIONSFILES= \
         $(SLO)$/paraitem.obj \

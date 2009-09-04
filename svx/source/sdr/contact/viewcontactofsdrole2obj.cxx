@@ -45,6 +45,7 @@
 #include <svtools/colorcfg.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/sdr/primitive2d/sdrolecontentprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -71,7 +72,8 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithGivenGraphic(const Graphic& rOLEGraphic, bool bScaleContent) const
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters(
+            bool bHighContrast) const
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
             SdrText* pSdrText = GetOle2Obj().getText(0);
@@ -103,80 +105,24 @@ namespace sdr
                     pAttribute = new drawinglayer::attribute::SdrLineFillShadowTextAttribute(0, 0, 0, 0, 0, 0);
                 }
 
-                // Prepare OLE filling. This is normally the metafile describing OLE content, but may also
-                // be the empty OLE bitmap for empty/not loaded OLEs
-                const GraphicObject aGraphicObject(rOLEGraphic);
-                const GraphicAttr aGraphicAttr;
-                drawinglayer::primitive2d::Primitive2DSequence xOLEContent;
-
-                if(bScaleContent)
-                {
-                    // Create outline and placeholder graphic with some scaling
-                    // #i94431# for some reason, i forgot to take the PrefMapMode of the graphic
-                    // into account. Since EmptyPresObj's are only used in Draw/Impress, it is
-                    // safe to assume 100th mm as target.
-                    Size aPrefSize(rOLEGraphic.GetPrefSize());
-
-                    if(MAP_PIXEL == rOLEGraphic.GetPrefMapMode().GetMapUnit())
-                    {
-                        aPrefSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MAP_100TH_MM);
-                    }
-                    else
-                    {
-                        aPrefSize = Application::GetDefaultDevice()->LogicToLogic(aPrefSize, rOLEGraphic.GetPrefMapMode(), MAP_100TH_MM);
-                    }
-
-                    const double fOffsetX((aObjectRange.getWidth() - aPrefSize.getWidth()) / 2.0);
-                    const double fOffsetY((aObjectRange.getHeight() - aPrefSize.getHeight()) / 2.0);
-
-                    if(basegfx::fTools::moreOrEqual(fOffsetX, 0.0) && basegfx::fTools::moreOrEqual(fOffsetY, 0.0))
-                    {
-                        // if content fits into frame, create it
-                        basegfx::B2DHomMatrix aInnerObjectMatrix;
-
-                        aInnerObjectMatrix.scale(aPrefSize.getWidth(), aPrefSize.getHeight());
-                        aInnerObjectMatrix.translate(fOffsetX, fOffsetY);
-                        aInnerObjectMatrix.shearX(fShearX);
-                        aInnerObjectMatrix.rotate(fRotate);
-                        aInnerObjectMatrix.translate(aObjectRange.getMinX(), aObjectRange.getMinY());
-
-                        drawinglayer::primitive2d::Primitive2DReference xScaledContent(
-                            new drawinglayer::primitive2d::GraphicPrimitive2D(aInnerObjectMatrix, aGraphicObject, aGraphicAttr));
-                        xOLEContent = drawinglayer::primitive2d::Primitive2DSequence(&xScaledContent, 1);
-                    }
-                }
-                else
-                {
-                    // create graphic primitive for content
-                    drawinglayer::primitive2d::Primitive2DReference xDirectContent(
-                        new drawinglayer::primitive2d::GraphicPrimitive2D(aObjectMatrix, aGraphicObject, aGraphicAttr));
-                    xOLEContent = drawinglayer::primitive2d::Primitive2DSequence(&xDirectContent, 1);
-                }
+                // #i102063# embed OLE content in an own primitive; this will be able to decompose accessing
+                // the weak SdrOle2 reference and will also implement getB2DRange() for fast BoundRect
+                // calculations without OLE Graphic access (which may trigger e.g. chart recalculation).
+                // It will also take care of HighContrast and ScaleContent
+                const drawinglayer::primitive2d::Primitive2DReference xOleContent(
+                    new drawinglayer::primitive2d::SdrOleContentPrimitive2D(
+                        GetOle2Obj(),
+                        aObjectMatrix,
+                        bHighContrast));
 
                 // create primitive. Use Ole2 primitive here. Prepare attribute settings, will be used soon anyways.
+                const drawinglayer::primitive2d::Primitive2DSequence xOLEContent(&xOleContent, 1);
                 const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrOle2Primitive2D(
                     xOLEContent,
                     aObjectMatrix,
                     *pAttribute));
                 xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                 delete pAttribute;
-
-                // a standard gray outline is created for scaled content
-                if(bScaleContent)
-                {
-                    const svtools::ColorConfig aColorConfig;
-                    const svtools::ColorConfigValue aColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES));
-
-                    if(aColor.bIsVisible)
-                    {
-                        basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0, 0, 1, 1)));
-                        const Color aVclColor(aColor.nColor);
-                        aOutline.transform(aObjectMatrix);
-                        const drawinglayer::primitive2d::Primitive2DReference xOutline(
-                            new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aVclColor.getBColor()));
-                        drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xOutline);
-                    }
-                }
             }
 
             return xRetval;
@@ -184,21 +130,8 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createViewIndependentPrimitive2DSequence() const
         {
-            const Graphic* pOLEGraphic = GetOle2Obj().GetGraphic();
-
-            if(pOLEGraphic)
-            {
-                // there is a graphic set, use it
-                return createPrimitive2DSequenceWithGivenGraphic(*pOLEGraphic, GetOle2Obj().IsEmptyPresObj());
-            }
-            else
-            {
-                // no graphic, use default empty OLE bitmap
-                const Bitmap aEmptyOLEBitmap(GetOle2Obj().GetEmtyOLEReplacementBitmap());
-                const Graphic aEmtyOLEGraphic(aEmptyOLEBitmap);
-
-                return createPrimitive2DSequenceWithGivenGraphic(aEmtyOLEGraphic, true);
-            }
+            // do as if no HC and call standard creator
+            return createPrimitive2DSequenceWithParameters(false);
         }
     } // end of namespace contact
 } // end of namespace sdr

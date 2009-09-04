@@ -44,12 +44,13 @@
 #include "com/sun/star/util/XModifyListener.hpp"
 
 #include "dp_gui.h"
+#include "dp_gui_dialog2.hxx"
+#include "dp_gui_updatedata.hxx"
 
 //==============================================================================
 namespace dp_gui {
 
 //------------------------------------------------------------------------------
-class ExtMgrDialog;
 class ExtensionCmdQueue;
 
 //------------------------------------------------------------------------------
@@ -65,7 +66,11 @@ private:
 
     ::std::auto_ptr< ExtensionCmdQueue > m_pExecuteCmdQueue;
 
-    ExtMgrDialog   *m_pDialog;
+    Window                  *m_pParent;
+    ExtMgrDialog            *m_pExtMgrDialog;
+    UpdateRequiredDialog    *m_pUpdReqDialog;
+
+    ::rtl::OUString          m_sGetExtensionsURL;
 
     // liste der packages ( xpackage?, mit parent manager, ... )
 
@@ -79,6 +84,12 @@ public:
                               const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &xContext );
         ~TheExtensionManager();
 
+    void createDialog( const bool bCreateUpdDlg );
+    sal_Int16 execute();
+
+    Dialog* getDialog() { return m_pExtMgrDialog ? (Dialog*) m_pExtMgrDialog : (Dialog*) m_pUpdReqDialog; }
+    DialogHelper* getDialogHelper() { return m_pExtMgrDialog ? (DialogHelper*) m_pExtMgrDialog : (DialogHelper*) m_pUpdReqDialog; }
+
     void SetText( const ::rtl::OUString &rTitle );
     void Show();
     void ToTop( USHORT nFlags );
@@ -87,11 +98,11 @@ public:
 
     //-----------------
     bool checkUpdates( bool showUpdateOnly, bool parentVisible );
+    bool updatePackages( const std::vector< TUpdateListEntry > &vList );
+
     bool enablePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
                         bool bEnable );
     bool removePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
-    bool updatePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
     bool installPackage( const ::rtl::OUString &rPackageURL, bool bWarnUser = false );
 
