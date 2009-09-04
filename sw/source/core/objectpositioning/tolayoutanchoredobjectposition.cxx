@@ -212,7 +212,9 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         // --> OD 2004-06-17 #i26791# - determine offset to 'horizontal' frame
         // anchor position, depending on layout-direction
         //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-        if( bVert && !bVertL2R )
+        // --> OD 2009-09-04 #mongolianlayout#
+        if( bVert || bVertL2R )
+        // <--
         {
 
             aRelPos.Y() = nRelPosX;
