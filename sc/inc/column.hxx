@@ -162,7 +162,7 @@ public:
     SCSIZE      GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const;
     BOOL        HasDataAt(SCROW nRow) const;
     BOOL        HasVisibleDataAt(SCROW nRow) const;
-//UNUSED2009-05 SCROW       GetFirstDataPos() const;
+    SCROW       GetFirstDataPos() const;
     SCROW       GetLastDataPos() const;
     SCROW       GetLastVisDataPos(BOOL bNotes) const;               // ohne Broadcaster
     SCROW       GetFirstVisDataPos(BOOL bNotes) const;
