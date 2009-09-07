@@ -180,8 +180,10 @@ void StartGrammarChecking( SwDoc &rDoc )
         pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell, 0, sal_False );
     }
 
-    // only documents with visible views need to be checked
-    //(E.g. don't check temporary documents created for printing, see printing of notes and selections)
+    //!! only documents with visible views need to be checked
+    //!! (E.g. don't check temporary documents created for printing, see printing of notes and selections.
+    //!! Those get created on the fly and get hard deleted a bit later as well, and no one should have
+    //!! a uno reference to them)
     if (bVisible)
     {
         uno::Reference< linguistic2::XProofreadingIterator > xGCIterator( rDoc.GetGCIterator() );
