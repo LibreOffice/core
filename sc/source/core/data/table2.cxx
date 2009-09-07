@@ -2837,7 +2837,7 @@ void ScTable::GetUpperCellString(SCCOL nCol, SCROW nRow, String& rStr)
 
 // Berechnen der Groesse der Tabelle und setzen der Groesse an der DrawPage
 
-void ScTable::SetDrawPageSize()
+void ScTable::SetDrawPageSize(bool bResetStreamValid)
 {
     ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
     if( pDrawLayer )
@@ -2852,6 +2852,11 @@ void ScTable::SetDrawPageSize()
 
         pDrawLayer->SetPageSize( static_cast<sal_uInt16>(nTab), Size( x, y ) );
     }
+
+    // #i102616# actions that modify the draw page size count as sheet modification
+    // (exception: InitDrawLayer)
+    if (bResetStreamValid && IsStreamValid())
+        SetStreamValid(FALSE);
 }
 
 

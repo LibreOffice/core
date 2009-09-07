@@ -75,6 +75,7 @@ class ScTableSheetObj;
 class SvxFmDrawPage;
 class SvxDrawPage;
 class ScRangeList;
+class ScSheetSaveData;
 
 class SC_DLLPUBLIC ScModelObj : public SfxBaseModel,
                     public com::sun::star::sheet::XSpreadsheetDocument,
@@ -129,6 +130,7 @@ public:
 
     void                    BeforeXMLLoading();
     void                    AfterXMLLoading(sal_Bool bRet);
+    ScSheetSaveData*        GetSheetSaveData();
 
     bool                    HasChangesListeners() const;
 

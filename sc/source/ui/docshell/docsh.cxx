@@ -120,6 +120,7 @@
 #include "cfgids.hxx"
 #include "warnpassword.hxx"
 #include "optsolver.hxx"
+#include "sheetdata.hxx"
 #include "tabprotection.hxx"
 
 #include "docsh.hxx"
@@ -755,7 +756,12 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     if ( IsDocShared() && !SC_MOD()->IsInSharedDocSaving() )
                     {
                     }
+                    UseSheetSaveEntries();      // use positions from saved file for next saving
                 }
+                break;
+            case SFX_EVENT_SAVEASDOCDONE:
+                // new positions are used after "save" and "save as", but not "save to"
+                UseSheetSaveEntries();      // use positions from saved file for next saving
                 break;
             default:
                 {
@@ -2212,6 +2218,7 @@ BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static
         pPaintLockData  ( NULL ), \
         pOldJobSetup    ( NULL ), \
         pSolverSaveData ( NULL ), \
+        pSheetSaveData  ( NULL ), \
         pModificator    ( NULL )
 
 //------------------------------------------------------------------
@@ -2305,6 +2312,7 @@ __EXPORT ScDocShell::~ScDocShell()
     delete pOldJobSetup;        // gesetzt nur bei Fehler in StartJob()
 
     delete pSolverSaveData;
+    delete pSheetSaveData;
     delete pOldAutoDBRange;
 
     if (pModificator)
@@ -2473,6 +2481,39 @@ void ScDocShell::SetSolverSaveData( const ScOptSolverSave& rData )
 {
     delete pSolverSaveData;
     pSolverSaveData = new ScOptSolverSave( rData );
+}
+
+ScSheetSaveData* ScDocShell::GetSheetSaveData()
+{
+    if (!pSheetSaveData)
+        pSheetSaveData = new ScSheetSaveData;
+
+    return pSheetSaveData;
+}
+
+void ScDocShell::UseSheetSaveEntries()
+{
+    if (pSheetSaveData)
+    {
+        pSheetSaveData->UseSaveEntries();   // use positions from saved file for next saving
+
+        bool bHasEntries = false;
+        SCTAB nTabCount = aDocument.GetTableCount();
+        SCTAB nTab;
+        for (nTab = 0; nTab < nTabCount; ++nTab)
+            if (pSheetSaveData->HasStreamPos(nTab))
+                bHasEntries = true;
+
+        if (!bHasEntries)
+        {
+            // if no positions were set (for example, export to other format),
+            // reset all "valid" flags
+
+            for (nTab = 0; nTab < nTabCount; ++nTab)
+                if (aDocument.IsStreamValid(nTab))
+                    aDocument.SetStreamValid(nTab, FALSE);
+        }
+    }
 }
 
 // --- ScDocShellModificator ------------------------------------------

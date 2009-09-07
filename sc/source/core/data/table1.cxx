@@ -141,6 +141,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     pOutlineTable( NULL ),
     bTableAreaValid( FALSE ),
     bVisible( TRUE ),
+    bStreamValid( FALSE ),
     bPendingRowHeights( FALSE ),
     nTab( nNewTab ),
     nRecalcLvl( 0 ),
@@ -248,7 +249,16 @@ const String& ScTable::GetUpperName() const
 
 void ScTable::SetVisible( BOOL bVis )
 {
+    if (bVisible != bVis && IsStreamValid())
+        SetStreamValid(FALSE);
+
     bVisible = bVis;
+}
+
+void ScTable::SetStreamValid( BOOL bSet, BOOL bIgnoreLock )
+{
+    if ( bIgnoreLock || !pDocument->IsStreamValidLocked() )
+        bStreamValid = bSet;
 }
 
 void ScTable::SetPendingRowHeights( BOOL bSet )
@@ -1247,6 +1257,9 @@ void ScTable::UpdateInsertTab(SCTAB nTable)
 {
     if (nTab >= nTable) nTab++;
     for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTab(nTable);
+
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
 }
 
 //UNUSED2008-05  void ScTable::UpdateInsertTabOnlyCells(SCTAB nTable)
@@ -1263,6 +1276,9 @@ void ScTable::UpdateDeleteTab( SCTAB nTable, BOOL bIsMove, ScTable* pRefUndo )
         for (i=0; i <= MAXCOL; i++) aCol[i].UpdateDeleteTab(nTable, bIsMove, &pRefUndo->aCol[i]);
     else
         for (i=0; i <= MAXCOL; i++) aCol[i].UpdateDeleteTab(nTable, bIsMove, NULL);
+
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
 }
 
 void ScTable::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo,
@@ -1274,6 +1290,9 @@ void ScTable::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo,
         aCol[i].UpdateMoveTab( nOldPos, nNewPos, nTabNo );
         rProgress.SetState( rProgress.GetState() + aCol[i].GetCodeCount() );
     }
+
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
 }
 
 void ScTable::UpdateCompile( BOOL bForceIfNameInUse )

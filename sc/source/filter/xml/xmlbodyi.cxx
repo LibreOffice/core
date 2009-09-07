@@ -36,6 +36,8 @@
 #include <cstdio>
 
 #include "document.hxx"
+#include "docuno.hxx"
+#include "sheetdata.hxx"
 
 #include "xmlbodyi.hxx"
 #include "xmltabi.hxx"
@@ -136,6 +138,14 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
+    ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
+    if ( pSheetData && pSheetData->HasStartPos() )
+    {
+        // stream part to copy ends before the next child element
+        sal_Int32 nEndOffset = GetScImport().GetByteOffset();
+        pSheetData->EndStreamPos( nEndOffset );
+    }
+
     SvXMLImportContext *pContext = 0;
 
     const SvXMLTokenMap& rTokenMap = GetScImport().GetBodyElemTokenMap();
@@ -218,8 +228,36 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
     return pContext;
 }
 
+void ScXMLBodyContext::Characters( const OUString& )
+{
+    ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
+    if ( pSheetData && pSheetData->HasStartPos() )
+    {
+        // stream part to copy ends before any content (whitespace) within the spreadsheet element
+        sal_Int32 nEndOffset = GetScImport().GetByteOffset();
+        pSheetData->EndStreamPos( nEndOffset );
+    }
+    // otherwise ignore
+}
+
 void ScXMLBodyContext::EndElement()
 {
+    ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
+    if ( pSheetData && pSheetData->HasStartPos() )
+    {
+        // stream part to copy ends before the closing tag of spreadsheet element
+        sal_Int32 nEndOffset = GetScImport().GetByteOffset();
+        pSheetData->EndStreamPos( nEndOffset );
+    }
+
+    if ( pSheetData )
+    {
+        // store the loaded namespaces (for the office:spreadsheet element),
+        // so the prefixes in copied stream fragments remain valid
+        const SvXMLNamespaceMap& rNamespaces = GetImport().GetNamespaceMap();
+        pSheetData->StoreLoadedNamespaces( rNamespaces );
+    }
+
     if (!bHadCalculationSettings)
     {
         // #111055#; set calculation settings defaults if there is no calculation settings element

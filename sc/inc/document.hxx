@@ -411,6 +411,7 @@ private:
     bool                mbAdjustHeightEnabled;
     bool                mbExecuteLinkEnabled;
     bool                mbChangeReadOnlyEnabled;    // allow changes in read-only document (for API import filters)
+    bool                mbStreamValidLocked;
 
     sal_Int16           mnNamedRangesLockCount;
 
@@ -571,6 +572,10 @@ public:
     SC_DLLPUBLIC void           TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos);
     SC_DLLPUBLIC void           SetVisible( SCTAB nTab, BOOL bVisible );
     SC_DLLPUBLIC BOOL           IsVisible( SCTAB nTab ) const;
+    BOOL            IsStreamValid( SCTAB nTab ) const;
+    void            SetStreamValid( SCTAB nTab, BOOL bSet, BOOL bIgnoreLock = FALSE );
+    void            LockStreamValid( bool bLock );
+    bool            IsStreamValidLocked() const                         { return mbStreamValidLocked; }
     BOOL            IsPendingRowHeights( SCTAB nTab ) const;
     void            SetPendingRowHeights( SCTAB nTab, BOOL bSet );
     SC_DLLPUBLIC void           SetLayoutRTL( SCTAB nTab, BOOL bRTL );

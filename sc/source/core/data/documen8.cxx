@@ -271,6 +271,11 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                 if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
                         rSet, rChanges ) )
                     InvalidateTextWidth( NULL, NULL, bNumFormatChanged );
+
+                for (SCTAB nTab=0; nTab<=MAXTAB; ++nTab)
+                    if (pTab[nTab] && pTab[nTab]->IsStreamValid())
+                        pTab[nTab]->SetStreamValid( FALSE );
+
                 ULONG nOldFormat =
                     ((const SfxUInt32Item*)&rSet.Get(
                     ATTR_VALUE_FORMAT ))->GetValue();

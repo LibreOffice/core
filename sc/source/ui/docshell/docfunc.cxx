@@ -113,6 +113,14 @@ IMPL_LINK( ScDocFunc, NotifyDrawUndo, SdrUndoAction*, pUndoAction )
     else
         rDocShell.GetUndoManager()->AddUndoAction( new ScUndoDraw( pUndoAction, &rDocShell ) );
     rDocShell.SetDrawModified();
+
+    // the affected sheet isn't known, so all stream positions are invalidated
+    ScDocument* pDoc = rDocShell.GetDocument();
+    SCTAB nTabCount = pDoc->GetTableCount();
+    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+        if (pDoc->IsStreamValid(nTab))
+            pDoc->SetStreamValid(nTab, FALSE);
+
     return 0;
 }
 
@@ -1061,6 +1069,9 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
     if( rDoc.IsUndoEnabled() )
         rDocShell.GetUndoManager()->AddUndoAction( new ScUndoShowHideNote( rDocShell, rPos, bShow ) );
 
+    if (rDoc.IsStreamValid(rPos.Tab()))
+        rDoc.SetStreamValid(rPos.Tab(), FALSE);
+
     rDocShell.SetDocumentModified();
 
     return true;
@@ -1088,6 +1099,9 @@ bool ScDocFunc::SetNoteText( const ScAddress& rPos, const String& rText, BOOL bA
         pNote->SetText( rPos, aNewText );
 
     //! Undo !!!
+
+    if (pDoc->IsStreamValid(rPos.Tab()))
+        pDoc->SetStreamValid(rPos.Tab(), FALSE);
 
     rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
@@ -1142,6 +1156,10 @@ bool ScDocFunc::ReplaceNote( const ScAddress& rPos, const String& rNoteText, con
 
         // repaint cell (to make note marker visible)
         rDocShell.PostPaintCell( rPos );
+
+        if (rDoc.IsStreamValid(rPos.Tab()))
+            rDoc.SetStreamValid(rPos.Tab(), FALSE);
+
         aModificator.SetDocumentModified();
         bDone = true;
     }

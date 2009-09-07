@@ -289,6 +289,13 @@ void ScModelObj::AfterXMLLoading(sal_Bool bRet)
         pDocShell->AfterXMLLoading(bRet);
 }
 
+ScSheetSaveData* ScModelObj::GetSheetSaveData()
+{
+    if (pDocShell)
+        return pDocShell->GetSheetSaveData();
+    return NULL;
+}
+
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
                                                 throw(uno::RuntimeException)
 {

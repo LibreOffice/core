@@ -497,6 +497,28 @@ BOOL ScDocument::IsVisible( SCTAB nTab ) const
 }
 
 
+BOOL ScDocument::IsStreamValid( SCTAB nTab ) const
+{
+    if ( ValidTab(nTab) && pTab[nTab] )
+        return pTab[nTab]->IsStreamValid();
+
+    return FALSE;
+}
+
+
+void ScDocument::SetStreamValid( SCTAB nTab, BOOL bSet, BOOL bIgnoreLock )
+{
+    if ( ValidTab(nTab) && pTab[nTab] )
+        pTab[nTab]->SetStreamValid( bSet, bIgnoreLock );
+}
+
+
+void ScDocument::LockStreamValid( bool bLock )
+{
+    mbStreamValidLocked = bLock;
+}
+
+
 BOOL ScDocument::IsPendingRowHeights( SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )

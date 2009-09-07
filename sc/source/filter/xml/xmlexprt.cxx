@@ -53,10 +53,12 @@
 #include "XMLColumnRowGroupExport.hxx"
 #include "XMLStylesExportHelper.hxx"
 #include "XMLChangeTrackingExportHelper.hxx"
+#include "sheetdata.hxx"
 #include "docoptio.hxx"
 #include "XMLExportSharedData.hxx"
 #include "chgviset.hxx"
 #include "docuno.hxx"
+#include "textuno.hxx"
 #include "chartlis.hxx"
 #include "unoguard.hxx"
 #include "scitems.hxx"
@@ -80,6 +82,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/txtparae.hxx>
 #include <xmloff/xmlcnitm.hxx>
+#include <xmloff/xmlerror.hxx>
 
 #include <rtl/ustring.hxx>
 
@@ -122,6 +125,8 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
 #include <com/sun/star/form/XFormsSupplier2.hpp>
+#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
@@ -452,6 +457,7 @@ ScXMLExport::ScXMLExport(
     const sal_uInt16 nExportFlag)
 :   SvXMLExport( xServiceFactory, SvXMLUnitConverter::GetMapUnit(GetFieldUnit()), XML_SPREADSHEET, nExportFlag ),
     pDoc(NULL),
+    nSourceStreamPos(0),
     pNumberFormatAttributesExportHelper(NULL),
     pSharedData(NULL),
     pColumnStyles(NULL),
@@ -565,6 +571,45 @@ ScXMLExport::~ScXMLExport()
         delete pDefaults;
     if (pNumberFormatAttributesExportHelper)
         delete pNumberFormatAttributesExportHelper;
+}
+
+void ScXMLExport::SetSourceStream( const uno::Reference<io::XInputStream>& xNewStream )
+{
+    xSourceStream = xNewStream;
+
+    if ( xSourceStream.is() )
+    {
+        // make sure it's a plain UTF-8 stream as written by OOo itself
+
+        const sal_Char pXmlHeader[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+        sal_Int32 nLen = strlen(pXmlHeader);
+
+        uno::Sequence<sal_Int8> aFileStart(nLen);
+        sal_Int32 nRead = xSourceStream->readBytes( aFileStart, nLen );
+
+        if ( nRead != nLen || rtl_compareMemory( aFileStart.getConstArray(), pXmlHeader, nLen ) != 0 )
+        {
+            // invalid - ignore stream, save normally
+            xSourceStream.clear();
+        }
+        else
+        {
+            // keep track of the bytes already read
+            nSourceStreamPos = nRead;
+
+            const ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetModel())->GetSheetSaveData();
+            if (pSheetData)
+            {
+                // add the loaded namespaces to the name space map
+
+                if ( !pSheetData->AddLoadedNamespaces( _GetNamespaceMap() ) )
+                {
+                    // conflicts in the namespaces - ignore the stream, save normally
+                    xSourceStream.clear();
+                }
+            }
+        }
+    }
 }
 
 sal_Int32 ScXMLExport::GetNumberFormatStyleIndex(sal_Int32 nNumFmt) const
@@ -803,7 +848,7 @@ void ScXMLExport::_ExportFontDecls()
     SvXMLExport::_ExportFontDecls();
 }
 
-table::CellRangeAddress ScXMLExport::GetEndAddress(uno::Reference<sheet::XSpreadsheet>& xTable, const sal_Int32 /* nTable */)
+table::CellRangeAddress ScXMLExport::GetEndAddress(const uno::Reference<sheet::XSpreadsheet>& xTable, const sal_Int32 /* nTable */)
 {
     table::CellRangeAddress aCellAddress;
     uno::Reference<sheet::XSheetCellCursor> xCursor(xTable->createCursor());
@@ -1481,6 +1526,95 @@ void ScXMLExport::SetBodyAttributes()
     }
 }
 
+static bool lcl_CopyStreamElement( const uno::Reference< io::XInputStream >& xInput,
+                            const uno::Reference< io::XOutputStream >& xOutput,
+                            sal_Int32 nCount )
+{
+    const sal_Int32 nBufSize = 16*1024;
+    uno::Sequence<sal_Int8> aSequence(nBufSize);
+
+    sal_Int32 nRemaining = nCount;
+    bool bFirst = true;
+
+    while ( nRemaining > 0 )
+    {
+        sal_Int32 nRead = xInput->readBytes( aSequence, std::min( nRemaining, nBufSize ) );
+        if (bFirst)
+        {
+            // safety check: Make sure the copied part actually points to the start of an element
+            if ( nRead < 1 || aSequence[0] != static_cast<sal_Int8>('<') )
+            {
+                return false;   // abort and set an error
+            }
+            bFirst = false;
+        }
+        if (nRead == nRemaining)
+        {
+            // safety check: Make sure the copied part also ends at the end of an element
+            if ( aSequence[nRead-1] != static_cast<sal_Int8>('>') )
+            {
+                return false;   // abort and set an error
+            }
+        }
+
+        if ( nRead == nBufSize )
+        {
+            xOutput->writeBytes( aSequence );
+            nRemaining -= nRead;
+        }
+        else
+        {
+            if ( nRead > 0 )
+            {
+                uno::Sequence<sal_Int8> aTempBuf( aSequence.getConstArray(), nRead );
+                xOutput->writeBytes( aTempBuf );
+            }
+            nRemaining = 0;
+        }
+    }
+    return true;    // successful
+}
+
+void ScXMLExport::CopySourceStream( sal_Int32 nStartOffset, sal_Int32 nEndOffset, sal_Int32& rNewStart, sal_Int32& rNewEnd )
+{
+    uno::Reference<xml::sax::XDocumentHandler> xHandler = GetDocHandler();
+    uno::Reference<io::XActiveDataSource> xDestSource( xHandler, uno::UNO_QUERY );
+    if ( xDestSource.is() )
+    {
+        uno::Reference<io::XOutputStream> xDestStream = xDestSource->getOutputStream();
+        uno::Reference<io::XSeekable> xDestSeek( xDestStream, uno::UNO_QUERY );
+        if ( xDestSeek.is() )
+        {
+            // temporary: set same stream again to clear buffer
+            xDestSource->setOutputStream( xDestStream );
+
+            if ( getExportFlags() & EXPORT_PRETTY )
+            {
+                ByteString aOutStr("\n   ");
+                uno::Sequence<sal_Int8> aOutSeq( (sal_Int8*)aOutStr.GetBuffer(), aOutStr.Len() );
+                xDestStream->writeBytes( aOutSeq );
+            }
+
+            rNewStart = (sal_Int32)xDestSeek->getPosition();
+
+            if ( nStartOffset > nSourceStreamPos )
+                xSourceStream->skipBytes( nStartOffset - nSourceStreamPos );
+
+            if ( !lcl_CopyStreamElement( xSourceStream, xDestStream, nEndOffset - nStartOffset ) )
+            {
+                // If copying went wrong, set an error.
+                // ScXMLImportWrapper then resets all stream flags, so the next save attempt will use normal saving.
+
+                uno::Sequence<OUString> aEmptySeq;
+                SetError(XMLERROR_CANCEL|XMLERROR_FLAG_SEVERE, aEmptySeq);
+            }
+            nSourceStreamPos = nEndOffset;
+
+            rNewEnd = (sal_Int32)xDestSeek->getPosition();
+        }
+    }
+}
+
 void ScXMLExport::_ExportContent()
 {
     nCurrentTable = 0;
@@ -1499,6 +1633,10 @@ void ScXMLExport::_ExportContent()
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetModel(), uno::UNO_QUERY );
     if ( !xSpreadDoc.is() )
         return;
+
+    ScSheetSaveData* pSheetData = ScModelObj::getImplementation(xSpreadDoc)->GetSheetSaveData();
+    if (pSheetData)
+        pSheetData->ResetSaveEntries();
 
     uno::Reference<container::XIndexAccess> xIndex( xSpreadDoc->getSheets(), uno::UNO_QUERY );
     if ( xIndex.is() )
@@ -1531,6 +1669,27 @@ void ScXMLExport::_ExportContent()
         WriteTheLabelRanges( xSpreadDoc );
         for (sal_Int32 nTable = 0; nTable < nTableCount; ++nTable)
         {
+            sal_Int32 nStartOffset = -1;
+            sal_Int32 nEndOffset = -1;
+            if (pSheetData && pDoc && pDoc->IsStreamValid((SCTAB)nTable))
+                pSheetData->GetStreamPos( nTable, nStartOffset, nEndOffset );
+
+            if ( nStartOffset >= 0 && nEndOffset >= 0 && xSourceStream.is() )
+            {
+                sal_Int32 nNewStart = -1;
+                sal_Int32 nNewEnd = -1;
+                CopySourceStream( nStartOffset, nEndOffset, nNewStart, nNewEnd );
+
+                // store position of copied sheet in output
+                pSheetData->AddSavePos( nTable, nNewStart, nNewEnd );
+
+                // skip iterator entries for this sheet
+                pCellsItr->SkipTable(static_cast<SCTAB>(nTable));
+            }
+            else
+            {
+                //! indent after rebasing to m52
+
             uno::Reference<sheet::XSpreadsheet> xTable(xIndex->getByIndex(nTable), uno::UNO_QUERY);
             if (xTable.is())
             {
@@ -1653,6 +1812,8 @@ void ScXMLExport::_ExportContent()
                     nEqualCells = 0;
                 }
             }
+
+            }
             IncrementProgressBar(sal_False);
         }
     }
@@ -1729,6 +1890,245 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
     SvXMLExport::_ExportStyles(bUsed);
 }
 
+void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& xProperties,
+                                    const uno::Reference<sheet::XSpreadsheet>& xTable,
+                                    sal_Int32 nTable, const rtl::OUString* pOldName)
+{
+    //! pass xCellRanges instead
+    uno::Reference<sheet::XSheetCellRanges> xCellRanges( xProperties, uno::UNO_QUERY );
+
+    rtl::OUString SC_SCELLPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX));
+    rtl::OUString SC_NUMBERFORMAT(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT));
+
+    rtl::OUString sStyleName;
+    sal_Int32 nNumberFormat(-1);
+    sal_Int32 nValidationIndex(-1);
+    std::vector< XMLPropertyState > xPropStates(xCellStylesExportPropertySetMapper->Filter( xProperties ));
+    std::vector< XMLPropertyState >::iterator aItr(xPropStates.begin());
+    std::vector< XMLPropertyState >::iterator aEndItr(xPropStates.end());
+    sal_Int32 nCount(0);
+    while (aItr != aEndItr)
+    {
+        if (aItr->mnIndex != -1)
+        {
+            switch (xCellStylesPropertySetMapper->GetEntryContextId(aItr->mnIndex))
+            {
+                case CTF_SC_VALIDATION :
+                {
+                    pValidationsContainer->AddValidation(aItr->maValue, nValidationIndex);
+                    // this is not very slow, because it is most the last property or
+                    // if it is not the last property it is the property before the last property,
+                    // so in the worst case only one property has to be copied, but in the best case no
+                    // property has to be copied
+                    aItr = xPropStates.erase(aItr);
+                    aEndItr = xPropStates.end();    // #120346# old aEndItr is invalidated!
+                }
+                break;
+                case CTF_SC_CELLSTYLE :
+                {
+                    aItr->maValue >>= sStyleName;
+                    aItr->mnIndex = -1;
+                    ++aItr;
+                    ++nCount;
+                }
+                break;
+                case CTF_SC_NUMBERFORMAT :
+                {
+                    if (aItr->maValue >>= nNumberFormat)
+                        addDataStyle(nNumberFormat);
+                    ++aItr;
+                    ++nCount;
+                }
+                break;
+                default:
+                {
+                    ++aItr;
+                    ++nCount;
+                }
+                break;
+            }
+        }
+        else
+        {
+            ++aItr;
+            ++nCount;
+        }
+    }
+    if (nCount == 1) // this is the CellStyle and should be removed if alone
+        xPropStates.clear();
+    if (nNumberFormat == -1)
+        xProperties->getPropertyValue(SC_NUMBERFORMAT) >>= nNumberFormat;
+    if (sStyleName.getLength())
+    {
+        if (xPropStates.size())
+        {
+            sal_Int32 nIndex;
+            if (pOldName)
+            {
+                if (GetAutoStylePool()->AddNamed(*pOldName, XML_STYLE_FAMILY_TABLE_CELL, sStyleName, xPropStates))
+                {
+                    GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TABLE_CELL, *pOldName);
+                    // add to pCellStyles, so the name is found for normal sheets
+                    rtl::OUString* pTemp(new rtl::OUString(*pOldName));
+                    if (!pCellStyles->AddStyleName(pTemp, nIndex))
+                        delete pTemp;
+                }
+            }
+            else
+            {
+                rtl::OUString sName;
+                sal_Bool bIsAutoStyle(sal_True);
+                if (GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_CELL, sStyleName, xPropStates))
+                {
+                    rtl::OUString* pTemp(new rtl::OUString(sName));
+                    if (!pCellStyles->AddStyleName(pTemp, nIndex))
+                        delete pTemp;
+                }
+                else
+                    nIndex = pCellStyles->GetIndexOfStyleName(sName, SC_SCELLPREFIX, bIsAutoStyle);
+
+                uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
+                table::CellRangeAddress* pAddresses(aAddresses.getArray());
+                sal_Bool bGetMerge(sal_True);
+                for (sal_Int32 i = 0; i < aAddresses.getLength(); ++i, ++pAddresses)
+                {
+                    pSharedData->SetLastColumn(nTable, pAddresses->EndColumn);
+                    pSharedData->SetLastRow(nTable, pAddresses->EndRow);
+                    pCellStyles->AddRangeStyleName(*pAddresses, nIndex, bIsAutoStyle, nValidationIndex, nNumberFormat);
+                    if (bGetMerge)
+                        bGetMerge = GetMerged(pAddresses, xTable);
+                }
+            }
+        }
+        else
+        {
+            rtl::OUString* pTemp(new rtl::OUString(EncodeStyleName(sStyleName)));
+            sal_Int32 nIndex(0);
+            if (!pCellStyles->AddStyleName(pTemp, nIndex, sal_False))
+            {
+                delete pTemp;
+                pTemp = NULL;
+            }
+            if ( !pOldName )
+            {
+                uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
+                table::CellRangeAddress* pAddresses(aAddresses.getArray());
+                sal_Bool bGetMerge(sal_True);
+                for (sal_Int32 i = 0; i < aAddresses.getLength(); ++i, ++pAddresses)
+                {
+                    if (bGetMerge)
+                        bGetMerge = GetMerged(pAddresses, xTable);
+                    pCellStyles->AddRangeStyleName(*pAddresses, nIndex, sal_False, nValidationIndex, nNumberFormat);
+                    if (!sStyleName.equalsAsciiL("Default", 7) || nValidationIndex != -1)
+                    {
+                        pSharedData->SetLastColumn(nTable, pAddresses->EndColumn);
+                        pSharedData->SetLastRow(nTable, pAddresses->EndRow);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void ScXMLExport::AddStyleFromColumn(const uno::Reference<beans::XPropertySet>& xColumnProperties,
+                                     const rtl::OUString* pOldName, sal_Int32& rIndex, sal_Bool& rIsVisible)
+{
+    rtl::OUString SC_SCOLUMNPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX));
+
+    std::vector<XMLPropertyState> xPropStates(xColumnStylesExportPropertySetMapper->Filter(xColumnProperties));
+    if(xPropStates.size())
+    {
+        std::vector< XMLPropertyState >::iterator aItr(xPropStates.begin());
+        std::vector< XMLPropertyState >::iterator aEndItr(xPropStates.end());
+        while (aItr != aEndItr)
+        {
+            if (xColumnStylesPropertySetMapper->GetEntryContextId(aItr->mnIndex) == CTF_SC_ISVISIBLE)
+            {
+                aItr->maValue >>= rIsVisible;
+                break;
+            }
+            ++aItr;
+        }
+
+        rtl::OUString sParent;
+        if (pOldName)
+        {
+            if (GetAutoStylePool()->AddNamed(*pOldName, XML_STYLE_FAMILY_TABLE_COLUMN, sParent, xPropStates))
+            {
+                GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TABLE_COLUMN, *pOldName);
+                // add to pColumnStyles, so the name is found for normal sheets
+                rtl::OUString* pTemp(new rtl::OUString(*pOldName));
+                rIndex = pColumnStyles->AddStyleName(pTemp);
+            }
+        }
+        else
+        {
+            rtl::OUString sName;
+            if (GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_COLUMN, sParent, xPropStates))
+            {
+                rtl::OUString* pTemp(new rtl::OUString(sName));
+                rIndex = pColumnStyles->AddStyleName(pTemp);
+            }
+            else
+                rIndex = pColumnStyles->GetIndexOfStyleName(sName, SC_SCOLUMNPREFIX);
+        }
+    }
+}
+
+void ScXMLExport::AddStyleFromRow(const uno::Reference<beans::XPropertySet>& xRowProperties,
+                                  const rtl::OUString* pOldName, sal_Int32& rIndex)
+{
+    rtl::OUString SC_SROWPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX));
+
+    std::vector<XMLPropertyState> xPropStates(xRowStylesExportPropertySetMapper->Filter(xRowProperties));
+    if(xPropStates.size())
+    {
+        rtl::OUString sParent;
+        if (pOldName)
+        {
+            if (GetAutoStylePool()->AddNamed(*pOldName, XML_STYLE_FAMILY_TABLE_ROW, sParent, xPropStates))
+            {
+                GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TABLE_ROW, *pOldName);
+                // add to pRowStyles, so the name is found for normal sheets
+                rtl::OUString* pTemp(new rtl::OUString(*pOldName));
+                rIndex = pRowStyles->AddStyleName(pTemp);
+            }
+        }
+        else
+        {
+            rtl::OUString sName;
+            if (GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_ROW, sParent, xPropStates))
+            {
+                rtl::OUString* pTemp(new rtl::OUString(sName));
+                rIndex = pRowStyles->AddStyleName(pTemp);
+            }
+            else
+                rIndex = pRowStyles->GetIndexOfStyleName(sName, SC_SROWPREFIX);
+        }
+    }
+}
+
+uno::Any lcl_GetEnumerated( uno::Reference<container::XEnumerationAccess> xEnumAccess, sal_Int32 nIndex )
+{
+    uno::Any aRet;
+    uno::Reference<container::XEnumeration> xEnum( xEnumAccess->createEnumeration() );
+    try
+    {
+        sal_Int32 nSkip = nIndex;
+        while ( nSkip > 0 )
+        {
+            (void) xEnum->nextElement();
+            --nSkip;
+        }
+        aRet = xEnum->nextElement();
+    }
+    catch (container::NoSuchElementException&)
+    {
+        // leave aRet empty
+    }
+    return aRet;
+}
+
 void ScXMLExport::_ExportAutoStyles()
 {
     if (GetModel().is())
@@ -1741,6 +2141,272 @@ void ScXMLExport::_ExportAutoStyles()
             {
                 if (getExportFlags() & EXPORT_CONTENT)
                 {
+                    //  re-create automatic styles with old names from stored data
+                    ScSheetSaveData* pSheetData = ScModelObj::getImplementation(xSpreadDoc)->GetSheetSaveData();
+                    if (pSheetData && pDoc)
+                    {
+                        // formulas have to be calculated now, to detect changed results
+                        // (during normal save, they will be calculated anyway)
+                        SCTAB nTabCount = pDoc->GetTableCount();
+                        for (SCTAB nTab=0; nTab<nTabCount; ++nTab)
+                            if (pDoc->IsStreamValid(nTab))
+                            {
+                                ScCellIterator aIter( pDoc, 0,0,nTab, MAXCOL,MAXROW,nTab );
+                                ScBaseCell* pCell = aIter.GetFirst();
+                                while (pCell)
+                                {
+                                    if (pCell->GetCellType() == CELLTYPE_FORMULA)
+                                        static_cast<ScFormulaCell*>(pCell)->IsValue();      // interpret if dirty
+                                    pCell = aIter.GetNext();
+                                }
+                            }
+
+                        // stored cell styles
+                        const std::vector<ScCellStyleEntry>& rCellEntries = pSheetData->GetCellStyles();
+                        std::vector<ScCellStyleEntry>::const_iterator aCellIter = rCellEntries.begin();
+                        std::vector<ScCellStyleEntry>::const_iterator aCellEnd = rCellEntries.end();
+                        while (aCellIter != aCellEnd)
+                        {
+                            ScAddress aPos = aCellIter->maCellPos;
+                            sal_Int32 nTable = aPos.Tab();
+                            bool bCopySheet = pDoc->IsStreamValid( static_cast<SCTAB>(nTable) );
+                            if (bCopySheet)
+                            {
+                                uno::Reference <sheet::XSpreadsheet> xTable(xIndex->getByIndex(nTable), uno::UNO_QUERY);
+                                uno::Reference <beans::XPropertySet> xProperties(
+                                    xTable->getCellByPosition( aPos.Col(), aPos.Row() ), uno::UNO_QUERY );
+
+                                AddStyleFromCells(xProperties, xTable, nTable, &aCellIter->maName);
+                            }
+                            ++aCellIter;
+                        }
+
+                        // stored column styles
+                        const std::vector<ScCellStyleEntry>& rColumnEntries = pSheetData->GetColumnStyles();
+                        std::vector<ScCellStyleEntry>::const_iterator aColumnIter = rColumnEntries.begin();
+                        std::vector<ScCellStyleEntry>::const_iterator aColumnEnd = rColumnEntries.end();
+                        while (aColumnIter != aColumnEnd)
+                        {
+                            ScAddress aPos = aColumnIter->maCellPos;
+                            sal_Int32 nTable = aPos.Tab();
+                            bool bCopySheet = pDoc->IsStreamValid( static_cast<SCTAB>(nTable) );
+                            if (bCopySheet)
+                            {
+                                uno::Reference<table::XColumnRowRange> xColumnRowRange(xIndex->getByIndex(nTable), uno::UNO_QUERY);
+                                uno::Reference<table::XTableColumns> xTableColumns(xColumnRowRange->getColumns());
+                                uno::Reference<beans::XPropertySet> xColumnProperties(xTableColumns->getByIndex( aPos.Col() ), uno::UNO_QUERY);
+
+                                sal_Int32 nIndex(-1);
+                                sal_Bool bIsVisible(sal_True);
+                                AddStyleFromColumn( xColumnProperties, &aColumnIter->maName, nIndex, bIsVisible );
+                            }
+                            ++aColumnIter;
+                        }
+
+                        // stored row styles
+                        const std::vector<ScCellStyleEntry>& rRowEntries = pSheetData->GetRowStyles();
+                        std::vector<ScCellStyleEntry>::const_iterator aRowIter = rRowEntries.begin();
+                        std::vector<ScCellStyleEntry>::const_iterator aRowEnd = rRowEntries.end();
+                        while (aRowIter != aRowEnd)
+                        {
+                            ScAddress aPos = aRowIter->maCellPos;
+                            sal_Int32 nTable = aPos.Tab();
+                            bool bCopySheet = pDoc->IsStreamValid( static_cast<SCTAB>(nTable) );
+                            if (bCopySheet)
+                            {
+                                uno::Reference<table::XColumnRowRange> xColumnRowRange(xIndex->getByIndex(nTable), uno::UNO_QUERY);
+                                uno::Reference<table::XTableRows> xTableRows(xColumnRowRange->getRows());
+                                uno::Reference<beans::XPropertySet> xRowProperties(xTableRows->getByIndex( aPos.Row() ), uno::UNO_QUERY);
+
+                                sal_Int32 nIndex(-1);
+                                AddStyleFromRow( xRowProperties, &aRowIter->maName, nIndex );
+                            }
+                            ++aRowIter;
+                        }
+
+                        // stored table styles
+                        const std::vector<ScCellStyleEntry>& rTableEntries = pSheetData->GetTableStyles();
+                        std::vector<ScCellStyleEntry>::const_iterator aTableIter = rTableEntries.begin();
+                        std::vector<ScCellStyleEntry>::const_iterator aTableEnd = rTableEntries.end();
+                        while (aTableIter != aTableEnd)
+                        {
+                            ScAddress aPos = aTableIter->maCellPos;
+                            sal_Int32 nTable = aPos.Tab();
+                            bool bCopySheet = pDoc->IsStreamValid( static_cast<SCTAB>(nTable) );
+                            if (bCopySheet)
+                            {
+                                //! separate method AddStyleFromTable needed?
+                                uno::Reference<beans::XPropertySet> xTableProperties(xIndex->getByIndex(nTable), uno::UNO_QUERY);
+                                if (xTableProperties.is())
+                                {
+                                    std::vector<XMLPropertyState> xPropStates(xTableStylesExportPropertySetMapper->Filter(xTableProperties));
+                                    rtl::OUString sParent;
+                                    rtl::OUString sName( aTableIter->maName );
+                                    GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TABLE_TABLE, sParent, xPropStates);
+                                    GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TABLE_TABLE, sName);
+                                }
+                            }
+                            ++aTableIter;
+                        }
+
+                        // stored styles for notes
+
+                        UniReference<SvXMLExportPropertyMapper> xShapeMapper = XMLShapeExport::CreateShapePropMapper( *this );
+                        GetShapeExport(); // make sure the graphics styles family is added
+
+                        const std::vector<ScNoteStyleEntry>& rNoteEntries = pSheetData->GetNoteStyles();
+                        std::vector<ScNoteStyleEntry>::const_iterator aNoteIter = rNoteEntries.begin();
+                        std::vector<ScNoteStyleEntry>::const_iterator aNoteEnd = rNoteEntries.end();
+                        while (aNoteIter != aNoteEnd)
+                        {
+                            ScAddress aPos = aNoteIter->maCellPos;
+                            sal_Int32 nTable = aPos.Tab();
+                            bool bCopySheet = pDoc->IsStreamValid( static_cast<SCTAB>(nTable) );
+                            if (bCopySheet)
+                            {
+                                //! separate method AddStyleFromNote needed?
+
+                                ScPostIt* pNote = pDoc->GetNote( aPos );
+                                DBG_ASSERT( pNote, "note not found" );
+                                if (pNote)
+                                {
+                                    SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
+                                    // all uno shapes are created anyway in CollectSharedData
+                                    uno::Reference<beans::XPropertySet> xShapeProperties( pDrawObj->getUnoShape(), uno::UNO_QUERY );
+                                    if (xShapeProperties.is())
+                                    {
+                                        if ( aNoteIter->maStyleName.getLength() )
+                                        {
+                                            std::vector<XMLPropertyState> xPropStates(xShapeMapper->Filter(xShapeProperties));
+                                            rtl::OUString sParent;
+                                            rtl::OUString sName( aNoteIter->maStyleName );
+                                            GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_SD_GRAPHICS_ID, sParent, xPropStates);
+                                            GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_SD_GRAPHICS_ID, sName);
+                                        }
+                                        if ( aNoteIter->maTextStyle.getLength() )
+                                        {
+                                            std::vector<XMLPropertyState> xPropStates(
+                                                GetTextParagraphExport()->GetParagraphPropertyMapper()->Filter(xShapeProperties));
+                                            rtl::OUString sParent;
+                                            rtl::OUString sName( aNoteIter->maTextStyle );
+                                            GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_PARAGRAPH, sParent, xPropStates);
+                                            GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TEXT_PARAGRAPH, sName);
+                                        }
+                                    }
+                                }
+                            }
+                            ++aNoteIter;
+                        }
+
+                        // note paragraph styles
+
+                        //UniReference<SvXMLExportPropertyMapper> xParaPropMapper = XMLTextParagraphExport::CreateParaExtPropMapper( *this );
+                        UniReference<SvXMLExportPropertyMapper> xParaPropMapper = GetTextParagraphExport()->GetParagraphPropertyMapper();
+
+                        const std::vector<ScTextStyleEntry>& rNoteParaEntries = pSheetData->GetNoteParaStyles();
+                        std::vector<ScTextStyleEntry>::const_iterator aNoteParaIter = rNoteParaEntries.begin();
+                        std::vector<ScTextStyleEntry>::const_iterator aNoteParaEnd = rNoteParaEntries.end();
+                        while (aNoteParaIter != aNoteParaEnd)
+                        {
+                            ScAddress aPos = aNoteParaIter->maCellPos;
+                            sal_Int32 nTable = aPos.Tab();
+                            bool bCopySheet = pDoc->IsStreamValid( static_cast<SCTAB>(nTable) );
+                            if (bCopySheet)
+                            {
+                                ScPostIt* pNote = pDoc->GetNote( aPos );
+                                DBG_ASSERT( pNote, "note not found" );
+                                if (pNote)
+                                {
+                                    SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
+                                    uno::Reference<container::XEnumerationAccess> xCellText(pDrawObj->getUnoShape(), uno::UNO_QUERY);
+                                    uno::Reference<beans::XPropertySet> xParaProp(
+                                        lcl_GetEnumerated( xCellText, aNoteParaIter->maSelection.nStartPara ), uno::UNO_QUERY );
+                                    if ( xParaProp.is() )
+                                    {
+                                        std::vector<XMLPropertyState> xPropStates(xParaPropMapper->Filter(xParaProp));
+                                        rtl::OUString sParent;
+                                        rtl::OUString sName( aNoteParaIter->maName );
+                                        GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_PARAGRAPH, sParent, xPropStates);
+                                        GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TEXT_PARAGRAPH, sName);
+                                    }
+                                }
+                            }
+                            ++aNoteParaIter;
+                        }
+
+                        // note text styles
+
+                        UniReference<SvXMLExportPropertyMapper> xTextPropMapper = XMLTextParagraphExport::CreateCharExtPropMapper( *this );
+
+                        const std::vector<ScTextStyleEntry>& rNoteTextEntries = pSheetData->GetNoteTextStyles();
+                        std::vector<ScTextStyleEntry>::const_iterator aNoteTextIter = rNoteTextEntries.begin();
+                        std::vector<ScTextStyleEntry>::const_iterator aNoteTextEnd = rNoteTextEntries.end();
+                        while (aNoteTextIter != aNoteTextEnd)
+                        {
+                            ScAddress aPos = aNoteTextIter->maCellPos;
+                            sal_Int32 nTable = aPos.Tab();
+                            bool bCopySheet = pDoc->IsStreamValid( static_cast<SCTAB>(nTable) );
+                            if (bCopySheet)
+                            {
+                                ScPostIt* pNote = pDoc->GetNote( aPos );
+                                DBG_ASSERT( pNote, "note not found" );
+                                if (pNote)
+                                {
+                                    SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
+                                    uno::Reference<text::XSimpleText> xCellText(pDrawObj->getUnoShape(), uno::UNO_QUERY);
+                                    uno::Reference<beans::XPropertySet> xCursorProp(xCellText->createTextCursor(), uno::UNO_QUERY);
+                                    ScDrawTextCursor* pCursor = ScDrawTextCursor::getImplementation( xCursorProp );
+                                    if (pCursor)
+                                    {
+                                        pCursor->SetSelection( aNoteTextIter->maSelection );
+
+                                        std::vector<XMLPropertyState> xPropStates(xTextPropMapper->Filter(xCursorProp));
+                                        rtl::OUString sParent;
+                                        rtl::OUString sName( aNoteTextIter->maName );
+                                        GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_TEXT, sParent, xPropStates);
+                                        GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TEXT_TEXT, sName);
+                                    }
+                                }
+                            }
+                            ++aNoteTextIter;
+                        }
+
+                        // stored text styles
+
+                        //UniReference<SvXMLExportPropertyMapper> xTextPropMapper = XMLTextParagraphExport::CreateCharExtPropMapper( *this );
+
+                        const std::vector<ScTextStyleEntry>& rTextEntries = pSheetData->GetTextStyles();
+                        std::vector<ScTextStyleEntry>::const_iterator aTextIter = rTextEntries.begin();
+                        std::vector<ScTextStyleEntry>::const_iterator aTextEnd = rTextEntries.end();
+                        while (aTextIter != aTextEnd)
+                        {
+                            ScAddress aPos = aTextIter->maCellPos;
+                            sal_Int32 nTable = aPos.Tab();
+                            bool bCopySheet = pDoc->IsStreamValid( static_cast<SCTAB>(nTable) );
+                            if (bCopySheet)
+                            {
+                                //! separate method AddStyleFromText needed?
+                                //! cache sheet object
+
+                                uno::Reference<table::XCellRange> xCellRange(xIndex->getByIndex(nTable), uno::UNO_QUERY);
+                                uno::Reference<text::XSimpleText> xCellText(xCellRange->getCellByPosition(aPos.Col(), aPos.Row()), uno::UNO_QUERY);
+                                uno::Reference<beans::XPropertySet> xCursorProp(xCellText->createTextCursor(), uno::UNO_QUERY);
+                                ScCellTextCursor* pCursor = ScCellTextCursor::getImplementation( xCursorProp );
+                                if (pCursor)
+                                {
+                                    pCursor->SetSelection( aTextIter->maSelection );
+
+                                    std::vector<XMLPropertyState> xPropStates(xTextPropMapper->Filter(xCursorProp));
+                                    rtl::OUString sParent;
+                                    rtl::OUString sName( aTextIter->maName );
+                                    GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_TEXT, sParent, xPropStates);
+                                    GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TEXT_TEXT, sName);
+                                }
+                            }
+                            ++aTextIter;
+                        }
+                    }
+
                     ExportExternalRefCacheStyles();
 
                     if (!pSharedData)
@@ -1751,18 +2417,18 @@ void ScXMLExport::_ExportAutoStyles()
                         CollectSharedData(nTableCount, nShapesCount, nCellCount);
                         //DBG_ERROR("no shared data setted");
                     }
-                    rtl::OUString SC_SCOLUMNPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX));
-                    rtl::OUString SC_SROWPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX));
-                    rtl::OUString SC_SCELLPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX));
-                    rtl::OUString SC_NUMBERFORMAT(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT));
                     sal_Int32 nTableCount(xIndex->getCount());
                     pCellStyles->AddNewTable(nTableCount - 1);
                     CollectShapesAutoStyles(nTableCount);
                     for (sal_Int32 nTable = 0; nTable < nTableCount; ++nTable)
                     {
+                        bool bUseStream = pSheetData && pDoc && pDoc->IsStreamValid((SCTAB)nTable) &&
+                                          pSheetData->HasStreamPos(nTable) && xSourceStream.is();
+
                         uno::Reference <sheet::XSpreadsheet> xTable(xIndex->getByIndex(nTable), uno::UNO_QUERY);
                         if (xTable.is())
                         {
+                            // table styles array must be complete, including copied tables - Add should find the stored style
                             uno::Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
                             if (xTableProperties.is())
                             {
@@ -1775,7 +2441,11 @@ void ScXMLExport::_ExportAutoStyles()
                                     aTableStyles.push_back(sName);
                                 }
                             }
-                            uno::Reference<sheet::XUniqueCellFormatRangesSupplier> xCellFormatRanges ( xTableProperties, uno::UNO_QUERY );
+                        }
+                        // collect other auto-styles only for non-copied sheets
+                        if (xTable.is() && !bUseStream)
+                        {
+                            uno::Reference<sheet::XUniqueCellFormatRangesSupplier> xCellFormatRanges ( xTable, uno::UNO_QUERY );
                             if ( xCellFormatRanges.is() )
                             {
                                 uno::Reference<container::XIndexAccess> xFormatRangesIndex(xCellFormatRanges->getUniqueCellFormatRanges());
@@ -1791,123 +2461,14 @@ void ScXMLExport::_ExportAutoStyles()
                                             uno::Reference <beans::XPropertySet> xProperties (xCellRanges, uno::UNO_QUERY);
                                             if (xProperties.is())
                                             {
-                                                rtl::OUString sStyleName;
-                                                sal_Int32 nNumberFormat(-1);
-                                                sal_Int32 nValidationIndex(-1);
-                                                std::vector< XMLPropertyState > xPropStates(xCellStylesExportPropertySetMapper->Filter( xProperties ));
-                                                std::vector< XMLPropertyState >::iterator aItr(xPropStates.begin());
-                                                std::vector< XMLPropertyState >::iterator aEndItr(xPropStates.end());
-                                                sal_Int32 nCount(0);
-                                                while (aItr != aEndItr)
-                                                {
-                                                    if (aItr->mnIndex != -1)
-                                                    {
-                                                        switch (xCellStylesPropertySetMapper->GetEntryContextId(aItr->mnIndex))
-                                                        {
-                                                            case CTF_SC_VALIDATION :
-                                                            {
-                                                                pValidationsContainer->AddValidation(aItr->maValue, nValidationIndex);
-                                                                // this is not very slow, because it is most the last property or
-                                                                // if it is not the last property it is the property before the last property,
-                                                                // so in the worst case only one property has to be copied, but in the best case no
-                                                                // property has to be copied
-                                                                aItr = xPropStates.erase(aItr);
-                                                                aEndItr = xPropStates.end();    // #120346# old aEndItr is invalidated!
-                                                            }
-                                                            break;
-                                                            case CTF_SC_CELLSTYLE :
-                                                            {
-                                                                aItr->maValue >>= sStyleName;
-                                                                aItr->mnIndex = -1;
-                                                                ++aItr;
-                                                                ++nCount;
-                                                            }
-                                                            break;
-                                                            case CTF_SC_NUMBERFORMAT :
-                                                            {
-                                                                if (aItr->maValue >>= nNumberFormat)
-                                                                    addDataStyle(nNumberFormat);
-                                                                ++aItr;
-                                                                ++nCount;
-                                                            }
-                                                            break;
-                                                            default:
-                                                            {
-                                                                ++aItr;
-                                                                ++nCount;
-                                                            }
-                                                            break;
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        ++aItr;
-                                                        ++nCount;
-                                                    }
-                                                }
-                                                if (nCount == 1) // this is the CellStyle and should be removed if alone
-                                                    xPropStates.clear();
-                                                if (nNumberFormat == -1)
-                                                    xProperties->getPropertyValue(SC_NUMBERFORMAT) >>= nNumberFormat;
-                                                if (sStyleName.getLength())
-                                                {
-                                                    if (xPropStates.size())
-                                                    {
-                                                        sal_Int32 nIndex;
-                                                        rtl::OUString sName;
-                                                        sal_Bool bIsAutoStyle(sal_True);
-                                                        if (GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_CELL, sStyleName, xPropStates))
-                                                        {
-                                                            rtl::OUString* pTemp(new rtl::OUString(sName));
-                                                            if (!pCellStyles->AddStyleName(pTemp, nIndex))
-                                                                delete pTemp;
-                                                        }
-                                                        else
-                                                            nIndex = pCellStyles->GetIndexOfStyleName(sName, SC_SCELLPREFIX, bIsAutoStyle);
-                                                        uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
-                                                        table::CellRangeAddress* pAddresses(aAddresses.getArray());
-                                                        sal_Bool bGetMerge(sal_True);
-                                                        for (sal_Int32 i = 0; i < aAddresses.getLength(); ++i, ++pAddresses)
-                                                        {
-                                                            pSharedData->SetLastColumn(nTable, pAddresses->EndColumn);
-                                                            pSharedData->SetLastRow(nTable, pAddresses->EndRow);
-                                                            pCellStyles->AddRangeStyleName(*pAddresses, nIndex, bIsAutoStyle, nValidationIndex, nNumberFormat);
-                                                            if (bGetMerge)
-                                                                bGetMerge = GetMerged(pAddresses, xTable);
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        rtl::OUString* pTemp(new rtl::OUString(EncodeStyleName(sStyleName)));
-                                                        sal_Int32 nIndex(0);
-                                                        if (!pCellStyles->AddStyleName(pTemp, nIndex, sal_False))
-                                                        {
-                                                            delete pTemp;
-                                                            pTemp = NULL;
-                                                        }
-                                                        uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
-                                                        table::CellRangeAddress* pAddresses(aAddresses.getArray());
-                                                        sal_Bool bGetMerge(sal_True);
-                                                        for (sal_Int32 i = 0; i < aAddresses.getLength(); ++i, ++pAddresses)
-                                                        {
-                                                            if (bGetMerge)
-                                                                bGetMerge = GetMerged(pAddresses, xTable);
-                                                            pCellStyles->AddRangeStyleName(*pAddresses, nIndex, sal_False, nValidationIndex, nNumberFormat);
-                                                            if (!sStyleName.equalsAsciiL("Default", 7) || nValidationIndex != -1)
-                                                            {
-                                                                pSharedData->SetLastColumn(nTable, pAddresses->EndColumn);
-                                                                pSharedData->SetLastRow(nTable, pAddresses->EndRow);
-                                                            }
-                                                        }
-                                                    }
-                                                }
+                                                AddStyleFromCells(xProperties, xTable, nTable, NULL);
                                                 IncrementProgressBar(sal_False);
                                             }
                                         }
                                     }
                                 }
                             }
-                            uno::Reference<table::XColumnRowRange> xColumnRowRange (xTableProperties, uno::UNO_QUERY);
+                            uno::Reference<table::XColumnRowRange> xColumnRowRange (xTable, uno::UNO_QUERY);
                             if (xColumnRowRange.is())
                             {
                                 if (pDoc)
@@ -1935,31 +2496,9 @@ void ScXMLExport::_ExportAutoStyles()
                                             uno::Reference <beans::XPropertySet> xColumnProperties(xTableColumns->getByIndex(nColumn), uno::UNO_QUERY);
                                             if (xColumnProperties.is())
                                             {
-                                                std::vector<XMLPropertyState> xPropStates(xColumnStylesExportPropertySetMapper->Filter(xColumnProperties));
-                                                if(xPropStates.size())
-                                                {
-                                                    std::vector< XMLPropertyState >::iterator aItr(xPropStates.begin());
-                                                    std::vector< XMLPropertyState >::iterator aEndItr(xPropStates.end());
-                                                    while (aItr != aEndItr)
-                                                    {
-                                                        if (xColumnStylesPropertySetMapper->GetEntryContextId(aItr->mnIndex) == CTF_SC_ISVISIBLE)
-                                                        {
-                                                            aItr->maValue >>= bIsVisible;
-                                                            break;
-                                                        }
-                                                        ++aItr;
-                                                    }
-                                                    rtl::OUString sParent;
-                                                    rtl::OUString sName;
-                                                    if (GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_COLUMN, sParent, xPropStates))
-                                                    {
-                                                        rtl::OUString* pTemp(new rtl::OUString(sName));
-                                                        nIndex = pColumnStyles->AddStyleName(pTemp);
-                                                    }
-                                                    else
-                                                        nIndex = pColumnStyles->GetIndexOfStyleName(sName, SC_SCOLUMNPREFIX);
-                                                    pColumnStyles->AddFieldStyleName(nTable, nColumn, nIndex, bIsVisible);
-                                                }
+                                                AddStyleFromColumn( xColumnProperties, NULL, nIndex, bIsVisible );
+                                                //if(xPropStates.size())
+                                                pColumnStyles->AddFieldStyleName(nTable, nColumn, nIndex, bIsVisible);
                                             }
                                             sal_Int32 nOld(nColumn);
                                             nColumn = pDoc->GetNextDifferentChangedCol(sal::static_int_cast<SCTAB>(nTable), static_cast<USHORT>(nColumn));
@@ -1996,20 +2535,9 @@ void ScXMLExport::_ExportAutoStyles()
                                             uno::Reference <beans::XPropertySet> xRowProperties(xTableRows->getByIndex(nRow), uno::UNO_QUERY);
                                             if(xRowProperties.is())
                                             {
-                                                std::vector<XMLPropertyState> xPropStates(xRowStylesExportPropertySetMapper->Filter(xRowProperties));
-                                                if(xPropStates.size())
-                                                {
-                                                    rtl::OUString sParent;
-                                                    rtl::OUString sName;
-                                                    if (GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_ROW, sParent, xPropStates))
-                                                    {
-                                                        rtl::OUString* pTemp(new rtl::OUString(sName));
-                                                        nIndex = pRowStyles->AddStyleName(pTemp);
-                                                    }
-                                                    else
-                                                        nIndex = pRowStyles->GetIndexOfStyleName(sName, SC_SROWPREFIX);
-                                                    pRowStyles->AddFieldStyleName(nTable, nRow, nIndex);
-                                                }
+                                                AddStyleFromRow( xRowProperties, NULL, nIndex );
+                                                //if(xPropStates.size())
+                                                pRowStyles->AddFieldStyleName(nTable, nRow, nIndex);
                                             }
                                             sal_Int32 nOld(nRow);
                                             nRow = pDoc->GetNextDifferentChangedRow(sal::static_int_cast<SCTAB>(nTable), static_cast<USHORT>(nRow), false);
@@ -2025,7 +2553,7 @@ void ScXMLExport::_ExportAutoStyles()
                                     }
                                 }
                             }
-                            uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery (xTableProperties, uno::UNO_QUERY);
+                            uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery (xTable, uno::UNO_QUERY);
                             if (xCellRangesQuery.is())
                             {
                                 uno::Reference<sheet::XSheetCellRanges> xSheetCellRanges(xCellRangesQuery->queryContentCells(sheet::CellFlags::FORMATTED));

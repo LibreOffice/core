@@ -127,6 +127,7 @@ private:
 
                                             //  interne Verwaltung  ------------------
     BOOL            bVisible;
+    BOOL            bStreamValid;
     BOOL            bPendingRowHeights;
 
     SCTAB           nTab;
@@ -192,6 +193,9 @@ public:
 
     BOOL        IsVisible() const                            { return bVisible; }
     void        SetVisible( BOOL bVis );
+
+    BOOL        IsStreamValid() const                        { return bStreamValid; }
+    void        SetStreamValid( BOOL bSet, BOOL bIgnoreLock = FALSE );
 
     BOOL        IsPendingRowHeights() const                  { return bPendingRowHeights; }
     void        SetPendingRowHeights( BOOL bSet );
@@ -726,7 +730,7 @@ private:
     BOOL        GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, BOOL bInSel,
                                     const ScMarkData& rMark) const;
     BOOL        GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark );
-    void        SetDrawPageSize();
+    void        SetDrawPageSize(bool bResetStreamValid = true);
     BOOL        TestTabRefAbs(SCTAB nTable);
     void        CompileDBFormula();
     void        CompileDBFormula( BOOL bCreateFormulaString );
