@@ -39,18 +39,17 @@
 
 testcase tiFormatModifyLayout
 
-'/// open application ///'
-   Call  hNewDocument
-'/// Impress: Format->Modify Layout ///'
-'/// Draw   : kontext menu: Slide-> Modify Slide (always disabled :-( ?///'
-   FormatPage ' 27046 SID_MODIFYPAGE
-      Kontext "SeitenLayout"
-      DialogTest ( SeitenLayout )
-      sleep 1
-'/// cancel dialog 'Page Setup' ///'
-      SeitenLayout.Cancel
-'/// close application ///'
-   Call hCloseDocument
-endcase
-
-
+    printlog "open application "
+    Call  hNewDocument
+    printlog "Impress: Format->Modify Layout "
+    printlog "Draw   : kontext menu: Slide-> Modify Slide (always disabled :-( ?"
+    FormatPage 
+    Kontext "SeitenLayout"
+    DialogTest ( SeitenLayout )
+    sleep 1
+    printlog "cancel dialog 'Page Setup' "
+    SeitenLayout.Cancel
+    printlog "close application "
+    Call hCloseDocument
+    
+endcase 'tiFormatModifyLayout
