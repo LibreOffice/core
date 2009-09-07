@@ -92,7 +92,7 @@ CFLAGS+= -Ob1
 .ENDIF
 
 # flags to enable build with symbols; required for crashdump feature
-#CFLAGSENABLESYMBOLS=-Zi -Fd$(MISC)$/_ooo_st_$(TARGET).PDB
+#CFLAGSENABLESYMBOLS=-Zi -Fd$(MISC)/_ooo_st_$(TARGET).PDB
 CFLAGSENABLESYMBOLS=-Z7 -Yd
 
 .IF "$(bndchk)" != ""
@@ -122,9 +122,9 @@ CFLAGS_NO_EXCEPTIONS=
 ENABLE_PCH:=
 .ENDIF "$(debug)"!=""
 
-CFLAGS_CREATE_PCH=-I$(INCPCH) -Fo$(SLO)$/pchname.obj -Ycprecompiled_$(PRJNAME).hxx -DPRECOMPILED_HEADERS
-CFLAGS_USE_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pch/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
-CFLAGS_USE_EXCEPTIONS_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pch_ex/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
+CFLAGS_CREATE_PCH=-I$(INCPCH) -Fo$(SLO)/pchname.obj -Ycprecompiled_$(PRJNAME).hxx -DPRECOMPILED_HEADERS
+CFLAGS_USE_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)/pch/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
+CFLAGS_USE_EXCEPTIONS_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)/pch_ex/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
 .IF "$(CALL_CDECL)"=="TRUE"
 CFLAGSCALL=-Gd
 .ELSE			# "$(CALL_CDECL)"=="TRUE"
@@ -149,8 +149,8 @@ CDEFSOBJMT+=-DWIN32 -D_MT
 CDEFSOBJMT+=-DWIN32 -D_MT
 .ENDIF # "$(DYNAMIC_CRT)"!=""
 
-CFLAGSPROF=-Gh -Fd$(MISC)$/$(@:b).pdb
-CFLAGSDEBUG=-Zi -Fd$(MISC)$/$(@:b).pdb
+CFLAGSPROF=-Gh -Fd$(MISC)/$(@:b).pdb
+CFLAGSDEBUG=-Zi -Fd$(MISC)/$(@:b).pdb
 CFLAGSDBGUTIL=
 .IF "$(VC_STANDARD)"==""
 CFLAGSOPT=-Oxs -Oy-
@@ -280,7 +280,7 @@ LIBCMT=libcmt.lib
 .ENDIF # "$(USE_STLP_DEBUG)" != ""
 .ENDIF # "$(DYNAMIC_CRT)"!=""
 
-STDOBJVCL=$(L)$/salmain.obj
+STDOBJVCL=$(L)/salmain.obj
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
@@ -300,15 +300,15 @@ LIBSTLPORTST=stlport_vc71_static.lib
 .ENDIF
 
 .IF "$(PROF_EDITION)" == ""
-ATL_INCLUDE*=$(COMPATH)$/PlatformSDK$/include$/atl
-ATL_LIB*=$(COMPATH)$/atlmfc$/lib
-MFC_INCLUDE*=$(COMPATH)$/PlatformSDK$/include$/mfc
-MFC_LIB*=$(COMPATH)$/atlmfc$/lib
+ATL_INCLUDE*=$(COMPATH)/PlatformSDK/include/atl
+ATL_LIB*=$(COMPATH)/atlmfc/lib
+MFC_INCLUDE*=$(COMPATH)/PlatformSDK/include/mfc
+MFC_LIB*=$(COMPATH)/atlmfc/lib
 .ELSE
-ATL_INCLUDE*=$(COMPATH)$/atlmfc$/include
-ATL_LIB*=$(COMPATH)$/atlmfc$/lib
-MFC_INCLUDE*=$(COMPATH)$/atlmfc$/include
-MFC_LIB*=$(COMPATH)$/atlmfc$/lib
+ATL_INCLUDE*=$(COMPATH)/atlmfc/include
+ATL_LIB*=$(COMPATH)/atlmfc/lib
+MFC_INCLUDE*=$(COMPATH)/atlmfc/include
+MFC_LIB*=$(COMPATH)/atlmfc/lib
 .ENDIF
 
 LIBMGR=lib $(NOLOGO)

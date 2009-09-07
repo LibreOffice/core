@@ -36,17 +36,17 @@
 .IF "$(SCP$(TNR)TARGETN)"!=""
 
 # try to get missing parfiles
-$(PAR)$/%.par : $(SOLARPARDIR)$/%.par
+$(PAR)/%.par : $(SOLARPARDIR)/%.par
     @@-$(MKDIRHIER) $(@:d:d)
     $(COPY) $< $@
 
-LOCALSCP$(TNR)FILES=$(foreach,i,$(SCP$(TNR)FILES) $(foreach,j,$(SCP$(TNR)LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+LOCALSCP$(TNR)FILES=$(foreach,i,$(SCP$(TNR)FILES) $(foreach,j,$(SCP$(TNR)LINK_PRODUCT_TYPE) $(PAR)/$j/$i ))
 
 $(SCP$(TNR)TARGETN): $(LOCALSCP$(TNR)FILES)
     @echo ------------------------------
     @echo Making: $@
-    @@-$(MKDIRHIER) $(BIN)$/$(SCP$(TNR)LINK_PRODUCT_TYPE)
-    $(SCPLINK) $(SCPLINKFLAGS) @@$(mktmp $(foreach,i,$(SCP$(TNR)FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
+    @@-$(MKDIRHIER) $(BIN)/$(SCP$(TNR)LINK_PRODUCT_TYPE)
+    $(SCPLINK) $(SCPLINKFLAGS) @@$(mktmp $(foreach,i,$(SCP$(TNR)FILES) $(subst,$(@:d:d:d), $(@:d:d))/$(i:+","))) -o $@
 .ENDIF
 
 # Anweisungen fuer das Linken

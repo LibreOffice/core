@@ -120,7 +120,7 @@ CFLAGSWERRCXX=-xwe
 MODULES_WITH_WARNINGS := \
     soldep
 
-STDOBJVCL=$(L)$/salmain.o
+STDOBJVCL=$(L)/salmain.o
 
 THREADLIB=
 .IF "$(PURIFY)"!=""
@@ -133,7 +133,7 @@ LINKC=$(CC)
 # link against set of baseline libraries
 .IF "$(SYSBASE)"!=""
 C_RESTRICTIONFLAGS*=-xc99=none
-#LD_OPTIONS+:=-L$(SYSBASE)$/usr$/lib
+#LD_OPTIONS+:=-L$(SYSBASE)/usr/lib
 CDEFS+=-DSYSBASE="$(SYSBASE)"
 CFLAGSCC+=$(C_RESTRICTIONFLAGS)
 #.EXPORT : LD_OPTIONS

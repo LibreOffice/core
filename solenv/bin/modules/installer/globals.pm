@@ -483,33 +483,7 @@ BEGIN
 
     $plat = $^O;
 
-    if (( $plat =~ /MSWin/i ) || (( $plat =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} eq "4nt" )))
-    {
-        $zippath= "zip.exe";                # Has to be in the path: r:\btw\zip.exe
-        $checksumfile = "so_checksum.exe";
-        $unopkgfile = "unopkg.exe";
-        if ( $plat =~ /cygwin/i )
-        {
-            $separator = "/";
-            $pathseparator = "\:";
-            $quote = "\'";
-        }
-        else
-        {
-            $separator = "\\";
-            $pathseparator = "\;";
-            $quote = "\"";
-        }
-        $libextension = "\.dll";
-        $isunix = 0;
-        $iswin = 1;
-                $archiveformat = ".zip";
-        %savedmapping = ();
-        %savedrevmapping = ();
-        %savedrev83mapping = ();
-        %saved83dirmapping = ();
-    }
-    elsif (( $plat =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" ))
+    if ( $plat =~ /cygwin/i )
     {
         $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
         $checksumfile = "so_checksum";

@@ -80,16 +80,16 @@ EXTNAME*=$(EXTENSIONNAME)_in
 WRONG_SOURCEVERSION
 .ENDIF
 
-# Create $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk if needed
-%minor.mk : $(SOLARENV)$/inc$/minor.mk
-    @@-$(MKDIRHIER) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)
-    @@$(COPY) $(SOLARENV)$/inc$/minor.mk $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk
-    @@$(TOUCH) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
+# Create $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/$(UPD)minor.mk if needed
+%minor.mk : $(SOLARENV)/inc/minor.mk
+    @@-$(MKDIRHIER) $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)
+    @@$(COPY) $(SOLARENV)/inc/minor.mk $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/$(UPD)minor.mk
+    @@$(TOUCH) $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/minormkchanged.flg
 .ENDIF          # "$(UPDATER)"!="" || "$(CWS_WORK_STAMP)"!=""
 
-# Force creation of $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/
+# Force creation of $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/
 # $(UPD)minor.mk could be empty as it's contents were already included from minor.mk
-.INCLUDE : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk
+.INCLUDE : $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/$(UPD)minor.mk
 
 .IF "$(BSCLIENT)"=="TRUE"
 .IF "$(UPDATER)"!="YES"
@@ -117,9 +117,9 @@ JAVAINTERPRETER=jview.exe
 .ELSE
 .IF "$(JDK)" == "SCAFE"
 .IF "$(JDK_VERSION)" != ""
-JAVAINTERPRETER=$(DEVROOT)$/vcafe11$/java$/bin$/java.exe
+JAVAINTERPRETER=$(DEVROOT)/vcafe11/java/bin/java.exe
 .ELSE
-JAVAINTERPRETER=$(DEVROOT)$/cafepro$/java$/bin$/java.exe
+JAVAINTERPRETER=$(DEVROOT)/cafepro/java/bin/java.exe
 .ENDIF
 .ELSE
 .IF "$(JAVACISGCJ)" == "yes"
@@ -138,9 +138,9 @@ JAVACOMPILER=jvc.exe
 .ELSE
 .IF "$(JDK)" == "SCAFE"
 .IF "$(JDK_VERSION)" != ""
-JAVACOMPILER=$(DEVROOT)$/vcafe11$/bin$/sj.exe
+JAVACOMPILER=$(DEVROOT)/vcafe11/bin/sj.exe
 .ELSE
-JAVACOMPILER=$(DEVROOT)$/cafepro$/bin$/sj.exe
+JAVACOMPILER=$(DEVROOT)/cafepro/bin/sj.exe
 .ENDIF
 .ELSE
 .IF "$(JAVACISGCJ)" == "yes"
@@ -313,7 +313,7 @@ dbgutil=
 # weitergereicht, aber case significant ausgewertet!
 # ---------------------------------------------------------------------------
 
-DMAKE_WORK_DIR*:=$(subst,/,$/ $(PWD))
+DMAKE_WORK_DIR*:=$(subst,/,/ $(PWD))
 
 .IF "$(TMP)"!=""
 tmp*=$(TMP)
@@ -538,54 +538,50 @@ TARGETTYPE=CUI
 # Output-Pfad
 # profile has to be first for not getting the .pro extension
 .IF "$(profile)"!=""
-OUT=$(PRJ)$/$(OUTPATH).cap
+OUT=$(PRJ)/$(OUTPATH).cap
 ROUT=$(OUTPATH).cap
 .ELSE
 
 .IF "$(product)"!=""
-OUT=$(PRJ)$/$(OUTPATH).pro
+OUT=$(PRJ)/$(OUTPATH).pro
 ROUT=$(OUTPATH).pro
 
 .ELSE
 .IF "$(profile)"!=""
-OUT=$(PRJ)$/$(OUTPATH).cap
+OUT=$(PRJ)/$(OUTPATH).cap
 ROUT=$(OUTPATH).cap
 .ENDIF
 .IF "$(dbcs)"!=""
-OUT=$(PRJ)$/$(OUTPATH).w
+OUT=$(PRJ)/$(OUTPATH).w
 ROUT=$(OUTPATH).w
 .ENDIF
 # could already be set by makefile.mk
 .IF "$(OUT)" == ""
-OUT*=$(PRJ)$/$(OUTPATH)
+OUT*=$(PRJ)/$(OUTPATH)
 ROUT*=$(OUTPATH)
 .ENDIF
 .ENDIF
 .ENDIF
 
 .IF "$(bndchk)" != ""
-OUT:=$(PRJ)$/$(OUTPATH).bnd
+OUT:=$(PRJ)/$(OUTPATH).bnd
 ROUT=$(OUTPATH).bnd
 .ENDIF
 .IF "$(truetime)" != ""
-OUT=$(PRJ)$/$(OUTPATH).tt
+OUT=$(PRJ)/$(OUTPATH).tt
 ROUT=$(OUTPATH).tt
 .ENDIF
 .IF "$(hbtoolkit)"!=""
-OUT=$(PRJ)$/$(OUTPATH).tlk
+OUT=$(PRJ)/$(OUTPATH).tlk
 ROUT=$(OUTPATH).tlk
 .ENDIF
 
 .IF "$(PRJ)"!="."
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
-.IF "$(USE_SHELL)"!="4nt"
 PATH_IN_MODULE:=\
-    $(subst,$(normpath $(shell @+cd $(PRJ) && pwd $(PWDFLAGS)))$/, $(PWD))
-.ELSE			# "$(USE_SHELL)"!="4nt"
-PATH_IN_MODULE:=$(subst,$(shell @+cd $(PRJ) && echo %_cwd)$/, $(PWD))
-.ENDIF			# "$(USE_SHELL)"!="4nt"
+    $(subst,$(normpath $(shell @+cd $(PRJ) && pwd $(PWDFLAGS)))/, $(PWD))
 .ELSE			# "$(GUI)"=="WNT"
-PATH_IN_MODULE:=$(subst,$(shell @+cd $(PRJ) && pwd $(PWDFLAGS))$/, $(PWD))
+PATH_IN_MODULE:=$(subst,$(shell @+cd $(PRJ) && pwd $(PWDFLAGS))/, $(PWD))
 .ENDIF			# "$(GUI)"=="WNT"
 .ELSE			# "$(PRJ)"!="."
 PATH_IN_MODULE:=
@@ -617,24 +613,24 @@ LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
 # --- generate output tree -----------------------------------------
 
 # As this is not part of the initial startup makefile we define an infered
-# target instead of using $(OUT)$/inc$/myworld.mk as target name.
+# target instead of using $(OUT)/inc/myworld.mk as target name.
 # (See iz62795)
-$(OUT)$/inc$/%world.mk :
+$(OUT)/inc/%world.mk :
     @$(MKOUT) $(ROUT)
     @echo $(EMQ)# > $@
 
 # don't need/want output trees in solenv!!!
 .IF "$(PRJNAME)"!="solenv"
-.INCLUDE : $(OUT)$/inc$/myworld.mk
+.INCLUDE : $(OUT)/inc/myworld.mk
 .ENDIF			# "$(PRJNAME)"!="solenv"
 
 .IF "$(common_build)"!=""
-$(LOCAL_COMMON_OUT)$/inc$/%world.mk :
+$(LOCAL_COMMON_OUT)/inc/%world.mk :
     @$(MKOUT) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(ROUT))
     @echo $(EMQ)# > $@
 
 .IF "$(PRJNAME)"!="solenv"
-.INCLUDE : $(LOCAL_COMMON_OUT)$/inc$/myworld.mk
+.INCLUDE : $(LOCAL_COMMON_OUT)/inc/myworld.mk
 .ENDIF			# "$(PRJNAME)"!="solenv"
 .ENDIF			# "$(common_build)"!=""
 
@@ -642,10 +638,10 @@ $(LOCAL_COMMON_OUT)$/inc$/%world.mk :
 
 # Misc-Pfad
 .IF "$(UNR)"!=""
-MISCX=$(OUT)$/umisc
-MISC=$(OUT)$/umisc
+MISCX=$(OUT)/umisc
+MISC=$(OUT)/umisc
 .ELSE
-MISC=$(OUT)$/misc
+MISC=$(OUT)/misc
 # pointing to misc in common output tree if exists
 COMMONMISC={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))}
 .ENDIF
@@ -654,31 +650,26 @@ L10N_MODULE*=l10n
 ALT_L10N_MODULE*=l10n_so
 
 .IF "$(WITH_LANG)"!=""
-.INCLUDE .IGNORE: $(SOLARSRC)$/$(L10N_MODULE)/localization_present.mk
-.INCLUDE .IGNORE: $(SOLARSRC)$/$(ALT_L10N_MODULE)/localization_present.mk
+.INCLUDE .IGNORE: $(SOLARSRC)/$(L10N_MODULE)/localization_present.mk
+.INCLUDE .IGNORE: $(SOLARSRC)/$(ALT_L10N_MODULE)/localization_present.mk
 
-#.IF "$(USE_SHELL)"!="4nt"
-#PATH_IN_MODULE:=$(subst,$(shell @+cd $(PRJ);pwd)$/,$(NULL) $(PWD))
-#.ELSE			# "$(USE_SHELL)"!="4nt"
-#PATH_IN_MODULE:=$(subst,$(shell @+cd $(PRJ) ^ echo %_cwd)$/,$(NULL) $(PWD))
-#.ENDIF			# "$(USE_SHELL)"!="4nt"
 .IF "$(LOCALIZATION_FOUND)"!="" || "$(ALT_LOCALIZATION_FOUND)"!=""
-TRYSDF:=$(SOLARSRC)$/$(L10N_MODULE)$/$(COMMON_OUTDIR)$(PROEXT)$/misc/sdf$/$(PRJNAME)$/$(PATH_IN_MODULE)$/localize.sdf
+TRYSDF:=$(SOLARSRC)/$(L10N_MODULE)/$(COMMON_OUTDIR)$(PROEXT)/misc/sdf/$(PRJNAME)/$(PATH_IN_MODULE)/localize.sdf
 .IF "$(ALT_LOCALIZATION_FOUND)"!=""
-TRYALTSDF:=$(SOLARSRC)$/$(ALT_L10N_MODULE)$/$(COMMON_OUTDIR)$(PROEXT)$/misc/sdf$/$(PRJNAME)$/$(PATH_IN_MODULE)$/localize.sdf
+TRYALTSDF:=$(SOLARSRC)/$(ALT_L10N_MODULE)/$(COMMON_OUTDIR)$(PROEXT)/misc/sdf/$(PRJNAME)/$(PATH_IN_MODULE)/localize.sdf
 # TODO: check performance impact...
 LOCALIZESDF:=$(strip $(shell @+$(IFEXIST) $(TRYALTSDF) $(THEN) echo $(TRYALTSDF) $(FI)))
 .ENDIF			# "$(ALT_LOCALIZATION_FOUND)"!=""
 some_local_helper_var:=$(strip $(shell @+$(IFEXIST) $(TRYSDF) $(THEN) echo $(TRYSDF) $(FI) ))
 LOCALIZESDF!:=$(eq,$(LOCALIZESDF),$(NULL) $(some_local_helper_var) $(LOCALIZESDF))
-LOCALIZESDF!:=$(eq,$(LOCALIZESDF),$(NULL) $(COMMONMISC)$/$(PRJNAME)$/$(PATH_IN_MODULE)$/localize.sdf $(LOCALIZESDF))
+LOCALIZESDF!:=$(eq,$(LOCALIZESDF),$(NULL) $(COMMONMISC)/$(PRJNAME)/$(PATH_IN_MODULE)/localize.sdf $(LOCALIZESDF))
 .ELSE			# "$(LOCALIZATION_FOUND)"!="" || "$(ALT_LOCALIZATION_FOUND)"!=""
-LOCALIZESDF:=$(COMMONMISC)$/$(PRJNAME)$/$(PATH_IN_MODULE)$/localize.sdf
+LOCALIZESDF:=$(COMMONMISC)/$(PRJNAME)/$(PATH_IN_MODULE)/localize.sdf
 .ENDIF			# "$(LOCALIZATION_FOUND)"!="" || "$(ALT_LOCALIZATION_FOUND)"!=""
 .ENDIF			# "$(WITH_LANG)"!=""
 
 
-OUTCXX=$(OUT)$/cxx
+OUTCXX=$(OUT)/cxx
 
 .IF "$(PACKAGE)"!=""
 IDLPACKAGE:=$(PACKAGE)
@@ -689,20 +680,20 @@ IDLPACKAGENAME=$(PRJNAME)
 .ENDIF
 
 # Objekt-Pfad
-OBJ=$(OUT)$/obj
-SLO=$(OUT)$/slo
-ROBJ=$(ROUT)$/obj
-RSLO=$(ROUT)$/slo
+OBJ=$(OUT)/obj
+SLO=$(OUT)/slo
+ROBJ=$(ROUT)/obj
+RSLO=$(ROUT)/slo
 
 # Particle Path
-PAR=$(OUT)$/par
+PAR=$(OUT)/par
 
 # Library-Pfad
-LB=$(OUT)$/lib
-SLB=$(OUT)$/slb
+LB=$(OUT)/lib
+SLB=$(OUT)/slb
 
 # wir haben ein ucr verzeichnis
-UCR=$(OUT)$/ucr
+UCR=$(OUT)/ucr
 
 # $(L) nur noch pfad ins solver\upd\...\lib
 #L:={$(LB);$(SLB);$(ILIB)}
@@ -716,11 +707,11 @@ ENVPRJ:=$(PRJ)
 # Class-Path for java-classes
 # obwohl der generierte Bytecode plattformunabhg. sein sollte
 # generieren wir ihn ersteinmal ins abhaengige Verzeichnis
-CLASSDIR=$(OUT)$/class
+CLASSDIR=$(OUT)/class
 CLASSPATH!:=.$(PATH_SEPERATOR)$(CLASSDIR)$(PATH_SEPERATOR)$(CLASSPATH)
-STARJAR=java -classpath $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARENV)$/bin$/jtools.jar com.sun.star.tool.starjar.StarJar
+STARJAR=java -classpath $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARENV)/bin/jtools.jar com.sun.star.tool.starjar.StarJar
 
-STARDEP=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/javadep
+STARDEP=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/javadep
 .IF "$(PRJNAME)"=="sj2"
 CLASSPATH!:=$(CLASSPATH:s/sj2/no/)
 .ENDIF
@@ -739,11 +730,11 @@ PROCESSOUT*:=$(MISC)
 .INCLUDE : libs.mk
 
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
-VERSIONOBJ=$(SLO)$/_version.obj
+VERSIONOBJ=$(SLO)/_version.obj
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
-VERSIONOBJ=$(SLO)$/_version.o
+VERSIONOBJ=$(SLO)/_version.o
 .ENDIF
 
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
@@ -760,25 +751,25 @@ SHELLLIB=gdi32.lib shell32.lib advapi32.lib comdlg32.lib
 
 # BIN-Pfad
 .IF "$(UNR)"!=""
-BIN=$(OUT)$/ubin
+BIN=$(OUT)/ubin
 .ELSE
-BIN=$(OUT)$/bin
+BIN=$(OUT)/bin
 .ENDIF
 # pointing to misc in common output tree if exists
-COMMONBIN=$(LOCAL_COMMON_OUT)$/bin
+COMMONBIN=$(LOCAL_COMMON_OUT)/bin
 
 # Include-Pfad
 # still without -I here s.a. target.mk INCLUDE
-INC=$(PRJ)$/inc
-INCPCH=$(PRJ)$/inc$/pch
-INCLOCAL=..$/inc
-INCGUI=$(PRJ)$/$(GUIBASE)$/inc
-INCCOM=$(OUT)$/inc
-INCCOMX=$(OUT)$/inc
-INCUNOIDL=$(INCCOM)$/$(PRJNAME)
-INCDEPN=. $(INCGUI) $(INCLOCAL) $(INC) $(INC)$/$(PRJNAME)
+INC=$(PRJ)/inc
+INCPCH=$(PRJ)/inc/pch
+INCLOCAL=../inc
+INCGUI=$(PRJ)/$(GUIBASE)/inc
+INCCOM=$(OUT)/inc
+INCCOMX=$(OUT)/inc
+INCUNOIDL=$(INCCOM)/$(PRJNAME)
+INCDEPN=. $(INCGUI) $(INCLOCAL) $(INC) $(INC)/$(PRJNAME)
 .IF "$(PRJINC)"!=""
-INCLOCPRJ=$(foreach,i,$(PRJINC) $i$/inc)
+INCLOCPRJ=$(foreach,i,$(PRJINC) $i/inc)
 INCDEPN+=$(INCLOCPRJ)
 .ENDIF
 .IF "$(INCPRE)"!=""
@@ -788,29 +779,29 @@ INCDEPN+=$(INCPRE)
 # Resource-Pfad fuer .SRS
 
 .IF "$(common_build_srs)"!=""
-SRS=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))$/srs
-SRSX=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))$/srs
+SRS=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))/srs
+SRSX=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))/srs
 .ELSE          # "$(common_build_srs)"!=""
-SRS=$(OUT)$/srs
-SRSX=$(OUT)$/srs
+SRS=$(OUT)/srs
+SRSX=$(OUT)/srs
 .ENDIF          # "$(common_build_srs)"!=""
 
 # Resource-Pfad fuer .RC und .RES
-RES=$(OUT)$/res
+RES=$(OUT)/res
 
 
 # das normale MISC wird nicht an LDMISC angepasst, stattdessen MISCX
 
 .IF "$(make_xl)"!=""
-BIN=$(PRJ)$/$(OUTPATH).xl$/bin
+BIN=$(PRJ)/$(OUTPATH).xl/bin
 .ENDIF
 
 # damit gezielt Abhaengigkeiten auf s: angegeben werden koennen
 
 .IF "$(common_build)"!=""
-SOLARIDLDIR=$(SOLARVERSION)$/common$(PROEXT)$/idl$(EXT_UPDMINOR)
+SOLARIDLDIR=$(SOLARVERSION)/common$(PROEXT)/idl$(EXT_UPDMINOR)
 .ELSE
-SOLARIDLDIR=$(SOLARVERSION)$/$(INPATH)$/idl$(EXT_UPDMINOR)
+SOLARIDLDIR=$(SOLARVERSION)/$(INPATH)/idl$(EXT_UPDMINOR)
 .ENDIF
 
 .IF "$(UPDMINOR)" != ""
@@ -818,29 +809,29 @@ EXT_UPDMINOR=.$(UPDMINOR)
 .ELSE
 EXT_UPDMINOR=
 .ENDIF
-SOLARRESDIR=$(SOLARVERSION)$/$(INPATH)$/res$(EXT_UPDMINOR)
-SOLARRESXDIR=$(SOLARVERSION)$/$(INPATH)$/res$(EXT_UPDMINOR)
-SOLARLIBDIR=$(SOLARVERSION)$/$(INPATH)$/lib$(EXT_UPDMINOR)
-SOLARJAVADIR=$(SOLARVERSION)$/$(INPATH)$/java$(EXT_UPDMINOR)
-SOLARINCDIR=$(SOLARVERSION)$/$(INPATH)$/inc$(EXT_UPDMINOR)
-SOLARINCXDIR=$(SOLARVERSION)$/$(INPATH)$/inc$(EXT_UPDMINOR)
+SOLARRESDIR=$(SOLARVERSION)/$(INPATH)/res$(EXT_UPDMINOR)
+SOLARRESXDIR=$(SOLARVERSION)/$(INPATH)/res$(EXT_UPDMINOR)
+SOLARLIBDIR=$(SOLARVERSION)/$(INPATH)/lib$(EXT_UPDMINOR)
+SOLARJAVADIR=$(SOLARVERSION)/$(INPATH)/java$(EXT_UPDMINOR)
+SOLARINCDIR=$(SOLARVERSION)/$(INPATH)/inc$(EXT_UPDMINOR)
+SOLARINCXDIR=$(SOLARVERSION)/$(INPATH)/inc$(EXT_UPDMINOR)
 .IF "$(SOLARLANG)"!="deut"
 .IF "$(SOLARLANG)" != ""
-SOLARINCXDIR=$(SOLARVERSION)$/$(INPATH)$/inc$(EXT_UPDMINOR)$/$(SOLARLANG)
-SOLARRESXDIR=$(SOLARVERSION)$/$(INPATH)$/res$(EXT_UPDMINOR)$/$(SOLARLANG)
+SOLARINCXDIR=$(SOLARVERSION)/$(INPATH)/inc$(EXT_UPDMINOR)/$(SOLARLANG)
+SOLARRESXDIR=$(SOLARVERSION)/$(INPATH)/res$(EXT_UPDMINOR)/$(SOLARLANG)
 .ENDIF
 .ENDIF
-SOLARBINDIR:=$(SOLARVERSION)$/$(INPATH)$/bin$(EXT_UPDMINOR)
-SOLARUCRDIR=$(SOLARVERSION)$/$(INPATH)$/ucr$(EXT_UPDMINOR)
-SOLARPARDIR=$(SOLARVERSION)$/$(INPATH)$/par$(EXT_UPDMINOR)
-SOLARXMLDIR=$(SOLARVERSION)$/$(INPATH)$/xml$(EXT_UPDMINOR)
-SOLARDOCDIR=$(SOLARVERSION)$/$(INPATH)$/doc$(EXT_UPDMINOR)
-SOLARPCKDIR=$(SOLARVERSION)$/$(INPATH)$/pck$(EXT_UPDMINOR)
-SOLARSDFDIR=$(SOLARVERSION)$/$(INPATH)$/sdf$(EXT_UPDMINOR)
-SOLARCOMMONBINDIR=$(SOLARVERSION)$/common$(PROEXT)$/bin$(EXT_UPDMINOR)
-SOLARCOMMONRESDIR=$(SOLARVERSION)$/common$(PROEXT)$/res$(EXT_UPDMINOR)
-SOLARCOMMONPCKDIR=$(SOLARVERSION)$/common$(PROEXT)$/pck$(EXT_UPDMINOR)
-SOLARCOMMONSDFDIR=$(SOLARVERSION)$/common$(PROEXT)$/sdf$(EXT_UPDMINOR)
+SOLARBINDIR:=$(SOLARVERSION)/$(INPATH)/bin$(EXT_UPDMINOR)
+SOLARUCRDIR=$(SOLARVERSION)/$(INPATH)/ucr$(EXT_UPDMINOR)
+SOLARPARDIR=$(SOLARVERSION)/$(INPATH)/par$(EXT_UPDMINOR)
+SOLARXMLDIR=$(SOLARVERSION)/$(INPATH)/xml$(EXT_UPDMINOR)
+SOLARDOCDIR=$(SOLARVERSION)/$(INPATH)/doc$(EXT_UPDMINOR)
+SOLARPCKDIR=$(SOLARVERSION)/$(INPATH)/pck$(EXT_UPDMINOR)
+SOLARSDFDIR=$(SOLARVERSION)/$(INPATH)/sdf$(EXT_UPDMINOR)
+SOLARCOMMONBINDIR=$(SOLARVERSION)/common$(PROEXT)/bin$(EXT_UPDMINOR)
+SOLARCOMMONRESDIR=$(SOLARVERSION)/common$(PROEXT)/res$(EXT_UPDMINOR)
+SOLARCOMMONPCKDIR=$(SOLARVERSION)/common$(PROEXT)/pck$(EXT_UPDMINOR)
+SOLARCOMMONSDFDIR=$(SOLARVERSION)/common$(PROEXT)/sdf$(EXT_UPDMINOR)
 .IF "$(common_build)"==""
 SOLARCOMMONBINDIR=$(SOLARBINDIR)
 SOLARCOMMONRESDIR=$(SOLARRESDIR)
@@ -852,9 +843,9 @@ SOLARCOMMONSDFDIR=$(SOLARSDFDIR)
 
 .IF "$(PRE)"==""
 #JARDIR=$(CLASSDIR)
-JARDIR=$(OUT)$/class
+JARDIR=$(OUT)/class
 .ELSE
-JARDIR=$(PRE)$/class
+JARDIR=$(PRE)/class
 .ENDIF
 
 # needs to be expanded!!!
@@ -899,9 +890,9 @@ UNOIDLDEFS+=-DSUPD=$(UPD) -DUPD=$(UPD)
 UNOIDLDEPFLAGS=-Mdepend=$(SOLARVER)
 
 .IF "$(PRE)"!=""
-UNOIDLINC!:=-I$(PRE)$/idl $(UNOIDLINC)
+UNOIDLINC!:=-I$(PRE)/idl $(UNOIDLINC)
 .ENDIF
-UNOIDLINC+=-I. -I.. -I$(PRJ) -I$(PRJ)$/inc -I$(PRJ)$/$(INPATH)$/idl -I$(OUT)$/inc -I$(SOLARIDLDIR) -I$(SOLARINCDIR)
+UNOIDLINC+=-I. -I.. -I$(PRJ) -I$(PRJ)/inc -I$(PRJ)/$(INPATH)/idl -I$(OUT)/inc -I$(SOLARIDLDIR) -I$(SOLARINCDIR)
 
 CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME)
 
@@ -937,9 +928,9 @@ HDEFS=-D:$(GUI) -D:$(COM)
 
 MKDEPFLAGS+=-I$(INCDEPN:s/ / -I/:s/-I-I/-I/)
 MKDEPALLINC=$(SOLARINC:s/-I/ -I/)
-MKDEPPREINC=-I$(PREPATH)$/$(INPATH)$/inc$(UPDMINOREXT)
-MKDEPSOLENV=-I$(SOLARENV)$/inc -I$(SOLARENV)$/$(GUI)$(CVER)$(COMEX)$/inc
-MKDEPSOLVER=-I$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT) -I$(SOLARVERSION)$/$(INPATH)$/inc
+MKDEPPREINC=-I$(PREPATH)/$(INPATH)/inc$(UPDMINOREXT)
+MKDEPSOLENV=-I$(SOLARENV)/inc -I$(SOLARENV)/$(GUI)$(CVER)$(COMEX)/inc
+MKDEPSOLVER=-I$(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT) -I$(SOLARVERSION)/$(INPATH)/inc
 MKDEPLOCAL=-I$(INCCOM)
 
 .IF "$(MKDEPENDALL)"!=""
@@ -965,9 +956,9 @@ MKDEPFLAGS+=$(MKDEPLOCAL)
 BISON=bison
 YACCFLAGS*=-d 
 
-SVIDL=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/svidl
+SVIDL=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/svidl
 
-LDUMP2*=$(SOLARBINDIR)$/ldump4
+LDUMP2*=$(SOLARBINDIR)/ldump4
 
 ZIPUPDATE=-u -j
 ZIPFLAGS=$(ZIPUPDATE)
@@ -981,9 +972,9 @@ SCPLINKFLAGS+=-v $(SCPLINKVERSION)
 .ENDIF			# "$(SCPLINKVERSION)"!=""
 
 .IF "$(make_srs_deps)"!=""
-RSC=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/rscdep
+RSC=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/rscdep
 .ELSE # "$(make_srs_deps)"!=""
-RSC=$(AUGMENT_LIBRARY_PATH) $(FLIPCMD) $(SOLARBINDIR)$/rsc
+RSC=$(AUGMENT_LIBRARY_PATH) $(FLIPCMD) $(SOLARBINDIR)/rsc
 .ENDIF # "$(make_srs_deps)"!=""
 
 #new
@@ -1014,9 +1005,9 @@ XPIDL_LINK=xpt_link
 # LINKEXTENDLINE compilerabhaengig definiert werden
 LINKEXTENDLINE=+
 
-LNT=$(DEVROOT)$/lint$/lint
-#LNTFLAGS=+v -i$(DEVROOT)$/lint\ -mL options.lnt -u
-LNTFLAGS=+v -i$(DEVROOT)$/lint$/ -mL options.lnt -u
+LNT=$(DEVROOT)/lint/lint
+#LNTFLAGS=+v -i$(DEVROOT)/lint\ -mL options.lnt -u
+LNTFLAGS=+v -i$(DEVROOT)/lint/ -mL options.lnt -u
 LNTFLAGSOUTOBJ=-os
 
 .IF "$(GUI)"=="WNT"
@@ -1047,19 +1038,19 @@ MAXPROCESS!:=1
 # allow seperate handling
 EXTMAXPROCESS*=$(MAXPROCESS)
 
-IDLC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/idlc
-REGMERGE*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/regmerge
-REGCOMPARE*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/regcompare
-REGCOMP*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/regcomp
-CPPUMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/cppumaker
-JAVAMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/javamaker
-RDBMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/rdbmaker
-CLIMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/climaker
+IDLC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/idlc
+REGMERGE*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/regmerge
+REGCOMPARE*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/regcompare
+REGCOMP*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/regcomp
+CPPUMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/cppumaker
+JAVAMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/javamaker
+RDBMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/rdbmaker
+CLIMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/climaker
 
-TESTSHL2=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/testshl2
-HELPEX=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/helpex
-LNGCONVEX=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/lngconvex
-HELPLINKER=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/HelpLinker
+TESTSHL2=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/testshl2
+HELPEX=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/helpex
+LNGCONVEX=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/lngconvex
+HELPLINKER=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/HelpLinker
 
 .IF "$(JAVAINTERPRETER)" == ""
 JAVA*:=java
@@ -1070,10 +1061,10 @@ JAVA*:=$(JAVAINTERPRETER)
 
 # Define SCPCOMP without wrapper because pre2par.pl chokes on DOS style
 # pathes. (See iz57443)
-SCPCOMP=$(PERL) $(SOLARENV)$/bin$/pre2par.pl
-SCPLINK=$(PERL) $(SOLARENV)$/bin$/par2script.pl
+SCPCOMP=$(PERL) $(SOLARENV)/bin/pre2par.pl
+SCPLINK=$(PERL) $(SOLARENV)/bin/par2script.pl
 LZIP*=lzip
-CPPLCC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/cpplcc
+CPPLCC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/cpplcc
 
 .IF "$(DISABLE_ENHANCED_COMID)"==""
 .INCLUDE : tg_compv.mk
@@ -1087,7 +1078,7 @@ COMID=$(COM)
 .ENDIF			# "$(SOLAR_JAVA)"=="TRUE"
 
 .IF "$(COM)"=="GCC"
-GXX_INCLUDE_PATH*:=$(COMPATH)$/include$/c++$/$(CCVER)
+GXX_INCLUDE_PATH*:=$(COMPATH)/include/c++/$(CCVER)
 .EXPORT : GXX_INCLUDE_PATH
 CDEFS+= -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH)
 .ENDIF
@@ -1308,13 +1299,13 @@ LINKCFLAGS+=$(LINKFLAGSADD)
 
 #defaults for UCR HEADER
 UNOUCRBASE*=UCR
-UNOUCROUT*=$(OUT)$/inc$/$(TARGET)
+UNOUCROUT*=$(OUT)/inc/$(TARGET)
 INCPRE+=-I$(UNOUCROUT)
-UNOUCRRDB*=$(SOLARBINDIR)$/types.rdb
+UNOUCRRDB*=$(SOLARBINDIR)/types.rdb
 
 # location of trustedinfo.manifest for Windows Vista
 .IF "$(COM)"=="MSC"
-TRUSTED_MANIFEST_LOCATION*=$(SOLARENV)$/inc
+TRUSTED_MANIFEST_LOCATION*=$(SOLARENV)/inc
 .ENDIF # "$(COM)"=="MSC"
 
 # --- Compiler -----------------------------------------------------
@@ -1323,53 +1314,53 @@ TRUSTED_MANIFEST_LOCATION*=$(SOLARENV)$/inc
 # --- include typelists --------------------------------------------
 
 .IF "$(COMP1TYPELIST)"!=""
-.INCLUDE .IGNORE : $(MISC)$/$(COMP1TYPELIST).mk
-$(COMP1TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/xml2cmp -types stdout $(MISC)$/$(COMP1TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
+.INCLUDE .IGNORE : $(MISC)/$(COMP1TYPELIST).mk
+$(COMP1TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/xml2cmp -types stdout $(MISC)/$(COMP1TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP2TYPELIST)"!=""
-.INCLUDE .IGNORE : $(MISC)$/$(COMP2TYPELIST).mk
-$(COMP2TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/xml2cmp -types stdout $(MISC)$/$(COMP2TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
+.INCLUDE .IGNORE : $(MISC)/$(COMP2TYPELIST).mk
+$(COMP2TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/xml2cmp -types stdout $(MISC)/$(COMP2TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP3TYPELIST)"!=""
-.INCLUDE .IGNORE : $(MISC)$/$(COMP3TYPELIST).mk
-$(COMP3TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/xml2cmp -types stdout $(MISC)$/$(COMP3TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
+.INCLUDE .IGNORE : $(MISC)/$(COMP3TYPELIST).mk
+$(COMP3TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/xml2cmp -types stdout $(MISC)/$(COMP3TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP4TYPELIST)"!=""
-.INCLUDE .IGNORE : $(MISC)$/$(COMP4TYPELIST).mk
-$(COMP4TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/xml2cmp -types stdout $(MISC)$/$(COMP4TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
+.INCLUDE .IGNORE : $(MISC)/$(COMP4TYPELIST).mk
+$(COMP4TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/xml2cmp -types stdout $(MISC)/$(COMP4TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP5TYPELIST)"!=""
-.INCLUDE .IGNORE : $(MISC)$/$(COMP5TYPELIST).mk
-$(COMP5TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/xml2cmp -types stdout $(MISC)$/$(COMP5TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
+.INCLUDE .IGNORE : $(MISC)/$(COMP5TYPELIST).mk
+$(COMP5TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/xml2cmp -types stdout $(MISC)/$(COMP5TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP6TYPELIST)"!=""
-.INCLUDE .IGNORE : $(MISC)$/$(COMP6TYPELIST).mk
-$(COMP6TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/xml2cmp -types stdout $(MISC)$/$(COMP6TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
+.INCLUDE .IGNORE : $(MISC)/$(COMP6TYPELIST).mk
+$(COMP6TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/xml2cmp -types stdout $(MISC)/$(COMP6TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP7TYPELIST)"!=""
-.INCLUDE .IGNORE : $(MISC)$/$(COMP7TYPELIST).mk
-$(COMP7TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/xml2cmp -types stdout $(MISC)$/$(COMP7TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
+.INCLUDE .IGNORE : $(MISC)/$(COMP7TYPELIST).mk
+$(COMP7TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/xml2cmp -types stdout $(MISC)/$(COMP7TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP8TYPELIST)"!=""
-.INCLUDE .IGNORE : $(MISC)$/$(COMP8TYPELIST).mk
-$(COMP8TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/xml2cmp -types stdout $(MISC)$/$(COMP8TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
+.INCLUDE .IGNORE : $(MISC)/$(COMP8TYPELIST).mk
+$(COMP8TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/xml2cmp -types stdout $(MISC)/$(COMP8TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP9TYPELIST)"!=""
-.INCLUDE .IGNORE : $(MISC)$/$(COMP9TYPELIST).mk
-$(COMP9TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/xml2cmp -types stdout $(MISC)$/$(COMP9TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
+.INCLUDE .IGNORE : $(MISC)/$(COMP9TYPELIST).mk
+$(COMP9TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/xml2cmp -types stdout $(MISC)/$(COMP9TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 # some place to define these jars for SO environment
-XML_APIS_JAR*=$(SOLARBINDIR)$/xml-apis.jar
-XERCES_JAR*=$(SOLARBINDIR)$/xercesImpl.jar
+XML_APIS_JAR*=$(SOLARBINDIR)/xml-apis.jar
+XERCES_JAR*=$(SOLARBINDIR)/xercesImpl.jar
 
 # workaround for strange dmake bug:
 # if the previous block was a rule or a target, "\#" isn't recognized
