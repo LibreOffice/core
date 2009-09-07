@@ -2755,7 +2755,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     uno::Sequence< beans::PropertyValue > aRenderer;
     if (m_pRenderData)
     {
-        Size aPgSize;
+        awt::Size aPageSize;
+        Size aTmpSize;
         if (bIsSwSrcView || m_pPrintUIOptions->getBoolValue( "PrintProspect", sal_False ))
         {
             // for printing of HTML source code and prospect printing we should use
@@ -2771,15 +2772,20 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             // for the correct PageSisze right now...
             Printer *pPrinter = dynamic_cast< Printer * >(lcl_GetOutputDevice( *m_pPrintUIOptions ));
             if (pPrinter)
-                aPgSize = pPrinter->GetPaperSize();
+            {
+                aTmpSize = pPrinter->GetPaperSize();
+                aTmpSize = pPrinter->LogicToLogic( aTmpSize,
+                            pPrinter->GetMapMode(), MapMode( MAP_100TH_MM ));
+                aPageSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
+            }
         }
         else
         {
             bool bIsSkipEmptyPages = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
-            aPgSize = pDoc->GetPageSize( sal_uInt16(nRenderer + 1), bIsSkipEmptyPages );
+            aTmpSize = pDoc->GetPageSize( sal_uInt16(nRenderer + 1), bIsSkipEmptyPages );
+            aPageSize = awt::Size ( TWIP_TO_MM100( aTmpSize.Width() ),
+                                    TWIP_TO_MM100( aTmpSize.Height() ));
         }
-        awt::Size aPageSize( TWIP_TO_MM100( aPgSize.Width() ),
-                             TWIP_TO_MM100( aPgSize.Height() ));
 
         aRenderer.realloc(2);
         aRenderer[0].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
