@@ -579,7 +579,8 @@ void GrammarCheckingIterator::DequeueAndCheck()
 
                     sal_Int32 nStartPos = aFPEntryItem.m_nStartIndex;
                     sal_Int32 nSuggestedEnd = GetSuggestedEndOfSentence( aCurTxt, nStartPos, aCurLocale );
-                    DBG_ASSERT( nSuggestedEnd > nStartPos, "nSuggestedEndOfSentencePos calculation failed?" );
+                    DBG_ASSERT( (nSuggestedEnd == 0 && aCurTxt.getLength() == 0) || nSuggestedEnd > nStartPos,
+                            "nSuggestedEndOfSentencePos calculation failed?" );
 
                     linguistic2::ProofreadingResult aRes;
 
