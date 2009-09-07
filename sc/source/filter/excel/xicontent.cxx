@@ -1011,7 +1011,7 @@ XclImpDecrypterRef lclReadFilepass5( XclImpStream& rStrm )
     {
         sal_uInt16 nKey, nHash;
         rStrm >> nKey >> nHash;
-        xDecr.reset( new XclImpBiff5Decrypter( rStrm.GetRoot(), nKey, nHash ) );
+        xDecr.reset( new XclImpBiff5Decrypter( nKey, nHash ) );
     }
     return xDecr;
 }
@@ -1022,14 +1022,13 @@ XclImpDecrypterRef lclReadFilepass8_Standard( XclImpStream& rStrm )
     DBG_ASSERT( rStrm.GetRecLeft() == 48, "lclReadFilepass8 - wrong record size" );
     if( rStrm.GetRecLeft() == 48 )
     {
-        sal_uInt8 pnDocId[ 16 ];
-        sal_uInt8 pnSaltData[ 16 ];
-        sal_uInt8 pnSaltHash[ 16 ];
-        rStrm.Read( pnDocId, 16 );
-        rStrm.Read( pnSaltData, 16 );
-        rStrm.Read( pnSaltHash, 16 );
-        xDecr.reset( new XclImpBiff8Decrypter(
-            rStrm.GetRoot(), pnDocId, pnSaltData, pnSaltHash ) );
+        sal_uInt8 pnSalt[ 16 ];
+        sal_uInt8 pnVerifier[ 16 ];
+        sal_uInt8 pnVerifierHash[ 16 ];
+        rStrm.Read( pnSalt, 16 );
+        rStrm.Read( pnVerifier, 16 );
+        rStrm.Read( pnVerifierHash, 16 );
+        xDecr.reset( new XclImpBiff8Decrypter( pnSalt, pnVerifier, pnVerifierHash ) );
     }
     return xDecr;
 }
@@ -1087,6 +1086,7 @@ ErrCode XclImpDecryptHelper::ReadFilepass( XclImpStream& rStrm )
     XclImpDecrypterRef xDecr;
     rStrm.DisableDecryption();
 
+    // read the FILEPASS record and create a new decrypter object
     switch( rStrm.GetRoot().GetBiff() )
     {
         case EXC_BIFF2:
@@ -1097,21 +1097,15 @@ ErrCode XclImpDecryptHelper::ReadFilepass( XclImpStream& rStrm )
         default:        DBG_ERROR_BIFF();
     };
 
-    if (!xDecr.is())
-        return EXC_ENCR_ERROR_UNSUPP_CRYPT;
-
     // set decrypter at import stream
     rStrm.SetDecrypter( xDecr );
 
-    // Store the document password for export.
-    SfxItemSet* pSet = rStrm.GetRoot().GetDocShell()->GetMedium()->GetItemSet();
-    if (pSet)
-    {
-        String aPass = xDecr->GetPassword();
-        pSet->Put( SfxStringItem(SID_PASSWORD, aPass) );
-    }
+    // request and verify a password (decrypter implements IDocPasswordVerifier)
+    if( xDecr.is() )
+        rStrm.GetRoot().RequestPassword( *xDecr );
 
-    return xDecr->GetError();
+    // return error code (success, wrong password, etc.)
+    return xDecr.is() ? xDecr->GetError() : EXC_ENCR_ERROR_UNSUPP_CRYPT;
 }
 
 // Document protection ========================================================

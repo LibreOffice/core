@@ -50,19 +50,6 @@ const sal_uInt16 EXC_ENCR_BLOCKSIZE         = 1024;
 const sal_uInt16 EXC_ID_UNKNOWN             = SAL_MAX_UINT16;
 const sal_uInt16 EXC_ID_CONT                = 0x003C;
 
-// Encryption/decryption ======================================================
-
-/** Helper class for BIFF stream en-/decryption. */
-class XclCryptoHelper : ScfNoInstance
-{
-public:
-    /** Returns the fixed password for workbook protection. */
-    static const ByteString GetBiff5WbProtPassword();
-
-    /** Returns the fixed password for workbook protection. */
-    static const String GetBiff8WbProtPassword();
-};
-
 // ============================================================================
 
 #endif
