@@ -37,7 +37,6 @@
 
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
-#include "sal/types.h"
 #include "salhelper/simplereferenceobject.hxx"
 
 #include "span.hxx"
@@ -114,17 +113,11 @@ private:
     long nesting_;
 };
 
-bool decodeXml( //TODO
-    rtl::OUString const & encoded, sal_Int32 begin, sal_Int32 end,
-    rtl::OUString * decoded);
-
 void parseXcsFile(rtl::OUString const & url, int layer, Data * data);
 
 void parseXcuFile(rtl::OUString const & url, int layer, Data * data);
 
 void parseModFile(rtl::OUString const & url, Data * data);
-
-void writeModFile(rtl::OUString const & url, Data const & data);
 
 }
 

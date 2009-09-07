@@ -48,7 +48,6 @@
 #include "node.hxx"
 #include "nodemap.hxx"
 #include "setnode.hxx"
-#include "xml.hxx"
 
 namespace configmgr {
 
@@ -59,6 +58,43 @@ namespace css = com::sun::star;
 bool isPrefix(rtl::OUString const & prefix, rtl::OUString const & path) {
     return prefix.getLength() < path.getLength() && path.match(prefix) &&
         path[prefix.getLength()] == '/';
+}
+
+bool decode(
+    rtl::OUString const & encoded, sal_Int32 begin, sal_Int32 end,
+    rtl::OUString * decoded)
+{
+    OSL_ASSERT(
+        begin >= 0 && begin <= end && end <= encoded.getLength() &&
+        decoded != 0);
+    rtl::OUStringBuffer buf;
+    while (begin != end) {
+        sal_Unicode c = encoded[begin++];
+        if (c == '&') {
+            if (encoded.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("amp;"), begin))
+            {
+                buf.append(sal_Unicode('&'));
+                begin += RTL_CONSTASCII_LENGTH("amp;");
+            } else if (encoded.matchAsciiL(
+                           RTL_CONSTASCII_STRINGPARAM("quot;"), begin))
+            {
+                buf.append(sal_Unicode('"'));
+                begin += RTL_CONSTASCII_LENGTH("quot;");
+            } else if (encoded.matchAsciiL(
+                           RTL_CONSTASCII_STRINGPARAM("apos;"), begin))
+            {
+                buf.append(sal_Unicode('\''));
+                begin += RTL_CONSTASCII_LENGTH("apos;");
+            } else {
+                return false;
+            }
+            OSL_ASSERT(begin <= end);
+        } else {
+            buf.append(c);
+        }
+    }
+    *decoded = buf.makeStringAndClear();
+    return true;
 }
 
 }
@@ -125,12 +161,32 @@ sal_Int32 Data::parseSegment(
     }
     sal_Int32 j = path.indexOf(del, i);
     if (j == -1 || j + 1 == path.getLength() || path[j + 1] != ']' ||
-        !xml::decodeXml(path, i, j, name))
+        !decode(path, i, j, name))
     {
         return -1;
     }
     *setElement = true;
     return j + 2;
+}
+
+rtl::OUString Data::parseLastSegment(
+    rtl::OUString const & path, rtl::OUString * name)
+{
+    OSL_ASSERT(name != 0);
+    sal_Int32 i = path.getLength();
+    OSL_ASSERT(i > 0 && path[i - 1] != '/');
+    if (path[i - 1] == ']') {
+        OSL_ASSERT(i > 2 && (path[i - 2] == '\'' || (path[i - 2] == '"')));
+        sal_Int32 j = path.lastIndexOf(path[i - 2], i - 2);
+        OSL_ASSERT(j > 0);
+        decode(path, j + 1, i - 2, name);
+        i = path.lastIndexOf('/', j);
+    } else {
+        i = path.lastIndexOf('/');
+        *name = path.copy(i + 1);
+    }
+    OSL_ASSERT(i != -1);
+    return path.copy(0, i);
 }
 
 rtl::Reference< Node > Data::findNode(

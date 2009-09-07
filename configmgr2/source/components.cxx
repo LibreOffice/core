@@ -46,6 +46,7 @@
 #include "components.hxx"
 #include "data.hxx"
 #include "node.hxx"
+#include "writemodfile.hxx"
 #include "xml.hxx"
 
 namespace configmgr {
@@ -105,7 +106,7 @@ void Components::addModification(rtl::OUString const & path) {
 }
 
 void Components::writeModifications() {
-    xml::writeModFile(getModificationFileUrl(), data_);
+    writeModFile(getModificationFileUrl(), data_);
 }
 
 void Components::insertXcsFile(int layer, rtl::OUString const & fileUri) {

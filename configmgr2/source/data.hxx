@@ -62,6 +62,9 @@ struct Data: private boost::noncopyable {
         rtl::OUString const & path, sal_Int32 index, rtl::OUString * name,
         bool * setElement, rtl::OUString * templateName);
 
+    static rtl::OUString parseLastSegment(
+        rtl::OUString const & path, rtl::OUString * name);
+
     static rtl::Reference< Node > findNode(
         int layer, NodeMap const & map, rtl::OUString const & name);
 

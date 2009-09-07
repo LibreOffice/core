@@ -38,10 +38,6 @@ VISIBILITY_HIDDEN = TRUE
 
 CDEFS += -DOOO_DLLIMPLEMENTATION_CONFIGMGR
 
-.IF "$(SYSTEM_LIBXML)" == "YES"
-CFLAGS += $(LIBXML_CFLAGS)
-.ENDIF
-
 SLOFILES = \
     $(SLO)$/access.obj \
     $(SLO)$/childaccess.obj \
@@ -62,6 +58,7 @@ SLOFILES = \
     $(SLO)$/setnode.obj \
     $(SLO)$/type.obj \
     $(SLO)$/update.obj \
+    $(SLO)$/writemodfile.obj \
     $(SLO)$/xml.obj \
     $(SLO)$/xmlreader.obj
 
@@ -71,7 +68,6 @@ SHL1STDLIBS = \
     $(COMPHELPERLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
-    $(LIBXML2LIB) \
     $(SALHELPERLIB) \
     $(SALLIB)
 SHL1TARGET = configmgr
