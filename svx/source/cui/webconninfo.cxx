@@ -46,7 +46,7 @@
 #include <com/sun/star/task/XMasterPasswordHandling.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <svtools/docpasswdrequest.hxx>
+#include <comphelper/docpasswordrequest.hxx>
 
 #include "webconninfo.hxx"
 #include "webconninfo.hrc"
@@ -297,9 +297,8 @@ IMPL_LINK( WebConnectionInfoDialog, ChangePasswordHdl, PushButton*, EMPTYARG )
             ::rtl::OUString aURL = m_aPasswordsLB.GetEntryText( pEntry, 0 );
             ::rtl::OUString aUserName = m_aPasswordsLB.GetEntryText( pEntry, 1 );
 
-            RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword(
-                                                               task::PasswordRequestMode_PASSWORD_CREATE,
-                                                               aURL );
+            ::comphelper::DocPasswordRequest* pPasswordRequest = new ::comphelper::DocPasswordRequest(
+                ::comphelper::DocPasswordRequestType_STANDARD, task::PasswordRequestMode_PASSWORD_CREATE, aURL );
 
             uno::Reference< task::XInteractionRequest > rRequest( pPasswordRequest );
             xInteractionHandler->handle( rRequest );
