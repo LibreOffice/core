@@ -224,7 +224,7 @@ bool parseBoolean(Span const & text, bool deflt) {
         css::uno::Reference< css::uno::XInterface >());
 }
 
-bool parseBooleanValue(Span const & text, sal_Bool * value) {
+bool parseValue(Span const & text, sal_Bool * value) {
     OSL_ASSERT(text.is() && value != 0);
     if (text.equals(RTL_CONSTASCII_STRINGPARAM("true")) ||
         text.equals(RTL_CONSTASCII_STRINGPARAM("1")))
@@ -241,7 +241,7 @@ bool parseBooleanValue(Span const & text, sal_Bool * value) {
     return false;
 }
 
-bool parseShortValue(Span const & text, sal_Int16 * value) {
+bool parseValue(Span const & text, sal_Int16 * value) {
     OSL_ASSERT(text.is() && value != 0);
     sal_Int32 n = rtl::OString(text.begin, text.length).toInt32();
         //TODO: check valid lexical representation
@@ -252,28 +252,28 @@ bool parseShortValue(Span const & text, sal_Int16 * value) {
     return false;
 }
 
-bool parseIntValue(Span const & text, sal_Int32 * value) {
+bool parseValue(Span const & text, sal_Int32 * value) {
     OSL_ASSERT(text.is() && value != 0);
     *value = rtl::OString(text.begin, text.length).toInt32();
         //TODO: check valid lexical representation
     return true;
 }
 
-bool parseLongValue(Span const & text, sal_Int64 * value) {
+bool parseValue(Span const & text, sal_Int64 * value) {
     OSL_ASSERT(text.is() && value != 0);
     *value = rtl::OString(text.begin, text.length).toInt64();
         //TODO: check valid lexical representation
     return true;
 }
 
-bool parseDoubleValue(Span const & text, double * value) {
+bool parseValue(Span const & text, double * value) {
     OSL_ASSERT(text.is() && value != 0);
     *value = rtl::OString(text.begin, text.length).toDouble();
         //TODO: check valid lexical representation
     return true;
 }
 
-bool parseStringValue(Span const & text, rtl::OUString * value) {
+bool parseValue(Span const & text, rtl::OUString * value) {
     OSL_ASSERT(text.is() && value != 0);
     *value = convertFromUtf8(text);
     return true;
@@ -296,9 +296,7 @@ bool parseHexDigit(char c, int * value) {
     return false;
 }
 
-bool parseHexbinaryValue(
-    Span const & text, css::uno::Sequence< sal_Int8 > * value)
-{
+bool parseValue(Span const & text, css::uno::Sequence< sal_Int8 > * value) {
     OSL_ASSERT(text.is() && value != 0);
     if ((text.length & 1) != 0) {
         return false;
@@ -318,11 +316,9 @@ bool parseHexbinaryValue(
     return true;
 }
 
-template< typename T > css::uno::Any parseValue(
-    Span const & text, bool (* parse)(Span const &, T *))
-{
+template< typename T > css::uno::Any parseSingleValue(Span const & text) {
     T val;
-    if (!(*parse)(text, &val)) {
+    if (!parseValue(text, &val)) {
         throw css::uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid value")),
             css::uno::Reference< css::uno::XInterface >());
@@ -331,8 +327,7 @@ template< typename T > css::uno::Any parseValue(
 }
 
 template< typename T > css::uno::Any parseListValue(
-    Span const & separator, Span const & text,
-    bool (* parse)(Span const &, T *))
+    Span const & separator, Span const & text)
 {
     comphelper::SequenceAsVector< T > seq;
     Span sep;
@@ -346,7 +341,7 @@ template< typename T > css::uno::Any parseListValue(
             sal_Int32 i = rtl_str_indexOfStr_WithLength(
                 t.begin, t.length, sep.begin, sep.length);
             T val;
-            if (!(*parse)(Span(t.begin, i == -1 ? t.length : i), &val)) {
+            if (!parseValue(Span(t.begin, i == -1 ? t.length : i), &val)) {
                 throw css::uno::RuntimeException(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid value")),
                     css::uno::Reference< css::uno::XInterface >());
@@ -370,33 +365,34 @@ css::uno::Any parseValue(Span const & separator, Span const & text, Type type) {
                 RTL_CONSTASCII_USTRINGPARAM("invalid value of type any")),
             css::uno::Reference< css::uno::XInterface >());
     case TYPE_BOOLEAN:
-        return parseValue(text, &parseBooleanValue);
+        return parseSingleValue< sal_Bool >(text);
     case TYPE_SHORT:
-        return parseValue(text, &parseShortValue);
+        return parseSingleValue< sal_Int16 >(text);
     case TYPE_INT:
-        return parseValue(text, &parseIntValue);
+        return parseSingleValue< sal_Int32 >(text);
     case TYPE_LONG:
-        return parseValue(text, &parseLongValue);
+        return parseSingleValue< sal_Int64 >(text);
     case TYPE_DOUBLE:
-        return parseValue(text, &parseDoubleValue);
+        return parseSingleValue< double >(text);
     case TYPE_STRING:
-        return parseValue(text, &parseStringValue);
+        return parseSingleValue< rtl::OUString >(text);
     case TYPE_HEXBINARY:
-        return parseValue(text, &parseHexbinaryValue);
+        return parseSingleValue< css::uno::Sequence< sal_Int8 > >(text);
     case TYPE_BOOLEAN_LIST:
-        return parseListValue(separator, text, &parseBooleanValue);
+        return parseListValue< sal_Bool >(separator, text);
     case TYPE_SHORT_LIST:
-        return parseListValue(separator, text, &parseShortValue);
+        return parseListValue< sal_Int16 >(separator, text);
     case TYPE_INT_LIST:
-        return parseListValue(separator, text, &parseIntValue);
+        return parseListValue< sal_Int32 >(separator, text);
     case TYPE_LONG_LIST:
-        return parseListValue(separator, text, &parseLongValue);
+        return parseListValue< sal_Int64 >(separator, text);
     case TYPE_DOUBLE_LIST:
-        return parseListValue(separator, text, &parseDoubleValue);
+        return parseListValue< double >(separator, text);
     case TYPE_STRING_LIST:
-        return parseListValue(separator, text, &parseStringValue);
+        return parseListValue< rtl::OUString >(separator, text);
     case TYPE_HEXBINARY_LIST:
-        return parseListValue(separator, text, &parseHexbinaryValue);
+        return parseListValue< css::uno::Sequence< sal_Int8 > >(
+            separator, text);
     default:
         OSL_ASSERT(false);
         throw css::uno::RuntimeException(
@@ -511,9 +507,7 @@ bool ValueParser::startElement(
                 if (attrNs == XmlReader::NAMESPACE_OOR &&
                     attrLn.equals(RTL_CONSTASCII_STRINGPARAM("scalar")))
                 {
-                    if (!parseIntValue(
-                            reader->getAttributeValue(true), &scalar))
-                    {
+                    if (!parseValue(reader->getAttributeValue(true), &scalar)) {
                         scalar = -1;
                     }
                     break;
