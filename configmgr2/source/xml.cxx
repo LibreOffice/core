@@ -101,18 +101,6 @@ rtl::OUString parseLastSegment(
     return path.copy(0, i);
 }
 
-xmlChar const * xmlString(char const * str) {
-    return reinterpret_cast< xmlChar const * >(str);
-}
-
-rtl::OUString convertUtf8String(Span const & text) {
-    OSL_ASSERT(text.is());
-    return rtl::OUString(text.begin, text.length, RTL_TEXTENCODING_UTF8);
-        // conversion cannot fail as XML parser guarantees that text is legal
-        // UTF-8
-        //TODO
-}
-
 rtl::OUString fullTemplateName(
     rtl::OUString const & component, rtl::OUString const & name)
 {
@@ -123,24 +111,45 @@ rtl::OUString fullTemplateName(
     return buf.makeStringAndClear();
 }
 
+xmlChar const * xmlString(char const * str) {
+    return reinterpret_cast< xmlChar const * >(str);
+}
+
+rtl::OUString convertFromUtf8(Span const & text) {
+    OSL_ASSERT(text.is());
+    rtl_uString * s = 0;
+    if (!rtl_convertStringToUString(
+            &s, text.begin, text.length, RTL_TEXTENCODING_UTF8,
+            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+             RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
+             RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
+    {
+        throw css::uno::RuntimeException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("cannot convert from UTF-8")),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    return rtl::OUString(s, SAL_NO_ACQUIRE);
+}
+
 rtl::OString convertToUtf8(
     rtl::OUString const & text, sal_Int32 offset, sal_Int32 length)
 {
     OSL_ASSERT(
         offset <= text.getLength() && text.getLength() - offset >= length);
-    rtl::OString utf8;
+    rtl::OString s;
     if (!rtl_convertUStringToString(
-            &utf8.pData, text.pData->buffer + offset, length,
+            &s.pData, text.pData->buffer + offset, length,
             RTL_TEXTENCODING_UTF8,
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
         throw css::uno::RuntimeException(
             rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("cannot translate text to UTF-8")),
+                RTL_CONSTASCII_USTRINGPARAM("cannot convert to UTF-8")),
             css::uno::Reference< css::uno::XInterface >());
     }
-    return utf8;
+    return s;
 }
 
 rtl::OString convertToUtf8(rtl::OUString const & text) {
@@ -188,7 +197,7 @@ Operation parseOperation(Span const & text) {
     } else {
         throw css::uno::RuntimeException(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid op ")) +
-             convertUtf8String(text)),
+             convertFromUtf8(text)),
             css::uno::Reference< css::uno::XInterface >());
     }
 }
@@ -272,7 +281,7 @@ Type parseType(XmlReader const * reader, Span const & text) {
     }
     throw css::uno::RuntimeException(
         (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid type ")) +
-         convertUtf8String(text)),
+         convertFromUtf8(text)),
         css::uno::Reference< css::uno::XInterface >());
 }
 
@@ -288,7 +297,7 @@ bool parseBoolean(Span const & text, bool deflt) {
     }
     throw css::uno::RuntimeException(
         (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid boolean ")) +
-         convertUtf8String(text)),
+         convertFromUtf8(text)),
         css::uno::Reference< css::uno::XInterface >());
 }
 
@@ -343,7 +352,7 @@ bool parseDoubleValue(Span const & text, double * value) {
 
 bool parseStringValue(Span const & text, rtl::OUString * value) {
     OSL_ASSERT(text.is() && value != 0);
-    *value = convertUtf8String(text);
+    *value = convertFromUtf8(text);
     return true;
 }
 
@@ -488,8 +497,8 @@ rtl::OUString parseTemplateReference(
             css::uno::Reference< css::uno::XInterface >());
     }
     return fullTemplateName(
-        component.is() ? convertUtf8String(component) : componentName,
-        convertUtf8String(nodeType));
+        component.is() ? convertFromUtf8(component) : componentName,
+        convertFromUtf8(nodeType));
 }
 
 struct XmlTextWriter: private boost::noncopyable {
@@ -507,27 +516,22 @@ void writeBooleanValue(xmlTextWriterPtr writer, sal_Bool const & value) {
 
 void writeShortValue(xmlTextWriterPtr writer, sal_Int16 const & value) {
     xmlTextWriterWriteString(
-        writer,
-        xmlString(
-            convertToUtf8(rtl::OUString::valueOf(sal_Int32(value))).getStr()));
+        writer, xmlString(rtl::OString::valueOf(sal_Int32(value)).getStr()));
 }
 
 void writeIntValue(xmlTextWriterPtr writer, sal_Int32 const & value) {
     xmlTextWriterWriteString(
-        writer,
-        xmlString(convertToUtf8(rtl::OUString::valueOf(value)).getStr()));
+        writer, xmlString(rtl::OString::valueOf(value).getStr()));
 }
 
 void writeLongValue(xmlTextWriterPtr writer, sal_Int64 const & value) {
     xmlTextWriterWriteString(
-        writer,
-        xmlString(convertToUtf8(rtl::OUString::valueOf(value)).getStr()));
+        writer, xmlString(rtl::OString::valueOf(value).getStr()));
 }
 
 void writeDoubleValue(xmlTextWriterPtr writer, double const & value) {
     xmlTextWriterWriteString(
-        writer,
-        xmlString(convertToUtf8(rtl::OUString::valueOf(value)).getStr()));
+        writer, xmlString(rtl::OString::valueOf(value).getStr()));
 }
 
 void writeStringValue(xmlTextWriterPtr writer, rtl::OUString const & value) {
@@ -547,8 +551,7 @@ void writeStringValue(xmlTextWriterPtr writer, rtl::OUString const & value) {
             xmlTextWriterWriteAttribute(
                 writer, xmlString("oor:scalar"),
                 xmlString(
-                    convertToUtf8(
-                        rtl::OUString::valueOf(static_cast< sal_Int32 >(c))).
+                    rtl::OString::valueOf(static_cast< sal_Int32 >(c)).
                     getStr()));
             xmlTextWriterEndElement(writer);
             i = j + 1;
@@ -951,7 +954,7 @@ bool ValueParser::startElement(
     }
     throw css::uno::RuntimeException(
         (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad member <")) +
-         convertUtf8String(name) +
+         convertFromUtf8(name) +
          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
          reader->getUrl()),
         css::uno::Reference< css::uno::XInterface >());
@@ -1264,7 +1267,7 @@ bool XcsParser::startElement(
     }
     throw css::uno::RuntimeException(
         (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad member <")) +
-         convertUtf8String(name) +
+         convertFromUtf8(name) +
          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
          reader->getUrl()),
         css::uno::Reference< css::uno::XInterface >());
@@ -1373,7 +1376,7 @@ void XcsParser::handleComponentSchema(XmlReader * reader) {
     buf.append(attrPackage.begin, attrPackage.length);
     buf.append('.');
     buf.append(attrName.begin, attrName.length);
-    componentName_ = convertUtf8String(Span(buf.getStr(), buf.getLength()));
+    componentName_ = convertFromUtf8(Span(buf.getStr(), buf.getLength()));
 }
 
 void XcsParser::handleNodeRef(XmlReader * reader) {
@@ -1418,14 +1421,14 @@ void XcsParser::handleNodeRef(XmlReader * reader) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("unknown node-ref ")) +
-             convertUtf8String(attrName) +
+             convertFromUtf8(attrName) +
              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" in ")) +
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
     rtl::Reference< Node > node(tmpl->clone());
     node->setLayer(valueParser_.getLayer());
-    elements_.push(Element(node, convertUtf8String(attrName)));
+    elements_.push(Element(node, convertFromUtf8(attrName)));
 }
 
 void XcsParser::handleProp(XmlReader * reader) {
@@ -1484,7 +1487,7 @@ void XcsParser::handleProp(XmlReader * reader) {
                  new PropertyNode(
                      valueParser_.getLayer(), valueParser_.type_, nillable,
                      css::uno::Any(), false))),
-            convertUtf8String(attrName)));
+            convertFromUtf8(attrName)));
 }
 
 void XcsParser::handlePropValue(
@@ -1533,7 +1536,7 @@ void XcsParser::handleGroup(XmlReader * reader, bool isTemplate) {
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::OUString name(convertUtf8String(attrName));
+    rtl::OUString name(convertFromUtf8(attrName));
     if (isTemplate) {
         name = fullTemplateName(componentName_, name);
     }
@@ -1576,7 +1579,7 @@ void XcsParser::handleSet(XmlReader * reader, bool isTemplate) {
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::OUString name(convertUtf8String(attrName));
+    rtl::OUString name(convertFromUtf8(attrName));
     if (isTemplate) {
         name = fullTemplateName(componentName_, name);
     }
@@ -1716,7 +1719,7 @@ bool XcuParser::startElement(
             throw css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("bad root element <")) +
-                 convertUtf8String(name) +
+                 convertFromUtf8(name) +
                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
                  reader->getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
@@ -1732,7 +1735,7 @@ bool XcuParser::startElement(
             throw css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("bad items node member <")) +
-                 convertUtf8String(name) +
+                 convertFromUtf8(name) +
                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
                  reader->getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
@@ -1751,7 +1754,7 @@ bool XcuParser::startElement(
                     (rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
                             "bad property node member <")) +
-                     convertUtf8String(name) +
+                     convertFromUtf8(name) +
                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
                      reader->getUrl()),
                     css::uno::Reference< css::uno::XInterface >());
@@ -1770,7 +1773,7 @@ bool XcuParser::startElement(
                     (rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
                             "bad localized property node member <")) +
-                     convertUtf8String(name) +
+                     convertFromUtf8(name) +
                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
                      reader->getUrl()),
                     css::uno::Reference< css::uno::XInterface >());
@@ -1779,7 +1782,7 @@ bool XcuParser::startElement(
         case Node::KIND_LOCALIZED_VALUE:
             throw css::uno::RuntimeException(
                 (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad member <")) +
-                 convertUtf8String(name) +
+                 convertFromUtf8(name) +
                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
                  reader->getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
@@ -1799,7 +1802,7 @@ bool XcuParser::startElement(
                     (rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
                             "bad group node member <")) +
-                     convertUtf8String(name) +
+                     convertFromUtf8(name) +
                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
                      reader->getUrl()),
                     css::uno::Reference< css::uno::XInterface >());
@@ -1815,7 +1818,7 @@ bool XcuParser::startElement(
                 throw css::uno::RuntimeException(
                     (rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM("bad set node member <")) +
-                     convertUtf8String(name) +
+                     convertFromUtf8(name) +
                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
                      reader->getUrl()),
                     css::uno::Reference< css::uno::XInterface >());
@@ -1898,7 +1901,7 @@ void XcuParser::handleComponentData(XmlReader * reader) {
     buf.append(attrPackage.begin, attrPackage.length);
     buf.append('.');
     buf.append(attrName.begin, attrName.length);
-    componentName_ = convertUtf8String(Span(buf.getStr(), buf.getLength()));
+    componentName_ = convertFromUtf8(Span(buf.getStr(), buf.getLength()));
     rtl::Reference< Node > node(
         Data::findNode(
             valueParser_.getLayer(), data_->components, componentName_));
@@ -1953,7 +1956,7 @@ void XcuParser::handleItem(XmlReader * reader) {
     int finalizedLayer;
     rtl::Reference< Node > node(
         data_->resolvePath(
-            convertUtf8String(attrPath), &componentName_, 0, &pathPrefix_, 0,
+            convertFromUtf8(attrPath), &componentName_, 0, &pathPrefix_, 0,
             &finalizedLayer));
     pathPrefix_ += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     if (!node.is()) {
@@ -2040,7 +2043,7 @@ void XcuParser::handleLocpropValue(
     }
     rtl::OUString name;
     if (attrLang.is()) {
-        name = convertUtf8String(attrLang);
+        name = convertFromUtf8(attrLang);
     }
     NodeMap::iterator i(locprop->getMembers().find(name));
     if (i != locprop->getMembers().end() &&
@@ -2128,7 +2131,7 @@ void XcuParser::handleGroupProp(XmlReader * reader, GroupNode * group) {
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::OUString name(convertUtf8String(attrName));
+    rtl::OUString name(convertFromUtf8(attrName));
     if (state_.top().record) {
         data_->addModification(pathPrefix_ + name);
     }
@@ -2362,7 +2365,7 @@ void XcuParser::handleGroupNode(
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::OUString name(convertUtf8String(attrName));
+    rtl::OUString name(convertFromUtf8(attrName));
     rtl::Reference< Node > subgroup(
         Data::findNode(valueParser_.getLayer(), group->getMembers(), name));
     if (!subgroup.is()) {
@@ -2439,7 +2442,7 @@ void XcuParser::handleSetNode(XmlReader * reader, SetNode * set) {
              reader->getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::OUString name(convertUtf8String(attrName));
+    rtl::OUString name(convertFromUtf8(attrName));
     rtl::OUString templateName(
         parseTemplateReference(
             attrComponent, attrNodeType, componentName_,
@@ -2650,7 +2653,7 @@ bool XcdParser::startElement(
                          reader->getUrl()),
                         css::uno::Reference< css::uno::XInterface >());
                 }
-                dependency_ = convertUtf8String(attrFile);
+                dependency_ = convertFromUtf8(attrFile);
                 if (dependency_.getLength() == 0) {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
@@ -2691,7 +2694,7 @@ bool XcdParser::startElement(
     }
     throw css::uno::RuntimeException(
         (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad member <")) +
-         convertUtf8String(name) +
+         convertFromUtf8(name) +
          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
          reader->getUrl()),
         css::uno::Reference< css::uno::XInterface >());
