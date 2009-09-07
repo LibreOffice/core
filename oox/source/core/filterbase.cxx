@@ -38,6 +38,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/uri.hxx>
+#include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include "tokens.hxx"
 #include "oox/helper/binaryinputstream.hxx"
@@ -58,7 +59,6 @@ using ::com::sun::star::uno::UNO_SET_THROW;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::XComponent;
-using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::awt::DeviceInfo;
 using ::com::sun::star::awt::XDevice;
@@ -72,6 +72,7 @@ using ::com::sun::star::task::XStatusIndicator;
 using ::com::sun::star::task::XInteractionHandler;
 using ::com::sun::star::graphic::XGraphic;
 using ::comphelper::MediaDescriptor;
+using ::comphelper::SequenceAsHashMap;
 using ::oox::ole::OleObjectHelper;
 
 namespace oox {
@@ -125,6 +126,16 @@ DocumentOpenedGuard::~DocumentOpenedGuard()
 
 // ============================================================================
 
+/** Specifies whether this filter is an import or export filter. */
+enum FilterDirection
+{
+    FILTERDIRECTION_UNKNOWN,
+    FILTERDIRECTION_IMPORT,
+    FILTERDIRECTION_EXPORT
+};
+
+// ----------------------------------------------------------------------------
+
 struct FilterBaseImpl
 {
     typedef ::boost::shared_ptr< GraphicHelper >            GraphicHelperRef;
@@ -132,9 +143,10 @@ struct FilterBaseImpl
     typedef ::boost::shared_ptr< OleObjectHelper >          OleObjHelperRef;
     typedef ::std::map< OUString, Reference< XGraphic > >   EmbeddedGraphicMap;
     typedef ::std::map< sal_Int32, sal_Int32 >              SystemPalette;
-    typedef ::std::map< OUString, Any >                     ArgumentMap;
 
-    MediaDescriptor     maDescriptor;
+    FilterDirection     meDirection;
+    SequenceAsHashMap   maArguments;
+    MediaDescriptor     maMediaDesc;
     DeviceInfo          maDeviceInfo;
     OUString            maFileUrl;
     StorageRef          mxStorage;
@@ -145,7 +157,6 @@ struct FilterBaseImpl
     EmbeddedGraphicMap  maEmbeddedGraphics;     /// Maps all imported embedded graphics by their path.
     SystemPalette       maSystemPalette;        /// Maps system colors (XML tokens) to RGB color values.
 
-    ArgumentMap                         maArguments;
     Reference< XMultiServiceFactory >   mxGlobalFactory;
     Reference< XModel >                 mxModel;
     Reference< XMultiServiceFactory >   mxModelFactory;
@@ -157,14 +168,16 @@ struct FilterBaseImpl
     explicit            FilterBaseImpl( const Reference< XMultiServiceFactory >& rxGlobalFactory );
 
     void                setDocumentModel( const Reference< XComponent >& rxComponent );
-    void                setMediaDescriptor( const Sequence< PropertyValue >& rDescriptor );
-
     bool                hasDocumentModel() const;
+
+    void                initializeFilter();
+    void                finalizeFilter();
 };
 
 // ----------------------------------------------------------------------------
 
 FilterBaseImpl::FilterBaseImpl( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
+    meDirection( FILTERDIRECTION_UNKNOWN ),
     mxGlobalFactory( rxGlobalFactory )
 {
     OSL_ENSURE( mxGlobalFactory.is(), "FilterBaseImpl::FilterBaseImpl - missing service factory" );
@@ -223,23 +236,39 @@ void FilterBaseImpl::setDocumentModel( const Reference< XComponent >& rxComponen
     mxModelFactory.set( rxComponent, UNO_QUERY );
 }
 
-void FilterBaseImpl::setMediaDescriptor( const Sequence< PropertyValue >& rDescriptor )
-{
-    maDescriptor = rDescriptor;
-
-    maFileUrl = maDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), maFileUrl );
-    mxInStream = maDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_INPUTSTREAM(), mxInStream );
-    mxOutStream = maDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_STREAMFOROUTPUT(), mxOutStream );
-    mxStatusIndicator = maDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_STATUSINDICATOR(), mxStatusIndicator );
-    mxInteractionHandler = maDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_INTERACTIONHANDLER(), mxInteractionHandler );
-
-    if( mxInStream.is() )
-        maDescriptor.addInputStream();
-}
-
 bool FilterBaseImpl::hasDocumentModel() const
 {
     return mxGlobalFactory.is() && mxModel.is() && mxModelFactory.is();
+}
+
+void FilterBaseImpl::initializeFilter()
+{
+    try
+    {
+        // lock the model controllers
+        mxModel->lockControllers();
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+void FilterBaseImpl::finalizeFilter()
+{
+    try
+    {
+        // clear the 'ComponentData' property in the descriptor
+        MediaDescriptor::iterator aIt = maMediaDesc.find( MediaDescriptor::PROP_COMPONENTDATA() );
+        if( aIt != maMediaDesc.end() )
+            aIt->second.clear();
+        // write the descriptor back to the document model (adds the password)
+        mxModel->attachResource( maFileUrl, maMediaDesc.getAsConstPropertyValueList() );
+        // unlock the model controllers
+        mxModel->unlockControllers();
+    }
+    catch( Exception& )
+    {
+    }
 }
 
 // ============================================================================
@@ -255,25 +284,30 @@ FilterBase::~FilterBase()
 
 bool FilterBase::isImportFilter() const
 {
-    return mxImpl->mxInStream.is();
+    return mxImpl->meDirection == FILTERDIRECTION_IMPORT;
 }
 
 bool FilterBase::isExportFilter() const
 {
-    return mxImpl->mxOutStream.is();
+    return mxImpl->meDirection == FILTERDIRECTION_EXPORT;
 }
 
 // ----------------------------------------------------------------------------
 
 Any FilterBase::getArgument( const OUString& rArgName ) const
 {
-    FilterBaseImpl::ArgumentMap::const_iterator aIt = mxImpl->maArguments.find( rArgName );
+    SequenceAsHashMap::const_iterator aIt = mxImpl->maArguments.find( rArgName );
     return (aIt == mxImpl->maArguments.end()) ? Any() : aIt->second;
 }
 
 const Reference< XMultiServiceFactory >& FilterBase::getGlobalFactory() const
 {
     return mxImpl->mxGlobalFactory;
+}
+
+MediaDescriptor& FilterBase::getMediaDescriptor() const
+{
+    return mxImpl->maMediaDesc;
 }
 
 const Reference< XModel >& FilterBase::getModel() const
@@ -440,6 +474,14 @@ sal_Int32 FilterBase::getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb ) 
     return (aIt == mxImpl->maSystemPalette.end()) ? ((nDefaultRgb < 0) ? API_RGB_WHITE : nDefaultRgb) : aIt->second;
 }
 
+OUString FilterBase::requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const
+{
+    ::std::vector< OUString > aDefaultPasswords;
+    aDefaultPasswords.push_back( CREATE_OUSTRING( "VelvetSweatshop" ) );
+    return ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
+        rVerifier, mxImpl->maMediaDesc, ::comphelper::DocPasswordRequestType_MS, &aDefaultPasswords );
+}
+
 bool FilterBase::importBinaryData( StreamDataSequence& orDataSeq, const OUString& rStreamName )
 {
     OSL_ENSURE( rStreamName.getLength() > 0, "FilterBase::importBinaryData - empty stream name" );
@@ -508,17 +550,12 @@ Sequence< OUString > SAL_CALL FilterBase::getSupportedServiceNames() throw( Runt
 
 void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs ) throw( Exception, RuntimeException )
 {
-    if( rArgs.getLength() >= 2 )
+    if( rArgs.getLength() >= 2 ) try
     {
-        Sequence< NamedValue > aArgSeq;
-        if( (rArgs[ 1 ] >>= aArgSeq) && aArgSeq.hasElements() )
-        {
-            const NamedValue* pArg = aArgSeq.getConstArray();
-            const NamedValue* pEnd = pArg + aArgSeq.getLength();
-            for( ; pArg < pEnd; ++pArg )
-                if( pArg->Name.getLength() > 0 )
-                    mxImpl->maArguments[ pArg->Name ] = pArg->Value;
-        }
+        mxImpl->maArguments << rArgs[ 1 ];
+    }
+    catch( Exception& )
+    {
     }
 }
 
@@ -529,6 +566,7 @@ void SAL_CALL FilterBase::setTargetDocument( const Reference< XComponent >& rxDo
     mxImpl->setDocumentModel( rxDocument );
     if( !mxImpl->hasDocumentModel() )
         throw IllegalArgumentException();
+    mxImpl->meDirection = FILTERDIRECTION_IMPORT;
 }
 
 // com.sun.star.document.XExporter interface ----------------------------------
@@ -538,29 +576,41 @@ void SAL_CALL FilterBase::setSourceDocument( const Reference< XComponent >& rxDo
     mxImpl->setDocumentModel( rxDocument );
     if( !mxImpl->hasDocumentModel() )
         throw IllegalArgumentException();
+    mxImpl->meDirection = FILTERDIRECTION_EXPORT;
 }
 
 // com.sun.star.document.XFilter interface ------------------------------------
 
-sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rDescriptor ) throw( RuntimeException )
+sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDescSeq ) throw( RuntimeException )
 {
     sal_Bool bRet = sal_False;
-    if( mxImpl->hasDocumentModel() )
+    if( mxImpl->hasDocumentModel() && (mxImpl->meDirection != FILTERDIRECTION_UNKNOWN) )
     {
-        mxImpl->setMediaDescriptor( rDescriptor );
+        setMediaDescriptor( rMediaDescSeq );
         DocumentOpenedGuard aOpenedGuard( mxImpl->maFileUrl );
         if( aOpenedGuard.isValid() )
         {
-            mxImpl->mxStorage = implCreateStorage( mxImpl->mxInStream, mxImpl->mxOutStream );
-            if( mxImpl->mxStorage.get() )
+            mxImpl->initializeFilter();
+            switch( mxImpl->meDirection )
             {
-                mxImpl->mxModel->lockControllers();
-                if( mxImpl->mxInStream.is() )
-                    bRet = importDocument();
-                else if( mxImpl->mxOutStream.is() )
-                    bRet = exportDocument();
-                mxImpl->mxModel->unlockControllers();
+                case FILTERDIRECTION_UNKNOWN:
+                break;
+                case FILTERDIRECTION_IMPORT:
+                    if( mxImpl->mxInStream.is() )
+                    {
+                        mxImpl->mxStorage = implCreateStorage( mxImpl->mxInStream );
+                        bRet = mxImpl->mxStorage.get() && importDocument();
+                    }
+                break;
+                case FILTERDIRECTION_EXPORT:
+                    if( mxImpl->mxOutStream.is() )
+                    {
+                        mxImpl->mxStorage = implCreateStorage( mxImpl->mxOutStream );
+                        bRet = mxImpl->mxStorage.get() && exportDocument();
+                    }
+                break;
             }
+            mxImpl->finalizeFilter();
         }
     }
     return bRet;
@@ -569,6 +619,46 @@ sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rDescript
 void SAL_CALL FilterBase::cancel() throw( RuntimeException )
 {
 }
+
+// protected ------------------------------------------------------------------
+
+Reference< XInputStream > FilterBase::implGetInputStream( MediaDescriptor& rMediaDesc ) const
+{
+    return rMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_INPUTSTREAM(), Reference< XInputStream >() );
+}
+
+Reference< XStream > FilterBase::implGetOutputStream( MediaDescriptor& rMediaDesc ) const
+{
+    return rMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_STREAMFOROUTPUT(), Reference< XStream >() );
+}
+
+// private --------------------------------------------------------------------
+
+void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDescSeq )
+{
+    mxImpl->maMediaDesc = rMediaDescSeq;
+
+    switch( mxImpl->meDirection )
+    {
+        case FILTERDIRECTION_UNKNOWN:
+            OSL_ENSURE( false, "FilterBase::setMediaDescriptor - invalid filter direction" );
+        break;
+        case FILTERDIRECTION_IMPORT:
+            mxImpl->maMediaDesc.addInputStream();
+            mxImpl->mxInStream = implGetInputStream( mxImpl->maMediaDesc );
+            OSL_ENSURE( mxImpl->mxInStream.is(), "FilterBase::setMediaDescriptor - missing input stream" );
+        break;
+        case FILTERDIRECTION_EXPORT:
+            mxImpl->mxOutStream = implGetOutputStream( mxImpl->maMediaDesc );
+            OSL_ENSURE( mxImpl->mxOutStream.is(), "FilterBase::setMediaDescriptor - missing output stream" );
+        break;
+    }
+
+    mxImpl->maFileUrl = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() );
+    mxImpl->mxStatusIndicator = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >() );
+    mxImpl->mxInteractionHandler = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_INTERACTIONHANDLER(), Reference< XInteractionHandler >() );
+}
+
 
 // ============================================================================
 

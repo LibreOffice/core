@@ -42,6 +42,10 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 
+.IF "$(SYSTEM_OPENSSL)" == "YES"
+CFLAGS+= $(OPENSSL_CFLAGS)
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\

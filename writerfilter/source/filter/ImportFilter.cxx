@@ -32,6 +32,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <comphelper/mediadescriptor.hxx>
+#include <oox/core/filterdetect.hxx>
 #include <dmapper/DomainMapper.hxx>
 #include <WriterFilter.hxx>
 #include <doctok/WW8Document.hxx>
@@ -44,6 +46,7 @@
 #include <resourcemodel/TagLogger.hxx>
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using ::comphelper::MediaDescriptor;
 
 /*-- 09.06.2006 10:15:20---------------------------------------------------
 
@@ -62,28 +65,29 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         if (!xExprtr.is() || !xFltr.is())
             return sal_False;
         xExprtr->setSourceDocument(m_xSrcDoc);
-        if (xFltr->filter(aDescriptor))
-            return sal_True;
-        return sal_False;
+        return xFltr->filter(aDescriptor);
     }
     else if (m_xDstDoc.is())
     {
+        MediaDescriptor aMediaDesc( aDescriptor );
+        OUString sFilterName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_FILTERNAME(), OUString() );
 
-    sal_Int32 nLength = aDescriptor.getLength();
-    const beans::PropertyValue * pValue = aDescriptor.getConstArray();
-    uno::Reference < io::XInputStream > xInputStream;
-    ::rtl::OUString sFilterName;
-    for ( sal_Int32 i = 0 ; i < nLength; i++)
-    {
-        if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
-            pValue[i].Value >>= xInputStream;
-        else if( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "FilterName" ) ) )
-            pValue[i].Value >>= sFilterName;
-    }
-    if ( !xInputStream.is() )
-    {
-        return sal_False;
-    }
+        uno::Reference< io::XInputStream > xInputStream;
+        try
+        {
+            // use the oox.core.FilterDetect implementation to extract the decrypted ZIP package
+            uno::Reference< lang::XMultiServiceFactory > xFactory( m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
+            ::oox::core::FilterDetect aDetector( xFactory );
+            xInputStream = aDetector.extractUnencryptedPackage( aMediaDesc );
+        }
+        catch( uno::Exception& )
+        {
+        }
+
+        if ( !xInputStream.is() )
+        {
+            return sal_False;
+        }
 
 #ifdef DEBUG_ELEMENT
     writerfilter::TagLogger::Pointer_t debugLogger

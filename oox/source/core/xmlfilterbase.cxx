@@ -28,16 +28,7 @@
  *
  ************************************************************************/
 
-#include "properties.hxx"
 #include "oox/core/xmlfilterbase.hxx"
-#include "oox/core/fasttokenhandler.hxx"
-#include "oox/core/fragmenthandler.hxx"
-#include "oox/core/namespaces.hxx"
-#include "oox/core/recordparser.hxx"
-#include "oox/core/relationshandler.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/helper/zipstorage.hxx"
 
 #include <cstdio>
 
@@ -47,9 +38,19 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <comphelper/mediadescriptor.hxx>
 #include <sax/fshelper.hxx>
-
+#include "properties.hxx"
 #include "tokens.hxx"
+#include "oox/helper/containerhelper.hxx"
+#include "oox/helper/propertyset.hxx"
+#include "oox/helper/zipstorage.hxx"
+#include "oox/core/fasttokenhandler.hxx"
+#include "oox/core/filterdetect.hxx"
+#include "oox/core/fragmenthandler.hxx"
+#include "oox/core/namespaces.hxx"
+#include "oox/core/recordparser.hxx"
+#include "oox/core/relationshandler.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -76,6 +77,7 @@ using ::com::sun::star::xml::sax::InputSource;
 using ::com::sun::star::xml::sax::SAXException;
 using ::com::sun::star::document::XDocumentProperties;
 using ::com::sun::star::util::DateTime;
+using ::comphelper::MediaDescriptor;
 using ::sax_fastparser::FastSerializerHelper;
 using ::sax_fastparser::FSHelperPtr;
 
@@ -479,16 +481,27 @@ XmlFilterBase& XmlFilterBase::exportDocumentProperties( Reference< XDocumentProp
     return *this;
 }
 
-StorageRef XmlFilterBase::implCreateStorage(
-        Reference< XInputStream >& rxInStream, Reference< XStream >& rxOutStream ) const
-{
-    StorageRef xStorage;
-    if( rxInStream.is() )
-        xStorage.reset( new ZipStorage( getGlobalFactory(), rxInStream ) );
-    else if( rxOutStream.is() )
-        xStorage.reset( new ZipStorage( getGlobalFactory(), rxOutStream ) );
+// protected ------------------------------------------------------------------
 
-    return xStorage;
+Reference< XInputStream > XmlFilterBase::implGetInputStream( MediaDescriptor& rMediaDesc ) const
+{
+    /*  Get the input stream directly from the media descriptor, or decrypt the
+        package again. The latter is needed e.g. when the document is reloaded.
+        All this is implemented in the detector service. */
+    FilterDetect aDetector( getGlobalFactory() );
+    return aDetector.extractUnencryptedPackage( rMediaDesc );
+}
+
+// private --------------------------------------------------------------------
+
+StorageRef XmlFilterBase::implCreateStorage( const Reference< XInputStream >& rxInStream ) const
+{
+    return StorageRef( new ZipStorage( getGlobalFactory(), rxInStream ) );
+}
+
+StorageRef XmlFilterBase::implCreateStorage( const Reference< XStream >& rxOutStream ) const
+{
+    return StorageRef( new ZipStorage( getGlobalFactory(), rxOutStream ) );
 }
 
 // ============================================================================

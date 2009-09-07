@@ -319,7 +319,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
     if( !maShapeModel.mxClientData.get() || !mrDrawing.convertShapeClientAnchor( aShapeRect, maShapeModel.mxClientData->maAnchor ) )
         aShapeRect = getRectangle( pParentAnchor );
     // convert the shape, if the calculated rectangle is not empty
-    if( (aShapeRect.Width > 0) || (aShapeRect.Height > 0) && rxShapes.is() )
+    if( ((aShapeRect.Width > 0) || (aShapeRect.Height > 0)) && rxShapes.is() )
         xShape = implConvertAndInsert( rxShapes, aShapeRect );
     return xShape;
 }

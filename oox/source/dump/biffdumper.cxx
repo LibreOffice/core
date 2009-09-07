@@ -50,6 +50,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::util::DateTime;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::io::XInputStream;
+using ::comphelper::MediaDescriptor;
 using ::oox::core::FilterBase;
 
 using namespace ::oox::xls;
@@ -326,14 +327,6 @@ bool BiffObjectBase::implStartRecord( BinaryInputStream&, sal_Int64& ornRecPos, 
     ornRecPos = mxBiffStrm->tellBase() - 4;
     ornRecId = mxBiffStrm->getRecId();
 
-    // record specific settings
-    switch( mxBiffStrm->getRecId() )
-    {
-        case BIFF_ID_CHEND:
-            out().decIndent();
-        break;
-    }
-
     // special CONTINUE handling
     mxBiffStrm->resetRecord( mbMergeContRec );
     if( mbMergeContRec ) switch( mxBiffStrm->getRecId() )
@@ -347,6 +340,21 @@ bool BiffObjectBase::implStartRecord( BinaryInputStream&, sal_Int64& ornRecPos, 
         case BIFF_ID_MSODRAWINGGROUP:
         case BIFF_ID_CHESCHERFORMAT:
             mxBiffStrm->resetRecord( true, mxBiffStrm->getRecId() );
+        break;
+    }
+
+    // record specific settings
+    switch( mxBiffStrm->getRecId() )
+    {
+        case BIFF2_ID_BOF:
+        case BIFF3_ID_BOF:
+        case BIFF4_ID_BOF:
+        case BIFF5_ID_BOF:
+        case BIFF_ID_INTERFACEHDR:
+            mxBiffStrm->enableDecoder( false );
+        break;
+        case BIFF_ID_CHEND:
+            out().decIndent();
         break;
     }
 
@@ -2183,6 +2191,52 @@ void WorkbookStreamObject::implDumpRecordBody()
             }
         break;
 
+        case BIFF_ID_FILEPASS:
+        {
+            rStrm.enableDecoder( false );
+            if( eBiff == BIFF8 )
+            {
+                switch( dumpDec< sal_uInt16 >( "type", "FILEPASS-TYPE" ) )
+                {
+                    case 0:
+                        dumpHex< sal_uInt16 >( "key" );
+                        dumpHex< sal_uInt16 >( "verifier" );
+                    break;
+                    case 1:
+                    {
+                        sal_uInt16 nMajor = dumpDec< sal_uInt16 >( "major-version", "FILEPASS-MAJOR" );
+                        dumpDec< sal_uInt16 >( "minor-version" );
+                        switch( nMajor )
+                        {
+                            case 1:
+                                dumpArray( "salt", 16 );
+                                dumpArray( "verifier", 16 );
+                                dumpArray( "verifier-hash", 16 );
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            else
+            {
+                dumpHex< sal_uInt16 >( "key" );
+                dumpHex< sal_uInt16 >( "verifier" );
+            }
+            rStrm.seekToStart();
+            BiffDecoderRef xDecoder = BiffCodecHelper::implReadFilePass( rStrm, eBiff );
+            if( xDecoder.get() )
+                cfg().requestPassword( *xDecoder );
+            setBinaryOnlyMode( !xDecoder || !xDecoder->isValid() );
+        }
+        break;
+
+        case BIFF_ID_FILESHARING:
+            dumpBool< sal_uInt16 >( "recommend-read-only" );
+            dumpHex< sal_uInt16 >( "password-hash" );
+            dumpString( "password-creator", BIFF_STR_8BITLENGTH, BIFF_STR_SMARTFLAGS );
+        break;
+
         case BIFF2_ID_FONT:
         case BIFF3_ID_FONT:
             dumpFontRec();
@@ -2602,9 +2656,14 @@ void WorkbookStreamObject::implDumpRecordBody()
         break;
 
         case BIFF_ID_SHEET:
-            if( eBiff >= BIFF5 ) dumpHex< sal_uInt32 >( "sheet-stream-pos", "CONV-DEC" );
-            if( eBiff >= BIFF5 ) dumpDec< sal_uInt8 >( "sheet-state", "SHEET-STATE" );
-            if( eBiff >= BIFF5 ) dumpDec< sal_uInt8 >( "sheet-type", "SHEET-TYPE" );
+            if( eBiff >= BIFF5 )
+            {
+                rStrm.enableDecoder( false );
+                dumpHex< sal_uInt32 >( "sheet-stream-pos", "CONV-DEC" );
+                rStrm.enableDecoder( true );
+                dumpDec< sal_uInt8 >( "sheet-state", "SHEET-STATE" );
+                dumpDec< sal_uInt8 >( "sheet-type", "SHEET-TYPE" );
+            }
             dumpString( "sheet-name", BIFF_STR_8BITLENGTH, BIFF_STR_8BITLENGTH );
         break;
 
@@ -3682,7 +3741,8 @@ Dumper::Dumper( const Reference< XMultiServiceFactory >& rxFactory, const Refere
     if( rxFactory.is() && rxInStrm.is() )
     {
         StorageRef xStrg( new OleStorage( rxFactory, rxInStrm, true ) );
-        ConfigRef xCfg( new Config( DUMP_BIFF_CONFIG_ENVVAR, rxFactory, xStrg, rSysFileName ) );
+        MediaDescriptor aMediaDesc;
+        ConfigRef xCfg( new Config( DUMP_BIFF_CONFIG_ENVVAR, rxFactory, xStrg, rSysFileName, aMediaDesc ) );
         DumperBase::construct( xCfg );
     }
 }
