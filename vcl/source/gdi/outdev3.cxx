@@ -4518,7 +4518,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     SalLayout* pLayout = ImplLayout( aStrikeoutTest, 0, 4 );
     if ( pLayout )
     {
-        nStrikeoutWidth = (pLayout->GetTextWidth() + 2) / 4;
+        nStrikeoutWidth = (pLayout->GetTextWidth() + 2) / (4 * pLayout->GetUnitsPerPixel());
         pLayout->Release();
         if ( nStrikeoutWidth <= 0 ) // sanity check
             nStrikeoutWidth = 1;
