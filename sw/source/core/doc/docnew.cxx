@@ -181,6 +181,7 @@ void StartGrammarChecking( SwDoc &rDoc )
     }
 
     // only documents with visible views need to be checked
+    //(E.g. don't check temporary documents created for printing, see printing of notes and selections)
     if (bVisible)
     {
         uno::Reference< linguistic2::XProofreadingIterator > xGCIterator( rDoc.GetGCIterator() );
