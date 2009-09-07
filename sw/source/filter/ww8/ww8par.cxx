@@ -46,7 +46,7 @@
 #include <unotools/tempfile.hxx>
 #include <svtools/sfxecode.hxx>
 
-#include <svtools/docpasswdrequest.hxx>
+#include <comphelper/docpasswordrequest.hxx>
 #include <hintids.hxx>
 
 #include <svx/tstpitem.hxx>
@@ -4171,8 +4171,8 @@ namespace
                 uno::Reference< task::XInteractionHandler > xHandler( rMedium.GetInteractionHandler() );
                 if( xHandler.is() )
                 {
-                    RequestDocumentPassword* pRequest = new RequestDocumentPassword(
-                        task::PasswordRequestMode_PASSWORD_ENTER,
+                    ::comphelper::DocPasswordRequest* pRequest = new ::comphelper::DocPasswordRequest(
+                        ::comphelper::DocPasswordRequestType_MS, task::PasswordRequestMode_PASSWORD_ENTER,
                         INetURLObject( rMedium.GetOrigURL() ).GetName( INetURLObject::DECODE_WITH_CHARSET ) );
                     uno::Reference< task::XInteractionRequest > xRequest( pRequest );
 
