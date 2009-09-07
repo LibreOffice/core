@@ -39,6 +39,7 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
@@ -374,7 +375,8 @@ extern "C"
 // LocatorImpl
 //---------------------------------------------
 class LocatorImpl :
-    public WeakImplHelper1< XLocator >
+    public WeakImplHelper2< XLocator, com::sun::star::io::XSeekable >
+    // should use a different interface for stream positions!
 {
 public:
     LocatorImpl( SaxExpatParser_Impl *p )
@@ -398,6 +400,20 @@ public: //XLocator
     virtual OUString SAL_CALL getSystemId(void) throw ()
     {
         return m_pParser->getEntity().structSource.sSystemId;
+    }
+
+    // XSeekable (only for getPosition)
+
+    virtual void SAL_CALL seek( sal_Int64 ) throw()
+    {
+    }
+    virtual sal_Int64 SAL_CALL getPosition() throw()
+    {
+        return XML_GetCurrentByteIndex( m_pParser->getEntity().pParser );
+    }
+    virtual ::sal_Int64 SAL_CALL getLength() throw()
+    {
+        return 0;
     }
 
 private:

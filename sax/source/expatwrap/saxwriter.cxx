@@ -208,6 +208,8 @@ public:
 // If there are invalid characters in the string it returns sal_False.
 // Than the calling method has to throw the needed Exception.
     inline sal_Bool comment(const rtl::OUString& rComment) throw( SAXException );
+
+    inline void clearBuffer() throw( SAXException );
 };
 
 const sal_Bool g_bValidCharsBelow32[32] =
@@ -693,6 +695,17 @@ inline void SaxWriterHelper::endDocument() throw( SAXException )
     }
 }
 
+inline void SaxWriterHelper::clearBuffer() throw( SAXException )
+{
+    FinishStartElement();
+    if (nCurrentPos > 0)
+    {
+        m_Sequence.realloc(nCurrentPos);
+        nCurrentPos = writeSequence();
+        m_Sequence.realloc(SEQUENCESIZE);
+    }
+}
+
 inline sal_Bool SaxWriterHelper::processingInstruction(const rtl::OUString& rTarget, const rtl::OUString& rData) throw( SAXException )
 {
     FinishStartElement();
@@ -927,12 +940,20 @@ public: // XActiveDataSource
     virtual void SAL_CALL setOutputStream(const Reference< XOutputStream > & aStream)
         throw (RuntimeException)
             {
+                // temporary: set same stream again to clear buffer
+                if ( m_out == aStream && mp_SaxWriterHelper && m_bDocStarted )
+                    mp_SaxWriterHelper->clearBuffer();
+                else
+                {
+
                 m_out = aStream;
                 delete mp_SaxWriterHelper;
                 mp_SaxWriterHelper = new SaxWriterHelper(m_out);
                 m_bDocStarted = sal_False;
                 m_nLevel = 0;
                 m_bIsCDATA = sal_False;
+
+                }
             }
     virtual Reference< XOutputStream >  SAL_CALL getOutputStream(void)
         throw(RuntimeException)
