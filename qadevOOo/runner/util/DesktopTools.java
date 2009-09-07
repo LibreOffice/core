@@ -317,22 +317,22 @@ public class DesktopTools
         }
         catch (com.sun.star.util.CloseVetoException e)
         {
-            e.printStackTrace();
+            // e.printStackTrace();
             System.out.println("Couldn't close document");
         }
         catch (com.sun.star.lang.DisposedException e)
         {
-            e.printStackTrace();
+            // e.printStackTrace();
             System.out.println("Couldn't close document");
         }
         catch (java.lang.NullPointerException e)
         {
-            e.printStackTrace();
+            // e.printStackTrace();
             System.out.println("Couldn't close document");
         }
         catch (com.sun.star.beans.PropertyVetoException e)
         {
-            e.printStackTrace();
+            // e.printStackTrace();
             System.out.println("Couldn't close document");
         }
     }

@@ -99,7 +99,7 @@ public class IniFile implements Enumeration
                 while (aLine != null)
                 {
                     aLine = aReader.readLine();
-                    if (aLine != null)
+                    if (aLine != null && aLine.length() > 0)
                     {
                         aLines.add(aLine);
                     }
