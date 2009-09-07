@@ -1041,7 +1041,6 @@ USHORT _PostItFld::GetPageNo(
             (pFrm->HasFollow() && pFrm->GetFollow()->GetOfst() <= nPos) )
             continue;
         USHORT nPgNo = pFrm->GetPhyPageNum();
-        BOOL bRight = pFrm->OnRightPage();
         if( rRangeEnum.hasValue( nPgNo, &rPossiblePages ))
         {
             rLineNo = (USHORT)(pFrm->GetLineCount( nPos ) +
