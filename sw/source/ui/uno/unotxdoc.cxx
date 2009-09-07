@@ -2542,18 +2542,22 @@ SwDoc * SwXTextDocument::GetRenderDoc(
         pDoc = pDocShell->GetDoc();
     else
     {
-        // important check since GuessViewShell below should only get called for PDF export.
-        // Otherwise the View should be obtained from the "View" property passed on in the
-        // calls to the XRenderable functions.
-        DBG_ASSERT( bIsPDFExport, "code should have been called for PDF export only..." );
-        (void)bIsPDFExport; // avoid warning in non dbg case
+        DBG_ASSERT( !xModel.is(), "unexpected model found" );
 
-        // used for PDF export of (multi-)selection
         if (rSelection.hasValue())     // is anything selected ?
         {
+            // this part should only be called when a temporary document needs to be created,
+            // for example for PDF export or printing of (multi-)selection only.
+
             bool bIsSwSrcView = false;
             if (!rpView)
+            {
+                (void) bIsPDFExport;
+                // aside from maybe PDF export the view should always have been provided!
+                DBG_ASSERT( bIsPDFExport, "view is missing, guessing one..." );
+
                 rpView = GuessViewShell( bIsSwSrcView );
+            }
             DBG_ASSERT( rpView, "ViewShell missing" );
             // the view shell should be SwView for documents PDF export.
             // for the page preview no selection should be possible
@@ -2568,7 +2572,8 @@ SwDoc * SwXTextDocument::GetRenderDoc(
                     rpView = pDoc->GetDocShell()->GetView();
                 }
             }
-            else {
+            else
+            {
                 DBG_ERROR( "unexpected ViewShell" );
             }
         }
