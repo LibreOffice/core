@@ -2783,11 +2783,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                 {
                     aTmpSize = pDoc->GetPageSize( USHORT(nRenderer + 1), bIsSkipEmptyPages );
                     // we just state what output size we would need
-                    // the rest is now up to vcl
-                    long nWidth  = 2 * aTmpSize.Width();
-                    long nHeight = aTmpSize.Height();
-                    aPageSize = awt::Size ( TWIP_TO_MM100( nWidth ),
-                                            TWIP_TO_MM100( nHeight ));
+                    // the rest is nowadays up to vcl
+                    aPageSize = awt::Size ( TWIP_TO_MM100( 2 * aTmpSize.Width() ),
+                                            TWIP_TO_MM100( aTmpSize.Height() ));
                 }
                 else
                 {
