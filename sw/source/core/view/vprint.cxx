@@ -495,7 +495,7 @@ SwPrintUIOptions::SwPrintUIOptions( bool bWeb,  bool bSwSrcView ) :
     aHelpText.realloc( 2 );
     aHelpText[0] = aLocalizedStrings.GetString( 25 );
     aHelpText[1] = aLocalizedStrings.GetString( 25 );
-    vcl::PrinterOptionsHelper::UIControlOptions aAnnotOpt( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintProspect" ) ), 1, sal_False );
+    vcl::PrinterOptionsHelper::UIControlOptions aAnnotOpt( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintProspect" ) ), 0, sal_False );
     m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( aLocalizedStrings.GetString( 26 ),
                                                     aHelpText,
                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintAnnotationMode" ) ),

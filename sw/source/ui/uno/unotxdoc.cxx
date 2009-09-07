@@ -2732,7 +2732,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         m_pPrintUIOptions = new SwPrintUIOptions( bWebDoc, bIsSwSrcView );
     }
     m_pPrintUIOptions->processProperties( rxOptions );
-    const bool bPrintProspect   = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
+    const bool bPrintProspect    = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
+    const bool bIsSkipEmptyPages = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
 
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
     DBG_ASSERT( pDoc && pView, "doc or view shell missing!" );
@@ -2762,7 +2763,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     {
         awt::Size aPageSize;
         Size aTmpSize;
-        if (bIsSwSrcView || m_pPrintUIOptions->getBoolValue( "PrintProspect", sal_False ))
+        if (bIsSwSrcView || bPrintProspect)
         {
             // for printing of HTML source code and prospect printing we should use
             // the printers paper size since
@@ -2778,16 +2779,29 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             Printer *pPrinter = dynamic_cast< Printer * >(lcl_GetOutputDevice( *m_pPrintUIOptions ));
             if (pPrinter)
             {
-                aTmpSize = pPrinter->GetPaperSize();
-                aTmpSize = pPrinter->LogicToLogic( aTmpSize,
-                            pPrinter->GetMapMode(), MapMode( MAP_100TH_MM ));
-                aPageSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
+                if (bPrintProspect)
+                {
+                    aTmpSize = pDoc->GetPageSize( USHORT(nRenderer + 1), bIsSkipEmptyPages );
+                    // we just state what output size we would need
+                    // the rest is now up to vcl
+                    long nWidth  = 2 * aTmpSize.Width();
+                    long nHeight = aTmpSize.Height();
+                    aPageSize = awt::Size ( TWIP_TO_MM100( nWidth ),
+                                            TWIP_TO_MM100( nHeight ));
+                }
+                else
+                {
+                    // printing HTML source view
+                    aTmpSize = pPrinter->GetPaperSize();
+                    aTmpSize = pPrinter->LogicToLogic( aTmpSize,
+                                pPrinter->GetMapMode(), MapMode( MAP_100TH_MM ));
+                    aPageSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
+                }
             }
         }
         else
         {
-            bool bIsSkipEmptyPages = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
-            aTmpSize = pDoc->GetPageSize( sal_uInt16(nRenderer + 1), bIsSkipEmptyPages );
+            aTmpSize = pDoc->GetPageSize( USHORT(nRenderer + 1), bIsSkipEmptyPages );
             aPageSize = awt::Size ( TWIP_TO_MM100( aTmpSize.Width() ),
                                     TWIP_TO_MM100( aTmpSize.Height() ));
         }
