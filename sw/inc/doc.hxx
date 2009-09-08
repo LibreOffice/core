@@ -1510,13 +1510,16 @@ public:
     // <--
     void SetCounted( const SwPaM&, bool bCounted);
 
-    /**
-       Replace numbering rules in a PaM by another numbering rule.
+    // --> OD 2009-08-25 #i86492#
+    // no longer needed.
+    // SwDoc::SetNumRule( rPaM, rNumRule, false, <ListId>, sal_True, true ) have to be used instead.
+//    /**
+//       Replace numbering rules in a PaM by another numbering rule.
 
-       \param rPaM         PaM to replace the numbering rules in
-       \param rNumRule     numbering rule to replace the present numbering rules
-     */
-    void ReplaceNumRule(const SwPaM & rPaM, const SwNumRule & rNumRule);
+//       \param rPaM         PaM to replace the numbering rules in
+//       \param rNumRule     numbering rule to replace the present numbering rules
+//     */
+//    void ReplaceNumRule(const SwPaM & rPaM, const SwNumRule & rNumRule);
 
     void MakeUniqueNumRules(const SwPaM & rPaM);
 
@@ -1576,8 +1579,8 @@ public:
                            - FALSE: search backward
        \param bNum         - TRUE:  search for enumeration
                            - FALSE: search for itemize
-       \param bOutline     - TRUE:  search for non-outline numbering rule
-                           - FALSE: search for outline numbering rule
+       \param bOutline     - TRUE:  search for outline numbering rule
+                           - FALSE: search for non-outline numbering rule
        \param nNonEmptyAllowed   number of non-empty paragraphs allowed between
                                  rPos and found paragraph
 
@@ -1589,13 +1592,13 @@ public:
         input parameter - boolean, indicating, if start node, determined by given
         start position has to be investigated or not.
      */
-    const SwNumRule * SearchNumRule(SwPosition & rPos,
-                                    BOOL bForward,
-                                    BOOL bNum,
-                                    BOOL bOutline,
+    const SwNumRule * SearchNumRule(const SwPosition & rPos,
+                                    const bool bForward,
+                                    const bool bNum,
+                                    const bool bOutline,
                                     int nNonEmptyAllowed,
                                     String& sListId,
-                                    bool bInvestigateStartNode = false );
+                                    const bool bInvestigateStartNode = false );
 
         // Absaetze ohne Numerierung, aber mit Einzuegen
     sal_Bool NoNum( const SwPaM& );

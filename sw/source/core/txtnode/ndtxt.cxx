@@ -234,7 +234,6 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
       mpNodeNum( 0 ),
       m_bLastOutlineState( false ),
       m_bNotifiable( false ),
-      //nOutlineLevel( pTxtColl->GetOutlineLevel() )//#outline level, removed by zhaojianwei.
       // --> OD 2008-11-19 #i70748#
       mbEmptyListStyleSetDueToSetOutlineLevelAttr( false ),
       // <--
@@ -253,6 +252,15 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
 //    SyncNumberAndNumRule();
     if ( !IsInList() && GetNumRule() && GetListId().Len() > 0 )
     {
+        // --> OD 2009-08-27 #i101516#
+        // apply paragraph style's assigned outline style list level as
+        // list level of the paragraph, if it has none set already.
+        if ( !HasAttrListLevel() &&
+             pTxtColl && pTxtColl->IsAssignedToListLevelOfOutlineStyle() )
+        {
+            SetAttrListLevel( pTxtColl->GetAssignedOutlineStyleLevel() );
+        }
+        // <--
         AddToList();
     }
     // <--

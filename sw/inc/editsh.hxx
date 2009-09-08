@@ -512,9 +512,9 @@ public:
     // --> OD 2008-03-18 #refactorlists# - add output parameter <sListId>
     // in case a list style is found, <sListId> holds the list id, to which the
     // text node belongs, which applies the found list style.
-    const SwNumRule * SearchNumRule(BOOL bForward,
-                                    BOOL bNum,
-                                    BOOL bOutline,
+    const SwNumRule * SearchNumRule(const bool bForward,
+                                    const bool bNum,
+                                    const bool bOutline,
                                     int nNonEmptyAllowed,
                                     String& sListId );
     // <--

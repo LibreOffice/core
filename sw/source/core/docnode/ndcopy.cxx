@@ -795,34 +795,68 @@ bool SwDoc::Copy( SwPaM& rPam, SwPosition& rPos, bool bCopyAll ) const
 // Kopieren eines Bereiches im oder in ein anderes Dokument !
 // Die Position darf nicht im Bereich liegen !!
 
-BOOL lcl_MarksWholeNode(const SwPaM & rPam)
+bool lcl_MarksWholeNode(const SwPaM & rPam)
 {
-    BOOL bResult = FALSE;
-    const SwPosition * pStt = rPam.Start(), * pEnd = rPam.End();
+    bool bResult = false;
+    const SwPosition* pStt = rPam.Start();
+    const SwPosition* pEnd = rPam.End();
 
     if (NULL != pStt && NULL != pEnd)
     {
-        SwTxtNode * pSttNd = pStt->nNode.GetNode().GetTxtNode();
-        SwTxtNode * pEndNd = pEnd->nNode.GetNode().GetTxtNode();
+        const SwTxtNode* pSttNd = pStt->nNode.GetNode().GetTxtNode();
+        const SwTxtNode* pEndNd = pEnd->nNode.GetNode().GetTxtNode();
 
         if (NULL != pSttNd && NULL != pEndNd &&
             pStt->nContent.GetIndex() == 0 &&
             pEnd->nContent.GetIndex() == pEndNd->Len())
         {
-            bResult = TRUE;
+            bResult = true;
         }
     }
 
     return bResult;
 }
 
+// --> OD 2009-08-25 #i86492#
+bool lcl_ContainsOnlyParagraphsInList( const SwPaM& rPam )
+{
+    bool bRet = false;
+
+    const SwTxtNode* pTxtNd = rPam.Start()->nNode.GetNode().GetTxtNode();
+    const SwTxtNode* pEndTxtNd = rPam.End()->nNode.GetNode().GetTxtNode();
+    if ( pTxtNd && pTxtNd->IsInList() &&
+         pEndTxtNd && pEndTxtNd->IsInList() )
+    {
+        bRet = true;
+        SwNodeIndex aIdx(rPam.Start()->nNode);
+
+        do
+        {
+            aIdx++;
+            pTxtNd = aIdx.GetNode().GetTxtNode();
+
+            if ( !pTxtNd || !pTxtNd->IsInList() )
+            {
+                bRet = false;
+                break;
+            }
+        } while ( pTxtNd && pTxtNd != pEndTxtNd );
+    }
+
+
+    return bRet;
+}
+// <--
+
 BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                     BOOL bMakeNewFrms, bool bCopyAll, SwPaM* pCpyRange ) const
 {
     SwDoc* pDoc = rPos.nNode.GetNode().GetDoc();
-    bool bColumnSel = pDoc->IsClipBoard() && pDoc->IsColumnSelection();
+    const bool bColumnSel = pDoc->IsClipBoard() && pDoc->IsColumnSelection();
 
-    SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
+    SwPosition* pStt = rPam.Start();
+    SwPosition* pEnd = rPam.End();
+
     // kein Copy abfangen.
     if( !rPam.HasMark() || ( *pStt >= *pEnd && !bColumnSel ) ||
         //JP 29.6.2001: 88963 - dont copy if inspos is in region of start to end
@@ -830,7 +864,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
         ( pDoc == this && *pStt <= rPos && rPos < *pEnd ))
         return FALSE;
 
-    BOOL bEndEqualIns = pDoc == this && rPos == *pEnd;
+    const bool bEndEqualIns = pDoc == this && rPos == *pEnd;
 
     // falls Undo eingeschaltet, erzeuge das UndoCopy-Objekt
     SwUndoCpyDoc* pUndo = 0;
@@ -858,43 +892,63 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
 
     SwNodeRange aRg( pStt->nNode, pEnd->nNode );
     SwNodeIndex aInsPos( rPos.nNode );
-    BOOL bOneNode = pStt->nNode == pEnd->nNode;
-    SwTxtNode* pSttNd = pStt->nNode.GetNode().GetTxtNode();
-    SwTxtNode* pEndNd = pEnd->nNode.GetNode().GetTxtNode();
-    SwTxtNode* pDestNd = aInsPos.GetNode().GetTxtNode();
-    BOOL bCopyCollFmt = !pDoc->IsInsOnlyTextGlossary() && (
-                        ( pDestNd && !pDestNd->GetTxt().Len() ) ||
-                        ( !bOneNode && !rPos.nContent.GetIndex() ));
-    BOOL bCopyBookmarks = TRUE;
-    BOOL bStartIsTxtNode = 0 != pSttNd;
+    const bool bOneNode = pStt->nNode == pEnd->nNode;
+    SwTxtNode* pSttTxtNd = pStt->nNode.GetNode().GetTxtNode();
+    SwTxtNode* pEndTxtNd = pEnd->nNode.GetNode().GetTxtNode();
+    SwTxtNode* pDestTxtNd = aInsPos.GetNode().GetTxtNode();
+    bool bCopyCollFmt = !pDoc->IsInsOnlyTextGlossary() &&
+                        ( ( pDestTxtNd && !pDestTxtNd->GetTxt().Len() ) ||
+                          ( !bOneNode && !rPos.nContent.GetIndex() ) );
+    bool bCopyBookmarks = true;
+    BOOL bStartIsTxtNode = 0 != pSttTxtNd;
 
-    // --> OD 2008-03-18 #refactorlists#
-    String aDummy;
-    const SwNumRule * pNumRuleToPropagate =
-        pDoc->SearchNumRule(rPos, FALSE, FALSE, TRUE, 0, aDummy);
+    // --> OD 2009-08-25 #i86492#
+    // Correct the search for a previous list:
+    // First search for non-outline numbering list. Then search for non-outline
+    // bullet list.
+    // Keep also the <ListId> value for possible propagation.
+    String aListIdToPropagate;
+    const SwNumRule* pNumRuleToPropagate =
+        pDoc->SearchNumRule( rPos, false, true, false, 0, aListIdToPropagate, true );
+    if ( !pNumRuleToPropagate )
+    {
+        pNumRuleToPropagate =
+            pDoc->SearchNumRule( rPos, false, false, false, 0, aListIdToPropagate, true );
+    }
+    // <--
+    // --> OD 2009-08-25 #i86492#
+    // Do not propagate previous found list, if
+    // - destination is an empty paragraph which is not in a list and
+    // - source contains at least one paragraph which is not in a list
+    if ( pNumRuleToPropagate &&
+         pDestTxtNd && !pDestTxtNd->GetTxt().Len() && !pDestTxtNd->IsInList() &&
+         !lcl_ContainsOnlyParagraphsInList( rPam ) )
+    {
+        pNumRuleToPropagate = 0;
+    }
     // <--
 
     // Block, damit aus diesem gesprungen werden kann !!
     do {
-        if( pSttNd )
+        if( pSttTxtNd )
         {
             // den Anfang nicht komplett kopieren ?
             if( !bCopyCollFmt || bColumnSel || pStt->nContent.GetIndex() )
             {
                 SwIndex aDestIdx( rPos.nContent );
                 BOOL bCopyOk = FALSE;
-                if( !pDestNd )
+                if( !pDestTxtNd )
                 {
                     if( pStt->nContent.GetIndex() || bOneNode )
-                        pDestNd = pDoc->GetNodes().MakeTxtNode( aInsPos,
+                        pDestTxtNd = pDoc->GetNodes().MakeTxtNode( aInsPos,
                             pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD));
                     else
                     {
-                        pDestNd = (SwTxtNode*)pSttNd->MakeCopy( pDoc, aInsPos );
+                        pDestTxtNd = static_cast<SwTxtNode*>(pSttTxtNd->MakeCopy( pDoc, aInsPos ));
                         bCopyOk = TRUE;
                     }
-                    aDestIdx.Assign( pDestNd, 0 );
-                    bCopyCollFmt = TRUE;
+                    aDestIdx.Assign( pDestTxtNd, 0 );
+                    bCopyCollFmt = true;
                 }
                 else if( !bOneNode || bColumnSel )
                 {
@@ -911,8 +965,8 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                         aCpyPam.Move( fnMoveBackward, fnGoCntnt );
                     }
 
-                    pDestNd = pDoc->GetNodes()[ aInsPos.GetIndex()-1 ]->GetTxtNode();
-                    aDestIdx.Assign( pDestNd, pDestNd->GetTxt().Len() );
+                    pDestTxtNd = pDoc->GetNodes()[ aInsPos.GetIndex()-1 ]->GetTxtNode();
+                    aDestIdx.Assign( pDestTxtNd, pDestTxtNd->GetTxt().Len() );
 
                     // korrigiere den Bereich wieder !!
                     if( bEndEqualIns )
@@ -925,59 +979,83 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                             rPam.Exchange();
 
                         aRg.aEnd = pEnd->nNode;
-                        pEndNd = pEnd->nNode.GetNode().GetTxtNode();
+                        pEndTxtNd = pEnd->nNode.GetNode().GetTxtNode();
                     }
                     else if( rPos == *pEnd )        // Wurde das Ende auch verschoben
                     {
                         pEnd->nNode--;
-                        pEnd->nContent.Assign( pDestNd, nCntntEnd );
+                        pEnd->nContent.Assign( pDestTxtNd, nCntntEnd );
                         aRg.aEnd = pEnd->nNode;
-                        pEndNd = pEnd->nNode.GetNode().GetTxtNode();
+                        pEndTxtNd = pEnd->nNode.GetNode().GetTxtNode();
                     }
                 }
 
-                const SfxPoolItem * pItem = NULL;
-                const SfxItemSet * pAttrSet = pDestNd->GetpSwAttrSet();
-
                 /* #107213#: Safe numrule item at destination. */
-                int aState = SFX_ITEM_UNKNOWN;
+                // --> OD 2009-08-25 #i86492#
+                // Safe also <ListId> item of destination.
+                int aNumRuleState = SFX_ITEM_UNKNOWN;
                 SwNumRuleItem aNumRuleItem;
-
-                if (pAttrSet != NULL)
+                int aListIdState = SFX_ITEM_UNKNOWN;
+                SfxStringItem aListIdItem( RES_PARATR_LIST_ID, String() );
                 {
-                    aState =
-                        pAttrSet->GetItemState(RES_PARATR_NUMRULE, FALSE, &pItem);
+                    const SfxItemSet * pAttrSet = pDestTxtNd->GetpSwAttrSet();
+                    if (pAttrSet != NULL)
+                    {
+                        const SfxPoolItem * pItem = NULL;
+                        aNumRuleState = pAttrSet->GetItemState(RES_PARATR_NUMRULE, FALSE, &pItem);
+                        if (SFX_ITEM_SET == aNumRuleState)
+                            aNumRuleItem = *((SwNumRuleItem *) pItem);
 
-                    if (SFX_ITEM_SET == aState)
-                        aNumRuleItem = *((SwNumRuleItem *) pItem);
+                        aListIdState =
+                            pAttrSet->GetItemState(RES_PARATR_LIST_ID, FALSE, &pItem);
+                        if (SFX_ITEM_SET == aListIdState)
+                        {
+                            aListIdItem.SetValue( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+                        }
+                    }
                 }
+                // <--
                 /* #107213# */
 
                 if( !bCopyOk )
                 {
-                    xub_StrLen nCpyLen = ( bOneNode ? pEnd->nContent.GetIndex()
-                                            : pSttNd->GetTxt().Len() )
-                                    - pStt->nContent.GetIndex();
-                    pSttNd->Copy( pDestNd, aDestIdx, pStt->nContent, nCpyLen );
+                    xub_StrLen nCpyLen = ( bOneNode
+                                           ? pEnd->nContent.GetIndex()
+                                           : pSttTxtNd->GetTxt().Len() )
+                                         - pStt->nContent.GetIndex();
+                    pSttTxtNd->Copy( pDestTxtNd, aDestIdx, pStt->nContent, nCpyLen );
                     if( bEndEqualIns )
                         pEnd->nContent -= nCpyLen;
                 }
 
                 if( bOneNode )
                 {
-                    // ist der DestinationNode leer, kopiere die Vorlage mit
                     if( bCopyCollFmt )
                     {
-                        pSttNd->CopyCollFmt( *pDestNd );
+                        pSttTxtNd->CopyCollFmt( *pDestTxtNd );
 
                         /* #107213# If only a part of one paragraph is copied
                            restore the numrule at the destination. */
-                        if (! lcl_MarksWholeNode(rPam))
+                        // --> OD 2009-08-25 #i86492#
+                        // restore also <ListId> item
+                        if ( !lcl_MarksWholeNode(rPam) )
                         {
-                            if (SFX_ITEM_SET == aState)
-                                pDestNd->SetAttr(aNumRuleItem);
+                            if (SFX_ITEM_SET == aNumRuleState)
+                            {
+                                pDestTxtNd->SetAttr(aNumRuleItem);
+                            }
                             else
-                                pDestNd->ResetAttr(RES_PARATR_NUMRULE);
+                            {
+                                pDestTxtNd->ResetAttr(RES_PARATR_NUMRULE);
+                            }
+                            if (SFX_ITEM_SET == aListIdState)
+                            {
+                                pDestTxtNd->SetAttr(aListIdItem);
+                            }
+                            else
+                            {
+                                pDestTxtNd->ResetAttr(RES_PARATR_LIST_ID);
+                            }
                         }
                     }
 
@@ -987,13 +1065,13 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                 aRg.aStart++;
             }
         }
-        else if( pDestNd )
+        else if( pDestTxtNd )
         {
             // Problems with insertion of table selections into "normal" text solved.
             // We have to set the correct PaM for Undo, if this PaM starts in a textnode,
             // the undo operation will try to merge this node after removing the table.
             // If we didn't split a textnode, the PaM should start at the inserted table node
-            if( rPos.nContent.GetIndex() == pDestNd->Len() )
+            if( rPos.nContent.GetIndex() == pDestTxtNd->Len() )
             {    // Insertion at the last position of a textnode (empty or not)
                 aInsPos++; // The table will be inserted behind the text node
             }
@@ -1040,15 +1118,15 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
             }
         }
 
-        pDestNd = aInsPos.GetNode().GetTxtNode();
-        if( pEndNd )
+        pDestTxtNd = aInsPos.GetNode().GetTxtNode();
+        if( pEndTxtNd )
         {
             SwIndex aDestIdx( rPos.nContent );
-            if( !pDestNd )
+            if( !pDestTxtNd )
             {
-                pDestNd = pDoc->GetNodes().MakeTxtNode( aInsPos,
+                pDestTxtNd = pDoc->GetNodes().MakeTxtNode( aInsPos,
                             pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD));
-                aDestIdx.Assign( pDestNd, 0  );
+                aDestIdx.Assign( pDestTxtNd, 0  );
                 aInsPos--;
 
                 // #112756# #98130# if we have to insert an extra text node
@@ -1060,42 +1138,66 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                 bStartIsTxtNode = TRUE;
             }
 
-            const SfxPoolItem * pItem = NULL;
-            const SfxItemSet* pAttrSet = pDestNd->GetpSwAttrSet();
-
             /* #107213# Save numrule at destination */
-            int aState = SFX_ITEM_UNKNOWN;
+            // --> OD 2009-08-25 #i86492#
+            // Safe also <ListId> item of destination.
+            int aNumRuleState = SFX_ITEM_UNKNOWN;
             SwNumRuleItem aNumRuleItem;
-
-            if (pAttrSet != NULL)
+            int aListIdState = SFX_ITEM_UNKNOWN;
+            SfxStringItem aListIdItem( RES_PARATR_LIST_ID, String() );
             {
-                aState =
-                    pAttrSet->GetItemState(RES_PARATR_NUMRULE, FALSE, &pItem);
+                const SfxItemSet* pAttrSet = pDestTxtNd->GetpSwAttrSet();
+                if (pAttrSet != NULL)
+                {
+                    const SfxPoolItem * pItem = NULL;
 
-                if (SFX_ITEM_SET == aState)
-                    aNumRuleItem = *((SwNumRuleItem *) pItem);
+                    aNumRuleState =
+                        pAttrSet->GetItemState(RES_PARATR_NUMRULE, FALSE, &pItem);
+                    if (SFX_ITEM_SET == aNumRuleState)
+                        aNumRuleItem = *((SwNumRuleItem *) pItem);
+
+                    aListIdState =
+                        pAttrSet->GetItemState(RES_PARATR_LIST_ID, FALSE, &pItem);
+                    if (SFX_ITEM_SET == aListIdState)
+                        aListIdItem.SetValue( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+                }
             }
+            // <--
             /* #107213# */
 
-            BOOL bEmptyDestNd = 0 == pDestNd->GetTxt().Len();
-            pEndNd->Copy( pDestNd, aDestIdx, SwIndex( pEndNd ),
+            BOOL bEmptyDestNd = 0 == pDestTxtNd->GetTxt().Len();
+            pEndTxtNd->Copy( pDestTxtNd, aDestIdx, SwIndex( pEndTxtNd ),
                             pEnd->nContent.GetIndex() );
 
             // auch alle FormatVorlagen kopieren
             if( bCopyCollFmt && ( bOneNode || bEmptyDestNd ))
             {
-                pEndNd->CopyCollFmt( *pDestNd );
+                pEndTxtNd->CopyCollFmt( *pDestTxtNd );
 
-                if (bOneNode)
+                if ( bOneNode )
                 {
                     /* #107213# If only a part of one paragraph is copied
                        restore the numrule at the destination. */
-                    if ( ! lcl_MarksWholeNode(rPam))
+                    // --> OD 2009-08-25 #i86492#
+                    // restore also <ListId> item
+                    if ( !lcl_MarksWholeNode(rPam) )
                     {
-                        if (SFX_ITEM_SET == aState)
-                            pDestNd->SetAttr(aNumRuleItem);
+                        if (SFX_ITEM_SET == aNumRuleState)
+                        {
+                            pDestTxtNd->SetAttr(aNumRuleItem);
+                        }
                         else
-                            pDestNd->ResetAttr(RES_PARATR_NUMRULE);
+                        {
+                            pDestTxtNd->ResetAttr(RES_PARATR_NUMRULE);
+                        }
+                        if (SFX_ITEM_SET == aListIdState)
+                        {
+                            pDestTxtNd->SetAttr(aListIdItem);
+                        }
+                        else
+                        {
+                            pDestTxtNd->ResetAttr(RES_PARATR_LIST_ID);
+                        }
                     }
                 }
             }
@@ -1104,13 +1206,13 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
         if( bCopyAll || aRg.aStart != aRg.aEnd )
         {
             SfxItemSet aBrkSet( pDoc->GetAttrPool(), aBreakSetRange );
-            if( pSttNd && bCopyCollFmt && pDestNd->HasSwAttrSet() )
+            if( pSttTxtNd && bCopyCollFmt && pDestTxtNd->HasSwAttrSet() )
             {
-                aBrkSet.Put( *pDestNd->GetpSwAttrSet() );
+                aBrkSet.Put( *pDestTxtNd->GetpSwAttrSet() );
                 if( SFX_ITEM_SET == aBrkSet.GetItemState( RES_BREAK, FALSE ) )
-                    pDestNd->ResetAttr( RES_BREAK );
+                    pDestTxtNd->ResetAttr( RES_BREAK );
                 if( SFX_ITEM_SET == aBrkSet.GetItemState( RES_PAGEDESC, FALSE ) )
-                    pDestNd->ResetAttr( RES_PAGEDESC );
+                    pDestTxtNd->ResetAttr( RES_PAGEDESC );
             }
 
             if( aInsPos == pEnd->nNode )
@@ -1124,13 +1226,13 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
             else
                 CopyWithFlyInFly( aRg, pEnd->nContent.GetIndex(), aInsPos, bMakeNewFrms, FALSE );
 
-            bCopyBookmarks = FALSE;
+            bCopyBookmarks = false;
 
             // harte Umbrueche wieder in den ersten Node setzen
-            if( aBrkSet.Count() && 0 != ( pDestNd = pDoc->GetNodes()[
+            if( aBrkSet.Count() && 0 != ( pDestTxtNd = pDoc->GetNodes()[
                     aCpyPam.GetPoint()->nNode.GetIndex()+1 ]->GetTxtNode() ) )
             {
-                pDestNd->SetAttr( aBrkSet );
+                pDestTxtNd->SetAttr( aBrkSet );
             }
         }
     } while( FALSE );
@@ -1169,8 +1271,14 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
         *pCpyRange->GetMark() = *aCpyPam.GetMark();
     }
 
-    if (pNumRuleToPropagate)
-        pDoc->ReplaceNumRule(aCpyPam, *pNumRuleToPropagate);
+    if ( pNumRuleToPropagate )
+    {
+        // --> OD 2009-08-25 #i86492#
+        // use <SwDoc::SetNumRule(..)>, because it also handles the <ListId>
+//        pDoc->ReplaceNumRule(aCpyPam, *pNumRuleToPropagate);
+        pDoc->SetNumRule( aCpyPam, *pNumRuleToPropagate, false,
+                          aListIdToPropagate, sal_True, true );
+    }
 
     pDoc->SetRedlineMode_intern( eOld );
     pDoc->SetModified();
