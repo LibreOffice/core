@@ -47,9 +47,9 @@ public:
     virtual XmlReader::Text getTextMode() = 0;
 
     virtual bool startElement(
-        XmlReader * reader, XmlReader::Namespace ns, Span const & name) = 0;
+        XmlReader & reader, XmlReader::Namespace ns, Span const & name) = 0;
 
-    virtual void endElement(XmlReader const * reader) = 0;
+    virtual void endElement(XmlReader const & reader) = 0;
 
     virtual void characters(Span const & text) = 0;
 

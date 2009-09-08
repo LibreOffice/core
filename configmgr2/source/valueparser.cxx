@@ -259,7 +259,7 @@ XmlReader::Text ValueParser::getTextMode() const {
 }
 
 bool ValueParser::startElement(
-    XmlReader * reader, XmlReader::Namespace ns, Span const & name)
+    XmlReader & reader, XmlReader::Namespace ns, Span const & name)
 {
     if (!node_.is()) {
         return false;
@@ -284,13 +284,13 @@ bool ValueParser::startElement(
             for (;;) {
                 XmlReader::Namespace attrNs;
                 Span attrLn;
-                if (!reader->nextAttribute(&attrNs, &attrLn)) {
+                if (!reader.nextAttribute(&attrNs, &attrLn)) {
                     break;
                 }
                 if (attrNs == XmlReader::NAMESPACE_OOR &&
                     attrLn.equals(RTL_CONSTASCII_STRINGPARAM("scalar")))
                 {
-                    if (!parseValue(reader->getAttributeValue(true), &scalar)) {
+                    if (!parseValue(reader.getAttributeValue(true), &scalar)) {
                         scalar = -1;
                     }
                     break;
@@ -310,7 +310,7 @@ bool ValueParser::startElement(
                     (rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
                             "bad unicode scalar attribute in ")) +
-                     reader->getUrl()),
+                     reader.getUrl()),
                     css::uno::Reference< css::uno::XInterface >());
             }
             state_ = State(state_ + 1);
@@ -323,12 +323,11 @@ bool ValueParser::startElement(
     throw css::uno::RuntimeException(
         (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad member <")) +
          xmldata::convertFromUtf8(name) +
-         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
-         reader->getUrl()),
+         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) + reader.getUrl()),
         css::uno::Reference< css::uno::XInterface >());
 }
 
-bool ValueParser::endElement(XmlReader const * reader) {
+bool ValueParser::endElement(XmlReader const & reader) {
     if (!node_.is()) {
         return false;
     }
@@ -430,13 +429,13 @@ int ValueParser::getLayer() const {
     return layer_;
 }
 
-void ValueParser::checkEmptyPad(XmlReader const * reader) const {
+void ValueParser::checkEmptyPad(XmlReader const & reader) const {
     if (pad_.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "mixed text and <it> elements in ")) +
-             reader->getUrl()),
+             reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
 }

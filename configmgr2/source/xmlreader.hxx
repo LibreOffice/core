@@ -36,6 +36,8 @@
 #include <vector>
 
 #include "boost/noncopyable.hpp"
+#include "com/sun/star/container/NoSuchElementException.hpp"
+#include "com/sun/star/uno/RuntimeException.hpp"
 #include "osl/file.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -47,7 +49,10 @@ namespace configmgr {
 
 class XmlReader: private boost::noncopyable {
 public:
-    explicit XmlReader(rtl::OUString const & fileUrl);
+    explicit XmlReader(rtl::OUString const & fileUrl)
+        SAL_THROW((
+            com::sun::star::container::NoSuchElementException,
+            com::sun::star::uno::UnoRuntimeException));
 
     ~XmlReader();
 

@@ -32,6 +32,7 @@
 
 #include <cstddef>
 
+#include "com/sun/star/container/NoSuchElementException.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
@@ -40,6 +41,7 @@
 #include "rtl/string.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include "sal/types.h"
 
 #include "pad.hxx"
 #include "span.hxx"
@@ -65,18 +67,25 @@ bool isSpace(char c) {
 
 }
 
-XmlReader::XmlReader(rtl::OUString const & fileUrl):
+XmlReader::XmlReader(rtl::OUString const & fileUrl)
+    SAL_THROW((
+        css::container::NoSuchElementException, css::uno::UnoRuntimeException)):
     fileUrl_(fileUrl)
 {
-    oslFileError e = osl_openFile(
-        fileUrl_.pData, &fileHandle_, osl_File_OpenFlag_Read);
-    if (e != osl_File_E_None) {
+    switch (osl_openFile(fileUrl_.pData, &fileHandle_, osl_File_OpenFlag_Read))
+    {
+    case osl_File_E_None:
+        break;
+    case osl_File_E_NOENT:
+        throw css::container::NoSuchElementException(
+            fileUrl_, css::uno::Reference< css::uno::XInterface >());
+    default:
         throw css::uno::RuntimeException(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot open ")) +
              fileUrl_),
             css::uno::Reference< css::uno::XInterface >());
     }
-    e = osl_getFileSize(fileHandle_, &fileSize_);
+    oslFileError e = osl_getFileSize(fileHandle_, &fileSize_);
     if (e == osl_File_E_None) {
         e = osl_mapFile(
             fileHandle_, &fileAddress_, fileSize_, 0,
@@ -669,9 +678,18 @@ XmlReader::Result XmlReader::handleStartTag(Namespace * ns, Span * localName) {
     Namespace defaultNs = NAMESPACE_NONE;
     attributes_.clear();
     for (;;) {
+        char const * p = pos_;
         skipSpace();
         if (peek() == '/' || peek() == '>') {
             break;
+        }
+        if (pos_ == p) {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "missing whitespace before attribute in ")) +
+                 fileUrl_),
+                css::uno::Reference< css::uno::XInterface >());
         }
         char const * attrNameBegin = pos_;
         char const * attrNameColon = 0;

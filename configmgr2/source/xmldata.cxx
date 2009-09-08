@@ -90,13 +90,13 @@ rtl::OUString convertFromUtf8(Span const & text) {
     return rtl::OUString(s, SAL_NO_ACQUIRE);
 }
 
-Type parseType(XmlReader const * reader, Span const & text) {
+Type parseType(XmlReader const & reader, Span const & text) {
     if (!text.is()) {
         return TYPE_ERROR;
     }
     sal_Int32 i = rtl_str_indexOfChar_WithLength(text.begin, text.length, ':');
     if (i >= 0) {
-        switch (reader->getNamespace(Span(text.begin, i))) {
+        switch (reader.getNamespace(Span(text.begin, i))) {
         case XmlReader::NAMESPACE_OOR:
             if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
                     RTL_CONSTASCII_STRINGPARAM("any")))

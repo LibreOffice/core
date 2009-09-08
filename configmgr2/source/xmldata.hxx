@@ -45,7 +45,7 @@ namespace xmldata {
 
 rtl::OUString convertFromUtf8(Span const & text);
 
-Type parseType(XmlReader const * reader, Span const & text);
+Type parseType(XmlReader const & reader, Span const & text);
 
 bool parseBoolean(Span const & text, bool deflt);
 

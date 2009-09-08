@@ -30,7 +30,10 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
+#include "com/sun/star/container/NoSuchElementException.hpp"
+#include "com/sun/star/uno/RuntimeException.hpp"
 #include "osl/diagnose.h"
+#include "sal/types.h"
 
 #include "parsemanager.hxx"
 #include "parser.hxx"
@@ -38,32 +41,36 @@
 
 namespace configmgr {
 
+namespace {
+
+namespace css = com::sun::star;
+
+}
+
 ParseManager::ParseManager(
-    rtl::OUString const & url, rtl::Reference< Parser > const & parser):
-    url_(url), parser_(parser), reader_(0)
+    rtl::OUString const & url, rtl::Reference< Parser > const & parser)
+    SAL_THROW((
+        css::container::NoSuchElementException, css::uno::UnoRuntimeException)):
+    reader_(url), parser_(parser)
 {
     OSL_ASSERT(parser.is());
 }
 
 bool ParseManager::parse() {
-    if (reader_.get() == 0) {
-        reader_.reset(new XmlReader(url_));
-    }
     for (;;) {
         switch (itemData_.is()
                 ? XmlReader::RESULT_BEGIN
-                : reader_->nextItem(
+                : reader_.nextItem(
                     parser_->getTextMode(), &itemData_, &itemNamespace_))
         {
         case XmlReader::RESULT_BEGIN:
-            if (!parser_->startElement(
-                    reader_.get(), itemNamespace_, itemData_))
+            if (!parser_->startElement(reader_, itemNamespace_, itemData_))
             {
                 return false;
             }
             break;
         case XmlReader::RESULT_END:
-            parser_->endElement(reader_.get());
+            parser_->endElement(reader_);
             break;
         case XmlReader::RESULT_TEXT:
             parser_->characters(itemData_);

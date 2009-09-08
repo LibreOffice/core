@@ -33,6 +33,7 @@
 #include <algorithm>
 #include <list>
 
+#include "com/sun/star/container/NoSuchElementException.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
@@ -76,13 +77,19 @@ void parseSystemLayer() {
     //TODO
 }
 
-void parseXcsFile(rtl::OUString const & url, int layer, Data * data) {
+void parseXcsFile(rtl::OUString const & url, int layer, Data * data)
+    SAL_THROW((
+        css::container::NoSuchElementException, css::uno::UnoRuntimeException))
+{
     OSL_VERIFY(
         rtl::Reference< ParseManager >(
             new ParseManager(url, new XcsParser(layer, data)))->parse());
 }
 
-void parseXcuFile(rtl::OUString const & url, int layer, Data * data) {
+void parseXcuFile(rtl::OUString const & url, int layer, Data * data)
+    SAL_THROW((
+        css::container::NoSuchElementException, css::uno::UnoRuntimeException))
+{
     OSL_VERIFY(
         rtl::Reference< ParseManager >(
             new ParseManager(url, new XcuParser(layer, data)))->parse());
@@ -128,11 +135,27 @@ void Components::writeModifications() {
 }
 
 void Components::insertXcsFile(int layer, rtl::OUString const & fileUri) {
-    parseXcsFile(fileUri, layer, &data_);
+    try {
+        parseXcsFile(fileUri, layer, &data_);
+    } catch (css::container::NoSuchElementException & e) {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("insertXcsFile does not exist: ")) +
+             e.Message),
+            css::uno::Reference< css::uno::XInterface >());
+    }
 }
 
 void Components::insertXcuFile(int layer, rtl::OUString const & fileUri) {
-    parseXcuFile(fileUri, layer + 1, &data_);
+    try {
+        parseXcuFile(fileUri, layer + 1, &data_);
+    } catch (css::container::NoSuchElementException & e) {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("insertXcuFile does not exist: ")) +
+             e.Message),
+            css::uno::Reference< css::uno::XInterface >());
+    }
 }
 
 Components::Components() {
@@ -262,7 +285,16 @@ void Components::parseFiles(
             if (file.getLength() >= extension.getLength() &&
                 file.match(extension, file.getLength() - extension.getLength()))
             {
-                (*parseFile)(stat.getFileURL(), layer, &data_);
+                try {
+                    (*parseFile)(stat.getFileURL(), layer, &data_);
+                } catch (css::container::NoSuchElementException & e) {
+                    throw css::uno::RuntimeException(
+                        (rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "stat'ed file does not exist: ")) +
+                         e.Message),
+                        css::uno::Reference< css::uno::XInterface >());
+                }
             }
         }
     }
@@ -276,7 +308,16 @@ void Components::parseFileList(
         rtl::OUString url(urls.getToken(0, ' ', i));
         if (url.getLength() != 0) {
             ini.expandMacrosFrom(url); //TODO: detect failure
-            (*parseFile)(url, layer, &data_);
+            try {
+                (*parseFile)(url, layer, &data_);
+            } catch (css::container::NoSuchElementException & e) {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "stat'ed file does not exist: ")) +
+                     e.Message),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
         }
         if (i == -1) {
             break;
@@ -333,9 +374,18 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
                 rtl::OUString name(
                     file.copy(
                         0, file.getLength() - RTL_CONSTASCII_LENGTH(".xcd")));
-                rtl::Reference< ParseManager > manager(
-                    new ParseManager(
-                        stat.getFileURL(), new XcdParser(layer, deps, &data_)));
+                rtl::Reference< ParseManager > manager;
+                try {
+                    manager = new ParseManager(
+                        stat.getFileURL(), new XcdParser(layer, deps, &data_));
+                } catch (css::container::NoSuchElementException & e) {
+                    throw css::uno::RuntimeException(
+                        (rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "stat'ed file does not exist: ")) +
+                         e.Message),
+                        css::uno::Reference< css::uno::XInterface >());
+                }
                 if (manager->parse()) {
                     deps.insert(name);
                 } else {
@@ -417,20 +467,12 @@ rtl::OUString Components::getModificationFileUrl() const {
 }
 
 void Components::parseModificationLayer() {
-    rtl::OUString url(getModificationFileUrl());
-    osl::DirectoryItem di;
-    switch (osl::DirectoryItem::get(url, di)) {
-    case osl::FileBase::E_None:
-        break;
-    case osl::FileBase::E_NOENT:
-        return;
-    default:
-        throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot stat ")) + url,
-            css::uno::Reference< css::uno::XInterface >());
+    try {
+        parseXcuFile(getModificationFileUrl(), Data::NO_LAYER, &data_);
+    } catch (css::container::NoSuchElementException &) {
+        OSL_TRACE(
+            "configmgr user registrymodifications.xcu does not (yet) exist");
     }
-    parseXcuFile(url, Data::NO_LAYER, &data_);
-        //TODO: atomic check for existence
 }
 
 }

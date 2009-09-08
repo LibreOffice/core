@@ -32,14 +32,16 @@
 
 #include "sal/config.h"
 
-#include <memory>
-
+#include "com/sun/star/container/NoSuchElementException.hpp"
+#include "com/sun/star/uno/RuntimeException.hpp"
 #include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
+#include "sal/types.h"
 #include "salhelper/simplereferenceobject.hxx"
 
 #include "span.hxx"
 #include "xmlreader.hxx"
+
+namespace rtl { class OUString; }
 
 namespace configmgr {
 
@@ -48,16 +50,18 @@ class Parser;
 class ParseManager: public salhelper::SimpleReferenceObject {
 public:
     ParseManager(
-        rtl::OUString const & url, rtl::Reference< Parser > const & parser);
+        rtl::OUString const & url, rtl::Reference< Parser > const & parser)
+        SAL_THROW((
+            com::sun::star::container::NoSuchElementException,
+            com::sun::star::uno::UnoRuntimeException));
 
     bool parse();
 
 private:
     virtual ~ParseManager();
 
-    rtl::OUString url_;
+    XmlReader reader_;
     rtl::Reference< Parser > parser_;
-    std::auto_ptr< XmlReader > reader_;
     Span itemData_;
     XmlReader::Namespace itemNamespace_;
 };

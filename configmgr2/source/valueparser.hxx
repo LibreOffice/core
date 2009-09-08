@@ -60,9 +60,9 @@ public:
     XmlReader::Text getTextMode() const;
 
     bool startElement(
-        XmlReader * reader, XmlReader::Namespace ns, Span const & name);
+        XmlReader & reader, XmlReader::Namespace ns, Span const & name);
 
-    bool endElement(XmlReader const * reader);
+    bool endElement(XmlReader const & reader);
 
     void characters(Span const & text);
 
@@ -76,7 +76,7 @@ public:
     Span separator_;
 
 private:
-    void checkEmptyPad(XmlReader const * reader) const;
+    void checkEmptyPad(XmlReader const & reader) const;
 
     template< typename T > com::sun::star::uno::Any convertItems();
 

@@ -63,9 +63,9 @@ private:
     virtual XmlReader::Text getTextMode();
 
     virtual bool startElement(
-        XmlReader * reader, XmlReader::Namespace ns, Span const & name);
+        XmlReader & reader, XmlReader::Namespace ns, Span const & name);
 
-    virtual void endElement(XmlReader const * reader);
+    virtual void endElement(XmlReader const & reader);
 
     virtual void characters(Span const & span);
 
@@ -74,35 +74,35 @@ private:
 
     static Operation parseOperation(Span const & text);
 
-    void handleComponentData(XmlReader * reader);
+    void handleComponentData(XmlReader & reader);
 
-    void handleItem(XmlReader * reader);
+    void handleItem(XmlReader & reader);
 
-    void handlePropValue(XmlReader * reader, PropertyNode * prop);
+    void handlePropValue(XmlReader & reader, PropertyNode * prop);
 
     void handleLocpropValue(
-        XmlReader * reader, LocalizedPropertyNode * locprop);
+        XmlReader & reader, LocalizedPropertyNode * locprop);
 
-    void handleGroupProp(XmlReader * reader, GroupNode * group);
+    void handleGroupProp(XmlReader & reader, GroupNode * group);
 
     void handleUnknownGroupProp(
-        XmlReader const * reader, GroupNode * group, rtl::OUString const & name,
+        XmlReader const & reader, GroupNode * group, rtl::OUString const & name,
         Type type, Operation operation, bool finalized);
 
     void handlePlainGroupProp(
-        XmlReader const * reader, PropertyNode * property,
+        XmlReader const & reader, PropertyNode * property,
         rtl::OUString const & name, Type type, Operation operation,
         bool finalized);
 
     void handleLocalizedGroupProp(
-        XmlReader const * reader, LocalizedPropertyNode * property,
+        XmlReader const & reader, LocalizedPropertyNode * property,
         rtl::OUString const & name, Type type, Operation operation,
         bool finalized);
 
     void handleGroupNode(
-        XmlReader * reader, rtl::Reference< Node > const & group);
+        XmlReader & reader, rtl::Reference< Node > const & group);
 
-    void handleSetNode(XmlReader * reader, SetNode * set);
+    void handleSetNode(XmlReader & reader, SetNode * set);
 
     struct State {
         rtl::Reference< Node > node; // empty iff ignore or <items>

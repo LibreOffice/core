@@ -58,26 +58,26 @@ private:
     virtual XmlReader::Text getTextMode();
 
     virtual bool startElement(
-        XmlReader * reader, XmlReader::Namespace ns, Span const & name);
+        XmlReader & reader, XmlReader::Namespace ns, Span const & name);
 
-    virtual void endElement(XmlReader const * reader);
+    virtual void endElement(XmlReader const & reader);
 
     virtual void characters(Span const & text);
 
-    void handleComponentSchema(XmlReader * reader);
+    void handleComponentSchema(XmlReader & reader);
 
-    void handleNodeRef(XmlReader * reader);
+    void handleNodeRef(XmlReader & reader);
 
-    void handleProp(XmlReader * reader);
+    void handleProp(XmlReader & reader);
 
     void handlePropValue(
-        XmlReader * reader, rtl::Reference< Node > const & property);
+        XmlReader & reader, rtl::Reference< Node > const & property);
 
-    void handleGroup(XmlReader * reader, bool isTemplate);
+    void handleGroup(XmlReader & reader, bool isTemplate);
 
-    void handleSet(XmlReader * reader, bool isTemplate);
+    void handleSet(XmlReader & reader, bool isTemplate);
 
-    void handleSetItem(XmlReader * reader, SetNode * set);
+    void handleSetItem(XmlReader & reader, SetNode * set);
 
     enum State {
         STATE_START, STATE_COMPONENT_SCHEMA, STATE_TEMPLATES,

@@ -68,7 +68,7 @@ XmlReader::Text XcdParser::getTextMode() {
 }
 
 bool XcdParser::startElement(
-    XmlReader * reader, XmlReader::Namespace ns, Span const & name)
+    XmlReader & reader, XmlReader::Namespace ns, Span const & name)
 {
     if (nestedParser_.is()) {
         OSL_ASSERT(nesting_ != LONG_MAX);
@@ -93,13 +93,13 @@ bool XcdParser::startElement(
                 for (;;) {
                     XmlReader::Namespace attrNs;
                     Span attrLn;
-                    if (!reader->nextAttribute(&attrNs, &attrLn)) {
+                    if (!reader.nextAttribute(&attrNs, &attrLn)) {
                         break;
                     }
                     if (attrNs == XmlReader::NAMESPACE_NONE && //TODO: _OOR
                         attrLn.equals(RTL_CONSTASCII_STRINGPARAM("file")))
                     {
-                        attrFile = reader->getAttributeValue(false);
+                        attrFile = reader.getAttributeValue(false);
                     }
                 }
                 if (!attrFile.is()) {
@@ -107,7 +107,7 @@ bool XcdParser::startElement(
                         (rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM(
                                 "no dependency file attribute in ")) +
-                         reader->getUrl()),
+                         reader.getUrl()),
                         css::uno::Reference< css::uno::XInterface >());
                 }
                 dependency_ = xmldata::convertFromUtf8(attrFile);
@@ -116,7 +116,7 @@ bool XcdParser::startElement(
                         (rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM(
                                 "bad dependency file attribute in ")) +
-                         reader->getUrl()),
+                         reader.getUrl()),
                         css::uno::Reference< css::uno::XInterface >());
                 }
             }
@@ -152,12 +152,11 @@ bool XcdParser::startElement(
     throw css::uno::RuntimeException(
         (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad member <")) +
          xmldata::convertFromUtf8(name) +
-         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) +
-         reader->getUrl()),
+         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) + reader.getUrl()),
         css::uno::Reference< css::uno::XInterface >());
 }
 
-void XcdParser::endElement(XmlReader const * reader) {
+void XcdParser::endElement(XmlReader const & reader) {
     if (nestedParser_.is()) {
         nestedParser_->endElement(reader);
         if (--nesting_ == 0) {
