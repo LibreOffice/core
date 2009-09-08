@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,6 +37,7 @@
 #include "ChartWindow.hxx"
 #include "ViewElementListProvider.hxx"
 #include "dlg_ShapeFont.hxx"
+#include "dlg_ShapeParagraph.hxx"
 #include "chartview/DrawModelWrapper.hxx"
 #include "macros.hxx"
 
@@ -45,10 +46,16 @@
 #include <vos/mutex.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/brkitem.hxx>
+#include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
+#include <svx/eeitem.hxx>
+#include <svx/hyznitem.hxx>
+#include <svx/orphitem.hxx>
+#include <svx/spltitem.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
-#include <svx/dialogs.hrc>
+#include <svx/widwitem.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -137,6 +144,7 @@ FeatureState ShapeController::getState( const ::rtl::OUString& rCommand )
             }
             break;
         case COMMAND_ID_FONT_DIALOG:
+        case COMMAND_ID_PARAGRAPH_DIALOG:
             {
                 aReturn.bEnabled = bWritable;
                 aReturn.aState <<= false;
@@ -204,6 +212,11 @@ void ShapeController::execute( const ::rtl::OUString& rCommand, const Sequence< 
                 executeDispatch_FontDialog();
             }
             break;
+        case COMMAND_ID_PARAGRAPH_DIALOG:
+            {
+                executeDispatch_ParagraphDialog();
+            }
+            break;
         default:
             {
             }
@@ -224,6 +237,7 @@ void ShapeController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:Backward",                  COMMAND_ID_BACKWARD,                    CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:SendToBack",                COMMAND_ID_SEND_TO_BACK,                CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:FontDialog",                COMMAND_ID_FONT_DIALOG,                 CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:ParagraphDialog",           COMMAND_ID_PARAGRAPH_DIALOG,            CommandGroup::EDIT );
 }
 
 IMPL_LINK( ShapeController, CheckNameHdl, AbstractSvxNameDialog*, pDialog )
@@ -554,6 +568,44 @@ void ShapeController::executeDispatch_FontDialog()
             ViewElementListProvider aViewElementListProvider( pDrawModelWrapper );
             ::vos::OGuard aGuard( Application::GetSolarMutex() );
             ::boost::scoped_ptr< ShapeFontDialog > pDlg( new ShapeFontDialog( pParent, &aAttr, &aViewElementListProvider ) );
+            if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
+            {
+                const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
+                pDrawViewWrapper->SetAttributes( *pOutAttr );
+            }
+        }
+    }
+}
+
+void ShapeController::executeDispatch_ParagraphDialog()
+{
+    if ( m_pChartController )
+    {
+        Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
+        DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
+        if ( pParent && pDrawViewWrapper )
+        {
+            SfxItemPool& rPool = pDrawViewWrapper->GetModel()->GetItemPool();
+            SfxItemSet aAttr( rPool );
+            pDrawViewWrapper->GetAttributes( aAttr );
+
+            SfxItemSet aNewAttr( rPool,
+                                    EE_ITEMS_START, EE_ITEMS_END,
+                                    SID_ATTR_PARA_HYPHENZONE, SID_ATTR_PARA_HYPHENZONE,
+                                    SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_PAGEBREAK,
+                                    SID_ATTR_PARA_SPLIT, SID_ATTR_PARA_SPLIT,
+                                    SID_ATTR_PARA_WIDOWS, SID_ATTR_PARA_WIDOWS,
+                                    SID_ATTR_PARA_ORPHANS, SID_ATTR_PARA_ORPHANS,
+                                    0 );
+            aNewAttr.Put( aAttr );
+            aNewAttr.Put( SvxHyphenZoneItem( sal_False, SID_ATTR_PARA_HYPHENZONE ) );
+            aNewAttr.Put( SvxFmtBreakItem( SVX_BREAK_NONE, SID_ATTR_PARA_PAGEBREAK ) );
+            aNewAttr.Put( SvxFmtSplitItem( sal_True, SID_ATTR_PARA_SPLIT)  );
+            aNewAttr.Put( SvxWidowsItem( 0, SID_ATTR_PARA_WIDOWS) );
+            aNewAttr.Put( SvxOrphansItem( 0, SID_ATTR_PARA_ORPHANS) );
+
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            ::boost::scoped_ptr< ShapeParagraphDialog > pDlg( new ShapeParagraphDialog( pParent, &aNewAttr ) );
             if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
             {
                 const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();

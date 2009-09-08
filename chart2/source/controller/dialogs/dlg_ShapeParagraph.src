@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: ShapeController.hrc,v $
+ * $RCSfile: dlg_ShapeFont.src,v $
  * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
@@ -27,27 +27,44 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef CHART_SHAPECONTROLLER_HRC
-#define CHART_SHAPECONTROLLER_HRC
+#include "ResourceIds.hrc"
+#include <svx/dialogs.hrc>
 
-//-----------------------------------------------------------------------------
-//Command Ids:
-#define COMMAND_ID_FORMAT_LINE                  1
-#define COMMAND_ID_FORMAT_AREA                  2
-#define COMMAND_ID_TEXT_ATTRIBUTES              3
-#define COMMAND_ID_TRANSFORM_DIALOG             4
-#define COMMAND_ID_OBJECT_TITLE_DESCRIPTION     5
-#define COMMAND_ID_RENAME_OBJECT                6
-#define COMMAND_ID_ARRANGE_ROW                  7
-#define COMMAND_ID_BRING_TO_FRONT               8
-#define COMMAND_ID_FORWARD                      9
-#define COMMAND_ID_BACKWARD                    10
-#define COMMAND_ID_SEND_TO_BACK                11
-#define COMMAND_ID_CUT                         12
-#define COMMAND_ID_COPY                        13
-#define COMMAND_ID_PASTE                       14
-#define COMMAND_ID_FONT_DIALOG                 15
-#define COMMAND_ID_PARAGRAPH_DIALOG            16
-
-// CHART_SHAPECONTROLLER_HRC
-#endif
+TabDialog DLG_SHAPE_PARAGRAPH
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 289 , 176 ) ;
+    Text [ en-US ] = "Paragraph" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_STD_PARAGRAPH ;
+                Text [ en-US ] = "Indents & Spacing";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_ALIGN_PARAGRAPH ;
+                Text [ en-US ] = "Alignment";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PARA_ASIAN ;
+                Text [ en-US ] = "Asian Typography";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_TABULATOR ;
+                Text [ en-US ] = "Tab";
+            };
+        };
+    };
+};

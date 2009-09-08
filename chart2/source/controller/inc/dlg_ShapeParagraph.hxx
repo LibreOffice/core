@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: ShapeController.hrc,v $
+ * $RCSfile: dlg_ShapeFont.hxx,v $
  * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
@@ -27,27 +27,31 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef CHART_SHAPECONTROLLER_HRC
-#define CHART_SHAPECONTROLLER_HRC
+#ifndef CHART2_DLG_SHAPEPARAGRAPH_HXX
+#define CHART2_DLG_SHAPEPARAGRAPH_HXX
 
-//-----------------------------------------------------------------------------
-//Command Ids:
-#define COMMAND_ID_FORMAT_LINE                  1
-#define COMMAND_ID_FORMAT_AREA                  2
-#define COMMAND_ID_TEXT_ATTRIBUTES              3
-#define COMMAND_ID_TRANSFORM_DIALOG             4
-#define COMMAND_ID_OBJECT_TITLE_DESCRIPTION     5
-#define COMMAND_ID_RENAME_OBJECT                6
-#define COMMAND_ID_ARRANGE_ROW                  7
-#define COMMAND_ID_BRING_TO_FRONT               8
-#define COMMAND_ID_FORWARD                      9
-#define COMMAND_ID_BACKWARD                    10
-#define COMMAND_ID_SEND_TO_BACK                11
-#define COMMAND_ID_CUT                         12
-#define COMMAND_ID_COPY                        13
-#define COMMAND_ID_PASTE                       14
-#define COMMAND_ID_FONT_DIALOG                 15
-#define COMMAND_ID_PARAGRAPH_DIALOG            16
+#include <sfx2/tabdlg.hxx>
 
-// CHART_SHAPECONTROLLER_HRC
+//.............................................................................
+namespace chart
+{
+//.............................................................................
+
+/** dialog for paragraph properties of shapes
+ */
+class ShapeParagraphDialog : public SfxTabDialog
+{
+public:
+    ShapeParagraphDialog( Window* pParent, const SfxItemSet* pAttr );
+    virtual ~ShapeParagraphDialog();
+
+private:
+    virtual void PageCreated( USHORT nId, SfxTabPage& rPage );
+};
+
+//.............................................................................
+} //  namespace chart
+//.............................................................................
+
+// CHART2_DLG_SHAPEPARAGRAPH_HXX
 #endif

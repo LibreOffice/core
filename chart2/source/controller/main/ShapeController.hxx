@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,6 +85,7 @@ private:
     void executeDispatch_RenameObject();
     void executeDispatch_ChangeZOrder( sal_uInt16 nId );
     void executeDispatch_FontDialog();
+    void executeDispatch_ParagraphDialog();
 
     SdrObject* getFirstAdditionalShape();
     SdrObject* getLastAdditionalShape();
