@@ -174,6 +174,15 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
                                                   sal_Int32 i_nDPIY
                                                  )
 {
+    #if OSL_DEBUG_LEVEL > 0
+    rtl::OUStringBuffer aBuf( 256 );
+    aBuf.appendAscii( "PageSize: " );
+    aBuf.append( sal_Int32( i_rOrigSize.Width()/100) );
+    aBuf.appendAscii( "mm x " );
+    aBuf.append( sal_Int32( i_rOrigSize.Height()/100) );
+    aBuf.appendAscii( "mm" );
+    SetQuickHelpText( aBuf.makeStringAndClear() );
+    #endif
     maMtf = i_rNewPreview;
     maOrigSize = i_rOrigSize;
     maReplacementString = i_rReplacement;

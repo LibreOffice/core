@@ -191,6 +191,8 @@ public:
             return maMultiPage.aPaperSize;
         return i_rPageSize;
     }
+    bool isFixedPageSize() const
+    { return maFixedPageSize.Width() != 0 && maFixedPageSize.Height() != 0; }
     PrinterController::PageSize modifyJobSetup( const Sequence< PropertyValue >& i_rProps );
 };
 
@@ -612,7 +614,7 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
             Size aCurSize( mpPrinter->GetPaperSize() );
             Size aRealPaperSize( getRealPaperSize( aPageSize.aSize ) );
             if( aRealPaperSize != aCurSize )
-                mpPrinter->SetPaperSizeUser( aRealPaperSize );
+                mpPrinter->SetPaperSizeUser( aRealPaperSize, ! isFixedPageSize() );
         }
         if( i_rProps[ nProperty ].Name.equalsAscii( "PageIncludesNonprintableArea" ) )
         {
@@ -854,7 +856,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     o_rMtf.WindStart();
 
     mpImplData->mpPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
-    mpImplData->mpPrinter->SetPaperSizeUser( aPaperSize );
+    mpImplData->mpPrinter->SetPaperSizeUser( aPaperSize, ! mpImplData->isFixedPageSize() );
 
     return PrinterController::PageSize( aPaperSize );
 }
@@ -941,7 +943,7 @@ void PrinterController::printFilteredPage( int i_nPage )
     // in N-Up printing set the correct page size
     mpImplData->mpPrinter->SetMapMode( MAP_100TH_MM );
     // aPageSize was filtered through mpImplData->getRealPaperSize already by getFilteredPageFile()
-    mpImplData->mpPrinter->SetPaperSizeUser( aPageSize.aSize );
+    mpImplData->mpPrinter->SetPaperSizeUser( aPageSize.aSize, ! mpImplData->isFixedPageSize() );
     // if full paper are is meant, move the output to accomodate for pageoffset
     if( aPageSize.bFullPaper )
     {

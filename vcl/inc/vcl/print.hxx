@@ -261,7 +261,7 @@ private:
                                                   const XubString* pDriver );
     SAL_DLLPRIVATE void         ImplUpdatePageData();
     SAL_DLLPRIVATE void         ImplUpdateFontList();
-    SAL_DLLPRIVATE void         ImplFindPaperFormatForUserSize( JobSetup& );
+    SAL_DLLPRIVATE void         ImplFindPaperFormatForUserSize( JobSetup&, bool bMatchNearest );
     DECL_DLLPRIVATE_LINK(       ImplDestroyPrinterAsync, void* );
 
     SAL_DLLPRIVATE bool StartJob( const rtl::OUString& rJobName, boost::shared_ptr<vcl::PrinterController>& );
@@ -331,6 +331,7 @@ public:
     USHORT                      GetPaperBin() const;
     BOOL                        SetPaper( Paper ePaper );
     BOOL                        SetPaperSizeUser( const Size& rSize );
+    BOOL                        SetPaperSizeUser( const Size& rSize, bool bMatchNearest );
     Paper                   GetPaper() const;
 
     // returns number of available paper formats

@@ -974,12 +974,13 @@ USHORT Printer::GetPaperBin() const
 // -----------------------------------------------------------------------
 
 // Map user paper format to a available printer paper formats
-void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
+void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNearest )
 {
     ImplJobSetup*   pSetupData = aJobSetup.ImplGetData();
 
     int     nLandscapeAngle = GetLandscapeAngle();
     int     nPaperCount     = GetPaperInfoCount();
+    bool    bFound = false;
 
     PaperInfo aInfo(pSetupData->mnPaperWidth, pSetupData->mnPaperHeight);
 
@@ -993,6 +994,7 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
             pSetupData->mePaperFormat = ImplGetPaperFormat( rPaperInfo.getWidth(),
                                                             rPaperInfo.getHeight() );
             pSetupData->meOrientation = ORIENTATION_PORTRAIT;
+            bFound = true;
             break;
         }
     }
@@ -1016,9 +1018,47 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
                 pSetupData->mePaperFormat = ImplGetPaperFormat( rPaperInfo.getWidth(),
                                                                 rPaperInfo.getHeight() );
                 pSetupData->meOrientation = ORIENTATION_LANDSCAPE;
+                bFound = true;
                 break;
             }
         }
+    }
+
+    if( ! bFound && bMatchNearest )
+    {
+         sal_Int64 nBestMatch = SAL_MAX_INT64;
+         int nBestIndex = 0;
+         Orientation eBestOrientation = ORIENTATION_PORTRAIT;
+         for( int i = 0; i < nPaperCount; i++ )
+         {
+             const PaperInfo& rPaperInfo = GetPaperInfo( i );
+
+             // check protrait match
+             sal_Int64 nDX = pSetupData->mnPaperWidth - rPaperInfo.getWidth();
+             sal_Int64 nDY = pSetupData->mnPaperHeight - rPaperInfo.getHeight();
+             sal_Int64 nMatch = nDX*nDX + nDY*nDY;
+             if( nMatch < nBestMatch )
+             {
+                 nBestMatch = nMatch;
+                 nBestIndex = i;
+                 eBestOrientation = ORIENTATION_PORTRAIT;
+             }
+
+             // check landscape match
+             nDX = pSetupData->mnPaperWidth - rPaperInfo.getHeight();
+             nDY = pSetupData->mnPaperHeight - rPaperInfo.getWidth();
+             nMatch = nDX*nDX + nDY*nDY;
+             if( nMatch < nBestMatch )
+             {
+                 nBestMatch = nMatch;
+                 nBestIndex = i;
+                 eBestOrientation = ORIENTATION_LANDSCAPE;
+             }
+         }
+         const PaperInfo& rBestInfo = GetPaperInfo( nBestIndex );
+         pSetupData->mePaperFormat = ImplGetPaperFormat( rBestInfo.getWidth(),
+                                                         rBestInfo.getHeight() );
+         pSetupData->meOrientation = eBestOrientation;
     }
 }
 
@@ -1050,7 +1090,7 @@ BOOL Printer::SetPaper( Paper ePaper )
 
         ImplReleaseGraphics();
         if ( ePaper == PAPER_USER )
-            ImplFindPaperFormatForUserSize( aJobSetup );
+            ImplFindPaperFormatForUserSize( aJobSetup, false );
         if ( mpInfoPrinter->SetData( SAL_JOBSET_PAPERSIZE|SAL_JOBSET_ORIENTATION, pSetupData ) )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
@@ -1070,6 +1110,11 @@ BOOL Printer::SetPaper( Paper ePaper )
 // -----------------------------------------------------------------------
 
 BOOL Printer::SetPaperSizeUser( const Size& rSize )
+{
+    return SetPaperSizeUser( rSize, false );
+}
+
+BOOL Printer::SetPaperSizeUser( const Size& rSize, bool bMatchNearest )
 {
     if ( mbInPrintPage )
         return FALSE;
@@ -1094,7 +1139,7 @@ BOOL Printer::SetPaperSizeUser( const Size& rSize )
         }
 
         ImplReleaseGraphics();
-        ImplFindPaperFormatForUserSize( aJobSetup );
+        ImplFindPaperFormatForUserSize( aJobSetup, bMatchNearest );
 
         // Changing the paper size can also change the orientation!
         if ( mpInfoPrinter->SetData( SAL_JOBSET_PAPERSIZE|SAL_JOBSET_ORIENTATION, pSetupData ) )
