@@ -569,7 +569,7 @@ namespace {
                                     rtl::OUString(),
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_HELP),
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "PageOptions" ) ),
-                                    CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES),
+                                    CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW),
                                     0,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
                                     aPageOptionsOpt

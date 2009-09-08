@@ -187,8 +187,18 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
         {
             < "Original size" ; > ;
             < "Fit to printable page" ; > ;
-            < "Distribute on multiple pages" ; > ;
-            < "Trim" ; > ;
+            < "Distribute on multiple paper sheets" ; > ;
+            < "Tile paper sheet with repeated slides" ; > ;
+        };
+    };
+    StringArray _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW
+    {
+        ItemList [ en-US ] =
+        {
+            < "Original size" ; > ;
+            < "Fit to printable page" ; > ;
+            < "Distribute on multiple paper sheets" ; > ;
+            < "Tile paper sheet with repeated pages" ; > ;
         };
     };
     StringArray _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_HELP
