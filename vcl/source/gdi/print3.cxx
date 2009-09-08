@@ -365,8 +365,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             {
                 GDIMetaFile aPageFile;
                 i_pController->setLastPage( sal_True );
-                if( i_pController->getPageCountProtected() > 0 )
-                    i_pController->getFilteredPageFile( 0, aPageFile );
+                i_pController->getFilteredPageFile( 0, aPageFile );
                 return;
             }
             if( aDlg.isPrintToFile() )

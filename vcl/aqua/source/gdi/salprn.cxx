@@ -651,17 +651,14 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
         mnCurPageRangeCount = 1;
     } while( aAccViewState.bNeedRestart || mnCurPageRangeStart + mnCurPageRangeCount < nAllPages );
 
-    // inform applictation that it can release its data
+    // inform application that it can release its data
     // this is awkward, but the XRenderable interface has no method for this,
     // so we need to call XRenderadble::render one last time with IsLastPage = TRUE
-    if( nAllPages > 0 )
-    {
-        i_rController.setLastPage( sal_True );
-        GDIMetaFile aPageFile;
-        if( mrContext )
-            SetupPrinterGraphics( mrContext );
-        i_rController.getFilteredPageFile( 0, aPageFile );
-    }
+    i_rController.setLastPage( sal_True );
+    GDIMetaFile aPageFile;
+    if( mrContext )
+        SetupPrinterGraphics( mrContext );
+    i_rController.getFilteredPageFile( 0, aPageFile );
 
     i_rController.setJobState( bWasAborted
                              ? view::PrintableState_JOB_ABORTED
