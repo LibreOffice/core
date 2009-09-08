@@ -110,7 +110,7 @@ ModalDialog SV_DLG_PRINT
 
     String SV_PRINT_TOFILE_TXT
     {
-        Text [en-US] = "Print to file...";
+        Text [en-US] = "Print to File...";
     };
 
     String SV_PRINT_DEFPRT_TXT
@@ -326,7 +326,7 @@ ModalDialog SV_DLG_PRINT
         {
             Pos = MAP_APPFONT( 5, 5 );
             Size = MAP_APPFONT( 10, 10 );
-            Text [en-US] = "Printer details";
+            Text [en-US] = "Details";
         };
         FixedText SV_PRINT_STATUS_TXT
         {
