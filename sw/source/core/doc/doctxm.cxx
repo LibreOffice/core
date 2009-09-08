@@ -1245,7 +1245,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                 {
                     // Stichwortverzeichnismarkierung
                     lang::Locale aLocale;
-                    if ( pBreakIt->xBreak.is() )
+                    if ( pBreakIt->GetBreakIter().is() )
                     {
                         aLocale = pBreakIt->GetLocale(
                                         pTOXSrc->GetLang( *pTxtMark->GetStart() ) );

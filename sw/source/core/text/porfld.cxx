@@ -215,25 +215,25 @@ SwFldSlot::~SwFldSlot()
 void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
 {
     String aTxt;
-    if( GetExpTxt( rInf, aTxt ) && aTxt.Len() && pBreakIt->xBreak.is() )
+    if( GetExpTxt( rInf, aTxt ) && aTxt.Len() && pBreakIt->GetBreakIter().is() )
     {
         BYTE nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
         USHORT nScript;
         {
-            nScript = pBreakIt->xBreak->getScriptType( aTxt, 0 );
+            nScript = pBreakIt->GetBreakIter()->getScriptType( aTxt, 0 );
             xub_StrLen nChg = 0;
             if( i18n::ScriptType::WEAK == nScript )
             {
-                nChg =(xub_StrLen)pBreakIt->xBreak->endOfScript(aTxt,0,nScript);
+                nChg =(xub_StrLen)pBreakIt->GetBreakIter()->endOfScript(aTxt,0,nScript);
                 if( nChg < aTxt.Len() )
-                    nScript = pBreakIt->xBreak->getScriptType( aTxt, nChg );
+                    nScript = pBreakIt->GetBreakIter()->getScriptType( aTxt, nChg );
             }
 
             //
             // nNextScriptChg will be evaluated during SwFldPortion::Format()
             //
             if ( nChg < aTxt.Len() )
-                nNextScriptChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( aTxt, nChg, nScript );
+                nNextScriptChg = (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript( aTxt, nChg, nScript );
             else
                 nNextScriptChg = aTxt.Len();
 
@@ -1127,12 +1127,12 @@ SwCombinedPortion::SwCombinedPortion( const XubString &rTxt )
         aExpand.Erase( 6 );
     // Initialization of the scripttype array,
     // the arrays of width and position are filled by the format function
-    if( pBreakIt->xBreak.is() )
+    if( pBreakIt->GetBreakIter().is() )
     {
         BYTE nScr = SW_SCRIPTS;
         for( USHORT i = 0; i < rTxt.Len(); ++i )
         {
-            USHORT nScript = pBreakIt->xBreak->getScriptType( rTxt, i );
+            USHORT nScript = pBreakIt->GetBreakIter()->getScriptType( rTxt, i );
             switch ( nScript ) {
                 case i18n::ScriptType::LATIN : nScr = SW_LATIN; break;
                 case i18n::ScriptType::ASIAN : nScr = SW_CJK; break;

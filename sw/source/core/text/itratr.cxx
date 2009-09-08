@@ -400,10 +400,10 @@ sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const XubString &rT
         xub_StrLen nStop = nIdx;
         sal_Bool bClear;
         LanguageType eLang = pFnt->GetLanguage();
-        if( pBreakIt->xBreak.is() )
+        if( pBreakIt->GetBreakIter().is() )
         {
             bClear = CH_BLANK == rTxt.GetChar( nStop );
-            Boundary aBndry( pBreakIt->xBreak->getWordBoundary( rTxt, nIdx,
+            Boundary aBndry( pBreakIt->GetBreakIter()->getWordBoundary( rTxt, nIdx,
                              pBreakIt->GetLocale( eLang ),
                              WordType::DICTIONARY_WORD, TRUE ) );
             nStop = (xub_StrLen)aBndry.endPos;
@@ -870,7 +870,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
 
     if ( nStt == nEnd )
     {
-        if ( !pBreakIt->xBreak.is() )
+        if ( !pBreakIt->GetBreakIter().is() )
             return 100;
 
         SwScriptInfo aScriptInfo;
@@ -878,7 +878,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
         aIter.SeekAndChgAttrIter( nStt, pOut );
 
         Boundary aBound =
-            pBreakIt->xBreak->getWordBoundary( GetTxt(), nStt,
+            pBreakIt->GetBreakIter()->getWordBoundary( GetTxt(), nStt,
             pBreakIt->GetLocale( aIter.GetFnt()->GetLanguage() ),
             WordType::DICTIONARY_WORD, sal_True );
 

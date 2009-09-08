@@ -179,7 +179,7 @@ MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
     if( nWishLen && nWishLen < nEnd )
         nEnd = nWishLen;
 
-    if ( ! nWishLen && pBreakIt->xBreak.is() )
+    if ( ! nWishLen && pBreakIt->GetBreakIter().is() )
     {
         // find first word
         const SwAttrSet& rAttrSet = GetSwAttrSet();
@@ -201,7 +201,7 @@ MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
         }
 
         Boundary aBound =
-            pBreakIt->xBreak->getWordBoundary( GetTxt(), 0,
+            pBreakIt->GetBreakIter()->getWordBoundary( GetTxt(), 0,
             pBreakIt->GetLocale( eLanguage ), WordType::DICTIONARY_WORD, sal_True );
 
         nEnd = (xub_StrLen)aBound.endPos;

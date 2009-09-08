@@ -682,7 +682,7 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
         return m_Text;
 
     Boundary aBndry;
-    const uno::Reference< XBreakIterator > &rxBreak = pBreakIt->xBreak;
+    const uno::Reference< XBreakIterator > &rxBreak = pBreakIt->GetBreakIter();
     if (rxBreak.is())
     {
         sal_Int16 nWordType = WordType::DICTIONARY_WORD;
@@ -750,7 +750,7 @@ BOOL SwScanner::NextWord()
             {
                 if ( !pLanguage )
                 {
-                    const USHORT nNextScriptType = pBreakIt->xBreak->getScriptType( rText, nBegin );
+                    const USHORT nNextScriptType = pBreakIt->GetBreakIter()->getScriptType( rText, nBegin );
                     ModelToViewHelper::ModelPosition aModelBeginPos = ModelToViewHelper::ConvertToModelPosition( pConversionMap, nBegin );
                     const xub_StrLen nBeginModelPos = (xub_StrLen)aModelBeginPos.mnPos;
                     aCurrLang = rNode.GetLang( nBeginModelPos, 1, nNextScriptType );
@@ -772,7 +772,7 @@ BOOL SwScanner::NextWord()
             return FALSE;
 
         // get the word boundaries
-        aBound = pBreakIt->xBreak->getWordBoundary( rText, nBegin,
+        aBound = pBreakIt->GetBreakIter()->getWordBoundary( rText, nBegin,
                 pBreakIt->GetLocale( aCurrLang ), nWordType, sal_True );
 
         //no word boundaries could be found
@@ -795,11 +795,11 @@ BOOL SwScanner::NextWord()
 
         // restrict boundaries to script boundaries and nEndPos
         const USHORT nCurrScript =
-                pBreakIt->xBreak->getScriptType( rText, nBegin );
+                pBreakIt->GetBreakIter()->getScriptType( rText, nBegin );
 
         XubString aTmpWord = rText.Copy( nBegin, static_cast<xub_StrLen>(aBound.endPos - nBegin) );
         const sal_Int32 nScriptEnd = nBegin +
-            pBreakIt->xBreak->endOfScript( aTmpWord, 0, nCurrScript );
+            pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
         const sal_Int32 nEnd = Min( aBound.endPos, nScriptEnd );
 
         // restrict word start to last script change position
@@ -810,7 +810,7 @@ BOOL SwScanner::NextWord()
             aTmpWord = rText.Copy( static_cast<xub_StrLen>(aBound.startPos),
                                    static_cast<xub_StrLen>(nBegin - aBound.startPos + 1) );
             nScriptBegin = aBound.startPos +
-                pBreakIt->xBreak->beginOfScript( aTmpWord, nBegin - aBound.startPos,
+                pBreakIt->GetBreakIter()->beginOfScript( aTmpWord, nBegin - aBound.startPos,
                                                 nCurrScript );
         }
 
@@ -820,11 +820,11 @@ BOOL SwScanner::NextWord()
     else
     {
         const USHORT nCurrScript =
-                pBreakIt->xBreak->getScriptType( rText, aBound.startPos );
+                pBreakIt->GetBreakIter()->getScriptType( rText, aBound.startPos );
         XubString aTmpWord = rText.Copy( static_cast<xub_StrLen>(aBound.startPos),
                                          static_cast<xub_StrLen>(aBound.endPos - aBound.startPos) );
         const sal_Int32 nScriptEnd = aBound.startPos +
-            pBreakIt->xBreak->endOfScript( aTmpWord, 0, nCurrScript );
+            pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
         const sal_Int32 nEnd = Min( aBound.endPos, nScriptEnd );
         nBegin = (xub_StrLen)aBound.startPos;
         nLen = (xub_StrLen)(nEnd - nBegin);
@@ -1196,7 +1196,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
 
             LanguageType eActLang = pNode->GetLang( nBegin );
             Boundary aBound =
-                pBreakIt->xBreak->getWordBoundary( pNode->GetTxt(), nBegin,
+                pBreakIt->GetBreakIter()->getWordBoundary( pNode->GetTxt(), nBegin,
                     pBreakIt->GetLocale( eActLang ),
                     WordType::DICTIONARY_WORD, TRUE );
             nBegin = xub_StrLen(aBound.startPos);
@@ -1352,8 +1352,8 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
             {
                 const LanguageType aCurrLang = pNode->GetLang( nBegin );
                 const com::sun::star::lang::Locale aCurrLocale = pBreakIt->GetLocale( aCurrLang );
-                nBegin = static_cast< xub_StrLen >(pBreakIt->xBreak->beginOfSentence( rText, nBegin, aCurrLocale ));
-                nEnd = static_cast< xub_StrLen >(Min( rText.getLength(), pBreakIt->xBreak->endOfSentence( rText, nEnd, aCurrLocale ) ));
+                nBegin = static_cast< xub_StrLen >(pBreakIt->GetBreakIter()->beginOfSentence( rText, nBegin, aCurrLocale ));
+                nEnd = static_cast< xub_StrLen >(Min( rText.getLength(), pBreakIt->GetBreakIter()->endOfSentence( rText, nEnd, aCurrLocale ) ));
             }
         }
     }
@@ -1753,7 +1753,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
                 const bool bCount = aExpandText.getLength() > 0;
 
                 // count words in 'regular' text:
-                if( bCount && pBreakIt->xBreak.is() )
+                if( bCount && pBreakIt->GetBreakIter().is() )
                 {
                     const String aScannerText( aExpandText );
                     SwScanner aScanner( *this, aScannerText, 0, pConversionMap,

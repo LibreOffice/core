@@ -411,8 +411,8 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         else
         {
             Boundary aBndry;
-            if( pBreakIt->xBreak.is() )
-                aBndry = pBreakIt->xBreak->getWordBoundary(
+            if( pBreakIt->GetBreakIter().is() )
+                aBndry = pBreakIt->GetBreakIter()->getWordBoundary(
                             pTxtNd->GetTxt(), nPtPos,
                             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                             WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
@@ -909,8 +909,8 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             else
             {
                 Boundary aBndry;
-                if( pBreakIt->xBreak.is() )
-                    aBndry = pBreakIt->xBreak->getWordBoundary(
+                if( pBreakIt->GetBreakIter().is() )
+                    aBndry = pBreakIt->GetBreakIter()->getWordBoundary(
                                 pTxtNd->GetTxt(), nPtPos,
                                 pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                                 WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,

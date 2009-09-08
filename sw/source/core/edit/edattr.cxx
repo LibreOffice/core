@@ -474,14 +474,14 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
         {
             USHORT nScript;
             for( n = 0; n < nEnd; n = (xub_StrLen)
-                    pBreakIt->xBreak->endOfScript( sExp, n, nScript ))
+                    pBreakIt->GetBreakIter()->endOfScript( sExp, n, nScript ))
             {
-                nScript = pBreakIt->xBreak->getScriptType( sExp, n );
+                nScript = pBreakIt->GetBreakIter()->getScriptType( sExp, n );
                 rScrpt |= lcl_SetScriptFlags( nScript );
             }
         }
         else
-            rScrpt |= lcl_SetScriptFlags( pBreakIt->xBreak->
+            rScrpt |= lcl_SetScriptFlags( pBreakIt->GetBreakIter()->
                                         getScriptType( sExp, nEnd-1 ));
     }
 
@@ -493,7 +493,7 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
 USHORT SwEditShell::GetScriptType() const
 {
     USHORT nRet = 0;
-    if( pBreakIt->xBreak.is() )
+    //if( pBreakIt->GetBreakIter().is() )
     {
         FOREACHPAM_START(this)
 
@@ -525,7 +525,7 @@ USHORT SwEditShell::GetScriptType() const
                     {
                         nScript = pScriptInfo ?
                                   pScriptInfo->ScriptType( nPos ) :
-                                  pBreakIt->xBreak->getScriptType( pTNd->GetTxt(), nPos );
+                                  pBreakIt->GetBreakIter()->getScriptType( pTNd->GetTxt(), nPos );
                     }
                     else
                         nScript = GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
@@ -534,7 +534,7 @@ USHORT SwEditShell::GetScriptType() const
                         nRet |= lcl_SetScriptFlags( nScript );
                 }
             }
-            else
+            else if ( pBreakIt->GetBreakIter().is() )
             {
                 ULONG nEndIdx = pEnd->nNode.GetIndex();
                 SwNodeIndex aIdx( pStt->nNode );
@@ -563,7 +563,7 @@ USHORT SwEditShell::GetScriptType() const
                         {
                             nScript = pScriptInfo ?
                                       pScriptInfo->ScriptType( nChg ) :
-                                      pBreakIt->xBreak->getScriptType(
+                                      pBreakIt->GetBreakIter()->getScriptType(
                                                                 rTxt, nChg );
 
                             if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nChg, nRet, TRUE,
@@ -578,7 +578,7 @@ USHORT SwEditShell::GetScriptType() const
 
                             nChg = pScriptInfo ?
                                    pScriptInfo->NextScriptChg( nChg ) :
-                                   (xub_StrLen)pBreakIt->xBreak->endOfScript(
+                                   (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript(
                                                     rTxt, nChg, nScript );
 
                             nFldPos = rTxt.Search(

@@ -884,8 +884,8 @@ void WW8_SdrAttrIter::NextPara( USHORT nPar )
     pEditPool = aSet.GetPool();
     eNdChrSet = ItemGet<SvxFontItem>(aSet,EE_CHAR_FONTINFO).GetCharSet();
 
-    if( pBreakIt->xBreak.is() )
-        nScript = pBreakIt->xBreak->getScriptType( pEditObj->GetText(nPara), 0);
+    if( pBreakIt->GetBreakIter().is() )
+        nScript = pBreakIt->GetBreakIter()->getScriptType( pEditObj->GetText(nPara), 0);
     else
         nScript = i18n::ScriptType::LATIN;
 

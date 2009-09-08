@@ -708,8 +708,8 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 {
                     //Make a guess at which of asian of western we should be setting
                     USHORT nScript;
-                    if (pBreakIt->xBreak.is())
-                        nScript = pBreakIt->xBreak->getScriptType( aData.sUp, 0);
+                    if (pBreakIt->GetBreakIter().is())
+                        nScript = pBreakIt->GetBreakIter()->getScriptType( aData.sUp, 0);
                     else
                         nScript = i18n::ScriptType::ASIAN;
 

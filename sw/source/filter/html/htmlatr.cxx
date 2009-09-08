@@ -1801,8 +1801,8 @@ HTMLEndPosLst::HTMLEndPosLst( SwDoc *pD, SwDoc* pTempl,
     xub_StrLen nPos = 0;
     while( nPos < nEndPos )
     {
-        sal_uInt16 nScript = pBreakIt->xBreak->getScriptType( rText, nPos );
-        nPos = (xub_StrLen)pBreakIt->xBreak->endOfScript( rText, nPos, nScript );
+        sal_uInt16 nScript = pBreakIt->GetBreakIter()->getScriptType( rText, nPos );
+        nPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript( rText, nPos, nScript );
         aScriptChgLst.Insert( nPos, aScriptChgLst.Count() );
         aScriptLst.Insert( nScript, aScriptLst.Count() );
     }

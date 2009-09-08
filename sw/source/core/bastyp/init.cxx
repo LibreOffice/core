@@ -467,14 +467,18 @@ SwAutoCompleteWord* SwDoc::pACmpltWords = 0;
 
 SwCheckIt* pCheckIt = 0;
 CharClass* pAppCharClass = 0;
-SwCalendarWrapper* pCalendarWrapper = 0;
+
 CollatorWrapper* pCollator = 0, *pCaseCollator = 0;
 ::utl::TransliterationWrapper* pTransWrp = 0;
 
 /******************************************************************************
  *  void _InitCore()
  ******************************************************************************/
-
+salhelper::SingletonRef<SwCalendarWrapper>* s_getCalendarWrapper()
+{
+    static salhelper::SingletonRef<SwCalendarWrapper> aCalendarWrapper;
+    return &aCalendarWrapper;
+}
 void _InitCore()
 {
     SfxPoolItem* pItem;
@@ -740,9 +744,9 @@ void _InitCore()
 
     SwBreakIt::_Create( xMSF );
     pCheckIt = NULL;
-    pAppCharClass = new CharClass(
-        xMSF, SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() ));
-    pCalendarWrapper = new SwCalendarWrapper( xMSF );
+    /*pAppCharClass = new CharClass(
+        xMSF, SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() ));*/
+    //pCalendarWrapper = new SwCalendarWrapper( xMSF );
 
     _FrmInit();
     _TextInit();
@@ -773,7 +777,6 @@ void _FinitCore()
     SwBreakIt::_Delete();
     delete pCheckIt;
     delete pAppCharClass;
-    delete pCalendarWrapper;
     delete pCollator;
     delete pCaseCollator;
 
@@ -856,15 +859,14 @@ void _FinitCore()
 // returns the APP - CharClass instance - used for all ToUpper/ToLower/...
 CharClass& GetAppCharClass()
 {
+    if ( !pAppCharClass )
+    {
+        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        pAppCharClass = new CharClass(
+            xMSF, SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() ));
+    }
     return *pAppCharClass;
 }
-
-LocaleDataWrapper& GetAppLocaleData()
-{
-    SvtSysLocale aSysLocale;
-    return (LocaleDataWrapper&)aSysLocale.GetLocaleData();
-}
-
 
 void SwCalendarWrapper::LoadDefaultCalendar( USHORT eLang )
 {

@@ -259,7 +259,6 @@ namespace nsSetAttrMode
 
 // returns the APP - CharClass instance - used for all ToUpper/ToLower/...
 SW_DLLPUBLIC CharClass& GetAppCharClass();
-SW_DLLPUBLIC LocaleDataWrapper& GetAppLocaleData();
 SW_DLLPUBLIC LanguageType GetAppLanguage();
 
 

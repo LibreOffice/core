@@ -2190,9 +2190,9 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
                         {
                             const String& rText = pTxtNd->GetTxt();
                             sal_uInt16 nScriptTxt =
-                                pBreakIt->xBreak->getScriptType(
+                                pBreakIt->GetBreakIter()->getScriptType(
                                             rText, pAttr->GetSttCnt() );
-                            xub_StrLen nScriptEnd = (xub_StrLen)pBreakIt->xBreak
+                            xub_StrLen nScriptEnd = (xub_StrLen)pBreakIt->GetBreakIter()
                                     ->endOfScript( rText, nStt, nScriptTxt );
                             while( nScriptEnd < nEndCnt )
                             {
@@ -2212,9 +2212,9 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
                                         pNext->InsertPrev( pSetAttr );
                                 }
                                 nStt = nScriptEnd;
-                                nScriptTxt = pBreakIt->xBreak->getScriptType(
+                                nScriptTxt = pBreakIt->GetBreakIter()->getScriptType(
                                                 rText, nStt );
-                                nScriptEnd = (xub_StrLen)pBreakIt->xBreak
+                                nScriptEnd = (xub_StrLen)pBreakIt->GetBreakIter()
                                     ->endOfScript( rText, nStt, nScriptTxt );
                             }
                             bInsert = nScriptItem == nScriptTxt;
@@ -3007,9 +3007,9 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
                                             .GetTxtNode();
         ASSERT( pTxtNd, "No text node" );
         const String& rText = pTxtNd->GetTxt();
-        sal_uInt16 nScriptTxt = pBreakIt->xBreak->getScriptType(
+        sal_uInt16 nScriptTxt = pBreakIt->GetBreakIter()->getScriptType(
                         rText, pAttr->GetSttCnt() );
-        xub_StrLen nScriptEnd = (xub_StrLen)pBreakIt->xBreak
+        xub_StrLen nScriptEnd = (xub_StrLen)pBreakIt->GetBreakIter()
                     ->endOfScript( rText, pAttr->GetSttCnt(), nScriptTxt );
         while( nScriptEnd < nEndCnt )
         {
@@ -3027,9 +3027,9 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
                 }
             }
             pAttr->nSttCntnt = nScriptEnd;
-            nScriptTxt = pBreakIt->xBreak->getScriptType(
+            nScriptTxt = pBreakIt->GetBreakIter()->getScriptType(
                             rText, nScriptEnd );
-            nScriptEnd = (xub_StrLen)pBreakIt->xBreak
+            nScriptEnd = (xub_StrLen)pBreakIt->GetBreakIter()
                     ->endOfScript( rText, nScriptEnd, nScriptTxt );
         }
         bInsert = nScriptItem == nScriptTxt;

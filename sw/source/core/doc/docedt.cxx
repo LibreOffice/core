@@ -2619,8 +2619,8 @@ void SwDoc::TransliterateText( const SwPaM& rPaM,
     if( pStt == pEnd && pTNd )                  // no region ?
     {
         Boundary aBndry;
-        if( pBreakIt->xBreak.is() )
-            aBndry = pBreakIt->xBreak->getWordBoundary(
+        if( pBreakIt->GetBreakIter().is() )
+            aBndry = pBreakIt->GetBreakIter()->getWordBoundary(
                         pTNd->GetTxt(), nSttCnt,
                         pBreakIt->GetLocale( pTNd->GetLang( nSttCnt ) ),
                         WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,

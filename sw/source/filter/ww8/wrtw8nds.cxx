@@ -670,15 +670,15 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRu
     aStr += String::CreateFromInt32( nJC );
 
     /*
-       MS needs to know the name and size of the font used in the ruby item,
-       but we coud have written it in a mixture of asian and western
-       scripts, and each of these can be a different font and size than the
-       other, so we make a guess based upon the first character of the text,
-       defaulting to asian.
-       */
+     MS needs to know the name and size of the font used in the ruby item,
+     but we coud have written it in a mixture of asian and western
+     scripts, and each of these can be a different font and size than the
+     other, so we make a guess based upon the first character of the text,
+     defaulting to asian.
+     */
     USHORT nRubyScript;
-    if ( pBreakIt->xBreak.is() )
-        nRubyScript = pBreakIt->xBreak->getScriptType( rRuby.GetText(), 0);
+    if( pBreakIt->GetBreakIter().is() )
+        nRubyScript = pBreakIt->GetBreakIter()->getScriptType( rRuby.GetText(), 0);
     else
         nRubyScript = i18n::ScriptType::ASIAN;
 
@@ -726,8 +726,8 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRu
     aStr.APPEND_CONST_ASC( "(\\s\\up " );
 
 
-    if ( pBreakIt->xBreak.is() )
-        nRubyScript = pBreakIt->xBreak->getScriptType( rNode.GetTxt(),
+    if ( pBreakIt->GetBreakIter().is() )
+        nRubyScript = pBreakIt->GetBreakIter()->getScriptType( rNode.GetTxt(),
                 *( pRubyTxt->GetStart() ) );
     else
         nRubyScript = i18n::ScriptType::ASIAN;
@@ -1409,8 +1409,8 @@ String SwAttrIter::GetSnippet(const String &rStr, xub_StrLen nAktPos,
     if (SVX_CASEMAP_TITEL == ((const SvxCaseMapItem&)rItem).GetValue())
     {
         sal_uInt16 nScriptType = i18n::ScriptType::LATIN;
-        if (pBreakIt->xBreak.is())
-            nScriptType = pBreakIt->xBreak->getScriptType(aSnippet, 0);
+        if (pBreakIt->GetBreakIter().is())
+            nScriptType = pBreakIt->GetBreakIter()->getScriptType(aSnippet, 0);
 
         LanguageType nLanguage;
         switch (nScriptType)
@@ -1435,7 +1435,7 @@ String SwAttrIter::GetSnippet(const String &rStr, xub_StrLen nAktPos,
         //If we weren't at the begin of a word undo the case change.
         //not done before doing the casemap because the sequence might start
         //with whitespace
-        if (pBreakIt->xBreak.is() && !pBreakIt->xBreak->isBeginWord(
+        if (pBreakIt->GetBreakIter().is() && !pBreakIt->GetBreakIter()->isBeginWord(
             rStr, nAktPos, pBreakIt->GetLocale(nLanguage),
             i18n::WordType::ANYWORD_IGNOREWHITESPACES ) )
         {

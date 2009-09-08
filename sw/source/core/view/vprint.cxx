@@ -44,6 +44,7 @@
 #include <svx/pbinitem.hxx>
 #include <svx/svdview.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <svtools/syslocale.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
 #include <fmtfsize.hxx>
@@ -353,7 +354,7 @@ void lcl_FormatPostIt( IDocumentContentOperations* pIDCO, SwPaM& aPam, SwPostItF
     aStr.AppendAscii(sTmp);
     aStr += pField->GetPar1();
     aStr += ' ';
-    aStr += GetAppLocaleData().getDate( pField->GetDate() );
+    aStr += SvtSysLocale().GetLocaleData().getDate( pField->GetDate() );
     pIDCO->Insert( aPam, aStr, true );
 
     pIDCO->SplitNode( *aPam.GetPoint(), false );

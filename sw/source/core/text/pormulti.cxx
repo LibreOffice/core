@@ -916,7 +916,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
         // for 99% of all cases
         XubString aTxt = GetTxtFrm()->GetTxtNode()->GetExpandTxt( rPos, 1 );
 
-        if ( pBreakIt->xBreak.is() && aTxt.Len() )
+        if ( pBreakIt->GetBreakIter().is() && aTxt.Len() )
         {
             sal_Bool bFldDir = ( i18n::ScriptType::COMPLEX ==
                                  pBreakIt->GetRealScriptOfText( aTxt, 0 ) );

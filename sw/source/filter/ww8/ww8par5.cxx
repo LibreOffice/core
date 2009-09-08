@@ -2521,8 +2521,8 @@ void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
         const SwCharFmt *pCharFmt=0;
         //Make a guess at which of asian of western we should be setting
         USHORT nScript;
-        if (pBreakIt->xBreak.is())
-            nScript = pBreakIt->xBreak->getScriptType(sRuby, 0);
+        if (pBreakIt->GetBreakIter().is())
+            nScript = pBreakIt->GetBreakIter()->getScriptType(sRuby, 0);
         else
             nScript = i18n::ScriptType::ASIAN;
 

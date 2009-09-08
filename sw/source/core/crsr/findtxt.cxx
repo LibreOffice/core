@@ -456,7 +456,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     USHORT nCurrScript = 0;
 
     if ( SearchAlgorithms_APPROXIMATE == rSearchOpt.algorithmType &&
-         pBreakIt->xBreak.is() )
+         pBreakIt->GetBreakIter().is() )
     {
         pScriptIter = new SwScriptIterator( sCleanStr, nStart, bSrchForward );
         nSearchScript = pBreakIt->GetRealScriptOfText( rSearchOpt.searchString, 0 );

@@ -2790,8 +2790,8 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             */
             const String& rFldPar1 = pFld->GetPar1();
             USHORT nScript;
-            if( pBreakIt->xBreak.is() )
-                nScript = pBreakIt->xBreak->getScriptType( rFldPar1, 0);
+            if( pBreakIt->GetBreakIter().is() )
+                nScript = pBreakIt->GetBreakIter()->getScriptType( rFldPar1, 0);
             else
                 nScript = i18n::ScriptType::ASIAN;
 
@@ -3110,8 +3110,8 @@ static Writer& OutRTF_SwTxtRuby( Writer& rWrt, const SfxPoolItem& rHt )
         defaulting to asian.
         */
     USHORT nScript;
-    if( pBreakIt->xBreak.is() )
-        nScript = pBreakIt->xBreak->getScriptType( rRuby.GetText(), 0);
+    if( pBreakIt->GetBreakIter().is() )
+        nScript = pBreakIt->GetBreakIter()->getScriptType( rRuby.GetText(), 0);
     else
         nScript = i18n::ScriptType::ASIAN;
 
@@ -3153,8 +3153,8 @@ static Writer& OutRTF_SwTxtRuby( Writer& rWrt, const SfxPoolItem& rHt )
         rWrt.Strm() << "\\\\a" << cDirective;
     rWrt.Strm() << "(\\\\s\\\\up ";
 
-    if( pBreakIt->xBreak.is() )
-        nScript = pBreakIt->xBreak->getScriptType( pNd->GetTxt(),
+    if( pBreakIt->GetBreakIter().is() )
+        nScript = pBreakIt->GetBreakIter()->getScriptType( pNd->GetTxt(),
                                                    *pRubyTxt->GetStart() );
     else
         nScript = i18n::ScriptType::ASIAN;
