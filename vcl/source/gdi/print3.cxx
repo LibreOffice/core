@@ -741,6 +741,13 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     if( nSubPages < 1 )
         nSubPages = 1;
 
+    // reverse sheet order
+    if( mpImplData->mbReversePageOrder )
+    {
+        int nDocPages = getFilteredPageCount();
+        i_nFilteredPage = nDocPages - 1 - i_nFilteredPage;
+    }
+
     // there is no filtering to be done (and possibly the page size of the
     // original page is to be set), when N-Up is "neutral" that is there is
     // only one subpage and the margins are 0
@@ -748,11 +755,6 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
         rMPS.nLeftMargin == 0 && rMPS.nRightMargin == 0 &&
         rMPS.nTopMargin == 0 && rMPS.nBottomMargin == 0 )
     {
-        if( mpImplData->mbReversePageOrder )
-        {
-            int nDocPages = getPageCountProtected();
-            i_nFilteredPage = nDocPages - 1 - i_nFilteredPage;
-        }
         PrinterController::PageSize aPageSize = getPageFile( i_nFilteredPage, o_rMtf, i_bMayUseCache );
         Size aPaperSize = mpImplData->getRealPaperSize( aPageSize.aSize );
         if( aPaperSize != aPageSize.aSize )
@@ -802,9 +804,11 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
         int nPage = (i_nFilteredPage * nSubPages + nSubPage) / rMPS.nRepeat;
         if( mpImplData->mbReversePageOrder )
         {
-            nPage = nDocPages - 1 - nPage;
-            if( nPage == 0 )
+            if( nSubPage == nSubPages-1 ||
+                nPage == nDocPages-1 )
+            {
                 mpImplData->mbLastPage = bIsLastPage;
+            }
         }
         else
         {
