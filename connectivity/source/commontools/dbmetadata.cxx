@@ -157,10 +157,9 @@ namespace dbtools
             const DatabaseMetaData_Impl& _metaData, ::boost::optional< ::rtl::OUString >& _cachedSetting,
             ::rtl::OUString (SAL_CALL XDatabaseMetaData::*_getter)() )
         {
-            lcl_checkConnected( _metaData );
-
             if ( !_cachedSetting )
             {
+                lcl_checkConnected( _metaData );
                 try
                 {
                     _cachedSetting.reset( (_metaData.xConnectionMetaData.get()->*_getter)() );

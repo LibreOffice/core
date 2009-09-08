@@ -73,10 +73,6 @@ namespace connectivity
             //====================================================================
             // Data attributes
             //====================================================================
-            TTypeInfoVector                 m_aTypeInfo;    // Hashtable containing an entry
-                                                                        //  for each row returned by
-                                                                        //  DatabaseMetaData.getTypeInfo.
-
             SQLSMALLINT     numParams;      // Number of parameter markers
                                             //  for the prepared statement
 
@@ -119,7 +115,7 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            OPreparedStatement( OConnection* _pConnection,const TTypeInfoVector& _TypeInfo,const ::rtl::OUString& sql);
+            OPreparedStatement( OConnection* _pConnection,const ::rtl::OUString& sql);
 
             //XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

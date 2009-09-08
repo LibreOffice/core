@@ -79,7 +79,7 @@ void OPredicateCompiler::dispose()
 {
     Clean();
     m_orgColumns        = NULL;
-    m_xIndexes          = NULL;
+m_xIndexes.clear();
 }
 //------------------------------------------------------------------
 //  inline OCursor& OPredicateCompiler::Cursor() const {return m_rCursor;}

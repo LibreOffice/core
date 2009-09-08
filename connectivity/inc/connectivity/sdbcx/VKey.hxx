@@ -51,6 +51,7 @@ namespace connectivity
 
         struct OOO_DLLPUBLIC_DBTOOLS KeyProperties
         {
+            ::std::vector< ::rtl::OUString> m_aKeyColumnNames;
             ::rtl::OUString m_ReferencedTable;
             sal_Int32       m_Type;
             sal_Int32       m_UpdateRule;
