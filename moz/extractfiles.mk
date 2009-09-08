@@ -30,7 +30,7 @@
 #*************************************************************************
 
 MOZTARGET=$(OS)$(COM)$(CPU)
-MOZ_DIST_DIR=$(MISC)$/build$/mozilla$/dist
+MOZ_DIST_DIR=$(MISC)$/build$/mozilla$/$(BUILD_DIR)$/dist
 MOZ_BIN_DIR=$(MOZ_DIST_DIR)$/bin
 RUNTIME_DIR=$(MISC)$/$(MOZTARGET)runtime
 LIB_DIR=$(LB)
