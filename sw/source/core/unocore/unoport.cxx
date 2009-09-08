@@ -701,6 +701,10 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
                 aResult.State  = pPropertyStates[i];
 
                 aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_FAILURE;
+                //#i104499# ruby portion attributes need special handling:
+                if( pEntry->nWID == RES_TXTATR_CJK_RUBY &&
+                    ePortionType == PORTION_RUBY_START )
+                        aResult.State = beans::PropertyState_DIRECT_VALUE;
                 if (!bDirectValuesOnly  ||  beans::PropertyState_DIRECT_VALUE == aResult.State)
                 {
                     // get property value
@@ -1096,4 +1100,3 @@ SwXRubyPortion::SwXRubyPortion(const SwUnoCrsr* pPortionCrsr,
 SwXRubyPortion::~SwXRubyPortion()
 {
 }
-

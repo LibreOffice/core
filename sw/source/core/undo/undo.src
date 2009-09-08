@@ -54,7 +54,7 @@ String STR_SPLITNODE_UNDO
 };
 String STR_MOVE_UNDO
 {
-    Text [ en-US ] = "Move: $1" ;
+    Text [ en-US ] = "Move" ;
 };
 String STR_INSATTR_UNDO
 {
