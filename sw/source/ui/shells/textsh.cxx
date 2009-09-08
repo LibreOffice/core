@@ -831,8 +831,11 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
         {
             case SID_INSERT_SOUND:
             case SID_INSERT_VIDEO:
+                /*!SvxPluginFileDlg::IsAvailable( nWhich ) ||
+
+                discussed with mba: for performance reasons we skip the IsAvailable call here
+                */
                 if ( GetShell().IsSelFrmMode() ||
-                     !SvxPluginFileDlg::IsAvailable( nWhich ) ||
                      SFX_CREATE_MODE_EMBEDDED == eCreateMode || bCrsrInHidden )
                 {
                     rSet.DisableItem( nWhich );
