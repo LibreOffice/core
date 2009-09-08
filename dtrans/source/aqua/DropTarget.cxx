@@ -297,6 +297,9 @@ NSDragOperation DropTarget::draggingUpdated(id sender)
 
       fire_dragOver(dtde);
 
+      // drag over callbacks likely have rendered something
+      [mView setNeedsDisplay: TRUE];
+
       dragOp = OfficeToSystemDragActions(mSelectedDropAction);
 
       //NSLog(@"Drag update: Source actions: %x proposed action %x selected action %x", mDragSourceSupportedActions, currentAction, mSelectedDropAction);

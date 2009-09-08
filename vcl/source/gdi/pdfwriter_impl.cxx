@@ -805,7 +805,7 @@ class Matrix3
 {
     double f[6];
 
-    void set( double *pn ) { for( int i = 0 ; i < 5; i++ ) f[i] = pn[i]; }
+    void set( double *pn ) { for( int i = 0 ; i < 6; i++ ) f[i] = pn[i]; }
 public:
     Matrix3();
     ~Matrix3() {}
@@ -6787,14 +6787,15 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         for( sal_uInt32 nPos = nBeginRun+1; nPos < aRunEnds[nRun]; nPos++ )
         {
             appendHex( rGlyphs[nPos].m_nMappedGlyphId, aUnkernedLine );
-            // check if glyph advance matches with the width of the previous glyph, else adjust
+            // check if default glyph positioning is sufficient
             const Point aThisPos = aMat.transform( rGlyphs[nPos].m_aPos );
             const Point aPrevPos = aMat.transform( rGlyphs[nPos-1].m_aPos );
             double fAdvance = aThisPos.X() - aPrevPos.X();
-            fAdvance *= 1000.0 / (fXScale * nPixelFontHeight);
-            const sal_Int32 nAdjustment = rGlyphs[nPos-1].m_nNativeWidth - sal_Int32(fAdvance+0.5);
+            fAdvance *= 1000.0 / nPixelFontHeight;
+            const sal_Int32 nAdjustment = (sal_Int32)(rGlyphs[nPos-1].m_nNativeWidth - fAdvance + 0.5);
             if( nAdjustment != 0 )
             {
+                // apply individual glyph positioning
                 bNeedKern = true;
                 aKernedLine.append( ">" );
                 aKernedLine.append( nAdjustment );
@@ -8643,6 +8644,8 @@ void PDFWriterImpl::drawPolyLine( const Polygon& rPoly, const PDFWriter::ExtLine
 
                 for(sal_uInt32 a(0); a < nEdgeCount; a++)
                 {
+                    if( a > 0 )
+                        aLine.append( " " );
                     const sal_uInt32 nNextIndex((a + 1) % nPointCount);
                     const basegfx::B2DPoint aNext(aPoly.getB2DPoint(nNextIndex));
 

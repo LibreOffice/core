@@ -6,8 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: outdev3.cxx,v $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -4498,71 +4496,79 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
                                           FontStrikeout eStrikeout,
                                           Color aColor )
 {
-    BOOL bOldMap = IsMapModeEnabled();
-    EnableMapMode( FALSE );
+    // PDF-export does its own strikeout drawing... why again?
+    if( mpPDFWriter && mpPDFWriter->isBuiltinFont(mpFontEntry->maFontSelData.mpFontData) )
+        return;
 
-    Color aOldColor = GetTextColor();
-    SetTextColor( aColor );
-    ImplInitTextColor();
-
-    xub_Unicode pChars[5];
+    // prepare string for strikeout measurement
+    static char cStrikeoutChar;
     if ( eStrikeout == STRIKEOUT_SLASH )
-        pChars[0] = '/';
+        cStrikeoutChar = '/';
     else // ( eStrikeout == STRIKEOUT_X )
-        pChars[0] = 'X';
-    pChars[3]=pChars[2]=pChars[1]=pChars[0];
+        cStrikeoutChar = 'X';
+    static const int nTestStrLen = 4;
+    static const int nMaxStrikeStrLen = 2048;
+    xub_Unicode aChars[ nMaxStrikeStrLen +1]; // +1 for valgrind...
+    for( int i = 0; i < nTestStrLen; ++i)
+        aChars[i] = cStrikeoutChar;
+    const String aStrikeoutTest( aChars, nTestStrLen );
 
     // calculate approximation of strikeout atom size
     long nStrikeoutWidth = nWidth;
     String aStrikeoutTest( pChars, 4 );
-    SalLayout* pLayout = ImplLayout( aStrikeoutTest, 0, 4 );
-    if ( pLayout )
+    SalLayout* pLayout = ImplLayout( aStrikeoutTest, 0, nTestStrLen );
+    if( pLayout )
     {
-        nStrikeoutWidth = (pLayout->GetTextWidth() + 2) / (4 * pLayout->GetUnitsPerPixel());
+        nStrikeoutWidth = (pLayout->GetTextWidth() +nTestStrLen/2) / (nTestStrLen * pLayout->GetUnitsPerPixel());
         pLayout->Release();
-        if ( nStrikeoutWidth <= 0 ) // sanity check
-            nStrikeoutWidth = 1;
     }
+    if( nStrikeoutWidth <= 0 ) // sanity check
+        return;
 
     // calculate acceptable strikeout length
     // allow the strikeout to be one pixel larger than the text it strikes out
-    long nMaxWidth = nStrikeoutWidth/2;
+    long nMaxWidth = nStrikeoutWidth / 2;
     if ( nMaxWidth < 2 )
         nMaxWidth = 2;
     nMaxWidth += nWidth + 1;
 
-    // build strikeout string
-    long nFullStrikeoutWidth = 0;
-    String aStrikeoutText( pChars, 0 );
-    while ( (nFullStrikeoutWidth+=nStrikeoutWidth) < nMaxWidth+1 )
-        aStrikeoutText += pChars[0];
-
+    int nStrikeStrLen = (nMaxWidth + nStrikeoutWidth - 1) / nStrikeoutWidth;
     // if the text width is smaller than the strikeout text, then do not
     // strike out at all. This case requires user interaction, e.g. adding
     // a space to the text
-    if ( (aStrikeoutText.Len() > 0)
-    && !(mpPDFWriter && mpPDFWriter->isBuiltinFont(mpFontEntry->maFontSelData.mpFontData) ) )
-    {
-        if ( mpFontEntry->mnOrientation )
-            ImplRotatePos( nBaseX, nBaseY, nX, nY, mpFontEntry->mnOrientation );
+    if( nStrikeStrLen <= 0 )
+        return;
+    if( nStrikeStrLen > nMaxStrikeStrLen )
+        nStrikeStrLen = nMaxStrikeStrLen;
 
-        // strikeout text has to be left aligned
-        ULONG nOrigTLM = mnTextLayoutMode;
-        mnTextLayoutMode = TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_COMPLEX_DISABLED;
-        SalLayout* pSalLayout = ImplLayout( aStrikeoutText, 0, STRING_LEN );
-        mnTextLayoutMode = nOrigTLM;
+    // build the strikeout string
+    for( int i = nTestStrLen; i < nStrikeStrLen; ++i)
+        aChars[i] = cStrikeoutChar;
+    const String aStrikeoutText( aChars, xub_StrLen(nStrikeStrLen) );
 
-        if ( pSalLayout )
-        {
-            pSalLayout->DrawBase() = Point( nX+mnTextOffX, nY+mnTextOffY );
-            pSalLayout->DrawText( *mpGraphics );
-            pSalLayout->Release();
-        }
-    }
+    if( mpFontEntry->mnOrientation )
+        ImplRotatePos( nBaseX, nBaseY, nX, nY, mpFontEntry->mnOrientation );
+
+    // strikeout text has to be left aligned
+    ULONG nOrigTLM = mnTextLayoutMode;
+    mnTextLayoutMode = TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_COMPLEX_DISABLED;
+    pLayout = ImplLayout( aStrikeoutText, 0, STRING_LEN );
+    mnTextLayoutMode = nOrigTLM;
+
+    if( !pLayout )
+        return;
+
+    // draw the strikeout text
+    const Color aOldColor = GetTextColor();
+    SetTextColor( aColor );
+    ImplInitTextColor();
+
+    pLayout->DrawBase() = Point( nX+mnTextOffX, nY+mnTextOffY );
+    pLayout->DrawText( *mpGraphics );
+    pLayout->Release();
 
     SetTextColor( aOldColor );
     ImplInitTextColor();
-    EnableMapMode( bOldMap );
 }
 
 // -----------------------------------------------------------------------
