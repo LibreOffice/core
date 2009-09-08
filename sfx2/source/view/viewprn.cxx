@@ -261,7 +261,15 @@ void SfxPrinterController::printPage( int i_nPage ) const
     if( mxRenderable.is() && pPrinter )
     {
         Sequence< beans::PropertyValue > aJobOptions( getMergedOptions() );
-        mxRenderable->render( i_nPage, getSelectionObject(), aJobOptions );
+        try
+        {
+            mxRenderable->render( i_nPage, getSelectionObject(), aJobOptions );
+        }
+        catch( lang::IllegalArgumentException& )
+        {
+            // don't care enough about nonexistant page here
+            // to provoke a crash
+        }
     }
 }
 
