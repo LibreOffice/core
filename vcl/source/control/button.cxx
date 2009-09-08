@@ -4392,7 +4392,7 @@ TriStateBox::~TriStateBox()
 
 // =======================================================================
 
-DisclosureButton::DisclosureButton( Window* pParent, WinBits nStyle ) :
+DisclosureButton::DisclosureButton( Window* pParent, WinBits ) :
     CheckBox( pParent, WB_NOBORDER )
 {
 }
