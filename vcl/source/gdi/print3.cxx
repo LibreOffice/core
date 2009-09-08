@@ -585,6 +585,11 @@ bool PrinterController::setupPrinter( Window* i_pParent )
             {
                 mpImplData->maFixedPageSize = aNewPaperSize;
                 mpImplData->maPageCache.invalidate();
+                awt::Size aOverrideSize;
+                aOverrideSize.Width = aNewPaperSize.Width();
+                aOverrideSize.Height = aNewPaperSize.Height();
+                setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OverridePageSize" ) ),
+                          makeAny( aOverrideSize ) );
             }
         }
     }
