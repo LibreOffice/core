@@ -146,8 +146,7 @@ namespace vcl
         public:
             FixedLine                               maPrinterFL;
             ListBox                                 maPrinters;
-            PushButton                              maDetailsBtn;
-            FixedText                               maDetailsTxt;
+            DisclosureButton                        maDetailsBtn;
             FixedText                               maStatusLabel;
             FixedText                               maStatusTxt;
             FixedText                               maLocationLabel;

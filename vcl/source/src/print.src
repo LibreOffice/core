@@ -316,17 +316,12 @@ ModalDialog SV_DLG_PRINT
             Border = TRUE;
             HelpText [en-US] = "Select the printer to print on.";
         };
-        PushButton SV_PRINT_DETAILS_BTN
+        CheckBox SV_PRINT_DETAILS_BTN
         {
             Pos = MAP_APPFONT( 5, 5 );
             Size = MAP_APPFONT( 5, 5 );
-            HelpText [en-US] = "Show/Hide detailed information of the selected printer.";
-        };
-        FixedText SV_PRINT_DETAILS_TXT
-        {
-            Pos = MAP_APPFONT( 5, 5 );
-            Size = MAP_APPFONT( 10, 10 );
             Text [en-US] = "Details";
+            HelpText [en-US] = "Show/Hide detailed information of the selected printer.";
         };
         FixedText SV_PRINT_STATUS_TXT
         {

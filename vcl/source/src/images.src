@@ -833,3 +833,23 @@ Bitmap (SV_ICON_SMALL_HC_START + SV_ICON_ID_PRINTERADMIN)
     File = "printeradmin_16_h.png" ;
 };
 
+Bitmap SV_DISCLOSURE_PLUS
+{
+    File = "plus.png";
+};
+
+Bitmap SV_DISCLOSURE_PLUS_HC
+{
+    File = "plus_sch.png";
+};
+
+Bitmap SV_DISCLOSURE_MINUS
+{
+    File = "minus.png";
+};
+
+Bitmap SV_DISCLOSURE_MINUS_HC
+{
+    File = "minus_sch.png";
+};
+

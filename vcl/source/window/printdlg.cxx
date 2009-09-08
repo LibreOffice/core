@@ -454,7 +454,6 @@ PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
     , maPrinterFL( this, VclResId( SV_PRINT_PRINTERS_FL ) )
     , maPrinters( this, VclResId( SV_PRINT_PRINTERS ) )
     , maDetailsBtn( this, VclResId( SV_PRINT_DETAILS_BTN ) )
-    , maDetailsTxt( this, VclResId( SV_PRINT_DETAILS_TXT ) )
     , maStatusLabel( this, VclResId( SV_PRINT_STATUS_TXT ) )
     , maStatusTxt( this, 0 )
     , maLocationLabel( this, VclResId( SV_PRINT_LOCATION_TXT ) )
@@ -526,10 +525,7 @@ void PrintDialog::JobTabPage::setupLayout()
     // create a row for details button/text and properties button
     boost::shared_ptr< vcl::RowOrColumn > xDetRow( new vcl::RowOrColumn( &maLayout, false ) );
     maLayout.addChild( xDetRow );
-    boost::shared_ptr< vcl::LabeledElement > xDetLbl( new vcl::LabeledElement( xDetRow.get() ) );
-    xDetRow->addChild( xDetLbl );
-    xDetLbl->setLabel( &maDetailsBtn );
-    xDetLbl->setElement( &maDetailsTxt );
+    xDetRow->addWindow( &maDetailsBtn );
     xDetRow->addChild( new vcl::Spacer( xDetRow.get(), 2 ) );
     xDetRow->addWindow( &maSetupButton );
 
@@ -568,9 +564,7 @@ void PrintDialog::JobTabPage::setupLayout()
     xCollateRow->setLabel( &maCollateBox );
     xCollateRow->setElement( &maCollateImage );
 
-    maDetailsBtn.SetSymbol( SYMBOL_SPIN_DOWN );
-    maDetailsBtn.SetSmallSymbol();
-    maDetailsBtn.SetStyle( maDetailsBtn.GetStyle() | (WB_SMALLSTYLE | WB_BEVELBUTTON) );
+    // maDetailsBtn.SetStyle( maDetailsBtn.GetStyle() | (WB_SMALLSTYLE | WB_BEVELBUTTON) );
     mxDetails->show( false, false );
 }
 
@@ -796,7 +790,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maBackwardBtn.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maJobPage.maCollateBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maJobPage.maSetupButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maJobPage.maDetailsBtn.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maJobPage.maDetailsBtn.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.maBorderCB.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maOptionsPage.maToFileBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maOptionsPage.maReverseOrderBox.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
@@ -1950,8 +1944,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     }
     else if( pButton == &maJobPage.maDetailsBtn )
     {
-        bool bShow = ! maJobPage.maStatusTxt.IsVisible();
-        maJobPage.maDetailsBtn.SetSymbol( bShow ? SYMBOL_SPIN_UP : SYMBOL_SPIN_DOWN );
+        bool bShow = maJobPage.maDetailsBtn.IsChecked();
         maJobPage.mxDetails->show( bShow );
         if( bShow )
         {

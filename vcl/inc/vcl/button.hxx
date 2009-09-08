@@ -416,7 +416,6 @@ private:
     SAL_DLLPRIVATE void         ImplInitCheckBoxData();
     SAL_DLLPRIVATE WinBits      ImplInitStyle( const Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
-    SAL_DLLPRIVATE void         ImplDrawCheckBoxState();
     SAL_DLLPRIVATE void         ImplInvalidateOrDrawCheckBoxState();
     SAL_DLLPRIVATE void         ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                                     const Point& rPos, const Size& rSize,
@@ -436,10 +435,11 @@ protected:
     SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE virtual void FillLayoutData() const;
 
+    SAL_DLLPRIVATE virtual void ImplDrawCheckBoxState();
+    SAL_DLLPRIVATE const Rectangle& GetStateRect() const { return maStateRect; }
 public:
     SAL_DLLPRIVATE void         ImplCheck();
     SAL_DLLPRIVATE void         ImplSetMinimumNWFSize();
-
 public:
                     CheckBox( Window* pParent, WinBits nStyle = 0 );
                     CheckBox( Window* pParent, const ResId& rResId );
@@ -536,6 +536,15 @@ public:
             TriStateBox( Window* pParent, WinBits nStyle = 0 );
             TriStateBox( Window* pParent, const ResId& rResId );
             ~TriStateBox();
+};
+
+class VCL_DLLPUBLIC DisclosureButton : public CheckBox
+{
+protected:
+    SAL_DLLPRIVATE virtual void ImplDrawCheckBoxState();
+public:
+    DisclosureButton( Window* pParent, WinBits nStyle = 0 );
+    DisclosureButton( Window* pParent, const ResId& rResId );
 };
 
 #endif  // _SV_BUTTON_HXX

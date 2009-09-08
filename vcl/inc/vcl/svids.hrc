@@ -60,6 +60,11 @@
 #define SV_RESID_BITMAP_CLOSEDOC            1052
 #define SV_RESID_BITMAP_CLOSEDOCHC          1053
 
+#define SV_DISCLOSURE_PLUS                  1060
+#define SV_DISCLOSURE_MINUS                 1061
+#define SV_DISCLOSURE_PLUS_HC               1062
+#define SV_DISCLOSURE_MINUS_HC              1063
+
 #define SV_RESID_MENU_EDIT                  2000
 #define SV_MENU_EDIT_UNDO                   1
 #define SV_MENU_EDIT_CUT                    2
@@ -146,7 +151,6 @@
 #define SV_PRINT_LOCATION_TXT               21
 #define SV_PRINT_COMMENT_TXT                22
 #define SV_PRINT_DETAILS_BTN                23
-#define SV_PRINT_DETAILS_TXT                24
 
 #define SV_PRINT_TAB_OPT                    3
 #define SV_PRINT_OPT_PRINT_FL               1

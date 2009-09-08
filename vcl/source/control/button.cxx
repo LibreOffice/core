@@ -4389,3 +4389,76 @@ TriStateBox::TriStateBox( Window* pParent, const ResId& rResId ) :
 TriStateBox::~TriStateBox()
 {
 }
+
+// =======================================================================
+
+DisclosureButton::DisclosureButton( Window* pParent, WinBits nStyle ) :
+    CheckBox( pParent, WB_NOBORDER )
+{
+}
+
+// -----------------------------------------------------------------------
+
+DisclosureButton::DisclosureButton( Window* pParent, const ResId& rResId ) :
+    CheckBox( pParent, rResId.SetRT( RSC_CHECKBOX ) )
+{
+}
+
+// -----------------------------------------------------------------------
+
+void DisclosureButton::ImplDrawCheckBoxState()
+{
+    /* HACK: DisclosureButton is currently assuming, that the disclosure sign
+       will fit into the rectangle occupied by a normal checkbox on all themes.
+       If this does not hold true for some theme, ImplGetCheckImageSize
+       would have to be overloaded for DisclosureButton; also GetNativeControlRegion
+       for CTRL_LISTNODE would have to be implemented and taken into account
+    */
+
+    Rectangle aStateRect( GetStateRect() );
+
+    ImplControlValue    aControlValue( GetState() == STATE_CHECK ? BUTTONVALUE_ON : BUTTONVALUE_OFF, rtl::OUString(), 0 );
+    Region              aCtrlRegion( aStateRect );
+    ControlState        nState = 0;
+
+    if ( HasFocus() )                       nState |= CTRL_STATE_FOCUSED;
+    if ( ImplGetButtonState() & BUTTON_DRAW_DEFAULT )   nState |= CTRL_STATE_DEFAULT;
+    if ( Window::IsEnabled() )              nState |= CTRL_STATE_ENABLED;
+    if ( IsMouseOver() && aStateRect.IsInside( GetPointerPosPixel() ) )
+        nState |= CTRL_STATE_ROLLOVER;
+
+    if( ! DrawNativeControl( CTRL_LISTNODE, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
+                           aControlValue, rtl::OUString() ) )
+    {
+        ImplSVCtrlData& rCtrlData( ImplGetSVData()->maCtrlData );
+        if( ! rCtrlData.mpDisclosurePlus )
+            rCtrlData.mpDisclosurePlus = new Image( BitmapEx( VclResId( SV_DISCLOSURE_PLUS ) ) );
+        if( ! rCtrlData.mpDisclosurePlusHC )
+            rCtrlData.mpDisclosurePlusHC = new Image( BitmapEx( VclResId( SV_DISCLOSURE_PLUS_HC ) ) );
+        if( ! rCtrlData.mpDisclosureMinus )
+            rCtrlData.mpDisclosureMinus = new Image( BitmapEx( VclResId( SV_DISCLOSURE_MINUS ) ) );
+        if( ! rCtrlData.mpDisclosureMinusHC )
+            rCtrlData.mpDisclosureMinusHC = new Image( BitmapEx( VclResId( SV_DISCLOSURE_MINUS_HC ) ) );
+
+        Image* pImg = NULL;
+        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+            pImg = IsChecked() ? rCtrlData.mpDisclosureMinusHC : rCtrlData.mpDisclosurePlusHC;
+        else
+            pImg = IsChecked() ? rCtrlData.mpDisclosureMinus : rCtrlData.mpDisclosurePlus;
+
+        DBG_ASSERT( pImg, "no disclosure image" );
+        if( ! pImg )
+            return;
+
+        USHORT nStyle = 0;
+        if( ! IsEnabled() )
+            nStyle |= IMAGE_DRAW_DISABLE;
+
+        Size aSize( aStateRect.GetSize() );
+        Size aImgSize( pImg->GetSizePixel() );
+        Point aOff( (aSize.Width() - aImgSize.Width())/2,
+                    (aSize.Height() - aImgSize.Height())/2 );
+        aOff += aStateRect.TopLeft();
+        DrawImage( aOff, *pImg, nStyle );
+    }
+}

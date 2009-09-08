@@ -86,6 +86,7 @@ class Timer;
 class AutoTimer;
 class Help;
 class ImageList;
+class Image;
 class PopupMenu;
 class Application;
 class OutputDevice;
@@ -247,6 +248,10 @@ struct ImplSVCtrlData
     ImageList*              mpSplitVPinImgList; // ImageList for Vertikale SplitWindows (PIN's)
     ImageList*              mpSplitHArwImgList; // ImageList for Horizontale SplitWindows (Arrows)
     ImageList*              mpSplitVArwImgList; // ImageList for Vertikale SplitWindows (Arrows)
+    Image*                  mpDisclosurePlus;
+    Image*                  mpDisclosurePlusHC;
+    Image*                  mpDisclosureMinus;
+    Image*                  mpDisclosureMinusHC;
     ImplTBDragMgr*          mpTBDragMgr;        // DragMgr for ToolBox
     USHORT                  mnCheckStyle;       // CheckBox-Style for ImageList-Update
     USHORT                  mnRadioStyle;       // Radio-Style for ImageList-Update
