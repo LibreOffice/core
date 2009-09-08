@@ -1953,14 +1953,31 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
         bool bShow = ! maJobPage.maStatusTxt.IsVisible();
         maJobPage.maDetailsBtn.SetSymbol( bShow ? SYMBOL_SPIN_UP : SYMBOL_SPIN_DOWN );
         maJobPage.mxDetails->show( bShow );
-        // enlarge dialog if necessary
-        Size aMinSize( maJobPage.maLayout.getOptimalSize( WINDOWSIZE_MINIMUM ) );
-        Size aCurSize( maJobPage.GetSizePixel() );
-        if( aCurSize.Height() < aMinSize.Height() )
+        if( bShow )
         {
+            maDetailsCollapsedSize = GetOutputSizePixel();
+            // enlarge dialog if necessary
+            Size aMinSize( maJobPage.maLayout.getOptimalSize( WINDOWSIZE_MINIMUM ) );
+            Size aCurSize( maJobPage.GetSizePixel() );
+            if( aCurSize.Height() < aMinSize.Height() )
+            {
+                Size aDlgSize( GetOutputSizePixel() );
+                aDlgSize.Height() += aMinSize.Height() - aCurSize.Height();
+                SetOutputSizePixel( aDlgSize );
+            }
+            maDetailsExpandedSize = GetOutputSizePixel();
+        }
+        else if( maDetailsCollapsedSize.Width() > 0   &&
+                 maDetailsCollapsedSize.Height() > 0 )
+        {
+            // if the user did not resize the dialog
+            // make it smaller again on collapsing the details
             Size aDlgSize( GetOutputSizePixel() );
-            aDlgSize.Height() += aMinSize.Height() - aCurSize.Height();
-            SetOutputSizePixel( aDlgSize );
+            if( aDlgSize == maDetailsExpandedSize &&
+                aDlgSize.Height() > maDetailsCollapsedSize.Height() )
+            {
+                SetOutputSizePixel( maDetailsCollapsedSize );
+            }
         }
     }
     else if( pButton == &maJobPage.maCollateBox )

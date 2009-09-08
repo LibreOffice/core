@@ -248,6 +248,9 @@ namespace vcl
 
         vcl::RowOrColumn                        maLayout;
 
+        Size                                    maDetailsCollapsedSize;
+        Size                                    maDetailsExpandedSize;
+
         Size getJobPageSize();
         void updateNup();
         void updateNupFromPages();
