@@ -734,8 +734,8 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOp
             else if (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL)
             {
                 ::utl::TransliterationWrapper* pTransliteration =
-                    (pOptions->bIgnoreCase ? ScGlobal::pTransliteration :
-                     ScGlobal::pCaseTransliteration);
+                    (pOptions->bIgnoreCase ? ScGlobal::GetpTransliteration() :
+                     ScGlobal::GetCaseTransliteration());
                 bool bMatch;
                 if (pOptions->bMatchWholeCell)
                     bMatch = pTransliteration->isEqual( *rComp.pVal[0], *rComp.pVal[1]);
@@ -752,17 +752,17 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOp
                 fRes = (bMatch ? 0 : 1);
             }
             else if (pOptions->bIgnoreCase)
-                fRes = (double) ScGlobal::pCollator->compareString(
+                fRes = (double) ScGlobal::GetCollator()->compareString(
                         *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
             else
-                fRes = (double) ScGlobal::pCaseCollator->compareString(
+                fRes = (double) ScGlobal::GetCaseCollator()->compareString(
                         *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
         }
         else if (pDok->GetDocOptions().IsIgnoreCase())
-            fRes = (double) ScGlobal::pCollator->compareString(
+            fRes = (double) ScGlobal::GetCollator()->compareString(
                 *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
         else
-            fRes = (double) ScGlobal::pCaseCollator->compareString(
+            fRes = (double) ScGlobal::GetCaseCollator()->compareString(
                 *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
     }
     return fRes;
@@ -1876,7 +1876,7 @@ void ScInterpreter::ScCell()
             String          aFuncResult;
             ScBaseCell*     pCell = GetCell( aCellPos );
 
-            ScCellKeywordTranslator::transKeyword(aInfoType, ScGlobal::pLocale, ocCell);
+            ScCellKeywordTranslator::transKeyword(aInfoType, ScGlobal::GetLocale(), ocCell);
 
 // *** ADDRESS INFO ***
             if( aInfoType.EqualsAscii( "COL" ) )
@@ -3975,7 +3975,7 @@ static sal_Int32 lcl_CompareMatrix2Query( SCSIZE i, const ScMatrix& rMat,
     const String& rStr1 = rMat.GetString(i);
     const String& rStr2 = *rEntry.pStr;
 
-    return ScGlobal::pCollator->compareString( rStr1, rStr2); // case-insensitive
+    return ScGlobal::GetCollator()->compareString( rStr1, rStr2); // case-insensitive
 }
 
 /** returns the last item with the identical value as the original item
@@ -5375,12 +5375,13 @@ void ScInterpreter::CalculateLookup(BOOL HLookup)
                     String aParamStr = *rEntry.pStr;
                     if ( bSorted )
                     {
+                        static CollatorWrapper* pCollator = ScGlobal::GetCollator();
                         for (SCSIZE i = 0; i < nMatCount; i++)
                         {
                             if (HLookup ? pMat->IsString(i, 0) : pMat->IsString(0, i))
                             {
                                 sal_Int32 nRes =
-                                    ScGlobal::pCollator->compareString( HLookup ? pMat->GetString(i,0) : pMat->GetString(0,i), aParamStr);
+                                    pCollator->compareString( HLookup ? pMat->GetString(i,0) : pMat->GetString(0,i), aParamStr);
                                 if (nRes <= 0)
                                     nDelta = i;
                                 else if (i>0)   // #i2168# ignore first mismatch
@@ -5396,7 +5397,7 @@ void ScInterpreter::CalculateLookup(BOOL HLookup)
                         {
                             if (HLookup ? pMat->IsString(i, 0) : pMat->IsString(0, i))
                             {
-                                if ( ScGlobal::pTransliteration->isEqual(
+                                if ( ScGlobal::GetpTransliteration()->isEqual(
                                     HLookup ? pMat->GetString(i,0) : pMat->GetString(0,i), aParamStr ) )
                                 {
                                     nDelta = i;
@@ -5734,7 +5735,7 @@ BOOL ScInterpreter::GetDBParams(SCTAB& rTab, ScQueryParam& rParam,
                 {
                     ScBaseCell* pCell = GetCell( aLook );
                     GetCellString( aCellStr, pCell );
-                    bFound = ScGlobal::pTransliteration->isEqual( aCellStr, aStr );
+                    bFound = ScGlobal::GetpTransliteration()->isEqual( aCellStr, aStr );
                     if (!bFound)
                         aLook.IncCol();
                 }

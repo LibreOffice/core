@@ -683,7 +683,7 @@ __cdecl
 #endif
 ScRangeData_QsortNameCompare( const void* p1, const void* p2 )
 {
-    return (int) ScGlobal::pCollator->compareString(
+    return (int) ScGlobal::GetCollator()->compareString(
             (*(const ScRangeData**)p1)->GetName(),
             (*(const ScRangeData**)p2)->GetName() );
 }

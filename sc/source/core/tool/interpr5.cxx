@@ -2796,7 +2796,7 @@ void ScInterpreter::ScInfo()
     if( MustHaveParamCount( GetByte(), 1 ) )
     {
         String aStr = GetString();
-        ScCellKeywordTranslator::transKeyword(aStr, ScGlobal::pLocale, ocInfo);
+        ScCellKeywordTranslator::transKeyword(aStr, ScGlobal::GetLocale(), ocInfo);
         if( aStr.EqualsAscii( "SYSTEM" ) )
             PushString( String( RTL_CONSTASCII_USTRINGPARAM( SC_INFO_OSVERSION ) ) );
         else if( aStr.EqualsAscii( "OSVERSION" ) )

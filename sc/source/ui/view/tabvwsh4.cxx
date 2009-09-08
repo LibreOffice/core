@@ -1806,7 +1806,7 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
             {
                 SCTAB nInitTabCount = 3;                            //! konfigurierbar !!!
                 for (SCTAB i=1; i<nInitTabCount; i++)
-                    pDoc->MakeTable(i);
+                    pDoc->MakeTable(i,false);
             }
 
             pDocSh->SetEmpty( FALSE );          // #i6232# make sure this is done only once

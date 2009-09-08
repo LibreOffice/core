@@ -94,7 +94,6 @@ const USHORT SC_SHRINKAGAIN_MAX = 7;
 class ScDrawStringsVars
 {
     ScOutputData*       pOutput;                // Verbindung
-    SvNumberFormatter*  pFormatter;
 
     const ScPatternAttr* pPattern;              // Attribute
     const SfxItemSet*   pCondSet;               // aus bedingter Formatierung
@@ -187,8 +186,6 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, BOOL bPTL) :
     bShrink     ( FALSE ),
     bPixelToLogic( bPTL )
 {
-    pFormatter = pData->pDoc->GetFormatTable();
-
     ScModule* pScMod = SC_MOD();
     //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     bCellContrast = pOutput->bUseStyleColor &&
@@ -373,7 +370,7 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
     //  Zahlenformat
 
 //    ULONG nOld = nValueFormat;
-    nValueFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
+    nValueFormat = pPattern->GetNumberFormat( pOutput->pDoc->GetFormatTable(), pCondSet );
 
 /*  s.u.
     if (nValueFormat != nOld)
@@ -414,7 +411,7 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
     const SfxPoolItem* pLangItem;
     if ( !pCondSet || pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT,TRUE,&pLangItem) != SFX_ITEM_SET )
         pLangItem = &pPattern->GetItem(ATTR_LANGUAGE_FORMAT);
-    nValueFormat = pFormatter->GetFormatForLanguageIfBuiltIn(
+    nValueFormat = pOutput->pDoc->GetFormatTable()->GetFormatForLanguageIfBuiltIn(
                     ((SfxUInt32Item*)pFormItem)->GetValue(),
                     ((SvxLanguageItem*)pLangItem)->GetLanguage() );
 
@@ -456,7 +453,7 @@ BOOL ScDrawStringsVars::SetText( ScBaseCell* pCell )
             ULONG nFormat = GetValueFormat();
             ScCellFormat::GetString( pCell,
                                      nFormat, aString, &pColor,
-                                     *pFormatter,
+                                     *pOutput->pDoc->GetFormatTable(),
                                      pOutput->bShowNullValues,
                                      pOutput->bShowFormulas,
                                      ftCheck );
@@ -1916,8 +1913,6 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
     Size aMinSize = pRefDevice->PixelToLogic(Size(0,100));      // erst darueber wird ausgegeben
 //    UINT32 nMinHeight = aMinSize.Height() / 200;                // 1/2 Pixel
 
-    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-
     ScModule* pScMod = SC_MOD();
     sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
     //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
@@ -2321,12 +2316,12 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                 else
                                 {
                                     ULONG nFormat = pPattern->GetNumberFormat(
-                                                                pFormatter, pCondSet );
+                                                                pDoc->GetFormatTable(), pCondSet );
                                     String aString;
                                     Color* pColor;
                                     ScCellFormat::GetString( pCell,
                                                              nFormat,aString, &pColor,
-                                                             *pFormatter,
+                                                             *pDoc->GetFormatTable(),
                                                              bShowNullValues,
                                                              bShowFormulas,
                                                              ftCheck );
@@ -2812,8 +2807,6 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
             nRotMax = pRowInfo[nRotY].nRotMaxCol;
 
 
-    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-
     ScModule* pScMod = SC_MOD();
     sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
     //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
@@ -3102,12 +3095,12 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                 else
                                 {
                                     ULONG nFormat = pPattern->GetNumberFormat(
-                                                                pFormatter, pCondSet );
+                                                                pDoc->GetFormatTable(), pCondSet );
                                     String aString;
                                     Color* pColor;
                                     ScCellFormat::GetString( pCell,
                                                              nFormat,aString, &pColor,
-                                                             *pFormatter,
+                                                             *pDoc->GetFormatTable(),
                                                              bShowNullValues,
                                                              bShowFormulas,
                                                              ftCheck );

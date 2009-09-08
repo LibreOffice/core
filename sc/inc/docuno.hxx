@@ -111,6 +111,7 @@ private:
 
     BOOL                    FillRenderMarkData( const com::sun::star::uno::Any& aSelection,
                                                 ScMarkData& rMark, ScPrintSelectionStatus& rStatus ) const;
+    com::sun::star::uno::Reference<com::sun::star::uno::XAggregation> GetFormatter();
 
     rtl::OUString           maBuildId;
 protected:

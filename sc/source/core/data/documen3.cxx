@@ -428,7 +428,7 @@ BOOL ScDocument::LinkExternalTab( SCTAB& rTab, const String& aDocTab,
     {
         ScTableLink* pLink = new ScTableLink( pShell, aFileName, aFilterName, aOptions, nRefreshDelay );
         pLink->SetInCreate( TRUE );
-        pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName,
+        GetLinkManager()->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName,
                                         &aFilterName );
         pLink->Update();
         pLink->SetInCreate( FALSE );
@@ -1735,10 +1735,7 @@ void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
     *pDocOptions = rOpt;
     rOpt.GetDate( d,m,y );
 
-    SvNumberFormatter* pFormatter = xPoolHelper->GetFormTable();
-    pFormatter->ChangeNullDate( d,m,y );
-    pFormatter->ChangeStandardPrec( (USHORT)rOpt.GetStdPrecision() );
-    pFormatter->SetYear2000( rOpt.GetYear2000() );
+    xPoolHelper->SetFormTableOpt(rOpt);
 }
 
 const ScViewOptions& ScDocument::GetViewOptions() const

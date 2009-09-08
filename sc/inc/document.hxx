@@ -258,7 +258,7 @@ private:
     ScChartCollection*  pChartCollection;
     std::auto_ptr< ScTemporaryChartLock > apTemporaryChartLock;
     ScPatternAttr*      pSelectionAttr;                 // Attribute eines Blocks
-    SvxLinkManager*     pLinkManager;
+    mutable SvxLinkManager*     pLinkManager;
     ScFormulaCell*      pFormulaTree;                   // Berechnungsbaum Start
     ScFormulaCell*      pEOFormulaTree;                 // Berechnungsbaum Ende, letzte Zelle
     ScFormulaCell*      pFormulaTrack;                  // BroadcastTrack Start
@@ -440,7 +440,7 @@ public:
     SC_DLLPUBLIC void           InitDrawLayer( SfxObjectShell* pDocShell = NULL );
     XColorTable*    GetColorTable();
 
-    SvxLinkManager*     GetLinkManager() { return pLinkManager; }
+    SC_DLLPUBLIC SvxLinkManager*        GetLinkManager() const;
 
     SC_DLLPUBLIC const ScDocOptions&        GetDocOptions() const;
     SC_DLLPUBLIC void                   SetDocOptions( const ScDocOptions& rOpt );
@@ -512,7 +512,7 @@ public:
             ::com::sun::star::embed::XEmbeddedObject >
                     FindOleObjectByName( const String& rName );
 
-    SC_DLLPUBLIC void           MakeTable( SCTAB nTab );
+    SC_DLLPUBLIC void           MakeTable( SCTAB nTab,bool _bNeedsNameCheck = true );
 
     SCTAB           GetVisibleTab() const       { return nVisibleTab; }
     SC_DLLPUBLIC void           SetVisibleTab(SCTAB nTab)   { nVisibleTab = nTab; }

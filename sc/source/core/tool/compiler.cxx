@@ -2973,7 +2973,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                                 ;   // nothing, prevent compiler warning
                             break;
                         }
-                        if ( ScGlobal::pTransliteration->isEqual( aStr, aName ) )
+                        if ( ScGlobal::GetpTransliteration()->isEqual( aStr, aName ) )
                         {
                             aRef.InitFlags();
                             aRef.nCol = aIter.GetCol();
@@ -3102,7 +3102,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                             ;   // nothing, prevent compiler warning
                         break;
                     }
-                    if ( ScGlobal::pTransliteration->isEqual( aStr, aName ) )
+                    if ( ScGlobal::GetpTransliteration()->isEqual( aStr, aName ) )
                     {
                         SCCOL nCol = aIter.GetCol();
                         SCROW nRow = aIter.GetRow();

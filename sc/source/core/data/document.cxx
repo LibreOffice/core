@@ -115,13 +115,14 @@ struct ScLessDefaultAttr
 
 typedef std::set<ScDefaultAttr, ScLessDefaultAttr>  ScDefaultAttrSet;
 
-void ScDocument::MakeTable( SCTAB nTab )
+void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
 {
     if ( ValidTab(nTab) && !pTab[nTab] )
     {
         String aString = ScGlobal::GetRscString(STR_TABLE_DEF); //"Tabelle"
         aString += String::CreateFromInt32(nTab+1);
-        CreateValidTabName( aString );  // keine doppelten
+        if ( _bNeedsNameCheck )
+            CreateValidTabName( aString );  // keine doppelten
 
         pTab[nTab] = new ScTable(this, nTab, aString);
         ++nMaxTableNumber;
@@ -219,7 +220,7 @@ BOOL ScDocument::ValidNewTabName( const String& rName ) const
         {
             String aOldName;
             pTab[i]->GetName(aOldName);
-            bValid = !ScGlobal::pTransliteration->isEqual( rName, aOldName );
+            bValid = !ScGlobal::GetpTransliteration()->isEqual( rName, aOldName );
         }
     return bValid;
 }
@@ -464,7 +465,7 @@ BOOL ScDocument::RenameTab( SCTAB nTab, const String& rName, BOOL /* bUpdateRef 
                 {
                     String aOldName;
                     pTab[i]->GetName(aOldName);
-                    bValid = !ScGlobal::pTransliteration->isEqual( rName, aOldName );
+                    bValid = !ScGlobal::GetpTransliteration()->isEqual( rName, aOldName );
                 }
             if (bValid)
             {

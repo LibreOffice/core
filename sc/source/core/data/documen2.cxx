@@ -262,6 +262,15 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
     aTrackTimer.SetTimeout( 100 );
 }
 
+SvxLinkManager* ScDocument::GetLinkManager()  const
+{
+    if ( bAutoCalc && !pLinkManager && pShell)
+    {
+        pLinkManager = new SvxLinkManager( pShell );
+    }
+    return pLinkManager;
+}
+
 
 void ScDocument::SetStorageGrammar( formula::FormulaGrammar::Grammar eGram )
 {
@@ -372,7 +381,7 @@ ScDocument::~ScDocument()
 
     // Links aufrauemen
 
-    if ( pLinkManager )
+    if ( GetLinkManager() )
     {
         // BaseLinks freigeben
         for ( USHORT n = pLinkManager->GetServers().Count(); n; )
