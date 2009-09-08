@@ -128,6 +128,7 @@ const OUString* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
 {
     static const OUString aSD_EXPORT_IDENTIFIER( RTL_CONSTASCII_USTRINGPARAM( "SdExportLastFilter" ) );
     static const OUString aSI_EXPORT_IDENTIFIER( RTL_CONSTASCII_USTRINGPARAM( "SiExportLastFilter" ) );
+    static const OUString aSW_EXPORT_IDENTIFIER( RTL_CONSTASCII_USTRINGPARAM( "SwExportLastFilter" ) );
 
     const OUString* pRet = NULL;
 
@@ -135,6 +136,7 @@ const OUString* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
     {
         case FileDialogHelper::SD_EXPORT: pRet = &aSD_EXPORT_IDENTIFIER; break;
         case FileDialogHelper::SI_EXPORT: pRet = &aSI_EXPORT_IDENTIFIER; break;
+        case FileDialogHelper::SW_EXPORT: pRet = &aSW_EXPORT_IDENTIFIER; break;
         default: break;
     }
 

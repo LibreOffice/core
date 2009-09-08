@@ -42,7 +42,7 @@ TARGETTYPE=		CUI
 
 .INCLUDE :  settings.mk
 
-CFLAGS+=-GR -GX
+CFLAGS+=-GR -EHa
 
 # --- Files --------------------------------------------------------
 
