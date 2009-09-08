@@ -167,8 +167,10 @@ namespace
                 return rtl::OUString();
                 #endif
             }
-            #if defined WNT || (defined MACOSX && defined QUARTZ)
+            #if defined WNT
             return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFilePicker" );
+            #elif (defined MACOSX && defined QUARTZ)
+            return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.AquaFilePicker" );
             #else
             return rtl::OUString();
             #endif
