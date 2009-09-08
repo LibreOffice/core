@@ -368,12 +368,12 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* p
 
             if( pPrintOpts->GetOptionsPrint().IsDate() )
             {
-                aTimeDateStr += GetSdrGlobalData().pLocaleData->getDate( Date() );
+                aTimeDateStr += GetSdrGlobalData().GetLocaleData()->getDate( Date() );
                 aTimeDateStr += (sal_Unicode)' ';
             }
 
             if( pPrintOpts->GetOptionsPrint().IsTime() )
-                aTimeDateStr += GetSdrGlobalData().pLocaleData->getTime( Time(), FALSE, FALSE );
+                aTimeDateStr += GetSdrGlobalData().GetLocaleData()->getTime( Time(), FALSE, FALSE );
 
             if( pPrintOpts->GetOptionsPrint().IsOutline() )
                 bPrintOutline = TRUE;
