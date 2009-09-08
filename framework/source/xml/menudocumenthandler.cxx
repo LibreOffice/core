@@ -47,7 +47,6 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -55,7 +54,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
-
+#include <rtl/logfile.hxx>
 #include <comphelper/attributelist.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -172,19 +171,6 @@ ReadMenuDocumentHandlerBase::ReadMenuDocumentHandlerBase() :
 
 ReadMenuDocumentHandlerBase::~ReadMenuDocumentHandlerBase()
 {
-}
-
-Any SAL_CALL ReadMenuDocumentHandlerBase::queryInterface(
-    const Type & rType )
-throw( RuntimeException )
-{
-    Any a = ::cppu::queryInterface(
-                rType ,
-                SAL_STATIC_CAST( XDocumentHandler*, this ));
-    if ( a.hasValue() )
-        return a;
-
-    return OWeakObject::queryInterface( rType );
 }
 
 void SAL_CALL ReadMenuDocumentHandlerBase::ignorableWhitespace(
@@ -607,14 +593,15 @@ throw( SAXException, RuntimeException )
         m_bMenuMode = sal_True;
 
         // Container must be factory to create sub container
-        Reference< XComponentContext > xComponentContext;
-        Reference< XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
-        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>=
-            xComponentContext;
+        if ( !m_xComponentContext.is() )
+        {
+            const Reference< XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+            m_xComponentContext.set(xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
+        }
 
         Reference< XIndexContainer > xSubItemContainer;
         if ( m_xContainerFactory.is() )
-            xSubItemContainer = Reference< XIndexContainer >( m_xContainerFactory->createInstanceWithContext( xComponentContext ), UNO_QUERY );
+            xSubItemContainer = Reference< XIndexContainer >( m_xContainerFactory->createInstanceWithContext( m_xComponentContext ), UNO_QUERY );
 
         // read attributes for menu
         for ( sal_Int16 i=0; i< xAttrList->getLength(); i++ )

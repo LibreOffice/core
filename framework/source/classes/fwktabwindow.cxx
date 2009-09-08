@@ -33,7 +33,7 @@
 
 #include <classes/fwktabwindow.hxx>
 #include "framework.hrc"
-#include <classes/fwkresid.hxx>
+#include <classes/fwlresid.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XContainerWindowEventHandler.hpp>
@@ -224,9 +224,9 @@ void FwkTabPage::Save()
 
 FwkTabWindow::FwkTabWindow( Window* pParent ) :
 
-    Window( pParent, FwkResId( WIN_TABWINDOW ) ),
+    Window( pParent, FwlResId( WIN_TABWINDOW ) ),
 
-    m_aTabCtrl  ( this, FwkResId( TC_TABCONTROL ) )
+    m_aTabCtrl  ( this, FwlResId( TC_TABCONTROL ) )
 {
     uno::Reference < lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     m_xWinProvider = uno::Reference < awt::XContainerWindowProvider >(
@@ -365,20 +365,19 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
     {
         beans::NamedValue aValue = rProperties[i];
         ::rtl::OUString sName = aValue.Name;
-        uno::Any aAny = aValue.Value;
 
         if ( sName.equalsAscii("Title") )
-            aAny >>= sTitle;
+            aValue.Value >>= sTitle;
         else if ( sName.equalsAscii("ToolTip") )
-            aAny >>= sToolTip;
+            aValue.Value >>= sToolTip;
         else if ( sName.equalsAscii("PageURL") )
-            aAny >>= sPageURL;
+            aValue.Value >>= sPageURL;
         else if ( sName.equalsAscii("EventHdl") )
-            aAny >>= xEventHdl;
+            aValue.Value >>= xEventHdl;
         else if ( sName.equalsAscii("Image") )
-            aAny >>= xImage;
+            aValue.Value >>= xImage;
         else if ( sName.equalsAscii("Disabled") )
-            aAny >>= bDisabled;
+            aValue.Value >>= bDisabled;
     }
 
     TabEntry* pEntry = new TabEntry( nIndex, sPageURL, xEventHdl );

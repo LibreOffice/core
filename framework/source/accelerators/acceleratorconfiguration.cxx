@@ -115,6 +115,24 @@ namespace framework
     namespace fpc = ::framework::pattern::configuration;
 #endif
 
+    ::rtl::OUString lcl_getKeyString(const css::awt::KeyEvent& aKeyEvent)
+    {
+        KeyMapping aKeyMapping;
+        const sal_Int32 nBeginIndex = 4; // "KEY_" is the prefix of a identifier...
+        ::rtl::OUStringBuffer sKeyBuffer((aKeyMapping.mapCodeToIdentifier(aKeyEvent.KeyCode)).copy(nBeginIndex));
+
+        if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT )
+            sKeyBuffer.appendAscii("_SHIFT");
+        if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  )
+            sKeyBuffer.appendAscii("_MOD1");
+        if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  )
+            sKeyBuffer.appendAscii("_MOD2");
+        if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  )
+            sKeyBuffer.appendAscii("_MOD3");
+
+        return sKeyBuffer.makeStringAndClear();
+    }
+
 //-----------------------------------------------
 //  XInterface, XTypeProvider
 DEFINE_XINTERFACE_6(XMLBasedAcceleratorConfiguration                       ,
@@ -285,7 +303,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::g
             continue;
 
         AcceleratorCache::TKeyList lKeys = rCache.getKeysByCommand(rCommand);
-        if (lKeys.size()<1)
+        if ( lKeys.empty() )
             continue;
 
         css::uno::Any& rAny = lPreferredOnes[i];
@@ -694,6 +712,8 @@ XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(const css::un
                                 , m_pPrimaryWriteCache(0                        )
                                 , m_pSecondaryWriteCache(0                      )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration" );
+    static const ::rtl::OUString CFG_ENTRY_ACCELERATORS(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Accelerators"));
     m_xCfg = css::uno::Reference< css::container::XNameAccess > (
              ::comphelper::ConfigurationHelper::openConfig( m_xSMGR, CFG_ENTRY_ACCELERATORS, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
              css::uno::UNO_QUERY );
@@ -708,14 +728,17 @@ XCUBasedAcceleratorConfiguration::~XCUBasedAcceleratorConfiguration()
 css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfiguration::getAllKeyEvents()
     throw(css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::getAllKeyEvents" );
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
 
     AcceleratorCache::TKeyList lKeys  = impl_getCFG(sal_True).getAllKeys(); //get keys from PrimaryKeys set
 
     AcceleratorCache::TKeyList lSecondaryKeys = impl_getCFG(sal_False).getAllKeys(); //get keys from SecondaryKeys set
+    lKeys.reserve(lKeys.size()+lSecondaryKeys.size());
     AcceleratorCache::TKeyList::const_iterator pIt;
-    for ( pIt  = lSecondaryKeys.begin(); pIt != lSecondaryKeys.end(); ++pIt )
+    AcceleratorCache::TKeyList::const_iterator pEnd = lSecondaryKeys.end();
+    for ( pIt  = lSecondaryKeys.begin(); pIt != pEnd; ++pIt )
         lKeys.push_back(*pIt);
 
     return lKeys.getAsConstList();
@@ -728,6 +751,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
     throw(css::container::NoSuchElementException,
           css::uno::RuntimeException            )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::getCommandByKeyEvent" );
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
 
@@ -753,6 +777,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
                                                     throw(css::lang::IllegalArgumentException,
                                                     css::uno::RuntimeException         )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::setKeyEvent" );
     RTL_LOGFILE_PRODUCT_CONTEXT( aLog1, " start XCUBasedAcceleratorConfiguration::setKeyEvent" );
 
     if (
@@ -841,6 +866,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeKeyEvent(const css::awt::K
     throw(css::container::NoSuchElementException,
           css::uno::RuntimeException            )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::removeKeyEvent" );
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
@@ -885,6 +911,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
         css::container::NoSuchElementException,
         css::uno::RuntimeException            )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::getKeyEventsByCommand" );
     if (!sCommand.getLength())
         throw css::lang::IllegalArgumentException(
                 ::rtl::OUString::createFromAscii("Empty command strings are not allowed here."),
@@ -938,6 +965,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
     throw(css::lang::IllegalArgumentException   ,
         css::uno::RuntimeException            )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::getPreferredKeyEventsForCommandList" );
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
 
@@ -959,7 +987,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
             continue;
 
         AcceleratorCache::TKeyList lKeys = rCache.getKeysByCommand(rCommand);
-        if (lKeys.size()<1)
+        if ( lKeys.empty() )
             continue;
 
         AcceleratorCache::TKeyList::const_iterator pPreferredKey = lcl_getPreferredKey(lKeys);
@@ -982,6 +1010,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
         css::container::NoSuchElementException,
         css::uno::RuntimeException            )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents" );
     if (!sCommand.getLength())
         throw css::lang::IllegalArgumentException(
                 ::rtl::OUString::createFromAscii("Empty command strings are not allowed here."),
@@ -1013,6 +1042,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reload()
     throw(css::uno::Exception       ,
         css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::reload" );
     RTL_LOGFILE_PRODUCT_CONTEXT( aLog1, " start XCUBasedAcceleratorConfiguration::reload()" );
 
     // SAFE -> ----------------------------------
@@ -1056,6 +1086,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::store()
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::reload" );
     RTL_LOGFILE_PRODUCT_CONTEXT( aLog1, " start XCUBasedAcceleratorConfiguration::store()" );
 
     // SAFE -> ----------------------------------
@@ -1087,6 +1118,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
     throw(css::uno::Exception       ,
       css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::storeToStorage" );
     // todo implement me
     // use m_aCache + old AcceleratorXMLWriter to store data directly on storage given as parameter ...
 }
@@ -1095,6 +1127,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
 ::sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::isModified()
     throw(css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::isModified" );
     return sal_False;
 }
 
@@ -1102,6 +1135,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
 ::sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::isReadOnly()
     throw(css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::isReadOnly" );
     return sal_False;
 }
 
@@ -1109,6 +1143,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
 void SAL_CALL XCUBasedAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& /*xStorage*/)
     throw(css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::setStorage" );
     LOG_WARNING("XCUBasedAcceleratorConfiguration::setStorage()", "TODO implement this HACK .-)")
 }
 
@@ -1116,6 +1151,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setStorage(const css::uno::Refer
 ::sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::hasStorage()
     throw(css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::hasStorage" );
     LOG_WARNING("XCUBasedAcceleratorConfiguration::hasStorage()", "TODO implement this HACK .-)")
         return sal_False;
 }
@@ -1124,6 +1160,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setStorage(const css::uno::Refer
 void SAL_CALL XCUBasedAcceleratorConfiguration::addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::addConfigurationListener" );
     LOG_WARNING("XCUBasedAcceleratorConfiguration::addConfigurationListener()", "TODO implement me")
 }
 
@@ -1131,6 +1168,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::addConfigurationListener(const c
 void SAL_CALL XCUBasedAcceleratorConfiguration::removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::removeConfigurationListener" );
     LOG_WARNING("XCUBasedAcceleratorConfiguration::removeConfigurationListener()", "TODO implement me")
 }
 
@@ -1138,6 +1176,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeConfigurationListener(cons
 void SAL_CALL XCUBasedAcceleratorConfiguration::reset()
     throw(css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::reset" );
     css::uno::Reference< css::container::XNamed > xNamed(m_xCfg, css::uno::UNO_QUERY);
     ::rtl::OUString sConfig = xNamed->getName();
     if ( sConfig.equalsAscii("Global") )
@@ -1160,6 +1199,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reset()
 void SAL_CALL XCUBasedAcceleratorConfiguration::addResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::reload" );
     LOG_WARNING("XCUBasedAcceleratorConfiguration::addResetListener()", "TODO implement me")
 }
 
@@ -1167,6 +1207,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::addResetListener(const css::uno:
 void SAL_CALL XCUBasedAcceleratorConfiguration::removeResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::removeResetListener" );
     LOG_WARNING("XCUBasedAcceleratorConfiguration::removeResetListener()", "TODO implement me")
 }
 
@@ -1174,6 +1215,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeResetListener(const css::u
 void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util::ChangesEvent& aEvent)
     throw(css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::changesOccurred" );
     RTL_LOGFILE_PRODUCT_CONTEXT( aLog1, " start XCUBasedAcceleratorConfiguration::changesOccurred()" );
 
     css::uno::Reference< css::container::XHierarchicalNameAccess > xHAccess;
@@ -1230,11 +1272,13 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
 void SAL_CALL XCUBasedAcceleratorConfiguration::disposing(const css::lang::EventObject& /*aSource*/)
     throw(css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::changesOccurred" );
 }
 
 //-----------------------------------------------
 void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& xCfg )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::impl_ts_load" );
     AcceleratorCache aReadCache = AcceleratorCache();
     css::uno::Reference< css::container::XNameAccess > xAccess;
     if (m_sGlobalOrModules.equalsAscii("Global"))
@@ -1346,6 +1390,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
 //-----------------------------------------------
 void XCUBasedAcceleratorConfiguration::impl_ts_save(sal_Bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& /*xCfg*/)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::impl_ts_save" );
     if (bPreferred)
     {
         AcceleratorCache::TKeyList::const_iterator pIt;
@@ -1439,6 +1484,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(sal_Bool bPreferred, const c
 //-----------------------------------------------
 void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt::KeyEvent& aKeyEvent, const ::rtl::OUString& sCommand, const sal_Bool bPreferred )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::insertKeyToConfiguration" );
     css::uno::Reference< css::container::XNameAccess > xAccess;
     css::uno::Reference< css::container::XNameContainer > xContainer;
     css::uno::Reference< css::lang::XSingleServiceFactory > xFac;
@@ -1464,18 +1510,7 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
         xModules->getByName(m_sModuleCFG) >>= xContainer;
     }
 
-    KeyMapping aKeyMapping;
-    const sal_Int32 nBeginIndex = 4; // "KEY_" is the prefix of a identifier...
-    ::rtl::OUString sKey = (aKeyMapping.mapCodeToIdentifier(aKeyEvent.KeyCode)).copy(nBeginIndex);
-
-    if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT )
-        sKey += ::rtl::OUString::createFromAscii("_SHIFT");
-    if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  )
-        sKey += ::rtl::OUString::createFromAscii("_MOD1");
-    if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  )
-        sKey += ::rtl::OUString::createFromAscii("_MOD2");
-        if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  )
-                sKey += ::rtl::OUString::createFromAscii("_MOD3");
+    const ::rtl::OUString sKey = lcl_getKeyString(aKeyEvent);
     css::uno::Reference< css::container::XNameAccess > xKey;
     css::uno::Reference< css::container::XNameContainer > xCommand;
     if ( !xContainer->hasByName(sKey) )
@@ -1497,6 +1532,7 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
 //-----------------------------------------------
 void XCUBasedAcceleratorConfiguration::removeKeyFromConfiguration( const css::awt::KeyEvent& aKeyEvent, const sal_Bool bPreferred )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::removeKeyFromConfiguration" );
     css::uno::Reference< css::container::XNameAccess > xAccess;
     css::uno::Reference< css::container::XNameContainer > xContainer;
 
@@ -1516,25 +1552,14 @@ void XCUBasedAcceleratorConfiguration::removeKeyFromConfiguration( const css::aw
         xModules->getByName(m_sModuleCFG) >>= xContainer;
     }
 
-    KeyMapping aKeyMapping;
-    const sal_Int32 nBeginIndex = 4; // "KEY_" is the prefix of a identifier...
-    ::rtl::OUString sKey = (aKeyMapping.mapCodeToIdentifier(aKeyEvent.KeyCode)).copy(nBeginIndex);
-
-    if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT )
-        sKey += ::rtl::OUString::createFromAscii("_SHIFT");
-    if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  )
-        sKey += ::rtl::OUString::createFromAscii("_MOD1");
-    if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  )
-        sKey += ::rtl::OUString::createFromAscii("_MOD2");
-        if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  )
-                sKey += ::rtl::OUString::createFromAscii("_MOD3");
-
+    const ::rtl::OUString sKey = lcl_getKeyString(aKeyEvent);
     xContainer->removeByName(sKey);
 }
 
 //-----------------------------------------------
 void XCUBasedAcceleratorConfiguration::reloadChanged( const ::rtl::OUString& sPrimarySecondary, const ::rtl::OUString& sGlobalModules, const ::rtl::OUString& sModule, const ::rtl::OUString& sKey )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::reloadChanged" );
     css::uno::Reference< css::container::XNameAccess > xAccess;
     css::uno::Reference< css::container::XNameContainer > xContainer;
 
@@ -1607,6 +1632,7 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const ::rtl::OUString& sPr
 //-----------------------------------------------
 AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPreferred, sal_Bool bWriteAccessRequested)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::impl_getCFG" );
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
@@ -1656,6 +1682,7 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPrefer
 //-----------------------------------------------
 ::comphelper::Locale XCUBasedAcceleratorConfiguration::impl_ts_getLocale() const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::impl_ts_getLocale" );
     static ::rtl::OUString LOCALE_PACKAGE = ::rtl::OUString::createFromAscii("/org.openoffice.Setup");
     static ::rtl::OUString LOCALE_PATH    = ::rtl::OUString::createFromAscii("L10N"                 );
     static ::rtl::OUString LOCALE_KEY     = ::rtl::OUString::createFromAscii("ooLocale"             );

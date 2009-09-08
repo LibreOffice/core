@@ -46,11 +46,8 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
-
-#ifndef __COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
-#endif
-
 #include "com/sun/star/beans/XFastPropertySet.hpp"
 #include <toolkit/helper/vclunohelper.hxx>
 

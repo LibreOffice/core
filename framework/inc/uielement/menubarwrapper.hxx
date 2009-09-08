@@ -74,9 +74,6 @@ class MenuBarWrapper : public UIConfigElementWrapperBase,
         FWK_DECLARE_XINTERFACE
         FWK_DECLARE_XTYPEPROVIDER
 
-        // #110897#
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
-
         MenuBarManager* GetMenuBarManager() const { return static_cast< MenuBarManager* >( m_xMenuBarManager.get() ); }
         void            InvalidatePopupControllerCache() { m_bRefreshPopupControllerCache = sal_True; }
 
@@ -91,8 +88,6 @@ class MenuBarWrapper : public UIConfigElementWrapperBase,
 
         // XUIElementSettings
         virtual void SAL_CALL updateSettings(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getSettings( sal_Bool bWriteable ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& UISettings ) throw (::com::sun::star::uno::RuntimeException);
 
         // XElementAccess
         virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw (::com::sun::star::uno::RuntimeException);
@@ -104,11 +99,11 @@ class MenuBarWrapper : public UIConfigElementWrapperBase,
         virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
+        virtual void impl_fillNewData();
         void fillPopupControllerCache();
 
         sal_Bool                                                                                m_bRefreshPopupControllerCache : 1;
         com::sun::star::uno::Reference< com::sun::star::lang::XComponent >                      m_xMenuBarManager;
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
         PopupControllerCache                                                                    m_aPopupControllerCache;
 };
 

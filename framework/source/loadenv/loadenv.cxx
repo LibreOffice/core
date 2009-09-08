@@ -75,6 +75,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
@@ -1829,9 +1830,8 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         // read window state from the configuration
         // and apply it on the window.
         // Do nothing, if no configuration entry exists!
-        css::uno::Any   aWindowState = ::comphelper::ConfigurationHelper::readRelativeKey(xModuleCfg, sModule, OFFICEFACTORY_PROPNAME_WINDOWATTRIBUTES);
         ::rtl::OUString sWindowState ;
-        aWindowState >>= sWindowState;
+        ::comphelper::ConfigurationHelper::readRelativeKey(xModuleCfg, sModule, OFFICEFACTORY_PROPNAME_WINDOWATTRIBUTES) >>= sWindowState;
         if (sWindowState.getLength())
         {
             // SOLAR SAFE ->

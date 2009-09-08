@@ -58,13 +58,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/XUIElementSettings.hpp>
-#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGER_HPP_
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
-#endif
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#ifndef _COM_SUN_STAR_UI_UIElementType_HPP_
 #include <com/sun/star/ui/UIElementType.hpp>
-#endif
+#include <com/sun/star/lang/DisposedException.hpp>
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -85,6 +82,7 @@
 #include <svtools/menuoptions.hxx>
 #include <svtools/cmdoptions.hxx>
 #include <dispatch/uieventloghelper.hxx>
+#include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -148,8 +146,7 @@ Reference< XLayoutManager > getLayoutManagerFromFrame( const Reference< XFrame >
 
     try
     {
-        Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
-        aValue >>= xLayoutManager;
+        xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) >>= xLayoutManager;
     }
     catch ( UnknownPropertyException& )
     {
@@ -264,8 +261,7 @@ rtl::OUString ToolbarsMenuController::getUINameFromCommand( const rtl::OUString&
             Reference< XNameAccess > xNameAccess( m_xServiceManager->createInstance(
                                                                     SERVICENAME_UICOMMANDDESCRIPTION ),
                                                                 UNO_QUERY );
-            Any a = xNameAccess->getByName( m_aModuleIdentifier );
-            a >>= m_xUICommandDescription;
+            xNameAccess->getByName( m_aModuleIdentifier ) >>= m_xUICommandDescription;
         }
         catch ( Exception& )
         {
@@ -278,8 +274,7 @@ rtl::OUString ToolbarsMenuController::getUINameFromCommand( const rtl::OUString&
         {
             Sequence< PropertyValue > aPropSeq;
             rtl::OUString             aStr;
-            Any a( m_xUICommandDescription->getByName( rCommandURL ));
-            if ( a >>= aPropSeq )
+            if ( m_xUICommandDescription->getByName( rCommandURL ) >>= aPropSeq )
             {
                 for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
                 {
@@ -367,7 +362,8 @@ Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuControl
     aTbSeq[1].Name = m_aPropResourceURL;
 
     Sequence< Sequence< com::sun::star::beans::PropertyValue > > aSeq( aToolBarArray.size() );
-    for ( sal_uInt32 i = 0; i < aToolBarArray.size(); i++ )
+    const sal_uInt32 nCount = aToolBarArray.size();
+    for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
         aTbSeq[0].Value <<= aToolBarArray[i].aToolBarUIName;
         aTbSeq[1].Value <<= aToolBarArray[i].aToolBarResName;
@@ -476,7 +472,8 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         std::sort( aSortedTbs.begin(), aSortedTbs.end(), CompareToolBarEntry );
 
         sal_Int16 nIndex( 1 );
-        for ( sal_uInt32 i = 0; i < aSortedTbs.size(); i++ )
+        const sal_uInt32 nCount = aSortedTbs.size();
+        for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
             USHORT nItemCount = m_xPopupMenu->getItemCount();
             m_xPopupMenu->insertItem( nIndex, aSortedTbs[i].aUIName, css::awt::MenuItemStyle::CHECKABLE, nItemCount );
@@ -631,10 +628,6 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
 }
 
 // XMenuListener
-void SAL_CALL ToolbarsMenuController::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
-{
-}
-
 void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
 {
     Reference< css::awt::XPopupMenu >   xPopupMenu;
@@ -679,9 +672,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                                 rtl::OUString aElementName = aElementNames[i];
                                 Sequence< PropertyValue > aWindowState;
 
-                                Any a( xPersistentWindowState->getByName( aElementName ));
-
-                                if ( a >>= aWindowState )
+                                if ( xPersistentWindowState->getByName( aElementName ) >>= aWindowState )
                                 {
                                     sal_Bool  bVisible( sal_False );
                                     sal_Bool  bContextSensitive( sal_False );
@@ -700,7 +691,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                                     if ( !bVisible && bContextSensitive && nVisibleIndex >= 0 )
                                     {
                                         // Default is: Every context sensitive toolbar is visible
-                                        aWindowState[nVisibleIndex].Value = makeAny( sal_True );
+                                        aWindowState[nVisibleIndex].Value <<= sal_True;
                                         xNameReplace->replaceByName( aElementName, makeAny( aWindowState ));
                                         bRefreshToolbars = true;
                                     }
@@ -810,7 +801,8 @@ void SAL_CALL ToolbarsMenuController::activate( const css::awt::MenuEvent& ) thr
     }
 
     // Update status for all commands inside our toolbars popup menu
-    for ( sal_uInt32 i=0; i < aCmdVector.size(); i++ )
+    const sal_uInt32 nCount = aCmdVector.size();
+    for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
         bool bInternal = ( aCmdVector[i].indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATIC_INTERNAL_CMD_PART ))) == 0);
 
@@ -837,10 +829,6 @@ void SAL_CALL ToolbarsMenuController::activate( const css::awt::MenuEvent& ) thr
     }
 }
 
-void SAL_CALL ToolbarsMenuController::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
-{
-}
-
 // XPopupMenuController
 void SAL_CALL ToolbarsMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw ( RuntimeException )
 {
@@ -863,37 +851,14 @@ void SAL_CALL ToolbarsMenuController::setPopupMenu( const Reference< css::awt::X
 // XInitialization
 void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
-    const rtl::OUString aFrameName( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-    const rtl::OUString aCommandURLName( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
-
     ResetableGuard aLock( m_aLock );
-
     sal_Bool bInitalized( m_bInitialized );
     if ( !bInitalized )
     {
-        PropertyValue       aPropValue;
-        rtl::OUString       aCommandURL;
-        Reference< XFrame > xFrame;
+        PopupMenuControllerBase::initialize(aArguments);
 
-        for ( int i = 0; i < aArguments.getLength(); i++ )
+        if ( m_bInitialized )
         {
-            if ( aArguments[i] >>= aPropValue )
-            {
-                if ( aPropValue.Name.equalsAscii( "Frame" ))
-                    aPropValue.Value >>= xFrame;
-                else if ( aPropValue.Name.equalsAscii( "CommandURL" ))
-                    aPropValue.Value >>= aCommandURL;
-            }
-        }
-
-        if ( xFrame.is() && aCommandURL.getLength() )
-        {
-            m_xFrame        = xFrame;
-            m_aCommandURL   = aCommandURL;
-            m_bInitialized  = true;
-
-            m_aBaseURL      = determineBaseURL( aCommandURL );
-
             Reference< XModuleManager > xModuleManager( m_xServiceManager->createInstance(
                                                             SERVICENAME_MODULEMANAGER ),
                                                         UNO_QUERY );
@@ -932,11 +897,6 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
                 {
                 }
             }
-
-            m_xURLTransformer = Reference< XURLTransformer >( m_xServiceManager->createInstance(
-                                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                                        "com.sun.star.util.URLTransformer" ))),
-                                                                   UNO_QUERY );
         }
     }
 }

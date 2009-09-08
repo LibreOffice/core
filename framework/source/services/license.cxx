@@ -318,9 +318,9 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
 #endif
         // check if we need to show the license at all
         // open org.openoffice.Setup/Office/ooLicenseAcceptDate
-        ::rtl::OUString sConfigSrvc = ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
+        ::rtl::OUString sConfigSrvc = SERVICENAME_CFGPROVIDER;
         ::rtl::OUString sAccessSrvc = ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess");
-        ::rtl::OUString sReadSrvc   = ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
+        ::rtl::OUString sReadSrvc   = SERVICENAME_CFGREADACCESS;
 
         // get configuration provider
         Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
@@ -332,11 +332,10 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         theArgs[0] <<= v;
         Reference< XPropertySet > pset = Reference< XPropertySet >(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
-        Any result = pset->getPropertyValue(::rtl::OUString::createFromAscii("ooLicenseAcceptDate"));
 
         // if we find a date there, compare it to baseinstall license date
         ::rtl::OUString aAcceptDate;
-        if (result >>= aAcceptDate)
+        if (pset->getPropertyValue(::rtl::OUString::createFromAscii("ooLicenseAcceptDate")) >>= aAcceptDate)
         {
             // get LicenseFileDate from base install
             ::rtl::OUString aLicenseURL = aLicensePath;

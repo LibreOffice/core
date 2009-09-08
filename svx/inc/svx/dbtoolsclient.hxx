@@ -36,7 +36,7 @@
 #include <osl/module.h>
 #include <tools/solar.h>
 #include <unotools/sharedunocomponent.hxx>
-#include <svx/svxdllapi.h>
+#include "svx/svxdllapi.h"
 
 //........................................................................
 namespace svxform
@@ -94,7 +94,7 @@ namespace svxform
     public:
         OStaticDataAccessTools();
 
-        SVX_DLLPRIVATE const ::rtl::Reference< ::connectivity::simple::IDataAccessTools >& getDataAccessTools() const { return m_xDataAccessTools; }
+        const ::rtl::Reference< ::connectivity::simple::IDataAccessTools >& getDataAccessTools() const { return m_xDataAccessTools; }
 
         // ------------------------------------------------
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> getNumberFormats(
@@ -103,13 +103,13 @@ namespace svxform
         ) const;
 
         // ------------------------------------------------
-        SVX_DLLPRIVATE sal_Int32 getDefaultNumberFormat(
+        sal_Int32 getDefaultNumberFormat(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xColumn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes >& _xTypes,
             const ::com::sun::star::lang::Locale& _rLocale );
 
         // ------------------------------------------------
-        SVX_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection_withFeedback(
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection_withFeedback(
             const ::rtl::OUString& _rDataSourceName,
             const ::rtl::OUString& _rUser,
             const ::rtl::OUString& _rPwd,
@@ -131,26 +131,26 @@ namespace svxform
                 const SAL_THROW ( (::com::sun::star::uno::RuntimeException) );
 
         // ------------------------------------------------
-        SVX_DLLPRIVATE void TransferFormComponentProperties(
+        void TransferFormComponentProperties(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxOld,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxNew,
             const ::com::sun::star::lang::Locale& _rLocale
         ) const;
 
         // ------------------------------------------------
-        SVX_DLLPRIVATE ::rtl::OUString quoteName(
+        ::rtl::OUString quoteName(
             const ::rtl::OUString& _rQuote,
             const ::rtl::OUString& _rName
         ) const;
 
         // ------------------------------------------------
-        SVX_DLLPRIVATE ::rtl::OUString composeTableNameForSelect(
+        ::rtl::OUString composeTableNameForSelect(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable
         ) const;
 
         // ------------------------------------------------
-        SVX_DLLPRIVATE ::com::sun::star::sdb::SQLContext prependContextInfo(
+        ::com::sun::star::sdb::SQLContext prependContextInfo(
             ::com::sun::star::sdbc::SQLException& _rException,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
             const ::rtl::OUString& _rContextDescription,
@@ -158,7 +158,7 @@ namespace svxform
         ) const;
 
         // ------------------------------------------------
-        SVX_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > getDataSource(
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > getDataSource(
                 const ::rtl::OUString& _rsRegisteredName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
             ) const;
@@ -167,22 +167,22 @@ namespace svxform
         /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::INSERT
             @param      _rxCursorSet    the property set
         */
-        SVX_DLLPRIVATE sal_Bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
+        sal_Bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
 
         // ------------------------------------------------
         /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::UPDATE
             @param      _rxCursorSet    the property set
         */
-        SVX_DLLPRIVATE sal_Bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
+        sal_Bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
 
         // ------------------------------------------------
         /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::DELETE
             @param      _rxCursorSet    the property set
         */
-        SVX_DLLPRIVATE sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
+        sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
 
         // ------------------------------------------------
-        SVX_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
             getFieldsByCommandDescriptor(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                 const sal_Int32 _nCommandType,
@@ -201,13 +201,13 @@ namespace svxform
             )   SAL_THROW( ( ) );
 
         // ------------------------------------------------
-        SVX_DLLPRIVATE bool isEmbeddedInDatabase(
+        bool isEmbeddedInDatabase(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent,
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxActualConnection
         );
 
         // ------------------------------------------------
-        SVX_DLLPRIVATE bool isEmbeddedInDatabase(
+        bool isEmbeddedInDatabase(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent
         );
     };
@@ -215,7 +215,7 @@ namespace svxform
     //====================================================================
     //= DBToolsObjectFactory
     //====================================================================
-    class DBToolsObjectFactory : public ODbtoolsClient
+    class SVX_DLLPUBLIC DBToolsObjectFactory : public ODbtoolsClient
     {
     public:
         DBToolsObjectFactory();

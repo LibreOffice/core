@@ -51,6 +51,7 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>
 #include <com/sun/star/awt/XMenuBar.hpp>

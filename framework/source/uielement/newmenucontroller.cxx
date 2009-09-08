@@ -43,7 +43,7 @@
 #include <classes/fwkresid.hxx>
 #include <classes/bmkmenu.hxx>
 #include <helper/imageproducer.hxx>
-#include <classes/menuconfiguration.hxx>
+#include <xml/menuconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -280,7 +280,8 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
             aMenuShortCuts.push_back( aEmptyKeyCode );
         }
 
-        for ( sal_uInt32 i = 0; i < aCmds.size(); i++ )
+        const sal_uInt32 nCount = aCmds.size();
+        for ( sal_uInt32 i = 0; i < nCount; i++ )
             aSeq[i] = aCmds[i];
 
         if ( m_xGlobalAcceleratorManager.is() )
@@ -290,7 +291,8 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
         if ( m_xDocAcceleratorManager.is() )
             retrieveShortcutsFromConfiguration( xGlobalAccelCfg, aSeq, aMenuShortCuts );
 
-        for ( sal_uInt32 i = 0; i < aIds.size(); i++ )
+        const sal_uInt32 nCount2 = aIds.size();
+        for ( sal_uInt32 i = 0; i < nCount2; i++ )
             pPopupMenu->SetAccelKey( USHORT( aIds[i] ), aMenuShortCuts[i] );
 
         // Special handling for "New" menu short-cut should be set at the
@@ -335,10 +337,6 @@ NewMenuController::NewMenuController( const ::com::sun::star::uno::Reference< ::
     m_bAcceleratorCfg( sal_False ),
     m_aTargetFrame( RTL_CONSTASCII_USTRINGPARAM( "_default" ))
 {
-    m_xURLTransformer = Reference< XURLTransformer >(
-                            xServiceManager->createInstance(
-                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                            UNO_QUERY );
 }
 
 NewMenuController::~NewMenuController()
@@ -420,10 +418,6 @@ void SAL_CALL NewMenuController::statusChanged( const FeatureStateEvent& ) throw
 }
 
 // XMenuListener
-void SAL_CALL NewMenuController::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
-{
-}
-
 void SAL_CALL NewMenuController::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
 {
     Reference< css::awt::XPopupMenu > xPopupMenu;
@@ -510,118 +504,66 @@ void SAL_CALL NewMenuController::activate( const css::awt::MenuEvent& ) throw (R
     }
 }
 
-void SAL_CALL NewMenuController::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
-{
-}
-
 // XPopupMenuController
-void SAL_CALL NewMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw ( RuntimeException )
+void NewMenuController::impl_setPopupMenu()
 {
-    ResetableGuard aLock( m_aLock );
 
-    if ( m_bDisposed )
-        throw DisposedException();
+    if ( m_xPopupMenu.is() )
+        fillPopupMenu( m_xPopupMenu );
 
-    if ( m_xFrame.is() && !m_xPopupMenu.is() )
+    // Identify module that we are attach to. It's our context that we need to know.
+    Reference< XModuleManager > xModuleManager( m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ),UNO_QUERY );
+    if ( xModuleManager.is() )
     {
-        // Create popup menu on demand
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
-        m_xPopupMenu = xPopupMenu;
-        m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >( (OWeakObject*)this, UNO_QUERY ));
-
-        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-
-        com::sun::star::util::URL aTargetURL;
-        aTargetURL.Complete = m_aCommandURL;
-        m_xURLTransformer->parseStrict( aTargetURL );
-        m_xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-
-        if ( m_xPopupMenu.is() )
-            fillPopupMenu( m_xPopupMenu );
-
-        // Identify module that we are attach to. It's our context that we need to know.
-        Reference< XModuleManager > xModuleManager( m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ),UNO_QUERY );
-        if ( xModuleManager.is() )
+        try
         {
-            try
+            m_aModuleIdentifier = xModuleManager->identify( m_xFrame );
+            m_bModuleIdentified = sal_True;
+
+            Reference< XNameAccess > xNameAccess( xModuleManager, UNO_QUERY );
+            if (( m_aModuleIdentifier.getLength() > 0 ) && xNameAccess.is() )
             {
-                m_aModuleIdentifier = xModuleManager->identify( m_xFrame );
-                m_bModuleIdentified = sal_True;
+                Sequence< PropertyValue > aSeq;
 
-                Reference< XNameAccess > xNameAccess( xModuleManager, UNO_QUERY );
-                if (( m_aModuleIdentifier.getLength() > 0 ) && xNameAccess.is() )
+                if ( xNameAccess->getByName( m_aModuleIdentifier ) >>= aSeq )
                 {
-                    Sequence< PropertyValue > aSeq;
-
-                    Any a = xNameAccess->getByName( m_aModuleIdentifier );
-                    if ( a >>= aSeq )
+                    for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
                     {
-                        for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
+                        if ( aSeq[y].Name.equalsAscii("ooSetupFactoryEmptyDocumentURL") )
                         {
-                            if ( aSeq[y].Name.equalsAscii("ooSetupFactoryEmptyDocumentURL") )
-                            {
-                                aSeq[y].Value >>= m_aEmptyDocURL;
-                                break;
-                            }
+                            aSeq[y].Value >>= m_aEmptyDocURL;
+                            break;
                         }
                     }
                 }
             }
-            catch ( RuntimeException& e )
-            {
-                throw e;
-            }
-            catch ( Exception& )
-            {
-            }
+        }
+        catch ( RuntimeException& e )
+        {
+            throw e;
+        }
+        catch ( Exception& )
+        {
         }
     }
-}
-
-void SAL_CALL NewMenuController::updatePopupMenu() throw (RuntimeException)
-{
-    ResetableGuard aLock( m_aLock );
-    if ( m_bDisposed )
-        throw DisposedException();
 }
 
 // XInitialization
 void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
-    const rtl::OUString aFrameName( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-    const rtl::OUString aCommandURLName( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
-
     ResetableGuard aLock( m_aLock );
 
     sal_Bool bInitalized( m_bInitialized );
     if ( !bInitalized )
     {
-        PropertyValue       aPropValue;
-        rtl::OUString       aCommandURL;
-        Reference< XFrame > xFrame;
+        PopupMenuControllerBase::initialize( aArguments );
 
-        for ( int i = 0; i < aArguments.getLength(); i++ )
+        if ( m_bInitialized )
         {
-            if ( aArguments[i] >>= aPropValue )
-            {
-                if ( aPropValue.Name.equalsAscii( "Frame" ))
-                    aPropValue.Value >>= xFrame;
-                else if ( aPropValue.Name.equalsAscii( "CommandURL" ))
-                    aPropValue.Value >>= aCommandURL;
-            }
-        }
-
-        if ( xFrame.is() && aCommandURL.getLength() )
-        {
-            m_xFrame        = xFrame;
-            m_aCommandURL   = aCommandURL;
-            m_bInitialized  = sal_True;
-
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
             m_bShowImages   = rSettings.GetUseImagesInMenus();
-        m_bHiContrast   = rSettings.GetMenuColor().IsDark();
+            m_bHiContrast   = rSettings.GetMenuColor().IsDark();
 
             m_bNewMenu      = m_aCommandURL.equalsAscii( ".uno:AddDirect" );
         }

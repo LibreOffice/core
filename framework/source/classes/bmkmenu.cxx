@@ -41,7 +41,7 @@
 #include <general.h>
 #include <macros/debug/assertion.hxx>
 #include <helper/imageproducer.hxx>
-#include <classes/menuconfiguration.hxx>
+#include <xml/menuconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -130,15 +130,17 @@ USHORT BmkMenu_Impl::GetMID()
 
 // ------------------------------------------------------------------------
 
-BmkMenu::BmkMenu( com::sun::star::uno::Reference< XFrame >& xFrame, BmkMenu::BmkMenuType nType, BmkMenu* pRoot ) :
-    m_nType( nType ), m_xFrame( xFrame )
+BmkMenu::BmkMenu( com::sun::star::uno::Reference< XFrame >& xFrame, BmkMenu::BmkMenuType nType, BmkMenu* pRoot )
+    :AddonMenu(xFrame)
+    ,m_nType( nType )
 {
     _pImp = new BmkMenu_Impl( pRoot );
     Initialize();
 }
 
-BmkMenu::BmkMenu( Reference< XFrame >& xFrame, BmkMenu::BmkMenuType nType ) :
-    m_nType( nType ), m_xFrame( xFrame )
+BmkMenu::BmkMenu( Reference< XFrame >& xFrame, BmkMenu::BmkMenuType nType )
+    :AddonMenu(xFrame)
+    ,m_nType( nType )
 {
     _pImp = new BmkMenu_Impl();
     Initialize();
@@ -147,17 +149,6 @@ BmkMenu::BmkMenu( Reference< XFrame >& xFrame, BmkMenu::BmkMenuType nType ) :
 BmkMenu::~BmkMenu()
 {
     delete _pImp;
-
-    for ( USHORT i = 0; i < GetItemCount(); i++ )
-    {
-        if ( GetItemType( i ) != MENUITEM_SEPARATOR )
-        {
-            // delete user attributes created with new!
-            USHORT nId = GetItemId( i );
-            MenuConfiguration::Attributes* pUserAttributes = (MenuConfiguration::Attributes*)GetUserValue( nId );
-            delete pUserAttributes;
-        }
-    }
 }
 
 void BmkMenu::Initialize()

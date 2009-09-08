@@ -75,7 +75,7 @@ namespace framework
 {
 //-----------------------------------------------
 // Accelerators.xcu
-static const ::rtl::OUString CFG_ENTRY_ACCELERATORS = ::rtl::OUString::createFromAscii("org.openoffice.Office.Accelerators");
+
 static const ::rtl::OUString CFG_ENTRY_PRIMARY      = ::rtl::OUString::createFromAscii("PrimaryKeys");
 static const ::rtl::OUString CFG_ENTRY_SECONDARY    = ::rtl::OUString::createFromAscii("SecondaryKeys");
 

@@ -168,14 +168,6 @@ throw ( RuntimeException )
 
 // ------------------------------------------------------------------
 
-void SAL_CALL ImageButtonToolbarController::execute( sal_Int16 KeyModifier )
-throw ( RuntimeException )
-{
-    ComplexToolbarController::execute( KeyModifier );
-}
-
-// ------------------------------------------------------------------
-
 void ImageButtonToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );

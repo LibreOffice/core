@@ -1730,9 +1730,12 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
 
         // Try to instanciate quickstart service. This service is not mandatory, so
         // do nothing if service is not available.
-        Reference < XComponent > xQuickstart( rSMgr->createInstanceWithArguments(
+        if ( bQuickstart )
+        {
+            Reference < XComponent > xQuickstart( rSMgr->createInstanceWithArguments(
                                                 DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" ), aSeq ),
                                                 UNO_QUERY );
+        }
         return sal_True;
     }
     catch( ::com::sun::star::uno::Exception& )

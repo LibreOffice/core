@@ -36,7 +36,7 @@
 #endif
 #include <svx/gridctrl.hxx>
 #include "gridcell.hxx"
-#include "dbtoolsclient.hxx"
+#include "svx/dbtoolsclient.hxx"
 #include "fmtools.hxx"
 #include <svtools/stringtransfer.hxx>
 

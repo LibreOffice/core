@@ -58,7 +58,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
@@ -106,11 +106,8 @@ typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  ::rtl::OUString         
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class OPlugInFrameDispatcher    :   public css::frame::XDispatchProvider            ,
-                                      public css::frame::XDispatch                  ,
-                                    public css::mozilla::XPluginInstanceNotifySink  ,
-                                    private ThreadHelpBase                          ,
-                                    public ::cppu::OWeakObject
+class OPlugInFrameDispatcher    :   private ThreadHelpBase                          ,
+                                    public ::cppu::WeakImplHelper3< ::com::sun::star::frame::XDispatchProvider, ::com::sun::star::frame::XDispatch, ::com::sun::star::mozilla::XPluginInstanceNotifySink >
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -142,12 +139,6 @@ class OPlugInFrameDispatcher    :   public css::frame::XDispatchProvider        
          OPlugInFrameDispatcher(    const   css::uno::Reference< css::lang::XMultiServiceFactory >&     xFactory    ,
                                 const   css::uno::Reference< css::mozilla::XPluginInstance >&       xOwner      ,
                                 const   css::uno::Reference< css::mozilla::XPluginInstancePeer >&   xPlugInDLL  );
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XInterface
-        //---------------------------------------------------------------------------------------------------------
-
-        DECLARE_XINTERFACE
 
         //---------------------------------------------------------------------------------------------------------
         //  XDispatchProvider

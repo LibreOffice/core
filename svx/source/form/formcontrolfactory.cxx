@@ -30,7 +30,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "dbtoolsclient.hxx"
+#include "svx/dbtoolsclient.hxx"
 #include "formcontrolfactory.hxx"
 #include "fmcontrollayout.hxx"
 #include "fmprop.hrc"
