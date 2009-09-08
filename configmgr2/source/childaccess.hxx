@@ -27,8 +27,8 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_CHILDACCESS_HXX
-#define INCLUDED_CONFIGMGR_CHILDACCESS_HXX
+#ifndef INCLUDED_CONFIGMGR_SOURCE_CHILDACCESS_HXX
+#define INCLUDED_CONFIGMGR_SOURCE_CHILDACCESS_HXX
 
 #include "sal/config.h"
 

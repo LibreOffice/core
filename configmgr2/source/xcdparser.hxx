@@ -27,38 +27,52 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_SPAN_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_SPAN_HXX
+#ifndef INCLUDED_CONFIGMGR_SOURCE_XCDPARSER_HXX
+#define INCLUDED_CONFIGMGR_SOURCE_XCDPARSER_HXX
 
 #include "sal/config.h"
 
-#include "rtl/string.h"
-#include "sal/types.h"
+#include <set>
+
+#include "rtl/ref.hxx"
+#include "rtl/ustring.hxx"
+
+#include "parser.hxx"
+#include "xmlreader.hxx"
 
 namespace configmgr {
 
-struct Span {
-    char const * begin;
-    sal_Int32 length;
+class Span;
+struct Data;
 
-    inline Span(): begin(0), length(0) {}
-        // init length to avoid compiler warnings
+class XcdParser: public Parser {
+public:
+    typedef std::set< rtl::OUString > Dependencies;
 
-    inline Span(char const * theBegin, sal_Int32 theLength):
-        begin(theBegin), length(theLength) {}
+    XcdParser(int layer, Dependencies const & dependencies, Data * data);
 
-    inline void clear() throw() { begin = 0; }
+private:
+    virtual ~XcdParser();
 
-    inline bool is() const { return begin != 0; }
+    virtual XmlReader::Text getTextMode();
 
-    inline bool equals(Span const & text) const {
-        return rtl_str_compare_WithLength(
-            begin, length, text.begin, text.length) == 0;
-    }
+    virtual bool startElement(
+        XmlReader * reader, XmlReader::Namespace ns, Span const & name);
 
-    inline bool equals(char const * textBegin, sal_Int32 textLength) const {
-        return equals(Span(textBegin, textLength));
-    }
+    virtual void endElement(XmlReader const * reader);
+
+    virtual void characters(Span const & text);
+
+    enum State {
+        STATE_START, STATE_DEPENDENCIES, STATE_DEPENDENCY, STATE_COMPONENTS };
+
+    int layer_;
+    Dependencies const & dependencies_;
+    Data * data_;
+    State state_;
+    rtl::OUString dependency_;
+    rtl::Reference< Parser > nestedParser_;
+    long nesting_;
 };
 
 }

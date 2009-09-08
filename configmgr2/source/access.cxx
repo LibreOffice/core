@@ -70,7 +70,6 @@
 #include "components.hxx"
 #include "data.hxx"
 #include "groupnode.hxx"
-#include "layer.hxx"
 #include "localizedpropertynode.hxx"
 #include "localizedvaluenode.hxx"
 #include "lock.hxx"
@@ -213,9 +212,7 @@ std::vector< rtl::Reference< ChildAccess > > Access::getAllChildren() {
     return vec;
 }
 
-void Access::checkValue(
-    com::sun::star::uno::Any const & value, Type type, bool nillable)
-{
+void Access::checkValue(css::uno::Any const & value, Type type, bool nillable) {
     bool ok;
     switch (type) {
     case TYPE_NIL:
@@ -254,7 +251,7 @@ void Access::checkValue(
 }
 
 void Access::insertLocalizedValueChild(
-    rtl::OUString const & name, com::sun::star::uno::Any const & value)
+    rtl::OUString const & name, css::uno::Any const & value)
 {
     LocalizedPropertyNode * locprop = dynamic_cast< LocalizedPropertyNode * >(
         getNode().get());
@@ -262,7 +259,7 @@ void Access::insertLocalizedValueChild(
     rtl::Reference< ChildAccess > child(
         new ChildAccess(
             getRootAccess(), this, name,
-            new LocalizedValueNode(NO_LAYER, value)));
+            new LocalizedValueNode(Data::NO_LAYER, value)));
     child->markAsModified();
     //TODO notify change
 }
@@ -306,7 +303,7 @@ void Access::commitChildChanges(bool valid) {
                 // Inserted:
                 if (j != members.end()) {
                     childValid = childValid &&
-                        j->second->getFinalized() == NO_LAYER;
+                        j->second->getFinalized() == Data::NO_LAYER;
                     if (childValid) {
                         child->getNode()->setMandatory(
                             j->second->getMandatory());
@@ -318,10 +315,10 @@ void Access::commitChildChanges(bool valid) {
             } else {
                 // Removed:
                 childValid = childValid && j != members.end() &&
-                    j->second->getFinalized() == NO_LAYER &&
-                    j->second->getMandatory() == NO_LAYER;
+                    j->second->getFinalized() == Data::NO_LAYER &&
+                    j->second->getMandatory() == Data::NO_LAYER;
                 if (childValid) {
-                    j->second->remove(NO_LAYER);
+                    j->second->remove(Data::NO_LAYER);
                 }
             }
             if (childValid) {
@@ -907,7 +904,8 @@ void Access::insertByName(
         rtl::Reference< ChildAccess >(
             new ChildAccess(
                 getRootAccess(), this, aName,
-                new PropertyNode(NO_LAYER, TYPE_ANY, true, aElement, true)))->
+                new PropertyNode(
+                    Data::NO_LAYER, TYPE_ANY, true, aElement, true)))->
             markAsModified();
         //TODO notify change
         break;
@@ -964,7 +962,7 @@ void Access::removeByName(rtl::OUString const & aName)
     checkLocalizedPropertyAccess();
     rtl::Reference< ChildAccess > child(getChild(aName));
     if (!child.is() || child->isFinalized() ||
-        child->getNode()->getMandatory() != NO_LAYER)
+        child->getNode()->getMandatory() != Data::NO_LAYER)
     {
         throw css::container::NoSuchElementException(
             aName, static_cast< cppu::OWeakObject * >(this));
@@ -992,7 +990,7 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
     rtl::OUString tmplName(
         dynamic_cast< SetNode * >(getNode().get())->getDefaultTemplateName());
     rtl::Reference< Node > tmpl(
-        Components::singleton().getTemplate(NO_LAYER, tmplName));
+        Components::singleton().getTemplate(Data::NO_LAYER, tmplName));
     if (!tmpl.is()) {
         throw css::uno::Exception(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unknown template ")) +
@@ -1000,7 +998,7 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
             static_cast< cppu::OWeakObject * >(this));
     }
     rtl::Reference< Node > node(tmpl->clone());
-    node->setLayer(NO_LAYER);
+    node->setLayer(Data::NO_LAYER);
     return static_cast< cppu::OWeakObject * >(
         new ChildAccess(getRootAccess(), node));
 }

@@ -44,7 +44,6 @@
 
 #include "data.hxx"
 #include "groupnode.hxx"
-#include "layer.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
 #include "setnode.hxx"
@@ -187,6 +186,16 @@ rtl::OUString Data::parseLastSegment(
     }
     OSL_ASSERT(i != -1);
     return path.copy(0, i);
+}
+
+rtl::OUString Data::fullTemplateName(
+    rtl::OUString const & component, rtl::OUString const & name)
+{
+    OSL_ASSERT(component.indexOf(':') == -1);
+    rtl::OUStringBuffer buf(component);
+    buf.append(sal_Unicode(':'));
+    buf.append(name);
+    return buf.makeStringAndClear();
 }
 
 rtl::Reference< Node > Data::findNode(

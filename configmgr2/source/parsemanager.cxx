@@ -27,17 +27,54 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_LAYER_HXX
-#define INCLUDED_CONFIGMGR_LAYER_HXX
-
+#include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
-#include <climits>
+#include "osl/diagnose.h"
+
+#include "parsemanager.hxx"
+#include "parser.hxx"
+#include "xmlreader.hxx"
 
 namespace configmgr {
 
-enum { NO_LAYER = INT_MAX };
-
+ParseManager::ParseManager(
+    rtl::OUString const & url, rtl::Reference< Parser > const & parser):
+    url_(url), parser_(parser), reader_(0)
+{
+    OSL_ASSERT(parser.is());
 }
 
-#endif
+bool ParseManager::parse() {
+    if (reader_.get() == 0) {
+        reader_.reset(new XmlReader(url_));
+    }
+    for (;;) {
+        switch (itemData_.is()
+                ? XmlReader::RESULT_BEGIN
+                : reader_->nextItem(
+                    parser_->getTextMode(), &itemData_, &itemNamespace_))
+        {
+        case XmlReader::RESULT_BEGIN:
+            if (!parser_->startElement(
+                    reader_.get(), itemNamespace_, itemData_))
+            {
+                return false;
+            }
+            break;
+        case XmlReader::RESULT_END:
+            parser_->endElement(reader_.get());
+            break;
+        case XmlReader::RESULT_TEXT:
+            parser_->characters(itemData_);
+            break;
+        case XmlReader::RESULT_DONE:
+            return true;
+        }
+        itemData_.clear();
+    }
+}
+
+ParseManager::~ParseManager() {}
+
+}

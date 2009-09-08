@@ -52,14 +52,19 @@ SLOFILES = \
     $(SLO)$/node.obj \
     $(SLO)$/nodemap.obj \
     $(SLO)$/pad.obj \
+    $(SLO)$/parsemanager.obj \
     $(SLO)$/propertynode.obj \
     $(SLO)$/rootaccess.obj \
     $(SLO)$/services.obj \
     $(SLO)$/setnode.obj \
     $(SLO)$/type.obj \
     $(SLO)$/update.obj \
+    $(SLO)$/valueparser.obj \
     $(SLO)$/writemodfile.obj \
-    $(SLO)$/xml.obj \
+    $(SLO)$/xcdparser.obj \
+    $(SLO)$/xcuparser.obj \
+    $(SLO)$/xcsparser.obj \
+    $(SLO)$/xmldata.obj \
     $(SLO)$/xmlreader.obj
 
 SHL1IMPLIB = i$(SHL1TARGET)

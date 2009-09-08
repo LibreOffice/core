@@ -27,39 +27,34 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_SPAN_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_SPAN_HXX
+#ifndef INCLUDED_CONFIGMGR_SOURCE_XMLDATA_HXX
+#define INCLUDED_CONFIGMGR_SOURCE_XMLDATA_HXX
 
 #include "sal/config.h"
 
-#include "rtl/string.h"
-#include "sal/types.h"
+#include "type.hxx"
+
+namespace rtl { class OUString; }
 
 namespace configmgr {
 
-struct Span {
-    char const * begin;
-    sal_Int32 length;
+class Span;
+class XmlReader;
 
-    inline Span(): begin(0), length(0) {}
-        // init length to avoid compiler warnings
+namespace xmldata {
 
-    inline Span(char const * theBegin, sal_Int32 theLength):
-        begin(theBegin), length(theLength) {}
+rtl::OUString convertFromUtf8(Span const & text);
 
-    inline void clear() throw() { begin = 0; }
+Type parseType(XmlReader const * reader, Span const & text);
 
-    inline bool is() const { return begin != 0; }
+bool parseBoolean(Span const & text, bool deflt);
 
-    inline bool equals(Span const & text) const {
-        return rtl_str_compare_WithLength(
-            begin, length, text.begin, text.length) == 0;
-    }
+rtl::OUString parseTemplateReference(
+    Span const & component, Span const & nodeType,
+    rtl::OUString const & componentName,
+    rtl::OUString const * defaultTemplateName);
 
-    inline bool equals(char const * textBegin, sal_Int32 textLength) const {
-        return equals(Span(textBegin, textLength));
-    }
-};
+}
 
 }
 

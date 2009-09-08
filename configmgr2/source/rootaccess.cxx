@@ -48,7 +48,7 @@
 
 #include "childaccess.hxx"
 #include "components.hxx"
-#include "layer.hxx"
+#include "data.hxx"
 #include "lock.hxx"
 #include "node.hxx"
 #include "rootaccess.hxx"
@@ -92,7 +92,7 @@ rtl::Reference< Node > RootAccess::getNode() {
                  path_),
                 static_cast< cppu::OWeakObject * >(this));
         }
-        finalized_ = finalizedLayer != NO_LAYER;
+        finalized_ = finalizedLayer != Data::NO_LAYER;
     }
     return node_;
 }
@@ -183,7 +183,7 @@ void RootAccess::commitChanges()
     commitChildChanges(
         (Components::singleton().resolvePath(path_, 0, 0, &finalizedLayer)
          == node_) &&
-        finalizedLayer == NO_LAYER);
+        finalizedLayer == Data::NO_LAYER);
     Components::singleton().writeModifications();
 }
 

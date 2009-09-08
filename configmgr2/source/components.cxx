@@ -33,8 +33,10 @@
 #include <algorithm>
 #include <list>
 
+#include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
+#include "osl/diagnose.h"
 #include "osl/file.hxx"
 #include "rtl/bootstrap.hxx"
 #include "rtl/ref.hxx"
@@ -46,8 +48,11 @@
 #include "components.hxx"
 #include "data.hxx"
 #include "node.hxx"
+#include "parsemanager.hxx"
 #include "writemodfile.hxx"
-#include "xml.hxx"
+#include "xcdparser.hxx"
+#include "xcuparser.hxx"
+#include "xcsparser.hxx"
 
 namespace configmgr {
 
@@ -57,17 +62,30 @@ namespace css = com::sun::star;
 
 struct UnresolvedListItem {
     rtl::OUString name;
-    rtl::Reference< xml::Reader > reader;
+    rtl::Reference< ParseManager > manager;
 
     UnresolvedListItem(
-        rtl::OUString const & theName, rtl::Reference< xml::Reader > theReader):
-        name(theName), reader(theReader) {}
+        rtl::OUString const & theName,
+        rtl::Reference< ParseManager > theManager):
+        name(theName), manager(theManager) {}
 };
 
 typedef std::list< UnresolvedListItem > UnresolvedList;
 
 void parseSystemLayer() {
     //TODO
+}
+
+void parseXcsFile(rtl::OUString const & url, int layer, Data * data) {
+    OSL_VERIFY(
+        rtl::Reference< ParseManager >(
+            new ParseManager(url, new XcsParser(layer, data)))->parse());
+}
+
+void parseXcuFile(rtl::OUString const & url, int layer, Data * data) {
+    OSL_VERIFY(
+        rtl::Reference< ParseManager >(
+            new ParseManager(url, new XcuParser(layer, data)))->parse());
 }
 
 rtl::OUString expand(rtl::OUString const & str) {
@@ -110,11 +128,11 @@ void Components::writeModifications() {
 }
 
 void Components::insertXcsFile(int layer, rtl::OUString const & fileUri) {
-    xml::parseXcsFile(fileUri, layer, &data_);
+    parseXcsFile(fileUri, layer, &data_);
 }
 
 void Components::insertXcuFile(int layer, rtl::OUString const & fileUri) {
-    xml::parseXcuFile(fileUri, layer + 1, &data_);
+    parseXcuFile(fileUri, layer + 1, &data_);
 }
 
 Components::Components() {
@@ -281,7 +299,7 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
             css::uno::Reference< css::uno::XInterface >());
     }
     UnresolvedList unres;
-    xml::XcdParser::Dependencies deps;
+    XcdParser::Dependencies deps;
     for (;;) {
         osl::DirectoryItem i;
         osl::FileBase::RC rc = dir.getNextItem(i, SAL_MAX_UINT32);
@@ -315,14 +333,13 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
                 rtl::OUString name(
                     file.copy(
                         0, file.getLength() - RTL_CONSTASCII_LENGTH(".xcd")));
-                rtl::Reference< xml::Reader > reader(
-                    new xml::Reader(
-                        stat.getFileURL(),
-                        new xml::XcdParser(layer, deps, &data_)));
-                if (reader->parse()) {
+                rtl::Reference< ParseManager > manager(
+                    new ParseManager(
+                        stat.getFileURL(), new XcdParser(layer, deps, &data_)));
+                if (manager->parse()) {
                     deps.insert(name);
                 } else {
-                    unres.push_back(UnresolvedListItem(name, reader));
+                    unres.push_back(UnresolvedListItem(name, manager));
                 }
             }
         }
@@ -330,7 +347,7 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
     while (!unres.empty()) {
         bool resolved = false;
         for (UnresolvedList::iterator i(unres.begin()); i != unres.end();) {
-            if (i->reader->parse()) {
+            if (i->manager->parse()) {
                 deps.insert(i->name);
                 unres.erase(i++);
                 resolved = true;
@@ -353,11 +370,11 @@ void Components::parseXcsXcuLayer(int layer, rtl::OUString const & url) {
     parseXcdFiles(layer, url);
     parseFiles(
         layer, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcs")),
-        &xml::parseXcsFile,
+        &parseXcsFile,
         url + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/schema")), false);
     parseFiles(
         layer + 1, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcu")),
-        &xml::parseXcuFile,
+        &parseXcuFile,
         url + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/data")), false);
 }
 
@@ -368,18 +385,18 @@ void Components::parseXcsXcuIniLayer(int layer, rtl::OUString const & url) {
     rtl::OUString urls;
     if (ini.getFrom(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SCHEMA")), urls))
     {
-        parseFileList(layer, &xml::parseXcsFile, urls, ini);
+        parseFileList(layer, &parseXcsFile, urls, ini);
     }
     if (ini.getFrom(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATA")), urls))
     {
-        parseFileList(layer + 1, &xml::parseXcuFile, urls, ini);
+        parseFileList(layer + 1, &parseXcuFile, urls, ini);
     }
 }
 
 void Components::parseModuleLayer(int layer, rtl::OUString const & url) {
     parseFiles(
         layer, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcu")),
-        &xml::parseXcuFile, url, false);
+        &parseXcuFile, url, false);
 }
 
 void Components::parseResLayer(int layer, rtl::OUString const & url) {
@@ -388,7 +405,7 @@ void Components::parseResLayer(int layer, rtl::OUString const & url) {
     parseXcdFiles(layer, resUrl);
     parseFiles(
         layer, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcu")),
-        &xml::parseXcuFile, resUrl, false);
+        &parseXcuFile, resUrl, false);
 }
 
 rtl::OUString Components::getModificationFileUrl() const {
@@ -400,7 +417,20 @@ rtl::OUString Components::getModificationFileUrl() const {
 }
 
 void Components::parseModificationLayer() {
-    xml::parseModFile(getModificationFileUrl(), &data_);
+    rtl::OUString url(getModificationFileUrl());
+    osl::DirectoryItem di;
+    switch (osl::DirectoryItem::get(url, di)) {
+    case osl::FileBase::E_None:
+        break;
+    case osl::FileBase::E_NOENT:
+        return;
+    default:
+        throw css::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot stat ")) + url,
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    parseXcuFile(url, Data::NO_LAYER, &data_);
+        //TODO: atomic check for existence
 }
 
 }

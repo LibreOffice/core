@@ -55,7 +55,6 @@
 #include "components.hxx"
 #include "data.hxx"
 #include "groupnode.hxx"
-#include "layer.hxx"
 #include "localizedpropertynode.hxx"
 #include "localizedvaluenode.hxx"
 #include "lock.hxx"
@@ -117,7 +116,7 @@ rtl::Reference< Node > ChildAccess::getNode() {
 }
 
 bool ChildAccess::isFinalized() {
-    return node_->getFinalized() != NO_LAYER ||
+    return node_->getFinalized() != Data::NO_LAYER ||
         (parent_.is() && parent_->isFinalized());
 }
 
@@ -305,11 +304,11 @@ void ChildAccess::commitChanges(bool valid) {
         switch (node_->kind()) {
         case Node::KIND_PROPERTY:
             dynamic_cast< PropertyNode * >(node_.get())->setValue(
-                NO_LAYER, *changedValue_);
+                Data::NO_LAYER, *changedValue_);
             break;
         case Node::KIND_LOCALIZED_VALUE:
             dynamic_cast< LocalizedValueNode * >(node_.get())->setValue(
-                NO_LAYER, *changedValue_);
+                Data::NO_LAYER, *changedValue_);
             break;
         default:
             OSL_ASSERT(false); // this cannot happen

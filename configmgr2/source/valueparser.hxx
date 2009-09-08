@@ -27,31 +27,68 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_TYPE_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_TYPE_HXX
+#ifndef INCLUDED_CONFIGMGR_SOURCE_VALUEPARSER_HXX
+#define INCLUDED_CONFIGMGR_SOURCE_VALUEPARSER_HXX
 
 #include "sal/config.h"
 
+#include <vector>
+
+#include "boost/noncopyable.hpp"
+#include "rtl/ref.hxx"
+#include "rtl/ustring.hxx"
+
+#include "pad.hxx"
+#include "span.hxx"
+#include "type.hxx"
+#include "xmlreader.hxx"
+
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;
-    class Type;
 } } } }
 
 namespace configmgr {
 
-enum Type {
-    TYPE_ERROR, TYPE_NIL, TYPE_ANY, TYPE_BOOLEAN, TYPE_SHORT, TYPE_INT,
-    TYPE_LONG, TYPE_DOUBLE, TYPE_STRING, TYPE_HEXBINARY, TYPE_BOOLEAN_LIST,
-    TYPE_SHORT_LIST, TYPE_INT_LIST, TYPE_LONG_LIST, TYPE_DOUBLE_LIST,
-    TYPE_STRING_LIST, TYPE_HEXBINARY_LIST };
+class Node;
 
-bool isListType(Type type);
+class ValueParser: private boost::noncopyable {
+public:
+    ValueParser(int layer);
 
-Type elementType(Type type);
+    ~ValueParser();
 
-com::sun::star::uno::Type mapType(Type type);
+    XmlReader::Text getTextMode() const;
 
-Type mapType(com::sun::star::uno::Any const & value);
+    bool startElement(
+        XmlReader * reader, XmlReader::Namespace ns, Span const & name);
+
+    bool endElement(XmlReader const * reader);
+
+    void characters(Span const & text);
+
+    void start(
+        rtl::Reference< Node > const & property,
+        rtl::OUString const & localizedName = rtl::OUString());
+
+    int getLayer() const;
+
+    Type type_;
+    Span separator_;
+
+private:
+    void checkEmptyPad(XmlReader const * reader) const;
+
+    template< typename T > com::sun::star::uno::Any convertItems();
+
+    enum State { STATE_TEXT, STATE_TEXT_UNICODE, STATE_IT, STATE_IT_UNICODE };
+
+    int layer_;
+    rtl::Reference< Node > node_;
+    rtl::OUString localizedName_;
+    State state_;
+    Pad pad_;
+    std::vector< com::sun::star::uno::Any > items_;
+};
 
 }
 

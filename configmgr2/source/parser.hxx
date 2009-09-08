@@ -27,44 +27,20 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_XML_HXX
-#define INCLUDED_CONFIGMGR_XML_HXX
+#ifndef INCLUDED_CONFIGMGR_SOURCE_PARSER_HXX
+#define INCLUDED_CONFIGMGR_SOURCE_PARSER_HXX
 
 #include "sal/config.h"
 
 #include <memory>
-#include <set>
 
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
 #include "salhelper/simplereferenceobject.hxx"
 
-#include "span.hxx"
 #include "xmlreader.hxx"
 
 namespace configmgr {
 
-struct Data;
-
-namespace xml {
-
-class Parser;
-
-class Reader: public salhelper::SimpleReferenceObject {
-public:
-    Reader(rtl::OUString const & url, rtl::Reference< Parser > const & parser);
-
-    bool parse();
-
-private:
-    virtual ~Reader();
-
-    rtl::OUString url_;
-    rtl::Reference< Parser > parser_;
-    std::auto_ptr< XmlReader > reader_;
-    Span itemData_;
-    XmlReader::Namespace itemNamespace_;
-};
+class Span;
 
 class Parser: public salhelper::SimpleReferenceObject {
 public:
@@ -78,48 +54,10 @@ public:
     virtual void characters(Span const & text) = 0;
 
 protected:
-    Parser();
+    Parser() {}
 
-    virtual ~Parser();
+    virtual ~Parser() {}
 };
-
-class XcdParser: public Parser {
-public:
-    typedef std::set< rtl::OUString > Dependencies;
-
-    XcdParser(int layer, Dependencies const & dependencies, Data * data);
-
-private:
-    virtual ~XcdParser();
-
-    virtual XmlReader::Text getTextMode();
-
-    virtual bool startElement(
-        XmlReader * reader, XmlReader::Namespace ns, Span const & name);
-
-    virtual void endElement(XmlReader const * reader);
-
-    virtual void characters(Span const & text);
-
-    enum State {
-        STATE_START, STATE_DEPENDENCIES, STATE_DEPENDENCY, STATE_COMPONENTS };
-
-    int layer_;
-    Dependencies const & dependencies_;
-    Data * data_;
-    State state_;
-    rtl::OUString dependency_;
-    rtl::Reference< Parser > nestedParser_;
-    long nesting_;
-};
-
-void parseXcsFile(rtl::OUString const & url, int layer, Data * data);
-
-void parseXcuFile(rtl::OUString const & url, int layer, Data * data);
-
-void parseModFile(rtl::OUString const & url, Data * data);
-
-}
 
 }
 

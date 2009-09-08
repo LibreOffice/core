@@ -27,38 +27,39 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_SPAN_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_SPAN_HXX
+#ifndef INCLUDED_CONFIGMGR_SOURCE_PARSEMANAGER_HXX
+#define INCLUDED_CONFIGMGR_SOURCE_PARSEMANAGER_HXX
 
 #include "sal/config.h"
 
-#include "rtl/string.h"
-#include "sal/types.h"
+#include <memory>
+
+#include "rtl/ref.hxx"
+#include "rtl/ustring.hxx"
+#include "salhelper/simplereferenceobject.hxx"
+
+#include "span.hxx"
+#include "xmlreader.hxx"
 
 namespace configmgr {
 
-struct Span {
-    char const * begin;
-    sal_Int32 length;
+class Parser;
 
-    inline Span(): begin(0), length(0) {}
-        // init length to avoid compiler warnings
+class ParseManager: public salhelper::SimpleReferenceObject {
+public:
+    ParseManager(
+        rtl::OUString const & url, rtl::Reference< Parser > const & parser);
 
-    inline Span(char const * theBegin, sal_Int32 theLength):
-        begin(theBegin), length(theLength) {}
+    bool parse();
 
-    inline void clear() throw() { begin = 0; }
+private:
+    virtual ~ParseManager();
 
-    inline bool is() const { return begin != 0; }
-
-    inline bool equals(Span const & text) const {
-        return rtl_str_compare_WithLength(
-            begin, length, text.begin, text.length) == 0;
-    }
-
-    inline bool equals(char const * textBegin, sal_Int32 textLength) const {
-        return equals(Span(textBegin, textLength));
-    }
+    rtl::OUString url_;
+    rtl::Reference< Parser > parser_;
+    std::auto_ptr< XmlReader > reader_;
+    Span itemData_;
+    XmlReader::Namespace itemNamespace_;
 };
 
 }

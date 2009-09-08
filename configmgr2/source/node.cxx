@@ -38,7 +38,7 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
-#include "layer.hxx"
+#include "data.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
 
@@ -63,11 +63,11 @@ rtl::OUString Node::getTemplateName() const {
 
 void Node::setMandatory(int layer) {
     (void) layer; // avoid warnings
-    OSL_ASSERT(layer == NO_LAYER);
+    OSL_ASSERT(layer == Data::NO_LAYER);
 }
 
 int Node::getMandatory() const {
-    return NO_LAYER;
+    return Data::NO_LAYER;
 }
 
 void Node::setLayer(int layer) {
@@ -102,7 +102,9 @@ rtl::Reference< Node > Node::getMember(rtl::OUString const & name) {
     return node.is() && !node->isRemoved() ? node : rtl::Reference< Node >();
 }
 
-Node::Node(int layer): layer_(layer), finalized_(NO_LAYER), removed_(false) {}
+Node::Node(int layer):
+    layer_(layer), finalized_(Data::NO_LAYER), removed_(false)
+{}
 
 Node::Node(const Node & other):
     SimpleReferenceObject(), layer_(other.layer_), finalized_(other.finalized_),

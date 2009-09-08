@@ -27,11 +27,12 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_DATA_HXX
-#define INCLUDED_CONFIGMGR_DATA_HXX
+#ifndef INCLUDED_CONFIGMGR_SOURCE_DATA_HXX
+#define INCLUDED_CONFIGMGR_SOURCE_DATA_HXX
 
 #include "sal/config.h"
 
+#include <climits>
 #include <list>
 
 #include "boost/noncopyable.hpp"
@@ -49,6 +50,8 @@ class Node;
 struct Data: private boost::noncopyable {
     typedef std::list< rtl::OUString > Modifications;
 
+    enum { NO_LAYER = INT_MAX };
+
     NodeMap templates;
 
     NodeMap components;
@@ -64,6 +67,9 @@ struct Data: private boost::noncopyable {
 
     static rtl::OUString parseLastSegment(
         rtl::OUString const & path, rtl::OUString * name);
+
+    static rtl::OUString fullTemplateName(
+        rtl::OUString const & component, rtl::OUString const & name);
 
     static rtl::Reference< Node > findNode(
         int layer, NodeMap const & map, rtl::OUString const & name);

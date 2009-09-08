@@ -27,8 +27,8 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_GROUPNODE_HXX
-#define INCLUDED_CONFIGMGR_GROUPNODE_HXX
+#ifndef INCLUDED_CONFIGMGR_SOURCE_GROUPNODE_HXX
+#define INCLUDED_CONFIGMGR_SOURCE_GROUPNODE_HXX
 
 #include "sal/config.h"
 

@@ -49,7 +49,6 @@
 
 #include "data.hxx"
 #include "groupnode.hxx"
-#include "layer.hxx"
 #include "localizedpropertynode.hxx"
 #include "localizedvaluenode.hxx"
 #include "node.hxx"
@@ -394,7 +393,7 @@ void writeNode(
                 if (!i->second->isRemoved()) {
                     writeNode(
                         handle, node, i->first, i->second,
-                        topLevel && node->getLayer() != NO_LAYER);
+                        topLevel && node->getLayer() != Data::NO_LAYER);
                 }
             }
             writeData(handle, RTL_CONSTASCII_STRINGPARAM("</prop>"));
@@ -405,8 +404,8 @@ void writeNode(
             LocalizedValueNode * locval = dynamic_cast< LocalizedValueNode * >(
                 node.get());
             if (locval->isRemoved()
-                ? topLevel && locval->getLayer() == NO_LAYER
-                : !topLevel || locval->getLayer() == NO_LAYER)
+                ? topLevel && locval->getLayer() == Data::NO_LAYER
+                : !topLevel || locval->getLayer() == Data::NO_LAYER)
             {
                 writeData(handle, RTL_CONSTASCII_STRINGPARAM("<value"));
                 if (name.getLength() != 0) {
@@ -520,7 +519,7 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
             parent = data.resolvePath(parentPath, 0, 0, 0, 0, 0);
             NodeMap::iterator k(parent->getMembers().find(name));
             if (k != parent->getMembers().end() &&
-                k->second->getLayer() == NO_LAYER)
+                k->second->getLayer() == Data::NO_LAYER)
             {
                 OSL_ASSERT(k->second->isRemoved());
                 switch (parent->kind()) {

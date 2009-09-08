@@ -36,7 +36,7 @@
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
-#include "layer.hxx"
+#include "data.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
 #include "setnode.hxx"
@@ -47,7 +47,7 @@ SetNode::SetNode(
     int layer, rtl::OUString const & defaultTemplateName,
     rtl::OUString const & templateName):
     Node(layer), defaultTemplateName_(defaultTemplateName),
-    templateName_(templateName), mandatory_(NO_LAYER)
+    templateName_(templateName), mandatory_(Data::NO_LAYER)
 {}
 
 rtl::Reference< Node > SetNode::clone() const {

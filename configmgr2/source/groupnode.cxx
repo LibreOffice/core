@@ -33,8 +33,8 @@
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
+#include "data.hxx"
 #include "groupnode.hxx"
-#include "layer.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
 
@@ -43,7 +43,7 @@ namespace configmgr {
 GroupNode::GroupNode(
     int layer, bool extensible, rtl::OUString const & templateName):
     Node(layer), extensible_(extensible), templateName_(templateName),
-    mandatory_(NO_LAYER)
+    mandatory_(Data::NO_LAYER)
 {}
 
 rtl::Reference< Node > GroupNode::clone() const {
