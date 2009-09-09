@@ -2678,7 +2678,8 @@ BOOL SwRedlineTbl::InsertWithValidRanges( SwRedlinePtr& p, USHORT* pInsPos )
             { // but our Mark was outside the table => Correction
                 do
                 {
-                    *pNew->GetPoint() = *pTab; // We want to be before the table
+                    // We want to be before the table
+                    *pNew->GetPoint() = SwPosition(*pTab);
                     pC = GoPreviousNds( &pNew->GetPoint()->nNode, FALSE ); // here we are.
                     if( pC )
                         pNew->GetPoint()->nContent.Assign( pC, 0 );
@@ -3418,7 +3419,7 @@ void SwRedline::CopyToSection()
             SwNodeIndex aNdIdx( *pSttNd, 1 );
             SwTxtNode* pTxtNd = aNdIdx.GetNode().GetTxtNode();
             SwPosition aPos( aNdIdx, SwIndex( pTxtNd ));
-            pDoc->Copy( *this, aPos );
+            pDoc->Copy( *this, aPos, false );
 
             // JP 08.10.98: die Vorlage vom EndNode ggfs. mit uebernehmen
             //              - ist im Doc::Copy nicht erwuenscht
@@ -3443,13 +3444,13 @@ void SwRedline::CopyToSection()
             if( pCEndNd )
             {
                 SwPosition aPos( *pSttNd->EndOfSectionNode() );
-                pDoc->Copy( *this, aPos );
+                pDoc->Copy( *this, aPos, false );
             }
             else
             {
                 SwNodeIndex aInsPos( *pSttNd->EndOfSectionNode() );
                 SwNodeRange aRg( pStt->nNode, 0, pEnd->nNode, 1 );
-                pDoc->CopyWithFlyInFly( aRg, aInsPos );
+                pDoc->CopyWithFlyInFly( aRg, 0, aInsPos );
             }
         }
         pCntntSect = new SwNodeIndex( *pSttNd );
@@ -3487,7 +3488,12 @@ void SwRedline::DelCopyOfSection()
         }
 
         if( pCSttNd && pCEndNd )
-            pDoc->DeleteAndJoin( aPam );
+        {
+            // --> OD 2009-08-20 #i100466#
+            // force a <join next> on <delete and join> operation
+            pDoc->DeleteAndJoin( aPam, true );
+            // <--
+        }
         else if( pCSttNd || pCEndNd )
         {
             if( pCSttNd && !pCEndNd )

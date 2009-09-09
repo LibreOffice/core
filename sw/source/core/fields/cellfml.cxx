@@ -371,6 +371,7 @@ void SwTableFormula::_MakeFormel( const SwTable& rTbl, String& rNewStr,
         rNewStr += ')';
     }
     else if( pSttBox && !pLastBox )         // nur die StartBox ?
+    {
                             //JP 12.01.99: und keine EndBox in der Formel!
         // Berechne den Wert der Box
         if ( pSttBox->getRowSpan() >= 1 )
@@ -378,6 +379,7 @@ void SwTableFormula::_MakeFormel( const SwTable& rTbl, String& rNewStr,
             rNewStr += pCalcPara->rCalc.GetStrResult(
                             pSttBox->GetValue( *pCalcPara ), FALSE );
         }
+    }
     else
         pCalcPara->rCalc.SetCalcError( CALC_SYNTAX );   // Fehler setzen
     rNewStr += ' ';

@@ -281,7 +281,7 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
         if ( pSh->GetWin() && !pSh->IsPreView() )
         {
             const SwNoTxtNode* pNd = GetNode()->GetNoTxtNode();
-            String aTxt( pNd->GetAlternateText() );
+            String aTxt( pNd->GetTitle() );
             if ( !aTxt.Len() && pNd->IsGrfNode() )
                 GetRealURL( *(SwGrfNode*)pNd, aTxt );
             if( !aTxt.Len() )
@@ -788,7 +788,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         break;
 
     default:
-        if( !pNew || RES_GRFATR_BEGIN > nWhich || nWhich >= RES_GRFATR_END )
+        if ( !pNew || !isGRFATR(nWhich) )
             return;
     }
 
@@ -796,6 +796,34 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     {
         InvalidatePrt();
         SetCompletePaint();
+    }
+}
+
+void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, OutputDevice* pOut )
+{
+    if(!pOut)
+        return;
+    Rectangle aPxRect = pOut->LogicToPixel( rInArea.SVRect() );
+    Rectangle aNewPxRect( aPxRect );
+    while( aNewPxRect.Left() < aPxRect.Left() )
+    {
+        rAlignedGrfArea.Left( rAlignedGrfArea.Left()+1 );
+        aNewPxRect = pOut->LogicToPixel( rAlignedGrfArea.SVRect() );
+    }
+    while( aNewPxRect.Top() < aPxRect.Top() )
+    {
+        rAlignedGrfArea.Top( rAlignedGrfArea.Top()+1 );
+        aNewPxRect = pOut->LogicToPixel( rAlignedGrfArea.SVRect() );
+    }
+    while( aNewPxRect.Bottom() > aPxRect.Bottom() )
+    {
+        rAlignedGrfArea.Bottom( rAlignedGrfArea.Bottom()-1 );
+        aNewPxRect = pOut->LogicToPixel( rAlignedGrfArea.SVRect() );
+    }
+    while( aNewPxRect.Right() > aPxRect.Right() )
+    {
+        rAlignedGrfArea.Right( rAlignedGrfArea.Right()-1 );
+        aNewPxRect = pOut->LogicToPixel( rAlignedGrfArea.SVRect() );
     }
 }
 
@@ -816,15 +844,30 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
     const BOOL bPrn = pOut == rNoTNd.getIDocumentDeviceAccess()->getPrinter( false ) ||
                           pOut->GetConnectMetaFile();
 
+    const bool bIsChart = pOLENd && ChartPrettyPainter::IsChart( pOLENd->GetOLEObj().GetObject() );
+
     /// OD 25.09.2002 #99739# - calculate aligned rectangle from parameter <rGrfArea>.
     ///     Use aligned rectangle <aAlignedGrfArea> instead of <rGrfArea> in
     ///     the following code.
     SwRect aAlignedGrfArea = rGrfArea;
     ::SwAlignRect( aAlignedGrfArea,  pShell );
-    /// OD 25.09.2002 #99739#
-    /// Because for drawing a graphic left-top-corner and size coordinations are
-    /// used, these coordinations have to be determined on pixel level.
-    ::SwAlignGrfRect( &aAlignedGrfArea, *pOut );
+
+    if( !bIsChart )
+    {
+        /// OD 25.09.2002 #99739#
+        /// Because for drawing a graphic left-top-corner and size coordinations are
+        /// used, these coordinations have to be determined on pixel level.
+        ::SwAlignGrfRect( &aAlignedGrfArea, *pOut );
+    }
+    else //if( bIsChart )
+    {
+        //#i78025# charts own borders are not completely visible
+        //the above pixel correction is not correct - at least not for charts
+        //so a different pixel correction is choosen here
+        //this might be a good idea for all other OLE objects also,
+        //but as I cannot oversee the consequences I fix it only for charts for now
+        lcl_correctlyAlignRect( aAlignedGrfArea, rGrfArea, pOut );
+     }
 
     if( pGrfNd )
     {
@@ -863,7 +906,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                     pGrfNd->TriggerAsyncRetrieveInputStream();
                     // <--
                 }
-                String aTxt( pGrfNd->GetAlternateText() );
+                String aTxt( pGrfNd->GetTitle() );
                 if ( !aTxt.Len() )
                     GetRealURL( *pGrfNd, aTxt );
                 ::lcl_PaintReplacement( aAlignedGrfArea, aTxt, *pShell, this, FALSE );
@@ -928,7 +971,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 ((SwNoTxtFrm*)this)->nWeight = -1;
                 String aText;
                 if ( !nResId &&
-                    !(aText = pGrfNd->GetAlternateText()).Len() &&
+                     !(aText = pGrfNd->GetTitle()).Len() &&
                      (!GetRealURL( *pGrfNd, aText ) || !aText.Len()))
                 {
                     nResId = STR_COMCORE_READERROR;
@@ -946,9 +989,8 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         if( bForceSwap )
             pGrfNd->SwapOut();
     }
-    else if( pOLENd
+    else if( bIsChart
         //charts must be painted resolution dependent!! #i82893#, #i75867#
-        && ChartPrettyPainter::IsChart(pOLENd->GetOLEObj().GetObject())
         && ChartPrettyPainter::ShouldPrettyPaintChartOnThisDevice( pOut )
         && svt::EmbeddedObjectRef::TryRunningState( pOLENd->GetOLEObj().GetOleRef() )
         && ChartPrettyPainter::DoPrettyPaintChart( uno::Reference< frame::XModel >(

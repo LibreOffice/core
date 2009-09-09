@@ -1653,7 +1653,12 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 {
                     ASSERT( maAnchoredDrawObj.DrawObj(), "SwDrawContact::Modify: no draw object here?" );
                     if ( maAnchoredDrawObj.DrawObj() )
-                        maAnchoredDrawObj.DrawObj()->getShapePropertyChangeNotifier().notifyPropertyChange( ::svx::eTextShapeAnchorType );
+                    {
+                        // --> OD 2009-07-10 #i102752#
+                        // assure that a ShapePropertyChangeNotifier exists
+                        maAnchoredDrawObj.DrawObj()->notifyShapePropertyChange( ::svx::eTextShapeAnchorType );
+                        // <--
+                    }
                 }
             }
         }
@@ -2321,6 +2326,15 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence VOCOfDrawVirtObj::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
         {
+#ifdef DBG_UTIL
+            // #i101734#
+            static bool bCheckOtherThanTranslate(false);
+            static double fShearX(0.0);
+            static double fRotation(0.0);
+            static double fScaleX(0.0);
+            static double fScaleY(0.0);
+#endif
+
             const VCOfDrawVirtObj& rVC = static_cast< const VCOfDrawVirtObj& >(GetViewContact());
             const SdrObject& rReferencedObject = rVC.GetSwDrawVirtObj().GetReferencedObj();
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
@@ -2331,8 +2345,20 @@ namespace sdr
 
             if(aLocalOffset.X() || aLocalOffset.Y())
             {
+#ifdef DBG_UTIL
+                // #i101734# added debug code to check more complex transformations
+                // than just a translation
+                if(bCheckOtherThanTranslate)
+                {
+                    aOffsetMatrix.scale(fScaleX, fScaleY);
+                    aOffsetMatrix.shearX(tan(fShearX * F_PI180));
+                    aOffsetMatrix.rotate(fRotation * F_PI180);
+                }
+#endif
+
                 aOffsetMatrix.set(0, 2, aLocalOffset.X());
                 aOffsetMatrix.set(1, 2, aLocalOffset.Y());
+
             }
 
             if(rReferencedObject.ISA(SdrObjGroup))
@@ -2574,16 +2600,6 @@ void SwDrawVirtObj::RecalcBoundRect()
 
     const Point aOffset(GetOffset());
     aOutRect = ReferencedObj().GetCurrentBoundRect() + aOffset;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-SdrObject* SwDrawVirtObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    Point aPnt(rPnt - GetOffset());
-    BOOL bRet = rRefObj.CheckHit(aPnt, nTol, pVisiLayer) != NULL;
-
-    return bRet ? (SdrObject*)this : NULL;
 }
 
 basegfx::B2DPolyPolygon SwDrawVirtObj::TakeXorPoly() const

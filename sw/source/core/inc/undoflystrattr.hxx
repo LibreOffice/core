@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: segdefs_.hxx,v $
- * $Revision: 1.3 $
+ * $RCSfile: SwUndoPageDesc.hxx,v $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,3 +27,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef _UNDO_FLY_STR_ATTR_HXX
+#define _UNDO_FLY_STR_ATTR_HXX
+
+#include <undobj.hxx>
+#include <swundo.hxx>
+
+class SwFlyFrmFmt;
+class String;
+
+class SwUndoFlyStrAttr : public SwUndo
+{
+    public:
+        SwUndoFlyStrAttr( SwFlyFrmFmt& rFlyFrmFmt,
+                          const SwUndoId eUndoId,
+                          const String& sOldStr,
+                          const String& sNewStr );
+        virtual ~SwUndoFlyStrAttr();
+
+        virtual void Undo( SwUndoIter & rIt );
+        virtual void Redo( SwUndoIter & rIt );
+        virtual void Repeat( SwUndoIter & rIt );
+
+        virtual SwRewriter GetRewriter() const;
+
+    private:
+        SwFlyFrmFmt& mrFlyFrmFmt;
+        const String msOldStr;
+        const String msNewStr;
+};
+
+#endif // _UNDO_FLY_STR_ATTR_HXX

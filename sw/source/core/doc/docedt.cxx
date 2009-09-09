@@ -34,16 +34,12 @@
 #include <string.h>         // fuer strchr()
 #include <hintids.hxx>
 
-#ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
-#endif
 #include <svx/cscoitem.hxx>
 #include <svx/brkitem.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
-#endif
 #include <unotools/charclass.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
@@ -477,16 +473,19 @@ bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
             SwNode* pNode = &aIdx.GetNode();
             if( pNode->IsTxtNode() ) // Looking for text nodes...
             {
-                SwpHints *pHints = ((SwTxtNode*)pNode)->GetpSwpHints();
+                SwpHints *pHints =
+                    static_cast<SwTxtNode*>(pNode)->GetpSwpHints();
                 if( pHints && pHints->HasFtn() ) //...with footnotes
                 {
                     bUpdateFtn = sal_True; // Heureka
                     USHORT nCount = pHints->Count();
                     for( USHORT i = 0; i < nCount; ++i )
                     {
-                        SwTxtAttr *pAttr = pHints->GetHt( i );
-                        if( pAttr->Which() == RES_TXTATR_FTN )
-                            rSaveArr.Insert( (SwTxtFtn*)pAttr );
+                        SwTxtAttr *pAttr = pHints->GetTextHint( i );
+                        if ( pAttr->Which() == RES_TXTATR_FTN )
+                        {
+                            rSaveArr.Insert( static_cast<SwTxtFtn*>(pAttr) );
+                        }
                     }
                 }
             }
@@ -1220,20 +1219,11 @@ bool SwDoc::Move( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         {
             if( pTNd->CanJoinNext())
             {
-                SwTxtNode *pNextTNd = 0;
-                if( !pTNd->Len() )
-                {
-                    SwNodeIndex aTmpIdx( *pTNd, 1 );
-                    pNextTNd = aTmpIdx.GetNode().GetTxtNode();
-                }
-                if( pNextTNd )
-                {
-                    if( !bNullCntnt )
-                        pSavePam->Move( fnMoveForward, fnGoCntnt );
-                    pNextTNd->JoinPrev();
-                }
-                else
-                    pTNd->JoinNext();
+                // --> OD 2009-08-20 #i100466#
+                // Always join next, because <pTNd> has to stay as it is.
+                // A join previous from its next would more or less delete <pTNd>
+                pTNd->JoinNext();
+                // <--
                 bRemove = false;
             }
         }
@@ -1475,7 +1465,12 @@ void lcl_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev )
                     bExchange = !bExchange;
                 if( bExchange )
                     rPam.Exchange();
-                rJoinPrev = rJoinTxt && rPam.GetPoint() == pStt;
+                rJoinPrev = rPam.GetPoint() == pStt;
+                ASSERT( !pStt->nContent.GetIndex() &&
+                    pEndNd->GetTxt().Len() != pEnd->nContent.GetIndex()
+                    ? rPam.GetPoint()->nNode < rPam.GetMark()->nNode
+                    : rPam.GetPoint()->nNode > rPam.GetMark()->nNode,
+                    "lcl_GetJoinFlags");
             }
         }
     }
@@ -1493,6 +1488,9 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
         SwDoc* pDoc = rPam.GetDoc();
         if( bJoinPrev )
         {
+            // N.B.: we do not need to handle xmlids in this case, because
+            // it is only invoked if one paragraph is completely empty
+            // (see lcl_GetJoinFlags)
             {
                 // falls PageBreaks geloescht / gesetzt werden, darf das
                 // nicht in die Undo-History aufgenommen werden !!
@@ -1595,12 +1593,26 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
             }
 
             pDoc->CorrRel( aIdx, *rPam.GetPoint(), 0, sal_True );
+            // --> OD 2009-08-20 #i100466#
+            // adjust given <rPam>, if it does not belong to the cursors
+            if ( pDelNd == rPam.GetBound( sal_True ).nContent.GetIdxReg() )
+            {
+                rPam.GetBound( sal_True ) = SwPosition( SwNodeIndex( *pTxtNd ), SwIndex( pTxtNd ) );
+            }
+            if( pDelNd == rPam.GetBound( sal_False ).nContent.GetIdxReg() )
+            {
+                rPam.GetBound( sal_False ) = SwPosition( SwNodeIndex( *pTxtNd ), SwIndex( pTxtNd ) );
+            }
+            // <--
             pTxtNd->JoinNext();
         }
     }
 }
 
-bool SwDoc::DeleteAndJoin( SwPaM & rPam )
+// OD 2009-08-20 #i100466#
+// Add handling of new optional parameter <bForceJoinNext>
+bool SwDoc::DeleteAndJoin( SwPaM & rPam,
+                           const bool bForceJoinNext )
 {
     if( lcl_StrLenOverFlow( rPam ) )
         return sal_False;
@@ -1649,7 +1661,12 @@ SetRedlineMode( eOld );
 
     sal_Bool bJoinTxt, bJoinPrev;
     lcl_GetJoinFlags( rPam, bJoinTxt, bJoinPrev );
-
+    // --> OD 2009-08-20 #i100466#
+    if ( bForceJoinNext )
+    {
+        bJoinPrev = sal_False;
+    }
+    // <--
     {
         // dann eine Kopie vom Cursor erzeugen um alle Pams aus den
         // anderen Sichten aus dem Loeschbereich zu verschieben
@@ -1753,7 +1770,8 @@ bool SwDoc::Delete( SwPaM & rPam )
     do {        // middle checked loop!
         if( pCNd )
         {
-            if( pCNd->GetTxtNode() )
+            SwTxtNode * pStartTxtNode( pCNd->GetTxtNode() );
+            if ( pStartTxtNode )
             {
                 // verschiebe jetzt noch den Inhalt in den neuen Node
                 sal_Bool bOneNd = pStt->nNode == pEnd->nNode;
@@ -1763,7 +1781,15 @@ bool SwDoc::Delete( SwPaM & rPam )
 
                 // falls schon leer, dann nicht noch aufrufen
                 if( nLen )
-                    ((SwTxtNode*)pCNd)->Erase( pStt->nContent, nLen );
+                {
+                    pStartTxtNode->Erase( pStt->nContent, nLen );
+
+                    if( !pStartTxtNode->Len() )
+                    {
+                // METADATA: remove reference if empty (consider node deleted)
+                        pStartTxtNode->RemoveMetadataReference();
+                    }
+                }
 
                 if( bOneNd )        // das wars schon
                     break;
@@ -1781,13 +1807,20 @@ bool SwDoc::Delete( SwPaM & rPam )
         pCNd = pEnd->nNode.GetNode().GetCntntNode();
         if( pCNd )
         {
-            if( pCNd->GetTxtNode() )
+            SwTxtNode * pEndTxtNode( pCNd->GetTxtNode() );
+            if( pEndTxtNode )
             {
                 // falls schon leer, dann nicht noch aufrufen
                 if( pEnd->nContent.GetIndex() )
                 {
                     SwIndex aIdx( pCNd, 0 );
-                    ((SwTxtNode*)pCNd)->Erase( aIdx, pEnd->nContent.GetIndex() );
+                    pEndTxtNode->Erase( aIdx, pEnd->nContent.GetIndex() );
+
+                    if( !pEndTxtNode->Len() )
+                    {
+                // METADATA: remove reference if empty (consider node deleted)
+                        pEndTxtNode->RemoveMetadataReference();
+                    }
                 }
             }
             else
@@ -2202,6 +2235,8 @@ sal_Bool lcl_GetTokenToParaBreak( String& rStr, String& rRet, sal_Bool bRegExpRp
     return bRet;
 }
 
+// N.B.: it is possible to call Replace with a PaM that spans 2 paragraphs:
+// search with regex for "$", then replace _all_
 bool SwDoc::Replace( SwPaM& rPam, const String& rStr, bool bRegExpRplc )
 {
     if( !rPam.HasMark() || *rPam.GetPoint() == *rPam.GetMark() )

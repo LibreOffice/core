@@ -37,9 +37,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/objitem.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #ifndef _HELPID_H
 #include <helpid.h>
 #endif
@@ -63,12 +61,8 @@
 
 
 #define SwOleShell
-#ifndef _ITEMDEF_HXX
-#include <itemdef.hxx>
-#endif
-#ifndef _SWSLOTS_HXX
+#include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#endif
 
 
 SFX_IMPL_INTERFACE(SwOleShell, SwFrameShell, SW_RES(STR_SHELLNAME_OBJECT))

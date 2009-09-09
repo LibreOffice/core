@@ -37,15 +37,9 @@
 #include <svtools/svstdarr.hxx>
 #endif
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <viewopt.hxx>
 #include <frmtool.hxx>
 #include <viscrs.hxx>
@@ -65,14 +59,10 @@
 #include <comcore.hrc>          // ResId fuer Abfrage wenn zu Search & Replaces
 #endif
 
-// #i75172#
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpaintwindow.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <vcl/hatch.hxx>
+#include <vcl/svapp.hxx>
+#include <svx/sdr/overlay/overlayselection.hxx>
 
 extern void SwCalcPixStatics( OutputDevice *pOut );
 
@@ -525,192 +515,6 @@ void SwVisCrsr::_SetPosAndShow()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// #i75172#
-
-namespace sdr
-{
-    namespace overlay
-    {
-        class OverlaySwSelPaintRects : public OverlayObject
-        {
-            // geometry
-            std::vector< basegfx::B2DRange >        maRanges;
-            SwOverlayType                           mePaintType;
-
-            // Draw geometry
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-            // Create the BaseRange. This method needs to calculate maBaseRange.
-            virtual void createBaseRange(OutputDevice& rOutputDevice);
-
-        public:
-            OverlaySwSelPaintRects(Color aBaseColor, const std::vector< basegfx::B2DRange >& rRanges, SwOverlayType eType);
-            virtual ~OverlaySwSelPaintRects();
-
-            // data access
-            const std::vector< basegfx::B2DRange >& getB2DRanges() const { return maRanges; }
-            void setB2DRanges(const std::vector< basegfx::B2DRange >& rNew);
-
-            // Hittest with logical coordinates
-            virtual sal_Bool isHit(const basegfx::B2DPoint& rPos, double fTol) const;
-
-            // transform object coordinates. Needs to transform maSecondPosition
-            // and maThirdPosition.
-            virtual void transform(const basegfx::B2DHomMatrix& rMatrix);
-        };
-
-        void OverlaySwSelPaintRects::drawGeometry(OutputDevice& rOutputDevice)
-        {
-            // safe original AA and switch off for selection
-            const sal_uInt16 nOriginalAA(rOutputDevice.GetAntialiasing());
-            rOutputDevice.SetAntialiasing(0);
-
-            rOutputDevice.SetLineColor();
-            rOutputDevice.SetFillColor(getBaseColor());
-
-            if ( mePaintType == SW_OVERLAY_INVERT )
-            {
-                rOutputDevice.Push();
-                rOutputDevice.SetRasterOp( ROP_XOR );
-                rOutputDevice.SetFillColor( COL_WHITE );
-            }
-
-            for(sal_uInt32 a(0); a < maRanges.size(); a++)
-            {
-                const basegfx::B2DRange& rRange(maRanges[a]);
-
-                switch(mePaintType)
-                {
-                    default: // SW_OVERLAY_INVERT
-                    {
-                        const Rectangle aRectangle(
-                            basegfx::fround(rRange.getMinX()), basegfx::fround(rRange.getMinY()),
-                            basegfx::fround(rRange.getMaxX()) - 1, basegfx::fround(rRange.getMaxY()) - 1);
-                        Rectangle aPntRect(aRectangle);
-
-                        // avoid single-pixel overlaps
-                        Rectangle aCalcRect( aPntRect );
-                        bool bChange(false);
-
-                        ++aCalcRect.Bottom();
-                        ++aCalcRect.Right();
-
-                        aPntRect = rOutputDevice.LogicToPixel( aPntRect );
-                        aCalcRect = rOutputDevice.LogicToPixel( aCalcRect );
-
-                        if(aPntRect.Bottom() == aCalcRect.Bottom())
-                        {
-                            --aPntRect.Bottom();
-                            bChange = true;
-                        }
-
-                        if(aPntRect.Right() == aCalcRect.Right())
-                        {
-                            --aPntRect.Right();
-                            bChange = true;
-                        }
-
-                        if(bChange)
-                        {
-                            aPntRect = rOutputDevice.PixelToLogic(aPntRect);
-                        }
-                        else
-                        {
-                            aPntRect = aRectangle;
-                        }
-
-                        rOutputDevice.DrawRect(aPntRect);
-                        break;
-                    }
-                    case SW_OVERLAY_TRANSPARENT :
-                    {
-                        const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(rRange));
-                        rOutputDevice.DrawTransparent(basegfx::B2DPolyPolygon(aPolygon), 0.5);
-                        break;
-                    }
-                }
-            }
-
-            if(mePaintType == SW_OVERLAY_INVERT)
-            {
-                rOutputDevice.Pop();
-            }
-
-            // restore original AA
-            rOutputDevice.SetAntialiasing(nOriginalAA);
-        }
-
-        void OverlaySwSelPaintRects::createBaseRange(OutputDevice& /*rOutputDevice*/)
-        {
-            maBaseRange.reset();
-
-            for(sal_uInt32 a(0); a < maRanges.size(); a++)
-            {
-                const basegfx::B2DRange& rCandidate = maRanges[a];
-                maBaseRange.expand(rCandidate);
-            }
-        }
-
-        OverlaySwSelPaintRects::OverlaySwSelPaintRects(Color aBaseColor, const std::vector< basegfx::B2DRange >& rRanges, SwOverlayType eType)
-        :   OverlayObject(aBaseColor),
-            maRanges(rRanges),
-            mePaintType(eType)
-        {
-        }
-
-        OverlaySwSelPaintRects::~OverlaySwSelPaintRects()
-        {
-            if(getOverlayManager())
-            {
-                getOverlayManager()->remove(*this);
-            }
-        }
-
-        void OverlaySwSelPaintRects::setB2DRanges(const std::vector< basegfx::B2DRange >& rNew)
-        {
-            if(rNew != maRanges)
-            {
-                maRanges = rNew;
-                objectChange();
-            }
-        }
-
-        sal_Bool OverlaySwSelPaintRects::isHit(const basegfx::B2DPoint& rPos, double /*fTol*/) const
-        {
-            if(isHittable())
-            {
-                for(sal_uInt32 a(0); a < maRanges.size(); a++)
-                {
-                    const basegfx::B2DRange& rCandidate = maRanges[a];
-
-                    if(rCandidate.isInside(rPos))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return sal_False;
-        }
-
-        void OverlaySwSelPaintRects::transform(const basegfx::B2DHomMatrix& rMatrix)
-        {
-            if(!rMatrix.isIdentity())
-            {
-                for(sal_uInt32 a(0); a < maRanges.size(); a++)
-                {
-                    basegfx::B2DRange& rCandidate = maRanges[a];
-                    rCandidate.transform(rMatrix);
-                }
-
-                // register change (after change)
-                objectChange();
-            }
-        }
-    } // end of namespace overlay
-} // end of namespace sdr
-
-//////////////////////////////////////////////////////////////////////////////
 
 SwSelPaintRects::SwSelPaintRects( const SwCrsrShell& rCSh )
 :   SwRects( 0 ),
@@ -758,8 +562,11 @@ void SwSelPaintRects::Show()
 
     if(pView && pView->PaintWindowCount())
     {
+        // reset rects
         SwRects::Remove( 0, SwRects::Count() );
         FillRects();
+
+        // get new rects
         std::vector< basegfx::B2DRange > aNewRanges;
 
         for(sal_uInt16 a(0); a < Count(); a++)
@@ -776,7 +583,7 @@ void SwSelPaintRects::Show()
         {
             if(aNewRanges.size())
             {
-                static_cast< sdr::overlay::OverlaySwSelPaintRects* >(mpCursorOverlay)->setB2DRanges(aNewRanges);
+                static_cast< sdr::overlay::OverlaySelection* >(mpCursorOverlay)->setRanges(aNewRanges);
             }
             else
             {
@@ -791,20 +598,34 @@ void SwSelPaintRects::Show()
 
             if(pTargetOverlay)
             {
-                Color aHighlight(COL_BLACK);
-                const OutputDevice *pOut = GetShell()->GetOut();
+                // #i97672# get the system's hilight color and limit it to the maximum
+                // allowed luminance. This is needed to react on too bright hilight colors
+                // which would otherwise vive a bad visualisation
+                const OutputDevice *pOut = Application::GetDefaultDevice();
+                Color aHighlight(pOut->GetSettings().GetStyleSettings().GetHighlightColor());
+                const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+                const basegfx::BColor aSelection(aHighlight.getBColor());
+                const double fLuminance(aSelection.luminance());
+                const double fMaxLum(aSvtOptionsDrawinglayer.GetSelectionMaximumLuminancePercent() / 100.0);
 
-                if(pOut)
+                if(fLuminance > fMaxLum)
                 {
-                    aHighlight = pOut->GetSettings().GetStyleSettings().GetHighlightColor();
+                    const double fFactor(fMaxLum / fLuminance);
+                    const basegfx::BColor aNewSelection(
+                        aSelection.getRed() * fFactor,
+                        aSelection.getGreen() * fFactor,
+                        aSelection.getBlue() * fFactor);
+
+                    aHighlight = Color(aNewSelection);
                 }
 
-                SwOverlayType aType(GetShell()->getSwOverlayType());
-#ifdef DBG_UTIL
-                static bool bChange(false);
-                if(bChange) aType = (SW_OVERLAY_INVERT == aType) ? SW_OVERLAY_TRANSPARENT : SW_OVERLAY_INVERT;
-#endif
-                mpCursorOverlay = new sdr::overlay::OverlaySwSelPaintRects(aHighlight, aNewRanges, aType);
+                // create correct selection
+                mpCursorOverlay = new sdr::overlay::OverlaySelection(
+                    sdr::overlay::OVERLAY_TRANSPARENT,
+                    aHighlight,
+                    aNewRanges,
+                    true);
+
                 pTargetOverlay->add(*mpCursorOverlay);
             }
         }
@@ -907,7 +728,11 @@ SwShellCrsr::SwShellCrsr( SwShellCrsr& rICrsr )
 
 SwShellCrsr::~SwShellCrsr() {}
 
-SwShellCrsr::operator SwShellCrsr* ()   { return this; }
+
+bool SwShellCrsr::IsReadOnlyAvailable() const
+{
+    return GetShell()->IsReadOnlyAvailable();
+}
 
 void SwShellCrsr::SetMark()
 {
@@ -936,7 +761,7 @@ void SwShellCrsr::Show()
     SwShellCrsr * pTmp = this;
     do {
         pTmp->SwSelPaintRects::Show();
-    } while( this != ( pTmp = (SwShellCrsr*)*(SwCursor*)(pTmp->GetNext() )));
+    } while( this != ( pTmp = dynamic_cast<SwShellCrsr*>(pTmp->GetNext()) ) );
 
     SHOWBOOKMARKS1( 1 )
     SHOWREDLINES1( 1 )
@@ -948,7 +773,6 @@ void SwShellCrsr::Show()
 void SwShellCrsr::Invalidate( const SwRect& rRect )
 {
     SwShellCrsr * pTmp = this;
-    SwCursor* pTmpCrsr;
 
     do
     {
@@ -963,9 +787,7 @@ void SwShellCrsr::Invalidate( const SwRect& rRect )
         do
         {
             pTmpRing = pTmpRing->GetNext();
-            pTmpCrsr = dynamic_cast<SwCursor*>(pTmpRing);
-            if ( pTmpCrsr )
-                pTmp = (SwShellCrsr*)*pTmpCrsr;
+            pTmp = dynamic_cast<SwShellCrsr*>(pTmpRing);
         }
         while ( !pTmp );
     }
@@ -981,7 +803,7 @@ void SwShellCrsr::Hide()
     SwShellCrsr * pTmp = this;
     do {
         pTmp->SwSelPaintRects::Hide();
-    } while( this != ( pTmp = (SwShellCrsr*)*(SwCursor*)(pTmp->GetNext() )));
+    } while( this != ( pTmp = dynamic_cast<SwShellCrsr*>(pTmp->GetNext()) ) );
 
     SHOWBOOKMARKS1( 2 )
     SHOWREDLINES1( 2 )
@@ -1086,9 +908,6 @@ SwShellTableCrsr::SwShellTableCrsr( const SwCrsrShell& rCrsrSh,
 SwShellTableCrsr::~SwShellTableCrsr() {}
 
 void SwShellTableCrsr::SetMark()                { SwShellCrsr::SetMark(); }
-SwShellTableCrsr::operator SwShellCrsr* ()      { return this; }
-SwShellTableCrsr::operator SwTableCursor* ()    { return this; }
-SwShellTableCrsr::operator SwShellTableCrsr* () { return this; }
 
 SwCursor* SwShellTableCrsr::Create( SwPaM* pRing ) const
 {

@@ -2041,8 +2041,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 case 15: //"BulletId",
                 {
                     sal_Int16 nSet = 0;
-                    pData->aVal >>= nSet;
-                    if(nSet < 0xff)
+                    if( pData->aVal >>= nSet )
                         aFmt.SetBulletChar(nSet);
                     else
                         bWrongArg = sal_True;

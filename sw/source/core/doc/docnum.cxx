@@ -1080,10 +1080,8 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
         // <--
     }
 
-    // --> OD 2006-01-13 #i60395#
-    // It's not allowed to apply the outline numbering rule as hard attribute
-    // to document content - typically paragraphs.
-    if ( bSetItem && pNew != GetOutlineNumRule() )
+    // --> OD 2009-08-18 #i103817#
+    if ( bSetItem )
     // <--
     {
         Insert( rPam, SwNumRuleItem( pNew->GetName() ), 0 );
@@ -2094,6 +2092,10 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
     }
     else
     {
+        //Impossible to move to negative index
+        if( ULONG(abs( nOffset )) > nStIdx)
+            return FALSE;
+
         nInEndIdx = nStIdx - 1;
         nStIdx += nOffset;
     }
@@ -2273,7 +2275,7 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
                 }
             }
 
-            Copy( aPam, aInsPos );
+            Copy( aPam, aInsPos, false );
             if( bDelLastPara )
             {
                 // dann muss der letzte leere Node wieder entfernt werden

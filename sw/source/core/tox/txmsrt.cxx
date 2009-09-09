@@ -718,40 +718,49 @@ String SwTOXPara::GetURL() const
         {
             const SwTxtNode * pTxtNd = static_cast<const SwTxtNode *>(pNd);
 
-            //if( MAXLEVEL >= pTxtNd->GetTxtColl()->GetOutlineLevel())  //#outline level,zhaojianwei
-            if ( pTxtNd->GetAttrOutlineLevel() > 0)  //<-end,zhaojianwei
-            {
-                aTxt = '#';
-                const SwNumRule * pRule = pTxtNd->GetNumRule();
-                if( pRule )
-                {
-                    // dann noch die rel. Nummer davor setzen
-                    const USHORT nCurrLevel = static_cast<USHORT>(pTxtNd->GetActualListLevel());
-                    if(nCurrLevel <= MAXLEVEL)
-                    {
-                        // --> OD 2005-11-02 #i51089 - TUNING#
-                        if ( pTxtNd->GetNum() )
-                        {
-                            SwNumberTree::tNumberVector aNumVector =
-                                pTxtNd->GetNumberVector();
+            // --> OD 2009-08-05 #i103265#
+//            //if( MAXLEVEL >= pTxtNd->GetTxtColl()->GetOutlineLevel())  //#outline level,zhaojianwei
+//            if ( pTxtNd->GetAttrOutlineLevel() > 0)  //<-end,zhaojianwei
+//            {
+//                aTxt = '#';
+//                const SwNumRule * pRule = pTxtNd->GetNumRule();
+//                if( pRule )
+//                {
+//                    // dann noch die rel. Nummer davor setzen
+//                    const USHORT nCurrLevel = static_cast<USHORT>(pTxtNd->GetActualListLevel());
+//                    if(nCurrLevel <= MAXLEVEL)
+//                    {
+//                        // --> OD 2005-11-02 #i51089 - TUNING#
+//                        if ( pTxtNd->GetNum() )
+//                        {
+//                            SwNumberTree::tNumberVector aNumVector =
+//                                pTxtNd->GetNumberVector();
 
-                            for( USHORT n = 0; n <= nCurrLevel; ++n )
-                            {
-                                int nNum = aNumVector[ n ];
-                                nNum -= ( pRule->Get( n ).GetStart() - 1 );
-                                ( aTxt += String::CreateFromInt32( nNum )) += '.';
-                            }
-                        }
-                        else
-                        {
-                            ASSERT( false,
-                                    "<SwTOXPara::GetURL()> - text node with numbering rule, but without number. This is a serious defect -> inform OD" );
-                        }
-                    }
-                }
-                aTxt += pTxtNd->GetExpandTxt();
-                ( aTxt += cMarkSeperator ).AppendAscii( pMarkToOutline );
-            }
+//                            for( USHORT n = 0; n <= nCurrLevel; ++n )
+//                            {
+//                                int nNum = aNumVector[ n ];
+//                                nNum -= ( pRule->Get( n ).GetStart() - 1 );
+//                                ( aTxt += String::CreateFromInt32( nNum )) += '.';
+//                            }
+//                        }
+//                        else
+//                        {
+//                            ASSERT( false,
+//                                    "<SwTOXPara::GetURL()> - text node with numbering rule, but without number. This is a serious defect -> inform OD" );
+//                        }
+//                    }
+//                }
+//                aTxt += pTxtNd->GetExpandTxt();
+//                ( aTxt += cMarkSeperator ).AppendAscii( pMarkToOutline );
+//            }
+            SwDoc* pDoc = const_cast<SwDoc*>( pTxtNd->GetDoc() );
+            ::sw::mark::IMark const * const pMark = pDoc->getIDocumentMarkAccess()->getMarkForTxtNode(
+                                *(pTxtNd),
+                                IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK);
+            aTxt = '#';
+            const String aMarkName( pMark->GetName() );
+            aTxt += aMarkName;
+            // <--
         }
         break;
 
@@ -943,4 +952,3 @@ BOOL    SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
     }
     return bRet;
 }
-

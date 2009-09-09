@@ -118,7 +118,7 @@ void SwTxtFrm::CalcFtnFlag( xub_StrLen nStop )//Fuer den Test von SplitFrm
     if( !pHints )
         return;
 
-    const MSHORT nSize = pHints->Count();
+    const USHORT nSize = pHints->Count();
 
 #ifndef DBG_UTIL
     const xub_StrLen nEnd = GetFollow() ? GetFollow()->GetOfst() : STRING_LEN;
@@ -127,7 +127,7 @@ void SwTxtFrm::CalcFtnFlag( xub_StrLen nStop )//Fuer den Test von SplitFrm
                         : GetFollow() ? GetFollow()->GetOfst() : STRING_LEN;
 #endif
 
-    for( MSHORT i = 0; i < nSize; ++i )
+    for ( USHORT i = 0; i < nSize; ++i )
     {
         const SwTxtAttr *pHt = (*pHints)[i];
         if ( pHt->Which() == RES_TXTATR_FTN )
@@ -452,7 +452,7 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
         return;
 
     sal_Bool bRollBack = nLen != STRING_LEN;
-    MSHORT nSize = pHints->Count();
+    USHORT nSize = pHints->Count();
     xub_StrLen nEnd;
     SwTxtFrm* pSource;
     if( bRollBack )
@@ -476,9 +476,9 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
         SwFtnBossFrm *pEndBoss = 0;
         sal_Bool bFtnEndDoc
             = FTNPOS_CHAPTER == GetNode()->GetDoc()->GetFtnInfo().ePos;
-        for( MSHORT i = nSize; i; )
+        for ( USHORT i = nSize; i; )
         {
-            SwTxtAttr *pHt = pHints->GetHt(--i);
+            SwTxtAttr *pHt = pHints->GetTextHint(--i);
             if ( RES_TXTATR_FTN != pHt->Which() )
                 continue;
 

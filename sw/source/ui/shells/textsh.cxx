@@ -46,18 +46,14 @@
 #include <svtools/ptitem.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/moduleoptions.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/fcontnr.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/srchitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/urihelper.hxx>
-#ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
-#endif
 #include <svtools/whiter.hxx>
 #include <sfx2/request.hxx>
 #include <svx/opaqitem.hxx>
@@ -71,9 +67,7 @@
 #include <svx/htmlmode.hxx>
 #include <svx/pfiledlg.hxx>
 #include <svx/htmlcfg.hxx>
-#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HDL_
 #include <com/sun/star/i18n/TransliterationModules.hdl>
-#endif
 
 #include <sot/clsids.hxx>
 #include <svx/acorrcfg.hxx>
@@ -84,12 +78,8 @@
 #include <fmtfsize.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <doc.hxx>
 #include <uitool.hxx>
 #ifndef _CMDID_H
@@ -99,9 +89,7 @@
 #include <globals.hrc>
 #endif
 #include <frmmgr.hxx>
-#ifndef _TEXTSH_HXX
 #include <textsh.hxx>
-#endif
 #include <frmfmt.hxx>
 #include <tablemgr.hxx>
 #include <swundo.hxx>       // fuer Undo-IDs
@@ -137,12 +125,8 @@
 #define HyphenZone
 #define TextFont
 #define DropCap
-#ifndef _ITEMDEF_HXX
-#include <itemdef.hxx>
-#endif
-#ifndef _SWSLOTS_HXX
+#include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#endif
 #include <SwRewriter.hxx>
 #include <undobj.hxx>
 #ifndef _COMCORE_HRC

@@ -743,7 +743,7 @@ IMAGE_SETEVENT:
     }
 
     if( sAltNm.Len() )
-        pGrfNd->SetAlternateText( sAltNm );
+        pGrfNd->SetTitle( sAltNm );
 
     if( bSetTwipSize )
         pGrfNd->SetTwipSize( aGrfSz );

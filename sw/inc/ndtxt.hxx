@@ -38,6 +38,13 @@
 #include <errhdl.hxx>
 #include <modeltoviewhelper.hxx>
 #include <SwNumberTreeTypes.hxx>
+
+#include <sfx2/Metadatable.hxx>
+
+#include <vector>
+#include <set>
+
+
 class SwNumRule;
 class SwNodeNum;
 // --> OD 2008-05-06 #refactorlists#
@@ -46,9 +53,6 @@ class SwList;
 // --> OD 2008-12-02 #i96772#
 class SvxLRSpaceItem;
 // <--
-
-#include <vector>
-#include <set>
 
 namespace utl {
     class TransliterationWrapper;
@@ -85,7 +89,7 @@ typedef std::set< xub_StrLen > SwSoftPageBreakList;
 // --------------------
 // SwTxtNode
 // --------------------
-class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
+class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
 {
 
     // fuer das Erzeugen des ersten TextNode
@@ -98,25 +102,25 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
 
     //Kann 0 sein, nur dann nicht 0 wenn harte Attribute drin stehen.
     //Also niemals direkt zugreifen!
-    SwpHints    *pSwpHints;
+    SwpHints    *m_pSwpHints;
 
     // --> OD 2005-11-02 #i51089 - TUNING#
     mutable SwNodeNum* mpNodeNum;  // Numerierung fuer diesen Absatz
     // <--
-    XubString   aText;
+    XubString   m_Text;
 
-    SwParaIdleData_Impl* pParaIdleData_Impl;
+    SwParaIdleData_Impl* m_pParaIdleData_Impl;
 
     // Some of the chars this para are hidden. Paragraph has to be reformatted
     // on changing the view to print preview.
-    mutable BOOL bContainsHiddenChars : 1;
+    mutable bool m_bContainsHiddenChars : 1;
     // The whole paragraph is hidden because of the hidden text attribute
-    mutable BOOL bHiddenCharsHidePara : 1;
+    mutable bool m_bHiddenCharsHidePara : 1;
     // The last two flags have to be recalculated if this flag is set:
-    mutable BOOL bRecalcHiddenCharFlags : 1;
+    mutable bool m_bRecalcHiddenCharFlags : 1;
 
-    bool bNotifiable;
-    mutable BOOL bLastOutlineState : 1;
+    mutable bool m_bLastOutlineState : 1;
+    bool m_bNotifiable;
 
     // BYTE nOutlineLevel; //#outline level, removed by zhaojianwei.
     // --> OD 2008-11-19 #i70748#
@@ -133,6 +137,7 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     // pointer to the list, to whose the text node is added to
     SwList* mpList;
     // <--
+
 
     SW_DLLPRIVATE SwTxtNode( const SwNodeIndex &rWhere, SwTxtFmtColl *pTxtColl,
                              const SfxItemSet* pAutoAttr = 0 );
@@ -160,12 +165,13 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
 
     // Optimization: Asking for information about hidden characters at SwScriptInfo
     // updates these flags.
-    inline bool IsCalcHiddenCharFlags() const { return bRecalcHiddenCharFlags; }
+    inline bool IsCalcHiddenCharFlags() const
+        { return m_bRecalcHiddenCharFlags; }
     inline void SetHiddenCharAttribute( bool bNewHiddenCharsHidePara, bool bNewContainsHiddenChars ) const
     {
-        bHiddenCharsHidePara = bNewHiddenCharsHidePara;
-        bContainsHiddenChars = bNewContainsHiddenChars;
-        bRecalcHiddenCharFlags = false;
+        m_bHiddenCharsHidePara = bNewHiddenCharsHidePara;
+        m_bContainsHiddenChars = bNewContainsHiddenChars;
+        m_bRecalcHiddenCharFlags = false;
     }
 
     SW_DLLPRIVATE void CalcHiddenCharFlags() const;
@@ -193,6 +199,8 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
         @return number of this node
     */
     SwNodeNum* CreateNum() const;
+
+    inline void TryDeleteSwpHints();
 
 public:
     bool IsWordCountDirty() const;
@@ -223,14 +231,14 @@ public:
 public:
     using SwCntntNode::GetAttr;
 
-    const String& GetTxt() const { return aText; }
+    const String& GetTxt() const { return m_Text; }
 
-    // Zugriff auf SwpHints
+    // getters for SwpHints
     inline       SwpHints &GetSwpHints();
     inline const SwpHints &GetSwpHints() const;
-    inline       SwpHints *GetpSwpHints() { return pSwpHints; }
-    inline const SwpHints *GetpSwpHints() const { return pSwpHints; }
-    inline BOOL  HasHints() const { return pSwpHints ? TRUE : FALSE; }
+    inline       SwpHints *GetpSwpHints()       { return m_pSwpHints; }
+    inline const SwpHints *GetpSwpHints() const { return m_pSwpHints; }
+    inline       bool   HasHints() const { return m_pSwpHints ? true : false; }
     inline       SwpHints &GetOrCreateSwpHints();
 
     virtual ~SwTxtNode();
@@ -341,7 +349,7 @@ public:
     SwCntntNode *AppendNode( const SwPosition & );
 
     // setze ggf. das DontExpand-Flag an INet bzw. Zeichenvorlagen
-    BOOL DontExpandFmt( const SwIndex& rIdx, BOOL bFlag = TRUE,
+    BOOL DontExpandFmt( const SwIndex& rIdx, bool bFlag = true,
                         BOOL bFmtToTxtAttributes = TRUE );
 
     // gebe das vorgegebene Attribut, welches an der TextPosition (rIdx)
@@ -400,12 +408,12 @@ public:
     /**
        Returns if this text node is an outline.
 
-       @retval TRUE      this text node is an outline
-       @retval FALSE     else
+       @retval true      this text node is an outline
+       @retval false     else
      */
-    BOOL IsOutline() const;
+    bool IsOutline() const;
 
-    BOOL IsOutlineStateChanged() const;
+    bool IsOutlineStateChanged() const;
 
     void UpdateOutlineState();
 
@@ -712,29 +720,29 @@ public:
     // Passes back info needed on the dropcap dimensions
     bool GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescent) const;
 
-
-    //
     // Hidden Paragraph Field:
-    //
-    inline BOOL CalcHiddenParaField()
-        { if(pSwpHints) return pSwpHints->CalcHiddenParaField(); return FALSE; }
-    // Setzen des CalcVisible-Flags
-    inline void SetCalcHiddenParaField(){ if(pSwpHints) pSwpHints->SetCalcHiddenParaField(); }
+    inline bool CalcHiddenParaField()
+        { return m_pSwpHints ? m_pSwpHints->CalcHiddenParaField() : false; }
+    // set CalcVisible flags
+    inline void SetCalcHiddenParaField()
+        { if (m_pSwpHints) m_pSwpHints->SetCalcHiddenParaField(); }
 
-    // Ist der Absatz sichtbar
-    inline BOOL HasHiddenParaField() const
-        { return pSwpHints ? pSwpHints->HasHiddenParaField() : FALSE; }
+    // is the paragraph visible?
+    inline bool HasHiddenParaField() const
+        { return m_pSwpHints ? m_pSwpHints->HasHiddenParaField()  : false; }
 
     //
     // Hidden Paragraph Field:
     //
     inline bool HasHiddenCharAttribute( bool bWholePara ) const
     {
-        if ( bRecalcHiddenCharFlags )
+        if ( m_bRecalcHiddenCharFlags )
             CalcHiddenCharFlags();
-        return bWholePara ? bHiddenCharsHidePara : bContainsHiddenChars;
+        return bWholePara ? m_bHiddenCharsHidePara : m_bContainsHiddenChars;
     }
-    inline void SetCalcHiddenCharFlags() const { bRecalcHiddenCharFlags = TRUE; }
+
+    inline void SetCalcHiddenCharFlags() const
+        { m_bRecalcHiddenCharFlags = true; }
 
 // --> FME 2004-06-08 #i12836# enhanced pdf
     //
@@ -765,16 +773,6 @@ public:
 
     // count words in given range
     void CountWords( SwDocStat& rStat, xub_StrLen nStart, xub_StrLen nEnd ) const;
-
-    // #111840#
-    /**
-       Returns position of certain text attribute.
-
-       @param pAttr     text attribute to search
-
-       @return position of given attribute or NULL in case of failure
-     */
-    SwPosition * GetPosition(const SwTxtAttr * pAttr);
 
     // Checks some global conditions like loading or destruction of document
     // to economize notifications
@@ -808,32 +806,50 @@ public:
 
     USHORT GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd ) const;
 
+    // sfx2::Metadatable
+    virtual ::sfx2::IXmlIdRegistry& GetRegistry();
+    virtual bool IsInClipboard() const;
+    virtual bool IsInUndo() const;
+    virtual bool IsInContent() const;
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::rdf::XMetadatable > MakeUnoObject();
+
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtNode)
 };
 
 //-----------------------------------------------------------------------------
 
-inline SwpHints &SwTxtNode::GetSwpHints()
+inline SwpHints & SwTxtNode::GetSwpHints()
 {
-    ASSERT_ID( pSwpHints, ERR_NOHINTS);
-    return *pSwpHints;
+    ASSERT_ID( m_pSwpHints, ERR_NOHINTS);
+    return *m_pSwpHints;
 }
 inline const SwpHints &SwTxtNode::GetSwpHints() const
 {
-    ASSERT_ID( pSwpHints, ERR_NOHINTS);
-    return *pSwpHints;
+    ASSERT_ID( m_pSwpHints, ERR_NOHINTS);
+    return *m_pSwpHints;
 }
 
 inline SwpHints& SwTxtNode::GetOrCreateSwpHints()
 {
-    if( !pSwpHints )
-        pSwpHints = new SwpHints;
-    return *pSwpHints;
+    if ( !m_pSwpHints )
+    {
+        m_pSwpHints = new SwpHints;
+    }
+    return *m_pSwpHints;
+}
+
+inline void SwTxtNode::TryDeleteSwpHints()
+{
+    if ( m_pSwpHints && m_pSwpHints->CanBeDeleted() )
+    {
+        DELETEZ( m_pSwpHints );
+    }
 }
 
 inline SwTxtFmtColl* SwTxtNode::GetTxtColl() const
 {
-    return (SwTxtFmtColl*)GetRegisteredIn();
+    return static_cast<SwTxtFmtColl*>(const_cast<SwModify*>(GetRegisteredIn()));
 }
 
 // fuer den IBM-Compiler nicht inlinen wg. 42876
@@ -841,11 +857,11 @@ inline SwTxtFmtColl* SwTxtNode::GetTxtColl() const
 // Inline Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!
 inline       SwTxtNode   *SwNode::GetTxtNode()
 {
-     return ND_TEXTNODE == nNodeType ? (SwTxtNode*)this : 0;
+     return ND_TEXTNODE == nNodeType ? static_cast<SwTxtNode*>(this) : 0;
 }
 inline const SwTxtNode   *SwNode::GetTxtNode() const
 {
-     return ND_TEXTNODE == nNodeType ? (const SwTxtNode*)this : 0;
+     return ND_TEXTNODE == nNodeType ? static_cast<const SwTxtNode*>(this) : 0;
 }
 #endif
 

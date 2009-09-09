@@ -102,6 +102,7 @@ LIB1OBJFILES= $(OUT)$/slo$/swmodule.obj \
 # dynamic libraries
 SHL1STDLIBS+= \
     $(LNGLIB) \
+    $(SVXCORELIB) \
     $(SVXLIB) \
     $(SFXLIB) \
     $(XMLOFFLIB) \
@@ -179,6 +180,7 @@ DEF3NAME=       $(SHL3TARGET)
 
 SHL3STDLIBS= \
         $(ISWLIB) \
+            $(SVXCORELIB) \
             $(SVXLIB) \
             $(SFX2LIB) \
             $(SVTOOLLIB) \
@@ -255,7 +257,6 @@ LIB3OBJFILES = \
     $(SLO)$/glossary.obj \
     $(SLO)$/inpdlg.obj \
     $(SLO)$/insfnote.obj \
-    $(SLO)$/insrc.obj \
     $(SLO)$/instable.obj \
     $(SLO)$/insrule.obj \
     $(SLO)$/javaedit.obj \
@@ -318,7 +319,8 @@ DEF4NAME=$(SHL4TARGET)
 
 SHL4STDLIBS= \
     $(ISWLIB) \
-    $(SVXLIB) \
+    $(SVXCORELIB) \
+    $(SVXMSFILTERLIB) \
     $(SFXLIB) \
     $(GOODIESLIB) \
     $(BASEGFXLIB) \

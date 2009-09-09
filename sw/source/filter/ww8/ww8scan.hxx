@@ -79,13 +79,13 @@ namespace SL
     DEFCONSTSTRINGARRAY(MSMacroCmds);
 }
 
-/*
- winword strings are typically Belt and Braces strings preceeded with a
- pascal style count, and ending with a c style 0 terminator. 16bit chars
- and count for ww8+ and 8bit chars and count for ww7-. The count and 0
- can be checked for integrity to catch errors (e.g. lotus created documents)
- where in error 8bit strings are used instead of 16bits strings for style
- names.
+/**
+    winword strings are typically Belt and Braces strings preceeded with a
+    pascal style count, and ending with a c style 0 terminator. 16bit chars
+    and count for ww8+ and 8bit chars and count for ww7-. The count and 0
+    can be checked for integrity to catch errors (e.g. lotus created documents)
+    where in error 8bit strings are used instead of 16bits strings for style
+    names.
 */
 template<class C> class wwString
 {
@@ -98,7 +98,7 @@ typedef wwString<sal_uInt16> ww8String;
 
 struct SprmInfo
 {
-    sal_uInt16 nId;         //A ww8 sprm is hardcoded as 16bits
+    sal_uInt16 nId;         ///< A ww8 sprm is hardcoded as 16bits
     unsigned int nLen : 6;
     unsigned int nVari : 2;
 };
@@ -114,8 +114,10 @@ struct SprmInfoHash
 typedef ww::WrappedHash<SprmInfo, SprmInfoHash> wwSprmSearcher;
 typedef ww::WrappedHash<sal_uInt16> wwSprmSequence;
 
-//wwSprmParser knows how to take a sequence of bytes and split it up into
-//sprms and their arguments
+/**
+    wwSprmParser knows how to take a sequence of bytes and split it up into
+    sprms and their arguments
+*/
 class wwSprmParser
 {
 private:
@@ -134,20 +136,20 @@ private:
 public:
     //7- ids are very different to 8+ ones
     wwSprmParser(ww::WordVersion eVersion);
-    //Return the SPRM id at the beginning of this byte sequence
+    /// Return the SPRM id at the beginning of this byte sequence
     sal_uInt16 GetSprmId(const sal_uInt8* pSp) const;
 
     USHORT GetSprmSize(sal_uInt16 nId, const sal_uInt8* pSprm) const;
 
-    //Get known len of a sprms head, the bytes of the sprm id + any bytes
-    //reserved to hold a variable length
+    /// Get known len of a sprms head, the bytes of the sprm id + any bytes
+    /// reserved to hold a variable length
     USHORT DistanceToData(sal_uInt16 nId) const;
 
-    //Get len of a sprms data area, ignoring the bytes of the sprm id and
-    //ignoring any len bytes. Reports the remaining data after those bytes
+    /// Get len of a sprms data area, ignoring the bytes of the sprm id and
+    /// ignoring any len bytes. Reports the remaining data after those bytes
     USHORT GetSprmTailLen(sal_uInt16 nId, const sal_uInt8 * pSprm) const;
 
-    //The minimum acceptable sprm len possible for this type of parser
+    /// The minimum acceptable sprm len possible for this type of parser
     int MinSprmLen() const { return (IsSevenMinus(meVersion)) ? 2 : 3; }
 
     inline int getVersion() const { return meVersion; } //cmc, I'm dubious about the usage of this, how can it be 0
@@ -164,14 +166,14 @@ class  WW8PLCFx_PCD;
 String WW8ReadPString( SvStream& rStrm, rtl_TextEncoding eEnc,
     bool bAtEndSeekRel1 = true);
 
-/*
+/**
  The following method reads a 2Byte unicode string.  If bAtEndSeekRel1 is set,
  exactly ONE byte is skipped If nChars is set then that number of characters
  (not bytes) is read, if its not set, the first character read is the length
 */
 String WW8Read_xstz(SvStream& rStrm, USHORT nChars, bool bAtEndSeekRel1);
 
-/*
+/**
  reads array of strings (see MS documentation: STring TaBle stored in File)
  returns NOT the original pascal strings but an array of converted char*
 
@@ -183,23 +185,23 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
 
 struct WW8FieldDesc
 {
-    long nLen;              // Gesamtlaenge ( zum Text ueberlesen )
-    WW8_CP nSCode;          // Anfang Befehlscode
-    WW8_CP nLCode;          // Laenge
-    WW8_CP nSRes;           // Anfang Ergebnis
-    WW8_CP nLRes;           // Laenge ( == 0, falls kein Ergebnis )
-    USHORT nId;             // WW-Id fuer Felder
-    BYTE nOpt;              // WW-Flags ( z.B.: vom User geaendert )
-    BYTE bCodeNest:1;       // Befehl rekursiv verwendet
-    BYTE bResNest:1;        // Befehl in Resultat eingefuegt
+    long nLen;              ///< Gesamtlaenge ( zum Text ueberlesen )
+    WW8_CP nSCode;          ///< Anfang Befehlscode
+    WW8_CP nLCode;          ///< Laenge
+    WW8_CP nSRes;           ///< Anfang Ergebnis
+    WW8_CP nLRes;           ///< Laenge ( == 0, falls kein Ergebnis )
+    USHORT nId;             ///< WW-Id fuer Felder
+    BYTE nOpt;              ///< WW-Flags ( z.B.: vom User geaendert )
+    BYTE bCodeNest:1;       ///< Befehl rekursiv verwendet
+    BYTE bResNest:1;        ///< Befehl in Resultat eingefuegt
 };
 
 struct WW8PLCFxSave1
 {
     ULONG nPLCFxPos;
-    ULONG nPLCFxPos2;       // fuer PLCF_Cp_Fkp: PieceIter-Pos
+    ULONG nPLCFxPos2;       ///< fuer PLCF_Cp_Fkp: PieceIter-Pos
     long nPLCFxMemOfs;
-    WW8_CP nStartCp;        // for cp based iterator like PAP and CHP
+    WW8_CP nStartCp;        ///< for cp based iterator like PAP and CHP
     long nCpOfs;
     WW8_FC nStartFC;
     WW8_CP nAttrStart;
@@ -207,17 +209,17 @@ struct WW8PLCFxSave1
     bool bLineEnd;
 };
 
-/*
+/**
     u.a. fuer Felder, also genausoviele Attr wie Positionen,
     falls Ctor-Param bNoEnd = false
 */
 class WW8PLCFspecial        // Iterator fuer PLCFs
 {
 private:
-    INT32* pPLCF_PosArray;  // Pointer auf Pos-Array und auf ganze Struktur
-    BYTE*  pPLCF_Contents;  // Pointer auf Inhalts-Array-Teil des Pos-Array
-    long nIMax;             // Anzahl der Elemente
-    long nIdx;              // Merker, wo wir gerade sind
+    INT32* pPLCF_PosArray;  ///< Pointer auf Pos-Array und auf ganze Struktur
+    BYTE*  pPLCF_Contents;  ///< Pointer auf Inhalts-Array-Teil des Pos-Array
+    long nIMax;             ///< Anzahl der Elemente
+    long nIdx;              ///< Merker, wo wir gerade sind
     long nStru;
 public:
     WW8PLCFspecial( SvStream* pSt, long nFilePos, long nPLCF,
@@ -246,7 +248,7 @@ public:
     WW8PLCFspecial& operator --( int ) { nIdx--; return *this; }
 };
 
-/* simple Iterator for SPRMs */
+/** simple Iterator for SPRMs */
 class WW8SprmIter
 {
 private:
@@ -463,7 +465,7 @@ public:
     }
 };
 
-/*
+/**
  Iterator for Piece Table Exceptions of Fkps
  works only with FCs, not with CPs !  ( Low-Level )
 */
@@ -587,7 +589,7 @@ public:
     bool HasFkp() const { return (0 != pFkp); }
 };
 
-// Iterator fuer Piece Table Exceptions of Fkps arbeitet auf CPs (High-Level)
+/// Iterator fuer Piece Table Exceptions of Fkps arbeitet auf CPs (High-Level)
 class WW8PLCFx_Cp_FKP : public WW8PLCFx_Fc_FKP
 {
 private:
@@ -619,7 +621,7 @@ public:
     virtual void Restore( const WW8PLCFxSave1& rSave );
 };
 
-// Iterator for Piece Table Exceptions of Sepx
+/// Iterator for Piece Table Exceptions of Sepx
 class WW8PLCFx_SEPX : public WW8PLCFx
 {
 private:
@@ -652,7 +654,7 @@ public:
                     BYTE*& p1,   BYTE*& p2,   BYTE*& p3,   BYTE*& p4 ) const;
 };
 
-// Iterator fuer Fuss-/Endnoten und Anmerkungen
+/// Iterator fuer Fuss-/Endnoten und Anmerkungen
 class WW8PLCFx_SubDoc : public WW8PLCFx
 {
 private:
@@ -684,7 +686,7 @@ public:
     long Count() const { return ( pRef ) ? pRef->GetIMax() : 0; }
 };
 
-// Iterator fuer Fuss- und Endnoten
+/// Iterator for footnotes and endnotes
 class WW8PLCFx_FLD : public WW8PLCFx
 {
 private:
@@ -709,7 +711,7 @@ public:
 
 enum eBookStatus { BOOK_NORMAL = 0, BOOK_IGNORE = 0x1, BOOK_FIELD = 0x2 };
 
-// Iterator for Booknotes
+/// Iterator for Booknotes
 class WW8PLCFx_Book : public WW8PLCFx
 {
 private:
@@ -978,7 +980,8 @@ public:
 
 };
 
-/*
+/** FIB - the File Information Block
+
     The FIB contains a "magic word" and pointers to the various other parts of
     the file, as well as information about the length of the file.
     The FIB starts at the beginning of the file.
@@ -986,7 +989,7 @@ public:
 class WW8Fib
 {
 public:
-    /*
+    /**
         Program-Version asked for by us:
         in Ctor we check if it matches the value of nFib
 
@@ -1040,6 +1043,7 @@ public:
     UINT16 fExtChar :1; // 1000 =1, when using extended character set in file
     UINT16 fFarEast :1; // 4000 =1, probably, when far-East language vaiants of Word is used to create a file #i90932#
 
+    UINT16 fObfuscated :1; // 8000=1. specifies whether the document is obfuscated using XOR obfuscation. otherwise this bit MUST be ignored.
 
     UINT16 nFibBack;    // 0xc
     UINT16 nHash;       // 0xe  file encrypted hash
@@ -1434,6 +1438,7 @@ public:
 
     /* leider falsch, man braucht auch noch einen fuer den Export */
     WW8Fib( BYTE nVersion = 6 );
+    bool WriteHeader(SvStream& rStrm);
     bool Write(SvStream& rStrm);
     static rtl_TextEncoding GetFIBCharset(UINT16 chs);
     ww::WordVersion GetFIBVersion() const;
@@ -1495,7 +1500,8 @@ namespace nsHdFtFlags
     const HdFtFlags WW8_FOOTER_FIRST    = 0x20;
 }
 
-class WW8Dop            // Document Properties
+/// Document Properties
+class WW8Dop
 {
 public:
     /* Error Status */

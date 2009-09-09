@@ -29,54 +29,54 @@
  ************************************************************************/
 #ifndef _TXTINET_HXX
 #define _TXTINET_HXX
+
 #include <txatbase.hxx>
 #include <calbck.hxx>
 
 class SwTxtNode;
 class SwCharFmt;
-class Color;
 
 // ATT_INETFMT *********************************************
 
 class SW_DLLPUBLIC SwTxtINetFmt : public SwTxtAttrEnd, public SwClient
 {
-    SwTxtNode* pMyTxtNd;
-    BOOL bVisited       : 1; // Besuchter Link?
-    BOOL bValidVis      : 1; // Ist das bVisited-Flag gueltig?
-    BOOL bColor         : 1;
+    SwTxtNode * m_pTxtNode;
+    bool m_bVisited         : 1; // visited link?
+    bool m_bVisitedValid    : 1; // is m_bVisited valid?
 
     // forbidden and not implemented.
     SwTxtINetFmt();
 
 public:
-    SwTxtINetFmt( const SwFmtINetFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
+    SwTxtINetFmt( SwFmtINetFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
     virtual ~SwTxtINetFmt();
     TYPEINFO();
 
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
     virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
 
-    // erfrage und setze den TxtNode Pointer
-    const SwTxtNode* GetpTxtNode() const { return pMyTxtNd; }
+    // get and set TxtNode pointer
+    const SwTxtNode* GetpTxtNode() const { return m_pTxtNode; }
     inline const SwTxtNode& GetTxtNode() const;
-    void ChgTxtNode( const SwTxtNode* pNew ) { pMyTxtNd = (SwTxtNode*)pNew; }
+    void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
 
           SwCharFmt* GetCharFmt();
     const SwCharFmt* GetCharFmt() const
-            { return ((SwTxtINetFmt*)this)->GetCharFmt(); }
+            { return const_cast<SwTxtINetFmt*>(this)->GetCharFmt(); }
 
-    BOOL IsVisited() const { return bVisited; }
-    void SetVisited( BOOL bNew ) { bVisited = bNew; }
+    bool IsVisited() const { return m_bVisited; }
+    void SetVisited( bool bNew ) { m_bVisited = bNew; }
 
-    BOOL IsValidVis() const { return bValidVis; }
-    void SetValidVis( BOOL bNew ) { bValidVis = bNew; }
+    bool IsVisitedValid() const { return m_bVisitedValid; }
+    void SetVisitedValid( bool bNew ) { m_bVisitedValid = bNew; }
 
     BOOL IsProtect() const;
 };
+
 inline const SwTxtNode& SwTxtINetFmt::GetTxtNode() const
 {
-    ASSERT( pMyTxtNd, "SwTxtINetFmt:: wo ist mein TextNode?" );
-    return *pMyTxtNd;
+    ASSERT( m_pTxtNode, "SwTxtINetFmt: where is my TxtNode?" );
+    return *m_pTxtNode;
 }
 
 #endif

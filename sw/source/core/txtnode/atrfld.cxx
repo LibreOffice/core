@@ -255,12 +255,12 @@ BOOL SwFmtFld::IsProtect() const
 |*
 *************************************************************************/
 
-SwTxtFld::SwTxtFld( const SwFmtFld& rAttr, xub_StrLen nStartPos )
-    : SwTxtAttr( rAttr, nStartPos ),
-    aExpand( rAttr.GetFld()->Expand() ),
-    pMyTxtNd( 0 )
+SwTxtFld::SwTxtFld( SwFmtFld& rAttr, xub_StrLen nStartPos )
+    : SwTxtAttr( rAttr, nStartPos )
+    , m_aExpand( rAttr.GetFld()->Expand() )
+    , m_pTxtNode( 0 )
 {
-    ((SwFmtFld&)rAttr).pTxtAttr = this;
+    rAttr.pTxtAttr = this;
 }
 
 SwTxtFld::~SwTxtFld( )
@@ -280,12 +280,12 @@ SwTxtFld::~SwTxtFld( )
 void SwTxtFld::Expand() const
 {
     // Wenn das expandierte Feld sich nicht veraendert hat, wird returnt
-    ASSERT( pMyTxtNd, "wo ist denn mein Node?" );
+    ASSERT( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
 
     const SwField* pFld = GetFld().GetFld();
     XubString aNewExpand( pFld->Expand() );
 
-    if( aNewExpand == aExpand )
+    if( aNewExpand == m_aExpand )
     {
         // Bei Seitennummernfeldern
         const USHORT nWhich = pFld->GetTyp()->Which();
@@ -301,16 +301,18 @@ void SwTxtFld::Expand() const
             // BP: das muesste man noch optimieren!
             //JP 12.06.97: stimmt, man sollte auf jedenfall eine Status-
             //              aenderung an die Frames posten
-            if( pMyTxtNd->CalcHiddenParaField() )
-                pMyTxtNd->Modify( 0, 0 );
+            if( m_pTxtNode->CalcHiddenParaField() )
+            {
+                m_pTxtNode->Modify( 0, 0 );
+            }
             return;
         }
     }
 
-    aExpand = aNewExpand;
+    m_aExpand = aNewExpand;
 
-    // 0, this fuer Formatieren
-    pMyTxtNd->Modify( 0, (SfxPoolItem*)&GetFld() );
+    // 0, this for formatting
+    m_pTxtNode->Modify( 0, const_cast<SwFmtFld*>( &GetFld() ) );
 }
 
 /*************************************************************************
@@ -319,11 +321,11 @@ void SwTxtFld::Expand() const
 
 void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
 {
-    ASSERT( pMyTxtNd, "wo ist denn mein Node?" );
-    ASSERT( pDest->pMyTxtNd, "wo ist denn mein Node?" );
+    ASSERT( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
+    ASSERT( pDest->m_pTxtNode, "SwTxtFld: where is pDest's TxtNode?" );
 
-    IDocumentFieldsAccess* pIDFA = pMyTxtNd->getIDocumentFieldsAccess();
-    IDocumentFieldsAccess* pDestIDFA = pDest->pMyTxtNd->getIDocumentFieldsAccess();
+    IDocumentFieldsAccess* pIDFA = m_pTxtNode->getIDocumentFieldsAccess();
+    IDocumentFieldsAccess* pDestIDFA = pDest->m_pTxtNode->getIDocumentFieldsAccess();
 
     SwFmtFld& rFmtFld = (SwFmtFld&)pDest->GetFld();
     const USHORT nFldWhich = rFmtFld.GetFld()->GetTyp()->Which();
@@ -366,9 +368,21 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
         ((SwTblField*)rFmtFld.GetFld())->IsIntrnlName() )
     {
         // erzeuge aus der internen (fuer CORE) die externe (fuer UI) Formel
-        const SwTableNode* pTblNd = pMyTxtNd->FindTableNode();
+        const SwTableNode* pTblNd = m_pTxtNode->FindTableNode();
         if( pTblNd )        // steht in einer Tabelle
             ((SwTblField*)rFmtFld.GetFld())->PtrToBoxNm( &pTblNd->GetTable() );
+    }
+}
+
+/* -----------------26.06.2003 13:54-----------------
+
+ --------------------------------------------------*/
+void SwTxtFld::NotifyContentChange(SwFmtFld& rFmtFld)
+{
+    //if not in undo section notify the change
+    if (m_pTxtNode && m_pTxtNode->GetNodes().IsDocNodes())
+    {
+        m_pTxtNode->Modify(0, &rFmtFld);
     }
 }
 

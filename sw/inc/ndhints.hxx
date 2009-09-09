@@ -61,41 +61,45 @@ SV_DECL_PTRARR_SORT(SwpHtEnd,SwTxtAttr*,1,1)
  *                      class SwpHintsArr
  *************************************************************************/
 
-// Das neue Hintsarray:
-class SwpHintsArr : private SwpHtStart
+/// the Hints array
+class SwpHintsArray
 {
 
 protected:
-    SwpHtEnd aHtEnd;
+    SwpHtStart m_HintStarts;
+    SwpHtEnd   m_HintEnds;
 
+    //FIXME: why are the non-const methods public?
 public:
     void Insert( const SwTxtAttr *pHt );
     void DeleteAtPos( const USHORT nPosInStart );
-    BOOL Resort();
-    SwTxtAttr *Cut( const USHORT nPosInStart );
+    bool Resort();
+    SwTxtAttr * Cut( const USHORT nPosInStart );
 
-    inline const SwTxtAttr *GetStart( const USHORT nPos ) const { return (*this)[nPos]; }
-    inline const SwTxtAttr *GetEnd( const USHORT nPos ) const { return aHtEnd[nPos]; }
-    inline SwTxtAttr *GetStart( const USHORT nPos ) { return GetHt(nPos); }
-    inline SwTxtAttr *GetEnd( const USHORT nPos ) { return aHtEnd[nPos]; }
-    inline USHORT GetEndCount() const { return aHtEnd.Count(); }
-    inline USHORT GetStartCount() const { return Count(); }
+    inline const SwTxtAttr * GetStart( const USHORT nPos ) const
+        { return m_HintStarts[nPos]; }
+    inline const SwTxtAttr * GetEnd  ( const USHORT nPos ) const
+        { return m_HintEnds  [nPos]; }
+    inline       SwTxtAttr * GetStart( const USHORT nPos )
+        { return m_HintStarts[nPos]; }
+    inline       SwTxtAttr * GetEnd  ( const USHORT nPos )
+        { return m_HintEnds  [nPos]; }
+
+    inline USHORT GetEndCount()   const { return m_HintEnds  .Count(); }
+    inline USHORT GetStartCount() const { return m_HintStarts.Count(); }
+
     inline USHORT GetStartOf( const SwTxtAttr *pHt ) const;
     inline USHORT GetPos( const SwTxtAttr *pHt ) const
-//  OS: in svmem.hxx wird fuer TCPP GetPos ohne const gerufen
-#ifdef TCPP
-        { return SwpHtStart::GetPos( (SwTxtAttr *)pHt ); }
-#else
-        { return SwpHtStart::GetPos( pHt ); }
-#endif
+        { return m_HintStarts.GetPos( pHt ); }
 
-    inline SwTxtAttr *GetHt( const USHORT nIdx ) { return SwpHtStart::operator[](nIdx); }
-    inline const SwTxtAttr *operator[]( const USHORT nIdx )const
-        { return SwpHtStart::operator[](nIdx); }
-    inline USHORT Count() const { return SwpHtStart::Count(); }
+    inline SwTxtAttr * GetTextHint( const USHORT nIdx )
+        { return GetStart(nIdx); }
+    inline const SwTxtAttr * operator[]( const USHORT nIdx ) const
+        { return m_HintStarts[nIdx]; }
+    inline USHORT Count() const { return m_HintStarts.Count(); }
 
 #ifdef DBG_UTIL
-    BOOL Check() const;
+    bool Check() const;
 #endif
 };
 
@@ -103,67 +107,68 @@ public:
  *                      class SwpHints
  *************************************************************************/
 
-// Die public-Schnittstelle zum Node hin
-class SwpHints: public SwpHintsArr
+// public interface
+class SwpHints : public SwpHintsArray
 {
 private:
-    SwRegHistory* pHistory;
-    // Numerierung
-    BOOL    bHasHiddenParaField    :1;  // HiddenParaFld
-    BOOL    bFntChg :1;  // Fontwechsel
-    BOOL    bFtn    :1;  // Fussnoten
-    BOOL    bInSplitNode: 1;    // TRUE: der Node ist im Split und die Frames
-                                // werden verschoben!
-    BOOL    bDDEFlds : 1;       // es sind DDE-Felder am TextNode vorhanden
-    BOOL    bCalcHiddenParaField : 1; // bHasHiddenParaField ist invalid, CalcHiddenParaField() rufen
+    SwRegHistory* m_pHistory;   // for Undo
 
-    // Haelt ein neues Attribut in pHistory fest.
-    void NoteInHistory( SwTxtAttr *pAttr, const BOOL bNew = FALSE );
+    bool m_bFontChange          : 1;  // font change
+    // true: the Node is in Split and Frames are moved
+    bool m_bInSplitNode         : 1;
+    // m_bHasHiddenParaField is invalid, call CalcHiddenParaField()
+    bool m_bCalcHiddenParaField : 1;
+    bool m_bHasHiddenParaField  : 1;  // HiddenParaFld
+    bool m_bFootnote            : 1;  // footnotes
+    bool m_bDDEFields           : 1;  // the TextNode has DDE fields
+
+    // records a new attibute in m_pHistory.
+    void NoteInHistory( SwTxtAttr *pAttr, const bool bNew = false );
 
     void CalcFlags( );
 
-    // die Delete Methoden duerfen nur vom TextNode gerufen werden !!
-    // Dieser sorgt dafuer, das bei Attributen ohne Ende auch das
-    // entsp. Zeichen entfernt wird !!
+    // Delete methods may only be called by the TextNode!
+    // Because the TextNode also guarantees removal of the Character for
+    // attributes without an end.
     friend class SwTxtNode;
     void DeleteAtPos( const USHORT nPos );
-    // Ist der Hint schon bekannt, dann suche die Position und loesche ihn.
-    // Ist er nicht im Array, so gibt es ein ASSERT !!
+    // Delete the given Hint. The Hint must actually be in the array!
     void Delete( SwTxtAttr* pTxtHt );
 
-    inline void SetCalcHiddenParaField(){ bCalcHiddenParaField = TRUE; }
-    inline void SetHiddenParaField( const BOOL bNew )  { bHasHiddenParaField = bNew; }
-    inline BOOL HasHiddenParaField() const
-        { if( bCalcHiddenParaField ) ((SwpHints*)this)->CalcHiddenParaField(); return bHasHiddenParaField; }
+    inline void SetInSplitNode(bool bInSplit) { m_bInSplitNode = bInSplit; }
+    inline void SetCalcHiddenParaField() { m_bCalcHiddenParaField = true; }
+    inline void SetHiddenParaField( const bool bNew )
+        { m_bHasHiddenParaField = bNew; }
+    inline bool HasHiddenParaField() const
+    {
+        if ( m_bCalcHiddenParaField )
+        {
+            (const_cast<SwpHints*>(this))->CalcHiddenParaField();
+        }
+        return m_bHasHiddenParaField;
+    }
 
     void BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint, USHORT nMode );
     bool MergePortions( SwTxtNode& rNode );
 
 public:
-    inline BOOL CanBeDeleted() const { return !Count(); }
+    SwpHints();
 
-    // damit das SwDoc::Undo ueber alle Attributaenderungen informiert
-    // wird, gibt es hier einen Pointer auf die History. Nur wenn dieser
-    // != 0 ist, muessen alle Attributaenderungen "gemeldet" werden.
-    void Register( SwRegHistory* pHist ) { pHistory = pHist; }
+    inline bool CanBeDeleted() const    { return !Count(); }
+
+    // register a History, which receives all attribute changes (for Undo)
+    void Register( SwRegHistory* pHist ) { m_pHistory = pHist; }
+    // deregister the currently registered History
     void DeRegister() { Register(0); }
-    SwRegHistory* getHistory() const { return pHistory; }
+    SwRegHistory* GetHistory() const    { return m_pHistory; }
 
-    void Insert( SwTxtAttr*  pHt,      SwTxtNode &rNode, USHORT nMode = 0 );
+    void Insert( SwTxtAttr*  pHt, SwTxtNode &rNode, USHORT nMode = 0 );
 
-    inline BOOL HasFtn() const { return bFtn; }
-    inline BOOL IsInSplitNode() const { return bInSplitNode; }
+    inline bool HasFtn() const          { return m_bFootnote; }
+    inline bool IsInSplitNode() const   { return m_bInSplitNode; }
 
-    // Konstruktor  (wird im nur einmal benutzt!)
-    SwpHints()
-    {
-        pHistory = 0;
-        bFntChg = TRUE;
-        bDDEFlds = bFtn = bInSplitNode = bCalcHiddenParaField = bHasHiddenParaField = FALSE;
-    }
-
-    // Berechnung von bHasHiddenParaField, return-Wert TRUE bei Aenderung
-    BOOL CalcHiddenParaField();
+    // calc current value of m_bHasHiddenParaField, returns true iff changed
+    bool CalcHiddenParaField();
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwpHints)
 };
@@ -172,20 +177,22 @@ public:
 SvStream &operator<<(SvStream &aS, const SwpHints &rHints); //$ ostream
 
 /*************************************************************************
- *                       Inline-Implementationen
+ *                         Inline Implementations
  *************************************************************************/
 
-inline USHORT SwpHintsArr::GetStartOf( const SwTxtAttr *pHt ) const
+inline USHORT SwpHintsArray::GetStartOf( const SwTxtAttr *pHt ) const
 {
     USHORT nPos;
-    if( !Seek_Entry( pHt, &nPos ) )
+    if ( !m_HintStarts.Seek_Entry( pHt, &nPos ) )
+    {
         nPos = USHRT_MAX;
+    }
     return nPos;
 }
 
-inline SwTxtAttr *SwpHintsArr::Cut( const USHORT nPosInStart )
+inline SwTxtAttr *SwpHintsArray::Cut( const USHORT nPosInStart )
 {
-    SwTxtAttr *pHt = GetHt(nPosInStart);
+    SwTxtAttr *pHt = GetTextHint(nPosInStart);
     DeleteAtPos( nPosInStart );
     return pHt;
 }

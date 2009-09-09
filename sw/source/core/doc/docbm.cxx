@@ -535,11 +535,11 @@ namespace sw { namespace mark
     }
 
     void MarkManager::deleteMarks(
-        const SwNodeIndex& rStt,
-        const SwNodeIndex& rEnd,
-        ::std::vector<SaveBookmark>* pSaveBkmk,
-        const SwIndex* pSttIdx,
-        const SwIndex* pEndIdx)
+            const SwNodeIndex& rStt,
+            const SwNodeIndex& rEnd,
+            ::std::vector<SaveBookmark>* pSaveBkmk,
+            const SwIndex* pSttIdx,
+            const SwIndex* pEndIdx )
     {
         vector<const_iterator_t> vMarksToDelete;
         bool isSortingNeeded = false;
@@ -574,12 +574,29 @@ namespace sw { namespace mark
                 isPosInRange = true, isOtherPosInRange = true;
             }
 
-            if(isPosInRange && isOtherPosInRange)
+            if(isPosInRange && (isOtherPosInRange || !pMark->IsExpanded()))
             {
                 // completely in range
-                if(pSaveBkmk)
-                    pSaveBkmk->push_back(SaveBookmark(true, true, *pMark, rStt, pSttIdx));
-                vMarksToDelete.push_back(ppMark);
+
+                // --> OD 2009-08-07 #i92125#
+                bool bKeepCrossRefBkmk( false );
+                {
+                    if ( rStt == rEnd &&
+                         ( IDocumentMarkAccess::GetType(*pMark) ==
+                            IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK ||
+                           IDocumentMarkAccess::GetType(*pMark) ==
+                            IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK ) )
+                    {
+                        bKeepCrossRefBkmk = true;
+                    }
+                }
+                if ( !bKeepCrossRefBkmk )
+                {
+                    if(pSaveBkmk)
+                        pSaveBkmk->push_back(SaveBookmark(true, true, *pMark, rStt, pSttIdx));
+                    vMarksToDelete.push_back(ppMark);
+                }
+                // <--
             }
             else if(isPosInRange ^ isOtherPosInRange)
             {
@@ -596,13 +613,24 @@ namespace sw { namespace mark
                         rEnd,
                         isPosInRange ? pMark->GetOtherMarkPos() : pMark->GetMarkPos());
 
-                if(isPosInRange)
-                    pMark->SetMarkPos(*pNewPos);
-                else
-                    pMark->SetOtherMarkPos(*pNewPos);
+                // --> OD 2009-08-06 #i92125#
+                // no move of position for cross-reference bookmarks,
+                // if move occurs inside a certain node
+                if ( ( IDocumentMarkAccess::GetType(*pMark) !=
+                                IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK &&
+                       IDocumentMarkAccess::GetType(*pMark) !=
+                                IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK ) ||
+                     pMark->GetMarkPos().nNode != pNewPos->nNode )
+                {
+                    if(isPosInRange)
+                        pMark->SetMarkPos(*pNewPos);
+                    else
+                        pMark->SetOtherMarkPos(*pNewPos);
 
-                // illegal selection? collapse the mark and restore sorting later
-                isSortingNeeded |= lcl_FixCorrectedMark(isPosInRange, isOtherPosInRange, pMark);
+                    // illegal selection? collapse the mark and restore sorting later
+                    isSortingNeeded |= lcl_FixCorrectedMark(isPosInRange, isOtherPosInRange, pMark);
+                }
+                // <--
             }
         }
 
@@ -613,7 +641,9 @@ namespace sw { namespace mark
         for(vector<const_iterator_t>::reverse_iterator pppMark = vMarksToDelete.rbegin();
             pppMark != vMarksToDelete.rend();
             pppMark++)
+        {
             deleteMark(*pppMark);
+        }
         if(isSortingNeeded)
             sortMarks();
 #if FALSE
@@ -1332,7 +1362,8 @@ void _SaveCntntIdx(SwDoc* pDoc,
                 aSave.IncCount();
             FOREACHPAM_END()
 
-            SwUnoTableCrsr* pUnoTblCrsr = (SwUnoTableCrsr*)*rTbl[ n ];
+            SwUnoTableCrsr* pUnoTblCrsr =
+                dynamic_cast<SwUnoTableCrsr*>(rTbl[ n ]);
             if( pUnoTblCrsr )
             {
                 FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
@@ -1474,8 +1505,9 @@ void _RestoreCntntIdx(SwDoc* pDoc,
                     if( pPos )
                         break;
 
-                    SwUnoTableCrsr* pUnoTblCrsr = (SwUnoTableCrsr*)*rTbl[ i ];
-                    if( pUnoTblCrsr )
+                    SwUnoTableCrsr* pUnoTblCrsr =
+                        dynamic_cast<SwUnoTableCrsr*>(rTbl[ i ]);
+                    if ( pUnoTblCrsr )
                     {
                         FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
                             if( aSave.GetCount() == nCnt )
@@ -1487,7 +1519,7 @@ void _RestoreCntntIdx(SwDoc* pDoc,
                             ++nCnt;
                         FOREACHPAM_END()
                     }
-                    if( pPos )
+                    if ( pPos )
                         break;
                 }
             }
@@ -1629,8 +1661,9 @@ void _RestoreCntntIdx(SvULongs& rSaveArr,
                         if( pPos )
                             break;
 
-                        SwUnoTableCrsr* pUnoTblCrsr = (SwUnoTableCrsr*)*rTbl[ i ];
-                        if( pUnoTblCrsr )
+                        SwUnoTableCrsr* pUnoTblCrsr =
+                            dynamic_cast<SwUnoTableCrsr*>(rTbl[ i ]);
+                        if ( pUnoTblCrsr )
                         {
                             FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
                                 if( aSave.GetCount() == nCnt )
@@ -1642,7 +1675,7 @@ void _RestoreCntntIdx(SvULongs& rSaveArr,
                                 ++nCnt;
                             FOREACHPAM_END()
                         }
-                        if( pPos )
+                        if ( pPos )
                             break;
                     }
                 }

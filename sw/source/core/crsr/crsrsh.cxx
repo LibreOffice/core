@@ -59,9 +59,7 @@
 #include <callnk.hxx>
 #include <viscrs.hxx>
 #include <section.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <scriptinfo.hxx>
 #include <globdoc.hxx>
 #include <pamtyp.hxx>
@@ -173,7 +171,7 @@ BOOL SwCrsrShell::DestroyCrsr()
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
     SwCursor* pNextCrsr = (SwCursor*)pCurCrsr->GetNext();
     delete pCurCrsr;
-    pCurCrsr = (SwShellCrsr*)*pNextCrsr;
+    pCurCrsr = dynamic_cast<SwShellCrsr*>(pNextCrsr);
     UpdateCrsr();
     return TRUE;
 }
@@ -201,9 +199,8 @@ SwPaM* SwCrsrShell::GetCrsr( BOOL bMakeTblCrsr ) const
 
         if( pTblCrsr->IsChgd() )
         {
-            SwCrsrShell* pThis = (SwCrsrShell*)this;
-            pThis->pCurCrsr = (SwShellCrsr*)
-                            *pTblCrsr->MakeBoxSels( pThis->pCurCrsr );
+            const_cast<SwCrsrShell*>(this)->pCurCrsr =
+                dynamic_cast<SwShellCrsr*>(pTblCrsr->MakeBoxSels( pCurCrsr ));
         }
     }
     return pCurCrsr;
@@ -539,7 +536,7 @@ BOOL SwCrsrShell::SttEndDoc( BOOL bStt )
 {
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
 
-    SwShellCrsr* pTmpCrsr = pBlockCrsr ? pBlockCrsr->getShellCrsr() : pCurCrsr;
+    SwShellCrsr* pTmpCrsr = pBlockCrsr ? &pBlockCrsr->getShellCrsr() : pCurCrsr;
     BOOL bRet = pTmpCrsr->SttEndDoc( bStt );
     if( bRet )
     {
@@ -920,7 +917,8 @@ BOOL SwCrsrShell::ChgCurrPam( const Point & rPt,
             UpdateCrsr();     // Cursor steht schon richtig
             return TRUE;
         }
-    } while( pCurCrsr != ( pCmp = (SwShellCrsr*)*((SwCursor*)pCmp->GetNext()) ) );
+    } while( pCurCrsr !=
+        ( pCmp = dynamic_cast<SwShellCrsr*>(pCmp->GetNext()) ) );
     return FALSE;
 }
 
@@ -1124,7 +1122,7 @@ BOOL SwCrsrShell::GoNextCrsr()
 
     SET_CURR_SHELL( this );
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
-    pCurCrsr = (SwShellCrsr*)*((SwCursor*)pCurCrsr->GetNext());
+    pCurCrsr = dynamic_cast<SwShellCrsr*>(pCurCrsr->GetNext());
 
     // Bug 24086: auch alle anderen anzeigen
     if( !ActionPend() )
@@ -1146,7 +1144,7 @@ BOOL SwCrsrShell::GoPrevCrsr()
 
     SET_CURR_SHELL( this );
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
-    pCurCrsr = (SwShellCrsr*)*((SwCursor*)pCurCrsr->GetPrev());
+    pCurCrsr = dynamic_cast<SwShellCrsr*>(pCurCrsr->GetPrev());
 
     // Bug 24086: auch alle anderen anzeigen
     if( !ActionPend() )
@@ -1957,7 +1955,9 @@ BOOL SwCrsrShell::Pop( BOOL bOldCrsr )
 
     // der Nachfolger wird der Aktuelle
     if( pCrsrStk->GetNext() != pCrsrStk )
-        pTmp = (SwShellCrsr*)*((SwCursor*)pCrsrStk->GetNext());
+    {
+        pTmp = dynamic_cast<SwShellCrsr*>(pCrsrStk->GetNext());
+    }
 
     if( bOldCrsr )              // loesche vom Stack
         delete pCrsrStk;        //
@@ -2029,7 +2029,9 @@ void SwCrsrShell::Combine()
 
     SwShellCrsr * pTmp = 0;
     if( pCrsrStk->GetNext() != pCrsrStk )
-        pTmp = (SwShellCrsr*)*((SwCursor*)pCrsrStk->GetNext());
+    {
+        pTmp = dynamic_cast<SwShellCrsr*>(pCrsrStk->GetNext());
+    }
     delete pCrsrStk;
     pCrsrStk = pTmp;
     if( !pCurCrsr->IsInProtectTable( TRUE ) &&
@@ -2567,22 +2569,6 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
  * Alle Ansichten eines Dokumentes stehen im Ring der Shells.
  */
 
-SwOverlayType impGetOverlayType(OutputDevice* pOut)
-{
-    if(!pOut)
-    {
-        pOut = Application::GetDefaultDevice();
-    }
-
-    if(pOut->GetSettings().GetStyleSettings().GetHighContrastMode()
-        || !pOut->supportsOperation( OutDevSupport_TransparentRect ))
-    {
-        return SW_OVERLAY_INVERT;
-    }
-
-    return SW_OVERLAY_TRANSPARENT;
-}
-
 SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     : ViewShell( rShell, pInitWin ),
     SwModify( 0 ), pCrsrStk( 0 ), pBlockCrsr( 0 ), pTblCrsr( 0 ),
@@ -2590,9 +2576,8 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     eMvState( MV_NONE ),
     // --> OD 2008-04-02 #refactorlists#
     sMarkedListId(),
-    nMarkedListLevel( 0 ),
+    nMarkedListLevel( 0 )
     // <--
-    maSwOverlayType(SW_OVERLAY_INVERT)
 {
     SET_CURR_SHELL( this );
     // Nur die Position vom aktuellen Cursor aus der Copy-Shell uebernehmen
@@ -2608,9 +2593,6 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
 //  UpdateCrsr( 0 );
     // OD 11.02.2003 #100556#
     mbMacroExecAllowed = rShell.IsMacroExecAllowed();
-
-    // #i88893# init cursor selection type
-    maSwOverlayType = impGetOverlayType(pInitWin);
 }
 
 
@@ -2626,9 +2608,8 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
     eMvState( MV_NONE ), // state for crsr-travelling - GetCrsrOfst
     // --> OD 2008-04-02 #refactorlists#
     sMarkedListId(),
-    nMarkedListLevel( 0 ),
+    nMarkedListLevel( 0 )
     // <--
-    maSwOverlayType(SW_OVERLAY_INVERT)
 {
     SET_CURR_SHELL( this );
     /*
@@ -2656,9 +2637,6 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
 //  UpdateCrsr( 0 );
     // OD 11.02.2003 #100556#
     mbMacroExecAllowed = true;
-
-    // #i88893# init cursor selection type
-    maSwOverlayType = impGetOverlayType(pInitWin);
 }
 
 
@@ -3040,16 +3018,6 @@ BOOL SwCrsrShell::HasReadonlySel() const
     }
     return bRet;
 }
-
-// SwCursor - Methode !!!!
-BOOL SwCursor::IsReadOnlyAvailable() const
-{
-    const SwShellCrsr* pShCrsr = *this;
-    const SwUnoCrsr* pUnoCrsr = *this;
-    return pShCrsr ? pShCrsr->GetShell()->IsReadOnlyAvailable() :
-        pUnoCrsr ? TRUE : FALSE;
-}
-
 
 BOOL SwCrsrShell::IsSelFullPara() const
 {

@@ -247,6 +247,9 @@ SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
     SwTxtNode* pTxtNd = pDoc->GetNodes().MakeTxtNode( rIdx, pColl );
 
+    // METADATA: register copy
+    pTxtNd->RegisterAsCopyOf(*pCpyTxtNd);
+
     // kopiere Attribute/Text
     if( !pCpyAttrNd->HasSwAttrSet() )
         // wurde ein AttrSet fuer die Numerierung angelegt, so loesche diesen!
@@ -670,7 +673,7 @@ void lcl_DeleteRedlines( const SwNodeRange& rRg, SwNodeRange& rCpyRg )
 
 // Kopieren eines Bereiches im oder in ein anderes Dokument !
 
-bool SwDoc::Copy( SwPaM& rPam, SwPosition& rPos ) const
+bool SwDoc::Copy( SwPaM& rPam, SwPosition& rPos, bool bCopyAll ) const
 {
     const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
 
@@ -709,13 +712,13 @@ bool SwDoc::Copy( SwPaM& rPam, SwPosition& rPos ) const
     BOOL bRet = FALSE;
 
     if( pDoc != this )
-        bRet = _Copy( rPam, rPos, TRUE, pRedlineRange );    // nur normales Kopieren
+        bRet = _Copy( rPam, rPos, TRUE, bCopyAll, pRedlineRange );    // nur normales Kopieren
     // Copy in sich selbst (ueber mehrere Nodes wird hier gesondert
     // behandelt; in einem TextNode wird normal behandelt)
     else if( ! ( *pStt <= rPos && rPos < *pEnd &&
             ( pStt->nNode != pEnd->nNode ||
               !pStt->nNode.GetNode().IsTxtNode() )) )
-        bRet = _Copy( rPam, rPos, TRUE, pRedlineRange );    // nur normales Kopieren
+        bRet = _Copy( rPam, rPos, TRUE, bCopyAll, pRedlineRange );  // nur normales Kopieren
 
     else
     {
@@ -739,7 +742,7 @@ bool SwDoc::Copy( SwPaM& rPam, SwPosition& rPos ) const
         SwStartNode* pSttNd = pDoc->GetNodes().MakeEmptySection(
                                 SwNodeIndex( GetNodes().GetEndOfAutotext() ));
         aPam.GetPoint()->nNode = *pSttNd->EndOfSectionNode();
-        pDoc->_Copy( rPam, *aPam.GetPoint(), FALSE );       // kopieren ohne Frames
+        pDoc->_Copy( rPam, *aPam.GetPoint(), FALSE, bCopyAll, 0 );      // kopieren ohne Frames
 
         aPam.GetPoint()->nNode = pDoc->GetNodes().GetEndOfAutotext();
         aPam.SetMark();
@@ -814,7 +817,7 @@ BOOL lcl_MarksWholeNode(const SwPaM & rPam)
 }
 
 BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
-                    BOOL bMakeNewFrms, SwPaM* pCpyRange ) const
+                    BOOL bMakeNewFrms, bool bCopyAll, SwPaM* pCpyRange ) const
 {
     SwDoc* pDoc = rPos.nNode.GetNode().GetDoc();
     bool bColumnSel = pDoc->IsClipBoard() && pDoc->IsColumnSelection();
@@ -1098,7 +1101,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
             }
         }
 
-        if( aRg.aStart != aRg.aEnd )
+        if( bCopyAll || aRg.aStart != aRg.aEnd )
         {
             SfxItemSet aBrkSet( pDoc->GetAttrPool(), aBreakSetRange );
             if( pSttNd && bCopyCollFmt && pDestNd->HasSwAttrSet() )
@@ -1113,13 +1116,13 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
             if( aInsPos == pEnd->nNode )
             {
                 SwNodeIndex aSaveIdx( aInsPos, -1 );
-                CopyWithFlyInFly( aRg, aInsPos, bMakeNewFrms, FALSE );
+                CopyWithFlyInFly( aRg, 0,aInsPos, bMakeNewFrms, FALSE );
                 aSaveIdx++;
                 pEnd->nNode = aSaveIdx;
                 pEnd->nContent.Assign( aSaveIdx.GetNode().GetTxtNode(), 0 );
             }
             else
-                CopyWithFlyInFly( aRg, aInsPos, bMakeNewFrms, FALSE );
+                CopyWithFlyInFly( aRg, pEnd->nContent.GetIndex(), aInsPos, bMakeNewFrms, FALSE );
 
             bCopyBookmarks = FALSE;
 
@@ -1178,7 +1181,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
 
 //  ----- Copy-Methode vom SwDoc - "kopiere Fly's in Fly's" ------
 
-void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg,
+void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndContentIndex,
                             const SwNodeIndex& rInsPos, BOOL bMakeNewFrms,
                             BOOL bDelRedlines, BOOL bCopyFlyAtFly ) const
 {
@@ -1217,7 +1220,7 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg,
     // Undo abschalten
     BOOL bUndo = pDest->DoesUndo();
     pDest->DoUndo( FALSE );
-    _CopyFlyInFly( rRg, aSavePos, bCopyFlyAtFly );
+    _CopyFlyInFly( rRg, nEndContentIndex, aSavePos, bCopyFlyAtFly );
     pDest->DoUndo( bUndo );
 
     SwNodeRange aCpyRange( aSavePos, rInsPos );
@@ -1253,7 +1256,7 @@ void lcl_ChainFmts( SwFlyFrmFmt *pSrc, SwFlyFrmFmt *pDest )
     }
 }
 
-void SwDoc::_CopyFlyInFly( const SwNodeRange& rRg, const SwNodeIndex& rSttIdx,
+void SwDoc::_CopyFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndContentIndex, const SwNodeIndex& rSttIdx,
                             BOOL bCopyFlyAtFly ) const
 {
     // Bug 22727: suche erst mal alle Flys zusammen, sortiere sie entsprechend
@@ -1270,7 +1273,8 @@ void SwDoc::_CopyFlyInFly( const SwNodeRange& rRg, const SwNodeIndex& rSttIdx,
         const SwFrmFmt* pFmt = (*GetSpzFrmFmts())[n];
         const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
         const SwPosition* pAPos;
-        if ( ( pAnchor->GetAnchorId() == FLY_AT_CNTNT ||
+        bool bAtCntnt = pAnchor->GetAnchorId() == FLY_AT_CNTNT;
+        if ( ( bAtCntnt ||
                pAnchor->GetAnchorId() == FLY_AT_FLY ||
                pAnchor->GetAnchorId() == FLY_AUTO_CNTNT ) &&
              0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
@@ -1279,9 +1283,53 @@ void SwDoc::_CopyFlyInFly( const SwNodeRange& rRg, const SwNodeIndex& rSttIdx,
                     : ( IsRedlineMove()
                             ? rRg.aStart < pAPos->nNode
                             : rRg.aStart <= pAPos->nNode )) &&
-             pAPos->nNode < rRg.aEnd )
+             pAPos->nNode <= rRg.aEnd )
         {
-            aArr.Insert( _ZSortFly( pFmt, pAnchor, nArrLen + aArr.Count() ));
+            //frames at the last source node are not always copied:
+            //- if the node is empty and is the last node of the document or a table cell
+            //  or a text frame then tey have to be copied
+            //- if the content index in this node is > 0 then paragph and frame bound objects are copied
+            //- to-character bound objects are copied if their index is <= nEndContentIndex
+            bool bAdd = false;
+            if( pAPos->nNode < rRg.aEnd )
+                bAdd = true;
+            if( !bAdd )
+            {
+                bool bEmptyNode = false;
+                bool bLastNode = false;
+                // is the node empty?
+                const SwNodes& rNodes = pAPos->nNode.GetNodes();
+                SwTxtNode* pTxtNode;
+                if( 0 != ( pTxtNode = pAPos->nNode.GetNode().GetTxtNode() ))
+                {
+                    bEmptyNode = !pTxtNode->GetTxt().Len();
+                    if( bEmptyNode )
+                    {
+                        //last node information is only necessary to know for the last TextNode
+                        SwNodeIndex aTmp( pAPos->nNode );
+                        ++aTmp;//goto next node
+                        while( rNodes[aTmp ]->IsEndNode() )
+                        {
+                            if( aTmp == rNodes.GetEndOfContent().GetIndex() )
+                            {
+                                bLastNode = true;
+                                break;
+                            }
+                            ++aTmp;
+                        }
+                    }
+                }
+                bAdd = bLastNode && bEmptyNode;
+                if( !bAdd )
+                {
+                    if( bAtCntnt )
+                        bAdd = nEndContentIndex > 0;
+                    else
+                        bAdd = pAPos->nContent <= nEndContentIndex;
+                }
+            }
+            if( bAdd )
+                aArr.Insert( _ZSortFly( pFmt, pAnchor, nArrLen + aArr.Count() ));
         }
     }
 

@@ -2880,6 +2880,80 @@ sal_Bool SwFlyFrmFmt::GetInfo( SfxPoolItem& rInfo ) const
     return sal_True;
 }
 
+// --> OD 2009-07-14 #i73249#
+void SwFlyFrmFmt::SetObjTitle( const String& rTitle, bool bBroadcast )
+{
+    SdrObject* pMasterObject = FindSdrObject();
+    ASSERT( pMasterObject,
+            "<SwNoTxtNode::SetObjTitle(..)> - missing <SdrObject> instance" );
+    if ( !pMasterObject )
+    {
+        return;
+    }
+
+    if( bBroadcast )
+    {
+        SwStringMsgPoolItem aOld( RES_TITLE_CHANGED, pMasterObject->GetTitle() );
+        SwStringMsgPoolItem aNew( RES_TITLE_CHANGED, rTitle );
+        pMasterObject->SetTitle( rTitle );
+        Modify( &aOld, &aNew );
+    }
+    else
+    {
+        pMasterObject->SetTitle( rTitle );
+    }
+}
+
+const String SwFlyFrmFmt::GetObjTitle() const
+{
+    const SdrObject* pMasterObject = FindSdrObject();
+    ASSERT( pMasterObject,
+            "<SwFlyFrmFmt::GetObjTitle(..)> - missing <SdrObject> instance" );
+    if ( !pMasterObject )
+    {
+        return aEmptyStr;
+    }
+
+    return pMasterObject->GetTitle();
+}
+
+void SwFlyFrmFmt::SetObjDescription( const String& rDescription, bool bBroadcast )
+{
+    SdrObject* pMasterObject = FindSdrObject();
+    ASSERT( pMasterObject,
+            "<SwFlyFrmFmt::SetDescription(..)> - missing <SdrObject> instance" );
+    if ( !pMasterObject )
+    {
+        return;
+    }
+
+    if( bBroadcast )
+    {
+        SwStringMsgPoolItem aOld( RES_DESCRIPTION_CHANGED, pMasterObject->GetDescription() );
+        SwStringMsgPoolItem aNew( RES_DESCRIPTION_CHANGED, rDescription );
+        pMasterObject->SetDescription( rDescription );
+        Modify( &aOld, &aNew );
+    }
+    else
+    {
+        pMasterObject->SetDescription( rDescription );
+    }
+}
+
+const String SwFlyFrmFmt::GetObjDescription() const
+{
+    const SdrObject* pMasterObject = FindSdrObject();
+    ASSERT( pMasterObject,
+            "<SwNoTxtNode::GetDescription(..)> - missing <SdrObject> instance" );
+    if ( !pMasterObject )
+    {
+        return aEmptyStr;
+    }
+
+    return pMasterObject->GetDescription();
+}
+// <--
+
 /** SwFlyFrmFmt::IsBackgroundTransparent - for #99657#
 
     OD 22.08.2002 - overloading virtual method and its default implementation,

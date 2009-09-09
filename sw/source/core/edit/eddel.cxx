@@ -42,12 +42,8 @@
 #include <IMark.hxx>
 #include <docary.hxx>
 #include <SwRewriter.hxx>
-#ifndef _UNOBJ_HXX
 #include <undobj.hxx>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 
 #include <comcore.hrc>
 #include <list>
@@ -253,10 +249,10 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
             bFirstMove = FALSE;
         }
 
-        if( !GetDoc()->Copy( *PCURCRSR, *pPos ))
+        if( !GetDoc()->Copy( *PCURCRSR, *pPos, false ))
             continue;
 
-        SwPaM aInsertPaM(*pPos, aSttNdIdx);
+        SwPaM aInsertPaM(*pPos, SwPosition(aSttNdIdx));
         pDestShell->GetDoc()->MakeUniqueNumRules(aInsertPaM);
 
         bRet = TRUE;
@@ -321,24 +317,6 @@ BOOL SwEditShell::Replace( const String& rNewStr, BOOL bRegExpRplc )
         GetDoc()->StartUndo(UNDO_EMPTY, NULL);
 
         FOREACHPAM_START(this)
-
-//JP 02.12.97: muss das noch sein??
-            // sollten mehrere Node selektiert sein, dann loesche diese
-            // erst, fuege ein Zeichen ein und ersetze dann dieses
-            if( PCURCRSR->GetPoint()->nNode != PCURCRSR->GetMark()->nNode )
-            {
-                BOOL bForward = PCURCRSR->GetPoint()->nNode.GetIndex() >
-                                PCURCRSR->GetMark()->nNode.GetIndex();
-                DeleteSel( *PCURCRSR );
-                pDoc->Insert( *PCURCRSR, ' ' );
-                PCURCRSR->SetMark();
-                if( bForward )
-                    PCURCRSR->GetMark()->nContent--;
-                else
-                    PCURCRSR->GetPoint()->nContent--;
-            }
-//JP 02.12.97: muss das noch sein??
-
             if( PCURCRSR->HasMark() && *PCURCRSR->GetMark() != *PCURCRSR->GetPoint() )
             {
                 bRet = GetDoc()->Replace( *PCURCRSR, rNewStr, bRegExpRplc ) || bRet;

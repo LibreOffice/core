@@ -1710,11 +1710,13 @@ BOOL SwDoc::ConvertFieldsToText()
                         sText.Erase();
 
                     //now remove the field and insert the string
-                    SwPaM aPam(*pTxtFld->GetpTxtNode(), *pTxtFld->GetStart());
-                    aPam.SetMark();
-                    aPam.Move();
-                    DeleteAndJoin(aPam);
-                    Insert( aPam, sText, true );
+                    SwPaM aPam1(*pTxtFld->GetpTxtNode(), *pTxtFld->GetStart());
+                    aPam1.Move();
+                    Insert( aPam1, sText, true );//insert first to keep the field's attributes
+                    SwPaM aPam2(*pTxtFld->GetpTxtNode(), *pTxtFld->GetStart());
+                    aPam2.SetMark();
+                    aPam2.Move();
+                    DeleteAndJoin(aPam2);//remove the field
                 }
             }
             ++aBegin;

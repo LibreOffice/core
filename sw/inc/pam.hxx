@@ -60,13 +60,10 @@ struct SW_DLLPUBLIC SwPosition
     SwNodeIndex nNode;
     SwIndex nContent;
 
-    SwPosition( const SwNode& rNode );
-    SwPosition( const SwNodeIndex &rNode );
     SwPosition( const SwNodeIndex &rNode, const SwIndex &rCntnt );
-    /* @@@MAINTAINABILITY-HORROR@@@
-       SwPosition desperately needs a constructor
-       SwPosition( const SwNode& rNode, xub_StrLen nOffset );
-    */
+    explicit SwPosition( const SwNodeIndex &rNode );
+    explicit SwPosition( const SwNode& rNode );
+    explicit SwPosition( SwCntntNode& rNode, const xub_StrLen nOffset = 0 );
 
     SwPosition( const SwPosition & );
     SwPosition &operator=(const SwPosition &);
@@ -128,11 +125,11 @@ void _InitPam();
 
 class SW_DLLPUBLIC SwPaM : public Ring
 {
-    SwPosition aBound1;
-    SwPosition aBound2;
-    SwPosition *pPoint;
-    SwPosition *pMark;
-    BOOL bIsInFrontOfLabel;
+    SwPosition   m_Bound1;
+    SwPosition   m_Bound2;
+    SwPosition * m_pPoint; // points at either m_Bound1 or m_Bound2
+    SwPosition * m_pMark;  // points at either m_Bound1 or m_Bound2
+    bool m_bIsInFrontOfLabel;
 
     SwPaM* MakeRegion( SwMoveFn fnMove, const SwPaM * pOrigRg = 0 );
 
@@ -180,54 +177,66 @@ public:
                     SwMoveFn fnMove, BOOL bSrchForward, BOOL bRegSearch, BOOL bChkEmptyPara, BOOL bChkParaEnd,
                     xub_StrLen &nStart, xub_StrLen &nEnde,xub_StrLen nTxtLen,SwNode* pNode, SwPaM* pPam);
 
-    inline BOOL IsInFrontOfLabel() const { return bIsInFrontOfLabel; }
-    inline void _SetInFrontOfLabel( BOOL bNew ) { bIsInFrontOfLabel = bNew; }
+    inline bool IsInFrontOfLabel() const        { return m_bIsInFrontOfLabel; }
+    inline void _SetInFrontOfLabel( bool bNew ) { m_bIsInFrontOfLabel = bNew; }
 
     virtual void SetMark();
-    void DeleteMark() { pMark = pPoint; }
+
+    void DeleteMark()
+    {
+        if (m_pMark != m_pPoint)
+        {
+            // clear the mark position; this helps if mark's SwIndex is
+            // registered at some node, and that node is then deleted
+            *m_pMark = SwPosition( SwNodeIndex( GetNode()->GetNodes() ) );
+            m_pMark = m_pPoint;
+        }
+    }
+
 #ifndef DBG_UTIL
     void Exchange()
     {
-        if(pPoint != pMark)
+        if (m_pPoint != m_pMark)
         {
-            SwPosition *pTmp = pPoint;
-            pPoint = pMark;
-            pMark = pTmp;
+            SwPosition *pTmp = m_pPoint;
+            m_pPoint = m_pMark;
+            m_pMark = pTmp;
         }
     }
 #else
     void Exchange();
 #endif
-    /*
-     * Undocumented Feature: Liefert zurueck, ob das Pam ueber
-     * eine Selektion verfuegt oder nicht. Definition einer
-     * Selektion: Point und Mark zeigen auf unterschiedliche
-     * Puffer.
-     */
-    BOOL HasMark() const { return pPoint == pMark? FALSE : TRUE; }
 
-    const SwPosition *GetPoint() const { return pPoint; }
-          SwPosition *GetPoint()       { return pPoint; }
-    const SwPosition *GetMark()  const { return pMark; }
-          SwPosition *GetMark()        { return pMark; }
+    /** A PaM marks a selection if Point and Mark are distinct positions.
+        @return     true iff the PaM spans a selection
+     */
+    bool HasMark() const { return m_pPoint == m_pMark ? false : true; }
+
+    const SwPosition *GetPoint() const { return m_pPoint; }
+          SwPosition *GetPoint()       { return m_pPoint; }
+    const SwPosition *GetMark()  const { return m_pMark; }
+          SwPosition *GetMark()        { return m_pMark; }
 
     const SwPosition *Start() const
-                    { return (*pPoint) <= (*pMark)? pPoint: pMark; }
+                { return (*m_pPoint) <= (*m_pMark) ? m_pPoint : m_pMark; }
           SwPosition *Start()
-                    { return (*pPoint) <= (*pMark)? pPoint: pMark; }
-    const SwPosition *End()   const
-                    { return (*pPoint) > (*pMark)? pPoint: pMark; }
-          SwPosition *End()
-                    { return (*pPoint) > (*pMark)? pPoint: pMark; }
+                { return (*m_pPoint) <= (*m_pMark) ? m_pPoint : m_pMark; }
 
-    // erfrage vom SwPaM den aktuellen Node/ContentNode am SPoint / Mark
-    SwNode* GetNode( BOOL bPoint = TRUE ) const
+    const SwPosition *End()   const
+                { return (*m_pPoint) >  (*m_pMark) ? m_pPoint : m_pMark; }
+          SwPosition *End()
+                { return (*m_pPoint) >  (*m_pMark) ? m_pPoint : m_pMark; }
+
+    /// @return current Node at Point/Mark
+    SwNode    * GetNode      ( bool bPoint = true ) const
     {
-        return &( bPoint ? pPoint->nNode : pMark->nNode ).GetNode();
+        return &( bPoint ? m_pPoint->nNode : m_pMark->nNode ).GetNode();
     }
-    SwCntntNode* GetCntntNode( BOOL bPoint = TRUE ) const
+
+    /// @return current ContentNode at Point/Mark
+    SwCntntNode* GetCntntNode( bool bPoint = true ) const
     {
-        return ( bPoint ? pPoint->nNode : pMark->nNode ).GetNode().GetCntntNode();
+        return GetNode(bPoint)->GetCntntNode();
     }
 
     /**
@@ -238,12 +247,13 @@ public:
     */
     SwPaM & Normalize(BOOL bPointFirst = TRUE);
 
-    // erfrage vom SwPaM das Dokument, in dem er angemeldet ist
-    SwDoc* GetDoc() const { return pPoint->nNode.GetNode().GetDoc(); }
-    SwPosition& GetBound( BOOL bOne = TRUE )
-    {   return bOne ? aBound1 : aBound2; }
-    const SwPosition& GetBound( BOOL bOne = TRUE ) const
-    {   return bOne ? aBound1 : aBound2; }
+    /// @return the document (SwDoc) at which the PaM is registered
+    SwDoc* GetDoc() const   { return m_pPoint->nNode.GetNode().GetDoc(); }
+
+          SwPosition& GetBound( bool bOne = true )
+                            { return bOne ? m_Bound1 : m_Bound2; }
+    const SwPosition& GetBound( bool bOne = true ) const
+                            { return bOne ? m_Bound1 : m_Bound2; }
 
     // erfrage die Seitennummer auf der der Cursor steht
     USHORT GetPageNum( BOOL bAtPoint = TRUE, const Point* pLayPos = 0 );

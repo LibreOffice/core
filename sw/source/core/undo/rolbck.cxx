@@ -72,41 +72,46 @@
 #include <svx/brkitem.hxx>
 #include <bookmrk.hxx>
 
-SV_IMPL_PTRARR( SwpHstry, SwHstryHintPtr)
+SV_IMPL_PTRARR( SwpHstry, SwHistoryHintPtr)
 
-String SwHstryHint::GetDescription() const
+String SwHistoryHint::GetDescription() const
 {
     return String();
 }
 
 
-SwSetFmtHint::SwSetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNd )
-    :  SwHstryHint( HSTRY_SETFMTHNT ),
-       pAttr( pFmtHt->Clone() ),
-       nNode( nNd )
+SwHistorySetFmt::SwHistorySetFmt( const SfxPoolItem* pFmtHt, ULONG nNd )
+    :  SwHistoryHint( HSTRY_SETFMTHNT )
+    ,  m_pAttr( pFmtHt->Clone() )
+    ,  m_nNodeIndex( nNd )
 {
-    switch( pAttr->Which() )
+    switch ( m_pAttr->Which() )
     {
-    case RES_PAGEDESC:
-        ((SwFmtPageDesc*)pAttr)->ChgDefinedIn( 0 );
-        break;
-    case RES_PARATR_DROP:
-        ((SwFmtDrop*)pAttr)->ChgDefinedIn( 0 );
-        break;
-    case RES_BOXATR_FORMULA:
+        case RES_PAGEDESC:
+            static_cast<SwFmtPageDesc&>(*m_pAttr).ChgDefinedIn( 0 );
+            break;
+        case RES_PARATR_DROP:
+            static_cast<SwFmtDrop&>(*m_pAttr).ChgDefinedIn( 0 );
+            break;
+        case RES_BOXATR_FORMULA:
         {
             //JP 30.07.98: Bug 54295 - Formeln immer im Klartext speichern
-            SwTblBoxFormula& rNew = *(SwTblBoxFormula*)pAttr;
-            if( rNew.IsIntrnlName() )
+            SwTblBoxFormula& rNew = static_cast<SwTblBoxFormula&>(*m_pAttr);
+            if ( rNew.IsIntrnlName() )
             {
-                const SwTblBoxFormula& rOld = *(SwTblBoxFormula*)pFmtHt;
+                const SwTblBoxFormula& rOld =
+                    *static_cast<const SwTblBoxFormula*>(pFmtHt);
                 const SwNode* pNd = rOld.GetNodeOfFormula();
-                if( pNd && 0 != (pNd = pNd->FindTableNode() ))
+                if ( pNd )
                 {
-                    SwTableFmlUpdate aMsgHnt( &((SwTableNode*)pNd)->GetTable() );
-                    aMsgHnt.eFlags = TBL_BOXNAME;
-                    rNew.ChgDefinedIn( rOld.GetDefinedIn() );
-                    rNew.ChangeState( &aMsgHnt );
+                    const SwTableNode* pTableNode = pNd->FindTableNode();
+                    if (pTableNode)
+                    {
+                        SwTableFmlUpdate aMsgHnt( &pTableNode->GetTable() );
+                        aMsgHnt.eFlags = TBL_BOXNAME;
+                        rNew.ChgDefinedIn( rOld.GetDefinedIn() );
+                        rNew.ChangeState( &aMsgHnt );
+                    }
                 }
             }
             rNew.ChgDefinedIn( 0 );
@@ -115,15 +120,15 @@ SwSetFmtHint::SwSetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNd )
     }
 }
 
-String SwSetFmtHint::GetDescription() const
+String SwHistorySetFmt::GetDescription() const
 {
     String aResult ;
 
-    USHORT nWhich = pAttr->Which();
+    USHORT nWhich = m_pAttr->Which();
     switch (nWhich)
     {
     case RES_BREAK:
-        switch (((SvxFmtBreakItem *) pAttr)->GetBreak())
+        switch ((static_cast<SvxFmtBreakItem &>(*m_pAttr)).GetBreak())
         {
         case SVX_BREAK_PAGE_BEFORE:
         case SVX_BREAK_PAGE_AFTER:
@@ -148,58 +153,73 @@ String SwSetFmtHint::GetDescription() const
     return aResult;
 }
 
-void SwSetFmtHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
+void SwHistorySetFmt::SetInDoc( SwDoc* pDoc, bool bTmpSet )
 {
-    SwNode * pNode = pDoc->GetNodes()[ nNode ];
-    if( pNode->IsCntntNode() )
+    SwNode * pNode = pDoc->GetNodes()[ m_nNodeIndex ];
+    if ( pNode->IsCntntNode() )
     {
-        ((SwCntntNode*)pNode)->SetAttr( *pAttr );
+        static_cast<SwCntntNode*>(pNode)->SetAttr( *m_pAttr );
     }
-    else if( pNode->IsTableNode() )
-        ((SwTableNode*)pNode)->GetTable().GetFrmFmt()->SetFmtAttr( *pAttr );
-    else if( pNode->IsStartNode() &&
-            SwTableBoxStartNode == ((SwStartNode*)pNode)->GetStartNodeType() )
+    else if ( pNode->IsTableNode() )
+    {
+        static_cast<SwTableNode*>(pNode)->GetTable().GetFrmFmt()->SetFmtAttr(
+                *m_pAttr );
+    }
+    else if ( pNode->IsStartNode() && (SwTableBoxStartNode ==
+                static_cast<SwStartNode*>(pNode)->GetStartNodeType()) )
     {
         SwTableNode* pTNd = pNode->FindTableNode();
-        SwTableBox* pBox;
-        if( pTNd && 0 != ( pBox = pTNd->GetTable().GetTblBox( nNode )))
-            pBox->ClaimFrmFmt()->SetFmtAttr( *pAttr );
+        if ( pTNd )
+        {
+            SwTableBox* pBox = pTNd->GetTable().GetTblBox( m_nNodeIndex );
+            if (pBox)
+            {
+                pBox->ClaimFrmFmt()->SetFmtAttr( *m_pAttr );
+            }
+        }
     }
 
-    if( !bTmpSet )
-        DELETEZ( pAttr );
+    if ( !bTmpSet )
+    {
+        m_pAttr.reset();
+    }
 }
 
-SwSetFmtHint::~SwSetFmtHint()
+SwHistorySetFmt::~SwHistorySetFmt()
 {
-    delete pAttr;
 }
 
 
 // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
-SwResetFmtHint::SwResetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNodeIdx )
+SwHistoryResetFmt::SwHistoryResetFmt(const SfxPoolItem* pFmtHt, ULONG nNodeIdx)
 // <--
-    : SwHstryHint( HSTRY_RESETFMTHNT ),
-      nNode( nNodeIdx ),
-      nWhich( pFmtHt->Which() )
+    : SwHistoryHint( HSTRY_RESETFMTHNT )
+    , m_nNodeIndex( nNodeIdx )
+    , m_nWhich( pFmtHt->Which() )
 {
 }
 
 
-void SwResetFmtHint::SetInDoc( SwDoc* pDoc, BOOL )
+void SwHistoryResetFmt::SetInDoc( SwDoc* pDoc, bool )
 {
-    SwNode * pNode = pDoc->GetNodes()[ nNode ];
+    SwNode * pNode = pDoc->GetNodes()[ m_nNodeIndex ];
     if ( pNode->IsCntntNode() )
     {
-        ((SwCntntNode*)pNode)->ResetAttr( nWhich );
+        static_cast<SwCntntNode*>(pNode)->ResetAttr( m_nWhich );
     }
-    else if( pNode->IsTableNode() )
-        ((SwTableNode*)pNode)->GetTable().GetFrmFmt()->ResetFmtAttr( nWhich );
+    else if ( pNode->IsTableNode() )
+    {
+        static_cast<SwTableNode*>(pNode)->GetTable().GetFrmFmt()->
+            ResetFmtAttr( m_nWhich );
+    }
 }
 
 
-SwSetTxtHint::SwSetTxtHint( SwTxtAttr* pTxtHt, ULONG nNodePos )
-    : SwHstryHint( HSTRY_SETTXTHNT )
+SwHistorySetTxt::SwHistorySetTxt( SwTxtAttr* pTxtHt, ULONG nNodePos )
+    : SwHistoryHint( HSTRY_SETTXTHNT )
+    , m_nNodeIndex( nNodePos )
+    , m_nStart( *pTxtHt->GetStart() )
+    , m_nEnd( *pTxtHt->GetAnyEnd() )
 {
     // !! Achtung: folgende Attribute erzeugen keine FormatAttribute:
     //  - NoLineBreak, NoHypen, Inserted, Deleted
@@ -208,354 +228,372 @@ SwSetTxtHint::SwSetTxtHint( SwTxtAttr* pTxtHt, ULONG nNodePos )
     // ein bisschen kompliziert, aber ist Ok so: erst vom default
     // eine Kopie und dann die Werte aus dem Text Attribut zuweisen
     USHORT nWhich = pTxtHt->Which();
-    if( RES_TXTATR_CHARFMT == nWhich )
-        pAttr = new SwFmtCharFmt( pTxtHt->GetCharFmt().GetCharFmt() );
+    if ( RES_TXTATR_CHARFMT == nWhich )
+    {
+        m_pAttr.reset( new SwFmtCharFmt( pTxtHt->GetCharFmt().GetCharFmt() ) );
+    }
     else
-        pAttr = pTxtHt->GetAttr().Clone();
-    nNode = nNodePos;
-    nStart = *pTxtHt->GetStart();
-    nEnd = *pTxtHt->GetAnyEnd();
+    {
+        m_pAttr.reset( pTxtHt->GetAttr().Clone() );
+    }
 }
 
 
-SwSetTxtHint::~SwSetTxtHint()
+SwHistorySetTxt::~SwHistorySetTxt()
 {
-    delete pAttr;
 }
 
 
-void SwSetTxtHint::SetInDoc( SwDoc* pDoc, BOOL )
+void SwHistorySetTxt::SetInDoc( SwDoc* pDoc, bool )
 {
-    if( !pAttr )
+    if ( !m_pAttr.get() )
         return;
 
-    if( RES_TXTATR_CHARFMT == pAttr->Which() )
+    if ( RES_TXTATR_CHARFMT == m_pAttr->Which() )
     {
-        // befrage das Doc, ob das CharFmt noch vorhanden ist !
-        if( USHRT_MAX == pDoc->GetCharFmts()->GetPos(
-                            ((SwFmtCharFmt*)pAttr)->GetCharFmt() ) )
-            return;     // nicht setzen, Format nicht vorhanden
+        // ask the Doc if the CharFmt still exists
+        if ( USHRT_MAX == pDoc->GetCharFmts()->GetPos(
+                        (static_cast<SwFmtCharFmt&>(*m_pAttr)).GetCharFmt() ) )
+            return; // do not set, format does not exist
     }
 
-    SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
-    ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
+    SwTxtNode * pTxtNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTxtNode();
+    ASSERT( pTxtNd, "SwHistorySetTxt::SetInDoc: not a TextNode" );
 
-    if( pTxtNd )
-        pTxtNd->InsertItem( *pAttr, nStart, nEnd,
-                        nsSetAttrMode::SETATTR_NOTXTATRCHR | nsSetAttrMode::SETATTR_NOHINTADJUST );
-}
-
-
-SwSetTxtFldHint::SwSetTxtFldHint( SwTxtFld* pTxtFld, ULONG nNodePos )
-    : SwHstryHint( HSTRY_SETTXTFLDHNT ), pFldType( 0 )
-{
-    pFld = new SwFmtFld( *pTxtFld->GetFld().GetFld() );
-
-    // nur kopieren wenn kein Sys-FieldType
-    SwDoc* pDoc = (SwDoc*)pTxtFld->GetTxtNode().GetDoc();
-
-    nFldWhich = pFld->GetFld()->GetTyp()->Which();
-    if( nFldWhich == RES_DBFLD ||
-        nFldWhich == RES_USERFLD ||
-        nFldWhich == RES_SETEXPFLD ||
-        nFldWhich == RES_DDEFLD ||
-        !pDoc->GetSysFldType( nFldWhich ))
+    if ( pTxtNd )
     {
-        pFldType = pFld->GetFld()->GetTyp()->Copy();
-        pFld->GetFld()->ChgTyp( pFldType );     // Fieldtype umsetzen
+        pTxtNd->InsertItem( *m_pAttr, m_nStart, m_nEnd,
+                        nsSetAttrMode::SETATTR_NOTXTATRCHR |
+                        nsSetAttrMode::SETATTR_NOHINTADJUST );
     }
-    nNode = nNodePos;
-    nPos = *pTxtFld->GetStart();
-}
-
-String SwSetTxtFldHint::GetDescription() const
-{
-    return pFld->GetFld()->GetDescription();;
-}
-
-SwSetTxtFldHint::~SwSetTxtFldHint()
-{
-    delete pFld;
-    delete pFldType;
 }
 
 
-void SwSetTxtFldHint::SetInDoc( SwDoc* pDoc, BOOL )
+SwHistorySetTxtFld::SwHistorySetTxtFld( SwTxtFld* pTxtFld, ULONG nNodePos )
+    : SwHistoryHint( HSTRY_SETTXTFLDHNT )
+    , m_pFldType( 0 )
+    , m_pFld( new SwFmtFld( *pTxtFld->GetFld().GetFld() ) )
 {
-    if( !pFld )
-        return;
+    // only copy if not Sys-FieldType
+    SwDoc* pDoc = pTxtFld->GetTxtNode().GetDoc();
 
-    SwFieldType* pNewFldType = pFldType;
-    if( !pNewFldType )
-        pNewFldType = pDoc->GetSysFldType( nFldWhich );
-    else
-        // den Type am Dokuement anmelden
-        pNewFldType = pDoc->InsertFldType( *pFldType );
-
-    pFld->GetFld()->ChgTyp( pNewFldType );      // Fieldtype umsetzen
-
-    SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
-    ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
-
-    if( pTxtNd )
-        pTxtNd->InsertItem( *pFld, nPos, nPos, nsSetAttrMode::SETATTR_NOTXTATRCHR );
-}
-
-
-
-SwSetRefMarkHint::SwSetRefMarkHint( SwTxtRefMark* pTxtHt, ULONG nNodePos )
-    : SwHstryHint( HSTRY_SETREFMARKHNT )
-{
-    aRefName = pTxtHt->GetRefMark().GetRefName();
-    nNode = nNodePos;
-    nStart = *pTxtHt->GetStart();
-    nEnd = *pTxtHt->GetAnyEnd();
-}
-
-
-void SwSetRefMarkHint::SetInDoc( SwDoc* pDoc, BOOL )
-{
-    SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
-    ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
-    if( !pTxtNd )
-        return;
-
-    SwFmtRefMark aRefMark( aRefName );
-
-    // existiert hier schon eine Referenz-Markierung ohne Ende, so
-    // darf es nicht eingefuegt werden !!
-    if( nStart != nEnd || !pTxtNd->GetTxtAttr( nStart, RES_TXTATR_REFMARK ) )
-        pTxtNd->InsertItem( aRefMark, nStart, nEnd, nsSetAttrMode::SETATTR_NOTXTATRCHR );
-}
-
-
-SwSetTOXMarkHint::SwSetTOXMarkHint( SwTxtTOXMark* pTxtHt, ULONG nNodePos )
-    : SwHstryHint( HSTRY_SETTOXMARKHNT ), aTOXMark( pTxtHt->GetTOXMark() )
-{
-    aTOXName = aTOXMark.GetTOXType()->GetTypeName();
-    eTOXTypes = aTOXMark.GetTOXType()->GetType();
-    ((SwModify*)aTOXMark.GetRegisteredIn())->Remove( &aTOXMark );
-
-    nNode = nNodePos;
-    nStart = *pTxtHt->GetStart();
-    nEnd = *pTxtHt->GetAnyEnd();
-}
-
-
-void SwSetTOXMarkHint::SetInDoc( SwDoc* pDoc, BOOL )
-{
-    SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
-    ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
-    if( !pTxtNd )
-        return;
-
-    // suche den entsprechenden Verzeichnistyp
-    USHORT nCnt = pDoc->GetTOXTypeCount( eTOXTypes );
-    const SwTOXType* pToxType = 0;
-    for( USHORT n = 0; n < nCnt; ++n )
+    m_nFldWhich = m_pFld->GetFld()->GetTyp()->Which();
+    if (m_nFldWhich == RES_DBFLD ||
+        m_nFldWhich == RES_USERFLD ||
+        m_nFldWhich == RES_SETEXPFLD ||
+        m_nFldWhich == RES_DDEFLD ||
+        !pDoc->GetSysFldType( m_nFldWhich ))
     {
-        pToxType = pDoc->GetTOXType( eTOXTypes, n );
-        if( pToxType->GetTypeName() == aTOXName )
+        m_pFldType.reset( m_pFld->GetFld()->GetTyp()->Copy() );
+        m_pFld->GetFld()->ChgTyp( m_pFldType.get() ); // change field type
+    }
+    m_nNodeIndex = nNodePos;
+    m_nPos = *pTxtFld->GetStart();
+}
+
+String SwHistorySetTxtFld::GetDescription() const
+{
+    return m_pFld->GetFld()->GetDescription();;
+}
+
+SwHistorySetTxtFld::~SwHistorySetTxtFld()
+{
+}
+
+
+void SwHistorySetTxtFld::SetInDoc( SwDoc* pDoc, bool )
+{
+    if ( !m_pFld.get() )
+        return;
+
+    SwFieldType* pNewFldType = m_pFldType.get();
+    if ( !pNewFldType )
+    {
+        pNewFldType = pDoc->GetSysFldType( m_nFldWhich );
+    }
+    else
+    {
+        // register type with the document
+        pNewFldType = pDoc->InsertFldType( *m_pFldType );
+    }
+
+    m_pFld->GetFld()->ChgTyp( pNewFldType ); // change field type
+
+    SwTxtNode * pTxtNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTxtNode();
+    ASSERT( pTxtNd, "SwHistorySetTxtFld: no TextNode" );
+
+    if ( pTxtNd )
+    {
+        pTxtNd->InsertItem( *m_pFld, m_nPos, m_nPos,
+                    nsSetAttrMode::SETATTR_NOTXTATRCHR );
+    }
+}
+
+
+
+SwHistorySetRefMark::SwHistorySetRefMark( SwTxtRefMark* pTxtHt, ULONG nNodePos )
+    : SwHistoryHint( HSTRY_SETREFMARKHNT )
+    , m_RefName( pTxtHt->GetRefMark().GetRefName() )
+    , m_nNodeIndex( nNodePos )
+    , m_nStart( *pTxtHt->GetStart() )
+    , m_nEnd( *pTxtHt->GetAnyEnd() )
+{
+}
+
+
+void SwHistorySetRefMark::SetInDoc( SwDoc* pDoc, bool )
+{
+    SwTxtNode * pTxtNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTxtNode();
+    ASSERT( pTxtNd, "SwHistorySetRefMark: no TextNode" );
+    if ( !pTxtNd )
+        return;
+
+    SwFmtRefMark aRefMark( m_RefName );
+
+    // if a reference mark without an end already exists here: must not insert!
+    if ( m_nStart != m_nEnd ||
+         !pTxtNd->GetTxtAttr( m_nStart, RES_TXTATR_REFMARK ) )
+    {
+        pTxtNd->InsertItem( aRefMark, m_nStart, m_nEnd,
+                            nsSetAttrMode::SETATTR_NOTXTATRCHR );
+    }
+}
+
+
+SwHistorySetTOXMark::SwHistorySetTOXMark( SwTxtTOXMark* pTxtHt, ULONG nNodePos )
+    : SwHistoryHint( HSTRY_SETTOXMARKHNT )
+    , m_TOXMark( pTxtHt->GetTOXMark() )
+    , m_TOXName( m_TOXMark.GetTOXType()->GetTypeName() )
+    , m_eTOXTypes( m_TOXMark.GetTOXType()->GetType() )
+    , m_nNodeIndex( nNodePos )
+    , m_nStart( *pTxtHt->GetStart() )
+    , m_nEnd( *pTxtHt->GetAnyEnd() )
+{
+    const_cast<SwModify*>(m_TOXMark.GetRegisteredIn())->Remove( &m_TOXMark );
+}
+
+
+void SwHistorySetTOXMark::SetInDoc( SwDoc* pDoc, bool )
+{
+    SwTxtNode * pTxtNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTxtNode();
+    ASSERT( pTxtNd, "SwHistorySetTOXMark: no TextNode" );
+    if ( !pTxtNd )
+        return;
+
+    // search for respective TOX type
+    USHORT nCnt = pDoc->GetTOXTypeCount( m_eTOXTypes );
+    SwTOXType* pToxType = 0;
+    for ( USHORT n = 0; n < nCnt; ++n )
+    {
+        pToxType = const_cast<SwTOXType*>(pDoc->GetTOXType( m_eTOXTypes, n ));
+        if ( pToxType->GetTypeName() == m_TOXName )
             break;
         pToxType = 0;
     }
 
-    if( !pToxType )     // Verzeichnistyp nicht gefunden, neu anlegen
-        pToxType = pDoc->InsertTOXType( SwTOXType( eTOXTypes, aTOXName ));
+    if ( !pToxType )  // TOX type not found, create new
+    {
+        pToxType = const_cast<SwTOXType*>(
+                pDoc->InsertTOXType( SwTOXType( m_eTOXTypes, m_TOXName )));
+    }
 
-    SwTOXMark aNew( aTOXMark );
-    ((SwTOXType*)pToxType)->Add( &aNew );
+    SwTOXMark aNew( m_TOXMark );
+    pToxType->Add( &aNew );
 
-    pTxtNd->InsertItem( aNew, nStart, nEnd, nsSetAttrMode::SETATTR_NOTXTATRCHR );
+    pTxtNd->InsertItem( aNew, m_nStart, m_nEnd,
+                        nsSetAttrMode::SETATTR_NOTXTATRCHR );
 }
 
 
-int SwSetTOXMarkHint::IsEqual( const SwTOXMark& rCmp ) const
+int SwHistorySetTOXMark::IsEqual( const SwTOXMark& rCmp ) const
 {
-    return aTOXName == rCmp.GetTOXType()->GetTypeName() &&
-           eTOXTypes == rCmp.GetTOXType()->GetType() &&
-           aTOXMark.GetAlternativeText() == rCmp.GetAlternativeText() &&
-           ( TOX_INDEX == eTOXTypes
-              ? ( aTOXMark.GetPrimaryKey() == rCmp.GetPrimaryKey() &&
-                 aTOXMark.GetSecondaryKey() == rCmp.GetSecondaryKey() )
-              : aTOXMark.GetLevel() == rCmp.GetLevel()
+    return m_TOXName   == rCmp.GetTOXType()->GetTypeName() &&
+           m_eTOXTypes == rCmp.GetTOXType()->GetType() &&
+           m_TOXMark.GetAlternativeText() == rCmp.GetAlternativeText() &&
+           ( (TOX_INDEX == m_eTOXTypes)
+              ?   ( m_TOXMark.GetPrimaryKey()   == rCmp.GetPrimaryKey()  &&
+                    m_TOXMark.GetSecondaryKey() == rCmp.GetSecondaryKey()   )
+              :   m_TOXMark.GetLevel() == rCmp.GetLevel()
            );
 }
 
 
-SwResetTxtHint::SwResetTxtHint( USHORT nWhich, xub_StrLen nAttrStt,
-                                xub_StrLen nAttrEnd, ULONG nNodePos )
-    : SwHstryHint( HSTRY_RESETTXTHNT ),
-    nNode( nNodePos ), nStart( nAttrStt ), nEnd( nAttrEnd ), nAttr( nWhich )
+SwHistoryResetTxt::SwHistoryResetTxt( USHORT nWhich,
+            xub_StrLen nAttrStart, xub_StrLen nAttrEnd, ULONG nNodePos )
+    : SwHistoryHint( HSTRY_RESETTXTHNT )
+    , m_nNodeIndex( nNodePos ), m_nStart( nAttrStart ), m_nEnd( nAttrEnd )
+    , m_nAttr( nWhich )
 {
 }
 
 
-void SwResetTxtHint::SetInDoc( SwDoc* pDoc, BOOL )
+void SwHistoryResetTxt::SetInDoc( SwDoc* pDoc, bool )
 {
-    SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
-    ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
-    if( pTxtNd )
-        pTxtNd->Delete( nAttr, nStart, nEnd );
+    SwTxtNode * pTxtNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTxtNode();
+    ASSERT( pTxtNd, "SwHistoryResetTxt: no TextNode" );
+    if ( pTxtNd )
+    {
+        pTxtNd->Delete( m_nAttr, m_nStart, m_nEnd );
+    }
 }
 
 
-SwSetFtnHint::SwSetFtnHint( SwTxtFtn* pTxtFtn, ULONG nNodePos )
-    : SwHstryHint( HSTRY_SETFTNHNT ),
-    nNode( nNodePos ), nStart( *pTxtFtn->GetStart() )
+SwHistorySetFootnote::SwHistorySetFootnote( SwTxtFtn* pTxtFtn, ULONG nNodePos )
+    : SwHistoryHint( HSTRY_SETFTNHNT )
+    , m_pUndo( new SwUndoSaveSection )
+    , m_FootnoteNumber( pTxtFtn->GetFtn().GetNumStr() )
+    , m_nNodeIndex( nNodePos )
+    , m_nStart( *pTxtFtn->GetStart() )
+    , m_bEndNote( pTxtFtn->GetFtn().IsEndNote() )
 {
-    ASSERT( pTxtFtn->GetStartNode(), "Footnote ohne Section" );
-
-    aFtnStr = pTxtFtn->GetFtn().GetNumStr();
-    bEndNote = pTxtFtn->GetFtn().IsEndNote();
+    ASSERT( pTxtFtn->GetStartNode(),
+            "SwHistorySetFootnote: Footnote without Section" );
 
     // merke die alte NodePos, denn wer weiss was alles in der SaveSection
     // gespeichert (geloescht) wird
-    SwDoc* pDoc = (SwDoc*)pTxtFtn->GetTxtNode().GetDoc();
-    SwNode* pSaveNd = pDoc->GetNodes()[ nNode ];
+    SwDoc* pDoc = const_cast<SwDoc*>(pTxtFtn->GetTxtNode().GetDoc());
+    SwNode* pSaveNd = pDoc->GetNodes()[ m_nNodeIndex ];
 
     //Pointer auf StartNode der FtnSection merken und erstmal den Pointer im
     //Attribut zuruecksetzen -> Damit werden automatisch die Frms vernichtet.
     SwNodeIndex aSttIdx( *pTxtFtn->GetStartNode() );
     pTxtFtn->SetStartNode( 0, FALSE );
 
-    pUndo = new SwUndoSaveSection;
-    pUndo->SaveSection( pDoc, aSttIdx );
-    nNode = pSaveNd->GetIndex();
+    m_pUndo->SaveSection( pDoc, aSttIdx );
+    m_nNodeIndex = pSaveNd->GetIndex();
 }
 
-SwSetFtnHint::SwSetFtnHint( const SwTxtFtn &rTxtFtn ) :
-    SwHstryHint( HSTRY_SETFTNHNT ),
-    pUndo( 0 ),
-    nNode( _SwTxtFtn_GetIndex( (&rTxtFtn) ) ),
-    nStart( *rTxtFtn.GetStart() )
+SwHistorySetFootnote::SwHistorySetFootnote( const SwTxtFtn &rTxtFtn )
+    : SwHistoryHint( HSTRY_SETFTNHNT )
+    , m_pUndo( 0 )
+    , m_FootnoteNumber( rTxtFtn.GetFtn().GetNumStr() )
+    , m_nNodeIndex( _SwTxtFtn_GetIndex( (&rTxtFtn) ) )
+    , m_nStart( *rTxtFtn.GetStart() )
+    , m_bEndNote( rTxtFtn.GetFtn().IsEndNote() )
 {
-    ASSERT( rTxtFtn.GetStartNode(), "Footnote ohne Section" );
-
-    aFtnStr = rTxtFtn.GetFtn().GetNumStr();
-    bEndNote = rTxtFtn.GetFtn().IsEndNote();
+    ASSERT( rTxtFtn.GetStartNode(),
+            "SwHistorySetFootnote: Footnote without Section" );
 }
 
-String SwSetFtnHint::GetDescription() const
+String SwHistorySetFootnote::GetDescription() const
 {
     return SW_RES(STR_FOOTNOTE);
 }
 
-SwSetFtnHint::~SwSetFtnHint()
+SwHistorySetFootnote::~SwHistorySetFootnote()
 {
-    delete pUndo;
 }
 
 
-void SwSetFtnHint::SetInDoc( SwDoc* pDoc, BOOL )
+void SwHistorySetFootnote::SetInDoc( SwDoc* pDoc, bool )
 {
-    SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
-    ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
-    if( !pTxtNd )
+    SwTxtNode * pTxtNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTxtNode();
+    ASSERT( pTxtNd, "SwHistorySetFootnote: no TextNode" );
+    if ( !pTxtNd )
         return;
 
-    if ( pUndo )
+    if ( m_pUndo.get() )
     {
-        // setze die Fussnote im TextNode
-        SwFmtFtn aTemp( bEndNote );
-        SwFmtFtn& rNew = (SwFmtFtn&)pDoc->GetAttrPool().Put(aTemp);
-        if( aFtnStr.Len() )
-            rNew.SetNumStr( aFtnStr );
-        SwTxtFtn* pTxtFtn = new SwTxtFtn( rNew, nStart );
+        // set the footnote in the TextNode
+        SwFmtFtn aTemp( m_bEndNote );
+        SwFmtFtn& rNew = const_cast<SwFmtFtn&>(
+                static_cast<const SwFmtFtn&>(pDoc->GetAttrPool().Put(aTemp)) );
+        if ( m_FootnoteNumber.Len() )
+        {
+            rNew.SetNumStr( m_FootnoteNumber );
+        }
+        SwTxtFtn* pTxtFtn = new SwTxtFtn( rNew, m_nStart );
 
-        // erzeuge schon die Section der Fussnote
+        // create the section of the Footnote
         SwNodeIndex aIdx( *pTxtNd );
-        pUndo->RestoreSection( pDoc, &aIdx, SwFootnoteStartNode );
+        m_pUndo->RestoreSection( pDoc, &aIdx, SwFootnoteStartNode );
         pTxtFtn->SetStartNode( &aIdx );
-        if( pUndo->GetHistory() )
-            // erst jetzt die Frames anlegen lassen
-            pUndo->GetHistory()->Rollback( pDoc );
+        if ( m_pUndo->GetHistory() )
+        {
+            // create frames only now
+            m_pUndo->GetHistory()->Rollback( pDoc );
+        }
 
         pTxtNd->Insert( pTxtFtn );
     }
     else
     {
-        SwTxtFtn *pFtn = (SwTxtFtn*)pTxtNd->GetTxtAttr( nStart );
-        SwFmtFtn &rFtn = (SwFmtFtn&)pFtn->GetFtn();
-        rFtn.SetNumStr( aFtnStr  );
-        if( rFtn.IsEndNote() != bEndNote )
+        SwTxtFtn *pFtn = const_cast<SwTxtFtn*>(
+                static_cast<const SwTxtFtn*>(pTxtNd->GetTxtAttr( m_nStart )));
+        SwFmtFtn &rFtn = const_cast<SwFmtFtn&>(pFtn->GetFtn());
+        rFtn.SetNumStr( m_FootnoteNumber  );
+        if ( rFtn.IsEndNote() != m_bEndNote )
         {
-            rFtn.SetEndNote( bEndNote );
+            rFtn.SetEndNote( m_bEndNote );
             pFtn->CheckCondColl();
         }
     }
 }
 
 
-SwChgFmtColl::SwChgFmtColl( const SwFmtColl* pFmtColl, ULONG nNd,
+SwHistoryChangeFmtColl::SwHistoryChangeFmtColl( SwFmtColl* pFmtColl, ULONG nNd,
                             BYTE nNodeWhich )
-    : SwHstryHint( HSTRY_CHGFMTCOLL ),
-    pColl( pFmtColl ),
-    nNode( nNd ),
-    nNdWhich( nNodeWhich )
+    : SwHistoryHint( HSTRY_CHGFMTCOLL )
+    , m_pColl( pFmtColl )
+    , m_nNodeIndex( nNd )
+    , m_nNodeType( nNodeWhich )
 {
 }
 
-void SwChgFmtColl::SetInDoc( SwDoc* pDoc, BOOL )
+void SwHistoryChangeFmtColl::SetInDoc( SwDoc* pDoc, bool )
 {
-    SwCntntNode * pCntntNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
-    ASSERT( pCntntNd, "Undo-ChgFmt: kein ContentNode" );
+    SwCntntNode * pCntntNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetCntntNode();
+    ASSERT( pCntntNd, "SwHistoryChangeFmtColl: no ContentNode" );
 
-    // prufe vor dem setzen des Formates, ob dieses ueberhaupt noch im
-    // Dokument vorhanden ist. Wurde es schon geloescht, gibt es kein Undo !!
-    if( pCntntNd && nNdWhich == pCntntNd->GetNodeType() )
+    // before setting the format, check if it is still available in the
+    // document. if it has been deleted, there is no undo!
+    if ( pCntntNd && m_nNodeType == pCntntNd->GetNodeType() )
     {
-        if( ND_TEXTNODE == nNdWhich )
+        if ( ND_TEXTNODE == m_nNodeType )
         {
-            if( USHRT_MAX != pDoc->GetTxtFmtColls()->GetPos( (SwTxtFmtColl*)pColl ))
+            if ( USHRT_MAX != pDoc->GetTxtFmtColls()->GetPos(
+                            static_cast<SwTxtFmtColl * const>(m_pColl) ))
             {
-                pCntntNd->ChgFmtColl( (SwFmtColl*)pColl );
+                pCntntNd->ChgFmtColl( m_pColl );
             }
         }
-        else if( USHRT_MAX != pDoc->GetGrfFmtColls()->GetPos( (SwGrfFmtColl*)pColl ))
-            pCntntNd->ChgFmtColl( (SwFmtColl*)pColl );
+        else if ( USHRT_MAX != pDoc->GetGrfFmtColls()->GetPos(
+                            static_cast<SwGrfFmtColl * const>(m_pColl) ))
+        {
+            pCntntNd->ChgFmtColl( m_pColl );
+        }
     }
 }
 
 
-SwHstryTxtFlyCnt::SwHstryTxtFlyCnt( SwTxtFlyCnt* pTxtFly )
-    : SwHstryHint( HSTRY_FLYCNT )
+SwHistoryTxtFlyCnt::SwHistoryTxtFlyCnt( SwFrmFmt* const pFlyFmt )
+    : SwHistoryHint( HSTRY_FLYCNT )
+    , m_pUndo( new SwUndoDelLayFmt( pFlyFmt ) )
 {
-    ASSERT( pTxtFly->GetFlyCnt().GetFrmFmt(), "FlyCntnt ohne Format" );
-    pUndo = new SwUndoDelLayFmt( pTxtFly->GetFlyCnt().GetFrmFmt() );
-    pUndo->ChgShowSel( FALSE );
+    ASSERT( pFlyFmt, "SwHistoryTxtFlyCnt: no Format" );
+    m_pUndo->ChgShowSel( FALSE );
 }
 
 
-SwHstryTxtFlyCnt::SwHstryTxtFlyCnt( SwFlyFrmFmt* pFlyFmt )
-    : SwHstryHint( HSTRY_FLYCNT )
+SwHistoryTxtFlyCnt::~SwHistoryTxtFlyCnt()
 {
-    ASSERT( pFlyFmt, "kein Format" );
-    pUndo = new SwUndoDelLayFmt( pFlyFmt );
-    pUndo->ChgShowSel( FALSE );
 }
 
 
-SwHstryTxtFlyCnt::~SwHstryTxtFlyCnt()
-{
-    delete pUndo;
-}
-
-
-void SwHstryTxtFlyCnt::SetInDoc( SwDoc* pDoc, BOOL )
+void SwHistoryTxtFlyCnt::SetInDoc( SwDoc* pDoc, bool )
 {
     SwPaM aPam( pDoc->GetNodes().GetEndOfPostIts() );
     SwUndoIter aUndoIter( &aPam );
-    pUndo->Undo( aUndoIter );
+    m_pUndo->Undo( aUndoIter );
 }
 
 
 
-SwHstryBookmark::SwHstryBookmark(
+SwHistoryBookmark::SwHistoryBookmark(
     const ::sw::mark::IMark& rBkmk,
     bool bSavePos,
     bool bSaveOtherPos)
-    : SwHstryHint(HSTRY_BOOKMARK)
+    : SwHistoryHint(HSTRY_BOOKMARK)
     , m_aName(rBkmk.GetName())
     , m_aShortName()
     , m_aKeycode()
@@ -581,7 +619,7 @@ SwHstryBookmark::SwHstryBookmark(
 }
 
 
-void SwHstryBookmark::SetInDoc(SwDoc* pDoc, BOOL)
+void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
 {
     bool bDoesUndo = pDoc->DoesUndo();
     pDoc->DoUndo(false);
@@ -595,7 +633,7 @@ void SwHstryBookmark::SetInDoc(SwDoc* pDoc, BOOL)
     {
         SwCntntNode* const pCntntNd = rNds[m_nNode]->GetCntntNode();
         OSL_ENSURE(pCntntNd,
-            "<SwHstryBookmark::SetInDoc(..)>"
+            "<SwHistoryBookmark::SetInDoc(..)>"
             " - wrong node for a mark");
 
         // #111660# don't crash when nNode1 doesn't point to content node.
@@ -612,7 +650,7 @@ void SwHstryBookmark::SetInDoc(SwDoc* pDoc, BOOL)
     {
         SwCntntNode* const pCntntNd = rNds[m_nOtherNode]->GetCntntNode();
         OSL_ENSURE(pCntntNd,
-            "<SwHstryBookmark::SetInDoc(..)>"
+            "<SwHistoryBookmark::SetInDoc(..)>"
             " - wrong node for a mark");
 
         if(pPam.get() != NULL && pCntntNd)
@@ -627,7 +665,7 @@ void SwHstryBookmark::SetInDoc(SwDoc* pDoc, BOOL)
         if(!pMark)
             pMark = pMarkAccess->findMark(m_aName)->get();
         OSL_ENSURE(pMark->IsExpanded(),
-            "<SwHstryBookmark::SetInDoc(..)>"
+            "<SwHistoryBookmark::SetInDoc(..)>"
             " - missing pos on old mark");
         pPam->SetMark();
         *pPam->GetMark() = pMark->GetOtherMarkPos();
@@ -649,14 +687,14 @@ void SwHstryBookmark::SetInDoc(SwDoc* pDoc, BOOL)
 }
 
 
-BOOL SwHstryBookmark::IsEqualBookmark(const ::sw::mark::IMark& rBkmk)
+bool SwHistoryBookmark::IsEqualBookmark(const ::sw::mark::IMark& rBkmk)
 {
     return m_nNode == rBkmk.GetMarkPos().nNode.GetIndex()
         && m_nCntnt == rBkmk.GetMarkPos().nContent.GetIndex()
         && m_aName == rBkmk.GetName();
 }
 
-const ::rtl::OUString& SwHstryBookmark::GetName() const
+const ::rtl::OUString& SwHistoryBookmark::GetName() const
 {
     return m_aName;
 }
@@ -664,65 +702,70 @@ const ::rtl::OUString& SwHstryBookmark::GetName() const
 /*************************************************************************/
 
 
-SwHstrySetAttrSet::SwHstrySetAttrSet( const SfxItemSet& rSet, ULONG nNodePos,
-                                        const SvUShortsSort& rSetArr )
-    : SwHstryHint( HSTRY_SETATTRSET ),
-      aOldSet( rSet ),
-      aResetArr( 0, 4 ),
-      nNode( nNodePos ),
-      // --> OD 2007-07-09 #i77372#
-      //mnNumLvl( MAXLEVEL),//NO_NUMBERING ),
-      mnNumLvl( MAXLEVEL),  //#outline level,zhaojianwei
-      mbIsRestart( false ),
-      mnRestartVal( USHRT_MAX ),
-      mbIsCounted( false )
-      // <--
+SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
+                        ULONG nNodePos, const SvUShortsSort& rSetArr )
+    : SwHistoryHint( HSTRY_SETATTRSET )
+    , m_OldSet( rSet )
+    , m_ResetArray( 0, 4 )
+    , m_nNodeIndex( nNodePos )
 {
-    SfxItemIter aIter( aOldSet ), aOrigIter( rSet );
+    SfxItemIter aIter( m_OldSet ), aOrigIter( rSet );
     const SfxPoolItem* pItem = aIter.FirstItem(),
                      * pOrigItem = aOrigIter.FirstItem();
     do {
         if( !rSetArr.Seek_Entry( pOrigItem->Which() ))
         {
-            aResetArr.Insert( pOrigItem->Which(), aResetArr.Count() );
-            aOldSet.ClearItem( pOrigItem->Which() );
+            m_ResetArray.Insert( pOrigItem->Which(), m_ResetArray.Count() );
+            m_OldSet.ClearItem( pOrigItem->Which() );
         }
         else
         {
-            switch( pItem->Which() )
+            switch ( pItem->Which() )
             {
-            case RES_PAGEDESC:
-                ((SwFmtPageDesc*)pItem)->ChgDefinedIn( 0 );
-                break;
+                case RES_PAGEDESC:
+                    static_cast<SwFmtPageDesc*>(
+                        const_cast<SfxPoolItem*>(pItem))->ChgDefinedIn( 0 );
+                    break;
 
-            case RES_PARATR_DROP:
-                ((SwFmtDrop*)pItem)->ChgDefinedIn( 0 );
-                break;
+                case RES_PARATR_DROP:
+                    static_cast<SwFmtDrop*>(
+                        const_cast<SfxPoolItem*>(pItem))->ChgDefinedIn( 0 );
+                    break;
 
-            case RES_BOXATR_FORMULA:
-                {
+                case RES_BOXATR_FORMULA:
+                    {
                     //JP 20.04.98: Bug 49502 - wenn eine Formel gesetzt ist, nie den
                     //              Value mit sichern. Der muss gegebenfalls neu
                     //              errechnet werden!
                     //JP 30.07.98: Bug 54295 - Formeln immer im Klartext speichern
-                    aOldSet.ClearItem( RES_BOXATR_VALUE );
+                        m_OldSet.ClearItem( RES_BOXATR_VALUE );
 
-                    SwTblBoxFormula& rNew = *(SwTblBoxFormula*)pItem;
-                    if( rNew.IsIntrnlName() )
-                    {
-                        const SwTblBoxFormula& rOld = (SwTblBoxFormula&)rSet.Get( RES_BOXATR_FORMULA );
-                        const SwNode* pNd = rOld.GetNodeOfFormula();
-                        if( pNd && 0 != (pNd = pNd->FindTableNode() ))
+                        SwTblBoxFormula& rNew =
+                            *static_cast<SwTblBoxFormula*>(
+                                const_cast<SfxPoolItem*>(pItem));
+                        if ( rNew.IsIntrnlName() )
                         {
-                            SwTableFmlUpdate aMsgHnt( &((SwTableNode*)pNd)->GetTable() );
-                            aMsgHnt.eFlags = TBL_BOXNAME;
-                            rNew.ChgDefinedIn( rOld.GetDefinedIn() );
-                            rNew.ChangeState( &aMsgHnt );
+                            const SwTblBoxFormula& rOld =
+                                static_cast<const SwTblBoxFormula&>(
+                                        rSet.Get( RES_BOXATR_FORMULA ));
+                            const SwNode* pNd = rOld.GetNodeOfFormula();
+                            if ( pNd )
+                            {
+                                const SwTableNode* pTableNode
+                                    = pNd->FindTableNode();
+                                if (pTableNode)
+                                {
+                                    SwTableFmlUpdate aMsgHnt(
+                                        &pTableNode->GetTable() );
+                                    aMsgHnt.eFlags = TBL_BOXNAME;
+                                    rNew.ChgDefinedIn( rOld.GetDefinedIn() );
+                                    rNew.ChangeState( &aMsgHnt );
+                                }
+                            }
                         }
+                        rNew.ChgDefinedIn( 0 );
                     }
-                    rNew.ChgDefinedIn( 0 );
-                }
-                break;
+                    break;
             }
         }
 
@@ -733,24 +776,29 @@ SwHstrySetAttrSet::SwHstrySetAttrSet( const SfxItemSet& rSet, ULONG nNodePos,
     } while( TRUE );
 }
 
-void SwHstrySetAttrSet::SetInDoc( SwDoc* pDoc, BOOL )
+void SwHistorySetAttrSet::SetInDoc( SwDoc* pDoc, bool )
 {
     BOOL bDoesUndo = pDoc->DoesUndo();
     pDoc->DoUndo( FALSE );
 
-    SwNode * pNode = pDoc->GetNodes()[ nNode ];
-    if( pNode->IsCntntNode() )
+    SwNode * pNode = pDoc->GetNodes()[ m_nNodeIndex ];
+    if ( pNode->IsCntntNode() )
     {
-        ((SwCntntNode*)pNode)->SetAttr( aOldSet );
-        if( aResetArr.Count() )
-            ((SwCntntNode*)pNode)->ResetAttr( aResetArr );
+        static_cast<SwCntntNode*>(pNode)->SetAttr( m_OldSet );
+        if ( m_ResetArray.Count() )
+        {
+            static_cast<SwCntntNode*>(pNode)->ResetAttr( m_ResetArray );
+        }
     }
-    else if( pNode->IsTableNode() )
+    else if ( pNode->IsTableNode() )
     {
-        SwFmt& rFmt = *((SwTableNode*)pNode)->GetTable().GetFrmFmt();
-        rFmt.SetFmtAttr( aOldSet );
-        if( aResetArr.Count() )
-            rFmt.ResetFmtAttr( *aResetArr.GetData() );
+        SwFmt& rFmt =
+            *static_cast<SwTableNode*>(pNode)->GetTable().GetFrmFmt();
+        rFmt.SetFmtAttr( m_OldSet );
+        if ( m_ResetArray.Count() )
+        {
+            rFmt.ResetFmtAttr( *m_ResetArray.GetData() );
+        }
     }
 
     pDoc->DoUndo( bDoesUndo );
@@ -759,11 +807,11 @@ void SwHstrySetAttrSet::SetInDoc( SwDoc* pDoc, BOOL )
 /*************************************************************************/
 
 
-SwHstryResetAttrSet::SwHstryResetAttrSet( const SfxItemSet& rSet,
+SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
                     ULONG nNodePos, xub_StrLen nAttrStt, xub_StrLen nAttrEnd )
-    : SwHstryHint( HSTRY_RESETATTRSET ),
-    nNode( nNodePos ), nStart( nAttrStt ), nEnd( nAttrEnd ),
-    aArr( (BYTE)rSet.Count() )
+    : SwHistoryHint( HSTRY_RESETATTRSET )
+    , m_nNodeIndex( nNodePos ), m_nStart( nAttrStt ), m_nEnd( nAttrEnd )
+    , m_Array( (BYTE)rSet.Count() )
 {
     SfxItemIter aIter( rSet );
     bool bAutoStyle = true;
@@ -773,10 +821,14 @@ SwHstryResetAttrSet::SwHstryResetAttrSet( const SfxItemSet& rSet,
         const USHORT nWhich = aIter.GetCurItem()->Which();
         // Character attribute cannot be inserted into the hints array
         // anymore. Therefore we have to treat them as one RES_TXTATR_AUTOFMT:
-        if ( RES_CHRATR_BEGIN <= nWhich && RES_CHRATR_END > nWhich )
+        if (isCHRATR(nWhich))
+        {
             bAutoStyle = true;
+        }
         else
-            aArr.Insert( aIter.GetCurItem()->Which() ,aArr.Count() );
+        {
+            m_Array.Insert( aIter.GetCurItem()->Which(), m_Array.Count() );
+        }
 
         if( aIter.IsAtEnd() )
             break;
@@ -785,32 +837,39 @@ SwHstryResetAttrSet::SwHstryResetAttrSet( const SfxItemSet& rSet,
     }
 
     if ( bAutoStyle )
-        aArr.Insert( RES_TXTATR_AUTOFMT, aArr.Count() );
+    {
+        m_Array.Insert( RES_TXTATR_AUTOFMT, m_Array.Count() );
+    }
 }
 
 
-void SwHstryResetAttrSet::SetInDoc( SwDoc* pDoc, BOOL )
+void SwHistoryResetAttrSet::SetInDoc( SwDoc* pDoc, bool )
 {
     BOOL bDoesUndo = pDoc->DoesUndo();
     pDoc->DoUndo( FALSE );
 
-    SwCntntNode * pCntntNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
-    ASSERT( pCntntNd, "wo ist mein CntntNode" );
+    SwCntntNode * pCntntNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetCntntNode();
+    ASSERT( pCntntNd, "SwHistoryResetAttrSet: no CntntNode" );
 
     if (pCntntNd)
     {
-        const USHORT* pArr = aArr.GetData();
-        if( USHRT_MAX == nEnd && USHRT_MAX == nStart )
+        const USHORT* pArr = m_Array.GetData();
+        if ( USHRT_MAX == m_nEnd && USHRT_MAX == m_nStart )
         {
-            // kein Bereich also Schnittstelle zum Content-Node
-            for( USHORT n = aArr.Count(); n; --n, ++pArr )
+            // no area: use ContentNode
+            for ( USHORT n = m_Array.Count(); n; --n, ++pArr )
+            {
                 pCntntNd->ResetAttr( *pArr );
+            }
         }
         else
         {
-            // Bereich: also Schnittstelle zum Text-Node
-            for( USHORT n = aArr.Count(); n; --n, ++pArr )
-                ((SwTxtNode*)pCntntNd)->Delete( *pArr, nStart, nEnd );
+            // area: use TextNode
+            for ( USHORT n = m_Array.Count(); n; --n, ++pArr )
+            {
+                static_cast<SwTxtNode*>(pCntntNd)->
+                    Delete( *pArr, m_nStart, m_nEnd );
+            }
         }
     }
 
@@ -821,41 +880,47 @@ void SwHstryResetAttrSet::SetInDoc( SwDoc* pDoc, BOOL )
 /*************************************************************************/
 
 
-SwHstryChgFlyAnchor::SwHstryChgFlyAnchor( const SwFrmFmt& rFmt )
-    : SwHstryHint( HSTRY_CHGFLYANCHOR ),
-    pFmt( (SwFrmFmt*)&rFmt )
+SwHistoryChangeFlyAnchor::SwHistoryChangeFlyAnchor( SwFrmFmt& rFmt )
+    : SwHistoryHint( HSTRY_CHGFLYANCHOR )
+    , m_rFmt( rFmt )
+    , m_nOldNodeIndex( rFmt.GetAnchor().GetCntntAnchor()->nNode.GetIndex() )
+    , m_nOldContentIndex( ( FLY_AUTO_CNTNT == rFmt.GetAnchor().GetAnchorId() )
+            ?   rFmt.GetAnchor().GetCntntAnchor()->nContent.GetIndex()
+            :   STRING_MAXLEN )
 {
-    const SwFmtAnchor& rAnchor = rFmt.GetAnchor();
-    nOldPos = rAnchor.GetCntntAnchor()->nNode.GetIndex();
-    if( FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
-        nOldCnt = rAnchor.GetCntntAnchor()->nContent.GetIndex();
-    else
-        nOldCnt = STRING_MAXLEN;
 }
 
 
-void SwHstryChgFlyAnchor::SetInDoc( SwDoc* pDoc, BOOL )
+void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
 {
     BOOL bDoesUndo = pDoc->DoesUndo();
     pDoc->DoUndo( FALSE );
 
-    USHORT nPos = pDoc->GetSpzFrmFmts()->GetPos( pFmt );
-    if( USHRT_MAX != nPos )         // Format noch vorhanden
+    USHORT nPos = pDoc->GetSpzFrmFmts()->GetPos( &m_rFmt );
+    if ( USHRT_MAX != nPos )    // Format does still exist
     {
-        SwFmtAnchor aTmp( pFmt->GetAnchor() );
+        SwFmtAnchor aTmp( m_rFmt.GetAnchor() );
 
-        SwNode* pNd = pDoc->GetNodes()[ nOldPos  ];
+        SwNode* pNd = pDoc->GetNodes()[ m_nOldNodeIndex ];
+        SwCntntNode* pCNd = pNd->GetCntntNode();
         SwPosition aPos( *pNd );
-        if( STRING_MAXLEN != nOldCnt )
-            aPos.nContent.Assign( (SwCntntNode*)pNd, nOldCnt );
+        if ( STRING_MAXLEN != m_nOldContentIndex )
+        {
+            ASSERT(pCNd, "SwHistoryChangeFlyAnchor: no ContentNode");
+            if (pCNd)
+            {
+                aPos.nContent.Assign( pCNd, m_nOldContentIndex );
+            }
+        }
         aTmp.SetAnchor( &aPos );
 
-        // damit das Layout nicht durcheinander kommt!
-        SwCntntNode* pCNd = pNd->GetCntntNode();
-        if( !pCNd || !pCNd->GetFrm( 0, 0, FALSE ) )
-            pFmt->DelFrms();
+        // so the Layout does not get confused
+        if ( !pCNd || !pCNd->GetFrm( 0, 0, FALSE ) )
+        {
+            m_rFmt.DelFrms();
+        }
 
-        pFmt->SetFmtAttr( aTmp );
+        m_rFmt.SetFmtAttr( aTmp );
     }
     pDoc->DoUndo( bDoesUndo );
 }
@@ -863,55 +928,64 @@ void SwHstryChgFlyAnchor::SetInDoc( SwDoc* pDoc, BOOL )
 
 /*************************************************************************/
 
-SwHstryChgFlyChain::SwHstryChgFlyChain( const SwFlyFrmFmt& rFmt,
+SwHistoryChangeFlyChain::SwHistoryChangeFlyChain( SwFlyFrmFmt& rFmt,
                                         const SwFmtChain& rAttr )
-    : SwHstryHint( HSTRY_CHGFLYCHAIN ),
-    pPrevFmt( rAttr.GetPrev() ),
-    pNextFmt( rAttr.GetNext() ),
-    pFlyFmt( (SwFlyFrmFmt*)&rFmt )
+    : SwHistoryHint( HSTRY_CHGFLYCHAIN )
+    , m_pPrevFmt( rAttr.GetPrev() )
+    , m_pNextFmt( rAttr.GetNext() )
+    , m_pFlyFmt( &rFmt )
 {
 }
 
 
-void SwHstryChgFlyChain::SetInDoc( SwDoc* pDoc, BOOL )
+void SwHistoryChangeFlyChain::SetInDoc( SwDoc* pDoc, bool )
 {
-    if( USHRT_MAX != pDoc->GetSpzFrmFmts()->GetPos( pFlyFmt ) )
+    if ( USHRT_MAX != pDoc->GetSpzFrmFmts()->GetPos( m_pFlyFmt ) )
     {
         SwFmtChain aChain;
-        if( pPrevFmt && USHRT_MAX != pDoc->GetSpzFrmFmts()->GetPos( pPrevFmt ))
+
+        if ( m_pPrevFmt &&
+             USHRT_MAX != pDoc->GetSpzFrmFmts()->GetPos( m_pPrevFmt ) )
         {
-            aChain.SetPrev( pPrevFmt );
-            SwFmtChain aTmp( pPrevFmt->GetChain() );
-            aTmp.SetNext( pFlyFmt );
-            pPrevFmt->SetFmtAttr( aTmp );
-        }
-        if( pNextFmt && USHRT_MAX != pDoc->GetSpzFrmFmts()->GetPos( pNextFmt ))
-        {
-            aChain.SetNext( pNextFmt );
-            SwFmtChain aTmp( pNextFmt->GetChain() );
-            aTmp.SetPrev( pFlyFmt );
-            pNextFmt->SetFmtAttr( aTmp );
+            aChain.SetPrev( m_pPrevFmt );
+            SwFmtChain aTmp( m_pPrevFmt->GetChain() );
+            aTmp.SetNext( m_pFlyFmt );
+            m_pPrevFmt->SetFmtAttr( aTmp );
         }
 
-        if( aChain.GetNext() || aChain.GetPrev()  )
-            pFlyFmt->SetFmtAttr( aChain );
+        if ( m_pNextFmt &&
+             USHRT_MAX != pDoc->GetSpzFrmFmts()->GetPos( m_pNextFmt ) )
+        {
+            aChain.SetNext( m_pNextFmt );
+            SwFmtChain aTmp( m_pNextFmt->GetChain() );
+            aTmp.SetPrev( m_pFlyFmt );
+            m_pNextFmt->SetFmtAttr( aTmp );
+        }
+
+        if ( aChain.GetNext() || aChain.GetPrev() )
+        {
+            m_pFlyFmt->SetFmtAttr( aChain );
+        }
     }
 }
 
 
 // -> #i27615#
-SwHstryChgCharFmt::SwHstryChgCharFmt(const SfxItemSet & rSet,
-                                     const String & _sFmt)
-    : SwHstryHint(HSTRY_CHGCHARFMT), aOldSet(rSet), sFmt(_sFmt)
+SwHistoryChangeCharFmt::SwHistoryChangeCharFmt(const SfxItemSet & rSet,
+                                     const String & sFmt)
+    : SwHistoryHint(HSTRY_CHGCHARFMT)
+    , m_OldSet(rSet), m_Fmt(sFmt)
 {
 }
 
-void SwHstryChgCharFmt::SetInDoc(SwDoc * pDoc, BOOL )
+void SwHistoryChangeCharFmt::SetInDoc(SwDoc * pDoc, bool )
 {
-    SwCharFmt * pCharFmt = pDoc->FindCharFmtByName(sFmt);
+    SwCharFmt * pCharFmt = pDoc->FindCharFmtByName(m_Fmt);
 
     if (pCharFmt)
-        pCharFmt->SetFmtAttr(aOldSet);
+    {
+        pCharFmt->SetFmtAttr(m_OldSet);
+    }
 }
 // <- #i27615#
 
@@ -919,7 +993,8 @@ void SwHstryChgCharFmt::SetInDoc(SwDoc * pDoc, BOOL )
 
 
 SwHistory::SwHistory( USHORT nInitSz, USHORT nGrowSz )
-    : SwpHstry( (BYTE)nInitSz, (BYTE)nGrowSz ), nEndDiff( 0 )
+    : m_SwpHstry( (BYTE)nInitSz, (BYTE)nGrowSz )
+    , m_nEndDiff( 0 )
 {}
 
 
@@ -944,98 +1019,106 @@ void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
                      ULONG nNodeIdx )
 // <--
 {
-    ASSERT( !nEndDiff, "nach REDO wurde die History noch nicht geloescht" );
+    ASSERT( !m_nEndDiff, "History was not deleted after REDO" );
 
     USHORT nWhich = pNewValue->Which();
     if( (nWhich >= POOLATTR_END) || (nWhich == RES_TXTATR_FIELD) )
         return;
 
-    // kein default Attribut ??
-    SwHstryHint * pHt;
-#ifdef JP_NEWCORE
-    if( pOldValue && pOldValue->GetFmt() &&
-        ( !pNewValue->GetFmt() || pOldValue->GetFmt()==pNewValue->GetFmt()) )
-#else
-    if( pOldValue && pOldValue != GetDfltAttr( pOldValue->Which() ) )
-#endif
-        pHt = new SwSetFmtHint( (SfxPoolItem*)pOldValue, nNodeIdx );
+    // no default Attribute?
+    SwHistoryHint * pHt;
+    if ( pOldValue && pOldValue != GetDfltAttr( pOldValue->Which() ) )
+    {
+        pHt = new SwHistorySetFmt( pOldValue, nNodeIdx );
+    }
     else
-        pHt = new SwResetFmtHint( (SfxPoolItem*)pNewValue, nNodeIdx );
-    Insert( pHt, Count() );
+    {
+        pHt = new SwHistoryResetFmt( pNewValue, nNodeIdx );
+    }
+    m_SwpHstry.Insert( pHt, Count() );
 }
 
 
-void SwHistory::Add( const SwTxtAttr* pHint, ULONG nNodeIdx, BOOL bNewAttr )
+void SwHistory::Add( SwTxtAttr* pHint, ULONG nNodeIdx, bool bNewAttr )
 {
+    ASSERT( !m_nEndDiff, "History was not deleted after REDO" );
 
-    ASSERT( !nEndDiff, "nach REDO wurde die History noch nicht geloescht" );
-
-    SwHstryHint * pHt;
+    SwHistoryHint * pHt;
     USHORT nAttrWhich = pHint->Which();
 
     if( !bNewAttr )
     {
         switch ( nAttrWhich )
         {
-        case RES_TXTATR_FTN:
-            pHt = new SwSetFtnHint( (SwTxtFtn*)pHint, nNodeIdx );
-            break;
-        case RES_TXTATR_FLYCNT:
-            pHt = new SwHstryTxtFlyCnt( (SwTxtFlyCnt*)pHint );
-            break;
-        case RES_TXTATR_FIELD:
-            pHt = new SwSetTxtFldHint( (SwTxtFld*)pHint, nNodeIdx );
-            break;
-        case RES_TXTATR_TOXMARK:
-            pHt = new SwSetTOXMarkHint( (SwTxtTOXMark*)pHint, nNodeIdx );
-            break;
-        case RES_TXTATR_REFMARK:
-            pHt = new SwSetRefMarkHint( (SwTxtRefMark*)pHint, nNodeIdx );
-            break;
-        default:
-            pHt = new SwSetTxtHint((SwTxtAttr*)pHint, nNodeIdx );
+            case RES_TXTATR_FTN:
+                pHt = new SwHistorySetFootnote(
+                            static_cast<SwTxtFtn*>(pHint), nNodeIdx );
+                break;
+            case RES_TXTATR_FLYCNT:
+                pHt = new SwHistoryTxtFlyCnt( static_cast<SwTxtFlyCnt*>(pHint)
+                            ->GetFlyCnt().GetFrmFmt() );
+                break;
+            case RES_TXTATR_FIELD:
+                pHt = new SwHistorySetTxtFld(
+                            static_cast<SwTxtFld*>(pHint), nNodeIdx );
+                break;
+            case RES_TXTATR_TOXMARK:
+                pHt = new SwHistorySetTOXMark(
+                            static_cast<SwTxtTOXMark*>(pHint), nNodeIdx );
+                break;
+            case RES_TXTATR_REFMARK:
+                pHt = new SwHistorySetRefMark(
+                            static_cast<SwTxtRefMark*>(pHint), nNodeIdx );
+                break;
+            default:
+                pHt = new SwHistorySetTxt(
+                            static_cast<SwTxtAttr*>(pHint), nNodeIdx );
         }
     }
     else
     {
-        pHt = new SwResetTxtHint( pHint->Which(), *pHint->GetStart(),
+        pHt = new SwHistoryResetTxt( pHint->Which(), *pHint->GetStart(),
                                     *pHint->GetAnyEnd(), nNodeIdx );
     }
-    Insert( pHt, Count() );
+    m_SwpHstry.Insert( pHt, Count() );
 }
 
 
-void SwHistory::Add( const SwFmtColl* pColl, ULONG nNodeIdx, BYTE nWhichNd )
+void SwHistory::Add( SwFmtColl* pColl, ULONG nNodeIdx, BYTE nWhichNd )
 {
-    ASSERT( !nEndDiff, "nach REDO wurde die History noch nicht geloescht" );
-    SwHstryHint * pHt = new SwChgFmtColl( pColl, nNodeIdx, nWhichNd );
-    Insert( pHt, Count() );
+    ASSERT( !m_nEndDiff, "History was not deleted after REDO" );
+
+    SwHistoryHint * pHt =
+        new SwHistoryChangeFmtColl( pColl, nNodeIdx, nWhichNd );
+    m_SwpHstry.Insert( pHt, Count() );
 }
 
 
 void SwHistory::Add(const ::sw::mark::IMark& rBkmk, bool bSavePos, bool bSaveOtherPos)
 {
-    ASSERT(!nEndDiff, "nach REDO wurde die History noch nicht geloescht");
-    SwHstryHint * pHt = new SwHstryBookmark(rBkmk, bSavePos, bSaveOtherPos);
-    Insert(pHt, Count());
+    ASSERT( !m_nEndDiff, "History was not deleted after REDO" );
+
+    SwHistoryHint * pHt = new SwHistoryBookmark(rBkmk, bSavePos, bSaveOtherPos);
+    m_SwpHstry.Insert( pHt, Count() );
 }
 
 
-void SwHistory::Add( const SwFrmFmt& rFmt )
+void SwHistory::Add( SwFrmFmt& rFmt )
 {
-    SwHstryHint * pHt = new SwHstryChgFlyAnchor( rFmt );
-    Insert( pHt, Count() );
+    SwHistoryHint * pHt = new SwHistoryChangeFlyAnchor( rFmt );
+    m_SwpHstry.Insert( pHt, Count() );
 }
 
-void SwHistory::Add( const SwFlyFrmFmt& rFmt, USHORT& rSetPos )
+void SwHistory::Add( SwFlyFrmFmt& rFmt, USHORT& rSetPos )
 {
-    ASSERT( !nEndDiff, "nach REDO wurde die History noch nicht geloescht" );
-    SwHstryHint * pHint;
+    ASSERT( !m_nEndDiff, "History was not deleted after REDO" );
+
+    SwHistoryHint * pHint;
     const USHORT nWh = rFmt.Which();
     if( RES_FLYFRMFMT == nWh || RES_DRAWFRMFMT == nWh )
     {
-        pHint = new SwHstryTxtFlyCnt( (SwFlyFrmFmt*)&rFmt );
-        Insert( pHint, Count() );
+        pHint = new SwHistoryTxtFlyCnt( &rFmt );
+        m_SwpHstry.Insert( pHint, Count() );
 
         const SwFmtChain* pChainItem;
         if( SFX_ITEM_SET == rFmt.GetItemState( RES_CHAIN, FALSE,
@@ -1043,8 +1126,9 @@ void SwHistory::Add( const SwFlyFrmFmt& rFmt, USHORT& rSetPos )
         {
             if( pChainItem->GetNext() || pChainItem->GetPrev() )
             {
-                SwHstryHint * pHt = new SwHstryChgFlyChain( rFmt, *pChainItem );
-                Insert( pHt, rSetPos++ );
+                SwHistoryHint * pHt =
+                    new SwHistoryChangeFlyChain( rFmt, *pChainItem );
+                m_SwpHstry.Insert( pHt, rSetPos++ );
                 if ( pChainItem->GetNext() )
                 {
                     SwFmtChain aTmp( pChainItem->GetNext()->GetChain() );
@@ -1058,23 +1142,22 @@ void SwHistory::Add( const SwFlyFrmFmt& rFmt, USHORT& rSetPos )
                     pChainItem->GetPrev()->SetFmtAttr( aTmp );
                 }
             }
-            ((SwFlyFrmFmt&)rFmt).ResetFmtAttr( RES_CHAIN );
+            rFmt.ResetFmtAttr( RES_CHAIN );
         }
     }
 }
 
 void SwHistory::Add( const SwTxtFtn& rFtn )
 {
-    SwHstryHint *pHt = new SwSetFtnHint( rFtn );
-    Insert( pHt, Count() );
+    SwHistoryHint *pHt = new SwHistorySetFootnote( rFtn );
+    m_SwpHstry.Insert( pHt, Count() );
 }
 
 // #i27615#
 void SwHistory::Add(const SfxItemSet & rSet, const SwCharFmt & rFmt)
 {
-    SwHstryHint * pHt = new SwHstryChgCharFmt(rSet, rFmt.GetName());
-
-    Insert(pHt, Count());
+    SwHistoryHint * pHt = new SwHistoryChangeCharFmt(rSet, rFmt.GetName());
+    m_SwpHstry.Insert(pHt, Count());
 }
 
 /*************************************************************************
@@ -1088,69 +1171,80 @@ void SwHistory::Add(const SfxItemSet & rSet, const SwCharFmt & rFmt)
 *************************************************************************/
 
 
-BOOL SwHistory::Rollback( SwDoc* pDoc, USHORT nStart )
+bool SwHistory::Rollback( SwDoc* pDoc, USHORT nStart )
 {
-    if( !Count() )
-        return FALSE;
+    if ( !Count() )
+        return false;
 
-    SwHstryHint * pHHt;
+    SwHistoryHint * pHHt;
     USHORT i;
-    for( i = Count(); i > nStart ; )
+    for ( i = Count(); i > nStart ; )
     {
-        pHHt = operator[]( --i );
-        pHHt->SetInDoc( pDoc, FALSE );
+        pHHt = m_SwpHstry[ --i ];
+        pHHt->SetInDoc( pDoc, false );
         delete pHHt;
     }
-    SwpHstry::Remove( nStart, Count() - nStart );
-    nEndDiff = 0;
-    return TRUE;
+    m_SwpHstry.Remove( nStart, Count() - nStart );
+    m_nEndDiff = 0;
+    return true;
 }
 
 
 
-BOOL SwHistory::TmpRollback( SwDoc* pDoc, USHORT nStart, BOOL bToFirst )
+bool SwHistory::TmpRollback( SwDoc* pDoc, USHORT nStart, bool bToFirst )
 {
-    USHORT nEnd = Count() - nEndDiff;
-    if( !Count() || !nEnd || nStart >= nEnd )
-        return FALSE;
+    USHORT nEnd = Count() - m_nEndDiff;
+    if ( !Count() || !nEnd || nStart >= nEnd )
+        return false;
 
-    SwHstryHint * pHHt;
-    if( bToFirst )
-        for( ; nEnd > nStart; ++nEndDiff )
+    SwHistoryHint * pHHt;
+    if ( bToFirst )
+    {
+        for ( ; nEnd > nStart; ++m_nEndDiff )
         {
-            pHHt = operator[]( --nEnd );
-            pHHt->SetInDoc( pDoc, TRUE );
+            pHHt = m_SwpHstry[ --nEnd ];
+            pHHt->SetInDoc( pDoc, true );
         }
+    }
     else
-        for( ; nStart < nEnd; ++nEndDiff, ++nStart )
+    {
+        for ( ; nStart < nEnd; ++m_nEndDiff, ++nStart )
         {
-            pHHt = operator[]( nStart );
-            pHHt->SetInDoc( pDoc, TRUE );
+            pHHt = m_SwpHstry[ nStart ];
+            pHHt->SetInDoc( pDoc, true );
         }
-    return TRUE;
+    }
+    return true;
 }
 
 
 void SwHistory::Delete( USHORT nStart )
 {
-    for( USHORT n = Count(); n > nStart; )
-        SwpHstry::DeleteAndDestroy( --n, 1 );
-    nEndDiff = 0;
+    for ( USHORT n = Count(); n > nStart; )
+    {
+        m_SwpHstry.DeleteAndDestroy( --n, 1 );
+    }
+    m_nEndDiff = 0;
 }
 
 
 USHORT SwHistory::SetTmpEnd( USHORT nNewTmpEnd )
 {
-    ASSERT( nNewTmpEnd <= Count(),  "das temp. Ende ist zu gross" );
+    ASSERT( nNewTmpEnd <= Count(),  "SwHistory::SetTmpEnd: out of bounds" );
 
-    USHORT nOld = Count() - nEndDiff;
-    nEndDiff = Count() - nNewTmpEnd;
+    USHORT nOld = Count() - m_nEndDiff;
+    m_nEndDiff = Count() - nNewTmpEnd;
 
-    // rufe bei allen SwHstryFlyCnt das Redo vom UndoObject auf. Dadurch
-    // werden die Formate der Fly gesichert !!
-    for( USHORT n = nOld; n < nNewTmpEnd; n++ )
-        if( HSTRY_FLYCNT == (*this)[ n ]->Which() )
-            ((SwHstryTxtFlyCnt*)(*this)[ n ])->GetUDelLFmt()->Redo();
+    // for every SwHistoryFlyCnt, call the Redo of its UndoObject.
+    // this saves the formats of the flys!
+    for ( USHORT n = nOld; n < nNewTmpEnd; n++ )
+    {
+        if ( HSTRY_FLYCNT == (*this)[ n ]->Which() )
+        {
+            static_cast<SwHistoryTxtFlyCnt*>((*this)[ n ])
+                ->GetUDelLFmt()->Redo();
+        }
+    }
 
     return nOld;
 }
@@ -1173,21 +1267,21 @@ void SwHistory::CopyFmtAttr( const SfxItemSet& rSet, ULONG nNodeIdx )
     }
 }
 
-void SwHistory::CopyAttr( const SwpHints* pHts, ULONG nNodeIdx,
-                          xub_StrLen nStt, xub_StrLen nEnd, BOOL bFields )
+void SwHistory::CopyAttr( SwpHints* pHts, ULONG nNodeIdx,
+                          xub_StrLen nStart, xub_StrLen nEnd, bool bFields )
 {
     if( !pHts  )
         return;
 
-    // kopiere alle Attribute aus dem TextNode die
-    // im Bereich von Position nStt bis Len liegen
-    const SwTxtAttr* pHt;
+    // copy all attributes of the TextNode in the area from nStart to nEnd
+    SwTxtAttr* pHt;
     xub_StrLen nAttrStt;
     const xub_StrLen * pEndIdx;
     for( USHORT n = 0; n < pHts->Count(); n++ )
     {
         // BP: nAttrStt muss auch bei !pEndIdx gesetzt werden
-        nAttrStt = *(pHt = (*pHts)[n])->GetStart();
+        pHt = pHts->GetTextHint(n);
+        nAttrStt = *pHt->GetStart();
 // JP: ???? wieso nAttrStt >= nEnd
 //      if( 0 != ( pEndIdx = pHt->GetEnd() ) && nAttrStt >= nEnd )
         if( 0 != ( pEndIdx = pHt->GetEnd() ) && nAttrStt > nEnd )
@@ -1212,17 +1306,21 @@ void SwHistory::CopyAttr( const SwpHints* pHts, ULONG nNodeIdx,
         if( bNextAttr )
            continue;
 
-        // alle Attribute, die irgendwie in diesem Bereich liegen speichern
-        if( nStt <= nAttrStt )
+        // save all attributes that are somehow in this area
+        if ( nStart <= nAttrStt )
         {
-            if( nEnd > nAttrStt
+            if ( nEnd > nAttrStt
 // JP: ???? wieso nAttrStt >= nEnd
 //              || (nEnd == nAttrStt && (!pEndIdx || nEnd == pEndIdx->GetIndex()))
             )
-                Add( pHt, nNodeIdx, FALSE );
+            {
+                Add( pHt, nNodeIdx, false );
+            }
         }
-        else if( pEndIdx && nStt < *pEndIdx )
-            Add( pHt, nNodeIdx, FALSE );
+        else if ( pEndIdx && nStart < *pEndIdx )
+        {
+            Add( pHt, nNodeIdx, false );
+        }
     }
 }
 
@@ -1232,74 +1330,79 @@ void SwHistory::CopyAttr( const SwpHints* pHts, ULONG nNodeIdx,
 // Klasse zum Registrieren der History am Node, Format, HintsArray, ...
 
 SwRegHistory::SwRegHistory( SwHistory* pHst )
-    : SwClient( 0 ),
-      pHstry( pHst ),
-      nNodeIdx( ULONG_MAX )
+    : SwClient( 0 )
+    , m_pHistory( pHst )
+    , m_nNodeIndex( ULONG_MAX )
 {
-    if( pHst )
-        _MakeSetWhichIds();
+    _MakeSetWhichIds();
 }
 
 SwRegHistory::SwRegHistory( SwModify* pRegIn, const SwNode& rNd,
                             SwHistory* pHst )
-    : SwClient( pRegIn ),
-      pHstry( pHst ),
-      nNodeIdx( rNd.GetIndex() )
+    : SwClient( pRegIn )
+    , m_pHistory( pHst )
+    , m_nNodeIndex( rNd.GetIndex() )
 {
-    if( pHst )
-        _MakeSetWhichIds();
+    _MakeSetWhichIds();
 }
 
 SwRegHistory::SwRegHistory( const SwNode& rNd, SwHistory* pHst )
-    : SwClient( 0 ),
-      pHstry( pHst ),
-      nNodeIdx( rNd.GetIndex() )
+    : SwClient( 0 )
+    , m_pHistory( pHst )
+    , m_nNodeIndex( rNd.GetIndex() )
 {
-    if( pHstry )
-        _MakeSetWhichIds();
+    _MakeSetWhichIds();
 }
 
 void SwRegHistory::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
-    // Attribut erfragen ?? ( mal sehen )
-    if( pHstry && ( pOld || pNew ) )
+    if ( m_pHistory && ( pOld || pNew ) )
     {
-        if( pNew->Which() < POOLATTR_END )
-            pHstry->Add( pOld, pNew, nNodeIdx );
-        else if( RES_ATTRSET_CHG == pNew->Which() )
+        if ( pNew->Which() < POOLATTR_END )
         {
-            SwHstryHint* pNewHstr;
-            const SfxItemSet& rSet = *((SwAttrSetChg*)pOld)->GetChgSet();
-            if( 1 < rSet.Count() )
-                pNewHstr = new SwHstrySetAttrSet( rSet, nNodeIdx,
-                                                    aSetWhichIds );
+            m_pHistory->Add( pOld, pNew, m_nNodeIndex );
+        }
+        else if ( RES_ATTRSET_CHG == pNew->Which() )
+        {
+            SwHistoryHint* pNewHstr;
+            const SfxItemSet& rSet =
+                *static_cast<SwAttrSetChg*>(pOld)->GetChgSet();
+            if ( 1 < rSet.Count() )
+            {
+                pNewHstr =
+                    new SwHistorySetAttrSet( rSet, m_nNodeIndex, m_WhichIdSet );
+            }
             else
             {
                 const SfxPoolItem* pItem = SfxItemIter( rSet ).FirstItem();
-                if( aSetWhichIds.Seek_Entry( pItem->Which() ) )
-                    pNewHstr = new SwSetFmtHint( pItem, nNodeIdx );
+                if ( m_WhichIdSet.Seek_Entry( pItem->Which() ) )
+                {
+                    pNewHstr = new SwHistorySetFmt( pItem, m_nNodeIndex );
+                }
                 else
-                    pNewHstr = new SwResetFmtHint( pItem, nNodeIdx );
+                {
+                    pNewHstr = new SwHistoryResetFmt( pItem, m_nNodeIndex );
+                }
             }
-            pHstry->Insert( pNewHstr, pHstry->Count() );
+            m_pHistory->m_SwpHstry.Insert( pNewHstr, m_pHistory->Count() );
         }
     }
 }
 
 
 
-void SwRegHistory::Add( SwTxtAttr* pHt, const BOOL bNew )
+void SwRegHistory::AddHint( SwTxtAttr* pHt, const bool bNew )
 {
-    pHstry->Add( pHt, nNodeIdx, bNew );
+    m_pHistory->Add( pHt, m_nNodeIndex, bNew );
 }
 
 
 SwRegHistory::SwRegHistory( SwTxtNode* pTxtNode, const SfxItemSet& rSet,
                             xub_StrLen nStart, xub_StrLen nEnd, USHORT nFlags,
                             SwHistory* pHst )
-    : SwClient( pTxtNode ),
-      pHstry( pHst ),
-      nNodeIdx( pTxtNode->GetIndex() )
+    : SwClient( pTxtNode )
+    , m_pHistory( pHst )
+    , m_nNodeIndex( pTxtNode->GetIndex() )
 {
     if( !rSet.Count() )
         return;
@@ -1322,45 +1425,57 @@ SwRegHistory::SwRegHistory( SwTxtNode* pTxtNode, const SfxItemSet& rSet,
 
     if( pHst && bInsert )
     {
-        SwHstryHint* pNewHstr = new SwHstryResetAttrSet( rSet,
+        SwHistoryHint* pNewHstr = new SwHistoryResetAttrSet( rSet,
                                     pTxtNode->GetIndex(), nStart, nEnd );
         // der NodeIndex kann verschoben sein !!
 
-        pHst->Insert( pNewHstr, pHst->Count() );
+        pHst->m_SwpHstry.Insert( pNewHstr, pHst->Count() );
     }
 }
 
 void SwRegHistory::RegisterInModify( SwModify* pRegIn, const SwNode& rNd )
 {
-    if( pHstry && pRegIn )
+    if ( m_pHistory && pRegIn )
     {
         pRegIn->Add( this );
-        nNodeIdx = rNd.GetIndex();
+        m_nNodeIndex = rNd.GetIndex();
         _MakeSetWhichIds();
     }
-    else if( aSetWhichIds.Count() )
-        aSetWhichIds.Remove( 0, aSetWhichIds.Count() );
+    else if ( m_WhichIdSet.Count() )
+    {
+        m_WhichIdSet.Remove( 0, m_WhichIdSet.Count() );
+    }
 }
 
 void SwRegHistory::_MakeSetWhichIds()
 {
-    if( aSetWhichIds.Count() )
-        aSetWhichIds.Remove( 0, aSetWhichIds.Count() );
+    if (!m_pHistory) return;
+
+    if ( m_WhichIdSet.Count() )
+    {
+        m_WhichIdSet.Remove( 0, m_WhichIdSet.Count() );
+    }
 
     if( GetRegisteredIn() )
     {
         const SfxItemSet* pSet = 0;
         if( GetRegisteredIn()->ISA( SwCntntNode ) )
-            pSet = ((SwCntntNode*)GetRegisteredIn())->GetpSwAttrSet();
-        else if( GetRegisteredIn()->ISA( SwFmt ) )
-            pSet = &((SwFmt*)GetRegisteredIn())->GetAttrSet();
+        {
+            pSet = static_cast<SwCntntNode*>(
+                    const_cast<SwModify*>(GetRegisteredIn()))->GetpSwAttrSet();
+        }
+        else if ( GetRegisteredIn()->ISA( SwFmt ) )
+        {
+            pSet = &static_cast<SwFmt*>(
+                    const_cast<SwModify*>(GetRegisteredIn()))->GetAttrSet();
+        }
         if( pSet && pSet->Count() )
         {
             SfxItemIter aIter( *pSet );
             USHORT nW = aIter.FirstItem()->Which();
             while( TRUE )
             {
-                aSetWhichIds.Insert( nW );
+                m_WhichIdSet.Insert( nW );
                 if( aIter.IsAtEnd() )
                     break;
                 nW = aIter.NextItem()->Which();
@@ -1368,3 +1483,4 @@ void SwRegHistory::_MakeSetWhichIds()
         }
     }
 }
+

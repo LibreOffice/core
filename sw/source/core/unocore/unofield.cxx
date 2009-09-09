@@ -1971,12 +1971,12 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
 
             if (NULL != pDoc)
             {
-                SwPosition * pPos = GetPosition();
-
-                ASSERT(pPos, "no position");
-                pDoc->PutValueToField( *pPos, rValue, pEntry->nWID);
-
-                delete pPos;
+                const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
+                if(!pTxtFld)
+                    throw uno::RuntimeException();
+                SwPosition aPosition( pTxtFld->GetTxtNode() );
+                aPosition.nContent = *pTxtFld->GetStart();
+                pDoc->PutValueToField( aPosition, rValue, pEntry->nWID);
             }
             // <- #111840#
         }
@@ -2172,12 +2172,11 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
                         xub_StrLen nHiddenStart;
                         xub_StrLen nHiddenEnd;
 
-                        SwPosition *pPos = pTxtFld->GetPosition();
-                        if (!pPos)
-                            throw uno::RuntimeException();
+                        SwPosition aPosition( pTxtFld->GetTxtNode() );
+                        aPosition.nContent = *pTxtFld->GetStart();
 
-                        bHidden = SwScriptInfo::GetBoundsOfHiddenRange( rTxtNode,
-                                        pPos->nContent.GetIndex(),
+                        bHidden = SwScriptInfo::GetBoundsOfHiddenRange( pTxtFld->GetTxtNode(),
+                                        *pTxtFld->GetStart(),
                                         nHiddenStart, nHiddenEnd );
                     }
 
@@ -2475,23 +2474,6 @@ const SwField*  SwXTextField::GetField() const
     if(GetRegisteredIn() && pFmtFld)
         return  pFmtFld->GetFld();
     return 0;
-}
-
-// #111840#
-SwPosition * SwXTextField::GetPosition()
-{
-    SwPosition * pResult = NULL;
-    const SwFmtFld * pFmtFld2 = GetFldFmt();
-
-    if (pFmtFld2)
-    {
-        const SwTxtFld * pTxtFld = pFmtFld2->GetTxtFld();
-
-        if (pTxtFld)
-            pResult = pTxtFld->GetPosition();
-    }
-
-    return pResult;
 }
 
 /******************************************************************

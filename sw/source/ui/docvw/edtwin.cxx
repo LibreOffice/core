@@ -420,7 +420,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
             SdrObject* pObj; SdrPageView* pPV;
             pSdrView->SetHitTolerancePixel( HIT_PIX );
             if ( bNotInSelObj && bExecHyperlinks &&
-                 pSdrView->PickObj( rLPt, pObj, pPV, SDRSEARCH_PICKMACRO ))
+                 pSdrView->PickObj( rLPt, pSdrView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO ))
             {
                 SdrObjMacroHitRec aTmp;
                 aTmp.aPos = rLPt;
@@ -1405,8 +1405,8 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     if( rKeyCode.GetFullCode() == (KEY_A | KEY_MOD1 |KEY_SHIFT)
         && rSh.HasDrawView() &&
         (0 != (nLclSelectionType = rSh.GetSelectionType()) &&
-        ((nLclSelectionType & nsSelectionType::SEL_FRM) ||
-        ((nLclSelectionType & nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM) &&
+        ((nLclSelectionType & (nsSelectionType::SEL_FRM|nsSelectionType::SEL_GRF)) ||
+        ((nLclSelectionType & (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM)) &&
                 rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1))))
     {
         SdrHdlList& rHdlList = (SdrHdlList&)rSh.GetDrawView()->GetHdlList();

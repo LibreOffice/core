@@ -35,12 +35,8 @@
 #include <algorithm>
 
 
-#ifndef _COM_SUN_STAR_CHART_DATAROWSOURCE_HPP_
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_DATAROWSOURCE_HPP_
 #include <com/sun/star/chart2/data/LabelOrigin.hpp>
-#endif
 #include <cppuhelper/interfacecontainer.hxx>
 #include <vos/mutex.hxx>
 #include <osl/mutex.hxx>
@@ -283,11 +279,9 @@ static String GetCellRangeName( SwFrmFmt &rTblFmt, SwUnoCrsr &rTblCrsr )
 
     //!! see also SwXTextTableCursor::getRangeName
 
-    SwUnoTableCrsr* pUnoTblCrsr = rTblCrsr;
-#if OSL_DEBUG_LEVEL > 1
+    SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<SwUnoTableCrsr*>(&rTblCrsr);
     if (!pUnoTblCrsr)
         return String();
-#endif
     pUnoTblCrsr->MakeBoxSels();
 
     const SwStartNode*  pStart;
@@ -491,7 +485,8 @@ static void GetFormatAndCreateCursorFromRangeRep(
                     pUnoCrsr->SetMark();
                     pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                    SwUnoTableCrsr* pCrsr = *pUnoCrsr;
+                    SwUnoTableCrsr* pCrsr =
+                        dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
                     pCrsr->MakeBoxSels();
 
                     if (ppUnoCrsr)
@@ -2064,9 +2059,8 @@ SwChartDataSequence::SwChartDataSequence(
 
     // check if it can properly convert into a SwUnoTableCrsr
     // which is required for some functions
-    SwUnoTableCrsr* pUnoTblCrsr = *pTblCrsr;
-    if (!pUnoTblCrsr)
-        pUnoTblCrsr = *pTblCrsr;
+    SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
+    DBG_ASSERT(pUnoTblCrsr, "SwChartDataSequence: cursor not SwUnoTableCrsr");
 #endif
 }
 
@@ -2115,9 +2109,8 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
 
     // check if it can properly convert into a SwUnoTableCrsr
     // which is required for some functions
-    SwUnoTableCrsr* pUnoTblCrsr = *pTblCrsr;
-    if (!pUnoTblCrsr)
-        pUnoTblCrsr = *pTblCrsr;
+    SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
+    DBG_ASSERT(pUnoTblCrsr, "SwChartDataSequence: cursor not SwUnoTableCrsr");
 #endif
 }
 
@@ -2779,7 +2772,7 @@ bool SwChartDataSequence::ExtendTo( bool bExtendCol,
 {
     bool bChanged = false;
 
-    SwUnoTableCrsr* pUnoTblCrsr = *pTblCrsr;
+    SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
     //pUnoTblCrsr->MakeBoxSels();
 
     const SwStartNode *pStartNd  = 0;

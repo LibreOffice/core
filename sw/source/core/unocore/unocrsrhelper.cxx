@@ -585,9 +585,9 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
 
         if(pSwNum)
         {
+            SwDoc* pDoc = rPam.GetDoc();
             if(pSwNum->GetNumRule())
             {
-                SwDoc* pDoc = rPam.GetDoc();
                 SwNumRule aRule(*pSwNum->GetNumRule());
                 const String* pNewCharStyles =  pSwNum->GetNewCharStyleNames();
                 const String* pBulletFontNames = pSwNum->GetBulletFontNames();
@@ -680,7 +680,6 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
             }
             else if(pSwNum->GetCreatedNumRuleName().Len())
             {
-                SwDoc* pDoc = rPam.GetDoc();
                 UnoActionContext aAction(pDoc);
                 SwNumRule* pRule = pDoc->FindNumRulePtr( pSwNum->GetCreatedNumRuleName() );
                 if(!pRule)
@@ -690,6 +689,17 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                 pDoc->SetNumRule( rPam, *pRule, false );
                 // <--
             }
+            // --> OD 2009-08-18 #i103817#
+            // outline numbering
+            else
+            {
+                UnoActionContext aAction(pDoc);
+                SwNumRule* pRule = pDoc->GetOutlineNumRule();
+                if(!pRule)
+                    throw RuntimeException();
+                pDoc->SetNumRule( rPam, *pRule, false );
+            }
+            // <--
         }
     }
     else if(rValue.getValueType() == ::getVoidCppuType())

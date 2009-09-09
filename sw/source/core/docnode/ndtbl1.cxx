@@ -117,7 +117,7 @@ void lcl_GetStartEndCell( const SwCursor& rCrsr,
             "Tabselection nicht auf Cnt." );
 
     Point aPtPos, aMkPos;
-    const SwShellCrsr* pShCrsr = rCrsr;
+    const SwShellCrsr* pShCrsr = dynamic_cast<const SwShellCrsr*>(&rCrsr);
     if( pShCrsr )
     {
         aPtPos = pShCrsr->GetPtPos();
@@ -138,7 +138,8 @@ void lcl_GetStartEndCell( const SwCursor& rCrsr,
 BOOL lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
                     BOOL bAllCrsr = FALSE )
 {
-    const SwTableCursor* pTblCrsr = rCursor;
+    const SwTableCursor* pTblCrsr =
+        dynamic_cast<const SwTableCursor*>(&rCursor);
     if( pTblCrsr )
         ::GetTblSelCrs( *pTblCrsr, rBoxes );
     else

@@ -155,7 +155,7 @@ sal_Bool SwTxtSizeInfo::_HasHint( const SwTxtNode* pTxtNode, xub_StrLen nPos )
     const SwpHints *pHints = pTxtNode->GetpSwpHints();
     if( !pHints )
         return sal_False;
-    for( MSHORT i = 0; i < pHints->Count(); ++i )
+    for ( USHORT i = 0; i < pHints->Count(); ++i )
     {
         const SwTxtAttr *pPos = (*pHints)[i];
         xub_StrLen nStart = *pPos->GetStart();

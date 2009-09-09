@@ -36,9 +36,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/objsh.hxx>
 
-#ifndef _INTN_HXX //autogen
 // #include <tools/intn.hxx>
-#endif
 #include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/prnmon.hxx>
@@ -752,7 +750,7 @@ SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef &rDocShellR
     // Wir bauen uns ein neues Dokument
     SwDoc *pPrtDoc = new SwDoc;
     pPrtDoc->acquire();
-    pPrtDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)rDocShellRef );
+    pPrtDoc->SetRefForDocShell( boost::addressof(rDocShellRef) );
     pPrtDoc->LockExpFlds();
 
     // Der Drucker wird uebernommen
@@ -770,9 +768,11 @@ SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef &rDocShellR
     pPrtDoc->ReplaceStyles( *GetDoc() );
 
     SwShellCrsr *pActCrsr = pFESh->_GetCrsr();
-    SwShellCrsr *pFirstCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetNext());
+    SwShellCrsr *pFirstCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetNext());
     if( !pActCrsr->HasMark() ) // bei Multiselektion kann der aktuelle Cursor leer sein
-        pActCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetPrev());
+    {
+        pActCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetPrev());
+    }
 
     // Die Y-Position der ersten Selektion
     const Point aSelPoint = pFESh->IsTableMode() ?
@@ -838,7 +838,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     // Wir bauen uns ein neues Dokument
 //    SwDoc *pPrtDoc = new SwDoc;
 //    pPrtDoc->acquire();
-//    pPrtDoc->SetRefForDocShell( (SvEmbeddedObjectRef*)&(long&)rDocShellRef );
+//    pPrtDoc->SetRefForDocShell( boost::addressof(rDocShellRef) );
     pPrtDoc->LockExpFlds();
 
     // Der Drucker wird uebernommen
@@ -858,9 +858,11 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     pPrtDoc->ReplaceStyles( *GetDoc() );
 
     SwShellCrsr *pActCrsr = pFESh->_GetCrsr();
-    SwShellCrsr *pFirstCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetNext());
+    SwShellCrsr *pFirstCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetNext());
     if( !pActCrsr->HasMark() ) // bei Multiselektion kann der aktuelle Cursor leer sein
-        pActCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetPrev());
+    {
+        pActCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetPrev());
+    }
 
     // Die Y-Position der ersten Selektion
     // Die Y-Position der ersten Selektion

@@ -956,6 +956,10 @@ Menu MN_GRF_POPUPMENU
     {
         MN_ALIGN_FRAME
         MN_MOUSE_FRAME_WITH_CONTOUR
+        // --> OD 2009-07-14 #i73249#
+        SEPARATOR ;
+        MN_TITLE_DESCRIPTION_SHAPE
+        // <--
         SEPARATOR ;
         MenuItem
         {
@@ -989,6 +993,10 @@ Menu MN_OLE_POPUPMENU
     {
         MN_ALIGN_FRAME
         MN_MOUSE_FRAME_WITH_CONTOUR
+        // --> OD 2009-07-14 #i73249#
+        SEPARATOR ;
+        MN_TITLE_DESCRIPTION_SHAPE
+        // <--
         SEPARATOR ;
         MenuItem
         {
@@ -1013,6 +1021,10 @@ Menu MN_FRM_POPUPMENU
     {
         MN_ALIGN_FRAME
         MN_MOUSE_FRAME_WITHOUT_CONTOUR
+        // --> OD 2009-07-07 #i73249#
+        SEPARATOR ;
+        MN_TITLE_DESCRIPTION_SHAPE
+        // <--
         SEPARATOR ;
         MN_FRM
         MN_FRM_CAPTION_ITEM

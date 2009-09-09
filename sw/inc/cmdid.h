@@ -155,7 +155,6 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_PASTE                (FN_EDIT + 13)    /* Einfuegen */
 #define FN_PASTESPECIAL         (FN_EDIT + 14)    /* Verknuepfung einfuegen */
 #define FN_PASTESPECIAL_DLG     (FN_EDIT + 15)    /* Verknuepfung einfuegen */
-
 #define FN_NUMBER_BULLETS       (FN_EDIT + 21)    /* Bullets */
 #define FN_REPEAT               (FN_EDIT + 22)    /* Letzten Befehl wiederholen */
 #define FN_EDIT_IDX_ENTRY_DLG   (FN_EDIT + 23)    /* Index-Entry bearbeiten */
@@ -1259,6 +1258,10 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_IID_COLRIGHT                 (FN_FRAME + 17)
 
 #define FN_SET_FRM_ALT_NAME             (FN_FRAME + 18)
+// --> OD 2009-07-13 #i73249#
+#define FN_UNO_TITLE                    (FN_FRAME + 19)
+#define FN_UNO_DESCRIPTION              (FN_FRAME + 20)
+// <--
 
 
 //Member-Ids fuer Fill/SetVariable an Items

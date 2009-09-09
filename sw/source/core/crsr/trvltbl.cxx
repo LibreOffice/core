@@ -32,9 +32,7 @@
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
 
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 #include <svx/protitem.hxx>
 #include <crsrsh.hxx>
 #include <doc.hxx>
@@ -53,6 +51,7 @@
 #include <cellatr.hxx>
 #include <cellfrm.hxx>
 #include <rowfrm.hxx>
+
 
 // setze Crsr in die naechsten/vorherigen Celle
 BOOL SwCrsrShell::GoNextCell( BOOL bAppendLine )
@@ -653,7 +652,7 @@ BOOL GotoCurrTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
 BOOL SwCursor::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
 {
     BOOL bRet = FALSE;
-    SwTableCursor* pTblCrsr = (SwTableCursor*)*this;
+    SwTableCursor* pTblCrsr = dynamic_cast<SwTableCursor*>(this);
 
     if( pTblCrsr || !HasMark() )    // nur wenn kein Mark oder ein TblCrsr
     {

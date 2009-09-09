@@ -552,6 +552,10 @@ String lcl_dbg_out(const SwNode & rNode)
     aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
 #endif
 
+    aTmpStr += String(" type=\"", RTL_TEXTENCODING_ASCII_US);
+    aTmpStr += String::CreateFromInt32(sal_Int32( rNode.GetNodeType() ) );
+    aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
+
     aTmpStr += String(" pointer=\"", RTL_TEXTENCODING_ASCII_US);
 
     char aBuffer[128];

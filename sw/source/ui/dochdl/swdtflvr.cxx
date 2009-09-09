@@ -468,7 +468,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
         pClpDocFac = new SwDocFac;
         SwDoc* pTmpDoc = pClpDocFac->GetDoc();
 
-        pTmpDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)aDocShellRef );
+        pTmpDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
         pWrtShell->Copy( pTmpDoc );
 
@@ -561,10 +561,14 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
             break;
 
         case SOT_FORMAT_STRING:
-            bOK = SetObject( pClpDocFac->GetDoc(),
+        {
+            SwDoc* pDoc = pClpDocFac->GetDoc();
+            ASSERT( pDoc, "Document not found" );
+            pDoc->SetClipBoard( true );
+            bOK = SetObject( pDoc,
                                 SWTRANSFER_OBJECTTYPE_STRING, rFlavor );
-            break;
-
+        }
+        break;
         case SOT_FORMAT_RTF:
             bOK = SetObject( pClpDocFac->GetDoc(),
                                 SWTRANSFER_OBJECTTYPE_RTF, rFlavor );
@@ -879,7 +883,7 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
         SwDoc* pTmpDoc = pClpDocFac->GetDoc();
         pTmpDoc->SetClipBoard( true );
 
-        pTmpDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)aDocShellRef );
+        pTmpDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
         pWrtShell->Copy( pTmpDoc );
 
@@ -1063,7 +1067,7 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
     SwCntntNode* pCNd = rNds.GoNext( &aNodeIdx ); // gehe zum 1. ContentNode
     SwPaM aPam( *pCNd );
 
-    pCDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)aDocShellRef );
+    pCDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
     pCDoc->LockExpFlds();   // nie die Felder updaten - Text so belassen
 
     pCDoc->InsertGlossary( rGlossary, rStr, aPam, 0 );
@@ -2893,6 +2897,15 @@ static USHORT aPasteSpecialIds[] =
     SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR,
     0
 };
+
+
+int SwTransferable::PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& rData )
+{
+    // Plain text == unformatted
+    return SwTransferable::PasteFormat( rSh, rData, SOT_FORMAT_STRING );
+}
+
+// -----------------------------------------------------------------------
 
 int SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData, ULONG& rFormatUsed )
 {

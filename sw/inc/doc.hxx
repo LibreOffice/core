@@ -32,45 +32,23 @@
 
 /** SwDoc interfaces */
 
-#ifndef IINTERFACE_HXX_INCLUDED
 #include <IInterface.hxx>
-#endif
 #include <IDocumentSettingAccess.hxx>
-#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
-#endif
 #include <IDocumentMarkAccess.hxx>
-#ifndef IREDLINEACCESS_HXX_INCLUDED
 #include <IDocumentRedlineAccess.hxx>
-#endif
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentFieldsAccess.hxx>
-#ifndef IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
 #include <IDocumentContentOperations.hxx>
-#endif
-#ifndef IDOCUMENTSTYLEPOOLACCESS_HXX_INCLUDED
 #include <IDocumentStylePoolAccess.hxx>
-#endif
-#ifndef IDOCUMENTLINENUMBERACCESS_HXX_INCLUDED
 #include <IDocumentLineNumberAccess.hxx>
-#endif
-#ifndef IDOCUMENTSTATISTICS_HXX_INCLUDED
 #include <IDocumentStatistics.hxx>
-#endif
-#ifndef IDOCUMENTSTATE_HXX_INCLUDED
 #include <IDocumentState.hxx>
-#endif
-#ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
 #include <IDocumentDrawModelAccess.hxx>
-#endif
 #include <IDocumentLayoutAccess.hxx>
-#ifndef IDOCUMENTTIMERACCESS_HXX_INCLUDED
 #include <IDocumentTimerAccess.hxx>
-#endif
-#ifndef IDOCUMENTCHARTDATAPROVIDER_HXX_INCLUDED
 #include <IDocumentChartDataProviderAccess.hxx>
-#endif
 // --> OD 2007-10-26 #i83479#
 #include <IDocumentOutlineNodes.hxx>
 #include <IDocumentListItems.hxx>
@@ -92,15 +70,11 @@ class SwList;
 #include <toxe.hxx>             // enums
 #include <flyenum.hxx>
 #include <itabenum.hxx>
-#ifndef _SWDBDATA_HXXnLinkCt
 #include <swdbdata.hxx>
-#endif
 #include <chcmprse.hxx>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
-#ifndef _VOS_REF_HXX
 #include <vos/ref.hxx>
-#endif
 #include <svx/svdtypes.hxx>
 #include <svtools/style.hxx>
 #include <svx/numitem.hxx>
@@ -113,6 +87,7 @@ class SwList;
 
 #include <svtools/embedhlp.hxx>
 #include <vector>
+#include <memory>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -258,6 +233,7 @@ namespace container {
 
 namespace sfx2 {
     class SvLinkSource;
+    class IXmlIdRegistry;
 }
 
 //PageDescriptor-Schnittstelle, Array hier wegen inlines.
@@ -433,6 +409,8 @@ private:
     tImplSortedNodeNumList* mpListItemsList;
     // <--
 
+    ::std::auto_ptr< ::sfx2::IXmlIdRegistry > m_pXmlIdRegistry;
+
     // -------------------------------------------------------------------
     // sonstige
     sal_uInt16  nUndoPos;           // akt. Undo-InsertPosition (fuers Redo!)
@@ -502,7 +480,6 @@ private:
     bool mbPurgeOLE              : 1;    // TRUE: Purge OLE-Objects
     bool mbKernAsianPunctuation  : 1;    // TRUE: kerning also for ASIAN punctuation
     bool mbReadlineChecked       : 1;    // TRUE: if the query was already shown
-    bool mbWinEncryption         : 1;    // imported document password encrypted?
     bool mbLinksUpdated          : 1;    // OD 2005-02-11 #i38810#
                                          // flag indicating, that the links have been updated.
     bool mbClipBoard             : 1;    // true: this document represents the clipboard
@@ -638,7 +615,7 @@ private:
         // Kopieren eines Bereiches im oder in ein anderes Dokument !
         // Die Position darf nicht im Bereich liegen !!
     sal_Bool _Copy( SwPaM&, SwPosition&,
-                sal_Bool MakeNewFrms = sal_True, SwPaM* pCpyRng = 0 ) const;    // in ndcopy.cxx
+                sal_Bool MakeNewFrms /*= sal_True*/, bool bCopyAll, SwPaM* pCpyRng /*= 0*/ ) const; // in ndcopy.cxx
 
     SwFlyFrmFmt* _MakeFlySection( const SwPosition& rAnchPos,
                                 const SwCntntNode& rNode, RndStdIds eRequestId,
@@ -650,7 +627,8 @@ private:
                                 const SfxItemSet* pGrfAttrSet,
                                 SwFrmFmt* = 0 );
 
-    void _CopyFlyInFly( const SwNodeRange& rRg, const SwNodeIndex& rSttIdx,
+    void _CopyFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndContentIndex,
+                        const SwNodeIndex& rSttIdx,
                         sal_Bool bCopyFlyAtFly = sal_False ) const; // steht im ndcopy.cxx
     sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, sal_Bool bNewFrms );
 
@@ -722,6 +700,8 @@ private:
      SwFmt *_MakeFrmFmt(const String &, SwFmt *, BOOL, BOOL );
      SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, BOOL, BOOL );
 
+     void InitTOXTypes();
+     void   Paste( const SwDoc& );
 public:
 
     /** Life cycle
@@ -898,11 +878,16 @@ public:
 
     /** IDocumentContentOperations
     */
-    virtual bool Copy(SwPaM&, SwPosition&) const;
+    virtual bool Copy(SwPaM&, SwPosition&, bool bCopyAll) const;
     virtual void DeleteSection(SwNode* pNode);
     virtual bool Delete(SwPaM&);
     virtual bool DelFullPara(SwPaM&);
-    virtual bool DeleteAndJoin(SwPaM&);
+    // --> OD 2009-08-20 #i100466#
+    // Add optional parameter <bForceJoinNext>, default value <false>
+    // Needed for hiding of deletion redlines
+    virtual bool DeleteAndJoin( SwPaM&,
+                                const bool bForceJoinNext = false );
+    // <--
     virtual bool Move(SwPaM&, SwPosition&, SwMoveFlags);
     virtual bool Move(SwNodeRange&, SwNodeIndex&, SwMoveFlags);
     virtual bool MoveAndJoin(SwPaM&, SwPosition&, SwMoveFlags);
@@ -1101,6 +1086,7 @@ public:
                                 SwFrmFmt *pParent = 0 );
 
     void CopyWithFlyInFly( const SwNodeRange& rRg,
+                            const xub_StrLen nEndContentIndex,
                             const SwNodeIndex& rInsPos,
                             sal_Bool bMakeNewFrms = sal_True,
                             sal_Bool bDelRedlines = sal_True,
@@ -1110,7 +1096,12 @@ public:
 
     sal_Bool SetFrmFmtToFly( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFmt,
                         SfxItemSet* pSet = 0, sal_Bool bKeepOrient = sal_False );
-
+    // --> OD 2009-07-20 #i73249#
+    void SetFlyFrmTitle( SwFlyFrmFmt& rFlyFrmFmt,
+                         const String& sNewTitle );
+    void SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
+                               const String& sNewDescription );
+    // <--
 
     /** Footnotes
     */
@@ -1121,9 +1112,9 @@ public:
     void SetEndNoteInfo(const SwEndNoteInfo& rInfo);
           SwFtnIdxs& GetFtnIdxs()       { return *pFtnIdxs; }
     const SwFtnIdxs& GetFtnIdxs() const { return *pFtnIdxs; }
-    // Fussnoten im Bereich aendern
-    sal_Bool SetCurFtn( const SwPaM& rPam, const String& rNumStr,
-                        sal_uInt16 nNumber, sal_Bool bIsEndNote );
+    // change footnotes in area
+    bool SetCurFtn( const SwPaM& rPam, const String& rNumStr,
+                    sal_uInt16 nNumber, bool bIsEndNote );
 
     /** Operations on the content of the document e.g.
         spell-checking/hyphenating/word-counting
@@ -1437,6 +1428,7 @@ public:
     void SetInReading( bool bNew )              { mbInReading = bNew; }
 
     bool IsClipBoard() const                    { return mbClipBoard; }
+    // N.B.: must be called right after constructor! (@see GetXmlIdRegistry)
     void SetClipBoard( bool bNew )              { mbClipBoard = bNew; }
 
     bool IsColumnSelection() const              { return mbColumnSelection; }
@@ -1975,9 +1967,6 @@ public:
     USHORT SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         USHORT nMode );
 
-    inline void SetWinEncryption(const bool bImportWinEncryption) {mbWinEncryption = bImportWinEncryption; }
-    inline bool IsWinEncrypted() const         { return mbWinEncryption; }
-
     void ReadLayoutCache( SvStream& rStream );
     void WriteLayoutCache( SvStream& rStream );
     SwLayoutCache* GetLayoutCache() const { return pLayoutCache; }
@@ -2100,6 +2089,9 @@ public:
     {
         return n32DummyCompatabilityOptions2;
     }
+
+    ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
+    SwDoc* CreateCopy() const;
 };
 
 

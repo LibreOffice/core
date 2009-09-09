@@ -68,8 +68,11 @@
 #include <unochart.hxx>
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
+#include <unocrsr.hxx>
+
 
 using namespace com::sun::star;
+
 
 SV_IMPL_PTRARR(SwGetINetAttrs, SwGetINetAttr*)
 
@@ -123,7 +126,7 @@ void SwEditShell::Insert(const String &rStr)
     // calculate cursor bidi level
     SwCursor* pTmpCrsr = _GetCrsr();
     const BOOL bDoNotSetBidiLevel = ! pTmpCrsr ||
-                                    ( 0 != (SwUnoCrsr*)*pTmpCrsr );
+                                ( 0 != dynamic_cast<SwUnoCrsr*>(pTmpCrsr) );
 
     if ( ! bDoNotSetBidiLevel )
     {
@@ -380,27 +383,27 @@ void SwEditShell::GetGrfNms( String* pGrfName, String* pFltName,
 
 
 // alternativen Text abfragen/setzen
-const String& SwEditShell::GetAlternateText() const
-{
-    SwPaM* pCrsr = GetCrsr();
-    const SwNoTxtNode* pNd;
-    if( !pCrsr->HasMark() && 0 != ( pNd = pCrsr->GetNode()->GetNoTxtNode()) )
-        return pNd->GetAlternateText();
+//const String& SwEditShell::GetAlternateText() const
+//{
+//    SwPaM* pCrsr = GetCrsr();
+//    const SwNoTxtNode* pNd;
+//    if( !pCrsr->HasMark() && 0 != ( pNd = pCrsr->GetNode()->GetNoTxtNode()) )
+//        return pNd->GetAlternateText();
 
-    return aEmptyStr;
-}
+//    return aEmptyStr;
+//}
 
 
-void SwEditShell::SetAlternateText( const String& rTxt )
-{
-    SwPaM* pCrsr = GetCrsr();
-    SwNoTxtNode* pNd;
-    if( !pCrsr->HasMark() && 0 != ( pNd = pCrsr->GetNode()->GetNoTxtNode()) )
-    {
-        pNd->SetAlternateText( rTxt, sal_True );
-        GetDoc()->SetModified();
-    }
-}
+//void SwEditShell::SetAlternateText( const String& rTxt )
+//{
+//    SwPaM* pCrsr = GetCrsr();
+//    SwNoTxtNode* pNd;
+//    if( !pCrsr->HasMark() && 0 != ( pNd = pCrsr->GetNode()->GetNoTxtNode()) )
+//    {
+//        pNd->SetAlternateText( rTxt, sal_True );
+//        GetDoc()->SetModified();
+//    }
+//}
 
 
 const PolyPolygon *SwEditShell::GetGraphicPolygon() const

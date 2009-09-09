@@ -76,7 +76,7 @@
 #include <srcview.hxx>
 #include <viewfunc.hxx>
 #include <doc.hxx>
-#include <itemdef.hxx>
+#include <sfx2/msg.hxx>
 #include <shellio.hxx>
 
 #include <cmdid.h>          // FN_       ...

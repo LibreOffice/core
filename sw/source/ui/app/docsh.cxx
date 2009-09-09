@@ -30,17 +30,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <rtl/logfile.hxx>
-#ifndef _MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <vcl/jobset.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/whiter.hxx>
@@ -53,9 +48,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/misccfg.hxx>
-#ifndef _PASSWD_HXX
 #include <sfx2/passwd.hxx>
-#endif
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/evntconf.hxx>
@@ -70,9 +63,7 @@
 #include <sot/clsids.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
-//#ifndef _SB_SBJSMOD_HXX //autogen
 //#include <basic/sbjsmod.hxx>
-//#endif
 #include <swevent.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtfsize.hxx>
@@ -81,41 +72,27 @@
 #include <swwait.hxx>
 #include <swprtopt.hxx>
 #include <frmatr.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>         // fuer die aktuelle Sicht
-#endif
 #include <edtwin.hxx>
 #include <PostItMgr.hxx>
 #include <postit.hxx>
 #include <wrtsh.hxx>        // Verbindung zur Core
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>        // Dokumenterzeugung
-#endif
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <viewopt.hxx>
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
 #include <swmodule.hxx>
-#ifndef _GLOBDOC_HXX
 #include <globdoc.hxx>
-#endif
 #include <usrpref.hxx>
 #include <shellio.hxx>      // I/O
 #include <docstyle.hxx>
 #include <doc.hxx>
 #include <docstat.hxx>
 #include <pagedesc.hxx>
-#ifndef _PVIEW_HXX
 #include <pview.hxx>
-#endif
 #include <mdiexp.hxx>
 #include <swbaslnk.hxx>
-#ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
-#endif
 #include <ndindex.hxx>
 #include <ndole.hxx>
 #include <swcli.hxx>
@@ -127,18 +104,10 @@
 #include <docary.hxx>
 // <--
 #include <swerror.h>        // Fehlermeldungen
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _CMDID_H
-#include <cmdid.h>          //
-#endif
-#ifndef _GLOBALS_HRC
+#include <cmdid.h>
 #include <globals.hrc>
-#endif
-#ifndef _APP_HRC
 #include <app.hrc>
-#endif
 #include "warnpassword.hxx"
 
 #include <cfgid.h>
@@ -150,18 +119,17 @@
 #include <comphelper/storagehelper.hxx>
 
 #define SwDocShell
-#ifndef _ITEMDEF_HXX
-#include <itemdef.hxx>
-#endif
-#ifndef _SWSLOTS_HXX
+#include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#endif
 #include <com/sun/star/document/UpdateDocMode.hpp>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <unomid.h>
+
+#include <sfx2/Metadatable.hxx>
+
 
 using rtl::OUString;
 using namespace ::com::sun::star;
@@ -608,17 +576,6 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         InfoBox( 0,
                  SW_RESSTR(STR_DLLNOTFOUND) ).Execute();
         return FALSE;
-    }
-
-    // if the imported word document is password protected - warn the user
-    // about saving it without the password.
-    if(pDoc->IsWinEncrypted())
-    {
-        if(!SwWarnPassword::WarningOnPassword( rMedium ))
-        {
-            SetError(ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
-            return FALSE;
-        }
     }
 
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
@@ -1416,4 +1373,8 @@ BOOL SwTmpPersist::SaveCompleted( SvStorage * pStor )
     return FALSE;
 } */
 
+const ::sfx2::IXmlIdRegistry* SwDocShell::GetXmlIdRegistry() const
+{
+    return pDoc ? &pDoc->GetXmlIdRegistry() : 0;
+}
 

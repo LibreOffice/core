@@ -39,9 +39,7 @@
 #endif
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svtools/stritem.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/urihelper.hxx>
@@ -64,21 +62,15 @@
 #include <svx/grfflt.hxx>
 #include <svx/tbxcolor.hxx>
 #include <fmturl.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <swmodule.hxx>
 #include <frmatr.hxx>
 #include <swundo.hxx>
 #include <uitool.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _GRFSH_HXX
 #include <grfsh.hxx>
-#endif
 #include <frmmgr.hxx>
 #include <frmdlg.hxx>
 #include <frmfmt.hxx>
@@ -90,7 +82,7 @@
 #include <popup.hrc>
 
 #define SwGrfShell
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
 #include "swabstdlg.hxx"
@@ -122,7 +114,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             {
                 String sGrfNm, sFilterNm;
                 rSh.GetGrfNms( &sGrfNm, &sFilterNm );
-                ExportGraphic( *pGraphic, sGrfNm, sGrfNm );
+                ExportGraphic( *pGraphic, sGrfNm );
             }
         }
         break;
@@ -162,8 +154,13 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.Put( aFrmSize );
 
             aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
-            if(nSlot == FN_FORMAT_GRAFIC_DLG)
-                aSet.Put(SfxStringItem(FN_SET_FRM_ALT_NAME, rSh.GetAlternateText()));
+            if ( nSlot == FN_FORMAT_GRAFIC_DLG )
+            {
+                // --> OD 2009-07-13 #i73249#
+//                aSet.Put(SfxStringItem(FN_SET_FRM_ALT_NAME, rSh.GetAlternateText()));
+                aSet.Put( SfxStringItem( FN_SET_FRM_ALT_NAME, rSh.GetObjTitle() ) );
+                // <--
+            }
 
             pRect = &rSh.GetAnyCurRect(RECT_PAGE_PRT);
             aFrmSize.SetWidth( pRect->Width() );
@@ -332,10 +329,15 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                                      sFilterNm, 0 );
                     }
                 }
-                if( SFX_ITEM_SET == pSet->GetItemState(
+                if ( SFX_ITEM_SET == pSet->GetItemState(
                                         FN_SET_FRM_ALT_NAME, TRUE, &pItem ))
-                    rSh.SetAlternateText(
-                                ((const SfxStringItem*)pItem)->GetValue() );
+                {
+                    // --> OD 2009-07-13 #i73249#
+//                    rSh.SetAlternateText(
+//                                ((const SfxStringItem*)pItem)->GetValue() );
+                    rSh.SetObjTitle( ((const SfxStringItem*)pItem)->GetValue() );
+                    // <--
+                }
 
                 SfxItemSet aGrfSet( rSh.GetAttrPool(), RES_GRFATR_BEGIN,
                                                        RES_GRFATR_END-1 );

@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: porlay.cxx,v $
- * $Revision: 1.67.190.1 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -45,15 +42,10 @@
 #include <porrst.hxx>       // SwHangingPortion
 #include <pormulti.hxx>     // SwMultiPortion
 #include <breakit.hxx>
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <unicode/uchar.h>
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
-#ifndef _COM_SUN_STAR_I18N_CTLSCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/CTLScriptType.hdl>
-#endif
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
-#endif
 #include <paratr.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/scripttypeitem.hxx>
@@ -1036,7 +1028,26 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         }
         // <--
 
-        aScriptChg.Insert( nChg, nCnt );
+        // special case for dotted circle since it can be used with complex
+        // before a mark, so we want it associated with the mark's script
+        if (nChg < rTxt.Len() && nChg > 0 && (i18n::ScriptType::WEAK ==
+            pBreakIt->xBreak->getScriptType(rTxt,nChg - 1)))
+        {
+            int8_t nType = u_charType(rTxt.GetChar(nChg) );
+            if (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK ||
+                nType == U_COMBINING_SPACING_MARK )
+            {
+                aScriptChg.Insert( nChg - 1, nCnt );
+            }
+            else
+            {
+                aScriptChg.Insert( nChg, nCnt );
+            }
+        }
+        else
+        {
+            aScriptChg.Insert( nChg, nCnt );
+        }
         aScriptType.Insert( nScript, nCnt++ );
 
         // if current script is asian, we search for compressable characters
@@ -1113,7 +1124,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         // we search for connecting opportunities (kashida)
         else if ( bAdjustBlock && i18n::ScriptType::COMPLEX == nScript )
         {
-            SwScanner aScanner( rNode, rNode.aText, 0, 0,
+            SwScanner aScanner( rNode, rNode.GetTxt(), 0, 0,
                                 i18n::WordType::DICTIONARY_WORD,
                                 nLastKashida, nChg );
 

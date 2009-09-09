@@ -39,9 +39,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
 #include <vcl/cmdevt.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <svtools/printdlg.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/stritem.hxx>
@@ -71,20 +69,12 @@
 #include <swmodule.hxx>
 #include <modcfg.hxx>
 #include <wrtsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <viewopt.hxx>
 #include <doc.hxx>
-#ifndef _PVIEW_HXX
 #include <pview.hxx>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _TEXTSH_HXX
 #include <textsh.hxx>
-#endif
 #include <scroll.hxx>
 #include <swprtopt.hxx>
 #include <docstat.hxx>
@@ -109,12 +99,8 @@
 #endif
 
 #define SwPagePreView
-#ifndef _ITEMDEF_HXX
-#include <itemdef.hxx>
-#endif
-#ifndef _SWSLOTS_HXX
+#include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#endif
 // OD 12.12.2002 #103492#
 #include <pagepreviewlayout.hxx>
 
@@ -2318,13 +2304,11 @@ void SwPagePreView::DocSzChgd( const Size &rSz )
 
     aDocSz = rSz;
 
-    // die neue Anzahl von Seiten bestimmen
-    USHORT nNewCnt = GetViewShell()->GetNumPages();
-    if( nNewCnt == mnPageCount )
-        return;
+    // --> OD 2009-08-20 #i96726#
+    // Due to the multiple page layout it is needed to trigger recalculation
+    // of the page preview layout, even if the count of pages is not changing.
+    mnPageCount = GetViewShell()->GetNumPages();
 
-    // dann eine neue Startseite berechnen
-    mnPageCount = nNewCnt;
     if( aVisArea.GetWidth() )
     {
         ChgPage( SwPagePreViewWin::MV_CALC, TRUE );
@@ -2332,6 +2316,7 @@ void SwPagePreView::DocSzChgd( const Size &rSz )
 
         aViewWin.Invalidate();
     }
+    // <--
 }
 
 /*--------------------------------------------------------------------

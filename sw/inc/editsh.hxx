@@ -622,9 +622,9 @@ public:
                   const Graphic* pGraphic = 0,
                   const GraphicObject* pGrafObj = 0 );
 
-    // alternativen Text einer Grafik/OLe-Objectes abfragen/setzen
-    const String& GetAlternateText() const;
-    void SetAlternateText( const String& rTxt );
+//    // alternativen Text einer Grafik/OLe-Objectes abfragen/setzen
+//    const String& GetAlternateText() const;
+//    void SetAlternateText( const String& rTxt );
 
     //eindeutige Identifikation des Objektes (fuer ImageMapDlg)
     void    *GetIMapInventor() const;
@@ -801,11 +801,11 @@ public:
 
     // erfrage und setze den Fussnoten-Text/Nummer. Set.. auf akt. SSelection!
     BOOL GetCurFtn( SwFmtFtn* pToFillFtn = 0 );
-    BOOL SetCurFtn( const SwFmtFtn& rFillFtn );
-    BOOL HasFtns( BOOL bEndNotes = FALSE ) const;
+    bool SetCurFtn( const SwFmtFtn& rFillFtn );
+    bool HasFtns( bool bEndNotes = false ) const;
 //z.Zt nicht benoetigt  USHORT GetFtnCnt( BOOL bEndNotes = FALSE ) const;
         // gebe Liste aller Fussnoten und deren Anfangstexte
-    USHORT GetSeqFtnList( SwSeqFldList& rList, BOOL bEndNotes = FALSE );
+    USHORT GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes = false );
 
     // SS fuer Bereiche
     const SwSection* InsertSection( const SwSection& rNew,

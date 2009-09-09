@@ -302,7 +302,7 @@ SwIndex& SwIndex::Assign( SwIndexReg* pArr, xub_StrLen nIdx )
             pArr->pFirst = pArr->pLast = this;
             nIndex = nIdx;
         }
-        else if( nIdx > ((pArr->pLast->nIndex - pArr->pFirst->nIndex) / 2) )
+        else if( pArr->pLast && (nIdx > ((pArr->pLast->nIndex - pArr->pFirst->nIndex) / 2)) )
             ChgValue( *pArr->pLast, nIdx );
         else
             ChgValue( *pArr->pFirst, nIdx );

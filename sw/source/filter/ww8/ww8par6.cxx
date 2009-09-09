@@ -778,6 +778,11 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
            )
         {
             SwFmtLineNumber aLN;
+            if (const SwFmtLineNumber* pLN
+                = (const SwFmtLineNumber*)GetFmtAttr(RES_LINENUMBER))
+            {
+                aLN.SetCountLines( pLN->IsCount() );
+            }
             aLN.SetStartValue(1 + rSection.maSep.lnnMin);
             NewAttr(aLN);
             pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_LINENUMBER);
@@ -2307,14 +2312,12 @@ WW8DupProperties::WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStk)
         const SwFltStackEntry* pEntry = (*pCtrlStck)[ i ];
         if(pEntry->bLocked)
         {
-            if (pEntry->pAttr->Which() > RES_CHRATR_BEGIN &&
-                pEntry->pAttr->Which() < RES_CHRATR_END)
+            if (isCHRATR(pEntry->pAttr->Which()))
             {
                 aChrSet.Put( *pEntry->pAttr );
 
             }
-            else if (pEntry->pAttr->Which() > RES_PARATR_BEGIN &&
-                pEntry->pAttr->Which() < RES_PARATR_END)
+            else if (isPARATR(pEntry->pAttr->Which()))
             {
                 aParSet.Put( *pEntry->pAttr );
             }
@@ -3877,6 +3880,12 @@ void SwWW8ImplReader::Read_NoLineNumb(USHORT , const BYTE* pData, short nLen)
         return;
     }
     SwFmtLineNumber aLN;
+    if (const SwFmtLineNumber* pLN
+        = (const SwFmtLineNumber*)GetFmtAttr(RES_LINENUMBER))
+    {
+        aLN.SetStartValue( pLN->GetStartValue() );
+    }
+
     aLN.SetCountLines( pData && (0 == *pData) );
     NewAttr( aLN );
 }

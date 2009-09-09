@@ -45,6 +45,9 @@ AUTOSEG=true
 CDEFS+=-Dmydebug
 .ENDIF
 
+.IF "$(ENABLE_GRAPHITE)" == "TRUE"
+CFLAGS+=-DENABLE_GRAPHITE
+.ENDIF
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \

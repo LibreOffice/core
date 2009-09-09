@@ -150,9 +150,6 @@ const int CRSR_POSOLD = 0x01,   // Cursor bleibt an alter Doc-Position
 
 String *ReplaceBackReferences( const com::sun::star::util::SearchOptions& rSearchOpt, SwPaM* pPam );
 
-// #i75172#
-enum SwOverlayType { SW_OVERLAY_INVERT, SW_OVERLAY_TRANSPARENT };
-
 // die Cursor - Shell
 class SW_DLLPUBLIC SwCrsrShell : public ViewShell, public SwModify
 {
@@ -252,9 +249,6 @@ private:
     // OD 11.02.2003 #100556# - flag to allow/avoid execution of marcos (default: true)
     bool mbMacroExecAllowed : 1;
 
-    // #i88893# the overlay type to use for cursor
-    SwOverlayType maSwOverlayType;
-
     SW_DLLPRIVATE void UpdateCrsr( USHORT eFlags
                             =SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE,
                      BOOL bIdleEnd = FALSE );
@@ -351,9 +345,6 @@ public:
     // if ExtendedSelect() is called afterwards, the whole nodes array is selected
     // only for usage in special cases allowed!
     void ExtendedSelectAll();
-
-    // #i88893# the overlay type to use for cursor
-    SwOverlayType getSwOverlayType() const { return maSwOverlayType; }
 
     SwPaM* GetCrsr( BOOL bMakeTblCrsr = TRUE ) const;
     inline SwCursor* GetSwCrsr( BOOL bMakeTblCrsr = TRUE ) const;
