@@ -15,6 +15,8 @@ ALLTAR : $(HIDSRS1PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
+$(MISC)$/$(TARGET).$(SRS1NAME).dprr: $(LOCALIZE_ME_DEST)
+
 $(MISC)$/$(TARGET).$(SRS1NAME).dprr: $(SRC1FILES) $(HIDSRS1PARTICLE) $(HID1FILES)
     @echo ------------------------------
     @echo Making: $@
@@ -30,6 +32,8 @@ $(foreach,i,$(SRC1FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)
     $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
+
+$(SRS)$/$(SRS1NAME).srs: $(LOCALIZE_ME_DEST)
 
 $(SRS)$/$(SRS1NAME).srs: $(foreach,i,$(SRC1FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 .ELSE			# "$(WITH_LANG)"!=""
@@ -66,6 +70,8 @@ ALLTAR : $(HIDSRS2PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
+$(MISC)$/$(TARGET).$(SRS2NAME).dprr: $(LOCALIZE_ME_DEST)
+
 $(MISC)$/$(TARGET).$(SRS2NAME).dprr: $(SRC2FILES) $(HIDSRS2PARTICLE) $(HID2FILES)
     @echo ------------------------------
     @echo Making: $@
@@ -81,6 +87,8 @@ $(foreach,i,$(SRC2FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)
     $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
+
+$(SRS)$/$(SRS2NAME).srs: $(LOCALIZE_ME_DEST)
 
 $(SRS)$/$(SRS2NAME).srs: $(foreach,i,$(SRC2FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 .ELSE			# "$(WITH_LANG)"!=""
@@ -117,6 +125,8 @@ ALLTAR : $(HIDSRS3PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
+$(MISC)$/$(TARGET).$(SRS3NAME).dprr: $(LOCALIZE_ME_DEST)
+
 $(MISC)$/$(TARGET).$(SRS3NAME).dprr: $(SRC3FILES) $(HIDSRS3PARTICLE) $(HID3FILES)
     @echo ------------------------------
     @echo Making: $@
@@ -132,6 +142,8 @@ $(foreach,i,$(SRC3FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)
     $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
+
+$(SRS)$/$(SRS3NAME).srs: $(LOCALIZE_ME_DEST)
 
 $(SRS)$/$(SRS3NAME).srs: $(foreach,i,$(SRC3FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 .ELSE			# "$(WITH_LANG)"!=""
@@ -168,6 +180,8 @@ ALLTAR : $(HIDSRS4PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
+$(MISC)$/$(TARGET).$(SRS4NAME).dprr: $(LOCALIZE_ME_DEST)
+
 $(MISC)$/$(TARGET).$(SRS4NAME).dprr: $(SRC4FILES) $(HIDSRS4PARTICLE) $(HID4FILES)
     @echo ------------------------------
     @echo Making: $@
@@ -183,6 +197,8 @@ $(foreach,i,$(SRC4FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)
     $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
+
+$(SRS)$/$(SRS4NAME).srs: $(LOCALIZE_ME_DEST)
 
 $(SRS)$/$(SRS4NAME).srs: $(foreach,i,$(SRC4FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 .ELSE			# "$(WITH_LANG)"!=""
@@ -219,6 +235,8 @@ ALLTAR : $(HIDSRS5PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
+$(MISC)$/$(TARGET).$(SRS5NAME).dprr: $(LOCALIZE_ME_DEST)
+
 $(MISC)$/$(TARGET).$(SRS5NAME).dprr: $(SRC5FILES) $(HIDSRS5PARTICLE) $(HID5FILES)
     @echo ------------------------------
     @echo Making: $@
@@ -234,6 +252,8 @@ $(foreach,i,$(SRC5FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)
     $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
+
+$(SRS)$/$(SRS5NAME).srs: $(LOCALIZE_ME_DEST)
 
 $(SRS)$/$(SRS5NAME).srs: $(foreach,i,$(SRC5FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 .ELSE			# "$(WITH_LANG)"!=""
@@ -270,6 +290,8 @@ ALLTAR : $(HIDSRS6PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
+$(MISC)$/$(TARGET).$(SRS6NAME).dprr: $(LOCALIZE_ME_DEST)
+
 $(MISC)$/$(TARGET).$(SRS6NAME).dprr: $(SRC6FILES) $(HIDSRS6PARTICLE) $(HID6FILES)
     @echo ------------------------------
     @echo Making: $@
@@ -285,6 +307,8 @@ $(foreach,i,$(SRC6FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)
     $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
+
+$(SRS)$/$(SRS6NAME).srs: $(LOCALIZE_ME_DEST)
 
 $(SRS)$/$(SRS6NAME).srs: $(foreach,i,$(SRC6FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 .ELSE			# "$(WITH_LANG)"!=""
@@ -321,6 +345,8 @@ ALLTAR : $(HIDSRS7PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
+$(MISC)$/$(TARGET).$(SRS7NAME).dprr: $(LOCALIZE_ME_DEST)
+
 $(MISC)$/$(TARGET).$(SRS7NAME).dprr: $(SRC7FILES) $(HIDSRS7PARTICLE) $(HID7FILES)
     @echo ------------------------------
     @echo Making: $@
@@ -336,6 +362,8 @@ $(foreach,i,$(SRC7FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)
     $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
+
+$(SRS)$/$(SRS7NAME).srs: $(LOCALIZE_ME_DEST)
 
 $(SRS)$/$(SRS7NAME).srs: $(foreach,i,$(SRC7FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 .ELSE			# "$(WITH_LANG)"!=""
@@ -372,6 +400,8 @@ ALLTAR : $(HIDSRS8PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
+$(MISC)$/$(TARGET).$(SRS8NAME).dprr: $(LOCALIZE_ME_DEST)
+
 $(MISC)$/$(TARGET).$(SRS8NAME).dprr: $(SRC8FILES) $(HIDSRS8PARTICLE) $(HID8FILES)
     @echo ------------------------------
     @echo Making: $@
@@ -387,6 +417,8 @@ $(foreach,i,$(SRC8FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)
     $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
+
+$(SRS)$/$(SRS8NAME).srs: $(LOCALIZE_ME_DEST)
 
 $(SRS)$/$(SRS8NAME).srs: $(foreach,i,$(SRC8FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 .ELSE			# "$(WITH_LANG)"!=""
@@ -423,6 +455,8 @@ ALLTAR : $(HIDSRS9PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
+$(MISC)$/$(TARGET).$(SRS9NAME).dprr: $(LOCALIZE_ME_DEST)
+
 $(MISC)$/$(TARGET).$(SRS9NAME).dprr: $(SRC9FILES) $(HIDSRS9PARTICLE) $(HID9FILES)
     @echo ------------------------------
     @echo Making: $@
@@ -438,6 +472,8 @@ $(foreach,i,$(SRC9FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)
     $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
+
+$(SRS)$/$(SRS9NAME).srs: $(LOCALIZE_ME_DEST)
 
 $(SRS)$/$(SRS9NAME).srs: $(foreach,i,$(SRC9FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 .ELSE			# "$(WITH_LANG)"!=""
@@ -474,6 +510,8 @@ ALLTAR : $(HIDSRS10PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
+$(MISC)$/$(TARGET).$(SRS10NAME).dprr: $(LOCALIZE_ME_DEST)
+
 $(MISC)$/$(TARGET).$(SRS10NAME).dprr: $(SRC10FILES) $(HIDSRS10PARTICLE) $(HID10FILES)
     @echo ------------------------------
     @echo Making: $@
@@ -489,6 +527,8 @@ $(foreach,i,$(SRC10FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)
     $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
+
+$(SRS)$/$(SRS10NAME).srs: $(LOCALIZE_ME_DEST)
 
 $(SRS)$/$(SRS10NAME).srs: $(foreach,i,$(SRC10FILES) $(COMMONMISC)$/$(TARGET)$/$i)
 .ELSE			# "$(WITH_LANG)"!=""

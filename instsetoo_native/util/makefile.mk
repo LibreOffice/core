@@ -149,6 +149,8 @@ ooodevlanguagepack: $(foreach,i,$(alllangiso) ooodevlanguagepack_$i)
 
 sdkoo: $(foreach,i,$(alllangiso) sdkoo_$i)
 
+sdkoodev: $(foreach,i,$(alllangiso) sdkoodev_$i)
+
 ure: $(foreach,i,$(alllangiso) ure_$i)
 
 broffice: $(foreach,i,$(alllangiso) broffice_$i)
@@ -195,6 +197,8 @@ $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(ADDDEPS)
 $(foreach,i,$(alllangiso) ooodevlanguagepack_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) sdkoo_$i) : $(ADDDEPS)
+
+$(foreach,i,$(alllangiso) sdkoodev_$i) : $(ADDDEPS)
              
 $(foreach,i,$(alllangiso) ure_$i) : $(ADDDEPS)
 
@@ -213,8 +217,8 @@ $(MAKETARGETS) : $(ADDDEPS)
 .ENDIF			# "$(BUILD_SPECIAL)"!=""
 
 .IF "$(OS)" == "MACOSX"
-DMGDEPS=$(BIN)$/{osxdndinstall.png DS_Store}
-$(foreach,i,$(alllangiso) {openoffice openofficedev openofficewithjre broffice brofficedev brofficewithjre}_$i) : $(DMGDEPS)
+DMGDEPS=$(BIN)$/{osxdndinstall.png DS_Store DS_Store_Langpack}
+$(foreach,i,$(alllangiso) {openoffice openofficedev openofficewithjre ooolanguagepack broffice brofficedev brofficewithjre}_$i) : $(DMGDEPS)
 .ENDIF # "$(OS)" == "MACOSX"
 
 .IF "$(PKGFORMAT)"!=""
@@ -272,6 +276,14 @@ sdkoo_%{$(PKGFORMAT:^".")} :
 sdkoo_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_SDK -u $(OUT) -buildid $(BUILD) -msitemplate $(MSISDKOOTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) -dontstrip $(PKGFORMATSWITCH) $(VERBOSESWITCH))
+
+.IF "$(PKGFORMAT)"!=""
+$(foreach,i,$(alllangiso) sdkoodev_$i) : $$@{$(PKGFORMAT:^".")}
+sdkoodev_%{$(PKGFORMAT:^".")} :
+.ELSE			# "$(PKGFORMAT)"!=""
+sdkoodev_% :
+.ENDIF			# "$(PKGFORMAT)"!=""
+    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_Dev_SDK -u $(OUT) -buildid $(BUILD) -msitemplate $(MSISDKOOTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) -dontstrip $(PKGFORMATSWITCH) $(VERBOSESWITCH))
 
 .IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) ure_$i) : $$@{$(PKGFORMAT:^".")}
@@ -372,7 +384,7 @@ $(BIN)$/broffice$/intro.zip : $(SOLARCOMMONPCKDIR)$/broffice_nologo$/intro.zip
     @-$(MKDIR) $(@:d)
     $(COPY) $< $@
 
-$(BIN)$/{osxdndinstall.png DS_Store} : $(PRJ)$/res$/$$(@:f)
+$(BIN)$/{osxdndinstall.png DS_Store DS_Store_Langpack} : $(PRJ)$/res$/$$(@:f)
     @$(COPY) $< $@
 
 hack_msitemplates .PHONY:

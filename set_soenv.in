@@ -86,9 +86,9 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $SHELL,
      $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $FRAMEWORKSHOME, $COMEX, $PERL, 
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME, 
-     $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TEMP,
+     $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
-     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB,
+     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
 	 $PROEXT,
      $SYSTEM_PYTHON, $PYTHONPATH, $SYSTEM_MOZILLA, $EPM_FLAGS);
 #
@@ -186,7 +186,6 @@ $CALL_CDECL           = "TRUE";
 $COMMON_OUTDIR        = "";
 $common_build         = "";
 $NO_REC_RES           = "TRUE";
-$NO_HIDS              = "TRUE";
 $SO3                  = "TRUE";
 $SOLAR_JAVA           = "@SOLAR_JAVA@";
 $SOLAR_PLUGIN         = "TRUE";
@@ -1109,7 +1108,8 @@ if ($platform =~ m/cygwin|os2/)
       else
       {  $ILIB       .= $wps.$COMPATH.$LIB;
       }
-      $ILIB       .= $wps.$PSDK_HOME.$LIB;
+      $ILIB       .= $wps.PathFormat("@MINGW_CLIB_DIR@").
+                     $wps.$PSDK_HOME.$LIB;
       if ( '@ENABLE_DIRETX@' )
       {   $ILIB   .= $wps.PathFormat("@DIRECTXSDK_LIB@");
       }
@@ -1486,6 +1486,7 @@ elsif ($platform =~ m/cygwin/)
      else
      {  $SOLARINC    .= $I.'$COMPATH'.$ds."include"; }
      @mingw_lib_include_paths = split( / /, "@MINGW_LIB_INCLUDE_PATH@" );
+     $SOLARINC .= $I.PathFormat("@MINGW_BACKWARD_INCLUDE_PATH@");
      foreach $mingw_lib_include_path (@mingw_lib_include_paths)
        {   chomp $mingw_lib_include_path;
            if ( $mingw_lib_include_path ne $COMPATH.$ds."include" && $mingw_lib_include_path ne "" )
@@ -1622,7 +1623,6 @@ ToFile( "common_build",      $common_build,      "e" );
 ToFile( "BMP_WRITES_FLAG",   $BMP_WRITES_FLAG,   "e" );
 ToFile( "BUILD_SOSL_RELEASE", $BUILD_SOSL_RELEASE, "e" );
 ToFile( "NO_REC_RES",        $NO_REC_RES,        "e" );
-ToFile( "NO_HIDS",           $NO_HIDS,           "e" );
 ToFile( "SO3",               $SO3,               "e" );
 ToFile( "SOLAR_PLUGIN",      $SOLAR_PLUGIN,      "e" );
 ToFile( "UPDATER",           $UPDATER,           "e" );
@@ -1646,6 +1646,8 @@ ToFile( "BUILD_MOZAB",       "@BUILD_MOZAB@",    "e" );
 ToFile( "PREBUILD_MOZAB",    $PREBUILD_MOZAB,    "e" );
 ToFile( "MOZILLA_VERSION",   $MOZILLA_VERSION,   "e" );
 ToFile( "DEFAULT_MOZILLA_TOOLKIT", $MOZILLA_TOOLKIT, "e" );
+ToFile( "ENABLE_NSS_MODULE",  "@ENABLE_NSS_MODULE@", "e" );
+ToFile( "MOZILLABUILD",  "@MOZILLABUILD@", "e" );
 ToFile( "BUILD_VER_STRING",  "@BUILD_VER_STRING@", "e" );
 ToFile( "ENABLE_VBA",  "@ENABLE_VBA@", "e" );
 ToFile( "VBA_EXTENSION",  "@VBA_EXTENSION@", "e" );
@@ -1691,8 +1693,12 @@ ToFile( "ENABLE_GIO",        "@ENABLE_GIO@",       "e" );
 ToFile( "ENABLE_KDE",        "@ENABLE_KDE@",       "e" );
 ToFile( "KDE_CFLAGS",        "@KDE_CFLAGS@",       "e" );
 ToFile( "KDE_LIBS",          "@KDE_LIBS@",         "e" );
-ToFile( "ENABLE_KAB",        "@ENABLE_KAB@",       "e" );
 ToFile( "MOC",               "@MOC@",              "e" );
+ToFile( "ENABLE_KDE4",       "@ENABLE_KDE4@",      "e" );
+ToFile( "KDE4_CFLAGS",       "@KDE4_CFLAGS@",      "e" );
+ToFile( "KDE4_LIBS",         "@KDE4_LIBS@",        "e" );
+ToFile( "MOC4",              "@MOC4@",             "e" );
+ToFile( "ENABLE_KAB",        "@ENABLE_KAB@",       "e" );
 ToFile( "PSPRINT",           "TRUE",             "e" );
 ToFile( "MKDEPENDSOLVER",    "TRUE",             "e" );
 #
@@ -1816,8 +1822,12 @@ ToFile( "ENABLE_FONTCONFIG", "@ENABLE_FONTCONFIG@", "e" );
 ToFile( "ENABLE_DIRECTX",    "@ENABLE_DIRECTX@",    "e" );
 ToFile( "ENABLE_LAYOUT",     "@ENABLE_LAYOUT@",     "e" );
 ToFile( "ENABLE_PCH",        "@ENABLE_PCH@",       "e" );
+ToFile( "NO_HIDS",           "@NO_HIDS@",       "e" );
+ToFile( "ENABLE_GRAPHITE",   "@ENABLE_GRAPHITE@",   "e");
+ToFile( "SYSTEM_GRAPHITE",   "@SYSTEM_GRAPHITE@",   "e");
+ToFile( "GRAPHITE_LIBS",     "@GRAPHITE_LIBS@",     "e");
+ToFile( "GRAPHITE_CFLAGS",   "@GRAPHITE_CFLAGS@",   "e");
 ToFile( "VC_STANDARD",       "@VC_STANDARD@",      "e" );
-ToFile( "WITH_GPC",          "@WITH_GPC@",         "e" );
 ToFile( "WITH_MYSPELL_DICTS","@WITH_MYSPELL_DICTS@","e");
 ToFile( "SYSTEM_DICTS",      "@SYSTEM_DICTS@",     "e");
 ToFile( "DICT_SYSTEM_DIR",   "@DICT_SYSTEM_DIR@",  "e");
@@ -1943,9 +1953,12 @@ ToFile( "CRYPT_LINK",        "@CRYPT_LINK@",       "e" );
 ToFile( "XAU_LIBS",          "@XAU_LIBS@",         "e" );
 ToFile( "GXX_INCLUDE_PATH",  PathFormat("@GXX_INCLUDE_PATH@"), "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );
-if ($platform !~ m/cygwin|os2/)
-{  ToFile( "TEMP",              $TEMP,              "e" );
-   ToFile( "TMP",               $TEMP,              "e" );
+if ($platform !~ m/cygwin|os2/) {
+   if ( $ENV{"TMPDIR"} eq "" ) {
+      ToFile( "TMPDIR",      "/tmp",               "e" );
+   } else {
+      ToFile( "TMPDIR",      "$ENV{'TMPDIR'}",     "e" );
+   }
 }
 ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
 if ( $platform =~ m/cygwin/ )
@@ -1953,8 +1966,15 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "ILIB",              $ILIB,              "e" );
    if ( $MINGW eq "yes" )
    {  ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
+      ToFile( "EXCEPTIONS",        "@EXCEPTIONS@",        "e" );
       ToFile( "DIRECTXSDK_HOME",    PathFormat("@DIRECTXSDK_HOME@"),    "e" );
       ToFile( "USE_MINGW",         $USE_MINGW,              "e" );
+      ToFile( "MINGW_CLIB_DIR",         PathFormat("@MINGW_CLIB_DIR@"),              "e" );
+      ToFile( "MINGW_SHARED_GCCLIB",         "@MINGW_SHARED_GCCLIB@",              "e" );
+      ToFile( "MINGW_GCCLIB_EH",      "@MINGW_GCCLIB_EH@",              "e" );
+      ToFile( "MINGW_SHARED_GXXLIB",         "@MINGW_SHARED_GXXLIB@",              "e" );
+      ToFile( "MINGW_GCCDLL",         "@MINGW_GCCDLL@",              "e" );
+      ToFile( "MINGW_GXXDLL",         "@MINGW_GXXDLL@",              "e" );
    }
    ToFile( "GREP",              $WIN_GREP,          "e" );
    ToFile( "FIND",              $WIN_FIND,          "e" );

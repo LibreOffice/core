@@ -483,6 +483,16 @@ WindowsCustomAction gid_Customaction_ShowReleaseNotes2
 	Assignment1 = ("InstallExecuteSequence", "(Not Installed or ISPATCH) and Not REMOVE=\"ALL\"", "end");
 End
 
+WindowsCustomAction gid_Customaction_RebaseLibrariesonproperties
+	Name = "RebaseLibrariesOnProperties";
+	Typ = "65";
+	Source = "rebase.dll";
+	Target = "RebaseLibrariesOnProperties";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "end");
+	Assignment2 = ("AdminExecuteSequence", "Not REMOVE=\"ALL\"", "end");
+End
+
 WindowsCustomAction gid_Customaction_ShowSurvey
 	Name = "ShowSurveyAfterUninstall";
 	Typ = "65";

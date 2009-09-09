@@ -28,7 +28,7 @@ $(DEF1EXPORTFILE) : $(SHL1VERSIONMAP)
 # Extract RTTI symbols from all the objects that will be used to build a shared library
     nm -gP $(SHL1OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL1LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
     $(RENAME) $@.exported-symbols $@
@@ -311,7 +311,7 @@ $(DEF2EXPORTFILE) : $(SHL2VERSIONMAP)
 # Extract RTTI symbols from all the objects that will be used to build a shared library
     nm -gP $(SHL2OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL2LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
     $(RENAME) $@.exported-symbols $@
@@ -594,7 +594,7 @@ $(DEF3EXPORTFILE) : $(SHL3VERSIONMAP)
 # Extract RTTI symbols from all the objects that will be used to build a shared library
     nm -gP $(SHL3OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL3LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
     $(RENAME) $@.exported-symbols $@
@@ -877,7 +877,7 @@ $(DEF4EXPORTFILE) : $(SHL4VERSIONMAP)
 # Extract RTTI symbols from all the objects that will be used to build a shared library
     nm -gP $(SHL4OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL4LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
     $(RENAME) $@.exported-symbols $@
@@ -1160,7 +1160,7 @@ $(DEF5EXPORTFILE) : $(SHL5VERSIONMAP)
 # Extract RTTI symbols from all the objects that will be used to build a shared library
     nm -gP $(SHL5OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL5LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
     $(RENAME) $@.exported-symbols $@
@@ -1443,7 +1443,7 @@ $(DEF6EXPORTFILE) : $(SHL6VERSIONMAP)
 # Extract RTTI symbols from all the objects that will be used to build a shared library
     nm -gP $(SHL6OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL6LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
     $(RENAME) $@.exported-symbols $@
@@ -1726,7 +1726,7 @@ $(DEF7EXPORTFILE) : $(SHL7VERSIONMAP)
 # Extract RTTI symbols from all the objects that will be used to build a shared library
     nm -gP $(SHL7OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL7LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
     $(RENAME) $@.exported-symbols $@
@@ -2009,7 +2009,7 @@ $(DEF8EXPORTFILE) : $(SHL8VERSIONMAP)
 # Extract RTTI symbols from all the objects that will be used to build a shared library
     nm -gP $(SHL8OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL8LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
     $(RENAME) $@.exported-symbols $@
@@ -2292,7 +2292,7 @@ $(DEF9EXPORTFILE) : $(SHL9VERSIONMAP)
 # Extract RTTI symbols from all the objects that will be used to build a shared library
     nm -gP $(SHL9OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL9LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
     $(RENAME) $@.exported-symbols $@
@@ -2575,7 +2575,7 @@ $(DEF10EXPORTFILE) : $(SHL10VERSIONMAP)
 # Extract RTTI symbols from all the objects that will be used to build a shared library
     nm -gP $(SHL10OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL10LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
     $(RENAME) $@.exported-symbols $@

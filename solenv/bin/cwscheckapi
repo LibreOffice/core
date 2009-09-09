@@ -34,80 +34,136 @@ EXIT_FAILURE=1
 EXIT_ERROR=2
 EXIT_BUG=10
 
-usage() {
-        echo "Usage: $SCRIPTNAME [-m MODULE1[,MODULEn]] [-k] [-o] [-h] [-d] [-i] [-t] [-s] [-a]" >&2
-        echo "" >&2
-        echo "[-m] list of modules to test like: '-m sw,sc,sd' or '-m all' for all modules" >&2
-        echo "" >&2
-        echo "[-k] keep Office installation, otherwise it will be removed after test" >&2
-        echo "" >&2
-        echo "[-o] force OpenOffice.org installation instead of StarOffice" >&2
-        echo "" >&2
-        echo "[-d] debug installation and UnoAPI-Tests" >&2
-        echo "" >&2
-        echo "[-i] debug installation" >&2
-        echo "" >&2
-        echo "[-t] debug UnoAPI-Tests" >&2
-        echo "" >&2
-        echo "[-s] skip installation of Office" >&2
-        echo "" >&2
-        echo "[-a] NoCwsAttach: do not attach UnoAPI-Test result to EIS database" >&2
-        echo "" >&2
-        echo "further informations: http://wiki.services.openoffice.org/wiki/Cwscheckapi" >&2
-        echo "" >&2
-        exit $EXIT_FAILURE
+# report the given error parameter to cwstestresult if the is one.
+# 0: no error send ok or parameter $2
+# 1: failure
+# 2...: incomplete
+function reportError()
+{
+    ERRORCODE=$1
+    if [ -e $SOLARENV/bin/cwstestresult.pl ]; then
+        if [ $ERRORCODE -eq 0 ]; then
+            PT_STATUS=${2:-ok} # use default 'ok' or $2
+        elif [ $ERRORCODE -eq 1 ]; then
+            PT_STATUS=failed
+        else
+            PT_STATUS=incomplete
+        fi
+
+        if [ "$OSTYPE" == "cygwin" ]; then
+            CWSENV=Windows
+        elif [ "$OSTYPE" == "linux" ]; then
+            CWSENV=Linux
+        elif [ "$OSTYPE" == "solaris" ]; then
+            CWSENV=SolarisX86
+        else
+            CWSENV=Unknown
+        fi
+        perl $SOLARENV/bin/cwstestresult.pl -c $CWS_WORK_STAMP -n CWSCheckAPI -p $CWSENV $PT_STATUS
+    else
+        echo "No cwstestresult.pl found."
+    fi
 }
+
+usage() {
+    echo "Usage: $SCRIPTNAME [-m MODULE1[,MODULEn]] [-k] [-o] [-h] [-d] [-u] [-t] [-s] [-a]" >&2
+    echo "" >&2
+    echo "[-m] list of modules to test like: '-m sw,sc,sd' or '-m all' for all modules" >&2
+    echo "" >&2
+    echo "[-k] keep Office installation, otherwise it will be removed after test" >&2
+    echo "" >&2
+    echo "[-o] force OpenOffice.org installation instead of StarOffice" >&2
+    echo "" >&2
+    echo "[-d] debug installation and UnoAPI-Tests" >&2
+    # echo "" >&2
+    # echo "[-i] debug installation" >&2
+    echo "" >&2
+    echo "[-t] debug UnoAPI-Tests" >&2
+    echo "" >&2
+    echo "[-s] skip installation of Office" >&2
+    echo "" >&2
+    echo "[-a] NoCwsAttach: do not attach UnoAPI-Test result to EIS database" >&2
+    echo "" >&2
+    echo "[-u] UseInstalledOffice: do not install an office" >&2
+    echo "" >&2
+    echo "further informations: http://wiki.services.openoffice.org/wiki/Cwscheckapi" >&2
+    echo "" >&2
+    exit $EXIT_FAILURE
+}
+
+# we start cwscheckapi
+reportError 0 running
 
 if [ "$PROEXT" != ".pro" ]; then
     echo "ERROR: cwscheckapi works only on pro-versions" >&2
+    reportError 2
     exit $EXIT_FAILURE
 fi
 
 if [ x${USER}x = xx ]; then
     if [ x${LOGNAME}x = xx ]; then
         echo "ERROR: could not determine username. Please export variable USER" >&2
+        reportError 2
         exit $EXIT_FAILURE
     else 
         USER=$LOGNAME
         export USER
     fi
 fi
-     
 
 
-DEBUG_I=false
+
+#DEBUG_I=false
 DEBUG_T=false
 INSTALL=true
-ATTACH=ture
+ATTACH=true
 MODULES="auto"
 OOO=false
 KEEPOFFICE=false
+USE_INSTALLED_OFFICE=false
 
-while getopts ':m:dkitsaho' OPTION ; do
+while getopts ':m:dkutsaho' OPTION ; do
         case $OPTION in
-        d)        DEBUG_I=true
-                  DEBUG_T=true
+            d)
+#                DEBUG_I=true
+                DEBUG_T=true
                 ;;
-        m)        MODULES="$OPTARG"
+            m) 
+                MODULES="$OPTARG"
                 ;;
-        k)        KEEPOFFICE=true
+            k)
+                KEEPOFFICE=true
                 ;;
-        o)        OOO=true
+            o)
+                OOO=true
                 ;;
-        i)        DEBUG_I=true
+#            i)
+#                DEBUG_I=true
+#                ;;
+            t)
+                DEBUG_T=true
                 ;;
-        t)        DEBUG_T=true
+            s)
+                INSTALL=false
                 ;;
-        s)        INSTALL=false
+            a)
+                ATTACH=false
                 ;;
-        a)        ATTACH=false
+            u)
+                USE_INSTALLED_OFFICE=true
+                INSTALL=false
+                KEEPOFFICE=true
+                echo "make sure your office is started with parameter -accept=pipe,name=$USER;urp;"
                 ;;
-        h)        usage $EXIT_SUCCESS
+            h)
+                usage $EXIT_SUCCESS
                 ;;
-        \?)        echo "unkown option \"-$OPTARG\"." >&2
-                usage $EXIT_ERROR
-                ;;
-        *)        echo "this is not possible...">&2
+            \?)
+            echo "unkown option \"-$OPTARG\"." >&2
+            usage $EXIT_ERROR
+            ;;
+            *)
+                echo "this is not possible...">&2
                 usage $EXIT_BUG
                 ;;
         esac
@@ -140,24 +196,24 @@ export LOCALUNPACKDIR
 
 unset FORCE2ARCHIVE
 
-date 2>&1
-
 if [ $INSTALL = true ]; then
-	
     
-	if [ $DEBUG_I = true ]; then
-        echo "start installation: `date`"
-		echo call "$SOLARENV/bin/installoffice.pl -cwscheckapi true -dest $LOCALINSTALLDIR -debug $DEBUG_I"
-    fi
+    date 2>&1
+    
+#    if [ $DEBUG_I = true ]; then
+#        echo "start installation: `date`"
+#        echo call "$SOLARENV/bin/installoffice.pl -cwscheckapi true -dest $LOCALINSTALLDIR -debug $DEBUG_I"
+#    fi
     perl -w $SOLARENV/bin/installoffice.pl -cwscheckapi true -dest $LOCALINSTALLDIR -ooo $OOO -debug $DEBUG_I
-
+    
     EXITVAL=$?
     
     if [ $EXITVAL -ne 0 ]; then
         echo "ERROR: could not install office"
+        reportError 2
         exit $EXITVAL
     fi
-	echo "`date` installation successfull, start testing...." 
+    echo "`date` installation successfull, start testing...." 
 fi
 
 SOFFICE="soffice"
@@ -170,38 +226,57 @@ if [ "$GUI" = "WNT" ]; then
     SOFFICE="soffice.exe"
     PS=";"
     CYGWIN="-Cygwin true"
-    SHELL=`which bash`
-    SHELL=`cygpath -w $SHELL`
+    SHELL=$(which bash)
+    SHELL=$(cygpath -w $SHELL)
     if [ ! -f $SHELL ]; then
         echo "could not determine bash shell" 
+        reportError 2
         exit 1
     fi
 fi
 
-if [ $DEBUG_T = true ]; then
-    echo find $LOCALINSTALLDIR -name $SOFFICE
-fi
+# if [ $DEBUG_T = true ]; then
+#     echo find $LOCALINSTALLDIR -name $SOFFICE
+# fi
 
-OFFICEBIN=`find $LOCALINSTALLDIR -name $SOFFICE`
+if [ $USE_INSTALLED_OFFICE = false ]; then
 
-if [ ! -f "$OFFICEBIN" ]; then
-    echo "could not find 'soffice' in subfolders of $LOCALINSTALLDIR"
-    exit 1
-fi
+    OFFICEBIN=`find $LOCALINSTALLDIR -name $SOFFICE`
 
-if [ "$GUI" = "WNT" ]; then
+    if [ ! -f "$OFFICEBIN" ]; then
+        echo "could not find 'soffice' in subfolders of $LOCALINSTALLDIR"
+        reportError 2
+        exit 1
+    fi
+
+    if [ "$GUI" = "WNT" ]; then
     # transform /tmp/... -> c:\tmp\...
-    OFFICEBIN=`cygpath -w $OFFICEBIN`
+        OFFICEBIN=`cygpath -w $OFFICEBIN`
+    fi
+else
+    OFFICEBIN=$SOFFICE
+    echo "Use already installed and running office."
 fi
 
 JARFOLDER=$SOLARVERSION/$INPATH/bin$UPDMINOREXT
 SOLVER_LIB=$SOLARVERSION/$INPATH/lib$UPDMINOREXT
-myCLASSPATH=${PS}${JARFOLDER}/ridl.jar${PS}${JARFOLDER}/unoil.jar${PS}${JARFOLDER}/jurt.jar${PS}${JARFOLDER}/juh.jar${PS}${JARFOLDER}/java_uno.jar
-myCLASSPATH=$myCLASSPATH${PS}${JARFOLDER}/OOoRunner.jar
-myCLASSPATH=$myCLASSPATH${PS}/net/unoapi/export/unoapi/bin/mysql.jar${PS}$SOLVER_LIB
+
+myCLASSPATH=${PS}${JARFOLDER}/ridl.jar${PS}\
+${JARFOLDER}/unoil.jar${PS}\
+${JARFOLDER}/jurt.jar${PS}\
+${JARFOLDER}/juh.jar${PS}\
+${JARFOLDER}/java_uno.jar
+
+myCLASSPATH=$myCLASSPATH${PS}\
+${JARFOLDER}/OOoRunner.jar
+
+myCLASSPATH=$myCLASSPATH${PS}\
+/net/unoapi/export/unoapi/bin/mysql.jar${PS}\
+$SOLVER_LIB
+
 PARAM=""
 if [ -n "$JAVAI" ]; then
-        JAVABIN=$JAVAI
+    JAVABIN=$JAVAI
 elif [ -n "$JAVA_HOME" ]; then
     if [ "$OS$CPUNAME$CPU" = SOLARISSPARCU ]; then
         JAVABIN=$JAVA_HOME/bin/sparcv9/java
@@ -209,19 +284,20 @@ elif [ -n "$JAVA_HOME" ]; then
         JAVABIN=$JAVA_HOME/bin/java
     fi
 else
-        echo "please set environment variable JAVA_HOME"
-        exit 1
+    echo "please set environment variable JAVA_HOME"
+    reportError 2
+    exit 1
 fi
 
 if [ -n "$WORK_STAMP" ]; then
-	if [ -n "$CWS_WORK_STAMP" ]; then
+    if [ -n "$CWS_WORK_STAMP" ]; then
         PARAM="$PARAM -Version cws_${CWS_WORK_STAMP}"
-	else
-	    echo "######"
-	    echo CAUTION! You are working on the MWS
-	    echo "######"
+    else
+        echo "######"
+        echo CAUTION! You are working on the MWS
+        echo "######"
         PARAM="$PARAM -Version ${WORK_STAMP}_${UPDMINOR}"
-	fi
+    fi
 fi
 
 PARAM="$PARAM -cmd '$OFFICEBIN -nofirststartwizard -accept=pipe,name=$USER;urp; -norestore -nocrashreport -nolockcheck -enableautomation'"
@@ -241,12 +317,33 @@ if [ $DEBUG_T = true ]; then
     PARAM="$PARAM -debug true -log true"
 fi
 
-#XDEBUG=" -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8001 " 
+# Sample command
+# /so/env/Linux_JDK_1.5.0_06/bin/java
+# -Xmx120m $XDEBUG
+# -cp :/net/so-cwsserv02/export/cws/unoapi04/DEV300/unxlngi6.pro/bin.m50/ridl.jar:/net/so-cwsserv02/export/cws/unoapi04/DEV300/unxlngi6.pro/bin.m50/unoil.jar:/net/so-cwsserv02/export/cws/unoapi04/DEV300/unxlngi6.pro/bin.m50/jurt.jar:/net/so-cwsserv02/export/cws/unoapi04/DEV300/unxlngi6.pro/bin.m50/juh.jar:/net/so-cwsserv02/export/cws/unoapi04/DEV300/unxlngi6.pro/bin.m50/java_uno.jar:/net/so-cwsserv02/export/cws/unoapi04/DEV300/unxlngi6.pro/bin.m50/OOoRunner.jar:/net/unoapi/export/unoapi/bin/mysql.jar:/net/so-cwsserv02/export/cws/unoapi04/DEV300/unxlngi6.pro/lib.m50
+# org.openoffice.Runner
+# -Version cws_unoapi04
+# -cmd '/tmp/ll93751/cwscheckapi/office/staroffice9/program/soffice -nofirststartwizard -accept=pipe,name=ll93751;urp; -norestore -nocrashreport -nolockcheck -enableautomation'
+# -cs pipe,name=ll93751
+# -NoOffice true
+# -SRC_ROOT /net/so-cwsserv02/export/cws/unoapi04/DEV300/src.m50
+# -COMP_ENV unxlngi6
+# -Shell /bin/bash 
+# -tb java_complex
+# -TimeOut 90000 
+# -o 'complex.unoapi.CheckModuleAPI::module(auto)'
+
+# XDEBUG=" -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y "
+
+# set DEBUGAPI if you want to debug the checkapi
+# DEBUGAPI=t
+
 COMMAND="$JAVABIN -Xmx120m $XDEBUG -cp $myCLASSPATH org.openoffice.Runner $PARAM $*"
 echo "$COMMAND"
 
 LOGFILE=$CWSCHECKAPIPATH/cwscheckapi.log
 $COMMAND | tee $LOGFILE
+EXITVAL=$?
 
 if [ $KEEPOFFICE = false ]; then
     echo "remove office instrallation in $LOCALINSTALLDIR..."
@@ -257,3 +354,10 @@ echo
 echo A logfile could be found here: $LOGFILE
 
 date 2>&1
+
+# send the results via cwstestresult.pl to EIS
+if [ $EXITVAL -eq 0 ]; then
+    reportError 0 ok
+else
+    reportError 1
+fi

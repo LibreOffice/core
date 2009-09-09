@@ -668,7 +668,7 @@ TRYALTSDF:=$(SOLARSRC)$/$(ALT_L10N_MODULE)$/$(COMMON_OUTDIR)$(PROEXT)$/misc/sdf$
 # TODO: check performance impact...
 LOCALIZESDF:=$(strip $(shell @+$(IFEXIST) $(TRYALTSDF) $(THEN) echo $(TRYALTSDF) $(FI)))
 .ENDIF			# "$(ALT_LOCALIZATION_FOUND)"!=""
-some_local_helper_var:=$(strip $(shell +$(IFEXIST) $(TRYSDF) $(THEN) echo $(TRYSDF) $(FI) ))
+some_local_helper_var:=$(strip $(shell @+$(IFEXIST) $(TRYSDF) $(THEN) echo $(TRYSDF) $(FI) ))
 LOCALIZESDF!:=$(eq,$(LOCALIZESDF),$(NULL) $(some_local_helper_var) $(LOCALIZESDF))
 LOCALIZESDF!:=$(eq,$(LOCALIZESDF),$(NULL) $(COMMONMISC)$/$(PRJNAME)$/$(PATH_IN_MODULE)$/localize.sdf $(LOCALIZESDF))
 .ELSE			# "$(LOCALIZATION_FOUND)"!="" || "$(ALT_LOCALIZATION_FOUND)"!=""

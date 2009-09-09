@@ -46,38 +46,11 @@ COMPLETELANGISO_VAR:=$(uniq $(completelangiso) $(alllangiso))
 
 ALLTAR : $(INCCOM)$/alllangmodules.inc $(INCCOM)$/alllangmodules_root.inc $(INCCOM)$/alllangmodules_base.inc $(INCCOM)$/alllangmodules_calc.inc $(INCCOM)$/alllangmodules_draw.inc $(INCCOM)$/alllangmodules_impress.inc $(INCCOM)$/alllangmodules_math.inc $(INCCOM)$/alllangmodules_writer.inc $(INCCOM)$/alllangmodules_binfilter.inc
 
-.PHONY $(INCCOM)$/alllangmodules.inc:
+.INCLUDE .IGNORE : $(MISC)$/$(TARGET)_lang_track.mk
+.IF "$(LAST_COMPLETELANGISO_VAR)"!="$(COMPLETELANGISO_VAR)"
+PHONYTEMPL=.PHONY
+.ENDIF			# "$(LAST_COMPLETELANGISO_VAR)"!="$(COMPLETELANGISO_VAR)"
+$(INCCOM)$/alllangmodules%.inc $(PHONYTEMPL) : module_langpack%.sct
     @@-$(RENAME) $@ $@.tmp
-    $(PERL) -w modules.pl -i $(PRJ)$/source$/templates$/module_langpack.sct -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
-
-.PHONY $(INCCOM)$/alllangmodules_root.inc:
-    @@-$(RENAME) $@ $@.tmp
-    $(PERL) -w modules.pl -i $(PRJ)$/source$/templates$/module_langpack_root.sct -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
-
-.PHONY $(INCCOM)$/alllangmodules_base.inc:
-    @@-$(RENAME) $@ $@.tmp
-    $(PERL) -w modules.pl -i $(PRJ)$/source$/templates$/module_langpack_base.sct -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
-
-.PHONY $(INCCOM)$/alllangmodules_calc.inc:
-    @@-$(RENAME) $@ $@.tmp
-    $(PERL) -w modules.pl -i $(PRJ)$/source$/templates$/module_langpack_calc.sct -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
-
-.PHONY $(INCCOM)$/alllangmodules_draw.inc:
-    @@-$(RENAME) $@ $@.tmp
-    $(PERL) -w modules.pl -i $(PRJ)$/source$/templates$/module_langpack_draw.sct -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
-
-.PHONY $(INCCOM)$/alllangmodules_impress.inc:
-    @@-$(RENAME) $@ $@.tmp
-    $(PERL) -w modules.pl -i $(PRJ)$/source$/templates$/module_langpack_impress.sct -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
-
-.PHONY $(INCCOM)$/alllangmodules_math.inc:
-    @@-$(RENAME) $@ $@.tmp
-    $(PERL) -w modules.pl -i $(PRJ)$/source$/templates$/module_langpack_math.sct -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
-
-.PHONY $(INCCOM)$/alllangmodules_writer.inc:
-    @@-$(RENAME) $@ $@.tmp
-    $(PERL) -w modules.pl -i $(PRJ)$/source$/templates$/module_langpack_writer.sct -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
-
-.PHONY $(INCCOM)$/alllangmodules_binfilter.inc:
-    @@-$(RENAME) $@ $@.tmp
-    $(PERL) -w modules.pl -i $(PRJ)$/source$/templates$/module_langpack_binfilter.sct -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
+    $(PERL) -w modules.pl -i $< -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
+    @echo LAST_COMPLETELANGISO_VAR=$(COMPLETELANGISO_VAR) > $(MISC)$/$(TARGET)_lang_track.mk

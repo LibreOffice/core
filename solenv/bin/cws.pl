@@ -69,22 +69,24 @@ my @valid_commands = (
                         'task', 't',
                         'integrate',
                         'cdiff', 'cd',
-                        'eisclone'
+                        'eisclone',
+                        'setcurrent'
                      );
 
 # list the valid options to each command
 my %valid_options_hash = (
-                            'help'      => ['help'],
-                            'create'    => ['help', 'milestone', 'migration'],
-                            'fetch'     => ['help', 'switch', 'milestone', 'childworkspace','platforms','quiet',
+                            'help'       => ['help'],
+                            'create'     => ['help', 'milestone', 'migration', 'hg'],
+                            'fetch'      => ['help', 'switch', 'milestone', 'childworkspace','platforms','quiet',
                                             'onlysolver'],
-                            'rebase'    => ['help', 'milestone','commit'],
-                            'analyze'   => ['help'],
-                            'query'     => ['help', 'milestone','masterworkspace','childworkspace'],
-                            'task'      => ['help'],
-                            'integrate' => ['help', 'childworkspace'],
-                            'cdiff'     => ['help', 'childworkspace', 'masterworkspace', 'files', 'modules'],
-                            'eisclone'  => ['help']
+                            'rebase'     => ['help', 'milestone','commit'],
+                            'analyze'    => ['help'],
+                            'query'      => ['help', 'milestone','masterworkspace','childworkspace'],
+                            'task'       => ['help'],
+                            'integrate'  => ['help', 'childworkspace'],
+                            'cdiff'      => ['help', 'childworkspace', 'masterworkspace', 'files', 'modules'],
+                            'setcurrent' => ['help', 'milestone'],
+                            'eisclone'   => ['help']
                          );
 
 my %valid_commands_hash;
@@ -115,6 +117,7 @@ sub parse_command_line
     Getopt::Long::Configure ("no_auto_abbrev", "no_ignorecase");
     my $success = GetOptions(\%options_hash, 'milestone|m=s',
                                              'masterworkspace|master|M=s',
+                                             'hg',
                                              'migration',
                                              'childworkspace|child|c=s',
                                              'debug',
@@ -365,6 +368,7 @@ sub get_cws_by_name
 sub register_child_workspace
 {
     my $cws          = shift;
+    my $scm          = shift;
     my $is_promotion = shift;
 
     my $milestone = $cws->milestone();
@@ -387,9 +391,9 @@ sub register_child_workspace
     }
 
     if ( $is_promotion ) {
-        my $rc = $cws->set_subversion_flag(1);
+        my $rc = $cws->set_scm($scm);
         if ( !$rc ) {
-            print_error("Failed to set subversion flag on child workspace '$child'.\nContact EIS administrator!\n", 12);
+            print_error("Failed to set the SCM property '$scm' on child workspace '$child'.\nContact EIS administrator!\n", 12);
         }
 
         $rc = $cws->promote($vcsid, "");
@@ -410,9 +414,9 @@ sub register_child_workspace
             print_error("Failed to register child workspace '$child' for master '$master'.", 12);
         }
         else {
-            my $rc = $cws->set_subversion_flag(1);
+            my $rc = $cws->set_scm($scm);
             if ( !$rc ) {
-                print_error("Failed to set subversion flag on child workspace '$child'.\nContact EIS administrator!\n", 12);
+                print_error("Failed to set the SCM property '$scm' on child workspace '$child'.\nContact EIS administrator!\n", 12);
             }
             print "\n***** Successfully ***** registered child workspace '$child'\n";
             print "for master workspace '$master' (milestone '$milestone').\n";
@@ -435,7 +439,7 @@ sub query_cws
         print_error("Can't determine master workspace environment.\n", 30);
     }
 
-    if ( ($query_mode eq 'integratedinto' || $query_mode eq 'incompatible' || $query_mode eq 'taskids' || $query_mode eq 'state' || $query_mode eq 'current' || $query_mode eq 'owner' || $query_mode eq 'qarep' || $query_mode eq 'issubversion' || $query_mode eq 'ispublic' || $query_mode eq 'build') && !defined($childws) ) {
+    if ( ($query_mode eq 'integratedinto' || $query_mode eq 'incompatible' || $query_mode eq 'taskids' || $query_mode eq 'status' || $query_mode eq 'current' || $query_mode eq 'owner' || $query_mode eq 'qarep' || $query_mode eq 'issubversion' || $query_mode eq 'ispublic' || $query_mode eq 'build') && !defined($childws) ) {
         print_error("Can't determine child workspace environment.\n", 30);
     }
 
@@ -512,29 +516,19 @@ sub query_status
     return;
 }
 
-sub query_vcs
+sub query_scm
 {
     my $cws = shift;
     my $masterws = $cws->master();
     my $childws  = $cws->child();
 
     if ( is_valid_cws($cws) ) {
-        my $issvn = $cws->get_subversion_flag();
-        if ( !defined($issvn) ) {
-            print_error("Internal error: can't get isSubVersion flag.", 3);
+        my $scm = $cws->get_scm();
+        if ( !defined($scm) ) {
+            print_error("Internal error: can't retrieve scm info.", 3);
         } else {
-            if ( $issvn==1 ) {
-                print_message("Child workspace uses SubVersion");
-            } else {
-                print_message("Child workspace uses CVS");
-            }
+                print_message("Child workspace uses '$scm'.");
         }
-    }
-
-    # check if we got a valid child workspace
-    my $id = $cws->eis_id();
-    if ( !$id ) {
-        print_error("Child workspace '$childws' for master workspace '$masterws' not found in EIS database.", 2);
     }
 
     return;
@@ -557,12 +551,6 @@ sub query_ispublic
                 print_message("Child workspace is internal");
             }
         }
-    }
-
-    # check if we got a valid child workspace
-    my $id = $cws->eis_id();
-    if ( !$id ) {
-        print_error("Child workspace '$childws' for master workspace '$masterws' not found in EIS database.", 2);
     }
 
     return;
@@ -1117,7 +1105,7 @@ sub update_solver
     my $solver     = shift;
     my $milestone  = shift;
 
-    my @zip_sub_dirs = ('bin', 'doc', 'idl', 'inc', 'lib', 'par', 'pck', 'pdb', 'pus', 'rdb', 'res', 'xml');
+    my @zip_sub_dirs = ('bin', 'doc', 'idl', 'inc', 'lib', 'par', 'pck', 'pdb', 'pus', 'rdb', 'res', 'xml', 'sdf');
 
     use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 
@@ -1248,6 +1236,7 @@ sub do_help
         print STDERR "\tquery (q)\n";
         print STDERR "\ttask (t)\n";
         print STDERR "\tcdiff (cd)\n";
+        print STDERR "\tsetcurrent\n";
         print STDERR "\tintegrate *** release engineers only ***\n";
         print STDERR "\teisclone *** release engineers only ***\n";
     }
@@ -1260,10 +1249,11 @@ sub do_help
     }
     elsif ($arg eq 'create') {
         print STDERR "create: Create a new child workspace\n";
-        print STDERR "usage: create [-m milestone] <master workspace> <child workspace>\n";
+        print STDERR "usage: create [--hg] [-m milestone] <master workspace> <child workspace>\n";
         print STDERR "\t-m milestone:          Milestone to base the child workspace on. If ommitted the\n";
         print STDERR "\t                       last published milestone will be used.\n";
         print STDERR "\t--milestone milestone: Same as -m milestone.\n";
+        print STDERR "\t--hg:                  Create Mercurial (hg) based CWS.\n";
         print STDERR "\t--migration:           Used only for the migration of an exitisting CWS from CVS to SVN.\n";
         print STDERR "\t                       Disables existence check in EIS, creates CWS branch in SVN, sets SVN flag.\n";
     }
@@ -1274,7 +1264,7 @@ sub do_help
     elsif ($arg eq 'query') {
         print STDERR "query: Query child workspace for miscellaneous information\n";
         print STDERR "usage: query [-M master] [-c child] <current|integratedinto|incompatible|owner|qarep|status|taskids>\n";
-        print STDERR "       query [-M master] [-c child] <release|due|due_qa|help|ui|ispublic|vcs|build>\n";
+        print STDERR "       query [-M master] [-c child] <release|due|due_qa|help|ui|ispublic|scm|build>\n";
         print STDERR "       query [-M master] <latest|milestones|ispublicmaster>\n";
         print STDERR "       query  <masters>\n";
         print STDERR "       query [-M master] [-m milestone] <integrated|buildid>\n";
@@ -1308,7 +1298,7 @@ sub do_help
         print STDERR "\tnominated\tquery nominated CWSs\n";
         print STDERR "\tready\t\tquery CWSs ready for QA\n";
         print STDERR "\tispublic\tquery public flag of CWS\n";
-        print STDERR "\tvcs\t\tquery Version Control System used for CWS (either CVS or SubVersion)\n";
+        print STDERR "\tscm\t\tquery Source Control Management (SCM) system used for CWS\n";
         print STDERR "\tmasters\t\tquery available MWS\n";
         print STDERR "\tmilestones\tquery which milestones are know on the given MWS\n";
         print STDERR "\tispublicmaster\tquery public flag of MWS\n";
@@ -1367,6 +1357,14 @@ sub do_help
         print STDERR "\t--files:                Print only file names\n";
         print STDERR "\t--modules:              Print only top level directories aka modules\n"
     }
+    elsif ($arg eq 'setcurrent') {
+        print STDERR "setcurrent: Set the current milestone for the CWS (only hg based CWSs)\n";
+        print STDERR "usage: setcurrent [-m milestone]\n";
+        print STDERR "\t-m milestone:           Set milestone to <milestone> to workspace <workspace>\n";
+        print STDERR "\t                        Use 'latest' for the for lastest published milestone on the current master\n";
+        print STDERR "\t                        For cross master change use the form <MWS>:<milestone>\n";
+        print STDERR "\t--milestone milestone:  Same as -m milestone\n";
+    }
     else {
         print STDERR "'$arg': unknown subcommand\n";
         exit(1);
@@ -1387,6 +1385,11 @@ sub do_create
     my $is_migration = 0;
     if ( exists $options_ref->{'migration'} ) {
         $is_migration = 1;
+    }
+
+    my $is_hg = 0;
+    if ( exists $options_ref->{'hg'} ) {
+        $is_hg = 1;
     }
 
     my $master   = uc $args_ref->[0];
@@ -1449,6 +1452,11 @@ sub do_create
     # set milestone
     $cws->milestone($milestone);
 
+    # handle mercurial(hg) based CWSs
+    if ( $is_hg ) {
+        register_child_workspace($cws, 'hg', $is_promotion);
+        return;
+    }
 
     my $config = CwsConfig->new();
     my $ooo_svn_server = $config->get_ooo_svn_server();
@@ -1550,7 +1558,7 @@ sub do_create
         }
     }
     else {
-        register_child_workspace($cws, $is_promotion);
+        register_child_workspace($cws, 'svn', $is_promotion);
     }
     return;
 }
@@ -1605,7 +1613,7 @@ sub do_rebase
                 print_error("Can't determine latest milestone of '$old_masterws' available for rebase.", 22);
             }
             $new_masterws  = $old_masterws;
-            $new_milestone = $cws->get_current_milestone($old_masterws);
+            $new_milestone = $latest;
         }
         else {
             ($new_masterws, $new_milestone) =  verify_milestone($cws, $milestone);
@@ -1695,7 +1703,7 @@ sub do_rebase
 
         }
 
-        print_message("... updating EIS database\n");
+        print_message("... updating EIS database");
         my $push_return = $cws->set_master_and_milestone($new_masterws, $new_milestone);
         # sanity check
         if ( $$push_return[1] ne $new_milestone) {
@@ -1987,7 +1995,7 @@ sub do_query
     my $options_ref = shift;
 
     # list of available query modes
-    my @query_modes = qw(integratedinto incompatible taskids status latest current owner qarep build buildid integrated approved nominated ready new planned release due due_qa help ui milestones masters vcs ispublic ispublicmaster);
+    my @query_modes = qw(integratedinto incompatible taskids status latest current owner qarep build buildid integrated approved nominated ready new planned release due due_qa help ui milestones masters scm ispublic ispublicmaster);
     my %query_modes_hash = ();
     foreach (@query_modes) {
         $query_modes_hash{$_}++;
@@ -2001,6 +2009,10 @@ sub do_query
     # cwquery mode 'state' has been renamed to 'status' to be more consistent
     # with CVS etc. 'state' is still an alias for 'status'
     $mode = 'status' if $mode eq 'state';
+
+    # cwquery mode 'vcs' has been renamed to 'scm' to be more consistent
+    # with general use etc. 'vcs' is still an alias for 'scm'
+    $mode = 'scm' if $mode eq 'vcs';
 
     # there will be more query modes over time
     if ( !exists $query_modes_hash{$mode} ) {
@@ -2170,6 +2182,46 @@ sub do_cdiff
         }
     }
 
+}
+
+sub do_setcurrent
+{
+    my $args_ref    = shift;
+    my $options_ref = shift;
+
+    if ( exists $options_ref->{'help'} || @{$args_ref} != 0) {
+        do_help(['setcurrent']);
+    }
+
+    if ( !exists $options_ref->{'milestone'} ) {
+        do_help(['setcurrent']);
+    }
+
+    my $cws = get_cws_from_environment();
+    my $old_masterws = $cws->master();
+    my $new_masterws;
+    my $new_milestone;
+
+    my $milestone = $options_ref->{'milestone'};
+    if ( $milestone eq 'latest' ) {
+        my $latest = $cws->get_current_milestone($old_masterws);
+
+        if ( !$latest ) {
+            print_error("Can't determine latest milestone of '$old_masterws'.", 22);
+        }
+        $new_masterws  = $old_masterws;
+        $new_milestone = $latest;
+    }
+    else {
+        ($new_masterws, $new_milestone) =  verify_milestone($cws, $milestone);
+    }
+
+    print_message("... updating EIS database");
+    my $push_return = $cws->set_master_and_milestone($new_masterws, $new_milestone);
+    # sanity check
+    if ( $$push_return[1] ne $new_milestone) {
+        print_error("Couldn't push new milestone '$new_milestone' to database", 0);
+    }
 }
 
 sub do_eisclone
