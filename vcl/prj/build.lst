@@ -14,7 +14,7 @@ vc	vcl\os2\source\app						nmake	-	p	vc__appp vc_inc NULL
 vc	vcl\os2\source\gdi						nmake	-	p	vc__gdip vc_inc NULL
 vc	vcl\os2\source\window					nmake	-	p	vc__winp vc_inc NULL
 vc	vcl\os2\source\src						nmake	-	p	vc__srcp vc_inc NULL
-vc  vcl\source\components					nmake	-	all	vc_components NULL
+vc  vcl\source\components					nmake	-	all	vc_components vc_inc NULL
 vc	vcl\win\source\app						nmake	-	w	vc__appw vc_inc NULL
 vc	vcl\win\source\gdi						nmake	-	w	vc__gdiw vc_inc NULL
 vc	vcl\win\source\window					nmake	-	w	vc__winw vc_inc NULL
