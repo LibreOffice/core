@@ -59,9 +59,18 @@ PATCH_FILES=$(TARFILE_NAME).patch
 
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
+PATCH_FILES+=$(TARFILE_NAME)-mingw.patch
+xml2_CC=$(CC)
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+xml2_CC+=-shared-libgcc
+.ENDIF
+xml2_LIBS=-lws2_32 -lmingwthrd
+.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+xml2_LIBS+=-lstdc++_s
+.ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-python --enable-static=no --without-debug --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CFLAGS=-D_MT LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc -L$(ILIB:s/;/ -L/)" LIBS="-lws2_32 -lmingwthrd" OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--enable-ipv6=no --without-python --enable-static=no --without-debug --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CC="$(xml2_CC)" CFLAGS=-D_MT LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc -L$(ILIB:s/;/ -L/)" LIBS="$(xml2_LIBS)" OBJDUMP="$(WRAPCMD) objdump"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE

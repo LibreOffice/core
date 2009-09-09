@@ -57,9 +57,17 @@ PATCH_FILES=$(TARFILE_NAME).patch $(TARFILE_NAME)_win_manifest.patch
 
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
+xslt_CC=$(CC)
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+xslt_CC+=-shared-libgcc
+.ENDIF
+xslt_LIBS=-lmingwthrd
+.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+xslt_LIBS+=-lstdc++_s
+.ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-crypto --without-python --enable-static=no --with-sax1=yes --build=i586-pc-mingw32 --host=i586-pc-mingw32 CFLAGS="$(xslt_CFLAGS) -D_MT" LDFLAGS="$(xslt_LDFLAGS) -no-undefined -L$(ILIB:s/;/ -L/)" LIBS="-lmingwthrd"  LIBXML2LIB=$(LIBXML2LIB) OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--enable-ipv6=no --without-crypto --without-python --enable-static=no --with-sax1=yes --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(xslt_CC)" CFLAGS="$(xslt_CFLAGS) -D_MT" LDFLAGS="-no-undefined -L$(ILIB:s/;/ -L/)" LIBS="$(xslt_LIBS)"  LIBXML2LIB=$(LIBXML2LIB) OBJDUMP="$(WRAPCMD) objdump"
 BUILD_ACTION=chmod 777 xslt-config && $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)

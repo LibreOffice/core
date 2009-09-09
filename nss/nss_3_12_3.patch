@@ -1,0 +1,131 @@
+--- misc/mozilla/nsprpub/config/rules.mk	Tue Mar 24 23:49:17 2009
++++ misc/build/mozilla/nsprpub/config/rules.mk	Mon Jun 29 15:45:22 2009
+@@ -363,7 +363,11 @@
+ ifdef NS_USE_GCC
+ 	$(RC) $(RCFLAGS) $(filter-out -U%,$(DEFINES)) $(INCLUDES:-I%=--include-dir %) -o $@ $<
+ else
+-	$(RC) $(RCFLAGS) $(filter-out -U%,$(DEFINES)) $(INCLUDES) -Fo$@ $<
++        #We remove stl from the paths to avoid that rc.exe finds the stlport of
++        #OOo. stlport includes the system stl which will fail. By removing it,
++        #rc will use the stl from the system if the path is in the INCLUDE
++        #variable.
++	INCLUDE="$(subst /stl,,$(INCLUDE))" $(RC) $(RCFLAGS) $(filter-out -U%,$(DEFINES)) $(INCLUDES) -Fo$@ $<
+ endif # GCC
+ 	@echo $(RES) finished
+ endif
+--- misc/mozilla/nsprpub/configure	Fri Dec  5 01:46:50 2008
++++ misc/build/mozilla/nsprpub/configure	Mon Jun 29 15:28:52 2009
+@@ -3905,7 +3905,7 @@
+     PR_MD_CSRCS=linux.c
+     MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
+     DSO_CFLAGS=-fPIC
+-    DSO_LDOPTS='-shared -Wl,-soname -Wl,$(notdir $@)'
++    DSO_LDOPTS='-shared -Wl,-rpath,\$$ORIGIN -Wl,-soname -Wl,$(notdir $@)'
+     _OPTIMIZE_FLAGS=-O2
+     _DEBUG_FLAGS="-g -fno-inline"  # most people on linux use gcc/gdb, and that
+                                    # combo is not yet good at debugging inlined
+--- misc/mozilla/security/coreconf/Darwin.mk	Fri Mar 20 08:19:35 2009
++++ misc/build/mozilla/security/coreconf/Darwin.mk	Mon Jun 29 15:28:52 2009
+@@ -38,9 +38,12 @@
+ include $(CORE_DEPTH)/coreconf/UNIX.mk
+ 
+ DEFAULT_COMPILER = cc
++# CC is taken from environment automatically.
++#CC		= cc
++# Use CCC from environment.
++#CCC		= c++
++CCC		= $(CXX)
+ 
+-CC		= cc
+-CCC		= c++
+ RANLIB		= ranlib
+ 
+ ifndef CPU_ARCH
+--- misc/mozilla/security/coreconf/Linux.mk	Sat Sep  6 01:17:23 2008
++++ misc/build/mozilla/security/coreconf/Linux.mk	Mon Jun 29 15:28:52 2009
+@@ -46,8 +46,11 @@
+ 	IMPL_STRATEGY = _PTH
+ endif
+ 
+-CC			= gcc
+-CCC			= g++
++# CC is taken from environment automatically.
++#CC			= gcc
++# Use CCC from environment.
++#CCC			= g++
++CCC		= $(CXX)
+ RANLIB			= ranlib
+ 
+ DEFAULT_COMPILER = gcc
+@@ -174,7 +177,7 @@
+ ARCH			= linux
+ 
+ DSO_CFLAGS		= -fPIC
+-DSO_LDOPTS		= -shared $(ARCHFLAG) -Wl,-z,defs
++DSO_LDOPTS		= -shared $(ARCHFLAG) -Wl,-z,defs  '-Wl,-rpath,$$ORIGIN'
+ DSO_LDFLAGS		=
+ LDFLAGS			+= $(ARCHFLAG)
+ 
+--- misc/mozilla/security/coreconf/SunOS5.mk	Thu Nov 22 05:39:56 2007
++++ misc/build/mozilla/security/coreconf/SunOS5.mk	Mon Jun 29 15:28:52 2009
+@@ -89,8 +89,11 @@
+ 	    # OPTIMIZER += -mno-omit-leaf-frame-pointer -fno-omit-frame-pointer
+ 	endif
+ else
+-	CC         = cc
+-	CCC        = CC
++# CC is taken from environment automatically.
++#	CC         = cc
++# Use CXX from environment.
++#	CCC        = CC
++        CCC       = $(CXX)
+ 	ASFLAGS   += -Wa,-P
+ 	OS_CFLAGS += $(NOMD_OS_CFLAGS) $(ARCHFLAG)
+ 	ifndef BUILD_OPT
+--- misc/mozilla/security/coreconf/arch.mk	Wed Mar 11 19:54:24 2009
++++ misc/build/mozilla/security/coreconf/arch.mk	Mon Jun 29 15:28:52 2009
+@@ -329,8 +329,14 @@
+ # IMPL_STRATEGY may be defined too.
+ #
+ 
+-OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(COMPILER_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
++# OBJDIR_NAME is used to build the directory containing the built objects, for 
++# example mozilla/dist/Linux2.6_x86_glibc_PTH_DBG.OBJ
++# We need to deliver the contents of that folder into the solver. To make that easier
++# in the makefile we rename this directory to "out". 
++#OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(COMPILER_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
++OBJDIR_NAME = out
+ 
++
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ ifndef BUILD_OPT
+ #
+--- misc/mozilla/security/coreconf/rules.mk	Wed Jan 21 00:30:57 2009
++++ misc/build/mozilla/security/coreconf/rules.mk	Mon Jun 29 15:47:42 2009
+@@ -359,7 +359,11 @@
+ ifdef NS_USE_GCC
+ 	$(RC) $(filter-out -U%,$(DEFINES)) $(INCLUDES:-I%=--include-dir %) -o $@ $<
+ else
+-	$(RC) $(filter-out -U%,$(DEFINES)) $(INCLUDES) -Fo$@ $<
++        #We remove stl from the paths to avoid that rc.exe finds the stlport of
++        #OOo. stlport includes the system stl which will fail. By removing it,
++        #rc will use the stl from the system if the path is in the INCLUDE
++        #variable.
++	INCLUDE="$(subst /stl,,$(INCLUDE))" $(RC) $(filter-out -U%,$(DEFINES)) $(INCLUDES) -Fo$@ $<
+ endif
+ 	@echo $(RES) finished
+ endif
+--- misc/mozilla/security/nss/cmd/platlibs.mk	Wed Dec  3 00:24:46 2008
++++ misc/build/mozilla/security/nss/cmd/platlibs.mk	Mon Jun 29 15:28:52 2009
+@@ -52,9 +52,9 @@
+ 
+ ifeq ($(OS_ARCH), Linux)
+ ifeq ($(USE_64), 1)
+-EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib64:$$ORIGIN/../lib'
++EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN:$$ORIGIN'
+ else
+-EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib'
++EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN'
+ endif
+ endif
+ 

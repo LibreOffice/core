@@ -36,17 +36,71 @@ RUNTIME_DIR=$(MISC)$/$(MOZTARGET)runtime
 LIB_DIR=$(LB)
 INCLUDE_DIR=$(INCCOM)
 
+
+
+#If we build the NSS module then we do not need the old nss libs from here
+.IF "$(ENABLE_NSS_MODULE)"=="YES"
+
+
+.IF "$(OS)" == "SOLARIS" 
+.IF "$(CPU)" == "S" #32bit
+FREEBL_LIB=freebl_32fpu_3 freebl_32int64_3 freebl_32int_3
+.ELIF "$(CPU)" == "U" #64bit unxsolu4
+FREEBL_LIB=freebl_64int_3 freebl_64fpu_3
+.ELSE
+FREEBL_LIB=freebl3
+.ENDIF #"$(CPU)" == "S"
+
+.ELSE # "$(OS)" == "SOLARIS" 
+FREEBL_LIB=freebl3
+.ENDIF # "$(OS)" == "SOLARIS" 
+
+
+NSS_MODULE_RUNTIME_LIST:= \
+    $(FREEBL_LIB) \
+    nspr4 \
+    nss3 \
+    nssckbi \
+    nssdbm3 \
+    nssutil3 \
+    plc4 \
+    plds4 \
+    smime3 \
+    softokn3 \
+    sqlite3 \
+    ssl3
+
+BIN_RUNTIMELIST= \
+    xpcom \
+    xpcom_core \
+    xpcom_compat	
+.ELSE
+
+.IF "$(GUI)" == "WNT"
+    FREEBL_LIB=freebl3
+.ELSE # "$(GUI)" == "WNT"
+    .IF "$(OS)$(CPUNAME)" == "SOLARISSPARC"
+        FREEBL_LIB=freebl_32fpu_3
+    .ELSE # "$(OS)$(CPUNAME)" == "SOLARISSPARC"
+        FREEBL_LIB=freebl3
+    .ENDIF # "$(OS)$(CPUNAME)" == "SOLARISSPARC"
+.ENDIF # "$(GUI)" == "WNT"
+
+
 BIN_RUNTIMELIST=	\
     nspr4	\
     plc4	\
     plds4	\
     xpcom	\
+    xpcom_core	\
     xpcom_compat	\
     nss3	\
     ssl3	\
     softokn3	\
-    smime3
-    
+    smime3 \
+    $(FREEBL_LIB)
+.ENDIF #  "$(ENABLE_NSS_MODULE)"=="YES"
+
 .IF "$(GUI)"=="WNT"
 BIN_RUNTIMELIST+=	\
     js3250 	\
@@ -61,12 +115,6 @@ BIN_RUNTIMELIST+=	\
     msgbaseutil	\
     ldap50	\
     prldap50
-.IF	"$(OS)"=="SOLARIS"
-.IF	"$(CPU)"=="S"
-BIN_RUNTIMELIST+=	\
-    freebl_hybrid_3
-.ENDIF
-.ENDIF #"$(OS)"=="SOLARIS"
 .ENDIF
 
 COMPONENT_RUNTIMELIST=	\
@@ -81,7 +129,7 @@ COMPONENT_RUNTIMELIST=	\
     vcard	\
     i18n 	\
     pipnss
-    
+
 .IF "$(GUI)"=="WNT"
 COMPONENT_RUNTIMELIST+=	\
     xppref32	\
@@ -101,7 +149,8 @@ COMREGISTRY_FILELIST=	\
     xpcom_io.xpt	\
     xpcom_xpti.xpt	\
     addrbook.xpt	\
-    mozldap.xpt
+    mozldap.xpt \
+    pref.xpt
 
 .IF "$(GUI)"=="WNT"
 COMREGISTRY_FILELIST+=	xpcom_thread.xpt
@@ -119,37 +168,89 @@ DEFAULTS_RUNTIMELIST=	\
     greprefs$/all.js	\
     greprefs$/security-prefs.js
 
+.IF "$(ENABLE_NSS_MODULE)"=="YES"
+#These headers come from the separate NSS module if enabled
+NSS_INCLUDE_LIST= nspr nss
+
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
+
+
+LIBLIST=        \
+        libembed_base_s.a \
+        libmozreg_s.a \
+        libnslber32v50.a \
+        libnsldap32v50.a \
+    libxpcom_core.dll.a \
+        libxpcom.dll.a 
+
+.ELSE #"$(COM)"=="GCC"
+
+LIBLIST=        \
+        embed_base_s.lib \
+        mozreg_s.lib \
+        nslber32v50.lib \
+        nsldap32v50.lib \
+    xpcom_core.lib	\
+        xpcom.lib 
+
+.ENDIF #"$(COM)"=="GCC"
+
+.ELSE   #"$(GUI)"=="WNT"
+
+LIBLIST=        \
+        libembed_base_s.a \
+        libmozreg_s.a \
+        liblber50.a \
+    libxpcom_core$(DLLPOST)	\
+        libxpcom$(DLLPOST)      \
+        libmsgbaseutil$(DLLPOST)        \
+        libldap50$(DLLPOST) \
+
+.ENDIF
+
+.ELSE # .IF"$(ENABLE_NSS_MODULE)"=="YES"
+
+.IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+
 LIBLIST=	\
     libembed_base_s.a	\
     libmozreg_s.a	\
     libnslber32v50.a	\
     libnsldap32v50.a	\
     libnspr4.a 	\
+    libxpcom_core.dll.a	\
     libxpcom.dll.a	\
     libnss3.a	\
     libsmime3.a
+
 .ELSE
+
 LIBLIST=	\
     embed_base_s.lib	\
     mozreg_s.lib	\
     nslber32v50.lib	\
     nsldap32v50.lib	\
     nspr4.lib 	\
+    xpcom_core.lib	\
     xpcom.lib	\
     plc4.lib	\
     plds4.lib	\
     nss3.lib	\
     ssl3.lib	\
     smime3.lib
+
 .ENDIF
-.ELSE	#"$(GUI)"=="WNT"
+
+.ELSE   #"$(GUI)"=="WNT"
+
 LIBLIST=	\
     libembed_base_s.a	\
     libmozreg_s.a	\
     liblber50.a	\
     libnspr4$(DLLPOST)	\
+    libxpcom_core$(DLLPOST)	\
     libxpcom$(DLLPOST)	\
     libmsgbaseutil$(DLLPOST)	\
     libldap50$(DLLPOST) \
@@ -159,7 +260,9 @@ LIBLIST=	\
     libnss3$(DLLPOST)	\
     libssl3$(DLLPOST)	\
     libsmime3$(DLLPOST)
+
 .ENDIF
+.ENDIF # .IF "$(ENABLE_NSS_MODULE)"=="YES"
 
 INCLUDE_PATH=$(MOZ_DIST_DIR)$/include$/
 PUBLIC_PATH=$(MOZ_DIST_DIR)$/public$/
@@ -178,7 +281,7 @@ extract_mozab_files:	$(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) \
     $(MISC)$/build$/so_moz_runtime_files	\
     $(MISC)$/build$/so_moz_include_files	\
     $(MISC)$/build$/so_moz_lib_files
-    
+
 make_temp_dir:
     @@-$(MKDIR)	$(RUNTIME_DIR)
     @@-$(MKDIR)	$(RUNTIME_DIR)$/components
@@ -202,7 +305,21 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
     $(foreach,file,$(BIN_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/$(DLLPRE)$(file)$(DLLPOST) \
     $(LIB_DIR)$/$(DLLPRE)$(file)$(DLLPOST) &&) \
     echo >& $(NULLDEV)
+.IF "$(ENABLE_NSS_MODULE)" == "YES"
+# We add the libraries from the separate nss module
+    $(foreach,file,$(NSS_MODULE_RUNTIME_LIST) $(COPY) $(SOLARLIBDIR)$/$(DLLPRE)$(file)$(DLLPOST) \
+    $(RUNTIME_DIR)$/$(DLLPRE)$(file)$(DLLPOST) &&) \
+    echo >& $(NULLDEV)
 .ENDIF
+.ELSE # .IF "$(GUI)" == "UNX"
+.IF "$(ENABLE_NSS_MODULE)" == "YES"
+# We add the libraries from the separate nss module
+    $(foreach,file,$(NSS_MODULE_RUNTIME_LIST) $(COPY) $(SOLARBINDIR)$/$(DLLPRE)$(file)$(DLLPOST) \
+    $(RUNTIME_DIR)$/$(DLLPRE)$(file)$(DLLPOST) &&) \
+    echo >& $(NULLDEV)
+.ENDIF
+.ENDIF # .IF "$(GUI)" == "UNX"
+
 
 # copy files in RES_FILELIST
 .IF "$(OS)"=="SOLARIS"
@@ -227,8 +344,6 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
     @@-$(MKDIR)	$(RUNTIME_DIR)$/greprefs
     $(foreach,file,$(DEFAULTS_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/$(file) $(RUNTIME_DIR)$/$(file) &&) \
     echo >& $(NULLDEV)
-# copy regxpcom
-    @$(COPY) $(MOZ_BIN_DIR)$/regxpcom$(REG_SUBFIX) $(RUNTIME_DIR)$/regxpcom$(REG_SUBFIX)
 
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"!="MACOSX"
@@ -266,30 +381,14 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
 .ENDIF
 
 # zip runtime files to mozruntime.zip
-.IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS"
-# regxpcom needs to find libxpcom.so next to itself:
-.IF "$(USE_SHELL)"=="bash"
-    cd $(RUNTIME_DIR) && \
-        LD_LIBRARY_PATH=$${{LD_LIBRARY_PATH+$${{LD_LIBRARY_PATH}}:}}. \
-        .$/regxpcom$(REG_SUBFIX)
-.ELSE
-    cd $(RUNTIME_DIR) && if ($$?LD_LIBRARY_PATH == 1) \
-        eval 'setenv LD_LIBRARY_PATH "$${{LD_LIBRARY_PATH}}:."' && \
-        if ($$?LD_LIBRARY_PATH == 0) setenv LD_LIBRARY_PATH . && \
-        .$/regxpcom$(REG_SUBFIX)
-.ENDIF
-.ELSE
-    cd $(RUNTIME_DIR) && .$/regxpcom$(REG_SUBFIX)
-.ENDIF
-    $(COPY) $(RUNTIME_DIR)$/components$/xpti.dat $(RUNTIME_DIR)$/components$/xptitemp.dat
-    $(RM) $(RUNTIME_DIR)$/regxpcom$(REG_SUBFIX)
     cd $(RUNTIME_DIR) && zip -r ..$/..$/bin$/mozruntime.zip *
-    
+
     $(TOUCH) $@
 
 $(INCCOM)$/nsBuildID.h: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
     @-echo "You can delete $(INCCOM) to force it copy all include files again."
-    
+
+
 $(MISC)$/build$/so_moz_include_files: $(INCCOM)$/nsBuildID.h
 .IF "$(USE_SHELL)"=="4nt"
     $(COPY) /QSZ $(INCLUDE_PATH)* $(INCLUDE_DIR)
@@ -308,6 +407,13 @@ $(MISC)$/build$/so_moz_include_files: $(INCCOM)$/nsBuildID.h
     chmod -R 775 $(INCCOM)
 .ENDIF
     $(TOUCH) $@
+.IF "$(ENABLE_NSS_MODULE)"=="YES"
+        +$(foreach,dir,$(NSS_INCLUDE_LIST) $(RENAME:s/+//) $(INCLUDE_DIR)$/$(dir) \
+    $(INCLUDE_DIR)$/$(dir)_remove_me &&) \
+        echo >& $(NULLDEV)
+        $(foreach,dir,$(NSS_INCLUDE_LIST) rm -r -f $(INCLUDE_DIR)$/$(dir)_remove_me &&) \
+        echo >& $(NULLDEV)
+.ENDIF
 
 # On UNX the rules for so_moz_runtime_files copy files into the same directory
 # used here (LIB_DIR), and on MACOSX all those files together need to be
@@ -325,13 +431,13 @@ $(MISC)$/build$/so_moz_lib_files:		$(foreach,file,$(LIBLIST) $(LIB_DIR)$/$(file)
     chmod -R 775 $(LB)
 .ENDIF
     $(TOUCH) $@
-    
+
 $(BIN_RUNTIMELIST): $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
     @$(COPY) $(MOZ_BIN_DIR)$/$(DLLPRE)$@$(DLLPOST) $(RUNTIME_DIR)$/$(DLLPRE)$@$(DLLPOST)
 
 $(COMPONENT_RUNTIMELIST): $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
     @$(COPY) $(MOZ_BIN_DIR)$/components$/$(DLLPRE)$@$(DLLPOST) $(RUNTIME_DIR)$/components$/$(DLLPRE)$@$(DLLPOST)
-    
+
 $(COMREGISTRY_FILELIST): $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
     @$(COPY) $(MOZ_BIN_DIR)$/components$/$@ $(RUNTIME_DIR)$/components$/$@
 
@@ -345,7 +451,6 @@ RES_FILELIST: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     @echo No Res Files to copy.
 .ENDIF
 
-    
 $(LIB_DIR)$/%: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     noop
 
