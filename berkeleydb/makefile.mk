@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -59,8 +59,6 @@ ADDITIONAL_FILES= \
     sequence$/makefile.mk txn$/makefile.mk xa$/makefile.mk \
     db_4_7_gcc4.map
 
-
-
 # not needed for win32. comment out when causing problems...
 .IF "$(GUI)$(COM)"=="WNTGCC"
 PATCH_FILES=db-4.7.25-mingw.patch
@@ -113,7 +111,7 @@ BUILD_DIR_OUT=$(CONFIGURE_DIR)
 
 .IF "$(OS)"=="IRIX"
 CONFIGURE_ACTION= $(CONFIG_SHELL) ..$/dist$/configure
-BUILD_ACTION=gmake 
+BUILD_ACTION=gmake
 .ELSE
 BUILD_ACTION=make
 .ENDIF
