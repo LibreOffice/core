@@ -1531,7 +1531,7 @@ sub get_path_to_nsis_sdk
         # do we have nsis already in path ?
         @paths = split(/:/, $ENV{'PATH'});
         foreach $paths (@paths) {
-            $path =~ s/[\/\\]+$//; # remove trailing slashes;
+            $paths =~ s/[\/\\]+$//; # remove trailing slashes;
             $nsispath = $paths . "/nsis";
 
             if ( -x $nsispath ) {
