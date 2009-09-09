@@ -996,6 +996,11 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                                     exportSection(xSection);
                             }
                         }
+                    } // if ( aColIter->xElement.is() )
+                    else if ( !bShapeHandled )
+                    {
+                        bShapeHandled = true;
+                        exportShapes(_xSection);
                     }
                     aColIter = aColIter + (aColIter->nColSpan - 1);
                 }
@@ -1617,7 +1622,7 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddPa
         {
             ::std::auto_ptr<SvXMLElementExport> pSubDocument;
             uno::Reference< frame::XModel> xModel(xShape->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model"))),uno::UNO_QUERY);
-            if ( xModel.is() ) // special handlingfor chart object
+            if ( xModel.is() ) // special handling for chart object
             {
                 pSubDocument.reset(new SvXMLElementExport(*this,XML_NAMESPACE_REPORT, XML_SUB_DOCUMENT, sal_False, sal_False));
                 exportMasterDetailFields(xShape.get());

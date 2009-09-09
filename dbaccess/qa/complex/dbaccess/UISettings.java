@@ -39,9 +39,6 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCloseable;
-import helper.URLHelper;
-import java.io.File;
-import java.net.URI;
 
 public class UISettings extends TestCase
 {
@@ -64,11 +61,11 @@ public class UISettings extends TestCase
      */
     public void checkTableFormattingPersistence() throws java.lang.Exception
     {
-        CRMDatabase database = new CRMDatabase( getORB() );
+        final CRMDatabase database = new CRMDatabase( getORB() );
 
         // load the document
         String docURL = database.getDatabase().getDocumentURL();
-        XComponentLoader loader = (XComponentLoader)UnoRuntime.queryInterface( XComponentLoader.class,
+        final XComponentLoader loader = (XComponentLoader)UnoRuntime.queryInterface( XComponentLoader.class,
             getORB().createInstance( "com.sun.star.frame.Desktop" ) );
         XModel doc = (XModel)UnoRuntime.queryInterface( XModel.class,
             loader.loadComponentFromURL( docURL, "_blank", 0, new PropertyValue[] {} ) );
@@ -87,7 +84,7 @@ public class UISettings extends TestCase
 
         // change the table's formatting
         tableControlModel.setPropertyValue( "FontName", "Andale Sans UI" );
-        tableControlModel.setPropertyValue( "FontHeight", new Float( 20 ) );
+        tableControlModel.setPropertyValue( "FontHeight", Float.valueOf( 20 ) );
         tableControlModel.setPropertyValue( "FontSlant", FontSlant.ITALIC );
 
         // close the table
@@ -126,7 +123,7 @@ public class UISettings extends TestCase
 
         // close the doc
         docUI.closeSubComponents();
-        XCloseable closeDoc = (XCloseable)UnoRuntime.queryInterface( XCloseable.class,
+        final XCloseable closeDoc = (XCloseable)UnoRuntime.queryInterface( XCloseable.class,
             doc );
         closeDoc.close( true );
     }

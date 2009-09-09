@@ -152,7 +152,6 @@ namespace dbaui
                                         , const SfxItemSet& _rCoreAttrs
                                         , USHORT _nPortId
                                         , USHORT _nDefaultPortResId
-                                        , const sal_Char* _pDriverName
                                         , USHORT _nHelpTextResId
                                         , USHORT _nHeaderTextResId
                                         , USHORT _nDriverClassId );

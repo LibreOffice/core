@@ -60,6 +60,8 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/LineEndFormat.hpp>
+#include <com/sun/star/awt/LineEndFormat.hpp>
+#include <com/sun/star/awt/MouseWheelBehavior.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -684,13 +686,23 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                 aCopyProperties.push_back( PROPERTY_WIDTH );
 
                 // help text to display for the column
-                Any aDescription; aDescription <<= ::rtl::OUString();
+                Any aDescription;
                 if ( xColPSI->hasPropertyByName( PROPERTY_HELPTEXT ) )
-                    aDescription <<= ::comphelper::getString( xColumn->getPropertyValue( PROPERTY_HELPTEXT ) );
+                    aDescription = xColumn->getPropertyValue( PROPERTY_HELPTEXT );
+                if ( !aDescription.hasValue() )
+                    aDescription <<= ::rtl::OUString();
                 aInitialValues.push_back( NamedValue( PROPERTY_HELPTEXT, aDescription ) );
 
                 // ... horizontal justify
-                aInitialValues.push_back( NamedValue( PROPERTY_ALIGN, makeAny( sal_Int16( ::comphelper::getINT32( xColumn->getPropertyValue( PROPERTY_ALIGN ) ) ) ) ) );
+                Any aAlign; aAlign <<= sal_Int16( 0 );
+                Any aColAlign( xColumn->getPropertyValue( PROPERTY_ALIGN ) );
+                if ( aColAlign.hasValue() )
+                    aAlign <<= sal_Int16( ::comphelper::getINT32( aColAlign ) );
+                aInitialValues.push_back( NamedValue( PROPERTY_ALIGN, aAlign ) );
+
+                // don't allow the mouse to scroll in the cells
+                if ( xGridColPSI->hasPropertyByName( PROPERTY_MOUSE_WHEEL_BEHAVIOR ) )
+                    aInitialValues.push_back( NamedValue( PROPERTY_MOUSE_WHEEL_BEHAVIOR, makeAny( MouseWheelBehavior::SCROLL_DISABLED ) ) );
 
                 // now set all those values
                 for ( ::std::vector< NamedValue >::const_iterator property = aInitialValues.begin();
@@ -1535,25 +1547,6 @@ void SbaTableQueryBrowser::LoadFinished(sal_Bool _bWasSynch)
     // if the form has been loaded, this means that our "selection" has changed
     EventObject aEvent( *this );
     m_aSelectionListeners.notifyEach( &XSelectionChangeListener::selectionChanged, aEvent );
-
-    // update our database document
-    Reference< XModel > xDocument;
-    try
-    {
-        Reference< XPropertySet > xCursorProps( getRowSet(), UNO_QUERY_THROW );
-        Reference< XConnection > xConnection( xCursorProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ), UNO_QUERY );
-        if ( xConnection.is() )
-        {
-            Reference< XChild > xChild( xConnection, UNO_QUERY_THROW );
-            Reference< XDocumentDataSource > xDataSource( xChild->getParent(), UNO_QUERY_THROW );
-            xDocument.set( xDataSource->getDatabaseDocument(), UNO_QUERY_THROW );
-        }
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
-    m_xCurrentDatabaseDocument = xDocument;
 }
 
 //------------------------------------------------------------------------------
@@ -1746,7 +1739,13 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                 if (getBrowserView() && getBrowserView()->getVclControl() && !getBrowserView()->getVclControl()->IsEditing())
                 {
                     SbaGridControl* pControl = getBrowserView()->getVclControl();
-                    aReturn.bEnabled = pControl->canCopyCellText(pControl->GetCurRow(), pControl->GetCurColumnId());
+                    if ( pControl->GetSelectRowCount() )
+                    {
+                        aReturn.bEnabled = m_aCurrentFrame.isActive();
+                        break;
+                    } // if ( getBrowserView()->getVclControl()->GetSelectRowCount() )
+                    else
+                        aReturn.bEnabled = pControl->canCopyCellText(pControl->GetCurRow(), pControl->GetCurColumnId());
                     break;
                 }
                 // NO break here
@@ -1942,7 +1941,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
             {
                 copyEntry(m_pTreeView->getListBox().GetCurEntry());
             }
-            else if (getBrowserView() && getBrowserView()->getVclControl() && !getBrowserView()->getVclControl()->IsEditing())
+            else if (getBrowserView() && getBrowserView()->getVclControl() && !getBrowserView()->getVclControl()->IsEditing() && getBrowserView()->getVclControl()->GetSelectRowCount() < 1)
             {
                 SbaGridControl* pControl = getBrowserView()->getVclControl();
                 pControl->copyCellText(pControl->GetCurRow(), pControl->GetCurColumnId());
@@ -2346,31 +2345,34 @@ sal_Bool SbaTableQueryBrowser::implSelect(const ::rtl::OUString& _rDataSourceNam
         SvLBoxEntry* pCommandType = NULL;
         SvLBoxEntry* pCommand = getObjectEntry( _rDataSourceName, _rCommand, _nCommandType, &pDataSource, &pCommandType, sal_True, _rxConnection );
 
-        //  if (pDataSource) // OJ change for the new app
+        if (pCommand)
         {
-            if (pCommand)
+            bool bSuccess = true;
+            if ( _bSelectDirect )
             {
-                if ( _bSelectDirect )
-                {
-                    implSelect( pCommand );
-                }
-                else
-                    m_pTreeView->getListBox().Select(pCommand);
+                bSuccess = implSelect( pCommand );
+            }
+            else
+            {
+                m_pTreeView->getListBox().Select( pCommand );
+            }
 
+            if ( bSuccess )
+            {
                 m_pTreeView->getListBox().MakeVisible(pCommand);
                 m_pTreeView->getListBox().SetCursor(pCommand);
             }
-            else if (!pCommandType)
-            {
-                if ( m_pCurrentlyDisplayed )
-                {   // tell the old entry (if any) it has been deselected
-                    selectPath(m_pCurrentlyDisplayed, sal_False);
-                    m_pCurrentlyDisplayed = NULL;
-                }
-
-                // we have a command and need to display this in the rowset
-                return implLoadAnything(_rDataSourceName, _rCommand, _nCommandType, _bEscapeProcessing, _rxConnection);
+        }
+        else if (!pCommandType)
+        {
+            if ( m_pCurrentlyDisplayed )
+            {   // tell the old entry (if any) it has been deselected
+                selectPath(m_pCurrentlyDisplayed, sal_False);
+                m_pCurrentlyDisplayed = NULL;
             }
+
+            // we have a command and need to display this in the rowset
+            return implLoadAnything(_rDataSourceName, _rCommand, _nCommandType, _bEscapeProcessing, _rxConnection);
         }
     }
     return sal_False;
@@ -2437,7 +2439,8 @@ bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
 
     Reference< ::com::sun::star::form::XLoadable >  xLoadable = getLoadable();
     bRebuild |= !xLoadable->isLoaded();
-    if(bRebuild)
+    bool bSuccess = true;
+    if ( bRebuild )
     {
         try
         {
@@ -2458,7 +2461,7 @@ bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
             if ( !pConData->xConnection.is() )
             {
                 unloadAndCleanup( sal_False );
-                return 0L;
+                return false;
             }
 
             Reference<XNameAccess> xNameAccess;
@@ -2532,6 +2535,7 @@ bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
                                 }
                                 catch (Exception&)
                                 {
+                                    DBG_UNHANDLED_EXCEPTION();
                                 }
                             }
                         }
@@ -2540,10 +2544,8 @@ bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
             }
 
             String sDataSourceName( getDataSourceAcessor( pConnection ) );
-            if ( implLoadAnything( sDataSourceName, aName, nCommandType, sal_True, pConData->xConnection ) )
-                // set the title of the beamer
-                ;/*updateTitle();*/
-            else
+            bSuccess = implLoadAnything( sDataSourceName, aName, nCommandType, sal_True, pConData->xConnection );
+            if ( !bSuccess )
             {   // clean up
                 criticalFail();
             }
@@ -2573,7 +2575,7 @@ bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
             xRowSetProps->setPropertyValue(PROPERTY_ACTIVE_CONNECTION,Any());
         }
     }
-    return true;
+    return bSuccess;
 }
 
 // -----------------------------------------------------------------------------
@@ -3698,8 +3700,25 @@ void SbaTableQueryBrowser::postReloadForm()
 Reference< XEmbeddedScripts > SAL_CALL SbaTableQueryBrowser::getScriptContainer() throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaTableQueryBrowser::getScriptContainer" );
-    Reference< XEmbeddedScripts > xScripts( m_xCurrentDatabaseDocument, UNO_QUERY );
-    OSL_ENSURE( xScripts.is() || !m_xCurrentDatabaseDocument.is(),
+    // update our database document
+    Reference< XModel > xDocument;
+    try
+    {
+        Reference< XPropertySet > xCursorProps( getRowSet(), UNO_QUERY_THROW );
+        Reference< XConnection > xConnection( xCursorProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ), UNO_QUERY );
+        if ( xConnection.is() )
+        {
+            Reference< XChild > xChild( xConnection, UNO_QUERY_THROW );
+            Reference< XDocumentDataSource > xDataSource( xChild->getParent(), UNO_QUERY_THROW );
+            xDocument.set( xDataSource->getDatabaseDocument(), UNO_QUERY_THROW );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    Reference< XEmbeddedScripts > xScripts( xDocument, UNO_QUERY );
+    OSL_ENSURE( xScripts.is() || !xDocument.is(),
         "SbaTableQueryBrowser::getScriptContainer: invalid database document!" );
     return xScripts;
 }

@@ -72,7 +72,7 @@ protected:
 #endif
 
 public:
-    ODatasourceSelectDialog( Window* _pParent, const StringBag& _rDatasources, ::dbaccess::DATASOURCE_TYPE _eType,SfxItemSet* _pOutputSet = NULL );
+    ODatasourceSelectDialog( Window* _pParent, const StringBag& _rDatasources, bool _bAdabas,SfxItemSet* _pOutputSet = NULL );
     ~ODatasourceSelectDialog();
 
     inline String   GetSelected() const { return m_aDatasource.GetSelectEntry();}

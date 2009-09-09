@@ -31,10 +31,6 @@
 #ifndef INCLUDED_FIXEDTEXTCOLOR_HXX
 #define INCLUDED_FIXEDTEXTCOLOR_HXX
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_reportdesign.hxx"
-
-
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/container/XChild.hpp>

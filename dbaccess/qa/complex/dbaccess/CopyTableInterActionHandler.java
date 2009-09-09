@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: AdabasStatDlg.hrc,v $
+ * $RCSfile: RowSetEventListener.java,v $
  * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
@@ -27,10 +27,27 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef DBAUI_ADABASSTATDLG_HRC
-#define DBAUI_ADABASSTATDLG_HRC
+package complex.dbaccess;
 
-#define STR_PAGETITLE_ADABAS_STATISTIC      1
+import com.sun.star.lib.uno.helper.WeakBase;
+import com.sun.star.task.XInteractionHandler;
+import com.sun.star.task.XInteractionRequest;
 
+/**
+ *
+ * @author oj93728
+ */
+class CopyTableInterActionHandler extends WeakBase
+        implements XInteractionHandler
+{
+    private final CopyTableWizard test;
+    public CopyTableInterActionHandler(CopyTableWizard testCase)
+    {
+        test = testCase;
+    }
 
-#endif // DBAUI_ADABASSTATDLG_HRC
+    public void handle(XInteractionRequest xRequest)
+    {
+        test.assure(xRequest.toString());
+    }
+}

@@ -1102,7 +1102,8 @@ void ODatabaseDocument::impl_closeControllerFrames_nolck_throw( sal_Bool _bDeliv
 {
     Controllers aCopy = m_aControllers;
 
-    for ( Controllers::iterator aIter = aCopy.begin(); aIter != aCopy.end() ; ++aIter )
+    Controllers::iterator aEnd = aCopy.end();
+    for ( Controllers::iterator aIter = aCopy.begin(); aIter != aEnd ; ++aIter )
     {
         if ( !aIter->is() )
             continue;

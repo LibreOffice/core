@@ -867,7 +867,8 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
         _rTypeInfoIters.reserve(_rTypeInfoMap.size());
 
         OTypeInfoMap::iterator aIter = _rTypeInfoMap.begin();
-        for(;aIter != _rTypeInfoMap.end();++aIter)
+        OTypeInfoMap::iterator aEnd = _rTypeInfoMap.end();
+        for(;aIter != aEnd;++aIter)
             _rTypeInfoIters.push_back(aIter);
 
         // Close the result set/statement.

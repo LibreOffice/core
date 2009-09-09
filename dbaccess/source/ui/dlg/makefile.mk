@@ -78,10 +78,8 @@ SRC1FILES =	\
         CollectionView.src	\
         dlgattr.src			\
         advancedsettings.src\
-        AdabasStatDlg.src	\
         UserAdminDlg.src	\
         sqlmessage.src      \
-        ExtensionNotPresent.src \
         textconnectionsettings.src
 
 
@@ -109,7 +107,6 @@ EXCEPTIONSFILES=						\
         $(SLO)$/TextConnectionHelper.obj	\
         $(SLO)$/ConnectionPageSetup.obj	\
         $(SLO)$/DBSetupConnectionPages.obj 	\
-        $(SLO)$/AdabasStatDlg.obj		\
         $(SLO)$/UserAdminDlg.obj		\
         $(SLO)$/UserAdmin.obj			\
         $(SLO)$/AdabasStat.obj			\
@@ -121,7 +118,6 @@ EXCEPTIONSFILES=						\
         $(SLO)$/dbfindex.obj            \
         $(SLO)$/DriverSettings.obj      \
         $(SLO)$/odbcconfig.obj          \
-        $(SLO)$/ExtensionNotPresent.obj \
         $(SLO)$/advancedsettings.obj    \
         $(SLO)$/datasourceui.obj	\
         $(SLO)$/textconnectionsettings.obj

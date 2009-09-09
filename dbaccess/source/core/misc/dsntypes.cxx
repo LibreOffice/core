@@ -34,18 +34,20 @@
 #include "dsntypes.hxx"
 #include "dbamiscres.hrc"
 #include <unotools/confignode.hxx>
-#include <tools/rc.hxx>
 #include <tools/debug.hxx>
+#include <tools/wldcrd.hxx>
 #include <osl/file.hxx>
 #include "dbastrings.hrc"
 #include "core_resource.hxx"
 #include "core_resource.hrc"
 #include <comphelper/documentconstants.hxx>
+#include <connectivity/DriversConfig.hxx>
 //.........................................................................
 namespace dbaccess
 {
 //.........................................................................
 
+    using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
@@ -61,84 +63,31 @@ namespace dbaccess
                 _nPortNumber    = _sUrl.GetToken(1,':').ToInt32();
             }
         }
-        class ODataSourceTypeStringListResource : public Resource
-        {
-            ::std::vector<String>   m_aStrings;
-        public:
-            ODataSourceTypeStringListResource(USHORT _nResId ) : Resource(ResId(_nResId,*ResourceManager::getResManager()))
-            {
-                m_aStrings.reserve(STR_END);
-                for (int i = STR_MYSQL_ODBC; i < STR_END ; ++i)
-                {
-                    m_aStrings.push_back(String(DBA_RES(sal::static_int_cast<USHORT>(i))));
-                }
-
-            }
-            ~ODataSourceTypeStringListResource()
-            {
-                FreeResource();
-            }
-            /** fill the vector with our readed strings
-                @param  _rToFill
-                    Vector to fill.
-            */
-            inline void fill( ::std::vector<String>& _rToFill )
-            {
-                _rToFill = m_aStrings;
-            }
-        };
-
-        ::rtl::OUString lcl_getUserDefinedDriverNodeName()
-        {
-            static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/UserDefinedDriverSettings"));
-            return s_sNodeName;
-        }
-        // -----------------------------------------------------------------------------
-        ::rtl::OUString lcl_getDriverTypeDisplayNodeName()
-        {
-            static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DriverTypeDisplayName"));
-            return s_sNodeName;
-        }
-        // -----------------------------------------------------------------------------
-        ::rtl::OUString lcl_getDriverDsnPrefixNodeName()
-        {
-            static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DriverDsnPrefix"));
-            return s_sNodeName;
-        }
-        // -----------------------------------------------------------------------------
-        ::rtl::OUString lcl_getDriverExtensionNodeName()
-        {
-            static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("Extension"));
-            return s_sNodeName;
-        }
-
     }
 //=========================================================================
 //= ODsnTypeCollection
 //=========================================================================
 DBG_NAME(ODsnTypeCollection)
 //-------------------------------------------------------------------------
-ODsnTypeCollection::ODsnTypeCollection()
+ODsnTypeCollection::ODsnTypeCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory)
+:m_xFactory(_xFactory)
 #ifdef DBG_UTIL
-:m_nLivingIterators(0)
+,m_nLivingIterators(0)
 #endif
 {
     DBG_CTOR(ODsnTypeCollection,NULL);
-    ODataSourceTypeStringListResource aTypes(RSC_DATASOURCE_TYPES);
-    aTypes.fill(m_aDsnPrefixes);
-
-    ODataSourceTypeStringListResource aDisplayNames(RSC_DATASOURCE_TYPE_UINAMES);
-    aDisplayNames.fill(m_aDsnTypesDisplayNames);
-
+    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
+    const uno::Sequence< ::rtl::OUString > aURLs = aDriverConfig.getURLs();
+    const ::rtl::OUString* pIter = aURLs.getConstArray();
+    const ::rtl::OUString* pEnd = pIter + aURLs.getLength();
+    for(;pIter != pEnd;++pIter )
+    {
+        m_aDsnPrefixes.push_back(*pIter);
+        m_aDsnTypesDisplayNames.push_back(aDriverConfig.getDriverTypeDisplayName(*pIter));
+    }
 
     DBG_ASSERT(m_aDsnTypesDisplayNames.size() == m_aDsnPrefixes.size(),
         "ODsnTypeCollection::ODsnTypeCollection : invalid resources !");
-    String sCurrentType;
-
-    for (StringVector::iterator aIter = m_aDsnPrefixes.begin();aIter != m_aDsnPrefixes.end();++aIter)
-    {
-        m_aDsnTypes.push_back(implDetermineType(*aIter));
-    }
 }
 
 //-------------------------------------------------------------------------
@@ -147,466 +96,243 @@ ODsnTypeCollection::~ODsnTypeCollection()
     DBG_DTOR(ODsnTypeCollection,NULL);
     DBG_ASSERT(0 == m_nLivingIterators, "ODsnTypeCollection::~ODsnTypeCollection : there are still living iterator objects!");
 }
-// -----------------------------------------------------------------------------
-void ODsnTypeCollection::initUserDriverTypes(const Reference< XMultiServiceFactory >& _rxORB)
-{
-    // read the user driver out of the configuration
-    // the config node where all pooling relevant info are stored under
-    ::utl::OConfigurationTreeRoot aUserDefinedDriverRoot = ::utl::OConfigurationTreeRoot::createWithServiceFactory(
-        _rxORB, lcl_getUserDefinedDriverNodeName(), -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
-
-    if ( aUserDefinedDriverRoot.isValid() )
-    {
-        Sequence< ::rtl::OUString > aDriverKeys = aUserDefinedDriverRoot.getNodeNames();
-        const ::rtl::OUString* pDriverKeys = aDriverKeys.getConstArray();
-        const ::rtl::OUString* pDriverKeysEnd = pDriverKeys + aDriverKeys.getLength();
-        for (sal_Int32 i=0;pDriverKeys != pDriverKeysEnd && i <= DST_USERDEFINE10; ++pDriverKeys)
-        {
-            ::utl::OConfigurationNode aThisDriverSettings = aUserDefinedDriverRoot.openNode(*pDriverKeys);
-            if ( aThisDriverSettings.isValid() )
-            {
-                // read the needed information
-                ::rtl::OUString sDsnPrefix,sDsnTypeDisplayName,sExtension;
-                aThisDriverSettings.getNodeValue(lcl_getDriverTypeDisplayNodeName()) >>= sDsnTypeDisplayName;
-                aThisDriverSettings.getNodeValue(lcl_getDriverDsnPrefixNodeName()) >>= sDsnPrefix;
-                aThisDriverSettings.getNodeValue(lcl_getDriverExtensionNodeName()) >>= sExtension;
-
-                m_aDsnTypesDisplayNames.push_back(sDsnTypeDisplayName);
-                m_aDsnPrefixes.push_back(sDsnPrefix);
-                m_aDsnTypes.push_back(static_cast<DATASOURCE_TYPE>(DST_USERDEFINE1 + i++));
-                m_aUserExtensions.push_back(sExtension);
-            }
-        }
-    }
-}
-
 //-------------------------------------------------------------------------
-DATASOURCE_TYPE ODsnTypeCollection::getType(const String& _rDsn) const
+String ODsnTypeCollection::getTypeDisplayName(const ::rtl::OUString& _sURL) const
 {
-    DATASOURCE_TYPE eType = DST_UNKNOWN;
-    // look for user defined driver types
+    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
+    return aDriverConfig.getDriverTypeDisplayName(_sURL);
+}
+//-------------------------------------------------------------------------
+String ODsnTypeCollection::cutPrefix(const ::rtl::OUString& _sURL) const
+{
+    String sURL( _sURL);
+    String sRet;
+    String sOldPattern;
     StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
     StringVector::const_iterator aEnd = m_aDsnPrefixes.end();
-    for (; aIter != aEnd; ++aIter)
+    for(;aIter != aEnd;++aIter)
     {
-        if ( _rDsn.Len() >= aIter->Len() && aIter->EqualsIgnoreCaseAscii(_rDsn,0, aIter->Len()) )
+        WildCard aWildCard(*aIter);
+        if ( sOldPattern.Len() < aIter->Len() && aWildCard.Matches(_sURL) )
         {
-            size_t nPos = (aIter - m_aDsnPrefixes.begin());
-            if ( nPos < m_aDsnTypes.size() )
-            {
-                eType = m_aDsnTypes[nPos];
-                break;
-            }
+            if ( aIter->Len() < sURL.Len() )
+                sRet = sURL.Copy(sURL.Match(*aIter));
+            else
+                sRet = sURL.Copy(aIter->Match(sURL));
+            sOldPattern = *aIter;
         }
     }
-    return eType;
-}
 
+    return sRet;
+}
 //-------------------------------------------------------------------------
-String ODsnTypeCollection::getTypeDisplayName(DATASOURCE_TYPE _eType) const
+String ODsnTypeCollection::getPrefix(const ::rtl::OUString& _sURL) const
 {
-    String sDisplayName;
-
-    sal_Int32 nIndex = implDetermineTypeIndex(_eType);
-    if ((nIndex >= 0) && (nIndex < (sal_Int32)m_aDsnTypesDisplayNames.size()))
-        sDisplayName = m_aDsnTypesDisplayNames[nIndex];
-
-    return sDisplayName;
-}
-
-//-------------------------------------------------------------------------
-String ODsnTypeCollection::getDatasourcePrefix(DATASOURCE_TYPE _eType) const
-{
-    String sPrefix;
-    sal_Int32 nIndex = implDetermineTypeIndex(_eType);
-    if ((nIndex >= 0) && (nIndex < (sal_Int32)m_aDsnPrefixes.size()))
-        sPrefix = m_aDsnPrefixes[nIndex];
-
-    return sPrefix;
-}
-
-//-------------------------------------------------------------------------
-String ODsnTypeCollection::cutPrefix(const String& _rDsn) const
-{
-    DATASOURCE_TYPE eType = getType(_rDsn);
-    String sPrefix = getDatasourcePrefix(eType);
-    return _rDsn.Copy(sPrefix.Len());
-}
-// -----------------------------------------------------------------------------
-String ODsnTypeCollection::getMediaType(DATASOURCE_TYPE _eType) const
-{
+    String sURL( _sURL);
     String sRet;
-    switch (_eType)
+    String sOldPattern;
+    StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
+    StringVector::const_iterator aEnd = m_aDsnPrefixes.end();
+    for(;aIter != aEnd;++aIter)
     {
-        case DST_DBASE:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application/dbase"));
-            break;
-        case DST_FLAT:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("text/csv"));
-            break;
-        case DST_CALC:
-            sRet = MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET;
-            break;
-        case DST_MSACCESS:
-        case DST_MSACCESS_2007:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application/msaccess"));
-            break;
-        default:
-            break;
+        WildCard aWildCard(*aIter);
+        if ( sOldPattern.Len() < aIter->Len() && aWildCard.Matches(sURL) )
+        {
+            if ( aIter->Len() < sURL.Len() )
+                sRet = aIter->Copy(0,sURL.Match(*aIter));
+            else
+                sRet = sURL.Copy(0,aIter->Match(sURL));
+            sRet.EraseTrailingChars('*');
+            sOldPattern = *aIter;
+        }
     }
+
     return sRet;
 }
 // -----------------------------------------------------------------------------
-String ODsnTypeCollection::getDatasourcePrefixFromMediaType(const String& _sMediaType,const String& _sExtension)
+bool ODsnTypeCollection::isConnectionUrlRequired(const ::rtl::OUString& _sURL) const
 {
-    ::rtl::OUString sURL(RTL_CONSTASCII_USTRINGPARAM("sdbc:"));
-    if ( _sMediaType.EqualsIgnoreCaseAscii( "text/csv" ) )
+    String sURL( _sURL);
+    String sRet;
+    String sOldPattern;
+    StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
+    StringVector::const_iterator aEnd = m_aDsnPrefixes.end();
+    for(;aIter != aEnd;++aIter)
     {
-        sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("flat:"));
-    }
-    else if ( _sMediaType.EqualsIgnoreCaseAscii( "application/dbase" ) )
+        WildCard aWildCard(*aIter);
+        if ( sOldPattern.Len() < aIter->Len() && aWildCard.Matches(sURL) )
+        {
+            sRet = *aIter;
+            sOldPattern = *aIter;
+        }
+    } // for(;aIter != aEnd;++aIter)
+    return sRet.GetChar(sRet.Len()-1) == '*';
+}
+// -----------------------------------------------------------------------------
+String ODsnTypeCollection::getMediaType(const ::rtl::OUString& _sURL) const
+{
+    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
+    const ::comphelper::NamedValueCollection& aFeatures = aDriverConfig.getMetaData(_sURL);
+    return aFeatures.getOrDefault("MediaType",::rtl::OUString());
+}
+// -----------------------------------------------------------------------------
+String ODsnTypeCollection::getDatasourcePrefixFromMediaType(const ::rtl::OUString& _sMediaType,const ::rtl::OUString& _sExtension)
+{
+    String sURL;
+    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
+    const uno::Sequence< ::rtl::OUString > aURLs = aDriverConfig.getURLs();
+    const ::rtl::OUString* pIter = aURLs.getConstArray();
+    const ::rtl::OUString* pEnd = pIter + aURLs.getLength();
+    for(;pIter != pEnd;++pIter )
     {
-        sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dbase:"));
-    }
-    else if ( _sMediaType.EqualsIgnoreCaseAscii( MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII ) )
-    {
-        sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc:"));
-    }
-    else if ( _sMediaType.EqualsIgnoreCaseAscii( "application/msaccess" ) )
-    {
-        if ( _sExtension.EqualsIgnoreCaseAscii( "mdb" ) )
-            sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE="));
-        else
-            sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE="));
-    }
+        const ::comphelper::NamedValueCollection& aFeatures = aDriverConfig.getMetaData(*pIter);
+        if ( aFeatures.getOrDefault("MediaType",::rtl::OUString()) == _sMediaType )
+        {
+            const ::rtl::OUString sFileExtension = aFeatures.getOrDefault("Extension",::rtl::OUString());
+            if ( (sFileExtension.getLength() && _sExtension == sFileExtension ) || !sFileExtension.getLength() || !_sExtension.getLength() )
+            {
+                sURL = *pIter;
+                break;
+            }
+        }
+    } // for(;pIter != pEnd;++pIter )
+    sURL.EraseTrailingChars('*');
     return sURL;
 }
 // -----------------------------------------------------------------------------
-void ODsnTypeCollection::extractHostNamePort(const String& _rDsn,String& _sDatabaseName,String& _rsHostname,sal_Int32& _nPortNumber) const
+bool ODsnTypeCollection::isShowPropertiesEnabled( const ::rtl::OUString& _sURL ) const
 {
-    DATASOURCE_TYPE eType = getType(_rDsn);
+    return !(    _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:embedded:hsqldb",sizeof("sdbc:embedded:hsqldb")-1)
+            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:outlook",sizeof("sdbc:address:outlook")-1)
+            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:outlookexp",sizeof("sdbc:address:outlookexp")-1)
+            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:mozilla:",sizeof("sdbc:address:mozilla:")-1)
+            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:kab",sizeof("sdbc:address:kab")-1)
+            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:evolution:local",sizeof("sdbc:address:evolution:local")-1)
+            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:evolution:groupwise",sizeof("sdbc:address:evolution:groupwise")-1)
+            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:evolution:ldap",sizeof("sdbc:address:evolution:ldap")-1)
+            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:macab",sizeof("sdbc:address:macab")-1)  );
+}
+// -----------------------------------------------------------------------------
+void ODsnTypeCollection::extractHostNamePort(const ::rtl::OUString& _rDsn,String& _sDatabaseName,String& _rsHostname,sal_Int32& _nPortNumber) const
+{
     String sUrl = cutPrefix(_rDsn);
-    switch( eType )
+    if ( _rDsn.matchIgnoreAsciiCaseAsciiL("jdbc:oracle:thin:",sizeof("jdbc:oracle:thin:")-1) )
     {
-        case DST_ORACLE_JDBC:
-            lcl_extractHostAndPort(sUrl,_rsHostname,_nPortNumber);
-            if ( !_rsHostname.Len() && sUrl.GetTokenCount(':') == 2 )
-            {
-                _nPortNumber = -1;
-                _rsHostname = sUrl.GetToken(0,':');
-            }
-            if ( _rsHostname.Len() )
-                _rsHostname = _rsHostname.GetToken(_rsHostname.GetTokenCount('@') - 1,'@');
-            _sDatabaseName = sUrl.GetToken(sUrl.GetTokenCount(':') - 1,':');
-            break;
-        case DST_LDAP:
-            lcl_extractHostAndPort(sUrl,_sDatabaseName,_nPortNumber);
-            break;
-        case DST_ADABAS:
-            if ( sUrl.GetTokenCount(':') == 2 )
-                _rsHostname = sUrl.GetToken(0,':');
-            _sDatabaseName = sUrl.GetToken(sUrl.GetTokenCount(':') - 1,':');
-            break;
-        case DST_MYSQL_NATIVE:
-        case DST_MYSQL_JDBC:
-            {
-                lcl_extractHostAndPort(sUrl,_rsHostname,_nPortNumber);
-
-                if ( _nPortNumber == -1 && !_rsHostname.Len() && sUrl.GetTokenCount('/') == 2 )
-                    _rsHostname = sUrl.GetToken(0,'/');
-                _sDatabaseName = sUrl.GetToken(sUrl.GetTokenCount('/') - 1,'/');
-            }
-            break;
-        case DST_MSACCESS:
-        case DST_MSACCESS_2007:
-            {
-                ::rtl::OUString sNewFileName;
-                if ( ::osl::FileBase::getFileURLFromSystemPath( sUrl, sNewFileName ) == ::osl::FileBase::E_None )
-                {
-                    _sDatabaseName = sNewFileName;
-                }
-            }
-            break;
-        default:
-            break;
-    }
-}
-
-//-------------------------------------------------------------------------
-sal_Bool ODsnTypeCollection::isFileSystemBased(DATASOURCE_TYPE _eType) const
-{
-    switch (_eType)
-    {
-        case DST_DBASE:
-        case DST_FLAT:
-        case DST_CALC:
-        case DST_MSACCESS:
-        case DST_MSACCESS_2007:
-            return sal_True;
-
-        case DST_USERDEFINE1:
-        case DST_USERDEFINE2:
-        case DST_USERDEFINE3:
-        case DST_USERDEFINE4:
-        case DST_USERDEFINE5:
-        case DST_USERDEFINE6:
-        case DST_USERDEFINE7:
-        case DST_USERDEFINE8:
-        case DST_USERDEFINE9:
-        case DST_USERDEFINE10:
+        lcl_extractHostAndPort(sUrl,_rsHostname,_nPortNumber);
+        if ( !_rsHostname.Len() && sUrl.GetTokenCount(':') == 2 )
         {
-            StringVector::size_type nPos = static_cast<sal_Int16>(_eType-DST_USERDEFINE1);
-            return nPos < m_aUserExtensions.size() && m_aUserExtensions[nPos].Len() != 0;
+            _nPortNumber = -1;
+            _rsHostname = sUrl.GetToken(0,':');
         }
-        default:
-            return sal_False;
+        if ( _rsHostname.Len() )
+            _rsHostname = _rsHostname.GetToken(_rsHostname.GetTokenCount('@') - 1,'@');
+        _sDatabaseName = sUrl.GetToken(sUrl.GetTokenCount(':') - 1,':');
+    } // if ( _rDsn.matchIgnoreAsciiCaseAsciiL("jdbc:oracle:thin:",sizeof("jdbc:oracle:thin:")-1) )
+    else if ( _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:address:ldap:",sizeof("sdbc:address:ldap:")-1) )
+    {
+        lcl_extractHostAndPort(sUrl,_sDatabaseName,_nPortNumber);
     }
-}
+    else if ( _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:adabas:",sizeof("sdbc:adabas:")-1) )
+    {
+        if ( sUrl.GetTokenCount(':') == 2 )
+            _rsHostname = sUrl.GetToken(0,':');
+        _sDatabaseName = sUrl.GetToken(sUrl.GetTokenCount(':') - 1,':');
+    }
+    else if ( _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:mysql:mysqlc:",sizeof("sdbc:mysql:mysqlc:")-1) || _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:mysql:jdbc:",sizeof("sdbc:mysql:jdbc:")-1) )
+    {
+        lcl_extractHostAndPort(sUrl,_rsHostname,_nPortNumber);
 
-
-sal_Bool ODsnTypeCollection::supportsTableCreation(DATASOURCE_TYPE _eType)
-{
-    BOOL bSupportsTableCreation;
-        switch( _eType )
+        if ( _nPortNumber == -1 && !_rsHostname.Len() && sUrl.GetTokenCount('/') == 2 )
+            _rsHostname = sUrl.GetToken(0,'/');
+        _sDatabaseName = sUrl.GetToken(sUrl.GetTokenCount('/') - 1,'/');
+    }
+    else if ( _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=",sizeof("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=")-1)
+         || _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=",sizeof("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=")-1))
+    {
+        ::rtl::OUString sNewFileName;
+        if ( ::osl::FileBase::getFileURLFromSystemPath( sUrl, sNewFileName ) == ::osl::FileBase::E_None )
         {
-            case DST_MOZILLA:
-            case DST_OUTLOOK:
-            case DST_OUTLOOKEXP:
-            case DST_FLAT:
-            case DST_EVOLUTION:
-            case DST_EVOLUTION_GROUPWISE:
-            case DST_EVOLUTION_LDAP:
-            case DST_KAB:
-             case DST_THUNDERBIRD:
-            case DST_CALC:
-                bSupportsTableCreation = FALSE;
-                break;
-            case DST_DBASE:
-            case DST_ADABAS:
-            case DST_ADO:
-            case DST_MSACCESS:
-            case DST_MSACCESS_2007:
-            case DST_MYSQL_ODBC:
-            case DST_ODBC:
-            case DST_MYSQL_JDBC:
-            case DST_MYSQL_NATIVE:
-            case DST_ORACLE_JDBC:
-            case DST_LDAP:
-            case DST_JDBC:
-            default:
-                bSupportsTableCreation = TRUE;
-                break;
+            _sDatabaseName = sNewFileName;
         }
-        return bSupportsTableCreation;
+    }
 }
 // -----------------------------------------------------------------------------
-sal_Bool ODsnTypeCollection::supportsBrowsing(DATASOURCE_TYPE _eType)
+String ODsnTypeCollection::getJavaDriverClass(const ::rtl::OUString& _sURL) const
 {
-    sal_Bool bEnableBrowseButton = sal_False;
-    switch( _eType )
-    {
-        case DST_DBASE:
-        case DST_FLAT:
-        case DST_CALC:
-        case DST_ADABAS:
-        case DST_ADO:
-        case DST_MSACCESS:
-        case DST_MSACCESS_2007:
-        case DST_MYSQL_ODBC:
-        case DST_ODBC:
-        case DST_MOZILLA:
-        case DST_THUNDERBIRD:
-            bEnableBrowseButton = TRUE;
-            break;
-        case DST_MYSQL_NATIVE:
-        case DST_MYSQL_JDBC:
-        case DST_ORACLE_JDBC:
-        case DST_LDAP:
-        case DST_OUTLOOK:
-        case DST_OUTLOOKEXP:
-        case DST_JDBC:
-        case DST_EVOLUTION:
-        case DST_EVOLUTION_GROUPWISE:
-        case DST_EVOLUTION_LDAP:
-        case DST_KAB:
-            bEnableBrowseButton = FALSE;
-            break;
-        default:
-            bEnableBrowseButton = getTypeExtension(_eType).Len() != 0;
-            break;
-    }
-    return bEnableBrowseButton;
-}
-
-
-//-------------------------------------------------------------------------
-DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn) const
-{
-    sal_uInt16 nSeparator = _rDsn.Search((sal_Unicode)':');
-    if (STRING_NOTFOUND == nSeparator)
-    {
-        // there should be at least one such separator
-        DBG_ERROR("ODsnTypeCollection::implDetermineType : missing the colon !");
-        return DST_UNKNOWN;
-    }
-    // find first :
-    sal_uInt16 nOracleSeparator = _rDsn.Search((sal_Unicode)':', nSeparator + 1);
-    if ( nOracleSeparator != STRING_NOTFOUND )
-    {
-        nOracleSeparator = _rDsn.Search((sal_Unicode)':', nOracleSeparator + 1);
-        if (nOracleSeparator != STRING_NOTFOUND && _rDsn.EqualsIgnoreCaseAscii("jdbc:oracle:thin", 0, nOracleSeparator))
-            return DST_ORACLE_JDBC;
-    }
-
-    if (_rDsn.EqualsIgnoreCaseAscii("jdbc", 0, nSeparator))
-        return DST_JDBC;
-
-    // find second :
-    nSeparator = _rDsn.Search((sal_Unicode)':', nSeparator + 1);
-    if (STRING_NOTFOUND == nSeparator)
-    {
-        // at the moment only jdbc is allowed to have just one separator
-        DBG_ERROR("ODsnTypeCollection::implDetermineType : missing the second colon !");
-        return DST_UNKNOWN;
-    }
-
-    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:adabas", 0, nSeparator))
-        return DST_ADABAS;
-    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:odbc", 0, nSeparator))
-        return DST_ODBC;
-    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:dbase", 0, nSeparator))
-        return DST_DBASE;
-
-    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:ado:", 0, nSeparator))
-    {
-        nSeparator = _rDsn.Search((sal_Unicode)':', nSeparator + 1);
-        if (STRING_NOTFOUND != nSeparator && _rDsn.EqualsIgnoreCaseAscii("sdbc:ado:access",0, nSeparator) )
-        {
-            nSeparator = _rDsn.Search((sal_Unicode)';', nSeparator + 1);
-            if (STRING_NOTFOUND != nSeparator && _rDsn.EqualsIgnoreCaseAscii("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0",0, nSeparator) )
-                return DST_MSACCESS_2007;
-
-            return DST_MSACCESS;
-        }
-        return DST_ADO;
-    }
-    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:flat:", 0, nSeparator))
-        return DST_FLAT;
-    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:calc:", 0, nSeparator))
-        return DST_CALC;
-    //if ( ( 11 <= nSeparator) && _rDsn.EqualsIgnoreCaseAscii("sdbc:mysqlc:", 0, nSeparator))
-    //  return DST_MYSQL_NATIVE;
-
-    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:embedded:hsqldb", 0, _rDsn.Len()))
-        return DST_EMBEDDED_HSQLDB;
-
-    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:address:", 0, nSeparator))
-    {
-        ++nSeparator;
-        if (_rDsn.EqualsIgnoreCaseAscii("mozilla:", nSeparator,_rDsn.Len() - nSeparator))
-            return DST_MOZILLA;
-        if (_rDsn.EqualsIgnoreCaseAscii("thunderbird:", nSeparator,_rDsn.Len() - nSeparator))
-            return DST_THUNDERBIRD;
-        if (_rDsn.EqualsIgnoreCaseAscii("ldap:", nSeparator,_rDsn.Len() - nSeparator))
-            return DST_LDAP;
-        if (_rDsn.EqualsIgnoreCaseAscii("outlook", nSeparator,_rDsn.Len() - nSeparator))
-            return DST_OUTLOOK;
-        if (_rDsn.EqualsIgnoreCaseAscii("outlookexp", nSeparator,_rDsn.Len() - nSeparator))
-            return DST_OUTLOOKEXP;
-        if (_rDsn.EqualsIgnoreCaseAscii("evolution:ldap", nSeparator,_rDsn.Len() - nSeparator))
-            return DST_EVOLUTION_LDAP;
-        if (_rDsn.EqualsIgnoreCaseAscii("evolution:groupwise", nSeparator,_rDsn.Len() - nSeparator))
-            return DST_EVOLUTION_GROUPWISE;
-        if (_rDsn.EqualsIgnoreCaseAscii("evolution:local", nSeparator,_rDsn.Len() - nSeparator))
-            return DST_EVOLUTION;
-        if (_rDsn.EqualsIgnoreCaseAscii("kab", nSeparator,_rDsn.Len() - nSeparator))
-            return DST_KAB;
-        if (_rDsn.EqualsIgnoreCaseAscii("macab", nSeparator,_rDsn.Len() - nSeparator))
-            return DST_MACAB;
-    }
-
-    // find third :
-    nSeparator = _rDsn.Search((sal_Unicode)':', nSeparator + 1);
-    if (STRING_NOTFOUND == nSeparator)
-    {
-        DBG_ERROR("ODsnTypeCollection::implDetermineType : missing the third colon !");
-        return DST_UNKNOWN;
-    }
-
-    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:mysql:odbc", 0, nSeparator))
-        return DST_MYSQL_ODBC;
-    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:mysql:jdbc", 0, nSeparator))
-        return DST_MYSQL_JDBC;
-    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:mysql:mysqlc", 0, nSeparator))
-        return DST_MYSQL_NATIVE;
-
-    DBG_ERROR("ODsnTypeCollection::implDetermineType : unrecognized data source type !");
-    return DST_UNKNOWN;
-}
-// -----------------------------------------------------------------------------
-sal_Int32 ODsnTypeCollection::implDetermineTypeIndex(DATASOURCE_TYPE _eType) const
-{
-    DBG_ASSERT(
-            (m_aDsnTypesDisplayNames.size() == m_aDsnPrefixes.size())
-        &&  (m_aDsnTypesDisplayNames.size() == m_aDsnTypes.size()),
-        "ODsnTypeCollection::implDetermineTypeIndex : inconsistent structures !");
-
-    // the type of the datasource described by the DSN string
-    if (DST_UNKNOWN == _eType)
-    {
-        return -1;
-    }
-
-    // search this type in our arrays
-    sal_Int32 nIndex = 0;
-    ConstTypeVectorIterator aSearch = m_aDsnTypes.begin();
-
-    for (; aSearch != m_aDsnTypes.end(); ++nIndex, ++aSearch)
-        if (*aSearch == _eType)
-            return nIndex;
-
-    DBG_ERROR("ODsnTypeCollection::implDetermineTypeIndex : recognized the DSN schema, but did not find the type!");
-    return -1;
-}
-// -----------------------------------------------------------------------------
-Sequence<PropertyValue> ODsnTypeCollection::getDefaultDBSettings( DATASOURCE_TYPE _eType ) const
-{
-    Sequence< PropertyValue > aSettings;
-
-    switch ( _eType )
-    {
-    case DST_EMBEDDED_HSQLDB:
-        aSettings.realloc( 3 );
-
-        aSettings[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AutoIncrementCreation" ) );
-        aSettings[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IDENTITY" ) );
-
-        aSettings[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AutoRetrievingStatement" ) );
-        aSettings[1].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CALL IDENTITY()" ) );
-
-        aSettings[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAutoRetrievingEnabled" ) );
-        aSettings[2].Value <<= (sal_Bool)sal_True;
-        break;
-
-    default:
-        DBG_ERROR( "ODsnTypeCollection::getDefaultDBSettings: type is unsupported by this method!" );
-        break;
-    }
-
-    return aSettings;
-}
-
-// -----------------------------------------------------------------------------
-String ODsnTypeCollection::getTypeExtension(DATASOURCE_TYPE _eType) const
-{
-    StringVector::size_type nPos = static_cast<sal_uInt16>(_eType-DST_USERDEFINE1);
-    return nPos < m_aUserExtensions.size() ? m_aUserExtensions[nPos] : String();
+    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
+    const ::comphelper::NamedValueCollection& aFeatures = aDriverConfig.getProperties(_sURL);
+    return aFeatures.getOrDefault("JavaDriverClass",::rtl::OUString());
 }
 //-------------------------------------------------------------------------
-bool ODsnTypeCollection::isEmbeddedDatabase( DATASOURCE_TYPE _eType ) const
+sal_Bool ODsnTypeCollection::isFileSystemBased(const ::rtl::OUString& _sURL) const
 {
- // the only known embedded type so far is DST_EMBEDDED_HSQLDB
- return ( _eType == DST_EMBEDDED_HSQLDB );
+    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
+    const ::comphelper::NamedValueCollection& aFeatures = aDriverConfig.getMetaData(_sURL);
+    return aFeatures.getOrDefault("FileSystemBased",sal_False);
+}
+// -----------------------------------------------------------------------------
+sal_Bool ODsnTypeCollection::supportsTableCreation(const ::rtl::OUString& _sURL) const
+{
+    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
+    const ::comphelper::NamedValueCollection& aFeatures = aDriverConfig.getMetaData(_sURL);
+    return aFeatures.getOrDefault("SupportsTableCreation",sal_False);
+}
+// -----------------------------------------------------------------------------
+sal_Bool ODsnTypeCollection::supportsBrowsing(const ::rtl::OUString& _sURL) const
+{
+    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
+    const ::comphelper::NamedValueCollection& aFeatures = aDriverConfig.getMetaData(_sURL);
+    return aFeatures.getOrDefault("SupportsBrowsing",sal_False);
+}
+// -----------------------------------------------------------------------------
+bool ODsnTypeCollection::needsJVM(const String& _sURL) const
+{
+    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
+    const ::comphelper::NamedValueCollection& aFeatures = aDriverConfig.getMetaData(_sURL);
+    return aFeatures.getOrDefault("UseJava",sal_False);
+}
+// -----------------------------------------------------------------------------
+Sequence<PropertyValue> ODsnTypeCollection::getDefaultDBSettings( const ::rtl::OUString& _sURL ) const
+{
+    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
+    const ::comphelper::NamedValueCollection& aProperties = aDriverConfig.getProperties(_sURL);
+    return aProperties.getPropertyValues();
+}
+
+// -----------------------------------------------------------------------------
+String ODsnTypeCollection::getTypeExtension(const ::rtl::OUString& _sURL) const
+{
+    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
+    const ::comphelper::NamedValueCollection& aFeatures = aDriverConfig.getMetaData(_sURL);
+    return aFeatures.getOrDefault("Extension",::rtl::OUString());
+}
+//-------------------------------------------------------------------------
+bool ODsnTypeCollection::isEmbeddedDatabase( const ::rtl::OUString& _sURL ) const
+{
+    const ::rtl::OUString sEmbeddedDatabaseURL = getEmbeddedDatabase();
+    WildCard aWildCard(sEmbeddedDatabaseURL);
+    return aWildCard.Matches(_sURL);
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString ODsnTypeCollection::getEmbeddedDatabase() const
+{
+    ::rtl::OUString sEmbeddedDatabaseURL;
+    static const ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess")); ///Installed
+    const ::utl::OConfigurationTreeRoot aInstalled = ::utl::OConfigurationTreeRoot::createWithServiceFactory(m_xFactory, s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
+    if ( aInstalled.isValid() )
+    {
+        if ( aInstalled.hasByName("EmbeddedDatabases/DefaultEmbeddedDatabase/Value") )
+        {
+            static const ::rtl::OUString s_sValue(RTL_CONSTASCII_USTRINGPARAM("EmbeddedDatabases/DefaultEmbeddedDatabase/Value"));
+
+            aInstalled.getNodeValue(s_sValue) >>= sEmbeddedDatabaseURL;
+            if ( sEmbeddedDatabaseURL.getLength() )
+                aInstalled.getNodeValue(s_sValue + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sEmbeddedDatabaseURL + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/URL"))) >>= sEmbeddedDatabaseURL;
+        }
+    } // if ( aInstalled.isValid() )
+    if ( !sEmbeddedDatabaseURL.getLength() )
+        sEmbeddedDatabaseURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:embedded:hsqldb"));
+    return sEmbeddedDatabaseURL;
 }
 //-------------------------------------------------------------------------
 ODsnTypeCollection::TypeIterator ODsnTypeCollection::begin() const
@@ -617,9 +343,220 @@ ODsnTypeCollection::TypeIterator ODsnTypeCollection::begin() const
 //-------------------------------------------------------------------------
 ODsnTypeCollection::TypeIterator ODsnTypeCollection::end() const
 {
-    return TypeIterator(this, m_aDsnTypes.size());
+    return TypeIterator(this, m_aDsnTypesDisplayNames.size());
 }
+//-------------------------------------------------------------------------
+DATASOURCE_TYPE ODsnTypeCollection::determineType(const String& _rDsn) const
+{
+    String sDsn(_rDsn);
+    sDsn.EraseTrailingChars('*');
+    sal_uInt16 nSeparator = sDsn.Search((sal_Unicode)':');
+    if (STRING_NOTFOUND == nSeparator)
+    {
+        // there should be at least one such separator
+        DBG_ERROR("ODsnTypeCollection::implDetermineType : missing the colon !");
+        return DST_UNKNOWN;
+    }
+    // find first :
+    sal_uInt16 nOracleSeparator = sDsn.Search((sal_Unicode)':', nSeparator + 1);
+    if ( nOracleSeparator != STRING_NOTFOUND )
+    {
+        nOracleSeparator = sDsn.Search((sal_Unicode)':', nOracleSeparator + 1);
+        if (nOracleSeparator != STRING_NOTFOUND && sDsn.EqualsIgnoreCaseAscii("jdbc:oracle:thin", 0, nOracleSeparator))
+            return DST_ORACLE_JDBC;
+    }
 
+    if (sDsn.EqualsIgnoreCaseAscii("jdbc", 0, nSeparator))
+        return DST_JDBC;
+
+    // find second :
+    nSeparator = sDsn.Search((sal_Unicode)':', nSeparator + 1);
+    if (STRING_NOTFOUND == nSeparator)
+    {
+        // at the moment only jdbc is allowed to have just one separator
+        DBG_ERROR("ODsnTypeCollection::implDetermineType : missing the second colon !");
+        return DST_UNKNOWN;
+    }
+
+    if (sDsn.EqualsIgnoreCaseAscii("sdbc:adabas", 0, nSeparator))
+        return DST_ADABAS;
+    if (sDsn.EqualsIgnoreCaseAscii("sdbc:odbc", 0, nSeparator))
+        return DST_ODBC;
+    if (sDsn.EqualsIgnoreCaseAscii("sdbc:dbase", 0, nSeparator))
+        return DST_DBASE;
+
+    if (sDsn.EqualsIgnoreCaseAscii("sdbc:ado:", 0, nSeparator))
+    {
+        nSeparator = sDsn.Search((sal_Unicode)':', nSeparator + 1);
+        if (STRING_NOTFOUND != nSeparator && sDsn.EqualsIgnoreCaseAscii("sdbc:ado:access",0, nSeparator) )
+        {
+            nSeparator = sDsn.Search((sal_Unicode)';', nSeparator + 1);
+            if (STRING_NOTFOUND != nSeparator && sDsn.EqualsIgnoreCaseAscii("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0",0, nSeparator) )
+                return DST_MSACCESS_2007;
+
+            return DST_MSACCESS;
+        }
+        return DST_ADO;
+    }
+    if (sDsn.EqualsIgnoreCaseAscii("sdbc:flat:", 0, nSeparator))
+        return DST_FLAT;
+    if (sDsn.EqualsIgnoreCaseAscii("sdbc:calc:", 0, nSeparator))
+        return DST_CALC;
+    //if ( ( 11 <= nSeparator) && sDsn.EqualsIgnoreCaseAscii("sdbc:mysqlc:", 0, nSeparator))
+    //  return DST_MYSQL_NATIVE;
+
+    if (sDsn.EqualsIgnoreCaseAscii("sdbc:embedded:hsqldb", 0, sDsn.Len()))
+        return DST_EMBEDDED_HSQLDB;
+
+    if (sDsn.EqualsIgnoreCaseAscii("sdbc:address:", 0, nSeparator))
+    {
+        ++nSeparator;
+        if (sDsn.EqualsIgnoreCaseAscii("mozilla:", nSeparator,sDsn.Len() - nSeparator))
+            return DST_MOZILLA;
+        if (sDsn.EqualsIgnoreCaseAscii("thunderbird:", nSeparator,sDsn.Len() - nSeparator))
+            return DST_THUNDERBIRD;
+        if (sDsn.EqualsIgnoreCaseAscii("ldap:", nSeparator,sDsn.Len() - nSeparator))
+            return DST_LDAP;
+        if (sDsn.EqualsIgnoreCaseAscii("outlook", nSeparator,sDsn.Len() - nSeparator))
+            return DST_OUTLOOK;
+        if (sDsn.EqualsIgnoreCaseAscii("outlookexp", nSeparator,sDsn.Len() - nSeparator))
+            return DST_OUTLOOKEXP;
+        if (sDsn.EqualsIgnoreCaseAscii("evolution:ldap", nSeparator,sDsn.Len() - nSeparator))
+            return DST_EVOLUTION_LDAP;
+        if (sDsn.EqualsIgnoreCaseAscii("evolution:groupwise", nSeparator,sDsn.Len() - nSeparator))
+            return DST_EVOLUTION_GROUPWISE;
+        if (sDsn.EqualsIgnoreCaseAscii("evolution:local", nSeparator,sDsn.Len() - nSeparator))
+            return DST_EVOLUTION;
+        if (sDsn.EqualsIgnoreCaseAscii("kab", nSeparator,sDsn.Len() - nSeparator))
+            return DST_KAB;
+        if (sDsn.EqualsIgnoreCaseAscii("macab", nSeparator,sDsn.Len() - nSeparator))
+            return DST_MACAB;
+    }
+
+    // find third :
+    nSeparator = sDsn.Search((sal_Unicode)':', nSeparator + 1);
+    if (STRING_NOTFOUND == nSeparator)
+    {
+        DBG_ERROR("ODsnTypeCollection::implDetermineType : missing the third colon !");
+        return DST_UNKNOWN;
+    }
+
+    if (sDsn.EqualsIgnoreCaseAscii("sdbc:mysql:odbc", 0, nSeparator))
+        return DST_MYSQL_ODBC;
+    if (sDsn.EqualsIgnoreCaseAscii("sdbc:mysql:jdbc", 0, nSeparator))
+        return DST_MYSQL_JDBC;
+    if (sDsn.EqualsIgnoreCaseAscii("sdbc:mysql:mysqlc", 0, nSeparator))
+        return DST_MYSQL_NATIVE;
+
+    DBG_ERROR("ODsnTypeCollection::implDetermineType : unrecognized data source type !");
+    return DST_UNKNOWN;
+}
+// -----------------------------------------------------------------------------
+void ODsnTypeCollection::fillPageIds(const ::rtl::OUString& _sURL,::std::vector<sal_Int16>& _rOutPathIds) const
+{
+    DATASOURCE_TYPE eType = determineType(_sURL);
+    switch(eType)
+    {
+        case DST_ADO:
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_ADO);
+            break;
+        case DST_DBASE:
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_DBASE);
+            break;
+        case DST_FLAT:
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_TEXT);
+            break;
+        case DST_CALC:
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_SPREADSHEET);
+            break;
+        case DST_ODBC:
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_ODBC);
+            break;
+        case DST_JDBC:
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_JDBC);
+            break;
+        case DST_MYSQL_ODBC:
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_MYSQL_INTRO);
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_MYSQL_ODBC);
+            break;
+        case DST_MYSQL_JDBC:
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_MYSQL_INTRO);
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_MYSQL_JDBC);
+            break;
+        case DST_MYSQL_NATIVE:
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_MYSQL_INTRO);
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_MYSQL_NATIVE);
+            break;
+        case DST_ORACLE_JDBC:
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_ORACLE);
+            break;
+        case DST_ADABAS:
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_ADABAS);
+            break;
+        case DST_LDAP:
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_LDAP);
+            break;
+        case DST_MSACCESS:
+        case DST_MSACCESS_2007:
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_MSACCESS);
+            break;
+        case DST_OUTLOOKEXP:
+        case DST_OUTLOOK:
+        case DST_MOZILLA:
+        case DST_THUNDERBIRD:
+        case DST_EVOLUTION:
+        case DST_EVOLUTION_GROUPWISE:
+        case DST_EVOLUTION_LDAP:
+        case DST_KAB:
+        case DST_MACAB:
+        case DST_EMBEDDED_HSQLDB:
+            break;
+        default:
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_USERDEFINED);
+            break;
+    }
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString ODsnTypeCollection::getType(const ::rtl::OUString& _sURL) const
+{
+    ::rtl::OUString sOldPattern;
+    StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
+    StringVector::const_iterator aEnd = m_aDsnPrefixes.end();
+    for(;aIter != aEnd;++aIter)
+    {
+        WildCard aWildCard(*aIter);
+        if ( sOldPattern.getLength() < aIter->Len() && aWildCard.Matches(_sURL) )
+        {
+            sOldPattern = *aIter;
+        }
+    } // for(sal_Int32 i = 0;aIter != aEnd;++aIter,++i)
+    return sOldPattern;
+}
+// -----------------------------------------------------------------------------
+sal_Int32 ODsnTypeCollection::getIndexOf(const ::rtl::OUString& _sURL) const
+{
+    sal_Int32 nRet = -1;
+    String sURL( _sURL);
+    String sOldPattern;
+    StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
+    StringVector::const_iterator aEnd = m_aDsnPrefixes.end();
+    for(sal_Int32 i = 0;aIter != aEnd;++aIter,++i)
+    {
+        WildCard aWildCard(*aIter);
+        if ( sOldPattern.Len() < aIter->Len() && aWildCard.Matches(sURL) )
+        {
+            nRet = i;
+            sOldPattern = *aIter;
+        }
+    }
+
+    return nRet;
+}
+// -----------------------------------------------------------------------------
+sal_Int32 ODsnTypeCollection::size() const
+{
+    return m_aDsnPrefixes.size();
+}
 //=========================================================================
 //= ODsnTypeCollection::TypeIterator
 //=========================================================================
@@ -653,24 +590,22 @@ ODsnTypeCollection::TypeIterator::~TypeIterator()
 }
 
 //-------------------------------------------------------------------------
-DATASOURCE_TYPE ODsnTypeCollection::TypeIterator::getType() const
-{
-    DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypes.size(), "ODsnTypeCollection::TypeIterator::getType : invalid position!");
-    return m_pContainer->m_aDsnTypes[m_nPosition];
-}
-
-//-------------------------------------------------------------------------
 String ODsnTypeCollection::TypeIterator::getDisplayName() const
 {
     DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size(), "ODsnTypeCollection::TypeIterator::getDisplayName : invalid position!");
     return m_pContainer->m_aDsnTypesDisplayNames[m_nPosition];
 }
-
+// -----------------------------------------------------------------------------
+::rtl::OUString ODsnTypeCollection::TypeIterator::getURLPrefix() const
+{
+    DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnPrefixes.size(), "ODsnTypeCollection::TypeIterator::getDisplayName : invalid position!");
+    return m_pContainer->m_aDsnPrefixes[m_nPosition];
+}
 //-------------------------------------------------------------------------
 const ODsnTypeCollection::TypeIterator& ODsnTypeCollection::TypeIterator::operator++()
 {
-    DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypes.size(), "ODsnTypeCollection::TypeIterator::operator++ : invalid position!");
-    if (m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypes.size())
+    DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size(), "ODsnTypeCollection::TypeIterator::operator++ : invalid position!");
+    if (m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size())
         ++m_nPosition;
     return *this;
 }

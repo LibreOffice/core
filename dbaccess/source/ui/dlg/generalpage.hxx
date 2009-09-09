@@ -102,11 +102,12 @@ namespace dbaui
 
         ::svt::ControlDependencyManager
                             m_aControlDependencies;
+        ::std::vector< ::rtl::OUString> m_aURLPrefixes;
 
 
         ::dbaccess::ODsnTypeCollection*
                             m_pCollection;  /// the DSN type collection instance
-        ::dbaccess::DATASOURCE_TYPE     m_eCurrentSelection;    /// currently selected type
+        ::rtl::OUString     m_eCurrentSelection;    /// currently selected type
         ::dbaccess::DATASOURCE_TYPE     m_eNotSupportedKnownType;   /// if a data source of an unsupported, but known type is encountered ....
 
         enum SPECIAL_MESSAGE
@@ -122,8 +123,9 @@ namespace dbaui
         Link                m_aChooseDocumentHandler;       /// to be called when a recent document has been definately chosen
         sal_Bool            m_bDisplayingInvalid : 1;   // the currently displayed data source is deleted
         sal_Bool            m_bUserGrabFocus : 1;
-        bool                approveDataSourceType( ::dbaccess::DATASOURCE_TYPE eType, String& _inout_rDisplayName );
-        void                insertDatasourceTypeEntryData(::dbaccess::DATASOURCE_TYPE eType, String sDisplayName);
+        bool                m_bInitTypeList : 1;
+        bool                approveDataSourceType( const ::rtl::OUString& _sURLPrefix, String& _inout_rDisplayName );
+        void                insertDatasourceTypeEntryData(const ::rtl::OUString& _sType, String sDisplayName);
 
     public:
         static SfxTabPage*  Create(Window* pParent, const SfxItemSet& _rAttrSet, sal_Bool _bDBWizardMode = sal_False);
@@ -138,7 +140,7 @@ namespace dbaui
         DocumentDescriptor  GetSelectedDocument() const;
 
         /// get the currently selected datasource type
-        ::dbaccess::DATASOURCE_TYPE GetSelectedType() const { return m_eCurrentSelection; }
+        ::rtl::OUString     GetSelectedType() const { return m_eCurrentSelection; }
 
     protected:
         // SfxTabPage overridables
@@ -156,15 +158,15 @@ namespace dbaui
 
     protected:
 
-        void onTypeSelected(const ::dbaccess::DATASOURCE_TYPE _eType);
+        void onTypeSelected(const ::rtl::OUString& _sURLPrefix);
         void initializeTypeList();
 
-        void implSetCurrentType( const ::dbaccess::DATASOURCE_TYPE _eType );
+        void implSetCurrentType( const ::rtl::OUString& _eType );
 
-        void switchMessage(const ::dbaccess::DATASOURCE_TYPE _eType);
+        void switchMessage(const ::rtl::OUString& _sURLPrefix);
 
         /// sets the the title of the parent dialog
-        void setParentTitle(::dbaccess::DATASOURCE_TYPE _eSelectedType);
+        void setParentTitle(const ::rtl::OUString& _sURLPrefix);
 
         DECL_LINK(OnDatasourceTypeSelected, ListBox*);
         DECL_LINK(OnSetupModeSelected, RadioButton*);

@@ -271,11 +271,12 @@ void OTableEditorDelUndoAct::Undo()
     // Geloeschte Zeilen wieder einfuegen
     ULONG nPos;
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_aDeletedRows.begin();
+    ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aEnd = m_aDeletedRows.end();
 
      ::boost::shared_ptr<OTableRow>  pNewOrigRow;
     ::std::vector< ::boost::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
 
-    for(;aIter != m_aDeletedRows.end();++aIter)
+    for(;aIter != aEnd;++aIter)
     {
         pNewOrigRow.reset(new OTableRow( **aIter ));
         nPos = (*aIter)->GetPos();
@@ -294,9 +295,10 @@ void OTableEditorDelUndoAct::Redo()
     // Zeilen wieder loeschen
     ULONG nPos;
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_aDeletedRows.begin();
+    ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aEnd = m_aDeletedRows.end();
     ::std::vector< ::boost::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
 
-    for(;aIter != m_aDeletedRows.end();++aIter)
+    for(;aIter != aEnd;++aIter)
     {
         nPos = (*aIter)->GetPos();
         pOriginalRows->erase( pOriginalRows->begin()+nPos );
@@ -354,8 +356,9 @@ void OTableEditorInsUndoAct::Redo()
     long nInsertRow = m_nInsPos;
      ::boost::shared_ptr<OTableRow>  pRow;
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_vInsertedRows.begin();
+    ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aEnd = m_vInsertedRows.end();
     ::std::vector< ::boost::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
-    for(;aIter != m_vInsertedRows.end();++aIter)
+    for(;aIter != aEnd;++aIter)
     {
         pRow.reset(new OTableRow( **aIter ));
         pRowList->insert( pRowList->begin()+nInsertRow ,pRow );

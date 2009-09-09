@@ -138,7 +138,8 @@ void ORelationTableConnectionData::ChangeOrientation()
     // Source- und DestFieldName der Linien austauschen
     ::rtl::OUString sTempString;
     OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
-    for(;aIter != m_vConnLineData.end();++aIter)
+    OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
+    for(;aIter != aEnd;++aIter)
     {
         sTempString = (*aIter)->GetSourceFieldName();
         (*aIter)->SetSourceFieldName( (*aIter)->GetDestFieldName() );
@@ -195,7 +196,8 @@ BOOL ORelationTableConnectionData::checkPrimaryKey(const Reference< XIndexAccess
             for(;pKeyIter != pKeyEnd;++pKeyIter)
             {
                 OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
-                for(;aIter != m_vConnLineData.end();++aIter)
+                OConnectionLineDataVec::const_iterator aEnd = m_vConnLineData.end();
+                for(;aIter != aEnd;++aIter)
                 {
                     ++nValidLinesCount;
                     if ( (*aIter)->GetFieldName(_eEConnectionSide) == *pKeyIter )
@@ -338,7 +340,8 @@ BOOL ORelationTableConnectionData::Update()
         if ( xColumnFactory.is() )
         {
             OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
-            for(;aIter != m_vConnLineData.end();++aIter)
+            OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
+            for(;aIter != aEnd;++aIter)
             {
                 if((*aIter)->GetSourceFieldName().getLength() && (*aIter)->GetDestFieldName().getLength())
                 {
@@ -392,7 +395,8 @@ BOOL ORelationTableConnectionData::Update()
                         xColumn->getPropertyValue(PROPERTY_RELATEDCOLUMN)   >>= sRelatedColumn;
 
                         OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
-                        for(;aIter != m_vConnLineData.end();++aIter)
+                        OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
+                        for(;aIter != aEnd;++aIter)
                         {
                             if(    (*aIter)->GetSourceFieldName() == sName
                                 && (*aIter)->GetDestFieldName() == sRelatedColumn )

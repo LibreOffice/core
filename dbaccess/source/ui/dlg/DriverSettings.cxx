@@ -34,14 +34,15 @@
 #include "DriverSettings.hxx"
 #include "dsitems.hxx"
 #include "datasourceui.hxx"
-
+#include <connectivity/DriversConfig.hxx>
 
 using namespace dbaui;
-void ODriversSettings::getSupportedIndirectSettings( ::dbaccess::DATASOURCE_TYPE _eType, ::std::vector< sal_Int32>& _out_rDetailsIds )
+void ODriversSettings::getSupportedIndirectSettings( const ::rtl::OUString& _sURLPrefix,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory, ::std::vector< sal_Int32>& _out_rDetailsIds )
 {
     // for a number of settings, we do not need to use hard-coded here, but can ask a
     // central DataSourceUI instance.
-    DataSourceUI aDSUI( _eType );
+    DataSourceMetaData aMeta(_sURLPrefix);
+    DataSourceUI aDSUI( aMeta );
     const USHORT nGenericKnownSettings[] =
     {
          DSID_SQL92CHECK,
@@ -67,71 +68,35 @@ void ODriversSettings::getSupportedIndirectSettings( ::dbaccess::DATASOURCE_TYPE
             _out_rDetailsIds.push_back( *pGenericKnowSetting );
 
     // the rest is hard-coded. On the long run, all of this should be done via DataSourceUI::hasSetting
-    switch ( _eType )
+    ::connectivity::DriversConfig aDriverConfig(_xFactory);
+    const ::comphelper::NamedValueCollection& aProperties = aDriverConfig.getProperties(_sURLPrefix);
+    typedef ::std::pair<USHORT, ::rtl::OUString> TProperties;
+    TProperties aProps[] = { TProperties(DSID_SHOWDELETEDROWS,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowDeleted")))
+                            ,TProperties(DSID_CHARSET,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet")))
+                            ,TProperties(DSID_FIELDDELIMITER,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldDelimiter")))
+                            ,TProperties(DSID_TEXTDELIMITER,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StringDelimiter")))
+                            ,TProperties(DSID_DECIMALDELIMITER,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DecimalDelimiter")))
+                            ,TProperties(DSID_THOUSANDSDELIMITER,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ThousandDelimiter")))
+                            ,TProperties(DSID_TEXTFILEEXTENSION,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Extension")))
+                            ,TProperties(DSID_TEXTFILEHEADER,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderLine")))
+                            ,TProperties(DSID_ADDITIONALOPTIONS,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SystemDriverSettings")))
+                            ,TProperties(DSID_CONN_SHUTSERVICE,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShutdownDatabase")))
+                            ,TProperties(DSID_CONN_DATAINC,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataCacheSizeIncrement")))
+                            ,TProperties(DSID_CONN_CACHESIZE,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataCacheSize")))
+                            ,TProperties(DSID_CONN_CTRLUSER,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlUser")))
+                            ,TProperties(DSID_CONN_CTRLPWD,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlPassword")))
+                            ,TProperties(DSID_USECATALOG,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalog")))
+                            ,TProperties(DSID_CONN_SOCKET,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LocalSocket")))
+                            ,TProperties(DSID_JDBCDRIVERCLASS,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass")))
+                            ,TProperties(DSID_CONN_LDAP_BASEDN,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseDN")))
+                            ,TProperties(DSID_CONN_LDAP_ROWCOUNT,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MaxRowCount")))
+                            ,TProperties(DSID_CONN_LDAP_USESSL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSSL")))
+                            ,TProperties(DSID_IGNORECURRENCY,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreCurrency")))
+                            ,TProperties(0,::rtl::OUString())
+    };
+    for ( TProperties* pProps = aProps; pProps->first; ++pProps )
     {
-        case  ::dbaccess::DST_DBASE:
-            _out_rDetailsIds.push_back(DSID_SHOWDELETEDROWS);
-            _out_rDetailsIds.push_back(DSID_CHARSET);
-            break;
-
-        case  ::dbaccess::DST_FLAT:
-            _out_rDetailsIds.push_back(DSID_FIELDDELIMITER);
-            _out_rDetailsIds.push_back(DSID_TEXTDELIMITER);
-            _out_rDetailsIds.push_back(DSID_DECIMALDELIMITER);
-            _out_rDetailsIds.push_back(DSID_THOUSANDSDELIMITER);
-            _out_rDetailsIds.push_back(DSID_TEXTFILEEXTENSION);
-            _out_rDetailsIds.push_back(DSID_TEXTFILEHEADER);
-            _out_rDetailsIds.push_back(DSID_CHARSET);
-            break;
-
-        case  ::dbaccess::DST_ADABAS:
-            _out_rDetailsIds.push_back(DSID_CHARSET);
-            _out_rDetailsIds.push_back(DSID_CONN_SHUTSERVICE);
-            _out_rDetailsIds.push_back(DSID_CONN_DATAINC);
-            _out_rDetailsIds.push_back(DSID_CONN_CACHESIZE);
-            _out_rDetailsIds.push_back(DSID_CONN_CTRLUSER);
-            _out_rDetailsIds.push_back(DSID_CONN_CTRLPWD);
-            break;
-
-        case  ::dbaccess::DST_ADO:
-            _out_rDetailsIds.push_back(DSID_CHARSET);
-            break;
-
-        case  ::dbaccess::DST_ODBC:
-            _out_rDetailsIds.push_back(DSID_ADDITIONALOPTIONS);
-            _out_rDetailsIds.push_back(DSID_CHARSET);
-            _out_rDetailsIds.push_back(DSID_USECATALOG);
-            break;
-
-        case  ::dbaccess::DST_MYSQL_NATIVE:
-            _out_rDetailsIds.push_back(DSID_CHARSET);
-            _out_rDetailsIds.push_back(DSID_CONN_SOCKET);
-            break;
-        case  ::dbaccess::DST_MYSQL_JDBC:
-            _out_rDetailsIds.push_back(DSID_CHARSET);
-            _out_rDetailsIds.push_back(DSID_JDBCDRIVERCLASS);
-            break;
-
-        case  ::dbaccess::DST_MYSQL_ODBC:
-            _out_rDetailsIds.push_back(DSID_CHARSET);
-            break;
-
-        case  ::dbaccess::DST_LDAP:
-            _out_rDetailsIds.push_back(DSID_CONN_LDAP_BASEDN);
-            _out_rDetailsIds.push_back(DSID_CONN_LDAP_ROWCOUNT);
-            _out_rDetailsIds.push_back(DSID_CONN_LDAP_USESSL);
-            break;
-
-        case  ::dbaccess::DST_JDBC:
-            _out_rDetailsIds.push_back(DSID_JDBCDRIVERCLASS);
-            break;
-
-        case  ::dbaccess::DST_ORACLE_JDBC:
-            _out_rDetailsIds.push_back(DSID_JDBCDRIVERCLASS);
-            _out_rDetailsIds.push_back(DSID_IGNORECURRENCY);
-            break;
-
-        default:
-            break;
+        if ( aProperties.has(pProps->second) )
+            _out_rDetailsIds.push_back(pProps->first);
     }
 }

@@ -61,7 +61,8 @@ namespace dbaui
             {
                 (*rxOStm) << (sal_Int32)pRows->size(); // first stream the size
                 ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = pRows->begin();
-                for(;aIter != pRows->end();++aIter)
+                ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = pRows->end();
+                for(;aIter != aEnd;++aIter)
                     (*rxOStm) << *(*aIter);
                 return sal_True;
             }

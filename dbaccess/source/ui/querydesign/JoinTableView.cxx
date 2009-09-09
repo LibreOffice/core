@@ -102,6 +102,7 @@
 #endif
 #include <cppuhelper/exc_hlp.hxx>
 #include <tools/diagnose_ex.h>
+#include <boost/bind.hpp>
 #include <algorithm>
 #include <functional>
 
@@ -291,7 +292,8 @@ void OJoinTableView::Resize()
         return;
 
     OTableWindowMapIterator aIter = m_aTableMap.begin();
-    for(;aIter != m_aTableMap.end();++aIter)
+    OTableWindowMapIterator aEnd = m_aTableMap.end();
+    for(;aIter != aEnd;++aIter)
     {
         OTableWindow* pCurrent = aIter->second;
         Point aPos(pCurrent->GetData()->GetPosition() - GetScrollOffset());
@@ -631,7 +633,8 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
         // Belegte Bereiche dieser Zeile pruefen
         OTableWindow* pOtherTabWin;// = GetTabWinMap()->First();
         OTableWindowMapIterator aIter = m_aTableMap.begin();
-        for(;aIter != m_aTableMap.end();++aIter)
+        OTableWindowMapIterator aEnd = m_aTableMap.end();
+        for(;aIter != aEnd;++aIter)
         {
             pOtherTabWin = aIter->second;
             Rectangle aOtherTabWinRect( pOtherTabWin->GetPosPixel(), pOtherTabWin->GetSizePixel() );
@@ -814,7 +817,8 @@ BOOL OJoinTableView::ScrollPane( long nDelta, BOOL bHoriz, BOOL bPaintScrollBars
     Point aPos;
 
     OTableWindowMapIterator aIter = m_aTableMap.begin();
-    for(;aIter != m_aTableMap.end();++aIter)
+    OTableWindowMapIterator aEnd = m_aTableMap.end();
+    for(;aIter != aEnd;++aIter)
     {
         pTabWin = aIter->second;
         aPos = pTabWin->GetPosPixel();
@@ -954,7 +958,8 @@ void OJoinTableView::MouseButtonUp( const MouseEvent& rEvt )
         DeselectConn(GetSelectedConn());
 
         ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
-        for(;aIter != m_vTableConnection.end();++aIter)
+        ::std::vector<OTableConnection*>::iterator aEnd = m_vTableConnection.end();
+        for(;aIter != aEnd;++aIter)
         {
             if( (*aIter)->CheckHit(rEvt.GetPosPixel()) )
             {
@@ -1085,9 +1090,7 @@ void OJoinTableView::DrawConnections( const Rectangle& rRect )
     DBG_CHKTHIS(OJoinTableView,NULL);
     //////////////////////////////////////////////////////////////////////
     // Die Joins zeichnen
-    ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
-    for(;aIter != m_vTableConnection.end();++aIter)
-        (*aIter)->Draw( rRect );
+    ::std::for_each(m_vTableConnection.begin(),m_vTableConnection.end(),boost::bind( &OTableConnection::Draw, _1, boost::cref( rRect )));
     // zum Schluss noch mal die selektierte ueber alle anderen drueber
     if (GetSelectedConn())
         GetSelectedConn()->Draw( rRect );
@@ -1124,7 +1127,8 @@ void OJoinTableView::ClearAll()
 
     // und das selbe mit den Connections
     ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
-    for(;aIter != m_vTableConnection.end();++aIter)
+    ::std::vector<OTableConnection*>::iterator aEnd = m_vTableConnection.end();
+    for(;aIter != aEnd;++aIter)
         RemoveConnection( *aIter ,sal_True);
     m_vTableConnection.clear();
 
@@ -1325,7 +1329,8 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
 
                 const Point& aMousePos = rEvt.GetMousePosPixel();
                 ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
-                for(;aIter != m_vTableConnection.end();++aIter)
+                ::std::vector<OTableConnection*>::iterator aEnd = m_vTableConnection.end();
+                for(;aIter != aEnd;++aIter)
                 {
                     if( (*aIter)->CheckHit(aMousePos) )
                     {
@@ -1355,7 +1360,8 @@ OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTab
         BOOL bFoundStart = _rpFirstAfter ? FALSE : TRUE;
 
         ::std::vector<OTableConnection*>::const_iterator aIter = m_vTableConnection.begin();
-        for(;aIter != m_vTableConnection.end();++aIter)
+        ::std::vector<OTableConnection*>::const_iterator aEnd = m_vTableConnection.end();
+        for(;aIter != aEnd;++aIter)
         {
             OTableConnection* pData = *aIter;
 
@@ -1437,7 +1443,8 @@ long OJoinTableView::PreNotify(NotifyEvent& rNEvt)
                         BOOL bForward = !pKeyEvent->GetKeyCode().IsShift();
                         // is there an active tab win ?
                         OTableWindowMapIterator aIter = m_aTableMap.begin();
-                        for(;aIter != m_aTableMap.end();++aIter)
+                        OTableWindowMapIterator aEnd = m_aTableMap.end();
+                        for(;aIter != aEnd;++aIter)
                             if (aIter->second && aIter->second->HasChildPathFocus())
                                 break;
 
@@ -1569,7 +1576,8 @@ long OJoinTableView::PreNotify(NotifyEvent& rNEvt)
                 if (pSearchFor)
                 {
                     OTableWindowMapIterator aIter = m_aTableMap.begin();
-                    for(;aIter != m_aTableMap.end();++aIter)
+                    OTableWindowMapIterator aEnd = m_aTableMap.end();
+                    for(;aIter != aEnd;++aIter)
                     {
                         if (aIter->second == pSearchFor)
                         {
@@ -1622,7 +1630,8 @@ void OJoinTableView::StateChanged( StateChangedType nType )
         SetZoomedPointFont( aFont );
 
         OTableWindowMapIterator aIter = m_aTableMap.begin();
-        for(;aIter != m_aTableMap.end();++aIter)
+        OTableWindowMapIterator aEnd = m_aTableMap.end();
+        for(;aIter != aEnd;++aIter)
         {
             aIter->second->SetZoom(GetZoom());
             Size aSize(CalcZoom(aIter->second->GetSizePixel().Width()),CalcZoom(aIter->second->GetSizePixel().Height()));
@@ -1643,7 +1652,8 @@ void OJoinTableView::HideTabWins()
         // working on a copy because the real list will be cleared in inner calls
         OTableWindowMap aCopy(*pTabWins);
         OTableWindowMap::iterator aIter = aCopy.begin();
-        for(;aIter != aCopy.end();++aIter)
+        OTableWindowMap::iterator aEnd = aCopy.end();
+        for(;aIter != aEnd;++aIter)
             RemoveTabWin(aIter->second);
     }
 
@@ -1690,7 +1700,8 @@ void OJoinTableView::clearLayoutInformation()
     m_aTableMap.clear();
 
     ::std::vector<OTableConnection*>::const_iterator aIter2 = m_vTableConnection.begin();
-    for(;aIter2 != m_vTableConnection.end();++aIter2)
+    ::std::vector<OTableConnection*>::const_iterator aEnd2 = m_vTableConnection.end();
+    for(;aIter2 != aEnd2;++aIter2)
         delete *aIter2;
 
     m_vTableConnection.clear();

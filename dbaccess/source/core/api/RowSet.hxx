@@ -133,6 +133,7 @@ namespace dbaccess
             (since we have not been executed, yet)
         */
         ORowSetValueVector                          m_aPrematureParamValues;
+        ORowSetValueVector                          m_aParameterValueForCache;
         ::std::bit_vector                           m_aParametersSet;
 
         ::cppu::OInterfaceContainerHelper           m_aRowsetListeners;

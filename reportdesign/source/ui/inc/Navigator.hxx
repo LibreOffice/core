@@ -50,6 +50,7 @@ namespace rptui
 
         // window
         virtual void    Resize();
+        virtual void GetFocus();
     };
 // =============================================================================
 } // namespace rptui

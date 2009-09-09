@@ -53,8 +53,7 @@
 #include "AddField.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include "DateTime.hxx"
-#include <svtools/syslocale.hxx>
-#include <vcl/svapp.hxx>
+
 #include <sfx2/filedlghelper.hxx>
 #include <tools/string.hxx>
 #include <tools/diagnose_ex.h>
@@ -104,6 +103,7 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
+#include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 
@@ -142,6 +142,8 @@
 #include <svtools/itemset.hxx>
 #include <svtools/aeitem.hxx> //CHINA001
 #include <svtools/cliplistener.hxx>
+#include <svtools/syslocale.hxx>
+#include <svtools/viewoptions.hxx>
 
 #include <vos/mutex.hxx>
 #include "PropertyForward.hxx"
@@ -341,8 +343,11 @@ void OReportController::disposing()
         m_pClipbordNotifier->AddRemoveListener( getView(), sal_False );
         m_pClipbordNotifier->release();
         m_pClipbordNotifier = NULL;
-    }
+    } // if ( getView() && m_pClipbordNotifier )
+    if ( m_pGroupsFloater )
     {
+        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_GROUPS_SORTING ) );
+        aDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( m_pGroupsFloater->GetWindowState(WINDOWSTATE_MASK_ALL).GetBuffer() ) );
         ::std::auto_ptr<FloatingWindow> aTemp(m_pGroupsFloater);
         m_pGroupsFloater = NULL;
     }
@@ -554,6 +559,8 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_RPT_NEW_FUNCTION:
             aReturn.bEnabled = isEditable();
             break;
+        case SID_COLLAPSE_SECTION:
+        case SID_EXPAND_SECTION:
         case SID_NEXT_MARK:
         case SID_PREV_MARK:
             aReturn.bEnabled = isEditable();
@@ -1165,6 +1172,12 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             break;
         case SID_RPT_NEW_FUNCTION:
             createNewFunction(aArgs[0].Value);
+            break;
+        case SID_COLLAPSE_SECTION:
+            collapseSection(true);
+            break;
+        case SID_EXPAND_SECTION:
+            collapseSection(false);
             break;
         case SID_NEXT_MARK:
             markSection(true);
@@ -2102,6 +2115,8 @@ void OReportController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:TerminateInplaceActivation",    SID_TERMINATE_INPLACEACTIVATION);
     implDescribeSupportedFeature( ".uno:SelectAllLabels",               SID_SELECT_ALL_LABELS);
     implDescribeSupportedFeature( ".uno:SelectAllEdits",                SID_SELECT_ALL_EDITS);
+    implDescribeSupportedFeature( ".uno:CollapseSection",           SID_COLLAPSE_SECTION);
+    implDescribeSupportedFeature( ".uno:ExpandSection",             SID_EXPAND_SECTION);
 }
 // -----------------------------------------------------------------------------
 SfxUndoManager* OReportController::getUndoMgr()
@@ -2558,6 +2573,9 @@ void OReportController::openSortingAndGroupingDialog()
     if ( !m_pGroupsFloater )
     {
         m_pGroupsFloater = new OGroupsSortingDialog(getView(),!isEditable(),this);
+        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_GROUPS_SORTING ) );
+        if ( aDlgOpt.Exists() )
+            m_pGroupsFloater->SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
         m_pGroupsFloater->AddEventListener(LINK(this,OReportController,EventLstHdl));
     }
     else if ( isUiVisible() )
@@ -3280,7 +3298,7 @@ void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
     sal_Bool bTime = aMap.getUnpackedValueOrDefault(PROPERTY_TIME_STATE,sal_False);
     if ( bTime )
     {
-        sFunction = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("NOW()"));
+        sFunction = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("TIMEVALUE(NOW())"));
         aMap[PROPERTY_FORMATKEY] <<= aMap.getUnpackedValueOrDefault(PROPERTY_FORMATKEYTIME,sal_Int32(0));
         createControl(aMap.getAsConstPropertyValueList(),xSection,sFunction);
     }
@@ -3956,6 +3974,15 @@ void OReportController::createGroupSection(const bool _bUndo,const bool _bHeader
             else
                 xGroup->setFooterOn( bSwitchOn );
         }
+    }
+}
+// -----------------------------------------------------------------------------
+void OReportController::collapseSection(const bool _bCollapse)
+{
+    ::boost::shared_ptr<OSectionWindow> pSection = m_pMyOwnView->getMarkedSection();
+    if ( pSection )
+    {
+        pSection->setCollapsed(_bCollapse);
     }
 }
 // -----------------------------------------------------------------------------
