@@ -6,10 +6,6 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.111.36.3 $
-#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -184,6 +180,16 @@ SHL1STDLIBS+=\
             $(ICUDATALIB)		\
             $(ICULELIB)			\
             $(JVMACCESSLIB)
+
+.IF "$(GUI)" == "UNX"
+.IF "$(ENABLE_GRAPHITE)" != ""
+.IF "$(SYSTEM_GRAPHITE)" == "YES"
+SHL1STDLIBS+= $(GRAPHITE_LIBS)
+.ELSE
+SHL1STDLIBS+= $(SOLARVERSION)/$(INPATH)/lib$(UPDMINOREXT)/libgraphite.a
+.ENDIF
+.ENDIF
+.ENDIF
 SHL1USE_EXPORTS=name
 
 .IF "$(GUIBASE)"=="aqua"
@@ -198,12 +204,16 @@ LIB1FILES+= \
 .IF "$(USE_BUILTIN_RASTERIZER)"!=""
     LIB1FILES +=    $(SLB)$/glyphs.lib
     SHL1STDLIBS+=   $(FREETYPELIB)
+.ELSE
+.IF "$(ENABLE_GRAPHITE)" == "TRUE"
+    LIB1FILES +=    $(SLB)$/glyphs.lib
+.ENDIF
 .ENDIF # USE_BUILTIN_RASTERIZER
 
 SHL1LIBS=   $(LIB1TARGET)
 .IF "$(GUI)"!="UNX"
 .IF "$(COM)"!="GCC"
-SHL1OBJS=   $(SLO)$/salshl.obj
+#SHL1OBJS=   $(SLO)$/salshl.obj
 .ENDIF
 .ENDIF
 
@@ -222,6 +232,14 @@ DEFLIB1NAME =vcl
 # --- W32 ----------------------------------------------------------------
 
 .IF "$(GUI)" == "WNT"
+
+.IF "$(ENABLE_GRAPHITE)" == "TRUE"
+.IF "$(COM)" == "GCC"
+SHL1STDLIBS += -lgraphite
+.ELSE
+SHL1STDLIBS += graphite_dll.lib
+.ENDIF
+.ENDIF
 
 SHL1STDLIBS += $(UWINAPILIB)      \
                $(GDI32LIB)        \
@@ -296,7 +314,7 @@ SHL2STDLIBS+=`pkg-config --libs xrender`
 .IF "$(GUIBASE)"=="unx"
 
 SHL2STDLIBS += -lXext -lSM -lICE -lX11
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="FREEBSD"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="FREEBSD" && "$(OS)"!="NETBSD"
 # needed by salprnpsp.cxx
 SHL2STDLIBS+= -ldl
 .ENDIF
@@ -366,7 +384,7 @@ SHL5IMPLIB=ikde_plug_
 SHL5LIBS=$(LIB5TARGET)
 SHL5DEPN=$(SHL2TARGETN)
 # libs for KDE plugin
-SHL5STDLIBS=$(KDE_LIBS)
+SHL5LINKFLAGS+=$(KDE_LIBS)
 SHL5STDLIBS+=-l$(SHL2TARGET)
 SHL5STDLIBS+=\
         $(VCLLIB)       \
@@ -381,6 +399,35 @@ SHL5STDLIBS+= $(XRANDR_LIBS)
 .ENDIF
 
 .ENDIF # "$(ENABLE_KDE)" != ""
+
+# KDE4 plugin
+.IF "$(ENABLE_KDE4)" != ""
+.IF "$(KDE4_ROOT)"!=""
+EXTRALIBPATHS+=-L$(KDE4_ROOT)$/lib
+.ENDIF
+LIB6TARGET=$(SLB)$/ikde4_plug_
+LIB6FILES=$(SLB)$/kde4plug.lib
+SHL6TARGET=vclplug_kde4$(DLLPOSTFIX)
+SHL6IMPLIB=ikde4_plug_
+SHL6LIBS=$(LIB6TARGET)
+SHL6DEPN=$(SHL2TARGETN)
+# libs for KDE4 plugin
+SHL6LINKFLAGS+=$(KDE4_LIBS)
+SHL6STDLIBS+=-l$(SHL2TARGET)
+SHL6STDLIBS+=\
+        $(VCLLIB)       \
+        $(PSPLIB)	\
+        $(TOOLSLIB)     \
+        $(VOSLIB)       \
+        $(SALLIB)
+
+.IF "$(ENABLE_RANDR)" != ""
+.IF "$(XRANDR_DLOPEN)" == "FALSE"
+SHL6STDLIBS+= $(XRANDR_LIBS)
+.ENDIF
+.ENDIF
+
+.ENDIF # "$(ENABLE_KDE4)" != ""
 
 .ENDIF # UNX
 

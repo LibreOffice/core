@@ -541,7 +541,7 @@ SfxItemState SfxItemSet::GetItemState( USHORT nWhich,
                         // Unterschiedlich vorhanden
                         return SFX_ITEM_DONTCARE;
 
-                    if ( (*ppFnd)->IsA(TYPE(SfxVoidItem)) )
+                    if ( (*ppFnd)->Type() == TYPE(SfxVoidItem) )
                         return SFX_ITEM_DISABLED;
 
                     if (ppItem)

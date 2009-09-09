@@ -520,8 +520,16 @@ void AquaSalFrame::SetClientSize( long nWidth, long nHeight )
 
 void AquaSalFrame::GetClientSize( long& rWidth, long& rHeight )
 {
-    rWidth  = mbShown ? maGeometry.nWidth : 0;
-    rHeight = mbShown ? maGeometry.nHeight : 0;
+    if( mbShown || mbInitShow )
+    {
+        rWidth  = maGeometry.nWidth;
+        rHeight = maGeometry.nHeight;
+    }
+    else
+    {
+        rWidth  = 0;
+        rHeight = 0;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1174,7 +1182,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     getAppleScrollBarVariant();
 
     // set scrollbar size
-    aStyleSettings.SetScrollBarSize( [NSScroller scrollerWidth] );
+    aStyleSettings.SetScrollBarSize( static_cast<long int>([NSScroller scrollerWidth]) );
 
     // images in menus false for MacOSX
     aStyleSettings.SetUseImagesInMenus( false );
@@ -1195,7 +1203,15 @@ const SystemEnvData* AquaSalFrame::GetSystemData() const
 
 void AquaSalFrame::Beep( SoundType eSoundType )
 {
-    NSBeep();
+    switch( eSoundType )
+    {
+    case SOUND_DISABLE:
+        // don't beep
+        break;
+    default:
+        NSBeep();
+        break;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1232,7 +1248,7 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, USHOR
             if( (nFlags & SAL_FRAME_POSSIZE_WIDTH) != 0 )
                 nX = mpParent->maGeometry.nWidth - nWidth-1 - nX;
             else
-                nX = mpParent->maGeometry.nWidth - aContentRect.size.width-1 - nX;
+                nX = mpParent->maGeometry.nWidth - static_cast<long int>( aContentRect.size.width-1) - nX;
         }
         NSRect aParentFrameRect = [mpParent->mpWindow frame];
         aParentContentRect = [NSWindow contentRectForFrameRect: aParentFrameRect styleMask: mpParent->mnStyleMask];

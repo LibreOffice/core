@@ -103,6 +103,16 @@ if ( defined $ENV{USE_SHELL} && $ENV{USE_SHELL} eq '4nt' ) {
    $DELIMITER = "/";
 }
 
+my $binpath = '';
+if( defined $ENV{UPDMINOREXT} )
+{
+    $binpath = $ENV{SOLARVER}.$DELIMITER.$ENV{INPATH}.$DELIMITER."bin".$ENV{UPDMINOREXT}.$DELIMITER ;
+}
+else
+{
+    $binpath = $ENV{SOLARVER}.$DELIMITER.$ENV{INPATH}.$DELIMITER."bin".$DELIMITER ;
+}
+
 #%sl_modules = fetch_sourcelanguage_dirlist();
 
 
@@ -494,11 +504,11 @@ sub collectfiles{
         my $args    = "";
 
         if( $ENV{WRAPCMD} ){
-            $command = "$ENV{WRAPCMD} localize_sl";
+            $command = $ENV{WRAPCMD}.$binpath."localize_sl";
         }else{
-            $command = "localize_sl";
+            $command = $binpath."localize_sl";
         }
-
+        print $command;
         # -e
         # if ( -x $command ){
         if( $command ){

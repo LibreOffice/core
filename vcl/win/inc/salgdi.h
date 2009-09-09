@@ -81,6 +81,9 @@ public:
     bool                    SupportsArabic() const      { return mbHasArabicSupport; }
     bool                    AliasSymbolsHigh() const    { return mbAliasSymbolsHigh; }
     bool                    AliasSymbolsLow() const     { return mbAliasSymbolsLow; }
+#ifdef ENABLE_GRAPHITE
+    bool                    SupportsGraphite() const    { return mbHasGraphiteSupport; }
+#endif
 
     ImplFontCharMap*        GetImplFontCharMap() const;
     const Ucs2SIntMap* GetEncodingVector() const { return mpEncodingVector; }
@@ -97,6 +100,9 @@ private:
     mutable bool                    mbDisableGlyphApi;
     mutable bool                    mbHasKoreanRange;
     mutable bool                    mbHasCJKSupport;
+#ifdef ENABLE_GRAPHITE
+    mutable bool                    mbHasGraphiteSupport;
+#endif
     mutable bool                    mbHasArabicSupport;
     mutable ImplFontCharMap*        mpUnicodeMap;
     mutable const Ucs2SIntMap*      mpEncodingVector;

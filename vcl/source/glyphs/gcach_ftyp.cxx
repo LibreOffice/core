@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: gcach_ftyp.cxx,v $
- * $Revision: 1.151 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -353,7 +350,7 @@ FT_FaceRec_* FtFontInfo::GetFaceFT()
             maFaceFT = NULL;
     }
 
-    return maFaceFT;
+   return maFaceFT;
 }
 
 // -----------------------------------------------------------------------
@@ -1058,7 +1055,7 @@ static inline void SplitGlyphFlags( const FreetypeServerFont& rFont, int& nGlyph
 // -----------------------------------------------------------------------
 
 int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags,
-    FT_GlyphRec_* pGlyphFT, bool bForBitmapProcessing ) const
+    FT_Glyph pGlyphFT, bool bForBitmapProcessing ) const
 {
     int nAngle = GetFontSelData().mnOrientation;
     // shortcut most common case
@@ -1130,9 +1127,9 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags,
     else
     {
         // FT<=2005 ignores transforms for bitmaps, so do it manually
-        FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<FT_BitmapGlyph&>(pGlyphFT);
-        rBmpGlyphFT->left += (aVector.x + 32) >> 6;
-        rBmpGlyphFT->top  += (aVector.y + 32) >> 6;
+        FT_BitmapGlyph pBmpGlyphFT = reinterpret_cast<FT_BitmapGlyph>(pGlyphFT);
+        pBmpGlyphFT->left += (aVector.x + 32) >> 6;
+        pBmpGlyphFT->top  += (aVector.y + 32) >> 6;
     }
 
     return nAngle;
@@ -1425,6 +1422,20 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
         FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
     }
 
+    // Check for zero area bounding boxes as this crashes some versions of FT.
+    // This also provides a handy short cut as much of the code following
+    //  becomes an expensive nop when a glyph covers no pixels.
+    FT_BBox cbox;
+    FT_Glyph_Get_CBox(pGlyphFT, ft_glyph_bbox_unscaled, &cbox);
+
+    if( (cbox.xMax - cbox.xMin) == 0 || (cbox.yMax - cbox.yMin == 0) )
+    {
+        nAngle = 0;
+        memset(&rRawBitmap, 0, sizeof rRawBitmap);
+        FT_Done_Glyph( pGlyphFT );
+        return true;
+    }
+
     if( pGlyphFT->format != FT_GLYPH_FORMAT_BITMAP )
     {
         if( pGlyphFT->format == FT_GLYPH_FORMAT_OUTLINE )
@@ -1440,12 +1451,12 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
         }
     }
 
-    const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(pGlyphFT);
+    const FT_BitmapGlyph pBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph>(pGlyphFT);
     // NOTE: autohinting in FT<=2.0.2 miscalculates the offsets below by +-1
-    rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
-    rRawBitmap.mnYOffset        = -rBmpGlyphFT->top;
+    rRawBitmap.mnXOffset        = +pBmpGlyphFT->left;
+    rRawBitmap.mnYOffset        = -pBmpGlyphFT->top;
 
-    const FT_Bitmap& rBitmapFT  = rBmpGlyphFT->bitmap;
+    const FT_Bitmap& rBitmapFT  = pBmpGlyphFT->bitmap;
     rRawBitmap.mnHeight         = rBitmapFT.rows;
     rRawBitmap.mnBitCount       = 1;
     if( mbArtBold && !pFTEmbolden )
@@ -1595,11 +1606,11 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
         }
     }
 
-    const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(pGlyphFT);
-    rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
-    rRawBitmap.mnYOffset        = -rBmpGlyphFT->top;
+    const FT_BitmapGlyph pBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph>(pGlyphFT);
+    rRawBitmap.mnXOffset        = +pBmpGlyphFT->left;
+    rRawBitmap.mnYOffset        = -pBmpGlyphFT->top;
 
-    const FT_Bitmap& rBitmapFT  = rBmpGlyphFT->bitmap;
+    const FT_Bitmap& rBitmapFT  = pBmpGlyphFT->bitmap;
     rRawBitmap.mnHeight         = rBitmapFT.rows;
     rRawBitmap.mnWidth          = rBitmapFT.width;
     rRawBitmap.mnBitCount       = 8;
@@ -1698,60 +1709,55 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 // -----------------------------------------------------------------------
 
 // TODO: replace with GetFontCharMap()
-ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
+bool FreetypeServerFont::GetFontCodeRanges( CmapResult& rResult ) const
 {
-    CmapResult aResult;
-    aResult.mnPairCount = 0;
-    aResult.mpPairCodes = NULL;
-    aResult.mbSymbolic  = mpFontInfo->IsSymbolFont();
+    rResult.mbSymbolic = mpFontInfo->IsSymbolFont();
 
+    // TODO: is the full CmapResult needed on platforms calling this?
     if( FT_IS_SFNT( maFaceFT ) )
     {
         ULONG nLength = 0;
         const unsigned char* pCmap = mpFontInfo->GetTable( "cmap", &nLength );
-        if( pCmap && nLength && ParseCMAP( pCmap, nLength, aResult ) )
-        {
-            // copy the ranges into the provided array...
-            if( pCodes )
-                for( int i = 0; i < 2*aResult.mnPairCount; ++i )
-                    pCodes[ i ] = aResult.mpPairCodes[ i ];
-
-            delete[] aResult.mpPairCodes;
-        }
+        if( pCmap && (nLength > 0) )
+            if( ParseCMAP( pCmap, nLength, rResult ) )
+                return true;
     }
 
-    if( aResult.mnPairCount <= 0 )
+    typedef std::vector<sal_uInt32> U32Vector;
+    U32Vector aCodes;
+
+    // FT's coverage is available since FT>=2.1.0 (OOo-baseline>=2.1.4 => ok)
+    aCodes.reserve( 0x1000 );
+    FT_UInt nGlyphIndex;
+    for( sal_uInt32 cCode = FT_Get_First_Char( maFaceFT, &nGlyphIndex );; )
     {
-        if( aResult.mbSymbolic )
-        {
-            // we usually get here for Type1 symbol fonts
-            if( pCodes )
-            {
-                pCodes[ 0 ] = 0xF020;
-                pCodes[ 1 ] = 0xF100;
-            }
-            aResult.mnPairCount = 1;
-        }
-        else
-        {
-            // we have to use the brute force method...
-            for( sal_uInt32 cCode = 0x0020;; )
-            {
-                for(; cCode<0xFFF0 && !GetGlyphIndex( cCode ); ++cCode ) ;
-                if( cCode >= 0xFFF0 )
-                    break;
-                ++aResult.mnPairCount;
-                if( pCodes )
-                    *(pCodes++) = cCode;
-                for(; cCode<0xFFF0 && GetGlyphIndex( cCode ); ++cCode ) ;
-                if( pCodes )
-                    *(pCodes++) = cCode;
-            }
-        }
+        if( !nGlyphIndex )
+            break;
+        aCodes.push_back( cCode );  // first code inside range
+        sal_uInt32 cNext = cCode;
+        do cNext = FT_Get_Next_Char( maFaceFT, cCode, &nGlyphIndex ); while( cNext == ++cCode );
+        aCodes.push_back( cCode );  // first code outside range
+        cCode = cNext;
     }
 
-    return aResult.mnPairCount;
+    const int nCount = aCodes.size();
+    if( !nCount) {
+        if( !rResult.mbSymbolic )
+            return false;
+
+        // we usually get here for Type1 symbol fonts
+        aCodes.push_back( 0xF020 );
+        aCodes.push_back( 0xF100 );
+    }
+
+    sal_uInt32* pCodes = new sal_uInt32[ nCount ];
+    for( int i = 0; i < nCount; ++i )
+        pCodes[i] = aCodes[i];
+    rResult.mpRangeCodes = pCodes;
+    rResult.mnRangeCount = nCount / 2;
+    return true;
 }
+
 // -----------------------------------------------------------------------
 // kerning stuff
 // -----------------------------------------------------------------------

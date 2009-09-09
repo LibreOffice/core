@@ -52,6 +52,7 @@ USE_DEFFILE=TRUE
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES=	$(SLB)$/awt.lib \
             $(SLB)$/tree.lib \
+            $(SLB)$/grid.lib \
             $(SLB)$/controls.lib \
             $(SLB)$/helper.lib\
             $(SLB)$/layout-core.lib \

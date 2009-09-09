@@ -283,6 +283,7 @@ void SourceTreeLocalizer::WorkOnFile(
     const ByteString &rParameter, const ByteString &rIso )
 /*****************************************************************************/
 {
+        (void) rIso; // Remove me ;)
         String sFull( rFileName, RTL_TEXTENCODING_ASCII_US );
         DirEntry aEntry( sFull );
         ByteString sFileName( aEntry.GetName(), RTL_TEXTENCODING_ASCII_US );
@@ -324,36 +325,23 @@ void SourceTreeLocalizer::WorkOnFile(
             sExecutable += rExecutable ;
 
 
-#if defined(WNT) || defined(OS2)
-            sExecutable += ".exe";
-            String sPath( Export::GetEnv( "PATH" ), RTL_TEXTENCODING_ASCII_US );
-#else
-            String sPath( Export::GetEnv( "LD_LIBRARY_PATH" ), RTL_TEXTENCODING_ASCII_US );
-#endif
+        ByteString sCommand( sExecutable );
+        sCommand += " ";
+        sCommand += rParameter;
+        sCommand += " -p ";
+        sCommand += sPrj;
+        sCommand += " -r ";
+        sCommand += sRoot;
+        sCommand += " -i ";
+        sCommand += sFileName;
+        sCommand += " -o ";
+        sCommand += sTempFile;
+        if ( sLanguageRestriction.Len()) {
+            sCommand += " -l ";
+        sCommand += getSourceLanguages( sLanguageRestriction , sCommand );
+        }
 
-            DirEntry aExecutable( String( sExecutable, RTL_TEXTENCODING_ASCII_US ));
-            aExecutable.Find( sPath );
-
-            ByteString sCommand( aExecutable.GetFull(), RTL_TEXTENCODING_ASCII_US );
-            sCommand += " ";
-            sCommand += rParameter;
-            sCommand += " -p ";
-            sCommand += sPrj;
-            sCommand += " -r ";
-            sCommand += sRoot;
-            sCommand += " -i ";
-            sCommand += sFileName;
-            sCommand += " -o ";
-            sCommand += sTempFile;
-            if ( sLanguageRestriction.Len()) {
-                sCommand += " -l ";
-                sCommand += getSourceLanguages( sLanguageRestriction , sCommand );
-            }
-            if ( rIso.Equals("iso") && sIsoCode99.Len()) {
-                sCommand += " -ISO99 ";
-                sCommand += sIsoCode99;
-            }
-            if( bQuiet2 ){
+        if( bQuiet2 ){
                 sCommand +=" -QQ ";
             }
             //printf("DBG: %s\n",sCommand.GetBuffer());

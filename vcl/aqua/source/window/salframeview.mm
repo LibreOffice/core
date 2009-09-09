@@ -841,6 +841,16 @@ private:
 
     if( pUnmodifiedString && [pUnmodifiedString length] == 1 )
     {
+        /* #i103102# key events with command and alternate don't make it through
+           interpretKeyEvents (why ?). Try to dispatch them here first,
+           if not successful continue normally
+        */
+        if( (mpFrame->mnLastModifierFlags & (NSAlternateKeyMask | NSCommandKeyMask))
+                    == (NSAlternateKeyMask | NSCommandKeyMask) )
+        {
+            if( [self sendSingleCharacter: mpLastEvent] )
+                return YES;
+        }
         unichar keyChar = [pUnmodifiedString characterAtIndex: 0];
         USHORT nKeyCode = ImplMapCharCode( keyChar );
         
@@ -1242,12 +1252,18 @@ private:
     }
 }
 
--(MacOSBOOL)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode  character: (sal_Unicode)aChar
+-(MacOSBOOL)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode character: (sal_Unicode)aChar
 {
     return [self sendKeyInputAndReleaseToFrame: nKeyCode character: aChar modifiers: mpFrame->mnLastModifierFlags];
 }
 
--(MacOSBOOL)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode  character: (sal_Unicode)aChar modifiers: (unsigned int)nMod
+-(MacOSBOOL)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode character: (sal_Unicode)aChar modifiers: (unsigned int)nMod
+{
+    return [self sendKeyToFrameDirect: nKeyCode character: aChar modifiers: nMod] ||
+           [self sendSingleCharacter: mpLastEvent];
+}
+
+-(MacOSBOOL)sendKeyToFrameDirect: (USHORT)nKeyCode  character: (sal_Unicode)aChar modifiers: (unsigned int)nMod
 {
     YIELD_GUARD;
     
@@ -1283,7 +1299,7 @@ private:
             // don't send unicodes in the private use area
             if( keyChar >= 0xf700 && keyChar < 0xf780 )
                 keyChar = 0;
-            MacOSBOOL bRet = [self sendKeyInputAndReleaseToFrame: nKeyCode character: keyChar];
+            MacOSBOOL bRet = [self sendKeyToFrameDirect: nKeyCode character: keyChar modifiers: mpFrame->mnLastModifierFlags];
             mbInKeyInput = false;
 
             return bRet;

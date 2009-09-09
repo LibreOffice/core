@@ -50,6 +50,7 @@ SLOFILES=\
     $(EXCEPTIONSFILES) \
     $(SLO)$/adrparse.obj \
     $(SLO)$/docpasswdrequest.obj \
+    $(SLO)$/docmspasswdrequest.obj \
     $(SLO)$/filenotation.obj \
     $(SLO)$/inethist.obj \
     $(SLO)$/inettype.obj \

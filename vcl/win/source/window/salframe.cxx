@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: salframe.cxx,v $
- * $Revision: 1.157.20.2 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -355,11 +352,9 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         {
             OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "user32" ) );
             oslModule pLib = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
-            void *pFunc = NULL;
+            oslGenericFunction pFunc = NULL;
             if( pLib )
-            {
                 pFunc = osl_getAsciiFunctionSymbol( pLib, "SetLayeredWindowAttributes" );
-            }
 
             lpfnSetLayeredWindowAttributes = ( SetLayeredWindowAttributes_Proc_T ) pFunc;
 
@@ -3155,7 +3150,8 @@ void WinSalFrame::Beep( SoundType eSoundType )
         MB_ICONQUESTION                 // SOUND_QUERY
     };
 
-    MessageBeep( aImplSoundTab[eSoundType] );
+    if( eSoundType != SOUND_DISABLE ) // don't beep on disable
+        MessageBeep( aImplSoundTab[eSoundType] );
 }
 
 // -----------------------------------------------------------------------

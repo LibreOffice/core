@@ -1040,6 +1040,14 @@ BOOL SvTreeListBox::Expand( SvLBoxEntry* pParent )
         pParent->SetFlags( nFlags );
         GetModel()->InvalidateEntry( pParent ); // neu zeichnen
     }
+
+    // --> OD 2009-04-01 #i92103#
+    if ( bExpanded )
+    {
+        pImp->CallEventListeners( VCLEVENT_LISTBOX_ENTRY_EXPANDED, pParent );
+    }
+    // <--
+
     return bExpanded;
 }
 
@@ -1059,6 +1067,14 @@ BOOL SvTreeListBox::Collapse( SvLBoxEntry* pParent )
         pHdlEntry = pParent;
         ExpandedHdl();
     }
+
+    // --> OD 2009-04-01 #i92103#
+    if ( bCollapsed )
+    {
+        pImp->CallEventListeners( VCLEVENT_LISTBOX_ENTRY_COLLAPSED, pParent );
+    }
+    // <--
+
     return bCollapsed;
 }
 
