@@ -48,6 +48,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_CONTROLLABEL,           "LabelControl");
     PCR_CONSTASCII_STRING( PROPERTY_LABEL,                  "Label");
     PCR_CONSTASCII_STRING( PROPERTY_TABINDEX,               "TabIndex");
+    PCR_CONSTASCII_STRING( PROPERTY_WHEEL_BEHAVIOR,         "MouseWheelBehavior");
     PCR_CONSTASCII_STRING( PROPERTY_TAG,                    "Tag");
     PCR_CONSTASCII_STRING( PROPERTY_NAME,                   "Name");
     PCR_CONSTASCII_STRING( PROPERTY_VALUE,                  "Value");
@@ -57,6 +58,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_CONTROLSOURCE,          "DataField");
     PCR_CONSTASCII_STRING( PROPERTY_INPUT_REQUIRED,         "InputRequired");
     PCR_CONSTASCII_STRING( PROPERTY_ENABLED,                "Enabled");
+    PCR_CONSTASCII_STRING( PROPERTY_ENABLE_VISIBLE,         "EnableVisible" );
     PCR_CONSTASCII_STRING( PROPERTY_READONLY,               "ReadOnly");
     PCR_CONSTASCII_STRING( PROPERTY_ISREADONLY,             "IsReadOnly");
     PCR_CONSTASCII_STRING( PROPERTY_FILTER,                 "Filter");

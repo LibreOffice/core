@@ -181,7 +181,7 @@
 #define HID_PROP_LOCKED                         (HID_FORMS_START +  22)
 #define HID_PROP_FORMATKEY                      (HID_FORMS_START +  23)
 #define HID_PROP_REQUIRED                       (HID_FORMS_START +  24)
-    // FREE
+#define HID_PROP_WHEEL_BEHAVIOR                 (HID_FORMS_START +  25)
     // FREE
 #define HID_PROP_UNIQUE                         (HID_FORMS_START +  27)
 #define HID_PROP_CLASSID                        (HID_FORMS_START +  28)
@@ -249,7 +249,7 @@
 #define HID_PROP_ECHO_CHAR                      (HID_FORMS_START +  91)
 #define HID_PROP_EMPTY_IS_NULL                  (HID_FORMS_START +  92)
 #define HID_PROP_DECIMAL_ACCURACY               (HID_FORMS_START +  93)
-    // FREE
+#define HID_PROP_ENABLE_VISIBLE                 (HID_FORMS_START +  94)
 #define HID_PROP_DEFAULT_BUTTON                 (HID_FORMS_START +  95)
 #define HID_PROP_HIDDEN_VALUE                   (HID_FORMS_START +  96)
 #define HID_PROP_TRISTATE                       (HID_FORMS_START +  97)

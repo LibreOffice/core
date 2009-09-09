@@ -743,65 +743,6 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
     return xInputStream;
 }
 
-//-----------------------------------------------
-void OWriteStream_Impl::CopyTempFileToOutput( uno::Reference< io::XOutputStream > xOutStream )
-{
-    OSL_ENSURE( xOutStream.is(), "The stream must be specified!\n" );
-    OSL_ENSURE( m_aTempURL.getLength() || m_xCacheStream.is(), "The temporary must exist!\n" );
-
-    uno::Reference< io::XInputStream > xTempInStream;
-
-    if ( m_xCacheStream.is() )
-    {
-        if ( !m_xCacheSeek.is() )
-            throw uno::RuntimeException();
-        sal_Int64 nPos = m_xCacheSeek->getPosition();
-
-        try
-        {
-            m_xCacheSeek->seek( 0 );
-            uno::Reference< io::XInputStream > xTempInp = m_xCacheStream->getInputStream();
-            if ( xTempInp.is() )
-                ::comphelper::OStorageHelper::CopyInputToOutput( xTempInStream, xOutStream );
-        }
-        catch( uno::Exception& aException )
-        {
-            AddLog( aException.Message );
-            AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
-
-            m_xCacheSeek->seek( nPos );
-            throw io::IOException(); //TODO:
-        }
-
-        m_xCacheSeek->seek( nPos );
-    }
-    else if ( m_aTempURL.getLength() )
-    {
-        uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
-                        GetServiceFactory()->createInstance (
-                                ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
-                        uno::UNO_QUERY );
-
-        if ( !xTempAccess.is() )
-            throw uno::RuntimeException(); // TODO:
-
-        try
-        {
-            xTempInStream = xTempAccess->openFileRead( m_aTempURL );
-        }
-        catch( uno::Exception& aException )
-        {
-            AddLog( aException.Message );
-            AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
-        }
-
-        if ( !xTempInStream.is() )
-            throw io::IOException(); //TODO:
-
-        ::comphelper::OStorageHelper::CopyInputToOutput( xTempInStream, xOutStream );
-    }
-}
-
 // =================================================================================================
 
 //-----------------------------------------------

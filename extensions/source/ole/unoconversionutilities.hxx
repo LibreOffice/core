@@ -1684,7 +1684,8 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
 Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type& aType= Type())
 #endif
 {
-    if (pVar->vt != VT_UNKNOWN && pVar->vt != VT_DISPATCH)
+    //To allow passing "Nothing" in VS 2008 we need to accept VT_EMPTY
+    if (pVar->vt != VT_UNKNOWN && pVar->vt != VT_DISPATCH && pVar->vt != VT_EMPTY)
         throw IllegalArgumentException(
             OUSTR("[automation bridge]UnoConversionUtilities<T>::createOleObjectWrapper \n"
                   "The VARIANT does not contain an object type! "), 0, -1);
@@ -1719,13 +1720,23 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
     Any ret;
     //If no Type is provided and pVar contains IUnknown then we return a XInterface.
     //If pVar contains an IDispatch then we return a XInvocation.
-    Type desiredType;
-    if (aType == VOID_TYPE && pVar->vt == VT_UNKNOWN)
-        desiredType = getCppuType((Reference<XInterface>*) 0);
-    else if (aType == VOID_TYPE && pVar->vt == VT_DISPATCH)
-        desiredType = getCppuType((Reference<XInvocation>*) 0);
-    else
-        desiredType = aType;
+    Type desiredType = aType;
+
+    if (aType == VOID_TYPE)
+    {
+        switch (pVar->vt)
+        {
+        case VT_EMPTY:
+        case VT_UNKNOWN:
+            desiredType = getCppuType((Reference<XInterface>*) 0);
+            break;
+        case VT_DISPATCH:
+            desiredType = getCppuType((Reference<XInvocation>*) 0);
+            break;
+        default:
+            desiredType = aType;
+        }
+    }
 
     // COM pointer are NULL, no wrapper required
      if (spUnknown == NULL)

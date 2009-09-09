@@ -239,22 +239,9 @@ Sequence<Type> OControl::_getTypes()
 }
 
 //------------------------------------------------------------------------------
-void OControl::initFormControlPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& _rxPeer )
+void OControl::initFormControlPeer( const Reference< XWindowPeer >& /*_rxPeer*/ )
 {
-    try
-    {
-        Reference< XVclWindowPeer > xVclWindowPeer( _rxPeer, UNO_QUERY_THROW );
-
-        // #i63103# - form controls should only react on the mouse wheel when they're focused
-        xVclWindowPeer->setProperty(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WheelWithoutFocus" ) ),
-            makeAny( sal_Bool( sal_False ) )
-        );
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
+    // nothing to do here
 }
 
 // OComponentHelper
@@ -2164,9 +2151,9 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
 
         try
         {
+            sal_Int32 nFieldType = DataType::OTHER;
             if ( xFieldCandidate.is() )
             {
-                sal_Int32 nFieldType = 0;
                 xFieldCandidate->getPropertyValue( PROPERTY_FIELDTYPE ) >>= nFieldType;
                 if ( approveDbColumnType( nFieldType ) )
                     impl_setField_noNotify( xFieldCandidate );
@@ -2178,6 +2165,8 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
             {
                 if( m_xField->getPropertySetInfo()->hasPropertyByName( PROPERTY_VALUE ) )
                 {
+                    m_nFieldType = nFieldType;
+
                     // an wertaenderungen horchen
                     m_xField->addPropertyChangeListener( PROPERTY_VALUE, this );
                     m_xColumnUpdate = Reference< XColumnUpdate >( m_xField, UNO_QUERY );
