@@ -213,6 +213,7 @@ static AquaSalFrame* getMouseContainerFrame()
             AquaSalMenu::enableMainMenu( false );
         #endif
         mpFrame->CallCallback( SALEVENT_GETFOCUS, 0 );
+        mpFrame->SendPaintEvent(); // repaint controls as active
     }
 }
 
@@ -221,7 +222,10 @@ static AquaSalFrame* getMouseContainerFrame()
     YIELD_GUARD;
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
+    {
         mpFrame->CallCallback(SALEVENT_LOSEFOCUS, 0);
+        mpFrame->SendPaintEvent(); // repaint controls as inactive
+    }
 }
 
 -(void)windowDidChangeScreen: (NSNotification*)pNotification
