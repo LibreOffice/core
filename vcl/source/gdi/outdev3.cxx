@@ -4515,7 +4515,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
 
     // calculate approximation of strikeout atom size
     long nStrikeoutWidth = nWidth;
-    String aStrikeoutTest( pChars, 4 );
+    String aStrikeoutTest( aChars, 4 );
     SalLayout* pLayout = ImplLayout( aStrikeoutTest, 0, nTestStrLen );
     if( pLayout )
     {
