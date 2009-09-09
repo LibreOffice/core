@@ -89,7 +89,6 @@ namespace css = com::sun::star;
 }
 
 bool Access::isValue() {
-    osl::MutexGuard g(lock);
     rtl::Reference< Node > p(getNode());
     switch (p->kind()) {
     case Node::KIND_PROPERTY:

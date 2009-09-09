@@ -503,12 +503,13 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
     for (Data::Modifications::const_iterator j(data.modifications.begin());
          j != data.modifications.end(); ++j)
     {
-        writeData(tmp.handle, RTL_CONSTASCII_STRINGPARAM("<item oor:path=\""));
         rtl::OUString name;
         rtl::OUString parentPath(Data::parseLastSegment(*j, &name));
         rtl::Reference< Node > parent;
         rtl::Reference< Node > node(data.resolvePath(*j, 0, 0, 0, &parent, 0));
         if (node.is()) {
+            writeData(
+                tmp.handle, RTL_CONSTASCII_STRINGPARAM("<item oor:path=\""));
             writeAttributeValue(tmp.handle, parentPath);
             writeData(tmp.handle, RTL_CONSTASCII_STRINGPARAM("\">"));
             writeNode(tmp.handle, parent, name, node, true);
@@ -522,6 +523,9 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
                 k->second->getLayer() == Data::NO_LAYER)
             {
                 OSL_ASSERT(k->second->isRemoved());
+                writeData(
+                    tmp.handle,
+                    RTL_CONSTASCII_STRINGPARAM("<item oor:path=\""));
                 switch (parent->kind()) {
                 case Node::KIND_LOCALIZED_PROPERTY:
                     {

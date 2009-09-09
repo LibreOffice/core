@@ -271,6 +271,7 @@ Service::createInstanceWithArguments(
             static_cast< cppu::OWeakObject * >(this));
     }
     rtl::Reference< RootAccess > root(new RootAccess(nodepath, locale, update));
+    osl::MutexGuard guard(lock);
     if (root->isValue()) {
         throw css::uno::Exception(
             (rtl::OUString(
