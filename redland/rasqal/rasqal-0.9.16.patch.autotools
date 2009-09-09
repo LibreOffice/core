@@ -1,0 +1,38 @@
+--- misc/rasqal-0.9.16/ltmain.sh	Tue Apr 29 23:33:55 2008
++++ misc/build/rasqal-0.9.16/ltmain.sh	Wed Feb 18 13:25:00 2009
+@@ -1565,6 +1565,11 @@
+ 	[\\/]* | [A-Za-z]:[\\/]*) ;;
+ 	*)
+ 	  absdir=`cd "$dir" && pwd`
++	  case $host_os in
++	    mingw*)
++	      absdir=`cygpath -m $absdir`
++	      ;;
++	  esac
+ 	  if test -z "$absdir"; then
+ 	    $echo "$modename: cannot determine absolute directory name of \`$dir'" 1>&2
+ 	    absdir="$dir"
+@@ -3262,9 +3267,9 @@
+ 	    revision="$number_revision"
+ 	    ;;
+ 	  freebsd-aout|freebsd-elf|sunos)
+-	    current="$number_major"
+-	    revision="$number_minor"
+-	    age="0"
++	    current=`expr $number_major + $number_minor`
++	    age="$number_minor"
++	    revision="$number_revision"
+ 	    ;;
+ 	  irix|nonstopux)
+ 	    current=`expr $number_major + $number_minor`
+@@ -3344,8 +3349,8 @@
+ 	  ;;
+ 
+ 	freebsd-elf)
+-	  major=".$current"
+-	  versuffix=".$current";
++	  major=.`expr $current - $age`
++	  versuffix="$major.$age.$revision"
+ 	  ;;
+ 
+ 	irix | nonstopux)

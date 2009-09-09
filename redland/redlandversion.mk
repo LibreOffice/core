@@ -30,8 +30,7 @@
 #*************************************************************************
 
 RAPTOR_MAJOR=1
-# rasqal has no stable abi
-RASQAL_MAJOR=0
+RASQAL_MAJOR=1
 # redland has no stable abi
 REDLAND_MAJOR=0
 

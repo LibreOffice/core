@@ -1,0 +1,154 @@
+--- misc/redland-1.0.8/librdf/win32_rdf_config.h	Tue Jul  1 05:10:26 2008
++++ misc/build/redland-1.0.8/librdf/win32_rdf_config.h	Wed Feb 18 13:31:07 2009
+@@ -43,7 +43,8 @@
+ #define HAVE_STRICMP 1
+ 
+ /* MS names for these functions */
+-#define vsnprintf _vsnprintf
++// next line breaks build on wntmsci12
++//#define vsnprintf _vsnprintf
+ #define snprintf _snprintf
+ #define access _access
+ #define stricmp _stricmp
+@@ -72,40 +73,40 @@
+  */
+ 
+ /* BDB has close method with 2 args */
+-#define HAVE_BDB_CLOSE_2_ARGS 1
++// #define HAVE_BDB_CLOSE_2_ARGS 1
+ 
+ /* BDB defines DBC */
+-#define HAVE_BDB_CURSOR 1
++// #define HAVE_BDB_CURSOR 1
+ 
+ /* BDB cursor method has 4 arguments */
+-#define HAVE_BDB_CURSOR_4_ARGS 1
++// #define HAVE_BDB_CURSOR_4_ARGS 1
+ 
+ /* BDB defines DB_TXN */
+-#define HAVE_BDB_DB_TXN 1
++// #define HAVE_BDB_DB_TXN 1
+ 
+ /* BDB has fd method with 2 args */
+-#define HAVE_BDB_FD_2_ARGS 1
++// #define HAVE_BDB_FD_2_ARGS 1
+ 
+ /* Have BDB hash support */
+-#define HAVE_BDB_HASH 1
++// #define HAVE_BDB_HASH 1
+ 
+ /* BDB has open method with 6 args */
+ /* #undef HAVE_BDB_OPEN_6_ARGS */
+ 
+ /* BDB has open method with 7 args */
+-#define HAVE_BDB_OPEN_7_ARGS 1
++// #define HAVE_BDB_OPEN_7_ARGS 1
+ 
+ /* BDB has set_flags method */
+-#define HAVE_BDB_SET_FLAGS 1
++// #define HAVE_BDB_SET_FLAGS 1
+ 
+ /* BDB has dbopen method */
+ /* #undef HAVE_DBOPEN */
+ 
+ /* BDB has db_create method */
+-#define HAVE_DB_CREATE 1
++// #define HAVE_DB_CREATE 1
+ 
+ /* Define to 1 if you have the <db.h> header file. */
+-#define HAVE_DB_H 1
++// #define HAVE_DB_H 1
+ 
+ /* Define to 1 if you have the <dlfcn.h> header file. */
+ /* undef HAVE_DLFCN_H */
+@@ -141,13 +142,13 @@
+ /* #undef HAVE_LIBWWW */
+ 
+ /* Have local MD5 digest */
+-#define HAVE_LOCAL_MD5_DIGEST 1
++// #define HAVE_LOCAL_MD5_DIGEST 1
+ 
+ /* Have local RIPEMD160 digest */
+ /* #undef HAVE_LOCAL_RIPEMD160_DIGEST */
+ 
+ /* Have local SHA1 digest */
+-#define HAVE_LOCAL_SHA1_DIGEST 1
++// #define HAVE_LOCAL_SHA1_DIGEST 1
+ 
+ /* Define to 1 if you have the <memory.h> header file. */
+ #define HAVE_MEMORY_H 1
+@@ -159,25 +160,33 @@
+ #define HAVE_MKTEMP 1
+ 
+ /* MySQL libraries are present */
+-#define HAVE_MYSQL 1
++// #define HAVE_MYSQL 1
+ 
+ /* Define to 1 if you have the <openssl/crypto.h> header file. */
+ /* #undef HAVE_OPENSSL_CRYPTO_H */
++#define HAVE_OPENSSL_CRYPTO_H 1
+ 
+ /* Have openssl MD5 digest */
+ /* #undef HAVE_OPENSSL_CRYPTO_MD5_DIGEST */
++#define HAVE_OPENSSL_CRYPTO_MD5_DIGEST 1
+ 
+ /* Have openssl RIPEMD160 digest */
+ /* #undef HAVE_OPENSSL_CRYPTO_RIPEMD160_DIGEST */
++#define HAVE_OPENSSL_CRYPTO_RIPEMD160_DIGEST 1
+ 
+ /* Have openssl SHA1 digest */
+ /* #undef HAVE_OPENSSL_CRYPTO_SHA1_DIGEST */
++#define HAVE_OPENSSL_CRYPTO_SHA1_DIGEST 1
+ 
+ /* Have openssl digests */
+ /* #undef HAVE_OPENSSL_DIGESTS */
++#define HAVE_OPENSSL_DIGESTS 1
+ 
+ /* Define to 1 if you have the <pthread.h> header file. */
+ /* #undef HAVE_PTHREAD_H */
++#ifdef __MINGW32__
++#undef HAVE_PTHREAD_H
++#endif
+ 
+ /* Define to 1 if you have the <stdint.h> header file. */
+ #define HAVE_STDINT_H 1
+@@ -246,7 +255,7 @@
+ #define SIZEOF_UNSIGNED_LONG_LONG 8
+ 
+ /* SQLite API version */
+-#define SQLITE_API 3
++// #define SQLITE_API 3
+ 
+ /* Define to 1 if you have the ANSI C header files. */
+ #define STDC_HEADERS 1
+@@ -254,14 +263,17 @@
+ /* Building file storage */
+ #define STORAGE_FILE 1
+ 
++#define STORAGE_HASHES 1
++#define STORAGE_MEMORY 1
++
+ /* Building MySQL storage */
+-#define STORAGE_MYSQL 1
++// #define STORAGE_MYSQL 1
+ 
+ /* Building PostgreSQL storage */
+ /*#undef STORAGE_POSTGRESQL*/
+ 
+ /* Building SQLite storage */
+-#define STORAGE_SQLITE 1
++// #define STORAGE_SQLITE 1
+ 
+ /* Building 3store storage */
+ /*#undef STORAGE_TSTORE*/
+--- misc/redland-1.0.8/utils/rdfproc.c	Tue Jul  1 05:10:25 2008
++++ misc/build/redland-1.0.8/utils/rdfproc.c	Wed Feb 18 13:26:41 2009
+@@ -28,7 +28,7 @@
+ #endif
+ 
+ #ifdef WIN32
+-#include <win32_config.h>
++#include <win32_rdf_config.h>
+ #endif
+ 
+ #include <stdio.h>
