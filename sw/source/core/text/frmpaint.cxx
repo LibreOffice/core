@@ -457,7 +457,7 @@ SwRect SwTxtFrm::Paint()
         SwRepaint *pRepaint = GetPara()->GetRepaint();
         long l;
         //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-        if ( IsVertical() )
+        if ( IsVertLR() ) // mba: the following line was added, but we don't need it for the existing directions; kept for IsVertLR(), but should be checked
             pRepaint->Chg( ( GetUpper()->Frm() ).Pos() + ( GetUpper()->Prt() ).Pos(), ( GetUpper()->Prt() ).SSize() );
 
         if( pRepaint->GetOfst() )

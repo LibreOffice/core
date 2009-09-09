@@ -2606,9 +2606,12 @@ void SwTxtFrm::ChgThisLines()
         else //Paragraphs which are not counted should not manipulate the AllLines.
             nThisLines = nNew;
     }
+
+    //mba: invalidating is not necessary; if mongolian script has a problem, it should be fixed at the ritgh place
+    //with invalidating we probably get too much flickering
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     //Ugly. How can we hack if better?
-    InvalidatePage();
+    //InvalidatePage();
 }
 
 
