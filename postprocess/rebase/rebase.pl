@@ -179,6 +179,7 @@ sub get_files
     foreach my $pattern ( @target ) {
         foreach my $i ( glob( $pattern ) ) {
             my $lib = File::Basename::basename $i;
+        $lib =~ s/\+/\\\+/g;
             if ( grep /^$lib$/i, (keys %lastrun) ) {
                 push @$oldfiles_ref, $i;
             } else {
@@ -196,6 +197,7 @@ sub rebase_again
     my $oldfiles_ref = shift;
     my $newfiles_ref = shift;
     my @grownfiles;
+    my $solarbin ="$ENV{SOLARVERSION}/$ENV{INPATH}/bin$ENV{UPDMINOREXT}";
     my $command = "rebase " . $options_string;
     if ( $ENV{WRAPCMD} ) {
         $command = $ENV{WRAPCMD} . " " . $command;
@@ -222,7 +224,14 @@ sub rebase_again
         print;
         # evaluate error messages
         if ( /REBASE: ([^\s]+).*Grew too large/ ) {
-            push @grownfiles, $1;
+            my $toobig_name = $1;
+            if ( -e "$solarbin/so/$toobig_name" ) {
+                push @grownfiles, "$solarbin/so/$toobig_name";
+                print "name was : $toobig_name\n";
+                print "push $solarbin/so/$toobig_name\n";
+            } else {
+                push @grownfiles, "$solarbin/$toobig_name";
+            }
         }
     }
     close( COMMAND );
