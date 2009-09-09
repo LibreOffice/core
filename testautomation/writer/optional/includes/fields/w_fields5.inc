@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Fields - Variabs
 '*
@@ -53,6 +53,8 @@ sub w_fields5
 
 end sub
 
+'-----------------------------------------------------------------
+
 testcase tVariables_1
     if bAsianLan = true then
         QaErrorLog "No testing with Asian language. Aborting."
@@ -62,8 +64,8 @@ testcase tVariables_1
   Dim sName()   as String
   Dim sValue    as String
   Dim sResult() as String
-  Dim i as Integer
-  Dim j as Integer
+  Dim i         as Integer
+  Dim j         as Integer
 
   sValue  = "This is a test!"
 
@@ -134,8 +136,8 @@ testcase tVariables_2
   Dim sName()   as String
   Dim sValue    as String
   Dim sResult() as String
-  Dim i as Integer
-  Dim j as Integer
+  Dim i         as Integer
+  Dim j         as Integer
 
   sValue  = "1234,567"
 
@@ -205,8 +207,9 @@ testcase tVariables_3
   Dim sValue    as String
   Dim iFormat() as Integer
   Dim sResult() as String
-  Dim i as Integer
-  Dim j as Integer
+  Dim i         as Integer
+  Dim j         as Integer
+  Dim mUnit     as String
 
   sName   = "myTest"
   sValue  = "1234.567"
@@ -271,8 +274,8 @@ testcase tVariables_4
 
   Dim sName()   as String
   Dim sResult() as String
-  Dim i as Integer
-  Dim j as Integer
+  Dim i         as Integer
+  Dim j         as Integer
 
   sName   = Array( _
                    "myTest1" , _
@@ -350,8 +353,8 @@ testcase tVariables_5
   Dim sName     as String
   Dim sValue    as String
   Dim sResult() as String
-  Dim i as Integer
-  Dim j as Integer
+  Dim i         as Integer
+  Dim j         as Integer
 
   sResult = Array( _
                    "100"   , _
@@ -429,8 +432,8 @@ testcase tVariables_6
   Dim sName()   as String
   Dim sValue()  as String
   Dim sResult   as String
-  Dim i as Integer
-  Dim j as Integer
+  Dim i         as Integer
+  Dim j         as Integer
 
   sName   = Array( _
                    "myTest1" , _
@@ -482,8 +485,8 @@ endcase
 testcase tVariables_7
 
   Dim sResult() as String
-  Dim i as Integer
-  Dim x as Integer
+  Dim i         as Integer
+  Dim x         as Integer
 
   printlog "Number range"
  '/// <b> Number range </b>
@@ -540,9 +543,9 @@ endcase
 
 testcase tVariables_8
 
-  Dim sName as String
-  Dim sValue as String
-  Dim sReference as String
+  Dim sName         as String
+  Dim sValue        as String
+  Dim sReference    as String
   Dim sFieldContent as String
 
   sName = "myTest" : sValue = "100"
@@ -613,12 +616,12 @@ endcase
 
 testcase tVariables_9
 
-  Dim sName() as String
-  Dim sValue() as String
+  Dim sName()    as String
+  Dim sValue()   as String
   Dim sResult1() as String
   Dim sResult2() as String
-  Dim i as Integer
-  Dim j as Integer
+  Dim i          as Integer
+  Dim j          as Integer
 
   sName    = Array("U1" , "UserField" , "U2")
   sValue   = Array("UserField - 10" , "100" , "UserField + 10")
@@ -673,11 +676,11 @@ testcase tVariables_10
     qaerrorlog "#i93906# - tVariables_10 outcommented due to a problem with copying field-contents outside the office."
     goto endsub
 
-  Dim sDDEFile as String
-  Dim sContent as String
-  Dim sName as String
-  Dim sDDEStatement as String
-  Dim sSectionName as String
+  Dim sDDEFile        as String
+  Dim sContent        as String
+  Dim sName           as String
+  Dim sDDEStatement   as String
+  Dim sSectionName    as String
 
   sDDEFile = Convertpath ( gNetzOfficePath + "dde_test.oxt")
   sContent = "DDE"
@@ -763,14 +766,14 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tVariables_11
-    qaerrorlog "#i93906# - tVariables_10 outcommented due to a problem with copying field-contents outside the office."
+    qaerrorlog "#i102792# - tVariables_11 outcommented. Fields not updated."
     goto endsub
 
-  Dim sDDEFile as String
-  Dim sContent as String
-  Dim sName as String
+  Dim sDDEFile      as String
+  Dim sContent      as String
+  Dim sName         as String
   Dim sDDEStatement as String
-  Dim sSectionName as String
+  Dim sSectionName  as String
 
   sDDEFile = Convertpath ( gNetzOfficePath + "dde_test.oxt")
   sContent = "DDE"
@@ -840,4 +843,3 @@ testcase tVariables_11
 endcase
 
 '-----------------------------------------------------------------
-

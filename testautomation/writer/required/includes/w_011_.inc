@@ -30,7 +30,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description:  Testcases for the Toolbar.
 '*
@@ -446,6 +446,7 @@ endcase
 '-----------------------------------------------------------
 
 testcase tZORest
+
     printlog "- Draw Functions-Objectbar: Rest"
     if gApplication = "HTML" then
         printlog "This test does not apply to HTML documents"

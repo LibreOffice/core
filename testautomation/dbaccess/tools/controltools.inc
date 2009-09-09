@@ -119,6 +119,7 @@ function fSetControlProperty(sControlType, sPropertyName, sPropertyValue as stri
                     Align.select(Cint(sPropertyValue))
                 elseif sPropertyName = "AdditionalInfo" then
                     Information.setText(sPropertyValue)
+                    Information.TypeKeys("<RETURN>",true)
                 elseif sPropertyName = "AutoComplete" then
                     AutoComplete.select(Cint(sPropertyValue))
                 elseif sPropertyName = "Background" then
@@ -166,10 +167,11 @@ function fSetControlProperty(sControlType, sPropertyName, sPropertyValue as stri
                     DefaultSelection2.setText(sPropertyValue)
                 elseif sPropertyName = "DefaultState" then
                     DefaultState.select(Cint(sPropertyValue))
-                elseif sPropertyName = "DefaultValue" then                    
+                elseif sPropertyName = "DefaultValue" then
                     TabGeneralControl.MouseDown 1,1,1,true
+                    TabGeneralControl.MouseUp 1,1,1,true
                     sleep(1)
-                    TabGeneralControl.TypeKeys "<TAB>" , 11 , true
+                    TabGeneralControl.TypeKeys "<TAB>" , 16 , true
                     sleep(1)
                     TabGeneralControl.TypeKeys sPropertyValue , true                    
                     sleep(1)

@@ -7,7 +7,8 @@ import java.lang.reflect.Method;
  * Invoke a method of a class in an own thread. Provide a method to end
  * the thread.
  */
-public class MethodThread extends Thread {
+public class MethodThread extends Thread
+{
 
     /** The method that should be executed **/
     private Method mTestMethod = null;
@@ -19,7 +20,6 @@ public class MethodThread extends Thread {
     private String mErrMessage = null;
     /** Did an Exception happen? **/
     private boolean mExceptionHappened = false;
-
     private Object[] mParameter = null;
 
     /**
@@ -28,13 +28,15 @@ public class MethodThread extends Thread {
      * @param invokeClass The class where the method is invoked.
      * @param log The logging mechanism.
      */
-    public MethodThread(Method testMethod, Object invokeClass, PrintWriter log) {
+    public MethodThread(Method testMethod, Object invokeClass, PrintWriter log)
+    {
         mTestMethod = testMethod;
         mInvokeClass = invokeClass;
         mLog = log;
     }
 
-    public MethodThread(Method testMethod, Object invokeClass, Object[] parameter, PrintWriter log) {
+    public MethodThread(Method testMethod, Object invokeClass, Object[] parameter, PrintWriter log)
+    {
         mTestMethod = testMethod;
         mInvokeClass = invokeClass;
         mParameter = parameter;
@@ -44,22 +46,29 @@ public class MethodThread extends Thread {
     /**
      * Invoke the method.
      */
-    public void run() {
-        try {
+    public void run()
+    {
+        try
+        {
             mTestMethod.invoke(mInvokeClass, mParameter);
         }
-        catch(IllegalAccessException e) {
+        catch (IllegalAccessException e)
+        {
             e.printStackTrace(mLog);
             mErrMessage = e.getMessage();
             mExceptionHappened = true;
         }
-        catch(java.lang.reflect.InvocationTargetException e) {
+        catch (java.lang.reflect.InvocationTargetException e)
+        {
             Throwable t = e.getTargetException();
-            if (!(t instanceof ComplexTestCase.AssureException)) {
+            if (!(t instanceof ComplexTestCase.AssureException))
+            {
                 t.printStackTrace(mLog);
                 mErrMessage = t.getMessage();
                 if (mErrMessage == null)
+                {
                     mErrMessage = t.toString();
+                }
                 mExceptionHappened = true;
             }
 
@@ -70,7 +79,8 @@ public class MethodThread extends Thread {
      * Get the error message
      * @return The error message.
      */
-    public String getErrorMessage() {
+    public String getErrorMessage()
+    {
         return mErrMessage;
     }
 
@@ -78,18 +88,22 @@ public class MethodThread extends Thread {
      * Is there an error message?
      * @return True, if an error did happen.
      */
-    public boolean hasErrorMessage() {
+    public boolean hasErrorMessage()
+    {
         return mExceptionHappened;
     }
 
     /**
      * Stop the running method.
      */
-    public void destroy() {
-        try {
+    public void destroy()
+    {
+        try
+        {
             interrupt();
         }
-        catch(SecurityException e) {
+        catch (SecurityException e)
+        {
             e.printStackTrace(mLog);
             mErrMessage = e.getMessage();
             mExceptionHappened = true;

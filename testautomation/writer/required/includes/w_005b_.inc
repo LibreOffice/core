@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description :  Testcases for the Format-Menu.
 '*
@@ -218,6 +218,7 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAlignment
+
     PrintLog "- Format / Alignment"
 
     printlog " Open new document"
@@ -413,6 +414,7 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAnchorObject
+
     PrintLog "- Format / Anchor Frame"
 
     printlog " Open new document"
@@ -880,6 +882,7 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAlignmentArea
+
     PrintLog "- Format / Alignment drawing objects"
     if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
@@ -1092,7 +1095,7 @@ testcase tFormatPositionAndSizeLegend
 
     printlog " Insert a legend"
     sleep (1)
-    Call wObjektSelektieren(13, 13, 75, 75)
+    Call wObjektSelektieren(30, 30, 75, 75)
 
     hUseAsyncSlot( "FormatPositionAndSize" )
     kontext "active"
@@ -1408,7 +1411,8 @@ endcase
 '-----------------------------------------------------------
 
 testcase tHtmlDocFormatAlignment
-    gApplication = "HTML"
+
+	gApplication = "HTML"
     PrintLog "- Format / Alignment"
 
     printlog " Open new document"

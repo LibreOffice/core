@@ -30,7 +30,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description :  Testcases for the Format-Menu
 '*
@@ -760,8 +760,9 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAnchor
-    PrintLog "- Format / Anchor"
 
+    PrintLog "- Format / Anchor"
+	
     printlog " Open new document"
     Call hNewDocument
     printlog " Insert a graphic from file '..\writer\required\input\graphics\jolink.jpg'"
@@ -894,6 +895,7 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAnchorArea
+
     PrintLog "- Format / Anchor drawing objects"
     if gApplication = "HTML" then
         printlog "Not in WriterWeb!"

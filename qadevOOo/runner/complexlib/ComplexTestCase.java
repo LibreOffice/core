@@ -27,7 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package complexlib;
 
 import java.lang.reflect.Method;
@@ -38,11 +37,11 @@ import share.LogWriter;
 import share.ComplexTest;
 import java.io.PrintWriter;
 
-
 /**
  * Base class for all complex tests.
  */
-public abstract class ComplexTestCase extends Assurance implements ComplexTest {
+public abstract class ComplexTestCase extends Assurance implements ComplexTest
+{
 
     /** The test parameters **/
     protected static TestParameters param = null;
@@ -59,7 +58,8 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest {
      **/
     protected int mThreadTimeOut = 0;
     /** Continue a test even if it did fail **/
-    public static final boolean CONTINUE = true;
+    // public static final boolean CONTINUE = true;
+
     /** End a test if it did fail **/
     public static final boolean BREAK = true;
 
@@ -70,31 +70,42 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest {
      * @param entry The name of the test method that should be called.
      * @param environment The environment for the test.
      */
-    public void executeMethods(DescEntry entry, TestParameters environment) {
+    public void executeMethods(DescEntry entry, TestParameters environment)
+    {
 
         // get the environment
         param = environment;
         log = entry.Logger;
 
         mThreadTimeOut = param.getInt("ThreadTimeOut");
-        if (mThreadTimeOut == 0) {
+        if (mThreadTimeOut == 0)
+        {
             mThreadTimeOut = 300000;
         }
         // start with the before() method
         boolean beforeWorked = true;
-        try {
-            Method before = this.getClass().getMethod("before", new Class[]{});
-            before.invoke(this, new Object[]{});
-        } catch (java.lang.NoSuchMethodException e) {
+        try
+        {
+            Method before = this.getClass().getMethod("before", new Class[] {} );
+            before.invoke(this, new Object[] {} );
+        }
+        catch (java.lang.NoSuchMethodException e)
+        {
             // simply ignore
-        } catch (java.lang.IllegalAccessException e) {
+        }
+        catch (java.lang.IllegalAccessException e)
+        {
             log.println("Cannot access the 'before()' method, although it" + " is there. Is this ok?");
-        } catch (java.lang.reflect.InvocationTargetException e) {
+        }
+        catch (java.lang.reflect.InvocationTargetException e)
+        {
             beforeWorked = false;
             Throwable t = e.getTargetException();
-            if (!(t instanceof RuntimeException) || state) {
+            if (!(t instanceof RuntimeException) || state)
+            {
                 log.println(t.toString());
-                if (message == null) {
+                if (message == null)
+                {
                     message = "Exception in before() method.\n\r" + t.getMessage();
                 }
                 state = false;
@@ -104,12 +115,16 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest {
 
 
         //executeMethodTests
-        for (int i = 0; i < entry.SubEntries.length; i++) {
+        for (int i = 0; i < entry.SubEntries.length; i++)
+        {
             subEntry = entry.SubEntries[i];
-            if (beforeWorked) {
+            if (beforeWorked)
+            {
                 state = true;
                 message = "";
-            } else {
+            }
+            else
+            {
                 // set all test methods on failed, if 'before()' did not work.
                 subEntry.State = message;
                 subEntry.hasErrorMsg = true;
@@ -117,18 +132,25 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest {
                 continue;
             }
             Method testMethod = null;
-            try {
+            try
+            {
                 String entryName = subEntry.entryName;
                 Object[] parameter = null;
 
-                if (entryName.indexOf("(") != -1) {
-                    String sParameter = (entryName.substring(entryName.indexOf("(") +1 , entryName.indexOf(")")));
+                if (entryName.indexOf("(") != -1)
+                {
+                    String sParameter = (entryName.substring(entryName.indexOf("(") + 1, entryName.indexOf(")")));
                     mTestMethodName = entryName;
-                    parameter = new String[] {sParameter};
+                    parameter = new String[]
+                            {
+                                sParameter
+                            };
                     entryName = entryName.substring(0, entryName.indexOf("("));
-                    testMethod = this.getClass().getMethod(entryName, new Class[]{String.class });
-                } else {
-                    testMethod = this.getClass().getMethod(entryName, new Class[]{});
+                    testMethod = this.getClass().getMethod(entryName, new Class[] { String.class });
+                }
+                else
+                {
+                    testMethod = this.getClass().getMethod(entryName, new Class[] {} );
                     mTestMethodName = entryName;
                 }
 
@@ -136,7 +158,8 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest {
                 log.println("Starting " + mTestMethodName);
                 th.start();
 
-                try {
+                try
+                {
                     // some tests are very dynamic in its exceution time so that
                     // a threadTimeOut fials. In this cases the logging mechanisim
                     // is a usefull way to detect that a office respective a test
@@ -150,38 +173,48 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest {
                     int sleepingStep = 1000;
                     int factor = 0;
 
-                    while (th.isAlive() && (lastPing != newPing || factor * sleepingStep < mThreadTimeOut)) {
+                    while (th.isAlive() && (lastPing != newPing || factor * sleepingStep < mThreadTimeOut))
+                    {
                         Thread.sleep(sleepingStep);
                         factor++;
                         // if a test starts the office itself it the watcher is a
                         // new one.
                         share.Watcher ow = (share.Watcher) param.get("Watcher");
-                        if (ow != null) {
+                        if (ow != null)
+                        {
                             lastPing = newPing;
                             newPing = ow.getPing();
                             //System.out.println("lastPing: '" + lastPing + "' newPing '" + newPing + "'");
                             factor = 0;
                         }
                     }
-                } catch (InterruptedException e) {
                 }
-                if (th.isAlive()) {
+                catch (InterruptedException e)
+                {
+                }
+                if (th.isAlive())
+                {
                     log.println("Destroy " + mTestMethodName);
                     th.destroy();
                     subEntry.State = "Test did sleep for " + (mThreadTimeOut / 1000) + " seconds and has been killed!";
                     subEntry.hasErrorMsg = true;
                     subEntry.ErrorMsg = subEntry.State;
                     continue;
-                } else {
+                }
+                else
+                {
                     log.println("Finished " + mTestMethodName);
-                    if (th.hasErrorMessage()) {
+                    if (th.hasErrorMessage())
+                    {
                         subEntry.State = th.getErrorMessage();
                         subEntry.hasErrorMsg = true;
                         subEntry.ErrorMsg = subEntry.State;
                         continue;
                     }
                 }
-            } catch (java.lang.Exception e) {
+            }
+            catch (java.lang.Exception e)
+            {
                 log.println(e.getClass().getName());
                 String msg = e.getMessage();
                 log.println("Message: " + msg);
@@ -196,22 +229,34 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest {
             subEntry.ErrorMsg = message;
         }
 
-        if (beforeWorked) {
+        if (beforeWorked)
+        {
             // the after() method
-            try {
-                Method after = this.getClass().getMethod("after", new Class[]{});
-                after.invoke(this, new Object[]{});
-            } catch (java.lang.NoSuchMethodException e) {
+            try
+            {
+                Method after = this.getClass().getMethod("after", new Class[] {});
+                after.invoke(this, new Object[] {} );
+            }
+            catch (java.lang.NoSuchMethodException e)
+            {
                 // simply ignore
-            } catch (java.lang.IllegalAccessException e) {
+            }
+            catch (java.lang.IllegalAccessException e)
+            {
                 // simply ignore
-            } catch (java.lang.reflect.InvocationTargetException e) {
+            }
+            catch (java.lang.reflect.InvocationTargetException e)
+            {
                 Throwable t = e.getTargetException();
-                if (!(t instanceof StatusException)) {
+                if (!(t instanceof StatusException))
+                {
                     log.println(t.toString());
-                    if (message == null) {
+                    if (message == null)
+                    {
                         message = "Exception in after() method.\n\r" + t.getMessage();
-                    } else {
+                    }
+                    else
+                    {
                         message += "Exception in \'after()\' method.\n\r" + t.getMessage();
                     }
                     log.println("Message: " + message);
@@ -232,9 +277,8 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest {
      * Override to give an own name.
      * @return As default, the name of this class.
      */
-    public String getTestObjectName() {
+    public String getTestObjectName()
+    {
         return this.getClass().getName();
     }
-
-
 }

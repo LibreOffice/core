@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Chinese Translation test
 '*
@@ -77,7 +77,7 @@ testcase tDefaultSetting_1
 
     printlog " 'Simplified Chinese to Traditional Chinese' should be Checked by default"
      if NOT SChineseToTChinese.IsChecked then
-         Warnlog "#i96768# 'Simplified Chinese to Traditional Chinese' should be Checked by default !"
+         QAErrorlog "#i96768# 'Simplified Chinese to Traditional Chinese' should be Checked by default !"
      end if
    ChineseTranslation.Cancel
 

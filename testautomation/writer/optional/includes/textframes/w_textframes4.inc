@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Test of textframe - 4
 '*
@@ -90,7 +90,7 @@ endcase
 
 testcase tTextframes_50
 
-    Dim sTestFile as  String
+    Dim sTestFile as String
     
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\textframe\frame.sxw")
     
@@ -116,7 +116,10 @@ testcase tTextframes_50
     end if
     TabType.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
@@ -124,7 +127,7 @@ endcase
 
 testcase tTextframes_51
 
-    Dim sTestFile as  String
+    Dim sTestFile as String
     
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\textframe\inFrontText.doc")
     
@@ -150,7 +153,10 @@ testcase tTextframes_51
     end if
     TabType.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
@@ -184,7 +190,10 @@ testcase tTextframes_52
     end if
     TabType.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
@@ -218,7 +227,10 @@ testcase tTextframes_53
     end if
     TabType.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
@@ -252,7 +264,10 @@ testcase tTextframes_54
     end if
     TabType.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
@@ -349,15 +364,10 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_57
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-
-    Dim sTestFile      as String
-    Dim iVertical       as Integer
-    Dim sVerticalBy  as String
+    Dim sTestFile   as String
+    Dim iVertical   as Integer
+    Dim sVerticalBy as String
     Dim sPositionY1 as String
     Dim sPositionY2 as String
     
@@ -423,21 +433,19 @@ goto endsub
         Warnlog "Something is wrong ! Perhaps the frame isn't in the header!"
     end if
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_58
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-
-    Dim sTestFile    as String
-    Dim iVertical     as Integer
+    Dim sTestFile   as String
+    Dim iVertical   as Integer
     Dim sVerticalBy as String
     Dim sPositionY1 as String
     Dim sPositionY2 as String
@@ -503,24 +511,22 @@ goto endsub
         Warnlog "Something is wrong ! Perhaps the frame is still in the header!"
     end if
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_59
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-
-    Dim sTestFile as String
+    Dim sTestFile   as String
     Dim sPositionY1 as String
     Dim sPositionY2 as String
     
-    sTestFile    = Convertpath (gTesttoolpath + "writer\optional\input\textframe\frameInTable.sxw")
+    sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\textframe\frameInTable.sxw")
     
     printlog "- Exceeding layout environment at the bottom - 'Follow text flow'(ON , table)"
     '/// Exceeding layout environment at the bottom - 'Follow text flow'(ON , table)
@@ -591,20 +597,18 @@ goto endsub
         Warnlog "The frame isn't in the table!"
     endcatch
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_60
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-
-    Dim sTestFile as String
+    Dim sTestFile   as String
     Dim sPositionY1 as String
     Dim sPositionY2 as String
     
@@ -620,14 +624,16 @@ goto endsub
     Call hFileOpen(sTestFile,false)
     Call sMakeReadOnlyDocumentEditable
     
-    'Set focus to the picture
+    'Set focus to the frame
     Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
-	Call wTypeKeys ( "<Tab>" )
     
     printlog "Move the frame into the document-area."
     Call wTypeKeys "<RIGHT>",10
     Call wTypeKeys "<DOWN>",7
+    
+    'Set focus to the picture
+    Call wTypeKeys ( "<Tab>" )
     
     'Get the pic Y position
     Sleep 1
@@ -683,22 +689,20 @@ goto endsub
     catch
     endcatch
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_61
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-
-    Dim sTestFile                 as String
-    Dim iVertical                 as Integer
-    Dim sVerticalBy               as String
+    Dim sTestFile   as String
+    Dim iVertical   as Integer
+    Dim sVerticalBy as String
     Dim sPositionY1 as String
     Dim sPositionY2 as String
     
@@ -763,22 +767,20 @@ goto endsub
         Warnlog "Something is wrong ! Perhaps the frame isn't in the footer!"
     end if
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_62
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-
-    Dim sTestFile                 as String
-    Dim iVertical                 as Integer
-    Dim sVerticalBy               as String
+    Dim sTestFile   as String
+    Dim iVertical   as Integer
+    Dim sVerticalBy as String
     Dim sPositionY1 as String
     Dim sPositionY2 as String
     
@@ -843,24 +845,22 @@ goto endsub
         Warnlog "Something is wrong ! Perhaps the frame is still in the footer!"
     end if
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_63
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-
-    Dim sTestFile                 as String
-    Dim iHorizontal               as Integer
-    Dim sHorizontalBy             as String
-    Dim sPositionX1 as String
-    Dim sPositionX2 as String
+    Dim sTestFile     as String
+    Dim iHorizontal   as Integer
+    Dim sHorizontalBy as String
+    Dim sPositionX1   as String
+    Dim sPositionX2   as String
     
     sTestFile      = Convertpath (gTesttoolpath + "writer\optional\input\textframe\frameInTable.sxw")
     iHorizontal    = 4 'From Left
@@ -935,24 +935,22 @@ goto endsub
         Warnlog "The frame isn't in the table!"
     endcatch
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_64
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-
-    Dim sTestFile                 as String
-    Dim iHorizontal               as Integer
-    Dim sHorizontalBy             as String
-    Dim sPositionX1 as String
-    Dim sPositionX2 as String
+    Dim sTestFile     as String
+    Dim iHorizontal   as Integer
+    Dim sHorizontalBy as String
+    Dim sPositionX1   as String
+    Dim sPositionX2   as String
     
     sTestFile      = Convertpath (gTesttoolpath + "writer\optional\input\textframe\frameInTable.sxw")
     iHorizontal    = 4 'From Left
@@ -1027,24 +1025,22 @@ goto endsub
     catch
     endcatch
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_65
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-
-    Dim sTestFile                 as String
-    Dim iHorizontal               as Integer
-    Dim sHorizontalBy             as String
-    Dim sPositionX1 as String
-    Dim sPositionX2 as String
+	Dim sTestFile     as String
+    Dim iHorizontal   as Integer
+    Dim sHorizontalBy as String
+    Dim sPositionX1   as String
+    Dim sPositionX2   as String
     
     sTestFile      = Convertpath (gTesttoolpath + "writer\optional\input\textframe\frameInFrame.sxw")
     iHorizontal    = 4 'From Left
@@ -1108,24 +1104,22 @@ goto endsub
         Warnlog "Something is wrong ! Perhaps the frame A isn't in frame B!"
     end if
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_66
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-
-    Dim sTestFile                 as String
-    Dim iHorizontal               as Integer
-    Dim sHorizontalBy             as String
-    Dim sPositionX1 as String
-    Dim sPositionX2 as String
+    Dim sTestFile     as String
+    Dim iHorizontal   as Integer
+    Dim sHorizontalBy as String
+    Dim sPositionX1   as String
+    Dim sPositionX2   as String
     
     sTestFile      = Convertpath (gTesttoolpath + "writer\optional\input\textframe\frameInFrame.sxw")
     iHorizontal    = 4 'From Left
@@ -1189,24 +1183,22 @@ goto endsub
         Warnlog "Something is wrong ! Perhaps the frame A isn't in frame B!"
     end if
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_67
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-
-    Dim sTestFile                 as String
-    Dim iHorizontal               as Integer
-    Dim sHorizontalBy             as String
-    Dim sPositionX1 as String
-    Dim sPositionX2 as String
+    Dim sTestFile     as String
+    Dim iHorizontal   as Integer
+    Dim sHorizontalBy as String
+    Dim sPositionX1   as String
+    Dim sPositionX2   as String
     
     sTestFile      = Convertpath (gTesttoolpath + "writer\optional\input\textframe\frameInTable.sxw")
     iHorizontal    = 4 'From Left
@@ -1281,24 +1273,22 @@ goto endsub
         Warnlog "The frame isn't in the table!"
     endcatch
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_68
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-    
-    Dim sTestFile                 as String
-    Dim iHorizontal               as Integer
-    Dim sHorizontalBy             as String
-    Dim sPositionX1 as String
-    Dim sPositionX2 as String
+    Dim sTestFile     as String
+    Dim iHorizontal   as Integer
+    Dim sHorizontalBy as String
+    Dim sPositionX1   as String
+    Dim sPositionX2   as String
     
     sTestFile      = Convertpath (gTesttoolpath + "writer\optional\input\textframe\frameInTable.sxw")
     iHorizontal    = 4 'From Left
@@ -1373,24 +1363,22 @@ goto endsub
     catch
     endcatch
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_69
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-
-    Dim sTestFile                 as String
-    Dim iHorizontal               as Integer
-    Dim sHorizontalBy             as String
-    Dim sPositionX1 as String
-    Dim sPositionX2 as String
+    Dim sTestFile     as String
+    Dim iHorizontal   as Integer
+    Dim sHorizontalBy as String
+    Dim sPositionX1   as String
+    Dim sPositionX2   as String
     
     sTestFile      = Convertpath (gTesttoolpath + "writer\optional\input\textframe\frameInFrame.sxw")
     iHorizontal    = 4 'From Left
@@ -1454,24 +1442,22 @@ goto endsub
         Warnlog "Something is wrong ! Perhaps the frame A isn't in frame B!"
     end if
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_70
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-
-    Dim sTestFile                 as String
-    Dim iHorizontal               as Integer
-    Dim sHorizontalBy             as String
-    Dim sPositionX1 as String
-    Dim sPositionX2 as String
+    Dim sTestFile     as String
+    Dim iHorizontal   as Integer
+    Dim sHorizontalBy as String
+    Dim sPositionX1   as String
+    Dim sPositionX2   as String
     
     sTestFile      = Convertpath (gTesttoolpath + "writer\optional\input\textframe\frameInFrame.sxw")
     iHorizontal    = 4 'From Left
@@ -1535,7 +1521,10 @@ goto endsub
         Warnlog "Something is wrong ! Perhaps the frame A isn't in frame B!"
     end if
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 

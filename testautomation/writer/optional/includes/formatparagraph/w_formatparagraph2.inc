@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Test the functionality of Paragraph Formatting - 2
 '*
@@ -151,9 +151,9 @@ endcase
 
 testcase tParagraphAlignment3
 
-  Dim sTestFile as String
+	Dim sTestFile as String
 
-  sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\alignmentTest.sxw")
+	sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\alignmentTest.sxw")
 
   PrintLog "- Test 'Center' alignment"
   '/// Test 'Center' alignment
@@ -367,6 +367,7 @@ endcase
 '--------------------------------------------------------------------------
 
 testcase tParagraphAlignment7
+
   Dim sTestFile as String
   Dim sPositionX as String
 

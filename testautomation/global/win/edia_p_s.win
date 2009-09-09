@@ -41,7 +41,7 @@ TransitionEffects filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTBOOKMARKS
 FormsFormat filter:ListBox:RID_PDF_TAB_GENER:LB_FORMSFORMAT
 ExportBlankPages filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTEMPTYPAGES
 
-*PDFOptionsInitialView PDF1TBO
+*PDFOptionsInitialView HID_FILTER_PDF_INITIAL_VIEW
 PageOnly filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_OPNMODE_PAGEONLY
 BookmarksAndPage filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_OPNMODE_OUTLINE
 ThumbnailsAndPage filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_OPNMODE_THUMBS
@@ -54,7 +54,7 @@ SinglePage filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_PGLY_SINGPG
 Continuous filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_PGLY_CONT
 ContinuousFacing filter:RadioButton:RID_PDF_TAB_OPNFTR:RB_PGLY_CONTFAC
 
-*PDFOptionsUserInterface PDF2TBO
+*PDFOptionsUserInterface HID_FILTER_PDF_USER_INTERFACE
 ResizeWindow filter:CheckBox:RID_PDF_TAB_VPREFER:CB_WNDOPT_RESINIT
 CenterWindow filter:CheckBox:RID_PDF_TAB_VPREFER:CB_WNDOPT_CNTRWIN
 OpenInFullscreen filter:CheckBox:RID_PDF_TAB_VPREFER:CB_WNDOPT_OPNFULL
@@ -70,15 +70,6 @@ PosterColors svx:NumericField:RID_SVX_GRFFILTER_DLG_POSTER:DLG_FILTERPOSTER_NUM_
 Currency HID_DLGDEPOT_LSTMARKETS
 OKButton HID_DLGDEPOT_0_CMDGOON_HISTORY
 CancelButton HID_DLGDEPOT_0_CMDCANCEL_HISTORY
-
-*PurchaseStarOffice HID_LICENSING_DIALOG
-TabPurchase HID_TP_PURCHASE
-getSerialNumber tab:PushButton:TP_PURCHASE:PB_PURCHASE_GET
-TabUnlockStarOffice HID_TP_UNLOCK
-SerialNumberA tab:Edit:TP_UNLOCK:ED_UNLOCK_A
-SerialNumberB tab:Edit:TP_UNLOCK:ED_UNLOCK_B
-SerialNumberC tab:Edit:TP_UNLOCK:ED_UNLOCK_C
-TabSummary HID_TP_SUMMARY
 
 *QueryEditWindow HID_CTL_QRYSQLEDIT
 
@@ -393,6 +384,10 @@ SolverSettingsEdit  sc:PushButton:RID_SCDLG_SOLVEROPTIONS:BTN_EDIT
 *SolverEditSetting   HID_SC_SOLVER_INTEGER
 SolverNumeric sc:NumericField:RID_SCDLG_SOLVER_INTEGER:NF_VALUE
 
+*SolvingResult HID_SC_SOLVER_SUCCESS
+
+*NoSolution HID_SC_SOLVER_NOSOLUTION
+
 *SortOrder HID_DLG_ORDERCRIT
 Fieldname1 dbaccess:ListBox:DLG_ORDERCRIT:LB_ORDERFIELD1
 Order1 dbaccess:ListBox:DLG_ORDERCRIT:LB_ORDERVALUE1
@@ -400,6 +395,10 @@ Fieldname2 dbaccess:ListBox:DLG_ORDERCRIT:LB_ORDERFIELD2
 Order2 dbaccess:ListBox:DLG_ORDERCRIT:LB_ORDERVALUE2
 Fieldname3 dbaccess:ListBox:DLG_ORDERCRIT:LB_ORDERFIELD3
 Order3 dbaccess:ListBox:DLG_ORDERCRIT:LB_ORDERVALUE3
+
+*SortRange sc:ModalDialog:RID_SCDLG_SORT_WARNING
+ExtendSelection   sc:PushButton:RID_SCDLG_SORT_WARNING:BTN_EXTSORT
+CurrentSelection   sc:PushButton:RID_SCDLG_SORT_WARNING:BTN_CURSORT
 
 *Spellcheck HID_SPELLCHECK
 NotInDictionary svx:MultiLineEdit:RID_SVXDLG_SPELLCHECK:ED_NEWWORD

@@ -172,11 +172,20 @@ testcase tOpenNoneDatabaseDocument
         
     Kontext "DocumentCalc"
     if (DocumentCalc.exists()) then
-        printlog "the spreadsheet is loaded"
-        printlog "close spreadsheet again"
+		warnlog "the spreadsheet should not appear"
         call hCloseDocument()
     else
-        warnlog "the spreadsheet is not loaded"
+        Kontext "MessageBox"
+        if(MessageBox.exists(1)) then
+        	printlog "messagebox appear ->> OK"
+        	MessageBox.OK
+            Kontext "DatabaseWizard"	
+    	        DatabaseWizard.Cancel
+        else
+        	warnlog "there should be a message box about the fact that this is no database"
+        	Kontext "DatabaseWizard"	
+	            DatabaseWizard.Cancel
+        endif
     endif
     
 endcase

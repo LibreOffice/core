@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : oliver.craemer@sun.com
 '*
 '* short description : Tool library for chart type dialog
 '*
@@ -160,25 +160,26 @@ end function
 '--------------------------------------------------------------------
 '
 function fSetChartType ( sChartType as STRING ) as INTEGER
-'Function to choose a chart type in 'Chart Type' dialog
+	'Function to choose a chart type in 'Chart Type' dialog
     fSetChartType = 99
 
-' Input: STRING sChartType (English UI name of chart type to select) 
-' column
-' bar
-' pie
-' area
-' line
-' xy
-' net
-' stock
-' column_line
-' Output (Error-codes)
-' 0 = Sucess
-' 1 = Serious problem trying to select chart type
-' 2 = Failure (wrong chart type selected)
-' 42 = User error, unknown chart type
-' 99 = Unexpected error
+	' Input: STRING sChartType (English UI name of chart type to select) 
+	' column
+	' bar
+	' pie
+	' area
+	' line
+	' xy
+	' bubble
+	' net
+	' stock
+	' column_line
+	' Output (Error-codes)
+	' 0 = Sucess
+	' 1 = Serious problem trying to select chart type
+	' 2 = Failure (wrong chart type selected)
+	' 42 = User error, unknown chart type
+	' 99 = Unexpected error
  
     dim iEntryInList as INTEGER
     
@@ -191,9 +192,10 @@ function fSetChartType ( sChartType as STRING ) as INTEGER
            case "area"        : iEntryInList = 4
            case "line"        : iEntryInList = 5
            case "xy"          : iEntryInList = 6
-           case "net"         : iEntryInList = 7
-           case "stock"       : iEntryInList = 8
-           case "column_line" : iEntryInList = 9
+		   case "bubble"      : iEntryInList = 7
+           case "net"         : iEntryInList = 8
+           case "stock"       : iEntryInList = 9
+           case "column_line" : iEntryInList = 10
            case else
                 fSetChartType = 42
                 warnlog "USER ERROR: Input doesn't match!"
@@ -226,14 +228,14 @@ end function
 '--------------------------------------------------------------------
 '
 function fSetChartTypeVariant ( iChartTypeVariant as INTEGER ) as INTEGER
-' Function to select the chart type variant 
-' Input: INTEGER iChartTypeVariant (Position in variant control)
-'  Posible Values are 1,2,3,4 (depending on the chart type)
-'  Output (Error-codes)
-' 0 = Sucess
-' 1 = Serious problem while selecting the variant control
-' 42 = User error, input out of range
-' 99 = Unexpected error   
+	' Function to select the chart type variant 
+	' Input: INTEGER iChartTypeVariant (Position in variant control)
+	'  Posible Values are 1,2,3,4 (depending on the chart type)
+	'  Output (Error-codes)
+	' 0 = Sucess
+	' 1 = Serious problem while selecting the variant control
+	' 42 = User error, input out of range
+	' 99 = Unexpected error   
     
     fSetChartTypeVariant = 99
     
@@ -251,9 +253,10 @@ function fSetChartTypeVariant ( iChartTypeVariant as INTEGER ) as INTEGER
                             else
                                 iMaximumVariant = 3
                             endif
-        case 4, 7       :   iMaximumVariant = 3
-        case 3, 5, 6, 8 :   iMaximumVariant = 4
-        case 9          :   iMaximumVariant = 2
+		case 7          :   iMaximumVariant = 1							
+        case 4       :   iMaximumVariant = 3
+        case 3, 5, 6, 8 ,9 :   iMaximumVariant = 4
+        case 10         :   iMaximumVariant = 2
     end select
 
     ' Check if input matches this range
@@ -445,19 +448,19 @@ end function
 '
 function fSetStackSeries ( sStackMode as STRING ) as INTEGER
     fSetStackSeries = 99
-' Function to adjust data stacking feature///
-' Input:
-' STRING sStackMode:
-' Select stack mode using three controls
-' <i>disable - Uncheck 'Stack Series' check-box
-' <i>ontop - Check 'Stack Series' check-box and check 'On Top' radio button
-' <i>percent - Check 'Stack Series' check-box and check 'Percent' radio button
-' Returns error-code:
-'  0 := Sucess.
-'  1 := Serious problem while selecting stack mode.
-' 11 := 'Stack Series' not visible
-' 42 := User error, input doesn't match.
-' 99 := Unexpected error.
+	' Function to adjust data stacking feature///
+	' Input:
+	' STRING sStackMode:
+	' Select stack mode using three controls
+	' <i>disable - Uncheck 'Stack Series' check-box
+	' <i>ontop - Check 'Stack Series' check-box and check 'On Top' radio button
+	' <i>percent - Check 'Stack Series' check-box and check 'Percent' radio button
+	' Returns error-code:
+	'  0 := Sucess.
+	'  1 := Serious problem while selecting stack mode.
+	' 11 := 'Stack Series' not visible
+	' 42 := User error, input doesn't match.
+	' 99 := Unexpected error.
     
     printlog ""
     printlog "** Selecting the Stack Series Option"
@@ -503,16 +506,16 @@ end function
 '
 function fSetSmoothLines ( bEnableSmoothLines as BOOLEAN ) as INTEGER
     fSetSmoothLines = 99
-' Function to adjust smooth lines feature
-' Input:
-' BOOLEAN bEnableSmoothLines:
-' Enable (TRUE), Disable (FALSE)'Smooth Lines'
-' Returns error-code:
-'  0 := Sucess.
-'  1 := Serious problem while Enabling/Disable 'Smooth Lines.
-' 11 := 'Smooth lines' not visible
-' 42 := User error, input doesn't match.
-' 99 := Unexpected error.
+	' Function to adjust smooth lines feature
+	' Input:
+	' BOOLEAN bEnableSmoothLines:
+	' Enable (TRUE), Disable (FALSE)'Smooth Lines'
+	' Returns error-code:
+	'  0 := Sucess.
+	'  1 := Serious problem while Enabling/Disable 'Smooth Lines.
+	' 11 := 'Smooth lines' not visible
+	' 42 := User error, input doesn't match.
+	' 99 := Unexpected error.
      
     printlog ""
     printlog "** Selecting the Smooth Lines Option"

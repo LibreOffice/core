@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Test the functionality of Paragraph Formatting - 3
 '*
@@ -64,9 +64,9 @@
 
 testcase tParagraphTabs1
 
-  Dim sTestFile    as String
-  Dim sTabs        as String
-  Dim sPosition    as String
+  Dim sTestFile as String
+  Dim sTabs      as String
+  Dim sPosition as String
 
   sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\TabsTest.sxw")
   sTabs     = "3" + gSeperator + "00" + gMeasurementUnit
@@ -110,9 +110,9 @@ endcase
 
 testcase tParagraphTabs2
 
-  Dim sTestFile    as String
-  Dim sTabs        as String
-  Dim sPosition    as String
+  Dim sTestFile  as String
+  Dim sTabs       as String
+  Dim sPosition  as String
 
   sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\TabsTest.sxw")
   sTabs     = "3" + gSeperator + "00" + gMeasurementUnit

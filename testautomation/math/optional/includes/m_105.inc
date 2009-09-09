@@ -195,7 +195,7 @@ end sub
 
 testcase tToolsConfigure
     '/// idea from #108930 find double entries of keyboard-keys ///'
-    dim sKeys(300,2) as string 
+    dim sKeys(600,2) as string 
     dim i,a,b as integer
     dim sTemp, sTemp2 as string
     dim iBugCount(2) as integer
@@ -383,8 +383,15 @@ testcase tToolsCatalog
             '///+ insert for the count of symbols for each symbol set the symbol into the document  ///'
             for j = 1 to x(i)
                 printlog "(" + i + "/" + iSymbolSets + ")(" + j + "/" + x(i) + ")"
-                '///+ Insert->Object->Formula ///'
-                InsertObjectFormulaWriter ' culprint after 20 calls :-( in #111622
+                try
+                    '///+ Insert->Object->Formula ///'
+                    InsertObjectFormulaWriter ' culprint after 20 calls :-( in #111622
+                catch
+                    qaErrorLog "Can not leave object selection"
+                    ' somehow not triggerable on macos
+                    call hCloseDocument
+                    goto endsub
+                endcatch
                 Kontext "DocumentMath"
                 '///+ Tools->Catalog ///'
                 ToolsSymbolsCatalog

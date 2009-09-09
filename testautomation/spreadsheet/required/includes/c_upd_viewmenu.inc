@@ -332,10 +332,10 @@ testcase tViewNavigator
     '/// Check that the dragmodus has 3 modes
     printlog " Check that the dragmodus has 3 modes"
     Dragmodus.OpenMenu
-    if MenuGetItemCount <> 3 then
+    if hMenuItemGetCount <> 3 then
         warnlog "Not enough modes for dragmodus"
     end if
-    MenuSelect (0)
+    hMenuSelectNr (0)
     '/// Close Navigator
     printlog " Close Navigator"
     Kontext "Navigator"

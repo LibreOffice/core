@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Test of the insert graphic function - 4
 '*
@@ -52,7 +52,6 @@
 testcase tInsertGraphic_41
 QaErrorLog "#i102477# - tInsertGraphic_41 crashes testtool. Therefore outcommented."
 goto endsub
-
 
   Dim sLeft as String
   Dim sRight as String

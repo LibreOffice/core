@@ -39,10 +39,7 @@
 
 testcase tAllControlsOnDialog( cMajor as string )
 
-    '///<h1>Basic test for macro controls</h1>
-    '///<i>This test opens the applications and creates a basic dialog.
-    '///+On this dialog all control are inserted, the document is saved and reloaded
-    '///+to see if the dialog and the controls still exist.</i><br><br>
+    printlog( "Insert all available controls into a BASIC dialog and verify that changed settings persist a save/load cycle" )
 
     dim iApplication as Integer ' numeric expression for gApplication
     dim cApplication as string  ' Name of the current application
@@ -64,29 +61,21 @@ testcase tAllControlsOnDialog( cMajor as string )
     
     const CMODULE = "tacod" ' abbreviation for tAllControlsOnDialog
 
-
-    '///<b>save/load-test for controls on a basic-dialog in all applications</b>
-    '///<ul>
-    '///+<li>open a new doc (for Writer only)</li>
-
-    ' If you want to test all applications, make iApplication = 1 to 6
+    printlog( "Perform the test for one application only: WRITER" )
     for iApplication = 1 to 1
     
-        ' switch documenttype (writer, calc, impress, draw ...)
+        printlog( "Set document type" )
         cApplication = hNumericDoctype( iApplication )
 
-        ' get the name of the workfile dependent on gApplication
-        '///+<li>Build a path and a filename (path from UNO, Suffix from global-module)</li>
+        printlog( "Build the filename" )
         sFile = hGetWorkPath() & "basic" & hGetSuffix( cMajor )
         sFile = ConvertPath( sFile )
         printlog( "Using file: " & sFile )
         
-        ' delete the file if it exists, the outcome has no influence on the test
-        ' so the returnvalue is ignored
+        printlog( "Delete the file, if it exists" )
         hDeleteFile( sFile )
                 
-        ' open a new document to work with (2 open AFTER this)
-        '///+<li>Open a new document to work with</li>
+        printlog( "Open a second document" )
         printlog( "" )
         printlog( cApplication )
         brc = hCreateDocument()
@@ -95,9 +84,9 @@ testcase tAllControlsOnDialog( cMajor as string )
             goto endsub
         endif
 
-        '///+<li>Create a new module for the new document</li>
-        '///+<li>Create a new dialog in BasicIDE</li>
-        '///+<li>Open the macro controls float</li>
+        printlog( "Create a new module for the new document" )
+        printlog( "Create a new dialog in BasicIDE" )
+        printlog( "Open the macro controls float" )
         bOpen = hInitFormControls( CMODULE )
         if ( not bOpen ) then
             printlog( "Aborting due to previous errors" )
@@ -118,7 +107,7 @@ testcase tAllControlsOnDialog( cMajor as string )
         
 
         Kontext "BASICIDE"
-        '///+<li>close the BASIC-IDE</li>
+        printlog( "close the BASIC-IDE" )
         hCloseBasicIde()
         
         
@@ -144,7 +133,7 @@ testcase tAllControlsOnDialog( cMajor as string )
             goto endsub
         endif
             
-        '///+<li>Click 'Edit' to edit the module</li>
+        printlog( "Click 'Edit' to edit the module" )
         printlog( "Edit the module" )
         Bearbeiten.Click()
         if ( WaitSlot <> WSFinished ) then
@@ -152,7 +141,7 @@ testcase tAllControlsOnDialog( cMajor as string )
         endif
 
         kontext "BasicIDE"
-        '///+<li>Find the dialog we created before</li>
+        printlog( "Find the dialog we created before" )
         ' try to find our dialog again by stepping through the tabbar
         bOpen = hFindFirstDialog()
         if ( not bOpen ) then
@@ -162,7 +151,7 @@ testcase tAllControlsOnDialog( cMajor as string )
             goto endsub
         endif
 
-        '///+<li>Open the macro controls float</li>
+        printlog( "Open the macro controls float" )
         ' if the dialog is open, open the macro controls toolbar as well,
         ' we need access to the "properties" button
         bOpen = hShowMacroControls()
@@ -173,7 +162,7 @@ testcase tAllControlsOnDialog( cMajor as string )
             goto endsub
         endif
         
-        '///+<li>Select every control, open its properties and verify its name, close properties</li>
+        printlog( "Select every control, open its properties and verify its name, close properties" )
         for iCurrentControl = 1 to ICONTROLCOUNT
 
             if ( instr( gtSysName, "Solaris" ) > 0 ) then
@@ -191,7 +180,7 @@ testcase tAllControlsOnDialog( cMajor as string )
         ' we need to delete the list-content otherwise we run into index-problems
         ListAllDelete( lsControlNames() )
        
-        '///+<li>Cleanup: Close the BASIC-IDE</li>
+        printlog( "Cleanup: Close the BASIC-IDE" )
         printlog( "Close the BASIC IDE" )
         hCloseBasicIde()        
         
@@ -200,25 +189,22 @@ testcase tAllControlsOnDialog( cMajor as string )
         endif 
 
         printlog "Save the document"
-        '///+<li>save the document</li>
+        printlog( "save the document" )
         Call hFileSaveAsKill( sFile )
 
         printlog "Close it"
-        '///+<li>close the document</li>
-        '///</ul>
+        printlog( "close the document" )
         brc = hDestroyDocument()
 
         printlog( "" ) 
         printlog( "Test case 2: Verify that all items keep their names after close and reload of the document" )
         
-        '///<b>check all controls in the saved document</b>
-        printlog "Open the file again"
-        '///<ul>
-        '///+<li>open the document</li>
+        printlog( "Open the file again" )
+        printlog( "Open the document" )
         hFileOpen( sFile )
 
         printlog "Open tools/macro and select the last module for the current document"
-        '///+<li>open the basic-IDE of this document, open controls, activate 'Select-mode' and open the properties</li>
+        printlog( "open the basic-IDE of this document, open controls, activate 'Select-mode' and open the properties" )
         ToolsMacro_uno
         kontext "Makro"
         irc = hSelectNodeByName( MakroAus , CMODULE )
@@ -238,7 +224,7 @@ testcase tAllControlsOnDialog( cMajor as string )
             goto endsub
         endif
             
-        '///+<li>Click 'Edit' to edit the module</li>
+        printlog( "Click 'Edit' to edit the module" )
         printlog( "Edit the module" )
         Bearbeiten.Click()
         if ( WaitSlot <> WSFinished ) then
@@ -246,7 +232,7 @@ testcase tAllControlsOnDialog( cMajor as string )
         endif
 
         kontext "BasicIDE"
-        '///+<li>Find the dialog we created before</li>
+        printlog( "Find the dialog we created before" )
         ' try to find our dialog again by stepping through the tabbar
         bOpen = hFindFirstDialog()
         if ( not bOpen ) then
@@ -256,7 +242,7 @@ testcase tAllControlsOnDialog( cMajor as string )
             goto endsub
         endif
 
-        '///+<li>Open the macro controls float</li>
+        printlog( "Open the macro controls float" )
         ' if the dialog is open, open the macro controls toolbar as well,
         ' we need access to the "properties" button
         bOpen = hShowMacroControls()
@@ -267,7 +253,7 @@ testcase tAllControlsOnDialog( cMajor as string )
             goto endsub
         endif
         
-        '///+<li>Select every control, open its properties and verify its name, close properties</li>
+        printlog( "Select every control, open its properties and verify its name, close properties" )
         for iCurrentControl = 1 to ICONTROLCOUNT
 
             if ( instr( gtSysName, "Solaris" ) > 0 ) then
@@ -285,19 +271,18 @@ testcase tAllControlsOnDialog( cMajor as string )
         ' we need to delete the list-content otherwise we run into index-problems
         ListAllDelete( lsControlNames() )
        
-        '///+<li>Cleanup: Close the BASIC-IDE</li>
+        printlog( "Cleanup: Close the BASIC-IDE" )
         printlog( "Close the BASIC IDE" )
         hCloseBasicIde()
         
-        '///+<li>Cleanup: Close the document</li>
+        printlog( "Cleanup: Close the document" )
         printlog( "Close the document" )
         brc = hDestroyDocument()
         
-        '///+<li>Cleanup: Delete the file we created</li>
+        printlog( "Cleanup: Delete the file we created" )
         hDeleteFile( sFile )
         
-        '///+<li>Repeat this for every application</li>
-        '///</ul>
+        printlog( "Repeat this for every application" )
         
     next iApplication
 
