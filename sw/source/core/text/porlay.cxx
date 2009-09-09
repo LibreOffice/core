@@ -1031,7 +1031,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         // special case for dotted circle since it can be used with complex
         // before a mark, so we want it associated with the mark's script
         if (nChg < rTxt.Len() && nChg > 0 && (i18n::ScriptType::WEAK ==
-            pBreakIt->xBreak->getScriptType(rTxt,nChg - 1)))
+            pBreakIt->GetBreakIter()->getScriptType(rTxt,nChg - 1)))
         {
             int8_t nType = u_charType(rTxt.GetChar(nChg) );
             if (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK ||
