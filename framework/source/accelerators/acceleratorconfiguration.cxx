@@ -61,10 +61,6 @@
 // other includes
 #include <vcl/svapp.hxx>
 
-#ifndef __FRAMEWORK_ACCELERATORS_KEYMAPPING_HXX_
-#include <accelerators/keymapping.hxx>
-#endif
-
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
 #endif
@@ -778,7 +774,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
                                                     css::uno::RuntimeException         )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::setKeyEvent" );
-    RTL_LOGFILE_PRODUCT_CONTEXT( aLog1, " start XCUBasedAcceleratorConfiguration::setKeyEvent" );
+    RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "XCUBasedAcceleratorConfiguration::setKeyEvent" );
 
     if (
         (aKeyEvent.KeyCode   == 0) &&
@@ -857,8 +853,6 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
-
-    RTL_LOGFILE_PRODUCT_CONTEXT( aLog2, " end XCUBasedAcceleratorConfiguration::setKeyEvent" );
 }
 
 //-----------------------------------------------
@@ -1043,7 +1037,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reload()
         css::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::reload" );
-    RTL_LOGFILE_PRODUCT_CONTEXT( aLog1, " start XCUBasedAcceleratorConfiguration::reload()" );
+    RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "XCUBasedAcceleratorConfiguration::reload()" );
 
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
@@ -1077,8 +1071,6 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reload()
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
-
-    RTL_LOGFILE_PRODUCT_CONTEXT( aLog2, " end XCUBasedAcceleratorConfiguration::reload()" );
 }
 
 //-----------------------------------------------
@@ -1087,7 +1079,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::store()
           css::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::reload" );
-    RTL_LOGFILE_PRODUCT_CONTEXT( aLog1, " start XCUBasedAcceleratorConfiguration::store()" );
+    RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "XCUBasedAcceleratorConfiguration::store()" );
 
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
@@ -1109,18 +1101,74 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::store()
 
     aReadLock.unlock();
     // <- SAFE ----------------------------------
-
-    RTL_LOGFILE_PRODUCT_CONTEXT( aLog2, " end XCUBasedAcceleratorConfiguration::store()" );
 }
 
 //-----------------------------------------------
-void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::Reference< css::embed::XStorage >& /*xStorage*/)
+void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
     throw(css::uno::Exception       ,
       css::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::storeToStorage" );
-    // todo implement me
     // use m_aCache + old AcceleratorXMLWriter to store data directly on storage given as parameter ...
+    if (!xStorage.is())
+        return;
+
+    long nOpenModes = css::embed::ElementModes::READWRITE;
+    css::uno::Reference< css::embed::XStorage > xAcceleratorTypeStorage = xStorage->openStorageElement(::rtl::OUString::createFromAscii("accelerator"), nOpenModes);
+    if (!xAcceleratorTypeStorage.is())
+        return;
+
+    css::uno::Reference< css::io::XStream > xStream = xAcceleratorTypeStorage->openStreamElement(::rtl::OUString::createFromAscii("current"), nOpenModes);
+    css::uno::Reference< css::io::XOutputStream > xOut;
+    if (xStream.is())
+        xOut = xStream->getOutputStream();
+    if (!xOut.is())
+        throw css::io::IOException(
+        ::rtl::OUString::createFromAscii("Could not open accelerator configuration for saving."),
+        static_cast< ::cppu::OWeakObject* >(this));
+
+    // the original m_aCache has been split into primay cache and secondary cache...
+    // we should merge them before storing to storage
+    // SAFE -> ----------------------------------
+    WriteGuard aWriteLock(m_aLock);
+
+    AcceleratorCache aCache;
+    if (m_pPrimaryWriteCache != 0)
+        aCache.takeOver(*m_pPrimaryWriteCache);
+    else
+        aCache.takeOver(m_aPrimaryReadCache);
+
+    AcceleratorCache::TKeyList lKeys;
+    AcceleratorCache::TKeyList::const_iterator pIt;
+    if (m_pSecondaryWriteCache!=0)
+    {
+        lKeys = m_pSecondaryWriteCache->getAllKeys();
+        for ( pIt=lKeys.begin(); pIt!=lKeys.end(); ++pIt )
+            aCache.setKeyCommandPair(*pIt, m_pSecondaryWriteCache->getCommandByKey(*pIt));
+    }
+    else
+    {
+        lKeys = m_aSecondaryReadCache.getAllKeys();
+        for ( pIt=lKeys.begin(); pIt!=lKeys.end(); ++pIt )
+            aCache.setKeyCommandPair(*pIt, m_aSecondaryReadCache.getCommandByKey(*pIt));
+    }
+
+    aWriteLock.unlock();
+    // <- SAFE ----------------------------------
+
+    css::uno::Reference< css::io::XTruncate > xClearable(xOut, css::uno::UNO_QUERY_THROW);
+    xClearable->truncate();
+    css::uno::Reference< css::io::XSeekable > xSeek(xOut, css::uno::UNO_QUERY);
+    if (xSeek.is())
+        xSeek->seek(0);
+
+    css::uno::Reference< css::xml::sax::XDocumentHandler > xWriter    (m_xSMGR->createInstance(SERVICENAME_SAXWRITER), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::io::XActiveDataSource>       xDataSource(xWriter                                     , css::uno::UNO_QUERY_THROW);
+    xDataSource->setOutputStream(xOut);
+
+    // write into the stream
+    AcceleratorConfigurationWriter aWriter(aCache, xWriter);
+    aWriter.flush();
 }
 
 //-----------------------------------------------
@@ -1216,7 +1264,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
     throw(css::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "XCUBasedAcceleratorConfiguration::changesOccurred" );
-    RTL_LOGFILE_PRODUCT_CONTEXT( aLog1, " start XCUBasedAcceleratorConfiguration::changesOccurred()" );
+    RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "XCUBasedAcceleratorConfiguration::changesOccurred()" );
 
     css::uno::Reference< css::container::XHierarchicalNameAccess > xHAccess;
     aEvent.Base >>= xHAccess;
@@ -1264,8 +1312,6 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
                 reloadChanged(sPrimarySecondary, sGlobalModules, sModule, sKey);
         }
     }
-
-    RTL_LOGFILE_PRODUCT_CONTEXT( aLog2, " end XCUBasedAcceleratorConfiguration::changesOccurred()" );
 }
 
 //-----------------------------------------------
@@ -1290,7 +1336,6 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
         xModules->getByName(m_sModuleCFG) >>= xAccess;
     }
 
-    static KeyMapping aKeyMapping;
     const ::rtl::OUString sIsoLang       = impl_ts_getLocale().toISO();
     const ::rtl::OUString sDefaultLocale = ::rtl::OUString::createFromAscii("en-US");
 
@@ -1342,7 +1387,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
             sal_Int32 nIndex = 0;
             ::rtl::OUString sKeyCommand = sKey.getToken(0, '_', nIndex);
             ::rtl::OUString sPrefix = ::rtl::OUString::createFromAscii("KEY_");
-            aKeyEvent.KeyCode = aKeyMapping.mapIdentifierToCode(sPrefix + sKeyCommand);
+            aKeyEvent.KeyCode = m_rKeyMapping->mapIdentifierToCode(sPrefix + sKeyCommand);
 
             css::uno::Sequence< ::rtl::OUString > sToken(4);
             const sal_Int32 nToken = 4;
@@ -1575,13 +1620,12 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const ::rtl::OUString& sPr
         xModules->getByName(sModule) >>= xContainer;
     }
 
-    KeyMapping aKeyMapping;
     css::awt::KeyEvent aKeyEvent;
     ::rtl::OUString sKeyIdentifier;
 
     sal_Int32 nIndex = 0;
     sKeyIdentifier = sKey.getToken(0, '_', nIndex);
-    aKeyEvent.KeyCode = aKeyMapping.mapIdentifierToCode(::rtl::OUString::createFromAscii("KEY_")+sKeyIdentifier);
+    aKeyEvent.KeyCode = m_rKeyMapping->mapIdentifierToCode(::rtl::OUString::createFromAscii("KEY_")+sKeyIdentifier);
 
     css::uno::Sequence< ::rtl::OUString > sToken(3);
     const sal_Int32 nToken = 3;
@@ -1704,4 +1748,3 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPrefer
 }
 
 } // namespace framework
-
