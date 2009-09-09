@@ -45,6 +45,10 @@ CreateElement::CreateElement(ResourceType_t nResource, Id nId)
 
 // class OOXMLFactory_ns
 
+OOXMLFactory_ns::~OOXMLFactory_ns()
+{
+}
+
 AttributeToResourceMapPointer OOXMLFactory_ns::getAttributeToResourceMap(Id nId)
 {
     if (m_AttributesMap.find(nId) == m_AttributesMap.end())
