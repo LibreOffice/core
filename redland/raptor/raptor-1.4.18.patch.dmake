@@ -1,6 +1,6 @@
 --- misc/raptor-1.4.18/src/makefile.mk	Thu Nov  6 15:25:51 2008
 +++ misc/build/raptor-1.4.18/src/makefile.mk	Thu Nov  6 15:33:14 2008
-@@ -1,1 +1,122 @@
+@@ -1,1 +1,123 @@
 -dummy
 +#*************************************************************************
 +#
@@ -40,6 +40,7 @@
 +LIBTARGET=NO
 +
 +EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
++UWINAPILIB=
 +
 +
 +# --- Settings -----------------------------------------------------

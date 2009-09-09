@@ -1,6 +1,6 @@
 --- misc/redland-1.0.8/librdf/makefile.mk	Mon Jun 16 19:32:46 2008
 +++ misc/build/redland-1.0.8/librdf/makefile.mk	Mon Jun 16 19:26:20 2008
-@@ -1,1 +1,114 @@
+@@ -1,1 +1,115 @@
 -dummy
 +#*************************************************************************
 +#
@@ -38,6 +38,7 @@
 +PRJNAME=redland
 +TARGET=librdf
 +LIBTARGET=NO
++UWINAPILIB=
 +
 +EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
 +
