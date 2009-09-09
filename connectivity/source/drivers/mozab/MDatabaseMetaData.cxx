@@ -157,7 +157,7 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
                     // COLUMN_NAME
                     aRow[4] = new ORowSetValueDecorator( compare->first );
                     // ORDINAL_POSITION
-                    aRow[17] = new ORowSetValueDecorator( static_cast< sal_Int32 >( compare->second.eProgrammaticNameIndex ) + 1 );
+                    aRow[17] = new ORowSetValueDecorator( static_cast< sal_Int32 >( compare->second.columnPosition ) + 1 );
                     aRows.push_back(aRow);
                 }
             }

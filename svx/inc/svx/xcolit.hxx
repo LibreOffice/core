@@ -48,7 +48,7 @@ class SVX_DLLPUBLIC XColorItem : public NameOrIndex
 public:
             TYPEINFO();
             XColorItem() {}
-            XColorItem(USHORT nWhich, long nIndex, const Color& rTheColor);
+            XColorItem(USHORT nWhich, INT32 nIndex, const Color& rTheColor);
 
     virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );

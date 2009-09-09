@@ -72,12 +72,14 @@ namespace sdr
         }
 
         TextProperties::TextProperties(SdrObject& rObj)
-        :   AttributeProperties(rObj)
+        :   AttributeProperties(rObj),
+            maVersion(0)
         {
         }
 
         TextProperties::TextProperties(const TextProperties& rProps, SdrObject& rObj)
-        :   AttributeProperties(rProps, rObj)
+        :   AttributeProperties(rProps, rObj),
+            maVersion(rProps.getVersion())
         {
         }
 
@@ -93,9 +95,10 @@ namespace sdr
         void TextProperties::ItemSetChanged(const SfxItemSet& rSet)
         {
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
-
-
             sal_Int32 nText = rObj.getTextCount();
+
+            // #i101556# ItemSet has changed -> new version
+            maVersion++;
 
             while( --nText >= 0 )
             {
@@ -236,6 +239,9 @@ namespace sdr
 
             // call parent
             AttributeProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
+
+            // #i101556# StyleSheet has changed -> new version
+            maVersion++;
 
             if( rObj.GetModel() /*&& !rObj.IsTextEditActive()*/ && !rObj.IsLinkedText() )
             {
@@ -577,6 +583,9 @@ namespace sdr
                             rObj.ActionChanged();
                             //rObj.BroadcastObjectChange();
                         }
+
+                        // #i101556# content of StyleSheet has changed -> new version
+                        maVersion++;
                     }
 
                     if(SFX_HINT_DYING == nId)
@@ -615,6 +624,12 @@ namespace sdr
                     }
                 }
             }
+        }
+
+        // #i101556# Handout version information
+        sal_uInt32 TextProperties::getVersion() const
+        {
+            return maVersion;
         }
     } // end of namespace properties
 } // end of namespace sdr

@@ -27,6 +27,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#include <com/sun/star/uno/Any.hxx>
 
 #ifndef _SALAQUAFILEPICKER_HXX_
 #include "SalAquaFilePicker.hxx"
@@ -59,8 +61,10 @@
 
 - (MacOSBOOL)panel:(id)sender shouldShowFilename:(NSString *)filename
 {
-    if (filterHelper == NULL)
+    if( filterHelper == NULL )
         return true;
+    if( filename == nil )
+        return false;
     return filterHelper->filenameMatchesFilter(filename);
 }
 
@@ -104,5 +108,19 @@
     filePicker->filterControlChanged();
 }
 
+- (void)autoextensionChanged:(id)sender 
+{
+    if (sender == nil) {
+        return;
+    }
+    
+    if ([sender class] != [NSButton class]) {
+        return;
+    }
+    uno::Any aValue;
+    aValue <<= ([((NSButton*)sender) state] == NSOnState);
+    
+    filePicker->setValue(::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
+}
 
 @end

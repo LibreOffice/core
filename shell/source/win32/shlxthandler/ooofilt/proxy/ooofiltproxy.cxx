@@ -147,7 +147,6 @@ extern "C" HRESULT __stdcall DllCanUnloadNow()
 extern "C" HRESULT __stdcall DllRegisterServer()
 {
     Init();
-
     if (Forward_DllRegisterServer)
         return Forward_DllRegisterServer();
     else

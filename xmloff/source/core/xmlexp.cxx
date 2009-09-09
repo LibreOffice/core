@@ -63,9 +63,7 @@
 #include <xmloff/SettingsExportHelper.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#endif
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <GradientStyle.hxx>
 #include <HatchStyle.hxx>
@@ -73,16 +71,10 @@
 #include <TransGradientStyle.hxx>
 #include <MarkerStyle.hxx>
 #include <DashStyle.hxx>
-#ifndef _XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX
-#include <xmloff/XMLFontAutoStylePool>
-#endif
+#include <xmloff/XMLFontAutoStylePool.hxx>
 #include "XMLImageMapExport.hxx"
-#ifndef _XMLOFF_XMLBASE64EXPORT_HXX_
 #include "XMLBase64Export.hxx"
-#endif
-#ifndef _XMLOFF_XMLERROR_HXX_
 #include "xmlerror.hxx"
-#endif
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include "XMLFilterServiceNames.h"
@@ -105,6 +97,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <com/sun/star/rdf/XMetadatable.hpp>
+#include "RDFaExportHelper.hxx"
 
 
 using ::rtl::OUString;
@@ -125,6 +118,9 @@ sal_Char __READONLY_DATA sXML_1_1[] = "1.1";
 sal_Char __READONLY_DATA sXML_1_2[] = "1.2";
 
 const sal_Char *sOpenOfficeOrgProject ="OpenOffice.org_project";
+
+const sal_Char s_grddl_xsl[] =
+    "http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl";
 
 #define LOGFILE_AUTHOR "mb93740"
 
@@ -223,6 +219,19 @@ public:
     /// relative path of stream in package, e.g. "someobject/content.xml"
     ::rtl::OUString mStreamPath;
 
+    const uno::Reference< uno::XComponentContext > mxComponentContext;
+
+    /// name of stream in package, e.g., "content.xml"
+    ::rtl::OUString mStreamName;
+
+    /// stack of backed up namespace maps
+    /// long: depth at which namespace map has been backed up into the stack
+    ::std::stack< ::std::pair< SvXMLNamespaceMap *, long > > mNamespaceMaps;
+    /// counts depth (number of open elements/start tags)
+    long mDepth;
+
+    ::std::auto_ptr< ::xmloff::RDFaExportHelper> mpRDFaHelper;
+
     // --> OD 2008-11-26 #158694#
     sal_Bool                                            mbExportTextNumberElement;
     // <--
@@ -243,14 +252,20 @@ SvXMLExport_Impl::SvXMLExport_Impl()
     // --> PB 2007-07-06 #i146851#
         ,mbSaveBackwardCompatibleODF( sal_True )
     // <--
-        ,mStreamPath()
+        ,mxComponentContext( ::comphelper::getProcessComponentContext() )
+        ,mStreamName()
+        ,mNamespaceMaps()
+        ,mDepth(0)
+        ,mpRDFaHelper() // lazy
     // --> OD 2008-11-26 #158694#
         ,mbExportTextNumberElement( sal_False )
     // <--
         ,mbNullDateInitialized( sal_False )
 {
+    OSL_ENSURE(mxComponentContext.is(), "SvXMLExport: no ComponentContext");
+    if (!mxComponentContext.is()) throw uno::RuntimeException();
     mxUriReferenceFactory = uri::UriReferenceFactory::create(
-            comphelper_getProcessComponentContext());
+        mxComponentContext );
 }
 
 //==============================================================================
@@ -325,9 +340,17 @@ void SvXMLExport::_InitCtor()
         mpNamespaceMap->Add( GetXMLToken(XML_NP_XSI), GetXMLToken(XML_N_XSI), XML_NAMESPACE_XSI );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_FIELD), GetXMLToken(XML_N_FIELD), XML_NAMESPACE_FIELD );
     }
+    // RDFa: needed for content and header/footer styles
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
     {
-        mpNamespaceMap->Add( GetXMLToken(XML_NP_RDFA), GetXMLToken(XML_N_RDFA), XML_NAMESPACE_RDFA );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_XHTML),
+            GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
+    }
+    // GRDDL: to convert RDFa and meta.xml to RDF
+    if( (getExportFlags() & (EXPORT_META|EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
+    {
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_GRDDL),
+            GetXMLToken(XML_N_GRDDL), XML_NAMESPACE_GRDDL );
     }
 
     mxAttrList = (xml::sax::XAttributeList*)mpAttrList;
@@ -762,9 +785,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             aBaseURL.insertName( sName );
             msOrigFileName = aBaseURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
         }
-        OSL_ENSURE(sName.getLength(), "no StreamName ???");
-        mpImpl->mStreamPath = sRelPath.getLength() ? sRelPath +
-            ::rtl::OUString::createFromAscii("/") + sName : sName;
+        mpImpl->mStreamName = sName; // Note: may be empty (XSLT)
 
         // --> OD 2006-09-26 #i69627#
         const ::rtl::OUString sOutlineStyleAsNormalListStyle(
@@ -914,6 +935,54 @@ uno::Sequence< OUString > SAL_CALL SvXMLExport::getSupportedServiceNames(  )
 
 ///////////////////////////////////////////////////////////////////////
 
+::rtl::OUString
+SvXMLExport::EnsureNamespace(::rtl::OUString const & i_rNamespace,
+    ::rtl::OUString const & i_rPreferredPrefix)
+{
+    ::rtl::OUString sPrefix;
+    sal_uInt16 nKey( _GetNamespaceMap().GetKeyByName( i_rNamespace ) );
+    if( XML_NAMESPACE_UNKNOWN == nKey )
+    {
+        // There is no prefix for the namespace, so
+        // we have to generate one and have to add it.
+        sPrefix = i_rPreferredPrefix;
+        nKey = _GetNamespaceMap().GetKeyByPrefix( sPrefix );
+        sal_Int32 n( 0 );
+        ::rtl::OUStringBuffer buf;
+        while( nKey != USHRT_MAX )
+        {
+            buf.append( i_rPreferredPrefix );
+            buf.append( ++n );
+            sPrefix = buf.makeStringAndClear();
+            nKey = _GetNamespaceMap().GetKeyByPrefix( sPrefix );
+        }
+
+        if (mpImpl->mNamespaceMaps.empty()
+            || (mpImpl->mNamespaceMaps.top().second != mpImpl->mDepth))
+        {
+            // top was created for lower depth... need a new namespace map!
+            mpImpl->mNamespaceMaps.push(
+                ::std::make_pair(mpNamespaceMap, mpImpl->mDepth) );
+            mpNamespaceMap = new SvXMLNamespaceMap( *mpNamespaceMap );
+        }
+
+        // add the namespace to the map and as attribute
+        mpNamespaceMap->Add( sPrefix, i_rNamespace );
+        buf.append( GetXMLToken(XML_XMLNS) );
+        buf.append( sal_Unicode(':') );
+        buf.append( sPrefix );
+        AddAttribute( buf.makeStringAndClear(), i_rNamespace );
+    }
+    else
+    {
+        // If there is a prefix for the namespace, reuse that.
+        sPrefix = _GetNamespaceMap().GetPrefixByKey( nKey );
+    }
+    return sPrefix;
+}
+
+///////////////////////////////////////////////////////////////////////
+
 void SvXMLExport::AddAttributeASCII( sal_uInt16 nPrefixKey,
                                      const sal_Char *pName,
                                        const sal_Char *pValue )
@@ -921,9 +990,8 @@ void SvXMLExport::AddAttributeASCII( sal_uInt16 nPrefixKey,
     OUString sName( OUString::createFromAscii( pName ) );
     OUString sValue( OUString::createFromAscii( pValue ) );
 
-    mpAttrList->AddAttribute( mpNamespaceMap->GetQNameByKey( nPrefixKey,
-                                                           sName ),
-                             sValue );
+    mpAttrList->AddAttribute(
+        _GetNamespaceMap().GetQNameByKey( nPrefixKey, sName ), sValue );
 }
 
 void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const sal_Char *pName,
@@ -931,16 +999,15 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const sal_Char *pName,
 {
     OUString sName( OUString::createFromAscii( pName ) );
 
-    mpAttrList->AddAttribute( mpNamespaceMap->GetQNameByKey( nPrefixKey,
-                                                           sName ),
-                             rValue );
+    mpAttrList->AddAttribute(
+        _GetNamespaceMap().GetQNameByKey( nPrefixKey, sName ), rValue );
 }
 
 void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const OUString& rName,
                               const OUString& rValue )
 {
-    mpAttrList->AddAttribute( mpNamespaceMap->GetQNameByKey( nPrefixKey, rName ),
-                             rValue );
+    mpAttrList->AddAttribute(
+        _GetNamespaceMap().GetQNameByKey( nPrefixKey, rName ), rValue );
 }
 
 void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
@@ -948,7 +1015,7 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
                                 const OUString& rValue )
 {
     mpAttrList->AddAttribute(
-        mpNamespaceMap->GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
+        _GetNamespaceMap().GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
         rValue );
 }
 
@@ -957,7 +1024,7 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
                                 enum XMLTokenEnum eValue)
 {
     mpAttrList->AddAttribute(
-        mpNamespaceMap->GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
+        _GetNamespaceMap().GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
         GetXMLToken(eValue) );
 }
 
@@ -1307,6 +1374,13 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     {
         enum XMLTokenEnum eRootService = XML_TOKEN_INVALID;
         const sal_Int32 nExportMode = mnExportFlags & (EXPORT_META|EXPORT_STYLES|EXPORT_CONTENT|EXPORT_SETTINGS);
+
+        if ( EXPORT_SETTINGS != nExportMode ) // meta, content, styles
+        {
+            AddAttribute( XML_NAMESPACE_GRDDL, XML_TRANSFORMATION,
+                OUString::createFromAscii(s_grddl_xsl) );
+        }
+
         if( EXPORT_META == nExportMode )
         {
             // export only meta
@@ -2159,7 +2233,8 @@ void SvXMLExport::StartElement(sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,
                         sal_Bool bIgnWSOutside )
 {
-    StartElement(mpNamespaceMap->GetQNameByKey( nPrefix, GetXMLToken(eName) ), bIgnWSOutside);
+    StartElement(_GetNamespaceMap().GetQNameByKey( nPrefix,
+        GetXMLToken(eName) ), bIgnWSOutside);
 }
 
 void SvXMLExport::StartElement(const OUString& rName,
@@ -2188,6 +2263,7 @@ void SvXMLExport::StartElement(const OUString& rName,
         }
     }
     ClearAttrList();
+    ++mpImpl->mDepth; // increment nesting depth counter
 }
 
 void SvXMLExport::Characters(const ::rtl::OUString& rChars)
@@ -2218,12 +2294,26 @@ void SvXMLExport::EndElement(sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,
                         sal_Bool bIgnWSInside )
 {
-    EndElement(mpNamespaceMap->GetQNameByKey( nPrefix, GetXMLToken(eName) ), bIgnWSInside);
+    EndElement(_GetNamespaceMap().GetQNameByKey( nPrefix, GetXMLToken(eName) ),
+        bIgnWSInside);
 }
 
 void SvXMLExport::EndElement(const OUString& rName,
                         sal_Bool bIgnWSInside )
 {
+    // decrement nesting depth counter & (maybe) restore namespace map
+    --mpImpl->mDepth;
+    if (!mpImpl->mNamespaceMaps.empty() &&
+        (mpImpl->mNamespaceMaps.top().second == mpImpl->mDepth))
+    {
+        delete mpNamespaceMap;
+        mpNamespaceMap = mpImpl->mNamespaceMaps.top().first;
+        mpImpl->mNamespaceMaps.pop();
+    }
+    OSL_ENSURE(mpImpl->mNamespaceMaps.empty() ||
+        (mpImpl->mNamespaceMaps.top().second < mpImpl->mDepth),
+        "SvXMLExport: NamespaceMaps corrupted");
+
     if ((mnErrorFlags & ERROR_DO_NOTHING) != ERROR_DO_NOTHING)
     {
         try
@@ -2319,6 +2409,12 @@ void SvXMLExport::DisposingModel()
     return mxServiceFactory;
 }
 
+uno::Reference< uno::XComponentContext >
+SvXMLExport::GetComponentContext() const
+{
+    return mpImpl->mxComponentContext;
+}
+
 ::comphelper::UnoInterfaceToUniqueIdentifierMapper& SvXMLExport::getInterfaceToIdentifierMapper()
 {
     return mpImpl->maInterfaceToIdentifierMapper;
@@ -2346,23 +2442,9 @@ SvtSaveOptions::ODFDefaultVersion SvXMLExport::getDefaultVersion() const
     return SvtSaveOptions::ODFVER_012;
 }
 
-::rtl::OUString SvXMLExport::GetStreamPath() const
+::rtl::OUString SvXMLExport::GetStreamName() const
 {
-    return mpImpl->mStreamPath;
-}
-
-//FIXME: where to put this???
-static bool splitXmlId(::rtl::OUString const & i_XmlId,
-    ::rtl::OUString & o_StreamName, ::rtl::OUString& o_Idref )
-{
-    const sal_Int32 idx(i_XmlId.indexOf(static_cast<sal_Unicode>('#')));
-    if ((idx <= 0) || (idx >= i_XmlId.getLength() - 1)) {
-        return false;
-    } else {
-        o_StreamName = (i_XmlId.copy(0, idx));
-        o_Idref      = (i_XmlId.copy(idx+1));
-        return true;
-    }
+    return mpImpl->mStreamName;
 }
 
 void
@@ -2380,28 +2462,67 @@ SvXMLExport::AddAttributeXmlId(uno::Reference<uno::XInterface> const & i_xIfc)
 //    OSL_ENSURE(xMeta.is(), "xml:id: not XMetadatable");
     if ( xMeta.is() )
     {
-        const ::rtl::OUString XmlId( xMeta->getXmlId() );
-        if ( !XmlId.equalsAscii("") )
+        const beans::StringPair mdref( xMeta->getMetadataReference() );
+        if ( !mdref.Second.equalsAscii("") )
         {
-            ::rtl::OUString StreamName;
-            ::rtl::OUString Idref;
-            if( splitXmlId(XmlId, StreamName, Idref) )
+            const ::rtl::OUString streamName( GetStreamName() );
+            if ( streamName.getLength() )
             {
-                if ( GetStreamPath().equals(StreamName) )
+                if ( streamName.equals(mdref.First) )
                 {
-                    AddAttribute( XML_NAMESPACE_XML, XML_ID, Idref );
+                    AddAttribute( XML_NAMESPACE_XML, XML_ID, mdref.Second );
                 }
                 else
                 {
-                    OSL_ENSURE(false, "xml:id: invalid stream name");
+                    OSL_ENSURE(false, "SvXMLExport::AddAttributeXmlId: "
+                         "invalid stream name");
                 }
             }
             else
             {
-                OSL_ENSURE(false, "xml:id invalid?");
+                // FIXME: this is ugly
+                // there is no stream name (e.g. XSLT, flat-xml format)!
+                // but how do we ensure uniqueness in this case?
+                // a) just omit styles.xml ids -- they are unlikely anyway...
+                // b) somehow find out whether we are currently exporting styles
+                //    or content, and prefix "s" or "c" => unique
+                if ( mdref.First.equalsAscii("content.xml") )
+                {
+                    AddAttribute( XML_NAMESPACE_XML, XML_ID, mdref.Second );
+                }
+                else
+                {
+                    OSL_TRACE("SvXMLExport::AddAttributeXmlId: "
+                        "no stream name given: dropping styles.xml xml:id");
+                }
             }
         }
     }
+}
+
+void
+SvXMLExport::AddAttributesRDFa(
+    uno::Reference<text::XTextContent> const & i_xTextContent)
+{
+    // check version >= 1.2
+    switch (getDefaultVersion()) {
+        case SvtSaveOptions::ODFVER_011: // fall thru
+        case SvtSaveOptions::ODFVER_010: return;
+        default: break;
+    }
+
+    const uno::Reference<rdf::XMetadatable> xMeta(
+        i_xTextContent, uno::UNO_QUERY);
+    if (!xMeta.is() || !xMeta->getMetadataReference().Second.getLength())
+    {
+        return; // no xml:id => no RDFa
+    }
+
+    if (!mpImpl->mpRDFaHelper.get())
+    {
+        mpImpl->mpRDFaHelper.reset( new ::xmloff::RDFaExportHelper(*this) );
+    }
+    mpImpl->mpRDFaHelper->AddRDFa(xMeta);
 }
 
 // --> OD 2008-11-26 #158694#

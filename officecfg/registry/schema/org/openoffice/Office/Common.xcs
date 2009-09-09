@@ -1184,6 +1184,42 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
         </info>
         <value>45000</value>
       </prop>
+      <prop oor:name="TransparentSelection" oor:type="xs:boolean">
+        <info>
+          <author>AW</author>
+          <desc>
+            This switch defines if the selections in the applications (text or cells) are visualized using 
+            inverse (XOR) when set to false (the old selection method, also used when in HighContrast mode) 
+            or a transparent overlay selection using the system's selection color.
+          </desc>
+          <label>This switch defines if for text/cell selections the old inverse or the new transparent selection is to be used.</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="TransparentSelectionPercent" oor:type="xs:short">
+        <info>
+          <author>AW</author>
+          <desc>
+            Specifies the degree of transparence to be used when transparent selection is used. The value is a percent
+            value. Since neither no transparence nor complete transparence makes sense, the value is limited to a range
+            of 10% - 90%. If the given value is outside this range, it is cropped to it.
+          </desc>
+          <label>Specifies the percent of transparence to use if transparent selection is used.</label>
+        </info>
+        <value>75</value>
+      </prop>
+      <prop oor:name="SelectionMaximumLuminancePercent" oor:type="xs:short">
+        <info>
+          <author>AW</author>
+          <desc>
+            Specifies the maximum allowed luminance the system's selection color may have. When the color
+            fetched from the system is brighter (luminacne is bigger), it will be scaled to a luminance
+            of exactly this given value.
+          </desc>
+          <label>Specifies the maximum allowed luminance for the system's selection color.</label>
+        </info>
+        <value>70</value>
+      </prop>
     </group>
 		<group oor:name="AutoCorrect">
 			<info>
@@ -1455,6 +1491,18 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				<author>MBA</author>
 				<desc>Contains the current and default path settings used by the Office.</desc>
 			</info>
+      <group oor:name="Info">
+        <info>
+          <author>CD</author>
+          <desc>Contains various properties information purpose only.</desc>
+        </info>
+        <prop oor:name="WorkPathChanged" oor:type="xs:boolean">
+          <info>
+            <desc>A flag which is set by the tools options dialog whenever a user changed the work path.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+      </group>
 			<group oor:name="Current">
 				<info>
 					<author>MBA</author>
@@ -2331,6 +2379,13 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					<author>MBA</author>
 					<desc>Specifies whether the user defined configuration settings are loaded together with the document.</desc>
 					<label>Load user-defined settings</label>
+				</info>
+				<value>true</value>
+			</prop>
+			<prop oor:name="ShowOfficeUpdateDialog" oor:type="xs:boolean">
+				<info>
+					<author>MAV</author>
+					<desc>Specifies whether the office update dialog should be shown in case the loaded document has newer ODF version than the maximal supported one.</desc>
 				</info>
 				<value>true</value>
 			</prop>

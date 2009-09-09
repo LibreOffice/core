@@ -1387,6 +1387,10 @@ void Desktop::Main()
         tools::InitTestToolLib();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} tools::InitTestToolLib" );
 
+        bool bAbort = CheckExtensionDependencies();
+        if ( bAbort )
+            return;
+
         // First Start Wizard allowed ?
         if ( ! pCmdLineArgs->IsNoFirstStartWizard())
         {

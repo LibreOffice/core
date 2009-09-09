@@ -37,6 +37,9 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -44,17 +47,37 @@ namespace sdr
 {
     namespace overlay
     {
-        void OverlayLineStriped::drawGeometry(OutputDevice& rOutputDevice)
+        drawinglayer::primitive2d::Primitive2DSequence OverlayLineStriped::createOverlayObjectPrimitive2DSequence()
         {
-            ImpDrawLineStriped(rOutputDevice, getBasePosition(), getSecondPosition());
+            drawinglayer::primitive2d::Primitive2DSequence aRetval;
+
+            if(getOverlayManager())
+            {
+                const basegfx::BColor aRGBColorA(getOverlayManager()->getStripeColorA().getBColor());
+                const basegfx::BColor aRGBColorB(getOverlayManager()->getStripeColorB().getBColor());
+                const double fStripeLengthPixel(getOverlayManager()->getStripeLengthPixel());
+                basegfx::B2DPolygon aLine;
+
+                aLine.append(getBasePosition());
+                aLine.append(getSecondPosition());
+
+                const drawinglayer::primitive2d::Primitive2DReference aReference(
+                    new drawinglayer::primitive2d::PolygonMarkerPrimitive2D(
+                        aLine,
+                        aRGBColorA,
+                        aRGBColorB,
+                        fStripeLengthPixel));
+
+                aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
+            }
+
+            return aRetval;
         }
 
-        void OverlayLineStriped::createBaseRange(OutputDevice& /*rOutputDevice*/)
+        void OverlayLineStriped::stripeDefinitionHasChanged()
         {
-            // reset range and expand it
-            maBaseRange.reset();
-            maBaseRange.expand(getBasePosition());
-            maBaseRange.expand(getSecondPosition());
+            // react on OverlayManager's stripe definition change
+            objectChange();
         }
 
         OverlayLineStriped::OverlayLineStriped(
@@ -79,63 +102,6 @@ namespace sdr
                 // register change (after change)
                 objectChange();
             }
-        }
-
-        sal_Bool OverlayLineStriped::isHit(const basegfx::B2DPoint& rPos, double fTol) const
-        {
-            if(isHittable() && !getBasePosition().equal(getSecondPosition()))
-            {
-                return basegfx::tools::isInEpsilonRange(getBasePosition(), getSecondPosition(), rPos, fTol);
-            }
-
-            return sal_False;
-        }
-
-        void OverlayLineStriped::transform(const basegfx::B2DHomMatrix& rMatrix)
-        {
-            if(!rMatrix.isIdentity())
-            {
-                // transform base position
-                OverlayObjectWithBasePosition::transform(rMatrix);
-
-                // transform maSecondPosition
-                const basegfx::B2DPoint aNewSecondPosition = rMatrix * getSecondPosition();
-                setSecondPosition(aNewSecondPosition);
-            }
-        }
-    } // end of namespace overlay
-} // end of namespace sdr
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace sdr
-{
-    namespace overlay
-    {
-        void OverlayLine::drawGeometry(OutputDevice& rOutputDevice)
-        {
-            const Point aStart(FRound(getBasePosition().getX()), FRound(getBasePosition().getY()));
-            const Point aEnd(FRound(getSecondPosition().getX()), FRound(getSecondPosition().getY()));
-
-            rOutputDevice.SetLineColor(getBaseColor());
-            rOutputDevice.SetFillColor();
-
-            rOutputDevice.DrawLine(aStart, aEnd);
-        }
-
-        OverlayLine::OverlayLine(
-            const basegfx::B2DPoint& rBasePos,
-            const basegfx::B2DPoint& rSecondPos,
-            Color aLineColor)
-        :   OverlayLineStriped(rBasePos, rSecondPos)
-        {
-            // set base color here, OverlayCrosshairStriped constructor has set
-            // it to it's own default.
-            maBaseColor = aLineColor;
-        }
-
-        OverlayLine::~OverlayLine()
-        {
         }
     } // end of namespace overlay
 } // end of namespace sdr

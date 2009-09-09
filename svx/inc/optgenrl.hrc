@@ -74,7 +74,7 @@
 #define LINEH       12
 #define FLINEH      8
 #define LEFT        12
-#define MID         96
+#define MID         100
 #define RIGHT       248
 #define TOP         10
 #define LINE(y)     (14+y*15)

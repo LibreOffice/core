@@ -327,7 +327,11 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aTextPAttrTokenMap[] =
 {
-    { XML_NAMESPACE_XML , XML_ID,           XML_TOK_TEXT_P_XMLID },
+    { XML_NAMESPACE_XML  , XML_ID,          XML_TOK_TEXT_P_XMLID },
+    { XML_NAMESPACE_XHTML, XML_ABOUT,       XML_TOK_TEXT_P_ABOUT },
+    { XML_NAMESPACE_XHTML, XML_PROPERTY,    XML_TOK_TEXT_P_PROPERTY },
+    { XML_NAMESPACE_XHTML, XML_CONTENT,     XML_TOK_TEXT_P_CONTENT },
+    { XML_NAMESPACE_XHTML, XML_DATATYPE,    XML_TOK_TEXT_P_DATATYPE },
     { XML_NAMESPACE_TEXT, XML_STYLE_NAME,   XML_TOK_TEXT_P_STYLE_NAME },
     { XML_NAMESPACE_TEXT, XML_COND_STYLE_NAME,
                                             XML_TOK_TEXT_P_COND_STYLE_NAME },
@@ -927,6 +931,134 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
     return bConverted ? sChars.makeStringAndClear() : rChars;
 }
 
+// --> OD 2006-10-12 #i69629#
+// helper method to determine, if a paragraph style has a list style (inclusive
+// an empty one) inherits a list style (inclusive an empty one) from one of its parents
+// --> OD 2007-01-29 #i73973#
+// apply special case, that found list style equals the chapter numbering, also
+// to the found list styles of the parent styles.
+sal_Bool lcl_HasListStyle( OUString sStyleName,
+                           const Reference < XNameContainer >& xParaStyles,
+                           SvXMLImport& rImport,
+                           const OUString& sNumberingStyleName,
+                           const OUString& sOutlineStyleName )
+{
+    sal_Bool bRet( sal_False );
+
+    if ( !xParaStyles->hasByName( sStyleName ) )
+    {
+        // error case
+        return sal_True;
+    }
+
+    Reference< XPropertyState > xPropState( xParaStyles->getByName( sStyleName ),
+                                            UNO_QUERY );
+    if ( !xPropState.is() )
+    {
+        // error case
+        return sal_False;
+    }
+
+    if ( xPropState->getPropertyState( sNumberingStyleName ) == PropertyState_DIRECT_VALUE )
+    {
+        // list style found
+        bRet = sal_True;
+        // special case: the set list style equals the chapter numbering
+        Reference< XPropertySet > xPropSet( xPropState, UNO_QUERY );
+        if ( xPropSet.is() )
+        {
+            OUString sListStyle;
+            xPropSet->getPropertyValue( sNumberingStyleName ) >>= sListStyle;
+            if ( sListStyle.getLength() != 0 &&
+                 sListStyle == sOutlineStyleName )
+            {
+                bRet = sal_False;
+            }
+        }
+    }
+    else
+    {
+        // --> OD 2007-12-07 #i77708#
+        sal_Int32 nUPD( 0 );
+        sal_Int32 nBuild( 0 );
+        // --> OD 2008-03-19 #i86058#
+//        rImport.getBuildIds( nUPD, nBuild );
+        const bool bBuildIdFound = rImport.getBuildIds( nUPD, nBuild );
+        // <--
+        // <--
+        // search list style at parent
+        Reference<XStyle> xStyle( xPropState, UNO_QUERY );
+        while ( xStyle.is() )
+        {
+            OUString aParentStyle( xStyle->getParentStyle() );
+            if ( aParentStyle.getLength() > 0 )
+            {
+                aParentStyle =
+                    rImport.GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_PARAGRAPH,
+                                                 aParentStyle );
+            }
+            if ( aParentStyle.getLength() == 0 ||
+                 !xParaStyles->hasByName( aParentStyle ) )
+            {
+                // no list style found
+                break;
+            }
+            else
+            {
+                xPropState = Reference< XPropertyState >(
+                                    xParaStyles->getByName( aParentStyle ),
+                                    UNO_QUERY );
+                if ( !xPropState.is() )
+                {
+                    // error case
+                    return sal_True;
+                }
+                if ( xPropState->getPropertyState( sNumberingStyleName ) == PropertyState_DIRECT_VALUE )
+                {
+                    // list style found
+                    bRet = sal_True;
+                    // --> OD 2007-01-29 #i73973#
+                    // special case: the found list style equals the chapter numbering
+                    Reference< XPropertySet > xPropSet( xPropState, UNO_QUERY );
+                    if ( xPropSet.is() )
+                    {
+                        OUString sListStyle;
+                        xPropSet->getPropertyValue( sNumberingStyleName ) >>= sListStyle;
+                        if ( sListStyle.getLength() != 0 &&
+                             sListStyle == sOutlineStyleName )
+                        {
+                            bRet = sal_False;
+                        }
+                        // --> OD 2007-12-07 #i77708#
+                        // special handling for text documents from OOo version prior OOo 2.4
+                        // --> OD 2008-03-19 #i86058#
+                        // check explicitly on certain versions and on import of
+                        // text documents in OpenOffice.org file format
+                        else if ( sListStyle.getLength() == 0 &&
+                                  ( rImport.IsTextDocInOOoFileFormat() ||
+                                    ( bBuildIdFound &&
+                                      ( ( nUPD == 641 ) || ( nUPD == 645 ) || // prior OOo 2.0
+                                        ( nUPD == 680 && nBuild <= 9238 ) ) ) ) ) // OOo 2.0 - OOo 2.3.1
+                        {
+                            bRet = sal_False;
+                        }
+                        // <--
+                    }
+                    // <--
+                    break;
+                }
+                else
+                {
+                    // search list style at parent
+                    xStyle = Reference<XStyle>( xPropState, UNO_QUERY );
+                }
+            }
+        }
+    }
+
+    return bRet;
+}
+// <--
 OUString XMLTextImportHelper::SetStyleAndAttrs(
         SvXMLImport& rImport,
         const Reference < XTextCursor >& rCursor,
@@ -1237,14 +1369,20 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     // Some minor rework and adjust access to paragraph styles
     if ( bPara )
     {
+        // --> OD 2009-08-18 #i103817#
+        sal_Int16 nCurrentOutlineLevelInheritedFromParagraphStyle = 0;
+        const bool bHasOutlineLevelProp( xPropSetInfo->hasPropertyByName( sOutlineLevel ) );
+        if ( bHasOutlineLevelProp )
+        {
+            xPropSet->getPropertyValue( sOutlineLevel ) >>= nCurrentOutlineLevelInheritedFromParagraphStyle;
+        }
+        // <--
         //if ( bPara && nOutlineLevel != -1 )   //#outline level,removed by zhaojianwei
         if ( nOutlineLevel > 0 )       //add by zhaojianwei
         {
             //#outline level,removed by zhaojianwei
-            if ( xPropSetInfo->hasPropertyByName( sOutlineLevel ) )
+            if ( bHasOutlineLevelProp )
             {
-                sal_Int16 nCurrentOutlineLevelInheritedFromParagraphStyle = 0;
-                xPropSet->getPropertyValue( sOutlineLevel ) >>= nCurrentOutlineLevelInheritedFromParagraphStyle;
                 // In case that the value equals the value of its paragraph style
                 // attribute outline level, the paragraph attribute value is left unset
                 if ( nCurrentOutlineLevelInheritedFromParagraphStyle != nOutlineLevel )
@@ -1323,15 +1461,33 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 {
                     AddOutlineStyleCandidate( nOutlineLevel, sStyleName );
                 }
+                // --> OD 2009-08-18 #i103817#
+                // Assure that heading applies the outline style
+                if ( ( !pStyle || !pStyle->IsListStyleSet() ) &&
+                     !bOutlineStyleCandidate &&
+                     xChapterNumbering.is() )
+                {
+                    OUString sEmptyStr;
+                    if ( !lcl_HasListStyle( sStyleName,
+                                    xParaStyles, GetXMLImport(),
+                                    sNumberingStyleName,
+                                    sEmptyStr ) )
+                    {
+                        // heading not in a list --> apply outline style
+                        xPropSet->setPropertyValue( sNumberingRules,
+                                                    makeAny(xChapterNumbering) );
+                        xPropSet->setPropertyValue( sNumberingLevel,
+                                                    makeAny( static_cast<sal_Int8>(nOutlineLevel - 1) ) );
+                    }
+                }
+                // <--
             }
             // <--
         }
         //-> #outlinelevel added by zhaojianwei
         //handle for text:p,if the paragraphstyle outlinelevel is set to[1~10]
-        else if( xPropSetInfo->hasPropertyByName( sOutlineLevel ) )
+        else if( bHasOutlineLevelProp )
         {
-            sal_Int16 nCurrentOutlineLevelInheritedFromParagraphStyle = 0;
-            xPropSet->getPropertyValue( sOutlineLevel ) >>= nCurrentOutlineLevelInheritedFromParagraphStyle;
             if ( nCurrentOutlineLevelInheritedFromParagraphStyle != 0 )
             {
                 sal_Int16 nZero = 0;
@@ -1423,132 +1579,6 @@ void XMLTextImportHelper::AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel
 }
 // <--
 
-// --> OD 2006-10-12 #i69629#
-// helper method to determine, if a paragraph style has a list style (inclusive
-// an empty one) inherits a list style (inclusive an empty one) from one of its parents
-// --> OD 2007-01-29 #i73973#
-// apply special case, that found list style equals the chapter numbering, also
-// to the found list styles of the parent styles.
-sal_Bool lcl_HasListStyle( OUString sStyleName,
-                           const Reference < XNameContainer >& xParaStyles,
-                           SvXMLImport& rImport,
-                           const OUString& sNumberingStyleName,
-                           const OUString& sOutlineStyleName )
-{
-    sal_Bool bRet( sal_False );
-
-    if ( !xParaStyles->hasByName( sStyleName ) )
-    {
-        // error case
-        return sal_True;
-    }
-
-    Reference< XPropertyState > xPropState( xParaStyles->getByName( sStyleName ),
-                                            UNO_QUERY );
-    if ( !xPropState.is() )
-    {
-        // error case
-        return sal_False;
-    }
-
-    if ( xPropState->getPropertyState( sNumberingStyleName ) == PropertyState_DIRECT_VALUE )
-    {
-        // list style found
-        bRet = sal_True;
-        // special case: the set list style equals the chapter numbering
-        Reference< XPropertySet > xPropSet( xPropState, UNO_QUERY );
-        if ( xPropSet.is() )
-        {
-            OUString sListStyle;
-            xPropSet->getPropertyValue( sNumberingStyleName ) >>= sListStyle;
-            if ( sListStyle == sOutlineStyleName )
-            {
-                bRet = sal_False;
-            }
-        }
-    }
-    else
-    {
-        // --> OD 2007-12-07 #i77708#
-        sal_Int32 nUPD( 0 );
-        sal_Int32 nBuild( 0 );
-        // --> OD 2008-03-19 #i86058#
-//        rImport.getBuildIds( nUPD, nBuild );
-        const bool bBuildIdFound = rImport.getBuildIds( nUPD, nBuild );
-        // <--
-        // <--
-        // search list style at parent
-        Reference<XStyle> xStyle( xPropState, UNO_QUERY );
-        while ( xStyle.is() )
-        {
-            OUString aParentStyle( xStyle->getParentStyle() );
-            if ( aParentStyle.getLength() > 0 )
-            {
-                aParentStyle =
-                    rImport.GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_PARAGRAPH,
-                                                 aParentStyle );
-            }
-            if ( aParentStyle.getLength() == 0 ||
-                 !xParaStyles->hasByName( aParentStyle ) )
-            {
-                // no list style found
-                break;
-            }
-            else
-            {
-                xPropState = Reference< XPropertyState >(
-                                    xParaStyles->getByName( aParentStyle ),
-                                    UNO_QUERY );
-                if ( !xPropState.is() )
-                {
-                    // error case
-                    return sal_True;
-                }
-                if ( xPropState->getPropertyState( sNumberingStyleName ) == PropertyState_DIRECT_VALUE )
-                {
-                    // list style found
-                    bRet = sal_True;
-                    // --> OD 2007-01-29 #i73973#
-                    // special case: the found list style equals the chapter numbering
-                    Reference< XPropertySet > xPropSet( xPropState, UNO_QUERY );
-                    if ( xPropSet.is() )
-                    {
-                        OUString sListStyle;
-                        xPropSet->getPropertyValue( sNumberingStyleName ) >>= sListStyle;
-                        if ( sListStyle == sOutlineStyleName )
-                        {
-                            bRet = sal_False;
-                        }
-                        // --> OD 2007-12-07 #i77708#
-                        // special handling for text documents from OOo version prior OOo 2.4
-                        // --> OD 2008-03-19 #i86058#
-                        // check explicitly on certain versions and on import of
-                        // text documents in OpenOffice.org file format
-                        else if ( sListStyle.getLength() == 0 &&
-                                  ( rImport.IsTextDocInOOoFileFormat() ||
-                                    ( bBuildIdFound &&
-                                      ( ( nUPD == 641 ) || ( nUPD == 645 ) || // prior OOo 2.0
-                                        ( nUPD == 680 && nBuild <= 9238 ) ) ) ) ) // OOo 2.0 - OOo 2.3.1
-                        {
-                            bRet = sal_False;
-                        }
-                        // <--
-                    }
-                    // <--
-                    break;
-                }
-                else
-                {
-                    // search list style at parent
-                    xStyle = Reference<XStyle>( xPropState, UNO_QUERY );
-                }
-            }
-        }
-    }
-
-    return bRet;
-}
-// <--
 // --> OD 2006-10-12 #i69629#
 void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
 {

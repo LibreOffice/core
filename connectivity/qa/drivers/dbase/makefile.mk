@@ -32,7 +32,7 @@
 PRJ = ..$/..$/..
 TARGET  = DBaseDriverTest
 PRJNAME = connectivity
-PACKAGE = complex$/connectivity
+PACKAGE = qa$/drivers$/dbase
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
@@ -45,7 +45,8 @@ JAVAFILES       =\
         DBaseDateFunctions.java\
         DBaseDriverTest.java\
         DBaseNumericFunctions.java\
-        DBaseStringFunctions.java
+        DBaseStringFunctions.java\
+        DBaseSqlTests.java
         
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
@@ -59,15 +60,9 @@ JARCOMPRESS 	= TRUE
 
 # --- Targets ------------------------------------------------------
 
-.IF "$(depend)" == ""
-ALL :   ALLTAR
-.ELSE
-ALL: 	ALLDEP
-.ENDIF
-
 .INCLUDE :  target.mk
 
 
-run:
-    java -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar org.openoffice.Runner -TestBase java_complex -o complex.connectivity.$(TARGET)
+run: $(CLASSDIR)$/$(JARTARGET)
+    java -cp "$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar" org.openoffice.Runner -TestBase java_complex -o qa.drivers.dbase.$(TARGET)
 

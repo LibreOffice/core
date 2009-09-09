@@ -60,7 +60,7 @@
 #define PAPERSIZE_MONARCH       25
 #define PAPERSIZE_COM675        26
 #define PAPERSIZE_COM9          27
-#define PAPERSIZE_COM10         29
+#define PAPERSIZE_COM10         28
 #define PAPERSIZE_COM11         29
 #define PAPERSIZE_COM12         30
 #define PAPERSIZE_KAI16         31
@@ -68,7 +68,7 @@
 #define PAPERSIZE_KAI32BIG      33
 #define PAPERSIZE_B4_JIS        34
 #define PAPERSIZE_B5_JIS        35
-#define PAPERSIZE_B6_JIS        38
+#define PAPERSIZE_B6_JIS        36
 
 #endif
 

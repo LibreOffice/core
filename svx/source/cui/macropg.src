@@ -234,11 +234,11 @@ String RID_SVXSTR_EVENT_PAGECOUNTCHANGE
 };
 String RID_SVXSTR_EVENT_SUBCOMPONENT_OPENED
 {
-    Text = "Loaded a sub component" ;
+    Text [ en-US ] = "Loaded a sub component" ;
 };
 String RID_SVXSTR_EVENT_SUBCOMPONENT_CLOSED
 {
-    Text = "Closed a sub component" ;
+    Text [ en-US ] = "Closed a sub component" ;
 };
 String RID_SVXSTR_EVENT_APPROVEPARAMETER
 {

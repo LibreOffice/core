@@ -79,9 +79,10 @@ XML_NAMESPACE( ANIMATION,       31U )
 XML_NAMESPACE( XML,             32U )
 XML_NAMESPACE( REPORT,          33U )
 XML_NAMESPACE( OF,              34U )       // OpenFormula aka ODFF
-XML_NAMESPACE( RDFA,            35U )
+XML_NAMESPACE( XHTML,           35U )
+XML_NAMESPACE( GRDDL,           36U )
 
-#define _XML_OLD_NAMESPACE_BASE 36U
+#define _XML_OLD_NAMESPACE_BASE 37U
 
 // namespaces used in the technical preview (SO 5.2)
 XML_OLD_NAMESPACE( FO,      0U )

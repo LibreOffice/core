@@ -406,7 +406,7 @@ class OfaAutoCompleteTabPage : public SfxTabPage
     CheckBox        aCBAsTip; //Show as tip
 
     CheckBox        aCBCollect;//Collect words
-    CheckBox        aCBKeepList;//...save the list for later use...
+    CheckBox        aCBRemoveList;//...save the list for later use...
     //--removed--CheckBox        aCBEndless;//
 
     FixedText       aFTExpandKey;

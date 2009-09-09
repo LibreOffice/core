@@ -497,6 +497,7 @@ xub_StrLen FormulaDlg_Impl::GetFunctionPos(xub_StrLen nPos)
     if ( m_aTokenList.getLength() )
     {
         const uno::Reference< sheet::XFormulaParser > xParser(m_pHelper->getFormulaParser());
+        const table::CellAddress aRefPos(m_pHelper->getReferencePosition());
 
         const sheet::FormulaToken* pIter = m_aTokenList.getConstArray();
         const sheet::FormulaToken* pEnd = pIter + m_aTokenList.getLength();
@@ -509,7 +510,7 @@ xub_StrLen FormulaDlg_Impl::GetFunctionPos(xub_StrLen nPos)
                 const sal_Int32 eOp = pIter->OpCode;
                 uno::Sequence<sheet::FormulaToken> aArgs(1);
                 aArgs[0] = *pIter;
-                const String aString = xParser->printFormula(aArgs);
+                const String aString = xParser->printFormula(aArgs, aRefPos);
                 const sheet::FormulaToken* pNextToken = pIter + 1;
 
                 if(!bUserMatrixFlag && FormulaCompiler::IsMatrixFunction((OpCode)eOp) )
@@ -533,7 +534,7 @@ xub_StrLen FormulaDlg_Impl::GetFunctionPos(xub_StrLen nPos)
                     if ( pNextToken != pEnd )
                     {
                         aArgs[0] = *pNextToken;
-                        const String a2String = xParser->printFormula(aArgs);
+                        const String a2String = xParser->printFormula(aArgs, aRefPos);
                         const xub_StrLen n3 = aFormString.Search(a2String,nXXX);
                         if ( n3 < nTokPos )
                             nTokPos = n3;
@@ -681,7 +682,8 @@ void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvLBoxEntry* pParent,Formul
         aArgs[0] = m_aTokenMap.find(pOrigToken)->second;
         try
         {
-            const String aResult = m_pHelper->getFormulaParser()->printFormula(aArgs);
+            const table::CellAddress aRefPos(m_pHelper->getReferencePosition());
+            const String aResult = m_pHelper->getFormulaParser()->printFormula(aArgs, aRefPos);
 
             if ( nParas > 0 )
             {
@@ -749,7 +751,8 @@ void FormulaDlg_Impl::UpdateTokenArray( const String& rStrExp)
     m_aTokenList.realloc(0);
     try
     {
-        m_aTokenList = m_pHelper->getFormulaParser()->parseFormula(rStrExp);
+        const table::CellAddress aRefPos(m_pHelper->getReferencePosition());
+        m_aTokenList = m_pHelper->getFormulaParser()->parseFormula(rStrExp, aRefPos);
     }
     catch(const uno::Exception&)
     {
@@ -962,7 +965,8 @@ String FormulaDlg_Impl::RepairFormula(const String& aFormula)
 
         if ( m_aTokenList.getLength() )
         {
-            const String sFormula(m_pHelper->getFormulaParser()->printFormula(m_aTokenList));
+            const table::CellAddress aRefPos(m_pHelper->getReferencePosition());
+            const String sFormula(m_pHelper->getFormulaParser()->printFormula(m_aTokenList, aRefPos));
             if ( !sFormula.Len() || sFormula.GetChar(0) != '=' )
                 aResult += sFormula;
             else
@@ -1601,6 +1605,7 @@ void FormulaDlg_Impl::Update()
 {
     FormEditData* pData = m_pHelper->getFormEditData();
     const String sExpression = pMEdit->GetText();
+    aOldFormula = String();
     UpdateTokenArray(sExpression);
     FormulaCursorHdl(&aMEFormula);
     CalcStruct(sExpression);

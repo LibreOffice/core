@@ -55,13 +55,12 @@
 #include "svx/svddrgmt.hxx"
 #include "svx/svdoutl.hxx"
 #include "svx/svdotable.hxx"
-
-// #90477#
 #include <tools/tenccvt.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <sdrpaintwindow.hxx>
 #include <svx/sdrpagewindow.hxx>
+#include <svx/sdrhittesthelper.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -489,7 +488,9 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         SdrTextObj* pTextObj=PTR_CAST(SdrTextObj,pHitObj);
         if (pTextObj!=NULL && pTextObj->HasText())
         {
-            BOOL bTEHit=pTextObj->IsTextEditHit(aLocalLogicPosition,0/*nHitTolLog*/,&pPV->GetVisibleLayers());
+            bool bTEHit(pPV &&
+                SdrObjectPrimitiveHit(*pTextObj, aLocalLogicPosition, 0, *pPV, &pPV->GetVisibleLayers(), true));
+
             if (bTEHit)
             {
                 Rectangle aTextRect;
@@ -566,11 +567,15 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
 
         if(!bBoundRectHit)
         {
-            BOOL bTEHit=pHitObj->IsTextEditHit(aLocalLogicPosition,0,&pPV->GetVisibleLayers());
+            bool bTEHit(pPV &&
+                SdrObjectPrimitiveHit(*pHitObj, aLocalLogicPosition, 0, *pPV, &pPV->GetVisibleLayers(), true));
 
             // TextEdit an Objekten im gesperrten Layer
             if (pPV->GetLockedLayers().IsSet(pHitObj->GetLayer()))
+            {
                 bTEHit=FALSE;
+            }
+
             if (bTEHit)
             {
                 rVEvt.pRootObj=pObj;

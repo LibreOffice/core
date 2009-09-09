@@ -36,6 +36,7 @@
 #include <tools/color.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
 #include "svx/svxdllapi.h"
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 #include <vector>
 
@@ -65,60 +66,64 @@ namespace sdr
 {
     namespace overlay
     {
-        class SVX_DLLPUBLIC OverlayObject : public ::sdr::animation::Event
+        class SVX_DLLPUBLIC OverlayObject : private ::boost::noncopyable, public ::sdr::animation::Event
         {
-            // Manager is allowed access to private Members, especially
-            // pNext and pPrevious are used form the manager to handle the
-            // OverlayObject.
-            friend class                            OverlayManager;
+        private:
+            // Manager is allowed access to private Member mpOverlayManager
+            friend class                                    OverlayManager;
 
             // pointer to OverlayManager, if object is added. Changed by
             // OverlayManager, do not chnge Yourself.
-            OverlayManager*                         mpOverlayManager;
+            OverlayManager*                                 mpOverlayManager;
 
-            // Chaining of IAO's, used by OverlayManager. These will be
-            // used form the OverlayManager, so do not change them Yourself.
-            OverlayObject*                          mpNext;
-            OverlayObject*                          mpPrevious;
+            // Primitive2DSequence of the OverlayObject
+            drawinglayer::primitive2d::Primitive2DSequence  maPrimitive2DSequence;
 
         protected:
+            // access methods to maPrimitive2DSequence. The usage of this methods may allow
+            // later thread-safe stuff to be added if needed. Only to be used by getPrimitive2DSequence()
+            // implementations for buffering the last decomposition.
+            const drawinglayer::primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
+            void setPrimitive2DSequence(const drawinglayer::primitive2d::Primitive2DSequence& rNew) { maPrimitive2DSequence = rNew; }
+
+            // the creation method for Primitive2DSequence. Called when getPrimitive2DSequence()
+            // sees that maPrimitive2DSequence is empty. Needs to be supported by all
+            // OverlayObject implementations. Default implementation will assert
+            // a missing implementation
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
+
             // region in logical coordinates
-            basegfx::B2DRange                       maBaseRange;
+            basegfx::B2DRange                               maBaseRange;
 
             // base color of this OverlayObject
-            Color                                   maBaseColor;
+            Color                                           maBaseColor;
 
             // bitfield
             // Flag for visibility
-            unsigned                                mbIsVisible : 1;
-
-            // Flag for validity
-            unsigned                                mbIsChanged : 1;
+            unsigned                                        mbIsVisible : 1;
 
             // Flag to control hittability
-            unsigned                                mbIsHittable : 1;
+            unsigned                                        mbIsHittable : 1;
 
             // Flag to hold info if this objects supports animation. Default is
-            // sal_False. If sal_True, the Trigger() method should be overloaded
+            // false. If true, the Trigger() method should be overloaded
             // to implement the animation effect and to re-initiate the event.
-            unsigned                                mbAllowsAnimation : 1;
+            unsigned                                        mbAllowsAnimation : 1;
 
-            // Draw geometry
-            virtual void drawGeometry(OutputDevice& rOutputDevice) = 0;
-
-            // Create the BaseRange. This method needs to calculate maBaseRange.
-            virtual void createBaseRange(OutputDevice& rOutputDevice) = 0;
+            // Flag tocontrol if this OverlayObject allows AntiAliased visualisation.
+            // Default is true, but e.g. for selection visualisation in SC and SW,
+            // it is switched to false
+            unsigned                                        mbAllowsAntiAliase : 1;
 
             // set changed flag. Call after change, since the old range is invalidated
             // and then the new one is calculated and invalidated, too. This will only
             // work after the change.
-            void objectChange();
+            virtual void objectChange();
 
-            // support method to draw striped geometries
-            void ImpDrawRangeStriped(OutputDevice& rOutputDevice, const basegfx::B2DRange& rRange);
-            void ImpDrawLineStriped(OutputDevice& rOutputDevice, double x1, double y1, double x2, double y2);
-            void ImpDrawLineStriped(OutputDevice& rOutputDevice, const basegfx::B2DPoint& rStart, const basegfx::B2DPoint& rEnd);
-            void ImpDrawPolygonStriped(OutputDevice& rOutputDevice, const basegfx::B2DPolygon& rPolygon);
+            // write access to AntiAliase flag. This is protected since
+            // only implementations are allowed to change this, preferrably in their
+            // constructor
+            void allowAntiAliase(bool bNew);
 
         public:
             OverlayObject(Color aBaseColor);
@@ -127,19 +132,21 @@ namespace sdr
             // get OverlayManager
             OverlayManager* getOverlayManager() const { return mpOverlayManager; }
 
-            // Hittest with logical coordinates. Default tests against maBaseRange.
-            virtual sal_Bool isHit(const basegfx::B2DPoint& rPos, double fTol = 0.0) const;
+            // the access method for Primitive2DSequence. Will use createPrimitive2DSequence and
+            // setPrimitive2DSequence if needed. Overloading may be used to allow disposal of last
+            // created primitives to react on changed circumstances and to re-create primitives
+            virtual drawinglayer::primitive2d::Primitive2DSequence getOverlayObjectPrimitive2DSequence() const;
 
             // access to visibility state
-            sal_Bool isVisible() const { return mbIsVisible; }
-            void setVisible(sal_Bool bNew);
-
-            // read access to changed flag
-            sal_Bool isChanged() const { return mbIsChanged; }
+            bool isVisible() const { return mbIsVisible; }
+            void setVisible(bool bNew);
 
             // access to hittable flag
-            sal_Bool isHittable() const { return mbIsHittable; }
-            void setHittable(sal_Bool bNew);
+            bool isHittable() const { return mbIsHittable; }
+            void setHittable(bool bNew);
+
+            // read access to AntiAliase flag
+            bool allowsAntiAliase() const { return mbAllowsAntiAliase; }
 
             // read access to baseRange. This may trigger createBaseRange() if
             // object is changed.
@@ -154,16 +161,7 @@ namespace sdr
             virtual void Trigger(sal_uInt32 nTime);
 
             // acces to AllowsAnimation flag
-            sal_Bool allowsAnimation() const { return mbAllowsAnimation; }
-
-            // transform object coordinates.
-            virtual void transform(const basegfx::B2DHomMatrix& rMatrix) = 0;
-
-            // Zoom has changed. If the objects logical size
-            // depends on the MapMode of the used OutputDevice, use this call
-            // to invalidate the range in logical coordinates. Default is no
-            // change.
-            virtual void zoomHasChanged();
+            bool allowsAnimation() const { return mbAllowsAnimation; }
 
             // stripe definition has changed. The OverlayManager does have
             // support data to draw graphics in two colors striped. This
@@ -197,10 +195,6 @@ namespace sdr
             // access to basePosition
             const basegfx::B2DPoint& getBasePosition() const { return maBasePosition; }
             void setBasePosition(const basegfx::B2DPoint& rNew);
-
-            // transform object coordinates. Transforms maBasePosition
-            // and invalidates on change
-            virtual void transform(const basegfx::B2DHomMatrix& rMatrix);
         };
     } // end of namespace overlay
 } // end of namespace sdr

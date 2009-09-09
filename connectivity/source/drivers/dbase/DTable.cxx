@@ -368,11 +368,12 @@ void ODbaseTable::fillColumns()
         cType[0] = aDBFColumn.db_typ;
         cType[1] = 0;
         aTypeName = ::rtl::OUString::createFromAscii(cType);
+OSL_TRACE("column type: %c",aDBFColumn.db_typ);
 
         switch (aDBFColumn.db_typ)
         {
             case 'C':
-                eType = DataType::CHAR;
+                eType = DataType::VARCHAR;
                 aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
                 break;
             case 'F':
@@ -2785,13 +2786,13 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
                 if ( bIsText )
                 {
                     //  char cChar;
-                    ::rtl::OUString aStr;
+                    ::rtl::OUStringBuffer aStr;
                     while ( nLength > STRING_MAXLEN )
                     {
                         ByteString aBStr;
                         aBStr.Expand(STRING_MAXLEN);
                         m_pMemoStream->Read(aBStr.AllocBuffer(STRING_MAXLEN),STRING_MAXLEN);
-                        aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), m_eEncoding);
+                        aStr.append(::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), m_eEncoding));
                         nLength -= STRING_MAXLEN;
                     }
                     if ( nLength > 0 )
@@ -2800,12 +2801,10 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
                         aBStr.Expand(static_cast<xub_StrLen>(nLength));
                         m_pMemoStream->Read(aBStr.AllocBuffer(static_cast<xub_StrLen>(nLength)),nLength);
                         //  aBStr.ReleaseBufferAccess();
-
-                        aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), m_eEncoding);
-
+                        aStr.append(::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), m_eEncoding));
                     }
                     if ( aStr.getLength() )
-                        aVariable = aStr;
+                        aVariable = aStr.makeStringAndClear();
                 } // if ( bIsText )
                 else
                 {

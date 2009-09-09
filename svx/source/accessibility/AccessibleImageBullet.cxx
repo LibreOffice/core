@@ -172,16 +172,8 @@ namespace accessibility
 
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        // throws if defunc
-        sal_Int32 nPara( GetParagraphIndex() );
-
         // Get the string from the resource for the specified id.
-        String sStr = ::rtl::OUString( SVX_RESSTR (RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION) );
-        String sParaIndex = ::rtl::OUString::valueOf( nPara );
-        sStr.SearchAndReplace( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "$(ARG)" )),
-                               sParaIndex );
-
-        return ::rtl::OUString( sStr );
+        return ::rtl::OUString( SVX_RESSTR (RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION) );
     }
 
     ::rtl::OUString SAL_CALL  AccessibleImageBullet::getAccessibleName() throw (uno::RuntimeException)
@@ -190,16 +182,8 @@ namespace accessibility
 
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        // throws if defunc
-        sal_Int32 nPara( GetParagraphIndex() );
-
         // Get the string from the resource for the specified id.
-        String sStr = ::rtl::OUString( SVX_RESSTR (RID_SVXSTR_A11Y_IMAGEBULLET_NAME) );
-        String sParaIndex = ::rtl::OUString::valueOf( nPara );
-        sStr.SearchAndReplace( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "$(ARG)" )),
-                               sParaIndex );
-
-        return ::rtl::OUString( sStr );
+        return ::rtl::OUString( SVX_RESSTR (RID_SVXSTR_A11Y_IMAGEBULLET_NAME) );
     }
 
     uno::Reference< XAccessibleRelationSet > SAL_CALL AccessibleImageBullet::getAccessibleRelationSet() throw (uno::RuntimeException)

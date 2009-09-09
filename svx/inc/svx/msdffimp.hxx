@@ -36,9 +36,7 @@
 #include <tools/solar.h>        // UINTXX
 #include <svtools/svarray.hxx>
 
-#ifndef _SV_COLOR_HXX //autogen
 #include <tools/color.hxx>
-#endif
 #include <tools/gen.hxx>
 #include <tools/table.hxx>
 #include <svx/msdffdef.hxx>
@@ -48,7 +46,7 @@
 
 #include <map>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <sot/storage.hxx>
 

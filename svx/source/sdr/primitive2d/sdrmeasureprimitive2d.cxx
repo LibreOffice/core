@@ -52,71 +52,71 @@ namespace drawinglayer
     namespace primitive2d
     {
         Primitive2DReference SdrMeasurePrimitive2D::impCreatePart(
-            const ::basegfx::B2DHomMatrix& rObjectMatrix,
-            const ::basegfx::B2DPoint& rStart,
-            const ::basegfx::B2DPoint& rEnd,
+            const basegfx::B2DHomMatrix& rObjectMatrix,
+            const basegfx::B2DPoint& rStart,
+            const basegfx::B2DPoint& rEnd,
             bool bLeftActive,
             bool bRightActive) const
         {
-            ::basegfx::B2DPolygon aPolygon;
+            basegfx::B2DPolygon aPolygon;
             aPolygon.append(rStart);
             aPolygon.append(rEnd);
 
-            if(!maSdrLSTAttribute.getLineStartEnd() || (!bLeftActive && !bRightActive))
+            if(!getSdrLSTAttribute().getLineStartEnd() || (!bLeftActive && !bRightActive))
             {
-                return createPolygonLinePrimitive(aPolygon, rObjectMatrix, *maSdrLSTAttribute.getLine(), 0L);
+                return createPolygonLinePrimitive(aPolygon, rObjectMatrix, *getSdrLSTAttribute().getLine(), 0L);
             }
 
             if(bLeftActive && bRightActive)
             {
-                return createPolygonLinePrimitive(aPolygon, rObjectMatrix, *maSdrLSTAttribute.getLine(), maSdrLSTAttribute.getLineStartEnd());
+                return createPolygonLinePrimitive(aPolygon, rObjectMatrix, *getSdrLSTAttribute().getLine(), getSdrLSTAttribute().getLineStartEnd());
             }
 
-            const attribute::SdrLineStartEndAttribute* pLineStartEnd = maSdrLSTAttribute.getLineStartEnd();
-            const ::basegfx::B2DPolyPolygon aEmpty;
+            const attribute::SdrLineStartEndAttribute* pLineStartEnd = getSdrLSTAttribute().getLineStartEnd();
+            const basegfx::B2DPolyPolygon aEmpty;
             const attribute::SdrLineStartEndAttribute aLineStartEnd(
                 bLeftActive ? pLineStartEnd->getStartPolyPolygon() : aEmpty, bRightActive ? pLineStartEnd->getEndPolyPolygon() : aEmpty,
                 bLeftActive ? pLineStartEnd->getStartWidth() : 0.0, bRightActive ? pLineStartEnd->getEndWidth() : 0.0,
                 bLeftActive ? pLineStartEnd->isStartActive() : false, bRightActive ? pLineStartEnd->isEndActive() : false,
                 bLeftActive ? pLineStartEnd->isStartCentered() : false, bRightActive? pLineStartEnd->isEndCentered() : false);
 
-            return createPolygonLinePrimitive(aPolygon, rObjectMatrix, *maSdrLSTAttribute.getLine(), &aLineStartEnd);
+            return createPolygonLinePrimitive(aPolygon, rObjectMatrix, *getSdrLSTAttribute().getLine(), &aLineStartEnd);
         }
 
         Primitive2DSequence SdrMeasurePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
             SdrBlockTextPrimitive2D* pBlockText = 0L;
-            ::basegfx::B2DRange aTextRange;
-            double fTextX((maStart.getX() + maEnd.getX()) * 0.5);
-            double fTextY((maStart.getX() + maEnd.getX()) * 0.5);
-            const ::basegfx::B2DVector aLine(maEnd - maStart);
+            basegfx::B2DRange aTextRange;
+            double fTextX((getStart().getX() + getEnd().getX()) * 0.5);
+            double fTextY((getStart().getX() + getEnd().getX()) * 0.5);
+            const basegfx::B2DVector aLine(getEnd() - getStart());
             const double fDistance(aLine.getLength());
             const double fAngle(atan2(aLine.getY(), aLine.getX()));
             bool bAutoUpsideDown(false);
-            const attribute::SdrTextAttribute* pTextAttribute = maSdrLSTAttribute.getText();
+            const attribute::SdrTextAttribute* pTextAttribute = getSdrLSTAttribute().getText();
 
-            ::basegfx::B2DHomMatrix aObjectMatrix;
+            basegfx::B2DHomMatrix aObjectMatrix;
             aObjectMatrix.rotate(fAngle);
-            aObjectMatrix.translate(maStart.getX(), maStart.getY());
+            aObjectMatrix.translate(getStart().getX(), getStart().getY());
 
             if(pTextAttribute)
             {
-                ::basegfx::B2DHomMatrix aTextMatrix;
+                basegfx::B2DHomMatrix aTextMatrix;
                 double fTestAngle(fAngle);
 
-                if(mbTextRotation)
+                if(getTextRotation())
                 {
                     aTextMatrix.rotate(-90.0 * F_PI180);
                     fTestAngle -= (90.0 * F_PI180);
 
-                    if(mbTextAutoAngle && fTestAngle < -F_PI)
+                    if(getTextAutoAngle() && fTestAngle < -F_PI)
                     {
                         fTestAngle += F_2PI;
                     }
                 }
 
-                if(mbTextAutoAngle)
+                if(getTextAutoAngle())
                 {
                     if(fTestAngle > (F_PI / 4.0) || fTestAngle < (-F_PI * (3.0 / 4.0)))
                     {
@@ -125,13 +125,18 @@ namespace drawinglayer
                 }
 
                 // create primitive and get text range
-                pBlockText = new SdrBlockTextPrimitive2D(pTextAttribute->getSdrText(), pTextAttribute->getOutlinerParaObject(),
-                    aTextMatrix, pTextAttribute->isScroll(), false, false);
+                pBlockText = new SdrBlockTextPrimitive2D(
+                    &pTextAttribute->getSdrText(),
+                    pTextAttribute->getOutlinerParaObject(),
+                    aTextMatrix,
+                    pTextAttribute->isScroll(),
+                    false,
+                    false);
                 aTextRange = pBlockText->getB2DRange(aViewInformation);
             }
 
             // prepare line attribute and result
-            const attribute::SdrLineAttribute* pLineAttribute(maSdrLSTAttribute.getLine());
+            const attribute::SdrLineAttribute* pLineAttribute(getSdrLSTAttribute().getLine());
 
             if(!pLineAttribute)
             {
@@ -142,7 +147,7 @@ namespace drawinglayer
             {
                 bool bArrowsOutside(false);
                 bool bMainLineSplitted(false);
-                const attribute::SdrLineStartEndAttribute* pLineStartEnd = maSdrLSTAttribute.getLineStartEnd();
+                const attribute::SdrLineStartEndAttribute* pLineStartEnd = getSdrLSTAttribute().getLineStartEnd();
                 double fStartArrowW(0.0);
                 double fStartArrowH(0.0);
                 double fEndArrowW(0.0);
@@ -152,7 +157,7 @@ namespace drawinglayer
                 {
                     if(pLineStartEnd->isStartActive())
                     {
-                        const ::basegfx::B2DRange aArrowRange(::basegfx::tools::getRange(pLineStartEnd->getStartPolyPolygon()));
+                        const basegfx::B2DRange aArrowRange(basegfx::tools::getRange(pLineStartEnd->getStartPolyPolygon()));
                         fStartArrowW = pLineStartEnd->getStartWidth();
                         fStartArrowH = aArrowRange.getHeight() * fStartArrowW / aArrowRange.getWidth();
 
@@ -164,7 +169,7 @@ namespace drawinglayer
 
                     if(pLineStartEnd->isEndActive())
                     {
-                        const ::basegfx::B2DRange aArrowRange(::basegfx::tools::getRange(pLineStartEnd->getEndPolyPolygon()));
+                        const basegfx::B2DRange aArrowRange(basegfx::tools::getRange(pLineStartEnd->getEndPolyPolygon()));
                         fEndArrowW = pLineStartEnd->getEndWidth();
                         fEndArrowH = aArrowRange.getHeight() * fEndArrowW / aArrowRange.getWidth();
 
@@ -184,8 +189,8 @@ namespace drawinglayer
                     bArrowsOutside = true;
                 }
 
-                MeasureTextPosition eHorizontal(meHorizontal);
-                MeasureTextPosition eVertical(meVertical);
+                MeasureTextPosition eHorizontal(getHorizontal());
+                MeasureTextPosition eVertical(getVertical());
 
                 if(MEASURETEXTPOSITION_AUTOMATIC == eVertical)
                 {
@@ -232,7 +237,7 @@ namespace drawinglayer
                 }
 
                 // switch text above/below?
-                if(mbBelow || (bAutoUpsideDown && !mbTextRotation))
+                if(getBelow() || (bAutoUpsideDown && !getTextRotation()))
                 {
                     if(MEASURETEXTPOSITION_NEGATIVE == eVertical)
                     {
@@ -244,9 +249,9 @@ namespace drawinglayer
                     }
                 }
 
-                const double fMainLineOffset(mbBelow ? mfDistance : -mfDistance);
-                const ::basegfx::B2DPoint aMainLeft(0.0, fMainLineOffset);
-                const ::basegfx::B2DPoint aMainRight(fDistance, fMainLineOffset);
+                const double fMainLineOffset(getBelow() ? getDistance() : -getDistance());
+                const basegfx::B2DPoint aMainLeft(0.0, fMainLineOffset);
+                const basegfx::B2DPoint aMainRight(fDistance, fMainLineOffset);
 
                 // main line
                 if(bArrowsOutside)
@@ -266,8 +271,8 @@ namespace drawinglayer
                         }
                     }
 
-                    const ::basegfx::B2DPoint aMainLeftLeft(aMainLeft.getX() - fLenLeft, aMainLeft.getY());
-                    const ::basegfx::B2DPoint aMainRightRight(aMainRight.getX() + fLenRight, aMainRight.getY());
+                    const basegfx::B2DPoint aMainLeftLeft(aMainLeft.getX() - fLenLeft, aMainLeft.getY());
+                    const basegfx::B2DPoint aMainRightRight(aMainRight.getX() + fLenRight, aMainRight.getY());
 
                     appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(aObjectMatrix, aMainLeftLeft, aMainLeft, false, true));
                     appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(aObjectMatrix, aMainRight, aMainRightRight, true, false));
@@ -282,8 +287,8 @@ namespace drawinglayer
                     if(bMainLineSplitted)
                     {
                         const double fHalfLength((fDistance - (aTextRange.getWidth() + (fStartArrowH + fEndArrowH) * 0.25)) * 0.5);
-                        const ::basegfx::B2DPoint aMainInnerLeft(aMainLeft.getX() + fHalfLength, aMainLeft.getY());
-                        const ::basegfx::B2DPoint aMainInnerRight(aMainRight.getX() - fHalfLength, aMainRight.getY());
+                        const basegfx::B2DPoint aMainInnerLeft(aMainLeft.getX() + fHalfLength, aMainLeft.getY());
+                        const basegfx::B2DPoint aMainInnerRight(aMainRight.getX() - fHalfLength, aMainRight.getY());
 
                         appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(aObjectMatrix, aMainLeft, aMainInnerLeft, true, false));
                         appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(aObjectMatrix, aMainInnerRight, aMainRight, false, true));
@@ -295,19 +300,19 @@ namespace drawinglayer
                 }
 
                 // left/right help line value preparation
-                const double fTopEdge(mbBelow ? mfUpper + mfDistance : -mfUpper - mfDistance);
-                const double fBottomLeft(mbBelow ? mfLower - mfLeftDelta : mfLeftDelta - mfLower);
-                const double fBottomRight(mbBelow ? mfLower - mfRightDelta : mfRightDelta - mfLower);
+                const double fTopEdge(getBelow() ? getUpper() + getDistance() : -getUpper() - getDistance());
+                const double fBottomLeft(getBelow() ? getLower() - getLeftDelta() : getLeftDelta() - getLower());
+                const double fBottomRight(getBelow() ? getLower() - getRightDelta() : getRightDelta() - getLower());
 
                 // left help line
-                const ::basegfx::B2DPoint aLeftUp(0.0, fTopEdge);
-                const ::basegfx::B2DPoint aLeftDown(0.0, fBottomLeft);
+                const basegfx::B2DPoint aLeftUp(0.0, fTopEdge);
+                const basegfx::B2DPoint aLeftDown(0.0, fBottomLeft);
 
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(aObjectMatrix, aLeftDown, aLeftUp, false, false));
 
                 // right help line
-                const ::basegfx::B2DPoint aRightUp(fDistance, fTopEdge);
-                const ::basegfx::B2DPoint aRightDown(fDistance, fBottomRight);
+                const basegfx::B2DPoint aRightUp(fDistance, fTopEdge);
+                const basegfx::B2DPoint aRightDown(fDistance, fBottomRight);
 
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, impCreatePart(aObjectMatrix, aRightDown, aRightUp, false, false));
 
@@ -390,7 +395,7 @@ namespace drawinglayer
                 }
             }
 
-            if(!maSdrLSTAttribute.getLine())
+            if(!getSdrLSTAttribute().getLine())
             {
                 // embed line geometry to invisible line group
                 const Primitive2DReference xHiddenLines(new HitTestPrimitive2D(aRetval));
@@ -403,7 +408,7 @@ namespace drawinglayer
             if(pBlockText)
             {
                 // create transformation to text primitive end position
-                ::basegfx::B2DHomMatrix aChange;
+                basegfx::B2DHomMatrix aChange;
 
                 // handle auto text rotation
                 if(bAutoUpsideDown)
@@ -427,18 +432,9 @@ namespace drawinglayer
             }
 
             // add shadow
-            if(maSdrLSTAttribute.getShadow())
+            if(getSdrLSTAttribute().getShadow())
             {
-                // attention: shadow is added BEFORE object stuff to render it BEHIND object (!)
-                const Primitive2DReference xShadow(createShadowPrimitive(aRetval, *maSdrLSTAttribute.getShadow()));
-
-                if(xShadow.is())
-                {
-                    Primitive2DSequence aContentWithShadow(2L);
-                    aContentWithShadow[0L] = xShadow;
-                    aContentWithShadow[1L] = Primitive2DReference(new GroupPrimitive2D(aRetval));
-                    aRetval = aContentWithShadow;
-                }
+                aRetval = createEmbeddedShadowPrimitive(aRetval, *getSdrLSTAttribute().getShadow());
             }
 
             return aRetval;
@@ -446,8 +442,8 @@ namespace drawinglayer
 
         SdrMeasurePrimitive2D::SdrMeasurePrimitive2D(
             const attribute::SdrLineShadowTextAttribute& rSdrLSTAttribute,
-            const ::basegfx::B2DPoint& rStart,
-            const ::basegfx::B2DPoint& rEnd,
+            const basegfx::B2DPoint& rStart,
+            const basegfx::B2DPoint& rEnd,
             MeasureTextPosition eHorizontal,
             MeasureTextPosition eVertical,
             double fDistance,
@@ -481,19 +477,19 @@ namespace drawinglayer
             {
                 const SdrMeasurePrimitive2D& rCompare = (SdrMeasurePrimitive2D&)rPrimitive;
 
-                return (maStart == rCompare.maStart
-                    && maEnd == rCompare.maEnd
-                    && meHorizontal == rCompare.meHorizontal
-                    && meVertical == rCompare.meVertical
-                    && mfDistance == rCompare.mfDistance
-                    && mfUpper == rCompare.mfUpper
-                    && mfLower == rCompare.mfLower
-                    && mfLeftDelta == rCompare.mfLeftDelta
-                    && mfRightDelta == rCompare.mfRightDelta
-                    && mbBelow == rCompare.mbBelow
-                    && mbTextRotation == rCompare.mbTextRotation
-                    && mbTextAutoAngle == rCompare.mbTextAutoAngle
-                    && maSdrLSTAttribute == rCompare.maSdrLSTAttribute);
+                return (getStart() == rCompare.getStart()
+                    && getEnd() == rCompare.getEnd()
+                    && getHorizontal() == rCompare.getHorizontal()
+                    && getVertical() == rCompare.getVertical()
+                    && getDistance() == rCompare.getDistance()
+                    && getUpper() == rCompare.getUpper()
+                    && getLower() == rCompare.getLower()
+                    && getLeftDelta() == rCompare.getLeftDelta()
+                    && getRightDelta() == rCompare.getRightDelta()
+                    && getBelow() == rCompare.getBelow()
+                    && getTextRotation() == rCompare.getTextRotation()
+                    && getTextAutoAngle() == rCompare.getTextAutoAngle()
+                    && getSdrLSTAttribute() == rCompare.getSdrLSTAttribute());
             }
 
             return false;

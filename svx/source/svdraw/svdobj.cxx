@@ -127,6 +127,11 @@
 #include <svx/polysc3d.hxx>
 #include "svx/svdotable.hxx"
 #include "svx/shapepropertynotifier.hxx"
+#include <svx/sdrhittesthelper.hxx>
+
+// --> OD 2009-07-10 #i73249#
+#include <svx/svdundo.hxx>
+// <--
 
 using namespace ::com::sun::star;
 
@@ -175,8 +180,15 @@ FASTBOOL SdrObjUserData::HasMacro(const SdrObject* /*pObj*/) const
 
 SdrObject* SdrObjUserData::CheckMacroHit(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const
 {
-    if (pObj==NULL) return NULL;
-    return pObj->CheckHit(rRec.aPos,rRec.nTol,rRec.pVisiLayer);
+    if(pObj)
+    {
+        if(rRec.pPageView)
+        {
+            return SdrObjectPrimitiveHit(*pObj, rRec.aPos, rRec.nTol, *rRec.pPageView, rRec.pVisiLayer, false);
+        }
+    }
+
+    return 0;
 }
 
 Pointer SdrObjUserData::GetMacroPointer(const SdrObjMacroHitRec& /*rRec*/, const SdrObject* /*pObj*/) const
@@ -751,7 +763,29 @@ void SdrObject::SetName(const String& rStr)
 
     if(pPlusData && pPlusData->aObjName != rStr)
     {
+        // --> OD 2009-07-09 #i73249#
+        // Undo/Redo for setting object's name
+        bool bUndo( false );
+        if ( GetModel() && GetModel()->IsUndoEnabled() )
+        {
+            bUndo = true;
+            SdrUndoAction* pUndoAction =
+                    GetModel()->GetSdrUndoFactory().CreateUndoObjectStrAttr(
+                                                    *this,
+                                                    SdrUndoObjStrAttr::OBJ_NAME,
+                                                    GetName(),
+                                                    rStr );
+            GetModel()->BegUndo( pUndoAction->GetComment() );
+            GetModel()->AddUndo( pUndoAction );
+        }
+        // <--
         pPlusData->aObjName = rStr;
+        // --> OD 2009-07-09 #i73249#
+        if ( bUndo )
+        {
+            GetModel()->EndUndo();
+        }
+        // <--
         SetChanged();
         BroadcastObjectChange();
     }
@@ -776,7 +810,29 @@ void SdrObject::SetTitle(const String& rStr)
 
     if(pPlusData && pPlusData->aObjTitle != rStr)
     {
+        // --> OD 2009-07-13 #i73249#
+        // Undo/Redo for setting object's title
+        bool bUndo( false );
+        if ( GetModel() && GetModel()->IsUndoEnabled() )
+        {
+            bUndo = true;
+            SdrUndoAction* pUndoAction =
+                    GetModel()->GetSdrUndoFactory().CreateUndoObjectStrAttr(
+                                                    *this,
+                                                    SdrUndoObjStrAttr::OBJ_TITLE,
+                                                    GetTitle(),
+                                                    rStr );
+            GetModel()->BegUndo( pUndoAction->GetComment() );
+            GetModel()->AddUndo( pUndoAction );
+        }
+        // <--
         pPlusData->aObjTitle = rStr;
+        // --> OD 2009-07-13 #i73249#
+        if ( bUndo )
+        {
+            GetModel()->EndUndo();
+        }
+        // <--
         SetChanged();
         BroadcastObjectChange();
     }
@@ -801,7 +857,29 @@ void SdrObject::SetDescription(const String& rStr)
 
     if(pPlusData && pPlusData->aObjDescription != rStr)
     {
+        // --> OD 2009-07-13 #i73249#
+        // Undo/Redo for setting object's description
+        bool bUndo( false );
+        if ( GetModel() && GetModel()->IsUndoEnabled() )
+        {
+            bUndo = true;
+            SdrUndoAction* pUndoAction =
+                    GetModel()->GetSdrUndoFactory().CreateUndoObjectStrAttr(
+                                                    *this,
+                                                    SdrUndoObjStrAttr::OBJ_DESCRIPTION,
+                                                    GetDescription(),
+                                                    rStr );
+            GetModel()->BegUndo( pUndoAction->GetComment() );
+            GetModel()->AddUndo( pUndoAction );
+        }
+        // <--
         pPlusData->aObjDescription = rStr;
+        // --> OD 2009-07-13 #i73249#
+        if ( bUndo )
+        {
+            GetModel()->EndUndo();
+        }
+        // <--
         SetChanged();
         BroadcastObjectChange();
     }
@@ -902,6 +980,10 @@ const Rectangle& SdrObject::GetLastBoundRect() const
 
 void SdrObject::RecalcBoundRect()
 {
+    // #i101680# suppress BoundRect calculations on import(s)
+    if(pModel && pModel->isLocked() )
+        return;
+
     // central new method which will calculate the BoundRect using primitive geometry
     if(aOutRect.IsEmpty())
     {
@@ -980,19 +1062,6 @@ BOOL SdrObject::LineGeometryUsageIsNecessary() const
 {
     XLineStyle eXLS = (XLineStyle)((const XLineStyleItem&)GetMergedItem(XATTR_LINESTYLE)).GetValue();
     return (eXLS != XLINE_NONE);
-}
-
-SdrObject* SdrObject::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
-    {
-        return 0L;
-    }
-
-    Rectangle aO(GetCurrentBoundRect());
-    aO.Left()-=nTol; aO.Top()-=nTol; aO.Right()+=nTol; aO.Bottom()+=nTol;
-    FASTBOOL bRet=aO.IsInside(rPnt);
-    return bRet ? (SdrObject*)this : NULL;
 }
 
 SdrObject* SdrObject::Clone() const
@@ -1165,6 +1234,11 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
         }
 
         SfxItemSet aNewSet(*GetObjectItemPool());
+
+        // #i101980# ignore LineWidth; that's what the old implementation
+        // did. With linewidth, the result may be huge due to fat/thick
+        // line decompositions
+        aNewSet.Put(XLineWidthItem(0));
 
         // solid black lines and no fill
         aNewSet.Put(XLineStyleItem(XLINE_SOLID));
@@ -1393,8 +1467,15 @@ FASTBOOL SdrObject::MovCreate(SdrDragStat& rStat)
     rStat.TakeCreateRect(aOutRect);
     rStat.SetActionRect(aOutRect);
     aOutRect.Justify();
-    SetBoundRectDirty();
-    bSnapRectDirty=TRUE;
+
+    // #i101648# for naked (non-derived) SdrObjects, do not invalidate aOutRect
+    // by calling SetBoundRectDirty(); aOutRect IS the geometry for such objects.
+    // No derivation implementation calls the parent implementation, so this will
+    // cause no further prolems
+    //
+    // SetBoundRectDirty();
+    // bSnapRectDirty=TRUE;
+
     return TRUE;
 }
 
@@ -1402,7 +1483,11 @@ FASTBOOL SdrObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     rStat.TakeCreateRect(aOutRect);
     aOutRect.Justify();
-    SetRectsDirty();
+
+    // #i101648# see description at MovCreate
+    //
+    // SetRectsDirty();
+
     return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointAnz()>=2);
 }
 
@@ -1730,11 +1815,6 @@ FASTBOOL SdrObject::HasTextEdit() const
     return FALSE;
 }
 
-SdrObject* SdrObject::CheckTextEditHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    return CheckHit(rPnt,nTol,pVisiLayer);
-}
-
 sal_Bool SdrObject::BegTextEdit(SdrOutliner& /*rOutl*/)
 {
     return FALSE;
@@ -1806,11 +1886,19 @@ FASTBOOL SdrObject::HasMacro() const
 
 SdrObject* SdrObject::CheckMacroHit(const SdrObjMacroHitRec& rRec) const
 {
-    SdrObjUserData* pData=ImpGetMacroUserData();
-    if (pData!=NULL) {
-        return pData->CheckMacroHit(rRec,this);
+    SdrObjUserData* pData = ImpGetMacroUserData();
+
+    if(pData)
+    {
+        return pData->CheckMacroHit(rRec, this);
     }
-    return CheckHit(rRec.aPos,rRec.nTol,rRec.pVisiLayer);
+
+    if(rRec.pPageView)
+    {
+        return SdrObjectPrimitiveHit(*this, rRec.aPos, rRec.nTol, *rRec.pPageView, rRec.pVisiLayer, false);
+    }
+
+    return 0;
 }
 
 Pointer SdrObject::GetMacroPointer(const SdrObjMacroHitRec& rRec) const
@@ -2374,8 +2462,8 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
 
     if(pRet->LineGeometryUsageIsNecessary())
     {
-        basegfx::B2DPolyPolygon aAreaPolyPolygon;
-        basegfx::B2DPolyPolygon aLinePolyPolygon;
+        basegfx::B2DPolyPolygon aMergedLineFillPolyPolygon;
+        basegfx::B2DPolyPolygon aMergedHairlinePolyPolygon;
         const drawinglayer::primitive2d::Primitive2DSequence xSequence(pRet->GetViewContact().getViewIndependentPrimitive2DSequence());
 
         if(xSequence.hasElements())
@@ -2387,36 +2475,31 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
             drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aViewInformation2D);
             aExtractor.process(xSequence);
 
-            aAreaPolyPolygon = aExtractor.getExtractedLineFills();
-            aLinePolyPolygon = aExtractor.getExtractedHairlines();
-        }
+            // #i102241# check for line results
+            const std::vector< basegfx::B2DPolygon >& rHairlineVector = aExtractor.getExtractedHairlines();
 
-        // Since this may in some cases lead to a count of 0 after
-        // the merge i moved the merge to the front.
-        if(aAreaPolyPolygon.count())
-        {
-            // bezier geometry got created, even for straight edges since the given
-            // object is a result of DoConvertToPolyObj. For conversion to contour
-            // this is not really needed and can be reduced again AFAP
-            aAreaPolyPolygon = basegfx::tools::simplifyCurveSegments(aAreaPolyPolygon);
-
-            // merge all to a decent result (try to use AND, but remember original)
-            const basegfx::B2DPolyPolygon aTemp(aAreaPolyPolygon);
-            aAreaPolyPolygon = basegfx::tools::solveCrossovers(aAreaPolyPolygon);
-            aAreaPolyPolygon = basegfx::tools::stripNeutralPolygons(aAreaPolyPolygon);
-            aAreaPolyPolygon = basegfx::tools::stripDispensablePolygons(aAreaPolyPolygon, false);
-
-            if(!aAreaPolyPolygon.count())
+            if(rHairlineVector.size())
             {
-                // OOps, AND is empty, this means there were no overlapping parts. Use
-                // remembered parts as result
-                aAreaPolyPolygon = aTemp;
+                // for SdrObject creation, just copy all to a single Hairline-PolyPolygon
+                for(sal_uInt32 a(0); a < rHairlineVector.size(); a++)
+                {
+                    aMergedHairlinePolyPolygon.append(rHairlineVector[a]);
+                }
+            }
+
+            // #i102241# check for fill rsults
+            const std::vector< basegfx::B2DPolyPolygon >& rLineFillVector(aExtractor.getExtractedLineFills());
+
+            if(rLineFillVector.size())
+            {
+                // merge to a single PolyPolygon (OR)
+                aMergedLineFillPolyPolygon = basegfx::tools::mergeToSinglePolyPolygon(rLineFillVector);
             }
         }
 
-        //  || aLinePolyPolygon.Count() removed; the conversion is ONLY
+        //  || aMergedHairlinePolyPolygon.Count() removed; the conversion is ONLY
         // useful when new closed filled polygons are created
-        if(aAreaPolyPolygon.count() || (bForceLineDash && aLinePolyPolygon.count()))
+        if(aMergedLineFillPolyPolygon.count() || (bForceLineDash && aMergedHairlinePolyPolygon.count()))
         {
             SfxItemSet aSet(pRet->GetMergedItemSet());
             XFillStyle eOldFillStyle = ((const XFillStyleItem&)(aSet.Get(XATTR_FILLSTYLE))).GetValue();
@@ -2424,10 +2507,10 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
             SdrPathObj* aLineHairlinePart = NULL;
             bool bBuildGroup(false);
 
-            if(aAreaPolyPolygon.count())
+            if(aMergedLineFillPolyPolygon.count())
             {
                 // create SdrObject for filled line geometry
-                aLinePolygonPart = new SdrPathObj(OBJ_PATHFILL, aAreaPolyPolygon);
+                aLinePolygonPart = new SdrPathObj(OBJ_PATHFILL, aMergedLineFillPolyPolygon);
                 aLinePolygonPart->SetModel(pRet->GetModel());
 
                 // correct item properties
@@ -2442,13 +2525,13 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
                 aLinePolygonPart->SetMergedItemSet(aSet);
             }
 
-            if(aLinePolyPolygon.count())
+            if(aMergedHairlinePolyPolygon.count())
             {
                 // create SdrObject for hairline geometry
                 // OBJ_PATHLINE is necessary here, not OBJ_PATHFILL. This is intended
                 // to get a non-filled object. If the poly is closed, the PathObj takes care for
                 // the correct closed state.
-                aLineHairlinePart = new SdrPathObj(OBJ_PATHLINE, aLinePolyPolygon);
+                aLineHairlinePart = new SdrPathObj(OBJ_PATHLINE, aMergedHairlinePolyPolygon);
                 aLineHairlinePart->SetModel(pRet->GetModel());
 
                 aSet.Put(XLineWidthItem(0L));
@@ -2850,8 +2933,8 @@ void SdrObject::impl_setUnoShape( const uno::Reference< uno::XInterface >& _rxUn
 {
     maWeakUnoShape = _rxUnoShape;
     mpSvxShape = SvxShape::getImplementation( _rxUnoShape );
-    OSL_ENSURE( mpSvxShape || !_rxUnoShape.is(),
-        "SdrObject::setUnoShape: not sure it's a good idea to have an XShape which is not implemented by SvxShape ..." );
+//    OSL_ENSURE( mpSvxShape || !_rxUnoShape.is(),
+//        "SdrObject::setUnoShape: not sure it's a good idea to have an XShape which is not implemented by SvxShape ..." );
 }
 
 /** only for internal use! */

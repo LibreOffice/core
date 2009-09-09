@@ -105,8 +105,14 @@ namespace sdr
                         drawinglayer::primitive2d::calculateRelativeCornerRadius(nCornerRadius, aObjectRange, fCornerRadiusX, fCornerRadiusY);
 
                         // create primitive
-                        const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrRectanglePrimitive2D(
-                            aObjectMatrix, *pAttribute, fCornerRadiusX, fCornerRadiusY));
+                        const drawinglayer::primitive2d::Primitive2DReference xReference(
+                            new drawinglayer::primitive2d::SdrRectanglePrimitive2D(
+                                aObjectMatrix,
+                                *pAttribute,
+                                fCornerRadiusX,
+                                fCornerRadiusY,
+                                GetRectObj().IsTextFrame()));
+
                         xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                     }
 

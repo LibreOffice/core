@@ -145,17 +145,25 @@ namespace drawinglayer
 
                     // prepare textlayoutdevice
                     TextLayouterDevice aTextLayouter;
-                    aTextLayouter.setFontAttributes(getFontAttributes(), aFontScale.getX(), aFontScale.getY());
+                    aTextLayouter.setFontAttributes(getFontAttributes(), aFontScale.getX(), aFontScale.getY(), getLocale());
 #ifdef WIN32
                     // when under Windows and the font is unequally scaled, need to correct font X-Scaling factor
                     if(bCorrectScale)
                     {
-                        aScale.setX(aScale.getX() * aTextLayouter.getCurrentFontRelation());
+                        const double fFontRelation(aTextLayouter.getCurrentFontRelation());
+                        aScale.setX(aScale.getX() * fFontRelation);
+                        aFontScale.setX(aFontScale.getX() / fFontRelation);
                     }
 #endif
                     // get the text outlines. No DXArray is given (would contain integers equal to unit vector
                     // transformed by object's transformation), let VCL do the job
-                    aTextLayouter.getTextOutlines(rTarget, getText(), getTextPosition(), getTextLength());
+                    aTextLayouter.getTextOutlines(
+                        rTarget, getText(),
+                        getTextPosition(),
+                        getTextLength(),
+                        // #i89784# added support for DXArray for justified text
+                        getDXArray(),
+                        aFontScale.getX());
 
                     // create primitives for the outlines
                     const sal_uInt32 nCount(rTarget.size());
@@ -300,30 +308,35 @@ namespace drawinglayer
 
                     // prepare textlayoutdevice
                     TextLayouterDevice aTextLayouter;
-                    aTextLayouter.setFontAttributes(getFontAttributes(), aFontScale.getX(), aFontScale.getY());
+                    aTextLayouter.setFontAttributes(getFontAttributes(), aFontScale.getX(), aFontScale.getY(), getLocale());
 
                     // get basic text range
                     basegfx::B2DRange aNewRange(aTextLayouter.getTextBoundRect(getText(), getTextPosition(), getTextLength()));
-#ifdef WIN32
-                    // when under Windows and the font is unequally scaled, need to correct font X-Scaling factor
-                    if(bCorrectScale)
+
+                    // #i102556# take empty results into account
+                    if(!aNewRange.isEmpty())
                     {
-                        aScale.setX(aScale.getX() * aTextLayouter.getCurrentFontRelation());
-                    }
+#ifdef WIN32
+                        // when under Windows and the font is unequally scaled, need to correct font X-Scaling factor
+                        if(bCorrectScale)
+                        {
+                            aScale.setX(aScale.getX() * aTextLayouter.getCurrentFontRelation());
+                        }
 #endif
-                    // prepare object transformation for range
-                    basegfx::B2DHomMatrix aRangeTransformation;
+                        // prepare object transformation for range
+                        basegfx::B2DHomMatrix aRangeTransformation;
 
-                    aRangeTransformation.scale(aScale.getX(), aScale.getY());
-                    aRangeTransformation.shearX(fShearX);
-                    aRangeTransformation.rotate(fRotate);
-                    aRangeTransformation.translate(aTranslate.getX(), aTranslate.getY());
+                        aRangeTransformation.scale(aScale.getX(), aScale.getY());
+                        aRangeTransformation.shearX(fShearX);
+                        aRangeTransformation.rotate(fRotate);
+                        aRangeTransformation.translate(aTranslate.getX(), aTranslate.getY());
 
-                    // apply range transformation to it
-                    aNewRange.transform(aRangeTransformation);
+                        // apply range transformation to it
+                        aNewRange.transform(aRangeTransformation);
 
-                    // assign to buffered value
-                    const_cast< TextSimplePortionPrimitive2D* >(this)->maB2DRange = aNewRange;
+                        // assign to buffered value
+                        const_cast< TextSimplePortionPrimitive2D* >(this)->maB2DRange = aNewRange;
+                    }
                 }
             }
 

@@ -180,13 +180,15 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
             {
                 bNumeric = TRUE;
                 xub_StrLen nDot = 0;
+                xub_StrLen nDecimalDelCount = 0;
                 for (xub_StrLen j = 0; j < aField2.Len(); j++)
                 {
                     const sal_Unicode c = aField2.GetChar(j);
                     // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
-                    if ((!cDecimalDelimiter || c != cDecimalDelimiter) &&
-                        (!cThousandDelimiter || c != cThousandDelimiter) &&
-                        !aCharClass.isDigit(aField2,j))
+                    if ( ( !cDecimalDelimiter  || c != cDecimalDelimiter )  &&
+                         ( !cThousandDelimiter || c != cThousandDelimiter ) &&
+                        !aCharClass.isDigit(aField2,j)                      &&
+                        ( j != 0 || (c != '+' && c != '-' ) ) )
                     {
                         bNumeric = FALSE;
                         break;
@@ -195,11 +197,13 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                     {
                         nPrecision = 15; // we have an decimal value
                         nScale = 2;
-                        nDot++;
-                    }
+                        ++nDecimalDelCount;
+                    } // if (cDecimalDelimiter && c == cDecimalDelimiter)
+                    if ( c == '.' )
+                        ++nDot;
                 }
 
-                if (nDot > 1) // if there is more than one dot it isn't a number
+                if (nDecimalDelCount > 1 || nDot > 1 ) // if there is more than one dot it isn't a number
                     bNumeric = FALSE;
                 if (bNumeric && cThousandDelimiter)
                 {
@@ -656,7 +660,10 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
     }
     return sal_True;
 }
-
+void OFlatTable::refreshHeader()
+{
+    m_nRowPos = 0;
+}
 // -----------------------------------------------------------------------------
 sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
 {
@@ -688,7 +695,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                     m_pFileStream->Seek(m_nFilePos);
                     if ( m_pFileStream->IsEof() || !readLine(nCurPos) /*|| !checkHeaderLine()*/)
                     {
-                        m_nMaxRowCount = m_nRowPos;
+                        m_nMaxRowCount = m_nRowPos -1;
                         return sal_False;
                     } // if ( m_pFileStream->IsEof() || !readLine(nCurPos) /*|| !checkHeaderLine()*/)
 
@@ -793,7 +800,10 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                 TRowPositionsInFile::const_iterator aFind = m_aFilePosToEndLinePos.find(nOffset);
                 m_bNeedToReadLine = aFind != m_aFilePosToEndLinePos.end();
                 if ( m_bNeedToReadLine )
+                {
+                    m_nFilePos  = aFind->first;
                     nCurPos = aFind->second;
+                }
                 else
                 {
                     m_nFilePos = nOffset;

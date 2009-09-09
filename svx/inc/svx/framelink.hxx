@@ -325,7 +325,7 @@ inline double GetVerDiagAngle( const Rectangle& rRect )
     @param fAngle
         Inner (right) angle between diagonal and horizontal frame border.
  */
-long GetTLDiagOffset( long nVerOffs, long nDiagOffs, double fAngle );
+SVX_DLLPUBLIC long GetTLDiagOffset( long nVerOffs, long nDiagOffs, double fAngle );
 
 /** Returns an X coordinate for a diagonal frame border in the specified height.
 
@@ -434,7 +434,7 @@ long GetTRDiagOffset( long nVerOffs, long nDiagOffs, double fAngle );
         True, if rLBorder and rRBorder can be drawn in one step without
         interruption at their connection point.
  */
-bool CheckFrameBorderConnectable(
+SVX_DLLPUBLIC bool CheckFrameBorderConnectable(
     const Style&        rLBorder,       /// Style of the left frame border to connect.
     const Style&        rRBorder,       /// Style of the right frame border to connect.
 
@@ -486,7 +486,7 @@ bool CheckFrameBorderConnectable(
                     |       \                       /       |
                  rLFromB      \                   /      rRFromB
  */
-void DrawHorFrameBorder(
+SVX_DLLPUBLIC void DrawHorFrameBorder(
     OutputDevice&       rDev,           /// The output device used to draw the frame border.
 
     const Point&        rLPos,          /// Reference point for left end of the processed frame border.
@@ -603,7 +603,7 @@ void SVX_DLLPUBLIC DrawHorFrameBorder(
                  rBFromB
                     |
  */
-void DrawVerFrameBorder(
+SVX_DLLPUBLIC void DrawVerFrameBorder(
     OutputDevice&       rDev,           /// The output device used to draw the frame border.
 
     const Point&        rTPos,          /// Reference point for top end of the processed frame border.
@@ -698,7 +698,7 @@ void SVX_DLLPUBLIC DrawVerFrameBorderSlanted(
 
     The function preserves all settings of the passed output device.
  */
-void DrawDiagFrameBorders(
+SVX_DLLPUBLIC void DrawDiagFrameBorders(
     OutputDevice&       rDev,           /// The output device used to draw the frame border.
 
     const Rectangle&    rRect,          /// Rectangle for both diagonal frame borders.

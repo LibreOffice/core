@@ -223,9 +223,9 @@ SfxDocumentInfoItem::SfxDocumentInfoItem()
     , m_Keywords()
     , m_Subject()
     , m_Title()
-    , bHasTemplate( sal_True )
-    , bDeleteUserData( sal_False )
-    , bIsUseUserData( sal_True )
+    , m_bHasTemplate( sal_True )
+    , m_bDeleteUserData( sal_False )
+    , m_bUseUserData( sal_True )
 {
 }
 
@@ -253,9 +253,9 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const String& rFile,
                     i_xDocProps->getKeywords()) )
     , m_Subject( i_xDocProps->getSubject() )
     , m_Title( i_xDocProps->getTitle() )
-    , bHasTemplate( TRUE )
-    , bDeleteUserData( sal_False )
-    , bIsUseUserData( bIs )
+    , m_bHasTemplate( sal_True )
+    , m_bDeleteUserData( sal_False )
+    , m_bUseUserData( bIs )
 {
     try
     {
@@ -302,15 +302,10 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const SfxDocumentInfoItem& rItem )
     , m_Keywords( rItem.getKeywords() )
     , m_Subject( rItem.getSubject() )
     , m_Title( rItem.getTitle() )
-    , bHasTemplate( rItem.bHasTemplate )
-    , bDeleteUserData( rItem.bDeleteUserData )
-    , bIsUseUserData( rItem.bIsUseUserData )
+    , m_bHasTemplate( rItem.m_bHasTemplate )
+    , m_bDeleteUserData( rItem.m_bDeleteUserData )
+    , m_bUseUserData( rItem.m_bUseUserData )
 {
-    for (size_t i = 0; i < 4; ++i) {
-        m_UserDefinedFieldTitles[i] = rItem.getUserDefinedFieldTitle(i);
-        m_UserDefinedFieldValues[i] = rItem.getUserDefinedFieldValue(i);
-    }
-
     for ( sal_uInt32 i = 0; i < rItem.m_aCustomProperties.size(); i++ )
     {
         CustomProperty* pProp = new CustomProperty( rItem.m_aCustomProperties[i]->m_sName,
@@ -384,8 +379,9 @@ void SfxDocumentInfoItem::resetUserData(const ::rtl::OUString & i_rAuthor)
 
 //------------------------------------------------------------------------
 
-void SfxDocumentInfoItem::updateDocumentInfo(
-        const uno::Reference<document::XDocumentProperties>& i_xDocProps) const
+void SfxDocumentInfoItem::UpdateDocumentInfo(
+        const uno::Reference<document::XDocumentProperties>& i_xDocProps,
+        bool i_bDoNotUpdateUserDefined) const
 {
     if (isAutoloadEnabled()) {
         i_xDocProps->setAutoloadSecs(getAutoloadDelay());
@@ -409,6 +405,15 @@ void SfxDocumentInfoItem::updateDocumentInfo(
         ::comphelper::string::convertCommaSeparated(getKeywords()));
     i_xDocProps->setSubject(getSubject());
     i_xDocProps->setTitle(getTitle());
+
+    // this is necessary in case of replaying a recorded macro:
+    // in this case, the macro may contain the 4 old user-defined DocumentInfo
+    // fields, but not any of the DocumentInfo properties;
+    // as a consequence, most of the UserDefined properties of the
+    // DocumentProperties would be summarily deleted here, which does not
+    // seem like a good idea.
+    if (i_bDoNotUpdateUserDefined)
+        return;
 
     try
     {
@@ -442,24 +447,24 @@ void SfxDocumentInfoItem::updateDocumentInfo(
 
 //------------------------------------------------------------------------
 
-BOOL SfxDocumentInfoItem::IsDeleteUserData() const
+sal_Bool SfxDocumentInfoItem::IsDeleteUserData() const
 {
-     return bDeleteUserData;
+    return m_bDeleteUserData;
 }
 
-void SfxDocumentInfoItem::SetDeleteUserData( BOOL bSet )
+void SfxDocumentInfoItem::SetDeleteUserData( sal_Bool bSet )
 {
-    bDeleteUserData = bSet;
+    m_bDeleteUserData = bSet;
 }
 
-BOOL SfxDocumentInfoItem::IsUseUserData() const
+sal_Bool SfxDocumentInfoItem::IsUseUserData() const
 {
-     return bIsUseUserData;
+    return m_bUseUserData;
 }
 
-void SfxDocumentInfoItem::SetUseUserData( BOOL bSet )
+void SfxDocumentInfoItem::SetUseUserData( sal_Bool bSet )
 {
-    bIsUseUserData = bSet;
+    m_bUseUserData = bSet;
 }
 
 std::vector< CustomProperty* > SfxDocumentInfoItem::GetCustomProperties() const
@@ -488,38 +493,11 @@ void SfxDocumentInfoItem::AddCustomProperty( const ::rtl::OUString& sName, const
     m_aCustomProperties.push_back( pProp );
 }
 
-::rtl::OUString SfxDocumentInfoItem::getUserDefinedFieldTitle(size_t i_ix) const
-{
-    DBG_ASSERT(i_ix < 4, "SfxDocumentInfoItem: invalid index");
-    return m_UserDefinedFieldTitles[i_ix];
-}
-
-::rtl::OUString SfxDocumentInfoItem::getUserDefinedFieldValue(size_t i_ix) const
-{
-    DBG_ASSERT(i_ix < 4, "SfxDocumentInfoItem: invalid index");
-    return m_UserDefinedFieldValues[i_ix];
-}
-
-void SfxDocumentInfoItem::setUserDefinedFieldTitle(size_t i_ix,
-        ::rtl::OUString i_val)
-{
-    DBG_ASSERT(i_ix < 4, "SfxDocumentInfoItem: invalid index");
-    m_UserDefinedFieldTitles[i_ix] = i_val;
-}
-
-void SfxDocumentInfoItem::setUserDefinedFieldValue(size_t i_ix,
-        ::rtl::OUString i_val)
-{
-    DBG_ASSERT(i_ix < 4, "SfxDocumentInfoItem: invalid index");
-    m_UserDefinedFieldValues[i_ix] = i_val;
-}
-
 sal_Bool SfxDocumentInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
 {
     String aValue;
     sal_Int32 nValue = 0;
     sal_Bool bValue = sal_False;
-    BOOL bField = FALSE;
     BOOL bIsInt = FALSE;
     BOOL bIsString = FALSE;
     nMemberId &= ~CONVERT_TWIPS;
@@ -562,43 +540,6 @@ sal_Bool SfxDocumentInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
             bIsString = TRUE;
             aValue = getTitle();
             break;
-        case MID_DOCINFO_FIELD1:
-        case MID_DOCINFO_FIELD2:
-        case MID_DOCINFO_FIELD3:
-        case MID_DOCINFO_FIELD4:
-            bField = TRUE;
-            // no break here
-        case MID_DOCINFO_FIELD1TITLE:
-        case MID_DOCINFO_FIELD2TITLE:
-        case MID_DOCINFO_FIELD3TITLE:
-        case MID_DOCINFO_FIELD4TITLE:
-        {
-            bIsString = TRUE;
-            USHORT nSub = MID_DOCINFO_FIELD1TITLE;
-            if ( bField )
-            {
-                nSub = MID_DOCINFO_FIELD1;
-            }
-            if ( bField )
-            {
-                DBG_ASSERT( nMemberId == MID_DOCINFO_FIELD1 ||
-                            nMemberId == MID_DOCINFO_FIELD2 ||
-                            nMemberId == MID_DOCINFO_FIELD3 ||
-                            nMemberId == MID_DOCINFO_FIELD4,
-                            "SfxDocumentInfoItem:Anpassungsfehler" );
-                aValue = getUserDefinedFieldValue( nMemberId - nSub );
-            }
-            else
-            {
-                DBG_ASSERT( nMemberId == MID_DOCINFO_FIELD1TITLE ||
-                            nMemberId == MID_DOCINFO_FIELD2TITLE ||
-                            nMemberId == MID_DOCINFO_FIELD3TITLE ||
-                            nMemberId == MID_DOCINFO_FIELD4TITLE,
-                            "SfxDocumentInfoItem:Anpassungsfehler" );
-                aValue = getUserDefinedFieldTitle( nMemberId - nSub );
-            }
-            break;
-        }
         default:
             DBG_ERROR("Wrong MemberId!");
             return sal_False;
@@ -673,28 +614,6 @@ sal_Bool SfxDocumentInfoItem::PutValue( const Any& rVal, BYTE nMemberId )
             if ( bRet )
                 setTitle(aValue);
             break;
-        case MID_DOCINFO_FIELD1TITLE:
-        case MID_DOCINFO_FIELD2TITLE:
-        case MID_DOCINFO_FIELD3TITLE:
-        case MID_DOCINFO_FIELD4TITLE:
-        {
-            bRet = (rVal >>= aValue);
-            if ( bRet )
-                setUserDefinedFieldTitle(
-                    nMemberId - MID_DOCINFO_FIELD1TITLE, String(aValue));
-            break;
-        }
-        case MID_DOCINFO_FIELD1:
-        case MID_DOCINFO_FIELD2:
-        case MID_DOCINFO_FIELD3:
-        case MID_DOCINFO_FIELD4:
-        {
-            bRet = (rVal >>= aValue);
-            if ( bRet )
-                setUserDefinedFieldValue(
-                    nMemberId - MID_DOCINFO_FIELD1, String(aValue));
-            break;
-        }
         default:
             DBG_ERROR("Wrong MemberId!");
             return sal_False;
@@ -1178,7 +1097,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         aFileValFt.SetText( aURL.GetPartBeforeLastName() );
 
     // handle access data
-    BOOL bIsUseUserData = pInfoItem->IsUseUserData();
+    sal_Bool m_bUseUserData = pInfoItem->IsUseUserData();
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     aCreateValFt.SetText( ConvertDateTime_Impl( pInfoItem->getAuthor(),
         pInfoItem->getCreationDate(), aLocaleWrapper ) );
@@ -1193,7 +1112,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         aPrintValFt.SetText( ConvertDateTime_Impl( pInfoItem->getPrintedBy(),
             aTime, aLocaleWrapper ) );
     const long nTime = pInfoItem->getEditingDuration();
-    if( bIsUseUserData )
+    if ( m_bUseUserData )
     {
         const Time aT( nTime/3600, (nTime%3600)/60, nTime%60 );
         aTimeLogValFt.SetText( aLocaleWrapper.getDuration( aT ) );
@@ -1201,7 +1120,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
             pInfoItem->getEditingCycles() ) );
     }
 
-    TriState eState = (TriState)bIsUseUserData;
+    TriState eState = (TriState)m_bUseUserData;
 
     if ( STATE_DONTKNOW == eState )
         aUseUserDataCB.EnableTriState( TRUE );
@@ -1554,192 +1473,6 @@ int SfxInternetPage::DeactivatePage( SfxItemSet* /*pSet*/ )
     }
 
     return nRet;
-}
-
-//------------------------------------------------------------------------
-
-SfxDocumentUserPage::SfxDocumentUserPage( Window* pParent,
-                                          const SfxItemSet& rItemSet ) :
-
-    SfxTabPage( pParent, SfxResId( TP_DOCINFOUSER ), rItemSet ),
-
-    bLabelModified  ( FALSE ),
-    aInfo1Ft        ( this, SfxResId( FT_INFO1 ) ),
-    aInfo1Ed        ( this, SfxResId( ED_INFO1 ) ),
-    aInfo2Ft        ( this, SfxResId( FT_INFO2 ) ),
-    aInfo2Ed        ( this, SfxResId( ED_INFO2 ) ),
-    aInfo3Ft        ( this, SfxResId( FT_INFO3 ) ),
-    aInfo3Ed        ( this, SfxResId( ED_INFO3 ) ),
-    aInfo4Ft        ( this, SfxResId( FT_INFO4 ) ),
-    aInfo4Ed        ( this, SfxResId( ED_INFO4 ) ),
-    aEditLabelBtn   ( this, SfxResId( BTN_EDITLABEL ) ),
-
-    pInfoItem       ( NULL )
-
-{
-    FreeResource();
-    //increase button width in case of long labels
-    Size aButtonSize = aEditLabelBtn.GetOutputSizePixel();
-    sal_Int32 nTextWidth = aEditLabelBtn.GetTextWidth(aEditLabelBtn.GetText());
-    //add some additional space
-    sal_Int32 nDiff = nTextWidth + 4 - aButtonSize.Width();
-    if( nDiff > 0)
-    {
-        Point aPos(aEditLabelBtn.GetPosPixel());
-        aPos.X() -= nDiff;
-        aButtonSize.Width() += nDiff;
-        aEditLabelBtn.SetPosSizePixel(aPos, aButtonSize);
-    }
-
-    aEditLabelBtn.SetClickHdl( LINK( this, SfxDocumentUserPage, EditLabelHdl ) );
-}
-
-//------------------------------------------------------------------------
-
-IMPL_LINK( SfxDocumentUserPage, EditLabelHdl, PushButton *, pPushButton )
-{
-    (void)pPushButton; //unused
-    SfxDocInfoEditDlg* pDlg = new SfxDocInfoEditDlg( this );
-    pDlg->SetText1( GetLabelText_Impl( &aInfo1Ft ) );
-    pDlg->SetText2( GetLabelText_Impl( &aInfo2Ft ) );
-    pDlg->SetText3( GetLabelText_Impl( &aInfo3Ft ) );
-    pDlg->SetText4( GetLabelText_Impl( &aInfo4Ft ) );
-
-    if ( RET_OK == pDlg->Execute() )
-    {
-        SetLabelText_Impl( &aInfo1Ft, pDlg->GetText1() );
-        SetLabelText_Impl( &aInfo2Ft, pDlg->GetText2() );
-        SetLabelText_Impl( &aInfo3Ft, pDlg->GetText3() );
-        SetLabelText_Impl( &aInfo4Ft, pDlg->GetText4() );
-        bLabelModified = TRUE;
-    }
-    delete pDlg;
-    return 0;
-}
-
-//------------------------------------------------------------------------
-
-String SfxDocumentUserPage::GetLabelText_Impl( FixedText* pLabel )
-{
-    DBG_ASSERT( pLabel, "SfxDocumentUserPage::SetLabelText_Impl(): invalid label" );
-    String aLabel = pLabel->GetText();
-    aLabel.Erase( 0, aLabel.Search( ' ' ) + 1 );
-    return aLabel;
-}
-
-//------------------------------------------------------------------------
-
-void SfxDocumentUserPage::SetLabelText_Impl( FixedText* pLabel, const String& rNewLabel )
-{
-    String aLabel( '~' );
-    sal_Int32 nNumber = 0;
-    if ( &aInfo1Ft == pLabel )
-        nNumber = 1;
-    else if ( &aInfo2Ft == pLabel )
-        nNumber = 2;
-    else if ( &aInfo3Ft == pLabel )
-        nNumber = 3;
-    else if ( &aInfo4Ft == pLabel )
-        nNumber = 4;
-    DBG_ASSERT( nNumber > 0, "SfxDocumentUserPage::SetLabelText_Impl(): wrong label" );
-    aLabel += String::CreateFromInt32( nNumber );
-    aLabel += String( DEFINE_CONST_UNICODE(": ") );
-    aLabel += rNewLabel;
-    DBG_ASSERT( pLabel, "SfxDocumentUserPage::SetLabelText_Impl(): invalid label" );
-    pLabel->SetText( aLabel );
-}
-
-//------------------------------------------------------------------------
-
-SfxTabPage* SfxDocumentUserPage::Create( Window* pParent, const SfxItemSet& rItemSet )
-{
-    return new SfxDocumentUserPage(pParent, rItemSet);
-}
-
-//------------------------------------------------------------------------
-
-BOOL SfxDocumentUserPage::FillItemSet( SfxItemSet& rSet )
-{
-    const BOOL bMod = bLabelModified ||
-                      aInfo1Ed.IsModified() || aInfo2Ed.IsModified() ||
-                      aInfo3Ed.IsModified() || aInfo4Ed.IsModified();
-    if ( !bMod )
-        return FALSE;
-
-    const SfxPoolItem* pItem = NULL;
-    SfxDocumentInfoItem* pInfo = NULL;
-    SfxTabDialog* pDlg = GetTabDialog();
-    const SfxItemSet* pExSet = NULL;
-
-    if ( pDlg )
-        pExSet = pDlg->GetExampleSet();
-
-    if ( pExSet && SFX_ITEM_SET != pExSet->GetItemState( SID_DOCINFO, TRUE, &pItem ) )
-        pInfo = pInfoItem;
-    else if ( pItem )
-        pInfo = new SfxDocumentInfoItem( *(const SfxDocumentInfoItem*)pItem );
-
-    if ( !pInfo )
-    {
-        DBG_ERRORFILE( "SfxDocumentUserPage::FillItemSet(): no item found" );
-        return FALSE;
-    }
-
-    if ( bLabelModified || aInfo1Ed.IsModified() )
-    {
-        XubString aTitle = GetLabelText_Impl( &aInfo1Ft );
-        pInfo->setUserDefinedFieldTitle( 0, aTitle );
-        pInfo->setUserDefinedFieldValue( 0, aInfo1Ed.GetText() );
-    }
-    if ( bLabelModified || aInfo2Ed.IsModified() )
-    {
-        XubString aTitle = GetLabelText_Impl( &aInfo2Ft );
-        pInfo->setUserDefinedFieldTitle( 1, aTitle );
-        pInfo->setUserDefinedFieldValue( 1, aInfo2Ed.GetText() );
-    }
-    if ( bLabelModified || aInfo3Ed.IsModified() )
-    {
-        XubString aTitle = GetLabelText_Impl( &aInfo3Ft );
-        pInfo->setUserDefinedFieldTitle( 2, aTitle );
-        pInfo->setUserDefinedFieldValue( 2, aInfo3Ed.GetText() );
-    }
-    if ( bLabelModified || aInfo4Ed.IsModified() )
-    {
-        XubString aTitle = GetLabelText_Impl( &aInfo4Ft );
-        pInfo->setUserDefinedFieldTitle( 3, aTitle );
-        pInfo->setUserDefinedFieldValue( 3, aInfo4Ed.GetText() );
-    }
-    rSet.Put( *pInfo );
-    if ( pInfo != pInfoItem )
-        delete pInfo;
-    return bMod;
-}
-
-//------------------------------------------------------------------------
-
-void SfxDocumentUserPage::Reset(const SfxItemSet &rSet)
-{
-    pInfoItem = &(SfxDocumentInfoItem&)rSet.Get( SID_DOCINFO );
-
-    SetLabelText_Impl( &aInfo1Ft, pInfoItem->getUserDefinedFieldTitle(0) );
-    aInfo1Ed.SetText( pInfoItem->getUserDefinedFieldValue(0) );
-    SetLabelText_Impl( &aInfo2Ft, pInfoItem->getUserDefinedFieldTitle(1) );
-    aInfo2Ed.SetText( pInfoItem->getUserDefinedFieldValue(1) );
-    SetLabelText_Impl( &aInfo3Ft, pInfoItem->getUserDefinedFieldTitle(2) );
-    aInfo3Ed.SetText( pInfoItem->getUserDefinedFieldValue(2) );
-    SetLabelText_Impl( &aInfo4Ft, pInfoItem->getUserDefinedFieldTitle(3) );
-    aInfo4Ed.SetText( pInfoItem->getUserDefinedFieldValue(3) );
-    bLabelModified = FALSE;
-
-    SFX_ITEMSET_ARG( &rSet, pROItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
-    if ( pROItem && pROItem->GetValue() )
-    {
-        aInfo1Ed.SetReadOnly( TRUE );
-        aInfo2Ed.SetReadOnly( TRUE );
-        aInfo3Ed.SetReadOnly( TRUE );
-        aInfo4Ed.SetReadOnly( TRUE );
-        aEditLabelBtn.Disable();
-    }
 }
 
 //------------------------------------------------------------------------

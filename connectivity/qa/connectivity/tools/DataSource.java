@@ -27,10 +27,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package connectivity.tools;
 
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.container.ElementExistException;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XNameAccess;
@@ -51,21 +49,22 @@ import java.util.logging.Logger;
 public class DataSource
 {
     // the service factory
-    XMultiServiceFactory    m_orb;
-    XDataSource             m_dataSource;
 
-    public DataSource( XMultiServiceFactory _orb, String _registeredName ) throws Exception
+    private final XMultiServiceFactory m_orb;
+    private XDataSource m_dataSource;
+
+    public DataSource(final XMultiServiceFactory _orb, final String _registeredName) throws Exception
     {
         m_orb = _orb;
 
-        XNameAccess dbContext = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class,
-            _orb.createInstance("com.sun.star.sdb.DatabaseContext"));
+        final XNameAccess dbContext = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,
+                _orb.createInstance("com.sun.star.sdb.DatabaseContext"));
 
-        m_dataSource = (XDataSource)UnoRuntime.queryInterface(XDataSource.class,
-            dbContext.getByName( _registeredName ) );
+        m_dataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class,
+                dbContext.getByName(_registeredName));
     }
 
-    public DataSource( XMultiServiceFactory _orb, XDataSource _dataSource )
+    public DataSource(final XMultiServiceFactory _orb,final XDataSource _dataSource)
     {
         m_orb = _orb;
         m_dataSource = _dataSource;
@@ -77,47 +76,47 @@ public class DataSource
     }
 
     /** creates a query with a given name and SQL command
-    */
-    public void createQuery( String _name, String _sqlCommand ) throws ElementExistException, WrappedTargetException, com.sun.star.lang.IllegalArgumentException
+     */
+    public void createQuery(final String _name, final String _sqlCommand) throws ElementExistException, WrappedTargetException, com.sun.star.lang.IllegalArgumentException
     {
-        createQuery( _name, _sqlCommand, true );
+        createQuery(_name, _sqlCommand, true);
     }
 
     /** creates a query with a given name, SQL command, and EscapeProcessing flag
-    */
-    public void createQuery( String _name, String _sqlCommand, boolean _escapeProcessing ) throws ElementExistException, WrappedTargetException, com.sun.star.lang.IllegalArgumentException
+     */
+    public void createQuery(final String _name, final String _sqlCommand, final boolean _escapeProcessing) throws ElementExistException, WrappedTargetException, com.sun.star.lang.IllegalArgumentException
     {
-        XSingleServiceFactory queryDefsFac = (XSingleServiceFactory)UnoRuntime.queryInterface(
-            XSingleServiceFactory.class, getQueryDefinitions() );
+        final XSingleServiceFactory queryDefsFac = (XSingleServiceFactory) UnoRuntime.queryInterface(
+                XSingleServiceFactory.class, getQueryDefinitions());
         XPropertySet queryDef = null;
         try
         {
-            queryDef = (XPropertySet)UnoRuntime.queryInterface(
-                XPropertySet.class, queryDefsFac.createInstance() );
-            queryDef.setPropertyValue( "Command", _sqlCommand );
-            queryDef.setPropertyValue( "EscapeProcessing", new Boolean( _escapeProcessing ) );
+            queryDef = (XPropertySet) UnoRuntime.queryInterface(
+                    XPropertySet.class, queryDefsFac.createInstance());
+            queryDef.setPropertyValue("Command", _sqlCommand);
+            queryDef.setPropertyValue("EscapeProcessing", Boolean.valueOf(_escapeProcessing));
         }
-        catch( com.sun.star.uno.Exception e )
+        catch (com.sun.star.uno.Exception e)
         {
-            e.printStackTrace( System.err );
+            e.printStackTrace(System.err);
         }
 
-        XNameContainer queryDefsContainer = (XNameContainer)UnoRuntime.queryInterface(
-            XNameContainer.class, getQueryDefinitions() );
-        queryDefsContainer.insertByName( _name, queryDef );
+        final XNameContainer queryDefsContainer = (XNameContainer) UnoRuntime.queryInterface(
+                XNameContainer.class, getQueryDefinitions());
+        queryDefsContainer.insertByName(_name, queryDef);
     }
 
     /** provides the query definition with the given name
      */
-    public QueryDefinition getQueryDefinition( String _name ) throws NoSuchElementException
+    public QueryDefinition getQueryDefinition(final String _name) throws NoSuchElementException
     {
-        XNameAccess allDefs = getQueryDefinitions();
+        final XNameAccess allDefs = getQueryDefinitions();
         try
         {
             return new QueryDefinition(
-                (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, allDefs.getByName( _name ) ) );
+                    (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, allDefs.getByName(_name)));
         }
-        catch ( WrappedTargetException e )
+        catch (WrappedTargetException e)
         {
         }
         throw new NoSuchElementException();
@@ -127,8 +126,8 @@ public class DataSource
      */
     public XNameAccess getQueryDefinitions()
     {
-        XQueryDefinitionsSupplier suppQueries = (XQueryDefinitionsSupplier)UnoRuntime.queryInterface(
-            XQueryDefinitionsSupplier.class, m_dataSource );
+        final XQueryDefinitionsSupplier suppQueries = (XQueryDefinitionsSupplier) UnoRuntime.queryInterface(
+                XQueryDefinitionsSupplier.class, m_dataSource);
         return suppQueries.getQueryDefinitions();
     }
 
@@ -137,12 +136,12 @@ public class DataSource
      *  This is usually necessary if you created tables by directly executing SQL statements,
      *  bypassing the SDBCX layer.
      */
-    public void refreshTables( com.sun.star.sdbc.XConnection _connection )
+    public void refreshTables(final com.sun.star.sdbc.XConnection _connection)
     {
-        XTablesSupplier suppTables = (XTablesSupplier)UnoRuntime.queryInterface(
-            XTablesSupplier.class, _connection );
-        XRefreshable refreshTables = (XRefreshable)UnoRuntime.queryInterface(
-            XRefreshable.class, suppTables.getTables() );
+        final XTablesSupplier suppTables = (XTablesSupplier) UnoRuntime.queryInterface(
+                XTablesSupplier.class, _connection);
+        final XRefreshable refreshTables = (XRefreshable) UnoRuntime.queryInterface(
+                XRefreshable.class, suppTables.getTables());
         refreshTables.refresh();
     }
 
@@ -158,9 +157,9 @@ public class DataSource
         String name = null;
         try
         {
-            XPropertySet dataSourceProps = (XPropertySet) UnoRuntime.queryInterface(
-            XPropertySet.class, m_dataSource );
-            name = (String)dataSourceProps.getPropertyValue("Name");
+            final XPropertySet dataSourceProps = (XPropertySet) UnoRuntime.queryInterface(
+                    XPropertySet.class, m_dataSource);
+            name = (String) dataSourceProps.getPropertyValue("Name");
         }
         catch (Exception ex)
         {

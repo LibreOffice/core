@@ -33,10 +33,10 @@
 
 #include <tools/contnr.hxx>
 
-#ifndef _RESID_HXX //autogen
 #include <tools/resid.hxx>
-#endif
 #include <tools/string.hxx>
+
+#include <svx/svxdllapi.h>
 
 //************************************************************
 //   Vorausdeklarationen
@@ -64,7 +64,7 @@ public:
 // IDs von SDR_StringCacheBegin (256) bis
 // SDR_StringCacheEnd (weiss ich grad' nicht).
 // Hierzu siehe auch SvdStr.Hrc
-String ImpGetResStr(sal_uInt16 nResID);
+SVX_DLLPUBLIC String ImpGetResStr(sal_uInt16 nResID);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

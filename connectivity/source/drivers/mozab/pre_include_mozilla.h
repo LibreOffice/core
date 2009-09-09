@@ -38,18 +38,28 @@
 // Turn off DEBUG Assertions
 #ifdef _DEBUG
     #define _DEBUG_WAS_DEFINED _DEBUG
-    #undef _DEBUG
+    #ifndef MOZILLA_ENABLE_DEBUG
+        #undef _DEBUG
+    #endif
 #else
     #undef _DEBUG_WAS_DEFINED
+    #ifdef MOZILLA_ENABLE_DEBUG
+        #define _DEBUG 1
+    #endif
 #endif
 
 // and turn off the additional virtual methods which are part of some interfaces when compiled
 // with debug
 #ifdef DEBUG
     #define DEBUG_WAS_DEFINED DEBUG
-    #undef DEBUG
+    #ifndef MOZILLA_ENABLE_DEBUG
+        #undef DEBUG
+    #endif
 #else
     #undef DEBUG_WAS_DEFINED
+    #ifdef MOZILLA_ENABLE_DEBUG
+        #define DEBUG 1
+    #endif
 #endif
 
 #if defined __GNUC__

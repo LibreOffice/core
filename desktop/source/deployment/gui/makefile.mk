@@ -50,6 +50,7 @@ DLLPRE =
 
 SLOFILES = \
         $(SLO)$/dp_gui_service.obj \
+        $(SLO)$/dp_gui_extlistbox.obj \
         $(SLO)$/dp_gui_dialog2.obj \
         $(SLO)$/dp_gui_theextmgr.obj \
         $(SLO)$/license_dialog.obj \

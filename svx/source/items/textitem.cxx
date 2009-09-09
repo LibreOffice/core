@@ -485,6 +485,13 @@ SfxItemPresentation SvxFontItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
+//------------------------------------------------------------------------
+
+void SvxFontItem::EnableStoreUnicodeNames( BOOL bEnable )
+{
+    bEnableStoreUnicodeNames = bEnable;
+}
+
 // class SvxPostureItem --------------------------------------------------
 
 SvxPostureItem::SvxPostureItem( const FontItalic ePosture, const USHORT nId ) :

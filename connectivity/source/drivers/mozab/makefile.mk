@@ -66,22 +66,24 @@ MOZ_REG_LIB := $(MOZ_LIB)$/mozreg.lib
 
 .IF "$(OS)"=="WNT" 
 .IF "$(COM)"=="GCC"
-MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lembed_base_s -lnspr4 -lmozreg_s -lxpcom
+MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lembed_base_s -lnspr4 -lmozreg_s -lxpcom -lxpcom_core
 .ELSE
 LIB += $(MOZ_LIB)
-MOZ_LIB_XPCOM= $(MOZ_EMBED_LIB) $(MOZ_LIB)$/nspr4.lib $(MOZ_REG_LIB) $(MOZ_LIB)$/xpcom.lib
+MOZ_LIB_XPCOM= $(MOZ_EMBED_LIB) $(MOZ_LIB)$/nspr4.lib $(MOZ_REG_LIB) $(MOZ_LIB)$/xpcom.lib $(MOZ_LIB)$/xpcom_core.lib
 .ENDIF
 .ELSE "$(OS)"=="WNT" 
-MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lembed_base_s -lnspr4 -lmozreg_s -lxpcom
+MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lnspr4 -lxpcom_core -lmozreg_s -lembed_base_s
 .ENDIF
 #End of mozilla specific stuff.
-
-# Disable '-z defs' due to broken libxpcom.
-LINKFLAGSDEFS=$(0)
 
 USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
 VISIBILITY_HIDDEN=TRUE
+
+.IF "$(OS)"!="WNT" 
+COMPONENT_CONFIG_DATA=$(TARGET)2.xcu
+COMPONENT_CONFIG_SCHEMA=$(TARGET)2.xcs
+.ENDIF
 
 # --- Settings ----------------------------------
 
@@ -89,7 +91,7 @@ VISIBILITY_HIDDEN=TRUE
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
 
-.INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/makefile.pmk
 
 .INCLUDE :  $(PRJ)$/version.mk
 
@@ -98,7 +100,6 @@ ENVCFLAGS+=/FR$(SLO)$/
 SLOFILES=\
         $(SLO)$/MDriver.obj						\
         $(SLO)$/MServices.obj
-
             
 # --- MOZAB BASE Library -----------------------------------
 
@@ -140,7 +141,8 @@ MOZSLOFILES=\
     $(SLO)$/MNSINIParser.obj	\
     $(SLO)$/MNSRunnable.obj	\
     $(SLO)$/MNSProfile.obj					\
-    $(SLO)$/MNSProfileDirServiceProvider.obj
+    $(SLO)$/MNSProfileDirServiceProvider.obj    \
+    $(SLO)$/MLdapAttributeMap.obj
 
 
 SLO2FILES=\
@@ -186,7 +188,7 @@ DEF2NAME=	$(SHL2TARGET)
 
 # --- Targets ----------------------------------
 
-.INCLUDE : target.mk
+.INCLUDE : $(PRJ)$/target.pmk
 
 # --- filter file ------------------------------
 

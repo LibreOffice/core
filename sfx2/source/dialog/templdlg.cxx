@@ -79,7 +79,6 @@
 #include "imgmgr.hxx"
 #include "helpid.hrc"
 #include "appdata.hxx"
-#include "objshimp.hxx"
 #include <sfx2/viewfrm.hxx>
 
 #include <comphelper/configurationhelper.hxx>
@@ -103,8 +102,8 @@ using namespace ::com::sun::star::uno;
 
 static USHORT nLastItemId = USHRT_MAX;
 
-// filter box has maximum 7 entries visible
-#define MAX_FILTER_ENTRIES          7
+// filter box has maximum 12 entries visible
+#define MAX_FILTER_ENTRIES          12
 
 //=========================================================================
 
@@ -883,7 +882,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
 
     nActFilter = pCurObjShell ? static_cast< USHORT >( LoadFactoryStyleFilter( pCurObjShell ) ) : 0xFFFF;
     if ( pCurObjShell && 0xFFFF == nActFilter )
-        nActFilter = pCurObjShell->pImp->nStyleFilter;
+        nActFilter = pCurObjShell->GetAutoStyleFilterIndex();
 
         // Einfuegen in die Toolbox
         // umgekehrte Reihenfolge, da immer vorne eingefuegt wird.
@@ -1300,7 +1299,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
             if(pTreeBox)
                 aFilterLb.SelectEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)));
 
-            // show maximum seven entries
+            // show maximum 12 entries
             aFilterLb.SetDropDownLineCount( MAX_FILTER_ENTRIES );
             aFilterLb.SetUpdateMode(TRUE);
         }
@@ -1504,7 +1503,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
          CheckItem( nActFamily, TRUE );
          nActFilter = static_cast< USHORT >( LoadFactoryStyleFilter( pDocShell ) );
          if ( 0xFFFF == nActFilter )
-            nActFilter = pDocShell->pImp->nStyleFilter;
+            nActFilter = pDocShell->GetAutoStyleFilterIndex();
 
          nAppFilter = pItem->GetValue();
          if(!pTreeBox)
@@ -1674,7 +1673,7 @@ void SfxCommonTemplateDialog_Impl::FilterSelect(
         SfxObjectShell *pDocShell = pViewFrame->GetObjectShell();
         if (pDocShell)
         {
-            pDocShell->Get_Impl()->nStyleFilter = nActFilter;
+            pDocShell->SetAutoStyleFilterIndex(nActFilter);
             SaveFactoryStyleFilter( pDocShell, nActFilter );
         }
 
@@ -1885,8 +1884,8 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(USHORT nEntry)
                 pStyleSheetPool->SetSearchMask( eFam, SFXSTYLEBIT_USERDEF );
 
                 SfxNewStyleDlg *pDlg =
-                    // FloatingWindow must not be parent of a modal dialog
-                    new SfxNewStyleDlg(SFX_APP()->GetTopWindow(), *pStyleSheetPool);
+                    // why? : FloatingWindow must not be parent of a modal dialog
+                    new SfxNewStyleDlg(pWindow, *pStyleSheetPool);
                 if(RET_OK == pDlg->Execute())
                 {
                     pStyleSheetPool->SetSearchMask(eFam, nFilter);

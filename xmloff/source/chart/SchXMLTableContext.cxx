@@ -343,37 +343,6 @@ void lcl_fillRangeMapping(
     }
 }
 
-void lcl_copyProperties(
-    const Reference< beans::XPropertySet > & xSource,
-    const Reference< beans::XPropertySet > & xDestination )
-{
-    if( ! (xSource.is() && xDestination.is()))
-        return;
-
-    try
-    {
-        Reference< beans::XPropertySetInfo > xSrcInfo( xSource->getPropertySetInfo(), uno::UNO_QUERY_THROW );
-        Reference< beans::XPropertySetInfo > xDestInfo( xDestination->getPropertySetInfo(), uno::UNO_QUERY_THROW );
-        Sequence< beans::Property > aProperties( xSrcInfo->getProperties());
-        const sal_Int32 nLength = aProperties.getLength();
-        for( sal_Int32 i = 0; i < nLength; ++i )
-        {
-            OUString aName( aProperties[i].Name);
-            if( xDestInfo->hasPropertyByName( aName ))
-            {
-                beans::Property aProp( xDestInfo->getPropertyByName( aName ));
-                if( (aProp.Attributes & beans::PropertyAttribute::READONLY) == 0 )
-                    xDestination->setPropertyValue(
-                        aName, xSource->getPropertyValue( aName ));
-            }
-        }
-    }
-    catch( const uno::Exception & )
-    {
-        OSL_ENSURE( false, "Copying property sets failed!" );
-    }
-}
-
 Reference< chart2::data::XDataSequence >
     lcl_reassignDataSequence(
         const Reference< chart2::data::XDataSequence > & xSequence,
@@ -967,7 +936,15 @@ void SchXMLTableHelper::applyTableSimple(
         sal_Int32 nColumnCount = 0;
         sal_Int32 nCol = 0, nRow = 0;
         if( nRowCount )
+        {
             nColumnCount = rTable.aData[ 0 ].size();
+            ::std::vector< ::std::vector< SchXMLCell > >::const_iterator iRow = rTable.aData.begin();
+            while( iRow != rTable.aData.end() )
+            {
+                nColumnCount = ::std::max( nColumnCount, static_cast<sal_Int32>(iRow->size()) );
+                iRow++;
+            }
+        }
 
         // #i27909# avoid illegal index access for empty tables
         if( nColumnCount == 0 || nRowCount == 0 )
@@ -981,7 +958,8 @@ void SchXMLTableHelper::applyTableSimple(
 
         // set labels
         ::std::vector< ::std::vector< SchXMLCell > >::const_iterator iRow = rTable.aData.begin();
-        for( nCol = 1; nCol < nColumnCount; nCol++ )
+        sal_Int32 nColumnCountOnFirstRow = iRow->size();
+        for( nCol = 1; nCol < nColumnCountOnFirstRow; nCol++ )
         {
             aLabels[ nCol - 1 ] = (*iRow)[ nCol ].aString;
         }
@@ -1016,7 +994,7 @@ void SchXMLTableHelper::applyTableSimple(
 
 // ----------------------------------------
 
-void SchXMLTableHelper::applyTable(
+void SchXMLTableHelper::applyTableToInternalDataProvider(
     const SchXMLTable& rTable,
     uno::Reference< chart2::XChartDocument > xChartDoc )
 {
@@ -1031,19 +1009,12 @@ void SchXMLTableHelper::applyTable(
     // prerequisite for this method: all objects (data series, domains, etc.)
     // need their own range string.
 
-    // If the range-strings are valid (starting with "local-table") they should
-    // be interpreted like given, otherwise (when the ranges refer to Calc- or
-    // Writer-ranges, but the container is not available like when pasting a
-    // chart from Calc to Impress) the range is ignored, and every object gets
-    // one table column in the order of appearance, which is: 1. categories,
-    // 2. data series: 2.a) domains, 2.b) values (main-role, usually y-values)
-
     // apply all data read in the table to the chart data-array of the internal
     // data provider
     lcl_applyXMLTableToInternalDataprovider( rTable, xDataArray );
 }
 
-void SchXMLTableHelper::postProcessTable(
+void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
     const SchXMLTable& rTable,
     const tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
     uno::Reference< chart2::XChartDocument > xChartDoc,
@@ -1051,6 +1022,14 @@ void SchXMLTableHelper::postProcessTable(
 {
     if( ! (xChartDoc.is() && xChartDoc->hasInternalDataProvider()))
         return;
+
+    // If the range-strings are valid (starting with "local-table") they should
+    // be interpreted like given, otherwise (when the ranges refer to Calc- or
+    // Writer-ranges, but the container is not available like when pasting a
+    // chart from Calc to Impress) the range is ignored, and every object gets
+    // one table column in the order of appearance, which is: 1. categories,
+    // 2. data series: 2.a) domains, 2.b) values (main-role, usually y-values)
+
     Reference< chart2::data::XDataProvider >  xDataProv( xChartDoc->getDataProvider());
 
     // create a mapping from original ranges to new ranges
@@ -1079,7 +1058,7 @@ void SchXMLTableHelper::postProcessTable(
                         lcl_reassignDataSequence( xSeq, xDataProv, aRangeMap, aRange ));
                     if( xNewSeq != xSeq )
                     {
-                        lcl_copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
+                        SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
                                             Reference< beans::XPropertySet >( xNewSeq, uno::UNO_QUERY ));
                         aLSeqIt->second->setValues( xNewSeq );
                     }
@@ -1099,7 +1078,7 @@ void SchXMLTableHelper::postProcessTable(
                             Reference< chart2::data::XDataSequence > xNewSequence(
                                 xDataProv->createDataSequenceByRangeRepresentation(
                                     OUString(RTL_CONSTASCII_USTRINGPARAM("categories"))));
-                            lcl_copyProperties(
+                            SchXMLTools::copyProperties(
                                 xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
                             aLSeqIt->second->setValues( xNewSequence );
                             bCategoriesApplied = true;
@@ -1110,7 +1089,7 @@ void SchXMLTableHelper::postProcessTable(
                             OUString aRep( OUString::valueOf( aLSeqIt->first.first ));
                             Reference< chart2::data::XDataSequence > xNewSequence(
                                 xDataProv->createDataSequenceByRangeRepresentation( aRep ));
-                            lcl_copyProperties(
+                            SchXMLTools::copyProperties(
                                 xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
                             aLSeqIt->second->setValues( xNewSequence );
                         }
@@ -1131,7 +1110,7 @@ void SchXMLTableHelper::postProcessTable(
                         lcl_reassignDataSequence( xSeq, xDataProv, aRangeMap, aRange ));
                     if( xNewSeq != xSeq )
                     {
-                        lcl_copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
+                        SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
                                             Reference< beans::XPropertySet >( xNewSeq, uno::UNO_QUERY ));
                         aLSeqIt->second->setLabel( xNewSeq );
                     }
@@ -1143,7 +1122,7 @@ void SchXMLTableHelper::postProcessTable(
 
                     Reference< chart2::data::XDataSequence > xNewSeq(
                         xDataProv->createDataSequenceByRangeRepresentation( aRep ));
-                    lcl_copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
+                    SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
                                         Reference< beans::XPropertySet >( xNewSeq, uno::UNO_QUERY ));
                     aLSeqIt->second->setLabel( xNewSeq );
                 }

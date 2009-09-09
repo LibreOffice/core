@@ -41,6 +41,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/font.hxx>
 #include <vcl/metric.hxx>
+#include <i18npool/mslangid.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -165,14 +166,14 @@ namespace drawinglayer
             mrDevice.SetFont( rFont );
         }
 
-        void TextLayouterDevice::setFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DHomMatrix& rTransform)
+        void TextLayouterDevice::setFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DHomMatrix& rTransform, const ::com::sun::star::lang::Locale & rLocale)
         {
-            setFont(getVclFontFromFontAttributes(rFontAttributes, rTransform, mrDevice));
+            setFont(getVclFontFromFontAttributes(rFontAttributes, rTransform, rLocale, mrDevice));
         }
 
-        void TextLayouterDevice::setFontAttributes(const FontAttributes& rFontAttributes, double fFontScaleX, double fFontScaleY)
+        void TextLayouterDevice::setFontAttributes(const FontAttributes& rFontAttributes, double fFontScaleX, double fFontScaleY, const ::com::sun::star::lang::Locale & rLocale)
         {
-            setFont(getVclFontFromFontAttributes(rFontAttributes, fFontScaleX, fFontScaleY, 0.0, mrDevice));
+            setFont(getVclFontFromFontAttributes(rFontAttributes, fFontScaleX, fFontScaleY, 0.0, rLocale, mrDevice));
         }
 
         double TextLayouterDevice::getOverlineOffset() const
@@ -239,8 +240,25 @@ namespace drawinglayer
             basegfx::B2DPolyPolygonVector& rB2DPolyPolyVector,
             const String& rText,
             xub_StrLen nIndex,
-            xub_StrLen nLength)
+            xub_StrLen nLength,
+            // #i89784# added suppirt for DXArray for justified text
+            const ::std::vector< double >& rDXArray,
+            double fFontScaleWidth)
         {
+            std::vector< sal_Int32 > aTransformedDXArray;
+            const sal_uInt32 nDXArraySize(rDXArray.size());
+
+            if(nDXArraySize && basegfx::fTools::more(fFontScaleWidth, 0.0))
+            {
+                OSL_ENSURE(nDXArraySize == nLength, "DXArray size does not correspond to text portion size (!)");
+                aTransformedDXArray.reserve(nDXArraySize);
+
+                for(std::vector< double >::const_iterator aStart(rDXArray.begin()); aStart != rDXArray.end(); aStart++)
+                {
+                    aTransformedDXArray.push_back(basegfx::fround((*aStart) * fFontScaleWidth));
+                }
+            }
+
             return mrDevice.GetTextOutlines(
                 rB2DPolyPolyVector,
                 rText,
@@ -249,7 +267,7 @@ namespace drawinglayer
                 nLength,
                 true,
                 0,
-                0);
+                nDXArraySize ? &(aTransformedDXArray[0]) : 0);
         }
 
         basegfx::B2DRange TextLayouterDevice::getTextBoundRect(
@@ -268,12 +286,14 @@ namespace drawinglayer
                     nIndex,
                     nLength);
 
-                return basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+                // #i102556# take empty results into account
+                if(!aRect.IsEmpty())
+                {
+                    return basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+                }
             }
-            else
-            {
-                return basegfx::B2DRange();
-            }
+
+            return basegfx::B2DRange();
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -288,6 +308,7 @@ namespace drawinglayer
         Font getVclFontFromFontAttributes(
             const FontAttributes& rFontAttributes,
             const basegfx::B2DHomMatrix& rTransform,
+            const ::com::sun::star::lang::Locale & rLocale,
             const OutputDevice& rOutDev)
         {
             // decompose matrix to have position and size of text
@@ -296,7 +317,7 @@ namespace drawinglayer
 
             rTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
-            return getVclFontFromFontAttributes(rFontAttributes, aScale.getX(), aScale.getY(), fRotate, rOutDev);
+            return getVclFontFromFontAttributes(rFontAttributes, aScale.getX(), aScale.getY(), fRotate, rLocale, rOutDev);
         }
 
         Font getVclFontFromFontAttributes(
@@ -304,6 +325,7 @@ namespace drawinglayer
             double fFontScaleX,
             double fFontScaleY,
             double fFontRotation,
+            const ::com::sun::star::lang::Locale & rLocale,
             const OutputDevice& /*rOutDev*/)
         {
             sal_uInt32 nWidth(basegfx::fround(fabs(fFontScaleX)));
@@ -323,6 +345,7 @@ namespace drawinglayer
             aRetval.SetWeight(static_cast<FontWeight>(rFontAttributes.getWeight()));
             aRetval.SetItalic(rFontAttributes.getItalic() ? ITALIC_NORMAL : ITALIC_NONE);
             aRetval.SetOutline(rFontAttributes.getOutline());
+            aRetval.SetLanguage(MsLangId::convertLocaleToLanguage(rLocale));
 
 #ifdef WIN32
             // #100424# use higher precision

@@ -53,9 +53,13 @@ class SvXMLExport;
 
 namespace SchXMLTools
 {
+    bool isDocumentGeneratedWithOpenOfficeOlderThan2_0( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel);
     bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel);
     bool isDocumentGeneratedWithOpenOfficeOlderThan2_4( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel);
     bool isDocumentGeneratedWithOpenOfficeOlderThan3_0( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel);
+
+    void setBuildIDAtImportInfo( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel
+        , ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xImportInfo );
 
     enum SchXMLChartTypeEnum
     {
@@ -65,9 +69,10 @@ namespace SchXMLTools
         XML_CHART_CLASS_RING,
         XML_CHART_CLASS_SCATTER,
         XML_CHART_CLASS_RADAR,
+        XML_CHART_CLASS_FILLED_RADAR,
         XML_CHART_CLASS_BAR,
         XML_CHART_CLASS_STOCK,
-        XML_CHART_CLASS_BUBBLE, // not yet implemented
+        XML_CHART_CLASS_BUBBLE,
         XML_CHART_CLASS_ADDIN,
         XML_CHART_CLASS_UNKNOWN
     };
@@ -127,6 +132,16 @@ namespace SchXMLTools
             ::com::sun::star::chart2::data::XDataSequence > & xDataSequence,
         ::rtl::OUString & rOutXMLRange,
         bool bClearProp = false );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > getDataProviderFromParent( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc );
+
+    bool switchBackToDataProviderFromParent( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::XChartDocument >& xChartDoc
+        , const tSchXMLLSequencesPerIndex & rLSequencesPerIndex );
+
+    void copyProperties(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xSource,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xDestination );
 }
 
 #endif  // SCH_XML_TOOLS_HXX_

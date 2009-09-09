@@ -621,6 +621,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         else
             aBaseURL = pMed->GetBaseURL();
     }
+    pMed->GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, aBaseURL ) );
 
     pImp->nLoadedFlags = 0;
     pImp->bModelInitialized = sal_False;
@@ -827,37 +828,28 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             }
         }
 
-        uno::Reference< XInteractionHandler > xHandler( pMedium->GetInteractionHandler() );
-        if ( xHandler.is() && !SFX_APP()->Get_Impl()->bODFVersionWarningLater )
+        if ( pMedium->HasStorage_Impl() )
         {
-            // scan the generator string (within meta.xml)
-            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                GetModel(), uno::UNO_QUERY_THROW);
-            uno::Reference<document::XDocumentProperties> xDocProps
-                = xDPS->getDocumentProperties();
-            if ( xDocProps.is() )
+            uno::Reference< XInteractionHandler > xHandler( pMedium->GetInteractionHandler() );
+            if ( xHandler.is() && !SFX_APP()->Get_Impl()->bODFVersionWarningLater )
             {
-                uno::Reference<beans::XPropertySet> xUserDefinedProps(
-                    xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
-                uno::Any aAny;
+                uno::Reference<beans::XPropertySet> xStorageProps( pMedium->GetStorage(), uno::UNO_QUERY_THROW );
+                ::rtl::OUString sVersion;
                 try
                 {
-                    aAny = xUserDefinedProps->getPropertyValue(
-                            DEFINE_CONST_UNICODE("ODFVersion"));
+                    xStorageProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) ) >>= sVersion;
                 }
                 catch( const uno::Exception& )
                 {
                     // Custom Property "ODFVersion" does not exist
                 }
 
-                ::rtl::OUString sVersion;
-                if ( (aAny >>= sVersion) && sVersion.getLength() )
+                if ( sVersion.getLength() )
                 {
                     double nVersion = sVersion.toDouble();
-                    if ( nVersion > 1.20001 )
+                    if ( nVersion > 1.20001  && SfxObjectShell_Impl::NeedsOfficeUpdateDialog() )
                         // ODF version greater than 1.2 - added some decimal places to be safe against floating point conversion errors (hack)
                     {
-
                         ::rtl::OUString sDocumentURL( pMedium->GetOrigURL() );
                         ::rtl::OUString aSystemFileURL;
                         if ( osl::FileBase::getSystemPathFromFileURL( sDocumentURL, aSystemFileURL ) == osl::FileBase::E_None )
@@ -1138,7 +1130,12 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 */
 
 {
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::SaveTo_Impl" );
+    RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE SfxObjectShell::SaveTo_Impl" );
+    if( RTL_LOGFILE_HASLOGFILE() )
+    {
+        ByteString aString( rMedium.GetName(), RTL_TEXTENCODING_ASCII_US );
+        RTL_LOGFILE_PRODUCT_CONTEXT_TRACE1( aLog, "saving \"%s\"", aString.GetBuffer() );
+    }
 
     AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Begin" ) ) );
 
@@ -1227,7 +1224,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         bStoreToSameLocation = sal_True;
         AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Save" ) ) );
 
-        rMedium.CheckFileDate( pMedium->GetInitFileDate() );
+        if ( pMedium->DocNeedsFileDateCheck() )
+            rMedium.CheckFileDate( pMedium->GetInitFileDate( sal_False ) );
 
         if ( bCopyTo && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
         {
@@ -2083,10 +2081,17 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
                 InvalidateName();
             SetModified(sal_False); // nur bei gesetztem Medium zur"ucksetzen
             Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
+
+            // this is the end of the saving process, it is possible that the file was changed
+            // between medium commit and this step ( attributes change and so on )
+            // so get the file date again
+            if ( pNewMed->DocNeedsFileDateCheck() )
+                pNewMed->GetInitFileDate( sal_True );
         }
     }
 
     pMedium->ClearBackup_Impl();
+    pMedium->LockOrigFileOnDemand( sal_True, sal_False );
 
     return bOk;
 }
@@ -3106,6 +3111,13 @@ void SfxObjectShell::SetSecurityOptOpenReadOnly( sal_Bool _b )
 
 sal_Bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
 {
+    RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE SfxObjectShell::LoadOwnFormat" );
+    if( RTL_LOGFILE_HASLOGFILE() )
+    {
+        ByteString aString( rMedium.GetName(), RTL_TEXTENCODING_ASCII_US );
+        RTL_LOGFILE_PRODUCT_CONTEXT_TRACE1( aLog, "loading \"%s\"", aString.GetBuffer() );
+    }
+
     uno::Reference< embed::XStorage > xStorage = rMedium.GetStorage();
     if ( xStorage.is() )
     {

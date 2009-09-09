@@ -138,9 +138,11 @@ namespace xmloff { namespace token {
         XML_NP_OF,
         XML_N_OF,
 
-        // ODF 1.2 metadata: RDFa
-        XML_NP_RDFA,
-        XML_N_RDFA,
+        // ODF 1.2 metadata: RDFa and GRDDL
+        XML_NP_XHTML,
+        XML_N_XHTML,
+        XML_NP_GRDDL,
+        XML_N_GRDDL,
 
         // units
         XML_UNIT_MM,
@@ -3041,6 +3043,7 @@ namespace xmloff { namespace token {
         XML_META_FIELD,
         XML_ABOUT,
         XML_DATATYPE,
+        XML_TRANSFORMATION,
 
         // ODF 1.2 numbered-paragraph
         XML_LIST_ID,
@@ -3071,12 +3074,20 @@ namespace xmloff { namespace token {
         XML_AT_LABELS,
         XML_AT_AXIS,
         XML_AT_LABELS_AND_AXIS,
+        XML_FILLED_RADAR,
 
         // MathML only
         XML_MATHVARIANT,
         XML_MATHSIZE,
         XML_MATHWEIGHT,
         XML_MATHCOLOR,
+
+        XML_CONTAINS,
+        XML_DOES_NOT_CONTAIN,
+        XML_BEGINS_WITH,
+        XML_DOES_NOT_BEGIN_WITH,
+        XML_ENDS_WITH,
+        XML_DOES_NOT_END_WITH,
 
         XML_TOKEN_END
     };

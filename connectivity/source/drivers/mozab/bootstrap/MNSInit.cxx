@@ -34,12 +34,13 @@
 
 #include "mozilla_nsinit.h"
 
+#include <MNSInit.hxx>
+
 #include <sal/types.h>
 #include <osl/diagnose.h>
 #include <osl/conditn.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
-#include <MNSInit.hxx>
 
 #ifndef CONNECTIVITY_MOZAB_MCONFIGACCESS_HXX
 #include "MConfigAccess.hxx"
@@ -77,7 +78,8 @@ extern "C" void NS_SetupRegistry();
     const PRUnichar* pUsedProfile = *_pValidProfiles;
 
     // have a look what the configuration suggests as preferred profile
-    const PRUnichar* pPreferredProfile = static_cast< const PRUnichar* >( getUserProfile( ) );
+    // PRUnichar != sal_Unicode in mingw
+    const PRUnichar* pPreferredProfile = reinterpret_cast_mingw_only< const PRUnichar* >( getUserProfile( ) );
     if ( pPreferredProfile && *pPreferredProfile )
     {
         PRUnichar const* const* pLoop = _pValidProfiles;
@@ -128,7 +130,12 @@ sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists)
         nsCOMPtr<nsILocalFile> binDir;
         // Note: if path3 construction fails, mozilla will default to using MOZILLA_FIVE_HOME in the NS_InitXPCOM2()
         rtl::OUString path1(
-            RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/program"));
+#if defined WNT
+            RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program")
+#else
+            RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/program")
+#endif
+        );
         rtl::Bootstrap::expandMacros(path1);
         rtl::OString path2;
         if ((osl::FileBase::getSystemPathFromFileURL(path1, path1) ==

@@ -73,7 +73,7 @@ protected:
 
 public:
     SdrObjConnection() { ResetVars(); }
-    ~SdrObjConnection();
+    SVX_DLLPUBLIC ~SdrObjConnection();
 
     void ResetVars();
     FASTBOOL TakeGluePoint(SdrGluePoint& rGP, FASTBOOL bSetAbsolutePos) const;
@@ -252,7 +252,6 @@ public:
 
     virtual void RecalcSnapRect();
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
-    virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
     virtual void operator=(const SdrObject& rObj);
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;

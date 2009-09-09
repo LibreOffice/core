@@ -38,6 +38,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/svdpage.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -219,6 +220,11 @@ namespace sdr
             SdrGrafObj& rGrafObj = getSdrGrafObj();
             rGrafObj.ForceSwapIn();
 
+            // #i103720# forget event to avoid possible deletion by the following ActionChanged call
+            // which may use createPrimitive2DSequence/impPrepareGraphicWithAsynchroniousLoading again.
+            // Deletion is actally done by the scheduler who leaded to coming here
+            mpAsynchLoadEvent = 0;
+
             // Invalidate all paint areas and check existing animation (which may have changed).
             GetViewContact().ActionChanged();
         }
@@ -229,11 +235,15 @@ namespace sdr
         void ViewObjectContactOfGraphic::forgetAsynchGraphicLoadingEvent(sdr::event::AsynchGraphicLoadingEvent* pEvent)
         {
             (void) pEvent; // suppress warning
-            DBG_ASSERT(mpAsynchLoadEvent, "ViewObjectContactOfGraphic::forgetAsynchGraphicLoadingEvent: I did not trigger a event, why am i called (?)");
-            DBG_ASSERT(mpAsynchLoadEvent == pEvent, "ViewObjectContactOfGraphic::forgetAsynchGraphicLoadingEvent: Forced to forget another event then i have scheduled (?)");
 
-            // forget event
-            mpAsynchLoadEvent = 0;
+            if(mpAsynchLoadEvent)
+            {
+                OSL_ENSURE(!pEvent || mpAsynchLoadEvent == pEvent,
+                    "ViewObjectContactOfGraphic::forgetAsynchGraphicLoadingEvent: Forced to forget another event then i have scheduled (?)");
+
+                // forget event
+                mpAsynchLoadEvent = 0;
+            }
         }
 
         SdrGrafObj& ViewObjectContactOfGraphic::getSdrGrafObj()
@@ -245,9 +255,18 @@ namespace sdr
         {
             // prepare primitive generation with evtl. loading the graphic when it's swapped out
             SdrGrafObj& rGrafObj = const_cast< ViewObjectContactOfGraphic* >(this)->getSdrGrafObj();
-            const bool bDoAsynchronGraphicLoading(rGrafObj.GetModel() && rGrafObj.GetModel()->IsSwapGraphics());
+            bool bDoAsynchronGraphicLoading(rGrafObj.GetModel() && rGrafObj.GetModel()->IsSwapGraphics());
             static bool bSuppressAsynchLoading(false);
             bool bSwapInDone(false);
+
+            if(bDoAsynchronGraphicLoading
+                && rGrafObj.IsSwappedOut()
+                && rGrafObj.GetPage()
+                && rGrafObj.GetPage()->IsMasterPage())
+            {
+                // #i102380# force Swap-In for GraphicObjects on MasterPage to have a nicer visualisation
+                bDoAsynchronGraphicLoading = false;
+            }
 
             if(bDoAsynchronGraphicLoading && !bSuppressAsynchLoading)
             {
@@ -260,6 +279,23 @@ namespace sdr
 
             // get return value by calling parent
             drawinglayer::primitive2d::Primitive2DSequence xRetval = ViewObjectContactOfSdrObj::createPrimitive2DSequence(rDisplayInfo);
+
+            if(xRetval.hasElements())
+            {
+                // #i103255# suppress when graphic needs draft visualisation and output
+                // is for PDF export/Printer
+                const ViewContactOfGraphic& rVCOfGraphic = static_cast< const ViewContactOfGraphic& >(GetViewContact());
+
+                if(rVCOfGraphic.visualisationUsesDraft())
+                {
+                    const ObjectContact& rObjectContact = GetObjectContact();
+
+                    if(rObjectContact.isOutputToPDFFile() || rObjectContact.isOutputToPrinter())
+                    {
+                        xRetval = drawinglayer::primitive2d::Primitive2DSequence();
+                    }
+                }
+            }
 
             // if swap in was forced only for printing, swap out again
             const bool bSwapInExclusiveForPrinting(bSwapInDone && GetObjectContact().isOutputToPrinter());
