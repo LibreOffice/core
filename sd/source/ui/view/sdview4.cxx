@@ -115,7 +115,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     if( !pPickObj && pPV )
     {
         SdrPageView* pPageView = pPV;
-        PickObj(rPos, pPickObj, pPageView);
+        PickObj(rPos, getHitTolLog(), pPickObj, pPageView);
     }
 
     if( mnAction == DND_ACTION_LINK && pPickObj && pPV )
@@ -312,7 +312,7 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
     if( !pPickObj && pPV )
     {
         SdrPageView* pPageView = pPV;
-        PickObj(rPos, pPickObj, pPageView);
+        PickObj(rPos, getHitTolLog(), pPickObj, pPageView);
     }
 
     if( mnAction == DND_ACTION_LINK && pPickObj && pPV && pPickObj->ISA( SdrMediaObj ) )

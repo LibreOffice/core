@@ -33,14 +33,10 @@
 
 #include <svx/numitem.hxx>
 
-#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
 #include <vcl/wrkwin.hxx>
-#ifndef _SVXIDS_HRC
-#include <svx/svxids.hrc>
-#endif
 #include <svtools/urihelper.hxx>
+#include <svx/svxids.hrc>
 #include <svx/svdfppt.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
@@ -81,22 +77,18 @@
 #include <svx/numitem.hxx>
 #include <svtools/itempool.hxx>
 #include <svx/fhgtitem.hxx>
-#ifndef _SVX_SVDOPAGE
 #include <svx/svdopage.hxx>
-#endif
 #include <svx/svdomedia.hxx>
 #include <svx/svdogrp.hxx>
-#include <propread.hxx>
+#include "propread.hxx"
 #include <cusshow.hxx>
 #include <vcl/bmpacc.hxx>
 
-#include "../ui/inc/DrawDocShell.hxx"
-#include <../ui/inc/FrameView.hxx>
-#include <../ui/inc/optsitem.hxx>
+#include "../../ui/inc/DrawDocShell.hxx"
+#include "../../ui/inc/FrameView.hxx"
+#include "../../ui/inc/optsitem.hxx"
 
-#ifndef _OFA_FLTRCFG_HXX
 #include <svtools/fltrcfg.hxx>
-#endif
 #include <sfx2/progress.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <svx/editstat.hxx>
@@ -104,8 +96,8 @@
 #include <sfx2/docfac.hxx>
 #define MAX_USER_MOVE       2
 
-#include <ppt/pptinanimations.hxx>
-#include <ppt/ppt97animations.hxx>
+#include "pptinanimations.hxx"
+#include "ppt97animations.hxx"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -157,7 +149,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
     if( pDocument )
     {
         // iterate over all styles
-        SdStyleSheetPool* pStyleSheetPool = dynamic_cast< SdStyleSheetPool* >( pDocument->GetStyleSheetPool() );
+        SdStyleSheetPool* pStyleSheetPool = pDocument->GetSdStyleSheetPool();
 
         sal_uInt32 nStyles = pStyleSheetPool ? pStyleSheetPool->GetStyles().size() : 0;
         for (sal_uInt32 nStyle = 0; nStyle < nStyles; nStyle++)
@@ -2748,3 +2740,24 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
     return pObj;
 }
 
+// ---------------------
+// - exported function -
+// ---------------------
+
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ImportPPT( const ::rtl::OUString& rConfigPath,
+        uno::Sequence< beans::PropertyValue >* pConfigData,
+        SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium )
+{
+    sal_Bool bRet = sal_False;
+
+    MSFilterTracer aTracer( rConfigPath, pConfigData );
+    aTracer.StartTracing();
+
+    SdPPTImport* pImport = new SdPPTImport( pDocument, rDocStream, rStorage, rMedium, &aTracer );
+    bRet = pImport->Import();
+
+    aTracer.EndTracing();
+    delete pImport;
+
+    return bRet;
+}
