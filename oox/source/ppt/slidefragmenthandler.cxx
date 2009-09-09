@@ -38,6 +38,7 @@
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include "headerfootercontext.hxx"
 #include "oox/ppt/backgroundproperties.hxx"
 #include "oox/ppt/slidefragmenthandler.hxx"
 #include "oox/ppt/slidetimingcontext.hxx"
@@ -45,6 +46,8 @@
 #include "oox/ppt/slidemastertextstylescontext.hxx"
 #include "oox/ppt/pptshapegroupcontext.hxx"
 #include "oox/ppt/pptshape.hxx"
+#include "oox/vml/vmldrawing.hxx"
+#include "oox/vml/vmldrawingfragment.hxx"
 #include "oox/drawingml/clrschemecontext.hxx"
 
 
@@ -64,21 +67,22 @@ SlideFragmentHandler::SlideFragmentHandler( XmlFilterBase& rFilter, const OUStri
 , mpSlidePersistPtr( pPersistPtr )
 , meShapeLocation( eShapeLocation )
 {
-    OUString aVMLDrawingFragmentPath = getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "vmlDrawing" ) );
+    OUString aVMLDrawingFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "vmlDrawing" ) );
     if( aVMLDrawingFragmentPath.getLength() > 0 )
-    {
-        getFilter().importFragment( new oox::vml::DrawingFragmentHandler(
-            getFilter(), aVMLDrawingFragmentPath, pPersistPtr->getDrawing()->getShapes(), pPersistPtr->getDrawing()->getShapeTypes() ) );
-    }
+        getFilter().importFragment( new oox::vml::DrawingFragment(
+            getFilter(), aVMLDrawingFragmentPath, *pPersistPtr->getDrawing() ) );
 }
 
 SlideFragmentHandler::~SlideFragmentHandler() throw()
 {
+    // convert and insert all VML shapes (mostly form controls)
+    mpSlidePersistPtr->getDrawing()->convertAndInsert();
 }
 
 Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
     Reference< XFastContextHandler > xRet;
+    AttributeList aAttribs( xAttribs );
 
     switch( aElementToken )
     {
@@ -100,11 +104,27 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
         }
         break;
 
+    case NMSP_PPT|XML_controls:
+        xRet = getFastContextHandler();
+        break;
+    case NMSP_PPT|XML_control:
+        {
+            ::oox::vml::ControlInfo aInfo;
+            aInfo.setShapeId( aAttribs.getInteger( XML_spid, 0 ) );
+            aInfo.maFragmentPath = getFragmentPathFromRelId( aAttribs.getString( R_TOKEN( id ), OUString() ) );
+            aInfo.maName = aAttribs.getXString( XML_name, OUString() );
+            mpSlidePersistPtr->getDrawing()->registerControl( aInfo );
+        }
+        return xRet;
+
     case NMSP_PPT|XML_timing: // CT_SlideTiming
         xRet.set( new SlideTimingContext( *this, mpSlidePersistPtr->getTimeNodeList() ) );
         break;
     case NMSP_PPT|XML_transition: // CT_SlideTransition
         xRet.set( new SlideTransitionContext( *this, xAttribs, maSlideProperties ) );
+        break;
+    case NMSP_PPT|XML_hf:
+        xRet.set( new HeaderFooterContext( *this, xAttribs, mpSlidePersistPtr->getHeaderFooter() ) );
         break;
 
     // BackgroundGroup

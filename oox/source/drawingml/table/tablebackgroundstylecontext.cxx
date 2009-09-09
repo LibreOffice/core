@@ -30,7 +30,6 @@
 
 #include <osl/diagnose.h>
 
-#include "oox/drawingml/stylematrixreferencecontext.hxx"
 #include "oox/drawingml/table/tablebackgroundstylecontext.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/core/namespaces.hxx"
@@ -66,16 +65,16 @@ TableBackgroundStyleContext::createFastChildContext( ::sal_Int32 aElementToken, 
         // EG_ThemeableFillStyle (choice)
         case NMSP_DRAWINGML|XML_fill:       // CT_FillProperties
             {
-                boost::shared_ptr< oox::drawingml::FillProperties >& rFillProperties( mrTableStyle.getBackgroundFillProperties() );
-                rFillProperties = boost::shared_ptr< oox::drawingml::FillProperties > ( new oox::drawingml::FillProperties() );
-                xRet.set( new oox::drawingml::FillPropertiesContext( *this, *rFillProperties.get() ) );
+                boost::shared_ptr< FillProperties >& rxFillProperties = mrTableStyle.getBackgroundFillProperties();
+                rxFillProperties.reset( new FillProperties );
+                xRet.set( new FillPropertiesContext( *this, *rxFillProperties ) );
             }
             break;
         case NMSP_DRAWINGML|XML_fillRef:    // CT_StyleMatrixReference
             {
                 ShapeStyleRef& rStyleRef = mrTableStyle.getBackgroundFillStyleRef();
                 rStyleRef.mnThemedIdx = aAttribs.getInteger( XML_idx, 0 );
-                xRet.set( new StyleMatrixReferenceContext( *this, rStyleRef.maPhClr ) );
+                xRet.set( new ColorContext( *this, rStyleRef.maPhClr ) );
             }
             break;
 

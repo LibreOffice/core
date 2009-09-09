@@ -29,6 +29,7 @@
  ************************************************************************/
 
 #include "processinginstruction.hxx"
+#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <string.h>
 
 namespace DOM

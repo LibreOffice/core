@@ -216,7 +216,7 @@ TabPage  RID_PDF_TAB_GENER
         Size = MAP_APPFONT ( 158 , 16 ) ;
         TabStop = TRUE ;
         WordBreak = TRUE ;
-        Text[ en-US ] = "E~xport automatically inserted blank pages";
+        Text[ en-US ] = "Exp~ort automatically inserted blank pages";
     };
     CheckBox CB_ADDSTREAM
     {
@@ -231,7 +231,7 @@ TabPage  RID_PDF_TAB_GENER
 //tab page for PDF Export, opening features
 TabPage  RID_PDF_TAB_OPNFTR
 {
-    HelpId = 0 ;
+    HelpId = HID_FILTER_PDF_INITIAL_VIEW ;
     Text[ en-US ] = "Initial View" ;
     TAB_PDF_SIZE;
     Hide = TRUE;
@@ -374,7 +374,7 @@ TabPage  RID_PDF_TAB_OPNFTR
 //tab page for PDF Export, viewer preferences
 TabPage  RID_PDF_TAB_VPREFER
 {
-    HelpId = 0 ;
+    HelpId = HID_FILTER_PDF_USER_INTERFACE ;
     Text[ en-US ] = "User Interface" ;
     TAB_PDF_SIZE;
     Hide = TRUE;
@@ -492,7 +492,7 @@ TabPage  RID_PDF_TAB_VPREFER
 //tab page for PDF Export, security
 TabPage  RID_PDF_TAB_SECURITY
 {
-    HelpId = 0 ;
+    HelpId = HID_FILTER_PDF_SECURITY ;
     Text [ en-US ] = "Security";
     TAB_PDF_SIZE;
     Hide = TRUE;
@@ -654,7 +654,7 @@ TabPage  RID_PDF_TAB_SECURITY
 //tab page for PDF Export, links management
 TabPage  RID_PDF_TAB_LINKS
 {
-    HelpId = 0 ;
+    HelpId = HID_FILTER_PDF_LINKS;
     Text [ en-US ] = "---";
     TAB_PDF_SIZE;
     Hide = TRUE;

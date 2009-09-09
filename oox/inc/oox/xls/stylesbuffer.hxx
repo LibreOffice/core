@@ -164,8 +164,6 @@ private:
 private:
     ::std::vector< sal_Int32 > maColors;    /// List of RGB values.
     size_t              mnAppendIndex;      /// Index to append a new color.
-    sal_Int32           mnWindowColor;      /// System window background color.
-    sal_Int32           mnWinTextColor;     /// System window text color.
 };
 
 // ============================================================================

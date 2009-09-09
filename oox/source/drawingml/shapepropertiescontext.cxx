@@ -116,7 +116,7 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
 
     // FillPropertiesGroupContext
     if( !xRet.is() )
-        xRet.set( FillPropertiesGroupContext::StaticCreateContext( *this, aElementToken, xAttribs, mrShape.getFillProperties() ) );
+        xRet.set( FillPropertiesContext::createFillContext( *this, aElementToken, xAttribs, mrShape.getFillProperties() ) );
 
     return xRet;
 }

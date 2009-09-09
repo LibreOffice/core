@@ -34,6 +34,8 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include "oox/drawingml/shape.hxx"
+#include "oox/vml/vmldrawing.hxx"
+#include "oox/vml/vmldrawingfragment.hxx"
 #include "oox/xls/excelhandlers.hxx"
 
 namespace oox {
@@ -107,24 +109,23 @@ public:
     void                importClientData( const AttributeList& rAttribs );
     /** Sets an attribute of the cell-dependent anchor position from xdr:from and xdr:to elements. */
     void                setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, const ::rtl::OUString& rValue );
+    void                importVmlAnchor( const ::rtl::OUString& rAnchor );
 
     /** Returns true, if the anchor contains valid position and size settings. */
     bool                isValidAnchor() const;
 
-#if 0 // unused code
     /** Calculates the resulting shape anchor in 1/100 mm. */
     ::com::sun::star::awt::Rectangle
                         calcApiLocation(
                             const ::com::sun::star::awt::Size& rApiSheetSize,
                             const AnchorSizeModel& rEmuSheetSize ) const;
-#endif
 
     /** Calculates the resulting shape anchor in EMUs. */
     ::com::sun::star::awt::Rectangle
                         calcEmuLocation( const AnchorSizeModel& rEmuSheetSize ) const;
 
 private:
-    enum AnchorType { ANCHOR_ABSOLUTE, ANCHOR_ONECELL, ANCHOR_TWOCELL, ANCHOR_INVALID };
+    enum AnchorType { ANCHOR_ABSOLUTE, ANCHOR_ONECELL, ANCHOR_TWOCELL, ANCHOR_VML, ANCHOR_INVALID };
 
     AnchorType          meType;             /// Type of this shape anchor.
     AnchorPosModel      maPos;              /// Top-left position, if anchor is of type absolute.
@@ -160,6 +161,38 @@ private:
     AnchorSizeModel     maEmuSheetSize;         /// Sheet size in EMU.
     ::oox::drawingml::ShapePtr mxShape;         /// Current top-level shape.
     ShapeAnchorRef      mxAnchor;               /// Current anchor of top-level shape.
+};
+
+// ============================================================================
+
+class VmlDrawing : public ::oox::vml::Drawing, public WorksheetHelper
+{
+public:
+    explicit            VmlDrawing( const WorksheetHelper& rHelper );
+
+    /** Calculates the shape rectangle from a cell anchor string. */
+    virtual bool        convertShapeClientAnchor(
+                            ::com::sun::star::awt::Rectangle& orShapeRect,
+                            const ::rtl::OUString& rShapeAnchor ) const;
+
+    /** Converts additional form control properties from the passed VML shape
+        client data. */
+    virtual void        convertControlClientData(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxCtrlModel,
+                            const ::oox::vml::ShapeClientData& rClientData ) const;
+};
+
+// ============================================================================
+
+class OoxVmlDrawingFragment : public ::oox::vml::DrawingFragment, public WorksheetHelper
+{
+public:
+    explicit            OoxVmlDrawingFragment(
+                            const WorksheetHelper& rHelper,
+                            const ::rtl::OUString& rFragmentPath );
+
+protected:
+    virtual void        finalizeImport();
 };
 
 // ============================================================================

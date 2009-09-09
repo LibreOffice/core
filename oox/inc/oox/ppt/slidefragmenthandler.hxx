@@ -34,7 +34,6 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include "oox/helper/propertymap.hxx"
 #include "oox/core/fragmenthandler.hxx"
-#include "oox/vml/drawingfragmenthandler.hxx"
 #include "oox/ppt/slidepersist.hxx"
 
 #include <stack>

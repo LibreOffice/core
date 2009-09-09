@@ -31,17 +31,21 @@
 #include "oox/xls/worksheetfragment.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/recordinputstream.hxx"
+#include "oox/core/filterbase.hxx"
 #include "oox/core/relations.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/autofiltercontext.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/commentsfragment.hxx"
 #include "oox/xls/condformatcontext.hxx"
+#include "oox/xls/drawingfragment.hxx"
 #include "oox/xls/externallinkbuffer.hxx"
 #include "oox/xls/pagesettings.hxx"
 #include "oox/xls/pivottablebuffer.hxx"
 #include "oox/xls/pivottablefragment.hxx"
 #include "oox/xls/querytablefragment.hxx"
+#include "oox/xls/scenariobuffer.hxx"
+#include "oox/xls/scenariocontext.hxx"
 #include "oox/xls/sheetdatacontext.hxx"
 #include "oox/xls/tablefragment.hxx"
 #include "oox/xls/viewsettings.hxx"
@@ -84,21 +88,12 @@ const sal_uInt32 BIFF_DATAVAL_NODROPDOWN    = 0x00000200;
 const sal_uInt32 BIFF_DATAVAL_SHOWINPUT     = 0x00040000;
 const sal_uInt32 BIFF_DATAVAL_SHOWERROR     = 0x00080000;
 
-const sal_uInt32 OLE_HYPERLINK_HASTARGET    = 0x00000001;   /// Has hyperlink moniker.
-const sal_uInt32 OLE_HYPERLINK_ABSOLUTE     = 0x00000002;   /// Absolute path.
-const sal_uInt32 OLE_HYPERLINK_HASLOCATION  = 0x00000008;   /// Has target location.
-const sal_uInt32 OLE_HYPERLINK_HASDISPLAY   = 0x00000010;   /// Has display string.
-const sal_uInt32 OLE_HYPERLINK_HASGUID      = 0x00000020;   /// Has identification GUID.
-const sal_uInt32 OLE_HYPERLINK_HASTIME      = 0x00000040;   /// Has creation time.
-const sal_uInt32 OLE_HYPERLINK_HASFRAME     = 0x00000080;   /// Has frame.
-const sal_uInt32 OLE_HYPERLINK_ASSTRING     = 0x00000100;   /// Hyperlink as simple string.
-
 const sal_Int32 OOBIN_OLEOBJECT_CONTENT     = 1;
 const sal_Int32 OOBIN_OLEOBJECT_ICON        = 4;
 const sal_Int32 OOBIN_OLEOBJECT_ALWAYS      = 1;
 const sal_Int32 OOBIN_OLEOBJECT_ONCALL      = 3;
-const sal_uInt16 OOBIN_OLEOBJECT_AUTOLOAD   = 0x0001;
-const sal_uInt16 OOBIN_OLEOBJECT_LINKED     = 0x0002;
+const sal_uInt16 OOBIN_OLEOBJECT_LINKED     = 0x0001;
+const sal_uInt16 OOBIN_OLEOBJECT_AUTOLOAD   = 0x0002;
 
 } // namespace
 
@@ -178,10 +173,10 @@ void OoxDataValidationsContext::importDataValidation( const AttributeList& rAttr
 {
     mxValModel.reset( new ValidationModel );
     getAddressConverter().convertToCellRangeList( mxValModel->maRanges, rAttribs.getString( XML_sqref, OUString() ), getSheetIndex(), true );
-    mxValModel->maInputTitle   = rAttribs.getString( XML_promptTitle, OUString() );
-    mxValModel->maInputMessage = rAttribs.getString( XML_prompt, OUString() );
-    mxValModel->maErrorTitle   = rAttribs.getString( XML_errorTitle, OUString() );
-    mxValModel->maErrorMessage = rAttribs.getString( XML_error, OUString() );
+    mxValModel->maInputTitle   = rAttribs.getXString( XML_promptTitle, OUString() );
+    mxValModel->maInputMessage = rAttribs.getXString( XML_prompt, OUString() );
+    mxValModel->maErrorTitle   = rAttribs.getXString( XML_errorTitle, OUString() );
+    mxValModel->maErrorMessage = rAttribs.getXString( XML_error, OUString() );
     mxValModel->mnType         = rAttribs.getToken( XML_type, XML_none );
     mxValModel->mnOperator     = rAttribs.getToken( XML_operator, XML_between );
     mxValModel->mnErrorStyle   = rAttribs.getToken( XML_errorStyle, XML_stop );
@@ -239,10 +234,10 @@ OoxWorksheetFragment::OoxWorksheetFragment( const WorkbookHelper& rHelper,
     // import data tables related to this worksheet
     RelationsRef xTableRels = getRelations().getRelationsFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "table" ) );
     for( Relations::const_iterator aIt = xTableRels->begin(), aEnd = xTableRels->end(); aIt != aEnd; ++aIt )
-        importOoxFragment( new OoxTableFragment( *this, getFragmentPathFromTarget( aIt->second.maTarget ) ) );
+        importOoxFragment( new OoxTableFragment( *this, getFragmentPathFromRelation( aIt->second ) ) );
 
     // import comments related to this worksheet
-    ::rtl::OUString aCommentsFragmentPath = getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "comments" ) );
+    OUString aCommentsFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "comments" ) );
     if( aCommentsFragmentPath.getLength() > 0 )
         importOoxFragment( new OoxCommentsFragment( *this, aCommentsFragmentPath ) );
 }
@@ -294,6 +289,8 @@ ContextHandlerRef OoxWorksheetFragment::onCreateContext( sal_Int32 nElement, con
                 case XLS_TOKEN( picture ):          getPageSettings().importPicture( getRelations(), rAttribs );    break;
                 case XLS_TOKEN( drawing ):          importDrawing( rAttribs );                                      break;
                 case XLS_TOKEN( legacyDrawing ):    importLegacyDrawing( rAttribs );                                break;
+                case XLS_TOKEN( scenarios ):
+                    return new OoxScenariosContext( *this );
             }
         break;
 
@@ -409,6 +406,8 @@ ContextHandlerRef OoxWorksheetFragment::onCreateRecordContext( sal_Int32 nRecId,
                 case OOBIN_ID_PHONETICPR:       getWorksheetSettings().importPhoneticPr( rStrm );           break;
                 case OOBIN_ID_DRAWING:          importDrawing( rStrm );                                     break;
                 case OOBIN_ID_LEGACYDRAWING:    importLegacyDrawing( rStrm );                               break;
+                case OOBIN_ID_SCENARIOS:
+                    return new OoxScenariosContext( *this );
             }
         break;
 
@@ -470,6 +469,8 @@ const RecordInfo* OoxWorksheetFragment::getRecordInfos() const
         { OOBIN_ID_OLEOBJECTS,          OOBIN_ID_OLEOBJECTS + 2         },
         { OOBIN_ID_ROW,                 -1                              },
         { OOBIN_ID_ROWBREAKS,           OOBIN_ID_ROWBREAKS + 1          },
+        { OOBIN_ID_SCENARIO,            OOBIN_ID_SCENARIO + 1           },
+        { OOBIN_ID_SCENARIOS,           OOBIN_ID_SCENARIOS + 1          },
         { OOBIN_ID_SHEETDATA,           OOBIN_ID_SHEETDATA + 1          },
         { OOBIN_ID_SHEETVIEW,           OOBIN_ID_SHEETVIEW + 1          },
         { OOBIN_ID_SHEETVIEWS,          OOBIN_ID_SHEETVIEWS + 1         },
@@ -488,12 +489,12 @@ void OoxWorksheetFragment::initializeImport()
     // import query table fragments related to this worksheet
     RelationsRef xQueryRels = getRelations().getRelationsFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "queryTable" ) );
     for( Relations::const_iterator aIt = xQueryRels->begin(), aEnd = xQueryRels->end(); aIt != aEnd; ++aIt )
-        importOoxFragment( new OoxQueryTableFragment( *this, getFragmentPathFromTarget( aIt->second.maTarget ) ) );
+        importOoxFragment( new OoxQueryTableFragment( *this, getFragmentPathFromRelation( aIt->second ) ) );
 
     // import pivot table fragments related to this worksheet
     RelationsRef xPivotRels = getRelations().getRelationsFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "pivotTable" ) );
     for( Relations::const_iterator aIt = xPivotRels->begin(), aEnd = xPivotRels->end(); aIt != aEnd; ++aIt )
-        importOoxFragment( new OoxPivotTableFragment( *this, getFragmentPathFromTarget( aIt->second.maTarget ) ) );
+        importOoxFragment( new OoxPivotTableFragment( *this, getFragmentPathFromRelation( aIt->second ) ) );
 }
 
 void OoxWorksheetFragment::finalizeImport()
@@ -558,10 +559,10 @@ void OoxWorksheetFragment::importHyperlink( const AttributeList& rAttribs )
     HyperlinkModel aModel;
     if( getAddressConverter().convertToCellRange( aModel.maRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex(), true, true ) )
     {
-        aModel.maTarget   = getRelations().getTargetFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
-        aModel.maLocation = rAttribs.getString( XML_location, OUString() );
-        aModel.maDisplay  = rAttribs.getString( XML_display, OUString() );
-        aModel.maTooltip  = rAttribs.getString( XML_tooltip, OUString() );
+        aModel.maTarget   = getRelations().getExternalTargetFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+        aModel.maLocation = rAttribs.getXString( XML_location, OUString() );
+        aModel.maDisplay  = rAttribs.getXString( XML_display, OUString() );
+        aModel.maTooltip  = rAttribs.getXString( XML_tooltip, OUString() );
         setHyperlink( aModel );
     }
 }
@@ -588,28 +589,29 @@ void OoxWorksheetFragment::importLegacyDrawing( const AttributeList& rAttribs )
 
 void OoxWorksheetFragment::importOleObject( const AttributeList& rAttribs )
 {
-    OleObjectModel aModel;
-    aModel.maProgId = rAttribs.getString( XML_progId, OUString() );
+    ::oox::vml::OleObjectInfo aInfo;
+    aInfo.setShapeId( rAttribs.getInteger( XML_shapeId, 0 ) );
     OSL_ENSURE( rAttribs.hasAttribute( XML_link ) != rAttribs.hasAttribute( R_TOKEN( id ) ),
-        "OoxWorksheetFragment::importOleObject - either linked or embedded" );
-    if( rAttribs.hasAttribute( XML_link ) )
-        (void)0;
-    if( rAttribs.hasAttribute( R_TOKEN( id ) ) )
-        aModel.maStoragePath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
-    aModel.mnAspect = rAttribs.getToken( XML_dvAspect, XML_DVASPECT_CONTENT );
-    aModel.mnUpdateMode = rAttribs.getToken( XML_oleUpdate, XML_OLEUPDATE_ALWAYS );
-    aModel.mnShapeId = rAttribs.getInteger( XML_shapeId, 0 );
-    aModel.mbAutoLoad = rAttribs.getBool( XML_autoLoad, false );
-    setOleObject( aModel );
+        "OoxWorksheetFragment::importOleObject - OLE object must be either linked or embedded" );
+    aInfo.mbLinked = rAttribs.hasAttribute( XML_link );
+    if( aInfo.mbLinked )
+        aInfo.maTargetLink = getFormulaParser().importOleTargetLink( rAttribs.getString( XML_link, OUString() ) );
+    else if( rAttribs.hasAttribute( R_TOKEN( id ) ) )
+        importEmbeddedOleData( aInfo.maEmbeddedData, rAttribs.getString( R_TOKEN( id ), OUString() ) );
+    aInfo.maProgId = rAttribs.getString( XML_progId, OUString() );
+    aInfo.mbShowAsIcon = rAttribs.getToken( XML_dvAspect, XML_DVASPECT_CONTENT ) == XML_DVASPECT_ICON;
+    aInfo.mbAutoUpdate = rAttribs.getToken( XML_oleUpdate, XML_OLEUPDATE_ONCALL ) == XML_OLEUPDATE_ALWAYS;
+    aInfo.mbAutoLoad = rAttribs.getBool( XML_autoLoad, false );
+    getVmlDrawing().registerOleObject( aInfo );
 }
 
 void OoxWorksheetFragment::importControl( const AttributeList& rAttribs )
 {
-    FormControlModel aModel;
-    aModel.maStoragePath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
-    aModel.maName = rAttribs.getString( XML_name, OUString() );
-    aModel.mnShapeId = rAttribs.getInteger( XML_shapeId, 0 );
-    setFormControl( aModel );
+    ::oox::vml::ControlInfo aInfo;
+    aInfo.setShapeId( rAttribs.getInteger( XML_shapeId, 0 ) );
+    aInfo.maFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+    aInfo.maName = rAttribs.getString( XML_name, OUString() );
+    getVmlDrawing().registerControl( aInfo );
 }
 
 void OoxWorksheetFragment::importDimension( RecordInputStream& rStrm )
@@ -678,7 +680,7 @@ void OoxWorksheetFragment::importHyperlink( RecordInputStream& rStrm )
     HyperlinkModel aModel;
     if( getAddressConverter().convertToCellRange( aModel.maRange, aBinRange, getSheetIndex(), true, true ) )
     {
-        aModel.maTarget = getRelations().getTargetFromRelId( rStrm.readString() );
+        aModel.maTarget = getRelations().getExternalTargetFromRelId( rStrm.readString() );
         rStrm >> aModel.maLocation >> aModel.maTooltip >> aModel.maDisplay;
         setHyperlink( aModel );
     }
@@ -705,27 +707,36 @@ void OoxWorksheetFragment::importLegacyDrawing( RecordInputStream& rStrm )
 
 void OoxWorksheetFragment::importOleObject( RecordInputStream& rStrm )
 {
-    OleObjectModel aModel;
-    sal_Int32 nAspect, nUpdateMode;
+    ::oox::vml::OleObjectInfo aInfo;
+    sal_Int32 nAspect, nUpdateMode, nShapeId;
     sal_uInt16 nFlags;
-    rStrm >> nAspect >> nUpdateMode >> aModel.mnShapeId >> nFlags >> aModel.maProgId;
-    if( getFlag( nFlags, OOBIN_OLEOBJECT_LINKED ) )
-        (void)0;
+    rStrm >> nAspect >> nUpdateMode >> nShapeId >> nFlags >> aInfo.maProgId;
+    aInfo.mbLinked = getFlag( nFlags, OOBIN_OLEOBJECT_LINKED );
+    if( aInfo.mbLinked )
+        aInfo.maTargetLink = getFormulaParser().importOleTargetLink( rStrm );
     else
-        aModel.maStoragePath = getFragmentPathFromRelId( rStrm.readString() );
-    aModel.mnAspect = (nAspect == OOBIN_OLEOBJECT_ICON) ? XML_DVASPECT_ICON : XML_DVASPECT_CONTENT;
-    aModel.mnUpdateMode = (nUpdateMode == OOBIN_OLEOBJECT_ONCALL) ? XML_OLEUPDATE_ONCALL : XML_OLEUPDATE_ALWAYS;
-    aModel.mbAutoLoad = getFlag( nFlags, OOBIN_OLEOBJECT_AUTOLOAD );
-    setOleObject( aModel );
+        importEmbeddedOleData( aInfo.maEmbeddedData, rStrm.readString() );
+    aInfo.setShapeId( nShapeId );
+    aInfo.mbShowAsIcon = nAspect == OOBIN_OLEOBJECT_ICON;
+    aInfo.mbAutoUpdate = nUpdateMode == OOBIN_OLEOBJECT_ALWAYS;
+    aInfo.mbAutoLoad = getFlag( nFlags, OOBIN_OLEOBJECT_AUTOLOAD );
+    getVmlDrawing().registerOleObject( aInfo );
 }
 
 void OoxWorksheetFragment::importControl( RecordInputStream& rStrm )
 {
-    FormControlModel aModel;
-    rStrm >> aModel.mnShapeId;
-    aModel.maStoragePath = getFragmentPathFromRelId( rStrm.readString() );
-    rStrm >> aModel.maName;
-    setFormControl( aModel );
+    ::oox::vml::ControlInfo aInfo;
+    aInfo.setShapeId( rStrm.readInt32() );
+    aInfo.maFragmentPath = getFragmentPathFromRelId( rStrm.readString() );
+    rStrm >> aInfo.maName;
+    getVmlDrawing().registerControl( aInfo );
+}
+
+void OoxWorksheetFragment::importEmbeddedOleData( StreamDataSequence& orEmbeddedData, const OUString& rRelId )
+{
+    OUString aFragmentPath = getFragmentPathFromRelId( rRelId );
+    if( aFragmentPath.getLength() > 0 )
+        getBaseFilter().importBinaryData( orEmbeddedData, aFragmentPath );
 }
 
 // ============================================================================
@@ -874,6 +885,7 @@ bool BiffWorksheetFragment::importFragment()
                         case BIFF_ID_PICTURE:           rPageSett.importPicture( mrStrm );              break;
                         case BIFF_ID_PTDEFINITION:      importPTDefinition();                           break;
                         case BIFF_ID_SAVERECALC:        rWorkbookSett.importSaveRecalc( mrStrm );       break;
+                        case BIFF_ID_SCENARIOS:         importScenarios();                              break;
                         case BIFF_ID_SCENPROTECT:       rWorksheetSett.importScenProtect( mrStrm );     break;
                         case BIFF_ID_SCL:               rSheetViewSett.importScl( mrStrm );             break;
                         case BIFF_ID_SHEETPR:           rWorksheetSett.importSheetPr( mrStrm );         break;
@@ -986,9 +998,7 @@ namespace {
 OUString lclReadDataValMessage( BiffInputStream& rStrm )
 {
     // empty strings are single NUL characters (string length is 1)
-    rStrm.enableNulChars( true );
-    OUString aMessage = rStrm.readUniString();
-    rStrm.enableNulChars( false );
+    OUString aMessage = rStrm.readUniString( true );
     if( (aMessage.getLength() == 1) && (aMessage[ 0 ] == 0) )
         aMessage = OUString();
     return aMessage;
@@ -998,11 +1008,9 @@ ApiTokenSequence lclReadDataValFormula( BiffInputStream& rStrm, FormulaParser& r
 {
     sal_uInt16 nFmlaSize = rStrm.readuInt16();
     rStrm.skip( 2 );
-    TokensFormulaContext aContext( true, false );
     // enable NUL characters, string list is single tStr token with NUL separators
-    rStrm.enableNulChars( true );
+    TokensFormulaContext aContext( true, false, true );
     rParser.importFormula( aContext, rStrm, &nFmlaSize );
-    rStrm.enableNulChars( false );
     return aContext.getTokens();
 }
 
@@ -1059,30 +1067,6 @@ void BiffWorksheetFragment::importDimension()
     setDimension( aRange );
 }
 
-OUString BiffWorksheetFragment::readHyperlinkString( rtl_TextEncoding eTextEnc, bool bUnicode )
-{
-    OUString aRet;
-    sal_Int32 nChars = mrStrm.readInt32();
-    if( nChars > 0 )
-    {
-        sal_uInt16 nReadChars = getLimitedValue< sal_uInt16, sal_Int32 >( nChars, 0, SAL_MAX_UINT16 );
-        // strings are NUL terminated
-        mrStrm.enableNulChars( true );
-        aRet = bUnicode ?
-            mrStrm.readUnicodeArray( nReadChars ) :
-            mrStrm.readCharArray( nReadChars, eTextEnc );
-        mrStrm.enableNulChars( false );
-        // remove trailing NUL and possible other garbage
-        sal_Int32 nNulPos = aRet.indexOf( '\0' );
-        if( nNulPos >= 0 )
-            aRet = aRet.copy( 0, nNulPos );
-        // skip remaining chars
-        sal_uInt32 nSkip = static_cast< sal_uInt32 >( nChars - nReadChars );
-        mrStrm.skip( (bUnicode ? 2 : 1) * nSkip );
-    }
-    return aRet;
-}
-
 void BiffWorksheetFragment::importHyperlink()
 {
     HyperlinkModel aModel;
@@ -1096,75 +1080,11 @@ void BiffWorksheetFragment::importHyperlink()
     if( !getAddressConverter().convertToCellRange( aModel.maRange, aBiffRange, getSheetIndex(), true, true ) )
         return;
 
-    BiffGuid aGuid;
-    sal_uInt32 nVersion, nFlags;
-    mrStrm >> aGuid >> nVersion >> nFlags;
-
-    OSL_ENSURE( aGuid == BiffHelper::maGuidStdHlink, "BiffWorksheetFragment::importHyperlink - unexpected header GUID" );
-    OSL_ENSURE( nVersion == 2, "BiffWorksheetFragment::importHyperlink - unexpected header version" );
-    if( !(aGuid == BiffHelper::maGuidStdHlink) || (nVersion != 2) )
+    // try to read the StdHlink data
+    if( !::oox::ole::OleHelper::importStdHlink( aModel, mrStrm, getTextEncoding(), true ) )
         return;
 
-    // display string
-    if( getFlag( nFlags, OLE_HYPERLINK_HASDISPLAY ) )
-        aModel.maDisplay = readHyperlinkString( getTextEncoding(), true );
-    // frame string
-    if( getFlag( nFlags, OLE_HYPERLINK_HASFRAME ) )
-        aModel.maFrame = readHyperlinkString( getTextEncoding(), true );
-
-    // target
-    if( getFlag( nFlags, OLE_HYPERLINK_HASTARGET ) )
-    {
-        if( getFlag( nFlags, OLE_HYPERLINK_ASSTRING ) )
-        {
-            OSL_ENSURE( getFlag( nFlags, OLE_HYPERLINK_ABSOLUTE ), "BiffWorksheetFragment::importHyperlink - link not absolute" );
-            aModel.maTarget = readHyperlinkString( getTextEncoding(), true );
-        }
-        else // hyperlink moniker
-        {
-            mrStrm >> aGuid;
-            if( aGuid == BiffHelper::maGuidFileMoniker )
-            {
-                // file name, maybe relative and with directory up-count
-                sal_Int16 nUpLevels;
-                mrStrm >> nUpLevels;
-                OSL_ENSURE( (nUpLevels == 0) || !getFlag( nFlags, OLE_HYPERLINK_ABSOLUTE ), "BiffWorksheetFragment::importHyperlink - absolute filename with upcount" );
-                aModel.maTarget = readHyperlinkString( getTextEncoding(), false );
-                mrStrm.skip( 24 );
-                sal_Int32 nBytes = mrStrm.readInt32();
-                if( nBytes > 0 )
-                {
-                    sal_Int64 nEndPos = mrStrm.tell() + ::std::max< sal_Int32 >( nBytes, 0 );
-                    sal_uInt16 nChars = getLimitedValue< sal_uInt16, sal_Int32 >( mrStrm.readInt32() / 2, 0, SAL_MAX_UINT16 );
-                    mrStrm.skip( 2 );   // key value
-                    aModel.maTarget = mrStrm.readUnicodeArray( nChars ); // NOT null terminated
-                    mrStrm.seek( nEndPos );
-                }
-                if( !getFlag( nFlags, OLE_HYPERLINK_ABSOLUTE ) )
-                    for( sal_Int16 nLevel = 0; nLevel < nUpLevels; ++nLevel )
-                        aModel.maTarget = CREATE_OUSTRING( "../" ) + aModel.maTarget;
-            }
-            else if( aGuid == BiffHelper::maGuidUrlMoniker )
-            {
-                // URL, maybe relative and with leading '../'
-                sal_Int32 nBytes = mrStrm.readInt32();
-                sal_Int64 nEndPos = mrStrm.tell() + ::std::max< sal_Int32 >( nBytes, 0 );
-                aModel.maTarget = mrStrm.readNulUnicodeArray();
-                mrStrm.seek( nEndPos );
-            }
-            else
-            {
-                OSL_ENSURE( false, "BiffWorksheetFragment::importHyperlink - unsupported hyperlink moniker" );
-                return;
-            }
-        }
-    }
-
-    // target location
-    if( getFlag( nFlags, OLE_HYPERLINK_HASLOCATION ) )
-        aModel.maLocation = readHyperlinkString( getTextEncoding(), true );
-
-    // try to read the SCREENTIP record
+    // try to read the optional following SCREENTIP record
     if( (mrStrm.getNextRecId() == BIFF_ID_SCREENTIP) && mrStrm.startNextRecord() )
     {
         mrStrm.skip( 2 );      // repeated record id
@@ -1228,6 +1148,11 @@ void BiffWorksheetFragment::importPTDefinition()
 {
     mxPTContext.reset( new BiffPivotTableContext( *this, getPivotTables().createPivotTable() ) );
     mxPTContext->importRecord();
+}
+
+void BiffWorksheetFragment::importScenarios()
+{
+    getScenarios().createSheetScenarios( getSheetIndex() ).importScenarios( mrStrm );
 }
 
 void BiffWorksheetFragment::importStandardWidth()

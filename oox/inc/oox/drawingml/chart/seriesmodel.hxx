@@ -94,6 +94,20 @@ struct DataLabelsModel : public DataLabelModelBase
 
 // ============================================================================
 
+struct PictureOptionsModel
+{
+    double              mfStackUnit;        /// Bitmap stacking unit.
+    sal_Int32           mnPictureFormat;    /// Bitmap mode (stretch/tile).
+    bool                mbApplyToFront;     /// True = draw picture at front/back side of 3D data points.
+    bool                mbApplyToSides;     /// True = draw picture at left/right side of 3D data points.
+    bool                mbApplyToEnd;       /// True = draw picture at top/bottom side of 3D data points.
+
+    explicit            PictureOptionsModel();
+                        ~PictureOptionsModel();
+};
+
+// ============================================================================
+
 struct ErrorBarModel
 {
     enum SourceType
@@ -163,9 +177,11 @@ struct TrendlineModel
 
 struct DataPointModel
 {
-    typedef ModelRef< Shape > ShapeRef;
+    typedef ModelRef< Shape >               ShapeRef;
+    typedef ModelRef< PictureOptionsModel > PictureOptionsRef;
 
     ShapeRef            mxShapeProp;        /// Data point formatting.
+    PictureOptionsRef   mxPicOptions;       /// Fill bitmap settings.
     ShapeRef            mxMarkerProp;       /// Data point marker formatting.
     OptValue< sal_Int32 > monExplosion;     /// Pie slice moved from pie center.
     OptValue< sal_Int32 > monMarkerSize;    /// Size of the series line marker (2...72).
@@ -194,6 +210,7 @@ struct SeriesModel
     typedef ModelVector< TrendlineModel >           TrendlineVector;
     typedef ModelVector< DataPointModel >           DataPointVector;
     typedef ModelRef< Shape >                       ShapeRef;
+    typedef ModelRef< PictureOptionsModel >         PictureOptionsRef;
     typedef ModelRef< TextModel >                   TextRef;
     typedef ModelRef< DataLabelsModel >             DataLabelsRef;
 
@@ -202,6 +219,7 @@ struct SeriesModel
     TrendlineVector     maTrendlines;       /// All trendlines of this series.
     DataPointVector     maPoints;           /// Explicit formatted data points.
     ShapeRef            mxShapeProp;        /// Series formatting.
+    PictureOptionsRef   mxPicOptions;       /// Fill bitmap settings.
     ShapeRef            mxMarkerProp;       /// Data point marker formatting.
     TextRef             mxText;             /// Series title source.
     DataLabelsRef       mxLabels;           /// Data point label settings for all points.

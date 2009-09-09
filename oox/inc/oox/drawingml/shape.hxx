@@ -57,8 +57,8 @@ typedef ::std::map< sal_Int32, ShapeStyleRef > ShapeStyleRefMap;
 
 // ============================================================================
 
-/** A callback that will be called after the ::com::sun::drawing::XShape has been
-    created from the imported shape and it has been inserted into the draw page.
+/** A callback that will be called before and after the API shape is created
+    from the imported shape.
 
     An instance of a derived class of this callback can be set at every
     ::oox::drawingml::Shape instance to implement anything that needs a created
@@ -67,10 +67,24 @@ typedef ::std::map< sal_Int32, ShapeStyleRef > ShapeStyleRefMap;
 class CreateShapeCallback
 {
 public:
+    virtual ::rtl::OUString onCreateXShape(
+                            const ::rtl::OUString& rServiceName,
+                            const ::com::sun::star::awt::Rectangle& rShapeRect );
+
+    virtual void        onXShapeCreated(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape ) const;
+
+    inline const PropertyMap& getShapeProperties() const { return maShapeProps; }
+
+protected:
+    explicit            CreateShapeCallback( ::oox::core::XmlFilterBase& rFilter );
     virtual             ~CreateShapeCallback();
-    virtual void        onCreateXShape(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape ) = 0;
+
+protected:
+    ::oox::core::XmlFilterBase& mrFilter;
+    PropertyMap         maShapeProps;
 };
+
 typedef ::boost::shared_ptr< CreateShapeCallback > CreateShapeCallbackRef;
 
 // ============================================================================
@@ -94,7 +108,9 @@ public:
     inline FillProperties&          getFillProperties() { return *mpFillPropertiesPtr; }
     inline const FillProperties&    getFillProperties() const { return *mpFillPropertiesPtr; }
 
-    FillPropertiesPtr               getGraphicProperties() { return mpGraphicPropertiesPtr; }
+    inline GraphicProperties&       getGraphicProperties() { return *mpGraphicPropertiesPtr; }
+    inline const GraphicProperties& getGraphicProperties() const { return *mpGraphicPropertiesPtr; }
+
     CustomShapePropertiesPtr        getCustomShapeProperties(){ return mpCustomShapePropertiesPtr; }
 
     table::TablePropertiesPtr       getTableProperties();
@@ -150,7 +166,8 @@ protected:
                             const ::rtl::OUString& rServiceName,
                             const ThemePtr& rxTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle* pShapeRect );
+                            const ::com::sun::star::awt::Rectangle* pShapeRect,
+                            sal_Bool bClearText );
 
     void                addChildren(
                             const ::oox::core::XmlFilterBase& rFilterBase,
@@ -164,7 +181,7 @@ protected:
     TextBodyPtr                 mpTextBody;
     LinePropertiesPtr           mpLinePropertiesPtr;
     FillPropertiesPtr           mpFillPropertiesPtr;
-    FillPropertiesPtr           mpGraphicPropertiesPtr;
+    GraphicPropertiesPtr        mpGraphicPropertiesPtr;
     CustomShapePropertiesPtr    mpCustomShapePropertiesPtr;
     table::TablePropertiesPtr   mpTablePropertiesPtr;
     PropertyMap                 maShapeProperties;

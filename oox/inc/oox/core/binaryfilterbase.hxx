@@ -43,14 +43,14 @@ class BinaryFilterBase : public FilterBase
 {
 public:
     explicit            BinaryFilterBase(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory );
 
     virtual             ~BinaryFilterBase();
 
 private:
     virtual StorageRef  implCreateStorage(
                             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxStream ) const;
+                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream ) const;
 };
 
 typedef ::rtl::Reference< BinaryFilterBase > BinaryFilterRef;

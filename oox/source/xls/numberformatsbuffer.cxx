@@ -1890,8 +1890,8 @@ public:
                             { rNumFmt.finalizeImport( mxNumFmts, maEnUsLocale ); }
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > mxNumFmts;
-    ::com::sun::star::lang::Locale maEnUsLocale;
+    Reference< XNumberFormats > mxNumFmts;
+    Locale              maEnUsLocale;
 };
 
 NumberFormatFinalizer::NumberFormatFinalizer( const WorkbookHelper& rHelper ) :
@@ -1959,7 +1959,7 @@ NumberFormatsBuffer::NumberFormatsBuffer( const WorkbookHelper& rHelper ) :
     // get the current locale
     try
     {
-        Reference< XMultiServiceFactory > xConfigProv( getBaseFilter().getGlobalFactory()->createInstance(
+        Reference< XMultiServiceFactory > xConfigProv( getGlobalFactory()->createInstance(
             CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationProvider" ) ), UNO_QUERY_THROW );
 
         // try user-defined locale setting
@@ -2002,7 +2002,7 @@ NumberFormatRef NumberFormatsBuffer::createNumFmt( sal_Int32 nNumFmtId, const OU
 NumberFormatRef NumberFormatsBuffer::importNumFmt( const AttributeList& rAttribs )
 {
     sal_Int32 nNumFmtId = rAttribs.getInteger( XML_numFmtId, -1 );
-    OUString aFmtCode = rAttribs.getString( XML_formatCode, OUString() );
+    OUString aFmtCode = rAttribs.getXString( XML_formatCode, OUString() );
     return createNumFmt( nNumFmtId, aFmtCode );
 }
 
@@ -2020,15 +2020,15 @@ void NumberFormatsBuffer::importFormat( BiffInputStream& rStrm )
     {
         case BIFF2:
         case BIFF3:
-            aFmtCode = rStrm.readByteString( false, getTextEncoding() );
+            aFmtCode = rStrm.readByteStringUC( false, getTextEncoding() );
         break;
         case BIFF4:
             rStrm.skip( 2 );    // in BIFF4 the index field exists, but is undefined
-            aFmtCode = rStrm.readByteString( false, getTextEncoding() );
+            aFmtCode = rStrm.readByteStringUC( false, getTextEncoding() );
         break;
         case BIFF5:
             mnNextBiffIndex = rStrm.readuInt16();
-            aFmtCode = rStrm.readByteString( false, getTextEncoding() );
+            aFmtCode = rStrm.readByteStringUC( false, getTextEncoding() );
         break;
         case BIFF8:
             mnNextBiffIndex = rStrm.readuInt16();

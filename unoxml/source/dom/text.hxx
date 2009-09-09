@@ -41,7 +41,7 @@
 #include <libxml/tree.h>
 #include "characterdata.hxx"
 
-using namespace rtl;
+using ::rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::dom;
@@ -61,6 +61,8 @@ namespace DOM
 
         virtual void SAL_CALL saxify(
             const Reference< XDocumentHandler >& i_xHandler);
+
+        virtual void SAL_CALL fastSaxify( Context& io_rContext );
 
          // Breaks this node into two nodes at the specified offset, keeping
          // both in the tree as siblings.

@@ -351,7 +351,6 @@ bool BiffObjectBase::implStartRecord( BinaryInputStream&, sal_Int64& ornRecPos, 
     }
 
     ornRecSize = mxBiffStrm->getLength();
-    mxBiffStrm->enableNulChars( true );
     return bValid;
 }
 
@@ -429,7 +428,7 @@ OUString BiffObjectBase::dumpByteString( const String& rName, BiffStringFlags nF
     OSL_ENSURE( !getFlag( nFlags, static_cast< BiffStringFlags >( ~(BIFF_STR_8BITLENGTH | BIFF_STR_EXTRAFONTS) ) ), "BiffObjectBase::dumpByteString - unknown flag" );
     bool b8BitLength = getFlag( nFlags, BIFF_STR_8BITLENGTH );
 
-    OString aString = mxBiffStrm->readByteString( !b8BitLength );
+    OString aString = mxBiffStrm->readByteString( !b8BitLength, true );
     FontPortionModelList aPortions;
     if( getFlag( nFlags, BIFF_STR_EXTRAFONTS ) )
         aPortions.importPortions( *mxBiffStrm, false );
@@ -486,7 +485,7 @@ OUString BiffObjectBase::dumpUniString( const String& rName, BiffStringFlags nFl
     sal_uInt32 nPhoneticSize = bPhonetic ? mxBiffStrm->readuInt32() : 0;
 
     // --- character array ---
-    OUString aString = mxBiffStrm->readUniStringChars( nChars, b16Bit );
+    OUString aString = mxBiffStrm->readUniStringChars( nChars, b16Bit, true );
     writeStringItem( rName( "text" ), aString );
 
     // --- formatting ---
@@ -2096,16 +2095,16 @@ void WorkbookStreamObject::implDumpRecordBody()
                 sal_uInt8 nDescrLen = dumpDec< sal_uInt8 >( "description-text-len" );
                 sal_uInt8 nHelpLen = dumpDec< sal_uInt8 >( "help-text-len" );
                 sal_uInt8 nStatusLen = dumpDec< sal_uInt8 >( "statusbar-text-len" );
-                writeStringItem( "name", bBiff8 ? rStrm.readUniString( nNameLen ) : rStrm.readCharArray( nNameLen, eTextEnc ) );
+                writeStringItem( "name", bBiff8 ? rStrm.readUniStringBody( nNameLen, true ) : rStrm.readCharArrayUC( nNameLen, eTextEnc, true ) );
                 getFormulaDumper().dumpNameFormula( EMPTY_STRING, nFmlaSize );
-                if( nMenuLen > 0 ) writeStringItem( "menu-text", bBiff8 ? rStrm.readUniString( nMenuLen ) : rStrm.readCharArray( nMenuLen, eTextEnc ) );
-                if( nDescrLen > 0 ) writeStringItem( "description-text", bBiff8 ? rStrm.readUniString( nDescrLen ) : rStrm.readCharArray( nDescrLen, eTextEnc ) );
-                if( nHelpLen > 0 ) writeStringItem( "help-text", bBiff8 ? rStrm.readUniString( nHelpLen ) : rStrm.readCharArray( nHelpLen, eTextEnc ) );
-                if( nStatusLen > 0 ) writeStringItem( "statusbar-text", bBiff8 ? rStrm.readUniString( nStatusLen ) : rStrm.readCharArray( nStatusLen, eTextEnc ) );
+                if( nMenuLen > 0 ) writeStringItem( "menu-text", bBiff8 ? rStrm.readUniStringBody( nMenuLen, true ) : rStrm.readCharArrayUC( nMenuLen, eTextEnc, true ) );
+                if( nDescrLen > 0 ) writeStringItem( "description-text", bBiff8 ? rStrm.readUniStringBody( nDescrLen, true ) : rStrm.readCharArrayUC( nDescrLen, eTextEnc, true ) );
+                if( nHelpLen > 0 ) writeStringItem( "help-text", bBiff8 ? rStrm.readUniStringBody( nHelpLen, true ) : rStrm.readCharArrayUC( nHelpLen, eTextEnc, true ) );
+                if( nStatusLen > 0 ) writeStringItem( "statusbar-text", bBiff8 ? rStrm.readUniStringBody( nStatusLen, true ) : rStrm.readCharArrayUC( nStatusLen, eTextEnc, true ) );
             }
             else
             {
-                writeStringItem( "name", rStrm.readCharArray( nNameLen, eTextEnc ) );
+                writeStringItem( "name", rStrm.readCharArrayUC( nNameLen, eTextEnc, true ) );
                 getFormulaDumper().dumpNameFormula( EMPTY_STRING, nFmlaSize );
                 if( eBiff == BIFF2 ) getFormulaDumper().dumpFormulaSize();
             }
@@ -2177,7 +2176,7 @@ void WorkbookStreamObject::implDumpRecordBody()
             }
             else
             {
-                OStringBuffer aUrl( rStrm.readByteString( false ) );
+                OStringBuffer aUrl( rStrm.readByteString( false, true ) );
                 if( (aUrl.getLength() > 0) && (aUrl[ 0 ] == '\x03') )
                     aUrl.append( static_cast< sal_Char >( rStrm.readuInt8() ) );
                 writeStringItem( "encoded-url", OStringToOUString( aUrl.makeStringAndClear(), getBiffData().getTextEncoding() ) );
@@ -2318,7 +2317,7 @@ void WorkbookStreamObject::implDumpRecordBody()
             else
             {
                 sal_uInt16 nTextLen = ::std::min( dumpDec< sal_uInt16 >( "text-len" ), static_cast< sal_uInt16 >( rStrm.getRemaining() ) );
-                writeStringItem( "note-text", rStrm.readCharArray( nTextLen, getBiffData().getTextEncoding() ) );
+                writeStringItem( "note-text", rStrm.readCharArrayUC( nTextLen, getBiffData().getTextEncoding(), true ) );
             }
         break;
 
@@ -2546,6 +2545,35 @@ void WorkbookStreamObject::implDumpRecordBody()
         }
         break;
 
+        case BIFF_ID_SCENARIO:
+        {
+            sal_uInt16 nCellCount = dumpDec< sal_uInt16 >( "cell-count" );
+            // two bytes instead of flag field
+            dumpBoolean( "locked" );
+            dumpBoolean( "hidden" );
+            sal_uInt16 nNameLen = dumpDec< sal_uInt8 >( "name-len" );
+            sal_uInt16 nCommentLen = dumpDec< sal_uInt8 >( "comment-len" );
+            sal_uInt16 nUserLen = dumpDec< sal_uInt8 >( "user-len" );
+            writeStringItem( "name", rStrm.readUniStringBody( nNameLen, true ) );
+            if( nUserLen > 0 ) dumpUniString( "user" );         // repeated string length
+            if( nCommentLen > 0 ) dumpUniString( "comment" );   // repeated string length
+            out().resetItemIndex();
+            for( sal_uInt16 nCell = 0; !rStrm.isEof() && (nCell < nCellCount); ++nCell )
+                dumpAddress( "#pos" );
+            out().resetItemIndex();
+            for( sal_uInt16 nCell = 0; !rStrm.isEof() && (nCell < nCellCount); ++nCell )
+                dumpString( "#value" );
+            dumpUnused( 2 * nCellCount );
+        }
+        break;
+
+        case BIFF_ID_SCENARIOS:
+            dumpDec< sal_uInt16 >( "count" );
+            dumpDec< sal_uInt16 >( "selected" );
+            dumpDec< sal_uInt16 >( "shown" );
+            dumpRangeList( "result-cells" );
+        break;
+
         case BIFF_ID_SCL:
         {
             sal_uInt16 nNum = dumpDec< sal_uInt16 >( "numerator" );
@@ -2768,7 +2796,7 @@ OUString WorkbookStreamObject::dumpPivotString( const String& rName, sal_uInt16 
     {
         aString = (getBiff() == BIFF8) ?
             getBiffStream().readUniString( nStrLen ) :
-            getBiffStream().readCharArray( nStrLen, getBiffData().getTextEncoding() );
+            getBiffStream().readCharArrayUC( nStrLen, getBiffData().getTextEncoding() );
         writeStringItem( rName, aString );
     }
     return aString;
@@ -3484,7 +3512,7 @@ void WorkbookStreamObject::dumpObjRecString( const String& rName, sal_uInt16 nTe
         if( bRepeatLen )
             dumpByteString( rName, BIFF_STR_8BITLENGTH );
         else
-            writeStringItem( rName, getBiffStream().readCharArray( nTextLen, getBiffData().getTextEncoding() ) );
+            writeStringItem( rName, getBiffStream().readCharArrayUC( nTextLen, getBiffData().getTextEncoding() ) );
         dumpObjRecPadding();
     }
 }

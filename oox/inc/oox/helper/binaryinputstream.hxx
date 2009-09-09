@@ -79,6 +79,39 @@ public:
     inline float        readFloat() { return readValue< float >(); }
     inline double       readDouble() { return readValue< double >(); }
 
+    /** Reads a NUL-terminated byte character array and returns the string. */
+    ::rtl::OString      readNulCharArray();
+
+    /** Reads a NUL-terminated byte character array and returns a Unicode string.
+        @param eTextEnc  The text encoding used to create the Unicode string. */
+    ::rtl::OUString     readNulCharArrayUC( rtl_TextEncoding eTextEnc );
+
+    /** Reads a NUL-terminated Unicode character array and returns the string. */
+    ::rtl::OUString     readNulUnicodeArray();
+
+    /** Reads nChar byte characters and returns the string.
+        @param nChars  Number of characters (bytes) to read from the stream.
+        @param bAllowNulChars
+            True = NUL characters are inserted into the imported string.
+            False = NUL characters are replaced by question marks (default). */
+    ::rtl::OString      readCharArray( sal_Int32 nChars, bool bAllowNulChars = false );
+
+    /** Reads nChar byte characters and returns a Unicode string.
+        @param nChars  Number of characters (bytes) to read from the stream.
+        @param eTextEnc  The text encoding used to create the Unicode string.
+        @param bAllowNulChars
+            True = NUL characters are inserted into the imported string.
+            False = NUL characters are replaced by question marks (default). */
+    ::rtl::OUString     readCharArrayUC( sal_Int32 nChars, rtl_TextEncoding eTextEnc, bool bAllowNulChars = false );
+
+    /** Reads nChars Unicode characters and returns the string.
+        @param nChars  Number of 16-bit characters to read from the stream.
+        @param bAllowNulChars
+            True = NUL characters are inserted into the imported string.
+            False = NUL characters are replaced by question marks (default). */
+    ::rtl::OUString     readUnicodeArray( sal_Int32 nChars, bool bAllowNulChars = false );
+
+
 private:
     /** Used by the readValue() template functions to read built-in types.
         @descr  Derived classes may overwrite this default implementation which
@@ -165,7 +198,7 @@ public:
             wrapper. The data sequence MUST NOT be changed from outside as long
             as this stream wrapper is used to read from it.
      */
-    explicit            SequenceInputStream( StreamDataSequence& rData );
+    explicit            SequenceInputStream( const StreamDataSequence& rData );
 
     /** Reads nBytes bytes to the passed sequence.
         @return  Number of bytes really read. */

@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: modelobjectcontainer.hxx,v $
- * $Revision: 1.2 $
+ * $RCSfile: modelobjecthelper.hxx,v $
+ * $Revision: 1.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,22 +28,20 @@
  *
  ************************************************************************/
 
-#ifndef OOX_CORE_MODELOBJECTCONTAINER_HXX
-#define OOX_CORE_MODELOBJECTCONTAINER_HXX
+#ifndef OOX_HELPER_MODELOBJECTHELPER_HXX
+#define OOX_HELPER_MODELOBJECTHELPER_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include "oox/helper/containerhelper.hxx"
 
 namespace com { namespace sun { namespace star {
-    namespace frame { class XModel; }
+    namespace lang { class XMultiServiceFactory; }
     namespace awt { struct Gradient; }
-    namespace awt { class XBitmap; }
     namespace drawing { struct LineDash; }
     namespace drawing { struct PolyPolygonBezierCoords; }
 } } }
 
 namespace oox {
-namespace core {
 
 // ============================================================================
 
@@ -54,11 +52,11 @@ namespace core {
     the same filter (e.g. embedded charts) which carry their own drawing object
     tables.
  */
-class ModelObjectContainer
+class ModelObjectHelper
 {
 public:
-    explicit            ModelObjectContainer(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
+    explicit            ModelObjectHelper(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
 
     /** Returns true, if the model contains a line marker with the passed name. */
     bool                hasLineMarker( const ::rtl::OUString& rMarkerName ) const;
@@ -79,7 +77,7 @@ public:
 
     /** Inserts a new named fill bitmap, returns the bitmap name, based on an
         internal constant name with a new unused index appended. */
-    ::rtl::OUString     insertFillBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >& rxBitmap );
+    ::rtl::OUString     insertFillBitmap( const ::rtl::OUString& rGraphicUrl );
 
 private:
     ObjectContainer     maMarkerContainer;
@@ -93,7 +91,6 @@ private:
 
 // ============================================================================
 
-} // namespace core
 } // namespace oox
 
 #endif

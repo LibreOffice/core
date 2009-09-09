@@ -33,7 +33,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <rtl/ref.hxx>
-#include "oox/vml/drawing.hxx"
+#include "oox/vml/vmldrawing.hxx"
 #include "oox/drawingml/table/tablestylelist.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 
@@ -58,8 +58,8 @@ public:
     /** Has to be implemented by each filter to resolve scheme colors. */
     virtual sal_Int32   getSchemeClr( sal_Int32 nColorSchemeToken ) const;
 
-    /** Has to be implemented by each filter to return drawings collection. */
-    virtual const ::oox::vml::DrawingPtr getDrawings();
+    /** Has to be implemented by each filter to return the collection of VML shapes. */
+    virtual ::oox::vml::Drawing* getVmlDrawing();
 
     /** Has to be implemented by each filter to return TableStyles. */
     virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles();

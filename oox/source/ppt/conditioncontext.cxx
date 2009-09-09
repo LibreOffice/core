@@ -154,7 +154,7 @@ namespace oox { namespace ppt {
         {
             maCond.mnType = aElementToken;
             AttributeList attribs( xAttribs );
-            sal_uInt32 nId = attribs.getUnsignedInteger( XML_val, 0 );
+            sal_uInt32 nId = attribs.getUnsigned( XML_val, 0 );
             maCond.maValue = makeAny( nId );
             break;
         }

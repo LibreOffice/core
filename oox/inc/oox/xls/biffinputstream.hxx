@@ -116,7 +116,7 @@ private:
 
 // ============================================================================
 
-/** This class is used to import BIFF streams.
+/** This class is used to read BIFF record streams.
 
     An instance is constructed with a BinaryInputStream object. The passed
     stream is reset to its start while constructing this stream.
@@ -271,58 +271,83 @@ public:
     template< typename Type >
     inline BiffInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
 
-    // strings ----------------------------------------------------------------
+    // byte strings -----------------------------------------------------------
 
-    /** Enables/disables reading NUL characters into strings.
-
-        Default behaviour is to replace NUL characters with question marks.
-        This default behaviour is restored automatically, if a new record is
-        started using the function startNextRecord().
-
-        @param bEnable
+    /** Reads 8/16 bit string length and character array, and returns the string.
+        @param b16BitLen
+            True = Read 16-bit string length field before the character array.
+            False = Read 8-bit string length field before the character array.
+        @param bAllowNulChars
             True = NUL characters are inserted into the imported string.
             False = NUL characters are replaced by question marks (default).
      */
-    inline void         enableNulChars( bool bEnable ) { mbNulChars = bEnable; }
+    ::rtl::OString      readByteString( bool b16BitLen, bool bAllowNulChars = false );
 
-    // byte strings -----------------------------------------------------------
+    /** Reads 8/16 bit string length and character array, and returns a Unicode string.
+        @param b16BitLen
+            True = Read 16-bit string length field before the character array.
+            False = Read 8-bit string length field before the character array.
+        @param eTextEnc  The text encoding used to create the Unicode string.
+        @param bAllowNulChars
+            True = NUL characters are inserted into the imported string.
+            False = NUL characters are replaced by question marks (default).
+     */
+    ::rtl::OUString     readByteStringUC( bool b16BitLen, rtl_TextEncoding eTextEnc, bool bAllowNulChars = false );
 
-    /** Reads nChar byte characters and returns the string. */
-    ::rtl::OString      readCharArray( sal_uInt16 nChars );
-    /** Reads nChar byte characters and returns the string. */
-    ::rtl::OUString     readCharArray( sal_uInt16 nChars, rtl_TextEncoding eTextEnc );
-
-    /** Reads 8/16 bit string length and character array, and returns the string. */
-    ::rtl::OString      readByteString( bool b16BitLen );
-    /** Reads 8/16 bit string length and character array, and returns the string. */
-    ::rtl::OUString     readByteString( bool b16BitLen, rtl_TextEncoding eTextEnc );
-
-    /** Ignores 8/16 bit string length and character array. */
+    /** Ignores 8/16 bit string length and character array.
+        @param b16BitLen
+            True = Read 16-bit string length field before the character array.
+            False = Read 8-bit string length field before the character array.
+     */
     void                skipByteString( bool b16BitLen );
 
     // Unicode strings --------------------------------------------------------
 
-    /** Reads a null-terminated Unicode characters and returns the string. */
-    ::rtl::OUString     readNulUnicodeArray();
-    /** Reads nChars Unicode characters and returns the string. */
-    ::rtl::OUString     readUnicodeArray( sal_uInt16 nChars );
+    /** Reads nChars characters of a BIFF8 string, and returns the string.
+        @param nChars  Number of characters to read from the stream.
+        @param b16BitChars
+            True = The character array contains 16-bit characters.
+            False = The character array contains truncated 8-bit characters.
+        @param bAllowNulChars
+            True = NUL characters are inserted into the imported string.
+            False = NUL characters are replaced by question marks (default).
+     */
+    ::rtl::OUString     readUniStringChars( sal_uInt16 nChars, bool b16BitChars, bool bAllowNulChars = false );
 
-    /** Reads nChars characters of a BIFF8 string, and returns the string. */
-    ::rtl::OUString     readUniStringChars( sal_uInt16 nChars, bool b16Bit );
-    /** Reads 8 bit flags, extended header, nChar characters, extended data of
-        a BIFF8 string, and returns the string. */
-    ::rtl::OUString     readUniString( sal_uInt16 nChars );
-    /** Reads 16 bit character count, 8 bit flags, extended header, character
-        array, extended data of a BIFF8 string, and returns the string. */
-    ::rtl::OUString     readUniString();
+    /** Reads 8-bit flags, extended header, nChar characters, extended data of
+        a BIFF8 string, and returns the string.
+        @param nChars  Number of characters to read from the stream.
+        @param bAllowNulChars
+            True = NUL characters are inserted into the imported string.
+            False = NUL characters are replaced by question marks (default).
+     */
+    ::rtl::OUString     readUniStringBody( sal_uInt16 nChars, bool bAllowNulChars = false );
 
-    /** Ignores nChars characters of a BIFF8 string. */
-    void                skipUniStringChars( sal_uInt16 nChars, bool b16Bit );
-    /** Ignores 8 bit flags, extended header, nChar characters, extended data
-        of a BIFF8 string. */
-    void                skipUniString( sal_uInt16 nChars );
-    /** Ignores 16 bit character count, 8 bit flags, extended header, character
-        array, extended data of a BIFF8 string. */
+    /** Reads 16-bit character count, 8-bit flags, extended header, character
+        array, extended data of a BIFF8 string, and returns the string.
+        @param bAllowNulChars
+            True = NUL characters are inserted into the imported string.
+            False = NUL characters are replaced by question marks (default).
+     */
+    ::rtl::OUString     readUniString( bool bAllowNulChars = false );
+
+    /** Ignores nChars characters of a BIFF8 string.
+        @param nChars  Number of characters to skip in the stream.
+        @param b16BitChars
+            True = The character array contains 16-bit characters.
+            False = The character array contains truncated 8-bit characters.
+     */
+    void                skipUniStringChars( sal_uInt16 nChars, bool b16BitChars );
+
+    /** Ignores 8-bit flags, extended header, nChar characters, extended data
+        of a BIFF8 string.
+        @param nChars  Number of characters to skip in the stream.
+     */
+    void                skipUniStringBody( sal_uInt16 nChars );
+
+    /** Ignores 16-bit character count, 8-bit flags, extended header, character
+        array, extended data of a BIFF8 string.
+     */
     void                skipUniString();
 
     // ------------------------------------------------------------------------
@@ -351,9 +376,9 @@ private:
         has been started in a CONTINUE record, jumps to an existing following
         CONTINUE record, even if handling of CONTINUE records is disabled (this
         is a special handling for TXO string data). Reads additional Unicode
-        flag byte at start of the new raw record and sets or resets rb16Bit.
+        flag byte at start of the new raw record and sets or resets rb16BitChars.
         @return  True if next CONTINUE record has been found and initialized. */
-    bool                jumpToNextStringContinue( bool& rb16Bit );
+    bool                jumpToNextStringContinue( bool& rb16BitChars );
     /** Calculates the complete length of the current record including CONTINUE
         records, stores the length in mnComplRecSize. */
     void                calcRecordLength();
@@ -367,9 +392,9 @@ private:
     sal_uInt16          getMaxRawReadSize( sal_Int32 nBytes ) const;
 
     /** Reads an array of Unicode characters and appends them to the passed buffer. */
-    void                appendUnicodeArray( ::rtl::OUStringBuffer& orBuffer, sal_uInt16 nChars, bool b16Bit );
+    void                appendUnicodeArray( ::rtl::OUStringBuffer& orBuffer, sal_uInt16 nChars, bool b16BitChars, bool bAllowNulChars );
     /** Reads the BIFF8 Unicode string header fields. */
-    void                readUniStringHeader( bool& orb16Bit, sal_Int32& ornAddSize );
+    void                readUniStringHeader( bool& orb16BitChars, sal_Int32& ornAddSize );
 
 private:
     prv::BiffInputRecordBuffer maRecBuffer; /// Raw record data buffer.
@@ -383,7 +408,6 @@ private:
     bool                mbHasComplRec;      /// True = mnComplRecSize is valid.
 
     bool                mbCont;             /// True = automatic CONTINUE lookup enabled.
-    bool                mbNulChars;         /// True = import NUL characters.
 };
 
 // ============================================================================
@@ -405,6 +429,8 @@ private:
 
 // ============================================================================
 
+/** Stores the current position of the passed stream on construction and
+    restores it automatically on destruction. */
 class BiffInputStreamPosGuard : private BiffInputStreamPos
 {
 public:

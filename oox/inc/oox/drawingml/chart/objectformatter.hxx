@@ -84,6 +84,7 @@ enum ObjectType
 
 struct ChartSpaceModel;
 struct ObjectFormatterData;
+struct PictureOptionsModel;
 
 class ObjectFormatter
 {
@@ -103,6 +104,14 @@ public:
     void                convertFrameFormatting(
                             PropertySet& rPropSet,
                             const ModelRef< Shape >& rxShapeProp,
+                            ObjectType eObjType,
+                            sal_Int32 nSeriesIdx = -1 );
+
+    /** Sets frame formatting properties to the passed property set. */
+    void                convertFrameFormatting(
+                            PropertySet& rPropSet,
+                            const ModelRef< Shape >& rxShapeProp,
+                            const PictureOptionsModel& rPicOptions,
                             ObjectType eObjType,
                             sal_Int32 nSeriesIdx = -1 );
 

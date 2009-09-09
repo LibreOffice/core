@@ -565,11 +565,11 @@ namespace oox { namespace ppt {
                     break;
                 case NMSP_PPT|XML_to:
                     // CT_Color
-                    xRet.set( new colorChoiceContext( *this, maToClr ) );
+                    xRet.set( new ColorContext( *this, maToClr ) );
                     break;
                 case NMSP_PPT|XML_from:
                     // CT_Color
-                    xRet.set( new colorChoiceContext( *this, maFromClr ) );
+                    xRet.set( new ColorContext( *this, maFromClr ) );
                     break;
 
                 default:

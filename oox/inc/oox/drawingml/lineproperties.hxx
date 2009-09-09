@@ -104,7 +104,7 @@ struct LineProperties
                             PropertyMap& rPropMap,
                             const LinePropertyIds& rPropIds,
                             const ::oox::core::XmlFilterBase& rFilter,
-                            ::oox::core::ModelObjectContainer& rObjContainer,
+                            ModelObjectHelper& rModelObjHelper,
                             sal_Int32 nPhClr ) const;
 
     /** Writes the properties to the passed property map. */
@@ -112,7 +112,7 @@ struct LineProperties
                             PropertySet& rPropSet,
                             const LinePropertyIds& rPropIds,
                             const ::oox::core::XmlFilterBase& rFilter,
-                            ::oox::core::ModelObjectContainer& rObjContainer,
+                            ModelObjectHelper& rModelObjHelper,
                             sal_Int32 nPhClr ) const;
 };
 

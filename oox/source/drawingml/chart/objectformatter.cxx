@@ -34,7 +34,9 @@
 #include <osl/thread.h>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include "oox/core/modelobjectcontainer.hxx"
+#include "properties.hxx"
+#include "tokens.hxx"
+#include "oox/helper/modelobjecthelper.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/lineproperties.hxx"
@@ -42,8 +44,6 @@
 #include "oox/drawingml/textparagraph.hxx"
 #include "oox/drawingml/theme.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 
 using ::rtl::OStringBuffer;
 using ::rtl::OUString;
@@ -61,7 +61,6 @@ using ::com::sun::star::graphic::XGraphic;
 using ::com::sun::star::util::XNumberFormats;
 using ::com::sun::star::util::XNumberFormatsSupplier;
 using ::com::sun::star::util::XNumberFormatTypes;
-using ::oox::core::ModelObjectContainer;
 using ::oox::core::XmlFilterBase;
 
 namespace oox {
@@ -558,6 +557,13 @@ static const ObjectTypeFormatEntry spObjTypeFormatEntries[] =
 
 #undef TYPEFORMAT_FRAME
 #undef TYPEFORMAT_LINE
+// ----------------------------------------------------------------------------
+
+void lclConvertPictureOptions( FillProperties& orFillProps, const PictureOptionsModel& rPicOptions )
+{
+    bool bStacked = (rPicOptions.mnPictureFormat == XML_stack) || (rPicOptions.mnPictureFormat == XML_stackScale);
+    orFillProps.maBlipProps.moBitmapMode = bStacked ? XML_tile : XML_stretch;
+}
 
 // ----------------------------------------------------------------------------
 
@@ -565,8 +571,8 @@ const sal_Int32 spnCommonLineIds[ LineId_END ] = { PROP_LineStyle,   PROP_LineWi
 const sal_Int32 spnLinearLineIds[ LineId_END ] = { PROP_LineStyle,   PROP_LineWidth,   PROP_Color,       PROP_Transparency,       PROP_LineDashName,   PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID };
 const sal_Int32 spnFilledLineIds[ LineId_END ] = { PROP_BorderStyle, PROP_BorderWidth, PROP_BorderColor, PROP_BorderTransparency, PROP_BorderDashName, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID };
 
-const sal_Int32 spnCommonFillIds[ FillId_END ] = { PROP_FillStyle, PROP_FillColor, PROP_FillTransparence, PROP_FillGradientName, PROP_FillBitmapName, PROP_FillBitmapMode, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID };
-const sal_Int32 spnFilledFillIds[ FillId_END ] = { PROP_FillStyle, PROP_Color,     PROP_Transparency,     PROP_GradientName,     PROP_FillBitmapName, PROP_FillBitmapMode, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID };
+const sal_Int32 spnCommonFillIds[ FillId_END ] = { PROP_FillStyle, PROP_FillColor, PROP_FillTransparence, PROP_FillGradientName, PROP_FillBitmapName, PROP_FillBitmapMode, PROP_FillBitmapSizeX, PROP_FillBitmapSizeY, PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint };
+const sal_Int32 spnFilledFillIds[ FillId_END ] = { PROP_FillStyle, PROP_Color,     PROP_Transparency,     PROP_GradientName,     PROP_FillBitmapName, PROP_FillBitmapMode, PROP_FillBitmapSizeX, PROP_FillBitmapSizeY, PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint };
 
 } // namespace
 
@@ -637,6 +643,7 @@ public:
     void                convertFormatting(
                             PropertySet& rPropSet,
                             const ModelRef< Shape >& rxShapeProp,
+                            const PictureOptionsModel* pPicOptions,
                             sal_Int32 nSeriesIdx );
 
 private:
@@ -699,6 +706,7 @@ public:
     void                convertFrameFormatting(
                             PropertySet& rPropSet,
                             const ModelRef< Shape >& rxShapeProp,
+                            const PictureOptionsModel* pPicOptions,
                             sal_Int32 nSeriesIdx );
 
     /** Sets text formatting properties to the passed property set. */
@@ -731,7 +739,7 @@ private:
     LineFormatter       maLineFormatter;    /// Converter for line formatting.
     FillFormatter       maFillFormatter;    /// Converter for fill formatting.
     EffectFormatter     maEffectFormatter;  /// Converter for effect formatting.
-    TextFormatter       maTextFormatter;    /// Converter for effect formatting.
+    TextFormatter       maTextFormatter;    /// Converter for text formatting.
     const ObjectTypeFormatEntry& mrEntry;   /// Additional settings.
 };
 
@@ -743,7 +751,7 @@ struct ObjectFormatterData
 
     const XmlFilterBase& mrFilter;              /// Base filter object.
     ObjectTypeFormatterMap maTypeFormatters;    /// Formatters for all types of objects in a chart.
-    ModelObjectContainer maObjContainer;        /// Container for named drawing formatting (dashes, gradients, bitmaps).
+    ModelObjectHelper   maModelObjHelper;       /// Helper for named drawing formatting (dashes, gradients, bitmaps).
     LinePropertyIds     maCommonLineIds;        /// Property identifiers for common border formatting.
     LinePropertyIds     maLinearLineIds;        /// Property identifiers for line formatting of linear series.
     LinePropertyIds     maFilledLineIds;        /// Property identifiers for line formatting of filled series.
@@ -884,7 +892,7 @@ void LineFormatter::convertFormatting( PropertySet& rPropSet, const ModelRef< Sh
         aLineProps.assignUsed( *mxAutoLine );
     if( rxShapeProp.is() )
         aLineProps.assignUsed( rxShapeProp->getLineProperties() );
-    aLineProps.pushToPropSet( rPropSet, mrLinePropIds, mrData.mrFilter, mrData.maObjContainer, getPhColor( nSeriesIdx ) );
+    aLineProps.pushToPropSet( rPropSet, mrLinePropIds, mrData.mrFilter, mrData.maModelObjHelper, getPhColor( nSeriesIdx ) );
 }
 
 // ============================================================================
@@ -903,14 +911,16 @@ FillFormatter::FillFormatter( ObjectFormatterData& rData, const AutoFormatEntry*
     }
 }
 
-void FillFormatter::convertFormatting( PropertySet& rPropSet, const ModelRef< Shape >& rxShapeProp, sal_Int32 nSeriesIdx )
+void FillFormatter::convertFormatting( PropertySet& rPropSet, const ModelRef< Shape >& rxShapeProp, const PictureOptionsModel* pPicOptions, sal_Int32 nSeriesIdx )
 {
     FillProperties aFillProps;
     if( mxAutoFill.get() )
         aFillProps.assignUsed( *mxAutoFill );
     if( rxShapeProp.is() )
         aFillProps.assignUsed( rxShapeProp->getFillProperties() );
-    aFillProps.pushToPropSet( rPropSet, mrFillPropIds, mrData.mrFilter, mrData.maObjContainer, 0, getPhColor( nSeriesIdx ) );
+    if( pPicOptions )
+        lclConvertPictureOptions( aFillProps, *pPicOptions );
+    aFillProps.pushToPropSet( rPropSet, mrFillPropIds, mrData.mrFilter, mrData.maModelObjHelper, 0, getPhColor( nSeriesIdx ) );
 }
 
 // ============================================================================
@@ -986,11 +996,11 @@ ObjectTypeFormatter::ObjectTypeFormatter( ObjectFormatterData& rData, const Obje
 {
 }
 
-void ObjectTypeFormatter::convertFrameFormatting( PropertySet& rPropSet, const ModelRef< Shape >& rxShapeProp, sal_Int32 nSeriesIdx )
+void ObjectTypeFormatter::convertFrameFormatting( PropertySet& rPropSet, const ModelRef< Shape >& rxShapeProp, const PictureOptionsModel* pPicOptions, sal_Int32 nSeriesIdx )
 {
     maLineFormatter.convertFormatting( rPropSet, rxShapeProp, nSeriesIdx );
     if( mrEntry.mbIsFrame )
-        maFillFormatter.convertFormatting( rPropSet, rxShapeProp, nSeriesIdx );
+        maFillFormatter.convertFormatting( rPropSet, rxShapeProp, pPicOptions, nSeriesIdx );
     maEffectFormatter.convertFormatting( rPropSet, rxShapeProp, nSeriesIdx );
 }
 
@@ -1001,7 +1011,7 @@ void ObjectTypeFormatter::convertTextFormatting( PropertySet& rPropSet, const Mo
 
 void ObjectTypeFormatter::convertFormatting( PropertySet& rPropSet, const ModelRef< Shape >& rxShapeProp, const ModelRef< TextBody >& rxTextProp )
 {
-    convertFrameFormatting( rPropSet, rxShapeProp, -1 );
+    convertFrameFormatting( rPropSet, rxShapeProp, 0, -1 );
     convertTextFormatting( rPropSet, rxTextProp );
 }
 
@@ -1020,7 +1030,7 @@ void ObjectTypeFormatter::convertAutomaticLine( PropertySet& rPropSet, sal_Int32
 void ObjectTypeFormatter::convertAutomaticFill( PropertySet& rPropSet, sal_Int32 nSeriesIdx )
 {
     ModelRef< Shape > xShapeProp;
-    maFillFormatter.convertFormatting( rPropSet, xShapeProp, nSeriesIdx );
+    maFillFormatter.convertFormatting( rPropSet, xShapeProp, 0, nSeriesIdx );
     maEffectFormatter.convertFormatting( rPropSet, xShapeProp, nSeriesIdx );
 }
 
@@ -1028,12 +1038,12 @@ void ObjectTypeFormatter::convertAutomaticFill( PropertySet& rPropSet, sal_Int32
 
 ObjectFormatterData::ObjectFormatterData( const XmlFilterBase& rFilter, const Reference< XChartDocument >& rxChartDoc, const ChartSpaceModel& rChartSpace ) :
     mrFilter( rFilter ),
-    maObjContainer( Reference< XModel >( rxChartDoc, UNO_QUERY ) ),
+    maModelObjHelper( Reference< XMultiServiceFactory >( rxChartDoc, UNO_QUERY ) ),
     maCommonLineIds( spnCommonLineIds, true, false ),
     maLinearLineIds( spnLinearLineIds, true, false ),
     maFilledLineIds( spnFilledLineIds, true, false ),
-    maCommonFillIds( spnCommonFillIds, true, true, false ),
-    maFilledFillIds( spnFilledFillIds, true, true, false ),
+    maCommonFillIds( spnCommonFillIds, true, true ),
+    maFilledFillIds( spnFilledFillIds, true, true ),
     maEnUsLocale( CREATE_OUSTRING( "en" ), CREATE_OUSTRING( "US" ), OUString() ),
     mnMaxSeriesIdx( -1 )
 {
@@ -1105,7 +1115,13 @@ sal_Int32 ObjectFormatter::getMaxSeriesIndex() const
 void ObjectFormatter::convertFrameFormatting( PropertySet& rPropSet, const ModelRef< Shape >& rxShapeProp, ObjectType eObjType, sal_Int32 nSeriesIdx )
 {
     if( ObjectTypeFormatter* pFormat = mxData->getTypeFormatter( eObjType ) )
-        pFormat->convertFrameFormatting( rPropSet, rxShapeProp, nSeriesIdx );
+        pFormat->convertFrameFormatting( rPropSet, rxShapeProp, 0, nSeriesIdx );
+}
+
+void ObjectFormatter::convertFrameFormatting( PropertySet& rPropSet, const ModelRef< Shape >& rxShapeProp, const PictureOptionsModel& rPicOptions, ObjectType eObjType, sal_Int32 nSeriesIdx )
+{
+    if( ObjectTypeFormatter* pFormat = mxData->getTypeFormatter( eObjType ) )
+        pFormat->convertFrameFormatting( rPropSet, rxShapeProp, &rPicOptions, nSeriesIdx );
 }
 
 void ObjectFormatter::convertTextFormatting( PropertySet& rPropSet, const ModelRef< TextBody >& rxTextProp, ObjectType eObjType )

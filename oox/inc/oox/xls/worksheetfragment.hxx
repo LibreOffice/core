@@ -131,6 +131,9 @@ private:
     void                importOleObject( RecordInputStream& rStrm );
     /** Imports additional data for an OCX form control. */
     void                importControl( RecordInputStream& rStrm );
+
+    /** Imports the binary data of an embedded OLE object from the fragment with the passed ID. */
+    void                importEmbeddedOleData( StreamDataSequence& orEmbeddedData, const ::rtl::OUString& rRelId );
 };
 
 // ============================================================================
@@ -167,8 +170,6 @@ private:
     void                importDefRowHeight();
     /** Imports the DIMENSION record containing the used area of the sheet. */
     void                importDimension();
-    /** Reads a string as used in the HYPERLINK record. */
-    ::rtl::OUString     readHyperlinkString( rtl_TextEncoding eTextEnc, bool bUnicode );
     /** Imports the HYPERLINK record and sets a cell hyperlink. */
     void                importHyperlink();
     /** Imports the LABELRANGES record and sets the imported label ranges. */
@@ -179,6 +180,8 @@ private:
     void                importPageBreaks( bool bRowBreak );
     /** Imports a pivot table. */
     void                importPTDefinition();
+    /** Imports the SCENARIOS record and the following scenarios. */
+    void                importScenarios();
     /** Imports the STANDARDWIDTH record and sets standard column width. */
     void                importStandardWidth();
 
