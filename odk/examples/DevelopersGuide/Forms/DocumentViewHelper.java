@@ -27,17 +27,27 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+package org.openoffice.sdk.forms;
 
-/**************************************************************************/
-import com.sun.star.uno.*;
-import com.sun.star.frame.*;
-import com.sun.star.lang.*;
-import com.sun.star.util.*;
-import com.sun.star.awt.*;
-import com.sun.star.view.*;
-import com.sun.star.beans.*;
-import com.sun.star.container.*;
-import com.sun.star.form.*;
+import com.sun.star.awt.XControl;
+import com.sun.star.awt.XControlModel;
+import com.sun.star.awt.XWindow;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XIndexContainer;
+import com.sun.star.form.FormComponentType;
+import com.sun.star.form.XForm;
+import com.sun.star.form.XFormController;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XDispatch;
+import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.URL;
+import com.sun.star.util.XURLTransformer;
+import com.sun.star.view.XControlAccess;
+import com.sun.star.view.XFormLayerAccess;
+
 
 /**************************************************************************/
 /** provides a small wrapper around a document view
@@ -119,13 +129,22 @@ class DocumentViewHelper
     }
 
     /* ------------------------------------------------------------------ */
+    /* retrieves the form controller belonging to a given logical form
+     */
+    public XFormController getFormController( Object _form )
+    {
+        XFormLayerAccess formLayer = (XFormLayerAccess)get( XFormLayerAccess.class );
+        return formLayer.getFormController( (XForm)UnoRuntime.queryInterface( XForm.class, _form ) );
+    }
+
+    /* ------------------------------------------------------------------ */
     /** retrieves a control within the current view of a document
         @param xModel
             specifies the control model whose control should be located
         @return
             the control tied to the model
     */
-    public XControl getControl( XControlModel xModel ) throws com.sun.star.uno.Exception
+    public XControl getFormControl( XControlModel xModel ) throws com.sun.star.uno.Exception
     {
         // the current view of the document
         XControlAccess xCtrlAcc = (XControlAccess)get( XControlAccess.class );
@@ -134,17 +153,17 @@ class DocumentViewHelper
     }
 
     /* ------------------------------------------------------------------ */
-    public XControl getControl( Object aModel ) throws com.sun.star.uno.Exception
+    public XControl getFormControl( Object aModel ) throws com.sun.star.uno.Exception
     {
         XControlModel xModel = (XControlModel)UnoRuntime.queryInterface( XControlModel.class, aModel );
-        return getControl( xModel );
+        return getFormControl( xModel );
     }
 
     /* ------------------------------------------------------------------ */
-    public Object getControl( Object aModel, Class aInterfaceClass ) throws com.sun.star.uno.Exception
+    public Object getFormControl( Object aModel, Class aInterfaceClass ) throws com.sun.star.uno.Exception
     {
         XControlModel xModel = (XControlModel)UnoRuntime.queryInterface( XControlModel.class, aModel );
-        return UnoRuntime.queryInterface( aInterfaceClass, getControl( xModel ) );
+        return UnoRuntime.queryInterface( aInterfaceClass, getFormControl( xModel ) );
     }
 
     /* ------------------------------------------------------------------ */
@@ -171,7 +190,7 @@ class DocumentViewHelper
     public void grabControlFocus( Object xModel ) throws com.sun.star.uno.Exception
     {
         // look for the control from the current view which belongs to the model
-        XControl xControl = getControl( xModel );
+        XControl xControl = getFormControl( xModel );
 
         // the focus can be set to an XWindow only
         XWindow xControlWindow = (XWindow)UnoRuntime.queryInterface( XWindow.class,

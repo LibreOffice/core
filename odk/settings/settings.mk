@@ -216,7 +216,7 @@ endif
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -M $(PRJ)/settings/component.uno.map
 
 EXE_LINK_FLAGS=-w -mt -z combreloc -PIC -temp=/tmp -norunpath -Bdirect -z defs
-LINK_LIBS=-L$(OUT)/lib -L$(OO_SDK_OUT)/$(PLATFORM)/lib -L"$(OO_SDK_URE_LIB_DIR)"
+LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)"
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
 
 ifeq "$(PROCTYPE)" "sparc64"
@@ -362,7 +362,7 @@ COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -Wl,--version-script,$(PRJ)/settings/compo
 
 #EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs -Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs -Wl,--no-whole-archive
-LINK_LIBS=-L$(OUT)/lib -L$(OO_SDK_OUT)/$(PLATFORM)/lib -L"$(OO_SDK_URE_LIB_DIR)"
+LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)"
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
 
 ifneq "$(OO_SDK_URE_HOME)" ""
@@ -570,7 +570,7 @@ COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -Wl,--version-script,$(PRJ)/settings/compo
 
 EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined 
 #EXE_LINK_FLAGS+=-Wl,-export-dynamic -Wl,-z,defs
-LINK_LIBS=-L$(OUT)/lib -L$(OO_SDK_OUT)/$(PLATFORM)/lib -L"$(OO_SDK_URE_LIB_DIR)" $(PTHREAD_LIBS)
+LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)" $(PTHREAD_LIBS)
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
 
 ifneq "$(OO_SDK_URE_HOME)" ""

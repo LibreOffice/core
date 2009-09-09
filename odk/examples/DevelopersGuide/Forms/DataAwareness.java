@@ -37,46 +37,37 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
+package org.openoffice.sdk.forms;
+
+import com.sun.star.beans.PropertyChangeEvent;
+import com.sun.star.beans.XPropertyChangeListener;
+import com.sun.star.beans.XPropertySet;
+
 
 // __________ Imports __________
+import com.sun.star.beans.XPropertySetInfo;
 
 // base classes
-import com.sun.star.uno.*;
-import com.sun.star.lang.*;
-
-// factory for creating components
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.frame.XComponentLoader;
-
-// container handling
-import com.sun.star.container.*;
-
-// property access
-import com.sun.star.beans.*;
-
-// toolkit specific stuff
-import com.sun.star.awt.*;
-
-// drawing layer
-import com.sun.star.drawing.*;
-
-// text documents
-import com.sun.star.text.*;
-
-// form layer
-import com.sun.star.form.*;
-
-// data access
-import com.sun.star.sdbc.*;
-import com.sun.star.sdbcx.*;
-import com.sun.star.sdb.*;
-
-// document framework
-import com.sun.star.frame.*;
-import com.sun.star.view.*;
-
-// miscellaneous
-import com.sun.star.util.*;
+import com.sun.star.container.XIndexContainer;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNamed;
+import com.sun.star.form.FormComponentType;
+import com.sun.star.form.ListSourceType;
+import com.sun.star.form.XGridColumnFactory;
+import com.sun.star.form.XReset;
+import com.sun.star.form.XResetListener;
+import com.sun.star.form.runtime.FormFeature;
+import com.sun.star.lang.EventObject;
+import com.sun.star.lang.XComponent;
+import com.sun.star.sdb.CommandType;
+import com.sun.star.sdb.XColumnUpdate;
+import com.sun.star.sdbc.ResultSetConcurrency;
+import com.sun.star.sdbc.XConnection;
+import com.sun.star.sdbc.XDataSource;
+import com.sun.star.sdbc.XStatement;
+import com.sun.star.sdbcx.XColumnsSupplier;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**************************************************************************/
 /** a class for enumerating a form component tree
@@ -160,25 +151,11 @@ class RevokeButtons extends ComponentTreeTraversal
 public class DataAwareness extends DocumentBasedExample implements XPropertyChangeListener, XResetListener
 {
     /* ================================================================== */
-    private class Parameters
-    {
-        public  String  sDataSourceName;
-        public  String  sUser;
-        public  String  sPassword;
-        public  String  sTablePrefix;
+    private HsqlDatabase            m_database;
 
-        public  String addTablePrefix( String sBaseName )
-        {
-            String sReturn = new String( sTablePrefix );
-            if ( 0 < sTablePrefix.length() )
-                sReturn += ".";
-            sReturn += sBaseName;
-            return sReturn;
-        }
-    };
-
-    /* ================================================================== */
-    private Parameters              m_aParameters;
+    private static final String     s_tableNameSalesmen = "SALESMEN";
+    private static final String     s_tableNameCustomers = "CUSTOMERS";
+    private static final String     s_tableNameSales = "SALES";
 
     private XPropertySet            m_xMasterForm;
     private ButtonOperator          m_aOperator;
@@ -197,7 +174,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
     /* ------------------------------------------------------------------ */
     public DataAwareness()
     {
-        super( DocumentType.CALC );
+        super( DocumentType.WRITER );
         m_bDefaultSalesDate = false;
         m_bProtectKeyFields = false;
         m_bAllowEmptySales = false;
@@ -444,22 +421,15 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         String[] aCurrentFilter = (String[])xDSP.getPropertyValue( "TableFilter" );
 
         // check if the table name is already part of it
-        String sPureTableName = sTableName;                                     // the pure name, e.g. SALESMAN
-        String sPrefixedTableName = m_aParameters.addTablePrefix( sTableName ); // the prefixed name, e.g. SCHEMA.SALESMAN
         String sAllTables = "*";                                                // all tables
-        String sPrefixWildcard = m_aParameters.addTablePrefix( sAllTables );    // all tables in this schema, e.g. SCHEMA.*
 
         for ( int i=0; i<aCurrentFilter.length; ++i )
         {
             String sCurrentTableFilter = aCurrentFilter[i];
 
-            if ( sCurrentTableFilter.equals( sPureTableName ) )
-                return;
-            if ( sCurrentTableFilter.equals( sPrefixedTableName ) )
+            if ( sCurrentTableFilter.equals( sTableName ) )
                 return;
             if ( sCurrentTableFilter.equals( sAllTables ) )
-                return;
-            if ( sCurrentTableFilter.equals( sPrefixWildcard ) )
                 return;
         }
 
@@ -469,8 +439,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         for ( int i=0; i<aCurrentFilter.length; ++i )
             aNewFilter[i] = aCurrentFilter[i];
         // add our table
-        aNewFilter[ aCurrentFilter.length ] = sPrefixedTableName;
-            // note that sPrefixedTableName equals sTableName in case there is no prefix
+        aNewFilter[ aCurrentFilter.length ] = sTableName;
 
         xDSP.setPropertyValue( "TableFilter", aNewFilter );
     }
@@ -510,16 +479,14 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
     }
 
     /* ------------------------------------------------------------------ */
-    /** creates the table SALESMAN
+    /** creates the table SALESMEN
 
         @return
             <TRUE/> if and only if the creation succeeded
     */
-    protected boolean createTableSalesman( XConnection xConn, String[] out_sTableName ) throws java.lang.Exception
+    protected boolean createTableSalesman( XConnection xConn ) throws java.lang.Exception
     {
-        out_sTableName[0] = "SALESMAN";
-
-        String sCreateStatement = "CREATE TABLE SALESMAN ";
+        String sCreateStatement = "CREATE TABLE " + s_tableNameSalesmen + " ";
         sCreateStatement += "(SNR INTEGER NOT NULL, ";
         sCreateStatement += "FIRSTNAME VARCHAR(50), ";
         sCreateStatement += "LASTNAME VARCHAR(100), ";
@@ -529,9 +496,9 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         sCreateStatement += "BIRTHDATE DATE, ";
         sCreateStatement += "PRIMARY KEY(SNR))";
 
-        if ( implCreateTable( xConn, sCreateStatement, out_sTableName[0] ) )
+        if ( implCreateTable( xConn, sCreateStatement, s_tableNameSalesmen) )
         {
-            String sInsertionPrefix = "INSERT INTO SALESMAN VALUES ";
+            String sInsertionPrefix = "INSERT INTO " + s_tableNameSalesmen + " VALUES ";
 
             implExecuteStatement( xConn, sInsertionPrefix + "(1, 'Joseph', 'Smith', 'Bond Street', 'CA', 95460, '1946-07-02')" );
             implExecuteStatement( xConn, sInsertionPrefix + "(2, 'Frank', 'Jones', 'Lake silver', 'CA', 95460, '1963-12-24')" );
@@ -543,16 +510,14 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
     }
 
     /* ------------------------------------------------------------------ */
-    /** creates the table CUSTOMER
+    /** creates the table CUSTOMERS
 
         @return
             <TRUE/> if and only if the creation succeeded
     */
-    protected boolean createTableCustomer( XConnection xConn, String[] out_sTableName ) throws java.lang.Exception
+    protected boolean createTableCustomer( XConnection xConn ) throws java.lang.Exception
     {
-        out_sTableName[0] = "CUSTOMER";
-
-        String sCreateStatement = "CREATE TABLE CUSTOMER ";
+        String sCreateStatement = "CREATE TABLE " + s_tableNameCustomers + " ";
         sCreateStatement += "(COS_NR INTEGER NOT NULL, ";
         sCreateStatement += "LASTNAME VARCHAR(100), ";
         sCreateStatement += "STREET VARCHAR(50), ";
@@ -561,9 +526,9 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         sCreateStatement += "ZIP INTEGER, ";
         sCreateStatement += "PRIMARY KEY(COS_NR))";
 
-        if ( implCreateTable( xConn, sCreateStatement, out_sTableName[0] ) )
+        if ( implCreateTable( xConn, sCreateStatement, s_tableNameCustomers ) )
         {
-            String sInsertionPrefix = "INSERT INTO CUSTOMER VALUES ";
+            String sInsertionPrefix = "INSERT INTO " + s_tableNameCustomers + " VALUES ";
 
             implExecuteStatement( xConn, sInsertionPrefix + "(100, 'Acme, Inc.', '99 Market Street', 'Groundsville', 'CA', 95199)" );
             implExecuteStatement( xConn, sInsertionPrefix + "(101, 'Superior BugSoft', '1 Party Place', 'Mendocino', 'CA', 95460)");
@@ -580,11 +545,9 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         @return
             <TRUE/> if and only if the creation succeeded
     */
-    protected boolean createTableSales( XConnection xConn, String[] out_sTableName ) throws java.lang.Exception
+    protected boolean createTableSales( XConnection xConn ) throws java.lang.Exception
     {
-        out_sTableName[0] = "SALES";
-
-        String sCreateStatement = "CREATE TABLE SALES ";
+        String sCreateStatement = "CREATE TABLE " + s_tableNameSales + " ";
         sCreateStatement += "(SALENR INTEGER NOT NULL, ";
         sCreateStatement += "COS_NR INTEGER NOT NULL, ";
         sCreateStatement += "SNR INTEGER NOT NULL, ";
@@ -593,9 +556,9 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         sCreateStatement += "PRICE DECIMAL(8,2), ";
         sCreateStatement += "PRIMARY KEY(SALENR))";
 
-        if ( implCreateTable( xConn, sCreateStatement, out_sTableName[0] ) )
+        if ( implCreateTable( xConn, sCreateStatement, s_tableNameSales ) )
         {
-            String sInsertionPrefix = "INSERT INTO SALES VALUES ";
+            String sInsertionPrefix = "INSERT INTO " + s_tableNameSales + " VALUES ";
 
             implExecuteStatement( xConn, sInsertionPrefix + "(1, 100, 1, 'Fruits', '2005-02-12', 39.99)" );
             implExecuteStatement( xConn, sInsertionPrefix + "(2, 101, 3, 'Beef', '2005-10-18', 15.78)" );
@@ -613,194 +576,17 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
     */
     protected void ensureTables() throws java.lang.Exception
     {
-        XNameAccess aDSContext = (XNameAccess)UnoRuntime.queryInterface( XNameAccess.class,
-            m_xCtx.getServiceManager().createInstanceWithContext(
-                "com.sun.star.sdb.DatabaseContext", m_xCtx ) );
-
-        if ( !aDSContext.hasByName( m_aParameters.sDataSourceName ) )
-        {
-            String sError = new String( "There is no data source named '" );
-            sError += m_aParameters.sDataSourceName;
-            sError += new String( "'!" );
-            System.out.println( sError );
-            System.exit( 2 );
-        }
-
         // get the data source
-        XDataSource xDS = (XDataSource)UnoRuntime.queryInterface( XDataSource.class,
-            aDSContext.getByName( m_aParameters.sDataSourceName ) );
+        XDataSource xDS = m_database.getDataSource();
         XPropertySet xDSProps = UNO.queryPropertySet( xDS );
 
-
-        if ( ( 0 == m_aParameters.sUser.length() ) && ( 0 < m_aParameters.sPassword.length() ) )
-        {   // the user gave us a password, but no user name
-            m_aParameters.sUser = (String)xDSProps.getPropertyValue( "User" );
-        }
-
-
         // connect to this data source
-        XConnection xConn = xDS.getConnection( m_aParameters.sUser, m_aParameters.sPassword );
+        XConnection xConn = xDS.getConnection( "", "" );
         XComponent xConnComp = UNO.queryComponent( xConn );
 
-        // do we need do remember the password?
-        if ( null != xConn )
-        {   // connecting was a success
-            if ( 0 != m_aParameters.sPassword.length() )
-            {   // and we (resp. the user) supplied a password to establish the connection
-                String sOldPassword = (String)xDSProps.getPropertyValue( "Password" );
-                if ( 0 == sOldPassword.length() )
-                {   // and the data source did not have a password before
-                    String sOldUser = (String)xDSProps.getPropertyValue( "User" );
-                    if ( sOldUser.equals( m_aParameters.sUser ) )
-                    {   // and the user name is the same
-                        // => remember the password for this session
-                        xDSProps.setPropertyValue( "Password", m_aParameters.sPassword );
-                    }
-                }
-            }
-        }
-
-        // get the tables of the data source
-        XTablesSupplier xSuppTables = UNO.queryTablesSupplier( xConn );
-        XNameAccess xTables = xSuppTables.getTables();
-
-        boolean bFakedTablePrefix = false;
-            // this will track if we faked the table prefix of our parameters
-
-        boolean bHasAll = false;
-        while ( !bHasAll )
-        {
-            // okay, check if there is a table for the salesmen ...
-            String sSalesmanTable = m_aParameters.addTablePrefix( "SALESMAN" );
-            boolean bHasSalesman = xTables.hasByName( sSalesmanTable );
-
-            // ... and the customers
-            String sCustomerTable = m_aParameters.addTablePrefix( "CUSTOMER" );
-            boolean bHasCustomer = xTables.hasByName( sCustomerTable );
-
-            // ... and the customers
-            String sSalesTable = m_aParameters.addTablePrefix( "SALES" );
-            boolean bHasSales = xTables.hasByName( sSalesTable );
-
-            boolean bHasAny = bHasSalesman || bHasCustomer || bHasSales;
-            bHasAll = bHasSalesman && bHasCustomer && bHasSales;
-
-            if ( !bHasAll )
-            {
-                // perhaps the user just didn't give us a table prefix
-                if  (   !bHasAny                                        // we do not have any of the tables
-                    &&  ( 0 == m_aParameters.sTablePrefix.length() )    // we do not have a table prefix
-                    &&  !bFakedTablePrefix                              // and we did not yet try to fake a prefix
-                    )
-                {
-                    if ( 0 != m_aParameters.sUser.length() )
-                    {
-                        // assume the user name as table prefix
-                        m_aParameters.sTablePrefix = m_aParameters.sUser;
-                        bFakedTablePrefix = true;
-                    }
-                    else
-                    {
-                        String sDataSourceUserName = (String)xDSProps.getPropertyValue( "User" );
-                        m_aParameters.sTablePrefix = sDataSourceUserName;
-                        bFakedTablePrefix = true;
-                    }
-                    if ( 0 != m_aParameters.sTablePrefix.length() )
-                    {
-                        // normalize the prefix which we are assuming from now on
-                        XDatabaseMetaData xMeta = xConn.getMetaData();
-                        if ( xMeta.storesUpperCaseIdentifiers() )
-                            m_aParameters.sTablePrefix = m_aParameters.sTablePrefix.toUpperCase();
-                        else if ( xMeta.storesLowerCaseIdentifiers() )
-                            m_aParameters.sTablePrefix = m_aParameters.sTablePrefix.toLowerCase();
-
-                        // we have another thing we can try
-                        System.out.println( "none of the required tables found - assuming table prefix \"" + m_aParameters.sTablePrefix + "\"" );
-                        System.out.println();
-                        continue;
-                    }
-                }
-
-                // error message and outta here
-                String sError = new String( "missing table " );
-                if ( !bHasSalesman )
-                    sError += sSalesmanTable;
-                else if ( !bHasCustomer )
-                    sError += sCustomerTable;
-                else if ( !bHasSales )
-                    sError += sSalesTable;
-                else
-                    sError += "<unknown>";
-                sError += " in data source ";
-                sError += m_aParameters.sDataSourceName;
-
-                System.out.println( sError );
-
-                // create the table (if we are allowed to by the user)
-                boolean bCreationSuccess = false;
-
-                System.out.print( "shall we create the table (Y)? " );
-                int nShouldCreate = skipLineFeeds( System.in );
-
-                if ( ( 'Y' == nShouldCreate ) || ( 'y' == nShouldCreate ) )
-                {
-                    String[] sTable = new String[] { new String() };
-
-                    if ( !bHasSalesman )
-                        bCreationSuccess = createTableSalesman( xConn, sTable );
-                    else if ( !bHasCustomer )
-                        bCreationSuccess = createTableCustomer( xConn, sTable );
-                    else
-                        bCreationSuccess = createTableSales( xConn, sTable );
-
-                    if  (   !bHasAny                // we did not have any of the tables
-                        &&  bFakedTablePrefix       // the user did not give us a table prefix, but we faked one
-                        &&  bCreationSuccess        // we succeeded to create the table
-                        )
-                    {
-                        // check if we really need to use this table prefix
-                        // Above, we set the table prefix to the user name, and we did not find all of our tables
-                        // neither without nor with this prefix.
-                        // Thus, at the moment, it may still be possible that we do not need the table
-                        // prefix at all
-                        if ( !existsInvisibleTable( xConn, m_aParameters.addTablePrefix( sTable[0] ) ) )
-                        {
-                            m_aParameters.sTablePrefix = new String();
-                        }
-                    }
-
-                    if ( bCreationSuccess )
-                    {
-                        System.out.println( "  successfully created table " + m_aParameters.addTablePrefix( sTable[0] ) );
-                        System.out.println( );
-                    }
-
-                    // now that we created the table, make sure that it is in the table filter of the
-                    // data source
-                    makeTableVisible( xDS, xConn, sTable[0] );
-
-                    // we added a table and changed the table filter, so we need to refresh the tables
-                    // Normally, we would just call XRefreshable::refresh on the tables container.
-                    XRefreshable xRefresh = (XRefreshable)UnoRuntime.queryInterface( XRefreshable.class, xTables );
-                    xRefresh.refresh();
-
-                    // Unfortunately, there is a bug that this does not work currently - simply nothing happens.
-                    // So we dispose and re-open the connection.
-                    xConnComp.dispose();
-
-                    xConn = xDS.getConnection( m_aParameters.sUser, m_aParameters.sPassword );
-                    xConnComp = UNO.queryComponent( xConn );
-                    xSuppTables = UNO.queryTablesSupplier( xConn );
-                    xTables = xSuppTables.getTables();
-                }
-
-                if ( !bCreationSuccess )
-                {
-                    xConnComp.dispose();
-                    System.exit( 3 );
-                }
-            }
-        }
+        createTableSalesman( xConn );
+        createTableCustomer( xConn );
+        createTableSales( xConn );
 
         // free the resources acquired by the connection
         xConnComp.dispose();
@@ -827,7 +613,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         @return
             the model of the newly created button
     */
-    protected XPropertySet createButton( int nXPos, int nYPos, int nXSize, String sName, String sLabel, String sActionURL ) throws java.lang.Exception
+    protected XPropertySet createButton( int nXPos, int nYPos, int nXSize, String sName, String sLabel, short _formFeature ) throws java.lang.Exception
     {
         XPropertySet xButton = m_formLayer.createControlAndShape( "CommandButton", nXPos, nYPos, nXSize, 6 );
         // the name for referring to it later:
@@ -839,12 +625,10 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         // don't want buttons to be accessible by the "tab" key - this would be uncomfortable when traveling
         // with records with "tab"
         xButton.setPropertyValue( "Tabstop", new Boolean( false ) );
+        // similar, they should not steal the focus when clicked
+        xButton.setPropertyValue( "FocusOnClick", new Boolean( false ) );
 
-        // create our button operator, if necessary
-        if ( null == m_aOperator )
-            m_aOperator = new ButtonOperator( m_xCtx, m_document );
-
-        m_aOperator.addButton( xButton, sActionURL );
+        m_aOperator.addButton( xButton, _formFeature );
 
         return xButton;
     }
@@ -909,6 +693,8 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
     {
         super.prepareDocument();
 
+        m_database = new HsqlDatabase( m_xCtx );
+
         // ensure that we have the tables needed for our example
         ensureTables();
 
@@ -938,26 +724,21 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         m_xMasterForm = FLTools.getParent( xZipField );
 
         // set the data source signature at the form
-        m_xMasterForm.setPropertyValue( "DataSourceName", m_aParameters.sDataSourceName );
+        m_xMasterForm.setPropertyValue( "DataSourceName", m_database.getDocumentURL() );
         m_xMasterForm.setPropertyValue( "CommandType", new Integer( CommandType.TABLE ) );
-        m_xMasterForm.setPropertyValue( "Command", m_aParameters.addTablePrefix( "SALESMAN" ) );
+        m_xMasterForm.setPropertyValue( "Command", "SALESMEN" );
 
         // --------------------------------------------------------------
         // insert the buttons
-        createButton( 2, 63, 8, "first", "<<", ".uno:FormSlots/moveToFirst#0\\0" );
-        createButton( 12, 63, 8, "prev", "<", ".uno:FormSlots/moveToPrev#0\\0" );
-        createButton( 22, 63, 8, "next", ">", ".uno:FormSlots/moveToNext#0\\0" );
-        createButton( 32, 63, 8, "last", ">>", ".uno:FormSlots/moveToLast#0\\0" );
-        createButton( 42, 63, 8, "new", ">*", ".uno:FormSlots/moveToNew#0\\0" );
+        // create our button operator, if necessary
+        m_aOperator = new ButtonOperator( m_xCtx, m_document, m_xMasterForm );
 
-        // NOTE:
-        // The URLs above imply knowledge about the current implementation.
-        // The part before the '#' is an official URL, the part after that means that we refer
-        // to a functionallity in Form 1 of DrawPage 1 of the document.
-        // If we would not have these implementation bugs which prevent us from calling "XResultSet::first"
-        // and friends from Java, we would not need this implementation details.
-
-        createButton( 58, 63, 13, "reload", "reload", "" );
+        createButton( 2, 63, 8, "first", "<<", FormFeature.MoveToFirst );
+        createButton( 12, 63, 8, "prev", "<", FormFeature.MoveToPrevious );
+        createButton( 22, 63, 8, "next", ">", FormFeature.MoveToNext );
+        createButton( 32, 63, 8, "last", ">>", FormFeature.MoveToLast );
+        createButton( 42, 63, 8, "new", ">*", FormFeature.MoveToInsertRow );
+        createButton( 58, 63, 13, "reload", "reload", FormFeature.ReloadForm );
 
         // --------------------------------------------------------------
         // create a sub for for the sales
@@ -966,12 +747,12 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         XIndexContainer xSalesForm = m_document.createSubForm( m_xMasterForm, "Sales" );
         XPropertySet xSalesFormProps = UNO.queryPropertySet( xSalesForm );
 
-        xSalesFormProps.setPropertyValue( "DataSourceName", m_aParameters.sDataSourceName );
+        xSalesFormProps.setPropertyValue( "DataSourceName", m_database.getDocumentURL() );
         xSalesFormProps.setPropertyValue( "CommandType", new Integer( CommandType.COMMAND ) );
 
         String sCommand = new String( "SELECT * FROM " );
-        sCommand += m_aParameters.addTablePrefix( "SALES" );
-        sCommand += " AS SALES WHERE SALES.SNR = :salesmen";
+        sCommand += s_tableNameSales;
+        sCommand += " WHERE " + s_tableNameSales + ".SNR = :salesmen";
         xSalesFormProps.setPropertyValue( "Command", sCommand );
 
         // the master-details connection
@@ -1003,7 +784,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         xCustomerColumn.setPropertyValue( "ListSourceType", ListSourceType.SQL );
 
         String sListSource = "SELECT LASTNAME, COS_NR FROM ";
-        sListSource += m_aParameters.addTablePrefix( "CUSTOMER" );
+        sListSource += s_tableNameCustomers;
         String[] aListSource = new String[] { sListSource };
         xCustomerColumn.setPropertyValue( "ListSource", aListSource );
 
@@ -1114,6 +895,12 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
     }
 
     /* ------------------------------------------------------------------ */
+    protected void onFormsAlive()
+    {
+        m_aOperator.onFormsAlive();
+    }
+
+    /* ------------------------------------------------------------------ */
     /** performs any cleanup before exiting the program
     */
     protected void cleanUp( ) throws java.lang.Exception
@@ -1140,83 +927,6 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         xFormReset.removeResetListener( this );
 
         super.cleanUp();
-    }
-
-    /* ------------------------------------------------------------------ */
-    /** explains how to use this class
-    */
-    protected void explainUsage()
-    {
-        System.err.println( "usage: DataAwareness -d <data source name>" );
-        System.err.println( "                [-u <data source user name>]" );
-        System.err.println( "                [-p <data source password>]" );
-        System.err.println( "                [-t <alternate table prefix>]\n" );
-        System.err.println( "  -d    - specifies the name of the data source" );
-        System.err.println( "          registered in OpenOffice.org where the sample tables" );
-        System.err.println( "          can be found." );
-        System.err.println( "  -u    - specifies a user name to use when logging on to the data source" );
-        System.err.println( "  -p    - specifies a password to use when logging on to the data source" );
-        System.err.println( "  -t    - specifies a prefix to use for the table names" );
-    }
-
-    /* ------------------------------------------------------------------ */
-    /** collect the RuntimeArguments
-    */
-    protected void collectParameters(String argv[])
-    {
-        m_aParameters = new Parameters();
-
-        System.out.println(  );
-
-        // ........................................
-        // mandatory: the -d and a data source name
-        if ( ( argv.length < 2 ) || ( !argv[0].equals( "-d" ) ) )
-        {
-            explainUsage();
-            System.exit( 1 );
-        }
-
-        m_aParameters.sDataSourceName   = new String( argv[1] );
-        m_aParameters.sUser             = new String();
-        m_aParameters.sPassword         = new String();
-        m_aParameters.sTablePrefix      = new String();
-
-        // ........................................
-        // optional arguments
-        if ( argv.length >= 3 )
-        {
-            // must be a even number of arguments (switch-value pair)
-            if ( 0 != ( argv.length % 2 ) )
-            {
-                explainUsage();
-                System.exit( 1 );
-            }
-
-            int nArgPos = 2;
-            while ( argv.length > nArgPos )
-            {
-                String sValue = new String( argv[ nArgPos + 1 ] );
-                // try to recognize the switch
-                if ( argv[ nArgPos ].equals( "-t" ) )
-                {
-                    m_aParameters.sTablePrefix = sValue;
-                }
-                else if ( argv[ nArgPos ].equals( "-p" ) )
-                {
-                    m_aParameters.sPassword = sValue;
-                }
-                else if ( argv[ nArgPos ].equals( "-u" ) )
-                {
-                    m_aParameters.sUser = sValue;
-                }
-                else
-                {
-                    explainUsage();
-                    System.exit( 1 );
-                }
-                nArgPos += 2;
-            }
-        }
     }
 
     /* ------------------------------------------------------------------ */

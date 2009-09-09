@@ -436,7 +436,7 @@ if (-d "$StartDir") {
                 "test/bridge",
                 "test/performance",
                 "text",
-                "text/FieldMaster",
+                "text/fieldmaster",
                 "text/textfield",
                 "text/textfield/docinfo",
                 "ucb",

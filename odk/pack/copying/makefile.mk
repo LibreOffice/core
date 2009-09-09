@@ -85,7 +85,8 @@ LIBLIST = \
     $(DESTDIRLIB)$/isalhelper.lib 	\
     $(DESTDIRLIB)$/icppu.lib 	\
     $(DESTDIRLIB)$/icppuhelper.lib 	\
-    $(DESTDIRLIB)$/irmcxt.lib
+    $(DESTDIRLIB)$/irmcxt.lib \
+    $(DESTDIRLIB)$/ipurpenvhelper3MSC.lib
 
 .IF "$(COMEX)"=="8"
     LIBLIST += $(DESTDIRLIB)$/stlport_vc7.lib
