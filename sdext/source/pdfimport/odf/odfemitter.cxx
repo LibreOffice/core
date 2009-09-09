@@ -35,7 +35,6 @@
 #include "odfemitter.hxx"
 
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>

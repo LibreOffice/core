@@ -36,6 +36,8 @@
 #include "impoptimizer.hxx"
 #include <osl/file.hxx>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;

@@ -33,10 +33,10 @@
 #define _FILEOPEN_DIALOG_HXX_
 
 #include <vector>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 class FileOpenDialog
 {

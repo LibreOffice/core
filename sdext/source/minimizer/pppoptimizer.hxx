@@ -39,7 +39,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <comphelper/property.hxx>
 
 // ----------------
 // - PPPOptimizer -

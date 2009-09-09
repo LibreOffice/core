@@ -42,7 +42,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <comphelper/anytostring.hxx>
 
 
 using namespace com::sun::star;
@@ -150,12 +149,6 @@ bool getPassword( const uno::Reference< task::XInteractionHandler >& xHandler,
     }
     catch( uno::Exception& )
     {
-#if 0
-        OSL_ENSURE( false,
-                    rtl::OUStringToOString(
-                        comphelper::anyToString( cppu::getCaughtException() ),
-                        RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
     }
 
     OSL_TRACE( "request %s selected\n", pRequest->isSelected() ? "was" : "was not" );
