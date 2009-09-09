@@ -64,6 +64,7 @@
 #include "transobj.hxx"
 #include "refundo.hxx"
 #include "undoolk.hxx"
+#include "clipparam.hxx"
 #include "sc.hrc"
 
 
@@ -1316,9 +1317,8 @@ void __EXPORT ScUndoDragDrop::Redo()
         aSourceMark.SelectTable( nTab, TRUE );
 
     // do not clone objects and note captions into clipdoc (see above)
-    pDoc->CopyToClip( aSrcRange.aStart.Col(), aSrcRange.aStart.Row(),
-                      aSrcRange.aEnd.Col(),   aSrcRange.aEnd.Row(),
-                      bCut, pClipDoc, FALSE, &aSourceMark, bKeepScenarioFlags, FALSE, FALSE );
+    ScClipParam aClipParam(aSrcRange, bCut);
+    pDoc->CopyToClip(aClipParam, pClipDoc, &aSourceMark, false, bKeepScenarioFlags, false, false);
 
     if (bCut)
     {

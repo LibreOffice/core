@@ -324,20 +324,8 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
 void ScDocument::CopyStdStylesFrom( ScDocument* pSrcDoc )
 {
     // #b5017505# number format exchange list has to be handled here, too
-
-    SvNumberFormatter* pThisFormatter = xPoolHelper->GetFormTable();
-    SvNumberFormatter* pOtherFormatter = pSrcDoc->xPoolHelper->GetFormTable();
-    if (pOtherFormatter && pOtherFormatter != pThisFormatter)
-    {
-        SvNumberFormatterIndexTable* pExchangeList =
-                pThisFormatter->MergeFormatter(*(pOtherFormatter));
-        if (pExchangeList->Count() > 0)
-            pFormatExchangeList = pExchangeList;
-    }
-
+    NumFmtMergeHandler aNumFmtMergeHdl(this, pSrcDoc);
     xPoolHelper->GetStylePool()->CopyStdStylesFrom( pSrcDoc->xPoolHelper->GetStylePool() );
-
-    pFormatExchangeList = NULL;
 }
 
 //------------------------------------------------------------------------

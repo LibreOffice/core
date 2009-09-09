@@ -80,6 +80,7 @@
 #include "listenercalls.hxx"
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
+#include "clipparam.hxx"
 
 #include <memory>
 
@@ -854,7 +855,7 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
         {
             ScDocument* pClipDoc = SC_MOD()->GetClipDoc();
             if (pClipDoc)
-                pClipDoc->bCutMode = FALSE;
+                pClipDoc->GetClipParam().mbCutMode = false;
         }
     }
 }
@@ -864,7 +865,10 @@ void ScDocument::UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDo
 {
     DBG_ASSERT(pClipDoc->bIsClip, "UpdateTranspose: kein Clip");
 
-    ScRange aSource = pClipDoc->aClipRange;         // Tab wird noch angepasst
+    ScRange aSource;
+    ScClipParam& rClipParam = GetClipParam();
+    if (rClipParam.maRanges.Count())
+        aSource = *rClipParam.maRanges.First();
     ScAddress aDest = rDestPos;
 
     SCTAB nClipTab = 0;

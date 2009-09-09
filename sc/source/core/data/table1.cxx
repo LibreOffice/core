@@ -1327,7 +1327,7 @@ void ScTable::FindRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
 
 void ScTable::ReplaceRangeNamesInUse(SCCOL nCol1, SCROW nRow1,
                                     SCCOL nCol2, SCROW nRow2,
-                                    const ScIndexMap& rMap )
+                                    const ScRangeData::IndexMap& rMap )
 {
     for (SCCOL i = nCol1; i <= nCol2 && (ValidCol(i)); i++)
     {

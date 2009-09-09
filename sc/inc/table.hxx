@@ -71,7 +71,6 @@ class ScStyleSheet;
 class ScTableLink;
 class ScTableProtection;
 class ScUserListData;
-class ScIndexMap;
 struct RowInfo;
 struct ScFunctionData;
 struct ScLineFlags;
@@ -322,6 +321,8 @@ public:
     void        DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nDelFlag);
     void        CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pTable,
                             BOOL bKeepScenarioFlags, BOOL bCloneNoteCaptions);
+    void        CopyToClip(const ScRangeList& rRanges, ScTable* pTable,
+                           bool bKeepScenarioFlags, bool bCloneNoteCaptions);
     void        CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCsCOL nDx, SCsROW nDy,
                                 USHORT nInsFlag, BOOL bAsLink, BOOL bSkipAttrForEmpty, ScTable* pTable);
     void        StartListeningInArea( SCCOL nCol1, SCROW nRow1,
@@ -439,7 +440,7 @@ public:
     void        FindRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                  std::set<USHORT>& rIndexes) const;
     void        ReplaceRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                      const ScIndexMap& rMap );
+                                      const ScRangeData::IndexMap& rMap );
     void        Fill( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         ULONG nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
                         double nStepValue, double nMaxValue);

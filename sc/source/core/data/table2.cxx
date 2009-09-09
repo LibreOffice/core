@@ -371,6 +371,16 @@ void ScTable::CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     }
 }
 
+void ScTable::CopyToClip(const ScRangeList& rRanges, ScTable* pTable,
+                         bool bKeepScenarioFlags, bool bCloneNoteCaptions)
+{
+    ScRangeList aRanges(rRanges);
+    for (ScRangePtr p = aRanges.First(); p; p = aRanges.Next())
+    {
+        CopyToClip(p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(),
+                   pTable, bKeepScenarioFlags, bCloneNoteCaptions);
+    }
+}
 
 void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             SCsCOL nDx, SCsROW nDy, USHORT nInsFlag,

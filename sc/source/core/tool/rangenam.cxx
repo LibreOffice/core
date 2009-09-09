@@ -49,7 +49,6 @@
 #include "rechead.hxx"
 #include "refupdat.hxx"
 #include "document.hxx"
-#include "indexmap.hxx"
 
 using namespace formula;
 
@@ -588,20 +587,20 @@ void ScRangeData::TransferTabRef( SCTAB nOldTab, SCTAB nNewTab )
     }
 }
 
-
-void ScRangeData::ReplaceRangeNamesInUse( const ScIndexMap& rMap )
+void ScRangeData::ReplaceRangeNamesInUse( const IndexMap& rMap )
 {
-    BOOL bCompile = FALSE;
+    bool bCompile = false;
     for ( FormulaToken* p = pCode->First(); p; p = pCode->Next() )
     {
         if ( p->GetOpCode() == ocName )
         {
-            const USHORT nOldIndex = p->GetIndex();
-            const USHORT nNewIndex = rMap.Find( nOldIndex );
+            const sal_uInt16 nOldIndex = p->GetIndex();
+            IndexMap::const_iterator itr = rMap.find(nOldIndex);
+            const sal_uInt16 nNewIndex = itr == rMap.end() ? nOldIndex : itr->second;
             if ( nOldIndex != nNewIndex )
             {
                 p->SetIndex( nNewIndex );
-                bCompile = TRUE;
+                bCompile = true;
             }
         }
     }

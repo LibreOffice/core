@@ -1510,7 +1510,7 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         //  #51889# Spezialfall: Copy/Cut bei Mehrfachselektion -> Fehlermeldung
         //  (Slot ist disabled, SfxViewShell::KeyInput wuerde also kommentarlos verschluckt)
         KeyFuncType eFunc = aCode.GetFunction();
-        if ( eFunc == KEYFUNC_COPY || eFunc == KEYFUNC_CUT )
+        if ( eFunc == KEYFUNC_CUT )
         {
             ScRange aDummy;
             ScMarkType eMarkType = GetViewData()->GetSimpleArea( aDummy );

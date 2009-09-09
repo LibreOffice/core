@@ -37,6 +37,8 @@
 #include "formula/grammar.hxx"
 #include "scdllapi.h"
 
+#include <map>
+
 //------------------------------------------------------------------------
 
 class ScDocument;
@@ -65,7 +67,6 @@ typedef USHORT RangeType;
 //------------------------------------------------------------------------
 
 class ScTokenArray;
-class ScIndexMap;
 
 class ScRangeData : public ScDataObject
 {
@@ -87,6 +88,8 @@ private:
     friend class ScRangeName;
     ScRangeData( USHORT nIndex );
 public:
+    typedef ::std::map<sal_uInt16, sal_uInt16> IndexMap;
+
     SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
                                  const String& rName,
                                  const String& rSymbol,
@@ -152,7 +155,7 @@ public:
 
     void            ValidateTabRefs();
 
-    void            ReplaceRangeNamesInUse( const ScIndexMap& rMap );
+    void            ReplaceRangeNamesInUse( const IndexMap& rMap );
 
     static void     MakeValidName( String& rName );
     SC_DLLPUBLIC static BOOL        IsNameValid( const String& rName, ScDocument* pDoc );

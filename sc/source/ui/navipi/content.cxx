@@ -71,6 +71,7 @@
 #include "navicfg.hxx"
 #include "navsett.hxx"
 #include "postit.hxx"
+#include "clipparam.hxx"
 
 using namespace com::sun::star;
 
@@ -1103,9 +1104,8 @@ void lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, USHORT nFlag
                                                    aMark ) )
     {
         ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
-        pSrcDoc->CopyToClip( rRange.aStart.Col(), rRange.aStart.Row(),
-                             rRange.aEnd.Col(),   rRange.aEnd.Row(),
-                             FALSE, pClipDoc, FALSE, &aMark );
+        ScClipParam aClipParam(rRange, false);
+        pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark);
         // pClipDoc->ExtendMerge( rRange, TRUE );
 
         TransferableObjectDescriptor aObjDesc;

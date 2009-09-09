@@ -94,6 +94,7 @@
 #include "compiler.hxx"
 #include "scui_def.hxx" //CHINA001
 #include "tabprotection.hxx"
+#include "clipparam.hxx"
 
 #include <memory>
 
@@ -2276,8 +2277,8 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     }
     ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
 
-    pDoc->CopyToClip( nStartCol, nStartRow, nEndCol, nEndRow, bCut, pClipDoc,
-                        FALSE, &aSourceMark, bScenariosAdded, TRUE );
+    ScClipParam aClipParam(ScRange(nStartCol, nStartRow, 0, nEndCol, nEndRow, 0), false);
+    pDoc->CopyToClip(aClipParam, pClipDoc, &aSourceMark, false, bScenariosAdded, true);
 
     ScDrawLayer::SetGlobalDrawPersist(NULL);
 

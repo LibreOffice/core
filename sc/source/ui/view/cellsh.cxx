@@ -206,7 +206,6 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 break;
 
             case SID_COPY:                      // Kopieren
-                bDisable = (!bSimpleArea && eMarkType != SC_MARK_SIMPLE_FILTERED);
                 // nur wegen Matrix nicht editierbar? Matrix nicht zerreissen
                 //! schlaegt nicht zu, wenn geschuetzt UND Matrix, aber damit
                 //! muss man leben.. wird in Copy-Routine abgefangen, sonst

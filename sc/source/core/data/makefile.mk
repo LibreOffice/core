@@ -56,6 +56,7 @@ SLOFILES =  \
     $(SLO)$/bcaslot.obj \
     $(SLO)$/cell.obj \
     $(SLO)$/cell2.obj \
+        $(SLO)$/clipparam.obj \
     $(SLO)$/column.obj \
     $(SLO)$/column2.obj \
     $(SLO)$/column3.obj \
@@ -117,6 +118,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/autonamecache.obj \
     $(SLO)$/bcaslot.obj \
     $(SLO)$/cell2.obj \
+    $(SLO)$/clipparam.obj \
     $(SLO)$/column.obj \
     $(SLO)$/column3.obj \
     $(SLO)$/documen2.obj \

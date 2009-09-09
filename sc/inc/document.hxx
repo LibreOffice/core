@@ -136,6 +136,8 @@ class ScLookupCache;
 struct ScLookupCacheMapImpl;
 class SfxUndoManager;
 class ScFormulaParserPool;
+struct ScClipParam;
+struct ScClipRangeNameData;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -280,6 +282,7 @@ private:
     ScFieldEditEngine*  pCacheFieldEditEngine;
 
     ::std::auto_ptr<ScDocProtection> pDocProtection;
+    ::std::auto_ptr<ScClipParam>     mpClipParam;
 
     ::std::auto_ptr<ScExternalRefManager> pExternalRefMgr;
 
@@ -306,7 +309,6 @@ private:
 
     sal_uInt32          nRangeOverflowType;             // used in (xml) loading for overflow warnings
 
-    ScRange             aClipRange;
     ScRange             aEmbedRange;
     ScAddress           aCurTextWidthCalcPos;
     ScAddress           aOnlineSpellPos;                // within whole document
@@ -356,7 +358,6 @@ private:
     BOOL                bForcedFormulaPending;
     BOOL                bCalculatingFormulaTree;
     BOOL                bIsClip;
-    BOOL                bCutMode;
     BOOL                bIsUndo;
     BOOL                bIsVisible;                     // set from view ctor
 
@@ -962,12 +963,11 @@ public:
     void            DeleteAreaTab(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 SCTAB nTab, USHORT nDelFlag);
     void            DeleteAreaTab(const ScRange& rRange, USHORT nDelFlag);
-    void            CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                BOOL bCut, ScDocument* pClipDoc, BOOL bAllTabs,
-                                const ScMarkData* pMarks = NULL,
-                                BOOL bKeepScenarioFlags = FALSE,
-                                BOOL bIncludeObjects = FALSE,
-                                BOOL bCloneNoteCaptions = TRUE);
+
+    void            CopyToClip(const ScClipParam& rClipParam, ScDocument* pClipDoc,
+                               const ScMarkData* pMarks = NULL, bool bAllTabs = false, bool bKeepScenarioFlags = false,
+                               bool bIncludeObjects = false, bool bCloneNoteCaptions = true);
+
     void            CopyTabToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 SCTAB nTab, ScDocument* pClipDoc = NULL);
     void            CopyBlockFromClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
@@ -995,6 +995,12 @@ public:
                                     BOOL bSkipAttrForEmpty = FALSE,
                                     const ScRangeList * pDestRanges = NULL );
 
+    void            CopyMultiRangeFromClip(const ScAddress& rDestPos, const ScMarkData& rMark,
+                                           sal_uInt16 nInsFlag, ScDocument* pClipDoc,
+                                           bool bResetCut = true, bool bAsLink = false,
+                                           bool bIncludeFiltered = true,
+                                           bool bSkipAttrForEmpty = false);
+
     void            GetClipArea(SCCOL& nClipX, SCROW& nClipY, BOOL bIncludeFiltered);
     void            GetClipStart(SCCOL& nClipX, SCROW& nClipY);
 
@@ -1003,6 +1009,9 @@ public:
     BOOL            IsClipboardSource() const;
 
     SC_DLLPUBLIC void           TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsLink );
+
+    ScClipParam&    GetClipParam();
+    void            SetClipParam(const ScClipParam& rParam);
 
     void            MixDocument( const ScRange& rRange, USHORT nFunction, BOOL bSkipEmpty,
                                     ScDocument* pSrcDoc );
@@ -1701,6 +1710,23 @@ public:
     SfxUndoManager*     GetUndoManager();
 private: // CLOOK-Impl-Methoden
 
+    /**
+     * Use this class as a locale variable to merge number formatter from
+     * another document, and set NULL pointer to pFormatExchangeList when
+     * done.
+     */
+    class NumFmtMergeHandler
+    {
+    public:
+        explicit NumFmtMergeHandler(ScDocument* pDoc, ScDocument* pSrcDoc);
+        ~NumFmtMergeHandler();
+
+    private:
+        ScDocument* mpDoc;
+    };
+
+    void    MergeNumberFormatter(ScDocument* pSrcDoc);
+
     void    ImplCreateOptions(); // bei Gelegenheit auf on-demand umstellen?
     void    ImplDeleteOptions();
 
@@ -1721,6 +1747,12 @@ private: // CLOOK-Impl-Methoden
     void    DeleteAreaLinksOnTab( SCTAB nTab );
     void    UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
                              const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+
+    void    CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks, bool bAllTabs);
+    void    CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameData& rRangeNames);
+    void    UpdateRangeNamesInFormulas(
+        ScClipRangeNameData& rRangeNames, const ScRangeList& rDestRanges, const ScMarkData& rMark,
+        SCCOL nXw, SCROW nYw);
 
     BOOL    HasPartOfMerged( const ScRange& rRange );
 
