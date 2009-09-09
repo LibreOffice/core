@@ -32,6 +32,7 @@ package com.sun.star.report.pentaho.layoutprocessor;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.sql.Time;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.OfficeToken;
@@ -58,6 +59,7 @@ public class FormatValueUtility
 
     public static final String VALUE_TYPE = "value-type";
     private static SimpleDateFormat dateFormat;
+    private static SimpleDateFormat timeFormat;
 
     private FormatValueUtility()
     {
@@ -66,11 +68,23 @@ public class FormatValueUtility
     public static String applyValueForVariable(final Object value, final AttributeMap variableSection)
     {
         String ret = null;
-        if (value instanceof Date)
+        if (value instanceof Time)
+        {
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "time");
+            ret = formatTime((Time) value);
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "time-value", ret);
+        }
+        else if (value instanceof java.sql.Date )
         {
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "date");
             ret = formatDate((Date) value);
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", ret);
+        }
+        else if (value instanceof Date)
+        {
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "float");
+            ret = HSSFDateUtil.getExcelDate((Date)value,false,2).toString();
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "value", ret);
         }
         else if (value instanceof Number)
         {
@@ -104,19 +118,20 @@ public class FormatValueUtility
 
     public static void applyValueForCell(final Object value, final AttributeMap variableSection,final String valueType)
     {
-        if (value instanceof Date )
+        if (value instanceof Time)
         {
-            if ( "date".equals(valueType) )
-            {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", formatDate((Date) value));
-            }
-            else
-            {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "value", String.valueOf(HSSFDateUtil.getExcelDate((Date)value)));
-            }
-
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "time-value", formatTime((Time) value));
         }
-        else if (value instanceof Number )
+        else if (value instanceof java.sql.Date )
+        {
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", formatDate((Date) value));
+        }
+        else if (value instanceof Date)
+        {
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "float");
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "value", HSSFDateUtil.getExcelDate((Date)value,false,2).toString());
+        }
+        else if (value instanceof Number)
         {
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "value", String.valueOf(value));
         }
@@ -165,6 +180,14 @@ public class FormatValueUtility
             dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'S'Z'");
         }
         return dateFormat.format(date);
+    }
+    private static synchronized String formatTime(final Date date)
+    {
+        if (timeFormat == null)
+        {
+            timeFormat = new SimpleDateFormat("'PT'HH'H'mm'M'ss'S'");
+        }
+        return timeFormat.format(date);
     }
 
     public static DataFlags computeDataFlag(final FormattedTextElement element,
