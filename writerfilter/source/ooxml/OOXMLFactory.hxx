@@ -99,7 +99,6 @@ typedef boost::shared_ptr<TokenToIdMap> TokenToIdMapPointer;
 typedef hash_map<Id, TokenToIdMapPointer> TokenToIdsMap;
 
 class OOXMLFactory_ns {
-    virtual ~OOXMLFactory_ns();
 public:
     typedef boost::shared_ptr<OOXMLFactory_ns> Pointer_t;
 
@@ -114,6 +113,8 @@ public:
     TokenToIdMapPointer getTokenToIdMap(Id nId);
 
 protected:
+    virtual ~OOXMLFactory_ns();
+
     AttributesMap m_AttributesMap;
     ListValuesMap m_ListValuesMap;
     CreateElementsMap m_CreateElementsMap;
