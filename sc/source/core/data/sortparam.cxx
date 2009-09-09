@@ -36,6 +36,7 @@
 #include "sortparam.hxx"
 #include "global.hxx"
 #include "address.hxx"
+#include "queryparam.hxx"
 #include <tools/debug.hxx>
 
 

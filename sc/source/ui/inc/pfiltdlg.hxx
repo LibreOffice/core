@@ -53,8 +53,8 @@
 #ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
 #endif
-#include "global.hxx" // -> ScQueryParam
 #include "address.hxx"
+#include "queryparam.hxx"
 
 //------------------------------------------------------------------
 

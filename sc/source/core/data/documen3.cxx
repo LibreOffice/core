@@ -80,6 +80,7 @@
 #include "listenercalls.hxx"
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
+#include "doubleref.hxx"
 
 #include <memory>
 
@@ -1240,6 +1241,28 @@ BOOL ScDocument::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
 
     DBG_ERROR("missing tab");
     return FALSE;
+}
+
+bool ScDocument::CreateQueryParam(const ScDoubleRefBase* pDoubleRef, ScQueryParam& rQueryParam)
+{
+    if (!pDoubleRef)
+        return false;
+
+    switch (pDoubleRef->getType())
+    {
+        case ScDoubleRefBase::INTERNAL:
+        {
+            const ScRange& rRange = static_cast<const ScInternalDoubleRef*>(pDoubleRef)->getRange();
+            const ScAddress& s = rRange.aStart;
+            const ScAddress& e = rRange.aEnd;
+            if (ValidTab(s.Tab()) && pTab[s.Tab()])
+                return pTab[s.Tab()]->CreateQueryParam(s.Col(), s.Row(), e.Col(), e.Row(), rQueryParam);
+        }
+        break;
+        case ScDoubleRefBase::EXTERNAL:
+        break;
+    }
+    return false;
 }
 
 BOOL ScDocument::HasAutoFilter( SCCOL nCurCol, SCROW nCurRow, SCTAB nCurTab )

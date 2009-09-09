@@ -36,6 +36,7 @@
 #include "rangelst.hxx"     // ScRangeListRef
 #include "markdata.hxx"
 #include "sortparam.hxx"
+#include "queryparam.hxx"
 #include "pivot.hxx"
 
 class ScDocShell;

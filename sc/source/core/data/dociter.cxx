@@ -482,55 +482,66 @@ BOOL ScValueIterator::GetNext(double& rValue, USHORT& rErr)
 }
 */
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+// ============================================================================
 
-ScQueryValueIterator::ScQueryValueIterator(ScDocument* pDocument, SCTAB nTable, const ScQueryParam& rParam) :
-    aParam (rParam),
-    pDoc( pDocument ),
-    nNumFmtIndex(0),
-    nTab( nTable),
-    nNumFmtType( NUMBERFORMAT_UNDEFINED ),
-    bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() )
+ScQueryValueIterator::DataAccess::DataAccess()
 {
-    nCol = aParam.nCol1;
-    nRow = aParam.nRow1;
+}
+
+ScQueryValueIterator::DataAccess::~DataAccess()
+{
+}
+
+// ----------------------------------------------------------------------------
+
+ScQueryValueIterator::DataAccessInternal::DataAccessInternal(const ScQueryParam* pParam, ScDocument* pDoc) :
+    mpParam(pParam),
+    mpDoc(pDoc)
+{
+    nCol = mpParam->nCol1;
+    nRow = mpParam->nRow1;
+    nTab = mpParam->nTab;
+
     nColRow = 0;                    // wird bei GetFirst initialisiert
     SCSIZE i;
-    SCSIZE nCount = aParam.GetEntryCount();
-    for (i=0; (i<nCount) && (aParam.GetEntry(i).bDoQuery); i++)
+    SCSIZE nCount = mpParam->GetEntryCount();
+    for (i=0; (i<nCount) && (mpParam->GetEntry(i).bDoQuery); i++)
     {
-        ScQueryEntry& rEntry = aParam.GetEntry(i);
+        ScQueryEntry& rEntry = mpParam->GetEntry(i);
         sal_uInt32 nIndex = 0;
         rEntry.bQueryByString =
-                !(pDoc->GetFormatTable()->IsNumberFormat(*rEntry.pStr, nIndex, rEntry.nVal));
+                !(mpDoc->GetFormatTable()->IsNumberFormat(*rEntry.pStr, nIndex, rEntry.nVal));
     }
     nNumFormat = 0;                 // werden bei GetNumberFormat initialisiert
     pAttrArray = 0;
     nAttrEndRow = 0;
 }
 
-BOOL ScQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
+ScQueryValueIterator::DataAccessInternal::~DataAccessInternal()
 {
-    ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
-    SCCOLROW nFirstQueryField = aParam.GetEntry(0).nField;
+}
+
+bool ScQueryValueIterator::DataAccessInternal::getCurrent(double& rValue, USHORT& rErr)
+{
+    ScColumn* pCol = &(mpDoc->pTab[nTab])->aCol[nCol];
+    SCCOLROW nFirstQueryField = mpParam->GetEntry(0).nField;
     for ( ;; )
     {
-        if ( nRow > aParam.nRow2 )
+        if ( nRow > mpParam->nRow2 )
         {
-            nRow = aParam.nRow1;
-            if (aParam.bHasHeader)
+            nRow = mpParam->nRow1;
+            if (mpParam->bHasHeader)
                 nRow++;
             do
             {
                 nCol++;
-                if ( nCol > aParam.nCol2 )
+                if ( nCol > mpParam->nCol2 )
                 {
                     // rValue = 0.0;    // do not change caller's value!
                     rErr = 0;
                     return FALSE;               // Ende und Aus
                 }
-                pCol = &(pDoc->pTab[nTab])->aCol[nCol];
+                pCol = &(mpDoc->pTab[nTab])->aCol[nCol];
             } while ( pCol->nCount == 0 );
             pCol->Search( nRow, nColRow );
         }
@@ -538,11 +549,11 @@ BOOL ScQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
         while ( (nColRow < pCol->nCount) && (pCol->pItems[nColRow].nRow < nRow) )
             nColRow++;
 
-        if ( nColRow < pCol->nCount && pCol->pItems[nColRow].nRow <= aParam.nRow2 )
+        if ( nColRow < pCol->nCount && pCol->pItems[nColRow].nRow <= mpParam->nRow2 )
         {
             nRow = pCol->pItems[nColRow].nRow;
             ScBaseCell* pCell = pCol->pItems[nColRow].pCell;
-            if ( (pDoc->pTab[nTab])->ValidQuery( nRow, aParam, NULL,
+            if ( (mpDoc->pTab[nTab])->ValidQuery( nRow, *mpParam, NULL,
                     (nCol == static_cast<SCCOL>(nFirstQueryField) ? pCell : NULL) ) )
             {
                 switch (pCell->GetCellType())
@@ -553,8 +564,8 @@ BOOL ScQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
                             if ( bCalcAsShown )
                             {
                                 lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
-                                    nAttrEndRow, pCol->pAttrArray, nRow, pDoc );
-                                rValue = pDoc->RoundValueAsShown( rValue, nNumFormat );
+                                    nAttrEndRow, pCol->pAttrArray, nRow, mpDoc );
+                                rValue = mpDoc->RoundValueAsShown( rValue, nNumFormat );
                             }
                             nNumFmtType = NUMBERFORMAT_NUMBER;
                             nNumFmtIndex = 0;
@@ -567,7 +578,7 @@ BOOL ScQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
                             if (((ScFormulaCell*)pCell)->IsValue())
                             {
                                 rValue = ((ScFormulaCell*)pCell)->GetValue();
-                                pDoc->GetNumberFormatInfo( nNumFmtType,
+                                mpDoc->GetNumberFormatInfo( nNumFmtType,
                                     nNumFmtIndex, ScAddress( nCol, nRow, nTab ),
                                     pCell );
                                 rErr = ((ScFormulaCell*)pCell)->GetErrCode();
@@ -586,30 +597,90 @@ BOOL ScQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
                 nRow++;
         }
         else
-            nRow = aParam.nRow2 + 1; // Naechste Spalte
+            nRow = mpParam->nRow2 + 1; // Naechste Spalte
     }
-//    return FALSE;
+    return false;
+}
+
+bool ScQueryValueIterator::DataAccessInternal::getFirst(double& rValue, USHORT& rErr)
+{
+    if (mpParam->bHasHeader)
+        nRow++;
+//  nColRow = 0;
+    ScColumn* pCol = &(mpDoc->pTab[nTab])->aCol[nCol];
+    pCol->Search( nRow, nColRow );
+    return getCurrent(rValue, rErr);
+}
+
+bool ScQueryValueIterator::DataAccessInternal::getNext(double& rValue, USHORT& rErr)
+{
+    ++nRow;
+    return getCurrent(rValue, rErr);
+}
+
+// ----------------------------------------------------------------------------
+
+ScQueryValueIterator::DataAccessMatrix::DataAccessMatrix(const ScQueryParamMatrix* pParam) :
+    mpParam(pParam)
+{
+}
+
+ScQueryValueIterator::DataAccessMatrix::~DataAccessMatrix()
+{
+}
+
+bool ScQueryValueIterator::DataAccessMatrix::getCurrent(double& rValue, USHORT& rErr)
+{
+    return false;
+}
+
+bool ScQueryValueIterator::DataAccessMatrix::getFirst(double& rValue, USHORT& rErr)
+{
+    return false;
+}
+
+bool ScQueryValueIterator::DataAccessMatrix::getNext(double& rValue, USHORT& rErr)
+{
+    return false;
+}
+
+// ----------------------------------------------------------------------------
+
+ScQueryValueIterator::ScQueryValueIterator(ScDocument* pDocument, ScQueryParamBase* pParam) :
+    mpParam (pParam)
+{
+    switch (mpParam->GetType())
+    {
+        case ScQueryParamBase::INTERNAL:
+        {
+            const ScQueryParam* p = static_cast<const ScQueryParam*>(pParam);
+            mpData.reset(new DataAccessInternal(p, pDocument));
+        }
+        break;
+        case ScQueryParamBase::MATRIX:
+        {
+            const ScQueryParamMatrix* p = static_cast<const ScQueryParamMatrix*>(pParam);
+            mpData.reset(new DataAccessMatrix(p));
+        }
+    }
+}
+
+bool ScQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
+{
+    return mpData->getCurrent(rValue, rErr);
 }
 
 BOOL ScQueryValueIterator::GetFirst(double& rValue, USHORT& rErr)
 {
-    nCol = aParam.nCol1;
-    nRow = aParam.nRow1;
-    if (aParam.bHasHeader)
-        nRow++;
-//  nColRow = 0;
-    ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
-    pCol->Search( nRow, nColRow );
-    return GetThis(rValue, rErr);
+    return mpData->getFirst(rValue, rErr);
 }
 
 BOOL ScQueryValueIterator::GetNext(double& rValue, USHORT& rErr)
 {
-    ++nRow;
-    return GetThis(rValue, rErr);
+    return mpData->getNext(rValue, rErr);
 }
 
-//-------------------------------------------------------------------------------
+// ============================================================================
 
 ScCellIterator::ScCellIterator( ScDocument* pDocument,
                                 SCCOL nSCol, SCROW nSRow, SCTAB nSTab,

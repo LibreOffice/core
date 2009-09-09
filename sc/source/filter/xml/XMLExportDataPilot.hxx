@@ -43,6 +43,7 @@ class ScDPDimensionSaveData;
 class ScDPSaveGroupDimension;
 class ScDPSaveNumGroupDimension;
 struct ScDPNumGroupInfo;
+struct ScQueryParam;
 
 class ScXMLExportDataPilot
 {

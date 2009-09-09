@@ -819,7 +819,7 @@ struct ScQueryEntry
     ScQueryEntry&   operator=( const ScQueryEntry& r );
     BOOL            operator==( const ScQueryEntry& r ) const;
 };
-
+#if 0
 struct SC_DLLPUBLIC ScQueryParam
 {
     SCCOL           nCol1;
@@ -860,7 +860,7 @@ public:
     void            MoveToDest();
     void            FillInExcelSyntax(String& aCellStr, SCSIZE nIndex);
 };
-
+#endif
 // -----------------------------------------------------------------------
 
 struct SC_DLLPUBLIC ScSubTotalParam

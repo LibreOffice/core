@@ -32,6 +32,8 @@
 #define SC_DATAUNO_HXX
 
 #include "global.hxx"
+#include "queryparam.hxx"
+
 #include <svtools/itemprop.hxx>
 #include <svtools/lstner.hxx>
 #include <com/sun/star/sheet/TableFilterField.hpp>

@@ -242,7 +242,7 @@ utl::TextSearch* ScQueryEntry::GetSearchTextPtr( BOOL bCaseSens )
 }
 
 //------------------------------------------------------------------------
-
+#if 0
 ScQueryParam::ScQueryParam()
 {
     nEntryCount = 0;
@@ -472,7 +472,7 @@ void ScQueryParam::FillInExcelSyntax(String& aCellStr, SCSIZE nIndex)
         }
     }
 }
-
+#endif
 //------------------------------------------------------------------------
 // struct ScSubTotalParam:
 

@@ -68,6 +68,7 @@
 #include "jumpmatrix.hxx"
 #include "parclass.hxx"
 #include "externalrefmgr.hxx"
+#include "doubleref.hxx"
 
 #include <math.h>
 #include <float.h>
@@ -79,6 +80,42 @@ using namespace com::sun::star;
 using namespace formula;
 
 #define ADDIN_MAXSTRLEN 256
+
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+
+namespace {
+
+class StackPrinter
+{
+public:
+    explicit StackPrinter(const char* msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~StackPrinter()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
 
 // Implementiert in ui\miscdlgs\teamdlg.cxx
 
@@ -1021,6 +1058,46 @@ void ScInterpreter::DoubleRefToVars( const ScToken* p,
     }
 }
 
+ScDoubleRefBase* ScInterpreter::PopDoubleRef()
+{
+    if (!sp)
+    {
+        SetError(errUnknownStackVariable);
+        return NULL;
+    }
+
+    --sp;
+    FormulaToken* p = pStack[sp];
+    switch (p->GetType())
+    {
+        case svError:
+            fprintf(stdout, "ScInterpreter::PopDoubleRef:   error\n");
+            nGlobalError = p->GetError();
+        break;
+        case svDoubleRef:
+        {
+            fprintf(stdout, "ScInterpreter::PopDoubleRef:   double ref\n");
+            SCCOL nCol1, nCol2;
+            SCROW nRow1, nRow2;
+            SCTAB nTab1, nTab2;
+            DoubleRefToVars(static_cast<ScToken*>(p),
+                            nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, false);
+
+            return new ScInternalDoubleRef(pDok,
+                ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
+        }
+        break;
+        case svMatrix:
+        {
+            fprintf(stdout, "ScInterpreter::PopDoubleRef:   matrix\n");
+        }
+        break;
+        default:
+            fprintf(stdout, "ScInterpreter::PopDoubleRef:   other\n");
+            SetError( errIllegalParameter);
+    }
+    return NULL;
+}
 
 void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                                  SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
@@ -1034,13 +1111,16 @@ void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
         switch (p->GetType())
         {
             case svError:
+                fprintf(stdout, "ScInterpreter::PopDoubleRef:   error\n");
                 nGlobalError = p->GetError();
                 break;
             case svDoubleRef:
+                fprintf(stdout, "ScInterpreter::PopDoubleRef:   double ref\n");
                 DoubleRefToVars( static_cast<ScToken*>(p), rCol1, rRow1, rTab1, rCol2, rRow2, rTab2,
                         bDontCheckForTableOp);
                 break;
             default:
+                fprintf(stdout, "ScInterpreter::PopDoubleRef:   other\n");
                 SetError( errIllegalParameter);
         }
     }
@@ -1860,11 +1940,11 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix( double& rDouble,
 void ScInterpreter::ScDBGet()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBGet" );
-    SCTAB nTab;
     ScQueryParam aQueryParam;
     BOOL bMissingField = FALSE;
-    if (GetDBParams( nTab, aQueryParam, bMissingField))
+    if (GetDBParams(aQueryParam, bMissingField))
     {
+        SCTAB nTab = aQueryParam.nTab;
         ScBaseCell* pCell;
         ScQueryCellIterator aCellIter(pDok, nTab, aQueryParam);
         if ( (pCell = aCellIter.GetFirst()) != NULL )
@@ -2986,6 +3066,7 @@ void ScInterpreter::ScColRowNameAuto()
 
 void ScInterpreter::ScExternalRef()
 {
+    StackPrinter __stack_printer__("ScInterpreter::ScExternalRef");
     ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
     const String* pFile = pRefMgr->getExternalFileName(pCur->GetIndex());
     if (!pFile)
@@ -2995,6 +3076,7 @@ void ScInterpreter::ScExternalRef()
     {
         case svExternalSingleRef:
         {
+            fprintf(stdout, "ScInterpreter::ScExternalRef:   single ref\n");
             ScSingleRefData aData(static_cast<const ScToken*>(pCur)->GetSingleRef());
             if (aData.IsTabRel())
             {
@@ -3012,6 +3094,7 @@ void ScInterpreter::ScExternalRef()
                 break;
 
             PushTempToken( *xNew);      // push a clone
+            fprintf(stdout, "ScInterpreter::ScExternalRef:   token pushed\n");
 
             if (aFmt.mbIsSet)
             {
@@ -3023,6 +3106,7 @@ void ScInterpreter::ScExternalRef()
         //break;    // unreachable, prevent compiler warning
         case svExternalDoubleRef:
         {
+            fprintf(stdout, "ScInterpreter::ScExternalRef:   double ref\n");
             ScComplexRefData aData(static_cast<const ScToken*>(pCur)->GetDoubleRef());
             if (aData.Ref1.IsTabRel() || aData.Ref2.IsTabRel())
             {
@@ -3051,6 +3135,7 @@ void ScInterpreter::ScExternalRef()
             }
 
             PushMatrix(p->GetMatrix());
+            fprintf(stdout, "ScInterpreter::ScExternalRef:   matrix pushed\n");
             return;
         }
         //break;    // unreachable, prevent compiler warning

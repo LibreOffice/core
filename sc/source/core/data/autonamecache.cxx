@@ -40,6 +40,7 @@
 #include "autonamecache.hxx"
 #include "dociter.hxx"
 #include "cell.hxx"
+#include "queryparam.hxx"
 
 // -----------------------------------------------------------------------
 

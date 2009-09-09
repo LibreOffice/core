@@ -40,6 +40,7 @@
 #include "global.hxx"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
+#include "queryparam.hxx"
 
 class ScXMLImport;
 class ScDPSaveNumGroupDimension;

@@ -53,7 +53,9 @@ class SbxVariable;
 class ScBaseCell;
 class ScFormulaCell;
 class SvNumberFormatter;
+class ScDoubleRefBase;
 struct MatrixDoubleOp;
+struct ScQueryParam;
 
 struct ScCompare
 {
@@ -301,6 +303,7 @@ void DoubleRefToVars( const ScToken* p,
         SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
         SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
         BOOL bDontCheckForTableOp = FALSE );
+ScDoubleRefBase* PopDoubleRef();
 void PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                           SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
                           BOOL bDontCheckForTableOp = FALSE );
@@ -488,7 +491,7 @@ void ScSubTotal();
 // compatibility). If this was the case then rMissingField is set to TRUE upon
 // return. If rMissingField==FALSE upon call all "missing cases" are considered
 // to be an error.
-BOOL GetDBParams( SCTAB& rTab, ScQueryParam& rParam, BOOL& rMissingField );
+BOOL GetDBParams( ScQueryParam& rParam, BOOL& rMissingField );
 
 void DBIterator( ScIterFunc );
 void ScDBSum();

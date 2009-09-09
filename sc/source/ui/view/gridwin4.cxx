@@ -73,6 +73,7 @@
 #include "editutil.hxx"
 #include "inputopt.hxx"
 #include "fillinfo.hxx"
+#include "queryparam.hxx"
 #include "sc.hrc"
 #include <vcl/virdev.hxx>
 

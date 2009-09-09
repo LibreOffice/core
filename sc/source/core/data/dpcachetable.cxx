@@ -38,6 +38,7 @@
 #include "dptabdat.hxx"
 #include "dptabsrc.hxx"
 #include "dpobject.hxx"
+#include "queryparam.hxx"
 
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>

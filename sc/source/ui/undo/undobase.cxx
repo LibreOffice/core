@@ -45,6 +45,7 @@
 #include "undodraw.hxx"
 #include "dbcolect.hxx"
 #include "attrib.hxx"
+#include "queryparam.hxx"
 #include "globstr.hrc"
 
 // STATIC DATA -----------------------------------------------------------

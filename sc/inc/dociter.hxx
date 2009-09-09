@@ -35,6 +35,9 @@
 #include <tools/solar.h>
 #include "global.hxx"
 #include "scdllapi.h"
+#include "queryparam.hxx"
+
+#include <memory>
 
 class ScDocument;
 class ScBaseCell;
@@ -127,33 +130,71 @@ public:
                     }
 };
 
+// ============================================================================
+
 class ScQueryValueIterator            // alle Zahlenwerte in einem Bereich durchgehen
 {
 private:
-    ScQueryParam    aParam;
-    ScDocument*     pDoc;
-    const ScAttrArray*  pAttrArray;
-    ULONG           nNumFormat;     // fuer CalcAsShown
-    ULONG           nNumFmtIndex;
-    SCCOL           nCol;
-    SCROW           nRow;
-    SCSIZE          nColRow;
-    SCROW           nAttrEndRow;
-    SCTAB           nTab;
-    short           nNumFmtType;
-    BOOL            bCalcAsShown;
+    class DataAccess
+    {
+    public:
+        DataAccess();
+        virtual ~DataAccess() = 0;
+        virtual bool getCurrent(double& rValue, USHORT& rErr) = 0;
+        virtual bool getFirst(double& rValue, USHORT& rErr) = 0;
+        virtual bool getNext(double& rValue, USHORT& rErr) = 0;
+    };
 
-    BOOL            GetThis(double& rValue, USHORT& rErr);
+    class DataAccessInternal : public DataAccess
+    {
+    public:
+        DataAccessInternal(const ScQueryParam* pParam, ScDocument* pDoc);
+        virtual ~DataAccessInternal();
+        virtual bool getCurrent(double &rValue, USHORT &rErr);
+        virtual bool getFirst(double &rValue, USHORT &rErr);
+        virtual bool getNext(double& rValue, USHORT& rErr);
+
+    private:
+        const ScQueryParam* mpParam;
+        ScDocument*         mpDoc;
+        const ScAttrArray*  pAttrArray;
+        ULONG               nNumFormat;     // fuer CalcAsShown
+        ULONG               nNumFmtIndex;
+        SCCOL               nCol;
+        SCROW               nRow;
+        SCSIZE              nColRow;
+        SCROW               nAttrEndRow;
+        SCTAB               nTab;
+        short               nNumFmtType;
+        bool                bCalcAsShown;
+    };
+
+    class DataAccessMatrix : public DataAccess
+    {
+    public:
+        DataAccessMatrix(const ScQueryParamMatrix* pParam);
+        virtual ~DataAccessMatrix();
+        virtual bool getCurrent(double &rValue, USHORT &rErr);
+        virtual bool getFirst(double &rValue, USHORT &rErr);
+        virtual bool getNext(double &rValue, USHORT &rErr);
+
+    private:
+        const ScQueryParamMatrix* mpParam;
+    };
+
+    ::std::auto_ptr<ScQueryParamBase> mpParam;
+    ::std::auto_ptr<DataAccess> mpData;
+
+    bool            GetThis(double& rValue, USHORT& rErr);
 public:
-                    ScQueryValueIterator(ScDocument* pDocument, SCTAB nTable,
-                                         const ScQueryParam& aParam);
+                    ScQueryValueIterator(ScDocument* pDocument, ScQueryParamBase* pParam);
     /// Does NOT reset rValue if no value found!
     BOOL            GetFirst(double& rValue, USHORT& rErr);
     /// Does NOT reset rValue if no value found!
     BOOL            GetNext(double& rValue, USHORT& rErr);
-    void            GetCurNumFmtInfo( short& nType, ULONG& nIndex )
-                        { nType = nNumFmtType; nIndex = nNumFmtIndex; }
 };
+
+// ============================================================================
 
 class ScCellIterator            // alle Zellen in einem Bereich durchgehen
 {                               // bei SubTotal aber keine ausgeblendeten und
