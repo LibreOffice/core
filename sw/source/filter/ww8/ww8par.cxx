@@ -597,7 +597,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 }
             }
 
-            if ( ( mnFix16Angle || nTextRotationAngle ) && dynamic_cast< SdrObjCustomShape* >( pObj ) )
+            if ( ( ( rObjData.nSpFlags & SP_FFLIPV ) || mnFix16Angle || nTextRotationAngle ) && dynamic_cast< SdrObjCustomShape* >( pObj ) )
             {
                 SdrObjCustomShape* pCustomShape = dynamic_cast< SdrObjCustomShape* >( pObj );
 
@@ -605,6 +605,10 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 if ( mnFix16Angle && !( GetPropertyValue( DFF_Prop_FitTextToShape ) & 4 ) )
                 {   // text is already rotated, we have to take back the object rotation if DFF_Prop_RotateText is false
                     fExtraTextRotation = -mnFix16Angle;
+                }
+                if ( rObjData.nSpFlags & SP_FFLIPV )    // sj: in ppt the text is flipped, whereas in word the text
+                {                                       // remains unchanged, so we have to take back the flipping here
+                    fExtraTextRotation += 18000.0;      // because our core will flip text if the shape is flipped.
                 }
                 fExtraTextRotation += nTextRotationAngle;
                 if ( !::basegfx::fTools::equalZero( fExtraTextRotation ) )
