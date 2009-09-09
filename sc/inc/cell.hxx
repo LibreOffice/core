@@ -59,9 +59,6 @@ class ScCodeArray;
 class ScProgress;
 class ScPostIt;
 
-class ScMultipleReadHeader;
-class ScMultipleWriteHeader;
-
 // ============================================================================
 
 /** Default cell clone flags: do not start listening, do not adjust 3D refs to
@@ -102,7 +99,7 @@ public:
 
     /** Returns a clone of this cell, clones cell note and caption object too
         (unless SC_CLONECELL_NOCAPTION flag is set). Broadcaster will not be cloned. */
-    ScBaseCell*     CloneWithNote( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
+    ScBaseCell*     CloneWithNote( const ScAddress& rOwnPos, ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
 
     /** Due to the fact that ScBaseCell does not have a vtable, this function
         deletes the cell by calling the appropriate d'tor of the derived class. */
@@ -195,10 +192,6 @@ public:
 #ifdef DBG_UTIL
                     ~ScNoteCell();
 #endif
-
-                    ScNoteCell( SvStream& rStream, USHORT nVer );
-
-    void            Save( SvStream& rStream ) const;
 
 private:
                     ScNoteCell( const ScNoteCell& );
@@ -387,6 +380,15 @@ public:
     inline USHORT   GetSeenInIteration() const { return nSeenInIteration; }
 
     BOOL            HasOneReference( ScRange& r ) const;
+    /* Checks if the formula contains reference list that can be
+       expressed by one reference (like A1;A2;A3:A5 -> A1:A5). The
+       reference list is not required to be sorted (i.e. A3;A1;A2 is
+       still recognized as A1:A3), but no overlapping is allowed.
+       If one reference is recognized, the rRange is filled.
+
+       It is similar to HasOneReference(), but more general.
+     */
+    bool HasRefListExpressibleAsOneReference(ScRange& rRange) const;
     BOOL            HasRelNameReference() const;
     BOOL            HasColRowName() const;
 

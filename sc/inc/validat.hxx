@@ -93,7 +93,9 @@ public:
             ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                                 const String& rExpr1, const String& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
+                                const String& rExprNmsp1 = EMPTY_STRING, const String& rExprNmsp2 = EMPTY_STRING,
+                                formula::FormulaGrammar::Grammar eGrammar1 = formula::FormulaGrammar::GRAM_DEFAULT,
+                                formula::FormulaGrammar::Grammar eGrammar2 = formula::FormulaGrammar::GRAM_DEFAULT );
             ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument* pDocument, const ScAddress& rPos );
@@ -197,8 +199,6 @@ public:
                 { if (!Insert(pNew)) delete pNew; }
 
     ScValidationData* GetData( sal_uInt32 nKey );
-
-    void    ResetUsed();
 
     void    CompileXML();
     void    UpdateReference( UpdateRefMode eUpdateRefMode,

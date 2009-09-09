@@ -39,6 +39,7 @@
 #include <tools/globname.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include "scitems.hxx"
@@ -86,9 +87,13 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
     {
         uno::Reference< lang::XComponent > xComponent( pDocShell->GetModel(), uno::UNO_QUERY_THROW );
 
+        uno::Sequence< beans::NamedValue > aArgSeq( 1 );
+        aArgSeq[ 0 ].Name = CREATE_OUSTRING( "UseBiffFilter" );
+        aArgSeq[ 0 ].Value <<= bUseOoxFilter;
+
         uno::Sequence< uno::Any > aArgs( 2 );
         aArgs[ 0 ] <<= getProcessServiceFactory();
-        aArgs[ 1 ] <<= !bUseOoxFilter;
+        aArgs[ 1 ] <<= aArgSeq;
         uno::Reference< document::XImporter > xImporter( ScfApiHelper::CreateInstanceWithArgs(
             CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelBiffFilter" ), aArgs ), uno::UNO_QUERY_THROW );
         xImporter->setTargetDocument( xComponent );

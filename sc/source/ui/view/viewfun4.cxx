@@ -81,6 +81,9 @@
 #include "impex.hxx"
 #include "editutil.hxx"
 #include "editable.hxx"
+#include "dociter.hxx"
+#include "reffind.hxx"
+#include "compiler.hxx"
 
 using namespace com::sun::star;
 
@@ -187,7 +190,128 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         ShowAllCursors();
     }
 }
+void ScViewFunc::DoRefConversion( BOOL bRecord )
+{
+    ScDocument* pDoc = GetViewData()->GetDocument();
+    ScMarkData& rMark = GetViewData()->GetMarkData();
+    SCTAB nTabCount = pDoc->GetTableCount();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
 
+    ScRange aMarkRange;
+    rMark.MarkToSimple();
+    BOOL bMulti = rMark.IsMultiMarked();
+    if (bMulti)
+        rMark.GetMultiMarkArea( aMarkRange );
+    else if (rMark.IsMarked())
+        rMark.GetMarkArea( aMarkRange );
+    else
+    {
+        aMarkRange = ScRange( GetViewData()->GetCurX(),
+            GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+    }
+    ScEditableTester aTester( pDoc, aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
+                            aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(),rMark );
+    if (!aTester.IsEditable())
+    {
+        ErrorMessage(aTester.GetMessageId());
+        return;
+    }
+
+    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    BOOL bOk = FALSE;
+
+    ScDocument* pUndoDoc = NULL;
+    if (bRecord)
+    {
+        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        SCTAB nTab = aMarkRange.aStart.Tab();
+        pUndoDoc->InitUndo( pDoc, nTab, nTab );
+
+        if ( rMark.GetSelectCount() > 1 )
+        {
+            for (SCTAB i=0; i<nTabCount; i++)
+                if ( rMark.GetTableSelect(i) && i != nTab )
+                    pUndoDoc->AddUndoTab( i, i );
+        }
+        ScRange aCopyRange = aMarkRange;
+        aCopyRange.aStart.SetTab(0);
+        aCopyRange.aEnd.SetTab(nTabCount-1);
+        pDoc->CopyToDocument( aCopyRange, IDF_ALL, bMulti, pUndoDoc, &rMark );
+    }
+
+    ScRangeListRef xRanges;
+    GetViewData()->GetMultiArea( xRanges );
+    ULONG nCount = xRanges->Count();
+
+    for (SCTAB i=0; i<nTabCount; i++)
+    {
+        if (rMark.GetTableSelect(i))
+        {
+            for (ULONG j=0; j<nCount; j++)
+            {
+                ScRange aRange = *xRanges->GetObject(j);
+                aRange.aStart.SetTab(i);
+                aRange.aEnd.SetTab(i);
+                ScCellIterator aIter( pDoc, aRange );
+                ScBaseCell* pCell = aIter.GetFirst();
+                while ( pCell )
+                {
+                    if (pCell->GetCellType() == CELLTYPE_FORMULA)
+                    {
+                        String aOld;
+                        ((ScFormulaCell*)pCell)->GetFormula(aOld);
+                        xub_StrLen nLen = aOld.Len();
+                        ScRefFinder aFinder( aOld, pDoc );
+                        aFinder.ToggleRel( 0, nLen );
+                        if (aFinder.GetFound())
+                        {
+                            ScAddress aPos = ((ScFormulaCell*)pCell)->aPos;
+                            String aNew = aFinder.GetText();
+                            ScCompiler aComp( pDoc, aPos);
+                            aComp.SetGrammar(pDoc->GetGrammar());
+                            ScTokenArray* pArr = aComp.CompileString( aNew );
+                            ScFormulaCell* pNewCell = new ScFormulaCell( pDoc, aPos,
+                                                        pArr,formula::FormulaGrammar::GRAM_DEFAULT, MM_NONE );
+                            pDoc->PutCell( aPos, pNewCell );
+                            bOk = TRUE;
+                        }
+                    }
+                    pCell = aIter.GetNext();
+                }
+            }
+        }
+    }
+    if (bRecord)
+    {
+        ScDocument* pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
+        SCTAB nTab = aMarkRange.aStart.Tab();
+        pRedoDoc->InitUndo( pDoc, nTab, nTab );
+
+        if ( rMark.GetSelectCount() > 1 )
+        {
+            for (SCTAB i=0; i<nTabCount; i++)
+                if ( rMark.GetTableSelect(i) && i != nTab )
+                    pRedoDoc->AddUndoTab( i, i );
+        }
+        ScRange aCopyRange = aMarkRange;
+        aCopyRange.aStart.SetTab(0);
+        aCopyRange.aEnd.SetTab(nTabCount-1);
+        pDoc->CopyToDocument( aCopyRange, IDF_ALL, bMulti, pRedoDoc, &rMark );
+
+        pDocSh->GetUndoManager()->AddUndoAction(
+            new ScUndoRefConversion( pDocSh,
+                                    aMarkRange, rMark, pUndoDoc, pRedoDoc, bMulti, IDF_ALL) );
+    }
+
+    pDocSh->PostPaint( aMarkRange, PAINT_GRID );
+    pDocSh->UpdateOle(GetViewData());
+    pDocSh->SetDocumentModified();
+    CellContentChanged();
+
+    if (!bOk)
+        ErrorMessage(STR_ERR_NOREF);
+}
 //  Thesaurus - Undo ok
 void ScViewFunc::DoThesaurus( BOOL bRecord )
 {
@@ -537,11 +661,13 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
             SfxDispatcher &rDispatcher = GetViewData()->GetDispatcher();
             SfxStringItem aFileNameItem( SID_FILE_NAME, aStrURL );
             SfxStringItem aFilterItem( SID_FILTER_NAME, pFlt->GetName() );
+            // #i69524# add target, as in SfxApplication when the Open dialog is used
+            SfxStringItem aTargetItem( SID_TARGETNAME, String::CreateFromAscii("_default") );
 
             // Asynchron oeffnen, kann naemlich auch aus D&D heraus passieren
             // und das bekommt dem MAC nicht so gut ...
             return BOOL( 0 != rDispatcher.Execute( SID_OPENDOC,
-                                    SFX_CALLMODE_ASYNCHRON, &aFileNameItem, &aFilterItem, 0L) );
+                                    SFX_CALLMODE_ASYNCHRON, &aFileNameItem, &aFilterItem, &aTargetItem, 0L) );
         }
     }
 

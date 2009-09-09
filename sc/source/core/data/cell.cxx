@@ -148,7 +148,7 @@ ScBaseCell* ScBaseCell::CloneWithoutNote( ScDocument& rDestDoc, const ScAddress&
     return lclCloneCell( *this, rDestDoc, rDestPos, nCloneFlags );
 }
 
-ScBaseCell* ScBaseCell::CloneWithNote( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
+ScBaseCell* ScBaseCell::CloneWithNote( const ScAddress& rOwnPos, ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
 {
     ScBaseCell* pNewCell = lclCloneCell( *this, rDestDoc, rDestPos, nCloneFlags );
     if( mpNote )
@@ -156,7 +156,7 @@ ScBaseCell* ScBaseCell::CloneWithNote( ScDocument& rDestDoc, const ScAddress& rD
         if( !pNewCell )
             pNewCell = new ScNoteCell;
         bool bCloneCaption = (nCloneFlags & SC_CLONECELL_NOCAPTION) == 0;
-        pNewCell->TakeNote( ScNoteUtil::CloneNote( rDestDoc, rDestPos, *mpNote, bCloneCaption ) );
+        pNewCell->TakeNote( mpNote->Clone( rOwnPos, rDestDoc, rDestPos, bCloneCaption ) );
     }
     return pNewCell;
 }
@@ -582,23 +582,6 @@ ScNoteCell::~ScNoteCell()
 }
 #endif
 
-ScNoteCell::ScNoteCell( SvStream& rStream, USHORT nVer ) :
-    ScBaseCell( CELLTYPE_NOTE )
-{
-    if( nVer >= SC_DATABYTES2 )
-    {
-        BYTE cData;
-        rStream >> cData;
-        if( cData & 0x0F )
-            rStream.SeekRel( cData & 0x0F );
-    }
-}
-
-void ScNoteCell::Save( SvStream& rStream ) const
-{
-    rStream << (BYTE) 0x00;
-}
-
 // ============================================================================
 
 ScValueCell::ScValueCell() :
@@ -1016,15 +999,15 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
 
     ScCompiler aComp( pDocument, aPos, *pCode);
     aComp.SetGrammar(eTempGrammar);
-    String aFormula;
-    aComp.CreateStringFromTokenArray( aFormula );
+    String aFormula, aFormulaNmsp;
+    aComp.CreateStringFromXMLTokenArray( aFormula, aFormulaNmsp );
     pDocument->DecXMLImportedFormulaCount( aFormula.Len() );
     rProgress.SetStateCountDownOnPercent( pDocument->GetXMLImportedFormulaCount() );
     // pCode darf fuer Abfragen noch nicht geloescht, muss aber leer sein
     if ( pCode )
         pCode->Clear();
     ScTokenArray* pCodeOld = pCode;
-    pCode = aComp.CompileString( aFormula );
+    pCode = aComp.CompileString( aFormula, aFormulaNmsp );
     delete pCodeOld;
     if( !pCode->GetCodeError() )
     {
@@ -1701,7 +1684,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 
         // Reschedule verlangsamt das ganze erheblich, nur bei Prozentaenderung ausfuehren
         ScProgress::GetInterpretProgress()->SetStateCountDownOnPercent(
-            pDocument->GetFormulaCodeInTree() );
+            pDocument->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE );
     }
     else
     {

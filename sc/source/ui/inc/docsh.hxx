@@ -59,9 +59,6 @@ class INetURLObject;
 class ScPaintItem;
 class ScViewData;
 class ScDocFunc;
-#if OLD_PIVOT_IMPLEMENTATION
-class ScPivot;
-#endif
 class ScDrawLayer;
 class ScTabViewShell;
 class ScSbxDocHelper;
@@ -290,12 +287,9 @@ public:
     BOOL            IsEditable() const;
 
     BOOL            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
-    void            UpdateAllRowHeights();
+    void            UpdateAllRowHeights( const ScMarkData* pTabMark = NULL );
+    void            UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore = false );
 
-#if OLD_PIVOT_IMPLEMENTATION
-    void            PivotUpdate( ScPivot* pOldPivot, ScPivot* pNewPivot,
-                                    BOOL bRecord = TRUE, BOOL bApi = FALSE );
-#endif
     void            RefreshPivotTables( const ScRange& rSource );
     void            DoConsolidate( const ScConsolidateParam& rParam, BOOL bRecord = TRUE );
     void            UseScenario( SCTAB nTab, const String& rName, BOOL bRecord = TRUE );

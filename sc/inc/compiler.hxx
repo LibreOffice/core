@@ -311,9 +311,11 @@ private:
     const CharClass*    pCharClass;         // which character classification is used for parseAnyToken
     USHORT      mnPredetectedReference;     // reference when reading ODF, 0 (none), 1 (single) or 2 (double)
     SCsTAB      nMaxTab;                    // last sheet in document
+    sal_Int32   mnRangeOpPosInSymbol;       // if and where a range operator is in symbol
     const Convention *pConv;
     bool        mbCloseBrackets;            // whether to close open brackets automatically, default TRUE
     bool        mbExtendedErrorDetection;
+    bool        mbRewind;                   // whether symbol is to be rewound to some step during lexical analysis
 
     BOOL   NextNewToken(bool bInArray = false);
 
@@ -352,6 +354,7 @@ public:
                                 const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO );
 
     static BOOL EnQuote( String& rStr );
+    sal_Unicode GetNativeAddressSymbol( Convention::SpecialSymbolType eType ) const;
 
 
     // Check if it is a valid english function name
@@ -393,6 +396,8 @@ public:
         maExternalLinks = rLinks;
     }
 
+    void            CreateStringFromXMLTokenArray( String& rFormula, String& rFormulaNmsp );
+
     void            SetExtendedErrorDetection( bool bVal ) { mbExtendedErrorDetection = bVal; }
 
     BOOL            IsCorrected() { return bCorrected; }
@@ -400,12 +405,13 @@ public:
 
     // Use convention from this->aPos by default
     ScTokenArray* CompileString( const String& rFormula );
+    ScTokenArray* CompileString( const String& rFormula, const String& rFormulaNmsp );
     const ScDocument* GetDoc() const { return pDoc; }
     const ScAddress& GetPos() const { return aPos; }
 
-    void MoveRelWrap();
-    static void MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc,
-                             const ScAddress& rPos );
+    void MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow );
+    static void MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,
+                             SCCOL nMaxCol, SCROW nMaxRow );
 
     BOOL UpdateNameReference( UpdateRefMode eUpdateRefMode,
                               const ScRange&,

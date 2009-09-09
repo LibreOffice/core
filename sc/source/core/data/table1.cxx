@@ -114,6 +114,7 @@
 #include "progress.hxx"
 #include "hints.hxx"        // fuer Paint-Broadcast
 #include "prnsave.hxx"
+#include "tabprotection.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -132,7 +133,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     bPageSizeValid( FALSE ),
     nRepeatStartX( SCCOL_REPEAT_NONE ),
     nRepeatStartY( SCROW_REPEAT_NONE ),
-    bProtected( FALSE ),
+    pTabProtection( NULL ),
     pColWidth( NULL ),
     pRowHeight( NULL ),
     pColFlags( NULL ),
@@ -140,6 +141,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     pOutlineTable( NULL ),
     bTableAreaValid( FALSE ),
     bVisible( TRUE ),
+    bPendingRowHeights( FALSE ),
     nTab( nNewTab ),
     nRecalcLvl( 0 ),
     pDocument( pDoc ),
@@ -247,6 +249,11 @@ const String& ScTable::GetUpperName() const
 void ScTable::SetVisible( BOOL bVis )
 {
     bVisible = bVis;
+}
+
+void ScTable::SetPendingRowHeights( BOOL bSet )
+{
+    bPendingRowHeights = bSet;
 }
 
 void ScTable::SetLayoutRTL( BOOL bSet )
@@ -863,6 +870,10 @@ BOOL ScTable::ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
     if (!ValidCol(nCol) || !ValidRow(nRow))
         return FALSE;
 
+    if (pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_OVERLAPPED))
+        // Skip an overlapped cell.
+        return false;
+
     if (bMarked && !rMark.IsCellMarked(nCol,nRow))
         return FALSE;
 
@@ -905,7 +916,8 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
     {
         BOOL bUp = ( nMovY < 0 );
         nRow = rMark.GetNextMarked( nCol, nRow, bUp );
-        while ( VALIDROW(nRow) && pRowFlags && (pRowFlags->GetValue(nRow) & CR_HIDDEN) )
+        while ( VALIDROW(nRow) && ((pRowFlags && (pRowFlags->GetValue(nRow) & CR_HIDDEN)) ||
+                pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_OVERLAPPED)) )
         {
             //  #53697# ausgeblendete ueberspringen (s.o.)
             nRow += nMovY;
@@ -934,7 +946,8 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
             else if (nRow > MAXROW)
                 nRow = 0;
             nRow = rMark.GetNextMarked( nCol, nRow, bUp );
-            while ( VALIDROW(nRow) && pRowFlags && (pRowFlags->GetValue(nRow) & CR_HIDDEN) )
+            while ( VALIDROW(nRow) && ((pRowFlags && (pRowFlags->GetValue(nRow) & CR_HIDDEN)) ||
+                    pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_OVERLAPPED)) )
             {
                 //  #53697# ausgeblendete ueberspringen (s.o.)
                 nRow += nMovY;
@@ -1095,6 +1108,7 @@ void ScTable::UpdateDrawRef( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nR
 {
     if ( nTab >= nTab1 && nTab <= nTab2 && nDz == 0 )       // only within the table
     {
+        InitializeNoteCaptions();
         ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
         if ( eUpdateRefMode != URM_COPY && pDrawLayer )
         {
@@ -1444,11 +1458,11 @@ void ScTable::AddPrintRange( const ScRange& rNew )
         aPrintRanges.push_back( rNew );
 }
 
-void ScTable::SetPrintRange( const ScRange& rNew )
-{
-    ClearPrintRanges();
-    AddPrintRange( rNew );
-}
+//UNUSED2009-05 void ScTable::SetPrintRange( const ScRange& rNew )
+//UNUSED2009-05 {
+//UNUSED2009-05     ClearPrintRanges();
+//UNUSED2009-05     AddPrintRange( rNew );
+//UNUSED2009-05 }
 
 void ScTable::SetPrintEntireSheet()
 {

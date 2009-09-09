@@ -276,7 +276,7 @@ public:
             {}
         /* Use the formula::FormulaGrammar::AddressConvention associated with rAddr::Tab() */
         Details( const ScDocument* pDoc, const ScAddress & rAddr );
-        void SetPos( const ScDocument* pDoc, const ScAddress & rAddr );
+//UNUSED2009-05 void SetPos( const ScDocument* pDoc, const ScAddress & rAddr );
     };
     SC_DLLPUBLIC static const Details detailsOOOa1;
 
@@ -791,12 +791,14 @@ template< typename T > void PutInOrder( T& nStart, T& nEnd )
 
 bool ConvertSingleRef( ScDocument* pDoc, const String& rRefString,
         SCTAB nDefTab, ScRefAddress& rRefAddress,
-        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1);
+        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
+        ScAddress::ExternalInfo* pExtInfo = NULL );
 
 bool ConvertDoubleRef(ScDocument* pDoc, const String& rRefString,
         SCTAB nDefTab, ScRefAddress& rStartRefAddress,
         ScRefAddress& rEndRefAddress,
-        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1);
+        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
+        ScAddress::ExternalInfo* pExtInfo = NULL );
 
 /// append alpha representation of column to buffer
 SC_DLLPUBLIC void ScColToAlpha( rtl::OUStringBuffer& rBuffer, SCCOL nCol);

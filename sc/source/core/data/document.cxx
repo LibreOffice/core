@@ -93,6 +93,7 @@
 #include "bcaslot.hxx"
 #include "postit.hxx"
 #include "externalrefmgr.hxx"
+#include "tabprotection.hxx"
 
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
@@ -303,11 +304,6 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
                 pRangeName->UpdateTabRef( nPos, 1 );
                 pDBCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
-#if OLD_PIVOT_IMPLEMENTATION
-                if (pPivotCollection)
-                    pPivotCollection->UpdateReference(
-                                    URM_INSDEL, 0,0,nPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
-#endif
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 if (pDetOpList)
@@ -395,11 +391,6 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                 pRangeName->UpdateTabRef( nTab, 2 );
                 pDBCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1 );
-#if OLD_PIVOT_IMPLEMENTATION
-                if (pPivotCollection)
-                    pPivotCollection->UpdateReference(
-                                    URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1 );
-#endif
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,-1 );
                 if (pDetOpList)
@@ -503,6 +494,22 @@ BOOL ScDocument::IsVisible( SCTAB nTab ) const
             return pTab[nTab]->IsVisible();
 
     return FALSE;
+}
+
+
+BOOL ScDocument::IsPendingRowHeights( SCTAB nTab ) const
+{
+    if ( ValidTab(nTab) && pTab[nTab] )
+        return pTab[nTab]->IsPendingRowHeights();
+
+    return FALSE;
+}
+
+
+void ScDocument::SetPendingRowHeights( SCTAB nTab, BOOL bSet )
+{
+    if ( ValidTab(nTab) && pTab[nTab] )
+        pTab[nTab]->SetPendingRowHeights( bSet );
 }
 
 
@@ -2467,7 +2474,7 @@ void ScDocument::GetCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
 ScBaseCell* ScDocument::GetCell( const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();
-    if ( pTab[nTab] )
+    if (ValidTab(nTab) && pTab[nTab])
         return pTab[nTab]->GetCell( rPos );
 
     DBG_ERROR("GetCell ohne Tabelle");
@@ -2566,6 +2573,18 @@ void ScDocument::DeleteNote( const ScAddress& rPos )
         pTab[ rPos.Tab() ]->DeleteNote( rPos.Col(), rPos.Row() );
 }
 
+
+void ScDocument::InitializeNoteCaptions( SCTAB nTab, bool bForced )
+{
+    if( ValidTab( nTab ) && pTab[ nTab ] )
+        pTab[ nTab ]->InitializeNoteCaptions( bForced );
+}
+
+void ScDocument::InitializeAllNoteCaptions( bool bForced )
+{
+    for( SCTAB nTab = 0; nTab < GetTableCount(); ++nTab )
+        InitializeNoteCaptions( nTab, bForced );
+}
 
 void ScDocument::SetDirty()
 {
@@ -2932,14 +2951,20 @@ BOOL ScDocument::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, U
 
 
 void ScDocument::UpdateAllRowHeights( OutputDevice* pDev, double nPPTX, double nPPTY,
-                                    const Fraction& rZoomX, const Fraction& rZoomY )
+                                    const Fraction& rZoomX, const Fraction& rZoomY, const ScMarkData* pTabMark )
 {
-    // one progress across all sheets
-    ScProgress aProgress( GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), GetWeightedCount() );
+    // one progress across all (selected) sheets
+
+    ULONG nCellCount = 0;
+    for ( SCTAB nTab=0; nTab<=MAXTAB; nTab++ )
+        if ( pTab[nTab] && ( !pTabMark || pTabMark->GetTableSelect(nTab) ) )
+            nCellCount += pTab[nTab]->GetWeightedCount();
+
+    ScProgress aProgress( GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nCellCount );
 
     ULONG nProgressStart = 0;
     for ( SCTAB nTab=0; nTab<=MAXTAB; nTab++ )
-        if ( pTab[nTab] )
+        if ( pTab[nTab] && ( !pTabMark || pTabMark->GetTableSelect(nTab) ) )
         {
             pTab[nTab]->SetOptimalHeight( 0, MAXROW, 0,
                         pDev, nPPTX, nPPTY, rZoomX, rZoomY, FALSE, &aProgress, nProgressStart );
@@ -4104,24 +4129,6 @@ BOOL ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
 }
 
 
-//UNUSED2008-05  void ScDocument::SetAutoFilterFlags()
-//UNUSED2008-05  {
-//UNUSED2008-05      USHORT nCount = pDBCollection->GetCount();
-//UNUSED2008-05      for (USHORT i=0; i<nCount; i++)
-//UNUSED2008-05      {
-//UNUSED2008-05          ScDBData* pData = (*pDBCollection)[i];
-//UNUSED2008-05          SCTAB nDBTab;
-//UNUSED2008-05          SCCOL nDBStartCol;
-//UNUSED2008-05          SCROW nDBStartRow;
-//UNUSED2008-05          SCCOL nDBEndCol;
-//UNUSED2008-05          SCROW nDBEndRow;
-//UNUSED2008-05          pData->GetArea( nDBTab, nDBStartCol,nDBStartRow, nDBEndCol,nDBEndRow );
-//UNUSED2008-05          pData->SetAutoFilter( HasAttrib( nDBStartCol,nDBStartRow,nDBTab,
-//UNUSED2008-05                                  nDBEndCol,nDBStartRow,nDBTab, HASATTR_AUTOFILTER ) );
-//UNUSED2008-05      }
-//UNUSED2008-05  }
-
-
 BOOL ScDocument::IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
     const ScMergeFlagAttr* pAttr = (const ScMergeFlagAttr*)
@@ -4531,11 +4538,11 @@ void ScDocument::AddPrintRange( SCTAB nTab, const ScRange& rNew )
 }
 
 
-void ScDocument::SetPrintRange( SCTAB nTab, const ScRange& rNew )
-{
-    if (ValidTab(nTab) && pTab[nTab])
-        pTab[nTab]->SetPrintRange( rNew );
-}
+//UNUSED2009-05 void ScDocument::SetPrintRange( SCTAB nTab, const ScRange& rNew )
+//UNUSED2009-05 {
+//UNUSED2009-05     if (ValidTab(nTab) && pTab[nTab])
+//UNUSED2009-05         pTab[nTab]->SetPrintRange( rNew );
+//UNUSED2009-05 }
 
 
 void ScDocument::SetPrintEntireSheet( SCTAB nTab )

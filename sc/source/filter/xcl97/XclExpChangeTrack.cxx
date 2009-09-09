@@ -491,6 +491,7 @@ void XclExpChTrTabId::Copy( const XclExpChTrTabIdBuffer& rBuffer )
 
 void XclExpChTrTabId::SaveCont( XclExpStream& rStrm )
 {
+    rStrm.EnableEncryption();
     if( pBuffer )
         for( sal_uInt16* pElem = pBuffer; pElem < (pBuffer + nTabCount); pElem++ )
             rStrm << *pElem;

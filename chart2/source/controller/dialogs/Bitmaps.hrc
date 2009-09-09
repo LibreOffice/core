@@ -34,23 +34,28 @@
 #include <svtools/solar.hrc>
 #endif
 
-// next free: 100
-
 #ifndef STD_MASKCOLOR
 #define STD_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }
 #endif
 
 //-----------------------------------------------------------------------------
 // chart types
+// Images:
 
 #define IMG_TYPE_COLUMN (RID_APP_START + 1)
 #define IMG_TYPE_BAR    (RID_APP_START + 2)
 #define IMG_TYPE_PIE    (RID_APP_START + 3)
-#define IMG_TYPE_LINE   (RID_APP_START + 4)
-#define IMG_TYPE_AREA   (RID_APP_START + 5)
-#define IMG_TYPE_NET    (RID_APP_START + 6)
-#define IMG_TYPE_STOCK  (RID_APP_START + 7)
-#define IMG_TYPE_COLUMN_LINE  (RID_APP_START + 8)
+#define IMG_TYPE_AREA   (RID_APP_START + 4)
+#define IMG_TYPE_LINE   (RID_APP_START + 5)
+#define IMG_TYPE_XY     (RID_APP_START + 6)
+#define IMG_TYPE_BUBBLE (RID_APP_START + 7)
+#define IMG_TYPE_NET    (RID_APP_START + 8)
+#define IMG_TYPE_STOCK  (RID_APP_START + 9)
+#define IMG_TYPE_COLUMN_LINE  (RID_APP_START + 10)
+
+//-----------------------------------------------------------------------------
+//Chart Subtypes
+// Bitmaps:
 
 //----------------------
 // Column Chart Subtypes
@@ -168,8 +173,8 @@
 #define BMP_NET_SYMB_STACK (RID_APP_START + 77)
 #define BMP_NET_LINESYMB (RID_APP_START + 78)
 #define BMP_NET_LINESYMB_STACK (RID_APP_START + 79)
-#define BMP_NET_FILLED (RID_APP_START + 80)
-#define BMP_NET_FILLED_STACKED (RID_APP_START + 81)
+#define BMP_NET_FILL (RID_APP_START + 80)
+#define BMP_NET_FILL_STACK (RID_APP_START + 81)
 
 //----------------------
 // Stock Chart Subtypes
@@ -185,7 +190,13 @@
 #define BMP_COLUMN_LINE         (RID_APP_START + 86)
 #define BMP_COLUMN_LINE_STACKED (RID_APP_START + 87)
 
+//----------------------
+// Bubble Chart Subtypes
+#define BMP_BUBBLE_1            (RID_APP_START + 88)
+
 //-----------------------------------------------------------------------------
+//further Images:
+
 //SchStatisticTabPage and SchDataStatisticsDlg part 1
 #define BMP_INDICATE_BOTH_VERTI (RID_APP_START + 89)
 #define BMP_INDICATE_UP (RID_APP_START + 90)
@@ -201,9 +212,8 @@
 #define BMP_REGRESSION_EXP (RID_APP_START + 95)
 #define BMP_REGRESSION_POWER (RID_APP_START + 96)
 
-//-----------------------------------------------------------------------------
 // hide-button for range-choosing
-#define IMG_SELECTRANGE (RID_APP_START + 9)
+#define IMG_SELECTRANGE (RID_APP_START + 100)
 
 // CHART_BITMAPS_HRC
 #endif

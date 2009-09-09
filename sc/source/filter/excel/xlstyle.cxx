@@ -471,11 +471,11 @@ void XclFontData::SetApiFamily( sal_Int16 nApiFamily )
     }
 }
 
-void XclFontData::SetApiFontEncoding( sal_Int16 nApiFontEnc )
-{
-    // API constants are equal to rtl_TextEncoding constants
-    SetFontEncoding( static_cast< rtl_TextEncoding >( nApiFontEnc ) );
-}
+//UNUSED2009-05 void XclFontData::SetApiFontEncoding( sal_Int16 nApiFontEnc )
+//UNUSED2009-05 {
+//UNUSED2009-05     // API constants are equal to rtl_TextEncoding constants
+//UNUSED2009-05     SetFontEncoding( static_cast< rtl_TextEncoding >( nApiFontEnc ) );
+//UNUSED2009-05 }
 
 void XclFontData::SetApiPosture( Awt::FontSlant eApiPosture )
 {
@@ -663,6 +663,8 @@ void XclFontPropSetHelper::ReadFontProperties( XclFontData& rFontData,
             // font escapement
             sal_Int16 nApiEscapement = 0;
             sal_Int8 nApiEscHeight = 0;
+            maHlpChEscapement.ReadFromPropertySet( rPropSet );
+            maHlpChEscapement.ReadFromPropertySet( rPropSet );
             maHlpChEscapement.ReadFromPropertySet( rPropSet );
             maHlpChEscapement >> nApiEscapement >> nApiEscHeight;
             rFontData.SetApiEscapement( nApiEscapement );

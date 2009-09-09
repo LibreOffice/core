@@ -957,15 +957,6 @@ void lcl_convertTokensToString(OUString& rStr, const vector<ScSharedTokenRef>& r
     func.getString(rStr);
 }
 
-void lcl_convertTokenToString(OUString& rStr, const ScSharedTokenRef& rToken, ScDocument* pDoc,
-                              FormulaGrammar::Grammar eGrammar)
-{
-    const sal_Unicode cRangeSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
-    Tokens2RangeString func(pDoc, eGrammar, cRangeSep);
-    func.operator() (rToken);
-    func.getString(rStr);
-}
-
 } // anonymous namespace
 
 // DataProvider ==============================================================
@@ -995,44 +986,6 @@ void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
     }
 }
 
-void lcl_SeperateOneColumnRange(ScRange aR, const ScAddress& rPos, ScRangeListRef& xRanges)
-{
-    if (aR.aStart == rPos)
-    {
-        aR.aStart.SetRow(aR.aStart.Row() + 1);
-        xRanges->Join(aR);
-    }
-    else if (aR.aEnd == rPos)
-    {
-        aR.aStart.SetRow(aR.aStart.Row() - 1);
-        xRanges->Join(aR);
-    }
-    else
-    {
-        xRanges->Join(ScRange(aR.aStart, ScAddress(rPos.Col(), rPos.Row() - 1, rPos.Tab())));
-        xRanges->Join(ScRange(ScAddress(rPos.Col(), rPos.Row() + 1, rPos.Tab()), aR.aEnd ));
-    }
-}
-
-void lcl_SeperateOneRowRange(ScRange aR, const ScAddress& rPos, ScRangeListRef& xRanges)
-{
-    if (aR.aStart == rPos)
-    {
-        aR.aStart.SetCol(aR.aStart.Col() + 1);
-        xRanges->Join(aR);
-    }
-    else if (aR.aEnd == rPos)
-    {
-        aR.aStart.SetCol(aR.aStart.Col() - 1);
-        xRanges->Join(aR);
-    }
-    else
-    {
-        xRanges->Join(ScRange(aR.aStart, ScAddress(rPos.Col() - 1, rPos.Row(), rPos.Tab())));
-        xRanges->Join(ScRange(ScAddress(rPos.Col() + 1, rPos.Row(), rPos.Tab()), aR.aEnd ));
-    }
-}
-
 ::sal_Bool SAL_CALL ScChart2DataProvider::createDataSourcePossible( const uno::Sequence< beans::PropertyValue >& aArguments )
     throw (uno::RuntimeException)
 {
@@ -1051,7 +1004,7 @@ void lcl_SeperateOneRowRange(ScRange aR, const ScAddress& rPos, ScRangeListRef& 
     }
 
     vector<ScSharedTokenRef> aTokens;
-    ScRefTokenHelper::compileRangeRepresentation(aTokens, aRangeRepresentation, m_pDocument);
+    ScRefTokenHelper::compileRangeRepresentation(aTokens, aRangeRepresentation, m_pDocument, m_pDocument->GetGrammar());
     return !aTokens.empty();
 }
 
@@ -1445,7 +1398,7 @@ ScChart2DataProvider::createDataSource(
     }
 
     vector<ScSharedTokenRef> aRefTokens;
-    ScRefTokenHelper::compileRangeRepresentation(aRefTokens, aRangeRepresentation, m_pDocument);
+    ScRefTokenHelper::compileRangeRepresentation(aRefTokens, aRangeRepresentation, m_pDocument, m_pDocument->GetGrammar());
     if (aRefTokens.empty())
         // Invalid range representation.  Bail out.
         throw lang::IllegalArgumentException();
@@ -2180,7 +2133,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         return false;
 
     vector<ScSharedTokenRef> aTokens;
-    ScRefTokenHelper::compileRangeRepresentation(aTokens, aRangeRepresentation, m_pDocument);
+    ScRefTokenHelper::compileRangeRepresentation(aTokens, aRangeRepresentation, m_pDocument, m_pDocument->GetGrammar());
     return !aTokens.empty();
 }
 
@@ -2196,6 +2149,12 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL
     DBG_ASSERT( m_pDocument, "No Document -> no createDataSequenceByRangeRepresentation" );
     if(!m_pDocument || (aRangeRepresentation.getLength() == 0))
         return xResult;
+
+    // Note: the range representation must be in Calc A1 format.  The import
+    // filters use this method to pass data ranges, and they have no idea what
+    // the current formula syntax is.  In the future we should add another
+    // method to allow the client code to directly pass tokens representing
+    // ranges.
 
     vector<ScSharedTokenRef> aRefTokens;
     ScRefTokenHelper::compileRangeRepresentation(aRefTokens, aRangeRepresentation, m_pDocument);
@@ -2242,7 +2201,7 @@ rtl::OUString SAL_CALL ScChart2DataProvider::convertRangeToXML( const rtl::OUStr
         return aRet;
 
     vector<ScSharedTokenRef> aRefTokens;
-    ScRefTokenHelper::compileRangeRepresentation(aRefTokens, sRangeRepresentation, m_pDocument);
+    ScRefTokenHelper::compileRangeRepresentation(aRefTokens, sRangeRepresentation, m_pDocument, m_pDocument->GetGrammar());
     if (aRefTokens.empty())
         throw lang::IllegalArgumentException();
 
@@ -2483,7 +2442,7 @@ void ScChart2DataProvider::detectRangesFromDataSource(vector<ScSharedTokenRef>& 
     {
         const OUString& rRangeRep = *itr;
         vector<ScSharedTokenRef> aTokens;
-        ScRefTokenHelper::compileRangeRepresentation(aTokens, rRangeRep, m_pDocument);
+        ScRefTokenHelper::compileRangeRepresentation(aTokens, rRangeRep, m_pDocument, m_pDocument->GetGrammar());
 
         CollectRefTokens func;
         func = for_each(aTokens.begin(), aTokens.end(), func);

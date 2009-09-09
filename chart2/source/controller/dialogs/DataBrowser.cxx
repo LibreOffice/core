@@ -407,14 +407,14 @@ Image SeriesHeader::GetChartTypeImage(
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_SCATTER ))
     {
-        // @todo: correct image for scatter chart type
-        aResult = SELECT_IMAGE( IMG_TYPE_LINE, bHC );
+        aResult = SELECT_IMAGE( IMG_TYPE_XY, bHC );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_PIE ))
     {
         aResult = SELECT_IMAGE( IMG_TYPE_PIE, bHC );
     }
-    else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_NET ))
+    else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_NET )
+          || aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET ) )
     {
         aResult = SELECT_IMAGE( IMG_TYPE_NET, bHC );
     }
@@ -422,6 +422,10 @@ Image SeriesHeader::GetChartTypeImage(
     {
         // @todo: correct image for candle-stick type
         aResult = SELECT_IMAGE( IMG_TYPE_STOCK, bHC );
+    }
+    else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE ))
+    {
+        aResult = SELECT_IMAGE( IMG_TYPE_BUBBLE, bHC );
     }
 
     return aResult;
@@ -1068,6 +1072,7 @@ sal_Bool DataBrowser::IsTabAllowed( sal_Bool bForward ) const
 
     if( CellContainsNumbers( nRow, nCol ))
     {
+        m_aNumberEditField.UseInputStringForFormatting();
         m_aNumberEditField.SetFormatKey( GetNumberFormatKey( nRow, nCol ));
         return m_rNumberEditController;
     }

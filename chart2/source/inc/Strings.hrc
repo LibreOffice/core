@@ -33,8 +33,8 @@
 // this includes no link dependency
 #include <svtools/solar.hrc>
 
+//next free is 286
 //single free is: 134
-//next free is 282
 
 //#define RID_APP_START 30000
 ////#define STR_NULL                            (RID_APP_START +  1)
@@ -100,6 +100,7 @@
 #define STR_STACKED                         (RID_APP_START + 11)
 #define STR_PERCENT                         (RID_APP_START + 12)
 #define STR_DEEP                            (RID_APP_START + 13)
+#define STR_FILLED                          (RID_APP_START + 285)
 
 #define STR_DONUT                           (RID_APP_START + 8)
 #define STR_TYPE_PIE                        (RID_APP_START + 187)
@@ -128,6 +129,9 @@
 #define STR_STOCK_2                         (RID_APP_START + 144)
 #define STR_STOCK_3                         (RID_APP_START + 145)
 #define STR_STOCK_4                         (RID_APP_START + 146)
+
+#define STR_TYPE_BUBBLE                     (RID_APP_START + 282)
+#define STR_BUBBLE_1                        (RID_APP_START + 283)
 
 //-----------------------------------------------------------------------------
 //additional controls for wizard:
@@ -181,6 +185,7 @@
 #define STR_DATA_ROLE_MIN                   (RID_APP_START + 248)
 #define STR_DATA_ROLE_MAX                   (RID_APP_START + 249)
 #define STR_DATA_ROLE_CATEGORIES            (RID_APP_START + 260)
+#define STR_DATA_ROLE_SIZE                  (RID_APP_START + 284)
 
 #define STR_DATA_UNNAMED_SERIES             (RID_APP_START + 250)
 #define STR_DATA_UNNAMED_SERIES_WITH_INDEX  (RID_APP_START + 251)

@@ -1190,6 +1190,10 @@ PrintDialog* __EXPORT ScTabViewShell::CreatePrintDialog( Window *pParent )
     bool bAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets();
     pDlg->CheckSheetRange( bAllTabs ? PRINTSHEETS_ALL : PRINTSHEETS_SELECTED_SHEETS );
 
+    // update all pending row heights with a single progress bar,
+    // instead of a separate progress for each sheet from ScPrintFunc
+    pDocShell->UpdatePendingRowHeights( MAXTAB, true );
+
     for ( SCTAB i=0; i<nTabCount; i++ )
     {
         ScPrintFunc aPrintFunc( pDocShell, pPrinter, i );

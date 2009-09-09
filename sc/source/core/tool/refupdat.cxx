@@ -821,27 +821,27 @@ ScRefUpdateRes ScRefUpdate::Move( ScDocument* pDoc, const ScAddress& rPos,
 }
 
 void ScRefUpdate::MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
-                                  ScComplexRefData& rRef )
+                               SCCOL nMaxCol, SCROW nMaxRow, ScComplexRefData& rRef )
 {
     if( rRef.Ref1.IsColRel() )
     {
         rRef.Ref1.nCol = rRef.Ref1.nRelCol + rPos.Col();
-        lcl_MoveItWrap( rRef.Ref1.nCol, static_cast<SCsCOL>(0), MAXCOL );
+        lcl_MoveItWrap( rRef.Ref1.nCol, static_cast<SCsCOL>(0), nMaxCol );
     }
     if( rRef.Ref2.IsColRel() )
     {
         rRef.Ref2.nCol = rRef.Ref2.nRelCol + rPos.Col();
-        lcl_MoveItWrap( rRef.Ref2.nCol, static_cast<SCsCOL>(0), MAXCOL );
+        lcl_MoveItWrap( rRef.Ref2.nCol, static_cast<SCsCOL>(0), nMaxCol );
     }
     if( rRef.Ref1.IsRowRel() )
     {
         rRef.Ref1.nRow = rRef.Ref1.nRelRow + rPos.Row();
-        lcl_MoveItWrap( rRef.Ref1.nRow, static_cast<SCsROW>(0), MAXROW );
+        lcl_MoveItWrap( rRef.Ref1.nRow, static_cast<SCsROW>(0), nMaxRow );
     }
     if( rRef.Ref2.IsRowRel() )
     {
         rRef.Ref2.nRow = rRef.Ref2.nRelRow + rPos.Row();
-        lcl_MoveItWrap( rRef.Ref2.nRow, static_cast<SCsROW>(0), MAXROW );
+        lcl_MoveItWrap( rRef.Ref2.nRow, static_cast<SCsROW>(0), nMaxRow );
     }
     SCsTAB nMaxTab = (SCsTAB) pDoc->GetTableCount() - 1;
     if( rRef.Ref1.IsTabRel() )
@@ -938,38 +938,5 @@ ScRefUpdateRes ScRefUpdate::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCRO
 
     return eRet;
 }
-
-#if OLD_PIVOT_IMPLEMENTATION
-ScRefUpdateRes ScRefUpdate::DoGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,
-                                    ScRange& rRef )
-{
-    //  wie UpdateGrow, nur mit Range statt RefData
-
-    ScRefUpdateRes eRet = UR_NOTHING;
-
-    BOOL bUpdateX = ( nGrowX &&
-            rRef.aStart.Col() == rArea.aStart.Col() && rRef.aEnd.Col() == rArea.aEnd.Col() &&
-            rRef.aStart.Row() >= rArea.aStart.Row() && rRef.aEnd.Row() <= rArea.aEnd.Row() &&
-            rRef.aStart.Tab() >= rArea.aStart.Tab() && rRef.aEnd.Tab() <= rArea.aEnd.Tab() );
-    BOOL bUpdateY = ( nGrowY &&
-            rRef.aStart.Col() >= rArea.aStart.Col() && rRef.aEnd.Col() <= rArea.aEnd.Col() &&
-            ( rRef.aStart.Row() == rArea.aStart.Row() || rRef.aStart.Row() == rArea.aStart.Row()+1 ) &&
-                rRef.aEnd.Row() == rArea.aEnd.Row() &&
-            rRef.aStart.Tab() >= rArea.aStart.Tab() && rRef.aEnd.Tab() <= rArea.aEnd.Tab() );
-
-    if ( bUpdateX )
-    {
-        rRef.aEnd.SetCol( rRef.aEnd.Col() + nGrowX );
-        eRet = UR_UPDATED;
-    }
-    if ( bUpdateY )
-    {
-        rRef.aEnd.SetRow( rRef.aEnd.Row() + nGrowY );
-        eRet = UR_UPDATED;
-    }
-
-    return eRet;
-}
-#endif
 
 

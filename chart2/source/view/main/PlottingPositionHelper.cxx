@@ -142,19 +142,6 @@ uno::Reference< XTransformation > PlottingPositionHelper::getTransformationScale
             std::swap(nXAxisOrientation,nYAxisOrientation);
         }
 
-        if( AxisOrientation_MATHEMATICAL==nXAxisOrientation )
-            aMatrix.translate(-MinX, 0.0, 0.0);
-        else
-            aMatrix.translate(-MaxX, 0.0, 0.0);
-        if( AxisOrientation_MATHEMATICAL==nYAxisOrientation )
-            aMatrix.translate(0.0, -MinY, 0.0);
-        else
-            aMatrix.translate(0.0, -MaxY, 0.0);
-        if( AxisOrientation_MATHEMATICAL==nZAxisOrientation )
-            aMatrix.translate(0.0, 0.0, -MaxZ);//z direction in draw is reverse mathematical direction
-        else
-            aMatrix.translate(0.0, 0.0, -MinZ);
-
         double fWidthX = MaxX - MinX;
         double fWidthY = MaxY - MinY;
         double fWidthZ = MaxZ - MinZ;
@@ -163,9 +150,24 @@ uno::Reference< XTransformation > PlottingPositionHelper::getTransformationScale
         double fScaleDirectionY = AxisOrientation_MATHEMATICAL==nYAxisOrientation ? 1.0 : -1.0;
         double fScaleDirectionZ = AxisOrientation_MATHEMATICAL==nZAxisOrientation ? -1.0 : 1.0;
 
-        aMatrix.scale(fScaleDirectionX*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthX,
-            fScaleDirectionY*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthY,
-            fScaleDirectionZ*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthZ);
+        double fScaleX = fScaleDirectionX*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthX;
+        double fScaleY = fScaleDirectionY*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthY;
+        double fScaleZ = fScaleDirectionZ*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthZ;
+
+        aMatrix.scale(fScaleX, fScaleY, fScaleZ);
+
+        if( AxisOrientation_MATHEMATICAL==nXAxisOrientation )
+            aMatrix.translate(-MinX*fScaleX, 0.0, 0.0);
+        else
+            aMatrix.translate(-MaxX*fScaleX, 0.0, 0.0);
+        if( AxisOrientation_MATHEMATICAL==nYAxisOrientation )
+            aMatrix.translate(0.0, -MinY*fScaleY, 0.0);
+        else
+            aMatrix.translate(0.0, -MaxY*fScaleY, 0.0);
+        if( AxisOrientation_MATHEMATICAL==nZAxisOrientation )
+            aMatrix.translate(0.0, 0.0, -MaxZ*fScaleZ);//z direction in draw is reverse mathematical direction
+        else
+            aMatrix.translate(0.0, 0.0, -MinZ*fScaleZ);
 
         aMatrix = m_aMatrixScreenToScene*aMatrix;
 

@@ -393,21 +393,52 @@ BOOL ScDocShell::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
     return bChange;
 }
 
-void ScDocShell::UpdateAllRowHeights()
+void ScDocShell::UpdateAllRowHeights( const ScMarkData* pTabMark )
 {
     // update automatic row heights
 
     ScSizeDeviceProvider aProv(this);
     Fraction aZoom(1,1);
-    aDocument.UpdateAllRowHeights( aProv.GetDevice(), aProv.GetPPTX(), aProv.GetPPTY(), aZoom, aZoom );
+    aDocument.UpdateAllRowHeights( aProv.GetDevice(), aProv.GetPPTX(), aProv.GetPPTY(), aZoom, aZoom, pTabMark );
 }
 
-#if OLD_PIVOT_IMPLEMENTATION
-void ScDocShell::PivotUpdate( ScPivot*, ScPivot*, BOOL, BOOL )
+void ScDocShell::UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore )
 {
-    DBG_ERRORFILE("PivotUpdate is obsolete!");
+    BOOL bIsUndoEnabled = aDocument.IsUndoEnabled();
+    aDocument.EnableUndo( FALSE );
+    if ( bBefore )          // check all sheets up to nUpdateTab
+    {
+        SCTAB nTabCount = aDocument.GetTableCount();
+        if ( nUpdateTab >= nTabCount )
+            nUpdateTab = nTabCount-1;     // nUpdateTab is inclusive
+
+        ScMarkData aUpdateSheets;
+        SCTAB nTab;
+        for (nTab=0; nTab<=nUpdateTab; ++nTab)
+            if ( aDocument.IsPendingRowHeights( nTab ) )
+                aUpdateSheets.SelectTable( nTab, TRUE );
+
+        if (aUpdateSheets.GetSelectCount())
+            UpdateAllRowHeights(&aUpdateSheets);        // update with a single progress bar
+
+        for (nTab=0; nTab<=nUpdateTab; ++nTab)
+            if ( aUpdateSheets.GetTableSelect( nTab ) )
+            {
+                aDocument.UpdatePageBreaks( nTab );
+                aDocument.SetPendingRowHeights( nTab, FALSE );
+            }
+    }
+    else                    // only nUpdateTab
+    {
+        if ( aDocument.IsPendingRowHeights( nUpdateTab ) )
+        {
+            AdjustRowHeight( 0, MAXROW, nUpdateTab );
+            aDocument.UpdatePageBreaks( nUpdateTab );
+            aDocument.SetPendingRowHeights( nUpdateTab, FALSE );
+        }
+    }
+    aDocument.EnableUndo( bIsUndoEnabled );
 }
-#endif
 
 void ScDocShell::RefreshPivotTables( const ScRange& rSource )
 {
@@ -827,7 +858,7 @@ BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRec
                 ++nAdjSource;               // new position of source table after CopyTab
 
             if ( aDocument.IsTabProtected( nAdjSource ) )
-                aDocument.SetTabProtection( nDestTab, TRUE, aDocument.GetTabPassword( nAdjSource ) );
+                aDocument.CopyTabProtection(nAdjSource, nDestTab);
 
             if (bRecord)
             {

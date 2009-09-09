@@ -240,11 +240,11 @@ BOOL ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
 }
 
 
-BOOL ScColumn::HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
-                            BOOL bLeft, BOOL bRight ) const
-{
-    return pAttrArray->HasLines( nRow1, nRow2, rSizes, bLeft, bRight );
-}
+//UNUSED2009-05 BOOL ScColumn::HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
+//UNUSED2009-05                             BOOL bLeft, BOOL bRight ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     return pAttrArray->HasLines( nRow1, nRow2, rSizes, bLeft, bRight );
+//UNUSED2009-05 }
 
 
 BOOL ScColumn::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
@@ -1272,11 +1272,14 @@ void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, BOOL bKee
     {
         int nCloneFlags = bCloneNoteCaptions ? SC_CLONECELL_DEFAULT : SC_CLONECELL_NOCAPTION;
         rColumn.Resize( rColumn.GetCellCount() + nBlockCount );
-        ScAddress aPos( rColumn.nCol, 0, rColumn.nTab );
+        ScAddress aOwnPos( nCol, 0, nTab );
+        ScAddress aDestPos( rColumn.nCol, 0, rColumn.nTab );
         for (i = nStartIndex; i <= nEndIndex; i++)
         {
-            aPos.SetRow( pItems[i].nRow );
-            rColumn.Append( aPos.Row(), pItems[i].pCell->CloneWithNote( *rColumn.pDocument, aPos, nCloneFlags ) );
+            aOwnPos.SetRow( pItems[i].nRow );
+            aDestPos.SetRow( pItems[i].nRow );
+            ScBaseCell* pNewCell = pItems[i].pCell->CloneWithNote( aOwnPos, *rColumn.pDocument, aDestPos, nCloneFlags );
+            rColumn.Append( aDestPos.Row(), pNewCell );
         }
     }
 }
@@ -1376,16 +1379,18 @@ void ScColumn::UndoToColumn(SCROW nRow1, SCROW nRow2, USHORT nFlags, BOOL bMarke
 void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
 {
     ScDocument& rDestDoc = *rDestCol.pDocument;
+    ScAddress aOwnPos( nCol, 0, nTab );
     ScAddress aDestPos( rDestCol.nCol, 0, rDestCol.nTab );
 
     SCSIZE nPosCount = rPosCol.nCount;
     for (SCSIZE nPosIndex = 0; nPosIndex < nPosCount; nPosIndex++)
     {
-        aDestPos.SetRow( rPosCol.pItems[nPosIndex].nRow );
+        aOwnPos.SetRow( rPosCol.pItems[nPosIndex].nRow );
+        aDestPos.SetRow( aOwnPos.Row() );
         SCSIZE nThisIndex;
         if ( Search( aDestPos.Row(), nThisIndex ) )
         {
-            ScBaseCell* pNew = pItems[nThisIndex].pCell->CloneWithNote( rDestDoc, aDestPos );
+            ScBaseCell* pNew = pItems[nThisIndex].pCell->CloneWithNote( aOwnPos, rDestDoc, aDestPos );
             rDestCol.Insert( aDestPos.Row(), pNew );
         }
     }

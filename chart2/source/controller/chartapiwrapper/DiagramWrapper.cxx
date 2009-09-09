@@ -538,6 +538,10 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
         if( aName.indexOf( C2U("Scatter") ) != -1 )
             return C2U( "com.sun.star.chart.XYDiagram" );
 
+        // "FilledNet" "StackedFilledNet" "PercentStackedFilledNet"
+        if( aName.indexOf( C2U("FilledNet") ) != -1 )
+            return C2U( "com.sun.star.chart.FilledNetDiagram" );
+
         // "Net" "NetSymbol" "NetLine" "StackedNet" "StackedNetSymbol"
         // "StackedNetLine" "PercentStackedNet" "PercentStackedNetSymbol"
         // "PercentStackedNetLine"
@@ -548,6 +552,9 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
         // "StockVolumeOpenLowHighClose"
         if( aName.indexOf( C2U("Stock") ) != -1 )
             return C2U( "com.sun.star.chart.StockDiagram" );
+
+        if( aName.indexOf( C2U("Bubble") ) != -1 )
+            return C2U( "com.sun.star.chart.BubbleDiagram" );
 
         // Note: this must be checked after Bar, Net and Scatter
 
@@ -588,11 +595,17 @@ const tMakeStringStringMap& lcl_getChartTypeNameMap()
         ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.ScatterChartType" )
         , ::rtl::OUString::createFromAscii( "com.sun.star.chart.XYDiagram" ) )
 
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.FilledNetChartType" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.FilledNetDiagram" ) )
+
         ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.NetChartType" )
         , ::rtl::OUString::createFromAscii( "com.sun.star.chart.NetDiagram" ) )
 
         ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.CandleStickChartType" )
         , ::rtl::OUString::createFromAscii( "com.sun.star.chart.StockDiagram" ) )
+
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.BubbleChartType" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.BubbleDiagram" ) )
 
         ;
     return g_aChartTypeNameMap;

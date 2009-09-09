@@ -76,8 +76,9 @@ SV_IMPL_OP_PTRARR_SORT( ScValidationEntries_Impl, ScValidationDataPtr );
 ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                             const String& rExpr1, const String& rExpr2,
                             ScDocument* pDocument, const ScAddress& rPos,
-                            const formula::FormulaGrammar::Grammar eGrammar ) :
-    ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, eGrammar ),
+                            const String& rExprNmsp1, const String& rExprNmsp2,
+                            FormulaGrammar::Grammar eGrammar1, FormulaGrammar::Grammar eGrammar2 ) :
+    ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, rExprNmsp1, rExprNmsp2, eGrammar1, eGrammar2 ),
     nKey( 0 ),
     eDataMode( eMode ),
     eErrorStyle( SC_VALERR_STOP ),
@@ -950,13 +951,6 @@ ScValidationData* ScValidationDataList::GetData( sal_uInt32 nKey )
 
     DBG_ERROR("ScValidationDataList: Eintrag nicht gefunden");
     return NULL;
-}
-
-void ScValidationDataList::ResetUsed()
-{
-    USHORT nCount = Count();
-    for (USHORT i=0; i<nCount; i++)
-        (*this)[i]->SetUsed(FALSE);
 }
 
 void ScValidationDataList::CompileXML()

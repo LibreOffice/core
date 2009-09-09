@@ -36,7 +36,8 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/sheet/FilterOperator.hpp>
-#include <com/sun/star/sheet/TableFilterField.hpp>
+#include <com/sun/star/sheet/FilterOperator2.hpp>
+#include <com/sun/star/sheet/TableFilterField2.hpp>
 #include <tools/stack.hxx>
 
 #include "xmldrani.hxx"
@@ -48,7 +49,7 @@ class ScXMLFilterContext : public SvXMLImportContext
 {
     ScXMLDatabaseRangeContext* pDatabaseRangeContext;
 
-    com::sun::star::uno::Sequence <com::sun::star::sheet::TableFilterField> aFilterFields;
+    com::sun::star::uno::Sequence <com::sun::star::sheet::TableFilterField2> aFilterFields;
     com::sun::star::table::CellAddress aOutputPosition;
     com::sun::star::table::CellRangeAddress aConditionSourceRangeAddress;
     sal_Int16   nUserListIndex;
@@ -89,7 +90,7 @@ public:
                             aConnectionOrStack.Push(pTemp);}
     void CloseConnection() { sal_Bool* pTemp = static_cast <sal_Bool*> (aConnectionOrStack.Pop()); bConnectionOr = *pTemp; bNextConnectionOr = *pTemp; delete pTemp;}
     sal_Bool GetConnection() { sal_Bool bTemp = bConnectionOr; bConnectionOr = bNextConnectionOr; return bTemp; }
-    void AddFilterField (const com::sun::star::sheet::TableFilterField aFilterField) { aFilterFields.realloc(aFilterFields.getLength() + 1);
+    void AddFilterField(const com::sun::star::sheet::TableFilterField2 aFilterField) { aFilterFields.realloc(aFilterFields.getLength() + 1);
                                                                                 aFilterFields[aFilterFields.getLength() - 1] = aFilterField; }
 };
 
@@ -171,7 +172,7 @@ public:
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
-    void getOperatorXML(const rtl::OUString sTempOperator, com::sun::star::sheet::FilterOperator& aFilterOperator, sal_Bool& bUseRegularExpressions) const;
+    void getOperatorXML(const rtl::OUString sTempOperator, sal_Int32& aFilterOperator, sal_Bool& bUseRegularExpressions) const;
     virtual void EndElement();
 };
 

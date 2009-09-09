@@ -63,6 +63,7 @@ SLOFILES=	\
     $(SLO)$/ColumnChartType.obj \
     $(SLO)$/ColumnLineChartTypeTemplate.obj \
     $(SLO)$/DataInterpreter.obj \
+    $(SLO)$/FilledNetChartType.obj \
     $(SLO)$/LineChartType.obj \
     $(SLO)$/LineChartTypeTemplate.obj \
     $(SLO)$/NetChartType.obj \
@@ -71,6 +72,9 @@ SLOFILES=	\
     $(SLO)$/PieChartTypeTemplate.obj \
     $(SLO)$/ScatterChartType.obj \
     $(SLO)$/ScatterChartTypeTemplate.obj \
+    $(SLO)$/BubbleChartType.obj \
+    $(SLO)$/BubbleChartTypeTemplate.obj \
+    $(SLO)$/BubbleDataInterpreter.obj \
     $(SLO)$/StockChartTypeTemplate.obj \
     $(SLO)$/StockDataInterpreter.obj \
     $(SLO)$/XYDataInterpreter.obj \

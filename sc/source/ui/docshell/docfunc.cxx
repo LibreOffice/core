@@ -93,7 +93,12 @@
 #include "editable.hxx"
 #include "compiler.hxx"
 #include "scui_def.hxx" //CHINA001
+#include "tabprotection.hxx"
+
+#include <memory>
+
 using namespace com::sun::star;
+using ::com::sun::star::uno::Sequence;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -955,16 +960,18 @@ BOOL ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
 }
 
 
-ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const String& rText )
+ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const String& rText, const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScTokenArray* pCode = new ScTokenArray;
     pCode->AddString( rText );
+    if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && (rFormulaNmsp.Len() > 0) )
+        pCode->AddString( rFormulaNmsp );
     return pCode;
 }
 
 
 ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos,
-        const String& rText, const formula::FormulaGrammar::Grammar eGrammar )
+        const String& rText, const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     ScBaseCell* pNewCell = NULL;
@@ -974,7 +981,7 @@ ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos,
         ScTokenArray* pCode;
         if ( pDoc->IsImportingXML() )
         {   // temporary formula string as string tokens
-            pCode = lcl_ScDocFunc_CreateTokenArrayXML( rText );
+            pCode = lcl_ScDocFunc_CreateTokenArrayXML( rText, rFormulaNmsp, eGrammar );
             pDoc->IncXMLImportedFormulaCount( rText.Len() );
         }
         else
@@ -1011,8 +1018,8 @@ ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos,
 
 
 BOOL ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
-                                BOOL bInterpret, BOOL bEnglish, BOOL bApi,
-                                const formula::FormulaGrammar::Grammar eGrammar )
+        BOOL bInterpret, BOOL bEnglish, BOOL bApi,
+        const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
     //  SetCellText ruft PutCell oder SetNormalString
 
@@ -1025,12 +1032,15 @@ BOOL ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
             //  code moved to own method InterpretEnglishString because it is also used in
             //  ScCellRangeObj::setFormulaArray
 
-            pNewCell = InterpretEnglishString( rPos, rText, eGrammar );
+            pNewCell = InterpretEnglishString( rPos, rText, rFormulaNmsp, eGrammar );
         }
         // sonst Null behalten -> SetString mit lokalen Formeln/Zahlformat
     }
     else if ( rText.Len() )
+    {
+        OSL_ENSURE( rFormulaNmsp.Len() == 0, "ScDocFunc::SetCellText - formula namespace, but do not interpret?" );
         pNewCell = ScBaseCell::CreateTextCell( rText, pDoc );   // immer Text
+    }
 
     if (pNewCell)
         return PutCell( rPos, pNewCell, bApi );
@@ -1047,7 +1057,7 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
     if( !pNote || (bShow == pNote->IsCaptionShown()) ) return false;
 
     // move the caption to internal or hidden layer and create undo action
-    pNote->ShowCaption( bShow );
+    pNote->ShowCaption( rPos, bShow );
     if( rDoc.IsUndoEnabled() )
         rDocShell.GetUndoManager()->AddUndoAction( new ScUndoShowHideNote( rDocShell, rPos, bShow ) );
 
@@ -1075,7 +1085,7 @@ bool ScDocFunc::SetNoteText( const ScAddress& rPos, const String& rText, BOOL bA
     aNewText.ConvertLineEnd();      //! ist das noetig ???
 
     if( ScPostIt* pNote = (aNewText.Len() > 0) ? pDoc->GetOrCreateNote( rPos ) : pDoc->GetNote( rPos ) )
-        pNote->SetText( aNewText );
+        pNote->SetText( rPos, aNewText );
 
     //! Undo !!!
 
@@ -1099,23 +1109,26 @@ bool ScDocFunc::ReplaceNote( const ScAddress& rPos, const String& rNoteText, con
         ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
         SfxUndoManager* pUndoMgr = (pDrawLayer && rDoc.IsUndoEnabled()) ? rDocShell.GetUndoManager() : 0;
 
+        ScNoteData aOldData;
+        ScPostIt* pOldNote = rDoc.ReleaseNote( rPos );
+        if( pOldNote )
+        {
+            // ensure existing caption object before draw undo tracking starts
+            pOldNote->GetOrCreateCaption( rPos );
+            // rescue note data for undo
+            aOldData = pOldNote->GetNoteData();
+        }
+
         // collect drawing undo actions for deleting/inserting caption obejcts
         if( pUndoMgr )
             pDrawLayer->BeginCalcUndo();
 
-        // delete old note
-        ScNoteData aOldData;
-        if( ScPostIt* pOldNote = rDoc.ReleaseNote( rPos ) )
-        {
-            // rescue note data for undo
-            aOldData = pOldNote->GetNoteData();
-            // delete the note (creates drawing undo action for the caption object)
-            delete pOldNote;
-        }
+        // delete the note (creates drawing undo action for the caption object)
+        delete pOldNote;
 
         // create new note (creates drawing undo action for the new caption object)
         ScNoteData aNewData;
-        if( ScPostIt* pNewNote = ScNoteUtil::CreateNoteFromString( rDoc, rPos, rNoteText, false ) )
+        if( ScPostIt* pNewNote = ScNoteUtil::CreateNoteFromString( rDoc, rPos, rNoteText, false, true ) )
         {
             if( pAuthor ) pNewNote->SetAuthor( *pAuthor );
             if( pDate ) pNewNote->SetDate( *pDate );
@@ -1438,8 +1451,8 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                 pDoc->ExtendMerge( nMergeStartX, nMergeStartY, nMergeEndX, nMergeEndY, i );
                 pDoc->ExtendOverlapped( nMergeStartX, nMergeStartY, nMergeEndX, nMergeEndY, i );
 
-                if(( eCmd == INS_CELLSDOWN && ( nMergeStartX != nMergeTestStartX || nMergeEndX != nMergeTestEndX ))||
-                    eCmd == INS_CELLSRIGHT && ( nMergeStartY != nMergeTestStartY || nMergeEndY != nMergeTestEndY ) )
+                if(( eCmd == INS_CELLSDOWN && ( nMergeStartX != nMergeTestStartX || nMergeEndX != nMergeTestEndX )) ||
+                    (eCmd == INS_CELLSRIGHT && ( nMergeStartY != nMergeTestStartY || nMergeEndY != nMergeTestEndY )) )
                 {
                     if (!bApi)
                         rDocShell.ErrorMessage(STR_MSSG_INSERTCELLS_0);
@@ -2065,6 +2078,12 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                 nUndoPos ++;
             }
         }
+
+        if( !bDeletingMerge )
+        {
+            rDocShell.GetUndoManager()->LeaveListAction();
+        }
+
         rDocShell.GetUndoManager()->AddUndoAction( new ScUndoDeleteCells(
             &rDocShell, ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab ),nUndoPos, pTabs, pScenarios,
             eCmd, pUndoDoc, pUndoData ) );
@@ -2747,42 +2766,42 @@ BOOL ScDocFunc::SetLayoutRTL( SCTAB nTab, BOOL bRTL, BOOL /* bApi */ )
     return TRUE;
 }
 
-BOOL ScDocFunc::SetGrammar( formula::FormulaGrammar::Grammar eGrammar )
-{
-    ScDocument* pDoc = rDocShell.GetDocument();
-
-    if ( pDoc->GetGrammar() == eGrammar )
-        return TRUE;
-
-    BOOL bUndo(pDoc->IsUndoEnabled());
-    ScDocShellModificator aModificator( rDocShell );
-
-    pDoc->SetGrammar( eGrammar );
-
-    if (bUndo)
-    {
-        rDocShell.GetUndoManager()->AddUndoAction( new ScUndoSetGrammar( &rDocShell, eGrammar ) );
-    }
-
-    rDocShell.PostPaint( 0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_ALL );
-
-    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-    if (NULL != pViewSh)
-    {
-        pViewSh->UpdateInputHandler( FALSE, FALSE );
-    }
-
-    aModificator.SetDocumentModified();
-
-    SfxBindings* pBindings = rDocShell.GetViewBindings();
-    if (pBindings)
-    {
-        // erAck: 2006-09-07T22:19+0200  commented out in CWS scr1c1
-        //pBindings->Invalidate( FID_TAB_USE_R1C1 );
-    }
-
-    return TRUE;
-}
+//UNUSED2009-05 BOOL ScDocFunc::SetGrammar( formula::FormulaGrammar::Grammar eGrammar )
+//UNUSED2009-05 {
+//UNUSED2009-05     ScDocument* pDoc = rDocShell.GetDocument();
+//UNUSED2009-05
+//UNUSED2009-05     if ( pDoc->GetGrammar() == eGrammar )
+//UNUSED2009-05         return TRUE;
+//UNUSED2009-05
+//UNUSED2009-05     BOOL bUndo(pDoc->IsUndoEnabled());
+//UNUSED2009-05     ScDocShellModificator aModificator( rDocShell );
+//UNUSED2009-05
+//UNUSED2009-05     pDoc->SetGrammar( eGrammar );
+//UNUSED2009-05
+//UNUSED2009-05     if (bUndo)
+//UNUSED2009-05     {
+//UNUSED2009-05         rDocShell.GetUndoManager()->AddUndoAction( new ScUndoSetGrammar( &rDocShell, eGrammar ) );
+//UNUSED2009-05     }
+//UNUSED2009-05
+//UNUSED2009-05     rDocShell.PostPaint( 0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_ALL );
+//UNUSED2009-05
+//UNUSED2009-05     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+//UNUSED2009-05     if (NULL != pViewSh)
+//UNUSED2009-05     {
+//UNUSED2009-05         pViewSh->UpdateInputHandler( FALSE, FALSE );
+//UNUSED2009-05     }
+//UNUSED2009-05
+//UNUSED2009-05     aModificator.SetDocumentModified();
+//UNUSED2009-05
+//UNUSED2009-05     SfxBindings* pBindings = rDocShell.GetViewBindings();
+//UNUSED2009-05     if (pBindings)
+//UNUSED2009-05     {
+//UNUSED2009-05         // erAck: 2006-09-07T22:19+0200  commented out in CWS scr1c1
+//UNUSED2009-05         //pBindings->Invalidate( FID_TAB_USE_R1C1 );
+//UNUSED2009-05     }
+//UNUSED2009-05
+//UNUSED2009-05     return TRUE;
+//UNUSED2009-05 }
 
 BOOL ScDocFunc::RenameTable( SCTAB nTab, const String& rName, BOOL bRecord, BOOL bApi )
 {
@@ -3126,103 +3145,156 @@ BOOL ScDocFunc::RemovePageBreak( BOOL bColumn, const ScAddress& rPos,
 
 //------------------------------------------------------------------------
 
-BOOL lcl_ValidPassword( ScDocument* pDoc, SCTAB nTab,
-                        const String& rPassword,
-                        uno::Sequence<sal_Int8>* pReturnOld = NULL )
+void ScDocFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
 {
-    uno::Sequence<sal_Int8> aOldPassword;
-    if ( nTab == TABLEID_DOC )
+    ScDocument* pDoc = rDocShell.GetDocument();
+
+    pDoc->SetTabProtection(nTab, &rProtect);
+    if (pDoc->IsUndoEnabled())
     {
-        if (pDoc->IsDocProtected())
-            aOldPassword = pDoc->GetDocPassword();
+        ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+        DBG_ASSERT(pProtect, "ScDocFunc::Unprotect: ScTableProtection pointer is NULL!");
+        if (pProtect)
+        {
+            ::std::auto_ptr<ScTableProtection> p(new ScTableProtection(*pProtect));
+            p->setProtected(true); // just in case ...
+            rDocShell.GetUndoManager()->AddUndoAction(
+                new ScUndoTabProtect(&rDocShell, nTab, p) );
+
+            // ownership of auto_ptr now transferred to ScUndoTabProtect.
+        }
+    }
+
+    rDocShell.PostPaintGridAll();
+    ScDocShellModificator aModificator(rDocShell);
+    aModificator.SetDocumentModified();
+}
+
+BOOL ScDocFunc::Protect( SCTAB nTab, const String& rPassword, BOOL /*bApi*/ )
+{
+    ScDocument* pDoc = rDocShell.GetDocument();
+    if (nTab == TABLEID_DOC)
+    {
+        // document protection
+        ScDocProtection aProtection;
+        aProtection.setProtected(true);
+        aProtection.setPassword(rPassword);
+        pDoc->SetDocProtection(&aProtection);
+        if (pDoc->IsUndoEnabled())
+        {
+            ScDocProtection* pProtect = pDoc->GetDocProtection();
+            DBG_ASSERT(pProtect, "ScDocFunc::Unprotect: ScDocProtection pointer is NULL!");
+            if (pProtect)
+            {
+                ::std::auto_ptr<ScDocProtection> p(new ScDocProtection(*pProtect));
+                p->setProtected(true); // just in case ...
+                rDocShell.GetUndoManager()->AddUndoAction(
+                    new ScUndoDocProtect(&rDocShell, p) );
+                // ownership of auto_ptr is transferred to ScUndoDocProtect.
+            }
+        }
     }
     else
     {
-        if (pDoc->IsTabProtected(nTab))
-            aOldPassword = pDoc->GetTabPassword(nTab);
-    }
+        // sheet protection
 
-    if (pReturnOld)
-        *pReturnOld = aOldPassword;
-
-    return ((aOldPassword.getLength() == 0) || SvPasswordHelper::CompareHashPassword(aOldPassword, rPassword));
-}
-
-BOOL ScDocFunc::Protect( SCTAB nTab, const String& rPassword, BOOL bApi )
-{
-    ScDocShellModificator aModificator( rDocShell );
-
-    ScDocument* pDoc = rDocShell.GetDocument();
-    BOOL bUndo(pDoc->IsUndoEnabled());
-    BOOL bOk = lcl_ValidPassword( pDoc, nTab, rPassword);
-    if ( bOk )
-    {
-        uno::Sequence<sal_Int8> aPass;
-        if (rPassword.Len())
-            SvPasswordHelper::GetHashPassword(aPass, rPassword);
-
-        if (bUndo)
+        ScTableProtection aProtection;
+        aProtection.setProtected(true);
+        aProtection.setPassword(rPassword);
+        pDoc->SetTabProtection(nTab, &aProtection);
+        if (pDoc->IsUndoEnabled())
         {
-            rDocShell.GetUndoManager()->AddUndoAction(
-                        new ScUndoProtect( &rDocShell, nTab, TRUE, aPass ) );
+            ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+            DBG_ASSERT(pProtect, "ScDocFunc::Unprotect: ScTableProtection pointer is NULL!");
+            if (pProtect)
+            {
+                ::std::auto_ptr<ScTableProtection> p(new ScTableProtection(*pProtect));
+                p->setProtected(true); // just in case ...
+                rDocShell.GetUndoManager()->AddUndoAction(
+                    new ScUndoTabProtect(&rDocShell, nTab, p) );
+                // ownership of auto_ptr now transferred to ScUndoTabProtect.
+            }
         }
-
-        if ( nTab == TABLEID_DOC )
-            pDoc->SetDocProtection( TRUE, aPass );
-        else
-            pDoc->SetTabProtection( nTab, TRUE, aPass );
-
-        rDocShell.PostPaintGridAll();
-        aModificator.SetDocumentModified();
-    }
-    else if (!bApi)
-    {
-        //  different password was set before
-
-//!     rDocShell.ErrorMessage(...);
-
-        InfoBox aBox( rDocShell.GetActiveDialogParent(), String( ScResId( SCSTR_WRONGPASSWORD ) ) );
-        aBox.Execute();
     }
 
-    return bOk;
+    rDocShell.PostPaintGridAll();
+    ScDocShellModificator aModificator( rDocShell );
+    aModificator.SetDocumentModified();
+
+    return true;
 }
 
 BOOL ScDocFunc::Unprotect( SCTAB nTab, const String& rPassword, BOOL bApi )
 {
-    ScDocShellModificator aModificator( rDocShell );
-
     ScDocument* pDoc = rDocShell.GetDocument();
-    BOOL bUndo(pDoc->IsUndoEnabled());
-    uno::Sequence<sal_Int8> aOldPassword;
-    uno::Sequence<sal_Int8> aPass;
-    BOOL bOk = lcl_ValidPassword( pDoc, nTab, rPassword, &aOldPassword );
-    if ( bOk )
-    {
-        uno::Sequence<sal_Int8> aEmptyPass;
-        if ( nTab == TABLEID_DOC )
-            pDoc->SetDocProtection( FALSE, aEmptyPass );
-        else
-            pDoc->SetTabProtection( nTab, FALSE, aEmptyPass );
 
-        if (bUndo)
+    if (nTab == TABLEID_DOC)
+    {
+        // document protection
+
+        ScDocProtection* pDocProtect = pDoc->GetDocProtection();
+        if (!pDocProtect || !pDocProtect->isProtected())
+            // already unprotected (should not happen)!
+            return true;
+
+        // save the protection state before unprotect (for undo).
+        ::std::auto_ptr<ScDocProtection> pProtectCopy(new ScDocProtection(*pDocProtect));
+
+        if (!pDocProtect->verifyPassword(rPassword))
         {
-            rDocShell.GetUndoManager()->AddUndoAction(
-                        new ScUndoProtect( &rDocShell, nTab, FALSE, aOldPassword ) );
+            if (!bApi)
+            {
+                InfoBox aBox( rDocShell.GetActiveDialogParent(), String( ScResId( SCSTR_WRONGPASSWORD ) ) );
+                aBox.Execute();
+            }
+            return false;
         }
 
-        rDocShell.PostPaintGridAll();
-        aModificator.SetDocumentModified();
+        pDoc->SetDocProtection(NULL);
+        if (pDoc->IsUndoEnabled())
+        {
+            pProtectCopy->setProtected(false);
+            rDocShell.GetUndoManager()->AddUndoAction(
+                new ScUndoDocProtect(&rDocShell, pProtectCopy) );
+            // ownership of auto_ptr now transferred to ScUndoDocProtect.
+        }
     }
-    else if (!bApi)
+    else
     {
-//!     rDocShell.ErrorMessage(...);
+        // sheet protection
 
-        InfoBox aBox( rDocShell.GetActiveDialogParent(), String( ScResId( SCSTR_WRONGPASSWORD ) ) );
-        aBox.Execute();
+        ScTableProtection* pTabProtect = pDoc->GetTabProtection(nTab);
+        if (!pTabProtect || !pTabProtect->isProtected())
+            // already unprotected (should not happen)!
+            return true;
+
+        // save the protection state before unprotect (for undo).
+        ::std::auto_ptr<ScTableProtection> pProtectCopy(new ScTableProtection(*pTabProtect));
+        if (!pTabProtect->verifyPassword(rPassword))
+        {
+            if (!bApi)
+            {
+                InfoBox aBox( rDocShell.GetActiveDialogParent(), String( ScResId( SCSTR_WRONGPASSWORD ) ) );
+                aBox.Execute();
+            }
+            return false;
+        }
+
+        pDoc->SetTabProtection(nTab, NULL);
+        if (pDoc->IsUndoEnabled())
+        {
+            pProtectCopy->setProtected(false);
+            rDocShell.GetUndoManager()->AddUndoAction(
+                new ScUndoTabProtect(&rDocShell, nTab, pProtectCopy) );
+            // ownership of auto_ptr now transferred to ScUndoTabProtect.
+        }
     }
 
-    return bOk;
+    rDocShell.PostPaintGridAll();
+    ScDocShellModificator aModificator( rDocShell );
+    aModificator.SetDocumentModified();
+
+    return true;
 }
 
 //------------------------------------------------------------------------
@@ -3449,9 +3521,8 @@ BOOL ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
 //------------------------------------------------------------------------
 
 BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
-                                const ScTokenArray* pTokenArray,
-                                const String& rString, BOOL bApi, BOOL bEnglish,
-                                const formula::FormulaGrammar::Grammar eGrammar )
+        const ScTokenArray* pTokenArray, const String& rString, BOOL bApi, BOOL bEnglish,
+        const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -3498,7 +3569,7 @@ BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         }
         else if ( pDoc->IsImportingXML() )
         {
-            ScTokenArray* pCode = lcl_ScDocFunc_CreateTokenArrayXML( rString );
+            ScTokenArray* pCode = lcl_ScDocFunc_CreateTokenArrayXML( rString, rFormulaNmsp, eGrammar );
             pDoc->InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
                     aMark, EMPTY_STRING, pCode, eGrammar);
             delete pCode;
@@ -4428,11 +4499,11 @@ BOOL ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
         if ( DeleteContents( aMark, IDF_CONTENTS, TRUE, bApi ) )
         {
             // GRAM_PODF_A1 for API compatibility.
-            bRet = EnterMatrix( aNewRange, &aMark, NULL, aFormula, bApi, FALSE,formula::FormulaGrammar::GRAM_PODF_A1 );
+            bRet = EnterMatrix( aNewRange, &aMark, NULL, aFormula, bApi, FALSE, EMPTY_STRING, formula::FormulaGrammar::GRAM_PODF_A1 );
             if (!bRet)
             {
                 //  versuchen, alten Zustand wiederherzustellen
-                EnterMatrix( rOldRange, &aMark, NULL, aFormula, bApi, FALSE,formula::FormulaGrammar::GRAM_PODF_A1 );
+                EnterMatrix( rOldRange, &aMark, NULL, aFormula, bApi, FALSE, EMPTY_STRING, formula::FormulaGrammar::GRAM_PODF_A1 );
             }
         }
 

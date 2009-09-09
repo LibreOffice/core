@@ -100,6 +100,7 @@
 
 #include <oox/core/tokens.hxx>
 
+using ::com::sun::star::uno::Sequence;
 
 
 using ::rtl::OString;
@@ -216,12 +217,6 @@ UINT16 ExcDummyRec::GetNum( void ) const
 
 
 //------------------------------------------------------- class ExcBoolRecord -
-
-ExcBoolRecord::ExcBoolRecord( SfxItemSet* pItemSet, USHORT nWhich, BOOL bDefault )
-{
-    bVal = pItemSet? ( ( const SfxBoolItem& ) pItemSet->Get( nWhich ) ).GetValue() : bDefault;
-}
-
 
 void ExcBoolRecord::SaveCont( XclExpStream& rStrm )
 {
@@ -432,7 +427,9 @@ ExcBundlesheetBase::ExcBundlesheetBase() :
 void ExcBundlesheetBase::UpdateStreamPos( XclExpStream& rStrm )
 {
     rStrm.SetSvStreamPos( nOwnPos );
+    rStrm.DisableEncryption();
     rStrm << static_cast<sal_uInt32>(nStrPos);
+    rStrm.EnableEncryption();
 }
 
 
@@ -532,7 +529,7 @@ void XclExpWsbool::SaveXml( XclExpXmlStream& rStrm )
 // XclExpWindowProtection ===============================================================
 
 XclExpWindowProtection::XclExpWindowProtection(bool bValue) :
-    XclExpBoolRecord(EXC_ID_WINDOWPROTECT,bValue)
+    XclExpBoolRecord(EXC_ID_WINDOWPROTECT, bValue)
 {
 }
 
@@ -545,9 +542,31 @@ void XclExpWindowProtection::SaveXml( XclExpXmlStream& rStrm )
 
 // XclExpDocProtection ===============================================================
 
-XclExpDocProtection::XclExpDocProtection(bool bValue) :
-    XclExpBoolRecord(EXC_ID_PROTECT,bValue)
+XclExpProtection::XclExpProtection(bool bValue) :
+    XclExpBoolRecord(EXC_ID_PROTECT, bValue)
 {
+}
+
+// ============================================================================
+
+XclExpPassHash::XclExpPassHash(const Sequence<sal_Int8>& aHash) :
+    XclExpRecord(EXC_ID_PASSWORD, 2),
+    mnHash(0x0000)
+{
+    if (aHash.getLength() >= 2)
+    {
+        mnHash  = ((aHash[0] << 8) & 0xFFFF);
+        mnHash |= (aHash[1] & 0xFF);
+    }
+}
+
+XclExpPassHash::~XclExpPassHash()
+{
+}
+
+void XclExpPassHash::WriteBody(XclExpStream& rStrm)
+{
+    rStrm << mnHash;
 }
 
 // ============================================================================
@@ -699,7 +718,31 @@ BOOL XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
     String  sText;
 
     if( rEntry.pStr )
+    {
         sText.Assign( *rEntry.pStr );
+        switch( rEntry.eOp )
+        {
+            case SC_CONTAINS:
+            case SC_DOES_NOT_CONTAIN:
+            {
+                sText.InsertAscii( "*" , 0 );
+                sText.AppendAscii( "*" );
+            }
+            break;
+            case SC_BEGINS_WITH:
+            case SC_DOES_NOT_BEGIN_WITH:
+                sText.AppendAscii( "*" );
+            break;
+            case SC_ENDS_WITH:
+            case SC_DOES_NOT_END_WITH:
+                sText.InsertAscii( "*" , 0 );
+            break;
+            default:
+            {
+                //nothing
+            }
+        }
+    }
 
     BOOL bLen = sText.Len() > 0;
 
@@ -759,6 +802,14 @@ BOOL XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
                     case SC_LESS_EQUAL:     nOper = EXC_AFOPER_LESSEQUAL;       break;
                     case SC_GREATER_EQUAL:  nOper = EXC_AFOPER_GREATEREQUAL;    break;
                     case SC_NOT_EQUAL:      nOper = EXC_AFOPER_NOTEQUAL;        break;
+                    case SC_CONTAINS:
+                    case SC_BEGINS_WITH:
+                    case SC_ENDS_WITH:
+                                            nOper = EXC_AFOPER_EQUAL;           break;
+                    case SC_DOES_NOT_CONTAIN:
+                    case SC_DOES_NOT_BEGIN_WITH:
+                    case SC_DOES_NOT_END_WITH:
+                                            nOper = EXC_AFOPER_NOTEQUAL;        break;
                     default:;
                 }
                 bConflict = !AddCondition( rEntry.eConnect, nType, nOper, fVal, pText );

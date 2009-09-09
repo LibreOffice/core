@@ -1051,8 +1051,8 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                                     aValue.Erase( 0, 1 );
                                     aValue.Erase( aValue.Len()-1, 1 );
                                     GetDocFunc().EnterMatrix( aSourceRange,
-                                            NULL, NULL, aValue, FALSE, FALSE,
-                                           formula::FormulaGrammar::GRAM_DEFAULT );
+                                        NULL, NULL, aValue, FALSE, FALSE,
+                                        EMPTY_STRING, formula::FormulaGrammar::GRAM_DEFAULT );
                                 }
                                 break;
                                 case MM_REFERENCE :     // do nothing

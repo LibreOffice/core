@@ -782,7 +782,8 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
                     DBG_ASSERT( !pAddNoteCell->HasNote(), "ScColumn::CopyFromClip - unexpected note at destination cell" );
                     bool bCloneCaption = (nInsFlag & IDF_NOCAPTIONS) == 0;
                     // #i52342# if caption is cloned, the note must be constructed with the destination document
-                    ScPostIt* pNewNote = ScNoteUtil::CloneNote( *pDocument, aDestPos, *pSourceNote, bCloneCaption );
+                    ScAddress aSourcePos( rColumn.nCol, rColumn.pItems[i].nRow, rColumn.nTab );
+                    ScPostIt* pNewNote = pSourceNote->Clone( aSourcePos, *pDocument, aDestPos, bCloneCaption );
                     pAddNoteCell->TakeNote( pNewNote );
                 }
             }
@@ -907,7 +908,8 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, USHORT nFlags, ScDocument& rDestD
         {
             bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == 0;
             // #i52342# if caption is cloned, the note must be constructed with the destination document
-            ScPostIt* pNewNote = ScNoteUtil::CloneNote( rDestDoc, rDestPos, *pNote, bCloneCaption );
+            ScAddress aOwnPos( nCol, pItems[nIndex].nRow, nTab );
+            ScPostIt* pNewNote = pNote->Clone( aOwnPos, rDestDoc, rDestPos, bCloneCaption );
             if (!pNew)
                 pNew = new ScNoteCell( pNewNote );
             else

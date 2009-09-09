@@ -64,12 +64,13 @@
 #include "patattr.hxx"
 #include "scmod.hxx"
 #include "inputopt.hxx"
+#include "compiler.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
 //  Delimiters zusaetzlich zu EditEngine-Default:
 
-const sal_Char __FAR_DATA ScEditUtil::pCalcDelimiters[] = "=();+-*/^&<>";
+const sal_Char __FAR_DATA ScEditUtil::pCalcDelimiters[] = "=()+-*/^&<>";
 
 
 //------------------------------------------------------------------------
@@ -79,6 +80,7 @@ String ScEditUtil::ModifyDelimiters( const String& rOld )
     String aRet = rOld;
     aRet.EraseAllChars( '_' );  // underscore is used in function argument names
     aRet.AppendAscii( RTL_CONSTASCII_STRINGPARAM( pCalcDelimiters ) );
+    aRet.Append(ScCompiler::GetNativeSymbol(ocSep)); // argument separator is localized.
     return aRet;
 }
 

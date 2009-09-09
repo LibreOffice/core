@@ -68,11 +68,14 @@
 #include "cell.hxx"
 #include "dociter.hxx"
 #include "docoptio.hxx"
-#include "formula/errorcodes.hxx"
+#include <formula/errorcodes.hxx>
 #include "parclass.hxx"
 #include "autonamecache.hxx"
 #include "externalrefmgr.hxx"
 #include "rangeutl.hxx"
+#include "convuno.hxx"
+#include "tokenuno.hxx"
+#include "formulaparserpool.hxx"
 
 using namespace formula;
 using namespace ::com::sun::star;
@@ -124,77 +127,6 @@ enum ScanState
 static const sal_Char* pInternal[ 5 ] = { "GAME", "SPEW", "TTT", "STARCALCTEAM", "ANTWORT" };
 
 using namespace ::com::sun::star::i18n;
-/////////////////////////////////////////////////////////////////////////
-
-short lcl_GetRetFormat( OpCode eOpCode )
-{
-    switch (eOpCode)
-    {
-        case ocEqual:
-        case ocNotEqual:
-        case ocLess:
-        case ocGreater:
-        case ocLessEqual:
-        case ocGreaterEqual:
-        case ocAnd:
-        case ocOr:
-        case ocNot:
-        case ocTrue:
-        case ocFalse:
-        case ocIsEmpty:
-        case ocIsString:
-        case ocIsNonString:
-        case ocIsLogical:
-        case ocIsRef:
-        case ocIsValue:
-        case ocIsFormula:
-        case ocIsNA:
-        case ocIsErr:
-        case ocIsError:
-        case ocIsEven:
-        case ocIsOdd:
-        case ocExact:
-            return NUMBERFORMAT_LOGICAL;
-        case ocGetActDate:
-        case ocGetDate:
-        case ocEasterSunday :
-            return NUMBERFORMAT_DATE;
-        case ocGetActTime:
-            return NUMBERFORMAT_DATETIME;
-        case ocGetTime:
-            return NUMBERFORMAT_TIME;
-        case ocNPV:
-        case ocBW:
-        case ocDIA:
-        case ocGDA:
-        case ocGDA2:
-        case ocVBD:
-        case ocLIA:
-        case ocRMZ:
-        case ocZW:
-        case ocZinsZ:
-        case ocKapz:
-        case ocKumZinsZ:
-        case ocKumKapZ:
-            return NUMBERFORMAT_CURRENCY;
-        case ocZins:
-        case ocIRR:
-        case ocMIRR:
-        case ocZGZ:
-        case ocEffektiv:
-        case ocNominal:
-        case ocPercentSign:
-            return NUMBERFORMAT_PERCENT;
-//      case ocSum:
-//      case ocSumSQ:
-//      case ocProduct:
-//      case ocAverage:
-//          return -1;
-        default:
-            return NUMBERFORMAT_NUMBER;
-    }
-    return NUMBERFORMAT_NUMBER;
-}
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -408,28 +340,36 @@ void ScCompiler::InitCharClassEnglish()
 
 void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
 {
-    DBG_ASSERT( eGrammar != FormulaGrammar::GRAM_UNSPECIFIED, "ScCompiler::SetGrammar: don't passFormulaGrammar::GRAM_UNSPECIFIED");
+    DBG_ASSERT( eGrammar != FormulaGrammar::GRAM_UNSPECIFIED, "ScCompiler::SetGrammar: don't pass FormulaGrammar::GRAM_UNSPECIFIED");
     if (eGrammar == GetGrammar())
         return;     // nothing to be done
 
-    FormulaGrammar::Grammar eMyGrammar = eGrammar;
-    const sal_Int32 nFormulaLanguage = FormulaGrammar::extractFormulaLanguage( eMyGrammar);
-    OpCodeMapPtr xMap( GetOpCodeMap( nFormulaLanguage));
-    DBG_ASSERT( xMap, "ScCompiler::SetGrammar: unknown formula language");
-    if (!xMap)
+    if( eGrammar == FormulaGrammar::GRAM_EXTERNAL )
     {
-        xMap = GetOpCodeMap( ::com::sun::star::sheet::FormulaLanguage::NATIVE);
-        eMyGrammar = xMap->getGrammar();
+        meGrammar = eGrammar;
+        mxSymbols = GetOpCodeMap( ::com::sun::star::sheet::FormulaLanguage::NATIVE);
     }
+    else
+    {
+        FormulaGrammar::Grammar eMyGrammar = eGrammar;
+        const sal_Int32 nFormulaLanguage = FormulaGrammar::extractFormulaLanguage( eMyGrammar);
+        OpCodeMapPtr xMap = GetOpCodeMap( nFormulaLanguage);
+        DBG_ASSERT( xMap, "ScCompiler::SetGrammar: unknown formula language");
+        if (!xMap)
+        {
+            xMap = GetOpCodeMap( ::com::sun::star::sheet::FormulaLanguage::NATIVE);
+            eMyGrammar = xMap->getGrammar();
+        }
 
-    // Save old grammar for call to SetGrammarAndRefConvention().
-    FormulaGrammar::Grammar eOldGrammar = GetGrammar();
-    // This also sets the grammar associated with the map!
-    SetFormulaLanguage( xMap);
+        // Save old grammar for call to SetGrammarAndRefConvention().
+        FormulaGrammar::Grammar eOldGrammar = GetGrammar();
+        // This also sets the grammar associated with the map!
+        SetFormulaLanguage( xMap);
 
-    // Override if necessary.
-    if (eMyGrammar != GetGrammar())
-        SetGrammarAndRefConvention( eMyGrammar, eOldGrammar);
+        // Override if necessary.
+        if (eMyGrammar != GetGrammar())
+            SetGrammarAndRefConvention( eMyGrammar, eOldGrammar);
+    }
 }
 
 
@@ -1811,9 +1751,11 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArra
         aPos( rPos ),
         pCharClass( ScGlobal::pCharClass ),
         mnPredetectedReference(0),
+        mnRangeOpPosInSymbol(-1),
         pConv( pConvOOO_A1 ),
         mbCloseBrackets( true ),
-        mbExtendedErrorDetection( false )
+        mbExtendedErrorDetection( false ),
+        mbRewind( false )
 {
     nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
 }
@@ -1824,9 +1766,11 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)
         aPos( rPos ),
         pCharClass( ScGlobal::pCharClass ),
         mnPredetectedReference(0),
+        mnRangeOpPosInSymbol(-1),
         pConv( pConvOOO_A1 ),
         mbCloseBrackets( true ),
-        mbExtendedErrorDetection( false )
+        mbExtendedErrorDetection( false ),
+        mbRewind( false )
 {
     nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
 }
@@ -1962,7 +1906,7 @@ xub_StrLen ScCompiler::NextSymbol(bool bInArray)
     sal_Unicode c = *pSrc;
     sal_Unicode cLast = 0;
     bool bQuote = false;
-    bool bRangeOp = false;
+    mnRangeOpPosInSymbol = -1;
     ScanState eState = ssGetChar;
     xub_StrLen nSpaces = 0;
     sal_Unicode cSep = mxSymbols->getSymbol( ocSep).GetChar(0);
@@ -2110,11 +2054,11 @@ Label_MaskStateMachine:
                     else
                         *pSym++ = c;
                 }
-                else if (c == ':' && !bRangeOp)
+                else if (c == ':' && mnRangeOpPosInSymbol < 0)
                 {
                     // One range operator may form Sheet1.A:A, which we need to
                     // pass as one entity to IsReference().
-                    bRangeOp = true;
+                    mnRangeOpPosInSymbol = pSym - &cSymbol[0];
                     if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
                     {
                         SetError(errStringOverflow);
@@ -2409,7 +2353,7 @@ Label_MaskStateMachine:
     {
         nSrcPos = sal::static_int_cast<xub_StrLen>( nSrcPos + nSpaces );
         String aSymbol;
-        bRangeOp = false;
+        mnRangeOpPosInSymbol = -1;
         USHORT nErr = 0;
         do
         {
@@ -2438,9 +2382,9 @@ Label_MaskStateMachine:
                     bi18n = (c == cSheetSep || c == SC_COMPILER_FILE_TAB_SEP);
                 }
                 // One range operator restarts parsing for second reference.
-                if (c == ':' && !bRangeOp)
+                if (c == ':' && mnRangeOpPosInSymbol < 0)
                 {
-                    bRangeOp = true;
+                    mnRangeOpPosInSymbol = aSymbol.Len();
                     bi18n = true;
                 }
                 if ( bi18n )
@@ -2459,6 +2403,14 @@ Label_MaskStateMachine:
     {
         nSrcPos = sal::static_int_cast<xub_StrLen>( pSrc - pStart );
         *pSym = 0;
+    }
+    if (mnRangeOpPosInSymbol >= 0 && mnRangeOpPosInSymbol == (pSym-1) - &cSymbol[0])
+    {
+        // This is a trailing range operator, which is nonsense. Will be caught
+        // in next round.
+        mnRangeOpPosInSymbol = -1;
+        *--pSym = 0;
+        --nSrcPos;
     }
     if ( bAutoCorrect )
         aCorrectedSymbol = cSymbol;
@@ -2835,8 +2787,21 @@ BOOL ScCompiler::IsReference( const String& rName )
     // Though the range operator is handled explicitly, when encountering
     // something like Sheet1.A:A we will have to treat it as one entity if it
     // doesn't pass as single cell reference.
-    if (ScGlobal::FindUnquoted( rName, ':') != STRING_NOTFOUND)
-        return IsDoubleReference( rName);
+    if (mnRangeOpPosInSymbol > 0)   // ":foo" would be nonsense
+    {
+        if (IsDoubleReference( rName))
+            return true;
+        // Now try with a symbol up to the range operator, rewind source
+        // position.
+        sal_Int32 nLen = mnRangeOpPosInSymbol;
+        while (cSymbol[++nLen])
+            ;
+        cSymbol[mnRangeOpPosInSymbol] = 0;
+        nSrcPos -= static_cast<xub_StrLen>(nLen - mnRangeOpPosInSymbol);
+        mnRangeOpPosInSymbol = -1;
+        mbRewind = true;
+        return true;    // end all checks
+    }
     return false;
 }
 
@@ -3551,54 +3516,65 @@ BOOL ScCompiler::NextNewToken( bool bInArray )
     // #42016# Italian ARCTAN.2 resulted in #REF! => IsOpcode() before
     // IsReference().
 
-    const String aOrg( cSymbol );
-
-    if (bAsciiNonAlnum && IsOpCode( aOrg, bInArray ))
-        return true;
-
     String aUpper;
-    bool bAsciiUpper = false;
-    if (bMayBeFuncName)
+
+    do
     {
-        bAsciiUpper = lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
-        if (IsOpCode( aUpper, bInArray ))
+        mbRewind = false;
+        const String aOrg( cSymbol );
+
+        if (bAsciiNonAlnum && IsOpCode( aOrg, bInArray ))
             return true;
-    }
 
-    // Column 'DM' ("Deutsche Mark", German currency) couldn't be
-    // referred => IsReference() before IsValue().
-    // Preserve case of file names in external references.
-    if (IsReference( aOrg ))
-        return true;
+        aUpper.Erase();
+        bool bAsciiUpper = false;
+        if (bMayBeFuncName)
+        {
+            bAsciiUpper = lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
+            if (IsOpCode( aUpper, bInArray ))
+                return true;
+        }
 
-    if (!aUpper.Len())
-        bAsciiUpper = lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
+        // Column 'DM' ("Deutsche Mark", German currency) couldn't be
+        // referred => IsReference() before IsValue().
+        // Preserve case of file names in external references.
+        if (IsReference( aOrg ))
+        {
+            if (mbRewind)   // Range operator, but no direct reference.
+                continue;   // do; up to range operator.
+            return true;
+        }
 
-    // IsBoolean() before IsValue() to catch inline bools without the kludge
-    //    for inline arrays.
-    if (bAllowBooleans && IsBoolean( aUpper ))
-        return true;
+        if (!aUpper.Len())
+            bAsciiUpper = lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
 
-    if (IsValue( aUpper ))
-        return true;
+        // IsBoolean() before IsValue() to catch inline bools without the kludge
+        //    for inline arrays.
+        if (bAllowBooleans && IsBoolean( aUpper ))
+            return true;
 
-    // User defined names and such do need i18n upper also in ODF.
-    if (bAsciiUpper)
-        aUpper = ScGlobal::pCharClass->upper( aOrg );
+        if (IsValue( aUpper ))
+            return true;
 
-    if (IsNamedRange( aUpper ))
-        return true;
-    // Preserve case of file names in external references.
-    if (IsExternalNamedRange( aOrg ))
-        return true;
-    if (IsDBRange( aUpper ))
-        return true;
-    if (IsColRowName( aUpper ))
-        return true;
-    if (bMayBeFuncName && IsMacro( aUpper ))
-        return true;
-    if (bMayBeFuncName && IsOpCode2( aUpper ))
-        return true;
+        // User defined names and such do need i18n upper also in ODF.
+        if (bAsciiUpper)
+            aUpper = ScGlobal::pCharClass->upper( aOrg );
+
+        if (IsNamedRange( aUpper ))
+            return true;
+        // Preserve case of file names in external references.
+        if (IsExternalNamedRange( aOrg ))
+            return true;
+        if (IsDBRange( aUpper ))
+            return true;
+        if (IsColRowName( aUpper ))
+            return true;
+        if (bMayBeFuncName && IsMacro( aUpper ))
+            return true;
+        if (bMayBeFuncName && IsOpCode2( aUpper ))
+            return true;
+
+    } while (mbRewind);
 
     if ( mbExtendedErrorDetection )
     {
@@ -3620,12 +3596,31 @@ BOOL ScCompiler::NextNewToken( bool bInArray )
     return true;
 }
 
+void ScCompiler::CreateStringFromXMLTokenArray( String& rFormula, String& rFormulaNmsp )
+{
+    bool bExternal = GetGrammar() == FormulaGrammar::GRAM_EXTERNAL;
+    USHORT nExpectedCount = bExternal ? 2 : 1;
+    DBG_ASSERT( pArr->GetLen() == nExpectedCount, "ScCompiler::CreateStringFromXMLTokenArray - wrong number of tokens" );
+    if( pArr->GetLen() == nExpectedCount )
+    {
+        FormulaToken** ppTokens = pArr->GetArray();
+        // string tokens expected, GetString() will assert if token type is wrong
+        rFormula = ppTokens[ 0 ]->GetString();
+        if( bExternal )
+            rFormulaNmsp = ppTokens[ 1 ]->GetString();
+    }
+}
+
 ScTokenArray* ScCompiler::CompileString( const String& rFormula )
 {
 #if 0
     fprintf( stderr, "CompileString '%s'\n",
              rtl::OUStringToOString( rFormula, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
+
+    OSL_ENSURE( meGrammar != FormulaGrammar::GRAM_EXTERNAL, "ScCompiler::CompileString - unexpected grammar GRAM_EXTERNAL" );
+    if( meGrammar == FormulaGrammar::GRAM_EXTERNAL )
+        SetGrammar( FormulaGrammar::GRAM_PODF );
 
     ScTokenArray aArr;
     pArr = &aArr;
@@ -3829,6 +3824,34 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
 }
 
 
+ScTokenArray* ScCompiler::CompileString( const String& rFormula, const String& rFormulaNmsp )
+{
+    DBG_ASSERT( (GetGrammar() == FormulaGrammar::GRAM_EXTERNAL) || (rFormulaNmsp.Len() == 0),
+        "ScCompiler::CompileString - unexpected formula namespace for internal grammar" );
+    if( GetGrammar() == FormulaGrammar::GRAM_EXTERNAL ) try
+    {
+        ScFormulaParserPool& rParserPool = pDoc->GetFormulaParserPool();
+        uno::Reference< sheet::XFormulaParser > xParser( rParserPool.getFormulaParser( rFormulaNmsp ), uno::UNO_SET_THROW );
+        table::CellAddress aReferencePos;
+        ScUnoConversion::FillApiAddress( aReferencePos, aPos );
+        uno::Sequence< sheet::FormulaToken > aTokenSeq = xParser->parseFormula( rFormula, aReferencePos );
+        ScTokenArray aTokenArray;
+        if( ScTokenConversion::ConvertToTokenArray( *pDoc, aTokenArray, aTokenSeq ) )
+        {
+            // remember pArr, in case a subsequent CompileTokenArray() is executed.
+            ScTokenArray* pNew = new ScTokenArray( aTokenArray );
+            pArr = pNew;
+            return pNew;
+        }
+    }
+    catch( uno::Exception& )
+    {
+    }
+    // no success - fallback to some internal grammar and hope the best
+    return CompileString( rFormula );
+}
+
+
 BOOL ScCompiler::HandleRange()
 {
     ScRangeData* pRangeData = pDoc->GetRangeName()->FindIndex( pToken->GetIndex() );
@@ -3865,7 +3888,7 @@ BOOL ScCompiler::HandleRange()
             if( pRangeData->HasReferences() )
             {
                 SetRelNameReference();
-                MoveRelWrap();
+                MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
             }
             pNew->Reset();
             if ( bAddPair )
@@ -3917,7 +3940,7 @@ BOOL ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
             if (pNew->GetNextReference() != NULL)
             {
                 SetRelNameReference();
-                MoveRelWrap();
+                MoveRelWrap(MAXCOL, MAXROW);
             }
             pNew->Reset();
             return GetToken();
@@ -4012,33 +4035,33 @@ void ScCompiler::SetRelNameReference()
 
 // Wrap-adjust relative references of a RangeName to current position,
 // don't call for other token arrays!
-void ScCompiler::MoveRelWrap()
+void ScCompiler::MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow )
 {
     pArr->Reset();
     for( ScToken* t = static_cast<ScToken*>(pArr->GetNextReference()); t;
                   t = static_cast<ScToken*>(pArr->GetNextReference()) )
     {
         if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
-            ScRefUpdate::MoveRelWrap( pDoc, aPos, SingleDoubleRefModifier( t->GetSingleRef() ).Ref() );
+            ScRefUpdate::MoveRelWrap( pDoc, aPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( t->GetSingleRef() ).Ref() );
         else
-            ScRefUpdate::MoveRelWrap( pDoc, aPos, t->GetDoubleRef() );
+            ScRefUpdate::MoveRelWrap( pDoc, aPos, nMaxCol, nMaxRow, t->GetDoubleRef() );
     }
 }
 
 // static
 // Wrap-adjust relative references of a RangeName to current position,
 // don't call for other token arrays!
-void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc,
-            const ScAddress& rPos )
+void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,
+                              SCCOL nMaxCol, SCROW nMaxRow )
 {
     rArr.Reset();
     for( ScToken* t = static_cast<ScToken*>(rArr.GetNextReference()); t;
                   t = static_cast<ScToken*>(rArr.GetNextReference()) )
     {
         if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
-            ScRefUpdate::MoveRelWrap( pDoc, rPos, SingleDoubleRefModifier( t->GetSingleRef() ).Ref() );
+            ScRefUpdate::MoveRelWrap( pDoc, rPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( t->GetSingleRef() ).Ref() );
         else
-            ScRefUpdate::MoveRelWrap( pDoc, rPos, t->GetDoubleRef() );
+            ScRefUpdate::MoveRelWrap( pDoc, rPos, nMaxCol, nMaxRow, t->GetDoubleRef() );
     }
 }
 
@@ -4213,7 +4236,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                     SingleDoubleRefModifier aMod( rRef );
                     if ( rRef.IsRelName() )
                     {
-                        ScRefUpdate::MoveRelWrap( pDoc, aPos, aMod.Ref() );
+                        ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, aMod.Ref() );
                         rChanged = TRUE;
                     }
                     else
@@ -4243,7 +4266,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                     SCTAB nTabs = rRef.Ref2.nTab - rRef.Ref1.nTab;
                     if ( rRef.Ref1.IsRelName() || rRef.Ref2.IsRelName() )
                     {
-                        ScRefUpdate::MoveRelWrap( pDoc, aPos, rRef );
+                        ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, rRef );
                         rChanged = TRUE;
                     }
                     else
@@ -5058,6 +5081,11 @@ BOOL ScCompiler::EnQuote( String& rStr )
     rStr.Insert( '\'', 0 );
     rStr += '\'';
     return TRUE;
+}
+
+sal_Unicode ScCompiler::GetNativeAddressSymbol( Convention::SpecialSymbolType eType ) const
+{
+    return pConv->getSpecialSymbol(eType);
 }
 
 void ScCompiler::fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const

@@ -468,7 +468,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     {
         //the view has become dirty, we should repaint it if we have a window
         if( m_pChartWindow )
-            m_pChartWindow->Invalidate();
+            m_pChartWindow->ForceInvalidate();
     }
     else if( rEvent.NewMode.equals(C2U("invalid")) )
     {
@@ -478,8 +478,11 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
         if( m_pDrawViewWrapper && m_pDrawViewWrapper->IsTextEdit() )
             this->EndTextEdit();
         if( m_pDrawViewWrapper )
+        {
             m_pDrawViewWrapper->UnmarkAll();
             //m_pDrawViewWrapper->hideMarkHandles(); todo??
+            m_pDrawViewWrapper->HideSdrPage();
+        }
     }
     else
     {

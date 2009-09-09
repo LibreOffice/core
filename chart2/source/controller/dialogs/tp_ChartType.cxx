@@ -862,6 +862,7 @@ ChartTypeTabPage::ChartTypeTabPage( Window* pParent
     m_aChartTypeDialogControllerList.push_back(new AreaChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new LineChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new XYChartDialogController() );
+    m_aChartTypeDialogControllerList.push_back(new BubbleChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new NetChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new StockChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new CombiColumnLineChartDialogController() );
@@ -994,7 +995,8 @@ IMPL_LINK( ChartTypeTabPage, SelectMainTypeHdl, void *, EMPTYARG )
 
         aParameter.bSortByXValues = lcl_getSortByXValues( m_xChartModel );
         this->fillAllControls( aParameter );
-        m_pCurrentMainType->fillExtraControls(aParameter,m_xChartModel);
+        uno::Reference< beans::XPropertySet > xTemplateProps( this->getCurrentTemplate(), uno::UNO_QUERY );
+        m_pCurrentMainType->fillExtraControls(aParameter,m_xChartModel,xTemplateProps);
     }
     return 0;
 }

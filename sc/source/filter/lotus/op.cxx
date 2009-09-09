@@ -171,20 +171,20 @@ void OP_Label( SvStream& r, UINT16 n )
 }
 
 
-void OP_Text( SvStream& r, UINT16 n )        // WK3
-{
-    UINT16          nRow;
-    BYTE            nCol, nTab;
-    sal_Char        pText[ 256 ];
-
-    r >> nRow >> nTab >> nCol;
-    n -= 4;
-
-    r.Read( pText, n );
-    pText[ n ] = 0;   // zur Sicherheit Nullterminator anhaengen
-
-    PutFormString( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), static_cast<SCTAB> (nTab), pText );
-}
+//UNUSED2009-05 void OP_Text( SvStream& r, UINT16 n )        // WK3
+//UNUSED2009-05 {
+//UNUSED2009-05     UINT16          nRow;
+//UNUSED2009-05     BYTE            nCol, nTab;
+//UNUSED2009-05     sal_Char        pText[ 256 ];
+//UNUSED2009-05
+//UNUSED2009-05     r >> nRow >> nTab >> nCol;
+//UNUSED2009-05     n -= 4;
+//UNUSED2009-05
+//UNUSED2009-05     r.Read( pText, n );
+//UNUSED2009-05     pText[ n ] = 0;   // zur Sicherheit Nullterminator anhaengen
+//UNUSED2009-05
+//UNUSED2009-05     PutFormString( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), static_cast<SCTAB> (nTab), pText );
+//UNUSED2009-05 }
 
 
 void OP_Formula( SvStream& r, UINT16 /*n*/ )
@@ -466,7 +466,7 @@ void OP_Note123( SvStream& r, UINT16 n)
     delete [] pText;
 
     ScAddress aPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab) );
-    ScNoteUtil::CreateNoteFromString( *pDoc, aPos, aNoteText, false );
+    ScNoteUtil::CreateNoteFromString( *pDoc, aPos, aNoteText, false, false );
 }
 
 void OP_HorAlign123( BYTE nAlignPattern, SfxItemSet& rPatternItemSet )

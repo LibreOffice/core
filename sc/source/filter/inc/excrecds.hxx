@@ -149,7 +149,6 @@ protected:
 
 public:
     inline                  ExcBoolRecord( const BOOL bDefault ) : bVal( bDefault ) {}
-                            ExcBoolRecord( SfxItemSet*, USHORT nWhich, BOOL bDefault );
 
     virtual sal_Size        GetLen( void ) const;
 };
@@ -246,10 +245,23 @@ class XclExpWindowProtection : public   XclExpBoolRecord
 };
 
 // EXC_ID_PROTECT  Document Protection
-class XclExpDocProtection : public  XclExpBoolRecord
+class XclExpProtection : public XclExpBoolRecord
 {
     public:
-        XclExpDocProtection(bool bValue);
+        XclExpProtection(bool bValue);
+};
+
+class XclExpPassHash : public XclExpRecord
+{
+public:
+    XclExpPassHash(const ::com::sun::star::uno::Sequence<sal_Int8>& aHash);
+    virtual ~XclExpPassHash();
+
+private:
+    virtual void    WriteBody(XclExpStream& rStrm);
+
+private:
+    sal_uInt16  mnHash;
 };
 
 

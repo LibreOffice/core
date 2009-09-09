@@ -185,6 +185,7 @@ long lcl_LineTotal(const SvxBorderLine* pLine)
 
 void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
 {
+    pDocShell->UpdatePendingRowHeights( nPrintTab );
     pDoc = pDocShell->GetDocument();
 
     SfxPrinter* pDocPrinter = pDoc->GetPrinter();   // auch fuer Preview den Drucker nehmen

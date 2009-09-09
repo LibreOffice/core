@@ -106,7 +106,11 @@ sal_Bool ChartTypeHelper::isSupportingStatisticProperties( const uno::Reference<
             return sal_False;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
             return sal_False;
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
+            return sal_False;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
+            return sal_False;
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) ) //todo: BubbleChart support error bars and trend lines
             return sal_False;
     }
     return sal_True;
@@ -195,6 +199,8 @@ sal_Bool ChartTypeHelper::isSupportingSecondaryAxis( const uno::Reference< XChar
             return sal_False;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
             return sal_False;
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
+            return sal_False;
     }
     return sal_True;
 }
@@ -281,6 +287,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE)
         )
     {
         aRet.realloc(5);
@@ -332,13 +339,20 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
     {
-        aRet.realloc(5);
+        aRet.realloc(6);
         sal_Int32* pSeq = aRet.getArray();
+        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::OUTSIDE;
         *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::TOP;
         *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::BOTTOM;
         *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::LEFT;
         *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::RIGHT;
         *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::CENTER;
+    }
+    else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
+    {
+        aRet.realloc(1);
+        sal_Int32* pSeq = aRet.getArray();
+        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::OUTSIDE;
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
     {
@@ -395,6 +409,8 @@ bool ChartTypeHelper::isSupportingAxisPositioning( const uno::Reference< chart2:
     {
         rtl::OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
+            return false;
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
             return false;
     }
     if( nDimensionCount==3 )
@@ -509,7 +525,8 @@ sal_Int32 ChartTypeHelper::getAxisType( const uno::Reference<
         return AxisType::REALNUMBER;
     if(0==nDimensionIndex)//x-axis
     {
-        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER)
+         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
             return AxisType::REALNUMBER;
         return AxisType::CATEGORY;
     }
@@ -558,7 +575,8 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
 
     rtl::OUString aChartTypeName = xChartType->getChartType();
     if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) ||
-        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) ||
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
     {
         aRet.realloc( 2 );
         sal_Int32* pSeq = aRet.getArray();
@@ -574,7 +592,8 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
             *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::CONTINUE;
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE) ||
-        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET))
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) ||
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
     {
         aRet.realloc( bStacked ? 2 : 3 );
         sal_Int32* pSeq = aRet.getArray();
@@ -602,6 +621,65 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
     }
 
     return aRet;
+}
+
+bool ChartTypeHelper::isSeriesInFrontOfAxisLine( const uno::Reference< XChartType >& xChartType )
+{
+    if( xChartType.is() )
+    {
+        rtl::OUString aChartTypeName = xChartType->getChartType();
+        if( aChartTypeName.match( CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET ) )
+            return false;
+    }
+    return true;
+}
+
+rtl::OUString ChartTypeHelper::getRoleOfSequenceForYAxisNumberFormatDetection( const uno::Reference< XChartType >& xChartType )
+{
+    rtl::OUString aRet( C2U( "values-y" ) );
+    if( !xChartType.is() )
+        return aRet;
+    rtl::OUString aChartTypeName = xChartType->getChartType();
+    if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
+        aRet = xChartType->getRoleOfSequenceForSeriesLabel();
+    return aRet;
+}
+
+rtl::OUString ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( const uno::Reference< XChartType >& xChartType )
+{
+    rtl::OUString aRet( C2U( "values-y" ) );
+    if( !xChartType.is() )
+        return aRet;
+    rtl::OUString aChartTypeName = xChartType->getChartType();
+    if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
+        aRet = xChartType->getRoleOfSequenceForSeriesLabel();
+    return aRet;
+}
+
+bool ChartTypeHelper::shouldLabelNumberFormatKeyBeDetectedFromYAxis( const uno::Reference< XChartType >& xChartType )
+{
+    bool bRet = true;
+    rtl::OUString aChartTypeName = xChartType->getChartType();
+    if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
+        bRet = false;
+    return bRet;
+}
+
+bool ChartTypeHelper::isSupportingOnlyDeepStackingFor3D( const uno::Reference< XChartType >& xChartType )
+{
+    bool bRet = false;
+    if( !xChartType.is() )
+        return bRet;
+
+    rtl::OUString aChartTypeName = xChartType->getChartType();
+    if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE) ||
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) ||
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA) )
+    {
+        bRet = true;
+    }
+    return bRet;
 }
 
 //.............................................................................

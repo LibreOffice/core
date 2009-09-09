@@ -82,7 +82,7 @@ SHL1STDLIBS=	$(CHARTTOOLS)		\
                 $(SALLIB)			\
                 $(SVLLIB)			\
                 $(SVTOOLLIB)		\
-                $(SVXLIB)			\
+                $(SVXCORELIB)			\
                 $(TOOLSLIB) 		\
                 $(UNOTOOLSLIB)      \
                 $(BASEGFXLIB) 		\

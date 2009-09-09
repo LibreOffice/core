@@ -109,7 +109,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
 
     Sequence< Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
 
-    rtl::OUString aX, aY, aY_Min, aY_Max, aY_First, aY_Last;
+    rtl::OUString aX, aY, aY_Min, aY_Max, aY_First, aY_Last, a_Size;
     double fValue = 0;
 
     uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( xChartModel, uno::UNO_QUERY );
@@ -170,6 +170,12 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
                     sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
                     aY_Last = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
                 }
+                else if( aRole.equals(C2U("values-size")) )
+                {
+                    aData[nPointIndex]>>= fValue;
+                    sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
+                    a_Size = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
+                }
             }
             catch( uno::Exception& e )
             {
@@ -201,6 +207,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
     lcl_addText( aRet, aSeparator, aY_Min );
     lcl_addText( aRet, aSeparator, aY_Max );
     lcl_addText( aRet, aSeparator, aY_Last );
+    lcl_addText( aRet, aSeparator, a_Size );
 
     return aRet;
 }

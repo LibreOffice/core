@@ -59,13 +59,13 @@ ScAddress::Details::Details ( const ScDocument* pDoc,
 {
 }
 
-void ScAddress::Details::SetPos ( const ScDocument* pDoc,
-                                  const ScAddress & rAddr )
-{
-    nRow  = rAddr.Row();
-    nCol  = rAddr.Col();
-    eConv = pDoc->GetAddressConvention();
-}
+//UNUSED2009-05 void ScAddress::Details::SetPos ( const ScDocument* pDoc,
+//UNUSED2009-05                                   const ScAddress & rAddr )
+//UNUSED2009-05 {
+//UNUSED2009-05     nRow  = rAddr.Row();
+//UNUSED2009-05     nCol  = rAddr.Col();
+//UNUSED2009-05     eConv = pDoc->GetAddressConvention();
+//UNUSED2009-05 }
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -1126,39 +1126,48 @@ lcl_ScAddress_Parse ( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAddr,
 
 bool ConvertSingleRef( ScDocument* pDoc, const String& rRefString,
                        SCTAB nDefTab, ScRefAddress& rRefAddress,
-                       const ScAddress::Details& rDetails )
+                       const ScAddress::Details& rDetails,
+                       ScAddress::ExternalInfo* pExtInfo /* = NULL */ )
 {
-    ScAddress aAddr( 0, 0, nDefTab );
-    USHORT nRes = lcl_ScAddress_Parse( rRefString.GetBuffer(), pDoc, aAddr, rDetails, NULL );
-    if( nRes & SCA_VALID )
+    bool bRet = false;
+    if (pExtInfo || (ScGlobal::FindUnquoted( rRefString, SC_COMPILER_FILE_TAB_SEP) == STRING_NOTFOUND))
     {
-        rRefAddress.Set( aAddr,
-                ((nRes & SCA_COL_ABSOLUTE) == 0),
-                ((nRes & SCA_ROW_ABSOLUTE) == 0),
-                ((nRes & SCA_TAB_ABSOLUTE) == 0));
-        return TRUE;
+        ScAddress aAddr( 0, 0, nDefTab );
+        USHORT nRes = aAddr.Parse( rRefString, pDoc, rDetails, pExtInfo);
+        if ( nRes & SCA_VALID )
+        {
+            rRefAddress.Set( aAddr,
+                    ((nRes & SCA_COL_ABSOLUTE) == 0),
+                    ((nRes & SCA_ROW_ABSOLUTE) == 0),
+                    ((nRes & SCA_TAB_ABSOLUTE) == 0));
+            bRet = true;
+        }
     }
-    else
-        return FALSE;
+    return bRet;
 }
 
 
 bool ConvertDoubleRef( ScDocument* pDoc, const String& rRefString, SCTAB nDefTab,
                        ScRefAddress& rStartRefAddress, ScRefAddress& rEndRefAddress,
-                       const ScAddress::Details& rDetails )
+                       const ScAddress::Details& rDetails,
+                       ScAddress::ExternalInfo* pExtInfo /* = NULL */ )
 {
-    BOOL bRet = FALSE;
-    // FIXME : This will break for Lotus
-    xub_StrLen nPos = rRefString.Search(':');
-    if (nPos != STRING_NOTFOUND)
+    bool bRet = false;
+    if (pExtInfo || (ScGlobal::FindUnquoted( rRefString, SC_COMPILER_FILE_TAB_SEP) == STRING_NOTFOUND))
     {
-        String aTmp( rRefString );
-        sal_Unicode* p = aTmp.GetBufferAccess();
-        p[ nPos ] = 0;
-        if( ConvertSingleRef( pDoc, p, nDefTab, rStartRefAddress, rDetails ) )
+        ScRange aRange( ScAddress( 0, 0, nDefTab));
+        USHORT nRes = aRange.Parse( rRefString, pDoc, rDetails, pExtInfo);
+        if ( nRes & SCA_VALID )
         {
-            nDefTab = rStartRefAddress.Tab();
-            bRet = ConvertSingleRef( pDoc, p + nPos + 1, nDefTab, rEndRefAddress, rDetails );
+            rStartRefAddress.Set( aRange.aStart,
+                    ((nRes & SCA_COL_ABSOLUTE) == 0),
+                    ((nRes & SCA_ROW_ABSOLUTE) == 0),
+                    ((nRes & SCA_TAB_ABSOLUTE) == 0));
+            rEndRefAddress.Set( aRange.aEnd,
+                    ((nRes & SCA_COL2_ABSOLUTE) == 0),
+                    ((nRes & SCA_ROW2_ABSOLUTE) == 0),
+                    ((nRes & SCA_TAB2_ABSOLUTE) == 0));
+            bRet = true;
         }
     }
     return bRet;

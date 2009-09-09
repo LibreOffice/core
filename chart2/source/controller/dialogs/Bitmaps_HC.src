@@ -49,6 +49,11 @@ Image IMG_TYPE_LINE_HC
     ImageBitmap = Bitmap { File = "typepointline_16.png" ; };
     MaskColor = SC_HC_MASKCOLOR;
 };
+Image IMG_TYPE_XY_HC
+{
+    ImageBitmap = Bitmap { File = "typexy_16.png" ; };
+    MaskColor = SC_HC_MASKCOLOR;
+};
 Image IMG_TYPE_AREA_HC
 {
     ImageBitmap = Bitmap { File = "typearea_16.png" ; };
@@ -68,6 +73,15 @@ Image IMG_TYPE_COLUMN_LINE_HC
 {
     ImageBitmap = Bitmap { File = "typecolumnline_16.png" ; };
     MaskColor = SC_HC_MASKCOLOR;
+};
+Image IMG_TYPE_BUBBLE_HC
+{
+    ImageBitmap = Bitmap { File = "typebubble_16.png" ; };
+    MaskColor = SC_HC_MASKCOLOR;
+};
+Bitmap BMP_BUBBLE_1_HC
+{
+    File = "bubble_52x60_h.png" ;
 };
 Bitmap BMP_AREAS_2D_HC
 {
@@ -345,13 +359,13 @@ Bitmap BMP_NET_LINESYMB_STACK_HC
 {
     File = "netlinepointstack_52x60_h.png" ;
 };
-Bitmap BMP_NET_FILLED_HC
+Bitmap BMP_NET_FILL_HC
 {
-    File = "net_52x60_h.png" ;
+    File = "netfill_52x60_h.png" ;
 };
-Bitmap BMP_NET_FILLED_STACKED_HC
+Bitmap BMP_NET_FILL_STACK_HC
 {
-    File = "netstack_52x60_h.png" ;
+    File = "netstackfill_52x60_h.png" ;
 };
 //---------------------
 Bitmap BMP_PYRAMIDQ_3D_1_HC

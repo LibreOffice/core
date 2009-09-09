@@ -119,14 +119,14 @@
 #include "drwlayer.hxx"
 #include "attrib.hxx"
 #include "validat.hxx"
+#include "tabprotection.hxx"
+#include "postit.hxx"
 
-// #114409#
-#include <vcl/salbtype.hxx>     // FRound
 #include "drawview.hxx"
 #include <svx/sdrpagewindow.hxx>
-#include <svx/sdrpaintwindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/sdr/overlay/overlayselection.hxx>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -352,8 +352,7 @@ void lcl_UnLockComment( ScDrawView* pView, SdrPageView* pPV, SdrModel* pDrDoc, c
     }
 }
 
-//==================================================================
-
+// ---------------------------------------------------------------------------
 //  WB_DIALOGCONTROL noetig fuer UNO-Controls
 ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhichPos )
 :           Window( pParent, WB_CLIPCHILDREN | WB_DIALOGCONTROL ),
@@ -376,9 +375,6 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             bEEMouse( FALSE ),
             nMouseStatus( SC_GM_NONE ),
             nNestedButtonState( SC_NESTEDBUTTON_NONE ),
-#if OLD_PIVOT_IMPLEMENTATION
-            bPivotMouse( FALSE ),
-#endif
             bDPMouse( FALSE ),
             bRFMouse( FALSE ),
             nPagebreakMouse( SC_PD_NONE ),
@@ -1837,15 +1833,6 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         return;
     }
 
-#if OLD_PIVOT_IMPLEMENTATION
-    if (bPivotMouse)
-    {
-        PivotMouseButtonUp( rMEvt );
-        bPivotMouse = FALSE;
-        return;
-    }
-#endif
-
     if (bDPMouse)
     {
         DPMouseButtonUp( rMEvt );       // resets bDPMouse
@@ -2027,8 +2014,9 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         Point aPos = rMEvt.GetPosPixel();
         SCsCOL nPosX;
         SCsROW nPosY;
+        SCTAB nTab = pViewData->GetTabNo();
         pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
-        ScDPObject* pDPObj  = pDoc->GetDPAtCursor( nPosX, nPosY, pViewData->GetTabNo() );
+        ScDPObject* pDPObj  = pDoc->GetDPAtCursor( nPosX, nPosY, nTab );
         if ( pDPObj && pDPObj->GetSaveData()->GetDrillDown() )
         {
             ScAddress aCellPos( nPosX, nPosY, pViewData->GetTabNo() );
@@ -2070,16 +2058,34 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             return;
         }
 
-        //  edit cell contents
-        pViewData->GetViewShell()->UpdateInputHandler();
-        pScMod->SetInputMode( SC_INPUT_TABLE );
-        if (pViewData->HasEditView(eWhich))
+        // Check for cell protection attribute.
+        ScTableProtection* pProtect = pDoc->GetTabProtection( nTab );
+        bool bEditAllowed = true;
+        if ( pProtect && pProtect->isProtected() )
         {
-            //  Text-Cursor gleich an die geklickte Stelle setzen
-            EditView* pEditView = pViewData->GetEditView( eWhich );
-            MouseEvent aEditEvt( rMEvt.GetPosPixel(), 1, MOUSE_SYNTHETIC, MOUSE_LEFT, 0 );
-            pEditView->MouseButtonDown( aEditEvt );
-            pEditView->MouseButtonUp( aEditEvt );
+            bool bCellProtected = pDoc->HasAttrib(nPosX, nPosY, nTab, nPosX, nPosY, nTab, HASATTR_PROTECTED);
+            bool bSkipProtected = !pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+            bool bSkipUnprotected = !pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+
+            if ( bSkipProtected && bSkipUnprotected )
+                bEditAllowed = false;
+            else if ( (bCellProtected && bSkipProtected) || (!bCellProtected && bSkipUnprotected) )
+                bEditAllowed = false;
+        }
+
+        if ( bEditAllowed )
+        {
+            //  edit cell contents
+            pViewData->GetViewShell()->UpdateInputHandler();
+            pScMod->SetInputMode( SC_INPUT_TABLE );
+            if (pViewData->HasEditView(eWhich))
+            {
+                //  Text-Cursor gleich an die geklickte Stelle setzen
+                EditView* pEditView = pViewData->GetEditView( eWhich );
+                MouseEvent aEditEvt( rMEvt.GetPosPixel(), 1, MOUSE_SYNTHETIC, MOUSE_LEFT, 0 );
+                pEditView->MouseButtonDown( aEditEvt );
+                pEditView->MouseButtonUp( aEditEvt );
+            }
         }
         return;
     }
@@ -2233,14 +2239,6 @@ void __EXPORT ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         pEditView->MouseMove( rMEvt );
         return;
     }
-
-#if OLD_PIVOT_IMPLEMENTATION
-    if (bPivotMouse)
-    {
-        PivotMouseMove( rMEvt );
-        return;
-    }
-#endif
 
     if (bDPMouse)
     {
@@ -2452,10 +2450,6 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
     {
         if (!pViewData->GetView()->IsInActivatePart())
         {
-#if OLD_PIVOT_IMPLEMENTATION
-            if (bPivotMouse)
-                bPivotMouse = FALSE;            // gezeichnet wird per bDragRect
-#endif
             if (bDPMouse)
                 bDPMouse = FALSE;               // gezeichnet wird per bDragRect
             if (bDragRect)
@@ -4864,7 +4858,6 @@ BOOL ScGridWindow::GetEditUrlOrError( BOOL bSpellErr, const Point& rPos,
     MapMode aEditMode = pViewData->GetLogicMode(eWhich);            // ohne Drawing-Skalierung
     Rectangle aLogicEdit = PixelToLogic( aEditRect, aEditMode );
     long nThisColLogic = aLogicEdit.Right() - aLogicEdit.Left() + 1;
-
     Size aPaperSize = Size( 1000000, 1000000 );
     if(pCell->GetCellType() == CELLTYPE_FORMULA)
     {
@@ -5179,37 +5172,30 @@ void ScGridWindow::UpdateCursorOverlay()
         }
     }
 
-    //
-    //  convert into logic units and create overlay object
-    //
-
     if ( aPixelRects.size() )
     {
-        sdr::overlay::OverlayObjectCell::RangeVector aRanges;
-
-        std::vector<Rectangle>::const_iterator aPixelEnd( aPixelRects.end() );
-        for ( std::vector<Rectangle>::const_iterator aPixelIter( aPixelRects.begin() );
-              aPixelIter != aPixelEnd; ++aPixelIter )
-        {
-            Rectangle aLogic( PixelToLogic( *aPixelIter, aDrawMode ) );
-
-            const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
-            const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
-            const basegfx::B2DRange a2DRange(aTopLeft, aBottomRight);
-
-            aRanges.push_back( a2DRange );
-        }
-
         // #i70788# get the OverlayManager safely
         ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
 
         if(pOverlayManager)
         {
-            BOOL bOld = pViewData->GetView()->IsOldSelection();
+            const Color aCursorColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+            std::vector< basegfx::B2DRange > aRanges;
+            const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
 
-            ScOverlayType eType = bOld ? SC_OVERLAY_INVERT : SC_OVERLAY_SOLID;
-            Color aCursorColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
-            sdr::overlay::OverlayObjectCell* pOverlay = new sdr::overlay::OverlayObjectCell( eType, aCursorColor, aRanges );
+            for(sal_uInt32 a(0); a < aPixelRects.size(); a++)
+            {
+                const Rectangle aRA(aPixelRects[a]);
+                basegfx::B2DRange aRB(aRA.Left(), aRA.Top(), aRA.Right() + 1, aRA.Bottom() + 1);
+                aRB.transform(aTransform);
+                aRanges.push_back(aRB);
+            }
+
+            sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+                sdr::overlay::OVERLAY_SOLID,
+                aCursorColor,
+                aRanges,
+                false);
 
             pOverlayManager->add(*pOverlay);
             mpOOCursors = new ::sdr::overlay::OverlayObjectList;
@@ -5234,50 +5220,52 @@ void ScGridWindow::UpdateSelectionOverlay()
         SetMapMode( aDrawMode );
 
     DeleteSelectionOverlay();
-
     std::vector<Rectangle> aPixelRects;
     GetSelectionRects( aPixelRects );
 
     if ( aPixelRects.size() && pViewData->IsActive() )
     {
-        SCTAB nTab = pViewData->GetTabNo();
-        BOOL bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( nTab );
-        BOOL bOld = pViewData->GetView()->IsOldSelection();
-
-        sdr::overlay::OverlayObjectCell::RangeVector aRanges;
-
-        std::vector<Rectangle>::const_iterator aPixelEnd( aPixelRects.end() );
-        for ( std::vector<Rectangle>::const_iterator aPixelIter( aPixelRects.begin() );
-              aPixelIter != aPixelEnd; ++aPixelIter )
-        {
-            Rectangle aPixel( *aPixelIter );
-            if ( !bOld )
-            {
-                // for transparent selection, add a pixel so the border is on the grid on all edges
-                if ( bLayoutRTL )
-                    aPixel.Right() += 1;
-                else
-                    aPixel.Left() -= 1;
-                aPixel.Top() -= 1;
-            }
-            Rectangle aLogic( PixelToLogic( aPixel, aDrawMode ) );
-
-            const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
-            const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
-            const basegfx::B2DRange a2DRange(aTopLeft, aBottomRight);
-
-            aRanges.push_back( a2DRange );
-        }
-
         // #i70788# get the OverlayManager safely
         ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
 
         if(pOverlayManager)
         {
-            ScOverlayType eType = bOld ? SC_OVERLAY_INVERT : SC_OVERLAY_BORDER_TRANSPARENT;
-            Color aHighlight( GetSettings().GetStyleSettings().GetHighlightColor() );
-            sdr::overlay::OverlayObjectCell* pOverlay =
-                new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
+            std::vector< basegfx::B2DRange > aRanges;
+            const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+
+            for(sal_uInt32 a(0); a < aPixelRects.size(); a++)
+            {
+                const Rectangle aRA(aPixelRects[a]);
+                basegfx::B2DRange aRB(aRA.Left() - 1, aRA.Top() - 1, aRA.Right(), aRA.Bottom());
+                aRB.transform(aTransform);
+                aRanges.push_back(aRB);
+            }
+
+            // #i97672# get the system's hilight color and limit it to the maximum
+            // allowed luminance. This is needed to react on too bright hilight colors
+            // which would otherwise vive a bad visualisation
+            Color aHighlight(GetSettings().GetStyleSettings().GetHighlightColor());
+            const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+            const basegfx::BColor aSelection(aHighlight.getBColor());
+            const double fLuminance(aSelection.luminance());
+            const double fMaxLum(aSvtOptionsDrawinglayer.GetSelectionMaximumLuminancePercent() / 100.0);
+
+            if(fLuminance > fMaxLum)
+            {
+                const double fFactor(fMaxLum / fLuminance);
+                const basegfx::BColor aNewSelection(
+                    aSelection.getRed() * fFactor,
+                    aSelection.getGreen() * fFactor,
+                    aSelection.getBlue() * fFactor);
+
+                aHighlight = Color(aNewSelection);
+            }
+
+            sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+                sdr::overlay::OVERLAY_TRANSPARENT,
+                aHighlight,
+                aRanges,
+                true);
 
             pOverlayManager->add(*pOverlay);
             mpOOSelection = new ::sdr::overlay::OverlayObjectList;
@@ -5329,31 +5317,24 @@ void ScGridWindow::UpdateAutoFillOverlay()
         aFillPos.Y() -= 2;
         Rectangle aFillRect( aFillPos, Size(6,6) );
 
-        //
-        //  convert into logic units
-        //
-
-        sdr::overlay::OverlayObjectCell::RangeVector aRanges;
-
-        Rectangle aLogic( PixelToLogic( aFillRect, aDrawMode ) );
-
-        const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
-        const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
-        const basegfx::B2DRange a2DRange(aTopLeft, aBottomRight);
-
-        aRanges.push_back( a2DRange );
-
         // #i70788# get the OverlayManager safely
         ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
 
         if(pOverlayManager)
         {
-            BOOL bOld = pViewData->GetView()->IsOldSelection();
+            const Color aHandleColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+            std::vector< basegfx::B2DRange > aRanges;
+            const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+            basegfx::B2DRange aRB(aFillRect.Left(), aFillRect.Top(), aFillRect.Right() + 1, aFillRect.Bottom() + 1);
 
-            ScOverlayType eType = bOld ? SC_OVERLAY_INVERT : SC_OVERLAY_SOLID;
-            Color aHandleColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
-            sdr::overlay::OverlayObjectCell* pOverlay =
-                new sdr::overlay::OverlayObjectCell( eType, aHandleColor, aRanges );
+            aRB.transform(aTransform);
+            aRanges.push_back(aRB);
+
+            sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+                sdr::overlay::OVERLAY_SOLID,
+                aHandleColor,
+                aRanges,
+                false);
 
             pOverlayManager->add(*pOverlay);
             mpOOAutoFill = new ::sdr::overlay::OverlayObjectList;
@@ -5464,34 +5445,28 @@ void ScGridWindow::UpdateDragRectOverlay()
             aPixelRects.push_back( Rectangle( aRect.Left()+3, aRect.Bottom()-2, aRect.Right()-3, aRect.Bottom() ) );
         }
 
-        //
-        //  convert into logic units and create overlay object
-        //
-
-        sdr::overlay::OverlayObjectCell::RangeVector aRanges;
-
-        std::vector<Rectangle>::const_iterator aPixelEnd( aPixelRects.end() );
-        for ( std::vector<Rectangle>::const_iterator aPixelIter( aPixelRects.begin() );
-              aPixelIter != aPixelEnd; ++aPixelIter )
-        {
-            Rectangle aLogic( PixelToLogic( *aPixelIter, aDrawMode ) );
-
-            const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
-            const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
-            const basegfx::B2DRange a2DRange(aTopLeft, aBottomRight);
-
-            aRanges.push_back( a2DRange );
-        }
-
         // #i70788# get the OverlayManager safely
         ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
 
         if(pOverlayManager)
         {
-            ScOverlayType eType = SC_OVERLAY_INVERT;
-            Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
-            sdr::overlay::OverlayObjectCell* pOverlay =
-                new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
+            // Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
+            std::vector< basegfx::B2DRange > aRanges;
+            const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+
+            for(sal_uInt32 a(0); a < aPixelRects.size(); a++)
+            {
+                const Rectangle aRA(aPixelRects[a]);
+                basegfx::B2DRange aRB(aRA.Left(), aRA.Top(), aRA.Right() + 1, aRA.Bottom() + 1);
+                aRB.transform(aTransform);
+                aRanges.push_back(aRB);
+            }
+
+            sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+                sdr::overlay::OVERLAY_INVERT,
+                Color(COL_BLACK),
+                aRanges,
+                false);
 
             pOverlayManager->add(*pOverlay);
             mpOODragRect = new ::sdr::overlay::OverlayObjectList;
@@ -5518,31 +5493,26 @@ void ScGridWindow::UpdateHeaderOverlay()
     DeleteHeaderOverlay();
 
     //  Pixel rectangle is in aInvertRect
-
-    //
-    //  convert into logic units and create overlay object
-    //
-
     if ( !aInvertRect.IsEmpty() )
     {
-        Rectangle aLogic( PixelToLogic( aInvertRect, aDrawMode ) );
-
-        const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
-        const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
-        const basegfx::B2DRange a2DRange(aTopLeft, aBottomRight);
-
-        sdr::overlay::OverlayObjectCell::RangeVector aRanges;
-        aRanges.push_back( a2DRange );
-
         // #i70788# get the OverlayManager safely
         ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
 
         if(pOverlayManager)
         {
-            ScOverlayType eType = SC_OVERLAY_INVERT;
-            Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
-            sdr::overlay::OverlayObjectCell* pOverlay =
-                new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
+            // Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
+            std::vector< basegfx::B2DRange > aRanges;
+            const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+            basegfx::B2DRange aRB(aInvertRect.Left(), aInvertRect.Top(), aInvertRect.Right() + 1, aInvertRect.Bottom() + 1);
+
+            aRB.transform(aTransform);
+            aRanges.push_back(aRB);
+
+            sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+                sdr::overlay::OVERLAY_INVERT,
+                Color(COL_BLACK),
+                aRanges,
+                false);
 
             pOverlayManager->add(*pOverlay);
             mpOOHeader = new ::sdr::overlay::OverlayObjectList;
@@ -5593,30 +5563,26 @@ void ScGridWindow::UpdateShrinkOverlay()
         }
     }
 
-    //
-    //  convert into logic units and create overlay object
-    //
-
     if ( !aPixRect.IsEmpty() )
     {
-        Rectangle aLogic( PixelToLogic( aPixRect, aDrawMode ) );
-
-        const basegfx::B2DPoint aTopLeft(aLogic.Left(), aLogic.Top());
-        const basegfx::B2DPoint aBottomRight(aLogic.Right(), aLogic.Bottom());
-        const basegfx::B2DRange a2DRange(aTopLeft, aBottomRight);
-
-        sdr::overlay::OverlayObjectCell::RangeVector aRanges;
-        aRanges.push_back( a2DRange );
-
         // #i70788# get the OverlayManager safely
         ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
 
         if(pOverlayManager)
         {
-            ScOverlayType eType = SC_OVERLAY_INVERT;
-            Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
-            sdr::overlay::OverlayObjectCell* pOverlay =
-                new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
+            // Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
+            std::vector< basegfx::B2DRange > aRanges;
+            const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+            basegfx::B2DRange aRB(aPixRect.Left(), aPixRect.Top(), aPixRect.Right() + 1, aPixRect.Bottom() + 1);
+
+            aRB.transform(aTransform);
+            aRanges.push_back(aRB);
+
+            sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+                sdr::overlay::OVERLAY_INVERT,
+                Color(COL_BLACK),
+                aRanges,
+                false);
 
             pOverlayManager->add(*pOverlay);
             mpOOShrink = new ::sdr::overlay::OverlayObjectList;
@@ -5658,126 +5624,4 @@ void ScGridWindow::flushOverlayManager()
 }
 
 // ---------------------------------------------------------------------------
-
-// #114409#
-namespace sdr
-{
-    namespace overlay
-    {
-        OverlayObjectCell::OverlayObjectCell( ScOverlayType eType, const Color& rColor, const RangeVector& rRects )
-        :   OverlayObject( rColor ),
-            mePaintType( eType ),
-            maRectangles( rRects )
-        {
-        }
-
-        OverlayObjectCell::~OverlayObjectCell()
-        {
-        }
-
-        void OverlayObjectCell::drawGeometry(OutputDevice& rOutputDevice)
-        {
-            // safe original AA and switch off for selection
-            const sal_uInt16 nOriginalAA(rOutputDevice.GetAntialiasing());
-            rOutputDevice.SetAntialiasing(0);
-
-            // set colors
-            rOutputDevice.SetLineColor();
-            rOutputDevice.SetFillColor(getBaseColor());
-
-            if ( mePaintType == SC_OVERLAY_BORDER_TRANSPARENT )
-            {
-                // to draw the border, all rectangles have to be collected into a PolyPolygon
-
-                PolyPolygon aPolyPoly;
-                sal_uInt32 nRectCount = maRectangles.size();
-                for(sal_uInt32 nRect=0; nRect < nRectCount; ++nRect)
-                {
-                    const basegfx::B2DRange& rRange(maRectangles[nRect]);
-                    Rectangle aRectangle(FRound(rRange.getMinX()), FRound(rRange.getMinY()), FRound(rRange.getMaxX()), FRound(rRange.getMaxY()));
-                    if ( nRectCount == 1 || nRect+1 < nRectCount )
-                    {
-                        // simply add for all except the last rect
-                        aPolyPoly.Insert( Polygon( aRectangle ) );
-                    }
-                    else
-                    {
-                        PolyPolygon aTemp( aPolyPoly );
-                        aTemp.GetUnion( PolyPolygon( Polygon( aRectangle ) ), aPolyPoly );
-                    }
-                }
-
-                rOutputDevice.DrawTransparent(aPolyPoly, 75);
-
-                rOutputDevice.SetLineColor(getBaseColor());
-                rOutputDevice.SetFillColor();
-
-                rOutputDevice.DrawPolyPolygon(aPolyPoly);
-            }
-            else
-            {
-                if ( mePaintType == SC_OVERLAY_INVERT )
-                {
-                    rOutputDevice.Push();
-                    rOutputDevice.SetRasterOp( ROP_XOR );
-                    rOutputDevice.SetFillColor( COL_WHITE );
-                }
-
-                for(sal_uInt32 a(0L);a < maRectangles.size(); a++)
-                {
-                    const basegfx::B2DRange& rRange(maRectangles[a]);
-                    const Rectangle aRectangle(FRound(rRange.getMinX()), FRound(rRange.getMinY()), FRound(rRange.getMaxX()), FRound(rRange.getMaxY()));
-
-                    switch(mePaintType)
-                    {
-                        case SC_OVERLAY_INVERT :
-                        {
-                            rOutputDevice.DrawRect( aRectangle );
-                            break;
-                        }
-                        case SC_OVERLAY_SOLID :
-                        {
-                            rOutputDevice.DrawRect(aRectangle);
-                            break;
-                        }
-                        default:
-                        {
-                            // SC_OVERLAY_BORDER_TRANSPARENT is handled separately
-                        }
-                    }
-                }
-
-                if ( mePaintType == SC_OVERLAY_INVERT )
-                {
-                    rOutputDevice.Pop();
-                }
-            }
-
-            // restore original AA
-            rOutputDevice.SetAntialiasing(nOriginalAA);
-        }
-
-        void OverlayObjectCell::createBaseRange(OutputDevice& /* rOutputDevice */)
-        {
-            maBaseRange.reset();
-
-            for(sal_uInt32 a(0L); a < maRectangles.size(); a++)
-            {
-                maBaseRange.expand(maRectangles[a]);
-            }
-        }
-
-        void OverlayObjectCell::transform(const basegfx::B2DHomMatrix& rMatrix)
-        {
-            for(sal_uInt32 a(0L); a < maRectangles.size(); a++)
-            {
-                maRectangles[a].transform(rMatrix);
-            }
-        }
-
-    } // end of namespace overlay
-} // end of namespace sdr
-
-// ---------------------------------------------------------------------------
-
 // eof

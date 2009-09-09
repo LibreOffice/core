@@ -599,6 +599,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
                     }
                     else
                     {
+                        DELETEZ(pUndoData);
                         ScFormulaCell* pCell = new ScFormulaCell( aCell, *pDoc, aPos );
                         if ( nError )
                         {
@@ -751,12 +752,13 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
         ScPatternAttr* pCellAttrs = NULL;
         EditTextObject* pNewData = NULL;
         String aString;
+
+        const ScPatternAttr* pOldPattern = pDoc->GetPattern( nCol, nRow, nTab );
+        ScTabEditEngine aEngine( *pOldPattern, pDoc->GetEnginePool() );
+        aEngine.SetText(*pData);
+
         if (bTestSimple)                    // Testen, ob einfacher String ohne Attribute
         {
-            const ScPatternAttr* pOldPattern = pDoc->GetPattern( nCol, nRow, nTab );
-            ScTabEditEngine aEngine( *pOldPattern, pDoc->GetEnginePool() );
-            aEngine.SetText(*pData);
-
             ScEditAttrTester aAttrTester( &aEngine );
             bSimple = !aAttrTester.NeedsObject();
             bCommon = aAttrTester.NeedsCellAttr();
@@ -777,10 +779,10 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
                 pCellAttrs->GetFromEditItemSet( &aAttrTester.GetAttribs() );
                 //! remove common attributes from EditEngine?
             }
-
-            if (bSimple)
-                aString = aEngine.GetText();
         }
+
+        // #i97726# always get text for "repeat" of undo action
+        aString = ScEditUtil::GetSpaceDelimitedString(aEngine);
 
         //
         //      Undo
@@ -838,7 +840,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
             {   // wg. ChangeTrack erst jetzt
                 pDocSh->GetUndoManager()->AddUndoAction(
                     new ScUndoEnterData( pDocSh, nCol, nRow, nTab, nPos, pTabs,
-                                        ppOldCells, NULL, NULL, String(),
+                                        ppOldCells, NULL, NULL, aString,
                                         pUndoData ) );
             }
 
@@ -924,7 +926,7 @@ void ScViewFunc::EnterMatrix( const String& rString )
     if (pData->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = pData->GetDocShell();
-        BOOL bSuccess = pDocSh->GetDocFunc().EnterMatrix( aRange, &rMark, NULL, rString, FALSE, FALSE,formula::FormulaGrammar::GRAM_DEFAULT );
+        BOOL bSuccess = pDocSh->GetDocFunc().EnterMatrix( aRange, &rMark, NULL, rString, FALSE, FALSE, EMPTY_STRING, formula::FormulaGrammar::GRAM_DEFAULT );
         if (bSuccess)
             pDocSh->UpdateOle(GetViewData());
     }
@@ -2181,6 +2183,7 @@ void ScViewFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
             const SCCOLROW* pTabRanges = pRanges;
 
             pDoc->IncSizeRecalcLevel( nTab );       // nicht fuer jede Spalte einzeln
+            pDoc->InitializeNoteCaptions( nTab );
             for (SCCOLROW nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
             {
                 SCCOLROW nStartNo = *(pTabRanges++);
@@ -2544,6 +2547,36 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, BOOL bOptimal )
     }
 
     ShowAllCursors();
+}
+
+void ScViewFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
+{
+    if (nTab == TABLEID_DOC)
+        return;
+
+    ScMarkData& rMark = GetViewData()->GetMarkData();
+    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScDocument* pDoc = pDocSh->GetDocument();
+    ScDocFunc aFunc(*pDocSh);
+    bool bUndo(pDoc->IsUndoEnabled());
+
+    //  modifying several tables is handled here
+
+    if (bUndo)
+    {
+        String aUndo = ScGlobal::GetRscString( STR_UNDO_PROTECT_TAB );
+        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+    }
+
+    SCTAB nCount = pDocSh->GetDocument()->GetTableCount();
+    for ( SCTAB i=0; i<nCount; i++ )
+        if ( rMark.GetTableSelect(i) )
+            aFunc.ProtectSheet(i, rProtect);
+
+    if (bUndo)
+        pDocSh->GetUndoManager()->LeaveListAction();
+
+    UpdateLayerLocks();         //! broadcast to all views
 }
 
 void ScViewFunc::Protect( SCTAB nTab, const String& rPassword )

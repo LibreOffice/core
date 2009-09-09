@@ -71,6 +71,7 @@
 #include "gridwin.hxx"
 #include <com/sun/star/view/DocumentZoomType.hpp>
 #include "AccessibilityHints.hxx"
+#include <svx/sdrhittesthelper.hxx>
 
 using namespace com::sun::star;
 
@@ -1169,7 +1170,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
 
             SdrView* pDrawView = GetViewShell()->GetSdrView();
 
-            if (pDrawPage && pDrawView)
+            if (pDrawPage && pDrawView && pDrawView->GetSdrPageView())
             {
                 Window* pActiveWin = pData->GetActiveWin();
                 Point aPos = pActiveWin->PixelToLogic(rPoint);
@@ -1183,7 +1184,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
                 while (i < nCount && !bFound)
                 {
                     SdrObject* pObj = pDrawPage->GetObj(i);
-                    if (pObj && pObj->IsHit(aPos, nHitLog))
+                    if (pObj && SdrObjectPrimitiveHit(*pObj, aPos, nHitLog, *pDrawView->GetSdrPageView(), 0, false))
                     {
                         xTarget.set(pObj->getUnoShape(), uno::UNO_QUERY);
                         bFound = sal_True;

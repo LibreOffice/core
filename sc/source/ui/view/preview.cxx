@@ -244,6 +244,10 @@ void ScPreview::CalcPages( SCTAB /*nToWhichTab*/ )
         nTabsTested = 0;
     }
 
+    // update all pending row heights with a single progress bar,
+    // instead of a separate progress for each sheet from ScPrintFunc
+    pDocShell->UpdatePendingRowHeights( nAnz-1, true );
+
     //  PrintOptions is passed to PrintFunc for SkipEmpty flag,
     //  but always all sheets are used (there is no selected sheet)
     ScPrintOptions aOptions = SC_MOD()->GetPrintOptions();
