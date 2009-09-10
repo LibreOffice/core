@@ -127,77 +127,6 @@ enum ScanState
 static const sal_Char* pInternal[ 5 ] = { "GAME", "SPEW", "TTT", "STARCALCTEAM", "ANTWORT" };
 
 using namespace ::com::sun::star::i18n;
-/////////////////////////////////////////////////////////////////////////
-
-short lcl_GetRetFormat( OpCode eOpCode )
-{
-    switch (eOpCode)
-    {
-        case ocEqual:
-        case ocNotEqual:
-        case ocLess:
-        case ocGreater:
-        case ocLessEqual:
-        case ocGreaterEqual:
-        case ocAnd:
-        case ocOr:
-        case ocNot:
-        case ocTrue:
-        case ocFalse:
-        case ocIsEmpty:
-        case ocIsString:
-        case ocIsNonString:
-        case ocIsLogical:
-        case ocIsRef:
-        case ocIsValue:
-        case ocIsFormula:
-        case ocIsNA:
-        case ocIsErr:
-        case ocIsError:
-        case ocIsEven:
-        case ocIsOdd:
-        case ocExact:
-            return NUMBERFORMAT_LOGICAL;
-        case ocGetActDate:
-        case ocGetDate:
-        case ocEasterSunday :
-            return NUMBERFORMAT_DATE;
-        case ocGetActTime:
-            return NUMBERFORMAT_DATETIME;
-        case ocGetTime:
-            return NUMBERFORMAT_TIME;
-        case ocNPV:
-        case ocBW:
-        case ocDIA:
-        case ocGDA:
-        case ocGDA2:
-        case ocVBD:
-        case ocLIA:
-        case ocRMZ:
-        case ocZW:
-        case ocZinsZ:
-        case ocKapz:
-        case ocKumZinsZ:
-        case ocKumKapZ:
-            return NUMBERFORMAT_CURRENCY;
-        case ocZins:
-        case ocIRR:
-        case ocMIRR:
-        case ocZGZ:
-        case ocEffektiv:
-        case ocNominal:
-        case ocPercentSign:
-            return NUMBERFORMAT_PERCENT;
-//      case ocSum:
-//      case ocSumSQ:
-//      case ocProduct:
-//      case ocAverage:
-//          return -1;
-        default:
-            return NUMBERFORMAT_NUMBER;
-    }
-    return NUMBERFORMAT_NUMBER;
-}
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -3959,7 +3888,7 @@ BOOL ScCompiler::HandleRange()
             if( pRangeData->HasReferences() )
             {
                 SetRelNameReference();
-                MoveRelWrap();
+                MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
             }
             pNew->Reset();
             if ( bAddPair )
@@ -4011,7 +3940,7 @@ BOOL ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
             if (pNew->GetNextReference() != NULL)
             {
                 SetRelNameReference();
-                MoveRelWrap();
+                MoveRelWrap(MAXCOL, MAXROW);
             }
             pNew->Reset();
             return GetToken();
@@ -4106,33 +4035,33 @@ void ScCompiler::SetRelNameReference()
 
 // Wrap-adjust relative references of a RangeName to current position,
 // don't call for other token arrays!
-void ScCompiler::MoveRelWrap()
+void ScCompiler::MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow )
 {
     pArr->Reset();
     for( ScToken* t = static_cast<ScToken*>(pArr->GetNextReference()); t;
                   t = static_cast<ScToken*>(pArr->GetNextReference()) )
     {
         if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
-            ScRefUpdate::MoveRelWrap( pDoc, aPos, SingleDoubleRefModifier( t->GetSingleRef() ).Ref() );
+            ScRefUpdate::MoveRelWrap( pDoc, aPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( t->GetSingleRef() ).Ref() );
         else
-            ScRefUpdate::MoveRelWrap( pDoc, aPos, t->GetDoubleRef() );
+            ScRefUpdate::MoveRelWrap( pDoc, aPos, nMaxCol, nMaxRow, t->GetDoubleRef() );
     }
 }
 
 // static
 // Wrap-adjust relative references of a RangeName to current position,
 // don't call for other token arrays!
-void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc,
-            const ScAddress& rPos )
+void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,
+                              SCCOL nMaxCol, SCROW nMaxRow )
 {
     rArr.Reset();
     for( ScToken* t = static_cast<ScToken*>(rArr.GetNextReference()); t;
                   t = static_cast<ScToken*>(rArr.GetNextReference()) )
     {
         if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
-            ScRefUpdate::MoveRelWrap( pDoc, rPos, SingleDoubleRefModifier( t->GetSingleRef() ).Ref() );
+            ScRefUpdate::MoveRelWrap( pDoc, rPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( t->GetSingleRef() ).Ref() );
         else
-            ScRefUpdate::MoveRelWrap( pDoc, rPos, t->GetDoubleRef() );
+            ScRefUpdate::MoveRelWrap( pDoc, rPos, nMaxCol, nMaxRow, t->GetDoubleRef() );
     }
 }
 
@@ -4307,7 +4236,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                     SingleDoubleRefModifier aMod( rRef );
                     if ( rRef.IsRelName() )
                     {
-                        ScRefUpdate::MoveRelWrap( pDoc, aPos, aMod.Ref() );
+                        ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, aMod.Ref() );
                         rChanged = TRUE;
                     }
                     else
@@ -4337,7 +4266,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                     SCTAB nTabs = rRef.Ref2.nTab - rRef.Ref1.nTab;
                     if ( rRef.Ref1.IsRelName() || rRef.Ref2.IsRelName() )
                     {
-                        ScRefUpdate::MoveRelWrap( pDoc, aPos, rRef );
+                        ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, rRef );
                         rChanged = TRUE;
                     }
                     else

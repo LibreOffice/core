@@ -240,11 +240,11 @@ BOOL ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
 }
 
 
-BOOL ScColumn::HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
-                            BOOL bLeft, BOOL bRight ) const
-{
-    return pAttrArray->HasLines( nRow1, nRow2, rSizes, bLeft, bRight );
-}
+//UNUSED2009-05 BOOL ScColumn::HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
+//UNUSED2009-05                             BOOL bLeft, BOOL bRight ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     return pAttrArray->HasLines( nRow1, nRow2, rSizes, bLeft, bRight );
+//UNUSED2009-05 }
 
 
 BOOL ScColumn::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const

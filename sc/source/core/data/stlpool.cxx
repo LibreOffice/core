@@ -95,10 +95,10 @@ void ScStyleSheetPool::SetDocument( ScDocument* pDocument )
 
 //------------------------------------------------------------------------
 
-void ScStyleSheetPool::SetForceStdName( const String* pSet )
-{
-    pForceStdName = pSet;
-}
+//UNUSED2009-05 void ScStyleSheetPool::SetForceStdName( const String* pSet )
+//UNUSED2009-05 {
+//UNUSED2009-05     pForceStdName = pSet;
+//UNUSED2009-05 }
 
 //------------------------------------------------------------------------
 

@@ -260,7 +260,7 @@ public:
     BOOL        IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bIgnoreNotes = false ) const;
 
     void        PutCell( const ScAddress&, ScBaseCell* pCell );
-    void        PutCell( const ScAddress&, ULONG nFormatIndex, ScBaseCell* pCell);
+//UNUSED2009-05 void        PutCell( const ScAddress&, ULONG nFormatIndex, ScBaseCell* pCell);
     void        PutCell( SCCOL nCol, SCROW nRow, ScBaseCell* pCell );
     void        PutCell(SCCOL nCol, SCROW nRow, ULONG nFormatIndex, ScBaseCell* pCell);
                 //  TRUE = Zahlformat gesetzt
@@ -463,7 +463,7 @@ public:
                                 const SvxBorderLine** ppLeft, const SvxBorderLine** ppTop,
                                 const SvxBorderLine** ppRight, const SvxBorderLine** ppBottom ) const;
 
-    BOOL        HasLines( const ScRange& rRange, Rectangle& rSizes ) const;
+//UNUSED2009-05 BOOL        HasLines( const ScRange& rRange, Rectangle& rSizes ) const;
     BOOL        HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nMask ) const;
     BOOL        HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const;
     BOOL        ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
@@ -546,8 +546,8 @@ public:
     void            ClearPrintRanges();
     /** Adds a new print ranges. */
     void            AddPrintRange( const ScRange& rNew );
-    /** Removes all old print ranges and sets the passed print ranges. */
-    void            SetPrintRange( const ScRange& rNew );
+//UNUSED2009-05 /** Removes all old print ranges and sets the passed print ranges. */
+//UNUSED2009-05 void            SetPrintRange( const ScRange& rNew );
     /** Marks the specified sheet to be printed completely. Deletes old print ranges! */
     void            SetPrintEntireSheet();
 

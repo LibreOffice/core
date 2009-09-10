@@ -149,7 +149,6 @@ protected:
 
 public:
     inline                  ExcBoolRecord( const BOOL bDefault ) : bVal( bDefault ) {}
-                            ExcBoolRecord( SfxItemSet*, USHORT nWhich, BOOL bDefault );
 
     virtual sal_Size        GetLen( void ) const;
 };

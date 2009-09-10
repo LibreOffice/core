@@ -2766,42 +2766,42 @@ BOOL ScDocFunc::SetLayoutRTL( SCTAB nTab, BOOL bRTL, BOOL /* bApi */ )
     return TRUE;
 }
 
-BOOL ScDocFunc::SetGrammar( formula::FormulaGrammar::Grammar eGrammar )
-{
-    ScDocument* pDoc = rDocShell.GetDocument();
-
-    if ( pDoc->GetGrammar() == eGrammar )
-        return TRUE;
-
-    BOOL bUndo(pDoc->IsUndoEnabled());
-    ScDocShellModificator aModificator( rDocShell );
-
-    pDoc->SetGrammar( eGrammar );
-
-    if (bUndo)
-    {
-        rDocShell.GetUndoManager()->AddUndoAction( new ScUndoSetGrammar( &rDocShell, eGrammar ) );
-    }
-
-    rDocShell.PostPaint( 0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_ALL );
-
-    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-    if (NULL != pViewSh)
-    {
-        pViewSh->UpdateInputHandler( FALSE, FALSE );
-    }
-
-    aModificator.SetDocumentModified();
-
-    SfxBindings* pBindings = rDocShell.GetViewBindings();
-    if (pBindings)
-    {
-        // erAck: 2006-09-07T22:19+0200  commented out in CWS scr1c1
-        //pBindings->Invalidate( FID_TAB_USE_R1C1 );
-    }
-
-    return TRUE;
-}
+//UNUSED2009-05 BOOL ScDocFunc::SetGrammar( formula::FormulaGrammar::Grammar eGrammar )
+//UNUSED2009-05 {
+//UNUSED2009-05     ScDocument* pDoc = rDocShell.GetDocument();
+//UNUSED2009-05
+//UNUSED2009-05     if ( pDoc->GetGrammar() == eGrammar )
+//UNUSED2009-05         return TRUE;
+//UNUSED2009-05
+//UNUSED2009-05     BOOL bUndo(pDoc->IsUndoEnabled());
+//UNUSED2009-05     ScDocShellModificator aModificator( rDocShell );
+//UNUSED2009-05
+//UNUSED2009-05     pDoc->SetGrammar( eGrammar );
+//UNUSED2009-05
+//UNUSED2009-05     if (bUndo)
+//UNUSED2009-05     {
+//UNUSED2009-05         rDocShell.GetUndoManager()->AddUndoAction( new ScUndoSetGrammar( &rDocShell, eGrammar ) );
+//UNUSED2009-05     }
+//UNUSED2009-05
+//UNUSED2009-05     rDocShell.PostPaint( 0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_ALL );
+//UNUSED2009-05
+//UNUSED2009-05     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+//UNUSED2009-05     if (NULL != pViewSh)
+//UNUSED2009-05     {
+//UNUSED2009-05         pViewSh->UpdateInputHandler( FALSE, FALSE );
+//UNUSED2009-05     }
+//UNUSED2009-05
+//UNUSED2009-05     aModificator.SetDocumentModified();
+//UNUSED2009-05
+//UNUSED2009-05     SfxBindings* pBindings = rDocShell.GetViewBindings();
+//UNUSED2009-05     if (pBindings)
+//UNUSED2009-05     {
+//UNUSED2009-05         // erAck: 2006-09-07T22:19+0200  commented out in CWS scr1c1
+//UNUSED2009-05         //pBindings->Invalidate( FID_TAB_USE_R1C1 );
+//UNUSED2009-05     }
+//UNUSED2009-05
+//UNUSED2009-05     return TRUE;
+//UNUSED2009-05 }
 
 BOOL ScDocFunc::RenameTable( SCTAB nTab, const String& rName, BOOL bRecord, BOOL bApi )
 {

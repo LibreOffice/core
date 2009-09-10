@@ -33,7 +33,7 @@
 // this includes no link dependency
 #include <svtools/solar.hrc>
 
-//next free is 285
+//next free is 286
 //single free is: 134
 
 //#define RID_APP_START 30000
@@ -100,6 +100,7 @@
 #define STR_STACKED                         (RID_APP_START + 11)
 #define STR_PERCENT                         (RID_APP_START + 12)
 #define STR_DEEP                            (RID_APP_START + 13)
+#define STR_FILLED                          (RID_APP_START + 285)
 
 #define STR_DONUT                           (RID_APP_START + 8)
 #define STR_TYPE_PIE                        (RID_APP_START + 187)

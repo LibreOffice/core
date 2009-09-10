@@ -96,17 +96,17 @@ ScImportParam::~ScImportParam()
 {
 }
 
-void ScImportParam::Clear()
-{
-    nCol1 = nCol2 = 0;
-    nRow1 = nRow2 = 0;
-    bImport = FALSE;
-    bNative = FALSE;
-    bSql = TRUE;
-    nType = ScDbTable;
-    aDBName.Erase();
-    aStatement.Erase();
-}
+//UNUSED2009-05 void ScImportParam::Clear()
+//UNUSED2009-05 {
+//UNUSED2009-05     nCol1 = nCol2 = 0;
+//UNUSED2009-05     nRow1 = nRow2 = 0;
+//UNUSED2009-05     bImport = FALSE;
+//UNUSED2009-05     bNative = FALSE;
+//UNUSED2009-05     bSql = TRUE;
+//UNUSED2009-05     nType = ScDbTable;
+//UNUSED2009-05     aDBName.Erase();
+//UNUSED2009-05     aStatement.Erase();
+//UNUSED2009-05 }
 
 ScImportParam& ScImportParam::operator=( const ScImportParam& r )
 {
@@ -849,16 +849,16 @@ __EXPORT ScPivotParam::~ScPivotParam()
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScPivotParam::Clear()
-{
-    nCol = 0;
-    nRow = 0;
-    nTab = 0;
-    bIgnoreEmptyRows = bDetectCategories = FALSE;
-    bMakeTotalCol = bMakeTotalRow = TRUE;
-    ClearLabelData();
-    ClearPivotArrays();
-}
+//UNUSED2009-05 void __EXPORT ScPivotParam::Clear()
+//UNUSED2009-05 {
+//UNUSED2009-05     nCol = 0;
+//UNUSED2009-05     nRow = 0;
+//UNUSED2009-05     nTab = 0;
+//UNUSED2009-05     bIgnoreEmptyRows = bDetectCategories = FALSE;
+//UNUSED2009-05     bMakeTotalCol = bMakeTotalRow = TRUE;
+//UNUSED2009-05     ClearLabelData();
+//UNUSED2009-05     ClearPivotArrays();
+//UNUSED2009-05 }
 
 //------------------------------------------------------------------------
 

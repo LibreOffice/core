@@ -86,13 +86,6 @@ extern "C" {
 #define SC_TRANSLITERATION_CASESENSE 0
 #endif
 
-// Remove the old pivot table implementation that the current data pilot
-// implementation has effectively replaced.  The old pivot code was still
-// around to handle loading of the old binary format.  Now that the old
-// binary filter is handled by binfilter, we can safely remove the old pivot
-// handling code.
-#define OLD_PIVOT_IMPLEMENTATION 0
-
 //------------------------------------------------------------------------
 struct LabelData;
 //------------------------------------------------------------------------
@@ -467,7 +460,7 @@ struct ScImportParam
 
     ScImportParam&  operator=   ( const ScImportParam& r );
     BOOL            operator==  ( const ScImportParam& r ) const;
-    void            Clear       ();
+//UNUSED2009-05 void            Clear       ();
 };
 
 struct ScStringHashCode

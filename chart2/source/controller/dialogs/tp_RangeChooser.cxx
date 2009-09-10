@@ -216,6 +216,29 @@ void RangeChooserTabPage::initControlsFromModel()
     m_nChangingControlCalls--;
 }
 
+void RangeChooserTabPage::DeactivatePage()
+{
+    commitPage();
+    svt::OWizardPage::DeactivatePage();
+}
+
+void RangeChooserTabPage::commitPage()
+{
+    commitPage(eFinish);
+}
+
+sal_Bool RangeChooserTabPage::commitPage( CommitPageReason /*eReason*/ )
+{
+    //ranges may have been edited in the meanwhile (dirty is true in that case here)
+    if( isValid() )
+    {
+        changeDialogModelAccordingToControls();
+        return sal_True;//return false if this page should not be left
+    }
+    else
+        return sal_False;
+}
+
 void RangeChooserTabPage::changeDialogModelAccordingToControls()
 {
     if(m_nChangingControlCalls>0)

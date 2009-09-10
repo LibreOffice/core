@@ -953,13 +953,6 @@ ScValidationData* ScValidationDataList::GetData( sal_uInt32 nKey )
     return NULL;
 }
 
-void ScValidationDataList::ResetUsed()
-{
-    USHORT nCount = Count();
-    for (USHORT i=0; i<nCount; i++)
-        (*this)[i]->SetUsed(FALSE);
-}
-
 void ScValidationDataList::CompileXML()
 {
     USHORT nCount = Count();

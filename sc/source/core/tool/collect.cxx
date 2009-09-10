@@ -334,38 +334,6 @@ ScDataObject*   ScStrCollection::Clone() const
 }
 
 //------------------------------------------------------------------------
-
-void ScStrCollection::Load( SvStream& rStream )
-{
-    ScReadHeader aHdr( rStream );
-    lcl_DeleteScDataObjects( pItems, nCount );
-    BOOL bDups;
-    rStream >> bDups;
-    SetDups( bDups );
-    rStream >> nCount >> nLimit >> nDelta;
-    pItems = new ScDataObject*[nLimit];
-    String aStr;
-    rtl_TextEncoding eSet = rStream.GetStreamCharSet();
-    for ( USHORT i=0; i<nCount; i++ )
-    {
-        rStream.ReadByteString( aStr, eSet );
-        pItems[i] = new StrData( aStr );
-    }
-}
-
-void ScStrCollection::Store( SvStream& rStream ) const
-{
-    ScWriteHeader aHdr( rStream );
-    BOOL bDups = IsDups();
-    rStream << bDups << nCount << nLimit << nDelta;
-    rtl_TextEncoding eSet = rStream.GetStreamCharSet();
-    for ( USHORT i=0; i<nCount; i++ )
-    {
-        rStream.WriteByteString( ((StrData*)pItems[i])->GetString(), eSet );
-    }
-}
-
-//------------------------------------------------------------------------
 // TypedScStrCollection
 //------------------------------------------------------------------------
 

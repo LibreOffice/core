@@ -440,13 +440,6 @@ void ScDocShell::UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore )
     aDocument.EnableUndo( bIsUndoEnabled );
 }
 
-#if OLD_PIVOT_IMPLEMENTATION
-void ScDocShell::PivotUpdate( ScPivot*, ScPivot*, BOOL, BOOL )
-{
-    DBG_ERRORFILE("PivotUpdate is obsolete!");
-}
-#endif
-
 void ScDocShell::RefreshPivotTables( const ScRange& rSource )
 {
     //! rename to RefreshDataPilotTables?

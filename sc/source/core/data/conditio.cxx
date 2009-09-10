@@ -1553,13 +1553,6 @@ ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
     return NULL;
 }
 
-//UNUSED2008-05  void ScConditionalFormatList::ResetUsed()
-//UNUSED2008-05  {
-//UNUSED2008-05      USHORT nCount = Count();
-//UNUSED2008-05      for (USHORT i=0; i<nCount; i++)
-//UNUSED2008-05          (*this)[i]->SetUsed(FALSE);
-//UNUSED2008-05  }
-
 void ScConditionalFormatList::CompileAll()
 {
     USHORT nCount = Count();

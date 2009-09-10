@@ -127,6 +127,9 @@ void ShrfmlaBuffer::Store( const ScRange& rRange, const ScTokenArray& rToken )
     DBG_ASSERT( mnCurrIdx <= 0xFFFF, "*ShrfmlaBuffer::Store(): Gleich wird mir schlecht...!" );
 
     ScRangeData* pData = new ScRangeData( pExcRoot->pIR->GetDocPtr(), aName, rToken, rRange.aStart, RT_SHARED );
+    const ScAddress& rMaxPos = pExcRoot->pIR->GetMaxPos();
+    pData->SetMaxCol(rMaxPos.Col());
+    pData->SetMaxRow(rMaxPos.Row());
     pData->SetIndex( static_cast< USHORT >( mnCurrIdx ) );
     pExcRoot->pIR->GetNamedRanges().Insert( pData );
     index_hash[rRange.aStart] = static_cast< USHORT >( mnCurrIdx );
