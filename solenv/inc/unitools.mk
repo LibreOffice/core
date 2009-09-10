@@ -178,6 +178,7 @@ FIND=find
 LS=ls
 DUMPBIN=echo
 4nt_force_shell:=+
+
 .ENDIF			# "$(GUI)"=="UNX"
 
 # (Global) Set if not set before
