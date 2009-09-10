@@ -549,7 +549,7 @@ sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rDescript
     {
         mxImpl->setMediaDescriptor( rDescriptor );
         DocumentOpenedGuard aOpenedGuard( mxImpl->maFileUrl );
-        if( aOpenedGuard.isValid() )
+        if( aOpenedGuard.isValid() || !mxImpl->maFileUrl.getLength())
         {
             mxImpl->mxStorage = implCreateStorage( mxImpl->mxInStream, mxImpl->mxOutStream );
             if( mxImpl->mxStorage.get() )
