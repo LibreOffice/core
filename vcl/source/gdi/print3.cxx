@@ -776,7 +776,8 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     mpImplData->mbLastPage = sal_False;
 
     Size aPaperSize( mpImplData->getRealPaperSize( mpImplData->maMultiPage.aPaperSize ) );
-    // multi page area: paper size minus margins + one time spacing right and down
+
+    // multi page area: page size minus margins + one time spacing right and down
     // the added spacing is so each subpage can be calculated including its spacing
     Size aMPArea( aPaperSize );
     aMPArea.Width()  -= rMPS.nLeftMargin + rMPS.nRightMargin;
@@ -858,10 +859,11 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     }
     o_rMtf.WindStart();
 
+    // subsequent getPageFile calls have changed the paper, reset it to current value
     mpImplData->mpPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
     mpImplData->mpPrinter->SetPaperSizeUser( aPaperSize, ! mpImplData->isFixedPageSize() );
 
-    return PrinterController::PageSize( aPaperSize );
+    return PrinterController::PageSize( aPaperSize, true );
 }
 
 int PrinterController::getFilteredPageCount()

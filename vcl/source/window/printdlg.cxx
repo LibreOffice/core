@@ -1678,10 +1678,18 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
     {
         const MapMode aMapMode( MAP_100TH_MM );
         GDIMetaFile aMtf;
-        if( nPages > 0 )
-            maPController->getFilteredPageFile( mnCurPage, aMtf, i_bMayUseCache );
-
         boost::shared_ptr<Printer> aPrt( maPController->getPrinter() );
+        if( nPages > 0 )
+        {
+            PrinterController::PageSize aPageSize =
+                maPController->getFilteredPageFile( mnCurPage, aMtf, i_bMayUseCache );
+            if( ! aPageSize.bFullPaper )
+            {
+                Point aOff( aPrt->PixelToLogic( aPrt->GetPageOffsetPixel(), aMapMode ) );
+                aMtf.Move( aOff.X(), aOff.Y() );
+            }
+        }
+
         Size aCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
         maPreviewWindow.setPreview( aMtf, aCurPageSize, nPages > 0 ? rtl::OUString() : maNoPageStr,
                                     aPrt->ImplGetDPIX(), aPrt->ImplGetDPIY()
