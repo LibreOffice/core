@@ -43,7 +43,7 @@ JDKINCS=
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 MOZFILES = $(SLO)$/npwin.obj
 .ELSE
 MOZFILES = $(SLO)$/npunix.obj
