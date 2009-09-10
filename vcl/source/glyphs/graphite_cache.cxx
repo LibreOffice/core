@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifdef MSC
+#ifdef WNT
 #include <tools/svwin.h>
 #include <svsys.h>
 #endif
