@@ -35,6 +35,7 @@
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/beans/NamedValue.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
+#include "com/sun/star/lang/EventObject.hpp"
 #include "com/sun/star/lang/Locale.hpp"
 #include "com/sun/star/lang/XLocalizable.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
@@ -57,6 +58,7 @@
 #include "cppuhelper/compbase5.hxx"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/interfacecontainer.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/mutex.hxx"
 #include "sal/types.h"
@@ -136,8 +138,7 @@ private:
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL
     getAvailableServiceNames() throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL refresh() throw (css::uno::RuntimeException)
-    { /*TODO*/ }
+    virtual void SAL_CALL refresh() throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL addRefreshListener(
         css::uno::Reference< css::util::XRefreshListener > const & l)
@@ -147,8 +148,7 @@ private:
         css::uno::Reference< css::util::XRefreshListener > const & l)
         throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL flush() throw (css::uno::RuntimeException)
-    { /*TODO*/ }
+    virtual void SAL_CALL flush() throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL addFlushListener(
         css::uno::Reference< css::util::XFlushListener > const & l)
@@ -294,6 +294,16 @@ css::uno::Sequence< rtl::OUString > Service::getAvailableServiceNames()
     return names;
 }
 
+void Service::refresh() throw (css::uno::RuntimeException) {
+    //TODO
+    cppu::OInterfaceContainerHelper * cont = rBHelper.getContainer(
+        cppu::UnoType< css::util::XRefreshListener >::get());
+    if (cont != 0) {
+        css::lang::EventObject ev(static_cast< cppu::OWeakObject * >(this));
+        cont->notifyEach(&css::util::XRefreshListener::refreshed, ev);
+    }
+}
+
 void Service::addRefreshListener(
     css::uno::Reference< css::util::XRefreshListener > const & l)
     throw (css::uno::RuntimeException)
@@ -308,6 +318,16 @@ void Service::removeRefreshListener(
 {
     rBHelper.removeListener(
         cppu::UnoType< css::util::XRefreshListener >::get(), l);
+}
+
+void Service::flush() throw (css::uno::RuntimeException) {
+    //TODO
+    cppu::OInterfaceContainerHelper * cont = rBHelper.getContainer(
+        cppu::UnoType< css::util::XFlushListener >::get());
+    if (cont != 0) {
+        css::lang::EventObject ev(static_cast< cppu::OWeakObject * >(this));
+        cont->notifyEach(&css::util::XFlushListener::flushed, ev);
+    }
 }
 
 void Service::addFlushListener(
