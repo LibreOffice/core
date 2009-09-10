@@ -111,10 +111,10 @@ namespace framework
     namespace fpc = ::framework::pattern::configuration;
 #endif
 
-    ::rtl::OUString lcl_getKeyString(KeyMapping& _rKeyMapping,const css::awt::KeyEvent& aKeyEvent)
+    ::rtl::OUString lcl_getKeyString(salhelper::SingletonRef<framework::KeyMapping>& _rKeyMapping, const css::awt::KeyEvent& aKeyEvent)
     {
         const sal_Int32 nBeginIndex = 4; // "KEY_" is the prefix of a identifier...
-        ::rtl::OUStringBuffer sKeyBuffer((_rKeyMapping.mapCodeToIdentifier(aKeyEvent.KeyCode)).copy(nBeginIndex));
+        ::rtl::OUStringBuffer sKeyBuffer((_rKeyMapping->mapCodeToIdentifier(aKeyEvent.KeyCode)).copy(nBeginIndex));
 
         if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT )
             sKeyBuffer.appendAscii("_SHIFT");
