@@ -136,10 +136,26 @@ sub checkPage( sFile as string , bDisabled as boolean, optional iMiddleMouseButt
             iTemp = 2 ' Automatic scrolling
         endif
         if Itemp = iMiddleMouseButton then
-            printlog "      * Middle mouse button: OK"
+            printlog "     * Middle mouse button: ok"
         else
-            warnlog "Middle mouse button: expected: '" + iTemp + "' '" + MausAktion.getItemText(iTemp) + "'; is: '" + iMiddleMouseButton + "' '" + MausAktion.getItemText(iMiddleMouseButton) + "'"
+            warnlog "Middle mouse button: expected: '" + iTemp + "' '" _
+                    + MausAktion.getItemText(iTemp) + "'; is: '" _
+                    + iMiddleMouseButton + "' '" _
+                    + MausAktion.getItemText(iMiddleMouseButton) + "'"
         endif
+    endif
+    
+    if ( Transparency.isEnabled() ) then
+        if ( Transparency.isChecked() ) then
+            checkCheckBox( sFile , "*" , transparency )
+            checkEntryField( sFile , "*", selectionopacity )
+        else
+            Transparency.check()
+            checkEntryField( sFile , "*", selectionopacity, "i104150" )
+            Transparency.unCheck()
+        endif
+    else
+        printlog( "Transparency is not available on this system" )
     endif
 
     Kontext "OptionenDLG"
@@ -204,6 +220,18 @@ sub changePage( sFile as string , bInverted as boolean, optional iMiddleMouseBut
         else
             MausAktion.select(2) ' Automatic scrolling
         endif
+    endif
+    
+    if ( Transparency.isEnabled() ) then
+        if ( Transparency.isChecked() ) then
+            setEntryField( sFile , "*", selectionopacity )
+            setCheckBox( sFile , "*" , transparency )
+        else
+            setCheckBox( sFile , "*" , transparency )
+            setEntryField( sFile , "*", selectionopacity )
+        endif        
+    else
+        printlog( "Transparency is not available on this system" )
     endif
 
     Kontext "OptionenDLG"

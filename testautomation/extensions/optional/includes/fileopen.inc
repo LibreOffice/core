@@ -70,12 +70,16 @@ testcase tExtensionFileOpen
     
     printlog( "Reopen Extension Manager UI, click Add.. and check the directory" )
     ToolsPackageManager
+    
     kontext "PackageManager"
     if ( PackageManager.exists( 3 ) ) then
         Add.click()
+        
         Kontext "OeffnenDlg"
         if ( OeffnenDlg.exists( 2 ) ) then
-            DateiAuswahl.select( DateiAuswahl.getItemCount() ) 
+
+            printlog( "Select the last item in the list which should be the extension" )            
+            DateiAuswahl.select( Dateiauswahl.getItemCount() )
             cString = DateiAuswahl.getSelText()
             if ( cString <> EXTENSION_NAME ) then
                 warnlog( "Incorrect extension listed. Please check path and filename" )
@@ -85,11 +89,13 @@ testcase tExtensionFileOpen
             else
                 printlog( "Found correct extension, the dialog remembers the path" )
             endif
+
             kontext "OeffnenDlg"
             OeffnenDlg.cancel()
         else
             warnlog( "Could not access Add Extensions Dialog" )
         endif
+        
         kontext "PackageManager"
         PackageManager.close()
     else

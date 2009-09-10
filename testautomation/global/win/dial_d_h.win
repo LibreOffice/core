@@ -253,14 +253,14 @@ PopuplisteRechts sfx2:ListBox:DLG_ORGANIZE:LB_RIGHT_TYP
 AddressBook sfx2:PushButton:DLG_ORGANIZE:BTN_ADDRESSTEMPLATE
 
 *EinfuegenSpalten FN_TABLE_INSERT_COL_DLG
-Anzahl sw:NumericField:DLG_INS_ROW_COL:ED_COUNT
-Davor sw:RadioButton:DLG_INS_ROW_COL:CB_POS_BEFORE
-Dahinter sw:RadioButton:DLG_INS_ROW_COL:CB_POS_AFTER
+Anzahl svx:NumericField:DLG_INS_ROW_COL:ED_COUNT
+Davor svx:RadioButton:DLG_INS_ROW_COL:CB_POS_BEFORE
+Dahinter svx:RadioButton:DLG_INS_ROW_COL:CB_POS_AFTER
 
 *EinfuegenZeilen FN_TABLE_INSERT_ROW_DLG
-Anzahl sw:NumericField:DLG_INS_ROW_COL:ED_COUNT
-Davor sw:RadioButton:DLG_INS_ROW_COL:CB_POS_BEFORE
-Dahinter sw:RadioButton:DLG_INS_ROW_COL:CB_POS_AFTER
+Anzahl svx:NumericField:DLG_INS_ROW_COL:ED_COUNT
+Davor svx:RadioButton:DLG_INS_ROW_COL:CB_POS_BEFORE
+Dahinter svx:RadioButton:DLG_INS_ROW_COL:CB_POS_AFTER
 
 *EbeneEinfuegenDlg SID_INSERTLAYER
 EbenenName sd:Edit:DLG_INSERT_LAYER:EDT_NAME
