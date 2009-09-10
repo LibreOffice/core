@@ -217,8 +217,8 @@ $(MAKETARGETS) : $(ADDDEPS)
 .ENDIF			# "$(BUILD_SPECIAL)"!=""
 
 .IF "$(OS)" == "MACOSX"
-DMGDEPS=$(BIN)$/{osxdndinstall.png DS_Store}
-$(foreach,i,$(alllangiso) {openoffice openofficedev openofficewithjre broffice brofficedev brofficewithjre}_$i) : $(DMGDEPS)
+DMGDEPS=$(BIN)$/{osxdndinstall.png DS_Store DS_Store_Langpack}
+$(foreach,i,$(alllangiso) {openoffice openofficedev openofficewithjre ooolanguagepack broffice brofficedev brofficewithjre}_$i) : $(DMGDEPS)
 .ENDIF # "$(OS)" == "MACOSX"
 
 .IF "$(PKGFORMAT)"!=""
@@ -384,7 +384,7 @@ $(BIN)$/broffice$/intro.zip : $(SOLARCOMMONPCKDIR)$/broffice_nologo$/intro.zip
     @-$(MKDIR) $(@:d)
     $(COPY) $< $@
 
-$(BIN)$/{osxdndinstall.png DS_Store} : $(PRJ)$/res$/$$(@:f)
+$(BIN)$/{osxdndinstall.png DS_Store DS_Store_Langpack} : $(PRJ)$/res$/$$(@:f)
     @$(COPY) $< $@
 
 hack_msitemplates .PHONY:

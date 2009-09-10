@@ -128,6 +128,7 @@ CDD=cd
 # expect cygwin tools to exist
 COPY*=cp
 COPYRECURSE=-r
+DEREFERENCE=-L
 COPYUPDATE=-u
 ECHON=echo -n
 ECHONL=echo
@@ -179,16 +180,22 @@ PERL*=perl
 TYPE=cat
 CDD=cd
 COPY=cp -f
+.IF "$(OS)"=="MACOSX"
+COPYRECURSE=-R
+.ELSE #"$(OS)"=="MACOSX"
 COPYRECURSE=-r
+.ENDIF
 .IF "$(OS)"=="SOLARIS"
 AWK*=nawk
 GNUCOPY*=gnucp
 GNUPATCH*=gnupatch
 GNUTAR*=gtar
+DEREFERENCE=
 .ELSE			# "$(OS)"=="SOLARIS"
 AWK*=awk
 GNUCOPY*=cp
 GNUPATCH*=patch
+DEREFERENCE=-L
 .ENDIF			# "$(OS)"=="SOLARIS"
 .IF "$(OS)"=="LINUX" || "$(OS)"=="MACOSX"
 GNUMAKE*=make

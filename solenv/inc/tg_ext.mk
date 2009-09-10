@@ -34,9 +34,9 @@
 # setup INCLUDE variable for use by VC++
 .IF "$(GUI)$(COM)"=="WNTMSC"
 .IF "$(EXT_USE_STLPORT)"==""
-INCLUDE!:=$(subst,$/stl, $(SOLARINC))
+INCLUDE!:=. $(subst,$/stl, $(SOLARINC))
 .ELSE			# "$(EXT_USE_STLPORT)"==""
-INCLUDE!:=$(SOLARINC)
+INCLUDE!:=. $(SOLARINC)
 .ENDIF			# "$(EXT_USE_STLPORT)"==""
 INCLUDE!:=$(INCLUDE:s/ -I/;/)
 .EXPORT : INCLUDE
@@ -134,13 +134,13 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.Z
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.gz
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := gzip -d -c $(BACK_PATH)$(fake_back)download$/$(TARFILE_NAME).tar.gz $(TARFILE_FILTER) | $(TAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(BACK_PATH)$(fake_back)download$/$(TARFILE_NAME).tar.gz) $(TARFILE_FILTER) | $(TAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tgz
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := gzip -d -c $(BACK_PATH)$(fake_back)download$/$(TARFILE_NAME).tgz $(TARFILE_FILTER) | $(TAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(BACK_PATH)$(fake_back)download$/$(TARFILE_NAME).tgz) $(TARFILE_FILTER) | $(TAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
@@ -171,7 +171,7 @@ $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpa
     $(IFEXIST) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) $(THEN) $(RENAME:s/+//) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)_removeme $(FI)
     -rm -rf $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)_removeme
     @-$(MKDIRHIER) $(PACKAGE_DIR)$(fake_root_dir)
-    cd $(PACKAGE_DIR)$(fake_root_dir) && ( $(shell @$(TYPE) $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack)) && $(TOUCH) $(UNTAR_FLAG_FILE)
+    cd $(PACKAGE_DIR)$(fake_root_dir) && ( $(shell $(TYPE) $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack)) && $(TOUCH) $(UNTAR_FLAG_FILE)
     @echo make writeable...
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     @cd $(PACKAGE_DIR) && chmod -R +rw $(TARFILE_ROOTDIR) && $(TOUCH) $(UNTAR_FLAG_FILE)
@@ -293,7 +293,7 @@ $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
     @-$(MKDIR) $(foreach,i,$(OUTDIR2INC) $(INCCOM)$/$(i:b))
     @echo copied $(foreach,i,$(OUTDIR2INC) $(shell @$(COPY) $(COPYRECURSE) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i$/* $(INCCOM)$/$(i:b) >& $(NULLDEV) && echo $i))
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    $(COPY) $(COPYRECURSE) $(foreach,i,$(OUTDIR2INC) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(INCCOM)
+    $(COPY) $(DEREFERENCE) $(COPYRECURSE) $(foreach,i,$(OUTDIR2INC) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(INCCOM)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(OUTDIR2INC)"!=""
 .IF "$(OUT2BIN)"!=""

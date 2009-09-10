@@ -135,50 +135,62 @@ sub register_unocomponents
 
     my $error_occured = 0;
     my $filestring = "";
-    for ( my $i = 0; $i <= $#{$unocomponents}; )
+    for ( my $i = 0; $i <= $#{$unocomponents}; ++$i )
     {
-        my $sourcepath = ${$unocomponents}[$i++]->{'sourcepath'};
-
-        $filestring = $filestring . make_file_url($sourcepath);
-
-        if ( $i % $installer::globals::unomaxservices == 0 || $i > $#{$unocomponents} )    # limiting to $installer::globals::maxservices files
+        my $sourcepath = make_file_url(${$unocomponents}[$i]->{'sourcepath'});
+        my $urlprefix = ${$unocomponents}[$i]->{'NativeServicesURLPrefix'};
+        if (defined($urlprefix))
         {
-            my @regcompoutput = ();
-
-            my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -r ".fix_cygwin_path($servicesfile)." -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " -wop=" . $installer::globals::quote . $nativeservicesurlprefix . $installer::globals::quote . " 2\>\&1 |";
-
-            open (REG, "$systemcall");
-            while (<REG>) {push(@regcompoutput, $_); }
-            close (REG);
-
-            my $returnvalue = $?;   # $? contains the return value of the systemcall
-
-            my $infoline = "Systemcall: $systemcall\n";
-            push( @installer::globals::logfileinfo, $infoline);
-
-            for ( my $j = 0; $j <= $#regcompoutput; $j++ ) { push( @installer::globals::logfileinfo, "$regcompoutput[$j]"); }
-
-            if ($returnvalue)
-            {
-                $infoline = "ERROR: $systemcall\n";
-                push( @installer::globals::logfileinfo, $infoline);
-                $error_occured = 1;
-            }
-            else
-            {
-                $infoline = "SUCCESS: $systemcall\n";
-                push( @installer::globals::logfileinfo, $infoline);
-            }
-
-            $filestring = "";
+            call_regcomp(
+                $regcompfileref, $servicesfile, $sourcepath, $urlprefix);
         }
         else
         {
-            $filestring = $filestring . ";";
+            $filestring .= ";" unless $filestring eq "";
+            $filestring .= $sourcepath;
+        }
+        if (length($filestring) > $installer::globals::unomaxservices ||
+            ($i == $#{$unocomponents} && $filestring ne ""))
+        {
+            call_regcomp(
+                $regcompfileref, $servicesfile, $filestring,
+                $nativeservicesurlprefix);
+            $filestring = "";
         }
     }
 
     return $error_occured;
+}
+
+sub call_regcomp
+{
+    my ($regcompfileref, $servicesfile, $filestring, $urlprefix) = @_;
+    my @regcompoutput = ();
+
+    my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -r ".fix_cygwin_path($servicesfile)." -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " -wop=" . $installer::globals::quote . $urlprefix . $installer::globals::quote . " 2\>\&1 |";
+
+    open (REG, "$systemcall");
+    while (<REG>) {push(@regcompoutput, $_); }
+    close (REG);
+
+    my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    for ( my $j = 0; $j <= $#regcompoutput; $j++ ) { push( @installer::globals::logfileinfo, "$regcompoutput[$j]"); }
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
+        $error_occured = 1;
+    }
+    else
+    {
+        $infoline = "SUCCESS: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
 }
 
 ################################################################
@@ -343,7 +355,6 @@ sub register_pythoncomponents
                 $counter++;
             }
 
-#           if ((( $counter > 0 ) && ( $counter%$installer::globals::unomaxservices == 0 )) || (( $counter > 0 ) && ( $i == $#{$pythoncomponents} )))   # limiting to $installer::globals::maxservices files
             if ( $counter > 0 )
             {
                 $filestring =~ s/\;\s*$//;

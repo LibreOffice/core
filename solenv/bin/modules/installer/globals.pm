@@ -134,6 +134,7 @@ BEGIN
     $issolarissparcbuild = 0;
     $issolarisx86build = 0;
     $isfreebsdpkgbuild = 0;
+    $ismacdmgbuild = 0;
     $unpackpath = "";
     $idttemplatepath = "";
     $idtlanguagepath = "";
@@ -397,7 +398,7 @@ BEGIN
     %usedtreeconditions = ();
     %moduledestination = ();
 
-    $unomaxservices = 25;
+    $unomaxservices = 1800; # regcomp -c argument length
     $javamaxservices = 15;
 
     $one_cab_file = 0;
@@ -448,6 +449,7 @@ BEGIN
     @featurecollector =();
     $msiassemblyfiles = "";
     $nsisfilename = "Nsis";
+    $macinstallfilename = "macinstall.ulf";
     $nsis204 = 0;
     $nsis231 = 0;
     $unicodensis = 0;

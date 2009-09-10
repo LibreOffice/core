@@ -144,11 +144,13 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @cat $(APP1LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP1RES)) >  $(MISC)$/$(@:b)_all.res
     windres $(MISC)$/$(@:b)_all.res $(APP1RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP1BASEX) $(APP1STACKN) -o $@ $(APP1OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP1RESO) \
         `$(TYPE) /dev/null $(APP1LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP1LIBSALCPPRT) $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1) > $(MISC)$/$(TARGET).$(@:b)_1.cmd
+        $(APP_LINKTYPE) $(APP1LIBSALCPPRT) \
+        -Wl,--start-group $(APP1STDLIBS) -Wl,--end-group $(APP1STDLIB) \
+        $(STDLIB1) $(MINGWSSTDENDOBJ) > $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @ls -l $@
@@ -428,11 +430,13 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @cat $(APP2LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP2RES)) >  $(MISC)$/$(@:b)_all.res
     windres $(MISC)$/$(@:b)_all.res $(APP2RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP2BASEX) $(APP2STACKN) -o $@ $(APP2OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP2RESO) \
         `$(TYPE) /dev/null $(APP2LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP2LIBSALCPPRT) $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2) > $(MISC)$/$(TARGET).$(@:b)_2.cmd
+        $(APP_LINKTYPE) $(APP2LIBSALCPPRT) \
+        -Wl,--start-group $(APP2STDLIBS) -Wl,--end-group $(APP2STDLIB) \
+        $(STDLIB2) $(MINGWSSTDENDOBJ) > $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @ls -l $@
@@ -712,11 +716,13 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @cat $(APP3LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP3RES)) >  $(MISC)$/$(@:b)_all.res
     windres $(MISC)$/$(@:b)_all.res $(APP3RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP3BASEX) $(APP3STACKN) -o $@ $(APP3OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP3RESO) \
         `$(TYPE) /dev/null $(APP3LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP3LIBSALCPPRT) $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3) > $(MISC)$/$(TARGET).$(@:b)_3.cmd
+        $(APP_LINKTYPE) $(APP3LIBSALCPPRT) \
+        -Wl,--start-group $(APP3STDLIBS) -Wl,--end-group $(APP3STDLIB) \
+        $(STDLIB3) $(MINGWSSTDENDOBJ) > $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @ls -l $@
@@ -996,11 +1002,13 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @cat $(APP4LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP4RES)) >  $(MISC)$/$(@:b)_all.res
     windres $(MISC)$/$(@:b)_all.res $(APP4RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP4BASEX) $(APP4STACKN) -o $@ $(APP4OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP4RESO) \
         `$(TYPE) /dev/null $(APP4LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP4LIBSALCPPRT) $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4) > $(MISC)$/$(TARGET).$(@:b)_4.cmd
+        $(APP_LINKTYPE) $(APP4LIBSALCPPRT) \
+        -Wl,--start-group $(APP4STDLIBS) -Wl,--end-group $(APP4STDLIB) \
+        $(STDLIB4) $(MINGWSSTDENDOBJ) > $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @ls -l $@
@@ -1280,11 +1288,13 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @cat $(APP5LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP5RES)) >  $(MISC)$/$(@:b)_all.res
     windres $(MISC)$/$(@:b)_all.res $(APP5RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP5BASEX) $(APP5STACKN) -o $@ $(APP5OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP5RESO) \
         `$(TYPE) /dev/null $(APP5LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP5LIBSALCPPRT) $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5) > $(MISC)$/$(TARGET).$(@:b)_5.cmd
+        $(APP_LINKTYPE) $(APP5LIBSALCPPRT) \
+        -Wl,--start-group $(APP5STDLIBS) -Wl,--end-group $(APP5STDLIB) \
+        $(STDLIB5) $(MINGWSSTDENDOBJ) > $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @ls -l $@
@@ -1564,11 +1574,13 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @cat $(APP6LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP6RES)) >  $(MISC)$/$(@:b)_all.res
     windres $(MISC)$/$(@:b)_all.res $(APP6RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP6BASEX) $(APP6STACKN) -o $@ $(APP6OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP6RESO) \
         `$(TYPE) /dev/null $(APP6LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP6LIBSALCPPRT) $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6) > $(MISC)$/$(TARGET).$(@:b)_6.cmd
+        $(APP_LINKTYPE) $(APP6LIBSALCPPRT) \
+        -Wl,--start-group $(APP6STDLIBS) -Wl,--end-group $(APP6STDLIB) \
+        $(STDLIB6) $(MINGWSSTDENDOBJ) > $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @ls -l $@
@@ -1848,11 +1860,13 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @cat $(APP7LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP7RES)) >  $(MISC)$/$(@:b)_all.res
     windres $(MISC)$/$(@:b)_all.res $(APP7RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP7BASEX) $(APP7STACKN) -o $@ $(APP7OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP7RESO) \
         `$(TYPE) /dev/null $(APP7LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP7LIBSALCPPRT) $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7) > $(MISC)$/$(TARGET).$(@:b)_7.cmd
+        $(APP_LINKTYPE) $(APP7LIBSALCPPRT) \
+        -Wl,--start-group $(APP7STDLIBS) -Wl,--end-group $(APP7STDLIB) \
+        $(STDLIB7) $(MINGWSSTDENDOBJ) > $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @ls -l $@
@@ -2132,11 +2146,13 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @cat $(APP8LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP8RES)) >  $(MISC)$/$(@:b)_all.res
     windres $(MISC)$/$(@:b)_all.res $(APP8RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP8BASEX) $(APP8STACKN) -o $@ $(APP8OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP8RESO) \
         `$(TYPE) /dev/null $(APP8LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP8LIBSALCPPRT) $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8) > $(MISC)$/$(TARGET).$(@:b)_8.cmd
+        $(APP_LINKTYPE) $(APP8LIBSALCPPRT) \
+        -Wl,--start-group $(APP8STDLIBS) -Wl,--end-group $(APP8STDLIB) \
+        $(STDLIB8) $(MINGWSSTDENDOBJ) > $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @ls -l $@
@@ -2416,11 +2432,13 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @cat $(APP9LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP9RES)) >  $(MISC)$/$(@:b)_all.res
     windres $(MISC)$/$(@:b)_all.res $(APP9RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP9BASEX) $(APP9STACKN) -o $@ $(APP9OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP9RESO) \
         `$(TYPE) /dev/null $(APP9LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP9LIBSALCPPRT) $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9) > $(MISC)$/$(TARGET).$(@:b)_9.cmd
+        $(APP_LINKTYPE) $(APP9LIBSALCPPRT) \
+        -Wl,--start-group $(APP9STDLIBS) -Wl,--end-group $(APP9STDLIB) \
+        $(STDLIB9) $(MINGWSSTDENDOBJ) > $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @ls -l $@
@@ -2700,11 +2718,13 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @cat $(APP10LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP10RES)) >  $(MISC)$/$(@:b)_all.res
     windres $(MISC)$/$(@:b)_all.res $(APP10RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP10BASEX) $(APP10STACKN) -o $@ $(APP10OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP10RESO) \
         `$(TYPE) /dev/null $(APP10LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP10LIBSALCPPRT) $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10) > $(MISC)$/$(TARGET).$(@:b)_10.cmd
+        $(APP_LINKTYPE) $(APP10LIBSALCPPRT) \
+        -Wl,--start-group $(APP10STDLIBS) -Wl,--end-group $(APP10STDLIB) \
+        $(STDLIB10) $(MINGWSSTDENDOBJ) > $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @ls -l $@
