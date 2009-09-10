@@ -62,6 +62,7 @@ SHL1STDLIBS= \
         $(SVLLIB) \
         $(SVTOOLLIB) \
         $(SFXLIB) \
+        $(SVXCORELIB) \
         $(SVXLIB) \
         $(TOOLSLIB)
 

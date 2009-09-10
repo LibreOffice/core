@@ -163,40 +163,6 @@ namespace oooimprovement
             const css::uno::Any& aValue);
 
         //-----------------------------------------------
-        /** it checks if the specified set node exists ... or create an empty one
-         *  otherwise.
-         *
-         *  This method must be used in combination with openConfig().
-         *  The cached configuration access must be provided here ... and
-         *  all operations are made relativ to this access point.
-         *
-         *  Further this method must be used only with configuration set's.
-         *  Atomic keys can't be "created" ... they "exists everytimes".
-         *
-         *  @param  xCFG
-         *          the configuration root, where sRelPathToSet should be interpreted
-         *          as relativ path.
-         *
-         *  @param  sRelPathToSet
-         *          path relative to xCFG parameter.
-         *
-         *  @param  sSetNode
-         *          the set node, which should be checked if its exists ...
-         *          or which should be created with default values.
-         *
-         *  @return A reference to the found (or new created) set node.
-         *          Cant be NULL .. in such case an exception occure !
-         *
-         *  @throw  css::uno::Any exceptions the underlying configuration can throw.
-         *          E.g. css::uno::Exception if the provided configuration
-         *          access does not allow writing for this set.
-         */
-        static css::uno::Reference< css::uno::XInterface> makeSureSetNodeExists(
-            const css::uno::Reference< css::uno::XInterface> xCFG,
-            const ::rtl::OUString& sRelPathToSet,
-            const ::rtl::OUString& sSetNode);
-
-        //-----------------------------------------------
         /** commit all changes made on the specified configuration access.
          *
          *  This method must be used in combination with openConfig().

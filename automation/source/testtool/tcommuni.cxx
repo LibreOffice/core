@@ -36,7 +36,6 @@
 #include <vcl/svapp.hxx>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
-#include <vos/process.hxx>
 #include <vcl/timer.hxx>
 
 #ifndef _BASIC_TTRESHLP_HXX

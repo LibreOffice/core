@@ -66,7 +66,6 @@ private:
 
 protected:
     DlgEdObj();
-    DlgEdObj(const ::rtl::OUString& rModelName);
     DlgEdObj(const ::rtl::OUString& rModelName,
              const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac);
 
@@ -160,9 +159,6 @@ private:
 
 
 protected:
-    DlgEdForm(const ::rtl::OUString& rModelName);
-    DlgEdForm(const ::rtl::OUString& rModelName,
-              const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac);
     DlgEdForm();
 
     virtual void NbcMove( const Size& rSize );
