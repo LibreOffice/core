@@ -53,7 +53,7 @@ class SbxVariable;
 class ScBaseCell;
 class ScFormulaCell;
 class SvNumberFormatter;
-class ScDoubleRefBase;
+class ScDBRangeBase;
 struct MatrixDoubleOp;
 struct ScQueryParam;
 
@@ -303,7 +303,7 @@ void DoubleRefToVars( const ScToken* p,
         SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
         SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
         BOOL bDontCheckForTableOp = FALSE );
-ScDoubleRefBase* PopDoubleRef();
+ScDBRangeBase* PopDoubleRef();
 void PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                           SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
                           BOOL bDontCheckForTableOp = FALSE );

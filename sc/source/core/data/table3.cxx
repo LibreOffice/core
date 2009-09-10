@@ -1962,7 +1962,7 @@ BOOL ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
 }
 
 bool ScTable::CreateExcelQuery(
-    ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef,
+    ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef,
     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
     bool bValid = true;
@@ -2216,7 +2216,7 @@ BOOL ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
     return bValid;
 }
 
-bool ScTable::CreateStarQuery(ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
+bool ScTable::CreateStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
     // A valid StarQuery must be at least 4 columns wide. To be precise it
     // should be exactly 4 columns ...
@@ -2369,7 +2369,7 @@ BOOL ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
 }
 
 bool ScTable::FillQueryEntries(
-    ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
+    ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
     PutInOrder(nCol1, nCol2);
     PutInOrder(nRow1, nRow2);

@@ -40,28 +40,28 @@ class ScQueryParamBase;
 
 // ============================================================================
 
-class ScDoubleRefBase
+class ScDBRangeBase
 {
 public:
     enum RefType { INTERNAL, EXTERNAL };
 
-    virtual ~ScDoubleRefBase() = 0;
+    virtual ~ScDBRangeBase() = 0;
 
     RefType getType() const;
 
     virtual SCCOL getFirstFieldColumn() const = 0;
     virtual SCCOL findFieldColumn(SCCOL nColIndex) const = 0;
     virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const = 0;
-    virtual ScDBQueryParamBase* createQueryParam(const ScDoubleRefBase* pQueryRef) const = 0;
+    virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const = 0;
     virtual bool isRangeEqual(const ScRange& rRange) const = 0;
-    virtual bool fillQueryEntries(ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef) const= 0;
+    virtual bool fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef) const= 0;
 
 protected:
-    ScDoubleRefBase(ScDocument* pDoc, RefType eType);
+    ScDBRangeBase(ScDocument* pDoc, RefType eType);
     ScDocument* getDoc() const;
 
 private:
-    ScDoubleRefBase(); // disabled
+    ScDBRangeBase(); // disabled
 
     ScDocument* mpDoc;
     RefType meType;
@@ -69,20 +69,20 @@ private:
 
 // ============================================================================
 
-class ScInternalDoubleRef : public ScDoubleRefBase
+class ScDBInternalRange : public ScDBRangeBase
 {
 public:
-    explicit ScInternalDoubleRef(ScDocument* pDoc, const ScRange& rRange);
-    virtual ~ScInternalDoubleRef();
+    explicit ScDBInternalRange(ScDocument* pDoc, const ScRange& rRange);
+    virtual ~ScDBInternalRange();
 
     const ScRange& getRange() const;
 
     virtual SCCOL getFirstFieldColumn() const;
     virtual SCCOL findFieldColumn(SCCOL nColIndex) const;
     virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const;
-    virtual ScDBQueryParamBase* createQueryParam(const ScDoubleRefBase* pQueryRef) const;
+    virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const;
     virtual bool isRangeEqual(const ScRange& rRange) const;
-    virtual bool fillQueryEntries(ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef) const;
+    virtual bool fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef) const;
 
 private:
     sal_uInt16 getCellString(String& rStr, ScBaseCell* pCell) const;
@@ -93,18 +93,18 @@ private:
 
 // ============================================================================
 
-class ScExternalDoubleRef : public ScDoubleRefBase
+class ScDBExternalRange : public ScDBRangeBase
 {
 public:
-    explicit ScExternalDoubleRef(ScDocument* pDoc);
-    virtual ~ScExternalDoubleRef();
+    explicit ScDBExternalRange(ScDocument* pDoc);
+    virtual ~ScDBExternalRange();
 
     virtual SCCOL getFirstFieldColumn() const;
     virtual SCCOL findFieldColumn(SCCOL nColIndex) const;
     virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const;
-    virtual ScDBQueryParamBase* createQueryParam(const ScDoubleRefBase* pQueryRef) const;
+    virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const;
     virtual bool isRangeEqual(const ScRange& rRange) const;
-    virtual bool fillQueryEntries(ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef) const;
+    virtual bool fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef) const;
 };
 
 #endif

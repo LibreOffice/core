@@ -5673,7 +5673,7 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( BOOL& rMissingField )
     if ( GetByte() == 3 )
     {
         // First, get the query criteria range.
-        ::std::auto_ptr<ScDoubleRefBase> pQueryRef( PopDoubleRef() );
+        ::std::auto_ptr<ScDBRangeBase> pQueryRef( PopDoubleRef() );
         if (!pQueryRef.get())
             return NULL;
 
@@ -5738,7 +5738,7 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( BOOL& rMissingField )
                 SetError( errIllegalParameter );
         }
 
-        auto_ptr<ScDoubleRefBase> pDBRef( PopDoubleRef() );
+        auto_ptr<ScDBRangeBase> pDBRef( PopDoubleRef() );
 
         if (nGlobalError || !pDBRef.get())
             return NULL;
@@ -5819,7 +5819,7 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
     {
         double nVal;
         USHORT nErr;
-        ScQueryValueIterator aValIter(pDok, pQueryParam.release());
+        ScDBQueryValueIterator aValIter(pDok, pQueryParam.release());
         if ( aValIter.GetFirst(nVal, nErr) && !nErr )
         {
             switch( eFunc )
@@ -5914,7 +5914,7 @@ void ScInterpreter::ScDBCount()
         {   // count only matching records with a value in the "result" field
             double nVal;
             USHORT nErr = 0;
-            ScQueryValueIterator aValIter( pDok, pQueryParam.release());
+            ScDBQueryValueIterator aValIter( pDok, pQueryParam.release());
             if ( aValIter.GetFirst( nVal, nErr) && !nErr )
             {
                 do
@@ -6001,7 +6001,7 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
     {
         double fVal;
         USHORT nErr;
-        ScQueryValueIterator aValIter(pDok, pQueryParam.release());
+        ScDBQueryValueIterator aValIter(pDok, pQueryParam.release());
         if (aValIter.GetFirst(fVal, nErr) && !nErr)
         {
             do

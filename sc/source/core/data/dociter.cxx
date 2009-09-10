@@ -484,17 +484,17 @@ BOOL ScValueIterator::GetNext(double& rValue, USHORT& rErr)
 
 // ============================================================================
 
-ScQueryValueIterator::DataAccess::DataAccess()
+ScDBQueryValueIterator::DataAccess::DataAccess()
 {
 }
 
-ScQueryValueIterator::DataAccess::~DataAccess()
+ScDBQueryValueIterator::DataAccess::~DataAccess()
 {
 }
 
 // ----------------------------------------------------------------------------
 
-ScQueryValueIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryParamInternal* pParam, ScDocument* pDoc) :
+ScDBQueryValueIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryParamInternal* pParam, ScDocument* pDoc) :
     mpParam(pParam),
     mpDoc(pDoc)
 {
@@ -517,11 +517,11 @@ ScQueryValueIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryPara
     nAttrEndRow = 0;
 }
 
-ScQueryValueIterator::DataAccessInternal::~DataAccessInternal()
+ScDBQueryValueIterator::DataAccessInternal::~DataAccessInternal()
 {
 }
 
-bool ScQueryValueIterator::DataAccessInternal::getCurrent(double& rValue, USHORT& rErr)
+bool ScDBQueryValueIterator::DataAccessInternal::getCurrent(double& rValue, USHORT& rErr)
 {
     ScColumn* pCol = &(mpDoc->pTab[nTab])->aCol[nCol];
     SCCOLROW nFirstQueryField = mpParam->GetEntry(0).nField;
@@ -604,7 +604,7 @@ bool ScQueryValueIterator::DataAccessInternal::getCurrent(double& rValue, USHORT
     return false;
 }
 
-bool ScQueryValueIterator::DataAccessInternal::getFirst(double& rValue, USHORT& rErr)
+bool ScDBQueryValueIterator::DataAccessInternal::getFirst(double& rValue, USHORT& rErr)
 {
     if (mpParam->bHasHeader)
         nRow++;
@@ -614,7 +614,7 @@ bool ScQueryValueIterator::DataAccessInternal::getFirst(double& rValue, USHORT& 
     return getCurrent(rValue, rErr);
 }
 
-bool ScQueryValueIterator::DataAccessInternal::getNext(double& rValue, USHORT& rErr)
+bool ScDBQueryValueIterator::DataAccessInternal::getNext(double& rValue, USHORT& rErr)
 {
     ++nRow;
     return getCurrent(rValue, rErr);
@@ -622,33 +622,33 @@ bool ScQueryValueIterator::DataAccessInternal::getNext(double& rValue, USHORT& r
 
 // ----------------------------------------------------------------------------
 
-ScQueryValueIterator::DataAccessMatrix::DataAccessMatrix(const ScDBQueryParamMatrix* pParam) :
+ScDBQueryValueIterator::DataAccessMatrix::DataAccessMatrix(const ScDBQueryParamMatrix* pParam) :
     mpParam(pParam)
 {
 }
 
-ScQueryValueIterator::DataAccessMatrix::~DataAccessMatrix()
+ScDBQueryValueIterator::DataAccessMatrix::~DataAccessMatrix()
 {
 }
 
-bool ScQueryValueIterator::DataAccessMatrix::getCurrent(double& /*rValue*/, USHORT& /*rErr*/)
-{
-    return false;
-}
-
-bool ScQueryValueIterator::DataAccessMatrix::getFirst(double& /*rValue*/, USHORT& /*rErr*/)
+bool ScDBQueryValueIterator::DataAccessMatrix::getCurrent(double& /*rValue*/, USHORT& /*rErr*/)
 {
     return false;
 }
 
-bool ScQueryValueIterator::DataAccessMatrix::getNext(double& /*rValue*/, USHORT& /*rErr*/)
+bool ScDBQueryValueIterator::DataAccessMatrix::getFirst(double& /*rValue*/, USHORT& /*rErr*/)
+{
+    return false;
+}
+
+bool ScDBQueryValueIterator::DataAccessMatrix::getNext(double& /*rValue*/, USHORT& /*rErr*/)
 {
     return false;
 }
 
 // ----------------------------------------------------------------------------
 
-ScQueryValueIterator::ScQueryValueIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam) :
+ScDBQueryValueIterator::ScDBQueryValueIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam) :
     mpParam (pParam)
 {
     switch (mpParam->GetType())
@@ -667,17 +667,17 @@ ScQueryValueIterator::ScQueryValueIterator(ScDocument* pDocument, ScDBQueryParam
     }
 }
 
-bool ScQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
+bool ScDBQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
 {
     return mpData->getCurrent(rValue, rErr);
 }
 
-BOOL ScQueryValueIterator::GetFirst(double& rValue, USHORT& rErr)
+BOOL ScDBQueryValueIterator::GetFirst(double& rValue, USHORT& rErr)
 {
     return mpData->getFirst(rValue, rErr);
 }
 
-BOOL ScQueryValueIterator::GetNext(double& rValue, USHORT& rErr)
+BOOL ScDBQueryValueIterator::GetNext(double& rValue, USHORT& rErr)
 {
     return mpData->getNext(rValue, rErr);
 }

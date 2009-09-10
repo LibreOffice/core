@@ -1243,7 +1243,7 @@ BOOL ScDocument::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
     return FALSE;
 }
 
-bool ScDocument::FillQueryEntries( ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef,
+bool ScDocument::FillQueryEntries( ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef,
                                    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab)
 {
     if (!pParam)

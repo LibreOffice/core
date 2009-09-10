@@ -1060,7 +1060,7 @@ void ScInterpreter::DoubleRefToVars( const ScToken* p,
     }
 }
 
-ScDoubleRefBase* ScInterpreter::PopDoubleRef()
+ScDBRangeBase* ScInterpreter::PopDoubleRef()
 {
     if (!sp)
     {
@@ -1085,7 +1085,7 @@ ScDoubleRefBase* ScInterpreter::PopDoubleRef()
             DoubleRefToVars(static_cast<ScToken*>(p),
                             nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, false);
 
-            return new ScInternalDoubleRef(pDok,
+            return new ScDBInternalRange(pDok,
                 ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
         }
         break;

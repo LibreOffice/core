@@ -46,47 +46,47 @@ using ::std::auto_ptr;
 
 // ============================================================================
 
-ScDoubleRefBase::ScDoubleRefBase(ScDocument* pDoc, RefType eType) :
+ScDBRangeBase::ScDBRangeBase(ScDocument* pDoc, RefType eType) :
     mpDoc(pDoc), meType(eType)
 {
 }
 
-ScDoubleRefBase::~ScDoubleRefBase()
+ScDBRangeBase::~ScDBRangeBase()
 {
 }
 
-ScDoubleRefBase::RefType ScDoubleRefBase::getType() const
+ScDBRangeBase::RefType ScDBRangeBase::getType() const
 {
     return meType;
 }
 
-ScDocument* ScDoubleRefBase::getDoc() const
+ScDocument* ScDBRangeBase::getDoc() const
 {
     return mpDoc;
 }
 
 // ============================================================================
 
-ScInternalDoubleRef::ScInternalDoubleRef(ScDocument* pDoc, const ScRange& rRange) :
-    ScDoubleRefBase(pDoc, INTERNAL), maRange(rRange)
+ScDBInternalRange::ScDBInternalRange(ScDocument* pDoc, const ScRange& rRange) :
+    ScDBRangeBase(pDoc, INTERNAL), maRange(rRange)
 {
 }
 
-ScInternalDoubleRef::~ScInternalDoubleRef()
+ScDBInternalRange::~ScDBInternalRange()
 {
 }
 
-const ScRange& ScInternalDoubleRef::getRange() const
+const ScRange& ScDBInternalRange::getRange() const
 {
     return maRange;
 }
 
-SCCOL ScInternalDoubleRef::getFirstFieldColumn() const
+SCCOL ScDBInternalRange::getFirstFieldColumn() const
 {
     return getRange().aStart.Col();
 }
 
-SCCOL ScInternalDoubleRef::findFieldColumn(SCCOL nColIndex) const
+SCCOL ScDBInternalRange::findFieldColumn(SCCOL nColIndex) const
 {
     const ScRange& rRange = getRange();
     const ScAddress& s = rRange.aStart;
@@ -101,7 +101,7 @@ SCCOL ScInternalDoubleRef::findFieldColumn(SCCOL nColIndex) const
     return Min(nDBCol2, static_cast<SCCOL>(nDBCol1 + nColIndex - 1));
 }
 
-sal_uInt16 ScInternalDoubleRef::getCellString(String& rStr, ScBaseCell* pCell) const
+sal_uInt16 ScDBInternalRange::getCellString(String& rStr, ScBaseCell* pCell) const
 {
     sal_uInt16 nErr = 0;
     if (pCell)
@@ -151,7 +151,7 @@ sal_uInt16 ScInternalDoubleRef::getCellString(String& rStr, ScBaseCell* pCell) c
     return nErr;
 }
 
-SCCOL ScInternalDoubleRef::findFieldColumn(const OUString& rStr, sal_uInt16* pErr) const
+SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr) const
 {
     const ScAddress& s = maRange.aStart;
     const ScAddress& e = maRange.aEnd;
@@ -182,7 +182,7 @@ SCCOL ScInternalDoubleRef::findFieldColumn(const OUString& rStr, sal_uInt16* pEr
     return bFound ? nField : -1;
 }
 
-ScDBQueryParamBase* ScInternalDoubleRef::createQueryParam(const ScDoubleRefBase* pQueryRef) const
+ScDBQueryParamBase* ScDBInternalRange::createQueryParam(const ScDBRangeBase* pQueryRef) const
 {
     auto_ptr<ScDBQueryParamInternal> pParam(new ScDBQueryParamInternal);
 
@@ -208,12 +208,12 @@ ScDBQueryParamBase* ScInternalDoubleRef::createQueryParam(const ScDoubleRefBase*
     return pParam.release();
 }
 
-bool ScInternalDoubleRef::isRangeEqual(const ScRange& rRange) const
+bool ScDBInternalRange::isRangeEqual(const ScRange& rRange) const
 {
     return maRange == rRange;
 }
 
-bool ScInternalDoubleRef::fillQueryEntries(ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef) const
+bool ScDBInternalRange::fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef) const
 {
     if (!pDBRef)
         return false;
@@ -225,41 +225,41 @@ bool ScInternalDoubleRef::fillQueryEntries(ScQueryParamBase* pParam, const ScDou
 
 // ============================================================================
 
-ScExternalDoubleRef::ScExternalDoubleRef(ScDocument* pDoc) :
-    ScDoubleRefBase(pDoc, EXTERNAL)
+ScDBExternalRange::ScDBExternalRange(ScDocument* pDoc) :
+    ScDBRangeBase(pDoc, EXTERNAL)
 {
 }
 
-ScExternalDoubleRef::~ScExternalDoubleRef()
+ScDBExternalRange::~ScDBExternalRange()
 {
 }
 
-SCCOL ScExternalDoubleRef::getFirstFieldColumn() const
-{
-    return -1;
-}
-
-SCCOL ScExternalDoubleRef::findFieldColumn(SCCOL /*nColIndex*/) const
+SCCOL ScDBExternalRange::getFirstFieldColumn() const
 {
     return -1;
 }
 
-SCCOL ScExternalDoubleRef::findFieldColumn(const OUString& rStr, sal_uInt16* pErr) const
+SCCOL ScDBExternalRange::findFieldColumn(SCCOL /*nColIndex*/) const
 {
     return -1;
 }
 
-ScDBQueryParamBase* ScExternalDoubleRef::createQueryParam(const ScDoubleRefBase* /*pQueryRef*/) const
+SCCOL ScDBExternalRange::findFieldColumn(const OUString& /*rStr*/, sal_uInt16* /*pErr*/) const
+{
+    return -1;
+}
+
+ScDBQueryParamBase* ScDBExternalRange::createQueryParam(const ScDBRangeBase* /*pQueryRef*/) const
 {
     return NULL;
 }
 
-bool ScExternalDoubleRef::isRangeEqual(const ScRange& /*rRange*/) const
+bool ScDBExternalRange::isRangeEqual(const ScRange& /*rRange*/) const
 {
     return false;
 }
 
-bool ScExternalDoubleRef::fillQueryEntries(ScQueryParamBase* /*pParam*/, const ScDoubleRefBase* /*pDBRef*/) const
+bool ScDBExternalRange::fillQueryEntries(ScQueryParamBase* /*pParam*/, const ScDBRangeBase* /*pDBRef*/) const
 {
     return false;
 }

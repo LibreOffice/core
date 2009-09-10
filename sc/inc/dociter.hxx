@@ -132,10 +132,7 @@ public:
 
 // ============================================================================
 
-/**
- * Rename this to ScDBQueryValueIterator.
- */
-class ScQueryValueIterator            // alle Zahlenwerte in einem Bereich durchgehen
+class ScDBQueryValueIterator            // alle Zahlenwerte in einem Bereich durchgehen
 {
 private:
     class DataAccess
@@ -190,7 +187,7 @@ private:
 
     bool            GetThis(double& rValue, USHORT& rErr);
 public:
-                    ScQueryValueIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam);
+                    ScDBQueryValueIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam);
     /// Does NOT reset rValue if no value found!
     BOOL            GetFirst(double& rValue, USHORT& rErr);
     /// Does NOT reset rValue if no value found!
