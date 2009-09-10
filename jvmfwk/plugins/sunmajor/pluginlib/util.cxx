@@ -65,6 +65,7 @@ using namespace rtl;
 using namespace osl;
 using namespace std;
 
+#define CHAR_POINTER(oustr) ::rtl::OUStringToOString(oustr,RTL_TEXTENCODING_UTF8).pData->buffer
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #ifdef WNT
 #define HKEY_SUN_JRE L"Software\\JavaSoft\\Java Runtime Environment"
@@ -449,7 +450,11 @@ bool getJavaProps(const OUString & exePath,
         rs = stdoutReader.readLine( & aLine);
         if (rs != FileHandleReader::RESULT_OK)
             break;
+        JFW_TRACE2(OString("[Java framework] line:\" ")
+               + aLine + OString(" \".\n"));
         OUString sLine = decodeOutput(aLine);
+        JFW_TRACE2(OString("[Java framework] line:\" ")
+               + OString( CHAR_POINTER(sLine)) + OString(" \".\n"));
         sLine = sLine.trim();
         if (sLine.getLength() == 0)
             continue;
