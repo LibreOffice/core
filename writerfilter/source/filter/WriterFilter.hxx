@@ -33,16 +33,18 @@
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <WriterFilterDllApi.hxx>
 
-class WRITERFILTER_DLLPUBLIC WriterFilter : public cppu::WeakImplHelper4
+class WRITERFILTER_DLLPUBLIC WriterFilter : public cppu::WeakImplHelper5
 <
     com::sun::star::document::XFilter,
     com::sun::star::document::XImporter,
+    com::sun::star::document::XExporter,
     com::sun::star::lang::XInitialization,
     com::sun::star::lang::XServiceInfo
 >
@@ -50,7 +52,7 @@ class WRITERFILTER_DLLPUBLIC WriterFilter : public cppu::WeakImplHelper4
 
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xDoc;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xSrcDoc, m_xDstDoc;
     ::rtl::OUString m_sFilterName;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > m_xHandler;
 
@@ -67,6 +69,10 @@ public:
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+    // XExporter
+    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     // XInitialization

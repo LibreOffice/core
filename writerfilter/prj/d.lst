@@ -3,3 +3,5 @@
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
+mkdir: %_DEST%\inc%_EXT%\writerfilter\doctok
+..\%__SRC%\inc\doctok\sprmids.hxx %_DEST%\inc%_EXT%\writerfilter\doctok\sprmids.hxx

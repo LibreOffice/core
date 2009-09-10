@@ -68,6 +68,14 @@ PresentationFragmentHandler::PresentationFragmentHandler( XmlFilterBase& rFilter
 : FragmentHandler( rFilter, rFragmentPath )
 , mpTextListStyle( new TextListStyle )
 {
+    TextParagraphPropertiesVector& rParagraphDefaulsVector( mpTextListStyle->getListStyle() );
+    TextParagraphPropertiesVector::iterator aParagraphDefaultIter( rParagraphDefaulsVector.begin() );
+    while( aParagraphDefaultIter != rParagraphDefaulsVector.end() )
+    {
+        // ppt is having zero bottom margin per default, whereas OOo is 0,5cm,
+        // so this attribute needs to be set always
+        (*aParagraphDefaultIter++)->getParaBottomMargin() = TextSpacing( 0 );
+    }
 }
 
 PresentationFragmentHandler::~PresentationFragmentHandler() throw()
@@ -76,6 +84,66 @@ PresentationFragmentHandler::~PresentationFragmentHandler() throw()
 }
 void PresentationFragmentHandler::startDocument() throw (SAXException, RuntimeException)
 {
+}
+
+void ResolveTextFields( XmlFilterBase& rFilter )
+{
+    const oox::core::TextFieldStack& rTextFields = rFilter.getTextFieldStack();
+    if ( rTextFields.size() )
+    {
+        Reference< frame::XModel > xModel( rFilter.getModel() );
+        oox::core::TextFieldStack::const_iterator aIter( rTextFields.begin() );
+        while( aIter != rTextFields.end() )
+        {
+            const OUString sURL = CREATE_OUSTRING( "URL" );
+            Reference< drawing::XDrawPagesSupplier > xDPS( xModel, uno::UNO_QUERY_THROW );
+            Reference< drawing::XDrawPages > xDrawPages( xDPS->getDrawPages(), uno::UNO_QUERY_THROW );
+
+            const oox::core::TextField& rTextField( *aIter++ );
+            Reference< XPropertySet > xPropSet( rTextField.xTextField, UNO_QUERY );
+            Reference< XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
+            if ( xPropSetInfo->hasPropertyByName( sURL ) )
+            {
+                rtl::OUString aURL;
+                if ( xPropSet->getPropertyValue( sURL ) >>= aURL )
+                {
+                    const OUString sSlide = CREATE_OUSTRING( "#Slide " );
+                    const OUString sNotes = CREATE_OUSTRING( "#Notes " );
+                    sal_Bool bNotes = sal_False;
+                    sal_Int32 nPageNumber = 0;
+                    if ( aURL.match( sSlide ) )
+                        nPageNumber = aURL.copy( sSlide.getLength() ).toInt32();
+                    else if ( aURL.match( sNotes ) )
+                    {
+                        nPageNumber = aURL.copy( sNotes.getLength() ).toInt32();
+                        bNotes = sal_True;
+                    }
+                    if ( nPageNumber )
+                    {
+                        try
+                        {
+                            Reference< XDrawPage > xDrawPage;
+                            xDrawPages->getByIndex( nPageNumber - 1 ) >>= xDrawPage;
+                            if ( bNotes )
+                            {
+                                Reference< ::com::sun::star::presentation::XPresentationPage > xPresentationPage( xDrawPage, UNO_QUERY_THROW );
+                                xDrawPage = xPresentationPage->getNotesPage();
+                            }
+                            Reference< container::XNamed > xNamed( xDrawPage, UNO_QUERY_THROW );
+                            aURL = CREATE_OUSTRING( "#" ).concat( xNamed->getName() );
+                            xPropSet->setPropertyValue( sURL, Any( aURL ) );
+                            Reference< text::XTextContent > xContent( rTextField.xTextField, UNO_QUERY);
+                            Reference< text::XTextRange > xTextRange( rTextField.xTextCursor, UNO_QUERY );
+                            rTextField.xText->insertTextContent( xTextRange, xContent, sal_True );
+                        }
+                        catch( uno::Exception& )
+                        {
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeException)
@@ -216,6 +284,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                 }
             }
         }
+        ResolveTextFields( rFilter );
     }
     catch( uno::Exception& )
     {
@@ -297,6 +366,26 @@ bool PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
         awt::Size& rPageSize( pSlidePersistPtr->isNotesPage() ? maNotesSize : maSlideSize );
         xPropertySet->setPropertyValue( sWidth, Any( rPageSize.Width ) );
         xPropertySet->setPropertyValue( sHeight, Any( rPageSize.Height ) );
+
+        oox::ppt::HeaderFooter aHeaderFooter( pSlidePersistPtr->getHeaderFooter() );
+        if ( !pSlidePersistPtr->isMasterPage() )
+            aHeaderFooter.mbSlideNumber = aHeaderFooter.mbHeader = aHeaderFooter.mbFooter = aHeaderFooter.mbDateTime = sal_False;
+        try
+        {
+            static const OUString sIsHeaderVisible = CREATE_OUSTRING( "IsHeaderVisible" );
+            static const OUString sIsFooterVisible = CREATE_OUSTRING( "IsFooterVisible" );
+            static const OUString sIsDateTimeVisible = CREATE_OUSTRING( "IsDateTimeVisible" );
+            static const OUString sIsPageNumberVisible = CREATE_OUSTRING( "IsPageNumberVisible" );
+
+            if ( pSlidePersistPtr->isNotesPage() )
+                xPropertySet->setPropertyValue( sIsHeaderVisible, Any( aHeaderFooter.mbHeader ) );
+            xPropertySet->setPropertyValue( sIsFooterVisible, Any( aHeaderFooter.mbFooter ) );
+            xPropertySet->setPropertyValue( sIsDateTimeVisible, Any( aHeaderFooter.mbDateTime ) );
+            xPropertySet->setPropertyValue( sIsPageNumberVisible, Any( aHeaderFooter.mbSlideNumber ) );
+        }
+        catch( uno::Exception& )
+        {
+        }
     }
     pSlidePersistPtr->setPath( rxSlideFragmentHandler->getFragmentPath() );
     return getFilter().importFragment( rxSlideFragmentHandler );

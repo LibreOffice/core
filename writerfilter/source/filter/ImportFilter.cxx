@@ -30,9 +30,7 @@
 
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#ifndef _COM_SU_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#endif
 #include <com/sun/star/io/XInputStream.hpp>
 #include <dmapper/DomainMapper.hxx>
 #include <WriterFilter.hxx>
@@ -42,6 +40,7 @@
 #include <iostream>
 #include <osl/process.h>
 #endif
+
 #include <resourcemodel/TagLogger.hxx>
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -52,6 +51,24 @@ using namespace ::com::sun::star;
 sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
    throw (uno::RuntimeException)
 {
+    if( m_xSrcDoc.is() )
+    {
+        uno::Reference< lang::XMultiServiceFactory > xMSF(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
+        uno::Reference< uno::XInterface > xIfc( xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.DocxExport" ))), uno::UNO_QUERY_THROW);
+        if (!xIfc.is())
+            return sal_False;
+        uno::Reference< document::XExporter > xExprtr(xIfc, uno::UNO_QUERY_THROW);
+        uno::Reference< document::XFilter > xFltr(xIfc, uno::UNO_QUERY_THROW);
+        if (!xExprtr.is() || !xFltr.is())
+            return sal_False;
+        xExprtr->setSourceDocument(m_xSrcDoc);
+        if (xFltr->filter(aDescriptor))
+            return sal_True;
+        return sal_False;
+    }
+    else if (m_xDstDoc.is())
+    {
+
     sal_Int32 nLength = aDescriptor.getLength();
     const beans::PropertyValue * pValue = aDescriptor.getConstArray();
     uno::Reference < io::XInputStream > xInputStream;
@@ -82,18 +99,18 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         (m_sFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_2007" ) ) ||
          m_sFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_2007_Template" ) )) ?
                 writerfilter::dmapper::DOCUMENT_OOXML : writerfilter::dmapper::DOCUMENT_DOC;
-    writerfilter::Stream::Pointer_t pStream(new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDoc, eType));
+    writerfilter::Stream::Pointer_t pStream(new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, eType));
     //create the tokenizer and domain mapper
     if( eType == writerfilter::dmapper::DOCUMENT_OOXML )
     {
         writerfilter::ooxml::OOXMLStream::Pointer_t pDocStream = writerfilter::ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream);
         writerfilter::ooxml::OOXMLDocument::Pointer_t pDocument(writerfilter::ooxml::OOXMLDocumentFactory::createDocument(pDocStream));
 
-        uno::Reference<frame::XModel> xModel(m_xDoc, uno::UNO_QUERY_THROW);
+        uno::Reference<frame::XModel> xModel(m_xDstDoc, uno::UNO_QUERY_THROW);
         pDocument->setModel(xModel);
 
         uno::Reference<drawing::XDrawPageSupplier> xDrawings
-            (m_xDoc, uno::UNO_QUERY_THROW);
+            (m_xDstDoc, uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPage> xDrawPage
             (xDrawings->getDrawPage(), uno::UNO_SET_THROW);
         pDocument->setDrawPage(xDrawPage);
@@ -116,6 +133,8 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
 #endif
 
     return sal_True;
+    }
+    return sal_False;
 }
 /*-- 09.06.2006 10:15:20---------------------------------------------------
 
@@ -130,7 +149,13 @@ void WriterFilter::cancel(  ) throw (uno::RuntimeException)
 void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
    throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-   m_xDoc = xDoc;
+   m_xDstDoc = xDoc;
+}
+
+void WriterFilter::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
+   throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+   m_xSrcDoc = xDoc;
 }
 
 /*-- 09.06.2006 10:15:20---------------------------------------------------
@@ -163,24 +188,28 @@ OUString WriterFilter_getImplementationName () throw (uno::RuntimeException)
 }
 
 #define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
+#define SERVICE_NAME2 "com.sun.star.document.ExportFilter"
 /*-- 09.06.2006 10:15:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 sal_Bool WriterFilter_supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
 {
-   return (ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ));
+   return (ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ) ||
+           ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ));
 }
 /*-- 09.06.2006 10:15:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 uno::Sequence< OUString > WriterFilter_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
-   uno::Sequence < OUString > aRet(1);
+   uno::Sequence < OUString > aRet(2);
    OUString* pArray = aRet.getArray();
    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
+   pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME2 ) );
    return aRet;
 }
 #undef SERVICE_NAME1
+#undef SERVICE_NAME2
 
 /*-- 09.06.2006 10:15:20---------------------------------------------------
 

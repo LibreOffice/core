@@ -38,9 +38,13 @@
 #include "oox/core/filterbase.hxx"
 #include "oox/core/relations.hxx"
 #include <oox/dllapi.h>
+#include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
+#include <com/sun/star/text/XText.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
+    namespace document { class XDocumentProperties; }
     namespace xml { namespace sax { class XLocator; } }
     namespace xml { namespace sax { class XFastDocumentHandler; } }
 } } }
@@ -59,6 +63,13 @@ namespace oox {
 namespace core {
 
 class FragmentHandler;
+
+struct TextField {
+    com::sun::star::uno::Reference< com::sun::star::text::XText > xText;
+    com::sun::star::uno::Reference< com::sun::star::text::XTextCursor > xTextCursor;
+    com::sun::star::uno::Reference< com::sun::star::text::XTextField > xTextField;
+};
+typedef std::vector< TextField > TextFieldStack;
 
 // ============================================================================
 
@@ -135,8 +146,10 @@ public:
      */
     ::rtl::OUString     addRelation( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutputStream, const ::rtl::OUString& rType, const ::rtl::OUString& rTarget, bool bExternal = false );
 
-    /** Opens and returns the specified output stream from the base storage
-        with specified media type.
+    /** Returns a stack of used textfields, used by the pptx importer to replace links to slidepages with rhe real page name */
+    TextFieldStack& getTextFieldStack() const;
+
+    /** Opens and returns the specified output stream from the base storage with specified media type.
 
         @param rStreamName
             The name of the embedded storage stream. The name may contain
@@ -182,6 +195,14 @@ public:
     inline sal_Int32 GetUniqueId() { return mnMaxDocId++; }
     inline ::rtl::OString GetUniqueIdOString() { return ::rtl::OString::valueOf( mnMaxDocId++ ); }
     inline ::rtl::OUString GetUniqueIdOUString() { return ::rtl::OUString::valueOf( mnMaxDocId++ ); }
+
+    /** Write the document properties into into the current OPC package.
+
+        @param xProperties  The document properties to export.
+
+        @return *this
+     */
+    XmlFilterBase& exportDocumentProperties( ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > xProperties );
 
 private:
     virtual StorageRef  implCreateStorage(

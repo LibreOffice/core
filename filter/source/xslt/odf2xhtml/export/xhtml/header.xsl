@@ -2,32 +2,32 @@
 <!--
 
   DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-  
+
   Copyright 2008 by Sun Microsystems, Inc.
- 
+
   OpenOffice.org - a multi-platform office productivity suite
- 
+
   $RCSfile: header.xsl,v $
- 
-  $Revision: 1.3 $
- 
+
+  $Revision: 1.3.14.2 $
+
   This file is part of OpenOffice.org.
- 
+
   OpenOffice.org is free software: you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License version 3
   only, as published by the Free Software Foundation.
- 
+
   OpenOffice.org is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU Lesser General Public License version 3 for more details
   (a copy is included in the LICENSE file that accompanied this code).
- 
+
   You should have received a copy of the GNU Lesser General Public License
   version 3 along with OpenOffice.org.  If not, see
   <http://www.openoffice.org/license.html>
   for a copy of the LGPLv3 License.
- 
+
 -->
 <!--
 	For further documentation and updates visit http://xml.openoffice.org/odf2xhtml
@@ -112,11 +112,16 @@
 	</xsl:text>
 <xsl:text>li { list-style: none; margin:0; padding:0;}
 	</xsl:text>
-<xsl:text>li span.odfLiEnd { clear: both; line-height:0; width:0; height:0; margin:0; padding:0; }
+<xsl:comment> "li span.odfLiEnd" - IE 7 issue</xsl:comment>
+<xsl:text>
+	</xsl:text>
+<xsl:text>li span. { clear: both; line-height:0; width:0; height:0; margin:0; padding:0; }
 	</xsl:text>
 <xsl:text>span.footnodeNumber { padding-right:1em; }
 	</xsl:text>
-<xsl:text>* { margin:0; }
+<xsl:text>span.annotation_style_by_filter { font-size:95%; font-family:Arial; background-color:#fff000;  margin:0; border:0; padding:0;  }
+	</xsl:text>        
+<xsl:text>* { margin:0;}
 	</xsl:text>
 			<xsl:call-template name="write-mapped-CSS-styles">
 				<xsl:with-param name="globalData" select="$globalData" />
@@ -169,13 +174,37 @@
 	<xsl:template name='create-page-layout'>
 		<xsl:param name="globalData" />
 
+		<!-- approximation to find the correct master page style (with page dimensions) -->
+		<xsl:variable name="masterPageNames">
+            <!-- set context to styles.xml -->
+            <xsl:for-each select="$globalData/all-doc-styles/style">
+                <!-- Loop over every style:style containing a @style:master-page-name attribute -->            
+                <xsl:for-each select="key('masterPage','count')">
+                        <!-- set context to styles.xml -->
+                        <xsl:for-each select="/*/office:body">
+                            <!-- Check if this style is being used in the body -->
+                            <xsl:if test="key('elementUsingStyle', ../@style:name)">
+                                <!-- Check every master-page-name if it is not emtpy and return as ';' separated list  -->
+                                <xsl:if test="string-length(../@style:master-page-name) &gt; 0"><xsl:value-of select="../@style:master-page-name"/>;</xsl:if>
+                            </xsl:if>
+                        </xsl:for-each>
+                </xsl:for-each>
+            </xsl:for-each>
+		</xsl:variable>
+		<!-- Take the first of the masterpage list and get the according style:master-page element and find the @style:page-layout-name  -->
+		<xsl:variable name="pageLayoutName" select="key('masterPageElements', substring-before($masterPageNames,';'))/@style:page-layout-name"/>
+		 <!-- Find the according style:page-layout and store the properties in a variable  -->
+		<xsl:variable name="pageProperties" select="key('pageLayoutElements', $pageLayoutName)/style:page-layout-properties"/>
+
 <xsl:text>@page { </xsl:text>
 
 		<xsl:call-template name="page-size">
-			<xsl:with-param name="globalData"   select="$globalData" />
+			<xsl:with-param name="globalData"       select="$globalData" />
+			<xsl:with-param name="pageProperties"   select="$pageProperties" />
 		</xsl:call-template>
 		<xsl:call-template name="page-margin">
-			<xsl:with-param name="globalData"   select="$globalData" />
+			<xsl:with-param name="globalData"       select="$globalData" />
+			<xsl:with-param name="pageProperties"   select="$pageProperties" />
 		</xsl:call-template>
 
 <xsl:text> }
@@ -186,9 +215,7 @@
 
 	<xsl:template name="page-size">
 		<xsl:param name="globalData" />
-
-		<!-- approximation as attribute belongs to a page style, which won't work in XHTML -->
-		<xsl:variable name="pageProperties" select="$globalData/styles-file/*/office:automatic-styles/style:page-layout[1]/style:page-layout-properties"/>
+		<xsl:param name="pageProperties" />
 
 		<xsl:variable name="printOrientation"  select="$pageProperties/@style:print-orientation" />
 		<xsl:variable name="pageWidth"         select="$pageProperties/@fo:page-width" />
@@ -213,9 +240,7 @@
 
 	<xsl:template name="page-margin">
 		<xsl:param name="globalData" />
-
-		<!-- approximation as attribute belongs to a page style, which won't work in XHTML -->
-		<xsl:variable name="pageProperties" select="$globalData/styles-file/*/office:automatic-styles/style:page-layout[1]/style:page-layout-properties"/>
+		<xsl:param name="pageProperties" />
 
 		<xsl:variable name="marginTop"  select="$pageProperties/@fo:margin-top" />
 		<xsl:if test="$marginTop">
@@ -293,7 +318,7 @@
 		<!-- explicit output content-type for low-tech browser (e.g. IE6) -->
 		<xsl:element name="meta">
 			<xsl:attribute name="http-equiv">Content-Type</xsl:attribute>
-			<xsl:attribute name="content">text/html; charset=utf-8</xsl:attribute>
+			<xsl:attribute name="content">application/xhtml+xml; charset=utf-8</xsl:attribute>
 		</xsl:element>
 
 		<!-- title of document for browser frame title -->
