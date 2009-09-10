@@ -1057,29 +1057,14 @@
  	    current="$number_major"
  	    revision="$number_minor"
  	    age="0"
-@@ -2990,16 +2990,6 @@
- 	  verstring="-compatibility_version $minor_current -current_version $minor_current.$revision"
+@@ -2996,8 +2996,8 @@
  	  ;;
  
--	freebsd-aout)
--	  major=".$current"
--	  versuffix=".$current.$revision";
--	  ;;
--
--	freebsd-elf)
+ 	freebsd-elf)
 -	  major=".$current"
 -	  versuffix=".$current";
--	  ;;
--
++	  major=.`expr $current - $age`
++	  versuffix="$major"
+ 	  ;;
+ 
  	irix | nonstopux)
- 	  major=`expr $current - $age + 1`
- 
-@@ -3022,7 +3012,7 @@
- 	  versuffix="$major.$revision"
- 	  ;;
- 
--	linux)
-+	linux|freebsd-aout|freebsd-elf)
- 	  major=.`expr $current - $age`
- 	  versuffix="$major.$age.$revision"
- 	  ;;
