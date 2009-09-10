@@ -60,7 +60,8 @@ SLOFILES=           $(SLO)$/BorderHandler.obj \
                     $(SLO)$/PropertyIds.obj  \
                     $(SLO)$/StyleSheetTable.obj \
                     $(SLO)$/TDefTableHandler.obj \
-            $(SLO)$/ThemeTable.obj \
+                    $(SLO)$/SettingsTable.obj \
+                    $(SLO)$/ThemeTable.obj \
                     $(SLO)$/ModelEventListener.obj\
                     $(SLO)$/OLEHandler.obj
 

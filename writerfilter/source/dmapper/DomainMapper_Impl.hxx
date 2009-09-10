@@ -50,6 +50,7 @@
 #include <ListTable.hxx>
 #include <LFOTable.hxx>
 #include <StyleSheetTable.hxx>
+#include <SettingsTable.hxx>
 #include <ThemeTable.hxx>
 #include <GraphicImport.hxx>
 #include <OLEHandler.hxx>
@@ -292,6 +293,7 @@ private:
     LFOTablePtr             m_pLFOTable;
     StyleSheetTablePtr      m_pStyleSheetTable;
     ThemeTablePtr           m_pThemeTable;
+    SettingsTablePtr        m_pSettingsTable;
     GraphicImportPtr        m_pGraphicImport;
 
     PropertyMapPtr                  m_pTopContext;
@@ -410,6 +412,12 @@ public:
         if(!m_pThemeTable)
             m_pThemeTable.reset( new ThemeTable );
         return m_pThemeTable;
+    }
+    SettingsTablePtr GetSettingsTable()
+    {
+        if( !m_pSettingsTable )
+            m_pSettingsTable.reset( new SettingsTable( m_rDMapper, m_xTextFactory ) );
+        return m_pSettingsTable;
     }
 
     GraphicImportPtr GetGraphicImport( GraphicImportType eGraphicImportType );
