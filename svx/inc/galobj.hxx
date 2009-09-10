@@ -122,8 +122,8 @@ public:
     BOOL                    IsValid() const { return bIsValid; }
     BOOL                    IsThumbBitmap() const { return bIsThumbBmp; }
 
-    const String            GetTitle() const;
-    void                    SetTitle( const String& rTitle );
+    SVX_DLLPUBLIC const String          GetTitle() const;
+    SVX_DLLPUBLIC void                  SetTitle( const String& rTitle );
 
     friend SvStream&        operator<<( SvStream& rOut, const SgaObject& rObj );
     friend SvStream&        operator>>( SvStream& rIn, SgaObject& rObj );

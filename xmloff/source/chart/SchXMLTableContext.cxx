@@ -936,7 +936,15 @@ void SchXMLTableHelper::applyTableSimple(
         sal_Int32 nColumnCount = 0;
         sal_Int32 nCol = 0, nRow = 0;
         if( nRowCount )
+        {
             nColumnCount = rTable.aData[ 0 ].size();
+            ::std::vector< ::std::vector< SchXMLCell > >::const_iterator iRow = rTable.aData.begin();
+            while( iRow != rTable.aData.end() )
+            {
+                nColumnCount = ::std::max( nColumnCount, static_cast<sal_Int32>(iRow->size()) );
+                iRow++;
+            }
+        }
 
         // #i27909# avoid illegal index access for empty tables
         if( nColumnCount == 0 || nRowCount == 0 )
@@ -950,7 +958,8 @@ void SchXMLTableHelper::applyTableSimple(
 
         // set labels
         ::std::vector< ::std::vector< SchXMLCell > >::const_iterator iRow = rTable.aData.begin();
-        for( nCol = 1; nCol < nColumnCount; nCol++ )
+        sal_Int32 nColumnCountOnFirstRow = iRow->size();
+        for( nCol = 1; nCol < nColumnCountOnFirstRow; nCol++ )
         {
             aLabels[ nCol - 1 ] = (*iRow)[ nCol ].aString;
         }

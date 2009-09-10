@@ -40,6 +40,9 @@
 #include <comphelper/sequenceasvector.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
+#ifdef __MINGW32__
+#include <limits.h>
+#endif
 #include "..\misc\WinImplHelper.hxx"
 
  inline bool is_current_process_window(HWND hwnd)

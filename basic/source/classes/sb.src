@@ -341,7 +341,7 @@ Resource RID_BASIC_START
     };
     String SbERR_NO_METHOD & ERRCODE_RES_MASK
     {
-        Text [ en-US ] = "Property or method not found." ;
+        Text [ en-US ] = "Property or method not found: $(ARG1)." ;
     };
     String SbERR_NEEDS_OBJECT & ERRCODE_RES_MASK
     {

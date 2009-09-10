@@ -660,7 +660,10 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
     }
     return sal_True;
 }
-
+void OFlatTable::refreshHeader()
+{
+    m_nRowPos = 0;
+}
 // -----------------------------------------------------------------------------
 sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
 {
@@ -692,7 +695,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                     m_pFileStream->Seek(m_nFilePos);
                     if ( m_pFileStream->IsEof() || !readLine(nCurPos) /*|| !checkHeaderLine()*/)
                     {
-                        m_nMaxRowCount = m_nRowPos;
+                        m_nMaxRowCount = m_nRowPos -1;
                         return sal_False;
                     } // if ( m_pFileStream->IsEof() || !readLine(nCurPos) /*|| !checkHeaderLine()*/)
 
@@ -797,7 +800,10 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                 TRowPositionsInFile::const_iterator aFind = m_aFilePosToEndLinePos.find(nOffset);
                 m_bNeedToReadLine = aFind != m_aFilePosToEndLinePos.end();
                 if ( m_bNeedToReadLine )
+                {
+                    m_nFilePos  = aFind->first;
                     nCurPos = aFind->second;
+                }
                 else
                 {
                     m_nFilePos = nOffset;

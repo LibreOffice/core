@@ -1014,7 +1014,6 @@ try
             Property* pResult = ::std::lower_bound(pNewProps, pNewProps + nNewLen,pOldProps[i].Name, ::comphelper::PropertyStringLessFunctor());
             if (    pResult
                 && ( pResult != pNewProps + nNewLen && pResult->Name == pOldProps[i].Name )
-                && ( pResult->Attributes == pOldProps[i].Attributes )
                 && ( (pResult->Attributes & PropertyAttribute::READONLY) == 0 )
                 && ( pResult->Type.equals(pOldProps[i].Type)) )
             {   // Attribute stimmen ueberein und Property ist nicht read-only

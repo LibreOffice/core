@@ -39,6 +39,7 @@
 #include <tools/string.hxx>
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/txtprmap.hxx>
+#include <xmloff/xmlimp.hxx>
 #include "txtimppr.hxx"
 
 #define XML_LINE_LEFT 0
@@ -120,11 +121,21 @@ sal_Bool XMLTextImportPropertyMapper::handleSpecialItem(
     case CTF_FONTFAMILYNAME:
     case CTF_FONTFAMILYNAME_CJK:
     case CTF_FONTFAMILYNAME_CTL:
-    case CTF_TEXT_DISPLAY:
         bRet = getPropertySetMapper()->importXML( rValue, rProperty,
                                                   rUnitConverter );
         break;
 
+    case CTF_TEXT_DISPLAY:
+        bRet = getPropertySetMapper()->importXML( rValue, rProperty,
+                                                  rUnitConverter );
+        if( SvXMLImport::OOo_2x == GetImport().getGeneratorVersion() )
+        {
+            sal_Bool bHidden;
+            rProperty.maValue >>= bHidden;
+            bHidden = !bHidden;
+            rProperty.maValue <<= bHidden;
+        }
+    break;
     default:
         bRet = SvXMLImportPropertyMapper::handleSpecialItem( rProperty,
                     rProperties, rValue, rUnitConverter, rNamespaceMap );

@@ -304,6 +304,8 @@
 #define ESCHER_ShpInst_ActionButtonMovie    200
 #define ESCHER_ShpInst_HostControl          201
 #define ESCHER_ShpInst_TextBox              202
+
+#define ESCHER_ShpInst_COUNT                203
 #define ESCHER_ShpInst_Max                  0x0FFF
 #define ESCHER_ShpInst_Nil                  ESCHER_ShpInst_Max
 
@@ -960,9 +962,34 @@ namespace com { namespace sun { namespace star {
         struct Gradient;
     }
     namespace drawing {
+        struct EnhancedCustomShapeAdjustmentValue;
         class XShape;
     }
 }}}
+
+struct SVX_DLLPUBLIC EscherConnectorListEntry
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   mXConnector;
+    ::com::sun::star::awt::Point            maPointA;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   mXConnectToA;
+    ::com::sun::star::awt::Point            maPointB;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   mXConnectToB;
+
+    sal_uInt32      GetConnectorRule( sal_Bool bFirst );
+
+                    EscherConnectorListEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rC,
+                                        const ::com::sun::star::awt::Point& rPA,
+                                        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rSA ,
+                                        const ::com::sun::star::awt::Point& rPB,
+                                        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rSB ) :
+                                            mXConnector ( rC ),
+                                            maPointA    ( rPA ),
+                                            mXConnectToA( rSA ),
+                                            maPointB    ( rPB ),
+                                            mXConnectToB( rSB ) {}
+
+    sal_uInt32      GetClosestPoint( const Polygon& rPoly, const ::com::sun::star::awt::Point& rP );
+};
 
 struct SVX_DLLPUBLIC EscherExContainer
 {
@@ -1108,8 +1135,19 @@ public:
 #define ESCHER_CREATEPOLYGON_POLYLINE       2
 #define ESCHER_CREATEPOLYGON_POLYPOLYGON    4
 
-struct EscherPropSortStruct;
 class GraphicAttr;
+class SdrObjCustomShape;
+
+struct EscherPropSortStruct
+{
+    sal_uInt8*  pBuf;
+    sal_uInt32  nPropSize;
+    sal_uInt32  nPropValue;
+    sal_uInt16  nPropId;
+};
+
+typedef std::vector< EscherPropSortStruct > EscherProperties;
+
 class SVX_DLLPUBLIC EscherPropertyContainer
 {
         EscherGraphicProvider*  pGraphicProvider;
@@ -1154,6 +1192,10 @@ class SVX_DLLPUBLIC EscherPropertyContainer
                             sal_uInt8* pProp, sal_uInt32 nPropSize );
 
         sal_Bool    GetOpt( sal_uInt16 nPropertyID, sal_uInt32& rPropValue ) const;
+
+        sal_Bool    GetOpt( sal_uInt16 nPropertyID, EscherPropSortStruct& rPropValue ) const;
+
+        EscherProperties GetOpts() const;
 
         void        Commit( SvStream& rSt, sal_uInt16 nVersion = 3, sal_uInt16 nRecType = ESCHER_OPT );
 
@@ -1202,6 +1244,14 @@ class SVX_DLLPUBLIC EscherPropertyContainer
         static PolyPolygon GetPolyPolygon( const ::com::sun::star::uno::Any& rSource );
         static MSO_SPT GetCustomShapeType( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape, sal_uInt32& nMirrorFlags );
         static MSO_SPT GetCustomShapeType( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape, sal_uInt32& nMirrorFlags, rtl::OUString& rShapeType );
+
+    // helper functions which are also used in ooxml export
+    static sal_Bool GetLineArrow( const sal_Bool bLineStart,
+                      const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+                      ESCHER_LineEnd& reLineEnd, sal_Int32& rnArrowLength, sal_Int32& rnArrowWidth );
+    static sal_Bool IsDefaultObject( SdrObjCustomShape* pCustoShape );
+    static void LookForPolarHandles( const MSO_SPT eShapeType, sal_Int32& nAdjustmentsWhichNeedsToBeConverted );
+    static sal_Bool GetAdjustmentValue( const com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue & rkProp, sal_Int32 nIndex, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, sal_Int32& nValue );
 };
 
 // ---------------------------------------------------------------------------------------------
@@ -1338,7 +1388,7 @@ class SVX_DLLPUBLIC EscherEx : public EscherPersistTable, public EscherGraphicPr
         BOOL                    mbOleEmf;                   // OLE is EMF instead of WMF
 
 
-        BOOL    DoSeek( UINT32 nKey );
+        virtual BOOL DoSeek( UINT32 nKey );
 
     public:
 
@@ -1349,7 +1399,7 @@ class SVX_DLLPUBLIC EscherEx : public EscherPersistTable, public EscherGraphicPr
                 /// Wenn pPicStreamMergeBSE angegeben ist, werden die BLIPs
                 /// aus diesem Stream in die MsofbtBSE Records des EscherStream
                 /// gemerged, wie es fuer Excel (und Word?) benoetigt wird.
-        void    Flush( SvStream* pPicStreamMergeBSE = NULL );
+        virtual void Flush( SvStream* pPicStreamMergeBSE = NULL );
 
     virtual     ~EscherEx();
 
@@ -1360,13 +1410,13 @@ class SVX_DLLPUBLIC EscherEx : public EscherPersistTable, public EscherGraphicPr
 
         void    InsertPersistOffset( UINT32 nKey, UINT32 nOffset ); // Es wird nicht geprueft, ob sich jener schluessel schon in der PersistantTable befindet
         BOOL    SeekToPersistOffset( UINT32 nKey );
-        BOOL    InsertAtPersistOffset( UINT32 nKey, UINT32 nValue );// nValue wird im Stream an entrsprechender Stelle eingefuegt(overwrite modus), ohne dass sich die
+        virtual BOOL InsertAtPersistOffset( UINT32 nKey, UINT32 nValue );// nValue wird im Stream an entrsprechender Stelle eingefuegt(overwrite modus), ohne dass sich die
                                                                     // aktuelle StreamPosition aendert
 
         SvStream&   GetStream() const   { return *mpOutStrm; }
         ULONG   GetStreamPos() const    { return mpOutStrm->Tell(); }
 
-        BOOL    SeekBehindRecHeader( UINT16 nRecType );             // der stream muss vor einem gueltigen Record Header oder Atom stehen
+        virtual BOOL SeekBehindRecHeader( UINT16 nRecType );                // der stream muss vor einem gueltigen Record Header oder Atom stehen
 
                 // features beim erzeugen folgender Container:
                 //
@@ -1378,22 +1428,25 @@ class SVX_DLLPUBLIC EscherEx : public EscherPersistTable, public EscherGraphicPr
         virtual void OpenContainer( UINT16 nEscherContainer, int nRecInstance = 0 );
         virtual void CloseContainer();
 
-        void    BeginAtom();
-        void    EndAtom( UINT16 nRecType, int nRecVersion = 0, int nRecInstance = 0 );
-        void    AddAtom( UINT32 nAtomSitze, UINT16 nRecType, int nRecVersion = 0, int nRecInstance = 0 );
-        void    AddClientAnchor( const Rectangle& rRectangle );
+        virtual void BeginAtom();
+        virtual void EndAtom( UINT16 nRecType, int nRecVersion = 0, int nRecInstance = 0 );
+        virtual void AddAtom( UINT32 nAtomSitze, UINT16 nRecType, int nRecVersion = 0, int nRecInstance = 0 );
+        virtual void AddChildAnchor( const Rectangle& rRectangle );
+        virtual void AddClientAnchor( const Rectangle& rRectangle );
 
-        UINT32  EnterGroup( const String& rShapeName, const Rectangle* pBoundRect = 0 );
+        virtual UINT32 EnterGroup( const String& rShapeName, const Rectangle* pBoundRect = 0 );
         UINT32  EnterGroup( const Rectangle* pBoundRect = NULL );
         UINT32  GetGroupLevel() const { return mnGroupLevel; };
-        BOOL    SetGroupSnapRect( UINT32 nGroupLevel, const Rectangle& rRect );
-        BOOL    SetGroupLogicRect( UINT32 nGroupLevel, const Rectangle& rRect );
-        void    LeaveGroup();
+        virtual BOOL SetGroupSnapRect( UINT32 nGroupLevel, const Rectangle& rRect );
+        virtual BOOL SetGroupLogicRect( UINT32 nGroupLevel, const Rectangle& rRect );
+        virtual void LeaveGroup();
 
                 // ein ESCHER_Sp wird geschrieben ( Ein ESCHER_DgContainer muss dazu geoeffnet sein !!)
-        void    AddShape( UINT32 nShpInstance, UINT32 nFlagIds, UINT32 nShapeID = 0 );
+        virtual void AddShape( UINT32 nShpInstance, UINT32 nFlagIds, UINT32 nShapeID = 0 );
                 // reserviert eine ShapeId
         UINT32  GetShapeID();
+
+        virtual void Commit( EscherPropertyContainer& rProps, const Rectangle& rRect );
 
         UINT32  GetColor( const UINT32 nColor, BOOL bSwap = TRUE );
         UINT32  GetColor( const Color& rColor, BOOL bSwap = TRUE );

@@ -45,12 +45,12 @@ class SVX_DLLPUBLIC XFillBmpSizeLogItem : public SfxBoolItem
 public:
                             TYPEINFO();
                             XFillBmpSizeLogItem( BOOL bLog = TRUE );
-                            XFillBmpSizeLogItem( SvStream& rIn );
+                            SVX_DLLPRIVATE XFillBmpSizeLogItem( SvStream& rIn );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;

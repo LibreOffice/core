@@ -697,17 +697,16 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
             aOut.EnableOutput( FALSE );
             aOut.SetMapMode( aMap );
             aMtf.Record( &aOut );
-
-            // aXOut.SetOffset( Point( -aBoundRect.Left(), -aBoundRect.Top() ) );
-            // #i92760# offset set in wrong direction, corrected
-            MapMode aOffsetMapMode(aOut.GetMapMode());
-            aOffsetMapMode.SetOrigin(Point(-aBoundRect.Left(), -aBoundRect.Top()));
-            aOut.SetMapMode(aOffsetMapMode);
-
             pObj->SingleObjectPainter( aOut ); // #110094#-17
-
             aMtf.Stop();
             aMtf.WindStart();
+
+            // #i99268# replace the original offset from using XOutDev's SetOffset
+            // NOT (as tried with #i92760#) with another MapMode which gets recorded
+            // by the Metafile itself (what always leads to problems), but by hardly
+            // moving the result
+            aMtf.Move(-aBoundRect.Left(), -aBoundRect.Top());
+
             aMtf.SetPrefMapMode( aMap );
             aMtf.SetPrefSize( aBoundRect.GetSize() );
 

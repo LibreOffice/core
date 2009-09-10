@@ -215,9 +215,14 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createTextField(
 {
     uno::Reference< uno::XInterface > xRet;
 
-    const OUString aTextFieldPrexit( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.") );
+    const OUString aTextFieldPrexit( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.textfield.") );
 
-    if( ServiceSpecifier.compareTo( aTextFieldPrexit, aTextFieldPrexit.getLength() ) == 0 )
+    // #i93308# up to OOo 3.2 we used this wrong namespace name with the capital T & F. This is
+    // fixed since OOo 3.2 but for compatibility we will still provide support for the wrong notation.
+    const OUString aTextFieldPrexit2( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.") );
+
+    if( (ServiceSpecifier.compareTo( aTextFieldPrexit, aTextFieldPrexit.getLength() ) == 0) ||
+        (ServiceSpecifier.compareTo( aTextFieldPrexit2, aTextFieldPrexit2.getLength() ) == 0) )
     {
         OUString aFieldType( ServiceSpecifier.copy( aTextFieldPrexit.getLength() ) );
 

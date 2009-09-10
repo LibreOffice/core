@@ -430,6 +430,11 @@ void SbiInstance::FatalError( SbError n )
     pRun->FatalError( n );
 }
 
+void SbiInstance::FatalError( SbError _errCode, const String& _details )
+{
+    pRun->FatalError( _errCode, _details );
+}
+
 void SbiInstance::Abort()
 {
     // Basic suchen, in dem der Fehler auftrat
@@ -721,7 +726,7 @@ BOOL SbiRuntime::Step()
                     pCode = pError;
                 else
                     bLetParentHandleThis = true;
-                         }
+            }
             else
             {
                 bLetParentHandleThis = true;
@@ -795,10 +800,33 @@ void SbiRuntime::Error( SbError n )
         nError = n;
 }
 
+void SbiRuntime::Error( SbError _errCode, const String& _details )
+{
+    if ( _errCode )
+    {
+        OSL_ENSURE( pInst->pRun == this, "SbiRuntime::Error: can't propagate the error message details!" );
+        if ( pInst->pRun == this )
+        {
+            pInst->Error( _errCode, _details );
+            OSL_POSTCOND( nError == _errCode, "SbiRuntime::Error: the instance is expecte to propagate the error code back to me!" );
+        }
+        else
+        {
+            nError = _errCode;
+        }
+    }
+}
+
 void SbiRuntime::FatalError( SbError n )
 {
     StepSTDERROR();
     Error( n );
+}
+
+void SbiRuntime::FatalError( SbError _errCode, const String& _details )
+{
+    StepSTDERROR();
+    Error( _errCode, _details );
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -859,21 +887,13 @@ SbxVariableRef SbiRuntime::PopVar()
 
 BOOL SbiRuntime::ClearExprStack()
 {
-    // #74732 Hier kann ein Fehler gesetzt werden
-    BOOL bErrorSet = FALSE;
-
     // Achtung: Clear() reicht nicht, da Methods geloescht werden muessen
     while ( nExprLvl )
     {
-        SbxVariableRef xVar = PopVar();
-        if( !nError && xVar->ISA( UnoClassMemberVariable ) )
-        {
-            Error( SbERR_NO_METHOD );
-            bErrorSet = TRUE;
-        }
+        PopVar();
     }
     refExprStk->Clear();
-    return bErrorSet;
+    return FALSE;
 }
 
 // Variable auf dem Expression-Stack holen, ohne sie zu entfernen

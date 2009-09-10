@@ -459,7 +459,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             return;
 
         // if it's a "default value" property of a control model, set the according "value" property
-        static const sal_Char* pDefaultValueProperties[] = {
+        static ::rtl::OUString pDefaultValueProperties[] = {
             FM_PROP_DEFAULT_TEXT, FM_PROP_DEFAULTCHECKED, FM_PROP_DEFAULT_DATE, FM_PROP_DEFAULT_TIME,
             FM_PROP_DEFAULT_VALUE, FM_PROP_DEFAULT_SELECT_SEQ, FM_PROP_EFFECTIVE_DEFAULT
         };
@@ -472,7 +472,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             "FmXUndoEnvironment::propertyChange: inconsistence!");
         for (sal_Int32 i=0; i<nDefaultValueProps; ++i)
         {
-            if (0 == evt.PropertyName.compareToAscii(pDefaultValueProperties[i]))
+            if (0 == evt.PropertyName.compareTo(pDefaultValueProperties[i]))
             {
                 try
                 {

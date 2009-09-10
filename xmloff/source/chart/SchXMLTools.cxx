@@ -53,6 +53,7 @@
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include "xmlnmspe.hxx"
+#include <xmloff/xmlmetai.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -103,9 +104,19 @@ rtl::OUString lcl_getGeneratorFromModel( const uno::Reference< frame::XModel >& 
         uno::Reference< document::XDocumentProperties > xChartDocumentProperties(
             xChartDocumentPropertiesSupplier->getDocumentProperties());
         if( xChartDocumentProperties.is() )
-        {
             aGenerator =  xChartDocumentProperties->getGenerator();
-        }
+    }
+    return aGenerator;
+}
+
+rtl::OUString lcl_getGeneratorFromModelOrItsParent( const uno::Reference< frame::XModel >& xChartModel )
+{
+    ::rtl::OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
+    if( !aGenerator.getLength() ) //try to get the missing info from the parent document
+    {
+        uno::Reference< container::XChild > xChild( xChartModel, uno::UNO_QUERY );
+        if( xChild.is() )
+            aGenerator = lcl_getGeneratorFromModel( uno::Reference< frame::XModel >( xChild->getParent(), uno::UNO_QUERY) );
     }
     return aGenerator;
 }
@@ -158,6 +169,7 @@ static __FAR_DATA SvXMLEnumMapEntry aXMLChartClassMap[] =
     { XML_RING,         XML_CHART_CLASS_RING    },
     { XML_SCATTER,      XML_CHART_CLASS_SCATTER },
     { XML_RADAR,        XML_CHART_CLASS_RADAR   },
+    { XML_FILLED_RADAR, XML_CHART_CLASS_FILLED_RADAR },
     { XML_BAR,          XML_CHART_CLASS_BAR     },
     { XML_STOCK,        XML_CHART_CLASS_STOCK   },
     { XML_BUBBLE,       XML_CHART_CLASS_BUBBLE  },
@@ -201,6 +213,9 @@ const tMakeStringStringMap& lcl_getChartTypeNameMap()
 
         ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.NetDiagram" )
         , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.NetChartType" ) )
+
+        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.FilledNetDiagram" )
+        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.FilledNetChartType" ) )
 
         ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.StockDiagram" )
         , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.CandleStickChartType" ) )
@@ -269,6 +284,8 @@ OUString GetChartTypeByClassName(
         aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Bubble"));
     else if( IsXMLToken( rClassName, XML_RADAR ))
         aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Net"));
+    else if( IsXMLToken( rClassName, XML_FILLED_RADAR ))
+        aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("FilledNet"));
     else if( IsXMLToken( rClassName, XML_STOCK ))
     {
         if( bUseOldNames )
@@ -336,6 +353,8 @@ XMLTokenEnum getTokenByChartType(
                 eResult = XML_BUBBLE;
             else if( aServiceName.equalsAscii("Net"))
                 eResult = XML_RADAR;
+            else if( aServiceName.equalsAscii("FilledNet"))
+                eResult = XML_FILLED_RADAR;
             else if( (bUseOldNames && aServiceName.equalsAscii("Stock")) ||
                      (!bUseOldNames && aServiceName.equalsAscii("CandleStick")))
                 eResult = XML_STOCK;
@@ -673,6 +692,13 @@ bool switchBackToDataProviderFromParent( const Reference< chart2::XChartDocument
     return true;
 }
 
+void setBuildIDAtImportInfo( uno::Reference< frame::XModel > xModel, Reference< beans::XPropertySet > xImportInfo )
+{
+    ::rtl::OUString aGenerator( lcl_getGeneratorFromModelOrItsParent(xModel) );
+    if( aGenerator.getLength() )
+        SvXMLMetaDocumentContext::setBuildId( aGenerator, xImportInfo );
+}
+
 bool isDocumentGeneratedWithOpenOfficeOlderThan3_0( const uno::Reference< frame::XModel >& xChartModel )
 {
     bool bResult = isDocumentGeneratedWithOpenOfficeOlderThan2_3( xChartModel );
@@ -706,28 +732,38 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const uno::Reference< frame:
     //if there is a meta stream at the chart object it was not written with an older OpenOffice version < 2.3
     if( !aGenerator.getLength() )
     {
-        //if there is no meta stream at the chart object we need to check the version from the parent document
-        //and we need to check whether the document was created with OpenOffice.org at all
+        //if there is no meta stream at the chart object we need to check whether the parent document is OpenOffice at all
         uno::Reference< container::XChild > xChild( xChartModel, uno::UNO_QUERY );
         if( xChild.is() )
         {
-            ::rtl::OUString aParentGenerator( lcl_getGeneratorFromModel( uno::Reference< frame::XModel >( xChild->getParent(), uno::UNO_QUERY) ) );
-            if( aParentGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project") ) ) != -1 )
+            aGenerator = lcl_getGeneratorFromModel( uno::Reference< frame::XModel >( xChild->getParent(), uno::UNO_QUERY) );
+            if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project") ) ) != -1 )
             {
-                sal_Int32 nBuilId = lcl_getBuildIDFromGenerator( aParentGenerator );
-                if( nBuilId<=9161 ) //9161 is build id of OpenOffice.org 2.2.1
-                    bResult= true;
+                //the chart application has not created files without a meta stream since OOo 2.3 (OOo 2.3 has written a metastream already) 
+                //only the report builder extension has created some files with OOo 3.1 that do not have a meta stream
+                if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/31") ) ) != -1 )
+                    bResult = false;//#i100102# probably generated with OOo 3.1 by the report designer
+                else
+                    bResult= true; //in this case the OLE chart was created by an older version, as OLE objects are sometimes stream copied the version can differ from the parents version, so the parents version is not a reliable indicator
             }
-            else if(
-                   ( aParentGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org 1") ) ) == 0 )
-                || ( aParentGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice 6") ) ) == 0 )
-                || ( aParentGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice 7") ) ) == 0 )
-                || ( aParentGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarSuite 6") ) ) == 0 )
-                || ( aParentGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarSuite 7") ) ) == 0 )
-                )
+            else if( isDocumentGeneratedWithOpenOfficeOlderThan2_0(xChartModel) )
                 bResult= true;
         }
     }
+    return bResult;
+}
+
+bool isDocumentGeneratedWithOpenOfficeOlderThan2_0( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel)
+{
+    bool bResult = false;
+    ::rtl::OUString aGenerator( lcl_getGeneratorFromModelOrItsParent(xChartModel) );
+    if(    ( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org 1") ) ) == 0 )
+        || ( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice 6") ) ) == 0 )
+        || ( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice 7") ) ) == 0 )
+        || ( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarSuite 6") ) ) == 0 )
+        || ( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarSuite 7") ) ) == 0 )
+        )
+        bResult= true;
     return bResult;
 }
 

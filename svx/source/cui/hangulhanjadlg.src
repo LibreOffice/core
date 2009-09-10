@@ -37,7 +37,7 @@
 ModalDialog RID_SVX_MDLG_HANGULHANJA
 {
     HelpId = HID_DIALOG_HANGULHANJA;
-    Size = MAP_APPFONT( 287, 175 );
+    Size = MAP_APPFONT( 302, 175 );
     OutputSize = TRUE;
     Closeable = TRUE ;
     Moveable = TRUE ;
@@ -47,7 +47,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
     PushButton PB_FIND
     {
-        Pos = MAP_APPFONT( 192, 23 );
+        Pos = MAP_APPFONT( 207, 23 );
         Size = MAP_APPFONT( 30, 14 );
 
         Text [ en-US ] = "~Find";
@@ -56,7 +56,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
     Control CTL_SUGGESTIONS
     {
         Pos = MAP_APPFONT( 51, 46 );
-        Size = MAP_APPFONT( 171, 30 );
+        Size = MAP_APPFONT( 186, 30 );
         TabStop = TRUE ;
     };
 
@@ -71,7 +71,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
     RadioButton RB_SIMPLE_CONVERSION
     {
         Pos = MAP_APPFONT( 51, 81 );
-        Size = MAP_APPFONT( 55, 8 );
+        Size = MAP_APPFONT( 60, 8 );
 
         Group = TRUE;
 
@@ -80,16 +80,16 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
     RadioButton RB_HANJA_HANGUL_BRACKETED
     {
-        Pos = MAP_APPFONT( 109, 81 );
-        Size = MAP_APPFONT( 55, 8 );
+        Pos = MAP_APPFONT( 114, 81 );
+        Size = MAP_APPFONT( 60, 8 );
 
         Text [ en-US ] = "Hanja (Han~gul)";
     };
 
     RadioButton RB_HANGUL_HANJA_BRACKETED
     {
-        Pos = MAP_APPFONT( 167, 81 );
-        Size = MAP_APPFONT( 55, 8 );
+        Pos = MAP_APPFONT( 177, 81 );
+        Size = MAP_APPFONT( 60, 8 );
 
         Text [ en-US ] = "Hang~ul (Hanja)";
     };
@@ -97,7 +97,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
     RadioButton RB_HANGUL_HANJA_ABOVE
     {
         Pos = MAP_APPFONT( 51, 95 );
-        Size = MAP_APPFONT( 55, 16 );
+        Size = MAP_APPFONT( 60, 16 );
 
         // this is the _primary_ text
         Text [ en-US ] = "Hangu~l";
@@ -105,8 +105,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
     RadioButton RB_HANGUL_HANJA_BELOW
     {
-        Pos = MAP_APPFONT( 109, 95 );
-        Size = MAP_APPFONT( 55, 16 );
+        Pos = MAP_APPFONT( 114, 95 );
+        Size = MAP_APPFONT( 60, 16 );
 
         // this is the _primary_ text
         Text [ en-US ] = "Hang~ul";
@@ -114,8 +114,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
     RadioButton RB_HANJA_HANGUL_ABOVE
     {
-        Pos = MAP_APPFONT( 51, 114 );
-        Size = MAP_APPFONT( 55, 16 );
+        Pos = MAP_APPFONT( 56, 114 );
+        Size = MAP_APPFONT( 60, 16 );
 
         // this is the _primary_ text
         Text [ en-US ] = "Han~ja";
@@ -123,8 +123,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
     RadioButton RB_HANJA_HANGUL_BELOW
     {
-        Pos = MAP_APPFONT( 109, 114 );
-        Size = MAP_APPFONT( 55, 16 );
+        Pos = MAP_APPFONT( 114, 114 );
+        Size = MAP_APPFONT( 60, 16 );
 
         // this is the _primary_ text
         Text [ en-US ] = "Ha~nja";
@@ -141,14 +141,14 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
     CheckBox CB_HANGUL_ONLY
     {
         Pos = MAP_APPFONT( 51, 134 );
-        Size = MAP_APPFONT( 55, 8 );
+        Size = MAP_APPFONT( 60, 8 );
 
         Text [ en-US ] = "Hangul ~only";
     };
 
     CheckBox CB_HANJA_ONLY
     {
-        Pos = MAP_APPFONT( 109, 134 );
+        Pos = MAP_APPFONT( 114, 134 );
         Size = MAP_APPFONT( 55, 8 );
 
         Text [ en-US ] = "Hanja onl~y";
@@ -157,12 +157,12 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
     // this element is only for determining where our radio button group ends (in both directions)
     FixedText FT_RESIZE_ANCHOR
     {
-        Pos = MAP_APPFONT( 226, 133 );
+        Pos = MAP_APPFONT( 241, 133 );
     };
 
     CheckBox CB_REPLACE_BY_CHARACTER
     {
-        Pos = MAP_APPFONT( 226, 81 );
+        Pos = MAP_APPFONT( 241, 81 );
         Size = MAP_APPFONT( 55, 24 );
 
         WordBreak = TRUE;

@@ -4754,13 +4754,13 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
             if ( ( nGroupRotateAngle > 4500 && nGroupRotateAngle <= 13500 )
                 || ( nGroupRotateAngle > 22500 && nGroupRotateAngle <= 31500 ) )
             {
-                sal_Int32 nHalfWidth = ( aGlobalChildRect.GetWidth() + 1 ) >> 1;
-                sal_Int32 nHalfHeight = ( aGlobalChildRect.GetHeight() + 1 ) >> 1;
-                Point aTopLeft( aGlobalChildRect.Left() + nHalfWidth - nHalfHeight,
-                                aGlobalChildRect.Top() + nHalfHeight - nHalfWidth );
-                Size aNewSize( aGlobalChildRect.GetHeight(), aGlobalChildRect.GetWidth() );
+                sal_Int32 nHalfWidth = ( aClientRect.GetWidth() + 1 ) >> 1;
+                sal_Int32 nHalfHeight = ( aClientRect.GetHeight() + 1 ) >> 1;
+                Point aTopLeft( aClientRect.Left() + nHalfWidth - nHalfHeight,
+                                aClientRect.Top() + nHalfHeight - nHalfWidth );
+                Size aNewSize( aClientRect.GetHeight(), aClientRect.GetWidth() );
                 Rectangle aNewRect( aTopLeft, aNewSize );
-                aGlobalChildRect = aNewRect;
+                aClientRect = aNewRect;
             }
 
             // now importing the inner objects of the group
