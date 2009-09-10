@@ -491,7 +491,7 @@ void ScSubTotal();
 // compatibility). If this was the case then rMissingField is set to TRUE upon
 // return. If rMissingField==FALSE upon call all "missing cases" are considered
 // to be an error.
-BOOL GetDBParams( ScQueryParam& rParam, BOOL& rMissingField );
+ScDBQueryParamBase* GetDBParams( BOOL& rMissingField );
 
 void DBIterator( ScIterFunc );
 void ScDBSum();

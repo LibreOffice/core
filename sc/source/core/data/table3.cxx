@@ -61,8 +61,10 @@
 #include "cellform.hxx"
 #include "postit.hxx"
 #include "queryparam.hxx"
+#include "doubleref.hxx"
 
 #include <vector>
+#include <stdio.h>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -79,6 +81,17 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScSortInfo, nMemPoolSortInfo, nMemPoolSortInfo )
 
 // END OF STATIC DATA -----------------------------------------------------
 
+struct ScTable::QueryParam : public ScQueryParamBase, public ScQueryParamTable
+{
+    QueryParam() :
+        ScQueryParamBase(), ScQueryParamTable()
+    {
+    }
+
+    virtual ~QueryParam()
+    {
+    }
+};
 
 class ScSortInfoArray
 {
@@ -1258,6 +1271,335 @@ BOOL ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
     return bRet;
 }
 
+BOOL ScTable::ValidQuery(SCROW nRow, const ScDBQueryParamInternal& rParam,
+        BOOL* pSpecial /* =NULL */ , ScBaseCell* pCell /* =NULL */ ,
+        BOOL* pbTestEqualCondition /* = NULL */ )
+{
+    if (!rParam.GetEntry(0).bDoQuery)
+        return TRUE;
+
+    //---------------------------------------------------------------
+
+    const SCSIZE nFixedBools = 32;
+    BOOL aBool[nFixedBools];
+    BOOL aTest[nFixedBools];
+    SCSIZE nEntryCount = rParam.GetEntryCount();
+    BOOL* pPasst = ( nEntryCount <= nFixedBools ? &aBool[0] : new BOOL[nEntryCount] );
+    BOOL* pTest = ( nEntryCount <= nFixedBools ? &aTest[0] : new BOOL[nEntryCount] );
+
+    long    nPos = -1;
+    SCSIZE  i    = 0;
+    BOOL    bMatchWholeCell = pDocument->GetDocOptions().IsMatchWholeCell();
+    CollatorWrapper* pCollator = (rParam.bCaseSens ? ScGlobal::pCaseCollator :
+        ScGlobal::pCollator);
+    ::utl::TransliterationWrapper* pTransliteration = (rParam.bCaseSens ?
+        ScGlobal::pCaseTransliteration : ScGlobal::pTransliteration);
+
+    while ( (i < nEntryCount) && rParam.GetEntry(i).bDoQuery )
+    {
+        ScQueryEntry& rEntry = rParam.GetEntry(i);
+        // we can only handle one single direct query
+        if ( !pCell || i > 0 )
+            pCell = GetCell( static_cast<SCCOL>(rEntry.nField), nRow );
+
+        BOOL bOk = FALSE;
+        BOOL bTestEqual = FALSE;
+
+        if ( pSpecial && pSpecial[i] )
+        {
+            if (rEntry.nVal == SC_EMPTYFIELDS)
+                bOk = !( aCol[rEntry.nField].HasDataAt( nRow ) );
+            else // if (rEntry.nVal == SC_NONEMPTYFIELDS)
+                bOk = aCol[rEntry.nField].HasDataAt( nRow );
+        }
+        else if ( !rEntry.bQueryByString && (pCell ? pCell->HasValueData() :
+                    HasValueData( static_cast<SCCOL>(rEntry.nField), nRow)))
+        {   // by Value
+            double nCellVal;
+            if ( pCell )
+            {
+                switch ( pCell->GetCellType() )
+                {
+                    case CELLTYPE_VALUE :
+                        nCellVal = ((ScValueCell*)pCell)->GetValue();
+                    break;
+                    case CELLTYPE_FORMULA :
+                        nCellVal = ((ScFormulaCell*)pCell)->GetValue();
+                    break;
+                    default:
+                        nCellVal = 0.0;
+                }
+
+            }
+            else
+                nCellVal = GetValue( static_cast<SCCOL>(rEntry.nField), nRow );
+
+            switch (rEntry.eOp)
+            {
+                case SC_EQUAL :
+                    bOk = ::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    break;
+                case SC_LESS :
+                    bOk = (nCellVal < rEntry.nVal) && !::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    break;
+                case SC_GREATER :
+                    bOk = (nCellVal > rEntry.nVal) && !::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    break;
+                case SC_LESS_EQUAL :
+                    bOk = (nCellVal < rEntry.nVal) || ::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    if ( bOk && pbTestEqualCondition )
+                        bTestEqual = ::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    break;
+                case SC_GREATER_EQUAL :
+                    bOk = (nCellVal > rEntry.nVal) || ::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    if ( bOk && pbTestEqualCondition )
+                        bTestEqual = ::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    break;
+                case SC_NOT_EQUAL :
+                    bOk = !::rtl::math::approxEqual( nCellVal, rEntry.nVal );
+                    break;
+                default:
+                {
+                    // added to avoid warnings
+                }
+            }
+        }
+        else if ( (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL) ||
+                  (rEntry.eOp == SC_CONTAINS || rEntry.eOp == SC_DOES_NOT_CONTAIN ||
+                   rEntry.eOp == SC_BEGINS_WITH || rEntry.eOp == SC_ENDS_WITH ||
+                   rEntry.eOp == SC_DOES_NOT_BEGIN_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH) ||
+                (rEntry.bQueryByString && (pCell ? pCell->HasStringData() :
+                                           HasStringData(
+                                               static_cast<SCCOL>(rEntry.nField),
+                                               nRow))))
+        {   // by String
+            String  aCellStr;
+            if( rEntry.eOp == SC_CONTAINS || rEntry.eOp == SC_DOES_NOT_CONTAIN
+                || rEntry.eOp == SC_BEGINS_WITH || rEntry.eOp == SC_ENDS_WITH
+                || rEntry.eOp == SC_DOES_NOT_BEGIN_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH )
+                bMatchWholeCell = FALSE;
+            if ( pCell )
+            {
+                if (pCell->GetCellType() != CELLTYPE_NOTE)
+                {
+                    ULONG nFormat = GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
+                    ScCellFormat::GetInputString( pCell, nFormat, aCellStr, *(pDocument->GetFormatTable()) );
+                }
+            }
+            else
+                GetInputString( static_cast<SCCOL>(rEntry.nField), nRow, aCellStr );
+
+            BOOL bRealRegExp = (rParam.bRegExp && ((rEntry.eOp == SC_EQUAL)
+                || (rEntry.eOp == SC_NOT_EQUAL) || (rEntry.eOp == SC_CONTAINS)
+                || (rEntry.eOp == SC_DOES_NOT_CONTAIN) || (rEntry.eOp == SC_BEGINS_WITH)
+                || (rEntry.eOp == SC_ENDS_WITH) || (rEntry.eOp == SC_DOES_NOT_BEGIN_WITH)
+                || (rEntry.eOp == SC_DOES_NOT_END_WITH)));
+            BOOL bTestRegExp = (pbTestEqualCondition && rParam.bRegExp
+                && ((rEntry.eOp == SC_LESS_EQUAL)
+                    || (rEntry.eOp == SC_GREATER_EQUAL)));
+            if ( bRealRegExp || bTestRegExp )
+            {
+                xub_StrLen nStart = 0;
+                xub_StrLen nEnd   = aCellStr.Len();
+
+                // from 614 on, nEnd is behind the found text
+                BOOL bMatch = FALSE;
+                if ( rEntry.eOp == SC_ENDS_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH )
+                {
+                    nEnd = 0;
+                    nStart = aCellStr.Len();
+                    bMatch = (BOOL) rEntry.GetSearchTextPtr( rParam.bCaseSens )
+                        ->SearchBkwrd( aCellStr, &nStart, &nEnd );
+                }
+                else
+                {
+                    bMatch = (BOOL) rEntry.GetSearchTextPtr( rParam.bCaseSens )
+                        ->SearchFrwrd( aCellStr, &nStart, &nEnd );
+                }
+                if ( bMatch && bMatchWholeCell
+                        && (nStart != 0 || nEnd != aCellStr.Len()) )
+                    bMatch = FALSE;    // RegExp must match entire cell string
+                if ( bRealRegExp )
+                    switch (rEntry.eOp)
+                {
+                    case SC_EQUAL:
+                    case SC_CONTAINS:
+                        bOk = bMatch;
+                        break;
+                    case SC_NOT_EQUAL:
+                    case SC_DOES_NOT_CONTAIN:
+                        bOk = !bMatch;
+                        break;
+                    case SC_BEGINS_WITH:
+                        bOk = ( bMatch && (nStart == 0) );
+                        break;
+                    case SC_DOES_NOT_BEGIN_WITH:
+                        bOk = !( bMatch && (nStart == 0) );
+                        break;
+                    case SC_ENDS_WITH:
+                        bOk = ( bMatch && (nEnd == aCellStr.Len()) );
+                        break;
+                    case SC_DOES_NOT_END_WITH:
+                        bOk = !( bMatch && (nEnd == aCellStr.Len()) );
+                        break;
+                    default:
+                        {
+                            // added to avoid warnings
+                        }
+                }
+                else
+                    bTestEqual = bMatch;
+            }
+            if ( !bRealRegExp )
+            {
+                if ( rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL
+                    || rEntry.eOp == SC_CONTAINS || rEntry.eOp == SC_DOES_NOT_CONTAIN
+                    || rEntry.eOp == SC_BEGINS_WITH || rEntry.eOp == SC_ENDS_WITH
+                    || rEntry.eOp == SC_DOES_NOT_BEGIN_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH )
+                {
+                    if ( !rEntry.bQueryByString && rEntry.pStr->Len() == 0 )
+                    {
+                        // #i18374# When used from functions (match, countif, sumif, vlookup, hlookup, lookup),
+                        // the query value is assigned directly, and the string is empty. In that case,
+                        // don't find any string (isEqual would find empty string results in formula cells).
+                        bOk = FALSE;
+                        if ( rEntry.eOp == SC_NOT_EQUAL )
+                            bOk = !bOk;
+                    }
+                    else if ( bMatchWholeCell )
+                    {
+                        bOk = pTransliteration->isEqual( aCellStr, *rEntry.pStr );
+                        if ( rEntry.eOp == SC_NOT_EQUAL )
+                            bOk = !bOk;
+                    }
+                    else
+                    {
+                        String aCell( pTransliteration->transliterate(
+                            aCellStr, ScGlobal::eLnge, 0, aCellStr.Len(),
+                            NULL ) );
+                        String aQuer( pTransliteration->transliterate(
+                            *rEntry.pStr, ScGlobal::eLnge, 0, rEntry.pStr->Len(),
+                            NULL ) );
+                        xub_StrLen nIndex = (rEntry.eOp == SC_ENDS_WITH
+                            || rEntry.eOp == SC_DOES_NOT_END_WITH)? (aCell.Len()-aQuer.Len()):0;
+                        xub_StrLen nStrPos = aCell.Search( aQuer, nIndex );
+                        switch (rEntry.eOp)
+                        {
+                        case SC_EQUAL:
+                        case SC_CONTAINS:
+                            bOk = ( nStrPos != STRING_NOTFOUND );
+                            break;
+                        case SC_NOT_EQUAL:
+                        case SC_DOES_NOT_CONTAIN:
+                            bOk = ( nStrPos == STRING_NOTFOUND );
+                            break;
+                        case SC_BEGINS_WITH:
+                            bOk = ( nStrPos == 0 );
+                            break;
+                        case SC_DOES_NOT_BEGIN_WITH:
+                            bOk = ( nStrPos != 0 );
+                            break;
+                        case SC_ENDS_WITH:
+                            bOk = ( nStrPos + aQuer.Len() == aCell.Len() );
+                            break;
+                        case SC_DOES_NOT_END_WITH:
+                            bOk = ( nStrPos + aQuer.Len() != aCell.Len() );
+                            break;
+                        default:
+                            {
+                                // added to avoid warnings
+                            }
+                        }
+                    }
+                }
+                else
+                {   // use collator here because data was probably sorted
+                    sal_Int32 nCompare = pCollator->compareString(
+                        aCellStr, *rEntry.pStr );
+                    switch (rEntry.eOp)
+                    {
+                        case SC_LESS :
+                            bOk = (nCompare < 0);
+                            break;
+                        case SC_GREATER :
+                            bOk = (nCompare > 0);
+                            break;
+                        case SC_LESS_EQUAL :
+                            bOk = (nCompare <= 0);
+                            if ( bOk && pbTestEqualCondition && !bTestEqual )
+                                bTestEqual = (nCompare == 0);
+                            break;
+                        case SC_GREATER_EQUAL :
+                            bOk = (nCompare >= 0);
+                            if ( bOk && pbTestEqualCondition && !bTestEqual )
+                                bTestEqual = (nCompare == 0);
+                            break;
+                        default:
+                        {
+                            // added to avoid warnings
+                        }
+                    }
+                }
+            }
+        }
+        else if (rParam.bMixedComparison)
+        {
+            if (rEntry.bQueryByString &&
+                    (rEntry.eOp == SC_LESS || rEntry.eOp == SC_LESS_EQUAL) &&
+                    (pCell ? pCell->HasValueData() :
+                     HasValueData( static_cast<SCCOL>(rEntry.nField), nRow)))
+            {
+                bOk = TRUE;
+            }
+            else if (!rEntry.bQueryByString &&
+                    (rEntry.eOp == SC_GREATER || rEntry.eOp == SC_GREATER_EQUAL) &&
+                    (pCell ? pCell->HasStringData() :
+                     HasStringData( static_cast<SCCOL>(rEntry.nField), nRow)))
+            {
+                bOk = TRUE;
+            }
+        }
+
+        if (nPos == -1)
+        {
+            nPos++;
+            pPasst[nPos] = bOk;
+            pTest[nPos] = bTestEqual;
+        }
+        else
+        {
+            if (rEntry.eConnect == SC_AND)
+            {
+                pPasst[nPos] = pPasst[nPos] && bOk;
+                pTest[nPos] = pTest[nPos] && bTestEqual;
+            }
+            else
+            {
+                nPos++;
+                pPasst[nPos] = bOk;
+                pTest[nPos] = bTestEqual;
+            }
+        }
+        i++;
+    }
+
+    for ( long j=1; j <= nPos; j++ )
+    {
+        pPasst[0] = pPasst[0] || pPasst[j];
+        pTest[0] = pTest[0] || pTest[j];
+    }
+
+    BOOL bRet = pPasst[0];
+    if ( pPasst != &aBool[0] )
+        delete [] pPasst;
+    if ( pbTestEqualCondition )
+        *pbTestEqualCondition = pTest[0];
+    if ( pTest != &aTest[0] )
+        delete [] pTest;
+
+    return bRet;
+}
+
 void ScTable::TopTenQuery( ScQueryParam& rParam )
 {
     BOOL bSortCollatorInitialized = FALSE;
@@ -1619,6 +1961,155 @@ BOOL ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     return bValid;
 }
 
+bool ScTable::CreateExcelQuery(
+    ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef,
+    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
+{
+    bool bValid = true;
+    SCCOL* pFields = new SCCOL[nCol2-nCol1+1];
+    String  aCellStr;
+    SCCOL   nCol = nCol1;
+
+    while (bValid && (nCol <= nCol2))
+    {
+        String aQueryStr;
+        GetInputString(nCol, nRow1, aQueryStr);
+        SCCOL nField = pDBRef->findFieldColumn(aQueryStr);
+        if (ValidCol(nField))
+            pFields[nCol - nCol1] = nField;
+        else
+            bValid = false;
+        nCol++;
+    }
+
+    if (bValid)
+    {
+        ULONG nVisible = 0;
+        for ( nCol=nCol1; nCol<=nCol2; nCol++ )
+            nVisible += aCol[nCol].VisibleCount( nRow1+1, nRow2 );
+
+        if ( nVisible > SCSIZE_MAX / sizeof(void*) )
+        {
+            DBG_ERROR("zu viele Filterkritierien");
+            nVisible = 0;
+        }
+
+        SCSIZE nNewEntries = nVisible;
+        pParam->Resize( nNewEntries );
+
+        SCSIZE nIndex = 0;
+        SCROW nRow = nRow1 + 1;
+        while (nRow <= nRow2)
+        {
+            nCol = nCol1;
+            while (nCol <= nCol2)
+            {
+                GetInputString( nCol, nRow, aCellStr );
+                ScGlobal::pCharClass->toUpper( aCellStr );
+                if (aCellStr.Len() > 0)
+                {
+                    if (nIndex < nNewEntries)
+                    {
+                        pParam->GetEntry(nIndex).nField = pFields[nCol - nCol1];
+                        pParam->FillInExcelSyntax(aCellStr, nIndex);
+                        nIndex++;
+                        if (nIndex < nNewEntries)
+                            pParam->GetEntry(nIndex).eConnect = SC_AND;
+                    }
+                    else
+                        bValid = FALSE;
+                }
+                nCol++;
+            }
+            nRow++;
+            if (nIndex < nNewEntries)
+                pParam->GetEntry(nIndex).eConnect = SC_OR;
+        }
+    }
+    delete [] pFields;
+    return bValid;
+}
+
+//BOOL ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScDBQueryParamInternal& rQueryParam)
+//{
+//    BOOL    bValid = TRUE;
+//    SCCOL* pFields = new SCCOL[nCol2-nCol1+1];
+//    String  aCellStr;
+//    SCCOL   nCol = nCol1;
+//    DBG_ASSERT( rQueryParam.nTab != SCTAB_MAX, "rQueryParam.nTab no value, not bad but no good" );
+//    SCTAB   nDBTab = (rQueryParam.nTab == SCTAB_MAX ? nTab : rQueryParam.nTab);
+//    SCROW   nDBRow1 = rQueryParam.nRow1;
+//    SCCOL   nDBCol2 = rQueryParam.nCol2;
+//    // Erste Zeile muessen Spaltenkoepfe sein
+//    while (bValid && (nCol <= nCol2))
+//    {
+//        String aQueryStr;
+//        GetUpperCellString(nCol, nRow1, aQueryStr);
+//        BOOL bFound = FALSE;
+//        SCCOL i = rQueryParam.nCol1;
+//        while (!bFound && (i <= nDBCol2))
+//        {
+//            if ( nTab == nDBTab )
+//                GetUpperCellString(i, nDBRow1, aCellStr);
+//            else
+//                pDocument->GetUpperCellString(i, nDBRow1, nDBTab, aCellStr);
+//            bFound = (aCellStr == aQueryStr);
+//            if (!bFound) i++;
+//        }
+//        if (bFound)
+//            pFields[nCol - nCol1] = i;
+//        else
+//            bValid = FALSE;
+//        nCol++;
+//    }
+//    if (bValid)
+//    {
+//        ULONG nVisible = 0;
+//        for ( nCol=nCol1; nCol<=nCol2; nCol++ )
+//            nVisible += aCol[nCol].VisibleCount( nRow1+1, nRow2 );
+//
+//        if ( nVisible > SCSIZE_MAX / sizeof(void*) )
+//        {
+//            DBG_ERROR("zu viele Filterkritierien");
+//            nVisible = 0;
+//        }
+//
+//        SCSIZE nNewEntries = nVisible;
+//        rQueryParam.Resize( nNewEntries );
+//
+//        SCSIZE nIndex = 0;
+//        SCROW nRow = nRow1 + 1;
+//        while (nRow <= nRow2)
+//        {
+//            nCol = nCol1;
+//            while (nCol <= nCol2)
+//            {
+//                GetInputString( nCol, nRow, aCellStr );
+//                ScGlobal::pCharClass->toUpper( aCellStr );
+//                if (aCellStr.Len() > 0)
+//                {
+//                    if (nIndex < nNewEntries)
+//                    {
+//                        rQueryParam.GetEntry(nIndex).nField = pFields[nCol - nCol1];
+//                        rQueryParam.FillInExcelSyntax(aCellStr, nIndex);
+//                        nIndex++;
+//                        if (nIndex < nNewEntries)
+//                            rQueryParam.GetEntry(nIndex).eConnect = SC_AND;
+//                    }
+//                    else
+//                        bValid = FALSE;
+//                }
+//                nCol++;
+//            }
+//            nRow++;
+//            if (nIndex < nNewEntries)
+//                rQueryParam.GetEntry(nIndex).eConnect = SC_OR;
+//        }
+//    }
+//    delete [] pFields;
+//    return bValid;
+//}
+
 BOOL ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam)
 {
     // A valid StarQuery must be at least 4 columns wide. To be precise it
@@ -1725,6 +2216,126 @@ BOOL ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
     return bValid;
 }
 
+bool ScTable::CreateStarQuery(ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
+{
+    // A valid StarQuery must be at least 4 columns wide. To be precise it
+    // should be exactly 4 columns ...
+    // Additionally, if this wasn't checked, a formula pointing to a valid 1-3
+    // column Excel style query range immediately left to itself would result
+    // in a circular reference when the field name or operator or value (first
+    // to third query range column) is obtained (#i58354#). Furthermore, if the
+    // range wasn't sufficiently specified data changes wouldn't flag formula
+    // cells for recalculation.
+
+    if (nCol2 - nCol1 < 3)
+        return false;
+
+    BOOL bValid;
+    BOOL bFound;
+    String aCellStr;
+    SCSIZE nIndex = 0;
+    SCROW nRow = nRow1;
+//  DBG_ASSERT( rQueryParam.nTab != SCTAB_MAX, "rQueryParam.nTab no value, not bad but no good" );
+//  SCTAB   nDBTab = (rQueryParam.nTab == SCTAB_MAX ? nTab : rQueryParam.nTab);
+//  SCROW   nDBRow1 = rQueryParam.nRow1;
+//  SCCOL   nDBCol2 = rQueryParam.nCol2;
+
+    SCSIZE nNewEntries = static_cast<SCSIZE>(nRow2 - nRow1 + 1);
+    pParam->Resize(nNewEntries);
+
+    do
+    {
+        ScQueryEntry& rEntry = pParam->GetEntry(nIndex);
+
+        bValid = FALSE;
+
+        if (nIndex > 0)
+        {
+            // For all entries after the first one, check the and/or connector in the first column.
+            GetUpperCellString(nCol1, nRow, aCellStr);
+            if ( aCellStr == ScGlobal::GetRscString(STR_TABLE_UND) )
+            {
+                rEntry.eConnect = SC_AND;
+                bValid = TRUE;
+            }
+            else if ( aCellStr == ScGlobal::GetRscString(STR_TABLE_ODER) )
+            {
+                rEntry.eConnect = SC_OR;
+                bValid = TRUE;
+            }
+        }
+
+        if ((nIndex < 1) || bValid)
+        {
+            // field name in the 2nd column.
+            bFound = FALSE;
+            GetInputString(nCol1 + 1, nRow, aCellStr);
+            SCCOL nField = pDBRef->findFieldColumn(aCellStr);
+            if (ValidCol(nField))
+            {
+                rEntry.nField = nField;
+                bValid = true;
+            }
+            else
+                bValid = false;
+//          GetUpperCellString(nCol1 + 1, nRow, aCellStr);
+//          for (SCCOL i=rQueryParam.nCol1; (i <= nDBCol2) && (!bFound); i++)
+//          {
+//              String aFieldStr;
+//              if ( nTab == nDBTab )
+//                  GetUpperCellString(i, nDBRow1, aFieldStr);
+//              else
+//                  pDocument->GetUpperCellString(i, nDBRow1, nDBTab, aFieldStr);
+//              bFound = (aCellStr == aFieldStr);
+//              if (bFound)
+//              {
+//                  rEntry.nField = i;
+//                  bValid = TRUE;
+//              }
+//              else
+//                  bValid = FALSE;
+//          }
+        }
+
+        if (bValid)
+        {
+            // equality, non-equality operator in the 3rd column.
+            bFound = FALSE;
+            GetUpperCellString(nCol1 + 2, nRow, aCellStr);
+            if (aCellStr.GetChar(0) == '<')
+            {
+                if (aCellStr.GetChar(1) == '>')
+                    rEntry.eOp = SC_NOT_EQUAL;
+                else if (aCellStr.GetChar(1) == '=')
+                    rEntry.eOp = SC_LESS_EQUAL;
+                else
+                    rEntry.eOp = SC_LESS;
+            }
+            else if (aCellStr.GetChar(0) == '>')
+            {
+                if (aCellStr.GetChar(1) == '=')
+                    rEntry.eOp = SC_GREATER_EQUAL;
+                else
+                    rEntry.eOp = SC_GREATER;
+            }
+            else if (aCellStr.GetChar(0) == '=')
+                rEntry.eOp = SC_EQUAL;
+
+        }
+
+        if (bValid)
+        {
+            // Finally, the right-hand-side value in the 4th column.
+            GetString(nCol1 + 3, nRow, *rEntry.pStr);
+            rEntry.bDoQuery = TRUE;
+        }
+        nIndex++;
+        nRow++;
+    }
+    while (bValid && (nRow <= nRow2) /* && (nIndex < MAXQUERY) */ );
+    return bValid;
+}
+
 BOOL ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam)
 {
     SCSIZE i, nCount;
@@ -1753,6 +2364,38 @@ BOOL ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
         //  nix
         for (i=0; i < nCount; i++)
             rQueryParam.GetEntry(i).Clear();
+    }
+    return bValid;
+}
+
+bool ScTable::FillQueryEntries(
+    ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
+{
+    PutInOrder(nCol1, nCol2);
+    PutInOrder(nRow1, nRow2);
+
+    SCSIZE nCount = pParam->GetEntryCount();
+    for (SCSIZE i = 0; i < nCount; ++i)
+        pParam->GetEntry(i).Clear();
+
+    // Standard QueryTabelle
+    bool bValid = CreateStarQuery(pParam, pDBRef, nCol1, nRow1, nCol2, nRow2);
+    // Excel QueryTabelle
+    if (!bValid)
+        bValid = CreateExcelQuery(pParam, pDBRef, nCol1, nRow1, nCol2, nRow2);
+
+    nCount = pParam->GetEntryCount();
+    if (bValid)
+    {
+        //  bQueryByString muss gesetzt sein
+        for (SCSIZE i = 0; i < nCount; ++i)
+            pParam->GetEntry(i).bQueryByString = true;
+    }
+    else
+    {
+        //  nix
+        for (SCSIZE i = 0; i < nCount; ++i)
+            pParam->GetEntry(i).Clear();
     }
     return bValid;
 }

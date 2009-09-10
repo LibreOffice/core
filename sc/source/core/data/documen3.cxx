@@ -1243,25 +1243,15 @@ BOOL ScDocument::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
     return FALSE;
 }
 
-bool ScDocument::CreateQueryParam(const ScDoubleRefBase* pDoubleRef, ScQueryParam& rQueryParam)
+bool ScDocument::FillQueryEntries( ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef,
+                                   SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab)
 {
-    if (!pDoubleRef)
+    if (!pParam)
         return false;
 
-    switch (pDoubleRef->getType())
-    {
-        case ScDoubleRefBase::INTERNAL:
-        {
-            const ScRange& rRange = static_cast<const ScInternalDoubleRef*>(pDoubleRef)->getRange();
-            const ScAddress& s = rRange.aStart;
-            const ScAddress& e = rRange.aEnd;
-            if (ValidTab(s.Tab()) && pTab[s.Tab()])
-                return pTab[s.Tab()]->CreateQueryParam(s.Col(), s.Row(), e.Col(), e.Row(), rQueryParam);
-        }
-        break;
-        case ScDoubleRefBase::EXTERNAL:
-        break;
-    }
+    if (ValidTab(nTab) && pTab[nTab])
+        return pTab[nTab]->FillQueryEntries(pParam, pDBRef, nCol1, nRow1, nCol2, nRow2);
+
     return false;
 }
 

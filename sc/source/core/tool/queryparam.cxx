@@ -37,16 +37,23 @@
 
 // ============================================================================
 
-ScQueryParamBase::ScQueryParamBase(DataType eType) :
-    nEntryCount(0), meType(eType)
+ScQueryParamBase::ScQueryParamBase() :
+    nEntryCount(0)
 {
+    Resize( MAXQUERY );
+    for (USHORT i=0; i<MAXQUERY; i++)
+        pEntries[i].Clear();
 }
 
 ScQueryParamBase::ScQueryParamBase(const ScQueryParamBase& r) :
     bHasHeader(r.bHasHeader), bByRow(r.bByRow), bInplace(r.bInplace), bCaseSens(r.bCaseSens),
-    bRegExp(r.bRegExp), bDuplicate(r.bDuplicate),
-    meType(r.meType)
+    bRegExp(r.bRegExp), bDuplicate(r.bDuplicate), bMixedComparison(r.bMixedComparison)
 {
+    nEntryCount = 0;
+
+    Resize( r.nEntryCount );
+    for (USHORT i=0; i<nEntryCount; i++)
+        pEntries[i] = r.pEntries[i];
 }
 
 ScQueryParamBase::~ScQueryParamBase()
@@ -141,15 +148,26 @@ void ScQueryParamBase::FillInExcelSyntax(String& aCellStr, SCSIZE nIndex)
     }
 }
 
-ScQueryParamBase::DataType ScQueryParamBase::GetType() const
+// ============================================================================
+
+ScQueryParamTable::ScQueryParamTable()
 {
-    return meType;
+}
+
+ScQueryParamTable::ScQueryParamTable(const ScQueryParamTable& r) :
+    nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),nTab(r.nTab)
+{
+}
+
+ScQueryParamTable::~ScQueryParamTable()
+{
 }
 
 // ============================================================================
 
 ScQueryParam::ScQueryParam() :
-    ScQueryParamBase(ScQueryParamBase::INTERNAL)
+    ScQueryParamBase(),
+    ScQueryParamTable()
 {
     Clear();
 }
@@ -158,15 +176,9 @@ ScQueryParam::ScQueryParam() :
 
 ScQueryParam::ScQueryParam( const ScQueryParam& r ) :
     ScQueryParamBase(r),
-    nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),nTab(r.nTab),
-    bMixedComparison(r.bMixedComparison), bDestPers(r.bDestPers),
-    nDestTab(r.nDestTab), nDestCol(r.nDestCol), nDestRow(r.nDestRow)
+    ScQueryParamTable(r),
+    bDestPers(r.bDestPers), nDestTab(r.nDestTab), nDestCol(r.nDestCol), nDestRow(r.nDestRow)
 {
-    nEntryCount = 0;
-
-    Resize( r.nEntryCount );
-    for (USHORT i=0; i<nEntryCount; i++)
-        pEntries[i] = r.pEntries[i];
 }
 
 //------------------------------------------------------------------------
@@ -285,12 +297,42 @@ void ScQueryParam::MoveToDest()
 
 // ============================================================================
 
-ScQueryParamMatrix::ScQueryParamMatrix() :
-    ScQueryParamBase(ScQueryParamBase::MATRIX)
+ScDBQueryParamBase::ScDBQueryParamBase(DataType eType) :
+    ScQueryParamBase(),
+    mnField(-1),
+    meType(eType)
 {
 }
 
-ScQueryParamMatrix::~ScQueryParamMatrix()
+ScDBQueryParamBase::~ScDBQueryParamBase()
+{
+}
+
+ScDBQueryParamBase::DataType ScDBQueryParamBase::GetType() const
+{
+    return meType;
+}
+
+// ============================================================================
+
+ScDBQueryParamInternal::ScDBQueryParamInternal() :
+    ScDBQueryParamBase(ScDBQueryParamBase::INTERNAL),
+    ScQueryParamTable()
+{
+}
+
+ScDBQueryParamInternal::~ScDBQueryParamInternal()
+{
+}
+
+// ============================================================================
+
+ScDBQueryParamMatrix::ScDBQueryParamMatrix() :
+    ScDBQueryParamBase(ScDBQueryParamBase::MATRIX)
+{
+}
+
+ScDBQueryParamMatrix::~ScDBQueryParamMatrix()
 {
 }
 

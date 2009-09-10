@@ -132,6 +132,9 @@ public:
 
 // ============================================================================
 
+/**
+ * Rename this to ScDBQueryValueIterator.
+ */
 class ScQueryValueIterator            // alle Zahlenwerte in einem Bereich durchgehen
 {
 private:
@@ -148,14 +151,14 @@ private:
     class DataAccessInternal : public DataAccess
     {
     public:
-        DataAccessInternal(const ScQueryParam* pParam, ScDocument* pDoc);
+        DataAccessInternal(const ScDBQueryParamInternal* pParam, ScDocument* pDoc);
         virtual ~DataAccessInternal();
         virtual bool getCurrent(double &rValue, USHORT &rErr);
         virtual bool getFirst(double &rValue, USHORT &rErr);
         virtual bool getNext(double& rValue, USHORT& rErr);
 
     private:
-        const ScQueryParam* mpParam;
+        const ScDBQueryParamInternal* mpParam;
         ScDocument*         mpDoc;
         const ScAttrArray*  pAttrArray;
         ULONG               nNumFormat;     // fuer CalcAsShown
@@ -172,22 +175,22 @@ private:
     class DataAccessMatrix : public DataAccess
     {
     public:
-        DataAccessMatrix(const ScQueryParamMatrix* pParam);
+        DataAccessMatrix(const ScDBQueryParamMatrix* pParam);
         virtual ~DataAccessMatrix();
         virtual bool getCurrent(double &rValue, USHORT &rErr);
         virtual bool getFirst(double &rValue, USHORT &rErr);
         virtual bool getNext(double &rValue, USHORT &rErr);
 
     private:
-        const ScQueryParamMatrix* mpParam;
+        const ScDBQueryParamMatrix* mpParam;
     };
 
-    ::std::auto_ptr<ScQueryParamBase> mpParam;
+    ::std::auto_ptr<ScDBQueryParamBase> mpParam;
     ::std::auto_ptr<DataAccess> mpData;
 
     bool            GetThis(double& rValue, USHORT& rErr);
 public:
-                    ScQueryValueIterator(ScDocument* pDocument, ScQueryParamBase* pParam);
+                    ScQueryValueIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam);
     /// Does NOT reset rValue if no value found!
     BOOL            GetFirst(double& rValue, USHORT& rErr);
     /// Does NOT reset rValue if no value found!

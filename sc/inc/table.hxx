@@ -76,7 +76,9 @@ struct RowInfo;
 struct ScFunctionData;
 struct ScLineFlags;
 class CollatorWrapper;
-
+struct ScDBQueryParamInternal;
+struct ScQueryParamBase;
+class ScDoubleRefBase;
 
 class ScTable
 {
@@ -171,6 +173,8 @@ friend class ScAttrRectIterator;
 
 
 public:
+    struct QueryParam;
+
                 ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
                             BOOL bColInfo = TRUE, BOOL bRowInfo = TRUE );
                 ~ScTable();
@@ -630,10 +634,14 @@ public:
     BOOL        ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam,
                     BOOL* pSpecial = NULL, ScBaseCell* pCell = NULL,
                     BOOL* pbTestEqualCondition = NULL );
+    BOOL        ValidQuery(SCROW nRow, const ScDBQueryParamInternal& rQueryParam,
+                    BOOL* pSpecial = NULL, ScBaseCell* pCell = NULL,
+                    BOOL* pbTestEqualCondition = NULL );
     void        TopTenQuery( ScQueryParam& );
     SCSIZE      Query(ScQueryParam& rQueryParam, BOOL bKeepSub);
     BOOL        CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
-
+//  BOOL        CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScDBQueryParamInternal& rQueryParam);
+    bool        FillQueryEntries(ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     void        GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, TypedScStrCollection& rStrings);
     void        GetFilteredFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, TypedScStrCollection& rStrings );
     BOOL        GetDataEntries(SCCOL nCol, SCROW nRow, TypedScStrCollection& rStrings, BOOL bLimit);
@@ -712,7 +720,9 @@ private:
     void        SortReorder( ScSortInfoArray*, ScProgress& );
 
     BOOL        CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
+    bool        CreateExcelQuery(ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     BOOL        CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
+    bool        CreateStarQuery(ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     void        GetUpperCellString(SCCOL nCol, SCROW nRow, String& rStr);
 
     BOOL        RefVisible(ScFormulaCell* pCell);

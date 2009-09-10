@@ -494,11 +494,11 @@ ScQueryValueIterator::DataAccess::~DataAccess()
 
 // ----------------------------------------------------------------------------
 
-ScQueryValueIterator::DataAccessInternal::DataAccessInternal(const ScQueryParam* pParam, ScDocument* pDoc) :
+ScQueryValueIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryParamInternal* pParam, ScDocument* pDoc) :
     mpParam(pParam),
     mpDoc(pDoc)
 {
-    nCol = mpParam->nCol1;
+    nCol = mpParam->mnField;
     nRow = mpParam->nRow1;
     nTab = mpParam->nTab;
 
@@ -529,21 +529,23 @@ bool ScQueryValueIterator::DataAccessInternal::getCurrent(double& rValue, USHORT
     {
         if ( nRow > mpParam->nRow2 )
         {
-            nRow = mpParam->nRow1;
-            if (mpParam->bHasHeader)
-                nRow++;
-            do
-            {
-                nCol++;
-                if ( nCol > mpParam->nCol2 )
-                {
-                    // rValue = 0.0;    // do not change caller's value!
-                    rErr = 0;
-                    return FALSE;               // Ende und Aus
-                }
-                pCol = &(mpDoc->pTab[nTab])->aCol[nCol];
-            } while ( pCol->nCount == 0 );
-            pCol->Search( nRow, nColRow );
+            rErr = 0;
+            return false;
+//          nRow = mpParam->nRow1;
+//          if (mpParam->bHasHeader)
+//              nRow++;
+//          do
+//          {
+//              nCol++;
+//              if ( nCol > mpParam->mnField )
+//              {
+//                  // rValue = 0.0;    // do not change caller's value!
+//                  rErr = 0;
+//                  return FALSE;               // Ende und Aus
+//              }
+//              pCol = &(mpDoc->pTab[nTab])->aCol[nCol];
+//          } while ( pCol->nCount == 0 );
+//          pCol->Search( nRow, nColRow );
         }
 
         while ( (nColRow < pCol->nCount) && (pCol->pItems[nColRow].nRow < nRow) )
@@ -620,7 +622,7 @@ bool ScQueryValueIterator::DataAccessInternal::getNext(double& rValue, USHORT& r
 
 // ----------------------------------------------------------------------------
 
-ScQueryValueIterator::DataAccessMatrix::DataAccessMatrix(const ScQueryParamMatrix* pParam) :
+ScQueryValueIterator::DataAccessMatrix::DataAccessMatrix(const ScDBQueryParamMatrix* pParam) :
     mpParam(pParam)
 {
 }
@@ -629,37 +631,37 @@ ScQueryValueIterator::DataAccessMatrix::~DataAccessMatrix()
 {
 }
 
-bool ScQueryValueIterator::DataAccessMatrix::getCurrent(double& rValue, USHORT& rErr)
+bool ScQueryValueIterator::DataAccessMatrix::getCurrent(double& /*rValue*/, USHORT& /*rErr*/)
 {
     return false;
 }
 
-bool ScQueryValueIterator::DataAccessMatrix::getFirst(double& rValue, USHORT& rErr)
+bool ScQueryValueIterator::DataAccessMatrix::getFirst(double& /*rValue*/, USHORT& /*rErr*/)
 {
     return false;
 }
 
-bool ScQueryValueIterator::DataAccessMatrix::getNext(double& rValue, USHORT& rErr)
+bool ScQueryValueIterator::DataAccessMatrix::getNext(double& /*rValue*/, USHORT& /*rErr*/)
 {
     return false;
 }
 
 // ----------------------------------------------------------------------------
 
-ScQueryValueIterator::ScQueryValueIterator(ScDocument* pDocument, ScQueryParamBase* pParam) :
+ScQueryValueIterator::ScQueryValueIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam) :
     mpParam (pParam)
 {
     switch (mpParam->GetType())
     {
-        case ScQueryParamBase::INTERNAL:
+        case ScDBQueryParamBase::INTERNAL:
         {
-            const ScQueryParam* p = static_cast<const ScQueryParam*>(pParam);
+            const ScDBQueryParamInternal* p = static_cast<const ScDBQueryParamInternal*>(pParam);
             mpData.reset(new DataAccessInternal(p, pDocument));
         }
         break;
-        case ScQueryParamBase::MATRIX:
+        case ScDBQueryParamBase::MATRIX:
         {
-            const ScQueryParamMatrix* p = static_cast<const ScQueryParamMatrix*>(pParam);
+            const ScDBQueryParamMatrix* p = static_cast<const ScDBQueryParamMatrix*>(pParam);
             mpData.reset(new DataAccessMatrix(p));
         }
     }

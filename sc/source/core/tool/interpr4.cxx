@@ -75,9 +75,11 @@
 #include <map>
 #include <algorithm>
 #include <functional>
+#include <memory>
 
 using namespace com::sun::star;
 using namespace formula;
+using ::std::auto_ptr;
 
 #define ADDIN_MAXSTRLEN 256
 
@@ -1940,13 +1942,15 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix( double& rDouble,
 void ScInterpreter::ScDBGet()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBGet" );
-    ScQueryParam aQueryParam;
     BOOL bMissingField = FALSE;
-    if (GetDBParams(aQueryParam, bMissingField))
+    auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
+    if (pQueryParam.get() && pQueryParam->GetType() == ScDBQueryParamBase::INTERNAL)
     {
-        SCTAB nTab = aQueryParam.nTab;
+#if 0
+        ScQueryParam* p = static_cast<ScQueryParam*>(pQueryParam.get());
+        SCTAB nTab = p->nTab;
         ScBaseCell* pCell;
-        ScQueryCellIterator aCellIter(pDok, nTab, aQueryParam);
+        ScQueryCellIterator aCellIter(pDok, nTab, *p);
         if ( (pCell = aCellIter.GetFirst()) != NULL )
         {
             if (aCellIter.GetNext())
@@ -2009,6 +2013,7 @@ void ScInterpreter::ScDBGet()
         }
         else
             PushNoValue();
+#endif
     }
     else
         PushIllegalParameter();

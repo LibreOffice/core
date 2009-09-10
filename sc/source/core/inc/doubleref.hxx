@@ -35,7 +35,8 @@
 
 class ScDocument;
 class ScBaseCell;
-class ScQueryParam;
+class ScDBQueryParamBase;
+class ScQueryParamBase;
 
 // ============================================================================
 
@@ -48,15 +49,16 @@ public:
 
     RefType getType() const;
 
-    virtual SCCOL getFirstFieldColumn() = 0;
-    virtual SCCOL findFieldColumn(SCCOL nColIndex) = 0;
-    virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16& rErr) = 0;
-    virtual void initQueryParam(ScQueryParam& rParam) const = 0;
+    virtual SCCOL getFirstFieldColumn() const = 0;
+    virtual SCCOL findFieldColumn(SCCOL nColIndex) const = 0;
+    virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const = 0;
+    virtual ScDBQueryParamBase* createQueryParam(const ScDoubleRefBase* pQueryRef) const = 0;
     virtual bool isRangeEqual(const ScRange& rRange) const = 0;
+    virtual bool fillQueryEntries(ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef) const= 0;
 
 protected:
     ScDoubleRefBase(ScDocument* pDoc, RefType eType);
-    ScDocument* getDoc();
+    ScDocument* getDoc() const;
 
 private:
     ScDoubleRefBase(); // disabled
@@ -75,14 +77,15 @@ public:
 
     const ScRange& getRange() const;
 
-    virtual SCCOL getFirstFieldColumn();
-    virtual SCCOL findFieldColumn(SCCOL nColIndex);
-    virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16& rErr);
-    virtual void initQueryParam(ScQueryParam& rParam) const;
+    virtual SCCOL getFirstFieldColumn() const;
+    virtual SCCOL findFieldColumn(SCCOL nColIndex) const;
+    virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const;
+    virtual ScDBQueryParamBase* createQueryParam(const ScDoubleRefBase* pQueryRef) const;
     virtual bool isRangeEqual(const ScRange& rRange) const;
+    virtual bool fillQueryEntries(ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef) const;
 
 private:
-    sal_uInt16 getCellString(String& rStr, ScBaseCell* pCell);
+    sal_uInt16 getCellString(String& rStr, ScBaseCell* pCell) const;
 
 private:
     ScRange maRange;
@@ -96,11 +99,12 @@ public:
     explicit ScExternalDoubleRef(ScDocument* pDoc);
     virtual ~ScExternalDoubleRef();
 
-    virtual SCCOL getFirstFieldColumn();
-    virtual SCCOL findFieldColumn(SCCOL nColIndex);
-    virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16& rErr);
-    virtual void initQueryParam(ScQueryParam& rParam) const;
+    virtual SCCOL getFirstFieldColumn() const;
+    virtual SCCOL findFieldColumn(SCCOL nColIndex) const;
+    virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const;
+    virtual ScDBQueryParamBase* createQueryParam(const ScDoubleRefBase* pQueryRef) const;
     virtual bool isRangeEqual(const ScRange& rRange) const;
+    virtual bool fillQueryEntries(ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef) const;
 };
 
 #endif

@@ -36,14 +36,13 @@
 
 struct ScQueryParamBase
 {
-    enum DataType { INTERNAL, MATRIX };
-
     bool            bHasHeader;
     bool            bByRow;
     bool            bInplace;
     bool            bCaseSens;
     bool            bRegExp;
     bool            bDuplicate;
+    bool            bMixedComparison;   // whether numbers are smaller than strings
 
     virtual ~ScQueryParamBase();
 
@@ -53,30 +52,33 @@ struct ScQueryParamBase
     SC_DLLPUBLIC void DeleteQuery( SCSIZE nPos );
     void            FillInExcelSyntax(String& aCellStr, SCSIZE nIndex);
 
-    DataType        GetType() const;
-
 protected:
-    ScQueryParamBase(DataType eType);
+    ScQueryParamBase();
     ScQueryParamBase(const ScQueryParamBase& r);
 
     SCSIZE          nEntryCount;
     ScQueryEntry*   pEntries;
-
-private:
-    ScQueryParamBase();
-    DataType        meType;
 };
 
 // ============================================================================
 
-struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase
+struct ScQueryParamTable
 {
     SCCOL           nCol1;
     SCROW           nRow1;
     SCCOL           nCol2;
     SCROW           nRow2;
     SCTAB           nTab;
-    BOOL            bMixedComparison;   // whether numbers are smaller than strings
+
+    ScQueryParamTable();
+    ScQueryParamTable(const ScQueryParamTable& r);
+    virtual ~ScQueryParamTable();
+};
+
+// ============================================================================
+
+struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamTable
+{
     BOOL            bDestPers;          // nicht gespeichert
     SCTAB           nDestTab;
     SCCOL           nDestCol;
@@ -94,12 +96,41 @@ struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase
 
 // ============================================================================
 
-struct ScQueryParamMatrix : public ScQueryParamBase
+struct ScDBQueryParamBase : public ScQueryParamBase
+{
+    enum DataType { INTERNAL, MATRIX };
+
+    SCCOL   mnField;    /// the field in which the values are processed during iteration.
+
+    DataType        GetType() const;
+
+    virtual ~ScDBQueryParamBase();
+
+protected:
+    ScDBQueryParamBase(DataType eType);
+
+private:
+    ScDBQueryParamBase();
+
+    DataType        meType;
+};
+
+// ============================================================================
+
+struct ScDBQueryParamInternal : public ScDBQueryParamBase, public ScQueryParamTable
+{
+    ScDBQueryParamInternal();
+    virtual ~ScDBQueryParamInternal();
+};
+
+// ============================================================================
+
+struct ScDBQueryParamMatrix : public ScDBQueryParamBase
 {
     ScMatrixRef mpMatrix;
 
-    ScQueryParamMatrix();
-    virtual ~ScQueryParamMatrix();
+    ScDBQueryParamMatrix();
+    virtual ~ScDBQueryParamMatrix();
 };
 
 #endif

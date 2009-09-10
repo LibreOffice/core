@@ -39,7 +39,10 @@
 #include "document.hxx"
 #include "queryparam.hxx"
 
+#include <memory>
+
 using ::rtl::OUString;
+using ::std::auto_ptr;
 
 // ============================================================================
 
@@ -57,7 +60,7 @@ ScDoubleRefBase::RefType ScDoubleRefBase::getType() const
     return meType;
 }
 
-ScDocument* ScDoubleRefBase::getDoc()
+ScDocument* ScDoubleRefBase::getDoc() const
 {
     return mpDoc;
 }
@@ -78,12 +81,12 @@ const ScRange& ScInternalDoubleRef::getRange() const
     return maRange;
 }
 
-SCCOL ScInternalDoubleRef::getFirstFieldColumn()
+SCCOL ScInternalDoubleRef::getFirstFieldColumn() const
 {
     return getRange().aStart.Col();
 }
 
-SCCOL ScInternalDoubleRef::findFieldColumn(SCCOL nColIndex)
+SCCOL ScInternalDoubleRef::findFieldColumn(SCCOL nColIndex) const
 {
     const ScRange& rRange = getRange();
     const ScAddress& s = rRange.aStart;
@@ -98,7 +101,7 @@ SCCOL ScInternalDoubleRef::findFieldColumn(SCCOL nColIndex)
     return Min(nDBCol2, static_cast<SCCOL>(nDBCol1 + nColIndex - 1));
 }
 
-sal_uInt16 ScInternalDoubleRef::getCellString(String& rStr, ScBaseCell* pCell)
+sal_uInt16 ScInternalDoubleRef::getCellString(String& rStr, ScBaseCell* pCell) const
 {
     sal_uInt16 nErr = 0;
     if (pCell)
@@ -148,11 +151,10 @@ sal_uInt16 ScInternalDoubleRef::getCellString(String& rStr, ScBaseCell* pCell)
     return nErr;
 }
 
-SCCOL ScInternalDoubleRef::findFieldColumn(const OUString& rStr, sal_uInt16& rErr)
+SCCOL ScInternalDoubleRef::findFieldColumn(const OUString& rStr, sal_uInt16* pErr) const
 {
-    const ScRange& rRange = getRange();
-    const ScAddress& s = rRange.aStart;
-    const ScAddress& e = rRange.aEnd;
+    const ScAddress& s = maRange.aStart;
+    const ScAddress& e = maRange.aEnd;
 
     SCCOL nDBCol1 = s.Col();
     SCROW nDBRow1 = s.Row();
@@ -168,7 +170,9 @@ SCCOL ScInternalDoubleRef::findFieldColumn(const OUString& rStr, sal_uInt16& rEr
     while (!bFound && (aLook.Col() <= nDBCol2))
     {
         ScBaseCell* pCell = getDoc()->GetCell( aLook );
-        rErr = getCellString( aCellStr, pCell );
+        sal_uInt16 nErr = getCellString( aCellStr, pCell );
+        if (pErr)
+            *pErr = nErr;
         bFound = ScGlobal::pTransliteration->isEqual(aCellStr, rStr);
         if (!bFound)
             aLook.IncCol();
@@ -178,26 +182,45 @@ SCCOL ScInternalDoubleRef::findFieldColumn(const OUString& rStr, sal_uInt16& rEr
     return bFound ? nField : -1;
 }
 
-void ScInternalDoubleRef::initQueryParam(ScQueryParam& rParam) const
+ScDBQueryParamBase* ScInternalDoubleRef::createQueryParam(const ScDoubleRefBase* pQueryRef) const
 {
+    auto_ptr<ScDBQueryParamInternal> pParam(new ScDBQueryParamInternal);
+
+    // Set the database range first.
     const ScAddress& s = maRange.aStart;
     const ScAddress& e = maRange.aEnd;
-    rParam.nCol1 = s.Col();
-    rParam.nRow1 = s.Row();
-    rParam.nCol2 = e.Col();
-    rParam.nRow2 = e.Row();
-    rParam.nTab  = s.Tab();
-    rParam.bHasHeader = TRUE;
-    rParam.bByRow = TRUE;
-    rParam.bInplace = TRUE;
-    rParam.bCaseSens = FALSE;
-    rParam.bRegExp = FALSE;
-    rParam.bDuplicate = TRUE;
+    pParam->nCol1 = s.Col();
+    pParam->nRow1 = s.Row();
+    pParam->nCol2 = e.Col();
+    pParam->nRow2 = e.Row();
+    pParam->nTab  = s.Tab();
+    pParam->bHasHeader = TRUE;
+    pParam->bByRow = TRUE;
+    pParam->bInplace = TRUE;
+    pParam->bCaseSens = FALSE;
+    pParam->bRegExp = FALSE;
+    pParam->bDuplicate = TRUE;
+
+    // Now construct the query entries from the query range.
+    if (!pQueryRef->fillQueryEntries(pParam.get(), this))
+        return NULL;
+
+    return pParam.release();
 }
 
 bool ScInternalDoubleRef::isRangeEqual(const ScRange& rRange) const
 {
     return maRange == rRange;
+}
+
+bool ScInternalDoubleRef::fillQueryEntries(ScQueryParamBase* pParam, const ScDoubleRefBase* pDBRef) const
+{
+    if (!pDBRef)
+        return false;
+
+    const ScAddress& s = maRange.aStart;
+    const ScAddress& e = maRange.aEnd;
+    return getDoc()->FillQueryEntries(pParam, pDBRef, s.Col(), s.Row(), e.Col(), e.Row(), s.Tab());
 }
 
 // ============================================================================
@@ -211,26 +234,32 @@ ScExternalDoubleRef::~ScExternalDoubleRef()
 {
 }
 
-SCCOL ScExternalDoubleRef::getFirstFieldColumn()
+SCCOL ScExternalDoubleRef::getFirstFieldColumn() const
 {
     return -1;
 }
 
-SCCOL ScExternalDoubleRef::findFieldColumn(SCCOL nColIndex)
+SCCOL ScExternalDoubleRef::findFieldColumn(SCCOL /*nColIndex*/) const
 {
     return -1;
 }
 
-SCCOL ScExternalDoubleRef::findFieldColumn(const OUString& rStr, sal_uInt16& rErr)
+SCCOL ScExternalDoubleRef::findFieldColumn(const OUString& rStr, sal_uInt16* pErr) const
 {
     return -1;
 }
 
-void ScExternalDoubleRef::initQueryParam(ScQueryParam& rParam) const
+ScDBQueryParamBase* ScExternalDoubleRef::createQueryParam(const ScDoubleRefBase* /*pQueryRef*/) const
 {
+    return NULL;
 }
 
 bool ScExternalDoubleRef::isRangeEqual(const ScRange& /*rRange*/) const
+{
+    return false;
+}
+
+bool ScExternalDoubleRef::fillQueryEntries(ScQueryParamBase* /*pParam*/, const ScDoubleRefBase* /*pDBRef*/) const
 {
     return false;
 }
