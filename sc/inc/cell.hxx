@@ -59,9 +59,6 @@ class ScCodeArray;
 class ScProgress;
 class ScPostIt;
 
-class ScMultipleReadHeader;
-class ScMultipleWriteHeader;
-
 // ============================================================================
 
 /** Default cell clone flags: do not start listening, do not adjust 3D refs to
@@ -195,10 +192,6 @@ public:
 #ifdef DBG_UTIL
                     ~ScNoteCell();
 #endif
-
-                    ScNoteCell( SvStream& rStream, USHORT nVer );
-
-    void            Save( SvStream& rStream ) const;
 
 private:
                     ScNoteCell( const ScNoteCell& );

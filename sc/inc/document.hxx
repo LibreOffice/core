@@ -99,10 +99,6 @@ class ScFormulaCell;
 class ScMarkData;
 class ScOutlineTable;
 class ScPatternAttr;
-#if OLD_PIVOT_IMPLEMENTATION
-class ScPivot;
-class ScPivotCollection;
-#endif
 class ScPrintRangeSaver;
 class ScRangeData;
 class ScRangeName;
@@ -237,9 +233,6 @@ friend class ScHorizontalAttrIterator;
 friend class ScDocAttrIterator;
 friend class ScAttrRectIterator;
 friend class ScDocShell;
-#if OLD_PIVOT_IMPLEMENTATION
-friend class ScPivot;
-#endif
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
@@ -261,9 +254,6 @@ private:
     ScTable*            pTab[MAXTABCOUNT];
     ScRangeName*        pRangeName;
     ScDBCollection*     pDBCollection;
-#if OLD_PIVOT_IMPLEMENTATION
-    ScPivotCollection*  pPivotCollection;
-#endif
     ScDPCollection*     pDPCollection;
     ScChartCollection*  pChartCollection;
     std::auto_ptr< ScTemporaryChartLock > apTemporaryChartLock;
@@ -497,11 +487,6 @@ public:
     SC_DLLPUBLIC ScDPCollection*        GetDPCollection();
     ScDPObject*         GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
     ScDPObject*         GetDPAtBlock( const ScRange& rBlock ) const;
-#if OLD_PIVOT_IMPLEMENTATION
-    ScPivotCollection*  GetPivotCollection() const;
-    void                SetPivotCollection(ScPivotCollection* pNewPivotCollection);
-    ScPivot*            GetPivotAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
-#endif
     SC_DLLPUBLIC ScChartCollection* GetChartCollection() const;
 
     void                StopTemporaryChartLock();
@@ -724,8 +709,8 @@ public:
     BOOL            HasSubTotalCells( const ScRange& rRange );
 
     SC_DLLPUBLIC void           PutCell( const ScAddress&, ScBaseCell* pCell, BOOL bForceTab = FALSE );
-    SC_DLLPUBLIC void           PutCell( const ScAddress&, ScBaseCell* pCell,
-                            ULONG nFormatIndex, BOOL bForceTab = FALSE);
+//UNUSED2009-05 SC_DLLPUBLIC void           PutCell( const ScAddress&, ScBaseCell* pCell,
+//UNUSED2009-05                         ULONG nFormatIndex, BOOL bForceTab = FALSE);
     SC_DLLPUBLIC void           PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell,
                             BOOL bForceTab = FALSE );
     SC_DLLPUBLIC void           PutCell(SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell,
@@ -1347,8 +1332,8 @@ public:
     SC_DLLPUBLIC void            ClearPrintRanges( SCTAB nTab );
     /** Adds a new print ranges. */
     SC_DLLPUBLIC void            AddPrintRange( SCTAB nTab, const ScRange& rNew );
-    /** Removes all old print ranges and sets the passed print ranges. */
-    void            SetPrintRange( SCTAB nTab, const ScRange& rNew );
+//UNUSED2009-05 /** Removes all old print ranges and sets the passed print ranges. */
+//UNUSED2009-05 void            SetPrintRange( SCTAB nTab, const ScRange& rNew );
     /** Marks the specified sheet to be printed completely. Deletes old print ranges on the sheet! */
     SC_DLLPUBLIC void            SetPrintEntireSheet( SCTAB nTab );
     SC_DLLPUBLIC void           SetRepeatColRange( SCTAB nTab, const ScRange* pNew );
@@ -1685,7 +1670,7 @@ public:
     SC_DLLPUBLIC SfxItemPool*       GetEnginePool() const;
     SC_DLLPUBLIC ScFieldEditEngine& GetEditEngine();
     SC_DLLPUBLIC ScNoteEditEngine&  GetNoteEngine();
-    SfxItemPool&            GetNoteItemPool();
+//UNUSED2009-05 SfxItemPool&            GetNoteItemPool();
 
     ScRefreshTimerControl*  GetRefreshTimerControl() const
         { return pRefreshTimerControl; }

@@ -1320,6 +1320,8 @@ bool DiagramHelper::isSupportingFloorAndWall( const Reference<
             return false;
         if( xType.is() && xType->getChartType().match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
             return false;
+        if( xType.is() && xType->getChartType().match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
+            return false;
     }
     return true;
 }

@@ -372,8 +372,8 @@ struct XclFontData
     void                SetApiHeight( float fPoint );
     /** Sets the API font family. */
     void                SetApiFamily( sal_Int16 nApiFamily );
-    /** Sets the API font text encoding. */
-    void                SetApiFontEncoding( sal_Int16 nApiFontEnc );
+//UNUSED2009-05 /** Sets the API font text encoding. */
+//UNUSED2009-05 void                SetApiFontEncoding( sal_Int16 nApiFontEnc );
     /** Sets the API font posture. */
     void                SetApiPosture( ::com::sun::star::awt::FontSlant eApiPosture );
     /** Sets the API font weight. */

@@ -1067,7 +1067,7 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable)
             pCode = new ScTokenArray( *pRangeData->GetCode() );
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.SetGrammar(pDocument->GetGrammar());
-            aComp2.MoveRelWrap();
+            aComp2.MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
             aComp2.UpdateInsertTab( nTable, FALSE );
             // If the shared formula contained a named range/formula containing
             // an absolute reference to a sheet, those have to be readjusted.
@@ -1103,7 +1103,7 @@ BOOL ScFormulaCell::UpdateDeleteTab(SCTAB nTable, BOOL bIsMove)
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.SetGrammar(pDocument->GetGrammar());
             aComp2.CompileTokenArray();
-            aComp2.MoveRelWrap();
+            aComp2.MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
             aComp2.UpdateDeleteTab( nTable, FALSE, FALSE, bRefChanged );
             // If the shared formula contained a named range/formula containing
             // an absolute reference to a sheet, those have to be readjusted.
@@ -1140,7 +1140,7 @@ void ScFormulaCell::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.SetGrammar(pDocument->GetGrammar());
             aComp2.CompileTokenArray();
-            aComp2.MoveRelWrap();
+            aComp2.MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
             aComp2.UpdateMoveTab( nOldPos, nNewPos, TRUE );
             bCompile = TRUE;
         }

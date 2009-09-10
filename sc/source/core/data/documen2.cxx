@@ -248,9 +248,6 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
 
     pRangeName = new ScRangeName( 4, 4, FALSE, this );
     pDBCollection = new ScDBCollection( 4, 4, FALSE, this );
-#if OLD_PIVOT_IMPLEMENTATION
-    pPivotCollection = new ScPivotCollection(4, 4, this );
-#endif
     pSelectionAttr = NULL;
     pChartCollection = new ScChartCollection;
     apTemporaryChartLock = std::auto_ptr< ScTemporaryChartLock >( new ScTemporaryChartLock(this) );
@@ -421,9 +418,6 @@ ScDocument::~ScDocument()
     }
     delete pRangeName;
     delete pDBCollection;
-#if OLD_PIVOT_IMPLEMENTATION
-    delete pPivotCollection;
-#endif
     delete pSelectionAttr;
     apTemporaryChartLock.reset();
     delete pChartCollection;
@@ -548,12 +542,12 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
     return *pNoteEngine;
 }
 
-SfxItemPool& ScDocument::GetNoteItemPool()
-{
-    if ( !pNoteItemPool )
-        pNoteItemPool = new SfxItemPool(SdrObject::GetGlobalDrawObjectItemPool());
-    return *pNoteItemPool;
-}
+//UNUSED2009-05 SfxItemPool& ScDocument::GetNoteItemPool()
+//UNUSED2009-05 {
+//UNUSED2009-05     if ( !pNoteItemPool )
+//UNUSED2009-05         pNoteItemPool = new SfxItemPool(SdrObject::GetGlobalDrawObjectItemPool());
+//UNUSED2009-05     return *pNoteItemPool;
+//UNUSED2009-05 }
 
 void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
 {
@@ -623,22 +617,22 @@ void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
     }
 }
 
-void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell,
-                            ULONG nFormatIndex, BOOL bForceTab )
-{
-    SCTAB nTab = rPos.Tab();
-    if ( bForceTab && !pTab[nTab] )
-    {
-        BOOL bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
-
-        pTab[nTab] = new ScTable(this, nTab,
-                            String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("temp")),
-                            bExtras, bExtras);
-    }
-
-    if (pTab[nTab])
-        pTab[nTab]->PutCell( rPos, nFormatIndex, pCell );
-}
+//UNUSED2009-05 void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell,
+//UNUSED2009-05                             ULONG nFormatIndex, BOOL bForceTab )
+//UNUSED2009-05 {
+//UNUSED2009-05     SCTAB nTab = rPos.Tab();
+//UNUSED2009-05     if ( bForceTab && !pTab[nTab] )
+//UNUSED2009-05     {
+//UNUSED2009-05         BOOL bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
+//UNUSED2009-05
+//UNUSED2009-05         pTab[nTab] = new ScTable(this, nTab,
+//UNUSED2009-05                             String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("temp")),
+//UNUSED2009-05                             bExtras, bExtras);
+//UNUSED2009-05     }
+//UNUSED2009-05
+//UNUSED2009-05     if (pTab[nTab])
+//UNUSED2009-05         pTab[nTab]->PutCell( rPos, nFormatIndex, pCell );
+//UNUSED2009-05 }
 
 BOOL ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
                                 BOOL bNotes ) const
@@ -759,11 +753,6 @@ BOOL ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
                 pDBCollection->UpdateMoveTab( nOldPos, nNewPos );
                 xColNameRanges->UpdateReference( URM_REORDER, this, aSourceRange, 0,0,nDz );
                 xRowNameRanges->UpdateReference( URM_REORDER, this, aSourceRange, 0,0,nDz );
-#if OLD_PIVOT_IMPLEMENTATION
-                if (pPivotCollection)
-                    pPivotCollection->UpdateReference( URM_REORDER,
-                                    0,0,nOldPos, MAXCOL,MAXROW,nOldPos, 0,0,nDz );
-#endif
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_REORDER, aSourceRange, 0,0,nDz );
                 if (pDetOpList)
@@ -858,11 +847,6 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                 pRangeName->UpdateTabRef(nNewPos, 1);
                 pDBCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
-#if OLD_PIVOT_IMPLEMENTATION
-                if (pPivotCollection)
-                    pPivotCollection->UpdateReference(
-                                    URM_INSDEL, 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
-#endif
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 if (pDetOpList)

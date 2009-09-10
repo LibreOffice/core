@@ -121,6 +121,10 @@ OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::drawing::Position3D getPointFromPoly(
                 , sal_Int32 nPointIndex, sal_Int32 nPolyIndex=0 );
 
 //-----------------------------------------------------------------------------
+OOO_DLLPUBLIC_CHARTTOOLS
+void addPolygon( com::sun::star::drawing::PolyPolygonShape3D& rRet
+                , const com::sun::star::drawing::PolyPolygonShape3D& rAdd );
+//-----------------------------------------------------------------------------
 /** PolyPolygonShape3D + PolyPolygonShape3D -> PolyPolygonShape3D
 */
 OOO_DLLPUBLIC_CHARTTOOLS

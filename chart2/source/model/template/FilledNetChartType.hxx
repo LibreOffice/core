@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: pivot.cxx,v $
- * $Revision: 1.13 $
+ * $RCSfile: FilledNetChartType.hxx,v $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,11 +27,40 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef CHART_FILLEDNETCHARTTYPE_HXX
+#define CHART_FILLEDNETCHARTTYPE_HXX
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sc.hxx"
+#include "NetChartType.hxx"
+#include "ServiceMacros.hxx"
 
+namespace chart
+{
 
+class FilledNetChartType : public NetChartType_Base
+{
+public:
+    FilledNetChartType( ::com::sun::star::uno::Reference<
+                      ::com::sun::star::uno::XComponentContext > const & xContext );
+    virtual ~FilledNetChartType();
 
-// -----------------------------------------------------------------------
+    APPHELPER_XSERVICEINFO_DECL()
 
+    /// establish methods for factory instatiation
+    APPHELPER_SERVICE_FACTORY_HELPER( FilledNetChartType )
+
+protected:
+    explicit FilledNetChartType( const FilledNetChartType & rOther );
+
+    // ____ XChartType ____
+    virtual ::rtl::OUString SAL_CALL getChartType()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XCloneable ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
+        throw (::com::sun::star::uno::RuntimeException);
+};
+
+} //  namespace chart
+
+// CHART_FILLEDNETCHARTTYPE_HXX
+#endif

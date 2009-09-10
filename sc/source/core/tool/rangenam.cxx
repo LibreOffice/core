@@ -60,7 +60,7 @@ using namespace formula;
 // Interner ctor fuer das Suchen nach einem Index
 
 ScRangeData::ScRangeData( USHORT n )
-           : pCode( NULL ), nIndex( n ), bModified( FALSE )
+           : pCode( NULL ), nIndex( n ), bModified( FALSE ), mnMaxRow(-1), mnMaxCol(-1)
 {}
 
 ScRangeData::ScRangeData( ScDocument* pDok,
@@ -76,7 +76,9 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 eType       ( nType ),
                 pDoc        ( pDok ),
                 nIndex      ( 0 ),
-                bModified   ( FALSE )
+                bModified   ( FALSE ),
+                mnMaxRow    (-1),
+                mnMaxCol    (-1)
 {
     if (rSymbol.Len() > 0)
     {
@@ -122,7 +124,9 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 eType       ( nType ),
                 pDoc        ( pDok ),
                 nIndex      ( 0 ),
-                bModified   ( FALSE )
+                bModified   ( FALSE ),
+                mnMaxRow    (-1),
+                mnMaxCol    (-1)
 {
     if( !pCode->GetCodeError() )
     {
@@ -157,7 +161,9 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 eType       ( RT_NAME ),
                 pDoc        ( pDok ),
                 nIndex      ( 0 ),
-                bModified   ( FALSE )
+                bModified   ( FALSE ),
+                mnMaxRow    (-1),
+                mnMaxCol    (-1)
 {
     ScSingleRefData aRefData;
     aRefData.InitAddress( rTarget );
@@ -179,7 +185,9 @@ ScRangeData::ScRangeData(const ScRangeData& rScRangeData) :
     eType       (rScRangeData.eType),
     pDoc        (rScRangeData.pDoc),
     nIndex      (rScRangeData.nIndex),
-    bModified   (rScRangeData.bModified)
+    bModified   (rScRangeData.bModified),
+    mnMaxRow    (rScRangeData.mnMaxRow),
+    mnMaxCol    (rScRangeData.mnMaxCol)
 {}
 
 ScRangeData::~ScRangeData()
@@ -247,7 +255,7 @@ void ScRangeData::UpdateSymbol( rtl::OUStringBuffer& rBuffer, const ScAddress& r
     ::std::auto_ptr<ScTokenArray> pTemp( pCode->Clone() );
     ScCompiler aComp( pDoc, rPos, *pTemp.get());
     aComp.SetGrammar(eGrammar);
-    aComp.MoveRelWrap();
+    aComp.MoveRelWrap(GetMaxCol(), GetMaxRow());
     aComp.CreateStringFromTokenArray( rBuffer );
 }
 
@@ -355,19 +363,19 @@ BOOL ScRangeData::operator== (const ScRangeData& rData) const       // fuer Undo
     return TRUE;
 }
 
-BOOL ScRangeData::IsRangeAtCursor( const ScAddress& rPos, BOOL bStartOnly ) const
-{
-    BOOL bRet = FALSE;
-    ScRange aRange;
-    if ( IsReference(aRange) )
-    {
-        if ( bStartOnly )
-            bRet = ( rPos == aRange.aStart );
-        else
-            bRet = ( aRange.In( rPos ) );
-    }
-    return bRet;
-}
+//UNUSED2009-05 BOOL ScRangeData::IsRangeAtCursor( const ScAddress& rPos, BOOL bStartOnly ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     BOOL bRet = FALSE;
+//UNUSED2009-05     ScRange aRange;
+//UNUSED2009-05     if ( IsReference(aRange) )
+//UNUSED2009-05     {
+//UNUSED2009-05         if ( bStartOnly )
+//UNUSED2009-05             bRet = ( rPos == aRange.aStart );
+//UNUSED2009-05         else
+//UNUSED2009-05             bRet = ( aRange.In( rPos ) );
+//UNUSED2009-05     }
+//UNUSED2009-05     return bRet;
+//UNUSED2009-05 }
 
 BOOL ScRangeData::IsRangeAtBlock( const ScRange& rBlock ) const
 {
@@ -393,7 +401,7 @@ BOOL ScRangeData::IsReference( ScRange& rRange, const ScAddress& rPos ) const
         ::std::auto_ptr<ScTokenArray> pTemp( pCode->Clone() );
         ScCompiler aComp( pDoc, rPos, *pTemp);
         aComp.SetGrammar(pDoc->GetGrammar());
-        aComp.MoveRelWrap();
+        aComp.MoveRelWrap(MAXCOL, MAXROW);
         return pTemp->IsReference( rRange );
     }
 
@@ -518,6 +526,26 @@ BOOL ScRangeData::IsNameValid( const String& rName, ScDocument* pDoc )
             return FALSE;
     }
     return TRUE;
+}
+
+void ScRangeData::SetMaxRow(SCROW nRow)
+{
+    mnMaxRow = nRow;
+}
+
+SCROW ScRangeData::GetMaxRow() const
+{
+    return mnMaxRow >= 0 ? mnMaxRow : MAXROW;
+}
+
+void ScRangeData::SetMaxCol(SCCOL nCol)
+{
+    mnMaxCol = nCol;
+}
+
+SCCOL ScRangeData::GetMaxCol() const
+{
+    return mnMaxCol >= 0 ? mnMaxCol : MAXCOL;
 }
 
 
@@ -771,16 +799,16 @@ ScRangeData* ScRangeName::FindIndex( USHORT nIndex )
         return NULL;
 }
 
-ScRangeData* ScRangeName::GetRangeAtCursor( const ScAddress& rPos, BOOL bStartOnly ) const
-{
-    if ( pItems )
-    {
-        for ( USHORT i = 0; i < nCount; i++ )
-            if ( ((ScRangeData*)pItems[i])->IsRangeAtCursor( rPos, bStartOnly ) )
-                return (ScRangeData*)pItems[i];
-    }
-    return NULL;
-}
+//UNUSED2009-05 ScRangeData* ScRangeName::GetRangeAtCursor( const ScAddress& rPos, BOOL bStartOnly ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     if ( pItems )
+//UNUSED2009-05     {
+//UNUSED2009-05         for ( USHORT i = 0; i < nCount; i++ )
+//UNUSED2009-05             if ( ((ScRangeData*)pItems[i])->IsRangeAtCursor( rPos, bStartOnly ) )
+//UNUSED2009-05                 return (ScRangeData*)pItems[i];
+//UNUSED2009-05     }
+//UNUSED2009-05     return NULL;
+//UNUSED2009-05 }
 
 ScRangeData* ScRangeName::GetRangeAtBlock( const ScRange& rBlock ) const
 {

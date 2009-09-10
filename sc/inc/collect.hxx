@@ -143,9 +143,6 @@ public:
     virtual ScDataObject*   Clone() const;
             StrData*    operator[]( const USHORT nIndex) const {return (StrData*)At(nIndex);}
     virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
-
-            void        Load( SvStream& );
-            void        Store( SvStream& ) const;
 };
 
 //------------------------------------------------------------------------
@@ -178,9 +175,6 @@ public:
 
 private:
     friend class TypedScStrCollection;
-#if OLD_PIVOT_IMPLEMENTATION
-    friend class PivotScStrCollection;
-#endif
 
     String  aStrValue;
     double  nValue;

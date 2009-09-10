@@ -582,23 +582,6 @@ ScNoteCell::~ScNoteCell()
 }
 #endif
 
-ScNoteCell::ScNoteCell( SvStream& rStream, USHORT nVer ) :
-    ScBaseCell( CELLTYPE_NOTE )
-{
-    if( nVer >= SC_DATABYTES2 )
-    {
-        BYTE cData;
-        rStream >> cData;
-        if( cData & 0x0F )
-            rStream.SeekRel( cData & 0x0F );
-    }
-}
-
-void ScNoteCell::Save( SvStream& rStream ) const
-{
-    rStream << (BYTE) 0x00;
-}
-
 // ============================================================================
 
 ScValueCell::ScValueCell() :
