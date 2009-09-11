@@ -27,7 +27,7 @@
 # for a copy of the LGPLv3 License.
 #***********************************************************************/
 
-PRJ = ..$/..
+PRJ = ../..
 PRJNAME = configmgr
 TARGET = unoapi
 
@@ -37,4 +37,4 @@ TARGET = unoapi
 ALLTAR: TEST
 
 TEST .PHONY:
-    $(SOLARENV)$/bin$/checkapi -sce module.sce
+    $(SOLARENV)/bin/checkapi -sce module.sce
