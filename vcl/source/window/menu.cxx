@@ -557,7 +557,7 @@ public:
 
     void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    void    SetImages( long nMaxHeight = 0 );
+    void    SetImages( long nMaxHeight = 0, bool bForce = false );
 
     void    calcMinSize();
     Size    getMinSize();
@@ -591,7 +591,7 @@ void DecoToolBox::DataChanged( const DataChangedEvent& rDCEvt )
     {
         calcMinSize();
         SetBackground();
-        SetImages();
+        SetImages( 0, true);
     }
 }
 
@@ -625,7 +625,7 @@ Size DecoToolBox::getMinSize()
     return maMinSize;
 }
 
-void DecoToolBox::SetImages( long nMaxHeight )
+void DecoToolBox::SetImages( long nMaxHeight, bool bForce )
 {
     long border = getMinSize().Height() - maImage.GetSizePixel().Height();
 
@@ -635,13 +635,13 @@ void DecoToolBox::SetImages( long nMaxHeight )
     if( nMaxHeight < getMinSize().Height() )
         nMaxHeight = getMinSize().Height();
 
-    if( lastSize != nMaxHeight - border )
+    if( (lastSize != nMaxHeight - border) || bForce )
     {
         lastSize = nMaxHeight - border;
 
         Color       aEraseColor( 255, 255, 255, 255 );
         BitmapEx    aBmpExDst( maImage.GetBitmapEx() );
-        BitmapEx    aBmpExSrc( GetSettings().GetStyleSettings().GetMenuBarColor().IsDark() ?
+        BitmapEx    aBmpExSrc( GetSettings().GetStyleSettings().GetHighContrastMode() ?
                               maImageHC.GetBitmapEx() : aBmpExDst );
 
         aEraseColor.SetTransparency( 255 );
@@ -5066,7 +5066,7 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
         aCloser.SetParentClipMode( PARENTCLIPMODE_NOCLIP );
 
         aCloser.InsertItem( IID_DOCUMENTCLOSE,
-        GetSettings().GetStyleSettings().GetMenuBarColor().IsDark() ? aCloser.maImageHC : aCloser.maImage, 0 );
+        GetSettings().GetStyleSettings().GetHighContrastMode() ? aCloser.maImageHC : aCloser.maImage, 0 );
         aCloser.SetSelectHdl( LINK( this, MenuBarWindow, CloserHdl ) );
         aCloser.AddEventListener( LINK( this, MenuBarWindow, ToolboxEventHdl ) );
         aCloser.SetQuickHelpText( IID_DOCUMENTCLOSE, XubString( ResId( SV_HELPTEXT_CLOSEDOCUMENT, *pResMgr ) ) );
@@ -5707,7 +5707,7 @@ void MenuBarWindow::Paint( const Rectangle& )
 
     // in high contrast mode draw a separating line on the lower edge
     if( ! IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL) &&
-        GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+        GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         Push( PUSH_LINECOLOR | PUSH_MAPMODE );
         SetLineColor( Color( COL_WHITE ) );

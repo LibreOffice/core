@@ -1123,7 +1123,7 @@ void GtkSalFrame::SetIcon( USHORT nIcon )
     USHORT nIndex;
 
     // Use high contrast icons where appropriate
-    if( Application::GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+    if( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         nOffsets[0] = SV_ICON_LARGE_HC_START;
         nOffsets[1] = SV_ICON_SMALL_HC_START;

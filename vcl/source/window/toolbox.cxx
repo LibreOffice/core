@@ -397,7 +397,7 @@ void ToolBox::ImplDrawGradientBackground( ToolBox* pThis, ImplDockingWindowWrapp
     Color startCol, endCol;
     startCol = pThis->GetSettings().GetStyleSettings().GetFaceGradientColor();
     endCol = pThis->GetSettings().GetStyleSettings().GetFaceColor();
-    if( endCol.IsDark() )
+    if( pThis->GetSettings().GetStyleSettings().GetHighContrastMode() )
         // no 'extreme' gradient when high contrast
         startCol = endCol;
 
