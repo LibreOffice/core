@@ -81,7 +81,6 @@
 #include <fmtcntnt.hxx>
 #include <fmtcnct.hxx>
 #include <fmtpdsc.hxx>
-#include <fmthbsh.hxx>
 #include <ftninfo.hxx>
 #include <fmtftn.hxx>
 #include <txtftn.hxx>
@@ -954,7 +953,9 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                         pFrm->SetFmtAttr(aURL);
                     }
                     else
-                        pDoc->Insert(aRegion, *pEntry->pAttr, 0);
+                    {
+                        pDoc->InsertPoolItem(aRegion, *pEntry->pAttr, 0);
+                    }
                 }
             }
             break;
@@ -1072,7 +1073,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     SwTxtNode* pTxt = rBkMrkPos.nNode.GetNode().GetTxtNode();
                     if( pTxt && rBkMrkPos.nContent.GetIndex() )
                     {
-                        SwTxtAttr* pFtn = pTxt->GetTxtAttr(
+                        SwTxtAttr* const pFtn = pTxt->GetTxtAttrForCharAt(
                             rBkMrkPos.nContent.GetIndex()-1, RES_TXTATR_FTN );
                         if( pFtn )
                         {
@@ -1087,7 +1088,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 }
             }
 
-            pDoc->Insert(aPaM, *pEntry->pAttr, 0);
+            pDoc->InsertPoolItem(aPaM, *pEntry->pAttr, 0);
             MoveAttrs(*aPaM.GetPoint());
         }
         break;
@@ -1627,7 +1628,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
         sTxt, aDate );
     aPostIt.SetTextObject(pOutliner);
 
-    rDoc.Insert(*pPaM, SwFmtFld(aPostIt), 0);
+    rDoc.InsertPoolItem(*pPaM, SwFmtFld(aPostIt), 0);
 
     return 0;
 }
@@ -2516,7 +2517,7 @@ bool SwWW8ImplReader::AddTextToParagraph(const String& rAddString)
 */
         if ((pNd->GetTxt().Len() + rAddString.Len()) < STRING_MAXLEN -1)
         {
-            rDoc.Insert (*pPaM, rAddString, true);
+            rDoc.InsertString(*pPaM, rAddString);
         }
         else
         {
@@ -2525,16 +2526,16 @@ bool SwWW8ImplReader::AddTextToParagraph(const String& rAddString)
             {
                 String sTempStr (rAddString,0,
                     STRING_MAXLEN - pNd->GetTxt().Len() -1);
-                rDoc.Insert (*pPaM, sTempStr, true);
+                rDoc.InsertString(*pPaM, sTempStr);
                 sTempStr = rAddString.Copy(sTempStr.Len(),
                     rAddString.Len() - sTempStr.Len());
                 AppendTxtNode(*pPaM->GetPoint());
-                rDoc.Insert (*pPaM,sTempStr, true );
+                rDoc.InsertString(*pPaM, sTempStr);
             }
             else
             {
                 AppendTxtNode(*pPaM->GetPoint());
-                rDoc.Insert (*pPaM, rAddString, true);
+                rDoc.InsertString(*pPaM, rAddString);
             }
         }
 
@@ -2555,7 +2556,9 @@ bool SwWW8ImplReader::ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd,
         if( bSymbol )   // Spezialzeichen einfuegen
         {
             for(USHORT nCh = 0; nCh < nEnd - rPos; ++nCh)
-                rDoc.Insert( *pPaM, cSymbol );
+            {
+                rDoc.InsertString( *pPaM, cSymbol );
+            }
             pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_FONT );
         }
         pStrm->SeekRel( nEnd- rPos );
@@ -2636,7 +2639,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 SwPageNumberField aFld(
                     (SwPageNumberFieldType*)rDoc.GetSysFldType(
                     RES_PAGENUMBERFLD ), PG_RANDOM, SVX_NUM_ARABIC);
-                rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
+                rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
             }
             break;
         case 0xe:
@@ -2648,7 +2651,8 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             {
                 // Always insert a txtnode for a column break, e.g. ##
                 AppendTxtNode(*pPaM->GetPoint());
-                rDoc.Insert(*pPaM, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK), 0);
+                rDoc.InsertPoolItem(*pPaM,
+                    SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK), 0);
             }
             break;
         case 0x7:
@@ -2699,14 +2703,14 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
         case 0xc:
             bRet = HandlePageBreakChar();
             break;
-        case 0x1e:
-            rDoc.Insert( *pPaM, CHAR_HARDHYPHEN);   // Non-breaking hyphen
+        case 0x1e:   // Non-breaking hyphen
+            rDoc.InsertString( *pPaM, CHAR_HARDHYPHEN );
             break;
-        case 0x1f:
-            rDoc.Insert( *pPaM, CHAR_SOFTHYPHEN);   // Non-required hyphens
+        case 0x1f:   // Non-required hyphens
+            rDoc.InsertString( *pPaM, CHAR_SOFTHYPHEN );
             break;
-        case 0xa0:
-            rDoc.Insert( *pPaM, CHAR_HARDBLANK);    // Non-breaking spaces
+        case 0xa0:   // Non-breaking spaces
+            rDoc.InsertString( *pPaM, CHAR_HARDBLANK  );
             break;
         case 0x1:
             /*
@@ -3164,7 +3168,8 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
                     AppendTxtNode(*pPaM->GetPoint());
                 }
                 // <--
-                rDoc.Insert(*pPaM, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
+                rDoc.InsertPoolItem(*pPaM,
+                    SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
                 bPgSecBreak = false;
             }
         }
@@ -3398,7 +3403,7 @@ void GiveNodePageDesc(SwNodeIndex &rIdx, const SwFmtPageDesc &rPgDesc,
             rIdx.GetNode().GetCntntNode(), 0);
         SwPaM aPage(aPamStart);
 
-        rDoc.Insert(aPage, rPgDesc, 0);
+        rDoc.InsertPoolItem(aPage, rPgDesc, 0);
     }
 }
 

@@ -79,7 +79,6 @@
 #include <charatr.hxx>
 #include <fmtfld.hxx>
 #include <fmtpdsc.hxx>
-#include <fmthbsh.hxx>
 #include <txtfld.hxx>
 #include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
@@ -235,7 +234,7 @@ ULONG HTMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const 
         // sonst ist sie schon gesetzt.
         if( !rDoc.get(IDocumentSettingAccess::HTML_MODE) )
         {
-            rDoc.Insert( rPam, SwFmtPageDesc(
+            rDoc.InsertPoolItem( rPam, SwFmtPageDesc(
                 rDoc.GetPageDescFromPool( RES_POOLPAGE_HTML, false )), 0 );
         }
     }
@@ -1282,7 +1281,9 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
                 pPageDesc = pCSS1Parser->GetRightPageDesc();
 
             if( pPageDesc )
-                pDoc->Insert( *pPam, SwFmtPageDesc( pPageDesc ), 0 );
+            {
+                pDoc->InsertPoolItem( *pPam, SwFmtPageDesc( pPageDesc ), 0 );
+            }
         }
         break;
 
@@ -1436,11 +1437,11 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_NONBREAKSPACE:
-        pDoc->Insert( *pPam, CHAR_HARDBLANK );
+        pDoc->InsertString( *pPam, CHAR_HARDBLANK );
         break;
 
     case HTML_SOFTHYPH:
-        pDoc->Insert( *pPam, CHAR_SOFTHYPHEN );
+        pDoc->InsertString( *pPam, CHAR_SOFTHYPHEN );
         break;
 
     case HTML_LINEFEEDCHAR:
@@ -1482,7 +1483,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
         {
             if( !bDocInitalized )
                 DocumentDetected();
-            pDoc->Insert( *pPam, aToken, true );
+            pDoc->InsertString( *pPam, aToken );
 
             // wenn es noch vorlaefige Absatz-Attribute gibt, der Absatz aber
             // nicht leer ist, dann sind die Absatz-Attribute entgueltig.
@@ -2336,7 +2337,7 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
                         // also delete the SwpHints!!! To avoid any trouble
                         // we leave the loop immediately if this is the last
                         // hint.
-                        pTxtNd->Delete( pHt, sal_True );
+                        pTxtNd->DeleteAttribute( pHt );
                         if( 1 == nCntAttr )
                             break;
                         i--;
@@ -2821,7 +2822,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                         eJumpTo = JUMPTO_NONE;
                     }
 
-                    pDoc->Insert( *pAttrPam, *pAttr->pItem, nsSetAttrMode::SETATTR_DONTREPLACE );
+                    pDoc->InsertPoolItem( *pAttrPam, *pAttr->pItem, nsSetAttrMode::SETATTR_DONTREPLACE );
                 }
                 pAttrPam->DeleteMark();
 
@@ -2903,7 +2904,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
             pAttrPam->Move( fnMoveBackward );
         }
 
-        pDoc->Insert( *pAttrPam, *pAttr->pItem, 0 );
+        pDoc->InsertPoolItem( *pAttrPam, *pAttr->pItem, 0 );
 
         aFields.Remove( 0, 1 );
         delete pAttr;
@@ -4941,7 +4942,7 @@ void SwHTMLParser::InsertSpacer()
             {
                 NewAttr( &aAttrTab.pKerning, SvxKerningItem( (short)nSize, RES_CHRATR_KERNING ) );
                 String aTmp( ' ' );
-                pDoc->Insert( *pPam, aTmp /*, CHARSET_ANSI*/, true );
+                pDoc->InsertString( *pPam, aTmp );
                 EndAttr( aAttrTab.pKerning );
             }
         }
@@ -5149,7 +5150,7 @@ void SwHTMLParser::InsertLineBreak()
         // wenn kein CLEAR ausgefuehrt werden sollte oder konnte, wird
         // ein Zeilenumbruch eingef?gt
         String sTmp( (sal_Unicode)0x0a );   // make the Mac happy :-)
-        pDoc->Insert( *pPam, sTmp, true );
+        pDoc->InsertString( *pPam, sTmp );
     }
     else if( pPam->GetPoint()->nContent.GetIndex() )
     {

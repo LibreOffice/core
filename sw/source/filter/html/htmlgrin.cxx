@@ -1374,7 +1374,7 @@ void SwHTMLParser::StripTrailingPara()
                 if( pPrvNd )
                 {
                     SwIndex aSrc( pCNd, 0 );
-                    pCNd->GetTxtNode()->Cut( pPrvNd, aSrc, pCNd->Len() );
+                    pCNd->GetTxtNode()->CutText( pPrvNd, aSrc, pCNd->Len() );
                 }
             }
 
@@ -1436,9 +1436,10 @@ void SwHTMLParser::StripTrailingPara()
         xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();
         while( bSetSmallFont && nPos>0 )
         {
-            bSetSmallFont = CH_TXTATR_BREAKWORD ==
-                                        pTxtNd->GetTxt().GetChar( --nPos ) &&
-                        0 != pTxtNd->GetTxtAttr( nPos, RES_TXTATR_FLYCNT );
+            --nPos;
+            bSetSmallFont =
+                (CH_TXTATR_BREAKWORD == pTxtNd->GetTxt().GetChar( nPos )) &&
+                (0 != pTxtNd->GetTxtAttrForCharAt( nPos, RES_TXTATR_FLYCNT ));
         }
     }
 

@@ -109,7 +109,6 @@
 #include <pagedesc.hxx>     // for SwPageDesc
 #include <flddat.hxx>       // for Date fields
 #include <ndtxt.hxx>        // for Numrules
-#include <fmthbsh.hxx>
 #include <swrect.hxx>
 #include <reffld.hxx>
 #include <ftninfo.hxx>
@@ -3140,10 +3139,6 @@ void WW8AttributeOutput::ParaVerticalAlign( const SvxParaVertAlignItem& rAlign )
 
 // NoHyphen: ich habe keine Entsprechung in der SW-UI und WW-UI gefunden
 
-void WW8AttributeOutput::TextHardBlank( const SwFmtHardBlank& rHardBlank )
-{
-    m_rWW8Export.WriteChar( rHardBlank.GetChar() );
-}
 
 // RefMark, NoLineBreakHere  fehlen noch
 
@@ -5154,9 +5149,6 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
         case RES_TXTATR_FTN:
             TextFootnote( static_cast< const SwFmtFtn& >( rHt ) );
-            break;
-        case RES_TXTATR_HARDBLANK:
-            TextHardBlank( static_cast< const SwFmtHardBlank& >( rHt ) );
             break;
 
         case RES_PARATR_LINESPACING:

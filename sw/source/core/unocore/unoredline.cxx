@@ -295,7 +295,7 @@ uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
         {
             if ( 1 < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
             {
-                SwUnoCrsr* pUnoCrsr = GetCrsr();
+                SwUnoCrsr* pUnoCrsr = GetCursor();
                 uno::Reference<text::XText> xRet = new SwXRedlineText(pUnoCrsr->GetDoc(), *pNodeIdx);
                 aRet <<= xRet;
             }
@@ -318,7 +318,7 @@ uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
  ---------------------------------------------------------------------------*/
 void SwXRedlinePortion::Validate() throw( uno::RuntimeException )
 {
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
+    SwUnoCrsr* pUnoCrsr = GetCursor();
     if(!pUnoCrsr)
         throw uno::RuntimeException();
     //search for the redline

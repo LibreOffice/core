@@ -44,9 +44,7 @@
 #include <svx/lrspitem.hxx>
 #include <svx/brkitem.hxx>
 #include <svx/adjitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
-#endif
 #include <svx/fontitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/cscoitem.hxx>
@@ -74,7 +72,6 @@
 #include <acorrect.hxx>
 #include <shellres.hxx>
 #include <section.hxx>
-#include <fmthbsh.hxx>
 #include <frmatr.hxx>
 #include <charatr.hxx>
 #include <mdiexp.hxx>
@@ -645,7 +642,7 @@ BOOL SwAutoFormat::DoUnderline()
         aBox.SetLine( &aLine, BOX_LINE_BOTTOM );
         aBox.SetDistance( 42 );     // ~0,75 mm
         aSet.Put(aBox);
-        pDoc->Insert( aDelPam, aSet, 0 );
+        pDoc->InsertItemSet( aDelPam, aSet, 0 );
 
         aDelPam.DeleteMark();
     }
@@ -1300,7 +1297,9 @@ void SwAutoFormat::DelMoreLinesBlanks( BOOL bWithLineBreaks )
                 BOOL bHasBlnks = HasSelBlanks( *pNxt );
                 DeleteSel( *pNxt );
                 if( !bHasBlnks )
-                    pDoc->Insert( *pNxt, ' ' );
+                {
+                    pDoc->InsertString( *pNxt, sal_Unicode(' ') );
+                }
             }
 
             if( pNxt == &aDelPam )
@@ -1357,7 +1356,9 @@ void SwAutoFormat::BuildIndent()
                         IsBlanksInString( *pNxtNd ) ||
                         IsSentenceAtEnd( *pNxtNd );
                 if( DeleteAktNxtPara( pNxtNd->GetTxt() ))
-                    pDoc->Insert( aDelPam, ' ' );
+                {
+                    pDoc->InsertString( aDelPam, sal_Unicode(' ') );
+                }
                 if( bBreak )
                     break;
                 pNxtNd = GetNextNode();
@@ -1396,7 +1397,9 @@ void SwAutoFormat::BuildTextIndent()
             bBreak = !IsFastFullLine( *pNxtNd ) || IsBlanksInString( *pNxtNd ) ||
                     IsSentenceAtEnd( *pNxtNd );
             if( DeleteAktNxtPara( pNxtNd->GetTxt() ) )
-                pDoc->Insert( aDelPam, ' ' );
+            {
+                pDoc->InsertString( aDelPam, sal_Unicode(' ') );
+            }
             if( bBreak )
                 break;
             pNxtNd = GetNextNode();
@@ -1430,7 +1433,9 @@ void SwAutoFormat::BuildText()
             bBreak = !IsFastFullLine( *pNxtNd ) || IsBlanksInString( *pNxtNd ) ||
                     IsSentenceAtEnd( *pNxtNd );
             if( DeleteAktNxtPara( pNxtNd->GetTxt() ) )
-                pDoc->Insert( aDelPam, ' ' );
+            {
+                pDoc->InsertString( aDelPam, sal_Unicode(' ') );
+            }
             if( bBreak )
                 break;
             const SwTxtNode* pCurrNode = pNxtNd;
@@ -1705,7 +1710,7 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
             String sChgStr( '\t' );
             if( bChgBullet )
                 sChgStr.Insert( aFlags.cBullet, 0 );
-            pDoc->Insert( aDelPam, sChgStr, true );
+            pDoc->InsertString( aDelPam, sChgStr );
 
             SfxItemSet aSet( pDoc->GetAttrPool(), aTxtNodeSetRange );
             if( bChgBullet )
@@ -1745,7 +1750,9 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
         bBreak = !IsFastFullLine( *pNxtNd ) || IsBlanksInString( *pNxtNd ) ||
                 IsSentenceAtEnd( *pNxtNd );
         if( DeleteAktNxtPara( pNxtNd->GetTxt() ) )
-            pDoc->Insert( aDelPam, ' ' );
+        {
+            pDoc->InsertString( aDelPam, sal_Unicode(' ') );
+        }
         if( bBreak )
             break;
         const SwTxtNode* pCurrNode = pNxtNd;
@@ -1813,7 +1820,9 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
             aDelPam.GetMark()->nContent = nSpaceStt;
             DeleteSel( aDelPam );
             if( bInsTab )
-                pDoc->Insert( aDelPam, '\t' );
+            {
+                pDoc->InsertString( aDelPam, sal_Unicode('\t') );
+            }
         }
     }
 
@@ -1831,7 +1840,9 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
                     IsBlanksInString( *pNxtNd ) ||
                     IsSentenceAtEnd( *pNxtNd );
             if( DeleteAktNxtPara( pNxtNd->GetTxt() ) )
-                pDoc->Insert( aDelPam, ' ' );
+            {
+                pDoc->InsertString( aDelPam, sal_Unicode(' ') );
+            }
             if( bBreak )
                 break;
             pNxtNd = GetNextNode();
@@ -1942,7 +1953,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                     sReplace.Erase( 1 );
                     bSetHardBlank = TRUE;
                 }
-                pDoc->Replace( aDelPam, sReplace, FALSE );
+                pDoc->ReplaceRange( aDelPam, sReplace, false );
 
                 if( aFlags.bWithRedlining )
                 {
@@ -1957,7 +1968,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                 aDelPam.DeleteMark();
                 if( bSetHardBlank )
                 {
-                    pDoc->Insert( aDelPam, CHAR_HARDBLANK );
+                    pDoc->InsertString( aDelPam, CHAR_HARDBLANK );
                     ++nPos;
                 }
             }
@@ -1994,7 +2005,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
 
                         aDelPam.SetMark();
                         aDelPam.GetPoint()->nContent = nPos+1;
-                        pDoc->Replace( aDelPam, sReplace, FALSE );
+                        pDoc->ReplaceRange( aDelPam, sReplace, false );
 
                         if( aFlags.bWithRedlining )
                         {
@@ -2012,7 +2023,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                         if( bSetHardBlank )
                         {
                             aDelPam.GetPoint()->nContent = nPos;
-                            pDoc->Insert( aDelPam, CHAR_HARDBLANK );
+                            pDoc->InsertString( aDelPam, CHAR_HARDBLANK );
                             aDelPam.GetPoint()->nContent = ++nPos;
                         }
                     }

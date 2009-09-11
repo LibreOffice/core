@@ -182,6 +182,7 @@ SwTxtFtn::SwTxtFtn( SwFmtFtn& rAttr, xub_StrLen nStartPos )
     , m_nSeqNo( USHRT_MAX )
 {
     rAttr.pTxtAttr = this;
+    SetHasDummyChar(true);
 }
 
 
@@ -291,7 +292,7 @@ void SwTxtFtn::SetNumber( const USHORT nNewNum, const XubString* pStr )
 }
 
 // Die Fussnoten duplizieren
-void SwTxtFtn::CopyFtn( SwTxtFtn *pDest )
+void SwTxtFtn::CopyFtn( SwTxtFtn *pDest ) const
 {
     if ( m_pStartNode && pDest->GetStartNode() )
     {

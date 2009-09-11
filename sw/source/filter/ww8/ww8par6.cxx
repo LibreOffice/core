@@ -698,7 +698,8 @@ SwSectionFmt *wwSectionManager::InsertSection(
 
     aSection.SetProtect(SectionIsProtected(rSection));
 
-    rSection.mpSection = mrReader.rDoc.Insert( rMyPaM, aSection, &aSet );
+    rSection.mpSection =
+        mrReader.rDoc.InsertSwSection( rMyPaM, aSection, &aSet );
     ASSERT(rSection.mpSection, "section not inserted!");
     if (!rSection.mpSection)
         return 0;
@@ -851,7 +852,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
         aSection.SetProtect(true);
         // --> CMC, OD 2004-06-18 #i19922# improvement:
         // return value of method <Insert> not used.
-        mrReader.rDoc.Insert(*mrReader.pPaM, aSection, 0 ,false);
+        mrReader.rDoc.InsertSwSection(*mrReader.pPaM, aSection, 0, false);
     }
 
     wwSection aLastSection(*mrReader.pPaM->GetPoint());
@@ -3217,7 +3218,7 @@ SwFrmFmt *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion)
     if (
          aBegin == aEnd && nBegin == nEnd - 1 &&
          0 != (pTNd = aBegin.GetNode().GetTxtNode()) &&
-         0 != (pTFlyAttr = pTNd->GetTxtAttr(nBegin, RES_TXTATR_FLYCNT))
+         0 != (pTFlyAttr = pTNd->GetTxtAttrForCharAt(nBegin, RES_TXTATR_FLYCNT))
        )
     {
         const SwFmtFlyCnt& rFly = pTFlyAttr->GetFlyCnt();

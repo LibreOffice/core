@@ -96,7 +96,8 @@ namespace SwUnoCursorHelper
                                     com::sun::star::beans::PropertyState& eState);
 
     sal_Bool    DocInsertStringSplitCR(  SwDoc &rDoc,
-                                    const SwPaM &rNewCursor, const String &rText );
+                    const SwPaM &rNewCursor, const String &rText,
+                    const bool bForceExpandHints );
     void    makeRedline( SwPaM& rPaM, const ::rtl::OUString& RedlineType,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& RedlineProperties )
                 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);

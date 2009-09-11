@@ -701,7 +701,7 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
                 if (i < nLength - 1)
                     sStr += '\t';
             }
-            pSh->SwEditShell::Insert(sStr);
+            pSh->SwEditShell::Insert2(sStr);
             pSh->SwFEShell::SplitNode();    // Zeilenvorschub
         }
     }

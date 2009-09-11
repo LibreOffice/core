@@ -1566,7 +1566,7 @@ void SwScriptInfo::DeleteHiddenRanges( SwTxtNode& rNode )
         nHiddenStart = *(rFirst++);
 
         SwPaM aPam( rNode, nHiddenStart, rNode, nHiddenEnd );
-        rNode.getIDocumentContentOperations()->Delete( aPam );
+        rNode.getIDocumentContentOperations()->DeleteRange( aPam );
     }
 }
 

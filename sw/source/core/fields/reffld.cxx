@@ -331,8 +331,8 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 
                 case REF_ONLYCAPTION:
                     {
-                        const SwTxtAttr* pTxtAttr = pTxtNd->GetTxtAttr( nStt,
-                                                        RES_TXTATR_FIELD );
+                        const SwTxtAttr* const pTxtAttr =
+                            pTxtNd->GetTxtAttrForCharAt(nStt, RES_TXTATR_FIELD);
                         if( pTxtAttr )
                             nStt = SwGetExpField::GetReferenceTextPos(
                                                 pTxtAttr->GetFld(), *pDoc );

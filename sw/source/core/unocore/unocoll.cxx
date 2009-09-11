@@ -76,7 +76,9 @@
 #include <slist>
 #include <iterator>
 
+#include "unometa.hxx"
 #include "docsh.hxx"
+
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -174,11 +176,11 @@ const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { "com.sun.star.text.TextField.Bibliography",             SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY },
     { "com.sun.star.text.TextField.CombinedCharacters",       SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS },
     { "com.sun.star.text.TextField.DropDown",                 SW_SERVICE_FIELDTYPE_DROPDOWN },
+    { "com.sun.star.text.textfield.MetadataField",            SW_SERVICE_FIELDTYPE_METAFIELD },
     { "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_4 },
     { "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_5 },
     { "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_6 },
     { "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_7 },
-    { "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_8 },
     { "com.sun.star.text.FieldMaster.User",                   SW_SERVICE_FIELDMASTER_USER },
     { "com.sun.star.text.FieldMaster.DDE",                    SW_SERVICE_FIELDMASTER_DDE },
     { "com.sun.star.text.FieldMaster.SetExpression",          SW_SERVICE_FIELDMASTER_SET_EXP },
@@ -207,6 +209,7 @@ const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { "com.sun.star.chart2.data.DataProvider",                SW_SERVICE_CHART2_DATA_PROVIDER },
     { "com.sun.star.text.Fieldmark",                          SW_SERVICE_TYPE_FIELDMARK },
     { "com.sun.star.text.FormFieldmark",                      SW_SERVICE_TYPE_FORMFIELDMARK },
+    { "com.sun.star.text.InContentMetadata",                  SW_SERVICE_TYPE_META },
 
     // case-correct versions of the service names (see #i67811)
     { CSS_TEXT_TEXTFIELD_DATE_TIME,                   SW_SERVICE_FIELDTYPE_DATETIME },
@@ -603,6 +606,12 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             OSL_ASSERT( pDoc->GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED );
             if( pDoc->GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                 xRet = (cppu::OWeakObject*) pDoc->GetChartDataProvider( true /* create - if not yet available */ );
+        break;
+        case SW_SERVICE_TYPE_META:
+            xRet = static_cast< ::cppu::OWeakObject* >( new SwXMeta(pDoc) );
+        break;
+        case SW_SERVICE_FIELDTYPE_METAFIELD:
+            xRet = static_cast< ::cppu::OWeakObject* >(new SwXMetaField(pDoc));
         break;
         default:
             throw uno::RuntimeException();

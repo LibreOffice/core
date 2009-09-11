@@ -911,6 +911,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_PARA_CONT_PREV_SUBTREE       (FN_EXTRA2 + 109)
 #define FN_UNO_PARA_NUM_STRING              (FN_EXTRA2 + 110)
 #define FN_UNO_TABLE_NAME                   (FN_EXTRA2 + 111)
+#define FN_UNO_META                         (FN_EXTRA2 + 112)
 
 /*--------------------------------------------------------------------
     Bereich: Hilfe

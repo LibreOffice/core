@@ -1667,7 +1667,8 @@ bool SwPostIt::CalcFollow()
     SwTxtFld* pTxtFld = mpFmtFld->GetTxtFld();
     SwPosition aPosition( pTxtFld->GetTxtNode() );
     aPosition.nContent = *pTxtFld->GetStart();
-    SwTxtAttr* pTxtAttr = pTxtFld->GetTxtNode().GetTxtAttr( aPosition.nContent.GetIndex()-1,RES_TXTATR_FIELD );
+    SwTxtAttr * const pTxtAttr = pTxtFld->GetTxtNode().GetTxtAttrForCharAt(
+                    aPosition.nContent.GetIndex() - 1, RES_TXTATR_FIELD );
     const SwField* pFld = pTxtAttr ? pTxtAttr->GetFld().GetFld() : 0;
     return pFld && (pFld->Which()== RES_POSTITFLD);
 }
@@ -1680,12 +1681,14 @@ sal_uInt32 SwPostIt::CountFollowing()
     SwPosition aPosition( pTxtFld->GetTxtNode() );
     aPosition.nContent = *pTxtFld->GetStart();
 
-    SwTxtAttr* pTxtAttr = pTxtFld->GetTxtNode().GetTxtAttr( aPosition.nContent.GetIndex()+1,RES_TXTATR_FIELD );
+    SwTxtAttr * pTxtAttr = pTxtFld->GetTxtNode().GetTxtAttrForCharAt(
+                    aPosition.nContent.GetIndex() + 1, RES_TXTATR_FIELD );
     SwField* pFld = pTxtAttr ? const_cast<SwField*>(pTxtAttr->GetFld().GetFld()) : 0;
     while (pFld && (pFld->Which()== RES_POSTITFLD))
     {
         aCount++;
-        pTxtAttr = pTxtFld->GetTxtNode().GetTxtAttr( aPosition.nContent.GetIndex() + aCount,RES_TXTATR_FIELD );
+        pTxtAttr = pTxtFld->GetTxtNode().GetTxtAttrForCharAt(
+                    aPosition.nContent.GetIndex() + aCount, RES_TXTATR_FIELD );
         pFld = pTxtAttr ? const_cast<SwField*>(pTxtAttr->GetFld().GetFld()) : 0;
     }
     return aCount - 1;

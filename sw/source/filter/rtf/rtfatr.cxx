@@ -102,7 +102,6 @@
 #include <fmtfld.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtftn.hxx>
-#include <fmthbsh.hxx>
 #include <fchrfmt.hxx>
 #include <fmtautofmt.hxx>
 #include <fmtcntnt.hxx>
@@ -3048,14 +3047,6 @@ static Writer& OutRTF_SwFtn( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-static Writer& OutRTF_SwHardBlank( Writer& rWrt, const SfxPoolItem& rHt)
-{
-    RTFOutFuncs::Out_String(rWrt.Strm(),
-        String(((SwFmtHardBlank&)rHt).GetChar()), ((SwRTFWriter&)rWrt).eDefaultEncoding,
-        ((SwRTFWriter&)rWrt).bWriteHelpFmt);
-    return rWrt;
-}
-
 static Writer& OutRTF_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
 {
     const SwFmtCharFmt& rChrFmt = (const SwFmtCharFmt&)rHt;
@@ -4275,7 +4266,7 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_TXTATR_FLYCNT */             OutRTF_SwFlyCntnt,
 /* RES_TXTATR_FTN */                OutRTF_SwFtn,
 /* RES_TXTATR_SOFTHYPH */           0,  // old attr. - coded now by character
-/* RES_TXTATR_HARDBLANK*/           OutRTF_SwHardBlank,
+/* RES_TXTATR_HARDBLANK*/           0,
 /* RES_TXTATR_DUMMY1 */             0, // Dummy:
 /* RES_TXTATR_DUMMY2 */             0, // Dummy:
 

@@ -192,7 +192,9 @@ void SwUndoInsSection::Redo( SwUndoIter& rUndoIter )
                                         rBase, pAttr, TRUE );
     }
     else
-        rDoc.Insert( *rUndoIter.pAktPam, *pSection, pAttr, TRUE );
+    {
+        rDoc.InsertSwSection( *rUndoIter.pAktPam, *pSection, pAttr, true );
+    }
 
     if( pHistory )
         pHistory->SetTmpEnd( pHistory->Count() );
@@ -236,7 +238,10 @@ void SwUndoInsSection::Repeat( SwUndoIter& rUndoIter )
                                             rBase, pAttr, TRUE );
     }
     else
-        rUndoIter.GetDoc().Insert( *rUndoIter.pAktPam, *pSection, pAttr );
+    {
+        rUndoIter.GetDoc().InsertSwSection( *rUndoIter.pAktPam,
+            *pSection, pAttr );
+    }
 }
 
 
@@ -255,7 +260,7 @@ void SwUndoInsSection::Join( SwDoc& rDoc, ULONG nNode )
     if( pHistory )
     {
         SwIndex aCntIdx( pTxtNd, 0 );
-        pTxtNd->RstAttr( aCntIdx, pTxtNd->GetTxt().Len() );
+        pTxtNd->RstAttr( aCntIdx, pTxtNd->Len(), 0, 0, true );
     }
 }
 

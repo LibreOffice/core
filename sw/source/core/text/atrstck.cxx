@@ -136,8 +136,8 @@ const BYTE StackPos[ static_cast<USHORT>(RES_TXTATR_WITHEND_END) -
      0, // RES_TXTATR_DUMMY5                     // 46
     38, // RES_TXTATR_CJK_RUBY,                  // 47
      0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 48
-     0, // RES_TXTATR_DUMMY6,                    // 49
-     0  // RES_TXTATR_DUMMY7,                    // 50
+    39, // RES_TXTATR_META,                      // 49
+    39  // RES_TXTATR_METAFIELD,                 // 50
 };
 
 /*************************************************************************
@@ -650,6 +650,10 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
         rFnt.GetRef()--;
     else if ( RES_TXTATR_TOXMARK == nAttr )
         rFnt.GetTox()--;
+    else if ( (RES_TXTATR_META == nAttr) || (RES_TXTATR_METAFIELD == nAttr) )
+    {
+        rFnt.GetMeta()--;
+    }
     else if ( RES_TXTATR_CJK_RUBY == nAttr )
     {
         // ruby stack has no more attributes
@@ -927,6 +931,13 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
                 rFnt.GetTox()++;
             else
                 rFnt.GetTox()--;
+            break;
+        case RES_TXTATR_META:
+        case RES_TXTATR_METAFIELD:
+            if ( bPush )
+                rFnt.GetMeta()++;
+            else
+                rFnt.GetMeta()--;
             break;
     }
 }

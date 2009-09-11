@@ -39,76 +39,51 @@
 
 
 class SfxItemPool;
-class SvxBrushItem;
-class SvxFontItem;
-class SvxPostureItem;
-class SvxWeightItem;
-class SvxUnderlineItem;
-class SvxOverlineItem;
-class SvxFontHeightItem;
-class SvxPropSizeItem;
-class SvxShadowedItem;
-class SvxAutoKernItem;
-class SvxWordLineModeItem;
-class SvxContourItem;
-class SvxCrossedOutItem;
-class SvxColorItem;
-class SvxCharSetColorItem;
 class SvXMLAttrContainerItem;
 class SwFmtRuby;
-class SvxTwoLinesItem;
-class SvxEmphasisMarkItem;
-class SvxCharScaleWidthItem;
-class SvxCharRotateItem;
-class SvxCharReliefItem;
-class SvxCharHiddenItem;
-
 class SwFmtCharFmt;
 class SwFmtAutoFmt;
 class SwFmtINetFmt;
-class SvxKerningItem;
-class SvxCaseMapItem;
-class SvxLanguageItem;
-class SvxEscapementItem;
-class SvxBlinkItem;
-class SvxNoHyphenItem;
-class SwFmtSoftHyph;
-class SwFmtHardBlank;
 class SwFmtFld;
 class SwFmtFtn;
 class SwFmtFlyCnt;
 class SwTOXMark;
 class SwFmtRefMark;
+class SwFmtMeta;
+
 
 class SwTxtAttr : private boost::noncopyable
 {
-    const SfxPoolItem* m_pAttr;
+private:
+    SfxPoolItem * const m_pAttr;
     xub_StrLen m_nStart;
     bool m_bDontExpand          : 1;
     bool m_bLockExpandFlag      : 1;
 
-    bool m_bDontMergeAttr       : 1;    // refmarks, toxmarks, ruby
     bool m_bDontMoveAttr        : 1;    // refmarks, toxmarks
     bool m_bCharFmtAttr         : 1;    // charfmt, inet
     bool m_bOverlapAllowedAttr  : 1;    // refmarks, toxmarks
     bool m_bPriorityAttr        : 1;    // attribute has priority (redlining)
     bool m_bDontExpandStart     : 1;    // don't expand start at paragraph start (ruby)
+    bool m_bNesting             : 1;    // SwTxtAttrNesting
+    bool m_bHasDummyChar        : 1;    // without end + meta
 
 protected:
-    SwTxtAttr( const SfxPoolItem& rAttr, xub_StrLen nStart );
+    SwTxtAttr( SfxPoolItem& rAttr, xub_StrLen nStart );
+    virtual ~SwTxtAttr();
 
     void SetLockExpandFlag( bool bFlag )    { m_bLockExpandFlag = bFlag; }
-    void SetDontMergeAttr( bool bFlag )     { m_bDontMergeAttr = bFlag; }
     void SetDontMoveAttr( bool bFlag )      { m_bDontMoveAttr = bFlag; }
     void SetCharFmtAttr( bool bFlag )       { m_bCharFmtAttr = bFlag; }
     void SetOverlapAllowedAttr( bool bFlag ){ m_bOverlapAllowedAttr = bFlag; }
     void SetDontExpandStartAttr(bool bFlag) { m_bDontExpandStart = bFlag; }
+    void SetNesting(const bool bFlag)       { m_bNesting = bFlag; }
+    void SetHasDummyChar(const bool bFlag)  { m_bHasDummyChar = bFlag; }
 
 public:
-    virtual ~SwTxtAttr();
 
-    // RemoveFromPool muss immer vorm DTOR Aufruf erfolgen!!
-    void RemoveFromPool( SfxItemPool& rPool );
+    /// destroy instance
+    static void Destroy( SwTxtAttr * pToDestroy, SfxItemPool& rPool );
 
     /// start position
                   xub_StrLen* GetStart()        { return & m_nStart; }
@@ -123,44 +98,23 @@ public:
     inline void SetDontExpand( bool bDontExpand );
     bool DontExpand() const                 { return m_bDontExpand; }
     bool IsLockExpandFlag() const           { return m_bLockExpandFlag; }
-    bool IsDontMergeAttr() const            { return m_bDontMergeAttr; }
     bool IsDontMoveAttr() const             { return m_bDontMoveAttr; }
     bool IsCharFmtAttr() const              { return m_bCharFmtAttr; }
     bool IsOverlapAllowedAttr() const       { return m_bOverlapAllowedAttr; }
     bool IsPriorityAttr() const             { return m_bPriorityAttr; }
     void SetPriorityAttr( bool bFlag )      { m_bPriorityAttr = bFlag; }
     bool IsDontExpandStartAttr() const      { return m_bDontExpandStart; }
+    bool IsNesting() const                  { return m_bNesting; }
+    bool HasDummyChar() const               { return m_bHasDummyChar; }
 
     inline const SfxPoolItem& GetAttr() const;
+    inline       SfxPoolItem& GetAttr();
     inline USHORT Which() const { return GetAttr().Which(); }
 
     virtual int         operator==( const SwTxtAttr& ) const;
 
-    inline const SvxFontItem            &GetFont() const;
-    inline const SvxPostureItem         &GetPosture() const;
-    inline const SvxWeightItem          &GetWeight() const;
-    inline const SvxUnderlineItem       &GetUnderline() const;
-    inline const SvxOverlineItem        &GetOverline() const;
-    inline const SvxFontHeightItem      &GetFontSize() const;
-    inline const SvxPropSizeItem        &GetPropSize() const;
-    inline const SvxShadowedItem        &GetShadowed() const;
-    inline const SvxAutoKernItem        &GetAutoKern() const;
-    inline const SvxWordLineModeItem    &GetWordLineMode() const;
-    inline const SvxContourItem         &GetContour() const;
-    inline const SvxCrossedOutItem      &GetCrossedOut() const;
-    inline const SvxColorItem           &GetColor() const;
-    inline const SvxCharSetColorItem    &GetCharSetColor() const;
     inline const SwFmtCharFmt           &GetCharFmt() const;
     inline const SwFmtAutoFmt           &GetAutoFmt() const;
-    inline const SvxKerningItem         &GetKerning() const;
-    inline const SvxCaseMapItem         &GetCaseMap() const;
-    inline const SvxLanguageItem        &GetLanguage() const;
-    inline const SvxEscapementItem      &GetEscapement() const;
-    inline const SvxBlinkItem           &GetBlink() const;
-    inline const SvxBrushItem           &GetChrBackground() const;
-    inline const SvxNoHyphenItem        &GetNoHyphenHere() const;
-    inline const SwFmtSoftHyph          &GetSoftHyph() const;
-    inline const SwFmtHardBlank         &GetHardBlank() const;
     inline const SwFmtFld               &GetFld() const;
     inline const SwFmtFtn               &GetFtn() const;
     inline const SwFmtFlyCnt            &GetFlyCnt() const;
@@ -169,25 +123,19 @@ public:
     inline const SwFmtINetFmt           &GetINetFmt() const;
     inline const SvXMLAttrContainerItem &GetXMLAttrContainer() const;
     inline const SwFmtRuby              &GetRuby() const;
-    inline const SvxTwoLinesItem        &Get2Lines() const;
-    inline const SvxEmphasisMarkItem    &GetEmphasisMark() const;
-    inline const SvxCharScaleWidthItem &GetCharScaleW() const;
-    inline const SvxCharRotateItem      &GetCharRotate() const;
-    inline const SvxCharReliefItem      &GetCharRelief() const;
-    inline const SvxCharHiddenItem      &GetCharHidden() const;
+    inline const SwFmtMeta              &GetMeta() const;
 
 };
 
 class SwTxtAttrEnd : public SwTxtAttr
 {
-    using SwTxtAttr::GetEnd;
-
 protected:
     xub_StrLen m_nEnd;
 
 public:
-    SwTxtAttrEnd( const SfxPoolItem& rAttr, USHORT nStart, USHORT nEnd );
+    SwTxtAttrEnd( SfxPoolItem& rAttr, USHORT nStart, USHORT nEnd );
 
+    using SwTxtAttr::GetEnd;
     virtual xub_StrLen* GetEnd();
 };
 
@@ -211,6 +159,12 @@ inline const SfxPoolItem& SwTxtAttr::GetAttr() const
     return *m_pAttr;
 }
 
+inline SfxPoolItem& SwTxtAttr::GetAttr()
+{
+    return const_cast<SfxPoolItem&>(
+            const_cast<const SwTxtAttr*>(this)->GetAttr());
+}
+
 inline void SwTxtAttr::SetDontExpand( bool bDontExpand )
 {
     if ( !m_bLockExpandFlag )
@@ -219,102 +173,7 @@ inline void SwTxtAttr::SetDontExpand( bool bDontExpand )
     }
 }
 
-inline const SvxFontItem& SwTxtAttr::GetFont() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_FONT, "Wrong attribute" );
-    return (const SvxFontItem&)(*m_pAttr);
-}
-
-inline const SvxPostureItem& SwTxtAttr::GetPosture() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_POSTURE,
-        "Wrong attribute" );
-    return (const SvxPostureItem&)(*m_pAttr);
-}
-
-inline const SvxWeightItem& SwTxtAttr::GetWeight() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_WEIGHT,
-        "Wrong attribute" );
-    return (const SvxWeightItem&)(*m_pAttr);
-}
-
-inline const SvxUnderlineItem& SwTxtAttr::GetUnderline() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_UNDERLINE,
-        "Wrong attribute" );
-    return (const SvxUnderlineItem&)(*m_pAttr);
-}
-
-inline const SvxOverlineItem& SwTxtAttr::GetOverline() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_OVERLINE,
-        "Wrong attribute" );
-    return (const SvxOverlineItem&)(*m_pAttr);
-}
-
-inline const SvxFontHeightItem& SwTxtAttr::GetFontSize() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_FONTSIZE,
-        "Wrong attribute" );
-    return (const SvxFontHeightItem&)(*m_pAttr);
-}
-
-inline const SvxPropSizeItem& SwTxtAttr::GetPropSize() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_PROPORTIONALFONTSIZE,
-        "Wrong attribute" );
-    return (const SvxPropSizeItem&)(*m_pAttr);
-}
-
-inline const SvxShadowedItem& SwTxtAttr::GetShadowed() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_SHADOWED,
-        "Wrong attribute" );
-    return (const SvxShadowedItem&)(*m_pAttr);
-}
-
-inline const SvxAutoKernItem& SwTxtAttr::GetAutoKern() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_AUTOKERN,
-        "Wrong attribute" );
-    return (const SvxAutoKernItem&)(*m_pAttr);
-}
-
-inline const SvxWordLineModeItem& SwTxtAttr::GetWordLineMode() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_WORDLINEMODE,
-        "Wrong attribute" );
-    return (const SvxWordLineModeItem&)(*m_pAttr);
-}
-
-inline const SvxContourItem& SwTxtAttr::GetContour() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_CONTOUR,
-        "Wrong attribute" );
-    return (const SvxContourItem&)(*m_pAttr);
-}
-
-inline const SvxCrossedOutItem& SwTxtAttr::GetCrossedOut() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_CROSSEDOUT,
-        "Wrong attribute" );
-    return (const SvxCrossedOutItem&)(*m_pAttr);
-}
-
-inline const SvxColorItem& SwTxtAttr::GetColor() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_COLOR,
-        "Wrong attribute" );
-    return (const SvxColorItem&)(*m_pAttr);
-}
-
-inline const SvxCharSetColorItem& SwTxtAttr::GetCharSetColor() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_CHARSETCOLOR,
-        "Wrong attribute" );
-    return (const SvxCharSetColorItem&)(*m_pAttr);
-}
+//------------------------------------------------------------------------
 
 inline const SwFmtCharFmt& SwTxtAttr::GetCharFmt() const
 {
@@ -328,69 +187,6 @@ inline const SwFmtAutoFmt& SwTxtAttr::GetAutoFmt() const
     ASSERT( m_pAttr && m_pAttr->Which() == RES_TXTATR_AUTOFMT,
         "Wrong attribute" );
     return (const SwFmtAutoFmt&)(*m_pAttr);
-}
-
-inline const SvxKerningItem& SwTxtAttr::GetKerning() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_KERNING,
-        "Wrong attribute" );
-    return (const SvxKerningItem&)(*m_pAttr);
-}
-
-inline const SvxCaseMapItem& SwTxtAttr::GetCaseMap() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_CASEMAP,
-        "Wrong attribute" );
-    return (const SvxCaseMapItem&)(*m_pAttr);
-}
-
-inline const SvxLanguageItem& SwTxtAttr::GetLanguage() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_LANGUAGE,
-        "Wrong attribute" );
-    return (const SvxLanguageItem&)(*m_pAttr);
-}
-
-inline const SvxEscapementItem& SwTxtAttr::GetEscapement() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_ESCAPEMENT,
-        "Wrong attribute" );
-    return (const SvxEscapementItem&)(*m_pAttr);
-}
-
-inline const SvxBlinkItem& SwTxtAttr::GetBlink() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_BLINK,
-        "Wrong attribute" );
-    return (const SvxBlinkItem&)(*m_pAttr);
-}
-
-inline const SvxBrushItem& SwTxtAttr::GetChrBackground() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_BACKGROUND,
-        "Wrong attribute" );
-    return (const SvxBrushItem&)(*m_pAttr);
-}
-
-inline const SvxNoHyphenItem& SwTxtAttr::GetNoHyphenHere() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_NOHYPHEN,
-        "Wrong attribute" );
-    return (const SvxNoHyphenItem&)(*m_pAttr);
-}
-
-inline const SwFmtSoftHyph& SwTxtAttr::GetSoftHyph() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_TXTATR_SOFTHYPH,
-        "Wrong attribute" );
-    return (const SwFmtSoftHyph&)(*m_pAttr);
-}
-
-inline const SwFmtHardBlank& SwTxtAttr::GetHardBlank() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_TXTATR_HARDBLANK,
-        "Wrong attribute" );
-    return (const SwFmtHardBlank&)(*m_pAttr);
 }
 
 inline const SwFmtFld& SwTxtAttr::GetFld() const
@@ -447,46 +243,13 @@ inline const SwFmtRuby& SwTxtAttr::GetRuby() const
         "Wrong attribute" );
     return (const SwFmtRuby&)(*m_pAttr);
 }
-inline const SvxTwoLinesItem& SwTxtAttr::Get2Lines() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_TWO_LINES,
-        "Wrong attribute" );
-    return (const SvxTwoLinesItem&)(*m_pAttr);
-}
 
-inline const SvxEmphasisMarkItem& SwTxtAttr::GetEmphasisMark() const
+inline const SwFmtMeta& SwTxtAttr::GetMeta() const
 {
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_EMPHASIS_MARK,
+    ASSERT( m_pAttr && (m_pAttr->Which() == RES_TXTATR_META ||
+                        m_pAttr->Which() == RES_TXTATR_METAFIELD),
         "Wrong attribute" );
-    return (const SvxEmphasisMarkItem&)(*m_pAttr);
-}
-
-inline const SvxCharScaleWidthItem&    SwTxtAttr::GetCharScaleW() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_SCALEW,
-        "Wrong attribute" );
-    return (const SvxCharScaleWidthItem&)(*m_pAttr);
-}
-
-inline const SvxCharRotateItem&    SwTxtAttr::GetCharRotate() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_ROTATE,
-        "Wrong attribute" );
-    return (const SvxCharRotateItem&)(*m_pAttr);
-}
-
-inline const SvxCharReliefItem&    SwTxtAttr::GetCharRelief() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_RELIEF,
-        "Wrong attribute" );
-    return (const SvxCharReliefItem&)(*m_pAttr);
-}
-
-inline const SvxCharHiddenItem& SwTxtAttr::GetCharHidden() const
-{
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_CHRATR_HIDDEN,
-        "Wrong attribute" );
-    return (const SvxCharHiddenItem&)(*m_pAttr);
+    return (const SwFmtMeta&)(*m_pAttr);
 }
 
 #endif
