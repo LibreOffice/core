@@ -60,6 +60,8 @@ LIB1OBJFILES=   \
                 $(SLO)$/rootitemcontainer.obj                   \
                 $(SLO)$/constitemcontainer.obj                  \
                 $(SLO)$/jobconst.obj                            \
+                $(SLO)$/popupmenucontrollerbase.obj             \
+                $(SLO)$/mischelper.obj                          \
                 $(SLO)$/propertysethelper.obj
 
 
@@ -118,6 +120,8 @@ SHL1STDLIBS=    \
                 $(CPPUHELPERLIB)    \
                 $(TOOLSLIB)         \
                 $(VOSLIB)           \
+                $(VCLLIB)           \
+                $(TKLIB)            \
                 $(CPPULIB)          \
                 $(SALLIB)
 
@@ -174,12 +178,36 @@ SHL3IMPLIB=     ifwl
 
 SHL3OBJS=       $(SLO)$/mediatypedetectionhelper.obj\
                 $(SLO)$/registertemp.obj            \
-                $(SLO)$/substitutepathvars.obj      \
-                $(SLO)$/pathsettings.obj
+                $(SLO)$/mailtodispatcher.obj        \
+                $(SLO)$/oxt_handler.obj    			\
+                $(SLO)$/toolbarsmenucontroller.obj  \
+                $(SLO)$/newmenucontroller.obj          \
+                $(SLO)$/macrosmenucontroller.obj   \
+                $(SLO)$/langselectionmenucontroller.obj   \
+                $(SLO)$/headermenucontroller.obj    \
+                $(SLO)$/footermenucontroller.obj    \
+                $(SLO)$/fontsizemenucontroller.obj  \
+                $(SLO)$/fontmenucontroller.obj      \
+                $(SLO)$/tabwindowservice.obj        \
+                $(SLO)$/fwktabwindow.obj            \
+                $(SLO)$/logotextstatusbarcontroller.obj   \
+                $(SLO)$/fwlresid.obj    			\
+                $(SLO)$/logoimagestatusbarcontroller.obj  \
+                $(SLO)$/simpletextstatusbarcontroller.obj \
+                $(SLO)$/uriabbreviation.obj         \
+                $(SLO)$/servicehandler.obj          \
+                $(SLO)$/license.obj                 \
+                $(SLO)$/dispatchrecorder.obj        \
+                $(SLO)$/dispatchrecordersupplier.obj\
+                $(SLO)$/dispatchhelper.obj          \
+                $(SLO)$/popupmenudispatcher.obj           \
 
 SHL3STDLIBS=    \
                 $(FWILIB)                           \
+                $(FWELIB)                           \
                 $(SVLLIB)                           \
+                $(TKLIB)                            \
+                $(SVTOOLLIB)                        \
                 $(UNOTOOLSLIB)                      \
                 $(TOOLSLIB)                         \
                 $(I18NISOLANGLIB)                   \
@@ -187,10 +215,11 @@ SHL3STDLIBS=    \
                 $(CPPUHELPERLIB)                    \
                 $(COMPHELPERLIB)                    \
                 $(CPPULIB)                          \
+                $(VCLLIB)                           \
                 $(SALLIB)
 
 SHL3DEF=        $(MISC)$/$(SHL3TARGET).def
-SHL3DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
+SHL3DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2TARGETN)
 
 DEF3NAME=       $(SHL3TARGET)
 
@@ -222,20 +251,15 @@ SHL4OBJS=       \
                 $(SLO)$/contenthandler.obj          \
                 $(SLO)$/controlmenucontroller.obj   \
                 $(SLO)$/desktop.obj                 \
-                $(SLO)$/dispatchhelper.obj          \
                 $(SLO)$/dispatchinformationprovider.obj     \
                 $(SLO)$/dispatchprovider.obj        \
-                $(SLO)$/dispatchrecorder.obj        \
-                $(SLO)$/dispatchrecordersupplier.obj\
                 $(SLO)$/dockingareadefaultacceptor.obj  \
                 $(SLO)$/documentacceleratorconfiguration.obj \
                 $(SLO)$/dropdownboxtoolbarcontroller.obj  \
                 $(SLO)$/droptargetlistener.obj      \
-                $(SLO)$/edittoolbarcontroller.obj         \
+                $(SLO)$/edittoolbarcontroller.obj   \
+                $(SLO)$/factoryconfiguration.obj    \
                 $(SLO)$/filter.obj                  \
-                $(SLO)$/fontmenucontroller.obj      \
-                $(SLO)$/fontsizemenucontroller.obj  \
-                $(SLO)$/footermenucontroller.obj    \
                 $(SLO)$/framecontainer.obj          \
                 $(SLO)$/frameloader.obj             \
                 $(SLO)$/frame.obj                   \
@@ -243,10 +267,10 @@ SHL4OBJS=       \
                 $(SLO)$/globalacceleratorconfiguration.obj  \
                 $(SLO)$/globalsettings.obj                \
                 $(SLO)$/graphicnameaccess.obj       \
-                $(SLO)$/headermenucontroller.obj    \
                 $(SLO)$/helpagentdispatcher.obj     \
                 $(SLO)$/imagebuttontoolbarcontroller.obj  \
                 $(SLO)$/imagemanager.obj            \
+                $(SLO)$/imagemanagerimpl.obj        \
                 $(SLO)$/interceptionhelper.obj      \
                 $(SLO)$/jobdata.obj                 \
                 $(SLO)$/jobdispatch.obj             \
@@ -255,46 +279,34 @@ SHL4OBJS=       \
                 $(SLO)$/jobresult.obj               \
                 $(SLO)$/joburl.obj                  \
                 $(SLO)$/keymapping.obj              \
-                $(SLO)$/langselectionmenucontroller.obj   \
                 $(SLO)$/langselectionstatusbarcontroller.obj \
                 $(SLO)$/layoutmanager.obj           \
-                $(SLO)$/license.obj                 \
                 $(SLO)$/loaddispatcher.obj          \
                 $(SLO)$/loaddispatchlistener.obj    \
                 $(SLO)$/loadenv.obj                 \
-                $(SLO)$/logoimagestatusbarcontroller.obj  \
-                $(SLO)$/logotextstatusbarcontroller.obj   \
-                $(SLO)$/macrosmenucontroller.obj   \
-                $(SLO)$/mailtodispatcher.obj        \
                 $(SLO)$/menubarfactory.obj          \
                 $(SLO)$/menubarmanager.obj          \
                 $(SLO)$/menubarmerger.obj                 \
                 $(SLO)$/menubarwrapper.obj          \
                 $(SLO)$/menudispatcher.obj          \
                 $(SLO)$/menumanager.obj             \
-                $(SLO)$/mischelper.obj             \
                 $(SLO)$/moduleacceleratorconfiguration.obj  \
                 $(SLO)$/moduleimagemanager.obj      \
                 $(SLO)$/modulemanager.obj           \
                 $(SLO)$/moduleuicfgsupplier.obj     \
                 $(SLO)$/moduleuiconfigurationmanager.obj \
-                $(SLO)$/newmenucontroller.obj          \
                 $(SLO)$/objectmenucontroller.obj    \
                 $(SLO)$/ocomponentaccess.obj        \
                 $(SLO)$/ocomponentenumeration.obj   \
                 $(SLO)$/oframes.obj                 \
-                $(SLO)$/oxt_handler.obj    			\
+                $(SLO)$/pathsettings.obj			\
                 $(SLO)$/persistentwindowstate.obj   \
-                $(SLO)$/popupmenucontrollerbase.obj \
                 $(SLO)$/popupmenucontrollerfactory.obj\
-                $(SLO)$/popupmenudispatcher.obj           \
                 $(SLO)$/presethandler.obj                   \
                 $(SLO)$/progressbarwrapper.obj          \
                 $(SLO)$/recentfilesmenucontroller.obj   \
                 $(SLO)$/registerservices.obj        \
-                $(SLO)$/servicehandler.obj          \
                 $(SLO)$/sessionlistener.obj         \
-                $(SLO)$/simpletextstatusbarcontroller.obj \
                 $(SLO)$/spinfieldtoolbarcontroller.obj    \
                 $(SLO)$/statusbarcontrollerfactory.obj\
                 $(SLO)$/statusbarfactory.obj        \
@@ -306,8 +318,7 @@ SHL4OBJS=       \
                 $(SLO)$/statusindicator.obj         \
                 $(SLO)$/stillinteraction.obj        \
                 $(SLO)$/storageholder.obj           \
-                $(SLO)$/tabwindowservice.obj        \
-                $(SLO)$/fwktabwindow.obj            \
+                $(SLO)$/substitutepathvars.obj      \
                 $(SLO)$/tagwindowasmodified.obj     \
                 $(SLO)$/targethelper.obj            \
                 $(SLO)$/taskcreator.obj             \
@@ -318,14 +329,13 @@ SHL4OBJS=       \
                 $(SLO)$/toolbarmanager.obj          \
                 $(SLO)$/toolbarmerger.obj           \
                 $(SLO)$/toolbar.obj                 \
-                $(SLO)$/toolbarsmenucontroller.obj  \
                 $(SLO)$/toolbarwrapper.obj          \
                 $(SLO)$/toolboxfactory.obj          \
                 $(SLO)$/uicategorydescription.obj   \
                 $(SLO)$/uicommanddescription.obj    \
                 $(SLO)$/uiconfigurationmanager.obj  \
+                $(SLO)$/uiconfigurationmanagerimpl.obj  \
                 $(SLO)$/uielementfactorymanager.obj \
-                $(SLO)$/uriabbreviation.obj         \
                 $(SLO)$/urltransformer.obj          \
                 $(SLO)$/vclstatusindicator.obj      \
                 $(SLO)$/wakeupthread.obj            \

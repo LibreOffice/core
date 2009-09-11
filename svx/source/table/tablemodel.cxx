@@ -795,6 +795,9 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
             if( bUndo )
                 pModel->EndUndo();
 
+            if( pModel )
+                pModel->SetChanged();
+
         }
         catch( Exception& )
         {
@@ -900,10 +903,10 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
                 maRows[nRows]->removeColumns( nIndex, nCount );
 
             if( bUndo )
-            {
                 pModel->EndUndo();
+
+            if( pModel )
                 pModel->SetChanged();
-            }
         }
         catch( Exception& )
         {
@@ -969,6 +972,9 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
         }
         if( bUndo )
             pModel->EndUndo();
+
+        if( pModel )
+            pModel->SetChanged();
 
         updateRows();
         setModified(sal_True);
@@ -1056,10 +1062,10 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
             remove_range<RowVector,RowVector::iterator>( maRows, nIndex, nCount );
 
             if( bUndo )
-            {
                 pModel->EndUndo();
+
+            if( pModel )
                 pModel->SetChanged();
-            }
         }
         catch( Exception& )
         {

@@ -40,7 +40,7 @@
 #include "fmobj.hxx"
 #include "svditer.hxx"
 #include "fmresids.hrc"
-#include "dbtoolsclient.hxx"
+#include "svx/dbtoolsclient.hxx"
 #include "treevisitor.hxx"
 
 #include <com/sun/star/sdb/CommandType.hpp>

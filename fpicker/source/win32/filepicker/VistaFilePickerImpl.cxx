@@ -781,7 +781,7 @@ void VistaFilePickerImpl::impl_sta_getSelectedFiles(const RequestRef& rRequest)
     // Note further: we must react different if dialog is in execute or not .-(
     ComPtr< IShellItem >      iItem;
     ComPtr< IShellItemArray > iItems;
-    HRESULT                   hResult;
+    HRESULT                   hResult = E_FAIL;
 
     if (iOpen.is())
     {
@@ -917,7 +917,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
     }
 
 
-    HRESULT hResult;
+    HRESULT hResult = E_FAIL;
     try
     {
         // show dialog and wait for user decision

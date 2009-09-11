@@ -708,7 +708,7 @@ void SAL_CALL SfxGlobalEvents_Impl::notifyDocumentEvent( const ::rtl::OUString& 
         const css::uno::Reference< css::frame::XController2 >& /*_ViewController*/, const css::uno::Any& /*_Supplement*/ )
         throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException)
 {
-    // we're a multiplexer only, no change to generate artifical events here
+    // we're a multiplexer only, no chance to generate artifical events here
     throw css::lang::NoSupportException(::rtl::OUString(), *this);
 }
 

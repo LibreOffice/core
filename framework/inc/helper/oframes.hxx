@@ -53,7 +53,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakref.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -90,10 +90,8 @@ namespace framework{
     @devstatus      deprecated
 *//*-*************************************************************************************************************/
 
-class OFrames   :   public css::lang::XTypeProvider ,
-                    public css::frame::XFrames  ,   //=> XIndexAccess => XElementAccess
-                    private ThreadHelpBase      ,   // Must be the first of baseclasses - Is neccessary for right initialization of objects!
-                    public ::cppu::OWeakObject
+class OFrames   :   private ThreadHelpBase      ,   // Must be the first of baseclasses - Is neccessary for right initialization of objects!
+                    public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFrames >
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -123,13 +121,6 @@ class OFrames   :   public css::lang::XTypeProvider ,
          OFrames(   const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory        ,
                     const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
                             FrameContainer*                                         pFrameContainer );
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XInterface
-        //---------------------------------------------------------------------------------------------------------
-
-        FWK_DECLARE_XINTERFACE
-            FWK_DECLARE_XTYPEPROVIDER
 
         //---------------------------------------------------------------------------------------------------------
         //  XFrames

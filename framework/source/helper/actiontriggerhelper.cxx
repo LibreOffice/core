@@ -128,9 +128,7 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
             try
             {
                 Reference< XPropertySet > xPropSet;
-                Any a = xIndexAccess->getByIndex( i );
-
-                if (( a >>= xPropSet ) && ( xPropSet.is() ))
+                if (( xIndexAccess->getByIndex( i ) >>= xPropSet ) && ( xPropSet.is() ))
                 {
                     if ( IsSeparator( xPropSet ))
                     {

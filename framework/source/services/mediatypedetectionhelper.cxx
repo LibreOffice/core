@@ -38,6 +38,7 @@
 #include <services.h>
 #include <svtools/inettype.hxx>
 #include <tools/string.hxx>
+#include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -71,23 +72,6 @@ MediaTypeDetectionHelper::MediaTypeDetectionHelper( const uno::Reference< lang::
 MediaTypeDetectionHelper::~MediaTypeDetectionHelper()
 {
 }
-
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
-
-DEFINE_XINTERFACE_3                 (   MediaTypeDetectionHelper
-                                        , OWeakObject
-                                        , DIRECT_INTERFACE( lang::XTypeProvider )
-                                        , DIRECT_INTERFACE( lang::XServiceInfo  )
-                                        , DIRECT_INTERFACE( util::XStringMapping )
-                                    )
-
-DEFINE_XTYPEPROVIDER_3              (   MediaTypeDetectionHelper
-                                        , lang::XTypeProvider
-                                        , lang::XServiceInfo
-                                        , util::XStringMapping
-                                    )
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   MediaTypeDetectionHelper
                                         , ::cppu::OWeakObject

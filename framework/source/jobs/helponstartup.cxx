@@ -85,19 +85,6 @@ static ::rtl::OUString ENVTYPE_DOCUMENTEVENT    = ::rtl::OUString::createFromAsc
 
 //-----------------------------------------------
 
-DEFINE_XINTERFACE_4(HelpOnStartup                              ,
-                    OWeakObject                                ,
-                    DIRECT_INTERFACE(css::lang::XTypeProvider ),
-                    DIRECT_INTERFACE(css::lang::XServiceInfo  ),
-                    DIRECT_INTERFACE(css::task::XJob          ),
-                    DIRECT_INTERFACE(css::lang::XEventListener))
-
-DEFINE_XTYPEPROVIDER_4(HelpOnStartup            ,
-                       css::lang::XTypeProvider ,
-                       css::lang::XServiceInfo  ,
-                       css::task::XJob          ,
-                       css::lang::XEventListener)
-
 DEFINE_XSERVICEINFO_MULTISERVICE(HelpOnStartup                   ,
                                       ::cppu::OWeakObject             ,
                                       SERVICENAME_JOB                 ,

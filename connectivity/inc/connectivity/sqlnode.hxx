@@ -404,7 +404,8 @@ namespace connectivity
         static sal_Bool getTableComponents(const OSQLParseNode* _pTableNode,
                                             ::com::sun::star::uno::Any &_rCatalog,
                                             ::rtl::OUString &_rSchema,
-                                            ::rtl::OUString &_rTable);
+                                            ::rtl::OUString &_rTable
+                                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData);
 
         // susbtitute all occurences of :var or [name] into the dynamic parameter ?
         // _pNode will be modified if parameters exists

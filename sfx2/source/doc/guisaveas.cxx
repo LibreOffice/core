@@ -808,6 +808,9 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                eCtxt = sfx2::FileDialogHelper::SD_EXPORT;
         if( aDocServiceName.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) )
                eCtxt = sfx2::FileDialogHelper::SI_EXPORT;
+        if( aDocServiceName.equalsAscii( "com.sun.star.text.TextDocument" ) )
+            eCtxt = sfx2::FileDialogHelper::SW_EXPORT;
+
         if ( eCtxt != sfx2::FileDialogHelper::UNKNOWN_CONTEXT )
                pFileDlg->SetContext( eCtxt );
 
@@ -836,7 +839,8 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     ::rtl::OUString aAdjustToType;
 
     // bSetStandardName == true means that user agreed to store document in the default (default default ;-)) format
-    if ( bSetStandardName || GetStorable()->hasLocation() )
+    if ( !(( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED )) && 
+        ( bSetStandardName || GetStorable()->hasLocation() ))
     {
         uno::Sequence< beans::PropertyValue > aOldFilterProps;
         ::rtl::OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(

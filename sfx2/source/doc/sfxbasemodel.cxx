@@ -141,6 +141,52 @@ namespace css = ::com::sun::star;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+/** This Listener is used to get notified when the XDocumentProperties of the
+    XModel change.
+    If several changes are done the "bQuiet" member can be used to
+    temporarily suppress notifications.
+ */
+class SfxDocInfoListener_Impl : public ::cppu::WeakImplHelper1<
+    ::com::sun::star::util::XModifyListener >
+{
+
+public:
+    SfxObjectShell& m_rShell;
+    bool bQuiet;
+    bool bGotModified;
+
+    SfxDocInfoListener_Impl( SfxObjectShell& i_rDoc )
+        : m_rShell(i_rDoc)
+        , bQuiet(false)
+    { };
+
+    ~SfxDocInfoListener_Impl();
+
+    virtual void SAL_CALL disposing( const lang::EventObject& )
+        throw ( uno::RuntimeException );
+    virtual void SAL_CALL modified( const lang::EventObject& )
+        throw ( uno::RuntimeException );
+};
+SfxDocInfoListener_Impl::~SfxDocInfoListener_Impl()
+{
+}
+void SAL_CALL SfxDocInfoListener_Impl::modified( const lang::EventObject& )
+        throw ( uno::RuntimeException )
+{
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    bGotModified = true;
+
+    // notify changes to the SfxObjectShell
+    if ( !bQuiet ) {
+        m_rShell.FlushDocInfo();
+    }
+}
+
+void SAL_CALL SfxDocInfoListener_Impl::disposing( const lang::EventObject& )
+    throw ( uno::RuntimeException )
+{
+}
+
 //________________________________________________________________________________________________________
 //  impl. declarations
 //________________________________________________________________________________________________________
@@ -861,6 +907,8 @@ SfxBaseModel::getDocumentProperties()
             uno::UNO_QUERY_THROW);
 //        xDocProps->initialize(uno::Sequence<uno::Any>());
         m_pData->m_xDocumentProperties.set(xDocProps, uno::UNO_QUERY_THROW);
+        uno::Reference<util::XModifyBroadcaster> xMB(m_pData->m_xDocumentProperties, uno::UNO_QUERY_THROW);
+        xMB->addModifyListener(new SfxDocInfoListener_Impl(*m_pData->m_pObjectShell));
     }
 
     return m_pData->m_xDocumentProperties;

@@ -36,8 +36,9 @@
 //_________________________________________________________________________________________________________________
 #include <dispatch/menudispatcher.hxx>
 #include <general.h>
-#include <classes/menuconfiguration.hxx>
+#include <xml/menuconfiguration.hxx>
 #include <classes/addonmenu.hxx>
+#include <services.h>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -62,6 +63,7 @@
 #include <tools/rcid.h>
 #include <vos/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -388,7 +390,7 @@ IMPL_LINK( MenuDispatcher, Close_Impl, void*, EMPTYARG )
     css::util::URL aURL;
     aURL.Complete = ::rtl::OUString::createFromAscii(".uno:CloseWin");
     css::uno::Reference< css::util::XURLTransformer >  xTrans ( m_xFactory->createInstance(
-                        ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer") ), css::uno::UNO_QUERY );
+                        SERVICENAME_URLTRANSFORMER ), css::uno::UNO_QUERY );
     if( xTrans.is() )
     {
         // Datei laden

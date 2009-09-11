@@ -4,10 +4,6 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.31 $
- *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:31:09 $
- *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *
@@ -227,11 +223,13 @@ namespace drawinglayer
                         const basegfx::BColor aTextlineColor = maBColorModifierStack.getModifiedColor(pTCPP->getTextlineColor());
                         mpOutputDevice->SetTextLineColor( Color(aTextlineColor) );
 
-                                                // set Overline attribute
+                        // set Overline attribute
                         FontUnderline eFontOverline = mapTextLineStyle( pTCPP->getFontOverline() );
                         if( eFontOverline != UNDERLINE_NONE )
                         {
                             aFont.SetOverline( eFontOverline );
+                            const basegfx::BColor aOverlineColor = maBColorModifierStack.getModifiedColor(pTCPP->getOverlineColor());
+                            mpOutputDevice->SetOverlineColor( Color(aOverlineColor) );
                             if( pTCPP->getWordLineMode() )
                                 aFont.SetWordLineMode( true );
                         }

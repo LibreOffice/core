@@ -87,7 +87,7 @@ namespace connectivity
                 }
                 ~ODocHolder()
                 {
-                    m_xDoc = NULL;
+                   m_xDoc.clear();
                     m_pConnection->releaseDoc();
                 }
                 ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument> getDoc() const { return m_xDoc; }

@@ -88,6 +88,6 @@ void KabTables::impl_refresh(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 void KabTables::disposing(void)
 {
-    m_xMetaData = NULL;
+m_xMetaData.clear();
     OCollection::disposing();
 }

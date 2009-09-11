@@ -7601,6 +7601,11 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                 CreateTableRows( xColumnRowRange->getRows(), aRows, pGroup->GetSnapRect().Bottom() );
                 CreateTableColumns( xColumnRowRange->getColumns(), aColumns, pGroup->GetSnapRect().Right() );
 
+                sal_Int32 nCellCount = aRows.size() * aColumns.size();
+                sal_Int32 *pMergedCellIndexTable = new sal_Int32[ nCellCount ];
+                for ( sal_Int32 i = 0; i < nCellCount; i++ )
+                    pMergedCellIndexTable[ i ] = i;
+
                 aGroupIter.Reset();
                 while( aGroupIter.IsMore() )
                 {
@@ -7621,7 +7626,16 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                             ApplyCellAttributes( pObj, xCell );
 
                             if ( ( nRowCount > 1 ) || ( nColumnCount > 1 ) )    // cell merging
+                            {
                                 MergeCells( xTable, nColumn, nRow, nColumnCount, nRowCount );
+                                for ( sal_Int32 nRowIter = 0; nRowIter < nRowCount; nRowIter++ )
+                                {
+                                    for ( sal_Int32 nColumnIter = 0; nColumnIter < nColumnCount; nColumnIter++ )
+                                    {   // now set the correct index for the merged cell
+                                        pMergedCellIndexTable[ ( ( nRow + nRowIter ) * aColumns.size() ) + nColumn + nColumnIter ] = nTableIndex;
+                                    }
+                                }
+                            }
 
                             // applying text
                             OutlinerParaObject* pParaObject = pObj->GetOutlinerParaObject();
@@ -7633,13 +7647,30 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                             }
                         }
                     }
-                    else
+                }
+                aGroupIter.Reset();
+                while( aGroupIter.IsMore() )
+                {
+                    SdrObject* pObj( aGroupIter.Next() );
+                    if ( IsLine( pObj ) )
                     {
                         std::vector< sal_Int32 > vPositions;    // containing cell indexes + cell position
                         GetLinePositions( pObj, aRows, aColumns, vPositions, pGroup->GetSnapRect() );
+
+                        // correcting merged cell position
+                        std::vector< sal_Int32 >::iterator aIter( vPositions.begin() );
+                        while( aIter != vPositions.end() )
+                        {
+                            sal_Int32 nOldPosition = *aIter & 0xffff;
+                            sal_Int32 nOldFlags = *aIter & 0xffff0000;
+                            sal_Int32 nNewPosition = pMergedCellIndexTable[ nOldPosition ] | nOldFlags;
+                            *aIter++ = nNewPosition;
+                        }
                         ApplyCellLineAttributes( pObj, xTable, vPositions, aColumns.size() );
                     }
                 }
+                delete[] pMergedCellIndexTable;
+
                 // we are replacing the whole group object by a single table object, so
                 // possibly connections to the group object have to be removed.
                 if ( pSolverContainer )

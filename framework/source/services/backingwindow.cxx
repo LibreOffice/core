@@ -34,6 +34,7 @@
 #include "backingwindow.hxx"
 #include "framework.hrc"
 #include "classes/fwkresid.hxx"
+#include <services.h>
 
 #include "vcl/metric.hxx"
 #include "vcl/mnemonic.hxx"
@@ -206,9 +207,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maToolbox.ShowItem( nItemId_Info );
 
     // get dispatch provider
-    mxDesktop = Reference<XDesktop>( comphelper::getProcessServiceFactory()->createInstance(
-                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
-                                        UNO_QUERY );
+    mxDesktop = Reference<XDesktop>( comphelper::getProcessServiceFactory()->createInstance(SERVICENAME_DESKTOP ),UNO_QUERY );
     if( mxDesktop.is() )
         mxDesktopDispatchProvider = Reference< XDispatchProvider >( mxDesktop, UNO_QUERY );
 
@@ -720,9 +719,7 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
     {
         try
         {
-            Reference<lang::XMultiServiceFactory> xConfig( comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
-                UNO_QUERY);
+            Reference<lang::XMultiServiceFactory> xConfig( comphelper::getProcessServiceFactory()->createInstance(SERVICENAME_CFGPROVIDER),UNO_QUERY);
             if( xConfig.is() )
             {
                 Sequence<Any> args(1);
@@ -732,9 +729,7 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
                     Any(rtl::OUString::createFromAscii(pNodePath)),
                     PropertyState_DIRECT_VALUE);
                 args.getArray()[0] <<= val;
-                Reference<container::XNameAccess> xNameAccess(
-                    xConfig->createInstanceWithArguments(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
-                        args), UNO_QUERY);
+                Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,args), UNO_QUERY);
                 if( xNameAccess.is() )
                 {
                     rtl::OUString sURL;

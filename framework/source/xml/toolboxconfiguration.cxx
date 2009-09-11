@@ -35,6 +35,7 @@
 #include <xml/toolboxdocumenthandler.hxx>
 #include <xml/toolboxlayoutdocumenthandler.hxx>
 #include <xml/saxnamespacefilter.hxx>
+#include <services.h>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -73,7 +74,7 @@ static Reference< XParser > GetSaxParser(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
     )
 {
-    return Reference< XParser >( xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )), UNO_QUERY);
+    return Reference< XParser >( xServiceFactory->createInstance( SERVICENAME_SAXPARSER), UNO_QUERY);
 }
 
 static Reference< XDocumentHandler > GetSaxWriter(
@@ -81,7 +82,7 @@ static Reference< XDocumentHandler > GetSaxWriter(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
     )
 {
-    return Reference< XDocumentHandler >( xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )), UNO_QUERY) ;
+    return Reference< XDocumentHandler >( xServiceFactory->createInstance( SERVICENAME_SAXWRITER), UNO_QUERY) ;
 }
 
 // #110897#

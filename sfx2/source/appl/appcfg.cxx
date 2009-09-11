@@ -1043,14 +1043,15 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSync
     if ( pDoc && ( pDoc->IsPreview() || !pDoc->Get_Impl()->bInitialized ) )
         return;
 
+#ifdef DBG_UTIL
+    ::rtl::OUString aName = SfxEventConfiguration::GetEventName_Impl( rEventHint.GetEventId() );
+    ByteString aTmp( "SfxEvent: ");
+    aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
+    DBG_TRACE( aTmp.GetBuffer() );
+#endif
+
     if ( bSynchron )
     {
-#ifdef DBG_UTIL
-        ::rtl::OUString aName = SfxEventConfiguration::GetEventName_Impl( rEventHint.GetEventId() );
-        ByteString aTmp( "SfxEvent: ");
-        aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
-        DBG_TRACE( aTmp.GetBuffer() );
-#endif
         Broadcast(rEventHint);
         if ( pDoc )
             pDoc->Broadcast( rEventHint );

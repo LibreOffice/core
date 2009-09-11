@@ -127,10 +127,12 @@ AcceleratorCache::TKeyList AcceleratorCache::getAllKeys() const
 
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
+    lKeys.reserve(m_lKey2Commands.size());
 
     TKey2Commands::const_iterator pIt;
+    TKey2Commands::const_iterator pEnd = m_lKey2Commands.end();
     for (  pIt  = m_lKey2Commands.begin();
-           pIt != m_lKey2Commands.end()  ;
+           pIt != pEnd  ;
          ++pIt                           )
     {
         lKeys.push_back(pIt->first);

@@ -1912,12 +1912,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
             XGradientStyle eGrad = XGRAD_LINEAR;
             sal_Int32 nChgColors = 0;
 
-            if ( !nAngle )
-                nChgColors ^= 1;
-
-            if ( !nFocus )
-                nChgColors ^= 1;
-            else if ( nFocus < 0 )      // Bei negativem Focus sind die Farben zu tauschen
+            if ( nFocus < 0 )       // Bei negativem Focus sind die Farben zu tauschen
             {
                 nFocus =- nFocus;
                 nChgColors ^= 1;
@@ -1925,8 +1920,8 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
             if( nFocus > 40 && nFocus < 60 )
             {
                 eGrad = XGRAD_AXIAL;    // Besser gehts leider nicht
-                nChgColors ^= 1;
             }
+
             USHORT nFocusX = (USHORT)nFocus;
             USHORT nFocusY = (USHORT)nFocus;
 
@@ -4952,6 +4947,16 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             if ( bGraphic )
             {
                 pRet = ImportGraphic( rSt, aSet, aObjData );        // SJ: #68396# is no longer true (fixed in ppt2000)
+                ApplyAttributes( rSt, aSet, aObjData );
+                pRet->SetMergedItemSet(aSet);
+            }
+            else if ( aObjData.eShapeType == mso_sptLine )
+            {
+                basegfx::B2DPolygon aPoly;
+                aPoly.append(basegfx::B2DPoint(aObjData.aBoundRect.Left(), aObjData.aBoundRect.Top()));
+                aPoly.append(basegfx::B2DPoint(aObjData.aBoundRect.Right(), aObjData.aBoundRect.Bottom()));
+                pRet = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPoly));
+                pRet->SetModel( pSdrModel );
                 ApplyAttributes( rSt, aSet, aObjData );
                 pRet->SetMergedItemSet(aSet);
             }

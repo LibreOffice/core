@@ -53,10 +53,12 @@ private:
     long            nTabPos;
 
     SvxTabAdjust    eAdjustment;
-    sal_Unicode     cDecimal;
+    mutable sal_Unicode     m_cDecimal;
     sal_Unicode     cFill;
 
     SVX_DLLPRIVATE friend SvStream& operator<<( SvStream&, SvxTabStop& );
+
+    void fillDecimal() const;
 
 public:
     SvxTabStop();
@@ -78,8 +80,8 @@ public:
     SvxTabAdjust&   GetAdjustment() { return eAdjustment; }
     SvxTabAdjust    GetAdjustment() const { return eAdjustment; }
 
-    sal_Unicode&  GetDecimal() { return cDecimal; }
-    sal_Unicode   GetDecimal() const { return cDecimal; }
+    sal_Unicode&  GetDecimal() { fillDecimal(); return m_cDecimal; }
+    sal_Unicode   GetDecimal() const { fillDecimal(); return m_cDecimal; }
 
     sal_Unicode&  GetFill() { return cFill; }
     sal_Unicode   GetFill() const { return cFill; }
@@ -91,7 +93,7 @@ public:
                         {
                             return ( nTabPos     == rTS.nTabPos     &&
                                      eAdjustment == rTS.eAdjustment &&
-                                     cDecimal    == rTS.cDecimal    &&
+                                     m_cDecimal    == rTS.m_cDecimal    &&
                                      cFill       == rTS.cFill );
                         }
 
@@ -105,7 +107,7 @@ public:
                         {
                             nTabPos = rTS.nTabPos;
                             eAdjustment = rTS.eAdjustment;
-                            cDecimal = rTS.cDecimal;
+                            m_cDecimal = rTS.m_cDecimal;
                             cFill = rTS.cFill;
                             return *this;
                         }

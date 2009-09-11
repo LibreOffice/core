@@ -55,6 +55,12 @@
 #include <svx/xlnedwit.hxx>
 #include <svx/xlnstcit.hxx>
 #include <svx/xlnedcit.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xgrad.hxx>
+#include <svx/xbitmap.hxx>
+#include <svx/xhatch.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #ifndef __COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENTCOMMAND_HPP__
@@ -64,6 +70,7 @@
 #include <boost/shared_ptr.hpp>
 #endif
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/color/bcolortools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 // #i76201#
@@ -724,23 +731,23 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     /*const sal_Int32* pDefData =*/ ApplyShapeAttributes( rGeometryItem );
     switch( eSpType )
     {
-        case mso_sptCan :                       nColorData = 0x20200000; break;
-        case mso_sptCube :                      nColorData = 0x302d0000; break;
-        case mso_sptActionButtonBlank :         nColorData = 0x502ad400; break;
-        case mso_sptActionButtonHome :          nColorData = 0x702ad4ad; break;
-        case mso_sptActionButtonHelp :          nColorData = 0x602ad4a0; break;
-        case mso_sptActionButtonInformation :   nColorData = 0x702ad4a5; break;
-        case mso_sptActionButtonBackPrevious :  nColorData = 0x602ad4a0; break;
-        case mso_sptActionButtonForwardNext :   nColorData = 0x602ad4a0; break;
-        case mso_sptActionButtonBeginning :     nColorData = 0x602ad4a0; break;
-        case mso_sptActionButtonEnd :           nColorData = 0x602ad4a0; break;
-        case mso_sptActionButtonReturn :        nColorData = 0x602ad4a0; break;
-        case mso_sptActionButtonDocument :      nColorData = 0x702ad4da; break;
-        case mso_sptActionButtonSound :         nColorData = 0x602ad4a0; break;
-        case mso_sptActionButtonMovie :         nColorData = 0x602ad4a0; break;
-        case mso_sptBevel :                     nColorData = 0x502ad400; break;
-        case mso_sptFoldedCorner :              nColorData = 0x20d00000; break;
-        case mso_sptSmileyFace :                nColorData = 0x20d00000; break;
+        case mso_sptCan :                       nColorData = 0x20400000; break;
+        case mso_sptCube :                      nColorData = 0x302e0000; break;
+        case mso_sptActionButtonBlank :         nColorData = 0x502ce400; break;
+        case mso_sptActionButtonHome :          nColorData = 0x702ce4ce; break;
+        case mso_sptActionButtonHelp :          nColorData = 0x602ce4c0; break;
+        case mso_sptActionButtonInformation :   nColorData = 0x702ce4c5; break;
+        case mso_sptActionButtonBackPrevious :  nColorData = 0x602ce4c0; break;
+        case mso_sptActionButtonForwardNext :   nColorData = 0x602ce4c0; break;
+        case mso_sptActionButtonBeginning :     nColorData = 0x602ce4c0; break;
+        case mso_sptActionButtonEnd :           nColorData = 0x602ce4c0; break;
+        case mso_sptActionButtonReturn :        nColorData = 0x602ce4c0; break;
+        case mso_sptActionButtonDocument :      nColorData = 0x702ce4ec; break;
+        case mso_sptActionButtonSound :         nColorData = 0x602ce4c0; break;
+        case mso_sptActionButtonMovie :         nColorData = 0x602ce4c0; break;
+        case mso_sptBevel :                     nColorData = 0x502ce400; break;
+        case mso_sptFoldedCorner :              nColorData = 0x20e00000; break;
+        case mso_sptSmileyFace :                nColorData = 0x20e00000; break;
         case mso_sptNil :
         {
             if( sShapeType.getLength() > 4 &&
@@ -754,14 +761,14 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
         case mso_sptCurvedRightArrow :
         case mso_sptCurvedUpArrow :
         case mso_sptCurvedDownArrow :           nColorData = 0x2d000000; break;
-        case mso_sptRibbon2 :                   nColorData = 0x30dd0000; break;
-        case mso_sptRibbon :                    nColorData = 0x30dd0000; break;
+        case mso_sptRibbon2 :                   nColorData = 0x30ee0000; break;
+        case mso_sptRibbon :                    nColorData = 0x30ee0000; break;
 
-        case mso_sptEllipseRibbon2 :            nColorData = 0x30dd0000; break;
-        case mso_sptEllipseRibbon :             nColorData = 0x30dd0000; break;
+        case mso_sptEllipseRibbon2 :            nColorData = 0x30ee0000; break;
+        case mso_sptEllipseRibbon :             nColorData = 0x30ee0000; break;
 
-        case mso_sptVerticalScroll :            nColorData = 0x30dd0000; break;
-        case mso_sptHorizontalScroll :          nColorData = 0x30dd0000; break;
+        case mso_sptVerticalScroll :            nColorData = 0x30ee0000; break;
+        case mso_sptHorizontalScroll :          nColorData = 0x30ee0000; break;
         default:
             break;
     }
@@ -1022,41 +1029,48 @@ sal_Bool EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedC
 // nLumDat 27-24 = nLumDatEntry 0
 // nLumDat 23-20 = nLumDatEntry 1 ...
 // each 4bit entry is to be interpreted as a 10 percent signed luminance changing
-Color EnhancedCustomShape2d::GetColorData( const Color& rFillColor, sal_uInt32 nIndex )
+sal_Int32 EnhancedCustomShape2d::GetLuminanceChange( sal_uInt32 nIndex ) const
 {
-    Color aRetColor;
+    const sal_uInt32 nCount = nColorData >> 28;
+    if ( !nCount )
+        return 0;
 
-    sal_uInt32 i, nColor, nTmp, nCount = nColorData >> 28;
+    if ( nIndex >= nCount )
+        nIndex = nCount - 1;
 
-    if ( nCount )
+    const sal_Int32 nLumDat = nColorData << ( ( 1 + nIndex ) << 2 );
+    return ( nLumDat >> 28 ) * 10;
+}
+
+Color EnhancedCustomShape2d::GetColorData( const Color& rFillColor, sal_uInt32 nIndex ) const
+{
+    const sal_Int32 nLuminance = GetLuminanceChange(nIndex);
+    if( !nLuminance )
+        return rFillColor;
+
+    basegfx::BColor aHSVColor=
+        basegfx::tools::rgb2hsv(
+            basegfx::BColor(rFillColor.GetRed()/255.0,
+                            rFillColor.GetGreen()/255.0,
+                            rFillColor.GetBlue()/255.0));
+    if( nLuminance > 0 )
     {
-        if ( nIndex >= nCount )
-            nIndex = nCount - 1;
-
-        sal_uInt32 nFillColor = (sal_uInt32)rFillColor.GetRed() |
-                                    ((sal_uInt32)rFillColor.GetGreen() << 8 ) |
-                                        ((sal_uInt32)rFillColor.GetBlue() << 16 );
-
-        sal_Int32 nLumDat = nColorData << ( ( 1 + nIndex ) << 2 );
-        sal_Int32 nLuminance = ( nLumDat >> 28 ) * 12;
-
-        nTmp = nFillColor;
-        nColor = 0;
-        for ( i = 0; i < 3; i++ )
-        {
-            sal_Int32 nC = (sal_uInt8)nTmp;
-            nTmp >>= 8;
-            nC += ( ( nLuminance * nC ) >> 8 );
-            if ( nC < 0 )
-                nC = 0;
-            else if ( nC &~ 0xff )
-                nC = 0xff;
-            nColor >>= 8;
-            nColor |= nC << 16;
-        }
-        aRetColor = Color( (sal_uInt8)nColor, (sal_uInt8)( nColor >> 8 ), (sal_uInt8)( nColor >> 16 ) );
+        aHSVColor.setGreen(
+            aHSVColor.getGreen() * (1.0-nLuminance/100.0));
+        aHSVColor.setBlue(
+            nLuminance/100.0 +
+            (1.0-nLuminance/100.0)*aHSVColor.getBlue());
     }
-    return aRetColor;
+    else if( nLuminance < 0 )
+    {
+        aHSVColor.setBlue(
+            (1.0+nLuminance/100.0)*aHSVColor.getBlue());
+    }
+
+    aHSVColor = basegfx::tools::hsv2rgb(aHSVColor);
+    return Color( (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getRed(),0.0,1.0) * 255.0 + 0.5 ),
+                  (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getGreen(),0.0,1.0) * 255.0 + 0.5 ),
+                  (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getBlue(),0.0,1.0) * 255.0 + 0.5 ) );
 }
 
 Rectangle EnhancedCustomShape2d::GetTextRect() const
@@ -1687,6 +1701,19 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 
     if(aNewB2DPolyPolygon.count())
     {
+        if( !bLineGeometryNeededOnly )
+        {
+            // hack aNewB2DPolyPolygon to fill logic rect - this is
+            // needed to produce gradient fills that look like mso
+            aNewB2DPolygon.clear();
+            aNewB2DPolygon.append(basegfx::B2DPoint(0,0));
+            aNewB2DPolyPolygon.append(aNewB2DPolygon);
+
+            aNewB2DPolygon.clear();
+            aNewB2DPolygon.append(basegfx::B2DPoint(aLogicRect.GetWidth(),
+                                                    aLogicRect.GetHeight()));
+            aNewB2DPolyPolygon.append(aNewB2DPolygon);
+        }
         // #i37011#
         bool bForceCreateTwoObjects(false);
 
@@ -1856,6 +1883,78 @@ void CorrectCalloutArrows( MSO_SPT eSpType, sal_uInt32 nLineObjectCount, std::ve
     }
 }
 
+void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rCustomShapeSet,
+                                          sal_uInt32& nColorIndex, sal_uInt32 nColorCount)
+{
+    if ( !rObj.IsLine() )
+    {
+        const XFillStyle eFillStyle = ((const XFillStyleItem&)rObj.GetMergedItem(XATTR_FILLSTYLE)).GetValue();
+        switch( eFillStyle )
+        {
+            default:
+            case XFILL_SOLID:
+            {
+                Color aFillColor;
+                if ( nColorCount )
+                {
+                    aFillColor = GetColorData(
+                        ((XFillColorItem&)rCustomShapeSet.Get( XATTR_FILLCOLOR )).GetColorValue(),
+                        std::min(nColorIndex, nColorCount-1) );
+                    rObj.SetMergedItem( XFillColorItem( String(), aFillColor ) );
+                }
+                break;
+            }
+            case XFILL_GRADIENT:
+            {
+                XGradient aXGradient(((const XFillGradientItem&)rObj.GetMergedItem(XATTR_FILLGRADIENT)).GetGradientValue());
+                if ( nColorCount )
+                {
+                    aXGradient.SetStartColor(
+                        GetColorData(
+                            aXGradient.GetStartColor(),
+                            std::min(nColorIndex, nColorCount-1) ));
+                    aXGradient.SetEndColor(
+                        GetColorData(
+                            aXGradient.GetEndColor(),
+                            std::min(nColorIndex, nColorCount-1) ));
+                }
+
+                rObj.SetMergedItem( XFillGradientItem( String(), aXGradient ) );
+                break;
+            }
+            case XFILL_HATCH:
+            {
+                XHatch aXHatch(((const XFillHatchItem&)rObj.GetMergedItem(XATTR_FILLHATCH)).GetHatchValue());
+                if ( nColorCount )
+                {
+                    aXHatch.SetColor(
+                        GetColorData(
+                            aXHatch.GetColor(),
+                            std::min(nColorIndex, nColorCount-1) ));
+                }
+
+                rObj.SetMergedItem( XFillHatchItem( String(), aXHatch ) );
+                break;
+            }
+            case XFILL_BITMAP:
+            {
+                Bitmap aBitmap(((const XFillBitmapItem&)rObj.GetMergedItem(XATTR_FILLBITMAP)).GetBitmapValue().GetBitmap());
+                if ( nColorCount )
+                {
+                    aBitmap.Adjust(
+                        static_cast< short > ( GetLuminanceChange(
+                            std::min(nColorIndex, nColorCount-1))));
+                }
+
+                rObj.SetMergedItem( XFillBitmapItem( String(), aBitmap ) );
+                break;
+            }
+        }
+
+        if ( nColorIndex < nColorCount )
+            nColorIndex++;
+    }
+}
 
 SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnly )
 {
@@ -1880,17 +1979,9 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
     if ( vObjectList.size() )
     {
         const SfxItemSet& rCustomShapeSet = pCustomShapeObj->GetMergedItemSet();
-        // For primitive rendering, shadow handling is done completely based on the geometry, so i removed it here
-        // const sal_Bool   bShadow(((SdrShadowItem&)rCustomShapeSet.Get( SDRATTR_SHADOW )).GetValue());
-        Color           aBasicColor( COL_WHITE );
         Color           aFillColor;
         sal_uInt32      nColorCount = nColorData >> 28;
         sal_uInt32      nColorIndex = 0;
-
-        if ( nColorCount )
-        {
-            aBasicColor = ((XFillColorItem&)rCustomShapeSet.Get( XATTR_FILLCOLOR )).GetColorValue();
-        }
 
         // #i37011# remove invisible objects
         if(vObjectList.size())
@@ -1916,26 +2007,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
         if(1L == vObjectList.size())
         {
             // a single object, correct some values
-            SdrPathObj* pObj(vObjectList[0L]);
-
-// For primitive rendering, shadow handling is done completely based on the geometry, so i removed it here
-//          if(bShadow)
-//          {
-//              pObj->SetMergedItem(SdrShadowItem(sal_True));
-//          }
-
-            if(!pObj->IsLine())
-            {
-                if ( nColorIndex < nColorCount )
-                {
-                    aFillColor = GetColorData( aBasicColor, nColorIndex++ );
-                }
-
-                if ( nColorCount )
-                {
-                    pObj->SetMergedItem( XFillColorItem( String(), aFillColor ) );
-                }
-            }
+            AdaptObjColor(*vObjectList[0L],rCustomShapeSet,nColorIndex,nColorCount);
         }
         else
         {
@@ -1954,16 +2026,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
                 else
                 {
                     nAreaObjectCount++;
-
-                    if ( nColorIndex < nColorCount )
-                    {
-                        aFillColor = GetColorData( aBasicColor, nColorIndex++ );
-                    }
-
-                    if ( nColorCount )
-                    {
-                        pObj->SetMergedItem( XFillColorItem( String(), aFillColor ) );
-                    }
+                    AdaptObjColor(*pObj,rCustomShapeSet,nColorIndex,nColorCount);
                 }
             }
 
