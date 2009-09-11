@@ -204,10 +204,15 @@ public:
      */
     XmlFilterBase& exportDocumentProperties( ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > xProperties );
 
+protected:
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+                        implGetInputStream( ::comphelper::MediaDescriptor& rMediaDesc ) const;
+
 private:
     virtual StorageRef  implCreateStorage(
-                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream ) const;
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream ) const;
+    virtual StorageRef  implCreateStorage(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream ) const;
 
 private:
     ::std::auto_ptr< XmlFilterBaseImpl > mxImpl;
