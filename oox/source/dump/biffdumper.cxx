@@ -1337,6 +1337,7 @@ bool FormulaObject::dumpAttrToken()
             dumpDec< sal_uInt16, sal_uInt8 >( !bBiff2, "skip-err" );
         }
         break;
+        case 0:     // in array formulas and defined names, the skip-bit may be 0
         case BIFF_TOK_ATTR_SKIP:
             dumpDec< sal_uInt16, sal_uInt8 >( !bBiff2, "skip" );
         break;
