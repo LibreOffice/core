@@ -145,14 +145,14 @@ BOOL SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet& )
     if(m_pImpl->m_aConfig.IsModified())
         m_pImpl->m_aConfig.Commit();
 
-#ifndef UNX
     AllSettings aAllSettings = Application::GetSettings();
     MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
+#ifndef UNX
     aMiscSettings.SetEnableATToolSupport( m_aAccessibilityTool.IsChecked() );
+#endif
     aAllSettings.SetMiscSettings(aMiscSettings);
     Application::SetSettings(aAllSettings);
     Application::MergeSystemSettings( aAllSettings );
-#endif
 
     return FALSE;
 }

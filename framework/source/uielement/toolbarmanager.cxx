@@ -243,7 +243,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     ThreadHelpBase( &Application::GetSolarMutex() ),
     OWeakObject(),
     m_bDisposed( sal_False ),
-    m_bIsHiContrast( pToolBar->GetSettings().GetStyleSettings().GetFaceColor().IsDark() ),
+    m_bIsHiContrast( pToolBar->GetSettings().GetStyleSettings().GetHighContrastMode() ),
     m_bSmallSymbols( !SvtMiscOptions().AreCurrentSymbolsLarge() ),
     m_bModuleIdentified( sal_False ),
     m_bAddedToTaskPaneList( sal_True ),
@@ -371,7 +371,7 @@ void ToolBarManager::CheckAndUpdateImages()
     sal_Bool bRefreshImages = sal_False;
 
     // Check if high contrast/normal mode have changed
-    if ( m_pToolBar->GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+    if ( m_pToolBar->GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         if ( !m_bIsHiContrast )
         {
@@ -1365,7 +1365,7 @@ void ToolBarManager::RequestImages()
     }
 
     sal_Bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
-    m_bIsHiContrast = m_pToolBar->GetSettings().GetStyleSettings().GetFaceColor().IsDark();
+    m_bIsHiContrast = m_pToolBar->GetSettings().GetStyleSettings().GetHighContrastMode();
     sal_Int16 p = getImageTypeFromBools( SvtMiscOptions().AreCurrentSymbolsLarge(), m_bIsHiContrast );
 
     if ( m_xDocImageManager.is() )
