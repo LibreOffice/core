@@ -271,11 +271,29 @@ rtl::Reference< Node > Data::resolvePath(
                 css::uno::Reference< css::uno::XInterface >());
         }
         if (setElement) {
-            if (p->kind() != Node::KIND_SET ||
-                (templateName.getLength() != 0 &&
-                 !dynamic_cast< SetNode * >(p.get())->isValidTemplate(
-                     templateName)))
-            {
+            switch (p->kind()) {
+            case Node::KIND_LOCALIZED_PROPERTY:
+                if (templateName.getLength() != 0) {
+                    throw css::uno::RuntimeException(
+                        (rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM("bad path ")) +
+                         path),
+                    css::uno::Reference< css::uno::XInterface >());
+                }
+                break;
+            case Node::KIND_SET:
+                if (templateName.getLength() != 0 &&
+                    !dynamic_cast< SetNode * >(p.get())->isValidTemplate(
+                        templateName))
+                {
+                    throw css::uno::RuntimeException(
+                        (rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM("bad path ")) +
+                         path),
+                    css::uno::Reference< css::uno::XInterface >());
+                }
+                break;
+            default:
                 throw css::uno::RuntimeException(
                     (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) +
                      path),

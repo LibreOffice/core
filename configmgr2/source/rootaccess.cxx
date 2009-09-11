@@ -102,6 +102,11 @@ bool RootAccess::isFinalized() {
     return finalized_;
 }
 
+rtl::OUString RootAccess::name() {
+    getNode();
+    return name_;
+}
+
 rtl::Reference< RootAccess > RootAccess::getRootAccess() {
     return this;
 }
@@ -141,14 +146,6 @@ css::uno::Any RootAccess::queryInterface(css::uno::Type const & aType)
         res.clear();
     }
     return res;
-}
-
-rtl::OUString RootAccess::getName() throw (css::uno::RuntimeException) {
-    OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
-    checkLocalizedPropertyAccess();
-    getNode();
-    return name_;
 }
 
 void RootAccess::addChangesListener(

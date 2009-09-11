@@ -120,19 +120,16 @@ bool ChildAccess::isFinalized() {
         (parent_.is() && parent_->isFinalized());
 }
 
+rtl::OUString ChildAccess::name() {
+    return name_;
+}
+
 rtl::Reference< RootAccess > ChildAccess::getRootAccess() {
     return root_;
 }
 
 rtl::Reference< Access > ChildAccess::getParentAccess() {
     return parent_;
-}
-
-rtl::OUString ChildAccess::getName() throw (css::uno::RuntimeException) {
-    OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
-    checkLocalizedPropertyAccess();
-    return name_;
 }
 
 css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()

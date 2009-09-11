@@ -81,12 +81,11 @@ public:
 
     virtual bool isFinalized();
 
+    virtual rtl::OUString name();
+
     virtual rtl::Reference< RootAccess > getRootAccess();
 
     virtual rtl::Reference< Access > getParentAccess();
-
-    virtual rtl::OUString SAL_CALL getName()
-        throw (com::sun::star::uno::RuntimeException);
 
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
     SAL_CALL getParent()

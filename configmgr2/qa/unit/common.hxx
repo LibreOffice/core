@@ -63,16 +63,7 @@ namespace css = com::sun::star;
         throw; \
     }
 
-class Magic
-{
-    rtl::OUString maTempDir;
-  public:
-    Magic();
-    ~Magic();
-};
-
 class Test: public CppUnit::TestFixture {
-    Magic *mpMagic;
 public:
     // init
     virtual void setUp();
@@ -85,7 +76,7 @@ public:
     css::uno::Any getKey (const sal_Char *pPath, const sal_Char *pName)
         { return getKey (pPath, rtl::OUString::createFromAscii (pName)); }
     void setKey (const sal_Char *pPath, rtl::OUString aName, css::uno::Any a);
-    void resetKey (const sal_Char *pPath, rtl::OUString aName);
+    bool resetKey (const sal_Char *pPath, rtl::OUString aName);
 
     // tests
     void keyFetch();

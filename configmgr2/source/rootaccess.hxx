@@ -80,6 +80,8 @@ private:
 
     virtual bool isFinalized();
 
+    virtual rtl::OUString name();
+
     virtual rtl::Reference< RootAccess > getRootAccess();
 
     virtual rtl::Reference< Access > getParentAccess();
@@ -89,9 +91,6 @@ private:
 
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
         com::sun::star::uno::Type const & aType)
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual rtl::OUString SAL_CALL getName()
         throw (com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL addChangesListener(

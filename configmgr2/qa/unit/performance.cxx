@@ -35,41 +35,17 @@
 
 void Test::setUp()
 {
-    mpMagic = new Magic();
-
     char const * f = getForwardString();
-    rtl::OUString args(
+    rtl::OUString rdb(
         f, rtl_str_getLength(f), osl_getThreadTextEncoding());
         //TODO: handle conversion failure
-    sal_Int32 i = args.indexOf('#');
-    if (i < 0)
-        std::abort();
-
-    rtl::OUString rdb(args.copy(0, i));
-    rtl::OUString regpath(args.copy(i + 1));
-    rtl::OUString regurl;
-    if (osl::FileBase::getFileURLFromSystemPath(regpath, regurl) !=
-        osl::FileBase::E_None)
-        std::abort();
 
     css::uno::Reference< css::beans::XPropertySet > factory(
         cppu::createRegistryServiceFactory(rdb), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::uno::XComponentContext > context(
+    mxContext = css::uno::Reference< css::uno::XComponentContext >(
         factory->getPropertyValue(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext"))),
         css::uno::UNO_QUERY_THROW);
-    cppu::ContextEntry_Init entry(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "/modules/com.sun.star.configuration/bootstrap/Strata")),
-        css::uno::makeAny(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.comp.configuration.backend.LocalStratum:"))
-            + regurl));
-    mxContext = cppu::createComponentContext(&entry, 1, context);
-
-    CPPUNIT_ASSERT_MESSAGE ("component context is valid", mxContext.is());
 
     try {
         mxProvider = css::uno::Reference< css::lang::XMultiServiceFactory >(
@@ -119,8 +95,6 @@ void Test::tearDown()
 {
     disposeComponent (mxProvider);
     disposeComponent (mxContext);
-
-    delete mpMagic;
 }
 
 void Test::normalizePathKey (rtl::OString &rPath, rtl::OString &rKey)
@@ -161,7 +135,7 @@ void Test::setKey (const sal_Char *pPath, rtl::OUString aName, css::uno::Any a)
     disposeComponent(xAppView);
 }
 
-void Test::resetKey (const sal_Char *pPath, rtl::OUString aName)
+bool Test::resetKey (const sal_Char *pPath, rtl::OUString aName)
 {
     css::uno::Reference< css::util::XChangesBatch > xAppView;
 
@@ -170,10 +144,14 @@ void Test::resetKey (const sal_Char *pPath, rtl::OUString aName)
     css::uno::Reference< css::container::XNameReplace > xSettings(xAppView, css::uno::UNO_QUERY_THROW);
 
     css::uno::Reference< css::beans::XPropertyState > xSettingsState(xSettings, css::uno::UNO_QUERY);
+    if (!xSettingsState.is()) {
+        return false;
+    }
     xSettingsState->setPropertyToDefault(aName);
     xAppView->commitChanges();
 
     disposeComponent(xAppView);
+    return true;
 }
 
 void Test::keyFetch()
@@ -206,7 +184,7 @@ void Test::keySet()
 void Test::keyReset()
 {
     try {
-        resetKey ("/org.openoffice.Setup/Test",
+        bool supported= resetKey ("/org.openoffice.Setup/Test",
                   rtl::OUString::createFromAscii("AString"));
 
         // check value
@@ -215,6 +193,7 @@ void Test::keyReset()
             CPPUNIT_FAIL("to fetch key");
 
         CPPUNIT_ASSERT_MESSAGE ("check default value valid",
+                                !supported ||
                                 aStr == rtl::OUString::createFromAscii("Foo"));
     } CATCH_FAIL ("exception setting keys" )
 }

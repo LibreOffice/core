@@ -133,6 +133,8 @@ protected:
 
     virtual ~Access();
 
+    virtual rtl::OUString name() = 0;
+
     virtual rtl::Reference< RootAccess > getRootAccess() = 0;
 
     virtual rtl::Reference< Access > getParentAccess() = 0;
@@ -242,6 +244,9 @@ private:
             com::sun::star::lang::IllegalArgumentException,
             com::sun::star::lang::NoSupportException,
             com::sun::star::uno::RuntimeException);
+
+    virtual rtl::OUString SAL_CALL getName()
+        throw (com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL setName(rtl::OUString const & aName)
         throw (com::sun::star::uno::RuntimeException);
