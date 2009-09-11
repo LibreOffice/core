@@ -554,7 +554,11 @@ function hNewDialog() as boolean
     '///+<li>Verify that a new dialog is opened and has the focus</li>
     if ( DialogWindow.Exists() ) then 
         printlog( CFN & "New dialog is open" )
-        hNewDialog() = true 
+        hNewDialog() = true
+		if ( DialogWindow.IsMax() = false ) then		
+			DialogWindow.Maximize()
+			Wait( 2000 )
+		end if		
     else
         warnlog( CFN & "New dialog is not open" )
         hNewDialog() = false

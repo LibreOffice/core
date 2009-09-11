@@ -94,7 +94,6 @@ testcase tiPengineAnimationEffectsPreview
            kontext "TabMotionPaths"
               if TabMotionPaths.exists(5) then
                  DialogTest(TabMotionPaths)
-'                 qaErrorLog("#i44701# selection needs to be made on the page where you say 'OK'")
                  TestAnimations
               else
                  bError = true

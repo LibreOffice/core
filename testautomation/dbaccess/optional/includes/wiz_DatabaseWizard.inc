@@ -213,14 +213,24 @@ endcase
 '-------------------------------------------------------------------------
 testcase tMozilla
 
-    call fCreateMozillaAddressbookDatasource(gOfficePath + "user/work/tt_mozilla.odb")
-    call fOpendatabase(gOfficePath + "user/work/tt_mozilla.odb")
-    
-    Kontext "ContainerView"
-        ViewTables
-    
-    call fCloseDatabase(true)    
+    if ( fCreateMozillaAddressbookDatasource(gOfficePath + "user/work/tt_mozilla.odb") = true) then
+        if ( fOpendatabase(gOfficePath + "user/work/tt_mozilla.odb") = true) then        
+            Kontext "ContainerView"
+                ViewTables
+        else
+            warnlog "mozilla database could not be open."
 
+        endif
+    else
+        qaerrorlog "mozilla database could not be created. Maybe you have no mozilla installed."
+    	Kontext "MessageBox"
+    		if (MessageBox.exists(1)) then
+    			MessageBox.OK
+    		endif
+    endif
+	' try to close the database    
+    call fCloseDatabase(false)
+    
 endcase
 '-------------------------------------------------------------------------
 testcase tJDBC

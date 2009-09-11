@@ -123,7 +123,13 @@ sub checkPage( sFile as string , bDisabled as boolean, optional iMiddleMouseButt
     else
         printlog( "Hardware acceleration is not available on this system" )
     endif
-    checkCheckBox( sFile , "*" , UseAntiAliasing )
+    
+    if ( UseAntiAliasing.isEnabled() ) then
+        checkCheckBox( sFile , "*" , UseAntiAliasing )
+    else
+        printlog( "Antialiasing is not available on this system" )
+    endif
+    
     checkListBox( sFile , "*" , MousePositioning)
     ' needs to get handled differently on platforms!
     iMiddleMouseButton = MausAktion.getSelIndex
@@ -209,7 +215,13 @@ sub changePage( sFile as string , bInverted as boolean, optional iMiddleMouseBut
     else
         printlog( "Harware acceleration is not available on this system" )
     endif
-    setCheckBox( sFile , "*" , useantialiasing )
+    
+    if ( UseAntiAliasing.isEnabled() ) then
+        setCheckBox( sFile , "*" , useantialiasing )
+    else
+        printlog( "Antialiasing is not available on this system" )
+    endif
+    
     setListBox( sFile , "*" , MousePositioning )
     ' needs to get handled differently on platforms!
     if iMiddleMouseButtonExtern = 1 then

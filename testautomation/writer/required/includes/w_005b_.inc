@@ -1091,13 +1091,12 @@ testcase tFormatPositionAndSizeLegend
     Kontext "NavigatorWriter"
     if NavigatorWriter.Exists then ViewNavigator
 
+	printlog " Insert a legend"
     Call wZeichenobjektEinfuegen ( "Legende", 45, 35, 50, 50 )
+	Call wTypeKeys "<ESCAPE>"
+    Call wTypeKeys "<SHIFT F4>"
 
-    printlog " Insert a legend"
-    sleep (1)
-    Call wObjektSelektieren(30, 30, 75, 75)
-
-    hUseAsyncSlot( "FormatPositionAndSize" )
+    Call hUseAsyncSlot( "FormatPositionAndSize" )
     kontext "active"
     if ( active.exists( 1 ) ) then
         printlog( "Dialog open. Good" )
