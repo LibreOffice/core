@@ -1996,6 +1996,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         }
 
         aStyleSettings.SetMenuTextColor( aMenuFore );
+        aStyleSettings.SetMenuBarTextColor( aMenuFore );
         aStyleSettings.SetMenuColor( aMenuBack );
         aStyleSettings.SetMenuBarColor( aMenuBack );
 

@@ -66,17 +66,17 @@ public:
 
     virtual void                Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
 
+    CharClass*                  GetCharClass();
+
 };
 
 
 // -----------------------------------------------------------------------
 
-SvtSysLocale_Impl::SvtSysLocale_Impl()
+SvtSysLocale_Impl::SvtSysLocale_Impl() : pCharClass(NULL)
 {
     const lang::Locale& rLocale = Application::GetSettings().GetLocale();
     pLocaleData = new LocaleDataWrapper(
-        ::comphelper::getProcessServiceFactory(), rLocale );
-    pCharClass = new CharClass(
         ::comphelper::getProcessServiceFactory(), rLocale );
     aSysLocaleOptions.AddListener( *this );
 }
@@ -89,7 +89,15 @@ SvtSysLocale_Impl::~SvtSysLocale_Impl()
     delete pLocaleData;
 }
 
-
+CharClass* SvtSysLocale_Impl::GetCharClass()
+{
+    if ( !pCharClass )
+    {
+        const lang::Locale& rLocale = Application::GetSettings().GetLocale();
+        pCharClass = new CharClass(::comphelper::getProcessServiceFactory(), rLocale );
+    }
+    return pCharClass;
+}
 void SvtSysLocale_Impl::Notify( SvtBroadcaster&, const SfxHint& rHint )
 {
     const SfxSimpleHint* p = PTR_CAST( SfxSimpleHint, &rHint );
@@ -98,7 +106,7 @@ void SvtSysLocale_Impl::Notify( SvtBroadcaster&, const SfxHint& rHint )
         MutexGuard aGuard( SvtSysLocale::GetMutex() );
         const lang::Locale& rLocale = Application::GetSettings().GetLocale();
         pLocaleData->setLocale( rLocale );
-        pCharClass->setLocale( rLocale );
+        GetCharClass()->setLocale( rLocale );
     }
 }
 
@@ -158,11 +166,11 @@ const LocaleDataWrapper* SvtSysLocale::GetLocaleDataPtr() const
 
 const CharClass& SvtSysLocale::GetCharClass() const
 {
-    return *(pImpl->pCharClass);
+    return *(pImpl->GetCharClass());
 }
 
 
 const CharClass* SvtSysLocale::GetCharClassPtr() const
 {
-    return pImpl->pCharClass;
+    return pImpl->GetCharClass();
 }

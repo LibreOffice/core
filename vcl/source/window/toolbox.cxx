@@ -1901,37 +1901,78 @@ BOOL ToolBox::ImplCalcItem()
     nDefWidth       = GetDefaultImageSize().Width();
     nDefHeight      = GetDefaultImageSize().Height();
 
+    mnWinHeight = 0;
     // determine minimum size necessary in NWF
-    if( IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
     {
         Rectangle aRect( Point( 0, 0 ), Size( nMinWidth, nMinHeight ) );
-        Region aArrowReg = aRect;
+        Region aReg = aRect;
         ImplControlValue aVal;
         Region aNativeBounds, aNativeContent;
-        if( GetNativeControlRegion( CTRL_TOOLBAR, PART_BUTTON,
-                                    aArrowReg,
+        if( IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
+        {
+            if( GetNativeControlRegion( CTRL_TOOLBAR, PART_BUTTON,
+                                        aReg,
+                                        CTRL_STATE_ENABLED | CTRL_STATE_ROLLOVER,
+                                        aVal, OUString(),
+                                        aNativeBounds, aNativeContent ) )
+            {
+                aRect = aNativeBounds.GetBoundRect();
+                if( aRect.GetWidth() > nMinWidth )
+                    nMinWidth = aRect.GetWidth();
+                if( aRect.GetHeight() > nMinHeight )
+                    nMinHeight = aRect.GetHeight();
+                if( nDropDownArrowWidth < nMinWidth )
+                    nDropDownArrowWidth = nMinWidth;
+                if( nMinWidth > mpData->mnMenuButtonWidth )
+                    mpData->mnMenuButtonWidth = nMinWidth;
+                else if( nMinWidth < TB_MENUBUTTON_SIZE )
+                    mpData->mnMenuButtonWidth = TB_MENUBUTTON_SIZE;
+            }
+        }
+
+        // also calculate the area for comboboxes, drop down list boxes and spinfields
+        // as these are often inserted into toolboxes; set mnWinHeight to the
+        // greater of those values to prevent toolbar flickering (#i103385#)
+        aRect = Rectangle( Point( 0, 0 ), Size( nMinWidth, nMinHeight ) );
+        aReg = aRect;
+        if( GetNativeControlRegion( CTRL_COMBOBOX, PART_ENTIRE_CONTROL,
+                                    aReg,
                                     CTRL_STATE_ENABLED | CTRL_STATE_ROLLOVER,
                                     aVal, OUString(),
                                     aNativeBounds, aNativeContent ) )
         {
             aRect = aNativeBounds.GetBoundRect();
-            if( aRect.GetWidth() > nMinWidth )
-                nMinWidth = aRect.GetWidth();
-            if( aRect.GetHeight() > nMinHeight )
-                nMinHeight = aRect.GetHeight();
-            if( nDropDownArrowWidth < nMinWidth )
-                nDropDownArrowWidth = nMinWidth;
-            if( nMinWidth > mpData->mnMenuButtonWidth )
-                mpData->mnMenuButtonWidth = nMinWidth;
-            else if( nMinWidth < TB_MENUBUTTON_SIZE )
-                mpData->mnMenuButtonWidth = TB_MENUBUTTON_SIZE;
+            if( aRect.GetHeight() > mnWinHeight )
+                mnWinHeight = aRect.GetHeight();
+        }
+        aRect = Rectangle( Point( 0, 0 ), Size( nMinWidth, nMinHeight ) );
+        aReg = aRect;
+        if( GetNativeControlRegion( CTRL_LISTBOX, PART_ENTIRE_CONTROL,
+                                    aReg,
+                                    CTRL_STATE_ENABLED | CTRL_STATE_ROLLOVER,
+                                    aVal, OUString(),
+                                    aNativeBounds, aNativeContent ) )
+        {
+            aRect = aNativeBounds.GetBoundRect();
+            if( aRect.GetHeight() > mnWinHeight )
+                mnWinHeight = aRect.GetHeight();
+        }
+        aRect = Rectangle( Point( 0, 0 ), Size( nMinWidth, nMinHeight ) );
+        aReg = aRect;
+        if( GetNativeControlRegion( CTRL_SPINBOX, PART_ENTIRE_CONTROL,
+                                    aReg,
+                                    CTRL_STATE_ENABLED | CTRL_STATE_ROLLOVER,
+                                    aVal, OUString(),
+                                    aNativeBounds, aNativeContent ) )
+        {
+            aRect = aNativeBounds.GetBoundRect();
+            if( aRect.GetHeight() > mnWinHeight )
+                mnWinHeight = aRect.GetHeight();
         }
     }
 
     if ( ! mpData->m_aItems.empty() )
     {
-        mnWinHeight = 0;
-
         std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
         while ( it != mpData->m_aItems.end() )
         {

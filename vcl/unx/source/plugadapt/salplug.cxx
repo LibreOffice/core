@@ -382,10 +382,10 @@ static const char * get_desktop_environment()
 
                 if ( is_kde4_desktop( pDisplay ) )
                     pRet = desktop_strings[DESKTOP_KDE4];
-                else if ( is_kde_desktop( pDisplay ) )
-                    pRet = desktop_strings[DESKTOP_KDE];
                 else if ( is_gnome_desktop( pDisplay ) )
                     pRet = desktop_strings[DESKTOP_GNOME];
+                else if ( is_kde_desktop( pDisplay ) )
+                    pRet = desktop_strings[DESKTOP_KDE];
                 else if ( is_cde_desktop( pDisplay ) )
                     pRet = desktop_strings[DESKTOP_CDE];
                 else

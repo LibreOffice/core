@@ -800,14 +800,8 @@ void ComboBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 long ComboBox::PreNotify( NotifyEvent& rNEvt )
 {
-    long nDone = 0;
 
-    if( ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN ) && ( rNEvt.GetWindow() == mpImplLB->GetMainWindow() ) )
-    {
-        mpSubEdit->GrabFocus();
-    }
-
-    return nDone ? nDone : Edit::PreNotify( rNEvt );
+    return Edit::PreNotify( rNEvt );
 }
 
 // -----------------------------------------------------------------------
@@ -885,6 +879,10 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
         {
             nDone = 0;  // don't eat this event, let the default handling happen (i.e. scroll the context)
         }
+    }
+    else if( ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN ) && ( rNEvt.GetWindow() == mpImplLB->GetMainWindow() ) )
+    {
+        mpSubEdit->GrabFocus();
     }
 
     return nDone ? nDone : Edit::Notify( rNEvt );

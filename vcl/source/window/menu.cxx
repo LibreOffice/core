@@ -2731,7 +2731,14 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                 }
 
                 if ( pThisItemOnly && bHighlighted )
-                    pWin->SetTextColor( rSettings.GetMenuTextColor() );
+                {
+                    // This restores the normal menu or menu bar text
+                    // color for when it is no longer highlighted.
+            if ( bIsMenuBar )
+                pWin->SetTextColor( rSettings.GetMenuBarTextColor() );
+            else
+                pWin->SetTextColor( rSettings.GetMenuTextColor() );
+         }
             }
             if( bLayout )
             {
@@ -3787,7 +3794,10 @@ static void ImplInitMenuWindow( Window* pWin, BOOL bFont, BOOL bMenuBar )
             pWin->SetBackground( Wallpaper( rStyleSettings.GetMenuColor() ) );
     }
 
-    pWin->SetTextColor( rStyleSettings.GetMenuTextColor() );
+    if ( bMenuBar )
+        pWin->SetTextColor( rStyleSettings.GetMenuBarTextColor() );
+    else
+        pWin->SetTextColor( rStyleSettings.GetMenuTextColor() );
     pWin->SetTextFillColor();
     pWin->SetLineColor();
 }
