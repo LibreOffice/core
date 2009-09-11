@@ -416,6 +416,12 @@ shell BasicIDEShell
         StateMethod     = GetState;
     ]
 
+    SID_IMPORT_DIALOG
+    [
+        ExecMethod      = ExecuteDialog;
+        StateMethod     = GetState;
+    ]
+
     SID_DIALOG_TESTMODE
     [
         ExecMethod      = ExecuteDialog;
