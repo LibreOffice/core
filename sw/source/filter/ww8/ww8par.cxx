@@ -2181,6 +2181,66 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
                 switch (pLang->GetLanguage())
                 {
                     case LANGUAGE_CZECH:
+                    case LANGUAGE_HUNGARIAN:
+                    case LANGUAGE_POLISH:
+                        eSrcCharSet = RTL_TEXTENCODING_MS_1250;
+                        break;
+                    case LANGUAGE_RUSSIAN:
+                        eSrcCharSet = RTL_TEXTENCODING_MS_1251;
+                        break;
+                    case LANGUAGE_GREEK:
+                        eSrcCharSet = RTL_TEXTENCODING_MS_1253;
+                        break;
+                    case LANGUAGE_TURKISH:
+                        eSrcCharSet = RTL_TEXTENCODING_MS_1254;
+                        break;
+                    default:
+                        eSrcCharSet = RTL_TEXTENCODING_MS_1252;
+                        break;
+                }
+            }
+        }
+    }
+    return eSrcCharSet;
+}
+
+//Takashi Ono for CJK
+CharSet SwWW8ImplReader::GetCurrentCJKCharSet()
+{
+    /*
+    #i2015
+    If the hard charset is set use it, if not see if there is an open
+    character run that has set the charset, if not then fallback to the
+    current underlying paragraph style.
+    */
+    CharSet eSrcCharSet = eHardCharSet;
+    if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
+    {
+        if (!maFontSrcCJKCharSets.empty())
+            eSrcCharSet = maFontSrcCJKCharSets.top();
+        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1))
+            eSrcCharSet = pCollA[nCharFmt].GetCJKCharSet();
+        if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
+            eSrcCharSet = pCollA[nAktColl].GetCJKCharSet();
+        if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
+        { // patch from cmc for #i52786#
+            /*
+             #i22206#/#i52786#
+             The (default) character set used for a run of text is the default
+             character set for the version of Word that last saved the document.
+
+             This is a bit tentative, more might be required if the concept is correct.
+             When later version of word write older 6/95 documents the charset is
+             correctly set in the character runs involved, so its hard to reproduce
+             documents that require this to be sure of the process involved.
+            */
+            const SvxLanguageItem *pLang =
+                (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE);
+            if (pLang)
+            {
+                switch (pLang->GetLanguage())
+                {
+                    case LANGUAGE_CZECH:
                         eSrcCharSet = RTL_TEXTENCODING_MS_1250;
                         break;
                     default:
@@ -2339,6 +2399,8 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
 
     const CharSet eSrcCharSet = bVer67 ? GetCurrentCharSet() :
         RTL_TEXTENCODING_MS_1252;
+    const CharSet eSrcCJKCharSet = bVer67 ? GetCurrentCJKCharSet() :
+        RTL_TEXTENCODING_MS_1252;
 
     // (re)alloc UniString data
     String sPlainCharsBuf;
@@ -2399,7 +2461,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
                     sal_Char aTest[2];
                     aTest[0] = static_cast< sal_Char >((nUCode & 0xFF00) >> 8);
                     aTest[1] = static_cast< sal_Char >(nUCode & 0x00FF);
-                    String aTemp(aTest, 2, eSrcCharSet);
+                    String aTemp(aTest, 2, eSrcCJKCharSet);
                     ASSERT(aTemp.Len() == 1, "so much for that theory");
                     *pWork = aTemp.GetChar(0);
                 }

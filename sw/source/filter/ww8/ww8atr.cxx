@@ -3757,8 +3757,17 @@ void WW8AttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
         UINT16 nHeight = rGrid.GetBaseHeight() + rGrid.GetRubyHeight();
         m_rWW8Export.InsUInt16( NS_sprm::LN_SDyaLinePitch );
         m_rWW8Export.InsUInt16( nHeight );
-        sal_uInt32 nPageCharSize = ItemGet<SvxFontHeightItem>(*(m_rWW8Export.pStyles->GetSwFmt()),
-                RES_CHRATR_CJK_FONTSIZE).GetHeight();
+
+        WW8WrtStyle * pStyles = rWrtWW8.pStyles;
+        SwFmt * pSwFmt = pStyles->GetSwFmt();
+
+        sal_uInt32 nPageCharSize = 0;
+
+        if (pSwFmt != NULL)
+        {
+            nPageCharSize = ItemGet<SvxFontHeightItem>
+            (*pSwFmt, RES_CHRATR_CJK_FONTSIZE).GetHeight();
+        }
 
         INT32 nCharWidth = rGrid.GetBaseWidth() - nPageCharSize;
         INT32 nFraction = 0;

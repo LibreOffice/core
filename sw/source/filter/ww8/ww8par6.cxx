@@ -3557,11 +3557,32 @@ bool SwWW8ImplReader::SetNewFontAttr(USHORT nFCode, bool bSetEnums,
         //off the stack will keep in sync
         if (!pAktColl && IsListOrDropcap())
         {
-            if (!maFontSrcCharSets.empty())
-                eSrcCharSet = maFontSrcCharSets.top();
+            if (nWhich == RES_CHRATR_CJK_FONT)
+            {
+                if (!maFontSrcCJKCharSets.empty())
+                {
+                    eSrcCharSet = maFontSrcCJKCharSets.top();
+                }
+                else
+                {
+                    eSrcCharSet = RTL_TEXTENCODING_DONTKNOW;
+                }
+
+                maFontSrcCJKCharSets.push(eSrcCharSet);
+            }
             else
-                eSrcCharSet = RTL_TEXTENCODING_DONTKNOW;
-            maFontSrcCharSets.push(eSrcCharSet);
+            {
+                if (!maFontSrcCharSets.empty())
+                {
+                    eSrcCharSet = maFontSrcCharSets.top();
+                }
+                else
+                {
+                    eSrcCharSet = RTL_TEXTENCODING_DONTKNOW;
+                }
+
+                maFontSrcCharSets.push(eSrcCharSet);
+            }
         }
         return false;
     }
@@ -3591,7 +3612,10 @@ bool SwWW8ImplReader::SetNewFontAttr(USHORT nFCode, bool bSetEnums,
         else if (IsListOrDropcap())
         {
             //Add character text encoding to stack
-            maFontSrcCharSets.push(eSrcCharSet);
+            if (nWhich  == RES_CHRATR_CJK_FONT)
+                maFontSrcCJKCharSets.push(eSrcCharSet);
+            else
+                maFontSrcCharSets.push(eSrcCharSet);
         }
     }
 
@@ -3605,6 +3629,13 @@ void SwWW8ImplReader::ResetCharSetVars()
     ASSERT(!maFontSrcCharSets.empty(),"no charset to remove");
     if (!maFontSrcCharSets.empty())
         maFontSrcCharSets.pop();
+}
+
+void SwWW8ImplReader::ResetCJKCharSetVars()
+{
+    ASSERT(!maFontSrcCJKCharSets.empty(),"no charset to remove");
+    if (!maFontSrcCJKCharSets.empty())
+        maFontSrcCJKCharSets.pop();
 }
 
 /*
@@ -3637,7 +3668,10 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
         if( nLen < 0 ) // Ende des Attributes
         {
             pCtrlStck->SetAttr( *pPaM->GetPoint(), nId );
-            ResetCharSetVars();
+            if (nId == RES_CHRATR_CJK_FONT)
+                ResetCJKCharSetVars();
+            else
+                ResetCharSetVars();
         }
         else
         {

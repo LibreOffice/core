@@ -4725,4 +4725,11 @@ CharSet SwWW8StyInf::GetCharSet() const
     return eLTRFontSrcCharSet;
 }
 
+CharSet SwWW8StyInf::GetCJKCharSet() const
+{
+    if ((pFmt) && (pFmt->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
+        return eRTLFontSrcCharSet;
+    return eCJKFontSrcCharSet;
+}
+
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */

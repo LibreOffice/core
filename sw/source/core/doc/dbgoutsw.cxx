@@ -542,7 +542,7 @@ String lcl_dbg_out(const SwNode & rNode)
     String aTmpStr;
 
     aTmpStr += String("<node ", RTL_TEXTENCODING_ASCII_US);
-    aTmpStr += String("index =\"", RTL_TEXTENCODING_ASCII_US);
+    aTmpStr += String("index=\"", RTL_TEXTENCODING_ASCII_US);
     aTmpStr += String::CreateFromInt32(rNode.GetIndex());
     aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
 
@@ -672,7 +672,15 @@ String lcl_dbg_out(const SwNode & rNode)
         }
     }
     else if (rNode.IsStartNode())
-        aTmpStr += String("<start/>", RTL_TEXTENCODING_ASCII_US);
+    {
+        aTmpStr += String("<start end=\"", RTL_TEXTENCODING_ASCII_US);
+
+        const SwStartNode * pStartNode = dynamic_cast<const SwStartNode *> (&rNode);
+        if (pStartNode != NULL)
+            aTmpStr += String::CreateFromInt32(pStartNode->EndOfSectionNode()->GetIndex());
+
+        aTmpStr += String("\"/>", RTL_TEXTENCODING_ASCII_US);
+    }
     else if (rNode.IsEndNode())
         aTmpStr += String("<end/>", RTL_TEXTENCODING_ASCII_US);
 
@@ -722,25 +730,68 @@ BOOL lcl_dbg_add_node(const SwNodePtr & pNode, void * pArgs)
     return TRUE;
 }
 
-String lcl_dbg_out(SwNodes & rNodes)
+void lcl_dbg_nodes_inner(String & aStr, SwNodes & rNodes, ULONG & nIndex)
 {
-    String aStr("<nodes>", RTL_TEXTENCODING_ASCII_US);
+    SwNode * pNode = rNodes[nIndex];
+    SwStartNode * pStartNode = dynamic_cast<SwStartNode *> (pNode);
 
-    for (ULONG i = 0; i < rNodes.Count(); i++)
+    SwNode * pEndNode = NULL;
+    if (pStartNode != NULL)
+        pEndNode = pStartNode->EndOfSectionNode();
+
+    ULONG nCount = rNodes.Count();
+    ULONG nStartIndex = nIndex;
+
+    bool bDone = false;
+
+    String aTag;
+    if (pNode->IsTableNode())
+        aTag += String("table", RTL_TEXTENCODING_ASCII_US);
+    else if (pNode->IsSectionNode())
+        aTag += String("section", RTL_TEXTENCODING_ASCII_US);
+    else
+        aTag += String("nodes", RTL_TEXTENCODING_ASCII_US);
+
+    aStr += String("<", RTL_TEXTENCODING_ASCII_US);
+    aStr += aTag;
+    aStr += String(">", RTL_TEXTENCODING_ASCII_US);
+
+    while (! bDone)
     {
-        SwNode * pNode = rNodes[i];
+        if (pNode->IsStartNode() && nIndex != nStartIndex)
+            lcl_dbg_nodes_inner(aStr, rNodes, nIndex);
+        else
+        {
+            aStr += lcl_dbg_out(*pNode);
+            aStr += String("\n", RTL_TEXTENCODING_ASCII_US);
 
-        if (pNode->IsEndNode())
-            aStr += String("</nodes>\n", RTL_TEXTENCODING_ASCII_US);
+            nIndex++;
+        }
 
-        aStr += lcl_dbg_out(*pNode);
-        aStr += String("\n", RTL_TEXTENCODING_ASCII_US);
-
-        if (pNode->IsStartNode())
-            aStr += String("<nodes>", RTL_TEXTENCODING_ASCII_US);
+        if (pNode == pEndNode || nIndex >= nCount)
+            bDone = true;
+        else
+            pNode = rNodes[nIndex];
     }
 
-    aStr += String("</nodes>\n", RTL_TEXTENCODING_ASCII_US);
+    aStr += String("</", RTL_TEXTENCODING_ASCII_US);
+    aStr += aTag;
+    aStr += String(">\n", RTL_TEXTENCODING_ASCII_US);
+}
+
+String lcl_dbg_out(SwNodes & rNodes)
+{
+    String aStr("<nodes-array>", RTL_TEXTENCODING_ASCII_US);
+
+    ULONG nIndex = 0;
+    ULONG nCount = rNodes.Count();
+
+    while (nIndex < nCount)
+    {
+        lcl_dbg_nodes_inner(aStr, rNodes, nIndex);
+    }
+
+    aStr += String("</nodes-array>\n", RTL_TEXTENCODING_ASCII_US);
 
     return aStr;
 }
@@ -1028,5 +1079,24 @@ SW_DLLPUBLIC const char * dbg_out(const SwFormTokens & rTokens)
 {
     return dbg_out(lcl_dbg_out(rTokens));
 }
+
+String lcl_dbg_out(const SwNodeRange & rRange)
+{
+    String aStr("[", RTL_TEXTENCODING_ASCII_US);
+
+    aStr += lcl_dbg_out(rRange.aStart);
+    aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
+    aStr += lcl_dbg_out(rRange.aEnd);
+
+    aStr += String("]" , RTL_TEXTENCODING_ASCII_US);
+
+    return aStr;
+}
+
+SW_DLLPUBLIC const char * dbg_out(const SwNodeRange & rRange)
+{
+    return dbg_out(lcl_dbg_out(rRange));
+}
+
 #endif // DEBUG
 

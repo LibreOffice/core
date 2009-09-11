@@ -449,7 +449,6 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
         for (rtfSections::myrDummyIter aI = maSegments.maDummyPageNos.rbegin(); aI != aDEnd; ++aI)
             pDoc->DelPageDesc(*aI);
 
-
         if( aFlyArr.Count() )
             SetFlysInDoc();
 

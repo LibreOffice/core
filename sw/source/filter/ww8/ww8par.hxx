@@ -933,6 +933,7 @@ private:
      Stack of textencoding being used as we progress through the document text
     */
     std::stack<rtl_TextEncoding> maFontSrcCharSets;
+    std::stack<rtl_TextEncoding> maFontSrcCJKCharSets;
 
     /*
      Winword numbering gets imported as SwNumRules, there is a problem that
@@ -1173,6 +1174,7 @@ private:
         rtl_TextEncoding&);
     bool SetNewFontAttr(USHORT nFCode, bool bSetEnums, USHORT nWhich);
     void ResetCharSetVars();
+    void ResetCJKCharSetVars();
 
     const SfxPoolItem* GetFmtAttr( USHORT nWhich );
     bool JoinNode(SwPaM &rPam, bool bStealAttr = false);
@@ -1615,6 +1617,7 @@ public:     // eigentlich private, geht aber leider nur public
     // Laden eines kompletten DocFiles
     ULONG LoadDoc( SwPaM&,WW8Glossary *pGloss=0);
     CharSet GetCurrentCharSet();
+    CharSet GetCurrentCJKCharSet();
 
     void PostProcessAttrs();
 };
