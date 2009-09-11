@@ -393,14 +393,14 @@ InsertSymbol SID_CHOOSE_POLYGON
 InsertSnapPointLine SID_CAPTUREPOINT
 
 ' **** Chart
-InsertTitle .uno:InsertTitle
-InsertAxes .uno:InsertAxis
-InsertGrids .uno:InsertGrids
-InsertLegend .uno:InsertLegend
-InsertDataLabels .uno:InsertDescription
-InsertTrendlines .uno:InsertTrendlines
-InsertMeanValueLines .uno:InsertMeanValues
-InsertYErrorBars .uno:InsertYErrorbars
+InsertTitle .uno:InsertMenuTitles
+InsertAxes .uno:InsertMenuAxes
+InsertGrids .uno:InsertMenuGrids
+InsertLegend .uno:InsertMenuLegend
+InsertDataLabels .uno:InsertMenuDataLabels
+InsertTrendlines .uno:InsertMenuTrendlines
+InsertMeanValueLines .uno:InsertMenuMeanValues
+InsertYErrorBars .uno:InsertMenuYErrorBars
 
 ' ***********************************
 ' *********** Format Menu ***********
@@ -643,6 +643,7 @@ FormatChartArea .uno:DiagramArea
 FormatChartType .uno:DiagramType
 FormatDataRanges .uno:DataRanges
 Format3DView .uno:View3D
+FormatSelection .uno:FormatSelection
 ' **** Math
 FormatFonts SID_FONT
 FormatFontSize SID_FONTSIZE

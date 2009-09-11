@@ -1332,6 +1332,8 @@ Hyphenation .uno:Hyphenate
 ThesaurusD .uno:ThesaurusDialog
 EuroConverter .uno:EuroConverter
 ImageMap .uno:ImageMapDialog
+ChartElementSelector .uno:ChartElementSelector
+FormatSelection .uno:FormatSelection
 '-------------------------------------------------------------------------
 *ToolsCollectionBar .HelpId:insertcontrolsbar
 '-------------------------------------------------------------------------

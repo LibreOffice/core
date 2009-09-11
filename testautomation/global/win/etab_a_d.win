@@ -242,7 +242,7 @@ Hidden_More2                chart2:PushButton:TP_AXIS_POSITIONS:PB_MINOR_GRID
 +TabDataRangesDataSeries TabChartTypeDataSeries
 +TabFormatDataRangesDataSeries TabChartTypeDataSeries
  
-*TabChartPieOpetions chart2:TabPage:TP_POLAROPTIONS
+*TabChartPieOptions chart2:TabPage:TP_POLAROPTIONS
 Clockwise           chart2:CheckBox:TP_POLAROPTIONS:CB_CLOCKWISE
 StartingAngle       HID_SCH_STARTING_ANGLE_DIAL
 Degrees             chart2:NumericField:TP_POLAROPTIONS:NF_STARTING_ANGLE
