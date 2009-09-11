@@ -1397,3 +1397,4 @@ VorherigeDarstellung .uno:ZoomPrevious
 Library  .uno:LibSelector
 Controls .uno:ChooseControls
 Export   .uno:ExportDialog
+Import   .uno:ImportDialog
