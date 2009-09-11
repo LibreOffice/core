@@ -336,6 +336,7 @@ void SwWrtShell::UnSelectFrm()
     // Rahmenselektion aufheben mit garantiert ungueltiger Position
     Point aPt(LONG_MIN, LONG_MIN);
     SelectObj(aPt, 0);
+    GetView().LeaveDrawCreate();
     SwTransferable::ClearSelection( *this );
 }
 

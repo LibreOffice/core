@@ -91,6 +91,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/salbtype.hxx> // FRound
+#include <vcl/msgbox.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
@@ -269,6 +270,8 @@ void PostItTxt::KeyInput( const KeyEvent& rKeyEvt )
             bool bIsProtected = mpMarginWin->IsProtected();
             if (!bIsProtected || (bIsProtected && !mpMarginWin->Engine()->GetEditEngine().DoesKeyChangeText(rKeyEvt)) )
                 bDone = mpOutlinerView->PostKeyEvent( rKeyEvt );
+            else
+                InfoBox( this, SW_RES( MSG_READONLY_CONTENT )).Execute();
         }
         if (bDone)
             mpMarginWin->ResizeIfNeccessary(aOldHeight,mpMarginWin->GetPostItTextHeight());
@@ -436,33 +439,6 @@ void PostItTxt::Command( const CommandEvent& rCEvt )
             mpMarginWin->DocView()->HandleWheelCommands(rCEvt);
         }
     }
-    else if (rCEvt.GetCommand() == COMMAND_SELECTIONCHANGE)
-    {
-        if ( mpOutlinerView )
-        {
-            const CommandSelectionChangeData *pData = rCEvt.GetSelectionChangeData();
-            ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
-            aSelection.nStartPos = sal::static_int_cast<sal_uInt16, ULONG>(pData->GetStart());
-            aSelection.nEndPos = sal::static_int_cast<sal_uInt16, ULONG>(pData->GetEnd());
-            mpOutlinerView->GetEditView().SetSelection(aSelection);
-        }
-    }
-    else if (rCEvt.GetCommand() == COMMAND_PREPARERECONVERSION)
-    {
-        if ( mpOutlinerView && mpOutlinerView->HasSelection() )
-        {
-            EditEngine *aEditEngine = mpOutlinerView->GetEditView().GetEditEngine();
-            ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
-            aSelection.Adjust();
-            if( aSelection.nStartPara != aSelection.nEndPara )
-            {
-                xub_StrLen aParaLen = aEditEngine->GetTextLen( aSelection.nStartPara );
-                aSelection.nEndPara = aSelection.nStartPara;
-                aSelection.nEndPos = aParaLen;
-                mpOutlinerView->GetEditView().SetSelection( aSelection );
-            }
-        }
-    }
     else
     {
         if ( mpOutlinerView )
@@ -475,40 +451,6 @@ void PostItTxt::Command( const CommandEvent& rCEvt )
 void PostItTxt::DataChanged( const DataChangedEvent& aData)
 {
     Window::DataChanged( aData );
-}
-
-XubString PostItTxt::GetSurroundingText() const
-{
-    if( mpOutlinerView )
-    {
-        EditEngine *aEditEngine = mpOutlinerView->GetEditView().GetEditEngine();
-        if( mpOutlinerView->HasSelection() )
-            return mpOutlinerView->GetSelected();
-        else
-        {
-            ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
-            XubString aStr = aEditEngine->GetText(aSelection.nStartPara);
-            return aStr;
-        }
-    }
-    else
-        return XubString::EmptyString();
-}
-
-Selection PostItTxt::GetSurroundingTextSelection() const
-{
-    if( mpOutlinerView )
-    {
-        if( mpOutlinerView->HasSelection() )
-            return Selection( 0, mpOutlinerView->GetSelected().Len() );
-        else
-        {
-            ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
-            return Selection( aSelection.nStartPos, aSelection.nEndPos );
-        }
-    }
-    else
-        return Selection( 0, 0 );
 }
 
 IMPL_LINK( PostItTxt, WindowEventListener, VclSimpleEvent*, pWinEvent )
@@ -547,6 +489,22 @@ IMPL_LINK( PostItTxt, WindowEventListener, VclSimpleEvent*, pWinEvent )
         }
     }
     return sal_True;
+}
+
+XubString PostItTxt::GetSurroundingText() const
+{
+    if( mpOutlinerView )
+        return mpOutlinerView->GetSurroundingText();
+    else
+        return XubString::EmptyString();
+}
+
+Selection PostItTxt::GetSurroundingTextSelection() const
+{
+    if( mpOutlinerView )
+        return mpOutlinerView->GetSurroundingTextSelection();
+    else
+        return Selection( 0, 0 );
 }
 
 /************** SwMarginWin***********************************++*/
@@ -735,6 +693,15 @@ void SwMarginWin::ShowAnkorOnly(const Point &aPoint)
         mpShadow->setVisible(false);
 }
 
+SfxItemSet SwMarginWin::DefaultItem()
+{
+    SfxItemSet aItem( mpView->GetDocShell()->GetPool() );
+    aItem.Put(SvxFontHeightItem(200,100,EE_CHAR_FONTHEIGHT));
+    aItem.Put(SvxFontItem(FAMILY_SWISS,GetSettings().GetStyleSettings().GetFieldFont().GetName(),
+        EMPTYSTRING,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
+    return aItem;
+}
+
 void SwMarginWin::InitControls()
 {
     // actual window which holds the user text
@@ -779,11 +746,7 @@ void SwMarginWin::InitControls()
     mpPostItTxt->SetTextView(mpOutlinerView);
     mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,1,1) ) );
 
-    SfxItemSet item(aShell->GetPool());
-    item.Put(SvxFontHeightItem(200,100,EE_CHAR_FONTHEIGHT));
-    item.Put(SvxFontItem(FAMILY_SWISS,GetSettings().GetStyleSettings().GetFieldFont().GetName(),
-                            EMPTYSTRING,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
-    mpOutlinerView->SetAttribs(item);
+    mpOutlinerView->SetAttribs(DefaultItem());
 
     // TODO: ??
     EEHorizontalTextDirection aDefHoriTextDir = Application::GetSettings().GetLayoutRTL() ? EE_HTEXTDIR_R2L : EE_HTEXTDIR_L2R;
@@ -965,7 +928,7 @@ void SwMarginWin::SetPosAndSize()
         {
             mpAnkor->SetAnkorState(AS_ALL);
             SwMarginWin* pWin = GetTopReplyNote();
-            if (IsFollow() && pWin )
+            if (pWin)
                 pWin->Ankor()->SetAnkorState(AS_END);
         }
     }
@@ -973,9 +936,9 @@ void SwMarginWin::SetPosAndSize()
 
 void SwMarginWin::DoResize()
 {
-    long aTextHeight        =   LogicToPixel( mpOutliner->CalcTextSize()).Height();
-    unsigned long aWidth    =   GetSizePixel().Width();
-    long aHeight            =   GetSizePixel().Height();
+    long aTextHeight    =  LogicToPixel( mpOutliner->CalcTextSize()).Height();
+    long aHeight        =  GetSizePixel().Height();
+    unsigned long aWidth    =  GetSizePixel().Width();
 
     if (mbMeta)
     {
@@ -999,7 +962,6 @@ void SwMarginWin::DoResize()
         mpVScrollbar->Hide();
     }
 
-    mpPostItTxt->SetPosSizePixel(0, 0, aWidth, aHeight);
     mpMeta->SetPosSizePixel(0,aHeight,GetSizePixel().Width()-GetMetaButtonAreaWidth(),GetMetaHeight());
     mpOutliner->SetPaperSize( PixelToLogic( Size(aWidth,aHeight) ) ) ;
     mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,aWidth,aHeight) ) );
@@ -1007,11 +969,21 @@ void SwMarginWin::DoResize()
     {   // if we do not have a scrollbar anymore, we want to see the complete text
         mpOutlinerView->SetVisArea( PixelToLogic( Rectangle(0,0,aWidth,aHeight) ) );
     }
-    mpVScrollbar->SetPosSizePixel( aWidth, 0, GetScrollbarWidth(), aHeight      );
+
+    if (!Application::GetSettings().GetLayoutRTL())
+    {
+        mpPostItTxt->SetPosSizePixel(0, 0, aWidth, aHeight);
+        mpVScrollbar->SetPosSizePixel( aWidth, 0, GetScrollbarWidth(), aHeight);
+    }
+    else
+    {
+        mpPostItTxt->SetPosSizePixel((aTextHeight > aHeight) && !IsPreview() ? GetScrollbarWidth() : 0 , 0, aWidth, aHeight);
+        mpVScrollbar->SetPosSizePixel( 0, 0, GetScrollbarWidth(), aHeight);
+    }
+
     mpVScrollbar->SetVisibleSize( PixelToLogic(Size(0,aHeight)).Height() );
     mpVScrollbar->SetPageSize( PixelToLogic(Size(0,aHeight)).Height() * 8 / 10 );
     mpVScrollbar->SetLineSize( mpOutliner->GetTextHeight() / 10 );
-    //mpVScrollbar->SetThumbPos( mpOutlinerView->GetVisArea().Top()+ mpOutlinerView->GetEditView().GetCursor()->GetOffsetY());
     SetScrollbar();
     mpVScrollbar->SetRange( Range(0, mpOutliner->GetTextHeight()));
 
@@ -1024,10 +996,6 @@ void SwMarginWin::DoResize()
     Point aLeft = PixelToLogic( Point( aBase.X() - (METABUTTON_WIDTH+5)*fx.GetNumerator()/fx.GetDenominator(), aBase.Y()+17*fy.GetNumerator()/fx.GetDenominator() ) );
     Point aRight = PixelToLogic( Point( aBase.X() - (METABUTTON_WIDTH-1)*fx.GetNumerator()/fx.GetDenominator(), aBase.Y()+17*fy.GetNumerator()/fy.GetDenominator() ) );
     Point aBottom = PixelToLogic( Point( aBase.X() - (METABUTTON_WIDTH+2)*fx.GetNumerator()/fx.GetDenominator(), aBase.Y()+20*fy.GetNumerator()/fy.GetDenominator() ) );
-
-    //Point aLeft       = PixelToLogic(Point(mpMeta->GetPosPixel().X()+mpMeta->GetPosPixel().X()+GetSizePixel().Width()-(GetMetaButtonWidth()+10)+5,mpMeta->GetPosPixel().Y()+17));
-    //Point aRight  = PixelToLogic(Point(mpMeta->GetPosPixel().X()+mpMeta->GetPosPixel().X()+GetSizePixel().Width()-(GetMetaButtonWidth()+10)+11,mpMeta->GetPosPixel().Y()+17));
-    //Point aBottom = PixelToLogic(Point(mpMeta->GetPosPixel().X()+mpMeta->GetPosPixel().X()+GetSizePixel().Width()-(GetMetaButtonWidth()+10)+8,mpMeta->GetPosPixel().Y()+20));
 
     aPopupTriangle.clear();
     aPopupTriangle.append(basegfx::B2DPoint(aLeft.X(),aLeft.Y()));
@@ -1220,6 +1188,8 @@ void SwMarginWin::HideNote()
 
 void SwMarginWin::ActivatePostIt()
 {
+    mpMgr->AssureStdModeAtShell();
+
     mpOutliner->ClearModifyFlag();
     mpOutliner->GetUndoManager().Clear();
 
@@ -1280,6 +1250,8 @@ void SwMarginWin::ToggleInsMode()
 
 void SwMarginWin::ExecuteCommand(USHORT nSlot)
 {
+    mpMgr->AssureStdModeAtShell();
+
     switch (nSlot)
     {
         case FN_POSTIT:
@@ -1444,9 +1416,7 @@ void SwMarginWin::ResetAttributes()
 {
     mpOutlinerView->RemoveAttribsKeepLanguages(TRUE);
     mpOutliner->RemoveFields(TRUE);
-    SfxItemSet aSet( mpView->GetDocShell()->GetPool() );
-    aSet.Put(SvxFontHeightItem(200,100,EE_CHAR_FONTHEIGHT));
-    mpOutlinerView->SetAttribs(aSet);
+    mpOutlinerView->SetAttribs(DefaultItem());
 }
 
 sal_Int32 SwMarginWin::GetScrollbarWidth()
@@ -1504,7 +1474,7 @@ void SwMarginWin::SetViewState(ShadowState bState)
             {
                 mpAnkor->SetAnkorState(AS_ALL);
                 SwMarginWin* pWin = GetTopReplyNote();
-                if (IsFollow() && pWin)
+                if (pWin)
                     pWin->Ankor()->SetAnkorState(AS_END);
                 mpAnkor->setLineSolid(true);
             }
@@ -1567,7 +1537,7 @@ bool SwMarginWin::IsAnyStackParentVisible()
 SwMarginWin* SwMarginWin::GetTopReplyNote()
 {
     SwMarginWin* pTopNote = 0;
-    SwMarginWin* pMarginWin = mpMgr->GetNextPostIt(KEY_PAGEUP, this);
+    SwMarginWin* pMarginWin = IsFollow() ? mpMgr->GetNextPostIt(KEY_PAGEUP, this) : 0;
     while (pMarginWin)
     {
         pTopNote = pMarginWin;
@@ -1627,11 +1597,7 @@ void SwPostIt::SetPostItText()
     else
     {
         Engine()->Clear();
-        SfxItemSet item( DocView()->GetDocShell()->GetPool() );
-        item.Put(SvxFontHeightItem(200,100,EE_CHAR_FONTHEIGHT));
-        item.Put(SvxFontItem(FAMILY_SWISS,GetSettings().GetStyleSettings().GetFieldFont().GetName(),
-                            EMPTYSTRING,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
-        View()->SetAttribs(item);
+        View()->SetAttribs(DefaultItem());
         View()->InsertText(mpFld->GetPar2(),false);
     }
 
@@ -1654,8 +1620,10 @@ void SwPostIt::UpdateData()
         mpFld->SetTextObject(Engine()->CreateParaObject());
         DocView()->GetDocShell()->GetDoc()->AppendUndo(new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
         delete pOldField;
-        // so we get a new layout of notes (ankor position is still the same and we would otherwise not get one)
+        // so we get a new layout of notes (anchor position is still the same and we would otherwise not get one)
         Mgr()->SetLayout();
+        // #i98686# if we have several views, all notes should update their text
+        mpFmtFld->Broadcast(SwFmtFldHint( 0, SWFMTFLD_CHANGED));
         DocView()->GetDocShell()->SetModified();
     }
     Engine()->ClearModifyFlag();
@@ -1818,11 +1786,7 @@ void SwPostIt::InitAnswer(OutlinerParaObject* pText)
 
     //remove all attributes and reset our standard ones
     View()->GetEditView().RemoveAttribsKeepLanguages(true);
-    SfxItemSet aNormalSet( DocView()->GetDocShell()->GetPool() );
-    aNormalSet.Put(SvxFontHeightItem(200,100,EE_CHAR_FONTHEIGHT));
-    aNormalSet.Put(SvxFontItem(FAMILY_SWISS,GetSettings().GetStyleSettings().GetFieldFont().GetName(),
-                            EMPTYSTRING,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
-    View()->SetAttribs(aNormalSet);
+    View()->SetAttribs(DefaultItem());
     // lets insert an undo step so the initial text can be easily deleted
     // but do not use UpdateData() directly, would set modified state again and reentrance into Mgr
     Engine()->SetModifyHdl( Link() );
@@ -1895,11 +1859,7 @@ void SwRedComment::SetPostItText()
     Engine()->EnableUndo( FALSE );
 
     Engine()->Clear();
-    SfxItemSet item( DocView()->GetDocShell()->GetPool() );
-    item.Put(SvxFontHeightItem(200,100,EE_CHAR_FONTHEIGHT));
-    item.Put(SvxFontItem(FAMILY_SWISS,GetSettings().GetStyleSettings().GetFieldFont().GetName(),
-                        EMPTYSTRING,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
-    View()->SetAttribs(item);
+    View()->SetAttribs(DefaultItem());
     View()->InsertText(pRedline->GetComment(),false);
 
     Engine()->ClearModifyFlag();
