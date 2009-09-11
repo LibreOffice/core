@@ -492,13 +492,14 @@ Reference < XInputStream > ZipFile::createMemoryStream(
 }
 #endif
 Reference < XInputStream > ZipFile::createUnbufferedStream(
+            SotMutexHolderRef aMutexHolder,
             ZipEntry & rEntry,
             const ORef < EncryptionData > &rData,
             sal_Int8 nStreamMode,
             sal_Bool bIsEncrypted,
             ::rtl::OUString aMediaType )
 {
-    return new XUnbufferedStream ( rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode );
+    return new XUnbufferedStream ( aMutexHolder, rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode );
 }
 
 
@@ -509,7 +510,8 @@ ZipEnumeration * SAL_CALL ZipFile::entries(  )
 
 Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntry,
         const vos::ORef < EncryptionData > &rData,
-        sal_Bool bIsEncrypted )
+        sal_Bool bIsEncrypted,
+        SotMutexHolderRef aMutexHolder )
     throw(IOException, ZipException, RuntimeException)
 {
     if ( rEntry.nOffset <= 0 )
@@ -525,7 +527,8 @@ Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntry,
     if ( bIsEncrypted && !rData.isEmpty() && rData->aDigest.getLength() )
         bNeedRawStream = !hasValidPassword ( rEntry, rData );
 
-    return createUnbufferedStream ( rEntry,
+    return createUnbufferedStream ( aMutexHolder,
+                                    rEntry,
                                     rData,
                                     bNeedRawStream ? UNBUFF_STREAM_RAW : UNBUFF_STREAM_DATA,
                                     bIsEncrypted );
@@ -533,7 +536,8 @@ Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntry,
 
 Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry,
         const vos::ORef < EncryptionData > &rData,
-        sal_Bool bIsEncrypted )
+        sal_Bool bIsEncrypted,
+        SotMutexHolderRef aMutexHolder )
     throw ( packages::WrongPasswordException,
             IOException,
             ZipException,
@@ -562,7 +566,8 @@ Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry,
     else
         bNeedRawStream = ( rEntry.nMethod == STORED );
 
-    return createUnbufferedStream ( rEntry,
+    return createUnbufferedStream ( aMutexHolder,
+                                    rEntry,
                                     rData,
                                     bNeedRawStream ? UNBUFF_STREAM_RAW : UNBUFF_STREAM_DATA,
                                     bIsEncrypted );
@@ -570,19 +575,21 @@ Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry,
 
 Reference< XInputStream > SAL_CALL ZipFile::getRawData( ZipEntry& rEntry,
         const vos::ORef < EncryptionData > &rData,
-        sal_Bool bIsEncrypted )
+        sal_Bool bIsEncrypted,
+        SotMutexHolderRef aMutexHolder )
     throw(IOException, ZipException, RuntimeException)
 {
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
 
-    return createUnbufferedStream ( rEntry, rData, UNBUFF_STREAM_RAW, bIsEncrypted );
+    return createUnbufferedStream ( aMutexHolder, rEntry, rData, UNBUFF_STREAM_RAW, bIsEncrypted );
 }
 
 Reference< XInputStream > SAL_CALL ZipFile::getWrappedRawStream(
         ZipEntry& rEntry,
         const vos::ORef < EncryptionData > &rData,
-        const ::rtl::OUString& aMediaType )
+        const ::rtl::OUString& aMediaType,
+        SotMutexHolderRef aMutexHolder )
     throw ( packages::NoEncryptionException,
             IOException,
             ZipException,
@@ -594,7 +601,7 @@ Reference< XInputStream > SAL_CALL ZipFile::getWrappedRawStream(
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
 
-    return createUnbufferedStream ( rEntry, rData, UNBUFF_STREAM_WRAPPEDRAW, sal_True, aMediaType );
+    return createUnbufferedStream ( aMutexHolder, rEntry, rData, UNBUFF_STREAM_WRAPPEDRAW, sal_True, aMediaType );
 }
 
 sal_Bool ZipFile::readLOC( ZipEntry &rEntry )

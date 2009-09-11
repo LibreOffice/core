@@ -83,6 +83,7 @@
 #include <comphelper/seekableinput.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
+#include <comphelper/documentconstants.hxx>
 
 using namespace rtl;
 using namespace std;
@@ -105,6 +106,8 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 
 #define LOGFILE_AUTHOR "mg115289"
 
+
+namespace {
 
 sal_Bool isLocalFile_Impl( ::rtl::OUString aURL )
 {
@@ -130,6 +133,27 @@ sal_Bool isLocalFile_Impl( ::rtl::OUString aURL )
     }
 
     return ( aSystemPath.getLength() != 0 );
+}
+
+class PostinitializationGuard
+{
+    uno::Reference< io::XInputStream > m_xTempStream;
+
+    ZipPackage&                        m_rZipPackage;
+
+public:
+    PostinitializationGuard( const uno::Reference< io::XInputStream >& xTempStream,
+                             ZipPackage& rZipPackage )
+    : m_xTempStream( xTempStream )
+    , m_rZipPackage( rZipPackage )
+    {}
+
+    virtual ~PostinitializationGuard()
+    {
+        m_rZipPackage.ConnectTo( m_xTempStream );
+    }
+};
+
 }
 
 //===========================================================================
@@ -174,7 +198,8 @@ class DummyInputStream : public ::cppu::WeakImplHelper1< XInputStream >
 //===========================================================================
 
 ZipPackage::ZipPackage (const uno::Reference < XMultiServiceFactory > &xNewFactory)
-: bHasEncryptedEntries ( sal_False )
+: m_aMutexHolder( new SotMutexHolder )
+, bHasEncryptedEntries ( sal_False )
 , bUseManifest ( sal_True )
 , bForceRecovery ( sal_False )
 , m_bMediaTypeFallbackUsed ( sal_False )
@@ -928,21 +953,138 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     }
 }
 
-sal_Bool ZipPackage::writeFileIsTemp()
+void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< Sequence < PropertyValue > >& aManList )
+{
+    // Write the manifest
+    uno::Reference < XOutputStream > xManOutStream;
+    OUString sManifestWriter( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestWriter" ) );
+    uno::Reference < XManifestWriter > xWriter ( xFactory->createInstance( sManifestWriter ), UNO_QUERY );
+    if ( xWriter.is() )
+    {
+        ZipEntry * pEntry = new ZipEntry;
+        ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
+        xManOutStream = uno::Reference < XOutputStream > (*pBuffer, UNO_QUERY);
+
+        pEntry->sName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "META-INF/manifest.xml") );
+        pEntry->nMethod = DEFLATED;
+        pEntry->nCrc = pEntry->nSize = pEntry->nCompressedSize = -1;
+        pEntry->nTime = ZipOutputStream::getCurrentDosTime();
+
+        // Convert vector into a Sequence
+        Sequence < Sequence < PropertyValue > > aManifestSequence ( aManList.size() );
+        Sequence < PropertyValue > * pSequence = aManifestSequence.getArray();
+        for (vector < Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
+             aIter != aEnd;
+             aIter++, pSequence++)
+            *pSequence= (*aIter);
+        xWriter->writeManifestSequence ( xManOutStream,  aManifestSequence );
+
+        sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
+        pBuffer->realloc( nBufferLength );
+
+        // the manifest.xml is never encrypted - so pass an empty reference
+        vos::ORef < EncryptionData > xEmpty;
+        aZipOut.putNextEntry( *pEntry, xEmpty );
+        aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
+        aZipOut.closeEntry();
+    }
+    else
+    {
+        VOS_ENSURE ( 0, "Couldn't get a ManifestWriter!" );
+        IOException aException;
+        throw WrappedTargetException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Couldn't get a ManifestWriter!" ) ),
+                static_cast < OWeakObject * > ( this ),
+                makeAny( aException ) );
+    }
+}
+
+void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< Sequence < PropertyValue > >& aManList )
+{
+    const OUString sFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
+    const OUString sMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
+
+    ZipEntry* pEntry = new ZipEntry;
+    ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
+    uno::Reference< io::XOutputStream > xConTypeOutStream( *pBuffer, UNO_QUERY );
+
+    pEntry->sName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "[Content_Types].xml") );
+    pEntry->nMethod = DEFLATED;
+    pEntry->nCrc = pEntry->nSize = pEntry->nCompressedSize = -1;
+    pEntry->nTime = ZipOutputStream::getCurrentDosTime();
+
+    // Convert vector into a Sequence
+    // TODO/LATER: use Defaulst entries in future
+    uno::Sequence< beans::StringPair > aDefaultsSequence;
+    uno::Sequence< beans::StringPair > aOverridesSequence( aManList.size() );
+    sal_Int32 nSeqLength = 0;
+    for ( vector< uno::Sequence< beans::PropertyValue > >::const_iterator aIter = aManList.begin(),
+            aEnd = aManList.end();
+         aIter != aEnd;
+         aIter++)
+    {
+        ::rtl::OUString aPath;
+        ::rtl::OUString aType;
+        OSL_ENSURE( (*aIter)[PKG_MNFST_MEDIATYPE].Name.equals( sMediaType ) && (*aIter)[PKG_MNFST_FULLPATH].Name.equals( sFullPath ),
+                    "The mediatype sequence format is wrong!\n" );
+        (*aIter)[PKG_MNFST_MEDIATYPE].Value >>= aType;
+        if ( aType.getLength() )
+        {
+            // only nonempty type makes sence here
+            nSeqLength++;
+            (*aIter)[PKG_MNFST_FULLPATH].Value >>= aPath;
+            aOverridesSequence[nSeqLength-1].First = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) + aPath;
+            aOverridesSequence[nSeqLength-1].Second = aType;
+        }
+    }
+    aOverridesSequence.realloc( nSeqLength );
+
+    ::comphelper::OFOPXMLHelper::WriteContentSequence(
+            xConTypeOutStream, aDefaultsSequence, aOverridesSequence, xFactory );
+
+    sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
+    pBuffer->realloc( nBufferLength );
+
+    // there is no encryption in this format currently
+    vos::ORef < EncryptionData > xEmpty;
+    aZipOut.putNextEntry( *pEntry, xEmpty );
+    aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
+    aZipOut.closeEntry();
+}
+
+void ZipPackage::ConnectTo( const uno::Reference< io::XInputStream >& xInStream )
+{
+    xContentSeek.set( xInStream, uno::UNO_QUERY_THROW );
+    xContentStream = xInStream;
+
+    // seek back to the beginning of the temp file so we can read segments from it
+    xContentSeek->seek( 0 );
+    if ( pZipFile )
+        pZipFile->setInputStream( xContentStream );
+    else
+        pZipFile = new ZipFile ( xContentStream, xFactory, sal_False );
+}
+
+uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
 {
     // In case the target local file does not exist or empty
-    // write directly to it otherwize create a temporary file to write to
+    // write directly to it otherwize create a temporary file to write to.
+    // If a temporary file is created it is returned back by the method.
+    // If the data written directly, xComponentStream will be switched here
 
     sal_Bool bUseTemp = sal_True;
-    uno::Reference < XOutputStream > xTempOut;
-    uno::Reference< XActiveDataStreamer > xSink;
+    uno::Reference < io::XInputStream > xResult;
+    uno::Reference < io::XInputStream > xTempIn;
+
+    uno::Reference < io::XOutputStream > xTempOut;
+    uno::Reference< io::XActiveDataStreamer > xSink;
 
     if ( eMode == e_IMode_URL && !pZipFile && isLocalFile_Impl( sURL ) )
     {
         xSink = openOriginalForOutput();
         if( xSink.is() )
         {
-            uno::Reference< XStream > xStr = xSink->getStream();
+            uno::Reference< io::XStream > xStr = xSink->getStream();
             if( xStr.is() )
             {
                 xTempOut = xStr->getOutputStream();
@@ -963,7 +1105,9 @@ sal_Bool ZipPackage::writeFileIsTemp()
     {
         // create temporary file
         const OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
-        xTempOut = uno::Reference < XOutputStream > ( xFactory->createInstance ( sServiceName ), UNO_QUERY );
+        uno::Reference < io::XStream > xTempFile( xFactory->createInstance ( sServiceName ), UNO_QUERY_THROW );
+        xTempOut.set( xTempFile->getOutputStream(), UNO_SET_THROW );
+        xTempIn.set( xTempFile->getInputStream(), UNO_SET_THROW );
     }
 
     // Hand it to the ZipOutputStream:
@@ -995,7 +1139,7 @@ sal_Bool ZipPackage::writeFileIsTemp()
             // Write a magic file with mimetype
             WriteMimetypeMagicFile( aZipOut );
         }
-        if ( m_nFormat == OFOPXML_FORMAT )
+        else if ( m_nFormat == OFOPXML_FORMAT )
         {
             // Remove the old [Content_Types].xml file as the
             // file will be re-generated
@@ -1009,9 +1153,6 @@ sal_Bool ZipPackage::writeFileIsTemp()
         // Create a vector to store data for the manifest.xml file
         vector < Sequence < PropertyValue > > aManList;
 
-        // Make a reference to the manifest output stream so it persists
-        // until the call to ZipOutputStream->finish()
-        uno::Reference < XOutputStream > xManOutStream;
         const OUString sMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
         const OUString sVersion ( RTL_CONSTASCII_USTRINGPARAM ( "Version" ) );
         const OUString sFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
@@ -1047,107 +1188,20 @@ sal_Bool ZipPackage::writeFileIsTemp()
 
         if( bUseManifest && m_nFormat == PACKAGE_FORMAT )
         {
-            // Write the manifest
-            OUString sManifestWriter( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestWriter" ) );
-            uno::Reference < XManifestWriter > xWriter ( xFactory->createInstance( sManifestWriter ), UNO_QUERY );
-            if ( xWriter.is() )
-            {
-                ZipEntry * pEntry = new ZipEntry;
-                ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
-                xManOutStream = uno::Reference < XOutputStream > (*pBuffer, UNO_QUERY);
-
-                pEntry->sName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "META-INF/manifest.xml") );
-                pEntry->nMethod = DEFLATED;
-                pEntry->nCrc = pEntry->nSize = pEntry->nCompressedSize = -1;
-                pEntry->nTime = ZipOutputStream::getCurrentDosTime();
-
-                // Convert vector into a Sequence
-                Sequence < Sequence < PropertyValue > > aManifestSequence ( aManList.size() );
-                Sequence < PropertyValue > * pSequence = aManifestSequence.getArray();
-                for (vector < Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
-                     aIter != aEnd;
-                     aIter++, pSequence++)
-                    *pSequence= (*aIter);
-                xWriter->writeManifestSequence ( xManOutStream,  aManifestSequence );
-
-                sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
-                pBuffer->realloc( nBufferLength );
-
-                // the manifest.xml is never encrypted - so pass an empty reference
-                vos::ORef < EncryptionData > xEmpty;
-                aZipOut.putNextEntry( *pEntry, xEmpty );
-                aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
-                aZipOut.closeEntry();
-            }
-            else
-            {
-                VOS_ENSURE ( 0, "Couldn't get a ManifestWriter!" );
-                IOException aException;
-                throw WrappedTargetException(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Couldn't get a ManifestWriter!" ) ),
-                        static_cast < OWeakObject * > ( this ),
-                        makeAny( aException ) );
-            }
+            WriteManifest( aZipOut, aManList );
         }
         else if( m_nFormat == OFOPXML_FORMAT )
         {
-            ZipEntry* pEntry = new ZipEntry;
-            ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
-            uno::Reference< io::XOutputStream > xConTypeOutStream( *pBuffer, UNO_QUERY );
-
-            pEntry->sName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "[Content_Types].xml") );
-            pEntry->nMethod = DEFLATED;
-            pEntry->nCrc = pEntry->nSize = pEntry->nCompressedSize = -1;
-            pEntry->nTime = ZipOutputStream::getCurrentDosTime();
-
-            // Convert vector into a Sequence
-            // TODO/LATER: use Defaulst entries in future
-            uno::Sequence< beans::StringPair > aDefaultsSequence;
-            uno::Sequence< beans::StringPair > aOverridesSequence( aManList.size() );
-            sal_Int32 nSeqLength = 0;
-            for ( vector< uno::Sequence< beans::PropertyValue > >::const_iterator aIter = aManList.begin(),
-                    aEnd = aManList.end();
-                 aIter != aEnd;
-                 aIter++)
-            {
-                ::rtl::OUString aPath;
-                ::rtl::OUString aType;
-                OSL_ENSURE( (*aIter)[PKG_MNFST_MEDIATYPE].Name.equals( sMediaType ) && (*aIter)[PKG_MNFST_FULLPATH].Name.equals( sFullPath ),
-                            "The mediatype sequence format is wrong!\n" );
-                (*aIter)[PKG_MNFST_MEDIATYPE].Value >>= aType;
-                if ( aType.getLength() )
-                {
-                    // only nonempty type makes sence here
-                    nSeqLength++;
-                    (*aIter)[PKG_MNFST_FULLPATH].Value >>= aPath;
-                    aOverridesSequence[nSeqLength-1].First = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) + aPath;
-                    aOverridesSequence[nSeqLength-1].Second = aType;
-                }
-            }
-            aOverridesSequence.realloc( nSeqLength );
-
-            ::comphelper::OFOPXMLHelper::WriteContentSequence(
-                    xConTypeOutStream, aDefaultsSequence, aOverridesSequence, xFactory );
-
-            sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
-            pBuffer->realloc( nBufferLength );
-
-            // there is no encryption in this format currently
-            vos::ORef < EncryptionData > xEmpty;
-            aZipOut.putNextEntry( *pEntry, xEmpty );
-            aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
-            aZipOut.closeEntry();
+            WriteContentTypes( aZipOut, aManList );
         }
 
         aZipOut.finish();
 
-        // Update our References to point to the new temp file
         if( bUseTemp )
-        {
-            xContentStream = uno::Reference < XInputStream > ( xTempOut, UNO_QUERY_THROW );
-            xContentSeek = uno::Reference < XSeekable > ( xTempOut, UNO_QUERY_THROW );
-        }
-        else
+            xResult = xTempIn;
+
+        // Update our References to point to the new temp file
+        if( !bUseTemp )
         {
             // the case when the original contents were written directly
             xTempOut->flush();
@@ -1158,14 +1212,15 @@ sal_Bool ZipPackage::writeFileIsTemp()
             if ( asyncOutputMonitor.is() )
                 asyncOutputMonitor->waitForCompletion();
 
+            // no need to postpone switching to the new stream since the target was written directly
+            uno::Reference< io::XInputStream > xNewStream;
             if ( eMode == e_IMode_URL )
-                xContentStream = xSink->getStream()->getInputStream();
-            else if ( eMode == e_IMode_XStream )
-                xContentStream = xStream->getInputStream();
+                xNewStream = xSink->getStream()->getInputStream();
+            else if ( eMode == e_IMode_XStream && xStream.is() )
+                xNewStream = xStream->getInputStream();
 
-            xContentSeek = uno::Reference < XSeekable > ( xContentStream, UNO_QUERY_THROW );
-
-            OSL_ENSURE( xContentStream.is() && xContentSeek.is(), "XSeekable interface is required!" );
+            if ( xNewStream.is() )
+                ConnectTo( xNewStream );
         }
     }
     catch ( uno::Exception& )
@@ -1197,14 +1252,7 @@ sal_Bool ZipPackage::writeFileIsTemp()
         }
     }
 
-    // seek back to the beginning of the temp file so we can read segments from it
-    xContentSeek->seek ( 0 );
-    if ( pZipFile )
-        pZipFile->setInputStream ( xContentStream );
-    else
-        pZipFile = new ZipFile ( xContentStream, xFactory, sal_False );
-
-    return bUseTemp;
+    return xResult;
 }
 
 uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
@@ -1259,9 +1307,12 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
 }
 
 // XChangesBatch
-void SAL_CALL ZipPackage::commitChanges(  )
+void SAL_CALL ZipPackage::commitChanges()
         throw(WrappedTargetException, RuntimeException)
 {
+    // lock the component for the time of commiting
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
+
     if ( eMode == e_IMode_XInputStream )
     {
         IOException aException;
@@ -1270,12 +1321,18 @@ void SAL_CALL ZipPackage::commitChanges(  )
     }
 
     RTL_LOGFILE_TRACE_AUTHOR ( "package", LOGFILE_AUTHOR, "{ ZipPackage::commitChanges" );
-    // First we write the entire package to a temporary file. After writeTempFile,
-    // xContentSeek and xContentStream will reference the new temporary file.
-    // Exception - empty or nonexistent local file that is written directly
 
-    if ( writeFileIsTemp() )
+    // first the writeTempFile is called, if it returns a stream the stream should be written to the target
+    // if no stream was returned, the file was written directly, nothing should be done
+
+    uno::Reference< io::XInputStream > xTempInStream = writeTempFile();
+    if ( xTempInStream.is() )
     {
+        uno::Reference< io::XSeekable > xTempSeek( xTempInStream, uno::UNO_QUERY_THROW );
+
+        // switch to the new temporary stream only after the transfer
+        PostinitializationGuard( xTempInStream, *this );
+
         if ( eMode == e_IMode_XStream )
         {
             // First truncate our output stream
@@ -1284,7 +1341,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
             // preparation for copy step
             try
             {
-                xContentSeek->seek( 0 );
+                xTempSeek->seek( 0 );
 
                 xOutputStream = xStream->getOutputStream();
                 uno::Reference < XTruncate > xTruncate ( xOutputStream, UNO_QUERY );
@@ -1303,7 +1360,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
             try
             {
                 // then copy the contents of the tempfile to our output stream
-                ::comphelper::OStorageHelper::CopyInputToOutput( xContentStream, xOutputStream );
+                ::comphelper::OStorageHelper::CopyInputToOutput( xTempInStream, xOutputStream );
                 xOutputStream->flush();
                 uno::Reference< io::XAsyncOutputMonitor > asyncOutputMonitor(
                     xOutputStream, uno::UNO_QUERY);
@@ -1316,7 +1373,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
                 // if anything goes wrong in this block the target file becomes corrupted
                 // so an exception should be thrown as a notification about it
                 // and the package must disconnect from the stream
-                DisconnectFromTargetAndThrowException_Impl( xContentStream );
+                DisconnectFromTargetAndThrowException_Impl( xTempInStream );
             }
         }
         else if ( eMode == e_IMode_URL )
@@ -1349,7 +1406,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
                 {
                     try
                     {
-                        ::comphelper::OStorageHelper::CopyInputToOutput( xContentStream, aOrigFileStream );
+                        ::comphelper::OStorageHelper::CopyInputToOutput( xTempInStream, aOrigFileStream );
                         aOrigFileStream->closeOutput();
                     }
                     catch( uno::Exception& )
@@ -1369,7 +1426,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
             {
                 try
                 {
-                    uno::Reference < XPropertySet > xPropSet ( xContentStream, UNO_QUERY );
+                    uno::Reference < XPropertySet > xPropSet ( xTempInStream, UNO_QUERY );
                     OSL_ENSURE( xPropSet.is(), "This is a temporary file that must implement XPropertySet!\n" );
                     if ( !xPropSet.is() )
                         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
@@ -1396,7 +1453,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
                 catch (::com::sun::star::uno::Exception& r)
                 {
                     if ( bCanBeCorrupted )
-                        DisconnectFromTargetAndThrowException_Impl( xContentStream );
+                        DisconnectFromTargetAndThrowException_Impl( xTempInStream );
 
                     throw WrappedTargetException(
                                                 OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "This package may be read only!" ) ),
@@ -1423,7 +1480,7 @@ void ZipPackage::DisconnectFromTargetAndThrowException_Impl( const uno::Referenc
 
     ::rtl::OUString aTempURL;
     try {
-        uno::Reference< beans::XPropertySet > xTempFile( xContentStream, uno::UNO_QUERY_THROW );
+        uno::Reference< beans::XPropertySet > xTempFile( xTempStream, uno::UNO_QUERY_THROW );
         uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString::createFromAscii( "Uri" ) );
         aUrl >>= aTempURL;
         xTempFile->setPropertyValue( ::rtl::OUString::createFromAscii( "RemoveFile" ),

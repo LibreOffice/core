@@ -70,8 +70,6 @@ protected:
     sal_uInt32  m_nMagicalHackPos;
     sal_uInt32  m_nMagicalHackSize;
 
-    SotMutexHolderRef m_aSharedMutexRef;
-
     sal_Bool m_bHasSeekable;
 
     sal_Bool m_bCompressedIsSetFromOutside;
