@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: file_url.h,v $
- * $Revision: 1.3 $
+ * $RCSfile: file_error.h,v $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,45 +28,27 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_FILE_URL_H
-#define INCLUDED_FILE_URL_H
+#ifndef INCLUDED_OSL_FILE_ERROR_H
+#define INCLUDED_OSL_FILE_ERROR_H
 
 #include "osl/file.h"
+#include "rtl/ustring.h"
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
-/**************************************************
- * osl_getSystemPathFromFileURL_Ex
- *************************************************/
+oslFileError oslTranslateFileError (/*DWORD*/ unsigned long dwError);
 
-#define FURL_ALLOW_RELATIVE sal_True
-#define FURL_DENY_RELATIVE  sal_False
-
-oslFileError osl_getSystemPathFromFileURL_Ex(rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath, sal_Bool bAllowRelative);
-
-/**************************************************
- * FileURLToPath
- *************************************************/
-
-oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileURL);
-
-/***************************************************
- * UnicodeToText
- **************************************************/
-
-int UnicodeToText(char * buffer, size_t bufLen, const sal_Unicode * uniText, sal_Int32 uniTextLen);
-
-/***************************************************
- * TextToUniCode
- **************************************************/
-
-int TextToUnicode(const char* text, size_t text_buffer_size, sal_Unicode* unic_text, sal_Int32 unic_text_buffer_size);
+#if OSL_DEBUG_LEVEL > 0
+void _osl_warnFile (const char * message, rtl_uString * ustrFile);
+#define OSL_ENSURE_FILE( cond, msg, file ) ( (cond) ?  (void)0 : _osl_warnFile( msg, file ) )
+#else
+#define OSL_ENSURE_FILE( cond, msg, file ) ((void)0)
+#endif
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* #define INCLUDED_FILE_URL_H */
+#endif /* INCLUDED_OSL_FILE_ERROR_H */
