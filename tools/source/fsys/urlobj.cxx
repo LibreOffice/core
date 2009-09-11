@@ -407,7 +407,7 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
         { "out", "out://", 0, true, false, false, false, false, false,
           false, false },
         { "vnd.sun.star.wfs", "vnd.sun.star.wfs://", 0, true, false, false,
-          false, true, false, true, false },
+          false, true, true, true, false },
         { "vnd.sun.star.hier", "vnd.sun.star.hier:", 0, true, false, false,
           false, false, false, true, false },
         { "vim", "vim://", 0, true, true, false, true, false, false, true,
