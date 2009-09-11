@@ -43,22 +43,22 @@
     </menu:menu>
     <menu:menu menu:id=".uno:InsertMenu" menu:label="" >
         <menu:menupopup>
-                <menu:menuitem menu:id=".uno:InsertTitle" menu:helpid="30515" menu:label="" />
-                <menu:menuitem menu:id=".uno:InsertAxis" menu:helpid="30518" menu:label="" />
-                <menu:menuitem menu:id=".uno:InsertGrids" menu:helpid="30540" menu:label="" />
-                <menu:menuitem menu:id=".uno:InsertLegend" menu:helpid="30516" menu:label="" />
+                <menu:menuitem menu:id=".uno:InsertMenuTitles" menu:label="" />
+                <menu:menuitem menu:id=".uno:InsertMenuLegend" menu:label="" />
+                <menu:menuitem menu:id=".uno:InsertMenuAxes" menu:label="" />
+                <menu:menuitem menu:id=".uno:InsertMenuGrids" menu:label="" />
             <menu:menuseparator/>
-                <menu:menuitem menu:id=".uno:InsertDescription" menu:helpid="30517" menu:label="" />
-                <menu:menuitem menu:id=".uno:InsertTrendlines" menu:label="" />
-                <menu:menuitem menu:id=".uno:InsertMeanValues" menu:label="" />
-                <menu:menuitem menu:id=".uno:InsertYErrorbars" menu:label="" />
+                <menu:menuitem menu:id=".uno:InsertMenuDataLabels" menu:label="" />
+                <menu:menuitem menu:id=".uno:InsertMenuTrendlines" menu:label="" />
+                <menu:menuitem menu:id=".uno:InsertMenuMeanValues" menu:label="" />
+                <menu:menuitem menu:id=".uno:InsertMenuYErrorBars" menu:label="" />
             <menu:menuseparator/>
                 <menu:menuitem menu:id=".uno:InsertSymbol" menu:helpid="10503" menu:label="" />
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:FormatMenu" menu:label="" >
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:DiagramObjects" menu:helpid="30572" menu:label="" />
+            <menu:menuitem menu:id=".uno:FormatSelection" menu:label="" />
             <menu:menuitem menu:id=".uno:TransformDialog" menu:helpid="10087" menu:label="" />
             <menu:menu menu:id=".uno:ArrangeRow" menu:label="" >
                 <menu:menupopup>
@@ -82,6 +82,7 @@
                     <menu:menuitem menu:id=".uno:AllTitles" menu:helpid="30562" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:Legend" menu:helpid="30521" menu:label="" />
             <menu:menu menu:id=".uno:DiagramAxisMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:DiagramAxisX" menu:helpid="30552" menu:label="" />
@@ -107,7 +108,6 @@
                     <menu:menuitem menu:id=".uno:DiagramGridAll" menu:helpid="30566" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
-                <menu:menuitem menu:id=".uno:Legend" menu:helpid="30521" menu:label="" />
             <menu:menuseparator/>
                 <menu:menuitem menu:id=".uno:DiagramWall" menu:helpid="30524" menu:label="" />
                 <menu:menuitem menu:id=".uno:DiagramFloor" menu:helpid="30525" menu:label="" />
