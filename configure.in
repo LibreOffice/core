@@ -4353,7 +4353,7 @@ if test "$BUILD_MOZAB" = "TRUE"; then
          AC_MSG_ERROR([Mozilla/SeaMonkey source archive not found.
 Please copy $MOZILLA_SOURCE_VERSION.tar.bz2 or $MOZILLA_SOURCE_VERSION.tar.gz to moz/download/.
 The archives can be found here:
-http://releases.mozilla.org/pub/mozilla.org/seamonkey/releases/$MOZILLA_VERSION/])
+ftp://ftp.mozilla.org/pub/mozilla.org/seamonkey/releases/$MOZILLA_VERSION/])
    fi
    if test "$_os" = "WINNT"; then
       AC_MSG_CHECKING([for moztools binaries])
@@ -4368,9 +4368,9 @@ http://releases.mozilla.org/pub/mozilla.org/seamonkey/releases/$MOZILLA_VERSION/
          AC_MSG_NOTICE([checking whether mozilla can be built...])
          PKG_CHECK_MODULES(MOZGTK2, gtk+-2.0 >= 2.4 libIDL-2.0 >= 0.8, AC_MSG_NOTICE([OK - can build mozilla]), AC_MSG_ERROR([Prerequisites to build mozilla not met. Either use the precompiled mozilla binaries or install the missing packages]))
       else
-         PKG_CHECK_MODULES(MOZLIBREQ, libIDL >= 0.6.3 libIDL <= 0.6.8, MOZIDL="TRUE", MOZIDL="")
+         PKG_CHECK_MODULES(MOZLIBREQ, libIDL-2.0 >= 0.6.3,  MOZIDL="TRUE", MOZIDL="")
          if test -z "$MOZIDL"; then
-            AC_MSG_ERROR([libIDL 0.6.3 - 0.6.8 is needed when not using GTK2 to build mozilla.])
+            AC_MSG_ERROR([libIDL 0.6.3 or newer is needed to build mozilla with mac toolkit.])
          fi
       fi
    else

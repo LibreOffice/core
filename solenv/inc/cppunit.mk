@@ -45,7 +45,7 @@
 # cat cppunit.mk | mkunroll >_cppunit.mk
 # all between begin and end will repeat n times (at the moment n=10) to create such iterations
 # $(TNR) is the number
-# $(SHL$(TNR)TARGETN) is the same like $(OUT)$/bin$/$(SHL1TARGET) for every number, within unix, "bin" is replaced by "lib"
+# $(SHL$(TNR)TARGETN) is the same like $(OUT)/bin/$(SHL1TARGET) for every number, within unix, "bin" is replaced by "lib"
 
 #.IF "$(TESTOPT)"==""
 #	TESTOPT="-onlyerrors"

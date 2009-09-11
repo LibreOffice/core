@@ -890,17 +890,7 @@ sub CorrectPath {
 
 sub check_dmake {
 #print "Checking dmake...";
-#    my $dmake_batch = CorrectPath("$tmp_dir/dmake.bat");
-    if ($QuantityToBuild && ($ENV{GUI} eq 'WNT') && ($ENV{USE_SHELL} eq '4nt')) {
-        if (open(DMAKEVERSION, "where dmake |")) {
-            my @output = <DMAKEVERSION>;
-            close DMAKEVERSION;
-            $dmake_bin = $output[0];
-            $dmake_bin =~ /(\b)$/;
-            $dmake_bin = $`;
-        };
-        return if (-e $dmake_bin);
-    } elsif (open(DMAKEVERSION, "dmake -V |")) {
+    if (open(DMAKEVERSION, "dmake -V |")) {
 #    if (open(DMAKEVERSION, "dmake -V |")) {
         my @dmake_version = <DMAKEVERSION>;
         close DMAKEVERSION;
@@ -1797,8 +1787,8 @@ sub do_custom_job {
     } else {
         $error_code = run_job($job, $module_paths{$module}, $module_job);
         if ($error_code) {
-            # give windows (4nt) one more chance
-            if ($ENV{GUI} eq 'WNT' && !$cygwin) {
+            # give windows one more chance
+            if ($ENV{GUI} eq 'WNT') {
                 $error_code = run_job($job, $module_paths{$module}, $module_job);
             };
         };
@@ -1955,14 +1945,14 @@ sub clear_module {
         my $dir = CorrectPath($module_paths{$module}.'/'.$_);
         if ((!-d $dir.'/.svn') && is_output_tree($dir)) {
             #print "I would delete $dir\n";
-            rmtree("$dir", 0, 1) if ($ENV{USE_SHELL} ne '4nt');
+            rmtree("$dir", 0, 1);
             if (-d $dir) {
                 system("$remove_command $dir");
                 if (-d $dir) {
                     push(@warnings, "Cannot delete $dir");
 #print_error("Cannot delete $dir");
                 } else {
-                    print STDERR (">>> Removed $dir by force\n") if ($ENV{USE_SHELL} ne '4nt');
+                    print STDERR (">>> Removed $dir by force\n");
                 };
             };
         };

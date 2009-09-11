@@ -133,8 +133,8 @@ CFLAGSOUTOBJ=-o
 
 # Flags to enable precompiled headers
 CFLAGS_CREATE_PCH=-x c++-header -I$(INCPCH) -DPRECOMPILED_HEADERS
-CFLAGS_USE_PCH=-I$(SLO)$/pch -DPRECOMPILED_HEADERS -Winvalid-pch
-CFLAGS_USE_EXCEPTIONS_PCH=-I$(SLO)$/pch_ex -DPRECOMPILED_HEADERS -Winvalid-pch
+CFLAGS_USE_PCH=-I$(SLO)/pch -DPRECOMPILED_HEADERS -Winvalid-pch
+CFLAGS_USE_EXCEPTIONS_PCH=-I$(SLO)/pch_ex -DPRECOMPILED_HEADERS -Winvalid-pch
 
 # ---------------------------------
 #  Optimization flags
@@ -172,7 +172,7 @@ LIBSTLPORT=-lstlportstlg
 LIBSTLPORTST=$(STATIC) -lstlportstlg
 .ELSE
 LIBSTLPORT=-lstlport_gcc_stldebug
-LIBSTLPORTST=$(SOLARVERSION)$/$(INPATH)$/lib$/libstlport_gcc_stldebug.a
+LIBSTLPORTST=$(SOLARVERSION)/$(INPATH)/lib/libstlport_gcc_stldebug.a
 .ENDIF
 .ELSE # "$(USE_STLP_DEBUG" != ""
 .IF "$(STLPORT_VER)" >= "500"
@@ -180,7 +180,7 @@ LIBSTLPORT=-lstlport
 LIBSTLPORTST=$(STATIC) -lstlport
 .ELSE
 LIBSTLPORT=-lstlport_gcc
-LIBSTLPORTST=$(SOLARVERSION)$/$(INPATH)$/lib$/libstlport_gcc.a
+LIBSTLPORTST=$(SOLARVERSION)/$(INPATH)/lib/libstlport_gcc.a
 .ENDIF
 .ENDIF # "$(USE_STLP_DEBUG" != ""
 
@@ -197,9 +197,9 @@ LINKC*=$(CC)
 LINKFLAGSDEFS*=-Wl,-multiply_defined,suppress
 # Very long install_names are needed so that install_name_tool -change later on
 # does not complain that "larger updated load commands do not fit:"
-LINKFLAGSRUNPATH_URELIB=-install_name '@__________________________________________________URELIB$/$(@:f)'
+LINKFLAGSRUNPATH_URELIB=-install_name '@__________________________________________________URELIB/$(@:f)'
 LINKFLAGSRUNPATH_UREBIN=
-LINKFLAGSRUNPATH_OOO=-install_name '@__________________________________________________OOO$/$(@:f)'
+LINKFLAGSRUNPATH_OOO=-install_name '@__________________________________________________OOO/$(@:f)'
 LINKFLAGSRUNPATH_SDK=
 LINKFLAGSRUNPATH_BRAND=
 LINKFLAGSRUNPATH_OXT=
@@ -211,7 +211,7 @@ LINKFLAGS=$(LINKFLAGSDEFS)
     LINKFLAGS+=-lobjc
     # Sometimes we still use files that would be in a GUIBASE="unx" specific directory
     # because they really aren't GUIBASE specific, so we've got to account for that here.
-    INCGUI+= -I$(PRJ)$/unx/inc
+    INCGUI+= -I$(PRJ)/unx/inc
 .ENDIF
 
 #special settings form environment
@@ -249,7 +249,7 @@ SONAME_SWITCH=-Wl,-h
 
 STDLIBCPP=-lstdc++
 
-STDOBJVCL=$(L)$/salmain.o
+STDOBJVCL=$(L)/salmain.o
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=

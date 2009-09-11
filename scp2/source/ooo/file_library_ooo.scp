@@ -895,7 +895,7 @@ File gid_File_Lib_Mozbootstrap
   #ifdef UNX
     Name = STRING(CONCAT2(libmozbootstrap,UNXSUFFIX));
   #else
-    Name = "libmozbootstrap.dll";
+    Name = "mozbootstrap.dll";
   #endif
 End
 
