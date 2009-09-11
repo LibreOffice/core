@@ -3780,6 +3780,10 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
         nColorCode &= 0x00ffffff;
 
     sal_uInt8 nUpper = (sal_uInt8)( nColorCode >> 24 );
+
+    // sj: below change from 0x1b to 0x19 was done because of i84812 (0x02 -> rgb color),
+    // now I have some problems to fix i104685 (there the color value is 0x02000000 whichs requires
+    // a 0x2 scheme color to be displayed properly), the color docu seems to be incomplete
     if( nUpper & 0x19 )      // if( nUpper & 0x1f )
     {
         if( ( nUpper & 0x08 ) || ( ( nUpper & 0x10 ) == 0 ) )
