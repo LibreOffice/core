@@ -1108,7 +1108,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         //  ====================================================
         //
 
-        Point aTmpPoint;
+        Point aPageOffset;
         Size aTmpSize( GetOutputSizePixel() );
         if( mpPDFWriter )
         {
@@ -1118,7 +1118,14 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             // also add error code to PDFWriter
             mpPDFWriter->insertError( vcl::PDFWriter::Warning_Transparency_Converted );
         }
-        const Rectangle aOutputRect( aTmpPoint, aTmpSize );
+        else if( meOutDevType == OUTDEV_PRINTER )
+        {
+            Printer* pThis = dynamic_cast<Printer*>(this);
+            aPageOffset = pThis->GetPageOffsetPixel();
+            aPageOffset = Point( 0, 0 ) - aPageOffset;
+            aTmpSize  = pThis->GetPaperSizePixel();
+        }
+        const Rectangle aOutputRect( aPageOffset, aTmpSize );
         bool bTiling = dynamic_cast<Printer*>(this) != NULL;
 
         // iterate over all aCCList members and generate bitmaps for the special ones
@@ -1226,7 +1233,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                             pCurrAct->Execute( &aPaintVDev );
                                         }
 
-                                        if( !( nActionNum % 4 ) )
+                                        if( !( nActionNum % 8 ) )
                                             Application::Reschedule();
                                     }
 

@@ -518,6 +518,8 @@ public:
 
     SAL_DLLPRIVATE int getPageCountProtected() const;
     SAL_DLLPRIVATE com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getPageParametersProtected( int i_nPage ) const;
+
+    SAL_DLLPRIVATE ULONG removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut );
 };
 
 class VCL_DLLPUBLIC PrinterOptionsHelper

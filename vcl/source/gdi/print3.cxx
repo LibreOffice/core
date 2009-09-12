@@ -874,24 +874,8 @@ int PrinterController::getFilteredPageCount()
     return (getPageCountProtected() * mpImplData->maMultiPage.nRepeat + (nDiv-1)) / nDiv;
 }
 
-void PrinterController::printFilteredPage( int i_nPage )
+ULONG PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut )
 {
-    if( mpImplData->meJobState != view::PrintableState_JOB_STARTED )
-        return;
-
-    GDIMetaFile aPageFile;
-    PrinterController::PageSize aPageSize = getFilteredPageFile( i_nPage, aPageFile );
-
-    if( mpImplData->mpProgress )
-    {
-        // do nothing if printing is canceled
-        if( mpImplData->mpProgress->isCanceled() )
-        {
-            setJobState( view::PrintableState_JOB_ABORTED );
-            return;
-        }
-    }
-
     ULONG nRestoreDrawMode = mpImplData->mpPrinter->GetDrawMode();
     sal_Int32 nMaxBmpDPIX = mpImplData->mpPrinter->ImplGetDPIX();
     sal_Int32 nMaxBmpDPIY = mpImplData->mpPrinter->ImplGetDPIY();
@@ -936,14 +920,31 @@ void PrinterController::printFilteredPage( int i_nPage )
         mpImplData->mpPrinter->SetDrawMode( mpImplData->mpPrinter->GetDrawMode() | DRAWMODE_NOTRANSPARENCY );
     }
 
-    GDIMetaFile aCleanedFile;
-    mpImplData->mpPrinter->RemoveTransparenciesFromMetaFile( aPageFile, aCleanedFile, nMaxBmpDPIX, nMaxBmpDPIY,
+    mpImplData->mpPrinter->RemoveTransparenciesFromMetaFile( i_rIn, o_rOut, nMaxBmpDPIX, nMaxBmpDPIY,
                                                              rPrinterOptions.IsReduceTransparency(),
                                                              rPrinterOptions.GetReducedTransparencyMode() == PRINTER_TRANSPARENCY_AUTO,
                                                              rPrinterOptions.IsReduceBitmaps() && rPrinterOptions.IsReducedBitmapIncludesTransparency()
                                                              );
+    return nRestoreDrawMode;
+}
 
-    mpImplData->mpPrinter->EnableOutput( TRUE );
+void PrinterController::printFilteredPage( int i_nPage )
+{
+    if( mpImplData->meJobState != view::PrintableState_JOB_STARTED )
+        return;
+
+    GDIMetaFile aPageFile;
+    PrinterController::PageSize aPageSize = getFilteredPageFile( i_nPage, aPageFile );
+
+    if( mpImplData->mpProgress )
+    {
+        // do nothing if printing is canceled
+        if( mpImplData->mpProgress->isCanceled() )
+        {
+            setJobState( view::PrintableState_JOB_ABORTED );
+            return;
+        }
+    }
 
     // in N-Up printing set the correct page size
     mpImplData->mpPrinter->SetMapMode( MAP_100TH_MM );
@@ -953,9 +954,14 @@ void PrinterController::printFilteredPage( int i_nPage )
     if( aPageSize.bFullPaper )
     {
         Point aPageOffset( mpImplData->mpPrinter->GetPageOffset() );
-        aCleanedFile.WindStart();
-        aCleanedFile.Move( -aPageOffset.X(), -aPageOffset.Y() );
+        aPageFile.WindStart();
+        aPageFile.Move( -aPageOffset.X(), -aPageOffset.Y() );
     }
+
+    GDIMetaFile aCleanedFile;
+    ULONG nRestoreDrawMode = removeTransparencies( aPageFile, aCleanedFile );
+
+    mpImplData->mpPrinter->EnableOutput( TRUE );
 
     // actually print the page
     mpImplData->mpPrinter->ImplStartPage();
