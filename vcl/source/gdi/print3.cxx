@@ -802,18 +802,10 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     {
         // map current sub page to real page
         int nPage = (i_nFilteredPage * nSubPages + nSubPage) / rMPS.nRepeat;
-        if( mpImplData->mbReversePageOrder )
+        if( nSubPage == nSubPages-1 ||
+            nPage == nDocPages-1 )
         {
-            if( nSubPage == nSubPages-1 ||
-                nPage == nDocPages-1 )
-            {
-                mpImplData->mbLastPage = bIsLastPage;
-            }
-        }
-        else
-        {
-            if( nPage == nDocPages-1 )
-                mpImplData->mbLastPage = bIsLastPage;
+            mpImplData->mbLastPage = bIsLastPage;
         }
         if( nPage >= 0 && nPage < nDocPages )
         {
