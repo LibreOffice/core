@@ -107,6 +107,8 @@ namespace pcr
         /// is our introspectee a dialog element?
         bool                                                                        m_bIsDialogElement;
             // TODO: move different handling into different derived classes?
+        /// (FormComponent) type of the grid column being inspected, or -1 if we're not inspecting a grid column
+        sal_Int16                                                                   m_nGridColumnType;
 
     public:
         // XServiceInfo - static versions
@@ -247,6 +249,12 @@ namespace pcr
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
                 impl_getContextFrame_nothrow() const;
+
+        /** approves or denies a certain method to be included in the UI
+            @return
+                <TRUE/> if and only if the given method is allowed.
+        */
+        bool    impl_filterMethod_nothrow( const EventDescription& _rEvent ) const;
 
     private:
         EventHandler();                                 // never implemented
