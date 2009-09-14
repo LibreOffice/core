@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -42,21 +42,21 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 # BEGIN ----------------------------------------------------------------
-# auto generated Target:testjob by codegen.pl 
+# auto generated Target:testjob by codegen.pl
 
 SHL1OBJS=\
     $(SLO)$/testOD_SL.obj \
     $(SLO)$/FileLoggerImpl.obj\
-    $(SLO)$/ExternalViewLogger.obj	
+    $(SLO)$/ExternalViewLogger.obj
 
 SHL1TARGET=$(TARGET)
-SHL1STDLIBS=$(SALLIB) $(TOOLSLIB) 
-   
+SHL1STDLIBS=$(SALLIB) $(TOOLSLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+
 .IF "$(GUI)" == "WNT"
-SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib $(LB)$/iodiapi.lib
+SHL1STDLIBS+=$(LB)$/iodiapi.lib
 .ENDIF
 .IF "$(GUI)" == "UNX"
-SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a $(LB)$/libodiapi.so
+SHL1STDLIBS+=$(LB)$/libodiapi.so
 .ENDIF
 
 SHL1IMPLIB= i$(SHL1TARGET)
