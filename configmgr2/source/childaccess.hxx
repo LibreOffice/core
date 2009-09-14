@@ -75,7 +75,9 @@ public:
         rtl::Reference< RootAccess > const & root,
         rtl::Reference< Node > const & node);
 
-    virtual rtl::OUString getPath();
+    virtual rtl::OUString getAbsolutePath();
+
+    virtual rtl::OUString getRelativePath();
 
     virtual rtl::Reference< Node > getNode();
 

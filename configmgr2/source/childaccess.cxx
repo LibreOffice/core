@@ -45,6 +45,7 @@
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
+#include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "rtl/uuid.h"
@@ -101,14 +102,24 @@ ChildAccess::ChildAccess(
     OSL_ASSERT(root.is() && node.is());
 }
 
-rtl::OUString ChildAccess::getPath() {
-    rtl::OUString path;
+rtl::OUString ChildAccess::getAbsolutePath() {
+    OSL_ASSERT(getParentAccess().is());
+    return getParentAccess()->getAbsolutePath() +
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
+        Data::createSegment(node_->getTemplateName(), name_);
+}
+
+rtl::OUString ChildAccess::getRelativePath() {
+    rtl::OUStringBuffer path;
     rtl::Reference< Access > parent(getParentAccess());
     if (parent.is()) {
-        path = parent->getPath() +
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        path.append(parent->getRelativePath());
+        if (path.getLength() != 0) {
+            path.append(sal_Unicode('/'));
+        }
     }
-    return path + Data::createSegment(node_->getTemplateName(), name_);
+    path.append(Data::createSegment(node_->getTemplateName(), name_));
+    return path.makeStringAndClear();
 }
 
 rtl::Reference< Node > ChildAccess::getNode() {
@@ -297,7 +308,7 @@ css::uno::Any ChildAccess::asValue() {
 void ChildAccess::commitChanges(bool valid) {
     commitChildChanges(valid);
     if (valid && changedValue_.get() != 0) {
-        Components::singleton().addModification(getPath());
+        Components::singleton().addModification(getAbsolutePath());
         switch (node_->kind()) {
         case Node::KIND_PROPERTY:
             dynamic_cast< PropertyNode * >(node_.get())->setValue(

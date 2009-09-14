@@ -74,7 +74,9 @@ public:
 private:
     virtual ~RootAccess();
 
-    virtual rtl::OUString getPath();
+    virtual rtl::OUString getAbsolutePath();
+
+    virtual rtl::OUString getRelativePath();
 
     virtual rtl::Reference< Node > getNode();
 

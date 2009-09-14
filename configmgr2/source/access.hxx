@@ -122,7 +122,9 @@ public:
 
     void releaseChild(rtl::OUString const & name);
 
-    virtual rtl::OUString getPath() = 0;
+    virtual rtl::OUString getAbsolutePath() = 0;
+
+    virtual rtl::OUString getRelativePath() = 0;
 
     virtual rtl::Reference< Node > getNode() = 0;
 
@@ -433,6 +435,9 @@ private:
         rtl::OUString const & name);
 
     rtl::Reference< ChildAccess > getSubChild(rtl::OUString const & path);
+
+    bool setChildProperty(
+        rtl::OUString const & name, com::sun::star::uno::Any const & value);
 
     com::sun::star::beans::Property asProperty();
 

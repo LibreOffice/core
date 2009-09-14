@@ -67,7 +67,7 @@ RootAccess::RootAccess(
 {}
 
 rtl::OUString RootAccess::getLocale() const {
-    return locale_; //TODO: handle locale_ == ""
+    return locale_;
 }
 
 bool RootAccess::isUpdate() const {
@@ -76,9 +76,13 @@ bool RootAccess::isUpdate() const {
 
 RootAccess::~RootAccess() {}
 
-rtl::OUString RootAccess::getPath() {
+rtl::OUString RootAccess::getAbsolutePath() {
     getNode();
     return path_;
+}
+
+rtl::OUString RootAccess::getRelativePath() {
+    return rtl::OUString();
 }
 
 rtl::Reference< Node > RootAccess::getNode() {
