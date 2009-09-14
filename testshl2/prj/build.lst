@@ -1,6 +1,9 @@
-t2  testshl2   :  cppunit NULL
+t2  testshl2   :  cppunit sal NULL
 t2  testshl2                           usr1    -   all t2_mkout NULL
-t2  testshl2\inc                       nmake   -    all t2_inc NULL
+t2  testshl2\inc                       nmake   -   all t2_inc NULL
+t2  testshl2\source\cppunit\win32      nmake   -   all t2_src_cppunit_win32 t2_inc NULL
+t2  testshl2\source\cppunit            nmake   -   all t2_src_cppunit t2_src_cppunit_win32 t2_inc NULL
+t2  testshl2\source\cppunit\result     nmake   -   all t2_src_cppunit_rsult t2_inc NULL
 t2  testshl2\source                    nmake   -   all t2_src t2_inc NULL
 t2  testshl2\util                      nmake   -   all t2_util t2_src NULL
 

@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -47,15 +47,15 @@ ENABLE_EXCEPTIONS=TRUE
 COMMON_OBJFILES=\
     $(OBJ)$/getopt.obj \
     $(OBJ)$/filehelper.obj \
-    $(OBJ)$/dynamicregister.obj 
+    $(OBJ)$/dynamicregister.obj
 
 TESTSHL_OBJFILES=\
     $(OBJ)$/autoregisterhelper.obj \
-    $(OBJ)$/testshl.obj 
+    $(OBJ)$/testshl.obj
 
 VERSIONINFO_OBJFILES=\
     $(OBJ)$/versionhelper.obj \
-    $(OBJ)$/versioner.obj 
+    $(OBJ)$/versioner.obj
 
 BMSMA_OBJFILES=\
     $(OBJ)$/bmsma.obj
@@ -68,37 +68,37 @@ APP1TARGET= $(TARGET)
 APP1OBJS= $(COMMON_OBJFILES) $(TESTSHL_OBJFILES)
 APP1RPATH=NONE
 
-APP1STDLIBS=$(SALLIB)
-
-# the c5t*.lib files are out of the cppunit module
-# APP1DEPN= \
-# 	$(SOLARLIBDIR)$/c5t_no_regallfkt.lib \
-# 	$(SOLARLIBDIR)$/c5t_testresult.lib
+APP1STDLIBS=$(SALLIB) \
+        $(CPPUNITLIB)
 
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)" == "GCC"
 APP1STDLIBS+= \
-    $(SOLARLIBDIR)$/libc5t_testresult$(DLLPOSTFIX).a \
-    $(SOLARLIBDIR)$/libc5t_no_regallfkt$(DLLPOSTFIX).a \
-    $(SOLARLIBDIR)$/libc5t_winstuff$(DLLPOSTFIX).a
+        $(LB)$/testshl2$(DLLPOSTFIX).a \
+        $(LB)$/libc5t_testresult$(DLLPOSTFIX).a \
+        $(LB)$/libc5t_no_regallfkt$(DLLPOSTFIX).a \
+        $(LB)$/libc5t_winstuff$(DLLPOSTFIX).a
 .ELSE
 APP1LIBS= \
-    $(SOLARLIBDIR)$/c5t_no_regallfkt.lib \
-    $(SOLARLIBDIR)$/c5t_testresult.lib
-APP1LIBS += $(SOLARLIBDIR)$/c5t_winstuff.lib
+        $(LB)$/testshl2.lib \
+        $(LB)$/c5t_testresult.lib \
+        $(LB)$/c5t_no_regallfkt.lib \
+        $(LB)$/c5t_winstuff.lib
 .ENDIF
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
 APP1LIBS= \
-    $(SOLARLIBDIR)$/c5t_no_regallfkt.lib \
-    $(SOLARLIBDIR)$/c5t_testresult.lib
+        $(LB)$/testshl2.lib \
+        $(LB)$/c5t_no_regallfkt.lib \
+        $(LB)$/c5t_testresult.lib
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
 APP1STDLIBS+= \
-    $(SOLARLIBDIR)$/libc5t_testresult$(DLLPOSTFIX).a \
-    $(SOLARLIBDIR)$/libc5t_no_regallfkt$(DLLPOSTFIX).a
+        $(LB)$/testshl2$(DLLPOSTFIX).a \
+        $(LB)$/libc5t_testresult$(DLLPOSTFIX).a \
+        $(LB)$/libc5t_no_regallfkt$(DLLPOSTFIX).a
 .ENDIF
 
 #
@@ -108,24 +108,24 @@ APP2OBJS= $(COMMON_OBJFILES) $(VERSIONINFO_OBJFILES)
 
 APP2STDLIBS=$(SALLIB)
 
-APP2DEPN= 
-APP2LIBS= 
+APP2DEPN=
+APP2LIBS=
 
 # ------------------------------------------------------------------
 APP3TARGET= $(TARGET)_timeout
-APP3OBJS= 	$(OBJ)$/getopt.obj $(OBJ)$/filehelper.obj $(OBJ)$/terminate.obj
+APP3OBJS=   $(OBJ)$/getopt.obj $(OBJ)$/filehelper.obj $(OBJ)$/terminate.obj
 
 APP3STDLIBS=$(SALLIB)
 
-APP3DEPN= 
-APP3LIBS= 
+APP3DEPN=
+APP3LIBS=
 
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)" == "GCC"
 APP3STDLIBS+= \
-    $(SOLARLIBDIR)$/libc5t_winstuff$(DLLPOSTFIX).a
+        $(LB)$/libc5t_winstuff$(DLLPOSTFIX).a
 .ELSE
-APP3LIBS += $(SOLARLIBDIR)$/c5t_winstuff.lib
+APP3LIBS += $(LB)$/c5t_winstuff.lib
 .ENDIF
 .ENDIF
 

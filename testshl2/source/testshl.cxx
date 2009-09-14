@@ -55,15 +55,15 @@
 #include "testshl/log.hxx"
 #include "testshl/filehelper.hxx"
 #include "testshl/getopt.hxx"
-#include "cppunit/result/outputter.hxx"
-#include "cppunit/joblist.hxx"
+#include "testshl/result/outputter.hxx"
+#include "testshl/joblist.hxx"
 
 // #include <osl/time.h>
 
 using namespace std;
 
-#include "cppunit/result/testshlTestResult.h"
-#include "cppunit/result/emacsTestResult.hxx"
+#include "testshl/result/testshlTestResult.h"
+#include "testshl/result/emacsTestResult.hxx"
 
 // Prototype for signal handling
 void setSignalFilename(GetOpt & opt);
