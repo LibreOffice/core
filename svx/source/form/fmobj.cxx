@@ -81,6 +81,10 @@ FmFormObj::FmFormObj(const ::rtl::OUString& rModelName,sal_Int32 _nType)
           ,m_pLastKnownRefDevice    ( NULL          )
 {
     DBG_CTOR(FmFormObj, NULL);
+
+    // normally, this is done in SetUnoControlModel, but if the call happened in the base class ctor,
+    // then our incarnation of it was not called (since we were not constructed at this time).
+    impl_checkRefDevice_nothrow( true );
 }
 
 //------------------------------------------------------------------
@@ -121,6 +125,43 @@ void FmFormObj::ClearObjEnv()
     m_xParent.clear();
     aEvts.realloc( 0 );
     m_nPos = -1;
+}
+
+//------------------------------------------------------------------
+void FmFormObj::impl_checkRefDevice_nothrow( bool _force )
+{
+    const FmFormModel* pFormModel = PTR_CAST( FmFormModel, GetModel() );
+    OutputDevice* pCurrentRefDevice = pFormModel ? pFormModel->GetRefDevice() : NULL;
+
+    if ( ( m_pLastKnownRefDevice == pCurrentRefDevice ) && !_force )
+        return;
+
+    Reference< XControlModel > xControlModel( GetUnoControlModel() );
+    if ( !xControlModel.is() )
+        return;
+
+    m_pLastKnownRefDevice = pCurrentRefDevice;
+    if ( m_pLastKnownRefDevice == NULL )
+        return;
+
+    try
+    {
+        Reference< XPropertySet > xModelProps( GetUnoControlModel(), UNO_QUERY_THROW );
+        Reference< XPropertySetInfo > xPropertyInfo( xModelProps->getPropertySetInfo(), UNO_SET_THROW );
+
+        static const ::rtl::OUString sRefDevicePropName( RTL_CONSTASCII_USTRINGPARAM( "ReferenceDevice" ) );
+        if ( xPropertyInfo->hasPropertyByName( sRefDevicePropName ) )
+        {
+            VCLXDevice* pUnoRefDevice = new VCLXDevice;
+            pUnoRefDevice->SetOutputDevice( m_pLastKnownRefDevice );
+            Reference< XDevice > xRefDevice( pUnoRefDevice );
+            xModelProps->setPropertyValue( sRefDevicePropName, makeAny( xRefDevice ) );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 //------------------------------------------------------------------
@@ -360,38 +401,10 @@ SdrObject* FmFormObj::Clone() const
 }
 
 //------------------------------------------------------------------
-void FmFormObj::ReformatText()
+void FmFormObj::NbcReformatText()
 {
-    const FmFormModel* pFormModel = PTR_CAST( FmFormModel, GetModel() );
-    OutputDevice* pCurrentRefDevice = pFormModel ? pFormModel->GetRefDevice() : NULL;
-
-    if ( m_pLastKnownRefDevice != pCurrentRefDevice )
-    {
-        m_pLastKnownRefDevice = pCurrentRefDevice;
-
-        try
-        {
-            Reference< XPropertySet > xModelProps( GetUnoControlModel(), UNO_QUERY );
-            Reference< XPropertySetInfo > xPropertyInfo;
-            if ( xModelProps.is() )
-                xPropertyInfo = xModelProps->getPropertySetInfo();
-
-            const ::rtl::OUString sRefDevicePropName( RTL_CONSTASCII_USTRINGPARAM( "ReferenceDevice" ) );
-            if ( xPropertyInfo.is() && xPropertyInfo->hasPropertyByName( sRefDevicePropName ) )
-            {
-                VCLXDevice* pUnoRefDevice = new VCLXDevice;
-                pUnoRefDevice->SetOutputDevice( m_pLastKnownRefDevice );
-                Reference< XDevice > xRefDevice( pUnoRefDevice );
-                xModelProps->setPropertyValue( sRefDevicePropName, makeAny( xRefDevice ) );
-            }
-        }
-        catch( const Exception& )
-        {
-            OSL_ENSURE( sal_False, "FmFormObj::ReformatText: caught an exception!" );
-        }
-    }
-
-    SdrUnoObj::ReformatText();
+    impl_checkRefDevice_nothrow( false );
+    SdrUnoObj::NbcReformatText();
 }
 
 //------------------------------------------------------------------
@@ -564,6 +577,13 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
 }
 
 //------------------------------------------------------------------
+void FmFormObj::SetModel( SdrModel* _pNewModel )
+{
+    SdrUnoObj::SetModel( _pNewModel );
+    impl_checkRefDevice_nothrow();
+}
+
+//------------------------------------------------------------------
 FmFormObj* FmFormObj::GetFormObject( SdrObject* _pSdrObject )
 {
     FmFormObj* pFormObject = dynamic_cast< FmFormObj* >( _pSdrObject );
@@ -595,6 +615,8 @@ void FmFormObj::SetUnoControlModel( const Reference< com::sun::star::awt::XContr
     SdrUnoObj::SetUnoControlModel( _rxModel );
 
     // TODO: call something like formObjectInserted at the form page, to tell it the new model
+
+    impl_checkRefDevice_nothrow( true );
 }
 
 //------------------------------------------------------------------
