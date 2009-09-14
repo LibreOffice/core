@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 #define TIMELOG
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 #include <bparr.hxx>
 #include <string>
 #include <stdlib.h>
