@@ -465,6 +465,8 @@ void SwDoc::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDeleteOld,/*[in]*/
         if ( bDeleteOld )
             delete pPrt;
         pPrt = pP;
+        if( pDrawModel )
+            pDrawModel->SetRefDevice( pP );
     }
 
     if ( bCallPrtDataChanged &&
@@ -493,6 +495,8 @@ void SwDoc::setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOl
         if ( bDeleteOld )
             delete pVirDev;
         pVirDev = pVd;
+        if( pDrawModel )
+            pDrawModel->SetRefDevice( pVd );
     }
 }
 
