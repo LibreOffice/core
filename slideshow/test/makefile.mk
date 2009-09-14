@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 PRJ=..
 
 PRJNAME=slideshow
-PRJINC=$(PRJ)$/source 
+PRJINC=$(PRJ)$/source
 TARGET=tests
 TARGETTYPE=GUI
 
@@ -50,13 +50,14 @@ SHL1OBJS=  \
     $(SLO)$/views.obj	  \
     $(SLO)$/slidetest.obj \
     $(SLO)$/testshape.obj \
-    $(SLO)$/testview.obj	
+    $(SLO)$/testview.obj
 
 SHL1TARGET= tests
 SHL1STDLIBS= 	$(SALLIB)		 \
                 $(BASEGFXLIB)	 \
                 $(CPPUHELPERLIB) \
                 $(CPPULIB)		 \
+                                $(TESTSHL2LIB)    \
                 $(CPPUNITLIB)	 \
                 $(UNOTOOLSLIB)	 \
                 $(VCLLIB)
@@ -70,7 +71,7 @@ SHL1STDLIBS= 	$(SALLIB)		 \
 SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = export.map 
+SHL1VERSIONMAP = export.map
 # END target1 ----------------------------------------------------------
 
 # BEGIN target2 --------------------------------------------------------
@@ -96,9 +97,9 @@ APP2DEF=	$(MISC)$/$(TARGET).def
 #------------------------------- All object files ----------------------------
 
 # do this here, so we get right dependencies
-SLOFILES=$(SHL1OBJS) 
+SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
-.INCLUDE : _cppunit.mk 
+.INCLUDE : _cppunit.mk
