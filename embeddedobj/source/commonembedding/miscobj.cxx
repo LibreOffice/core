@@ -361,9 +361,14 @@ uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType 
 {
     uno::Any aReturn;
 
-    aReturn <<= ::cppu::queryInterface(
+    if ( rType == ::getCppuType( (uno::Reference< embed::XEmbeddedObject > const *)0 ))
+    {
+        void * p = static_cast< embed::XEmbeddedObject * >( this );
+        return uno::Any( &p, rType );
+    }
+    else
+        aReturn <<= ::cppu::queryInterface(
                     rType,
-                    static_cast< embed::XEmbeddedObject* >( this ),
                     static_cast< embed::XInplaceObject* >( this ),
                     static_cast< embed::XVisualObject* >( this ),
                     static_cast< embed::XCommonEmbedPersist* >( static_cast< embed::XEmbedPersist* >( this ) ),
@@ -374,6 +379,7 @@ uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType 
                     static_cast< embed::XComponentSupplier* >( this ),
                     static_cast< util::XCloseable* >( this ),
                     static_cast< container::XChild* >( this ),
+                    static_cast< chart2::XDefaultSizeTransmitter* >( this ),
                     static_cast< document::XEventBroadcaster* >( this ) );
 
     if ( aReturn.hasValue() )
