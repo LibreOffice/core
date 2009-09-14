@@ -133,7 +133,7 @@ protected:
 
     virtual ~Access();
 
-    virtual rtl::OUString name() = 0;
+    virtual rtl::OUString getNameInternal() = 0;
 
     virtual rtl::Reference< RootAccess > getRootAccess() = 0;
 

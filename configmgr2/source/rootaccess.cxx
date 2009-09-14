@@ -102,7 +102,7 @@ bool RootAccess::isFinalized() {
     return finalized_;
 }
 
-rtl::OUString RootAccess::name() {
+rtl::OUString RootAccess::getNameInternal() {
     getNode();
     return name_;
 }

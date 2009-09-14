@@ -80,7 +80,7 @@ private:
 
     virtual bool isFinalized();
 
-    virtual rtl::OUString name();
+    virtual rtl::OUString getNameInternal();
 
     virtual rtl::Reference< RootAccess > getRootAccess();
 

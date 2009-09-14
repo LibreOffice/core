@@ -483,7 +483,7 @@ css::uno::Sequence< rtl::OUString > Access::getElementNames()
              children.begin());
          i != children.end(); ++i)
     {
-        names.push_back((*i)->name());
+        names.push_back((*i)->getNameInternal());
     }
     return names.getAsConstList();
 }
@@ -611,7 +611,7 @@ rtl::OUString Access::getName() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
-    return name();
+    return getNameInternal();
 }
 
 void Access::setName(rtl::OUString const & /*aName*/)
@@ -1029,7 +1029,7 @@ rtl::Reference< ChildAccess > Access::getModifiedChild(
     HardChildMap::iterator const & childIterator)
 {
     return (childIterator->second->getParentAccess() == this &&
-            childIterator->second->name() == childIterator->first)
+            childIterator->second->getNameInternal() == childIterator->first)
         ? childIterator->second : rtl::Reference< ChildAccess >();
 }
 
@@ -1146,7 +1146,7 @@ css::beans::Property Access::asProperty() {
         break;
     }
     return css::beans::Property(
-        name(), -1, type,
+        getNameInternal(), -1, type,
         (css::beans::PropertyAttribute::BOUND | //TODO: correct for group/set?
          css::beans::PropertyAttribute::CONSTRAINED |
          (nillable ? css::beans::PropertyAttribute::MAYBEVOID : 0) |

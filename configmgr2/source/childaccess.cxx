@@ -120,7 +120,7 @@ bool ChildAccess::isFinalized() {
         (parent_.is() && parent_->isFinalized());
 }
 
-rtl::OUString ChildAccess::name() {
+rtl::OUString ChildAccess::getNameInternal() {
     return name_;
 }
 
