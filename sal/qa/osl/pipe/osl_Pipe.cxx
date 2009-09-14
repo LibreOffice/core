@@ -35,7 +35,7 @@
 // include files
 //------------------------------------------------------------------------
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 

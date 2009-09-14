@@ -369,7 +369,7 @@
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Type.hxx"
 #include "com/sun/star/uno/TypeClass.hpp"
-#include "cppunit/simpleheader.hxx"
+#include "testshl/simpleheader.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 

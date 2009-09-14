@@ -47,7 +47,7 @@
 #include "com/sun/star/uri/XVndSunStarScriptUrlReference.hpp"
 #include "com/sun/star/util/XMacroExpander.hpp"
 #include "cppuhelper/servicefactory.hxx"
-#include "cppunit/simpleheader.hxx"
+#include "testshl/simpleheader.hxx"
 #include "osl/diagnose.h"
 #include "osl/thread.h"
 #include "rtl/string.h"

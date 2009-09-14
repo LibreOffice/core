@@ -36,7 +36,7 @@
 
 #include <rtl/byteseq.hxx>
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 using namespace rtl;
 

@@ -38,7 +38,7 @@
 
 #include <algorithm> // STL
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 #include "stringhelper.hxx"
 #include "valueequal.hxx"
 

@@ -44,7 +44,7 @@
 #include <osl/file.hxx>
 #include <osl_File_Const.h>
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 // #ifdef WNT
 // #   define UNICODE

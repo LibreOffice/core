@@ -47,7 +47,7 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppu/unotype.hxx"
-#include "cppunit/simpleheader.hxx"
+#include "testshl/simpleheader.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"

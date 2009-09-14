@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -45,14 +45,12 @@ CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
 # BEGIN ----------------------------------------------------------------
-# auto generated Target:joblist by codegen.pl 
+# auto generated Target:joblist by codegen.pl
 SHL1OBJS=  \
     $(SLO)$/rtl_OString2.obj
 
 SHL1TARGET= rtl_OString2
-SHL1STDLIBS=\
-   $(SALLIB) \
-   $(CPPUNITLIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
@@ -68,9 +66,7 @@ SHL2OBJS=  \
     $(SLO)$/rtl_str.obj
 
 SHL2TARGET= rtl_str
-SHL2STDLIBS=\
-   $(SALLIB) \
-   $(CPPUNITLIB)
+SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL2IMPLIB= i$(SHL2TARGET)
 DEF2NAME    =$(SHL2TARGET)
@@ -82,9 +78,7 @@ SHL3OBJS=  \
     $(SLO)$/rtl_string.obj
 
 SHL3TARGET= rtl_string
-SHL3STDLIBS=\
-   $(SALLIB) \
-   $(CPPUNITLIB)
+SHL3STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL3IMPLIB= i$(SHL3TARGET)
 DEF3NAME    =$(SHL3TARGET)

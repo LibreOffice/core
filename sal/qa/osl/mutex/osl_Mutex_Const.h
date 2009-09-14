@@ -49,7 +49,7 @@
 #endif
 #include <osl/time.h>
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 #ifdef UNX
 #include <unistd.h>

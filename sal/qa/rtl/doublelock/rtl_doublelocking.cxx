@@ -46,7 +46,7 @@
 
 #include <rtl/instance.hxx>
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 // -----------------------------------------------------------------------------
 #define CONST_TEST_STRING "gregorian"

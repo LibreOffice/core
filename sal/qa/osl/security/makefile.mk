@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -44,22 +44,14 @@ CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
 # BEGIN ----------------------------------------------------------------
-# auto generated Target:Security by codegen.pl 
+# auto generated Target:Security by codegen.pl
 SHL1OBJS=  \
     $(SLO)$/osl_Security.obj
 
 SHL1TARGET= osl_Security
-SHL1STDLIBS=\
-   $(SALLIB) 
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 .IF "$(GUI)" == "WNT"
-SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
 SHL1STDLIBS+= $(ADVAPI32LIB)
-.ENDIF
-.IF "$(GUI)" == "OS2"
-SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-.ENDIF
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
 .ENDIF
 
 SHL1IMPLIB= i$(SHL1TARGET)

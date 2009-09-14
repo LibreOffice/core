@@ -39,7 +39,7 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
-#include "cppunit/simpleheader.hxx"
+#include "testshl/simpleheader.hxx"
 
 #include <cstddef>
 #include <stdio.h>

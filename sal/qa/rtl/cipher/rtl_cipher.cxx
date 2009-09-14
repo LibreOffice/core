@@ -32,7 +32,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/cipher.h>
 

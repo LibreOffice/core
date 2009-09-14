@@ -37,7 +37,7 @@
 #endif
 
 #include <math.h>
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 #include <rtl/math.h>
 #include <rtl/string.hxx>
 

@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ DLLPRE = # no leading "lib" on .so files
 
 SHL1TARGET = $(TARGET)
 SHL1OBJS = $(SLO)$/test_thread.obj
-SHL1STDLIBS = $(CPPUNITLIB) $(SALLIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 SHL1VERSIONMAP = version.map
 SHL1IMPLIB = i$(SHL1TARGET)
 DEF1NAME = $(SHL1TARGET)

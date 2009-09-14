@@ -53,7 +53,7 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 using namespace rtl;
 

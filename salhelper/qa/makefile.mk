@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ ENABLE_EXCEPTIONS := TRUE
 
 SHL1TARGET = $(TARGET)
 SHL1OBJS = $(SLO)$/test_api.obj
-SHL1STDLIBS = $(CPPUNITLIB) $(SALLIB) $(SALHELPERLIB)
+SHL1STDLIBS = $(CPPUNITLIB) $(SALLIB) $(SALHELPERLIB) $(TESTSHL2LIB)
 SHL1IMPLIB = i$(SHL1TARGET)
 SHL1VERSIONMAP = version.map
 DEF1NAME = $(SHL1TARGET)
@@ -51,4 +51,4 @@ SLOFILES = $(SHL1OBJS)
 ALLTAR: test
 
 test .PHONY: $(SHL1TARGETN)
-    cd $(SHL1TARGETN:d) && testshl2 $(SHL1TARGETN:f)
+    cd $(SHL1TARGETN:d) && $(TESTSHL2) $(SHL1TARGETN:f)

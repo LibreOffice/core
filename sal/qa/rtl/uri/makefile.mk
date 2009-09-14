@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -47,9 +47,7 @@ CXXFLAGS+= $(LFS_CFLAGS)
 SHL1OBJS=  \
     $(SLO)$/rtl_Uri.obj
 SHL1TARGET= rtl_uri_simple
-SHL1STDLIBS=\
-    $(SALLIB) \
-    $(CPPUNITLIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)
@@ -61,9 +59,7 @@ SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 SHL2OBJS=  \
     $(SLO)$/rtl_testuri.obj
 SHL2TARGET= rtl_Uri
-SHL2STDLIBS=\
-    $(SALLIB) \
-    $(CPPUNITLIB)
+SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL2IMPLIB= i$(SHL2TARGET)
 DEF2NAME    =$(SHL2TARGET)

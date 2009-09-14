@@ -35,7 +35,7 @@
 
 #include "Interface1.hpp"
 
-#include "cppunit/simpleheader.hxx"
+#include "testshl/simpleheader.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 

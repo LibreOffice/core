@@ -48,7 +48,7 @@
 #include <rtl/string.hxx>
 #endif
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 #define TEST_ENSURE(c, m) CPPUNIT_ASSERT_MESSAGE((m), (c))
 

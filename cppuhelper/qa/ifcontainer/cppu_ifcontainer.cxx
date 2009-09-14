@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 #include "com/sun/star/lang/XEventListener.hpp"
 #include "cppuhelper/interfacecontainer.hxx"
