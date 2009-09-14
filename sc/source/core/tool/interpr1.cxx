@@ -5114,7 +5114,7 @@ void ScInterpreter::ScLookup()
             if ( !rEntry.bQueryByString )
                 bFound = false;
             else
-                bFound = (ScGlobal::pCollator->compareString( aDataStr, *rEntry.pStr) <= 0);
+                bFound = (ScGlobal::GetCollator()->compareString( aDataStr, *rEntry.pStr) <= 0);
         }
 
         if (!bFound)
