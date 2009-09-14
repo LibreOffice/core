@@ -3753,7 +3753,7 @@ void WW8AttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
         m_rWW8Export.InsUInt16( NS_sprm::LN_SDyaLinePitch );
         m_rWW8Export.InsUInt16( nHeight );
 
-        MSWordStyles * pStyles = rWrtWW8.pStyles;
+        MSWordStyles * pStyles = m_rWW8Export.pStyles;
         SwFmt * pSwFmt = pStyles->GetSwFmt();
 
         sal_uInt32 nPageCharSize = 0;
