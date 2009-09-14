@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -270,6 +270,7 @@ JVMACCESSLIB = -ljvmaccess$(UDK_MAJOR)$(COMID)
 JVMACCESSLIB = -ljvmaccess$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 CPPUNITLIB = -lcppunit$(DLLPOSTFIX)
+TESTSHL2LIB = -ltestshl2$(DLLPOSTFIX)
 .IF "$(SYSTEM_LIBXSLT)"=="YES"
 XSLTLIB=$(LIBXSLT_LIBS)
 .ELSE
@@ -473,6 +474,7 @@ HELPLINKERLIB=ihelplinker.lib
 SYSSHELLLIB=sysshell.lib
 JVMACCESSLIB = ijvmaccess.lib
 CPPUNITLIB = cppunit.lib
+TESTSHL2LIB = testshl2.lib
 XSLTLIB = libxslt.lib $(ZLIB3RDLIB) $(LIBXML2LIB)
 .IF "$(GUI)"=="OS2"
 REDLANDLIB = raptor.a rasqal.a rdf.a $(LIBXML2LIB) $(OPENSSLLIB) pthread.lib
