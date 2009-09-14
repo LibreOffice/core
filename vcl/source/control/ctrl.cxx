@@ -39,10 +39,13 @@
 #include <vcl/event.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/controllayout.hxx>
+#include <vcl/controldata.hxx>
 #include <vcl/salnativewidgets.hxx>
 
 
+namespace vcl
+{
+}
 
 using namespace vcl;
 
@@ -51,7 +54,7 @@ using namespace vcl;
 void Control::ImplInitControlData()
 {
     mbHasFocus      = FALSE;
-    mpLayoutData    = NULL;
+    mpControlData   = new ImplControlData;
 }
 
 // -----------------------------------------------------------------------
@@ -90,7 +93,7 @@ Control::Control( Window* pParent, const ResId& rResId ) :
 
 Control::~Control()
 {
-    delete mpLayoutData, mpLayoutData = NULL;
+    delete mpControlData, mpControlData = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -111,7 +114,7 @@ void Control::LoseFocus()
 
 void Control::Resize()
 {
-    delete mpLayoutData, mpLayoutData = NULL;
+    ImplClearLayoutData();
     Window::Resize();
 }
 
@@ -123,10 +126,31 @@ void Control::FillLayoutData() const
 
 // -----------------------------------------------------------------------
 
+void Control::CreateLayoutData() const
+{
+    DBG_ASSERT( !mpControlData->mpLayoutData, "Control::CreateLayoutData: should be called with non-existent layout data only!" );
+    mpControlData->mpLayoutData = new ::vcl::ControlLayoutData();
+}
+
+// -----------------------------------------------------------------------
+
+bool Control::HasLayoutData() const
+{
+    return mpControlData->mpLayoutData != NULL;
+}
+
+// -----------------------------------------------------------------------
+
+::vcl::ControlLayoutData* Control::GetLayoutData() const
+{
+    return mpControlData->mpLayoutData;
+}
+
+// -----------------------------------------------------------------------
+
 void Control::SetText( const String& rStr )
 {
-    delete mpLayoutData;
-    mpLayoutData = NULL;
+    ImplClearLayoutData();
     Window::SetText( rStr );
 }
 
@@ -142,9 +166,9 @@ Rectangle ControlLayoutData::GetCharacterBounds( long nIndex ) const
 
 Rectangle Control::GetCharacterBounds( long nIndex ) const
 {
-    if( ! mpLayoutData )
+    if( !HasLayoutData() )
         FillLayoutData();
-    return mpLayoutData ? mpLayoutData->GetCharacterBounds( nIndex ) : Rectangle();
+    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetCharacterBounds( nIndex ) : Rectangle();
 }
 
 // -----------------------------------------------------------------------
@@ -167,9 +191,9 @@ long ControlLayoutData::GetIndexForPoint( const Point& rPoint ) const
 
 long Control::GetIndexForPoint( const Point& rPoint ) const
 {
-    if( ! mpLayoutData )
+    if( ! HasLayoutData() )
         FillLayoutData();
-    return mpLayoutData ? mpLayoutData->GetIndexForPoint( rPoint ) : -1;
+    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetIndexForPoint( rPoint ) : -1;
 }
 
 // -----------------------------------------------------------------------
@@ -186,9 +210,9 @@ long ControlLayoutData::GetLineCount() const
 
 long Control::GetLineCount() const
 {
-    if( ! mpLayoutData )
+    if( !HasLayoutData() )
         FillLayoutData();
-    return mpLayoutData ? mpLayoutData->GetLineCount() : 0;
+    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetLineCount() : 0;
 }
 
 // -----------------------------------------------------------------------
@@ -220,9 +244,9 @@ Pair ControlLayoutData::GetLineStartEnd( long nLine ) const
 
 Pair Control::GetLineStartEnd( long nLine ) const
 {
-    if( ! mpLayoutData )
+    if( !HasLayoutData() )
         FillLayoutData();
-    return mpLayoutData ? mpLayoutData->GetLineStartEnd( nLine ) : Pair( -1, -1 );
+    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetLineStartEnd( nLine ) : Pair( -1, -1 );
 }
 
 // -----------------------------------------------------------------------
@@ -263,18 +287,18 @@ long ControlLayoutData::ToRelativeLineIndex( long nIndex ) const
 
 long Control::ToRelativeLineIndex( long nIndex ) const
 {
-    if( ! mpLayoutData )
+    if( !HasLayoutData() )
         FillLayoutData();
-    return mpLayoutData ? mpLayoutData->ToRelativeLineIndex( nIndex ) : -1;
+    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->ToRelativeLineIndex( nIndex ) : -1;
 }
 
 // -----------------------------------------------------------------------
 
 String Control::GetDisplayText() const
 {
-    if( ! mpLayoutData )
+    if( !HasLayoutData() )
         FillLayoutData();
-    return mpLayoutData ? mpLayoutData->m_aDisplayText : GetText();
+    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->m_aDisplayText : GetText();
 }
 
 // -----------------------------------------------------------------------
@@ -321,8 +345,7 @@ void Control::StateChanged( StateChangedType nStateChange )
         nStateChange == STATE_CHANGE_CONTROLFONT
         )
     {
-        delete mpLayoutData;
-        mpLayoutData = NULL;
+        ImplClearLayoutData();
     }
     Window::StateChanged( nStateChange );
 }
@@ -331,25 +354,25 @@ void Control::StateChanged( StateChangedType nStateChange )
 
 void Control::AppendLayoutData( const Control& rSubControl ) const
 {
-    if( ! rSubControl.mpLayoutData )
+    if( !rSubControl.HasLayoutData() )
         rSubControl.FillLayoutData();
-    if( ! rSubControl.mpLayoutData || ! rSubControl.mpLayoutData->m_aDisplayText.Len() )
+    if( !rSubControl.HasLayoutData() || !rSubControl.mpControlData->mpLayoutData->m_aDisplayText.Len() )
         return;
 
-    long nCurrentIndex = mpLayoutData->m_aDisplayText.Len();
-    mpLayoutData->m_aDisplayText.Append( rSubControl.mpLayoutData->m_aDisplayText );
-    int nLines = rSubControl.mpLayoutData->m_aLineIndices.size();
+    long nCurrentIndex = mpControlData->mpLayoutData->m_aDisplayText.Len();
+    mpControlData->mpLayoutData->m_aDisplayText.Append( rSubControl.mpControlData->mpLayoutData->m_aDisplayText );
+    int nLines = rSubControl.mpControlData->mpLayoutData->m_aLineIndices.size();
     int n;
-    mpLayoutData->m_aLineIndices.push_back( nCurrentIndex );
+    mpControlData->mpLayoutData->m_aLineIndices.push_back( nCurrentIndex );
     for( n = 1; n < nLines; n++ )
-        mpLayoutData->m_aLineIndices.push_back( rSubControl.mpLayoutData->m_aLineIndices[n] + nCurrentIndex );
-    int nRectangles = rSubControl.mpLayoutData->m_aUnicodeBoundRects.size();
+        mpControlData->mpLayoutData->m_aLineIndices.push_back( rSubControl.mpControlData->mpLayoutData->m_aLineIndices[n] + nCurrentIndex );
+    int nRectangles = rSubControl.mpControlData->mpLayoutData->m_aUnicodeBoundRects.size();
         Rectangle aRel = const_cast<Control&>(rSubControl).GetWindowExtentsRelative( const_cast<Control*>(this) );
     for( n = 0; n < nRectangles; n++ )
     {
-        Rectangle aRect = rSubControl.mpLayoutData->m_aUnicodeBoundRects[n];
+        Rectangle aRect = rSubControl.mpControlData->mpLayoutData->m_aUnicodeBoundRects[n];
         aRect.Move( aRel.Left(), aRel.Top() );
-        mpLayoutData->m_aUnicodeBoundRects.push_back( aRect );
+        mpControlData->mpLayoutData->m_aUnicodeBoundRects.push_back( aRect );
     }
 }
 
@@ -378,15 +401,15 @@ BOOL Control::ImplCallEventListenersAndHandler(  ULONG nEvent, const Link& rHand
 
 void Control::SetLayoutDataParent( const Control* pParent ) const
 {
-    if( mpLayoutData )
-        mpLayoutData->m_pParent = pParent;
+    if( HasLayoutData() )
+        mpControlData->mpLayoutData->m_pParent = pParent;
 }
 
 // -----------------------------------------------------------------
 
 void Control::ImplClearLayoutData() const
 {
-    delete mpLayoutData, mpLayoutData = NULL;
+    delete mpControlData->mpLayoutData, mpControlData->mpLayoutData = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -466,4 +489,140 @@ Size Control::GetOptimalSize(WindowSizeType eType) const
     default:
         return Size( LONG_MAX, LONG_MAX );
     }
+}
+
+// -----------------------------------------------------------------
+
+void Control::SetReferenceDevice( OutputDevice* _referenceDevice )
+{
+    if ( mpControlData->mpReferenceDevice == _referenceDevice )
+        return;
+
+    mpControlData->mpReferenceDevice = _referenceDevice;
+    Invalidate();
+}
+
+// -----------------------------------------------------------------
+
+OutputDevice* Control::GetReferenceDevice() const
+{
+    return mpControlData->mpReferenceDevice;
+}
+
+// -----------------------------------------------------------------
+
+const Font& Control::GetCanonicalFont( const StyleSettings& _rStyle ) const
+{
+    return _rStyle.GetLabelFont();
+}
+
+// -----------------------------------------------------------------
+const Color& Control::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
+{
+    return _rStyle.GetLabelTextColor();
+}
+
+// -----------------------------------------------------------------
+void Control::ImplInitSettings( const BOOL _bFont, const BOOL _bForeground )
+{
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+
+    if ( _bFont )
+    {
+        Font aFont( GetCanonicalFont( rStyleSettings ) );
+        if ( IsControlFont() )
+            aFont.Merge( GetControlFont() );
+        SetZoomedPointFont( aFont );
+    }
+
+    if ( _bForeground || _bFont )
+    {
+        Color aColor;
+        if ( IsControlForeground() )
+            aColor = GetControlForeground();
+        else
+            aColor = GetCanonicalTextColor( rStyleSettings );
+        SetTextColor( aColor );
+        SetTextFillColor();
+    }
+}
+
+// -----------------------------------------------------------------
+
+void Control::DrawControlText( OutputDevice& _rTargetDevice, const Rectangle& _rRect, const XubString& _rStr,
+    USHORT _nStyle, MetricVector* _pVector, String* _pDisplayText ) const
+{
+    if ( !mpControlData->mpReferenceDevice )
+    {
+        _rTargetDevice.DrawText( _rRect, _rStr, _nStyle, _pVector, _pDisplayText );
+        return;
+    }
+
+    // TODO:
+    // - respect the style (word break, vert./horz. align, etc.)
+    // - respect _pVector and _pDisplayText, i.e. fill metric data if they're given
+
+    sal_Int32* pCharWidths = new sal_Int32[ _rStr.Len() ];
+    // retrieve unzoomed point font of the target device
+    Font aFont( GetCanonicalFont( GetSettings().GetStyleSettings() ) );
+
+    // transfer font to the reference device
+    mpControlData->mpReferenceDevice->Push( PUSH_FONT );
+    Font aRefFont( aFont );
+    aRefFont.SetSize( LogicToLogic(
+        aRefFont.GetSize(), MAP_POINT, mpControlData->mpReferenceDevice->GetMapMode().GetMapUnit() ) );
+    mpControlData->mpReferenceDevice->SetFont( aRefFont );
+
+    // retrieve the character widths from the reference device
+    mpControlData->mpReferenceDevice->GetTextArray( _rStr, pCharWidths );
+    mpControlData->mpReferenceDevice->Pop();
+
+    // adjust the widths, which are in ref-device units, to the target device
+    const MapUnit eRefMapUnit( mpControlData->mpReferenceDevice->GetMapMode().GetMapUnit() );
+    OSL_ENSURE( eRefMapUnit != MAP_PIXEL, "a reference device with MAP_PIXEL?" );
+
+    const MapMode& aTargetMapMode( _rTargetDevice.GetMapMode() );
+    const MapUnit eTargetMapUnit( aTargetMapMode.GetMapUnit() );
+    const bool bTargetIsPixel = ( eTargetMapUnit == MAP_PIXEL );
+    {
+        for ( size_t i=0; i<_rStr.Len(); ++i )
+        {
+            pCharWidths[i] =
+                    bTargetIsPixel
+                ?   _rTargetDevice.LogicToPixel( Size( pCharWidths[i], 0 ), eRefMapUnit ).Width()
+                :   _rTargetDevice.LogicToLogic( Size( pCharWidths[i], 0 ), eRefMapUnit, eTargetMapUnit ).Width();
+        }
+    }
+
+    Point aDrawTextPosition( _rRect.TopLeft() );
+    // translate our zoom into a map mode / font / origin at the target device
+    if ( IsZoom() )
+    {
+        _rTargetDevice.Push( PUSH_MAPMODE | PUSH_FONT );
+
+        const Fraction& rZoom( GetZoom() );
+
+        MapMode aDrawMapMode( aTargetMapMode );
+        aDrawMapMode.SetScaleX( rZoom );
+        aDrawMapMode.SetScaleY( rZoom );
+        _rTargetDevice.SetMapMode( aDrawMapMode );
+
+        Font aDrawFont( aFont );
+        if ( bTargetIsPixel )
+            aDrawFont.SetSize( _rTargetDevice.LogicToPixel( aDrawFont.GetSize(), MAP_POINT ) );
+        else
+            aDrawFont.SetSize( _rTargetDevice.LogicToLogic( aDrawFont.GetSize(), MAP_POINT, eTargetMapUnit ) );
+        _rTargetDevice.SetFont( aDrawFont );
+
+        aDrawTextPosition.X() = long(aDrawTextPosition.X() / (double)rZoom);
+        aDrawTextPosition.Y() = long(aDrawTextPosition.Y() / (double)rZoom);
+    }
+
+    // draw the text
+    _rTargetDevice.DrawTextArray( aDrawTextPosition, _rStr, pCharWidths );
+
+    if ( IsZoom() )
+        _rTargetDevice.Pop();
+
+    delete[] pCharWidths;
 }

@@ -58,6 +58,11 @@ public:
 //#endif
 protected:
     virtual void    FillLayoutData() const;
+    virtual const Font&
+                    GetCanonicalFont( const StyleSettings& _rStyle ) const;
+    virtual const Color&
+                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
+
 public:
                     FixedText( Window* pParent, WinBits nStyle = 0 );
                     FixedText( Window* pParent, const ResId& rResId );
@@ -89,6 +94,10 @@ private:
 
 protected:
     virtual void    FillLayoutData() const;
+    virtual const Font&
+                    GetCanonicalFont( const StyleSettings& _rStyle ) const;
+    virtual const Color&
+                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 
 public:
                     FixedLine( Window* pParent, WinBits nStyle = WB_HORZ );

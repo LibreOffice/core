@@ -50,6 +50,10 @@ private:
                                       const Point& rPos, const Size& rSize, bool bLayout = false );
 
     virtual void    FillLayoutData() const;
+    virtual const Font&
+                    GetCanonicalFont( const StyleSettings& _rStyle ) const;
+    virtual const Color&
+                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 
 public:
                     GroupBox( Window* pParent, WinBits nStyle = 0 );

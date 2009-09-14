@@ -32,7 +32,7 @@
 #include "precompiled_vcl.hxx"
 #include <vcl/event.hxx>
 #include <vcl/group.hxx>
-#include <vcl/controllayout.hxx>
+#include <vcl/controldata.hxx>
 
 #ifndef _SV_RC_H
 #include <tools/rc.h>
@@ -66,31 +66,25 @@ WinBits GroupBox::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
+// -----------------------------------------------------------------
+
+const Font& GroupBox::GetCanonicalFont( const StyleSettings& _rStyle ) const
+{
+    return _rStyle.GetGroupFont();
+}
+
+// -----------------------------------------------------------------
+const Color& GroupBox::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
+{
+    return _rStyle.GetGroupTextColor();
+}
+
 // -----------------------------------------------------------------------
 
 void GroupBox::ImplInitSettings( BOOL bFont,
                                  BOOL bForeground, BOOL bBackground )
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    if ( bFont )
-    {
-        Font aFont = rStyleSettings.GetGroupFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetZoomedPointFont( aFont );
-    }
-
-    if ( bForeground || bFont )
-    {
-        Color aColor;
-        if ( IsControlForeground() )
-            aColor = GetControlForeground();
-        else
-            aColor = rStyleSettings.GetGroupTextColor();
-        SetTextColor( aColor );
-        SetTextFillColor();
-    }
+    Control::ImplInitSettings( bFont, bForeground );
 
     if ( bBackground )
     {
@@ -227,16 +221,16 @@ void GroupBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
         }
     }
 
-    MetricVector* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
-    String* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
-    pDev->DrawText( aRect, aText, nTextStyle, pVector, pDisplayText );
+    MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
+    String* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
+    DrawControlText( *pDev, aRect, aText, nTextStyle, pVector, pDisplayText );
 }
 
 // -----------------------------------------------------------------------
 
 void GroupBox::FillLayoutData() const
 {
-    mpLayoutData = new vcl::ControlLayoutData();
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<GroupBox*>(this)->   ImplDraw( const_cast<GroupBox*>(this), 0, Point(), GetOutputSizePixel(), true );
 }
 

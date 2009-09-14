@@ -101,6 +101,8 @@ protected:
     SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
 
     virtual void                FillLayoutData() const;
+    virtual const Font&         GetCanonicalFont( const StyleSettings& _rStyle ) const;
+    virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
     SAL_DLLPRIVATE Rectangle*   ImplFindPartRect( const Point& rPt );
 
 public:

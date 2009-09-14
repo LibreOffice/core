@@ -40,7 +40,7 @@
 #include <vcl/lstbox.h>
 #include <vcl/ilstbox.hxx>
 #include <vcl/i18nhelp.hxx>
-#include <vcl/controllayout.hxx>
+#include <vcl/controldata.hxx>
 #include <vcl/unohelp.hxx>
 #ifndef _COM_SUN_STAR_UTIL_XCOLLATOR_HPP_
 #include <com/sun/star/i18n/XCollator.hpp>
@@ -647,7 +647,7 @@ void ImplListBoxWindow::Clear()
     mnTop           = 0;
     mnLeft          = 0;
     mbImgsDiffSz    = FALSE;
-    delete mpLayoutData, mpLayoutData = NULL;
+    ImplClearLayoutData();
 
     mnCurrentPos = LISTBOX_ENTRY_NOTFOUND;
 
@@ -656,7 +656,7 @@ void ImplListBoxWindow::Clear()
 
 void ImplListBoxWindow::SetUserItemSize( const Size& rSz )
 {
-    delete mpLayoutData, mpLayoutData = NULL;
+    ImplClearLayoutData();
     maUserItemSize = rSz;
     ImplCalcMetrics();
 }
@@ -778,7 +778,7 @@ void ImplListBoxWindow::ImplCallSelect()
                 nMRUCount--;
             }
 
-            delete mpLayoutData, mpLayoutData = NULL;
+            ImplClearLayoutData();
 
             ImplEntryType* pNewEntry = new ImplEntryType( aSelected );
             pNewEntry->mbIsSelected = bSelectNewEntry;
@@ -798,7 +798,7 @@ void ImplListBoxWindow::ImplCallSelect()
 
 USHORT ImplListBoxWindow::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry )
 {
-    delete mpLayoutData, mpLayoutData = NULL;
+    ImplClearLayoutData();
     USHORT nNewPos = mpEntryList->InsertEntry( nPos, pNewEntry, mbSort );
 
     if( (GetStyle() & WB_WORDBREAK) )
@@ -812,7 +812,7 @@ USHORT ImplListBoxWindow::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry )
 
 void ImplListBoxWindow::RemoveEntry( USHORT nPos )
 {
-    delete mpLayoutData, mpLayoutData = NULL;
+    ImplClearLayoutData();
     mpEntryList->RemoveEntry( nPos );
     if( mnCurrentPos >= mpEntryList->GetEntryCount() )
         mnCurrentPos = LISTBOX_ENTRY_NOTFOUND;
@@ -1062,7 +1062,7 @@ void ImplListBoxWindow::SelectEntry( USHORT nPos, BOOL bSelect )
                 ImplPaint( nPos );
                 if ( !IsVisible( nPos ) )
                 {
-                    delete mpLayoutData, mpLayoutData = NULL;
+                    ImplClearLayoutData();
                     USHORT nVisibleEntries = GetLastVisibleEntry()-mnTop;
                     if ( !nVisibleEntries || !IsReallyVisible() || ( nPos < GetTopEntry() ) )
                     {
@@ -1233,7 +1233,7 @@ BOOL ImplListBoxWindow::SelectEntries( USHORT nSelect, LB_EVENT_TYPE eLET, BOOL 
             if( HasFocus() )
                 ImplShowFocusRect();
         }
-        delete mpLayoutData, mpLayoutData = NULL;
+        ImplClearLayoutData();
     }
     return bSelectionChanged;
 }
@@ -1838,8 +1838,8 @@ void ImplListBoxWindow::DrawEntry( USHORT nPos, BOOL bDrawImage, BOOL bDrawText,
 
     if( bDrawText )
     {
-        MetricVector* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
-        String* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
+        MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
+        String* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
         XubString aStr( mpEntryList->GetEntryText( nPos ) );
         if ( aStr.Len() )
         {
@@ -1859,7 +1859,7 @@ void ImplListBoxWindow::DrawEntry( USHORT nPos, BOOL bDrawImage, BOOL bDrawText,
             }
 
             if( bLayout )
-                mpLayoutData->m_aLineIndices.push_back( mpLayoutData->m_aDisplayText.Len() );
+                mpControlData->mpLayoutData->m_aLineIndices.push_back( mpControlData->mpLayoutData->m_aDisplayText.Len() );
 
             // pb: #106948# explicit mirroring for calc
             if ( mbMirroring )
@@ -1900,7 +1900,7 @@ void ImplListBoxWindow::DrawEntry( USHORT nPos, BOOL bDrawImage, BOOL bDrawText,
 
 void ImplListBoxWindow::FillLayoutData() const
 {
-    mpLayoutData = new vcl::ControlLayoutData();
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<ImplListBoxWindow*>(this)->
         ImplDoPaint( Rectangle( Point( 0, 0 ), GetOutputSize() ), true );
 }
@@ -1978,7 +1978,7 @@ void ImplListBoxWindow::Resize()
     if ( bShowFocusRect )
         ImplShowFocusRect();
 
-    delete mpLayoutData, mpLayoutData = NULL;
+    ImplClearLayoutData();
 }
 
 // -----------------------------------------------------------------------
@@ -2034,7 +2034,7 @@ void ImplListBoxWindow::SetTopEntry( USHORT nTop )
 
     if ( nTop != mnTop )
     {
-        delete mpLayoutData, mpLayoutData = NULL;
+        ImplClearLayoutData();
         long nDiff = mpEntryList->GetAddedHeight( mnTop, nTop, 0 );
         Update();
         ImplHideFocusRect();
@@ -2078,7 +2078,7 @@ void ImplListBoxWindow::ScrollHorz( long n )
 
     if ( nDiff )
     {
-        delete mpLayoutData, mpLayoutData = NULL;
+        ImplClearLayoutData();
         mnLeft = sal::static_int_cast<USHORT>(mnLeft + nDiff);
         Update();
         ImplHideFocusRect();
@@ -2148,7 +2148,7 @@ void ImplListBoxWindow::StateChanged( StateChangedType nType )
         ImplInitSettings( FALSE, FALSE, TRUE );
         Invalidate();
     }
-    delete mpLayoutData, mpLayoutData = NULL;
+    ImplClearLayoutData();
 }
 
 // -----------------------------------------------------------------------
@@ -2162,7 +2162,7 @@ void ImplListBoxWindow::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        delete mpLayoutData, mpLayoutData = NULL;
+        ImplClearLayoutData();
         ImplInitSettings( TRUE, TRUE, TRUE );
         ImplCalcMetrics();
         Invalidate();
@@ -2743,7 +2743,7 @@ void ImplWin::MouseButtonDown( const MouseEvent& )
 
 void ImplWin::FillLayoutData() const
 {
-    mpLayoutData = new vcl::ControlLayoutData();
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<ImplWin*>(this)->ImplDraw( true );
 }
 
@@ -2951,8 +2951,8 @@ void ImplWin::DrawEntry( BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImageP
             aTextRect.Left() += nMaxWidth + IMG_TXT_DISTANCE;
         }
 
-        MetricVector* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
-        String* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
+        MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
+        String* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
         DrawText( aTextRect, maString, nTextStyle, pVector, pDisplayText );
     }
 

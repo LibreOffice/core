@@ -44,7 +44,7 @@
 #include <vcl/subedit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/controllayout.hxx>
+#include <vcl/controldata.hxx>
 
 
 
@@ -687,7 +687,7 @@ void ComboBox::Resize()
 
 void ComboBox::FillLayoutData() const
 {
-    mpLayoutData = new vcl::ControlLayoutData();
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     AppendLayoutData( *mpSubEdit );
     mpSubEdit->SetLayoutDataParent( this );
     Control* pMainWindow = mpImplLB->GetMainWindow();
@@ -1531,7 +1531,7 @@ void ComboBox::SetBorderStyle( USHORT nBorderStyle )
 
 long ComboBox::GetIndexForPoint( const Point& rPoint, USHORT& rPos ) const
 {
-    if( ! mpLayoutData )
+    if( !HasLayoutData() )
         FillLayoutData();
 
     // check whether rPoint fits at all

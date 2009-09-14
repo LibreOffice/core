@@ -50,7 +50,7 @@
 #include <tools/poly.hxx>
 #include <vcl/button.hxx>
 #include <vcl/window.h>
-#include <vcl/controllayout.hxx>
+#include <vcl/controldata.hxx>
 #ifndef _SV_NATIVEWIDGET_HXX
 #include <vcl/salnativewidgets.hxx>
 #endif
@@ -383,8 +383,8 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
 
     WinBits         nWinStyle = GetStyle();
     Rectangle       aOutRect( rPos, rSize );
-    MetricVector   *pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
-    String         *pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
+    MetricVector   *pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
+    String         *pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
     ImageAlign      eImageAlign = mpButtonData->meImageAlign;
     Size            aImageSize = mpButtonData->maImage.GetSizePixel();
 
@@ -411,8 +411,7 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
         rPos = aOutRect.TopLeft();
 
         ImplSetFocusRect( aOutRect );
-
-        pDev->DrawText( aOutRect, aText, nTextStyle, pVector, pDisplayText );
+        DrawControlText( *pDev, aOutRect, aText, nTextStyle, pVector, pDisplayText );
         return;
     }
 
@@ -854,31 +853,25 @@ WinBits PushButton::ImplInitStyle( const Window* pPrevWindow, WinBits nStyle )
     return nStyle;
 }
 
+// -----------------------------------------------------------------
+
+const Font& PushButton::GetCanonicalFont( const StyleSettings& _rStyle ) const
+{
+    return _rStyle.GetPushButtonFont();
+}
+
+// -----------------------------------------------------------------
+const Color& PushButton::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
+{
+    return _rStyle.GetButtonTextColor();
+}
+
 // -----------------------------------------------------------------------
 
 void PushButton::ImplInitSettings( BOOL bFont,
                                    BOOL bForeground, BOOL bBackground )
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    if ( bFont )
-    {
-        Font aFont = rStyleSettings.GetPushButtonFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetZoomedPointFont( aFont );
-    }
-
-    if ( bForeground || bFont )
-    {
-        Color aColor;
-        if ( IsControlForeground() )
-            aColor = GetControlForeground();
-        else
-            aColor = rStyleSettings.GetButtonTextColor();
-        SetTextColor( aColor );
-        SetTextFillColor();
-    }
+    Button::ImplInitSettings( bFont, bForeground );
 
     if ( bBackground )
     {
@@ -1660,7 +1653,7 @@ void PushButton::KeyUp( const KeyEvent& rKEvt )
 
 void PushButton::FillLayoutData() const
 {
-    mpLayoutData = new vcl::ControlLayoutData();
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<PushButton*>(this)->ImplDrawPushButton( true );
 }
 
@@ -2226,31 +2219,25 @@ WinBits RadioButton::ImplInitStyle( const Window* pPrevWindow, WinBits nStyle )
     return nStyle;
 }
 
+// -----------------------------------------------------------------
+
+const Font& RadioButton::GetCanonicalFont( const StyleSettings& _rStyle ) const
+{
+    return _rStyle.GetRadioCheckFont();
+}
+
+// -----------------------------------------------------------------
+const Color& RadioButton::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
+{
+    return _rStyle.GetRadioCheckTextColor();
+}
+
 // -----------------------------------------------------------------------
 
 void RadioButton::ImplInitSettings( BOOL bFont,
                                     BOOL bForeground, BOOL bBackground )
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    if ( bFont )
-    {
-        Font aFont = rStyleSettings.GetRadioCheckFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetZoomedPointFont( aFont );
-    }
-
-    if ( bForeground || bFont )
-    {
-        Color aColor;
-        if ( IsControlForeground() )
-            aColor = GetControlForeground();
-        else
-            aColor = rStyleSettings.GetRadioCheckTextColor();
-        SetTextColor( aColor );
-        SetTextFillColor();
-    }
+    Button::ImplInitSettings( bFont, bForeground );
 
     if ( bBackground )
     {
@@ -2437,8 +2424,8 @@ void RadioButton::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
     WinBits                 nWinStyle = GetStyle();
     XubString               aText( GetText() );
     Rectangle               aRect( rPos, rSize );
-    MetricVector*           pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
-    String*                 pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
+    MetricVector*           pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
+    String*                 pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
 
     pDev->Push( PUSH_CLIPREGION );
     pDev->IntersectClipRegion( Rectangle( rPos, rSize ) );
@@ -2859,7 +2846,7 @@ void RadioButton::KeyUp( const KeyEvent& rKEvt )
 
 void RadioButton::FillLayoutData() const
 {
-    mpLayoutData = new vcl::ControlLayoutData();
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<RadioButton*>(this)->ImplDrawRadioButton( true );
 }
 
@@ -3400,31 +3387,25 @@ WinBits CheckBox::ImplInitStyle( const Window* pPrevWindow, WinBits nStyle )
     return nStyle;
 }
 
+// -----------------------------------------------------------------
+
+const Font& CheckBox::GetCanonicalFont( const StyleSettings& _rStyle ) const
+{
+    return _rStyle.GetRadioCheckFont();
+}
+
+// -----------------------------------------------------------------
+const Color& CheckBox::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
+{
+    return _rStyle.GetRadioCheckTextColor();
+}
+
 // -----------------------------------------------------------------------
 
 void CheckBox::ImplInitSettings( BOOL bFont,
                                  BOOL bForeground, BOOL bBackground )
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    if ( bFont )
-    {
-        Font aFont = rStyleSettings.GetRadioCheckFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetZoomedPointFont( aFont );
-    }
-
-    if ( bForeground || bFont )
-    {
-        Color aColor;
-        if ( IsControlForeground() )
-            aColor = GetControlForeground();
-        else
-            aColor = rStyleSettings.GetRadioCheckTextColor();
-        SetTextColor( aColor );
-        SetTextFillColor();
-    }
+    Button::ImplInitSettings( bFont, bForeground );
 
     if ( bBackground )
     {
@@ -3802,7 +3783,7 @@ void CheckBox::KeyUp( const KeyEvent& rKEvt )
 
 void CheckBox::FillLayoutData() const
 {
-    mpLayoutData = new vcl::ControlLayoutData();
+    mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     const_cast<CheckBox*>(this)->ImplDrawCheckBox( true );
 }
 

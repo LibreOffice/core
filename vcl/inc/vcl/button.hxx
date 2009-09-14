@@ -158,6 +158,10 @@ protected:
                     PushButton( WindowType nType );
 
     virtual void    FillLayoutData() const;
+    virtual const Font&
+                    GetCanonicalFont( const StyleSettings& _rStyle ) const;
+    virtual const Color&
+                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 public:
                     PushButton( Window* pParent, WinBits nStyle = 0 );
                     PushButton( Window* pParent, const ResId& rResId );
@@ -330,6 +334,10 @@ public:
 
 protected:
     virtual void FillLayoutData() const;
+    virtual const Font&
+                    GetCanonicalFont( const StyleSettings& _rStyle ) const;
+    virtual const Color&
+                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 
     inline void             SetMouseRect( const Rectangle& _rMouseRect )    { maMouseRect = _rMouseRect; }
     inline const Rectangle& GetMouseRect( ) const                           { return maMouseRect; }
@@ -435,6 +443,10 @@ protected:
     SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE virtual void FillLayoutData() const;
+    SAL_DLLPRIVATE virtual const Font&
+                                GetCanonicalFont( const StyleSettings& _rStyle ) const;
+    SAL_DLLPRIVATE virtual const Color&
+                                GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 
 public:
     SAL_DLLPRIVATE void         ImplCheck();
