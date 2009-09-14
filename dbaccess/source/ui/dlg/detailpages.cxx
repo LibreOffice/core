@@ -571,9 +571,6 @@ namespace dbaui
         m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
         m_aEDSocket.SetModifyHdl(getControlModifiedLink());
 
-        // #98982# OJ
-        m_aNFPortNumber.SetUseThousandSep(sal_False);
-
         Window* pWindows[] = {  &m_aFTHostname,&m_aEDHostname,
                                 &m_aPortNumber,&m_aNFPortNumber,&m_aFTSocket,&m_aEDSocket,
                                 &m_aFTDriverClass, &m_aEDDriverClass,&m_aTestJavaDriver,
@@ -701,36 +698,22 @@ namespace dbaui
     MySQLNativePage::MySQLNativePage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_MYSQL_NATIVE, _rCoreAttrs, CBTP_USE_CHARSET, false )
         ,m_aSeparator1          ( this, ModuleRes( FL_SEPARATOR1) )
-        ,m_aDatabaseNameLabel   ( this, ModuleRes( FT_AUTODATABASENAME ) )
-        ,m_aDatabaseName        ( this, ModuleRes( ET_AUTODATABASENAME ) )
-        ,m_aFTHostname          ( this, ModuleRes(FT_HOSTNAME))
-        ,m_aEDHostname          ( this, ModuleRes(ET_HOSTNAME))
-        ,m_aPortNumber          ( this, ModuleRes(FT_PORTNUMBER))
-        ,m_aNFPortNumber        ( this, ModuleRes(NF_PORTNUMBER))
-        ,m_aFTSocket            ( this, ModuleRes(FT_SOCKET))
-        ,m_aEDSocket            ( this, ModuleRes(ET_SOCKET))
+        ,m_aMySQLSettings       ( *this, getControlModifiedLink() )
         ,m_aSeparator2          ( this, ModuleRes(FL_SEPARATOR2))
         ,m_aUserNameLabel       ( this, ModuleRes(FT_USERNAME))
         ,m_aUserName            ( this, ModuleRes(ET_USERNAME))
         ,m_aPasswordRequired    ( this, ModuleRes(CB_PASSWORD_REQUIRED))
     {
-        m_aDatabaseName.SetModifyHdl(getControlModifiedLink());
-        m_aEDHostname.SetModifyHdl(getControlModifiedLink());
-        m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
-        m_aEDSocket.SetModifyHdl(getControlModifiedLink());
         m_aUserName.SetModifyHdl(getControlModifiedLink());
 
-        // #98982# OJ
-        m_aNFPortNumber.SetUseThousandSep(sal_False);
-
-        Window* pWindows[] = {  &m_aDatabaseNameLabel, &m_aDatabaseName, &m_aFTHostname, &m_aEDHostname,
-                                &m_aPortNumber,&m_aNFPortNumber,&m_aFTSocket,&m_aEDSocket,
-                                &m_aSeparator2, &m_aUserNameLabel, &m_aUserName, &m_aPasswordRequired,
-                                m_pCharsetLabel, m_pCharset};
-
+        Window* pWindows[] = {  &m_aMySQLSettings, &m_aSeparator2, &m_aUserNameLabel, &m_aUserName,
+                                &m_aPasswordRequired, m_pCharsetLabel, m_pCharset};
         sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
         for (sal_Int32 i=1; i < nCount; ++i)
             pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
+
+        LayoutHelper::positionBelow( m_aSeparator1, m_aMySQLSettings, RelatedControls, 3 );
+        m_aMySQLSettings.Show();
 
         FreeResource();
     }
@@ -738,25 +721,19 @@ namespace dbaui
     // -----------------------------------------------------------------------
     void MySQLNativePage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        OCommonBehaviourTabPage::fillControls(_rControlList);
+        OCommonBehaviourTabPage::fillControls( _rControlList );
+        m_aMySQLSettings.fillControls( _rControlList );
 
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aDatabaseName));
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aEDHostname));
-        _rControlList.push_back(new OSaveValueWrapper<NumericField>(&m_aNFPortNumber));
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aEDSocket));
         _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aUserName));
         _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aPasswordRequired));
     }
     // -----------------------------------------------------------------------
     void MySQLNativePage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        OCommonBehaviourTabPage::fillWindows(_rControlList);
+        OCommonBehaviourTabPage::fillWindows( _rControlList );
+        m_aMySQLSettings.fillWindows( _rControlList);
 
         _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aSeparator1));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aDatabaseNameLabel));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTHostname));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aPortNumber));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTSocket));
         _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aSeparator2));
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aUserNameLabel));
     }
@@ -764,12 +741,9 @@ namespace dbaui
     // -----------------------------------------------------------------------
     sal_Bool MySQLNativePage::FillItemSet( SfxItemSet& _rSet )
     {
-        sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+        sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet( _rSet );
 
-        fillString(_rSet,&m_aDatabaseName,DSID_DATABASENAME,bChangedSomething);
-        fillString(_rSet,&m_aEDHostname,DSID_CONN_HOSTNAME,bChangedSomething);
-        fillString(_rSet,&m_aEDSocket,DSID_CONN_SOCKET,bChangedSomething);
-        fillInt32(_rSet,&m_aNFPortNumber,DSID_MYSQL_PORTNUMBER,bChangedSomething );
+        bChangedSomething |= m_aMySQLSettings.FillItemSet( _rSet );
 
         if ( m_aUserName.GetText() != m_aUserName.GetSavedValue() )
         {
@@ -788,27 +762,13 @@ namespace dbaui
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        SFX_ITEMSET_GET(_rSet, pDatabaseName, SfxStringItem, DSID_DATABASENAME, sal_True);
-        SFX_ITEMSET_GET(_rSet, pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
-        SFX_ITEMSET_GET(_rSet, pPortNumber, SfxInt32Item, DSID_MYSQL_PORTNUMBER, sal_True);
-        SFX_ITEMSET_GET(_rSet, pSocket, SfxStringItem, DSID_CONN_SOCKET, sal_True);
+        m_aMySQLSettings.implInitControls( _rSet );
+
         SFX_ITEMSET_GET(_rSet, pUidItem, SfxStringItem, DSID_USER, sal_True);
         SFX_ITEMSET_GET(_rSet, pAllowEmptyPwd, SfxBoolItem, DSID_PASSWORDREQUIRED, sal_True);
 
         if ( bValid )
         {
-            m_aDatabaseName.SetText( pDatabaseName->GetValue() );
-            m_aDatabaseName.ClearModifyFlag();
-
-            m_aEDHostname.SetText(pHostName->GetValue());
-            m_aEDHostname.ClearModifyFlag();
-
-            m_aNFPortNumber.SetValue(pPortNumber->GetValue());
-            m_aNFPortNumber.ClearModifyFlag();
-
-            m_aEDSocket.SetText(pSocket->GetValue());
-            m_aEDSocket.ClearModifyFlag();
-
             m_aUserName.SetText(pUidItem->GetValue());
             m_aUserName.ClearModifyFlag();
             m_aPasswordRequired.Check(pAllowEmptyPwd->GetValue());
@@ -1023,8 +983,6 @@ namespace dbaui
         m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
         m_aNFRowCount.SetModifyHdl(getControlModifiedLink());
 
-        // #98982# OJ
-        m_aNFPortNumber.SetUseThousandSep(sal_False);
         m_aNFRowCount.SetUseThousandSep(sal_False);
         m_iNormalPort = 389;
         m_iSSLPort    = 636;

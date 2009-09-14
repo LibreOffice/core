@@ -139,25 +139,38 @@ IMPLEMENT_IMPLEMENTATION_ID(OContentHelper)
 Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    ::rtl::OUString sContentId = m_pImpl->m_aProps.aTitle;
+    ::rtl::OUStringBuffer aIdentifier;
+    aIdentifier.appendAscii( "private:" );
+    aIdentifier.append( impl_getHierarchicalName( true ) );
+    return new ::ucbhelper::ContentIdentifier( m_aContext.getLegacyServiceFactory(), aIdentifier.makeStringAndClear() );
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OContentHelper::impl_getHierarchicalName( bool _includingRootContainer ) const
+{
+    ::rtl::OUStringBuffer aHierarchicalName( m_pImpl->m_aProps.aTitle );
     Reference< XInterface > xParent = m_xParentContainer;
     while( xParent.is() )
     {
-        Reference<XPropertySet> xProp(xParent,UNO_QUERY);
-        Reference<XChild> xChild(xParent,UNO_QUERY);
-        xParent.set(xChild.is() ? xChild->getParent() : Reference< XInterface >(),UNO_QUERY);
+        Reference<XPropertySet> xProp( xParent, UNO_QUERY );
+        Reference< XChild > xChild( xParent, UNO_QUERY );
+        xParent.set( xChild.is() ? xChild->getParent() : Reference< XInterface >(), UNO_QUERY );
         if ( xProp.is() && xParent.is() )
         {
             ::rtl::OUString sName;
-            xProp->getPropertyValue(PROPERTY_NAME) >>= sName;
-            sContentId = sName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sContentId;
+            xProp->getPropertyValue( PROPERTY_NAME ) >>= sName;
+
+            ::rtl::OUString sPrevious = aHierarchicalName.makeStringAndClear();
+            aHierarchicalName.append( sName );
+            aHierarchicalName.append( sal_Unicode( '/' ) );
+            aHierarchicalName.append( sPrevious );
         }
     }
-
-    sContentId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:")) + sContentId;
-    return new ::ucbhelper::ContentIdentifier( m_aContext.getLegacyServiceFactory(), sContentId );
-    //  return Reference< XContentIdentifier >();
+    ::rtl::OUString sHierarchicalName( aHierarchicalName.makeStringAndClear() );
+    if ( !_includingRootContainer )
+        sHierarchicalName = sHierarchicalName.copy( sHierarchicalName.indexOf( '/' ) + 1 );
+    return sHierarchicalName;
 }
+
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OContentHelper::getContentType() throw (RuntimeException)
 {

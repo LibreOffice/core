@@ -1080,6 +1080,7 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
     {
         // known JDBC settings
         AsciiPropertyValue( "JavaDriverClass",            makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "JavaDriverClassPath",       makeAny( ::rtl::OUString() ) ),
         AsciiPropertyValue( "IgnoreCurrency",             makeAny( (sal_Bool)sal_False ) ),
         // known settings for file-based drivers
         AsciiPropertyValue( "Extension",                  makeAny( ::rtl::OUString() ) ),
@@ -1111,6 +1112,7 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "MaxRowCount",                makeAny( (sal_Int32)100 ) ),
         // known MySQLNative driver settings
         AsciiPropertyValue( "LocalSocket",                makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "NamedPipe",                  makeAny( ::rtl::OUString() ) ),
         // misc known driver settings
         AsciiPropertyValue( "ParameterNameSubstitution",  makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( "AddIndexAppendix",           makeAny( (sal_Bool)sal_True ) ),

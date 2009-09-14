@@ -60,6 +60,7 @@ SRC1FILES =	\
         AutoControls.src	\
         ConnectionPage.src	\
         UserAdmin.src		\
+        admincontrols.src   \
         directsql.src		\
         AdabasStat.src		\
         indexdialog.src		\
@@ -94,6 +95,7 @@ EXCEPTIONSFILES=						\
         $(SLO)$/RelationDlg.obj			\
         $(SLO)$/adtabdlg.obj			\
         $(SLO)$/dlgsave.obj				\
+        $(SLO)$/admincontrols.obj       \
         $(SLO)$/adminpages.obj			\
         $(SLO)$/queryorder.obj			\
         $(SLO)$/queryfilter.obj			\

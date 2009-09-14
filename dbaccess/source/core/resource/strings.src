@@ -235,9 +235,15 @@ String RID_STR_OBJECT_ALREADY_CONTAINED
 {
     Text [ en-US ] = "The object already is, with a different name, part of the container.";
 };
+
 String RID_STR_NAME_NOT_FOUND
 {
     Text [ en-US ] = "Unable to find the document '$name$'.";
+};
+
+String RID_STR_ERROR_WHILE_SAVING
+{
+    Text [ en-US ] = "Could not save the document:\n\n$except$:\n$message$";
 };
 
 //-------------------------------------------------------------------------

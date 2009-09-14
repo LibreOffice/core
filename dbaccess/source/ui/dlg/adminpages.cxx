@@ -339,16 +339,22 @@ namespace dbaui
     }
 
 
-    Point OGenericAdministrationPage::MovePoint(Point _aPixelBasePoint, sal_Int32 _XShift, sal_Int32 _YShift)
+    //=========================================================================
+    //= LayoutHelper
+    //=========================================================================
+    //-------------------------------------------------------------------------
+    void LayoutHelper::positionBelow( const Control& _rReference, Control& _rControl, const ControlRelation _eRelation,
+        const long _nIndentAppFont )
     {
-        Point rLogicPoint = PixelToLogic( _aPixelBasePoint, MAP_APPFONT );
-        sal_uInt32 XPos = rLogicPoint.X() + _XShift;
-        sal_uInt32 YPos = rLogicPoint.Y() + _YShift;
-        Point aNewPixelPoint = LogicToPixel(Point(XPos, YPos), MAP_APPFONT);
-        return aNewPixelPoint;
+        Point aReference = _rReference.GetPosPixel();
+        aReference.Y() += _rReference.GetSizePixel().Height();
+
+        const Window* pConverter = _rControl.GetParent();
+        Size aOffset = pConverter->LogicToPixel( Size( _nIndentAppFont, ( _eRelation == RelatedControls ? 3 : 6 ) ), MAP_APPFONT );
+
+        Point aControlPos( aReference.X() + aOffset.Width(), aReference.Y() + aOffset.Height() );
+        _rControl.SetPosPixel( aControlPos );
     }
-
-
 
 //.........................................................................
 }   // namespace dbaui

@@ -36,11 +36,18 @@
 #include "datasourceui.hxx"
 #include <connectivity/DriversConfig.hxx>
 
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/beans/NamedValue.hpp>
+
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::beans::NamedValue;
+
 using namespace dbaui;
 void ODriversSettings::getSupportedIndirectSettings( const ::rtl::OUString& _sURLPrefix,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory, ::std::vector< sal_Int32>& _out_rDetailsIds )
 {
     // for a number of settings, we do not need to use hard-coded here, but can ask a
     // central DataSourceUI instance.
+    // TODO: isn't DataSourceUI obsolete, now that this is in the configuration?
     DataSourceMetaData aMeta(_sURLPrefix);
     DataSourceUI aDSUI( aMeta );
     const USHORT nGenericKnownSettings[] =
@@ -67,9 +74,23 @@ void ODriversSettings::getSupportedIndirectSettings( const ::rtl::OUString& _sUR
         if ( aDSUI.hasSetting( *pGenericKnowSetting ) )
             _out_rDetailsIds.push_back( *pGenericKnowSetting );
 
-    // the rest is hard-coded. On the long run, all of this should be done via DataSourceUI::hasSetting
+    // the rest is configuration-based
     ::connectivity::DriversConfig aDriverConfig(_xFactory);
     const ::comphelper::NamedValueCollection& aProperties = aDriverConfig.getProperties(_sURLPrefix);
+#if OSL_DEBUG_LEVEL > 0
+    {
+        Sequence< NamedValue > aNamedValues;
+        aProperties >>= aNamedValues;
+        for (   const NamedValue* loop = aNamedValues.getConstArray();
+                loop != aNamedValues.getConstArray() + aNamedValues.getLength();
+                ++loop
+            )
+        {
+            int dummy = 0;
+            (void)dummy;
+        }
+    }
+#endif
     typedef ::std::pair<USHORT, ::rtl::OUString> TProperties;
     TProperties aProps[] = { TProperties(DSID_SHOWDELETEDROWS,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowDeleted")))
                             ,TProperties(DSID_CHARSET,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet")))
@@ -87,6 +108,7 @@ void ODriversSettings::getSupportedIndirectSettings( const ::rtl::OUString& _sUR
                             ,TProperties(DSID_CONN_CTRLPWD,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlPassword")))
                             ,TProperties(DSID_USECATALOG,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalog")))
                             ,TProperties(DSID_CONN_SOCKET,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LocalSocket")))
+                            ,TProperties(DSID_NAMED_PIPE,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NamedPipe")))
                             ,TProperties(DSID_JDBCDRIVERCLASS,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass")))
                             ,TProperties(DSID_CONN_LDAP_BASEDN,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseDN")))
                             ,TProperties(DSID_CONN_LDAP_ROWCOUNT,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MaxRowCount")))
@@ -94,6 +116,8 @@ void ODriversSettings::getSupportedIndirectSettings( const ::rtl::OUString& _sUR
                             ,TProperties(DSID_IGNORECURRENCY,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreCurrency")))
                             ,TProperties(0,::rtl::OUString())
     };
+    // TODO: This mapping between IDs and property names already exists - in ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper.
+    // We should not duplicate it here.
     for ( TProperties* pProps = aProps; pProps->first; ++pProps )
     {
         if ( aProperties.has(pProps->second) )

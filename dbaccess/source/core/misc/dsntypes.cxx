@@ -125,6 +125,7 @@ String ODsnTypeCollection::cutPrefix(const ::rtl::OUString& _sURL) const
 
     return sRet;
 }
+
 //-------------------------------------------------------------------------
 String ODsnTypeCollection::getPrefix(const ::rtl::OUString& _sURL) const
 {
@@ -149,6 +150,14 @@ String ODsnTypeCollection::getPrefix(const ::rtl::OUString& _sURL) const
 
     return sRet;
 }
+
+//-------------------------------------------------------------------------
+bool ODsnTypeCollection::hasDriver( const sal_Char* _pAsciiPattern ) const
+{
+    String sPrefix( getPrefix( ::rtl::OUString::createFromAscii( _pAsciiPattern ) ) );
+    return ( sPrefix.Len() > 0 );
+}
+
 // -----------------------------------------------------------------------------
 bool ODsnTypeCollection::isConnectionUrlRequired(const ::rtl::OUString& _sURL) const
 {
@@ -369,6 +378,9 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const String& _rDsn) const
     if (sDsn.EqualsIgnoreCaseAscii("jdbc", 0, nSeparator))
         return DST_JDBC;
 
+    if (sDsn.EqualsIgnoreCaseAscii("sdbc:embedded:hsqldb", 0, sDsn.Len()))
+        return DST_EMBEDDED_HSQLDB;
+
     // find second :
     nSeparator = sDsn.Search((sal_Unicode)':', nSeparator + 1);
     if (STRING_NOTFOUND == nSeparator)
@@ -377,13 +389,6 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const String& _rDsn) const
         DBG_ERROR("ODsnTypeCollection::implDetermineType : missing the second colon !");
         return DST_UNKNOWN;
     }
-
-    if (sDsn.EqualsIgnoreCaseAscii("sdbc:adabas", 0, nSeparator))
-        return DST_ADABAS;
-    if (sDsn.EqualsIgnoreCaseAscii("sdbc:odbc", 0, nSeparator))
-        return DST_ODBC;
-    if (sDsn.EqualsIgnoreCaseAscii("sdbc:dbase", 0, nSeparator))
-        return DST_DBASE;
 
     if (sDsn.EqualsIgnoreCaseAscii("sdbc:ado:", 0, nSeparator))
     {
@@ -398,55 +403,56 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const String& _rDsn) const
         }
         return DST_ADO;
     }
-    if (sDsn.EqualsIgnoreCaseAscii("sdbc:flat:", 0, nSeparator))
-        return DST_FLAT;
-    if (sDsn.EqualsIgnoreCaseAscii("sdbc:calc:", 0, nSeparator))
-        return DST_CALC;
-    //if ( ( 11 <= nSeparator) && sDsn.EqualsIgnoreCaseAscii("sdbc:mysqlc:", 0, nSeparator))
-    //  return DST_MYSQL_NATIVE;
 
-    if (sDsn.EqualsIgnoreCaseAscii("sdbc:embedded:hsqldb", 0, sDsn.Len()))
-        return DST_EMBEDDED_HSQLDB;
-
-    if (sDsn.EqualsIgnoreCaseAscii("sdbc:address:", 0, nSeparator))
+    struct KnownPrefix
     {
-        ++nSeparator;
-        if (sDsn.EqualsIgnoreCaseAscii("mozilla:", nSeparator,sDsn.Len() - nSeparator))
-            return DST_MOZILLA;
-        if (sDsn.EqualsIgnoreCaseAscii("thunderbird:", nSeparator,sDsn.Len() - nSeparator))
-            return DST_THUNDERBIRD;
-        if (sDsn.EqualsIgnoreCaseAscii("ldap:", nSeparator,sDsn.Len() - nSeparator))
-            return DST_LDAP;
-        if (sDsn.EqualsIgnoreCaseAscii("outlook", nSeparator,sDsn.Len() - nSeparator))
-            return DST_OUTLOOK;
-        if (sDsn.EqualsIgnoreCaseAscii("outlookexp", nSeparator,sDsn.Len() - nSeparator))
-            return DST_OUTLOOKEXP;
-        if (sDsn.EqualsIgnoreCaseAscii("evolution:ldap", nSeparator,sDsn.Len() - nSeparator))
-            return DST_EVOLUTION_LDAP;
-        if (sDsn.EqualsIgnoreCaseAscii("evolution:groupwise", nSeparator,sDsn.Len() - nSeparator))
-            return DST_EVOLUTION_GROUPWISE;
-        if (sDsn.EqualsIgnoreCaseAscii("evolution:local", nSeparator,sDsn.Len() - nSeparator))
-            return DST_EVOLUTION;
-        if (sDsn.EqualsIgnoreCaseAscii("kab", nSeparator,sDsn.Len() - nSeparator))
-            return DST_KAB;
-        if (sDsn.EqualsIgnoreCaseAscii("macab", nSeparator,sDsn.Len() - nSeparator))
-            return DST_MACAB;
-    }
+        const sal_Char*         pAsciiPrefix;
+        const DATASOURCE_TYPE   eType;
+        const bool              bMatchComplete;
 
-    // find third :
-    nSeparator = sDsn.Search((sal_Unicode)':', nSeparator + 1);
-    if (STRING_NOTFOUND == nSeparator)
+        KnownPrefix()
+            :pAsciiPrefix( NULL )
+            ,eType( DST_UNKNOWN )
+            ,bMatchComplete( false )
+        {
+        }
+        KnownPrefix( const sal_Char* _p, const DATASOURCE_TYPE _t, const bool _m )
+            :pAsciiPrefix( _p )
+            ,eType ( _t )
+            ,bMatchComplete( _m )
+        {
+        }
+    };
+    KnownPrefix aKnowPrefixes[] =
     {
-        DBG_ERROR("ODsnTypeCollection::implDetermineType : missing the third colon !");
-        return DST_UNKNOWN;
-    }
+        KnownPrefix( "sdbc:calc:",          DST_CALC,               false ),
+        KnownPrefix( "sdbc:flat:",          DST_FLAT,               false ),
+        KnownPrefix( "sdbc:adabas:",        DST_ADABAS,             false ),
+        KnownPrefix( "sdbc:odbc:",          DST_ODBC,               false ),
+        KnownPrefix( "sdbc:dbase:",         DST_DBASE,              false ),
+        KnownPrefix( "sdbc:mysql:odbc:",    DST_MYSQL_ODBC,         false ),
+        KnownPrefix( "sdbc:mysql:jdbc:",    DST_MYSQL_JDBC,         false ),
+        KnownPrefix( "sdbc:mysql:mysqlc:",  DST_MYSQL_NATIVE,       false ),
+        KnownPrefix( "sdbc:mysqlc:",        DST_MYSQL_NATIVE_DIRECT,false ),
 
-    if (sDsn.EqualsIgnoreCaseAscii("sdbc:mysql:odbc", 0, nSeparator))
-        return DST_MYSQL_ODBC;
-    if (sDsn.EqualsIgnoreCaseAscii("sdbc:mysql:jdbc", 0, nSeparator))
-        return DST_MYSQL_JDBC;
-    if (sDsn.EqualsIgnoreCaseAscii("sdbc:mysql:mysqlc", 0, nSeparator))
-        return DST_MYSQL_NATIVE;
+        KnownPrefix( "sdbc:address:mozilla:",           DST_MOZILLA,            true ),
+        KnownPrefix( "sdbc:address:thunderbird:",       DST_THUNDERBIRD,        true ),
+        KnownPrefix( "sdbc:address:ldap:",              DST_LDAP,               true ),
+        KnownPrefix( "sdbc:address:outlook",            DST_OUTLOOK,            true ),
+        KnownPrefix( "sdbc:address:outlookexp",         DST_OUTLOOKEXP,         true ),
+        KnownPrefix( "sdbc:address:evolution:ldap",     DST_EVOLUTION_LDAP,     true ),
+        KnownPrefix( "sdbc:address:evolution:groupwise",DST_EVOLUTION_GROUPWISE,true ),
+        KnownPrefix( "sdbc:address:evolution:local",    DST_EVOLUTION,          true ),
+        KnownPrefix( "sdbc:address:kab",                DST_KAB,                true ),
+        KnownPrefix( "sdbc:address:macab",              DST_MACAB,              true )
+    };
+
+    for ( size_t i=0; i < sizeof( aKnowPrefixes ) / sizeof( aKnowPrefixes[0] ); ++i )
+    {
+        USHORT nMatchLen = aKnowPrefixes[i].bMatchComplete ? sDsn.Len() : (USHORT)rtl_str_getLength( aKnowPrefixes[i].pAsciiPrefix );
+        if ( sDsn.EqualsIgnoreCaseAscii( aKnowPrefixes[i].pAsciiPrefix, 0, nMatchLen ) )
+            return aKnowPrefixes[i].eType;
+    }
 
     DBG_ERROR("ODsnTypeCollection::implDetermineType : unrecognized data source type !");
     return DST_UNKNOWN;

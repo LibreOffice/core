@@ -960,30 +960,29 @@ UniReference < XMLPropertySetMapper > ODBFilter::GetCellStylesPropertySetMapper(
 void ODBFilter::setPropertyInfo()
 {
     Reference<XPropertySet> xDataSource(getDataSource());
-    if ( xDataSource.is() )
+    if ( !xDataSource.is() )
+        return;
+
+    ::connectivity::DriversConfig aDriverConfig(getServiceFactory());
+    const ::rtl::OUString sURL = ::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_URL));
+    ::comphelper::NamedValueCollection aDataSourceSettings = aDriverConfig.getProperties( sURL );
+
+    Sequence<PropertyValue> aInfo;
+    if ( !m_aInfoSequence.empty() )
+        aInfo = Sequence<PropertyValue>(&(*m_aInfoSequence.begin()),m_aInfoSequence.size());
+    aDataSourceSettings.merge( ::comphelper::NamedValueCollection( aInfo ), true );
+
+    aDataSourceSettings >>= aInfo;
+    if ( aInfo.getLength() )
     {
-        ::connectivity::DriversConfig aDriverConfig(getServiceFactory());
-        const ::rtl::OUString sURL = ::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_URL));
-        ::comphelper::NamedValueCollection aMetaData = aDriverConfig.getMetaData(sURL);
-        aMetaData.merge( aDriverConfig.getProperties(sURL),true ) ;
-        Sequence<PropertyValue> aInfo;
-        if ( !m_aInfoSequence.empty() )
+        try
         {
-            aInfo = Sequence<PropertyValue>(&(*m_aInfoSequence.begin()),m_aInfoSequence.size());
+            xDataSource->setPropertyValue(PROPERTY_INFO,makeAny(aInfo));
         }
-        aMetaData.merge(::comphelper::NamedValueCollection(aInfo),true);
-        aMetaData >>= aInfo;
-        if ( aInfo.getLength() )
+        catch(Exception)
         {
-            try
-            {
-                xDataSource->setPropertyValue(PROPERTY_INFO,makeAny(aInfo));
-            }
-            catch(Exception)
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
-        } // if ( !m_aInfoSequence.empty() && xDataSource.is() )
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 }
 // -----------------------------------------------------------------------------

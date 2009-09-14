@@ -31,6 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
+#include "core_resource.hxx"
+#include "core_resource.hrc"
 #include "datasource.hxx"
 #include "databasedocument.hxx"
 #include "dbastrings.hrc"
@@ -724,7 +726,7 @@ void SAL_CALL ODatabaseDocument::store(  ) throw (IOException, RuntimeException)
 
 // -----------------------------------------------------------------------------
 void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const Sequence< PropertyValue>& _rArguments,
-    const StoreType _eType, DocumentGuard& _rGuard )
+    const StoreType _eType, DocumentGuard& _rGuard ) throw ( IOException, RuntimeException )
 {
     OSL_PRECOND( ( _eType == SAVE ) || ( _eType == SAVE_AS ),
         "ODatabaseDocument::impl_storeAs_throw: you introduced a new type which cannot be handled here!" );
@@ -788,10 +790,29 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
     }
     catch( const Exception& )
     {
+        Any aError = ::cppu::getCaughtException();
+
         // notify the failure
         if ( !bIsInitializationProcess )
             m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", NULL, makeAny( _rURL ) );
-        throw;
+
+        if  (   aError.isExtractableTo( ::cppu::UnoType< IOException >::get() )
+            ||  aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() )
+            )
+        {
+            // allowed to leave
+            throw;
+        }
+
+        Exception aExcept;
+        aError >>= aExcept;
+
+        ::rtl::OUString sErrorMessage = ResourceManager::loadString(
+            RID_STR_ERROR_WHILE_SAVING,
+            "$except$", aError.getValueTypeName(),
+            "$message$", aExcept.Message
+        );
+        throw IOException( sErrorMessage, *this );
     }
 
     // notify the document event
@@ -933,8 +954,26 @@ void SAL_CALL ODatabaseDocument::storeToURL( const ::rtl::OUString& _rURL, const
     }
     catch( const Exception& )
     {
-        m_aEventNotifier.notifyDocumentEventAsync( "OnSaveToFailed", NULL, makeAny( _rURL ) );
-        throw;
+        Any aError = ::cppu::getCaughtException();
+        m_aEventNotifier.notifyDocumentEventAsync( "OnSaveToFailed", NULL, aError );
+
+        if  (   aError.isExtractableTo( ::cppu::UnoType< IOException >::get() )
+            ||  aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() )
+            )
+        {
+            // allowed to leave
+            throw;
+        }
+
+        Exception aExcept;
+        aError >>= aExcept;
+
+        ::rtl::OUString sErrorMessage = ResourceManager::loadString(
+            RID_STR_ERROR_WHILE_SAVING,
+            "$except$", aError.getValueTypeName(),
+            "$message$", aExcept.Message
+        );
+        throw IOException( sErrorMessage, *this );
     }
 
     m_aEventNotifier.notifyDocumentEventAsync( "OnSaveToDone", NULL, makeAny( _rURL ) );
