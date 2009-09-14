@@ -48,7 +48,7 @@
 #include <rtl/math.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/basemutex.hxx>

@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -70,6 +70,7 @@ SHL1STDLIBS=\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPUNITLIB)		\
+        $(TESTSHL2LIB)           \
     $(ZLIB3RDLIB)	    \
     $(CPPULIB)			\
     $(SALLIB)
@@ -103,6 +104,7 @@ APP1STDLIBS=\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPUNITLIB)		\
+        $(TESTSHL2LIB)           \
     $(ZLIB3RDLIB)	    \
     $(CPPULIB)			\
     $(SALLIB)
@@ -131,6 +133,7 @@ APP2STDLIBS=\
       $(COMPHELPERLIB)	\
       $(CPPUHELPERLIB)	\
       $(CPPUNITLIB)		\
+        $(TESTSHL2LIB)           \
       $(ZLIB3RDLIB)	    \
       $(CPPULIB)			\
       $(SALLIB)
@@ -161,5 +164,5 @@ APP2STDLIBS=\
           @echo ----------------------------------------------------------
           testshl2 -forward $(BIN)$/ $(SHL1TARGETN)
            $(TOUCH) $@
-  
+
 #ALLTAR : $(MISC)$/pdfi_unittest_succeeded
