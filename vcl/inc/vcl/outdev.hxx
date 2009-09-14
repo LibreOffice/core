@@ -1143,7 +1143,8 @@ public:
                                                           long nMaxBmpDPIX, long nMaxBmpDPIY,
                                                           bool bReduceTransparency,
                                                           bool bTransparencyAutoMode,
-                                                          bool bDownsampleBitmaps
+                                                          bool bDownsampleBitmaps,
+                                                          const Color& rBackground = Color( COL_TRANSPARENT )
                                                           );
     /** Retrieve downsampled and cropped bitmap
 

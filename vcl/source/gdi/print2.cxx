@@ -646,7 +646,9 @@ static bool ImplIsActionHandlingTransparency( const MetaAction& rAct )
 bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
                                                      long nMaxBmpDPIX, long nMaxBmpDPIY,
                                                      bool bReduceTransparency, bool bTransparencyAutoMode,
-                                                     bool bDownsampleBitmaps )
+                                                     bool bDownsampleBitmaps,
+                                                     const Color& rBackground
+                                                     )
 {
     MetaAction*             pCurrAct;
     bool                    bTransparent( false );
@@ -735,6 +737,20 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         bool bStillBackground=true; // true until first non-bg action
         nActionNum=0; nLastBgAction=-1;
         pCurrAct=const_cast<GDIMetaFile&>(rInMtf).FirstAction();
+        if( rBackground != Color( COL_TRANSPARENT ) )
+        {
+            aBackgroundComponent.aBgColor = rBackground;
+            if( meOutDevType == OUTDEV_PRINTER )
+            {
+                Printer* pThis = dynamic_cast<Printer*>(this);
+                Point aPageOffset = pThis->GetPageOffsetPixel();
+                aPageOffset = Point( 0, 0 ) - aPageOffset;
+                Size aSize  = pThis->GetPaperSizePixel();
+                aBackgroundComponent.aBounds = Rectangle( aPageOffset, aSize );
+            }
+            else
+                aBackgroundComponent.aBounds = Rectangle( Point( 0, 0 ), GetOutputSizePixel() );
+        }
         while( pCurrAct && bStillBackground )
         {
             switch( pCurrAct->GetType() )
@@ -878,7 +894,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             //
 
             // if aBBCurrAct is empty, it will intersect with no
-            // aCCList member. Thus, we can safe us the check.
+            // aCCList member. Thus, we can save the check.
             // Furthermore, this ensures that non-output-generating
             // actions get their own aCCList entry, which is necessary
             // when copying them to the output metafile (see stage 4

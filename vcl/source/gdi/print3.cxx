@@ -920,10 +920,19 @@ ULONG PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& 
         mpImplData->mpPrinter->SetDrawMode( mpImplData->mpPrinter->GetDrawMode() | DRAWMODE_NOTRANSPARENCY );
     }
 
+    Color aBg( COL_TRANSPARENT ); // default: let RemoveTransparenciesFromMetaFile do its own background logic
+    if( mpImplData->maMultiPage.nRows * mpImplData->maMultiPage.nColumns > 1 )
+    {
+        // in N-Up printing we have no "page" background operation
+        // we also have no way to determine the paper color
+        // so let's go for white, which will kill 99.9% of the real cases
+        aBg = Color( COL_WHITE );
+    }
     mpImplData->mpPrinter->RemoveTransparenciesFromMetaFile( i_rIn, o_rOut, nMaxBmpDPIX, nMaxBmpDPIY,
                                                              rPrinterOptions.IsReduceTransparency(),
                                                              rPrinterOptions.GetReducedTransparencyMode() == PRINTER_TRANSPARENCY_AUTO,
-                                                             rPrinterOptions.IsReduceBitmaps() && rPrinterOptions.IsReducedBitmapIncludesTransparency()
+                                                             rPrinterOptions.IsReduceBitmaps() && rPrinterOptions.IsReducedBitmapIncludesTransparency(),
+                                                             aBg
                                                              );
     return nRestoreDrawMode;
 }
@@ -950,6 +959,7 @@ void PrinterController::printFilteredPage( int i_nPage )
     mpImplData->mpPrinter->SetMapMode( MAP_100TH_MM );
     // aPageSize was filtered through mpImplData->getRealPaperSize already by getFilteredPageFile()
     mpImplData->mpPrinter->SetPaperSizeUser( aPageSize.aSize, ! mpImplData->isFixedPageSize() );
+
     // if full paper are is meant, move the output to accomodate for pageoffset
     if( aPageSize.bFullPaper )
     {
