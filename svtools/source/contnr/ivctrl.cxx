@@ -579,8 +579,7 @@ Rectangle SvtIconChoiceCtrl::GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) co
 
 void SvtIconChoiceCtrl::FillLayoutData() const
 {
-    DBG_ASSERT( !mpLayoutData, "SvtIconChoiceCtrl::FillLayoutData: shouldn't this be called with non-existent layout data only?" );
-    mpLayoutData = new ::vcl::ControlLayoutData();
+    CreateLayoutData();
 
     SvtIconChoiceCtrl* pNonConstMe = const_cast< SvtIconChoiceCtrl* >( this );
 
@@ -598,7 +597,7 @@ void SvtIconChoiceCtrl::FillLayoutData() const
         sal_Bool bLargeIconMode = WB_ICON == ( _pImp->GetStyle() & ( VIEWMODE_MASK ) );
         sal_uInt16 nTextPaintFlags = bLargeIconMode ? PAINTFLAG_HOR_CENTERED : PAINTFLAG_VER_CENTERED;
 
-        _pImp->PaintItem( aTextRect, IcnViewFieldTypeText, pEntry, nTextPaintFlags, pNonConstMe, &sEntryText, mpLayoutData );
+        _pImp->PaintItem( aTextRect, IcnViewFieldTypeText, pEntry, nTextPaintFlags, pNonConstMe, &sEntryText, GetLayoutData() );
 
         ++nPos;
     }
