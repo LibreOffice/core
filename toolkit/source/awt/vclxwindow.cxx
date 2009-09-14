@@ -64,6 +64,7 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/button.hxx>
 #include <comphelper/asyncnotification.hxx>
 #include <toolkit/helper/solarrelease.hxx>
 
@@ -76,6 +77,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::lang::EventObject;
 using ::com::sun::star::awt::XWindowListener2;
 using ::com::sun::star::awt::XDockableWindowListener;
+using ::com::sun::star::awt::XDevice;
 using ::com::sun::star::style::VerticalAlignment;
 using ::com::sun::star::style::VerticalAlignment_TOP;
 using ::com::sun::star::style::VerticalAlignment_MIDDLE;
@@ -1639,6 +1641,19 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
     switch ( nPropType )
     {
+        case BASEPROPERTY_REFERENCE_DEVICE:
+        {
+            // TODO: at the moment, the refdevice is hackily implemented for Button and derived classes only
+            Control* pControl = dynamic_cast< Control* >( pWindow );
+            OSL_ENSURE( pControl, "VCLXWindow::setProperty( RefDevice ): need a Control for this!" );
+            if ( !pControl )
+                break;
+            Reference< XDevice > xDevice( Value, UNO_QUERY );
+            OutputDevice* pDevice = VCLUnoHelper::GetOutputDevice( xDevice );
+            pControl->SetReferenceDevice( pDevice );
+        }
+        break;
+
         case BASEPROPERTY_CONTEXT_WRITING_MODE:
         {
             OSL_VERIFY( Value >>= mpImpl->mnContextWritingMode );
@@ -2157,6 +2172,17 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_REFERENCE_DEVICE:
+            {
+                // TODO: at the moment, the refdevice is hackily implemented for Button and derived classes only
+                Button* pButton = dynamic_cast< Button* >( GetWindow() );
+                if ( !pButton )
+                    break;
+
+                // TODO: hmm ... it seems there is no way to query an OutputDevice for its XDevice ...?
+            }
+            break;
+
             case BASEPROPERTY_CONTEXT_WRITING_MODE:
                 aProp <<= mpImpl->mnContextWritingMode;
                 break;

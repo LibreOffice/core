@@ -197,6 +197,7 @@ namespace rtl {
 #define BASEPROPERTY_GRID_COLUMNMODEL               143
 #define BASEPROPERTY_GRID_SELECTIONMODE             144
 #define BASEPROPERTY_ENABLEVISIBLE                  145  // sal_Bool
+#define BASEPROPERTY_REFERENCE_DEVICE               146
 
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
