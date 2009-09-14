@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -42,17 +42,13 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 # BEGIN ----------------------------------------------------------------
-# auto generated Target:testjob by codegen.pl 
+# auto generated Target:testjob by codegen.pl
 
-SHL1OBJS=$(SLO)$/recent_docs.obj $(SLO)$/xml_parser.obj 
+SHL1OBJS=$(SLO)$/recent_docs.obj $(SLO)$/xml_parser.obj
 SHL1TARGET=recent_docs
-SHL1STDLIBS=$(SALLIB) 
+SHL1STDLIBS=$(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
-.IF "$(GUI)" == "WNT"
-SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-.ENDIF
 .IF "$(GUI)" == "UNX"
-SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a \
 ..$/unxsols4.pro$/slb$/libsysshell.a \
 $(EXPATASCII3RDLIB)
 .ENDIF
