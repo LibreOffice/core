@@ -519,12 +519,12 @@ String STR_EVENT_CREATEDOC
 
 String STR_EVENT_CLOSEDOC
 {
-    Text [ en-US ] = "Document is closing" ;
+    Text [ en-US ] = "Document closed" ;
 };
 
 String STR_EVENT_PREPARECLOSEDOC
 {
-    Text [ en-US ] = "Close Document" ;
+    Text [ en-US ] = "Document is closing" ;
 };
 
 String STR_EVENT_OPENDOC

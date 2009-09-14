@@ -35,6 +35,7 @@
 #include "fmcontrollayout.hxx"
 #include "fmprop.hrc"
 #include "fmresids.hrc"
+#include "fmservs.hxx"
 #include "svx/dialmgr.hxx"
 #include "svx/svdouno.hxx"
 
@@ -737,6 +738,75 @@ namespace svxform
         {
             DBG_UNHANDLED_EXCEPTION();
         }
+    }
+
+    //------------------------------------------------------------------------------
+    ::rtl::OUString FormControlFactory::getDefaultName( sal_Int16 _nClassId, const Reference< XServiceInfo >& _rxObject )
+    {
+        sal_uInt16 nResId(0);
+
+        switch ( _nClassId )
+        {
+            case FormComponentType::COMMANDBUTTON:  nResId = RID_STR_PROPTITLE_PUSHBUTTON;  break;
+            case FormComponentType::RADIOBUTTON:    nResId = RID_STR_PROPTITLE_RADIOBUTTON; break;
+            case FormComponentType::CHECKBOX:       nResId = RID_STR_PROPTITLE_CHECKBOX;    break;
+            case FormComponentType::LISTBOX:        nResId = RID_STR_PROPTITLE_LISTBOX;     break;
+            case FormComponentType::COMBOBOX:       nResId = RID_STR_PROPTITLE_COMBOBOX;    break;
+            case FormComponentType::GROUPBOX:       nResId = RID_STR_PROPTITLE_GROUPBOX;    break;
+            case FormComponentType::IMAGEBUTTON:    nResId = RID_STR_PROPTITLE_IMAGEBUTTON; break;
+            case FormComponentType::FIXEDTEXT:      nResId = RID_STR_PROPTITLE_FIXEDTEXT;   break;
+            case FormComponentType::GRIDCONTROL:    nResId = RID_STR_PROPTITLE_DBGRID;      break;
+            case FormComponentType::FILECONTROL:    nResId = RID_STR_PROPTITLE_FILECONTROL; break;
+            case FormComponentType::DATEFIELD:      nResId = RID_STR_PROPTITLE_DATEFIELD;   break;
+            case FormComponentType::TIMEFIELD:      nResId = RID_STR_PROPTITLE_TIMEFIELD;   break;
+            case FormComponentType::NUMERICFIELD:   nResId = RID_STR_PROPTITLE_NUMERICFIELD;    break;
+            case FormComponentType::CURRENCYFIELD:  nResId = RID_STR_PROPTITLE_CURRENCYFIELD;   break;
+            case FormComponentType::PATTERNFIELD:   nResId = RID_STR_PROPTITLE_PATTERNFIELD;    break;
+            case FormComponentType::IMAGECONTROL:   nResId = RID_STR_PROPTITLE_IMAGECONTROL;    break;
+            case FormComponentType::HIDDENCONTROL:  nResId = RID_STR_PROPTITLE_HIDDEN;      break;
+            case FormComponentType::SCROLLBAR:      nResId = RID_STR_PROPTITLE_SCROLLBAR;   break;
+            case FormComponentType::SPINBUTTON:     nResId = RID_STR_PROPTITLE_SPINBUTTON;  break;
+            case FormComponentType::NAVIGATIONBAR:  nResId = RID_STR_PROPTITLE_NAVBAR;      break;
+
+            case FormComponentType::TEXTFIELD:
+                nResId = RID_STR_PROPTITLE_EDIT;
+                if ( _rxObject.is() && _rxObject->supportsService( FM_SUN_COMPONENT_FORMATTEDFIELD ) )
+                    nResId = RID_STR_PROPTITLE_FORMATTED;
+                break;
+
+            default:
+                nResId = RID_STR_CONTROL;     break;
+        }
+
+        return String( SVX_RES( nResId ) );
+    }
+
+    //------------------------------------------------------------------------------
+    ::rtl::OUString FormControlFactory::getDefaultUniqueName_ByComponentType( const Reference< XNameAccess >& _rxContainer,
+        const Reference< XPropertySet >& _rxObject )
+    {
+        sal_Int16 nClassId = FormComponentType::CONTROL;
+        OSL_VERIFY( _rxObject->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId );
+        ::rtl::OUString sBaseName = getDefaultName( nClassId, Reference< XServiceInfo >( _rxObject, UNO_QUERY ) );
+
+        return getUniqueName( _rxContainer, sBaseName );
+    }
+
+    //------------------------------------------------------------------------------
+    ::rtl::OUString FormControlFactory::getUniqueName( const Reference< XNameAccess >& _rxContainer, const ::rtl::OUString& _rBaseName )
+    {
+        sal_Int32 n = 0;
+        ::rtl::OUString sName;
+        do
+        {
+            ::rtl::OUStringBuffer aBuf( _rBaseName );
+            aBuf.appendAscii( " " );
+            aBuf.append( ++n );
+            sName = aBuf.makeStringAndClear();
+        }
+        while ( _rxContainer->hasByName( sName ) );
+
+        return sName;
     }
 
 //........................................................................
