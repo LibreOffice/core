@@ -33,7 +33,7 @@
 
 #include <cwchar>
 
-#include "cppunit/simpleheader.hxx"
+#include "testshl/simpleheader.hxx"
 #include "tools/pathutils.hxx"
 
 namespace {

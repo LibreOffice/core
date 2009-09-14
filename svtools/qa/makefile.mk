@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ ENABLE_EXCEPTIONS = true
 .INCLUDE :  settings.mk
 
 # BEGIN ----------------------------------------------------------------
-# auto generated Target:job by codegen.pl 
+# auto generated Target:job by codegen.pl
 SHL1OBJS=  \
     $(SLO)$/test_URIHelper.obj
 
@@ -52,7 +52,8 @@ SHL1STDLIBS=\
      $(SVTOOLLIB) \
      $(TOOLSLIB) \
      $(UNOTOOLSLIB) \
-   $(CPPUNITLIB) 
+     $(TESTSHL2LIB)    \
+     $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)
@@ -71,15 +72,15 @@ SHL1VERSIONMAP= export.map
 
 # LLA: old stuff
 # USE_DEFFILE = true
-# 
+#
 # .INCLUDE: settings.mk
-# 
+#
 # .IF "$(OS)" == "WNT"
 # REGEXP = "s/^[\#].*$$//"
 # .ELSE # OS, WNT
 # REGEXP = 's/^[\#].*$$//'
 # .ENDIF # OS, WNT
-# 
+#
 # SHL1TARGET = URIHelper
 # SHL1OBJS = \
 # 	$(SLO)$/test_URIHelper.obj
@@ -90,12 +91,12 @@ SHL1VERSIONMAP= export.map
 #     $(SVTOOLLIB) \
 #     $(TOOLSLIB) \
 #     $(UNOTOOLSLIB)
-# 
+#
 # DEF1NAME = $(SHL1TARGET)
 # DEF1EXPORTFILE = $(MISC)$/$(SHL1TARGET).dxp
-# 
+#
 # .INCLUDE: target.mk
-# 
+#
 # $(MISC)$/$(SHL1TARGET).dxp: sce$/$(SHL1TARGET).sce
 #     + $(TYPE) $< | sed $(REGEXP) > $@
 #     + $(TYPE) $@ | sed "s/^/test_/" > $(MISC)$/$(SHL1TARGET).tst

@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ SHL1OBJS=  \
     $(SLO)$/basegfx1d.obj \
     $(SLO)$/basegfx2d.obj \
     $(SLO)$/basegfx3d.obj \
-    $(SLO)$/testtools.obj	
+    $(SLO)$/testtools.obj
 
 # linking statically against basegfx parts
 SHL1LIBS=\
@@ -65,23 +65,24 @@ SHL1STDLIBS= \
                 $(SALLIB)        \
                 $(CPPUHELPERLIB) \
                         $(CPPULIB)       \
+                                $(TESTSHL2LIB) \
                 $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = export.map 
+SHL1VERSIONMAP = export.map
 
 # END ------------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
-SLOFILES=$(SHL1OBJS) 
+SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
-.INCLUDE : _cppunit.mk 
+.INCLUDE : _cppunit.mk
 
 # --- Enable testshl2 execution in normal build ------------------------
 

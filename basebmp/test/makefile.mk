@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ CFLAGS += -fno-inline
 
 # SunStudio 12 (-m64 and -m32 modes): three test cases of the unit tests fail
 # if compiled with default -xalias_level (and optimization level -xO3)
-.IF "$(OS)"=="SOLARIS" 
+.IF "$(OS)"=="SOLARIS"
 # For Sun Studio 8 this switch does not work: compilation fails on bitmapdevice.cxx
 .IF "$(CCNUMVER)"!="00050005"
 CDEFS+=-xalias_level=compatible
@@ -67,7 +67,7 @@ CDEFS+=-xalias_level=compatible
 # --- Common ----------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------
-# auto generated Target:tests by codegen.pl 
+# auto generated Target:tests by codegen.pl
 SHL1OBJS=  \
     $(SLO)$/basictest.obj		\
     $(SLO)$/bmpmasktest.obj		\
@@ -88,13 +88,14 @@ SHL1OBJS=  \
 
 SHL1TARGET= tests
 SHL1STDLIBS= 	$(SALLIB)		 \
+                                $(TESTSHL2LIB)\
                 $(CPPUNITLIB)	 \
-                $(BASEGFXLIB)	
+                $(BASEGFXLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = export.map 
+SHL1VERSIONMAP = export.map
 
 # END ------------------------------------------------------------------
 
@@ -111,7 +112,7 @@ SHL1VERSIONMAP = export.map
 #			$(CPPUHELPERLIB)	\
 #			$(UCBHELPERLIB)		\
 #			$(SALLIB)			\
-#			$(VCLLIB)	
+#			$(VCLLIB)
 #
 #.IF "$(GUI)"!="UNX"
 #APP2DEF=	$(MISC)$/$(TARGET).def
@@ -119,12 +120,12 @@ SHL1VERSIONMAP = export.map
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
-SLOFILES=$(SHL1OBJS) 
+SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
-.INCLUDE : _cppunit.mk 
+.INCLUDE : _cppunit.mk
 
 # --- Enable test execution in normal build ------------------------
 

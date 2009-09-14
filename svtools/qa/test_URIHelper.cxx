@@ -57,7 +57,7 @@
 #include "cppuhelper/bootstrap.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase2.hxx"
-#include "cppunit/simpleheader.hxx"
+#include "testshl/simpleheader.hxx"
 #include "osl/diagnose.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
