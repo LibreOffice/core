@@ -211,7 +211,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence GraphicPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence GraphicPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence aRetval;
 
@@ -379,7 +379,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& rTransform,
             const GraphicObject& rGraphicObject,
             const GraphicAttr& rGraphicAttr)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maTransform(rTransform),
             maGraphicObject(rGraphicObject),
             maGraphicAttr(rGraphicAttr)
@@ -389,7 +389,7 @@ namespace drawinglayer
         GraphicPrimitive2D::GraphicPrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
             const GraphicObject& rGraphicObject)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maTransform(rTransform),
             maGraphicObject(rGraphicObject),
             maGraphicAttr()
@@ -398,7 +398,7 @@ namespace drawinglayer
 
         bool GraphicPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const GraphicPrimitive2D& rCompare = (GraphicPrimitive2D&)rPrimitive;
 

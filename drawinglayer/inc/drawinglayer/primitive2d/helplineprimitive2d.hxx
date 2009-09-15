@@ -53,7 +53,7 @@ namespace drawinglayer
             HELPLINESTYLE2D_LINE
         };
 
-        class HelplinePrimitive2D : public BasePrimitive2D
+        class HelplinePrimitive2D : public BufDecPrimitive2D
         {
         private:
             basegfx::B2DPoint                               maPosition;
@@ -70,7 +70,7 @@ namespace drawinglayer
 
         protected:
             // create local decomposition
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             HelplinePrimitive2D(

@@ -53,7 +53,7 @@ namespace drawinglayer
         BitmapPrimitive2D::BitmapPrimitive2D(
             const BitmapEx& rBitmapEx,
             const basegfx::B2DHomMatrix& rTransform)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maBitmapEx(rBitmapEx),
             maTransform(rTransform)
         {
@@ -61,7 +61,7 @@ namespace drawinglayer
 
         bool BitmapPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const BitmapPrimitive2D& rCompare = (BitmapPrimitive2D&)rPrimitive;
 

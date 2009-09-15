@@ -53,20 +53,20 @@ namespace drawinglayer
             // get the current DiscreteUnit
             const double fDiscreteUnit((rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
 
-            if(getLocalDecomposition().hasElements() && !basegfx::fTools::equal(fDiscreteUnit, getDiscreteUnit()))
+            if(getLocal2DDecomposition().hasElements() && !basegfx::fTools::equal(fDiscreteUnit, getDiscreteUnit()))
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< DiscreteMetricDependentPrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
+                const_cast< DiscreteMetricDependentPrimitive2D* >(this)->setLocal2DDecomposition(Primitive2DSequence());
             }
 
-            if(!getLocalDecomposition().hasElements())
+            if(!getLocal2DDecomposition().hasElements())
             {
                 // remember new valid DiscreteUnit
                 const_cast< DiscreteMetricDependentPrimitive2D* >(this)->mfDiscreteUnit = fDiscreteUnit;
             }
 
             // call base implementation
-            return BasePrimitive2D::get2DDecomposition(rViewInformation);
+            return BufDecPrimitive2D::get2DDecomposition(rViewInformation);
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -84,20 +84,20 @@ namespace drawinglayer
             // get the current Viewport
             const basegfx::B2DRange& rViewport = rViewInformation.getViewport();
 
-            if(getLocalDecomposition().hasElements() && !rViewport.equal(getViewport()))
+            if(getLocal2DDecomposition().hasElements() && !rViewport.equal(getViewport()))
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< ViewportDependentPrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
+                const_cast< ViewportDependentPrimitive2D* >(this)->setLocal2DDecomposition(Primitive2DSequence());
             }
 
-            if(!getLocalDecomposition().hasElements())
+            if(!getLocal2DDecomposition().hasElements())
             {
                 // remember new valid DiscreteUnit
                 const_cast< ViewportDependentPrimitive2D* >(this)->maViewport = rViewport;
             }
 
             // call base implementation
-            return BasePrimitive2D::get2DDecomposition(rViewInformation);
+            return BufDecPrimitive2D::get2DDecomposition(rViewInformation);
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

@@ -47,7 +47,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class MarkerArrayPrimitive2D : public BasePrimitive2D
+        class MarkerArrayPrimitive2D : public BufDecPrimitive2D
         {
         private:
             std::vector< basegfx::B2DPoint >                maPositions;
@@ -55,7 +55,7 @@ namespace drawinglayer
 
         protected:
             // create local decomposition
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             MarkerArrayPrimitive2D(

@@ -75,7 +75,7 @@ namespace drawinglayer
             // prepare fully scaled polygon
             basegfx::B2DPolyPolygon aScaledPolyPolygon(rUnitPolyPolygon);
             aScaledPolyPolygon.transform(rObjectTransform);
-            BasePrimitive2D* pNewFillPrimitive = 0L;
+            BufDecPrimitive2D* pNewFillPrimitive = 0L;
 
             if(rFill.isGradient())
             {
@@ -137,7 +137,7 @@ namespace drawinglayer
             // create line and stroke attribute
             const attribute::LineAttribute aLineAttribute(rLine.getColor(), rLine.getWidth(), rLine.getJoin());
             const attribute::StrokeAttribute aStrokeAttribute(rLine.getDotDashArray(), rLine.getFullDotDashLen());
-            BasePrimitive2D* pNewLinePrimitive = 0L;
+            BufDecPrimitive2D* pNewLinePrimitive = 0L;
 
             if(!rUnitPolygon.isClosed() && pStroke)
             {

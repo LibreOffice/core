@@ -81,7 +81,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence UnifiedAlphaTexturePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DSequence UnifiedAlphaTexturePrimitive3D::createLocal3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             if(0.0 == getTransparence())
             {
@@ -135,7 +135,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence GradientTexturePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DSequence GradientTexturePrimitive3D::createLocal3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             return getChildren();
         }
@@ -175,7 +175,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence BitmapTexturePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DSequence BitmapTexturePrimitive3D::createLocal3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             return getChildren();
         }

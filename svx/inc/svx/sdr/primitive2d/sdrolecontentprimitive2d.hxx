@@ -47,7 +47,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrOleContentPrimitive2D : public BasePrimitive2D
+        class SdrOleContentPrimitive2D : public BufDecPrimitive2D
         {
         private:
             SdrObjectWeakRef                            mpSdrOle2Obj;
@@ -58,7 +58,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrOleContentPrimitive2D(

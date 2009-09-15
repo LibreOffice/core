@@ -172,7 +172,7 @@ namespace drawinglayer
                 return;
             }
 
-            switch(rCandidate.getPrimitiveID())
+            switch(rCandidate.getPrimitive2DID())
             {
                 case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D :
                 {

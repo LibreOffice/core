@@ -57,7 +57,7 @@ namespace drawinglayer
             }
 
             // as tooling, the process() implementation takes over API handling and calls this
-            // virtual render method when the primitive implementation is BasePrimitive2D-based.
+            // virtual render method when the primitive implementation is BufDecPrimitive2D-based.
             // Default implementation does nothing
             virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 

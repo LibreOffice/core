@@ -123,7 +123,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class TextSimplePortionPrimitive2D : public BasePrimitive2D
+        class TextSimplePortionPrimitive2D : public BufDecPrimitive2D
         {
         private:
             basegfx::B2DHomMatrix                   maTextTransform;    // text range transformation from unit range ([0.0 .. 1.0]) to text range
@@ -140,7 +140,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             TextSimplePortionPrimitive2D(

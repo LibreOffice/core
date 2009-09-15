@@ -57,7 +57,7 @@ namespace drawinglayer
         protected:
             // local decomposition. Implementation will return empty Primitive2DSequence
             // since this is no visualisation data
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             HitTestPrimitive2D(const Primitive2DSequence& rChildren);

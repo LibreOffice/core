@@ -49,7 +49,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class SdrPrimitive3D : public BasePrimitive3D
+        class SdrPrimitive3D : public BufDecPrimitive3D
         {
         private:
             basegfx::B3DHomMatrix                       maTransform;

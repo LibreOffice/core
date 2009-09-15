@@ -47,7 +47,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class ControlPrimitive2D : public BasePrimitive2D
+        class ControlPrimitive2D : public BufDecPrimitive2D
         {
         private:
             // object's base data
@@ -64,13 +64,13 @@ namespace drawinglayer
             // and from thereon always used and returned by getXControl()
             void createXControl();
 
-            // single local decompositions, used from createLocalDecomposition()
+            // single local decompositions, used from createLocal2DDecomposition()
             Primitive2DReference createBitmapDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
             Primitive2DReference createPlaceholderDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         protected:
             // local decomposition
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             ControlPrimitive2D(

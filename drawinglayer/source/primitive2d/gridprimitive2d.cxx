@@ -53,7 +53,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence GridPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence GridPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DSequence aRetval;
 
@@ -248,7 +248,7 @@ namespace drawinglayer
             sal_uInt32 nSubdivisionsY,
             const basegfx::BColor& rBColor,
             const BitmapEx& rCrossMarker)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maTransform(rTransform),
             mfWidth(fWidth),
             mfHeight(fHeight),
@@ -265,7 +265,7 @@ namespace drawinglayer
 
         bool GridPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const GridPrimitive2D& rCompare = (GridPrimitive2D&)rPrimitive;
 
@@ -299,16 +299,16 @@ namespace drawinglayer
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            if(getLocalDecomposition().hasElements())
+            if(getLocal2DDecomposition().hasElements())
             {
                 if(maLastViewport != rViewInformation.getViewport() || maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
                     // conditions of last local decomposition have changed, delete
-                    const_cast< GridPrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
+                    const_cast< GridPrimitive2D* >(this)->setLocal2DDecomposition(Primitive2DSequence());
                 }
             }
 
-            if(!getLocalDecomposition().hasElements())
+            if(!getLocal2DDecomposition().hasElements())
             {
                 // remember ViewRange and ViewTransformation
                 const_cast< GridPrimitive2D* >(this)->maLastObjectToViewTransformation = rViewInformation.getObjectToViewTransformation();
@@ -316,7 +316,7 @@ namespace drawinglayer
             }
 
             // use parent implementation
-            return BasePrimitive2D::get2DDecomposition(rViewInformation);
+            return BufDecPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID

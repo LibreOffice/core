@@ -45,7 +45,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrCustomShapePrimitive2D : public BasePrimitive2D
+        class SdrCustomShapePrimitive2D : public BufDecPrimitive2D
         {
         private:
             attribute::SdrShadowTextAttribute           maSdrSTAttribute;
@@ -59,7 +59,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrCustomShapePrimitive2D(

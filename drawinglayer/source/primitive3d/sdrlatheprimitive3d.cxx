@@ -57,7 +57,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence SdrLathePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const
+        Primitive3DSequence SdrLathePrimitive3D::createLocal3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
         {
             Primitive3DSequence aRetval;
 
@@ -369,14 +369,14 @@ namespace drawinglayer
             if(getSdr3DObjectAttribute().getReducedLineGeometry())
             {
                 if(!mpLastRLGViewInformation ||
-                    (getLocalDecomposition().hasElements()
+                    (getLocal3DDecomposition().hasElements()
                         && *mpLastRLGViewInformation != rViewInformation))
                 {
                     // conditions of last local decomposition with reduced lines have changed. Remember
                     // new one and clear current decompositiopn
                     ::osl::Mutex m_mutex;
                     SdrLathePrimitive3D* pThat = const_cast< SdrLathePrimitive3D* >(this);
-                    pThat->setLocalDecomposition(Primitive3DSequence());
+                    pThat->setLocal3DDecomposition(Primitive3DSequence());
                     delete pThat->mpLastRLGViewInformation;
                     pThat->mpLastRLGViewInformation = new geometry::ViewInformation3D(rViewInformation);
                 }

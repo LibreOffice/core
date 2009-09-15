@@ -59,7 +59,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence HatchTexturePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DSequence HatchTexturePrimitive3D::createLocal3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             Primitive3DSequence aRetval;
 
@@ -76,14 +76,14 @@ namespace drawinglayer
 
                     if(xReference.is())
                     {
-                        // try to cast to BasePrimitive2D implementation
-                        const BasePrimitive3D* pBasePrimitive = dynamic_cast< const BasePrimitive3D* >(xReference.get());
+                        // try to cast to BufDecPrimitive2D implementation
+                        const BufDecPrimitive3D* pBasePrimitive = dynamic_cast< const BufDecPrimitive3D* >(xReference.get());
 
                         if(pBasePrimitive)
                         {
-                            // it is a BasePrimitive3D implementation, use getPrimitiveID() call for switch
+                            // it is a BufDecPrimitive3D implementation, use getPrimitive3DID() call for switch
                             // not all content is needed, remove transparencies and ModifiedColorPrimitives
-                            switch(pBasePrimitive->getPrimitiveID())
+                            switch(pBasePrimitive->getPrimitive3DID())
                             {
                                 case PRIMITIVE3D_ID_POLYPOLYGONMATERIALPRIMITIVE3D :
                                 {

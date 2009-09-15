@@ -48,7 +48,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class ScenePrimitive2D : public BasePrimitive2D
+        class ScenePrimitive2D : public BufDecPrimitive2D
         {
         private:
             primitive3d::Primitive3DSequence                    mxChildren3D;               // the 3d sub-primitives
@@ -80,11 +80,11 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             // public helpers
-            // Geometry extractor. Shadow will be added as in createLocalDecomposition, but
+            // Geometry extractor. Shadow will be added as in createLocal2DDecomposition, but
             // the 3D content is not converted to a bitmap visualisation but to projected 2D gemetry. This
             // helper is useful e.g. for Contour extraction or HitTests.
             Primitive2DSequence getGeometry2D(const geometry::ViewInformation2D& rViewInformation) const;

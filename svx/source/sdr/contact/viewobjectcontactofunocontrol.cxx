@@ -778,10 +778,10 @@ namespace sdr { namespace contact {
     //====================================================================
     //= LazyControlCreationPrimitive2D
     //====================================================================
-    class LazyControlCreationPrimitive2D : public ::drawinglayer::primitive2d::BasePrimitive2D
+    class LazyControlCreationPrimitive2D : public ::drawinglayer::primitive2d::BufDecPrimitive2D
     {
     private:
-        typedef ::drawinglayer::primitive2d::BasePrimitive2D  BasePrimitive2D;
+        typedef ::drawinglayer::primitive2d::BufDecPrimitive2D  BufDecPrimitive2D;
 
     protected:
         virtual ::drawinglayer::primitive2d::Primitive2DSequence
@@ -790,7 +790,7 @@ namespace sdr { namespace contact {
             ) const;
 
         virtual ::drawinglayer::primitive2d::Primitive2DSequence
-            createLocalDecomposition(
+            createLocal2DDecomposition(
                 const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
             ) const;
 
@@ -1432,7 +1432,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     bool LazyControlCreationPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
     {
-        if ( !BasePrimitive2D::operator==( rPrimitive ) )
+        if ( !BufDecPrimitive2D::operator==( rPrimitive ) )
             return false;
 
         const LazyControlCreationPrimitive2D* pRHS = dynamic_cast< const LazyControlCreationPrimitive2D* >( &rPrimitive );
@@ -1482,11 +1482,11 @@ namespace sdr { namespace contact {
     {
         if ( m_pVOCImpl->hasControl() )
             m_pVOCImpl->positionAndZoomControl( _rViewInformation.getObjectToViewTransformation() );
-        return BasePrimitive2D::get2DDecomposition( _rViewInformation );
+        return BufDecPrimitive2D::get2DDecomposition( _rViewInformation );
     }
 
     //--------------------------------------------------------------------
-    ::drawinglayer::primitive2d::Primitive2DSequence LazyControlCreationPrimitive2D::createLocalDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
+    ::drawinglayer::primitive2d::Primitive2DSequence LazyControlCreationPrimitive2D::createLocal2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
     {
         // force control here to make it a VCL ChildWindow. Will be fetched
         // and used below by getExistentControl()

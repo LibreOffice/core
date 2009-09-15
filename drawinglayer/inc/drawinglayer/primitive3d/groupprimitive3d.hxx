@@ -44,7 +44,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class GroupPrimitive3D : public BasePrimitive3D
+        class GroupPrimitive3D : public BufDecPrimitive3D
         {
         private:
             // the children. Declared private since this shall never be changed at all after construction
@@ -52,7 +52,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition. Implementation will just return children
-            virtual Primitive3DSequence createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+            virtual Primitive3DSequence createLocal3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
         public:
             // constructor

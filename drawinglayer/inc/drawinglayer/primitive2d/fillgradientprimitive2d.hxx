@@ -46,7 +46,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class FillGradientPrimitive2D : public BasePrimitive2D
+        class FillGradientPrimitive2D : public BufDecPrimitive2D
         {
         private:
             basegfx::B2DRange                       maObjectRange;
@@ -54,7 +54,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             FillGradientPrimitive2D(

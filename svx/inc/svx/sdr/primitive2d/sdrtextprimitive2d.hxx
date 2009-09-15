@@ -51,7 +51,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrTextPrimitive2D : public BasePrimitive2D
+        class SdrTextPrimitive2D : public BufDecPrimitive2D
         {
         private:
             // The text model data; this sould later just be the OutlinerParaObject or
@@ -138,7 +138,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrContourTextPrimitive2D(
@@ -180,7 +180,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrPathTextPrimitive2D(
@@ -224,7 +224,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrBlockTextPrimitive2D(
@@ -267,7 +267,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrStretchTextPrimitive2D(

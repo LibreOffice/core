@@ -181,7 +181,7 @@ namespace drawinglayer
             }
         }
 
-        Primitive2DSequence TextSimplePortionPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence TextSimplePortionPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence aRetval;
 
@@ -241,7 +241,7 @@ namespace drawinglayer
             const FontAttributes& rFontAttributes,
             const ::com::sun::star::lang::Locale& rLocale,
             const basegfx::BColor& rFontColor)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maTextTransform(rNewTransform),
             maText(rText),
             maTextPosition(aTextPosition),
@@ -268,7 +268,7 @@ namespace drawinglayer
 
         bool TextSimplePortionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const TextSimplePortionPrimitive2D& rCompare = (TextSimplePortionPrimitive2D&)rPrimitive;
 

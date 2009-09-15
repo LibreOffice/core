@@ -45,7 +45,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrConnectorPrimitive2D : public BasePrimitive2D
+        class SdrConnectorPrimitive2D : public BufDecPrimitive2D
         {
         private:
             attribute::SdrLineShadowTextAttribute       maSdrLSTAttribute;
@@ -53,7 +53,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrConnectorPrimitive2D(

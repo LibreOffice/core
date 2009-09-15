@@ -221,7 +221,7 @@ namespace drawinglayer
                 {
                     bool bModulate(::com::sun::star::drawing::TextureMode_MODULATE == aSdr3DObjectAttribute.getTextureMode());
                     bool bFilter(aSdr3DObjectAttribute.getTextureFilter());
-                    BasePrimitive3D* pNewTexturePrimitive3D = 0L;
+                    BufDecPrimitive3D* pNewTexturePrimitive3D = 0L;
 
                     if(rFill.isGradient())
                     {

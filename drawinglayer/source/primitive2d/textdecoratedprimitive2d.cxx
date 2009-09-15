@@ -602,7 +602,7 @@ namespace drawinglayer
             }
         }
 
-        Primitive2DSequence TextDecoratedPortionPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence TextDecoratedPortionPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             std::vector< Primitive2DReference > aNewPrimitives;
             basegfx::DecomposedB2DHomMatrixContainer aDecTrans(getTextTransform());
@@ -822,10 +822,10 @@ namespace drawinglayer
 
             if(bDecoratedIsNeeded)
             {
-                // decoration is used, fallback to BasePrimitive2D::getB2DRange which uses
+                // decoration is used, fallback to BufDecPrimitive2D::getB2DRange which uses
                 // the own local decomposition for computation and thus creates all necessary
                 // geometric objects
-                return BasePrimitive2D::getB2DRange(rViewInformation);
+                return BufDecPrimitive2D::getB2DRange(rViewInformation);
             }
             else
             {

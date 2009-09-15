@@ -178,7 +178,7 @@ namespace drawinglayer
             {
                 // nSegments is for whole circle, adapt to half circle
                 const sal_uInt32 nVerSeg(nSegments >> 1L);
-                std::vector< BasePrimitive3D* > aResultVector;
+                std::vector< BufDecPrimitive3D* > aResultVector;
 
                 if(nVerSeg)
                 {
@@ -196,7 +196,7 @@ namespace drawinglayer
                             {
                                 const basegfx::B3DPolygon aPartPolygon(aSphere.getB3DPolygon(a));
                                 const basegfx::B3DPolyPolygon aPartPolyPolygon(aPartPolygon);
-                                BasePrimitive3D* pNew = new PolyPolygonMaterialPrimitive3D(aPartPolyPolygon, rMaterial, false);
+                                BufDecPrimitive3D* pNew = new PolyPolygonMaterialPrimitive3D(aPartPolyPolygon, rMaterial, false);
                                 aResultVector.push_back(pNew);
                             }
                         }
@@ -345,7 +345,7 @@ namespace drawinglayer
                             if(aNewPolygon.count())
                             {
                                 const basegfx::B3DPolyPolygon aNewPolyPolygon(aNewPolygon);
-                                BasePrimitive3D* pNew = new PolyPolygonMaterialPrimitive3D(aNewPolyPolygon, rMaterial, false);
+                                BufDecPrimitive3D* pNew = new PolyPolygonMaterialPrimitive3D(aNewPolyPolygon, rMaterial, false);
                                 aResultVector.push_back(pNew);
                             }
 
@@ -359,7 +359,7 @@ namespace drawinglayer
 
                                 // create primitive
                                 const basegfx::B3DPolyPolygon aMiterPolyPolygon(aMiterPolygon);
-                                BasePrimitive3D* pNew = new PolyPolygonMaterialPrimitive3D(aMiterPolyPolygon, rMaterial, false);
+                                BufDecPrimitive3D* pNew = new PolyPolygonMaterialPrimitive3D(aMiterPolyPolygon, rMaterial, false);
                                 aResultVector.push_back(pNew);
                             }
 
@@ -417,10 +417,10 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence PolygonTubePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DSequence PolygonTubePrimitive3D::createLocal3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             const sal_uInt32 nPointCount(getB3DPolygon().count());
-            std::vector< BasePrimitive3D* > aResultVector;
+            std::vector< BufDecPrimitive3D* > aResultVector;
 
             if(0L != nPointCount)
             {

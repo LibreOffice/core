@@ -59,7 +59,7 @@ namespace drawinglayer
         protected:
             // local decomposition. Implementation will return empty Primitive3DSequence
             // since this is no visualisation data
-            virtual Primitive3DSequence createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+            virtual Primitive3DSequence createLocal3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
         public:
             HitTestPrimitive3D(const Primitive3DSequence& rChildren);

@@ -59,7 +59,7 @@ namespace drawinglayer
             mnCenterY(nCenterY)
         {}
 
-        Primitive2DSequence OverlayBitmapExPrimitive::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence OverlayBitmapExPrimitive::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence aRetval;
             const Size aBitmapSize(getBitmapEx().GetSizePixel());
@@ -129,7 +129,7 @@ namespace drawinglayer
             mfDiscreteDashLength(fDiscreteDashLength)
         {}
 
-        Primitive2DSequence OverlayCrosshairPrimitive::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence OverlayCrosshairPrimitive::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // use the prepared Viewport information accessible using getViewport()
             Primitive2DSequence aRetval;
@@ -208,7 +208,7 @@ namespace drawinglayer
             mfRotation(fRotation)
         {}
 
-        Primitive2DSequence OverlayHatchRectanglePrimitive::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence OverlayHatchRectanglePrimitive::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence aRetval;
 
@@ -301,7 +301,7 @@ namespace drawinglayer
             mfDiscreteDashLength(fDiscreteDashLength)
         {}
 
-        Primitive2DSequence OverlayHelplineStripedPrimitive::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence OverlayHelplineStripedPrimitive::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // use the prepared Viewport information accessible using getViewport()
             Primitive2DSequence aRetval;
@@ -417,7 +417,7 @@ namespace drawinglayer
             mfDiscreteDashLength(fDiscreteDashLength)
         {}
 
-        Primitive2DSequence OverlayRollingRectanglePrimitive::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence OverlayRollingRectanglePrimitive::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // use the prepared Viewport information accessible using getViewport()
             Primitive2DSequence aRetval;

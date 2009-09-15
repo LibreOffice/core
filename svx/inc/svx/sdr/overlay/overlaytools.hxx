@@ -58,7 +58,7 @@ namespace drawinglayer
             sal_uInt16                              mnCenterY;
 
         protected:
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             OverlayBitmapExPrimitive(
@@ -99,7 +99,7 @@ namespace drawinglayer
             double                                  mfDiscreteDashLength;
 
         protected:
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             OverlayCrosshairPrimitive(
@@ -148,7 +148,7 @@ namespace drawinglayer
             double                          mfRotation;
 
         protected:
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             OverlayHatchRectanglePrimitive(
@@ -206,7 +206,7 @@ namespace drawinglayer
             double                                  mfDiscreteDashLength;
 
         protected:
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             OverlayHelplineStripedPrimitive(
@@ -251,7 +251,7 @@ namespace drawinglayer
             double                                  mfDiscreteDashLength;
 
         protected:
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             OverlayRollingRectanglePrimitive(

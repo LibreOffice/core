@@ -39,26 +39,26 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// tooling class for BasePrimitive2D baseed classes which are view-dependent
+// tooling class for BufDecPrimitive2D baseed classes which are view-dependent
 // regarding the size of a discrete unit. The implementation of get2DDecomposition
-// guards the buffered local decomposition and ensures that a createLocalDecomposition
+// guards the buffered local decomposition and ensures that a createLocal2DDecomposition
 // implementation may use an up-to-date DiscreteUnit accessible using getDiscreteUnit()
 
 namespace drawinglayer
 {
     namespace primitive2d
     {
-        class DiscreteMetricDependentPrimitive2D : public BasePrimitive2D
+        class DiscreteMetricDependentPrimitive2D : public BufDecPrimitive2D
         {
         private:
             // the last used fDiscreteUnit definitions for decomposition. Since this
             // is checked and updated from get2DDecomposition() it will be current and
-            // usable in createLocalDecomposition()
+            // usable in createLocal2DDecomposition()
             double                                  mfDiscreteUnit;
 
         public:
             DiscreteMetricDependentPrimitive2D()
-            :   BasePrimitive2D(),
+            :   BufDecPrimitive2D(),
                 mfDiscreteUnit(0.0)
             {
             }
@@ -73,26 +73,26 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
-// tooling class for BasePrimitive2D baseed classes which are view-dependent
+// tooling class for BufDecPrimitive2D baseed classes which are view-dependent
 // regarding the viewport. The implementation of get2DDecomposition
-// guards the buffered local decomposition and ensures that a createLocalDecomposition
+// guards the buffered local decomposition and ensures that a createLocal2DDecomposition
 // implementation may use an up-to-date Viewport accessible using getViewport()
 
 namespace drawinglayer
 {
     namespace primitive2d
     {
-        class ViewportDependentPrimitive2D : public BasePrimitive2D
+        class ViewportDependentPrimitive2D : public BufDecPrimitive2D
         {
         private:
             // the last used Viewport definition for decomposition. Since this
             // is checked and updated from get2DDecomposition() it will be current and
-            // usable in createLocalDecomposition()
+            // usable in createLocal2DDecomposition()
             basegfx::B2DRange                       maViewport;
 
         public:
             ViewportDependentPrimitive2D()
-            :   BasePrimitive2D(),
+            :   BufDecPrimitive2D(),
                 maViewport()
             {
             }

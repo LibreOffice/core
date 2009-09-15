@@ -55,7 +55,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence MarkerArrayPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence MarkerArrayPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DSequence xRetval;
             const std::vector< basegfx::B2DPoint >& rPositions = getPositions();
@@ -100,7 +100,7 @@ namespace drawinglayer
         MarkerArrayPrimitive2D::MarkerArrayPrimitive2D(
             const std::vector< basegfx::B2DPoint >& rPositions,
             const BitmapEx& rMarker)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maPositions(rPositions),
             maMarker(rMarker)
         {
@@ -108,7 +108,7 @@ namespace drawinglayer
 
         bool MarkerArrayPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const MarkerArrayPrimitive2D& rCompare = (MarkerArrayPrimitive2D&)rPrimitive;
 

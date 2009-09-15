@@ -84,7 +84,7 @@ namespace drawinglayer
             return maShadowPrimitives.hasElements();
         }
 
-        Primitive2DSequence Embedded3DPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence Embedded3DPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // use info to create a yellow 2d rectangle, similar to empty 3d scenes and/or groups
             const basegfx::B2DRange aLocal2DRange(getB2DRange(rViewInformation));
@@ -102,7 +102,7 @@ namespace drawinglayer
             const basegfx::B3DVector& rLightNormal,
             double fShadowSlant,
             const basegfx::B3DRange& rScene3DRange)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             mxChildren3D(rxChildren3D),
             maObjectTransformation(rObjectTransformation),
             maViewInformation3D(rViewInformation3D),
@@ -118,7 +118,7 @@ namespace drawinglayer
 
         bool Embedded3DPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const Embedded3DPrimitive2D& rCompare = static_cast< const Embedded3DPrimitive2D& >(rPrimitive);
 

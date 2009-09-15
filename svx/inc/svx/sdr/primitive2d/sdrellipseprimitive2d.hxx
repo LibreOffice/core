@@ -45,7 +45,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrEllipsePrimitive2D : public BasePrimitive2D
+        class SdrEllipsePrimitive2D : public BufDecPrimitive2D
         {
         private:
             ::basegfx::B2DHomMatrix                     maTransform;
@@ -53,7 +53,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrEllipsePrimitive2D(
@@ -91,7 +91,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrEllipseSegmentPrimitive2D(

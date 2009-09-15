@@ -47,7 +47,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrConnectorPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DSequence SdrConnectorPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DSequence aRetval;
 
@@ -87,7 +87,7 @@ namespace drawinglayer
         SdrConnectorPrimitive2D::SdrConnectorPrimitive2D(
             const attribute::SdrLineShadowTextAttribute& rSdrLSTAttribute,
             const ::basegfx::B2DPolygon& rUnitPolygon)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maSdrLSTAttribute(rSdrLSTAttribute),
             maUnitPolygon(rUnitPolygon)
         {
@@ -95,7 +95,7 @@ namespace drawinglayer
 
         bool SdrConnectorPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const SdrConnectorPrimitive2D& rCompare = (SdrConnectorPrimitive2D&)rPrimitive;
 

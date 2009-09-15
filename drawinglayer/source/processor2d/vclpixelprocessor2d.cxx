@@ -111,7 +111,7 @@ namespace drawinglayer
 
         void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
-            switch(rCandidate.getPrimitiveID())
+            switch(rCandidate.getPrimitive2DID())
             {
                 case PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D :
                 {
@@ -274,7 +274,7 @@ namespace drawinglayer
                         const primitive2d::Primitive2DReference xReference(rContent[0]);
                         const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = dynamic_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(xReference.get());
 
-                        if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitiveID())
+                        if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitive2DID())
                         {
                             // single transparent PolyPolygon identified, use directly
                             const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));

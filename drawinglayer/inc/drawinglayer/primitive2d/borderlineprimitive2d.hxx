@@ -46,7 +46,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class BorderLinePrimitive2D : public BasePrimitive2D
+        class BorderLinePrimitive2D : public BufDecPrimitive2D
         {
         private:
             basegfx::B2DPoint                               maStart;
@@ -107,7 +107,7 @@ namespace drawinglayer
 
         protected:
             // create local decomposition
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             BorderLinePrimitive2D(

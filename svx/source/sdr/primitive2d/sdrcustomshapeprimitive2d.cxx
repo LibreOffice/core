@@ -47,7 +47,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrCustomShapePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DSequence SdrCustomShapePrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DSequence aRetval(getSubPrimitives());
 
@@ -73,7 +73,7 @@ namespace drawinglayer
             const Primitive2DSequence& rSubPrimitives,
             const basegfx::B2DHomMatrix& rTextBox,
             bool bWordWrap)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maSdrSTAttribute(rSdrSTAttribute),
             maSubPrimitives(rSubPrimitives),
             maTextBox(rTextBox),
@@ -83,7 +83,7 @@ namespace drawinglayer
 
         bool SdrCustomShapePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const SdrCustomShapePrimitive2D& rCompare = (SdrCustomShapePrimitive2D&)rPrimitive;
 

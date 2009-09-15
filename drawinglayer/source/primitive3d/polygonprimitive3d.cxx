@@ -56,7 +56,7 @@ namespace drawinglayer
         PolygonHairlinePrimitive3D::PolygonHairlinePrimitive3D(
             const basegfx::B3DPolygon& rPolygon,
             const basegfx::BColor& rBColor)
-        :   BasePrimitive3D(),
+        :   BufDecPrimitive3D(),
             maPolygon(rPolygon),
             maBColor(rBColor)
         {
@@ -64,7 +64,7 @@ namespace drawinglayer
 
         bool PolygonHairlinePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-            if(BasePrimitive3D::operator==(rPrimitive))
+            if(BufDecPrimitive3D::operator==(rPrimitive))
             {
                 const PolygonHairlinePrimitive3D& rCompare = (PolygonHairlinePrimitive3D&)rPrimitive;
 
@@ -92,7 +92,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence PolygonStrokePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DSequence PolygonStrokePrimitive3D::createLocal3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             Primitive3DSequence aRetval;
 
@@ -145,7 +145,7 @@ namespace drawinglayer
             const basegfx::B3DPolygon& rPolygon,
             const attribute::LineAttribute& rLineAttribute,
             const attribute::StrokeAttribute& rStrokeAttribute)
-        :   BasePrimitive3D(),
+        :   BufDecPrimitive3D(),
             maPolygon(rPolygon),
             maLineAttribute(rLineAttribute),
             maStrokeAttribute(rStrokeAttribute)
@@ -155,7 +155,7 @@ namespace drawinglayer
         PolygonStrokePrimitive3D::PolygonStrokePrimitive3D(
             const basegfx::B3DPolygon& rPolygon,
             const attribute::LineAttribute& rLineAttribute)
-        :   BasePrimitive3D(),
+        :   BufDecPrimitive3D(),
             maPolygon(rPolygon),
             maLineAttribute(rLineAttribute),
             maStrokeAttribute()
@@ -164,7 +164,7 @@ namespace drawinglayer
 
         bool PolygonStrokePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-            if(BasePrimitive3D::operator==(rPrimitive))
+            if(BufDecPrimitive3D::operator==(rPrimitive))
             {
                 const PolygonStrokePrimitive3D& rCompare = (PolygonStrokePrimitive3D&)rPrimitive;
 

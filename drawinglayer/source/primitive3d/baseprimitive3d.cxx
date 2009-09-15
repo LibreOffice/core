@@ -50,20 +50,18 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence BasePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        BasePrimitive3D::BasePrimitive3D()
+        :   BasePrimitive3DImplBase(m_aMutex)
         {
-            return Primitive3DSequence();
         }
 
-        BasePrimitive3D::BasePrimitive3D()
-        :   BasePrimitive3DImplBase(m_aMutex),
-            maLocalDecomposition()
+        BasePrimitive3D::~BasePrimitive3D()
         {
         }
 
         bool BasePrimitive3D::operator==( const BasePrimitive3D& rPrimitive ) const
         {
-            return (getPrimitiveID() == rPrimitive.getPrimitiveID());
+            return (getPrimitive3DID() == rPrimitive.getPrimitive3DID());
         }
 
         basegfx::B3DRange BasePrimitive3D::getB3DRange(const geometry::ViewInformation3D& rViewInformation) const
@@ -71,17 +69,9 @@ namespace drawinglayer
             return getB3DRangeFromPrimitive3DSequence(get3DDecomposition(rViewInformation), rViewInformation);
         }
 
-        Primitive3DSequence BasePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
+        Primitive3DSequence BasePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
-
-            if(!getLocalDecomposition().hasElements())
-            {
-                const Primitive3DSequence aNewSequence(createLocalDecomposition(rViewInformation));
-                const_cast< BasePrimitive3D* >(this)->setLocalDecomposition(aNewSequence);
-            }
-
-            return getLocalDecomposition();
+            return Primitive3DSequence();
         }
 
         Primitive3DSequence SAL_CALL BasePrimitive3D::getDecomposition( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException )
@@ -94,6 +84,38 @@ namespace drawinglayer
         {
             const geometry::ViewInformation3D aViewInformation(rViewParameters);
             return basegfx::unotools::rectangle3DFromB3DRectangle(getB3DRange(aViewInformation));
+        }
+    } // end of namespace primitive3d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace primitive3d
+    {
+        Primitive3DSequence BufDecPrimitive3D::createLocal3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        {
+            return Primitive3DSequence();
+        }
+
+        BufDecPrimitive3D::BufDecPrimitive3D()
+        :   BasePrimitive3D(),
+            maLocal3DDecomposition()
+        {
+        }
+
+        Primitive3DSequence BufDecPrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+
+            if(!getLocal3DDecomposition().hasElements())
+            {
+                const Primitive3DSequence aNewSequence(createLocal3DDecomposition(rViewInformation));
+                const_cast< BufDecPrimitive3D* >(this)->setLocal3DDecomposition(aNewSequence);
+            }
+
+            return getLocal3DDecomposition();
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -113,7 +135,7 @@ namespace drawinglayer
             if(rCandidate.is())
             {
                 // try to get C++ implementation base
-                const BasePrimitive3D* pCandidate(dynamic_cast< BasePrimitive3D* >(rCandidate.get()));
+                const BufDecPrimitive3D* pCandidate(dynamic_cast< BufDecPrimitive3D* >(rCandidate.get()));
 
                 if(pCandidate)
                 {
@@ -163,8 +185,8 @@ namespace drawinglayer
                 return true;
             }
 
-            const BasePrimitive3D* pA(dynamic_cast< const BasePrimitive3D* >(rxA.get()));
-            const BasePrimitive3D* pB(dynamic_cast< const BasePrimitive3D* >(rxB.get()));
+            const BufDecPrimitive3D* pA(dynamic_cast< const BufDecPrimitive3D* >(rxA.get()));
+            const BufDecPrimitive3D* pB(dynamic_cast< const BufDecPrimitive3D* >(rxB.get()));
             const bool bAEqualZero(pA == 0L);
 
             if(bAEqualZero != (pB == 0L))

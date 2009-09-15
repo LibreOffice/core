@@ -55,7 +55,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence FillHatchPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence FillHatchPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // create hatch
             const basegfx::BColor aHatchColor(maFillHatch.getColor());
@@ -125,7 +125,7 @@ namespace drawinglayer
             const basegfx::B2DRange& rObjectRange,
             const basegfx::BColor& rBColor,
             const attribute::FillHatchAttribute& rFillHatch)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maObjectRange(rObjectRange),
             maFillHatch(rFillHatch),
             maBColor(rBColor)
@@ -134,7 +134,7 @@ namespace drawinglayer
 
         bool FillHatchPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const FillHatchPrimitive2D& rCompare = (FillHatchPrimitive2D&)rPrimitive;
 

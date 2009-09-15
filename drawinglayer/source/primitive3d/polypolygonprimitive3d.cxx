@@ -55,7 +55,7 @@ namespace drawinglayer
             const basegfx::B3DPolyPolygon& rPolyPolygon,
             const attribute::MaterialAttribute3D& rMaterial,
             bool bDoubleSided)
-        :   BasePrimitive3D(),
+        :   BufDecPrimitive3D(),
             maPolyPolygon(rPolyPolygon),
             maMaterial(rMaterial),
             mbDoubleSided(bDoubleSided)
@@ -64,7 +64,7 @@ namespace drawinglayer
 
         bool PolyPolygonMaterialPrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-            if(BasePrimitive3D::operator==(rPrimitive))
+            if(BufDecPrimitive3D::operator==(rPrimitive))
             {
                 const PolyPolygonMaterialPrimitive3D& rCompare = (PolyPolygonMaterialPrimitive3D&)rPrimitive;
 

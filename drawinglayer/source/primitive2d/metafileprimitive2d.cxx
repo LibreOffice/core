@@ -53,7 +53,7 @@ namespace drawinglayer
         MetafilePrimitive2D::MetafilePrimitive2D(
             const basegfx::B2DHomMatrix& rMetaFileTransform,
             const GDIMetaFile& rMetaFile)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maMetaFileTransform(rMetaFileTransform),
             maMetaFile(rMetaFile)
         {
@@ -61,7 +61,7 @@ namespace drawinglayer
 
         bool MetafilePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const MetafilePrimitive2D& rCompare = (MetafilePrimitive2D&)rPrimitive;
 

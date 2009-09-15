@@ -64,7 +64,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrCellPrimitive2D : public BasePrimitive2D
+        class SdrCellPrimitive2D : public BufDecPrimitive2D
         {
         private:
             basegfx::B2DHomMatrix                       maTransform;
@@ -72,13 +72,13 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrCellPrimitive2D(
                 const basegfx::B2DHomMatrix& rTransform,
                 const attribute::SdrFillTextAttribute& rSdrFTAttribute)
-            :   BasePrimitive2D(),
+            :   BufDecPrimitive2D(),
                 maTransform(rTransform),
                 maSdrFTAttribute(rSdrFTAttribute)
             {
@@ -95,7 +95,7 @@ namespace drawinglayer
             DeclPrimitrive2DIDBlock()
         };
 
-        Primitive2DSequence SdrCellPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DSequence SdrCellPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DSequence aRetval;
 
@@ -132,7 +132,7 @@ namespace drawinglayer
 
         bool SdrCellPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const SdrCellPrimitive2D& rCompare = (SdrCellPrimitive2D&)rPrimitive;
 
@@ -155,7 +155,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrBorderlinePrimitive2D : public BasePrimitive2D
+        class SdrBorderlinePrimitive2D : public BufDecPrimitive2D
         {
         private:
             basegfx::B2DHomMatrix                       maTransform;
@@ -173,7 +173,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrBorderlinePrimitive2D(
@@ -187,7 +187,7 @@ namespace drawinglayer
                 bool bRightIsOutside,
                 bool bTopIsOutside,
                 bool bInTwips)
-            :   BasePrimitive2D(),
+            :   BufDecPrimitive2D(),
                 maTransform(rTransform),
                 maLeftLine(rLeftLine),
                 maBottomLine(rBottomLine),
@@ -282,7 +282,7 @@ namespace drawinglayer
             return (double)nValue;
         }
 
-        Primitive2DSequence SdrBorderlinePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DSequence SdrBorderlinePrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DSequence xRetval(4);
             sal_uInt32 nInsert(0);
@@ -462,7 +462,7 @@ namespace drawinglayer
 
         bool SdrBorderlinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const SdrBorderlinePrimitive2D& rCompare = (SdrBorderlinePrimitive2D&)rPrimitive;
 

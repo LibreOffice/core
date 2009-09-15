@@ -54,7 +54,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence FillBitmapPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence FillBitmapPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             const Size aTileSizePixel(getFillBitmap().getBitmap().GetSizePixel());
             Primitive2DSequence aRetval;
@@ -105,7 +105,7 @@ namespace drawinglayer
         FillBitmapPrimitive2D::FillBitmapPrimitive2D(
             const basegfx::B2DHomMatrix& rTransformation,
             const attribute::FillBitmapAttribute& rFillBitmap)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maTransformation(rTransformation),
             maFillBitmap(rFillBitmap)
         {
@@ -113,7 +113,7 @@ namespace drawinglayer
 
         bool FillBitmapPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const FillBitmapPrimitive2D& rCompare = static_cast< const FillBitmapPrimitive2D& >(rPrimitive);
 

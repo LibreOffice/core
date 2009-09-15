@@ -266,7 +266,7 @@ namespace drawinglayer
             return xRetval;
         }
 
-        Primitive2DSequence ControlPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence ControlPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // try to create a bitmap decomposition. If that fails for some reason,
             // at least create a replacement decomposition.
@@ -283,7 +283,7 @@ namespace drawinglayer
         ControlPrimitive2D::ControlPrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
             const uno::Reference< awt::XControlModel >& rxControlModel)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maTransform(rTransform),
             mxControlModel(rxControlModel),
             mxXControl(),
@@ -295,7 +295,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& rTransform,
             const uno::Reference< awt::XControlModel >& rxControlModel,
             const uno::Reference< awt::XControl >& rxXControl)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maTransform(rTransform),
             mxControlModel(rxControlModel),
             mxXControl(rxXControl),
@@ -316,7 +316,7 @@ namespace drawinglayer
         bool ControlPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
             // use base class compare operator
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const ControlPrimitive2D& rCompare = (ControlPrimitive2D&)rPrimitive;
 
@@ -365,23 +365,23 @@ namespace drawinglayer
             ::osl::MutexGuard aGuard( m_aMutex );
             const basegfx::B2DVector aNewScaling(rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
 
-            if(getLocalDecomposition().hasElements())
+            if(getLocal2DDecomposition().hasElements())
             {
                 if(!maLastViewScaling.equal(aNewScaling))
                 {
                     // conditions of last local decomposition have changed, delete
-                    const_cast< ControlPrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
+                    const_cast< ControlPrimitive2D* >(this)->setLocal2DDecomposition(Primitive2DSequence());
                 }
             }
 
-            if(!getLocalDecomposition().hasElements())
+            if(!getLocal2DDecomposition().hasElements())
             {
                 // remember ViewTransformation
                 const_cast< ControlPrimitive2D* >(this)->maLastViewScaling = aNewScaling;
             }
 
             // use parent implementation
-            return BasePrimitive2D::get2DDecomposition(rViewInformation);
+            return BufDecPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID

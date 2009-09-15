@@ -54,7 +54,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence FillGradientPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence FillGradientPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             const attribute::GradientStyle aGradientStyle(maFillGradient.getStyle());
             ::std::vector< basegfx::B2DHomMatrix > aMatrices;
@@ -167,7 +167,7 @@ namespace drawinglayer
         FillGradientPrimitive2D::FillGradientPrimitive2D(
             const basegfx::B2DRange& rObjectRange,
             const attribute::FillGradientAttribute& rFillGradient)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maObjectRange(rObjectRange),
             maFillGradient(rFillGradient)
         {
@@ -175,7 +175,7 @@ namespace drawinglayer
 
         bool FillGradientPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const FillGradientPrimitive2D& rCompare = (FillGradientPrimitive2D&)rPrimitive;
 

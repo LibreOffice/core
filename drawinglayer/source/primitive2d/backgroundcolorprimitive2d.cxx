@@ -54,7 +54,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence BackgroundColorPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence BackgroundColorPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             if(!rViewInformation.getViewport().isEmpty())
             {
@@ -70,7 +70,7 @@ namespace drawinglayer
 
         BackgroundColorPrimitive2D::BackgroundColorPrimitive2D(
             const basegfx::BColor& rBColor)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maBColor(rBColor),
             maLastViewport()
         {
@@ -78,7 +78,7 @@ namespace drawinglayer
 
         bool BackgroundColorPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const BackgroundColorPrimitive2D& rCompare = (BackgroundColorPrimitive2D&)rPrimitive;
 
@@ -98,20 +98,20 @@ namespace drawinglayer
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            if(getLocalDecomposition().hasElements() && (maLastViewport != rViewInformation.getViewport()))
+            if(getLocal2DDecomposition().hasElements() && (maLastViewport != rViewInformation.getViewport()))
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< BackgroundColorPrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
+                const_cast< BackgroundColorPrimitive2D* >(this)->setLocal2DDecomposition(Primitive2DSequence());
             }
 
-            if(!getLocalDecomposition().hasElements())
+            if(!getLocal2DDecomposition().hasElements())
             {
                 // remember ViewRange
                 const_cast< BackgroundColorPrimitive2D* >(this)->maLastViewport = rViewInformation.getViewport();
             }
 
             // use parent implementation
-            return BasePrimitive2D::get2DDecomposition(rViewInformation);
+            return BufDecPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID

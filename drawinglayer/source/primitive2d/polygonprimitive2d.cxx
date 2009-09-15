@@ -57,7 +57,7 @@ namespace drawinglayer
         PolygonHairlinePrimitive2D::PolygonHairlinePrimitive2D(
             const basegfx::B2DPolygon& rPolygon,
             const basegfx::BColor& rBColor)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maPolygon(rPolygon),
             maBColor(rBColor)
         {
@@ -65,7 +65,7 @@ namespace drawinglayer
 
         bool PolygonHairlinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const PolygonHairlinePrimitive2D& rCompare = (PolygonHairlinePrimitive2D&)rPrimitive;
 
@@ -110,7 +110,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolygonMarkerPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence PolygonMarkerPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // calculate logic DashLength
             const basegfx::B2DVector aDashVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(getDiscreteDashLength(), 0.0));
@@ -147,7 +147,7 @@ namespace drawinglayer
             const basegfx::BColor& rRGBColorA,
             const basegfx::BColor& rRGBColorB,
             double fDiscreteDashLength)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maPolygon(rPolygon),
             maRGBColorA(rRGBColorA),
             maRGBColorB(rRGBColorB),
@@ -158,7 +158,7 @@ namespace drawinglayer
 
         bool PolygonMarkerPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const PolygonMarkerPrimitive2D& rCompare = (PolygonMarkerPrimitive2D&)rPrimitive;
 
@@ -198,7 +198,7 @@ namespace drawinglayer
             ::osl::MutexGuard aGuard( m_aMutex );
             bool bNeedNewDecomposition(false);
 
-            if(getLocalDecomposition().hasElements())
+            if(getLocal2DDecomposition().hasElements())
             {
                 if(rViewInformation.getInverseObjectToViewTransformation() != maLastInverseObjectToViewTransformation)
                 {
@@ -209,10 +209,10 @@ namespace drawinglayer
             if(bNeedNewDecomposition)
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< PolygonMarkerPrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
+                const_cast< PolygonMarkerPrimitive2D* >(this)->setLocal2DDecomposition(Primitive2DSequence());
             }
 
-            if(!getLocalDecomposition().hasElements())
+            if(!getLocal2DDecomposition().hasElements())
             {
                 // remember last used InverseObjectToViewTransformation
                 PolygonMarkerPrimitive2D* pThat = const_cast< PolygonMarkerPrimitive2D* >(this);
@@ -220,7 +220,7 @@ namespace drawinglayer
             }
 
             // use parent implementation
-            return BasePrimitive2D::get2DDecomposition(rViewInformation);
+            return BufDecPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID
@@ -235,7 +235,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolygonStrokePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence PolygonStrokePrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(getB2DPolygon().count())
             {
@@ -307,7 +307,7 @@ namespace drawinglayer
             const basegfx::B2DPolygon& rPolygon,
             const attribute::LineAttribute& rLineAttribute,
             const attribute::StrokeAttribute& rStrokeAttribute)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maPolygon(rPolygon),
             maLineAttribute(rLineAttribute),
             maStrokeAttribute(rStrokeAttribute)
@@ -317,7 +317,7 @@ namespace drawinglayer
         PolygonStrokePrimitive2D::PolygonStrokePrimitive2D(
             const basegfx::B2DPolygon& rPolygon,
             const attribute::LineAttribute& rLineAttribute)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maPolygon(rPolygon),
             maLineAttribute(rLineAttribute),
             maStrokeAttribute()
@@ -326,7 +326,7 @@ namespace drawinglayer
 
         bool PolygonStrokePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const PolygonStrokePrimitive2D& rCompare = (PolygonStrokePrimitive2D&)rPrimitive;
 
@@ -348,7 +348,7 @@ namespace drawinglayer
                 {
                     // if line is mitered, use parent call since mitered line
                     // geometry may use more space than the geometry grown by half line width
-                    aRetval = BasePrimitive2D::getB2DRange(rViewInformation);
+                    aRetval = BufDecPrimitive2D::getB2DRange(rViewInformation);
                 }
                 else
                 {
@@ -392,7 +392,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolygonWavePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence PolygonWavePrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence aRetval;
 
@@ -505,7 +505,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolygonStrokeArrowPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence PolygonStrokeArrowPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // copy local polygon, it may be changed
             basegfx::B2DPolygon aLocalPolygon(getB2DPolygon());
@@ -614,7 +614,7 @@ namespace drawinglayer
             if(getStart().isActive() || getEnd().isActive())
             {
                 // use decomposition when line start/end is used
-                return BasePrimitive2D::getB2DRange(rViewInformation);
+                return BufDecPrimitive2D::getB2DRange(rViewInformation);
             }
             else
             {

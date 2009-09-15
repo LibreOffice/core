@@ -78,7 +78,7 @@ namespace
         unsigned                                        mbGraphicAnimationAllowed : 1;
 
         // as tooling, the process() implementation takes over API handling and calls this
-        // virtual render method when the primitive implementation is BasePrimitive2D-based.
+        // virtual render method when the primitive implementation is BufDecPrimitive2D-based.
         virtual void processBasePrimitive2D(const drawinglayer::primitive2d::BasePrimitive2D& rCandidate);
 
     public:
@@ -112,7 +112,7 @@ namespace
     void AnimatedExtractingProcessor2D::processBasePrimitive2D(const drawinglayer::primitive2d::BasePrimitive2D& rCandidate)
     {
         // known implementation, access directly
-        switch(rCandidate.getPrimitiveID())
+        switch(rCandidate.getPrimitive2DID())
         {
             // add and accept animated primitives directly, no need to decompose
             case PRIMITIVE2D_ID_ANIMATEDSWITCHPRIMITIVE2D :

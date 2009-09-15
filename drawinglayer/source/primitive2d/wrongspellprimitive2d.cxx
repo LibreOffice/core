@@ -48,7 +48,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence WrongSpellPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence WrongSpellPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // ATM this decompose is view-independent, what the original VCL-Display is not. To mimic
             // the old behaviour here if wanted it is necessary to add get2DDecomposition and implement
@@ -97,7 +97,7 @@ namespace drawinglayer
             double fStart,
             double fStop,
             const basegfx::BColor& rColor)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maTransformation(rTransformation),
             mfStart(fStart),
             mfStop(fStop),
@@ -107,7 +107,7 @@ namespace drawinglayer
 
         bool WrongSpellPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const WrongSpellPrimitive2D& rCompare = (WrongSpellPrimitive2D&)rPrimitive;
 

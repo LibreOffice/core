@@ -51,7 +51,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class PolyPolygonHairlinePrimitive2D : public BasePrimitive2D
+        class PolyPolygonHairlinePrimitive2D : public BufDecPrimitive2D
         {
         private:
             basegfx::B2DPolyPolygon                 maPolyPolygon;
@@ -59,7 +59,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             PolyPolygonHairlinePrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::BColor& rBColor);
@@ -87,7 +87,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class PolyPolygonMarkerPrimitive2D : public BasePrimitive2D
+        class PolyPolygonMarkerPrimitive2D : public BufDecPrimitive2D
         {
         private:
             basegfx::B2DPolyPolygon                 maPolyPolygon;
@@ -97,7 +97,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             PolyPolygonMarkerPrimitive2D(
@@ -131,7 +131,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class PolyPolygonStrokePrimitive2D : public BasePrimitive2D
+        class PolyPolygonStrokePrimitive2D : public BufDecPrimitive2D
         {
         private:
             basegfx::B2DPolyPolygon                 maPolyPolygon;
@@ -140,7 +140,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             PolyPolygonStrokePrimitive2D(
@@ -184,7 +184,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             PolyPolygonStrokeArrowPrimitive2D(
@@ -223,7 +223,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class PolyPolygonColorPrimitive2D : public BasePrimitive2D
+        class PolyPolygonColorPrimitive2D : public BufDecPrimitive2D
         {
         private:
             basegfx::B2DPolyPolygon                 maPolyPolygon;
@@ -264,7 +264,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             PolyPolygonGradientPrimitive2D(
@@ -298,7 +298,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             PolyPolygonHatchPrimitive2D(
@@ -332,7 +332,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             PolyPolygonBitmapPrimitive2D(

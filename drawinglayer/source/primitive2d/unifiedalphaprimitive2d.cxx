@@ -55,7 +55,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence UnifiedAlphaPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence UnifiedAlphaPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             if(0.0 == getAlpha())
             {

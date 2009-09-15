@@ -46,9 +46,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrOle2Primitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DSequence SdrOle2Primitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
-            // to take care of getSdrLFSTAttribute() later, the same as in SdrGrafPrimitive2D::createLocalDecomposition
+            // to take care of getSdrLFSTAttribute() later, the same as in SdrGrafPrimitive2D::createLocal2DDecomposition
             // should happen. For the moment we only need the OLE itself
             // Added complete primitive preparation using getSdrLFSTAttribute() now. To not do stuff which is not needed now, it
             // may be supressed by using a static bool. The paint version only supported text.

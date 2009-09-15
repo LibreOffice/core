@@ -51,7 +51,7 @@ namespace drawinglayer
 
         protected:
             //  create decomposition
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             UnifiedAlphaPrimitive2D(

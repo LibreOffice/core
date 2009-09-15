@@ -46,7 +46,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrRectanglePrimitive2D : public BasePrimitive2D
+        class SdrRectanglePrimitive2D : public BufDecPrimitive2D
         {
         private:
             basegfx::B2DHomMatrix                       maTransform;
@@ -61,7 +61,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrRectanglePrimitive2D(

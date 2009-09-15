@@ -49,7 +49,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence HitTestPrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DSequence HitTestPrimitive3D::createLocal3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             // return empty sequence
             return Primitive3DSequence();

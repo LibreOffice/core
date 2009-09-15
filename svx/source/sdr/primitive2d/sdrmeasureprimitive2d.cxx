@@ -83,7 +83,7 @@ namespace drawinglayer
             return createPolygonLinePrimitive(aPolygon, rObjectMatrix, *getSdrLSTAttribute().getLine(), &aLineStartEnd);
         }
 
-        Primitive2DSequence SdrMeasurePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        Primitive2DSequence SdrMeasurePrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
             SdrBlockTextPrimitive2D* pBlockText = 0L;
@@ -424,7 +424,7 @@ namespace drawinglayer
 
                 // apply to existing text primitive
                 SdrTextPrimitive2D* pNewBlockText = pBlockText->createTransformedClone(aChange);
-                OSL_ENSURE(pNewBlockText, "SdrMeasurePrimitive2D::createLocalDecomposition: Could not create transformed clone of text primitive (!)");
+                OSL_ENSURE(pNewBlockText, "SdrMeasurePrimitive2D::createLocal2DDecomposition: Could not create transformed clone of text primitive (!)");
                 delete pBlockText;
 
                 // add to local primitives
@@ -454,7 +454,7 @@ namespace drawinglayer
             bool bBelow,
             bool bTextRotation,
             bool bTextAutoAngle)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maSdrLSTAttribute(rSdrLSTAttribute),
             maStart(rStart),
             maEnd(rEnd),
@@ -473,7 +473,7 @@ namespace drawinglayer
 
         bool SdrMeasurePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const SdrMeasurePrimitive2D& rCompare = (SdrMeasurePrimitive2D&)rPrimitive;
 

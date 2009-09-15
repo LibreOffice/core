@@ -52,7 +52,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence AnimatedSwitchPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence AnimatedSwitchPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             if(getChildren().hasElements())
             {
@@ -107,13 +107,13 @@ namespace drawinglayer
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            if(getLocalDecomposition().hasElements() && mfDecomposeViewTime != rViewInformation.getViewTime())
+            if(getLocal2DDecomposition().hasElements() && mfDecomposeViewTime != rViewInformation.getViewTime())
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< AnimatedSwitchPrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
+                const_cast< AnimatedSwitchPrimitive2D* >(this)->setLocal2DDecomposition(Primitive2DSequence());
             }
 
-            if(!getLocalDecomposition().hasElements())
+            if(!getLocal2DDecomposition().hasElements())
             {
                 // remember time
                 const_cast< AnimatedSwitchPrimitive2D* >(this)->mfDecomposeViewTime = rViewInformation.getViewTime();
@@ -126,8 +126,8 @@ namespace drawinglayer
         basegfx::B2DRange AnimatedSwitchPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             // to get range from decomposition and not from group content, call implementation from
-            // BasePrimitive2D here
-            return BasePrimitive2D::getB2DRange(rViewInformation);
+            // BufDecPrimitive2D here
+            return BufDecPrimitive2D::getB2DRange(rViewInformation);
         }
 
         // provide unique ID
@@ -142,7 +142,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence AnimatedBlinkPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence AnimatedBlinkPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             if(getChildren().hasElements())
             {
@@ -206,7 +206,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence AnimatedInterpolatePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence AnimatedInterpolatePrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             const sal_uInt32 nSize(maMatrixStack.size());
 

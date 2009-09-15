@@ -53,7 +53,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence MediaPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence MediaPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DSequence xRetval(1);
 
@@ -114,7 +114,7 @@ namespace drawinglayer
             const rtl::OUString& rURL,
             const basegfx::BColor& rBackgroundColor,
             sal_uInt32 nDiscreteBorder)
-        :   BasePrimitive2D(),
+        :   BufDecPrimitive2D(),
             maTransform(rTransform),
             maURL(rURL),
             maBackgroundColor(rBackgroundColor),
@@ -124,7 +124,7 @@ namespace drawinglayer
 
         bool MediaPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufDecPrimitive2D::operator==(rPrimitive))
             {
                 const MediaPrimitive2D& rCompare = (MediaPrimitive2D&)rPrimitive;
 

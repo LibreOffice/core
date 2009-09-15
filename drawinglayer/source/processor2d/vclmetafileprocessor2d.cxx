@@ -589,7 +589,7 @@ namespace drawinglayer
 
         void VclMetafileProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
-            switch(rCandidate.getPrimitiveID())
+            switch(rCandidate.getPrimitive2DID())
             {
                 case PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D :
                 {
@@ -1453,7 +1453,7 @@ namespace drawinglayer
                         // PolyPolygonGradientPrimitive2D, PolyPolygonHatchPrimitive2D and
                         // PolyPolygonBitmapPrimitive2D are derived from PolyPolygonColorPrimitive2D.
                         // Check also for correct ID to exclude derived implementations
-                        if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitiveID())
+                        if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitive2DID())
                         {
                             // single transparent PolyPolygon identified, use directly
                             const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
@@ -1561,7 +1561,7 @@ namespace drawinglayer
                         }
 
                         // Check also for correct ID to exclude derived implementations
-                        if(pFiGradient && PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D == pFiGradient->getPrimitiveID())
+                        if(pFiGradient && PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D == pFiGradient->getPrimitive2DID())
                         {
                             // various content, create content-metafile
                             GDIMetaFile aContentMetafile;
