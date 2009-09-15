@@ -1990,7 +1990,7 @@ private:
     ShadowState                 maShadowState;
 
 protected:
-    virtual drawinglayer::primitive2d::Primitive2DSequence createLocalDecomposition(
+    virtual drawinglayer::primitive2d::Primitive2DSequence createLocal2DDecomposition(
         const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
 public:
@@ -2009,12 +2009,12 @@ public:
     const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
     ShadowState getShadowState() const { return maShadowState; }
 
-    virtual bool operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const;
+    virtual bool operator==( const drawinglayer::primitive2d::BufDecPrimitive2D& rPrimitive ) const;
 
     DeclPrimitrive2DIDBlock()
 };
 
-drawinglayer::primitive2d::Primitive2DSequence SwPostItShadowPrimitive::createLocalDecomposition(
+drawinglayer::primitive2d::Primitive2DSequence SwPostItShadowPrimitive::createLocal2DDecomposition(
     const drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     // get logic sizes in object coordinate system
@@ -2095,7 +2095,7 @@ drawinglayer::primitive2d::Primitive2DSequence SwPostItShadowPrimitive::createLo
     return xRetval;
 }
 
-bool SwPostItShadowPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const
+bool SwPostItShadowPrimitive::operator==( const drawinglayer::primitive2d::BufDecPrimitive2D& rPrimitive ) const
 {
     if(drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
     {
@@ -2177,7 +2177,7 @@ private:
     bool                            mbLineSolid : 1;
 
 protected:
-    virtual drawinglayer::primitive2d::Primitive2DSequence createLocalDecomposition(
+    virtual drawinglayer::primitive2d::Primitive2DSequence createLocal2DDecomposition(
         const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
 public:
@@ -2211,12 +2211,12 @@ public:
     bool getShadow() const { return mbShadow; }
     bool getLineSolid() const { return mbLineSolid; }
 
-    virtual bool operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const;
+    virtual bool operator==( const drawinglayer::primitive2d::BufDecPrimitive2D& rPrimitive ) const;
 
     DeclPrimitrive2DIDBlock()
 };
 
-drawinglayer::primitive2d::Primitive2DSequence SwPostItAnkorPrimitive::createLocalDecomposition(
+drawinglayer::primitive2d::Primitive2DSequence SwPostItAnkorPrimitive::createLocal2DDecomposition(
     const drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     drawinglayer::primitive2d::Primitive2DSequence aRetval;
@@ -2331,7 +2331,7 @@ drawinglayer::primitive2d::Primitive2DSequence SwPostItAnkorPrimitive::createLoc
     return aRetval;
 }
 
-bool SwPostItAnkorPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const
+bool SwPostItAnkorPrimitive::operator==( const drawinglayer::primitive2d::BufDecPrimitive2D& rPrimitive ) const
 {
     if(drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
     {
