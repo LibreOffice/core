@@ -256,7 +256,7 @@ namespace sd { namespace slidesorter { namespace view {
 // class for all derived SdPageObjectPrimitives. The SdPageObjectBasePrimitive itself
 // is pure virtual
 
-class SdPageObjectBasePrimitive : public drawinglayer::primitive2d::BufDecPrimitive2D
+class SdPageObjectBasePrimitive : public drawinglayer::primitive2d::BufferedDecompositionPrimitive2D
 {
 private:
     // the inner range of the SdPageObject visualisation
@@ -271,11 +271,11 @@ public:
     const basegfx::B2DRange& getPageObjectRange() const { return maRange; }
 
     // compare operator
-    virtual bool operator==( const drawinglayer::primitive2d::BufDecPrimitive2D& rPrimitive ) const;
+    virtual bool operator==( const drawinglayer::primitive2d::BufferedDecompositionPrimitive2D& rPrimitive ) const;
 };
 
 SdPageObjectBasePrimitive::SdPageObjectBasePrimitive(const basegfx::B2DRange& rRange)
-:   drawinglayer::primitive2d::BufDecPrimitive2D(),
+:   drawinglayer::primitive2d::BufferedDecompositionPrimitive2D(),
     maRange(rRange)
 {
 }
@@ -284,9 +284,9 @@ SdPageObjectBasePrimitive::~SdPageObjectBasePrimitive()
 {
 }
 
-bool SdPageObjectBasePrimitive::operator==( const drawinglayer::primitive2d::BufDecPrimitive2D& rPrimitive ) const
+bool SdPageObjectBasePrimitive::operator==( const drawinglayer::primitive2d::BufferedDecompositionPrimitive2D& rPrimitive ) const
 {
-    if(drawinglayer::primitive2d::BufDecPrimitive2D::operator==(rPrimitive))
+    if(drawinglayer::primitive2d::BufferedDecompositionPrimitive2D::operator==(rPrimitive))
     {
         const SdPageObjectBasePrimitive& rCompare = static_cast< const SdPageObjectBasePrimitive& >(rPrimitive);
         return (getPageObjectRange() == rCompare.getPageObjectRange());
@@ -319,7 +319,7 @@ public:
     const BitmapEx& getBitmapEx() const { return maBitmapEx; }
 
     // compare operator
-    virtual bool operator==( const drawinglayer::primitive2d::BufDecPrimitive2D& rPrimitive ) const;
+    virtual bool operator==( const drawinglayer::primitive2d::BufferedDecompositionPrimitive2D& rPrimitive ) const;
 
     // provide unique ID
     DeclPrimitrive2DIDBlock()
@@ -358,7 +358,7 @@ SdPageObjectPageBitmapPrimitive::~SdPageObjectPageBitmapPrimitive()
 {
 }
 
-bool SdPageObjectPageBitmapPrimitive::operator==( const drawinglayer::primitive2d::BufDecPrimitive2D& rPrimitive ) const
+bool SdPageObjectPageBitmapPrimitive::operator==( const drawinglayer::primitive2d::BufferedDecompositionPrimitive2D& rPrimitive ) const
 {
     if(SdPageObjectBasePrimitive::operator==(rPrimitive))
     {
@@ -641,7 +641,7 @@ public:
     bool getExcluded() const { return mbExcluded; }
 
     // compare operator
-    virtual bool operator==( const drawinglayer::primitive2d::BufDecPrimitive2D& rPrimitive ) const;
+    virtual bool operator==( const drawinglayer::primitive2d::BufferedDecompositionPrimitive2D& rPrimitive ) const;
 
     // provide unique ID
     DeclPrimitrive2DIDBlock()
@@ -866,7 +866,7 @@ SdPageObjectFadeNameNumberPrimitive::~SdPageObjectFadeNameNumberPrimitive()
 {
 }
 
-bool SdPageObjectFadeNameNumberPrimitive::operator==( const drawinglayer::primitive2d::BufDecPrimitive2D& rPrimitive ) const
+bool SdPageObjectFadeNameNumberPrimitive::operator==( const drawinglayer::primitive2d::BufferedDecompositionPrimitive2D& rPrimitive ) const
 {
     if(SdPageObjectBasePrimitive::operator==(rPrimitive))
     {
@@ -1150,7 +1150,7 @@ void PageObjectViewObjectContact::ActionChanged (void)
 // Very simple primitive which just remembers the discrete data and applies
 // it at decomposition time.
 
-class MouseOverEffectPrimitive : public drawinglayer::primitive2d::BufDecPrimitive2D
+class MouseOverEffectPrimitive : public drawinglayer::primitive2d::BufferedDecompositionPrimitive2D
 {
 private:
     basegfx::B2DRange           maLogicRange;
@@ -1168,7 +1168,7 @@ public:
         sal_uInt32 nDiscreteOffset,
         sal_uInt32 nDiscreteWidth,
         const basegfx::BColor& rRGBColor)
-    :   drawinglayer::primitive2d::BufDecPrimitive2D(),
+    :   drawinglayer::primitive2d::BufferedDecompositionPrimitive2D(),
         maLogicRange(rLogicRange),
         mnDiscreteOffset(nDiscreteOffset),
         mnDiscreteWidth(nDiscreteWidth),
@@ -1181,7 +1181,7 @@ public:
     sal_uInt32 getDiscreteWidth() const { return mnDiscreteWidth; }
     const basegfx::BColor& getRGBColor() const { return maRGBColor; }
 
-    virtual bool operator==( const drawinglayer::primitive2d::BufDecPrimitive2D& rPrimitive ) const;
+    virtual bool operator==( const drawinglayer::primitive2d::BufferedDecompositionPrimitive2D& rPrimitive ) const;
 
     DeclPrimitrive2DIDBlock()
 };
@@ -1214,9 +1214,9 @@ drawinglayer::primitive2d::Primitive2DSequence MouseOverEffectPrimitive::createL
     return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
 }
 
-bool MouseOverEffectPrimitive::operator==( const drawinglayer::primitive2d::BufDecPrimitive2D& rPrimitive ) const
+bool MouseOverEffectPrimitive::operator==( const drawinglayer::primitive2d::BufferedDecompositionPrimitive2D& rPrimitive ) const
 {
-    if(drawinglayer::primitive2d::BufDecPrimitive2D::operator==(rPrimitive))
+    if(drawinglayer::primitive2d::BufferedDecompositionPrimitive2D::operator==(rPrimitive))
     {
         const MouseOverEffectPrimitive& rCompare = static_cast< const MouseOverEffectPrimitive& >(rPrimitive);
 
