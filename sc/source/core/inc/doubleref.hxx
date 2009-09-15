@@ -69,7 +69,17 @@ public:
     virtual ::rtl::OUString getString(SCCOL nCol, SCROW nRow) const = 0;
 
     virtual SCCOL getFirstFieldColumn() const = 0;
-    virtual SCCOL findFieldColumn(SCCOL nColIndex) const = 0;
+
+    /**
+     * Get a <i>0-based</i> column index that corresponds with the passed field
+     * index.  Note that the field index passed as the 1st parameter is
+     * <i>1-based.</i>
+     *
+     * @param nIndex 1-based field index.
+     *
+     * @return 0-based column index
+     */
+    virtual SCCOL findFieldColumn(SCCOL nIndex) const = 0;
     virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const = 0;
     virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const = 0;
     virtual bool isRangeEqual(const ScRange& rRange) const = 0;
@@ -110,7 +120,16 @@ public:
     virtual ::rtl::OUString getString(SCCOL nCol, SCROW nRow) const;
 
     virtual SCCOL getFirstFieldColumn() const;
-    virtual SCCOL findFieldColumn(SCCOL nColIndex) const;
+    /**
+     * Get a <i>0-based</i> column index that corresponds with the passed field
+     * index.  Note that the field index passed as the 1st parameter is
+     * <i>1-based.</i>
+     *
+     * @param nIndex 1-based field index.
+     *
+     * @return 0-based column index
+     */
+    virtual SCCOL findFieldColumn(SCCOL nIndex) const;
     virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const;
     virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const;
     virtual bool isRangeEqual(const ScRange& rRange) const;
@@ -145,7 +164,17 @@ public:
     virtual ::rtl::OUString getString(SCCOL nCol, SCROW nRow) const;
 
     virtual SCCOL getFirstFieldColumn() const;
-    virtual SCCOL findFieldColumn(SCCOL nColIndex) const;
+
+    /**
+     * Get a <i>0-based</i> column index that corresponds with the passed field
+     * index.  Note that the field index passed as the 1st parameter is
+     * <i>1-based.</i>
+     *
+     * @param nIndex 1-based field index.
+     *
+     * @return 0-based column index
+     */
+    virtual SCCOL findFieldColumn(SCCOL nIndex) const;
     virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const;
     virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const;
     virtual bool isRangeEqual(const ScRange& rRange) const;

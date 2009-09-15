@@ -47,6 +47,43 @@
 #include "docoptio.hxx"
 #include "cellform.hxx"
 
+using ::rtl::math::approxEqual;
+
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+
+namespace {
+
+class StackPrinter
+{
+public:
+    explicit StackPrinter(const char* msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~StackPrinter()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -625,25 +662,154 @@ bool ScDBQueryValueIterator::DataAccessInternal::getNext(double& rValue, USHORT&
 ScDBQueryValueIterator::DataAccessMatrix::DataAccessMatrix(const ScDBQueryParamMatrix* pParam) :
     mpParam(pParam)
 {
+    SCSIZE nC, nR;
+    mpParam->mpMatrix->GetDimensions(nC, nR);
+    mnRows = static_cast<SCROW>(nR);
+    mnCols = static_cast<SCCOL>(nC);
 }
 
 ScDBQueryValueIterator::DataAccessMatrix::~DataAccessMatrix()
 {
 }
 
-bool ScDBQueryValueIterator::DataAccessMatrix::getCurrent(double& /*rValue*/, USHORT& /*rErr*/)
+bool ScDBQueryValueIterator::DataAccessMatrix::getCurrent(double& rValue, USHORT& rErr)
 {
+    rErr = 0; // There is never a cell error in matrix backends.
+
+    // Starting from row == mnCurRow, get the first row that satisfies all the
+    // query parameters.
+    for ( ;mnCurRow < mnRows; ++mnCurRow)
+    {
+        const ScMatrix& rMat = *mpParam->mpMatrix;
+        if (isValidQuery(mnCurRow, rMat))
+        {
+            rValue = rMat.GetDouble(mpParam->mnField, mnCurRow);
+            return true;
+        }
+    }
     return false;
 }
 
-bool ScDBQueryValueIterator::DataAccessMatrix::getFirst(double& /*rValue*/, USHORT& /*rErr*/)
+bool ScDBQueryValueIterator::DataAccessMatrix::getFirst(double& rValue, USHORT& rErr)
 {
+    mnCurRow = 1;
+    return getCurrent(rValue, rErr);
+}
+
+bool ScDBQueryValueIterator::DataAccessMatrix::getNext(double& rValue, USHORT& rErr)
+{
+    ++mnCurRow;
+    return getCurrent(rValue, rErr);
+}
+
+namespace {
+
+bool lcl_isQueryByValue(const ScQueryEntry& rEntry, const ScMatrix& rMat, SCSIZE nCol, SCSIZE nRow)
+{
+    if (rEntry.bQueryByString)
+        return false;
+
+    if (!rMat.IsValueOrEmpty(nCol, nRow))
+        return false;
+
+    return true;
+}
+
+bool lcl_isQueryByString(const ScQueryEntry& rEntry, const ScMatrix& rMat, SCSIZE nCol, SCSIZE nRow)
+{
+    switch (rEntry.eOp)
+    {
+        case SC_EQUAL:
+        case SC_NOT_EQUAL:
+        case SC_CONTAINS:
+        case SC_DOES_NOT_CONTAIN:
+        case SC_BEGINS_WITH:
+        case SC_ENDS_WITH:
+        case SC_DOES_NOT_BEGIN_WITH:
+        case SC_DOES_NOT_END_WITH:
+            return true;
+        default:
+            ;
+    }
+
+    if (rEntry.bQueryByString && rMat.IsString(nCol, nRow))
+        return true;
+
     return false;
 }
 
-bool ScDBQueryValueIterator::DataAccessMatrix::getNext(double& /*rValue*/, USHORT& /*rErr*/)
+}
+
+bool ScDBQueryValueIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScMatrix& rMat) const
 {
-    return false;
+    StackPrinter __stack_printer__("ScDBQueryValueIterator:DataAccessMatrix::isValidQuery");
+    SCSIZE nEntryCount = mpParam->GetEntryCount();
+    bool bEverValid = false;
+    for (SCSIZE i = 0; i < nEntryCount; ++i)
+    {
+        const ScQueryEntry& rEntry = mpParam->GetEntry(i);
+        if (!rEntry.bDoQuery)
+            continue;
+
+        bool bValid = false;
+
+        SCSIZE nField = static_cast<SCSIZE>(rEntry.nField);
+        if (lcl_isQueryByValue(rEntry, rMat, nField, nRow))
+        {
+            // By value
+            fprintf(stdout, "ScDBQueryValueIterator:DataAccessMatrix::isValidQuery:   by value\n");
+            double fMatVal = rMat.GetDouble(nField, nRow);
+            bool bEqual = approxEqual(fMatVal, rEntry.nVal);
+            switch (rEntry.eOp)
+            {
+                case SC_EQUAL:
+                    bValid = bEqual;
+                break;
+                case SC_LESS:
+                    bValid = (fMatVal < rEntry.nVal) && !bEqual;
+                break;
+                case SC_GREATER:
+                    bValid = (fMatVal > rEntry.nVal) && !bEqual;
+                break;
+                case SC_LESS_EQUAL:
+                    bValid = (fMatVal < rEntry.nVal) || bEqual;
+                break;
+                case SC_GREATER_EQUAL:
+                    bValid = (fMatVal > rEntry.nVal) || bEqual;
+                break;
+                case SC_NOT_EQUAL:
+                    bValid = !bEqual;
+                break;
+                default:
+                    ;
+            }
+        }
+        else if (lcl_isQueryByString(rEntry, rMat, nField, nRow))
+        {
+            // By string
+            fprintf(stdout, "ScDBQueryValueIterator:DataAccessMatrix::isValidQuery:   by string\n");
+        }
+        else if (mpParam->bMixedComparison)
+        {
+        }
+
+        if (i > 0)
+        {
+            // Evaluate the query connector for secondary queries.
+            switch (rEntry.eConnect)
+            {
+                case SC_AND:
+                    if (!bValid)
+                        return false;
+                break;
+                case SC_OR:
+                break;
+            }
+        }
+
+        bEverValid |= bValid;
+    }
+    return bEverValid;
 }
 
 // ----------------------------------------------------------------------------

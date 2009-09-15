@@ -179,7 +179,12 @@ private:
         virtual bool getNext(double &rValue, USHORT &rErr);
 
     private:
+        bool isValidQuery(SCROW mnRow, const ScMatrix& rMat) const;
+
         const ScDBQueryParamMatrix* mpParam;
+        SCROW mnCurRow;
+        SCROW mnRows;
+        SCCOL mnCols;
     };
 
     ::std::auto_ptr<ScDBQueryParamBase> mpParam;

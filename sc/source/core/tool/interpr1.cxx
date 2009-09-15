@@ -5818,7 +5818,7 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
     if (pQueryParam.get())
     {
         double nVal;
-        USHORT nErr;
+        USHORT nErr = 0;
         ScDBQueryValueIterator aValIter(pDok, pQueryParam.release());
         if ( aValIter.GetFirst(nVal, nErr) && !nErr )
         {

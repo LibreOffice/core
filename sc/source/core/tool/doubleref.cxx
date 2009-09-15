@@ -47,42 +47,6 @@ using ::rtl::OUString;
 using ::std::auto_ptr;
 using ::std::vector;
 
-#include <stdio.h>
-#include <string>
-#include <sys/time.h>
-
-namespace {
-
-class StackPrinter
-{
-public:
-    explicit StackPrinter(const char* msg) :
-        msMsg(msg)
-    {
-        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
-        mfStartTime = getTime();
-    }
-
-    ~StackPrinter()
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
-    }
-
-private:
-    double getTime() const
-    {
-        timeval tv;
-        gettimeofday(&tv, NULL);
-        return tv.tv_sec + tv.tv_usec / 1000000.0;
-    }
-
-    ::std::string msMsg;
-    double mfStartTime;
-};
-
-}
-
 namespace {
 
 void lcl_toUpper(OUString& rStr)
@@ -371,7 +335,7 @@ SCCOL ScDBInternalRange::getFirstFieldColumn() const
     return getRange().aStart.Col();
 }
 
-SCCOL ScDBInternalRange::findFieldColumn(SCCOL nColIndex) const
+SCCOL ScDBInternalRange::findFieldColumn(SCCOL nIndex) const
 {
     const ScRange& rRange = getRange();
     const ScAddress& s = rRange.aStart;
@@ -380,10 +344,10 @@ SCCOL ScDBInternalRange::findFieldColumn(SCCOL nColIndex) const
     SCCOL nDBCol1 = s.Col();
     SCCOL nDBCol2 = e.Col();
 
-    if ( nColIndex <= 0 || nColIndex > (nDBCol2 - nDBCol1 + 1) )
+    if ( nIndex <= 0 || nIndex > (nDBCol2 - nDBCol1 + 1) )
         return nDBCol1;
 
-    return Min(nDBCol2, static_cast<SCCOL>(nDBCol1 + nColIndex - 1));
+    return Min(nDBCol2, static_cast<SCCOL>(nDBCol1 + nIndex - 1));
 }
 
 sal_uInt16 ScDBInternalRange::getCellString(OUString& rStr, ScBaseCell* pCell) const
@@ -544,22 +508,56 @@ OUString ScDBExternalRange::getString(SCCOL nCol, SCROW nRow) const
 
 SCCOL ScDBExternalRange::getFirstFieldColumn() const
 {
+    return 0;
+}
+
+SCCOL ScDBExternalRange::findFieldColumn(SCCOL nIndex) const
+{
+    if (nIndex < 1)
+        // 1st field
+        return 0;
+
+    if (nIndex > mnCols)
+        // last field
+        return mnCols - 1;
+
+    return nIndex - 1;
+}
+
+SCCOL ScDBExternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr) const
+{
+    if (pErr)
+        pErr = 0;
+
+    OUString aUpper = rStr;
+    lcl_toUpper(aUpper);
+    for (SCCOL i = 0; i < mnCols; ++i)
+    {
+        OUString aUpperVal = mpMatrix->GetString(i, 0);
+        lcl_toUpper(aUpperVal);
+        if (aUpper.equals(aUpperVal))
+            return i;
+    }
     return -1;
 }
 
-SCCOL ScDBExternalRange::findFieldColumn(SCCOL /*nColIndex*/) const
+ScDBQueryParamBase* ScDBExternalRange::createQueryParam(const ScDBRangeBase* pQueryRef) const
 {
-    return -1;
-}
+    auto_ptr<ScDBQueryParamMatrix> pParam(new ScDBQueryParamMatrix);
+    pParam->mpMatrix = mpMatrix;
 
-SCCOL ScDBExternalRange::findFieldColumn(const OUString& /*rStr*/, sal_uInt16* /*pErr*/) const
-{
-    return -1;
-}
+    pParam->bHasHeader = TRUE;
+    pParam->bByRow = TRUE;
+    pParam->bInplace = TRUE;
+    pParam->bCaseSens = FALSE;
+    pParam->bRegExp = FALSE;
+    pParam->bDuplicate = TRUE;
 
-ScDBQueryParamBase* ScDBExternalRange::createQueryParam(const ScDBRangeBase* /*pQueryRef*/) const
-{
-    return NULL;
+    // Now construct the query entries from the query range.
+    if (!pQueryRef->fillQueryEntries(pParam.get(), this))
+        return NULL;
+
+    return pParam.release();
 }
 
 bool ScDBExternalRange::isRangeEqual(const ScRange& /*rRange*/) const
