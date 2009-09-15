@@ -35,9 +35,7 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
-SLOFILES = \
-    $(SLO)/performance.obj \
-    $(SLO)/threading.obj
+SLOFILES = $(SLO)/test.obj
 
 SHL1OBJS = $(SLOFILES)
 SHL1STDLIBS = \
