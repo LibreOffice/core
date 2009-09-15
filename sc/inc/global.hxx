@@ -812,48 +812,7 @@ struct ScQueryEntry
     ScQueryEntry&   operator=( const ScQueryEntry& r );
     BOOL            operator==( const ScQueryEntry& r ) const;
 };
-#if 0
-struct SC_DLLPUBLIC ScQueryParam
-{
-    SCCOL           nCol1;
-    SCROW           nRow1;
-    SCCOL           nCol2;
-    SCROW           nRow2;
-    SCTAB           nTab;
-    BOOL            bHasHeader;
-    BOOL            bByRow;
-    BOOL            bInplace;
-    BOOL            bCaseSens;
-    BOOL            bRegExp;
-    BOOL            bMixedComparison;   // whether numbers are smaller than strings
-    BOOL            bDuplicate;
-    BOOL            bDestPers;          // nicht gespeichert
-    SCTAB           nDestTab;
-    SCCOL           nDestCol;
-    SCROW           nDestRow;
 
-private:
-    SCSIZE          nEntryCount;
-    ScQueryEntry*   pEntries;
-
-public:
-    ScQueryParam();
-    ScQueryParam( const ScQueryParam& r );
-    ~ScQueryParam();
-
-    SCSIZE          GetEntryCount() const           { return nEntryCount; }
-    ScQueryEntry&   GetEntry(SCSIZE n) const        { return pEntries[n]; }
-    void            Resize(SCSIZE nNew);
-
-    ScQueryParam&   operator=   ( const ScQueryParam& r );
-    BOOL            operator==  ( const ScQueryParam& rOther ) const;
-    void            Clear       ();
-    void            DeleteQuery( SCSIZE nPos );
-
-    void            MoveToDest();
-    void            FillInExcelSyntax(String& aCellStr, SCSIZE nIndex);
-};
-#endif
 // -----------------------------------------------------------------------
 
 struct SC_DLLPUBLIC ScSubTotalParam

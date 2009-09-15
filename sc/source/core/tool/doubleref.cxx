@@ -38,11 +38,260 @@
 #include "global.hxx"
 #include "document.hxx"
 #include "queryparam.hxx"
+#include "globstr.hrc"
 
 #include <memory>
 
 using ::rtl::OUString;
 using ::std::auto_ptr;
+
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+
+namespace {
+
+class StackPrinter
+{
+public:
+    explicit StackPrinter(const char* msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~StackPrinter()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
+
+namespace {
+
+
+bool CreateStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
+{
+    // A valid StarQuery must be at least 4 columns wide. To be precise it
+    // should be exactly 4 columns ...
+    // Additionally, if this wasn't checked, a formula pointing to a valid 1-3
+    // column Excel style query range immediately left to itself would result
+    // in a circular reference when the field name or operator or value (first
+    // to third query range column) is obtained (#i58354#). Furthermore, if the
+    // range wasn't sufficiently specified data changes wouldn't flag formula
+    // cells for recalculation.
+
+    if (pQueryRef->getColSize() < 4)
+        return false;
+
+    BOOL bValid;
+    BOOL bFound;
+    String aCellStr;
+    SCSIZE nIndex = 0;
+    SCROW nRow = 0;
+    SCROW nRows = pDBRef->getRowSize();
+    SCSIZE nNewEntries = static_cast<SCSIZE>(nRows);
+    pParam->Resize(nNewEntries);
+
+    do
+    {
+        ScQueryEntry& rEntry = pParam->GetEntry(nIndex);
+
+        bValid = FALSE;
+
+        if (nIndex > 0)
+        {
+            // For all entries after the first one, check the and/or connector in the first column.
+            aCellStr = pQueryRef->getString(0, nRow);
+            aCellStr.EraseTrailingChars();
+            aCellStr.EraseLeadingChars();
+            ScGlobal::pCharClass->toUpper(aCellStr);
+            if ( aCellStr == ScGlobal::GetRscString(STR_TABLE_UND) )
+            {
+                rEntry.eConnect = SC_AND;
+                bValid = TRUE;
+            }
+            else if ( aCellStr == ScGlobal::GetRscString(STR_TABLE_ODER) )
+            {
+                rEntry.eConnect = SC_OR;
+                bValid = TRUE;
+            }
+        }
+
+        if ((nIndex < 1) || bValid)
+        {
+            // field name in the 2nd column.
+            bFound = FALSE;
+            aCellStr = pQueryRef->getString(1, nRow);
+            // TODO: remove leading/trailing blanks.
+            SCCOL nField = pDBRef->findFieldColumn(aCellStr); // TODO: must be case insensitive comparison.
+            if (ValidCol(nField))
+            {
+                rEntry.nField = nField;
+                bValid = true;
+            }
+            else
+                bValid = false;
+        }
+
+        if (bValid)
+        {
+            // equality, non-equality operator in the 3rd column.
+            bFound = FALSE;
+            aCellStr = pQueryRef->getString(2, nRow);
+            aCellStr.EraseTrailingChars();
+            aCellStr.EraseLeadingChars();
+            ScGlobal::pCharClass->toUpper(aCellStr);
+            if (aCellStr.GetChar(0) == '<')
+            {
+                if (aCellStr.GetChar(1) == '>')
+                    rEntry.eOp = SC_NOT_EQUAL;
+                else if (aCellStr.GetChar(1) == '=')
+                    rEntry.eOp = SC_LESS_EQUAL;
+                else
+                    rEntry.eOp = SC_LESS;
+            }
+            else if (aCellStr.GetChar(0) == '>')
+            {
+                if (aCellStr.GetChar(1) == '=')
+                    rEntry.eOp = SC_GREATER_EQUAL;
+                else
+                    rEntry.eOp = SC_GREATER;
+            }
+            else if (aCellStr.GetChar(0) == '=')
+                rEntry.eOp = SC_EQUAL;
+
+        }
+
+        if (bValid)
+        {
+            // Finally, the right-hand-side value in the 4th column.
+            *rEntry.pStr = pQueryRef->getString(3, nRow);
+            rEntry.bDoQuery = TRUE;
+        }
+        nIndex++;
+        nRow++;
+    }
+    while (bValid && (nRow < nRows) /* && (nIndex < MAXQUERY) */ );
+    return bValid;
+}
+
+bool CreateExcelQuery(
+    ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
+{
+    bool bValid = true;
+    SCCOL nCols = pQueryRef->getColSize();
+    SCROW nRows = pQueryRef->getRowSize();
+    SCCOL* pFields = new SCCOL[nCols];
+    SCCOL nCol = 0;
+    while (bValid && (nCol < nCols))
+    {
+        String aQueryStr = pQueryRef->getString(nCol, 0);
+//      GetInputString(nCol, nRow1, aQueryStr);
+        SCCOL nField = pDBRef->findFieldColumn(aQueryStr);
+        if (ValidCol(nField))
+            pFields[nCol] = nField;
+        else
+            bValid = false;
+        ++nCol;
+    }
+
+    if (bValid)
+    {
+//      ULONG nVisible = 0;
+//      for ( nCol=nCol1; nCol<=nCol2; nCol++ )
+//          nVisible += aCol[nCol].VisibleCount( nRow1+1, nRow2 );
+
+        // Count the number of visible cells (excluding the header row).  Each
+        // visible cell corresponds with a single query.
+        SCSIZE nVisible = pQueryRef->getVisibleDataCellCount();
+        if ( nVisible > SCSIZE_MAX / sizeof(void*) )
+        {
+            DBG_ERROR("zu viele Filterkritierien");
+            nVisible = 0;
+        }
+
+        SCSIZE nNewEntries = nVisible;
+        pParam->Resize( nNewEntries );
+
+        SCSIZE nIndex = 0;
+        SCROW nRow = 1;
+        String aCellStr;
+        while (nRow < nRows)
+        {
+            nCol = 0;
+            while (nCol < nCols)
+            {
+                aCellStr = pQueryRef->getString(nCol, nRow);
+                ScGlobal::pCharClass->toUpper( aCellStr );
+                if (aCellStr.Len() > 0)
+                {
+                    if (nIndex < nNewEntries)
+                    {
+                        pParam->GetEntry(nIndex).nField = pFields[nCol];
+                        pParam->FillInExcelSyntax(aCellStr, nIndex);
+                        nIndex++;
+                        if (nIndex < nNewEntries)
+                            pParam->GetEntry(nIndex).eConnect = SC_AND;
+                    }
+                    else
+                        bValid = FALSE;
+                }
+                nCol++;
+            }
+            nRow++;
+            if (nIndex < nNewEntries)
+                pParam->GetEntry(nIndex).eConnect = SC_OR;
+        }
+    }
+    delete [] pFields;
+    return bValid;
+}
+
+bool FillQueryEntries(
+    ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
+{
+    SCSIZE nCount = pParam->GetEntryCount();
+    for (SCSIZE i = 0; i < nCount; ++i)
+        pParam->GetEntry(i).Clear();
+
+    // Standard QueryTabelle
+    bool bValid = CreateStarQuery(pParam, pDBRef, pQueryRef);
+    // Excel QueryTabelle
+    if (!bValid)
+        bValid = CreateExcelQuery(pParam, pDBRef, pQueryRef);
+
+    nCount = pParam->GetEntryCount();
+    if (bValid)
+    {
+        //  bQueryByString muss gesetzt sein
+        for (SCSIZE i = 0; i < nCount; ++i)
+            pParam->GetEntry(i).bQueryByString = true;
+    }
+    else
+    {
+        //  nix
+        for (SCSIZE i = 0; i < nCount; ++i)
+            pParam->GetEntry(i).Clear();
+    }
+    return bValid;
+}
+
+}
 
 // ============================================================================
 
@@ -79,6 +328,33 @@ ScDBInternalRange::~ScDBInternalRange()
 const ScRange& ScDBInternalRange::getRange() const
 {
     return maRange;
+}
+
+SCCOL ScDBInternalRange::getColSize() const
+{
+    return maRange.aEnd.Col() - maRange.aStart.Col() + 1;
+}
+
+SCROW ScDBInternalRange::getRowSize() const
+{
+    return maRange.aEnd.Row() - maRange.aStart.Row() + 1;
+}
+
+SCSIZE ScDBInternalRange::getVisibleDataCellCount() const
+{
+    SCCOL nCols = getColSize();
+    SCROW nRows = getRowSize();
+    if (nRows <= 1)
+        return 0;
+
+    return (nRows-1)*nCols;
+}
+
+OUString ScDBInternalRange::getString(SCCOL nCol, SCROW nRow) const
+{
+    String aStr;
+    getDoc()->GetString(nCol, nRow, maRange.aStart.Tab(), aStr);
+    return aStr;
 }
 
 SCCOL ScDBInternalRange::getFirstFieldColumn() const
@@ -218,20 +494,50 @@ bool ScDBInternalRange::fillQueryEntries(ScQueryParamBase* pParam, const ScDBRan
     if (!pDBRef)
         return false;
 
-    const ScAddress& s = maRange.aStart;
-    const ScAddress& e = maRange.aEnd;
-    return getDoc()->FillQueryEntries(pParam, pDBRef, s.Col(), s.Row(), e.Col(), e.Row(), s.Tab());
+    return FillQueryEntries(pParam, pDBRef, this);
 }
 
 // ============================================================================
 
-ScDBExternalRange::ScDBExternalRange(ScDocument* pDoc) :
-    ScDBRangeBase(pDoc, EXTERNAL)
+ScDBExternalRange::ScDBExternalRange(ScDocument* pDoc, const ScMatrixRef& pMat) :
+    ScDBRangeBase(pDoc, EXTERNAL), mpMatrix(pMat)
 {
+    SCSIZE nC, nR;
+    mpMatrix->GetDimensions(nC, nR);
+    mnCols = nC;
+    mnRows = nR;
 }
 
 ScDBExternalRange::~ScDBExternalRange()
 {
+}
+
+SCCOL ScDBExternalRange::getColSize() const
+{
+    return mnCols;
+}
+
+SCROW ScDBExternalRange::getRowSize() const
+{
+    return mnRows;
+}
+
+SCSIZE ScDBExternalRange::getVisibleDataCellCount() const
+{
+    SCCOL nCols = getColSize();
+    SCROW nRows = getRowSize();
+    if (nRows <= 1)
+        return 0;
+
+    return (nRows-1)*nCols;
+}
+
+OUString ScDBExternalRange::getString(SCCOL nCol, SCROW nRow) const
+{
+    if (nCol >= mnCols || nRow >= mnRows)
+        return OUString();
+
+    return mpMatrix->GetString(nCol, nRow);
 }
 
 SCCOL ScDBExternalRange::getFirstFieldColumn() const
@@ -261,5 +567,7 @@ bool ScDBExternalRange::isRangeEqual(const ScRange& /*rRange*/) const
 
 bool ScDBExternalRange::fillQueryEntries(ScQueryParamBase* /*pParam*/, const ScDBRangeBase* /*pDBRef*/) const
 {
+    StackPrinter __stack_printer__("ScDBExternalRange::fillQueryEntries");
+
     return false;
 }

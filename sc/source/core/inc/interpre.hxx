@@ -56,6 +56,7 @@ class SvNumberFormatter;
 class ScDBRangeBase;
 struct MatrixDoubleOp;
 struct ScQueryParam;
+struct ScDBQueryParamBase;
 
 struct ScCompare
 {

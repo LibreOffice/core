@@ -1092,6 +1092,8 @@ ScDBRangeBase* ScInterpreter::PopDoubleRef()
         case svMatrix:
         {
             fprintf(stdout, "ScInterpreter::PopDoubleRef:   matrix\n");
+            ScMatrixRef pMat = static_cast<ScToken*>(p)->GetMatrix();
+            return new ScDBExternalRange(pDok, pMat);
         }
         break;
         default:

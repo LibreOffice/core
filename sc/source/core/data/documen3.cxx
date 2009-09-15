@@ -80,7 +80,6 @@
 #include "listenercalls.hxx"
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
-#include "doubleref.hxx"
 
 #include <memory>
 
@@ -1194,18 +1193,6 @@ BOOL ScDocument::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
 
     DBG_ERROR("missing tab");
     return FALSE;
-}
-
-bool ScDocument::FillQueryEntries( ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef,
-                                   SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab)
-{
-    if (!pParam)
-        return false;
-
-    if (ValidTab(nTab) && pTab[nTab])
-        return pTab[nTab]->FillQueryEntries(pParam, pDBRef, nCol1, nRow1, nCol2, nRow2);
-
-    return false;
 }
 
 BOOL ScDocument::HasAutoFilter( SCCOL nCurCol, SCROW nCurRow, SCTAB nCurTab )

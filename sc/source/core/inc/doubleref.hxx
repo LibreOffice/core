@@ -32,6 +32,7 @@
 #define SC_DOUBLEREF_HXX
 
 #include "address.hxx"
+#include "scmatrix.hxx"
 
 class ScDocument;
 class ScBaseCell;
@@ -40,6 +41,9 @@ class ScQueryParamBase;
 
 // ============================================================================
 
+/**
+ * Base class for abstracting range data backends for database functions.
+ */
 class ScDBRangeBase
 {
 public:
@@ -49,6 +53,10 @@ public:
 
     RefType getType() const;
 
+    virtual SCCOL getColSize() const = 0;
+    virtual SCROW getRowSize() const = 0;
+    virtual SCSIZE getVisibleDataCellCount() const = 0;
+    virtual ::rtl::OUString getString(SCCOL nCol, SCROW nRow) const = 0;
     virtual SCCOL getFirstFieldColumn() const = 0;
     virtual SCCOL findFieldColumn(SCCOL nColIndex) const = 0;
     virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const = 0;
@@ -77,6 +85,10 @@ public:
 
     const ScRange& getRange() const;
 
+    virtual SCCOL getColSize() const;
+    virtual SCROW getRowSize() const;
+    virtual SCSIZE getVisibleDataCellCount() const;
+    virtual ::rtl::OUString getString(SCCOL nCol, SCROW nRow) const;
     virtual SCCOL getFirstFieldColumn() const;
     virtual SCCOL findFieldColumn(SCCOL nColIndex) const;
     virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const;
@@ -96,15 +108,24 @@ private:
 class ScDBExternalRange : public ScDBRangeBase
 {
 public:
-    explicit ScDBExternalRange(ScDocument* pDoc);
+    explicit ScDBExternalRange(ScDocument* pDoc, const ScMatrixRef& pMat);
     virtual ~ScDBExternalRange();
 
+    virtual SCCOL getColSize() const;
+    virtual SCROW getRowSize() const;
+    virtual SCSIZE getVisibleDataCellCount() const;
+    virtual ::rtl::OUString getString(SCCOL nCol, SCROW nRow) const;
     virtual SCCOL getFirstFieldColumn() const;
     virtual SCCOL findFieldColumn(SCCOL nColIndex) const;
     virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const;
     virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const;
     virtual bool isRangeEqual(const ScRange& rRange) const;
     virtual bool fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef) const;
+
+private:
+    const ScMatrixRef mpMatrix;
+    SCCOL mnCols;
+    SCROW mnRows;
 };
 
 #endif

@@ -136,8 +136,6 @@ class ScLookupCache;
 struct ScLookupCacheMapImpl;
 class SfxUndoManager;
 class ScFormulaParserPool;
-class ScDBRangeBase;
-class ScDBQueryParamBase;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -1369,9 +1367,6 @@ public:
     BOOL            ValidQuery( SCROW nRow, SCTAB nTab, const ScQueryParam& rQueryParam, BOOL* pSpecial = NULL );
     SC_DLLPUBLIC BOOL           CreateQueryParam( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                         SCTAB nTab, ScQueryParam& rQueryParam );
-    bool            FillQueryEntries( ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef,
-                                      SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab );
-
     void            GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, String& rStr);
 
     BOOL            GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
