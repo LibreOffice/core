@@ -2009,7 +2009,7 @@ public:
     const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
     ShadowState getShadowState() const { return maShadowState; }
 
-    virtual bool operator==( const drawinglayer::primitive2d::BufDecPrimitive2D& rPrimitive ) const;
+    virtual bool operator==( const drawinglayer::primitive2d::BufferedDecompositionPrimitive2D& rPrimitive ) const;
 
     DeclPrimitrive2DIDBlock()
 };
@@ -2095,7 +2095,7 @@ drawinglayer::primitive2d::Primitive2DSequence SwPostItShadowPrimitive::createLo
     return xRetval;
 }
 
-bool SwPostItShadowPrimitive::operator==( const drawinglayer::primitive2d::BufDecPrimitive2D& rPrimitive ) const
+bool SwPostItShadowPrimitive::operator==( const drawinglayer::primitive2d::BufferedDecompositionPrimitive2D& rPrimitive ) const
 {
     if(drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
     {
@@ -2211,7 +2211,7 @@ public:
     bool getShadow() const { return mbShadow; }
     bool getLineSolid() const { return mbLineSolid; }
 
-    virtual bool operator==( const drawinglayer::primitive2d::BufDecPrimitive2D& rPrimitive ) const;
+    virtual bool operator==( const drawinglayer::primitive2d::BufferedDecompositionPrimitive2D& rPrimitive ) const;
 
     DeclPrimitrive2DIDBlock()
 };
@@ -2331,7 +2331,7 @@ drawinglayer::primitive2d::Primitive2DSequence SwPostItAnkorPrimitive::createLoc
     return aRetval;
 }
 
-bool SwPostItAnkorPrimitive::operator==( const drawinglayer::primitive2d::BufDecPrimitive2D& rPrimitive ) const
+bool SwPostItAnkorPrimitive::operator==( const drawinglayer::primitive2d::BufferedDecompositionPrimitive2D& rPrimitive ) const
 {
     if(drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
     {

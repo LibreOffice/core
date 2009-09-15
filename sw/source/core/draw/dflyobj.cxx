@@ -196,7 +196,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SwVirtFlyDrawObjPrimitive : public BufDecPrimitive2D
+        class SwVirtFlyDrawObjPrimitive : public BufferedDecompositionPrimitive2D
         {
         private:
             const SwVirtFlyDrawObj&                 mrSwVirtFlyDrawObj;
@@ -210,7 +210,7 @@ namespace drawinglayer
             SwVirtFlyDrawObjPrimitive(
                 const SwVirtFlyDrawObj& rSwVirtFlyDrawObj,
                 const basegfx::B2DRange &rOuterRange)
-            :   BufDecPrimitive2D(),
+            :   BufferedDecompositionPrimitive2D(),
                 mrSwVirtFlyDrawObj(rSwVirtFlyDrawObj),
                 maOuterRange(rOuterRange)
             {
@@ -269,7 +269,7 @@ namespace drawinglayer
 
         bool SwVirtFlyDrawObjPrimitive::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SwVirtFlyDrawObjPrimitive& rCompare = (SwVirtFlyDrawObjPrimitive&)rPrimitive;
 
@@ -295,7 +295,7 @@ namespace drawinglayer
             getSwVirtFlyDrawObj().wrap_DoPaintObject();
 
             // call parent
-            return BufDecPrimitive2D::get2DDecomposition(rViewInformation);
+            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID
