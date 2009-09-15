@@ -41,9 +41,11 @@
 #include "globstr.hrc"
 
 #include <memory>
+#include <vector>
 
 using ::rtl::OUString;
 using ::std::auto_ptr;
+using ::std::vector;
 
 #include <stdio.h>
 #include <string>
@@ -84,7 +86,7 @@ private:
 namespace {
 
 
-bool CreateStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
+bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
 {
     // A valid StarQuery must be at least 4 columns wide. To be precise it
     // should be exactly 4 columns ...
@@ -190,21 +192,20 @@ bool CreateStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, cons
     return bValid;
 }
 
-bool CreateExcelQuery(
+bool lcl_createExcelQuery(
     ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
 {
     bool bValid = true;
     SCCOL nCols = pQueryRef->getColSize();
     SCROW nRows = pQueryRef->getRowSize();
-    SCCOL* pFields = new SCCOL[nCols];
+    vector<SCCOL> aFields(nCols);
     SCCOL nCol = 0;
     while (bValid && (nCol < nCols))
     {
         String aQueryStr = pQueryRef->getString(nCol, 0);
-//      GetInputString(nCol, nRow1, aQueryStr);
         SCCOL nField = pDBRef->findFieldColumn(aQueryStr);
         if (ValidCol(nField))
-            pFields[nCol] = nField;
+            aFields[nCol] = nField;
         else
             bValid = false;
         ++nCol;
@@ -242,7 +243,7 @@ bool CreateExcelQuery(
                 {
                     if (nIndex < nNewEntries)
                     {
-                        pParam->GetEntry(nIndex).nField = pFields[nCol];
+                        pParam->GetEntry(nIndex).nField = aFields[nCol];
                         pParam->FillInExcelSyntax(aCellStr, nIndex);
                         nIndex++;
                         if (nIndex < nNewEntries)
@@ -258,11 +259,10 @@ bool CreateExcelQuery(
                 pParam->GetEntry(nIndex).eConnect = SC_OR;
         }
     }
-    delete [] pFields;
     return bValid;
 }
 
-bool FillQueryEntries(
+bool lcl_fillQueryEntries(
     ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
 {
     SCSIZE nCount = pParam->GetEntryCount();
@@ -270,10 +270,10 @@ bool FillQueryEntries(
         pParam->GetEntry(i).Clear();
 
     // Standard QueryTabelle
-    bool bValid = CreateStarQuery(pParam, pDBRef, pQueryRef);
+    bool bValid = lcl_createStarQuery(pParam, pDBRef, pQueryRef);
     // Excel QueryTabelle
     if (!bValid)
-        bValid = CreateExcelQuery(pParam, pDBRef, pQueryRef);
+        bValid = lcl_createExcelQuery(pParam, pDBRef, pQueryRef);
 
     nCount = pParam->GetEntryCount();
     if (bValid)
@@ -314,7 +314,7 @@ bool ScDBRangeBase::fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBa
     if (!pDBRef)
         return false;
 
-    return FillQueryEntries(pParam, pDBRef, this);
+    return lcl_fillQueryEntries(pParam, pDBRef, this);
 }
 
 ScDocument* ScDBRangeBase::getDoc() const
@@ -361,7 +361,8 @@ SCSIZE ScDBInternalRange::getVisibleDataCellCount() const
 OUString ScDBInternalRange::getString(SCCOL nCol, SCROW nRow) const
 {
     String aStr;
-    getDoc()->GetString(nCol, nRow, maRange.aStart.Tab(), aStr);
+    const ScAddress& s = maRange.aStart;
+    getDoc()->GetString(s.Col() + nCol, s.Row() + nRow, maRange.aStart.Tab(), aStr);
     return aStr;
 }
 

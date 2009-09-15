@@ -57,7 +57,17 @@ public:
     virtual SCCOL getColSize() const = 0;
     virtual SCROW getRowSize() const = 0;
     virtual SCSIZE getVisibleDataCellCount() const = 0;
+
+    /**
+     * Get a string value of a specified cell position.  Note that the
+     * position of the upper left cell of the range is always (0, 0) even if
+     * the reference type is of internal range.
+     *
+     * @param nCol column position (0 to column size-1)
+     * @param nRow row position (0 to row size-1)
+     */
     virtual ::rtl::OUString getString(SCCOL nCol, SCROW nRow) const = 0;
+
     virtual SCCOL getFirstFieldColumn() const = 0;
     virtual SCCOL findFieldColumn(SCCOL nColIndex) const = 0;
     virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const = 0;
@@ -88,7 +98,17 @@ public:
     virtual SCCOL getColSize() const;
     virtual SCROW getRowSize() const;
     virtual SCSIZE getVisibleDataCellCount() const;
+
+    /**
+     * Get a string value of a specified cell position.  Note that the
+     * position of the upper left cell of the range is always (0, 0) even if
+     * the reference type is of internal range.
+     *
+     * @param nCol column position (0 to column size-1)
+     * @param nRow row position (0 to row size-1)
+     */
     virtual ::rtl::OUString getString(SCCOL nCol, SCROW nRow) const;
+
     virtual SCCOL getFirstFieldColumn() const;
     virtual SCCOL findFieldColumn(SCCOL nColIndex) const;
     virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const;
@@ -113,7 +133,17 @@ public:
     virtual SCCOL getColSize() const;
     virtual SCROW getRowSize() const;
     virtual SCSIZE getVisibleDataCellCount() const;
+
+    /**
+     * Get a string value of a specified cell position.  Note that the
+     * position of the upper left cell of the range is always (0, 0) even if
+     * the reference type is of internal range.
+     *
+     * @param nCol column position (0 to column size-1)
+     * @param nRow row position (0 to row size-1)
+     */
     virtual ::rtl::OUString getString(SCCOL nCol, SCROW nRow) const;
+
     virtual SCCOL getFirstFieldColumn() const;
     virtual SCCOL findFieldColumn(SCCOL nColIndex) const;
     virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const;
