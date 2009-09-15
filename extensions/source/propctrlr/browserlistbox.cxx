@@ -1297,7 +1297,6 @@ namespace pcr
             // otherwise they would be used to scroll the document view, which does not sound like it is desired by
             // the user.
         }
-        break;
         }
         return Control::PreNotify( _rNEvt );
     }
