@@ -3335,10 +3335,10 @@ void FmXGridCell::setLock(sal_Bool _bLock) throw( RuntimeException )
 }
 
 //------------------------------------------------------------------
-void SAL_CALL FmXGridCell::setPosSize( ::sal_Int32 _X, ::sal_Int32 _Y, ::sal_Int32 _Width, ::sal_Int32 _Height, ::sal_Int16 _Flags ) throw (RuntimeException)
+void SAL_CALL FmXGridCell::setPosSize( ::sal_Int32 _XX, ::sal_Int32 _Y, ::sal_Int32 _Width, ::sal_Int32 _Height, ::sal_Int16 _Flags ) throw (RuntimeException)
 {
     OSL_ENSURE( false, "FmXGridCell::setPosSize: not implemented" );
-    (void)_X;
+    (void)_XX;
     (void)_Y;
     (void)_Width;
     (void)_Height;
@@ -3891,7 +3891,6 @@ void FmXEditCell::onWindowEvent( const ULONG _nEventId, const Window& _rWindow, 
             onTextChanged();
         return;
     }
-    break;
     }
 
     FmXTextCell::onWindowEvent( _nEventId, _rWindow, _pEventData );
