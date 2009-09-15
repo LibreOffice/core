@@ -237,7 +237,7 @@ class RecursiveTest:
     public cppu::WeakImplHelper1< css::beans::XPropertyChangeListener >
 {
 public:
-    RecursiveTest(Test const & test, int count, bool * destroyed);
+    RecursiveTest(Test const & theTest, int count, bool * destroyed);
 
     void test();
 
@@ -262,8 +262,8 @@ private:
 };
 
 RecursiveTest::RecursiveTest(
-    Test const & test, int count, bool * destroyed):
-    test_(test), count_(count), destroyed_(destroyed)
+    Test const & theTest, int count, bool * destroyed):
+    test_(theTest), count_(count), destroyed_(destroyed)
 {}
 
 void RecursiveTest::test() {
@@ -304,15 +304,15 @@ void RecursiveTest::propertyChange(css::beans::PropertyChangeEvent const &)
 
 class SimpleRecursiveTest: public RecursiveTest {
 public:
-    SimpleRecursiveTest(Test const & test, int count, bool * destroyed);
+    SimpleRecursiveTest(Test const & theTest, int count, bool * destroyed);
 
 private:
     virtual void step() const;
 };
 
 SimpleRecursiveTest::SimpleRecursiveTest(
-    Test const & test, int count, bool * destroyed):
-    RecursiveTest(test, count, destroyed)
+    Test const & theTest, int count, bool * destroyed):
+    RecursiveTest(theTest, count, destroyed)
 {}
 
 void SimpleRecursiveTest::step() const {
@@ -327,15 +327,15 @@ void SimpleRecursiveTest::step() const {
 
 class CrossThreadTest: public RecursiveTest {
 public:
-    CrossThreadTest(Test const & test, int count, bool * destroyed);
+    CrossThreadTest(Test const & theTest, int count, bool * destroyed);
 
 private:
     virtual void step() const;
 };
 
 CrossThreadTest::CrossThreadTest(
-    Test const & test, int count, bool * destroyed):
-    RecursiveTest(test, count, destroyed)
+    Test const & theTest, int count, bool * destroyed):
+    RecursiveTest(theTest, count, destroyed)
 {}
 
 void CrossThreadTest::step() const {
