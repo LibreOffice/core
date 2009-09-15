@@ -85,6 +85,10 @@ private:
 
 namespace {
 
+void lcl_toUpper(OUString& rStr)
+{
+    rStr = ScGlobal::pCharClass->toUpper(rStr.trim(), 0, rStr.getLength());
+}
 
 bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
 {
@@ -102,7 +106,7 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
 
     BOOL bValid;
     BOOL bFound;
-    String aCellStr;
+    OUString aCellStr;
     SCSIZE nIndex = 0;
     SCROW nRow = 0;
     SCROW nRows = pDBRef->getRowSize();
@@ -119,15 +123,13 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
         {
             // For all entries after the first one, check the and/or connector in the first column.
             aCellStr = pQueryRef->getString(0, nRow);
-            aCellStr.EraseTrailingChars();
-            aCellStr.EraseLeadingChars();
-            ScGlobal::pCharClass->toUpper(aCellStr);
-            if ( aCellStr == ScGlobal::GetRscString(STR_TABLE_UND) )
+            lcl_toUpper(aCellStr);
+            if ( aCellStr.equals(ScGlobal::GetRscString(STR_TABLE_UND)) )
             {
                 rEntry.eConnect = SC_AND;
                 bValid = TRUE;
             }
-            else if ( aCellStr == ScGlobal::GetRscString(STR_TABLE_ODER) )
+            else if ( aCellStr.equals(ScGlobal::GetRscString(STR_TABLE_ODER)) )
             {
                 rEntry.eConnect = SC_OR;
                 bValid = TRUE;
@@ -139,7 +141,6 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
             // field name in the 2nd column.
             bFound = FALSE;
             aCellStr = pQueryRef->getString(1, nRow);
-            // TODO: remove leading/trailing blanks.
             SCCOL nField = pDBRef->findFieldColumn(aCellStr); // TODO: must be case insensitive comparison.
             if (ValidCol(nField))
             {
@@ -155,26 +156,25 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
             // equality, non-equality operator in the 3rd column.
             bFound = FALSE;
             aCellStr = pQueryRef->getString(2, nRow);
-            aCellStr.EraseTrailingChars();
-            aCellStr.EraseLeadingChars();
-            ScGlobal::pCharClass->toUpper(aCellStr);
-            if (aCellStr.GetChar(0) == '<')
+            lcl_toUpper(aCellStr);
+            const sal_Unicode* p = aCellStr.getStr();
+            if (p[0] == sal_Unicode('<'))
             {
-                if (aCellStr.GetChar(1) == '>')
+                if (p[1] == sal_Unicode('>'))
                     rEntry.eOp = SC_NOT_EQUAL;
-                else if (aCellStr.GetChar(1) == '=')
+                else if (p[1] == sal_Unicode('='))
                     rEntry.eOp = SC_LESS_EQUAL;
                 else
                     rEntry.eOp = SC_LESS;
             }
-            else if (aCellStr.GetChar(0) == '>')
+            else if (p[0] == sal_Unicode('>'))
             {
-                if (aCellStr.GetChar(1) == '=')
+                if (p[1] == sal_Unicode('='))
                     rEntry.eOp = SC_GREATER_EQUAL;
                 else
                     rEntry.eOp = SC_GREATER;
             }
-            else if (aCellStr.GetChar(0) == '=')
+            else if (p[0] == sal_Unicode('='))
                 rEntry.eOp = SC_EQUAL;
 
         }
@@ -202,7 +202,7 @@ bool lcl_createExcelQuery(
     SCCOL nCol = 0;
     while (bValid && (nCol < nCols))
     {
-        String aQueryStr = pQueryRef->getString(nCol, 0);
+        OUString aQueryStr = pQueryRef->getString(nCol, 0);
         SCCOL nField = pDBRef->findFieldColumn(aQueryStr);
         if (ValidCol(nField))
             aFields[nCol] = nField;
@@ -386,19 +386,20 @@ SCCOL ScDBInternalRange::findFieldColumn(SCCOL nColIndex) const
     return Min(nDBCol2, static_cast<SCCOL>(nDBCol1 + nColIndex - 1));
 }
 
-sal_uInt16 ScDBInternalRange::getCellString(String& rStr, ScBaseCell* pCell) const
+sal_uInt16 ScDBInternalRange::getCellString(OUString& rStr, ScBaseCell* pCell) const
 {
     sal_uInt16 nErr = 0;
+    String aStr;
     if (pCell)
     {
         SvNumberFormatter* pFormatter = getDoc()->GetFormatTable();
         switch (pCell->GetCellType())
         {
             case CELLTYPE_STRING:
-                ((ScStringCell*) pCell)->GetString(rStr);
+                ((ScStringCell*) pCell)->GetString(aStr);
             break;
             case CELLTYPE_EDIT:
-                ((ScEditCell*) pCell)->GetString(rStr);
+                ((ScEditCell*) pCell)->GetString(aStr);
             break;
             case CELLTYPE_FORMULA:
             {
@@ -410,10 +411,10 @@ sal_uInt16 ScDBInternalRange::getCellString(String& rStr, ScBaseCell* pCell) con
                     ULONG nIndex = pFormatter->GetStandardFormat(
                                         NUMBERFORMAT_NUMBER,
                                         ScGlobal::eLnge);
-                    pFormatter->GetInputLineString(fVal, nIndex, rStr);
+                    pFormatter->GetInputLineString(fVal, nIndex, aStr);
                 }
                 else
-                    pFCell->GetString(rStr);
+                    pFCell->GetString(aStr);
             }
             break;
             case CELLTYPE_VALUE:
@@ -422,17 +423,14 @@ sal_uInt16 ScDBInternalRange::getCellString(String& rStr, ScBaseCell* pCell) con
                 ULONG nIndex = pFormatter->GetStandardFormat(
                                         NUMBERFORMAT_NUMBER,
                                         ScGlobal::eLnge);
-                pFormatter->GetInputLineString(fVal, nIndex, rStr);
+                pFormatter->GetInputLineString(fVal, nIndex, aStr);
             }
             break;
             default:
-                rStr = ScGlobal::GetEmptyString();
-            break;
+                ;
         }
     }
-    else
-        rStr = ScGlobal::GetEmptyString();
-
+    rStr = aStr;
     return nErr;
 }
 
@@ -440,6 +438,8 @@ SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
 {
     const ScAddress& s = maRange.aStart;
     const ScAddress& e = maRange.aEnd;
+    OUString aUpper = rStr;
+    lcl_toUpper(aUpper);
 
     SCCOL nDBCol1 = s.Col();
     SCROW nDBRow1 = s.Row();
@@ -450,7 +450,7 @@ SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
     BOOL    bFound = TRUE;
 
     bFound = FALSE;
-    String aCellStr;
+    OUString aCellStr;
     ScAddress aLook( nDBCol1, nDBRow1, nDBTab1 );
     while (!bFound && (aLook.Col() <= nDBCol2))
     {
@@ -458,7 +458,8 @@ SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
         sal_uInt16 nErr = getCellString( aCellStr, pCell );
         if (pErr)
             *pErr = nErr;
-        bFound = ScGlobal::pTransliteration->isEqual(aCellStr, rStr);
+        lcl_toUpper(aCellStr);
+        bFound = ScGlobal::pTransliteration->isEqual(aCellStr, aUpper);
         if (!bFound)
             aLook.IncCol();
     }
@@ -565,3 +566,4 @@ bool ScDBExternalRange::isRangeEqual(const ScRange& /*rRange*/) const
 {
     return false;
 }
+
