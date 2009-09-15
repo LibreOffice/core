@@ -60,6 +60,7 @@ cairo_CFLAGS=$(SOLARINC)
 cairo_LDFLAGS=$(SOLARLIB)
 
 cairo_CPPFLAGS=
+
 .IF "$(SYSTEM_ZLIB)"!="YES"
 cairo_CPPFLAGS+=-I$(SOLARINCDIR)$/external$/zlib
 cairo_COMPRESS=z_compress
@@ -103,6 +104,12 @@ OUT2INC+=src$/cairo-win32.h
 
 .ELIF "$(GUIBASE)"=="aqua"
 # ----------- Native Mac OS X (Aqua/Quartz) --------------------------------
+.IF "$(SYSBASE)"!=""
+.IF "$(EXTRA_CFLAGS)" != ""
+cairo_CFLAGS+=$(EXTRA_CFLAGS) $(EXTRA_CDEFS)
+cairo_CPPFLAGS+=$(EXTRA_CFLAGS) $(EXTRA_CDEFS)
+.ENDIF # "$(EXTRA_CFLAGS)" != ""
+.ENDIF # "$(SYSBASE)"!=""
 CONFIGURE_DIR=
 CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/configure
 CONFIGURE_FLAGS=--enable-static=no --disable-xlib --disable-ft --disable-svg --disable-png --enable-quartz --enable-quartz-font --enable-gtk-doc=no --enable-test-surfaces=no PKG_CONFIG=./dummy_pkg_config ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
