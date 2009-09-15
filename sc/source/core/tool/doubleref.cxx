@@ -309,6 +309,14 @@ ScDBRangeBase::RefType ScDBRangeBase::getType() const
     return meType;
 }
 
+bool ScDBRangeBase::fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef) const
+{
+    if (!pDBRef)
+        return false;
+
+    return FillQueryEntries(pParam, pDBRef, this);
+}
+
 ScDocument* ScDBRangeBase::getDoc() const
 {
     return mpDoc;
@@ -489,14 +497,6 @@ bool ScDBInternalRange::isRangeEqual(const ScRange& rRange) const
     return maRange == rRange;
 }
 
-bool ScDBInternalRange::fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef) const
-{
-    if (!pDBRef)
-        return false;
-
-    return FillQueryEntries(pParam, pDBRef, this);
-}
-
 // ============================================================================
 
 ScDBExternalRange::ScDBExternalRange(ScDocument* pDoc, const ScMatrixRef& pMat) :
@@ -562,12 +562,5 @@ ScDBQueryParamBase* ScDBExternalRange::createQueryParam(const ScDBRangeBase* /*p
 
 bool ScDBExternalRange::isRangeEqual(const ScRange& /*rRange*/) const
 {
-    return false;
-}
-
-bool ScDBExternalRange::fillQueryEntries(ScQueryParamBase* /*pParam*/, const ScDBRangeBase* /*pDBRef*/) const
-{
-    StackPrinter __stack_printer__("ScDBExternalRange::fillQueryEntries");
-
     return false;
 }

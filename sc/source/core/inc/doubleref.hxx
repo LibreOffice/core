@@ -52,6 +52,7 @@ public:
     virtual ~ScDBRangeBase() = 0;
 
     RefType getType() const;
+    bool fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef) const;
 
     virtual SCCOL getColSize() const = 0;
     virtual SCROW getRowSize() const = 0;
@@ -62,7 +63,6 @@ public:
     virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const = 0;
     virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const = 0;
     virtual bool isRangeEqual(const ScRange& rRange) const = 0;
-    virtual bool fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef) const= 0;
 
 protected:
     ScDBRangeBase(ScDocument* pDoc, RefType eType);
@@ -94,7 +94,6 @@ public:
     virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const;
     virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const;
     virtual bool isRangeEqual(const ScRange& rRange) const;
-    virtual bool fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef) const;
 
 private:
     sal_uInt16 getCellString(String& rStr, ScBaseCell* pCell) const;
@@ -120,7 +119,6 @@ public:
     virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const;
     virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const;
     virtual bool isRangeEqual(const ScRange& rRange) const;
-    virtual bool fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef) const;
 
 private:
     const ScMatrixRef mpMatrix;
