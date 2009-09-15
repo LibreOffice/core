@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,6 @@ PRJNAME=soldep
 TARGET=bootstrpdt
 ENABLE_EXCEPTIONS=true
 
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/util$/perl.mk
@@ -50,8 +49,7 @@ all:
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES= \
-          $(SLO)$/prj.obj	\
-          $(SLO)$/XmlBuildList.obj
+                  $(SLO)$/prj.obj
 
 SLOFILES=\
           $(SLO)$/dep.obj \
@@ -59,8 +57,7 @@ SLOFILES=\
           $(SLO)$/prodmap.obj \
           $(SLO)$/appdef.obj \
            $(SLO)$/hashtbl.obj		\
-          $(SLO)$/prj.obj \
-          $(SLO)$/XmlBuildList.obj
+          $(SLO)$/prj.obj
 
 
 SHL1TARGET	=$(TARGET)$(DLLPOSTFIX)
@@ -73,7 +70,7 @@ SHL1STDLIBS=\
             $(BTSTRPLIB)		\
             $(VOSLIB)			\
             $(SALLIB)   \
-               $(PERL_LIB)
+                $(PERL_LIB)
 
 DEF1NAME    =$(SHL1TARGET)
 DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt

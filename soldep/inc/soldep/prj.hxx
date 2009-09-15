@@ -39,8 +39,6 @@
 #include <vos/mutex.hxx>
 #include <tools/string.hxx>
 
-#define XML_EXT "xlist"
-
 #define OS_NONE             0x0000
 #define OS_WIN16            0x0001
 #define OS_WIN32            0x0002
@@ -58,7 +56,6 @@
 
 class SByteStringList;
 class GenericInformationList;
-class XmlBuildList;
 
 /*
 // Pfade auf Konfigurationsdateien des Build-Servers
@@ -377,7 +374,6 @@ protected:
     String          sFileName;
     SByteStringList* pDepMode;
     SByteStringList* pAllDepMode;
-    XmlBuildList*   mpXmlBuildList;
 
     Link aFileIOErrorHdl; // called with &String as parameter!!!
 
@@ -389,11 +385,10 @@ protected:
     ULONG           SearchFileEntry( StarFileList *pStarFiles, StarFile* pFile );
 
 public:
-                    Star( XmlBuildList* pXmlBuildListObj );
-                    Star( XmlBuildList* pXmlBuildListObj, String aFileName, USHORT nMode = STAR_MODE_SINGLE_PARSE );
-                    Star( XmlBuildList* pXmlBuildListObj, SolarFileList *pSolarFiles );
-                    Star( XmlBuildList* pXmlBuildListObj, GenericInformationList *pStandLst, ByteString &rVersion, BOOL bLocal = FALSE,
-                        const char *pSourceRoot = NULL  );
+                    Star( );
+                    Star( String aFileName, USHORT nMode = STAR_MODE_SINGLE_PARSE );
+                    Star( SolarFileList *pSolarFiles );
+                    Star( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bLocal = FALSE, const char *pSourceRoot = NULL  );
 
                     ~Star();
 
@@ -403,8 +398,6 @@ public:
     ByteString      GetName(){ return aStarName; }; // dummy function of VG
     void            Read( String &rFileName );
     void            Read( SolarFileList *pSOlarFiles );
-    void            ReadXmlBuildList(const ByteString& sBuildLstPath);
-
 
     BOOL            HasProject( ByteString aProjectName );
     Prj*            GetPrj( ByteString aProjectName );
@@ -446,9 +439,9 @@ private:
     USHORT          WritePrj( Prj *pPrj, SvFileStream& rStream );
 
 public:
-                    StarWriter( XmlBuildList* pXmlBuildListObj, String aFileName, BOOL bReadComments = FALSE, USHORT nMode = STAR_MODE_SINGLE_PARSE );
-                    StarWriter( XmlBuildList* pXmlBuildListObj, SolarFileList *pSolarFiles, BOOL bReadComments = FALSE );
-                    StarWriter( XmlBuildList* pXmlBuildListObj, GenericInformationList *pStandLst, ByteString &rVersion, ByteString &rMinor,
+                    StarWriter( String aFileName, BOOL bReadComments = FALSE, USHORT nMode = STAR_MODE_SINGLE_PARSE );
+                    StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments = FALSE );
+                    StarWriter( GenericInformationList *pStandLst, ByteString &rVersion, ByteString &rMinor,
                         BOOL bReadComments = FALSE, BOOL bLocal = FALSE, const char *pSourceRoot = NULL );
 
     void            CleanUp();

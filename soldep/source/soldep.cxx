@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,6 @@
 #include <soldep/depper.hxx>
 #include <soldep/soldep.hxx>
 #include <soldep/soldlg.hxx>
-#include <soldep/XmlBuildList.hxx>
 #include "dtsodcmp.hrc"
 
 IMPLEMENT_HASHTABLE_OWNER( SolIdMapper, ByteString, ULONG* );
@@ -66,19 +65,8 @@ SolDep::SolDep( Window* pBaseWindow )
                 : Depper( pBaseWindow ),
                 mbBServer(FALSE),
                 mpTravellerList( NULL ),
-                mbIsHide( FALSE ),
-                mpXmlBuildList (NULL)
+                mbIsHide( FALSE )
 {
-    /*
-    ByteString sModulPath ("."); // wo soll das Perlmodul stehen???
-    try
-    {
-        mpXmlBuildList = new XmlBuildList (sModulPath);
-    }
-    catch (XmlBuildListException& Exception) {
-        const char* Message = Exception.getMessage();
-    }
-    */
     mnSolWinCount = 0;
     mnSolLastId = 0;
 //    mpPrjIdMapper = new SolIdMapper( 63997 );
@@ -103,8 +91,6 @@ SolDep::~SolDep()
     delete mpSolIdMapper;
     delete mpStarWriter;
     delete mpStandLst;
-    if (mpXmlBuildList)
-        delete mpXmlBuildList;
 }
 
 /*****************************************************************************/
@@ -296,7 +282,7 @@ IMPL_LINK( SolDep, ToolSelect, SoldepToolBox* , pBox)
             SvFileStream aStream( String::CreateFromAscii("d:\\out.svm"), STREAM_STD_READWRITE );
             aMtf.Write( aStream );
             break;
-        }       
+        }
         case TID_SOLDEP_HIDE_INDEPENDEND:
             {
                 ToggleHideDependency();
@@ -571,12 +557,12 @@ USHORT SolDep::ReadSource(BOOL bUpdater)
     mpSolIdMapper = new SolIdMapper( 63997 );
     if (mpStandLst && bUpdater)
     {
-        mpStarWriter = new StarWriter( mpXmlBuildList, mpStandLst, msVersionMajor, msVersionMinor, TRUE );
+        mpStarWriter = new StarWriter( mpStandLst, msVersionMajor, msVersionMinor, TRUE );
     } else
     {
         SolarFileList* pSolarFileList;
         pSolarFileList = GetPrjListFromDir();
-        mpStarWriter = new StarWriter( mpXmlBuildList, pSolarFileList, TRUE );
+        mpStarWriter = new StarWriter( pSolarFileList, TRUE );
     }
     ByteString sTitle( SOLDEPL_NAME );
     if ( mpStarWriter->GetMode() == STAR_MODE_SINGLE_PARSE ) {
