@@ -109,7 +109,7 @@ namespace drawinglayer
         SdrEllipsePrimitive2D::SdrEllipsePrimitive2D(
             const ::basegfx::B2DHomMatrix& rTransform,
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute)
         {
@@ -117,7 +117,7 @@ namespace drawinglayer
 
         bool SdrEllipsePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrEllipsePrimitive2D& rCompare = (SdrEllipsePrimitive2D&)rPrimitive;
 

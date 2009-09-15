@@ -52,10 +52,6 @@ namespace drawinglayer
             basegfx::B2DHomMatrix                   maShadowTransform;
             basegfx::BColor                         maShadowColor;
 
-        protected:
-            //  create decomposition
-            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
-
         public:
             ShadowPrimitive2D(
                 const basegfx::B2DHomMatrix& rShadowTransform,
@@ -71,6 +67,9 @@ namespace drawinglayer
 
             // get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
+
+            //  create decomposition
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()

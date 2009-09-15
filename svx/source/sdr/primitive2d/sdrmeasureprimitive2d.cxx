@@ -454,7 +454,7 @@ namespace drawinglayer
             bool bBelow,
             bool bTextRotation,
             bool bTextAutoAngle)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maSdrLSTAttribute(rSdrLSTAttribute),
             maStart(rStart),
             maEnd(rEnd),
@@ -473,7 +473,7 @@ namespace drawinglayer
 
         bool SdrMeasurePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrMeasurePrimitive2D& rCompare = (SdrMeasurePrimitive2D&)rPrimitive;
 

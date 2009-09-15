@@ -48,7 +48,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class ScenePrimitive2D : public BufDecPrimitive2D
+        class ScenePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             primitive3d::Primitive3DSequence                    mxChildren3D;               // the 3d sub-primitives

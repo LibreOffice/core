@@ -52,33 +52,12 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence AnimatedSwitchPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
-        {
-            if(getChildren().hasElements())
-            {
-                const double fState(getAnimationEntry().getStateAtTime(rViewInformation.getViewTime()));
-                const sal_uInt32 nLen(getChildren().getLength());
-                sal_uInt32 nIndex(basegfx::fround(fState * (double)nLen));
-
-                if(nIndex >= nLen)
-                {
-                    nIndex = nLen - 1L;
-                }
-
-                const Primitive2DReference xRef(getChildren()[nIndex], uno::UNO_QUERY_THROW);
-                return Primitive2DSequence(&xRef, 1L);
-            }
-
-            return Primitive2DSequence();
-        }
-
         AnimatedSwitchPrimitive2D::AnimatedSwitchPrimitive2D(
             const animation::AnimationEntry& rAnimationEntry,
             const Primitive2DSequence& rChildren,
             bool bIsTextAnimation)
         :   GroupPrimitive2D(rChildren),
             mpAnimationEntry(0),
-            mfDecomposeViewTime(0.0),
             mbIsTextAnimation(bIsTextAnimation)
         {
             // clone given animation description
@@ -105,29 +84,22 @@ namespace drawinglayer
 
         Primitive2DSequence AnimatedSwitchPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
-
-            if(getLocal2DDecomposition().hasElements() && mfDecomposeViewTime != rViewInformation.getViewTime())
+            if(getChildren().hasElements())
             {
-                // conditions of last local decomposition have changed, delete
-                const_cast< AnimatedSwitchPrimitive2D* >(this)->setLocal2DDecomposition(Primitive2DSequence());
+                const double fState(getAnimationEntry().getStateAtTime(rViewInformation.getViewTime()));
+                const sal_uInt32 nLen(getChildren().getLength());
+                sal_uInt32 nIndex(basegfx::fround(fState * (double)nLen));
+
+                if(nIndex >= nLen)
+                {
+                    nIndex = nLen - 1L;
+                }
+
+                const Primitive2DReference xRef(getChildren()[nIndex], uno::UNO_QUERY_THROW);
+                return Primitive2DSequence(&xRef, 1L);
             }
 
-            if(!getLocal2DDecomposition().hasElements())
-            {
-                // remember time
-                const_cast< AnimatedSwitchPrimitive2D* >(this)->mfDecomposeViewTime = rViewInformation.getViewTime();
-            }
-
-            // use parent implementation
-            return GroupPrimitive2D::get2DDecomposition(rViewInformation);
-        }
-
-        basegfx::B2DRange AnimatedSwitchPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
-        {
-            // to get range from decomposition and not from group content, call implementation from
-            // BufDecPrimitive2D here
-            return BufDecPrimitive2D::getB2DRange(rViewInformation);
+            return Primitive2DSequence();
         }
 
         // provide unique ID

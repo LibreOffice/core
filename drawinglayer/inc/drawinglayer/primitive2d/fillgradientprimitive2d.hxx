@@ -46,7 +46,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class FillGradientPrimitive2D : public BufDecPrimitive2D
+        class FillGradientPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             basegfx::B2DRange                       maObjectRange;

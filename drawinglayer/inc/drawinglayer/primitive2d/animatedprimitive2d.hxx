@@ -59,18 +59,10 @@ namespace drawinglayer
             // definition and is owned by this implementation
             animation::AnimationEntry*                      mpAnimationEntry;
 
-            // the last remembered decompose time, created and used by getDecomposition() for
-            // buffering purposes
-            double                                          mfDecomposeViewTime;
-
             // bitfield
             // flag if this is a text or graphic animation. Necessary since SdrViews need to differentiate
             // between both types if they are on/off
             unsigned                                        mbIsTextAnimation : 1;
-
-        protected:
-            // create local decomposition
-            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             AnimatedSwitchPrimitive2D(
@@ -86,9 +78,6 @@ namespace drawinglayer
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
-            // get range
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()

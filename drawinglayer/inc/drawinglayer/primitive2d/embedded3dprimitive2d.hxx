@@ -48,7 +48,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class Embedded3DPrimitive2D : public BufDecPrimitive2D
+        class Embedded3DPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             // the sequence of 3d primitives

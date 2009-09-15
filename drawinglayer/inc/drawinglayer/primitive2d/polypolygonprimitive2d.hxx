@@ -51,7 +51,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class PolyPolygonHairlinePrimitive2D : public BufDecPrimitive2D
+        class PolyPolygonHairlinePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             basegfx::B2DPolyPolygon                 maPolyPolygon;
@@ -87,7 +87,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class PolyPolygonMarkerPrimitive2D : public BufDecPrimitive2D
+        class PolyPolygonMarkerPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             basegfx::B2DPolyPolygon                 maPolyPolygon;
@@ -131,7 +131,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class PolyPolygonStrokePrimitive2D : public BufDecPrimitive2D
+        class PolyPolygonStrokePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             basegfx::B2DPolyPolygon                 maPolyPolygon;
@@ -223,7 +223,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class PolyPolygonColorPrimitive2D : public BufDecPrimitive2D
+        class PolyPolygonColorPrimitive2D : public BasePrimitive2D
         {
         private:
             basegfx::B2DPolyPolygon                 maPolyPolygon;

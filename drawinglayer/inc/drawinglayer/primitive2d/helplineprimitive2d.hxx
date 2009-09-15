@@ -53,7 +53,7 @@ namespace drawinglayer
             HELPLINESTYLE2D_LINE
         };
 
-        class HelplinePrimitive2D : public BufDecPrimitive2D
+        class HelplinePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             basegfx::B2DPoint                               maPosition;

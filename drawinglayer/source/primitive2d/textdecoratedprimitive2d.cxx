@@ -822,10 +822,10 @@ namespace drawinglayer
 
             if(bDecoratedIsNeeded)
             {
-                // decoration is used, fallback to BufDecPrimitive2D::getB2DRange which uses
+                // decoration is used, fallback to BufferedDecompositionPrimitive2D::getB2DRange which uses
                 // the own local decomposition for computation and thus creates all necessary
                 // geometric objects
-                return BufDecPrimitive2D::getB2DRange(rViewInformation);
+                return BufferedDecompositionPrimitive2D::getB2DRange(rViewInformation);
             }
             else
             {

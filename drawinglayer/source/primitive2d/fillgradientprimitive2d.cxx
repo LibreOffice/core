@@ -167,7 +167,7 @@ namespace drawinglayer
         FillGradientPrimitive2D::FillGradientPrimitive2D(
             const basegfx::B2DRange& rObjectRange,
             const attribute::FillGradientAttribute& rFillGradient)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maObjectRange(rObjectRange),
             maFillGradient(rFillGradient)
         {
@@ -175,7 +175,7 @@ namespace drawinglayer
 
         bool FillGradientPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const FillGradientPrimitive2D& rCompare = (FillGradientPrimitive2D&)rPrimitive;
 

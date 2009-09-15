@@ -379,7 +379,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& rTransform,
             const GraphicObject& rGraphicObject,
             const GraphicAttr& rGraphicAttr)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maGraphicObject(rGraphicObject),
             maGraphicAttr(rGraphicAttr)
@@ -389,7 +389,7 @@ namespace drawinglayer
         GraphicPrimitive2D::GraphicPrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
             const GraphicObject& rGraphicObject)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maGraphicObject(rGraphicObject),
             maGraphicAttr()
@@ -398,7 +398,7 @@ namespace drawinglayer
 
         bool GraphicPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const GraphicPrimitive2D& rCompare = (GraphicPrimitive2D&)rPrimitive;
 

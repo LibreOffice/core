@@ -46,7 +46,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class BackgroundColorPrimitive2D : public BufDecPrimitive2D
+        class BackgroundColorPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             basegfx::BColor                             maBColor;

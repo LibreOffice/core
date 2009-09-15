@@ -47,7 +47,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class ControlPrimitive2D : public BufDecPrimitive2D
+        class ControlPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             // object's base data

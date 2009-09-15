@@ -105,7 +105,7 @@ namespace drawinglayer
         FillBitmapPrimitive2D::FillBitmapPrimitive2D(
             const basegfx::B2DHomMatrix& rTransformation,
             const attribute::FillBitmapAttribute& rFillBitmap)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransformation(rTransformation),
             maFillBitmap(rFillBitmap)
         {
@@ -113,7 +113,7 @@ namespace drawinglayer
 
         bool FillBitmapPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const FillBitmapPrimitive2D& rCompare = static_cast< const FillBitmapPrimitive2D& >(rPrimitive);
 

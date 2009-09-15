@@ -45,15 +45,30 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class GroupPrimitive2D : public BufDecPrimitive2D
+        /** Baseclass for all grouping 2D primitives
+
+            The grouping primitive in it's basic form is capable of holding
+            a child primitive content and returns it on decomposition on default.
+            It is used for two main purposes, but more may apply:
+
+            - to transport extended information, e.g. for text classification,
+              see e.g. TextHierarchy*Primitive2D implementations. Since they
+              decompose to their child content, renderers not aware/interested
+              in that extra information will just ignore these primitives
+
+            - to encapsulate common geometry, e.g. the ShadowPrimitive2D implements
+              applying a generic shadow to a child sequence by adding the needed
+              offset and color stuff in the decomposition
+
+            In most cases the decomposition is straightforward, so by default
+            this primitive will not buffer the result and is not derived from
+            BufferedDecompositionPrimitive2D, but from BasePrimitive2D.
+         */
+        class GroupPrimitive2D : public BasePrimitive2D
         {
         private:
             // the children. Declared private since this shall never be changed at all after construction
             Primitive2DSequence                             maChildren;
-
-        protected:
-            // local decomposition. Implementation will just return children
-            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             // constructor
@@ -64,6 +79,9 @@ namespace drawinglayer
 
             // compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
+
+            // local decomposition. Implementation will just return children
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()

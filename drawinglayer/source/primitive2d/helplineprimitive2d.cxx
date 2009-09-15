@@ -56,7 +56,7 @@ namespace drawinglayer
     {
         Primitive2DSequence HelplinePrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            std::vector< BufDecPrimitive2D* > aTempPrimitiveTarget;
+            std::vector< BufferedDecompositionPrimitive2D* > aTempPrimitiveTarget;
 
             if(!rViewInformation.getViewport().isEmpty() && !getDirection().equalZero())
             {
@@ -167,7 +167,7 @@ namespace drawinglayer
             const basegfx::BColor& rRGBColA,
             const basegfx::BColor& rRGBColB,
             double fDiscreteDashLength)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maPosition(rPosition),
             maDirection(rDirection),
             meStyle(eStyle),
@@ -181,7 +181,7 @@ namespace drawinglayer
 
         bool HelplinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const HelplinePrimitive2D& rCompare = (HelplinePrimitive2D&)rPrimitive;
 
@@ -217,7 +217,7 @@ namespace drawinglayer
             }
 
             // use parent implementation
-            return BufDecPrimitive2D::get2DDecomposition(rViewInformation);
+            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID

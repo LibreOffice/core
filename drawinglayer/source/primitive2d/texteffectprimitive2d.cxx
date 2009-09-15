@@ -104,22 +104,22 @@ namespace drawinglayer
                     {
                         // emboss/engrave in black, original forced to white
                         const basegfx::BColorModifier aBColorModifierToGray(basegfx::BColor(0.0));
-                        const Primitive2DReference xModifiedColor(new ModifiedColorPrimitive2D(getChildren(), aBColorModifierToGray));
+                        const Primitive2DReference xModifiedColor(new ModifiedColorPrimitive2D(getTextContent(), aBColorModifierToGray));
                         aRetval[0] = Primitive2DReference(new TransformPrimitive2D(aTransform, Primitive2DSequence(&xModifiedColor, 1)));
 
                         // add original, too
                         const basegfx::BColorModifier aBColorModifierToWhite(basegfx::BColor(1.0));
-                        aRetval[1] = Primitive2DReference(new ModifiedColorPrimitive2D(getChildren(), aBColorModifierToWhite));
+                        aRetval[1] = Primitive2DReference(new ModifiedColorPrimitive2D(getTextContent(), aBColorModifierToWhite));
                     }
                     else
                     {
                         // emboss/engrave in gray, keep original's color
                         const basegfx::BColorModifier aBColorModifierToGray(basegfx::BColor(0.75)); // 192
-                        const Primitive2DReference xModifiedColor(new ModifiedColorPrimitive2D(getChildren(), aBColorModifierToGray));
+                        const Primitive2DReference xModifiedColor(new ModifiedColorPrimitive2D(getTextContent(), aBColorModifierToGray));
                         aRetval[0] = Primitive2DReference(new TransformPrimitive2D(aTransform, Primitive2DSequence(&xModifiedColor, 1)));
 
                         // add original, too
-                        aRetval[1] = Primitive2DReference(new GroupPrimitive2D(getChildren()));
+                        aRetval[1] = Primitive2DReference(new GroupPrimitive2D(getTextContent()));
                     }
 
                     break;
@@ -132,39 +132,39 @@ namespace drawinglayer
 
                     aTransform.set(0, 2, aDistance.getX());
                     aTransform.set(1, 2, 0.0);
-                    aRetval[0] = Primitive2DReference(new TransformPrimitive2D(aTransform, getChildren()));
+                    aRetval[0] = Primitive2DReference(new TransformPrimitive2D(aTransform, getTextContent()));
 
                     aTransform.set(0, 2, aDiagonalDistance.getX());
                     aTransform.set(1, 2, aDiagonalDistance.getY());
-                    aRetval[1] = Primitive2DReference(new TransformPrimitive2D(aTransform, getChildren()));
+                    aRetval[1] = Primitive2DReference(new TransformPrimitive2D(aTransform, getTextContent()));
 
                     aTransform.set(0, 2, 0.0);
                     aTransform.set(1, 2, aDistance.getY());
-                    aRetval[2] = Primitive2DReference(new TransformPrimitive2D(aTransform, getChildren()));
+                    aRetval[2] = Primitive2DReference(new TransformPrimitive2D(aTransform, getTextContent()));
 
                     aTransform.set(0, 2, -aDiagonalDistance.getX());
                     aTransform.set(1, 2, aDiagonalDistance.getY());
-                    aRetval[3] = Primitive2DReference(new TransformPrimitive2D(aTransform, getChildren()));
+                    aRetval[3] = Primitive2DReference(new TransformPrimitive2D(aTransform, getTextContent()));
 
                     aTransform.set(0, 2, -aDistance.getX());
                     aTransform.set(1, 2, 0.0);
-                    aRetval[4] = Primitive2DReference(new TransformPrimitive2D(aTransform, getChildren()));
+                    aRetval[4] = Primitive2DReference(new TransformPrimitive2D(aTransform, getTextContent()));
 
                     aTransform.set(0, 2, -aDiagonalDistance.getX());
                     aTransform.set(1, 2, -aDiagonalDistance.getY());
-                    aRetval[5] = Primitive2DReference(new TransformPrimitive2D(aTransform, getChildren()));
+                    aRetval[5] = Primitive2DReference(new TransformPrimitive2D(aTransform, getTextContent()));
 
                     aTransform.set(0, 2, 0.0);
                     aTransform.set(1, 2, -aDistance.getY());
-                    aRetval[6] = Primitive2DReference(new TransformPrimitive2D(aTransform, getChildren()));
+                    aRetval[6] = Primitive2DReference(new TransformPrimitive2D(aTransform, getTextContent()));
 
                     aTransform.set(0, 2, aDiagonalDistance.getX());
                     aTransform.set(1, 2, -aDiagonalDistance.getY());
-                    aRetval[7] = Primitive2DReference(new TransformPrimitive2D(aTransform, getChildren()));
+                    aRetval[7] = Primitive2DReference(new TransformPrimitive2D(aTransform, getTextContent()));
 
                     // at last, place original over it, but force to white
                     const basegfx::BColorModifier aBColorModifierToWhite(basegfx::BColor(1.0, 1.0, 1.0));
-                    aRetval[8] = Primitive2DReference(new ModifiedColorPrimitive2D(getChildren(), aBColorModifierToWhite));
+                    aRetval[8] = Primitive2DReference(new ModifiedColorPrimitive2D(getTextContent(), aBColorModifierToWhite));
 
                     break;
                 }
@@ -174,11 +174,12 @@ namespace drawinglayer
         }
 
         TextEffectPrimitive2D::TextEffectPrimitive2D(
-            const Primitive2DSequence& rChildren,
+            const Primitive2DSequence& rTextContent,
             const basegfx::B2DPoint& rRotationCenter,
             double fDirection,
             TextEffectStyle2D eTextEffectStyle2D)
-        :   GroupPrimitive2D(rChildren),
+        :   BufferedDecompositionPrimitive2D(),
+            maTextContent(rTextContent),
             maRotationCenter(rRotationCenter),
             mfDirection(fDirection),
             meTextEffectStyle2D(eTextEffectStyle2D)
@@ -187,11 +188,12 @@ namespace drawinglayer
 
         bool TextEffectPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(GroupPrimitive2D::operator==(rPrimitive))
+            if(BasePrimitive2D::operator==(rPrimitive))
             {
                 const TextEffectPrimitive2D& rCompare = (TextEffectPrimitive2D&)rPrimitive;
 
-                return (getRotationCenter() == rCompare.getRotationCenter()
+                return (getTextContent() == rCompare.getTextContent()
+                    && getRotationCenter() == rCompare.getRotationCenter()
                     && getDirection() == rCompare.getDirection()
                     && getTextEffectStyle2D() == rCompare.getTextEffectStyle2D());
             }
@@ -206,7 +208,7 @@ namespace drawinglayer
             // then will ask 9 times at nearly the same content. This may even be refined here using the
             // TextEffectStyle information, e.g. for TEXTEFFECTSTYLE2D_RELIEF the grow needs only to
             // be in two directions
-            basegfx::B2DRange aRetval(getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation));
+            basegfx::B2DRange aRetval(getB2DRangeFromPrimitive2DSequence(getTextContent(), rViewInformation));
             aRetval.grow(fDiscreteSize);
 
             return aRetval;
@@ -232,7 +234,7 @@ namespace drawinglayer
             }
 
             // use parent implementation
-            return BufDecPrimitive2D::get2DDecomposition(rViewInformation);
+            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID

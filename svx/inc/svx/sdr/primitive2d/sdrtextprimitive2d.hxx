@@ -51,7 +51,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrTextPrimitive2D : public BufDecPrimitive2D
+        class SdrTextPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             // The text model data; this sould later just be the OutlinerParaObject or

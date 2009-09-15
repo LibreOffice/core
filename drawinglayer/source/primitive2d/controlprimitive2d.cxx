@@ -283,7 +283,7 @@ namespace drawinglayer
         ControlPrimitive2D::ControlPrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
             const uno::Reference< awt::XControlModel >& rxControlModel)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             mxControlModel(rxControlModel),
             mxXControl(),
@@ -295,7 +295,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& rTransform,
             const uno::Reference< awt::XControlModel >& rxControlModel,
             const uno::Reference< awt::XControl >& rxXControl)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             mxControlModel(rxControlModel),
             mxXControl(rxXControl),
@@ -316,7 +316,7 @@ namespace drawinglayer
         bool ControlPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
             // use base class compare operator
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const ControlPrimitive2D& rCompare = (ControlPrimitive2D&)rPrimitive;
 
@@ -381,7 +381,7 @@ namespace drawinglayer
             }
 
             // use parent implementation
-            return BufDecPrimitive2D::get2DDecomposition(rViewInformation);
+            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID

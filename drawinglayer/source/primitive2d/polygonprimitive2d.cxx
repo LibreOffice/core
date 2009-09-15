@@ -57,7 +57,7 @@ namespace drawinglayer
         PolygonHairlinePrimitive2D::PolygonHairlinePrimitive2D(
             const basegfx::B2DPolygon& rPolygon,
             const basegfx::BColor& rBColor)
-        :   BufDecPrimitive2D(),
+        :   BasePrimitive2D(),
             maPolygon(rPolygon),
             maBColor(rBColor)
         {
@@ -65,7 +65,7 @@ namespace drawinglayer
 
         bool PolygonHairlinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BasePrimitive2D::operator==(rPrimitive))
             {
                 const PolygonHairlinePrimitive2D& rCompare = (PolygonHairlinePrimitive2D&)rPrimitive;
 
@@ -147,7 +147,7 @@ namespace drawinglayer
             const basegfx::BColor& rRGBColorA,
             const basegfx::BColor& rRGBColorB,
             double fDiscreteDashLength)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maPolygon(rPolygon),
             maRGBColorA(rRGBColorA),
             maRGBColorB(rRGBColorB),
@@ -158,7 +158,7 @@ namespace drawinglayer
 
         bool PolygonMarkerPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const PolygonMarkerPrimitive2D& rCompare = (PolygonMarkerPrimitive2D&)rPrimitive;
 
@@ -220,7 +220,7 @@ namespace drawinglayer
             }
 
             // use parent implementation
-            return BufDecPrimitive2D::get2DDecomposition(rViewInformation);
+            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID
@@ -307,7 +307,7 @@ namespace drawinglayer
             const basegfx::B2DPolygon& rPolygon,
             const attribute::LineAttribute& rLineAttribute,
             const attribute::StrokeAttribute& rStrokeAttribute)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maPolygon(rPolygon),
             maLineAttribute(rLineAttribute),
             maStrokeAttribute(rStrokeAttribute)
@@ -317,7 +317,7 @@ namespace drawinglayer
         PolygonStrokePrimitive2D::PolygonStrokePrimitive2D(
             const basegfx::B2DPolygon& rPolygon,
             const attribute::LineAttribute& rLineAttribute)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maPolygon(rPolygon),
             maLineAttribute(rLineAttribute),
             maStrokeAttribute()
@@ -326,7 +326,7 @@ namespace drawinglayer
 
         bool PolygonStrokePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const PolygonStrokePrimitive2D& rCompare = (PolygonStrokePrimitive2D&)rPrimitive;
 
@@ -348,7 +348,7 @@ namespace drawinglayer
                 {
                     // if line is mitered, use parent call since mitered line
                     // geometry may use more space than the geometry grown by half line width
-                    aRetval = BufDecPrimitive2D::getB2DRange(rViewInformation);
+                    aRetval = BufferedDecompositionPrimitive2D::getB2DRange(rViewInformation);
                 }
                 else
                 {
@@ -614,7 +614,7 @@ namespace drawinglayer
             if(getStart().isActive() || getEnd().isActive())
             {
                 // use decomposition when line start/end is used
-                return BufDecPrimitive2D::getB2DRange(rViewInformation);
+                return BufferedDecompositionPrimitive2D::getB2DRange(rViewInformation);
             }
             else
             {

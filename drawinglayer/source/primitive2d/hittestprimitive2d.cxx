@@ -49,12 +49,6 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence HitTestPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
-        {
-            // return empty sequence
-            return Primitive2DSequence();
-        }
-
         HitTestPrimitive2D::HitTestPrimitive2D(
             const Primitive2DSequence& rChildren)
         :   GroupPrimitive2D(rChildren)
@@ -64,6 +58,12 @@ namespace drawinglayer
         basegfx::B2DRange HitTestPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             return getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation);
+        }
+
+        Primitive2DSequence HitTestPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        {
+            // return empty sequence
+            return Primitive2DSequence();
         }
 
         // provide unique ID

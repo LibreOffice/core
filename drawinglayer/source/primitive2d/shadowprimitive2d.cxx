@@ -55,7 +55,37 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence ShadowPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        ShadowPrimitive2D::ShadowPrimitive2D(
+            const basegfx::B2DHomMatrix& rShadowTransform,
+            const basegfx::BColor& rShadowColor,
+            const Primitive2DSequence& rChildren)
+        :   GroupPrimitive2D(rChildren),
+            maShadowTransform(rShadowTransform),
+            maShadowColor(rShadowColor)
+        {
+        }
+
+        bool ShadowPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+        {
+            if(BasePrimitive2D::operator==(rPrimitive))
+            {
+                const ShadowPrimitive2D& rCompare = static_cast< const ShadowPrimitive2D& >(rPrimitive);
+
+                return (getShadowTransform() == rCompare.getShadowTransform()
+                    && getShadowColor() == rCompare.getShadowColor());
+            }
+
+            return false;
+        }
+
+        basegfx::B2DRange ShadowPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        {
+            basegfx::B2DRange aRetval(getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation));
+            aRetval.transform(getShadowTransform());
+            return aRetval;
+        }
+
+        Primitive2DSequence ShadowPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence aRetval;
 
@@ -71,36 +101,6 @@ namespace drawinglayer
                 aRetval = Primitive2DSequence(&xRefB, 1L);
             }
 
-            return aRetval;
-        }
-
-        ShadowPrimitive2D::ShadowPrimitive2D(
-            const basegfx::B2DHomMatrix& rShadowTransform,
-            const basegfx::BColor& rShadowColor,
-            const Primitive2DSequence& rChildren)
-        :   GroupPrimitive2D(rChildren),
-            maShadowTransform(rShadowTransform),
-            maShadowColor(rShadowColor)
-        {
-        }
-
-        bool ShadowPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(GroupPrimitive2D::operator==(rPrimitive))
-            {
-                const ShadowPrimitive2D& rCompare = static_cast< const ShadowPrimitive2D& >(rPrimitive);
-
-                return (getShadowTransform() == rCompare.getShadowTransform()
-                    && getShadowColor() == rCompare.getShadowColor());
-            }
-
-            return false;
-        }
-
-        basegfx::B2DRange ShadowPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
-        {
-            basegfx::B2DRange aRetval(getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation));
-            aRetval.transform(getShadowTransform());
             return aRetval;
         }
 

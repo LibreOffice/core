@@ -97,7 +97,7 @@ namespace drawinglayer
             double fStart,
             double fStop,
             const basegfx::BColor& rColor)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransformation(rTransformation),
             mfStart(fStart),
             mfStop(fStop),
@@ -107,7 +107,7 @@ namespace drawinglayer
 
         bool WrongSpellPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const WrongSpellPrimitive2D& rCompare = (WrongSpellPrimitive2D&)rPrimitive;
 

@@ -47,7 +47,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrGrafPrimitive2D : public BufDecPrimitive2D
+        class SdrGrafPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             ::basegfx::B2DHomMatrix                     maTransform;

@@ -76,7 +76,7 @@ namespace drawinglayer
 
                     if(xReference.is())
                     {
-                        // try to cast to BufDecPrimitive2D implementation
+                        // try to cast to BufferedDecompositionPrimitive2D implementation
                         const BufDecPrimitive3D* pBasePrimitive = dynamic_cast< const BufDecPrimitive3D* >(xReference.get());
 
                         if(pBasePrimitive)

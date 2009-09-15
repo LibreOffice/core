@@ -778,10 +778,10 @@ namespace sdr { namespace contact {
     //====================================================================
     //= LazyControlCreationPrimitive2D
     //====================================================================
-    class LazyControlCreationPrimitive2D : public ::drawinglayer::primitive2d::BufDecPrimitive2D
+    class LazyControlCreationPrimitive2D : public ::drawinglayer::primitive2d::BufferedDecompositionPrimitive2D
     {
     private:
-        typedef ::drawinglayer::primitive2d::BufDecPrimitive2D  BufDecPrimitive2D;
+        typedef ::drawinglayer::primitive2d::BufferedDecompositionPrimitive2D  BufferedDecompositionPrimitive2D;
 
     protected:
         virtual ::drawinglayer::primitive2d::Primitive2DSequence
@@ -1432,7 +1432,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     bool LazyControlCreationPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
     {
-        if ( !BufDecPrimitive2D::operator==( rPrimitive ) )
+        if ( !BufferedDecompositionPrimitive2D::operator==( rPrimitive ) )
             return false;
 
         const LazyControlCreationPrimitive2D* pRHS = dynamic_cast< const LazyControlCreationPrimitive2D* >( &rPrimitive );
@@ -1482,7 +1482,7 @@ namespace sdr { namespace contact {
     {
         if ( m_pVOCImpl->hasControl() )
             m_pVOCImpl->positionAndZoomControl( _rViewInformation.getObjectToViewTransformation() );
-        return BufDecPrimitive2D::get2DDecomposition( _rViewInformation );
+        return BufferedDecompositionPrimitive2D::get2DDecomposition( _rViewInformation );
     }
 
     //--------------------------------------------------------------------

@@ -125,7 +125,7 @@ namespace drawinglayer
             const basegfx::B2DRange& rObjectRange,
             const basegfx::BColor& rBColor,
             const attribute::FillHatchAttribute& rFillHatch)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maObjectRange(rObjectRange),
             maFillHatch(rFillHatch),
             maBColor(rBColor)
@@ -134,7 +134,7 @@ namespace drawinglayer
 
         bool FillHatchPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const FillHatchPrimitive2D& rCompare = (FillHatchPrimitive2D&)rPrimitive;
 

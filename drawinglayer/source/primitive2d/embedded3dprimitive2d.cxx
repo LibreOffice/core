@@ -102,7 +102,7 @@ namespace drawinglayer
             const basegfx::B3DVector& rLightNormal,
             double fShadowSlant,
             const basegfx::B3DRange& rScene3DRange)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             mxChildren3D(rxChildren3D),
             maObjectTransformation(rObjectTransformation),
             maViewInformation3D(rViewInformation3D),
@@ -118,7 +118,7 @@ namespace drawinglayer
 
         bool Embedded3DPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const Embedded3DPrimitive2D& rCompare = static_cast< const Embedded3DPrimitive2D& >(rPrimitive);
 

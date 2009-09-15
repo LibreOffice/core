@@ -109,7 +109,7 @@ namespace drawinglayer
         SdrTextPrimitive2D::SdrTextPrimitive2D(
             const SdrText* pSdrText,
             const OutlinerParaObject& rOutlinerParaObject)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             mrSdrText(const_cast< SdrText* >(pSdrText)),
             maOutlinerParaObject(rOutlinerParaObject),
             mxLastVisualizingPage(),
@@ -133,7 +133,7 @@ namespace drawinglayer
 
         bool SdrTextPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrTextPrimitive2D& rCompare = (SdrTextPrimitive2D&)rPrimitive;
 
@@ -244,7 +244,7 @@ namespace drawinglayer
             }
 
             // call parent
-            return BufDecPrimitive2D::get2DDecomposition(rViewInformation);
+            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

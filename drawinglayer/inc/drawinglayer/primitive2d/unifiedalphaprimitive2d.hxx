@@ -49,10 +49,6 @@ namespace drawinglayer
         private:
             double                              mfAlpha; // unified transparence
 
-        protected:
-            //  create decomposition
-            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
-
         public:
             UnifiedAlphaPrimitive2D(
                 const Primitive2DSequence& rChildren,
@@ -63,6 +59,9 @@ namespace drawinglayer
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+
+            //  create decomposition
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()

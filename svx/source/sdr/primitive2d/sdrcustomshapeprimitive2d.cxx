@@ -73,7 +73,7 @@ namespace drawinglayer
             const Primitive2DSequence& rSubPrimitives,
             const basegfx::B2DHomMatrix& rTextBox,
             bool bWordWrap)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maSdrSTAttribute(rSdrSTAttribute),
             maSubPrimitives(rSubPrimitives),
             maTextBox(rTextBox),
@@ -83,7 +83,7 @@ namespace drawinglayer
 
         bool SdrCustomShapePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrCustomShapePrimitive2D& rCompare = (SdrCustomShapePrimitive2D&)rPrimitive;
 

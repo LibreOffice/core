@@ -47,7 +47,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class MetafilePrimitive2D : public BufDecPrimitive2D
+        class MetafilePrimitive2D : public BasePrimitive2D
         {
         private:
             basegfx::B2DHomMatrix                       maMetaFileTransform;

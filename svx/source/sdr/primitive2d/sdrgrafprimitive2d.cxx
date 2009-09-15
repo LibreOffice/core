@@ -121,7 +121,7 @@ namespace drawinglayer
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
             const GraphicObject& rGraphicObject,
             const GraphicAttr& rGraphicAttr)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             maGraphicObject(rGraphicObject),
@@ -133,7 +133,7 @@ namespace drawinglayer
 
         bool SdrGrafPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrGrafPrimitive2D& rCompare = (SdrGrafPrimitive2D&)rPrimitive;
 

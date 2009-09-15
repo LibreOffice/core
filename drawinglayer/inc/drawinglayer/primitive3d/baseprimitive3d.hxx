@@ -192,7 +192,7 @@ namespace drawinglayer
         // get range3D from a given Primitive3DSequence
         basegfx::B3DRange getB3DRangeFromPrimitive3DSequence(const Primitive3DSequence& rCandidate, const geometry::ViewInformation3D& aViewInformation);
 
-        // compare two Primitive2DReferences for equality, including trying to get implementations (BufDecPrimitive2D)
+        // compare two Primitive2DReferences for equality, including trying to get implementations (BufferedDecompositionPrimitive2D)
         // and using compare operator
         bool arePrimitive3DReferencesEqual(const Primitive3DReference& rA, const Primitive3DReference& rB);
 

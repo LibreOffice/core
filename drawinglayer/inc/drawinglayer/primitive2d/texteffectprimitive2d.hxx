@@ -36,7 +36,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTEFFECTPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTEFFECTPRIMITIVE2D_HXX
 
-#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -54,9 +54,12 @@ namespace drawinglayer
             TEXTEFFECTSTYLE2D_OUTLINE
         };
 
-        class TextEffectPrimitive2D : public GroupPrimitive2D
+        class TextEffectPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
+            // the text content
+            Primitive2DSequence                             maTextContent;
+
             // the style to apply, the direction and the rotation center
             const basegfx::B2DPoint                         maRotationCenter;
             double                                          mfDirection;
@@ -72,12 +75,13 @@ namespace drawinglayer
 
         public:
             TextEffectPrimitive2D(
-                const Primitive2DSequence& rChildren,
+                const Primitive2DSequence& rTextContent,
                 const basegfx::B2DPoint& rRotationCenter,
                 double fDirection,
                 TextEffectStyle2D eTextEffectStyle2D);
 
             // get data
+            const Primitive2DSequence& getTextContent() const { return maTextContent; }
             const basegfx::B2DPoint& getRotationCenter() const { return maRotationCenter; }
             double getDirection() const { return mfDirection; }
             TextEffectStyle2D getTextEffectStyle2D() const { return meTextEffectStyle2D; }

@@ -46,7 +46,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class BorderLinePrimitive2D : public BufDecPrimitive2D
+        class BorderLinePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             basegfx::B2DPoint                               maStart;

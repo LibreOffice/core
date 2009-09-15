@@ -80,7 +80,7 @@ namespace drawinglayer
         }
 
         PolyPolygonHairlinePrimitive2D::PolyPolygonHairlinePrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::BColor& rBColor)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maPolyPolygon(rPolyPolygon),
             maBColor(rBColor)
         {
@@ -88,7 +88,7 @@ namespace drawinglayer
 
         bool PolyPolygonHairlinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const PolyPolygonHairlinePrimitive2D& rCompare = (PolyPolygonHairlinePrimitive2D&)rPrimitive;
 
@@ -144,7 +144,7 @@ namespace drawinglayer
             const basegfx::BColor& rRGBColorA,
             const basegfx::BColor& rRGBColorB,
             double fDiscreteDashLength)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maPolyPolygon(rPolyPolygon),
             maRGBColorA(rRGBColorA),
             maRGBColorB(rRGBColorB),
@@ -154,7 +154,7 @@ namespace drawinglayer
 
         bool PolyPolygonMarkerPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const PolyPolygonMarkerPrimitive2D& rCompare = (PolyPolygonMarkerPrimitive2D&)rPrimitive;
 
@@ -211,7 +211,7 @@ namespace drawinglayer
             const basegfx::B2DPolyPolygon& rPolyPolygon,
               const attribute::LineAttribute& rLineAttribute,
             const attribute::StrokeAttribute& rStrokeAttribute)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maPolyPolygon(rPolyPolygon),
             maLineAttribute(rLineAttribute),
             maStrokeAttribute(rStrokeAttribute)
@@ -221,7 +221,7 @@ namespace drawinglayer
         PolyPolygonStrokePrimitive2D::PolyPolygonStrokePrimitive2D(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
               const attribute::LineAttribute& rLineAttribute)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maPolyPolygon(rPolyPolygon),
             maLineAttribute(rLineAttribute),
             maStrokeAttribute()
@@ -230,7 +230,7 @@ namespace drawinglayer
 
         bool PolyPolygonStrokePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const PolyPolygonStrokePrimitive2D& rCompare = (PolyPolygonStrokePrimitive2D&)rPrimitive;
 
@@ -343,7 +343,7 @@ namespace drawinglayer
             if(getStart().isActive() || getEnd().isActive())
             {
                 // use decomposition when line start/end is used
-                return BufDecPrimitive2D::getB2DRange(rViewInformation);
+                return BufferedDecompositionPrimitive2D::getB2DRange(rViewInformation);
             }
             else
             {
@@ -367,7 +367,7 @@ namespace drawinglayer
         PolyPolygonColorPrimitive2D::PolyPolygonColorPrimitive2D(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
             const basegfx::BColor& rBColor)
-        :   BufDecPrimitive2D(),
+        :   BasePrimitive2D(),
             maPolyPolygon(rPolyPolygon),
             maBColor(rBColor)
         {
@@ -375,7 +375,7 @@ namespace drawinglayer
 
         bool PolyPolygonColorPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BasePrimitive2D::operator==(rPrimitive))
             {
                 const PolyPolygonColorPrimitive2D& rCompare = (PolyPolygonColorPrimitive2D&)rPrimitive;
 

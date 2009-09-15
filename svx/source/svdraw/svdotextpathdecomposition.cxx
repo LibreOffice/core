@@ -231,8 +231,8 @@ namespace
     class impPolygonParagraphHandler
     {
         const drawinglayer::attribute::SdrFormTextAttribute&        mrSdrFormTextAttribute; // FormText parameters
-        std::vector< drawinglayer::primitive2d::BufDecPrimitive2D* >&   mrDecomposition;        // destination primitive list
-        std::vector< drawinglayer::primitive2d::BufDecPrimitive2D* >&   mrShadowDecomposition;  // destination primitive list for shadow
+        std::vector< drawinglayer::primitive2d::BufferedDecompositionPrimitive2D* >&    mrDecomposition;        // destination primitive list
+        std::vector< drawinglayer::primitive2d::BufferedDecompositionPrimitive2D* >&    mrShadowDecomposition;  // destination primitive list for shadow
         Reference < com::sun::star::i18n::XBreakIterator >          mxBreak;                // break iterator
 
         double getParagraphTextLength(const ::std::vector< const impPathTextPortion* >& rTextPortions)
@@ -271,8 +271,8 @@ namespace
     public:
         impPolygonParagraphHandler(
             const drawinglayer::attribute::SdrFormTextAttribute& rSdrFormTextAttribute,
-            std::vector< drawinglayer::primitive2d::BufDecPrimitive2D* >& rDecomposition,
-            std::vector< drawinglayer::primitive2d::BufDecPrimitive2D* >& rShadowDecomposition)
+            std::vector< drawinglayer::primitive2d::BufferedDecompositionPrimitive2D* >& rDecomposition,
+            std::vector< drawinglayer::primitive2d::BufferedDecompositionPrimitive2D* >& rShadowDecomposition)
         :   mrSdrFormTextAttribute(rSdrFormTextAttribute),
             mrDecomposition(rDecomposition),
             mrShadowDecomposition(rShadowDecomposition)
@@ -571,7 +571,7 @@ namespace
         const basegfx::B2DHomMatrix& rTransform,
         const drawinglayer::attribute::LineAttribute& rLineAttribute,
         const drawinglayer::attribute::StrokeAttribute& rStrokeAttribute,
-        std::vector< drawinglayer::primitive2d::BufDecPrimitive2D* >& rTarget)
+        std::vector< drawinglayer::primitive2d::BufferedDecompositionPrimitive2D* >& rTarget)
     {
         for(basegfx::B2DPolyPolygonVector::const_iterator aPolygon(rB2DPolyPolyVector.begin()); aPolygon != rB2DPolyPolyVector.end(); aPolygon++)
         {
@@ -591,10 +591,10 @@ namespace
     }
 
     drawinglayer::primitive2d::Primitive2DSequence impAddPathTextOutlines(
-        const std::vector< drawinglayer::primitive2d::BufDecPrimitive2D* >& rSource,
+        const std::vector< drawinglayer::primitive2d::BufferedDecompositionPrimitive2D* >& rSource,
         const drawinglayer::attribute::SdrFormTextOutlineAttribute& rOutlineAttribute)
     {
-        std::vector< drawinglayer::primitive2d::BufDecPrimitive2D* > aNewPrimitives;
+        std::vector< drawinglayer::primitive2d::BasePrimitive2D* > aNewPrimitives;
 
         for(sal_uInt32 a(0L); a < rSource.size(); a++)
         {
@@ -611,7 +611,7 @@ namespace
                 if(aB2DPolyPolyVector.size())
                 {
                     // create stroke primitives
-                    std::vector< drawinglayer::primitive2d::BufDecPrimitive2D* > aStrokePrimitives;
+                    std::vector< drawinglayer::primitive2d::BufferedDecompositionPrimitive2D* > aStrokePrimitives;
                     impAddPolygonStrokePrimitives(
                         aB2DPolyPolyVector,
                         aPolygonTransform,
@@ -710,8 +710,8 @@ bool SdrTextObj::impDecomposePathTextPrimitive(
         if(nLoopCount)
         {
             // prepare common decomposition stuff
-            std::vector< drawinglayer::primitive2d::BufDecPrimitive2D* > aRegularDecomposition;
-            std::vector< drawinglayer::primitive2d::BufDecPrimitive2D* > aShadowDecomposition;
+            std::vector< drawinglayer::primitive2d::BufferedDecompositionPrimitive2D* > aRegularDecomposition;
+            std::vector< drawinglayer::primitive2d::BufferedDecompositionPrimitive2D* > aShadowDecomposition;
             impPolygonParagraphHandler aPolygonParagraphHandler(
                 rFormTextAttribute, aRegularDecomposition, aShadowDecomposition);
             sal_uInt32 a;

@@ -47,7 +47,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrOleContentPrimitive2D : public BufDecPrimitive2D
+        class SdrOleContentPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             SdrObjectWeakRef                            mpSdrOle2Obj;

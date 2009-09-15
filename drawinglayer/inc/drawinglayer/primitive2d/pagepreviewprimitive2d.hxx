@@ -36,7 +36,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PAGEPREVIEWPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PAGEPREVIEWPRIMITIVE2D_HXX
 
-#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
@@ -47,17 +47,20 @@ namespace drawinglayer
     namespace primitive2d
     {
         // This primitive is needed to have the correct XDrawPage as ViewInformation for decomposing
-        // the page contents (given as childs of the GroupPrimitive2D here) if these contain e.g.
+        // the page contents (given as PageContent here) if these contain e.g.
         // view-dependent (in this case XDrawPage-dependent) text fields like PageNumber. If You want
         // those primitives to be visualized correctly, Your renderer needs to locally correct it's
         // ViewInformation2D to reference the new XDrawPage.
-        class PagePreviewPrimitive2D : public GroupPrimitive2D
+        class PagePreviewPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             // the XDrawPage visualized by this primitive. When we go forward with primitives
             // this will not only be used by the renderers to provide the correct decompose
             // graphic attribute context, but also to completely create the page's sub-content.
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > mxDrawPage;
+
+            // the PageContent
+            Primitive2DSequence                         maPageContent;
 
             // the own geometry
             basegfx::B2DHomMatrix                       maTransform;
@@ -80,11 +83,12 @@ namespace drawinglayer
                 const basegfx::B2DHomMatrix& rTransform,
                 double fContentWidth,
                 double fContentHeight,
-                const Primitive2DSequence& rChildren,
+                const Primitive2DSequence& rPageContent,
                 bool bKeepAspectRatio);
 
             // get data
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& getXDrawPage() const { return mxDrawPage; }
+            const Primitive2DSequence& getPageContent() const { return maPageContent; }
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             double getContentWidth() const { return mfContentWidth; }
             double getContentHeight() const { return mfContentHeight; }

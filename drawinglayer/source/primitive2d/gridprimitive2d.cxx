@@ -248,7 +248,7 @@ namespace drawinglayer
             sal_uInt32 nSubdivisionsY,
             const basegfx::BColor& rBColor,
             const BitmapEx& rCrossMarker)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             mfWidth(fWidth),
             mfHeight(fHeight),
@@ -265,7 +265,7 @@ namespace drawinglayer
 
         bool GridPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const GridPrimitive2D& rCompare = (GridPrimitive2D&)rPrimitive;
 
@@ -316,7 +316,7 @@ namespace drawinglayer
             }
 
             // use parent implementation
-            return BufDecPrimitive2D::get2DDecomposition(rViewInformation);
+            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID

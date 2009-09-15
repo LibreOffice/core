@@ -45,7 +45,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrCustomShapePrimitive2D : public BufDecPrimitive2D
+        class SdrCustomShapePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             attribute::SdrShadowTextAttribute           maSdrSTAttribute;

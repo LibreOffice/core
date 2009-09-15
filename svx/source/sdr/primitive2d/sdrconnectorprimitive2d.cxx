@@ -87,7 +87,7 @@ namespace drawinglayer
         SdrConnectorPrimitive2D::SdrConnectorPrimitive2D(
             const attribute::SdrLineShadowTextAttribute& rSdrLSTAttribute,
             const ::basegfx::B2DPolygon& rUnitPolygon)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maSdrLSTAttribute(rSdrLSTAttribute),
             maUnitPolygon(rUnitPolygon)
         {
@@ -95,7 +95,7 @@ namespace drawinglayer
 
         bool SdrConnectorPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrConnectorPrimitive2D& rCompare = (SdrConnectorPrimitive2D&)rPrimitive;
 

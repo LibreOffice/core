@@ -78,7 +78,7 @@ namespace
         unsigned                                        mbGraphicAnimationAllowed : 1;
 
         // as tooling, the process() implementation takes over API handling and calls this
-        // virtual render method when the primitive implementation is BufDecPrimitive2D-based.
+        // virtual render method when the primitive implementation is BufferedDecompositionPrimitive2D-based.
         virtual void processBasePrimitive2D(const drawinglayer::primitive2d::BasePrimitive2D& rCandidate);
 
     public:

@@ -52,7 +52,7 @@ namespace drawinglayer
         PointArrayPrimitive2D::PointArrayPrimitive2D(
             const std::vector< basegfx::B2DPoint >& rPositions,
             const basegfx::BColor& rRGBColor)
-        :   BufDecPrimitive2D(),
+        :   BasePrimitive2D(),
             maPositions(rPositions),
             maRGBColor(rRGBColor),
             maB2DRange()
@@ -61,7 +61,7 @@ namespace drawinglayer
 
         bool PointArrayPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BasePrimitive2D::operator==(rPrimitive))
             {
                 const PointArrayPrimitive2D& rCompare = (PointArrayPrimitive2D&)rPrimitive;
 

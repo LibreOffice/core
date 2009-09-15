@@ -54,11 +54,6 @@ namespace drawinglayer
         // (and maybe BoundRect extractors) will use it and it's children subcontent.
         class HitTestPrimitive2D : public GroupPrimitive2D
         {
-        protected:
-            // local decomposition. Implementation will return empty Primitive2DSequence
-            // since this is no visualisation data
-            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
-
         public:
             HitTestPrimitive2D(const Primitive2DSequence& rChildren);
 
@@ -66,6 +61,10 @@ namespace drawinglayer
             // range calculation is intended to use invisible replacement geometry, so
             // the local implementation will return the children's range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
+
+            // local decomposition. Implementation will return empty Primitive2DSequence
+            // since this is no visualisation data
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()

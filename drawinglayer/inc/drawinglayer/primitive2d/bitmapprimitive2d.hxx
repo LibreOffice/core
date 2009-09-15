@@ -47,7 +47,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class BitmapPrimitive2D : public BufDecPrimitive2D
+        class BitmapPrimitive2D : public BasePrimitive2D
         {
         private:
             BitmapEx                                    maBitmapEx;

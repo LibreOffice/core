@@ -64,7 +64,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrCellPrimitive2D : public BufDecPrimitive2D
+        class SdrCellPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             basegfx::B2DHomMatrix                       maTransform;
@@ -78,7 +78,7 @@ namespace drawinglayer
             SdrCellPrimitive2D(
                 const basegfx::B2DHomMatrix& rTransform,
                 const attribute::SdrFillTextAttribute& rSdrFTAttribute)
-            :   BufDecPrimitive2D(),
+            :   BufferedDecompositionPrimitive2D(),
                 maTransform(rTransform),
                 maSdrFTAttribute(rSdrFTAttribute)
             {
@@ -132,7 +132,7 @@ namespace drawinglayer
 
         bool SdrCellPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrCellPrimitive2D& rCompare = (SdrCellPrimitive2D&)rPrimitive;
 
@@ -155,7 +155,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrBorderlinePrimitive2D : public BufDecPrimitive2D
+        class SdrBorderlinePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             basegfx::B2DHomMatrix                       maTransform;
@@ -187,7 +187,7 @@ namespace drawinglayer
                 bool bRightIsOutside,
                 bool bTopIsOutside,
                 bool bInTwips)
-            :   BufDecPrimitive2D(),
+            :   BufferedDecompositionPrimitive2D(),
                 maTransform(rTransform),
                 maLeftLine(rLeftLine),
                 maBottomLine(rBottomLine),
@@ -462,7 +462,7 @@ namespace drawinglayer
 
         bool SdrBorderlinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrBorderlinePrimitive2D& rCompare = (SdrBorderlinePrimitive2D&)rPrimitive;
 

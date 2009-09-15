@@ -114,7 +114,7 @@ namespace drawinglayer
             const rtl::OUString& rURL,
             const basegfx::BColor& rBackgroundColor,
             sal_uInt32 nDiscreteBorder)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maURL(rURL),
             maBackgroundColor(rBackgroundColor),
@@ -124,7 +124,7 @@ namespace drawinglayer
 
         bool MediaPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const MediaPrimitive2D& rCompare = (MediaPrimitive2D&)rPrimitive;
 

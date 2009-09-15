@@ -106,8 +106,26 @@ namespace drawinglayer
             unique UNO APIs may be defined/implemented for these set to allow more intense work
             with primitives using UNO.
 
-            Current Basic Primitives are:
-            (add list here)
+            Current five Basic Primitives are:
+
+            - BitmapPrimitive2D (bitmap data, evtl. with alpha)
+            - MetafilePrimitive2D (VCL Metafile, currently no decomposition, but planned, so may vanish)
+            - PointArrayPrimitive2D (single points)
+            - PolygonHairlinePrimitive2D (hairline curves/polygons)
+            - PolyPolygonColorPrimitive2D (colored polygons)
+
+            All other implemented primitives have a defined decomposition and can thus be
+            decomposed downt to this small set.
+
+            A renderer implementing support for this minimal set of primitives can completely
+            render primitive-based visualisations. Of course, he also has to take states into account
+            which are representated by the following GroupPrimitive2D derivations:
+
+            - AlphaPrimitive2D (objects with freely defined transparence)
+            - InvertPrimitive2D (for XOR)
+            - MaskPrimitive2D (for masking)
+            - ModifiedColorPrimitive2D (for a stack of color modifications)
+            - TransformPrimitive2D (for a transformation stack)
 
             To support getting the geometric BoundRect, getB2DRange is used. The default
             implementation will use the get2DDecomposition result and merge a range from the
@@ -183,7 +201,7 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
-// BufDecPrimitive2D class
+// BufferedDecompositionPrimitive2D class
 
 namespace drawinglayer
 {
@@ -216,7 +234,7 @@ namespace drawinglayer
                 to identify if a new decomposition is needed at the next call
             (f) return maLocal2DDecomposition
          */
-        class BufDecPrimitive2D
+        class BufferedDecompositionPrimitive2D
         :   public BasePrimitive2D
         {
         private:
@@ -238,7 +256,7 @@ namespace drawinglayer
 
         public:
             // constructor/destructor
-            BufDecPrimitive2D();
+            BufferedDecompositionPrimitive2D();
 
             /** The getDecomposition default implementation will on demand use createLocal2DDecomposition() if
                 maLocal2DDecomposition is empty. It will set maLocal2DDecomposition to this obtained decomposition
@@ -264,7 +282,7 @@ namespace drawinglayer
         // get B2DRange from a given Primitive2DSequence
         basegfx::B2DRange getB2DRangeFromPrimitive2DSequence(const Primitive2DSequence& rCandidate, const geometry::ViewInformation2D& aViewInformation);
 
-        // compare two Primitive2DReferences for equality, including trying to get implementations (BufDecPrimitive2D)
+        // compare two Primitive2DReferences for equality, including trying to get implementations (BufferedDecompositionPrimitive2D)
         // and using compare operator
         bool arePrimitive2DReferencesEqual(const Primitive2DReference& rA, const Primitive2DReference& rB);
 

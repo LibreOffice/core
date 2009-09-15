@@ -55,7 +55,27 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence UnifiedAlphaPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        UnifiedAlphaPrimitive2D::UnifiedAlphaPrimitive2D(
+            const Primitive2DSequence& rChildren,
+            double fAlpha)
+        :   GroupPrimitive2D(rChildren),
+            mfAlpha(fAlpha)
+        {
+        }
+
+        bool UnifiedAlphaPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+        {
+            if(GroupPrimitive2D::operator==(rPrimitive))
+            {
+                const UnifiedAlphaPrimitive2D& rCompare = (UnifiedAlphaPrimitive2D&)rPrimitive;
+
+                return (getAlpha() == rCompare.getAlpha());
+            }
+
+            return false;
+        }
+
+        Primitive2DSequence UnifiedAlphaPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             if(0.0 == getAlpha())
             {
@@ -97,26 +117,6 @@ namespace drawinglayer
                 // completely transparent or invalid definition, add nothing
                 return Primitive2DSequence();
             }
-        }
-
-        UnifiedAlphaPrimitive2D::UnifiedAlphaPrimitive2D(
-            const Primitive2DSequence& rChildren,
-            double fAlpha)
-        :   GroupPrimitive2D(rChildren),
-            mfAlpha(fAlpha)
-        {
-        }
-
-        bool UnifiedAlphaPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(GroupPrimitive2D::operator==(rPrimitive))
-            {
-                const UnifiedAlphaPrimitive2D& rCompare = (UnifiedAlphaPrimitive2D&)rPrimitive;
-
-                return (getAlpha() == rCompare.getAlpha());
-            }
-
-            return false;
         }
 
         // provide unique ID

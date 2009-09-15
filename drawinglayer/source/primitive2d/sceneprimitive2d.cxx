@@ -298,7 +298,7 @@ namespace drawinglayer
             const attribute::SdrLightingAttribute& rSdrLightingAttribute,
             const basegfx::B2DHomMatrix& rObjectTransformation,
             const geometry::ViewInformation3D& rViewInformation3D)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             mxChildren3D(rxChildren3D),
             maSdrSceneAttribute(rSdrSceneAttribute),
             maSdrLightingAttribute(rSdrLightingAttribute),
@@ -314,7 +314,7 @@ namespace drawinglayer
 
         bool ScenePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const ScenePrimitive2D& rCompare = (ScenePrimitive2D&)rPrimitive;
 
@@ -411,7 +411,7 @@ namespace drawinglayer
             }
 
             // use parent implementation
-            return BufDecPrimitive2D::get2DDecomposition(rViewInformation);
+            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID

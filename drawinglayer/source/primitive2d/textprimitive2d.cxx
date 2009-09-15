@@ -241,7 +241,7 @@ namespace drawinglayer
             const FontAttributes& rFontAttributes,
             const ::com::sun::star::lang::Locale& rLocale,
             const basegfx::BColor& rFontColor)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTextTransform(rNewTransform),
             maText(rText),
             maTextPosition(aTextPosition),
@@ -268,7 +268,7 @@ namespace drawinglayer
 
         bool TextSimplePortionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const TextSimplePortionPrimitive2D& rCompare = (TextSimplePortionPrimitive2D&)rPrimitive;
 

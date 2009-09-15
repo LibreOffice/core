@@ -105,7 +105,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& rTransform,
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
             const basegfx::B2DPolyPolygon& rUnitPolyPolygon)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             maUnitPolyPolygon(rUnitPolyPolygon)
@@ -114,7 +114,7 @@ namespace drawinglayer
 
         bool SdrPathPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrPathPrimitive2D& rCompare = (SdrPathPrimitive2D&)rPrimitive;
 

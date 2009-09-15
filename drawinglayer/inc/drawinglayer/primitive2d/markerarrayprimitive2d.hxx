@@ -47,7 +47,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class MarkerArrayPrimitive2D : public BufDecPrimitive2D
+        class MarkerArrayPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             std::vector< basegfx::B2DPoint >                maPositions;

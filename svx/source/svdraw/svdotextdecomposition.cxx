@@ -66,7 +66,7 @@
 
 namespace
 {
-    drawinglayer::primitive2d::Primitive2DSequence impConvertVectorToPrimitive2DSequence(const std::vector< drawinglayer::primitive2d::BufDecPrimitive2D* >& rPrimitiveVector)
+    drawinglayer::primitive2d::Primitive2DSequence impConvertVectorToPrimitive2DSequence(const std::vector< drawinglayer::primitive2d::BasePrimitive2D* >& rPrimitiveVector)
     {
         const sal_Int32 nCount(rPrimitiveVector.size());
         drawinglayer::primitive2d::Primitive2DSequence aRetval(nCount);
@@ -108,9 +108,9 @@ namespace
     class impTextBreakupHandler
     {
     private:
-        std::vector< drawinglayer::primitive2d::BufDecPrimitive2D* >    maTextPortionPrimitives;
-        std::vector< drawinglayer::primitive2d::BufDecPrimitive2D* >    maLinePrimitives;
-        std::vector< drawinglayer::primitive2d::BufDecPrimitive2D* >    maParagraphPrimitives;
+        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >  maTextPortionPrimitives;
+        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >  maLinePrimitives;
+        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >  maParagraphPrimitives;
 
         SdrOutliner&                                                mrOutliner;
         basegfx::B2DHomMatrix                                       maNewTransformA;
@@ -129,7 +129,7 @@ namespace
 
         bool impIsUnderlineAbove(const Font& rFont) const;
         void impCreateTextPortionPrimitive(const DrawPortionInfo& rInfo);
-        drawinglayer::primitive2d::BufDecPrimitive2D* impCheckFieldPrimitive(drawinglayer::primitive2d::BufDecPrimitive2D* pPrimitive, const DrawPortionInfo& rInfo) const;
+        drawinglayer::primitive2d::BasePrimitive2D* impCheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive, const DrawPortionInfo& rInfo) const;
         void impFlushTextPortionPrimitivesToLinePrimitives();
         void impFlushLinePrimitivesToParagraphPrimitives();
         void impHandleDrawPortionInfo(const DrawPortionInfo& rInfo);
@@ -288,7 +288,7 @@ namespace
             const basegfx::BColor aBFontColor(aFontColor.getBColor());
 
             // prepare new primitive
-            drawinglayer::primitive2d::BufDecPrimitive2D* pNewPrimitive = 0;
+            drawinglayer::primitive2d::BasePrimitive2D* pNewPrimitive = 0;
             const bool bDecoratedIsNeeded(
                    UNDERLINE_NONE != rInfo.mrFont.GetOverline()
                 || UNDERLINE_NONE != rInfo.mrFont.GetUnderline()
@@ -467,7 +467,7 @@ namespace
         }
     }
 
-    drawinglayer::primitive2d::BufDecPrimitive2D* impTextBreakupHandler::impCheckFieldPrimitive(drawinglayer::primitive2d::BufDecPrimitive2D* pPrimitive, const DrawPortionInfo& rInfo) const
+    drawinglayer::primitive2d::BasePrimitive2D* impTextBreakupHandler::impCheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive, const DrawPortionInfo& rInfo) const
     {
         if(rInfo.mpFieldData)
         {
@@ -566,7 +566,7 @@ namespace
 
         // embed in TextHierarchyBulletPrimitive2D
         const drawinglayer::primitive2d::Primitive2DSequence aNewSequence(&aNewReference, 1);
-        drawinglayer::primitive2d::BufDecPrimitive2D* pNewPrimitive = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(aNewSequence);
+        drawinglayer::primitive2d::BasePrimitive2D* pNewPrimitive = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(aNewSequence);
 
         // add to output
         maTextPortionPrimitives.push_back(pNewPrimitive);

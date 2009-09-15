@@ -194,7 +194,7 @@ namespace drawinglayer
             bool bCreateInside,
             bool bCreateOutside,
             const basegfx::BColor& rRGBColor)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maStart(rStart),
             maEnd(rEnd),
             mfLeftWidth(fLeftWidth),
@@ -212,7 +212,7 @@ namespace drawinglayer
 
         bool BorderLinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const BorderLinePrimitive2D& rCompare = (BorderLinePrimitive2D&)rPrimitive;
 

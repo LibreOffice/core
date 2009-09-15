@@ -158,7 +158,7 @@ namespace drawinglayer
             const SdrOle2Obj& rSdrOle2Obj,
             const basegfx::B2DHomMatrix& rObjectTransform,
             bool bHighContrast)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             mpSdrOle2Obj(const_cast< SdrOle2Obj* >(&rSdrOle2Obj)),
             maObjectTransform(rObjectTransform),
             mbHighContrast(bHighContrast)
@@ -167,7 +167,7 @@ namespace drawinglayer
 
         bool SdrOleContentPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrOleContentPrimitive2D& rCompare = (SdrOleContentPrimitive2D&)rPrimitive;
                 const bool bBothNot(!mpSdrOle2Obj.is() && !rCompare.mpSdrOle2Obj.is());

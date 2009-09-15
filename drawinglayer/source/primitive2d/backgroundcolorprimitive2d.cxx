@@ -70,7 +70,7 @@ namespace drawinglayer
 
         BackgroundColorPrimitive2D::BackgroundColorPrimitive2D(
             const basegfx::BColor& rBColor)
-        :   BufDecPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maBColor(rBColor),
             maLastViewport()
         {
@@ -78,7 +78,7 @@ namespace drawinglayer
 
         bool BackgroundColorPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufDecPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const BackgroundColorPrimitive2D& rCompare = (BackgroundColorPrimitive2D&)rPrimitive;
 
@@ -111,7 +111,7 @@ namespace drawinglayer
             }
 
             // use parent implementation
-            return BufDecPrimitive2D::get2DDecomposition(rViewInformation);
+            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID

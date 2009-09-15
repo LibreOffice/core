@@ -46,14 +46,14 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class PointArrayPrimitive2D : public BufDecPrimitive2D
+        class PointArrayPrimitive2D : public BasePrimitive2D
         {
         private:
             std::vector< basegfx::B2DPoint >                maPositions;
             basegfx::BColor                                 maRGBColor;
 
             // #i96669# add simple range buffering for this primitive
-            basegfx::B2DRange                       maB2DRange;
+            basegfx::B2DRange                               maB2DRange;
 
         public:
             PointArrayPrimitive2D(

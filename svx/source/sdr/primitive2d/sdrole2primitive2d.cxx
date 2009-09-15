@@ -104,7 +104,7 @@ namespace drawinglayer
             }
 
             // add graphic content
-            appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, getChildren());
+            appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, getOLEContent());
 
             // add text, no need to supress to stay compatible since text was
             // always supported by the old paints, too
@@ -123,10 +123,11 @@ namespace drawinglayer
         }
 
         SdrOle2Primitive2D::SdrOle2Primitive2D(
-            const Primitive2DSequence& rChildren,
-            const ::basegfx::B2DHomMatrix& rTransform,
+            const Primitive2DSequence& rOLEContent,
+            const basegfx::B2DHomMatrix& rTransform,
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute)
-        :   GroupPrimitive2D(rChildren),
+        :   BasePrimitive2D(),
+            maOLEContent(rOLEContent),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute)
         {
@@ -134,11 +135,12 @@ namespace drawinglayer
 
         bool SdrOle2Primitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(GroupPrimitive2D::operator==(rPrimitive))
+            if(BasePrimitive2D::operator==(rPrimitive))
             {
                 const SdrOle2Primitive2D& rCompare = (SdrOle2Primitive2D&)rPrimitive;
 
-                if(getTransform() == rCompare.getTransform()
+                if(getOLEContent() == rCompare.getOLEContent()
+                    && getTransform() == rCompare.getTransform()
                     && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute())
                 {
                     return true;
