@@ -47,43 +47,10 @@
 #include "docoptio.hxx"
 #include "cellform.hxx"
 
+#include <vector>
+
 using ::rtl::math::approxEqual;
-
-#include <stdio.h>
-#include <string>
-#include <sys/time.h>
-
-namespace {
-
-class StackPrinter
-{
-public:
-    explicit StackPrinter(const char* msg) :
-        msMsg(msg)
-    {
-        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
-        mfStartTime = getTime();
-    }
-
-    ~StackPrinter()
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
-    }
-
-private:
-    double getTime() const
-    {
-        timeval tv;
-        gettimeofday(&tv, NULL);
-        return tv.tv_sec + tv.tv_usec / 1000000.0;
-    }
-
-    ::std::string msMsg;
-    double mfStartTime;
-};
-
-}
+using ::std::vector;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -742,14 +709,32 @@ bool lcl_isQueryByString(const ScQueryEntry& rEntry, const ScMatrix& rMat, SCSIZ
 
 bool ScDBQueryValueIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScMatrix& rMat) const
 {
-    StackPrinter __stack_printer__("ScDBQueryValueIterator:DataAccessMatrix::isValidQuery");
     SCSIZE nEntryCount = mpParam->GetEntryCount();
-    bool bEverValid = false;
+    vector<bool> aResults;
+    aResults.reserve(nEntryCount);
+
+    const CollatorWrapper& rCollator =
+        mpParam->bCaseSens ? *ScGlobal::pCaseCollator : *ScGlobal::pCollator;
+
     for (SCSIZE i = 0; i < nEntryCount; ++i)
     {
         const ScQueryEntry& rEntry = mpParam->GetEntry(i);
         if (!rEntry.bDoQuery)
             continue;
+
+        switch (rEntry.eOp)
+        {
+            case SC_EQUAL:
+            case SC_LESS:
+            case SC_GREATER:
+            case SC_LESS_EQUAL:
+            case SC_GREATER_EQUAL:
+            case SC_NOT_EQUAL:
+                break;
+            default:
+                // Only the above operators are supported.
+                continue;
+        }
 
         bool bValid = false;
 
@@ -757,7 +742,6 @@ bool ScDBQueryValueIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const Sc
         if (lcl_isQueryByValue(rEntry, rMat, nField, nRow))
         {
             // By value
-            fprintf(stdout, "ScDBQueryValueIterator:DataAccessMatrix::isValidQuery:   by value\n");
             double fMatVal = rMat.GetDouble(nField, nRow);
             bool bEqual = approxEqual(fMatVal, rEntry.nVal);
             switch (rEntry.eOp)
@@ -787,29 +771,81 @@ bool ScDBQueryValueIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const Sc
         else if (lcl_isQueryByString(rEntry, rMat, nField, nRow))
         {
             // By string
-            fprintf(stdout, "ScDBQueryValueIterator:DataAccessMatrix::isValidQuery:   by string\n");
+            do
+            {
+                if (!rEntry.pStr)
+                    break;
+
+                // Equality check first.
+
+                const String& rStr = rMat.GetString(nField, nRow);
+                bool bDone = false;
+                switch (rEntry.eOp)
+                {
+                    case SC_EQUAL:
+                        bValid = rEntry.pStr->Equals(rStr);
+                        bDone = true;
+                    break;
+                    case SC_NOT_EQUAL:
+                        bValid = !rEntry.pStr->Equals(rStr);
+                        bDone = true;
+                    break;
+                    default:
+                        ;
+                }
+
+                if (bDone)
+                    break;
+
+                // Unequality check using collator.
+
+                sal_Int32 nCompare = rCollator.compareString(rStr, *rEntry.pStr);
+                switch (rEntry.eOp)
+                {
+                    case SC_LESS :
+                        bValid = (nCompare < 0);
+                    break;
+                    case SC_GREATER :
+                        bValid = (nCompare > 0);
+                    break;
+                    case SC_LESS_EQUAL :
+                        bValid = (nCompare <= 0);
+                    break;
+                    case SC_GREATER_EQUAL :
+                        bValid = (nCompare >= 0);
+                    break;
+                    default:
+                        ;
+                }
+            }
+            while (false);
         }
         else if (mpParam->bMixedComparison)
         {
+            // Not used at the moment.
         }
 
-        if (i > 0)
+        if (aResults.empty())
+            // First query entry.
+            aResults.push_back(bValid);
+        else if (rEntry.eConnect == SC_AND)
         {
-            // Evaluate the query connector for secondary queries.
-            switch (rEntry.eConnect)
-            {
-                case SC_AND:
-                    if (!bValid)
-                        return false;
-                break;
-                case SC_OR:
-                break;
-            }
+            // For AND op, tuck the result into the last result value.
+            size_t n = aResults.size();
+            aResults[n-1] = aResults[n-1] && bValid;
         }
-
-        bEverValid |= bValid;
+        else
+            // For OR op, store its own result.
+            aResults.push_back(bValid);
     }
-    return bEverValid;
+
+    // Row is valid as long as there is at least one result being true.
+    vector<bool>::const_iterator itr = aResults.begin(), itrEnd = aResults.end();
+    for (; itr != itrEnd; ++itr)
+        if (*itr)
+            return true;
+
+    return false;
 }
 
 // ----------------------------------------------------------------------------
