@@ -3282,8 +3282,8 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
     else
         aPropertyName = aProp;
 
-    if ( ( m_pData->m_nStorageType == PACKAGE_STORAGE || m_pData->m_nStorageType == OFOPXML_STORAGE )
-            && aPropertyName.equalsAscii( "MediaType" )
+    if ( ( ( m_pData->m_nStorageType == PACKAGE_STORAGE || m_pData->m_nStorageType == OFOPXML_STORAGE )
+            && aPropertyName.equalsAscii( "MediaType" ) )
       || m_pData->m_nStorageType == PACKAGE_STORAGE && aPropertyName.equalsAscii( "Encrypted" )
       || aPropertyName.equalsAscii( "Compressed" ) )
     {
