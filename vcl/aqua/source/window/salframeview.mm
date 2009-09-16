@@ -184,6 +184,8 @@ static AquaSalFrame* getMouseContainerFrame()
         return YES;
     if( mpFrame->mbFullScreen )
         return YES;
+    if( (mpFrame->mnStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE) )
+        return YES;
     return [super canBecomeKeyWindow];
 }
 
