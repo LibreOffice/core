@@ -44,8 +44,8 @@ TARGET=xpdflib
 
 .IF "$(SYSTEM_POPPLER)" == "YES"
 dummy:
-        @echo "An already available installation of poppler should exist on your system."
-        @echo "Therefore xpdf provided here does not need to be built in addition."
+    @echo "An already available installation of poppler should exist on your system."
+    @echo "Therefore xpdf provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -62,7 +62,11 @@ CFLAGS:=$(EXTRA_CFLAGS)
 CXXFLAGS:=$(EXTRA_CFLAGS)
 .EXPORT : CFLAGS CXXFLAGS
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
-.ENDIF # "$(SYSBASE)"!=""
+.ELIF "$(OS)"=="MACOSX" # "$(SYSBASE)"!=""
+CFLAGS:=$(EXTRA_CDEFS)
+CXXFLAGS+:=$(EXTRA_CDEFS)
+.EXPORT: CFLAGS CXXFLAGS
+.ENDIF
 
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="SOLARIS"
@@ -76,12 +80,13 @@ LDFLAGS:=$(ARCH_FLAGS)
 .EXPORT : CFLAGS CXXFLAGS LDFLAGS
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCMACOSXP"
-CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-exceptions CXXFLAGS="-malign-natural"
-.ELSE
-#CONFIGURE_ACTION=./configure
-#CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-exceptions CFLAGS="-g -O0" CXXFLAGS="-g -O0"
-CONFIGURE_ACTION=./configure --without-libpaper-library --without-t1-library --without-x --enable-multithreaded --enable-exceptions
+.IF "$(OS)"=="MACOSX"
+CONFIGURE_ACTION=configure
+CONFIGURE_FLAGS+=--without-x --without-libpaper-library --without-t1-library --enable-multithreaded --enable-exceptions
+.IF "$(CPU)"=="P"
+CXXFLAGS+=-malign-natural
+.EXPORT: CXXFLAGS
+.ENDIF
 .ENDIF
 
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
