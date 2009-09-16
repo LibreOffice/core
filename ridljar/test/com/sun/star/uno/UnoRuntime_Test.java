@@ -54,7 +54,7 @@ public final class UnoRuntime_Test extends ComplexTestCase {
 
         // Test if a delegator object has the same OID as its creator:
         Test4 test4 = new Test4();
-        Ifc ifc = (Ifc) UnoRuntime.queryInterface(Ifc.class, test4);
+        Ifc ifc = UnoRuntime.queryInterface(Ifc.class, test4);
         assure(
             "Test4",
             UnoRuntime.generateOid(test4).equals(UnoRuntime.generateOid(ifc)));
@@ -64,19 +64,19 @@ public final class UnoRuntime_Test extends ComplexTestCase {
         // Test if a query for an interface which is not supported returns null:
         assure(
             "Test1",
-            (Ifc) UnoRuntime.queryInterface(Ifc.class, new Test1()) == null);
+            UnoRuntime.queryInterface(Ifc.class, new Test1()) == null);
 
         // Test if a query for an interface which is supported through
         // IQueryInterface succeeds:
         assure(
             "Test2",
-            (Ifc) UnoRuntime.queryInterface(Ifc.class, new Test2()) != null);
+            UnoRuntime.queryInterface(Ifc.class, new Test2()) != null);
 
         // Test if a query for an interface which is directly supported (through
         // inheritance) succeeds:
         assure(
             "Test3",
-            (Ifc) UnoRuntime.queryInterface(Ifc.class, new Test3()) != null);
+            UnoRuntime.queryInterface(Ifc.class, new Test3()) != null);
     }
 
     public void test_areSame() {

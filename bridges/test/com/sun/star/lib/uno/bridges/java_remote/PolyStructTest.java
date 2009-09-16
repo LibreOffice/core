@@ -61,7 +61,7 @@ public final class PolyStructTest extends ComplexTestCase {
         }
 
         protected boolean run(XComponentContext context) throws Throwable {
-            TestTransport t = (TestTransport) UnoRuntime.queryInterface(
+            TestTransport t = UnoRuntime.queryInterface(
                 TestTransport.class, getBridge(context).getInstance(""));
 
             assertEquals(

@@ -61,7 +61,7 @@ public class WeakReference
             Object weakImpl= obj.get();
             if (weakImpl != null)
             {
-                XWeak weak= (XWeak) UnoRuntime.queryInterface(XWeak.class, weakImpl);
+                XWeak weak= UnoRuntime.queryInterface(XWeak.class, weakImpl);
                 if (weak != null)
                 {
                     XAdapter adapter= (XAdapter) weak.queryAdapter();
@@ -77,7 +77,7 @@ public class WeakReference
      */
     public WeakReference(Object obj)
     {
-        XWeak weak= (XWeak) UnoRuntime.queryInterface(XWeak.class, obj);
+        XWeak weak= UnoRuntime.queryInterface(XWeak.class, obj);
         if (weak != null)
         {
             XAdapter adapter= (XAdapter) weak.queryAdapter();

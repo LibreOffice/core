@@ -76,7 +76,7 @@ public class TestOffice {
         {
             byte bytes[][] = new byte[1][];
 
-            XInputStream rIn = (XInputStream)UnoRuntime.queryInterface(XInputStream.class, rOut);
+            XInputStream rIn = UnoRuntime.queryInterface(XInputStream.class, rOut);
             if(rIn.available() != 10)
                 System.err.println("wrong bytes available\n");
 
@@ -90,11 +90,11 @@ public class TestOffice {
 
 
     static void testWriter(XComponent rCmp) throws IOException {
-        XTextDocument rTextDoc = (XTextDocument)UnoRuntime.queryInterface(XTextDocument.class, rCmp);
+        XTextDocument rTextDoc = UnoRuntime.queryInterface(XTextDocument.class, rCmp);
 
-        XText rText = (XText)UnoRuntime.queryInterface(XText.class, rTextDoc.getText());
-        XTextCursor rCursor = (XTextCursor)UnoRuntime.queryInterface(XTextCursor.class, rText.createTextCursor());
-        XTextRange rRange = (XTextRange)UnoRuntime.queryInterface(XTextRange.class, rCursor);
+        XText rText = UnoRuntime.queryInterface(XText.class, rTextDoc.getText());
+        XTextCursor rCursor = UnoRuntime.queryInterface(XTextCursor.class, rText.createTextCursor());
+        XTextRange rRange = UnoRuntime.queryInterface(XTextRange.class, rCursor);
 
         byte pcText[] = new byte[1024];
         pcText[0] = 0;
@@ -112,7 +112,7 @@ public class TestOffice {
     }
 
     static void testDocument(XMultiServiceFactory rSmgr) throws com.sun.star.uno.Exception, IOException {
-        XComponentLoader rLoader = (XComponentLoader)UnoRuntime.queryInterface(XComponentLoader.class, rSmgr.createInstance("com.sun.star.frame.Desktop"));
+        XComponentLoader rLoader = UnoRuntime.queryInterface(XComponentLoader.class, rSmgr.createInstance("com.sun.star.frame.Desktop"));
 
         String urls[] = new String[] {
             "private:factory/swriter",
@@ -148,13 +148,13 @@ public class TestOffice {
     }
 
     static void doSomething(Object r) throws com.sun.star.uno.Exception, IOException {
-        XNamingService rName = (XNamingService)UnoRuntime.queryInterface(XNamingService.class, r);
+        XNamingService rName = UnoRuntime.queryInterface(XNamingService.class, r);
 
         if(rName != null) {
             System.err.println("got the remote naming service !");
             Object rXsmgr = rName.getRegisteredObject("StarOffice.ServiceManager");
 
-            XMultiServiceFactory rSmgr = (XMultiServiceFactory)UnoRuntime.queryInterface(XMultiServiceFactory.class, rXsmgr);
+            XMultiServiceFactory rSmgr = UnoRuntime.queryInterface(XMultiServiceFactory.class, rXsmgr);
             if(rSmgr != null) {
                 System.err.println("got the remote service manager !");
 //                  testPipe(rSmgr);
@@ -183,7 +183,7 @@ public class TestOffice {
         smgr.addFactories(neededServices);
 
         Object  resolver  = smgr.createInstance("com.sun.star.bridge.UnoUrlResolver" );
-        XUnoUrlResolver resolver_xUnoUrlResolver = (XUnoUrlResolver)UnoRuntime.queryInterface(XUnoUrlResolver.class, resolver);
+        XUnoUrlResolver resolver_xUnoUrlResolver = UnoRuntime.queryInterface(XUnoUrlResolver.class, resolver);
 
           Object rInitialObject = resolver_xUnoUrlResolver.resolve(argv[0]);
 
