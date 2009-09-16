@@ -40,14 +40,6 @@
 // Acceleratorn
 //
 
-// Impress
-#include "accel.src"
-
-// Draw (Graphic)
-#undef  SD_ACCELERATOR
-#define SD_ACCELERATOR RID_GRAPHIC_DEFAULTACCEL
-#include "accel.src"
-
 //
 // Menu
 //

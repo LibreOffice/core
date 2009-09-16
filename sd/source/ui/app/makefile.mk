@@ -106,7 +106,7 @@ $(INCCOM)$/sddll0.hxx: makefile.mk
 .ENDIF			#  "$(USE_SHELL)"!="4nt"
 .ENDIF			# "$(GUI)"=="UNX"
 
-LOCALIZE_ME =  tbxids_tmpl.src menuids2_tmpl.src accel_tmpl.src menu_tmpl.src menuids_tmpl.src menuids4_tmpl.src popup2_tmpl.src toolbox2_tmpl.src accelids_tmpl.src menuportal_tmpl.src menuids3_tmpl.src
+LOCALIZE_ME =  tbxids_tmpl.src menuids2_tmpl.src menu_tmpl.src menuids_tmpl.src menuids4_tmpl.src popup2_tmpl.src toolbox2_tmpl.src menuportal_tmpl.src menuids3_tmpl.src
 
 
 .INCLUDE :  target.mk

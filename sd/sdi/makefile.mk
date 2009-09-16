@@ -41,6 +41,7 @@ SVSDIINC=$(PRJ)$/source$/ui$/inc
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.IF "$(L10N_framework)"==""
 
 # --- Files --------------------------------------------------------
 
@@ -86,5 +87,5 @@ SVSDI2DEPEND= \
     $(PRJ)$/inc$/app.hrc
 
 # --- Targets -------------------------------------------------------
-
+.ENDIF
 .INCLUDE :  target.mk
