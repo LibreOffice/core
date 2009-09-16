@@ -202,9 +202,7 @@ rtl::Reference< Node > Data::findNode(
     int layer, NodeMap const & map, rtl::OUString const & name)
 {
     NodeMap::const_iterator i(map.find(name));
-    return
-        (i == map.end() || i->second->getLayer() > layer ||
-         i->second->isRemoved())
+    return i == map.end() || i->second->getLayer() > layer
         ? rtl::Reference< Node >() : i->second;
 }
 

@@ -38,6 +38,7 @@
 #include "rtl/ustring.hxx"
 
 #include "node.hxx"
+#include "nodemap.hxx"
 #include "parser.hxx"
 #include "type.hxx"
 #include "valueparser.hxx"
@@ -90,9 +91,9 @@ private:
         Type type, Operation operation, bool finalized);
 
     void handlePlainGroupProp(
-        XmlReader const & reader, PropertyNode * property,
-        rtl::OUString const & name, Type type, Operation operation,
-        bool finalized);
+        XmlReader const & reader, GroupNode * group,
+        NodeMap::iterator const & propertyIndex, rtl::OUString const & name,
+        Type type, Operation operation, bool finalized);
 
     void handleLocalizedGroupProp(
         XmlReader const & reader, LocalizedPropertyNode * property,

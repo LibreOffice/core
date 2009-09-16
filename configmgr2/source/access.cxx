@@ -194,9 +194,7 @@ std::vector< rtl::Reference< ChildAccess > > Access::getAllChildren() {
     std::vector< rtl::Reference< ChildAccess > > vec;
     NodeMap & members = getNode()->getMembers();
     for (NodeMap::iterator i(members.begin()); i != members.end(); ++i) {
-        if (!i->second->isRemoved() &&
-            modifiedChildren_.find(i->first) == modifiedChildren_.end())
-        {
+        if (modifiedChildren_.find(i->first) == modifiedChildren_.end()) {
             vec.push_back(getUnmodifiedChild(i->first));
             OSL_ASSERT(vec.back().is());
         }
@@ -296,40 +294,37 @@ void Access::commitChildChanges(bool valid) {
                 // children); clarify what exactly should happen here for
                 // directly inserted children
         }
-        if (i->second->isModified()) {
-            NodeMap & members = getNode()->getMembers();
-            NodeMap::iterator j(members.find(i->first));
-            if (child.is()) {
-                // Inserted:
-                if (j != members.end()) {
-                    childValid = childValid &&
-                        j->second->getFinalized() == Data::NO_LAYER;
-                    if (childValid) {
-                        child->getNode()->setMandatory(
-                            j->second->getMandatory());
-                    }
-                }
+        NodeMap & members = getNode()->getMembers();
+        NodeMap::iterator j(members.find(i->first));
+        if (child.is()) {
+            // Inserted:
+            if (j != members.end()) {
+                childValid = childValid &&
+                    j->second->getFinalized() == Data::NO_LAYER;
                 if (childValid) {
-                    members[i->first] = child->getNode();
-                }
-            } else {
-                // Removed:
-                childValid = childValid && j != members.end() &&
-                    j->second->getFinalized() == Data::NO_LAYER &&
-                    j->second->getMandatory() == Data::NO_LAYER;
-                if (childValid) {
-                    j->second->remove(Data::NO_LAYER);
+                    child->getNode()->setMandatory(j->second->getMandatory());
                 }
             }
             if (childValid) {
-                Components::singleton().addModification(
-                    getAbsolutePath() +
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
-                    Data::createSegment(
-                        i->second->getNode()->getTemplateName(), i->first));
+                members[i->first] = child->getNode();
             }
-            i->second->committed();
+        } else {
+            // Removed:
+            childValid = childValid && j != members.end() &&
+                j->second->getFinalized() == Data::NO_LAYER &&
+                j->second->getMandatory() == Data::NO_LAYER;
+            if (childValid) {
+                members.erase(j);
+            }
         }
+        if (childValid && i->second.directlyModified) {
+            Components::singleton().addModification(
+                getAbsolutePath() +
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
+                Data::createSegment(
+                    i->second.child->getNode()->getTemplateName(), i->first));
+        }
+        i->second.child->committed();
         modifiedChildren_.erase(i);
     }
 }
@@ -628,13 +623,59 @@ rtl::OUString Access::getName() throw (css::uno::RuntimeException) {
     return getNameInternal();
 }
 
-void Access::setName(rtl::OUString const & /*aName*/)
+void Access::setName(rtl::OUString const & aName)
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
-    if(true)abort();*(char*)0=0;throw 0;//TODO
+    checkFinalized();
+    switch (getNode()->kind()) {
+    case Node::KIND_LOCALIZED_PROPERTY:
+        if(true)abort();*(char*)0=0;throw 0;//TODO
+    case Node::KIND_GROUP:
+    case Node::KIND_SET:
+        {
+            rtl::Reference< Access > parent(getParentAccess());
+            if (parent.is()) {
+                rtl::Reference< Node > node(getNode());
+                if (node->getTemplateName().getLength() != 0) {
+                    rtl::Reference< ChildAccess > other(
+                        parent->getChild(aName));
+                    if (other.get() == this) {
+                        break;
+                    }
+                    if (node->getMandatory() == Data::NO_LAYER &&
+                        !(other.is() && other->isFinalized()))
+                    {
+                        rtl::Reference< RootAccess > root(getRootAccess());
+                        rtl::Reference< ChildAccess > childAccess(
+                            dynamic_cast< ChildAccess * >(this));
+                        // unbind() modifies the parent chain that
+                        // markAsModified() walks, so order is important:
+                        childAccess->markAsModified(); //TODO: must not throw
+                        childAccess->unbind(); // must not throw
+                        if (other.is()) {
+                            other->unbind(); // must not throw
+                        }
+                        childAccess->bind(root, parent, aName);
+                            // must not throw
+                        childAccess->markAsModified(); //TODO: must not throw
+                        //TODO notify change
+                        break;
+                    }
+                }
+            }
+            throw css::uno::RuntimeException(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "configmgr setName inappropriate node")),
+                static_cast< cppu::OWeakObject * >(this));
+        }
+    default:
+        OSL_ASSERT(false); // this cannot happen
+        break;
+    }
 }
 
 css::beans::Property Access::getAsProperty() throw (css::uno::RuntimeException)
@@ -960,16 +1001,27 @@ void Access::replaceByName(
     OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
+    rtl::Reference< ChildAccess > child(getChild(aName));
+    if (!child.is()) {
+        throw css::container::NoSuchElementException(
+            aName, static_cast< cppu::OWeakObject * >(this));
+    }
+    child->checkFinalized();
     switch (getNode()->kind()) {
     case Node::KIND_LOCALIZED_PROPERTY:
     case Node::KIND_GROUP:
-        if (!setChildProperty(aName, aElement)) {
-            throw css::container::NoSuchElementException(
-                aName, static_cast< cppu::OWeakObject * >(this));
-        }
+        child->setProperty(aElement);
         break;
     case Node::KIND_SET:
-        if(true)abort();*(char*)0=0;throw 0;//TODO
+        {
+            rtl::Reference< ChildAccess > freeAcc(getFreeSetMember(aElement));
+            rtl::Reference< RootAccess > root(getRootAccess());
+            child->unbind(); // must not throw
+            freeAcc->bind(root, this, aName); // must not throw
+            freeAcc->markAsModified(); //TODO: must not throw
+            //TODO notify change
+        }
+        break;
     default:
         OSL_ASSERT(false); // this cannot happen
         break;
@@ -991,8 +1043,7 @@ void Access::insertByName(
         throw css::container::ElementExistException(
             aName, static_cast< cppu::OWeakObject * >(this));
     }
-    rtl::Reference< Node > p(getNode());
-    switch (p->kind()) {
+    switch (getNode()->kind()) {
     case Node::KIND_LOCALIZED_PROPERTY:
         insertLocalizedValueChild(aName, aElement);
         break;
@@ -1008,37 +1059,8 @@ void Access::insertByName(
         break;
     case Node::KIND_SET:
         {
-            rtl::Reference< ChildAccess > freeAcc;
-            css::uno::Reference< css::lang::XUnoTunnel > tunnel;
-            aElement >>= tunnel;
-            if (tunnel.is()) {
-                freeAcc.set(
-                    reinterpret_cast< ChildAccess * >(
-                        tunnel->getSomething(ChildAccess::getTunnelId())));
-            }
-            if (!freeAcc.is() || freeAcc->getParentAccess().is() ||
-                (freeAcc->isInTransaction() &&
-                 freeAcc->getRootAccess() != getRootAccess()))
-            {
-                throw css::lang::IllegalArgumentException(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "configmgr insertByName inappropriate set"
-                            " element")),
-                    static_cast< cppu::OWeakObject * >(this), 1);
-            }
-            if (!dynamic_cast< SetNode * >(p.get())->isValidTemplate(
-                    freeAcc->getNode()->getTemplateName()))
-            {
-                throw css::lang::IllegalArgumentException(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "configmgr insertByName inappropriate set"
-                            " element")),
-                    static_cast< cppu::OWeakObject * >(this), 1);
-            }
-            rtl::Reference< RootAccess > root(getRootAccess());
-            freeAcc->bind(root, this, aName); // must not throw
+            rtl::Reference< ChildAccess > freeAcc(getFreeSetMember(aElement));
+            freeAcc->bind(getRootAccess(), this, aName); // must not throw
             freeAcc->markAsModified(); //TODO: must not throw
             //TODO notify change
         }
@@ -1119,9 +1141,10 @@ css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
 rtl::Reference< ChildAccess > Access::getModifiedChild(
     HardChildMap::iterator const & childIterator)
 {
-    return (childIterator->second->getParentAccess() == this &&
-            childIterator->second->getNameInternal() == childIterator->first)
-        ? childIterator->second : rtl::Reference< ChildAccess >();
+    return (childIterator->second.child->getParentAccess() == this &&
+            (childIterator->second.child->getNameInternal() ==
+             childIterator->first))
+        ? childIterator->second.child : rtl::Reference< ChildAccess >();
 }
 
 rtl::Reference< ChildAccess > Access::getUnmodifiedChild(
@@ -1266,6 +1289,40 @@ void Access::checkFinalized() {
                     "configmgr modification of finalized item")),
             static_cast< cppu::OWeakObject * >(this), -1);
     }
+}
+
+rtl::Reference< ChildAccess > Access::getFreeSetMember(
+    css::uno::Any const & value)
+{
+    rtl::Reference< ChildAccess > freeAcc;
+    css::uno::Reference< css::lang::XUnoTunnel > tunnel;
+    value >>= tunnel;
+    if (tunnel.is()) {
+        freeAcc.set(
+            reinterpret_cast< ChildAccess * >(
+                tunnel->getSomething(ChildAccess::getTunnelId())));
+    }
+    if (!freeAcc.is() || freeAcc->getParentAccess().is() ||
+        (freeAcc->isInTransaction() &&
+         freeAcc->getRootAccess() != getRootAccess()))
+    {
+        throw css::lang::IllegalArgumentException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "configmgr inappropriate set element")),
+            static_cast< cppu::OWeakObject * >(this), 1);
+    }
+    OSL_ASSERT(dynamic_cast< SetNode * >(getNode().get()) != 0);
+    if (!dynamic_cast< SetNode * >(getNode().get())->isValidTemplate(
+            freeAcc->getNode()->getTemplateName()))
+    {
+        throw css::lang::IllegalArgumentException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "configmgr inappropriate set element")),
+            static_cast< cppu::OWeakObject * >(this), 1);
+    }
+    return freeAcc;
 }
 
 #if OSL_DEBUG_LEVEL > 0

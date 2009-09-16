@@ -104,9 +104,4 @@ void SetNode::clear() {
     members_.clear();
 }
 
-rtl::Reference< Node > SetNode::findMember(rtl::OUString const & name) {
-    NodeMap::iterator i(members_.find(name));
-    return i == members_.end() ? rtl::Reference< Node >() : i->second;
-}
-
 }

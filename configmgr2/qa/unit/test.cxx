@@ -39,6 +39,7 @@
 #include "com/sun/star/beans/XPropertyState.hpp"
 #include "com/sun/star/container/XHierarchicalNameAccess.hpp"
 #include "com/sun/star/container/XNameReplace.hpp"
+#include "com/sun/star/container/XNamed.hpp"
 #include "com/sun/star/lang/EventObject.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
@@ -97,6 +98,8 @@ public:
 
     void testKeyReset();
 
+    void testSetSetMemberName();
+
     void testReadCommands();
 
     void testThreads();
@@ -124,6 +127,7 @@ public:
     CPPUNIT_TEST(testKeyFetch);
     CPPUNIT_TEST(testKeySet);
     CPPUNIT_TEST(testKeyReset);
+    CPPUNIT_TEST(testSetSetMemberName);
     CPPUNIT_TEST(testReadCommands);
     CPPUNIT_TEST(testThreads);
     CPPUNIT_TEST(testRecursive);
@@ -434,6 +438,52 @@ void Test::testKeyReset() {
     }
 }
 
+void Test::testSetSetMemberName() {
+    rtl::OUString s;
+    CPPUNIT_ASSERT(
+        getKey(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
+                    ".uno:FontworkShapeType")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label"))) >>=
+        s);
+    CPPUNIT_ASSERT(
+        s.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Fontwork Shape")));
+
+    css::uno::Reference< css::container::XNameAccess > access(
+        createUpdateAccess(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "/org.openoffice.UI.GenericCommands/UserInterface/"
+                    "Commands"))),
+        css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::container::XNamed > member;
+    access->getByName(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM(".uno:FontworkGalleryFloater"))) >>=
+        member;
+    CPPUNIT_ASSERT(member.is());
+    member->setName(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM(".uno:FontworkShapeType")));
+    css::uno::Reference< css::util::XChangesBatch >(
+        access, css::uno::UNO_QUERY_THROW)->commitChanges();
+    css::uno::Reference< css::lang::XComponent >(
+        access, css::uno::UNO_QUERY_THROW)->dispose();
+
+    CPPUNIT_ASSERT(
+        getKey(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
+                    ".uno:FontworkShapeType")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label"))) >>=
+        s);
+    CPPUNIT_ASSERT(
+        s.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Fontwork Gallery")));
+}
+
 void Test::testReadCommands() {
     css::uno::Reference< css::container::XNameAccess > access(
         createViewAccess(
@@ -443,7 +493,8 @@ void Test::testReadCommands() {
                     "Commands"))),
         css::uno::UNO_QUERY_THROW);
     css::uno::Sequence< rtl::OUString > names(access->getElementNames());
-    CPPUNIT_ASSERT(names.getLength() == 696);
+    CPPUNIT_ASSERT(names.getLength() == 695);
+        // testSetSetMemberName() already removed ".uno:FontworkGalleryFloater"
     sal_uInt32 n = osl_getGlobalTimer();
     for (int i = 0; i < 8; ++i) {
         for (sal_Int32 j = 0; j < names.getLength(); ++j) {

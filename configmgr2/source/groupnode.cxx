@@ -87,9 +87,4 @@ void GroupNode::clear() {
     members_.clear();
 }
 
-rtl::Reference< Node > GroupNode::findMember(rtl::OUString const & name) {
-    NodeMap::iterator i(members_.find(name));
-    return i == members_.end() ? rtl::Reference< Node >() : i->second;
-}
-
 }

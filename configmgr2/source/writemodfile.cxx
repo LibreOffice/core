@@ -339,8 +339,7 @@ void writeValue(oslFileHandle handle, Type type, css::uno::Any const & value) {
 
 void writeNode(
     oslFileHandle handle, rtl::Reference< Node > const & parent,
-    rtl::OUString const & name, rtl::Reference< Node > const & node,
-    bool topLevel)
+    rtl::OUString const & name, rtl::Reference< Node > const & node)
 {
     static Span const typeNames[] = {
         Span(), Span(), Span(), // TYPE_ERROR, TYPE_NIL, TYPE_ANY
@@ -382,82 +381,56 @@ void writeNode(
         }
         break;
     case Node::KIND_LOCALIZED_PROPERTY:
+        writeData(handle, RTL_CONSTASCII_STRINGPARAM("<prop oor:name=\""));
+        writeAttributeValue(handle, name);
+        writeData(handle, RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"fuse\">"));
+        for (NodeMap::iterator i(node->getMembers().begin());
+             i != node->getMembers().end(); ++i)
         {
-            writeData(handle, RTL_CONSTASCII_STRINGPARAM("<prop oor:name=\""));
-            writeAttributeValue(handle, name);
-            writeData(
-                handle, RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"fuse\">"));
-            for (NodeMap::iterator i(node->getMembers().begin());
-                 i != node->getMembers().end(); ++i)
-            {
-                if (!i->second->isRemoved()) {
-                    writeNode(
-                        handle, node, i->first, i->second,
-                        topLevel && node->getLayer() != Data::NO_LAYER);
-                }
-            }
-            writeData(handle, RTL_CONSTASCII_STRINGPARAM("</prop>"));
+            writeNode(handle, node, i->first, i->second);
         }
+        writeData(handle, RTL_CONSTASCII_STRINGPARAM("</prop>"));
         break;
     case Node::KIND_LOCALIZED_VALUE:
         {
-            LocalizedValueNode * locval = dynamic_cast< LocalizedValueNode * >(
-                node.get());
-            if (locval->isRemoved()
-                ? topLevel && locval->getLayer() == Data::NO_LAYER
-                : !topLevel || locval->getLayer() == Data::NO_LAYER)
-            {
-                writeData(handle, RTL_CONSTASCII_STRINGPARAM("<value"));
-                if (name.getLength() != 0) {
+            writeData(handle, RTL_CONSTASCII_STRINGPARAM("<value"));
+            if (name.getLength() != 0) {
+                writeData(handle, RTL_CONSTASCII_STRINGPARAM(" xml:lang=\""));
+                writeAttributeValue(handle, name);
+                writeData(handle, RTL_CONSTASCII_STRINGPARAM("\""));
+            }
+            Type type = dynamic_cast< LocalizedPropertyNode * >(parent.get())->
+                getType();
+            css::uno::Any value(
+                dynamic_cast< LocalizedValueNode * >(node.get())->getValue());
+            if (type == TYPE_ANY) {
+                type = mapType(value);
+                if (type != TYPE_ERROR) { // TODO
                     writeData(
-                        handle, RTL_CONSTASCII_STRINGPARAM(" xml:lang=\""));
-                    writeAttributeValue(handle, name);
+                        handle, RTL_CONSTASCII_STRINGPARAM(" oor:type=\""));
+                    writeData(
+                        handle, typeNames[type].begin, typeNames[type].length);
                     writeData(handle, RTL_CONSTASCII_STRINGPARAM("\""));
                 }
-                if (locval->isRemoved()) {
-                    writeData(
-                        handle,
-                        RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"remove\"/>"));
-                } else {
-                    Type type = dynamic_cast< LocalizedPropertyNode * >(
-                        parent.get())->getType();
-                    if (type == TYPE_ANY) {
-                        type = mapType(locval->getValue());
-                        if (type != TYPE_ERROR) { // TODO
-                            writeData(
-                                handle,
-                                RTL_CONSTASCII_STRINGPARAM(" oor:type=\""));
-                            writeData(
-                                handle,
-                                typeNames[type].begin, typeNames[type].length);
-                            writeData(handle, RTL_CONSTASCII_STRINGPARAM("\""));
-                        }
-                    }
-                    writeValue(handle, type, locval->getValue());
-                }
             }
+            writeValue(handle, type, value);
         }
         break;
     case Node::KIND_GROUP:
     case Node::KIND_SET:
-        {
-            writeData(handle, RTL_CONSTASCII_STRINGPARAM("<node oor:name=\""));
-            writeAttributeValue(handle, name);
-            if (node->getTemplateName().getLength() != 0) { // set member
-                writeData(
-                    handle,
-                    RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"replace"));
-            }
-            writeData(handle, RTL_CONSTASCII_STRINGPARAM("\">"));
-            for (NodeMap::iterator i(node->getMembers().begin());
-                 i != node->getMembers().end(); ++i)
-            {
-                if (!i->second->isRemoved()) {
-                    writeNode(handle, node, i->first, i->second, false);
-                }
-            }
-            writeData(handle, RTL_CONSTASCII_STRINGPARAM("</node>"));
+        writeData(handle, RTL_CONSTASCII_STRINGPARAM("<node oor:name=\""));
+        writeAttributeValue(handle, name);
+        if (node->getTemplateName().getLength() != 0) { // set member
+            writeData(
+                handle, RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"replace"));
         }
+        writeData(handle, RTL_CONSTASCII_STRINGPARAM("\">"));
+        for (NodeMap::iterator i(node->getMembers().begin());
+             i != node->getMembers().end(); ++i)
+        {
+            writeNode(handle, node, i->first, i->second);
+        }
+        writeData(handle, RTL_CONSTASCII_STRINGPARAM("</node>"));
         break;
     }
 }
@@ -512,17 +485,13 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
                 tmp.handle, RTL_CONSTASCII_STRINGPARAM("<item oor:path=\""));
             writeAttributeValue(tmp.handle, parentPath);
             writeData(tmp.handle, RTL_CONSTASCII_STRINGPARAM("\">"));
-            writeNode(tmp.handle, parent, name, node, true);
+            writeNode(tmp.handle, parent, name, node);
             writeData(tmp.handle, RTL_CONSTASCII_STRINGPARAM("</item>"));
             // It is never necessary to write the oor:mandatory attribute, as it
             // cannot be set via the UNO API.
         } else {
             parent = data.resolvePath(parentPath, 0, 0, 0, 0, 0);
-            NodeMap::iterator k(parent->getMembers().find(name));
-            if (k != parent->getMembers().end() &&
-                k->second->getLayer() == Data::NO_LAYER)
-            {
-                OSL_ASSERT(k->second->isRemoved());
+            if (parent->getMember(name).is()) {
                 writeData(
                     tmp.handle,
                     RTL_CONSTASCII_STRINGPARAM("<item oor:path=\""));

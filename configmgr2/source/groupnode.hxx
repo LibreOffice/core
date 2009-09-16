@@ -65,8 +65,6 @@ private:
 
     virtual void clear();
 
-    virtual rtl::Reference< Node > findMember(rtl::OUString const & name);
-
     bool extensible_;
     NodeMap members_;
     rtl::OUString templateName_;

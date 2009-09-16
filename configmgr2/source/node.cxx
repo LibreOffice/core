@@ -87,28 +87,16 @@ int Node::getFinalized() const {
     return finalized_;
 }
 
-void Node::remove(int layer) {
-    setLayer(layer);
-    removed_ = true;
-    clear();
-}
-
-bool Node::isRemoved() const {
-    return removed_;
-}
-
 rtl::Reference< Node > Node::getMember(rtl::OUString const & name) {
-    rtl::Reference< Node > node(findMember(name));
-    return node.is() && !node->isRemoved() ? node : rtl::Reference< Node >();
+    NodeMap & members = getMembers();
+    NodeMap::iterator i(members.find(name));
+    return i == members.end() ? rtl::Reference< Node >() : i->second;
 }
 
-Node::Node(int layer):
-    layer_(layer), finalized_(Data::NO_LAYER), removed_(false)
-{}
+Node::Node(int layer): layer_(layer), finalized_(Data::NO_LAYER) {}
 
 Node::Node(const Node & other):
-    SimpleReferenceObject(), layer_(other.layer_), finalized_(other.finalized_),
-    removed_(other.removed_)
+    SimpleReferenceObject(), layer_(other.layer_), finalized_(other.finalized_)
 {}
 
 Node::~Node() {}
@@ -117,11 +105,6 @@ void Node::clear() {}
 
 rtl::Reference< Node > Node::findMember(rtl::OUString const &) {
     return rtl::Reference< Node >();
-}
-
-void Node::resurrect(int layer) {
-    setLayer(layer);
-    removed_ = false;
 }
 
 }

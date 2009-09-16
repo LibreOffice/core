@@ -66,10 +66,6 @@ public:
 
     int getFinalized() const;
 
-    void remove(int layer);
-
-    bool isRemoved() const;
-
     rtl::Reference< Node > getMember(rtl::OUString const & name);
 
 protected:
@@ -83,11 +79,8 @@ protected:
 
     virtual rtl::Reference< Node > findMember(rtl::OUString const & name);
 
-    void resurrect(int layer);
-
     int layer_;
     int finalized_;
-    bool removed_;
 };
 
 }

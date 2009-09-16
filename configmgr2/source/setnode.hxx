@@ -73,8 +73,6 @@ private:
 
     virtual void clear();
 
-    virtual rtl::Reference< Node > findMember(rtl::OUString const & name);
-
     rtl::OUString defaultTemplateName_;
     std::vector< rtl::OUString > additionalTemplateNames_;
     NodeMap members_;

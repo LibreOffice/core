@@ -88,7 +88,7 @@ ChildAccess::ChildAccess(
     rtl::Reference< RootAccess > const & root,
     rtl::Reference< Access > const & parent, rtl::OUString const & name,
     rtl::Reference< Node > const & node):
-    root_(root), parent_(parent), name_(name), node_(node), modified_(false),
+    root_(root), parent_(parent), name_(name), node_(node),
     inTransaction_(false)
 {
     OSL_ASSERT(root.is() && parent.is() && node.is());
@@ -97,7 +97,7 @@ ChildAccess::ChildAccess(
 ChildAccess::ChildAccess(
     rtl::Reference< RootAccess > const & root,
     rtl::Reference< Node > const & node):
-    root_(root), node_(node), modified_(false), inTransaction_(false)
+    root_(root), node_(node), inTransaction_(false)
 {
     OSL_ASSERT(root.is() && node.is());
 }
@@ -203,16 +203,18 @@ void ChildAccess::unbind() throw () {
 }
 
 void ChildAccess::markAsModified() {
-    modified_ = true;
-    for (ChildAccess * p = this; p != 0 && p->parent_.is();
+    OSL_ASSERT(parent_ != 0);
+    parent_->modifiedChildren_[name_] = ModifiedChild(this, true);
+    for (ChildAccess * p = dynamic_cast< ChildAccess * >(parent_.get());
+         p != 0 && p->parent_.is();
          p = dynamic_cast< ChildAccess * >(p->parent_.get()))
     {
-        p->parent_->modifiedChildren_[p->name_] = p;
+        p->parent_->modifiedChildren_.insert(
+            HardChildMap::value_type(p->name_, ModifiedChild(p, false)));
     }
 }
 
 void ChildAccess::committed() {
-    modified_ = false;
     inTransaction_ = false;
 }
 

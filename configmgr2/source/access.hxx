@@ -168,8 +168,20 @@ protected:
     void commitChildChanges(bool valid);
 
 public: //TODO
-    typedef std::map< rtl::OUString, rtl::Reference< ChildAccess > >
-        HardChildMap;
+    struct ModifiedChild {
+        rtl::Reference< ChildAccess > child;
+        bool directlyModified;
+
+        inline ModifiedChild() {}
+
+        inline ModifiedChild(
+            rtl::Reference< ChildAccess > const & theChild,
+            bool theDirectlyModified):
+            child(theChild), directlyModified(theDirectlyModified)
+        {}
+    };
+
+    typedef std::map< rtl::OUString, ModifiedChild > HardChildMap;
 
     HardChildMap modifiedChildren_;
 
@@ -442,6 +454,9 @@ private:
     com::sun::star::beans::Property asProperty();
 
     void checkFinalized();
+
+    rtl::Reference< ChildAccess > getFreeSetMember(
+        com::sun::star::uno::Any const & value);
 
     typedef std::map< rtl::OUString, ChildAccess * > WeakChildMap;
 

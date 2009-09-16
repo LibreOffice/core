@@ -63,7 +63,7 @@ css::uno::Any LocalizedValueNode::getValue() const {
 }
 
 void LocalizedValueNode::setValue(int layer, css::uno::Any const & value) {
-    resurrect(layer);
+    setLayer(layer);
     value_ = value;
 }
 

@@ -473,7 +473,7 @@ void XcuParser::handleLocpropValue(
         //TODO: only allow if parent.op == OPERATION_FUSE
         //TODO: disallow removing when e.g. lang=""?
         if (i != locprop->getMembers().end()) {
-            i->second->remove(valueParser_.getLayer());
+            locprop->getMembers().erase(i);
         }
         state_.push(State());
         break;
@@ -544,9 +544,7 @@ void XcuParser::handleGroupProp(XmlReader & reader, GroupNode * group) {
     } else {
         switch (i->second->kind()) {
         case Node::KIND_PROPERTY:
-            handlePlainGroupProp(
-                reader, dynamic_cast< PropertyNode * >(i->second.get()), name,
-                type, op, finalized);
+            handlePlainGroupProp(reader, group, i, name, type, op, finalized);
             break;
         case Node::KIND_LOCALIZED_PROPERTY:
             handleLocalizedGroupProp(
@@ -617,9 +615,12 @@ void XcuParser::handleUnknownGroupProp(
 }
 
 void XcuParser::handlePlainGroupProp(
-    XmlReader const & reader, PropertyNode * property,
-    rtl::OUString const & name, Type type, Operation operation, bool finalized)
+    XmlReader const & reader, GroupNode * group,
+    NodeMap::iterator const & propertyIndex, rtl::OUString const & name,
+    Type type, Operation operation, bool finalized)
 {
+    PropertyNode * property = dynamic_cast< PropertyNode * >(
+        propertyIndex->second.get());
     if (property->getLayer() > valueParser_.getLayer()) {
         state_.push(State()); // ignored
         return;
@@ -659,7 +660,7 @@ void XcuParser::handlePlainGroupProp(
                  reader.getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
         }
-        property->remove(valueParser_.getLayer());
+        group->getMembers().erase(propertyIndex);
         state_.push(State()); // ignore children
         break;
     }
@@ -885,7 +886,7 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
     }
     switch (op) {
     case OPERATION_MODIFY:
-        if (i == set->getMembers().end() || i->second->isRemoved()) {
+        if (i == set->getMembers().end()) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
@@ -912,7 +913,7 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
         }
         break;
     case OPERATION_FUSE:
-        if (i == set->getMembers().end() || i->second->isRemoved()) {
+        if (i == set->getMembers().end()) {
             if (state_.top().locked || finalizedLayer < valueParser_.getLayer())
             {
                 state_.push(State()); // ignored
@@ -939,7 +940,7 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
             finalizedLayer >= valueParser_.getLayer() &&
             mandatoryLayer > valueParser_.getLayer())
         {
-            i->second->remove(valueParser_.getLayer());
+            set->getMembers().erase(i);
         }
         state_.push(State());
         break;

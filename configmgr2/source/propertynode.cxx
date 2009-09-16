@@ -71,7 +71,7 @@ css::uno::Any PropertyNode::getValue() const {
 }
 
 void PropertyNode::setValue(int layer, css::uno::Any const & value) {
-    resurrect(layer);
+    setLayer(layer);
     value_ = value;
 }
 

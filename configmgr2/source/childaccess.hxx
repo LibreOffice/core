@@ -117,8 +117,6 @@ public:
 
     void markAsModified();
 
-    bool isModified() const { return modified_; }
-
     bool isInTransaction() const { return inTransaction_; }
 
     void committed();
@@ -142,7 +140,6 @@ private:
     rtl::OUString name_;
     rtl::Reference< Node > node_;
     std::auto_ptr< com::sun::star::uno::Any > changedValue_;
-    bool modified_;
     bool inTransaction_;
         // to determine if a free node can be inserted underneath some root
 };

@@ -66,8 +66,6 @@ private:
 
     virtual void clear();
 
-    virtual rtl::Reference< Node > findMember(rtl::OUString const & name);
-
     Type type_;
     bool nillable_;
     NodeMap members_;
