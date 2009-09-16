@@ -78,43 +78,6 @@
 
 #define SC_DOUBLE_MAXVALUE  1.7e307
 
-
-#include <stdio.h>
-#include <string>
-#include <sys/time.h>
-
-namespace {
-
-class StackPrinter
-{
-public:
-    explicit StackPrinter(const char* msg) :
-        msMsg(msg)
-    {
-        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
-        mfStartTime = getTime();
-    }
-
-    ~StackPrinter()
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
-    }
-
-private:
-    double getTime() const
-    {
-        timeval tv;
-        gettimeofday(&tv, NULL);
-        return tv.tv_sec + tv.tv_usec / 1000000.0;
-    }
-
-    ::std::string msMsg;
-    double mfStartTime;
-};
-
-}
-
 IMPL_FIXEDMEMPOOL_NEWDEL( ScTokenStack, 8, 4 )
 IMPL_FIXEDMEMPOOL_NEWDEL( ScInterpreter, 32, 16 )
 
@@ -5662,7 +5625,6 @@ void ScInterpreter::ScSubTotal()
 
 ScDBQueryParamBase* ScInterpreter::GetDBParams( BOOL& rMissingField )
 {
-    StackPrinter __stack_printer__("ScInterpreter::GetDBParams");
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetDBParams" );
     BOOL bAllowMissingField = FALSE;
     if ( rMissingField )
@@ -5685,20 +5647,16 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( BOOL& rMissingField )
         switch (GetStackType())
         {
             case svDouble :
-                fprintf(stdout, "ScInterpreter::GetDBParams:   double\n");
                 nVal = ::rtl::math::approxFloor( GetDouble() );
-                fprintf(stdout, "ScInterpreter::GetDBParams:   value = %g\n", nVal);
                 if ( bAllowMissingField && nVal == 0.0 )
                     rMissingField = TRUE;   // fake missing parameter
                 break;
             case svString :
                 bByVal = FALSE;
                 aStr = GetString();
-                fprintf(stdout, "ScInterpreter::GetDBParams:   str = '%s'\n", rtl::OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr());
                 break;
             case svSingleRef :
                 {
-                    fprintf(stdout, "ScInterpreter::GetDBParams:   single ref\n");
                     ScAddress aAdr;
                     PopSingleRef( aAdr );
                     ScBaseCell* pCell = GetCell( aAdr );
@@ -5712,7 +5670,6 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( BOOL& rMissingField )
                 }
                 break;
             case svDoubleRef :
-                fprintf(stdout, "ScInterpreter::GetDBParams:   double ref\n");
                 if ( bAllowMissingField )
                 {   // fake missing parameter for old SO compatibility
                     bRangeFake = TRUE;
@@ -5725,7 +5682,6 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( BOOL& rMissingField )
                 }
                 break;
             case svMissing :
-                fprintf(stdout, "ScInterpreter::GetDBParams:   missing\n");
                 PopError();
                 if ( bAllowMissingField )
                     rMissingField = TRUE;
@@ -5733,7 +5689,6 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( BOOL& rMissingField )
                     SetError( errIllegalParameter );
                 break;
             default:
-                fprintf(stdout, "ScInterpreter::GetDBParams:   pop error (%d)\n", __LINE__);
                 PopError();
                 SetError( errIllegalParameter );
         }
@@ -5774,7 +5729,6 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( BOOL& rMissingField )
 
         if (pParam.get())
         {
-            fprintf(stdout, "ScInterpreter::GetDBParams:   query param created\n");
             // An allowed missing field parameter sets the result field
             // to any of the query fields, just to be able to return
             // some cell from the iterator.
@@ -5806,8 +5760,6 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( BOOL& rMissingField )
 
 void ScInterpreter::DBIterator( ScIterFunc eFunc )
 {
-    StackPrinter __stack_printer__("ScInterpreter::DBIterator");
-
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::DBIterator" );
     double nErg = 0.0;
     double fMem = 0.0;
@@ -5855,10 +5807,7 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
         SetError(aValue.mnError);
     }
     else
-    {
-        fprintf(stdout, "ScInterpreter::DBIterator:   dp params failed!\n");
         SetError( errIllegalParameter);
-    }
     switch( eFunc )
     {
         case ifCOUNT:   nErg = nCount; break;
@@ -5872,7 +5821,6 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
 
 void ScInterpreter::ScDBSum()
 {
-    StackPrinter __stack_printer__("ScInterpreter::ScDBSum");
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBSum" );
     DBIterator( ifSUM );
 }
@@ -5918,7 +5866,8 @@ void ScInterpreter::ScDBCount()
                 do
                 {
                     nCount++;
-                } while ( aValIter.GetNext(aValue) && !aValue.mnError );
+                }
+                while ( aValIter.GetNext(aValue) && !aValue.mnError );
             }
             SetError(aValue.mnError);
         }
@@ -5945,7 +5894,8 @@ void ScInterpreter::ScDBCount2()
             do
             {
                 nCount++;
-            } while ( aValIter.GetNext(aValue) && !aValue.mnError );
+            }
+            while ( aValIter.GetNext(aValue) && !aValue.mnError );
         }
         SetError(aValue.mnError);
         PushDouble( nCount );

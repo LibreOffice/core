@@ -53,42 +53,6 @@ using ::rtl::math::approxEqual;
 using ::std::vector;
 using ::rtl::OUString;
 
-#include <stdio.h>
-#include <string>
-#include <sys/time.h>
-
-namespace {
-
-class StackPrinter
-{
-public:
-    explicit StackPrinter(const char* msg) :
-        msMsg(msg)
-    {
-        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
-        mfStartTime = getTime();
-    }
-
-    ~StackPrinter()
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
-    }
-
-private:
-    double getTime() const
-    {
-        timeval tv;
-        gettimeofday(&tv, NULL);
-        return tv.tv_sec + tv.tv_usec / 1000000.0;
-    }
-
-    ::std::string msMsg;
-    double mfStartTime;
-};
-
-}
-
 // STATIC DATA -----------------------------------------------------------
 
 namespace {
@@ -783,7 +747,6 @@ bool lcl_isQueryByString(const ScQueryEntry& rEntry, const ScMatrix& rMat, SCSIZ
 
 bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScMatrix& rMat) const
 {
-//  StackPrinter __stack_printer__("ScDBQueryValueIterator:DataAccessMatrix::isValidQuery");
     SCSIZE nEntryCount = mpParam->GetEntryCount();
     vector<bool> aResults;
     aResults.reserve(nEntryCount);
@@ -816,7 +779,6 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
         SCSIZE nField = static_cast<SCSIZE>(rEntry.nField);
         if (lcl_isQueryByValue(rEntry, rMat, nField, nRow))
         {
-//          fprintf(stdout, "ScDBQueryValueIterator:DataAccessMatrix::isValidQuery:   by value\n");
             // By value
             double fMatVal = rMat.GetDouble(nField, nRow);
             bool bEqual = approxEqual(fMatVal, rEntry.nVal);
@@ -846,7 +808,6 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
         }
         else if (lcl_isQueryByString(rEntry, rMat, nField, nRow))
         {
-//          fprintf(stdout, "ScDBQueryValueIterator:DataAccessMatrix::isValidQuery:    by string\n");
             // By string
             do
             {

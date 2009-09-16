@@ -83,42 +83,6 @@ using ::std::auto_ptr;
 
 #define ADDIN_MAXSTRLEN 256
 
-#include <stdio.h>
-#include <string>
-#include <sys/time.h>
-
-namespace {
-
-class StackPrinter
-{
-public:
-    explicit StackPrinter(const char* msg) :
-        msMsg(msg)
-    {
-        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
-        mfStartTime = getTime();
-    }
-
-    ~StackPrinter()
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
-    }
-
-private:
-    double getTime() const
-    {
-        timeval tv;
-        gettimeofday(&tv, NULL);
-        return tv.tv_sec + tv.tv_usec / 1000000.0;
-    }
-
-    ::std::string msMsg;
-    double mfStartTime;
-};
-
-}
-
 // Implementiert in ui\miscdlgs\teamdlg.cxx
 
 extern void ShowTheTeam();
@@ -1111,16 +1075,13 @@ void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
         switch (p->GetType())
         {
             case svError:
-                fprintf(stdout, "ScInterpreter::PopDoubleRef:   error\n");
                 nGlobalError = p->GetError();
                 break;
             case svDoubleRef:
-                fprintf(stdout, "ScInterpreter::PopDoubleRef:   double ref\n");
                 DoubleRefToVars( static_cast<ScToken*>(p), rCol1, rRow1, rTab1, rCol2, rRow2, rTab2,
                         bDontCheckForTableOp);
                 break;
             default:
-                fprintf(stdout, "ScInterpreter::PopDoubleRef:   other\n");
                 SetError( errIllegalParameter);
         }
     }
