@@ -1393,7 +1393,6 @@ File gid_File_Oo_Office_Extendedcolorscheme_Xcs
     Name = "/registry/schema/org/openoffice/Office/ExtendedColorScheme.xcs";
 End
 
-
 File gid_File_Oo_Office_Paths_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -2249,6 +2248,17 @@ File gid_File_Registry_Spool_Oo_Accelerators_System_Xcu
     Name = "/registry/spool/org/openoffice/Office/Accelerators-macosx.xcu";
 #else
     Name = "/registry/spool/org/openoffice/Office/Accelerators-unxwnt.xcu";
+#endif
+End
+
+File gid_File_Oo_Office_Paths_System_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Paths;
+#ifdef MACOSX
+    Name = "/registry/spool/org/openoffice/Office/Paths-macosx.xcu";
+#else
+    Name = "/registry/spool/org/openoffice/Office/Paths-unxwnt.xcu";
 #endif
 End
 
