@@ -41,7 +41,7 @@ public abstract class TestBase extends ComplexTestCase {
 
     public final void test() throws Exception {
         TestServiceFactory factory = getTestServiceFactory();
-        TestService2 t = (TestService2) UnoRuntime.queryInterface(
+        TestService2 t = UnoRuntime.queryInterface(
             TestService2.class, factory.get());
         assure(t != null);
         assure(UnoRuntime.queryInterface(TestService1.class, t) == t);
@@ -122,12 +122,10 @@ public abstract class TestBase extends ComplexTestCase {
         t.setProp8Long(0);
         assure(t.getProp8Long() == 0);
         assure(t.fn2() == 2);
-        XTestService3 t3 = (XTestService3) UnoRuntime.queryInterface(
-            XTestService3.class, t);
+        XTestService3 t3 = UnoRuntime.queryInterface(XTestService3.class, t);
         assure(t3 != null);
         assure(t3.fn3() == 3);
-        XTestService4 t4 = (XTestService4) UnoRuntime.queryInterface(
-            XTestService4.class, t);
+        XTestService4 t4 = UnoRuntime.queryInterface(XTestService4.class, t);
         assure(t4 == null);
         WaitUnreachable u = new WaitUnreachable(t);
         t = null;
