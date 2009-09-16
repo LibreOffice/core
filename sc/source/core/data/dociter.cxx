@@ -648,6 +648,10 @@ bool ScDBQueryValueIterator::DataAccessMatrix::getCurrent(double& rValue, USHORT
     for ( ;mnCurRow < mnRows; ++mnCurRow)
     {
         const ScMatrix& rMat = *mpParam->mpMatrix;
+        if (rMat.IsEmpty(mpParam->mnField, mnCurRow))
+            // Don't take empty values into account.
+            continue;
+
         if (isValidQuery(mnCurRow, rMat))
         {
             rValue = rMat.GetDouble(mpParam->mnField, mnCurRow);
