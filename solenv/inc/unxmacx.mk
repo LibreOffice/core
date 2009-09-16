@@ -35,11 +35,6 @@
 
 # PROCESSOR_DEFINES and DLLPOSTFIX are defined in the particular platform file
 
-# DARWIN_VERSION holds the Darwin version in the format: 000000. For example,
-# if the Darwin version is 1.3.7, DARWIN_VERSION will be set to 010307.
-# Not used now, comment it out. Remove it after some time.
-# DARWIN_VERSION=$(shell -/bin/sh -c "uname -r | sed 's/\./ /g' | xargs printf %2.2i%2.2i%2.2i")
-
 ASM=
 AFLAGS=
 LINKOUTPUT_FILTER=
@@ -52,8 +47,15 @@ CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY $(PROCESSOR_DEFI
 CDEFS+=-DX_LOCALE
 .ENDIF
 .IF "$(GUIBASE)"=="aqua"
-# TODO: use MACOSX_DEPLOYMENT_TARGET instead of MAC_OS_X_VERSION_MIN_REQUIRED?
-CDEFS+=-DQUARTZ -DMAC_OS_X_VERSION_MIN_REQUIRED=1040
+# MAXOSX_DEPLOYMENT_TARGET : The minimum version required to run the build,
+# build can assume functions/libraries of that version to be available
+# unless you want to do runtime checks for 10.5 api, you also want to use the 10.4 sdk
+# (safer/easier than dealing with the MAC_OS_X_VERSION_MAX_ALLOWED macro)
+# http://developer.apple.com/technotes/tn2002/tn2064.html
+MACOSX_DEPLOYMENT_TARGET=10.4
+.EXPORT: MACOSX_DEPLOYMENT_TARGET
+CDEFS+=-DQUARTZ 
+EXTRA_CDEFS+=-isysroot /Developer/SDKs/MacOSX10.4u.sdk
 .ENDIF
 
 # Name of library where static data members are initialized
@@ -104,7 +106,10 @@ CFLAGSCC=-pipe -fsigned-char -malign-natural $(ARCH_FLAGS)
 # Normal Objective C compilation flags
 #OBJCFLAGS=-no-precomp
 OBJCFLAGS=-fobjc-exceptions
-OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
+# -x options generally ignored by ccache, tell it that it can cache
+# the result nevertheless
+CCACHE_SKIP:=$(eq,$(USE_CCACHE),YES --ccache-skip $(NULL))
+OBJCXXFLAGS:=$(CCACHE_SKIP) -x $(CCACHE_SKIP) objective-c++ -fobjc-exceptions
 
 # Comp Flags for files that need exceptions enabled (C and C++)
 CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
@@ -195,6 +200,8 @@ LINK*=$(CXX)
 LINKC*=$(CC)
 
 LINKFLAGSDEFS*=-Wl,-multiply_defined,suppress
+# assure backwards-compatibility
+EXTRA_LINKFLAGS+=-Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk
 # Very long install_names are needed so that install_name_tool -change later on
 # does not complain that "larger updated load commands do not fit:"
 LINKFLAGSRUNPATH_URELIB=-install_name '@__________________________________________________URELIB/$(@:f)'

@@ -676,6 +676,15 @@ AC_ARG_ENABLE(check-only,
  
                           Usage: --enable-check-only=yes
 ],,)
+AC_ARG_ENABLE(ccache-skip,
+[[  --enable-ccache-skip    [default=auto] allow the use of --ccache-skip to 
+                          escape compiler flags that would otherwise prevent 
+                          caching of the result (currently used on Mac only)
+                          NOTE: requires patched version because of a bug in
+                          ccache (see issue 104567 for details and patch) 
+                          explicitly enable if your version of ccache doesn't 
+                          identify as version 2.4_OOo
+]],,enable_ccache_skip=auto)
 AC_ARG_WITH(lang,
 [  --with-lang             Use this option to build OpenOffice.org with
                           additional language support. English (US) is always
@@ -2586,6 +2595,55 @@ if test "$GCC" = "yes"; then
    else
       AC_MSG_RESULT([no])
    fi
+fi
+
+# ===================================================================
+# use --ccache-skip?
+# ===================================================================
+dnl used to escape compiler options for ccache that otherwise prevent 
+dnl caching of the results (like "-x objective-c++" for Mac)
+AC_MSG_CHECKING([whether we are allowed and able to use --ccache-skip])
+if test "$_os" != "Darwin" ; then
+   AC_MSG_RESULT([only used on Mac currently, skipping])
+elif test "$enable_ccache_skip" = "no" ; then
+   AC_MSG_RESULT([no - diabled explicitly])
+elif test "$enable_ccache_skip" = "yes" ; then
+   AC_MSG_RESULT([yes - enabled explicitly, skipping checks])
+   AC_SUBST([USE_CCACHE], [YES])
+elif test "$enable_ccache_skip" = "auto" ; then
+   # checking for ccache presence/version
+   AC_MSG_RESULT([probing...])
+   AC_PATH_PROG([CCACHE],[ccache],[not_found])
+   if test "$CCACHE" = "not_found" ; then
+      AC_MSG_NOTICE([not enabling --ccache-skip (ccache not found)])
+   else
+      # check ccache version 
+      AC_MSG_CHECKING([whether version of ccache is suitable])
+      CCACHE_VERSION=`"$CCACHE" -V | "$AWK" '/^ccache version/{print $3}'`
+      if test "$CCACHE_VERSION" = "2.4_OOo"; then
+         AC_MSG_RESULT([yes])
+         AC_MSG_CHECKING([whether ccache is actually used for the build])
+         AC_LANG_PUSH([C++])
+         save_CXXFLAGS=$CXXFLAGS
+         CXXFLAGS="$CXXFLAGS --ccache-skip -O2"
+         dnl an empty program will do, we're checking the compiler flags
+         AC_COMPILE_IFELSE(AC_LANG_PROGRAM([],[]), 
+            [use_ccache=yes], [use_ccache=no])
+         if test $use_ccache = yes ; then
+            AC_MSG_RESULT([yes, will enable --ccache-skip])
+            AC_SUBST([USE_CCACHE], [YES])
+         else
+            AC_MSG_RESULT([no, will not enable --ccache-skip])
+         fi
+         CXXFLAGS=$save_CXXFLAGS
+         AC_LANG_POP([C++])
+      else
+         AC_MSG_RESULT([no])
+         AC_MSG_NOTICE([ccache version $CCACHE_VERSION not accepted. See description for --enable-ccache-skip])
+      fi
+   fi
+else
+   AC_MSG_ERROR([invalid option to --enable-ccache-skip. Valid values are "auto", "yes" and "no"])
 fi
 
 dnl ===================================================================
