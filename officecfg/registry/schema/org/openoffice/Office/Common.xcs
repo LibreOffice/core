@@ -1657,10 +1657,11 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				</prop>
 				<prop oor:name="Temp" oor:type="xs:string">
 					<info>
+						<deprecated>Replaced by org.openoffice.Office.Paths/Temp</deprecated>
 						<author>MBA</author>
 						<desc>Specifies the base directory used by the Office to store temp files.</desc>
 					</info>
-					<value>$(temp)</value>
+					<value/>
 				</prop>
 				<prop oor:name="Template" oor:type="oor:string-list">
 					<info>

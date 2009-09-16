@@ -1231,9 +1231,20 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
     if ( !bResult && !IsReadOnly() )
     {
         // check whether the file is readonly in fs
+        // the check is only necessary if
         // do it only for loading, some contents still might have problems with this property, let them not affect the saving
         sal_Bool bContentReadonly = sal_False;
-        if ( bLoading )
+        if ( bLoading && ::utl::LocalFileHelper::IsLocalFile( aLogicName ) )
+        {
+            // let the stream be opened to check the possibility to open it for editing
+            GetMedium_Impl();
+        }
+
+        // "IsReadOnly" property does not allow to detect whether the file is readonly always
+        // so we try always to open the file for editing
+        // the file is readonly only in case the read-write stream can not be opened
+        SFX_ITEMSET_ARG( pSet, pWriteStreamItem, SfxUnoAnyItem, SID_STREAM, sal_False);
+        if ( bLoading && !pWriteStreamItem )
         {
             try
             {
@@ -1244,11 +1255,12 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
             {}
         }
 
+        // do further checks only if the file not readonly in fs
         if ( !bContentReadonly )
         {
+            // the special file locking should be used only for file URLs
             if ( ::utl::LocalFileHelper::IsLocalFile( aLogicName ) )
             {
-                // the special file locking should be used only for file URLs
 
                 // in case of storing the document should request the output before locking
                 if ( bLoading )
