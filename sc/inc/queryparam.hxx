@@ -34,6 +34,8 @@
 #include "global.hxx"
 #include "scmatrix.hxx"
 
+struct ScDBQueryParamInternal;
+
 struct ScQueryParamBase
 {
     bool            bHasHeader;
@@ -86,11 +88,13 @@ struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamT
 
     ScQueryParam();
     ScQueryParam( const ScQueryParam& r );
+    ScQueryParam( const ScDBQueryParamInternal& r );
     virtual ~ScQueryParam();
 
     ScQueryParam&   operator=   ( const ScQueryParam& r );
     BOOL            operator==  ( const ScQueryParam& rOther ) const;
-    void            Clear       ();
+    void            Clear();
+    void            ClearDestParams();
     void            MoveToDest();
 };
 

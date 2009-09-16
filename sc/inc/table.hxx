@@ -76,7 +76,7 @@ struct RowInfo;
 struct ScFunctionData;
 struct ScLineFlags;
 class CollatorWrapper;
-struct ScDBQueryParamInternal;
+
 
 class ScTable
 {
@@ -171,8 +171,6 @@ friend class ScAttrRectIterator;
 
 
 public:
-    struct QueryParam;
-
                 ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
                             BOOL bColInfo = TRUE, BOOL bRowInfo = TRUE );
                 ~ScTable();
@@ -630,9 +628,6 @@ public:
 
     void        Sort(const ScSortParam& rSortParam, BOOL bKeepQuery);
     BOOL        ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam,
-                    BOOL* pSpecial = NULL, ScBaseCell* pCell = NULL,
-                    BOOL* pbTestEqualCondition = NULL );
-    BOOL        ValidQuery(SCROW nRow, const ScDBQueryParamInternal& rQueryParam,
                     BOOL* pSpecial = NULL, ScBaseCell* pCell = NULL,
                     BOOL* pbTestEqualCondition = NULL );
     void        TopTenQuery( ScQueryParam& );

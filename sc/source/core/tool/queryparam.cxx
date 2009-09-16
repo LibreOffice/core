@@ -181,6 +181,17 @@ ScQueryParam::ScQueryParam( const ScQueryParam& r ) :
 {
 }
 
+ScQueryParam::ScQueryParam( const ScDBQueryParamInternal& r ) :
+    ScQueryParamBase(r),
+    ScQueryParamTable(r),
+    bDestPers(true),
+    nDestTab(0),
+    nDestCol(0),
+    nDestRow(0)
+{
+}
+
+
 //------------------------------------------------------------------------
 
 ScQueryParam::~ScQueryParam()
@@ -191,16 +202,25 @@ ScQueryParam::~ScQueryParam()
 
 void ScQueryParam::Clear()
 {
-    nCol1=nCol2=nDestCol = 0;
-    nRow1=nRow2=nDestRow = 0;
-    nDestTab = 0;
+    nCol1=nCol2 = 0;
+    nRow1=nRow2 = 0;
     nTab = SCTAB_MAX;
     bHasHeader = bCaseSens = bRegExp = bMixedComparison = FALSE;
-    bInplace = bByRow = bDuplicate = bDestPers = TRUE;
+    bInplace = bByRow = bDuplicate = TRUE;
 
     Resize( MAXQUERY );
     for (USHORT i=0; i<MAXQUERY; i++)
         pEntries[i].Clear();
+
+    ClearDestParams();
+}
+
+void ScQueryParam::ClearDestParams()
+{
+    bDestPers = true;
+    nDestTab = 0;
+    nDestCol = 0;
+    nDestRow = 0;
 }
 
 //------------------------------------------------------------------------

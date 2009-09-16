@@ -5844,7 +5844,6 @@ void ScInterpreter::ScDBCount()
             // have to live with it until we reimplement the iterators to also
             // return empty cells, which would mean to adapt all callers of
             // iterators.
-#if 0
             ScDBQueryParamInternal* p = static_cast<ScDBQueryParamInternal*>(pQueryParam.get());
             SCTAB nTab = p->nTab;
             ScQueryCellIterator aCellIter( pDok, nTab, *p);
@@ -5855,7 +5854,6 @@ void ScInterpreter::ScDBCount()
                     nCount++;
                 } while ( aCellIter.GetNext() );
             }
-#endif
         }
         else
         {   // count only matching records with a value in the "result" field
