@@ -44,6 +44,7 @@ EXTRALIBPATHS1+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL1VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL1VERSIONOBJ:b).h
@@ -58,6 +59,7 @@ $(MISC)/$(SHL1VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL1VERSIO
 
 .INIT : $(SHL1VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -581,6 +583,7 @@ EXTRALIBPATHS2+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL2VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL2TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL2VERSIONOBJ:b).h
@@ -595,6 +598,7 @@ $(MISC)/$(SHL2VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL2VERSIO
 
 .INIT : $(SHL2VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -1118,6 +1122,7 @@ EXTRALIBPATHS3+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL3VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL3VERSIONOBJ:b).h
@@ -1132,6 +1137,7 @@ $(MISC)/$(SHL3VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL3VERSIO
 
 .INIT : $(SHL3VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -1655,6 +1661,7 @@ EXTRALIBPATHS4+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL4VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL4TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL4VERSIONOBJ:b).h
@@ -1669,6 +1676,7 @@ $(MISC)/$(SHL4VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL4VERSIO
 
 .INIT : $(SHL4VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -2192,6 +2200,7 @@ EXTRALIBPATHS5+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL5VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL5VERSIONOBJ:b).h
@@ -2206,6 +2215,7 @@ $(MISC)/$(SHL5VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL5VERSIO
 
 .INIT : $(SHL5VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -2729,6 +2739,7 @@ EXTRALIBPATHS6+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL6VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL6TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL6VERSIONOBJ:b).h
@@ -2743,6 +2754,7 @@ $(MISC)/$(SHL6VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL6VERSIO
 
 .INIT : $(SHL6VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -3266,6 +3278,7 @@ EXTRALIBPATHS7+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL7VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL7VERSIONOBJ:b).h
@@ -3280,6 +3293,7 @@ $(MISC)/$(SHL7VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL7VERSIO
 
 .INIT : $(SHL7VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -3803,6 +3817,7 @@ EXTRALIBPATHS8+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL8VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL8TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL8VERSIONOBJ:b).h
@@ -3817,6 +3832,7 @@ $(MISC)/$(SHL8VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL8VERSIO
 
 .INIT : $(SHL8VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -4340,6 +4356,7 @@ EXTRALIBPATHS9+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL9VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL9VERSIONOBJ:b).h
@@ -4354,6 +4371,7 @@ $(MISC)/$(SHL9VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL9VERSIO
 
 .INIT : $(SHL9VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -4877,6 +4895,7 @@ EXTRALIBPATHS10+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL10VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL10TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL10VERSIONOBJ:b).h
@@ -4891,6 +4910,7 @@ $(MISC)/$(SHL10VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL10VERS
 
 .INIT : $(SHL10VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"

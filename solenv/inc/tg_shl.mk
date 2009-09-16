@@ -77,6 +77,7 @@ EXTRALIBPATHS$(TNR)+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL$(TNR)VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL$(TNR)VERSIONOBJ:b).h
@@ -91,6 +92,7 @@ $(MISC)/$(SHL$(TNR)VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL$(
 
 .INIT : $(SHL$(TNR)VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
