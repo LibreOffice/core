@@ -1073,12 +1073,10 @@ ScDBRangeBase* ScInterpreter::PopDoubleRef()
     switch (p->GetType())
     {
         case svError:
-            fprintf(stdout, "ScInterpreter::PopDoubleRef:   error\n");
             nGlobalError = p->GetError();
         break;
         case svDoubleRef:
         {
-            fprintf(stdout, "ScInterpreter::PopDoubleRef:   double ref\n");
             SCCOL nCol1, nCol2;
             SCROW nRow1, nRow2;
             SCTAB nTab1, nTab2;
@@ -1091,13 +1089,11 @@ ScDBRangeBase* ScInterpreter::PopDoubleRef()
         break;
         case svMatrix:
         {
-            fprintf(stdout, "ScInterpreter::PopDoubleRef:   matrix\n");
             ScMatrixRef pMat = static_cast<ScToken*>(p)->GetMatrix();
             return new ScDBExternalRange(pDok, pMat);
         }
         break;
         default:
-            fprintf(stdout, "ScInterpreter::PopDoubleRef:   other\n");
             SetError( errIllegalParameter);
     }
     return NULL;
@@ -3073,7 +3069,6 @@ void ScInterpreter::ScColRowNameAuto()
 
 void ScInterpreter::ScExternalRef()
 {
-    StackPrinter __stack_printer__("ScInterpreter::ScExternalRef");
     ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
     const String* pFile = pRefMgr->getExternalFileName(pCur->GetIndex());
     if (!pFile)
@@ -3083,7 +3078,6 @@ void ScInterpreter::ScExternalRef()
     {
         case svExternalSingleRef:
         {
-            fprintf(stdout, "ScInterpreter::ScExternalRef:   single ref\n");
             ScSingleRefData aData(static_cast<const ScToken*>(pCur)->GetSingleRef());
             if (aData.IsTabRel())
             {
@@ -3101,7 +3095,6 @@ void ScInterpreter::ScExternalRef()
                 break;
 
             PushTempToken( *xNew);      // push a clone
-            fprintf(stdout, "ScInterpreter::ScExternalRef:   token pushed\n");
 
             if (aFmt.mbIsSet)
             {
@@ -3113,7 +3106,6 @@ void ScInterpreter::ScExternalRef()
         //break;    // unreachable, prevent compiler warning
         case svExternalDoubleRef:
         {
-            fprintf(stdout, "ScInterpreter::ScExternalRef:   double ref\n");
             ScComplexRefData aData(static_cast<const ScToken*>(pCur)->GetDoubleRef());
             if (aData.Ref1.IsTabRel() || aData.Ref2.IsTabRel())
             {
@@ -3142,7 +3134,6 @@ void ScInterpreter::ScExternalRef()
             }
 
             PushMatrix(p->GetMatrix());
-            fprintf(stdout, "ScInterpreter::ScExternalRef:   matrix pushed\n");
             return;
         }
         //break;    // unreachable, prevent compiler warning
