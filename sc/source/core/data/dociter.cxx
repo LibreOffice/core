@@ -669,8 +669,6 @@ ScDBQueryDataIterator::DataAccessMatrix::~DataAccessMatrix()
 
 bool ScDBQueryDataIterator::DataAccessMatrix::getCurrent(Value& rValue)
 {
-    rValue.mnError = 0;  // There is never a cell error in matrix backends.
-
     // Starting from row == mnCurRow, get the first row that satisfies all the
     // query parameters.
     for ( ;mnCurRow < mnRows; ++mnCurRow)
@@ -689,6 +687,7 @@ bool ScDBQueryDataIterator::DataAccessMatrix::getCurrent(Value& rValue)
             rValue.maString = rMat.GetString(mpParam->mnField, mnCurRow);
             rValue.mfValue = rMat.GetDouble(mpParam->mnField, mnCurRow);
             rValue.mbIsNumber = !bIsStrVal;
+            rValue.mnError = 0;
             return true;
         }
     }
