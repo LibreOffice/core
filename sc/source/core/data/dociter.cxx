@@ -636,14 +636,14 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
                         }
                         break;
                     case CELLTYPE_STRING:
-                        if (mpParent->mbCountString)
+                        if (mpParam->mbSkipString)
+                            ++nRow;
+                        else
                         {
                             rValue.mfValue = 0.0;
                             rValue.mnError = 0;
                             return true;
                         }
-                        else
-                            ++nRow;
                         break;
                     default:
                         nRow++;
@@ -704,7 +704,7 @@ bool ScDBQueryDataIterator::DataAccessMatrix::getCurrent(Value& rValue)
             // Don't take empty values into account.
             continue;
 
-        if (rMat.IsString(mpParam->mnField, mnCurRow) && !mpParent->mbCountString)
+        if (rMat.IsString(mpParam->mnField, mnCurRow) && mpParam->mbSkipString)
             continue;
 
         if (isValidQuery(mnCurRow, rMat))
@@ -922,8 +922,7 @@ ScDBQueryDataIterator::Value::Value() :
 // ----------------------------------------------------------------------------
 
 ScDBQueryDataIterator::ScDBQueryDataIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam) :
-    mpParam (pParam),
-    mbCountString(false)
+    mpParam (pParam)
 {
     switch (mpParam->GetType())
     {
@@ -954,11 +953,6 @@ bool ScDBQueryDataIterator::GetFirst(Value& rValue)
 bool ScDBQueryDataIterator::GetNext(Value& rValue)
 {
     return mpData->getNext(rValue);
-}
-
-void ScDBQueryDataIterator::SetCountString(bool b)
-{
-    mbCountString = b;
 }
 
 // ============================================================================

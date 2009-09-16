@@ -203,8 +203,6 @@ private:
     ::std::auto_ptr<ScDBQueryParamBase> mpParam;
     ::std::auto_ptr<DataAccess>         mpData;
 
-    bool                                mbCountString;
-
     bool            GetThis(Value& rValue);
 
 public:
@@ -213,8 +211,6 @@ public:
     bool            GetFirst(Value& rValue);
     /// Does NOT reset rValue if no value found!
     bool            GetNext(Value& rValue);
-
-    void            SetCountString(bool b);
 };
 
 // ============================================================================

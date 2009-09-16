@@ -101,6 +101,7 @@ struct ScDBQueryParamBase : public ScQueryParamBase
     enum DataType { INTERNAL, MATRIX };
 
     SCCOL   mnField;    /// the field in which the values are processed during iteration.
+    bool    mbSkipString;
 
     DataType        GetType() const;
 

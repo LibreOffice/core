@@ -5937,9 +5937,9 @@ void ScInterpreter::ScDBCount2()
     if (pQueryParam.get())
     {
         ULONG nCount = 0;
+        pQueryParam->mbSkipString = false;
         ScDBQueryDataIterator aValIter( pDok, pQueryParam.release());
         ScDBQueryDataIterator::Value aValue;
-        aValIter.SetCountString(true);
         if ( aValIter.GetFirst(aValue) && !aValue.mnError )
         {
             do

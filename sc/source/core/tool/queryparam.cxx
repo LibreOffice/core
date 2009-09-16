@@ -300,6 +300,7 @@ void ScQueryParam::MoveToDest()
 ScDBQueryParamBase::ScDBQueryParamBase(DataType eType) :
     ScQueryParamBase(),
     mnField(-1),
+    mbSkipString(true),
     meType(eType)
 {
 }
