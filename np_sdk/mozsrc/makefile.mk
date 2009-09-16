@@ -39,6 +39,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+.IF "$(L10N_framework)"==""
 JDKINCS=
 
 # --- Files --------------------------------------------------------
@@ -56,6 +57,7 @@ CDEFS+=-DNO_X11
 ALL: $(MOZFILES)
 
 # --- Targets ------------------------------------------------------
+.ENDIF 		# L10N_framework
 
 .INCLUDE :	target.mk
 

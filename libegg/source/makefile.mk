@@ -41,7 +41,7 @@ C_RESTRICTIONFLAGS*=-xc99=no_lib
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
-
+.IF "$(L10N_framework)"==""
 .IF "$(ENABLE_GTK)"!=""
 
 PKGCONFIG_MODULES=gtk+-2.0 gdk-2.0
@@ -66,5 +66,5 @@ SHL1LIBS=       $(SLB)$/eggtray.lib
 .ENDIF #	"$(ENABLE_GTK)"!=""
 
 # --- Targets ----------------------------------
-
+.ENDIF 		# L10N_framework
 .INCLUDE : target.mk
