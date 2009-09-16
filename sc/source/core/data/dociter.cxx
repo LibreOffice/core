@@ -51,7 +51,7 @@
 
 using ::rtl::math::approxEqual;
 using ::std::vector;
-
+using ::rtl::OUString;
 
 #include <stdio.h>
 #include <string>
@@ -90,6 +90,15 @@ private:
 }
 
 // STATIC DATA -----------------------------------------------------------
+
+namespace {
+
+void lcl_toUpper(OUString& rStr)
+{
+    rStr = ScGlobal::pCharClass->toUpper(rStr.trim(), 0, rStr.getLength());
+}
+
+}
 
 ScDocumentIterator::ScDocumentIterator( ScDocument* pDocument,
                             SCTAB nStartTable, SCTAB nEndTable ) :
@@ -636,12 +645,15 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
                         }
                         break;
                     case CELLTYPE_STRING:
+                    case CELLTYPE_EDIT:
                         if (mpParam->mbSkipString)
                             ++nRow;
                         else
                         {
+                            rValue.maString = pCell->GetStringData();
                             rValue.mfValue = 0.0;
                             rValue.mnError = 0;
+                            rValue.mbIsNumber = false;
                             return true;
                         }
                         break;
@@ -704,13 +716,15 @@ bool ScDBQueryDataIterator::DataAccessMatrix::getCurrent(Value& rValue)
             // Don't take empty values into account.
             continue;
 
-        if (rMat.IsString(mpParam->mnField, mnCurRow) && mpParam->mbSkipString)
+        bool bIsStrVal = rMat.IsString(mpParam->mnField, mnCurRow);
+        if (bIsStrVal && mpParam->mbSkipString)
             continue;
 
         if (isValidQuery(mnCurRow, rMat))
         {
+            rValue.maString = rMat.GetString(mpParam->mnField, mnCurRow);
             rValue.mfValue = rMat.GetDouble(mpParam->mnField, mnCurRow);
-            rValue.mbIsNumber = true;
+            rValue.mbIsNumber = !bIsStrVal;
             return true;
         }
     }
@@ -841,16 +855,19 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
 
                 // Equality check first.
 
-                const String& rStr = rMat.GetString(nField, nRow);
+                OUString aMatStr = rMat.GetString(nField, nRow);
+                lcl_toUpper(aMatStr);
+                OUString aQueryStr = *rEntry.pStr;
+                lcl_toUpper(aQueryStr);
                 bool bDone = false;
                 switch (rEntry.eOp)
                 {
                     case SC_EQUAL:
-                        bValid = rEntry.pStr->Equals(rStr);
+                        bValid = aMatStr.equals(aQueryStr);
                         bDone = true;
                     break;
                     case SC_NOT_EQUAL:
-                        bValid = !rEntry.pStr->Equals(rStr);
+                        bValid = !aMatStr.equals(aQueryStr);
                         bDone = true;
                     break;
                     default:
@@ -862,7 +879,7 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
 
                 // Unequality check using collator.
 
-                sal_Int32 nCompare = rCollator.compareString(rStr, *rEntry.pStr);
+                sal_Int32 nCompare = rCollator.compareString(aMatStr, aQueryStr);
                 switch (rEntry.eOp)
                 {
                     case SC_LESS :

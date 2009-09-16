@@ -1942,82 +1942,35 @@ void ScInterpreter::ScDBGet()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBGet" );
     BOOL bMissingField = FALSE;
     auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
-    if (pQueryParam.get())
+    if (!pQueryParam.get())
     {
-#if 1
-        ScDBQueryDataIterator aValIter(pDok, pQueryParam.release());
-
-#else
-        ScQueryParam* p = static_cast<ScQueryParam*>(pQueryParam.get());
-        SCTAB nTab = p->nTab;
-        ScBaseCell* pCell;
-        ScQueryCellIterator aCellIter(pDok, nTab, *p);
-        if ( (pCell = aCellIter.GetFirst()) != NULL )
-        {
-            if (aCellIter.GetNext())
-                PushIllegalArgument();
-            else
-            {
-                switch (pCell->GetCellType())
-                {
-                    case CELLTYPE_VALUE:
-                    {
-                        double rValue = ((ScValueCell*)pCell)->GetValue();
-                        if ( bCalcAsShown )
-                        {
-                            ULONG nFormat;
-                            nFormat = aCellIter.GetNumberFormat();
-                            rValue = pDok->RoundValueAsShown( rValue, nFormat );
-                        }
-                        PushDouble(rValue);
-                    }
-                    break;
-                    case CELLTYPE_STRING:
-                    {
-                        String rString;
-                        ((ScStringCell*)pCell)->GetString(rString);
-                        PushString(rString);
-                    }
-                    break;
-                    case CELLTYPE_EDIT:
-                    {
-                        String rString;
-                        ((ScEditCell*)pCell)->GetString(rString);
-                        PushString(rString);
-                    }
-                    break;
-                    case CELLTYPE_FORMULA:
-                    {
-                        USHORT rErr = ((ScFormulaCell*)pCell)->GetErrCode();
-                        if (rErr)
-                            PushError(rErr);
-                        else if (((ScFormulaCell*)pCell)->IsValue())
-                        {
-                            double rValue = ((ScFormulaCell*)pCell)->GetValue();
-                            PushDouble(rValue);
-                        }
-                        else
-                        {
-                            String rString;
-                            ((ScFormulaCell*)pCell)->GetString(rString);
-                            PushString(rString);
-                        }
-                    }
-                    break;
-                    case CELLTYPE_NONE:
-                    case CELLTYPE_NOTE:
-                    default:
-                        PushIllegalArgument();
-                    break;
-                }
-            }
-        }
-        else
-            PushNoValue();
-#endif
-    }
-    else
+        // Failed to create query param.
         PushIllegalParameter();
+        return;
+    }
+
+    pQueryParam->mbSkipString = false;
+    ScDBQueryDataIterator aValIter(pDok, pQueryParam.release());
+    ScDBQueryDataIterator::Value aValue;
+    if (!aValIter.GetFirst(aValue) || aValue.mnError)
+    {
+        // No match found.
+        PushNoValue();
+        return;
+    }
+
+    ScDBQueryDataIterator::Value aValNext;
+    if (aValIter.GetNext(aValNext) && !aValNext.mnError)
+    {
+        // There should be only one unique match.
+        PushIllegalArgument();
+        return;
+    }
+
+    if (aValue.mbIsNumber)
+        PushDouble(aValue.mfValue);
+    else
+        PushString(aValue.maString);
 }
 
 
