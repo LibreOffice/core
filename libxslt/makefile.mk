@@ -46,6 +46,8 @@ all:
 
 # --- Files --------------------------------------------------------
 
+.IF "$(L10N_framework)"==""
+
 .INCLUDE :	libxsltversion.mk
 
 LIBXSLTVERSION=$(LIBXSLT_MAJOR).$(LIBXSLT_MINOR).$(LIBXSLT_MICRO)
@@ -54,7 +56,6 @@ TARFILE_NAME=$(PRJNAME)-$(LIBXSLTVERSION)
 PATCH_FILES=$(TARFILE_NAME).patch $(TARFILE_NAME)_win_manifest.patch
 
 # This is only for UNX environment now
-
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 xslt_CC=$(CC)
@@ -144,7 +145,7 @@ OUT2BIN+=xslt-config
 .ENDIF
 
 # --- Targets ------------------------------------------------------
-
+.ENDIF 			# L10N_framework
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
