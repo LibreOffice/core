@@ -37,6 +37,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
+.IF "$(L10N_framework)"==""
 DLLPRE =
 
 SLOFILES= \
@@ -59,5 +60,6 @@ SHL1RPATH=      URELIB
 DEF1NAME=		$(SHL1TARGET)
 
 # --- Targets ------------------------------------------------------
+.ENDIF 		# L10N_framework
 
 .INCLUDE :	target.mk
