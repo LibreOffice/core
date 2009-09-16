@@ -281,6 +281,17 @@ bool ScDBRangeBase::fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBa
     return lcl_fillQueryEntries(pParam, pDBRef, this);
 }
 
+void ScDBRangeBase::fillQueryOptions(ScQueryParamBase* pParam)
+{
+    pParam->bHasHeader = true;
+    pParam->bByRow = true;
+    pParam->bInplace = true;
+    pParam->bCaseSens = false;
+    pParam->bRegExp = false;
+    pParam->bDuplicate = true;
+    pParam->bMixedComparison = false;
+}
+
 ScDocument* ScDBRangeBase::getDoc() const
 {
     return mpDoc;
@@ -444,12 +455,8 @@ ScDBQueryParamBase* ScDBInternalRange::createQueryParam(const ScDBRangeBase* pQu
     pParam->nCol2 = e.Col();
     pParam->nRow2 = e.Row();
     pParam->nTab  = s.Tab();
-    pParam->bHasHeader = TRUE;
-    pParam->bByRow = TRUE;
-    pParam->bInplace = TRUE;
-    pParam->bCaseSens = FALSE;
-    pParam->bRegExp = FALSE;
-    pParam->bDuplicate = TRUE;
+
+    fillQueryOptions(pParam.get());
 
     // Now construct the query entries from the query range.
     if (!pQueryRef->fillQueryEntries(pParam.get(), this))
@@ -545,13 +552,7 @@ ScDBQueryParamBase* ScDBExternalRange::createQueryParam(const ScDBRangeBase* pQu
 {
     auto_ptr<ScDBQueryParamMatrix> pParam(new ScDBQueryParamMatrix);
     pParam->mpMatrix = mpMatrix;
-
-    pParam->bHasHeader = TRUE;
-    pParam->bByRow = TRUE;
-    pParam->bInplace = TRUE;
-    pParam->bCaseSens = FALSE;
-    pParam->bRegExp = FALSE;
-    pParam->bDuplicate = TRUE;
+    fillQueryOptions(pParam.get());
 
     // Now construct the query entries from the query range.
     if (!pQueryRef->fillQueryEntries(pParam.get(), this))

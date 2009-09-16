@@ -88,6 +88,12 @@ protected:
     ScDBRangeBase(ScDocument* pDoc, RefType eType);
     ScDocument* getDoc() const;
 
+    /**
+     * Populate query options that are always the same for all database
+     * queries.
+     */
+    static void fillQueryOptions(ScQueryParamBase* pParam);
+
 private:
     ScDBRangeBase(); // disabled
 
