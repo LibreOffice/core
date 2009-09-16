@@ -208,7 +208,7 @@ TabPage  RID_PDF_TAB_GENER
         Pos = MAP_APPFONT ( 12 , 193 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
-        Text[ en-US ] = "~Export notes";
+        Text[ en-US ] = "~Export comments";
     };
     CheckBox CB_EXPORTEMPTYPAGES
     {
