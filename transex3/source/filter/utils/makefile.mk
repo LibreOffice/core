@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.9.98.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,50 +29,29 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
+PRJ = ..$/..$/..
+TARGET  = FCFGUtils
+PRJNAME = filter
+PACKAGE = com$/sun$/star$/filter$/config$/tools$/utils
 
-PRJNAME=goodies
-TARGET=eos2met
-TARGET2=eme
-DEPTARGET=veos2met
+# --- Settings -----------------------------------------------------
 
-# --- Settings -----------------------------------------------------------
+.INCLUDE: settings.mk
 
-.INCLUDE :  settings.mk
+#----- compile .java files -----------------------------------------
 
-# --- Allgemein ----------------------------------------------------------
 
-.IF "$(editdebug)"!="" || "$(EDITDEBUG)"!=""
-CDEFS+= -DEDITDEBUG
-.ENDIF
+JAVACLASSFILES  =   \
+                    $(CLASSDIR)$/$(PACKAGE)$/AnalyzeStartupLog.class              \
+                    $(CLASSDIR)$/$(PACKAGE)$/ConfigHelper.class                   \
+                    $(CLASSDIR)$/$(PACKAGE)$/Logger.class                         \
+                    $(CLASSDIR)$/$(PACKAGE)$/FileHelper.class                     \
+                    $(CLASSDIR)$/$(PACKAGE)$/MalformedCommandLineException.class  \
+                    $(CLASSDIR)$/$(PACKAGE)$/Cache.class                          \
+                    $(CLASSDIR)$/$(PACKAGE)$/XMLHelper.class
 
-SRS1NAME=$(TARGET)
-SRC1FILES= 	dlgeos2.src	\
-            eos2mstr.src
-.IF "$(L10N_framework)"==""
-SLOFILES =  $(SLO)$/eos2met.obj	\
-            $(SLO)$/dlgeos2.obj
-.ENDIF
-# ==========================================================================
+MAXLINELENGTH   =   100000
 
-RESLIB1NAME=$(TARGET2)
-RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
-.IF "$(L10N_framework)"==""
-SHL1TARGET=     eme$(DLLPOSTFIX)
-SHL1IMPLIB=     eos2met
-SHL1STDLIBS=    $(TOOLSLIB) $(VCLLIB) $(SVTOOLLIB) $(CPPULIB) $(SALLIB)
-
-SHL1LIBS=       $(SLB)$/eos2met.lib
-.IF "$(GUI)" != "UNX"
-.IF "$(COM)" != "GCC"
-SHL1OBJS=       $(SLO)$/eos2met.obj
-.ENDIF
-.ENDIF
-
-SHL1VERSIONMAP=exports.map
-SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
-DEF1NAME=$(SHL1TARGET)
-.ENDIF
-# ==========================================================================
+# --- targets -----------------------------------------------------
 
 .INCLUDE :  target.mk
