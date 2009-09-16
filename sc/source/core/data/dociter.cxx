@@ -52,6 +52,43 @@
 using ::rtl::math::approxEqual;
 using ::std::vector;
 
+
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+
+namespace {
+
+class StackPrinter
+{
+public:
+    explicit StackPrinter(const char* msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~StackPrinter()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
+
 // STATIC DATA -----------------------------------------------------------
 
 ScDocumentIterator::ScDocumentIterator( ScDocument* pDocument,
@@ -527,7 +564,7 @@ ScDBQueryValueIterator::DataAccessInternal::~DataAccessInternal()
 {
 }
 
-bool ScDBQueryValueIterator::DataAccessInternal::getCurrent(double& rValue, USHORT& rErr)
+bool ScDBQueryValueIterator::DataAccessInternal::getCurrent(Value& rValue)
 {
     ScColumn* pCol = &(mpDoc->pTab[nTab])->aCol[nCol];
     SCCOLROW nFirstQueryField = mpParam->GetEntry(0).nField;
@@ -535,7 +572,7 @@ bool ScDBQueryValueIterator::DataAccessInternal::getCurrent(double& rValue, USHO
     {
         if ( nRow > mpParam->nRow2 )
         {
-            rErr = 0;
+            rValue.mnError = 0;
             return false;
 //          nRow = mpParam->nRow1;
 //          if (mpParam->bHasHeader)
@@ -568,16 +605,17 @@ bool ScDBQueryValueIterator::DataAccessInternal::getCurrent(double& rValue, USHO
                 {
                     case CELLTYPE_VALUE:
                         {
-                            rValue = ((ScValueCell*)pCell)->GetValue();
+                            rValue.mfValue = ((ScValueCell*)pCell)->GetValue();
+                            rValue.mbIsNumber = true;
                             if ( bCalcAsShown )
                             {
                                 lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
                                     nAttrEndRow, pCol->pAttrArray, nRow, mpDoc );
-                                rValue = mpDoc->RoundValueAsShown( rValue, nNumFormat );
+                                rValue.mfValue = mpDoc->RoundValueAsShown( rValue.mfValue, nNumFormat );
                             }
                             nNumFmtType = NUMBERFORMAT_NUMBER;
                             nNumFmtIndex = 0;
-                            rErr = 0;
+                            rValue.mnError = 0;
                             return TRUE;        // gefunden
                         }
 //                        break;
@@ -585,11 +623,12 @@ bool ScDBQueryValueIterator::DataAccessInternal::getCurrent(double& rValue, USHO
                         {
                             if (((ScFormulaCell*)pCell)->IsValue())
                             {
-                                rValue = ((ScFormulaCell*)pCell)->GetValue();
+                                rValue.mfValue = ((ScFormulaCell*)pCell)->GetValue();
+                                rValue.mbIsNumber = true;
                                 mpDoc->GetNumberFormatInfo( nNumFmtType,
                                     nNumFmtIndex, ScAddress( nCol, nRow, nTab ),
                                     pCell );
-                                rErr = ((ScFormulaCell*)pCell)->GetErrCode();
+                                rValue.mnError = ((ScFormulaCell*)pCell)->GetErrCode();
                                 return TRUE;    // gefunden
                             }
                             else
@@ -599,8 +638,8 @@ bool ScDBQueryValueIterator::DataAccessInternal::getCurrent(double& rValue, USHO
                     case CELLTYPE_STRING:
                         if (mpParent->mbCountString)
                         {
-                            rValue = 0.0;
-                            rErr = 0;
+                            rValue.mfValue = 0.0;
+                            rValue.mnError = 0;
                             return true;
                         }
                         else
@@ -620,20 +659,20 @@ bool ScDBQueryValueIterator::DataAccessInternal::getCurrent(double& rValue, USHO
     return false;
 }
 
-bool ScDBQueryValueIterator::DataAccessInternal::getFirst(double& rValue, USHORT& rErr)
+bool ScDBQueryValueIterator::DataAccessInternal::getFirst(Value& rValue)
 {
     if (mpParam->bHasHeader)
         nRow++;
 //  nColRow = 0;
     ScColumn* pCol = &(mpDoc->pTab[nTab])->aCol[nCol];
     pCol->Search( nRow, nColRow );
-    return getCurrent(rValue, rErr);
+    return getCurrent(rValue);
 }
 
-bool ScDBQueryValueIterator::DataAccessInternal::getNext(double& rValue, USHORT& rErr)
+bool ScDBQueryValueIterator::DataAccessInternal::getNext(Value& rValue)
 {
     ++nRow;
-    return getCurrent(rValue, rErr);
+    return getCurrent(rValue);
 }
 
 // ----------------------------------------------------------------------------
@@ -652,9 +691,9 @@ ScDBQueryValueIterator::DataAccessMatrix::~DataAccessMatrix()
 {
 }
 
-bool ScDBQueryValueIterator::DataAccessMatrix::getCurrent(double& rValue, USHORT& rErr)
+bool ScDBQueryValueIterator::DataAccessMatrix::getCurrent(Value& rValue)
 {
-    rErr = 0; // There is never a cell error in matrix backends.
+    rValue.mnError = 0;  // There is never a cell error in matrix backends.
 
     // Starting from row == mnCurRow, get the first row that satisfies all the
     // query parameters.
@@ -670,23 +709,24 @@ bool ScDBQueryValueIterator::DataAccessMatrix::getCurrent(double& rValue, USHORT
 
         if (isValidQuery(mnCurRow, rMat))
         {
-            rValue = rMat.GetDouble(mpParam->mnField, mnCurRow);
+            rValue.mfValue = rMat.GetDouble(mpParam->mnField, mnCurRow);
+            rValue.mbIsNumber = true;
             return true;
         }
     }
     return false;
 }
 
-bool ScDBQueryValueIterator::DataAccessMatrix::getFirst(double& rValue, USHORT& rErr)
+bool ScDBQueryValueIterator::DataAccessMatrix::getFirst(Value& rValue)
 {
     mnCurRow = mpParam->bHasHeader ? 1 : 0;
-    return getCurrent(rValue, rErr);
+    return getCurrent(rValue);
 }
 
-bool ScDBQueryValueIterator::DataAccessMatrix::getNext(double& rValue, USHORT& rErr)
+bool ScDBQueryValueIterator::DataAccessMatrix::getNext(Value& rValue)
 {
     ++mnCurRow;
-    return getCurrent(rValue, rErr);
+    return getCurrent(rValue);
 }
 
 namespace {
@@ -729,6 +769,7 @@ bool lcl_isQueryByString(const ScQueryEntry& rEntry, const ScMatrix& rMat, SCSIZ
 
 bool ScDBQueryValueIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScMatrix& rMat) const
 {
+//  StackPrinter __stack_printer__("ScDBQueryValueIterator:DataAccessMatrix::isValidQuery");
     SCSIZE nEntryCount = mpParam->GetEntryCount();
     vector<bool> aResults;
     aResults.reserve(nEntryCount);
@@ -761,6 +802,7 @@ bool ScDBQueryValueIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const Sc
         SCSIZE nField = static_cast<SCSIZE>(rEntry.nField);
         if (lcl_isQueryByValue(rEntry, rMat, nField, nRow))
         {
+//          fprintf(stdout, "ScDBQueryValueIterator:DataAccessMatrix::isValidQuery:   by value\n");
             // By value
             double fMatVal = rMat.GetDouble(nField, nRow);
             bool bEqual = approxEqual(fMatVal, rEntry.nVal);
@@ -790,6 +832,7 @@ bool ScDBQueryValueIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const Sc
         }
         else if (lcl_isQueryByString(rEntry, rMat, nField, nRow))
         {
+//          fprintf(stdout, "ScDBQueryValueIterator:DataAccessMatrix::isValidQuery:    by string\n");
             // By string
             do
             {
@@ -870,6 +913,14 @@ bool ScDBQueryValueIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const Sc
 
 // ----------------------------------------------------------------------------
 
+ScDBQueryValueIterator::Value::Value() :
+    mnError(0), mbIsNumber(true)
+{
+    ::rtl::math::setNan(&mfValue);
+}
+
+// ----------------------------------------------------------------------------
+
 ScDBQueryValueIterator::ScDBQueryValueIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam) :
     mpParam (pParam),
     mbCountString(false)
@@ -890,19 +941,19 @@ ScDBQueryValueIterator::ScDBQueryValueIterator(ScDocument* pDocument, ScDBQueryP
     }
 }
 
-bool ScDBQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
+bool ScDBQueryValueIterator::GetThis(Value& rValue)
 {
-    return mpData->getCurrent(rValue, rErr);
+    return mpData->getCurrent(rValue);
 }
 
-BOOL ScDBQueryValueIterator::GetFirst(double& rValue, USHORT& rErr)
+bool ScDBQueryValueIterator::GetFirst(Value& rValue)
 {
-    return mpData->getFirst(rValue, rErr);
+    return mpData->getFirst(rValue);
 }
 
-BOOL ScDBQueryValueIterator::GetNext(double& rValue, USHORT& rErr)
+bool ScDBQueryValueIterator::GetNext(Value& rValue)
 {
-    return mpData->getNext(rValue, rErr);
+    return mpData->getNext(rValue);
 }
 
 void ScDBQueryValueIterator::SetCountString(bool b)

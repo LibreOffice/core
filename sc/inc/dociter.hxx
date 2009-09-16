@@ -132,17 +132,28 @@ public:
 
 // ============================================================================
 
-class ScDBQueryValueIterator            // alle Zahlenwerte in einem Bereich durchgehen
+class ScDBQueryValueIterator
 {
+public:
+    struct Value
+    {
+        ::rtl::OUString maString;
+        double          mfValue;
+        sal_uInt16      mnError;
+        bool            mbIsNumber;
+
+        Value();
+    };
+
 private:
     class DataAccess
     {
     public:
         DataAccess(const ScDBQueryValueIterator* pParent);
         virtual ~DataAccess() = 0;
-        virtual bool getCurrent(double& rValue, USHORT& rErr) = 0;
-        virtual bool getFirst(double& rValue, USHORT& rErr) = 0;
-        virtual bool getNext(double& rValue, USHORT& rErr) = 0;
+        virtual bool getCurrent(Value& rValue) = 0;
+        virtual bool getFirst(Value& rValue) = 0;
+        virtual bool getNext(Value& rValue) = 0;
     protected:
         const ScDBQueryValueIterator* mpParent;
     };
@@ -152,15 +163,15 @@ private:
     public:
         DataAccessInternal(const ScDBQueryValueIterator* pParent, const ScDBQueryParamInternal* pParam, ScDocument* pDoc);
         virtual ~DataAccessInternal();
-        virtual bool getCurrent(double &rValue, USHORT &rErr);
-        virtual bool getFirst(double &rValue, USHORT &rErr);
-        virtual bool getNext(double& rValue, USHORT& rErr);
+        virtual bool getCurrent(Value& rValue);
+        virtual bool getFirst(Value& rValue);
+        virtual bool getNext(Value& rValue);
 
     private:
         const ScDBQueryParamInternal* mpParam;
         ScDocument*         mpDoc;
         const ScAttrArray*  pAttrArray;
-        ULONG               nNumFormat;     // fuer CalcAsShown
+        ULONG               nNumFormat;     // for CalcAsShown
         ULONG               nNumFmtIndex;
         SCCOL               nCol;
         SCROW               nRow;
@@ -176,9 +187,9 @@ private:
     public:
         DataAccessMatrix(const ScDBQueryValueIterator* pParent, const ScDBQueryParamMatrix* pParam);
         virtual ~DataAccessMatrix();
-        virtual bool getCurrent(double &rValue, USHORT &rErr);
-        virtual bool getFirst(double &rValue, USHORT &rErr);
-        virtual bool getNext(double &rValue, USHORT &rErr);
+        virtual bool getCurrent(Value& rValue);
+        virtual bool getFirst(Value& rValue);
+        virtual bool getNext(Value& rValue);
 
     private:
         bool isValidQuery(SCROW mnRow, const ScMatrix& rMat) const;
@@ -194,13 +205,14 @@ private:
 
     bool                                mbCountString;
 
-    bool            GetThis(double& rValue, USHORT& rErr);
+    bool            GetThis(Value& rValue);
+
 public:
                     ScDBQueryValueIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam);
     /// Does NOT reset rValue if no value found!
-    BOOL            GetFirst(double& rValue, USHORT& rErr);
+    bool            GetFirst(Value& rValue);
     /// Does NOT reset rValue if no value found!
-    BOOL            GetNext(double& rValue, USHORT& rErr);
+    bool            GetNext(Value& rValue);
 
     void            SetCountString(bool b);
 };

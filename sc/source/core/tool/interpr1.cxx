@@ -5817,10 +5817,9 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
     auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam.get())
     {
-        double nVal;
-        USHORT nErr = 0;
         ScDBQueryValueIterator aValIter(pDok, pQueryParam.release());
-        if ( aValIter.GetFirst(nVal, nErr) && !nErr )
+        ScDBQueryValueIterator::Value aValue;
+        if ( aValIter.GetFirst(aValue) && !aValue.mnError )
         {
             switch( eFunc )
             {
@@ -5836,24 +5835,24 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
                 {
                     case ifAVERAGE:
                     case ifSUM:
-                        if ( bNull && nVal != 0.0 )
+                        if ( bNull && aValue.mfValue != 0.0 )
                         {
                             bNull = FALSE;
-                            fMem = nVal;
+                            fMem = aValue.mfValue;
                         }
                         else
-                            nErg += nVal;
+                            nErg += aValue.mfValue;
                         break;
-                    case ifSUMSQ:   nErg += nVal * nVal; break;
-                    case ifPRODUCT: nErg *= nVal; break;
-                    case ifMAX:     if( nVal > nErg ) nErg = nVal; break;
-                    case ifMIN:     if( nVal < nErg ) nErg = nVal; break;
+                    case ifSUMSQ:   nErg += aValue.mfValue * aValue.mfValue; break;
+                    case ifPRODUCT: nErg *= aValue.mfValue; break;
+                    case ifMAX:     if( aValue.mfValue > nErg ) nErg = aValue.mfValue; break;
+                    case ifMIN:     if( aValue.mfValue < nErg ) nErg = aValue.mfValue; break;
                     default: ; // nothing
                 }
             }
-            while ( aValIter.GetNext(nVal, nErr) && !nErr );
+            while ( aValIter.GetNext(aValue) && !aValue.mnError );
         }
-        SetError(nErr);
+        SetError(aValue.mnError);
     }
     else
     {
@@ -5912,17 +5911,16 @@ void ScInterpreter::ScDBCount()
         }
         else
         {   // count only matching records with a value in the "result" field
-            double nVal;
-            USHORT nErr = 0;
             ScDBQueryValueIterator aValIter( pDok, pQueryParam.release());
-            if ( aValIter.GetFirst( nVal, nErr) && !nErr )
+            ScDBQueryValueIterator::Value aValue;
+            if ( aValIter.GetFirst(aValue) && !aValue.mnError )
             {
                 do
                 {
                     nCount++;
-                } while ( aValIter.GetNext( nVal, nErr) && !nErr );
+                } while ( aValIter.GetNext(aValue) && !aValue.mnError );
             }
-            SetError( nErr );
+            SetError(aValue.mnError);
         }
         PushDouble( nCount );
     }
@@ -5938,19 +5936,18 @@ void ScInterpreter::ScDBCount2()
     auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam.get())
     {
-        double nVal;
-        USHORT nErr = 0;
         ULONG nCount = 0;
         ScDBQueryValueIterator aValIter( pDok, pQueryParam.release());
+        ScDBQueryValueIterator::Value aValue;
         aValIter.SetCountString(true);
-        if ( aValIter.GetFirst( nVal, nErr) && !nErr )
+        if ( aValIter.GetFirst(aValue) && !aValue.mnError )
         {
             do
             {
                 nCount++;
-            } while ( aValIter.GetNext( nVal, nErr) && !nErr );
+            } while ( aValIter.GetNext(aValue) && !aValue.mnError );
         }
-        SetError( nErr );
+        SetError(aValue.mnError);
         PushDouble( nCount );
     }
     else
@@ -5999,20 +5996,19 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
     auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam.get())
     {
-        double fVal;
-        USHORT nErr;
         ScDBQueryValueIterator aValIter(pDok, pQueryParam.release());
-        if (aValIter.GetFirst(fVal, nErr) && !nErr)
+        ScDBQueryValueIterator::Value aValue;
+        if (aValIter.GetFirst(aValue) && !aValue.mnError)
         {
             do
             {
                 rValCount++;
-                values.push_back(fVal);
-                fSum += fVal;
+                values.push_back(aValue.mfValue);
+                fSum += aValue.mfValue;
             }
-            while ((nErr == 0) && aValIter.GetNext(fVal, nErr));
+            while ((aValue.mnError == 0) && aValIter.GetNext(aValue));
         }
-        SetError(nErr);
+        SetError(aValue.mnError);
     }
     else
         SetError( errIllegalParameter);

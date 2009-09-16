@@ -1942,9 +1942,12 @@ void ScInterpreter::ScDBGet()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBGet" );
     BOOL bMissingField = FALSE;
     auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
-    if (pQueryParam.get() && pQueryParam->GetType() == ScDBQueryParamBase::INTERNAL)
+    if (pQueryParam.get())
     {
-#if 0
+#if 1
+        ScDBQueryValueIterator aValIter(pDok, pQueryParam.release());
+
+#else
         ScQueryParam* p = static_cast<ScQueryParam*>(pQueryParam.get());
         SCTAB nTab = p->nTab;
         ScBaseCell* pCell;
