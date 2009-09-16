@@ -36,6 +36,10 @@ XCSROOTURL!:=$(ABSXCSROOT)
 XCSROOTURL!:=file:///$(subst,\,/ $(XCSROOTURL))
 .ENDIF
 SYSXSLDIR*:=$(XSLDIR)/
+.IF $(GUI)==OS2
+XCSROOTURL!:=$(subst,\,/ $(XCSROOTURL))
+SYSXSLDIR!:=$(subst,\,/ $(SYSXSLDIR))/
+.ENDIF
 
 #
 # --- XCS ---
