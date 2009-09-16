@@ -59,7 +59,7 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <comphelper/locale.hxx>
 
-#include <xmlhelp/compilehelp.hxx>
+#include <transex3/compilehelp.hxx>
 
 #include "databases.hxx"
 #include "urlparameter.hxx"

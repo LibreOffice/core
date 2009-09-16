@@ -34,7 +34,7 @@ PRJNAME = sandbox
 TARGET  = lib_sandbox_util
 
 # --- Settings -----------------------------------------------------
-
+.IF "$(L10N_framework)"==""
 .INCLUDE :  settings.mk
 
 JARCLASSDIRS	= com$/sun$/star$/lib$/sandbox
@@ -42,5 +42,7 @@ JARTARGET		= sandbox.jar
 JARCOMPRESS 	= TRUE
 
 # --- Targets ------------------------------------------------------
+.ENDIF			# L10N_framework
 
 .INCLUDE :  target.mk
+

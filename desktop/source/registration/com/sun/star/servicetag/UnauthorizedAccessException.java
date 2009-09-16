@@ -6,8 +6,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: helplinkerdllapi.h,v $
- * $Revision: 1.3 $
+ * $RCSfile: UnauthorizedAccessException.java,v $
+ *
+ * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,17 +29,31 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_HELPLINKERDLLAPI_H
-#define INCLUDED_HELPLINKERDLLAPI_H
+package com.sun.star.servicetag;
 
-#include "sal/types.h"
+/**
+ * Thrown if the user is not authorized to
+ * {@link Registry#updateServiceTag update} or
+ * {@link Registry#removeServiceTag remove}
+ * a service tag from a {@link Registry}.
+ */
+public class UnauthorizedAccessException extends RuntimeException {
 
-#if defined(HELPLINKER_DLLIMPLEMENTATION)
-#define HELPLINKER_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
-#else
-#define HELPLINKER_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
-#endif
-#define HELPLINKER_DLLPRIVATE SAL_DLLPRIVATE
+    /**
+     * Constructs an <code>UnauthorizedAccessException</code> object
+     * without detail message.
+     */
+    public UnauthorizedAccessException() {
+    }
 
-#endif /* INCLUDED_HELPLINKERDLLAPI_H */
 
+    /**
+     * Constructs an <code>UnauthorizedAccessException</code> object
+     * with the specified detail message.
+     *
+     * @param msg the detail message.
+     */
+    public UnauthorizedAccessException(String msg) {
+        super(msg);
+    }
+}
