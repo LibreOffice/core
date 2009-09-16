@@ -49,7 +49,7 @@ DLLPRE =
 # --- X11 Mac build currently doesn't work with cairo -----------
 .IF "$(OS)" == "MACOSX" && "$(GUIBASE)" == "unx"
 @all:   
-        @echo "Cannot build cairocanvas with X11..."
+    @echo "Cannot build cairocanvas with X11..."
 .ENDIF
 .ENDIF
 
@@ -97,7 +97,6 @@ SHL1STDLIBS+= -lcairo
 .IF "$(GUIBASE)"=="aqua"
 # native Mac OS X (Quartz)
 SLOFILES+= $(SLO)$/cairo_quartz_cairo.obj
-OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
 CFLAGSCXX+=$(OBJCXXFLAGS)
 .ELSE    # "$(GUIBASE)"=="aqua"
 

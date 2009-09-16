@@ -56,7 +56,7 @@ dummy:
     @echo "Nothing to build for GUIBASE $(GUIBASE)"
 .ELSE
 
-CFLAGSCXX+=-fconstant-cfstrings -x objective-c++ -fobjc-exceptions
+CFLAGSCXX+=$(OBJCXXFLAGS) -fconstant-cfstrings 
 
 SLOFILES= \
         $(SLO)$/aqua_clipboard.obj \

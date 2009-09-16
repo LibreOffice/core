@@ -1422,7 +1422,7 @@ private:
     return 0;
 }
 
-#ifdef MAC_OS_X_VERSION_10_5
+#if defined(MAC_OS_X_VERSION_10_5) && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
 /* build target 10.5 or greater */
 - (NSInteger)conversationIdentifier
 #else
