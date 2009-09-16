@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,15 +29,14 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..$/..
+PRJ=..$/..$/..
 
 PROJECTPCH=sd
 PROJECTPCHSOURCE=$(PRJ)$/util$/sd
 PRJNAME=sd
-TARGET=tpcontrols
+TARGET=uiannotations
 ENABLE_EXCEPTIONS=TRUE
 AUTOSEG=true
-PRJINC=..$/..$/ ..$/..$/slidesorter
 
 # --- Settings -----------------------------------------------------
 
@@ -46,27 +45,16 @@ PRJINC=..$/..$/ ..$/..$/slidesorter
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =      							\
-    $(SLO)$/AllMasterPagesSelector.obj		\
-    $(SLO)$/CurrentMasterPagesSelector.obj	\
-    $(SLO)$/DocumentHelper.obj				\
-    $(SLO)$/MasterPageObserver.obj			\
-    $(SLO)$/MasterPagesPanel.obj			\
-    $(SLO)$/MasterPagesSelector.obj			\
-    $(SLO)$/MasterPageContainer.obj			\
-    $(SLO)$/MasterPageContainerFiller.obj	\
-    $(SLO)$/MasterPageContainerProviders.obj\
-    $(SLO)$/MasterPageContainerQueue.obj	\
-    $(SLO)$/MasterPageDescriptor.obj		\
-    $(SLO)$/PreviewValueSet.obj				\
-    $(SLO)$/RecentlyUsedMasterPages.obj		\
-    $(SLO)$/RecentMasterPagesSelector.obj	\
-    $(SLO)$/CustomAnimationPanel.obj		\
-    $(SLO)$/SlideTransitionPanel.obj		\
-    $(SLO)$/TableDesignPanel.obj			\
-    $(SLO)$/AnimationSchemesPanel.obj
+SRS1NAME=$(TARGET)
+SRC1FILES =\
+        annotations.src
+
+SLOFILES = \
+        $(SLO)$/annotationwindow.obj \
+        $(SLO)$/annotationtag.obj \
+        $(SLO)$/annotationmanager.obj
+
 
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
-

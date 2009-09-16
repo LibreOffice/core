@@ -41,6 +41,8 @@
 #include <svx/eeitem.hxx>
 #include <svx/scriptspaceitem.hxx>
 
+#include <svtools/useroptions.hxx>
+
 #ifndef _OFA_MISCCFG_HXX
 #include <svtools/misccfg.hxx>
 #endif
@@ -222,7 +224,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     // Vorlagen existieren.
     SdrOutliner& rOutliner = GetDrawOutliner();
     rOutliner.SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
-    rOutliner.SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
+    SetCalcFieldValueHdl( &rOutliner );
 
     // set linguistic options
     {
@@ -315,7 +317,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     SfxItemSet aSet2( pHitTestOutliner->GetEmptyItemSet() );
     pHitTestOutliner->SetStyleSheetPool( (SfxStyleSheetPool*)GetStyleSheetPool() );
 
-    pHitTestOutliner->SetCalcFieldValueHdl( LINK(SD_MOD(), SdModule, CalcFieldValueHdl) );
+    SetCalcFieldValueHdl( pHitTestOutliner );
 
     try
     {
@@ -1068,5 +1070,36 @@ void SdDrawDocument::MasterPageListChanged()
     mpMasterPageListWatcher->Invalidate();
 }
 
+void SdDrawDocument::SetCalcFieldValueHdl(::Outliner* pOutliner)
+{
+    pOutliner->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
+}
+
+sal_uInt16 SdDrawDocument::GetAnnotationAuthorIndex( const rtl::OUString& rAuthor )
+{
+    // force current user to have first color
+    if( maAnnotationAuthors.empty() )
+    {
+        SvtUserOptions aUserOptions;
+        maAnnotationAuthors.push_back( aUserOptions.GetFullName() );
+    }
+
+    sal_uInt16 idx = 0;
+    for( std::vector< OUString >::iterator iter( maAnnotationAuthors.begin() ); iter != maAnnotationAuthors.end(); iter++ )
+    {
+        if( (*iter) == rAuthor )
+        {
+            break;
+        }
+        idx++;
+    }
+
+    if( idx == maAnnotationAuthors.size() )
+    {
+        maAnnotationAuthors.push_back( rAuthor );
+    }
+
+    return idx;
+}
 
 // eof

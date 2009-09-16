@@ -181,10 +181,54 @@ interface ImpressEditView : DrawView
         StateMethod = GetMenuState ;
     ]
 }
+interface Annotation
+{
+    SID_INSERT_POSTIT
+    [
+        ExecMethod = ExecuteAnnotation;
+        StateMethod = GetAnnotationState;
+    ]
+    SID_SHOW_POSTIT
+    [
+        ExecMethod = ExecuteAnnotation;
+        StateMethod = GetAnnotationState;
+    ]
+    SID_REPLYTO_POSTIT
+    [
+        ExecMethod = ExecuteAnnotation;
+        StateMethod = GetAnnotationState;
+    ]
+    SID_DELETE_POSTIT
+    [
+        ExecMethod = ExecuteAnnotation;
+        StateMethod = GetAnnotationState;
+    ]
+    SID_DELETEALL_POSTIT
+    [
+        ExecMethod = ExecuteAnnotation;
+        StateMethod = GetAnnotationState;
+    ]
+    SID_PREVIOUS_POSTIT
+    [
+        ExecMethod = ExecuteAnnotation;
+        StateMethod = GetAnnotationState;
+    ]
+    SID_NEXT_POSTIT
+    [
+        ExecMethod = ExecuteAnnotation;
+        StateMethod = GetAnnotationState;
+    ]
+    SID_DELETEALLBYAUTHOR_POSTIT
+    [
+        ExecMethod = ExecuteAnnotation;
+        StateMethod = GetAnnotationState;
+    ]
+}
 
 shell DrawViewShell
 {
     import ImpressEditView[Automation];
+    import Annotation;
 }
 
 

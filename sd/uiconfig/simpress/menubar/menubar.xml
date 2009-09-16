@@ -119,7 +119,8 @@
                     <menu:menuitem menu:id=".uno:HelplinesFront"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:ShowAnnotation"/>
+      <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Navigator"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HeaderAndFooter"/>
@@ -147,7 +148,8 @@
           <menu:menuitem menu:id=".uno:InsertFileField"/>
                 </menu:menupopup>
             </menu:menu>
-                        <menu:menuitem menu:id=".uno:InsertSymbol"/>
+      <menu:menuitem menu:id=".uno:InsertAnnotation"/>
+      <menu:menuitem menu:id=".uno:InsertSymbol"/>
             <menu:menu menu:id=".uno:FormattingMarkMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertNonBreakingSpace"/>
@@ -282,7 +284,7 @@
             <menu:menuitem menu:id=".uno:CustomShowDialog"/>
         </menu:menupopup>
     </menu:menu>
-    <menu:menu menu:id=".uno:WindowList">
+  <menu:menu menu:id=".uno:WindowList">
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:NewWindow"/>
             <menu:menuitem menu:id=".uno:CloseWin"/>

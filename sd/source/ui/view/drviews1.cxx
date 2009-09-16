@@ -1230,6 +1230,8 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME, TRUE, FALSE);
         rBindings.Invalidate(SID_STATUS_PAGE, TRUE, FALSE);
         UpdatePreview( mpActualPage );
+
+        mpDrawView->AdjustMarkHdl();
     }
 
     return (bOK);
