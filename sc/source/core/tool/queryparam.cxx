@@ -35,30 +35,36 @@
 
 #include "queryparam.hxx"
 
+using ::std::vector;
+
 // ============================================================================
 
-ScQueryParamBase::ScQueryParamBase() :
-    nEntryCount(0)
+ScQueryParamBase::ScQueryParamBase()
 {
     Resize( MAXQUERY );
     for (USHORT i=0; i<MAXQUERY; i++)
-        pEntries[i].Clear();
+        maEntries[i].Clear();
 }
 
 ScQueryParamBase::ScQueryParamBase(const ScQueryParamBase& r) :
     bHasHeader(r.bHasHeader), bByRow(r.bByRow), bInplace(r.bInplace), bCaseSens(r.bCaseSens),
-    bRegExp(r.bRegExp), bDuplicate(r.bDuplicate), bMixedComparison(r.bMixedComparison)
+    bRegExp(r.bRegExp), bDuplicate(r.bDuplicate), bMixedComparison(r.bMixedComparison),
+    maEntries(r.maEntries)
 {
-    nEntryCount = 0;
-
-    Resize( r.nEntryCount );
-    for (USHORT i=0; i<nEntryCount; i++)
-        pEntries[i] = r.pEntries[i];
 }
 
 ScQueryParamBase::~ScQueryParamBase()
 {
-    delete[] pEntries;
+}
+
+SCSIZE ScQueryParamBase::GetEntryCount() const
+{
+    return maEntries.size();
+}
+
+ScQueryEntry& ScQueryParamBase::GetEntry(SCSIZE n) const
+{
+    return maEntries[n];
 }
 
 void ScQueryParamBase::Resize(SCSIZE nNew)
@@ -66,43 +72,37 @@ void ScQueryParamBase::Resize(SCSIZE nNew)
     if ( nNew < MAXQUERY )
         nNew = MAXQUERY;                // nie weniger als MAXQUERY
 
-    ScQueryEntry* pNewEntries = NULL;
-    if ( nNew )
-        pNewEntries = new ScQueryEntry[nNew];
-
-    SCSIZE nCopy = Min( nEntryCount, nNew );
+    vector<ScQueryEntry> aNewEntries(nNew);
+    SCSIZE nCopy = ::std::min(maEntries.size(), nNew);
     for (SCSIZE i=0; i<nCopy; i++)
-        pNewEntries[i] = pEntries[i];
+        aNewEntries[i] = maEntries[i];
 
-    if ( nEntryCount )
-        delete[] pEntries;
-    nEntryCount = nNew;
-    pEntries = pNewEntries;
+    maEntries.swap(aNewEntries);
 }
 
 void ScQueryParamBase::DeleteQuery( SCSIZE nPos )
 {
-    if (nPos<nEntryCount)
-    {
-        for (SCSIZE i=nPos; i+1<nEntryCount; i++)
-            pEntries[i] = pEntries[i+1];
+    if (nPos >= maEntries.size())
+        return;
 
-        pEntries[nEntryCount-1].Clear();
-    }
-    else
-    {
-        DBG_ERROR("Falscher Parameter bei ScQueryParam2::DeleteQuery");
-    }
+    size_t n = maEntries.size();
+    vector<ScQueryEntry> aNewEntries;
+    aNewEntries.reserve(n-1);
+    for (size_t i = 0; i < n; ++i)
+        if (i != nPos)
+            aNewEntries.push_back(maEntries[i]);
+
+    maEntries.swap(aNewEntries);
 }
 
 void ScQueryParamBase::FillInExcelSyntax(String& aCellStr, SCSIZE nIndex)
 {
     if (aCellStr.Len() > 0)
     {
-        if ( nIndex >= nEntryCount )
+        if ( nIndex >= maEntries.size() )
             Resize( nIndex+1 );
 
-        ScQueryEntry& rEntry = pEntries[nIndex];
+        ScQueryEntry& rEntry = GetEntry(nIndex);
 
         rEntry.bDoQuery = TRUE;
         // Operatoren herausfiltern
@@ -210,7 +210,7 @@ void ScQueryParam::Clear()
 
     Resize( MAXQUERY );
     for (USHORT i=0; i<MAXQUERY; i++)
-        pEntries[i].Clear();
+        maEntries[i].Clear();
 
     ClearDestParams();
 }
@@ -244,9 +244,7 @@ ScQueryParam& ScQueryParam::operator=( const ScQueryParam& r )
     bByRow      = r.bByRow;
     bDestPers   = r.bDestPers;
 
-    Resize( r.nEntryCount );
-    for (USHORT i=0; i<nEntryCount; i++)
-        pEntries[i] = r.pEntries[i];
+    maEntries = r.maEntries;
 
     return *this;
 }
@@ -258,10 +256,13 @@ BOOL ScQueryParam::operator==( const ScQueryParam& rOther ) const
     BOOL bEqual = FALSE;
 
     // Anzahl der Queries gleich?
-    USHORT nUsed      = 0;
-    USHORT nOtherUsed = 0;
-    while ( nUsed<nEntryCount && pEntries[nUsed].bDoQuery ) ++nUsed;
-    while ( nOtherUsed<rOther.nEntryCount && rOther.pEntries[nOtherUsed].bDoQuery )
+    SCSIZE nUsed      = 0;
+    SCSIZE nOtherUsed = 0;
+    SCSIZE nEntryCount = GetEntryCount();
+    SCSIZE nOtherEntryCount = rOther.GetEntryCount();
+
+    while ( nUsed<nEntryCount && maEntries[nUsed].bDoQuery ) ++nUsed;
+    while ( nOtherUsed<nOtherEntryCount && rOther.maEntries[nOtherUsed].bDoQuery )
         ++nOtherUsed;
 
     if (   (nUsed       == nOtherUsed)
@@ -283,8 +284,8 @@ BOOL ScQueryParam::operator==( const ScQueryParam& rOther ) const
         && (nDestRow    == rOther.nDestRow) )
     {
         bEqual = TRUE;
-        for ( USHORT i=0; i<nUsed && bEqual; i++ )
-            bEqual = pEntries[i] == rOther.pEntries[i];
+        for ( SCSIZE i=0; i<nUsed && bEqual; i++ )
+            bEqual = maEntries[i] == rOther.maEntries[i];
     }
     return bEqual;
 }
@@ -304,8 +305,9 @@ void ScQueryParam::MoveToDest()
         nCol2 = sal::static_int_cast<SCCOL>( nCol2 + nDifX );
         nRow2 = sal::static_int_cast<SCROW>( nRow2 + nDifY );
         nTab  = sal::static_int_cast<SCTAB>( nTab  + nDifZ );
-        for (USHORT i=0; i<nEntryCount; i++)
-            pEntries[i].nField += nDifX;
+        size_t n = maEntries.size();
+        for (size_t i=0; i<n; i++)
+            maEntries[i].nField += nDifX;
 
         bInplace = TRUE;
     }

@@ -509,7 +509,7 @@ ScDBQueryDataIterator::DataAccess::~DataAccess()
 
 // ----------------------------------------------------------------------------
 
-ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryDataIterator* pParent, const ScDBQueryParamInternal* pParam, ScDocument* pDoc) :
+ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryDataIterator* pParent, ScDBQueryParamInternal* pParam, ScDocument* pDoc) :
     DataAccess(pParent),
     mpParam(pParam),
     mpDoc(pDoc)
@@ -653,7 +653,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getNext(Value& rValue)
 
 // ----------------------------------------------------------------------------
 
-ScDBQueryDataIterator::DataAccessMatrix::DataAccessMatrix(const ScDBQueryDataIterator* pParent, const ScDBQueryParamMatrix* pParam) :
+ScDBQueryDataIterator::DataAccessMatrix::DataAccessMatrix(const ScDBQueryDataIterator* pParent, ScDBQueryParamMatrix* pParam) :
     DataAccess(pParent),
     mpParam(pParam)
 {
@@ -905,13 +905,13 @@ ScDBQueryDataIterator::ScDBQueryDataIterator(ScDocument* pDocument, ScDBQueryPar
     {
         case ScDBQueryParamBase::INTERNAL:
         {
-            const ScDBQueryParamInternal* p = static_cast<const ScDBQueryParamInternal*>(pParam);
+            ScDBQueryParamInternal* p = static_cast<ScDBQueryParamInternal*>(pParam);
             mpData.reset(new DataAccessInternal(this, p, pDocument));
         }
         break;
         case ScDBQueryParamBase::MATRIX:
         {
-            const ScDBQueryParamMatrix* p = static_cast<const ScDBQueryParamMatrix*>(pParam);
+            ScDBQueryParamMatrix* p = static_cast<ScDBQueryParamMatrix*>(pParam);
             mpData.reset(new DataAccessMatrix(this, p));
         }
     }

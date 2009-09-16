@@ -34,6 +34,8 @@
 #include "global.hxx"
 #include "scmatrix.hxx"
 
+#include <vector>
+
 struct ScDBQueryParamInternal;
 
 struct ScQueryParamBase
@@ -48,18 +50,17 @@ struct ScQueryParamBase
 
     virtual ~ScQueryParamBase();
 
-    SCSIZE          GetEntryCount() const           { return nEntryCount; }
-    ScQueryEntry&   GetEntry(SCSIZE n) const        { return pEntries[n]; }
-    void            Resize(SCSIZE nNew);
+    SC_DLLPUBLIC SCSIZE GetEntryCount() const;
+    SC_DLLPUBLIC ScQueryEntry& GetEntry(SCSIZE n) const;
+    void Resize(SCSIZE nNew);
     SC_DLLPUBLIC void DeleteQuery( SCSIZE nPos );
-    void            FillInExcelSyntax(String& aCellStr, SCSIZE nIndex);
+    void FillInExcelSyntax(String& aCellStr, SCSIZE nIndex);
 
 protected:
     ScQueryParamBase();
     ScQueryParamBase(const ScQueryParamBase& r);
 
-    SCSIZE          nEntryCount;
-    ScQueryEntry*   pEntries;
+    mutable ::std::vector<ScQueryEntry>  maEntries;
 };
 
 // ============================================================================

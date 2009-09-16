@@ -161,14 +161,14 @@ private:
     class DataAccessInternal : public DataAccess
     {
     public:
-        DataAccessInternal(const ScDBQueryDataIterator* pParent, const ScDBQueryParamInternal* pParam, ScDocument* pDoc);
+        DataAccessInternal(const ScDBQueryDataIterator* pParent, ScDBQueryParamInternal* pParam, ScDocument* pDoc);
         virtual ~DataAccessInternal();
         virtual bool getCurrent(Value& rValue);
         virtual bool getFirst(Value& rValue);
         virtual bool getNext(Value& rValue);
 
     private:
-        const ScDBQueryParamInternal* mpParam;
+        ScDBQueryParamInternal* mpParam;
         ScDocument*         mpDoc;
         const ScAttrArray*  pAttrArray;
         ULONG               nNumFormat;     // for CalcAsShown
@@ -185,7 +185,7 @@ private:
     class DataAccessMatrix : public DataAccess
     {
     public:
-        DataAccessMatrix(const ScDBQueryDataIterator* pParent, const ScDBQueryParamMatrix* pParam);
+        DataAccessMatrix(const ScDBQueryDataIterator* pParent, ScDBQueryParamMatrix* pParam);
         virtual ~DataAccessMatrix();
         virtual bool getCurrent(Value& rValue);
         virtual bool getFirst(Value& rValue);
@@ -194,7 +194,7 @@ private:
     private:
         bool isValidQuery(SCROW mnRow, const ScMatrix& rMat) const;
 
-        const ScDBQueryParamMatrix* mpParam;
+        ScDBQueryParamMatrix* mpParam;
         SCROW mnCurRow;
         SCROW mnRows;
         SCCOL mnCols;
