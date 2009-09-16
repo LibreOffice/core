@@ -121,7 +121,7 @@ LDFLAGS+:=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -lpthread -ldl
 LDFLAGS+:=-Wl,-dylib_file,@loader_path/libraptor.1.dylib:$(PWD)/$(LB)/libraptor.1.dylib
 .ENDIF
 
-CPPFLAGS+:=$(EXTRA_CFLAGS)
+CPPFLAGS+:=$(EXTRA_CDEFS) $(EXTRA_CFLAGS)
 LDFLAGS+:=$(EXTRA_LINKFLAGS)
 XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
 

@@ -120,7 +120,9 @@ xmlsec_CFLAGS+=$(C_RESTRICTIONFLAGS)
 xmlsec_CFLAGS+=$(EXTRA_CFLAGS)
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 xmlsec_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
-.ENDIF			# "$(SYSBASE)"!=""
+.ELIF "$(OS)"=="MACOSX" # "$(SYSBASE)"!=""
+xmlsec_CPPFLAGS+=$(EXTRA_CDEFS)
+.ENDIF
 
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
 xmlsec_LDFLAGS+=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'

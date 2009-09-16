@@ -73,6 +73,7 @@ BUILD_ACTION=sh ccc.os2
 OUT2LIB=$(BUILD_DIR)$/liblpsolve55.lib
 .ELSE
 .IF "$(OS)"=="MACOSX"
+.EXPORT: EXTRA_CDEFS EXTRA_LINKFLAGS
 BUILD_ACTION=sh ccc.osx
 OUT2LIB=$(BUILD_DIR)$/liblpsolve55.dylib
 .ELSE

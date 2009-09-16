@@ -118,7 +118,7 @@ LDFLAGS+:=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -lpthread -ldl
 .ENDIF
 .ENDIF			# "$(SYSBASE)"!=""
 
-CPPFLAGS+:=$(EXTRA_CFLAGS)
+CPPFLAGS+:=$(EXTRA_CDEFS) $(EXTRA_CFLAGS)
 LDFLAGS+:=$(EXTRA_LINKFLAGS)
 XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
 
