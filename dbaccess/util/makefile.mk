@@ -45,7 +45,7 @@ GEN_HID_OTHER=TRUE
 LDUMP=ldump2.exe
 
 # --- database core (dba) -----------------------------------
-
+.IF "$(L10N_framework)"==""
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1FILES=\
         $(SLB)$/api.lib	\
@@ -84,6 +84,7 @@ DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt \
 # SHL1VERSIONMAP=$(TARGET).map
 SHL1USE_EXPORTS=name
 
+.ENDIF
 # --- .res file ----------------------------------------------------------
 
 RES1FILELIST=\
@@ -94,6 +95,7 @@ RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES=$(RES1FILELIST)
 
 # --- database ui (dbu) -----------------------------------
+.IF "$(L10N_framework)"==""
 
 LIB2TARGET=$(SLB)$/$(TARGET2).lib
 LIB2FILES=\
@@ -160,6 +162,7 @@ ALL: \
     $(LIB2TARGET)	\
     ALLTAR
 
+.ENDIF
 # --- .res file ----------------------------------------------------------
 
 RES2FILELIST=\
@@ -186,7 +189,7 @@ RESLIB2IMAGES=$(PRJ)$/res
 RESLIB2SRSFILES=$(RES2FILELIST)
 
 # --- database tools (sdbt) -----------------------------------
-
+.IF "$(L10N_framework)"==""
 LIB3TARGET=$(SLB)$/$(TARGET3).lib
 LIB3FILES=\
         $(SLB)$/conntools.lib \
@@ -209,6 +212,8 @@ SHL3DEF=$(MISC)$/$(SHL3TARGET).def
 DEF3NAME=$(SHL3TARGET)
 SHL3VERSIONMAP=$(TARGET3).map
 
+.END
+
 # --- .res file ----------------------------------------------------------
 
 RES3FILELIST=\
@@ -223,6 +228,8 @@ RESLIB3SRSFILES=$(RES3FILELIST)
 .INCLUDE : target.mk
 .IF "$(depend)"==""
 
+.IF "$(L10N_framework)"==""
+
 $(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo CLEAR_THE_FILE	> $@
@@ -236,3 +243,4 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo _real				>>$@
 .ENDIF
 
+.ENDIF

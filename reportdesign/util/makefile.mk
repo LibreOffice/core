@@ -40,6 +40,8 @@ GEN_HID_OTHER=TRUE
 # --- Settings ----------------------------------
 .INCLUDE :  settings.mk
 
+.IF "$(L10N_framework)"==""
+
 # ------------------------------------------------------------------
 # --- reportdesign core (rpt) -----------------------------------
 
@@ -89,7 +91,7 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
 DEFLIB1NAME=$(TARGET)
-
+.ENDIF
 # --- .res file ----------------------------------------------------------
 
 RES1FILELIST=\
@@ -99,7 +101,7 @@ RESLIB1NAME=$(TARGET)
 RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES=$(RES1FILELIST)
 
-
+.IF "$(L10N_framework)"==""
 # --- reportdesign UI core (rptui) -----------------------------------
 LIB2TARGET=$(SLB)$/$(TARGET2).lib
 LIB2FILES=\
@@ -164,18 +166,17 @@ SHL2LIBS=$(LIB2TARGET)
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=$(SHL2TARGET)
 SHL2VERSIONMAP=$(TARGET2).map
-
+.ENDIF
 # --- .res file ----------------------------------------------------------
-
 RES2FILELIST=\
     $(SRS)$/uidlg.srs				\
     $(SRS)$/ui_inspection.srs		\
     $(SRS)$/report.srs
 
-
 RESLIB2NAME=$(TARGET2)
 RESLIB2IMAGES=$(PRJ)$/res
 RESLIB2SRSFILES=$(RES2FILELIST)
+.IF "$(L10N_framework)"==""
 
 # ------------------- rptxml -------------------
 TARGET3=rptxml
@@ -223,7 +224,10 @@ SHL3DEF=	$(MISC)$/$(SHL3TARGET).def
 
 DEF3NAME=$(SHL3TARGET)
 
+.ENDIF
+
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
+
 

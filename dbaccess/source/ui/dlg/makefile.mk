@@ -55,6 +55,9 @@ CFLAGS+=-fpermissive
 
 # ... resource files ............................
 
+
+LOCALIZE_ME=AutoControls_tmpl.hrc
+
 SRS1NAME=$(TARGET)
 SRC1FILES =	\
         AutoControls.src	\
@@ -138,7 +141,7 @@ SLOFILES+=		$(SLO)$/adodatalinks.obj
 .ENDIF
 
 # --- Targets ----------------------------------
-LOCALIZE_ME=AutoControls_tmpl.hrc
+#LOCALIZE_ME=AutoControls_tmpl.hrc
 
 .INCLUDE : target.mk
 
