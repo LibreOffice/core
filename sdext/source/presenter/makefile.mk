@@ -41,6 +41,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE : rtlbootstrap.mk
 .INCLUDE : settings.mk
+.IF "$(L10N_framework)"==""
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 .IF "$(ENABLE_PRESENTER_SCREEN)" == "NO"
@@ -257,9 +258,10 @@ PLATFORMID:=$(RTL_OS:l)_$(RTL_ARCH:l)
 
 
 # --- Targets ----------------------------------
+.ENDIF # L10N_framework
 
 .INCLUDE : target.mk
-
+.IF "$(L10N_framework)"==""
 $(SLO)$/PresenterComponent.obj : $(INCCOM)$/PresenterExtensionIdentifier.hxx
 
 $(INCCOM)$/PresenterExtensionIdentifier.hxx : PresenterExtensionIdentifier.txx
@@ -362,3 +364,8 @@ $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
 
 
 .ENDIF # "$(ENABLE_PRESENTER_SCREEN)" != "NO"
+.ELSE
+ivo:
+    $(ECHO)
+.ENDIF # L10N_framework
+

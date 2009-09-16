@@ -42,7 +42,7 @@ VERSION=-0.2.0
 
 .IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
-
+.IF "$(L10N_framework)"==""
 TARFILE_NAME=$(TARGET)
 TARFILE_ROOTDIR=$(TARGET)
 PATCH_FILES=$(PRJ)$/patches$/$(TARGET).patch
@@ -60,12 +60,12 @@ BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" 
 
 
 .ENDIF # $(SOLAR_JAVA)!= ""
-
+.ENDIF
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
-
+.IF "$(L10N_framework)"==""
 .IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
 
@@ -77,4 +77,4 @@ $(CLASSDIR)$/$(TARGET)$(VERSION).jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 # $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/source$/org$/jfree$/formula$/function$/information$/IsRef-Function.properties : 
 #	@@-$(MKDIRHIER) $(@:d)
 #    $(MV) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/source$/org$/jfree$/formula$/function$/information$/isRef-Function.properties $@	
-
+.ENDIF
