@@ -267,7 +267,14 @@ static sal_Int32 SAL_CALL iterateCodePoints(const OUString& Text, sal_Int32 &nSt
             nStartPos = nStartPos + inc < 0 ? -1 : Text.getLength();
         } else {
             ch = Text.iterateCodePoints(&nStartPos, inc);
-            if (inc > 0) ch = Text.iterateCodePoints(&nStartPos, 0);
+            // Fix for #i80436#.
+            // erAck: 2009-06-30T21:52+0200  This logic looks somewhat
+            // suspicious as if it cures a symptom.. anyway, had to add
+            // nStartPos < Text.getLength() to silence the (correct) assertion
+            // in rtl_uString_iterateCodePoints() if Text was one character
+            // (codepoint) only, made up of a surrogate pair.
+            if (inc > 0 && nStartPos < Text.getLength())
+                ch = Text.iterateCodePoints(&nStartPos, 0);
         }
         return nStartPos;
 }

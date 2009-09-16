@@ -93,14 +93,10 @@ void ImageControl::UserDraw( const UserDrawEvent& rUDEvt )
 {
     USHORT nStyle = 0;
     BitmapEx* pBitmap = &maBmp;
-    Color aCol;
-    if( !!maBmpHC && ImplGetCurrentBackgroundColor( aCol ) )
+    if( !!maBmpHC )
     {
-        if( aCol.IsDark() )
+        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
             pBitmap = &maBmpHC;
-        // #99902 no col transform required
-        //if( aCol.IsBright() )
-        //  nStyle |= IMAGE_DRAW_COLORTRANSFORM;
     }
 
     if ( !*pBitmap )
