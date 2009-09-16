@@ -165,7 +165,7 @@
          	;;
   
       --libs)
-!         echo -L${libdir} ${LIBXML2LIB} ${ZLIB3RDLIB}   -lm
+!         echo -L${libdir} ${LIBXML2LIB} -lm
 ! #        if [ "`uname`" = "Linux" ]
 ! #	then
 ! #	    if [ "@XML_LIBDIR@" = "-L/usr/lib" -o "@XML_LIBDIR@" = "-L/usr/lib64" ]
