@@ -40,7 +40,7 @@ TARGET=so_berkeleydb
 
 .IF "$(SYSTEM_DB)" == "YES"
 all:
-        @echo "An already available installation of db should exist on your system."
+    @echo "An already available installation of db should exist on your system."
     @echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
@@ -102,7 +102,9 @@ CONFIGURE_DIR=out
 CONFIGURE_ACTION= \
     ..$/dist$/configure
 CONFIGURE_FLAGS=--disable-cxx --enable-dynamic --enable-shared --enable-compat185
-
+.IF "$(OS)"=="MACOSX"
+CONFIGURE_FLAGS+=CPPFLAGS="$(EXTRA_CDEFS)"
+.ENDIF
 # just pass ARCH_FLAGS to native build
 CFLAGS+:=$(ARCH_FLAGS)
 CXXFLAGS+:=$(ARCH_FLAGS)
