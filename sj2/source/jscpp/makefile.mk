@@ -40,7 +40,6 @@ TARGET=jscpp
 # --- Files --------------------------------------------------------
 
 .IF "$(GUIBASE)"=="aqua"
-OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
 CFLAGSCXX+=$(OBJCXXFLAGS)
 .ENDIF  # "$(GUIBASE)"=="aqua"
 
