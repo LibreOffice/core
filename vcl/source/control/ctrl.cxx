@@ -565,6 +565,8 @@ void Control::DrawControlText( OutputDevice& _rTargetDevice, const Rectangle& _r
     sal_Int32* pCharWidths = new sal_Int32[ _rStr.Len() ];
     // retrieve unzoomed point font of the target device
     Font aFont( GetCanonicalFont( GetSettings().GetStyleSettings() ) );
+    if ( IsControlFont() )
+        aFont.Merge( GetControlFont() );
 
     // transfer font to the reference device
     mpControlData->mpReferenceDevice->Push( PUSH_FONT );
