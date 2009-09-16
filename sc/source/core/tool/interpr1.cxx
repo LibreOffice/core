@@ -5936,22 +5936,22 @@ void ScInterpreter::ScDBCount2()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBCount2" );
     BOOL bMissingField = TRUE;
     auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
-    if (pQueryParam.get() && pQueryParam->GetType() == ScDBQueryParamBase::INTERNAL)
+    if (pQueryParam.get())
     {
-#if 0
-        ScDBQueryParamInternal* p = static_cast<ScDBQueryParamInternal*>(pQueryParam.get());
-        SCTAB nTab = p->nTab;
+        double nVal;
+        USHORT nErr = 0;
         ULONG nCount = 0;
-        ScQueryCellIterator aCellIter(pDok, nTab, *p);
-        if ( aCellIter.GetFirst() )
+        ScDBQueryValueIterator aValIter( pDok, pQueryParam.release());
+        aValIter.SetCountString(true);
+        if ( aValIter.GetFirst( nVal, nErr) && !nErr )
         {
             do
             {
                 nCount++;
-            } while ( aCellIter.GetNext() );
+            } while ( aValIter.GetNext( nVal, nErr) && !nErr );
         }
-        PushDouble(nCount);
-#endif
+        SetError( nErr );
+        PushDouble( nCount );
     }
     else
         PushIllegalParameter();

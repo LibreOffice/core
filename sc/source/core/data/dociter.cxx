@@ -488,7 +488,8 @@ BOOL ScValueIterator::GetNext(double& rValue, USHORT& rErr)
 
 // ============================================================================
 
-ScDBQueryValueIterator::DataAccess::DataAccess()
+ScDBQueryValueIterator::DataAccess::DataAccess(const ScDBQueryValueIterator* pParent) :
+    mpParent(pParent)
 {
 }
 
@@ -498,7 +499,8 @@ ScDBQueryValueIterator::DataAccess::~DataAccess()
 
 // ----------------------------------------------------------------------------
 
-ScDBQueryValueIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryParamInternal* pParam, ScDocument* pDoc) :
+ScDBQueryValueIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryValueIterator* pParent, const ScDBQueryParamInternal* pParam, ScDocument* pDoc) :
+    DataAccess(pParent),
     mpParam(pParam),
     mpDoc(pDoc)
 {
@@ -594,6 +596,16 @@ bool ScDBQueryValueIterator::DataAccessInternal::getCurrent(double& rValue, USHO
                                 nRow++;
                         }
                         break;
+                    case CELLTYPE_STRING:
+                        if (mpParent->mbCountString)
+                        {
+                            rValue = 0.0;
+                            rErr = 0;
+                            return true;
+                        }
+                        else
+                            ++nRow;
+                        break;
                     default:
                         nRow++;
                         break;
@@ -626,7 +638,8 @@ bool ScDBQueryValueIterator::DataAccessInternal::getNext(double& rValue, USHORT&
 
 // ----------------------------------------------------------------------------
 
-ScDBQueryValueIterator::DataAccessMatrix::DataAccessMatrix(const ScDBQueryParamMatrix* pParam) :
+ScDBQueryValueIterator::DataAccessMatrix::DataAccessMatrix(const ScDBQueryValueIterator* pParent, const ScDBQueryParamMatrix* pParam) :
+    DataAccess(pParent),
     mpParam(pParam)
 {
     SCSIZE nC, nR;
@@ -650,6 +663,9 @@ bool ScDBQueryValueIterator::DataAccessMatrix::getCurrent(double& rValue, USHORT
         const ScMatrix& rMat = *mpParam->mpMatrix;
         if (rMat.IsEmpty(mpParam->mnField, mnCurRow))
             // Don't take empty values into account.
+            continue;
+
+        if (rMat.IsString(mpParam->mnField, mnCurRow) && !mpParent->mbCountString)
             continue;
 
         if (isValidQuery(mnCurRow, rMat))
@@ -855,20 +871,21 @@ bool ScDBQueryValueIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const Sc
 // ----------------------------------------------------------------------------
 
 ScDBQueryValueIterator::ScDBQueryValueIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam) :
-    mpParam (pParam)
+    mpParam (pParam),
+    mbCountString(false)
 {
     switch (mpParam->GetType())
     {
         case ScDBQueryParamBase::INTERNAL:
         {
             const ScDBQueryParamInternal* p = static_cast<const ScDBQueryParamInternal*>(pParam);
-            mpData.reset(new DataAccessInternal(p, pDocument));
+            mpData.reset(new DataAccessInternal(this, p, pDocument));
         }
         break;
         case ScDBQueryParamBase::MATRIX:
         {
             const ScDBQueryParamMatrix* p = static_cast<const ScDBQueryParamMatrix*>(pParam);
-            mpData.reset(new DataAccessMatrix(p));
+            mpData.reset(new DataAccessMatrix(this, p));
         }
     }
 }
@@ -886,6 +903,11 @@ BOOL ScDBQueryValueIterator::GetFirst(double& rValue, USHORT& rErr)
 BOOL ScDBQueryValueIterator::GetNext(double& rValue, USHORT& rErr)
 {
     return mpData->getNext(rValue, rErr);
+}
+
+void ScDBQueryValueIterator::SetCountString(bool b)
+{
+    mbCountString = b;
 }
 
 // ============================================================================

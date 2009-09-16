@@ -138,17 +138,19 @@ private:
     class DataAccess
     {
     public:
-        DataAccess();
+        DataAccess(const ScDBQueryValueIterator* pParent);
         virtual ~DataAccess() = 0;
         virtual bool getCurrent(double& rValue, USHORT& rErr) = 0;
         virtual bool getFirst(double& rValue, USHORT& rErr) = 0;
         virtual bool getNext(double& rValue, USHORT& rErr) = 0;
+    protected:
+        const ScDBQueryValueIterator* mpParent;
     };
 
     class DataAccessInternal : public DataAccess
     {
     public:
-        DataAccessInternal(const ScDBQueryParamInternal* pParam, ScDocument* pDoc);
+        DataAccessInternal(const ScDBQueryValueIterator* pParent, const ScDBQueryParamInternal* pParam, ScDocument* pDoc);
         virtual ~DataAccessInternal();
         virtual bool getCurrent(double &rValue, USHORT &rErr);
         virtual bool getFirst(double &rValue, USHORT &rErr);
@@ -172,7 +174,7 @@ private:
     class DataAccessMatrix : public DataAccess
     {
     public:
-        DataAccessMatrix(const ScDBQueryParamMatrix* pParam);
+        DataAccessMatrix(const ScDBQueryValueIterator* pParent, const ScDBQueryParamMatrix* pParam);
         virtual ~DataAccessMatrix();
         virtual bool getCurrent(double &rValue, USHORT &rErr);
         virtual bool getFirst(double &rValue, USHORT &rErr);
@@ -188,7 +190,9 @@ private:
     };
 
     ::std::auto_ptr<ScDBQueryParamBase> mpParam;
-    ::std::auto_ptr<DataAccess> mpData;
+    ::std::auto_ptr<DataAccess>         mpData;
+
+    bool                                mbCountString;
 
     bool            GetThis(double& rValue, USHORT& rErr);
 public:
@@ -197,6 +201,8 @@ public:
     BOOL            GetFirst(double& rValue, USHORT& rErr);
     /// Does NOT reset rValue if no value found!
     BOOL            GetNext(double& rValue, USHORT& rErr);
+
+    void            SetCountString(bool b);
 };
 
 // ============================================================================
