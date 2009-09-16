@@ -29,7 +29,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-// #include "precompiled_cppunit.hxx"
+#include "precompiled_testshl2.hxx"
 
 // this functions build the wrapper, to handle old function calls to rtl_tres_state
 // IMPORTANT: Due to the fact that rtl_tres_state is in the sal.lib

@@ -80,7 +80,6 @@ APP1STDLIBS+= \
         $(LB)$/libc5t_winstuff$(DLLPOSTFIX).a
 .ELSE
 APP1LIBS= \
-        $(LB)$/testshl2.lib \
         $(LB)$/c5t_testresult.lib \
         $(LB)$/c5t_no_regallfkt.lib \
         $(LB)$/c5t_winstuff.lib
@@ -89,14 +88,12 @@ APP1LIBS= \
 
 .IF "$(GUI)" == "OS2"
 APP1LIBS= \
-        $(LB)$/testshl2.lib \
         $(LB)$/c5t_no_regallfkt.lib \
         $(LB)$/c5t_testresult.lib
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
 APP1STDLIBS+= \
-        $(LB)$/testshl2$(DLLPOSTFIX).a \
         $(LB)$/libc5t_testresult$(DLLPOSTFIX).a \
         $(LB)$/libc5t_no_regallfkt$(DLLPOSTFIX).a
 .ENDIF

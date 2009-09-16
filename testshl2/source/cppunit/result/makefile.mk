@@ -31,7 +31,7 @@
 
 PRJ=..$/..$/..
 
-PRJNAME=cppunit
+PRJNAME=testshl2
 TARGET=c5t_testresult
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE

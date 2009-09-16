@@ -1,4 +1,7 @@
-#include <testshl/result/SynchronizedObject.h>
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_testshl2.hxx"
+
+#include <cppunit/SynchronizedObject.h>
 
 
 namespace CppUnit

@@ -1,3 +1,6 @@
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_testshl2.hxx"
+
 #include <cppunit/TestFailure.h>
 #include <testshl/result/TestResultCollector.h>
 

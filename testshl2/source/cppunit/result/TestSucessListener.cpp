@@ -1,3 +1,7 @@
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_testshl2.hxx"
+
+
 #include <testshl/result/TestSucessListener.h>
 
 
