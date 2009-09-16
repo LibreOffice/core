@@ -61,14 +61,14 @@ testcase tTitleTextDirection
     printlog "Select the first OLE object in the document."
     call fSelectFirstOLE
     printlog "Edit / Object / Edit"    
-    EditObjectEdit       
-    Kontext "DocumentChart"
-    printlog "Type in the Chart document <TAB>"
-    DocumentChart.TypeKeys "<TAB>"
-    printlog "Format / Object properties"
-    FormatObjectProperties
+    EditObjectEdit
+	Kontext "DocumentChart"
+	printlog "Select the Main Title by using the ChartElememtSelectorListBox in the toolbar (4th entry)"
+    call fChartSelectElement (4)
+    printlog "Open the properties dialog by using the FormatSelection button in the toolbar"
+    FormatSelection.Click
     Kontext
-    printlog "Select the tab page alignment"    
+    printlog "Select the tab page Alignment"    
     Active.SetPage TabFormatChartTitleAlignment
     Kontext "TabFormatChartTitleAlignment"
     call DialogTest(TabFormatChartTitleAlignment)
@@ -172,13 +172,13 @@ testcase tDataSeriesTextDirection
     bCTLSupBefore = ActiveDeactivateCTLSupport(TRUE)
     call fSelectFirstOLE
     printlog "Select the first OLE object"
-    EditObjectEdit
     printlog "Edit / Object Edit"
-    Kontext "DocumentChart"
-    printlog "Type thrice in the Chart document <TAB>"
-    DocumentChart.TypeKeys "<TAB>" , 3
-    printlog "Format / Object properties"
-    FormatObjectProperties
+    EditObjectEdit
+    printlog "Select DataSeries A by toolbar selectorbox"
+	call fChartSelectElement (8) 
+	printlog "Insert DataLabels"
+	Kontext "DocumentChart"
+	InsertDataLabels
     Kontext
     Active.Setpage TabDataSeriesLabels
     Kontext "TabDataSeriesLabels"    
@@ -299,36 +299,27 @@ testcase tEquationTextDirection
     call fSelectFirstOLE    
     printlog "Edit / Object Edit"
     EditObjectEdit    
-    Kontext "DocumentChart"
-    printlog "Type thrice in the Chart document <TAB>"
-    DocumentChart.TypeKeys "<TAB>" , 3
-    printlog "Press F3-key to enter the data series."
-    DocumentChart.TypeKeys "<F3>"    
+    printlog "Select DataSeries A by toolbar selectorbox"
+	call fChartSelectElement (8) 
+	Kontext "DocumentChart"
     if fInvokeTrendLinesDialog() > 0 then
         warnlog "Something went wrong trying to invoke Trend Lines dialog -> Check this out!"
         Call hCloseDocument
         goto endsub
     endif   
-    Kontext "InsertTrendlinesDialog"
-    Call DialogTest(InsertTrendlinesDialog)
+    Kontext "TabTrendLineType"
+    Call DialogTest(TabTrendLineType)
     printlog "Select Linear radio-button"
     Linear.Check
     printlog "Check Show Equation check-box"
     ShowEquation.Check
     printlog "Leave the dialog with OK"
-    InsertTrendlinesDialog.OK
+    TabTrendLineType.OK
     Kontext "DocumentChart"
-	printlog "Leave Chart by ESC and reenter Chart"
-	DocumentChart.TypeKeys "<ESC>" , 2
-	call fSelectFirstOLE
-	EditObjectEdit
-	Kontext "DocumentChart"
-	printlog "Type <TAB> thrice in the Chart document, press F3 and <TAB> to select the equation"
-	DocumentChart.TypeKeys "<TAB>" , 3
-	DocumentChart.TypeKeys "<F3>" 
-    DocumentChart.TypeKeys "<TAB>"
+    printlog "Select Equation by toolbar selectorbox"
+	call fChartSelectElement (10)
     printlog "Format / Object properties"
-    FormatObjectProperties
+    FormatSelection.Click
     Kontext 
     printlog "Count the numbers of tab pages. It should be 7 in CTL mode."
     if Active.GetPageCount <> 7 then
@@ -372,13 +363,13 @@ testcase tDataPointTextDirection
     printlog "Select the first OLE object"
     EditObjectEdit
     printlog "Edit / Object Edit"
-    Kontext "DocumentChart"
-    printlog "Type thrice in the Chart document <TAB>"
-    DocumentChart.TypeKeys "<TAB>" , 3
+    printlog "Select DataSeries A by toolbar selectorbox"
+	call fChartSelectElement (8) 
+	Kontext "DocumentChart"
     printlog "Press F3-key to enter the data series."
     DocumentChart.TypeKeys "<F3>"
-    printlog "Format / Object properties"
-    FormatObjectProperties
+    printlog "Insert / DataLabels"
+    InsertDataLabels
     Kontext
     Active.Setpage TabDataPointLabels
     Kontext "TabDataPointLabels"    

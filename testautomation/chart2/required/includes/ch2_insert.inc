@@ -220,12 +220,9 @@ testcase tInsertTrendLines
    call fSelectFirstOLE
    '/// Invoke Edit::Object::Edit to enter Inplace Mode
    EditObjectEdit
-   '/// Invoke Insert::TrendLines
-   if fInvokeTrendLinesDialog() > 0 then
-       warnlog "Something went wrong trying to invoke Trend Lines dialog -> Check this out!"
-       Call hCloseDocument
-       goto endsub
-   endif
+   Kontext "DocumentChart"
+   printlog "Insert TrendLines"
+   InsertTrendlines
    '/// Check existence of dialog
    Kontext "InsertTrendlinesDialog"
    Call DialogTest ( InsertTrendlinesDialog )
