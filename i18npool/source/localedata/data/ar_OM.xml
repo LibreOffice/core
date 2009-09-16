@@ -1,14 +1,14 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE Locale SYSTEM 'locale.dtd'>
-<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.1">
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.0">
   <LC_INFO>
     <Language>
-      <LangID>so</LangID>
-      <DefaultName>Somali</DefaultName>
+      <LangID>ar</LangID>
+      <DefaultName>Arabic, Omani Spoken</DefaultName>
     </Language>
     <Country>
-      <CountryID>SO</CountryID>
-      <DefaultName>Somalia</DefaultName>
+      <CountryID>OM</CountryID>
+      <DefaultName>Oman</DefaultName>
     </Country>
   </LC_INFO>
   <LC_CTYPE unoid="generic">
@@ -19,22 +19,22 @@
       <TimeSeparator>:</TimeSeparator>
       <Time100SecSeparator>.</Time100SecSeparator>
       <ListSeparator>;</ListSeparator>
-      <LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
-      <LongDateDaySeparator>, </LongDateDaySeparator>
+      <LongDateDayOfWeekSeparator>، </LongDateDayOfWeekSeparator>
+      <LongDateDaySeparator>، </LongDateDaySeparator>
       <LongDateMonthSeparator> </LongDateMonthSeparator>
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
     <Markers>
-      <QuotationStart>“</QuotationStart>
-      <QuotationEnd>”</QuotationEnd>
-      <DoubleQuotationStart>‘</DoubleQuotationStart>
-      <DoubleQuotationEnd>’</DoubleQuotationEnd>
+      <QuotationStart>'</QuotationStart>
+      <QuotationEnd>'</QuotationEnd>
+      <DoubleQuotationStart>"</DoubleQuotationStart>
+      <DoubleQuotationEnd>"</DoubleQuotationEnd>
     </Markers>
-    <TimeAM>XH</TimeAM>
-    <TimePM>XD</TimePM>
+    <TimeAM>ص</TimeAM>
+    <TimePM>م</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$Ssh-477]">
+  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$ر.ع-2001]">
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
       <FormatCode>General</FormatCode>
     </FormatElement>
@@ -66,28 +66,28 @@
       <FormatCode>0.00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
-      <FormatCode>[CURRENCY]#,##0;-[CURRENCY]#,##0</FormatCode>
+      <FormatCode>[CURRENCY]#,##0;-#,##0 [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode>[CURRENCY]#,##0.00;-[CURRENCY]#,##0.00</FormatCode>
+      <FormatCode>[CURRENCY]#,##0.00;-#,##0.00 [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
-      <FormatCode>[CURRENCY]#,##0;[RED]-[CURRENCY]#,##0</FormatCode>
+      <FormatCode>[CURRENCY]#,##0;[RED]-#,##0 [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
-      <FormatCode>[CURRENCY]#,##0.00;[RED]-[CURRENCY]#,##0.00</FormatCode>
+      <FormatCode>[CURRENCY]#,##0.00;[RED]-#,##0.00 [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
       <FormatCode>CCC#,##0.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode>[CURRENCY]#,##0.--;[RED]-[CURRENCY]#,##0.--</FormatCode>
+      <FormatCode>[CURRENCY]#,##0.--;[RED]-#,##0.-- [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>D/MM/YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>NNNNDD, MMMM YYYY</FormatCode>
+      <FormatCode>NNNNDD، MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey6" default="true" type="medium" usage="DATE" formatindex="20">
       <FormatCode>DD/MM/YY</FormatCode>
@@ -96,31 +96,31 @@
       <FormatCode>DD/MM/YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="22">
-      <FormatCode>D, MMM YY</FormatCode>
+      <FormatCode>D، MMM YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="23">
-      <FormatCode>D, MMM YYYY</FormatCode>
+      <FormatCode>D، MMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey21" default="false" type="long" usage="DATE" formatindex="24">
-      <FormatCode>D, MMM YYYY</FormatCode>
+      <FormatCode>D، MMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="25">
-      <FormatCode>D, MMMM YYYY</FormatCode>
+      <FormatCode>D، MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey22" default="false" type="long" usage="DATE" formatindex="26">
-      <FormatCode>D, MMMM YY</FormatCode>
+      <FormatCode>D، MMMM YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey10" default="false" type="medium" usage="DATE" formatindex="27">
-      <FormatCode>NN, DD/MMM/YY</FormatCode>
+      <FormatCode>NN، DD/MMM/YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey18" default="false" type="long" usage="DATE" formatindex="28">
-      <FormatCode>NN, D, MMM YY</FormatCode>
+      <FormatCode>NN، D، MMM YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey19" default="false" type="long" usage="DATE" formatindex="29">
-      <FormatCode>NN, D, MMMM YYYY</FormatCode>
+      <FormatCode>NN، D، MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey20" default="false" type="long" usage="DATE" formatindex="30">
-      <FormatCode>NNNND, MMMM YYYY</FormatCode>
+      <FormatCode>NNNND، MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="short" usage="DATE" formatindex="31">
       <FormatCode>MM/DD</FormatCode>
@@ -188,123 +188,122 @@
     </SearchOptions>
   </LC_SEARCH>
   <LC_INDEX>
-    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-Z</IndexKey>
-    <UnicodeScript>0</UnicodeScript>
-    <UnicodeScript>1</UnicodeScript>
-    <FollowPageWord>bg.s</FollowPageWord>
-    <FollowPageWord>bgg.s</FollowPageWord>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">أ-ي</IndexKey>
+    <UnicodeScript>11</UnicodeScript>
+    <FollowPageWord>يتبع</FollowPageWord>
+    <FollowPageWord>يتبع</FollowPageWord>
   </LC_INDEX>
   <LC_CALENDAR>
     <Calendar unoid="gregorian" default="true">
       <DaysOfWeek>
         <Day>
           <DayID>sun</DayID>
-          <DefaultAbbrvName>Axa</DefaultAbbrvName>
-          <DefaultFullName>Axad</DefaultFullName>
+          <DefaultAbbrvName>الأحد</DefaultAbbrvName>
+          <DefaultFullName>الأحد</DefaultFullName>
         </Day>
         <Day>
           <DayID>mon</DayID>
-          <DefaultAbbrvName>Isn</DefaultAbbrvName>
-          <DefaultFullName>Isniin</DefaultFullName>
+          <DefaultAbbrvName>الإثنين</DefaultAbbrvName>
+          <DefaultFullName>الإثنين</DefaultFullName>
         </Day>
         <Day>
           <DayID>tue</DayID>
-          <DefaultAbbrvName>Tal</DefaultAbbrvName>
-          <DefaultFullName>Talaado</DefaultFullName>
+          <DefaultAbbrvName>الثلاثاء</DefaultAbbrvName>
+          <DefaultFullName>الثلاثاء</DefaultFullName>
         </Day>
         <Day>
           <DayID>wed</DayID>
-          <DefaultAbbrvName>Arb</DefaultAbbrvName>
-          <DefaultFullName>Arboco</DefaultFullName>
+          <DefaultAbbrvName>الأربعاء</DefaultAbbrvName>
+          <DefaultFullName>الأربعاء</DefaultFullName>
         </Day>
         <Day>
           <DayID>thu</DayID>
-          <DefaultAbbrvName>Kha</DefaultAbbrvName>
-          <DefaultFullName>Khamiis</DefaultFullName>
+          <DefaultAbbrvName>الخميس</DefaultAbbrvName>
+          <DefaultFullName>الخميس</DefaultFullName>
         </Day>
         <Day>
           <DayID>fri</DayID>
-          <DefaultAbbrvName>Jim</DefaultAbbrvName>
-          <DefaultFullName>Jimco</DefaultFullName>
+          <DefaultAbbrvName>الجمعة</DefaultAbbrvName>
+          <DefaultFullName>الجمعة</DefaultFullName>
         </Day>
         <Day>
           <DayID>sat</DayID>
-          <DefaultAbbrvName>Sab</DefaultAbbrvName>
-          <DefaultFullName>Sabti</DefaultFullName>
+          <DefaultAbbrvName>السبت</DefaultAbbrvName>
+          <DefaultFullName>السبت</DefaultFullName>
         </Day>
       </DaysOfWeek>
       <MonthsOfYear>
         <Month>
           <MonthID>jan</MonthID>
-          <DefaultAbbrvName>Jan</DefaultAbbrvName>
-          <DefaultFullName>Janaayo</DefaultFullName>
+          <DefaultAbbrvName>يانير</DefaultAbbrvName>
+          <DefaultFullName>يانير</DefaultFullName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
-          <DefaultAbbrvName>Feb</DefaultAbbrvName>
-          <DefaultFullName>Febraayo</DefaultFullName>
+          <DefaultAbbrvName>فبراير</DefaultAbbrvName>
+          <DefaultFullName>فبراير</DefaultFullName>
         </Month>
         <Month>
           <MonthID>mar</MonthID>
-          <DefaultAbbrvName>Mar</DefaultAbbrvName>
-          <DefaultFullName>Marso</DefaultFullName>
+          <DefaultAbbrvName>مارس</DefaultAbbrvName>
+          <DefaultFullName>مارس</DefaultFullName>
         </Month>
         <Month>
           <MonthID>apr</MonthID>
-          <DefaultAbbrvName>Abr</DefaultAbbrvName>
-          <DefaultFullName>Abriil</DefaultFullName>
+          <DefaultAbbrvName>أبريل</DefaultAbbrvName>
+          <DefaultFullName>أبريل</DefaultFullName>
         </Month>
         <Month>
           <MonthID>may</MonthID>
-          <DefaultAbbrvName>Maj</DefaultAbbrvName>
-          <DefaultFullName>Majo</DefaultFullName>
+          <DefaultAbbrvName>مايو</DefaultAbbrvName>
+          <DefaultFullName>مايو</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jun</MonthID>
-          <DefaultAbbrvName>Jun</DefaultAbbrvName>
-          <DefaultFullName>Junyo</DefaultFullName>
+          <DefaultAbbrvName>يونيو</DefaultAbbrvName>
+          <DefaultFullName>يونيو</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
-          <DefaultAbbrvName>Jul</DefaultAbbrvName>
-          <DefaultFullName>Julaayo</DefaultFullName>
+          <DefaultAbbrvName>يوليو</DefaultAbbrvName>
+          <DefaultFullName>يوليو</DefaultFullName>
         </Month>
         <Month>
           <MonthID>aug</MonthID>
-          <DefaultAbbrvName>Ago</DefaultAbbrvName>
-          <DefaultFullName>Agoosto</DefaultFullName>
+          <DefaultAbbrvName>أغسطس</DefaultAbbrvName>
+          <DefaultFullName>أغسطس</DefaultFullName>
         </Month>
         <Month>
           <MonthID>sep</MonthID>
-          <DefaultAbbrvName>Seb</DefaultAbbrvName>
-          <DefaultFullName>Sebtembar </DefaultFullName>
+          <DefaultAbbrvName>سبتمبر</DefaultAbbrvName>
+          <DefaultFullName>سبتمبر</DefaultFullName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
-          <DefaultAbbrvName>Okt</DefaultAbbrvName>
-          <DefaultFullName>Oktoobar</DefaultFullName>
+          <DefaultAbbrvName>أكتوبر</DefaultAbbrvName>
+          <DefaultFullName>أكتوبر</DefaultFullName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
-          <DefaultAbbrvName>Nof</DefaultAbbrvName>
-          <DefaultFullName>Nofeembar</DefaultFullName>
+          <DefaultAbbrvName>نوفمبر</DefaultAbbrvName>
+          <DefaultFullName>نوفمبر</DefaultFullName>
         </Month>
         <Month>
           <MonthID>dec</MonthID>
-          <DefaultAbbrvName>Dis</DefaultAbbrvName>
-          <DefaultFullName>Disembar</DefaultFullName>
+          <DefaultAbbrvName>ديسمبر</DefaultAbbrvName>
+          <DefaultFullName>ديسمبر</DefaultFullName>
         </Month>
       </MonthsOfYear>
       <Eras>
         <Era>
           <EraID>bc</EraID>
-          <DefaultAbbrvName>CH</DefaultAbbrvName>
-          <DefaultFullName>Ciise Hortiis</DefaultFullName>
+          <DefaultAbbrvName>ق.م</DefaultAbbrvName>
+          <DefaultFullName>قبل الميلاد</DefaultFullName>
         </Era>
         <Era>
           <EraID>ad</EraID>
-          <DefaultAbbrvName>CD</DefaultAbbrvName>
-          <DefaultFullName>Ciise Dabadiis</DefaultFullName>
+          <DefaultAbbrvName>م</DefaultAbbrvName>
+          <DefaultFullName>ميلادي</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
@@ -315,17 +314,10 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>SOS</CurrencyID>
-      <CurrencySymbol>Ssh</CurrencySymbol>
-      <BankSymbol>SOS</BankSymbol>
-      <CurrencyName>Shilin Soomaali</CurrencyName>
-      <DecimalPlaces>2</DecimalPlaces>
-    </Currency>
-    <Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
-      <CurrencyID>SOS</CurrencyID>
-      <CurrencySymbol>So. Sh.</CurrencySymbol>
-      <BankSymbol>SOS</BankSymbol>
-      <CurrencyName>Shilin Soomaali</CurrencyName>
+      <CurrencyID>OMR</CurrencyID>
+      <CurrencySymbol>ر.ع</CurrencySymbol>
+      <BankSymbol>OMR</BankSymbol>
+      <CurrencyName>ريال عماني</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
   </LC_CURRENCY>
@@ -336,29 +328,29 @@
   </LC_TRANSLITERATION>
   <LC_MISC>
     <ReservedWords>
-      <trueWord>Run</trueWord>
-      <falseWord>Been</falseWord>
-      <quarter1Word>Afarmeeloodka 1aad</quarter1Word>
-      <quarter2Word>Afarmeeloodka 2aad</quarter2Word>
-      <quarter3Word>Afarmeeloodka 3aad</quarter3Word>
-      <quarter4Word>Afarmeeloodka 4aad</quarter4Word>
-      <aboveWord>Kor</aboveWord>
-      <belowWord>Hoos</belowWord>
-      <quarter1Abbreviation>AM1</quarter1Abbreviation>
-      <quarter2Abbreviation>AM2</quarter2Abbreviation>
-      <quarter3Abbreviation>AM3</quarter3Abbreviation>
-      <quarter4Abbreviation>AM4</quarter4Abbreviation>
+      <trueWord>صحيح</trueWord>
+      <falseWord>خاطئ</falseWord>
+      <quarter1Word>الربع الأول</quarter1Word>
+      <quarter2Word>الربع الثاني</quarter2Word>
+      <quarter3Word>الربع الثالث</quarter3Word>
+      <quarter4Word>الربع الرابع</quarter4Word>
+      <aboveWord>فوق</aboveWord>
+      <belowWord>تحت</belowWord>
+      <quarter1Abbreviation>الربع 1</quarter1Abbreviation>
+      <quarter2Abbreviation>الربع 2</quarter2Abbreviation>
+      <quarter3Abbreviation>الربع 3</quarter3Abbreviation>
+      <quarter4Abbreviation>الربع 4</quarter4Abbreviation>
     </ReservedWords>
   </LC_MISC>
   <LC_NumberingLevel>
-    <NumberingLevel NumType="4" Prefix=" " Suffix=")"/>
-    <NumberingLevel NumType="4" Prefix=" " Suffix="."/>
-    <NumberingLevel NumType="4" Prefix="(" Suffix=")"/>
-    <NumberingLevel NumType="2" Prefix=" " Suffix="."/>
-    <NumberingLevel NumType="0" Prefix=" " Suffix=")"/>
-    <NumberingLevel NumType="1" Prefix=" " Suffix=")"/>
-    <NumberingLevel NumType="1" Prefix="(" Suffix=")"/>
-    <NumberingLevel NumType="3" Prefix=" " Suffix="."/>
+    <NumberingLevel NumType="4" Prefix=" "  Suffix=")"/>
+    <NumberingLevel NumType="4" Prefix=" "  Suffix="."/>
+    <NumberingLevel NumType="4" Prefix="("  Suffix=")"/>
+    <NumberingLevel NumType="2" Prefix=" "  Suffix="."/>
+    <NumberingLevel NumType="0" Prefix=" "  Suffix="."/>
+    <NumberingLevel NumType="1" Prefix=" "  Suffix=")"/>
+    <NumberingLevel NumType="1" Prefix="("  Suffix=")"/>
+    <NumberingLevel NumType="3" Prefix=" "  Suffix="."/>
   </LC_NumberingLevel>
   <LC_OutLineNumberingLevel ref="en_US"/>
 </Locale>

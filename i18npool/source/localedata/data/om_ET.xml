@@ -1,14 +1,14 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE Locale SYSTEM 'locale.dtd'>
-<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.1">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM "locale.dtd">
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.0">
   <LC_INFO>
     <Language>
-      <LangID>so</LangID>
-      <DefaultName>Somali</DefaultName>
+      <LangID>om</LangID>
+      <DefaultName>Oromo, West Central</DefaultName>
     </Language>
     <Country>
-      <CountryID>SO</CountryID>
-      <DefaultName>Somalia</DefaultName>
+      <CountryID>ET</CountryID>
+      <DefaultName>Ethiopia</DefaultName>
     </Country>
   </LC_INFO>
   <LC_CTYPE unoid="generic">
@@ -25,16 +25,16 @@
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
     <Markers>
-      <QuotationStart>“</QuotationStart>
-      <QuotationEnd>”</QuotationEnd>
-      <DoubleQuotationStart>‘</DoubleQuotationStart>
-      <DoubleQuotationEnd>’</DoubleQuotationEnd>
+      <QuotationStart>‘</QuotationStart>
+      <QuotationEnd>’</QuotationEnd>
+      <DoubleQuotationStart>“</DoubleQuotationStart>
+      <DoubleQuotationEnd>”</DoubleQuotationEnd>
     </Markers>
-    <TimeAM>XH</TimeAM>
-    <TimePM>XD</TimePM>
+    <TimeAM>AM</TimeAM>
+    <TimePM>PM</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$Ssh-477]">
+  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$Qar-0472]">
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
       <FormatCode>General</FormatCode>
     </FormatElement>
@@ -66,22 +66,22 @@
       <FormatCode>0.00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
-      <FormatCode>[CURRENCY]#,##0;-[CURRENCY]#,##0</FormatCode>
+      <FormatCode>[CURRENCY]#,##0;([CURRENCY]#,##0)</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode>[CURRENCY]#,##0.00;-[CURRENCY]#,##0.00</FormatCode>
+      <FormatCode>[CURRENCY]#,##0.00;([CURRENCY]#,##0.00)</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
-      <FormatCode>[CURRENCY]#,##0;[RED]-[CURRENCY]#,##0</FormatCode>
+      <FormatCode>[CURRENCY]#,##0;[RED]([CURRENCY]#,##0)</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
-      <FormatCode>[CURRENCY]#,##0.00;[RED]-[CURRENCY]#,##0.00</FormatCode>
+      <FormatCode>[CURRENCY]#,##0.00;[RED]([CURRENCY]#,##0.00)</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
       <FormatCode>CCC#,##0.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode>[CURRENCY]#,##0.--;[RED]-[CURRENCY]#,##0.--</FormatCode>
+      <FormatCode>[CURRENCY]#,##0.--;[RED]([CURRENCY]#,##0.--)</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>D/MM/YY</FormatCode>
@@ -191,141 +191,134 @@
     <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-Z</IndexKey>
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
-    <FollowPageWord>bg.s</FollowPageWord>
-    <FollowPageWord>bgg.s</FollowPageWord>
+    <FollowPageWord>Fl</FollowPageWord>
+    <FollowPageWord>Flt</FollowPageWord>
   </LC_INDEX>
   <LC_CALENDAR>
     <Calendar unoid="gregorian" default="true">
       <DaysOfWeek>
         <Day>
           <DayID>sun</DayID>
-          <DefaultAbbrvName>Axa</DefaultAbbrvName>
-          <DefaultFullName>Axad</DefaultFullName>
+          <DefaultAbbrvName>Dil</DefaultAbbrvName>
+          <DefaultFullName>Dilbata</DefaultFullName>
         </Day>
         <Day>
           <DayID>mon</DayID>
-          <DefaultAbbrvName>Isn</DefaultAbbrvName>
-          <DefaultFullName>Isniin</DefaultFullName>
+          <DefaultAbbrvName>Wix</DefaultAbbrvName>
+          <DefaultFullName>Wiixata</DefaultFullName>
         </Day>
         <Day>
           <DayID>tue</DayID>
-          <DefaultAbbrvName>Tal</DefaultAbbrvName>
-          <DefaultFullName>Talaado</DefaultFullName>
+          <DefaultAbbrvName>Kib</DefaultAbbrvName>
+          <DefaultFullName>Kibxata</DefaultFullName>
         </Day>
         <Day>
           <DayID>wed</DayID>
-          <DefaultAbbrvName>Arb</DefaultAbbrvName>
-          <DefaultFullName>Arboco</DefaultFullName>
+          <DefaultAbbrvName>Rob</DefaultAbbrvName>
+          <DefaultFullName>Roobii</DefaultFullName>
         </Day>
         <Day>
           <DayID>thu</DayID>
-          <DefaultAbbrvName>Kha</DefaultAbbrvName>
-          <DefaultFullName>Khamiis</DefaultFullName>
+          <DefaultAbbrvName>Kam</DefaultAbbrvName>
+          <DefaultFullName>Kamisa</DefaultFullName>
         </Day>
         <Day>
           <DayID>fri</DayID>
           <DefaultAbbrvName>Jim</DefaultAbbrvName>
-          <DefaultFullName>Jimco</DefaultFullName>
+          <DefaultFullName>Jimaata</DefaultFullName>
         </Day>
         <Day>
           <DayID>sat</DayID>
-          <DefaultAbbrvName>Sab</DefaultAbbrvName>
-          <DefaultFullName>Sabti</DefaultFullName>
+          <DefaultAbbrvName>San</DefaultAbbrvName>
+          <DefaultFullName>Sanbat-Xiqqaa</DefaultFullName>
         </Day>
       </DaysOfWeek>
       <MonthsOfYear>
         <Month>
           <MonthID>jan</MonthID>
-          <DefaultAbbrvName>Jan</DefaultAbbrvName>
-          <DefaultFullName>Janaayo</DefaultFullName>
+          <DefaultAbbrvName>Amj</DefaultAbbrvName>
+          <DefaultFullName>Amajjii</DefaultFullName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
-          <DefaultAbbrvName>Feb</DefaultAbbrvName>
-          <DefaultFullName>Febraayo</DefaultFullName>
+          <DefaultAbbrvName>Gur</DefaultAbbrvName>
+          <DefaultFullName>Gurraandhala</DefaultFullName>
         </Month>
         <Month>
           <MonthID>mar</MonthID>
-          <DefaultAbbrvName>Mar</DefaultAbbrvName>
-          <DefaultFullName>Marso</DefaultFullName>
+          <DefaultAbbrvName>Bit</DefaultAbbrvName>
+          <DefaultFullName>Bitootessa</DefaultFullName>
         </Month>
         <Month>
           <MonthID>apr</MonthID>
-          <DefaultAbbrvName>Abr</DefaultAbbrvName>
-          <DefaultFullName>Abriil</DefaultFullName>
+          <DefaultAbbrvName>Cam</DefaultAbbrvName>
+          <DefaultFullName>Caamsaa</DefaultFullName>
         </Month>
         <Month>
           <MonthID>may</MonthID>
-          <DefaultAbbrvName>Maj</DefaultAbbrvName>
-          <DefaultFullName>Majo</DefaultFullName>
+          <DefaultAbbrvName>Ebl</DefaultAbbrvName>
+          <DefaultFullName>Ebla</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jun</MonthID>
-          <DefaultAbbrvName>Jun</DefaultAbbrvName>
-          <DefaultFullName>Junyo</DefaultFullName>
+          <DefaultAbbrvName>Wax</DefaultAbbrvName>
+          <DefaultFullName>Waxabajjii</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
-          <DefaultAbbrvName>Jul</DefaultAbbrvName>
-          <DefaultFullName>Julaayo</DefaultFullName>
+          <DefaultAbbrvName>Ado</DefaultAbbrvName>
+          <DefaultFullName>Adoolessa</DefaultFullName>
         </Month>
         <Month>
           <MonthID>aug</MonthID>
-          <DefaultAbbrvName>Ago</DefaultAbbrvName>
-          <DefaultFullName>Agoosto</DefaultFullName>
+          <DefaultAbbrvName>Hag</DefaultAbbrvName>
+          <DefaultFullName>Hagayya </DefaultFullName>
         </Month>
         <Month>
           <MonthID>sep</MonthID>
-          <DefaultAbbrvName>Seb</DefaultAbbrvName>
-          <DefaultFullName>Sebtembar </DefaultFullName>
+          <DefaultAbbrvName>Ful</DefaultAbbrvName>
+          <DefaultFullName>Fulbaana</DefaultFullName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
-          <DefaultAbbrvName>Okt</DefaultAbbrvName>
-          <DefaultFullName>Oktoobar</DefaultFullName>
+          <DefaultAbbrvName>Onk</DefaultAbbrvName>
+          <DefaultFullName>Onkoloolessa </DefaultFullName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
-          <DefaultAbbrvName>Nof</DefaultAbbrvName>
-          <DefaultFullName>Nofeembar</DefaultFullName>
+          <DefaultAbbrvName>Sad</DefaultAbbrvName>
+          <DefaultFullName>Sadaasa</DefaultFullName>
         </Month>
         <Month>
           <MonthID>dec</MonthID>
-          <DefaultAbbrvName>Dis</DefaultAbbrvName>
-          <DefaultFullName>Disembar</DefaultFullName>
+          <DefaultAbbrvName>Mud</DefaultAbbrvName>
+          <DefaultFullName>Muddee</DefaultFullName>
         </Month>
       </MonthsOfYear>
       <Eras>
         <Era>
           <EraID>bc</EraID>
-          <DefaultAbbrvName>CH</DefaultAbbrvName>
-          <DefaultFullName>Ciise Hortiis</DefaultFullName>
+          <DefaultAbbrvName>DKD</DefaultAbbrvName>
+          <DefaultFullName>Dhaloota Kiristoosiin Dura</DefaultFullName>
         </Era>
         <Era>
           <EraID>ad</EraID>
-          <DefaultAbbrvName>CD</DefaultAbbrvName>
-          <DefaultFullName>Ciise Dabadiis</DefaultFullName>
+          <DefaultAbbrvName>DKB</DefaultAbbrvName>
+          <DefaultFullName>Dhaloota Kiristoosiin Booda</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
-        <DayID>sat</DayID>
+        <DayID>mon</DayID>
       </StartDayOfWeek>
       <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
     </Calendar>
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>SOS</CurrencyID>
-      <CurrencySymbol>Ssh</CurrencySymbol>
-      <BankSymbol>SOS</BankSymbol>
-      <CurrencyName>Shilin Soomaali</CurrencyName>
-      <DecimalPlaces>2</DecimalPlaces>
-    </Currency>
-    <Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
-      <CurrencyID>SOS</CurrencyID>
-      <CurrencySymbol>So. Sh.</CurrencySymbol>
-      <BankSymbol>SOS</BankSymbol>
-      <CurrencyName>Shilin Soomaali</CurrencyName>
+      <CurrencyID>ETB</CurrencyID>
+      <CurrencySymbol>Qar</CurrencySymbol>
+      <BankSymbol>ETB</BankSymbol>
+      <CurrencyName>Qarshii</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
   </LC_CURRENCY>
@@ -336,18 +329,18 @@
   </LC_TRANSLITERATION>
   <LC_MISC>
     <ReservedWords>
-      <trueWord>Run</trueWord>
-      <falseWord>Been</falseWord>
-      <quarter1Word>Afarmeeloodka 1aad</quarter1Word>
-      <quarter2Word>Afarmeeloodka 2aad</quarter2Word>
-      <quarter3Word>Afarmeeloodka 3aad</quarter3Word>
-      <quarter4Word>Afarmeeloodka 4aad</quarter4Word>
-      <aboveWord>Kor</aboveWord>
-      <belowWord>Hoos</belowWord>
-      <quarter1Abbreviation>AM1</quarter1Abbreviation>
-      <quarter2Abbreviation>AM2</quarter2Abbreviation>
-      <quarter3Abbreviation>AM3</quarter3Abbreviation>
-      <quarter4Abbreviation>AM4</quarter4Abbreviation>
+      <trueWord>Dhugaa</trueWord>
+      <falseWord>Soba</falseWord>
+      <quarter1Word>Bona</quarter1Word>
+      <quarter2Word>Arfaasaa</quarter2Word>
+      <quarter3Word>Ganna</quarter3Word>
+      <quarter4Word>Birraa</quarter4Word>
+      <aboveWord>Gubbaa</aboveWord>
+      <belowWord>Jala</belowWord>
+      <quarter1Abbreviation>Bn</quarter1Abbreviation>
+      <quarter2Abbreviation>Ar</quarter2Abbreviation>
+      <quarter3Abbreviation>Gn</quarter3Abbreviation>
+      <quarter4Abbreviation>Br</quarter4Abbreviation>
     </ReservedWords>
   </LC_MISC>
   <LC_NumberingLevel>
