@@ -107,6 +107,7 @@ IDLFILES=\
      HorizontalAdjust.idl\
      HypertextDocument.idl\
     IllustrationsIndex.idl\
+    InContentMetadata.idl\
      InvalidTextContentException.idl\
         LabelFollow.idl\
      LineNumberingProperties.idl\

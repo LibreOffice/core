@@ -551,7 +551,8 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
         {
             for (i = first; pszArguments[i] != NULL; i++)
                 n += strlen(pszArguments[i]) + 1;
-            args = (sal_Char*)malloc(n);
+            // YD DosStartSession requires low-mem buffers!
+            args = (sal_Char*)_tmalloc(n);
             *args = '\0';
             for (i = first; pszArguments[i] != NULL; i++)
             {
@@ -567,7 +568,8 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
         {
             for (i = 0; pszEnvironments[i] != NULL; i++)
                 n += strlen(pszEnvironments[i]) + 1;
-            envs = (sal_Char*)malloc(n + 1);
+            // YD DosStartSession requires low-mem buffers!
+            envs = (sal_Char*)_tmalloc(n + 1);
             pStr = (sal_Char*)envs;
             for (i = 0; pszEnvironments[i] != NULL; i++)
             {
@@ -660,9 +662,9 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
 
 
         if(envs)
-            free(envs);
+            _tfree(envs);
         if(args)
-            free(args);
+            _tfree(args);
 
         if( rc != NO_ERROR )
             return osl_Process_E_Unknown;

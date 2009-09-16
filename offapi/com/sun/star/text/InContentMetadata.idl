@@ -2,13 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright IBM Corporation 2009.
- * Copyright 2009 by Sun Microsystems, Inc.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: DocumentMSPasswordRequest.idl,v $
- * $Revision: 1.0 $
+ * $RCSfile: TextField.idl,v $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,37 +27,52 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_task_DocumentMSPasswordRequest_idl__
-#define __com_sun_star_task_DocumentMSPasswordRequest_idl__
 
-#ifndef __com_sun_star_task_PasswordRequest_idl__
-#include <com/sun/star/task/PasswordRequest.idl>
+#ifndef __com_sun_star_text_InContentMetadata_idl__
+#define __com_sun_star_text_InContentMetadata_idl__
+
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#endif
+
+#ifndef __com_sun_star_text_TextContent_idl__
+#include <com/sun/star/text/TextContent.idl>
+#endif
+
+#ifndef __com_sun_star_rdf_XMetadatable_idl__
+#include <com/sun/star/rdf/XMetadatable.idl>
 #endif
 
 
 //=============================================================================
 
-module com { module sun { module star { module task {
+module com {  module sun {  module star {  module text {
 
 //=============================================================================
-/** this request specifies the mode in which the password for Microsoft Office file format encryption should be asked
 
-    <P>
-    It is supported by <type>InteractionHandler</type> service, and can
-    be used to interact for a document password. Continuations for using with
-    the mentioned service are Abort and Approve.
-    </P>
+/** is a <type>TextContent</type> that can be used to attach RDF metadata
+    to a range of text.
 
     @since OOo 3.2
-*/
-published exception DocumentMSPasswordRequest: PasswordRequest
+ */
+service InContentMetadata
 {
     //-------------------------------------------------------------------------
-    /** the name of the document
-    */
-    string Name;
+    /** None of the properties of <type>TextContent</type> are
+        supported. */
+    service com::sun::star::text::TextContent;
+
+    //-------------------------------------------------------------------------
+    /** The <type>InContentMetadata</type> can have RDF metadata attached. */
+    interface com::sun::star::rdf::XMetadatable;
+
+    //-------------------------------------------------------------------------
+    /** The <type>TextContent</type>s that are contained in the
+        annotated range of text can be enumerated. */
+    interface com::sun::star::container::XEnumerationAccess;
 
 };
+
 
 //=============================================================================
 

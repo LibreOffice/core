@@ -56,6 +56,9 @@ EXTRA_FRAMEWORK_FLAG=-framework Python
 # pyuno.so even on Mac OS X, because it is a python module
 PYUNO_MODULE=$(DLLDEST)$/pyuno.so
 PYUNORC=pyunorc
+.ELIF "$(GUI)" == "OS2"
+.INCLUDE :  pyversion.mk
+PYUNORC=pyuno.ini
 .ELSE
 .INCLUDE :  pyversion.mk
 PYUNORC=pyuno.ini
