@@ -1945,7 +1945,7 @@ void ScInterpreter::ScDBGet()
     if (pQueryParam.get())
     {
 #if 1
-        ScDBQueryValueIterator aValIter(pDok, pQueryParam.release());
+        ScDBQueryDataIterator aValIter(pDok, pQueryParam.release());
 
 #else
         ScQueryParam* p = static_cast<ScQueryParam*>(pQueryParam.get());

@@ -5817,8 +5817,8 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
     auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam.get())
     {
-        ScDBQueryValueIterator aValIter(pDok, pQueryParam.release());
-        ScDBQueryValueIterator::Value aValue;
+        ScDBQueryDataIterator aValIter(pDok, pQueryParam.release());
+        ScDBQueryDataIterator::Value aValue;
         if ( aValIter.GetFirst(aValue) && !aValue.mnError )
         {
             switch( eFunc )
@@ -5911,8 +5911,8 @@ void ScInterpreter::ScDBCount()
         }
         else
         {   // count only matching records with a value in the "result" field
-            ScDBQueryValueIterator aValIter( pDok, pQueryParam.release());
-            ScDBQueryValueIterator::Value aValue;
+            ScDBQueryDataIterator aValIter( pDok, pQueryParam.release());
+            ScDBQueryDataIterator::Value aValue;
             if ( aValIter.GetFirst(aValue) && !aValue.mnError )
             {
                 do
@@ -5937,8 +5937,8 @@ void ScInterpreter::ScDBCount2()
     if (pQueryParam.get())
     {
         ULONG nCount = 0;
-        ScDBQueryValueIterator aValIter( pDok, pQueryParam.release());
-        ScDBQueryValueIterator::Value aValue;
+        ScDBQueryDataIterator aValIter( pDok, pQueryParam.release());
+        ScDBQueryDataIterator::Value aValue;
         aValIter.SetCountString(true);
         if ( aValIter.GetFirst(aValue) && !aValue.mnError )
         {
@@ -5996,8 +5996,8 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
     auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam.get())
     {
-        ScDBQueryValueIterator aValIter(pDok, pQueryParam.release());
-        ScDBQueryValueIterator::Value aValue;
+        ScDBQueryDataIterator aValIter(pDok, pQueryParam.release());
+        ScDBQueryDataIterator::Value aValue;
         if (aValIter.GetFirst(aValue) && !aValue.mnError)
         {
             do

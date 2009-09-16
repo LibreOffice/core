@@ -132,7 +132,7 @@ public:
 
 // ============================================================================
 
-class ScDBQueryValueIterator
+class ScDBQueryDataIterator
 {
 public:
     struct Value
@@ -149,19 +149,19 @@ private:
     class DataAccess
     {
     public:
-        DataAccess(const ScDBQueryValueIterator* pParent);
+        DataAccess(const ScDBQueryDataIterator* pParent);
         virtual ~DataAccess() = 0;
         virtual bool getCurrent(Value& rValue) = 0;
         virtual bool getFirst(Value& rValue) = 0;
         virtual bool getNext(Value& rValue) = 0;
     protected:
-        const ScDBQueryValueIterator* mpParent;
+        const ScDBQueryDataIterator* mpParent;
     };
 
     class DataAccessInternal : public DataAccess
     {
     public:
-        DataAccessInternal(const ScDBQueryValueIterator* pParent, const ScDBQueryParamInternal* pParam, ScDocument* pDoc);
+        DataAccessInternal(const ScDBQueryDataIterator* pParent, const ScDBQueryParamInternal* pParam, ScDocument* pDoc);
         virtual ~DataAccessInternal();
         virtual bool getCurrent(Value& rValue);
         virtual bool getFirst(Value& rValue);
@@ -185,7 +185,7 @@ private:
     class DataAccessMatrix : public DataAccess
     {
     public:
-        DataAccessMatrix(const ScDBQueryValueIterator* pParent, const ScDBQueryParamMatrix* pParam);
+        DataAccessMatrix(const ScDBQueryDataIterator* pParent, const ScDBQueryParamMatrix* pParam);
         virtual ~DataAccessMatrix();
         virtual bool getCurrent(Value& rValue);
         virtual bool getFirst(Value& rValue);
@@ -208,7 +208,7 @@ private:
     bool            GetThis(Value& rValue);
 
 public:
-                    ScDBQueryValueIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam);
+                    ScDBQueryDataIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam);
     /// Does NOT reset rValue if no value found!
     bool            GetFirst(Value& rValue);
     /// Does NOT reset rValue if no value found!
