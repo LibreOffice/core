@@ -370,7 +370,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                 SvtSaveOptions::ODFDefaultVersion nDefVersion = aSaveOpt.GetODFDefaultVersion();
 
                 // older versions can not have this property set, it exists only starting from ODF1.2
-                if ( nDefVersion == SvtSaveOptions::ODFVER_012 )
+                if ( nDefVersion >= SvtSaveOptions::ODFVER_012 )
                     aVersion = ODFVER_012_TEXT;
 
                 if ( aVersion.getLength() )
@@ -1207,7 +1207,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
             bNoPreserveForOasis = (
                                    (aODFVersion.equals( ODFVER_012_TEXT ) && nVersion == SvtSaveOptions::ODFVER_011) ||
-                                   (!aODFVersion.getLength() && nVersion == SvtSaveOptions::ODFVER_012)
+                                   (!aODFVersion.getLength() && nVersion >= SvtSaveOptions::ODFVER_012)
                                   );
         }
     }

@@ -1386,7 +1386,7 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
     {
         // the document might need saving ( new, modified or in ODF1.1 format without signature )
 
-        if ( nVersion == SvtSaveOptions::ODFVER_012 )
+        if ( nVersion >= SvtSaveOptions::ODFVER_012 )
         {
 
             if ( (bHasSign && QueryBox( NULL, SfxResId( MSG_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN ) ).Execute() == RET_YES)

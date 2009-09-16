@@ -2358,14 +2358,19 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
                                 <desc>ODFVER_011</desc>
                             </info>
                         </enumeration>
-                        <enumeration oor:value="3">
+                        <enumeration oor:value="4">
                             <info>
                                 <desc>ODFVER_012</desc>
                             </info>
                         </enumeration>
-                    </constraints>
-                    <value>3</value>
-                </prop>
+                        <enumeration oor:value="3">
+                          <info>
+                            <desc>ODFVER_LATEST</desc>
+                          </info>
+                        </enumeration>
+                      </constraints>
+                      <value>3</value>
+                  </prop>
             </group>
 		</group>
 		<group oor:name="Load">
@@ -6003,7 +6008,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
    	        <!-- UIHints: Edit Search/Replace  -->
 		<info>
                		<author>mod</author>
-                	<desc>Specifies if search includes notes(SwPostItFields)</desc>
+                	<desc>Specifies if search includes comments(SwPostItFields)</desc>
                 </info>
 		<value>false</value>
             </prop>

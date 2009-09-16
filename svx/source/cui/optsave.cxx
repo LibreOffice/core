@@ -777,7 +777,7 @@ IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
 IMPL_LINK( SfxSaveTabPage, ODFVersionHdl_Impl, ListBox *, EMPTYARG )
 {
     long nVersion = long( aODFVersionLB.GetEntryData( aODFVersionLB.GetSelectEntryPos() ) );
-    bool bShown = SvtSaveOptions::ODFDefaultVersion( nVersion ) == SvtSaveOptions::ODFVER_012;
+    bool bShown = SvtSaveOptions::ODFDefaultVersion( nVersion ) != SvtSaveOptions::ODFVER_LATEST;
     if ( bShown )
     {
         bool bHasODFFormat = false;
@@ -795,8 +795,8 @@ IMPL_LINK( SfxSaveTabPage, ODFVersionHdl_Impl, ListBox *, EMPTYARG )
                 || ( aSaveAsLB.GetEntryData( aSaveAsLB.GetSelectEntryPos() ) != NULL );
     }
 
-    aODFWarningFI.Show( !bShown );
-    aODFWarningFT.Show( !bShown );
+    aODFWarningFI.Show( bShown );
+    aODFWarningFT.Show( bShown );
 
     return 0;
 }

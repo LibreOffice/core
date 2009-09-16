@@ -89,6 +89,7 @@ using namespace ::com::sun::star::document;
 using namespace ::xmloff::token;
 
 sal_Char __READONLY_DATA sXML_np__office[] = "_office";
+sal_Char __READONLY_DATA sXML_np__office_ext[] = "_office_ooo";
 sal_Char __READONLY_DATA sXML_np__ooo[] = "_ooo";
 sal_Char __READONLY_DATA sXML_np__ooow[] = "_ooow";
 sal_Char __READONLY_DATA sXML_np__oooc[] = "_oooc";
@@ -241,6 +242,9 @@ void SvXMLImport::_InitCtor()
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__office ) ),
                             GetXMLToken(XML_N_OFFICE),
                             XML_NAMESPACE_OFFICE );
+        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__office_ext ) ),
+                            GetXMLToken(XML_N_OFFICE_EXT),
+                            XML_NAMESPACE_OFFICE_EXT );
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__ooo ) ), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__style) ),
                             GetXMLToken(XML_N_STYLE),

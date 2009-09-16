@@ -377,7 +377,6 @@
 #define SID_FRAME_UP            (SID_SC_START + 407)
 #define SID_FRAME_DOWN          (SID_SC_START + 408)
 #define SID_ENTER_STRING        (SID_SC_START + 476)
-#define SID_INSERT_POSTIT       (SID_SC_START + 276)
 #define SID_ATTR_SECIALCHAR     (SID_SC_START + 581)
 #define SID_ATTR_SPECIALCHAR    (SID_SC_START + 581)
 
@@ -1352,8 +1351,17 @@
 #define SID_RECHECK_DOCUMENT                            (SID_SVX_START+1091)
 #define SID_ATTR_PARA_OUTLINE_LEVEL                     (SID_SVX_START+1092)
 
+#define SID_INSERT_POSTIT                               (SID_SVX_START+1093)
+#define SID_DELETE_POSTIT                               (SID_SVX_START+1094)
+#define SID_NEXT_POSTIT                                 (SID_SVX_START+1095)
+#define SID_PREVIOUS_POSTIT                             (SID_SVX_START+1096)
+#define SID_DELETEALL_POSTIT                            (SID_SVX_START+1097)
+#define SID_SHOW_POSTIT                                 (SID_SVX_START+1098)
+#define SID_REPLYTO_POSTIT                              (SID_SVX_START+1099)
+#define SID_DELETEALLBYAUTHOR_POSTIT                    (SID_SVX_START+1100)
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               SID_ATTR_PARA_OUTLINE_LEVEL + 1
+#define SID_SVX_FIRSTFREE                               SID_DELETEALLBYAUTHOR_POSTIT + 1
 
 // --------------------------------------------------------------------------
 // Overflow check for slot IDs

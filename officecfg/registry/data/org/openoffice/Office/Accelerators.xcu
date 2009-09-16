@@ -1872,7 +1872,19 @@
     </node>
    </node>
    <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace">
-    <node oor:name="1_MOD1" oor:op="replace">
+     <node oor:name="PAGEDOWN_MOD1_MOD2" oor:op="replace">
+       <prop oor:name="Command">
+         <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+         <value xml:lang="en-US">.uno:NextAnnotation</value>
+       </prop>
+     </node>
+     <node oor:name="PAGEUP_MOD1_MOD2" oor:op="replace">
+       <prop oor:name="Command">
+         <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+         <value xml:lang="en-US">.uno:PreviousAnnotation</value>
+       </prop>
+     </node>
+     <node oor:name="1_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:SpacePara1</value>
      </prop>
