@@ -245,6 +245,7 @@ void BackingWindow::DataChanged( const DataChangedEvent& rDCEvt )
     if ( rDCEvt.GetFlags() & SETTINGS_STYLE )
     {
         initBackground();
+        Invalidate();
     }
 }
 
@@ -252,7 +253,7 @@ void BackingWindow::initBackground()
 {
     SetBackground( GetSettings().GetStyleSettings().GetWorkspaceGradient() );
 
-    bool bDark = GetSettings().GetStyleSettings().GetWindowColor().IsDark();
+    bool bDark = GetSettings().GetStyleSettings().GetHighContrastMode();
     maWelcomeTextColor = maLabelTextColor =  bDark ? Color( COL_WHITE ) : Color( 0x26, 0x35, 0x42 );
     Color aTextBGColor( bDark ? COL_BLACK : COL_WHITE );
 
@@ -527,7 +528,7 @@ void BackingWindow::layoutButtonAndText(
 
 void BackingWindow::Paint( const Rectangle& )
 {
-    bool bDark = GetSettings().GetStyleSettings().GetWindowColor().IsDark();
+    bool bDark = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     Color aBackColor( bDark ? COL_BLACK : COL_WHITE );
 

@@ -31,8 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-#include <connectivity/dbmetadata.hxx>
-#include <connectivity/dbexception.hxx>
+#include "connectivity/dbmetadata.hxx"
+#include "connectivity/dbexception.hxx"
+#include "connectivity/DriversConfig.hxx"
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
 
@@ -52,6 +53,7 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <boost/optional.hpp>
 
@@ -90,9 +92,19 @@ namespace dbtools
     {
         Reference< XConnection >        xConnection;
         Reference< XDatabaseMetaData >  xConnectionMetaData;
+        ::connectivity::DriversConfig   aDriverConfig;
 
         ::boost::optional< ::rtl::OUString >    sCachedIdentifierQuoteString;
         ::boost::optional< ::rtl::OUString >    sCachedCatalogSeparator;
+
+        DatabaseMetaData_Impl()
+            :xConnection()
+            ,xConnectionMetaData()
+            ,aDriverConfig( ::comphelper::getProcessServiceFactory() )
+            ,sCachedIdentifierQuoteString()
+            ,sCachedCatalogSeparator()
+        {
+        }
     };
 
     //--------------------------------------------------------------------
@@ -119,6 +131,17 @@ namespace dbtools
                 const ::rtl::OUString sError( aResources.getResourceString(STR_NO_CONNECTION_GIVEN));
                 throwSQLException( sError, SQL_CONNECTION_DOES_NOT_EXIST, NULL );
             }
+        }
+
+        //................................................................
+        static bool lcl_getDriverSetting( const sal_Char* _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
+        {
+            lcl_checkConnected( _metaData );
+            const ::comphelper::NamedValueCollection& rDriverMetaData = _metaData.aDriverConfig.getMetaData( _metaData.xConnectionMetaData->getURL() );
+            if ( !rDriverMetaData.has( _asciiName ) )
+                return false;
+            _out_setting = rDriverMetaData.get( _asciiName );
+            return true;
         }
 
         //................................................................
@@ -278,11 +301,11 @@ namespace dbtools
     //--------------------------------------------------------------------
     bool DatabaseMetaData::isAutoIncrementPrimaryKey() const
     {
-        bool doGenerate( true );
+        bool is( true );
         Any setting;
-        if ( lcl_getConnectionSetting( "AutoIncrementIsPrimaryKey", *m_pImpl, setting ) )
-            OSL_VERIFY( setting >>= doGenerate );
-        return doGenerate;
+        if ( lcl_getDriverSetting( "AutoIncrementIsPrimaryKey", *m_pImpl, setting ) )
+            OSL_VERIFY( setting >>= is );
+        return is;
     }
     //--------------------------------------------------------------------
     sal_Int32 DatabaseMetaData::getBooleanComparisonMode() const

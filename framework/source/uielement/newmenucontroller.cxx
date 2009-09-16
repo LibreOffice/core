@@ -486,7 +486,7 @@ void SAL_CALL NewMenuController::activate( const css::awt::MenuEvent& ) throw (R
         {
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
             sal_Bool bShowImages( rSettings.GetUseImagesInMenus() );
-            sal_Bool bHiContrast( rSettings.GetMenuColor().IsDark() );
+            sal_Bool bHiContrast( rSettings.GetHighContrastMode() );
 
             PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
 
@@ -563,7 +563,7 @@ void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments )
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
             m_bShowImages   = rSettings.GetUseImagesInMenus();
-            m_bHiContrast   = rSettings.GetMenuColor().IsDark();
+            m_bHiContrast   = rSettings.GetHighContrastMode();
 
             m_bNewMenu      = m_aCommandURL.equalsAscii( ".uno:AddDirect" );
         }

@@ -660,10 +660,15 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
 {
     check();
     if (m_readOnly)
+    {
+        OUString message;
+        if (m_context == OUSTR("shared"))
+            message = OUSTR("You need write permissions to install a shared extension!");
+        else
+            message = OUSTR("You need write permissions to install this extension!");
         throw deployment::DeploymentException(
-            OUSTR("operating on read-only context!"),
-            static_cast<OWeakObject *>(this), Any() );
-
+            message, static_cast<OWeakObject *>(this), Any() );
+    }
     Reference<XCommandEnvironment> xCmdEnv;
     if (m_xLogFile.is())
         xCmdEnv.set( new CmdEnvWrapperImpl( xCmdEnv_, m_xLogFile ) );
@@ -893,9 +898,15 @@ void PackageManagerImpl::removePackage(
 {
     check();
     if (m_readOnly)
+    {
+        OUString message;
+        if (m_context == OUSTR("shared"))
+            message = OUSTR("You need write permissions in order to remove a shared extension!");
+        else
+            message = OUSTR("You need write permissions in order to remove this extension!");
         throw deployment::DeploymentException(
-            OUSTR("operating on read-only context!"),
-            static_cast<OWeakObject *>(this), Any() );
+            message, static_cast<OWeakObject *>(this), Any() );
+    }
 
     Reference<XCommandEnvironment> xCmdEnv;
     if (m_xLogFile.is())
@@ -1117,9 +1128,15 @@ void PackageManagerImpl::reinstallDeployedPackages(
 {
     check();
     if (m_readOnly)
+    {
+        OUString message;
+        if (m_context == OUSTR("shared"))
+            message = OUSTR("You need write permissions in order to install shared extensions!");
+        else
+            message = OUSTR("You need write permissions in order to install extensions!");
         throw deployment::DeploymentException(
-            OUSTR("operating on read-only context!"),
-            static_cast<OWeakObject *>(this), Any() );
+            message, static_cast<OWeakObject *>(this), Any() );
+    }
 
     if (office_is_running())
         throw RuntimeException(

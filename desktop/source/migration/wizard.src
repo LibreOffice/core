@@ -305,7 +305,7 @@ TabPage TP_UPDATE_CHECK
 
 #define USERINDENT 40
 #define EDHEIGHT 12
-#define INITIALSWIDTH 25
+#define INITIALSWIDTH 50
 #define FTADD 2
 
 TabPage TP_USER

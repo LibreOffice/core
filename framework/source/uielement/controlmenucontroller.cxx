@@ -227,7 +227,7 @@ ControlMenuController::ControlMenuController( const ::com::sun::star::uno::Refer
     m_pResPopupMenu( 0 )
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    m_bWasHiContrast    = rSettings.GetMenuColor().IsDark();
+    m_bWasHiContrast    = rSettings.GetHighContrastMode();
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
 
 }
@@ -369,7 +369,7 @@ void SAL_CALL ControlMenuController::activate( const css::awt::MenuEvent& ) thro
 
         // Check if some modes have changed so we have to update our menu images
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        sal_Bool bIsHiContrast      = rSettings.GetMenuColor().IsDark();
+        sal_Bool bIsHiContrast      = rSettings.GetHighContrastMode();
         sal_Bool bShowMenuImages    = rSettings.GetUseImagesInMenus();
         sal_Bool bUpdateImages      = (( m_bWasHiContrast != bIsHiContrast ) || ( bShowMenuImages != m_bShowMenuImages ));
 
