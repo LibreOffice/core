@@ -659,7 +659,7 @@ bool ScDBQueryValueIterator::DataAccessMatrix::getCurrent(double& rValue, USHORT
 
 bool ScDBQueryValueIterator::DataAccessMatrix::getFirst(double& rValue, USHORT& rErr)
 {
-    mnCurRow = 1;
+    mnCurRow = mpParam->bHasHeader ? 1 : 0;
     return getCurrent(rValue, rErr);
 }
 
