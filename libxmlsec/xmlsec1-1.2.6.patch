@@ -213,15 +213,6 @@
    version_type=freebsd-$objformat
    case $version_type in
      freebsd-elf*)
-@@ -24598,7 +24599,7 @@
- fi
- 
- LIBXML_MIN_VERSION="2.4.2"
--LIBXML_CONFIG="xml2-config"
-+LIBXML_CONFIG="./libxml2-config"
- LIBXML_CFLAGS=""
- LIBXML_LIBS=""
- LIBXML_FOUND="no"
 @@ -25678,12 +25679,26 @@
  
  XMLSEC_NO_NSS="1"
@@ -2388,15 +2379,6 @@
  s,@XMLSEC_NO_SHA1@,$XMLSEC_NO_SHA1,;t t
 --- misc/xmlsec1-1.2.6/configure.in	2004-08-26 04:49:24.000000000 +0200
 +++ misc/build/xmlsec1-1.2.6/configure.in	2008-06-29 23:44:19.000000000 +0200
-@@ -143,7 +143,7 @@
- dnl find libxml
- dnl ==========================================================================
- LIBXML_MIN_VERSION="2.4.2"
--LIBXML_CONFIG="xml2-config"
-+LIBXML_CONFIG="./libxml2-config"
- LIBXML_CFLAGS=""
- LIBXML_LIBS=""
- LIBXML_FOUND="no"
 @@ -503,12 +503,26 @@
      
  XMLSEC_NO_NSS="1"
@@ -3076,58 +3058,6 @@
 +
 +#endif	/* __XMLSEC_NSS_TOKENS_H__ */
 +
---- misc/xmlsec1-1.2.6/libxml2-config	2008-06-29 23:44:40.000000000 +0200
-+++ misc/build/xmlsec1-1.2.6/libxml2-config	2008-06-29 23:44:19.000000000 +0200
-@@ -1 +1,48 @@
--dummy
-+#! /bin/sh
-+
-+if test "$SYSTEM_LIBXML" = "YES"
-+then xml2-config "$@"; exit 0
-+fi
-+
-+prefix=${SOLARVERSION}/${INPATH}
-+includedir=${SOLARVERSION}/${INPATH}/inc${UPDMINOREXT}/external
-+libdir=${SOLARVERSION}/${INPATH}/lib${UPDMINOREXT}
-+
-+while test $# -gt 0; do
-+    case "$1" in
-+    -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
-+    *) optarg= ;;
-+    esac
-+
-+    case "$1" in
-+    --prefix=*)
-+	prefix=$optarg
-+	includedir=$prefix/include
-+	libdir=$prefix/lib
-+	;;
-+
-+    --prefix)
-+	echo $prefix
-+	;;
-+
-+    --version)
-+	echo 2.5.4
-+	exit 0
-+	;;
-+
-+    --cflags)
-+       	echo -I${includedir} 
-+       	;;
-+
-+    --libs)
-+       	echo -L${libdir} ${LIBXML2LIB} ${ZLIB3RDLIB}   -lm  
-+       	;;
-+
-+    *)
-+	exit 1
-+	;;
-+    esac
-+    shift
-+done
-+
-+exit 0
 --- misc/xmlsec1-1.2.6/ltmain.sh	2004-08-26 08:00:15.000000000 +0200
 +++ misc/build/xmlsec1-1.2.6/ltmain.sh	2008-06-29 23:44:19.000000000 +0200
 @@ -1661,6 +1661,11 @@
