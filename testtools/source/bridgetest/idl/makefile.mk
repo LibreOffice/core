@@ -35,7 +35,7 @@ TARGET := bridgetest_idl
 
 .INCLUDE: settings.mk
 .INCLUDE: target.mk
-
+.IF "$(L10N_framework)"==""
 ALLTAR: $(MISC)$/$(TARGET).cppumaker.done $(MISC)$/$(TARGET).javamaker.done
 
 $(MISC)$/$(TARGET).cppumaker.done: $(BIN)$/bridgetest.rdb
@@ -70,3 +70,5 @@ $(BIN)$/cli_types_bridgetest.dll: $(BIN)$/bridgetest.rdb
 
 .ENDIF
 .ENDIF # GUI, WNT
+.ENDIF # L10N_framework
+
