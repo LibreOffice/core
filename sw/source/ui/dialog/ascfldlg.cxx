@@ -35,6 +35,8 @@
 #endif
 #include <hintids.hxx>
 #include <rtl/textenc.h>
+#include <i18npool/mslangid.hxx>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <svtools/lingucfg.hxx>
 #include <fontcfg.hxx>
 #include <swmodule.hxx>
@@ -234,14 +236,14 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                     switch(nAppScriptType)
                     {
                         case SCRIPTTYPE_ASIAN:
-                            aOpt.SetLanguage(aLinguOpt.nDefaultLanguage_CJK);
+                            aOpt.SetLanguage(MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, SCRIPTTYPE_ASIAN));
                         break;
                         case SCRIPTTYPE_COMPLEX:
-                            aOpt.SetLanguage(aLinguOpt.nDefaultLanguage_CTL);
+                            aOpt.SetLanguage(MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, SCRIPTTYPE_COMPLEX));
                         break;
                         //SCRIPTTYPE_LATIN:
                         default:
-                            aOpt.SetLanguage(aLinguOpt.nDefaultLanguage);
+                            aOpt.SetLanguage(MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, SCRIPTTYPE_LATIN));
                     }
                 }
             }
