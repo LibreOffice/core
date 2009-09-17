@@ -71,6 +71,7 @@ public class HelpIndexerTool
         String aLanguageStr = "";
         String aModule = "";
         String aTargetZipFileStr = "";
+        String aCfsName = "";
 
         // Scan arguments
         boolean bLang = false;
@@ -78,6 +79,7 @@ public class HelpIndexerTool
         boolean bZipDir = false;
         boolean bSrcDir = false;
         boolean bOutput = false;
+        boolean bCfsName = false;
 
         int nArgCount = args.length;
         for( int i = 0 ; i < nArgCount ; i++ )
@@ -127,6 +129,15 @@ public class HelpIndexerTool
                 }
                 i++;
             }
+            else if( "-checkcfsname".equals(args[i]) )
+            {
+                if( i + 1 < nArgCount )
+                {
+                    aCfsName = args[i + 1] + ".cfs";
+                    bCfsName = true;
+                }
+                i++;
+            }
         }
 
         if( !bLang || !bMod || !bZipDir || (!bOutput && !bExtensionMode) )
@@ -164,6 +175,15 @@ public class HelpIndexerTool
             }
             writer.close();
 
+            boolean bCfsFileOk = true;
+            if( bCfsName && !bExtensionMode && nRet != -1 )
+            {
+                String aCompleteCfsFileName = aDirToZipStr + File.separator + aIndexDirName + File.separator + aCfsName;
+                File aCfsFile = new File( aCompleteCfsFileName );
+                bCfsFileOk = aCfsFile.exists();
+                System.out.println( "Checking cfs file " + aCfsName+ ": " + (bCfsFileOk ? "Found" : "Not found") );
+            }
+
             if( bExtensionMode )
             {
                 if( !bSrcDir )
@@ -177,11 +197,17 @@ public class HelpIndexerTool
                 if( nRet == -1 )
                     deleteRecursively( aIndexDir );
 
-                if( !bExtensionMode )
+                if( bCfsFileOk )
                     System.out.println( "Zipping ..." );
                 File aDirToZipFile = new File( aDirToZipStr );
                 createZipFile( aDirToZipFile, aTargetZipFileStr );
                 deleteRecursively( aDirToZipFile );
+            }
+
+            if( !bCfsFileOk )
+            {
+                System.out.println( "cfs file check failed, terminating..." );
+                System.exit( -1 );
             }
 
             Date end = new Date();
