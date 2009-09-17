@@ -71,6 +71,7 @@ IDLFILES=\
     OfficeDocument.idl\
     OleEmbeddedServerRegistration.idl\
     OwnLockOnDocumentRequest.idl\
+    PDFDialog.idl\
     PrinterIndependentLayout.idl\
     RedlineDisplayType.idl \
     Settings.idl\
@@ -105,7 +106,7 @@ IDLFILES=\
     XLinkTargetSupplier.idl\
     XMimeTypeInfo.idl\
     XOOXMLDocumentPropertiesImporter.idl\
-        XRedlinesSupplier.idl \
+    XRedlinesSupplier.idl \
     XScriptInvocationContext.idl\
     XStandaloneDocumentInfo.idl\
     XStorageBasedDocument.idl\

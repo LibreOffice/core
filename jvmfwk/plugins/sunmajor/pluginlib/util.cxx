@@ -65,6 +65,7 @@ using namespace rtl;
 using namespace osl;
 using namespace std;
 
+#define CHAR_POINTER(oustr) ::rtl::OUStringToOString(oustr,RTL_TEXTENCODING_UTF8).pData->buffer
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #ifdef WNT
 #define HKEY_SUN_JRE L"Software\\JavaSoft\\Java Runtime Environment"
@@ -241,9 +242,9 @@ FileHandleReader::readLine(rtl::OString * pLine)
     {
         if (m_nIndex == m_nSize)
         {
-            sal_uInt64 nRead;
+            sal_uInt64 nRead = 0;
             switch (osl_readFile(
-                        m_aGuard.getHandle(), m_aBuffer, BUFFER_SIZE, &nRead))
+                        m_aGuard.getHandle(), m_aBuffer, sizeof(m_aBuffer), &nRead))
             {
             case osl_File_E_PIPE: //HACK! for windows
                 nRead = 0;
@@ -256,8 +257,8 @@ FileHandleReader::readLine(rtl::OString * pLine)
                 m_nIndex = 0;
                 m_nSize = static_cast< int >(nRead);
                 break;
-        case osl_File_E_INTR:
-            continue;
+            case osl_File_E_INTR:
+                continue;
 
             default:
                 return RESULT_ERROR;
@@ -449,7 +450,11 @@ bool getJavaProps(const OUString & exePath,
         rs = stdoutReader.readLine( & aLine);
         if (rs != FileHandleReader::RESULT_OK)
             break;
+        JFW_TRACE2(OString("[Java framework] line:\" ")
+               + aLine + OString(" \".\n"));
         OUString sLine = decodeOutput(aLine);
+        JFW_TRACE2(OString("[Java framework] line:\" ")
+               + OString( CHAR_POINTER(sLine)) + OString(" \".\n"));
         sLine = sLine.trim();
         if (sLine.getLength() == 0)
             continue;
@@ -483,19 +488,21 @@ bool getJavaProps(const OUString & exePath,
  */
 rtl::OUString decodeOutput(const rtl::OString& s)
 {
-    OUString sEncoded = OStringToOUString(s, RTL_TEXTENCODING_ASCII_US);
     OUStringBuffer buff(512);
     sal_Int32 nIndex = 0;
     do
     {
-        OUString aToken = sEncoded.getToken( 0, ' ', nIndex );
+        OString aToken = s.getToken( 0, ' ', nIndex );
         if (aToken.getLength())
         {
-            sal_Unicode value = (sal_Unicode) aToken.toInt32();
+            sal_Unicode value = (sal_Unicode)(aToken.toInt32());
             buff.append(value);
         }
     } while (nIndex >= 0);
-   return buff.makeStringAndClear();
+
+    OUString sDecoded(buff.makeStringAndClear());
+    JFW_TRACE2(sDecoded);
+    return sDecoded;
 }
 
 
