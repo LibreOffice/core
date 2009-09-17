@@ -72,10 +72,10 @@ AC_ARG_ENABLE(mozilla,
                           version, use this option.
 ],,enable_mozilla="yes")
 AC_ARG_WITH(fonts,
-[  --without-fonts         Removes Bitstream Vera fonts from
-                          openoffice.org installation set, for people building
-                          for specific distributions where the fonts are known 
-                          to be already available
+[  --without-fonts         OOo includes some third-party fonts to provide a reliable
+                          basis for help content, templates, samples, etc.
+                          When these fonts are already known to be available on the
+                          system then you should use this option.
 ],,)
 AC_ARG_WITH(ppds,
 [  --without-ppds          Removes Postscript Printer definition files from
