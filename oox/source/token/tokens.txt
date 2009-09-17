@@ -1501,6 +1501,9 @@ cyan
 cycle
 cylinder
 d
+dc
+dcmitype
+dcterms
 dLbl
 dLblPos
 dLbls
@@ -5467,7 +5470,9 @@ vol
 volType
 volTypes
 vstream
+vt
 w
+w10
 wAfter
 wArH
 wBefore
@@ -5545,6 +5550,7 @@ workbookView
 workbookViewId
 worksheet
 worksheetSource
+wp
 wpJustification
 wpSpaceWidth
 wrap
@@ -5568,6 +5574,7 @@ xMode
 xSplit
 xVal
 xWindow
+xdr
 xf
 xfDxf
 xfId
@@ -5586,6 +5593,7 @@ xmlns
 xpath
 xrange
 xscale
+xsi
 xy
 y
 yAlign

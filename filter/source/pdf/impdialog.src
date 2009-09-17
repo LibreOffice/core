@@ -231,7 +231,7 @@ TabPage  RID_PDF_TAB_GENER
 //tab page for PDF Export, opening features
 TabPage  RID_PDF_TAB_OPNFTR
 {
-    HelpId = 0 ;
+    HelpId = HID_FILTER_PDF_INITIAL_VIEW ;
     Text[ en-US ] = "Initial View" ;
     TAB_PDF_SIZE;
     Hide = TRUE;
@@ -374,7 +374,7 @@ TabPage  RID_PDF_TAB_OPNFTR
 //tab page for PDF Export, viewer preferences
 TabPage  RID_PDF_TAB_VPREFER
 {
-    HelpId = 0 ;
+    HelpId = HID_FILTER_PDF_USER_INTERFACE ;
     Text[ en-US ] = "User Interface" ;
     TAB_PDF_SIZE;
     Hide = TRUE;
@@ -492,7 +492,7 @@ TabPage  RID_PDF_TAB_VPREFER
 //tab page for PDF Export, security
 TabPage  RID_PDF_TAB_SECURITY
 {
-    HelpId = 0 ;
+    HelpId = HID_FILTER_PDF_SECURITY ;
     Text [ en-US ] = "Security";
     TAB_PDF_SIZE;
     Hide = TRUE;
@@ -503,7 +503,7 @@ TabPage  RID_PDF_TAB_SECURITY
         TabStop = TRUE ;
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 12, 5 ) ;
-        Size = MAP_APPFONT ( 100 , 13 ) ;
+        Size = MAP_APPFONT ( 120 , 13 ) ;
         Text[ en-US ] = "Set ~open password...";
     };
 
@@ -538,7 +538,7 @@ TabPage  RID_PDF_TAB_SECURITY
         TabStop = TRUE ;
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 12, 45 ) ;
-        Size = MAP_APPFONT ( 100 , 13 ) ;
+        Size = MAP_APPFONT ( 120 , 13 ) ;
         Text[ en-US ] = "Set ~permission password...";
     };
 
@@ -654,7 +654,7 @@ TabPage  RID_PDF_TAB_SECURITY
 //tab page for PDF Export, links management
 TabPage  RID_PDF_TAB_LINKS
 {
-    HelpId = 0 ;
+    HelpId = HID_FILTER_PDF_LINKS;
     Text [ en-US ] = "---";
     TAB_PDF_SIZE;
     Hide = TRUE;

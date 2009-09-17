@@ -2,7 +2,7 @@
         <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH ALIEN</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"/>
-        <prop oor:name="UserData"><value>emp</value></prop>
+        <prop oor:name="UserData"><value>sdfilt</value></prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>impress_MS_PowerPoint_97_Vorlage</value></prop>
         <prop oor:name="TemplateName"/>

@@ -101,8 +101,9 @@ ContextHandlerRef OoxWorkbookFragment::onCreateContext( sal_Int32 nElement, cons
                 case XLS_TOKEN( definedNames ):
                 case XLS_TOKEN( pivotCaches ):          return this;
 
-                case XLS_TOKEN( workbookPr ):           getWorkbookSettings().importWorkbookPr( rAttribs ); break;
-                case XLS_TOKEN( calcPr ):               getWorkbookSettings().importCalcPr( rAttribs );     break;
+                case XLS_TOKEN( fileSharing ):          getWorkbookSettings().importFileSharing( rAttribs );    break;
+                case XLS_TOKEN( workbookPr ):           getWorkbookSettings().importWorkbookPr( rAttribs );     break;
+                case XLS_TOKEN( calcPr ):               getWorkbookSettings().importCalcPr( rAttribs );         break;
             }
         break;
 
@@ -151,6 +152,7 @@ ContextHandlerRef OoxWorkbookFragment::onCreateRecordContext( sal_Int32 nRecId, 
                 case OOBIN_ID_EXTERNALREFS:
                 case OOBIN_ID_PIVOTCACHES:      return this;
 
+                case OOBIN_ID_FILESHARING:      getWorkbookSettings().importFileSharing( rStrm );   break;
                 case OOBIN_ID_WORKBOOKPR:       getWorkbookSettings().importWorkbookPr( rStrm );    break;
                 case OOBIN_ID_CALCPR:           getWorkbookSettings().importCalcPr( rStrm );        break;
                 case OOBIN_ID_DEFINEDNAME:      getDefinedNames().importDefinedName( rStrm );       break;
@@ -402,7 +404,8 @@ bool BiffWorkbookFragment::importFragment()
     }
 
     // final conversions, e.g. calculation settings and view settings
-    finalizeWorkbookImport();
+    if( bRet )
+        finalizeWorkbookImport();
 
     return bRet;
 }
@@ -509,33 +512,35 @@ bool BiffWorkbookFragment::importGlobalsFragment( ISegmentProgressBar& rProgress
 
                 case BIFF3: switch( nRecId )
                 {
-                    case BIFF_ID_CRN:           bExtLinkRec = true;                     break;
-                    case BIFF3_ID_DEFINEDNAME:  bExtLinkRec = true;                     break;
-                    case BIFF3_ID_EXTERNALNAME: bExtLinkRec = true;                     break;
-                    case BIFF_ID_EXTERNSHEET:   bExtLinkRec = true;                     break;
-                    case BIFF3_ID_FONT:         rStyles.importFont( mrStrm );           break;
-                    case BIFF2_ID_FORMAT:       rStyles.importFormat( mrStrm );         break;
-                    case BIFF_ID_HIDEOBJ:       rWorkbookSett.importHideObj( mrStrm );  break;
-                    case BIFF_ID_PALETTE:       rStyles.importPalette( mrStrm );        break;
-                    case BIFF_ID_STYLE:         rStyles.importStyle( mrStrm );          break;
-                    case BIFF_ID_XCT:           bExtLinkRec = true;                     break;
-                    case BIFF3_ID_XF:           rStyles.importXf( mrStrm );             break;
+                    case BIFF_ID_CRN:           bExtLinkRec = true;                         break;
+                    case BIFF3_ID_DEFINEDNAME:  bExtLinkRec = true;                         break;
+                    case BIFF3_ID_EXTERNALNAME: bExtLinkRec = true;                         break;
+                    case BIFF_ID_EXTERNSHEET:   bExtLinkRec = true;                         break;
+                    case BIFF_ID_FILESHARING:   rWorkbookSett.importFileSharing( mrStrm );  break;
+                    case BIFF3_ID_FONT:         rStyles.importFont( mrStrm );               break;
+                    case BIFF2_ID_FORMAT:       rStyles.importFormat( mrStrm );             break;
+                    case BIFF_ID_HIDEOBJ:       rWorkbookSett.importHideObj( mrStrm );      break;
+                    case BIFF_ID_PALETTE:       rStyles.importPalette( mrStrm );            break;
+                    case BIFF_ID_STYLE:         rStyles.importStyle( mrStrm );              break;
+                    case BIFF_ID_XCT:           bExtLinkRec = true;                         break;
+                    case BIFF3_ID_XF:           rStyles.importXf( mrStrm );                 break;
                 }
                 break;
 
                 case BIFF4: switch( nRecId )
                 {
-                    case BIFF_ID_CRN:           bExtLinkRec = true;                     break;
-                    case BIFF3_ID_DEFINEDNAME:  bExtLinkRec = true;                     break;
-                    case BIFF3_ID_EXTERNALNAME: bExtLinkRec = true;                     break;
-                    case BIFF_ID_EXTERNSHEET:   bExtLinkRec = true;                     break;
-                    case BIFF3_ID_FONT:         rStyles.importFont( mrStrm );           break;
-                    case BIFF4_ID_FORMAT:       rStyles.importFormat( mrStrm );         break;
-                    case BIFF_ID_HIDEOBJ:       rWorkbookSett.importHideObj( mrStrm );  break;
-                    case BIFF_ID_PALETTE:       rStyles.importPalette( mrStrm );        break;
-                    case BIFF_ID_STYLE:         rStyles.importStyle( mrStrm );          break;
-                    case BIFF_ID_XCT:           bExtLinkRec = true;                     break;
-                    case BIFF4_ID_XF:           rStyles.importXf( mrStrm );             break;
+                    case BIFF_ID_CRN:           bExtLinkRec = true;                         break;
+                    case BIFF3_ID_DEFINEDNAME:  bExtLinkRec = true;                         break;
+                    case BIFF3_ID_EXTERNALNAME: bExtLinkRec = true;                         break;
+                    case BIFF_ID_EXTERNSHEET:   bExtLinkRec = true;                         break;
+                    case BIFF_ID_FILESHARING:   rWorkbookSett.importFileSharing( mrStrm );  break;
+                    case BIFF3_ID_FONT:         rStyles.importFont( mrStrm );               break;
+                    case BIFF4_ID_FORMAT:       rStyles.importFormat( mrStrm );             break;
+                    case BIFF_ID_HIDEOBJ:       rWorkbookSett.importHideObj( mrStrm );      break;
+                    case BIFF_ID_PALETTE:       rStyles.importPalette( mrStrm );            break;
+                    case BIFF_ID_STYLE:         rStyles.importStyle( mrStrm );              break;
+                    case BIFF_ID_XCT:           bExtLinkRec = true;                         break;
+                    case BIFF4_ID_XF:           rStyles.importXf( mrStrm );                 break;
                 }
                 break;
 
@@ -546,6 +551,7 @@ bool BiffWorkbookFragment::importGlobalsFragment( ISegmentProgressBar& rProgress
                     case BIFF5_ID_DEFINEDNAME:  bExtLinkRec = true;                         break;
                     case BIFF5_ID_EXTERNALNAME: bExtLinkRec = true;                         break;
                     case BIFF_ID_EXTERNSHEET:   bExtLinkRec = true;                         break;
+                    case BIFF_ID_FILESHARING:   rWorkbookSett.importFileSharing( mrStrm );  break;
                     case BIFF5_ID_FONT:         rStyles.importFont( mrStrm );               break;
                     case BIFF4_ID_FORMAT:       rStyles.importFormat( mrStrm );             break;
                     case BIFF_ID_HIDEOBJ:       rWorkbookSett.importHideObj( mrStrm );      break;
@@ -567,6 +573,7 @@ bool BiffWorkbookFragment::importGlobalsFragment( ISegmentProgressBar& rProgress
                     case BIFF_ID_EXTERNALBOOK:  bExtLinkRec = true;                         break;
                     case BIFF5_ID_EXTERNALNAME: bExtLinkRec = true;                         break;
                     case BIFF_ID_EXTERNSHEET:   bExtLinkRec = true;                         break;
+                    case BIFF_ID_FILESHARING:   rWorkbookSett.importFileSharing( mrStrm );  break;
                     case BIFF5_ID_FONT:         rStyles.importFont( mrStrm );               break;
                     case BIFF4_ID_FORMAT:       rStyles.importFormat( mrStrm );             break;
                     case BIFF_ID_HIDEOBJ:       rWorkbookSett.importHideObj( mrStrm );      break;
@@ -591,8 +598,11 @@ bool BiffWorkbookFragment::importGlobalsFragment( ISegmentProgressBar& rProgress
 
     // finalize global buffers
     rProgressBar.setPosition( 0.5 );
-    rSharedStrings.finalizeImport();
-    rStyles.finalizeImport();
+    if( bRet )
+    {
+        rSharedStrings.finalizeImport();
+        rStyles.finalizeImport();
+    }
 
     /*  Import external link data (EXTERNSHEET, EXTERNALNAME, DEFINEDNAME)
         which need existing internal sheets (SHEET records). The SHEET records
