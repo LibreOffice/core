@@ -2016,7 +2016,7 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                     nScenarioCount ++;
 
                 pDoc->CopyToDocument( nUndoStartX, nUndoStartY, i, nUndoEndX, nUndoEndY, i+nScenarioCount,
-                    IDF_ALL, FALSE, pUndoDoc );
+                    IDF_ALL | IDF_NOCAPTIONS, FALSE, pUndoDoc );
             }
         }
 

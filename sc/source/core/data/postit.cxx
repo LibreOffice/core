@@ -786,19 +786,16 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
     OUStringBuffer aBuffer( rUserText );
     // add plain text of invisible (!) cell note (no formatting etc.)
     SdrCaptionObj* pNoteCaption = 0;
-    if( const ScPostIt* pNote = rDoc.GetNote( rPos ) )
+    const ScPostIt* pNote = rDoc.GetNote( rPos );
+    if( pNote && !pNote->IsCaptionShown() )
     {
-        if( !pNote->IsCaptionShown() )
-        {
-            if( aBuffer.getLength() > 0 )
-                aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "\n--------\n" ) );
-            aBuffer.append( pNote->GetText() );
-            pNoteCaption = pNote->GetOrCreateCaption( rPos );
-        }
+        if( aBuffer.getLength() > 0 )
+            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "\n--------\n" ) ).append( pNote->GetText() );
+        pNoteCaption = pNote->GetOrCreateCaption( rPos );
     }
 
     // create a caption if any text exists
-    if( aBuffer.getLength() == 0 )
+    if( !pNoteCaption && (aBuffer.getLength() == 0) )
         return 0;
 
     // prepare visible rectangle (add default distance to all borders)
@@ -811,20 +808,24 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
     // create the caption object
     ScCaptionCreator aCreator( rDoc, rPos, true, bTailFront );
     SdrCaptionObj* pCaption = aCreator.GetCaption();
+
     // insert caption into page (needed to set caption text)
     rDrawPage.InsertObject( pCaption );
-    // set the text to the object
-    pCaption->SetText( aBuffer.makeStringAndClear() );
 
-    // set formatting (must be done after setting text) and resize the box to fit the text
+    // clone the edit text object, unless user text is present, then set this text
     if( pNoteCaption && (rUserText.getLength() == 0) )
     {
+        if( OutlinerParaObject* pOPO = pNoteCaption->GetOutlinerParaObject() )
+            pCaption->SetOutlinerParaObject( new OutlinerParaObject( *pOPO ) );
+        // set formatting (must be done after setting text) and resize the box to fit the text
         pCaption->SetMergedItemSetAndBroadcast( pNoteCaption->GetMergedItemSet() );
         Rectangle aCaptRect( pCaption->GetLogicRect().TopLeft(), pNoteCaption->GetLogicRect().GetSize() );
         pCaption->SetLogicRect( aCaptRect );
     }
     else
     {
+        // if pNoteCaption is null, then aBuffer contains some text
+        pCaption->SetText( aBuffer.makeStringAndClear() );
         ScCaptionUtil::SetDefaultItems( *pCaption, rDoc );
         // adjust caption size to text size
         long nMaxWidth = ::std::min< long >( aVisRect.GetWidth() * 2 / 3, SC_NOTECAPTION_MAXWIDTH_TEMP );

@@ -377,14 +377,33 @@ void XclImpHyperlink::ConvertToValidTabName(String& rUrl)
     String aNewUrl(sal_Unicode('#')), aTabName;
 
     bool bInQuote = false;
+    bool bQuoteTabName = false;
     for (xub_StrLen i = 1; i < n; ++i)
     {
         c = rUrl.GetChar(i);
         if (c == sal_Unicode('\''))
         {
+            if (bInQuote && i+1 < n && rUrl.GetChar(i+1) == sal_Unicode('\''))
+            {
+                // Two consecutive single quotes ('') signify a single literal
+                // quite.  When this occurs, the whole table name needs to be
+                // quoted.
+                bQuoteTabName = true;
+                aTabName.Append(c);
+                aTabName.Append(c);
+                ++i;
+                continue;
+            }
+
             bInQuote = !bInQuote;
             if (!bInQuote && aTabName.Len() > 0)
+            {
+                if (bQuoteTabName)
+                    aNewUrl.Append(sal_Unicode('\''));
                 aNewUrl.Append(aTabName);
+                if (bQuoteTabName)
+                    aNewUrl.Append(sal_Unicode('\''));
+            }
         }
         else if (bInQuote)
             aTabName.Append(c);
