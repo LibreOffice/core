@@ -1246,6 +1246,19 @@
                     <value xml:lang="en-US">Rename Sheet</value>
                 </prop>
             </node>
+            <node oor:name=".uno:SetTabBgColor" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Tab Color...</value>
+                </prop>
+                <prop oor:name="ContextLabel" oor:type="xs:string">
+                    <value xml:lang="en-US">~Tab Color...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:TabBgColor" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Tab Color</value>
+                </prop>
+            </node>
             <node oor:name=".uno:Move" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Move/Copy Sheet...</value>
