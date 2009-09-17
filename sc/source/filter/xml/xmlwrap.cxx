@@ -624,6 +624,25 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
     return sal_False;
 }
 
+bool lcl_HasValidStream(ScDocument& rDoc)
+{
+    SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
+    if ( pObjSh->IsDocShared() )
+        return false;                       // never copy stream from shared file
+
+    // don't read remote file again
+    // (could instead re-use medium directly in that case)
+    SfxMedium* pSrcMed = rDoc.GetDocumentShell()->GetMedium();
+    if ( !pSrcMed || pSrcMed->IsRemote() )
+        return false;
+
+    SCTAB nTabCount = rDoc.GetTableCount();
+    for (SCTAB nTab=0; nTab<nTabCount; ++nTab)
+        if (rDoc.IsStreamValid(nTab))
+            return true;
+    return false;
+}
+
 sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServiceFactory>& xServiceFactory,
     uno::Reference<frame::XModel>& xModel, uno::Reference<uno::XInterface>& xWriter,
     uno::Sequence<beans::PropertyValue>& aDescriptor, const rtl::OUString& sName,
@@ -691,7 +710,49 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
     {
         ScXMLExport* pExport = static_cast<ScXMLExport*>(SvXMLExport::getImplementation(xFilter));
         pExport->SetSharedData(pSharedData);
-        bRet = xFilter->filter( aDescriptor );
+
+        // if there are sheets to copy, get the source stream
+        if ( sName.equalsAscii("content.xml") && lcl_HasValidStream(rDoc) &&
+             ( pExport->getExportFlags() & EXPORT_OASIS ) )
+        {
+            // old stream is still in this file's storage - open read-only
+
+            SfxMedium* pSrcMed = rDoc.GetDocumentShell()->GetMedium();
+            String aSrcURL = pSrcMed->GetOrigURL();
+
+            // SfxMedium must not be read-only, or it will create a temp file in GetStorage
+            SfxMedium aTmpMedium( aSrcURL, STREAM_READWRITE, FALSE, NULL, NULL );
+            uno::Reference<embed::XStorage> xTmpStorage = aTmpMedium.GetStorage();
+            uno::Reference<io::XStream> xSrcStream;
+            uno::Reference<io::XInputStream> xSrcInput;
+            try
+            {
+                if (xTmpStorage.is())
+                    xSrcStream = xTmpStorage->openStreamElement( sName, embed::ElementModes::READ );
+                if (xSrcStream.is())
+                    xSrcInput = xSrcStream->getInputStream();
+            }
+            catch (uno::Exception&)
+            {
+                // stream not available (for example, password protected) - save normally (xSrcInput is null)
+            }
+
+            pExport->SetSourceStream( xSrcInput );
+            bRet = xFilter->filter( aDescriptor );
+            pExport->SetSourceStream( uno::Reference<io::XInputStream>() );
+
+            // If there was an error, reset all stream flags, so the next save attempt will use normal saving.
+            if (!bRet)
+            {
+                SCTAB nTabCount = rDoc.GetTableCount();
+                for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+                    if (rDoc.IsStreamValid(nTab))
+                        rDoc.SetStreamValid(nTab, FALSE);
+            }
+        }
+        else
+            bRet = xFilter->filter( aDescriptor );
+
         pSharedData = pExport->GetSharedData();
 
         //stream is closed by SAX parser

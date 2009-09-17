@@ -63,6 +63,7 @@
 
 #include "sc.hrc" //CHINA001
 #include "scabstdlg.hxx" //CHINA001
+#include "clipparam.hxx"
 
 struct AreaLink_Impl
 {
@@ -389,9 +390,8 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
                     aSourceMark.SelectOneTable( nSrcTab );      // selektieren fuer CopyToClip
                     aSourceMark.SetMarkArea( aTokenRange );
 
-                    pSrcDoc->CopyToClip( aTokenRange.aStart.Col(), aTokenRange.aStart.Row(),
-                                         aTokenRange.aEnd.Col(), aTokenRange.aEnd.Row(),
-                                         FALSE, &aClipDoc, FALSE, &aSourceMark );
+                    ScClipParam aClipParam(aTokenRange, false);
+                    pSrcDoc->CopyToClip(aClipParam, &aClipDoc, &aSourceMark);
 
                     if ( aClipDoc.HasAttrib( 0,0,nSrcTab, MAXCOL,MAXROW,nSrcTab,
                                             HASATTR_MERGED | HASATTR_OVERLAPPED ) )

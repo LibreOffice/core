@@ -826,11 +826,6 @@ BOOL __EXPORT ScAnyRefDlg::DoClose( USHORT nId )
     return TRUE;
 }
 
-void ScAnyRefDlg::EnableSpreadsheets(BOOL bFlag, BOOL bChilds)
-{
-    m_aHelper.EnableSpreadsheets(bFlag, bChilds);
-}
-
 void ScAnyRefDlg::SetDispatcherLock( BOOL bLock )
 {
     m_aHelper.SetDispatcherLock( bLock );

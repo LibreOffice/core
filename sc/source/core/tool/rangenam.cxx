@@ -49,7 +49,6 @@
 #include "rechead.hxx"
 #include "refupdat.hxx"
 #include "document.hxx"
-#include "indexmap.hxx"
 
 using namespace formula;
 
@@ -363,19 +362,19 @@ BOOL ScRangeData::operator== (const ScRangeData& rData) const       // fuer Undo
     return TRUE;
 }
 
-BOOL ScRangeData::IsRangeAtCursor( const ScAddress& rPos, BOOL bStartOnly ) const
-{
-    BOOL bRet = FALSE;
-    ScRange aRange;
-    if ( IsReference(aRange) )
-    {
-        if ( bStartOnly )
-            bRet = ( rPos == aRange.aStart );
-        else
-            bRet = ( aRange.In( rPos ) );
-    }
-    return bRet;
-}
+//UNUSED2009-05 BOOL ScRangeData::IsRangeAtCursor( const ScAddress& rPos, BOOL bStartOnly ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     BOOL bRet = FALSE;
+//UNUSED2009-05     ScRange aRange;
+//UNUSED2009-05     if ( IsReference(aRange) )
+//UNUSED2009-05     {
+//UNUSED2009-05         if ( bStartOnly )
+//UNUSED2009-05             bRet = ( rPos == aRange.aStart );
+//UNUSED2009-05         else
+//UNUSED2009-05             bRet = ( aRange.In( rPos ) );
+//UNUSED2009-05     }
+//UNUSED2009-05     return bRet;
+//UNUSED2009-05 }
 
 BOOL ScRangeData::IsRangeAtBlock( const ScRange& rBlock ) const
 {
@@ -588,20 +587,20 @@ void ScRangeData::TransferTabRef( SCTAB nOldTab, SCTAB nNewTab )
     }
 }
 
-
-void ScRangeData::ReplaceRangeNamesInUse( const ScIndexMap& rMap )
+void ScRangeData::ReplaceRangeNamesInUse( const IndexMap& rMap )
 {
-    BOOL bCompile = FALSE;
+    bool bCompile = false;
     for ( FormulaToken* p = pCode->First(); p; p = pCode->Next() )
     {
         if ( p->GetOpCode() == ocName )
         {
-            const USHORT nOldIndex = p->GetIndex();
-            const USHORT nNewIndex = rMap.Find( nOldIndex );
+            const sal_uInt16 nOldIndex = p->GetIndex();
+            IndexMap::const_iterator itr = rMap.find(nOldIndex);
+            const sal_uInt16 nNewIndex = itr == rMap.end() ? nOldIndex : itr->second;
             if ( nOldIndex != nNewIndex )
             {
                 p->SetIndex( nNewIndex );
-                bCompile = TRUE;
+                bCompile = true;
             }
         }
     }
@@ -683,7 +682,7 @@ __cdecl
 #endif
 ScRangeData_QsortNameCompare( const void* p1, const void* p2 )
 {
-    return (int) ScGlobal::pCollator->compareString(
+    return (int) ScGlobal::GetCollator()->compareString(
             (*(const ScRangeData**)p1)->GetName(),
             (*(const ScRangeData**)p2)->GetName() );
 }
@@ -799,16 +798,16 @@ ScRangeData* ScRangeName::FindIndex( USHORT nIndex )
         return NULL;
 }
 
-ScRangeData* ScRangeName::GetRangeAtCursor( const ScAddress& rPos, BOOL bStartOnly ) const
-{
-    if ( pItems )
-    {
-        for ( USHORT i = 0; i < nCount; i++ )
-            if ( ((ScRangeData*)pItems[i])->IsRangeAtCursor( rPos, bStartOnly ) )
-                return (ScRangeData*)pItems[i];
-    }
-    return NULL;
-}
+//UNUSED2009-05 ScRangeData* ScRangeName::GetRangeAtCursor( const ScAddress& rPos, BOOL bStartOnly ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     if ( pItems )
+//UNUSED2009-05     {
+//UNUSED2009-05         for ( USHORT i = 0; i < nCount; i++ )
+//UNUSED2009-05             if ( ((ScRangeData*)pItems[i])->IsRangeAtCursor( rPos, bStartOnly ) )
+//UNUSED2009-05                 return (ScRangeData*)pItems[i];
+//UNUSED2009-05     }
+//UNUSED2009-05     return NULL;
+//UNUSED2009-05 }
 
 ScRangeData* ScRangeName::GetRangeAtBlock( const ScRange& rBlock ) const
 {

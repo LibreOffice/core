@@ -71,6 +71,7 @@
 #include "XMLChangeTrackingImportHelper.hxx"
 #include "chgviset.hxx"
 #include "XMLStylesImportHelper.hxx"
+#include "sheetdata.hxx"
 #include "unonames.hxx"
 #include "rangeutl.hxx"
 #include "postit.hxx"
@@ -93,6 +94,7 @@
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 
 #define SC_LOCALE           "Locale"
 #define SC_STANDARDFORMAT   "StandardFormat"
@@ -2416,6 +2418,20 @@ void ScXMLImport::SetStyleToRanges()
                 pStyle->FillPropertySet(xProperties);
                 sal_Int32 nNumberFormat(pStyle->GetNumberFormat());
                 SetType(xProperties, nNumberFormat, nPrevCellType, sPrevCurrency);
+
+                // store first cell of first range for each style, once per sheet
+                uno::Sequence<table::CellRangeAddress> aAddresses(xSheetCellRanges->getRangeAddresses());
+                if ( aAddresses.getLength() > 0 )
+                {
+                    const table::CellRangeAddress& rRange = aAddresses[0];
+                    if ( rRange.Sheet != pStyle->GetLastSheet() )
+                    {
+                        ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetModel())->GetSheetSaveData();
+                        pSheetData->AddCellStyle( sPrevStyleName,
+                            ScAddress( (SCCOL)rRange.StartColumn, (SCROW)rRange.StartRow, (SCTAB)rRange.Sheet ) );
+                        pStyle->SetLastSheet(rRange.Sheet);
+                    }
+                }
             }
             else
             {
@@ -2568,6 +2584,17 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
     sal_uInt16 nFlags = getImportFlags();
     if ( ( nFlags & IMPORT_CONTENT ) && !( nFlags & IMPORT_STYLES ) )
         ExamineDefaultStyle();
+
+    if (getImportFlags() & IMPORT_CONTENT)
+    {
+        if (GetModel().is())
+        {
+            // store initial namespaces, to find the ones that were added from the file later
+            ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetModel())->GetSheetSaveData();
+            const SvXMLNamespaceMap& rNamespaces = GetNamespaceMap();
+            pSheetData->StoreInitialNamespaces(rNamespaces);
+        }
+    }
 
     UnlockSolarMutex();
 }
@@ -2772,6 +2799,19 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
         GetProgressBarHelper()->End();  // make room for subsequent SfxProgressBars
         if (pDoc)
             pDoc->CompileXML();
+
+        if (pDoc && GetModel().is())
+        {
+            // set "valid stream" flags after loading (before UpdateRowHeights, so changed formula results
+            // in UpdateRowHeights can already clear the flags again)
+            ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetModel())->GetSheetSaveData();
+
+            SCTAB nTabCount = pDoc->GetTableCount();
+            for (SCTAB nTab=0; nTab<nTabCount; ++nTab)
+                if (!pSheetData->IsSheetBlocked( nTab ))
+                    pDoc->SetStreamValid( nTab, TRUE );
+        }
+
         aTables.UpdateRowHeights();
         aTables.ResizeShapes();
     }
@@ -2829,6 +2869,16 @@ void ScXMLImport::UnlockSolarMutex()
             pScUnoGuard = NULL;
         }
     }
+}
+
+sal_Int32 ScXMLImport::GetByteOffset()
+{
+    sal_Int32 nOffset = -1;
+    uno::Reference<xml::sax::XLocator> xLocator = GetLocator();
+    uno::Reference<io::XSeekable> xSeek( xLocator, uno::UNO_QUERY );        //! should use different interface
+    if ( xSeek.is() )
+        nOffset = (sal_Int32)xSeek->getPosition();
+    return nOffset;
 }
 
 void ScXMLImport::SetRangeOverflowType(sal_uInt32 nType)

@@ -53,7 +53,6 @@
 #include "scmatrix.hxx"
 #include "editutil.hxx"
 #include "chgtrack.hxx"
-#include "indexmap.hxx"
 #include "externalrefmgr.hxx"
 
 using namespace formula;
@@ -1480,14 +1479,15 @@ void ScFormulaCell::FindRangeNamesInUse(std::set<USHORT>& rIndexes) const
     lcl_FindRangeNamesInUse( rIndexes, pCode, pDocument->GetRangeName() );
 }
 
-void ScFormulaCell::ReplaceRangeNamesInUse( const ScIndexMap& rMap )
+void ScFormulaCell::ReplaceRangeNamesInUse( const ScRangeData::IndexMap& rMap )
 {
     for( FormulaToken* p = pCode->First(); p; p = pCode->Next() )
     {
         if( p->GetOpCode() == ocName )
         {
-            USHORT nIndex = p->GetIndex();
-            USHORT nNewIndex = rMap.Find( nIndex );
+            sal_uInt16 nIndex = p->GetIndex();
+            ScRangeData::IndexMap::const_iterator itr = rMap.find(nIndex);
+            sal_uInt16 nNewIndex = itr == rMap.end() ? nIndex : itr->second;
             if ( nIndex != nNewIndex )
             {
                 p->SetIndex( nNewIndex );

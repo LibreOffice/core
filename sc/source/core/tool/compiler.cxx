@@ -127,77 +127,6 @@ enum ScanState
 static const sal_Char* pInternal[ 5 ] = { "GAME", "SPEW", "TTT", "STARCALCTEAM", "ANTWORT" };
 
 using namespace ::com::sun::star::i18n;
-/////////////////////////////////////////////////////////////////////////
-
-short lcl_GetRetFormat( OpCode eOpCode )
-{
-    switch (eOpCode)
-    {
-        case ocEqual:
-        case ocNotEqual:
-        case ocLess:
-        case ocGreater:
-        case ocLessEqual:
-        case ocGreaterEqual:
-        case ocAnd:
-        case ocOr:
-        case ocNot:
-        case ocTrue:
-        case ocFalse:
-        case ocIsEmpty:
-        case ocIsString:
-        case ocIsNonString:
-        case ocIsLogical:
-        case ocIsRef:
-        case ocIsValue:
-        case ocIsFormula:
-        case ocIsNA:
-        case ocIsErr:
-        case ocIsError:
-        case ocIsEven:
-        case ocIsOdd:
-        case ocExact:
-            return NUMBERFORMAT_LOGICAL;
-        case ocGetActDate:
-        case ocGetDate:
-        case ocEasterSunday :
-            return NUMBERFORMAT_DATE;
-        case ocGetActTime:
-            return NUMBERFORMAT_DATETIME;
-        case ocGetTime:
-            return NUMBERFORMAT_TIME;
-        case ocNPV:
-        case ocBW:
-        case ocDIA:
-        case ocGDA:
-        case ocGDA2:
-        case ocVBD:
-        case ocLIA:
-        case ocRMZ:
-        case ocZW:
-        case ocZinsZ:
-        case ocKapz:
-        case ocKumZinsZ:
-        case ocKumKapZ:
-            return NUMBERFORMAT_CURRENCY;
-        case ocZins:
-        case ocIRR:
-        case ocMIRR:
-        case ocZGZ:
-        case ocEffektiv:
-        case ocNominal:
-        case ocPercentSign:
-            return NUMBERFORMAT_PERCENT;
-//      case ocSum:
-//      case ocSumSQ:
-//      case ocProduct:
-//      case ocAverage:
-//          return -1;
-        default:
-            return NUMBERFORMAT_NUMBER;
-    }
-    return NUMBERFORMAT_NUMBER;
-}
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -3044,7 +2973,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                                 ;   // nothing, prevent compiler warning
                             break;
                         }
-                        if ( ScGlobal::pTransliteration->isEqual( aStr, aName ) )
+                        if ( ScGlobal::GetpTransliteration()->isEqual( aStr, aName ) )
                         {
                             aRef.InitFlags();
                             aRef.nCol = aIter.GetCol();
@@ -3173,7 +3102,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                             ;   // nothing, prevent compiler warning
                         break;
                     }
-                    if ( ScGlobal::pTransliteration->isEqual( aStr, aName ) )
+                    if ( ScGlobal::GetpTransliteration()->isEqual( aStr, aName ) )
                     {
                         SCCOL nCol = aIter.GetCol();
                         SCROW nRow = aIter.GetRow();

@@ -206,7 +206,6 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 break;
 
             case SID_COPY:                      // Kopieren
-                bDisable = (!bSimpleArea && eMarkType != SC_MARK_SIMPLE_FILTERED);
                 // nur wegen Matrix nicht editierbar? Matrix nicht zerreissen
                 //! schlaegt nicht zu, wenn geschuetzt UND Matrix, aber damit
                 //! muss man leben.. wird in Copy-Routine abgefangen, sonst
@@ -670,15 +669,9 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                                 nErrCode = pFCell->GetErrCode();
                         }
 
-                        if ( nErrCode > 0 )
-                            rSet.Put( SfxStringItem( nWhich,
-                                ScGlobal::GetLongErrorString( nErrCode ) ) );
-                        else
-                        {
-                            String aFuncStr;
-                            if ( pTabViewShell->GetFunction( aFuncStr ) )
-                                rSet.Put( SfxStringItem( nWhich, aFuncStr ) );
-                        }
+                        String aFuncStr;
+                        if ( pTabViewShell->GetFunction( aFuncStr, nErrCode ) )
+                            rSet.Put( SfxStringItem( nWhich, aFuncStr ) );
                     }
                 }
                 break;

@@ -57,6 +57,8 @@ public:
     void SetCell (const ::com::sun::star::table::CellAddress& rAddress) { aStartCell = rAddress; }
     void SetOnTable (const sal_Bool bTempOnTable) { bOnTable = bTempOnTable; }
     void SetAnnotation(ScXMLAnnotationContext* pAnnotation) { pAnnotationContext = pAnnotation; }
+
+    ScXMLAnnotationContext* GetAnnotationContext() const    { return pAnnotationContext; }
 };
 
 

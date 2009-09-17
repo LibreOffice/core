@@ -156,7 +156,7 @@ FuncData::FuncData(const FuncData& rData) :
 
 short FuncCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
-    return (short) ScGlobal::pTransliteration->compareString(
+    return (short) ScGlobal::GetpTransliteration()->compareString(
         ((FuncData*)pKey1)->aInternalName, ((FuncData*)pKey2)->aInternalName );
 }
 
@@ -205,7 +205,7 @@ static ModuleCollection aModuleCollection;
 
 short ModuleCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
-    return (short) ScGlobal::pTransliteration->compareString(
+    return (short) ScGlobal::GetpTransliteration()->compareString(
         ((ModuleData*)pKey1)->aName, ((ModuleData*)pKey2)->aName );
 }
 

@@ -83,6 +83,8 @@ public:
     static sal_Int32 getNumberOfDisplayedSeries( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nNumberOfSeries );
     SAL_DLLPRIVATE static bool noBordersForSimpleScheme( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
 
+    static bool isSeriesInFrontOfAxisLine( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
+
     static sal_Int32 //one of ::com::sun::star::chart2::AxisType
                     getAxisType( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType
                                 , sal_Int32 nDimensionIndex );

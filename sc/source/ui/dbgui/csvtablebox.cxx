@@ -42,16 +42,16 @@
 
 // ============================================================================
 
-ScCsvTableBox::ScCsvTableBox( Window* pParent ) :
-    ScCsvControl( pParent, maData, WB_BORDER | WB_TABSTOP | WB_DIALOGCONTROL ),
-    maRuler( *this ),
-    maGrid( *this ),
-    maHScroll( this, WB_HORZ | WB_DRAG ),
-    maVScroll( this, WB_VERT | WB_DRAG ),
-    maScrollBox( this )
-{
-    Init();
-}
+//UNUSED2009-05 ScCsvTableBox::ScCsvTableBox( Window* pParent ) :
+//UNUSED2009-05     ScCsvControl( pParent, maData, WB_BORDER | WB_TABSTOP | WB_DIALOGCONTROL ),
+//UNUSED2009-05     maRuler( *this ),
+//UNUSED2009-05     maGrid( *this ),
+//UNUSED2009-05     maHScroll( this, WB_HORZ | WB_DRAG ),
+//UNUSED2009-05     maVScroll( this, WB_VERT | WB_DRAG ),
+//UNUSED2009-05     maScrollBox( this )
+//UNUSED2009-05 {
+//UNUSED2009-05     Init();
+//UNUSED2009-05 }
 
 ScCsvTableBox::ScCsvTableBox( Window* pParent, const ResId& rResId ) :
     ScCsvControl( pParent, maData, rResId ),
@@ -225,24 +225,24 @@ void ScCsvTableBox::SetUniStrings(
     EnableRepaint();
 }
 
-void ScCsvTableBox::SetByteStrings(
-        const ByteString* pTextLines, CharSet eCharSet,
-        const String& rSepChars, sal_Unicode cTextSep, bool bMergeSep )
-{
-    // assuming that pTextLines is a string array with size CSV_PREVIEW_LINES
-    // -> will be dynamic sometime
-    DisableRepaint();
-    sal_Int32 nEndLine = GetFirstVisLine() + CSV_PREVIEW_LINES;
-    const ByteString* pString = pTextLines;
-    for( sal_Int32 nLine = GetFirstVisLine(); nLine < nEndLine; ++nLine, ++pString )
-    {
-        if( mbFixedMode )
-            maGrid.ImplSetTextLineFix( nLine, String( *pString, eCharSet ) );
-        else
-            maGrid.ImplSetTextLineSep( nLine, String( *pString, eCharSet ), rSepChars, cTextSep, bMergeSep );
-    }
-    EnableRepaint();
-}
+//UNUSED2009-05 void ScCsvTableBox::SetByteStrings(
+//UNUSED2009-05         const ByteString* pTextLines, CharSet eCharSet,
+//UNUSED2009-05         const String& rSepChars, sal_Unicode cTextSep, bool bMergeSep )
+//UNUSED2009-05 {
+//UNUSED2009-05     // assuming that pTextLines is a string array with size CSV_PREVIEW_LINES
+//UNUSED2009-05     // -> will be dynamic sometime
+//UNUSED2009-05     DisableRepaint();
+//UNUSED2009-05     sal_Int32 nEndLine = GetFirstVisLine() + CSV_PREVIEW_LINES;
+//UNUSED2009-05     const ByteString* pString = pTextLines;
+//UNUSED2009-05     for( sal_Int32 nLine = GetFirstVisLine(); nLine < nEndLine; ++nLine, ++pString )
+//UNUSED2009-05     {
+//UNUSED2009-05         if( mbFixedMode )
+//UNUSED2009-05             maGrid.ImplSetTextLineFix( nLine, String( *pString, eCharSet ) );
+//UNUSED2009-05         else
+//UNUSED2009-05             maGrid.ImplSetTextLineSep( nLine, String( *pString, eCharSet ), rSepChars, cTextSep, bMergeSep );
+//UNUSED2009-05     }
+//UNUSED2009-05     EnableRepaint();
+//UNUSED2009-05 }
 
 
 // column settings ------------------------------------------------------------

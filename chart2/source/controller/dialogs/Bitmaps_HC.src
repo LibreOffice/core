@@ -359,13 +359,13 @@ Bitmap BMP_NET_LINESYMB_STACK_HC
 {
     File = "netlinepointstack_52x60_h.png" ;
 };
-Bitmap BMP_NET_FILLED_HC
+Bitmap BMP_NET_FILL_HC
 {
-    File = "net_52x60_h.png" ;
+    File = "netfill_52x60_h.png" ;
 };
-Bitmap BMP_NET_FILLED_STACKED_HC
+Bitmap BMP_NET_FILL_STACK_HC
 {
-    File = "netstack_52x60_h.png" ;
+    File = "netstackfill_52x60_h.png" ;
 };
 //---------------------
 Bitmap BMP_PYRAMIDQ_3D_1_HC

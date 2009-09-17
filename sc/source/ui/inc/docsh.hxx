@@ -59,9 +59,6 @@ class INetURLObject;
 class ScPaintItem;
 class ScViewData;
 class ScDocFunc;
-#if OLD_PIVOT_IMPLEMENTATION
-class ScPivot;
-#endif
 class ScDrawLayer;
 class ScTabViewShell;
 class ScSbxDocHelper;
@@ -75,6 +72,7 @@ class VirtualDevice;
 class ScImportOptions;
 class ScDocShellModificator;
 class ScOptSolverSave;
+class ScSheetSaveData;
 
 namespace sfx2 { class FileDialogHelper; }
 struct DocShell_Impl;
@@ -126,6 +124,7 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     ScPaintLockData*    pPaintLockData;
     ScJobSetup*         pOldJobSetup;
     ScOptSolverSave*    pSolverSaveData;
+    ScSheetSaveData*    pSheetSaveData;
 
     ScDocShellModificator* pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
 
@@ -169,6 +168,8 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
 
     SC_DLLPRIVATE void          EnableSharedSettings( bool bEnable );
     SC_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > LoadSharedDocument();
+
+    SC_DLLPRIVATE void          UseSheetSaveEntries();
 
 protected:
 
@@ -293,10 +294,6 @@ public:
     void            UpdateAllRowHeights( const ScMarkData* pTabMark = NULL );
     void            UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore = false );
 
-#if OLD_PIVOT_IMPLEMENTATION
-    void            PivotUpdate( ScPivot* pOldPivot, ScPivot* pNewPivot,
-                                    BOOL bRecord = TRUE, BOOL bApi = FALSE );
-#endif
     void            RefreshPivotTables( const ScRange& rSource );
     void            DoConsolidate( const ScConsolidateParam& rParam, BOOL bRecord = TRUE );
     void            UseScenario( SCTAB nTab, const String& rName, BOOL bRecord = TRUE );
@@ -421,6 +418,8 @@ public:
 
     const ScOptSolverSave* GetSolverSaveData() const    { return pSolverSaveData; }     // may be null
     void            SetSolverSaveData( const ScOptSolverSave& rData );
+
+    ScSheetSaveData* GetSheetSaveData();
 };
 
 SO2_DECL_REF(ScDocShell)
