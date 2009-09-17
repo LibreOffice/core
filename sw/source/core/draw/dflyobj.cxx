@@ -204,7 +204,7 @@ namespace drawinglayer
 
         protected:
             // method which is to be used to implement the local decomposition of a 2D primitive
-            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             SwVirtFlyDrawObjPrimitive(
@@ -239,7 +239,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SwVirtFlyDrawObjPrimitive::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence SwVirtFlyDrawObjPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence aRetval;
 
