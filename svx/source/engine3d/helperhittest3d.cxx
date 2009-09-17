@@ -100,7 +100,7 @@ namespace drawinglayer
             basegfx::B3DHomMatrix                   maCombinedTransform;
 
             // as tooling, the process() implementation takes over API handling and calls this
-            // virtual render method when the primitive implementation is BufDecPrimitive3D-based.
+            // virtual render method when the primitive implementation is BasePrimitive3D-based.
             virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate);
 
         public:
@@ -120,7 +120,7 @@ namespace drawinglayer
 
         void CutFindProcessor::processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate)
         {
-            // it is a BufDecPrimitive3D implementation, use getPrimitive3DID() call for switch
+            // it is a BasePrimitive3D implementation, use getPrimitive3DID() call for switch
             switch(rCandidate.getPrimitive3DID())
             {
                 case PRIMITIVE3D_ID_TRANSFORMPRIMITIVE3D :

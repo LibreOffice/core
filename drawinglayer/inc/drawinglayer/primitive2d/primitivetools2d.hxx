@@ -41,7 +41,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // tooling class for BufferedDecompositionPrimitive2D baseed classes which are view-dependent
 // regarding the size of a discrete unit. The implementation of get2DDecomposition
-// guards the buffered local decomposition and ensures that a createLocal2DDecomposition
+// guards the buffered local decomposition and ensures that a create2DDecomposition
 // implementation may use an up-to-date DiscreteUnit accessible using getDiscreteUnit()
 
 namespace drawinglayer
@@ -53,7 +53,7 @@ namespace drawinglayer
         private:
             // the last used fDiscreteUnit definitions for decomposition. Since this
             // is checked and updated from get2DDecomposition() it will be current and
-            // usable in createLocal2DDecomposition()
+            // usable in create2DDecomposition()
             double                                  mfDiscreteUnit;
 
         public:
@@ -75,7 +75,7 @@ namespace drawinglayer
 //////////////////////////////////////////////////////////////////////////////
 // tooling class for BufferedDecompositionPrimitive2D baseed classes which are view-dependent
 // regarding the viewport. The implementation of get2DDecomposition
-// guards the buffered local decomposition and ensures that a createLocal2DDecomposition
+// guards the buffered local decomposition and ensures that a create2DDecomposition
 // implementation may use an up-to-date Viewport accessible using getViewport()
 
 namespace drawinglayer
@@ -87,7 +87,7 @@ namespace drawinglayer
         private:
             // the last used Viewport definition for decomposition. Since this
             // is checked and updated from get2DDecomposition() it will be current and
-            // usable in createLocal2DDecomposition()
+            // usable in create2DDecomposition()
             basegfx::B2DRange                       maViewport;
 
         public:

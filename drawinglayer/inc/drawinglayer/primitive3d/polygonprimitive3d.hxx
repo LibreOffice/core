@@ -48,7 +48,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class PolygonHairlinePrimitive3D : public BufDecPrimitive3D
+        class PolygonHairlinePrimitive3D : public BasePrimitive3D
         {
         private:
             basegfx::B3DPolygon                     maPolygon;
@@ -81,7 +81,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class PolygonStrokePrimitive3D : public BufDecPrimitive3D
+        class PolygonStrokePrimitive3D : public BufferedDecompositionPrimitive3D
         {
         private:
             basegfx::B3DPolygon                     maPolygon;
@@ -90,7 +90,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive3DSequence createLocal3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+            virtual Primitive3DSequence create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
         public:
             PolygonStrokePrimitive3D(

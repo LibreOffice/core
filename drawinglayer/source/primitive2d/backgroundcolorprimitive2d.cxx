@@ -54,7 +54,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence BackgroundColorPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence BackgroundColorPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             if(!rViewInformation.getViewport().isEmpty())
             {
@@ -98,13 +98,13 @@ namespace drawinglayer
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            if(getLocal2DDecomposition().hasElements() && (maLastViewport != rViewInformation.getViewport()))
+            if(getBuffered2DDecomposition().hasElements() && (maLastViewport != rViewInformation.getViewport()))
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< BackgroundColorPrimitive2D* >(this)->setLocal2DDecomposition(Primitive2DSequence());
+                const_cast< BackgroundColorPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
             }
 
-            if(!getLocal2DDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().hasElements())
             {
                 // remember ViewRange
                 const_cast< BackgroundColorPrimitive2D* >(this)->maLastViewport = rViewInformation.getViewport();

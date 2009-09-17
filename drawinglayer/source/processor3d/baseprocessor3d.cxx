@@ -74,8 +74,8 @@ namespace drawinglayer
 
                     if(xReference.is())
                     {
-                        // try to cast to BufDecPrimitive3D implementation
-                        const primitive3d::BufDecPrimitive3D* pBasePrimitive = dynamic_cast< const primitive3d::BufDecPrimitive3D* >(xReference.get());
+                        // try to cast to BasePrimitive3D implementation
+                        const primitive3d::BasePrimitive3D* pBasePrimitive = dynamic_cast< const primitive3d::BasePrimitive3D* >(xReference.get());
 
                         if(pBasePrimitive)
                         {

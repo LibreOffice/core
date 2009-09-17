@@ -59,7 +59,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence HatchTexturePrimitive3D::createLocal3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DSequence HatchTexturePrimitive3D::impCreate3DDecomposition() const
         {
             Primitive3DSequence aRetval;
 
@@ -76,12 +76,12 @@ namespace drawinglayer
 
                     if(xReference.is())
                     {
-                        // try to cast to BufferedDecompositionPrimitive2D implementation
-                        const BufDecPrimitive3D* pBasePrimitive = dynamic_cast< const BufDecPrimitive3D* >(xReference.get());
+                        // try to cast to BasePrimitive2D implementation
+                        const BasePrimitive3D* pBasePrimitive = dynamic_cast< const BasePrimitive3D* >(xReference.get());
 
                         if(pBasePrimitive)
                         {
-                            // it is a BufDecPrimitive3D implementation, use getPrimitive3DID() call for switch
+                            // it is a BasePrimitive3D implementation, use getPrimitive3DID() call for switch
                             // not all content is needed, remove transparencies and ModifiedColorPrimitives
                             switch(pBasePrimitive->getPrimitive3DID())
                             {
@@ -287,7 +287,8 @@ namespace drawinglayer
             bool bModulate,
             bool bFilter)
         :   TexturePrimitive3D(rChildren, rTextureSize, bModulate, bFilter),
-            maHatch(rHatch)
+            maHatch(rHatch),
+            maBuffered3DDecomposition()
         {
         }
 
@@ -301,6 +302,19 @@ namespace drawinglayer
             }
 
             return false;
+        }
+
+        Primitive3DSequence HatchTexturePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+
+            if(!getBuffered3DDecomposition().hasElements())
+            {
+                const Primitive3DSequence aNewSequence(impCreate3DDecomposition());
+                const_cast< HatchTexturePrimitive3D* >(this)->setBuffered3DDecomposition(aNewSequence);
+            }
+
+            return getBuffered3DDecomposition();
         }
 
         // provide unique ID

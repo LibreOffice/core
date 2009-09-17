@@ -53,7 +53,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence GridPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence GridPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DSequence aRetval;
 
@@ -299,16 +299,16 @@ namespace drawinglayer
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            if(getLocal2DDecomposition().hasElements())
+            if(getBuffered2DDecomposition().hasElements())
             {
                 if(maLastViewport != rViewInformation.getViewport() || maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
                     // conditions of last local decomposition have changed, delete
-                    const_cast< GridPrimitive2D* >(this)->setLocal2DDecomposition(Primitive2DSequence());
+                    const_cast< GridPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
                 }
             }
 
-            if(!getLocal2DDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().hasElements())
             {
                 // remember ViewRange and ViewTransformation
                 const_cast< GridPrimitive2D* >(this)->maLastObjectToViewTransformation = rViewInformation.getObjectToViewTransformation();

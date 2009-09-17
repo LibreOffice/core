@@ -64,13 +64,13 @@ namespace drawinglayer
             // and from thereon always used and returned by getXControl()
             void createXControl();
 
-            // single local decompositions, used from createLocal2DDecomposition()
+            // single local decompositions, used from create2DDecomposition()
             Primitive2DReference createBitmapDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
             Primitive2DReference createPlaceholderDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         protected:
             // local decomposition
-            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             ControlPrimitive2D(

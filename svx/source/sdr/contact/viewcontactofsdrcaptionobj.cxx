@@ -164,7 +164,7 @@ namespace sdr
                                     const sal_uInt32 nYDist(((SdrShadowYDistItem&)(rItemSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
                                     aObjectMatrix.translate(nXDist, nYDist);
 
-                                    // create unit outline polygon as geometry (see SdrCaptionPrimitive2D::createLocal2DDecomposition)
+                                    // create unit outline polygon as geometry (see SdrCaptionPrimitive2D::create2DDecomposition)
                                     basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0), fCornerRadiusX, fCornerRadiusY));
 
                                     // create the specialized shadow primitive

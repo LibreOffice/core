@@ -50,7 +50,7 @@ namespace drawinglayer
     {
         static double fDiscreteSize(1.1);
 
-        Primitive2DSequence TextEffectPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence TextEffectPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DSequence aRetval;
 
@@ -218,16 +218,16 @@ namespace drawinglayer
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            if(getLocal2DDecomposition().hasElements())
+            if(getBuffered2DDecomposition().hasElements())
             {
                 if(maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
                     // conditions of last local decomposition have changed, delete
-                    const_cast< TextEffectPrimitive2D* >(this)->setLocal2DDecomposition(Primitive2DSequence());
+                    const_cast< TextEffectPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
                 }
             }
 
-            if(!getLocal2DDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().hasElements())
             {
                 // remember ViewRange and ViewTransformation
                 const_cast< TextEffectPrimitive2D* >(this)->maLastObjectToViewTransformation = rViewInformation.getObjectToViewTransformation();

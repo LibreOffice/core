@@ -602,7 +602,7 @@ namespace drawinglayer
             }
         }
 
-        Primitive2DSequence TextDecoratedPortionPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence TextDecoratedPortionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             std::vector< Primitive2DReference > aNewPrimitives;
             basegfx::DecomposedB2DHomMatrixContainer aDecTrans(getTextTransform());

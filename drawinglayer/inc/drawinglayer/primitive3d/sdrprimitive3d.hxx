@@ -47,9 +47,13 @@
 
 namespace drawinglayer
 {
+    /** base class for the more complicated geometric primitives, so
+        derive from buffered primitive to allow overloading of
+        create3DDecomposition there
+     */
     namespace primitive3d
     {
-        class SdrPrimitive3D : public BufDecPrimitive3D
+        class SdrPrimitive3D : public BufferedDecompositionPrimitive3D
         {
         private:
             basegfx::B3DHomMatrix                       maTransform;

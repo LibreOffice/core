@@ -80,11 +80,11 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             // public helpers
-            // Geometry extractor. Shadow will be added as in createLocal2DDecomposition, but
+            // Geometry extractor. Shadow will be added as in create2DDecomposition, but
             // the 3D content is not converted to a bitmap visualisation but to projected 2D gemetry. This
             // helper is useful e.g. for Contour extraction or HitTests.
             Primitive2DSequence getGeometry2D(const geometry::ViewInformation2D& rViewInformation) const;

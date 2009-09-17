@@ -57,7 +57,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolyPolygonHairlinePrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence PolyPolygonHairlinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             const basegfx::B2DPolyPolygon aPolyPolygon(getB2DPolyPolygon());
             const sal_uInt32 nCount(aPolyPolygon.count());
@@ -117,7 +117,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolyPolygonMarkerPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence PolyPolygonMarkerPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             const basegfx::B2DPolyPolygon aPolyPolygon(getB2DPolyPolygon());
             const sal_uInt32 nCount(aPolyPolygon.count());
@@ -185,7 +185,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolyPolygonStrokePrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence PolyPolygonStrokePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             const basegfx::B2DPolyPolygon aPolyPolygon(getB2DPolyPolygon());
             const sal_uInt32 nCount(aPolyPolygon.count());
@@ -268,7 +268,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolyPolygonStrokeArrowPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence PolyPolygonStrokeArrowPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             const basegfx::B2DPolyPolygon aPolyPolygon(getB2DPolyPolygon());
             const sal_uInt32 nCount(aPolyPolygon.count());
@@ -404,7 +404,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolyPolygonGradientPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence PolyPolygonGradientPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // create SubSequence with FillGradientPrimitive2D
             const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
@@ -451,7 +451,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolyPolygonHatchPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence PolyPolygonHatchPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // create SubSequence with FillHatchPrimitive2D
             const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
@@ -498,7 +498,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolyPolygonBitmapPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence PolyPolygonBitmapPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // create SubSequence with FillBitmapPrimitive2D
             const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());

@@ -53,7 +53,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence MediaPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence MediaPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DSequence xRetval(1);
 

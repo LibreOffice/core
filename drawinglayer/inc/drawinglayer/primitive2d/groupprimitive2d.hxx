@@ -63,6 +63,17 @@ namespace drawinglayer
             In most cases the decomposition is straightforward, so by default
             this primitive will not buffer the result and is not derived from
             BufferedDecompositionPrimitive2D, but from BasePrimitive2D.
+
+            A renderer has to take GroupPrimitive2D derivations into account which
+            are used to hold a state.
+
+            Current Basic 2D StatePrimitives are:
+
+            - AlphaPrimitive2D (objects with freely defined transparence)
+            - InvertPrimitive2D (for XOR)
+            - MaskPrimitive2D (for masking)
+            - ModifiedColorPrimitive2D (for a stack of color modifications)
+            - TransformPrimitive2D (for a transformation stack)
          */
         class GroupPrimitive2D : public BasePrimitive2D
         {

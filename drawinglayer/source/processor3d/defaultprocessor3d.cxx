@@ -468,7 +468,7 @@ namespace drawinglayer
 
         void DefaultProcessor3D::processBasePrimitive3D(const primitive3d::BasePrimitive3D& rBasePrimitive)
         {
-            // it is a BufDecPrimitive3D implementation, use getPrimitive3DID() call for switch
+            // it is a BasePrimitive3D implementation, use getPrimitive3DID() call for switch
             switch(rBasePrimitive.getPrimitive3DID())
             {
                 case PRIMITIVE3D_ID_GRADIENTTEXTUREPRIMITIVE3D :

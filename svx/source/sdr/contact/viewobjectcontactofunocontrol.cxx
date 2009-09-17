@@ -790,7 +790,7 @@ namespace sdr { namespace contact {
             ) const;
 
         virtual ::drawinglayer::primitive2d::Primitive2DSequence
-            createLocal2DDecomposition(
+            create2DDecomposition(
                 const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
             ) const;
 
@@ -1486,7 +1486,7 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    ::drawinglayer::primitive2d::Primitive2DSequence LazyControlCreationPrimitive2D::createLocal2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
+    ::drawinglayer::primitive2d::Primitive2DSequence LazyControlCreationPrimitive2D::create2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
     {
         // force control here to make it a VCL ChildWindow. Will be fetched
         // and used below by getExistentControl()

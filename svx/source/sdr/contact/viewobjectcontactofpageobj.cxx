@@ -153,7 +153,7 @@ namespace sdr
                     // would be possible, but would require the internal transformation
                     // which maps between the page visualisation object and the page
                     // content, including the aspect ratios (for details see in
-                    // PagePreviewPrimitive2D::createLocal2DDecomposition)
+                    // PagePreviewPrimitive2D::create2DDecomposition)
                     basegfx::B2DRange(),
 
                     GetXDrawPageForSdrPage(const_cast< SdrPage* >(pStartPage)),

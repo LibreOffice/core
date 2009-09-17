@@ -49,12 +49,6 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence HitTestPrimitive3D::createLocal3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
-        {
-            // return empty sequence
-            return Primitive3DSequence();
-        }
-
         HitTestPrimitive3D::HitTestPrimitive3D(
             const Primitive3DSequence& rChildren)
         :   GroupPrimitive3D(rChildren)
@@ -64,6 +58,12 @@ namespace drawinglayer
         basegfx::B3DRange HitTestPrimitive3D::getB3DRange(const geometry::ViewInformation3D& rViewInformation) const
         {
             return getB3DRangeFromPrimitive3DSequence(getChildren(), rViewInformation);
+        }
+
+        Primitive3DSequence HitTestPrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        {
+            // return empty sequence
+            return Primitive3DSequence();
         }
 
         // provide unique ID

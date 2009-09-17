@@ -53,13 +53,13 @@ namespace drawinglayer
             // get the current DiscreteUnit
             const double fDiscreteUnit((rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
 
-            if(getLocal2DDecomposition().hasElements() && !basegfx::fTools::equal(fDiscreteUnit, getDiscreteUnit()))
+            if(getBuffered2DDecomposition().hasElements() && !basegfx::fTools::equal(fDiscreteUnit, getDiscreteUnit()))
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< DiscreteMetricDependentPrimitive2D* >(this)->setLocal2DDecomposition(Primitive2DSequence());
+                const_cast< DiscreteMetricDependentPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
             }
 
-            if(!getLocal2DDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().hasElements())
             {
                 // remember new valid DiscreteUnit
                 const_cast< DiscreteMetricDependentPrimitive2D* >(this)->mfDiscreteUnit = fDiscreteUnit;
@@ -84,13 +84,13 @@ namespace drawinglayer
             // get the current Viewport
             const basegfx::B2DRange& rViewport = rViewInformation.getViewport();
 
-            if(getLocal2DDecomposition().hasElements() && !rViewport.equal(getViewport()))
+            if(getBuffered2DDecomposition().hasElements() && !rViewport.equal(getViewport()))
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< ViewportDependentPrimitive2D* >(this)->setLocal2DDecomposition(Primitive2DSequence());
+                const_cast< ViewportDependentPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
             }
 
-            if(!getLocal2DDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().hasElements())
             {
                 // remember new valid DiscreteUnit
                 const_cast< ViewportDependentPrimitive2D* >(this)->maViewport = rViewport;

@@ -56,11 +56,6 @@ namespace drawinglayer
         // use it and it's children subcontent.
         class HitTestPrimitive3D : public GroupPrimitive3D
         {
-        protected:
-            // local decomposition. Implementation will return empty Primitive3DSequence
-            // since this is no visualisation data
-            virtual Primitive3DSequence createLocal3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
-
         public:
             HitTestPrimitive3D(const Primitive3DSequence& rChildren);
 
@@ -68,6 +63,10 @@ namespace drawinglayer
             // range calculation is intended to use invisible replacement geometry, so
             // the local implementation will return the children's range
             virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
+
+            // local decomposition. Implementation will return empty Primitive3DSequence
+            // since this is no visualisation data
+            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
             // provide unique ID
             DeclPrimitrive3DIDBlock()

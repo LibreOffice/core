@@ -103,7 +103,7 @@ namespace drawinglayer
             const basegfx::B2DVector& rTextureSize,
             const attribute::SdrLineFillShadowAttribute& rSdrLFSAttribute,
             const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute)
-        :   BufDecPrimitive3D(),
+        :   BufferedDecompositionPrimitive3D(),
             maTransform(rTransform),
             maTextureSize(rTextureSize),
             maSdrLFSAttribute(rSdrLFSAttribute),
@@ -113,7 +113,7 @@ namespace drawinglayer
 
         bool SdrPrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-            if(BufDecPrimitive3D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive3D::operator==(rPrimitive))
             {
                 const SdrPrimitive3D& rCompare = static_cast< const SdrPrimitive3D& >(rPrimitive);
 

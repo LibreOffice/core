@@ -62,7 +62,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive3DSequence createLocal3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+            virtual Primitive3DSequence create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
         public:
             PolygonTubePrimitive3D(

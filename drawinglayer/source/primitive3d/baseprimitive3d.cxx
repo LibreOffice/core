@@ -94,28 +94,28 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence BufDecPrimitive3D::createLocal3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DSequence BufferedDecompositionPrimitive3D::create3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             return Primitive3DSequence();
         }
 
-        BufDecPrimitive3D::BufDecPrimitive3D()
+        BufferedDecompositionPrimitive3D::BufferedDecompositionPrimitive3D()
         :   BasePrimitive3D(),
-            maLocal3DDecomposition()
+            maBuffered3DDecomposition()
         {
         }
 
-        Primitive3DSequence BufDecPrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
+        Primitive3DSequence BufferedDecompositionPrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            if(!getLocal3DDecomposition().hasElements())
+            if(!getBuffered3DDecomposition().hasElements())
             {
-                const Primitive3DSequence aNewSequence(createLocal3DDecomposition(rViewInformation));
-                const_cast< BufDecPrimitive3D* >(this)->setLocal3DDecomposition(aNewSequence);
+                const Primitive3DSequence aNewSequence(create3DDecomposition(rViewInformation));
+                const_cast< BufferedDecompositionPrimitive3D* >(this)->setBuffered3DDecomposition(aNewSequence);
             }
 
-            return getLocal3DDecomposition();
+            return getBuffered3DDecomposition();
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -135,7 +135,7 @@ namespace drawinglayer
             if(rCandidate.is())
             {
                 // try to get C++ implementation base
-                const BufDecPrimitive3D* pCandidate(dynamic_cast< BufDecPrimitive3D* >(rCandidate.get()));
+                const BasePrimitive3D* pCandidate(dynamic_cast< BasePrimitive3D* >(rCandidate.get()));
 
                 if(pCandidate)
                 {
@@ -185,8 +185,8 @@ namespace drawinglayer
                 return true;
             }
 
-            const BufDecPrimitive3D* pA(dynamic_cast< const BufDecPrimitive3D* >(rxA.get()));
-            const BufDecPrimitive3D* pB(dynamic_cast< const BufDecPrimitive3D* >(rxB.get()));
+            const BasePrimitive3D* pA(dynamic_cast< const BasePrimitive3D* >(rxA.get()));
+            const BasePrimitive3D* pB(dynamic_cast< const BasePrimitive3D* >(rxB.get()));
             const bool bAEqualZero(pA == 0L);
 
             if(bAEqualZero != (pB == 0L))

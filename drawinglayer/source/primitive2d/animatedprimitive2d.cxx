@@ -114,7 +114,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence AnimatedBlinkPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence AnimatedBlinkPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             if(getChildren().hasElements())
             {
@@ -178,7 +178,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence AnimatedInterpolatePrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence AnimatedInterpolatePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             const sal_uInt32 nSize(maMatrixStack.size());
 

@@ -155,7 +155,7 @@ namespace drawinglayer
             sal_Int16 nCurrentlyValidPageNumber(0);
             sal_Int16 nCurrentlyValidPageCount(0);
 
-            if(getLocal2DDecomposition().hasElements())
+            if(getBuffered2DDecomposition().hasElements())
             {
                 bool bDoDelete(getLastSpellCheck() != bCurrentSpellCheck);
 
@@ -209,11 +209,11 @@ namespace drawinglayer
 
                 if(bDoDelete)
                 {
-                    const_cast< SdrTextPrimitive2D* >(this)->setLocal2DDecomposition(Primitive2DSequence());
+                    const_cast< SdrTextPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
                 }
             }
 
-            if(!getLocal2DDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().hasElements())
             {
                 if(!bCurrentlyVisualizingPageIsSet && mbContainsPageField)
                 {
@@ -255,7 +255,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrContourTextPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        Primitive2DSequence SdrContourTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
             const bool bCurrentSpellCheck(getSdrText()
@@ -316,7 +316,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrPathTextPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        Primitive2DSequence SdrPathTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
             const bool bCurrentSpellCheck(getSdrText()
@@ -380,7 +380,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrBlockTextPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        Primitive2DSequence SdrBlockTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
             const bool bCurrentSpellCheck(getSdrText()
@@ -449,7 +449,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrStretchTextPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        Primitive2DSequence SdrStretchTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
             const bool bCurrentSpellCheck(getSdrText()

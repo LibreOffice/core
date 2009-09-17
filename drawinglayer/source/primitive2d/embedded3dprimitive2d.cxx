@@ -84,7 +84,7 @@ namespace drawinglayer
             return maShadowPrimitives.hasElements();
         }
 
-        Primitive2DSequence Embedded3DPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence Embedded3DPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // use info to create a yellow 2d rectangle, similar to empty 3d scenes and/or groups
             const basegfx::B2DRange aLocal2DRange(getB2DRange(rViewInformation));

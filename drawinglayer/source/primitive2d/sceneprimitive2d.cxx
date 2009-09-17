@@ -158,7 +158,7 @@ namespace drawinglayer
             }
         }
 
-        Primitive2DSequence ScenePrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence ScenePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DSequence aRetval;
 
@@ -365,7 +365,7 @@ namespace drawinglayer
             bool bNeedNewDecomposition(false);
             bool bDiscreteSizesAreCalculated(false);
 
-            if(getLocal2DDecomposition().hasElements())
+            if(getBuffered2DDecomposition().hasElements())
             {
                 basegfx::B2DRange aVisibleDiscreteRange;
                 calculateDsicreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
@@ -392,10 +392,10 @@ namespace drawinglayer
             if(bNeedNewDecomposition)
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< ScenePrimitive2D* >(this)->setLocal2DDecomposition(Primitive2DSequence());
+                const_cast< ScenePrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
             }
 
-            if(!getLocal2DDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().hasElements())
             {
                 if(!bDiscreteSizesAreCalculated)
                 {

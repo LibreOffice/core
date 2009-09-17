@@ -60,10 +60,10 @@ namespace drawinglayer
     namespace processor3d
     {
         // as tooling, the process() implementation takes over API handling and calls this
-        // virtual render method when the primitive implementation is BufDecPrimitive3D-based.
+        // virtual render method when the primitive implementation is BasePrimitive3D-based.
         void Shadow3DExtractingProcessor::processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate)
         {
-            // it is a BufDecPrimitive3D implementation, use getPrimitive3DID() call for switch
+            // it is a BasePrimitive3D implementation, use getPrimitive3DID() call for switch
             switch(rCandidate.getPrimitive3DID())
             {
                 case PRIMITIVE3D_ID_SHADOWPRIMITIVE3D :

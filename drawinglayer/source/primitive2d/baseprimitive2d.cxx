@@ -94,14 +94,14 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence BufferedDecompositionPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence BufferedDecompositionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             return Primitive2DSequence();
         }
 
         BufferedDecompositionPrimitive2D::BufferedDecompositionPrimitive2D()
         :   BasePrimitive2D(),
-            maLocal2DDecomposition()
+            maBuffered2DDecomposition()
         {
         }
 
@@ -109,13 +109,13 @@ namespace drawinglayer
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            if(!getLocal2DDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().hasElements())
             {
-                const Primitive2DSequence aNewSequence(createLocal2DDecomposition(rViewInformation));
-                const_cast< BufferedDecompositionPrimitive2D* >(this)->setLocal2DDecomposition(aNewSequence);
+                const Primitive2DSequence aNewSequence(create2DDecomposition(rViewInformation));
+                const_cast< BufferedDecompositionPrimitive2D* >(this)->setBuffered2DDecomposition(aNewSequence);
             }
 
-            return getLocal2DDecomposition();
+            return getBuffered2DDecomposition();
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -135,7 +135,7 @@ namespace drawinglayer
             if(rCandidate.is())
             {
                 // try to get C++ implementation base
-                const BufferedDecompositionPrimitive2D* pCandidate(dynamic_cast< BufferedDecompositionPrimitive2D* >(rCandidate.get()));
+                const BasePrimitive2D* pCandidate(dynamic_cast< BasePrimitive2D* >(rCandidate.get()));
 
                 if(pCandidate)
                 {
@@ -185,8 +185,8 @@ namespace drawinglayer
                 return true;
             }
 
-            const BufferedDecompositionPrimitive2D* pA(dynamic_cast< const BufferedDecompositionPrimitive2D* >(rxA.get()));
-            const BufferedDecompositionPrimitive2D* pB(dynamic_cast< const BufferedDecompositionPrimitive2D* >(rxB.get()));
+            const BasePrimitive2D* pA(dynamic_cast< const BasePrimitive2D* >(rxA.get()));
+            const BasePrimitive2D* pB(dynamic_cast< const BasePrimitive2D* >(rxB.get()));
             const bool bAEqualZero(pA == 0L);
 
             if(bAEqualZero != (pB == 0L))

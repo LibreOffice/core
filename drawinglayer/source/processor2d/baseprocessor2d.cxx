@@ -74,12 +74,12 @@ namespace drawinglayer
 
                     if(xReference.is())
                     {
-                        // try to cast to BufferedDecompositionPrimitive2D implementation
-                        const primitive2d::BufferedDecompositionPrimitive2D* pBasePrimitive = dynamic_cast< const primitive2d::BufferedDecompositionPrimitive2D* >(xReference.get());
+                        // try to cast to BasePrimitive2D implementation
+                        const primitive2d::BasePrimitive2D* pBasePrimitive = dynamic_cast< const primitive2d::BasePrimitive2D* >(xReference.get());
 
                         if(pBasePrimitive)
                         {
-                            // it is a BufferedDecompositionPrimitive2D implementation, use local processor
+                            // it is a BasePrimitive2D implementation, use local processor
                             processBasePrimitive2D(*pBasePrimitive);
                         }
                         else

@@ -79,7 +79,12 @@ namespace drawinglayer
         /** Baseclass for all C++ implementations of com::sun::star::graphic::XPrimitive2D
 
             The description/functionality is identical with the 2D case in baseprimitive2d.hxx,
-            please see there for detailed information
+            please see there for detailed information.
+
+            Current Basic 3D Primitives are:
+
+            - PolygonHairlinePrimitive3D (for 3D hairlines)
+            - PolyPolygonMaterialPrimitive3D (for 3D filled plane polygons)
          */
         class BasePrimitive3D
         :   private boost::noncopyable,
@@ -96,7 +101,7 @@ namespace drawinglayer
             /** the ==operator is mainly needed to allow testing newly-created high level primitives against their last
                 incarnation which buffers/holds the decompositionsThe default implementation
                 uses getPrimitive3DID()-calls to test if it's the same ID at last. Overloaded implementation are then
-                based on this implementation
+                based on this implementation.
              */
             virtual bool operator==( const BasePrimitive3D& rPrimitive ) const;
             bool operator!=( const BasePrimitive3D& rPrimitive ) const { return !operator==(rPrimitive); }
@@ -133,7 +138,7 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
-// BufDecPrimitive3D class
+// BufferedDecompositionPrimitive3D class
 
 namespace drawinglayer
 {
@@ -144,32 +149,32 @@ namespace drawinglayer
             The description/functionality is identical with the 2D case in baseprimitive2d.hxx,
             please see there for detailed information
          */
-        class BufDecPrimitive3D
+        class BufferedDecompositionPrimitive3D
         :   public BasePrimitive3D
         {
         private:
-            /// a sequence used for buffering the last createLocal3DDecomposition() result
-            Primitive3DSequence                             maLocal3DDecomposition;
+            /// a sequence used for buffering the last create3DDecomposition() result
+            Primitive3DSequence                             maBuffered3DDecomposition;
 
         protected:
-            /** access methods to maLocal3DDecomposition. The usage of this methods may allow
+            /** access methods to maBuffered3DDecomposition. The usage of this methods may allow
                 later thread-safe stuff to be added if needed. Only to be used by getDecomposition()
                 implementations for buffering the last decomposition.
              */
-            const Primitive3DSequence& getLocal3DDecomposition() const { return maLocal3DDecomposition; }
-            void setLocal3DDecomposition(const Primitive3DSequence& rNew) { maLocal3DDecomposition = rNew; }
+            const Primitive3DSequence& getBuffered3DDecomposition() const { return maBuffered3DDecomposition; }
+            void setBuffered3DDecomposition(const Primitive3DSequence& rNew) { maBuffered3DDecomposition = rNew; }
 
             /** method which is to be used to implement the local decomposition of a 2D primitive. The default
                 implementation will just return an empty decomposition
              */
-            virtual Primitive3DSequence createLocal3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+            virtual Primitive3DSequence create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
         public:
             // constructor
-            BufDecPrimitive3D();
+            BufferedDecompositionPrimitive3D();
 
-            /** The getDecomposition default implementation will on demand use createLocal3DDecomposition() if
-                maLocal3DDecomposition is empty. It will set maLocal3DDecomposition to this obtained decomposition
+            /** The getDecomposition default implementation will on demand use create3DDecomposition() if
+                maBuffered3DDecomposition is empty. It will set maBuffered3DDecomposition to this obtained decomposition
                 to buffer it. If the decomposition is also ViewInformation-dependent, this method needs to be
                 overloaded and the ViewInformation for the last decomposition needs to be remembered, too, and
                 be used in the next call to decide if the buffered decomposition may be reused or not.
@@ -192,7 +197,7 @@ namespace drawinglayer
         // get range3D from a given Primitive3DSequence
         basegfx::B3DRange getB3DRangeFromPrimitive3DSequence(const Primitive3DSequence& rCandidate, const geometry::ViewInformation3D& aViewInformation);
 
-        // compare two Primitive2DReferences for equality, including trying to get implementations (BufferedDecompositionPrimitive2D)
+        // compare two Primitive2DReferences for equality, including trying to get implementations (BasePrimitive2D)
         // and using compare operator
         bool arePrimitive3DReferencesEqual(const Primitive3DReference& rA, const Primitive3DReference& rB);
 

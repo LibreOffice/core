@@ -46,7 +46,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        class PolyPolygonMaterialPrimitive3D : public BufDecPrimitive3D
+        class PolyPolygonMaterialPrimitive3D : public BasePrimitive3D
         {
         private:
             basegfx::B3DPolyPolygon                     maPolyPolygon;

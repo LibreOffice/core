@@ -266,7 +266,7 @@ namespace drawinglayer
             return xRetval;
         }
 
-        Primitive2DSequence ControlPrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence ControlPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // try to create a bitmap decomposition. If that fails for some reason,
             // at least create a replacement decomposition.
@@ -365,16 +365,16 @@ namespace drawinglayer
             ::osl::MutexGuard aGuard( m_aMutex );
             const basegfx::B2DVector aNewScaling(rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
 
-            if(getLocal2DDecomposition().hasElements())
+            if(getBuffered2DDecomposition().hasElements())
             {
                 if(!maLastViewScaling.equal(aNewScaling))
                 {
                     // conditions of last local decomposition have changed, delete
-                    const_cast< ControlPrimitive2D* >(this)->setLocal2DDecomposition(Primitive2DSequence());
+                    const_cast< ControlPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
                 }
             }
 
-            if(!getLocal2DDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().hasElements())
             {
                 // remember ViewTransformation
                 const_cast< ControlPrimitive2D* >(this)->maLastViewScaling = aNewScaling;

@@ -137,7 +137,7 @@ namespace drawinglayer
             // create line and stroke attribute
             const attribute::LineAttribute aLineAttribute(rLine.getColor(), rLine.getWidth(), rLine.getJoin());
             const attribute::StrokeAttribute aStrokeAttribute(rLine.getDotDashArray(), rLine.getFullDotDashLen());
-            BufferedDecompositionPrimitive2D* pNewLinePrimitive = 0L;
+            BasePrimitive2D* pNewLinePrimitive = 0L;
 
             if(!rUnitPolygon.isClosed() && pStroke)
             {

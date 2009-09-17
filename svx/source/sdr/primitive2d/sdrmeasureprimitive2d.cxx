@@ -83,7 +83,7 @@ namespace drawinglayer
             return createPolygonLinePrimitive(aPolygon, rObjectMatrix, *getSdrLSTAttribute().getLine(), &aLineStartEnd);
         }
 
-        Primitive2DSequence SdrMeasurePrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        Primitive2DSequence SdrMeasurePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
             SdrBlockTextPrimitive2D* pBlockText = 0L;
@@ -424,7 +424,7 @@ namespace drawinglayer
 
                 // apply to existing text primitive
                 SdrTextPrimitive2D* pNewBlockText = pBlockText->createTransformedClone(aChange);
-                OSL_ENSURE(pNewBlockText, "SdrMeasurePrimitive2D::createLocal2DDecomposition: Could not create transformed clone of text primitive (!)");
+                OSL_ENSURE(pNewBlockText, "SdrMeasurePrimitive2D::create2DDecomposition: Could not create transformed clone of text primitive (!)");
                 delete pBlockText;
 
                 // add to local primitives

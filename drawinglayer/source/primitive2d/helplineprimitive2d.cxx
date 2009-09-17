@@ -54,9 +54,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence HelplinePrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence HelplinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            std::vector< BufferedDecompositionPrimitive2D* > aTempPrimitiveTarget;
+            std::vector< BasePrimitive2D* > aTempPrimitiveTarget;
 
             if(!rViewInformation.getViewport().isEmpty() && !getDirection().equalZero())
             {
@@ -200,16 +200,16 @@ namespace drawinglayer
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            if(getLocal2DDecomposition().hasElements())
+            if(getBuffered2DDecomposition().hasElements())
             {
                 if(maLastViewport != rViewInformation.getViewport() || maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
                     // conditions of last local decomposition have changed, delete
-                    const_cast< HelplinePrimitive2D* >(this)->setLocal2DDecomposition(Primitive2DSequence());
+                    const_cast< HelplinePrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
                 }
             }
 
-            if(!getLocal2DDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().hasElements())
             {
                 // remember ViewRange and ViewTransformation
                 const_cast< HelplinePrimitive2D* >(this)->maLastObjectToViewTransformation = rViewInformation.getObjectToViewTransformation();

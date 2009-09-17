@@ -88,10 +88,6 @@ namespace drawinglayer
         private:
             double                                      mfTransparence;
 
-        protected:
-            // local decomposition.
-            virtual Primitive3DSequence createLocal3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
-
         public:
             UnifiedAlphaTexturePrimitive3D(
                 double fTransparence,
@@ -102,6 +98,9 @@ namespace drawinglayer
 
             // compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
+
+            // local decomposition.
+            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
             // provide unique ID
             DeclPrimitrive3DIDBlock()
@@ -119,10 +118,6 @@ namespace drawinglayer
         {
         private:
             attribute::FillGradientAttribute        maGradient;
-
-        protected:
-            // local decomposition.
-            virtual Primitive3DSequence createLocal3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
         public:
             GradientTexturePrimitive3D(
@@ -154,10 +149,6 @@ namespace drawinglayer
         {
         private:
             attribute::FillBitmapAttribute      maBitmap;
-
-        protected:
-            // local decomposition.
-            virtual Primitive3DSequence createLocal3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
         public:
             BitmapTexturePrimitive3D(

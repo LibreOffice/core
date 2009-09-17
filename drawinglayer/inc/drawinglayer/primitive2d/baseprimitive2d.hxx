@@ -106,7 +106,7 @@ namespace drawinglayer
             unique UNO APIs may be defined/implemented for these set to allow more intense work
             with primitives using UNO.
 
-            Current five Basic Primitives are:
+            Current Basic 2D Primitives are:
 
             - BitmapPrimitive2D (bitmap data, evtl. with alpha)
             - MetafilePrimitive2D (VCL Metafile, currently no decomposition, but planned, so may vanish)
@@ -119,13 +119,7 @@ namespace drawinglayer
 
             A renderer implementing support for this minimal set of primitives can completely
             render primitive-based visualisations. Of course, he also has to take states into account
-            which are representated by the following GroupPrimitive2D derivations:
-
-            - AlphaPrimitive2D (objects with freely defined transparence)
-            - InvertPrimitive2D (for XOR)
-            - MaskPrimitive2D (for masking)
-            - ModifiedColorPrimitive2D (for a stack of color modifications)
-            - TransformPrimitive2D (for a transformation stack)
+            which are representated by GroupPrimitive2D derivations, see groupprimitive2d.hxx
 
             To support getting the geometric BoundRect, getB2DRange is used. The default
             implementation will use the get2DDecomposition result and merge a range from the
@@ -214,9 +208,9 @@ namespace drawinglayer
             primitive implementations which support a decomposition as base class.
 
             The buffering is done by holding the last decomposition in the local parameter
-            maLocal2DDecomposition. The default implementation of get2DDecomposition checks
-            if maLocal2DDecomposition is empty. If yes, it uses createLocal2DDecomposition
-            to create the content. In all cases, maLocal2DDecomposition is returned.
+            maBuffered2DDecomposition. The default implementation of get2DDecomposition checks
+            if maBuffered2DDecomposition is empty. If yes, it uses create2DDecomposition
+            to create the content. In all cases, maBuffered2DDecomposition is returned.
 
             For view-dependent primitives derived from Primitive2DBufferDecomposition more needs
             to be done when the decomposition depends on parts of the parameter ViewInformation2D.
@@ -227,39 +221,39 @@ namespace drawinglayer
                 (this may be a complete local copy of ViewInformation2D)
             (b) If a buffered decomposition exists, ckeck if one of the new local parameters
                 differs from the corresponding locally remembered (as member) ones. If yes,
-                clear maLocal2DDecomposition
-            (d) call baseclass::get2DDecomposition which will use createLocal2DDecomposition
-                to fill maLocal2DDecomposition if it's empty
+                clear maBuffered2DDecomposition
+            (d) call baseclass::get2DDecomposition which will use create2DDecomposition
+                to fill maBuffered2DDecomposition if it's empty
             (e) copy the new local parameters to the corresponding locally remembered ones
                 to identify if a new decomposition is needed at the next call
-            (f) return maLocal2DDecomposition
+            (f) return maBuffered2DDecomposition
          */
         class BufferedDecompositionPrimitive2D
         :   public BasePrimitive2D
         {
         private:
-            /// a sequence used for buffering the last createLocal2DDecomposition() result
-            Primitive2DSequence                             maLocal2DDecomposition;
+            /// a sequence used for buffering the last create2DDecomposition() result
+            Primitive2DSequence                             maBuffered2DDecomposition;
 
         protected:
-            /** access methods to maLocal2DDecomposition. The usage of this methods may allow
+            /** access methods to maBuffered2DDecomposition. The usage of this methods may allow
                 later thread-safe stuff to be added if needed. Only to be used by getDecomposition()
                 implementations for buffering the last decomposition.
              */
-            const Primitive2DSequence& getLocal2DDecomposition() const { return maLocal2DDecomposition; }
-            void setLocal2DDecomposition(const Primitive2DSequence& rNew) { maLocal2DDecomposition = rNew; }
+            const Primitive2DSequence& getBuffered2DDecomposition() const { return maBuffered2DDecomposition; }
+            void setBuffered2DDecomposition(const Primitive2DSequence& rNew) { maBuffered2DDecomposition = rNew; }
 
             /** method which is to be used to implement the local decomposition of a 2D primitive. The default
                 implementation will just return an empty decomposition
              */
-            virtual Primitive2DSequence createLocal2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             // constructor/destructor
             BufferedDecompositionPrimitive2D();
 
-            /** The getDecomposition default implementation will on demand use createLocal2DDecomposition() if
-                maLocal2DDecomposition is empty. It will set maLocal2DDecomposition to this obtained decomposition
+            /** The getDecomposition default implementation will on demand use create2DDecomposition() if
+                maBuffered2DDecomposition is empty. It will set maBuffered2DDecomposition to this obtained decomposition
                 to buffer it. If the decomposition is also ViewInformation2D-dependent, this method needs to be
                 overloaded and the ViewInformation2D for the last decomposition need to be remembered, too, and
                 be used in the next call to decide if the buffered decomposition may be reused or not.
@@ -282,7 +276,7 @@ namespace drawinglayer
         // get B2DRange from a given Primitive2DSequence
         basegfx::B2DRange getB2DRangeFromPrimitive2DSequence(const Primitive2DSequence& rCandidate, const geometry::ViewInformation2D& aViewInformation);
 
-        // compare two Primitive2DReferences for equality, including trying to get implementations (BufferedDecompositionPrimitive2D)
+        // compare two Primitive2DReferences for equality, including trying to get implementations (BasePrimitive2D)
         // and using compare operator
         bool arePrimitive2DReferencesEqual(const Primitive2DReference& rA, const Primitive2DReference& rB);
 

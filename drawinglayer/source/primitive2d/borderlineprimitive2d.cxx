@@ -49,7 +49,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence BorderLinePrimitive2D::createLocal2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence BorderLinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence xRetval;
 
