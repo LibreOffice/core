@@ -72,27 +72,6 @@ static osl::Mutex &  GetOwnMutex()
 ///////////////////////////////////////////////////////////////////////////
 
 
-static lang::Locale lcl_CreateLocale( LanguageType eLang )
-{
-    lang::Locale aLocale;
-    if ( eLang != LANGUAGE_NONE )
-        MsLangId::convertLanguageToLocale( eLang, aLocale );
-
-    return aLocale;
-}
-
-
-static INT16 lcl_LocaleToLanguage( const lang::Locale& rLocale )
-{
-    //  empty Locale -> LANGUAGE_NONE
-    if ( rLocale.Language.getLength() == 0 )
-        return LANGUAGE_NONE;
-
-    //  Variant of Locale is ignored
-    return MsLangId::convertLocaleToLanguage( rLocale );
-}
-
-
 static BOOL lcl_SetLocale( INT16 &rLanguage, const uno::Any &rVal )
 {
     BOOL bSucc = FALSE;
@@ -100,41 +79,31 @@ static BOOL lcl_SetLocale( INT16 &rLanguage, const uno::Any &rVal )
     lang::Locale aNew;
     if (rVal >>= aNew)  // conversion successful?
     {
-        INT16 nNew = lcl_LocaleToLanguage( aNew );
+        INT16 nNew = MsLangId::convertLocaleToLanguage( aNew );
         if (nNew != rLanguage)
         {
             rLanguage = nNew;
             bSucc = TRUE;
         }
     }
-
     return bSucc;
-}
-
-
-static inline INT16 lcl_CfgLocaleStrToLanguage( const OUString &rCfgLocaleStr )
-{
-    INT16 nRes = LANGUAGE_NONE;
-    if (0 != rCfgLocaleStr.getLength())
-        nRes = MsLangId::convertIsoStringToLanguage( rCfgLocaleStr );
-    return nRes;
 }
 
 
 static inline const OUString lcl_LanguageToCfgLocaleStr( INT16 nLanguage )
 {
     OUString aRes;
-    if (LANGUAGE_NONE != nLanguage)
+    if (LANGUAGE_SYSTEM != nLanguage)
         aRes = MsLangId::convertLanguageToIsoString( nLanguage );
     return aRes;
 }
 
 
-static void lcl_CfgAnyToLanguage( const uno::Any &rVal, INT16& rLanguage )
+static INT16 lcl_CfgAnyToLanguage( const uno::Any &rVal )
 {
     OUString aTmp;
-    if ((rVal >>= aTmp)  &&  0 != aTmp.getLength())
-       rLanguage = MsLangId::convertIsoStringToLanguage( aTmp );
+    rVal >>= aTmp;
+    return (aTmp.getLength() == 0) ? LANGUAGE_SYSTEM : MsLangId::convertIsoStringToLanguage( aTmp );
 }
 
 
@@ -143,7 +112,6 @@ static void lcl_CfgAnyToLanguage( const uno::Any &rVal, INT16& rLanguage )
 SvtLinguOptions::SvtLinguOptions()
 {
     nDefaultLanguage = LANGUAGE_NONE;
-
     nDefaultLanguage_CJK = LANGUAGE_NONE;
     nDefaultLanguage_CTL = LANGUAGE_NONE;
 
@@ -428,19 +396,19 @@ uno::Any SvtLinguConfigItem::GetProperty( INT32 nPropertyHandle ) const
         }
         case UPH_DEFAULT_LOCALE :
         {
-            lang::Locale aLocale( lcl_CreateLocale( rOpt.nDefaultLanguage ) );
+            lang::Locale aLocale( MsLangId::convertLanguageToLocale( rOpt.nDefaultLanguage, false ) );
             aRes.setValue( &aLocale, ::getCppuType((lang::Locale*)0 ));
             break;
         }
         case UPH_DEFAULT_LOCALE_CJK :
         {
-            lang::Locale aLocale( lcl_CreateLocale( rOpt.nDefaultLanguage_CJK ) );
+            lang::Locale aLocale( MsLangId::convertLanguageToLocale( rOpt.nDefaultLanguage_CJK, false ) );
             aRes.setValue( &aLocale, ::getCppuType((lang::Locale*)0 ));
             break;
         }
         case UPH_DEFAULT_LOCALE_CTL :
         {
-            lang::Locale aLocale( lcl_CreateLocale( rOpt.nDefaultLanguage_CTL ) );
+            lang::Locale aLocale( MsLangId::convertLanguageToLocale( rOpt.nDefaultLanguage_CTL, false ) );
             aRes.setValue( &aLocale, ::getCppuType((lang::Locale*)0 ));
             break;
         }
@@ -654,7 +622,7 @@ BOOL SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
             switch ( nPropertyHandle )
             {
                 case UPH_DEFAULT_LOCALE :
-                    { rOpt.bRODefaultLanguage = pROStates[i]; lcl_CfgAnyToLanguage( rVal, rOpt.nDefaultLanguage ); } break;
+                    { rOpt.bRODefaultLanguage = pROStates[i]; rOpt.nDefaultLanguage = lcl_CfgAnyToLanguage( rVal ); } break;
                 case UPH_ACTIVE_DICTIONARIES :
                     { rOpt.bROActiveDics = pROStates[i]; rVal >>= rOpt.aActiveDics;   } break;
                 case UPH_IS_USE_DICTIONARY_LIST :
@@ -662,9 +630,9 @@ BOOL SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
                 case UPH_IS_IGNORE_CONTROL_CHARACTERS :
                     { rOpt.bROIsIgnoreControlCharacters = pROStates[i]; rVal >>= rOpt.bIsIgnoreControlCharacters;    } break;
                 case UPH_DEFAULT_LOCALE_CJK :
-                    { rOpt.bRODefaultLanguage_CJK = pROStates[i]; lcl_CfgAnyToLanguage( rVal, rOpt.nDefaultLanguage_CJK );    } break;
+                    { rOpt.bRODefaultLanguage_CJK = pROStates[i]; rOpt.nDefaultLanguage_CJK = lcl_CfgAnyToLanguage( rVal );    } break;
                 case UPH_DEFAULT_LOCALE_CTL :
-                    { rOpt.bRODefaultLanguage_CTL = pROStates[i]; lcl_CfgAnyToLanguage( rVal, rOpt.nDefaultLanguage_CTL );    } break;
+                    { rOpt.bRODefaultLanguage_CTL = pROStates[i]; rOpt.nDefaultLanguage_CTL = lcl_CfgAnyToLanguage( rVal );    } break;
 
                 case UPH_IS_SPELL_UPPER_CASE :
                     { rOpt.bROIsSpellUpperCase = pROStates[i]; rVal >>= rOpt.bIsSpellUpperCase; } break;
