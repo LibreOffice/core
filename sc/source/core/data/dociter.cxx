@@ -543,25 +543,11 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
     SCCOLROW nFirstQueryField = mpParam->GetEntry(0).nField;
     for ( ;; )
     {
-        if ( nRow > mpParam->nRow2 )
+        if (nRow > mpParam->nRow2)
         {
+            // Bottom of the range reached.  Bail out.
             rValue.mnError = 0;
             return false;
-//          nRow = mpParam->nRow1;
-//          if (mpParam->bHasHeader)
-//              nRow++;
-//          do
-//          {
-//              nCol++;
-//              if ( nCol > mpParam->mnField )
-//              {
-//                  // rValue = 0.0;    // do not change caller's value!
-//                  rErr = 0;
-//                  return FALSE;               // Ende und Aus
-//              }
-//              pCol = &(mpDoc->pTab[nTab])->aCol[nCol];
-//          } while ( pCol->nCount == 0 );
-//          pCol->Search( nRow, nColRow );
         }
 
         while ( (nColRow < pCol->nCount) && (pCol->pItems[nColRow].nRow < nRow) )
