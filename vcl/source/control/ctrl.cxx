@@ -561,6 +561,31 @@ void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRec
         return;
     }
 
-    ControlTextRenderer aRenderer( *this, _rTargetDevice, *mpControlData->mpReferenceDevice );
-    _io_rRect = aRenderer.DrawText( _io_rRect, _rStr, _nStyle, _pVector, _pDisplayText );
+#ifdef FS_DEBUG
+    _rTargetDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_TEXTCOLOR );
+
+    _rTargetDevice.SetTextColor( COL_LIGHTRED );
+    _rTargetDevice.DrawText( _io_rRect, _rStr, _nStyle, _pVector, _pDisplayText );
+
+    _rTargetDevice.SetLineColor( COL_LIGHTRED );
+    _rTargetDevice.SetFillColor();
+    _rTargetDevice.DrawRect( _io_rRect );
+
+    _rTargetDevice.Pop();
+#endif
+
+    {
+        ControlTextRenderer aRenderer( *this, _rTargetDevice, *mpControlData->mpReferenceDevice );
+        _io_rRect = aRenderer.DrawText( _io_rRect, _rStr, _nStyle, _pVector, _pDisplayText );
+    }
+
+#ifdef FS_DEBUG
+    _rTargetDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+
+    _rTargetDevice.SetLineColor( COL_LIGHTGREEN );
+    _rTargetDevice.SetFillColor();
+    _rTargetDevice.DrawRect( _io_rRect );
+
+    _rTargetDevice.Pop();
+#endif
 }

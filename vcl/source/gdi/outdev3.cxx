@@ -7096,15 +7096,6 @@ void OutputDevice::AddTextRectActions( const Rectangle& rRect,
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::DrawText( const Rectangle& rRect,
-                             const String& rOrigStr, USHORT nStyle,
-                             MetricVector* pVector, String* pDisplayText )
-{
-    DrawText( rRect, rOrigStr, nStyle, pVector, pDisplayText, NULL );
-}
-
-// -----------------------------------------------------------------------
-
 void OutputDevice::DrawText( const Rectangle& rRect, const String& rOrigStr, USHORT nStyle,
                              MetricVector* pVector, String* pDisplayText,
                              ::vcl::ITextLayout* _pTextLayout )
@@ -7146,15 +7137,6 @@ void OutputDevice::DrawText( const Rectangle& rRect, const String& rOrigStr, USH
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawText( rRect, rOrigStr, nStyle, pVector, pDisplayText );
-}
-
-// -----------------------------------------------------------------------
-
-Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
-                                     const String& rOrigStr, USHORT nStyle,
-                                     TextRectInfo* pInfo ) const
-{
-    return GetTextRect( rRect, rOrigStr, nStyle, pInfo, NULL );
 }
 
 // -----------------------------------------------------------------------

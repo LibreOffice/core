@@ -54,7 +54,6 @@ namespace vcl
         long        GetTextArray( const XubString& _rText, sal_Int32* _pDXAry, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const;
         Rectangle   DrawText( const Rectangle& _rRect, const XubString& _rText, USHORT _nStyle, MetricVector* _pVector, String* _pDisplayText);
 
-
         bool        IsZoom() const;
 
     protected:
@@ -226,6 +225,13 @@ namespace vcl
             aRect.Bottom()  = long( aRect.Bottom() / (double)m_aZoom );
         }
 
+#ifdef FS_DEBUG
+        m_rTargetDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+        m_rTargetDevice.SetLineColor( COL_LIGHTBLUE );
+        m_rTargetDevice.SetFillColor();
+        m_rTargetDevice.DrawRect( aRect );
+        m_rTargetDevice.Pop();
+#endif
         onBeginDrawText();
         m_rTargetDevice.DrawText( aRect, _rText, _nStyle, _pVector, _pDisplayText, this );
         Rectangle aTextRect = onEndDrawText();

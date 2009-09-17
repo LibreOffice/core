@@ -653,18 +653,12 @@ public:
                                             GDIMetaFile&     rMtf );
     void                DrawText( const Rectangle& rRect,
                                   const XubString& rStr, USHORT nStyle = 0,
-                                  MetricVector* pVector = NULL, String* pDisplayText = NULL );
-    void                DrawText( const Rectangle& rRect,
-                                  const XubString& rStr, USHORT nStyle,
-                                  MetricVector* pVector, String* pDisplayText,
-                                  ::vcl::ITextLayout* _pTextLayout );
+                                  MetricVector* pVector = NULL, String* pDisplayText = NULL,
+                                  ::vcl::ITextLayout* _pTextLayout = NULL );
     Rectangle           GetTextRect( const Rectangle& rRect,
                                      const XubString& rStr, USHORT nStyle = TEXT_DRAW_WORDBREAK,
-                                     TextRectInfo* pInfo = NULL ) const;
-    Rectangle           GetTextRect( const Rectangle& rRect,
-                                     const XubString& rStr, USHORT nStyle,
-                                     TextRectInfo* pInfo,
-                                     const ::vcl::ITextLayout* _pTextLayout ) const;
+                                     TextRectInfo* pInfo = NULL,
+                                     const ::vcl::ITextLayout* _pTextLayout = NULL ) const;
     XubString           GetEllipsisString( const XubString& rStr, long nMaxWidth,
                                            USHORT nStyle = TEXT_DRAW_ENDELLIPSIS ) const;
     void                DrawCtrlText( const Point& rPos, const XubString& rStr,
