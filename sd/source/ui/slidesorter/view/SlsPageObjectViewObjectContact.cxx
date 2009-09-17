@@ -717,15 +717,13 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::createLocalDecompositio
     aTextLayouter.setFont(getPageNameFont());
 
     // get font attributes
-    ::basegfx::B2DVector aTextSizeAttribute;
-    const drawinglayer::primitive2d::FontAttributes aFontAttributes(drawinglayer::primitive2d::getFontAttributesFromVclFont(
-        aTextSizeAttribute,
-        getPageNameFont(),
-        false,
-        false));
-
-    // prepare DXTextArray (can be empty one)
-    const ::std::vector< double > aDXArray;
+    basegfx::B2DVector aTextSizeAttribute;
+    const drawinglayer::primitive2d::FontAttributes aFontAttributes(
+        drawinglayer::primitive2d::getFontAttributesFromVclFont(
+            aTextSizeAttribute,
+            getPageNameFont(),
+            false,
+            false));
 
     // prepare locale; this may need some more information in the future
     const ::com::sun::star::lang::Locale aLocale;
@@ -809,16 +807,27 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::createLocalDecompositio
         }
 
         // fill text matrix
-        ::basegfx::B2DHomMatrix aTextMatrix;
+        basegfx::B2DHomMatrix aTextMatrix;
 
-        aTextMatrix.set(0L, 0L, aTextSizeAttribute.getX());
-        aTextMatrix.set(1L, 1L, aTextSizeAttribute.getY());
-        aTextMatrix.set(0L, 2L, fStartX);
-        aTextMatrix.set(1L, 2L, fStartY);
+        aTextMatrix.set(0, 0, aTextSizeAttribute.getX());
+        aTextMatrix.set(1, 1, aTextSizeAttribute.getY());
+        aTextMatrix.set(0, 2, fStartX);
+        aTextMatrix.set(1, 2, fStartY);
+
+        // prepare DXTextArray (can be empty one)
+        const ::std::vector< double > aDXArray;
 
         // create Text primitive and add to target
-        xRetval[nInsert++] = Primitive2DReference(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-            aTextMatrix, aPageName, 0, aPageName.Len(), aDXArray, aFontAttributes, aLocale, aFontColor));
+        xRetval[nInsert++] = Primitive2DReference(
+            new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                aTextMatrix,
+                aPageName,
+                0,
+                aPageName.Len(),
+                aDXArray,
+                aFontAttributes,
+                aLocale,
+                aFontColor));
     }
 
     {
@@ -839,16 +848,27 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::createLocalDecompositio
         const double fStartY(aNumberRange.getMinY() + fTextHeight + aDiscretePixel.getX());
 
         // fill text matrix
-        ::basegfx::B2DHomMatrix aTextMatrix;
+        basegfx::B2DHomMatrix aTextMatrix;
 
-        aTextMatrix.set(0L, 0L, aTextSizeAttribute.getX());
-        aTextMatrix.set(1L, 1L, aTextSizeAttribute.getY());
-        aTextMatrix.set(0L, 2L, fStartX);
-        aTextMatrix.set(1L, 2L, fStartY);
+        aTextMatrix.set(0, 0, aTextSizeAttribute.getX());
+        aTextMatrix.set(1, 1, aTextSizeAttribute.getY());
+        aTextMatrix.set(0, 2, fStartX);
+        aTextMatrix.set(1, 2, fStartY);
+
+        // prepare DXTextArray (can be empty one)
+        const ::std::vector< double > aDXArray;
 
         // create Text primitive
-        xRetval[nInsert++] = Primitive2DReference(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-            aTextMatrix, aPageNumber, 0, nNumberLen, aDXArray, aFontAttributes, aLocale, aFontColor));
+        xRetval[nInsert++] = Primitive2DReference(
+            new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                aTextMatrix,
+                aPageNumber,
+                0,
+                nNumberLen,
+                aDXArray,
+                aFontAttributes,
+                aLocale,
+                aFontColor));
 
         if(getExcluded())
         {
