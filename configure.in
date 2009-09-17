@@ -4083,8 +4083,24 @@ if test -n "$with_system_boost" -o -n "$with_system_headers" && \
    AC_LANG_PUSH([C++])
    AC_CHECK_HEADER(boost/shared_ptr.hpp, [],
        [AC_MSG_ERROR(boost/shared_ptr.hpp not found. install boost)], [])
-   AC_CHECK_HEADER(boost/spirit/core.hpp, [],
-       [AC_MSG_ERROR(boost/spirit/core.hpp not found. install boost)], [])
+   AC_CHECK_HEADER(boost/spirit/include/classic_core.hpp, [],
+       [AC_MSG_ERROR(boost/spirit/include/classic_core.hpp not found. install boost >= 1.38)], [])
+   AC_CHECK_HEADER(boost/function.hpp, [],
+       [AC_MSG_ERROR(boost/function.hpp not found. install boost)], [])
+
+   save_CXXFLAGS=$CXXFLAGS
+   CXXFLAGS="$CXXFLAGS -fno-exceptions"
+   AC_MSG_CHECKING([whether boost/function.hpp compiles with -fno-exceptions])
+   AC_TRY_COMPILE([#include <boost/function.hpp>
+], [],
+   ac_cv_cxx_boost_no_exceptons_broken=no, ac_cv_cxx_boost_no_exceptons_broken=yes)
+
+   if test "$ac_cv_cxx_boost_no_exceptons_broken" = "yes"; then
+	AC_MSG_ERROR([no, see https://bugzilla.redhat.com/show_bug.cgi?id=477131])
+   else
+  	AC_MSG_RESULT([yes])
+   fi
+   CXXFLAGS=$save_CXXFLAGS
    AC_LANG_POP([C++])
 else
    AC_MSG_RESULT([internal])
