@@ -333,6 +333,13 @@ void Access::commitChildChanges(bool valid) {
     }
 }
 
+Access::ModifiedChild::ModifiedChild() {}
+
+Access::ModifiedChild::ModifiedChild(
+    rtl::Reference< ChildAccess > const & theChild, bool theDirectlyModified):
+    child(theChild), directlyModified(theDirectlyModified)
+{}
+
 rtl::OUString Access::getImplementationName() throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));

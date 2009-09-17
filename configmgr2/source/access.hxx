@@ -174,13 +174,11 @@ public: //TODO
         rtl::Reference< ChildAccess > child;
         bool directlyModified;
 
-        inline ModifiedChild() {}
+        ModifiedChild();
 
-        inline ModifiedChild(
+        ModifiedChild(
             rtl::Reference< ChildAccess > const & theChild,
-            bool theDirectlyModified):
-            child(theChild), directlyModified(theDirectlyModified)
-        {}
+            bool theDirectlyModified);
     };
 
     typedef std::map< rtl::OUString, ModifiedChild > HardChildMap;
