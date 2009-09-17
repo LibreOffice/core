@@ -60,17 +60,74 @@
                              )
 =================================================================================================================*/
 #include <services/mediatypedetectionhelper.hxx>
-#include <services/substitutepathvars.hxx>
-#include <services/pathsettings.hxx>
+#include <dispatch/mailtodispatcher.hxx>
+#include <dispatch/oxt_handler.hxx>
+#include <dispatch/popupmenudispatcher.hxx>
+#include <dispatch/servicehandler.hxx>
+#include <services/dispatchhelper.hxx>
+#include <recording/dispatchrecorder.hxx>
+#include <recording/dispatchrecordersupplier.hxx>
+#include <services/license.hxx>
+#include <services/uriabbreviation.hxx>
+#include <uielement/simpletextstatusbarcontroller.hxx>
+#include <uielement/logoimagestatusbarcontroller.hxx>
+#include <uielement/logotextstatusbarcontroller.hxx>
+#include <services/tabwindowservice.hxx>
+#include <uielement/fontmenucontroller.hxx>
+#include <uielement/fontsizemenucontroller.hxx>
+#include <uielement/footermenucontroller.hxx>
+#include <uielement/headermenucontroller.hxx>
+#include <uielement/langselectionmenucontroller.hxx>
+#include <uielement/macrosmenucontroller.hxx>
+#include <uielement/newmenucontroller.hxx>
+#include <uielement/toolbarsmenucontroller.hxx>
 
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper    )
-                        COMPONENTINFO( ::framework::SubstitutePathVariables     )
-                        COMPONENTINFO( ::framework::PathSettings                )
+                        COMPONENTINFO( ::framework::MailToDispatcher                        )
+                        COMPONENTINFO( ::framework::NewMenuController                       )
+                        COMPONENTINFO( ::framework::ToolbarsMenuController                  )
+                        COMPONENTINFO( ::framework::MacrosMenuController                    )
+                        COMPONENTINFO( ::framework::FontSizeMenuController                  )
+                        COMPONENTINFO( ::framework::HeaderMenuController                    )
+                        COMPONENTINFO( ::framework::FooterMenuController                    )
+                        COMPONENTINFO( ::framework::FontMenuController                      )
+                        COMPONENTINFO( ::framework::ServiceHandler                          )
+                        COMPONENTINFO( ::framework::LogoImageStatusbarController            )
+                        COMPONENTINFO( ::framework::LogoTextStatusbarController             )
+                        COMPONENTINFO( ::framework::SimpleTextStatusbarController           )
+                        COMPONENTINFO( ::framework::UriAbbreviation                         )
+                        COMPONENTINFO( ::framework::LanguageSelectionMenuController         )
+                        COMPONENTINFO( ::framework::PopupMenuDispatcher                     )
+                        COMPONENTINFO( ::framework::DispatchHelper                          )
+                        COMPONENTINFO( ::framework::TabWindowService                        )
+                        COMPONENTINFO( ::framework::DispatchRecorder                        )
+                        COMPONENTINFO( ::framework::DispatchRecorderSupplier                )
+                        COMPONENTINFO( ::framework::Oxt_Handler                             )
+                        COMPONENTINFO( ::framework::License                                 )
                     )
 
-COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        )   else
-                        IFFACTORY( ::framework::SubstitutePathVariables         )   else
-                        IFFACTORY( ::framework::PathSettings                    )
+COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        )
+                        IFFACTORY( ::framework::MailToDispatcher                        ) else
+                        IFFACTORY( ::framework::ServiceHandler                          )   else
+                        IFFACTORY( ::framework::LogoTextStatusbarController             )   else
+                        IFFACTORY( ::framework::LogoImageStatusbarController            )   else
+                        IFFACTORY( ::framework::License                                 )   else
+                        IFFACTORY( ::framework::PopupMenuDispatcher                     )   else
+                        IFFACTORY( ::framework::DispatchHelper                          )   else
+                        IFFACTORY( ::framework::TabWindowService                        )   else
+                        IFFACTORY( ::framework::DispatchRecorder                        )   else
+                        IFFACTORY( ::framework::DispatchRecorderSupplier                )   else
+                        IFFACTORY( ::framework::SimpleTextStatusbarController           )   else
+                        IFFACTORY( ::framework::ToolbarsMenuController                  )   else
+                        IFFACTORY( ::framework::FontMenuController                      )   else
+                        IFFACTORY( ::framework::MacrosMenuController                    )   else
+                        IFFACTORY( ::framework::NewMenuController                       )   else
+                        IFFACTORY( ::framework::FontSizeMenuController                  )   else
+                        IFFACTORY( ::framework::UriAbbreviation                         )   else
+                        IFFACTORY( ::framework::FooterMenuController                    )   else
+                        IFFACTORY( ::framework::HeaderMenuController                    )   else
+                        IFFACTORY( ::framework::LanguageSelectionMenuController         )   else
+                        IFFACTORY( ::framework::Oxt_Handler                             )
                     )

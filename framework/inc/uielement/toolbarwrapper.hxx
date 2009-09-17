@@ -79,13 +79,6 @@ class ToolBarWrapper : public ::com::sun::star::ui::XUIFunctionListener,
 
         // XUIElementSettings
         virtual void SAL_CALL updateSettings() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getSettings( sal_Bool bWriteable ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& UISettings ) throw (::com::sun::star::uno::RuntimeException);
-
-        // XUIConfigurationListener
-        virtual void SAL_CALL elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
 
         // XUIFunctionListener
         virtual void SAL_CALL functionExecute( const ::rtl::OUString& aUIElementName, const ::rtl::OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException);
@@ -99,9 +92,9 @@ class ToolBarWrapper : public ::com::sun::star::ui::XUIFunctionListener,
     //-------------------------------------------------------------------------------------------------------------
     protected:
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any&  aValue ) throw( com::sun::star::uno::Exception );
+        virtual void impl_fillNewData();
 
     private:
-        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
         com::sun::star::uno::Reference< com::sun::star::lang::XComponent >              m_xToolBarManager;
         com::sun::star::uno::Reference< com::sun::star::awt::XWindow >                  m_xToolBarWindow;
 };

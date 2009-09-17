@@ -871,6 +871,7 @@
 #define SID_HELP_PI                         (SID_SFX_START + 962)
 #define SID_BASIC_ENABLED                   (SID_SFX_START + 964)
 #define SID_EXPORT_DIALOG                   (SID_SFX_START + 965)
+#define SID_IMPORT_DIALOG                   (SID_SFX_START + 966)
 
 #define SID_BASICBREAK                      (SID_SFX_START +1521)
 

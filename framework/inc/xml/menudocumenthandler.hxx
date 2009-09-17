@@ -42,13 +42,14 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 //_________________________________________________________________________________________________________________
@@ -57,21 +58,12 @@
 
 namespace framework{
 
-class ReadMenuDocumentHandlerBase : public ::com::sun::star::xml::sax::XDocumentHandler,
-                                    public ThreadHelpBase,  // Struct for right initalization of mutex member! Must be first of baseclasses.
-                                    public ::cppu::OWeakObject
+class ReadMenuDocumentHandlerBase : public ThreadHelpBase,  // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                    public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
         ReadMenuDocumentHandlerBase();
         virtual ~ReadMenuDocumentHandlerBase();
-
-        // XInterface
-        virtual void SAL_CALL acquire() throw()
-            { OWeakObject::acquire(); }
-        virtual void SAL_CALL release() throw()
-            { OWeakObject::release(); }
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-            const ::com::sun::star::uno::Type & rType ) throw( ::com::sun::star::uno::RuntimeException );
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument(void)
@@ -295,6 +287,7 @@ class OReadMenuPopupHandler : public ReadMenuDocumentHandlerBase
         sal_Bool            m_bMenuMode;
         com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuContainer;
         com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
+        com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xComponentContext;
         NextElementClose    m_nNextElementExpected;
 }; // OReadMenuPopupHandler
 

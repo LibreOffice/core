@@ -42,30 +42,21 @@
 #include "connectivity/sdbcx/VDescriptor.hxx"
 #include "connectivity/dbtoolsdllapi.hxx"
 #include <comphelper/IdPropArrayHelper.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 namespace connectivity
 {
     namespace sdbcx
     {
 
-        typedef ::cppu::OWeakObject OView_BASE;
+        typedef ::cppu::WeakImplHelper2<    ::com::sun::star::lang::XServiceInfo,
+                                        ::com::sun::star::container::XNamed> OView_BASE;
 
 
-        class OOO_DLLPUBLIC_DBTOOLS OViewHelper
-        {
-        protected:
-            ::osl::Mutex             m_aMutex;
-            ::cppu::OBroadcastHelper rBHelper;
-
-        public:
-            OViewHelper(): rBHelper(m_aMutex){}
-        };
 
         class OOO_DLLPUBLIC_DBTOOLS OView :
-                        public OViewHelper,
+                        public ::comphelper::OMutexAndBroadcastHelper,
                         public OView_BASE,
-                        public ::com::sun::star::container::XNamed,
-                        public ::com::sun::star::lang::XServiceInfo,
                         public ::comphelper::OIdPropertyArrayUsageHelper<OView>,
                         public ODescriptor
         {

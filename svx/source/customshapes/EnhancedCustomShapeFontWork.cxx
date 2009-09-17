@@ -683,7 +683,7 @@ void FitTextOutlinesToShapeOutlines( const PolyPolygon& aOutlines2d, FWData& rFW
                 break;
             const Polygon& rOutlinePoly( aOutlines2d[ nOutline2dIdx++ ] );
             const sal_uInt16 nPointCount = rOutlinePoly.GetSize();
-            if ( nPointCount )
+            if ( nPointCount > 1 )
             {
                 std::vector< double > vDistances;
                 vDistances.reserve( nPointCount );
@@ -745,7 +745,7 @@ void FitTextOutlinesToShapeOutlines( const PolyPolygon& aOutlines2d, FWData& rFW
             const Polygon& rOutlinePoly2( aOutlines2d[ nOutline2dIdx++ ] );
             const sal_uInt16 nPointCount = rOutlinePoly.GetSize();
             const sal_uInt16 nPointCount2 = rOutlinePoly2.GetSize();
-            if ( nPointCount && nPointCount2 )
+            if ( ( nPointCount > 1 ) && ( nPointCount2 > 1 ) )
             {
                 std::vector< double > vDistances;
                 vDistances.reserve( nPointCount );

@@ -120,6 +120,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <svx/writingmodeitem.hxx>
 #include <vcl/print.hxx>
 #include <svx/svxfont.hxx>
@@ -3819,21 +3820,20 @@ BOOL PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
     nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_BulletOfs, nBulletOfs, nDestinationInstance );
 
     if ( nIsBullet )
-    {
         rNumberFormat.SetNumberingType( SVX_NUM_CHAR_SPECIAL );
 
-        UINT32 nFontHeight = 24;
-        PPTPortionObj* pPtr = pParaObj->First();
-        if ( pPtr )
-            pPtr->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nDestinationInstance );
+    UINT32 nFontHeight = 24;
+    PPTPortionObj* pPtr = pParaObj->First();
+    if ( pPtr )
+        pPtr->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nDestinationInstance );
+    if ( nIsBullet )
         nHardCount += ImplGetExtNumberFormat( rManager, rNumberFormat, pParaObj->pParaSet->mnDepth,
                                                     pParaObj->mnInstance, nDestinationInstance, rStartNumbering, nFontHeight, pParaObj );
 
-        if ( rNumberFormat.GetNumberingType() != SVX_NUM_BITMAP )
-            pParaObj->UpdateBulletRelSize( nBulletHeight );
-        if ( nHardCount )
-            ImplGetNumberFormat( rManager, rNumberFormat, pParaObj->pParaSet->mnDepth );
-    }
+    if ( rNumberFormat.GetNumberingType() != SVX_NUM_BITMAP )
+        pParaObj->UpdateBulletRelSize( nBulletHeight );
+    if ( nHardCount )
+        ImplGetNumberFormat( rManager, rNumberFormat, pParaObj->pParaSet->mnDepth );
 
     if ( nHardCount )
     {
@@ -3847,7 +3847,6 @@ BOOL PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
             case SVX_NUM_CHARS_UPPER_LETTER_N :
             case SVX_NUM_CHARS_LOWER_LETTER_N :
             {
-                PPTPortionObj* pPtr = pParaObj->First();
                 if ( pPtr )
                 {
                     sal_uInt32 nFont;
@@ -5566,11 +5565,6 @@ BOOL PPTPortionObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nDestinat
                     if ( nRetValue != nTmp )
                         bIsHardAttribute = 1;
                 }
-                if ( nRetValue && ( nDestinationInstance == TSS_TYPE_TEXT_IN_SHAPE ) )
-                {
-                    nRetValue = 0;          // no inheritance for standard textobjects
-                    bIsHardAttribute = 1;   // this attribute must be hard formatted
-                }
             }
             break;
             case PPT_CharAttr_Font :
@@ -6215,10 +6209,10 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
                 if ( pRule )
                 {
                     pRule->SetLevel( pParaSet->mnDepth, aNumberFormat );
-                    if ( nDestinationInstance == 0xffffffff )
+                    sal_uInt16 i, n;
+                    for ( i = 0; i < pRule->GetLevelCount(); i++ )
                     {
-                        sal_uInt16 i, n;
-                        for ( i = 0; i < pRule->GetLevelCount(); i++ )
+                        if ( i != pParaSet->mnDepth )
                         {
                             n = i > 4 ? 4 : i;
 
@@ -7429,6 +7423,15 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         xPropSet->setPropertyValue( sLeftBorder, Any( nLeftDist ) );
         xPropSet->setPropertyValue( sBottomBorder, Any( nLowerDist ) );
 
+        static const rtl::OUString  sTextVerticalAdjust( RTL_CONSTASCII_USTRINGPARAM( "TextVerticalAdjust" ) );
+        const SdrTextVertAdjust eTextVertAdjust(((const SdrTextVertAdjustItem&)pObj->GetMergedItem(SDRATTR_TEXT_VERTADJUST)).GetValue());
+        drawing::TextVerticalAdjust eVA( drawing::TextVerticalAdjust_TOP );
+        if ( eTextVertAdjust == SDRTEXTVERTADJUST_CENTER )
+            eVA = drawing::TextVerticalAdjust_CENTER;
+        else if ( eTextVertAdjust == SDRTEXTVERTADJUST_BOTTOM )
+            eVA = drawing::TextVerticalAdjust_BOTTOM;
+        xPropSet->setPropertyValue( sTextVerticalAdjust, Any( eVA ) );
+
         SfxItemSet aSet( pObj->GetMergedItemSet() );
         XFillStyle eFillStyle(((XFillStyleItem&)pObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue());
         ::com::sun::star::drawing::FillStyle eFS( com::sun::star::drawing::FillStyle_NONE );
@@ -7601,6 +7604,11 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                 CreateTableRows( xColumnRowRange->getRows(), aRows, pGroup->GetSnapRect().Bottom() );
                 CreateTableColumns( xColumnRowRange->getColumns(), aColumns, pGroup->GetSnapRect().Right() );
 
+                sal_Int32 nCellCount = aRows.size() * aColumns.size();
+                sal_Int32 *pMergedCellIndexTable = new sal_Int32[ nCellCount ];
+                for ( sal_Int32 i = 0; i < nCellCount; i++ )
+                    pMergedCellIndexTable[ i ] = i;
+
                 aGroupIter.Reset();
                 while( aGroupIter.IsMore() )
                 {
@@ -7621,7 +7629,16 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                             ApplyCellAttributes( pObj, xCell );
 
                             if ( ( nRowCount > 1 ) || ( nColumnCount > 1 ) )    // cell merging
+                            {
                                 MergeCells( xTable, nColumn, nRow, nColumnCount, nRowCount );
+                                for ( sal_Int32 nRowIter = 0; nRowIter < nRowCount; nRowIter++ )
+                                {
+                                    for ( sal_Int32 nColumnIter = 0; nColumnIter < nColumnCount; nColumnIter++ )
+                                    {   // now set the correct index for the merged cell
+                                        pMergedCellIndexTable[ ( ( nRow + nRowIter ) * aColumns.size() ) + nColumn + nColumnIter ] = nTableIndex;
+                                    }
+                                }
+                            }
 
                             // applying text
                             OutlinerParaObject* pParaObject = pObj->GetOutlinerParaObject();
@@ -7633,13 +7650,30 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                             }
                         }
                     }
-                    else
+                }
+                aGroupIter.Reset();
+                while( aGroupIter.IsMore() )
+                {
+                    SdrObject* pObj( aGroupIter.Next() );
+                    if ( IsLine( pObj ) )
                     {
                         std::vector< sal_Int32 > vPositions;    // containing cell indexes + cell position
                         GetLinePositions( pObj, aRows, aColumns, vPositions, pGroup->GetSnapRect() );
+
+                        // correcting merged cell position
+                        std::vector< sal_Int32 >::iterator aIter( vPositions.begin() );
+                        while( aIter != vPositions.end() )
+                        {
+                            sal_Int32 nOldPosition = *aIter & 0xffff;
+                            sal_Int32 nOldFlags = *aIter & 0xffff0000;
+                            sal_Int32 nNewPosition = pMergedCellIndexTable[ nOldPosition ] | nOldFlags;
+                            *aIter++ = nNewPosition;
+                        }
                         ApplyCellLineAttributes( pObj, xTable, vPositions, aColumns.size() );
                     }
                 }
+                delete[] pMergedCellIndexTable;
+
                 // we are replacing the whole group object by a single table object, so
                 // possibly connections to the group object have to be removed.
                 if ( pSolverContainer )

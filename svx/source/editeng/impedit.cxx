@@ -670,6 +670,8 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, US
 
     USHORT nTextPortionStart = 0;
     USHORT nPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
+    if (nPara == USHRT_MAX) // #i94322
+        return;
     ParaPortion* pParaPortion = pEditEngine->pImpEditEngine->GetParaPortions().GetObject( nPara );
 
     nShowCursorFlags |= nExtraCursorFlags;

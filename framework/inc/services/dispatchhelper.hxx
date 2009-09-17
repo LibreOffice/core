@@ -51,7 +51,7 @@
 
 //_______________________________________________
 // other includes
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <osl/conditn.hxx>
 
 //_______________________________________________
@@ -74,12 +74,8 @@ namespace framework{
                 All these steps are done inside one method call here.
 */
 
-class DispatchHelper : public css::lang::XTypeProvider
-                     , public css::lang::XServiceInfo
-                     , public css::frame::XDispatchHelper
-                     , public css::frame::XDispatchResultListener // => XEventListener
-                     , public ThreadHelpBase                      // must be the first base class!
-                     , public ::cppu::OWeakObject                 // => XInterface, XWeak
+class DispatchHelper : public ThreadHelpBase                      // must be the first base class!
+                      ,public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XServiceInfo,::com::sun::star::frame::XDispatchHelper,::com::sun::star::frame::XDispatchResultListener >
 {
 
     //-------------------------------------------
@@ -112,8 +108,6 @@ class DispatchHelper : public css::lang::XTypeProvider
         //---------------------------------------
         // XInterface, XTypeProvider, XServiceInfo
 
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         //---------------------------------------

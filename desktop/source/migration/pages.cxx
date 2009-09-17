@@ -37,6 +37,7 @@
 #include "migration.hxx"
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vos/security.hxx>
 #include <app.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
@@ -59,7 +60,6 @@
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
 #include <tools/config.hxx>
-
 
 using namespace rtl;
 using namespace osl;
@@ -388,6 +388,10 @@ UserPage::UserPage( svt::OWizardMachine* parent, const ResId& resid)
     SvtUserOptions aUserOpt;
     m_edFirst.SetText(aUserOpt.GetFirstName());
     m_edLast.SetText(aUserOpt.GetLastName());
+    rtl::OUString aUserName;
+    vos::OSecurity().getUserName( aUserName );
+       aUserOpt.SetID( aUserName );
+
     m_edInitials.SetText(aUserOpt.GetID());
     if (m_lang == LANGUAGE_RUSSIAN)
     {
@@ -403,6 +407,7 @@ sal_Bool UserPage::commitPage( CommitPageReason )
     aUserOpt.SetFirstName(m_edFirst.GetText());
     aUserOpt.SetLastName(m_edLast.GetText());
     aUserOpt.SetID( m_edInitials.GetText());
+
     if (m_lang == LANGUAGE_RUSSIAN)
         aUserOpt.SetFathersName(m_edFather.GetText());
 

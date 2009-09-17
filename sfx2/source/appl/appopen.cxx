@@ -48,7 +48,6 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
-#include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -81,7 +80,7 @@
 #include <svtools/templdlg.hxx>
 #include <osl/file.hxx>
 #include <svtools/extendedsecurityoptions.hxx>
-#include <svtools/docpasswdrequest.hxx>
+#include <comphelper/docpasswordhelper.hxx>
 #include <vcl/svapp.hxx>
 
 #include <vos/mutex.hxx>
@@ -247,6 +246,50 @@ void SetTemplate_Impl( const String &rFileName,
 
 //--------------------------------------------------------------------
 
+class SfxDocPasswordVerifier : public ::comphelper::IDocPasswordVerifier
+{
+public:
+    inline explicit     SfxDocPasswordVerifier( const Reference< embed::XStorage >& rxStorage ) :
+                            mxStorage( rxStorage ) {}
+
+    virtual ::comphelper::DocPasswordVerifierResult
+                        verifyPassword( const ::rtl::OUString& rPassword );
+
+private:
+    Reference< embed::XStorage > mxStorage;
+};
+
+::comphelper::DocPasswordVerifierResult SfxDocPasswordVerifier::verifyPassword( const ::rtl::OUString& rPassword )
+{
+    ::comphelper::DocPasswordVerifierResult eResult = ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
+    try
+    {
+        // check the password
+        // if the password correct is the stream will be opened successfuly
+        // and immediatelly closed
+        ::comphelper::OStorageHelper::SetCommonStoragePassword( mxStorage, rPassword );
+
+        mxStorage->openStreamElement(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ) ),
+                embed::ElementModes::READ | embed::ElementModes::NOCREATE );
+
+        // no exception -> success
+        eResult = ::comphelper::DocPasswordVerifierResult_OK;
+    }
+    catch( const packages::WrongPasswordException& )
+    {
+        eResult = ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
+    }
+    catch( const uno::Exception& )
+    {
+        // unknown error, do not try to ask again
+        eResult = ::comphelper::DocPasswordVerifierResult_ABORT;
+    }
+    return eResult;
+}
+
+//--------------------------------------------------------------------
+
 sal_uInt32 CheckPasswd_Impl
 (
     //Window *pWin,             // Parent des Dialogs
@@ -302,56 +345,13 @@ sal_uInt32 CheckPasswd_Impl
                         Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler = pFile->GetInteractionHandler();
                         if( xInteractionHandler.is() )
                         {
-                            sal_Bool bRetry = sal_True;
-                            sal_Bool bGotPasswd = sal_False;
-                            ::rtl::OUString aPassword;
-                            ::com::sun::star::task::PasswordRequestMode nDlgMode = ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER;
+                            // use the comphelper password helper to request a password
+                            ::rtl::OUString aDocumentName = INetURLObject( pFile->GetOrigURL() ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+                            SfxDocPasswordVerifier aVerifier( xStorage );
+                            ::rtl::OUString aPassword = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
+                                aVerifier, ::rtl::OUString(), xInteractionHandler, aDocumentName, comphelper::DocPasswordRequestType_STANDARD );
 
-                            while( bRetry )
-                            {
-                                bRetry = sal_False;
-
-                                RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword( nDlgMode,
-                                    INetURLObject( pFile->GetOrigURL() ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
-
-                                Reference< XInteractionRequest > rRequest( pPasswordRequest );
-                                xInteractionHandler->handle( rRequest );
-
-                                if ( pPasswordRequest->isPassword() )
-                                {
-                                    aPassword = pPasswordRequest->getPassword();
-                                    bGotPasswd = sal_True;
-
-                                    try
-                                    {
-                                        // check the password
-                                        // if the password correct is the stream will be opened successfuly
-                                        // and immediatelly closed
-                                        ::comphelper::OStorageHelper::SetCommonStoragePassword(
-                                                                        xStorage,
-                                                                        aPassword );
-
-                                        xStorage->openStreamElement(
-                                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ) ),
-                                                embed::ElementModes::READ | embed::ElementModes::NOCREATE );
-                                    }
-                                    catch( const packages::WrongPasswordException& )
-                                    {
-                                        // reask for the password
-                                        nDlgMode = ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER;
-                                        bRetry = sal_True;
-                                    }
-                                    catch( const uno::Exception& )
-                                    {
-                                        // do nothing special
-                                        // the error will be detected by loading
-                                    }
-                                }
-                                else
-                                    bGotPasswd = sal_False;
-                            }
-
-                            if ( bGotPasswd )
+                            if ( aPassword.getLength() > 0 )
                             {
                                 pSet->Put( SfxStringItem( SID_PASSWORD, aPassword ) );
 

@@ -1894,6 +1894,7 @@ void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
                 }
             }
         } catch (uno::Exception &) {
+            OSL_ENSURE(false, "SvXMLImport::SetXmlId: exception?");
         }
     }
 }

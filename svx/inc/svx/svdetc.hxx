@@ -81,7 +81,7 @@ friend class SdrAttrObj;
     Fraction   aMapFraction;
 
 private:
-    SVX_DLLPRIVATE static SdrEngineDefaults& GetDefaults();
+    static SdrEngineDefaults& GetDefaults();
 
 public:
     SdrEngineDefaults();
@@ -272,7 +272,7 @@ protected:
 public:
     SdrLinkList(): aList(1024,4,4)        {}
     ~SdrLinkList()                        { Clear(); }
-    void Clear();
+    SVX_DLLPUBLIC void Clear();
     unsigned GetLinkCount() const            { return (unsigned)aList.Count(); }
     Link& GetLink(unsigned nNum)             { return *((Link*)(aList.GetObject(nNum))); }
     const Link& GetLink(unsigned nNum) const { return *((Link*)(aList.GetObject(nNum))); }
@@ -299,7 +299,7 @@ class OLEObjCache : public Container
 
 public:
     OLEObjCache();
-    ~OLEObjCache();
+    SVX_DLLPUBLIC ~OLEObjCache();
 
     void SetSize(ULONG nNewSize);
     void InsertObj(SdrOle2Obj* pObj);
@@ -309,6 +309,9 @@ public:
 
 class SVX_DLLPUBLIC SdrGlobalData
 {
+    const SvtSysLocale*         pSysLocale;     // follows always locale settings
+    const CharClass*            pCharClass;     // follows always SysLocale
+    const LocaleDataWrapper*    pLocaleData;    // follows always SysLocale
 public:
     SdrLinkList         aUserMakeObjHdl;
     SdrLinkList         aUserMakeObjUserDataHdl;
@@ -317,10 +320,11 @@ public:
     ResMgr*             pResMgr;
     ULONG               nExchangeFormat;
     OLEObjCache         aOLEObjCache;
-    const SvtSysLocale*         pSysLocale;     // follows always locale settings
-    const CharClass*            pCharClass;     // follows always SysLocale
-    const LocaleDataWrapper*    pLocaleData;    // follows always SysLocale
 
+
+    const SvtSysLocale*         GetSysLocale();     // follows always locale settings
+    const CharClass*            GetCharClass();     // follows always SysLocale
+    const LocaleDataWrapper*    GetLocaleData();    // follows always SysLocale
 public:
     SdrGlobalData();
     ~SdrGlobalData();

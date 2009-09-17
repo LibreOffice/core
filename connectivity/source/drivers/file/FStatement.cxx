@@ -796,6 +796,7 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
             // Kriterium je nach Typ als String oder double in die Variable packen ...
             case DataType::CHAR:
             case DataType::VARCHAR:
+            case DataType::LONGVARCHAR:
                 *(m_aAssignValues->get())[nId] = ORowSetValue(aValue);
                 // Zeichensatz ist bereits konvertiert, da ja das gesamte Statement konvertiert wurde
                 break;

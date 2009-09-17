@@ -209,7 +209,13 @@ void SvXMLMetaDocumentContext::initDocumentProperties()
     }
 }
 
-void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId)
+void SvXMLMetaDocumentContext::setBuildId(const ::rtl::OUString & i_rBuildId)
+{
+    SvXMLMetaDocumentContext::setBuildId( i_rBuildId, GetImport().getImportInfo() );
+}
+
+//static
+void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId, const uno::Reference<beans::XPropertySet>& xImportInfo )
 {
     OUString sBuildId;
     // skip to second product
@@ -258,14 +264,13 @@ void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId)
 
     if ( sBuildId.getLength() ) try
     {
-        uno::Reference<beans::XPropertySet> xSet(GetImport().getImportInfo());
-        if( xSet.is() )
+        if( xImportInfo.is() )
         {
             const OUString aPropName(RTL_CONSTASCII_USTRINGPARAM("BuildId"));
             uno::Reference< beans::XPropertySetInfo > xSetInfo(
-                xSet->getPropertySetInfo());
+                xImportInfo->getPropertySetInfo());
             if( xSetInfo.is() && xSetInfo->hasPropertyByName( aPropName ) )
-                xSet->setPropertyValue( aPropName, uno::makeAny( sBuildId ) );
+                xImportInfo->setPropertyValue( aPropName, uno::makeAny( sBuildId ) );
         }
     }
     catch( uno::Exception& )

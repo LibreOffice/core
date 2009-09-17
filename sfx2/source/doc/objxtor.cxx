@@ -138,47 +138,6 @@ static WeakReference< XInterface > s_xCurrentComponent;
 
 //=========================================================================
 
-/** This Listener is used to get notified when the XDocumentProperties of the
-    XModel change.
-    If several changes are done the "bQuiet" member can be used to
-    temporarily suppress notifications.
- */
-class SfxDocInfoListener_Impl : public ::cppu::WeakImplHelper1<
-    ::com::sun::star::util::XModifyListener >
-{
-
-public:
-    SfxObjectShell& m_rShell;
-    bool bQuiet;
-    bool bGotModified;
-
-    SfxDocInfoListener_Impl( SfxObjectShell& i_rDoc )
-        : m_rShell(i_rDoc)
-        , bQuiet(false)
-    { };
-
-    virtual void SAL_CALL disposing( const lang::EventObject& )
-        throw ( uno::RuntimeException );
-    virtual void SAL_CALL modified( const lang::EventObject& )
-        throw ( uno::RuntimeException );
-};
-
-void SAL_CALL SfxDocInfoListener_Impl::modified( const lang::EventObject& )
-        throw ( uno::RuntimeException )
-{
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    bGotModified = true;
-
-    // notify changes to the SfxObjectShell
-    if ( !bQuiet ) {
-        m_rShell.FlushDocInfo();
-    }
-}
-
-void SAL_CALL SfxDocInfoListener_Impl::disposing( const lang::EventObject& )
-    throw ( uno::RuntimeException )
-{
-}
 
 //=========================================================================
 
@@ -622,6 +581,8 @@ sal_uInt16 SfxObjectShell::PrepareClose
         }
     }
 
+    SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_PREPARECLOSEDOC, this) );
+
     if( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
     {
         pImp->bPreparedForClose = sal_True;
@@ -635,8 +596,6 @@ sal_uInt16 SfxObjectShell::PrepareClose
     while ( pFrame && (pFrame->GetFrameType() & SFXFRAME_SERVER ) )
         pFrame = SfxViewFrame::GetNext( *pFrame, this );
 
-    SfxApplication *pSfxApp = SFX_APP();
-    pSfxApp->NotifyEvent( SfxEventHint(SFX_EVENT_PREPARECLOSEDOC, this) );
     sal_Bool bClose = sal_False;
     if ( bUI && IsModified() )
     {
@@ -1036,10 +995,10 @@ void SfxObjectShell::SetModel( SfxBaseModel* pModel )
     pImp->xModel = pModel;
     if ( pModel ) {
         pModel->addCloseListener( new SfxModelListener_Impl(this) );
-        pImp->m_xDocInfoListener = new SfxDocInfoListener_Impl(*this);
-        uno::Reference<util::XModifyBroadcaster> xMB(
-            pModel->getDocumentProperties(), uno::UNO_QUERY_THROW);
-        xMB->addModifyListener(pImp->m_xDocInfoListener);
+        //pImp->m_xDocInfoListener = new SfxDocInfoListener_Impl(*this);
+        //uno::Reference<util::XModifyBroadcaster> xMB(
+        //    pModel->getDocumentProperties(), uno::UNO_QUERY_THROW);
+        //xMB->addModifyListener(pImp->m_xDocInfoListener);
     }
 }
 
@@ -1077,7 +1036,8 @@ sal_uInt16 SfxObjectShell::GetAutoStyleFilterIndex()
 
 void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComponent )
 {
-    if ( _rxComponent.get() == s_xCurrentComponent.get().get() )
+    Reference< XInterface > xTest(s_xCurrentComponent);
+    if ( _rxComponent == xTest )
         // nothing to do
         return;
     // note that "_rxComponent.get() == s_xCurrentComponent.get().get()" is /sufficient/, but not
@@ -1085,9 +1045,8 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
     // In other words, it's still possible that we here do something which is not necessary,
     // but we should have filtered quite some unnecessary calls already.
 
-    s_xCurrentComponent = _rxComponent;
-
     BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
+    s_xCurrentComponent = _rxComponent;
     if ( pAppMgr )
         pAppMgr->SetGlobalUNOConstant( "ThisComponent", makeAny( _rxComponent ) );
 

@@ -100,7 +100,7 @@ void ODatabaseMetaDataResultSet::disposing(void)
     if(m_pRecordSet)
         m_pRecordSet->Close();
     m_aStatement    = NULL;
-    m_xMetaData     = NULL;
+m_xMetaData.clear();
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL ODatabaseMetaDataResultSet::queryInterface( const Type & rType ) throw(RuntimeException)

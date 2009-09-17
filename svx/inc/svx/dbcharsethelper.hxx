@@ -30,8 +30,8 @@
 
 #ifndef SVX_DBCHARSETHELPER_HXX
 #define SVX_DBCHARSETHELPER_HXX
-
-#include "dbtoolsclient.hxx"
+#include "svx/svxdllapi.h"
+#include "svx/dbtoolsclient.hxx"
 
 //........................................................................
 namespace svxform
@@ -41,7 +41,7 @@ namespace svxform
     //====================================================================
     //= ODataAccessCharsetHelper
     //====================================================================
-    class ODataAccessCharsetHelper : public ODbtoolsClient
+    class SVX_DLLPUBLIC ODataAccessCharsetHelper : public ODbtoolsClient
     {
     protected:
         mutable ::rtl::Reference< ::connectivity::simple::IDataAccessCharSet >  m_xCharsetHelper;

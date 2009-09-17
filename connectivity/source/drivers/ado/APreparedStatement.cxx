@@ -135,7 +135,7 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) thr
 // -------------------------------------------------------------------------
 void OPreparedStatement::disposing()
 {
-    m_xMetaData = NULL;
+m_xMetaData.clear();
     if (m_pParameters)
     {
         m_pParameters->Release();
@@ -295,7 +295,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
 
 
     // first clear the old things
-    m_xMetaData = NULL;
+m_xMetaData.clear();
     disposeResultSet();
     if(m_RecordSet.IsValid())
         m_RecordSet.Close();

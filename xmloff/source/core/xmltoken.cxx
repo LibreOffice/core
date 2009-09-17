@@ -3076,6 +3076,8 @@ namespace xmloff { namespace token {
         TOKEN( "at-labels",             XML_AT_LABELS ),
         TOKEN( "at-axis",               XML_AT_AXIS ),
         TOKEN( "at-labels-and-axis",    XML_AT_LABELS_AND_AXIS ),
+        TOKEN( "filled-radar",                    XML_FILLED_RADAR ),
+        TOKEN( "surface",               XML_SURFACE ),
 
         TOKEN( "mathvariant",           XML_MATHVARIANT ),
         TOKEN( "mathsize",              XML_MATHSIZE ),

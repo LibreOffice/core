@@ -438,10 +438,12 @@ public:
         star::uno::Reference< star::task::XInteractionRequest > const &
         rRequest)
         : osl::Condition(),
-          m_rRequest(rRequest)
+          m_rRequest(rRequest),
+          bHandled( false )
     {
     }
     star::uno::Reference< star::task::XInteractionRequest > m_rRequest;
+    bool                                                    bHandled;
     star::beans::Optional< rtl::OUString >                  m_aResult;
 };
 
@@ -450,13 +452,13 @@ long UUIInteractionHelper::handlerequest(
 {
     HandleData* pHND = (HandleData*) pHandleData;
     UUIInteractionHelper* pUUI = (UUIInteractionHelper*) pInteractionHelper;
-    pUUI->handle_impl(pHND->m_rRequest);
+    pHND->bHandled = pUUI->handle_impl(pHND->m_rRequest);
     pHND->set();
     return 0;
 }
 
 
-void
+bool
 UUIInteractionHelper::handleRequest(
     star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
     throw (star::uno::RuntimeException)
@@ -477,9 +479,10 @@ UUIInteractionHelper::handleRequest(
         ULONG locks = Application::ReleaseSolarMutex();
         aHD.wait();
         Application::AcquireSolarMutex(locks);
+        return aHD.bHandled;
     }
     else
-        handle_impl(rRequest);
+        return handle_impl(rRequest);
 }
 
 long UUIInteractionHelper::getstringfromrequest(
@@ -1282,7 +1285,7 @@ bool UUIInteractionHelper::handleErrorHandlerRequests(
     return false;
 }
 
-void
+bool
 UUIInteractionHelper::handle_impl(
     star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
     throw (star::uno::RuntimeException)
@@ -1290,7 +1293,7 @@ UUIInteractionHelper::handle_impl(
     try
     {
         if (!rRequest.is())
-            return;
+            return false;
 
         ////////////////////////////////////////////////////////////
         // Display Messagebox
@@ -1329,8 +1332,9 @@ UUIInteractionHelper::handle_impl(
                         OSL_ENSURE( xInteractionHandler.is(), "Custom Interactionhandler does not implement mandatory interface XInteractionHandler2!" );
                         if (xInteractionHandler.is())
                             if (xInteractionHandler->handleInteractionRequest(rRequest))
-                                break;
+                                return true;
                     }
+                    return false;
                 }
             }
         }
@@ -1341,6 +1345,7 @@ UUIInteractionHelper::handle_impl(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
             star::uno::Reference< star::uno::XInterface >());
     }
+    return true;
 }
 
 void UUIInteractionHelper::GetInteractionHandlerList(InteractionHandlerDataList &rdataList)

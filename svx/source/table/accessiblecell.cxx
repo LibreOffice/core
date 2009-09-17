@@ -573,4 +573,15 @@ sal_Int32 SAL_CALL AccessibleCell::getAccessibleIndexInParent (void) throw (Runt
     return mnIndexInParent;
 }
 
+::rtl::OUString SAL_CALL AccessibleCell::getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException)
+{
+    ThrowIfDisposed ();
+    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+
+    if( mxCell.is() )
+        return mxCell->getName();
+
+    return AccessibleCellBase::getAccessibleName();
+}
+
 } // end of namespace accessibility

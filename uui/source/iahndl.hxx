@@ -136,7 +136,7 @@ public:
 
     ~UUIInteractionHelper() SAL_THROW(());
 
-    void
+    bool
     handleRequest(com::sun::star::uno::Reference<
               com::sun::star::task::XInteractionRequest > const &
                   rRequest)
@@ -149,7 +149,7 @@ public:
         throw (com::sun::star::uno::RuntimeException);
 
 private:
-    void
+    bool
     handle_impl(com::sun::star::uno::Reference<
                     com::sun::star::task::XInteractionRequest > const &
                 rRequest)

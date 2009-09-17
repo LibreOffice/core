@@ -36,6 +36,7 @@
 #include <osl/module.h>
 #include <tools/solar.h>
 #include <unotools/sharedunocomponent.hxx>
+#include "svx/svxdllapi.h"
 
 //........................................................................
 namespace svxform
@@ -50,7 +51,7 @@ namespace svxform
     /** base class for classes which want to use dbtools features with load-on-call
         of the dbtools lib.
     */
-    class ODbtoolsClient
+    class SVX_DLLPUBLIC ODbtoolsClient
     {
     private:
         static  ::osl::Mutex    s_aMutex;
@@ -82,7 +83,7 @@ namespace svxform
     //====================================================================
     //= OStaticDataAccessTools
     //====================================================================
-    class OStaticDataAccessTools : public ODbtoolsClient
+    class SVX_DLLPUBLIC OStaticDataAccessTools : public ODbtoolsClient
     {
     protected:
         mutable ::rtl::Reference< ::connectivity::simple::IDataAccessTools >    m_xDataAccessTools;
@@ -214,7 +215,7 @@ namespace svxform
     //====================================================================
     //= DBToolsObjectFactory
     //====================================================================
-    class DBToolsObjectFactory : public ODbtoolsClient
+    class SVX_DLLPUBLIC DBToolsObjectFactory : public ODbtoolsClient
     {
     public:
         DBToolsObjectFactory();

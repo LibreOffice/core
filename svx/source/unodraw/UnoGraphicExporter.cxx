@@ -201,13 +201,13 @@ namespace svx
         SdrModel*           mpDoc;
     };
 
-    Reference< XInterface > SAL_CALL GraphicExporter_createInstance(const Reference< XMultiServiceFactory > & )
+    SVX_DLLPUBLIC Reference< XInterface > SAL_CALL GraphicExporter_createInstance(const Reference< XMultiServiceFactory > & )
         throw( Exception )
     {
         return (XWeak*)new GraphicExporter();
     }
 
-    Sequence< OUString > SAL_CALL GraphicExporter_getSupportedServiceNames()
+    SVX_DLLPUBLIC Sequence< OUString > SAL_CALL GraphicExporter_getSupportedServiceNames()
         throw()
     {
         Sequence< OUString > aSupportedServiceNames( 1 );
@@ -215,7 +215,7 @@ namespace svx
         return aSupportedServiceNames;
     }
 
-    OUString SAL_CALL GraphicExporter_getImplementationName()
+    SVX_DLLPUBLIC OUString SAL_CALL GraphicExporter_getImplementationName()
         throw()
     {
         return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.GraphicExporter" ) );

@@ -119,6 +119,12 @@ namespace
         // the visible area for contour text decomposition
         basegfx::B2DVector                                          maScale;
 
+        // #SJ# ClipRange for BlockText decomposition; only text portions completely
+        // inside are to be accepted, so this is different from geometric clipping
+        // (which would allow e.g. upper parts of portions to remain). Only used for 
+        // BlockText (see there)
+        basegfx::B2DRange                                           maClipRange;
+
         DECL_LINK(decomposeContourTextPrimitive, DrawPortionInfo* );
         DECL_LINK(decomposeBlockTextPrimitive, DrawPortionInfo* );
         DECL_LINK(decomposeStretchTextPrimitive, DrawPortionInfo* );
@@ -137,7 +143,14 @@ namespace
 
     public:
         impTextBreakupHandler(SdrOutliner& rOutliner)
-        :   mrOutliner(rOutliner)
+        :   maTextPortionPrimitives(),
+            maLinePrimitives(),
+            maParagraphPrimitives(),
+            mrOutliner(rOutliner),
+            maNewTransformA(),
+            maNewTransformB(),
+            maScale(),
+            maClipRange()
         {
         }
 
@@ -153,10 +166,14 @@ namespace
             mrOutliner.SetDrawBulletHdl(Link());
         }
 
-        void decomposeBlockTextPrimitive(const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB)
+        void decomposeBlockTextPrimitive(
+            const basegfx::B2DHomMatrix& rNewTransformA,
+            const basegfx::B2DHomMatrix& rNewTransformB,
+            const basegfx::B2DRange& rClipRange)
         {
             maNewTransformA = rNewTransformA;
             maNewTransformB = rNewTransformB;
+            maClipRange = rClipRange;
             mrOutliner.SetDrawPortionHdl(LINK(this, impTextBreakupHandler, decomposeBlockTextPrimitive));
             mrOutliner.SetDrawBulletHdl(LINK(this, impTextBreakupHandler, decomposeBlockBulletPrimitive));
             mrOutliner.StripPortions();
@@ -588,6 +605,43 @@ namespace
     {
         if(pInfo)
         {
+            // #SJ# Is clipping wanted? This is text clipping; only accept a portion
+            // if it's completely in the range
+            if(!maClipRange.isEmpty())
+            {
+                // Test start position first; this allows to not get the text range at
+                // all if text is far outside
+                const basegfx::B2DPoint aStartPosition(pInfo->mrStartPos.X(), pInfo->mrStartPos.Y());
+
+                if(!maClipRange.isInside(aStartPosition))
+                {
+                    return 0;
+                }
+
+                // Start position is inside. Get TextBoundRect and TopLeft next
+                drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
+                aTextLayouterDevice.setFont(pInfo->mrFont);
+
+                const basegfx::B2DRange aTextBoundRect(
+                    aTextLayouterDevice.getTextBoundRect(
+                        pInfo->mrText, pInfo->mnTextStart, pInfo->mnTextLen));
+                const basegfx::B2DPoint aTopLeft(aTextBoundRect.getMinimum() + aStartPosition);
+
+                if(!maClipRange.isInside(aTopLeft))
+                {
+                    return 0;
+                }
+
+                // TopLeft is inside. Get BottomRight and check
+                const basegfx::B2DPoint aBottomRight(aTextBoundRect.getMaximum() + aStartPosition);
+
+                if(!maClipRange.isInside(aBottomRight))
+                {
+                    return 0;
+                }
+
+                // all inside, clip was successful
+            }
             impHandleDrawPortionInfo(*pInfo);
         }
 
@@ -903,9 +957,18 @@ bool SdrTextObj::impDecomposeBlockTextPrimitive(
     aNewTransformB.rotate(fRotate);
     aNewTransformB.translate(aTranslate.getX(), aTranslate.getY());
 
+    // #SJ# create ClipRange (if needed)
+    basegfx::B2DRange aClipRange;
+
+    if(bIsCell)
+    {
+        aClipRange.expand(basegfx::B2DTuple(0.0, 0.0));
+        aClipRange.expand(basegfx::B2DTuple(aAnchorTextSize.Width(), aAnchorTextSize.Height()));
+    }
+
     // now break up text primitives.
     impTextBreakupHandler aConverter(rOutliner);
-    aConverter.decomposeBlockTextPrimitive(aNewTransformA, aNewTransformB);
+    aConverter.decomposeBlockTextPrimitive(aNewTransformA, aNewTransformB, aClipRange);
 
     // cleanup outliner
     rOutliner.Clear();
