@@ -233,8 +233,11 @@
             <menu:menuitem menu:id=".uno:ParagraphDialog"/>
             <menu:menu menu:id=".uno:TransliterateMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:ChangeCaseToUpper"/>
+                    <menu:menuitem menu:id=".uno:ChangeCaseToSentenceCase"/>
                     <menu:menuitem menu:id=".uno:ChangeCaseToLower"/>
+                    <menu:menuitem menu:id=".uno:ChangeCaseToUpper"/>
+                    <menu:menuitem menu:id=".uno:ChangeCaseToTitleCase"/>
+                    <menu:menuitem menu:id=".uno:ChangeCaseToToggleCase"/>
                     <menu:menuitem menu:id=".uno:ChangeCaseToHalfWidth"/>
                     <menu:menuitem menu:id=".uno:ChangeCaseToFullWidth"/>
                     <menu:menuitem menu:id=".uno:ChangeCaseToHiragana"/>

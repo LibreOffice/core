@@ -129,6 +129,9 @@ interface TableDrawText
     SID_VERTICALTEXT_STATE              [ StateMethod = GetAttrState ; Export = FALSE; ]
     SID_CTLFONT_STATE                   [ StateMethod = GetAttrState ; Export = FALSE; ]
 
+    SID_TRANSLITERATE_SENTENCE_CASE [ ExecMethod = ExecuteTrans; StateMethod = GetState;  Export = FALSE; ]
+    SID_TRANSLITERATE_TITLE_CASE    [ ExecMethod = ExecuteTrans; StateMethod = GetState;  Export = FALSE; ]
+    SID_TRANSLITERATE_TOGGLE_CASE   [ ExecMethod = ExecuteTrans; StateMethod = GetState;  Export = FALSE; ]
     SID_TRANSLITERATE_UPPER     [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
     SID_TRANSLITERATE_LOWER     [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
     SID_TRANSLITERATE_HALFWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]

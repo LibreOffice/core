@@ -192,6 +192,9 @@ interface CellSelection
     SID_HANGUL_HANJA_CONVERSION [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
         SID_CHINESE_CONVERSION          [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
 
+    SID_TRANSLITERATE_SENTENCE_CASE [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
+    SID_TRANSLITERATE_TITLE_CASE    [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
+    SID_TRANSLITERATE_TOGGLE_CASE   [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
     SID_TRANSLITERATE_UPPER     [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
     SID_TRANSLITERATE_LOWER     [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
     SID_TRANSLITERATE_HALFWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
