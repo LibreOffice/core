@@ -50,6 +50,7 @@ struct ImplKernPairData;
 namespace basegfx { class B2DPolyPolygon; }
 
 class RawBitmap;
+class CmapResult;
 
 #include <vcl/outfont.hxx>
 
@@ -189,7 +190,7 @@ public:
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const = 0;
     virtual ULONG               GetKernPairs( ImplKernPairData** ) const      { return 0; }
     virtual int                 GetGlyphKernValue( int, int ) const           { return 0; }
-    virtual ULONG               GetFontCodeRanges( sal_uInt32* ) const { return 0; }
+    virtual bool                GetFontCodeRanges( CmapResult& ) const        { return false; }
     Point                       TransformPoint( const Point& ) const;
 
     GlyphData&                  GetGlyphData( int nGlyphIndex );

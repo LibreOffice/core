@@ -66,6 +66,7 @@
 #include <vcl/image.hxx>
 
 #include "tree/treecontrol.hxx"
+#include "grid/gridcontrol.hxx"
 
 #include <map>
 #include <algorithm>
@@ -453,6 +454,8 @@ Reference< XInterface > UnoControlDialogModel::createInstance( const ::rtl::OUSt
         pNewModel = new OGeometryControlModel< UnoControlRoadmapModel >;
     else if ( aServiceSpecifier.compareToAscii( szServiceName_TreeControlModel ) == 0 )
         pNewModel = new OGeometryControlModel< UnoTreeModel >;
+    else if ( aServiceSpecifier.compareToAscii( szServiceName_GridControlModel ) == 0 )
+        pNewModel = new OGeometryControlModel< UnoGridModel >;
 
     if ( !pNewModel )
     {
@@ -515,6 +518,7 @@ Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames() th
         pNames[18] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLineModel );
         pNames[19] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlRoadmapModel );
         pNames[20] = ::rtl::OUString::createFromAscii( szServiceName_TreeControlModel );
+        pNames[20] = ::rtl::OUString::createFromAscii( szServiceName_GridControlModel );
 
     }
     return *pNamesSeq;

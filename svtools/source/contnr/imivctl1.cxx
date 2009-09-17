@@ -540,7 +540,13 @@ void SvxIconChoiceCtrl_Impl::EntrySelected( SvxIconChoiceCtrlEntry* pEntry, BOOL
             ShowCursor( TRUE );
     } // if( bUpdateMode )
 
-    CallEventListeners( VCLEVENT_LISTBOX_SELECT, pEntry );
+    // --> OD 2009-05-27 #i101012#
+    // emit vcl event LISTBOX_SELECT only in case that the given entry is selected.
+    if ( bSelect )
+    {
+        CallEventListeners( VCLEVENT_LISTBOX_SELECT, pEntry );
+    }
+    // <--
 }
 
 void SvxIconChoiceCtrl_Impl::ResetVirtSize()
