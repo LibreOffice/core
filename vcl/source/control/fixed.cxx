@@ -265,7 +265,8 @@ void FixedText::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
     if( bFillLayout )
         mpControlData->mpLayoutData->m_aDisplayText = String();
 
-    DrawControlText( *pDev, Rectangle( aPos, rSize ), aText, nTextStyle,
+    Rectangle aRect( Rectangle( aPos, rSize ) );
+    DrawControlText( *pDev, aRect, aText, nTextStyle,
         bFillLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL,
         bFillLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL
     );
@@ -548,7 +549,6 @@ void FixedLine::ImplDraw( bool bLayout )
         if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
             nStyle |= TEXT_DRAW_MONO;
 
-        aRect = GetTextRect( aRect, aText, nStyle );
         DrawControlText( *this, aRect, aText, nStyle, pVector, pDisplayText );
 
         if( !pVector )

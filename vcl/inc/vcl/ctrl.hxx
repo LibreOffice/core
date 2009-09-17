@@ -97,8 +97,11 @@ protected:
 
         If no reference device is set, the draw request will simply be forwarded to OutputDevice::DrawText. Otherwise,
         the text will be rendered according to the metrics at the reference device.
+
+        Note that the given rectangle might be modified, it will contain the result of a GetTextRect call (either
+        directly at the target device, or taking the reference device into account) when returning.
     */
-    void        DrawControlText( OutputDevice& _rTargetDevice, const Rectangle& _rRect,
+    void        DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect,
                                  const XubString& _rStr, USHORT _nStyle,
                                  MetricVector* _pVector, String* _pDisplayText ) const;
 
@@ -188,6 +191,14 @@ public:
     */
     void            SetReferenceDevice( OutputDevice* _referenceDevice );
     OutputDevice*   GetReferenceDevice() const;
+
+    Font            GetUnzoomedControlPointFont() const
+    {
+        Font aFont( GetCanonicalFont( GetSettings().GetStyleSettings() ) );
+        if ( IsControlFont() )
+            aFont.Merge( GetControlFont() );
+        return aFont;
+    }
 };
 
 #endif  // _SV_CTRL_HXX

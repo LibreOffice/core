@@ -41,6 +41,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/controldata.hxx>
 #include <vcl/salnativewidgets.hxx>
+#include <vcl/textlayout.hxx>
 
 
 namespace vcl
@@ -549,82 +550,17 @@ void Control::ImplInitSettings( const BOOL _bFont, const BOOL _bForeground )
 
 // -----------------------------------------------------------------
 
-void Control::DrawControlText( OutputDevice& _rTargetDevice, const Rectangle& _rRect, const XubString& _rStr,
+void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect, const XubString& _rStr,
     USHORT _nStyle, MetricVector* _pVector, String* _pDisplayText ) const
 {
+
     if ( !mpControlData->mpReferenceDevice )
     {
-        _rTargetDevice.DrawText( _rRect, _rStr, _nStyle, _pVector, _pDisplayText );
+        _io_rRect = _rTargetDevice.GetTextRect( _io_rRect, _rStr, _nStyle );
+        _rTargetDevice.DrawText( _io_rRect, _rStr, _nStyle, _pVector, _pDisplayText );
         return;
     }
 
-    // TODO:
-    // - respect the style (word break, vert./horz. align, etc.)
-    // - respect _pVector and _pDisplayText, i.e. fill metric data if they're given
-
-    sal_Int32* pCharWidths = new sal_Int32[ _rStr.Len() ];
-    // retrieve unzoomed point font of the target device
-    Font aFont( GetCanonicalFont( GetSettings().GetStyleSettings() ) );
-    if ( IsControlFont() )
-        aFont.Merge( GetControlFont() );
-
-    // transfer font to the reference device
-    mpControlData->mpReferenceDevice->Push( PUSH_FONT );
-    Font aRefFont( aFont );
-    aRefFont.SetSize( LogicToLogic(
-        aRefFont.GetSize(), MAP_POINT, mpControlData->mpReferenceDevice->GetMapMode().GetMapUnit() ) );
-    mpControlData->mpReferenceDevice->SetFont( aRefFont );
-
-    // retrieve the character widths from the reference device
-    mpControlData->mpReferenceDevice->GetTextArray( _rStr, pCharWidths );
-    mpControlData->mpReferenceDevice->Pop();
-
-    // adjust the widths, which are in ref-device units, to the target device
-    const MapUnit eRefMapUnit( mpControlData->mpReferenceDevice->GetMapMode().GetMapUnit() );
-    OSL_ENSURE( eRefMapUnit != MAP_PIXEL, "a reference device with MAP_PIXEL?" );
-
-    const MapMode& aTargetMapMode( _rTargetDevice.GetMapMode() );
-    const MapUnit eTargetMapUnit( aTargetMapMode.GetMapUnit() );
-    const bool bTargetIsPixel = ( eTargetMapUnit == MAP_PIXEL );
-    {
-        for ( size_t i=0; i<_rStr.Len(); ++i )
-        {
-            pCharWidths[i] =
-                    bTargetIsPixel
-                ?   _rTargetDevice.LogicToPixel( Size( pCharWidths[i], 0 ), eRefMapUnit ).Width()
-                :   _rTargetDevice.LogicToLogic( Size( pCharWidths[i], 0 ), eRefMapUnit, eTargetMapUnit ).Width();
-        }
-    }
-
-    Point aDrawTextPosition( _rRect.TopLeft() );
-    // translate our zoom into a map mode / font / origin at the target device
-    if ( IsZoom() )
-    {
-        _rTargetDevice.Push( PUSH_MAPMODE | PUSH_FONT );
-
-        const Fraction& rZoom( GetZoom() );
-
-        MapMode aDrawMapMode( aTargetMapMode );
-        aDrawMapMode.SetScaleX( rZoom );
-        aDrawMapMode.SetScaleY( rZoom );
-        _rTargetDevice.SetMapMode( aDrawMapMode );
-
-        Font aDrawFont( aFont );
-        if ( bTargetIsPixel )
-            aDrawFont.SetSize( _rTargetDevice.LogicToPixel( aDrawFont.GetSize(), MAP_POINT ) );
-        else
-            aDrawFont.SetSize( _rTargetDevice.LogicToLogic( aDrawFont.GetSize(), MAP_POINT, eTargetMapUnit ) );
-        _rTargetDevice.SetFont( aDrawFont );
-
-        aDrawTextPosition.X() = long(aDrawTextPosition.X() / (double)rZoom);
-        aDrawTextPosition.Y() = long(aDrawTextPosition.Y() / (double)rZoom);
-    }
-
-    // draw the text
-    _rTargetDevice.DrawTextArray( aDrawTextPosition, _rStr, pCharWidths );
-
-    if ( IsZoom() )
-        _rTargetDevice.Pop();
-
-    delete[] pCharWidths;
+    ControlTextRenderer aRenderer( *this, _rTargetDevice, *mpControlData->mpReferenceDevice );
+    _io_rRect = aRenderer.DrawText( _io_rRect, _rStr, _nStyle, _pVector, _pDisplayText );
 }

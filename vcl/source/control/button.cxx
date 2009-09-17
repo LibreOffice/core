@@ -406,12 +406,12 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
     }
     else if ( bDrawText && !bDrawImage && !bHasSymbol )
     {
-        aOutRect = pDev->GetTextRect( aOutRect, aText, nTextStyle );
+        DrawControlText( *pDev, aOutRect, aText, nTextStyle, pVector, pDisplayText );
+
+        ImplSetFocusRect( aOutRect );
         rSize = aOutRect.GetSize();
         rPos = aOutRect.TopLeft();
 
-        ImplSetFocusRect( aOutRect );
-        DrawControlText( *pDev, aOutRect, aText, nTextStyle, pVector, pDisplayText );
         return;
     }
 

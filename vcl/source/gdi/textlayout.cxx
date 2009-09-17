@@ -1,0 +1,269 @@
+/*************************************************************************
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2009 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_vcl.hxx"
+
+#include "vcl/ctrl.hxx"
+#include "vcl/outdev.hxx"
+#include "vcl/outfont.hxx"
+#include "vcl/textlayout.hxx"
+
+//........................................................................
+namespace vcl
+{
+//........................................................................
+
+    //====================================================================
+    //= ReferenceDeviceTextLayout
+    //====================================================================
+    class ReferenceDeviceTextLayout : public ITextLayout
+    {
+    public:
+        ReferenceDeviceTextLayout( const Control& _rControl, OutputDevice& _rTargetDevice, OutputDevice& _rReferenceDevice );
+        virtual ~ReferenceDeviceTextLayout();
+
+        // ITextLayout
+        virtual long    GetTextWidth( const XubString& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const;
+        virtual void    DrawText( const Point& _rStartPoint, const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength, MetricVector* _pVector, String* _pDisplayText );
+
+    public:
+        // equivalents to the respective OutputDevice methods, which take the reference device into account
+        long        GetTextArray( const XubString& _rText, sal_Int32* _pDXAry, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const;
+        Rectangle   DrawText( const Rectangle& _rRect, const XubString& _rText, USHORT _nStyle, MetricVector* _pVector, String* _pDisplayText);
+
+
+        bool        IsZoom() const;
+
+    protected:
+        void onBeginDrawText()
+        {
+            m_aCompleteTextRect.SetEmpty();
+        }
+        Rectangle onEndDrawText()
+        {
+            return m_aCompleteTextRect;
+        }
+
+    private:
+        OutputDevice&   m_rTargetDevice;
+        OutputDevice&   m_rReferenceDevice;
+        Font            m_aUnzoomedPointFont;
+        const Fraction  m_aZoom;
+
+        Rectangle       m_aCompleteTextRect;
+    };
+
+    //====================================================================
+    //= ControlTextRenderer
+    //====================================================================
+    ReferenceDeviceTextLayout::ReferenceDeviceTextLayout( const Control& _rControl, OutputDevice& _rTargetDevice, OutputDevice& _rReferenceDevice )
+        :m_rTargetDevice( _rTargetDevice )
+        ,m_rReferenceDevice( _rReferenceDevice )
+        ,m_aUnzoomedPointFont( _rControl.GetUnzoomedControlPointFont() )
+        ,m_aZoom( _rControl.GetZoom() )
+    {
+        if ( IsZoom() )
+        {
+            m_rTargetDevice.Push( PUSH_MAPMODE | PUSH_FONT );
+
+            MapMode aDrawMapMode( m_rTargetDevice.GetMapMode() );
+            aDrawMapMode.SetScaleX( m_aZoom );    // TODO: shouldn't this be "current_scale * zoom"?
+            aDrawMapMode.SetScaleY( m_aZoom );
+            m_rTargetDevice.SetMapMode( aDrawMapMode );
+
+            MapUnit eTargetMapUnit = m_rTargetDevice.GetMapMode().GetMapUnit();
+            Font aDrawFont( m_aUnzoomedPointFont );
+            if ( eTargetMapUnit == MAP_PIXEL )
+                aDrawFont.SetSize( m_rTargetDevice.LogicToPixel( aDrawFont.GetSize(), MAP_POINT ) );
+            else
+                aDrawFont.SetSize( m_rTargetDevice.LogicToLogic( aDrawFont.GetSize(), MAP_POINT, eTargetMapUnit ) );
+            _rTargetDevice.SetFont( aDrawFont );
+        }
+    }
+
+    //--------------------------------------------------------------------
+    namespace
+    {
+        //................................................................
+        bool lcl_normalizeLength( const XubString& _rText, const xub_StrLen _nStartIndex, xub_StrLen& _io_nLength )
+        {
+            xub_StrLen nTextLength = _rText.Len();
+            if ( _nStartIndex > nTextLength )
+                return false;
+            if ( _nStartIndex + _io_nLength > nTextLength )
+                _io_nLength = nTextLength - _nStartIndex;
+            return true;
+        }
+
+        //................................................................
+        class DeviceUnitMapping
+        {
+        public:
+            DeviceUnitMapping( const OutputDevice& _rTargetDevice, const OutputDevice& _rReferenceDevice )
+                :m_rTargetDevice( _rTargetDevice )
+                ,m_eTargetMapUnit( _rTargetDevice.GetMapMode().GetMapUnit() )
+                ,m_bTargetIsPixel( _rTargetDevice.GetMapMode().GetMapUnit() == MAP_PIXEL )
+                ,m_eRefMapUnit( _rReferenceDevice.GetMapMode().GetMapUnit() )
+            {
+                OSL_ENSURE( m_eRefMapUnit != MAP_PIXEL, "a reference device with MAP_PIXEL?" );
+            }
+
+            long mapToTarget( long _nWidth )
+            {
+                return  m_bTargetIsPixel
+                    ?   m_rTargetDevice.LogicToPixel( Size( _nWidth, 0 ), m_eRefMapUnit ).Width()
+                    :   m_rTargetDevice.LogicToLogic( Size( _nWidth, 0 ), m_eRefMapUnit, m_eTargetMapUnit ).Width();
+            }
+
+        private:
+            const OutputDevice& m_rTargetDevice;
+            const MapUnit       m_eTargetMapUnit;
+            const bool          m_bTargetIsPixel;
+            const MapUnit       m_eRefMapUnit;
+        };
+    }
+
+    //--------------------------------------------------------------------
+    ReferenceDeviceTextLayout::~ReferenceDeviceTextLayout()
+    {
+        if ( IsZoom() )
+            m_rTargetDevice.Pop();
+    }
+
+    //--------------------------------------------------------------------
+    bool ReferenceDeviceTextLayout::IsZoom() const
+    {
+        return m_aZoom.GetNumerator() != m_aZoom.GetDenominator();
+    }
+
+    //--------------------------------------------------------------------
+    long ReferenceDeviceTextLayout::GetTextArray( const XubString& _rText, sal_Int32* _pDXAry, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const
+    {
+        if ( !lcl_normalizeLength( _rText, _nStartIndex, _nLength ) )
+            return 0;
+
+        // transfer font to the reference device
+        m_rReferenceDevice.Push( PUSH_FONT );
+        Font aRefFont( m_aUnzoomedPointFont );
+        aRefFont.SetSize( OutputDevice::LogicToLogic(
+            aRefFont.GetSize(), MAP_POINT, m_rReferenceDevice.GetMapMode().GetMapUnit() ) );
+        m_rReferenceDevice.SetFont( aRefFont );
+
+        // retrieve the character widths from the reference device
+        long nTextWidth = m_rReferenceDevice.GetTextArray( _rText, _pDXAry, _nStartIndex, _nLength );
+        m_rReferenceDevice.Pop();
+
+        // adjust the widths, which are in ref-device units, to the target device
+        DeviceUnitMapping aMapping( m_rTargetDevice, m_rReferenceDevice );
+        if ( _pDXAry )
+        {
+            for ( size_t i=0; i<_nLength; ++i )
+                _pDXAry[i] = aMapping.mapToTarget( _pDXAry[i] );
+        }
+        nTextWidth = aMapping.mapToTarget( nTextWidth );
+
+        return nTextWidth;
+    }
+
+    //--------------------------------------------------------------------
+    long ReferenceDeviceTextLayout::GetTextWidth( const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const
+    {
+        return GetTextArray( _rText, NULL, _nStartIndex, _nLength );
+    }
+
+    //--------------------------------------------------------------------
+    void ReferenceDeviceTextLayout::DrawText( const Point& _rStartPoint, const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength, MetricVector* _pVector, String* _pDisplayText )
+    {
+        if ( !lcl_normalizeLength( _rText, _nStartIndex, _nLength ) )
+            return;
+
+        sal_Int32* pCharWidths = new sal_Int32[ _nLength ];
+        long nTextWidth = GetTextArray( _rText, pCharWidths, _nStartIndex, _nLength );
+        m_rTargetDevice.DrawTextArray( _rStartPoint, _rText, pCharWidths, _nStartIndex, _nLength );
+        delete[] pCharWidths;
+
+        m_aCompleteTextRect.Union( Rectangle( _rStartPoint, Size( nTextWidth, m_rTargetDevice.GetTextHeight() ) ) );
+
+        // TODO: use/fill those:
+        (void)_pVector;
+        (void)_pDisplayText;
+    }
+
+    //--------------------------------------------------------------------
+    Rectangle ReferenceDeviceTextLayout::DrawText( const Rectangle& _rRect, const XubString& _rText, USHORT _nStyle, MetricVector* _pVector, String* _pDisplayText)
+    {
+        Rectangle aRect( _rRect );
+        if ( IsZoom() )
+        {
+            // if there's a zoom factor involved, then we tampered with the target device's map mode in the ctor.
+            // Need to adjust the rectangle to this
+            aRect.Left()    = long( aRect.Left()   / (double)m_aZoom );
+            aRect.Right()   = long( aRect.Right()  / (double)m_aZoom );
+            aRect.Top()     = long( aRect.Top()    / (double)m_aZoom );
+            aRect.Bottom()  = long( aRect.Bottom() / (double)m_aZoom );
+        }
+
+        onBeginDrawText();
+        m_rTargetDevice.DrawText( aRect, _rText, _nStyle, _pVector, _pDisplayText, this );
+        Rectangle aTextRect = onEndDrawText();
+
+        if ( IsZoom() )
+        {
+            // similar to above, transform the to-be-returned rectanle to coordinates which are meaningful
+            // with the original map mode of the target device
+            aTextRect.Left()    = long( aTextRect.Left()   * (double)m_aZoom );
+            aTextRect.Right()   = long( aTextRect.Right()  * (double)m_aZoom );
+            aTextRect.Top()     = long( aTextRect.Top()    * (double)m_aZoom );
+            aTextRect.Bottom()  = long( aTextRect.Bottom() * (double)m_aZoom );
+        }
+
+        return aTextRect;
+    }
+
+    //====================================================================
+    //= ControlTextRenderer
+    //====================================================================
+    //--------------------------------------------------------------------
+    ControlTextRenderer::ControlTextRenderer( const Control& _rControl, OutputDevice& _rTargetDevice, OutputDevice& _rReferenceDevice )
+        :m_pImpl( new ReferenceDeviceTextLayout( _rControl, _rTargetDevice, _rReferenceDevice ) )
+    {
+    }
+
+    //--------------------------------------------------------------------
+    ControlTextRenderer::~ControlTextRenderer()
+    {
+    }
+
+    //--------------------------------------------------------------------
+    Rectangle ControlTextRenderer::DrawText( const Rectangle& _rRect, const XubString& _rText, USHORT _nStyle,
+        MetricVector* _pVector, String* _pDisplayText )
+    {
+        return m_pImpl->DrawText( _rRect, _rText, _nStyle, _pVector, _pDisplayText );
+    }
+
+//........................................................................
+} // namespace vcl
+//........................................................................

@@ -115,7 +115,8 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/bmpconv.obj		\
             $(SLO)$/pngread.obj		\
             $(SLO)$/pngwrite.obj	\
-            $(SLO)$/graphictools.obj
+            $(SLO)$/graphictools.obj \
+            $(SLO)$/textlayout.obj
 
 EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/outdev.obj		\
