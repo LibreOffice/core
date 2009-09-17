@@ -419,33 +419,42 @@ bool SdrRectObj::applySpecialDrag(SdrDragStat& rDrag)
 
 String SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
-    const bool bRad(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
+    const bool bCreateComment(rDrag.GetView() && this == rDrag.GetView()->GetCreateObj());
 
-    if(bRad)
+    if(bCreateComment)
     {
-        Point aPt(rDrag.GetNow());
-
-        // -sin fuer Umkehrung
-        if(aGeo.nDrehWink)
-            RotatePoint(aPt, aRect.TopLeft(), -aGeo.nSin, aGeo.nCos);
-
-        sal_Int32 nRad(aPt.X() - aRect.Left());
-
-        if(nRad < 0)
-            nRad = 0;
-
-        XubString aStr;
-
-        ImpTakeDescriptionStr(STR_DragRectEckRad, aStr);
-        aStr.AppendAscii(" (");
-        aStr += GetMetrStr(nRad);
-        aStr += sal_Unicode(')');
-
-        return aStr;
+        return String();
     }
     else
     {
-        return SdrTextObj::getSpecialDragComment(rDrag);
+        const bool bRad(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
+
+        if(bRad)
+        {
+            Point aPt(rDrag.GetNow());
+
+            // -sin fuer Umkehrung
+            if(aGeo.nDrehWink)
+                RotatePoint(aPt, aRect.TopLeft(), -aGeo.nSin, aGeo.nCos);
+
+            sal_Int32 nRad(aPt.X() - aRect.Left());
+
+            if(nRad < 0)
+                nRad = 0;
+
+            XubString aStr;
+
+            ImpTakeDescriptionStr(STR_DragRectEckRad, aStr);
+            aStr.AppendAscii(" (");
+            aStr += GetMetrStr(nRad);
+            aStr += sal_Unicode(')');
+
+            return aStr;
+        }
+        else
+        {
+            return SdrTextObj::getSpecialDragComment(rDrag);
+        }
     }
 }
 
