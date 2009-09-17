@@ -180,9 +180,7 @@ void SlidePersist::createBackground( const XmlFilterBase& rFilterBase )
             uno::Reference< beans::XPropertySet > xPagePropSet( mxPage, uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xPropertySet( aPropMap.makePropertySet() );
             PropertySet aPropSet( xPropertySet );
-            mpBackgroundPropertiesPtr->pushToPropSet(
-                aPropSet, ::oox::drawingml::FillProperties::DEFAULT_IDS,
-                rFilterBase, rFilterBase.getModelObjectHelper(), 0, -1 );
+            mpBackgroundPropertiesPtr->pushToPropSet( aPropSet, rFilterBase, rFilterBase.getModelObjectHelper() );
             xPagePropSet->setPropertyValue( sBackground, Any( xPropertySet ) );
         }
         catch( Exception )

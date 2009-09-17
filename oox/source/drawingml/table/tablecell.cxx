@@ -363,8 +363,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     aFillProperties.assignUsed( maFillProperties );
     PropertySet aPropSet( xPropSet );
     // TODO: phClr?
-    aFillProperties.pushToPropSet( aPropSet, FillProperties::DEFAULT_IDS,
-        rFilterBase, rFilterBase.getModelObjectHelper(), 0, -1 );
+    aFillProperties.pushToPropSet( aPropSet, rFilterBase, rFilterBase.getModelObjectHelper() );
 }
 
 } } }

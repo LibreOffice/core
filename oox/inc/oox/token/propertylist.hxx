@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: tokenmap.cxx,v $
- * $Revision: 1.4 $
+ * $RCSfile: propertylist.hxx,v $
+ * $Revision: 1.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,32 +28,26 @@
  *
  ************************************************************************/
 
-#include "oox/token/propertylist.hxx"
-#include "properties.hxx"
+#ifndef OOX_TOKEN_PROPERTYLIST_HXX
+#define OOX_TOKEN_PROPERTYLIST_HXX
+
+#include <vector>
+#include <rtl/ustring.hxx>
 
 namespace oox {
 
-namespace {
-
-// include auto-generated property name lists
-#include "propertywords.inc"
-
-} // namespace
-
 // ============================================================================
 
-PropertyList::PropertyList()
+/** A vector that contains all predefined property names used in the filters. */
+struct PropertyList : public ::std::vector< ::rtl::OUString >
 {
-    reserve( static_cast< size_t >( PROP_COUNT ) );
-    for( sal_Int32 nIdx = 0; nIdx < PROP_COUNT; ++nIdx )
-        push_back( ::rtl::OUString::createFromAscii( propertywordlist[ nIdx ] ) );
-}
-
-PropertyList::~PropertyList()
-{
-}
+    explicit            PropertyList();
+                        ~PropertyList();
+};
 
 // ============================================================================
 
 } // namespace oox
+
+#endif
 

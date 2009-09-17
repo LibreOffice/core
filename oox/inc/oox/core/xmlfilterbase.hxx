@@ -87,9 +87,6 @@ public:
     virtual const ::oox::drawingml::Theme*
                         getCurrentTheme() const = 0;
 
-    /** Has to be implemented by each filter to resolve scheme colors. */
-    virtual sal_Int32   getSchemeClr( sal_Int32 nColorSchemeToken ) const = 0;
-
     /** Has to be implemented by each filter to return the collection of VML shapes. */
     virtual ::oox::vml::Drawing* getVmlDrawing() = 0;
 

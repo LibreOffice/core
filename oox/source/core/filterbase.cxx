@@ -471,7 +471,19 @@ sal_Int32 FilterBase::getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb ) 
 {
     FilterBaseImpl::SystemPalette::const_iterator aIt = mxImpl->maSystemPalette.find( nToken );
     OSL_ENSURE( aIt != mxImpl->maSystemPalette.end(), "FilterBase::getSystemColor - invalid token identifier" );
-    return (aIt == mxImpl->maSystemPalette.end()) ? ((nDefaultRgb < 0) ? API_RGB_WHITE : nDefaultRgb) : aIt->second;
+    return (aIt == mxImpl->maSystemPalette.end()) ? nDefaultRgb : aIt->second;
+}
+
+sal_Int32 FilterBase::getSchemeColor( sal_Int32 /*nToken*/ ) const
+{
+    OSL_ENSURE( false, "FilterBase::getSchemeColor - scheme colors not implemented" );
+    return API_RGB_TRANSPARENT;
+}
+
+sal_Int32 FilterBase::getPaletteColor( sal_Int32 /*nPaletteIdx*/ ) const
+{
+    OSL_ENSURE( false, "FilterBase::getPaletteColor - palette colors not implemented" );
+    return API_RGB_TRANSPARENT;
 }
 
 OUString FilterBase::requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const
