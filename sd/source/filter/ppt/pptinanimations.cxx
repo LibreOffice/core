@@ -75,7 +75,7 @@
 #include <svx/editobj.hxx>
 #include <pptinanimations.hxx>
 #include <pptatom.hxx>
-#include "../pptin.hxx"
+#include "pptin.hxx"
 #include <algorithm>
 
 using ::std::map;

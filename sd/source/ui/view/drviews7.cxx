@@ -1328,6 +1328,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
+    // #i102735# discussed with CL: removed for performance reasons
+    #if 0
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_INSERT_SOUND ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_INSERT_VIDEO ) )
     {
@@ -1340,6 +1342,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         if (!SvxPluginFileDlg::IsAvailable (SID_INSERT_VIDEO))
             rSet.DisableItem (SID_INSERT_VIDEO);
     }
+    #endif
 
     ///////////////////////////////////////////////////////////////////////
     // Menuoption: Change->Convert->To Bitmap, Change->Convert->To Metafile

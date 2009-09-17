@@ -38,14 +38,12 @@
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <tools/string.hxx>
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
-#ifndef _UTL_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
 #include <vcl/timer.hxx>
+
+#include <sddllapi.h>
 
 #include <list>
 #include <map>
@@ -76,8 +74,8 @@ class CustomAnimationEffect
     friend class EffectSequenceHelper;
 
 public:
-    CustomAnimationEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
-    virtual ~CustomAnimationEffect();
+    SD_DLLPUBLIC CustomAnimationEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    SD_DLLPUBLIC virtual ~CustomAnimationEffect();
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& getNode() const { return mxNode; }
     void setNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
@@ -94,7 +92,7 @@ public:
     void                    setPresetClass( sal_Int16 nPresetClass );
 
     sal_Int16       getNodeType() const { return mnNodeType; }
-    void            setNodeType( sal_Int16 nNodeType );
+    SD_DLLPUBLIC void           setNodeType( sal_Int16 nNodeType );
 
     ::com::sun::star::uno::Any              getRepeatCount() const;
     void            setRepeatCount( const ::com::sun::star::uno::Any& rRepeatCount );
@@ -106,10 +104,10 @@ public:
     void            setFill( sal_Int16 nFill );
 
     double          getBegin() const { return mfBegin; }
-    void            setBegin( double fBegin );
+    SD_DLLPUBLIC void           setBegin( double fBegin );
 
     double          getDuration() const { return mfDuration; }
-    void            setDuration( double fDuration );
+    SD_DLLPUBLIC void           setDuration( double fDuration );
 
     double          getAbsoluteDuration() const { return mfAbsoluteDuration; }
 
@@ -117,13 +115,13 @@ public:
     void            setName( const String& rName ) { maName = rName; }
 
     sal_Int16       getIterateType() const { return mnIterateType; }
-    void            setIterateType( sal_Int16 nIterateType );
+    SD_DLLPUBLIC void           setIterateType( sal_Int16 nIterateType );
 
     double          getIterateInterval() const { return mfIterateInterval; }
-    void            setIterateInterval( double fIterateInterval );
+    SD_DLLPUBLIC void           setIterateInterval( double fIterateInterval );
 
     ::com::sun::star::uno::Any  getTarget() const { return maTarget; }
-    void                        setTarget( const ::com::sun::star::uno::Any& rTarget );
+    SD_DLLPUBLIC void                       setTarget( const ::com::sun::star::uno::Any& rTarget );
 
     sal_Bool        hasAfterEffect() const { return mbHasAfterEffect; }
     void            setHasAfterEffect( sal_Bool bHasAfterEffect ) { mbHasAfterEffect = bHasAfterEffect; }
@@ -165,7 +163,7 @@ public:
     void            setGroupId( sal_Int32 nGroupId );
 
     sal_Int16       getTargetSubItem() const { return mnTargetSubItem; }
-    void            setTargetSubItem( sal_Int16 nSubItem );
+    SD_DLLPUBLIC void           setTargetSubItem( sal_Int16 nSubItem );
 
     ::rtl::OUString getPath() const;
     void setPath( const ::rtl::OUString& rPath );
@@ -175,8 +173,8 @@ public:
 
     void setAudio( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAudio >& xAudio );
     bool getStopAudio() const;
-    void setStopAudio();
-    void createAudio( const ::com::sun::star::uno::Any& rSource, double fVolume = 1.0 );
+    SD_DLLPUBLIC void setStopAudio();
+    SD_DLLPUBLIC void createAudio( const ::com::sun::star::uno::Any& rSource, double fVolume = 1.0 );
     void removeAudio();
     const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAudio >& getAudio() const { return mxAudio; }
 
@@ -297,7 +295,7 @@ public:
 
     CustomAnimationEffectPtr append( const CustomAnimationPresetPtr& pDescriptor, const ::com::sun::star::uno::Any& rTarget, double fDuration = -1.0 );
     CustomAnimationEffectPtr append( const SdrPathObj& rPathObj, const ::com::sun::star::uno::Any& rTarget, double fDuration = -1.0 );
-    void append( const CustomAnimationEffectPtr& pEffect );
+    SD_DLLPUBLIC void append( const CustomAnimationEffectPtr& pEffect );
     void insert( EffectSequence::iterator& rPos, const CustomAnimationEffectPtr& pEffect );
     void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, double fDuration = -1.0 );
     void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, const rtl::OUString& rPresetSubType, double fDuration = -1.0 );
@@ -337,7 +335,7 @@ public:
     // text group methods
 
     CustomAnimationTextGroupPtr findGroup( sal_Int32 nGroupId );
-    CustomAnimationTextGroupPtr createTextGroup( CustomAnimationEffectPtr pEffect, sal_Int32 nTextGrouping, double fTextGroupingAuto, sal_Bool bAnimateForm, sal_Bool bTextReverse );
+    SD_DLLPUBLIC CustomAnimationTextGroupPtr    createTextGroup( CustomAnimationEffectPtr pEffect, sal_Int32 nTextGrouping, double fTextGroupingAuto, sal_Bool bAnimateForm, sal_Bool bTextReverse );
     void setTextGrouping( CustomAnimationTextGroupPtr pTextGroup, sal_Int32 nTextGrouping );
     void setAnimateForm( CustomAnimationTextGroupPtr pTextGroup, sal_Bool bAnimateForm );
     void setTextGroupingAuto( CustomAnimationTextGroupPtr pTextGroup, double fTextGroupingAuto );
