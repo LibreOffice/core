@@ -34,6 +34,7 @@
 
 #include <tools/shl.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -1286,6 +1287,15 @@ void SwAnnotationShell::ExecTransliteration(SfxRequest &rReq)
 
         switch( rReq.GetSlot() )
         {
+            case SID_TRANSLITERATE_SENTENCE_CASE:
+                nMode = TransliterationModulesExtra::SENTENCE_CASE;
+                break;
+            case SID_TRANSLITERATE_TITLE_CASE:
+                nMode = TransliterationModulesExtra::TITLE_CASE;
+                break;
+            case SID_TRANSLITERATE_TOGGLE_CASE:
+                nMode = TransliterationModulesExtra::TOGGLE_CASE;
+                break;
             case SID_TRANSLITERATE_UPPER:
                 nMode = TransliterationModules_LOWERCASE_UPPERCASE;
                 break;
