@@ -86,7 +86,7 @@ CancelButton HID_DLGDEPOT_0_CMDCANCEL_HISTORY
     '       again depends on the calling application.
 
     PrintingTabControl      .HelpId:vcl:PrintDialog:TabPages
-        TabGeneral          .HelpId:vcl:PrintDialog:JobPage
+        TabPrintGeneral     .HelpId:vcl:PrintDialog:JobPage
         TabApplication      .HelpId:vcl:PrintDialog:TabPage:10
         TabLayout           .HelpId:vcl:PrintDialog:NUpPage
         TabOptions          .HelpId:vcl:PrintDialog:OptPage
