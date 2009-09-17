@@ -430,6 +430,11 @@ public:
                                 USHORT nPos = TABBAR_APPEND );
     void            RemovePage( USHORT nPageId );
     void            MovePage( USHORT nPageId, USHORT nNewPos );
+
+    Color           GetTabBgColor( USHORT nPageId ) const;
+    void            SetTabBgColor( USHORT nPageId, const Color& aTabBgColor );
+    BOOL            IsDefaultTabBgColor( USHORT nPageId );
+
     void            Clear();
 
     void            EnablePage( USHORT nPageId, BOOL bEnable = TRUE );
