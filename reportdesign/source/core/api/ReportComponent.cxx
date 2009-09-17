@@ -42,9 +42,12 @@
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <svx/unolingu.hxx>
 #include <svtools/syslocale.hxx>
 #include <svtools/lingucfg.hxx>
+#include <i18npool/mslangid.hxx>
+
 // =============================================================================
 namespace reportdesign
 {
@@ -96,12 +99,14 @@ OFormatProperties::OFormatProperties()
     try
     {
         SvtLinguConfig aLinguConfig;
+        using namespace ::com::sun::star::i18n::ScriptType;
+
         aLinguConfig.GetProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultLocale"))) >>= aCharLocale;
-        LanguageType eCurLang = SvxLocaleToLanguage( aCharLocale );
+        LanguageType eCurLang = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aCharLocale), LATIN);
         aLinguConfig.GetProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultLocale_CJK")))  >>= aCharLocaleAsian;
-        LanguageType eCurLangCJK = SvxLocaleToLanguage( aCharLocaleAsian );
+        LanguageType eCurLangCJK = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aCharLocaleAsian), ASIAN);
         aLinguConfig.GetProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultLocale_CTL")))  >>= aCharLocaleComplex;
-        LanguageType eCurLangCTL = SvxLocaleToLanguage( aCharLocaleComplex );
+        LanguageType eCurLangCTL = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aCharLocaleComplex), COMPLEX);
 
         Font aLatin,aCJK,aCTL;
         lcl_getDefaultFonts(aLatin,aCJK,aCTL,eCurLang,eCurLangCJK,eCurLangCTL);

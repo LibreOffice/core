@@ -61,6 +61,7 @@ SHL1STDLIBS= \
         $(FWELIB)				\
         $(SFXLIB)				\
         $(TOOLSLIB) 			\
+        $(I18NISOLANGLIB) \
         $(SVLLIB)				\
         $(SVTOOLLIB)			\
         $(UNOTOOLSLIB)			\
