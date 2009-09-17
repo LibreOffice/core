@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,13 @@
 #include <tools/debug.hxx>
 #include "rtl/uri.hxx"
 
-using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+//using namespace ::com::sun::star;
 namespace css = ::com::sun::star;
+using rtl::OUString;
 
-namespace
+
+namespace 
 {
 ::rtl::OUString getElement(::rtl::OUString const & version, ::sal_Int32 * index)
 {
@@ -69,7 +72,7 @@ int compareVersions(
         ::rtl::OUString e2(getElement(version2, &i2));
         if (e1.getLength() < e2.getLength()) {
             return -1;
-        } else if (e1.getLength() > e2.getLength()) {
+        } else if (e1.getLength() > e2.getLength()) {            
             return 1;
         } else if (e1 < e2) {
             return -1;
@@ -80,80 +83,149 @@ int compareVersions(
     return 0;
 }
 }
-
-void ImplFillElementList( std::vector< rtl::OUString >& rList, const uno::Reference < embed::XStorage >& rxStore, const ::rtl::OUString rRootStorageName, bool bRecursive )
+//If the OOo 3.0 mode is used then we exclude
+//'mimetype' and all content of 'META-INF'.
+//If the argument 'bSigning' is true then the element list is created for a signing
+//operation in which case we use the latest signing algorithm. That is all elements 
+//we find in the zip storage are added to the list. We do not support the old signatures
+//which did not contain all files.
+//If 'bSigning' is false, then we validate. If the user enabled validating according to OOo 3.0
+//then mimetype and all content of META-INF must be excluded.
+void ImplFillElementList( 
+    std::vector< rtl::OUString >& rList, const Reference < css::embed::XStorage >& rxStore, 
+    const ::rtl::OUString rRootStorageName, const bool bRecursive, 
+    const DocumentSignatureAlgorithm mode)
 {
     ::rtl::OUString aMetaInfName( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) );
+    ::rtl::OUString sMimeTypeName (RTL_CONSTASCII_USTRINGPARAM("mimetype"));
     ::rtl::OUString aSep( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
 
-    uno::Reference < container::XNameAccess > xElements( rxStore, uno::UNO_QUERY );
-    uno::Sequence< ::rtl::OUString > aElements = xElements->getElementNames();
+    Reference < css::container::XNameAccess > xElements( rxStore, UNO_QUERY );
+    Sequence< ::rtl::OUString > aElements = xElements->getElementNames();
     sal_Int32 nElements = aElements.getLength();
     const ::rtl::OUString* pNames = aElements.getConstArray();
+
     for ( sal_Int32 n = 0; n < nElements; n++ )
     {
-        if ( pNames[n] != aMetaInfName )
+        if (mode != OOo3_2Document 
+            && (pNames[n] == aMetaInfName
+            || pNames[n] == sMimeTypeName))
+        {
+            continue;
+        }
+        else
         {
             ::rtl::OUString sEncName = ::rtl::Uri::encode(
-                    pNames[n], rtl_UriCharClassRelSegment,
-                    rtl_UriEncodeStrict, RTL_TEXTENCODING_UTF8);
+                pNames[n], rtl_UriCharClassRelSegment,
+                rtl_UriEncodeStrict, RTL_TEXTENCODING_UTF8);
             if (sEncName.getLength() == 0 && pNames[n].getLength() != 0)
                 throw css::uno::Exception(::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("Failed to encode element name of XStorage")), 0);
+                RTL_CONSTASCII_USTRINGPARAM("Failed to encode element name of XStorage")), 0);
 
             if ( rxStore->isStreamElement( pNames[n] ) )
             {
+                //Exclude documentsignatures.xml!
+                if (pNames[n].equals(
+                    DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName()))
+                    continue;
                 ::rtl::OUString aFullName( rRootStorageName + sEncName );
                 rList.push_back(aFullName);
             }
             else if ( bRecursive && rxStore->isStorageElement( pNames[n] ) )
             {
-                uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( pNames[n], embed::ElementModes::READ );
+                Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( pNames[n], css::embed::ElementModes::READ );
                 rtl::OUString aFullRootName( rRootStorageName + sEncName + aSep );
-                ImplFillElementList( rList, xSubStore, aFullRootName, bRecursive );
+                ImplFillElementList(rList, xSubStore, aFullRootName, bRecursive, mode);
             }
         }
     }
 }
 
 
-bool DocumentSignatureHelper::isODFPre_1_2(const uno::Reference < embed::XStorage >& rxStore)
+bool DocumentSignatureHelper::isODFPre_1_2(const ::rtl::OUString & sVersion)
 {
-    ::rtl::OUString sVersion;
-    uno::Reference< beans::XPropertySet > xProps(rxStore, uno::UNO_QUERY_THROW );
-    xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) ) >>= sVersion;
     //The property version exists only if the document is at least version 1.2
+    //That is, if the document has version 1.1 and sVersion is empty.
     //The constant is defined in comphelper/documentconstants.hxx
     if (compareVersions(sVersion, ODFVER_012_TEXT) == -1)
         return true;
     return false;
 }
 
+bool DocumentSignatureHelper::isOOo3_2_Signature(const SignatureInformation & sigInfo)
+{
+    ::rtl::OUString sManifestURI(RTL_CONSTASCII_USTRINGPARAM("META-INF/manifest.xml"));
+    bool bOOo3_2 = false;
+    typedef ::std::vector< SignatureReferenceInformation >::const_iterator CIT;
+    for (CIT i = sigInfo.vSignatureReferenceInfors.begin(); 
+        i < sigInfo.vSignatureReferenceInfors.end(); i++)
+    {
+        if (i->ouURI.equals(sManifestURI))
+        {
+            bOOo3_2 = true;
+            break;
+        }
+    }
+    return  bOOo3_2;
+}
 
-std::vector< rtl::OUString > DocumentSignatureHelper::CreateElementList( const uno::Reference < embed::XStorage >& rxStore, const ::rtl::OUString /*rRootStorageName*/, DocumentSignatureMode eMode )
+DocumentSignatureAlgorithm 
+DocumentSignatureHelper::getDocumentAlgorithm(
+    const ::rtl::OUString & sODFVersion, const SignatureInformation & sigInfo)
+{
+    OSL_ASSERT(sODFVersion.getLength());
+    DocumentSignatureAlgorithm mode = OOo3_2Document;
+    if (!isOOo3_2_Signature(sigInfo))
+    {
+        if (isODFPre_1_2(sODFVersion))
+            mode = OOo2Document;
+        else
+            mode = OOo3_0Document;
+    }
+    return mode;
+}
+
+//The function creates a list of files which are to be signed or for which
+//the signature is to be validated. The strings are UTF8 encoded URIs which 
+//contain '/' as path separators.
+//
+//The algorithm how document signatures are created and validated has 
+//changed over time. The change affects only which files within the document
+//are changed. Document signatures created by OOo 2.x only used particular files. Since
+//OOo 3.0 everything except "mimetype" and "META-INF" are signed. As of OOo 3.2 everything 
+//except META-INF/documentsignatures.xml is signed.
+//Signatures are validated according to the algorithm which was then used for validation.
+//That is, when validating a signature which was created by OOo 3.0, then mimetype and 
+//META-INF are not used.
+//
+//When a signature is created then we always use the latest algorithm. That is, we use
+//that of OOo 3.2
+std::vector< rtl::OUString > 
+DocumentSignatureHelper::CreateElementList( 
+    const Reference < css::embed::XStorage >& rxStore, 
+    const ::rtl::OUString /*rRootStorageName*/, DocumentSignatureMode eMode, 
+    const DocumentSignatureAlgorithm mode)
 {
     std::vector< rtl::OUString > aElements;
     ::rtl::OUString aSep( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-
-    bool bPre1_2 = isODFPre_1_2(rxStore);
 
     switch ( eMode )
     {
         case SignatureModeDocumentContent:
         {
-            if (bPre1_2)
+            if (mode == OOo2Document) //that is, ODF 1.0, 1.1
             {
                 // 1) Main content
-                ImplFillElementList( aElements, rxStore, ::rtl::OUString(), false );
+                ImplFillElementList(aElements, rxStore, ::rtl::OUString(), false, mode);
 
                 // 2) Pictures...
                 rtl::OUString aSubStorageName( rtl::OUString::createFromAscii( "Pictures" ) );
                 try
                 {
-                    uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, embed::ElementModes::READ );
-                    ImplFillElementList( aElements, xSubStore, aSubStorageName+aSep, true );
+                    Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
+                    ImplFillElementList(aElements, xSubStore, aSubStorageName+aSep, true, mode);
                 }
-                catch( com::sun::star::io::IOException& )
+                catch(css::io::IOException& )
                 {
                     ; // Doesn't have to exist...
                 }
@@ -161,22 +233,22 @@ std::vector< rtl::OUString > DocumentSignatureHelper::CreateElementList( const u
                 aSubStorageName = rtl::OUString::createFromAscii( "ObjectReplacements" );
                 try
                 {
-                    uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, embed::ElementModes::READ );
-                    ImplFillElementList( aElements, xSubStore, aSubStorageName+aSep, true );
+                    Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
+                    ImplFillElementList(aElements, xSubStore, aSubStorageName+aSep, true, mode);
                     xSubStore.clear();
 
                     // Object folders...
                     rtl::OUString aMatchStr( rtl::OUString::createFromAscii( "Object " ) );
-                    uno::Reference < container::XNameAccess > xElements( rxStore, uno::UNO_QUERY );
-                    uno::Sequence< ::rtl::OUString > aElementNames = xElements->getElementNames();
+                    Reference < css::container::XNameAccess > xElements( rxStore, UNO_QUERY );
+                    Sequence< ::rtl::OUString > aElementNames = xElements->getElementNames();
                     sal_Int32 nElements = aElementNames.getLength();
                     const ::rtl::OUString* pNames = aElementNames.getConstArray();
                     for ( sal_Int32 n = 0; n < nElements; n++ )
                     {
                         if ( ( pNames[n].match( aMatchStr ) ) && rxStore->isStorageElement( pNames[n] ) )
                         {
-                            uno::Reference < embed::XStorage > xTmpSubStore = rxStore->openStorageElement( pNames[n], embed::ElementModes::READ );
-                            ImplFillElementList( aElements, xTmpSubStore, pNames[n]+aSep, true );
+                            Reference < css::embed::XStorage > xTmpSubStore = rxStore->openStorageElement( pNames[n], css::embed::ElementModes::READ );
+                            ImplFillElementList(aElements, xTmpSubStore, pNames[n]+aSep, true, mode);
                         }
                     }
                 }
@@ -188,7 +260,7 @@ std::vector< rtl::OUString > DocumentSignatureHelper::CreateElementList( const u
             else
             {
                 // Everything except META-INF
-                ImplFillElementList( aElements, rxStore, ::rtl::OUString(), true );
+                ImplFillElementList(aElements, rxStore, ::rtl::OUString(), true, mode);
             }
         }
         break;
@@ -198,8 +270,8 @@ std::vector< rtl::OUString > DocumentSignatureHelper::CreateElementList( const u
             rtl::OUString aSubStorageName( rtl::OUString::createFromAscii( "Basic" ) );
             try
             {
-                uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, embed::ElementModes::READ );
-                ImplFillElementList( aElements, xSubStore, aSubStorageName+aSep, true );
+                Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
+                ImplFillElementList(aElements, xSubStore, aSubStorageName+aSep, true, mode);
             }
             catch( com::sun::star::io::IOException& )
             {
@@ -210,8 +282,8 @@ std::vector< rtl::OUString > DocumentSignatureHelper::CreateElementList( const u
             aSubStorageName = rtl::OUString::createFromAscii( "Dialogs") ;
             try
             {
-                uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, embed::ElementModes::READ );
-                ImplFillElementList( aElements, xSubStore, aSubStorageName+aSep, true );
+                Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
+                ImplFillElementList(aElements, xSubStore, aSubStorageName+aSep, true, mode);
             }
             catch( com::sun::star::io::IOException& )
             {
@@ -221,10 +293,10 @@ std::vector< rtl::OUString > DocumentSignatureHelper::CreateElementList( const u
             aSubStorageName = rtl::OUString::createFromAscii( "Scripts") ;
             try
             {
-                uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, embed::ElementModes::READ );
-                ImplFillElementList( aElements, xSubStore, aSubStorageName+aSep, true );
+                Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
+                ImplFillElementList(aElements, xSubStore, aSubStorageName+aSep, true, mode);
             }
-            catch( com::sun::star::io::IOException& )
+            catch( css::io::IOException& )
             {
                 ; // Doesn't have to exist...
             }
@@ -233,7 +305,7 @@ std::vector< rtl::OUString > DocumentSignatureHelper::CreateElementList( const u
         case SignatureModePackage:
         {
             // Everything except META-INF
-            ImplFillElementList( aElements, rxStore, ::rtl::OUString(), true );
+            ImplFillElementList(aElements, rxStore, ::rtl::OUString(), true, mode);
         }
         break;
     }
@@ -241,15 +313,16 @@ std::vector< rtl::OUString > DocumentSignatureHelper::CreateElementList( const u
     return aElements;
 }
 
-SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream( const uno::Reference < embed::XStorage >& rxStore, sal_Int32 nOpenMode, DocumentSignatureMode eDocSigMode )
+SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream( 
+    const Reference < css::embed::XStorage >& rxStore, sal_Int32 nOpenMode, DocumentSignatureMode eDocSigMode )
 {
-    sal_Int32 nSubStorageOpenMode = embed::ElementModes::READ;
-    if ( nOpenMode & embed::ElementModes::WRITE )
-        nSubStorageOpenMode = embed::ElementModes::WRITE;
+    sal_Int32 nSubStorageOpenMode = css::embed::ElementModes::READ;
+    if ( nOpenMode & css::embed::ElementModes::WRITE )
+        nSubStorageOpenMode = css::embed::ElementModes::WRITE;
 
     SignatureStreamHelper aHelper;
 
-    try
+    try 
     {
         ::rtl::OUString aSIGStoreName( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) );
         aHelper.xSignatureStorage = rxStore->openStorageElement( aSIGStoreName, nSubStorageOpenMode );
@@ -266,7 +339,7 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream( const uno::R
             aHelper.xSignatureStream = aHelper.xSignatureStorage->openStreamElement( aSIGStreamName, nOpenMode );
         }
     }
-    catch( com::sun::star::io::IOException& )
+    catch(css::io::IOException& )
     {
         // Doesn't have to exist...
         DBG_ASSERT( nOpenMode == embed::ElementModes::READ, "Error creating signature stream..." );
@@ -275,6 +348,107 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream( const uno::R
     return aHelper;
 }
 
+//sElementList contains all files which are expected to be signed. Only those files must me signed,
+//no more, no less.
+//The DocumentSignatureAlgorithm indicates if the document was created with OOo 2.x. Then 
+//the uri s in the Reference elements in the signature, were not properly encoded.
+// For example: <Reference URI="ObjectReplacements/Object 1">
+bool DocumentSignatureHelper::checkIfAllFilesAreSigned( 
+    const ::std::vector< ::rtl::OUString > & sElementList, 
+    const SignatureInformation & sigInfo,
+    const DocumentSignatureAlgorithm alg)
+{
+    // Can only be valid if ALL streams are signed, which means real stream count == signed stream count
+    unsigned int nRealCount = 0;
+    for ( int i = sigInfo.vSignatureReferenceInfors.size(); i; )
+    {
+        const SignatureReferenceInformation& rInf = sigInfo.vSignatureReferenceInfors[--i];
+        // There is also an extra entry of type TYPE_SAMEDOCUMENT_REFERENCE because of signature date.
+        if ( ( rInf.nType == TYPE_BINARYSTREAM_REFERENCE ) || ( rInf.nType == TYPE_XMLSTREAM_REFERENCE ) )
+        {
+            ::rtl::OUString sReferenceURI = rInf.ouURI;
+            if (alg == OOo2Document)
+            {
+                //Comparing URIs is a difficult. Therefore we kind of normalize
+                //it before comparing. We assume that our URI do not have a leading "./"
+                //and fragments at the end (...#...)
+                sReferenceURI = ::rtl::Uri::encode(
+                    sReferenceURI, rtl_UriCharClassPchar,
+                    rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8);
+            }
+
+            //find the file in the element list
+            typedef ::std::vector< ::rtl::OUString >::const_iterator CIT;
+            for (CIT aIter = sElementList.begin(); aIter < sElementList.end(); aIter++)
+            {
+                ::rtl::OUString sElementListURI = *aIter;
+                if (alg == OOo2Document)
+                {
+                    sElementListURI = 
+                        ::rtl::Uri::encode(
+                        sElementListURI, rtl_UriCharClassPchar,
+                        rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8);
+                }
+                if (sElementListURI.equals(sReferenceURI))
+                {
+                    nRealCount++;
+                    break;
+                }
+            }
+        }
+    }
+    return  sElementList.size() == nRealCount;
+}
+
+/*Compares the Uri which are obtained from CreateElementList with
+  the  path obtained from the manifest.xml.
+  Returns true if both strings are equal.
+*/
+bool DocumentSignatureHelper::equalsReferenceUriManifestPath(
+    const OUString & rUri, const OUString & rPath)
+{
+    bool retVal = false;
+    //split up the uri and path into segments. Both are separated by '/'
+    std::vector<OUString> vUriSegments;
+    sal_Int32 nIndex = 0;
+    do
+    {
+        OUString aToken = rUri.getToken( 0, '/', nIndex );
+        vUriSegments.push_back(aToken);
+    }
+    while (nIndex >= 0);
+
+    std::vector<OUString> vPathSegments;
+    nIndex = 0;
+    do
+    {
+        OUString aToken = rPath.getToken( 0, '/', nIndex );
+        vPathSegments.push_back(aToken);
+    }
+    while (nIndex >= 0);
+
+    //Now compare each segment of the uri with its counterpart from the path
+    if (vUriSegments.size() == vPathSegments.size())
+    {
+        retVal = true;
+        typedef std::vector<OUString>::const_iterator CIT;
+        for (CIT i = vUriSegments.begin(), j = vPathSegments.begin(); 
+            i != vUriSegments.end(); i++, j++)
+        {
+            //Decode the uri segment, so that %20 becomes ' ', etc.
+            OUString sDecUri = ::rtl::Uri::decode(
+                *i, rtl_UriDecodeWithCharset,  RTL_TEXTENCODING_UTF8);
+            if (!sDecUri.equals(*j))
+            {
+                retVal = false;
+                break;
+            }
+        }
+    }
+
+    return retVal;
+}
+    
 ::rtl::OUString DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName()
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "documentsignatures.xml" ) );

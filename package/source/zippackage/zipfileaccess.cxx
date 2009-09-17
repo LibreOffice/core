@@ -289,7 +289,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OZipFileAccess::getElementNames()
             aNames.realloc( nLen );
         }
 
-        aNames[nLen-1] = (*aIter).second.sName;
+        aNames[nLen-1] = (*aIter).second.sPath;
     }
 
     if ( aNames.getLength() != nLen )
@@ -368,7 +368,7 @@ uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( 
 
     for ( EntryHash::iterator aIter = m_pZipFile->GetEntryHash().begin(); aIter != m_pZipFile->GetEntryHash().end(); aIter++ )
     {
-        if ( StringGoodForPattern_Impl( (*aIter).second.sName, aPattern ) )
+        if ( StringGoodForPattern_Impl( (*aIter).second.sPath, aPattern ) )
         {
             uno::Reference< io::XInputStream > xEntryStream( m_pZipFile->getDataStream( (*aIter).second,
                                                                                         new EncryptionData(),

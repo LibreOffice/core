@@ -54,10 +54,17 @@
 #define ATTRIBUTE_ALGORITHM_NAME "manifest:algorithm-name"
 #define ATTRIBUTE_INITIALISATION_VECTOR "manifest:initialisation-vector"
 
+#define ELEMENT_START_KEY_GENERATION "manifest:start-key-generation"
+#define ATTRIBUTE_START_KEY_GENERATION_NAME "manifest:start-key-generation-name"
+#define ALGORITHM_SHA1 "SHA1"
+#define ATTRIBUTE_KEY_SIZE "manifest:key-size"
+#define START_KEY_SIZE "20"
+
 #define ELEMENT_KEY_DERIVATION "manifest:key-derivation"
 #define ATTRIBUTE_KEY_DERIVATION_NAME "manifest:key-derivation-name"
 #define ATTRIBUTE_SALT "manifest:salt"
 #define ATTRIBUTE_ITERATION_COUNT "manifest:iteration-count"
 #define CHECKSUM_TYPE "SHA1/1K"
+#define DERIVED_KEY_SIZE "16"
 
 #endif
