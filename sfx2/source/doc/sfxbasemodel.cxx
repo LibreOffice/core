@@ -2850,19 +2850,9 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
                     // TODO/LATER: a general way to set the error context should be available
                     SfxErrorContext aEc( ERRCTX_SFX_SAVEASDOC, m_pData->m_pObjectShell->GetTitle() );
 
-                    ::com::sun::star::uno::Any aInteraction;
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > lContinuations(1);
-                    ::framework::ContinuationApprove* pApprove = new ::framework::ContinuationApprove();
-                    lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >(static_cast< ::com::sun::star::task::XInteractionContinuation* >(pApprove), uno::UNO_QUERY);
-
                     ::com::sun::star::task::ErrorCodeRequest aErrorCode;
                     aErrorCode.ErrCode = nErrCode;
-                    aInteraction <<= aErrorCode;
-
-                    ::framework::InteractionRequest* pRequest = new ::framework::InteractionRequest(aInteraction,lContinuations);
-                    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > xRequest(static_cast< ::com::sun::star::task::XInteractionRequest* >(pRequest), uno::UNO_QUERY);
-
-                    xHandler->handle(xRequest);
+                    SfxMedium::CallApproveHandler( xHandler, uno::makeAny( aErrorCode ), sal_False );
                 }
             }
 

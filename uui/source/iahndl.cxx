@@ -68,6 +68,8 @@
 #include "com/sun/star/task/ErrorCodeRequest.hpp"
 #include "com/sun/star/task/MasterPasswordRequest.hpp"
 #include "com/sun/star/task/NoMasterException.hpp"
+#include "com/sun/star/task/DocumentMacroConfirmationRequest.hpp"
+#include "com/sun/star/task/DocumentMacroConfirmationRequest2.hpp"
 #include "com/sun/star/task/XInteractionAbort.hpp"
 #include "com/sun/star/task/XInteractionApprove.hpp"
 #include "com/sun/star/task/XInteractionDisapprove.hpp"
@@ -113,6 +115,7 @@
 #include "svtools/sfxecode.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
 #include "comphelper/sequenceashashmap.hxx"
+#include "comphelper/documentconstants.hxx"
 #include "unotools/configmgr.hxx"
 
 #include "ids.hrc"
@@ -1255,7 +1258,23 @@ bool UUIInteractionHelper::handleErrorHandlerRequests(
     if (aAnyRequest >>= aMacroConfirmRequest)
     {
         handleMacroConfirmRequest(
-            aMacroConfirmRequest,
+            aMacroConfirmRequest.DocumentURL,
+            aMacroConfirmRequest.DocumentStorage,
+            ODFVER_012_TEXT,
+            aMacroConfirmRequest.DocumentSignatureInformation,
+            rRequest->getContinuations()
+        );
+        return true;
+    }
+
+    star::task::DocumentMacroConfirmationRequest2 aMacroConfirmRequest2;
+    if (aAnyRequest >>= aMacroConfirmRequest2)
+    {
+        handleMacroConfirmRequest(
+            aMacroConfirmRequest2.DocumentURL,
+            aMacroConfirmRequest2.DocumentZipStorage,
+            aMacroConfirmRequest2.DocumentVersion,
+            aMacroConfirmRequest2.DocumentSignatureInformation,
             rRequest->getContinuations()
         );
         return true;
@@ -3044,12 +3063,12 @@ UUIInteractionHelper::handleGenericErrorRequest(
     ErrCode  nError   = (ErrCode)nErrorCode;
     sal_Bool bWarning = !ERRCODE_TOERROR(nError);
 
-    if ( nError == ERRCODE_SFX_BROKENSIGNATURE )
+    if ( nError == ERRCODE_SFX_BROKENSIGNATURE
+     || nError == ERRCODE_SFX_INCOMPLETE_ENCRYPTION )
     {
-        // the broken signature warning needs a special title
+        // the security warning need a special title
         String aErrorString;
         ErrorHandler::GetErrorString( nErrorCode, aErrorString );
-
 
         std::auto_ptr< ResMgr >
             xManager( ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
@@ -3064,7 +3083,8 @@ UUIInteractionHelper::handleGenericErrorRequest(
         } catch( star::uno::Exception& )
         {}
 
-        ::rtl::OUString aErrTitle = String( ResId( STR_WARNING_BROKENSIGNATURE_TITLE, *xManager.get() ) );
+        ::rtl::OUString aErrTitle = String( ResId( nError == ERRCODE_SFX_BROKENSIGNATURE ? STR_WARNING_BROKENSIGNATURE_TITLE : STR_WARNING_INCOMPLETE_ENCRYPTION_TITLE, *xManager.get() ) );
+
         if ( aTitle.getLength() && aErrTitle.getLength() )
             aTitle += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " - " ) );
          aTitle += aErrTitle;
@@ -3100,7 +3120,10 @@ namespace
 
 void
 UUIInteractionHelper::handleMacroConfirmRequest(
-    const star::task::DocumentMacroConfirmationRequest& _rRequest,
+    const ::rtl::OUString& aDocumentURL,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xZipStorage,
+    const ::rtl::OUString& aDocumentVersion,
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation > aSignInfo,
     star::uno::Sequence< star::uno::Reference<
         star::task::XInteractionContinuation > > const & rContinuations
 )
@@ -3114,17 +3137,17 @@ UUIInteractionHelper::handleMacroConfirmRequest(
     std::auto_ptr< ResMgr > pResMgr( ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
     if ( pResMgr.get() )
     {
-        bool bShowSignatures = _rRequest.DocumentSignatureInformation.getLength() > 0;
+        bool bShowSignatures = aSignInfo.getLength() > 0;
         MacroWarning aWarning( getParentProperty(), bShowSignatures, *pResMgr.get() );
 
-        aWarning.SetDocumentURL( _rRequest.DocumentURL );
-        if ( _rRequest.DocumentSignatureInformation.getLength() > 1 )
+        aWarning.SetDocumentURL( aDocumentURL );
+        if ( aSignInfo.getLength() > 1 )
         {
-            aWarning.SetStorage( _rRequest.DocumentStorage, _rRequest.DocumentSignatureInformation );
+            aWarning.SetStorage( xZipStorage, aDocumentVersion, aSignInfo );
         }
-        else if ( _rRequest.DocumentSignatureInformation.getLength() == 1 )
+        else if ( aSignInfo.getLength() == 1 )
         {
-            aWarning.SetCertificate( _rRequest.DocumentSignatureInformation[ 0 ].Signer );
+            aWarning.SetCertificate( aSignInfo[ 0 ].Signer );
         }
 
         bApprove = aWarning.Execute() == RET_OK;

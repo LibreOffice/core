@@ -525,16 +525,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             {
                 SfxErrorContext aEc( ERRCTX_SFX_SAVEASDOC, GetTitle() ); // ???
 
-                // xmlsec05, check with SFX team
-                sal_uInt16 nState = GetDocumentSignatureState();
-                if (    SIGNATURESTATE_SIGNATURES_OK == nState
-                     || SIGNATURESTATE_SIGNATURES_INVALID == nState
-                     || SIGNATURESTATE_SIGNATURES_NOTVALIDATED == nState )
-                {
-                    if ( QueryBox( NULL, SfxResId( RID_XMLSEC_QUERY_LOSINGSIGNATURE ) ).Execute() != RET_YES )
-                        return;
-                }
-
                 if ( nId == SID_SAVEASDOC )
                 {
                     // in case of plugin mode the SaveAs operation means SaveTo
@@ -644,7 +634,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                                                          ::rtl::OUString::createFromAscii( pSlot->GetUnoName() ),
                                                          aDispatchArgs,
                                                          bPreselectPassword,
-                                                         GetSharedFileURL() );
+                                                         GetSharedFileURL(),
+                                                         GetDocumentSignatureState() );
                 }
                 else
                 {
@@ -653,11 +644,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                                                       uno::Reference< uno::XInterface >(),
                                                       ERRCODE_IO_ABORT );
                 }
-
-                // the scripting signature might be preserved
-                // pImp->nScriptingSignatureState = SIGNATURESTATE_NOSIGNATURES;
-                pImp->nDocumentSignatureState = SIGNATURESTATE_NOSIGNATURES;
-                pImp->bSignatureErrorIsShown = sal_False;
 
                 // merge aDispatchArgs to the request
                 SfxAllItemSet aResultParams( GetPool() );
@@ -1085,7 +1071,11 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             }
             case SID_MACRO_SIGNATURE:
             {
-                rSet.Put( SfxUInt16Item( SID_MACRO_SIGNATURE, GetScriptingSignatureState() ) );
+                // the slot makes sense only if there is a macro in the document
+                if ( pImp->documentStorageHasMacros() || pImp->aMacroMode.hasMacroLibrary() )
+                    rSet.Put( SfxUInt16Item( SID_MACRO_SIGNATURE, GetScriptingSignatureState() ) );
+                else
+                    rSet.DisableItem( nWhich );
                 break;
             }
         }
@@ -1269,6 +1259,7 @@ sal_uInt16 SfxObjectShell::ImplCheckSignaturesInformation( const uno::Sequence< 
     sal_Bool bCertValid = sal_True;
     sal_uInt16 nResult = SIGNATURESTATE_NOSIGNATURES;
     int nInfos = aInfos.getLength();
+    bool bCompleteSignature = true;
     if( nInfos )
     {
         //These errors of certificates are allowed
@@ -1293,16 +1284,60 @@ sal_uInt16 SfxObjectShell::ImplCheckSignaturesInformation( const uno::Sequence< 
                 nResult = SIGNATURESTATE_SIGNATURES_BROKEN;
                 break; // we know enough
             }
+            bCompleteSignature &= !aInfos[n].PartialDocumentSignature;
         }
     }
 
     if ( nResult == SIGNATURESTATE_SIGNATURES_OK && !bCertValid )
         nResult = SIGNATURESTATE_SIGNATURES_NOTVALIDATED;
+    else if ( nResult == SIGNATURESTATE_SIGNATURES_OK && bCertValid && !bCompleteSignature)
+        nResult = SIGNATURESTATE_SIGNATURES_PARTIAL_OK;
 
     // this code must not check whether the document is modified
     // it should only check the provided info
 
     return nResult;
+}
+
+uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnalyzeSignature( sal_Bool bScriptingContent, const uno::Reference< security::XDocumentDigitalSignatures >& xSigner )
+{
+    uno::Sequence< security::DocumentSignatureInformation > aResult;
+    uno::Reference< security::XDocumentDigitalSignatures > xLocSigner = xSigner;
+
+    if ( GetMedium() && GetMedium()->GetName().Len() && IsOwnStorageFormat_Impl( *GetMedium())  && GetMedium()->GetStorage().is() )
+    {
+        try
+        {
+            if ( !xLocSigner.is() )
+            {
+                uno::Sequence< uno::Any > aArgs( 1 );
+                aArgs[0] <<= ::rtl::OUString();
+                try
+                {
+                    uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
+                    aArgs[0] = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) );
+                }
+                catch( uno::Exception& )
+                {
+                }
+
+                xLocSigner.set( comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ), aArgs ), uno::UNO_QUERY_THROW );
+
+            }
+
+            if ( bScriptingContent )
+                aResult = xLocSigner->verifyScriptingContentSignatures( GetMedium()->GetZipStorageToSign_Impl(),
+                                                                uno::Reference< io::XInputStream >() );
+            else
+                aResult = xLocSigner->verifyDocumentContentSignatures( GetMedium()->GetZipStorageToSign_Impl(),
+                                                                uno::Reference< io::XInputStream >() );
+        }
+        catch( com::sun::star::uno::Exception& )
+        {
+        }
+    }
+
+    return aResult;
 }
 
 sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
@@ -1313,33 +1348,12 @@ sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
     {
         *pState = SIGNATURESTATE_NOSIGNATURES;
 
-        if ( GetMedium() && GetMedium()->GetName().Len() && IsOwnStorageFormat_Impl( *GetMedium())  && GetMedium()->GetStorage().is() )
-        {
-            try
-            {
-                uno::Reference< security::XDocumentDigitalSignatures > xD(
-                    comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
-
-                if ( xD.is() )
-                {
-                    ::com::sun::star::uno::Sequence< security::DocumentSignatureInformation > aInfos;
-                    if ( bScriptingContent )
-                        aInfos = xD->verifyScriptingContentSignatures( GetMedium()->GetLastCommitReadStorage_Impl(),
-                                                                        uno::Reference< io::XInputStream >() );
-                    else
-                        aInfos = xD->verifyDocumentContentSignatures( GetMedium()->GetLastCommitReadStorage_Impl(),
-                                                                        uno::Reference< io::XInputStream >() );
-
-                    *pState = ImplCheckSignaturesInformation( aInfos );
-                }
-            }
-            catch( com::sun::star::uno::Exception& )
-            {
-            }
-        }
+        uno::Sequence< security::DocumentSignatureInformation > aInfos = ImplAnalyzeSignature( bScriptingContent );
+        *pState = ImplCheckSignaturesInformation( aInfos );
     }
 
-    if ( *pState == SIGNATURESTATE_SIGNATURES_OK || *pState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED )
+    if ( *pState == SIGNATURESTATE_SIGNATURES_OK || *pState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED
+        || *pState == SIGNATURESTATE_SIGNATURES_PARTIAL_OK)
     {
         if ( IsModified() )
             *pState = SIGNATURESTATE_SIGNATURES_INVALID;
@@ -1415,7 +1429,6 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
                 //When the document is modified then we must not show the digital signatures dialog
                 //If we have come here then the user denied to save.
                 if (!bHasSign)
-
                     bNoSig = true;
             }
         }
@@ -1437,18 +1450,42 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
         bAllowModifiedBack = sal_True;
     }
 
-    if ( ! bNoSig && GetMedium()->SignContents_Impl( bScriptingContent ) )
+    // we have to store to the original document, the original medium should be closed for this time
+    if ( !bNoSig
+      && ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
     {
-        if ( bScriptingContent )
-            pImp->nScriptingSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
-        else
-            pImp->nDocumentSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
+        GetMedium()->CloseAndRelease();
 
-        pImp->bSignatureErrorIsShown = sal_False;
+        // We sign only ODF1.2, that means that if this point has been reached,
+        // the ODF1.2 signing process should be used.
+        // This code still might be called to show the signature of ODF1.1 document.
+        sal_Bool bSigned = GetMedium()->SignContents_Impl(
+            bScriptingContent,
+            aODFVersion,
+            pImp->nDocumentSignatureState == SIGNATURESTATE_SIGNATURES_OK
+            || pImp->nDocumentSignatureState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED
+            || pImp->nDocumentSignatureState == SIGNATURESTATE_SIGNATURES_PARTIAL_OK);
 
-        Invalidate( SID_SIGNATURE );
-        Invalidate( SID_MACRO_SIGNATURE );
-        Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
+        DoSaveCompleted( GetMedium() );
+
+        if ( bSigned )
+        {
+            if ( bScriptingContent )
+            {
+                pImp->nScriptingSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
+
+                // adding of scripting signature removes existing document signature
+                pImp->nDocumentSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
+            }
+            else
+                pImp->nDocumentSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
+
+            pImp->bSignatureErrorIsShown = sal_False;
+
+            Invalidate( SID_SIGNATURE );
+            Invalidate( SID_MACRO_SIGNATURE );
+            Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
+        }
     }
 
     if ( bAllowModifiedBack )

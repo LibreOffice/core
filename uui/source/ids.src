@@ -50,6 +50,11 @@ String( STR_WARNING_BROKENSIGNATURE_TITLE )
     Text [ en-US ] = "Invalid Document Signature" ;
 };
 
+String( STR_WARNING_INCOMPLETE_ENCRYPTION_TITLE )
+{
+    Text [ en-US ] = "Non-Encrypted Streams" ;
+};
+
 Resource RID_UUI_ERRHDL
 {
     String (ERRCODE_UUI_IO_ABORT & ERRCODE_RES_MASK)
@@ -313,7 +318,7 @@ Resource RID_UUI_ERRHDL
 
     String (ERRCODE_UUI_IO_BROKENPACKAGE & ERRCODE_RES_MASK)
     {
-        Text [ en-US ] = "The file '$(ARG1)' is corrupt and therefore cannot be opened. Should %PRODUCTNAME repair the file?";
+        Text [ en-US ] = "The file '$(ARG1)' is corrupt and therefore cannot be opened. %PRODUCTNAME can try to repair the file.\n\nThe corruption could be the result of document manipulation or of structural document damage due to data transmission.\n\nWe recommend that you do not trust the content of the repaired document.\nExecution of macros is disabled for this document.\n\nShould %PRODUCTNAME repair the file?\n";
     };
 
     String (ERRCODE_UUI_IO_BROKENPACKAGE_CANTREPAIR & ERRCODE_RES_MASK)

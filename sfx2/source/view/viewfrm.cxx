@@ -77,6 +77,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <unotools/localfilehelper.hxx>
+#include <unotools/ucbhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
 
@@ -453,7 +454,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 // to the logical one, then on file system it can be checked that the copy is still newer than the original and no document reload is required
                 if ( ( !bNeedsReload && ( (aMedObj.GetProtocol() == INET_PROT_FILE &&
                         aMedObj.getFSysPath(INetURLObject::FSYS_DETECT) != aPhysObj.getFSysPath(INetURLObject::FSYS_DETECT) &&
-                        SfxContentHelper::IsYounger( aPhysObj.GetMainURL( INetURLObject::NO_DECODE ), aMedObj.GetMainURL( INetURLObject::NO_DECODE ) ))
+                        !::utl::UCBContentHelper::IsYounger( aMedObj.GetMainURL( INetURLObject::NO_DECODE ), aPhysObj.GetMainURL( INetURLObject::NO_DECODE ) ))
                       || pMed->IsRemote() ) )
                    || pVersionItem )
                 {
@@ -716,7 +717,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 // eigentliches Reload
                 //pNewSet->Put( SfxFrameItem ( SID_DOCFRAME, GetFrame() ) );
-                //pNewSet->Put( SfxBoolItem( SID_SILENT, sal_True ) );
+
+                if ( pSilentItem && pSilentItem->GetValue() )
+                    pNewSet->Put( SfxBoolItem( SID_SILENT, sal_True ) );
 
                 SFX_ITEMSET_ARG(pNewSet, pInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, FALSE);
                 SFX_ITEMSET_ARG(pNewSet, pMacroExecItem  , SfxUInt16Item, SID_MACROEXECMODE     , FALSE);
@@ -820,6 +823,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     }
 
                     xNewObj->GetMedium()->GetItemSet()->ClearItem( SID_RELOAD );
+                    xNewObj->GetMedium()->GetItemSet()->ClearItem( SID_SILENT );
                     UpdateDocument_Impl();
                 }
 

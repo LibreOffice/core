@@ -265,6 +265,7 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,m_bCreateTempStor( sal_False )
     ,m_xDocInfoListener()
     ,m_bIsInit( sal_False )
+    ,m_bIncomplEncrWarnShown( sal_False )
 {
 }
 
@@ -368,7 +369,7 @@ SfxObjectShell::~SfxObjectShell()
         pImp->xModel = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > ();
 
     // don't call GetStorage() here, in case of Load Failure it's possible that a storage was never assigned!
-    if ( pMedium && pMedium->HasStorage_Impl() && pMedium->GetStorage() == pImp->m_xDocStorage )
+    if ( pMedium && pMedium->HasStorage_Impl() && pMedium->GetStorage( sal_False ) == pImp->m_xDocStorage )
         pMedium->CanDisposeStorage_Impl( sal_False );
 
     if ( pImp->mpObjectContainer )

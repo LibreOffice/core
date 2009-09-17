@@ -58,13 +58,17 @@
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/document/XBinaryStreamResolver.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <comphelper/namecontainer.hxx>
 #include <rtl/logfile.hxx>
 #include <tools/string.hxx> // used in StartElement for logging
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/documentconstants.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <vcl/fontcvt.hxx>
 
 #include <com/sun/star/rdf/XMetadatable.hpp>
@@ -653,6 +657,21 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
         if ( rAttrName.equalsAscii("office:version") )
         {
             mpImpl->aODFVersion = xAttrList->getValueByIndex( i );
+
+            // the ODF version in content.xml and manifest.xml must be the same starting from ODF1.2
+            if ( mpImpl->mStreamName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ) ) )
+              && !IsODFVersionConsistent( mpImpl->aODFVersion ) )
+            {
+                throw xml::sax::SAXException(
+                        ::rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM( "Inconsistent ODF versions in content.xml and manifest.xml!" ) ),
+                        uno::Reference< uno::XInterface >(),
+                        uno::makeAny(
+                            packages::zip::ZipIOException(
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                    "Inconsistent ODF versions in content.xml and manifest.xml!" ) ),
+                                Reference< XInterface >() ) ) );
+            }
         }
         else if( ( rAttrName.getLength() >= 5 ) &&
             ( rAttrName.compareToAscii( sXML_xmlns, 5 ) == 0 ) &&
@@ -1600,6 +1619,50 @@ OUString SvXMLImport::GetAbsoluteReference(const OUString& rValue) const
         return aAbsURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
     else
         return rValue;
+}
+
+sal_Bool SvXMLImport::IsODFVersionConsistent( const ::rtl::OUString& aODFVersion )
+{
+    // the check returns sal_False only if the storage version could be retrieved
+    sal_Bool bResult = sal_True;
+
+    if ( aODFVersion.getLength() && aODFVersion.compareTo( ODFVER_012_TEXT ) >= 0 )
+    {
+        // check the consistency only for the ODF1.2 and later ( according to content.xml )
+        try
+        {
+            uno::Reference< document::XStorageBasedDocument > xDoc( mxModel, uno::UNO_QUERY_THROW );
+            uno::Reference< embed::XStorage > xStor = xDoc->getDocumentStorage();
+            uno::Reference< beans::XPropertySet > xStorProps( xStor, uno::UNO_QUERY_THROW );
+
+            // the check should be done only for OASIS format
+            ::rtl::OUString aMediaType;
+            xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ) ) >>= aMediaType;
+            if ( ::comphelper::OStorageHelper::GetXStorageFormat( xStor ) >= SOFFICE_FILEFORMAT_8 )
+            {
+                sal_Bool bRepairPackage = sal_False;
+                try
+                {
+                    xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RepairPackage" ) ) )
+                        >>= bRepairPackage;
+                } catch ( uno::Exception& )
+                {}
+
+                // check only if not in Repair mode
+                if ( !bRepairPackage )
+                {
+                    ::rtl::OUString aStorVersion;
+                    xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) )
+                        >>= aStorVersion;
+                    bResult = aODFVersion.equals( aStorVersion );
+                }
+            }
+        }
+        catch( uno::Exception& )
+        {}
+    }
+
+    return bResult;
 }
 
 void SvXMLImport::_CreateNumberFormatsSupplier()

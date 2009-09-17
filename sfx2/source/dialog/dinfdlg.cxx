@@ -899,7 +899,7 @@ void SfxDocumentPage::ImplUpdateSignatures()
             {
                 String s;
                 Sequence< security::DocumentSignatureInformation > aInfos;
-                aInfos = xD->verifyDocumentContentSignatures( pMedium->GetLastCommitReadStorage_Impl(),
+                aInfos = xD->verifyDocumentContentSignatures( pMedium->GetZipStorageToSign_Impl(),
                                                                 uno::Reference< io::XInputStream >() );
                 if( aInfos.getLength() > 1 )
                 {

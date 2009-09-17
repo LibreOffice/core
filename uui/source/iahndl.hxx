@@ -36,13 +36,15 @@
 #define INCLUDED_VECTOR
 #endif
 #include "osl/mutex.hxx"
-#include "com/sun/star/beans/Optional.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/Sequence.hxx"
+
+#include "com/sun/star/beans/Optional.hpp"
+#include "com/sun/star/embed/XStorage.hpp"
 #include "com/sun/star/task/InteractionClassification.hpp"
 #include "com/sun/star/task/PasswordRequestMode.hpp"
-#include "com/sun/star/task/DocumentMacroConfirmationRequest.hpp"
 #include "com/sun/star/task/FutureDocumentVersionProductUpdateRequest.hpp"
+#include "com/sun/star/security/DocumentSignatureInformation.hpp"
 #include "tools/solar.h"
 #include "tools/errcode.hxx"
 #include "vcl/wintypes.hxx"
@@ -360,7 +362,10 @@ private:
 
     void
     handleMacroConfirmRequest(
-        const ::com::sun::star::task::DocumentMacroConfirmationRequest& _rRequest,
+        const ::rtl::OUString& aDocumentURL,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xZipStorage,
+        const ::rtl::OUString& aDocumentVersion,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation > aSignInfo,
         com::sun::star::uno::Sequence<
             com::sun::star::uno::Reference<
                 com::sun::star::task::XInteractionContinuation > > const &
