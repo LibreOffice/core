@@ -261,4 +261,19 @@ Transliteration_l2u::Transliteration_l2u()
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_l2u";
 }
 
+Transliteration_titlecase::Transliteration_titlecase()
+{
+    nMappingType = MappingTypeToTitle;
+    transliterationName = "title(generic)";
+    implementationName = "com.sun.star.i18n.Transliteration.Transliteration_titlecase";
+}
+
+Transliteration_togglecase::Transliteration_togglecase()
+{
+    nMappingType = MappingTypeLowerToUpper | MappingTypeUpperToLower;
+    transliterationName = "toggle(generic)";
+    implementationName = "com.sun.star.i18n.Transliteration.Transliteration_togglecase";
+}
+
+
 } } } }

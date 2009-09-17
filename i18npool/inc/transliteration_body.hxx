@@ -93,6 +93,19 @@ public:
 };
 #endif
 
+
+class Transliteration_titlecase : public Transliteration_body
+{
+public:
+    Transliteration_titlecase();
+};
+
+class Transliteration_togglecase : public Transliteration_body
+{
+public:
+    Transliteration_togglecase();
+};
+
 } } } }
 
 #endif
