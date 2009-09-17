@@ -153,3 +153,4 @@ mkdir: %_DEST%\inc%_EXT%\vcl\plug\vcl
 ..\inc\vcl\ppdparser.hxx %_DEST%\inc%_EXT%\vcl\ppdparser.hxx
 ..\inc\vcl\helper.hxx %_DEST%\inc%_EXT%\vcl\helper.hxx
 ..\inc\vcl\strhelper.hxx %_DEST%\inc%_EXT%\vcl\strhelper.hxx
+..\inc\vcl\lazydelete.hxx %_DEST%\inc%_EXT%\vcl\lazydelete.hxx
