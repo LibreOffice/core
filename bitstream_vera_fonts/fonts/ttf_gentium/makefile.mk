@@ -28,7 +28,7 @@
 PRJ=..$/..
 
 PRJNAME=bitstream_vera_fonts
-TARGET=ttf_liberation
+TARGET=ttf_gentium
 
 # --- Settings -----------------------------------------------------
 
@@ -36,8 +36,8 @@ TARGET=ttf_liberation
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=liberation-fonts-1.05
-TARFILE_ROOTDIR=liberation-fonts-1.05
+TARFILE_NAME=gentiumbasic-fonts-1.10
+TARFILE_ROOTDIR=gentiumbasic-fonts-1.10
 
 PATCH_FILES=
 
@@ -55,8 +55,6 @@ BUILD_FLAGS=
 .INCLUDE : target.mk
 
 .IF "$(WITH_FONTS)"!="NO"
-.IF "$(GUI)" != "WNT"
 .INCLUDE : tg_ext.mk
-.ENDIF
 .ENDIF
 
