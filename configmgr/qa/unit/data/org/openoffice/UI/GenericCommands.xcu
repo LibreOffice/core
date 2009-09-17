@@ -2079,11 +2079,6 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:ChangeCaseToUpper" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">~Uppercase</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ChooseControls" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="x-no-translate"></value><value xml:lang="en-US">Insert Controls</value>
@@ -2092,9 +2087,29 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:ChangeCaseToSentenceCase" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">~Sentence case</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ChangeCaseToLower" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="x-no-translate"></value><value xml:lang="en-US">~Lowercase</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ChangeCaseToUpper" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">~Uppercase</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ChangeCaseToTitleCase" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">~Title case</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ChangeCaseToToggleCase" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">T~oggle case</value>
         </prop>
       </node>
       <node oor:name=".uno:ChangeCaseToHalfWidth" oor:op="replace">
