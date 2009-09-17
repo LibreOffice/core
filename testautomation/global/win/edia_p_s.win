@@ -86,7 +86,7 @@ CancelButton HID_DLGDEPOT_0_CMDCANCEL_HISTORY
         TabLayout           .HelpId:vcl:PrintDialog:NUpPage
         TabOptions          .HelpId:vcl:PrintDialog:OptPage
 
-        *TabGeneral                     .HelpId:vcl:PrintDialog:JobPage
+        *TabPrintGeneral                .HelpId:vcl:PrintDialog:JobPage
             PrinterList                 .HelpId:vcl:PrintDialog:JobPage:PrinterList
             NumberOfCopies              .HelpId:vcl:PrintDialog:JobPage:Copies
             Collate                     .HelpId:vcl:PrintDialog:JobPage:Collate
