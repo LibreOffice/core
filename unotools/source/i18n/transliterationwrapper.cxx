@@ -34,11 +34,12 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/debug.hxx>
 #include <i18npool/mslangid.hxx>
-#ifndef _COMPHELPER_COMPONENTFACTORY_HXX_
 #include <comphelper/componentfactory.hxx>
-#endif
+
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
 #define TRANSLIT_LIBRARYNAME "i18n"
 #define TRANSLIT_SERVICENAME "com.sun.star.i18n.Transliteration"
@@ -168,14 +169,22 @@ void TransliterationWrapper::loadModuleIfNeeded( sal_uInt16 nLang )
     sal_Bool bLoad = bFirstCall;
     bFirstCall = sal_False;
 
-    if( nLanguage != nLang )
+    if( static_cast< sal_Int32 >(nType) == TransliterationModulesExtra::SENTENCE_CASE )
     {
-        setLanguageLocaleImpl( nLang );
-        if( !bLoad )
-            bLoad = needLanguageForTheMode();
+        if( bLoad )
+            loadModuleByImplName(String::CreateFromAscii("SENTENCE_CASE"), nLang);
     }
-    if( bLoad )
-        loadModuleImpl();
+    else
+    {
+        if( nLanguage != nLang )
+        {
+            setLanguageLocaleImpl( nLang );
+            if( !bLoad )
+                bLoad = needLanguageForTheMode();
+        }
+        if( bLoad )
+            loadModuleImpl();
+    }
 }
 
 
