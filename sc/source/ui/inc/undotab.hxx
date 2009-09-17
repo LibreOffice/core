@@ -35,6 +35,7 @@
 #include "markdata.hxx"
 #include "formula/grammar.hxx"
 #include <tools/color.hxx>
+#include "tabbgcolor.hxx"
 
 #ifndef _SVSTDARR_SHORTS
 
@@ -226,6 +227,37 @@ private:
     void DoChange() const;
 };
 
+class ScUndoSetTabBgColor: public ScSimpleUndo
+{
+public:
+                    TYPEINFO();
+                    ScUndoSetTabBgColor(
+                            ScDocShell* pNewDocShell,
+                            SCTAB nT,
+                            const Color& aOTabBgColor,
+                            const Color& aNTabBgColor);
+                    ScUndoSetTabBgColor(
+                            ScDocShell* pNewDocShell,
+                            ScUndoSetTabBgColorInfoList* pUndoSetTabBgColorInfoList);
+    virtual         ~ScUndoSetTabBgColor();
+
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+
+virtual String  GetComment() const;
+
+private:
+    SCTAB   nTab;
+    Color   aOldTabBgColor;
+    Color   aNewTabBgColor;
+    ScUndoSetTabBgColorInfoList* aUndoSetTabBgColorInfoList;
+    BOOL    bIsMultipleUndo;
+
+    void DoChange( SCTAB nTab, const Color& rTabBgColor ) const;
+    void DoChange( BOOL bUndoType ) const;
+};
 
 class ScUndoMakeScenario: public ScSimpleUndo
 {

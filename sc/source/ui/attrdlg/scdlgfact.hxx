@@ -61,6 +61,7 @@ class ScDPShowDetailDlg;
 class ScNewScenarioDlg;
 class ScShowTabDlg;
 class ScStringInputDlg;
+class ScTabBgColorDlg;
 class ScImportOptionsDlg;
 class SfxTabDialog;
 class ScSortWarningDlg;
@@ -337,6 +338,12 @@ class AbstractScStringInputDlg_Impl :  public AbstractScStringInputDlg  //add fo
     virtual void GetInputString( String& rString ) const;
 };
 
+class AbstractScTabBgColorDlg_Impl :  public AbstractScTabBgColorDlg  //add for ScTabBgColorDlg
+{
+    DECL_ABSTDLG_BASE( AbstractScTabBgColorDlg_Impl, ScTabBgColorDlg )
+    virtual void GetSelectedColor( Color& rColor ) const;
+};
+
 class AbstractScImportOptionsDlg_Impl : public AbstractScImportOptionsDlg  //add for ScImportOptionsDlg
 {
     DECL_ABSTDLG_BASE( AbstractScImportOptionsDlg_Impl, ScImportOptionsDlg)
@@ -511,6 +518,14 @@ public:
                                                                 const String& rDefault,
                                                                 ULONG nHelpId ,
                                                                 int nId );
+
+    virtual AbstractScTabBgColorDlg * CreateScTabBgColorDlg (  Window* pParent, //add for ScStringInputDlg
+                                                                const String& rTitle, //Dialog Title
+                                                                const String& rTabBgColorNoColorText, //Label for no tab color
+                                                                const Color& rDefaultColor, //Currently selected Color
+                                                                ULONG nHelpId ,
+                                                                int nId );
+
     virtual AbstractScImportOptionsDlg * CreateScImportOptionsDlg ( Window*                 pParent, //add for ScImportOptionsDlg
                                                                     int nId,
                                                                     BOOL                    bAscii = TRUE,

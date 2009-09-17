@@ -144,6 +144,9 @@ private:
 
     BOOL            bOldCurValid;               // "virtuelle" Cursorpos. bei zusammengefassten
 
+    Color           aTabBgColor;
+    BOOL            IsDefaultTabBgColor() const {return aTabBgColor == Color( COL_AUTO ) ? TRUE : FALSE ;};
+
                     ScViewDataTable();
                     ~ScViewDataTable();
 
@@ -275,6 +278,10 @@ public:
     void            DeleteTab( SCTAB nTab );
     void            CopyTab( SCTAB nSrcTab, SCTAB nDestTab );
     void            MoveTab( SCTAB nSrcTab, SCTAB nDestTab );
+
+    void            SetTabBgColor( Color rTabBgColor, SCTAB nTab );
+    BOOL            IsDefaultTabBgColor( SCTAB nTab ) const;
+    Color           GetTabBgColor( SCTAB nTab ) const;
 
     SCTAB           GetRefTabNo() const                     { return nRefTabNo; }
     void            SetRefTabNo( SCTAB nNewTab )            { nRefTabNo = nNewTab; }

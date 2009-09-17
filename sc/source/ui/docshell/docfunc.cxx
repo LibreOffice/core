@@ -2855,6 +2855,104 @@ BOOL ScDocFunc::RenameTable( SCTAB nTab, const String& rName, BOOL bRecord, BOOL
     return bSuccess;
 }
 
+BOOL ScDocFunc::SetTabBgColor( SCTAB nTab, const Color& rColor, BOOL bRecord, BOOL bApi )
+{
+
+    ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
+    if ( !pDoc->IsDocEditable() || pDoc->IsTabProtected(nTab) )
+    {
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_PROTECTIONERR); //TODO Check to see what this string is...
+        return FALSE;
+    }
+
+    ScViewData* pViewData = rDocShell.GetViewData();
+
+    Color aOldTabBgColor;
+    aOldTabBgColor = pViewData->GetTabBgColor(nTab);
+
+    BOOL bSuccess = FALSE;
+    pViewData->SetTabBgColor(rColor, nTab);
+    if ( pViewData->GetTabBgColor( nTab ) == rColor)
+        bSuccess = TRUE;
+    if (bSuccess)
+    {
+        if (bRecord)
+        {
+            rDocShell.GetUndoManager()->AddUndoAction(
+                new ScUndoSetTabBgColor( &rDocShell, nTab, aOldTabBgColor, rColor));
+        }
+        rDocShell.PostPaintExtras();
+        ScDocShellModificator aModificator( rDocShell );
+        aModificator.SetDocumentModified();
+        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+
+        bSuccess = TRUE;
+    }
+    return bSuccess;
+}
+
+BOOL ScDocFunc::SetTabBgColor( ScUndoSetTabBgColorInfoList* rUndoSetTabBgColorInfoList, BOOL bRecord, BOOL bApi )
+{
+    ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
+    if ( !pDoc->IsDocEditable() )
+    {
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_PROTECTIONERR); //TODO Get a better String Error...
+        return FALSE;
+    }
+
+    ScViewData* pViewData = rDocShell.GetViewData();
+    USHORT nTab;
+    Color aNewTabBgColor;
+    ScUndoSetTabBgColorInfo* rUndoSetTabBgColorInfo;
+    BOOL bSuccess = TRUE;
+    USHORT nTabProtectCount = 0;
+    for ( USHORT i=0; i < rUndoSetTabBgColorInfoList->Count(); i++ )
+    {
+        rUndoSetTabBgColorInfo = rUndoSetTabBgColorInfoList->GetObject(i);
+        nTab = rUndoSetTabBgColorInfo->nTabId;
+        if ( !pDoc->IsTabProtected(nTab) )
+        {
+            aNewTabBgColor = rUndoSetTabBgColorInfo->aNewTabBgColor;
+            rUndoSetTabBgColorInfo->aOldTabBgColor = pViewData->GetTabBgColor(nTab);
+            pViewData->SetTabBgColor(aNewTabBgColor, nTab);
+            if ( pViewData->GetTabBgColor( nTab ) != aNewTabBgColor)
+            {
+                bSuccess = FALSE;
+                break;
+            }
+        }
+        else
+        {
+            nTabProtectCount++;
+        }
+    }
+    if ( nTabProtectCount == rUndoSetTabBgColorInfoList->Count() )
+    {
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_PROTECTIONERR); //TODO Get a better String Error...
+        return FALSE;
+    }
+    if (bSuccess)
+    {
+        if (bRecord)
+        {
+            rDocShell.GetUndoManager()->AddUndoAction(
+                new ScUndoSetTabBgColor( &rDocShell, rUndoSetTabBgColorInfoList));
+        }
+        rDocShell.PostPaintExtras();
+        ScDocShellModificator aModificator( rDocShell );
+        aModificator.SetDocumentModified();
+        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+    }
+    return bSuccess;
+}
+
 //------------------------------------------------------------------------
 
 //! SetWidthOrHeight - noch doppelt zu ViewFunc !!!!!!

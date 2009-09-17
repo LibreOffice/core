@@ -61,7 +61,8 @@ ScExtTabSettings::ScExtTabSettings() :
     mnPageZoom( 0 ),
     mbSelected( false ),
     mbFrozenPanes( false ),
-    mbPageMode( false )
+    mbPageMode( false ),
+    maTabBgColor( COL_AUTO)
 {
 }
 

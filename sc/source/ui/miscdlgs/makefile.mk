@@ -50,6 +50,7 @@ SLOFILES =  \
     $(SLO)$/delcodlg.obj		\
     $(SLO)$/inscodlg.obj		\
     $(SLO)$/strindlg.obj		\
+    $(SLO)$/tabbgcolordlg.obj   \
     $(SLO)$/mtrindlg.obj		\
     $(SLO)$/lbseldlg.obj		\
     $(SLO)$/filldlg.obj			\

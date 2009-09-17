@@ -58,6 +58,10 @@
 
 #include "scabstdlg.hxx" //CHINA001
 
+#include "tabbgcolor.hxx" //DBW
+#include "tabbgcolordlg.hxx" //DBW
+#include <svx/colritem.hxx> //DBW
+
 #define IS_AVAILABLE(WhichId,ppItem) \
     (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
 
@@ -686,6 +690,120 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             }
             break;
 
+        case FID_TAB_SET_TAB_BG_COLOR:
+        case FID_TAB_MENU_SET_TAB_BG_COLOR:
+            {
+                if ( nSlot == FID_TAB_MENU_SET_TAB_BG_COLOR )
+                    nSlot = FID_TAB_SET_TAB_BG_COLOR;
+
+                SCTAB nTabNr = pViewData->GetTabNo();
+                ScMarkData& rMark = pViewData->GetMarkData();
+                SCTAB nTabSelCount = rMark.GetSelectCount();
+
+                ScUndoSetTabBgColorInfo*     aTabBgColorUndoInfo=NULL;
+                ScUndoSetTabBgColorInfoList* aTabBgColorUndoInfoList =NULL;
+
+                if ( !pDoc->IsDocEditable() )
+                    break;
+
+                if ( pDoc->IsTabProtected( nTabNr ) ) // ||nTabSelCount > 1
+                    break;
+
+                if( pReqArgs != NULL )
+                {
+                    BOOL                bDone = FALSE;
+                    const SfxPoolItem*  pItem;
+                    Color               aColor;
+                    if( IS_AVAILABLE( FN_PARAM_1, &pItem ) )
+                        nTabNr = ((const SfxUInt16Item*)pItem)->GetValue();
+
+                    if( IS_AVAILABLE( nSlot, &pItem ) )
+                        aColor = ((const SvxColorItem*)pItem)->GetValue();
+
+                    if ( nTabSelCount > 1 )
+                    {
+                        aTabBgColorUndoInfoList = new ScUndoSetTabBgColorInfoList();
+                        for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+                        {
+                            if ( rMark.GetTableSelect(nTab) && !pDoc->IsTabProtected(nTab) )
+                            {
+                                aTabBgColorUndoInfo = new ScUndoSetTabBgColorInfo();
+                                aTabBgColorUndoInfo->nTabId = nTab;
+                                aTabBgColorUndoInfo->aNewTabBgColor = aColor;
+                                aTabBgColorUndoInfoList->Insert(aTabBgColorUndoInfo);
+                            }
+                        }
+                        bDone = SetTabBgColor( aTabBgColorUndoInfoList );
+                    }
+                    else
+                    {
+                        bDone = SetTabBgColor( aColor, nCurrentTab ); //ScViewFunc.SetTabBgColor
+                    }
+                    if( bDone )
+                    {
+                        rReq.Done( *pReqArgs );
+                    }
+                }
+                else
+                {
+                    USHORT      nRet    = RET_OK; /// temp
+                    BOOL        bDone   = FALSE; /// temp
+                    Color       aTabBgColor;
+                    Color       aNewTabBgColor;
+
+                    aTabBgColor = pViewData->GetTabBgColor( nCurrentTab );
+                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                    AbstractScTabBgColorDlg* pDlg = pFact->CreateScTabBgColorDlg(
+                                                                GetDialogParent(),
+                                                                String(ScResId(SCSTR_SET_TAB_BG_COLOR)),
+                                                                String(ScResId(SCSTR_NO_TAB_BG_COLOR)),
+                                                                aTabBgColor,
+                                                                nSlot,RID_SCDLG_TAB_BG_COLOR);
+                    while ( !bDone && nRet == RET_OK )
+                    {
+                        nRet = pDlg->Execute();
+                        if( nRet == RET_OK )
+                        {
+                            Color aSelectedColor;
+                            pDlg->GetSelectedColor(aSelectedColor);
+                            aTabBgColorUndoInfoList = new ScUndoSetTabBgColorInfoList();
+                            if ( nTabSelCount > 1 )
+                            {
+                                for  (SCTAB nTab=0; nTab<nTabCount; nTab++)
+                                {
+                                    if ( rMark.GetTableSelect(nTab) && !pDoc->IsTabProtected(nTab) )
+                                    {
+                                        aTabBgColorUndoInfo = new ScUndoSetTabBgColorInfo();
+                                        aTabBgColorUndoInfo->nTabId = nTab;
+                                        aTabBgColorUndoInfo->aNewTabBgColor = aSelectedColor;
+                                        aTabBgColorUndoInfoList->Insert(aTabBgColorUndoInfo);
+                                    }
+                                }
+                                bDone = SetTabBgColor( aTabBgColorUndoInfoList );
+                            }
+                            else
+                            {
+                                bDone = SetTabBgColor( aSelectedColor, nCurrentTab ); //ScViewFunc.SetTabBgColor
+                            }
+                            if ( bDone )
+                            {
+                                rReq.AppendItem( SvxColorItem( aTabBgColor, nSlot ) );
+                                rReq.Done();
+                            }
+                            else
+                            {
+                                if( rReq.IsAPI() )
+                                {
+                                    StarBASIC::Error( SbERR_SETPROP_FAILED );
+                                }
+                            }
+                        }
+                    }
+                    delete( pDlg );
+                }
+            }
+            break;
         default:
             DBG_ERROR("Unbekannte Message bei ViewShell");
             break;
@@ -802,6 +920,23 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
                         rSet.DisableItem( nWhich );
                     else
                         rSet.Put( SfxBoolItem( nWhich, pDoc->IsLayoutRTL( nTab ) ) );
+                }
+                break;
+
+            case FID_TAB_MENU_SET_TAB_BG_COLOR:
+                {
+                    if ( !pDoc->IsDocEditable()
+                        || ( pDocShell && pDocShell->IsDocShared() )
+                        || pDoc->IsTabProtected(nTab) )
+                        rSet.DisableItem( nWhich );
+                }
+                break;
+
+            case FID_TAB_SET_TAB_BG_COLOR:
+                {
+                    Color aColor;
+                    aColor = pViewData->GetTabBgColor( nTab );
+                    rSet.Put( SvxColorItem( aColor, nWhich ) );
                 }
                 break;
         }

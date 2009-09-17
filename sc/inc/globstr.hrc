@@ -573,7 +573,10 @@
 #define STR_STYLE_FAMILY_CELL       433
 #define STR_STYLE_FAMILY_PAGE       434
 
-#define STR_COUNT                   435
+#define STR_UNDO_SET_TAB_BG_COLOR       435
+#define STR_UNDO_SET_MULTI_TAB_BG_COLOR 436
+
+#define STR_COUNT                   437
 
 #endif
 

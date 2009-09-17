@@ -89,6 +89,7 @@
 #include "funcdesc.hxx"
 #include "docuno.hxx"
 
+#include "tabbgcolor.hxx" //DBW
 
 // STATIC DATA ---------------------------------------------------------------
 
@@ -2273,6 +2274,28 @@ BOOL ScViewFunc::RenameTable( const String& rName, SCTAB nTab )
     return bSuccess;
 }
 
+
+//----------------------------------------------------------------------------
+
+BOOL ScViewFunc::SetTabBgColor( const Color& rColor, SCTAB nTab )
+{
+    BOOL bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( nTab, rColor, TRUE, FALSE );
+    if (bSuccess)
+    {
+        GetViewData()->GetViewShell()->UpdateInputHandler();
+    }
+    return bSuccess;
+}
+
+BOOL ScViewFunc::SetTabBgColor( ScUndoSetTabBgColorInfoList* rUndoSetTabBgColorInfoList )
+{
+    BOOL bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( rUndoSetTabBgColorInfoList, TRUE, FALSE );
+    if (bSuccess)
+    {
+        GetViewData()->GetViewShell()->UpdateInputHandler();
+    }
+    return bSuccess;
+}
 
 //----------------------------------------------------------------------------
 

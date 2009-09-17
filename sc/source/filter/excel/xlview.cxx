@@ -79,6 +79,7 @@ void XclTabViewData::SetDefaults()
     mbDefGridColor = true;
     mbShowFormulas = false;
     mbShowGrid = mbShowHeadings = mbShowZeros = mbShowOutline = true;
+    maTabBgColor.SetColor( COL_AUTO );
 }
 
 bool XclTabViewData::IsSplit() const

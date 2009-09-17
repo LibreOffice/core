@@ -546,6 +546,96 @@ ModalDialog RID_SCDLG_STRINPUT
         Size = MAP_APPFONT ( 110 , 8 ) ;
     };
 };
+ModalDialog RID_SCDLG_TAB_BG_COLOR
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 118 , 167 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Control TAB_BG_COLOR_CT_BORDER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 1 , 1 ) ; //12, 32
+        Size = MAP_APPFONT ( 116+2 , 145+2 ) ;
+        DialogControl = TRUE;
+    };
+    Control TAB_BG_COLOR_SET_BGDCOLOR
+    {
+        // * HelpId = HID_BACKGROUND_CTL_BGDCOLORSET ;
+        Hide = FALSE ;
+        Pos = MAP_APPFONT ( 0 , 0 ) ;
+        Size = MAP_APPFONT ( 116 , 145 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 82 , 151 ) ;
+        Size = MAP_APPFONT ( 35 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = FALSE ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 45 , 151 ) ;
+        Size = MAP_APPFONT ( 35 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 2 , 151 ) ;
+        Size = MAP_APPFONT ( 35 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = FALSE ;
+    };
+};
+/*
+ModalDialog RID_SCDLG_TAB_BG_COLOR
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 180 , 150 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Control TAB_BG_COLOR_CT_BORDER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 1 , 1 ) ; //12, 32
+        Size = MAP_APPFONT ( 116+2 , 145+2 ) ;
+        DialogControl = TRUE;
+    };
+    Control TAB_BG_COLOR_SET_BGDCOLOR
+    {
+        // * HelpId = HID_BACKGROUND_CTL_BGDCOLORSET ;
+        Hide = FALSE ;
+        Pos = MAP_APPFONT ( 0 , 0 ) ;
+        Size = MAP_APPFONT ( 116 , 145 ) ;
+        TabStop = TRUE ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 125 , 50 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 125 , 67 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = FALSE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 125 , 84 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = FALSE ;
+    };
+};
+*/
 /*
 ModalDialog RID_SCDLG_MTRINPUT
 {

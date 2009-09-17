@@ -61,6 +61,7 @@ interface Tables
     FID_TABLE_HIDE  [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
     FID_TABLE_SHOW  [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
         SID_SELECT_TABLES       [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TAB_MENU_SET_TAB_BG_COLOR   [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
 }
 
  // ===========================================================================

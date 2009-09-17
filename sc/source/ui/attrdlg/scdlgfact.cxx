@@ -65,6 +65,7 @@
 #include "scendlg.hxx" //add for ScNewScenarioDlg
 #include "shtabdlg.hxx" //add for ScShowTabDlg
 #include "strindlg.hxx" //add for ScStringInputDlg
+#include "tabbgcolordlg.hxx"//add for ScTabBgColorDlg
 #include "scuiimoptdlg.hxx" //add for ScImportOptionsDlg
 #include "attrdlg.hxx" //add for ScAttrDlg
 #include "hfedtdlg.hxx" //add for ScHFEditDlg
@@ -114,6 +115,7 @@ IMPL_ABSTDLG_BASE(AbstractScDPShowDetailDlg_Impl); //add for ScDPShowDetailDlg
 IMPL_ABSTDLG_BASE(AbstractScNewScenarioDlg_Impl); //add for ScNewScenarioDlg
 IMPL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl); //add for ScShowTabDlg
 IMPL_ABSTDLG_BASE(AbstractScStringInputDlg_Impl); //add for ScStringInputDlg
+IMPL_ABSTDLG_BASE(AbstractScTabBgColorDlg_Impl); //add for ScTabBgColorDlg
 IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl); //add for ScImportOptionsDlg
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl); //add for ScAttrDlg, ScHFEditDlg, ScStyleDlg, ScSubTotalDlg,ScCharDlg, ScParagraphDlg, ScValidationDlg, ScSortDlg
 
@@ -613,6 +615,14 @@ void AbstractScStringInputDlg_Impl::GetInputString( String& rString ) const  //a
     pDlg->GetInputString( rString );
 }
 //add for AbstractScStringInputDlg_Impl end
+
+//add for AbstractScTabBgColorDlg_Impl begin
+void AbstractScTabBgColorDlg_Impl::GetSelectedColor( Color& rColor ) const  //add for ScTabBgColorDlg
+{
+    pDlg->GetSelectedColor( rColor );
+}
+//add for AbstractScTabBgColorDlg_Impl end
+
 
 //add for AbstractScImportOptionsDlg_Impl begin
 void AbstractScImportOptionsDlg_Impl::GetImportOptions( ScImportOptions& rOptions ) const  //add for ScImportOptionsDlg
@@ -1259,6 +1269,31 @@ AbstractScShowTabDlg * ScAbstractDialogFactory_Impl::CreateScShowTabDlg ( Window
     return 0;
 }
  //add for ScStringInputDlg end
+
+//add for ScTabBgColorDlg begin
+AbstractScTabBgColorDlg * ScAbstractDialogFactory_Impl::CreateScTabBgColorDlg (
+                                                            Window* pParent,
+                                                            const String& rTitle,
+                                                            const String& rTabBgColorNoColorText,
+                                                            const Color& rDefaultColor,
+                                                            ULONG nHelpId ,
+                                                            int nId )
+{
+ScTabBgColorDlg * pDlg=NULL;
+switch ( nId )
+{
+    case RID_SCDLG_TAB_BG_COLOR :
+        pDlg = new ScTabBgColorDlg( pParent, rTitle, rTabBgColorNoColorText, rDefaultColor, nHelpId );
+        break;
+    default:
+        break;
+}
+
+if ( pDlg )
+    return new AbstractScTabBgColorDlg_Impl( pDlg );
+return 0;
+}
+//add for ScTabBgColorDlg end
 
 //add for ScImportOptionsDlg begin
 AbstractScImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScImportOptionsDlg ( Window*               pParent,

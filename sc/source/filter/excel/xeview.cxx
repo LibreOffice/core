@@ -259,6 +259,35 @@ void XclExpSelection::WriteBody( XclExpStream& rStrm )
     maSelData.maXclSelection.Write( rStrm, false );
 }
 
+// ----------------------------------------------------------------------------
+
+XclExpTabBgColor::XclExpTabBgColor( const XclTabViewData& rTabViewData ) :
+    XclExpRecord( EXC_ID_SHEETEXT, 18 ),
+    mrTabViewData( rTabViewData )
+{
+}
+//TODO Fix savexml...
+/*void XclExpTabBgColor::SaveXml( XclExpXmlStream& rStrm )
+{
+}*/
+
+void XclExpTabBgColor::WriteBody( XclExpStream& rStrm )
+{
+    if ( mrTabViewData.IsDefaultTabBgColor() )
+        return;
+    sal_uInt16 rt = 0x0862; //rt
+    sal_uInt16 grbitFrt = 0x0000; //grbit must be set to 0
+    sal_uInt32 unused = 0x00000000; //Use twice...
+    sal_uInt32 cb = 0x00000014; // Record Size, may be larger in future...
+    sal_uInt16 reserved = 0x0000; //trailing bits are 0
+    sal_uInt16 TabBgColorIndex;
+    XclExpPalette& rPal = rStrm.GetRoot().GetPalette();
+    TabBgColorIndex = rPal.GetColorIndex(mrTabViewData.mnTabBgColorId);
+    if (TabBgColorIndex < 8 || TabBgColorIndex > 63 ) // only numbers 8 - 63 are valid numbers
+        TabBgColorIndex = 127; //Excel specs: 127 makes excel ignore tab color information.
+    rStrm << rt << grbitFrt << unused << unused << cb << TabBgColorIndex << reserved;
+}
+
 // Sheet view settings ========================================================
 
 namespace {
@@ -368,6 +397,14 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
         maData.mnNormalZoom     = lclGetXclZoom( rTabSett.mnNormalZoom, EXC_WIN2_NORMALZOOM_DEF );
         maData.mnPageZoom       = lclGetXclZoom( rTabSett.mnPageZoom, EXC_WIN2_PAGEZOOM_DEF );
         maData.mnCurrentZoom    = maData.mbPageMode ? maData.mnPageZoom : maData.mnNormalZoom;
+
+        // Tab Bg Color
+        if ( GetBiff() == EXC_BIFF8 && !rTabSett.IsDefaultTabBgColor() )
+        {
+            XclExpPalette& rPal = GetPalette();
+            maData.maTabBgColor = rTabSett.maTabBgColor;
+            maData.mnTabBgColorId = rPal.InsertColor(maData.maTabBgColor, EXC_COLOR_TABBG, EXC_COLOR_NOTABBG );
+        }
     }
 }
 
@@ -380,6 +417,7 @@ void XclExpTabViewSettings::Save( XclExpStream& rStrm )
     WriteSelection( rStrm, EXC_PANE_TOPRIGHT );
     WriteSelection( rStrm, EXC_PANE_BOTTOMLEFT );
     WriteSelection( rStrm, EXC_PANE_BOTTOMRIGHT );
+    WriteTabBgColor( rStrm );
 }
 
 static void lcl_WriteSelection( XclExpXmlStream& rStrm, const XclTabViewData& rData, sal_uInt8 nPane )
@@ -494,5 +532,10 @@ void XclExpTabViewSettings::WriteSelection( XclExpStream& rStrm, sal_uInt8 nPane
         XclExpSelection( maData, nPane ).Save( rStrm );
 }
 
+void XclExpTabViewSettings::WriteTabBgColor( XclExpStream& rStrm ) const
+{
+    if ( !maData.IsDefaultTabBgColor() )
+        XclExpTabBgColor( maData ).Save( rStrm );
+}
 // ============================================================================
 

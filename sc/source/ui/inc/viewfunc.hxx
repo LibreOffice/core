@@ -32,6 +32,8 @@
 
 #include "tabview.hxx"
 
+#include "tabbgcolor.hxx"
+
 #ifndef _SVSTDARR_SHORTS
 #define _SVSTDARR_SHORTS
 #include <svtools/svstdarr.hxx>
@@ -275,6 +277,9 @@ public:
     void            ImportTables( ScDocShell* pSrcShell,
                                     SCTAB nCount, const SCTAB* pSrcTabs,
                                     BOOL bLink,SCTAB nTab);
+
+    BOOL            SetTabBgColor( const Color& rColor, SCTAB nTabNr );
+    BOOL            SetTabBgColor( ScUndoSetTabBgColorInfoList* rUndoSetTabBgColorInfoList );
 
     void            InsertTableLink( const String& rFile,
                                         const String& rFilter, const String& rOptions,

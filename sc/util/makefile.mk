@@ -259,6 +259,7 @@ LIB8OBJFILES = \
         $(SLO)$/attrdlg.obj	\
         $(SLO)$/scuiimoptdlg.obj	\
         $(SLO)$/strindlg.obj		\
+        $(SLO)$/tabbgcolordlg.obj   \
         $(SLO)$/shtabdlg.obj		\
         $(SLO)$/scendlg.obj		\
         $(SLO)$/pvfundlg.obj	\

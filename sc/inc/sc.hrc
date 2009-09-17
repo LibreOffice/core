@@ -1650,6 +1650,15 @@
 #define MID_3   3
 #define MID_4   4
 
+// Sheet tab color
+#define FID_TAB_MENU_SET_TAB_BG_COLOR   (SC_OOO_BUILD_START + 7)
+#define FID_TAB_SET_TAB_BG_COLOR        (SC_OOO_BUILD_START + 8)
+
+#define SCSTR_SET_TAB_BG_COLOR          (SC_OOO_BUILD_START + 9)
+#define SCSTR_NO_TAB_BG_COLOR           (SC_OOO_BUILD_START + 10)
+
+#define RID_SCDLG_TAB_BG_COLOR          (SC_OOO_BUILD_START + 11)
+
 #endif
 
 

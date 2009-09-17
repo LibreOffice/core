@@ -214,6 +214,8 @@
                     <menu:menuitem menu:id=".uno:Hide"/>
                     <menu:menuitem menu:id=".uno:Show"/>
                     <menu:menuitem menu:id=".uno:SheetRightToLeft"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:SetTabBgColor"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:ToggleMergeCells"/>

@@ -70,6 +70,9 @@
 #include "drwlayer.hxx"
 #include "scresid.hxx"
 
+// for set tab bg color
+#include "viewdata.hxx"
+
 extern BOOL bDrawIsInUndo;          //! irgendwo als Member !!!
 
 using namespace com::sun::star;
@@ -93,6 +96,7 @@ TYPEINIT1(ScUndoScenarioFlags,  SfxUndoAction);
 TYPEINIT1(ScUndoRenameObject,   SfxUndoAction);
 TYPEINIT1(ScUndoLayoutRTL,      SfxUndoAction);
 //UNUSED2009-05 TYPEINIT1(ScUndoSetGrammar,     SfxUndoAction);
+TYPEINIT1(ScUndoSetTabBgColor,  SfxUndoAction);
 
 
 // -----------------------------------------------------------------------
@@ -779,6 +783,113 @@ BOOL ScUndoCopyTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return FALSE;
 }
 
+//---------------------------------------------------------------------------------
+//
+//      Tab Bg Color
+//
+
+ScUndoSetTabBgColor::ScUndoSetTabBgColor( ScDocShell* pNewDocShell,
+                                        SCTAB nT,
+                                        const Color& aOTabBgColor,
+                                        const Color& aNTabBgColor) :
+    ScSimpleUndo( pNewDocShell ),
+    nTab     ( nT ),
+    bIsMultipleUndo ( FALSE ),
+    aUndoSetTabBgColorInfoList ( NULL )
+{
+    aOldTabBgColor = aOTabBgColor;
+    aNewTabBgColor = aNTabBgColor;
+}
+
+ScUndoSetTabBgColor::ScUndoSetTabBgColor( ScDocShell* pNewDocShell,
+                                        ScUndoSetTabBgColorInfoList* pUndoSetTabBgColorInfoList) :
+    ScSimpleUndo( pNewDocShell ),
+    bIsMultipleUndo ( TRUE )
+{
+    aUndoSetTabBgColorInfoList = pUndoSetTabBgColorInfoList;
+}
+
+__EXPORT ScUndoSetTabBgColor::~ScUndoSetTabBgColor()
+{
+}
+
+String __EXPORT ScUndoSetTabBgColor::GetComment() const
+{
+    if (bIsMultipleUndo && aUndoSetTabBgColorInfoList && aUndoSetTabBgColorInfoList->Count() > 1)
+        return ScGlobal::GetRscString( STR_UNDO_SET_MULTI_TAB_BG_COLOR );
+    return ScGlobal::GetRscString( STR_UNDO_SET_TAB_BG_COLOR );
+}
+
+void ScUndoSetTabBgColor::DoChange( SCTAB nTabP, const Color& rTabBgColor ) const
+{
+    if (bIsMultipleUndo)
+        return;
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if (pViewShell)
+    {
+        ScViewData* pViewData = pViewShell->GetViewData();
+        if (pViewData)
+        {
+            pViewData->SetTabBgColor( rTabBgColor, nTabP );
+            pDocShell->PostPaintExtras();
+            pDocShell->PostDataChanged();
+            SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+            pViewShell->UpdateInputHandler();
+        }
+    }
+}
+
+void ScUndoSetTabBgColor::DoChange(BOOL bUndoType) const
+{
+    if (!bIsMultipleUndo)
+        return;
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if (pViewShell)
+    {
+        ScViewData* pViewData = pViewShell->GetViewData();
+        if (pViewData)
+        {
+            ScUndoSetTabBgColorInfo* aUndoSetTabBgColorInfo=NULL;
+            for (USHORT i=0; i < aUndoSetTabBgColorInfoList->Count(); i++)
+            {
+                aUndoSetTabBgColorInfo = aUndoSetTabBgColorInfoList->GetObject(i);
+                pViewData->SetTabBgColor(
+                    bUndoType ? aUndoSetTabBgColorInfo->aOldTabBgColor : aUndoSetTabBgColorInfo->aNewTabBgColor,
+                    aUndoSetTabBgColorInfo->nTabId);
+            }
+            pDocShell->PostPaintExtras();
+            pDocShell->PostDataChanged();
+            SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+            pViewShell->UpdateInputHandler();
+        }
+    }
+}
+
+void __EXPORT ScUndoSetTabBgColor::Undo()
+{
+    if ( bIsMultipleUndo )
+        DoChange(TRUE);
+    else
+        DoChange(nTab, aOldTabBgColor);
+}
+
+void __EXPORT ScUndoSetTabBgColor::Redo()
+{
+    if ( bIsMultipleUndo )
+        DoChange(FALSE);
+    else
+        DoChange(nTab, aNewTabBgColor);
+}
+
+void __EXPORT ScUndoSetTabBgColor::Repeat(SfxRepeatTarget& /* rTarget */)
+{
+    //  No Repeat
+}
+
+BOOL __EXPORT ScUndoSetTabBgColor::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+{
+    return FALSE;
+}
 
 // -----------------------------------------------------------------------
 //

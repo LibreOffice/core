@@ -193,6 +193,15 @@ Menu RID_POPUP_TAB
             HelpId = FID_TAB_RTL ;
             Text [ en-US ] = "S~heet Right-To-Left" ;
         };
+        //------------------------------
+        MenuItem { Separator = TRUE ; };
+        //------------------------------
+        MenuItem
+        {
+            Identifier = FID_TAB_MENU_SET_TAB_BG_COLOR ;
+            HelpId = FID_TAB_MENU_SET_TAB_BG_COLOR ;
+            Text [ en-US ] = "~Tab Color..." ;
+        };
     };
 };
 

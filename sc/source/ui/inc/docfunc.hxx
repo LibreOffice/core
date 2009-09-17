@@ -34,6 +34,7 @@
 #include <tools/link.hxx>
 #include "global.hxx"
 #include "formula/grammar.hxx"
+#include "tabbgcolor.hxx"
 
 class ScEditEngineDefaulter;
 class SdrUndoAction;
@@ -119,6 +120,10 @@ public:
     BOOL            InsertTable( SCTAB nTab, const String& rName, BOOL bRecord, BOOL bApi );
     BOOL            RenameTable( SCTAB nTab, const String& rName, BOOL bRecord, BOOL bApi );
     BOOL            DeleteTable( SCTAB nTab, BOOL bRecord, BOOL bApi );
+
+    BOOL            SetTabBgColor( SCTAB nTab, const Color& rColor, BOOL bRecord, BOOL bApi );
+    BOOL            SetTabBgColor( ScUndoSetTabBgColorInfoList* rUndoSetTabBgColorInfoList,
+                                    BOOL bRecord, BOOL bApi );
 
     BOOL            SetTableVisible( SCTAB nTab, BOOL bVisible, BOOL bApi );
 
