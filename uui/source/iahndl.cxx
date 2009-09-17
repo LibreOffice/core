@@ -77,8 +77,10 @@
 #include "com/sun/star/task/XInteractionRequest.hpp"
 #include "com/sun/star/task/XInteractionRetry.hpp"
 #include "com/sun/star/task/XPasswordContainer.hpp"
+#include "com/sun/star/task/XUrlContainer.hpp"
 #include "com/sun/star/task/XInteractionAskLater.hpp"
 #include "com/sun/star/ucb/AuthenticationRequest.hpp"
+#include "com/sun/star/ucb/URLAuthenticationRequest.hpp"
 #include "com/sun/star/ucb/CertificateValidationRequest.hpp"
 #include "com/sun/star/ucb/HandleCookiesRequest.hpp"
 #include "com/sun/star/ucb/InteractiveAppException.hpp"
@@ -99,6 +101,7 @@
 #include "com/sun/star/ucb/XInteractionCookieHandling.hpp"
 #include "com/sun/star/ucb/XInteractionReplaceExistingData.hpp"
 #include "com/sun/star/ucb/XInteractionSupplyAuthentication.hpp"
+#include "com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp"
 #include "com/sun/star/ucb/XInteractionSupplyName.hpp"
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -110,7 +113,6 @@
 #include "tools/rcid.h"
 #include "vcl/svapp.hxx"
 #include "svtools/svtools.hrc"
-#include "svtools/loginerr.hxx"
 #include "svtools/httpcook.hxx"
 #include "svtools/sfxecode.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
@@ -134,6 +136,8 @@
 #include "filechanged.hxx"
 #include "trylater.hxx"
 #include "lockfailed.hxx"
+#include "loginerr.hxx"
+
 #include <comphelper/processfactory.hxx>
 #include <svtools/zforlist.hxx>
 using namespace com::sun;
@@ -201,6 +205,8 @@ getContinuations(
     star::uno::Reference< star::task::XInteractionAbort > * pAbort,
     star::uno::Reference< star::ucb::XInteractionSupplyAuthentication > *
         pSupplyAuthentication,
+    star::uno::Reference< star::ucb::XInteractionSupplyAuthentication2 > *
+        pSupplyAuthentication2,
     star::uno::Reference< star::task::XInteractionPassword > * pPassword,
     star::uno::Reference< star::ucb::XInteractionSupplyName > *
         pSupplyName,
@@ -247,7 +253,16 @@ getContinuations(
                           star::ucb::XInteractionSupplyAuthentication >(
                       rContinuations[i], star::uno::UNO_QUERY);
             if (pSupplyAuthentication->is())
+            {
+                // is it even a supplyauthentication2, which is derived from
+                // supplyauthentication?
+                if (pSupplyAuthentication2 && !pSupplyAuthentication2->is())
+                    *pSupplyAuthentication2
+                        = star::uno::Reference<
+                            star::ucb::XInteractionSupplyAuthentication2 >(
+                                rContinuations[i], star::uno::UNO_QUERY);
                 continue;
+            }
         }
         if (pPassword && !pPassword->is())
         {
@@ -610,7 +625,7 @@ bool UUIInteractionHelper::handleMessageboxRequests(
             star::task::XInteractionDisapprove > xDisapprove;
         getContinuations(
             rRequest->getContinuations(),
-            &xApprove, &xDisapprove, 0, 0, 0, 0, 0, 0);
+            &xApprove, &xDisapprove, 0, 0, 0, 0, 0, 0, 0);
 
         if( xApprove.is() && xDisapprove.is() )
         {
@@ -1097,11 +1112,21 @@ bool UUIInteractionHelper::handleDialogRequests(
 {
     star::uno::Any aAnyRequest(rRequest->getRequest());
 
+    star::ucb::URLAuthenticationRequest aURLAuthenticationRequest;
+    if (aAnyRequest >>= aURLAuthenticationRequest)
+    {
+        handleAuthenticationRequest(aURLAuthenticationRequest,
+                                    rRequest->getContinuations(),
+                                    aURLAuthenticationRequest.URL);
+        return true;
+    }
+
     star::ucb::AuthenticationRequest aAuthenticationRequest;
     if (aAnyRequest >>= aAuthenticationRequest)
     {
         handleAuthenticationRequest(aAuthenticationRequest,
-                                    rRequest->getContinuations());
+                                    rRequest->getContinuations(),
+                                    rtl::OUString());
         return true;
     }
 
@@ -1345,10 +1370,12 @@ UUIInteractionHelper::handle_impl(
                         Reference< uno::XInterface > xIfc =
                             m_xServiceFactory->createInstance(aIt->ServiceName);
 
-                        Reference< com::sun::star::task::XInteractionHandler2 > xInteractionHandler =
-                            Reference< com::sun::star::task::XInteractionHandler2 >( xIfc, UNO_QUERY );
+                        Reference< task::XInteractionHandler2 >
+                            xInteractionHandler( xIfc, UNO_QUERY );
 
-                        OSL_ENSURE( xInteractionHandler.is(), "Custom Interactionhandler does not implement mandatory interface XInteractionHandler2!" );
+                        OSL_ENSURE( xInteractionHandler.is(),
+                                    "Custom Interactionhandler does not implement "
+                                    "mandatory interface XInteractionHandler2!" );
                         if (xInteractionHandler.is())
                             if (xInteractionHandler->handleInteractionRequest(rRequest))
                                 return true;
@@ -1512,7 +1539,8 @@ rtl::OUString UUIInteractionHelper::getContextProperty() SAL_THROW(())
 
 bool
 UUIInteractionHelper::initPasswordContainer(
-    star::uno::Reference< star::task::XPasswordContainer > * pContainer)
+    star::uno::Reference< star::task::XPasswordContainer > * pContainer,
+    star::uno::Reference< star::task::XUrlContainer > * pUrlContainer)
     const SAL_THROW(())
 {
     OSL_ENSURE(pContainer, "specification violation");
@@ -1527,11 +1555,17 @@ UUIInteractionHelper::initPasswordContainer(
                                   RTL_CONSTASCII_USTRINGPARAM(
                                      "com.sun.star.task.PasswordContainer"))),
                       star::uno::UNO_QUERY);
+
+            if ( pContainer->is() )
+            {
+                *pUrlContainer = star::uno::Reference< star::task::XUrlContainer >( *pContainer, UNO_QUERY );
+                OSL_ENSURE( pUrlContainer->is(), "Got no XUrlContainer!" );
+            }
         }
         catch (star::uno::Exception const &)
         {}
     OSL_ENSURE(pContainer->is(), "unexpected situation");
-    return pContainer->is();
+    return pContainer->is() && pUrlContainer->is();
 }
 
 
@@ -1710,6 +1744,7 @@ void UUIInteractionHelper::executeLoginDialog(LoginErrorInfo & rInfo,
                             != 0;
         bool bSavePassword = rInfo.GetIsPersistentPassword()
                              || rInfo.GetIsSavePassword();
+        bool bCanUseSysCreds = rInfo.GetCanUseSystemCredentials();
 
         sal_uInt16 nFlags = 0;
         if (rInfo.GetPath().Len() == 0)
@@ -1723,6 +1758,9 @@ void UUIInteractionHelper::executeLoginDialog(LoginErrorInfo & rInfo,
 
         if (!bSavePassword)
             nFlags |= LF_NO_SAVEPASSWORD;
+
+        if (!bCanUseSysCreds)
+            nFlags |= LF_NO_USESYSCREDS;
 
         std::auto_ptr< ResMgr >
             xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
@@ -1752,12 +1790,18 @@ void UUIInteractionHelper::executeLoginDialog(LoginErrorInfo & rInfo,
             xDialog->SetSavePassword(rInfo.GetIsSavePassword());
         }
 
+        if ( bCanUseSysCreds )
+            xDialog->SetUseSystemCredentials( rInfo.GetIsUseSystemCredentials() );
+
         rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
                                                        ERRCODE_BUTTON_CANCEL);
         rInfo.SetUserName(xDialog->GetName());
         rInfo.SetPassword(xDialog->GetPassword());
         rInfo.SetAccount(xDialog->GetAccount());
         rInfo.SetSavePassword(xDialog->IsSavePassword());
+
+        if ( bCanUseSysCreds )
+          rInfo.SetIsUseSystemCredentials( xDialog->IsUseSystemCredentials() );
     }
     catch (std::bad_alloc const &)
     {
@@ -2119,12 +2163,87 @@ UUIInteractionHelper::getInteractionHandler() const
     return xIH;
 }
 
+namespace
+{
+bool fillContinuation(
+    bool bUseSystemCredentials,
+    const star::ucb::AuthenticationRequest & rRequest,
+    const star::task::UrlRecord & aRec,
+    const star::uno::Reference< star::ucb::XInteractionSupplyAuthentication > &
+        xSupplyAuthentication,
+    const star::uno::Reference< star::ucb::XInteractionSupplyAuthentication2 > &
+        xSupplyAuthentication2,
+    bool bCanUseSystemCredentials,
+    bool bCheckForEqualPasswords )
+{
+    if ( bUseSystemCredentials )
+    {
+        // "use system creds" record found.
+        // Wants client that we use it?
+        if ( xSupplyAuthentication2.is() &&
+             bCanUseSystemCredentials )
+        {
+            xSupplyAuthentication2->setUseSystemCredentials( sal_True );
+            return true;
+        }
+        return false;
+    }
+    else if (aRec.UserList.getLength() != 0)
+    {
+        if (aRec.UserList[0].Passwords.getLength() == 0)
+        {
+            // Password sequence can be empty, for instance if master
+            // password was not given (e.g. master pw dialog canceled)
+            // pw container does not throw NoMasterException in this case.
+            // bug???
+            return false;
+        }
+
+        // "user/pass" record found.
+        if (!bCheckForEqualPasswords || !rRequest.HasPassword
+            || rRequest.Password != aRec.UserList[0].Passwords[0]) // failed login attempt?
+        {
+            if (xSupplyAuthentication->canSetUserName())
+                xSupplyAuthentication->
+                    setUserName(aRec.UserList[0].UserName.getStr());
+
+            if (xSupplyAuthentication->canSetPassword())
+                xSupplyAuthentication->
+                    setPassword(aRec.UserList[0].Passwords[0].getStr());
+            if (aRec.UserList[0].Passwords.getLength() > 1)
+            {
+                if (rRequest.HasRealm)
+                {
+                    if (xSupplyAuthentication->canSetRealm())
+                        xSupplyAuthentication->
+                            setRealm(aRec.UserList[0].Passwords[1].
+                                getStr());
+                }
+                else if (xSupplyAuthentication->canSetAccount())
+                    xSupplyAuthentication->
+                        setAccount(aRec.UserList[0].Passwords[1].
+                            getStr());
+            }
+
+            if ( xSupplyAuthentication2.is() &&
+                bCanUseSystemCredentials )
+                xSupplyAuthentication2->setUseSystemCredentials( sal_False );
+
+            return true;
+        }
+    }
+    return false;
+}
+
+}
+
 void
 UUIInteractionHelper::handleAuthenticationRequest(
     star::ucb::AuthenticationRequest const & rRequest,
     star::uno::Sequence< star::uno::Reference<
                              star::task::XInteractionContinuation > > const &
-    rContinuations)
+    rContinuations,
+    const rtl::OUString & rURL)
     SAL_THROW((star::uno::RuntimeException))
 {
     star::uno::Reference< star::task::XInteractionHandler > xIH;
@@ -2133,9 +2252,12 @@ UUIInteractionHelper::handleAuthenticationRequest(
     star::uno::Reference< star::task::XInteractionAbort > xAbort;
     star::uno::Reference< star::ucb::XInteractionSupplyAuthentication >
         xSupplyAuthentication;
+    star::uno::Reference< star::ucb::XInteractionSupplyAuthentication2 >
+        xSupplyAuthentication2;
     getContinuations(
         rContinuations,
-        0, 0, &xRetry, &xAbort, &xSupplyAuthentication, 0, 0, 0 );
+        0, 0, &xRetry, &xAbort,
+        &xSupplyAuthentication, &xSupplyAuthentication2, 0, 0, 0 );
     bool bRemember;
     bool bRememberPersistent;
     if (xSupplyAuthentication.is())
@@ -2158,90 +2280,103 @@ UUIInteractionHelper::handleAuthenticationRequest(
         bRememberPersistent = false;
     }
 
+    sal_Bool bCanUseSystemCredentials;
+    sal_Bool bDefaultUseSystemCredentials;
+    if (xSupplyAuthentication2.is())
+    {
+        bCanUseSystemCredentials
+          =  xSupplyAuthentication2->canUseSystemCredentials(
+            bDefaultUseSystemCredentials );
+    }
+    else
+    {
+        bCanUseSystemCredentials = sal_False;
+        bDefaultUseSystemCredentials = sal_False;
+    }
+
     com::sun::star::uno::Reference< com::sun::star::task::XPasswordContainer >
         xContainer;
+    com::sun::star::uno::Reference< com::sun::star::task::XUrlContainer >
+        xUrlContainer;
+
+    if ( bCanUseSystemCredentials && initPasswordContainer( &xContainer, &xUrlContainer ) )
+    {
+        // Runtime / Persistent info avail for current auth request?
+
+        rtl::OUString aResult = xUrlContainer->findUrl(
+            rURL.getLength() ? rURL : rRequest.ServerName );
+        if ( aResult.getLength() > 0 )
+        {
+            if ( fillContinuation( true,
+                                   rRequest,
+                                   star::task::UrlRecord(),
+                                   xSupplyAuthentication,
+                                   xSupplyAuthentication2,
+                                   bCanUseSystemCredentials,
+                                   false ) )
+            {
+                xSupplyAuthentication->select();
+                return;
+            }
+        }
+    }
 
     // xContainer works with userName passwdSequences pairs:
     if (rRequest.HasUserName
         && rRequest.HasPassword
-        && initPasswordContainer(&xContainer))
+        && initPasswordContainer(&xContainer, &xUrlContainer))
     {
         xIH = getInteractionHandler();
         try
         {
             if (rRequest.UserName.getLength() == 0)
             {
-                star::task::UrlRecord
-                    aRec(xContainer->find(rRequest.ServerName, xIH));
-                if (aRec.UserList.getLength() != 0)
+                star::task::UrlRecord aRec;
+                if ( rURL.getLength() )
+                    aRec = xContainer->find(rURL, xIH);
+
+                if ( aRec.UserList.getLength() == 0 )
                 {
-                    if (xSupplyAuthentication->canSetUserName())
-                        xSupplyAuthentication->
-                            setUserName(aRec.UserList[0].UserName.getStr());
-                    if (xSupplyAuthentication->canSetPassword())
-                    {
-                        OSL_ENSURE(aRec.UserList[0].Passwords.getLength() != 0,
-                                   "empty password list");
-                        xSupplyAuthentication->
-                            setPassword(
-                aRec.UserList[0].Passwords[0].getStr());
-                    }
-                    if (aRec.UserList[0].Passwords.getLength() > 1)
-                    {
-                        if (rRequest.HasRealm)
-                        {
-                            if (xSupplyAuthentication->canSetRealm())
-                                xSupplyAuthentication->
-                                    setRealm(aRec.UserList[0].Passwords[1].
-                                             getStr());
-                        }
-                        else if (xSupplyAuthentication->canSetAccount())
-                            xSupplyAuthentication->
-                                setAccount(aRec.UserList[0].Passwords[1].
-                                           getStr());
-                    }
+                    // compat: try server name.
+                    aRec = xContainer->find(rRequest.ServerName, xIH);
+                }
+
+                if ( fillContinuation( false,
+                                       rRequest,
+                                       aRec,
+                                       xSupplyAuthentication,
+                                       xSupplyAuthentication2,
+                                       bCanUseSystemCredentials,
+                                       false ) )
+                {
                     xSupplyAuthentication->select();
                     return;
                 }
             }
             else
             {
-                star::task::UrlRecord
-                    aRec(xContainer->findForName(rRequest.ServerName,
-                                                 rRequest.UserName,
-                                                 xIH));
-                if (aRec.UserList.getLength() != 0)
+                star::task::UrlRecord aRec;
+                if ( rURL.getLength() )
+                    aRec = xContainer->findForName(
+                        rURL, rRequest.UserName, xIH);
+
+                if ( aRec.UserList.getLength() == 0 )
                 {
-                    OSL_ENSURE(aRec.UserList[0].Passwords.getLength() != 0,
-                               "empty password list");
-                    if (!rRequest.HasPassword
-                        || rRequest.Password != aRec.UserList[0].Passwords[0])
-                    {
-                        if (xSupplyAuthentication->canSetUserName())
-                            xSupplyAuthentication->
-                                setUserName(
-                    aRec.UserList[0].UserName.getStr());
-                        if (xSupplyAuthentication->canSetPassword())
-                            xSupplyAuthentication->
-                                setPassword(aRec.UserList[0].Passwords[0].
-                                            getStr());
-                        if (aRec.UserList[0].Passwords.getLength() > 1)
-                        {
-                            if (rRequest.HasRealm)
-                            {
-                                if (xSupplyAuthentication->canSetRealm())
-                                    xSupplyAuthentication->
-                                        setRealm(aRec.UserList[0].Passwords[1].
-                                                                  getStr());
-                            }
-                            else if (xSupplyAuthentication->canSetAccount())
-                                xSupplyAuthentication->
-                                    setAccount(aRec.UserList[0].Passwords[1].
-                                               getStr());
-                        }
-                        xSupplyAuthentication->select();
-                        return;
-                    }
+                    // compat: try server name.
+                    aRec = xContainer->findForName(
+                        rRequest.ServerName, rRequest.UserName, xIH);
+                }
+
+                if ( fillContinuation( false,
+                                       rRequest,
+                                       aRec,
+                                       xSupplyAuthentication,
+                                       xSupplyAuthentication2,
+                                       bCanUseSystemCredentials,
+                                       true ) )
+                {
+                    xSupplyAuthentication->select();
+                    return;
                 }
             }
         }
@@ -2261,6 +2396,8 @@ UUIInteractionHelper::handleAuthenticationRequest(
     aInfo.SetErrorText(rRequest.Diagnostic);
     aInfo.SetPersistentPassword(bRememberPersistent);
     aInfo.SetSavePassword(bRemember);
+    aInfo.SetCanUseSystemCredentials( bCanUseSystemCredentials );
+    aInfo.SetIsUseSystemCredentials( bDefaultUseSystemCredentials );
     aInfo.SetModifyAccount(rRequest.HasAccount
                            && xSupplyAuthentication.is()
                            && xSupplyAuthentication->canSetAccount());
@@ -2293,34 +2430,51 @@ UUIInteractionHelper::handleAuthenticationRequest(
             else if (xSupplyAuthentication->canSetAccount())
                 xSupplyAuthentication->setAccount(aInfo.GetAccount());
 
+            if ( xSupplyAuthentication2.is() && bCanUseSystemCredentials )
+                xSupplyAuthentication2->setUseSystemCredentials(
+                    aInfo.GetIsUseSystemCredentials() );
+
             xSupplyAuthentication->select();
         }
-        // Empty user name can not be valid:
-        if (aInfo.GetUserName().Len() != 0
-            && initPasswordContainer(&xContainer))
+
+        if ( aInfo.GetIsUseSystemCredentials() )
         {
-            star::uno::Sequence< rtl::OUString >
-                aPassList(aInfo.GetAccount().Len() == 0 ? 1 : 2);
-            aPassList[0] = aInfo.GetPassword();
-            if (aInfo.GetAccount().Len() != 0)
-                aPassList[1] = aInfo.GetAccount();
+            if (aInfo.GetIsSavePassword())
+            {
+                if ( initPasswordContainer(&xContainer, &xUrlContainer) )
+                    xUrlContainer->addUrl(
+                      rURL.getLength() ? rURL : rRequest.ServerName,
+                      bRememberPersistent );
+            }
+        }
+        else if (aInfo.GetUserName().Len() != 0 // Empty user name can not be valid:
+            && initPasswordContainer(&xContainer, &xUrlContainer))
+        {
             try
             {
                 if (aInfo.GetIsSavePassword())
                 {
+                    star::uno::Sequence< rtl::OUString >
+                        aPassList(aInfo.GetAccount().Len() == 0 ? 1 : 2);
+                    aPassList[0] = aInfo.GetPassword();
+                    if (aInfo.GetAccount().Len() != 0)
+                        aPassList[1] = aInfo.GetAccount();
+
                     if (!xIH.is())
                         xIH = getInteractionHandler();
 
                     if (bRememberPersistent)
-                        xContainer->addPersistent(rRequest.ServerName,
-                                                  aInfo.GetUserName(),
-                                                  aPassList,
-                                                  xIH);
+                        xContainer->addPersistent(
+                            rURL.getLength() ? rURL : rRequest.ServerName,
+                            aInfo.GetUserName(),
+                            aPassList,
+                            xIH);
                     else
-                        xContainer->add(rRequest.ServerName,
-                                        aInfo.GetUserName(),
-                                        aPassList,
-                                        xIH);
+                        xContainer->add(
+                            rURL.getLength() ? rURL : rRequest.ServerName,
+                            aInfo.GetUserName(),
+                            aPassList,
+                            xIH);
                 }
             }
             catch (star::task::NoMasterException const &)
@@ -2375,7 +2529,7 @@ UUIInteractionHelper::handleCertificateValidationRequest(
     star::uno::Reference< star::task::XInteractionAbort > xAbort;
 
     getContinuations(
-        rContinuations, &xApprove, 0, 0, &xAbort, 0, 0, 0, 0);
+        rContinuations, &xApprove, 0, 0, &xAbort, 0, 0, 0, 0, 0);
 
     sal_Int32 failures = rRequest.CertificateValidity;
 
@@ -2502,7 +2656,7 @@ UUIInteractionHelper::handleNameClashResolveRequest(
         xReplaceExistingData;
     getContinuations(
         rContinuations,
-        0, 0, 0, &xAbort, 0, 0, &xSupplyName, &xReplaceExistingData);
+        0, 0, 0, &xAbort, 0, 0, 0, &xSupplyName, &xReplaceExistingData);
 
     OSL_ENSURE( xAbort.is(),
         "NameClashResolveRequest must contain Abort continuation" );
@@ -2563,7 +2717,7 @@ UUIInteractionHelper::handleMasterPasswordRequest(
         xSupplyAuthentication;
     getContinuations(
         rContinuations,
-        0, 0, &xRetry, &xAbort, &xSupplyAuthentication, 0, 0, 0);
+        0, 0, &xRetry, &xAbort, &xSupplyAuthentication, 0, 0, 0, 0);
     LoginErrorInfo aInfo;
 
     // in case of master password a hash code is returned
@@ -2606,7 +2760,7 @@ UUIInteractionHelper::handlePasswordRequest(
     star::uno::Reference< star::task::XInteractionPassword >
         xPassword;
     getContinuations(
-        rContinuations, 0, 0, &xRetry, &xAbort, 0, &xPassword, 0, 0);
+        rContinuations, 0, 0, &xRetry, &xAbort, 0, 0, &xPassword, 0, 0);
     LoginErrorInfo aInfo;
 
     executePasswordDialog(aInfo, nMode, aDocumentName);
@@ -2647,7 +2801,7 @@ UUIInteractionHelper::handleMSPasswordRequest(
     star::uno::Reference< star::task::XInteractionPassword >
         xPassword;
     getContinuations(
-        rContinuations, 0, 0, &xRetry, &xAbort, 0, &xPassword, 0, 0);
+        rContinuations, 0, 0, &xRetry, &xAbort, 0, 0, &xPassword, 0, 0);
     LoginErrorInfo aInfo;
 
     executeMSPasswordDialog(aInfo, nMode, aDocumentName);
@@ -3408,7 +3562,7 @@ UUIInteractionHelper::handleErrorRequest(
         star::uno::Reference< star::task::XInteractionAbort > xAbort;
         getContinuations(
             rContinuations,
-            &xApprove, &xDisapprove, &xRetry, &xAbort, 0, 0, 0, 0);
+            &xApprove, &xDisapprove, &xRetry, &xAbort, 0, 0, 0, 0, 0);
 
         // The following mapping uses the bit mask
         //     Approve = 8,
@@ -3526,7 +3680,7 @@ UUIInteractionHelper::handleBrokenPackageRequest(
     star::uno::Reference< star::task::XInteractionDisapprove > xDisapprove;
     star::uno::Reference< star::task::XInteractionAbort > xAbort;
     getContinuations(
-        rContinuations, &xApprove, &xDisapprove, 0, &xAbort, 0, 0, 0, 0);
+        rContinuations, &xApprove, &xDisapprove, 0, &xAbort, 0, 0, 0, 0, 0);
 
     ErrCode nErrorCode;
     if( xApprove.is() && xDisapprove.is() )
@@ -3631,7 +3785,7 @@ UUIInteractionHelper::handleLockedDocumentRequest(
     star::uno::Reference< star::task::XInteractionDisapprove > xDisapprove;
     star::uno::Reference< star::task::XInteractionAbort > xAbort;
     getContinuations(
-        rContinuations, &xApprove, &xDisapprove, 0, &xAbort, 0, 0, 0, 0);
+        rContinuations, &xApprove, &xDisapprove, 0, &xAbort, 0, 0, 0, 0, 0);
 
     if ( !xApprove.is() || !xDisapprove.is() || !xAbort.is() )
         return;
@@ -3709,7 +3863,7 @@ UUIInteractionHelper::handleChangedByOthersRequest(
     star::uno::Reference< star::task::XInteractionApprove > xApprove;
     star::uno::Reference< star::task::XInteractionAbort > xAbort;
     getContinuations(
-        rContinuations, &xApprove, 0, 0, &xAbort, 0, 0, 0, 0);
+        rContinuations, &xApprove, 0, 0, &xAbort, 0, 0, 0, 0, 0);
 
     if ( !xApprove.is() || !xAbort.is() )
         return;
@@ -3749,7 +3903,7 @@ UUIInteractionHelper::handleLockFileIgnoreRequest(
     star::uno::Reference< star::task::XInteractionApprove > xApprove;
     star::uno::Reference< star::task::XInteractionAbort > xAbort;
     getContinuations(
-        rContinuations, &xApprove, 0, 0, &xAbort, 0, 0, 0, 0);
+        rContinuations, &xApprove, 0, 0, &xAbort, 0, 0, 0, 0, 0);
 
     if ( !xApprove.is() || !xAbort.is() )
         return;

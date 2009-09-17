@@ -100,6 +100,7 @@ namespace com { namespace sun { namespace star {
         class XInteractionHandler;
         class XInteractionRequest;
         class XPasswordContainer;
+        class XUrlContainer;
     }
     namespace ucb {
         class AuthenticationRequest;
@@ -181,7 +182,10 @@ private:
     bool
     initPasswordContainer(com::sun::star::uno::Reference<
                   com::sun::star::task::XPasswordContainer > *
-              pContainer)
+              pContainer,
+                          com::sun::star::uno::Reference<
+                  com::sun::star::task::XUrlContainer > *
+              pUrlContainer)
         const SAL_THROW(());
 
     com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >
@@ -248,7 +252,8 @@ private:
         com::sun::star::uno::Sequence<
         com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionContinuation > > const &
-    rContinuations)
+    rContinuations,
+        rtl::OUString const & rURL)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     void

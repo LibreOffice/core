@@ -903,6 +903,12 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					<desc>Contains a list of passwords encoded with the master password.</desc>
 				</info>
 			</set>
+			<prop oor:name="AuthenticateUsingSystemCredentials" oor:type="oor:string-list">
+				<info>
+					<author>KSO</author>
+					<desc>Contains a list of URLs that should be accessed using system credentials of the user.</desc>
+				</info>
+			</prop>
 		</group>
 		<group oor:name="_3D_Engine">
 			<info>

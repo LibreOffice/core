@@ -542,7 +542,6 @@
 #include "svtools/lckbitem.hxx"
 #include "svtools/localisationoptions.hxx"
 #include "svtools/localresaccess.hxx"
-#include "svtools/loginerr.hxx"
 #include "svtools/lstner.hxx"
 #include "svtools/memberid.hrc"
 #include "svtools/menuoptions.hxx"
