@@ -145,6 +145,17 @@
 						<RGB><xsl:value-of select="." /></RGB>
 					</Color>
 					</xsl:for-each>
+                    <xsl:for-each select="key('config', 'TabColor')[not(.=preceding::config:config-item)]">
+                    <xsl:sort select="." />
+                    <Color>
+                        <Index><xsl:value-of select="56 - position()" /></Index>
+                        <RGB>
+                            <xsl:call-template name="colordecimal2rgb">
+                                <xsl:with-param name="colordecimal" select="."/>
+                            </xsl:call-template>
+                        </RGB>
+                    </Color>
+                    </xsl:for-each>
 				</Colors>
 			</OfficeDocumentSettings>
 			<ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
@@ -175,6 +186,160 @@
 		</Workbook>
 	</xsl:template>
 
+    <xsl:template name="colordecimal2rgb">
+        <xsl:param name="colordecimal"/>
+        <xsl:choose>
+            <xsl:when test="$colordecimal &lt;= 16777215 and $colordecimal &gt;= 65536">
+                <xsl:variable name="redValue" select="floor(($colordecimal) div 65536)"/>
+                <xsl:variable name="greenValue" select="floor(($colordecimal - ($redValue*65536)) div 256)"/>
+                <xsl:variable name="blueValue" select="$colordecimal - ($redValue*65536) - ($greenValue*256)"/>
+                <xsl:call-template name="dec_rgb2Hex">
+                    <xsl:with-param name="decRedValue" select="$redValue"/>
+                    <xsl:with-param name="decGreenValue" select="$greenValue"/>
+                    <xsl:with-param name="decBlueValue" select="$blueValue"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$colordecimal &lt;= 65535 and $colordecimal &gt;= 256">
+                <xsl:variable name="redValue" select="0"/>
+                <xsl:variable name="greenValue" select="$colordecimal div 256"/>
+                <xsl:variable name="blueValue" select="$colordecimal - ($greenValue*256)"/>
+                <xsl:call-template name="dec_rgb2Hex">
+                    <xsl:with-param name="decRedValue" select="$redValue"/>
+                    <xsl:with-param name="decGreenValue" select="$greenValue"/>
+                    <xsl:with-param name="decBlueValue" select="$blueValue"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$colordecimal &lt;= 255 and $colordecimal &gt;= 0">
+                <xsl:variable name="redValue" select="0"/>
+                <xsl:variable name="greenValue" select="0"/>
+                <xsl:variable name="blueValue" select="$colordecimal"/>
+                <xsl:call-template name="dec_rgb2Hex">
+                    <xsl:with-param name="decRedValue" select="$redValue"/>
+                    <xsl:with-param name="decGreenValue" select="$greenValue"/>
+                    <xsl:with-param name="decBlueValue" select="$blueValue"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:template>
+    <xsl:template name="dec_rgb2Hex">
+        <xsl:param name="decRedValue"/>
+        <xsl:param name="decGreenValue"/>
+        <xsl:param name="decBlueValue"/>
+        <xsl:variable name="hexRedValue">
+            <xsl:variable name="tmpHexRedValue">
+                <xsl:call-template name="decimal2hex">
+                    <xsl:with-param name="dec-number" select="$decRedValue"/>
+                    <xsl:with-param name="last-value" select="'H'"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="string-length($tmpHexRedValue) = 1">
+                    <xsl:value-of select="concat('0',$tmpHexRedValue)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$tmpHexRedValue"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="hexGreenValue">
+            <xsl:variable name="tmpHexGreenValue">
+                <xsl:call-template name="decimal2hex">
+                    <xsl:with-param name="dec-number" select="$decGreenValue"/>
+                    <xsl:with-param name="last-value" select="'H'"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="string-length($tmpHexGreenValue) = 1">
+                    <xsl:value-of select="concat('0',$tmpHexGreenValue)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$tmpHexGreenValue"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="hexBlueValue">
+            <xsl:variable name="tmpHexBlueValue">
+                <xsl:call-template name="decimal2hex">
+                    <xsl:with-param name="dec-number" select="$decBlueValue"/>
+                    <xsl:with-param name="last-value" select="'H'"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="string-length($tmpHexBlueValue) = 1">
+                    <xsl:value-of select="concat('0',$tmpHexBlueValue)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$tmpHexBlueValue"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:value-of select="concat('#',$hexRedValue,$hexGreenValue,$hexBlueValue)"/>
+    </xsl:template>
+    <xsl:template name="decimal2hex">
+        <!-- transforms a decimal number to a hex number,only for two-bit hex(less than 256 in decimal) currently -->
+        <xsl:param name="dec-number"/>
+        <xsl:param name="last-value"/>
+        <xsl:variable name="current-value">
+            <xsl:call-template name="decNumber2hex">
+                <xsl:with-param name="dec-value">
+                    <xsl:if test="$dec-number &gt; 15">
+                        <xsl:value-of select="floor($dec-number div 16)"/>
+                    </xsl:if>
+                    <xsl:if test="$dec-number &lt; 16">
+                        <xsl:value-of select="$dec-number"/>
+                    </xsl:if>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="$dec-number &gt; 15">
+            <xsl:call-template name="decimal2hex">
+                <xsl:with-param name="dec-number" select="$dec-number mod 16"/>
+                <xsl:with-param name="last-value" select="concat($last-value,$current-value)"/>
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:if test="$dec-number &lt; 16">
+            <xsl:value-of select="substring-after(concat($last-value,$current-value),'H')"/>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="decNumber2hex">
+        <!-- return a hex number for a decimal character -->
+        <xsl:param name="dec-value"/>
+        <xsl:choose>
+            <xsl:when test="$dec-value = 10">
+                <xsl:value-of select="'A'"/>
+            </xsl:when>
+            <xsl:when test="$dec-value = 11">
+                <xsl:value-of select="'B'"/>
+            </xsl:when>
+            <xsl:when test="$dec-value = 12">
+                <xsl:value-of select="'C'"/>
+            </xsl:when>
+            <xsl:when test="$dec-value = 13">
+                <xsl:value-of select="'D'"/>
+            </xsl:when>
+            <xsl:when test="$dec-value = 14">
+                <xsl:value-of select="'E'"/>
+            </xsl:when>
+            <xsl:when test="$dec-value = 15">
+                <xsl:value-of select="'F'"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$dec-value"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <xsl:template name="GetTabColorIndex">
+        <xsl:param name="SheetColor"/>
+        <xsl:for-each select="key('config', 'TabColor')[not(.=preceding::config:config-item)]">
+        <xsl:sort select="." />
+            <xsl:variable name="tmpColor" select="."/>
+            <xsl:if test=". = $SheetColor" >
+                <xsl:value-of select="56 - position()"/>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:template>
 	<xsl:template match="office:body">
 		<!-- office:body table:table children are spreadsheets -->
 		<xsl:apply-templates />
@@ -187,8 +352,11 @@
 	<!-- office:body table:table children are spreadsheets -->
 	<xsl:template match="office:spreadsheet/table:table">
 		<xsl:element name="ss:Worksheet">
-			<xsl:attribute name="ss:Name">
+			<xsl:variable name="TableName">
 				<xsl:value-of select="@table:name" />
+			</xsl:variable>
+			<xsl:attribute name="ss:Name">
+				<xsl:value-of select="$TableName" />
 			</xsl:attribute>
 			<xsl:call-template name="table:table" />
 			<xsl:element name="x:WorksheetOptions">
@@ -204,6 +372,16 @@
 				<xsl:if test="key('config', 'ShowZeroValues') = 'false'">
 						<xsl:element name="x:DoNotDisplayZeros" />
 				</xsl:if>
+                <xsl:if test="/*/office:settings/config:config-item-set/config:config-item-map-indexed/config:config-item-map-entry/config:config-item-map-named/config:config-item-map-entry[@config:name=$TableName]/config:config-item[@config:name='TabColor']">
+                    <xsl:element name="x:TabColorIndex">
+                        <xsl:variable name="TabColorIndex">
+                            <xsl:call-template name="GetTabColorIndex">
+                                <xsl:with-param name="SheetColor" select="/*/office:settings/config:config-item-set/config:config-item-map-indexed/config:config-item-map-entry/config:config-item-map-named/config:config-item-map-entry[@config:name=$TableName]/config:config-item[@config:name='TabColor']"/>
+                            </xsl:call-template>
+                        </xsl:variable>
+                        <xsl:value-of select="$TabColorIndex"/>
+                    </xsl:element>
+                </xsl:if>
 			</xsl:element>
 		</xsl:element>
 	</xsl:template>

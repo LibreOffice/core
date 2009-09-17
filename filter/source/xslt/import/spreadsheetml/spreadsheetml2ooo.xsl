@@ -385,6 +385,16 @@
 										</xsl:otherwise>
 									</xsl:choose>
 									<xsl:copy-of select="$sharedConfiguration"/>
+                                    <xsl:if test="x:WorksheetOptions/x:TabColorIndex">
+                                        <config:config-item config:name="TabColor" config:type="int">
+                                            <xsl:variable name="temp-value">
+                                                <xsl:call-template name="colorindex2decimal">
+                                                    <xsl:with-param name="colorindex" select="x:WorksheetOptions/x:TabColorIndex"/>
+                                                </xsl:call-template>
+                                            </xsl:variable>
+                                            <xsl:value-of select="$temp-value"/>
+                                        </config:config-item>
+                                    </xsl:if>
 								</config:config-item-map-entry>
 							</xsl:for-each>
 						</config:config-item-map-named>
@@ -4641,6 +4651,211 @@
 		</xsl:variable>
 		<xsl:value-of select="concat('#',$R-value,$G-value,$B-value)"/>
 	</xsl:template>
+    <xsl:template name="colorindex2decimal">
+        <xsl:param name="colorindex"/>
+        <xsl:variable name="colorIndexLookup">
+            <xsl:value-of select="$colorindex - 8"/>
+        </xsl:variable>
+        <xsl:variable name="tempColorValue">
+            <xsl:choose>
+                <!-- Grab the color from the custom color index if it exists... -->
+                <xsl:when test="/ss:Workbook/o:OfficeDocumentSettings/o:Colors/o:Color/o:Index=$colorIndexLookup">
+                    <xsl:value-of select="substring-after(normalize-space(/ss:Workbook/o:OfficeDocumentSettings/o:Colors/o:Color/o:RGB[/ss:Workbook/o:OfficeDocumentSettings/o:Colors/o:Color/o:Index=$colorIndexLookup]), '#')"/>
+                </xsl:when >
+                <xsl:otherwise>
+                    <xsl:choose>
+                        <xsl:when test="$colorindex=8">
+                            <xsl:value-of select="'000000'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=9">
+                            <xsl:value-of select="'FFFFFF'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=10">
+                            <xsl:value-of select="'FF0000'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=11">
+                            <xsl:value-of select="'00FF00'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=12">
+                            <xsl:value-of select="'0000FF'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=13">
+                            <xsl:value-of select="'FFFF00'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=14">
+                            <xsl:value-of select="'FF00FF'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=15">
+                            <xsl:value-of select="'00FFFF'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=16">
+                            <xsl:value-of select="'800000'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=17">
+                            <xsl:value-of select="'008000'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=18">
+                            <xsl:value-of select="'000080'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=19">
+                            <xsl:value-of select="'808000'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=20">
+                            <xsl:value-of select="'800080'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=21">
+                            <xsl:value-of select="'008080'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=22">
+                            <xsl:value-of select="'C0C0C0'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=23">
+                            <xsl:value-of select="'808080'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=24">
+                            <xsl:value-of select="'9999FF'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=25">
+                            <xsl:value-of select="'993366'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=26">
+                            <xsl:value-of select="'FFFFCC'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=27">
+                            <xsl:value-of select="'CCFFFF'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=28">
+                            <xsl:value-of select="'660066'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=29">
+                            <xsl:value-of select="'FF8080'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=30">
+                            <xsl:value-of select="'0066CC'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=31">
+                            <xsl:value-of select="'CCCCFF'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=32">
+                            <xsl:value-of select="'000080'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=33">
+                            <xsl:value-of select="'FF00FF'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=34">
+                            <xsl:value-of select="'FFFF00'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=35">
+                            <xsl:value-of select="'00FFFF'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=36">
+                            <xsl:value-of select="'800080'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=37">
+                            <xsl:value-of select="'800000'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=38">
+                            <xsl:value-of select="'008080'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=39">
+                            <xsl:value-of select="'0000FF'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=40">
+                            <xsl:value-of select="'00CCFF'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=41">
+                            <xsl:value-of select="'CCFFFF'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=42">
+                            <xsl:value-of select="'CCFFCC'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=43">
+                            <xsl:value-of select="'FFFF99'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=44">
+                            <xsl:value-of select="'99CCFF'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=45">
+                            <xsl:value-of select="'FF99CC'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=46">
+                            <xsl:value-of select="'CC99FF'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=47">
+                            <xsl:value-of select="'FFCC99'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=48">
+                            <xsl:value-of select="'3366FF'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=49">
+                            <xsl:value-of select="'33CCCC'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=50">
+                            <xsl:value-of select="'99CC00'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=51">
+                            <xsl:value-of select="'FFCC00'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=52">
+                            <xsl:value-of select="'FF9900'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=53">
+                            <xsl:value-of select="'FF6600'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=54">
+                            <xsl:value-of select="'666699'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=55">
+                            <xsl:value-of select="'969696'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=56">
+                            <xsl:value-of select="'003366'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=57">
+                            <xsl:value-of select="'339966'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=58">
+                            <xsl:value-of select="'003300'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=59">
+                            <xsl:value-of select="'333300'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=60">
+                            <xsl:value-of select="'993300'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=61">
+                            <xsl:value-of select="'993366'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=62">
+                            <xsl:value-of select="'333399'"/>
+                        </xsl:when>
+                        <xsl:when test="$colorindex=63">
+                            <xsl:value-of select="'333333'"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="'NOTFOUND'"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="tempColorDecimal">
+            <xsl:choose>
+                    <xsl:when test="not($tempColorValue = 'NOTFOUND')">
+                        <xsl:call-template name="hex2decimal">
+                            <xsl:with-param name="hex-number" select="$tempColorValue"/>
+                            <xsl:with-param name="index" select="1"/>
+                            <xsl:with-param name="str-length" select="6"/>
+                            <xsl:with-param name="last-value" select="0"/>
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="4294967295"/>
+                    </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:value-of select="$tempColorDecimal"/>
+    </xsl:template>
 	<xsl:template name="hex2decimal">
 		<!-- transforms a hex number to a decimal number.parses the string from left to right -->
 		<xsl:param name="hex-number"/>

@@ -381,7 +381,7 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:value-of select="$earlierCandidate" />
-						<xsl:variable name="parameterCandidate">
+						<xsl:variable name="parameterCandidate2">
 							<xsl:variable name="formularAfterCandidate" select="substring-after($expressionSuffix, $earlierCandidate)" />
 							<xsl:variable name="parameterTillBracket" select="concat(substring-before($formularAfterCandidate,')'),')')" />
 							<xsl:variable name="parameterTillComma" select="substring-before(substring-after($expressionSuffix, $parameterTillBracket),',')" />
@@ -405,8 +405,8 @@
 						<xsl:call-template name="getParameter">
 							<xsl:with-param name="closingBracketCount" select="$closingBracketCount" />
 							<xsl:with-param name="openingBracketCount" select="$openingBracketCount" />
-							<xsl:with-param name="parameterCandidate" select="$parameterCandidate" />
-							<xsl:with-param name="earlierCandidate" select="$parameterCandidate" />
+							<xsl:with-param name="parameterCandidate" select="$parameterCandidate2" />
+							<xsl:with-param name="earlierCandidate" select="$parameterCandidate2" />
 							<xsl:with-param name="expressionSuffix" select="$expressionSuffix" />
 						</xsl:call-template>
 					</xsl:otherwise>
