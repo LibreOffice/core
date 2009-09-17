@@ -245,38 +245,57 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
 
     SvtModuleOptions aModuleOpt;
     if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
+    {
         aSaveAsLB.RemoveEntry(aSaveAsLB.GetEntryPos( (void*) APP_MATH ));
+        aDocTypeLB.RemoveEntry(aDocTypeLB.GetEntryPos( (void*) APP_MATH ));
+    }
     else
     {
         pImpl->aDefaultArr[APP_MATH] = aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_MATH);
         pImpl->aDefaultReadonlyArr[APP_MATH] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::E_MATH);
     }
+
     if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+    {
         aSaveAsLB.RemoveEntry(aSaveAsLB.GetEntryPos( (void*) APP_DRAW ));
+        aDocTypeLB.RemoveEntry(aDocTypeLB.GetEntryPos( (void*) APP_DRAW ));
+    }
     else
     {
         pImpl->aDefaultArr[APP_DRAW] = aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_DRAW);
         pImpl->aDefaultReadonlyArr[APP_DRAW] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::E_DRAW);
     }
+
     if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+    {
         aSaveAsLB.RemoveEntry(aSaveAsLB.GetEntryPos( (void*) APP_IMPRESS ));
+        aDocTypeLB.RemoveEntry(aDocTypeLB.GetEntryPos( (void*) APP_IMPRESS ));
+    }
     else
     {
         pImpl->aDefaultArr[APP_IMPRESS] = aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_IMPRESS);
         pImpl->aDefaultReadonlyArr[APP_IMPRESS] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::E_IMPRESS);
     }
+
     if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+    {
         aSaveAsLB.RemoveEntry(aSaveAsLB.GetEntryPos( (void*) APP_CALC ));
+        aDocTypeLB.RemoveEntry(aDocTypeLB.GetEntryPos( (void*) APP_CALC ));
+    }
     else
     {
         pImpl->aDefaultArr[APP_CALC] = aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_CALC);
         pImpl->aDefaultReadonlyArr[APP_CALC] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::E_CALC);
     }
+
     if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
     {
         aSaveAsLB.RemoveEntry(aSaveAsLB.GetEntryPos( (void*) APP_WRITER ));
         aSaveAsLB.RemoveEntry(aSaveAsLB.GetEntryPos( (void*) APP_WRITER_WEB ));
         aSaveAsLB.RemoveEntry(aSaveAsLB.GetEntryPos( (void*) APP_WRITER_GLOBAL ));
+        aDocTypeLB.RemoveEntry(aDocTypeLB.GetEntryPos( (void*) APP_WRITER ));
+        aDocTypeLB.RemoveEntry(aDocTypeLB.GetEntryPos( (void*) APP_WRITER_WEB ));
+        aDocTypeLB.RemoveEntry(aDocTypeLB.GetEntryPos( (void*) APP_WRITER_GLOBAL ));
     }
     else
     {
@@ -718,18 +737,23 @@ OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
  ---------------------------------------------------------------------------*/
 IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
 {
-    if(&aDocTypeLB == pBox)
+    USHORT nCurPos = aDocTypeLB.GetSelectEntryPos();
+
+    long nData = -1;
+    if(nCurPos < APP_COUNT)
+        nData = (long) aDocTypeLB.GetEntryData(nCurPos);
+
+    if ( nData >= 0 && nData < APP_COUNT )
     {
-        USHORT nAppPos = pBox->GetSelectEntryPos();
-        if ( nAppPos < APP_COUNT )
+        if(&aDocTypeLB == pBox)
         {
             aSaveAsLB.Clear();
-            const OUString* pFilters = pImpl->aFilterArr[nAppPos].getConstArray();
-            if(!pImpl->aUIFilterArr[nAppPos].getLength())
+            const OUString* pFilters = pImpl->aFilterArr[nData].getConstArray();
+            if(!pImpl->aUIFilterArr[nData].getLength())
             {
-                pImpl->aUIFilterArr[nAppPos].realloc(pImpl->aFilterArr[nAppPos].getLength());
-                OUString* pUIFilters = pImpl->aUIFilterArr[nAppPos].getArray();
-                for(int nFilter = 0; nFilter < pImpl->aFilterArr[nAppPos].getLength(); nFilter++)
+                pImpl->aUIFilterArr[nData].realloc(pImpl->aFilterArr[nData].getLength());
+                OUString* pUIFilters = pImpl->aUIFilterArr[nData].getArray();
+                for(int nFilter = 0; nFilter < pImpl->aFilterArr[nData].getLength(); nFilter++)
                 {
                     Any aProps = pImpl->xFact->getByName(pFilters[nFilter]);
                     Sequence<PropertyValue> aProperties;
@@ -737,37 +761,36 @@ IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
                     pUIFilters[nFilter] = lcl_ExtracUIName(aProperties);
                 }
             }
-            const OUString* pUIFilters = pImpl->aUIFilterArr[nAppPos].getConstArray();
+            const OUString* pUIFilters = pImpl->aUIFilterArr[nData].getConstArray();
             OUString sSelect;
-            for(int i = 0; i < pImpl->aUIFilterArr[nAppPos].getLength(); i++)
+            for(int i = 0; i < pImpl->aUIFilterArr[nData].getLength(); i++)
             {
                 USHORT nEntryPos = aSaveAsLB.InsertEntry(pUIFilters[i]);
-                if ( pImpl->aODFArr[nAppPos][i] )
+                if ( pImpl->aODFArr[nData][i] )
                     aSaveAsLB.SetEntryData( nEntryPos, (void*)pImpl );
-                if(pFilters[i] == pImpl->aDefaultArr[nAppPos])
+                if(pFilters[i] == pImpl->aDefaultArr[nData])
                     sSelect = pUIFilters[i];
             }
             if(sSelect.getLength())
                 aSaveAsLB.SelectEntry(sSelect);
-            aSaveAsFI.Show(pImpl->aDefaultReadonlyArr[nAppPos]);
-            aSaveAsFT.Enable(!pImpl->aDefaultReadonlyArr[nAppPos]);
-            aSaveAsLB.Enable(!pImpl->aDefaultReadonlyArr[nAppPos]);
+            aSaveAsFI.Show(pImpl->aDefaultReadonlyArr[nData]);
+            aSaveAsFT.Enable(!pImpl->aDefaultReadonlyArr[nData]);
+            aSaveAsLB.Enable(!pImpl->aDefaultReadonlyArr[nData]);
         }
-    }
-    else
-    {
-        OUString sSelect = pBox->GetSelectEntry();
-        USHORT nPos = aDocTypeLB.GetSelectEntryPos();
-        const OUString* pFilters = pImpl->aFilterArr[nPos].getConstArray();
-        OUString* pUIFilters = pImpl->aUIFilterArr[nPos].getArray();
-        for(int i = 0; i < pImpl->aUIFilterArr[nPos].getLength(); i++)
-            if(pUIFilters[i] == sSelect)
-            {
-                sSelect = pFilters[i];
-                break;
-            }
+        else
+        {
+            OUString sSelect = pBox->GetSelectEntry();
+            const OUString* pFilters = pImpl->aFilterArr[nData].getConstArray();
+            OUString* pUIFilters = pImpl->aUIFilterArr[nData].getArray();
+            for(int i = 0; i < pImpl->aUIFilterArr[nData].getLength(); i++)
+                if(pUIFilters[i] == sSelect)
+                {
+                    sSelect = pFilters[i];
+                    break;
+                }
 
-        pImpl->aDefaultArr[nPos] = sSelect;
+            pImpl->aDefaultArr[nData] = sSelect;
+        }
     }
 
     ODFVersionHdl_Impl( &aSaveAsLB );
