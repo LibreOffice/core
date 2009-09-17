@@ -9,6 +9,19 @@
  #define _XOPEN_SOURCE_EXTENDED 1
  #endif
  
+--- misc/icu/source/common/unicode/pwin32.h	2008-07-01 10:41:12.000000000 +0900
++++ misc/build/icu/source/common/unicode/pwin32.h	2008-11-05 22:37:21.479250000 +0900
+@@ -32,6 +32,10 @@
+ #define __STDC_CONSTANT_MACROS
+ #endif
+ 
++#if defined(__MINGW32__)
++#define U_HAVE_INTTYPES_H 1
++#endif
++
+ /* _MSC_VER is used to detect the Microsoft compiler. */
+ #if defined(_MSC_VER)
+ #define U_INT64_IS_LONG_LONG 0
 --- misc/icu/source/config/mh-darwin	Tue Jul  1 03:41:24 2008
 +++ misc/build/icu/source/config/mh-darwin	Tue Jan 20 18:33:16 2009
 @@ -25,7 +25,7 @@

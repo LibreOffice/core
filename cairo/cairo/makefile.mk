@@ -60,6 +60,7 @@ cairo_CFLAGS=$(SOLARINC)
 cairo_LDFLAGS=$(SOLARLIB)
 
 cairo_CPPFLAGS=
+
 .IF "$(SYSTEM_ZLIB)"!="YES"
 cairo_CPPFLAGS+=-I$(SOLARINCDIR)$/external$/zlib
 cairo_COMPRESS=z_compress
@@ -74,10 +75,19 @@ cairo_CPPFLAGS+=$(INCLUDE)
 cairo_CFLAGS+=-D_MT
 cairo_LDFLAGS+=-no-undefined -L$(ILIB:s/;/ -L/)
 cairo_CPPFLAGS+=-nostdinc
+cairo_CC=$(CC)
+cairo_LIBS+=-lmingwthrd
+
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+cairo_CC+=-shared-libgcc
+.ENDIF
+.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+cairo_LIBS+=-lstdc++_s
+.ENDIF
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/configure
-CONFIGURE_FLAGS=--disable-xlib --disable-ft --disable-pthread --disable-svg --disable-png --enable-gtk-doc=no --enable-test-surfaces=no --enable-static=no --build=i586-pc-mingw32 --host=i586-pc-mingw32 PKG_CONFIG=./dummy_pkg_config LIBS=-lmingwthrd ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS) OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--disable-xlib --disable-ft --disable-pthread --disable-svg --disable-png --enable-gtk-doc=no --enable-test-surfaces=no --enable-static=no --build=i586-pc-mingw32 --host=i586-pc-mingw32 PKG_CONFIG=./dummy_pkg_config CC="$(cairo_CC)" LIBS="$(cairo_LIBS)" ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS) OBJDUMP="$(WRAPCMD) objdump"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -94,6 +104,12 @@ OUT2INC+=src$/cairo-win32.h
 
 .ELIF "$(GUIBASE)"=="aqua"
 # ----------- Native Mac OS X (Aqua/Quartz) --------------------------------
+.IF "$(SYSBASE)"!=""
+.IF "$(EXTRA_CFLAGS)" != ""
+cairo_CFLAGS+=$(EXTRA_CFLAGS) $(EXTRA_CDEFS)
+cairo_CPPFLAGS+=$(EXTRA_CFLAGS) $(EXTRA_CDEFS)
+.ENDIF # "$(EXTRA_CFLAGS)" != ""
+.ENDIF # "$(SYSBASE)"!=""
 CONFIGURE_DIR=
 CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/configure
 CONFIGURE_FLAGS=--enable-static=no --disable-xlib --disable-ft --disable-svg --disable-png --enable-quartz --enable-quartz-font --enable-gtk-doc=no --enable-test-surfaces=no PKG_CONFIG=./dummy_pkg_config ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)

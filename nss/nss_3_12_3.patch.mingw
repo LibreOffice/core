@@ -1,0 +1,166 @@
+--- misc/mozilla/nsprpub/config/autoconf.mk.in	2007-06-10 01:28:46.000000000 +0900
++++ misc/build/mozilla/nsprpub/config/autoconf.mk.in	2009-07-26 19:50:43.845875000 +0900
+@@ -22,6 +22,7 @@
+ RELEASE_OBJDIR_NAME = @RELEASE_OBJDIR_NAME@
+ OBJDIR_NAME	= @OBJDIR_NAME@
+ OBJDIR		= @OBJDIR@
++LIB_PREFIX	= @LIB_PREFIX@
+ OBJ_SUFFIX	= @OBJ_SUFFIX@
+ LIB_SUFFIX	= @LIB_SUFFIX@
+ DLL_SUFFIX	= @DLL_SUFFIX@
+--- misc/mozilla/nsprpub/config/rules.mk	2009-03-25 07:49:17.000000000 +0900
++++ misc/build/mozilla/nsprpub/config/rules.mk	2009-07-26 19:50:44.002125000 +0900
+@@ -113,9 +113,9 @@
+ # other platforms do not.
+ #
+ ifeq (,$(filter-out WIN95 OS2,$(OS_TARGET)))
+-LIBRARY		= $(OBJDIR)/$(LIBRARY_NAME)$(LIBRARY_VERSION)_s.$(LIB_SUFFIX)
++LIBRARY		= $(OBJDIR)/$(LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)_s.$(LIB_SUFFIX)
+ SHARED_LIBRARY	= $(OBJDIR)/$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-IMPORT_LIBRARY	= $(OBJDIR)/$(LIBRARY_NAME)$(LIBRARY_VERSION).$(LIB_SUFFIX)
++IMPORT_LIBRARY	= $(OBJDIR)/$(LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(LIB_SUFFIX)
+ SHARED_LIB_PDB	= $(OBJDIR)/$(LIBRARY_NAME)$(LIBRARY_VERSION).pdb
+ else
+ LIBRARY		= $(OBJDIR)/lib$(LIBRARY_NAME)$(LIBRARY_VERSION)_s.$(LIB_SUFFIX)
+--- misc/mozilla/nsprpub/configure	2008-12-05 09:46:50.000000000 +0900
++++ misc/build/mozilla/nsprpub/configure	2009-07-26 19:50:45.158375000 +0900
+@@ -2767,6 +2767,7 @@
+ LIB_SUFFIX=a
+ DLL_SUFFIX=so
+ ASM_SUFFIX=s
++LIB_PREFIX=lib
+ MKSHLIB='$(LD) $(DSO_LDOPTS) -o $@'
+ PR_MD_ASFILES=
+ PR_MD_CSRCS=
+@@ -4005,6 +4006,7 @@
+         OBJ_SUFFIX=obj
+         LIB_SUFFIX=lib
+         DLL_SUFFIX=dll
++        LIB_PREFIX=
+ 
+         # Determine compiler version
+         CC_VERSION=`"${CC}" -v 2>&1 | grep Version | sed -e 's|.* Version ||' -e 's| .*||'`
+@@ -6169,6 +6171,7 @@
+ s%@LIB_SUFFIX@%$LIB_SUFFIX%g
+ s%@DLL_SUFFIX@%$DLL_SUFFIX%g
+ s%@ASM_SUFFIX@%$ASM_SUFFIX%g
++s%@LIB_PREFIX@%$LIB_PREFIX%g
+ s%@MKSHLIB@%$MKSHLIB%g
+ s%@DSO_CFLAGS@%$DSO_CFLAGS%g
+ s%@DSO_LDOPTS@%$DSO_LDOPTS%g
+--- misc/mozilla/nsprpub/pr/src/Makefile.in	2008-06-08 05:25:59.000000000 +0900
++++ misc/build/mozilla/nsprpub/pr/src/Makefile.in	2009-07-26 20:57:15.324875000 +0900
+@@ -195,7 +195,7 @@
+ 
+ ifeq ($(OS_ARCH),WINNT)
+ ifdef NS_USE_GCC
+-OS_LIBS		= -ladvapi32 -lwsock32 -lwinmm
++OS_LIBS		+= -ladvapi32 -lwsock32 -lwinmm
+ else
+ OS_LIBS		= advapi32.lib wsock32.lib winmm.lib
+ endif
+--- misc/mozilla/security/coreconf/WIN32.mk	2009-04-01 09:49:48.000000000 +0900
++++ misc/build/mozilla/security/coreconf/WIN32.mk	2009-07-26 19:50:45.252125000 +0900
+@@ -43,8 +43,8 @@
+ DEFAULT_COMPILER = cl
+ 
+ ifdef NS_USE_GCC
+-	CC           = gcc
+-	CCC          = g++
++#	CC           = gcc
++	CCC          = $(CXX)
+ 	LINK         = ld
+ 	AR           = ar
+ 	AR          += cr $@
+--- misc/mozilla/security/coreconf/WIN95.mk	2009-02-14 14:51:10.000000000 +0900
++++ misc/build/mozilla/security/coreconf/WIN95.mk	2009-07-26 19:50:45.377125000 +0900
+@@ -44,4 +44,8 @@
+ DEFINES += -DWIN95
+ 
+ # WINNT uses the lib prefix, Win95 and WinCE don't
+-NSPR31_LIB_PREFIX = $(NULL)
++ifdef NS_USE_GCC
++  NSPR31_LIB_PREFIX = lib
++else
++  NSPR31_LIB_PREFIX = $(NULL)
++endif
+--- misc/mozilla/security/coreconf/rules.mk	2009-01-21 08:30:57.000000000 +0900
++++ misc/build/mozilla/security/coreconf/rules.mk	2009-07-26 19:50:45.689625000 +0900
+@@ -281,8 +281,12 @@
+ 	fi
+ endif	# MSVC with manifest tool
+ else
++ifeq (,$(filter-out WIN%,$(OS_TARGET)))
++	$(MKPROG) -o $@ $(CFLAGS) $(OBJS) $(LDFLAGS) -Wl,--start-group $(EXTRA_LIBS) -Wl,--end-group $(EXTRA_SHARED_LIBS) $(OS_LIBS)
++else
+ 	$(MKPROG) -o $@ $(CFLAGS) $(OBJS) $(LDFLAGS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS)
+ endif
++endif
+ 
+ get_objs:
+ 	@echo $(OBJS)
+--- misc/mozilla/security/nss/Makefile	2008-12-03 08:24:39.000000000 +0900
++++ misc/build/mozilla/security/nss/Makefile	2009-07-26 19:50:45.845875000 +0900
+@@ -108,7 +108,7 @@
+ NSPR_CONFIGURE_OPTS += --enable-debug-rtl
+ endif
+ ifdef NS_USE_GCC
+-NSPR_COMPILERS = CC=gcc CXX=g++
++NSPR_COMPILERS = CC="$(CC)" CXX="$(CXX)"
+ endif
+ 
+ #
+--- misc/mozilla/security/nss/cmd/crmftest/Makefile	2005-11-14 09:17:21.000000000 +0900
++++ misc/build/mozilla/security/nss/cmd/crmftest/Makefile	2009-07-26 19:50:45.970875000 +0900
+@@ -90,7 +90,7 @@
+ LDDIST = $(DIST)/lib
+ 
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+-EXTRA_LIBS += $(LDDIST)/sectool.lib
++EXTRA_LIBS += $(LDDIST)/$(LIB_PREFIX)sectool.$(LIB_SUFFIX)
+ endif
+ 
+ include ../platrules.mk
+--- misc/mozilla/security/nss/cmd/shlibsign/Makefile	2008-11-21 00:44:11.000000000 +0900
++++ misc/build/mozilla/security/nss/cmd/shlibsign/Makefile	2009-07-26 22:58:48.687625000 +0900
+@@ -112,10 +112,16 @@
+ 	$(call core_abspath,$(OBJDIR)) $(OS_TARGET) \
+ 	$(call core_abspath,$(NSPR_LIB_DIR)) $(call core_abspath,$<)
+ else
++ifeq ($(OS_TARGET), WIN95)
++	sh ./sign.sh $(shell cygpath -m -a $(DIST)) \
++	$(shell cygpath -m -a $(OBJDIR)) $(OS_TARGET) \
++	$(shell cygpath -m -a $(NSPR_LIB_DIR)) $(shell cygpath -m -a $<)
++else
+ 	cd $(OBJDIR) ; sh $(SRCDIR)/sign.sh $(call core_abspath,$(DIST)) \
+ 	$(call core_abspath,$(OBJDIR)) $(OS_TARGET) \
+ 	$(call core_abspath,$(NSPR_LIB_DIR)) $(call core_abspath,$<)
+ endif
++endif
+ 
+ libs install :: $(CHECKLOC)
+ 
+--- misc/mozilla/security/nss/lib/freebl/config.mk	2009-02-03 06:57:23.000000000 +0900
++++ misc/build/mozilla/security/nss/lib/freebl/config.mk	2009-07-26 19:50:46.127125000 +0900
+@@ -84,10 +84,6 @@
+ RES     = $(OBJDIR)/$(LIBRARY_NAME).res
+ RESNAME = freebl.rc
+ 
+-ifndef WINCE
+-OS_LIBS += shell32.lib
+-endif
+-
+ ifdef NS_USE_GCC
+ EXTRA_SHARED_LIBS += \
+ 	-L$(DIST)/lib \
+@@ -96,6 +92,10 @@
+ 	-lnspr4 \
+ 	$(NULL)
+ else # ! NS_USE_GCC
++ifndef WINCE
++OS_LIBS += shell32.lib
++endif
++
+ EXTRA_SHARED_LIBS += \
+ 	$(DIST)/lib/nssutil3.lib \
+ 	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)nspr4.lib \

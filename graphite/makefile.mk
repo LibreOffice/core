@@ -123,6 +123,15 @@ GR_LIB_PATH=LD_LIBRARY_PATH=$(SOLARVERSION)/$(INPATH)/lib$(UPDMINOREXT)
 GR_LIB_PATH=
 .ENDIF
 
+.IF "$(OS)"=="WNT"
+PATCH_FILES+=graphite-2.3.1.patch.mingw
+EXTRA_GR_CXX_FLAGS=-nostdinc
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+EXTRA_GR_CXX_FLAGS+=-shared-libgcc
+.ENDIF
+EXTRA_GR_LD_FLAGS+=-no-undefined
+.ENDIF
+
 # don't use SOLARLIB for LDFLAGS because it pulls in system graphite so build will fail
 # 
 CONFIGURE_ACTION=bash -c 'CXXFLAGS="$(INCLUDE) $(CFLAGSCXX) $(CFLAGSCOBJ) $(CDEFS) $(CDEFSOBJ) $(SOLARINC) $(LFS_CFLAGS) $(EXTRA_GR_CXX_FLAGS)" $(GR_LIB_PATH) LDFLAGS="-L$(SOLARVERSION)/$(INPATH)/lib$(UPDMINOREXT) $(EXTRA_GR_LD_FLAGS)" ./configure $(GR_CONFIGURE_FLAGS)'
@@ -148,7 +157,7 @@ BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=src$/.libs$/libgraphite.*.dylib
 .ELSE
-.IF "$(OS)"=="WNT"
+.IF "$(OS)"=="WNT" && "$(COM)"!="GCC"
 #OUT2LIB+=engine$/src$/.libs$/libgraphite*.dll
 .IF "$(debug)"=="true"
 OUT2BIN= \
