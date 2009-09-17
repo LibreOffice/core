@@ -41,19 +41,19 @@ DEFLIB$(TNR)NAME*=$(DEF$(TNR)LIBNAME)
 .ENDIF			# "$(DEF$(TNR)LIBNAME)"!=""
 
 .IF "$(DEFLIB$(TNR)NAME)"!=""
-DEF$(TNR)DEPN+=$(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)$/$(i).lib)
+DEF$(TNR)DEPN+=$(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib)
 .ENDIF
 
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
 .IF "$(DEF$(TNR)EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
-DEF$(TNR)EXPORTFILE=$(MISC)$/$(SHL$(TNR)VERSIONMAP:b)_$(SHL$(TNR)TARGET).dxp
+DEF$(TNR)EXPORTFILE=$(MISC)/$(SHL$(TNR)VERSIONMAP:b)_$(SHL$(TNR)TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)OBJS) $(SHL$(TNR)LIBS)
 .ENDIF # .IF "$(COM)"=="GCC"
 
 $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
     -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
     -$(GREP) "\*\|?" $@ > $@.symbols-regexp
@@ -61,7 +61,7 @@ $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
 # Extract RTTI symbols from all the objects that will be used to build a shared library
     nm -gP $(SHL$(TNR)OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL$(TNR)LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
     $(RENAME) $@.exported-symbols $@
@@ -70,9 +70,9 @@ $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="OS2"
-DEF$(TNR)EXPORTFILE=$(MISC)$/$(SHL$(TNR)VERSIONMAP:b)_$(SHL$(TNR)TARGET).dxp
+DEF$(TNR)EXPORTFILE=$(MISC)/$(SHL$(TNR)VERSIONMAP:b)_$(SHL$(TNR)TARGET).dxp
 $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .ENDIF			# "$(GUI)"=="OS2"
 
 .ENDIF			# "$(DEF$(TNR)EXPORTFILE)"==""
@@ -80,7 +80,7 @@ $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-DEF$(TNR)FILTER=$(SOLARENV)$/inc$/dummy.flt
+DEF$(TNR)FILTER=$(SOLARENV)/inc/dummy.flt
 
 RMHACK$(TNR):=$(RM)
 
@@ -109,20 +109,20 @@ $(DEF$(TNR)TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(RM) $(MISC)$/$(SHL$(TNR)TARGET).exp
-    dlltool --output-def $(MISC)$/$(SHL$(TNR)TARGET).exp --export-all-symbols \
-         `$(TYPE) $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
-    tail --lines +3 $(MISC)$/$(SHL$(TNR)TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(RM) $(MISC)$/$(SHL$(TNR)TARGET).exp
+    @-$(RM) $(MISC)/$(SHL$(TNR)TARGET).exp
+    dlltool --output-def $(MISC)/$(SHL$(TNR)TARGET).exp --export-all-symbols \
+         `$(TYPE) $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
+    tail --lines +3 $(MISC)/$(SHL$(TNR)TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-$(RM) $(MISC)/$(SHL$(TNR)TARGET).exp
 .ELSE
 .IF "$(SHL$(TNR)USE_EXPORTS)"==""
-    @-$(RMHACK$(TNR)) $(MISC)$/$(SHL$(TNR)TARGET).exp
-    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL$(TNR)TARGET).exp $(SLB)$/$(DEFLIB$(TNR)NAME).lib
-    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(MISC)$/$(SHL$(TNR)TARGET).exp			   >>$@.tmpfile
-    $(RMHACK$(TNR)) $(MISC)$/$(SHL$(TNR)TARGET).exp
+    @-$(RMHACK$(TNR)) $(MISC)/$(SHL$(TNR)TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)/$(SHL$(TNR)TARGET).exp $(SLB)/$(DEFLIB$(TNR)NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)/$(SHL$(TNR)TARGET).flt $(MISC)/$(SHL$(TNR)TARGET).exp			   >>$@.tmpfile
+    $(RMHACK$(TNR)) $(MISC)/$(SHL$(TNR)TARGET).exp
 .ELSE			# "$(SHL$(TNR)USE_EXPORTS)"==""
-    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL$(TNR)TARGET).direct
-    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF$(TNR)FILTER) $(MISC)$/$(SHL$(TNR)TARGET).direct >>$@.tmpfile
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib) | $(GREP) EXPORT: > $(MISC)/$(SHL$(TNR)TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF$(TNR)FILTER) $(MISC)/$(SHL$(TNR)TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"==""
 .ENDIF
 .ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
@@ -203,8 +203,8 @@ $(DEF$(TNR)TARGETN) .PHONY :
 #check osl/os2/module.c/osl_loadModule()
 SHL$(TNR)TARGET8=$(shell @fix_shl $(SHL$(TNR)TARGETN:f))
 
-DEF$(TNR)FILTER=$(SOLARENV)$/inc$/dummy.flt
-DEF$(TNR)NAMELIST=$(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)$/$(i).lib)
+DEF$(TNR)FILTER=$(SOLARENV)/inc/dummy.flt
+DEF$(TNR)NAMELIST=$(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib)
 
 .IF "$(link_always)"==""
 $(DEF$(TNR)TARGETN) : \
@@ -226,7 +226,7 @@ $(DEF$(TNR)TARGETN) .PHONY :
 .ENDIF
 
 .IF "$(DEFLIB$(TNR)NAME)"!=""
-    @+echo $(SLB)$/$(DEFLIB$(TNR)NAME).lib
+    @+echo $(SLB)/$(DEFLIB$(TNR)NAME).lib
     @+emxexpr $(DEF$(TNR)NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
 

@@ -25,10 +25,6 @@ AC_ARG_WITH(agg,
 AC_ARG_WITH(gnu-cp,
 [  --with-gnu-cp           Specify location of GNU cp on Solaris or FreeBSD
 ],,)
-AC_ARG_WITH(gpc,
-[  --without-gpc           Use the internal polygon clipping code instead of
-                          the external GPC polygon clipping library.
-],,if test ! -e ./external/gpc/gpc.c && test ! -e ./external/gpc/gpc.h; then without_gpc=yes; fi)
 AC_ARG_ENABLE(graphite,
 [  --enable-graphite       Enables the compilation of Graphite smart font rendering
 ],,)
@@ -258,6 +254,9 @@ AC_ARG_WITH(mozilla-toolkit,
 [  --with-mozilla-toolkit  Choose which GUI toolkit to use while building mozilla
                           components. Default: gtk2
 ],,)
+AC_ARG_ENABLE(nss_module,
+[  --disable-nss-module    Whether to use provided NSS module     
+],,enable_nss_module=yes)
 AC_ARG_ENABLE(kde,
 [  --enable-kde            Determines whether to use Qt/KDE vclplug on platforms
                           where Qt and KDE are available.
@@ -652,6 +651,12 @@ AC_ARG_WITH(directx-home,
  
                           Usage: --with-directx-home=<absolute path to Microsoft DirectX SDK>
 ],,)
+AC_ARG_WITH(mozilla-build,
+[  --with-mozilla-build   For Windows users, please supply the path to the
+                          mozilla build tools.
+ 
+                          Usage: --with-mozilla-build=<absolute path to mozilla build tools>
+],[MOZILLABUILD=$withval],)
 AC_ARG_WITH(local-solenv,
 [  --with-local-solenv     If you have solenv in a location other than ./solenv,
                           please supply the path here.
@@ -2179,8 +2184,65 @@ _ACEOF
    else
       AC_MSG_RESULT([$_mingw_lib_include_path])
    fi
-MINGW_LIB_INCLUDE_PATH="$_mingw_lib_include_path"
-AC_SUBST(MINGW_LIB_INCLUDE_PATH)
+  MINGW_LIB_INCLUDE_PATH="$_mingw_lib_include_path"
+  AC_SUBST(MINGW_LIB_INCLUDE_PATH)
+dnl mingw gcc 4.4.0 needs backward in include path to use hash_set/hash_map
+   AC_MSG_CHECKING([for mingwin c++ backward include path])
+   cat >conftest.$ac_ext <<_ACEOF
+#include <hash_set>
+_ACEOF
+   _mingw_backward_include_path=`$CXX -E -xc++ -Wno-deprecated conftest.$ac_ext 2>&5| $SED -n -e '/.*1*"\(.*\)\/hash_set".*/s//\1/p' | sort -u | xargs echo`
+   rm conftest.$ac_ext
+   if test -n "$_mingw_backward_include_path"; then
+      _mingw_backward_include_path=`cygpath -d $_mingw_backward_include_path`
+      _mingw_backward_include_path=`cygpath -u $_mingw_backward_include_path`
+      AC_MSG_RESULT([$_mingw_backward_include_path])
+   else
+      _mingw_backward_include_path="NO_BACKWARD_INCLUDE"
+      AC_MSG_RESULT([no mingwin c++ backward includes])
+   fi
+  MINGW_BACKWARD_INCLUDE_PATH="$_mingw_backward_include_path"
+  AC_SUBST(MINGW_BACKWARD_INCLUDE_PATH)
+  mingw_crtbegin=`$CC -print-file-name=crtbegin.o`
+  MINGW_CLIB_DIR=`dirname $mingw_crtbegin`
+  AC_MSG_CHECKING([whether to use dynamic libgcc])
+  if test -e "$MINGW_CLIB_DIR/libgcc_s.a"; then
+    AC_MSG_CHECKING([dynamic libgcc name])
+    MINGW_GCCDLL_pattern=`nm $MINGW_CLIB_DIR/libgcc_s.a | sed -ne 's@.* _libgcc\(.*\)_dll_iname@libgcc\1.dll@p' | uniq | sed -e 's@_@?@g'`
+    MINGW_GCCDLL=`cd $COMPATH && ls $MINGW_GCCDLL_pattern 2>/dev/null`
+    if test -n "$MINGW_GCCDLL"; then
+        MINGW_SHARED_GCCLIB=YES
+        AC_MSG_RESULT([use $MINGW_GCCDLL])
+    else
+        AC_MSG_RESULT([no])
+    fi
+  else
+    AC_MSG_RESULT([no])
+  fi
+  if test -e "$MINGW_CLIB_DIR/libgcc_eh.a"; then
+      MINGW_GCCLIB_EH=YES
+  fi
+  AC_MSG_CHECKING([whether to use dynamic libstdc++])
+  if test -e "$MINGW_CLIB_DIR/libstdc++_s.a" ; then
+    AC_MSG_CHECKING([dynamic libstdc++ name])
+    MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/libstdc++_s.a | sed -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | sed -e 's@_@?@g'`
+    MINGW_GXXDLL=`cd $COMPATH && ls $MINGW_GXXDLL_pattern 2>/dev/null`
+    if test -n "$MINGW_GXXDLL"; then
+        MINGW_SHARED_GXXLIB=YES
+        AC_MSG_RESULT([use $MINGW_GXXDLL])
+    else
+        AC_MSG_RESULT([no])
+    fi
+  else
+    AC_MSG_RESULT([no])
+  fi
+  MINGW_CLIB_DIR=`cygpath $MINGW_CLIB_DIR`
+  AC_SUBST(MINGW_CLIB_DIR)
+  AC_SUBST(MINGW_SHARED_GCCLIB)
+  AC_SUBST(MINGW_GCCLIB_EH)
+  AC_SUBST(MINGW_SHARED_GXXLIB)
+  AC_SUBST(MINGW_GCCDLL)
+  AC_SUBST(MINGW_GXXDLL)
 fi
 
 dnl ===================================================================
@@ -2244,6 +2306,29 @@ if test "$_os" = "OSF1"; then
       AC_MSG_RESULT([checked])
    fi
 fi
+
+dnl *************************************************************
+dnl Testing for exception handling - dwarf2 or sjlj exceptions...
+dnl *************************************************************
+AC_MSG_CHECKING([exception type])
+AC_LANG_PUSH([C++])
+if test "$WITH_MINGWIN" = "yes"; then
+  AC_TRY_LINK(
+	[#include <iostream>
+
+extern "C" void _Unwind_SjLj_RaiseException(void) __attribute__ ((__noreturn__));
+
+	],
+	[_Unwind_SjLj_RaiseException() ],
+	[exceptions_type="sjlj"],
+	[exceptions_type="dwarf2"]
+  )
+fi
+
+AC_MSG_RESULT($exceptions_type)
+AC_LANG_POP([C++])
+EXCEPTIONS="$exceptions_type"
+AC_SUBST(EXCEPTIONS)
 
 dnl **************************************************************
 dnl Testing for required  Solaris and SunStudio compiler patches...
@@ -3991,6 +4076,7 @@ AC_MSG_CHECKING([whether to enable build of Mozilla/Mozilla NSS-using components
 if test "$enable_mozilla" = "no"; then
    AC_MSG_RESULT([no])
    WITH_MOZILLA=NO
+   ENABLE_NSS_MODULE=NO
 else
    AC_MSG_RESULT([yes])
    WITH_MOZILLA=YES
@@ -4060,6 +4146,8 @@ AC_MSG_CHECKING([which mozilla to use])
 if test -n "$with_system_mozilla" && test "$with_system_mozilla" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_MOZILLA=YES
+    ENABLE_NSS_MODULE=NO
+    enable_nss_module=no
     AC_MSG_CHECKING([which Mozilla flavour to use])
     if test -n "$with_system_mozilla" && test "$with_system_mozilla" = "libxul"; then
       MOZ_FLAVOUR=libxul
@@ -4146,6 +4234,8 @@ Please recompile $tmp with --enable-ldap or use --with-openldap.])
 elif test "$enable_mozilla" = "no"; then
     AC_MSG_RESULT([none])
     WITH_MOZILLA=NO
+    ENABLE_NSS_MODULE=NO
+    enable_nss_module=no
 else
     AC_MSG_RESULT([internal])
     SYSTEM_MOZILLA=NO
@@ -4201,6 +4291,37 @@ else
    AC_MSG_RESULT([no])
 fi
 
+AC_MSG_CHECKING([whether to build provided NSS module])
+if test "$enable_nss_module" != "no"; then
+   ENABLE_NSS_MODULE="YES"
+   BUILD_TYPE="$BUILD_TYPE NSS"
+   AC_MSG_RESULT([yes])
+   if test "$_os" = "WINNT"; then
+      AC_MSG_CHECKING([for Mozilla build tooling])
+      if test -z "$MOZILLABUILD" ; then
+AC_MSG_ERROR([Mozilla build tooling not found. Use --with-mozilla-build=<absolut path to mozilla build tooling (mozilla-build)>])
+      else
+         if test \( "$WITH_MINGWIN" = "yes" \) ; then
+            if test ! -d "$MOZILLABUILD" ; then
+AC_MSG_ERROR([Mozilla build tooling incomplete!])
+            else
+               AC_MSG_RESULT([ok])
+            fi
+         else
+            if test ! -d "$MOZILLABUILD/moztools" \
+               -o ! -d "$MOZILLABUILD/msys" ; then
+AC_MSG_ERROR([Mozilla build tooling incomplete!])
+            else
+               AC_MSG_RESULT([ok])
+            fi
+         fi
+      fi
+   fi
+else
+   ENABLE_NSS_MODULE="NO"
+   AC_MSG_RESULT([no])
+fi
+
 if test "$BUILD_MOZAB" = "TRUE"; then
   if test "$_os" = "WINNT"; then
     if test "$WITH_MINGWIN" != "yes"; then
@@ -4232,7 +4353,7 @@ if test "$BUILD_MOZAB" = "TRUE"; then
          AC_MSG_ERROR([Mozilla/SeaMonkey source archive not found.
 Please copy $MOZILLA_SOURCE_VERSION.tar.bz2 or $MOZILLA_SOURCE_VERSION.tar.gz to moz/download/.
 The archives can be found here:
-http://releases.mozilla.org/pub/mozilla.org/seamonkey/releases/$MOZILLA_VERSION/])
+ftp://ftp.mozilla.org/pub/mozilla.org/seamonkey/releases/$MOZILLA_VERSION/])
    fi
    if test "$_os" = "WINNT"; then
       AC_MSG_CHECKING([for moztools binaries])
@@ -4247,9 +4368,9 @@ http://releases.mozilla.org/pub/mozilla.org/seamonkey/releases/$MOZILLA_VERSION/
          AC_MSG_NOTICE([checking whether mozilla can be built...])
          PKG_CHECK_MODULES(MOZGTK2, gtk+-2.0 >= 2.4 libIDL-2.0 >= 0.8, AC_MSG_NOTICE([OK - can build mozilla]), AC_MSG_ERROR([Prerequisites to build mozilla not met. Either use the precompiled mozilla binaries or install the missing packages]))
       else
-         PKG_CHECK_MODULES(MOZLIBREQ, libIDL >= 0.6.3 libIDL <= 0.6.8, MOZIDL="TRUE", MOZIDL="")
+         PKG_CHECK_MODULES(MOZLIBREQ, libIDL-2.0 >= 0.6.3,  MOZIDL="TRUE", MOZIDL="")
          if test -z "$MOZIDL"; then
-            AC_MSG_ERROR([libIDL 0.6.3 - 0.6.8 is needed when not using GTK2 to build mozilla.])
+            AC_MSG_ERROR([libIDL 0.6.3 or newer is needed to build mozilla with mac toolkit.])
          fi
       fi
    else
@@ -4279,6 +4400,8 @@ fi
 AC_SUBST(BUILD_MOZAB)
 
 fi
+AC_SUBST(ENABLE_NSS_MODULE)
+AC_SUBST(MOZILLABUILD)
 AC_SUBST(SYSTEM_MOZILLA)
 AC_SUBST(MOZ_FLAVOUR)
 AC_SUBST(MOZ_INC)
@@ -5236,40 +5359,6 @@ As the automatic detection fails please copy the files to external/msi/.])
    fi
 fi
 fi
-
-dnl ===================================================================
-dnl Test for the presence of the right polygon clipping code
-dnl ===================================================================
-AC_MSG_CHECKING([which polygon clipping code to use])
-WITH_GPC=NO
-
-if test "$with_gpc" != "no" && test "$without_gpc" != "yes"; then
-  WITH_GPC=YES
-  AC_MSG_RESULT([GPC])
-
-  AC_MSG_CHECKING([for GPC files])
-  if test -f ./external/gpc/gpc.h; then
-	HAVE_GPC_H="yes"
-  else
-	HAVE_GPC_H="no"
-  fi
-  if test -f ./external/gpc/gpc.c; then
-	HAVE_GPC_C="yes"
-  else
-	HAVE_GPC_C="no"
-  fi
-
-  if test "$HAVE_GPC_H" = "yes" -a "$HAVE_GPC_C" = "yes"; then
-	AC_MSG_RESULT([GPC files found])
-  else
-	AC_MSG_ERROR([GPC files not found
-ftp://ftp.cs.man.ac.uk/pub/toby/gpc/gpc231.tar.Z and untar in external/gpc,
-or use basegfx' implementation using --without-gpc])
-  fi
-else
-  AC_MSG_RESULT([internal])
-fi
-AC_SUBST(WITH_GPC)
 
 dnl ===================================================================
 dnl Test which vclplugs have to be built.

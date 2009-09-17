@@ -53,7 +53,7 @@ sub usage
     print <<Ende;
 
 --------------------------------------------------------------
-$par2script::globals::prog V1.0 (c) Ingo Schmidt 2003
+$par2script::globals::prog
 The following parameter are needed:
 -i: include pathes, comma separated list
 -o: setup script file name

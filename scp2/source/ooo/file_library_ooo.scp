@@ -33,7 +33,7 @@
 File gid_File_Lib_Accessbridge
     BIN_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "java_uno_accessbridge.dll";
 End
 #endif
@@ -63,7 +63,7 @@ File gid_File_Lib_Basprov
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT4(basprov,DLLPOSTFIX,.uno,UNXSUFFIX));
   #else
@@ -77,7 +77,7 @@ File gid_File_Lib_Cached1
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(libcached1,UNXSUFFIX));
   #else
@@ -89,7 +89,7 @@ File gid_File_Lib_Configmgr2
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(configmgr2.uno,UNXSUFFIX));
   #else
@@ -101,7 +101,7 @@ File gid_File_Lib_Sysmgr1
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(sysmgr1.uno,UNXSUFFIX));
   #else
@@ -113,7 +113,7 @@ File gid_File_Lib_Behelper
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(behelper.uno,UNXSUFFIX));
   #else
@@ -126,7 +126,7 @@ File gid_File_Lib_Ldapbe2
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(ldapbe2.uno,UNXSUFFIX));
   #else
@@ -203,7 +203,7 @@ File gid_File_Lib_Comphelper2
   #else
     Name = STRING(CONCAT3(comphelp4,COMID,.dll));
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -217,7 +217,7 @@ STD_LIB_FILE_PATCH( gid_File_Lib_Cui, cui)
 File gid_File_Lib_Curl
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     #ifdef MACOSX
        Name = STRING(CONCAT2(libcurl.3,UNXSUFFIX));
@@ -240,11 +240,11 @@ End
 File gid_File_Lib_Db
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
-    Name = STRING(CONCAT2(libdb-4.2,UNXSUFFIX));
+    Name = STRING(CONCAT2(libdb-4.7,UNXSUFFIX));
   #else
-    Name = "libdb42.dll";
+    Name = "libdb47.dll";
   #endif
 End
 
@@ -256,7 +256,7 @@ End
 File gid_File_Lib_Egg_Tray
  TXT_FILE_BODY;
  Styles = (PACKED);
- Dir = gid_Dir_Program;
+ Dir = SCP2_OOO_BIN_DIR;
  Name = STRING(CONCAT3(libeggtray,DLLPOSTFIX,UNXSUFFIX));
 End
 
@@ -264,7 +264,7 @@ File gid_File_Lib_QStart_Gtk
     Name = LIBNAME(qstart_gtk);
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
 #endif
@@ -294,7 +294,7 @@ File gid_File_Lib_Dbpool
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(libdbpool2,UNXSUFFIX));
   #else
@@ -313,7 +313,7 @@ File gid_File_Lib_Dict_Ja
   #else
     Name = "dict_ja.dll";
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
 
@@ -324,7 +324,7 @@ File gid_File_Lib_Dict_Zh
   #else
     Name = "dict_zh.dll";
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
 
@@ -335,7 +335,7 @@ File gid_File_Lib_Collator_Data
   #else
     Name = "collator_data.dll";
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
 
@@ -346,7 +346,7 @@ File gid_File_Lib_Index_Data
   #else
     Name = "index_data.dll";
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
 
@@ -357,7 +357,7 @@ File gid_File_Lib_Textconv_Dict
   #else
     Name = "textconv_dict.dll";
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
 
@@ -365,7 +365,7 @@ File gid_File_Lib_Dlgprov
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT4(dlgprov,DLLPOSTFIX,.uno,UNXSUFFIX));
   #else
@@ -377,7 +377,7 @@ File gid_File_Lib_Stringresource
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT4(stringresource,DLLPOSTFIX,.uno,UNXSUFFIX));
   #else
@@ -392,7 +392,7 @@ File gid_File_Lib_Vbaobj
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT4(libvbaobj,DLLPOSTFIX,.uno,UNXSUFFIX));
   #else
@@ -410,7 +410,7 @@ File gid_File_Lib_Dnd
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "dnd.dll";
 End
 
@@ -421,7 +421,7 @@ End
 File gid_File_Lib_Dtrans
     TXT_FILE_BODY;
     Name = "dtrans.dll";
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED, UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -443,7 +443,7 @@ STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Emser, emser )
 File gid_File_Lib_Inprocserv
     TXT_FILE_BODY;
     Styles = (PACKED,PATCH);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "inprocserv.dll";
 End
 
@@ -462,14 +462,14 @@ File gid_File_Lib_Kab_1
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(libkab1,UNXSUFFIX));
 End
 
 File gid_File_Lib_Kab_Drv_1
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(libkabdrv1,UNXSUFFIX));
 End
 
@@ -486,14 +486,14 @@ File gid_File_Lib_Macab_1
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(libmacab1,UNXSUFFIX));
 End
 
 File gid_File_Lib_Macab_Drv_1
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(libmacabdrv1,UNXSUFFIX));
 End
 
@@ -517,7 +517,7 @@ File gid_File_Lib_Evtatt
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(libevtatt,UNXSUFFIX));
   #else
@@ -530,7 +530,7 @@ SPECIAL_UNO_LIB_FILE(gid_File_Lib_Fileacc,fileacc)
 File gid_File_Lib_Filterconfig1
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT,PATCH);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     RegistryID = gid_Starregistry_Services_Rdb;
     Name = SPECIAL_NAME(filterconfig1);
 End
@@ -549,7 +549,7 @@ File gid_File_Lib_Fop
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "fop.dll";
 End
 
@@ -561,7 +561,7 @@ File gid_File_Lib_Fps
     TXT_FILE_BODY;
     Styles = (PACKED,PATCH,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "fps.dll";
 End
 
@@ -572,7 +572,7 @@ End
 File gid_File_Lib_Desktopbe
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(desktopbe1.uno,UNXSUFFIX));
     RegistryID = gid_Starregistry_Services_Rdb;
     Regmergefile = "desktopbe1-ucd.txt";
@@ -584,7 +584,7 @@ File gid_File_Lib_Fps_Gnome
     TXT_FILE_BODY;
     Styles = (PACKED);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = SPECIAL_COMPONENT_LIB_NAME(fps_gnome.uno);
     Regmergefile = "fps-gnome-ucd.txt";
 End
@@ -610,7 +610,7 @@ File gid_File_Lib_Fps_Aqua
     TXT_FILE_BODY;
     Styles = (PACKED,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = SPECIAL_COMPONENT_LIB_NAME(fps_aqua.uno);
     Regmergefile = "fps-aqua-ucd.txt";
 End
@@ -620,7 +620,7 @@ File gid_File_Lib_MacOSXSpell
 	Styles = (PACKED,UNO_COMPONENT);
 	RegistryID = gid_Starregistry_Services_Rdb;
 	Name = LIBNAME(MacOSXSpell);
-	Dir = gid_Dir_Program;
+	Dir = SCP2_OOO_BIN_DIR;
 End
 
 File gid_File_Lib_avmediaQuickTime
@@ -628,7 +628,7 @@ File gid_File_Lib_avmediaQuickTime
 	Styles = (PACKED,UNO_COMPONENT);
 	RegistryID = gid_Starregistry_Services_Rdb;
 	Name = LIBNAME(avmediaQuickTime);
-	Dir = gid_Dir_Program;
+	Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
 #endif
@@ -642,7 +642,7 @@ SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Fpicker, fpicker.uno )
 File gid_File_Lib_Cairo
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     #ifdef MACOSX
        Name = STRING(CONCAT3(libcairo,.2,UNXSUFFIX));
@@ -670,7 +670,7 @@ File gid_File_Lib_Ftransl
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "ftransl.dll";
 End
 
@@ -684,7 +684,7 @@ File gid_File_Lib_Fwk
     Name = LIBNAME(fwk);
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT,PATCH);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
 
@@ -696,7 +696,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Fwm , fwm)
 File gid_File_Lib_Gdiplus
     BIN_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "gdiplus.dll";
 End
 #endif
@@ -705,7 +705,7 @@ File gid_File_Lib_Go
     Name = LIBNAME(go);
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT,PATCH);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
 
@@ -717,7 +717,7 @@ File gid_File_Lib_I18npool
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(i18npool.uno,UNXSUFFIX));
   #else
@@ -728,7 +728,7 @@ End
 File gid_File_Lib_I18nregexp
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT3(libi18nregexp,COMID,UNXSUFFIX));
   #else
@@ -740,7 +740,7 @@ File gid_File_Lib_I18nsearch
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(i18nsearch.uno,UNXSUFFIX));
   #else
@@ -764,7 +764,7 @@ File gid_File_Lib_I18nutil
   #else
     Name = STRING(CONCAT3(i18nutil,COMID,.dll));
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
 
@@ -779,7 +779,7 @@ File gid_File_Lib_Icudata
   #else
     Name = STRING(CONCAT4(icudt,ICU_MAJOR,ICU_MINOR,.dll));
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
 
@@ -790,7 +790,7 @@ File gid_File_Lib_Icui18n
   #else
     Name = STRING(CONCAT4(icuin,ICU_MAJOR,ICU_MINOR,.dll));
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
 
@@ -801,7 +801,7 @@ File gid_File_Lib_Icule
   #else
     Name = STRING(CONCAT4(icule,ICU_MAJOR,ICU_MINOR,.dll));
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
 
@@ -812,7 +812,7 @@ File gid_File_Lib_Icuuc
   #else
     Name = STRING(CONCAT4(icuuc,ICU_MAJOR,ICU_MINOR,.dll));
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
 
@@ -825,7 +825,7 @@ File gid_File_Lib_J
   #else
     Name = STRING(CONCAT4(j,DLLPOSTFIX,_g,.dll));
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
 
@@ -852,7 +852,7 @@ File gid_File_Lib_Hsqldb_2
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(libhsqldb,UNXSUFFIX));
   #else
@@ -867,7 +867,7 @@ End
 File gid_File_Lib_Lngpckinsthlp
     BIN_FILE_BODY;
     Styles = (PACKED, LANGUAGEPACK, BINARYTABLE, BINARYTABLE_ONLY);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "lngpckinsthlp.dll";
 End
 
@@ -878,7 +878,7 @@ End
 File gid_File_Lib_sn_tools
     BIN_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY, DONTRENAMEINPATCH);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "sn_tools.dll";
 End
 
@@ -889,7 +889,7 @@ End
 File gid_File_Lib_relnotes
     BIN_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY, DONTRENAMEINPATCH);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "relnotes.dll";
 End
 
@@ -900,7 +900,7 @@ End
 File gid_File_Lib_Patchmsi
     TXT_FILE_BODY;
     Name = "patchmsi.dll";
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED,PATCH,PATCH_ONLY,BINARYTABLE,BINARYTABLE_ONLY,DONTRENAMEINPATCH);
 End
 
@@ -911,7 +911,7 @@ End
 File gid_File_Lib_Rebasemsi
     TXT_FILE_BODY;
     Name = "rebase.dll";
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED,PATCH,BINARYTABLE,BINARYTABLE_ONLY,DONTRENAMEINPATCH);
 End
 
@@ -926,7 +926,7 @@ File gid_File_Lib_Localedata_En
   #else
     Name = "localedata_en.dll";
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
 
@@ -937,7 +937,7 @@ File gid_File_Lib_Localedata_Es
   #else
     Name = "localedata_es.dll";
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
 
@@ -948,7 +948,7 @@ File gid_File_Lib_Localedata_Euro
   #else
     Name = "localedata_euro.dll";
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
 
@@ -959,7 +959,7 @@ File gid_File_Lib_Localedata_Others
   #else
     Name = "localedata_others.dll";
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
 
@@ -967,7 +967,7 @@ File gid_File_Lib_Mcnttype
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(libmcnttype,UNXSUFFIX));
   #else
@@ -997,11 +997,11 @@ File gid_File_Lib_Mozbootstrap
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(libmozbootstrap,UNXSUFFIX));
   #else
-    Name = "libmozbootstrap.dll";
+    Name = "mozbootstrap.dll";
   #endif
 End
 
@@ -1077,6 +1077,32 @@ End
 #endif
 #endif
 
+#if defined(WNT) && defined( _gcc3 )
+
+#if defined(MINGW_GCCDLL)
+
+File gid_File_Lib_Mingw_GccS
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = MINGW_GCCDLL;
+    Styles = (PACKED, PATCH);
+End
+
+#endif
+
+#if defined(MINGW_GXXDLL)
+
+File gid_File_Lib_Mingw_Stdcpp
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = MINGW_GXXDLL;
+    Styles = (PACKED, PATCH);
+End
+
+#endif
+
+#endif
+
 #if defined(WNT)
 #if defined(M1400)
 #if defined(PROF_EDITION)
@@ -1125,7 +1151,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Offacc, offacc)
 File gid_File_Lib_Officebean
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(libofficebean,UNXSUFFIX));
   #else
@@ -1142,7 +1168,7 @@ File gid_File_Lib_Ole
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "oleautobridge.uno.dll";
 End
 
@@ -1191,7 +1217,7 @@ File gid_File_Lib_Vclplug_Gen
     Name = LIBNAME(vclplug_gen);
     TXT_FILE_BODY;
     Styles = (PACKED,PATCH);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
 
@@ -1201,7 +1227,7 @@ File gid_File_Lib_Vclplug_Gtk
     Name = LIBNAME(vclplug_gtk);
     TXT_FILE_BODY;
     Styles = (PACKED,PATCH);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
 #ifdef ENABLE_KDE
@@ -1210,7 +1236,7 @@ File gid_File_Lib_Vclplug_Kde
     Name = LIBNAME(vclplug_kde);
     TXT_FILE_BODY;
     Styles = (PACKED,PATCH);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
 #endif
@@ -1231,7 +1257,7 @@ File gid_File_Lib_AppleRemote
     Name = LIBNAME(AppleRemote);
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
 
@@ -1240,7 +1266,7 @@ File gid_File_Lib_Basebmp
     Name = LIBNAME(basebmp);
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
 
@@ -1254,7 +1280,7 @@ STD_LIB_FILE( gid_File_Lib_BaseBmp, basebmp )
 File gid_File_Lib_Recentfile
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(librecentfile,UNXSUFFIX));
 End
 
@@ -1265,7 +1291,7 @@ End
 File gid_File_Lib_Reg4allmsdoc
     TXT_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "reg4allmsdoc.dll";
 End
 
@@ -1276,7 +1302,7 @@ End
 File gid_File_Lib_Qslnkmsi
     TXT_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "qslnkmsi.dll";
 End
 
@@ -1287,7 +1313,7 @@ End
 File gid_File_Lib_Sdqsmsi
     TXT_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "sdqsmsi.dll";
 End
 
@@ -1297,7 +1323,7 @@ File gid_File_Lib_Res
     Name = LIBNAME(res);
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT,PATCH);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
 
@@ -1305,7 +1331,7 @@ File gid_File_Lib_Sax_Uno
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT,DONT_OVERWRITE);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(sax.uno,UNXSUFFIX));
   #else
@@ -1317,7 +1343,7 @@ File gid_File_Lib_Fastsax_Uno
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT,DONT_OVERWRITE);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(fastsax.uno,UNXSUFFIX));
   #else
@@ -1345,7 +1371,7 @@ File gid_File_Lib_Scriptframe
     Name = "scriptframe.dll";
   #endif
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED,PATCH,UNO_COMPONENT);
 End
 
@@ -1356,7 +1382,7 @@ File gid_File_Lib_Slideshow
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(slideshow.uno,UNXSUFFIX));
   #else
@@ -1368,7 +1394,7 @@ File gid_File_Lib_Sdbc_2
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(libsdbc2,UNXSUFFIX));
   #else
@@ -1384,7 +1410,7 @@ File gid_File_Lib_Sfx
     Name = LIBNAME(sfx);
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT,PATCH);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
 
@@ -1393,21 +1419,21 @@ End
 File gid_File_Lib_OOoFilt
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "ooofilt.dll";
 End
 
 File gid_File_Lib_OOoFiltProxy
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "ooofiltproxy.dll";
 End
 
 File gid_File_Lib_Instooofiltmsi
     TXT_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "instooofiltmsi.dll";
 End
 
@@ -1419,7 +1445,7 @@ File gid_File_Lib_Smplmail
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "smplmail.uno.dll";
 End
 
@@ -1433,7 +1459,7 @@ File gid_File_Lib_Spa
     Name = LIBNAME(spa);
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
 End
 
 #endif
@@ -1443,7 +1469,7 @@ File gid_File_Lib_Spell
     Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Name = LIBNAME(spell);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
 End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Spl, spl)
@@ -1456,6 +1482,8 @@ STD_LIB_FILE_PATCH( gid_File_Lib_Svl, svl )
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svtools, svt )
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Svtmisc, svtmisc.uno )
 
+STD_LIB_FILE_PATCH( gid_File_Lib_Svx_Core, svxcore)
+STD_LIB_FILE_PATCH( gid_File_Lib_Svx_Msfilter, svxmsfilter)
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svx, svx)
 STD_UNO_LIB_FILE( gid_File_Lib_TextConversionDlgs, textconversiondlgs)
 
@@ -1468,7 +1496,7 @@ File gid_File_Lib_Sysdtrans
     TXT_FILE_BODY;
     Styles = (PACKED,PATCH,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     #ifdef QUARTZ
       Name = STRING(CONCAT3(libdtransaqua,DLLPOSTFIX,UNXSUFFIX));
@@ -1500,7 +1528,7 @@ File gid_File_Lib_Tvhlp1
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(libtvhlp1,UNXSUFFIX));
   #else
@@ -1512,7 +1540,7 @@ File gid_File_Lib_Ucb1
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(libucb1,UNXSUFFIX));
   #else
@@ -1522,7 +1550,7 @@ End
 
 File gid_File_Lib_Ucbhelper
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
   #ifdef UNX
     Name = STRING(CONCAT3(libucbhelper4,COMID,UNXSUFFIX));
@@ -1538,7 +1566,7 @@ File gid_File_Lib_Ucpchelp1
   #else
     Name = "ucpchelp1.dll";
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED, UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -1564,7 +1592,7 @@ File gid_File_Lib_Lnth
     Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Name = LIBNAME(lnth);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
 End
 
 File gid_File_Lib_Hyph
@@ -1572,7 +1600,7 @@ File gid_File_Lib_Hyph
     Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Name = LIBNAME(hyphen);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
 End
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Utl , utl)
@@ -1585,7 +1613,7 @@ File gid_File_Lib_Vcl
     Name = LIBNAME(vcl);
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT,PATCH);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
 
@@ -1596,7 +1624,7 @@ File gid_File_Lib_Vos
   #else
     Name = STRING(CONCAT3(vos3,COMID,.dll));
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
 
@@ -1610,7 +1638,7 @@ File gid_File_Lib_Xo
     Name = LIBNAME(xo);
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT,PATCH);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
 
@@ -1630,7 +1658,7 @@ UNO_JAR_FILE( gid_File_Jar_Xsltvalidate, XSLTValidate )
 File gid_File_Lib_Xslt
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     #ifdef MACOSX
        Name = STRING(CONCAT4(libxslt,.,LIBXSLT_MAJOR,UNXSUFFIX));
@@ -1671,7 +1699,7 @@ File gid_File_Lib_XSec_Framework
     #else
         Name = "xsec_fw.dll";
     #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -1683,7 +1711,7 @@ File gid_File_Lib_XSec_XmlSec
     #else
         Name = "xsec_xmlsec.dll";
     #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -1695,7 +1723,7 @@ File gid_File_Lib_XSec_XMLSecurity
     #else
         Name = "xmlsecurity.dll";
     #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -1708,7 +1736,7 @@ File gid_File_Lib_LibXMLSec_xmlseccore
     #else
       Name = "libxmlsec.dll";
     #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
 
@@ -1719,7 +1747,7 @@ File gid_File_Lib_LibXMLSec_xmlsecmscrypto
   #else
     Name = "libxmlsec-mscrypto.dll";
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
 #endif
@@ -1731,7 +1759,7 @@ File gid_File_Lib_Migrationoo2
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(migrationoo2.uno,UNXSUFFIX));
   #else
@@ -1742,7 +1770,7 @@ End
 File gid_File_Lib_Libtextcat
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(libtextcat,UNXSUFFIX));
   #else
@@ -1760,7 +1788,7 @@ SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH( gid_File_Lib_Updatefeed , updatefeed.uno )
 File gid_File_Lib_Onlinecheck
     BIN_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "onlinecheck.dll";
 End
 #endif
@@ -1769,7 +1797,7 @@ End
 File gid_File_Lib_Openssl
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef WNT  
     Name = "ssleay32.dll";
   #endif
@@ -1780,7 +1808,7 @@ End
 File gid_File_Lib_Crypto
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     
 	#ifdef WNT
 	  Name = "libeay32.dll";
@@ -1790,30 +1818,33 @@ End
 
 File gid_File_Lib_Soffice
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = SCP2_URE_DL_NORMAL("sofficeapp");
     Styles = (PACKED);
 End
 
 File gid_File_Lib_Unopkgapp
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = SCP2_URE_DL_NORMAL("unopkgapp");
     Styles = (PACKED);
 End
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Oooimprovecore , oooimprovecore)
 
-#if defined WNT && !defined SYSTEM_MOZILLA && !defined WITHOUT_MOZILLA
+#if defined WNT && !defined _gcc3 && !defined SYSTEM_MOZILLA && !defined WITHOUT_MOZILLA && \
+    !(defined M1400 && defined PROF_EDITION && !defined _STLP_DEBUG)
+        // see common_brand.scp gid_Brand_File_Lib_Msvcp80 and
+        // gid_Brand_File_Lib_Msvcr80
 File gid_File_Moz_Msvcp80
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = SCP2_URE_DL_NORMAL("msvcp80");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
 File gid_File_Moz_Msvcr80
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = SCP2_URE_DL_NORMAL("msvcr80");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
@@ -1823,7 +1854,7 @@ End
 File gid_File_Lib_Raptor
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     #ifdef MACOSX
        Name = STRING(CONCAT4(libraptor,.,RAPTOR_MAJOR,UNXSUFFIX));
@@ -1842,7 +1873,7 @@ End
 File gid_File_Lib_Rasqal
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     #ifdef MACOSX
        Name = STRING(CONCAT4(librasqal,.,RASQAL_MAJOR,UNXSUFFIX));
@@ -1861,7 +1892,7 @@ End
 File gid_File_Lib_Rdf
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     #ifdef MACOSX
        Name = STRING(CONCAT4(librdf,.,REDLAND_MAJOR,UNXSUFFIX));

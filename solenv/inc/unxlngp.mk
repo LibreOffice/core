@@ -64,7 +64,7 @@ CFLAGSCXX= -pipe -fguiding-decls -fno-rtti -fno-exceptions $(ARCH_FLAGS)
 CFLAGSCXX += -fexceptions
 .ENDIF
 PICSWITCH:=-fPIC
-#STDOBJVCL=$(L)$/salmain.o
+#STDOBJVCL=$(L)/salmain.o
 CFLAGSOBJGUIMT=
 CFLAGSOBJCUIMT=
 CFLAGSSLOGUIMT=$(PICSWITCH)
