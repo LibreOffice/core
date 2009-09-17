@@ -80,7 +80,8 @@ IDLFILES=\
     XStatusIndicatorSupplier.idl\
     XAbortChannel.idl\
     XInteractionRequestStringResolver.idl\
-    InteractionRequestStringResolver.idl
+    InteractionRequestStringResolver.idl\
+    XUrlContainer.idl
 
 # ------------------------------------------------------------------
 
