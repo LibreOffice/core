@@ -1084,10 +1084,10 @@ Optional Packages:
                           Usage: --with-vba-package-format="builtin" or
                                  --with-vba-package-format="extn"
 
-  --without-fonts         Removes Bitstream Vera fonts from
-                          openoffice.org installation set, for people building
-                          for specific distributions where the fonts are known
-                          to be already available
+  --without-fonts         OOo includes some third-party fonts to provide a reliable
+                          basis for help content, templates, samples, etc.
+                          When these fonts are already known to be available on the
+                          system then you should use this option.
 
   --without-ppds          Removes Postscript Printer definition files from
                           openoffice.org installation set, for people building
@@ -15612,18 +15612,18 @@ echo "$as_me: error: boost/shared_ptr.hpp not found. install boost" >&2;}
 fi
 
 
-   if test "${ac_cv_header_boost_spirit_core_hpp+set}" = set; then
-  echo "$as_me:$LINENO: checking for boost/spirit/core.hpp" >&5
-echo $ECHO_N "checking for boost/spirit/core.hpp... $ECHO_C" >&6
-if test "${ac_cv_header_boost_spirit_core_hpp+set}" = set; then
+   if test "${ac_cv_header_boost_spirit_include_classic_core_hpp+set}" = set; then
+  echo "$as_me:$LINENO: checking for boost/spirit/include/classic_core.hpp" >&5
+echo $ECHO_N "checking for boost/spirit/include/classic_core.hpp... $ECHO_C" >&6
+if test "${ac_cv_header_boost_spirit_include_classic_core_hpp+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 fi
-echo "$as_me:$LINENO: result: $ac_cv_header_boost_spirit_core_hpp" >&5
-echo "${ECHO_T}$ac_cv_header_boost_spirit_core_hpp" >&6
+echo "$as_me:$LINENO: result: $ac_cv_header_boost_spirit_include_classic_core_hpp" >&5
+echo "${ECHO_T}$ac_cv_header_boost_spirit_include_classic_core_hpp" >&6
 else
   # Is the header compilable?
-echo "$as_me:$LINENO: checking boost/spirit/core.hpp usability" >&5
-echo $ECHO_N "checking boost/spirit/core.hpp usability... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking boost/spirit/include/classic_core.hpp usability" >&5
+echo $ECHO_N "checking boost/spirit/include/classic_core.hpp usability... $ECHO_C" >&6
 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -15631,7 +15631,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 $ac_includes_default
-#include <boost/spirit/core.hpp>
+#include <boost/spirit/include/classic_core.hpp>
 _ACEOF
 rm -f conftest.$ac_objext
 if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
@@ -15667,15 +15667,15 @@ echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
 echo "${ECHO_T}$ac_header_compiler" >&6
 
 # Is the header present?
-echo "$as_me:$LINENO: checking boost/spirit/core.hpp presence" >&5
-echo $ECHO_N "checking boost/spirit/core.hpp presence... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking boost/spirit/include/classic_core.hpp presence" >&5
+echo $ECHO_N "checking boost/spirit/include/classic_core.hpp presence... $ECHO_C" >&6
 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <boost/spirit/core.hpp>
+#include <boost/spirit/include/classic_core.hpp>
 _ACEOF
 if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
   (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
@@ -15709,25 +15709,25 @@ echo "${ECHO_T}$ac_header_preproc" >&6
 # So?  What about this header?
 case $ac_header_compiler:$ac_header_preproc:$ac_cxx_preproc_warn_flag in
   yes:no: )
-    { echo "$as_me:$LINENO: WARNING: boost/spirit/core.hpp: accepted by the compiler, rejected by the preprocessor!" >&5
-echo "$as_me: WARNING: boost/spirit/core.hpp: accepted by the compiler, rejected by the preprocessor!" >&2;}
-    { echo "$as_me:$LINENO: WARNING: boost/spirit/core.hpp: proceeding with the compiler's result" >&5
-echo "$as_me: WARNING: boost/spirit/core.hpp: proceeding with the compiler's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: boost/spirit/include/classic_core.hpp: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: boost/spirit/include/classic_core.hpp: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: boost/spirit/include/classic_core.hpp: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: boost/spirit/include/classic_core.hpp: proceeding with the compiler's result" >&2;}
     ac_header_preproc=yes
     ;;
   no:yes:* )
-    { echo "$as_me:$LINENO: WARNING: boost/spirit/core.hpp: present but cannot be compiled" >&5
-echo "$as_me: WARNING: boost/spirit/core.hpp: present but cannot be compiled" >&2;}
-    { echo "$as_me:$LINENO: WARNING: boost/spirit/core.hpp:     check for missing prerequisite headers?" >&5
-echo "$as_me: WARNING: boost/spirit/core.hpp:     check for missing prerequisite headers?" >&2;}
-    { echo "$as_me:$LINENO: WARNING: boost/spirit/core.hpp: see the Autoconf documentation" >&5
-echo "$as_me: WARNING: boost/spirit/core.hpp: see the Autoconf documentation" >&2;}
-    { echo "$as_me:$LINENO: WARNING: boost/spirit/core.hpp:     section \"Present But Cannot Be Compiled\"" >&5
-echo "$as_me: WARNING: boost/spirit/core.hpp:     section \"Present But Cannot Be Compiled\"" >&2;}
-    { echo "$as_me:$LINENO: WARNING: boost/spirit/core.hpp: proceeding with the preprocessor's result" >&5
-echo "$as_me: WARNING: boost/spirit/core.hpp: proceeding with the preprocessor's result" >&2;}
-    { echo "$as_me:$LINENO: WARNING: boost/spirit/core.hpp: in the future, the compiler will take precedence" >&5
-echo "$as_me: WARNING: boost/spirit/core.hpp: in the future, the compiler will take precedence" >&2;}
+    { echo "$as_me:$LINENO: WARNING: boost/spirit/include/classic_core.hpp: present but cannot be compiled" >&5
+echo "$as_me: WARNING: boost/spirit/include/classic_core.hpp: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: boost/spirit/include/classic_core.hpp:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: boost/spirit/include/classic_core.hpp:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: boost/spirit/include/classic_core.hpp: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: boost/spirit/include/classic_core.hpp: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: boost/spirit/include/classic_core.hpp:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: boost/spirit/include/classic_core.hpp:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: boost/spirit/include/classic_core.hpp: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: boost/spirit/include/classic_core.hpp: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: boost/spirit/include/classic_core.hpp: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: boost/spirit/include/classic_core.hpp: in the future, the compiler will take precedence" >&2;}
     (
       cat <<\_ASBOX
 ## ------------------------------------------ ##
@@ -15738,26 +15738,233 @@ _ASBOX
       sed "s/^/$as_me: WARNING:     /" >&2
     ;;
 esac
-echo "$as_me:$LINENO: checking for boost/spirit/core.hpp" >&5
-echo $ECHO_N "checking for boost/spirit/core.hpp... $ECHO_C" >&6
-if test "${ac_cv_header_boost_spirit_core_hpp+set}" = set; then
+echo "$as_me:$LINENO: checking for boost/spirit/include/classic_core.hpp" >&5
+echo $ECHO_N "checking for boost/spirit/include/classic_core.hpp... $ECHO_C" >&6
+if test "${ac_cv_header_boost_spirit_include_classic_core_hpp+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  ac_cv_header_boost_spirit_core_hpp=$ac_header_preproc
+  ac_cv_header_boost_spirit_include_classic_core_hpp=$ac_header_preproc
 fi
-echo "$as_me:$LINENO: result: $ac_cv_header_boost_spirit_core_hpp" >&5
-echo "${ECHO_T}$ac_cv_header_boost_spirit_core_hpp" >&6
+echo "$as_me:$LINENO: result: $ac_cv_header_boost_spirit_include_classic_core_hpp" >&5
+echo "${ECHO_T}$ac_cv_header_boost_spirit_include_classic_core_hpp" >&6
 
 fi
-if test $ac_cv_header_boost_spirit_core_hpp = yes; then
+if test $ac_cv_header_boost_spirit_include_classic_core_hpp = yes; then
   :
 else
-  { { echo "$as_me:$LINENO: error: boost/spirit/core.hpp not found. install boost" >&5
-echo "$as_me: error: boost/spirit/core.hpp not found. install boost" >&2;}
+  { { echo "$as_me:$LINENO: error: boost/spirit/include/classic_core.hpp not found. install boost >= 1.38" >&5
+echo "$as_me: error: boost/spirit/include/classic_core.hpp not found. install boost >= 1.38" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
 
+   if test "${ac_cv_header_boost_function_hpp+set}" = set; then
+  echo "$as_me:$LINENO: checking for boost/function.hpp" >&5
+echo $ECHO_N "checking for boost/function.hpp... $ECHO_C" >&6
+if test "${ac_cv_header_boost_function_hpp+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_boost_function_hpp" >&5
+echo "${ECHO_T}$ac_cv_header_boost_function_hpp" >&6
+else
+  # Is the header compilable?
+echo "$as_me:$LINENO: checking boost/function.hpp usability" >&5
+echo $ECHO_N "checking boost/function.hpp usability... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <boost/function.hpp>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_header_compiler=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6
+
+# Is the header present?
+echo "$as_me:$LINENO: checking boost/function.hpp presence" >&5
+echo $ECHO_N "checking boost/function.hpp presence... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <boost/function.hpp>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_cxx_preproc_warn_flag
+    ac_cpp_err=$ac_cpp_err$ac_cxx_werror_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_cxx_preproc_warn_flag in
+  yes:no: )
+    { echo "$as_me:$LINENO: WARNING: boost/function.hpp: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: boost/function.hpp: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: boost/function.hpp: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: boost/function.hpp: proceeding with the compiler's result" >&2;}
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    { echo "$as_me:$LINENO: WARNING: boost/function.hpp: present but cannot be compiled" >&5
+echo "$as_me: WARNING: boost/function.hpp: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: boost/function.hpp:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: boost/function.hpp:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: boost/function.hpp: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: boost/function.hpp: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: boost/function.hpp:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: boost/function.hpp:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: boost/function.hpp: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: boost/function.hpp: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: boost/function.hpp: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: boost/function.hpp: in the future, the compiler will take precedence" >&2;}
+    (
+      cat <<\_ASBOX
+## ------------------------------------------ ##
+## Report this to the AC_PACKAGE_NAME lists.  ##
+## ------------------------------------------ ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+echo "$as_me:$LINENO: checking for boost/function.hpp" >&5
+echo $ECHO_N "checking for boost/function.hpp... $ECHO_C" >&6
+if test "${ac_cv_header_boost_function_hpp+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_header_boost_function_hpp=$ac_header_preproc
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_boost_function_hpp" >&5
+echo "${ECHO_T}$ac_cv_header_boost_function_hpp" >&6
+
+fi
+if test $ac_cv_header_boost_function_hpp = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: boost/function.hpp not found. install boost" >&5
+echo "$as_me: error: boost/function.hpp not found. install boost" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+
+
+   save_CXXFLAGS=$CXXFLAGS
+   CXXFLAGS="$CXXFLAGS -fno-exceptions"
+   echo "$as_me:$LINENO: checking whether boost/function.hpp compiles with -fno-exceptions" >&5
+echo $ECHO_N "checking whether boost/function.hpp compiles with -fno-exceptions... $ECHO_C" >&6
+   cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <boost/function.hpp>
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_cxx_boost_no_exceptons_broken=no
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_cxx_boost_no_exceptons_broken=yes
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+   if test "$ac_cv_cxx_boost_no_exceptons_broken" = "yes"; then
+	{ { echo "$as_me:$LINENO: error: no, see https://bugzilla.redhat.com/show_bug.cgi?id=477131" >&5
+echo "$as_me: error: no, see https://bugzilla.redhat.com/show_bug.cgi?id=477131" >&2;}
+   { (exit 1); exit 1; }; }
+   else
+  	echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+   fi
+   CXXFLAGS=$save_CXXFLAGS
    ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
