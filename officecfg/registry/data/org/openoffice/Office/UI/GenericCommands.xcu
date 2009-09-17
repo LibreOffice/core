@@ -2093,22 +2093,22 @@
                     <value>1</value>
                 </prop>
             </node>
-            <node oor:name=".uno:ChangeCaseToUpper" oor:op="replace">
+            <node oor:name=".uno:LanguageStatus" oor:op="replace">
+                    <prop oor:name="Label" oor:type="xs:string">
+                            <value xml:lang="en-US">Language Status</value>
+                    </prop>
+            </node>
+            <node oor:name=".uno:ChooseControls" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Uppercase</value>
+                    <value xml:lang="en-US">Insert Controls</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
                 </prop>
             </node>
-                        <node oor:name=".uno:LanguageStatus" oor:op="replace">
-                                <prop oor:name="Label" oor:type="xs:string">
-                                        <value xml:lang="en-US">Language Status</value>
-                                </prop>
-                        </node>
-                        <node oor:name=".uno:ChooseControls" oor:op="replace">
+            <node oor:name=".uno:ChangeCaseToSentenceCase" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Insert Controls</value>
+                    <value xml:lang="en-US">~Sentence case</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -2117,6 +2117,30 @@
             <node oor:name=".uno:ChangeCaseToLower" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Lowercase</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ChangeCaseToUpper" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Uppercase</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ChangeCaseToTitleCase" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Title case</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ChangeCaseToToggleCase" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">T~oggle case</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
