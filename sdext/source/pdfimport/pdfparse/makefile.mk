@@ -44,6 +44,8 @@ EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
 CFLAGS+=-DSYSTEM_ZLIB
 .ENDIF
 
+ENVCFLAGS += -DBOOST_SPIRIT_USE_OLD_NAMESPACE
+
 # --- Files --------------------------------------------------------
 
 SLOFILES=\
