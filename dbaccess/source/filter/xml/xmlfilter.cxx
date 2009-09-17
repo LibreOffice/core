@@ -518,7 +518,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         {
             try
             {
-                xStorage = pMedium->GetStorage();
+                xStorage = pMedium->GetStorage( sal_False );
                 //  nError = pMedium->GetError();
             }
             catch(const Exception&)

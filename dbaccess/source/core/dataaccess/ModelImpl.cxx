@@ -1400,7 +1400,7 @@ sal_Bool ODatabaseModelImpl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
 }
 
 // -----------------------------------------------------------------------------
-Reference< XStorage > ODatabaseModelImpl::getLastCommitDocumentStorage()
+Reference< XStorage > ODatabaseModelImpl::getZipStorageToSign()
 {
     // we do not support signing the scripting storages, so we're allowed to
     // return <NULL/> here.
@@ -1444,10 +1444,17 @@ Reference< XEmbeddedScripts > ODatabaseModelImpl::getEmbeddedDocumentScripts() c
 }
 
 // -----------------------------------------------------------------------------
-sal_Int16 ODatabaseModelImpl::getScriptingSignatureState() const
+sal_Int16 ODatabaseModelImpl::getScriptingSignatureState()
 {
     // no support for signatures at the moment
     return SIGNATURESTATE_NOSIGNATURES;
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool ODatabaseModelImpl::hasTrustedScriptingSignature( sal_Bool /*bAllowUIToAddAuthor*/ )
+{
+    // no support for signatures at the moment
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------------
