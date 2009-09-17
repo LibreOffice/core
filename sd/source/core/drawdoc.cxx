@@ -34,6 +34,7 @@
 #include "PageListWatcher.hxx"
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <svx/forbiddencharacterstable.hxx>
 
 #include <svx/svxids.hrc>
@@ -232,9 +233,12 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         SvtLinguOptions         aOptions;
         aLinguConfig.GetOptions( aOptions );
 
-        SetLanguage( aOptions.nDefaultLanguage, EE_CHAR_LANGUAGE );
-        SetLanguage( aOptions.nDefaultLanguage_CJK, EE_CHAR_LANGUAGE_CJK );
-        SetLanguage( aOptions.nDefaultLanguage_CTL, EE_CHAR_LANGUAGE_CTL );
+        SetLanguage( MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage,
+            ::com::sun::star::i18n::ScriptType::LATIN), EE_CHAR_LANGUAGE );
+        SetLanguage( MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage_CJK,
+            ::com::sun::star::i18n::ScriptType::ASIAN), EE_CHAR_LANGUAGE_CJK );
+        SetLanguage( MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage_CTL,
+            ::com::sun::star::i18n::ScriptType::COMPLEX), EE_CHAR_LANGUAGE_CTL );
 
         mbOnlineSpell = aOptions.bIsSpellAuto;
     }
