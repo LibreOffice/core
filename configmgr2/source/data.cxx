@@ -268,8 +268,11 @@ rtl::Reference< Node > Data::resolvePath(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path,
                 css::uno::Reference< css::uno::XInterface >());
         }
+        // For backwards compatibility, allow set members to be accessed with
+        // simple path segments, like group members:
+        p = p->getMember(seg);
         if (setElement) {
-            switch (p->kind()) {
+            switch (par->kind()) {
             case Node::KIND_LOCALIZED_PROPERTY:
                 if (templateName.getLength() != 0) {
                     throw css::uno::RuntimeException(
@@ -281,7 +284,7 @@ rtl::Reference< Node > Data::resolvePath(
                 break;
             case Node::KIND_SET:
                 if (templateName.getLength() != 0 &&
-                    !dynamic_cast< SetNode * >(p.get())->isValidTemplate(
+                    !dynamic_cast< SetNode * >(par.get())->isValidTemplate(
                         templateName))
                 {
                     throw css::uno::RuntimeException(
@@ -297,7 +300,6 @@ rtl::Reference< Node > Data::resolvePath(
                      path),
                     css::uno::Reference< css::uno::XInterface >());
             }
-            p = p->getMember(seg);
             if (templateName.getLength() != 0 && p != 0) {
                 rtl::OUString name(p->getTemplateName());
                 OSL_ASSERT(name.getLength() != 0);
@@ -309,10 +311,6 @@ rtl::Reference< Node > Data::resolvePath(
                         css::uno::Reference< css::uno::XInterface >());
                 }
             }
-        } else {
-            // For backwards compatibility, allow set members to be accessed
-            // with simple path segments, like group members:
-            p = p->getMember(seg);
         }
     }
 }

@@ -40,6 +40,7 @@
 #include "com/sun/star/beans/UnknownPropertyException.hpp"
 #include "com/sun/star/beans/XExactName.hpp"
 #include "com/sun/star/beans/XHierarchicalPropertySet.hpp"
+#include "com/sun/star/beans/XHierarchicalPropertySetInfo.hpp"
 #include "com/sun/star/beans/XMultiHierarchicalPropertySet.hpp"
 #include "com/sun/star/beans/XMultiPropertySet.hpp"
 #include "com/sun/star/beans/XProperty.hpp"
@@ -66,9 +67,9 @@
 
 #include "type.hxx"
 
-#if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 14
+#if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_15
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_15
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 15
 #include "comphelper/implbase_var.hxx"
 #undef COMPHELPER_IMPLBASE_INTERFACE_NUMBER
 #endif
@@ -99,7 +100,7 @@ class Node;
 class RootAccess;
 
 typedef
-    comphelper::WeakComponentImplHelper14<
+    comphelper::WeakComponentImplHelper15<
         com::sun::star::lang::XServiceInfo,
         com::sun::star::container::XHierarchicalNameAccess,
         com::sun::star::container::XContainer,
@@ -112,6 +113,7 @@ typedef
         com::sun::star::beans::XMultiPropertySet,
         com::sun::star::beans::XHierarchicalPropertySet,
         com::sun::star::beans::XMultiHierarchicalPropertySet,
+        com::sun::star::beans::XHierarchicalPropertySetInfo,
         com::sun::star::container::XNameContainer,
         com::sun::star::lang::XSingleServiceFactory >
     AccessBase;
@@ -403,6 +405,16 @@ private:
             com::sun::star::lang::IllegalArgumentException,
             com::sun::star::lang::WrappedTargetException,
             com::sun::star::uno::RuntimeException);
+
+    virtual com::sun::star::beans::Property SAL_CALL
+    getPropertyByHierarchicalName(rtl::OUString const & aHierarchicalName)
+        throw (
+            com::sun::star::beans::UnknownPropertyException,
+            com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL hasPropertyByHierarchicalName(
+        rtl::OUString const & aHierarchicalName)
+        throw (com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL replaceByName(
         rtl::OUString const & aName, com::sun::star::uno::Any const & aElement)

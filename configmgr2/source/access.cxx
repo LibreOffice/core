@@ -34,6 +34,7 @@
 
 #include "com/sun/star/beans/Property.hpp"
 #include "com/sun/star/beans/PropertyAttribute.hpp"
+#include "com/sun/star/beans/PropertyChangeEvent.hpp"
 #include "com/sun/star/beans/PropertyVetoException.hpp"
 #include "com/sun/star/beans/UnknownPropertyException.hpp"
 #include "com/sun/star/beans/XPropertiesChangeListener.hpp"
@@ -130,7 +131,10 @@ css::uno::Any Access::queryInterface(css::uno::Type const & aType)
                     "com.sun.beans.XHierarchicalPropertySet")) ||
             aType.getTypeName().equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM(
-                    "com.sun.beans.XMultiHierarchicalPropertySet")))
+                    "com.sun.beans.XMultiHierarchicalPropertySet")) ||
+            aType.getTypeName().equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "com.sun.beans.XHierarchicalPropertySetInfo")))
         {
             if (getNode()->kind() != Node::KIND_GROUP) {
                 res.clear();
@@ -631,8 +635,6 @@ void Access::setName(rtl::OUString const & aName)
     checkLocalizedPropertyAccess();
     checkFinalized();
     switch (getNode()->kind()) {
-    case Node::KIND_LOCALIZED_PROPERTY:
-        if(true)abort();*(char*)0=0;throw 0;//TODO
     case Node::KIND_GROUP:
     case Node::KIND_SET:
         {
@@ -666,12 +668,16 @@ void Access::setName(rtl::OUString const & aName)
                     }
                 }
             }
-            throw css::uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "configmgr setName inappropriate node")),
-                static_cast< cppu::OWeakObject * >(this));
         }
+        // fall through
+    case Node::KIND_LOCALIZED_PROPERTY:
+        // renaming a property could only work for an extension property, but a
+        // localized property is never an extension property
+        throw css::uno::RuntimeException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "configmgr setName inappropriate node")),
+            static_cast< cppu::OWeakObject * >(this));
     default:
         OSL_ASSERT(false); // this cannot happen
         break;
@@ -841,7 +847,7 @@ css::uno::Sequence< css::uno::Any > Access::getPropertyValues(
 }
 
 void Access::addPropertiesChangeListener(
-    css::uno::Sequence< rtl::OUString > const & /*aPropertyNames*/, //TODO
+    css::uno::Sequence< rtl::OUString > const &,
     css::uno::Reference< css::beans::XPropertiesChangeListener > const &
         xListener)
     throw (css::uno::RuntimeException)
@@ -864,19 +870,26 @@ void Access::removePropertiesChangeListener(
 }
 
 void Access::firePropertiesChangeEvent(
-    css::uno::Sequence< rtl::OUString > const & /*aPropertyNames*/,
+    css::uno::Sequence< rtl::OUString > const & aPropertyNames,
     css::uno::Reference< css::beans::XPropertiesChangeListener > const &
-        /*xListener*/)
+        xListener)
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    if(true)abort();*(char*)0=0;throw 0;//TODO
+    css::uno::Sequence< css::beans::PropertyChangeEvent > events(
+        aPropertyNames.getLength());
+    for (sal_Int32 i = 0; i < events.getLength(); ++i) {
+        events[i].PropertyName = aPropertyNames[i];
+        events[i].Further = false;
+        events[i].PropertyHandle = -1;
+    }
+    xListener->propertiesChange(events);
 }
 
 css::uno::Reference< css::beans::XHierarchicalPropertySetInfo >
 Access::getHierarchicalPropertySetInfo() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_GROUP));
-    if(true)abort();*(char*)0=0;throw 0;//TODO
+    return this;
 }
 
 void Access::setHierarchicalPropertyValue(
@@ -989,6 +1002,29 @@ css::uno::Sequence< css::uno::Any > Access::getHierarchicalPropertyValues(
         vals[i] = child->asValue();
     }
     return vals;
+}
+
+css::beans::Property Access::getPropertyByHierarchicalName(
+    rtl::OUString const & aHierarchicalName)
+    throw (css::beans::UnknownPropertyException, css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_GROUP));
+    osl::MutexGuard g(lock);
+    rtl::Reference< ChildAccess > child(getSubChild(aHierarchicalName));
+    if (!child.is()) {
+        throw css::beans::UnknownPropertyException(
+            aHierarchicalName, static_cast< cppu::OWeakObject * >(this));
+    }
+    return child->asProperty();
+}
+
+sal_Bool Access::hasPropertyByHierarchicalName(
+    rtl::OUString const & aHierarchicalName)
+    throw (css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_GROUP));
+    osl::MutexGuard g(lock);
+    return getSubChild(aHierarchicalName).is();
 }
 
 void Access::replaceByName(
