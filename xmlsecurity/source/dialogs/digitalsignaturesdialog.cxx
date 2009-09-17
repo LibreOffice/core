@@ -530,7 +530,8 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             {
                 //check the validity of the cert
                 try {
-                    sal_Int32 certResult = xSecEnv->verifyCertificate(xCert);
+                    sal_Int32 certResult = xSecEnv->verifyCertificate(xCert,
+                        Sequence<css::uno::Reference<css::security::XCertificate> >());
 
                     //These errors are alloweds
                     sal_Int32 validErrors = css::security::CertificateValidity::VALID

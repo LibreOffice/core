@@ -400,11 +400,47 @@ static int parseMimeResource( CFBundleRef i_xBundle,
     return nAdded;
 }
 
+// check some known bad plugins to avoid crashes
+static bool checkBlackList( CFBundleRef i_xBundle )
+{
+    rtl::OUString aBundleName;
+    CFTypeRef bundlename = CFBundleGetValueForInfoDictionaryKey( i_xBundle, CFSTR("CFBundleName"));
+    if( bundlename && CFGetTypeID(bundlename) == CFStringGetTypeID() )
+        aBundleName = getString( static_cast<CFStringRef>(bundlename) );
+
+    rtl::OUString aBundleVersion;
+    CFTypeRef bundleversion = CFBundleGetValueForInfoDictionaryKey( i_xBundle, CFSTR("CFBundleVersion"));
+    if( bundleversion && CFGetTypeID(bundleversion) == CFStringGetTypeID() )
+        aBundleVersion = getString( static_cast<CFStringRef>(bundleversion) );
+
+    // #i102735# VLC plugin prior to 1.0 tends to crash
+    if( aBundleName.equalsAscii( "VLC Plug-in" ) )
+    {
+        sal_Int32 nIndex = 0;
+        rtl::OUString aMajor( aBundleVersion.getToken( 0, '.', nIndex ) );
+        if( aMajor.toInt32() < 1 )
+        {
+            #if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "rejecting VCL plugin (%s %s)\n",
+                     rtl::OUStringToOString( aBundleName, RTL_TEXTENCODING_UTF8 ).getStr(),
+                     rtl::OUStringToOString( aBundleVersion, RTL_TEXTENCODING_UTF8 ).getStr()
+                     );
+            #endif
+            return true;
+        }
+    }
+
+    return false;
+}
+
 static int getPluginDescriptions( CFBundleRef i_xBundle , list< PluginDescription* >& io_rDescriptions )
 {
     int nDescriptions = 0;
     if( ! i_xBundle )
         return nDescriptions;
+
+    if( checkBlackList( i_xBundle ) )
+        return 0;
 
     rtl::OUString aPlugURL;
     CFURLRef xURL = CFBundleCopyBundleURL( i_xBundle );
@@ -424,7 +460,8 @@ static int getPluginDescriptions( CFBundleRef i_xBundle , list< PluginDescriptio
     fprintf( stderr, "URL: %s\nname: %s\ndescription: %s\n",
         rtl::OUStringToOString( aPlugURL, RTL_TEXTENCODING_UTF8 ).getStr(),
         rtl::OUStringToOString( aPlugName, RTL_TEXTENCODING_UTF8 ).getStr(),
-        rtl::OUStringToOString( aPlugDescription, RTL_TEXTENCODING_UTF8 ).getStr() );
+        rtl::OUStringToOString( aPlugDescription, RTL_TEXTENCODING_UTF8 ).getStr()
+        );
     #endif
 
 

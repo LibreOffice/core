@@ -37,12 +37,15 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #ifndef _COM_SUN_STAR_LANG_XPSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 #include <HashMaps.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <osl/file.h>
+#include <mutexholder.hxx>
+
 class ZipOutputStream;
 class ZipPackageFolder;
 class ZipFile;
@@ -81,6 +84,8 @@ class ZipPackage : public cppu::WeakImplHelper7
                     >
 {
 protected:
+    SotMutexHolderRef m_aMutexHolder;
+
     ::com::sun::star::uno::Sequence < sal_Int8 > aEncryptionKey;
     FolderHash       aRecent;
     ::rtl::OUString  sURL;
@@ -106,9 +111,13 @@ protected:
     void parseManifest();
     void parseContentType();
     void getZipFileContents();
-    sal_Bool writeFileIsTemp();
-    ::com::sun::star::uno::Reference < ::com::sun::star::io::XActiveDataStreamer > openOriginalForOutput();
+
     void WriteMimetypeMagicFile( ZipOutputStream& aZipOut );
+    void WriteManifest( ZipOutputStream& aZipOut, const ::std::vector< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& aManList );
+    void WriteContentTypes( ZipOutputStream& aZipOut, const ::std::vector< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& aManList );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > writeTempFile();
+    ::com::sun::star::uno::Reference < ::com::sun::star::io::XActiveDataStreamer > openOriginalForOutput();
     void DisconnectFromTargetAndThrowException_Impl(
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xTempStream );
 
@@ -118,6 +127,10 @@ public:
     ZipFile& getZipFile() { return *pZipFile;}
     const com::sun::star::uno::Sequence < sal_Int8 > & getEncryptionKey ( ) {return aEncryptionKey;}
     sal_Int16 getFormat() const { return m_nFormat; }
+
+    SotMutexHolderRef GetSharedMutexRef() { return m_aMutexHolder; }
+
+    void ConnectTo( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream );
 
     // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
