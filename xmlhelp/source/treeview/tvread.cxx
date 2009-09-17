@@ -44,7 +44,6 @@
 #include <expat/xmlparse.h>
 #endif
 #include <osl/file.hxx>
-#include <unotools/configmgr.hxx>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -708,11 +707,32 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     rtl::OUString productName( getKey(  xHierAccess,"Product/ooName" ) );
     setupversion = getKey(  xHierAccess,"Product/ooSetupVersion" );
     setupextension = rtl::OUString();
-    utl::ConfigManager * mgr = utl::ConfigManager::GetConfigManager();
-    if (mgr != NULL) {
-        mgr->GetDirectConfigProperty(utl::ConfigManager::PRODUCTEXTENSION) >>=
-            setupextension;
+
+    try
+    {
+        uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
+              xSMgr ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")), uno::UNO_QUERY_THROW);
+
+        uno::Sequence < uno::Any > lParams(1);
+        beans::PropertyValue                       aParam ;
+        aParam.Name    = ::rtl::OUString::createFromAscii("nodepath");
+        aParam.Value <<= ::rtl::OUString::createFromAscii("/org.openoffice.Setup/Product");
+        lParams[0] = uno::makeAny(aParam);
+
+        // open it
+        uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
+                    ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"),
+                    lParams) );
+
+        uno::Reference< container::XNameAccess > xDirectAccess(xCFG, uno::UNO_QUERY);
+        uno::Any aRet = xDirectAccess->getByName(::rtl::OUString::createFromAscii("ooSetupExtension"));
+
+        aRet >>= setupextension;
     }
+    catch ( uno::Exception& )
+    {
+    }
+
     rtl::OUString productVersion( setupversion +
                                   rtl::OUString::createFromAscii( " " ) +
                                   setupextension );
