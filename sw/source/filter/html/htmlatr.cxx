@@ -81,7 +81,6 @@
 #include <txatbase.hxx>
 #include <frmatr.hxx>
 #include <charfmt.hxx>
-#include <fmthbsh.hxx>
 #include <fmtfld.hxx>
 #include <doc.hxx>
 #include <pam.hxx>
@@ -1801,8 +1800,8 @@ HTMLEndPosLst::HTMLEndPosLst( SwDoc *pD, SwDoc* pTempl,
     xub_StrLen nPos = 0;
     while( nPos < nEndPos )
     {
-        sal_uInt16 nScript = pBreakIt->xBreak->getScriptType( rText, nPos );
-        nPos = (xub_StrLen)pBreakIt->xBreak->endOfScript( rText, nPos, nScript );
+        sal_uInt16 nScript = pBreakIt->GetBreakIter()->getScriptType( rText, nPos );
+        nPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript( rText, nPos, nScript );
         aScriptChgLst.Insert( nPos, aScriptChgLst.Count() );
         aScriptLst.Insert( nScript, aScriptLst.Count() );
     }
@@ -2495,7 +2494,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             if( RES_TXTATR_FIELD == pHt->Which() )      // Felder nicht
                 continue;                               // ausgeben
 
-            if( pHt->GetEnd() )
+            if ( pHt->GetEnd() && !pHt->HasDummyChar() )
             {
                 xub_StrLen nHtEnd = *pHt->GetEnd(),
                        nHtStt = *pHt->GetStart();
@@ -2555,7 +2554,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                 && nStrPos != nEnde )
             {
                 do {
-                    if( pHt->GetEnd() )
+                    if ( pHt->GetEnd() && !pHt->HasDummyChar() )
                     {
                         if( RES_CHRATR_KERNING == pHt->Which() &&
                             rHTMLWrt.IsHTMLMode(HTMLMODE_FIRSTLINE) &&
@@ -3041,15 +3040,6 @@ static Writer& OutHTML_SwFlyCnt( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-static Writer& OutHTML_SwHardBlank( Writer& rWrt, const SfxPoolItem& rHt )
-{
-    HTMLOutContext aContext ( ((SwHTMLWriter&)rWrt).eDestEnc );
-    HTMLOutFuncs::Out_Char( rWrt.Strm(), ((SwFmtHardBlank&)rHt).GetChar(),
-                            aContext,
-                            &((SwHTMLWriter&)rWrt).aNonConvertableCharacters);
-    HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
-    return rWrt;
-}
 
 // Das ist jetzt unser Blink-Item. Blinkend wird eingeschaltet, indem man
 // das Item auf TRUE setzt!
@@ -3416,7 +3406,7 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_TXTATR_FLYCNT */             OutHTML_SwFlyCnt,
 /* RES_TXTATR_FTN */                OutHTML_SwFmtFtn,
 /* RES_TXTATR_SOFTHYPH */           0,
-/* RES_TXTATR_HARDBLANK*/           OutHTML_SwHardBlank,
+/* RES_TXTATR_HARDBLANK*/           0,
 /* RES_TXTATR_DUMMY1 */             0, // Dummy:
 /* RES_TXTATR_DUMMY2 */             0, // Dummy:
 

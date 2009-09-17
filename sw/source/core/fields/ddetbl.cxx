@@ -131,8 +131,8 @@ void SwDDETable::ChangeContent()
             SwTxtNode* pTxtNode = aNdIdx.GetNode().GetTxtNode();
             ASSERT( pTxtNode, "Kein Node" );
             SwIndex aCntIdx( pTxtNode, 0 );
-            pTxtNode->Erase( aCntIdx );
-            pTxtNode->Insert( aLine.GetToken( i, '\t' ), aCntIdx );
+            pTxtNode->EraseText( aCntIdx );
+            pTxtNode->InsertText( aLine.GetToken( i, '\t' ), aCntIdx );
 
             SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)pBox->GetFrmFmt();
             pBoxFmt->LockModify();

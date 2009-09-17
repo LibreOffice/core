@@ -198,7 +198,12 @@ SwComparePosition ComparePosition(
                 nRet = POS_INSIDE;
         }
         else
-            nRet = POS_OVERLAP_BEHIND;
+        {
+            if (rStt1 == rStt2)
+                nRet = POS_OUTSIDE;
+            else
+                nRet = POS_OVERLAP_BEHIND;
+        }
     }
     else if( rEnd2 == rStt1 )
         nRet = POS_COLLIDE_START;
@@ -237,7 +242,12 @@ SwComparePosition ComparePosition(
                 nRet = POS_INSIDE;
         }
         else
-            nRet = POS_OVERLAP_BEHIND;
+        {
+            if (nStt1 == nStt2)
+                nRet = POS_OUTSIDE;
+            else
+                nRet = POS_OVERLAP_BEHIND;
+        }
     }
     else if( nEnd2 == nStt1 )
         nRet = POS_COLLIDE_START;

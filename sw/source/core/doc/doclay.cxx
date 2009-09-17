@@ -362,17 +362,20 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
         {
             const SwPosition* pPos = rAnchor.GetCntntAnchor();
             SwTxtNode *pTxtNd = pPos->nNode.GetNode().GetTxtNode();
-            SwTxtFlyCnt* pAttr;
 
-            // Attribut steht noch im TextNode, loeschen
-            if( pTxtNd && 0 != ( pAttr = ((SwTxtFlyCnt*)pTxtNd->GetTxtAttr(
-                                            pPos->nContent.GetIndex() ))) &&
-                pAttr->GetFlyCnt().GetFrmFmt() == pFmt )
+            // attribute is still in text node, delete it
+            if ( pTxtNd )
             {
-                // Pointer auf 0, nicht loeschen
-                ((SwFmtFlyCnt&)pAttr->GetFlyCnt()).SetFlyFmt();
-                SwIndex aIdx( pPos->nContent );
-                pTxtNd->Erase( aIdx, 1 );
+                SwTxtFlyCnt* const pAttr = static_cast<SwTxtFlyCnt*>(
+                    pTxtNd->GetTxtAttrForCharAt( pPos->nContent.GetIndex(),
+                        RES_TXTATR_FLYCNT ));
+                if ( pAttr && (pAttr->GetFlyCnt().GetFrmFmt() == pFmt) )
+                {
+                    // dont delete, set pointer to 0
+                    const_cast<SwFmtFlyCnt&>(pAttr->GetFlyCnt()).SetFlyFmt();
+                    SwIndex aIdx( pPos->nContent );
+                    pTxtNd->EraseText( aIdx, 1 );
+                }
             }
         }
 
@@ -550,9 +553,10 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
 
     if( bSetTxtFlyAtt && FLY_IN_CNTNT == rNewAnchor.GetAnchorId() )
     {
-        SwPosition* pPos = (SwPosition*)rNewAnchor.GetCntntAnchor();
-        pPos->nNode.GetNode().GetTxtNode()->InsertItem(SwFmtFlyCnt( pDest ),
-                                            pPos->nContent.GetIndex(), 0 );
+        const SwPosition* pPos = rNewAnchor.GetCntntAnchor();
+        SwFmtFlyCnt aFmt( pDest );
+        pPos->nNode.GetNode().GetTxtNode()->InsertItem(
+            aFmt, pPos->nContent.GetIndex(), 0 );
     }
 
     if( bMakeFrms )
@@ -698,7 +702,10 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
         ASSERT(pTxtNode!= 0, "There should be a SwTxtNode!");
 
         if (pTxtNode != NULL)
-            pTxtNode->InsertItem(SwFmtFlyCnt( pFmt ), nStt, nStt );
+        {
+            SwFmtFlyCnt aFmt( pFmt );
+            pTxtNode->InsertItem( aFmt, nStt, nStt );
+        }
     }
 
     if( SFX_ITEM_SET != pFmt->GetAttrSet().GetItemState( RES_FRM_SIZE ))
@@ -844,7 +851,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                         GetNodes().MakeTxtNode( aRg.aStart,
                                     (SwTxtFmtColl*)GetDfltTxtFmtColl() );
 
-                    Move( aRg, aPos.nNode, DOC_MOVEDEFAULT );
+                    MoveNodeRange( aRg, aPos.nNode, DOC_MOVEDEFAULT );
                 }
                 else
                 {
@@ -885,8 +892,11 @@ if( DoesUndo() )    // werden erstmal alle Undo - Objecte geloescht.
                 do {
                     if( pTmp->HasMark() &&
                         *pTmp->GetPoint() != *pTmp->GetMark() )
-                        Copy( *pTmp, aPos, false );
-                } while( &rPam != ( pTmp = (SwPaM*)pTmp->GetNext() ) );
+                    {
+                        CopyRange( *pTmp, aPos, false );
+                    }
+                    pTmp = static_cast<SwPaM*>(pTmp->GetNext());
+                } while ( &rPam != pTmp );
                 mbCopyIsMove = bOldFlag;
                 mbUndo = bOldUndo;
 
@@ -894,8 +904,11 @@ if( DoesUndo() )    // werden erstmal alle Undo - Objecte geloescht.
                 do {
                     if( pTmp->HasMark() &&
                         *pTmp->GetPoint() != *pTmp->GetMark() )
+                    {
                         DeleteAndJoin( *pTmp );
-                } while( &rPam != ( pTmp = (SwPaM*)pTmp->GetNext() ) );
+                    }
+                    pTmp = static_cast<SwPaM*>(pTmp->GetNext());
+                } while ( &rPam != pTmp );
             }
         } while( sal_False );
     }
@@ -982,8 +995,9 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     if( FLY_IN_CNTNT == eAnchorId )
     {
         xub_StrLen nStt = rRg.GetPoint()->nContent.GetIndex();
+        SwFmtFlyCnt aFmt( pFmt );
         rRg.GetPoint()->nNode.GetNode().GetTxtNode()->InsertItem(
-                                        SwFmtFlyCnt( pFmt ), nStt, nStt );
+                aFmt, nStt, nStt );
     }
 
     SwDrawContact* pContact = new SwDrawContact( pFmt, &rDrawObj );
@@ -1379,16 +1393,16 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
                     SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
                     ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
                     const xub_StrLen nIdx = pPos->nContent.GetIndex();
-                    SwTxtAttr *pHnt = pTxtNode->GetTxtAttr( nIdx, RES_TXTATR_FLYCNT );
+                    SwTxtAttr * const pHnt =
+                        pTxtNode->GetTxtAttrForCharAt(nIdx, RES_TXTATR_FLYCNT);
 
-#ifndef PRODUCT
                     ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                                 "Missing FlyInCnt-Hint." );
-                    ASSERT( pHnt && ((SwFmtFlyCnt&)pHnt->GetFlyCnt()).
-                                GetFrmFmt() == pOldFmt,
+                    ASSERT( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pOldFmt,
                                 "Wrong TxtFlyCnt-Hint." );
-#endif
-                    ((SwFmtFlyCnt&)pHnt->GetFlyCnt()).SetFlyFmt( pNewFmt );
+
+                    const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt(
+                            pNewFmt );
                 }
 
 
@@ -1466,7 +1480,7 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
 
         //String einfuegen
         SwIndex aIdx( pNew, 0 );
-        pNew->Insert( aTxt, aIdx );
+        pNew->InsertText( aTxt, aIdx );
 
         //
         //Feld einfuegen
@@ -1475,7 +1489,8 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
             SwSetExpField aFld( (SwSetExpFieldType*)pType, aEmptyStr, SVX_NUM_ARABIC);
             if( bOrderNumberingFirst )
                 nIdx = 0;
-            pNew->InsertItem( SwFmtFld( aFld ), nIdx, nIdx );
+            SwFmtFld aFmt( aFld );
+            pNew->InsertItem( aFmt, nIdx, nIdx );
             if(rCharacterStyle.Len())
             {
                 SwCharFmt* pCharFmt = FindCharFmtByName( rCharacterStyle );
@@ -1484,9 +1499,12 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
                     const USHORT nMyId = SwStyleNameMapper::GetPoolIdFromUIName(rCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
                     pCharFmt = GetCharFmtFromPool( nMyId );
                 }
-                if(pCharFmt)
-                    pNew->InsertItem( SwFmtCharFmt( pCharFmt ), 0,
-                                        nSepIdx + 1, nsSetAttrMode::SETATTR_DONTEXPAND );
+                if (pCharFmt)
+                {
+                    SwFmtCharFmt aCharFmt( pCharFmt );
+                    pNew->InsertItem( aCharFmt, 0,
+                        nSepIdx + 1, nsSetAttrMode::SETATTR_DONTEXPAND );
+                }
             }
         }
 
@@ -1672,7 +1690,8 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
         SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
         ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
         const xub_StrLen nIdx = pPos->nContent.GetIndex();
-        SwTxtAttr *pHnt = pTxtNode->GetTxtAttr( nIdx, RES_TXTATR_FLYCNT );
+        SwTxtAttr * const pHnt =
+            pTxtNode->GetTxtAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
 
 #ifndef PRODUCT
         ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
@@ -1681,7 +1700,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
                     GetFrmFmt() == (SwFrmFmt*)pOldFmt,
                     "Wrong TxtFlyCnt-Hint." );
 #endif
-        ((SwFmtFlyCnt&)pHnt->GetFlyCnt()).SetFlyFmt( pNewFmt );
+        const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt( pNewFmt );
     }
 
 
@@ -1751,7 +1770,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
 
         // insert text
         SwIndex aIdx( pNew, 0 );
-        pNew->Insert( aTxt, aIdx );
+        pNew->InsertText( aTxt, aIdx );
 
         // insert field
         if ( pType )
@@ -1759,7 +1778,8 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
             SwSetExpField aFld( (SwSetExpFieldType*)pType, aEmptyStr, SVX_NUM_ARABIC );
             if( bOrderNumberingFirst )
                 nIdx = 0;
-            pNew->InsertItem( SwFmtFld( aFld ), nIdx, nIdx );
+            SwFmtFld aFmt( aFld );
+            pNew->InsertItem( aFmt, nIdx, nIdx );
             if ( rCharacterStyle.Len() )
             {
                 SwCharFmt* pCharFmt = FindCharFmtByName( rCharacterStyle );
@@ -1769,7 +1789,11 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
                     pCharFmt = GetCharFmtFromPool( nMyId );
                 }
                 if ( pCharFmt )
-                    pNew->InsertItem( SwFmtCharFmt( pCharFmt ), 0, nSepIdx + 1, nsSetAttrMode::SETATTR_DONTEXPAND );
+                {
+                    SwFmtCharFmt aCharFmt( pCharFmt );
+                    pNew->InsertItem( aCharFmt, 0, nSepIdx + 1,
+                            nsSetAttrMode::SETATTR_DONTEXPAND );
+                }
             }
         }
     }

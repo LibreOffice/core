@@ -56,8 +56,8 @@ const SwSection* SwEditShell::InsertSection( const SwSection& rNew,
         GetDoc()->StartUndo( UNDO_INSSECTION, NULL );
 
         FOREACHPAM_START(this)
-            const SwSection* pNew = GetDoc()->Insert( *PCURCRSR,
-                                                        rNew, pAttr );
+            const SwSection* const pNew =
+                GetDoc()->InsertSwSection( *PCURCRSR, rNew, pAttr );
             if( !pRet )
                 pRet = pNew;
         FOREACHPAM_END()
@@ -72,8 +72,10 @@ const SwSection* SwEditShell::InsertSection( const SwSection& rNew,
 
 BOOL SwEditShell::IsInsRegionAvailable() const
 {
-    SwPaM* pCrsr;
-    if( IsTableMode() || ( pCrsr = GetCrsr() )->GetNext() != pCrsr )
+    if( IsTableMode() )
+        return FALSE;
+    SwPaM* pCrsr = GetCrsr();
+    if( pCrsr->GetNext() != pCrsr )
         return FALSE;
     if( pCrsr->HasMark() )
         return 0 != GetDoc()->IsInsRegionAvailable( *pCrsr );

@@ -224,6 +224,7 @@ public:
         return pOutlineNumrule;
     }
     CharSet GetCharSet() const;
+    CharSet GetCJKCharSet() const;
 };
 
 class WW8RStyle: public WW8Style

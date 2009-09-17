@@ -33,7 +33,7 @@
 
 
 #include <tools/stream.hxx>
-
+#include <svtools/syslocale.hxx>
 
 #include "swtypes.hxx"
 #include "hintids.hxx"
@@ -72,7 +72,7 @@ SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     aCursorConfig(*this),
     pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : 0)
 {
-    MeasurementSystem eSystem = GetAppLocaleData().getMeasurementSystemEnum();
+    MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     eUserMetric = MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH;
     eHScrollMetric = eUserMetric;
     eVScrollMetric = eUserMetric;

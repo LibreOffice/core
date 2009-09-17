@@ -70,8 +70,6 @@ namespace sw { namespace mark
                     "<SwCrossRefBookmark::ClearOtherMarkPos(..)>"
                     " - misusage of CrossRefBookmark: other bookmark position isn't allowed to be set or cleared." );
             }
-
-            static bool IsLegalName(const ::rtl::OUString& rName);
     };
 
     class CrossRefHeadingBookmark

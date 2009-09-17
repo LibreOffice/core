@@ -514,7 +514,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                 case SID_INSERT_ZWSP : cIns = CHAR_ZWSP ; break;
                 case SID_INSERT_ZWNBSP: cIns = CHAR_ZWNBSP; break;
             }
-            pOLV->InsertText( String(cIns), TRUE );
+            pOLV->InsertText( String(cIns));
             rReq.Done();
         }
         break;
@@ -856,7 +856,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         aFontSet.Set( aOldSet );
 
         // String einfuegen
-        pOLV->InsertText( sSym, TRUE );
+        pOLV->InsertText( sSym );
 
         // attributieren (Font setzen)
         SfxItemSet aFontAttribSet( *aFontSet.GetPool(), aFontSet.GetRanges() );

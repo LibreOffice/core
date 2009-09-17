@@ -81,7 +81,13 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/document/RedlineDisplayType.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/script/XInvocation.hpp>
+#include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <svx/linkmgr.hxx>
 #include <svx/unofill.hxx>
 #include <svx/unolingu.hxx>
@@ -236,15 +242,23 @@ sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rI
 Any SAL_CALL SwXTextDocument::queryInterface( const uno::Type& rType ) throw(RuntimeException)
 {
     Any aRet = SwXTextDocumentBaseClass::queryInterface(rType);
-    if(aRet.getValueType() == getVoidCppuType())
+    if ( !aRet.hasValue() )
         aRet = SfxBaseModel::queryInterface(rType);
-    if(aRet.getValueType() == getVoidCppuType() &&
+    if ( !aRet.hasValue() &&
         rType == ::getCppuType((Reference<lang::XMultiServiceFactory>*)0))
     {
         Reference<lang::XMultiServiceFactory> xTmp = this;
         aRet <<= xTmp;
     }
-    if(aRet.getValueType() == getVoidCppuType())
+
+    if ( !aRet.hasValue()
+        && rType != ::getCppuType((Reference< com::sun::star::document::XDocumentEventBroadcaster>*)0)
+        && rType != ::getCppuType((Reference< com::sun::star::frame::XController>*)0)
+        && rType != ::getCppuType((Reference< com::sun::star::frame::XFrame>*)0)
+        && rType != ::getCppuType((Reference< com::sun::star::script::XInvocation>*)0)
+        && rType != ::getCppuType((Reference< com::sun::star::reflection::XIdlClassProvider>*)0)
+        && rType != ::getCppuType((Reference< com::sun::star::beans::XFastPropertySet>*)0)
+        && rType != ::getCppuType((Reference< com::sun::star::awt::XWindow>*)0))
     {
         GetNumberFormatter();
         if(xNumFmtAgg.is())

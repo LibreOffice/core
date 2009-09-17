@@ -3778,6 +3778,7 @@ BOOL SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
 
         // remove mark
         pServerObject->SetNoServer(); // this removes the connection between SwServerObject and mark
+        // N.B. ppMark was not loaded from file and cannot have xml:id
         pMarkAccess->deleteMark(ppMark);
 
         // recreate as Bookmark

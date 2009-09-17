@@ -56,93 +56,46 @@
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <unotxvw.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _SWHINTS_HXX
 #include <swhints.hxx>
-#endif
 #include <swmodule.hxx>
 #include <inputwin.hxx>
 #include <chartins.hxx>
 #include <uivwimp.hxx>
 #include <uitool.hxx>
 #include <edtwin.hxx>
-#ifndef _TEXTSH_HXX
 #include <textsh.hxx>
-#endif
-#ifndef _LISTSH_HXX
 #include <listsh.hxx>
-#endif
-#ifndef _TABSH_HXX
 #include <tabsh.hxx>
-#endif
-#ifndef _GRFSH_HXX
 #include <grfsh.hxx>
-#endif
-#ifndef _MEDIASH_HXX
 #include <mediash.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <frmsh.hxx>
-#ifndef _OLESH_HXX
 #include <olesh.hxx>
-#endif
-#ifndef _DRAWSH_HXX
 #include <drawsh.hxx>
-#endif
-#ifndef _DRAWBASE_HXX
 #include <drawbase.hxx>
-#endif
-#ifndef _DRFORMSH_HXX
 #include <drformsh.hxx>
-#endif
-#ifndef _DRWTXTSH_HXX
 #include <drwtxtsh.hxx>
-#endif
-#ifndef _BEZIERSH_HXX
 #include <beziersh.hxx>
-#endif
-#ifndef _GLOBDOC_HXX
 #include <globdoc.hxx>
-#endif
 #include <scroll.hxx>
-#ifndef _GLOBDOC_HXX
 #include <globdoc.hxx>
-#endif
 #include <navipi.hxx>
 #include <gloshdl.hxx>
 #include <usrpref.hxx>
-#ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
-#endif
 #include <doc.hxx>
-#ifndef _WDOCSH_HXX
+#include <drawdoc.hxx>
 #include <wdocsh.hxx>
-#endif
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <workctrl.hxx>
 #include <wrtsh.hxx>
-#ifndef _BARCFG_HXX
 #include <barcfg.hxx>
-#endif
-#ifndef _PVIEW_HXX
 #include <pview.hxx>
-#endif
 #include <swdtflvr.hxx>
-#ifndef _VIEW_HRC
 #include <view.hrc>
-#endif
-#ifndef _GLOBDOC_HRC
 #include <globdoc.hrc>
-#endif
-#ifndef _FRMUI_HRC
 #include <frmui.hrc>
-#endif
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
 #include <swprtopt.hxx>
@@ -152,9 +105,7 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/scanner/ScannerContext.hpp>
 #include <com/sun/star/scanner/XScannerManager.hpp>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmluconv.hxx>
 
@@ -1781,7 +1732,18 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         CreateTab();
                     else
                         KillTab();
-                    SfxBoolItem aItem( SID_FM_DESIGN_MODE, !GetDocShell()->IsReadOnly());
+                    bool bReadonly = GetDocShell()->IsReadOnly();
+                    //#i76332# if document is to be opened in alive-mode then this has to be regarded while switching from readonly-mode to edit-mode
+                    if( !bReadonly )
+                    {
+                        SwDrawDocument * pDrawDoc = 0;
+                        if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (GetDocShell()->GetDoc()->GetDrawModel() ) ) )
+                        {
+                            if( !pDrawDoc->GetOpenInDesignMode() )
+                                break;// don't touch the design mode
+                        }
+                    }
+                    SfxBoolItem aItem( SID_FM_DESIGN_MODE, !bReadonly);
                     GetDispatcher().Execute( SID_FM_DESIGN_MODE, SFX_CALLMODE_ASYNCHRON,
                                                 &aItem, 0L );
                 }

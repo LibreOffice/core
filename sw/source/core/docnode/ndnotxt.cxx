@@ -48,6 +48,10 @@
 #include <istyleaccess.hxx>
 #include <SwStyleNameMapper.hxx>
 
+// --> OD 2009-07-13 #i73249#
+#include <frmfmt.hxx>
+// <--
+
 SwNoTxtNode::SwNoTxtNode( const SwNodeIndex & rWhere,
                   const BYTE nNdType,
                   SwGrfFmtColl *pGrfColl,
@@ -250,19 +254,57 @@ Graphic SwNoTxtNode::GetGraphic() const
     return aRet;
 }
 
-
-void SwNoTxtNode::SetAlternateText( const String& rTxt, sal_Bool bBroadcast )
+// --> OD 2009-07-14 #i73249#
+void SwNoTxtNode::SetTitle( const String& rTitle, bool bBroadcast )
 {
-    if( bBroadcast )
+    // Title attribute of <SdrObject> replaces own AlternateText attribute
+    SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(GetFlyFmt());
+    ASSERT( pFlyFmt,
+            "<SwNoTxtNode::SetTitle(..)> - missing <SwFlyFrmFmt> instance" );
+    if ( !pFlyFmt )
     {
-        SwStringMsgPoolItem aOld( RES_ALT_TEXT_CHANGED, aAlternateText );
-        SwStringMsgPoolItem aNew( RES_ALT_TEXT_CHANGED, rTxt );
-        aAlternateText = rTxt;
-        Modify( &aOld, &aNew );
+        return;
     }
-    else
-    {
-        aAlternateText = rTxt;
-    }
+
+    pFlyFmt->SetObjTitle( rTitle, bBroadcast );
 }
 
+const String SwNoTxtNode::GetTitle() const
+{
+    const SwFlyFrmFmt* pFlyFmt = dynamic_cast<const SwFlyFrmFmt*>(GetFlyFmt());
+    ASSERT( pFlyFmt,
+            "<SwNoTxtNode::GetTitle(..)> - missing <SwFlyFrmFmt> instance" );
+    if ( !pFlyFmt )
+    {
+        return aEmptyStr;
+    }
+
+    return pFlyFmt->GetObjTitle();
+}
+
+void SwNoTxtNode::SetDescription( const String& rDescription, bool bBroadcast )
+{
+    SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(GetFlyFmt());
+    ASSERT( pFlyFmt,
+            "<SwNoTxtNode::SetDescription(..)> - missing <SwFlyFrmFmt> instance" );
+    if ( !pFlyFmt )
+    {
+        return;
+    }
+
+    pFlyFmt->SetObjDescription( rDescription, bBroadcast );
+}
+
+const String SwNoTxtNode::GetDescription() const
+{
+    const SwFlyFrmFmt* pFlyFmt = dynamic_cast<const SwFlyFrmFmt*>(GetFlyFmt());
+    ASSERT( pFlyFmt,
+            "<SwNoTxtNode::GetDescription(..)> - missing <SwFlyFrmFmt> instance" );
+    if ( !pFlyFmt )
+    {
+        return aEmptyStr;
+    }
+
+    return pFlyFmt->GetObjDescription();
+}
+// <--

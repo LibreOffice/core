@@ -2304,13 +2304,11 @@ void SwPagePreView::DocSzChgd( const Size &rSz )
 
     aDocSz = rSz;
 
-    // die neue Anzahl von Seiten bestimmen
-    USHORT nNewCnt = GetViewShell()->GetNumPages();
-    if( nNewCnt == mnPageCount )
-        return;
+    // --> OD 2009-08-20 #i96726#
+    // Due to the multiple page layout it is needed to trigger recalculation
+    // of the page preview layout, even if the count of pages is not changing.
+    mnPageCount = GetViewShell()->GetNumPages();
 
-    // dann eine neue Startseite berechnen
-    mnPageCount = nNewCnt;
     if( aVisArea.GetWidth() )
     {
         ChgPage( SwPagePreViewWin::MV_CALC, TRUE );
@@ -2318,6 +2316,7 @@ void SwPagePreView::DocSzChgd( const Size &rSz )
 
         aViewWin.Invalidate();
     }
+    // <--
 }
 
 /*--------------------------------------------------------------------

@@ -176,6 +176,15 @@ public:
 
     virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
 
+    // --> OD 2009-07-14 #i73249#
+    const String GetObjTitle() const;
+    void SetObjTitle( const String& rTitle,
+                      bool bBroadcast = false );
+    const String GetObjDescription() const;
+    void SetObjDescription( const String& rDescription,
+                            bool bBroadcast = false );
+    // <--
+
     /** SwFlyFrmFmt::IsBackgroundTransparent - for #99657#
 
         OD 22.08.2002 - overloading virtual method and its default implementation,

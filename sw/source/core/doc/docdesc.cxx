@@ -70,7 +70,7 @@
 #include <fldbas.hxx>
 #include <swwait.hxx>
 #include <GetMetricVal.hxx>
-
+#include <svtools/syslocale.hxx>
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>
 #endif
@@ -111,7 +111,7 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
         nMinRight = nMinTop = nMinBottom = GetMetricVal( CM_1 );
         nMinLeft = nMinRight * 2;
     }
-    else if( MEASURE_METRIC == GetAppLocaleData().getMeasurementSystemEnum() )
+    else if( MEASURE_METRIC == SvtSysLocale().GetLocaleData().getMeasurementSystemEnum() )
     {
         nMinTop = nMinBottom = nMinLeft = nMinRight = 1134; //2 Zentimeter
     }

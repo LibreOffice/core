@@ -873,34 +873,38 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     // <--
 
     sal_uInt32 nWarnRDF = 0;
-    // RDF metadata - must be read before styles/content
-    // N.B.: embedded documents have their own manifest.rdf!
-    try
+    if ( !(IsOrganizerMode() || IsBlockMode() || aOpt.IsFmtsOnly() ||
+           bInsertMode) )
     {
-        const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(xModelComp,
-            uno::UNO_QUERY_THROW);
-        const uno::Reference<rdf::XURI> xBaseURI( ::sfx2::createBaseURI(
-            aContext.getUNOContext(), xStorage, aBaseURL, StreamPath) );
-        const uno::Reference<task::XInteractionHandler> xHandler(
-            pDocSh->GetMedium()->GetInteractionHandler() );
-        xDMA->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
-    }
-    catch (lang::WrappedTargetException & e)
-    {
-        ucb::InteractiveAugmentedIOException iaioe;
-        if (e.TargetException >>= iaioe)
+        // RDF metadata - must be read before styles/content
+        // N.B.: embedded documents have their own manifest.rdf!
+        try
         {
-            // import error that was not ignored by InteractionHandler!
-            nWarnRDF = ERR_SWG_READ_ERROR;
+            const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(xModelComp,
+                uno::UNO_QUERY_THROW);
+            const uno::Reference<rdf::XURI> xBaseURI( ::sfx2::createBaseURI(
+                aContext.getUNOContext(), xStorage, aBaseURL, StreamPath) );
+            const uno::Reference<task::XInteractionHandler> xHandler(
+                pDocSh->GetMedium()->GetInteractionHandler() );
+            xDMA->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
         }
-        else
+        catch (lang::WrappedTargetException & e)
+        {
+            ucb::InteractiveAugmentedIOException iaioe;
+            if (e.TargetException >>= iaioe)
+            {
+                // import error that was not ignored by InteractionHandler!
+                nWarnRDF = ERR_SWG_READ_ERROR;
+            }
+            else
+            {
+                nWarnRDF = WARN_SWG_FEATURES_LOST; // uhh... something wrong?
+            }
+        }
+        catch (uno::Exception &)
         {
             nWarnRDF = WARN_SWG_FEATURES_LOST; // uhh... something went wrong?
         }
-    }
-    catch (uno::Exception &)
-    {
-        nWarnRDF = WARN_SWG_FEATURES_LOST; // uhh... something went wrong?
     }
 
     sal_uInt32 nWarn = 0;

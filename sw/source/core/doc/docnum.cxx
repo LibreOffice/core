@@ -1031,12 +1031,14 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
                         "<SwDoc::SetNumRule(..)> - could not create new list. Serious defect -> please inform OD." );
                 sListId = pNewList->GetListId();
             }
-            Insert( rPam, SfxStringItem( RES_PARATR_LIST_ID, sListId ), 0 );
+            InsertPoolItem( rPam,
+                SfxStringItem( RES_PARATR_LIST_ID, sListId ), 0 );
         }
         else if ( sContinuedListId.Len() > 0 )
         {
             // apply given list id
-            Insert( rPam, SfxStringItem( RES_PARATR_LIST_ID, sContinuedListId ), 0 );
+            InsertPoolItem( rPam,
+                SfxStringItem( RES_PARATR_LIST_ID, sContinuedListId ), 0 );
         }
     }
     // <--
@@ -1080,13 +1082,11 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
         // <--
     }
 
-    // --> OD 2006-01-13 #i60395#
-    // It's not allowed to apply the outline numbering rule as hard attribute
-    // to document content - typically paragraphs.
-    if ( bSetItem && pNew != GetOutlineNumRule() )
+    // --> OD 2009-08-18 #i103817#
+    if ( bSetItem )
     // <--
     {
-        Insert( rPam, SwNumRuleItem( pNew->GetName() ), 0 );
+        InsertPoolItem( rPam, SwNumRuleItem( pNew->GetName() ), 0 );
     }
 
     // --> OD 2008-02-08 #newlistlevelattrs#
@@ -1126,33 +1126,34 @@ void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
     }
     else
     {
-        Insert( rPam, SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, FALSE ), 0 );
+        InsertPoolItem( rPam,
+            SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, FALSE ), 0 );
     }
 }
 
-void SwDoc::ReplaceNumRule(const SwPaM & rPaM, const SwNumRule & rNumRule)
-{
-    if (DoesUndo())
-        StartUndo(UNDO_START, NULL);
+//void SwDoc::ReplaceNumRule(const SwPaM & rPaM, const SwNumRule & rNumRule)
+//{
+//    if (DoesUndo())
+//        StartUndo(UNDO_START, NULL);
 
-    ULONG nStt = rPaM.Start()->nNode.GetIndex();
-    ULONG nEnd = rPaM.End()->nNode.GetIndex();
+//  ULONG nStt = rPaM.Start()->nNode.GetIndex();
+//  ULONG nEnd = rPaM.End()->nNode.GetIndex();
 
-    for (ULONG n = nStt; n <= nEnd; n++)
-    {
-        SwTxtNode * pCNd = GetNodes()[n]->GetTxtNode();
+//    for (ULONG n = nStt; n <= nEnd; n++)
+//    {
+//        SwTxtNode * pCNd = GetNodes()[n]->GetTxtNode();
 
-        if (pCNd && NULL != pCNd->GetNumRule())
-        {
-            SwPaM aPam(*pCNd);
+//        if (pCNd && NULL != pCNd->GetNumRule())
+//        {
+//            SwPaM aPam(*pCNd);
 
-            Insert(aPam, SwNumRuleItem(rNumRule.GetName()), 0);
-        }
-    }
+//            InsertPoolItem(aPam, SwNumRuleItem(rNumRule.GetName()), 0);
+//        }
+//    }
 
-    if (DoesUndo())
-        EndUndo(UNDO_START, NULL);
-}
+//    if (DoesUndo())
+//        EndUndo(UNDO_START, NULL);
+//}
 
 void SwDoc::SetNumRuleStart( const SwPosition& rPos, BOOL bFlag )
 {
@@ -1546,8 +1547,8 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
                         SwPosition aPos(*pCNd);
                         aListStyleData.pReplaceNumRule =
                             const_cast<SwNumRule *>
-                            (SearchNumRule( aPos, FALSE, pCNd->HasNumber(),
-                                            FALSE, 0,
+                            (SearchNumRule( aPos, false, pCNd->HasNumber(),
+                                            false, 0,
                                             aListStyleData.sListId, true ));
                     }
 
@@ -1851,13 +1852,13 @@ BOOL SwDoc::GotoNextNum( SwPosition& rPos, BOOL bOverUpper,
 
 // -> #i23731#
 // --> OD 2008-03-18 #refactorlists# - add output parameter <sListId>
-const SwNumRule *  SwDoc::SearchNumRule(SwPosition & rPos,
-                                        BOOL bForward,
-                                        BOOL bNum,
-                                        BOOL bOutline,
+const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
+                                        const bool bForward,
+                                        const bool bNum,
+                                        const bool bOutline,
                                         int nNonEmptyAllowed,
                                         String& sListId,
-                                        bool _bInvestigateStartNode)
+                                        const bool bInvestigateStartNode)
 {
     const SwNumRule * pResult = NULL;
     SwTxtNode * pTxtNd = rPos.nNode.GetNode().GetTxtNode();
@@ -1873,7 +1874,7 @@ const SwNumRule *  SwDoc::SearchNumRule(SwPosition & rPos,
         do
         {
             // --> OD 2005-10-20 #i55391#
-            if ( !_bInvestigateStartNode )
+            if ( !bInvestigateStartNode )
             {
                 if (bForward)
                     aIdx++;
@@ -1888,9 +1889,9 @@ const SwNumRule *  SwDoc::SearchNumRule(SwPosition & rPos,
                 const SwNumRule * pNumRule = pTxtNd->GetNumRule();
                 if (pNumRule)
                 {
-                    if (pNumRule->IsOutlineRule() == bOutline && // #115901#
-                        ( (bNum && pNumRule->Get(0).IsEnumeration()) ||
-                         (!bNum && pNumRule->Get(0).IsItemize()) )) // #i22362#, #i29560#
+                    if ( ( pNumRule->IsOutlineRule() == ( bOutline ? TRUE : FALSE ) ) && // #115901#
+                         ( ( bNum && pNumRule->Get(0).IsEnumeration()) ||
+                           ( !bNum && pNumRule->Get(0).IsItemize() ) ) ) // #i22362#, #i29560#
                     {
                         pResult = pTxtNd->GetNumRule();
                         // --> OD 2008-03-18 #refactorlists#
@@ -1913,7 +1914,7 @@ const SwNumRule *  SwDoc::SearchNumRule(SwPosition & rPos,
             }
 
             // --> OD 2005-10-20 #i55391#
-            if ( _bInvestigateStartNode )
+            if ( bInvestigateStartNode )
             {
                 if (bForward)
                     aIdx++;
@@ -2277,7 +2278,7 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
                 }
             }
 
-            Copy( aPam, aInsPos, false );
+            CopyRange( aPam, aInsPos, false );
             if( bDelLastPara )
             {
                 // dann muss der letzte leere Node wieder entfernt werden
@@ -2363,7 +2364,7 @@ SetRedlineMode( eOld );
     }
 
 
-    Move( aMvRg, aIdx, DOC_MOVEREDLINES );
+    MoveNodeRange( aMvRg, aIdx, DOC_MOVEREDLINES );
 
     if( pUndo )
     {

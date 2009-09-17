@@ -701,7 +701,7 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
                 if (i < nLength - 1)
                     sStr += '\t';
             }
-            pSh->SwEditShell::Insert(sStr);
+            pSh->SwEditShell::Insert2(sStr);
             pSh->SwFEShell::SplitNode();    // Zeilenvorschub
         }
     }
@@ -3248,18 +3248,21 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
             pWorkView->AttrChangedNotify( &rWorkShell );//Damit SelectShell gerufen wird.
 
-            // merge the data
-            SwDoc* pWorkDoc = rWorkShell.GetDoc();
-            SwNewDBMgr* pWorkDBMgr = pWorkDoc->GetNewDBMgr();
-            pWorkDoc->SetNewDBMgr( this );
-            pWorkDoc->EmbedAllLinks();
-            if(UNDO_UI_DELETE_INVISIBLECNTNT == rWorkShell.GetUndoIds())
-                rWorkShell.Undo();
-            // create a layout
-            rWorkShell.CalcLayout();
-            SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
-            rWorkShell.ViewShell::UpdateFlds();
-            SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
+                // merge the data
+                SwDoc* pWorkDoc = rWorkShell.GetDoc();
+                SwNewDBMgr* pWorkDBMgr = pWorkDoc->GetNewDBMgr();
+                pWorkDoc->SetNewDBMgr( this );
+                pWorkDoc->EmbedAllLinks();
+                if(UNDO_UI_DELETE_INVISIBLECNTNT == rWorkShell.GetUndoIds())
+                    rWorkShell.Undo();
+                // #i69485# lock fields to prevent access to the result set while calculating layout
+                rWorkShell.LockExpFlds();
+                // create a layout
+                rWorkShell.CalcLayout();
+                rWorkShell.UnlockExpFlds();
+                SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
+                rWorkShell.ViewShell::UpdateFlds();
+                SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
 
             // strip invisible content and convert fields to text
             rWorkShell.RemoveInvisibleContent();
@@ -3284,11 +3287,13 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 String sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
                 pTargetShell->GetDoc()->MakePageDesc( sNewPageDescName );
                 SwPageDesc* pTargetPageDesc = pTargetShell->FindPageDescByName( sNewPageDescName );
-                if(pSourcePageDesc && pTargetPageDesc)
+                const SwPageDesc* pWorkPageDesc = rWorkShell.FindPageDescByName( sStartingPageDesc );
+
+                if(pWorkPageDesc && pTargetPageDesc)
                 {
-                    pTargetDoc->CopyPageDesc( *pSourcePageDesc, *pTargetPageDesc, sal_False );
+                    pTargetDoc->CopyPageDesc( *pWorkPageDesc, *pTargetPageDesc, sal_False );
                     sModifiedStartingPageDesc = sNewPageDescName;
-                    lcl_CopyFollowPageDesc( *pTargetShell, *pSourcePageDesc, *pTargetPageDesc, nDocNo );
+                    lcl_CopyFollowPageDesc( *pTargetShell, *pWorkPageDesc, *pTargetPageDesc, nDocNo );
                 }
             }
             if(nDocNo == 1 || bPageStylesWithHeaderFooter)
@@ -3396,4 +3401,3 @@ void SwConnectionDisposedListener_Impl::disposing( const EventObject& rSource )
         }
     }
 }
-

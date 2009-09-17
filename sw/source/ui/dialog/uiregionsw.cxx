@@ -1580,6 +1580,7 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     aCurName.SetModifyHdl   ( LINK( this, SwInsertSectionTabPage, NameEditHdl));
     aDDECB.SetClickHdl      ( LINK( this, SwInsertSectionTabPage, DDEHdl ));
     ChangeProtectHdl(&aProtectCB);
+    aSubRegionED.EnableAutocomplete( sal_True, sal_True );
 }
 /* -----------------21.05.99 10:31-------------------
  *

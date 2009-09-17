@@ -31,6 +31,7 @@
 #define _TXTINET_HXX
 
 #include <txatbase.hxx>
+#include <txtatr.hxx>
 #include <calbck.hxx>
 
 class SwTxtNode;
@@ -38,7 +39,7 @@ class SwCharFmt;
 
 // ATT_INETFMT *********************************************
 
-class SW_DLLPUBLIC SwTxtINetFmt : public SwTxtAttrEnd, public SwClient
+class SW_DLLPUBLIC SwTxtINetFmt : public SwTxtAttrNesting, public SwClient
 {
     SwTxtNode * m_pTxtNode;
     bool m_bVisited         : 1; // visited link?
