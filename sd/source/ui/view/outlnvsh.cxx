@@ -63,7 +63,8 @@
 #include <sot/formats.hxx>
 #include <sfx2/topfrm.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hdl>
+#include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <svx/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svx/outlobj.hxx>
@@ -532,6 +533,9 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
 
     std::auto_ptr< OutlineViewModelChangeGuard > aGuard;
     if( pOlView && (
+        (nSlot == SID_TRANSLITERATE_SENTENCE_CASE) ||
+        (nSlot == SID_TRANSLITERATE_TITLE_CASE) ||
+        (nSlot == SID_TRANSLITERATE_TOGGLE_CASE) ||
         (nSlot == SID_TRANSLITERATE_UPPER) ||
         (nSlot == SID_TRANSLITERATE_LOWER) ||
         (nSlot == SID_TRANSLITERATE_HALFWIDTH) ||
@@ -665,6 +669,9 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         }
         break;
 
+        case SID_TRANSLITERATE_SENTENCE_CASE:
+        case SID_TRANSLITERATE_TITLE_CASE:
+        case SID_TRANSLITERATE_TOGGLE_CASE:
         case SID_TRANSLITERATE_UPPER:
         case SID_TRANSLITERATE_LOWER:
         case SID_TRANSLITERATE_HALFWIDTH:
@@ -680,6 +687,15 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
 
                 switch( nSlot )
                 {
+                    case SID_TRANSLITERATE_SENTENCE_CASE:
+                        nType = TransliterationModulesExtra::SENTENCE_CASE;
+                        break;
+                    case SID_TRANSLITERATE_TITLE_CASE:
+                        nType = TransliterationModulesExtra::TITLE_CASE;
+                        break;
+                    case SID_TRANSLITERATE_TOGGLE_CASE:
+                        nType = TransliterationModulesExtra::TOGGLE_CASE;
+                        break;
                     case SID_TRANSLITERATE_UPPER:
                         nType = TransliterationModules_LOWERCASE_UPPERCASE;
                         break;
