@@ -582,7 +582,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
         }
     }
 
-    SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_PREPARECLOSEDOC, this) );
+    SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_PREPARECLOSEDOC, GlobalEventConfig::GetEventName(STR_EVENT_PREPARECLOSEDOC), this) );
 
     if( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
     {
