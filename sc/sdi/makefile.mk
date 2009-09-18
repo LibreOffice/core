@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,12 @@ SDI1NAME=$(TARGET)
 SDI1EXPORT=scalc
 
 SVSDI1DEPEND= \
-    scalc.sdi \
+        $(SOLARINCXDIR)$/sfx2/sfx.sdi \
+        $(SOLARINCXDIR)$/sfx2/sfxitems.sdi \
+        $(SOLARINCXDIR)$/svx/svx.sdi \
+        $(SOLARINCXDIR)$/svx/svxitems.sdi \
+        $(SOLARINCXDIR)$/svx/xoitems.sdi \
+        scalc.sdi \
     app.sdi \
     auditsh.sdi \
     docsh.sdi \

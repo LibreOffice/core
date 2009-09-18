@@ -130,7 +130,7 @@ interface BaseSelection
 
 }
 
-interface TableEditView : View
+interface TableEditView
 [
     uuid ( "16D7E4A0-2FB4-11CF-89CB-008029E4B0B1" )
 ]
@@ -267,7 +267,7 @@ interface DataPilotField
 }
 
  // ===========================================================================
-shell ScTabViewShell : SfxViewShell
+shell ScTabViewShell
 {
     import TableSelection "ActiveDocument.ActiveTable";
     import TableOLEObject "SelectedObject";

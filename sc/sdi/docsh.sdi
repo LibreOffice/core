@@ -69,7 +69,7 @@ interface TableSelection
 
 
  //============================================================================
-interface TableDocument : OfficeDocument
+interface TableDocument
 [
     uuid = "BA338A42-064E-11d0-89CB-008029E4B0B1" ;
 ]
@@ -116,7 +116,7 @@ interface TableDocument : OfficeDocument
 
 
  //============================================================================
-shell ScDocShell : SfxObjectShell
+shell ScDocShell
 [
     uuid ( "3F543FA0-B6A6-101B-9961-04021C007002" )
 ]
