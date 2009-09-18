@@ -207,11 +207,13 @@ LINKFLAGS += -Wl,-zdynsort
 .ENDIF
 
 # libraries for linking applications
-STDLIBGUIMT+=-Wl,--as-needed -lX11 -ldl -lpthread -lm -Wl,--no-as-needed
+STDLIBGUIMT+=-Wl,--as-needed -ldl -lpthread -lm -Wl,--no-as-needed
 STDLIBCUIMT+=-Wl,--as-needed -ldl -lpthread -lm -Wl,--no-as-needed
 # libraries for linking shared libraries
-STDSHLGUIMT+=-Wl,--as-needed -lX11 -lXext -ldl -lpthread -lm -Wl,--no-as-needed
+STDSHLGUIMT+=-Wl,--as-needed -ldl -lpthread -lm -Wl,--no-as-needed
 STDSHLCUIMT+=-Wl,--as-needed -ldl -lpthread -lm -Wl,--no-as-needed
+
+X11LINK_DYNAMIC = -lX11
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
