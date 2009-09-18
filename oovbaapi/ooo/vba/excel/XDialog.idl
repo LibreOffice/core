@@ -45,13 +45,8 @@ module ooo {  module vba {  module excel {
 
 //=============================================================================
 
-interface XApplication;
-
-interface XDialog
+interface XDialog : com::sun::star::uno::XInterface
 {
-    interface ::ooo::vba::XHelperInterface;
-
-    void Show();
 };
 
 }; }; };

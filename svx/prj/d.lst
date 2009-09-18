@@ -658,5 +658,6 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\table
 ..\inc\svx\selectioncontroller.hxx %_DEST%\inc%_EXT%\svx\selectioncontroller.hxx
 ..\inc\svx\helperhittest3d.hxx %_DEST%\inc%_EXT%\svx\helperhittest3d.hxx
 ..\inc\svx\optimprove.hxx %_DEST%\inc%_EXT%\svx\optimprove.hxx
+..\inc\svx\msvbahelper.hxx %_DEST%\inc%_EXT%\svx\msvbahelper.hxx
 
 ..\%__SRC%\bin\*-layout.zip %_DEST%\pck%_EXT%\*.*

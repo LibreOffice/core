@@ -47,7 +47,6 @@ dummy:
 
 IDLFILES=\
     XErrObject.idl \
-    XGlobals.idl \
     XCollection.idl\
     XVBAToOOEventDescGen.idl\
     XPropValue.idl\
@@ -57,7 +56,21 @@ IDLFILES=\
     XCommandBarControls.idl\
     XCommandBar.idl\
     XCommandBars.idl\
-    Globals.idl\
+    XCommandBarPopup.idl\
+    XCommandBarButton.idl\
+    XControlProvider.idl\
+    ControlProvider.idl\
+    XApplicationBase.idl\
+    XWindowBase.idl\
+    XDocumentBase.idl\
+    XDocumentsBase.idl\
+    XGlobalsBase.idl\
+    XDocumentProperty.idl\
+    XDocumentProperties.idl\
+    XFontBase.idl\
+    XDialogsBase.idl\
+    XDialogBase.idl\
+    XPageSetupBase.idl  \
 
 # ------------------------------------------------------------------
 

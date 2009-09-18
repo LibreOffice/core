@@ -49,6 +49,7 @@ dummy:
 UNOIDLDBFILES= \
     $(UCR)$/vba.db \
     $(UCR)$/excel.db \
+    $(UCR)$/word.db \
     $(UCR)$/msforms.db \
     $(UCR)$/constants.db
 

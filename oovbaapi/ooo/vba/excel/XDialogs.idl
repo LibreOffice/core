@@ -33,9 +33,6 @@
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
 #endif
-#ifndef __ooo_vba_XCollection_idl__
-#include <ooo/vba/XCollection.idl>
-#endif
 
 #ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
@@ -44,15 +41,9 @@
 //=============================================================================
 
 module ooo {  module vba {  module excel {
-interface XApplication;
-//=============================================================================
 
-//interface XDialogs : ::ooo::vba::XCollection
-interface XDialogs
+interface XDialogs : com::sun::star::uno::XInterface
 {
-    interface ::ooo::vba::XHelperInterface;
-
-        [attribute, readonly] long Count;
 
     any Item( [in] any Index );
 };

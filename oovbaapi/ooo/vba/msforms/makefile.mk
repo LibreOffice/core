@@ -71,6 +71,7 @@ IDLFILES=\
     XSpinButton.idl \
     XImage.idl \
     XControls.idl \
+    XTextFrame.idl \
 
 # ------------------------------------------------------------------
 

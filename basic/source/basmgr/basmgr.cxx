@@ -47,6 +47,7 @@
 
 #include <basic/sbuno.hxx>
 #include <basic/basmgr.hxx>
+#include <sbunoobj.hxx>
 #include "basrid.hxx"
 #include "sbintern.hxx"
 #include <sb.hrc>
@@ -1766,6 +1767,15 @@ BasicError* BasicManager::GetNextError()
 {
     DBG_CHKTHIS( BasicManager, 0 );
     return pErrorMgr->GetNextError();
+}
+bool BasicManager::GetGlobalUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::uno::Any& aOut )
+{
+    bool bRes = false;
+    StarBASIC* pStandardLib = GetStdLib();
+    OSL_PRECOND( pStandardLib, "BasicManager::SetGlobalUNOConstant: no lib to insert into!" );
+    if ( pStandardLib )
+        bRes = pStandardLib->GetUNOConstant( _pAsciiName, aOut );
+    return bRes;
 }
 
 Any BasicManager::SetGlobalUNOConstant( const sal_Char* _pAsciiName, const Any& _rValue )

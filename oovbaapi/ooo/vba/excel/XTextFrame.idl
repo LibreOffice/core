@@ -34,21 +34,9 @@
 #include <ooo/vba/XHelperInterface.idl>
 #endif
 
-#ifndef __ooo_vba_excel_XCharacters_idl__
-#include <ooo/vba/excel/XCharacters.idl>
-#endif
-
 module ooo {  module vba {  module excel {
-interface XTextFrame : ooo::vba::XHelperInterface
+interface XTextFrame : com::sun::star::uno::XInterface
 {
-    [attribute] boolean AutoSize;
-    [attribute] float MarginBottom;
-    [attribute] float MarginTop;
-    [attribute] float MarginLeft;
-    [attribute] float MarginRight;
-    XCharacters Characters();
-    /*I don't find it in msdn
-    Range TextRange();*/
 };
 }; }; };
 #endif

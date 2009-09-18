@@ -69,6 +69,11 @@
 #endif
 
 #include <stdio.h>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/processfactory.hxx>
+#include <vcl/svapp.hxx>
+ using namespace ::com::sun::star;
 
 
 TYPEINIT1(SbModule,SbxObject)
@@ -84,6 +89,35 @@ SV_IMPL_VARARR(SbiBreakpoints,USHORT)
 
 SV_IMPL_VARARR(HighlightPortions, HighlightPortion)
 
+class AsyncQuitHandler
+{
+    AsyncQuitHandler() {}
+    AsyncQuitHandler( const AsyncQuitHandler&);
+public:
+    static AsyncQuitHandler& instance()
+    {
+        static AsyncQuitHandler dInst;
+        return dInst;
+    }
+
+    void QuitApplication()
+    {
+        uno::Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+        if ( xFactory.is() )
+    {
+            uno::Reference< frame::XDesktop > xDeskTop( xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop") ) ), uno::UNO_QUERY );
+           if ( xDeskTop.is() )
+               xDeskTop->terminate();
+        }
+    }
+    DECL_LINK( OnAsyncQuit, void* );
+};
+
+IMPL_LINK( AsyncQuitHandler, OnAsyncQuit, void*, pNull )
+{
+    QuitApplication();
+    return 0L;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 

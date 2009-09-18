@@ -54,17 +54,15 @@ MYDONEFILES += $(foreach,i,$(MYSYMFILES) $(MISC)$/$(i:b).done)
 
 ALLTAR: GENIDL
 
-GENIDL : $(MY_GEN_IDL_PATH) $(MYDONEFILES)
+GENIDL : $(MYDONEFILES)
 
 GENRDB : GENIDL $(MYURDFILES)
 
 $(MISC)$/%.done : %.api
+    @@-$(MKDIR) $(MY_GEN_IDL_PATH)
     @echo Processing $?
     $(PERL) api-to-idl.pl $? $(MY_GEN_IDL_PATH)
     @$(TOUCH) $@
-
-$(MY_GEN_IDL_PATH) : 
-    @@-$(MKDIR) $@
 
 CLEAN :
     @$(RM) $(MY_GEN_IDL_PATH)$/*.idl

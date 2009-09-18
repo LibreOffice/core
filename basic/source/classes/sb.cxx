@@ -65,7 +65,29 @@ SV_IMPL_VARARR(SbTextPortions,SbTextPortion)
 TYPEINIT1(StarBASIC,SbxObject)
 
 #define RTLNAME "@SBRTL"
+//  i#i68894#
 
+const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
+const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
+
+SbxObject* StarBASIC::getVBAGlobals( )
+{
+    if ( !pVBAGlobals )
+        pVBAGlobals = (SbUnoObject*)Find( aVBAHook , SbxCLASS_DONTCARE );
+    return pVBAGlobals;
+}
+
+//  i#i68894#
+SbxVariable* StarBASIC::VBAFind( const String& rName, SbxClassType t )
+{
+    if( rName == aThisComponent )
+        return NULL;
+    // rename to init globals
+    if ( getVBAGlobals( ) )
+        return pVBAGlobals->Find( rName, t );
+    return NULL;
+
+}
 // Create array for conversion SFX <-> VB error code
 struct SFX_VB_ErrorItem
 {
@@ -654,6 +676,8 @@ StarBASIC::StarBASIC( StarBASIC* p, BOOL bIsDocBasic  )
     pRtl = new SbiStdObject( String( RTL_CONSTASCII_USTRINGPARAM(RTLNAME) ), this );
     // Search via StarBasic is always global
     SetFlag( SBX_GBLSEARCH );
+    pVBAGlobals = NULL;
+    bQuit = FALSE;
 }
 
 // #51727 Override SetModified so that the modified state
@@ -966,6 +990,12 @@ SbxVariable* StarBASIC::FindVarInCurrentScopy
     if( pVar )
         rStatus = 0;      // We found something
     return pVar;
+}
+
+void StarBASIC::QuitAndExitApplication()
+{
+    Stop();
+    bQuit = TRUE;
 }
 
 void StarBASIC::Stop()
@@ -1506,6 +1536,18 @@ BOOL StarBASIC::LoadOldModules( SvStream& )
     return FALSE;
 }
 
+bool StarBASIC::GetUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::uno::Any& aOut )
+{
+    bool bRes = false;
+    ::rtl::OUString sVarName( ::rtl::OUString::createFromAscii( _pAsciiName ) );
+    SbUnoObject* pGlobs = dynamic_cast<SbUnoObject*>( Find( sVarName, SbxCLASS_DONTCARE ) );
+    if ( pGlobs )
+    {
+        aOut = pGlobs->getUnoAny();
+        bRes = true;
+    }
+    return bRes;
+}
 
 //========================================================================
 // #118116 Implementation Collection object

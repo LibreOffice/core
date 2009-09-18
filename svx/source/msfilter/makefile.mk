@@ -54,7 +54,8 @@ LIB1OBJFILES= \
     $(SLO)$/svxmsbas.obj	\
     $(SLO)$/msocximex.obj	\
     $(SLO)$/mscodec.obj		\
-    $(SLO)$/msfiltertracer.obj
+    $(SLO)$/msfiltertracer.obj \
+    $(SLO)$/msvbahelper.obj\
 
 LIB2TARGET= $(SLB)$/$(TARGET)-core.lib
 LIB2OBJFILES= \
@@ -70,7 +71,8 @@ EXCEPTIONSFILES= \
     $(SLO)$/msocximex.obj	\
     $(SLO)$/msoleexp.obj	\
     $(SLO)$/svxmsbas.obj	\
-    $(SLO)$/msfiltertracer.obj
+    $(SLO)$/msfiltertracer.obj \
+    $(SLO)$/msvbahelper.obj\
 
 .INCLUDE :  target.mk
 

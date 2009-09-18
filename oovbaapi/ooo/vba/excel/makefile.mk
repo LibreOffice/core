@@ -46,7 +46,9 @@ dummy:
 # ------------------------------------------------------------------------
 
 
-IDLFILES= XApplication.idl\
+IDLFILES= XGlobals.idl\
+    Globals.idl\
+    XApplication.idl\
     XComment.idl\
     XComments.idl\
     XRange.idl\
@@ -103,6 +105,9 @@ IDLFILES= XApplication.idl\
      XPageBreak.idl \
      XHPageBreak.idl \
      XHPageBreaks.idl \
+     XVPageBreak.idl \
+     XVPageBreaks.idl \
+     TextFrame.idl \
 
 
 # ------------------------------------------------------------------

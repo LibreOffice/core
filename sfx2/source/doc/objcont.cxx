@@ -1471,31 +1471,35 @@ sal_Bool SfxObjectShell::IsHelpDocument() const
 
 void SfxObjectShell::ResetFromTemplate( const String& rTemplateName, const String& rFileName )
 {
-    uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
-    xDocProps->setTemplateURL( ::rtl::OUString() );
-    xDocProps->setTemplateName( ::rtl::OUString() );
-    xDocProps->setTemplateDate( util::DateTime() );
-    xDocProps->resetUserData( ::rtl::OUString() );
-
-    // TODO/REFACTOR:
-    // Title?
-
-    if( ::utl::LocalFileHelper::IsLocalFile( rFileName ) )
+    // only care about reseting this data for openoffice formats otherwise
+    if ( IsOwnStorageFormat_Impl( *GetMedium())  )
     {
-        String aFoundName;
-        if( SFX_APP()->Get_Impl()->GetDocumentTemplates()->GetFull( String(), rTemplateName, aFoundName ) )
+        uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
+        xDocProps->setTemplateURL( ::rtl::OUString() );
+        xDocProps->setTemplateName( ::rtl::OUString() );
+        xDocProps->setTemplateDate( util::DateTime() );
+        xDocProps->resetUserData( ::rtl::OUString() );
+
+        // TODO/REFACTOR:
+        // Title?
+
+        if( ::utl::LocalFileHelper::IsLocalFile( rFileName ) )
         {
-            INetURLObject aObj( rFileName );
-            xDocProps->setTemplateURL( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
-            xDocProps->setTemplateName( rTemplateName );
+            String aFoundName;
+            if( SFX_APP()->Get_Impl()->GetDocumentTemplates()->GetFull( String(), rTemplateName, aFoundName ) )
+            {
+                INetURLObject aObj( rFileName );
+                xDocProps->setTemplateURL( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
+                xDocProps->setTemplateName( rTemplateName );
 
-            ::DateTime now;
-            xDocProps->setTemplateDate( util::DateTime(
-                now.Get100Sec(), now.GetSec(), now.GetMin(),
-                now.GetHour(), now.GetDay(), now.GetMonth(),
-                now.GetYear() ) );
+                ::DateTime now;
+                xDocProps->setTemplateDate( util::DateTime(
+                    now.Get100Sec(), now.GetSec(), now.GetMin(),
+                    now.GetHour(), now.GetDay(), now.GetMonth(),
+                    now.GetYear() ) );
 
-            SetQueryLoadTemplate( sal_True );
+                SetQueryLoadTemplate( sal_True );
+            }
         }
     }
 }
