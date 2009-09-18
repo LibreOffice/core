@@ -96,22 +96,6 @@ RES1FILELIST=\
 RESLIB1NAME=$(TARGET)
 RESLIB1SRSFILES=$(RES1FILELIST)
 
-.IF "$(GUI)"=="UNX"
-
-# [ed] 6/19/02 Only add in libraries for X11 OS X builds
-
-.IF "$(OS)"=="MACOSX"
-.IF "$(GUIBASE)"=="unx"
-SHL1STDLIBS +=\
-        -lX11 -lXt -lXmu
-.ENDIF
-.ELSE
-SHL1STDLIBS +=\
-    -lX11
-.ENDIF # OS == MACOSX
-
-.ENDIF
-
 .IF "$(GUI)"=="OS2"
 SHL1STDLIBS += pthread.lib libz.lib
 .ENDIF
