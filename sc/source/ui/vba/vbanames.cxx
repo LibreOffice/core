@@ -27,7 +27,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "helperdecl.hxx"
+#include <vbahelper/helperdecl.hxx>
 
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
@@ -81,7 +81,7 @@ ScDocument *
 ScVbaNames::getScDocument()
 {
     uno::Reference< frame::XModel > xModel( getModel() , uno::UNO_QUERY_THROW );
-    ScTabViewShell * pTabViewShell = getBestViewShell( xModel );
+    ScTabViewShell * pTabViewShell = excel::getBestViewShell( xModel );
     if ( !pTabViewShell )
         throw uno::RuntimeException( rtl::OUString::createFromAscii("No ViewShell available"), uno::Reference< uno::XInterface >() );
     ScViewData* pViewData = pTabViewShell->GetViewData();

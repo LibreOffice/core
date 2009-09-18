@@ -32,7 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#include "helperdecl.hxx"
+#include <vbahelper/helperdecl.hxx>
 #include "vbahyperlink.hxx"
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>

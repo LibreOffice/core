@@ -1,20 +1,15 @@
-Test run started : 05/29/2008 02:55:48 PM
+Test run started : 2008／09／22 11:18:57
 BEGIN Window2
  TEST START : Test Window.SplitRow
-  ITEM Assertion OK : Test SplitColumn: 2
-  ITEM Assertion FAIL : Test SplitRow: 5
-  ITEM Assertion FAIL : Test SplitVertical: 64.5090003183026
-  ITEM Assertion OK : Test SplitHorizontal: 502.570118758869
-  ITEM Assertion OK : Test SplitVertical: 242.283803521067
-  ITEM Assertion OK : Test SplitRow: 19
-  ITEM Assertion OK : Test SplitHorizontal: 242.283803521067
-  ITEM Assertion OK : Test SplitColumn: 1
-  ITEM Assertion FAIL : Test SplitRow: 8
-  ITEM Assertion OK : Test SplitColumn: 10
+  ITEM Assertion OK : Test SplitColumn: 2 (Test only applies to maximized Window and at least has 800*600 solotion)
+  ITEM Assertion OK : Test SplitRow: 2 (Test only applies to maximized Window and at least has 800*600 solotion)
+  ITEM Assertion OK : Test SplitVertical: 242.465788476212
+  ITEM Assertion OK : Test SplitHorizontal: 242.465788476212
+  ITEM Assertion OK : Test SplitRow: 4 (Test only applies to maximized Window and at least has 800*600 solotion)
+  ITEM Assertion OK : Test SplitColumn: 3 (Test only applies to maximized Window and at least has 800*600 solotion)
   ITEM Assertion OK : Test SplitColumn: 0
   ITEM Assertion OK : Test SplitRow: 0
  TEST OK : Test Window.SplitRow
-TEST ERROR - no test begun: Test Window.SplitRow
  TEST START : Test Window.DisplayGridlines
   ITEM Assertion OK : Test gridlines are on
   ITEM Assertion OK : Test gridlines are off
@@ -25,7 +20,8 @@ TEST ERROR - no test begun: Test Window.SplitRow
  TEST OK : Test Window.DisplayHeadings
  TEST START : Test Window.Visibility
   ITEM Assertion OK : Window is visible
- TEST FAIL : Test Window.Visibility (hit error handler).
+  ITEM Assertion OK : Window is not visible
+ TEST OK : Test Window.Visibility
  TEST START : Test Window.FreezePanes
   ITEM Assertion OK : Test no panes frozen
   ITEM Assertion OK : Test panes frozen at center
@@ -42,4 +38,4 @@ TEST ERROR - no test begun: Test Window.SplitRow
   ITEM Assertion OK : Application.Windows Count: 1
  TEST OK : Test Windows.Count
 END  Window2
-Test run finished : 05/29/2008 02:55:48 PM
+Test run finished : 2008／09／22 11:18:58

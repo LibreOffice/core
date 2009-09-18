@@ -35,11 +35,9 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
 
-ScVbaCharts::ScVbaCharts( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext ) : Charts_BASE(_xParent, _xContext, uno::Reference< container::XIndexAccess >() )
+ScVbaCharts::ScVbaCharts( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const uno::Reference< frame::XModel >& xModel ) : Charts_BASE(_xParent, _xContext, uno::Reference< container::XIndexAccess >())
 {
-    // #TODO #FIXME surely this is wrong, you should never use the
-    // currently documement ( it could be anything )
-    xComponent.set( getCurrentDocument(), uno::UNO_QUERY_THROW );
+    xComponent.set( xModel, uno::UNO_QUERY_THROW );
     xSpreadsheetDocument.set( xComponent, uno::UNO_QUERY_THROW );
 }
 

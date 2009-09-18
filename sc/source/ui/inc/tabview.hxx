@@ -292,7 +292,7 @@ public:
 
     void            TabChanged();
     void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, BOOL bAll );
-    void            RefreshZoom();
+    SC_DLLPUBLIC void            RefreshZoom();
     void            SetPagebreakMode( BOOL bSet );
 
     void            UpdateLayerLocks();

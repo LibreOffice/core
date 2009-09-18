@@ -36,9 +36,9 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "vbahelper.hxx"
-#include "vbahelperinterface.hxx"
-#include "vbacollectionimpl.hxx"
+#include "excelvbahelper.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
+#include <vbahelper/vbacollectionimpl.hxx>
 
 
 typedef CollTestImplHelper< ov::excel::XPivotTables > ScVbaPivotTables_BASE;

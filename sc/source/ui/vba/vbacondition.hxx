@@ -31,7 +31,7 @@
 #define SC_VBA_CONDITION_HXX
 #include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include "vbahelperinterface.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/sheet/ConditionOperator.hpp>
 
 template< typename Ifc1 >

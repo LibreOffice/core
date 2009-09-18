@@ -27,38 +27,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <comphelper/processfactory.hxx>
-
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <ooo/vba/excel/XApplication.hpp>
-
-#include <tools/string.hxx>
-
-#include "vbahelper.hxx"
 #include "vbadialog.hxx"
-#include "vbaglobals.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
-
-// fails silently
-void
-ScVbaDialog::Show() throw(uno::RuntimeException)
-{
-    rtl::OUString aURL;
-        uno::Reference< frame::XModel > xModel = getCurrentDocument();
-    if ( xModel.is() )
-    {
-        aURL = mapIndexToName( mnIndex );
-        if( aURL.getLength()  )
-            throw uno::RuntimeException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " Unable to open the specified dialog " ) ),
-                uno::Reference< XInterface > () );
-        dispatchRequests( xModel, aURL );
-    }
-}
-
 
 static const rtl::OUString aStringList[]=
 {
@@ -102,7 +74,7 @@ ScVbaDialog::mapIndexToName( sal_Int32 nIndex )
 rtl::OUString&
 ScVbaDialog::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaPivotTable") );
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaDialog") );
     return sImplName;
 }
 
@@ -113,7 +85,7 @@ ScVbaDialog::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.PivotTable" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Dialog" ) );
     }
     return aServiceNames;
 }

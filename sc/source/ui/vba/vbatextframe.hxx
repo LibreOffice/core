@@ -29,45 +29,23 @@
  ************************************************************************/
 #ifndef SC_VBA_TEXTFRAME_HXX
 #define SC_VBA_TEXTFRAME_HXX
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <ooo/vba/excel/XCharacters.hpp>
 #include <ooo/vba/excel/XTextFrame.hpp>
+#include <vbahelper/vbahelperinterface.hxx>
+#include <vbahelper/vbatextframe.hxx>
 
-#include "vbahelperinterface.hxx"
-#include "vbapalette.hxx"
-
-typedef InheritedHelperInterfaceImpl1< ov::excel::XTextFrame > ScVbaTextFrame_BASE;
+//typedef InheritedHelperInterfaceImpl1< ov::excel::XTextFrame > ScVbaTextFrame_BASE;
+typedef cppu::ImplInheritanceHelper1< VbaTextFrame, ov::excel::XTextFrame > ScVbaTextFrame_BASE;
 
 class ScVbaTextFrame : public ScVbaTextFrame_BASE
 {
-private:
-    css::uno::Reference< ov::excel::XCharacters > m_xCharacters;
-    css::uno::Reference< css::drawing::XShape > m_xShape;
-    css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
-protected:
+public:
+    ScVbaTextFrame( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext > const& xContext ) throw ( css::lang::IllegalArgumentException );
+    virtual ~ScVbaTextFrame() {}
+    // Methods
+    virtual css::uno::Any SAL_CALL Characters(  ) throw (css::uno::RuntimeException);
+    // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
-    virtual void setAsMSObehavior();
-    sal_Int32 getMargin( rtl::OUString sMarginType );
-    void setMargin( rtl::OUString sMarginType, float fMargin );
-public:
-    ScVbaTextFrame( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext , css::uno::Reference< css::drawing::XShape > xShape);
-    virtual ~ScVbaTextFrame() {}
-    // Attributes
-    virtual sal_Bool SAL_CALL getAutoSize() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setAutoSize( sal_Bool _autosize ) throw (css::uno::RuntimeException);
-    virtual float SAL_CALL getMarginBottom() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setMarginBottom( float _marginbottom ) throw (css::uno::RuntimeException);
-    virtual float SAL_CALL getMarginTop() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setMarginTop( float _margintop ) throw (css::uno::RuntimeException);
-    virtual float SAL_CALL getMarginLeft() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setMarginLeft( float _marginleft ) throw (css::uno::RuntimeException);
-    virtual float SAL_CALL getMarginRight() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setMarginRight( float _marginright ) throw (css::uno::RuntimeException);
-
-    // Methods
-    virtual css::uno::Reference< ov::excel::XCharacters > SAL_CALL Characters(  ) throw (css::uno::RuntimeException);
 
 };
 

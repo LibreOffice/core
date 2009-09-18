@@ -102,6 +102,7 @@
 
 using namespace com::sun::star;
 
+#define SC_UNO_VBADOCOBJ "ThisVBADocObj" // perhaps we want to actually make this ThisWorkbook ?
 //------------------------------------------------------------------------
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
@@ -116,6 +117,7 @@ const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_AUTOCONTFOC),       0, &getBooleanCppuType(),                                    0, 0},
         {MAP_CHAR_LEN(SC_UNO_BASICLIBRARIES),    0, &getCppuType((uno::Reference< script::XLibraryContainer >*)0), beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(SC_UNO_DIALOGLIBRARIES),   0, &getCppuType((uno::Reference< script::XLibraryContainer >*)0), beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(SC_UNO_VBADOCOBJ),   0, &getCppuType((beans::PropertyValue*)0), beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(SC_UNO_CALCASSHOWN),       PROP_UNO_CALCASSHOWN, &getBooleanCppuType(),                                    0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0, 0},
         {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0, 0},
@@ -1568,6 +1570,13 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         {
             aRet <<= pDocShell->GetDialogContainer();
         }
+        else if ( aString.EqualsAscii( SC_UNO_VBADOCOBJ ) )
+        {
+            beans::PropertyValue aProp;
+            aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ThisExcelDoc") );
+            aProp.Value <<= pDocShell->GetModel();
+            aRet <<= aProp;
+        }
         else if ( aString.EqualsAscii( SC_UNO_RUNTIMEUID ) )
         {
             aRet <<= getRuntimeUID();
@@ -1771,6 +1780,12 @@ sal_Int64 SAL_CALL ScModelObj::getSomething(
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
 
+    if ( rId.getLength() == 16 &&
+          0 == rtl_compareMemory( SfxObjectShell::getUnoTunnelId().getConstArray(),
+                                    rId.getConstArray(), 16 ) )
+        {
+            return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(pDocShell ));
+        }
     //  aggregated number formats supplier has XUnoTunnel, too
     //  interface from aggregated object must be obtained via queryAggregation
 

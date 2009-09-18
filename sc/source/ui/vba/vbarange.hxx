@@ -53,12 +53,15 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 
-//#include "vbahelperinterface.hxx"
+//#include <vbahelper/vbahelperinterface.hxx>
 #include "vbaformat.hxx"
+#include <formula/grammar.hxx>
 
 class ScTableSheetsObj;
 class ScCellRangesBase;
 class ScCellRangeObj;
+class ScDocShell;
+class ScDocument;
 
 //typedef InheritedHelperInterfaceImpl1< ov::excel::XRange >  ScVbaRange_BASE;
 typedef ScVbaFormat< ov::excel::XRange > ScVbaRange_BASE;

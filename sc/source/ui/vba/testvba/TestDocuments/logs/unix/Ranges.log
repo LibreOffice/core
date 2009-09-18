@@ -1,4 +1,4 @@
-Test run started : 17/12/2008 14:18:34
+Test run started : 10/03/2008 15:15:11
 ----------------------------------------------------------------
 ApplicationMethods
  TEST START : ApplicationMethods
@@ -7,8 +7,8 @@ ApplicationMethods
   ITEM Assertion OK :  Address of Application.Rows is: $1:$1
   ITEM Assertion OK :  Address of Application.Range is: $1:$1,$5:$7
   ITEM Assertion OK :  Please check manually: DefaultFilePath is: /data4/home/npower/Documents
-  ITEM Assertion OK :  Please check manually: Library Path is: /media/disk/BUILD-related/CWS/my_working_copy/INSTALL_FOR_TEST/opt/UserInstallation/user/basic
-  ITEM Assertion OK :  Please check manually: Template Path is: /media/disk/BUILD-related/CWS/my_working_copy/INSTALL_FOR_TEST/opt/UserInstallation/user/template
+  ITEM Assertion OK :  Please check manually: Library Path is: /data4/home/npower/.ooo-2.0/user/basic
+  ITEM Assertion OK :  Please check manually: Template Path is: /data4/home/npower/.ooo-2.0/user/template
   ITEM Assertion OK :  FileSeparator is /
   ITEM Assertion OK :  Name of ActiveWorkbook is: Ranges.xls
 END 'ApplicationMethods' Symbol
@@ -111,8 +111,8 @@ END 'Value-Issue' Symbol
 ----------------------------------------------------------------
 AutoFit issue
  TEST START : AutoFit issue
-  ITEM Assertion OK :  Columns.AutoFit: CurrentWidth is 679
-  ITEM Assertion OK :  Rows.AutoFit: CurrentHeight is 546
+  ITEM Assertion OK :  Columns.AutoFit: CurrentWidth is 680
+  ITEM Assertion OK :  Rows.AutoFit: CurrentHeight is 554
 END 'AutoFit issue' Symbol
  TEST OK : AutoFit issue
 ----------------------------------------------------------------
@@ -204,11 +204,11 @@ Heights and Widths
   ITEM Assertion OK : Range RowHeight is 40
   ITEM Assertion OK : Range ColumnWidth is 50
   ITEM Assertion OK : Range Height is 240
-  ITEM Assertion OK : Range Width is 787.5
+  ITEM Assertion OK : Range Width is 795
   ITEM Assertion OK : Range RowHeight is 50
   ITEM Assertion OK : Range ColumnWidth is 50
   ITEM Assertion OK : Range Height is 300
-  ITEM Assertion OK : Range Width is 787.5
+  ITEM Assertion OK : Range Width is 795
   ITEM Assertion OK : RowHeight is null: True
   ITEM Assertion OK : ColumnWidth is null: True
 END 'Heights and Widths' Symbol
@@ -218,7 +218,7 @@ RangeRowColumn-Issue
  TEST START : RangeRowColumn-Issue
   ITEM Assertion OK : Row is: 8
   ITEM Assertion OK : Column is: 5
-  ITEM Assertion OK : EntireRow.Columns.Count = 1024
+  ITEM Assertion OK : EntireRow.Columns.Count = 256
   ITEM Assertion OK : EntireColumn.Rows.Count = 131072
 END 'RangeRowColumn-Issue' Symbol
  TEST OK : RangeRowColumn-Issue
@@ -255,7 +255,7 @@ End issue
   ITEM Assertion OK : -  = $E$3
   ITEM Assertion OK : -  = $A$8
   ITEM Assertion OK : -  = $B$8
-  ITEM Assertion FAIL : -  = $AMJ$8
+  ITEM Assertion OK : -  = $IV$8
   ITEM Assertion OK : -  = $Z$8
 END 'End issue' Symbol
  TEST OK : End issue
@@ -277,4 +277,4 @@ Validation
   ITEM Assertion OK : Validation Error Title is : Microsoft Excel
 END 'Validation' Symbol
  TEST OK : Validation
-Test run finished : 17/12/2008 14:18:40
+Test run finished : 10/03/2008 15:15:13

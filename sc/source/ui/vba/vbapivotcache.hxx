@@ -34,7 +34,7 @@
 #include <com/sun/star/sheet/XDataPilotTable.hpp>
 
 #include <ooo/vba/excel/XPivotCache.hpp>
-#include "vbahelperinterface.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
 
 typedef InheritedHelperInterfaceImpl1<ov::excel::XPivotCache > PivotCacheImpl_BASE;
 

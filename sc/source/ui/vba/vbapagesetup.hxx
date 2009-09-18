@@ -35,39 +35,28 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "vbahelperinterface.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
+#include <vbahelper/vbapagesetupbase.hxx>
 
-typedef InheritedHelperInterfaceImpl1< ov::excel::XPageSetup > ScVbaPageSetup_BASE;
+typedef cppu::ImplInheritanceHelper1< VbaPageSetupBase, ov::excel::XPageSetup > ScVbaPageSetup_BASE;
 
 class ScVbaPageSetup :  public ScVbaPageSetup_BASE
 {
     css::uno::Reference< css::sheet::XSpreadsheet > mxSheet;
-    css::uno::Reference< css::beans::XPropertySet > mxPageProps;
-    css::uno::Reference< css::frame::XModel > mxModel;
 public:
     ScVbaPageSetup( const css::uno::Reference< ov::XHelperInterface >& xParent,
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     const css::uno::Reference< css::sheet::XSpreadsheet>& xSheet,
-                    const css::uno::Reference< css::frame::XModel >& xModlel) throw (css::uno::RuntimeException);
+                    const css::uno::Reference< css::frame::XModel >& xModel) throw (css::uno::RuntimeException);
     virtual ~ScVbaPageSetup(){}
 
     // Attribute
     virtual rtl::OUString SAL_CALL getPrintArea() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setPrintArea( const rtl::OUString& rAreas ) throw (css::uno::RuntimeException);
-    virtual double SAL_CALL getTopMargin() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setTopMargin( double margin ) throw (css::uno::RuntimeException);
-    virtual double SAL_CALL getBottomMargin() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setBottomMargin( double margin ) throw (css::uno::RuntimeException);
-    virtual double SAL_CALL getRightMargin() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setRightMargin( double margin ) throw (css::uno::RuntimeException);
-    virtual double SAL_CALL getLeftMargin() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setLeftMargin( double margin ) throw (css::uno::RuntimeException);
     virtual double SAL_CALL getHeaderMargin() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setHeaderMargin( double margin ) throw (css::uno::RuntimeException);
-    virtual double SAL_CALL getFooterMargin() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setFooterMargin( double margin ) throw (css::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getOrientation() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setOrientation( sal_Int32 orientation ) throw (css::uno::RuntimeException);
+    void SAL_CALL setHeaderMargin( double margin ) throw (css::uno::RuntimeException);
+    double SAL_CALL getFooterMargin() throw (css::uno::RuntimeException);
+    void SAL_CALL setFooterMargin( double margin ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getFitToPagesTall() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setFitToPagesTall( const css::uno::Any& fitToPagesTall ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getFitToPagesWide() throw (css::uno::RuntimeException);

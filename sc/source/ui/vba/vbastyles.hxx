@@ -31,7 +31,7 @@
 #define SC_VBA_STYLES_HXX
 #include <ooo/vba/excel/XStyles.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include "vbacollectionimpl.hxx"
+#include <vbahelper/vbacollectionimpl.hxx>
 
 typedef CollTestImplHelper< ov::excel::XStyles > ScVbaStyles_BASE;
 class ScVbaStyles: public ScVbaStyles_BASE

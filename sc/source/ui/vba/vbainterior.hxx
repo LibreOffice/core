@@ -34,9 +34,10 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 
 #include <com/sun/star/script/XInvocation.hpp>
-#include "vbahelperinterface.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
 
 class ScDocument;
 

@@ -102,6 +102,10 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <basic/basmgr.hxx>
+#include <cppuhelper/component_context.hxx>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <sfx2/app.hxx>
 
 
 using namespace com::sun::star;
@@ -248,16 +252,6 @@ void ImportExcel8::SheetProtection( void )
     GetSheetProtectBuffer().ReadOptions( aIn, GetCurrScTab() );
 }
 
-bool lcl_hasVBAEnabled()
-{
-    uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY);
-        // test if vba service is present
-    uno::Reference< uno::XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), uno::UNO_QUERY );
-    uno::Reference< uno::XInterface > xGlobals( xCtx->getValueByName( ::rtl::OUString::createFromAscii( "/singletons/ooo.vba.theGlobals") ), uno::UNO_QUERY );
-
-    return xGlobals.is();
-}
-
 void ImportExcel8::ReadBasic( void )
 {
     bHasBasic = TRUE;
@@ -272,9 +266,23 @@ void ImportExcel8::ReadBasic( void )
         bool bLoadStrg = pFilterOpt->IsLoadExcelBasicStorage();
         if( bLoadCode || bLoadStrg )
         {
+            uno::Any aGlobs;
+            uno::Sequence< uno::Any > aArgs(1);
+            aArgs[ 0 ] <<= pShell->GetModel();
+            aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( ::rtl::OUString::createFromAscii( "ooo.vba.excel.Globals"), aArgs );
+            pShell->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
             SvxImportMSVBasic aBasicImport( *pShell, *xRootStrg, bLoadCode, bLoadStrg );
-            bool bAsComment = !bLoadExecutable || !lcl_hasVBAEnabled();
+        bool bAsComment = !bLoadExecutable || !aGlobs.hasValue();
             aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA, bAsComment );
+                // There may be implications setting the current component
+                // too early :-/ so I will just manually set the Basic Variables
+                BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
+                if ( pAppMgr )
+                   pAppMgr->SetGlobalUNOConstant( "ThisComponent", makeAny( pShell->GetModel() ) );
+                {
+                    uno::Any aModel = uno::makeAny( pShell->GetModel() );
+                    pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aModel );
+                }
         }
     }
 }

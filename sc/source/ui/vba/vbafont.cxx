@@ -46,37 +46,14 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-// use local constants there is no need to expose these constants
-// externally. Looking at the Format->Character dialog it seem that
-// these may infact be even be calculated. Leave hardcoded for now
-// #FIXEME #TBD investigate the code for dialog mentioned above
-
-// The font baseline is not specified.
-const short NORMAL = 0;
-
-// specifies a superscripted.
-const short SUPERSCRIPT = 33;
-
-// specifies a subscripted.
-const short SUBSCRIPT = -33;
-
-// specifies a hight of superscripted font
- const sal_Int8 SUPERSCRIPTHEIGHT = 58;
-
-// specifies a hight of subscripted font
-const sal_Int8 SUBSCRIPTHEIGHT = 58;
-
-// specifies a hight of normal font
-const short NORMALHEIGHT = 100;
-
-ScVbaFont::ScVbaFont( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const ScVbaPalette& dPalette, uno::Reference< beans::XPropertySet > xPropertySet, ScCellRangeObj* pRangeObj  ) throw ( uno::RuntimeException ) : ScVbaFont_BASE( xParent, xContext ), mxFont( xPropertySet, css::uno::UNO_QUERY_THROW ), mPalette( dPalette ),  mpRangeObj( pRangeObj )
+ScVbaFont::ScVbaFont( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const ScVbaPalette& dPalette, uno::Reference< beans::XPropertySet > xPropertySet, ScCellRangeObj* pRangeObj  ) throw ( uno::RuntimeException ) : ScVbaFont_BASE( xParent, xContext, dPalette.getPalette(), xPropertySet ), mPalette( dPalette ),  mpRangeObj( pRangeObj )
 {
 }
 
 SfxItemSet*
 ScVbaFont::GetDataSet()
 {
-    SfxItemSet* pDataSet = ScVbaCellRangeAccess::GetDataSet( mpRangeObj );
+    SfxItemSet* pDataSet = excel::ScVbaCellRangeAccess::GetDataSet( mpRangeObj );
     return pDataSet;
 }
 
@@ -243,19 +220,13 @@ ScVbaFont::getSubscript() throw ( uno::RuntimeException )
     return uno::makeAny( ( nValue == SUBSCRIPT ) );
 }
 
-void SAL_CALL
-ScVbaFont::setSize( const uno::Any& aValue ) throw( uno::RuntimeException )
-{
-    mxFont->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharHeight" ) ), aValue );
-}
-
 uno::Any SAL_CALL
 ScVbaFont::getSize() throw ( uno::RuntimeException )
 {
     if ( GetDataSet() )
         if (  GetDataSet()->GetItemState( ATTR_FONT_HEIGHT, TRUE, NULL) == SFX_ITEM_DONTCARE )
             return aNULL();
-        return mxFont->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharHeight" ) ) );
+        return ScVbaFont_BASE::getSize();
 }
 
 void SAL_CALL
@@ -267,13 +238,12 @@ ScVbaFont::setColorIndex( const uno::Any& _colorindex ) throw( uno::RuntimeExcep
     // handled properly here
 
     if ( !nIndex || ( nIndex == excel::XlColorIndex::xlColorIndexAutomatic ) )
+        {
         nIndex = 1;  // check defualt ( assume black )
-    --nIndex; // OOo indices are zero bases
-    uno::Reference< container::XIndexAccess > xIndex = mPalette.getPalette();
-    // setColor expects colors in XL RGB values
-    // #FIXME this is daft we convert OO RGB val to XL RGB val and
-    // then back again to OO RGB value
-    setColor( OORGBToXLRGB(xIndex->getByIndex( nIndex )) );
+                ScVbaFont_BASE::setColorIndex( uno::makeAny( nIndex ) );
+        }
+        else
+            ScVbaFont_BASE::setColorIndex( _colorindex );
 }
 
 
@@ -284,26 +254,7 @@ ScVbaFont::getColorIndex() throw ( uno::RuntimeException )
     if ( GetDataSet() )
         if (  GetDataSet()->GetItemState( ATTR_FONT_COLOR, TRUE, NULL) == SFX_ITEM_DONTCARE )
             return aNULL();
-
-    // getColor returns Xl ColorValue, need to convert it to OO val
-    // as the palette deals with OO RGB values
-    // #FIXME this is daft in getColor we convert OO RGB val to XL RGB val
-    // and then back again to OO RGB value
-    XLRGBToOORGB( getColor() ) >>= nColor;
-    uno::Reference< container::XIndexAccess > xIndex = mPalette.getPalette();
-    sal_Int32 nElems = xIndex->getCount();
-    sal_Int32 nIndex = -1;
-    for ( sal_Int32 count=0; count<nElems; ++count )
-           {
-        sal_Int32 nPaletteColor = 0;
-        xIndex->getByIndex( count ) >>= nPaletteColor;
-        if ( nPaletteColor == nColor )
-        {
-            nIndex = count + 1; // 1 based
-            break;
-        }
-    }
-    return uno::makeAny( nIndex );
+    return ScVbaFont_BASE::getColorIndex();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -396,28 +347,13 @@ ScVbaFont::getFontStyle() throw ( uno::RuntimeException )
     return uno::makeAny( aStyles.makeStringAndClear() );
 }
 
-void SAL_CALL
-ScVbaFont::setBold( const uno::Any& aValue ) throw( uno::RuntimeException )
-{
-    sal_Bool bValue = sal_False;
-    aValue >>= bValue;
-    double fBoldValue = awt::FontWeight::NORMAL;
-    if( bValue )
-        fBoldValue = awt::FontWeight::BOLD;
-    mxFont->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharWeight" ) ), ( uno::Any )fBoldValue );
-
-}
-
 uno::Any SAL_CALL
 ScVbaFont::getBold() throw ( uno::RuntimeException )
 {
     if ( GetDataSet() )
         if (  GetDataSet()->GetItemState( ATTR_FONT_WEIGHT, TRUE, NULL) == SFX_ITEM_DONTCARE )
             return aNULL();
-
-    double fValue = 0.0;
-    mxFont->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharWeight" ) ) ) >>= fValue;
-    return uno::makeAny( fValue == awt::FontWeight::BOLD );
+    return ScVbaFont_BASE::getBold();
 }
 
 void SAL_CALL
@@ -481,32 +417,13 @@ ScVbaFont::getUnderline() throw ( uno::RuntimeException )
     return uno::makeAny( nValue );
 }
 
-void SAL_CALL
-ScVbaFont::setStrikethrough( const uno::Any& aValue ) throw ( uno::RuntimeException )
-{
-    sal_Bool bValue = sal_False;
-    aValue >>= bValue;
-    short nValue = awt::FontStrikeout::NONE;
-    if( bValue )
-        nValue = awt::FontStrikeout::SINGLE;
-    mxFont->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharStrikeout" ) ), ( uno::Any )nValue );
-}
-
 uno::Any SAL_CALL
 ScVbaFont::getStrikethrough() throw ( uno::RuntimeException )
 {
     if ( GetDataSet() )
         if (  GetDataSet()->GetItemState( ATTR_FONT_CROSSEDOUT, TRUE, NULL) == SFX_ITEM_DONTCARE )
             return aNULL();
-    short nValue = 0;
-    mxFont->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharStrikeout" ) ) ) >>= nValue;
-    return uno::Any( nValue == awt::FontStrikeout::SINGLE );
-}
-
-void  SAL_CALL
-ScVbaFont::setShadow( const uno::Any& aValue ) throw ( uno::RuntimeException )
-{
-    mxFont->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharShadowed" ) ), aValue );
+    return ScVbaFont_BASE::getStrikethrough();
 }
 
 uno::Any SAL_CALL
@@ -515,18 +432,7 @@ ScVbaFont::getShadow() throw (uno::RuntimeException)
     if ( GetDataSet() )
         if (  GetDataSet()->GetItemState( ATTR_FONT_SHADOWED, TRUE, NULL) == SFX_ITEM_DONTCARE )
             return aNULL();
-    return mxFont->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharShadowed" ) ) );
-}
-
-void  SAL_CALL
-ScVbaFont::setItalic( const uno::Any& aValue ) throw ( uno::RuntimeException )
-{
-    sal_Bool bValue = sal_False;
-    aValue >>= bValue;
-    short nValue = awt::FontSlant_NONE;
-    if( bValue )
-        nValue = awt::FontSlant_ITALIC;
-    mxFont->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharPosture" ) ), ( uno::Any )nValue );
+    return ScVbaFont_BASE::getShadow();
 }
 
 uno::Any SAL_CALL
@@ -536,17 +442,7 @@ ScVbaFont::getItalic() throw ( uno::RuntimeException )
         if (  GetDataSet()->GetItemState( ATTR_FONT_POSTURE, TRUE, NULL) == SFX_ITEM_DONTCARE )
             return aNULL();
 
-    awt::FontSlant aFS;
-    mxFont->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharPosture" ) ) ) >>= aFS;
-    return uno::makeAny( aFS == awt::FontSlant_ITALIC );
-}
-
-void  SAL_CALL
-ScVbaFont::setName( const uno::Any& aValue ) throw ( uno::RuntimeException )
-{
-    rtl::OUString sString;
-    aValue >>= sString;
-    mxFont->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharFontName" ) ), aValue);
+    return ScVbaFont_BASE::getItalic();
 }
 
 uno::Any SAL_CALL
@@ -555,20 +451,15 @@ ScVbaFont::getName() throw ( uno::RuntimeException )
     if ( GetDataSet() )
         if (  GetDataSet()->GetItemState( ATTR_FONT, TRUE, NULL) == SFX_ITEM_DONTCARE )
             return aNULL();
-    return mxFont->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharFontName" ) ) );
+    return ScVbaFont_BASE::getName();
 }
 uno::Any
 ScVbaFont::getColor() throw (uno::RuntimeException)
 {
+    // #TODO #FIXME - behave like getXXX above ( wrt. GetDataSet )
     uno::Any aAny;
     aAny = OORGBToXLRGB( mxFont->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharColor" ) ) ) );
     return aAny;
-}
-
-void
-ScVbaFont::setColor( const uno::Any& _color  ) throw (uno::RuntimeException)
-{
-    mxFont->setPropertyValue(  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharColor" ) ) , XLRGBToOORGB(_color));
 }
 
 void  SAL_CALL

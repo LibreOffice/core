@@ -128,7 +128,8 @@
 #include <rtl/logfile.hxx>
 
 #include <comphelper/processfactory.hxx>
-
+#include <basic/sbstar.hxx>
+#include <basic/basmgr.hxx>
 using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
@@ -358,7 +359,16 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
     }
     else
         aDocument.SetInsertingFromOtherDoc( FALSE );
-
+    // add vba globals ( if they are availabl )
+    SfxObjectShell* pShell = aDocument.GetDocumentShell();
+    if ( pShell )
+    {
+        uno::Any aGlobs;
+                uno::Sequence< uno::Any > aArgs(1);
+                aArgs[ 0 ] <<= pShell->GetModel();
+        aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
+        pShell->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
+    }
     aDocument.SetImportingXML( FALSE );
     aDocument.EnableExecuteLink( true );
     aDocument.EnableUndo( TRUE );

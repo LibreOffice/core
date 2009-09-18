@@ -120,10 +120,11 @@ ScVbaChartObject::Activate() throw ( script::BasicErrorException )
 {
     try
     {
-        // #TODO #FIXME should be ThisWorkbook or equivelant
-        // XModel
+        // #TODO #FIXME should be ThisWorkbook or equivelant, or in
+        // fact probably the chart object should be created with
+        // the XModel owner
         //uno::Reference< view::XSelectionSupplier > xSelectionSupplier( getXModel().getCurrentController());
-        uno::Reference< view::XSelectionSupplier > xSelectionSupplier( getCurrentDocument()->getCurrentController(), uno::UNO_QUERY_THROW );
+        uno::Reference< view::XSelectionSupplier > xSelectionSupplier( getCurrentExcelDoc(mxContext)->getCurrentController(), uno::UNO_QUERY_THROW );
         xSelectionSupplier->select(uno::makeAny(xShape));
     }
     catch (uno::Exception& )

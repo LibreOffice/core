@@ -34,7 +34,7 @@
 #include<com/sun/star/sheet/XViewPane.hpp>
 #include<ooo/vba/excel/XPane.hpp>
 
-#include"vbahelper.hxx"
+#include"excelvbahelper.hxx"
 
 typedef cppu::WeakImplHelper1< ov::excel::XPane > PaneImpl_Base;
 

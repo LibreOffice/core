@@ -34,7 +34,10 @@
 #include <ooo/vba/XCollection.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
-#include "vbacollectionimpl.hxx"
+#include <vbahelper/vbacollectionimpl.hxx>
+
+class ScDocument;
+class ScDocShell;
 
 typedef CollTestImplHelper< ov::excel::XNames > ScVbaNames_BASE;
 

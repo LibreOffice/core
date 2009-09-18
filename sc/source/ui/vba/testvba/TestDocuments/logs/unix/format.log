@@ -1,4 +1,4 @@
-Test run started : 17/12/2008 14:15:22
+Test run started : 2008／09／18 11:35:34
 BEGIN Format
  TEST START : Test Predefined_Number_Format_Sample function
   ITEM Assertion OK : General Number: 562486.2356
@@ -33,4 +33,4 @@ BEGIN Format
   ITEM Assertion OK : >: VBA
  TEST OK : Test Custom_Text_Format_Sample function
 END  Format
-Test run finished : 17/12/2008 14:15:22
+Test run finished : 2008／09／18 11:35:34

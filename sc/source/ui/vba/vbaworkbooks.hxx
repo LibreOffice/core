@@ -31,21 +31,20 @@
 #define SC_VBA_WORKBOOKS_HXX
 
 
-#include "vbacollectionimpl.hxx"
-#include <ooo/vba/XGlobals.hpp>
+#include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/excel/XWorkbooks.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include "vbahelper.hxx"
+#include <vbahelper/vbadocumentsbase.hxx>
+#include "excelvbahelper.hxx"
 
 
 class ScModelObj;
 
-typedef CollTestImplHelper< ov::excel::XWorkbooks > ScVbaWorkbooks_BASE;
+typedef cppu::ImplInheritanceHelper1< VbaDocumentsBase, ov::excel::XWorkbooks > ScVbaWorkbooks_BASE;
 
 class ScVbaWorkbooks : public ScVbaWorkbooks_BASE
 {
 private:
-    css::uno::Reference< ov::XGlobals > getGlobals() throw (css::uno::RuntimeException);
     rtl::OUString   getFileFilterType( const rtl::OUString& rString );
     bool    isTextFile( const rtl::OUString& rString );
     bool    isSpreadSheetFile( const rtl::OUString& rString );

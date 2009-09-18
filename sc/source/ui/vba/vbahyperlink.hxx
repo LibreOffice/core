@@ -40,7 +40,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/excel/XRange.hpp>
 
-#include "vbahelperinterface.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
 
 typedef InheritedHelperInterfaceImpl1< ov::excel::XHyperlink > HyperlinkImpl_BASE;
 

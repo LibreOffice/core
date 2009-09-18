@@ -32,8 +32,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/excel/XAxis.hpp>
 #include <ooo/vba/excel/XChart.hpp>
-#include "vbahelperinterface.hxx"
-
+#include <vbahelper/vbahelperinterface.hxx>
+#include <memory>
 typedef InheritedHelperInterfaceImpl1< ov::excel::XAxis >  ScVbaAxis_BASE;
 class ScVbaChart;
 class ScVbaAxis : public ScVbaAxis_BASE

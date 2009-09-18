@@ -1,4 +1,4 @@
-Test run started : 17/12/2008 13:53:49
+Test run started : 09/05/2008 10:21:46 AM
 BEGIN Replace
  TEST START : Test Replace function
   ITEM Assertion OK : common string:aefefdBc
@@ -11,4 +11,4 @@ BEGIN Replace
   ITEM Assertion OK : start = 1, count = 0, not support in Unix: abcbcdBc
  TEST OK : Test Replace function
 END  Replace
-Test run finished : 17/12/2008 13:53:49
+Test run finished : 09/05/2008 10:21:47 AM

@@ -1,4 +1,4 @@
-Test run started : 17/07/2007 20:56:04
+Test run started : 12/05/2009 11:23:35
 ----------------------------------------------------------------
 TestAddress
  TEST START : TestAddress
@@ -51,12 +51,17 @@ TestAddress
   ITEM Assertion OK : test47 Range('a2:b4').Rows('1:2')
   ITEM Assertion OK : test48 Range('a2:b4').Rows('2:2')
   ITEM Assertion OK : test49 Range('a2:b4').Rows('2:3')
+  ITEM Assertion OK : test50 Range(' A2:B4 ')
+  ITEM Assertion OK : test51 Range('A 2:B 4')
+  ITEM Assertion OK : test52 Range('A2 : B4 ')
+  ITEM Assertion OK : test53 Range('Sheet1 !A2 : B4 ')
+  ITEM Assertion OK : test54 Range('Sheet1! A2 : B4 ')
 Test Results
 ============
 
-Tests passed: 49
+Tests passed: 54
 Tests failed: 0
 
 END 'TestAddress
  TEST OK : TestAddress
-Test run finished : 17/07/2007 20:56:05
+Test run finished : 12/05/2009 11:23:35

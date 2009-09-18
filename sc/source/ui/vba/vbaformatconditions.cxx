@@ -36,6 +36,7 @@
 #include "vbaformatcondition.hxx"
 #include "vbaworkbook.hxx"
 #include "vbastyles.hxx"
+#include "vbaglobals.hxx"
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
@@ -50,7 +51,7 @@ static rtl::OUString sStyleNamePrefix( RTL_CONSTASCII_USTRINGPARAM("Excel_CondFo
 ScVbaFormatConditions::ScVbaFormatConditions( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< sheet::XSheetConditionalEntries >& _xSheetConditionalEntries, const uno::Reference< frame::XModel >& xModel ) : ScVbaFormatConditions_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( _xSheetConditionalEntries, uno::UNO_QUERY_THROW ) ), mxSheetConditionalEntries( _xSheetConditionalEntries )
 {
     mxRangeParent.set( xParent, uno::UNO_QUERY_THROW );
-    uno::Reference< excel::XWorkbook > xWorkbook = new ScVbaWorkbook(  uno::Reference< XHelperInterface >( ScVbaGlobals::getGlobalsImpl( xContext )->getApplication(), uno::UNO_QUERY_THROW ), xContext, xModel );
+    uno::Reference< excel::XWorkbook > xWorkbook = new ScVbaWorkbook(  uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), xContext, xModel );
     mxStyles.set( xWorkbook->Styles( uno::Any() ), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XCellRangeAddressable > xCellRange( mxRangeParent->getCellRange(), uno::UNO_QUERY_THROW );
     mxParentRangePropertySet.set( xCellRange, uno::UNO_QUERY_THROW );
