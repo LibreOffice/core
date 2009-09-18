@@ -62,7 +62,7 @@ using namespace ::com::sun::star;
 namespace
 {
 
-    static ::sw::mark::DdeBookmark* const lcl_FindDdeBookmark(const IDocumentMarkAccess& rMarkAccess, const String& rName, bool bCaseSensitive)
+    static ::sw::mark::DdeBookmark* lcl_FindDdeBookmark(const IDocumentMarkAccess& rMarkAccess, const String& rName, bool bCaseSensitive)
     {
         //Iterating over all bookmarks, checking DdeBookmarks
         const ::rtl::OUString sNameLc = bCaseSensitive ? rName : GetAppCharClass().lower(rName);
