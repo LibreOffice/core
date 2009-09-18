@@ -1,0 +1,88 @@
+    item void       SfxVoidItem;
+    item BOOL       SfxBoolItem;
+    item INT32      SfxUInt16Item;
+    item INT16      SfxInt16Item;
+    item INT32      SfxUInt32Item;
+    item INT32      SfxInt32Item;
+    item String     SfxStringItem;
+    item BYTE       SfxByteItem;
+    item INT16      SfxEnumItem;
+    item INT16      SfxAllEnumItem;
+    item INT16      TbxImageItem;
+
+    item String     SbxItem;                //! Dummy
+    item String     SfxObjectItem;          //! Dummy
+    item String     SfxTemplateItem;        //! Dummy
+    item String     SfxMacroInfoItem;       //! Dummy
+    item String     SfxImageItem;           //! Dummy
+    item String     SfxFrameItem;           //! Dummy
+    item String     SfxObjectShellItem      //! Dummy
+    item String     SfxUsrAnyItem           //! Dummy
+
+    struct Point
+    {
+        INT32   X   MID_X;
+        INT32   Y   MID_Y;
+    };
+    item Point SfxPointItem;
+
+    struct Rectangle
+    {
+        INT32   Left    MID_RECT_LEFT;
+        INT32   Top     MID_RECT_TOP;
+        INT32   Width   MID_WIDTH;
+        INT32   Height  MID_HEIGHT;
+    };
+    item Rectangle SfxRectangleItem;
+
+    struct DocInfo
+    {
+        BOOL        UseUserData        MID_DOCINFO_USEUSERDATA;
+        BOOL        DeleteUserData    MID_DOCINFO_DELETEUSERDATA;
+        String      Title              MID_DOCINFO_TITLE;
+        String      Subject            MID_DOCINFO_SUBJECT;
+        String      KeyWords           MID_DOCINFO_KEYWORDS;
+        String      Description        MID_DOCINFO_DESCRIPTION;
+        BOOL        AutoReload         MID_DOCINFO_AUTOLOADENABLED;
+        INT32       AutoReloadTime     MID_DOCINFO_AUTOLOADSECS;
+        String      AutoReloadURL      MID_DOCINFO_AUTOLOADURL;
+        String      AutoReloadFrame    MID_DOCINFO_DEFAULTTARGET;
+    };
+    item DocInfo SfxDocumentInfoItem;
+
+    struct SvxSearch
+    {
+        INT16       StyleFamily     MID_SEARCH_STYLEFAMILY;
+        UINT16      CellType        MID_SEARCH_CELLTYPE;
+        BOOL        RowDirection    MID_SEARCH_ROWDIRECTION;
+        BOOL        AllTables       MID_SEARCH_ALLTABLES;
+        BOOL        Backward        MID_SEARCH_BACKWARD;
+        BOOL        Pattern         MID_SEARCH_PATTERN;
+        BOOL        Content         MID_SEARCH_CONTENT;
+        BOOL        AsianOptions    MID_SEARCH_ASIANOPTIONS;
+        INT16       AlgorithmType   MID_SEARCH_ALGORITHMTYPE;
+        INT32       SearchFlags     MID_SEARCH_FLAGS;
+        String      SearchString    MID_SEARCH_SEARCHSTRING;
+        String      ReplaceString   MID_SEARCH_REPLACESTRING;
+        INT16       Locale          MID_SEARCH_LOCALE;
+        INT32       ChangedChars    MID_SEARCH_CHANGEDCHARS;
+        INT32       DeletedChars    MID_SEARCH_DELETEDCHARS;
+        INT32       InsertedChars   MID_SEARCH_INSERTEDCHARS;
+        INT32       TransliterateFlags MID_SEARCH_TRANSLITERATEFLAGS;
+        INT16       Command         MID_SEARCH_COMMAND;
+    };
+    item SvxSearch SvxSearchItem;
+
+    struct SvxSize
+    {
+        INT32               Width           MID_SIZE_WIDTH;
+        INT32               Height          MID_SIZE_HEIGHT;
+    };
+    item SvxSize SvxSizeItem;
+
+    struct SfxScriptOrganizer
+    {
+        String Language MID_SCRIPT_ORGANIZER_LANGUAGE;
+    };
+    item SfxScriptOrganizer SfxScriptOrganizerItem;
+

@@ -7,8 +7,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\global\accelerator\en-US
 mkdir: %_DEST%\xml%_EXT%\uiconfig\global\accelerator\es
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
-..\%__SRC%\inc\svxslots.ilb %_DEST%\inc%_EXT%\svxslots.ilb
-..\%__SRC%\inc\*.ilb* %_DEST%\inc%_EXT%\*.ilb*
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\lib\isvx*.lib %_DEST%\lib%_EXT%\isvx*.lib
 ..\%__SRC%\bin\gengal* %_DEST%\bin%_EXT%\gengal*
@@ -20,6 +18,9 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\global\accelerator\es
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 
 mkdir: %_DEST%\inc%_EXT%\svx
+..\sdi\svx.sdi %_DEST%\inc%_EXT%\svx\svx.sdi
+..\sdi\svxitems.sdi %_DEST%\inc%_EXT%\svx\svxitems.sdi
+..\sdi\xoitems.sdi %_DEST%\inc%_EXT%\svx\xoitems.sdi
 ..\inc\flagsdef.hxx %_DEST%\inc%_EXT%\svx\flagsdef.hxx
 ..\%__SRC%\inc\svxslots.hxx %_DEST%\inc%_EXT%\svx\svxslots.hxx
 ..\source\inc\fmresids.hrc %_DEST%\inc%_EXT%\svx\fmresids.hrc
