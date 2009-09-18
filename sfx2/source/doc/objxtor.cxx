@@ -582,7 +582,8 @@ sal_uInt16 SfxObjectShell::PrepareClose
         }
     }
 
-    SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_PREPARECLOSEDOC, GlobalEventConfig::GetEventName(STR_EVENT_PREPARECLOSEDOC), this) );
+    SfxApplication *pSfxApp = SFX_APP();
+    pSfxApp->NotifyEvent( SfxEventHint(SFX_EVENT_PREPARECLOSEDOC, GlobalEventConfig::GetEventName(STR_EVENT_PREPARECLOSEDOC), this) );
 
     if( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
     {
@@ -596,9 +597,6 @@ sal_uInt16 SfxObjectShell::PrepareClose
         ? SfxViewFrame::Current() : SfxViewFrame::GetFirst( this );
     while ( pFrame && (pFrame->GetFrameType() & SFXFRAME_SERVER ) )
         pFrame = SfxViewFrame::GetNext( *pFrame, this );
-
-    SfxApplication *pSfxApp = SFX_APP();
-    pSfxApp->NotifyEvent( SfxEventHint(SFX_EVENT_PREPARECLOSEDOC, GlobalEventConfig::GetEventName(STR_EVENT_PREPARECLOSEDOC), this) );
 
     sal_Bool bClose = sal_False;
     if ( bUI && IsModified() )
