@@ -46,16 +46,17 @@ namespace vcl
     class SAL_NO_VTABLE ITextLayout
     {
     public:
-        virtual long    GetTextWidth( const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const = 0;
-        virtual void    DrawText(
-                            const Point& _rStartPoint,
-                            const XubString& _rText,
-                            xub_StrLen _nStartIndex,
-                            xub_StrLen _nLength,
-                            MetricVector* _pVector,
-                            String* _pDisplayText
-                        ) = 0;
-        virtual bool    GetCaretPositions( const XubString& _rText, sal_Int32* _pCaretXArray, xub_StrLen nIndex, xub_StrLen nLen ) const = 0;
+        virtual long        GetTextWidth( const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const = 0;
+        virtual void        DrawText(
+                                const Point& _rStartPoint,
+                                const XubString& _rText,
+                                xub_StrLen _nStartIndex,
+                                xub_StrLen _nLength,
+                                MetricVector* _pVector,
+                                String* _pDisplayText
+                            ) = 0;
+        virtual bool        GetCaretPositions( const XubString& _rText, sal_Int32* _pCaretXArray, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const = 0;
+        virtual xub_StrLen  GetTextBreak( const XubString& _rText, long _nMaxTextWidth, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const = 0;
     };
 
     //====================================================================
@@ -74,25 +75,31 @@ namespace vcl
         virtual ~DefaultTextLayout();
 
         // ITextLayout overridables
-        virtual long    GetTextWidth(
-                            const XubString& _rText,
-                            xub_StrLen _nStartIndex,
-                            xub_StrLen _nLength
-                        ) const;
-        virtual void    DrawText(
-                            const Point& _rStartPoint,
-                            const XubString& _rText,
-                            xub_StrLen _nStartIndex,
-                            xub_StrLen _nLength,
-                            MetricVector* _pVector,
-                            String* _pDisplayText
-                        );
-        virtual bool    GetCaretPositions(
-                            const XubString& _rText,
-                            sal_Int32* _pCaretXArray,
-                            xub_StrLen _nStartIndex,
-                            xub_StrLen _nLength
-                        ) const;
+        virtual long        GetTextWidth(
+                                const XubString& _rText,
+                                xub_StrLen _nStartIndex,
+                                xub_StrLen _nLength
+                            ) const;
+        virtual void        DrawText(
+                                const Point& _rStartPoint,
+                                const XubString& _rText,
+                                xub_StrLen _nStartIndex,
+                                xub_StrLen _nLength,
+                                MetricVector* _pVector,
+                                String* _pDisplayText
+                            );
+        virtual bool        GetCaretPositions(
+                                const XubString& _rText,
+                                sal_Int32* _pCaretXArray,
+                                xub_StrLen _nStartIndex,
+                                xub_StrLen _nLength
+                            ) const;
+        virtual xub_StrLen  GetTextBreak(
+                                const XubString& _rText,
+                                long _nMaxTextWidth,
+                                xub_StrLen _nStartIndex,
+                                xub_StrLen _nLength
+                            ) const;
 
     private:
         OutputDevice&   m_rTargetDevice;

@@ -5305,7 +5305,7 @@ long OutputDevice::ImplGetTextLines( OutputDevice& rTargetDevice, ImplMultiTextL
                 if ( xBI.is() )
                 {
                     const com::sun::star::lang::Locale& rDefLocale(Application::GetSettings().GetUILocale());
-                    xub_StrLen nSoftBreak = rTargetDevice.GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
+                    xub_StrLen nSoftBreak = _rLayout.GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
                     DBG_ASSERT( nSoftBreak < nBreakPos, "Break?!" );
                     //aHyphOptions.hyphenIndex = nSoftBreak;
                     i18n::LineBreakResults aLBR = xBI->getLineBreak( aText, nSoftBreak, rDefLocale, nPos, aHyphOptions, aUserOptions );
@@ -6876,7 +6876,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                         if ( aLastLine.GetChar( i ) == _LF )
                             aLastLine.SetChar( i, ' ' );
                     }
-                    aLastLine = rTargetDevice.GetEllipsisString( aLastLine, nWidth, nStyle );
+                    aLastLine = ImplGetEllipsisString( rTargetDevice, aLastLine, nWidth, nStyle, _rLayout );
                     nStyle &= ~(TEXT_DRAW_VCENTER | TEXT_DRAW_BOTTOM);
                     nStyle |= TEXT_DRAW_TOP;
                 }
@@ -6966,7 +6966,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
         {
             if ( nStyle & TEXT_DRAW_ELLIPSIS )
             {
-                aStr = rTargetDevice.GetEllipsisString( aStr, nWidth, nStyle );
+                aStr = ImplGetEllipsisString( rTargetDevice, aStr, nWidth, nStyle, _rLayout );
                 nStyle &= ~(TEXT_DRAW_CENTER | TEXT_DRAW_RIGHT);
                 nStyle |= TEXT_DRAW_LEFT;
                 nTextWidth = _rLayout.GetTextWidth( aStr, 0, aStr.Len() );
@@ -7261,11 +7261,20 @@ static BOOL ImplIsCharIn( xub_Unicode c, const sal_Char* pStr )
 String OutputDevice::GetEllipsisString( const String& rOrigStr, long nMaxWidth,
                                         USHORT nStyle ) const
 {
-    DBG_TRACE( "OutputDevice::GetEllipsisString()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+    DefaultTextLayout aTextLayout( *const_cast< OutputDevice* >( this ) );
+    return ImplGetEllipsisString( *this, rOrigStr, nMaxWidth, nStyle, aTextLayout );
+}
+
+// -----------------------------------------------------------------------
+
+String OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice, const XubString& rOrigStr, long nMaxWidth,
+                                               USHORT nStyle, const ::vcl::ITextLayout& _rLayout )
+{
+    DBG_TRACE( "OutputDevice::ImplGetEllipsisString()" );
 
     String aStr = rOrigStr;
-    xub_StrLen nIndex = GetTextBreak( aStr, nMaxWidth );
+    xub_StrLen nIndex = _rLayout.GetTextBreak( aStr, nMaxWidth, 0, aStr.Len() );
 
 
     if ( nIndex != STRING_LEN )
@@ -7276,7 +7285,7 @@ String OutputDevice::GetEllipsisString( const String& rOrigStr, long nMaxWidth,
             if ( nIndex > 1 )
             {
                 aStr.AppendAscii( "..." );
-                while ( aStr.Len() && (GetTextWidth( aStr ) > nMaxWidth) )
+                while ( aStr.Len() && (_rLayout.GetTextWidth( aStr, 0, aStr.Len() ) > nMaxWidth) )
                 {
                     if ( (nIndex > 1) || (nIndex == aStr.Len()) )
                         nIndex--;
@@ -7312,8 +7321,8 @@ String OutputDevice::GetEllipsisString( const String& rOrigStr, long nMaxWidth,
             XubString aLastStr( aStr, nLastContent, aStr.Len() );
             XubString aTempLastStr1( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
             aTempLastStr1 += aLastStr;
-            if ( GetTextWidth( aTempLastStr1 ) > nMaxWidth )
-                aStr = GetEllipsisString( aStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS );
+            if ( _rLayout.GetTextWidth( aTempLastStr1, 0, aTempLastStr1.Len() ) > nMaxWidth )
+                aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS, _rLayout );
             else
             {
                 USHORT nFirstContent = 0;
@@ -7328,7 +7337,7 @@ String OutputDevice::GetEllipsisString( const String& rOrigStr, long nMaxWidth,
                     nFirstContent++;
 
                 if ( nFirstContent >= nLastContent )
-                    aStr = GetEllipsisString( aStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS );
+                    aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS, _rLayout );
                 else
                 {
                     if ( nFirstContent > 4 )
@@ -7337,8 +7346,8 @@ String OutputDevice::GetEllipsisString( const String& rOrigStr, long nMaxWidth,
                     aFirstStr.AppendAscii( "..." );
                     XubString aTempStr = aFirstStr;
                     aTempStr += aLastStr;
-                    if ( GetTextWidth( aTempStr ) > nMaxWidth )
-                        aStr = GetEllipsisString( aStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS );
+                    if ( _rLayout.GetTextWidth( aTempStr, 0, aTempStr.Len() ) > nMaxWidth )
+                        aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS, _rLayout );
                     else
                     {
                         do
@@ -7362,7 +7371,7 @@ String OutputDevice::GetEllipsisString( const String& rOrigStr, long nMaxWidth,
                                 XubString aTempLastStr( aStr, nLastContent, aStr.Len() );
                                 aTempStr = aFirstStr;
                                 aTempStr += aTempLastStr;
-                                if ( GetTextWidth( aTempStr ) > nMaxWidth )
+                                if ( _rLayout.GetTextWidth( aTempStr, 0, aTempStr.Len() ) > nMaxWidth )
                                     break;
                             }
                         }

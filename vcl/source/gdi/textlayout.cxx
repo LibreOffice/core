@@ -64,6 +64,12 @@ namespace vcl
         return m_rTargetDevice.GetCaretPositions( _rText, _pCaretXArray, _nStartIndex, _nLength );
     }
 
+    //--------------------------------------------------------------------
+    xub_StrLen DefaultTextLayout::GetTextBreak( const XubString& _rText, long _nMaxTextWidth, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const
+    {
+        return m_rTargetDevice.GetTextBreak( _rText, _nMaxTextWidth, _nStartIndex, _nLength );
+    }
+
     //====================================================================
     //= ReferenceDeviceTextLayout
     //====================================================================
@@ -74,9 +80,10 @@ namespace vcl
         virtual ~ReferenceDeviceTextLayout();
 
         // ITextLayout
-        virtual long    GetTextWidth( const XubString& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const;
-        virtual void    DrawText( const Point& _rStartPoint, const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength, MetricVector* _pVector, String* _pDisplayText );
-        virtual bool    GetCaretPositions( const XubString& _rText, sal_Int32* _pCaretXArray, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const;
+        virtual long        GetTextWidth( const XubString& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const;
+        virtual void        DrawText( const Point& _rStartPoint, const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength, MetricVector* _pVector, String* _pDisplayText );
+        virtual bool        GetCaretPositions( const XubString& _rText, sal_Int32* _pCaretXArray, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const;
+        virtual xub_StrLen  GetTextBreak( const XubString& _rText, long _nMaxTextWidth, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const;
 
     public:
         // equivalents to the respective OutputDevice methods, which take the reference device into account
@@ -174,6 +181,7 @@ namespace vcl
         public:
             DeviceUnitMapping( const OutputDevice& _rTargetDevice, const OutputDevice& _rReferenceDevice )
                 :m_rTargetDevice( _rTargetDevice )
+                ,m_rReferenceDevice( _rReferenceDevice )
                 ,m_eTargetMapUnit( _rTargetDevice.GetMapMode().GetMapUnit() )
                 ,m_bTargetIsPixel( _rTargetDevice.GetMapMode().GetMapUnit() == MAP_PIXEL )
                 ,m_eRefMapUnit( _rReferenceDevice.GetMapMode().GetMapUnit() )
@@ -185,11 +193,18 @@ namespace vcl
             {
                 return  m_bTargetIsPixel
                     ?   m_rTargetDevice.LogicToPixel( Size( _nWidth, 0 ), m_eRefMapUnit ).Width()
-                    :   m_rTargetDevice.LogicToLogic( Size( _nWidth, 0 ), m_eRefMapUnit, m_eTargetMapUnit ).Width();
+                    :   OutputDevice::LogicToLogic( Size( _nWidth, 0 ), m_eRefMapUnit, m_eTargetMapUnit ).Width();
+            }
+            long mapToReference( long _nWidth )
+            {
+                return  m_bTargetIsPixel
+                    ?   m_rTargetDevice.PixelToLogic( Size( _nWidth, 0 ), m_eRefMapUnit ).Width()
+                    :   OutputDevice::LogicToLogic( Size( _nWidth, 0 ), m_eTargetMapUnit, m_eRefMapUnit ).Width();
             }
 
         private:
             const OutputDevice& m_rTargetDevice;
+            const OutputDevice& m_rReferenceDevice;
             const MapUnit       m_eTargetMapUnit;
             const bool          m_bTargetIsPixel;
             const MapUnit       m_eRefMapUnit;
@@ -264,6 +279,16 @@ namespace vcl
             _pCaretXArray[i] = aMapping.mapToTarget( _pCaretXArray[i] );
 
         return true;
+    }
+
+    //--------------------------------------------------------------------
+    xub_StrLen ReferenceDeviceTextLayout::GetTextBreak( const XubString& _rText, long _nMaxTextWidth, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const
+    {
+        if ( !lcl_normalizeLength( _rText, _nStartIndex, _nLength ) )
+            return 0;
+
+        DeviceUnitMapping aMapping( m_rTargetDevice, m_rReferenceDevice );
+        return m_rReferenceDevice.GetTextBreak( _rText, aMapping.mapToReference( _nMaxTextWidth ), _nStartIndex, _nLength );
     }
 
     //--------------------------------------------------------------------
