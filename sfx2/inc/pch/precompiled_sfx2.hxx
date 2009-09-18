@@ -485,7 +485,6 @@
 #include "sal/types.h"
 #include "setup_native/qswin32.h"
 #include "shell/systemshell.hxx"
-#include "sj2/sjapplet.hxx"
 #include "sot/clsids.hxx"
 #include "sot/exchange.hxx"
 #include "sot/factory.hxx"

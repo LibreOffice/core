@@ -108,7 +108,6 @@ APP1STDLIBS =  \
     $(SAXLIB) \
     $(FWILIB) \
     $(ICUUCLIB) \
-    $(SJLIB) \
     $(I18NUTILLIB) \
     $(ICULIB) \
     $(JVMFWKLIB) \
@@ -120,11 +119,11 @@ APP1STDLIBS =  \
     $(VOSLIB)
 
 
-.IF "$(GUI)" == "UNX"
-.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
-APP1STDLIBS+= -lXext -lSM -lICE
-.ENDIF
-.ENDIF
+#.IF "$(GUI)" == "UNX"
+#.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
+#APP1STDLIBS+= -lXext -lSM -lICE
+#.ENDIF
+#.ENDIF
 
 APP1DEPN= $(APP1RES) verinfo.rc
 
@@ -172,7 +171,6 @@ APP5STDLIBS = \
     $(SAXLIB) \
     $(FWILIB) \
     $(ICUUCLIB) \
-    $(SJLIB) \
     $(I18NUTILLIB) \
     $(ICULIB) \
     $(JVMFWKLIB) \
@@ -183,9 +181,9 @@ APP5STDLIBS = \
     $(SALHELPERLIB) \
     $(VOSLIB)
 
-.IF "$(OS)" == "LINUX"
-APP5STDLIBS+= -lXext -lSM -lICE
-.ENDIF # LINUX
+#.IF "$(OS)" == "LINUX"
+#APP5STDLIBS+= -lXext -lSM -lICE
+#.ENDIF # LINUX
 
 APP5DEPN= $(APP1TARGETN) $(APP5RES) ooverinfo.rc
 APP5DEF=    $(MISCX)$/$(TARGET).def

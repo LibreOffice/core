@@ -62,7 +62,7 @@
 #include <sot/exchange.hxx>
 
 //#include <svtools/agprop.hxx>
-#include <sj2/sjapplet.hxx>
+//#include <sj2/sjapplet.hxx>
 #include <svtools/isethint.hxx>
 
 #include <unotools/configmgr.hxx>
@@ -850,6 +850,8 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     // INet Session neu aufsetzen
     if ( bResetSession )
     {
+        // no more sj2
+        #if 0
         try
         {
             SjApplet2::settingsChanged();
@@ -858,6 +860,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         {
             DBG_ERRORFILE( "SjApplet2::settingsChanged() throws an exception" );
         }
+        #endif
     }
 
     // geaenderte Daten speichern
