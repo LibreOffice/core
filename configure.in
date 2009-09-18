@@ -6101,8 +6101,8 @@ KDE4_CFLAGS=""
 KDE4_LIBS=""
 MOC4="moc"
 if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
-   qt_incdirs="$QTINC $QTDIR /usr/include/qt4 /usr/include $x_includes"
-   qt_libdirs="$QTLIB /usr/lib $x_libraries"
+   qt_incdirs="$QT4INC $QT4DIR /usr/include/qt4 /usr/include $x_includes"
+   qt_libdirs="$QT4LIB /usr/lib $x_libraries"
    
    kde_incdirs="/usr/include $x_includes"
    kde_libdirs="/usr/lib $x_libraries"
@@ -6110,6 +6110,15 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    if test "$build_cpu" == "x86_64" ; then
       qt_libdirs="$qt_libdirs /usr/lib64/qt4 /usr/lib64/qt /usr/lib64"
       kde_libdirs="$kde_libdirs /usr/lib64 /usr/lib64/kde4"
+   fi
+
+   if test -n "$KDE4DIR" ; then
+      kde_incdirs="$KDE4DIR/include $kde_incdirs"
+      if test "$build_cpu" != "x86_64" ; then
+         kde_libdirs="$KDE4DIR/lib $kde_libdirs"
+      else
+         kde_libdirs="$KDE4DIR/lib64 $KDE4DIR/lib $kde_libdirs"
+      fi
    fi
 
    qt_test_include="Qt/qobject.h"
@@ -6128,7 +6137,7 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    
    AC_MSG_RESULT([$qt_header_dir])
    if test "x$qt_header_dir" = "xno" ; then
-      AC_MSG_ERROR([Qt4 headers not found.  Please specify the root of your Qt4 installation by exporting QTDIR before running "configure".])
+      AC_MSG_ERROR([Qt4 headers not found.  Please specify the root of your Qt4 installation by exporting QT4DIR before running "configure".])
    fi
    
    AC_MSG_CHECKING([for Qt4 libraries])
@@ -6143,14 +6152,14 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    AC_MSG_RESULT([$qt_lib_dir])
    
    if test "x$qt_lib_dir" = "xno" ; then
-      AC_MSG_ERROR([Qt4 libraries not found.  Please specify the root of your Qt4 installation by exporting QTDIR before running "configure".])
+      AC_MSG_ERROR([Qt4 libraries not found.  Please specify the root of your Qt4 installation by exporting QT4DIR before running "configure".])
    fi
 
    dnl Check for Meta Object Compiler
-   AC_PATH_PROG( MOC4, moc, no, [$PATH:$QTDIR/bin] )
+   AC_PATH_PROG( MOC4, moc, no, [$PATH:$QT4DIR/bin] )
    if test "$MOC4" = "no" ; then
       AC_MSG_ERROR([Qt Meta Object Compiler not found.  Please specify
-the root of your Qt installation by exporting QTDIR before running "configure".])
+the root of your Qt installation by exporting QT4DIR before running "configure".])
    fi
 
    dnl Check for KDE4 headers
@@ -6164,7 +6173,7 @@ the root of your Qt installation by exporting QTDIR before running "configure".]
    done
    AC_MSG_RESULT([$kde_incdir])
    if test "x$kde_incdir" = "xno" ; then
-      AC_MSG_ERROR([KDE4 headers not found.  Please specify the root of your KDE4 installation by exporting KDEDIR before running "configure".])
+      AC_MSG_ERROR([KDE4 headers not found.  Please specify the root of your KDE4 installation by exporting KDE4DIR before running "configure".])
    fi
 
    dnl Check for KDE4 libraries
@@ -6179,7 +6188,7 @@ the root of your Qt installation by exporting QTDIR before running "configure".]
    
    AC_MSG_RESULT([$kde_libdir])
    if test "x$kde_libdir" = "xno" ; then
-      AC_MSG_ERROR([KDE4 libraries not found.  Please specify the root of your KDE4 installation by exporting KDEDIR before running "configure".])
+      AC_MSG_ERROR([KDE4 libraries not found.  Please specify the root of your KDE4 installation by exporting KDE4DIR before running "configure".])
    fi
 
    KDE4_CFLAGS="`pkg-config --cflags QtCore` `pkg-config --cflags QtGui` -I$kde_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
