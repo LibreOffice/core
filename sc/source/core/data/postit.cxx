@@ -652,7 +652,9 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
             been created already. */
         OSL_ENSURE( !mrDoc.IsUndo() && !mrDoc.IsClipboard(), "ScPostIt::CreateCaptionFromInitData - note caption should not be created in undo/clip documents" );
 
-        if( !maNoteData.mpCaption )
+        /*  #i104915# Never try to create notes in Undo document, leads to
+            crash due to missing document members (e.g. row height array). */
+        if( !maNoteData.mpCaption && !mrDoc.IsUndo() )
         {
             // ScNoteCaptionCreator c'tor creates the caption and inserts it into the document and maNoteData
             ScNoteCaptionCreator aCreator( mrDoc, rPos, maNoteData );
@@ -704,8 +706,13 @@ void ScPostIt::CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCapti
     OSL_ENSURE( !maNoteData.mpCaption, "ScPostIt::CreateCaption - unexpected caption object found" );
     maNoteData.mpCaption = 0;
 
-    // drawing layer may be missing, if a note is copied into a clipboard document
+    /*  #i104915# Never try to create notes in Undo document, leads to
+        crash due to missing document members (e.g. row height array). */
     OSL_ENSURE( !mrDoc.IsUndo(), "ScPostIt::CreateCaption - note caption should not be created in undo documents" );
+    if( mrDoc.IsUndo() )
+        return;
+
+    // drawing layer may be missing, if a note is copied into a clipboard document
     if( mrDoc.IsClipboard() )
         mrDoc.InitDrawLayer();
 
