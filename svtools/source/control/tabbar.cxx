@@ -1620,7 +1620,7 @@ Color TabBar::GetTabBgColor( USHORT nPageId ) const
 {
     USHORT nPos = GetPagePos( nPageId );
 
-    if ( nPos != TAB_PAGE_NOTFOUND )
+    if ( nPos != TABBAR_PAGE_NOTFOUND )
         return mpItemList->GetObject( nPos )->maTabBgColor;
     else
         return Color( COL_AUTO );
@@ -1630,7 +1630,7 @@ void TabBar::SetTabBgColor( USHORT nPageId, const Color& aTabBgColor )
 {
     USHORT nPos = GetPagePos( nPageId );
     ImplTabBarItem* pItem;
-    if ( nPos != TAB_PAGE_NOTFOUND )
+    if ( nPos != TABBAR_PAGE_NOTFOUND )
     {
         pItem = mpItemList->GetObject( nPos );
         // TODO: Need to take the text color specification out of this code!
