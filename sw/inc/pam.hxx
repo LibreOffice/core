@@ -192,8 +192,8 @@ public:
             m_pMark = m_pPoint;
         }
     }
-
 #ifndef DBG_UTIL
+
     void Exchange()
     {
         if (m_pPoint != m_pMark)
