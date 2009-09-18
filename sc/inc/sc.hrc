@@ -833,8 +833,10 @@
 #define FID_TAB_INDEX           (TAB_POPUP_START+6)
 #define FID_TAB_RTL             (TAB_POPUP_START+7)
 #define FID_TAB_DESELECTALL     (TAB_POPUP_START+8)
+#define FID_TAB_MENU_SET_TAB_BG_COLOR (TAB_POPUP_START + 9)
+#define FID_TAB_SET_TAB_BG_COLOR      (TAB_POPUP_START + 10)
 
-#define TAB_POPUP_END           (DATA_MENU_END + 20)
+#define TAB_POPUP_END           (TAB_POPUP_START + 20)
 
 #define OBJBAR_FORMAT_START     (TAB_POPUP_END)
 #define SID_ALIGNLEFT           (OBJBAR_FORMAT_START+6)
@@ -1430,7 +1432,10 @@
 
 #define RID_SCSTR_ONCLICK       (STR_START + 402)
 
-#define STR_END                 RID_SCSTR_ONCLICK
+#define SCSTR_SET_TAB_BG_COLOR  (STR_START + 403)
+#define SCSTR_NO_TAB_BG_COLOR   (STR_START + 404)
+
+#define STR_END                 (SCSTR_NO_TAB_BG_COLOR)
 
 #define BMP_START               (STR_END)
 
@@ -1635,8 +1640,9 @@
 #define RID_SCDLG_DOCPROTECTION         (SC_DIALOGS_START + 149)
 #define RID_SCDLG_RETYPEPASS            (SC_DIALOGS_START + 150)
 #define RID_SCDLG_RETYPEPASS_INPUT      (SC_DIALOGS_START + 151)
+#define RID_SCDLG_TAB_BG_COLOR          (SC_DIALOGS_START + 152)
 
-#define SC_DIALOGS_END          (SC_DIALOGS_START + 152)
+#define SC_DIALOGS_END          (SC_DIALOGS_START + 153)
 
 #ifndef STD_MASKCOLOR
 #define STD_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }
@@ -1649,15 +1655,6 @@
 #define MID_2   2
 #define MID_3   3
 #define MID_4   4
-
-// Sheet tab color
-#define FID_TAB_MENU_SET_TAB_BG_COLOR   (SC_OOO_BUILD_START + 7)
-#define FID_TAB_SET_TAB_BG_COLOR        (SC_OOO_BUILD_START + 8)
-
-#define SCSTR_SET_TAB_BG_COLOR          (SC_OOO_BUILD_START + 9)
-#define SCSTR_NO_TAB_BG_COLOR           (SC_OOO_BUILD_START + 10)
-
-#define RID_SCDLG_TAB_BG_COLOR          (SC_OOO_BUILD_START + 11)
 
 #endif
 
