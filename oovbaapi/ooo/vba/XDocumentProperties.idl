@@ -1,0 +1,71 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: XDocument.idl,v $
+ * $Revision: 1.4 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __ooo_vba_XDocumentProperties_idl__
+#define __ooo_vba_XDocumentProperties_idl__
+
+#ifndef __com_sun_star_script_BasicErrorException_idl__
+#include <com/sun/star/script/BasicErrorException.idl>
+#endif
+#ifndef __ooo_vba_XHelperInterface_idl__
+#include <ooo/vba/XHelperInterface.idl>
+#endif
+#ifndef __ooo_vba_XCollection_idl__
+#include <ooo/vba/XCollection.idl>
+#endif
+
+module ooo { module vba {
+interface XDocumentProperty;
+interface XDocumentProperties
+{
+    interface XCollection;
+    /** Creates a new custom document property.
+     * You can only add a new document property to the custom DocumentProperties collection. Depending on value of
+     * boolean LinkSource, either (False) Value or (True) LinkSource must be provided.
+     * @param Name (Required String. The name of the property.
+     * @param LinkToContent Specifies whether the property is linked to the contents of the container document. If this argument is True, the LinkSource argument is required; if it's False, the value argument is required.
+     * @param Type The data type of the property. Can be one of the following MsoDocProperties constants:
+     * msoPropertyTypeBoolean, msoPropertyTypeDate, msoPropertyTypeFloat, msoPropertyTypeNumber, or msoPropertyTypeString.
+     * @param Value The value of the property, if it's not linked to the contents of the container document.
+     * The value is converted to match the data type specified by the type argument, if it can't be converted, an error occurs.
+     * If LinkToContent is True, the Value argument is ignored and the new document property is assigned a default value
+     * until the linked property values are updated by the container application (usually when the document is saved).
+     * @param LinkSource Ignored if LinkToContent is False. The source of the linked property. The container application determines
+     * what types of source linking you can use.
+     */
+    XDocumentProperty Add([in] string Name, [in] boolean LinkToContent, [in] /* MsoDocProperties */ byte Type, [in] any Value,
+        [in] /*optional*/ any LinkSource)
+        raises (com::sun::star::script::BasicErrorException);
+};
+
+}; };
+
+#endif
+
