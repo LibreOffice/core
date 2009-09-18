@@ -115,8 +115,6 @@ public:
 
     void unbind() throw ();
 
-    void markAsModified();
-
     bool isInTransaction() const { return inTransaction_; }
 
     void committed();

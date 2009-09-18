@@ -103,6 +103,23 @@ bool Access::isValue() {
     }
 }
 
+void Access::markChildAsModified(rtl::Reference< ChildAccess > const & child) {
+    OSL_ASSERT(child.is() && child->getParentAccess() == this);
+    modifiedChildren_[child->getNameInternal()] = ModifiedChild(child, true);
+    for (rtl::Reference< Access > p(this);;) {
+        rtl::Reference< Access > parent(p->getParentAccess());
+        if (!parent.is()) {
+            break;
+        }
+        OSL_ASSERT(dynamic_cast< ChildAccess * >(p.get()) != 0);
+        parent->modifiedChildren_.insert(
+            ModifiedChildren::value_type(
+                p->getNameInternal(),
+                ModifiedChild(dynamic_cast< ChildAccess * >(p.get()), false)));
+        p = parent;
+    }
+}
+
 void Access::releaseChild(rtl::OUString const & name) {
     cachedChildren_.erase(name);
 }
@@ -189,7 +206,7 @@ rtl::Reference< Node > Access::getParentNode() {
 }
 
 rtl::Reference< ChildAccess > Access::getChild(rtl::OUString const & name) {
-    HardChildMap::iterator i(modifiedChildren_.find(name));
+    ModifiedChildren::iterator i(modifiedChildren_.find(name));
     return i == modifiedChildren_.end()
         ? getUnmodifiedChild(name) : getModifiedChild(i);
 }
@@ -203,7 +220,7 @@ std::vector< rtl::Reference< ChildAccess > > Access::getAllChildren() {
             OSL_ASSERT(vec.back().is());
         }
     }
-    for (HardChildMap::iterator i(modifiedChildren_.begin());
+    for (ModifiedChildren::iterator i(modifiedChildren_.begin());
          i != modifiedChildren_.end(); ++i)
     {
         rtl::Reference< ChildAccess > child(getModifiedChild(i));
@@ -258,11 +275,10 @@ void Access::insertLocalizedValueChild(
     LocalizedPropertyNode * locprop = dynamic_cast< LocalizedPropertyNode * >(
         getNode().get());
     checkValue(value, locprop->getType(), locprop->isNillable());
-    rtl::Reference< ChildAccess > child(
+    markChildAsModified(
         new ChildAccess(
             getRootAccess(), this, name,
             new LocalizedValueNode(Data::NO_LAYER, value)));
-    child->markAsModified();
     //TODO notify change
 }
 
@@ -270,7 +286,7 @@ void Access::reportChildChanges(
     std::vector< css::util::ElementChange > * changes)
 {
     OSL_ASSERT(changes != 0);
-    for (HardChildMap::iterator i(modifiedChildren_.begin());
+    for (ModifiedChildren::iterator i(modifiedChildren_.begin());
          i != modifiedChildren_.end(); ++i)
     {
         rtl::Reference< ChildAccess > child(getModifiedChild(i));
@@ -287,7 +303,7 @@ void Access::reportChildChanges(
 void Access::commitChildChanges(bool valid) {
     while (!modifiedChildren_.empty()) {
         bool childValid = valid;
-        HardChildMap::iterator i(modifiedChildren_.begin());
+        ModifiedChildren::iterator i(modifiedChildren_.begin());
         rtl::Reference< ChildAccess > child(getModifiedChild(i));
         if (child.is()) {
             childValid = childValid && !child->isFinalized();
@@ -332,13 +348,6 @@ void Access::commitChildChanges(bool valid) {
         modifiedChildren_.erase(i);
     }
 }
-
-Access::ModifiedChild::ModifiedChild() {}
-
-Access::ModifiedChild::ModifiedChild(
-    rtl::Reference< ChildAccess > const & theChild, bool theDirectlyModified):
-    child(theChild), directlyModified(theDirectlyModified)
-{}
 
 rtl::OUString Access::getImplementationName() throw (css::uno::RuntimeException)
 {
@@ -661,15 +670,17 @@ void Access::setName(rtl::OUString const & aName)
                         rtl::Reference< ChildAccess > childAccess(
                             dynamic_cast< ChildAccess * >(this));
                         // unbind() modifies the parent chain that
-                        // markAsModified() walks, so order is important:
-                        childAccess->markAsModified(); //TODO: must not throw
+                        // markChildAsModified() walks, so order is important:
+                        parent->markChildAsModified(childAccess);
+                            //TODO: must not throw
                         childAccess->unbind(); // must not throw
                         if (other.is()) {
                             other->unbind(); // must not throw
                         }
                         childAccess->bind(root, parent, aName);
                             // must not throw
-                        childAccess->markAsModified(); //TODO: must not throw
+                        parent->markChildAsModified(childAccess);
+                            //TODO: must not throw
                         //TODO notify change
                         break;
                     }
@@ -1061,7 +1072,7 @@ void Access::replaceByName(
             rtl::Reference< RootAccess > root(getRootAccess());
             child->unbind(); // must not throw
             freeAcc->bind(root, this, aName); // must not throw
-            freeAcc->markAsModified(); //TODO: must not throw
+            markChildAsModified(freeAcc); //TODO: must not throw
             //TODO notify change
         }
         break;
@@ -1092,19 +1103,18 @@ void Access::insertByName(
         break;
     case Node::KIND_GROUP:
         checkValue(aElement, TYPE_ANY, true);
-        rtl::Reference< ChildAccess >(
+        markChildAsModified(
             new ChildAccess(
                 getRootAccess(), this, aName,
                 new PropertyNode(
-                    Data::NO_LAYER, TYPE_ANY, true, aElement, true)))->
-            markAsModified();
+                    Data::NO_LAYER, TYPE_ANY, true, aElement, true)));
         //TODO notify change
         break;
     case Node::KIND_SET:
         {
             rtl::Reference< ChildAccess > freeAcc(getFreeSetMember(aElement));
             freeAcc->bind(getRootAccess(), this, aName); // must not throw
-            freeAcc->markAsModified(); //TODO: must not throw
+            markChildAsModified(freeAcc); //TODO: must not throw
             //TODO notify change
         }
         break;
@@ -1138,9 +1148,9 @@ void Access::removeByName(rtl::OUString const & aName)
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
     }
-    // unbind() modifies the parent chain that markAsModified() walks, so order
-    // is important:
-    child->markAsModified(); //TODO: must not throw
+    // unbind() modifies the parent chain that markChildAsModified() walks, so
+    // order is important:
+    markChildAsModified(child); //TODO: must not throw
     child->unbind();
     //TODO notify change
 }
@@ -1182,7 +1192,7 @@ css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
 }
 
 rtl::Reference< ChildAccess > Access::getModifiedChild(
-    HardChildMap::iterator const & childIterator)
+    ModifiedChildren::iterator const & childIterator)
 {
     return (childIterator->second.child->getParentAccess() == this &&
             (childIterator->second.child->getNameInternal() ==
@@ -1367,6 +1377,13 @@ rtl::Reference< ChildAccess > Access::getFreeSetMember(
     }
     return freeAcc;
 }
+
+Access::ModifiedChild::ModifiedChild() {}
+
+Access::ModifiedChild::ModifiedChild(
+    rtl::Reference< ChildAccess > const & theChild, bool theDirectlyModified):
+    child(theChild), directlyModified(theDirectlyModified)
+{}
 
 #if OSL_DEBUG_LEVEL > 0
 bool Access::thisIs(int what) {

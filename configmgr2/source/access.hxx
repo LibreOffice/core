@@ -122,6 +122,8 @@ class Access: public AccessBase, private boost::noncopyable {
 public:
     bool isValue();
 
+    void markChildAsModified(rtl::Reference< ChildAccess > const & child);
+
     void releaseChild(rtl::OUString const & name);
 
     virtual rtl::OUString getAbsolutePath() = 0;
@@ -169,7 +171,7 @@ protected:
 
     void commitChildChanges(bool valid);
 
-public: //TODO
+private:
     struct ModifiedChild {
         rtl::Reference< ChildAccess > child;
         bool directlyModified;
@@ -181,11 +183,8 @@ public: //TODO
             bool theDirectlyModified);
     };
 
-    typedef std::map< rtl::OUString, ModifiedChild > HardChildMap;
+    typedef std::map< rtl::OUString, ModifiedChild > ModifiedChildren;
 
-    HardChildMap modifiedChildren_;
-
-private:
     virtual rtl::OUString SAL_CALL getImplementationName()
         throw (com::sun::star::uno::RuntimeException);
 
@@ -451,7 +450,7 @@ private:
             com::sun::star::uno::RuntimeException);
 
     rtl::Reference< ChildAccess > getModifiedChild(
-        HardChildMap::iterator const & childIterator);
+        ModifiedChildren::iterator const & childIterator);
 
     rtl::Reference< ChildAccess > getUnmodifiedChild(
         rtl::OUString const & name);
@@ -470,6 +469,7 @@ private:
 
     typedef std::map< rtl::OUString, ChildAccess * > WeakChildMap;
 
+    ModifiedChildren modifiedChildren_;
     WeakChildMap cachedChildren_;
 
 #if OSL_DEBUG_LEVEL > 0

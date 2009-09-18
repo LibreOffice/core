@@ -198,20 +198,7 @@ void ChildAccess::unbind() throw () {
     OSL_ASSERT(parent_.is());
     parent_->releaseChild(name_);
     parent_.clear();
-    //TODO: clear name_?
     inTransaction_ = true;
-}
-
-void ChildAccess::markAsModified() {
-    OSL_ASSERT(parent_ != 0);
-    parent_->modifiedChildren_[name_] = ModifiedChild(this, true);
-    for (ChildAccess * p = dynamic_cast< ChildAccess * >(parent_.get());
-         p != 0 && p->parent_.is();
-         p = dynamic_cast< ChildAccess * >(p->parent_.get()))
-    {
-        p->parent_->modifiedChildren_.insert(
-            HardChildMap::value_type(p->name_, ModifiedChild(p, false)));
-    }
 }
 
 void ChildAccess::committed() {
@@ -259,7 +246,7 @@ void ChildAccess::setProperty(css::uno::Any const & value) {
         break;
     }
     checkValue(value, type, nillable);
-    markAsModified();
+    getParentAccess()->markChildAsModified(this);
     changedValue_.reset(new css::uno::Any(value));
     //TODO notify change
 }
