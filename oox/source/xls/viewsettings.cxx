@@ -245,6 +245,12 @@ void SheetViewSettings::importSheetView( const AttributeList& rAttribs )
     rModel.mbShowOutline     = rAttribs.getBool( XML_showOutlineSymbols, true );
 }
 
+void SheetViewSettings::importTabColor( const AttributeList& rAttribs )
+{
+    SheetViewModel& rModel = maSheetViews.empty() ? *createSheetView() : *maSheetViews.back();
+    rModel.maTabColor.importColor( rAttribs );
+}
+
 void SheetViewSettings::importPane( const AttributeList& rAttribs )
 {
     OSL_ENSURE( !maSheetViews.empty(), "SheetViewSettings::importPane - missing sheet view model" );
@@ -588,6 +594,9 @@ void SheetViewSettings::finalizeImport()
     aPropMap[ PROP_HasColumnRowHeaders ]          <<= xModel->mbShowHeadings;
     aPropMap[ PROP_ShowZeroValues ]               <<= xModel->mbShowZeros;
     aPropMap[ PROP_IsOutlineSymbolsSet ]          <<= xModel->mbShowOutline;
+
+    if (!xModel->maTabColor.isAuto())
+        aPropMap[ PROP_TabColor ] <<= static_cast< sal_Int32 >(xModel->maTabColor.getColor(*this));
 
     // store sheet view settings in global view settings object
     getViewSettings().setSheetViewSettings( getSheetIndex(), xModel, Any( aPropMap.makePropertyValueSequence() ) );
