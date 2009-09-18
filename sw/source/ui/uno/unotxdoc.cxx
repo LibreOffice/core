@@ -2253,6 +2253,14 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case WID_DOC_DIALOG_LIBRARIES:
             aAny <<= pDocShell->GetDialogContainer();
         break;
+        case WID_DOC_VBA_DOCOBJ:
+        {
+            beans::PropertyValue aProp;
+            aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ThisWordDoc") );
+            aProp.Value <<= pDocShell->GetModel();
+            aAny <<= aProp;
+        }
+        break;
         case WID_DOC_RUNTIME_UID:
             aAny <<= getRuntimeUID();
         break;

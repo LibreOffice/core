@@ -127,6 +127,7 @@ SHL1STDLIBS+= \
     $(SALHELPERLIB) \
     $(ICUUCLIB) \
     $(I18NUTILLIB)	\
+                $(VBAHELPERLIB) \
     $(AVMEDIALIB)
 
 .IF "$(GUI)"=="WNT"
@@ -338,6 +339,40 @@ SHL4STDLIBS= \
     $(CPPUHELPERLIB) \
     $(SALLIB) \
     $(ICUUCLIB) \
+    $(BASICLIB)     \
     $(I18NUTILLIB)
+
+#target vba
+TARGET_VBA=vbaswobj
+SHL5TARGET=$(TARGET_VBA)$(DLLPOSTFIX).uno
+SHL5IMPLIB=     i$(TARGET_VBA)
+
+SHL5VERSIONMAP=$(TARGET_VBA).map
+SHL5DEF=$(MISC)$/$(SHL5TARGET).def
+DEF5NAME=$(SHL5TARGET)
+SHL5STDLIBS= \
+                $(ISWLIB) \
+                $(CPPUHELPERLIB) \
+                $(VCLLIB) \
+                $(CPPULIB) \
+                $(COMPHELPERLIB) \
+                $(SVLIB) \
+                $(UNOTOOLSLIB) \
+                $(TOOLSLIB) \
+                $(SALLIB)\
+                $(VBAHELPERLIB) \
+                $(BASICLIB)     \
+                $(SFXLIB)       \
+                $(SVXLIB)       \
+                $(SVTOOLLIB)    \
+                $(SVLLIB) \
+                $(VCLLIB) \
+                $(TKLIB) \
+                $(I18NISOLANGLIB) \
+                $(SVXCORELIB) \
+                $(SVXMSFILTERLIB) \
+
+SHL5DEPN=$(SHL1TARGETN)
+SHL5LIBS=$(SLB)$/$(TARGET_VBA).lib
 
 .INCLUDE :  target.mk

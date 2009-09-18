@@ -43,6 +43,7 @@
 #include <cppuhelper/implbase4.hxx> // helper for implementations
 #include <IMark.hxx>
 #include <unobaseclass.hxx>
+#include "swdllapi.h"
 /***************************************************
  ***************************************************
  *
@@ -283,7 +284,7 @@ cppu::WeakImplHelper3
     ::com::sun::star::lang::XServiceInfo
 >
 SwCollectionBaseClass;
-class SwXTextTables : public SwCollectionBaseClass,
+class SW_DLLPUBLIC SwXTextTables : public SwCollectionBaseClass,
     public SwUnoCollection
 {
 protected:

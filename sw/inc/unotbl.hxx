@@ -214,14 +214,13 @@ typedef cppu::WeakImplHelper3<
                                 ::com::sun::star::lang::XServiceInfo,
                                 ::com::sun::star::beans::XPropertySet
                             > SwXTextTableCursor_Base;
-class SwXTextTableCursor : public SwXTextTableCursor_Base
+class SW_DLLPUBLIC SwXTextTableCursor : public SwXTextTableCursor_Base
     ,public SwClient
     ,public OTextCursorHelper
 {
     SwDepend                aCrsrDepend;
     const SfxItemPropertySet*   m_pPropSet;
 
-    SwFrmFmt*       GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
     //  SwUnoCrsr*      GetCrsr() const { return (SwUnoCrsr*)aCrsrDepend.GetRegisteredIn(); }
 
 protected:
@@ -271,6 +270,7 @@ public:
 
     const SwUnoCrsr*            GetCrsr() const;
     SwUnoCrsr*                  GetCrsr();
+    SwFrmFmt*       GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 };
 
 /*-----------------11.12.97 09:38-------------------
