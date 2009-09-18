@@ -41,6 +41,18 @@ TARGET=icons
 # --- Targets -------------------------------------------------------------
 
 all: \
+    $(MISC)$/oasis-drawing.ico \
+    $(MISC)$/oasis-text-template.ico \
+    $(MISC)$/oasis-spreadsheet.ico \
+    $(MISC)$/oasis-formula.ico \
+    $(MISC)$/oasis-spreadsheet-template.ico \
+    $(MISC)$/oasis-text.ico \
+    $(MISC)$/oasis-web-template.ico \
+    $(MISC)$/oasis-database.ico \
+    $(MISC)$/oasis-presentation-template.ico \
+    $(MISC)$/oasis-drawing-template.ico \
+    $(MISC)$/oasis-master-document.ico \
+    $(MISC)$/oasis-presentation.ico \
     $(MISC)$/ooo-base-app.ico \
     $(MISC)$/ooo-base-doc.ico \
     $(MISC)$/ooo-calc-app.ico \
