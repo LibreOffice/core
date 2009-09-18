@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -50,6 +50,11 @@ SDI2NAME=$(TARGET2)
 SIDHRCNAME=SDSLOTS.HRC
 
 SVSDI1DEPEND= \
+        $(SOLARINCXDIR)$/sfx2/sfx.sdi \
+        $(SOLARINCXDIR)$/sfx2/sfxitems.sdi \
+        $(SOLARINCXDIR)$/svx/svx.sdi \
+        $(SOLARINCXDIR)$/svx/svxitems.sdi \
+        $(SOLARINCXDIR)$/svx/xoitems.sdi \
     sdraw.sdi \
     app.sdi \
     _docsh.sdi \
@@ -69,7 +74,12 @@ SVSDI1DEPEND= \
     $(PRJ)$/inc$/app.hrc
 
 SVSDI2DEPEND= \
-    sdraw.sdi \
+        $(SOLARINCXDIR)$/sfx2/sfx.sdi \
+        $(SOLARINCXDIR)$/sfx2/sfxitems.sdi \
+        $(SOLARINCXDIR)$/svx/svx.sdi \
+        $(SOLARINCXDIR)$/svx/svxitems.sdi \
+        $(SOLARINCXDIR)$/svx/xoitems.sdi \
+        sdraw.sdi \
     app.sdi \
     _docsh.sdi \
     grdocsh.sdi \

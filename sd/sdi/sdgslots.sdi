@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-import "svxslots.ilb"
-
 module
 "2DADF501-1F00-101C-A2E4-00001B4C5CE7"
 "33A1C840-1F00-101C-A2E4-00001B4C5CE7"
@@ -36,10 +34,15 @@ StarDraw
 [
 HelpText( "StarDraw Application" )
 SlotIdFile( "sdslots.hrc" )
-TypeLibFile( "sdgslots.tlb" )
 ModulePrefix( "Sd" )
 ]
 {
+        include "sfxitems.sdi"
+        include "sfx.sdi"
+        include "svxitems.sdi"
+        include "xoitems.sdi"
+        include "svx.sdi"
+
         item UINT16 TbxImageItem;
 
         enum FadeEffect
