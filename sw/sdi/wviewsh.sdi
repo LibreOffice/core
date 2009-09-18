@@ -63,7 +63,7 @@ interface WebEditView : BaseTextEditView
     ]
 }
 
-shell SwWebView : SfxViewShell
+shell SwWebView
 {
     import WebEditView [Automation];
 //  import SearchSettings;
@@ -73,7 +73,7 @@ shell SwWebView : SfxViewShell
 
 }
 
-interface WebSourceView : View
+interface WebSourceView
 [ uuid = "95069CE0-69D8-101D-9757-C667E8298000"]
 {
     SID_TABLE_CELL // status()
@@ -189,7 +189,7 @@ interface WebSourceView : View
     ]
 }
 
-shell SwSrcView : SfxViewShell
+shell SwSrcView
 
 {
         import WebSourceView [Automation];

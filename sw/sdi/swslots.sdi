@@ -28,8 +28,6 @@
  *
  ************************************************************************/
 
-import "svxslots.ilb"
-
 module
 "9F76B581-23DD-101C-80B6-000024021835"
 "A1810F00-23DE-101C-80B6-000024021835"
@@ -37,10 +35,15 @@ StarWriter
 [
 HelpText( "StarWriter Application" )
 SlotIdFile( "swslots.hrc" )
-TypeLibFile( "swslots.tlb" )
 ModulePrefix( "Sw" )
 ]
 {
+    include "sfx2/sfxitems.sdi"
+    include "sfx2/sfx.sdi"
+    include "svx/svxitems.sdi"
+    include "svx/xoitems.sdi"
+    include "svx/svx.sdi"
+
     item String TbxDummyItem;
 /*
     item String XFillAttrSetItem;

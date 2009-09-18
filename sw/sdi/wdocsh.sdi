@@ -48,7 +48,7 @@ interface WebDocument : BaseTextDocument
     ]
 }
 
-shell SwWebDocShell : SfxObjectShell
+shell SwWebDocShell
 {
         import WebDocument[Automation];
 }
