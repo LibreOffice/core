@@ -165,6 +165,8 @@ public:
         // Selektion von Rahmen aufheben
     void    UnSelectFrm();
 
+    void    Invalidate();
+
     // Tabellenzellen selektieren fuer Bearbeiten von Formeln in der Ribbonbar
     inline void SelTblCells( const Link &rLink, BOOL bMark = TRUE );
     inline void EndSelTblCells();

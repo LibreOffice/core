@@ -1083,15 +1083,10 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         break;
         case SID_SOURCEVIEW:
         {
-            if(IsLoading())
-                rSet.DisableItem(nWhich);
-            else
-            {
-                SfxViewShell* pCurrView = GetView() ? (SfxViewShell*)GetView()
-                                            : SfxViewShell::Current();
-                BOOL bSourceView = 0 != PTR_CAST(SwSrcView, pCurrView);
-                rSet.Put(SfxBoolItem(SID_SOURCEVIEW, bSourceView));
-            }
+            SfxViewShell* pCurrView = GetView() ? (SfxViewShell*)GetView()
+                                        : SfxViewShell::Current();
+            BOOL bSourceView = 0 != PTR_CAST(SwSrcView, pCurrView);
+            rSet.Put(SfxBoolItem(SID_SOURCEVIEW, bSourceView));
         }
         break;
         case SID_HTML_MODE:
@@ -1116,18 +1111,10 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         case SID_BROWSER_MODE:
         case FN_PRINT_LAYOUT:
             {
-                SfxViewShell* pViewShell = SfxViewShell::Current();
-                BOOL bDisable = 0 != PTR_CAST(SwPagePreView, pViewShell) ||
-                                0 != PTR_CAST(SwSrcView, pViewShell);
-                if (bDisable)
-                    rSet.DisableItem( nWhich );
-                else
-                {
-                    sal_Bool bState = GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE);
-                    if(FN_PRINT_LAYOUT == nWhich)
-                        bState = !bState;
-                    rSet.Put( SfxBoolItem( nWhich, bState));
-                }
+                sal_Bool bState = GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE);
+                if(FN_PRINT_LAYOUT == nWhich)
+                    bState = !bState;
+                rSet.Put( SfxBoolItem( nWhich, bState));
             }
             break;
 
@@ -1337,44 +1324,42 @@ uno::Reference< frame::XController >
 /* -----------------------------12.02.01 12:08--------------------------------
 
  ---------------------------------------------------------------------------*/
+static const char* pEventNames[] =
+{
+    "OnPageCountChange",
+    "OnMailMerge",
+    "OnMailMergeFinished",
+    "OnFieldMerge",
+    "OnFieldMergeFinished",
+    "OnLayoutFinished"
+};
+
 Sequence< OUString >    SwDocShell::GetEventNames()
 {
     Sequence< OUString > aRet = SfxObjectShell::GetEventNames();
     sal_Int32 nLen = aRet.getLength();
-    aRet.realloc(nLen + 2);
+    aRet.realloc(nLen + 6);
     OUString* pNames = aRet.getArray();
-    pNames[nLen++] = OUString::createFromAscii("OnMailMerge");
-    pNames[nLen] = OUString::createFromAscii("OnPageCountChange");
+    pNames[nLen++] = GetEventName(0);
+    pNames[nLen++] = GetEventName(1);
+    pNames[nLen++] = GetEventName(2);
+    pNames[nLen++] = GetEventName(3);
+    pNames[nLen++] = GetEventName(4);
+    pNames[nLen]   = GetEventName(5);
+
     return aRet;
 }
-/*
-void SwTmpPersist::FillClass( SvGlobalName * pClassName,
-                            ULONG * pClipFormat,
-                            String * pAppName,
-                            String * pLongUserName,
-                            String * pUserName,
-                            sal_Int32 nFileFormat ) const
-{
-    pDShell->SwDocShell::FillClass( pClassName, pClipFormat, pAppName,
-                                    pLongUserName, pUserName, nFileFormat );
-}
 
-BOOL SwTmpPersist::Save()
-{
-    if( SaveChilds() )
-        return SvPersist::Save();
-    return FALSE;
-}
+static sal_Int32 nEvents=13;
 
-BOOL SwTmpPersist::SaveCompleted( SvStorage * pStor )
+rtl::OUString SwDocShell::GetEventName( sal_Int32 nIndex )
 {
-    if( SaveCompletedChilds( pStor ) )
-        return SvPersist::SaveCompleted( pStor );
-    return FALSE;
-} */
+    if ( nIndex<nEvents )
+        return ::rtl::OUString::createFromAscii(pEventNames[nIndex]);
+    return rtl::OUString();
+}
 
 const ::sfx2::IXmlIdRegistry* SwDocShell::GetXmlIdRegistry() const
 {
     return pDoc ? &pDoc->GetXmlIdRegistry() : 0;
 }
-

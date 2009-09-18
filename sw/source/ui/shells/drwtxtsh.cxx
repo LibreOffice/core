@@ -640,6 +640,7 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
                                 pUndoManager->Redo(0);
                     }
                     bCallBase = FALSE;
+                    GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
                 }
                 break;
             }

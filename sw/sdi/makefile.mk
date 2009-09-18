@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -97,8 +97,10 @@ SVSDI1DEPEND= \
         annotsh.sdi\
         swslots.hrc \
         $(INC)$/globals.hrc \
-        $(INC)$/cmdid.h
+                $(INC)$/cmdid.h \
+                $(SOLARINCXDIR)$/svxslots.ilb
 .ENDIF
+
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
