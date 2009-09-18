@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -35,6 +35,7 @@
 defaultlangiso=en-US
 
 # Complete list of all supported ISO codes
+
 completelangiso=\
     af \
     ar \
@@ -111,6 +112,7 @@ completelangiso=\
     pl \
     pt \
     pt-BR \
+    ro \
     ru \
     rw \
     sa-IN \
