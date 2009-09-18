@@ -89,7 +89,7 @@ public:
     explicit            DocumentOpenedGuard( const OUString& rUrl );
                         ~DocumentOpenedGuard();
 
-    inline bool         isValid() const { return maUrl.getLength() > 0; }
+    inline bool         isValid() const { return mbValid; }
 
 private:
                         DocumentOpenedGuard( const DocumentOpenedGuard& );
@@ -100,15 +100,15 @@ private:
 
     UrlSet&             mrUrls;
     OUString            maUrl;
+    bool                mbValid;
 };
 
 DocumentOpenedGuard::DocumentOpenedGuard( const OUString& rUrl ) :
     mrUrls( UrlPool::get() )
 {
     ::osl::MutexGuard aGuard( *this );
-    OSL_ENSURE( (rUrl.getLength() == 0) || (mrUrls.count( rUrl ) == 0),
-        "DocumentOpenedGuard::DocumentOpenedGuard - filter called recursively for this document" );
-    if( (rUrl.getLength() > 0) && (mrUrls.count( rUrl ) == 0) )
+    mbValid = (rUrl.getLength() == 0) || (mrUrls.count( rUrl ) == 0);
+    if( mbValid && (rUrl.getLength() > 0) )
     {
         mrUrls.insert( rUrl );
         maUrl = rUrl;
@@ -118,7 +118,7 @@ DocumentOpenedGuard::DocumentOpenedGuard( const OUString& rUrl ) :
 DocumentOpenedGuard::~DocumentOpenedGuard()
 {
     ::osl::MutexGuard aGuard( *this );
-    if( isValid() )
+    if( maUrl.getLength() > 0 )
         mrUrls.erase( maUrl );
 }
 
