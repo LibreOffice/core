@@ -41,7 +41,6 @@
 #include <tools/debug.hxx>
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
-#include <tools/urlobj.hxx> //for relative url
 #include <i18npool/mslangid.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>
@@ -51,6 +50,7 @@
 #include <vcl/sallayout.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/fontsubset.hxx>
+#include <vcl/textlayout.hxx>
 #include <svsys.h>
 #include <vcl/salgdi.hxx>
 #include <vcl/svapp.hxx>
@@ -7307,7 +7307,8 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, US
 
         if ( nTextHeight )
         {
-            nMaxTextWidth = m_pReferenceDevice->ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, NULL );
+            ::vcl::DefaultTextLayout aLayout( *m_pReferenceDevice );
+            nMaxTextWidth = OutputDevice::ImplGetTextLines( *m_pReferenceDevice, aMultiLineInfo, nWidth, aStr, nStyle, aLayout );
             nLines = (xub_StrLen)(nHeight/nTextHeight);
             nFormatLines = aMultiLineInfo.Count();
             if ( !nLines )

@@ -5256,9 +5256,9 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
 
 // -----------------------------------------------------------------------
 
-long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
+long OutputDevice::ImplGetTextLines( OutputDevice& rTargetDevice, ImplMultiTextLineInfo& rLineInfo,
                                      long nWidth, const XubString& rStr,
-                                     USHORT nStyle, const ::vcl::ITextLayout* _pLayout ) const
+                                     USHORT nStyle, const ::vcl::ITextLayout& _rLayout )
 {
     DBG_ASSERTWARNING( nWidth >= 0, "ImplGetTextLines: nWidth <= 0!" );
 
@@ -5296,8 +5296,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
             while ( ( nBreakPos < nLen ) && ( rStr.GetChar( nBreakPos ) != _CR ) && ( rStr.GetChar( nBreakPos ) != _LF ) )
                 nBreakPos++;
 
-            long nLineWidth = ( _pLayout != NULL ) ? _pLayout->GetTextWidth( rStr, nPos, nBreakPos-nPos )
-                                                   : GetTextWidth( rStr, nPos, nBreakPos-nPos );
+            long nLineWidth = _rLayout.GetTextWidth( rStr, nPos, nBreakPos-nPos );
             if ( ( nLineWidth > nWidth ) && ( nStyle & TEXT_DRAW_WORDBREAK ) )
             {
                 if ( !xBI.is() )
@@ -5306,7 +5305,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                 if ( xBI.is() )
                 {
                     const com::sun::star::lang::Locale& rDefLocale(Application::GetSettings().GetUILocale());
-                    xub_StrLen nSoftBreak = GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
+                    xub_StrLen nSoftBreak = rTargetDevice.GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
                     DBG_ASSERT( nSoftBreak < nBreakPos, "Break?!" );
                     //aHyphOptions.hyphenIndex = nSoftBreak;
                     i18n::LineBreakResults aLBR = xBI->getLineBreak( aText, nSoftBreak, rDefLocale, nPos, aHyphOptions, aUserOptions );
@@ -5410,8 +5409,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                             } // if ( xHyph.is() )
                         } // if ( (nStyle & TEXT_DRAW_WORDBREAK_HYPHENATION) == TEXT_DRAW_WORDBREAK_HYPHENATION )
                     }
-                    nLineWidth = ( _pLayout != NULL ) ? _pLayout->GetTextWidth( rStr, nPos, nBreakPos-nPos )
-                                                      : GetTextWidth( rStr, nPos, nBreakPos-nPos );
+                    nLineWidth = _rLayout.GetTextWidth( rStr, nPos, nBreakPos-nPos );
                 }
                 else
                 {
@@ -5425,16 +5423,14 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                         {
                             if( nSpacePos > nPos )
                                 nSpacePos--;
-                            nW = ( _pLayout != NULL ) ? _pLayout->GetTextWidth( rStr, nPos, nSpacePos-nPos )
-                                                      : GetTextWidth( rStr, nPos, nSpacePos-nPos );
+                            nW = _rLayout.GetTextWidth( rStr, nPos, nSpacePos-nPos );
                         }
                     } while( nW > nWidth );
 
                     if( nSpacePos != STRING_NOTFOUND )
                     {
                         nBreakPos = nSpacePos;
-                        nLineWidth = ( _pLayout != NULL ) ? _pLayout->GetTextWidth( rStr, nPos, nBreakPos-nPos )
-                                                          : GetTextWidth( rStr, nPos, nBreakPos-nPos );
+                        nLineWidth = _rLayout.GetTextWidth( rStr, nPos, nBreakPos-nPos );
                         if( nBreakPos < rStr.Len()-1 )
                             nBreakPos++;
                     }
@@ -6776,10 +6772,10 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rStr, long nTextWidth,
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::ImplDrawText( const Rectangle& rRect,
+void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
                                  const String& rOrigStr, USHORT nStyle,
                                  MetricVector* pVector, String* pDisplayText,
-                                 ::vcl::ITextLayout* _pLayout )
+                                 ::vcl::ITextLayout& _rLayout )
 {
     Color aOldTextColor;
     Color aOldTextFillColor;
@@ -6789,29 +6785,29 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
         BOOL  bHighContrastBlack = FALSE;
         BOOL  bHighContrastWhite = FALSE;
         Color aCol;
-        if( IsBackground() )
-            aCol = GetBackground().GetColor();
+        if( rTargetDevice.IsBackground() )
+            aCol = rTargetDevice.GetBackground().GetColor();
         else
             // best guess is the face color here
             // but it may be totally wrong. the background color
             // was typically already reset
-            aCol = GetSettings().GetStyleSettings().GetFaceColor();
+            aCol = rTargetDevice.GetSettings().GetStyleSettings().GetFaceColor();
 
         bHighContrastBlack = aCol.IsDark();
-        bHighContrastWhite = aCol.IsBright() && GetSettings().GetStyleSettings().GetHighContrastMode();
+        bHighContrastWhite = aCol.IsBright() && rTargetDevice.GetSettings().GetStyleSettings().GetHighContrastMode();
 
-        aOldTextColor = GetTextColor();
-        if ( IsTextFillColor() )
+        aOldTextColor = rTargetDevice.GetTextColor();
+        if ( rTargetDevice.IsTextFillColor() )
         {
             bRestoreFillColor = TRUE;
-            aOldTextFillColor = GetTextFillColor();
+            aOldTextFillColor = rTargetDevice.GetTextFillColor();
         }
         else
             bRestoreFillColor = FALSE;
         if( bHighContrastBlack )
-            SetTextColor( COL_GREEN );
+            rTargetDevice.SetTextColor( COL_GREEN );
         else if( bHighContrastWhite )
-            SetTextColor( COL_LIGHTGREEN );
+            rTargetDevice.SetTextColor( COL_LIGHTGREEN );
         else
         {
             // draw disabled text always without shadow
@@ -6822,7 +6818,7 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
             aRect.Move( 1, 1 );
             DrawText( aRect, rOrigStr, nStyle & ~TEXT_DRAW_DISABLE );
             */
-            SetTextColor( GetSettings().GetStyleSettings().GetShadowColor() );
+            rTargetDevice.SetTextColor( rTargetDevice.GetSettings().GetStyleSettings().GetShadowColor() );
         }
     }
 
@@ -6834,13 +6830,15 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
 
     Point       aPos            = rRect.TopLeft();
 
-    long        nTextHeight     = GetTextHeight();
-    TextAlign   eAlign          = GetTextAlign();
+    long        nTextHeight     = rTargetDevice.GetTextHeight();
+    TextAlign   eAlign          = rTargetDevice.GetTextAlign();
     xub_StrLen  nMnemonicPos    = STRING_NOTFOUND;
 
     String aStr = rOrigStr;
     if ( nStyle & TEXT_DRAW_MNEMONIC )
         aStr = GetNonMnemonicString( aStr, nMnemonicPos );
+
+    const bool bDrawMnemonics = !(rTargetDevice.GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector;
 
     // Mehrzeiligen Text behandeln wir anders
     if ( nStyle & TEXT_DRAW_MULTILINE )
@@ -6856,7 +6854,7 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
 
         if ( nTextHeight )
         {
-            nMaxTextWidth = ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, _pLayout );
+            nMaxTextWidth = ImplGetTextLines( rTargetDevice, aMultiLineInfo, nWidth, aStr, nStyle, _rLayout );
             nLines = (xub_StrLen)(nHeight/nTextHeight);
             nFormatLines = aMultiLineInfo.Count();
             if ( !nLines )
@@ -6878,7 +6876,7 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
                         if ( aLastLine.GetChar( i ) == _LF )
                             aLastLine.SetChar( i, ' ' );
                     }
-                    aLastLine = GetEllipsisString( aLastLine, nWidth, nStyle );
+                    aLastLine = rTargetDevice.GetEllipsisString( aLastLine, nWidth, nStyle );
                     nStyle &= ~(TEXT_DRAW_VCENTER | TEXT_DRAW_BOTTOM);
                     nStyle |= TEXT_DRAW_TOP;
                 }
@@ -6896,8 +6894,8 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
             // Clipping setzen
             if ( nStyle & TEXT_DRAW_CLIP )
             {
-                Push( PUSH_CLIPREGION );
-                IntersectClipRegion( rRect );
+                rTargetDevice.Push( PUSH_CLIPREGION );
+                rTargetDevice.IntersectClipRegion( rRect );
             }
 
             // Vertikales Alignment
@@ -6910,7 +6908,7 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
             if ( eAlign == ALIGN_BOTTOM )
                 aPos.Y() += nTextHeight;
             else if ( eAlign == ALIGN_BASELINE )
-                aPos.Y() += GetFontMetric().GetAscent();
+                aPos.Y() += rTargetDevice.GetFontMetric().GetAscent();
 
             // Alle Zeilen ausgeben, bis auf die letzte
             for ( i = 0; i < nFormatLines; i++ )
@@ -6922,11 +6920,8 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
                     aPos.X() += (nWidth-pLineInfo->GetWidth())/2;
                 xub_StrLen nIndex   = pLineInfo->GetIndex();
                 xub_StrLen nLineLen = pLineInfo->GetLen();
-                if ( _pLayout )
-                    _pLayout->DrawText( aPos, aStr, nIndex, nLineLen, pVector, pDisplayText );
-                else
-                    DrawText( aPos, aStr, nIndex, nLineLen, pVector, pDisplayText );
-                if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector )
+                _rLayout.DrawText( aPos, aStr, nIndex, nLineLen, pVector, pDisplayText );
+                if ( bDrawMnemonics )
                 {
                     if ( (nMnemonicPos >= nIndex) && (nMnemonicPos < nIndex+nLineLen) )
                     {
@@ -6935,16 +6930,16 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
                         long        nMnemonicWidth;
 
                         sal_Int32* pCaretXArray = (sal_Int32*) alloca( 2 * sizeof(sal_Int32) * nLineLen );
-                        /*BOOL bRet =*/ GetCaretPositions( aStr, pCaretXArray,
-                                                nIndex, nLineLen);
+                        /*BOOL bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray,
+                                                nIndex, nLineLen );
                         long lc_x1 = pCaretXArray[2*(nMnemonicPos - nIndex)];
                         long lc_x2 = pCaretXArray[2*(nMnemonicPos - nIndex)+1];
-                        nMnemonicWidth = ::abs((int)(lc_x1 - lc_x2));
+                        nMnemonicWidth = rTargetDevice.ImplLogicWidthToDevicePixel( ::abs((int)(lc_x1 - lc_x2)) );
 
-                        Point       aTempPos = LogicToPixel( aPos );
-                        nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( Min( lc_x1, lc_x2 ) );
-                        nMnemonicY = mnOutOffY + aTempPos.Y() + ImplLogicWidthToDevicePixel( GetFontMetric().GetAscent() );
-                        ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
+                        Point       aTempPos = rTargetDevice.LogicToPixel( aPos );
+                        nMnemonicX = rTargetDevice.GetOutOffXPixel() + aTempPos.X() + rTargetDevice.ImplLogicWidthToDevicePixel( Min( lc_x1, lc_x2 ) );
+                        nMnemonicY = rTargetDevice.GetOutOffYPixel() + aTempPos.Y() + rTargetDevice.ImplLogicWidthToDevicePixel( rTargetDevice.GetFontMetric().GetAscent() );
+                        rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
                     }
                 }
                 aPos.Y() += nTextHeight;
@@ -6955,31 +6950,26 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
             // Gibt es noch eine letzte Zeile, dann diese linksbuendig ausgeben,
             // da die Zeile gekuerzt wurde
             if ( aLastLine.Len() )
-                if ( _pLayout )
-                    _pLayout->DrawText( aPos, aLastLine, 0, STRING_LEN, pVector, pDisplayText );
-                else
-                    DrawText( aPos, aLastLine, 0, STRING_LEN, pVector, pDisplayText );
+                _rLayout.DrawText( aPos, aLastLine, 0, STRING_LEN, pVector, pDisplayText );
 
             // Clipping zuruecksetzen
             if ( nStyle & TEXT_DRAW_CLIP )
-                Pop();
+                rTargetDevice.Pop();
         }
     }
     else
     {
-        long nTextWidth = _pLayout
-                    ?   _pLayout->GetTextWidth( aStr, 0, STRING_LEN )
-                    :   GetTextWidth( aStr );
+        long nTextWidth = _rLayout.GetTextWidth( aStr, 0, STRING_LEN );
 
         // Evt. Text kuerzen
         if ( nTextWidth > nWidth )
         {
             if ( nStyle & TEXT_DRAW_ELLIPSIS )
             {
-                aStr = GetEllipsisString( aStr, nWidth, nStyle );
+                aStr = rTargetDevice.GetEllipsisString( aStr, nWidth, nStyle );
                 nStyle &= ~(TEXT_DRAW_CENTER | TEXT_DRAW_RIGHT);
                 nStyle |= TEXT_DRAW_LEFT;
-                nTextWidth = GetTextWidth( aStr );
+                nTextWidth = _rLayout.GetTextWidth( aStr, 0, aStr.Len() );
             }
         }
         else
@@ -6998,7 +6988,7 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
         if ( eAlign == ALIGN_BOTTOM )
             aPos.Y() += nTextHeight;
         else if ( eAlign == ALIGN_BASELINE )
-            aPos.Y() += GetFontMetric().GetAscent();
+            aPos.Y() += rTargetDevice.GetFontMetric().GetAscent();
 
         if ( nStyle & TEXT_DRAW_BOTTOM )
             aPos.Y() += nHeight-nTextHeight;
@@ -7011,50 +7001,44 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
         if ( nMnemonicPos != STRING_NOTFOUND )
         {
             sal_Int32* pCaretXArray = (sal_Int32*) alloca( 2 * sizeof(sal_Int32) * aStr.Len() );
-            /*BOOL bRet =*/ GetCaretPositions( aStr, pCaretXArray, 0, aStr.Len() );
+            /*BOOL bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray, 0, aStr.Len() );
             long lc_x1 = pCaretXArray[2*(nMnemonicPos)];
             long lc_x2 = pCaretXArray[2*(nMnemonicPos)+1];
-            nMnemonicWidth = ::abs((int)(lc_x1 - lc_x2));
+            nMnemonicWidth = rTargetDevice.ImplLogicWidthToDevicePixel( ::abs((int)(lc_x1 - lc_x2)) );
 
-            Point aTempPos = LogicToPixel( aPos );
-            nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( Min(lc_x1, lc_x2) );
-            nMnemonicY = mnOutOffY + aTempPos.Y() + ImplLogicWidthToDevicePixel( GetFontMetric().GetAscent() );
+            Point aTempPos = rTargetDevice.LogicToPixel( aPos );
+            nMnemonicX = rTargetDevice.GetOutOffXPixel() + aTempPos.X() + rTargetDevice.ImplLogicWidthToDevicePixel( Min(lc_x1, lc_x2) );
+            nMnemonicY = rTargetDevice.GetOutOffYPixel() + aTempPos.Y() + rTargetDevice.ImplLogicWidthToDevicePixel( rTargetDevice.GetFontMetric().GetAscent() );
         }
 
         if ( nStyle & TEXT_DRAW_CLIP )
         {
-            Push( PUSH_CLIPREGION );
-            IntersectClipRegion( rRect );
-            if ( _pLayout )
-                _pLayout->DrawText( aPos, aStr, 0, STRING_LEN, pVector, pDisplayText );
-            else
-                DrawText( aPos, aStr, 0, STRING_LEN, pVector, pDisplayText );
-            if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector )
+            rTargetDevice.Push( PUSH_CLIPREGION );
+            rTargetDevice.IntersectClipRegion( rRect );
+            _rLayout.DrawText( aPos, aStr, 0, STRING_LEN, pVector, pDisplayText );
+            if ( bDrawMnemonics )
             {
                 if ( nMnemonicPos != STRING_NOTFOUND )
-                    ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
+                    rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
             }
-            Pop();
+            rTargetDevice.Pop();
         }
         else
         {
-            if ( _pLayout )
-                _pLayout->DrawText( aPos, aStr, 0, STRING_LEN, pVector, pDisplayText );
-            else
-                DrawText( aPos, aStr, 0, STRING_LEN, pVector, pDisplayText );
-            if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector )
+            _rLayout.DrawText( aPos, aStr, 0, STRING_LEN, pVector, pDisplayText );
+            if ( bDrawMnemonics )
             {
                 if ( nMnemonicPos != STRING_NOTFOUND )
-                    ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
+                    rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
             }
         }
     }
 
     if ( nStyle & TEXT_DRAW_DISABLE && !pVector )
     {
-        SetTextColor( aOldTextColor );
+        rTargetDevice.SetTextColor( aOldTextColor );
         if ( bRestoreFillColor )
-            SetTextFillColor( aOldTextFillColor );
+            rTargetDevice.SetTextFillColor( aOldTextFillColor );
     }
 }
 
@@ -7087,7 +7071,8 @@ void OutputDevice::AddTextRectActions( const Rectangle& rRect,
 
     // #i47157# Factored out to ImplDrawTextRect(), to be shared
     // between us and DrawText()
-    ImplDrawText( rRect, rOrigStr, nStyle, NULL, NULL, NULL );
+    DefaultTextLayout aLayout( *this );
+    ImplDrawText( *this, rRect, rOrigStr, nStyle, NULL, NULL, aLayout );
 
     // and restore again
     EnableOutput( bOutputEnabled );
@@ -7130,7 +7115,8 @@ void OutputDevice::DrawText( const Rectangle& rRect, const String& rOrigStr, USH
 
     // #i47157# Factored out to ImplDrawText(), to be used also
     // from AddTextRectActions()
-    ImplDrawText( rRect, rOrigStr, nStyle, pVector, pDisplayText, _pTextLayout );
+    DefaultTextLayout aDefaultLayout( *this );
+    ImplDrawText( *this, rRect, rOrigStr, nStyle, pVector, pDisplayText, _pTextLayout ? *_pTextLayout : aDefaultLayout );
 
     // and enable again
     mpMetaFile = pMtf;
@@ -7167,7 +7153,8 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
         xub_StrLen              i;
 
         nMaxWidth = 0;
-        ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, _pTextLayout );
+        DefaultTextLayout aDefaultLayout( *const_cast< OutputDevice* >( this ) );
+        ImplGetTextLines( *const_cast< OutputDevice* >( this ), aMultiLineInfo, nWidth, aStr, nStyle, _pTextLayout ? *_pTextLayout : aDefaultLayout );
         nFormatLines = aMultiLineInfo.Count();
         if ( !nTextHeight )
             nTextHeight = 1;

@@ -55,16 +55,55 @@ namespace vcl
                             MetricVector* _pVector,
                             String* _pDisplayText
                         ) = 0;
+        virtual bool    GetCaretPositions( const XubString& _rText, sal_Int32* _pCaretXArray, xub_StrLen nIndex, xub_StrLen nLen ) const = 0;
+    };
+
+    //====================================================================
+    //= DefaultTextLayout
+    //====================================================================
+    /** is an implementation of the ITextLayout interface which simply delegates its calls to the respective
+        methods of an OutputDevice instance, without any inbetween magic.
+    */
+    class DefaultTextLayout : public ITextLayout
+    {
+    public:
+        DefaultTextLayout( OutputDevice& _rTargetDevice )
+            :m_rTargetDevice( _rTargetDevice )
+        {
+        }
+        virtual ~DefaultTextLayout();
+
+        // ITextLayout overridables
+        virtual long    GetTextWidth(
+                            const XubString& _rText,
+                            xub_StrLen _nStartIndex,
+                            xub_StrLen _nLength
+                        ) const;
+        virtual void    DrawText(
+                            const Point& _rStartPoint,
+                            const XubString& _rText,
+                            xub_StrLen _nStartIndex,
+                            xub_StrLen _nLength,
+                            MetricVector* _pVector,
+                            String* _pDisplayText
+                        );
+        virtual bool    GetCaretPositions(
+                            const XubString& _rText,
+                            sal_Int32* _pCaretXArray,
+                            xub_StrLen _nStartIndex,
+                            xub_StrLen _nLength
+                        ) const;
+
+    private:
+        OutputDevice&   m_rTargetDevice;
     };
 
     //====================================================================
     //= ControlTextRenderer
     //====================================================================
     class ReferenceDeviceTextLayout;
-    /** a class which allows rendering text onto a device, but calculating the metrics according to a reference device
-
-        The class provides a number of methods which are equivalent to the same methods of the OutputDevice, except
-        that OutputDevice does not know about reference devices.
+    /** a class which allows rendering text of a Control onto a device, by taking into account the metrics of
+        a reference device.
     */
     class ControlTextRenderer
     {
