@@ -107,6 +107,7 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/xforms/InvalidDataOnSubmitException.hpp"
 #include <com/sun/star/security/CertificateValidity.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 
 
 #include "vos/mutex.hxx"
@@ -1370,6 +1371,23 @@ UUIInteractionHelper::handle_impl(
                         Reference< uno::XInterface > xIfc =
                             m_xServiceFactory->createInstance(aIt->ServiceName);
 
+
+                        Reference< com::sun::star::lang::XInitialization > xInitialization =
+                            Reference< com::sun::star::lang::XInitialization >( xIfc, UNO_QUERY );
+
+                        OSL_ENSURE( xInitialization.is(), "Custom Interactionhandler does not implement mandatory interface XInitialization!" );
+                        if (xInitialization.is())
+                        {
+                            uno::Sequence< uno::Any > propertyValues(1);
+                            beans::PropertyValue    aProperty;
+                            
+                            aProperty.Name = rtl::OUString::createFromAscii( "Parent" );
+                            aProperty.Value <<= getParentXWindow();
+                            propertyValues[ 0 ] <<= aProperty;
+
+                            xInitialization->initialize(propertyValues);
+                        }
+
                         Reference< task::XInteractionHandler2 >
                             xInteractionHandler( xIfc, UNO_QUERY );
 
@@ -1503,6 +1521,15 @@ void UUIInteractionHelper::GetInteractionHandlerList(InteractionHandlerDataList 
 
 Window * UUIInteractionHelper::getParentProperty() SAL_THROW(())
 {
+    star::uno::Reference< star::awt::XWindow > xWindow = getParentXWindow();
+    if ( xWindow.is() )
+        return VCLUnoHelper::GetWindow(xWindow);
+
+    return 0;
+}
+
+star::uno::Reference< ::com::sun::star::awt::XWindow>  UUIInteractionHelper::getParentXWindow() SAL_THROW(())
+{
     osl::MutexGuard aGuard(m_aPropertyMutex);
     for (sal_Int32 i = 0; i < m_aProperties.getLength(); ++i)
     {
@@ -1513,7 +1540,7 @@ Window * UUIInteractionHelper::getParentProperty() SAL_THROW(())
         {
             star::uno::Reference< star::awt::XWindow > xWindow;
             aProperty.Value >>= xWindow;
-            return VCLUnoHelper::GetWindow(xWindow);
+            return xWindow;
         }
     }
     return 0;

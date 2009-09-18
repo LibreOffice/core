@@ -177,6 +177,8 @@ private:
 
     Window * getParentProperty() SAL_THROW(());
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>  getParentXWindow() SAL_THROW(());
+
     rtl::OUString getContextProperty() SAL_THROW(());
 
     bool
