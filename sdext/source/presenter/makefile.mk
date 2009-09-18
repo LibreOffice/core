@@ -55,6 +55,7 @@ common_build_zip=
 # --- Files -------------------------------------
 
 SLOFILES=										\
+    $(SLO)$/PresenterAccessibility.obj			\
     $(SLO)$/PresenterAnimation.obj				\
     $(SLO)$/PresenterAnimator.obj				\
     $(SLO)$/PresenterBitmapContainer.obj		\
@@ -84,6 +85,7 @@ SLOFILES=										\
     $(SLO)$/PresenterSlideSorter.obj			\
     $(SLO)$/PresenterSprite.obj					\
     $(SLO)$/PresenterSpritePane.obj				\
+    $(SLO)$/PresenterTextView.obj				\
     $(SLO)$/PresenterTheme.obj					\
     $(SLO)$/PresenterTimer.obj					\
     $(SLO)$/PresenterToolBar.obj				\
@@ -100,6 +102,7 @@ SHL1TARGET=		$(TARGET).uno
 SHL1STDLIBS=	$(CPPUHELPERLIB)	\
                 $(CPPULIB)			\
                 $(SALLIB)
+
 SHL1DEPN=
 SHL1IMPLIB=		i$(SHL1TARGET)
 SHL1LIBS=		$(SLB)$/$(TARGET).lib

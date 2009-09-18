@@ -113,15 +113,29 @@ public:
     void Update (void);
     void Layout (void);
 
-    enum LayoutMode { Standard, Notes, Generic };
+    void SetSlideSorterState (bool bIsActive);
+    void SetHelpViewState (bool bIsActive);
+
+    enum LayoutMode { LM_Standard, LM_Notes, LM_Generic };
+private:
     void SetLayoutMode (const LayoutMode eMode);
     LayoutMode GetLayoutMode (void) const;
 
-    void SetSlideSorterState (bool bIsActive);
     bool IsSlideSorterActive (void) const;
-
-    void SetHelpViewState (bool bIsActive);
     bool IsHelpViewActive (void) const;
+public:
+    enum ViewMode { VM_Standard, VM_Notes, VM_SlideOverview, VM_Help };
+    /** The high-level method to switch the view mode.  Use this instead of
+        SetLayoutMode and Set(Help|SlideSorter)State when possible.
+    */
+    void SetViewMode (const ViewMode eMode);
+
+    ViewMode GetViewMode (void) const;
+
+    /** Restore the layout mode (or slide sorter state) from the
+        configuration.
+    */
+    void RestoreViewMode (void);
 
     void AddLayoutListener (
         const css::uno::Reference<css::document::XEventListener>& rxListener);
@@ -218,6 +232,8 @@ private:
         const css::uno::Reference<css::drawing::framework::XPane>& rxPane) const;
 
     void Invalidate (void);
+
+    void StoreViewMode (const ViewMode eViewMode);
 
     void LayoutStandardMode (void);
     void LayoutNotesMode (void);
