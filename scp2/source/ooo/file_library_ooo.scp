@@ -400,7 +400,42 @@ File gid_File_Lib_Vbaobj
   #endif
 End
 
+File gid_File_Lib_Vbaswobj
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT4(libvbaswobj,DLLPOSTFIX,.uno,UNXSUFFIX));
+  #else
+    Name = STRING(CONCAT4(vbaswobj,DLLPOSTFIX,.uno,.dll));
+  #endif
+End
+
+File gid_File_Lib_Vbamsforms
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT4(libmsforms,DLLPOSTFIX,.uno,UNXSUFFIX));
+  #else
+    Name = STRING(CONCAT4(msforms,DLLPOSTFIX,.uno,.dll));
+  #endif
+End
+
 #endif // VBA_EXTENSION
+File gid_File_Lib_Vbahelper
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef UNX
+    Name = STRING(CONCAT3(libvbahelper,DLLPOSTFIX,UNXSUFFIX));
+  #else
+    Name = STRING(CONCAT3(vbahelper,DLLPOSTFIX,.dll));
+  #endif
+End
 #endif // ENABLE_VBA
 
 
