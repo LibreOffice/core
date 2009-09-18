@@ -56,116 +56,105 @@ ATL_INCLUDE_DIR=$(PSDK_HOME)$/include$/atl$/
 
 DIRECTXSDK_INCLUDE_DIR=$(DIRECTXSDK_HOME)$/include$/
 
-FILES_TO_COPY_FROM_MINGW=excpt.h \
-             tchar.h
+FILES_TO_COPY_FROM_MINGW= \
+    excpt.h \
+     tchar.h
 
-FILES_TO_COPY_FROM_W32API=amvideo.h \
-              bdatypes.h \
-              imm.h \
-              oaidl.h \
-              objfwd.h \
-              objidl.h \
-              uxtheme.h \
-              winbase.h \
-              wininet.h \
-              winnt.h \
-              winver.h \
-              wtypes.h
+FILES_TO_COPY_FROM_W32API= \
+    amvideo.h \
+    basetyps.h \
+    oaidl.h \
+    objidl.h \
+    specstrings.h \
+    uxtheme.h \
+    winbase.h \
+    windef.h \
+    wininet.h \
+    winver.h \
+    wtypes.h
 
-FILES_TO_COPY_FROM_SYS=stat.h
+FILES_TO_COPY_FROM_SYS= \
+    stat.h
 
-FILES_TO_COPY_FROM_PSDK=adoctint.h \
-            adodef.h \
-            adoguids.h \
-            adoint.h \
-            bcrypt.h \
-            commctrl.h \
-            control.h \
-            filter.h \
-            gdiplusbitmap.h \
-            gdiplusbrush.h \
-            gdiplusenums.h \
-            gdiplusfont.h \
-            gdiplusheaders.h \
-            gdiplusimageattributes.h \
-            gdiplusimaging.h \
-            gdiplusmatrix.h \
-            gdipluspath.h \
-            gdipluspen.h \
-            gdiplusregion.h \
-            gdiplusstringformat.h \
-            imagehlp.h \
-            inaddr.h \
-            intsafe.h \
-            mapinls.h \
-            mapiwin.h \
-                msdasc.h \
-                msi.h \
-                msiquery.h \
-            multimon.h \
-            ncrypt.h \
-                ntquery.h \
-            ocidl.h \
-            oledb.h \
-            oleidl.h \
-            propidl.h \
-            propkeydef.h \
-            propsys.h \
-            qedit.h \
-            shlobj.h \
-            shobjidl.h \
-            shtypes.h \
-            specstrings.h \
-            specstrings_adt.h \
-            specstrings_strict.h \
-            sspi.h \
-            strmif.h \
-            strsafe.h \
-            structuredquery.h \
-            urlmon.h \
-            wincrypt.h \
-            wingdi.h \
-            winsock2.h \
-            winuser.h \
-            ws2def.h \
-            ws2ipdef.h \
-            ws2tcpip.h \
-            wspiapi.h \
-            adoid.h \
-            amstream.h \
-            austream.h \
-            ddstream.h \
-            dispex.h \
-            dshow.h \
-            exdispid.h \
-            gdiplus.h \
-            mmstream.h \
-            msxml.h \
-            oleauto.h \
-            olectl.h \
-            qos.h \
-            shlguid.h \
-            transact.h \
-            winerror.h
+FILES_TO_COPY_FROM_PSDK= \
+    adoctint.h \
+    adodef.h \
+    adoguids.h \
+    adoint.h \
+    bcrypt.h \
+    commctrl.h \
+    control.h \
+    dispex.h \
+    filter.h \
+    gdiplusbitmap.h \
+    gdiplusbrush.h \
+    gdiplusenums.h \
+    gdiplusfont.h \
+    gdiplusheaders.h \
+    gdiplusimageattributes.h \
+    gdiplusimaging.h \
+    gdiplusmatrix.h \
+    gdipluspath.h \
+    gdipluspen.h \
+    gdiplusregion.h \
+    gdiplusstringformat.h \
+    imm.h \
+    imagehlp.h \
+    mapiwin.h \
+    msdasc.h \
+    msi.h \
+    msiquery.h \
+    multimon.h \
+    ntquery.h \
+    ocidl.h \
+    oleauto.h \
+    olectl.h \
+    oledb.h \
+    oleidl.h \
+    propidl.h \
+    propkeydef.h \
+    propsys.h \
+    shlobj.h \
+    shobjidl.h \
+    shtypes.h \
+    sspi.h \
+    strmif.h \
+    strsafe.h \
+    structuredquery.h \
+    urlmon.h \
+    wincrypt.h \
+    winerror.h \
+    wingdi.h \
+    wintrust.h \
+    winuser.h \
+    wspiapi.h \
+    exdispid.h \
+    dshow.h \
+    gdiplus.h \
+    msxml.h \
+    ncrypt.h \
+    shlguid.h \
+    transact.h
 
 .IF "$(DISABLE_ATL)"==""
 MINGWHEADER_ATL_PATCH_TARGET=$(MISC)$/mingwheader_atl_patch
 MINGWHEADER_ATL_COPY_TARGET=$(MISC)$/mingwheader_atl_copy
-FILES_TO_COPY_FROM_ATL=atlbase.h \
-               atlcom.h \
-               atlconv.h \
-               atlctl.h \
-               atlwin.h \
-               statreg.h
+FILES_TO_COPY_FROM_ATL= \
+    atlbase.h \
+    atlcom.h \
+    atlconv.h \
+    atlctl.h \
+    atlwin.h \
+    statreg.h
 .ENDIF
 
-FILES_TO_COPY_FROM_DIRECTXSDK=dxtrans.h \
-                  d3dx9.h \
-                  d3d.h \
-                  d3dtypes.h \
-                  d3dx9math.h \
-                  d3dx9math.inl \
-                  d3dx9core.h
+FILES_TO_COPY_FROM_DIRECTXSDK= \
+    d3dtypes.h \
+    d3dx9core.h \
+    d3dx9math.h \
+    d3dx9math.inl \
+    dxtrans.h \
+    d3dx9.h
 
 $(MISC)$/mingwheader_patch_all : $(MISC)$/mingwheader_patch $(MINGWHEADER_ATL_PATCH_TARGET) $(LB)$/libmsvcrt.a
 
@@ -198,16 +187,20 @@ $(MINGWHEADER_ATL_COPY_TARGET):
 
 $(LB)$/libmsvcrt.a:
 .IF "$(USE_MINGW)" == "cygwin"
-    $(WRAPCMD) nm -g --defined-only $(COMPATH)$/lib/mingw/libmsvcrt.a > $(MISC)$/msvcrt.nm
+    $(COPY) $(COMPATH)$/lib/mingw/libmsvcrt.a $(LB)$/libmsvcrt_orig.a
 .ELSE
-    $(WRAPCMD) nm -g --defined-only $(COMPATH)$/lib/libmsvcrt.a > $(MISC)$/msvcrt.nm
+    $(COPY) $(COMPATH)$/lib/libmsvcrt.a $(LB)$/libmsvcrt_orig.a
 .ENDIF
+    cd $(LB) && ar -x libmsvcrt_orig.a ofmt_stub.o
+    ar -d $(LB)$/libmsvcrt_orig.a ofmt_stub.o
+    nm -g --defined-only $(LB)$/libmsvcrt_orig.a > $(MISC)$/msvcrt.nm
     echo EXPORTS > $(MISC)$/msvcrt.def
     sed -ne 's/.* T _//p' $(MISC)$/msvcrt.nm | sort >> $(MISC)$/msvcrt.def
     -sed -ne 's/.* I __imp__//p' $(MISC)$/msvcrt.nm | sort | diff - $(MISC)$/msvcrt.def | \
         sed -ne 's/^< \(.*\)$/\1 DATA/p' > $(MISC)$/msvcrtdata.def
     cat $(MISC)$/msvcrtdata.def >> $(MISC)$/msvcrt.def
     dlltool --dllname msvcrt.dll --input-def=$(MISC)$/msvcrt.def --kill-at --output-lib=$(LB)$/libmsvcrt.a
+    cd $(LB) && ar -rs libmsvcrt.a ofmt_stub.o
 
 clean:
     -$(RM) $(MISC)$/mingw$/include$/*.h
