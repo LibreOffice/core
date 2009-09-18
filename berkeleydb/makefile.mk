@@ -145,6 +145,7 @@ db_LDFLAGS+=-L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api
 db_LDFLAGS+=-L$(COMPATH)/lib -L$(MINGW_CLIB_DIR)
 db_LIBS=-lmingwthrd
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+CFLAGS+=-D_GLIBCXX_DLL
 db_LIBS+=-lstdc++_s
 .ENDIF
 db_LIBXSO_LIBS=$(LIBSTLPORT) $(db_LIBS)
@@ -152,7 +153,7 @@ db_LIBXSO_LIBS=$(LIBSTLPORT) $(db_LIBS)
 db_LIBXSO_LIBS+=-lgcc_s
 .ENDIF
 CONFIGURE_ACTION=..$/dist$/configure
-CONFIGURE_FLAGS=--enable-cxx --enable-dynamic --enable-shared --build=i586-pc-mingw32 --host=i586-pc-mingw32 --enable-mingw CC="$(db_CC)" CXX="$(db_CXX)" LN_S=ln NM="$(WRAPCMD) nm" OBJDUMP="$(WRAPCMD) objdump" JAVA="$(WRAPCMD) -env java" JAVAC="$(WRAPCMD) -env javac" CFLAGS="$(CFLAGS)" CPPFLAGS="$(INCLUDE)" LDFLAGS="$(db_LDFLAGS)" LIBS="$(db_LIBS)" LIBSO_LIBS="$(db_LIBS)" LIBJSO_LIBS="$(db_LIBS)" LIBXSO_LIBS="$(db_LIBXSO_LIBS)"
+CONFIGURE_FLAGS=--disable-cxx --enable-dynamic --enable-shared --build=i586-pc-mingw32 --host=i586-pc-mingw32 --enable-mingw CC="$(db_CC)" CXX="$(db_CXX)" LN_S=ln NM="$(WRAPCMD) nm" OBJDUMP="$(WRAPCMD) objdump" JAVA="$(WRAPCMD) -env java" JAVAC="$(WRAPCMD) -env javac" CFLAGS="$(CFLAGS)" CPPFLAGS="$(INCLUDE)" LDFLAGS="$(db_LDFLAGS)" LIBS="$(db_LIBS)" LIBSO_LIBS="$(db_LIBS)" LIBJSO_LIBS="$(db_LIBS)" LIBXSO_LIBS="$(db_LIBXSO_LIBS)"
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_DIR_OUT=$(CONFIGURE_DIR)

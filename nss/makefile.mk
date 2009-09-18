@@ -109,7 +109,7 @@ nss_LIBS+=-lstdc++_s
 
 
 BUILD_DIR=security$/nss
-BUILD_ACTION=NS_USE_GCC=1 CC="$(nss_CC)" CXX="$(nss_CXX)" OS_LIBS="$(nss_LIBS)" OS_TARGET=WIN95 _WIN32_IE=0x500 PATH=$(PATH) DEFINES=-D_WIN32_IE=0x500 $(GNUMAKE) nss_build_all
+BUILD_ACTION=NS_USE_GCC=1 CC="$(nss_CC)" CXX="$(nss_CXX)" OS_LIBS="$(nss_LIBS)" OS_TARGET=WIN95 _WIN32_IE=0x500 PATH="$(PATH)" DEFINES=-D_WIN32_IE=0x500 $(GNUMAKE) nss_build_all
 
 OUT2LIB= \
     dist$/out$/lib$/libnspr4.a \
