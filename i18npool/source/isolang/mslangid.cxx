@@ -168,7 +168,6 @@ LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sa
                 else
                     nLang = nConfiguredWesternFallback;
                 break;
-                break;
         }
     }
     return nLang;
