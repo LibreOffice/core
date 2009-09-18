@@ -146,6 +146,8 @@ void X11Clipboard::clearContents()
     // inform previous owner of lost ownership
     if ( xOwner.is() )
         xOwner->lostOwnership(xThis, m_aContents);
+
+     fireChangedContentsEvent();
 }
 
 // ------------------------------------------------------------------------
