@@ -36,16 +36,21 @@
 #include <cppcanvas/vclfactory.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/topfrm.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/dialog.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/URL.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
+
+#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
 namespace sd { namespace framework {
 
@@ -55,8 +60,13 @@ FullScreenPane::FullScreenPane (
     const ::Window* pViewShellWindow)
     : FrameWindowPane(rxPaneId,NULL),
       mxComponentContext(rxComponentContext),
-      mpWorkWindow(new WorkWindow(NULL, 0))
+      mpWorkWindow(NULL)
 {
+    ::Window* pParent = NULL;
+    mpWorkWindow.reset(new WorkWindow(
+        pParent,
+        0));  // For debugging (non-fullscreen) use WB_BORDER | WB_MOVEABLE | WB_SIZEABLE));
+
     if ( ! rxPaneId.is())
         throw lang::IllegalArgumentException();
 
@@ -68,10 +78,18 @@ FullScreenPane::FullScreenPane (
 
     // Create a new top-leve window that is displayed full screen.
     mpWorkWindow->ShowFullScreenMode(TRUE, nScreenNumber);
+    // For debugging (non-fullscreen) use mpWorkWindow->SetScreenNumber(nScreenNumber);
     mpWorkWindow->SetMenuBarMode(MENUBAR_MODE_HIDE);
     mpWorkWindow->SetBorderStyle(WINDOW_BORDER_REMOVEBORDER);
     mpWorkWindow->SetBackground(Wallpaper());
-    mpWorkWindow->Show();
+    // Don't show the window right now in order to allow the setting of an
+    // accessibility object: accessibility objects are typically
+    // requested by AT-tools when the window is shown.  Chaning it
+    // afterwards may or may not work.
+
+    // Add resize listener at the work window.
+    Link aWindowEventHandler (LINK(this, FullScreenPane, WindowEventHandler));
+    mpWorkWindow->AddEventListener(aWindowEventHandler);
 
     // Set title and icon of the new window to those of the current window
     // of the view shell.
@@ -87,7 +105,6 @@ FullScreenPane::FullScreenPane (
     // completely.
     mpWindow = new ::Window(mpWorkWindow.get());
     mpWindow->SetPosSizePixel(Point(0,0), mpWorkWindow->GetSizePixel());
-    mpWindow->Show();
     mpWindow->SetBackground(Wallpaper());
     mxWindow = VCLUnoHelper::GetInterface(mpWindow);
 
@@ -115,7 +132,13 @@ void SAL_CALL FullScreenPane::disposing (void)
         delete mpWindow;
     }
 
-    mpWorkWindow.reset();
+    if (mpWorkWindow.get() != NULL)
+    {
+        Link aWindowEventHandler (LINK(this, FullScreenPane, WindowEventHandler));
+        mpWorkWindow->RemoveEventListener(aWindowEventHandler);
+        mpWorkWindow.reset();
+    }
+
 
     FrameWindowPane::disposing();
 }
@@ -123,7 +146,98 @@ void SAL_CALL FullScreenPane::disposing (void)
 
 
 
+//----- XPane -----------------------------------------------------------------
+
+sal_Bool SAL_CALL FullScreenPane::isVisible (void)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+
+    if (mpWindow != NULL)
+        return mpWindow->IsReallyVisible();
+    else
+        return false;
+}
+
+
+
+
+void SAL_CALL FullScreenPane::setVisible (const sal_Bool bIsVisible)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+
+    if (mpWindow != NULL)
+        mpWindow->Show(bIsVisible);
+    if (mpWorkWindow != NULL)
+        mpWorkWindow->Show(bIsVisible);
+}
+
+
+
+
+Reference<accessibility::XAccessible> SAL_CALL FullScreenPane::getAccessible (void)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+
+    if (mpWorkWindow != NULL)
+        return mpWorkWindow->GetAccessible(FALSE);
+    else
+        return NULL;
+}
+
+
+
+
+void SAL_CALL FullScreenPane::setAccessible (
+    const Reference<accessibility::XAccessible>& rxAccessible)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+
+    if (mpWindow != NULL)
+    {
+        Reference<lang::XInitialization> xInitializable (rxAccessible, UNO_QUERY);
+        if (xInitializable.is())
+        {
+            ::Window* pParentWindow = mpWindow->GetParent();
+            Reference<accessibility::XAccessible> xAccessibleParent;
+            if (pParentWindow != NULL)
+                xAccessibleParent = pParentWindow->GetAccessible();
+            Sequence<Any> aArguments (1);
+            aArguments[0] = Any(xAccessibleParent);
+            xInitializable->initialize(aArguments);
+        }
+        GetWindow()->SetAccessible(rxAccessible);
+    }
+}
+
+
+
+
 //-----------------------------------------------------------------------------
+
+IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent*, pEvent)
+{
+    switch (pEvent->GetId())
+    {
+        case VCLEVENT_WINDOW_RESIZE:
+            GetWindow()->SetPosPixel(Point(0,0));
+            GetWindow()->SetSizePixel(Size(
+                mpWorkWindow->GetSizePixel().Width(),
+                mpWorkWindow->GetSizePixel().Height()));
+            break;
+
+        case VCLEVENT_OBJECT_DYING:
+            mpWorkWindow.reset();
+            break;
+    }
+    return 1;
+}
+
+
+
 
 Reference<rendering::XCanvas> FullScreenPane::CreateCanvas (void)
     throw (RuntimeException)

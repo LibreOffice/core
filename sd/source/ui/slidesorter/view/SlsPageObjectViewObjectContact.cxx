@@ -520,6 +520,7 @@ class SdPageObjectFocusPrimitive : public SdPageObjectBasePrimitive
 private:
     /// Gap between border of page object and inside of focus rectangle.
     static const sal_Int32 mnFocusIndicatorOffset;
+    const bool mbContrastToSelected;
 
 protected:
     // method which is to be used to implement the local decomposition of a 2D primitive.
@@ -527,7 +528,7 @@ protected:
 
 public:
     // constructor and destructor
-    SdPageObjectFocusPrimitive(const basegfx::B2DRange& rRange);
+    SdPageObjectFocusPrimitive(const basegfx::B2DRange& rRange, const bool bContrast);
     ~SdPageObjectFocusPrimitive();
 
     // provide unique ID
@@ -556,19 +557,26 @@ Primitive2DSequence SdPageObjectFocusPrimitive::createLocalDecomposition(const d
     // create polygon
     const basegfx::B2DPolygon aIndicatorPolygon(basegfx::tools::createPolygonFromRect(aFocusIndicatorRange));
 
-    // white rectangle
+    const StyleSettings& rStyleSettings(Application::GetSettings().GetStyleSettings());
+
+    // "background" rectangle
+    const Color aBackgroundColor(mbContrastToSelected ? rStyleSettings.GetMenuHighlightColor() : rStyleSettings.GetWindowColor());
     xRetval[0] = Primitive2DReference(
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aIndicatorPolygon, Color(COL_WHITE).getBColor()));
 
     // dotted black rectangle with same geometry
     ::std::vector< double > aDotDashArray;
 
-    aDotDashArray.push_back(aDiscretePixel.getX());
-    aDotDashArray.push_back(aDiscretePixel.getX());
+    const sal_Int32 nFocusIndicatorWidth (3);
+    aDotDashArray.push_back(nFocusIndicatorWidth *aDiscretePixel.getX());
+    aDotDashArray.push_back(nFocusIndicatorWidth * aDiscretePixel.getX());
 
     // prepare line and stroke attributes
-    const drawinglayer::attribute::LineAttribute aLineAttribute(Color(COL_BLACK).getBColor());
-    const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(aDotDashArray, 2.0 * aDiscretePixel.getX());
+    const Color aLineColor(mbContrastToSelected ? rStyleSettings.GetMenuHighlightTextColor() : rStyleSettings.GetWindowTextColor());
+    const drawinglayer::attribute::LineAttribute aLineAttribute(aLineColor.getBColor());
+    const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(
+        aDotDashArray, 2.0 * nFocusIndicatorWidth * aDiscretePixel.getX());
+
 
     xRetval[1] = Primitive2DReference(
         new drawinglayer::primitive2d::PolygonStrokePrimitive2D(aIndicatorPolygon, aLineAttribute, aStrokeAttribute));
@@ -576,8 +584,9 @@ Primitive2DSequence SdPageObjectFocusPrimitive::createLocalDecomposition(const d
     return xRetval;
 }
 
-SdPageObjectFocusPrimitive::SdPageObjectFocusPrimitive(const basegfx::B2DRange& rRange)
-:   SdPageObjectBasePrimitive(rRange)
+SdPageObjectFocusPrimitive::SdPageObjectFocusPrimitive(const basegfx::B2DRange& rRange, const bool bContrast)
+    :   SdPageObjectBasePrimitive(rRange),
+        mbContrastToSelected(bContrast)
 {
 }
 
@@ -1094,7 +1103,7 @@ Primitive2DSequence PageObjectViewObjectContact::createPrimitive2DSequence(const
         if(bCreateFocused)
         {
             // add focus indicator if used
-            xRetval[nInsert++] = Primitive2DReference(new SdPageObjectFocusPrimitive(aInnerRange));
+            xRetval[nInsert++] = Primitive2DReference(new SdPageObjectFocusPrimitive(aInnerRange, bCreateSelected));
         }
 
         return xRetval;
