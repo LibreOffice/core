@@ -1239,7 +1239,7 @@
 #define RID_SVXSTR_MENU_ADDCOMMANDS_DESCRIPTION (RID_SVX_START + 1050)
 #define RID_SVXSTR_EVENT_STARTAPP               (RID_SVX_START + 1051)
 #define RID_SVXSTR_EVENT_CLOSEAPP               (RID_SVX_START + 1052)
-#define RID_SVXSTR_EVENT_CREATEDOC              (RID_SVX_START + 1053)
+#define RID_SVXSTR_EVENT_NEWDOC                 (RID_SVX_START + 1053)
 #define RID_SVXSTR_EVENT_CLOSEDOC               (RID_SVX_START + 1054)
 #define RID_SVXSTR_EVENT_PREPARECLOSEDOC        (RID_SVX_START + 1055)
 #define RID_SVXSTR_EVENT_OPENDOC                (RID_SVX_START + 1056)
@@ -1370,9 +1370,28 @@
 #define STR_LINKEDDOC_NO_SYSTEM_FILE                        (RID_SVX_START + 1169)
 #define RID_SVXSTR_EVENT_SUBCOMPONENT_OPENED                (RID_SVX_START + 1170)
 #define RID_SVXSTR_EVENT_SUBCOMPONENT_CLOSED                (RID_SVX_START + 1171)
+
+#define RID_SVXSTR_EVENT_CREATEDOC                          (RID_SVX_START + 1172)
+#define RID_SVXSTR_EVENT_LOADDOCFINISHED                    (RID_SVX_START + 1173)
+#define RID_SVXSTR_EVENT_SAVEDOCFAILED                      (RID_SVX_START + 1174)
+#define RID_SVXSTR_EVENT_SAVEASDOCFAILED                    (RID_SVX_START + 1175)
+#define RID_SVXSTR_EVENT_COPYTODOC                          (RID_SVX_START + 1176)
+#define RID_SVXSTR_EVENT_COPYTODOCDONE                      (RID_SVX_START + 1177)
+#define RID_SVXSTR_EVENT_COPYTODOCFAILED                    (RID_SVX_START + 1178)
+#define RID_SVXSTR_EVENT_VIEWCREATED                        (RID_SVX_START + 1179)
+#define RID_SVXSTR_EVENT_PREPARECLOSEVIEW                   (RID_SVX_START + 1180)
+#define RID_SVXSTR_EVENT_CLOSEVIEW                          (RID_SVX_START + 1181)
+#define RID_SVXSTR_EVENT_TITLECHANGED                       (RID_SVX_START + 1182)
+#define RID_SVXSTR_EVENT_MODECHANGED                        (RID_SVX_START + 1183)
+#define RID_SVXSTR_EVENT_VISAREACHANGED                     (RID_SVX_START + 1184)
+#define RID_SVXSTR_EVENT_STORAGECHANGED                     (RID_SVX_START + 1185)
+#define RID_SVXSTR_EVENT_MAILMERGE_END                      (RID_SVX_START + 1186)
+#define RID_SVXSTR_EVENT_FIELDMERGE                         (RID_SVX_START + 1187)
+#define RID_SVXSTR_EVENT_FIELDMERGE_FINISHED                (RID_SVX_START + 1188)
+#define RID_SVXSTR_EVENT_LAYOUT_FINISHED                    (RID_SVX_START + 1189)
     // if you add here, remember to adjust RID_SVXSTR_NEXTFREE
 
-#define RID_SVXSTR_NEXTFREE                                 (RID_SVX_START + 1172)
+#define RID_SVXSTR_NEXTFREE                                 (RID_SVX_START + 1190)
 
 // ----------------------------------------------------------------------------
 // if we have _a_lot_ time, we should group the resource ids by type, instead

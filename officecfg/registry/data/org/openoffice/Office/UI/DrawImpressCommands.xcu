@@ -651,7 +651,7 @@
                     <value xml:lang="en-US">~Page...</value>
                 </prop>
             </node>
-            <node oor:name=".uno:PasteClipboard" oor:op="replace">
+                        <node oor:name=".uno:PasteSpecial" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
 
                     <value xml:lang="en-US">Paste ~Special...</value>

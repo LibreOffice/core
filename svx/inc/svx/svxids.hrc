@@ -1177,7 +1177,6 @@
 #define SID_ATTR_CHAR_WIDTH_FIT_TO_LINE                 ( SID_SVX_START + 919 )
 #define SID_ATTR_CHAR_RELIEF                            ( SID_SVX_START + 920 )
 #define SID_LANGUAGE_OPTIONS                            ( SID_SVX_START + 921 )
-#define SID_CLIPBOARD_FORMAT_ITEMS                      ( SID_SVX_START + 922 )
 #define SID_GETUNDOSTRINGS                              ( SID_SVX_START + 923 )
 #define SID_GETREDOSTRINGS                              ( SID_SVX_START + 924 )
 #define SID_PARA_VERTALIGN                              ( SID_SVX_START + 925 )
@@ -1350,6 +1349,7 @@
 #define SID_CHAR_DLG_PREVIEW_STRING                     (SID_SVX_START+1090)
 #define SID_RECHECK_DOCUMENT                            (SID_SVX_START+1091)
 #define SID_ATTR_PARA_OUTLINE_LEVEL                     (SID_SVX_START+1092)
+#define SID_OBJECT_MIRROR                               (SID_SVX_START+1093)
 
 #define SID_INSERT_POSTIT                               (SID_SVX_START+1093)
 #define SID_DELETE_POSTIT                               (SID_SVX_START+1094)

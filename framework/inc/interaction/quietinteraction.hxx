@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef __FRAMEWORK_INTERACTION_STILLINTERACTION_HXX_
-#define __FRAMEWORK_INTERACTION_STILLINTERACTION_HXX_
+#ifndef __FRAMEWORK_INTERACTION_QUIETINTERACTION_HXX_
+#define __FRAMEWORK_INTERACTION_QUIETINTERACTION_HXX_
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -80,7 +80,7 @@ namespace framework{
     @modified   12.07.2002 14:06
     @by         Andreas Schlüns
  */
-class StillInteraction : public  css::lang::XTypeProvider
+class QuietInteraction : public  css::lang::XTypeProvider
                        , public  css::task::XInteractionHandler
                        , private ThreadHelpBase
                        , public  ::cppu::OWeakObject
@@ -130,7 +130,7 @@ class StillInteraction : public  css::lang::XTypeProvider
 
             @threadsafe not neccessary
         */
-        StillInteraction();
+        QuietInteraction();
 
         //_________________________________
         /**

@@ -78,27 +78,11 @@
 #define RID_RECORDINGTOOLBOX                    (RID_SFX_APP_START+43)
 #define RID_ENVTOOLBOX                          (RID_SFX_APP_START+44)
 
-#define STR_EVENT_STARTAPP                      (RID_SFX_APP_START+50)
-#define STR_EVENT_CLOSEAPP                      (RID_SFX_APP_START+51)
-#define STR_EVENT_CREATEDOC                     (RID_SFX_APP_START+52)
-#define STR_EVENT_OPENDOC                       (RID_SFX_APP_START+53)
-#define STR_EVENT_CLOSEDOC                      (RID_SFX_APP_START+54)
-#define STR_EVENT_SAVEDOC                       (RID_SFX_APP_START+55)
-#define STR_EVENT_SAVEASDOC                     (RID_SFX_APP_START+56)
-#define STR_EVENT_ACTIVATEDOC                   (RID_SFX_APP_START+57)
-#define STR_EVENT_DEACTIVATEDOC                 (RID_SFX_APP_START+58)
-#define STR_EVENT_ONERROR                       (RID_SFX_APP_START+78)
-#define STR_EVENT_PREPARECLOSEDOC               (RID_SFX_APP_START+89)
-#define STR_EVENT_MODIFYCHANGED                 (RID_SFX_APP_START+90)
-#define STR_EVENT_SAVEDOCDONE                   (RID_SFX_APP_START+95)
-#define STR_EVENT_SAVEASDOCDONE                 (RID_SFX_APP_START+96)
-
 #define STR_QUITAPP                             (RID_SFX_APP_START+59)
 #define STR_EXITANDRETURN                       (RID_SFX_APP_START+60)
 #define STR_ERR_NOFILE                          (RID_SFX_APP_START+61)
 #define STR_EXTHELPSTATUS                       (RID_SFX_APP_START+62)
 
-#define STR_EVENT_PRINTDOC                      (RID_SFX_APP_START+64)
 #define STR_ADDRESS_NAME                        (RID_SFX_APP_START+65)
 
 #define RID_STR_HLPFILENOTEXIST                 (RID_SFX_APP_START+68)

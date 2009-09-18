@@ -53,6 +53,7 @@
 #include <tools/datetime.hxx>
 
 #include <sfx2/viewsh.hxx>
+#include <sfx2/dispatch.hxx>
 #include "viewimp.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/prnmon.hxx>
@@ -70,6 +71,43 @@
 TYPEINIT1(SfxPrintingHint, SfxHint);
 
 // -----------------------------------------------------------------------
+
+void SfxAsyncPrintExec_Impl::AddRequest( SfxRequest& rReq )
+{
+    if ( rReq.GetArgs() )
+    {
+        // only queue API requests
+        if ( aReqs.empty() )
+            StartListening( *pView->GetObjectShell() );
+
+        aReqs.push( new SfxRequest( rReq ) );
+    }
+}
+
+void SfxAsyncPrintExec_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if ( &rBC == pView->GetObjectShell() )
+    {
+        SfxPrintingHint* pPrintHint = PTR_CAST( SfxPrintingHint, &rHint );
+        if ( pPrintHint && pPrintHint->GetWhich() == com::sun::star::view::PrintableState_JOB_COMPLETED )
+        {
+            while ( aReqs.front() )
+            {
+                SfxRequest* pReq = aReqs.front();
+                aReqs.pop();
+                pView->GetViewFrame()->GetDispatcher()->Execute( pReq->GetSlot(), SFX_CALLMODE_ASYNCHRON, *pReq->GetArgs() );
+                USHORT nSlot = pReq->GetSlot();
+                delete pReq;
+                if ( nSlot == SID_PRINTDOC || nSlot == SID_PRINTDOCDIRECT )
+                    // print jobs must be executed before the next command can be dispatched
+                    break;
+            }
+
+            if ( aReqs.empty() )
+                EndListening( *pView->GetObjectShell() );
+        }
+    }
+}
 
 void DisableRanges( PrintDialog& rDlg, SfxPrinter* pPrinter )
 
@@ -389,12 +427,18 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 {
     USHORT                  nCopies=1;
     USHORT                  nDialogRet = RET_CANCEL;
-    BOOL                    bCollate=FALSE;
+    BOOL                    bCollate=TRUE;
     SfxPrinter*             pPrinter = 0;
     PrintDialog*            pPrintDlg = 0;
     SfxDialogExecutor_Impl* pExecutor = 0;
     bool                    bSilent = false;
     BOOL bIsAPI = rReq.GetArgs() && rReq.GetArgs()->Count();
+
+    if ( bIsAPI && GetPrinter( FALSE ) && GetPrinter( FALSE )->IsPrinting() )
+    {
+        pImp->pPrinterCommandQueue->AddRequest( rReq );
+        return;
+    }
 
     const USHORT nId = rReq.GetSlot();
     switch( nId )
@@ -866,8 +910,11 @@ ErrCode SfxViewShell::DoPrint( SfxPrinter *pPrinter,
     else if ( pDocPrinter != pPrinter )
     {
         pProgress->RestoreOnEndPrint( pDocPrinter->Clone() );
-        SetPrinter( pPrinter, SFX_PRINTER_PRINTER );
+        USHORT nError = SetPrinter( pPrinter, SFX_PRINTER_PRINTER );
+        if ( nError != SFX_PRINTERROR_NONE )
+            return PRINTER_ACCESSDENIED;
     }
+
     pProgress->SetWaitMode(FALSE);
 
     // Drucker starten

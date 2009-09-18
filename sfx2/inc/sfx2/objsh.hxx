@@ -734,7 +734,7 @@ public:
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation >& aInfos );
     SAL_DLLPRIVATE void CheckEncryption_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
 
-    SAL_DLLPRIVATE static SEQUENCE< OUSTRING > GetEventNames_Impl();
+    SAL_DLLPRIVATE SEQUENCE< OUSTRING > GetEventNames_Impl();
     SAL_DLLPRIVATE void InitBasicManager_Impl();
     SAL_DLLPRIVATE SfxObjectShell_Impl* Get_Impl() { return pImp; }
 

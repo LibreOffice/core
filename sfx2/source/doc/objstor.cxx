@@ -522,7 +522,7 @@ sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
 
         pImp->bInitialized = sal_True;
         SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );
-        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_DOCCREATED, this ) );
+        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_DOCCREATED, GlobalEventConfig::GetEventName(STR_EVENT_DOCCREATED), this ) );
         return sal_True;
     }
 
@@ -3257,7 +3257,7 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
 
             SetupStorage( pImp->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT, sal_False );
             pImp->m_bCreateTempStor = sal_False;
-            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, this ) );
+            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(STR_EVENT_STORAGECHANGED), this ) );
         }
         catch( uno::Exception& )
         {
@@ -3417,7 +3417,7 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
 
     if ( bSendNotification )
     {
-        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, this ) );
+        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(STR_EVENT_STORAGECHANGED), this ) );
     }
 
     return bResult;

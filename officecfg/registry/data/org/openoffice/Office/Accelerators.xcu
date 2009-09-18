@@ -1245,7 +1245,7 @@
     </node>
     <node oor:name="V_SHIFT_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-      <value xml:lang="en-US">.uno:PasteClipboard</value>
+      <value xml:lang="en-US">.uno:PasteSpecial</value>
      </prop>
     </node>
     <node oor:name="X_MOD1" oor:op="replace">
@@ -2212,7 +2212,7 @@
     </node>
     <node oor:name="V_SHIFT_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-      <value xml:lang="en-US">.uno:PasteClipboard</value>
+      <value xml:lang="en-US">.uno:PasteSpecial</value>
      </prop>
     </node>
     <node oor:name="X_MOD1" oor:op="replace">

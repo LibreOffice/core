@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: stillinteraction.cxx,v $
+ * $RCSfile: QuietInteraction.cxx,v $
  * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
-#include "interaction/stillinteraction.hxx"
+#include "interaction/quietinteraction.hxx"
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -77,18 +77,18 @@ namespace framework{
 //  exported definitions
 //_________________________________________________________________________________________________________________
 
-DEFINE_XINTERFACE_2( StillInteraction                                 ,
+DEFINE_XINTERFACE_2( QuietInteraction                                 ,
                      OWeakObject                                      ,
                      DIRECT_INTERFACE(css::lang::XTypeProvider      ) ,
                      DIRECT_INTERFACE(css::task::XInteractionHandler) )
 
-DEFINE_XTYPEPROVIDER_2( StillInteraction               ,
+DEFINE_XTYPEPROVIDER_2( QuietInteraction               ,
                         css::lang::XTypeProvider       ,
                         css::task::XInteractionHandler )
 
 //_________________________________________________________________________________________________________________
 
-StillInteraction::StillInteraction()
+QuietInteraction::QuietInteraction()
     : ThreadHelpBase     ( &Application::GetSolarMutex() )
     , ::cppu::OWeakObject(                               )
     , m_aRequest         (                               )
@@ -97,7 +97,7 @@ StillInteraction::StillInteraction()
 
 //_________________________________________________________________________________________________________________
 
-void SAL_CALL StillInteraction::handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) throw( css::uno::RuntimeException )
+void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) throw( css::uno::RuntimeException )
 {
     // safe the request for outside analyzing everytime!
     css::uno::Any aRequest = xRequest->getRequest();
@@ -172,7 +172,7 @@ void SAL_CALL StillInteraction::handle( const css::uno::Reference< css::task::XI
 
 //_________________________________________________________________________________________________________________
 
-css::uno::Any StillInteraction::getRequest() const
+css::uno::Any QuietInteraction::getRequest() const
 {
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
@@ -182,7 +182,7 @@ css::uno::Any StillInteraction::getRequest() const
 
 //_________________________________________________________________________________________________________________
 
-sal_Bool StillInteraction::wasUsed() const
+sal_Bool QuietInteraction::wasUsed() const
 {
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);

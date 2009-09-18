@@ -61,6 +61,7 @@
 #include <basic/sbstar.hxx>
 #include <svtools/stritem.hxx>
 #include <basic/sbx.hxx>
+#include <svtools/eventcfg.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/signaturestate.hxx>
@@ -251,7 +252,6 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,pModule( 0 )
     ,pFrame( 0 )
     ,pTbxConfig( 0 )
-    ,pEventConfig(NULL)
     ,eFlags( SFXOBJECTSHELL_UNDEFINED )
     ,pCloser( 0 )
     ,bReadOnlyUI( sal_False )
@@ -597,6 +597,9 @@ sal_uInt16 SfxObjectShell::PrepareClose
     while ( pFrame && (pFrame->GetFrameType() & SFXFRAME_SERVER ) )
         pFrame = SfxViewFrame::GetNext( *pFrame, this );
 
+    SfxApplication *pSfxApp = SFX_APP();
+    pSfxApp->NotifyEvent( SfxEventHint(SFX_EVENT_PREPARECLOSEDOC, GlobalEventConfig::GetEventName(STR_EVENT_PREPARECLOSEDOC), this) );
+
     sal_Bool bClose = sal_False;
     if ( bUI && IsModified() )
     {
@@ -887,11 +890,6 @@ SfxObjectShell* SfxObjectShell::GetObjectShell()
 
 SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames()
 {
-    return GetEventNames_Impl();
-}
-
-SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames_Impl()
-{
     static uno::Sequence< ::rtl::OUString >* pEventNameContainer = NULL;
 
     if ( !pEventNameContainer )
@@ -899,93 +897,19 @@ SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames_Impl()
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
         if ( !pEventNameContainer )
         {
-            static uno::Sequence< ::rtl::OUString > aEventNameContainer( 27 );
-            // SFX_EVENT_STARTAPP
-            aEventNameContainer[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnStartApp" ) );
-
-            // SFX_EVENT_CLOSEAPP
-            aEventNameContainer[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnCloseApp" ) );
-
-            // SFX_EVENT_CREATEDOC
-            aEventNameContainer[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnNew" ) );
-
-            // SFX_EVENT_OPENDOC
-            aEventNameContainer[3] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnLoad" ) );
-
-            // SFX_EVENT_SAVEASDOC
-            aEventNameContainer[4] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnSaveAs" ) );
-
-            // SFX_EVENT_SAVEASDOCDONE
-            aEventNameContainer[5] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnSaveAsDone" ) );
-
-            // SFX_EVENT_SAVEDOC
-            aEventNameContainer[6] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnSave" ) );
-
-            // SFX_EVENT_SAVEDOCDONE
-            aEventNameContainer[7] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnSaveDone" ) );
-
-            // SFX_EVENT_PREPARECLOSEDOC
-            aEventNameContainer[8] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnPrepareUnload" ) );
-
-            // SFX_EVENT_CLOSEDOC
-            aEventNameContainer[9] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnUnload" ) );
-
-            // SFX_EVENT_ACTIVATEDOC
-            aEventNameContainer[10] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnFocus" ) );
-
-            // SFX_EVENT_DEACTIVATEDOC
-            aEventNameContainer[11] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnUnfocus" ) );
-
-            // SFX_EVENT_PRINTDOC
-            aEventNameContainer[12] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnPrint" ) );
-
-            // SFX_EVENT_MODIFYCHANGED
-            aEventNameContainer[13] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnModifyChanged" ) );
-
-            // SFX_EVENT_SAVETODOC
-            aEventNameContainer[14] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnCopyTo" ) );
-
-            // SFX_EVENT_SAVETODOCDONE
-            aEventNameContainer[15] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnCopyToDone" ) );
-
-            // SFX_EVENT_VIEWCREATED
-            aEventNameContainer[16] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnViewCreated" ) );
-
-            // SFX_EVENT_PREPARECLOSEVIEW
-            aEventNameContainer[17] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnPrepareViewClosing" ) );
-
-            // SFX_EVENT_CLOSEVIEW
-            aEventNameContainer[18] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnViewClosed" ) );
-
-            // SFX_EVENT_VISAREACHANGED
-            aEventNameContainer[19] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnVisAreaChanged" ) );
-
-            // SFX_EVENT_DOCCREATED
-            aEventNameContainer[20] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnCreate" ) );
-
-            // SFX_EVENT_LOADFINISHED
-            aEventNameContainer[21] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnLoadFinished" ) );
-
-            // SFX_EVENT_SAVEASDOCFAILED
-            aEventNameContainer[22] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnSaveAsFailed" ) );
-
-            // SFX_EVENT_SAVEDOCFAILED
-            aEventNameContainer[23] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnSaveFailed" ) );
-
-            // SFX_EVENT_SAVETODOCFAILED
-            aEventNameContainer[24] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnCopyToFailed" ) );
-
-            // SFX_HINT_TITLECHANGED
-            aEventNameContainer[25] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnTitleChanged" ) );
-
-            // SFX_HINT_MODECHANGED
-            aEventNameContainer[26] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnModeChanged" ) );
-
+            static uno::Sequence< ::rtl::OUString > aEventNameContainer = GlobalEventConfig().getElementNames();
             pEventNameContainer = &aEventNameContainer;
         }
     }
 
     return *pEventNameContainer;
+}
+
+SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames_Impl()
+{
+    if (!pImp->xEventNames.getLength())
+        pImp->xEventNames = GetEventNames();
+    return pImp->xEventNames;
 }
 
 //--------------------------------------------------------------------

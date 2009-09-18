@@ -668,7 +668,6 @@ struct SvxCharRotate
 };
 item SvxCharRotate SvxCharRotateItem;
 
-item String                 SvxClipboardFmtItem;  // dummy
 item String                 SfxSetItem;  // dummy
 item INT16                  SvxRotateModeItem;  // enum
 item INT16                  SvxOrientationItem;  // enum

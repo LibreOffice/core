@@ -33,6 +33,8 @@
 //#include <hash_map>
 
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
 #include <com/sun/star/logging/XSimpleLogRing.hpp>
 #include <tools/datetime.hxx>
 
@@ -72,6 +74,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         xBasicLibraries;
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >
                         xDialogLibraries;
+    com::sun::star::uno::Sequence < rtl::OUString > xEventNames;
     ::sfx2::DocumentMacroMode
                         aMacroMode;
     SfxProgress*        pProgress;
@@ -141,7 +144,6 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     SfxModule*              pModule;
     SfxFrame*               pFrame;
     SfxToolBoxConfig*       pTbxConfig;
-    SfxEventConfigItem_Impl* pEventConfig;
     SfxObjectShellFlags     eFlags;
     svtools::AsynchronLink* pCloser;
     String                  aBaseURL;

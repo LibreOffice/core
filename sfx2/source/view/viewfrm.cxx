@@ -867,7 +867,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if ( xNewObj.Is() )
                 {
                     // Propagate document closure.
-                    SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_CLOSEDOC, xOldObj ) );
+                    SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_CLOSEDOC, GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ), xOldObj ) );
                 }
 
                 // als erledigt recorden
@@ -1145,7 +1145,7 @@ void SfxViewFrame::SetObjectShell_Impl
     SwitchToViewShell_Impl( !IsRestoreView_Impl() ? (sal_uInt16) 0 : GetCurViewId() );
     rObjSh.PostActivateEvent_Impl( this );
     if ( Current() == this )
-        SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_ACTIVATEDOC, &rObjSh ) );
+        SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_ACTIVATEDOC, GlobalEventConfig::GetEventName( STR_EVENT_ACTIVATEDOC ), &rObjSh ) );
 
     Notify( rObjSh, SfxSimpleHint(SFX_HINT_TITLECHANGED) );
     Notify( rObjSh, SfxSimpleHint(SFX_HINT_DOCCHANGED) );
@@ -1518,6 +1518,8 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             case SFX_HINT_MODECHANGED:
             {
                 // r/o Umschaltung?
+                SfxBindings& rBind = GetBindings();
+                rBind.Invalidate( SID_RELOAD );
                 SfxDispatcher *pDispat = GetDispatcher();
                 sal_Bool bWasReadOnly = pDispat->GetReadOnly_Impl();
                 sal_Bool bIsReadOnly = xObjSh->IsReadOnly();
@@ -1525,8 +1527,9 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 {
                     // Dann auch TITLE_CHANGED
                     UpdateTitle();
-                    GetBindings().Invalidate( SID_FILE_NAME );
-                    GetBindings().Invalidate( SID_DOCINFO_TITLE );
+                    rBind.Invalidate( SID_FILE_NAME );
+                    rBind.Invalidate( SID_DOCINFO_TITLE );
+                    rBind.Invalidate( SID_EDITDOC );
 
                     pDispat->GetBindings()->InvalidateAll(sal_True);
                     pDispat->SetReadOnly_Impl( bIsReadOnly );
@@ -1547,8 +1550,11 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             case SFX_HINT_TITLECHANGED:
             {
                 UpdateTitle();
-                GetBindings().Invalidate( SID_FILE_NAME );
-                GetBindings().Invalidate( SID_DOCINFO_TITLE );
+                SfxBindings& rBind = GetBindings();
+                rBind.Invalidate( SID_FILE_NAME );
+                rBind.Invalidate( SID_DOCINFO_TITLE );
+                rBind.Invalidate( SID_EDITDOC );
+                rBind.Invalidate( SID_RELOAD );
                 break;
             }
 
@@ -1576,12 +1582,16 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 rBind.Invalidate( SID_DOC_MODIFIED );
                 rBind.Invalidate( SID_SAVEDOC );
                 rBind.Invalidate( SID_RELOAD );
+                rBind.Invalidate( SID_EDITDOC );
                 break;
             }
 
             case SFX_EVENT_OPENDOC:
             case SFX_EVENT_CREATEDOC:
             {
+                SfxBindings& rBind = GetBindings();
+                rBind.Invalidate( SID_RELOAD );
+                rBind.Invalidate( SID_EDITDOC );
                 if ( !xObjSh->IsReadOnly() )
                 {
                     // Im Gegensatz zu oben (TITLE_CHANGED) mu\s das UI nicht

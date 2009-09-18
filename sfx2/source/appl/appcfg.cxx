@@ -160,10 +160,12 @@ IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pAsyncTimer)
     SfxObjectShellRef xRef( aHint.GetObjShell() );
     pAsyncTimer->Stop();
 #ifdef DBG_UTIL
-    ::rtl::OUString aName = SfxEventConfiguration::GetEventName_Impl( aHint.GetEventId() );
-    ByteString aTmp( "SfxEvent: ");
-    aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
-    DBG_TRACE( aTmp.GetBuffer() );
+    if (!xRef.Is())
+    {
+        ByteString aTmp( "SfxEvent: ");
+        aTmp += ByteString( String( aHint.GetEventName() ), RTL_TEXTENCODING_UTF8 );
+        DBG_TRACE( aTmp.GetBuffer() );
+    }
 #endif
     SFX_APP()->Broadcast( aHint );
     if ( xRef.Is() )
@@ -1037,7 +1039,7 @@ SfxEventConfiguration* SfxApplication::GetEventConfig() const
 //--------------------------------------------------------------------
 void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSynchron )
 {
-    DBG_ASSERT(pAppData_Impl->pEventConfig,"Keine Events angemeldet!");
+    //DBG_ASSERT(pAppData_Impl->pEventConfig,"Keine Events angemeldet!");
 
     SfxObjectShell *pDoc = rEventHint.GetObjShell();
     if ( pDoc && ( pDoc->IsPreview() || !pDoc->Get_Impl()->bInitialized ) )
@@ -1052,6 +1054,14 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSync
 
     if ( bSynchron )
     {
+#ifdef DBG_UTIL
+        if (!pDoc)
+        {
+            ByteString aTmp( "SfxEvent: ");
+            aTmp += ByteString( String( rEventHint.GetEventName() ), RTL_TEXTENCODING_UTF8 );
+            DBG_TRACE( aTmp.GetBuffer() );
+        }
+#endif
         Broadcast(rEventHint);
         if ( pDoc )
             pDoc->Broadcast( rEventHint );

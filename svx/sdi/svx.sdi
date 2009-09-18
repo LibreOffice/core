@@ -1974,34 +1974,6 @@ SfxVoidItem ClearOutline SID_OUTLINE_DELETEALL
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ClipboardFormatItems SID_CLIPBOARD_FORMAT_ITEMS
-(SfxUInt32Item SelectedFormat SID_CLIPBOARD_FORMAT_ITEMS)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* status: */
-    SlotType = SvxClipboardFmtItem
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_EDIT;
-]
-
-//--------------------------------------------------------------------------
 SvxColorItem Color SID_ATTR_CHAR_COLOR
 
 [
@@ -3797,7 +3769,7 @@ SfxObjectItem FmFilterNavigatorController SID_FM_FILTER_NAVIGATOR_CONTROL
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -4806,7 +4778,7 @@ SfxStringListItem GetRedoStrings SID_GETREDOSTRINGS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = TRUE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -4833,7 +4805,7 @@ SfxStringListItem GetUndoStrings SID_GETUNDOSTRINGS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = TRUE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -7672,7 +7644,7 @@ SfxVoidItem OutlineBullet SID_OUTLINE_BULLET
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = TRUE,
@@ -8654,7 +8626,7 @@ SfxBoolItem ReadOnlyMode SID_READONLY_MODE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = TRUE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -9526,7 +9498,7 @@ SfxVoidItem Select SID_SELECT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -11130,7 +11102,7 @@ SfxBoolItem TwainSelect SID_TWAIN_SELECT
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = TRUE,
@@ -11155,7 +11127,7 @@ SfxVoidItem TwainTransfer SID_TWAIN_TRANSFER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = TRUE,

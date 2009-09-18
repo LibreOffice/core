@@ -48,7 +48,7 @@ CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
 
 SRS1NAME=$(TARGET)
 SRC1FILES = \
-        doc.src new.src doctdlg.src docvor.src doctempl.src sfxbasemodel.src graphhelp.src
+        doc.src new.src doctdlg.src docvor.src doctempl.src graphhelp.src
 
 SLOFILES =	\
         $(SLO)$/printhelper.obj \
