@@ -165,8 +165,6 @@ void DrawViewShell::Deactivate(BOOL bIsMDIActivate)
 
 void DrawViewShell::SelectionHasChanged (void)
 {
-    // Um die Performance zu steigern wird jetzt die komplette
-    // Shell invalidiert statt alle Slots einzeln
     Invalidate();
 
     //Update3DWindow(); // 3D-Controller
@@ -492,6 +490,8 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         Invalidate( SID_PAGEMODE );
         Invalidate( SID_LAYERMODE );
         Invalidate( SID_MASTERPAGE );
+        Invalidate( SID_DELETE_MASTER_PAGE );
+        Invalidate( SID_DELETE_PAGE );
         Invalidate( SID_SLIDE_MASTERPAGE );
         Invalidate( SID_TITLE_MASTERPAGE );
         Invalidate( SID_NOTES_MASTERPAGE );
@@ -1229,6 +1229,8 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME, TRUE, FALSE);
         rBindings.Invalidate(SID_STATUS_PAGE, TRUE, FALSE);
+        rBindings.Invalidate(SID_DELETE_MASTER_PAGE, TRUE, FALSE);
+        rBindings.Invalidate(SID_DELETE_PAGE, TRUE, FALSE);
         UpdatePreview( mpActualPage );
 
         mpDrawView->AdjustMarkHdl();
@@ -1358,6 +1360,7 @@ void DrawViewShell::ResetActualLayer()
 
         pLayerBar->SetCurPageId(nActiveLayer + 1);
         GetViewFrame()->GetBindings().Invalidate( SID_MODIFYLAYER );
+        GetViewFrame()->GetBindings().Invalidate( SID_DELETE_LAYER );
     }
 }
 

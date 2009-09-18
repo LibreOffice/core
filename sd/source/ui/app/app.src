@@ -36,23 +36,3 @@
 #include "misc.hxx"
 #include <svx/svxids.hrc>
 
-//
-// Acceleratorn
-//
-
-//
-// Menu
-//
-
-// Menu (Impress)
-#include "menu.src"
-#include "menuportal.src"
-
-// Menu (Draw (Graphic))
-#undef  SD_MENU
-#define SD_MENU RID_GRAPHIC_DEFAULTMENU
-#undef SD_MENU_PORTAL
-#define SD_MENU_PORTAL RID_GRAPHIC_PORTALMENU
-
-#include "menu.src"
-#include "menuportal.src"

@@ -62,7 +62,7 @@ interface DrawView
         GroupId = GID_DOCUMENT ;
         ExecMethod = ExecCtrl ;
         StateMethod = GetCtrlState ;
-        Asynchron , Volatile , AutoUpdate ,
+        Asynchron , AutoUpdate ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
     SID_PAGEMODE // ole : no, status : play rec
@@ -281,7 +281,7 @@ interface DrawView
         StateMethod = GetMenuState ;
     ]
 
-    SID_PASTE2 // ole : no, status : ?
+    SID_PASTE_SPECIAL // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
