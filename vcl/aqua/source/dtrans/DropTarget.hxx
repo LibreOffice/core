@@ -95,7 +95,7 @@ class DropTarget: public cppu::BaseMutex,
                   private boost::noncopyable
 {
 public:
-  DropTarget(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& context);
+  DropTarget();
   virtual ~DropTarget();
 
   // Overrides WeakComponentImplHelper::disposing which is called by
@@ -157,7 +157,6 @@ private:
   void fire_dropActionChanged(const com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde);
 
 private:
-  com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mXComponentContext;
   com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDropTargetDragContext > mXCurrentDragContext;
   com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDropTargetDropContext > mXCurrentDropContext;
   com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboard > mXCurrentDragClipboard;

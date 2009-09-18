@@ -29,7 +29,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dtrans.hxx"
+#include "precompiled_vcl.hxx"
 
 #include "aqua_clipboard.hxx"
 #include <cppuhelper/servicefactory.hxx>

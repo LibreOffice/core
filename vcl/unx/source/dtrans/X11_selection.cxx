@@ -29,7 +29,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dtrans.hxx"
+#include "precompiled_vcl.hxx"
 
 #include <unistd.h>
 #include <stdio.h>
@@ -293,25 +293,11 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
          *  registering us as XEventHandler on it.
          *
          *  implementor's note:
-         *  <RANT>
-         *  Because XDND implementations send their ClientMessage events with
-         *  XSendEvent and event mask 0 (which is perfectly sensible)
-         *  these events get only sent to the connection that created
-         *  the window in question: the vcl display.
-         *
-         *  So this whole service should be implemented in vcl where
-         *  it belongs. But as usual the dogmatics win and the dogma says:
-         *  "vcl bad, service good". So instead of making vcl a service
-         *  providing library we make a new one that is "independent" of vcl,
-         *  because it is not linked against it and dispatch every event of
-         *  the vcl event loop to here via uno mechanisms (that is copying it,
-         *  locking and unlocking mutexes). Well, the user has fast computers
-         *  these days, so why do we need performance where more memory and
-         *  a faster CPU will do the job ?
-         *  And that is why this runs under the title:
-         *      How NOT to implement a service
-         *      or the victory of dogma over common sense.
-         *  </RANT>
+         *  FIXME:
+         *  finally the clipboard and XDND service is back in the module it belongs
+         *  now cleanup and sharing of resources with the normal vcl event loop
+         *  needs to be added. The display used whould be that of the normal event loop
+         *  and synchronization should be done via the SolarMutex.
          */
         if( arguments.getLength() > 0 )
             arguments.getConstArray()[0] >>= m_xDisplayConnection;
@@ -338,20 +324,8 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
             arguments.getConstArray()[2] >>= m_xBitmapConverter;
     }
 
-    int nParams = osl_getCommandArgCount();
     OUString aParam;
-    bool bIsHeadless = false;
-    for( int i = 0; i < nParams; i++ )
-    {
-        osl_getCommandArg( i, &aParam.pData );
-        if( aParam.equalsAscii( "-headless" ) )
-        {
-            bIsHeadless = true;
-            break;
-        }
-    }
-
-    if( ! m_pDisplay && ! bIsHeadless )
+    if( ! m_pDisplay )
     {
         OUString aUDisplay;
         if( m_xDisplayConnection.is() )

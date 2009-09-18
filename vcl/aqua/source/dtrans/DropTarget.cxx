@@ -29,7 +29,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dtrans.hxx"
+#include "precompiled_vcl.hxx"
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEnterEvent.hpp>
@@ -64,8 +64,6 @@ using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace comphelper;
-
-extern rtl_StandardModuleCount g_moduleCount;
 
 OUString dropTarget_getImplementationName()
 {
@@ -152,17 +150,15 @@ namespace /* private */
 @end
 
 
-DropTarget::DropTarget( const Reference<XComponentContext>& context) :
+DropTarget::DropTarget() :
   WeakComponentImplHelper5<XInitialization, XDropTarget, XDropTargetDragContext, XDropTargetDropContext, XServiceInfo>(m_aMutex),
-  mXComponentContext(context),
   mDropTargetHelper(nil),
   mbActive(false),
   mDragSourceSupportedActions(DNDConstants::ACTION_NONE),
   mSelectedDropAction(DNDConstants::ACTION_NONE),
   mDefaultActions(DNDConstants::ACTION_COPY_OR_MOVE | DNDConstants::ACTION_LINK | DNDConstants::ACTION_DEFAULT)
 {
-  g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-  mDataFlavorMapper = DataFlavorMapperPtr_t(new DataFlavorMapper(mXComponentContext));
+  mDataFlavorMapper = DataFlavorMapperPtr_t(new DataFlavorMapper());
 }
 
 
@@ -170,7 +166,6 @@ DropTarget::~DropTarget()
 {
   [(id <DraggingDestinationHandler>)mView unregisterDraggingDestinationHandler:mDropTargetHelper];
   [mDropTargetHelper release];
-  g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 
@@ -249,7 +244,7 @@ NSDragOperation DropTarget::draggingEntered(id sender)
       sal_Int32 posY = static_cast<sal_Int32>(dragLocation.y);
 
       NSPasteboard* dragPboard = [sender draggingPasteboard];
-      mXCurrentDragClipboard = new AquaClipboard(mXComponentContext, dragPboard, false);
+      mXCurrentDragClipboard = new AquaClipboard(dragPboard, false);
 
       Reference<XTransferable> xTransferable = DragSource::g_XTransferable.is() ?
         DragSource::g_XTransferable : mXCurrentDragClipboard->getContents();

@@ -103,6 +103,16 @@ extern "C"
 {
     VCL_DLLPUBLIC SalInstance* create_SalInstance()
     {
+        /* #i92121# workaround deadlocks in the X11 implementation
+        */
+        static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
+        /* #i90094#
+           from now on we know that an X connection will be
+           established, so protect X against itself
+        */
+        if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
+            XInitThreads();
+
         X11SalInstance* pInstance = new X11SalInstance( new SalYieldMutex() );
 
         // initialize SalData

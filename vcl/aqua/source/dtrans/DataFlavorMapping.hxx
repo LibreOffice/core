@@ -75,7 +75,7 @@ public:
   /* Initialialize a DataFavorMapper instance. Throws a RuntimeException in case the XMimeContentTypeFactory service
      cannot be created.
    */
-  DataFlavorMapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& context);
+  DataFlavorMapper();
 
 
   /* Map a system data flavor to an OpenOffice data flavor.
@@ -133,7 +133,6 @@ private:
   bool isValidMimeContentType(const rtl::OUString& contentType) const;
 
 private:
-  const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> mXComponentContext;
   ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
 };
 

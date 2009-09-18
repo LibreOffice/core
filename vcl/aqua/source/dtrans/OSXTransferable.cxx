@@ -29,7 +29,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dtrans.hxx"
+#include "precompiled_vcl.hxx"
 #include <sal/types.h>
 
 #ifndef _TRANSFERABLE_HXX_
@@ -63,11 +63,9 @@ namespace // private
 } // namespace private
 
 
-OSXTransferable::OSXTransferable(const Reference< XComponentContext >& context,
-                                 const Reference<XMimeContentTypeFactory> rXMimeCntFactory,
+OSXTransferable::OSXTransferable(const Reference<XMimeContentTypeFactory> rXMimeCntFactory,
                                  DataFlavorMapperPtr_t pDataFlavorMapper,
                                  NSPasteboard* pasteboard) :
-  mXComponentContext(context),
   mrXMimeCntFactory(rXMimeCntFactory),
   mDataFlavorMapper(pDataFlavorMapper),
   mPasteboard(pasteboard)

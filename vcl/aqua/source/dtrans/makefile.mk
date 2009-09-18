@@ -29,17 +29,11 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=..$/..$/..
 
-PRJNAME=dtrans
+PRJNAME=vcl
 TARGET=dtransaqua
 ENABLE_EXCEPTIONS=TRUE
-LIBTARGET=NO
-.IF "$(OS)"=="MACOSX" 
-.IF "$(GUIBASE)"=="aqua"
-COMP1TYPELIST=$(TARGET)
-.ENDIF # "$(GUIBASE)"=="aqua"
-.ENDIF # "$(OS)"=="MACOSX" 
 
 # --- Settings -----------------------------------------------------
 
@@ -56,7 +50,7 @@ dummy:
     @echo "Nothing to build for GUIBASE $(GUIBASE)"
 .ELSE
 
-CFLAGSCXX+=$(OBJCXXFLAGS) -fconstant-cfstrings 
+CFLAGSCXX+=-fconstant-cfstrings -x objective-c++ -fobjc-exceptions
 
 SLOFILES= \
         $(SLO)$/aqua_clipboard.obj \
@@ -70,35 +64,7 @@ SLOFILES= \
         $(SLO)$/DragSourceContext.obj \
         $(SLO)$/DragActionConversion.obj
 
-SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
-
-SHL1STDLIBS= \
-        $(SALLIB)	\
-        $(CPPULIB) 	\
-        $(CPPUHELPERLIB) \
-        -framework Carbon \
-        -framework QuickTime \
-        -framework Cocoa
-
-SHL1DEPN=
-SHL1IMPLIB=	i$(SHL1TARGET)
-
-SHL1OBJS=	$(SLOFILES)
-
-#APP1NOSAL=TRUE
-#APP1TARGET=test_aquacb
-#APP1OBJS=$(SLO)$/test_aquacb.obj
-#APP1STDLIBS= 
-#$(SALLIB)
-#$(CPPULIB)
-#$(CPPUHELPERLIB)
-#-framework Cocoa
-
 # --- Targets ------------------------------------------------------
-
-ALL : ALLTAR
-    +cd $(LB) && $(REGCOMP) -register -r ../bin/$(COMP1TYPELIST).rdb -c $(SHL1TARGET)
-
 .INCLUDE :	target.mk
 
 .ENDIF		# "$(GUIBASE)"!="aqua"

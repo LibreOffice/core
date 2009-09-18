@@ -29,7 +29,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dtrans.hxx"
+#include "precompiled_vcl.hxx"
 
 #include <X11/Xatom.h>
 #include <X11_clipboard.hxx>
@@ -146,8 +146,6 @@ void X11Clipboard::clearContents()
     // inform previous owner of lost ownership
     if ( xOwner.is() )
         xOwner->lostOwnership(xThis, m_aContents);
-
-     fireChangedContentsEvent();
 }
 
 // ------------------------------------------------------------------------

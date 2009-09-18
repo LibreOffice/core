@@ -58,8 +58,7 @@ class OSXTransferable : public ::cppu::WeakImplHelper1<com::sun::star::datatrans
 public:
   typedef com::sun::star::uno::Sequence< sal_Int8 > ByteSequence_t;
 
-  explicit OSXTransferable(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& context,
-                           ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> rXMimeCntFactory,
+  explicit OSXTransferable(com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> rXMimeCntFactory,
                            DataFlavorMapperPtr_t pDataFlavorMapper,
                            NSPasteboard* pasteboard);
 
@@ -96,7 +95,6 @@ public:
 
 private:
   com::sun::star::uno::Sequence< com::sun::star::datatransfer::DataFlavor > mFlavorList;
-  const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mXComponentContext;
   ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
   DataFlavorMapperPtr_t mDataFlavorMapper;
   NSPasteboard* mPasteboard;

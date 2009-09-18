@@ -29,7 +29,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dtrans.hxx"
+#include "precompiled_vcl.hxx"
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
@@ -59,9 +59,6 @@ using namespace com::sun::star::awt;
 using namespace com::sun::star::lang;
 using namespace comphelper;
 using namespace std;
-
-
-extern rtl_StandardModuleCount g_moduleCount;
 
 
 // For OOo internal D&D we provide the Transferable without NSDragPboard
@@ -161,14 +158,12 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
 @end
 
 
-DragSource::DragSource( const Reference<XComponentContext>& context):
+DragSource::DragSource():
   WeakComponentImplHelper3<XDragSource, XInitialization, XServiceInfo>(m_aMutex),
-  mXComponentContext(context),
   mView(NULL),
   mLastMouseEventBeforeStartDrag(nil),
   m_MouseButton(0)
 {
-  g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt);
 }
 
 
@@ -176,7 +171,6 @@ DragSource::~DragSource()
 {
   [(id <MouseEventListener>)mView unregisterMouseEventListener: mDragSourceHelper];
   [mDragSourceHelper release];
-  g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 
@@ -254,7 +248,7 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
   m_MouseButton= mMouseEvent.Buttons;
   mXDragSrcListener = listener;
   mXCurrentContext = static_cast<XDragSourceContext*>(new DragSourceContext(this));
-  auto_ptr<AquaClipboard> clipb(new AquaClipboard(this->mXComponentContext, NULL, false));
+  auto_ptr<AquaClipboard> clipb(new AquaClipboard(NULL, false));
   g_XTransferable = transferable;
   clipb->setContents(g_XTransferable, Reference<XClipboardOwner>());
   mDragSourceActions = sourceActions;

@@ -92,8 +92,7 @@ public:
      system clipboard will be created (bUseSystemClipboard == true) or if
      the DragPasteboard if bUseSystemClipboard == false
    */
-  AquaClipboard(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& context,
-                NSPasteboard* pasteboard = NULL,
+  AquaClipboard(NSPasteboard* pasteboard = NULL,
                 bool bUseSystemClipboard = true);
 
   ~AquaClipboard();
@@ -171,7 +170,6 @@ private:
   void fireClipboardChangedEvent();
 
 private:
-  const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mXComponentContext;
   ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory > mrXMimeCntFactory;
   ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener > > mClipboardListeners;
   ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > mXClipboardContent;

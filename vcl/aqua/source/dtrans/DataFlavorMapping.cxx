@@ -28,11 +28,13 @@
  *
  ************************************************************************/
 
+#include "vcl/unohelp.hxx"
 #include <DataFlavorMapping.hxx>
 #include "HtmlFmtFlt.hxx"
 #include "PictToBmpFlt.hxx"
-#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
-#include <com/sun/star/datatransfer/XMimeContentType.hpp>
+#include "com/sun/star/datatransfer/UnsupportedFlavorException.hpp"
+#include "com/sun/star/datatransfer/XMimeContentType.hpp"
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 
 #include <rtl/ustring.hxx>
@@ -513,12 +515,11 @@ Any FileListDataProvider::getOOoData()
 
 //###########################
 
-DataFlavorMapper::DataFlavorMapper(const Reference<XComponentContext>& context) :
-  mXComponentContext(context)
+DataFlavorMapper::DataFlavorMapper()
 {
-  Reference<XMultiComponentFactory> mrServiceManager = mXComponentContext->getServiceManager();
-    mrXMimeCntFactory = Reference<XMimeContentTypeFactory>(mrServiceManager->createInstanceWithContext(
-       OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory")), mXComponentContext), UNO_QUERY);
+    Reference<XMultiServiceFactory> mrServiceManager = vcl::unohelper::GetMultiServiceFactory();
+    mrXMimeCntFactory = Reference<XMimeContentTypeFactory>(mrServiceManager->createInstance(
+       OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory"))), UNO_QUERY);
 
   if (!mrXMimeCntFactory.is())
     throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("AquaClipboard: Cannot create com.sun.star.datatransfer.MimeContentTypeFactory")), NULL);

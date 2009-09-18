@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: DragSourceContext.cxx,v $
+ * $RCSfile: service_entry.cxx,v $
  * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
@@ -29,55 +29,39 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dtrans.hxx"
+#include "precompiled_vcl.hxx"
+
+#include "saldata.hxx"
+#include "salinst.h"
+#include "DragSource.hxx"
+#include "DropTarget.hxx"
+#include "aqua_clipboard.hxx"
+#include "osl/diagnose.h"
+
+using namespace ::osl;
+using namespace ::rtl;
+using namespace ::com::sun::star::uno;
+using namespace ::cppu;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::datatransfer::clipboard;
 
 
-#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
-
-#include "DragSourceContext.hxx"
-#include <rtl/unload.h>
-
-
-using namespace com::sun::star::datatransfer::dnd;
-using namespace com::sun::star::datatransfer::dnd::DNDConstants;
-using namespace com::sun::star::uno;
-using namespace cppu;
-
-
-extern rtl_StandardModuleCount g_moduleCount;
-
-
-DragSourceContext::DragSourceContext( DragSource* pSource) :
-        WeakComponentImplHelper1<XDragSourceContext>(m_aMutex),
-        m_pDragSource( pSource)
+Reference< XInterface > AquaSalInstance::CreateClipboard( const Sequence< Any >& i_rArguments )
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+    SalData* pSalData = GetSalData();
+    if( ! pSalData->mxClipboard.is() )
+        pSalData->mxClipboard = Reference<XInterface>(static_cast< XClipboard* >(new AquaClipboard()), UNO_QUERY);
+    return pSalData->mxClipboard;
 }
 
-DragSourceContext::~DragSourceContext()
+
+Reference<XInterface> AquaSalInstance::CreateDragSource()
 {
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+    return Reference<XInterface>(static_cast< XInitialization* >(new DragSource()), UNO_QUERY);
 }
 
-sal_Int32 SAL_CALL DragSourceContext::getCurrentCursor(  )
-    throw( RuntimeException)
+Reference<XInterface> AquaSalInstance::CreateDropTarget()
 {
-    return 0;
+  return Reference<XInterface>(static_cast< XInitialization* >(new DropTarget()), UNO_QUERY);
 }
-
-void SAL_CALL DragSourceContext::setCursor( sal_Int32 /*cursorId*/ )
-    throw( RuntimeException)
-{
-}
-
-void SAL_CALL DragSourceContext::setImage( sal_Int32 /*imageId*/ )
-    throw( RuntimeException)
-{
-}
-
-void SAL_CALL DragSourceContext::transferablesFlavorsChanged(  )
-    throw( RuntimeException)
-{
-}
-
 

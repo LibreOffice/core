@@ -29,15 +29,13 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=..$/..$/..
 
-PRJNAME=dtrans
+PRJNAME=vcl
 TARGET=dtransX11
 TARGETTYPE=GUI
 
 ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
-LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
@@ -66,28 +64,6 @@ SLOFILES=\
     $(SLO)$/X11_service.obj			\
     $(SLO)$/bmp.obj					\
     $(SLO)$/config.obj
-
-SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
-
-.IF "$(OS)"=="MACOSX"
-SHL1STDLIBS= $(LIBSTLPORT) $(CPPUHELPERLIB)
-.ELSE
-SHL1STDLIBS= $(CPPUHELPERLIB)
-.ENDIF
-
-SHL1STDLIBS+= \
-        $(UNOTOOLSLIB)	\
-        $(CPPULIB) 	\
-        $(SALLIB)	\
-        -lX11
-
-SHL1DEPN=
-SHL1IMPLIB=		i$(SHL1TARGET) 
-SHL1OBJS=		$(SLOFILES)
-
-SHL1VERSIONMAP=exports.map
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=$(SHL1TARGET)
 
 .ENDIF		# "$(OS)"=="MACOSX"
 

@@ -89,7 +89,7 @@ class DragSource : public ::cppu::BaseMutex,
                    private ::boost::noncopyable
 {
 public:
-  DragSource(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext>& context);
+  DragSource();
   virtual ~DragSource();
 
   // XInitialization
@@ -119,8 +119,6 @@ public:
   virtual unsigned int getSupportedDragOperations(bool isLocal) const;
 
 public:
-  com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> mXComponentContext;
-
   // The context notifies the XDragSourceListeners
   com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDragSourceContext > mXCurrentContext;
 

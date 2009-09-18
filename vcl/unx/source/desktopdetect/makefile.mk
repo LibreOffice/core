@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,27 +29,33 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=..$/..$/..
 
 PRJNAME=vcl
-TARGET=components
-ENABLE_EXCEPTIONS=TRUE
+TARGET=dtdetect
+
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	$(PRJ)$/util$/makefile.pmk
-.INCLUDE :	settings.mk
+.INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile2.pmk
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=	$(SLO)$/display.obj		\
-            $(SLO)$/dtranscomp.obj  \
-            $(SLO)$/fontident.obj   \
-            $(SLO)$/factory.obj
+.IF "$(GUIBASE)"!="unx"
+
+dummy:
+    @echo "Nothing to build for GUIBASE $(GUIBASE)"
+
+.ELSE		# "$(GUIBASE)"!="unx"
+
+SLOFILES=$(SLO)$/desktopdetector.obj
+
+.ENDIF		# "$(GUIBASE)"!="unx"
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :	target.mk
-.INCLUDE :	$(PRJ)$/util$/target.pmk
+.INCLUDE :  target.mk
 
+.INCLUDE :  $(PRJ)$/util$/target.pmk

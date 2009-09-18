@@ -29,15 +29,15 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dtrans.hxx"
+#include "precompiled_vcl.hxx"
 #include "aqua_clipboard.hxx"
 
 #include "DataFlavorMapping.hxx"
 #include "OSXTransferable.hxx"
 
-#ifndef COMPHELPER_MAKESEQUENCE_HXX_INCLUDED
+#include "vcl/unohelp.hxx"
+
 #include "comphelper/makesequence.hxx"
-#endif
 
 #include <boost/assert.hpp>
 
@@ -95,15 +95,14 @@ Sequence<OUString> clipboard_getSupportedServiceNames()
 }
 
 
-AquaClipboard::AquaClipboard(const Reference< XComponentContext >& context, NSPasteboard* pasteboard, bool bUseSystemPasteboard) :
+AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard) :
   WeakComponentImplHelper4<XClipboardEx, XClipboardNotifier, XFlushableClipboard, XServiceInfo>(m_aMutex),
-  mXComponentContext(context),
   mIsSystemPasteboard(bUseSystemPasteboard)
 {
-  Reference<XMultiComponentFactory> mrServiceMgr = mXComponentContext->getServiceManager();
+    Reference<XMultiServiceFactory> mrServiceMgr = vcl::unohelper::GetMultiServiceFactory();
 
-  mrXMimeCntFactory = Reference<XMimeContentTypeFactory>(mrServiceMgr->createInstanceWithContext(
-     OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory")), mXComponentContext), UNO_QUERY);
+    mrXMimeCntFactory = Reference<XMimeContentTypeFactory>(mrServiceMgr->createInstance(
+     OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory"))), UNO_QUERY);
 
   if (!mrXMimeCntFactory.is())
     {
@@ -112,7 +111,7 @@ AquaClipboard::AquaClipboard(const Reference< XComponentContext >& context, NSPa
             static_cast<XClipboardEx*>(this));
     }
 
-  mpDataFlavorMapper = DataFlavorMapperPtr_t(new DataFlavorMapper(mXComponentContext));
+  mpDataFlavorMapper = DataFlavorMapperPtr_t(new DataFlavorMapper());
 
   if (pasteboard != NULL)
     {
@@ -183,8 +182,7 @@ Reference<XTransferable> SAL_CALL AquaClipboard::getContents() throw(RuntimeExce
       return mXClipboardContent;
     }
 
-  return Reference<XTransferable>(new OSXTransferable(mXComponentContext,
-                                                      mrXMimeCntFactory,
+  return Reference<XTransferable>(new OSXTransferable(mrXMimeCntFactory,
                                                       mpDataFlavorMapper,
                                                       mPasteboard));
 }
