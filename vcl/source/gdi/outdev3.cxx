@@ -5256,7 +5256,7 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
 
 // -----------------------------------------------------------------------
 
-long OutputDevice::ImplGetTextLines( OutputDevice& rTargetDevice, ImplMultiTextLineInfo& rLineInfo,
+long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                      long nWidth, const XubString& rStr,
                                      USHORT nStyle, const ::vcl::ITextLayout& _rLayout )
 {

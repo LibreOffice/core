@@ -465,7 +465,7 @@ public:
     SAL_DLLPRIVATE void         ImplGetEmphasisMark( PolyPolygon& rPolyPoly, BOOL& rPolyLine, Rectangle& rRect1, Rectangle& rRect2, long& rYOff, long& rWidth, FontEmphasisMark eEmphasis, long nHeight, short nOrient );
     SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const PolyPolygon& rPolyPoly, BOOL bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
     static
-    SAL_DLLPRIVATE long         ImplGetTextLines( OutputDevice& rTargetDevice, ImplMultiTextLineInfo& rLineInfo, long nWidth, const XubString& rStr, USHORT nStyle, const ::vcl::ITextLayout& _rLayout );
+    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const XubString& rStr, USHORT nStyle, const ::vcl::ITextLayout& _rLayout );
     SAL_DLLPRIVATE void         ImplInitFontList() const;
     SAL_DLLPRIVATE void         ImplUpdateFontData( bool bNewFontLists );
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
