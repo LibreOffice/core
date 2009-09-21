@@ -181,8 +181,10 @@ interface ImpressEditView : DrawView
         StateMethod = GetMenuState ;
     ]
 }
-interface Annotation
+
+shell DrawViewShell
 {
+    import ImpressEditView[Automation];
     SID_INSERT_POSTIT
     [
         ExecMethod = ExecuteAnnotation;
@@ -223,12 +225,6 @@ interface Annotation
         ExecMethod = ExecuteAnnotation;
         StateMethod = GetAnnotationState;
     ]
-}
-
-shell DrawViewShell
-{
-    import ImpressEditView[Automation];
-    import Annotation;
 }
 
 
