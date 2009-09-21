@@ -1049,10 +1049,10 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSync
         return;
 
 #ifdef DBG_UTIL
-    ::rtl::OUString aName = SfxEventConfiguration::GetEventName_Impl( rEventHint.GetEventId() );
-    ByteString aTmp( "SfxEvent: ");
-    aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
-    DBG_TRACE( aTmp.GetBuffer() );
+    //::rtl::OUString aName = SfxEventConfiguration::GetEventName_Impl( rEventHint.GetEventId() );
+    //ByteString aTmp( "SfxEvent: ");
+    //aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
+    //DBG_TRACE( aTmp.GetBuffer() );
 #endif
 
     if ( bSynchron )
