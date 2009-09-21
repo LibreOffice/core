@@ -33,12 +33,12 @@
 #include "sal/config.h"
 
 #include <climits>
-#include <list>
 
 #include "boost/noncopyable.hpp"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 
+#include "modifications.hxx"
 #include "nodemap.hxx"
 
 namespace rtl { class OUString; }
@@ -48,8 +48,6 @@ namespace configmgr {
 class Node;
 
 struct Data: private boost::noncopyable {
-    typedef std::list< rtl::OUString > Modifications;
-
     enum { NO_LAYER = INT_MAX };
 
     NodeMap templates;
@@ -81,8 +79,6 @@ struct Data: private boost::noncopyable {
 
     rtl::Reference< Node > getTemplate(
         int layer, rtl::OUString const & fullName) const;
-
-    void addModification(rtl::OUString const & path);
 };
 
 }

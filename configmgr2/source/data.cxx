@@ -54,11 +54,6 @@ namespace {
 
 namespace css = com::sun::star;
 
-bool isPrefix(rtl::OUString const & prefix, rtl::OUString const & path) {
-    return prefix.getLength() < path.getLength() && path.match(prefix) &&
-        path[prefix.getLength()] == '/';
-}
-
 bool decode(
     rtl::OUString const & encoded, sal_Int32 begin, sal_Int32 end,
     rtl::OUString * decoded)
@@ -319,23 +314,6 @@ rtl::Reference< Node > Data::getTemplate(
     int layer, rtl::OUString const & fullName) const
 {
     return findNode(layer, templates, fullName);
-}
-
-void Data::addModification(rtl::OUString const & path) {
-    //TODO
-    for (Modifications::iterator i(modifications.begin());
-         i != modifications.end();)
-    {
-        if (path == *i || isPrefix(*i, path)) {
-            return;
-        }
-        if (isPrefix(path, *i)) {
-            modifications.erase(i++);
-        } else {
-            ++i;
-        }
-    }
-    modifications.push_back(path);
 }
 
 }

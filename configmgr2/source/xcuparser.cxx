@@ -525,7 +525,7 @@ void XcuParser::handleGroupProp(XmlReader & reader, GroupNode * group) {
     }
     rtl::OUString name(xmldata::convertFromUtf8(attrName));
     if (state_.top().record) {
-        data_->addModification(pathPrefix_ + name);
+        data_->modifications.add(pathPrefix_ + name);
     }
     Type type = xmldata::parseType(reader, attrType);
     if (type == TYPE_ANY) {
@@ -842,7 +842,7 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
             attrComponent, attrNodeType, componentName_,
             &set->getDefaultTemplateName()));
     if (state_.top().record) {
-        data_->addModification(
+        data_->modifications.add(
             pathPrefix_ + Data::createSegment(templateName, name));
     }
     if (!set->isValidTemplate(templateName)) {

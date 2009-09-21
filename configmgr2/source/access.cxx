@@ -57,7 +57,7 @@
 #include "com/sun/star/util/ElementChange.hpp"
 #include "comphelper/sequenceasvector.hxx"
 #include "cppu/unotype.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include "cppuhelper/interfacecontainer.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
@@ -68,6 +68,7 @@
 #include "sal/types.h"
 
 #include "access.hxx"
+#include "broadcaster.hxx"
 #include "childaccess.hxx"
 #include "components.hxx"
 #include "data.hxx"
@@ -75,6 +76,7 @@
 #include "localizedpropertynode.hxx"
 #include "localizedvaluenode.hxx"
 #include "lock.hxx"
+#include "modifications.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
 #include "propertynode.hxx"
@@ -122,6 +124,36 @@ void Access::markChildAsModified(rtl::Reference< ChildAccess > const & child) {
 
 void Access::releaseChild(rtl::OUString const & name) {
     cachedChildren_.erase(name);
+}
+
+void Access::initGlobalBroadcaster(
+    Modifications const & globalModifications, Broadcaster * broadcaster)
+{
+    OSL_ASSERT(broadcaster != 0);
+    cppu::OInterfaceContainerHelper * cont = rBHelper.getContainer(
+        cppu::UnoType< css::beans::XPropertyChangeListener >::get());
+    if (cont != 0) {
+        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > els(
+            cont->getElements()); //TODO: performance
+        for (sal_Int32 i = 0; i < els.getLength(); ++i) {
+            //TODO: only for matching modifications
+            broadcaster->addPropertyChange(
+                css::uno::Reference< css::beans::XPropertyChangeListener >(
+                    els[i], css::uno::UNO_QUERY_THROW),
+                css::beans::PropertyChangeEvent(
+                    static_cast< cppu::OWeakObject * >(this), getNameInternal(),
+                    false, -1, css::uno::Any(), css::uno::Any()));
+        }
+    }
+    //TODO: iterate over children w/ listeners (incl. unmodified ones)
+    for (ModifiedChildren::iterator i(modifiedChildren_.begin());
+         i != modifiedChildren_.end(); ++i)
+    {
+        rtl::Reference< ChildAccess > child(getModifiedChild(i));
+        if (child.is()) {
+            child->initGlobalBroadcaster(globalModifications, broadcaster);
+        }
+    }
 }
 
 Access::Access(): AccessBase(lock) {}
@@ -300,14 +332,17 @@ void Access::reportChildChanges(
     }
 }
 
-void Access::commitChildChanges(bool valid) {
+void Access::commitChildChanges(
+    bool valid, Modifications * globalModifications)
+{
+    OSL_ASSERT(globalModifications != 0);
     while (!modifiedChildren_.empty()) {
         bool childValid = valid;
         ModifiedChildren::iterator i(modifiedChildren_.begin());
         rtl::Reference< ChildAccess > child(getModifiedChild(i));
         if (child.is()) {
             childValid = childValid && !child->isFinalized();
-            child->commitChanges(childValid);
+            child->commitChanges(childValid, globalModifications);
                 //TODO: currently, this is called here for directly inserted
                 // children as well as for children whose sub-children were
                 // modified (and should never be called for directly removed
@@ -338,16 +373,25 @@ void Access::commitChildChanges(bool valid) {
             }
         }
         if (childValid && i->second.directlyModified) {
-            Components::singleton().addModification(
+            rtl::OUString path(
                 getAbsolutePath() +
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
                 Data::createSegment(
                     i->second.child->getNode()->getTemplateName(), i->first));
+            Components::singleton().addModification(path);
+            globalModifications->add(path);
         }
         i->second.child->committed();
         modifiedChildren_.erase(i);
     }
 }
+
+Access::ModifiedChild::ModifiedChild() {}
+
+Access::ModifiedChild::ModifiedChild(
+    rtl::Reference< ChildAccess > const & theChild, bool theDirectlyModified):
+    child(theChild), directlyModified(theDirectlyModified)
+{}
 
 rtl::OUString Access::getImplementationName() throw (css::uno::RuntimeException)
 {
@@ -897,6 +941,7 @@ void Access::firePropertiesChangeEvent(
     css::uno::Sequence< css::beans::PropertyChangeEvent > events(
         aPropertyNames.getLength());
     for (sal_Int32 i = 0; i < events.getLength(); ++i) {
+        events[i].Source = static_cast< cppu::OWeakObject * >(this);
         events[i].PropertyName = aPropertyNames[i];
         events[i].Further = false;
         events[i].PropertyHandle = -1;
@@ -935,7 +980,8 @@ void Access::setHierarchicalPropertyValue(
             static_cast< cppu::OWeakObject * >(this));
     }
     child->checkFinalized();
-    child->setProperty(aValue);
+    Modifications localMods; //TODO: use
+    child->setProperty(aValue, &localMods);
 }
 
 css::uno::Any Access::getHierarchicalPropertyValue(
@@ -992,7 +1038,8 @@ void Access::setHierarchicalPropertyValues(
                 static_cast< cppu::OWeakObject * >(this), -1);
         }
         child->checkFinalized();
-        child->setProperty(Values[i]);
+        Modifications localMods; //TODO: use
+        child->setProperty(Values[i], &localMods);
     }
 }
 
@@ -1053,33 +1100,40 @@ void Access::replaceByName(
         css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
-    osl::MutexGuard g(lock);
-    checkLocalizedPropertyAccess();
-    rtl::Reference< ChildAccess > child(getChild(aName));
-    if (!child.is()) {
-        throw css::container::NoSuchElementException(
-            aName, static_cast< cppu::OWeakObject * >(this));
-    }
-    child->checkFinalized();
-    switch (getNode()->kind()) {
-    case Node::KIND_LOCALIZED_PROPERTY:
-    case Node::KIND_GROUP:
-        child->setProperty(aElement);
-        break;
-    case Node::KIND_SET:
-        {
-            rtl::Reference< ChildAccess > freeAcc(getFreeSetMember(aElement));
-            rtl::Reference< RootAccess > root(getRootAccess());
-            child->unbind(); // must not throw
-            freeAcc->bind(root, this, aName); // must not throw
-            markChildAsModified(freeAcc); //TODO: must not throw
-            //TODO notify change
+    Broadcaster bc;
+    {
+        osl::MutexGuard g(lock);
+        checkLocalizedPropertyAccess();
+        rtl::Reference< ChildAccess > child(getChild(aName));
+        if (!child.is()) {
+            throw css::container::NoSuchElementException(
+                aName, static_cast< cppu::OWeakObject * >(this));
         }
-        break;
-    default:
-        OSL_ASSERT(false); // this cannot happen
-        break;
+        child->checkFinalized();
+        Modifications localMods;
+        switch (getNode()->kind()) {
+        case Node::KIND_LOCALIZED_PROPERTY:
+        case Node::KIND_GROUP:
+            child->setProperty(aElement, &localMods);
+            break;
+        case Node::KIND_SET:
+            {
+                rtl::Reference< ChildAccess > freeAcc(
+                    getFreeSetMember(aElement));
+                rtl::Reference< RootAccess > root(getRootAccess());
+                child->unbind(); // must not throw
+                freeAcc->bind(root, this, aName); // must not throw
+                markChildAsModified(freeAcc); //TODO: must not throw
+                //TODO notify change
+            }
+            break;
+        default:
+            OSL_ASSERT(false); // this cannot happen
+            break;
+        }
+        getNotificationRoot()->initLocalBroadcaster(localMods, &bc);
     }
+    bc.send();
 }
 
 void Access::insertByName(
@@ -1276,7 +1330,8 @@ bool Access::setChildProperty(
         return false;
     }
     child->checkFinalized();
-    child->setProperty(value);
+    Modifications localMods; //TODO: use
+    child->setProperty(value, &localMods);
     return true;
 }
 
@@ -1378,12 +1433,45 @@ rtl::Reference< ChildAccess > Access::getFreeSetMember(
     return freeAcc;
 }
 
-Access::ModifiedChild::ModifiedChild() {}
+rtl::Reference< Access > Access::getNotificationRoot() {
+    for (rtl::Reference< Access > p(this);;) {
+        rtl::Reference< Access > parent(p->getParentAccess());
+        if (!parent.is()) {
+            return p;
+        }
+        p = parent;
+    }
+}
 
-Access::ModifiedChild::ModifiedChild(
-    rtl::Reference< ChildAccess > const & theChild, bool theDirectlyModified):
-    child(theChild), directlyModified(theDirectlyModified)
-{}
+void Access::initLocalBroadcaster(
+    Modifications const & localModifications, Broadcaster * broadcaster)
+{
+    OSL_ASSERT(broadcaster != 0);
+    cppu::OInterfaceContainerHelper * cont = rBHelper.getContainer(
+        cppu::UnoType< css::beans::XPropertyChangeListener >::get());
+    if (cont != 0) {
+        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > els(
+            cont->getElements()); //TODO: performance
+        for (sal_Int32 i = 0; i < els.getLength(); ++i) {
+            //TODO: only for matching modifications
+            broadcaster->addPropertyChange(
+                css::uno::Reference< css::beans::XPropertyChangeListener >(
+                    els[i], css::uno::UNO_QUERY_THROW),
+                css::beans::PropertyChangeEvent(
+                    static_cast< cppu::OWeakObject * >(this), getNameInternal(),
+                    false, -1, css::uno::Any(), css::uno::Any()));
+        }
+    }
+    //TODO: iterate over children w/ listeners (incl. unmodified ones)
+    for (ModifiedChildren::iterator i(modifiedChildren_.begin());
+         i != modifiedChildren_.end(); ++i)
+    {
+        rtl::Reference< ChildAccess > child(getModifiedChild(i));
+        if (child.is()) {
+            child->initLocalBroadcaster(localModifications, broadcaster);
+        }
+    }
+}
 
 #if OSL_DEBUG_LEVEL > 0
 bool Access::thisIs(int what) {

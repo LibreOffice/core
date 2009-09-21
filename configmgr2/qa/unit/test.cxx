@@ -281,7 +281,7 @@ void RecursiveTest::test() {
     properties_->addPropertyChangeListener(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")), this);
     step();
-    //TODO: CPPUNIT_ASSERT(count_ == 0);
+    CPPUNIT_ASSERT(count_ == 0);
     css::uno::Reference< css::lang::XComponent >(
         properties_, css::uno::UNO_QUERY_THROW)->dispose();
 }
@@ -300,6 +300,9 @@ void RecursiveTest::disposing(css::lang::EventObject const & Source)
 void RecursiveTest::propertyChange(css::beans::PropertyChangeEvent const &)
     throw (css::uno::RuntimeException)
 {
+    CPPUNIT_ASSERT(
+        evt.Source == properties_ &&
+        evt.PropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Label")));
     if (count_ > 0) {
         --count_;
         step();

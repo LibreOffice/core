@@ -32,6 +32,8 @@
 
 #include "sal/config.h"
 
+#include <set>
+
 #include "boost/noncopyable.hpp"
 #include "rtl/ref.hxx"
 
@@ -44,7 +46,10 @@ namespace rtl {
 
 namespace configmgr {
 
+class Broadcaster;
 class Node;
+class RootAccess;
+struct Modifications;
 
 class Components: private boost::noncopyable {
 public:
@@ -58,6 +63,15 @@ public:
 
     rtl::Reference< Node > getTemplate(
         int layer, rtl::OUString const & fullName) const;
+
+    void addRootAccess(rtl::Reference< RootAccess > const & access);
+
+    void removeRootAccess(RootAccess * access);
+
+    void initGlobalBroadcaster(
+        Modifications const & globalModifications,
+        rtl::Reference< RootAccess > const & exclude,
+        Broadcaster * broadcaster);
 
     void addModification(rtl::OUString const & path);
 
@@ -95,7 +109,10 @@ private:
 
     void parseModificationLayer();
 
+    typedef std::set< RootAccess * > WeakRootSet;
+
     Data data_;
+    WeakRootSet roots_;
 };
 
 }

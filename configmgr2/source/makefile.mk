@@ -40,6 +40,7 @@ CDEFS += -DOOO_DLLIMPLEMENTATION_CONFIGMGR
 
 SLOFILES = \
     $(SLO)/access.obj \
+    $(SLO)/broadcaster.obj \
     $(SLO)/childaccess.obj \
     $(SLO)/components.obj \
     $(SLO)/configurationprovider.obj \
@@ -49,6 +50,7 @@ SLOFILES = \
     $(SLO)/localizedpropertynode.obj \
     $(SLO)/localizedvaluenode.obj \
     $(SLO)/lock.obj \
+    $(SLO)/modifications.obj \
     $(SLO)/node.obj \
     $(SLO)/nodemap.obj \
     $(SLO)/pad.obj \

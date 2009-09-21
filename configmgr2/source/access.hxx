@@ -94,10 +94,12 @@ namespace rtl { class OUString; }
 
 namespace configmgr {
 
+class Broadcaster;
 class Change;
 class ChildAccess;
 class Node;
 class RootAccess;
+struct Modifications;
 
 typedef
     comphelper::WeakComponentImplHelper15<
@@ -134,6 +136,9 @@ public:
 
     virtual bool isFinalized() = 0;
 
+    void initGlobalBroadcaster(
+        Modifications const & localModifications, Broadcaster * broadcaster);
+
 protected:
     Access();
 
@@ -169,7 +174,7 @@ protected:
     void reportChildChanges(
         std::vector< com::sun::star::util::ElementChange > * changes);
 
-    void commitChildChanges(bool valid);
+    void commitChildChanges(bool valid, Modifications * globalModifications);
 
 private:
     struct ModifiedChild {
@@ -466,6 +471,11 @@ private:
 
     rtl::Reference< ChildAccess > getFreeSetMember(
         com::sun::star::uno::Any const & value);
+
+    rtl::Reference< Access > getNotificationRoot();
+
+    void initLocalBroadcaster(
+        Modifications const & localModifications, Broadcaster * broadcaster);
 
     typedef std::map< rtl::OUString, ChildAccess * > WeakChildMap;
 

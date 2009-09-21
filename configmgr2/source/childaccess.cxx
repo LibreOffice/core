@@ -59,6 +59,7 @@
 #include "localizedpropertynode.hxx"
 #include "localizedvaluenode.hxx"
 #include "lock.hxx"
+#include "modifications.hxx"
 #include "node.hxx"
 #include "propertynode.hxx"
 #include "rootaccess.hxx"
@@ -209,7 +210,10 @@ void ChildAccess::setNode(rtl::Reference< Node > const & node) {
     node_ = node;
 }
 
-void ChildAccess::setProperty(css::uno::Any const & value) {
+void ChildAccess::setProperty(
+    css::uno::Any const & value, Modifications * localModifications)
+{
+    OSL_ASSERT(localModifications != 0);
     Type type = TYPE_ERROR;
     bool nillable = false;
     switch (node_->kind()) {
@@ -226,7 +230,7 @@ void ChildAccess::setProperty(css::uno::Any const & value) {
             if (!Components::allLocales(locale)) {
                 rtl::Reference< ChildAccess > child(getChild(locale));
                 if (child.is()) {
-                    child->setProperty(value);
+                    child->setProperty(value, localModifications);
                 } else {
                     insertLocalizedValueChild(locale, value);
                 }
@@ -248,7 +252,7 @@ void ChildAccess::setProperty(css::uno::Any const & value) {
     checkValue(value, type, nillable);
     getParentAccess()->markChildAsModified(this);
     changedValue_.reset(new css::uno::Any(value));
-    //TODO notify change
+    localModifications->add(getRelativePath());
 }
 
 css::uno::Any ChildAccess::asValue() {
@@ -294,10 +298,14 @@ css::uno::Any ChildAccess::asValue() {
             static_cast< cppu::OWeakObject * >(this)));
 }
 
-void ChildAccess::commitChanges(bool valid) {
-    commitChildChanges(valid);
+void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
+{
+    OSL_ASSERT(globalModifications != 0);
+    commitChildChanges(valid, globalModifications);
     if (valid && changedValue_.get() != 0) {
-        Components::singleton().addModification(getAbsolutePath());
+        rtl::OUString path(getAbsolutePath());
+        Components::singleton().addModification(path);
+        globalModifications->add(path);
         switch (node_->kind()) {
         case Node::KIND_PROPERTY:
             dynamic_cast< PropertyNode * >(node_.get())->setValue(

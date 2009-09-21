@@ -50,6 +50,7 @@
 #include "data.hxx"
 #include "node.hxx"
 #include "parsemanager.hxx"
+#include "rootaccess.hxx"
 #include "writemodfile.hxx"
 #include "xcdparser.hxx"
 #include "xcuparser.hxx"
@@ -126,8 +127,27 @@ rtl::Reference< Node > Components::getTemplate(
     return data_.getTemplate(layer, fullName);
 }
 
+void Components::addRootAccess(rtl::Reference< RootAccess > const & access) {
+    roots_.insert(access.get());
+}
+
+void Components::removeRootAccess(RootAccess * access) {
+    roots_.erase(access);
+}
+
+void Components::initGlobalBroadcaster(
+    Modifications const & globalModifications,
+    rtl::Reference< RootAccess > const & exclude, Broadcaster * broadcaster)
+{
+    for (WeakRootSet::iterator i(roots_.begin()); i != roots_.end(); ++i) {
+        if (*i != exclude.get()) {
+            (*i)->initGlobalBroadcaster(globalModifications, broadcaster);
+        }
+    }
+}
+
 void Components::addModification(rtl::OUString const & path) {
-    data_.addModification(path);
+    data_.modifications.add(path);
 }
 
 void Components::writeModifications() {

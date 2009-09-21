@@ -46,6 +46,7 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
+#include "broadcaster.hxx"
 #include "childaccess.hxx"
 #include "components.hxx"
 #include "data.hxx"
@@ -74,7 +75,10 @@ bool RootAccess::isUpdate() const {
     return update_;
 }
 
-RootAccess::~RootAccess() {}
+RootAccess::~RootAccess() {
+    osl::MutexGuard g(lock);
+    Components::singleton().removeRootAccess(this);
+}
 
 rtl::OUString RootAccess::getAbsolutePath() {
     getNode();
@@ -178,14 +182,21 @@ void RootAccess::commitChanges()
     throw (css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
-    osl::MutexGuard g(lock);
-    checkLocalizedPropertyAccess();
-    int finalizedLayer;
-    commitChildChanges(
-        (Components::singleton().resolvePath(path_, 0, 0, &finalizedLayer)
-         == node_) &&
-        finalizedLayer == Data::NO_LAYER);
-    Components::singleton().writeModifications();
+    Broadcaster bc;
+    {
+        osl::MutexGuard g(lock);
+        checkLocalizedPropertyAccess();
+        int finalizedLayer;
+        Modifications globalMods;
+        commitChildChanges(
+            ((Components::singleton().resolvePath(path_, 0, 0, &finalizedLayer)
+              == node_) &&
+             finalizedLayer == Data::NO_LAYER),
+            &globalMods);
+        Components::singleton().writeModifications();
+        Components::singleton().initGlobalBroadcaster(globalMods, this, &bc);
+    }
+    bc.send();
 }
 
 sal_Bool RootAccess::hasPendingChanges() throw (css::uno::RuntimeException) {

@@ -51,6 +51,7 @@
 #include "groupnode.hxx"
 #include "localizedpropertynode.hxx"
 #include "localizedvaluenode.hxx"
+#include "modifications.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
 #include "propertynode.hxx"
@@ -473,8 +474,8 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
     //TODO: Do not write back information about those removed items that did not
     // come from the .xcs/.xcu files, anyway (but had been added dynamically
     // instead):
-    for (Data::Modifications::const_iterator j(data.modifications.begin());
-         j != data.modifications.end(); ++j)
+    for (Modifications::List::const_iterator j(data.modifications.list.begin());
+         j != data.modifications.list.end(); ++j)
     {
         rtl::OUString name;
         rtl::OUString parentPath(Data::parseLastSegment(*j, &name));

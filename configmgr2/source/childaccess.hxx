@@ -57,6 +57,7 @@ namespace configmgr {
 
 class Node;
 class RootAccess;
+struct Modifications;
 
 class ChildAccess:
     public cppu::ImplInheritanceHelper2<
@@ -121,11 +122,13 @@ public:
 
     void setNode(rtl::Reference< Node > const & node);
 
-    void setProperty(com::sun::star::uno::Any const & value);
+    void setProperty(
+        com::sun::star::uno::Any const & value,
+        Modifications * localModifications);
 
     com::sun::star::uno::Any asValue();
 
-    void commitChanges(bool valid);
+    void commitChanges(bool valid, Modifications * globalModifications);
 
 private:
     virtual ~ChildAccess();

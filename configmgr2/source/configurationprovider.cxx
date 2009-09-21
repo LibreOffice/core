@@ -67,6 +67,7 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
+#include "components.hxx"
 #include "configurationprovider.hxx"
 #include "lock.hxx"
 #include "rootaccess.hxx"
@@ -281,6 +282,7 @@ Service::createInstanceWithArguments(
              nodepath),
             static_cast< cppu::OWeakObject * >(this));
     }
+    Components::singleton().addRootAccess(root);
     return static_cast< cppu::OWeakObject * >(root.get());
 }
 
