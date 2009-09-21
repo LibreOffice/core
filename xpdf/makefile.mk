@@ -87,6 +87,8 @@ CONFIGURE_FLAGS+=--without-x --without-libpaper-library --without-t1-library --e
 CXXFLAGS+=-malign-natural
 .EXPORT: CXXFLAGS
 .ENDIF
+.ELSE
+CONFIGURE_ACTION=./configure --without-libpaper-library --without-t1-library --without-x --enable-multithreaded --enable-exceptions
 .ENDIF
 
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
