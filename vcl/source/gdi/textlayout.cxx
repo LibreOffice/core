@@ -90,8 +90,6 @@ namespace vcl
         long        GetTextArray( const XubString& _rText, sal_Int32* _pDXAry, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const;
         Rectangle   DrawText( const Rectangle& _rRect, const XubString& _rText, USHORT _nStyle, MetricVector* _pVector, String* _pDisplayText);
 
-        bool        IsZoom() const;
-
     protected:
         void onBeginDrawText()
         {
@@ -120,29 +118,32 @@ namespace vcl
         ,m_aUnzoomedPointFont( _rControl.GetUnzoomedControlPointFont() )
         ,m_aZoom( _rControl.GetZoom() )
     {
+        m_rTargetDevice.Push( PUSH_MAPMODE | PUSH_FONT );
+
+        MapMode aTargetMapMode( m_rTargetDevice.GetMapMode() );
+        OSL_ENSURE( aTargetMapMode.GetOrigin() == Point(), "ReferenceDeviceTextLayout::ReferenceDeviceTextLayout: uhm, the code below won't work here ..." );
+
         // normally, controls simulate "zoom" by "zooming" the font. This is responsible for (part of) the discrepancies
         // between text in Writer and text in controls in Writer, though both have the same font.
         // So, if we have a zoom set at the control, then we do not scale the font, but instead modify the map mode
         // to accomodate for the zoom.
-        if ( IsZoom() )
-        {
-            m_rTargetDevice.Push( PUSH_MAPMODE | PUSH_FONT );
+        aTargetMapMode.SetScaleX( m_aZoom );    // TODO: shouldn't this be "current_scale * zoom"?
+        aTargetMapMode.SetScaleY( m_aZoom );
 
-            MapMode aDrawMapMode( m_rTargetDevice.GetMapMode() );
-            OSL_ENSURE( aDrawMapMode.GetOrigin() == Point(), "ReferenceDeviceTextLayout::ReferenceDeviceTextLayout: uhm, the code below won't work here ..." );
+        // also, use a higher-resolution map unit than "pixels", which should save us some rounding errors when
+        // translating coordinates between the reference device and the target device.
+        const MapUnit eTargetMapUnit = MAP_TWIP;
+        OSL_ENSURE( aTargetMapMode.GetMapUnit() == MAP_PIXEL,
+            "ReferenceDeviceTextLayout::ReferenceDeviceTextLayout: this class is not expected to work with such target devices!" );
+            // we *could* adjust all the code in this class to handle this case, but at the moment, it's not necessary
+        aTargetMapMode.SetMapUnit( eTargetMapUnit );
 
-            aDrawMapMode.SetScaleX( m_aZoom );    // TODO: shouldn't this be "current_scale * zoom"?
-            aDrawMapMode.SetScaleY( m_aZoom );
-            m_rTargetDevice.SetMapMode( aDrawMapMode );
+        m_rTargetDevice.SetMapMode( aTargetMapMode );
 
-            MapUnit eTargetMapUnit = m_rTargetDevice.GetMapMode().GetMapUnit();
-            Font aDrawFont( m_aUnzoomedPointFont );
-            if ( eTargetMapUnit == MAP_PIXEL )
-                aDrawFont.SetSize( m_rTargetDevice.LogicToPixel( aDrawFont.GetSize(), MAP_POINT ) );
-            else
-                aDrawFont.SetSize( m_rTargetDevice.LogicToLogic( aDrawFont.GetSize(), MAP_POINT, eTargetMapUnit ) );
-            _rTargetDevice.SetFont( aDrawFont );
-        }
+        // now that the Zoom is part of the map mode, reset the target device's font to the "unzoomed" version
+        Font aDrawFont( m_aUnzoomedPointFont );
+        aDrawFont.SetSize( m_rTargetDevice.LogicToLogic( aDrawFont.GetSize(), MAP_POINT, eTargetMapUnit ) );
+        _rTargetDevice.SetFont( aDrawFont );
 
         // transfer font to the reference device
         m_rReferenceDevice.Push( PUSH_FONT );
@@ -156,9 +157,8 @@ namespace vcl
     //--------------------------------------------------------------------
     ReferenceDeviceTextLayout::~ReferenceDeviceTextLayout()
     {
-        if ( IsZoom() )
-            m_rTargetDevice.Pop();
         m_rReferenceDevice.Pop();
+        m_rTargetDevice.Pop();
     }
 
     //--------------------------------------------------------------------
@@ -180,41 +180,26 @@ namespace vcl
         {
         public:
             DeviceUnitMapping( const OutputDevice& _rTargetDevice, const OutputDevice& _rReferenceDevice )
-                :m_rTargetDevice( _rTargetDevice )
-                ,m_rReferenceDevice( _rReferenceDevice )
-                ,m_eTargetMapUnit( _rTargetDevice.GetMapMode().GetMapUnit() )
-                ,m_bTargetIsPixel( _rTargetDevice.GetMapMode().GetMapUnit() == MAP_PIXEL )
+                :m_eTargetMapUnit( _rTargetDevice.GetMapMode().GetMapUnit() )
                 ,m_eRefMapUnit( _rReferenceDevice.GetMapMode().GetMapUnit() )
             {
                 OSL_ENSURE( m_eRefMapUnit != MAP_PIXEL, "a reference device with MAP_PIXEL?" );
+                OSL_ENSURE( m_eTargetMapUnit != MAP_PIXEL, "we should have reset the target's map mode to TWIP!" );
             }
 
             long mapToTarget( long _nWidth )
             {
-                return  m_bTargetIsPixel
-                    ?   m_rTargetDevice.LogicToPixel( Size( _nWidth, 0 ), m_eRefMapUnit ).Width()
-                    :   OutputDevice::LogicToLogic( Size( _nWidth, 0 ), m_eRefMapUnit, m_eTargetMapUnit ).Width();
+                return  OutputDevice::LogicToLogic( Size( _nWidth, 0 ), m_eRefMapUnit, m_eTargetMapUnit ).Width();
             }
             long mapToReference( long _nWidth )
             {
-                return  m_bTargetIsPixel
-                    ?   m_rTargetDevice.PixelToLogic( Size( _nWidth, 0 ), m_eRefMapUnit ).Width()
-                    :   OutputDevice::LogicToLogic( Size( _nWidth, 0 ), m_eTargetMapUnit, m_eRefMapUnit ).Width();
+                return  OutputDevice::LogicToLogic( Size( _nWidth, 0 ), m_eTargetMapUnit, m_eRefMapUnit ).Width();
             }
 
         private:
-            const OutputDevice& m_rTargetDevice;
-            const OutputDevice& m_rReferenceDevice;
             const MapUnit       m_eTargetMapUnit;
-            const bool          m_bTargetIsPixel;
             const MapUnit       m_eRefMapUnit;
         };
-    }
-
-    //--------------------------------------------------------------------
-    bool ReferenceDeviceTextLayout::IsZoom() const
-    {
-        return m_aZoom.GetNumerator() != m_aZoom.GetDenominator();
     }
 
     //--------------------------------------------------------------------
@@ -311,15 +296,10 @@ namespace vcl
     Rectangle ReferenceDeviceTextLayout::DrawText( const Rectangle& _rRect, const XubString& _rText, USHORT _nStyle, MetricVector* _pVector, String* _pDisplayText)
     {
         Rectangle aRect( _rRect );
-        if ( IsZoom() )
-        {
-            // if there's a zoom factor involved, then we tampered with the target device's map mode in the ctor.
-            // Need to adjust the rectangle to this
-            aRect.Left()    = unzoomBy( aRect.Left(),   m_aZoom );
-            aRect.Right()   = unzoomBy( aRect.Right(),  m_aZoom );
-            aRect.Top()     = unzoomBy( aRect.Top(),    m_aZoom );
-            aRect.Bottom()  = unzoomBy( aRect.Bottom(), m_aZoom );
-        }
+
+        // in our ctor, we set the map mode of the target device from pixel to twip, but our caller doesn't know this,
+        // but passed pixel coordinates. So, adjust the rect.
+        aRect = m_rTargetDevice.PixelToLogic( aRect );
 
 #ifdef FS_DEBUG
         m_rTargetDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
@@ -343,15 +323,8 @@ namespace vcl
             aTextRect = m_rTargetDevice.GetTextRect( aRect, _rText, _nStyle, NULL, this );
         }
 
-        if ( IsZoom() )
-        {
-            // similar to above, transform the to-be-returned rectanle to coordinates which are meaningful
-            // with the original map mode of the target device
-            aTextRect.Left()    = zoomBy( aTextRect.Left(),   m_aZoom );
-            aTextRect.Right()   = zoomBy( aTextRect.Right(),  m_aZoom );
-            aTextRect.Top()     = zoomBy( aTextRect.Top(),    m_aZoom );
-            aTextRect.Bottom()  = zoomBy( aTextRect.Bottom(), m_aZoom );
-        }
+        // similar to above, the text rect now contains TWIPs, but the caller expects pixel coordinates
+        aTextRect = m_rTargetDevice.LogicToPixel( aTextRect );
 
         return aTextRect;
     }
