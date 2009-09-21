@@ -2510,6 +2510,18 @@ TokenToIdMapPointer </xsl:text>
         </xsl:if>
     </xsl:for-each>
     <xsl:text>
+      case 0:</xsl:text>
+    <xsl:for-each select="start">
+      <xsl:variable name="name" select="@name"/>
+      <xsl:text>
+        // </xsl:text>
+        <xsl:value-of select="$name"/>
+      <xsl:for-each select="ancestor::namespace/rng:grammar/rng:define[@name=$name]">
+        <xsl:call-template name="factorytokentoidmapinner"/>
+      </xsl:for-each>
+    </xsl:for-each>
+    <xsl:text>
+        break;
     default:
         break;
     }
@@ -2974,6 +2986,9 @@ uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastCh
             static char buffer[16];
             snprintf(buffer, sizeof(buffer), "0x%08" SAL_PRIuUINT32, nId);
             debug_logger->attribute("idnum", buffer);
+
+            snprintf(buffer, sizeof(buffer), "0x%08" SAL_PRIuUINT32, nDefine);
+            debug_logger->attribute("definenum", buffer);
 #endif
         
             CreateElement aCreateElement = (*pMap)[Element];
@@ -2993,7 +3008,7 @@ uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastCh
                         <xsl:text>:
                 aResult.set(OOXMLFastHelper&lt;OOXMLFastContextHandler</xsl:text>
                         <xsl:value-of select="@resource"/>
-                        <xsl:text>&gt;::createAndSetParentAndDefine(pHandler, Element, (*pTokenMap)[Element], aCreateElement.m_nId));
+                        <xsl:text>&gt;::createAndSetParentAndDefine(pHandler, Element, nId, aCreateElement.m_nId));
                 break;</xsl:text>
                     </xsl:if>
                 </xsl:if>

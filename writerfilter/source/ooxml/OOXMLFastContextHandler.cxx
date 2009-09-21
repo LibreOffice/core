@@ -132,6 +132,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
 (uno::Reference< uno::XComponentContext > const & context)
 : mpParent(NULL),
   mId(0),
+  mnDefine(0),
   mnToken(OOXML_FAST_TOKENS_END),
   mpStream(NULL),
   mnTableDepth(0),
