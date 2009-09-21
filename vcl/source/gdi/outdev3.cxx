@@ -6160,6 +6160,10 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const String& rStr,
 
     if ( !IsDeviceOutputNecessary() )
         return;
+    if( mbInitClipRegion )
+        ImplInitClipRegion();
+    if( mbOutputClipped )
+        return;
 
     SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen, rStartPt, 0, pDXAry, true );
     if( pSalLayout )
@@ -7094,10 +7098,11 @@ void OutputDevice::DrawText( const Rectangle& rRect, const String& rOrigStr, USH
     DBG_TRACE( "OutputDevice::DrawText( const Rectangle& )" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    if ( mpMetaFile )
+    bool bDecomposeTextRectAction = ( _pTextLayout != NULL ) && _pTextLayout->DecomposeTextRectAction();
+    if ( mpMetaFile && !bDecomposeTextRectAction )
         mpMetaFile->AddAction( new MetaTextRectAction( rRect, rOrigStr, nStyle ) );
 
-    if ( ( !IsDeviceOutputNecessary() && ! pVector ) || !rOrigStr.Len() || rRect.IsEmpty() )
+    if ( ( !IsDeviceOutputNecessary() && !pVector && !bDecomposeTextRectAction ) || !rOrigStr.Len() || rRect.IsEmpty() )
         return;
 
     // we need a graphics
@@ -7105,13 +7110,14 @@ void OutputDevice::DrawText( const Rectangle& rRect, const String& rOrigStr, USH
         return;
     if( mbInitClipRegion )
         ImplInitClipRegion();
-    if( mbOutputClipped )
+    if( mbOutputClipped && !bDecomposeTextRectAction )
         return;
 
     // temporarily disable mtf action generation (ImplDrawText _does_
     // create META_TEXT_ACTIONs otherwise)
     GDIMetaFile* pMtf = mpMetaFile;
-    mpMetaFile = NULL;
+    if ( !bDecomposeTextRectAction )
+        mpMetaFile = NULL;
 
     // #i47157# Factored out to ImplDrawText(), to be used also
     // from AddTextRectActions()

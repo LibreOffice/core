@@ -70,6 +70,12 @@ namespace vcl
         return m_rTargetDevice.GetTextBreak( _rText, _nMaxTextWidth, _nStartIndex, _nLength );
     }
 
+    //--------------------------------------------------------------------
+    bool DefaultTextLayout::DecomposeTextRectAction() const
+    {
+        return false;
+    }
+
     //====================================================================
     //= ReferenceDeviceTextLayout
     //====================================================================
@@ -84,6 +90,7 @@ namespace vcl
         virtual void        DrawText( const Point& _rStartPoint, const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength, MetricVector* _pVector, String* _pDisplayText );
         virtual bool        GetCaretPositions( const XubString& _rText, sal_Int32* _pCaretXArray, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const;
         virtual xub_StrLen  GetTextBreak( const XubString& _rText, long _nMaxTextWidth, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const;
+        virtual bool        DecomposeTextRectAction() const;
 
     public:
         // equivalents to the respective OutputDevice methods, which take the reference device into account
@@ -274,6 +281,12 @@ namespace vcl
 
         DeviceUnitMapping aMapping( m_rTargetDevice, m_rReferenceDevice );
         return m_rReferenceDevice.GetTextBreak( _rText, aMapping.mapToReference( _nMaxTextWidth ), _nStartIndex, _nLength );
+    }
+
+    //--------------------------------------------------------------------
+    bool ReferenceDeviceTextLayout::DecomposeTextRectAction() const
+    {
+        return true;
     }
 
     //--------------------------------------------------------------------
