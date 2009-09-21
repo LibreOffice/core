@@ -31,9 +31,7 @@
 
 .IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 
-.IF "L10N_framework"==""
 ALLTAR : $(RPMFLAGFILES)
-.ENDIF
 
 $(RPMFLAGFILES) : $(SPECFILE)
     @-$(MKDIRHIER) $(@:d)
