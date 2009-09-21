@@ -4545,7 +4545,7 @@ void DomainMapper::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
 #if OSL_DEBUG_LEVEL > 1 //settings table has no id anymore?
     case 0: //
 #endif
-    case NS_ooxml::LN_SETTINGS:
+    case NS_ooxml::LN_settings_settings:
         ref->resolve ( *m_pImpl->GetSettingsTable() );
     break;
     default:
