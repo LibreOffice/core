@@ -55,7 +55,7 @@ CDEFS+=-DX_LOCALE
 MACOSX_DEPLOYMENT_TARGET=10.4
 .EXPORT: MACOSX_DEPLOYMENT_TARGET
 CDEFS+=-DQUARTZ 
-EXTRA_CDEFS+=-isysroot /Developer/SDKs/MacOSX10.4u.sdk
+EXTRA_CDEFS*=-isysroot /Developer/SDKs/MacOSX10.4u.sdk
 .ENDIF
 
 # Name of library where static data members are initialized
@@ -201,7 +201,7 @@ LINKC*=$(CC)
 
 LINKFLAGSDEFS*=-Wl,-multiply_defined,suppress
 # assure backwards-compatibility
-EXTRA_LINKFLAGS+=-Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk
+EXTRA_LINKFLAGS*=-Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk
 # Very long install_names are needed so that install_name_tool -change later on
 # does not complain that "larger updated load commands do not fit:"
 LINKFLAGSRUNPATH_URELIB=-install_name '@__________________________________________________URELIB/$(@:f)'
