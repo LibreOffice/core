@@ -101,6 +101,7 @@ private:
     bool                    mbStringsLoaded;
     bool                    mbMinimized;
     bool                    mbListenerAdded;
+    mutable bool            mbShowsMessageBox;
 
     osl::Mutex              maMutex;
 

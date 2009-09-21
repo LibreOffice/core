@@ -104,7 +104,8 @@ UpdateHandler::UpdateHandler( const uno::Reference< uno::XComponentContext > & r
     mbVisible( false ),
     mbStringsLoaded( false ),
     mbMinimized( false ),
-    mbListenerAdded(false)
+    mbListenerAdded(false),
+    mbShowsMessageBox(false)
 {
 }
 
@@ -482,7 +483,18 @@ void SAL_CALL UpdateHandler::handle( uno::Reference< task::XInteractionRequest >
 void SAL_CALL UpdateHandler::queryTermination( const lang::EventObject& )
     throw ( frame::TerminationVetoException, uno::RuntimeException )
 {
-    setVisible( false );
+    if ( mbShowsMessageBox )
+    {
+        uno::Reference< awt::XTopWindow > xTopWindow( mxUpdDlg, uno::UNO_QUERY );
+        if ( xTopWindow.is() )
+            xTopWindow->toFront();
+
+        throw frame::TerminationVetoException(
+            UNISTRING("The office cannot be closed while displaying a warning!"),
+            uno::Reference<XInterface>(static_cast<frame::XTerminateListener*>(this), uno::UNO_QUERY));
+    }
+    else
+        setVisible( false );
 }
 
 //------------------------------------------------------------------------------
@@ -950,12 +962,14 @@ bool UpdateHandler::showWarning( const rtl::OUString &rWarningText ) const
     uno::Reference< awt::XMessageBox > xMsgBox( xToolkit->createWindow( aDescriptor ), uno::UNO_QUERY );
     if ( xMsgBox.is() )
     {
+        mbShowsMessageBox = true;
         sal_Int16 nRet;
         // xMsgBox->setCaptionText( msCancelTitle );
         xMsgBox->setMessageText( rWarningText );
         nRet = xMsgBox->execute();
         if ( nRet == 2 ) // RET_YES == 2
             bRet = true;
+        mbShowsMessageBox = false;
     }
 
     uno::Reference< lang::XComponent > xComponent( xMsgBox, uno::UNO_QUERY );
@@ -1020,10 +1034,13 @@ bool UpdateHandler::showWarning( const rtl::OUString &rWarningText,
 
         sal_Int16 nRet;
         // xMsgBox->setCaptionText( msCancelTitle );
+        mbShowsMessageBox = true;
         xMsgBox->setMessageText( rWarningText );
         nRet = xMsgBox->execute();
         if ( nRet == 2 ) // RET_YES == 2
             bRet = true;
+
+        mbShowsMessageBox = false;
     }
 
     uno::Reference< lang::XComponent > xComponent( xMsgBox, uno::UNO_QUERY );
