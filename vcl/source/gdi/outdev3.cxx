@@ -6854,7 +6854,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
 
         if ( nTextHeight )
         {
-            nMaxTextWidth = ImplGetTextLines( rTargetDevice, aMultiLineInfo, nWidth, aStr, nStyle, _rLayout );
+            nMaxTextWidth = ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, _rLayout );
             nLines = (xub_StrLen)(nHeight/nTextHeight);
             nFormatLines = aMultiLineInfo.Count();
             if ( !nLines )
@@ -7154,7 +7154,7 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
 
         nMaxWidth = 0;
         DefaultTextLayout aDefaultLayout( *const_cast< OutputDevice* >( this ) );
-        ImplGetTextLines( *const_cast< OutputDevice* >( this ), aMultiLineInfo, nWidth, aStr, nStyle, _pTextLayout ? *_pTextLayout : aDefaultLayout );
+        ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, _pTextLayout ? *_pTextLayout : aDefaultLayout );
         nFormatLines = aMultiLineInfo.Count();
         if ( !nTextHeight )
             nTextHeight = 1;

@@ -7308,7 +7308,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, US
         if ( nTextHeight )
         {
             ::vcl::DefaultTextLayout aLayout( *m_pReferenceDevice );
-            nMaxTextWidth = OutputDevice::ImplGetTextLines( *m_pReferenceDevice, aMultiLineInfo, nWidth, aStr, nStyle, aLayout );
+            nMaxTextWidth = OutputDevice::ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, aLayout );
             nLines = (xub_StrLen)(nHeight/nTextHeight);
             nFormatLines = aMultiLineInfo.Count();
             if ( !nLines )
