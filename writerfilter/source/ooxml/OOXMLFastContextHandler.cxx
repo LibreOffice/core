@@ -1459,6 +1459,13 @@ void OOXMLFastContextHandlerPropertyTable::lcl_endFastElement
     mTable.add(pTmpVal);
 
     writerfilter::Reference<Table>::Pointer_t pTable(mTable.clone());
+
+#ifdef DEBUG_PROPERTIES
+    debug_logger->startElement("table");
+    debug_logger->attribute("id", (*QNameToString::Instance())(mId));
+    debug_logger->endElement("table");
+#endif
+
     mpStream->table(mId, pTable);
 
     endAction(Element);
@@ -1686,7 +1693,16 @@ void OOXMLFastContextHandlerTable::lcl_endFastElement
 
     writerfilter::Reference<Table>::Pointer_t pTable(mTable.clone());
     if (isForwardEvents() && mId != 0x0)
+    {
+#ifdef DEBUG_PROPERTIES
+        debug_logger->startElement("table");
+        string str = (*QNameToString::Instance())(mId);
+        debug_logger->attribute("id", str);
+        debug_logger->endElement("table");
+#endif
+
         mpStream->table(mId, pTable);
+    }
 }
 
 void OOXMLFastContextHandlerTable::addCurrentChild()
