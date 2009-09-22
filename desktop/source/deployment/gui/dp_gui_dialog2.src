@@ -177,6 +177,16 @@ Image RID_IMG_LOCKED_HC
     ImageBitmap = Bitmap { File = "lock_16_h.png"; };
 };
 
+Image RID_IMG_SHARED
+{
+    ImageBitmap = Bitmap { File = "shared_16.png"; };
+};
+
+Image RID_IMG_SHARED_HC
+{
+    ImageBitmap = Bitmap { File = "shared_16_h.png"; };
+};
+
 Image RID_IMG_EXTENSION
 {
     ImageBitmap = Bitmap { File = "extension_32.png"; };

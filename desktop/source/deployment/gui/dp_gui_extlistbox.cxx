@@ -177,6 +177,8 @@ ExtensionBox_Impl::ExtensionBox_Impl( Dialog* pParent, TheExtensionManager *pMan
     m_nTopIndex( 0 ),
     m_nActiveHeight( 0 ),
     m_nExtraHeight( 2 ),
+    m_aSharedImage( DialogHelper::getResId( RID_IMG_SHARED ) ),
+    m_aSharedImageHC( DialogHelper::getResId( RID_IMG_SHARED_HC ) ),
     m_aLockedImage( DialogHelper::getResId( RID_IMG_LOCKED ) ),
     m_aLockedImageHC( DialogHelper::getResId( RID_IMG_LOCKED_HC ) ),
     m_aWarningImage( DialogHelper::getResId( RID_IMG_WARNING ) ),
@@ -618,7 +620,10 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     if ( pEntry->m_bShared )
     {
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SMALL_ICON_SIZE), TOP_OFFSET );
-        DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aLockedImageHC : m_aLockedImage );
+        if ( pEntry->m_bLocked )
+            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aLockedImageHC : m_aLockedImage );
+        else
+            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aSharedImageHC : m_aSharedImage );
     }
     if ( ( pEntry->m_eState == AMBIGUOUS ) || pEntry->m_bMissingDeps )
     {
