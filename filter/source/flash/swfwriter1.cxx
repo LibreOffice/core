@@ -41,6 +41,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 
 #include <svtools/filter.hxx>
@@ -640,9 +641,6 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
         // CL: This is still a hack until we figure out how to calculate a correct bound rect
         //     for rotatet text
         Rectangle textBounds( 0, 0, static_cast<long>(mnDocWidth*mnDocXScale), static_cast<long>(mnDocHeight*mnDocYScale) );
-
-        ::basegfx::B2DHomMatrix m; // #i73264#
-
         double scale = 1.0;
 
         // scale width if we have a stretched text
@@ -660,7 +658,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
             scale =  (double)n1 / (double)n2;
         }
 
-        m.rotate( static_cast<double>(nOrientation) * F_PI1800 );
+        basegfx::B2DHomMatrix m(basegfx::tools::createRotateB2DHomMatrix(static_cast<double>(nOrientation) * F_PI1800));
         m.translate( double(aPt.X() / scale), double(aPt.Y()) );
         m.scale( scale, scale );
 
