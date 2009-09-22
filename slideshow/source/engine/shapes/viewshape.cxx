@@ -51,6 +51,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
@@ -713,9 +714,8 @@ namespace slideshow
 
                         aBitmapTransform.invert();
 
-                        ::basegfx::B2DHomMatrix aTranslation;
-                        aTranslation.translate( aTmpRect.getMinX(),
-                                                aTmpRect.getMinY() );
+                        const basegfx::B2DHomMatrix aTranslation(basegfx::tools::createTranslateB2DHomMatrix(
+                            aTmpRect.getMinX(), aTmpRect.getMinY()));
 
                         aBitmapTransform = aBitmapTransform * aTranslation;
                         pBitmap->setTransformation( aBitmapTransform );

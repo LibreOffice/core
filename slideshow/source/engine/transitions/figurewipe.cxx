@@ -35,6 +35,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "transitiontools.hxx"
 #include "figurewipe.hxx"
 
@@ -45,10 +46,7 @@ namespace internal {
 ::basegfx::B2DPolyPolygon FigureWipe::operator () ( double t )
 {
     ::basegfx::B2DPolyPolygon res(m_figure);
-    ::basegfx::B2DHomMatrix aTransform;
-    aTransform.scale( t, t );
-    aTransform.translate( 0.5, 0.5 );
-    res.transform( aTransform );
+    res.transform(basegfx::tools::createScaleTranslateB2DHomMatrix(t, t, 0.5, 0.5));
     return res;
 }
 

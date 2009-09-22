@@ -40,6 +40,7 @@
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 namespace slideshow
 {
@@ -134,20 +135,19 @@ namespace slideshow
                         break;
 
                     case TransitionInfo::REVERSEMETHOD_ROTATE_180:
-                        maStaticTransformation.translate( -0.5, -0.5 );
-                        maStaticTransformation.rotate( M_PI );
-                        maStaticTransformation.translate( 0.5, 0.5 );
+                        maStaticTransformation = basegfx::tools::createRotateAroundPoint(0.5, 0.5, M_PI)
+                            * maStaticTransformation;
                         break;
 
                     case TransitionInfo::REVERSEMETHOD_FLIP_X:
-                        maStaticTransformation.scale( -1.0, 1.0 );
-                        maStaticTransformation.translate( 1.0, 0.0 );
+                        maStaticTransformation = basegfx::tools::createScaleTranslateB2DHomMatrix(-1.0, 1.0, 1.0, 0.0)
+                            * maStaticTransformation;
                         mbFlip = true;
                         break;
 
                     case TransitionInfo::REVERSEMETHOD_FLIP_Y:
-                        maStaticTransformation.scale( 1.0, -1.0 );
-                        maStaticTransformation.translate( 0.0, 1.0 );
+                        maStaticTransformation = basegfx::tools::createScaleTranslateB2DHomMatrix(1.0, -1.0, 0.0, 1.0)
+                            * maStaticTransformation;
                         mbFlip = true;
                         break;
                 }

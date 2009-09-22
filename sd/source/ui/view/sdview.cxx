@@ -99,6 +99,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <svx/unoapi.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <numeric>
 
@@ -454,12 +455,9 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                                 false));
 
                             // fill text matrix
-                            basegfx::B2DHomMatrix aTextMatrix;
-
-                            aTextMatrix.scale(aSize.getX(), aSize.getY());
-                            aTextMatrix.shearX(fShearX);
-                            aTextMatrix.rotate(fRotate);
-                            aTextMatrix.translate(fPosX, fPosY);
+                            const basegfx::B2DHomMatrix aTextMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                                aSize.getX(), aSize.getY(),
+                                fShearX, fRotate, fPosX, fPosY));
 
                             // create DXTextArray (can be empty one)
                             const ::std::vector< double > aDXArray;

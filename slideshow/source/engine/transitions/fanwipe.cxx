@@ -33,6 +33,7 @@
 
 #include <canvas/debug.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "transitiontools.hxx"
 #include "clockwipe.hxx"
 #include "fanwipe.hxx"
@@ -50,26 +51,21 @@ namespace internal {
 
     res.append( poly );
     // flip on y-axis:
-    ::basegfx::B2DHomMatrix aTransform;
-    aTransform.scale( -1.0, 1.0 );
-    poly.transform( aTransform );
+    poly.transform(basegfx::tools::createScaleB2DHomMatrix(-1.0, 1.0));
     poly.flip();
     res.append( poly );
-    aTransform.identity();
 
-    if (m_center) {
-        aTransform.scale( 0.5, 0.5 );
-        aTransform.translate( 0.5, 0.5 );
-        res.transform( aTransform );
+    if (m_center)
+    {
+        res.transform(basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
 
         if (! m_single)
             res.append( flipOnXAxis(res) );
     }
-    else {
+    else
+    {
         OSL_ASSERT( ! m_fanIn );
-        aTransform.scale( 0.5, 1.0 );
-        aTransform.translate( 0.5, 1.0 );
-        res.transform( aTransform );
+        res.transform(basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 1.0, 0.5, 1.0));
     }
     return res;
 }

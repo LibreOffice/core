@@ -55,6 +55,8 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdrpagewindow.hxx>
@@ -245,8 +247,7 @@ void SubstitutionOverlay::Clear (void)
 
 void SubstitutionOverlay::Move (const Point& rOffset)
 {
-    basegfx::B2DHomMatrix aTranslation;
-    aTranslation.translate(rOffset.X(), rOffset.Y());
+    const basegfx::B2DHomMatrix aTranslation(basegfx::tools::createTranslateB2DHomMatrix(rOffset.X(), rOffset.Y()));
 
     maShapes.transform(aTranslation);
     maPosition += rOffset;

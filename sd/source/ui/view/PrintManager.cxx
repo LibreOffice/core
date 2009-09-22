@@ -34,6 +34,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include "PrintManager.hxx"
 
@@ -1775,10 +1776,10 @@ void PrintManager::InitHandoutTemplate( PrintInfo& /*rInfo*/, USHORT nSlidesPerH
             aPoly.insert(0, basegfx::B2DPoint( aRect.Left(), aRect.Top() ) );
             aPoly.insert(1, basegfx::B2DPoint( aRect.Right(), aRect.Top() ) );
 
-            basegfx::B2DHomMatrix aMatrix;
-            aMatrix.translate( 0.0, static_cast< double >( aRect.GetHeight() / 7 ) );
-
+            const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createTranslateB2DHomMatrix(
+                0.0, static_cast< double >( aRect.GetHeight() / 7 )));
             basegfx::B2DPolyPolygon aPathPoly;
+
             for( sal_uInt16 nLine = 0; nLine < 7; nLine++ )
             {
                 aPoly.transform( aMatrix );
