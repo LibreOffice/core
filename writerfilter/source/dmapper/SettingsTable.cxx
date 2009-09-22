@@ -94,6 +94,7 @@ void SettingsTable::attribute(Id Name, Value & val)
     //printf ( "SettingsTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     /* WRITERFILTERSTATUS: table: SettingsTable_attributedata */
 #if 0 //no values known, yet
+
     switch(Name)
     {
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
