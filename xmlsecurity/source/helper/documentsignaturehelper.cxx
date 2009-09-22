@@ -342,7 +342,7 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
     catch(css::io::IOException& )
     {
         // Doesn't have to exist...
-        DBG_ASSERT( nOpenMode == embed::ElementModes::READ, "Error creating signature stream..." );
+        DBG_ASSERT( nOpenMode == css::embed::ElementModes::READ, "Error creating signature stream..." );
     }
 
     return aHelper;
