@@ -27,27 +27,18 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_MODIFICATIONS_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_MODIFICATIONS_HXX
+#ifndef INCLUDED_CONFIGMGR_SOURCE_PATH_HXX
+#define INCLUDED_CONFIGMGR_SOURCE_PATH_HXX
 
 #include "sal/config.h"
 
-#include <list>
+#include <vector>
 
-#include "boost/noncopyable.hpp"
-
-#include "path.hxx"
+namespace rtl { class OUString; }
 
 namespace configmgr {
 
-struct Modifications: private boost::noncopyable {
-public:
-    typedef std::list< Path > List;
-
-    List list;
-
-    void add(Path const & path);
-};
+typedef std::vector< rtl::OUString > Path;
 
 }
 

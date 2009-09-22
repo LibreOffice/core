@@ -44,6 +44,7 @@
 #include "sal/types.h"
 
 #include "access.hxx"
+#include "path.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace uno {
@@ -65,7 +66,8 @@ class RootAccess:
 {
 public:
     RootAccess(
-        rtl::OUString const & path, rtl::OUString const & locale, bool update);
+        rtl::OUString const & pathRepresenation, rtl::OUString const & locale,
+        bool update);
 
     virtual void initGlobalBroadcaster(
         Modifications const & localModifications, Broadcaster * broadcaster);
@@ -81,9 +83,11 @@ public:
 private:
     virtual ~RootAccess();
 
-    virtual rtl::OUString getAbsolutePath();
+    virtual Path getAbsolutePath();
 
-    virtual rtl::OUString getRelativePath();
+    virtual Path getRelativePath();
+
+    virtual rtl::OUString getRelativePathRepresentation();
 
     virtual rtl::Reference< Node > getNode();
 
@@ -99,6 +103,8 @@ private:
         std::vector< rtl::OUString > * services);
 
     virtual void initDisposeBroadcaster(Broadcaster * broadcaster);
+
+    virtual void clearListeners() throw ();
 
     virtual void initLocalBroadcaster(
         Modifications const & localModifications, Broadcaster * broadcaster);
@@ -134,12 +140,13 @@ private:
                 com::sun::star::util::XChangesListener > >
         ChangesListeners;
 
-    rtl::OUString path_;
+    rtl::OUString pathRepresentation_;
     rtl::OUString locale_;
     bool update_;
-    bool finalized_;
+    Path path_;
     rtl::Reference< Node > node_;
     rtl::OUString name_;
+    bool finalized_;
     ChangesListeners changesListeners_;
 };
 

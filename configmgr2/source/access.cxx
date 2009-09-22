@@ -103,6 +103,7 @@
 #include "modifications.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
+#include "path.hxx"
 #include "propertynode.hxx"
 #include "rootaccess.hxx"
 #include "setnode.hxx"
@@ -277,6 +278,23 @@ void Access::initDisposeBroadcaster(Broadcaster * broadcaster) {
         rtl::Reference< ChildAccess > child(getModifiedChild(i));
         if (child.is()) {
             child->initDisposeBroadcaster(broadcaster);
+        }
+    }
+}
+
+void Access::clearListeners() throw() {
+    disposeListeners_.clear();
+    containerListeners_.clear();
+    propertyChangeListeners_.clear();
+    vetoableChangeListeners_.clear();
+    propertiesChangeListeners_.clear();
+    //TODO: iterate over children w/ listeners (incl. unmodified ones):
+    for (ModifiedChildren::iterator i(modifiedChildren_.begin());
+         i != modifiedChildren_.end(); ++i)
+    {
+        rtl::Reference< ChildAccess > child(getModifiedChild(i));
+        if (child.is()) {
+            child->clearListeners();
         }
     }
 }
@@ -551,11 +569,8 @@ void Access::commitChildChanges(
             }
         }
         if (childValid && i->second.directlyModified) {
-            rtl::OUString path(
-                getAbsolutePath() +
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
-                Data::createSegment(
-                    i->second.child->getNode()->getTemplateName(), i->first));
+            Path path(getAbsolutePath());
+            path.push_back(i->first);
             Components::singleton().addModification(path);
             globalModifications->add(path);
         }
@@ -740,6 +755,7 @@ void Access::dispose() throw (css::uno::RuntimeException) {
             return;
         }
         initDisposeBroadcaster(&bc);
+        clearListeners();
         disposed_ = true;
     }
     bc.send();
@@ -965,7 +981,7 @@ rtl::OUString Access::getHierarchicalName() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
-    return getRelativePath();
+    return getRelativePathRepresentation();
 }
 
 rtl::OUString Access::composeHierarchicalName(
@@ -985,7 +1001,7 @@ rtl::OUString Access::composeHierarchicalName(
                     " name")),
             static_cast< cppu::OWeakObject * >(this), -1);
     }
-    rtl::OUStringBuffer path(getRelativePath());
+    rtl::OUStringBuffer path(getRelativePathRepresentation());
     if (path.getLength() != 0) {
         path.append(sal_Unicode('/'));
     }

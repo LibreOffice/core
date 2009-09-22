@@ -113,12 +113,12 @@ bool Components::allLocales(rtl::OUString const & locale) {
     return locale.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*"));
 }
 
-rtl::Reference< Node > Components::resolvePath(
-    rtl::OUString const & path, rtl::OUString * lastSegment,
-    rtl::OUString * canonicalPath, int * finalizedLayer) const
+rtl::Reference< Node > Components::resolvePathRepresentation(
+    rtl::OUString const & pathRepresentation, Path * path,
+    int * finalizedLayer) const
 {
-    return data_.resolvePath(
-        path, 0, lastSegment, canonicalPath, 0, finalizedLayer);
+    return data_.resolvePathRepresentation(
+        pathRepresentation, path, finalizedLayer);
 }
 
 rtl::Reference< Node > Components::getTemplate(
@@ -153,7 +153,7 @@ void Components::initGlobalBroadcaster(
     }
 }
 
-void Components::addModification(rtl::OUString const & path) {
+void Components::addModification(Path const & path) {
     data_.modifications.add(path);
 }
 

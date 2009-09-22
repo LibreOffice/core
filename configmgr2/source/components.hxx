@@ -38,6 +38,7 @@
 #include "rtl/ref.hxx"
 
 #include "data.hxx"
+#include "path.hxx"
 
 namespace rtl {
     class Bootstrap;
@@ -57,9 +58,9 @@ public:
 
     static bool allLocales(rtl::OUString const & locale);
 
-    rtl::Reference< Node > resolvePath(
-        rtl::OUString const & path, rtl::OUString * lastSegment,
-        rtl::OUString * canonicalPath, int * finalizedLayer) const;
+    rtl::Reference< Node > resolvePathRepresentation(
+        rtl::OUString const & pathRepresentation, Path * path,
+        int * finalizedLayer) const;
 
     rtl::Reference< Node > getTemplate(
         int layer, rtl::OUString const & fullName) const;
@@ -73,7 +74,7 @@ public:
         rtl::Reference< RootAccess > const & exclude,
         Broadcaster * broadcaster);
 
-    void addModification(rtl::OUString const & path);
+    void addModification(Path const & path);
 
     void writeModifications();
 

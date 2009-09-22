@@ -32,6 +32,7 @@
 
 #include <algorithm>
 
+#include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "osl/diagnose.h"
@@ -163,26 +164,6 @@ sal_Int32 Data::parseSegment(
     return j + 2;
 }
 
-rtl::OUString Data::parseLastSegment(
-    rtl::OUString const & path, rtl::OUString * name)
-{
-    OSL_ASSERT(name != 0);
-    sal_Int32 i = path.getLength();
-    OSL_ASSERT(i > 0 && path[i - 1] != '/');
-    if (path[i - 1] == ']') {
-        OSL_ASSERT(i > 2 && (path[i - 2] == '\'' || (path[i - 2] == '"')));
-        sal_Int32 j = path.lastIndexOf(path[i - 2], i - 2);
-        OSL_ASSERT(j > 0);
-        decode(path, j + 1, i - 2, name);
-        i = path.lastIndexOf('/', j);
-    } else {
-        i = path.lastIndexOf('/');
-        *name = path.copy(i + 1);
-    }
-    OSL_ASSERT(i != -1);
-    return path.copy(0, i);
-}
-
 rtl::OUString Data::fullTemplateName(
     rtl::OUString const & component, rtl::OUString const & name)
 {
@@ -201,98 +182,95 @@ rtl::Reference< Node > Data::findNode(
         ? rtl::Reference< Node >() : i->second;
 }
 
-rtl::Reference< Node > Data::resolvePath(
-    rtl::OUString const & path, rtl::OUString * firstSegment,
-    rtl::OUString * lastSegment, rtl::OUString * canonicalPath,
-    rtl::Reference< Node > * parent, int * finalizedLayer) const
+rtl::Reference< Node > Data::resolvePathRepresentation(
+    rtl::OUString const & pathRepresentation, Path * path, int * finalizedLayer)
+    const
 {
-    if (path.getLength() == 0 || path[0] != '/') {
+    if (pathRepresentation.getLength() == 0 || pathRepresentation[0] != '/') {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path, 0);
+            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) +
+             pathRepresentation),
+            css::uno::Reference< css::uno::XInterface >());
     }
     rtl::OUString seg;
     bool setElement;
-    sal_Int32 n = parseSegment(path, 1, &seg, &setElement, 0);
+    sal_Int32 n = parseSegment(pathRepresentation, 1, &seg, &setElement, 0);
     if (n == -1 || setElement)
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path, 0);
-    }
-    if (firstSegment != 0) {
-        *firstSegment = seg;
+            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) +
+             pathRepresentation),
+            css::uno::Reference< css::uno::XInterface >());
     }
     NodeMap::const_iterator i(components.find(seg));
-    rtl::OUStringBuffer canonic;
-    rtl::Reference< Node > par;
+    if (path != 0) {
+        path->clear();
+    }
+    rtl::Reference< Node > parent;
     int finalized = NO_LAYER;
     for (rtl::Reference< Node > p(i == components.end() ? 0 : i->second);;) {
         if (!p.is()) {
             return p;
         }
-        if (canonicalPath != 0) {
-            canonic.append(sal_Unicode('/'));
-            canonic.append(createSegment(p->getTemplateName(), seg));
+        if (path != 0) {
+            path->push_back(seg);
         }
         finalized = std::min(finalized, p->getFinalized());
-        if (n != path.getLength() && path[n++] != '/') {
+        if (n != pathRepresentation.getLength() &&
+            pathRepresentation[n++] != '/')
+        {
             throw css::uno::RuntimeException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path,
+                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) +
+                 pathRepresentation),
                 css::uno::Reference< css::uno::XInterface >());
         }
         // for backwards compatibility, ignore a final slash
-        if (n == path.getLength()) {
-            if (lastSegment != 0) {
-                *lastSegment = seg;
-            }
-            if (canonicalPath != 0) {
-                *canonicalPath = canonic.makeStringAndClear();
-            }
-            if (parent != 0) {
-                *parent = par;
-            }
+        if (n == pathRepresentation.getLength()) {
             if (finalizedLayer != 0) {
                 *finalizedLayer = finalized;
             }
             return p;
         }
-        par = p;
+        parent = p;
         rtl::OUString templateName;
-        n = parseSegment(path, n, &seg, &setElement, &templateName);
+        n = parseSegment(
+            pathRepresentation, n, &seg, &setElement, &templateName);
         if (n == -1) {
             throw css::uno::RuntimeException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path,
+                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) +
+                 pathRepresentation),
                 css::uno::Reference< css::uno::XInterface >());
         }
         // For backwards compatibility, allow set members to be accessed with
         // simple path segments, like group members:
         p = p->getMember(seg);
         if (setElement) {
-            switch (par->kind()) {
+            switch (parent->kind()) {
             case Node::KIND_LOCALIZED_PROPERTY:
                 if (templateName.getLength() != 0) {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM("bad path ")) +
-                         path),
+                         pathRepresentation),
                     css::uno::Reference< css::uno::XInterface >());
                 }
                 break;
             case Node::KIND_SET:
                 if (templateName.getLength() != 0 &&
-                    !dynamic_cast< SetNode * >(par.get())->isValidTemplate(
+                    !dynamic_cast< SetNode * >(parent.get())->isValidTemplate(
                         templateName))
                 {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM("bad path ")) +
-                         path),
+                         pathRepresentation),
                     css::uno::Reference< css::uno::XInterface >());
                 }
                 break;
             default:
                 throw css::uno::RuntimeException(
                     (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) +
-                     path),
+                     pathRepresentation),
                     css::uno::Reference< css::uno::XInterface >());
             }
             if (templateName.getLength() != 0 && p != 0) {
@@ -302,7 +280,7 @@ rtl::Reference< Node > Data::resolvePath(
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM("bad path ")) +
-                         path),
+                         pathRepresentation),
                         css::uno::Reference< css::uno::XInterface >());
                 }
             }

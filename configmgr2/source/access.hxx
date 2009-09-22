@@ -70,6 +70,7 @@
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 
+#include "path.hxx"
 #include "type.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -131,9 +132,11 @@ public:
 
     void releaseChild(rtl::OUString const & name);
 
-    virtual rtl::OUString getAbsolutePath() = 0;
+    virtual Path getAbsolutePath() = 0;
 
-    virtual rtl::OUString getRelativePath() = 0;
+    virtual Path getRelativePath() = 0;
+
+    virtual rtl::OUString getRelativePathRepresentation() = 0;
 
     virtual rtl::Reference< Node > getNode() = 0;
 
@@ -160,6 +163,8 @@ protected:
         std::vector< rtl::OUString > * services) = 0;
 
     virtual void initDisposeBroadcaster(Broadcaster * broadcaster);
+
+    virtual void clearListeners() throw ();
 
     virtual void initLocalBroadcaster(
         Modifications const & localModifications, Broadcaster * broadcaster);

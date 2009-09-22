@@ -49,6 +49,7 @@
 #include "groupnode.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
+#include "path.hxx"
 #include "propertynode.hxx"
 #include "setnode.hxx"
 #include "span.hxx"
@@ -347,10 +348,8 @@ void XcuParser::handleItem(XmlReader & reader) {
     }
     int finalizedLayer;
     rtl::Reference< Node > node(
-        data_->resolvePath(
-            xmldata::convertFromUtf8(attrPath), &componentName_, 0,
-            &pathPrefix_, 0, &finalizedLayer));
-    pathPrefix_ += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        data_->resolvePathRepresentation(
+            xmldata::convertFromUtf8(attrPath), &pathPrefix_, &finalizedLayer));
     if (!node.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -358,6 +357,8 @@ void XcuParser::handleItem(XmlReader & reader) {
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
+    OSL_ASSERT(!pathPrefix_.empty());
+    componentName_ = pathPrefix_.front();
     state_.push(
         State(
             node, finalizedLayer < valueParser_.getLayer(),
@@ -525,7 +526,9 @@ void XcuParser::handleGroupProp(XmlReader & reader, GroupNode * group) {
     }
     rtl::OUString name(xmldata::convertFromUtf8(attrName));
     if (state_.top().record) {
-        data_->modifications.add(pathPrefix_ + name);
+        Path path(pathPrefix_);
+        path.push_back(name);
+        data_->modifications.add(path);
     }
     Type type = xmldata::parseType(reader, attrType);
     if (type == TYPE_ANY) {
@@ -842,8 +845,9 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
             attrComponent, attrNodeType, componentName_,
             &set->getDefaultTemplateName()));
     if (state_.top().record) {
-        data_->modifications.add(
-            pathPrefix_ + Data::createSegment(templateName, name));
+        Path path(pathPrefix_);
+        path.push_back(name);
+        data_->modifications.add(path);
     }
     if (!set->isValidTemplate(templateName)) {
         throw css::uno::RuntimeException(

@@ -33,22 +33,32 @@
 #include "rtl/ustring.hxx"
 
 #include "modifications.hxx"
+#include "path.hxx"
 
 namespace configmgr {
 
 namespace {
 
-bool isPrefix(rtl::OUString const & prefix, rtl::OUString const & path) {
-    return prefix.getLength() < path.getLength() && path.match(prefix) &&
-        path[prefix.getLength()] == '/';
+bool isPrefix(Path const & prefix, Path const & path) {
+    if (prefix.size() > path.size()) {
+        return false;
+    }
+    Path::const_iterator i1(prefix.begin());
+    Path::const_iterator i2(path.begin());
+    while (i1 != prefix.end()) {
+        if (*i1++ != *i2++) {
+            return false;
+        }
+    }
+    return true;
 }
 
 }
 
-void Modifications::add(rtl::OUString const & path) {
+void Modifications::add(Path const & path) {
     //TODO: performance
     for (List::iterator i(list.begin()); i != list.end();) {
-        if (path == *i || isPrefix(*i, path)) {
+        if (isPrefix(*i, path)) {
             return;
         }
         if (isPrefix(path, *i)) {

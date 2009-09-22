@@ -45,6 +45,7 @@
 #include "sal/types.h"
 
 #include "access.hxx"
+#include "path.hxx"
 
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;
@@ -74,9 +75,11 @@ public:
         rtl::Reference< RootAccess > const & root,
         rtl::Reference< Node > const & node);
 
-    virtual rtl::OUString getAbsolutePath();
+    virtual Path getAbsolutePath();
 
-    virtual rtl::OUString getRelativePath();
+    virtual Path getRelativePath();
+
+    virtual rtl::OUString getRelativePathRepresentation();
 
     virtual rtl::Reference< Node > getNode();
 

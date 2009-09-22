@@ -33,6 +33,7 @@
 #include "sal/config.h"
 
 #include <climits>
+#include <vector>
 
 #include "boost/noncopyable.hpp"
 #include "rtl/ref.hxx"
@@ -40,6 +41,7 @@
 
 #include "modifications.hxx"
 #include "nodemap.hxx"
+#include "path.hxx"
 
 namespace rtl { class OUString; }
 
@@ -63,19 +65,15 @@ struct Data: private boost::noncopyable {
         rtl::OUString const & path, sal_Int32 index, rtl::OUString * name,
         bool * setElement, rtl::OUString * templateName);
 
-    static rtl::OUString parseLastSegment(
-        rtl::OUString const & path, rtl::OUString * name);
-
     static rtl::OUString fullTemplateName(
         rtl::OUString const & component, rtl::OUString const & name);
 
     static rtl::Reference< Node > findNode(
         int layer, NodeMap const & map, rtl::OUString const & name);
 
-    rtl::Reference< Node > resolvePath(
-        rtl::OUString const & path, rtl::OUString * firstSegment,
-        rtl::OUString * lastSegment, rtl::OUString * canonicalPath,
-        rtl::Reference< Node > * parent, int * finalizedLayer) const;
+    rtl::Reference< Node > resolvePathRepresentation(
+        rtl::OUString const & pathRepresentation, Path * path,
+        int * finalizedLayer) const;
 
     rtl::Reference< Node > getTemplate(
         int layer, rtl::OUString const & fullName) const;

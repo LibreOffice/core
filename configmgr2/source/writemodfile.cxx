@@ -43,6 +43,7 @@
 #include "rtl/string.hxx"
 #include "rtl/textcvt.h"
 #include "rtl/textenc.h"
+#include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -477,83 +478,97 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
     for (Modifications::List::const_iterator j(data.modifications.list.begin());
          j != data.modifications.list.end(); ++j)
     {
-        rtl::OUString name;
-        rtl::OUString parentPath(Data::parseLastSegment(*j, &name));
-        rtl::Reference< Node > parent;
-        rtl::Reference< Node > node(data.resolvePath(*j, 0, 0, 0, &parent, 0));
+        Path::const_iterator k(j->begin());
+        OSL_ASSERT(k != j->end());
+        rtl::OUString parentName(*k++);
+        rtl::Reference< Node > parent(
+            Data::findNode(Data::NO_LAYER, data.components, parentName));
+        OSL_ASSERT(parent.is() && k != j->end());
+        rtl::OUString nodeName;
+        rtl::Reference< Node > node;
+        rtl::OUStringBuffer pathRep; // up to grandparent segment
+        for (;;) {
+            nodeName = *k++;
+            node = parent->getMember(nodeName);
+            if (k == j->end()) {
+                break;
+            }
+            OSL_ASSERT(node.is());
+            pathRep.append(sal_Unicode('/'));
+            pathRep.append(
+                Data::createSegment(parent->getTemplateName(), parentName));
+            parent = node;
+            parentName = nodeName;
+        }
         if (node.is()) {
             writeData(
                 tmp.handle, RTL_CONSTASCII_STRINGPARAM("<item oor:path=\""));
-            writeAttributeValue(tmp.handle, parentPath);
+            pathRep.append(sal_Unicode('/'));
+            pathRep.append(
+                Data::createSegment(parent->getTemplateName(), parentName));
+            writeAttributeValue(tmp.handle, pathRep.makeStringAndClear());
             writeData(tmp.handle, RTL_CONSTASCII_STRINGPARAM("\">"));
-            writeNode(tmp.handle, parent, name, node);
+            writeNode(tmp.handle, parent, nodeName, node);
             writeData(tmp.handle, RTL_CONSTASCII_STRINGPARAM("</item>"));
             // It is never necessary to write the oor:mandatory attribute, as it
             // cannot be set via the UNO API.
         } else {
-            parent = data.resolvePath(parentPath, 0, 0, 0, 0, 0);
-            if (parent->getMember(name).is()) {
+            writeData(
+                tmp.handle, RTL_CONSTASCII_STRINGPARAM("<item oor:path=\""));
+            switch (parent->kind()) {
+            case Node::KIND_LOCALIZED_PROPERTY:
+                writeAttributeValue(tmp.handle, pathRep.makeStringAndClear());
                 writeData(
                     tmp.handle,
-                    RTL_CONSTASCII_STRINGPARAM("<item oor:path=\""));
-                switch (parent->kind()) {
-                case Node::KIND_LOCALIZED_PROPERTY:
-                    {
-                        rtl::OUString parentName;
-                        rtl::OUString grandparentPath(
-                            Data::parseLastSegment(parentPath, &parentName));
-                        writeAttributeValue(tmp.handle, grandparentPath);
-                        writeData(
-                            tmp.handle,
-                            RTL_CONSTASCII_STRINGPARAM("\"><prop oor:name=\""));
-                        writeAttributeValue(tmp.handle, parentName);
-                        writeData(
-                            tmp.handle,
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "\" oor:op=\"fuse\"><value"));
-                        if (name.getLength() != 0) {
-                            writeData(
-                                tmp.handle,
-                                RTL_CONSTASCII_STRINGPARAM(" xml:lang=\""));
-                            writeAttributeValue(tmp.handle, name);
-                            writeData(
-                                tmp.handle, RTL_CONSTASCII_STRINGPARAM("\""));
-                        }
-                        writeData(
-                            tmp.handle,
-                            RTL_CONSTASCII_STRINGPARAM(
-                                " oor:op=\"remove\"/></prop></item>"));
-                    }
-                    break;
-                case Node::KIND_GROUP:
-                    OSL_ASSERT(
-                        dynamic_cast< GroupNode * >(parent.get())->
-                        isExtensible());
-                    writeAttributeValue(tmp.handle, parentPath);
+                    RTL_CONSTASCII_STRINGPARAM("\"><prop oor:name=\""));
+                writeAttributeValue(tmp.handle, parentName);
+                writeData(
+                    tmp.handle,
+                    RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"fuse\"><value"));
+                if (nodeName.getLength() != 0) {
                     writeData(
-                        tmp.handle,
-                        RTL_CONSTASCII_STRINGPARAM("\"><prop oor:name=\""));
-                    writeAttributeValue(tmp.handle, name);
-                    writeData(
-                        tmp.handle,
-                        RTL_CONSTASCII_STRINGPARAM(
-                            "\" oor:op=\"remove\"/></item>"));
-                    break;
-                case Node::KIND_SET:
-                    writeAttributeValue(tmp.handle, parentPath);
-                    writeData(
-                        tmp.handle,
-                        RTL_CONSTASCII_STRINGPARAM("\"><node oor:name=\""));
-                    writeAttributeValue(tmp.handle, name);
-                    writeData(
-                        tmp.handle,
-                        RTL_CONSTASCII_STRINGPARAM(
-                            "\" oor:op=\"remove\"/></item>"));
-                    break;
-                default:
-                    OSL_ASSERT(false); // this cannot happen
-                    break;
+                        tmp.handle, RTL_CONSTASCII_STRINGPARAM(" xml:lang=\""));
+                    writeAttributeValue(tmp.handle, nodeName);
+                    writeData(tmp.handle, RTL_CONSTASCII_STRINGPARAM("\""));
                 }
+                writeData(
+                    tmp.handle,
+                    RTL_CONSTASCII_STRINGPARAM(
+                        " oor:op=\"remove\"/></prop></item>"));
+                break;
+            case Node::KIND_GROUP:
+                OSL_ASSERT(
+                    dynamic_cast< GroupNode * >(parent.get())->isExtensible());
+                pathRep.append(sal_Unicode('/'));
+                pathRep.append(
+                    Data::createSegment(parent->getTemplateName(), parentName));
+                writeAttributeValue(tmp.handle, pathRep.makeStringAndClear());
+                writeData(
+                    tmp.handle,
+                    RTL_CONSTASCII_STRINGPARAM("\"><prop oor:name=\""));
+                writeAttributeValue(tmp.handle, nodeName);
+                writeData(
+                    tmp.handle,
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "\" oor:op=\"remove\"/></item>"));
+                break;
+            case Node::KIND_SET:
+                pathRep.append(sal_Unicode('/'));
+                pathRep.append(
+                    Data::createSegment(parent->getTemplateName(), parentName));
+                writeAttributeValue(tmp.handle, pathRep.makeStringAndClear());
+                writeData(
+                    tmp.handle,
+                    RTL_CONSTASCII_STRINGPARAM("\"><node oor:name=\""));
+                writeAttributeValue(tmp.handle, nodeName);
+                writeData(
+                    tmp.handle,
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "\" oor:op=\"remove\"/></item>"));
+                break;
+            default:
+                OSL_ASSERT(false); // this cannot happen
+                break;
             }
         }
     }

@@ -60,6 +60,7 @@
 #include "lock.hxx"
 #include "modifications.hxx"
 #include "node.hxx"
+#include "path.hxx"
 #include "propertynode.hxx"
 #include "rootaccess.hxx"
 #include "setnode.hxx"
@@ -102,18 +103,28 @@ ChildAccess::ChildAccess(
     OSL_ASSERT(root.is() && node.is());
 }
 
-rtl::OUString ChildAccess::getAbsolutePath() {
+Path ChildAccess::getAbsolutePath() {
     OSL_ASSERT(getParentAccess().is());
-    return getParentAccess()->getAbsolutePath() +
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
-        Data::createSegment(node_->getTemplateName(), name_);
+    Path path(getParentAccess()->getAbsolutePath());
+    path.push_back(name_);
+    return path;
 }
 
-rtl::OUString ChildAccess::getRelativePath() {
+Path ChildAccess::getRelativePath() {
+    Path path;
+    rtl::Reference< Access > parent(getParentAccess());
+    if (parent.is()) {
+        path = parent->getRelativePath();
+    }
+    path.push_back(name_);
+    return path;
+}
+
+rtl::OUString ChildAccess::getRelativePathRepresentation() {
     rtl::OUStringBuffer path;
     rtl::Reference< Access > parent(getParentAccess());
     if (parent.is()) {
-        path.append(parent->getRelativePath());
+        path.append(parent->getRelativePathRepresentation());
         if (path.getLength() != 0) {
             path.append(sal_Unicode('/'));
         }
@@ -302,7 +313,7 @@ void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
     OSL_ASSERT(globalModifications != 0);
     commitChildChanges(valid, globalModifications);
     if (valid && changedValue_.get() != 0) {
-        rtl::OUString path(getAbsolutePath());
+        Path path(getAbsolutePath());
         Components::singleton().addModification(path);
         globalModifications->add(path);
         switch (node_->kind()) {

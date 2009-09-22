@@ -40,6 +40,7 @@
 #include "node.hxx"
 #include "nodemap.hxx"
 #include "parser.hxx"
+#include "path.hxx"
 #include "type.hxx"
 #include "valueparser.hxx"
 #include "xmldata.hxx"
@@ -135,7 +136,7 @@ private:
     Data * data_;
     rtl::OUString componentName_;
     StateStack state_;
-    rtl::OUString pathPrefix_;
+    Path pathPrefix_;
     rtl::OUString path_;
 };
 

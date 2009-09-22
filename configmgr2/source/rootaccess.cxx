@@ -35,7 +35,9 @@
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/lang/EventObject.hpp"
 #include "com/sun/star/lang/WrappedTargetException.hpp"
+#include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/util/ChangesEvent.hpp"
 #include "com/sun/star/util/ChangesSet.hpp"
 #include "com/sun/star/util/ElementChange.hpp"
@@ -56,6 +58,7 @@
 #include "data.hxx"
 #include "lock.hxx"
 #include "node.hxx"
+#include "path.hxx"
 #include "rootaccess.hxx"
 
 namespace configmgr {
@@ -67,8 +70,9 @@ namespace css = com::sun::star;
 }
 
 RootAccess::RootAccess(
-    rtl::OUString const & path, rtl::OUString const & locale, bool update):
-    path_(path), locale_(locale), update_(update)
+    rtl::OUString const & pathRepresentation, rtl::OUString const & locale,
+    bool update):
+    pathRepresentation_(pathRepresentation), locale_(locale), update_(update)
 {}
 
 void RootAccess::initGlobalBroadcaster(
@@ -83,7 +87,9 @@ void RootAccess::initGlobalBroadcaster(
             *i,
             css::util::ChangesEvent(
                 static_cast< cppu::OWeakObject * >(this),
-                css::uno::makeAny(*static_cast< cppu::OWeakObject * >(this)),
+                css::uno::makeAny(
+                    css::uno::Reference< css::uno::XInterface >(
+                        static_cast< cppu::OWeakObject * >(this))),
                     //TODO: XInterface or something else?
                 css::uno::Sequence< css::util::ElementChange >()/*TODO*/));
 
@@ -112,26 +118,32 @@ RootAccess::~RootAccess() {
     Components::singleton().removeRootAccess(this);
 }
 
-rtl::OUString RootAccess::getAbsolutePath() {
+Path RootAccess::getAbsolutePath() {
     getNode();
     return path_;
 }
 
-rtl::OUString RootAccess::getRelativePath() {
+Path RootAccess::getRelativePath() {
+    return Path();
+}
+
+rtl::OUString RootAccess::getRelativePathRepresentation() {
     return rtl::OUString();
 }
 
 rtl::Reference< Node > RootAccess::getNode() {
     if (!node_.is()) {
         int finalizedLayer;
-        node_ = Components::singleton().resolvePath(
-            path_, &name_, &path_, &finalizedLayer);
+        node_ = Components::singleton().resolvePathRepresentation(
+            pathRepresentation_, &path_, &finalizedLayer);
         if (!node_.is()) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot find ")) +
-                 path_),
+                 pathRepresentation_),
                 static_cast< cppu::OWeakObject * >(this));
         }
+        OSL_ASSERT(!path_.empty());
+        name_ = path_.back();
         finalized_ = finalizedLayer != Data::NO_LAYER;
     }
     return node_;
@@ -183,6 +195,11 @@ void RootAccess::initDisposeBroadcaster(Broadcaster * broadcaster) {
     Access::initDisposeBroadcaster(broadcaster);
 }
 
+void RootAccess::clearListeners() throw() {
+    changesListeners_.clear();
+    Access::clearListeners();
+}
+
 void RootAccess::initLocalBroadcaster(
     Modifications const & localModifications, Broadcaster * broadcaster)
 {
@@ -195,7 +212,9 @@ void RootAccess::initLocalBroadcaster(
             *i,
             css::util::ChangesEvent(
                 static_cast< cppu::OWeakObject * >(this),
-                css::uno::makeAny(*static_cast< cppu::OWeakObject * >(this)),
+                css::uno::makeAny(
+                    css::uno::Reference< css::uno::XInterface >(
+                        static_cast< cppu::OWeakObject * >(this))),
                     //TODO: XInterface or something else?
                 css::uno::Sequence< css::util::ElementChange >()/*TODO*/));
 
@@ -274,7 +293,8 @@ void RootAccess::commitChanges()
         int finalizedLayer;
         Modifications globalMods;
         commitChildChanges(
-            ((Components::singleton().resolvePath(path_, 0, 0, &finalizedLayer)
+            ((Components::singleton().resolvePathRepresentation(
+                  pathRepresentation_, 0, &finalizedLayer)
               == node_) &&
              finalizedLayer == Data::NO_LAYER),
             &globalMods);
