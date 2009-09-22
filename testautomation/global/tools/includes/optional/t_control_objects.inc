@@ -35,20 +35,100 @@
 '*
 '*  short description : Functions to manipulate controls by accessing them as objects
 '*
-'*******************************************************************************
-'**
-' #0 checkRadioButtons ' check a group of RBs where the sel. RB is given by number
-' #0 checkRadioButton  ' check a singe RB where the state is specified directly
-' #0 checkCheckbox     ' check a single checkbox
-' #0 setCheckBox       ' sets checkbox to status provided in reference file
-' #0 checkComboBox     ' compares an index to one provided in a reference-file
-' #0 setComboBox       ' selects an index provided by a reference file
-' #0 checkListBox      ' compares an index to one provided in a reference-file
-' #0 setListBox        ' selects an index provided by a reference file
-' #0 checkListItem     ' check that a listitem is correct
-' #1 hSetControlValue  ' Change the value of a EntryField (failsafe)
-'**
 '\******************************************************************************
+
+private const MSG1 = "Incorrect default setting: "
+
+'*******************************************************************************
+
+function cb_test( oControl as object, def_state as string, issueid as string ) as boolean
+
+    ' Small helper that prints a warnlog if a checkbox does not have the correct
+    ' default setting (checked -> def_state = TRUE). You can supply an issue id
+    ' which will be printed to the log. no parameter is optional, issueid can
+    ' be an empty string.
+    
+    ' oControl: The checkbox itself
+    ' def_state: Default state (checked or unchecked)
+    ' issueid:  Issue id as string "#i123456#" for QUASTe
+
+    dim con_state as boolean : con_state = oControl.isChecked()
+    dim con_name  as string  : con_name  = oControl.name()
+    
+    printlog( con_name & " (Checkbox)" )
+    cb_test() = true
+
+    if ( def_state ) then
+    
+        if ( NOT con_state ) then
+            warnlog( issueid & " " & MSG1 & con_name & " should be checked" )
+            cb_test() = false
+        endif
+        
+        oControl.unCheck()
+        oControl.check()
+        
+    else
+    
+        if ( con_state ) then
+            warnlog( issueid & " " & MSG1 & con_name & " should be unchecked" )
+            cb_test() = false
+        endif
+        
+        oControl.check()
+        oControl.unCheck()
+        
+    endif
+    
+end function
+
+'*******************************************************************************
+
+function lb_test( oControl as object, items as integer, preset as integer, issueid as string ) as boolean
+
+    ' Do some basic testing on listboxes
+    ' - verify that the number of entries is correct
+    ' - verify that the default selection is correct
+    ' - select each item and restore default
+    
+    ' oControl: The Listbox as object
+    ' items:    Number of items in the list
+    ' preset:   Item which is selected by default (usually 1), skip with 0
+    ' issueid:  Issue id as string "#i123456#" for QUASTe
+
+    dim con_name as string    : con_name   = oControl.name()
+    dim con_items as integer  : con_items  = oControl.getItemCount()
+    dim con_preset as integer : con_preset = oControl.getSelIndex()
+    dim con_iterator as integer
+    
+    printlog( con_name & " (Listbox)" )
+    lb_test() = true
+    
+    if ( con_items <> items ) then
+        warnlog( issueid & " Incorrect itemcount in listbox: " & con_name )
+        printlog( "Expected: " & items )
+        printlog( "Found...: " & con_items )
+        lb_test() = false
+    endif
+    
+    if ( preset > 0 ) then
+        if ( con_preset <> preset ) then
+            warnlog( issueid & " Incorrect default setting (index): " & con_name )
+            printlog( "Expected: " & preset )
+            printlog( "Found...: " & con_preset )
+            lb_test() = false
+        endif
+    endif
+    
+    for con_iterator = 1 to items
+        oControl.select( con_iterator )
+    next con_iterator
+    
+    oControl.select( preset )
+
+end function
+
+'*******************************************************************************
 
 function checkRadioButtons( _file as string  , sKey as string  , control1 as object  , control2 as object  , optional control3 as object  , optional control4 as object ) as integer
     

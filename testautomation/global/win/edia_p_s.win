@@ -97,13 +97,13 @@ CancelButton HID_DLGDEPOT_0_CMDCANCEL_HISTORY
             Collate                     .HelpId:vcl:PrintDialog:JobPage:Collate
             PrintNotes                  .HelpId:vcl:PrintDialog:PrintAnnotationMode:ListBox
             AllPages                    .HelpId:vcl:PrintDialog:PrintContent:RadioButton:0
-            Pages                       .HelpId:vcl:PrintDialog:PrintContent:RadioButton:1
-            Sheets                      .HelpId:vcl:PrintDialog:PrintRange:RadioButton:0
-            ThereofPrintAllPages        .HelpId:vcl:PrintDialog:PrintRange:RadioButton:0
-            SelectedSheets              .HelpId:vcl:PrintDialog:PrintRange:RadioButton:1
-            ThereofPrintPages           .HelpId:vcl:PrintDialog:PrintRange:RadioButton:1                        
             AllSlides                   .HelpId:vcl:PrintDialog:PrintContent:RadioButton:0
+            AllSheets                   .HelpId:vcl:PrintDialog:PrintContent:RadioButton:0
+            Pages                       .HelpId:vcl:PrintDialog:PrintContent:RadioButton:1
             Slides                      .HelpId:vcl:PrintDialog:PrintContent:RadioButton:1
+            SelectedSheets              .HelpId:vcl:PrintDialog:PrintContent:RadioButton:1
+            PrintAllPages               .HelpId:vcl:PrintDialog:PrintRange:RadioButton:0
+            PrintPages                  .HelpId:vcl:PrintDialog:PrintRange:RadioButton:1                        
             PageRange                   .HelpId:vcl:PrintDialog:PageRange:Edit
             Selection                   .HelpId:vcl:PrintDialog:PrintContent:RadioButton:2
             SelectedCells               .HelpId:vcl:PrintDialog:PrintContent:RadioButton:2
@@ -115,13 +115,13 @@ CancelButton HID_DLGDEPOT_0_CMDCANCEL_HISTORY
             ArrangeSlides               .HelpId:vcl:PrintDialog:SlidesPerPageOrder:ListBox            
 
         *TabApplication                 .HelpId:vcl:PrintDialog:TabPage:10
-            PageBackground              .HelpId:vcl:PrintDialog:PrintPageBackground:CheckBox
-            GraphicsAndDiagrams         .HelpId:vcl:PrintDialog:PrintTablesGraphicsAndDiagrams:CheckBox
-            HiddenText                  .HelpId:vcl:PrintDialog:PrintHiddenText:CheckBox
-            TextPlaceholder             .HelpId:vcl:PrintDialog:PrintTextPlaceholder:CheckBox
-            FormControls                .HelpId:vcl:PrintDialog:PrintControls:CheckBox
+            PrintPageBackground         .HelpId:vcl:PrintDialog:PrintPageBackground:CheckBox
+            PrintGraphicsAndDiagrams    .HelpId:vcl:PrintDialog:PrintTablesGraphicsAndDiagrams:CheckBox
+            PrintHiddenText             .HelpId:vcl:PrintDialog:PrintHiddenText:CheckBox
+            PrintTextPlaceholder        .HelpId:vcl:PrintDialog:PrintTextPlaceholder:CheckBox
+            PrintFormControls           .HelpId:vcl:PrintDialog:PrintControls:CheckBox
             PrintTextInBlack            .HelpId:vcl:PrintDialog:PrintBlackFonts:CheckBox
-            AddBlankPages               .HelpId:vcl:PrintDialog:PrintEmptyPages:CheckBox
+            PrintBlankPages             .HelpId:vcl:PrintDialog:PrintEmptyPages:CheckBox
             IncludeEmptyPages           .HelpId:vcl:PrintDialog:IsIncludeEmptyPages:CheckBox
             SlideName                   .HelpId:vcl:PrintDialog:IsPrintName:CheckBox
             DateAndTime                 .HelpId:vcl:PrintDialog:IsPrintDateTime:CheckBox
@@ -134,8 +134,10 @@ CancelButton HID_DLGDEPOT_0_CMDCANCEL_HISTORY
             TitleRow                    .HelpId:vcl:PrintDialog:TitleRow:CheckBox
             FormulaText                 .HelpId:vcl:PrintDialog:FormulaText:CheckBox
             Borders                     .HelpId:vcl:PrintDialog:Border:CheckBox
-            OriginalSize                .HelpId:vcl:PrintDialog:PrintFormat:RadioButton:0
-            FitToPage                   .HelpId:vcl:PrintDialog:PrintFormat:RadioButton:1
+            OriginalSize                .HelpId:vcl:PrintDialog:PageOptions:RadioButton:0
+            OriginalSizeMath            .HelpId:vcl:PrintDialog:PrintFormat:RadioButton:0
+            FitToPage                   .HelpId:vcl:PrintDialog:PageOptions:RadioButton:1
+            FitToPageMath               .HelpId:vcl:PrintDialog:PrintFormat:RadioButton:1            
             Scaling                     .HelpId:vcl:PrintDialog:PrintFormat:RadioButton:2
             ScalingFactor               .HelpId:vcl:PrintDialog:PrintScale:NumericField
 
@@ -156,7 +158,7 @@ CancelButton HID_DLGDEPOT_0_CMDCANCEL_HISTORY
 
         *TabOptions                     .HelpId:vcl:PrintDialog:OptPage
             PrintToFile                 .HelpId:vcl:PrintDialog:OptPage:ToFile
-            PrintAsSingeleJobs          .HelpId:vcl:PrintDialog:OptPage:SingleJobs
+            PrintAsSingleJobs           .HelpId:vcl:PrintDialog:OptPage:SingleJobs
             PrintReverse                .HelpId:vcl:PrintDialog:OptPage:Reverse
             PaperTrayFromPrefs          .HelpId:vcl:PrintDialog:PaperTray:CheckBox    
             PaperTrayFromPrefsWriter    .HelpId:vcl:PrintDialog:PrintPaperFromSetup:CheckBox        
