@@ -46,6 +46,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/tools/canvastools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <canvas/canvastools.hxx>
@@ -733,10 +734,8 @@ namespace dxcanvas
         // add output offset
         if( !maOutputOffset.equalZero() )
         {
-            ::basegfx::B2DHomMatrix aOutputOffset;
-            aOutputOffset.translate( maOutputOffset.getX(),
-                                     maOutputOffset.getY() );
-
+            const basegfx::B2DHomMatrix aOutputOffset(basegfx::tools::createTranslateB2DHomMatrix(
+                maOutputOffset.getX(), maOutputOffset.getY()));
             aTransform = aOutputOffset * aTransform;
         }
 
@@ -774,10 +773,8 @@ namespace dxcanvas
         // add output offset
         if( !maOutputOffset.equalZero() )
         {
-            ::basegfx::B2DHomMatrix aOutputOffset;
-            aOutputOffset.translate( maOutputOffset.getX(),
-                                     maOutputOffset.getY() );
-
+            const basegfx::B2DHomMatrix aOutputOffset(basegfx::tools::createTranslateB2DHomMatrix(
+                maOutputOffset.getX(), maOutputOffset.getY()));
             aTransform = aOutputOffset * aTransform;
         }
 

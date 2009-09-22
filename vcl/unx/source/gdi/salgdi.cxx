@@ -1506,9 +1506,7 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
     && !basegfx::fTools::equalZero( rLineWidth.getY() ) )
     {
         // prepare for createAreaGeometry() with anisotropic linewidth
-        basegfx::B2DHomMatrix aAnisoMatrix;
-        aAnisoMatrix.scale( 1.0, rLineWidth.getX() / rLineWidth.getY() );
-        aPolygon.transform( aAnisoMatrix );
+        aPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(1.0, rLineWidth.getX() / rLineWidth.getY()));
     }
 
     // AW: reSegment no longer needed; new createAreaGeometry will remove exteme positions
@@ -1523,9 +1521,7 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
     && !basegfx::fTools::equalZero( rLineWidth.getX() ) )
     {
         // postprocess createAreaGeometry() for anisotropic linewidth
-        basegfx::B2DHomMatrix aAnisoMatrix;
-        aAnisoMatrix.scale( 1.0, rLineWidth.getY() / rLineWidth.getX() );
-        aPolygon.transform( aAnisoMatrix );
+        aPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(1.0, rLineWidth.getY() / rLineWidth.getX()));
     }
 
     // temporarily adjust brush color to pen color

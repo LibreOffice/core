@@ -44,8 +44,8 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-
 #include <basegfx/tools/unopolypolygon.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 
 using namespace ::com::sun::star;
@@ -138,9 +138,7 @@ namespace unotools
 
         if( !aOffset.equalZero() )
         {
-            B2DHomMatrix aTranslate;
-            aTranslate.translate( aOffset.getX(), aOffset.getY() );
-
+            const B2DHomMatrix aTranslate(tools::createTranslateB2DHomMatrix(aOffset));
             aSrcPoly.transform( aTranslate );
         }
 

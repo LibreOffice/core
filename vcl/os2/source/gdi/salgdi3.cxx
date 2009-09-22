@@ -1361,10 +1361,8 @@ BOOL Os2SalGraphics::GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& rB
     // rescaling needed for the PolyPolygon conversion
     if( rB2DPolyPoly.count() )
     {
-        ::basegfx::B2DHomMatrix aMatrix;
-        aMatrix.scale( 1.0/256, 1.0/256 );
-        aMatrix.scale( mfFontScale, mfFontScale );
-        rB2DPolyPoly.transform( aMatrix );
+        const double fFactor((1.0/256) * mfFontScale);
+        rB2DPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(fFactor, fFactor));
     }
 
     return bRet;

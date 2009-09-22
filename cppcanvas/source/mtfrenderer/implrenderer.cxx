@@ -34,19 +34,14 @@
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
-
 #include <osl/mutex.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-
 #include <rtl/logfile.hxx>
-
 #include <comphelper/sequence.hxx>
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-
 #include <cppcanvas/canvas.hxx>
-
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.hpp>
@@ -59,7 +54,6 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
-
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -73,7 +67,6 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
-
 #include <canvas/canvastools.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/salbtype.hxx>
@@ -84,11 +77,9 @@
 #include <vcl/graphictools.hxx>
 #include <tools/poly.hxx>
 #include <i18npool/mslangid.hxx>
-
 #include <implrenderer.hxx>
 #include <tools.hxx>
 #include <outdevstate.hxx>
-
 #include <action.hxx>
 #include <bitmapaction.hxx>
 #include <lineaction.hxx>
@@ -96,15 +87,13 @@
 #include <polypolyaction.hxx>
 #include <textaction.hxx>
 #include <transparencygroupaction.hxx>
-
 #include <vector>
 #include <algorithm>
 #include <iterator>
-
 #include <boost/scoped_array.hpp>
-
 #include "mtftools.hxx"
 #include "outdevstate.hxx"
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 
 using namespace ::com::sun::star;
@@ -729,12 +718,11 @@ namespace cppcanvas
                                     fabs( aBounds.getHeight()*sin(nRotation) ) +
                                     fabs( aBounds.getWidth()*cos(nRotation) )));
 
-                            aTextureTransformation.scale( nScale, nScale );
-
-                            // translate back origin to center of
+                            // scale and translate back origin to center of
                             // primitive
-                            aTextureTransformation.translate( 0.5*aBounds.getWidth(),
-                                                              0.5*aBounds.getHeight() );
+                            aTextureTransformation = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                nScale, nScale, 0.5*aBounds.getWidth(), 0.5*aBounds.getHeight())
+                                * aTextureTransformation;
                         }
                         break;
 
@@ -856,9 +844,8 @@ namespace cppcanvas
                             aTextureTransformation.scale( nScaleX, nScaleY );
 
                             // rotate texture according to gradient rotation
-                            aTextureTransformation.translate( -0.5*nScaleX, -0.5*nScaleY );
-                            aTextureTransformation.rotate( nRotation );
-                            aTextureTransformation.translate( 0.5*nScaleX, 0.5*nScaleY );
+                            aTextureTransformation = basegfx::tools::createRotateAroundPoint(0.5*nScaleX, 0.5*nScaleY, nRotation)
+                                * aTextureTransformation;
 
                             aTextureTransformation.translate( nOffsetX, nOffsetY );
                         }

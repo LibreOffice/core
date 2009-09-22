@@ -43,6 +43,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/tools/tools.hxx>
 #include <basegfx/tools/canvastools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <canvas/parametricpolypolygon.hxx>
 
@@ -452,8 +453,7 @@ namespace dxcanvas
                     aFillBrush.SetColor( aFillColor );
 
                     const double nCurrScale( (nStepCount-i)/(double)nStepCount );
-                    aScaleMatrix.identity();
-                    aScaleMatrix.translate( -0.5, -0.5 );
+                    aScaleMatrix = basegfx::tools::createTranslateB2DHomMatrix(-0.5, -0.5);
 
                     // handle anisotrophic polygon scaling
                     if( rValues.mnAspectRatio < 1.0 )

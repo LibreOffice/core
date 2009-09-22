@@ -34,7 +34,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
-
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -44,6 +43,7 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/curve/b2dbeziertools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <numeric>
 #include <limits>
@@ -1887,29 +1887,10 @@ namespace basegfx
 
         B2DPolygon createPolygonFromEllipse( const B2DPoint& rCenter, double fRadiusX, double fRadiusY )
         {
-            const double fOne(1.0);
             B2DPolygon aRetval(createPolygonFromUnitCircle());
+            const B2DHomMatrix aMatrix(createScaleTranslateB2DHomMatrix(fRadiusX, fRadiusY, rCenter.getX(), rCenter.getY()));
 
-            // transformation necessary?
-            const sal_Bool bScale(!fTools::equal(fRadiusX, fOne) || !fTools::equal(fRadiusY, fOne));
-            const sal_Bool bTranslate(!rCenter.equalZero());
-
-            if(bScale || bTranslate)
-            {
-                B2DHomMatrix aMatrix;
-
-                if(bScale)
-                {
-                    aMatrix.scale(fRadiusX, fRadiusY);
-                }
-
-                if(bTranslate)
-                {
-                    aMatrix.translate(rCenter.getX(), rCenter.getY());
-                }
-
-                aRetval.transform(aMatrix);
-            }
+            aRetval.transform(aMatrix);
 
             return aRetval;
         }
@@ -2050,28 +2031,9 @@ namespace basegfx
         B2DPolygon createPolygonFromEllipseSegment( const B2DPoint& rCenter, double fRadiusX, double fRadiusY, double fStart, double fEnd )
         {
             B2DPolygon aRetval(createPolygonFromUnitEllipseSegment(fStart, fEnd));
+            const B2DHomMatrix aMatrix(createScaleTranslateB2DHomMatrix(fRadiusX, fRadiusY, rCenter.getX(), rCenter.getY()));
 
-            // transformation necessary?
-            const double fOne(1.0);
-            const sal_Bool bScale(!fTools::equal(fRadiusX, fOne) || !fTools::equal(fRadiusY, fOne));
-            const sal_Bool bTranslate(!rCenter.equalZero());
-
-            if(bScale || bTranslate)
-            {
-                B2DHomMatrix aMatrix;
-
-                if(bScale)
-                {
-                    aMatrix.scale(fRadiusX, fRadiusY);
-                }
-
-                if(bTranslate)
-                {
-                    aMatrix.translate(rCenter.getX(), rCenter.getY());
-                }
-
-                aRetval.transform(aMatrix);
-            }
+            aRetval.transform(aMatrix);
 
             return aRetval;
         }
@@ -2701,11 +2663,7 @@ namespace basegfx
 
             if(nPointCount)
             {
-                B2DHomMatrix aMatrix;
-
-                aMatrix.translate(-rCenter.getX(), -rCenter.getY());
-                aMatrix.rotate(fAngle);
-                aMatrix.translate(rCenter.getX(), rCenter.getY());
+                const B2DHomMatrix aMatrix(basegfx::tools::createRotateAroundPoint(rCenter, fAngle));
 
                 aRetval.transform(aMatrix);
             }

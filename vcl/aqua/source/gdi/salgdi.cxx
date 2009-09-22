@@ -1753,9 +1753,7 @@ BOOL AquaSalGraphics::GetGlyphOutline( long nGlyphId, basegfx::B2DPolyPolygon& r
 
     GgoClosePathProc( &aGgoData );
     if( mfFontScale != 1.0 ) {
-        basegfx::B2DHomMatrix aScale;
-        aScale.scale( +mfFontScale, +mfFontScale );
-        rPolyPoly.transform( aScale );
+        rPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(+mfFontScale, +mfFontScale));
     }
     return true;
 }

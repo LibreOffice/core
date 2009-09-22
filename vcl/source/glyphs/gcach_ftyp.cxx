@@ -2280,9 +2280,7 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex,
     // convert to basegfx polypolygon
     // TODO: get rid of the intermediate tools polypolygon
     rB2DPolyPoly = aToolPolyPolygon.getB2DPolyPolygon();
-    ::basegfx::B2DHomMatrix aMatrix;
-    aMatrix.scale( +1.0/(1<<6), -1.0/(1<<6) );
-    rB2DPolyPoly.transform( aMatrix );
+    rB2DPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix( +1.0/(1<<6), -1.0/(1<<6) ));
 
     return true;
 }

@@ -36,6 +36,9 @@
 #include <hommatrixtemplate.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/vector/b2dvector.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+
+///////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
@@ -60,6 +63,17 @@ namespace basegfx
     {
     }
 
+    B2DHomMatrix::B2DHomMatrix(double f_0x0, double f_0x1, double f_0x2, double f_1x0, double f_1x1, double f_1x2)
+    :   mpImpl( IdentityMatrix::get() ) // use common identity matrix, will be made unique with 1st set-call
+    {
+        mpImpl->set(0, 0, f_0x0);
+        mpImpl->set(0, 1, f_0x1);
+        mpImpl->set(0, 2, f_0x2);
+        mpImpl->set(1, 0, f_1x0);
+        mpImpl->set(1, 1, f_1x1);
+        mpImpl->set(1, 2, f_1x2);
+    }
+
     B2DHomMatrix& B2DHomMatrix::operator=(const B2DHomMatrix& rMat)
     {
         mpImpl = rMat.mpImpl;
@@ -79,6 +93,16 @@ namespace basegfx
     void B2DHomMatrix::set(sal_uInt16 nRow, sal_uInt16 nColumn, double fValue)
     {
         mpImpl->set(nRow, nColumn, fValue);
+    }
+
+    void B2DHomMatrix::set3x2(double f_0x0, double f_0x1, double f_0x2, double f_1x0, double f_1x1, double f_1x2)
+    {
+        mpImpl->set(0, 0, f_0x0);
+        mpImpl->set(0, 1, f_0x1);
+        mpImpl->set(0, 2, f_0x2);
+        mpImpl->set(1, 0, f_1x0);
+        mpImpl->set(1, 1, f_1x1);
+        mpImpl->set(1, 2, f_1x2);
     }
 
     bool B2DHomMatrix::isLastLineDefault() const
@@ -206,56 +230,9 @@ namespace basegfx
         if(!fTools::equalZero(fRadiant))
         {
             double fSin(0.0);
-            double fCos(0.0);
+            double fCos(1.0);
 
-            // is the rotation angle an approximate multiple of pi/2?
-            // If yes, force fSin/fCos to -1/0/1, to maintain
-            // orthogonality (which might also be advantageous for the
-            // other cases, but: for multiples of pi/2, the exact
-            // values _can_ be attained. It would be largely
-            // unintuitive, if a 180 degrees rotation would introduce
-            // slight roundoff errors, instead of exactly mirroring
-            // the coordinate system).
-            if( fTools::equalZero( fmod( fRadiant, F_PI2 ) ) )
-            {
-                // determine quadrant
-                const sal_Int32 nQuad(
-                    (4 + fround( 4/F_2PI*fmod( fRadiant, F_2PI ) )) % 4 );
-                switch( nQuad )
-                {
-                    case 0: // -2pi,0,2pi
-                        fSin = 0.0;
-                        fCos = 1.0;
-                        break;
-
-                    case 1: // -3/2pi,1/2pi
-                        fSin = 1.0;
-                        fCos = 0.0;
-                        break;
-
-                    case 2: // -pi,pi
-                        fSin = 0.0;
-                        fCos = -1.0;
-                        break;
-
-                    case 3: // -1/2pi,3/2pi
-                        fSin = -1.0;
-                        fCos = 0.0;
-                        break;
-
-                    default:
-                        OSL_ENSURE( false,
-                                    "B2DHomMatrix::rotate(): Impossible case reached" );
-                }
-            }
-            else
-            {
-                // TODO(P1): Maybe use glibc's sincos here (though
-                // that's kinda non-portable...)
-                fSin = sin(fRadiant);
-                fCos = cos(fRadiant);
-            }
-
+            tools::createSinCosOrthogonal(fSin, fCos, fRadiant);
             Impl2DHomMatrix aRotMat;
 
             aRotMat.set(0, 0, fCos);
@@ -474,104 +451,7 @@ namespace basegfx
 
         return true;
     }
-
-/* Old version: Used 3D decompose when shaer was involved and also a determinant test
-   (but only in that case). Keeping as comment since it also worked and to allow a
-   fallback in case the new version makes trouble somehow. Definitely missing in the 2nd
-   case is the sign correction for Y-Scale, this would need to be added following the above
-   pattern
-
-    bool B2DHomMatrix::decompose(B2DTuple& rScale, B2DTuple& rTranslate, double& rRotate, double& rShearX) const
-    {
-        // when perspective is used, decompose is not made here
-        if(!mpImpl->isLastLineDefault())
-            return false;
-
-        // test for rotation and shear
-        if(fTools::equalZero(get(0, 1))
-           && fTools::equalZero(get(1, 0)))
-        {
-            // no rotation and shear, direct value extraction
-            rRotate = rShearX = 0.0;
-
-            // copy scale values
-            rScale.setX(get(0, 0));
-            rScale.setY(get(1, 1));
-
-            // copy translation values
-            rTranslate.setX(get(0, 2));
-            rTranslate.setY(get(1, 2));
-
-            return true;
-        }
-        else
-        {
-            // test if shear is zero. That's the case, if the unit vectors in the matrix
-            // are perpendicular -> scalar is zero
-            const ::basegfx::B2DVector aUnitVecX(get(0, 0), get(1, 0));
-            const ::basegfx::B2DVector aUnitVecY(get(0, 1), get(1, 1));
-
-            if(fTools::equalZero(aUnitVecX.scalar(aUnitVecY)))
-            {
-                // no shear, direct value extraction
-                rShearX = 0.0;
-
-                // calculate rotation
-                rShearX = 0.0;
-                rRotate = atan2(aUnitVecX.getY(), aUnitVecX.getX());
-
-                // calculate scale values
-                rScale.setX(aUnitVecX.getLength());
-                rScale.setY(aUnitVecY.getLength());
-
-                // copy translation values
-                rTranslate.setX(get(0, 2));
-                rTranslate.setY(get(1, 2));
-
-                return true;
-            }
-            else
-            {
-                // If determinant is zero, decomposition is not possible
-                if(0.0 == determinant())
-                    return false;
-
-                // copy 2x2 matrix and translate vector to 3x3 matrix
-                ::basegfx::B3DHomMatrix a3DHomMat;
-
-                a3DHomMat.set(0, 0, get(0, 0));
-                a3DHomMat.set(0, 1, get(0, 1));
-                a3DHomMat.set(1, 0, get(1, 0));
-                a3DHomMat.set(1, 1, get(1, 1));
-                a3DHomMat.set(0, 3, get(0, 2));
-                a3DHomMat.set(1, 3, get(1, 2));
-
-                ::basegfx::B3DTuple r3DScale, r3DTranslate, r3DRotate, r3DShear;
-
-                if(a3DHomMat.decompose(r3DScale, r3DTranslate, r3DRotate, r3DShear))
-                {
-                    // copy scale values
-                    rScale.setX(r3DScale.getX());
-                    rScale.setY(r3DScale.getY());
-
-                    // copy shear
-                    rShearX = r3DShear.getX();
-
-                    // copy rotate
-                    rRotate = r3DRotate.getZ();
-
-                    // copy translate
-                    rTranslate.setX(r3DTranslate.getX());
-                    rTranslate.setY(r3DTranslate.getY());
-
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    } */
-
 } // end of namespace basegfx
 
+///////////////////////////////////////////////////////////////////////////////
 // eof

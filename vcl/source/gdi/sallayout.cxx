@@ -44,6 +44,7 @@
 #include <vcl/sallayout.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <i18npool/lang.h>
 
 #ifndef _TL_DEBUG_HXX
@@ -891,10 +892,8 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics,
         {
             if( aPos.X() || aPos.Y() )
             {
-                ::basegfx::B2DHomMatrix aMatrix;
-        aMatrix.translate( aPos.X(), aPos.Y() );
-        aGlyphOutline.transform( aMatrix );
-        }
+                aGlyphOutline.transform(basegfx::tools::createTranslateB2DHomMatrix(aPos.X(), aPos.Y()));
+            }
 
             // insert outline at correct position
             rVector.push_back( aGlyphOutline );
