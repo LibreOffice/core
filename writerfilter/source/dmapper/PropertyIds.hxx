@@ -278,6 +278,7 @@ enum PropertyIds
 /*239*/ ,PROP_STREAM_NAME
 /*240*/ ,PROP_BITMAP
 /*241*/ ,PROP_IS_DATE
+/*242*/ ,PROP_TAB_STOP_DISTANCE
 };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier

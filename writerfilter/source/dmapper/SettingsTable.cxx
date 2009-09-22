@@ -33,6 +33,7 @@
 #include <ooxml/resourceids.hxx>
 #include <stdio.h>
 #include <ListTable.hxx>
+#include <ConversionHelper.hxx>
 
 namespace writerfilter {
 namespace dmapper
@@ -50,6 +51,7 @@ struct SettingsTable_Impl
     ::rtl::OUString     m_sListSeparatorForFields; //2.15.1.56 listSeparator (List Separator for Field Code Evaluation)
 
     int                 m_nDefaultTabStop;
+    int                 m_nHyphenationZone;
 
     bool                m_bNoPunctuationKerning;
     bool                m_doNotIncludeSubdocsInStats; // Do Not Include Content in Text Boxes, Footnotes, and Endnotes in Document Statistics)
@@ -57,7 +59,8 @@ struct SettingsTable_Impl
     SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory ) :
         m_rDMapper( rDMapper )
         , m_xTextFactory( xTextFactory )
-        , m_nDefaultTabStop(0)
+        , m_nDefaultTabStop( 720 ) //default is 1/2 in
+        , m_nHyphenationZone(0)
         , m_bNoPunctuationKerning(false)
         , m_doNotIncludeSubdocsInStats(false)
         {}
@@ -160,7 +163,7 @@ void SettingsTable::sprm(Sprm& rSprm)
         break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Settings_noPunctuationKerning: //  92526;
-            m_pImpl->m_bNoPunctuationKerning = pValue->getInt() ? true : false;
+            m_pImpl->m_bNoPunctuationKerning = nIntValue ? true : false;
         break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Settings_characterSpacingControl: //  92527;
@@ -168,7 +171,7 @@ void SettingsTable::sprm(Sprm& rSprm)
         break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Settings_doNotIncludeSubdocsInStats: //  92554; // Do Not Include Content in Text Boxes, Footnotes, and Endnotes in Document Statistics)
-            m_pImpl->m_doNotIncludeSubdocsInStats = pValue->getInt()? true : false;
+            m_pImpl->m_doNotIncludeSubdocsInStats = nIntValue? true : false;
         break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Settings_decimalSymbol: //  92562;
@@ -180,6 +183,14 @@ void SettingsTable::sprm(Sprm& rSprm)
         break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Settings_rsids: //  92549; revision save Ids - probably not necessary
+        break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_Settings_hyphenationZone: // 92508;
+            m_pImpl->m_nHyphenationZone = nIntValue;
+        break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_Compat_useFELayout: // 92422;
+             // useFELayout (Do Not Bypass East Asian/Complex Script Layout Code - support of old versions of Word - ignored)
         break;
         default:
         {
@@ -193,6 +204,16 @@ void SettingsTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Poin
     // printf ( "SettingsTable::entry\n");
     ref->resolve(*this);
 }
+    //returns default TabStop in 1/100th mm
+
+/*-- 22.09.2009 10:29:32---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+int SettingsTable::GetDefaultTabStop() const
+{
+    return ConversionHelper::convertTwipToMM100( m_pImpl->m_nDefaultTabStop );
+}
+
 
 }//namespace dmapper
 } //namespace writerfilter

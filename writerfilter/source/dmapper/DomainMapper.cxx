@@ -4542,11 +4542,9 @@ void DomainMapper::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
     case NS_ooxml::LN_THEMETABLE:
         ref->resolve ( *m_pImpl->GetThemeTable() );
     break;
-#if OSL_DEBUG_LEVEL > 1 //settings table has no id anymore?
-    case 0: //
-#endif
     case NS_ooxml::LN_settings_settings:
         ref->resolve ( *m_pImpl->GetSettingsTable() );
+        m_pImpl->ApplySettingsTable();
     break;
     default:
         OSL_ENSURE( false, "which table is to be filled here?");

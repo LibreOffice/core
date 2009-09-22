@@ -517,6 +517,8 @@ public:
 
     void ResetRedlineProperties();
 
+    void ApplySettingsTable();
+
 };
 } //namespace dmapper
 } //namespace writerfilter

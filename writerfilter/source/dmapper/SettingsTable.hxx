@@ -69,6 +69,9 @@ public:
     // Table
     virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
 
+    //returns default TabStop in 1/100th mm
+    int GetDefaultTabStop() const;
+
 };
 typedef boost::shared_ptr< SettingsTable >          SettingsTablePtr;
 }}
