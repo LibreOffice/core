@@ -44,7 +44,6 @@
 #include <svx/svdviter.hxx>
 #include <svx/svdview.hxx>
 #include <svx/shapepropertynotifier.hxx>
-// AW, OD 2004-04-30 #i28501#
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <fmtornt.hxx>
@@ -69,30 +68,16 @@
 #include <txtfrm.hxx>
 #include <editsh.hxx>
 #include <docary.hxx>
-
-// OD 2004-02-11 #110582#-2
 #include <flyfrms.hxx>
-
-// OD 18.06.2003 #108784#
-#include <algorithm>
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-
-// AW: For VCOfDrawVirtObj and stuff
-#ifndef _SDR_CONTACT_VIEWCONTACTOFVIRTOBJ_HXX
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/sdr/contact/viewcontactofvirtobj.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TRANSFORMPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
-#endif
-
-#ifndef _SDR_CONTACT_VIEWOBJECTCONTACTOFSDROBJ_HXX
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
-#endif
-
 #include <com/sun/star/text/WritingMode2.hpp>
+
+#include <algorithm>
 
 using namespace ::com::sun::star;
 
@@ -2605,9 +2590,7 @@ void SwDrawVirtObj::RecalcBoundRect()
 basegfx::B2DPolyPolygon SwDrawVirtObj::TakeXorPoly() const
 {
     basegfx::B2DPolyPolygon aRetval(rRefObj.TakeXorPoly());
-    basegfx::B2DHomMatrix aMatrix;
-    aMatrix.translate(GetOffset().X(), GetOffset().Y());
-    aRetval.transform(aMatrix);
+    aRetval.transform(basegfx::tools::createTranslateB2DHomMatrix(GetOffset().X(), GetOffset().Y()));
 
     return aRetval;
 }
@@ -2615,9 +2598,7 @@ basegfx::B2DPolyPolygon SwDrawVirtObj::TakeXorPoly() const
 basegfx::B2DPolyPolygon SwDrawVirtObj::TakeContour() const
 {
     basegfx::B2DPolyPolygon aRetval(rRefObj.TakeContour());
-    basegfx::B2DHomMatrix aMatrix;
-    aMatrix.translate(GetOffset().X(), GetOffset().Y());
-    aRetval.transform(aMatrix);
+    aRetval.transform(basegfx::tools::createTranslateB2DHomMatrix(GetOffset().X(), GetOffset().Y()));
 
     return aRetval;
 }
