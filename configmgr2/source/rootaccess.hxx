@@ -32,12 +32,13 @@
 
 #include "sal/config.h"
 
+#include <set>
+
 #include "com/sun/star/lang/WrappedTargetException.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/util/ChangesSet.hpp"
 #include "com/sun/star/util/XChangesBatch.hpp"
 #include "com/sun/star/util/XChangesNotifier.hpp"
-#include "cppuhelper/implbase2.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -54,18 +55,24 @@ namespace com { namespace sun { namespace star {
 
 namespace configmgr {
 
+class Broadcaster;
 class Node;
+struct Modifications;
 
-typedef
-    cppu::ImplInheritanceHelper2<
-        Access, com::sun::star::util::XChangesNotifier,
-        com::sun::star::util::XChangesBatch >
-    RootAccessBase;
-
-class RootAccess: public RootAccessBase {
+class RootAccess:
+    public Access, public com::sun::star::util::XChangesNotifier,
+    public com::sun::star::util::XChangesBatch
+{
 public:
     RootAccess(
         rtl::OUString const & path, rtl::OUString const & locale, bool update);
+
+    virtual void initGlobalBroadcaster(
+        Modifications const & localModifications, Broadcaster * broadcaster);
+
+    virtual void SAL_CALL acquire() throw ();
+
+    virtual void SAL_CALL release() throw ();
 
     rtl::OUString getLocale() const;
 
@@ -90,6 +97,11 @@ private:
 
     virtual void addSupportedServiceNames(
         std::vector< rtl::OUString > * services);
+
+    virtual void initDisposeBroadcaster(Broadcaster * broadcaster);
+
+    virtual void initLocalBroadcaster(
+        Modifications const & localModifications, Broadcaster * broadcaster);
 
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
         com::sun::star::uno::Type const & aType)
@@ -116,12 +128,19 @@ private:
     virtual com::sun::star::util::ChangesSet SAL_CALL getPendingChanges()
         throw (com::sun::star::uno::RuntimeException);
 
+    typedef
+        std::multiset<
+            com::sun::star::uno::Reference<
+                com::sun::star::util::XChangesListener > >
+        ChangesListeners;
+
     rtl::OUString path_;
     rtl::OUString locale_;
     bool update_;
     bool finalized_;
     rtl::Reference< Node > node_;
     rtl::OUString name_;
+    ChangesListeners changesListeners_;
 };
 
 }

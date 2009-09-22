@@ -41,8 +41,6 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
-#include "cppuhelper/implbase2.hxx"
-#include "osl/interlck.h"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 
@@ -50,6 +48,7 @@
 
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;
+    class Type;
     class XInterface;
 } } } }
 
@@ -60,9 +59,8 @@ class RootAccess;
 struct Modifications;
 
 class ChildAccess:
-    public cppu::ImplInheritanceHelper2<
-        Access, com::sun::star::container::XChild,
-        com::sun::star::lang::XUnoTunnel >
+    public Access, public com::sun::star::container::XChild,
+    public com::sun::star::lang::XUnoTunnel
 {
 public:
     static com::sun::star::uno::Sequence< sal_Int8 > getTunnelId();
@@ -90,6 +88,10 @@ public:
 
     virtual rtl::Reference< Access > getParentAccess();
 
+    virtual void SAL_CALL acquire() throw ();
+
+    virtual void SAL_CALL release() throw ();
+
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
     SAL_CALL getParent()
         throw (com::sun::star::uno::RuntimeException);
@@ -104,10 +106,6 @@ public:
     virtual sal_Int64 SAL_CALL getSomething(
         com::sun::star::uno::Sequence< sal_Int8 > const & aIdentifier)
         throw (com::sun::star::uno::RuntimeException);
-
-    oslInterlockedCount acquireCounting();
-
-    void releaseNondeleting();
 
     void bind(
         rtl::Reference< RootAccess > const & root,
@@ -135,6 +133,10 @@ private:
 
     virtual void addSupportedServiceNames(
         std::vector< rtl::OUString > * services);
+
+    virtual com::sun::star::uno::Any SAL_CALL queryInterface(
+        com::sun::star::uno::Type const & aType)
+        throw (com::sun::star::uno::RuntimeException);
 
     rtl::Reference< RootAccess > root_;
     rtl::Reference< Access > parent_; // null iff free node

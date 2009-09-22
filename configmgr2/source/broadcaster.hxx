@@ -36,12 +36,23 @@
 
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/beans/PropertyChangeEvent.hpp"
+#include "com/sun/star/container/ContainerEvent.hpp"
+#include "com/sun/star/lang/EventObject.hpp"
 #include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "com/sun/star/util/ChangesEvent.hpp"
 #include "rtl/ref.hxx"
 
-namespace com { namespace sun { namespace star { namespace beans {
-    class XPropertyChangeListener;
-} } } }
+namespace com { namespace sun { namespace star {
+    namespace beans {
+        class XPropertiesChangeListener;
+        class XPropertyChangeListener;
+        class XVetoableChangeListener;
+    }
+    namespace container { class XContainerListener; }
+    namespace lang { class XEventListener; }
+    namespace util { class XChangesListener; }
+} } }
 
 namespace configmgr {
 
@@ -49,29 +60,133 @@ class Access;
 
 class Broadcaster: private boost::noncopyable {
 public:
-    void addPropertyChange(
+    void addDisposeNotification(
+        com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >
+            const & listener,
+        com::sun::star::lang::EventObject const & event);
+
+    void addContainerNotification(
+        com::sun::star::uno::Reference<
+            com::sun::star::container::XContainerListener > const & listener,
+        com::sun::star::container::ContainerEvent const & event);
+
+    void addPropertyChangeNotification(
         com::sun::star::uno::Reference<
             com::sun::star::beans::XPropertyChangeListener > const & listener,
         com::sun::star::beans::PropertyChangeEvent const & event);
 
+    void addVetoableChangeNotification(
+        com::sun::star::uno::Reference<
+            com::sun::star::beans::XVetoableChangeListener > const & listener,
+        com::sun::star::beans::PropertyChangeEvent const & event);
+
+    void addPropertiesChangeNotification(
+        com::sun::star::uno::Reference<
+            com::sun::star::beans::XPropertiesChangeListener > const & listener,
+        com::sun::star::uno::Sequence<
+            com::sun::star::beans::PropertyChangeEvent > const & event);
+
+    void addChangesNotification(
+        com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
+            const & listener,
+        com::sun::star::util::ChangesEvent const & event);
+
     void send();
 
 private:
-    struct PropertyChange {
+    struct DisposeNotification {
+        com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >
+            listener;
+        com::sun::star::lang::EventObject event;
+
+        DisposeNotification(
+            com::sun::star::uno::Reference<
+                com::sun::star::lang::XEventListener > const & theListener,
+            com::sun::star::lang::EventObject const & theEvent);
+    };
+
+    struct ContainerNotification {
+        com::sun::star::uno::Reference<
+            com::sun::star::container::XContainerListener > listener;
+        com::sun::star::container::ContainerEvent event;
+
+        ContainerNotification(
+            com::sun::star::uno::Reference<
+                com::sun::star::container::XContainerListener > const &
+                    theListener,
+            com::sun::star::container::ContainerEvent const & theEvent);
+    };
+
+    struct PropertyChangeNotification {
         com::sun::star::uno::Reference<
             com::sun::star::beans::XPropertyChangeListener > listener;
         com::sun::star::beans::PropertyChangeEvent event;
 
-        PropertyChange(
+        PropertyChangeNotification(
             com::sun::star::uno::Reference<
                 com::sun::star::beans::XPropertyChangeListener > const &
                 theListener,
             com::sun::star::beans::PropertyChangeEvent const & theEvent);
     };
 
-    typedef std::vector< PropertyChange > PropertyChanges;
+    struct VetoableChangeNotification {
+        com::sun::star::uno::Reference<
+            com::sun::star::beans::XVetoableChangeListener > listener;
+        com::sun::star::beans::PropertyChangeEvent event;
 
-    PropertyChanges propertyChanges_;
+        VetoableChangeNotification(
+            com::sun::star::uno::Reference<
+                com::sun::star::beans::XVetoableChangeListener > const &
+                theListener,
+            com::sun::star::beans::PropertyChangeEvent const & theEvent);
+    };
+
+    struct PropertiesChangeNotification {
+        com::sun::star::uno::Reference<
+            com::sun::star::beans::XPropertiesChangeListener > listener;
+        com::sun::star::uno::Sequence<
+            com::sun::star::beans::PropertyChangeEvent > event;
+
+        PropertiesChangeNotification(
+            com::sun::star::uno::Reference<
+                com::sun::star::beans::XPropertiesChangeListener > const &
+                theListener,
+            com::sun::star::uno::Sequence<
+                com::sun::star::beans::PropertyChangeEvent > const & theEvent);
+    };
+
+    struct ChangesNotification {
+        com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
+            listener;
+        com::sun::star::util::ChangesEvent event;
+
+        ChangesNotification(
+            com::sun::star::uno::Reference<
+                com::sun::star::util::XChangesListener > const & theListener,
+            com::sun::star::util::ChangesEvent const & theEvent);
+    };
+
+    typedef std::vector< DisposeNotification > DisposeNotifications;
+
+    typedef std::vector< ContainerNotification > ContainerNotifications;
+
+    typedef std::vector< PropertyChangeNotification >
+        PropertyChangeNotifications;
+
+    typedef std::vector< VetoableChangeNotification >
+        VetoableChangeNotifications;
+
+    typedef std::vector< PropertiesChangeNotification >
+        PropertiesChangeNotifications;
+
+    typedef std::vector< ChangesNotification > ChangesNotifications;
+
+    DisposeNotifications disposeNotifications_;
+    ContainerNotifications containerNotifications_;
+    PropertyChangeNotifications propertyChangeNotifications_;
+    VetoableChangeNotifications vetoableChangeNotifications_;
+    PropertiesChangeNotifications propertiesChangeNotifications_;
+    ChangesNotifications changesNotifications_;
 };
 
 }

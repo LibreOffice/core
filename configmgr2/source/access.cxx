@@ -37,15 +37,37 @@
 #include "com/sun/star/beans/PropertyChangeEvent.hpp"
 #include "com/sun/star/beans/PropertyVetoException.hpp"
 #include "com/sun/star/beans/UnknownPropertyException.hpp"
+#include "com/sun/star/beans/XExactName.hpp"
+#include "com/sun/star/beans/XHierarchicalPropertySet.hpp"
+#include "com/sun/star/beans/XHierarchicalPropertySetInfo.hpp"
+#include "com/sun/star/beans/XMultiHierarchicalPropertySet.hpp"
+#include "com/sun/star/beans/XMultiPropertySet.hpp"
 #include "com/sun/star/beans/XPropertiesChangeListener.hpp"
+#include "com/sun/star/beans/XProperty.hpp"
 #include "com/sun/star/beans/XPropertyChangeListener.hpp"
+#include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/beans/XPropertySetInfo.hpp"
 #include "com/sun/star/beans/XVetoableChangeListener.hpp"
+#include "com/sun/star/container/ContainerEvent.hpp"
 #include "com/sun/star/container/NoSuchElementException.hpp"
+#include "com/sun/star/container/XContainer.hpp"
 #include "com/sun/star/container/XContainerListener.hpp"
+#include "com/sun/star/container/XElementAccess.hpp"
+#include "com/sun/star/container/XHierarchicalName.hpp"
+#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
+#include "com/sun/star/container/XNameAccess.hpp"
+#include "com/sun/star/container/XNameContainer.hpp"
+#include "com/sun/star/container/XNamed.hpp"
+#include "com/sun/star/lang/DisposedException.hpp"
+#include "com/sun/star/lang/EventObject.hpp"
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
 #include "com/sun/star/lang/NoSupportException.hpp"
 #include "com/sun/star/lang/WrappedTargetException.hpp"
+#include "com/sun/star/lang/XComponent.hpp"
+#include "com/sun/star/lang/XEventListener.hpp"
+#include "com/sun/star/lang/XServiceInfo.hpp"
+#include "com/sun/star/lang/XSingleServiceFactory.hpp"
+#include "com/sun/star/lang/XTypeProvider.hpp"
 #include "com/sun/star/lang/XUnoTunnel.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
@@ -54,12 +76,14 @@
 #include "com/sun/star/uno/Type.hxx"
 #include "com/sun/star/uno/TypeClass.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
+#include "com/sun/star/uno/XWeak.hpp"
 #include "com/sun/star/util/ElementChange.hpp"
 #include "comphelper/sequenceasvector.hxx"
 #include "cppu/unotype.hxx"
-#include "cppuhelper/interfacecontainer.hxx"
+#include "cppuhelper/queryinterface.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/diagnose.h"
+#include "osl/interlck.h"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustrbuf.hxx"
@@ -90,6 +114,14 @@ namespace {
 
 namespace css = com::sun::star;
 
+}
+
+oslInterlockedCount Access::acquireCounting() {
+    return osl_incrementInterlockedCount(&m_refCount);
+}
+
+void Access::releaseNondeleting() {
+    osl_decrementInterlockedCount(&m_refCount);
 }
 
 bool Access::isValue() {
@@ -130,22 +162,52 @@ void Access::initGlobalBroadcaster(
     Modifications const & globalModifications, Broadcaster * broadcaster)
 {
     OSL_ASSERT(broadcaster != 0);
-    cppu::OInterfaceContainerHelper * cont = rBHelper.getContainer(
-        cppu::UnoType< css::beans::XPropertyChangeListener >::get());
-    if (cont != 0) {
-        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > els(
-            cont->getElements()); //TODO: performance
-        for (sal_Int32 i = 0; i < els.getLength(); ++i) {
-            //TODO: only for matching modifications
-            broadcaster->addPropertyChange(
-                css::uno::Reference< css::beans::XPropertyChangeListener >(
-                    els[i], css::uno::UNO_QUERY_THROW),
+    //TODO: only for matching modifications:
+    for (ContainerListeners::iterator i(containerListeners_.begin());
+         i != containerListeners_.end(); ++i)
+    {
+        broadcaster->addContainerNotification(
+            *i,
+            css::container::ContainerEvent(
+                static_cast< cppu::OWeakObject * >(this),
+                css::uno::Any()/*TODO*/, css::uno::Any()/*TODO*/,
+                css::uno::Any()/*TODO*/));
+    }
+    for (PropertyChangeListeners::iterator i(propertyChangeListeners_.begin());
+         i != propertyChangeListeners_.end(); ++i)
+    {
+        for (PropertyChangeListenersElement::iterator j(i->second.begin());
+             j != i->second.end(); ++j)
+        {
+            broadcaster->addPropertyChangeNotification(
+                *j,
                 css::beans::PropertyChangeEvent(
                     static_cast< cppu::OWeakObject * >(this), getNameInternal(),
                     false, -1, css::uno::Any(), css::uno::Any()));
         }
     }
-    //TODO: iterate over children w/ listeners (incl. unmodified ones)
+    for (VetoableChangeListeners::iterator i(vetoableChangeListeners_.begin());
+         i != vetoableChangeListeners_.end(); ++i)
+    {
+        for (VetoableChangeListenersElement::iterator j(i->second.begin());
+             j != i->second.end(); ++j)
+        {
+            broadcaster->addVetoableChangeNotification(
+                *j,
+                css::beans::PropertyChangeEvent(
+                    static_cast< cppu::OWeakObject * >(this), getNameInternal(),
+                    false, -1, css::uno::Any(), css::uno::Any()));
+        }
+    }
+    for (PropertiesChangeListeners::iterator i(
+             propertiesChangeListeners_.begin());
+         i != propertiesChangeListeners_.end(); ++i)
+    {
+        broadcaster->addPropertiesChangeNotification(
+            *i,
+            css::uno::Sequence< css::beans::PropertyChangeEvent >()/*TODO*/);
+    }
+    //TODO: iterate over children w/ listeners (incl. unmodified ones):
     for (ModifiedChildren::iterator i(modifiedChildren_.begin());
          i != modifiedChildren_.end(); ++i)
     {
@@ -156,65 +218,181 @@ void Access::initGlobalBroadcaster(
     }
 }
 
-Access::Access(): AccessBase(lock) {}
+Access::Access(): disposed_(false) {}
 
 Access::~Access() {}
+
+void Access::initDisposeBroadcaster(Broadcaster * broadcaster) {
+    OSL_ASSERT(broadcaster != 0);
+    for (DisposeListeners::iterator i(disposeListeners_.begin());
+         i != disposeListeners_.end(); ++i)
+    {
+        broadcaster->addDisposeNotification(
+            *i,
+            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+    }
+    for (ContainerListeners::iterator i(containerListeners_.begin());
+         i != containerListeners_.end(); ++i)
+    {
+        broadcaster->addDisposeNotification(
+            i->get(),
+            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+    }
+    for (PropertyChangeListeners::iterator i(propertyChangeListeners_.begin());
+         i != propertyChangeListeners_.end(); ++i)
+    {
+        for (PropertyChangeListenersElement::iterator j(i->second.begin());
+             j != i->second.end(); ++j)
+        {
+            broadcaster->addDisposeNotification(
+                j->get(),
+                css::lang::EventObject(
+                    static_cast< cppu::OWeakObject * >(this)));
+        }
+    }
+    for (VetoableChangeListeners::iterator i(vetoableChangeListeners_.begin());
+         i != vetoableChangeListeners_.end(); ++i)
+    {
+        for (VetoableChangeListenersElement::iterator j(i->second.begin());
+             j != i->second.end(); ++j)
+        {
+            broadcaster->addDisposeNotification(
+                j->get(),
+                css::lang::EventObject(
+                    static_cast< cppu::OWeakObject * >(this)));
+        }
+    }
+    for (PropertiesChangeListeners::iterator i(
+             propertiesChangeListeners_.begin());
+         i != propertiesChangeListeners_.end(); ++i)
+    {
+        broadcaster->addDisposeNotification(
+            i->get(),
+            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+    }
+    //TODO: iterate over children w/ listeners (incl. unmodified ones):
+    for (ModifiedChildren::iterator i(modifiedChildren_.begin());
+         i != modifiedChildren_.end(); ++i)
+    {
+        rtl::Reference< ChildAccess > child(getModifiedChild(i));
+        if (child.is()) {
+            child->initDisposeBroadcaster(broadcaster);
+        }
+    }
+}
+
+void Access::initLocalBroadcaster(
+    Modifications const & localModifications, Broadcaster * broadcaster)
+{
+    OSL_ASSERT(broadcaster != 0);
+    //TODO: only for matching modifications:
+    for (ContainerListeners::iterator i(containerListeners_.begin());
+         i != containerListeners_.end(); ++i)
+    {
+        broadcaster->addContainerNotification(
+            *i,
+            css::container::ContainerEvent(
+                static_cast< cppu::OWeakObject * >(this),
+                css::uno::Any()/*TODO*/, css::uno::Any()/*TODO*/,
+                css::uno::Any()/*TODO*/));
+    }
+    for (PropertyChangeListeners::iterator i(propertyChangeListeners_.begin());
+         i != propertyChangeListeners_.end(); ++i)
+    {
+        for (PropertyChangeListenersElement::iterator j(i->second.begin());
+             j != i->second.end(); ++j)
+        {
+            broadcaster->addPropertyChangeNotification(
+                *j,
+                css::beans::PropertyChangeEvent(
+                    static_cast< cppu::OWeakObject * >(this), getNameInternal(),
+                    false, -1, css::uno::Any(), css::uno::Any()));
+        }
+    }
+    for (VetoableChangeListeners::iterator i(vetoableChangeListeners_.begin());
+         i != vetoableChangeListeners_.end(); ++i)
+    {
+        for (VetoableChangeListenersElement::iterator j(i->second.begin());
+             j != i->second.end(); ++j)
+        {
+            broadcaster->addVetoableChangeNotification(
+                *j,
+                css::beans::PropertyChangeEvent(
+                    static_cast< cppu::OWeakObject * >(this), getNameInternal(),
+                    false, -1, css::uno::Any(), css::uno::Any()));
+        }
+    }
+    for (PropertiesChangeListeners::iterator i(
+             propertiesChangeListeners_.begin());
+         i != propertiesChangeListeners_.end(); ++i)
+    {
+        broadcaster->addPropertiesChangeNotification(
+            *i,
+            css::uno::Sequence< css::beans::PropertyChangeEvent >()/*TODO*/);
+    }
+    //TODO: iterate over children w/ listeners (incl. unmodified ones):
+    for (ModifiedChildren::iterator i(modifiedChildren_.begin());
+         i != modifiedChildren_.end(); ++i)
+    {
+        rtl::Reference< ChildAccess > child(getModifiedChild(i));
+        if (child.is()) {
+            child->initLocalBroadcaster(localModifications, broadcaster);
+        }
+    }
+}
 
 css::uno::Any Access::queryInterface(css::uno::Type const & aType)
     throw (css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
-    checkLocalizedPropertyAccess();
-    css::uno::Any res(AccessBase::queryInterface(aType));
+    css::uno::Any res(OWeakObject::queryInterface(aType));
     if (res.hasValue()) {
-        if (aType.getTypeName().equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("com.sun.beans.XPropertySetInfo")) ||
-            aType.getTypeName().equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("com.sun.beans.XPropertySet")) ||
-            aType.getTypeName().equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com.sun.beans.XMultiPropertySet")) ||
-            aType.getTypeName().equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com.sun.beans.XHierarchicalPropertySet")) ||
-            aType.getTypeName().equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com.sun.beans.XMultiHierarchicalPropertySet")) ||
-            aType.getTypeName().equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com.sun.beans.XHierarchicalPropertySetInfo")))
+        return res;
+    }
+    res = cppu::queryInterface(
+        aType, static_cast< css::lang::XTypeProvider * >(this),
+        static_cast< css::lang::XServiceInfo * >(this),
+        static_cast< css::lang::XComponent * >(this),
+        static_cast< css::container::XHierarchicalNameAccess * >(this),
+        static_cast< css::container::XContainer * >(this),
+        static_cast< css::beans::XExactName * >(this),
+        static_cast< css::container::XHierarchicalName * >(this),
+        static_cast< css::container::XNamed * >(this),
+        static_cast< css::beans::XProperty * >(this),
+        static_cast< css::container::XElementAccess * >(this),
+        static_cast< css::container::XNameAccess * >(this));
+    if (res.hasValue()) {
+        return res;
+    }
+    if (getNode()->kind() == Node::KIND_GROUP) {
+        res = cppu::queryInterface(
+            aType, static_cast< css::beans::XPropertySetInfo * >(this),
+            static_cast< css::beans::XPropertySet * >(this),
+            static_cast< css::beans::XMultiPropertySet * >(this),
+            static_cast< css::beans::XHierarchicalPropertySet * >(this),
+            static_cast< css::beans::XMultiHierarchicalPropertySet * >(this),
+            static_cast< css::beans::XHierarchicalPropertySetInfo * >(this));
+        if (res.hasValue()) {
+            return res;
+        }
+    }
+    if (getRootAccess()->isUpdate()) {
+        res = cppu::queryInterface(
+            aType, static_cast< css::container::XNameReplace * >(this));
+        if (res.hasValue()) {
+            return res;
+        }
+        if (getNode()->kind() != Node::KIND_GROUP ||
+            dynamic_cast< GroupNode * >(getNode().get())->isExtensible())
         {
-            if (getNode()->kind() != Node::KIND_GROUP) {
-                res.clear();
+            res = cppu::queryInterface(
+                aType, static_cast< css::container::XNameContainer * >(this));
+            if (res.hasValue()) {
+                return res;
             }
-        } else if (aType.getTypeName().equalsAsciiL(
-                       RTL_CONSTASCII_STRINGPARAM(
-                           "com.sun.star.container.XNameReplace")))
-        {
-            if (!getRootAccess()->isUpdate()) {
-                res.clear();
-            }
-        } else if (aType.getTypeName().equalsAsciiL(
-                       RTL_CONSTASCII_STRINGPARAM(
-                           "com.sun.star.container.XNameContainer")))
-        {
-            if ((getNode()->kind() == Node::KIND_GROUP &&
-                 !dynamic_cast< GroupNode * >(
-                     getNode().get())->isExtensible()) ||
-                !getRootAccess()->isUpdate())
-            {
-                res.clear();
-            }
-        } else if (aType.getTypeName().equalsAsciiL(
-                       RTL_CONSTASCII_STRINGPARAM(
-                           "com.sun.star.lang.XSingleServiceFactory")))
-        {
-            if (getNode()->kind() != Node::KIND_SET ||
-                !getRootAccess()->isUpdate())
-            {
-                res.clear();
-            }
+        }
+        if (getNode()->kind() == Node::KIND_SET) {
+            res = cppu::queryInterface(
+                aType, static_cast< css::lang::XSingleServiceFactory * >(this));
         }
     }
     return res;
@@ -386,12 +564,73 @@ void Access::commitChildChanges(
     }
 }
 
+bool Access::isDisposed() const {
+    return disposed_;
+}
+
 Access::ModifiedChild::ModifiedChild() {}
 
 Access::ModifiedChild::ModifiedChild(
     rtl::Reference< ChildAccess > const & theChild, bool theDirectlyModified):
     child(theChild), directlyModified(theDirectlyModified)
 {}
+
+css::uno::Sequence< css::uno::Type > Access::getTypes()
+    throw (css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
+    comphelper::SequenceAsVector< css::uno::Type > types;
+    types.push_back(cppu::UnoType< css::uno::XInterface >::get());
+    types.push_back(cppu::UnoType< css::uno::XWeak >::get());
+    types.push_back(cppu::UnoType< css::lang::XTypeProvider >::get());
+    types.push_back(cppu::UnoType< css::lang::XServiceInfo >::get());
+    types.push_back(cppu::UnoType< css::lang::XComponent >::get());
+    types.push_back(
+        cppu::UnoType< css::container::XHierarchicalNameAccess >::get());
+    types.push_back(cppu::UnoType< css::container::XContainer >::get());
+    types.push_back(cppu::UnoType< css::beans::XExactName >::get());
+    types.push_back(cppu::UnoType< css::container::XHierarchicalName >::get());
+    types.push_back(cppu::UnoType< css::container::XNamed >::get());
+    types.push_back(cppu::UnoType< css::beans::XProperty >::get());
+    types.push_back(cppu::UnoType< css::container::XElementAccess >::get());
+    types.push_back(cppu::UnoType< css::container::XNameAccess >::get());
+    if (getNode()->kind() == Node::KIND_GROUP) {
+        types.push_back(cppu::UnoType< css::beans::XPropertySetInfo >::get());
+        types.push_back(cppu::UnoType< css::beans::XPropertySet >::get());
+        types.push_back(cppu::UnoType< css::beans::XMultiPropertySet >::get());
+        types.push_back(
+            cppu::UnoType< css::beans::XHierarchicalPropertySet >::get());
+        types.push_back(
+            cppu::UnoType< css::beans::XMultiHierarchicalPropertySet >::get());
+        types.push_back(
+            cppu::UnoType< css::beans::XHierarchicalPropertySetInfo >::get());
+    }
+    if (getRootAccess()->isUpdate()) {
+        types.push_back(cppu::UnoType< css::container::XNameReplace >::get());
+        if (getNode()->kind() != Node::KIND_GROUP ||
+            dynamic_cast< GroupNode * >(getNode().get())->isExtensible())
+        {
+            types.push_back(
+                cppu::UnoType< css::container::XNameContainer >::get());
+        }
+        if (getNode()->kind() == Node::KIND_SET) {
+            types.push_back(
+                cppu::UnoType< css::lang::XSingleServiceFactory >::get());
+        }
+    }
+    return types.getAsConstList();
+}
+
+css::uno::Sequence< sal_Int8 > Access::getImplementationId()
+    throw (css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
+    return css::uno::Sequence< sal_Int8 >();
+}
 
 rtl::OUString Access::getImplementationName() throw (css::uno::RuntimeException)
 {
@@ -482,6 +721,65 @@ css::uno::Sequence< rtl::OUString > Access::getSupportedServiceNames()
     }
     addSupportedServiceNames(&services);
     return services.getAsConstList();
+}
+
+void Access::dispose() throw (css::uno::RuntimeException) {
+    OSL_ASSERT(thisIs(IS_ANY));
+    Broadcaster bc;
+    {
+        osl::MutexGuard g(lock);
+        checkLocalizedPropertyAccess();
+        if (getParentAccess().is()) {
+            throw css::uno::RuntimeException(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "configmgr dispose inappropriate Access")),
+                static_cast< cppu::OWeakObject * >(this));
+        }
+        if (disposed_) {
+            return;
+        }
+        initDisposeBroadcaster(&bc);
+        disposed_ = true;
+    }
+    bc.send();
+}
+
+void Access::addEventListener(
+    css::uno::Reference< css::lang::XEventListener > const & xListener)
+    throw (css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY));
+    {
+        osl::MutexGuard g(lock);
+        checkLocalizedPropertyAccess();
+        if (!xListener.is()) {
+            throw css::uno::RuntimeException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
+                static_cast< cppu::OWeakObject * >(this));
+        }
+        if (!disposed_) {
+            disposeListeners_.insert(xListener);
+            return;
+        }
+    }
+    try {
+        xListener->disposing(
+            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+    } catch (css::lang::DisposedException &) {}
+}
+
+void Access::removeEventListener(
+    css::uno::Reference< css::lang::XEventListener > const & aListener)
+    throw (css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
+    DisposeListeners::iterator i(disposeListeners_.find(aListener));
+    if (i != disposeListeners_.end()) {
+        disposeListeners_.erase(i);
+    }
 }
 
 css::uno::Type Access::getElementType() throw (css::uno::RuntimeException) {
@@ -585,10 +883,23 @@ void Access::addContainerListener(
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
-    checkLocalizedPropertyAccess();
-    rBHelper.addListener(
-        cppu::UnoType< css::container::XContainerListener >::get(), xListener);
+    {
+        osl::MutexGuard g(lock);
+        checkLocalizedPropertyAccess();
+        if (!xListener.is()) {
+            throw css::uno::RuntimeException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
+                static_cast< cppu::OWeakObject * >(this));
+        }
+        if (!disposed_) {
+            containerListeners_.insert(xListener);
+            return;
+        }
+    }
+    try {
+        xListener->disposing(
+            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+    } catch (css::lang::DisposedException &) {}
 }
 
 void Access::removeContainerListener(
@@ -598,8 +909,10 @@ void Access::removeContainerListener(
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
-    rBHelper.removeListener(
-        cppu::UnoType< css::container::XContainerListener >::get(), xListener);
+    ContainerListeners::iterator i(containerListeners_.find(xListener));
+    if (i != containerListeners_.end()) {
+        containerListeners_.erase(i);
+    }
 }
 
 rtl::OUString Access::getExactName(rtl::OUString const & aApproximateName)
@@ -799,7 +1112,7 @@ css::uno::Any Access::getPropertyValue(rtl::OUString const & PropertyName)
 }
 
 void Access::addPropertyChangeListener(
-    rtl::OUString const & /*aPropertyName*/, //TODO
+    rtl::OUString const & aPropertyName,
     css::uno::Reference< css::beans::XPropertyChangeListener > const &
         xListener)
     throw (
@@ -807,12 +1120,26 @@ void Access::addPropertyChangeListener(
         css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    rBHelper.addListener(
-        cppu::UnoType< css::beans::XPropertyChangeListener >::get(), xListener);
+    {
+        osl::MutexGuard g(lock);
+        if (!xListener.is()) {
+            throw css::uno::RuntimeException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
+                static_cast< cppu::OWeakObject * >(this));
+        }
+        if (!disposed_) {
+            propertyChangeListeners_[aPropertyName].insert(xListener);
+            return;
+        }
+    }
+    try {
+        xListener->disposing(
+            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+    } catch (css::lang::DisposedException &) {}
 }
 
 void Access::removePropertyChangeListener(
-    rtl::OUString const & /*aPropertyName*/, //TODO
+    rtl::OUString const & aPropertyName,
     css::uno::Reference< css::beans::XPropertyChangeListener > const &
         aListener)
     throw (
@@ -820,12 +1147,22 @@ void Access::removePropertyChangeListener(
         css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    rBHelper.removeListener(
-        cppu::UnoType< css::beans::XPropertyChangeListener >::get(), aListener);
+    osl::MutexGuard g(lock);
+    PropertyChangeListeners::iterator i(
+        propertyChangeListeners_.find(aPropertyName));
+    if (i != propertyChangeListeners_.end()) {
+        PropertyChangeListenersElement::iterator j(i->second.find(aListener));
+        if (j != i->second.end()) {
+            i->second.erase(j);
+            if (i->second.empty()) {
+                propertyChangeListeners_.erase(i);
+            }
+        }
+    }
 }
 
 void Access::addVetoableChangeListener(
-    rtl::OUString const & /*PropertyName*/, //TODO
+    rtl::OUString const & PropertyName,
     css::uno::Reference< css::beans::XVetoableChangeListener > const &
         aListener)
     throw (
@@ -833,12 +1170,26 @@ void Access::addVetoableChangeListener(
         css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    rBHelper.addListener(
-        cppu::UnoType< css::beans::XVetoableChangeListener >::get(), aListener);
+    {
+        osl::MutexGuard g(lock);
+        if (!aListener.is()) {
+            throw css::uno::RuntimeException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
+                static_cast< cppu::OWeakObject * >(this));
+        }
+        if (!disposed_) {
+            vetoableChangeListeners_[PropertyName].insert(aListener);
+            return;
+        }
+    }
+    try {
+        aListener->disposing(
+            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+    } catch (css::lang::DisposedException &) {}
 }
 
 void Access::removeVetoableChangeListener(
-    rtl::OUString const & /*PropertyName*/, //TODO
+    rtl::OUString const & PropertyName,
     css::uno::Reference< css::beans::XVetoableChangeListener > const &
         aListener)
     throw (
@@ -846,8 +1197,18 @@ void Access::removeVetoableChangeListener(
         css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    rBHelper.removeListener(
-        cppu::UnoType< css::beans::XVetoableChangeListener >::get(), aListener);
+    osl::MutexGuard g(lock);
+    VetoableChangeListeners::iterator i(
+        vetoableChangeListeners_.find(PropertyName));
+    if (i != vetoableChangeListeners_.end()) {
+        VetoableChangeListenersElement::iterator j(i->second.find(aListener));
+        if (j != i->second.end()) {
+            i->second.erase(j);
+            if (i->second.empty()) {
+                vetoableChangeListeners_.erase(i);
+            }
+        }
+    }
 }
 
 void Access::setPropertyValues(
@@ -915,9 +1276,22 @@ void Access::addPropertiesChangeListener(
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    rBHelper.addListener(
-        cppu::UnoType< css::beans::XPropertiesChangeListener >::get(),
-        xListener);
+    {
+        osl::MutexGuard g(lock);
+        if (!xListener.is()) {
+            throw css::uno::RuntimeException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
+                static_cast< cppu::OWeakObject * >(this));
+        }
+        if (!disposed_) {
+            propertiesChangeListeners_.insert(xListener);
+            return;
+        }
+    }
+    try {
+        xListener->disposing(
+            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+    } catch (css::lang::DisposedException &) {}
 }
 
 void Access::removePropertiesChangeListener(
@@ -926,9 +1300,12 @@ void Access::removePropertiesChangeListener(
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    rBHelper.removeListener(
-        cppu::UnoType< css::beans::XPropertiesChangeListener >::get(),
-        xListener);
+    osl::MutexGuard g(lock);
+    PropertiesChangeListeners::iterator i(
+        propertiesChangeListeners_.find(xListener));
+    if (i != propertiesChangeListeners_.end()) {
+        propertiesChangeListeners_.erase(i);
+    }
 }
 
 void Access::firePropertiesChangeEvent(
@@ -1099,7 +1476,7 @@ void Access::replaceByName(
         css::container::NoSuchElementException,
         css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
+    OSL_ASSERT(thisIs(IS_UPDATE));
     Broadcaster bc;
     {
         osl::MutexGuard g(lock);
@@ -1323,7 +1700,7 @@ rtl::Reference< ChildAccess > Access::getSubChild(rtl::OUString const & path) {
 }
 
 bool Access::setChildProperty(
-    rtl::OUString const & name, com::sun::star::uno::Any const & value)
+    rtl::OUString const & name, css::uno::Any const & value)
 {
     rtl::Reference< ChildAccess > child(getChild(name));
     if (!child.is()) {
@@ -1440,36 +1817,6 @@ rtl::Reference< Access > Access::getNotificationRoot() {
             return p;
         }
         p = parent;
-    }
-}
-
-void Access::initLocalBroadcaster(
-    Modifications const & localModifications, Broadcaster * broadcaster)
-{
-    OSL_ASSERT(broadcaster != 0);
-    cppu::OInterfaceContainerHelper * cont = rBHelper.getContainer(
-        cppu::UnoType< css::beans::XPropertyChangeListener >::get());
-    if (cont != 0) {
-        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > els(
-            cont->getElements()); //TODO: performance
-        for (sal_Int32 i = 0; i < els.getLength(); ++i) {
-            //TODO: only for matching modifications
-            broadcaster->addPropertyChange(
-                css::uno::Reference< css::beans::XPropertyChangeListener >(
-                    els[i], css::uno::UNO_QUERY_THROW),
-                css::beans::PropertyChangeEvent(
-                    static_cast< cppu::OWeakObject * >(this), getNameInternal(),
-                    false, -1, css::uno::Any(), css::uno::Any()));
-        }
-    }
-    //TODO: iterate over children w/ listeners (incl. unmodified ones)
-    for (ModifiedChildren::iterator i(modifiedChildren_.begin());
-         i != modifiedChildren_.end(); ++i)
-    {
-        rtl::Reference< ChildAccess > child(getModifiedChild(i));
-        if (child.is()) {
-            child->initLocalBroadcaster(localModifications, broadcaster);
-        }
     }
 }
 

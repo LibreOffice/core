@@ -33,6 +33,7 @@
 #include "sal/config.h"
 
 #include <map>
+#include <set>
 #include <vector>
 
 #include "boost/noncopyable.hpp"
@@ -56,23 +57,20 @@
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
 #include "com/sun/star/lang/NoSupportException.hpp"
 #include "com/sun/star/lang/WrappedTargetException.hpp"
+#include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
+#include "com/sun/star/lang/XTypeProvider.hpp"
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
+#include "cppuhelper/weak.hxx"
+#include "osl/interlck.h"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 
 #include "type.hxx"
-
-#if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_15
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_15
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 15
-#include "comphelper/implbase_var.hxx"
-#undef COMPHELPER_IMPLBASE_INTERFACE_NUMBER
-#endif
 
 namespace com { namespace sun { namespace star {
     namespace beans {
@@ -83,6 +81,7 @@ namespace com { namespace sun { namespace star {
         struct Property;
     }
     namespace container { class XContainerListener; }
+    namespace lang { class XEventListener; }
     namespace uno {
         class Any;
         class Type;
@@ -101,27 +100,31 @@ class Node;
 class RootAccess;
 struct Modifications;
 
-typedef
-    comphelper::WeakComponentImplHelper15<
-        com::sun::star::lang::XServiceInfo,
-        com::sun::star::container::XHierarchicalNameAccess,
-        com::sun::star::container::XContainer,
-        com::sun::star::beans::XExactName,
-        com::sun::star::beans::XPropertySetInfo,
-        com::sun::star::container::XHierarchicalName,
-        com::sun::star::container::XNamed,
-        com::sun::star::beans::XProperty,
-        com::sun::star::beans::XPropertySet,
-        com::sun::star::beans::XMultiPropertySet,
-        com::sun::star::beans::XHierarchicalPropertySet,
-        com::sun::star::beans::XMultiHierarchicalPropertySet,
-        com::sun::star::beans::XHierarchicalPropertySetInfo,
-        com::sun::star::container::XNameContainer,
-        com::sun::star::lang::XSingleServiceFactory >
-    AccessBase;
-
-class Access: public AccessBase, private boost::noncopyable {
+class Access:
+    public cppu::OWeakObject, public com::sun::star::lang::XTypeProvider,
+    public com::sun::star::lang::XServiceInfo,
+    public com::sun::star::lang::XComponent,
+    public com::sun::star::container::XHierarchicalNameAccess,
+    public com::sun::star::container::XContainer,
+    public com::sun::star::beans::XExactName,
+    public com::sun::star::beans::XPropertySetInfo,
+    public com::sun::star::container::XHierarchicalName,
+    public com::sun::star::container::XNamed,
+    public com::sun::star::beans::XProperty,
+    public com::sun::star::beans::XPropertySet,
+    public com::sun::star::beans::XMultiPropertySet,
+    public com::sun::star::beans::XHierarchicalPropertySet,
+    public com::sun::star::beans::XMultiHierarchicalPropertySet,
+    public com::sun::star::beans::XHierarchicalPropertySetInfo,
+    public com::sun::star::container::XNameContainer,
+    public com::sun::star::lang::XSingleServiceFactory,
+    private boost::noncopyable
+{
 public:
+    oslInterlockedCount acquireCounting();
+
+    void releaseNondeleting();
+
     bool isValue();
 
     void markChildAsModified(rtl::Reference< ChildAccess > const & child);
@@ -136,8 +139,11 @@ public:
 
     virtual bool isFinalized() = 0;
 
-    void initGlobalBroadcaster(
+    virtual void initGlobalBroadcaster(
         Modifications const & localModifications, Broadcaster * broadcaster);
+
+    using OWeakObject::acquire;
+    using OWeakObject::release;
 
 protected:
     Access();
@@ -152,6 +158,11 @@ protected:
 
     virtual void addSupportedServiceNames(
         std::vector< rtl::OUString > * services) = 0;
+
+    virtual void initDisposeBroadcaster(Broadcaster * broadcaster);
+
+    virtual void initLocalBroadcaster(
+        Modifications const & localModifications, Broadcaster * broadcaster);
 
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
         com::sun::star::uno::Type const & aType)
@@ -176,6 +187,8 @@ protected:
 
     void commitChildChanges(bool valid, Modifications * globalModifications);
 
+    bool isDisposed() const;
+
 private:
     struct ModifiedChild {
         rtl::Reference< ChildAccess > child;
@@ -190,6 +203,12 @@ private:
 
     typedef std::map< rtl::OUString, ModifiedChild > ModifiedChildren;
 
+    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+    getTypes() throw (com::sun::star::uno::RuntimeException);
+
+    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+    getImplementationId() throw (com::sun::star::uno::RuntimeException);
+
     virtual rtl::OUString SAL_CALL getImplementationName()
         throw (com::sun::star::uno::RuntimeException);
 
@@ -198,6 +217,19 @@ private:
 
     virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
     getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL dispose()
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL addEventListener(
+        com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >
+            const & xListener)
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL removeEventListener(
+        com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >
+            const & aListener)
+        throw (com::sun::star::uno::RuntimeException);
 
     virtual com::sun::star::uno::Type SAL_CALL getElementType()
         throw (com::sun::star::uno::RuntimeException);
@@ -474,13 +506,52 @@ private:
 
     rtl::Reference< Access > getNotificationRoot();
 
-    void initLocalBroadcaster(
-        Modifications const & localModifications, Broadcaster * broadcaster);
-
     typedef std::map< rtl::OUString, ChildAccess * > WeakChildMap;
+
+    typedef
+        std::multiset<
+            com::sun::star::uno::Reference<
+                com::sun::star::lang::XEventListener > >
+        DisposeListeners;
+
+    typedef
+        std::multiset<
+            com::sun::star::uno::Reference<
+                com::sun::star::container::XContainerListener > >
+        ContainerListeners;
+
+    typedef
+        std::multiset<
+            com::sun::star::uno::Reference<
+                com::sun::star::beans::XPropertyChangeListener > >
+        PropertyChangeListenersElement;
+
+    typedef std::map< rtl::OUString, PropertyChangeListenersElement >
+        PropertyChangeListeners;
+
+    typedef
+        std::multiset<
+            com::sun::star::uno::Reference<
+                com::sun::star::beans::XVetoableChangeListener > >
+        VetoableChangeListenersElement;
+
+    typedef std::map< rtl::OUString, VetoableChangeListenersElement >
+        VetoableChangeListeners;
+
+    typedef
+        std::multiset<
+            com::sun::star::uno::Reference<
+                com::sun::star::beans::XPropertiesChangeListener > >
+        PropertiesChangeListeners;
 
     ModifiedChildren modifiedChildren_;
     WeakChildMap cachedChildren_;
+    DisposeListeners disposeListeners_;
+    ContainerListeners containerListeners_;
+    PropertyChangeListeners propertyChangeListeners_;
+    VetoableChangeListeners vetoableChangeListeners_;
+    PropertiesChangeListeners propertiesChangeListeners_;
+    bool disposed_;
 
 #if OSL_DEBUG_LEVEL > 0
 protected:

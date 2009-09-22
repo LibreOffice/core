@@ -140,8 +140,15 @@ void Components::initGlobalBroadcaster(
     rtl::Reference< RootAccess > const & exclude, Broadcaster * broadcaster)
 {
     for (WeakRootSet::iterator i(roots_.begin()); i != roots_.end(); ++i) {
-        if (*i != exclude.get()) {
-            (*i)->initGlobalBroadcaster(globalModifications, broadcaster);
+        rtl::Reference< RootAccess > root;
+        if ((*i)->acquireCounting() > 1) {
+            root.set(*i); // must not throw
+        }
+        (*i)->releaseNondeleting();
+        if (root.is()) {
+            if (root != exclude) {
+                root->initGlobalBroadcaster(globalModifications, broadcaster);
+            }
         }
     }
 }

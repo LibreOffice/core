@@ -38,10 +38,9 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/queryinterface.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/diagnose.h"
-#include "osl/interlck.h"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
@@ -144,6 +143,14 @@ rtl::Reference< Access > ChildAccess::getParentAccess() {
     return parent_;
 }
 
+void ChildAccess::acquire() throw () {
+    Access::acquire();
+}
+
+void ChildAccess::release() throw () {
+    Access::release();
+}
+
 css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()
     throw (css::uno::RuntimeException)
 {
@@ -173,14 +180,6 @@ sal_Int64 ChildAccess::getSomething(
     checkLocalizedPropertyAccess();
     return aIdentifier == getTunnelId()
         ? reinterpret_cast< sal_Int64 >(this) : 0;
-}
-
-oslInterlockedCount ChildAccess::acquireCounting() {
-    return osl_incrementInterlockedCount(&m_refCount);
-}
-
-void ChildAccess::releaseNondeleting() {
-    osl_decrementInterlockedCount(&m_refCount);
 }
 
 void ChildAccess::bind(
@@ -342,6 +341,20 @@ void ChildAccess::addSupportedServiceNames(
         : rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(
                 "com.sun.star.configuration.SetElement")));
+}
+
+css::uno::Any ChildAccess::queryInterface(css::uno::Type const & aType)
+    throw (css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
+    css::uno::Any res(Access::queryInterface(aType));
+    return res.hasValue()
+        ? res
+        : cppu::queryInterface(
+            aType, static_cast< css::container::XChild * >(this),
+            static_cast< css::lang::XUnoTunnel * >(this));
 }
 
 }

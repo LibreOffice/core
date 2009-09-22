@@ -297,7 +297,7 @@ void RecursiveTest::disposing(css::lang::EventObject const & Source)
     properties_.clear();
 }
 
-void RecursiveTest::propertyChange(css::beans::PropertyChangeEvent const &)
+void RecursiveTest::propertyChange(css::beans::PropertyChangeEvent const & evt)
     throw (css::uno::RuntimeException)
 {
     CPPUNIT_ASSERT(

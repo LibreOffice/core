@@ -32,13 +32,17 @@
 
 #include <vector>
 
+#include "com/sun/star/lang/DisposedException.hpp"
+#include "com/sun/star/lang/EventObject.hpp"
 #include "com/sun/star/lang/WrappedTargetException.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/util/ChangesEvent.hpp"
 #include "com/sun/star/util/ChangesSet.hpp"
 #include "com/sun/star/util/ElementChange.hpp"
 #include "com/sun/star/util/XChangesListener.hpp"
 #include "comphelper/sequenceasvector.hxx"
 #include "cppu/unotype.hxx"
+#include "cppuhelper/queryinterface.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
@@ -66,6 +70,34 @@ RootAccess::RootAccess(
     rtl::OUString const & path, rtl::OUString const & locale, bool update):
     path_(path), locale_(locale), update_(update)
 {}
+
+void RootAccess::initGlobalBroadcaster(
+    Modifications const & globalModifications, Broadcaster * broadcaster)
+{
+    OSL_ASSERT(broadcaster != 0);
+    //TODO: only for matching modifications:
+    for (ChangesListeners::iterator i(changesListeners_.begin());
+         i != changesListeners_.end(); ++i)
+    {
+        broadcaster->addChangesNotification(
+            *i,
+            css::util::ChangesEvent(
+                static_cast< cppu::OWeakObject * >(this),
+                css::uno::makeAny(*static_cast< cppu::OWeakObject * >(this)),
+                    //TODO: XInterface or something else?
+                css::uno::Sequence< css::util::ElementChange >()/*TODO*/));
+
+    }
+    Access::initGlobalBroadcaster(globalModifications, broadcaster);
+}
+
+void RootAccess::acquire() throw () {
+    Access::acquire();
+}
+
+void RootAccess::release() throw () {
+    Access::release();
+}
 
 rtl::OUString RootAccess::getLocale() const {
     return locale_;
@@ -139,19 +171,56 @@ void RootAccess::addSupportedServiceNames(
     }
 }
 
+void RootAccess::initDisposeBroadcaster(Broadcaster * broadcaster) {
+    OSL_ASSERT(broadcaster != 0);
+    for (ChangesListeners::iterator i(changesListeners_.begin());
+         i != changesListeners_.end(); ++i)
+    {
+        broadcaster->addDisposeNotification(
+            i->get(),
+            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+    }
+    Access::initDisposeBroadcaster(broadcaster);
+}
+
+void RootAccess::initLocalBroadcaster(
+    Modifications const & localModifications, Broadcaster * broadcaster)
+{
+    OSL_ASSERT(broadcaster != 0);
+    //TODO: only for matching modifications:
+    for (ChangesListeners::iterator i(changesListeners_.begin());
+         i != changesListeners_.end(); ++i)
+    {
+        broadcaster->addChangesNotification(
+            *i,
+            css::util::ChangesEvent(
+                static_cast< cppu::OWeakObject * >(this),
+                css::uno::makeAny(*static_cast< cppu::OWeakObject * >(this)),
+                    //TODO: XInterface or something else?
+                css::uno::Sequence< css::util::ElementChange >()/*TODO*/));
+
+    }
+    Access::initLocalBroadcaster(localModifications, broadcaster);
+}
+
 css::uno::Any RootAccess::queryInterface(css::uno::Type const & aType)
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
-    css::uno::Any res(RootAccessBase::queryInterface(aType));
-    if (res.hasValue() &&
-        aType.getTypeName().equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("com.sun.star.util.XChangesBatch")) &&
-        !update_)
-    {
-        res.clear();
+    css::uno::Any res(Access::queryInterface(aType));
+    if (res.hasValue()) {
+        return res;
+    }
+    res = cppu::queryInterface(
+        aType, static_cast< css::util::XChangesNotifier * >(this));
+    if (res.hasValue()) {
+        return res;
+    }
+    if (!res.hasValue() && update_) {
+        res = cppu::queryInterface(
+            aType, static_cast< css::util::XChangesBatch * >(this));
     }
     return res;
 }
@@ -161,10 +230,24 @@ void RootAccess::addChangesListener(
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
-    checkLocalizedPropertyAccess();
-    rBHelper.addListener(
-        cppu::UnoType< css::util::XChangesListener >::get(), aListener);
+    {
+        osl::MutexGuard g(lock);
+        checkLocalizedPropertyAccess();
+        if (!aListener.is()) {
+            throw css::uno::RuntimeException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
+                static_cast< cppu::OWeakObject * >(this));
+        }
+        if (!isDisposed()) {
+            changesListeners_.insert(aListener);
+            return;
+        }
+    }
+    try {
+        aListener->disposing(
+            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+    } catch (css::lang::DisposedException &) {}
+    //TODO: actually fire changes events through Broadcaster::send
 }
 
 void RootAccess::removeChangesListener(
@@ -174,14 +257,16 @@ void RootAccess::removeChangesListener(
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
-    rBHelper.removeListener(
-        cppu::UnoType< css::util::XChangesListener >::get(), aListener);
+    ChangesListeners::iterator i(changesListeners_.find(aListener));
+    if (i != changesListeners_.end()) {
+        changesListeners_.erase(i);
+    }
 }
 
 void RootAccess::commitChanges()
     throw (css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
+    OSL_ASSERT(thisIs(IS_UPDATE));
     Broadcaster bc;
     {
         osl::MutexGuard g(lock);
@@ -200,7 +285,7 @@ void RootAccess::commitChanges()
 }
 
 sal_Bool RootAccess::hasPendingChanges() throw (css::uno::RuntimeException) {
-    OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
+    OSL_ASSERT(thisIs(IS_UPDATE));
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
     //TODO: Optimize:
@@ -212,7 +297,7 @@ sal_Bool RootAccess::hasPendingChanges() throw (css::uno::RuntimeException) {
 css::util::ChangesSet RootAccess::getPendingChanges()
     throw (css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
+    OSL_ASSERT(thisIs(IS_UPDATE));
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
     comphelper::SequenceAsVector< css::util::ElementChange > changes;
