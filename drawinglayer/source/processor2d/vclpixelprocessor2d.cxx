@@ -67,6 +67,7 @@
 #include <drawinglayer/primitive2d/invertprimitive2d.hxx>
 #include <cstdio>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -204,18 +205,8 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D :
                 {
-                    if(getOptionsDrawinglayer().IsAntiAliasing())
-                    {
-                        // For AA, direct render has to be avoided since it uses XOR maskings which will not
-                        // work with AA. Instead, the decompose which uses MaskPrimitive2D with fillings is
-                        // used
-                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
-                    }
-                    else
-                    {
-                        // direct draw of gradient
-                        RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate));
-                    }
+                    // direct draw of gradient
+                    RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
@@ -522,7 +513,6 @@ namespace drawinglayer
 
                     // restore AA setting
                     mpOutputDevice->SetAntialiasing(nOriginalAA);
-
                     break;
                 }
                 case PRIMITIVE2D_ID_TEXTHIERARCHYEDITPRIMITIVE2D :

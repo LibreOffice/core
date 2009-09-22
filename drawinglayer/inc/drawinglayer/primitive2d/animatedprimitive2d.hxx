@@ -38,6 +38,7 @@
 
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -114,42 +115,6 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
-// helper class for AnimatedInterpolatePrimitive2D
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
-        class BufferedMatrixDecompose
-        {
-        private:
-            // the matrix itself
-            basegfx::B2DHomMatrix                       maB2DHomMatrix;
-
-            // the decomposition
-            basegfx::B2DVector                          maScale;
-            basegfx::B2DVector                          maTranslate;
-            double                                      mfRotate;
-            double                                      mfShearX;
-
-            // flag if already decomposed, used by ensureDecompose()
-            bool                                        mbDecomposed;
-
-        public:
-            BufferedMatrixDecompose(const basegfx::B2DHomMatrix& rMatrix);
-            void ensureDecompose() const;
-
-            // data access
-            const basegfx::B2DHomMatrix& getB2DHomMatrix() const { return maB2DHomMatrix; }
-            const basegfx::B2DVector& getScale() const { return maScale; }
-            const basegfx::B2DVector& getTranslate() const { return maTranslate; }
-            double getRotate() const { return mfRotate; }
-            double getShearX() const { return mfShearX; }
-        };
-    } // end of anonymous namespace
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
@@ -159,7 +124,7 @@ namespace drawinglayer
         {
         private:
             // the transformations
-            std::vector< BufferedMatrixDecompose >      maMatrixStack;
+            std::vector< basegfx::tools::B2DHomMatrixBufferedDecompose >        maMatrixStack;
 
         protected:
             // create local decomposition

@@ -44,23 +44,37 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** AlphaPrimitive2D class
+
+            This is the basic primitive for applying freely defined transparence
+            to freely defined content. The basic idea is to associate a content
+            which is defined as a sequence of primitives and hold as child content
+            in the GroupPrimitive2D with an alpha channel also defined as a sequence
+            of primitives and hold in the Alpha member.
+
+            The basic definition is to use the Alpha content as Alpha-Mask by
+            interpreting the Alpha-content not as RGB, but as Luminance alpha mask
+            using the common RGB_to_luminance definition as e.g. used by VCL
+         */
         class AlphaPrimitive2D : public GroupPrimitive2D
         {
         private:
-            Primitive2DSequence                     maAlpha; // transparence sequence
+            /// The Alpha-Mask who's RGB-Values are interpreted as Luminance
+            Primitive2DSequence                     maAlpha;
 
         public:
+            /// constructor
             AlphaPrimitive2D(
                 const Primitive2DSequence& rChildren,
                 const Primitive2DSequence& rAlpha);
 
-            // get data
+            /// data read access
             const Primitive2DSequence& getAlpha() const { return maAlpha; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

@@ -596,21 +596,32 @@ namespace drawinglayer
             basegfx::BColor aStartColor(maBColorModifierStack.getModifiedColor(rGradient.getStartColor()));
             basegfx::BColor aEndColor(maBColorModifierStack.getModifiedColor(rGradient.getEndColor()));
             basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
-            aLocalPolyPolygon.transform(maCurrentTransformation);
 
-            if(aStartColor == aEndColor)
+            if(aLocalPolyPolygon.count())
             {
-                // no gradient at all, draw as polygon
-                mpOutputDevice->SetLineColor();
-                mpOutputDevice->SetFillColor(Color(aStartColor));
-                mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
-            }
-            else
-            {
-                impDrawGradientToOutDev(
-                    *mpOutputDevice, aLocalPolyPolygon, rGradient.getStyle(), rGradient.getSteps(),
-                    aStartColor, aEndColor, rGradient.getBorder(),
-                    -rGradient.getAngle(), rGradient.getOffsetX(), rGradient.getOffsetY(), false);
+                aLocalPolyPolygon.transform(maCurrentTransformation);
+
+                if(aStartColor == aEndColor)
+                {
+                    // no gradient at all, draw as polygon in AA and non-AA case
+                    mpOutputDevice->SetLineColor();
+                    mpOutputDevice->SetFillColor(Color(aStartColor));
+                    mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
+                }
+                else if(getOptionsDrawinglayer().IsAntiAliasing())
+                {
+                    // For AA, direct render has to be avoided since it uses XOR maskings which will not
+                    // work with AA. Instead, the decompose which uses MaskPrimitive2D with fillings is
+                    // used
+                    process(rPolygonCandidate.get2DDecomposition(getViewInformation2D()));
+                }
+                else
+                {
+                    impDrawGradientToOutDev(
+                        *mpOutputDevice, aLocalPolyPolygon, rGradient.getStyle(), rGradient.getSteps(),
+                        aStartColor, aEndColor, rGradient.getBorder(),
+                        -rGradient.getAngle(), rGradient.getOffsetX(), rGradient.getOffsetY(), false);
+                }
             }
         }
 

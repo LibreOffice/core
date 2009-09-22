@@ -288,7 +288,9 @@ namespace drawinglayer
                         getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
                         // create ranges. The current object range is just scale and translate
-                        const basegfx::B2DRange aCurrent(aTranslate.getX(), aTranslate.getY(), aTranslate.getX() + aScale.getX(), aTranslate.getY() + aScale.getY());
+                        const basegfx::B2DRange aCurrent(
+                            aTranslate.getX(), aTranslate.getY(),
+                            aTranslate.getX() + aScale.getX(), aTranslate.getY() + aScale.getY());
 
                         // calculate scalings between real image size and logic object size. This
                         // is necessary since the crop values are relative to original bitmap size
@@ -338,11 +340,15 @@ namespace drawinglayer
                             // build new object transformation for transform primitive which contains xPrimitive
                             basegfx::B2DHomMatrix aNewObjectTransform(getTransform());
                             aNewObjectTransform.invert();
-                            aNewObjectTransform.scale(aCropped.getWidth(), aCropped.getHeight());
-                            aNewObjectTransform.translate(aCropped.getMinX() - aCurrent.getMinX(), aCropped.getMinY() - aCurrent.getMinY());
-                            aNewObjectTransform.shearX(fShearX);
-                            aNewObjectTransform.rotate(fRotate);
-                            aNewObjectTransform.translate(aTranslate.getX(), aTranslate.getY());
+                            aNewObjectTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                aCropped.getWidth(), aCropped.getHeight(),
+                                aCropped.getMinX() - aCurrent.getMinX(), aCropped.getMinY() - aCurrent.getMinY())
+                                * aNewObjectTransform;
+
+                            // add shear, rotate and translate using combined matrix to speedup
+                            const basegfx::B2DHomMatrix aCombinedMatrix(basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                                fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
+                            aNewObjectTransform = aCombinedMatrix * aNewObjectTransform;
 
                             // prepare TransformPrimitive2D with xPrimitive
                             const Primitive2DReference xTransformPrimitive(new TransformPrimitive2D(aNewObjectTransform, Primitive2DSequence(&xPrimitive, 1L)));

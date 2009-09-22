@@ -43,6 +43,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/outdev.hxx>
 #include <vclhelperbitmaptransform.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // support for different kinds of bitmap rendering using vcl
@@ -84,10 +85,9 @@ namespace drawinglayer
         else
         {
             // if rotated, create the unrotated output rectangle for the GraphicManager paint
-            basegfx::B2DHomMatrix aSimpleObjectMatrix;
-
-            aSimpleObjectMatrix.scale(fabs(aScale.getX()), fabs(aScale.getY()));
-            aSimpleObjectMatrix.translate(aTranslate.getX(), aTranslate.getY());
+            const basegfx::B2DHomMatrix aSimpleObjectMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                fabs(aScale.getX()), fabs(aScale.getY()),
+                aTranslate.getX(), aTranslate.getY()));
 
             aOutlineRange.transform(aSimpleObjectMatrix);
         }
@@ -190,11 +190,11 @@ namespace drawinglayer
             }
 
             // build transform from pixel in aDestination to pixel in rBitmapEx
-            basegfx::B2DHomMatrix aTransform;
-
             // from relative in aCroppedRectPixel to relative in aDestRectPixel
             // No need to take bNeedToReduce into account, TopLeft is unchanged
-            aTransform.translate(aCroppedRectPixel.Left() - aDestRectPixel.Left(), aCroppedRectPixel.Top() - aDestRectPixel.Top());
+            basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                aCroppedRectPixel.Left() - aDestRectPixel.Left(),
+                aCroppedRectPixel.Top() - aDestRectPixel.Top()));
 
             // from relative in aDestRectPixel to absolute Logic. Here it
             // is essential to adapt to reduce factor (if used)
@@ -207,8 +207,10 @@ namespace drawinglayer
                 fAdaptedDRPHeight *= fReduceFactor;
             }
 
-            aTransform.scale(aDestRectLogic.getWidth() / fAdaptedDRPWidth, aDestRectLogic.getHeight() / fAdaptedDRPHeight);
-            aTransform.translate(aDestRectLogic.Left(), aDestRectLogic.Top());
+            aTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                aDestRectLogic.getWidth() / fAdaptedDRPWidth, aDestRectLogic.getHeight() / fAdaptedDRPHeight,
+                aDestRectLogic.Left(), aDestRectLogic.Top())
+                * aTransform;
 
             // from absolute in Logic to unified object coordinates (0.0 .. 1.0 in x and y)
             basegfx::B2DHomMatrix aInvBitmapTransform(rTransform);

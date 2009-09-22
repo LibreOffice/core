@@ -42,6 +42,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -112,9 +113,9 @@ namespace drawinglayer
                         }
 
                         // add the missing object transformation aspects
-                        aPageTrans.shearX(fShearX);
-                        aPageTrans.rotate(fRotate);
-                        aPageTrans.translate(aTranslate.getX(), aTranslate.getY());
+                        const basegfx::B2DHomMatrix aCombined(basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                            fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
+                        aPageTrans = aCombined * aPageTrans;
                     }
                     else
                     {

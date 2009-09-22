@@ -40,6 +40,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -230,11 +231,8 @@ namespace drawinglayer
 
                 if(!basegfx::fTools::equalZero(getRotation()))
                 {
-                    basegfx::B2DHomMatrix aTransform;
-
-                    aTransform.translate(-getObjectRange().getMinX(), -getObjectRange().getMinY());
-                    aTransform.rotate(getRotation());
-                    aTransform.translate(getObjectRange().getMinX(), getObjectRange().getMinY());
+                    const basegfx::B2DHomMatrix aTransform(basegfx::tools::createRotateAroundPoint(
+                        getObjectRange().getMinX(), getObjectRange().getMinY(), getRotation()));
 
                     aHatchPolyPolygon.transform(aTransform);
                 }

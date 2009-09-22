@@ -79,7 +79,7 @@ namespace drawinglayer
 
             if(rFill.isGradient())
             {
-                pNewFillPrimitive = new PolyPolygonGradientPrimitive2D(aScaledPolyPolygon, rFill.getColor(), *rFill.getGradient());
+                pNewFillPrimitive = new PolyPolygonGradientPrimitive2D(aScaledPolyPolygon, *rFill.getGradient());
             }
             else if(rFill.isHatch())
             {
@@ -88,7 +88,7 @@ namespace drawinglayer
             else if(rFill.isBitmap())
             {
                 const basegfx::B2DRange aRange(basegfx::tools::getRange(aScaledPolyPolygon));
-                pNewFillPrimitive = new PolyPolygonBitmapPrimitive2D(aScaledPolyPolygon, rFill.getColor(), rFill.getBitmap()->getFillBitmapAttribute(aRange));
+                pNewFillPrimitive = new PolyPolygonBitmapPrimitive2D(aScaledPolyPolygon, rFill.getBitmap()->getFillBitmapAttribute(aRange));
             }
             else
             {
@@ -191,19 +191,17 @@ namespace drawinglayer
 
                     // scale outline to object's size to allow growing with value relative to that size
                     // and also to keep aspect ratio
-                    basegfx::B2DHomMatrix aScaleTransform;
-                    aScaleTransform.set(0, 0, fabs(aScale.getX()));
-                    aScaleTransform.set(1, 1, fabs(aScale.getY()));
                     basegfx::B2DPolyPolygon aScaledUnitPolyPolygon(rUnitPolyPolygon);
-                    aScaledUnitPolyPolygon.transform(aScaleTransform);
+                    aScaledUnitPolyPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(
+                        fabs(aScale.getX()), fabs(aScale.getY())));
 
                     // grow the polygon. To shrink, use negative value (half width)
                     aScaledUnitPolyPolygon = basegfx::tools::growInNormalDirection(aScaledUnitPolyPolygon, -(pStroke->getWidth() * 0.5));
 
                     // scale back to unit polygon
-                    aScaleTransform.set(0, 0, 0.0 != aScale.getX() ? 1.0 / aScale.getX() : 1.0);
-                    aScaleTransform.set(1, 1, 0.0 != aScale.getY() ? 1.0 / aScale.getY() : 1.0);
-                    aScaledUnitPolyPolygon.transform(aScaleTransform);
+                    aScaledUnitPolyPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(
+                        0.0 != aScale.getX() ? 1.0 / aScale.getX() : 1.0,
+                        0.0 != aScale.getY() ? 1.0 / aScale.getY() : 1.0));
 
                     // create with unit polygon
                     pNew = new SdrContourTextPrimitive2D(
@@ -264,17 +262,16 @@ namespace drawinglayer
                 aTextAnchorRange.expand(aBottomRight);
 
                 // now create a transformation from this basic range (aTextAnchorRange)
-                aAnchorTransform.identity();
-                aAnchorTransform.scale(aTextAnchorRange.getWidth(), aTextAnchorRange.getHeight());
-                aAnchorTransform.translate(aTextAnchorRange.getMinX(), aTextAnchorRange.getMinY());
+                aAnchorTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    aTextAnchorRange.getWidth(), aTextAnchorRange.getHeight(),
+                    aTextAnchorRange.getMinX(), aTextAnchorRange.getMinY());
 
                 // apply mirroring
                 aAnchorTransform.scale(bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0);
 
                 // apply object's other transforms
-                aAnchorTransform.shearX(fShearX);
-                aAnchorTransform.rotate(fRotate);
-                aAnchorTransform.translate(aTranslate.getX(), aTranslate.getY());
+                aAnchorTransform = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
+                    * aAnchorTransform;
 
                 if(rText.isFitToSize())
                 {
@@ -336,10 +333,8 @@ namespace drawinglayer
                     aAnchorTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
                     // build transform from scaled only to full AnchorTransform and inverse
-                    basegfx::B2DHomMatrix aSRT;
-                    aSRT.shearX(fShearX);
-                    aSRT.rotate(fRotate);
-                    aSRT.translate(aTranslate.getX(), aTranslate.getY());
+                    const basegfx::B2DHomMatrix aSRT(basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                        fShearX, fRotate, aTranslate));
                     basegfx::B2DHomMatrix aISRT(aSRT);
                     aISRT.invert();
 

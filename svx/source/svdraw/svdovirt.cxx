@@ -40,6 +40,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svddrgv.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -216,9 +217,7 @@ basegfx::B2DPolyPolygon SdrVirtObj::TakeXorPoly() const
 
     if(aAnchor.X() || aAnchor.Y())
     {
-        basegfx::B2DHomMatrix aMatrix;
-        aMatrix.translate(aAnchor.X(), aAnchor.Y());
-        aPolyPolygon.transform(aMatrix);
+        aPolyPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix(aAnchor.X(), aAnchor.Y()));
     }
 
     return aPolyPolygon;

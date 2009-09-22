@@ -56,7 +56,6 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/svdogrp.hxx>
-
 #include <svx/polypolygoneditor.hxx>
 #include <svx/xlntrit.hxx>
 #include <vcl/salbtype.hxx>     // FRound
@@ -77,10 +76,9 @@ inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-
-// #i89784#
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace sdr;
 
@@ -2291,9 +2289,7 @@ Pointer SdrPathObj::GetCreatePointer() const
 
 void SdrPathObj::NbcMove(const Size& rSiz)
 {
-    basegfx::B2DHomMatrix aTrans;
-    aTrans.translate(rSiz.Width(), rSiz.Height());
-    maPathPolygon.transform(aTrans);
+    maPathPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix(rSiz.Width(), rSiz.Height()));
 
     // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
     SdrTextObj::NbcMove(rSiz);
@@ -2301,10 +2297,9 @@ void SdrPathObj::NbcMove(const Size& rSiz)
 
 void SdrPathObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    basegfx::B2DHomMatrix aTrans;
-    aTrans.translate(-rRef.X(), -rRef.Y());
-    aTrans.scale(double(xFact), double(yFact));
-    aTrans.translate(rRef.X(), rRef.Y());
+    basegfx::B2DHomMatrix aTrans(basegfx::tools::createTranslateB2DHomMatrix(-rRef.X(), -rRef.Y()));
+    aTrans = basegfx::tools::createScaleTranslateB2DHomMatrix(
+        double(xFact), double(yFact), rRef.X(), rRef.Y()) * aTrans;
     maPathPolygon.transform(aTrans);
 
     // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
@@ -2313,10 +2308,8 @@ void SdrPathObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 
 void SdrPathObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 {
-    basegfx::B2DHomMatrix aTrans;
-    aTrans.translate(-rRef.X(), -rRef.Y());
-    aTrans.rotate(-nWink * nPi180); // Thank JOE, the angles are defined mirrored to the mathematical meanings
-    aTrans.translate(rRef.X(), rRef.Y());
+    // Thank JOE, the angles are defined mirrored to the mathematical meanings
+    const basegfx::B2DHomMatrix aTrans(basegfx::tools::createRotateAroundPoint(rRef.X(), rRef.Y(), -nWink * nPi180));
     maPathPolygon.transform(aTrans);
 
     // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
@@ -2325,8 +2318,7 @@ void SdrPathObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 
 void SdrPathObj::NbcShear(const Point& rRefPnt, long nAngle, double fTan, FASTBOOL bVShear)
 {
-    basegfx::B2DHomMatrix aTrans;
-    aTrans.translate(-rRefPnt.X(), -rRefPnt.Y());
+    basegfx::B2DHomMatrix aTrans(basegfx::tools::createTranslateB2DHomMatrix(-rRefPnt.X(), -rRefPnt.Y()));
 
     if(bVShear)
     {
@@ -2347,11 +2339,10 @@ void SdrPathObj::NbcShear(const Point& rRefPnt, long nAngle, double fTan, FASTBO
 
 void SdrPathObj::NbcMirror(const Point& rRefPnt1, const Point& rRefPnt2)
 {
-    basegfx::B2DHomMatrix aTrans;
     const double fDiffX(rRefPnt2.X() - rRefPnt1.X());
     const double fDiffY(rRefPnt2.Y() - rRefPnt1.Y());
     const double fRot(atan2(fDiffY, fDiffX));
-    aTrans.translate(-rRefPnt1.X(), -rRefPnt1.Y());
+    basegfx::B2DHomMatrix aTrans(basegfx::tools::createTranslateB2DHomMatrix(-rRefPnt1.X(), -rRefPnt1.Y()));
     aTrans.rotate(-fRot);
     aTrans.scale(1.0, -1.0);
     aTrans.rotate(fRot);
@@ -2935,31 +2926,11 @@ sal_Bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
     }
 
     // build return value matrix
-    rMatrix.identity();
-
-    if(!basegfx::fTools::equal(aScale.getX(), 1.0) || !basegfx::fTools::equal(aScale.getY(), 1.0))
-    {
-        rMatrix.scale(aScale.getX(), aScale.getY());
-    }
-
-    if(!basegfx::fTools::equalZero(fShearX))
-    {
-        rMatrix.shearX(tan(fShearX));
-    }
-
-    if(!basegfx::fTools::equalZero(fRotate))
-    {
-        // #i78696#
-        // fRotate is from the old GeoStat and thus mathematically wrong orientated. For
-        // the linear combination of matrices it needed to be fixed in the API, so it needs to
-        // be mirrored here
-        rMatrix.rotate(-fRotate);
-    }
-
-    if(!aTranslate.equalZero())
-    {
-        rMatrix.translate(aTranslate.getX(), aTranslate.getY());
-    }
+    rMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+        aScale,
+        basegfx::fTools::equalZero(fShearX) ? 0.0 : tan(fShearX),
+        basegfx::fTools::equalZero(fRotate) ? 0.0 : -fRotate,
+        aTranslate);
 
     return sal_True;
 }

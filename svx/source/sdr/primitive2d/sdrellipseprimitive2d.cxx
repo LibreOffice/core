@@ -39,6 +39,7 @@
 #include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/attribute/sdrattribute.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -61,11 +62,7 @@ namespace drawinglayer
             ::basegfx::B2DPolygon aUnitOutline(::basegfx::tools::createPolygonFromUnitCircle(1));
 
             // scale and move UnitEllipse to UnitObject (-1,-1 1,1) -> (0,0 1,1)
-            ::basegfx::B2DHomMatrix aUnitCorrectionMatrix;
-            aUnitCorrectionMatrix.set(0, 0, 0.5);
-            aUnitCorrectionMatrix.set(1, 1, 0.5);
-            aUnitCorrectionMatrix.set(0, 2, 0.5);
-            aUnitCorrectionMatrix.set(1, 2, 0.5);
+            const basegfx::B2DHomMatrix aUnitCorrectionMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
 
             // apply to the geometry
             aUnitOutline.transform(aUnitCorrectionMatrix);
@@ -146,7 +143,6 @@ namespace drawinglayer
 
             // create unit outline polygon
             ::basegfx::B2DPolygon aUnitOutline(::basegfx::tools::createPolygonFromUnitEllipseSegment(mfStartAngle, mfEndAngle));
-            ::basegfx::B2DHomMatrix aUnitCorrectionMatrix;
 
             if(mbCloseSegment)
             {
@@ -161,7 +157,7 @@ namespace drawinglayer
             }
 
             // move and scale UnitEllipse to UnitObject (-1,-1 1,1) -> (0,0 1,1)
-            aUnitCorrectionMatrix.translate(1.0, 1.0);
+            basegfx::B2DHomMatrix aUnitCorrectionMatrix(basegfx::tools::createTranslateB2DHomMatrix(1.0, 1.0));
             aUnitCorrectionMatrix.scale(0.5, 0.5);
 
             // apply to the geometry

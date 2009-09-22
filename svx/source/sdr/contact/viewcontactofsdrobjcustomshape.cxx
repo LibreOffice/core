@@ -39,6 +39,7 @@
 #include <svx/sdr/primitive2d/sdrcustomshapeprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -82,18 +83,11 @@ namespace sdr
                     basegfx::B2DHomMatrix aRotMatrix;
 
                     aRotMatrix.translate(-aObjectRange.getMinimum().getX(), -aObjectRange.getMinimum().getY());
-
-                    if(rGeoStat.nShearWink)
-                    {
-                        aRotMatrix.shearX(tan((36000 - rGeoStat.nShearWink) * F_PI18000));
-                    }
-
-                    if(rGeoStat.nDrehWink)
-                    {
-                        aRotMatrix.rotate((36000 - rGeoStat.nDrehWink) * F_PI18000);
-                    }
-
-                    aRotMatrix.translate(aObjectRange.getMinimum().getX(), aObjectRange.getMinimum().getY());
+                    aRotMatrix = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                        rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0,
+                        rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0,
+                        aObjectRange.getMinimum().getX(), aObjectRange.getMinimum().getY())
+                        * aRotMatrix;
                     aRotObjectRange.transform(aRotMatrix);
 
                     // add negative translation part

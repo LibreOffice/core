@@ -41,6 +41,7 @@
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -68,13 +69,12 @@ namespace drawinglayer
                 case TEXTEFFECTSTYLE2D_RELIEF_ENGRAVED_DEFAULT:
                 {
                     // prepare transform of sub-group back to (0,0) and align to X-Axis
-                    basegfx::B2DHomMatrix aBackTransform;
-                    aBackTransform.translate(-getRotationCenter().getX(), -getRotationCenter().getY());
+                    basegfx::B2DHomMatrix aBackTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                        -getRotationCenter().getX(), -getRotationCenter().getY()));
                     aBackTransform.rotate(-getDirection());
 
                     // prepare transform of sub-group back to it's position and rotation
-                    basegfx::B2DHomMatrix aForwardTransform;
-                    aForwardTransform.rotate(getDirection());
+                    basegfx::B2DHomMatrix aForwardTransform(basegfx::tools::createRotateB2DHomMatrix(getDirection()));
                     aForwardTransform.translate(getRotationCenter().getX(), getRotationCenter().getY());
 
                     // create transformation for one discrete unit

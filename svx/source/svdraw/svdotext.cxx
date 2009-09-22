@@ -63,17 +63,14 @@
 #include <svx/editeng.hxx>
 #include <svtools/itemiter.hxx>
 #include <svx/sdr/properties/textproperties.hxx>
-
-// #110496#
 #include <vcl/metaact.hxx>
-
-// #111111#
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <vcl/virdev.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -737,9 +734,9 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
 {
     basegfx::B2DPolyPolygon aXorPolyPolygon(TakeXorPoly());
     basegfx::B2DPolyPolygon* pContourPolyPolygon = 0L;
-    basegfx::B2DHomMatrix aMatrix;
+    basegfx::B2DHomMatrix aMatrix(basegfx::tools::createTranslateB2DHomMatrix(
+        -rAnchorRect.Left(), -rAnchorRect.Top()));
 
-    aMatrix.translate(-rAnchorRect.Left(), -rAnchorRect.Top());
     if(aGeo.nDrehWink)
     {
         // Unrotate!
@@ -1735,31 +1732,11 @@ sal_Bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
     }
 
     // build matrix
-    rMatrix.identity();
-
-    if(!basegfx::fTools::equal(aScale.getX(), 1.0) || !basegfx::fTools::equal(aScale.getY(), 1.0))
-    {
-        rMatrix.scale(aScale.getX(), aScale.getY());
-    }
-
-    if(!basegfx::fTools::equalZero(fShearX))
-    {
-        rMatrix.shearX(tan(fShearX));
-    }
-
-    if(!basegfx::fTools::equalZero(fRotate))
-    {
-        // #i78696#
-        // fRotate is from the old GeoStat and thus mathematically wrong orientated. For
-        // the linear combination of matrices it needed to be fixed in the API, so it needs to
-        // be mirrored here
-        rMatrix.rotate(-fRotate);
-    }
-
-    if(!aTranslate.equalZero())
-    {
-        rMatrix.translate(aTranslate.getX(), aTranslate.getY());
-    }
+    rMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+        aScale,
+        basegfx::fTools::equalZero(fShearX) ? 0.0 : tan(fShearX),
+        basegfx::fTools::equalZero(fRotate) ? 0.0 : -fRotate,
+        aTranslate);
 
     return sal_False;
 }

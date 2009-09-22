@@ -61,6 +61,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -238,11 +239,10 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, c
         aCircPolygon.removeDoublePoints();
 
         // needs own scaling and translation from unit circle to target size
-        basegfx::B2DHomMatrix aMatrix;
         const basegfx::B2DPoint aCenter(aRange.getCenter());
-
-        aMatrix.scale(aRange.getWidth() / 2.0, aRange.getHeight() / 2.0);
-        aMatrix.translate(aCenter.getX(), aCenter.getY());
+        const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
+            aRange.getWidth() / 2.0, aRange.getHeight() / 2.0,
+            aCenter.getX(), aCenter.getY()));
         aCircPolygon.transform(aMatrix);
     }
     else
@@ -277,26 +277,16 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, c
     // #i76950#
     if(aGeo.nShearWink || aGeo.nDrehWink)
     {
-        const basegfx::B2DPoint aTopLeft(aRange.getMinimum());
-        basegfx::B2DHomMatrix aMatrix;
-
         // translate top left to (0,0)
-        aMatrix.translate(-aTopLeft.getX(), -aTopLeft.getY());
+        const basegfx::B2DPoint aTopLeft(aRange.getMinimum());
+        basegfx::B2DHomMatrix aMatrix(basegfx::tools::createTranslateB2DHomMatrix(
+            -aTopLeft.getX(), -aTopLeft.getY()));
 
-        // shear (if needed)
-        if(aGeo.nShearWink)
-        {
-            aMatrix.shearX(tan((36000 - aGeo.nShearWink) * F_PI18000));
-        }
-
-        // rotate (if needed)
-        if(aGeo.nDrehWink)
-        {
-            aMatrix.rotate((36000 - aGeo.nDrehWink) * F_PI18000);
-        }
-
-        // back to top left
-        aMatrix.translate(aTopLeft.getX(), aTopLeft.getY());
+        // shear, rotate and back to top left (if needed)
+        aMatrix = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+            aGeo.nShearWink ? tan((36000 - aGeo.nShearWink) * F_PI18000) : 0.0,
+            aGeo.nDrehWink ? (36000 - aGeo.nDrehWink) * F_PI18000 : 0.0,
+            aTopLeft) * aMatrix;
 
         // apply transformation
         aCircPolygon.transform(aMatrix);

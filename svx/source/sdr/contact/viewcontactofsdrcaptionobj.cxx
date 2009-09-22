@@ -37,6 +37,7 @@
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svx/sdr/primitive2d/sdrcaptionprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // includes for special text box shadow (SC)
@@ -83,30 +84,13 @@ namespace sdr
                         const Rectangle& rRectangle = rCaptionObj.GetGeoRect();
                         const ::basegfx::B2DRange aObjectRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
                         const GeoStat& rGeoStat(rCaptionObj.GetGeoStat());
-                        ::basegfx::B2DHomMatrix aObjectMatrix;
 
                         // fill object matrix
-                        if(!::basegfx::fTools::equalZero(aObjectRange.getWidth()))
-                        {
-                            aObjectMatrix.set(0, 0, aObjectRange.getWidth());
-                        }
-
-                        if(!::basegfx::fTools::equalZero(aObjectRange.getHeight()))
-                        {
-                            aObjectMatrix.set(1, 1, aObjectRange.getHeight());
-                        }
-
-                        if(rGeoStat.nShearWink)
-                        {
-                            aObjectMatrix.shearX(tan((36000 - rGeoStat.nShearWink) * F_PI18000));
-                        }
-
-                        if(rGeoStat.nDrehWink)
-                        {
-                            aObjectMatrix.rotate((36000 - rGeoStat.nDrehWink) * F_PI18000);
-                        }
-
-                        aObjectMatrix.translate(aObjectRange.getMinX(), aObjectRange.getMinY());
+                        basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                            aObjectRange.getWidth(), aObjectRange.getHeight(),
+                            rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0,
+                            rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0,
+                            aObjectRange.getMinX(), aObjectRange.getMinY()));
 
                         // calculate corner radius
                         double fCornerRadiusX;

@@ -144,35 +144,6 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
-// helper class for AnimatedInterpolatePrimitive2D
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
-        BufferedMatrixDecompose::BufferedMatrixDecompose(const basegfx::B2DHomMatrix& rMatrix)
-        :   maB2DHomMatrix(rMatrix),
-            maScale(0.0, 0.0),
-            maTranslate(0.0, 0.0),
-            mfRotate(0.0),
-            mfShearX(0.0),
-            mbDecomposed(false)
-        {
-        }
-
-        void BufferedMatrixDecompose::ensureDecompose() const
-        {
-            if(!mbDecomposed)
-            {
-                BufferedMatrixDecompose* pThis = const_cast< BufferedMatrixDecompose* >(this);
-                maB2DHomMatrix.decompose(pThis->maScale, pThis->maTranslate, pThis->mfRotate, pThis->mfShearX);
-                pThis->mbDecomposed = true;
-            }
-        }
-    } // end of anonymous namespace
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
@@ -199,21 +170,18 @@ namespace drawinglayer
                 const sal_uInt32 nIndA(sal_uInt32(floor(fIndex)));
                 const double fOffset(fIndex - (double)nIndA);
                 basegfx::B2DHomMatrix aTargetTransform;
+                std::vector< basegfx::tools::B2DHomMatrixBufferedDecompose >::const_iterator aMatA(maMatrixStack.begin() + nIndA);
 
                 if(basegfx::fTools::equalZero(fOffset))
                 {
                     // use matrix from nIndA directly
-                    aTargetTransform = maMatrixStack[nIndA].getB2DHomMatrix();
+                    aTargetTransform = aMatA->getB2DHomMatrix();
                 }
                 else
                 {
-                    // interpolate. Get involved matrices and ensure they are decomposed
+                    // interpolate. Get involved buffered decomposed matrices
                     const sal_uInt32 nIndB((nIndA + 1L) % nSize);
-                    std::vector< BufferedMatrixDecompose >::const_iterator aMatA(maMatrixStack.begin() + nIndA);
-                    std::vector< BufferedMatrixDecompose >::const_iterator aMatB(maMatrixStack.begin() + nIndB);
-
-                    aMatA->ensureDecompose();
-                    aMatB->ensureDecompose();
+                    std::vector< basegfx::tools::B2DHomMatrixBufferedDecompose >::const_iterator aMatB(maMatrixStack.begin() + nIndB);
 
                     // interpolate for fOffset [0.0 .. 1.0[
                     const basegfx::B2DVector aScale(basegfx::interpolate(aMatA->getScale(), aMatB->getScale(), fOffset));
@@ -222,10 +190,8 @@ namespace drawinglayer
                     const double fShearX(((aMatB->getShearX() - aMatA->getShearX()) * fOffset) + aMatA->getShearX());
 
                     // build matrix for state
-                    aTargetTransform.scale(aScale.getX(), aScale.getY());
-                    aTargetTransform.shearX(fShearX);
-                    aTargetTransform.rotate(fRotate);
-                    aTargetTransform.translate(aTranslate.getX(), aTranslate.getY());
+                    aTargetTransform = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                        aScale, fShearX, fRotate, aTranslate);
                 }
 
                 // create new transform primitive reference, return new sequence
@@ -246,12 +212,13 @@ namespace drawinglayer
         :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, bIsTextAnimation),
             maMatrixStack()
         {
-            // copy matrices
+            // copy matrices to locally pre-decomposed matrix stack
             const sal_uInt32 nCount(rmMatrixStack.size());
+            maMatrixStack.reserve(nCount);
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
-                maMatrixStack.push_back(BufferedMatrixDecompose(rmMatrixStack[a]));
+                maMatrixStack.push_back(basegfx::tools::B2DHomMatrixBufferedDecompose(rmMatrixStack[a]));
             }
         }
 

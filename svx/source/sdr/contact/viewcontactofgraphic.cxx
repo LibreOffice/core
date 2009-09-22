@@ -52,18 +52,16 @@
 #include "svdstr.hrc"
 #include <svdglob.hxx>
 #include <vcl/svapp.hxx>
-
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
-
 #include <svx/sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/colritem.hxx>
-//#include <svx/xtable.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -148,11 +146,9 @@ namespace sdr
             {
                 // create the EmptyPresObj fallback visualisation. The fallback graphic
                 // is already provided in rGraphicObject in this case, use it
-                aSmallerMatrix.scale(aPrefSize.getWidth(), aPrefSize.getHeight());
-                aSmallerMatrix.translate(fOffsetX, fOffsetY);
-                aSmallerMatrix.shearX(fShearX);
-                aSmallerMatrix.rotate(fRotate);
-                aSmallerMatrix.translate(aTranslate.getX(), aTranslate.getY());
+                aSmallerMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(aPrefSize.getWidth(), aPrefSize.getHeight(), fOffsetX, fOffsetY);
+                aSmallerMatrix = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
+                    * aSmallerMatrix;
 
                 const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
                 const drawinglayer::attribute::SdrLineFillShadowTextAttribute aEmptyAttributes(0, 0, 0, 0, 0, 0);
@@ -241,12 +237,8 @@ namespace sdr
                     && basegfx::fTools::lessOrEqual(fWidth, aScale.getX())
                     && basegfx::fTools::lessOrEqual(fHeight, aScale.getY()))
                 {
-                    basegfx::B2DHomMatrix aBitmapMatrix;
-
-                    aBitmapMatrix.scale(fWidth, fHeight);
-                    aBitmapMatrix.shearX(fShearX);
-                    aBitmapMatrix.rotate(fRotate);
-                    aBitmapMatrix.translate(aTranslate.getX(), aTranslate.getY());
+                    const basegfx::B2DHomMatrix aBitmapMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                        fWidth, fHeight, fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 
                     drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
                         drawinglayer::primitive2d::Primitive2DReference(
@@ -293,12 +285,8 @@ namespace sdr
                 if(pSdrText && pOPO)
                 {
                     // directly use the remaining space as TextRangeTransform
-                    basegfx::B2DHomMatrix aTextRangeTransform;
-
-                    aTextRangeTransform.scale(aScale.getX(), aScale.getY());
-                    aTextRangeTransform.shearX(fShearX);
-                    aTextRangeTransform.rotate(fRotate);
-                    aTextRangeTransform.translate(aTranslate.getX(), aTranslate.getY());
+                    const basegfx::B2DHomMatrix aTextRangeTransform(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                        aScale, fShearX, fRotate, aTranslate));
 
                     // directly create temp SdrBlockTextPrimitive2D
                     drawinglayer::primitive2d::SdrBlockTextPrimitive2D aBlockTextPrimitive(
@@ -376,7 +364,6 @@ namespace sdr
                         // which will use the primitive data we just create in the near future
                         const Rectangle& rRectangle = GetGrafObject().GetGeoRect();
                         const ::basegfx::B2DRange aObjectRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
-                        basegfx::B2DHomMatrix aObjectMatrix;
 
                         // look for mirroring
                         const GeoStat& rGeoStat(GetGrafObject().GetGeoStat());
@@ -407,10 +394,10 @@ namespace sdr
                         // fill object matrix
                         const double fShearX(rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0);
                         const double fRotate(nDrehWink ? (36000 - nDrehWink) * F_PI18000 : 0.0);
-                        aObjectMatrix.scale(aObjectRange.getWidth(), aObjectRange.getHeight());
-                        aObjectMatrix.shearX(fShearX);
-                        aObjectMatrix.rotate(fRotate);
-                        aObjectMatrix.translate(aObjectRange.getMinX(), aObjectRange.getMinY());
+                        const basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                            aObjectRange.getWidth(), aObjectRange.getHeight(),
+                            fShearX, fRotate,
+                            aObjectRange.getMinX(), aObjectRange.getMinY()));
 
                         // get the current, unchenged graphic obect from SdrGrafObj
                         const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);

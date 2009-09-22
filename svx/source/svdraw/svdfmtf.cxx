@@ -46,7 +46,6 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xflclit.hxx>
-
 #include <svx/xgrad.hxx>
 #include <svx/xflgrit.hxx>
 #include <fontitem.hxx>
@@ -55,9 +54,7 @@
 #include <svx/cntritem.hxx>
 #include <svx/colritem.hxx>
 #include <vcl/metric.hxx>
-
 #include <svx/charscaleitem.hxx>
-
 #include <svx/xflhtit.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svdmodel.hxx>
@@ -73,9 +70,8 @@
 #include <svtools/itemset.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <vcl/salbtype.hxx>     // FRound
-
-// #i73407#
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -385,12 +381,10 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction& rAct)
     if(!aStart.equal(aEnd))
     {
         basegfx::B2DPolygon aLine;
-        basegfx::B2DHomMatrix aTransform;
+        const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(fScaleX, fScaleY, aOfs.X(), aOfs.Y()));
 
         aLine.append(aStart);
         aLine.append(aEnd);
-        aTransform.scale(fScaleX, fScaleY);
-        aTransform.translate(aOfs.X(), aOfs.Y());
         aLine.transform(aTransform);
 
         const LineInfo& rLineInfo = rAct.GetLineInfo();
@@ -581,10 +575,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolyLineAction& rAct )
 
     if(aSource.count())
     {
-        basegfx::B2DHomMatrix aTransform;
-
-        aTransform.scale(fScaleX, fScaleY);
-        aTransform.translate(aOfs.X(), aOfs.Y());
+        const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(fScaleX, fScaleY, aOfs.X(), aOfs.Y()));
         aSource.transform(aTransform);
     }
 
@@ -618,10 +609,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolygonAction& rAct )
 
     if(aSource.count())
     {
-        basegfx::B2DHomMatrix aTransform;
-
-        aTransform.scale(fScaleX, fScaleY);
-        aTransform.translate(aOfs.X(), aOfs.Y());
+        const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(fScaleX, fScaleY, aOfs.X(), aOfs.Y()));
         aSource.transform(aTransform);
 
         if(!bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(basegfx::B2DPolyPolygon(aSource)))
@@ -643,10 +631,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaPolyPolygonAction& rAct)
 
     if(aSource.count())
     {
-        basegfx::B2DHomMatrix aTransform;
-
-        aTransform.scale(fScaleX, fScaleY);
-        aTransform.translate(aOfs.X(), aOfs.Y());
+        const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(fScaleX, fScaleY, aOfs.X(), aOfs.Y()));
         aSource.transform(aTransform);
 
         if(!bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(aSource))
@@ -791,9 +776,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction& rAct )
 
     if(aSource.count())
     {
-        basegfx::B2DHomMatrix aTransform;
-        aTransform.scale(fScaleX, fScaleY);
-        aTransform.translate(aOfs.X(), aOfs.Y());
+        const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(fScaleX, fScaleY, aOfs.X(), aOfs.Y()));
         aSource.transform(aTransform);
 
         if(!bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(aSource))
@@ -886,10 +869,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
 
             if(aSource.count())
             {
-                basegfx::B2DHomMatrix aTransform;
-
-                aTransform.scale(fScaleX, fScaleY);
-                aTransform.translate(aOfs.X(), aOfs.Y());
+                const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(fScaleX, fScaleY, aOfs.X(), aOfs.Y()));
                 aSource.transform(aTransform);
 
                 if(!bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(aSource))

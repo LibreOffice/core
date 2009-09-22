@@ -68,9 +68,6 @@
 #include <svx/svdattrx.hxx> // NotPersistItems
 #include <svx/svdoashp.hxx>
 #include <svx/svdomedia.hxx>
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedwit.hxx>
@@ -98,8 +95,6 @@
 #include <svx/editeng.hxx>
 #include <vcl/salbtype.hxx>     // FRound
 #include <svtools/whiter.hxx>
-
-// #97849#
 #include <svx/fmmodel.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/objface.hxx>
@@ -107,8 +102,6 @@
 #include <vcl/graphictools.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/sdr/properties/emptyproperties.hxx>
-
-// #110094#
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <svx/sdr/contact/viewcontactofgraphic.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
@@ -120,7 +113,6 @@
 #include <basegfx/range/b2drange.hxx>
 #include <svx/unoshape.hxx>
 #include <vcl/virdev.hxx>
-
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
 #include <drawinglayer/processor2d/linegeometryextractor2d.hxx>
@@ -128,10 +120,8 @@
 #include "svx/svdotable.hxx"
 #include "svx/shapepropertynotifier.hxx"
 #include <svx/sdrhittesthelper.hxx>
-
-// --> OD 2009-07-10 #i73249#
 #include <svx/svdundo.hxx>
-// <--
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace ::com::sun::star;
 
@@ -3056,17 +3046,7 @@ sal_Bool SdrObject::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B
     }
 
     // build matrix
-    rMatrix.identity();
-
-    if(1.0 != aScale.getX() || 1.0 != aScale.getY())
-    {
-        rMatrix.scale(aScale.getX(), aScale.getY());
-    }
-
-    if(0.0 != aTranslate.getX() || 0.0 != aTranslate.getY())
-    {
-        rMatrix.translate(aTranslate.getX(), aTranslate.getY());
-    }
+    rMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(aScale, aTranslate);
 
     return sal_False;
 }

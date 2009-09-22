@@ -257,9 +257,10 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class PolyPolygonGradientPrimitive2D : public PolyPolygonColorPrimitive2D
+        class PolyPolygonGradientPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
+            basegfx::B2DPolyPolygon                     maPolyPolygon;
             attribute::FillGradientAttribute            maFillGradient;
 
         protected:
@@ -269,10 +270,10 @@ namespace drawinglayer
         public:
             PolyPolygonGradientPrimitive2D(
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const basegfx::BColor& rBColor,
                 const attribute::FillGradientAttribute& rFillGradient);
 
             // get data
+            const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
             const attribute::FillGradientAttribute& getFillGradient() const { return maFillGradient; }
 
             // compare operator
@@ -291,10 +292,12 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class PolyPolygonHatchPrimitive2D : public PolyPolygonColorPrimitive2D
+        class PolyPolygonHatchPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
+            basegfx::B2DPolyPolygon                     maPolyPolygon;
             attribute::FillHatchAttribute               maFillHatch;
+            basegfx::BColor                             maBackgroundColor;
 
         protected:
             // local decomposition.
@@ -303,10 +306,12 @@ namespace drawinglayer
         public:
             PolyPolygonHatchPrimitive2D(
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const basegfx::BColor& rBColor,
+                const basegfx::BColor& rBackgroundColor,
                 const attribute::FillHatchAttribute& rFillHatch);
 
             // get data
+            const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
+            const basegfx::BColor& getBackgroundColor() const { return maBackgroundColor; }
             const attribute::FillHatchAttribute& getFillHatch() const { return maFillHatch; }
 
             // compare operator
@@ -325,9 +330,10 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class PolyPolygonBitmapPrimitive2D : public PolyPolygonColorPrimitive2D
+        class PolyPolygonBitmapPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
+            basegfx::B2DPolyPolygon                     maPolyPolygon;
             attribute::FillBitmapAttribute              maFillBitmap;
 
         protected:
@@ -337,10 +343,10 @@ namespace drawinglayer
         public:
             PolyPolygonBitmapPrimitive2D(
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const basegfx::BColor& rBColor,
                 const attribute::FillBitmapAttribute& rFillBitmap);
 
             // get data
+            const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
             const attribute::FillBitmapAttribute& getFillBitmap() const { return maFillBitmap; }
 
             // compare operator

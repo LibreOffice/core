@@ -39,6 +39,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -105,13 +106,10 @@ namespace drawinglayer
                     if(basegfx::fTools::moreOrEqual(fOffsetX, 0.0) && basegfx::fTools::moreOrEqual(fOffsetY, 0.0))
                     {
                         // if content fits into frame, create it
-                        basegfx::B2DHomMatrix aInnerObjectMatrix;
-
-                        aInnerObjectMatrix.scale(aPrefSize.getWidth(), aPrefSize.getHeight());
-                        aInnerObjectMatrix.translate(fOffsetX, fOffsetY);
-                        aInnerObjectMatrix.shearX(fShearX);
-                        aInnerObjectMatrix.rotate(fRotate);
-                        aInnerObjectMatrix.translate(aTranslate.getX(), aTranslate.getY());
+                        basegfx::B2DHomMatrix aInnerObjectMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                            aPrefSize.getWidth(), aPrefSize.getHeight(), fOffsetX, fOffsetY));
+                        aInnerObjectMatrix = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
+                            * aInnerObjectMatrix;
 
                         const drawinglayer::primitive2d::Primitive2DReference aGraphicPrimitive(
                             new drawinglayer::primitive2d::GraphicPrimitive2D(

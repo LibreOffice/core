@@ -60,6 +60,7 @@
 #include <unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svx/outlobj.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // helpers
@@ -676,9 +677,7 @@ bool SdrTextObj::impDecomposeContourTextPrimitive(
 
     // prepare contour polygon, force to non-mirrored for layouting
     basegfx::B2DPolyPolygon aPolyPolygon(rSdrContourTextPrimitive.getUnitPolyPolygon());
-    basegfx::B2DHomMatrix aTransform;
-    aTransform.scale(fabs(aScale.getX()), fabs(aScale.getY()));
-    aPolyPolygon.transform(aTransform);
+    aPolyPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(fabs(aScale.getX()), fabs(aScale.getY())));
 
     // prepare outliner
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
@@ -693,19 +692,17 @@ bool SdrTextObj::impDecomposeContourTextPrimitive(
 
     // prepare matrices to apply to newly created primitives
     basegfx::B2DHomMatrix aNewTransformA;
-    basegfx::B2DHomMatrix aNewTransformB;
 
     // mirroring. We are now in the polygon sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.
     const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
     const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));
-    aNewTransformB.scale(bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0);
 
     // in-between the translations of the single primitives will take place. Afterwards,
     // the object's transformations need to be applied
-    aNewTransformB.shearX(fShearX);
-    aNewTransformB.rotate(fRotate);
-    aNewTransformB.translate(aTranslate.getX(), aTranslate.getY());
+    const basegfx::B2DHomMatrix aNewTransformB(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+        bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0,
+        fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 
     // now break up text primitives.
     impTextBreakupHandler aConverter(rOutliner);
@@ -882,26 +879,22 @@ bool SdrTextObj::impDecomposeBlockTextPrimitive(
 
     // prepare matrices to apply to newly created primitives. aNewTransformA
     // will get coordinates in aOutlinerScale size and positive in X, Y.
-    basegfx::B2DHomMatrix aNewTransformA;
-    basegfx::B2DHomMatrix aNewTransformB;
-
-    // translate relative to given primitive to get same rotation and shear
+    // Translate relative to given primitive to get same rotation and shear
     // as the master shape we are working on. For vertical, use the top-right
     // corner
     const double fStartInX(bVerticalWritintg ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
-    aNewTransformA.translate(fStartInX, aAdjustTranslate.getY());
+    basegfx::B2DHomMatrix aNewTransformA(basegfx::tools::createTranslateB2DHomMatrix(fStartInX, aAdjustTranslate.getY()));
 
     // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.
     const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
     const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));
-    aNewTransformB.scale(bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0);
 
     // in-between the translations of the single primitives will take place. Afterwards,
     // the object's transformations need to be applied
-    aNewTransformB.shearX(fShearX);
-    aNewTransformB.rotate(fRotate);
-    aNewTransformB.translate(aTranslate.getX(), aTranslate.getY());
+    const basegfx::B2DHomMatrix aNewTransformB(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+        bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0,
+        fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 
     // now break up text primitives.
     impTextBreakupHandler aConverter(rOutliner);
@@ -956,7 +949,6 @@ bool SdrTextObj::impDecomposeStretchTextPrimitive(
 
     // prepare matrices to apply to newly created primitives
     basegfx::B2DHomMatrix aNewTransformA;
-    basegfx::B2DHomMatrix aNewTransformB;
 
     // #i101957# Check for vertical text. If used, aNewTransformA
     // needs to translate the text initially around object width to orient
@@ -978,13 +970,12 @@ bool SdrTextObj::impDecomposeStretchTextPrimitive(
     // move the null point which was top left to bottom right.
     const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
     const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));
-    aNewTransformB.scale(bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0);
 
     // in-between the translations of the single primitives will take place. Afterwards,
     // the object's transformations need to be applied
-    aNewTransformB.shearX(fShearX);
-    aNewTransformB.rotate(fRotate);
-    aNewTransformB.translate(aTranslate.getX(), aTranslate.getY());
+    const basegfx::B2DHomMatrix aNewTransformB(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+        bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0,
+        fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 
     // now break up text primitives.
     impTextBreakupHandler aConverter(rOutliner);

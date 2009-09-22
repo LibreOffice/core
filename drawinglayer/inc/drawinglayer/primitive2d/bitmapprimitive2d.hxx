@@ -47,28 +47,41 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** BitmapPrimitive2D class
+
+            This class is the central primitive for Bitmap-based primitives.
+            It provides RGBA-based bitmaps, currently using a BitmapEx from VCL.
+            This may change in the future to any other, maybe more general base
+            class providing 24bit RGBA.
+         */
         class BitmapPrimitive2D : public BasePrimitive2D
         {
         private:
+            /// the RGBA Bitmap-data
             BitmapEx                                    maBitmapEx;
+
+            /** the object transformation from unit coordinates, defining
+                size, shear, rotate and position
+             */
             basegfx::B2DHomMatrix                       maTransform;
 
         public:
+            /// constructor
             BitmapPrimitive2D(
                 const BitmapEx& rBitmapEx,
                 const basegfx::B2DHomMatrix& rTransform);
 
-            // get data
+            /// data read access
             const BitmapEx& getBitmapEx() const { return maBitmapEx; }
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // get range
+            /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

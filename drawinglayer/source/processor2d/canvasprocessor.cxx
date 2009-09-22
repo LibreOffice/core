@@ -76,6 +76,7 @@
 #include <helperchartrenderer.hxx>
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <helperwrongspellrenderer.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -1341,10 +1342,9 @@ namespace drawinglayer
 
                                 // prepare discrete offset for XBitmap, do not forget that the buffer bitmap
                                 // may be truncated to discrete visible pixels
-                                basegfx::B2DHomMatrix aDiscreteOffset;
-                                aDiscreteOffset.translate(
+                                const basegfx::B2DHomMatrix aDiscreteOffset(basegfx::tools::createTranslateB2DHomMatrix(
                                     aDiscreteRange.getMinX() > 0.0 ? -aDiscreteRange.getMinX() : 0.0,
-                                    aDiscreteRange.getMinY() > 0.0 ? -aDiscreteRange.getMinY() : 0.0);
+                                    aDiscreteRange.getMinY() > 0.0 ? -aDiscreteRange.getMinY() : 0.0));
 
                                 // create new local ViewInformation2D with new transformation
                                 const geometry::ViewInformation2D aViewInformation2D(
@@ -1600,16 +1600,14 @@ namespace drawinglayer
                 // adapt object's transformation to the correct scale
                 basegfx::B2DVector aScale, aTranslate;
                 double fRotate, fShearX;
-                basegfx::B2DHomMatrix aNewMatrix;
                 const Size aSizePixel(aModifiedBitmapEx.GetSizePixel());
 
                 if(0 != aSizePixel.Width() && 0 != aSizePixel.Height())
                 {
                     rBitmapCandidate.getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
-                    aNewMatrix.scale(aScale.getX() / aSizePixel.Width(), aScale.getY() / aSizePixel.Height());
-                    aNewMatrix.shearX(fShearX);
-                    aNewMatrix.rotate(fRotate);
-                    aNewMatrix.translate(aTranslate.getX(), aTranslate.getY());
+                    const basegfx::B2DHomMatrix aNewMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                        aScale.getX() / aSizePixel.Width(), aScale.getY() / aSizePixel.Height(),
+                        fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 
                     canvas::tools::setRenderStateTransform(maRenderState,
                         getViewInformation2D().getObjectTransformation() * aNewMatrix);
@@ -1658,10 +1656,9 @@ namespace drawinglayer
 
                         // prepare discrete offset for XBitmap, do not forget that the buffer bitmap
                         // may be truncated to discrete visible pixels
-                        basegfx::B2DHomMatrix aDiscreteOffset;
-                        aDiscreteOffset.translate(
+                        const basegfx::B2DHomMatrix aDiscreteOffset(basegfx::tools::createTranslateB2DHomMatrix(
                             aDiscreteRange.getMinX() > 0.0 ? -aDiscreteRange.getMinX() : 0.0,
-                            aDiscreteRange.getMinY() > 0.0 ? -aDiscreteRange.getMinY() : 0.0);
+                            aDiscreteRange.getMinY() > 0.0 ? -aDiscreteRange.getMinY() : 0.0));
 
                         // create new local ViewInformation2D with new transformation
                         const geometry::ViewInformation2D aViewInformation2D(
@@ -1821,13 +1818,9 @@ namespace drawinglayer
                         {
                             // create texture matrix from texture to object (where object is unit square here),
                             // so use values directly
-                            basegfx::B2DHomMatrix aTextureMatrix;
-                            aTextureMatrix.scale(
-                                rFillBitmapAttribute.getSize().getX(),
-                                rFillBitmapAttribute.getSize().getY());
-                            aTextureMatrix.translate(
-                                rFillBitmapAttribute.getTopLeft().getX(),
-                                rFillBitmapAttribute.getTopLeft().getY());
+                            const basegfx::B2DHomMatrix aTextureMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                rFillBitmapAttribute.getSize().getX(), rFillBitmapAttribute.getSize().getY(),
+                                rFillBitmapAttribute.getTopLeft().getX(), rFillBitmapAttribute.getTopLeft().getY()));
 
                             // create and fill texture
                             rendering::Texture aTexture;

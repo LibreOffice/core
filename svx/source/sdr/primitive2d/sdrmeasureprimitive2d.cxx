@@ -40,6 +40,7 @@
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -95,10 +96,8 @@ namespace drawinglayer
             const double fAngle(atan2(aLine.getY(), aLine.getX()));
             bool bAutoUpsideDown(false);
             const attribute::SdrTextAttribute* pTextAttribute = getSdrLSTAttribute().getText();
-
-            basegfx::B2DHomMatrix aObjectMatrix;
-            aObjectMatrix.rotate(fAngle);
-            aObjectMatrix.translate(getStart().getX(), getStart().getY());
+            const basegfx::B2DHomMatrix aObjectMatrix(
+                basegfx::tools::createShearXRotateTranslateB2DHomMatrix(0.0, fAngle, getStart()));
 
             if(pTextAttribute)
             {

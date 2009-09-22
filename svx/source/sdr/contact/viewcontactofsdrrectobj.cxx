@@ -39,6 +39,7 @@
 #include <svx/sdr/primitive2d/sdrrectangleprimitive2d.hxx>
 #include <svtools/itemset.hxx>
 #include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -73,30 +74,13 @@ namespace sdr
                         const Rectangle& rRectangle = GetRectObj().GetGeoRect();
                         const ::basegfx::B2DRange aObjectRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
                         const GeoStat& rGeoStat(GetRectObj().GetGeoStat());
-                        ::basegfx::B2DHomMatrix aObjectMatrix;
 
                         // fill object matrix
-                        if(!::basegfx::fTools::equalZero(aObjectRange.getWidth()))
-                        {
-                            aObjectMatrix.set(0, 0, aObjectRange.getWidth());
-                        }
-
-                        if(!::basegfx::fTools::equalZero(aObjectRange.getHeight()))
-                        {
-                            aObjectMatrix.set(1, 1, aObjectRange.getHeight());
-                        }
-
-                        if(rGeoStat.nShearWink)
-                        {
-                            aObjectMatrix.shearX(tan((36000 - rGeoStat.nShearWink) * F_PI18000));
-                        }
-
-                        if(rGeoStat.nDrehWink)
-                        {
-                            aObjectMatrix.rotate((36000 - rGeoStat.nDrehWink) * F_PI18000);
-                        }
-
-                        aObjectMatrix.translate(aObjectRange.getMinX(), aObjectRange.getMinY());
+                        basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                            aObjectRange.getWidth(), aObjectRange.getHeight(),
+                            rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0,
+                            rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0,
+                            aObjectRange.getMinX(), aObjectRange.getMinY()));
 
                         // calculate corner radius
                         sal_uInt32 nCornerRadius(((SdrEckenradiusItem&)(rItemSet.Get(SDRATTR_ECKENRADIUS))).GetValue());

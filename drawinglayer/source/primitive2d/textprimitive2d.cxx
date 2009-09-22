@@ -42,6 +42,7 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/texteffectprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -171,11 +172,8 @@ namespace drawinglayer
                     if(nCount)
                     {
                         // prepare object transformation for polygons
-                        rTransformation.identity();
-                        rTransformation.scale(aScale.getX(), aScale.getY());
-                        rTransformation.shearX(fShearX);
-                        rTransformation.rotate(fRotate);
-                        rTransformation.translate(aTranslate.getX(), aTranslate.getY());
+                        rTransformation = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                            aScale, fShearX, fRotate, aTranslate);
                     }
                 }
             }
@@ -324,12 +322,8 @@ namespace drawinglayer
                         }
 #endif
                         // prepare object transformation for range
-                        basegfx::B2DHomMatrix aRangeTransformation;
-
-                        aRangeTransformation.scale(aScale.getX(), aScale.getY());
-                        aRangeTransformation.shearX(fShearX);
-                        aRangeTransformation.rotate(fRotate);
-                        aRangeTransformation.translate(aTranslate.getX(), aTranslate.getY());
+                        const basegfx::B2DHomMatrix aRangeTransformation(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                            aScale, fShearX, fRotate, aTranslate));
 
                         // apply range transformation to it
                         aNewRange.transform(aRangeTransformation);

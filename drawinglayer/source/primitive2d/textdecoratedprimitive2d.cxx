@@ -57,7 +57,7 @@ namespace drawinglayer
     {
         void TextDecoratedPortionPrimitive2D::impCreateTextLine(
             std::vector< Primitive2DReference >& rTarget,
-            basegfx::DecomposedB2DHomMatrixContainer& rDecTrans,
+            basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans,
             const basegfx::B2DHomMatrix &rUnscaledTransform,
             FontUnderline eLineStyle,
             double fLineOffset,
@@ -248,10 +248,9 @@ namespace drawinglayer
                     fLineDist = 6.3 * fLineHeight;
                 }
 
-                basegfx::B2DHomMatrix aTransform;
-
                 // move base point of text to 0.0 and de-rotate
-                aTransform.translate(-rDecTrans.getTranslate().getX(), -rDecTrans.getTranslate().getY());
+                basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                    -rDecTrans.getTranslate().getX(), -rDecTrans.getTranslate().getY()));
                 aTransform.rotate(-rDecTrans.getRotate());
 
                 // translate in Y by offset
@@ -269,7 +268,7 @@ namespace drawinglayer
 
         void TextDecoratedPortionPrimitive2D::impCreateGeometryContent(
             std::vector< Primitive2DReference >& rTarget,
-            basegfx::DecomposedB2DHomMatrixContainer& rDecTrans,
+            basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans,
             const String& rText,
             xub_StrLen aTextPosition,
             xub_StrLen aTextLength,
@@ -295,13 +294,11 @@ namespace drawinglayer
             if(bUnderlineUsed || bStrikeoutUsed || bOverlineUsed)
             {
                 // common preparations
-                basegfx::B2DHomMatrix aUnscaledTransform;
                 TextLayouterDevice aTextLayouter;
 
                 // unscaled is needed since scale contains already the font size
-                aUnscaledTransform.shearX(rDecTrans.getShearX());
-                aUnscaledTransform.rotate(rDecTrans.getRotate());
-                aUnscaledTransform.translate(rDecTrans.getTranslate().getX(), rDecTrans.getTranslate().getY());
+                const basegfx::B2DHomMatrix aUnscaledTransform(basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                    rDecTrans.getShearX(), rDecTrans.getRotate(), rDecTrans.getTranslate()));
 
                 // TextLayouterDevice is needed to get metrics for text decorations like
                 // underline/strikeout/emphasis marks from it. For setup, the font size is needed
@@ -416,10 +413,10 @@ namespace drawinglayer
                             // double line, create 2nd primitive with offset using TransformPrimitive based on
                             // already created NewPrimitive
                             const double fLineDist(2.0 * fStrikeoutHeight);
-                            basegfx::B2DHomMatrix aTransform;
 
                             // move base point of text to 0.0 and de-rotate
-                            aTransform.translate(-rDecTrans.getTranslate().getX(), -rDecTrans.getTranslate().getY());
+                            basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                                -rDecTrans.getTranslate().getX(), -rDecTrans.getTranslate().getY()));
                             aTransform.rotate(-rDecTrans.getRotate());
 
                             // translate in Y by offset
@@ -469,7 +466,7 @@ namespace drawinglayer
 
         void TextDecoratedPortionPrimitive2D::impSplitSingleWords(
             std::vector< Primitive2DReference >& rTarget,
-            basegfx::DecomposedB2DHomMatrixContainer& rDecTrans) const
+            basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans) const
         {
             // break iterator support
             // made static so it only needs to be fetched once, even with many single
@@ -586,7 +583,7 @@ namespace drawinglayer
 
                         // create geometry content for the single word. Do not forget
                         // to use the new transformation
-                        basegfx::DecomposedB2DHomMatrixContainer aDecTrans(aNewTransform);
+                        basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose aDecTrans(aNewTransform);
 
                         impCreateGeometryContent(rTarget, aDecTrans, getText(), nNewTextStart,
                             nNewTextEnd - nNewTextStart, aNewDXArray, aNewFontAttributes);
@@ -605,7 +602,7 @@ namespace drawinglayer
         Primitive2DSequence TextDecoratedPortionPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             std::vector< Primitive2DReference > aNewPrimitives;
-            basegfx::DecomposedB2DHomMatrixContainer aDecTrans(getTextTransform());
+            basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose aDecTrans(getTextTransform());
             Primitive2DSequence aRetval;
 
             // create basic geometry such as SimpleTextPrimitive, Overline, Underline,
@@ -669,8 +666,8 @@ namespace drawinglayer
                         static basegfx::BColor aShadowColor(0.3, 0.3, 0.3);
 
                         // preapare shadow transform matrix
-                        basegfx::B2DHomMatrix aShadowTransform;
-                        aShadowTransform.translate(fTextShadowOffset, fTextShadowOffset);
+                        const basegfx::B2DHomMatrix aShadowTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                            fTextShadowOffset, fTextShadowOffset));
 
                         // create shadow primitive
                         aShadow = Primitive2DReference(new ShadowPrimitive2D(

@@ -420,16 +420,16 @@ namespace drawinglayer
 
         PolyPolygonGradientPrimitive2D::PolyPolygonGradientPrimitive2D(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
-            const basegfx::BColor& rBColor,
             const attribute::FillGradientAttribute& rFillGradient)
-        :   PolyPolygonColorPrimitive2D(rPolyPolygon, rBColor),
+        :   BufferedDecompositionPrimitive2D(),
+            maPolyPolygon(rPolyPolygon),
             maFillGradient(rFillGradient)
         {
         }
 
         bool PolyPolygonGradientPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(PolyPolygonColorPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const PolyPolygonGradientPrimitive2D& rCompare = (PolyPolygonGradientPrimitive2D&)rPrimitive;
 
@@ -455,7 +455,7 @@ namespace drawinglayer
         {
             // create SubSequence with FillHatchPrimitive2D
             const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
-            FillHatchPrimitive2D* pNewHatch = new FillHatchPrimitive2D(aPolyPolygonRange, getBColor(), getFillHatch());
+            FillHatchPrimitive2D* pNewHatch = new FillHatchPrimitive2D(aPolyPolygonRange, getBackgroundColor(), getFillHatch());
             const Primitive2DReference xSubRef(pNewHatch);
             const Primitive2DSequence aSubSequence(&xSubRef, 1L);
 
@@ -467,20 +467,23 @@ namespace drawinglayer
 
         PolyPolygonHatchPrimitive2D::PolyPolygonHatchPrimitive2D(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
-            const basegfx::BColor& rBColor,
+            const basegfx::BColor& rBackgroundColor,
             const attribute::FillHatchAttribute& rFillHatch)
-        :   PolyPolygonColorPrimitive2D(rPolyPolygon, rBColor),
+        :   BufferedDecompositionPrimitive2D(),
+            maPolyPolygon(rPolyPolygon),
+            maBackgroundColor(rBackgroundColor),
             maFillHatch(rFillHatch)
         {
         }
 
         bool PolyPolygonHatchPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(PolyPolygonColorPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const PolyPolygonHatchPrimitive2D& rCompare = (PolyPolygonHatchPrimitive2D&)rPrimitive;
 
-                return (getFillHatch() == rCompare.getFillHatch());
+                return (getBackgroundColor() == rCompare.getBackgroundColor()
+                    && getFillHatch() == rCompare.getFillHatch());
             }
 
             return false;
@@ -519,16 +522,16 @@ namespace drawinglayer
 
         PolyPolygonBitmapPrimitive2D::PolyPolygonBitmapPrimitive2D(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
-            const basegfx::BColor& rBColor,
             const attribute::FillBitmapAttribute& rFillBitmap)
-        :   PolyPolygonColorPrimitive2D(rPolyPolygon, rBColor),
+        :   BufferedDecompositionPrimitive2D(),
+            maPolyPolygon(rPolyPolygon),
             maFillBitmap(rFillBitmap)
         {
         }
 
         bool PolyPolygonBitmapPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(PolyPolygonColorPrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const PolyPolygonBitmapPrimitive2D& rCompare = (PolyPolygonBitmapPrimitive2D&)rPrimitive;
 

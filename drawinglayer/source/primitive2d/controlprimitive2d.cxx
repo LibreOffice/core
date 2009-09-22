@@ -54,6 +54,7 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/window.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -230,12 +231,8 @@ namespace drawinglayer
                                 }
 
                                 // short form for scale and translate transformation
-                                basegfx::B2DHomMatrix aBitmapTransform;
-
-                                aBitmapTransform.set(0L, 0L, aBitmapSizeLogic.getX());
-                                aBitmapTransform.set(1L, 1L, aBitmapSizeLogic.getY());
-                                aBitmapTransform.set(0L, 2L, aTranslate.getX());
-                                aBitmapTransform.set(1L, 2L, aTranslate.getY());
+                                const basegfx::B2DHomMatrix aBitmapTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                    aBitmapSizeLogic.getX(), aBitmapSizeLogic.getY(), aTranslate.getX(), aTranslate.getY()));
 
                                 // create primitive
                                 xRetval = new BitmapPrimitive2D(BitmapEx(aContent), aBitmapTransform);

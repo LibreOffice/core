@@ -42,6 +42,7 @@
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -65,10 +66,8 @@ namespace drawinglayer
                 getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
                 // create grid matrix which transforms from scaled logic to view
-                basegfx::B2DHomMatrix aRST;
-                aRST.shearX(fShearX);
-                aRST.rotate(fRotate);
-                aRST.translate(aTranslate.getX(), aTranslate.getY());
+                basegfx::B2DHomMatrix aRST(basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                    fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
                 aRST *= rViewInformation.getObjectToViewTransformation();
 
                 // get step widths

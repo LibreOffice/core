@@ -41,9 +41,9 @@
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
-namespace basegfx {
-    class DecomposedB2DHomMatrixContainer;
-} // end of namespace basegfx
+namespace basegfx { namespace tools {
+    class B2DHomMatrixBufferedOnDemandDecompose;
+}}
 
 namespace com { namespace sun { namespace star { namespace i18n {
     struct Boundary;
@@ -125,7 +125,7 @@ namespace drawinglayer
             // helper methods
             void impCreateTextLine(
                 std::vector< Primitive2DReference >& rTarget,
-                basegfx::DecomposedB2DHomMatrixContainer& rDecTrans,
+                basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans,
                 const basegfx::B2DHomMatrix &rUnscaledTransform,
                 FontUnderline eLineStyle,
                 double fLineOffset,
@@ -135,7 +135,7 @@ namespace drawinglayer
 
             void impCreateGeometryContent(
                 std::vector< Primitive2DReference >& rTarget,
-                basegfx::DecomposedB2DHomMatrixContainer& rDecTrans,
+                basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans,
                 const String& rText,
                 xub_StrLen aTextPosition,
                 xub_StrLen aTextLength,
@@ -147,7 +147,7 @@ namespace drawinglayer
 
             void impSplitSingleWords(
                 std::vector< Primitive2DReference >& rTarget,
-                basegfx::DecomposedB2DHomMatrixContainer& rDecTrans) const;
+                basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans) const;
 
         protected:
             // local decomposition.
