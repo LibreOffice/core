@@ -648,7 +648,12 @@ namespace svxform
 
             // let the control have the same font as the host document uses by default
             // #b6875455# / 2009-09-23 / frank.schoenheit@sun.com
-            lcl_initializeControlFont( _rxControlModel );
+            if  (   xPSI->hasPropertyByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReferenceDevice" ) ) )
+                &&  ControlLayouter::useDocumentReferenceDevice( _eDocType )
+                )
+                // the above is a somewhat weak heuristics for "when to use the document font", admittedly.
+                // However, /me thinks this can only be solved with real "Form Control Styles" in each application.
+                lcl_initializeControlFont( _rxControlModel );
 
             // initial default label for the control
             if ( xPSI->hasPropertyByName( FM_PROP_LABEL ) )
