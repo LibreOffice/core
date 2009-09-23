@@ -753,11 +753,11 @@ SYSTEM_AGG
 AGG_LIBS
 AGG_CFLAGS
 ENABLE_AGG
-NEON_VERSION
-SYSTEM_NEON
 SYSTEM_OPENSSL
 OPENSSL_LIBS
 OPENSSL_CFLAGS
+NEON_VERSION
+SYSTEM_NEON
 NEON_LIBS
 NEON_CFLAGS
 DISABLE_NEON
@@ -22946,6 +22946,12 @@ $as_echo "internal" >&6; }
     NEON_CFLAGS=
     BUILD_TYPE="$BUILD_TYPE NEON"
 fi
+
+
+
+
+fi
+
 if test "$_os" = "Darwin" && test "$with_system_openssl" != "no"; then
    with_system_openssl=yes
 fi
@@ -23071,12 +23077,6 @@ fi
 
 
 
-
-
-
-
-
-fi
 
 { $as_echo "$as_me:$LINENO: checking whether to enable agg" >&5
 $as_echo_n "checking whether to enable agg... " >&6; }

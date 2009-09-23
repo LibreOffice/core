@@ -4795,8 +4795,14 @@ else
     NEON_CFLAGS=
     BUILD_TYPE="$BUILD_TYPE NEON"
 fi
+AC_SUBST(SYSTEM_NEON)
+AC_SUBST(NEON_VERSION)
+AC_SUBST(NEON_LIBS)
+AC_SUBST(NEON_CFLAGS)
+fi
+
 dnl ===================================================================
-dnl Check for system openssl (only neon needs it!)
+dnl Check for system openssl
 dnl ===================================================================
 if test "$_os" = "Darwin" && test "$with_system_openssl" != "no"; then
    with_system_openssl=yes
@@ -4822,12 +4828,6 @@ fi
 AC_SUBST(SYSTEM_OPENSSL)
 AC_SUBST(OPENSSL_CFLAGS)
 AC_SUBST(OPENSSL_LIBS)
-
-AC_SUBST(SYSTEM_NEON)
-AC_SUBST(NEON_VERSION)
-AC_SUBST(NEON_LIBS)
-AC_SUBST(NEON_CFLAGS)
-fi
 
 dnl ===================================================================
 dnl Test for disabling agg
