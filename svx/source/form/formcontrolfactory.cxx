@@ -48,10 +48,13 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
+#include <com/sun/star/awt/FontEmphasisMark.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/FontEmphasis.hpp>
+#include <com/sun/star/awt/FontDescriptor.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
@@ -96,6 +99,7 @@ namespace svxform
     using ::com::sun::star::uno::TypeClass_LONG;
     using ::com::sun::star::util::XNumberFormats;
     using ::com::sun::star::util::XNumberFormatTypes;
+    using ::com::sun::star::awt::FontDescriptor;
     /** === end UNO using === **/
     namespace FormComponentType = ::com::sun::star::form::FormComponentType;
     namespace ScrollBarOrientation = ::com::sun::star::awt::ScrollBarOrientation;
@@ -104,6 +108,8 @@ namespace svxform
     namespace DataType = ::com::sun::star::sdbc::DataType;
     namespace ColumnValue = ::com::sun::star::sdbc::ColumnValue;
     namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
+    namespace FontEmphasis = ::com::sun::star::text::FontEmphasis;
+    namespace FontEmphasisMark = ::com::sun::star::awt::FontEmphasisMark;
 
     //====================================================================
     //= FormControlFactory_Data
@@ -427,43 +433,32 @@ namespace svxform
         };
 
         //....................................................................
+        Reference< XPropertySet > lcl_getDefaultDocumentTextStyle_throw( const Reference< XPropertySet >& _rxModel )
+        {
+            // the style family collection
+            Reference< XStyleFamiliesSupplier > xSuppStyleFamilies( getTypedModelNode< XStyleFamiliesSupplier >( _rxModel.get() ), UNO_SET_THROW );
+            Reference< XNameAccess > xStyleFamilies( xSuppStyleFamilies->getStyleFamilies(), UNO_SET_THROW );
+
+            // the names of the family, and the style - depends on the document type we live in
+            ::rtl::OUString sFamilyName, sStyleName;
+            if ( !lcl_getDocumentDefaultStyleAndFamily( xSuppStyleFamilies.get(), sFamilyName, sStyleName ) )
+                throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unknown document type!" ) ), NULL );
+
+            // the concrete style
+            Reference< XNameAccess > xStyleFamily( xStyleFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
+            return Reference< XPropertySet >( xStyleFamily->getByName( sStyleName ), UNO_QUERY_THROW );
+        }
+
+        //....................................................................
         static void lcl_initializeCharacterAttributes( const Reference< XPropertySet >& _rxModel )
         {
-            // need to initialize the attributes from the "Default" style of the document we live in
-
             try
             {
-                // the style family collection
-                Reference< XStyleFamiliesSupplier > xSuppStyleFamilies = getTypedModelNode< XStyleFamiliesSupplier >( _rxModel.get() );
-                Reference< XNameAccess > xStyleFamilies;
-                if ( xSuppStyleFamilies.is() )
-                    xStyleFamilies = xSuppStyleFamilies->getStyleFamilies();
-                OSL_ENSURE( xStyleFamilies.is(), "lcl_initializeCharacterAttributes: could not obtain the style families!" );
-                if ( !xStyleFamilies.is() )
-                    return;
+                Reference< XPropertySet > xStyle( lcl_getDefaultDocumentTextStyle_throw( _rxModel ), UNO_SET_THROW );
 
-                // the names of the family, and the style - depends on the document type we live in
-                ::rtl::OUString sFamilyName, sStyleName;
-                bool bKnownDocumentType = lcl_getDocumentDefaultStyleAndFamily( xSuppStyleFamilies.get(), sFamilyName, sStyleName );
-                OSL_ENSURE( bKnownDocumentType, "lcl_initializeCharacterAttributes: Huh? What document type is this?" );
-                if ( !bKnownDocumentType )
-                    return;
-
-                // the concrete style
-                Reference< XNameAccess > xStyleFamily( xStyleFamilies->getByName( sFamilyName ), UNO_QUERY );
-                Reference< XPropertySet > xStyle;
-                if ( xStyleFamily.is() )
-                    xStyleFamily->getByName( sStyleName ) >>= xStyle;
-                OSL_ENSURE( xStyle.is(), "lcl_initializeCharacterAttributes: could not retrieve the style!" );
-                if ( !xStyle.is() )
-                    return;
-
-                // transfer all properties which are described by the com.sun.star.style.
-                Reference< XPropertySetInfo > xSourcePropInfo( xStyle->getPropertySetInfo() );
-                Reference< XPropertySetInfo > xDestPropInfo( _rxModel->getPropertySetInfo() );
-                OSL_ENSURE( xSourcePropInfo.is() && xDestPropInfo.is(), "lcl_initializeCharacterAttributes: no property set info!" );
-                if ( !xSourcePropInfo.is() || !xDestPropInfo.is() )
-                    return;
+                // transfer all properties which are described by the style
+                Reference< XPropertySetInfo > xSourcePropInfo( xStyle->getPropertySetInfo(), UNO_SET_THROW );
+                Reference< XPropertySetInfo > xDestPropInfo( _rxModel->getPropertySetInfo(), UNO_SET_THROW );
 
                 ::rtl::OUString sPropertyName;
                 const sal_Char** pCharacterProperty = aCharacterAndParagraphProperties;
@@ -476,6 +471,99 @@ namespace svxform
 
                     ++pCharacterProperty;
                 }
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+
+        //....................................................................
+        /// translates a css.text.FontEmphasis into a css.awt.FontEmphasisMark
+        Any lcl_translateFontEmphasis( const Any& _rTextFontEmphasis )
+        {
+            sal_Int16 nTextFontEmphasis( FontEmphasis::NONE );
+            OSL_VERIFY( _rTextFontEmphasis >>= nTextFontEmphasis );
+
+            sal_Int16 nFontEmphasisMark = FontEmphasisMark::NONE;
+            switch ( nTextFontEmphasis )
+            {
+            case FontEmphasis::NONE         : nFontEmphasisMark = FontEmphasisMark::NONE;  break;
+            case FontEmphasis::DOT_ABOVE    : nFontEmphasisMark = FontEmphasisMark::DOT     | FontEmphasisMark::ABOVE;  break;
+            case FontEmphasis::CIRCLE_ABOVE : nFontEmphasisMark = FontEmphasisMark::CIRCLE  | FontEmphasisMark::ABOVE;  break;
+            case FontEmphasis::DISK_ABOVE   : nFontEmphasisMark = FontEmphasisMark::DISC    | FontEmphasisMark::ABOVE;  break;
+            case FontEmphasis::ACCENT_ABOVE : nFontEmphasisMark = FontEmphasisMark::ACCENT  | FontEmphasisMark::ABOVE;  break;
+            case FontEmphasis::DOT_BELOW    : nFontEmphasisMark = FontEmphasisMark::DOT     | FontEmphasisMark::BELOW;  break;
+            case FontEmphasis::CIRCLE_BELOW : nFontEmphasisMark = FontEmphasisMark::CIRCLE  | FontEmphasisMark::BELOW;  break;
+            case FontEmphasis::DISK_BELOW   : nFontEmphasisMark = FontEmphasisMark::DISC    | FontEmphasisMark::BELOW;  break;
+            case FontEmphasis::ACCENT_BELOW : nFontEmphasisMark = FontEmphasisMark::ACCENT  | FontEmphasisMark::BELOW;  break;
+            default:
+                OSL_ENSURE( false, "lcl_translateFontEmphasis: invalid text emphasis!" );
+                break;
+            }
+            return makeAny( nFontEmphasisMark );
+        }
+
+        //....................................................................
+        template< typename SIMPLE_TYPE >
+        void lcl_transferPropertyValue( const Reference< XPropertySet >& _rxSource, const Reference< XPropertySetInfo >& _rxCachedPSI,
+            const sal_Char* _pAsciiPropertyName, SIMPLE_TYPE& _out_rDest )
+        {
+            const ::rtl::OUString sPropertyName( ::rtl::OUString::createFromAscii( _pAsciiPropertyName ) );
+            if ( !_rxCachedPSI->hasPropertyByName( sPropertyName ) )
+                return;
+            Any aValue = _rxSource->getPropertyValue( sPropertyName );
+            OSL_VERIFY( aValue >>= _out_rDest );
+        }
+
+        //....................................................................
+        static void lcl_initializeControlFont( const Reference< XPropertySet >& _rxModel )
+        {
+            try
+            {
+                Reference< XPropertySet > xStyle( lcl_getDefaultDocumentTextStyle_throw( _rxModel ), UNO_SET_THROW );
+                Reference< XPropertySetInfo > xStylePSI( xStyle->getPropertySetInfo(), UNO_SET_THROW );
+                FontDescriptor aFont;
+
+                lcl_transferPropertyValue( xStyle, xStylePSI, "CharFontName", aFont.Name );
+                lcl_transferPropertyValue( xStyle, xStylePSI, "CharFontStyleName", aFont.StyleName );
+                lcl_transferPropertyValue( xStyle, xStylePSI, "CharFontFamily", aFont.Family );
+                lcl_transferPropertyValue( xStyle, xStylePSI, "CharFontCharSet", aFont.CharSet );
+                lcl_transferPropertyValue( xStyle, xStylePSI, "CharFontPitch", aFont.Pitch );
+                lcl_transferPropertyValue( xStyle, xStylePSI, "CharUnderline", aFont.Underline );
+                lcl_transferPropertyValue( xStyle, xStylePSI, "CharWeight", aFont.Weight );
+                lcl_transferPropertyValue( xStyle, xStylePSI, "CharPosture", aFont.Slant );
+                lcl_transferPropertyValue( xStyle, xStylePSI, "CharStrikeout", aFont.Strikeout );
+                lcl_transferPropertyValue( xStyle, xStylePSI, "CharWordMode", aFont.WordLineMode );
+                lcl_transferPropertyValue( xStyle, xStylePSI, "CharFontType", aFont.Type );
+                lcl_transferPropertyValue( xStyle, xStylePSI, "CharAutoKerning", aFont.Kerning );
+
+                short nCharScaleWidth = 100;
+                lcl_transferPropertyValue( xStyle, xStylePSI, "CharScaleWidth", nCharScaleWidth );
+                if ( nCharScaleWidth )
+                    aFont.CharacterWidth = (float)nCharScaleWidth;
+
+                float nCharHeight = 0;
+                lcl_transferPropertyValue( xStyle, xStylePSI, "CharHeight", nCharHeight );
+                aFont.Height = (short)nCharHeight;
+
+                _rxModel->setPropertyValue(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FontDescriptor" ) ),
+                    makeAny( aFont )
+                );
+
+                _rxModel->setPropertyValue(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FontEmphasisMark" ) ),
+                    lcl_translateFontEmphasis( xStyle->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharEmphasis" ) ) ) )
+                );
+                _rxModel->setPropertyValue(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FontRelief" ) ),
+                    xStyle->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharRelief" ) ) )
+                );
+                _rxModel->setPropertyValue(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextLineColor" ) ),
+                    xStyle->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharUnderlineColor" ) ) )
+                );
             }
             catch( const Exception& )
             {
@@ -557,6 +645,10 @@ namespace svxform
                 }
                 break;
             }
+
+            // let the control have the same font as the host document uses by default
+            // #b6875455# / 2009-09-23 / frank.schoenheit@sun.com
+            lcl_initializeControlFont( _rxControlModel );
 
             // initial default label for the control
             if ( xPSI->hasPropertyByName( FM_PROP_LABEL ) )
