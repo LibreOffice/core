@@ -80,15 +80,12 @@ LDFLAGS:=$(ARCH_FLAGS)
 .EXPORT : CFLAGS CXXFLAGS LDFLAGS
 .ENDIF
 
-.IF "$(OS)"=="MACOSX"
 CONFIGURE_ACTION=configure
 CONFIGURE_FLAGS+=--without-x --without-libpaper-library --without-t1-library --enable-multithreaded --enable-exceptions
-.IF "$(CPU)"=="P"
+
+.IF "$(OS)$(CPU)"=="MACOSXP"
 CXXFLAGS+=-malign-natural
 .EXPORT: CXXFLAGS
-.ENDIF
-.ELSE
-CONFIGURE_ACTION=./configure --without-libpaper-library --without-t1-library --without-x --enable-multithreaded --enable-exceptions
 .ENDIF
 
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
