@@ -116,7 +116,7 @@ SwVbaDocuments::createCollectionObject( const uno::Any& aSource )
 }
 
 uno::Any SAL_CALL
-SwVbaDocuments::Add( const uno::Any& Template, const uno::Any& NewTemplate, const uno::Any& DocumentType, const uno::Any& Visible ) throw (uno::RuntimeException)
+SwVbaDocuments::Add( const uno::Any& Template, const uno::Any& /*NewTemplate*/, const uno::Any& /*DocumentType*/, const uno::Any& /*Visible*/ ) throw (uno::RuntimeException)
 {
     rtl::OUString sFileName;
     if( Template.hasValue() && ( Template >>= sFileName ) )
@@ -132,14 +132,14 @@ SwVbaDocuments::Add( const uno::Any& Template, const uno::Any& NewTemplate, cons
 
 // #TODO# #FIXME# can any of the unused params below be used?
 void SAL_CALL
-SwVbaDocuments::Close( const uno::Any& SaveChanges, const uno::Any& OriginalFormat, const uno::Any& RouteDocument ) throw (uno::RuntimeException)
+SwVbaDocuments::Close( const uno::Any& /*SaveChanges*/, const uno::Any& /*OriginalFormat*/, const uno::Any& /*RouteDocument*/ ) throw (uno::RuntimeException)
 {
     VbaDocumentsBase::Close();
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?
 uno::Any SAL_CALL
-SwVbaDocuments::Open( const ::rtl::OUString& Filename, const uno::Any& ConfirmConversions, const uno::Any& ReadOnly, const uno::Any& AddToRecentFiles, const uno::Any& PasswordDocument, const uno::Any& PasswordTemplate, const uno::Any& Revert, const uno::Any& WritePasswordDocument, const uno::Any& WritePasswordTemplate, const uno::Any& Format, const uno::Any& Encoding, const uno::Any& Visible, const uno::Any& OpenAndRepair, const uno::Any& DocumentDirection, const uno::Any& NoEncodingDialog, const uno::Any& XMLTransform ) throw (uno::RuntimeException)
+SwVbaDocuments::Open( const ::rtl::OUString& Filename, const uno::Any& /*ConfirmConversions*/, const uno::Any& ReadOnly, const uno::Any& /*AddToRecentFiles*/, const uno::Any& /*PasswordDocument*/, const uno::Any& /*PasswordTemplate*/, const uno::Any& /*Revert*/, const uno::Any& /*WritePasswordDocument*/, const uno::Any& /*WritePasswordTemplate*/, const uno::Any& /*Format*/, const uno::Any& /*Encoding*/, const uno::Any& /*Visible*/, const uno::Any& /*OpenAndRepair*/, const uno::Any& /*DocumentDirection*/, const uno::Any& /*NoEncodingDialog*/, const uno::Any& /*XMLTransform*/ ) throw (uno::RuntimeException)
 {
     // we need to detect if this is a URL, if not then assume its a file path
     rtl::OUString aURL;

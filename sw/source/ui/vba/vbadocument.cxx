@@ -238,7 +238,6 @@ SwVbaDocument::getServiceImplName()
 uno::Any SAL_CALL
 SwVbaDocument::getAttachedTemplate() throw (uno::RuntimeException)
 {
-    SwDocShell* pDocShell = word::getDocShell( getModel() );
     uno::Reference< word::XTemplate > xTemplate;
     uno::Reference< document::XDocumentInfoSupplier > xDocInfoSupp( getModel(), uno::UNO_QUERY_THROW );
     uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSupp( xDocInfoSupp->getDocumentInfo(), uno::UNO_QUERY_THROW );
@@ -250,7 +249,7 @@ SwVbaDocument::getAttachedTemplate() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-SwVbaDocument::setAttachedTemplate( const css::uno::Any& _attachedtemplate ) throw (uno::RuntimeException)
+SwVbaDocument::setAttachedTemplate( const css::uno::Any& /*_attachedtemplate*/ ) throw (uno::RuntimeException)
 {
     throw uno::RuntimeException();
 }

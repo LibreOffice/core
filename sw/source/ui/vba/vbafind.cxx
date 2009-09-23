@@ -84,7 +84,7 @@ void SwVbaFind::SetReplace( sal_Int32 type )
     mbReplace = sal_True;
 }
 
-rtl::OUString SwVbaFind::ReplaceWildcards( const rtl::OUString& rText ) throw ( uno::RuntimeException )
+rtl::OUString SwVbaFind::ReplaceWildcards( const rtl::OUString& /*rText*/ ) throw ( uno::RuntimeException )
 {
     // TODO:
     return rtl::OUString();
@@ -177,7 +177,7 @@ sal_Bool SwVbaFind::SearchReplace() throw (uno::RuntimeException)
                 }
                 break;
             }
-            defalut:
+            default:
             {
                 result = sal_False;
             }
@@ -393,7 +393,7 @@ SwVbaFind::Execute( const uno::Any& FindText, const uno::Any& MatchCase, const u
 
     if( Replace.hasValue() )
     {
-        sal_Int32 nValue;
+        sal_Int32 nValue(0);
         Replace >>= nValue;
         SetReplace( nValue );
     }

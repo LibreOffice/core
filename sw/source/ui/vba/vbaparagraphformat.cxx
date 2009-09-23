@@ -203,7 +203,7 @@ sal_Int32 SAL_CALL SwVbaParagraphFormat::getOutlineLevel() throw (uno::RuntimeEx
     return nLevel;
 }
 
-void SAL_CALL SwVbaParagraphFormat::setOutlineLevel( sal_Int32 _outlinelevel ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaParagraphFormat::setOutlineLevel( sal_Int32 /*_outlinelevel*/ ) throw (uno::RuntimeException)
 {
     throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
 }
@@ -247,7 +247,7 @@ void SAL_CALL SwVbaParagraphFormat::setPageBreakBefore( const uno::Any& _breakbe
 
 float SAL_CALL SwVbaParagraphFormat::getSpaceBefore() throw (uno::RuntimeException)
 {
-    sal_Int32 nSpace;
+    sal_Int32 nSpace = 0;
     mxParaProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaTopMargin") ) ) >>= nSpace;
     return (float)( Millimeter::getInPoints( nSpace ) );
 }
@@ -302,7 +302,7 @@ uno::Any SAL_CALL SwVbaParagraphFormat::getTabStops() throw (uno::RuntimeExcepti
     throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
 }
 
-void SAL_CALL SwVbaParagraphFormat::setTabStops( const uno::Any& _tabstops ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaParagraphFormat::setTabStops( const uno::Any& /*_tabstops*/ ) throw (uno::RuntimeException)
 {
     throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
 }
@@ -484,7 +484,7 @@ sal_Int32 SwVbaParagraphFormat::getMSWordLineSpacingRule( style::LineSpacing& rL
 
 sal_Int16 SwVbaParagraphFormat::getCharHeight() throw (uno::RuntimeException)
 {
-    float fCharHeight;
+    float fCharHeight = 0.0;
     mxParaProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CharHeight") ) ) >>= fCharHeight;
     return (sal_Int16)( Millimeter::getInHundredthsOfOneMillimeter( fCharHeight ) );
 }

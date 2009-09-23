@@ -315,7 +315,7 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 ) throw (uno::
     sal_Int32 nIndex = 0;
     if( ( Index1 >>= nIndex ) && ( nIndex < 0 ) )
     {
-        for( const BuiltinStyleTable* pTable = aBuiltinStyleTable; pTable->wdBuiltinStyle != NULL; pTable++ )
+        for( const BuiltinStyleTable* pTable = aBuiltinStyleTable; pTable != NULL; pTable++ )
         {
             if( nIndex == pTable->wdBuiltinStyle )
             {

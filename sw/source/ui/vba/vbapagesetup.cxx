@@ -249,7 +249,7 @@ rtl::OUString SwVbaPageSetup::getStyleOfFirstPage() throw (uno::RuntimeException
     return wdSectionStart;
 }
 
-void SAL_CALL SwVbaPageSetup::setSectionStart( ::sal_Int32 _sectionstart ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaPageSetup::setSectionStart( ::sal_Int32 /*_sectionstart*/ ) throw (uno::RuntimeException)
 {
     // fail to find corresponding feature in Writer
     // #FIXME:

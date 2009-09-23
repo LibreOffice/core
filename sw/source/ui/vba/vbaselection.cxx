@@ -188,7 +188,7 @@ SwVbaSelection::EndKey( const uno::Any& _unit, const uno::Any& _extend ) throw (
 }
 
 void SAL_CALL
-SwVbaSelection::Delete( const uno::Any& _unit, const uno::Any& _count ) throw ( uno::RuntimeException )
+SwVbaSelection::Delete( const uno::Any& /*_unit*/, const uno::Any& /*_count*/ ) throw ( uno::RuntimeException )
 {
     // FIXME: handle the arguments: _unit and _count
     rtl::OUString url = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Delete"));

@@ -56,7 +56,7 @@ SwVbaRange::SwVbaRange( const uno::Reference< ooo::vba::XHelperInterface >& rPar
     initialize( rStart, rEnd );
 }
 
-SwVbaRange::SwVbaRange( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextDocument >& rTextDocument, const uno::Reference< text::XTextRange >& rStart, const uno::Reference< text::XTextRange >& rEnd, const uno::Reference< text::XText >& rText, sal_Bool _bMaySpanEndOfDocument ) throw (uno::RuntimeException) : SwVbaRange_BASE( rParent, rContext ),mxTextDocument( rTextDocument ), mbMaySpanEndOfDocument( _bMaySpanEndOfDocument ), mxText( rText )
+SwVbaRange::SwVbaRange( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextDocument >& rTextDocument, const uno::Reference< text::XTextRange >& rStart, const uno::Reference< text::XTextRange >& rEnd, const uno::Reference< text::XText >& rText, sal_Bool _bMaySpanEndOfDocument ) throw (uno::RuntimeException) : SwVbaRange_BASE( rParent, rContext ),mxTextDocument( rTextDocument ), mxText( rText ), mbMaySpanEndOfDocument( _bMaySpanEndOfDocument )
 {
     initialize( rStart, rEnd );
 }

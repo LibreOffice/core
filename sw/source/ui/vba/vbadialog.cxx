@@ -51,7 +51,7 @@ static const WordDialogTable aWordDialogTable[] =
 rtl::OUString
 SwVbaDialog::mapIndexToName( sal_Int32 nIndex )
 {
-    for( const WordDialogTable* pTable = aWordDialogTable; pTable->wdDialog != NULL; pTable++ )
+    for( const WordDialogTable* pTable = aWordDialogTable; pTable != NULL; pTable++ )
     {
         if( nIndex == pTable->wdDialog )
         {

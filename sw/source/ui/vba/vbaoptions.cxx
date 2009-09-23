@@ -141,7 +141,7 @@ sal_Int32 SAL_CALL SwVbaOptions::getDefaultBorderLineStyle() throw (uno::Runtime
     return word::WdLineStyle::wdLineStyleSingle;
 }
 
-void SAL_CALL SwVbaOptions::setDefaultBorderLineStyle( ::sal_Int32 _defaultborderlinestyle ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaOptions::setDefaultBorderLineStyle( ::sal_Int32 /*_defaultborderlinestyle*/ ) throw (uno::RuntimeException)
 {
     // not support in Writer
 }
@@ -151,7 +151,7 @@ sal_Int32 SAL_CALL SwVbaOptions::getDefaultBorderLineWidth() throw (uno::Runtime
     return word::WdLineWidth::wdLineWidth050pt;
 }
 
-void SAL_CALL SwVbaOptions::setDefaultBorderLineWidth( ::sal_Int32 _defaultborderlinewidth ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaOptions::setDefaultBorderLineWidth( ::sal_Int32 /*_defaultborderlinewidth*/ ) throw (uno::RuntimeException)
 {
     // not support in Writer
 }
@@ -161,7 +161,7 @@ sal_Int32 SAL_CALL SwVbaOptions::getDefaultBorderColorIndex() throw (uno::Runtim
     return word::WdColorIndex::wdAuto;
 }
 
-void SAL_CALL SwVbaOptions::setDefaultBorderColorIndex( ::sal_Int32 _defaultbordercolorindex ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaOptions::setDefaultBorderColorIndex( ::sal_Int32 /*_defaultbordercolorindex*/ ) throw (uno::RuntimeException)
 {
     // not support in Writer
 }
@@ -171,7 +171,7 @@ void SAL_CALL SwVbaOptions::setDefaultBorderColorIndex( ::sal_Int32 _defaultbord
     return sal_True;
 }
 
-void SAL_CALL SwVbaOptions::setReplaceSelection( ::sal_Bool _replaceselection ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaOptions::setReplaceSelection( ::sal_Bool /*_replaceselection*/ ) throw (uno::RuntimeException)
 {
     // not support in Writer
 }
@@ -181,7 +181,7 @@ void SAL_CALL SwVbaOptions::setReplaceSelection( ::sal_Bool _replaceselection ) 
     return sal_False;
 }
 
-void SAL_CALL SwVbaOptions::setMapPaperSize( ::sal_Bool _mappapersize ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaOptions::setMapPaperSize( ::sal_Bool /*_mappapersize*/ ) throw (uno::RuntimeException)
 {
     // not support in Writer
 }
@@ -191,7 +191,7 @@ void SAL_CALL SwVbaOptions::setMapPaperSize( ::sal_Bool _mappapersize ) throw (u
     return sal_False;
 }
 
-void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyHeadings( ::sal_Bool _autoformatasyoutypeapplyheadings ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyHeadings( ::sal_Bool /*_autoformatasyoutypeapplyheadings*/ ) throw (uno::RuntimeException)
 {
     // not support in Writer
 }
@@ -201,7 +201,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyHeadings( ::sal_Bool _aut
     return sal_False;
 }
 
-void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyBulletedLists( ::sal_Bool _autoformatasyoutypeapplybulletedlists ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyBulletedLists( ::sal_Bool /*_autoformatasyoutypeapplybulletedlists*/ ) throw (uno::RuntimeException)
 {
     // not support in Writer
 }
@@ -211,7 +211,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyBulletedLists( ::sal_Bool
     return sal_False;
 }
 
-void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyNumberedLists( ::sal_Bool _autoformatasyoutypeapplynumberedlists ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyNumberedLists( ::sal_Bool /*_autoformatasyoutypeapplynumberedlists*/ ) throw (uno::RuntimeException)
 {
     // not support in Writer
 }
@@ -221,7 +221,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyNumberedLists( ::sal_Bool
     return sal_False;
 }
 
-void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeFormatListItemBeginning( ::sal_Bool _autoformatasyoutypeformatlistitembeginning ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeFormatListItemBeginning( ::sal_Bool /*_autoformatasyoutypeformatlistitembeginning*/ ) throw (uno::RuntimeException)
 {
     // not support in Writer
 }
@@ -231,7 +231,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeFormatListItemBeginning( ::sal
     return sal_False;
 }
 
-void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeDefineStyles( ::sal_Bool _autoformatasyoutypedefinestyles ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeDefineStyles( ::sal_Bool /*_autoformatasyoutypedefinestyles*/ ) throw (uno::RuntimeException)
 {
     // not support in Writer
 }
@@ -241,7 +241,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeDefineStyles( ::sal_Bool _auto
     return sal_False;
 }
 
-void SAL_CALL SwVbaOptions::setAutoFormatApplyHeadings( ::sal_Bool _autoformatapplyheadings ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaOptions::setAutoFormatApplyHeadings( ::sal_Bool /*_autoformatapplyheadings*/ ) throw (uno::RuntimeException)
 {
     // not support in Writer
 }
@@ -251,7 +251,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatApplyHeadings( ::sal_Bool _autoformatap
     return sal_False;
 }
 
-void SAL_CALL SwVbaOptions::setAutoFormatApplyLists( ::sal_Bool _autoformatapplylists ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaOptions::setAutoFormatApplyLists( ::sal_Bool /*_autoformatapplylists*/ ) throw (uno::RuntimeException)
 {
     // not support in Writer
 }
@@ -261,7 +261,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatApplyLists( ::sal_Bool _autoformatapply
     return sal_False;
 }
 
-void SAL_CALL SwVbaOptions::setAutoFormatApplyBulletedLists( ::sal_Bool _autoformatapplybulletedlists ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaOptions::setAutoFormatApplyBulletedLists( ::sal_Bool /*_autoformatapplybulletedlists*/ ) throw (uno::RuntimeException)
 {
     // not support in Writer
 }

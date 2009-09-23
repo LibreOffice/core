@@ -49,7 +49,7 @@ SwVbaSection::~SwVbaSection()
     return sal_False;
 }
 
-void SAL_CALL SwVbaSection::setProtectedForForms( ::sal_Bool _protectedforforms ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaSection::setProtectedForForms( ::sal_Bool /*_protectedforforms*/ ) throw (uno::RuntimeException)
 {
 }
 

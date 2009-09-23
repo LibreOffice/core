@@ -356,7 +356,7 @@ sal_Bool SAL_CALL SwVbaBorders::getShadow() throw (uno::RuntimeException)
     return ( aShadowFormat.Location != table::ShadowLocation_NONE );
 }
 
-void SAL_CALL SwVbaBorders::setShadow( sal_Bool _shadow ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaBorders::setShadow( sal_Bool /*_shadow*/ ) throw (uno::RuntimeException)
 {
     throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
 }

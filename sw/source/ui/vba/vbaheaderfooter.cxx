@@ -55,7 +55,7 @@ sal_Bool SAL_CALL SwVbaHeaderFooter::getLinkToPrevious() throw (uno::RuntimeExce
     return sal_False;
 }
 
-void SAL_CALL SwVbaHeaderFooter::setLinkToPrevious( ::sal_Bool _linktoprevious ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaHeaderFooter::setLinkToPrevious( ::sal_Bool /*_linktoprevious*/ ) throw (uno::RuntimeException)
 {
     // not support in Writer
 }
@@ -71,7 +71,7 @@ uno::Reference< word::XRange > SAL_CALL SwVbaHeaderFooter::getRange() throw (uno
     {
         sPropsNameText = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FooterText") );
     }
-    if( mnIndex = word::WdHeaderFooterIndex::wdHeaderFooterEvenPages )
+    if( mnIndex == word::WdHeaderFooterIndex::wdHeaderFooterEvenPages )
     {
         sPropsNameText.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Left") ) );
     }

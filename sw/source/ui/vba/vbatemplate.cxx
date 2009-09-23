@@ -61,7 +61,8 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeExcep
 
     // the default template is "Normal.dot" in Word.
     rtl::OUString sGroup( RTL_CONSTASCII_USTRINGPARAM("Normal") );
-    if( sal_Int32 nIndex = msName.lastIndexOf( sal_Unicode('.') ) > 0 )
+    sal_Int32 nIndex = msName.lastIndexOf( sal_Unicode('.') );
+    if( nIndex > 0 )
     {
         sGroup = msName.copy( 0, msName.lastIndexOf( sal_Unicode('.') ) );
        // OSL_TRACE("SwVbaTemplate::AutoTextEntries: %s", rtl::OUStringToOString( sGroup, RTL_TEXTENCODING_UTF8 ).getStr() );
