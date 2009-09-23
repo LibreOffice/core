@@ -50,7 +50,6 @@ SLOFILES=   \
                         $(SLO)$/transliteration_OneToOne.obj \
                         $(SLO)$/transliteration_Ignore.obj \
                         $(SLO)$/transliteration_Numeric.obj \
-                        $(SLO)$/transliteration_sentencecase.obj \
                         $(SLO)$/hiraganaToKatakana.obj \
                         $(SLO)$/katakanaToHiragana.obj \
                         $(SLO)$/ignoreKana.obj \

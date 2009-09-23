@@ -50,7 +50,6 @@
 #include <transliteration_caseignore.hxx>
 #include <transliteration_Ignore.hxx>
 #include <transliteration_OneToOne.hxx>
-#include <transliteration_sentencecase.hxx>
 #include <textToPronounce_zh.hxx>
 #include <numtotext_cjk.hxx>
 #include <numtochar.hxx>
