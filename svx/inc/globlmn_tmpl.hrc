@@ -1365,7 +1365,7 @@
                     Identifier = SID_TRANSLITERATE_TITLE_CASE; \
                     Command = ".uno:ChangeCaseToTitleCase" ; \
                     HelpID = SID_TRANSLITERATE_TITLE_CASE; \
-                    Text [ en-US ] = "~Title case (aka. First letter capitalization)";\
+                    Text [ en-US ] = "~Title case";\
                 };\
                 MenuItem\
                 {\
