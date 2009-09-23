@@ -170,7 +170,6 @@ void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::Even
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     if ( SfxObjectShell::GetCurrentComponent() == _rEvent.Source )
     {
-        lcl_UpdateAppBasicDocVars( SfxObjectShell::GetCurrentComponent(), true );
         // remove ThisComponent reference from AppBasic
         SfxObjectShell::SetCurrentComponent( Reference< XInterface >() );
     }
@@ -1049,10 +1048,7 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
     BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
     s_xCurrentComponent = _rxComponent;
     if ( pAppMgr )
-    {
-        lcl_UpdateAppBasicDocVars( _rxComponent );
         pAppMgr->SetGlobalUNOConstant( "ThisComponent", makeAny( _rxComponent ) );
-    }
 
 #if OSL_DEBUG_LEVEL > 0
     const char* pComponentImplName = _rxComponent.get() ? typeid( *_rxComponent.get() ).name() : "void";
