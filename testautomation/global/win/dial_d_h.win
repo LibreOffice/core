@@ -195,6 +195,44 @@ Querformat sw:RadioButton:DLG_PAGEPREVIEW_PRINTOPTIONS:RB_LANDSCAPE
 Hochformat sw:RadioButton:DLG_PAGEPREVIEW_PRINTOPTIONS:RB_PORTRAIT
 Standard sw:PushButton:DLG_PAGEPREVIEW_PRINTOPTIONS:PB_STANDARD
 
+*DruckerZusaetzeDraw HID_SD_PRINT_OPTIONS
+Zeichnung sd:CheckBox:TP_PRINT_OPTIONS:CBX_DRAW
+Notizen sd:CheckBox:TP_PRINT_OPTIONS:CBX_NOTES
+Handzettel sd:CheckBox:TP_PRINT_OPTIONS:CBX_HANDOUTS
+Gliederung sd:CheckBox:TP_PRINT_OPTIONS:CBX_OUTLINE
+Seitenname sd:CheckBox:TP_PRINT_OPTIONS:CBX_PAGENAME
+Datum sd:CheckBox:TP_PRINT_OPTIONS:CBX_DATE
+Zeit sd:CheckBox:TP_PRINT_OPTIONS:CBX_TIME
+AusgeblendeteSeiten sd:CheckBox:TP_PRINT_OPTIONS:CBX_HIDDEN_PAGES
+Standard sd:RadioButton:TP_PRINT_OPTIONS:RBT_DEFAULT
+SeitengroesseAnpassen sd:RadioButton:TP_PRINT_OPTIONS:RBT_PAGESIZE
+SeitenKacheln sd:RadioButton:TP_PRINT_OPTIONS:RBT_PAGETILE
+Prospekt sd:RadioButton:TP_PRINT_OPTIONS:RBT_BOOKLET
+Vorderseite sd:CheckBox:TP_PRINT_OPTIONS:CBX_FRONT
+Rueckseite sd:CheckBox:TP_PRINT_OPTIONS:CBX_BACK
+AusDruckereinstellung sd:CheckBox:TP_PRINT_OPTIONS:CBX_PAPERBIN
+
+*DruckerZusaetzeWriter HID_OPTPRINT_PAGE
+Grafiken sw:CheckBox:TP_OPTPRINT_PAGE:CB_PGRF
+Tabellen sw:CheckBox:TP_OPTPRINT_PAGE:CB_PTAB
+Zeichnungen sw:CheckBox:TP_OPTPRINT_PAGE:CB_PDRAW
+Kontrollfelder sw:CheckBox:TP_OPTPRINT_PAGE:CB_CTRLFLD
+Hintergrund sw:CheckBox:TP_OPTPRINT_PAGE:CB_BACKGROUND
+HiddenText sw:CheckBox:TP_OPTPRINT_PAGE:CB_HIDDEN_TEXT
+TextPlaceholder sw:CheckBox:TP_OPTPRINT_PAGE:CB_TEXT_PLACEHOLDER
+RightToLeft sw:CheckBox:TP_OPTPRINT_PAGE:CB_PROSPECT_RTL
+SchwarzDrucken sw:CheckBox:TP_OPTPRINT_PAGE:CB_BLACK_FONT
+LinkeSeiten sw:CheckBox:TP_OPTPRINT_PAGE:CB_LEFTP
+RechteSeiten sw:CheckBox:TP_OPTPRINT_PAGE:CB_RIGHTP
+Umgekehrt sw:CheckBox:TP_OPTPRINT_PAGE:CB_REVERSE
+Prospekt sw:CheckBox:TP_OPTPRINT_PAGE:CB_PROSPECT
+Keine sw:RadioButton:TP_OPTPRINT_PAGE:RB_NO
+NurNotizen sw:RadioButton:TP_OPTPRINT_PAGE:RB_ONLY
+Dokumentende sw:RadioButton:TP_OPTPRINT_PAGE:RB_END
+Seitenende sw:RadioButton:TP_OPTPRINT_PAGE:RB_PAGEEND
+Fax sw:ListBox:TP_OPTPRINT_PAGE:LB_FAX
+AusDruckereinstellung sw:CheckBox:TP_OPTPRINT_PAGE:CB_PAPERFROMSETUP
+
 *Duplizieren SID_COPYOBJECTS
 AnzahlAnKopien sd:NumericField:DLG_COPY:NUM_FLD_COPIES
 XAchse sd:MetricField:DLG_COPY:MTR_FLD_MOVE_X
