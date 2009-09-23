@@ -113,7 +113,7 @@ public:
     DECL_LINK( OnAsyncQuit, void* );
 };
 
-IMPL_LINK( AsyncQuitHandler, OnAsyncQuit, void*, pNull )
+IMPL_LINK( AsyncQuitHandler, OnAsyncQuit, void*, /*pNull*/ )
 {
     QuitApplication();
     return 0L;

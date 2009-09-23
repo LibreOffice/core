@@ -246,7 +246,7 @@ VbaFontBase::setColor( const uno::Any& _color  ) throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-VbaFontBase::setUnderline( const uno::Any& aValue ) throw ( uno::RuntimeException )
+VbaFontBase::setUnderline( const uno::Any& /*aValue*/ ) throw ( uno::RuntimeException )
 {
 /*
     // default

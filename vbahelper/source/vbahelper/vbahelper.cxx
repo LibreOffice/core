@@ -856,7 +856,7 @@ double PixelsToPoints( css::uno::Reference< css::awt::XDevice >& xDevice, double
     return (fPixels/fConvertFactor)/POINTTO100THMILLIMETERFACTOR;
 }
 
-ConcreteXShapeGeometryAttributes::ConcreteXShapeGeometryAttributes( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape )
+ConcreteXShapeGeometryAttributes::ConcreteXShapeGeometryAttributes( const css::uno::Reference< css::uno::XComponentContext >& /*xContext*/, const css::uno::Reference< css::drawing::XShape >& xShape )
 {
     m_pShapeHelper.reset( new ShapeHelper( xShape ) );
 }
@@ -901,7 +901,6 @@ void setCursorHelper( const uno::Reference< frame::XModel >& xModel, const Point
     }
     else
     {
-        const uno::Reference< frame::XModel > xModel( xModel2, uno::UNO_QUERY );
         if ( xModel.is() )
         {
             const uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
