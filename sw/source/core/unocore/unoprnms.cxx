@@ -779,9 +779,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0734 CHAR_OVERLINE_COLOR */         {MAP_CHAR_LEN("CharOverlineColor")},
 /* 0735 CHAR_OVERLINE_HAS_COLOR */     {MAP_CHAR_LEN("CharOverlineHasColor")},
 /* 0736 UNO_NAME_OUTLINE_LEVEL */       {MAP_CHAR_LEN("OutlineLevel")},//#outline level,add<-zhaojianwei Outlinelevel
-/* 0737 UNO_NAME_DESCRIPTION */         {MAP_CHAR_LEN("Description")},
-/* 0738 UNO_NAME_IS_TEMPLATE */       {MAP_CHAR_LEN("IsTemplate")},
-/* 0739 UNO_NAME_VBA_DOCOBJ */       {MAP_CHAR_LEN("ThisVBADocObj")},
+/* 0737 UNO_NAME_DESCRIPTION */         {MAP_CHAR_LEN("Description")}
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )
