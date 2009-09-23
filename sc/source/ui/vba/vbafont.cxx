@@ -250,7 +250,6 @@ ScVbaFont::setColorIndex( const uno::Any& _colorindex ) throw( uno::RuntimeExcep
 uno::Any SAL_CALL
 ScVbaFont::getColorIndex() throw ( uno::RuntimeException )
 {
-    sal_Int32 nColor = 0;
     if ( GetDataSet() )
         if (  GetDataSet()->GetItemState( ATTR_FONT_COLOR, TRUE, NULL) == SFX_ITEM_DONTCARE )
             return aNULL();
