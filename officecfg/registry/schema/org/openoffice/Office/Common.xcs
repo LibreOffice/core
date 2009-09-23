@@ -864,7 +864,7 @@
             be disabled.&lt;p&gt;
           </desc>
         </info>
-        <value>false</value>
+        <value>true</value>
       </prop>
     </group>
     <group oor:name="ProductVersionID">

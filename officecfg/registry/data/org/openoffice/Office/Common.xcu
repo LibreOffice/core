@@ -513,9 +513,6 @@
         <prop oor:name="DynamicBorderColors" oor:type="xs:boolean">
           <value>true</value>
         </prop>
-        <prop oor:name="UseDocumentTextMetrics" oor:type="xs:boolean">
-          <value>true</value>
-        </prop>
       </node>
       <node oor:name="com.sun.star.sdb.FormDesign">
         <prop oor:name="VisualEffect" oor:type="xs:string">
@@ -524,13 +521,10 @@
         <prop oor:name="DynamicBorderColors" oor:type="xs:boolean">
           <value>true</value>
         </prop>
-        <prop oor:name="UseDocumentTextMetrics" oor:type="xs:boolean">
-          <value>true</value>
-        </prop>
       </node>
-      <node oor:name="com.sun.star.text.TextDocument">
+      <node oor:name="com.sun.star.sheet.SpreadsheetDocument">
         <prop oor:name="UseDocumentTextMetrics" oor:type="xs:boolean">
-          <value>true</value>
+          <value>false</value>
         </prop>
       </node>
     </node>
