@@ -1159,8 +1159,7 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
 
 void SwEditShell::TransliterateText( sal_uInt32 nType )
 {
-    utl::TransliterationWrapper aTrans(
-                        ::comphelper::getProcessServiceFactory(), nType );
+    utl::TransliterationWrapper aTrans( ::comphelper::getProcessServiceFactory(), nType );
     StartAllAction();
     SET_CURR_SHELL( this );
 
