@@ -39,13 +39,10 @@
 
 testcase tHelp_DialogTest
 
-    '///<h1>Update test for the main help window</h1>
-    '///<ul>
-    Dim i as Integer
-    dim brc as boolean
-    printlog "- open the help"
+    printlog( "Resource test for the help viewer" )
 
-    '///+<li>Open Help</li>
+    dim brc as boolean
+
     brc = hOpenHelp()
     if ( not brc ) then
         warnlog( "Help not open, aborting test" )
@@ -57,27 +54,14 @@ testcase tHelp_DialogTest
         goto endsub
     endif
 
+    hSelectHelpTab( "content" )
+    hSelectHelpTab( "index" )
+    hSelectHelpTab( "find" )
+    hSelectHelpTab( "bookmarks" )
+    
 
-    '///+<li>activate 'Content'-page</li>
-    brc = hSelectHelpTab( "content" )
-    call DialogTest( ContentPage )
-
-    '///+<li>activate 'Index'-page</li>
-    brc = hSelectHelpTab( "index" )
-    call DialogTest( IndexPage )
-
-    '///+<li>activate 'Find'-page</li>
-    brc = hSelectHelpTab( "find" )
-    call DialogTest( FindPage )
-
-    '///+<li>activate 'Bookmark'-page</li>
-    brc = hSelectHelpTab( "bookmarks" )
-    call DialogTest( BookmarksPage )
-
-    '///+<li>close help ( does not work correctly with testtool )</li>
     Kontext "StarOfficeHelp"
     hCloseHelp()
-    '///</ul>
 
 endcase
 
@@ -85,12 +69,11 @@ endcase
 
 testcase tHelp_ToolBar
 
-    '///<h1>Update test for the toolbar on the main Help window</h1>
-    '///<ul>
-    Dim i as Integer
+    printlog( "Resource test for the help toolbar" )
+    
     dim brc as boolean
+    dim iExitCounter as integer : iExitCounter = 0
 
-    '///+<li>Open Help</li>
     brc = hOpenHelp()
     if ( not brc ) then
         warnlog( "Help not open, aborting test" )
@@ -104,85 +87,62 @@ testcase tHelp_ToolBar
 
 
     kontext "starofficehelp"
-    '///+<li>Index-button</li>
     printlog "- Index -> on"
-    '///+<li>activate 'Index' ( => only the help-window must be shown )</li>
     Index.Click()
     waitslot
 
     printlog "- Index -> off"
-    '///+<li>activate 'Index' ( => the full help-window must be shown )</li>
     Index.Click()
 
-    ' Backward- and Forward-button
-    '///+<li>open the 'Index'-page</li>
     printlog "- activate 'Index'-page"
     brc = hSelectHelpTab( "index" )
-    sleep( 2 )
+    
+    do while( SearchIndex.getItemCount() < 100 )
+        iExitCounter = iExitCounter + 1 : if ( iExitCounter = 20 ) then exit do
+        wait( 100 )
+    loop
 
-    SearchIndex.Select 4
+    SearchIndex.Select( 4 )
     DisplayIndex.Click()
     waitslot
 
-    '///+<li>backward</li>
     printlog "- backward"
     Backward.Click()
     waitslot
 
-    '///+<li>forward</li>
     printlog "- forward"
     Forward.Click()
     waitslot
 
-    '///+<li>first page</li>
     printlog "- first page"
     GoToStart.Click()
 
-    '///+<li>print</li>
     printlog "- print"
-    ' the print-dialog must be shown ( if direct-printing is activated => BUG )
-    '///+<li>close the print-dialog</li>
     PrintButton.Click()
 
     kontext "active"
-
-    if Active.Exists ( 1 ) then
-
-        if Active.getRT() = 304 then
-            qaerrorlog "- Printing failed: Did you define a default printer?"
-            Active.OK()
-            
-            Kontext "DruckenDlg"
-            if ( druckenDlg.exists() ) then
-                printlog( "Printer dialog is still open, closing with cancel" )
-                druckenDlg. cancel()
-            endif
-            
-        endif
-
-    else
-        kontext "druckendlg"
-        if DruckenDlg.NotExists (2) then
-            warnlog "No print-dialog is open. => direct printing? - bug 93788!"
-        else
-            DruckenDlg.Cancel()
-        endif
-
+    if ( Active.Exists ( 1 ) ) then
+        qaerrorlog( "Unexpected messagebox: " & Active.getText() )
+        qaerrorlog( "Probably missing default printer on this system, fix it!" )
+        Active.OK()
     endif
     
-    '///+<li>Set Bookmark</li>
-    printlog "- Set Bookmark"
-
+    kontext "Printing"
+    if ( Printing.exists( 2 ) ) then
+        printlog( "Print dialog open, good." )
+        Printing.cancel()
+    else
+        warnlog( "Print dialog not open" )
+    endif
+    
     kontext "tb_help"
+    printlog "- Set Bookmark"
     SetBookmarks.Click()
 
-    '///+<li>close the 'add bookmark'-dialog</li>
-    kontext "addbookmark"
+    kontext "AddBookmark"
     call DialogTest ( AddBookmark )
     AddBookmark.Cancel()
 
-    '///+<li>close help ( does not work correctly with testtool )</li>
     brc = hCloseHelp()
-    '///</ul>
 
 endcase
