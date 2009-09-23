@@ -136,33 +136,6 @@ DBG_NAME(SfxObjectShell)
 extern svtools::AsynchronLink* pPendingCloser;
 static WeakReference< XInterface > s_xCurrentComponent;
 
-void lcl_UpdateAppBasicDocVars(  const Reference< XInterface >& _rxComponent, bool bClear = false )
-{
-    BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
-    if ( pAppMgr )
-    {
-        uno::Reference< beans::XPropertySet > xProps( _rxComponent, uno::UNO_QUERY );
-        if ( xProps.is() )
-        {
-            try
-            {
-                beans::PropertyValue aProp;
-                xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ThisVBADocObj") ) ) >>= aProp;
-                rtl::OString sTmp( rtl::OUStringToOString( aProp.Name, RTL_TEXTENCODING_UTF8 ) );
-                const char* pAscii = sTmp.getStr();
-                if ( bClear )
-                    pAppMgr->SetGlobalUNOConstant( pAscii, uno::makeAny( uno::Reference< uno::XInterface >() ) );
-                else
-                    pAppMgr->SetGlobalUNOConstant( pAscii, aProp.Value );
-
-            }
-            catch( uno::Exception& e )
-            {
-            }
-        }
-    }
-}
-
 //=========================================================================
 
 
