@@ -706,22 +706,6 @@ USHORT SbModule::Run( SbMethod* pMeth )
 
             delete pRt;
             pMOD = pOldMod;
-            if ( pINST->nCallLvl == 0 && IsVBACompat() )
-            {
-                // VBA always ensure screenupdating is enabled after completing
-                StarBASIC* pBasic = PTR_CAST(StarBASIC,GetParent());
-                if ( pBasic && pBasic->IsDocBasic() )
-                {
-                    uno::Any aUnoVar;
-                    ::rtl::OUString sVarName( ::rtl::OUString::createFromAscii( "ThisComponent" ) );
-                    SbUnoObject* pGlobs = dynamic_cast<SbUnoObject*>( pBasic->Find( sVarName, SbxCLASS_DONTCARE ) );
-                    if ( pGlobs )
-                        aUnoVar = pGlobs->getUnoAny();
-                    uno::Reference< frame::XModel > xModel( aUnoVar, uno::UNO_QUERY);
-                     if ( xModel.is() )
-                        xModel->unlockControllers();
-                }
-            }
             if( bDelInst )
             {
                 // #57841 Uno-Objekte, die in RTL-Funktionen gehalten werden,
@@ -746,7 +730,6 @@ USHORT SbModule::Run( SbMethod* pMeth )
         pINST->nCallLvl--;          // Call-Level wieder runter
         StarBASIC::FatalError( SbERR_STACK_OVERFLOW );
     }
-
     if( bDelInst )
     {
         // #57841 Uno-Objekte, die in RTL-Funktionen gehalten werden,
