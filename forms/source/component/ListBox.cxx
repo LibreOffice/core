@@ -1549,8 +1549,6 @@ namespace frm
     void SAL_CALL OListBoxControl::itemStateChanged(const ItemEvent& _rEvent) throw(RuntimeException)
     {
         // forward this to our listeners
-        Reference< XChild > xChild( getModel(), UNO_QUERY );
-        if ( xChild.is() && xChild->getParent().is() )
         {
             ::osl::MutexGuard aGuard( m_aMutex );
             if ( m_aItemListeners.getLength() )
@@ -1563,8 +1561,6 @@ namespace frm
                 m_pItemBroadcaster->addEvent( new ItemEventDescription( _rEvent ), this );
             }
         }
-        else
-            m_aItemListeners.notifyEach( &XItemListener::itemStateChanged, _rEvent );
 
         // and do the handling for the ChangeListeners
         ::osl::ClearableMutexGuard aGuard(m_aMutex);
