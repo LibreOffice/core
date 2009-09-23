@@ -150,9 +150,9 @@ void Components::initGlobalBroadcaster(
         if (root.is()) {
             if (root != exclude) {
                 Path path(root->getAbsolutePath());
-                Modifications const * mods = &modifications;
+                Modifications::Node const * mods = &modifications.getRoot();
                 for (Path::iterator j(path.begin()); j != path.end(); ++j) {
-                    Modifications::Children::const_iterator k(
+                    Modifications::Node::Children::const_iterator k(
                         mods->children.find(*j));
                     if (k == mods->children.end()) {
                         mods = 0;

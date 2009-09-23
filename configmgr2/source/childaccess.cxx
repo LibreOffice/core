@@ -86,19 +86,19 @@ css::uno::Sequence< sal_Int8 > ChildAccess::getTunnelId() {
 }
 
 ChildAccess::ChildAccess(
-    rtl::Reference< RootAccess > const & root,
+    Components & components, rtl::Reference< RootAccess > const & root,
     rtl::Reference< Access > const & parent, rtl::OUString const & name,
     rtl::Reference< Node > const & node):
-    root_(root), parent_(parent), name_(name), node_(node),
+    Access(components), root_(root), parent_(parent), name_(name), node_(node),
     inTransaction_(false)
 {
     OSL_ASSERT(root.is() && parent.is() && node.is());
 }
 
 ChildAccess::ChildAccess(
-    rtl::Reference< RootAccess > const & root,
+    Components & components, rtl::Reference< RootAccess > const & root,
     rtl::Reference< Node > const & node):
-    root_(root), node_(node), inTransaction_(false)
+    Access(components), root_(root), node_(node), inTransaction_(false)
 {
     OSL_ASSERT(root.is() && node.is());
 }
@@ -314,7 +314,7 @@ void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
     commitChildChanges(valid, globalModifications);
     if (valid && changedValue_.get() != 0) {
         Path path(getAbsolutePath());
-        Components::singleton().addModification(path);
+        getComponents().addModification(path);
         globalModifications->add(path);
         switch (node_->kind()) {
         case Node::KIND_PROPERTY:

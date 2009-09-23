@@ -34,18 +34,32 @@
 
 #include <map>
 
+#include "boost/noncopyable.hpp"
+
 #include "path.hxx"
 
 namespace rtl { class OUString; }
 
 namespace configmgr {
 
-struct Modifications {
-    typedef std::map< rtl::OUString, Modifications > Children;
+class Modifications: private boost::noncopyable {
+public:
+    struct Node {
+        typedef std::map< rtl::OUString, Node > Children;
 
-    Children children;
+        Children children;
+    };
+
+    Modifications();
+
+    ~Modifications();
 
     void add(Path const & path);
+
+    Node const & getRoot() const;
+
+private:
+    Node root_;
 };
 
 }

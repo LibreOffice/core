@@ -37,24 +37,32 @@
 
 namespace configmgr {
 
+Modifications::Modifications() {}
+
+Modifications::~Modifications() {}
+
 void Modifications::add(Path const & path) {
-    Modifications * mod = this;
+    Node * p = &root_;
     bool wasPresent = false;
     for (Path::const_iterator i(path.begin()); i != path.end(); ++i) {
-        Children::iterator j(mod->children.find(*i));
-        if (j == mod->children.end()) {
-            if (wasPresent && mod->children.empty()) {
+        Node::Children::iterator j(p->children.find(*i));
+        if (j == p->children.end()) {
+            if (wasPresent && p->children.empty()) {
                 return;
             }
-            j = mod->children.insert(Children::value_type(*i, Modifications())).
+            j = p->children.insert(Node::Children::value_type(*i, Node())).
                 first;
             wasPresent = false;
         } else {
             wasPresent = true;
         }
-        mod = &j->second;
+        p = &j->second;
     }
-    mod->children.clear();
+    p->children.clear();
+}
+
+Modifications::Node const & Modifications::getRoot() const {
+    return root_;
 }
 
 }

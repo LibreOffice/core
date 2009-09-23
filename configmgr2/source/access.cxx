@@ -160,12 +160,12 @@ void Access::releaseChild(rtl::OUString const & name) {
 }
 
 void Access::initGlobalBroadcaster(
-    Modifications const & modifications, Broadcaster * broadcaster)
+    Modifications::Node const & modifications, Broadcaster * broadcaster)
 {
     OSL_ASSERT(broadcaster != 0);
     //TODO: handle containerListeners_, vetoableChangeListeners_,
     // propertiesChangeListeners_
-    for (Modifications::Children::const_iterator i(
+    for (Modifications::Node::Children::const_iterator i(
              modifications.children.begin());
          i != modifications.children.end(); ++i)
     {
@@ -258,7 +258,9 @@ void Access::initGlobalBroadcaster(
     }
 }
 
-Access::Access(): disposed_(false) {}
+Access::Access(Components & components):
+    components_(components), disposed_(false)
+{}
 
 Access::~Access() {}
 
@@ -339,12 +341,12 @@ void Access::clearListeners() throw() {
 }
 
 void Access::initLocalBroadcaster(
-    Modifications const & modifications, Broadcaster * broadcaster)
+    Modifications::Node const & modifications, Broadcaster * broadcaster)
 {
     OSL_ASSERT(broadcaster != 0);
     //TODO: handle containerListeners_, vetoableChangeListeners_,
     // propertiesChangeListeners_
-    for (Modifications::Children::const_iterator i(
+    for (Modifications::Node::Children::const_iterator i(
              modifications.children.begin());
          i != modifications.children.end(); ++i)
     {
@@ -494,6 +496,10 @@ css::uno::Any Access::queryInterface(css::uno::Type const & aType)
     return res;
 }
 
+Components & Access::getComponents() const {
+    return components_;
+}
+
 void Access::checkLocalizedPropertyAccess() {
     if (getNode()->kind() == Node::KIND_LOCALIZED_PROPERTY &&
         !Components::allLocales(getRootAccess()->getLocale()))
@@ -583,7 +589,7 @@ void Access::insertLocalizedValueChild(
     checkValue(value, locprop->getType(), locprop->isNillable());
     markChildAsModified(
         new ChildAccess(
-            getRootAccess(), this, name,
+            components_, getRootAccess(), this, name,
             new LocalizedValueNode(Data::NO_LAYER, value)));
     //TODO notify change
 }
@@ -649,7 +655,7 @@ void Access::commitChildChanges(
         if (childValid && i->second.directlyModified) {
             Path path(getAbsolutePath());
             path.push_back(i->first);
-            Components::singleton().addModification(path);
+            components_.addModification(path);
             globalModifications->add(path);
         }
         i->second.child->committed();
@@ -1606,7 +1612,7 @@ void Access::replaceByName(
             OSL_ASSERT(false); // this cannot happen
             break;
         }
-        getNotificationRoot()->initLocalBroadcaster(localMods, &bc);
+        getNotificationRoot()->initLocalBroadcaster(localMods.getRoot(), &bc);
     }
     bc.send();
 }
@@ -1634,7 +1640,7 @@ void Access::insertByName(
         checkValue(aElement, TYPE_ANY, true);
         markChildAsModified(
             new ChildAccess(
-                getRootAccess(), this, aName,
+                components_, getRootAccess(), this, aName,
                 new PropertyNode(
                     Data::NO_LAYER, TYPE_ANY, true, aElement, true)));
         //TODO notify change
@@ -1691,7 +1697,7 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
     rtl::OUString tmplName(
         dynamic_cast< SetNode * >(getNode().get())->getDefaultTemplateName());
     rtl::Reference< Node > tmpl(
-        Components::singleton().getTemplate(Data::NO_LAYER, tmplName));
+        components_.getTemplate(Data::NO_LAYER, tmplName));
     if (!tmpl.is()) {
         throw css::uno::Exception(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unknown template ")) +
@@ -1701,7 +1707,7 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
     rtl::Reference< Node > node(tmpl->clone());
     node->setLayer(Data::NO_LAYER);
     return static_cast< cppu::OWeakObject * >(
-        new ChildAccess(getRootAccess(), node));
+        new ChildAccess(components_, getRootAccess(), node));
 }
 
 css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
@@ -1750,7 +1756,7 @@ rtl::Reference< ChildAccess > Access::getUnmodifiedChild(
         }
     }
     rtl::Reference< ChildAccess > child(
-        new ChildAccess(getRootAccess(), this, name, node));
+        new ChildAccess(components_, getRootAccess(), this, name, node));
     cachedChildren_[name] = child.get();
     return child;
 }

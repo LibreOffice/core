@@ -47,6 +47,7 @@
 #include "localizedpropertynode.hxx"
 #include "localizedvaluenode.hxx"
 #include "groupnode.hxx"
+#include "modifications.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
 #include "path.hxx"

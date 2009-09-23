@@ -48,9 +48,9 @@ namespace rtl {
 namespace configmgr {
 
 class Broadcaster;
+class Modifications;
 class Node;
 class RootAccess;
-struct Modifications;
 
 class Components: private boost::noncopyable {
 public:

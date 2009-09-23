@@ -271,8 +271,10 @@ Service::createInstanceWithArguments(
              ServiceSpecifier),
             static_cast< cppu::OWeakObject * >(this));
     }
-    rtl::Reference< RootAccess > root(new RootAccess(nodepath, locale, update));
     osl::MutexGuard guard(lock);
+    Components & components = Components::singleton();
+    rtl::Reference< RootAccess > root(
+        new RootAccess(components, nodepath, locale, update));
     if (root->isValue()) {
         throw css::uno::Exception(
             (rtl::OUString(
@@ -282,7 +284,7 @@ Service::createInstanceWithArguments(
              nodepath),
             static_cast< cppu::OWeakObject * >(this));
     }
-    Components::singleton().addRootAccess(root);
+    components.addRootAccess(root);
     return static_cast< cppu::OWeakObject * >(root.get());
 }
 

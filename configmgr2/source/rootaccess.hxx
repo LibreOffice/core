@@ -44,6 +44,7 @@
 #include "sal/types.h"
 
 #include "access.hxx"
+#include "modifications.hxx"
 #include "path.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -57,8 +58,8 @@ namespace com { namespace sun { namespace star {
 namespace configmgr {
 
 class Broadcaster;
+class Components;
 class Node;
-struct Modifications;
 
 class RootAccess:
     public Access, public com::sun::star::util::XChangesNotifier,
@@ -66,13 +67,13 @@ class RootAccess:
 {
 public:
     RootAccess(
-        rtl::OUString const & pathRepresenation, rtl::OUString const & locale,
-        bool update);
+        Components & components, rtl::OUString const & pathRepresenation,
+        rtl::OUString const & locale, bool update);
 
     virtual Path getAbsolutePath();
 
     virtual void initGlobalBroadcaster(
-        Modifications const & modifications, Broadcaster * broadcaster);
+        Modifications::Node const & modifications, Broadcaster * broadcaster);
 
     virtual void SAL_CALL acquire() throw ();
 
@@ -107,7 +108,7 @@ private:
     virtual void clearListeners() throw ();
 
     virtual void initLocalBroadcaster(
-        Modifications const & modifications, Broadcaster * broadcaster);
+        Modifications::Node const & modifications, Broadcaster * broadcaster);
 
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
         com::sun::star::uno::Type const & aType)

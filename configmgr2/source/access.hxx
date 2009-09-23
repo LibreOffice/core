@@ -70,6 +70,7 @@
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 
+#include "modifications.hxx"
 #include "path.hxx"
 #include "type.hxx"
 
@@ -97,9 +98,9 @@ namespace configmgr {
 class Broadcaster;
 class Change;
 class ChildAccess;
+class Components;
 class Node;
 class RootAccess;
-struct Modifications;
 
 class Access:
     public cppu::OWeakObject, public com::sun::star::lang::XTypeProvider,
@@ -143,13 +144,13 @@ public:
     virtual bool isFinalized() = 0;
 
     virtual void initGlobalBroadcaster(
-        Modifications const & modifications, Broadcaster * broadcaster);
+        Modifications::Node const & modifications, Broadcaster * broadcaster);
 
     using OWeakObject::acquire;
     using OWeakObject::release;
 
 protected:
-    Access();
+    Access(Components & components);
 
     virtual ~Access();
 
@@ -167,11 +168,13 @@ protected:
     virtual void clearListeners() throw ();
 
     virtual void initLocalBroadcaster(
-        Modifications const & modifications, Broadcaster * broadcaster);
+        Modifications::Node const & modifications, Broadcaster * broadcaster);
 
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
         com::sun::star::uno::Type const & aType)
         throw (com::sun::star::uno::RuntimeException);
+
+    Components & getComponents() const;
 
     void checkLocalizedPropertyAccess();
 
@@ -551,6 +554,7 @@ private:
                 com::sun::star::beans::XPropertiesChangeListener > >
         PropertiesChangeListeners;
 
+    Components & components_;
     ModifiedChildren modifiedChildren_;
     WeakChildMap cachedChildren_;
     DisposeListeners disposeListeners_;

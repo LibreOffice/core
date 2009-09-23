@@ -441,7 +441,7 @@ void writeModifications(
     oslFileHandle handle, rtl::OUString const & grandparentPathRepresentation,
     rtl::OUString const & parentName, rtl::Reference< Node > const & parent,
     rtl::OUString const & nodeName, rtl::Reference< Node > const & node,
-    Modifications const & modifications)
+    Modifications::Node const & modifications)
 {
     if (modifications.children.empty()) {
         OSL_ASSERT(parent.is());
@@ -525,7 +525,7 @@ void writeModifications(
                 Data::createSegment(parent->getTemplateName(), parentName);
         }
         OSL_ASSERT(node.is());
-        for (Modifications::Children::const_iterator i(
+        for (Modifications::Node::Children::const_iterator i(
                  modifications.children.begin());
              i != modifications.children.end(); ++i)
         {
@@ -574,9 +574,9 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
     //TODO: Do not write back information about those removed items that did not
     // come from the .xcs/.xcu files, anyway (but had been added dynamically
     // instead):
-    for (Modifications::Children::const_iterator j(
-             data.modifications.children.begin());
-         j != data.modifications.children.end(); ++j)
+    for (Modifications::Node::Children::const_iterator j(
+             data.modifications.getRoot().children.begin());
+         j != data.modifications.getRoot().children.end(); ++j)
     {
         writeModifications(
             tmp.handle, rtl::OUString(), rtl::OUString(),

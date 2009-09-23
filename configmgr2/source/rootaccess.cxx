@@ -57,6 +57,7 @@
 #include "components.hxx"
 #include "data.hxx"
 #include "lock.hxx"
+#include "modifications.hxx"
 #include "node.hxx"
 #include "path.hxx"
 #include "rootaccess.hxx"
@@ -70,9 +71,10 @@ namespace css = com::sun::star;
 }
 
 RootAccess::RootAccess(
-    rtl::OUString const & pathRepresentation, rtl::OUString const & locale,
-    bool update):
-    pathRepresentation_(pathRepresentation), locale_(locale), update_(update)
+    Components & components, rtl::OUString const & pathRepresentation,
+    rtl::OUString const & locale, bool update):
+    Access(components), pathRepresentation_(pathRepresentation),
+    locale_(locale), update_(update)
 {}
 
 Path RootAccess::getAbsolutePath() {
@@ -81,7 +83,7 @@ Path RootAccess::getAbsolutePath() {
 }
 
 void RootAccess::initGlobalBroadcaster(
-    Modifications const & modifications, Broadcaster * broadcaster)
+    Modifications::Node const & modifications, Broadcaster * broadcaster)
 {
     Access::initGlobalBroadcaster(modifications, broadcaster);
     //TODO: handle changesListeners_
@@ -105,7 +107,7 @@ bool RootAccess::isUpdate() const {
 
 RootAccess::~RootAccess() {
     osl::MutexGuard g(lock);
-    Components::singleton().removeRootAccess(this);
+    getComponents().removeRootAccess(this);
 }
 
 Path RootAccess::getRelativePath() {
@@ -119,7 +121,7 @@ rtl::OUString RootAccess::getRelativePathRepresentation() {
 rtl::Reference< Node > RootAccess::getNode() {
     if (!node_.is()) {
         int finalizedLayer;
-        node_ = Components::singleton().resolvePathRepresentation(
+        node_ = getComponents().resolvePathRepresentation(
             pathRepresentation_, &path_, &finalizedLayer);
         if (!node_.is()) {
             throw css::uno::RuntimeException(
@@ -186,7 +188,7 @@ void RootAccess::clearListeners() throw() {
 }
 
 void RootAccess::initLocalBroadcaster(
-    Modifications const & modifications, Broadcaster * broadcaster)
+    Modifications::Node const & modifications, Broadcaster * broadcaster)
 {
     Access::initLocalBroadcaster(modifications, broadcaster);
     //TODO: handle changesListeners_
@@ -263,13 +265,13 @@ void RootAccess::commitChanges()
         int finalizedLayer;
         Modifications globalMods;
         commitChildChanges(
-            ((Components::singleton().resolvePathRepresentation(
+            ((getComponents().resolvePathRepresentation(
                   pathRepresentation_, 0, &finalizedLayer)
               == node_) &&
              finalizedLayer == Data::NO_LAYER),
             &globalMods);
-        Components::singleton().writeModifications();
-        Components::singleton().initGlobalBroadcaster(globalMods, this, &bc);
+        getComponents().writeModifications();
+        getComponents().initGlobalBroadcaster(globalMods, this, &bc);
     }
     bc.send();
 }

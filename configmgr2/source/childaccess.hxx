@@ -55,9 +55,10 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 namespace configmgr {
 
+class Components;
+class Modifications;
 class Node;
 class RootAccess;
-struct Modifications;
 
 class ChildAccess:
     public Access, public com::sun::star::container::XChild,
@@ -67,12 +68,12 @@ public:
     static com::sun::star::uno::Sequence< sal_Int8 > getTunnelId();
 
     ChildAccess(
-        rtl::Reference< RootAccess > const & root,
+        Components & components, rtl::Reference< RootAccess > const & root,
         rtl::Reference< Access > const & parent, rtl::OUString const & name,
         rtl::Reference< Node > const & node);
 
     ChildAccess(
-        rtl::Reference< RootAccess > const & root,
+        Components & components, rtl::Reference< RootAccess > const & root,
         rtl::Reference< Node > const & node);
 
     virtual Path getAbsolutePath();
