@@ -114,7 +114,7 @@
           </xsl:call-template>
         </xsl:when>
         <xsl:when test="name(.)='attribute'">
-          <xsl:if test="ancestor::rng:grammar/@attributeFormDefault='qualified'">
+          <xsl:if test="ancestor::namespace/rng:grammar/@attributeFormDefault='qualified'">
             <xsl:call-template name="prefixforgrammar"/>
           </xsl:if>
         </xsl:when>

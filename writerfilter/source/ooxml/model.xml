@@ -23095,7 +23095,7 @@
       <element name="numbering" tokenid="ooxml:NUMBERING"/>
     </resource>
     <resource name="styles" resource="Stream">
-      <element name="styles" tokenid="ooxml:STYLES"/>
+      <element name="styles" tokenid="rtf:STYLESHEET"/>
     </resource>
     <resource name="ST_CaptionPos" resource="List" generated="yes">
       <value name="above" tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_above">above</value>

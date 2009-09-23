@@ -114,37 +114,59 @@ OOXMLFactory::Pointer_t OOXMLFactory::getInstance()
 void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                               const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
-    Id nId = pHandler->getId();
-    OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nId);
+    Id nDefine = pHandler->getDefine();
+    OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
 
     if (pFactory.get() != NULL)
     {
 #ifdef DEBUG_ATTRIBUTES
         debug_logger->startElement("attributes");
-        debug_logger->attribute("define", pFactory->getDefineName(nId));
+        debug_logger->attribute("define", pFactory->getDefineName(nDefine));
+        char sBuffer[256];
+        snprintf(sBuffer, sizeof(sBuffer), "%08" SAL_PRIxUINT32, nDefine);
+        debug_logger->attribute("define-num", sBuffer);
 #endif
 
-        AttributeToResourceMapPointer pMap = pFactory->getAttributeToResourceMap(nId);
+        TokenToIdMapPointer pTokenToIdMap = pFactory->getTokenToIdMap(nDefine);
+        AttributeToResourceMapPointer pMap = pFactory->getAttributeToResourceMap(nDefine);
 
         AttributeToResourceMap::const_iterator aIt;
         AttributeToResourceMap::const_iterator aEndIt = pMap->end();
 
         for (aIt = pMap->begin(); aIt != aEndIt; aIt++)
         {
+            Id nId = (*pTokenToIdMap)[aIt->first];
+#ifdef DEBUG_ATTRIBUTES
+            debug_logger->startElement("attribute");
+            debug_logger->attribute("name", fastTokenToId(aIt->first));
+            debug_logger->attribute("tokenid", (*QNameToString::Instance())(nId));
+            snprintf(sBuffer, sizeof(sBuffer), "%08" SAL_PRIxUINT32, nId);
+            debug_logger->attribute("tokenid-num", sBuffer);
+#endif
             if (Attribs->hasAttribute(aIt->first))
             {
                 switch (aIt->second)
                 {
-                    case RT_Boolean:
-                        {
-                            ::rtl::OUString aValue(Attribs->getValue(aIt->first));
-                            OOXMLFastHelper<OOXMLBooleanValue>::newProperty(pHandler, aIt->first, aValue);
-                        }
-                        break;
-                    default:
-                        break;
+                case RT_Boolean:
+                    {
+                        ::rtl::OUString aValue(Attribs->getValue(aIt->first));
+                        OOXMLFastHelper<OOXMLBooleanValue>::newProperty(pHandler, nId, aValue);
+                    }
+                    break;
+                case RT_String:
+                    {
+                        ::rtl::OUString aValue(Attribs->getValue(aIt->first));
+                        OOXMLFastHelper<OOXMLStringValue>::newProperty(pHandler, nId, aValue);
+
+                    }
+                    break;
+                default:
+                    break;
                 }
             }
+#ifdef DEBUG_ATTRIBUTES
+            debug_logger->endElement("attribute");
+#endif
         }
 
 #ifdef DEBUG_ATTRIBUTES

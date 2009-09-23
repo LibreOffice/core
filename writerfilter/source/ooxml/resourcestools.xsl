@@ -2460,7 +2460,7 @@ CreateElementMapPointer </xsl:text>
     <xsl:variable name="name" select="@name"/>
     <xsl:variable name="body">
         <xsl:for-each select="ancestor::namespace/resource[@name=$name]">
-            <xsl:for-each select="element[@tokenid]">
+            <xsl:for-each select="element[@tokenid]|attribute[@tokenid]">
                 <xsl:text>
         (*pMap)[</xsl:text>
                 <xsl:call-template name="fasttoken"/>
