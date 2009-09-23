@@ -69,8 +69,10 @@ public:
         rtl::OUString const & pathRepresenation, rtl::OUString const & locale,
         bool update);
 
+    virtual Path getAbsolutePath();
+
     virtual void initGlobalBroadcaster(
-        Modifications const & localModifications, Broadcaster * broadcaster);
+        Modifications const & modifications, Broadcaster * broadcaster);
 
     virtual void SAL_CALL acquire() throw ();
 
@@ -82,8 +84,6 @@ public:
 
 private:
     virtual ~RootAccess();
-
-    virtual Path getAbsolutePath();
 
     virtual Path getRelativePath();
 
@@ -107,7 +107,7 @@ private:
     virtual void clearListeners() throw ();
 
     virtual void initLocalBroadcaster(
-        Modifications const & localModifications, Broadcaster * broadcaster);
+        Modifications const & modifications, Broadcaster * broadcaster);
 
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
         com::sun::star::uno::Type const & aType)

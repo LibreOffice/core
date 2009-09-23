@@ -75,26 +75,16 @@ RootAccess::RootAccess(
     pathRepresentation_(pathRepresentation), locale_(locale), update_(update)
 {}
 
-void RootAccess::initGlobalBroadcaster(
-    Modifications const & globalModifications, Broadcaster * broadcaster)
-{
-    OSL_ASSERT(broadcaster != 0);
-    //TODO: only for matching modifications:
-    for (ChangesListeners::iterator i(changesListeners_.begin());
-         i != changesListeners_.end(); ++i)
-    {
-        broadcaster->addChangesNotification(
-            *i,
-            css::util::ChangesEvent(
-                static_cast< cppu::OWeakObject * >(this),
-                css::uno::makeAny(
-                    css::uno::Reference< css::uno::XInterface >(
-                        static_cast< cppu::OWeakObject * >(this))),
-                    //TODO: XInterface or something else?
-                css::uno::Sequence< css::util::ElementChange >()/*TODO*/));
+Path RootAccess::getAbsolutePath() {
+    getNode();
+    return path_;
+}
 
-    }
-    Access::initGlobalBroadcaster(globalModifications, broadcaster);
+void RootAccess::initGlobalBroadcaster(
+    Modifications const & modifications, Broadcaster * broadcaster)
+{
+    Access::initGlobalBroadcaster(modifications, broadcaster);
+    //TODO: handle changesListeners_
 }
 
 void RootAccess::acquire() throw () {
@@ -116,11 +106,6 @@ bool RootAccess::isUpdate() const {
 RootAccess::~RootAccess() {
     osl::MutexGuard g(lock);
     Components::singleton().removeRootAccess(this);
-}
-
-Path RootAccess::getAbsolutePath() {
-    getNode();
-    return path_;
 }
 
 Path RootAccess::getRelativePath() {
@@ -201,25 +186,10 @@ void RootAccess::clearListeners() throw() {
 }
 
 void RootAccess::initLocalBroadcaster(
-    Modifications const & localModifications, Broadcaster * broadcaster)
+    Modifications const & modifications, Broadcaster * broadcaster)
 {
-    OSL_ASSERT(broadcaster != 0);
-    //TODO: only for matching modifications:
-    for (ChangesListeners::iterator i(changesListeners_.begin());
-         i != changesListeners_.end(); ++i)
-    {
-        broadcaster->addChangesNotification(
-            *i,
-            css::util::ChangesEvent(
-                static_cast< cppu::OWeakObject * >(this),
-                css::uno::makeAny(
-                    css::uno::Reference< css::uno::XInterface >(
-                        static_cast< cppu::OWeakObject * >(this))),
-                    //TODO: XInterface or something else?
-                css::uno::Sequence< css::util::ElementChange >()/*TODO*/));
-
-    }
-    Access::initLocalBroadcaster(localModifications, broadcaster);
+    Access::initLocalBroadcaster(modifications, broadcaster);
+    //TODO: handle changesListeners_
 }
 
 css::uno::Any RootAccess::queryInterface(css::uno::Type const & aType)

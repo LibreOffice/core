@@ -70,7 +70,7 @@ public:
     void removeRootAccess(RootAccess * access);
 
     void initGlobalBroadcaster(
-        Modifications const & globalModifications,
+        Modifications const & modifications,
         rtl::Reference< RootAccess > const & exclude,
         Broadcaster * broadcaster);
 

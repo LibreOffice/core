@@ -143,7 +143,7 @@ public:
     virtual bool isFinalized() = 0;
 
     virtual void initGlobalBroadcaster(
-        Modifications const & localModifications, Broadcaster * broadcaster);
+        Modifications const & modifications, Broadcaster * broadcaster);
 
     using OWeakObject::acquire;
     using OWeakObject::release;
@@ -167,7 +167,7 @@ protected:
     virtual void clearListeners() throw ();
 
     virtual void initLocalBroadcaster(
-        Modifications const & localModifications, Broadcaster * broadcaster);
+        Modifications const & modifications, Broadcaster * broadcaster);
 
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
         com::sun::star::uno::Type const & aType)
@@ -505,6 +505,8 @@ private:
     com::sun::star::beans::Property asProperty();
 
     void checkFinalized();
+
+    void checkKnownProperty(rtl::OUString const & descriptor);
 
     rtl::Reference< ChildAccess > getFreeSetMember(
         com::sun::star::uno::Any const & value);

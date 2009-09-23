@@ -160,61 +160,100 @@ void Access::releaseChild(rtl::OUString const & name) {
 }
 
 void Access::initGlobalBroadcaster(
-    Modifications const & globalModifications, Broadcaster * broadcaster)
+    Modifications const & modifications, Broadcaster * broadcaster)
 {
     OSL_ASSERT(broadcaster != 0);
-    //TODO: only for matching modifications:
-    for (ContainerListeners::iterator i(containerListeners_.begin());
-         i != containerListeners_.end(); ++i)
+    //TODO: handle containerListeners_, vetoableChangeListeners_,
+    // propertiesChangeListeners_
+    for (Modifications::Children::const_iterator i(
+             modifications.children.begin());
+         i != modifications.children.end(); ++i)
     {
-        broadcaster->addContainerNotification(
-            *i,
-            css::container::ContainerEvent(
-                static_cast< cppu::OWeakObject * >(this),
-                css::uno::Any()/*TODO*/, css::uno::Any()/*TODO*/,
-                css::uno::Any()/*TODO*/));
-    }
-    for (PropertyChangeListeners::iterator i(propertyChangeListeners_.begin());
-         i != propertyChangeListeners_.end(); ++i)
-    {
-        for (PropertyChangeListenersElement::iterator j(i->second.begin());
-             j != i->second.end(); ++j)
-        {
-            broadcaster->addPropertyChangeNotification(
-                *j,
-                css::beans::PropertyChangeEvent(
-                    static_cast< cppu::OWeakObject * >(this), getNameInternal(),
-                    false, -1, css::uno::Any(), css::uno::Any()));
-        }
-    }
-    for (VetoableChangeListeners::iterator i(vetoableChangeListeners_.begin());
-         i != vetoableChangeListeners_.end(); ++i)
-    {
-        for (VetoableChangeListenersElement::iterator j(i->second.begin());
-             j != i->second.end(); ++j)
-        {
-            broadcaster->addVetoableChangeNotification(
-                *j,
-                css::beans::PropertyChangeEvent(
-                    static_cast< cppu::OWeakObject * >(this), getNameInternal(),
-                    false, -1, css::uno::Any(), css::uno::Any()));
-        }
-    }
-    for (PropertiesChangeListeners::iterator i(
-             propertiesChangeListeners_.begin());
-         i != propertiesChangeListeners_.end(); ++i)
-    {
-        broadcaster->addPropertiesChangeNotification(
-            *i,
-            css::uno::Sequence< css::beans::PropertyChangeEvent >()/*TODO*/);
-    }
-    //TODO: iterate over children w/ listeners (incl. unmodified ones):
-    for (ModifiedChildren::iterator i(modifiedChildren_.begin());
-         i != modifiedChildren_.end(); ++i)
-    {
-        rtl::Reference< ChildAccess > child(getModifiedChild(i));
+        rtl::Reference< ChildAccess > child(getChild(i->first));
         if (child.is()) {
-            child->initGlobalBroadcaster(globalModifications, broadcaster);
+            switch (child->getNode()->kind()) {
+            case Node::KIND_LOCALIZED_PROPERTY:
+                if (Components::allLocales(getRootAccess()->getLocale())) {
+                    break;
+                }
+                //TODO: filter child mods that are irrelevant for locale:
+                if (!i->second.children.empty()) {
+                    PropertyChangeListeners::iterator j(
+                        propertyChangeListeners_.find(i->first));
+                    if (j != propertyChangeListeners_.end()) {
+                        for (PropertyChangeListenersElement::iterator k(
+                                 j->second.begin());
+                             k != j->second.end(); ++k)
+                        {
+                            broadcaster->addPropertyChangeNotification(
+                                *k,
+                                css::beans::PropertyChangeEvent(
+                                    static_cast< cppu::OWeakObject * >(this),
+                                    i->first, false, -1, css::uno::Any(),
+                                    css::uno::Any()));
+                        }
+                    }
+                    j = propertyChangeListeners_.find(rtl::OUString());
+                    if (j != propertyChangeListeners_.end()) {
+                        for (PropertyChangeListenersElement::iterator k(
+                                 j->second.begin());
+                             k != j->second.end(); ++k)
+                        {
+                            broadcaster->addPropertyChangeNotification(
+                                *k,
+                                css::beans::PropertyChangeEvent(
+                                    static_cast< cppu::OWeakObject * >(this),
+                                    i->first, false, -1, css::uno::Any(),
+                                    css::uno::Any()));
+                        }
+                    }
+                }
+                return;
+            case Node::KIND_LOCALIZED_VALUE:
+                if (Components::allLocales(getRootAccess()->getLocale())) {
+                    return;
+                }
+                // fall through
+            case Node::KIND_PROPERTY:
+                if (i->second.children.empty()) {
+                    PropertyChangeListeners::iterator j(
+                        propertyChangeListeners_.find(i->first));
+                    if (j != propertyChangeListeners_.end()) {
+                        for (PropertyChangeListenersElement::iterator k(
+                                 j->second.begin());
+                             k != j->second.end(); ++k)
+                        {
+                            //TODO: filter out adds/removes:
+                            broadcaster->addPropertyChangeNotification(
+                                *k,
+                                css::beans::PropertyChangeEvent(
+                                    static_cast< cppu::OWeakObject * >(this),
+                                    i->first, false, -1, css::uno::Any(),
+                                    css::uno::Any()));
+                        }
+                    }
+                    j = propertyChangeListeners_.find(rtl::OUString());
+                    if (j != propertyChangeListeners_.end()) {
+                        for (PropertyChangeListenersElement::iterator k(
+                                 j->second.begin());
+                             k != j->second.end(); ++k)
+                        {
+                            //TODO: filter out adds/removes:
+                            broadcaster->addPropertyChangeNotification(
+                                *k,
+                                css::beans::PropertyChangeEvent(
+                                    static_cast< cppu::OWeakObject * >(this),
+                                    i->first, false, -1, css::uno::Any(),
+                                    css::uno::Any()));
+                        }
+                    }
+                }
+                return;
+            default:
+                break;
+            }
+            child->initGlobalBroadcaster(i->second, broadcaster);
+                //TODO: recurse only into children w/ listeners
         }
     }
 }
@@ -300,61 +339,100 @@ void Access::clearListeners() throw() {
 }
 
 void Access::initLocalBroadcaster(
-    Modifications const & localModifications, Broadcaster * broadcaster)
+    Modifications const & modifications, Broadcaster * broadcaster)
 {
     OSL_ASSERT(broadcaster != 0);
-    //TODO: only for matching modifications:
-    for (ContainerListeners::iterator i(containerListeners_.begin());
-         i != containerListeners_.end(); ++i)
+    //TODO: handle containerListeners_, vetoableChangeListeners_,
+    // propertiesChangeListeners_
+    for (Modifications::Children::const_iterator i(
+             modifications.children.begin());
+         i != modifications.children.end(); ++i)
     {
-        broadcaster->addContainerNotification(
-            *i,
-            css::container::ContainerEvent(
-                static_cast< cppu::OWeakObject * >(this),
-                css::uno::Any()/*TODO*/, css::uno::Any()/*TODO*/,
-                css::uno::Any()/*TODO*/));
-    }
-    for (PropertyChangeListeners::iterator i(propertyChangeListeners_.begin());
-         i != propertyChangeListeners_.end(); ++i)
-    {
-        for (PropertyChangeListenersElement::iterator j(i->second.begin());
-             j != i->second.end(); ++j)
-        {
-            broadcaster->addPropertyChangeNotification(
-                *j,
-                css::beans::PropertyChangeEvent(
-                    static_cast< cppu::OWeakObject * >(this), getNameInternal(),
-                    false, -1, css::uno::Any(), css::uno::Any()));
-        }
-    }
-    for (VetoableChangeListeners::iterator i(vetoableChangeListeners_.begin());
-         i != vetoableChangeListeners_.end(); ++i)
-    {
-        for (VetoableChangeListenersElement::iterator j(i->second.begin());
-             j != i->second.end(); ++j)
-        {
-            broadcaster->addVetoableChangeNotification(
-                *j,
-                css::beans::PropertyChangeEvent(
-                    static_cast< cppu::OWeakObject * >(this), getNameInternal(),
-                    false, -1, css::uno::Any(), css::uno::Any()));
-        }
-    }
-    for (PropertiesChangeListeners::iterator i(
-             propertiesChangeListeners_.begin());
-         i != propertiesChangeListeners_.end(); ++i)
-    {
-        broadcaster->addPropertiesChangeNotification(
-            *i,
-            css::uno::Sequence< css::beans::PropertyChangeEvent >()/*TODO*/);
-    }
-    //TODO: iterate over children w/ listeners (incl. unmodified ones):
-    for (ModifiedChildren::iterator i(modifiedChildren_.begin());
-         i != modifiedChildren_.end(); ++i)
-    {
-        rtl::Reference< ChildAccess > child(getModifiedChild(i));
+        rtl::Reference< ChildAccess > child(getChild(i->first));
         if (child.is()) {
-            child->initLocalBroadcaster(localModifications, broadcaster);
+            switch (child->getNode()->kind()) {
+            case Node::KIND_LOCALIZED_PROPERTY:
+                if (Components::allLocales(getRootAccess()->getLocale())) {
+                    break;
+                }
+                //TODO: filter child mods that are irrelevant for locale:
+                if (!i->second.children.empty()) {
+                    PropertyChangeListeners::iterator j(
+                        propertyChangeListeners_.find(i->first));
+                    if (j != propertyChangeListeners_.end()) {
+                        for (PropertyChangeListenersElement::iterator k(
+                                 j->second.begin());
+                             k != j->second.end(); ++k)
+                        {
+                            broadcaster->addPropertyChangeNotification(
+                                *k,
+                                css::beans::PropertyChangeEvent(
+                                    static_cast< cppu::OWeakObject * >(this),
+                                    i->first, false, -1, css::uno::Any(),
+                                    css::uno::Any()));
+                        }
+                    }
+                    j = propertyChangeListeners_.find(rtl::OUString());
+                    if (j != propertyChangeListeners_.end()) {
+                        for (PropertyChangeListenersElement::iterator k(
+                                 j->second.begin());
+                             k != j->second.end(); ++k)
+                        {
+                            broadcaster->addPropertyChangeNotification(
+                                *k,
+                                css::beans::PropertyChangeEvent(
+                                    static_cast< cppu::OWeakObject * >(this),
+                                    i->first, false, -1, css::uno::Any(),
+                                    css::uno::Any()));
+                        }
+                    }
+                }
+                return;
+            case Node::KIND_LOCALIZED_VALUE:
+                if (Components::allLocales(getRootAccess()->getLocale())) {
+                    return;
+                }
+                // fall through
+            case Node::KIND_PROPERTY:
+                if (i->second.children.empty()) {
+                    PropertyChangeListeners::iterator j(
+                        propertyChangeListeners_.find(i->first));
+                    if (j != propertyChangeListeners_.end()) {
+                        for (PropertyChangeListenersElement::iterator k(
+                                 j->second.begin());
+                             k != j->second.end(); ++k)
+                        {
+                            //TODO: filter out adds/removes:
+                            broadcaster->addPropertyChangeNotification(
+                                *k,
+                                css::beans::PropertyChangeEvent(
+                                    static_cast< cppu::OWeakObject * >(this),
+                                    i->first, false, -1, css::uno::Any(),
+                                    css::uno::Any()));
+                        }
+                    }
+                    j = propertyChangeListeners_.find(rtl::OUString());
+                    if (j != propertyChangeListeners_.end()) {
+                        for (PropertyChangeListenersElement::iterator k(
+                                 j->second.begin());
+                             k != j->second.end(); ++k)
+                        {
+                            //TODO: filter out adds/removes:
+                            broadcaster->addPropertyChangeNotification(
+                                *k,
+                                css::beans::PropertyChangeEvent(
+                                    static_cast< cppu::OWeakObject * >(this),
+                                    i->first, false, -1, css::uno::Any(),
+                                    css::uno::Any()));
+                        }
+                    }
+                }
+                return;
+            default:
+                break;
+            }
+            child->initLocalBroadcaster(i->second, broadcaster);
+                //TODO: recurse only into children w/ listeners
         }
     }
 }
@@ -1143,6 +1221,7 @@ void Access::addPropertyChangeListener(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
                 static_cast< cppu::OWeakObject * >(this));
         }
+        checkKnownProperty(aPropertyName);
         if (!disposed_) {
             propertyChangeListeners_[aPropertyName].insert(xListener);
             return;
@@ -1164,6 +1243,7 @@ void Access::removePropertyChangeListener(
 {
     OSL_ASSERT(thisIs(IS_GROUP));
     osl::MutexGuard g(lock);
+    checkKnownProperty(aPropertyName);
     PropertyChangeListeners::iterator i(
         propertyChangeListeners_.find(aPropertyName));
     if (i != propertyChangeListeners_.end()) {
@@ -1193,6 +1273,7 @@ void Access::addVetoableChangeListener(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
                 static_cast< cppu::OWeakObject * >(this));
         }
+        checkKnownProperty(PropertyName);
         if (!disposed_) {
             vetoableChangeListeners_[PropertyName].insert(aListener);
             return;
@@ -1214,6 +1295,7 @@ void Access::removeVetoableChangeListener(
 {
     OSL_ASSERT(thisIs(IS_GROUP));
     osl::MutexGuard g(lock);
+    checkKnownProperty(PropertyName);
     VetoableChangeListeners::iterator i(
         vetoableChangeListeners_.find(PropertyName));
     if (i != vetoableChangeListeners_.end()) {
@@ -1790,6 +1872,33 @@ void Access::checkFinalized() {
                     "configmgr modification of finalized item")),
             static_cast< cppu::OWeakObject * >(this), -1);
     }
+}
+
+void Access::checkKnownProperty(rtl::OUString const & descriptor) {
+    if (descriptor.getLength() == 0) {
+        return;
+    }
+    rtl::Reference< ChildAccess > child(getChild(descriptor));
+    if (child.is()) {
+        switch (child->getNode()->kind()) {
+        case Node::KIND_PROPERTY:
+            return;
+        case Node::KIND_LOCALIZED_PROPERTY:
+            if (!Components::allLocales(getRootAccess()->getLocale())) {
+                return;
+            }
+            break;
+        case Node::KIND_LOCALIZED_VALUE:
+            if (Components::allLocales(getRootAccess()->getLocale())) {
+                return;
+            }
+            break;
+        default:
+            break;
+        }
+    }
+    throw css::beans::UnknownPropertyException(
+        descriptor, static_cast< cppu::OWeakObject * >(this));
 }
 
 rtl::Reference< ChildAccess > Access::getFreeSetMember(

@@ -37,37 +37,24 @@
 
 namespace configmgr {
 
-namespace {
-
-bool isPrefix(Path const & prefix, Path const & path) {
-    if (prefix.size() > path.size()) {
-        return false;
-    }
-    Path::const_iterator i1(prefix.begin());
-    Path::const_iterator i2(path.begin());
-    while (i1 != prefix.end()) {
-        if (*i1++ != *i2++) {
-            return false;
-        }
-    }
-    return true;
-}
-
-}
-
 void Modifications::add(Path const & path) {
-    //TODO: performance
-    for (List::iterator i(list.begin()); i != list.end();) {
-        if (isPrefix(*i, path)) {
-            return;
-        }
-        if (isPrefix(path, *i)) {
-            list.erase(i++);
+    Modifications * mod = this;
+    bool wasPresent = false;
+    for (Path::const_iterator i(path.begin()); i != path.end(); ++i) {
+        Children::iterator j(mod->children.find(*i));
+        if (j == mod->children.end()) {
+            if (wasPresent && mod->children.empty()) {
+                return;
+            }
+            j = mod->children.insert(Children::value_type(*i, Modifications())).
+                first;
+            wasPresent = false;
         } else {
-            ++i;
+            wasPresent = true;
         }
+        mod = &j->second;
     }
-    list.push_back(path);
+    mod->children.clear();
 }
 
 }

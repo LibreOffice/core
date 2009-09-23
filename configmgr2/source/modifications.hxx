@@ -32,19 +32,18 @@
 
 #include "sal/config.h"
 
-#include <list>
-
-#include "boost/noncopyable.hpp"
+#include <map>
 
 #include "path.hxx"
 
+namespace rtl { class OUString; }
+
 namespace configmgr {
 
-struct Modifications: private boost::noncopyable {
-public:
-    typedef std::list< Path > List;
+struct Modifications {
+    typedef std::map< rtl::OUString, Modifications > Children;
 
-    List list;
+    Children children;
 
     void add(Path const & path);
 };

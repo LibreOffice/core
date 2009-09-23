@@ -48,6 +48,7 @@
 
 #include "components.hxx"
 #include "data.hxx"
+#include "modifications.hxx"
 #include "node.hxx"
 #include "parsemanager.hxx"
 #include "rootaccess.hxx"
@@ -136,9 +137,10 @@ void Components::removeRootAccess(RootAccess * access) {
 }
 
 void Components::initGlobalBroadcaster(
-    Modifications const & globalModifications,
+    Modifications const & modifications,
     rtl::Reference< RootAccess > const & exclude, Broadcaster * broadcaster)
 {
+    //TODO: Iterate only over roots w/ listeners:
     for (WeakRootSet::iterator i(roots_.begin()); i != roots_.end(); ++i) {
         rtl::Reference< RootAccess > root;
         if ((*i)->acquireCounting() > 1) {
@@ -147,7 +149,23 @@ void Components::initGlobalBroadcaster(
         (*i)->releaseNondeleting();
         if (root.is()) {
             if (root != exclude) {
-                root->initGlobalBroadcaster(globalModifications, broadcaster);
+                Path path(root->getAbsolutePath());
+                Modifications const * mods = &modifications;
+                for (Path::iterator j(path.begin()); j != path.end(); ++j) {
+                    Modifications::Children::const_iterator k(
+                        mods->children.find(*j));
+                    if (k == mods->children.end()) {
+                        mods = 0;
+                        break;
+                    }
+                    mods = &k->second;
+                }
+                //TODO: If the complete tree of which root is a part is deleted,
+                // or replaced, mods will be null, but some of the listeners
+                // from within root should probably fire nonetheless:
+                if (mods != 0) {
+                    root->initGlobalBroadcaster(*mods, broadcaster);
+                }
             }
         }
     }
