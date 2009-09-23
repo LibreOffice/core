@@ -151,7 +151,10 @@ sal_Bool TransliterationWrapper::needLanguageForTheMode() const
 {
     return TransliterationModules_UPPERCASE_LOWERCASE == nType ||
            TransliterationModules_LOWERCASE_UPPERCASE == nType ||
-           TransliterationModules_IGNORE_CASE == nType;
+           TransliterationModules_IGNORE_CASE == nType ||
+           TransliterationModulesExtra::SENTENCE_CASE == nType ||
+           TransliterationModulesExtra::TITLE_CASE == nType ||
+           TransliterationModulesExtra::TOGGLE_CASE == nType;
 }
 
 
@@ -173,6 +176,16 @@ void TransliterationWrapper::loadModuleIfNeeded( sal_uInt16 nLang )
     {
         if( bLoad )
             loadModuleByImplName(String::CreateFromAscii("SENTENCE_CASE"), nLang);
+    }
+    else if( static_cast< sal_Int32 >(nType) == TransliterationModulesExtra::TITLE_CASE )
+    {
+        if( bLoad )
+            loadModuleByImplName(String::CreateFromAscii("TITLE_CASE"), nLang);
+    }
+    else if( static_cast< sal_Int32 >(nType) == TransliterationModulesExtra::TOGGLE_CASE )
+    {
+        if( bLoad )
+            loadModuleByImplName(String::CreateFromAscii("TOGGLE_CASE"), nLang);
     }
     else
     {
