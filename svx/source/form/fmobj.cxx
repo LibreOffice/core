@@ -131,8 +131,10 @@ void FmFormObj::ClearObjEnv()
 void FmFormObj::impl_checkRefDevice_nothrow( bool _force )
 {
     const FmFormModel* pFormModel = PTR_CAST( FmFormModel, GetModel() );
-    OutputDevice* pCurrentRefDevice = pFormModel ? pFormModel->GetRefDevice() : NULL;
+    if ( !pFormModel || !pFormModel->ControlsUseRefDevice() )
+        return;
 
+    OutputDevice* pCurrentRefDevice = pFormModel ? pFormModel->GetRefDevice() : NULL;
     if ( ( m_pLastKnownRefDevice == pCurrentRefDevice ) && !_force )
         return;
 

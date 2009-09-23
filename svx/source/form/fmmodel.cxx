@@ -30,30 +30,27 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+
+#include "fmundo.hxx"
+#include "fmdocumentclassification.hxx"
+#include "fmcontrollayout.hxx"
+
+#include <svx/fmmodel.hxx>
+#include <svx/fmpage.hxx>
+#include <svx/svdobj.hxx>
 #include <tools/debug.hxx>
 
 #ifndef SVX_LIGHT
-#ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
-#endif
 #else
 class SfxObjectShell;
 #endif
 
-#ifndef _FM_FMMODEL_HXX
-#include <svx/fmmodel.hxx>
-#endif
-
-#ifndef _FM_PAGE_HXX
-#include <svx/fmpage.hxx>
-#endif
-#include "fmundo.hxx"
-#ifndef _SVX_SVDOBJ_HXX
-#include <svx/svdobj.hxx>
-#endif
+#include <boost/optional.hpp>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::container::XNameContainer;
+using namespace svxform;
 
 TYPEINIT1(FmFormModel, SdrModel);
 
@@ -62,11 +59,14 @@ struct FmFormModelImplData
     FmXUndoEnvironment*     pUndoEnv;
     sal_Bool                bOpenInDesignIsDefaulted;
     sal_Bool                bMovingPage;
+    ::boost::optional< sal_Bool >
+                            aControlsUseRefDevice;
 
     FmFormModelImplData()
         :pUndoEnv( NULL )
         ,bOpenInDesignIsDefaulted( sal_True )
         ,bMovingPage( sal_False )
+        ,aControlsUseRefDevice()
     {
     }
 };
@@ -312,6 +312,20 @@ sal_Bool FmFormModel::OpenInDesignModeIsDefaulted( )
     return m_pImpl->bOpenInDesignIsDefaulted;
 }
 #endif
+
+//------------------------------------------------------------------------
+sal_Bool FmFormModel::ControlsUseRefDevice() const
+{
+    if ( !m_pImpl->aControlsUseRefDevice )
+    {
+        OSL_PRECOND( m_pObjShell, "FmFormModel::ControlsUseRefDevice: no object shell -> no document -> no document type -> no way!" );
+        DocumentType eDocType = eUnknownDocumentType;
+        if ( m_pObjShell )
+            eDocType = DocumentClassification::classifyHostDocument( m_pObjShell->GetModel() );
+        m_pImpl->aControlsUseRefDevice.reset( ControlLayouter::useDocumentReferenceDevice( eDocType ) );
+    }
+    return *m_pImpl->aControlsUseRefDevice;
+}
 
 //------------------------------------------------------------------------
 void FmFormModel::SetAutoControlFocus( sal_Bool _bAutoControlFocus )

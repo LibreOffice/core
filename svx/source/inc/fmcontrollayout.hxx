@@ -62,6 +62,11 @@ namespace svxform
         */
         static bool useDynamicBorderColor( DocumentType _eDocType );
 
+        /** determines whether for the given document type, form controls should use the document's reference device
+            for text rendering
+        */
+        static bool useDocumentReferenceDevice( DocumentType _eDocType );
+
     private:
         ControlLayouter();    // never implemented
 

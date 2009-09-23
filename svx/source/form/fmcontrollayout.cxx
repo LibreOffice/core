@@ -141,6 +141,16 @@ namespace svxform
         return bDynamicBorderColor;
     }
 
+    //--------------------------------------------------------------------
+    bool ControlLayouter::useDocumentReferenceDevice( DocumentType _eDocType )
+    {
+        OConfigurationNode aConfig = getLayoutSettings( _eDocType );
+        Any aUseRefDevice = aConfig.getNodeValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseDocumentTextMetrics" ) ) );
+        bool bUseRefDevice = false;
+        OSL_VERIFY( aUseRefDevice >>= bUseRefDevice );
+        return bUseRefDevice;
+    }
+
 //........................................................................
 } // namespace svxform
 //........................................................................
