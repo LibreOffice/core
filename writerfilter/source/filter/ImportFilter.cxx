@@ -130,10 +130,10 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
     }
 
 #ifdef DEBUG_ELEMENT
-    writerfilter::TagLogger::dump("DEBUG");
     debugLogger->endDocument();
-    writerfilter::TagLogger::dump("DOMAINMAPPER");
+    writerfilter::TagLogger::dump("DEBUG");
     dmapperLogger->endDocument();
+    writerfilter::TagLogger::dump("DOMAINMAPPER");
 #endif
 
     return sal_True;
