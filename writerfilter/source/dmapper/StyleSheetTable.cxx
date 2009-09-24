@@ -68,6 +68,9 @@ StyleSheetEntry::StyleSheetEntry() :
         ,sNextStyleIdentifier()
         ,pProperties(new StyleSheetPropertyMap)
         {
+#if OSL_DEBUG_LEVEL > 1
+            nStyleTypeCode = STYLE_TYPE_PARA;
+#endif
         }
 
 /*-- 06.02.2008 11:30:46---------------------------------------------------
@@ -388,6 +391,9 @@ void StyleSheetTable::sprm(Sprm & rSprm)
             }
         }
         break;
+        case NS_ooxml::LN_CT_TblPrBase_tblCellMar:
+            //no cell margins in styles
+        break;
         case NS_ooxml::LN_CT_Style_pPr:
         case NS_ooxml::LN_CT_Style_rPr:
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
@@ -639,14 +645,26 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             uno::Reference< beans::XMultiPropertySet > xMultiPropertySet( xStyle, uno::UNO_QUERY_THROW);
                             xMultiPropertySet->setPropertyValues( aSortedPropVals.getNames(), aSortedPropVals.getValues() );
                         }
-                        catch( const beans::UnknownPropertyException& rUnknown)
-                        {
-                            (void) rUnknown;
-                            OSL_ENSURE( false, "Some style properties could not be set");
-                        }
                         catch( const lang::WrappedTargetException& rWrapped)
                         {
                             (void) rWrapped;
+                            rtl::OString aMessage("Some style properties could not be set");
+#if OSL_DEBUG_LEVEL > 0
+                            beans::UnknownPropertyException aUnknownPropertyException;
+
+                            if( rWrapped.TargetException >>= aUnknownPropertyException )
+                            {
+                                aMessage += rtl::OString(": " );
+                                ::rtl::OString sTemp;
+                                aUnknownPropertyException.Message.convertToString(&sTemp, RTL_TEXTENCODING_ASCII_US, 0 );
+                                aMessage += sTemp;
+                            }
+#endif
+                            OSL_ENSURE( false, aMessage.getStr());
+                        }
+                        catch( const uno::Exception& rEx)
+                        {
+                            (void) rEx;
                             OSL_ENSURE( false, "Some style properties could not be set");
                         }
                     }
