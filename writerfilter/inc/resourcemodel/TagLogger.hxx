@@ -106,6 +106,7 @@ namespace writerfilter
         void startElement(const string & name);
         void attribute(const string & name, const string & value);
         void attribute(const string & name, const ::rtl::OUString & value);
+        void attribute(const string & name, sal_uInt32 value);
         void addTag(XMLTag::Pointer_t pTag);
         void chars(const string & chars);
         void chars(const ::rtl::OUString & chars);

@@ -216,6 +216,13 @@ namespace writerfilter
         attribute(name, OUStringToOString(value, RTL_TEXTENCODING_ASCII_US).getStr());
     }
 
+    void TagLogger::attribute(const string & name, sal_uInt32 value)
+    {
+        char buffer[256];
+        snprintf(buffer, sizeof(buffer), "%" SAL_PRIdINT32, value);
+        attribute(name, buffer);
+    }
+
     void TagLogger::addTag(XMLTag::Pointer_t pTag)
     {
         currentTag()->addTag(pTag);
