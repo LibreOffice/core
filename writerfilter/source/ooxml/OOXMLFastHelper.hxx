@@ -178,10 +178,10 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
 {
     OOXMLValue::Pointer_t pVal(new T(rValue));
 
+#ifdef DEBUG_PROPERTIES
     string aStr = (*QNameToString::Instance())(nId);
 
-#ifdef DEBUG_PROPERTIES
-    debug_logger->startElement("newProperty");
+    debug_logger->startElement("newProperty-from-string");
     debug_logger->attribute("name", aStr);
     debug_logger->attribute
         ("value",
@@ -191,7 +191,7 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
     if (aStr.size() == 0)
         debug_logger->addTag(XMLTag::Pointer_t(new XMLTag("unknown-qname")));
 
-    debug_logger->endElement("newProperty");
+    debug_logger->endElement("newProperty-from-string");
 #endif
 
     pHandler->newProperty(nId, pVal);
@@ -204,17 +204,17 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
 {
     OOXMLValue::Pointer_t pVal(new T(nVal));
 
+#ifdef DEBUG_PROPERTIES
     string aStr = (*QNameToString::Instance())(nId);
 
-#ifdef DEBUG_PROPERTIES
-    debug_logger->startElement("newProperty");
+    debug_logger->startElement("newProperty-from-int");
     debug_logger->attribute("name", aStr);
     debug_logger->attribute("value", pVal->toString());
 
     if (aStr.size() == 0)
         debug_logger->addTag(XMLTag::Pointer_t(new XMLTag("unknown-qname")));
 
-    debug_logger->endElement("newProperty");
+    debug_logger->endElement("newProperty-from-int");
 #endif
 
     pHandler->newProperty(nId, pVal);
