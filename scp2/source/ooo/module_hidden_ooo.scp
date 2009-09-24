@@ -625,6 +625,7 @@ Module gid_Module_Root_Files_6
     gid_File_Lm_Vietnamese,
     gid_File_Lm_Welsh,
     gid_File_Lm_Yiddish_Utf,
+    gid_File_Lm_Zulu,
 	gid_File_Mod_Chart,
 	gid_File_Mod_Datastyl,
 	gid_File_Mod_Defs,

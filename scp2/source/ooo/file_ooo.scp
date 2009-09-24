@@ -1061,6 +1061,12 @@ File gid_File_Lm_Yiddish_Utf
     Styles = (PACKED);
 End
 
+File gid_File_Lm_Zulu
+    TXT_FILE_BODY;
+    Name = "zulu.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
 
 
 
