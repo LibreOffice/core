@@ -354,9 +354,18 @@ namespace basegfx
 
             if(!fTools::equalZero(fRadiant))
             {
-                aRetval = createTranslateB2DHomMatrix(-fPointX, -fPointY);
-                aRetval.rotate(fRadiant);
-                aRetval.translate(fPointX, fPointY);
+                double fSin(0.0);
+                double fCos(1.0);
+
+                createSinCosOrthogonal(fSin, fCos, fRadiant);
+
+                aRetval.set3x2(
+                    /* Row 0, Column 0 */ fCos,
+                    /* Row 0, Column 1 */ -fSin,
+                    /* Row 0, Column 2 */ (fPointX * (1.0 - fCos)) + (fSin * fPointY),
+                    /* Row 1, Column 0 */ fSin,
+                    /* Row 1, Column 1 */ fCos,
+                    /* Row 1, Column 2 */ (fPointY * (1.0 - fCos)) - (fSin * fPointX));
             }
 
             return aRetval;
