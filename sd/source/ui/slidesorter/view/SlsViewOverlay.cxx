@@ -167,9 +167,7 @@ OverlayBase::OverlayBase (ViewOverlay& rViewOverlay)
 
 OverlayBase::~OverlayBase (void)
 {
-    OverlayManager* pOverlayManager = getOverlayManager();
-    if (pOverlayManager != NULL)
-        pOverlayManager->remove(*this);
+    OSL_ENSURE(!getOverlayManager(), "Please call RemoveRegistration() in the derived class; it's too late to call it in the base class since virtual methods will be missing when called in the destructor.");
 }
 
 
@@ -183,6 +181,16 @@ void OverlayBase::EnsureRegistration (void)
         if (pOverlayManager != NULL)
             pOverlayManager->add(*this);
     }
+}
+
+
+
+
+void OverlayBase::RemoveRegistration()
+{
+    OverlayManager* pOverlayManager = getOverlayManager();
+    if (pOverlayManager != NULL)
+        pOverlayManager->remove(*this);
 }
 
 
@@ -202,6 +210,7 @@ SubstitutionOverlay::SubstitutionOverlay (ViewOverlay& rViewOverlay)
 
 SubstitutionOverlay::~SubstitutionOverlay (void)
 {
+    RemoveRegistration();
 }
 
 
@@ -317,6 +326,13 @@ SelectionRectangleOverlay::SelectionRectangleOverlay (ViewOverlay& rViewOverlay)
 
 
 
+SelectionRectangleOverlay::~SelectionRectangleOverlay()
+{
+    RemoveRegistration();
+}
+
+
+
 
 Rectangle SelectionRectangleOverlay::GetSelectionRectangle (void)
 {
@@ -387,6 +403,14 @@ InsertionIndicatorOverlay::InsertionIndicatorOverlay (ViewOverlay& rViewOverlay)
       mnInsertionIndex(-1),
       maBoundingBox()
 {
+}
+
+
+
+
+InsertionIndicatorOverlay::~InsertionIndicatorOverlay()
+{
+    RemoveRegistration();
 }
 
 
@@ -510,6 +534,7 @@ MouseOverIndicatorOverlay::MouseOverIndicatorOverlay (ViewOverlay& rViewOverlay)
 
 MouseOverIndicatorOverlay::~MouseOverIndicatorOverlay (void)
 {
+    RemoveRegistration();
 }
 
 
