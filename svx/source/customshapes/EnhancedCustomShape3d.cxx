@@ -323,7 +323,13 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         Point aCenter( aSnapRect.Center() );
 
         SfxItemSet aSet( pCustomShape->GetMergedItemSet() );
-        aSet.ClearItem( SDRATTR_TEXTDIRECTION );    //SJ: vertical writing is not required, by removing this item no outliner is created
+
+        //SJ: vertical writing is not required, by removing this item no outliner is created
+        aSet.ClearItem( SDRATTR_TEXTDIRECTION );
+
+        // For primitive rendering, shadow handling is done completely based on the geometry, so i removed it here
+        aSet.ClearItem(SDRATTR_SHADOW);
+
         std::vector< E3dCompoundObject* > aPlaceholderObjectList;
 
         double fExtrusionBackward, fExtrusionForward;
