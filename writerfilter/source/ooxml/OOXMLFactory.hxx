@@ -71,7 +71,16 @@ enum ResourceType_t {
     RT_PropertyTable
 };
 
-typedef hash_map<Token_t, ResourceType_t> AttributeToResourceMap;
+struct AttributeInfo
+{
+    ResourceType_t m_nResource;
+    Id m_nRef;
+
+    AttributeInfo(ResourceType_t nResource, Id nRef);
+    AttributeInfo();
+};
+
+typedef hash_map<Token_t, AttributeInfo> AttributeToResourceMap;
 typedef boost::shared_ptr<AttributeToResourceMap> AttributeToResourceMapPointer;
 typedef hash_map<Id, AttributeToResourceMapPointer> AttributesMap;
 

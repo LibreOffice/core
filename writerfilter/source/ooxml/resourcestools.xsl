@@ -2272,13 +2272,33 @@ uno::Reference&lt;XFastContextHandler&gt; </xsl:text>
                 <xsl:value-of select="key('context-resource', @name)/@resource"/>
             </xsl:for-each>
         </xsl:variable>
+        <xsl:variable name="refdefine1">
+          <xsl:for-each select="rng:ref">
+            <xsl:variable name="refname" select="@name"/>
+            <xsl:for-each select="ancestor::rng:grammar/rng:define[@name=$refname]">
+              <xsl:call-template name="idfordefine"/>
+            </xsl:for-each>
+          </xsl:for-each>
+        </xsl:variable>
+        <xsl:variable name="refdefine">
+          <xsl:choose>
+            <xsl:when test="string-length($refdefine1) > 0">
+              <xsl:value-of select="$refdefine1"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text>0</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
         <xsl:if test="string-length($resource) > 0">
             <xsl:text>
             (*pMap)[</xsl:text>
             <xsl:call-template name="fasttoken"/>
-            <xsl:text>] = RT_</xsl:text>
+            <xsl:text>] = AttributeInfo(RT_</xsl:text>
             <xsl:value-of select="$resource"/>
-            <xsl:text>;</xsl:text>
+            <xsl:text>, </xsl:text>
+            <xsl:value-of select="$refdefine"/>
+            <xsl:text>);</xsl:text>
         </xsl:if>
     </xsl:for-each>
     <xsl:for-each select=".//rng:ref[not(ancestor::rng:element or ancestor::rng:attribute)]">

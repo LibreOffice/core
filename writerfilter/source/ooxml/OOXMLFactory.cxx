@@ -33,6 +33,16 @@
 namespace writerfilter {
 namespace ooxml {
 
+AttributeInfo::AttributeInfo()
+:m_nResource(RT_NoResource), m_nRef(0)
+{
+}
+
+AttributeInfo::AttributeInfo(ResourceType_t nResource, Id nRef)
+ :m_nResource(nResource), m_nRef(nRef)
+{
+}
+
 CreateElement::CreateElement()
 :m_nResource(RT_NoResource), m_nId(0)
 {
@@ -145,22 +155,78 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
 #endif
             if (Attribs->hasAttribute(aIt->first))
             {
-                switch (aIt->second)
+                switch (aIt->second.m_nResource)
                 {
                 case RT_Boolean:
                     {
+#ifdef DEBUG_ATTRIBUTES
+                        debug_logger->element("boolean");
+#endif
                         ::rtl::OUString aValue(Attribs->getValue(aIt->first));
                         OOXMLFastHelper<OOXMLBooleanValue>::newProperty(pHandler, nId, aValue);
                     }
                     break;
                 case RT_String:
                     {
+#ifdef DEBUG_ATTRIBUTES
+                        debug_logger->element("string");
+#endif
                         ::rtl::OUString aValue(Attribs->getValue(aIt->first));
-                        OOXMLFastHelper<OOXMLStringValue>::newProperty(pHandler, nId, aValue);
+                        OOXMLFastHelper<OOXMLStringValue>::newProperty
+                            (pHandler, nId, aValue);
 
                     }
                     break;
+                case RT_Integer:
+                    {
+#ifdef DEBUG_ATTRIBUTES
+                        debug_logger->element("integer");
+#endif
+                        ::rtl::OUString aValue(Attribs->getValue(aIt->first));
+                        OOXMLFastHelper<OOXMLIntegerValue>::newProperty
+                            (pHandler, nId, aValue);
+                    }
+                    break;
+                case RT_Hex:
+                    {
+#ifdef DEBUG_ATTRIBUTES
+                        debug_logger->element("hex");
+#endif
+                        ::rtl::OUString aValue(Attribs->getValue(aIt->first));
+                        OOXMLFastHelper<OOXMLHexValue>::newProperty
+                            (pHandler, nId, aValue);
+                    }
+                    break;
+                case RT_List:
+                    {
+#ifdef DEBUG_ATTRIBUTES
+                        debug_logger->startElement("list");
+#endif
+                        ListValueMapPointer pListValueMap =
+                            pFactory->getListValueMap(aIt->second.m_nRef);
+
+                        if (pListValueMap.get() != NULL)
+                        {
+                            ::rtl::OUString aValue(Attribs->getValue(aIt->first));
+                            sal_uInt32 nValue = (*pListValueMap)[aValue];
+
+#ifdef DEBUG_ATTRIBUTES
+                            debug_logger->attribute("value", aValue);
+                            debug_logger->attribute("value-num", nValue);
+#endif
+
+                            OOXMLFastHelper<OOXMLIntegerValue>::newProperty
+                                (pHandler, nId, nValue);
+                        }
+#ifdef DEBUG_ATTRIBUTES
+                        debug_logger->endElement("list");
+#endif
+                    }
+                    break;
                 default:
+#ifdef DEBUG_ATTRIBUTES
+                    debug_logger->element("unknown-attribute-type");
+#endif
                     break;
                 }
             }
