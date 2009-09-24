@@ -181,10 +181,10 @@ APP5STDLIBS = \
     $(SALHELPERLIB) \
     $(VOSLIB)
 
-#.IF "$(OS)" == "LINUX"
+.IF "$(OS)" == "LINUX"
 APP5STDLIBS+= -lXext
 #APP5STDLIBS+= -lXext -lSM -lICE
-#.ENDIF # LINUX
+.ENDIF # LINUX
 
 APP5DEPN= $(APP1TARGETN) $(APP5RES) ooverinfo.rc
 APP5DEF=    $(MISCX)$/$(TARGET).def
