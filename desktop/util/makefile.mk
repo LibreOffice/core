@@ -119,11 +119,11 @@ APP1STDLIBS =  \
     $(VOSLIB)
 
 
-#.IF "$(GUI)" == "UNX"
-#.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
-#APP1STDLIBS+= -lXext -lSM -lICE
-#.ENDIF
-#.ENDIF
+.IF "$(GUI)" == "UNX"
+.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
+APP1STDLIBS+= -lXext 
+.ENDIF
+.ENDIF
 
 APP1DEPN= $(APP1RES) verinfo.rc
 
@@ -182,6 +182,7 @@ APP5STDLIBS = \
     $(VOSLIB)
 
 #.IF "$(OS)" == "LINUX"
+APP5STDLIBS+= -lXext
 #APP5STDLIBS+= -lXext -lSM -lICE
 #.ENDIF # LINUX
 
