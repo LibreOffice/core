@@ -213,7 +213,7 @@ STDLIBCUIMT+=-Wl,--as-needed -ldl -lpthread -lm -Wl,--no-as-needed
 STDSHLGUIMT+=-Wl,--as-needed -ldl -lpthread -lm -Wl,--no-as-needed
 STDSHLCUIMT+=-Wl,--as-needed -ldl -lpthread -lm -Wl,--no-as-needed
 
-X11LINK_DYNAMIC = -lX11
+X11LINK_DYNAMIC = -lX11 -lXext
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
