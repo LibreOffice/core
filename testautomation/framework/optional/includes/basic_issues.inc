@@ -182,7 +182,28 @@ testcase t_macros()
     hIDERunMacro()
     hTestActive( "1900" , 1 , FALSE )
     hTestActive( "2"    , 1 , FALSE )
-    
+'---------    
+    printlog( "" )
+    printlog( " ---------- i103691 ------------ " )
+    hInsertMacroFromFile( "i103691" )
+    hIDERunMacro()
+    hTestActive( "Equal" , 1 , FALSE )
+
+    printlog( "" )
+    printlog( " ---------- i103697 ------------ " )
+    hInsertMacroFromFile( "i103697" )
+    hIDERunMacro()
+    hTestActive( "i103697" , 1 , FALSE )
+
+    printlog( "" )
+    printlog( " ---------- i103990 ------------ " )
+    hInsertMacroFromFile( "i103990" )
+    hIDERunMacro()
+    hTestActive( "42" , 1 , FALSE )
+    hTestActive( "43" , 1 , FALSE )
+    hTestActive( "Pi" , 1 , FALSE )
+
+'-------
     printlog( "" )
     printlog( " ---------- MessageBoxes ------------ " )
     hInsertMacroFromFile( "MessageBoxes" )
