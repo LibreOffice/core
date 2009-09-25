@@ -456,12 +456,6 @@ STD_JAR_FILE( gid_File_Jar_Bsh, bsh )
 #endif
 
 #ifdef SOLAR_JAVA
-
-STD_JAR_FILE( gid_File_Jar_Classes, classes )
-
-#endif
-
-#ifdef SOLAR_JAVA
 #ifndef SYSTEM_LUCENE
 STD_JAR_FILE( gid_File_Jar_Lucene_Core, lucene-core-2.3 )
 STD_JAR_FILE( gid_File_Jar_Lucene_Analyzers, lucene-analyzers-2.3 )
