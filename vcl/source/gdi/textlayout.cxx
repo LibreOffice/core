@@ -107,7 +107,7 @@ namespace vcl
     public:
         // equivalents to the respective OutputDevice methods, which take the reference device into account
         long        GetTextArray( const XubString& _rText, sal_Int32* _pDXAry, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const;
-        Rectangle   DrawText( const Rectangle& _rRect, const XubString& _rText, USHORT _nStyle, MetricVector* _pVector, String* _pDisplayText);
+        Rectangle   DrawText( const Rectangle& _rRect, const XubString& _rText, USHORT _nStyle, MetricVector* _pVector, String* _pDisplayText );
 
     protected:
         void onBeginDrawText()
@@ -154,11 +154,13 @@ namespace vcl
 
         // also, use a higher-resolution map unit than "pixels", which should save us some rounding errors when
         // translating coordinates between the reference device and the target device.
-        const MapUnit eTargetMapUnit = MAP_TWIP;
         OSL_ENSURE( aTargetMapMode.GetMapUnit() == MAP_PIXEL,
             "ReferenceDeviceTextLayout::ReferenceDeviceTextLayout: this class is not expected to work with such target devices!" );
             // we *could* adjust all the code in this class to handle this case, but at the moment, it's not necessary
+        const MapUnit eTargetMapUnit = m_rReferenceDevice.GetMapMode().GetMapUnit();
         aTargetMapMode.SetMapUnit( eTargetMapUnit );
+        OSL_ENSURE( aTargetMapMode.GetMapUnit() != MAP_PIXEL,
+            "ReferenceDeviceTextLayout::ReferenceDeviceTextLayout: a reference device which has map mode PIXEL?!" );
 
         m_rTargetDevice.SetMapMode( aTargetMapMode );
 
@@ -195,48 +197,17 @@ namespace vcl
                 _io_nLength = nTextLength - _nStartIndex;
             return true;
         }
-
-        //................................................................
-        class DeviceUnitMapping
-        {
-        public:
-            DeviceUnitMapping( const OutputDevice& _rTargetDevice, const OutputDevice& _rReferenceDevice )
-                :m_eTargetMapUnit( _rTargetDevice.GetMapMode().GetMapUnit() )
-                ,m_eRefMapUnit( _rReferenceDevice.GetMapMode().GetMapUnit() )
-            {
-                OSL_ENSURE( m_eRefMapUnit != MAP_PIXEL, "a reference device with MAP_PIXEL?" );
-                OSL_ENSURE( m_eTargetMapUnit != MAP_PIXEL, "we should have reset the target's map mode to TWIP!" );
-            }
-
-            long mapToTarget( long _nWidth )
-            {
-                return  OutputDevice::LogicToLogic( Size( _nWidth, 0 ), m_eRefMapUnit, m_eTargetMapUnit ).Width();
-            }
-            long mapToReference( long _nWidth )
-            {
-                return  OutputDevice::LogicToLogic( Size( _nWidth, 0 ), m_eTargetMapUnit, m_eRefMapUnit ).Width();
-            }
-
-        private:
-            const MapUnit       m_eTargetMapUnit;
-            const MapUnit       m_eRefMapUnit;
-        };
     }
 
     //--------------------------------------------------------------------
-    long ReferenceDeviceTextLayout::GetTextArray( const XubString& _rText, sal_Int32* _pDXAry, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const
+    long ReferenceDeviceTextLayout::GetTextArray( const XubString& _rText, sal_Int32* _pDXAry, xub_StrLen _nStartIndex,
+        xub_StrLen _nLength ) const
     {
         if ( !lcl_normalizeLength( _rText, _nStartIndex, _nLength ) )
             return 0;
 
-        m_rReferenceDevice.SetLayoutMode( TEXT_LAYOUT_BIDI_LTR );
-            // TODO: make this layout mode dependent on some educated guess about the text
-            // TODO: even better: break the text into script type portions ... but this way too far goes into the direction
-            // of re-implementing EditEngine and Writer-Code features here.
-
         // retrieve the character widths from the reference device
         long nTextWidth = m_rReferenceDevice.GetTextArray( _rText, _pDXAry, _nStartIndex, _nLength );
-
 #if OSL_DEBUG_LEVEL > 1
         if ( _pDXAry )
         {
@@ -256,15 +227,6 @@ namespace vcl
             OSL_TRACE( aTrace.makeStringAndClear().getStr() );
         }
 #endif
-        // adjust the widths, which are in ref-device units, to the target device
-        DeviceUnitMapping aMapping( m_rTargetDevice, m_rReferenceDevice );
-        if ( _pDXAry )
-        {
-            for ( size_t i=0; i<_nLength; ++i )
-                _pDXAry[i] = aMapping.mapToTarget( _pDXAry[i] );
-        }
-        nTextWidth = aMapping.mapToTarget( nTextWidth );
-
         return nTextWidth;
     }
 
@@ -280,16 +242,23 @@ namespace vcl
         if ( !lcl_normalizeLength( _rText, _nStartIndex, _nLength ) )
             return;
 
+        if ( _pVector && _pDisplayText )
+        {
+            MetricVector aGlyphBounds;
+            m_rReferenceDevice.GetGlyphBoundRects( _rStartPoint, _rText, _nStartIndex, _nLength, _nStartIndex, aGlyphBounds );
+            ::std::copy(
+                aGlyphBounds.begin(), aGlyphBounds.end(),
+                ::std::insert_iterator< MetricVector > ( *_pVector, _pVector->end() ) );
+            _pDisplayText->Append( _rText.Copy( _nStartIndex, _nLength ) );
+            return;
+        }
+
         sal_Int32* pCharWidths = new sal_Int32[ _nLength ];
         long nTextWidth = GetTextArray( _rText, pCharWidths, _nStartIndex, _nLength );
         m_rTargetDevice.DrawTextArray( _rStartPoint, _rText, pCharWidths, _nStartIndex, _nLength );
         delete[] pCharWidths;
 
         m_aCompleteTextRect.Union( Rectangle( _rStartPoint, Size( nTextWidth, m_rTargetDevice.GetTextHeight() ) ) );
-
-        // TODO: use/fill those:
-        (void)_pVector;
-        (void)_pDisplayText;
     }
 
     //--------------------------------------------------------------------
@@ -303,11 +272,6 @@ namespace vcl
         if ( !m_rReferenceDevice.GetCaretPositions( _rText, _pCaretXArray, _nStartIndex, _nLength ) )
             return false;
 
-        // adjust the positions, which are in ref-device units, to the target device
-        DeviceUnitMapping aMapping( m_rTargetDevice, m_rReferenceDevice );
-        for ( size_t i=0; i<2*size_t(_nLength); ++i )
-            _pCaretXArray[i] = aMapping.mapToTarget( _pCaretXArray[i] );
-
         return true;
     }
 
@@ -317,8 +281,7 @@ namespace vcl
         if ( !lcl_normalizeLength( _rText, _nStartIndex, _nLength ) )
             return 0;
 
-        DeviceUnitMapping aMapping( m_rTargetDevice, m_rReferenceDevice );
-        return m_rReferenceDevice.GetTextBreak( _rText, aMapping.mapToReference( _nMaxTextWidth ), _nStartIndex, _nLength );
+        return m_rReferenceDevice.GetTextBreak( _rText, _nMaxTextWidth, _nStartIndex, _nLength );
     }
 
     //--------------------------------------------------------------------
@@ -344,7 +307,7 @@ namespace vcl
     }
 
     //--------------------------------------------------------------------
-    Rectangle ReferenceDeviceTextLayout::DrawText( const Rectangle& _rRect, const XubString& _rText, USHORT _nStyle, MetricVector* _pVector, String* _pDisplayText)
+    Rectangle ReferenceDeviceTextLayout::DrawText( const Rectangle& _rRect, const XubString& _rText, USHORT _nStyle, MetricVector* _pVector, String* _pDisplayText )
     {
         if ( !_rText.Len() )
             return Rectangle();
@@ -376,8 +339,21 @@ namespace vcl
             aTextRect = m_rTargetDevice.GetTextRect( aRect, _rText, _nStyle, NULL, this );
         }
 
-        // similar to above, the text rect now contains TWIPs, but the caller expects pixel coordinates
+        // similar to above, the text rect now contains TWIPs (or whatever unit the ref device has), but the caller
+        // expects pixel coordinates
         aTextRect = m_rTargetDevice.LogicToPixel( aTextRect );
+
+        // convert the metric vector
+        if ( _pVector )
+        {
+            for (   MetricVector::iterator charRect = _pVector->begin();
+                    charRect != _pVector->end();
+                    ++charRect
+                )
+            {
+                *charRect = m_rTargetDevice.LogicToPixel( *charRect );
+            }
+        }
 
         return aTextRect;
     }
