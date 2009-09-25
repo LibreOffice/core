@@ -1683,13 +1683,10 @@ void ValueSet::GetFocus()
     ImplDrawSelect();
     Control::GetFocus();
 
-    // Send accessibility event.
-    ::com::sun::star::uno::Any aOldState, aNewState;
-    aNewState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
-    ImplFireAccessibleEvent (
-        ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED,
-        aOldState, aNewState);
-
+    // Tell the accessible object that we got the focus.
+    ValueSetAcc* pAcc = ValueSetAcc::getImplementation( GetAccessible( FALSE ) );
+    if( pAcc )
+        pAcc->GetFocus();
 }
 
 // -----------------------------------------------------------------------
@@ -1703,12 +1700,10 @@ void ValueSet::LoseFocus()
         HideFocus();
     Control::LoseFocus();
 
-    // Send accessibility event.
-    ::com::sun::star::uno::Any aOldState, aNewState;
-    aOldState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
-    ImplFireAccessibleEvent (
-        ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED,
-        aOldState, aNewState);
+    // Tell the accessible object that we lost the focus.
+    ValueSetAcc* pAcc = ValueSetAcc::getImplementation( GetAccessible( FALSE ) );
+    if( pAcc )
+        pAcc->LoseFocus();
 }
 
 // -----------------------------------------------------------------------
