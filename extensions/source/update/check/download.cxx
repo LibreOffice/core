@@ -327,9 +327,9 @@ bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProx
                 curl_easy_getinfo( pCURL, CURLINFO_RESPONSE_CODE, &nError );
 
                 if ( 403 == nError )
-                    aMessage += RTL_CONSTASCII_STRINGPARAM( " 403: Access denied!" );
+                    aMessage += UNISTRING( " 403: Access denied!" );
                 else if ( 404 == nError )
-                    aMessage += RTL_CONSTASCII_STRINGPARAM( " 404: File not found!" );
+                    aMessage += UNISTRING( " 404: File not found!" );
                 else if ( 416 == nError )
                 {
                     // we got this error probably, because we already downloaded the file
@@ -338,9 +338,9 @@ bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProx
                 }
                 else
                 {
-                    aMessage += RTL_CONSTASCII_STRINGPARAM( ":error code = " );
+                    aMessage += UNISTRING( ":error code = " );
                     aMessage += aMessage.valueOf( nError );
-                    aMessage += RTL_CONSTASCII_STRINGPARAM( " !" );
+                    aMessage += UNISTRING( " !" );
                 }
             }
             if ( !ret )
