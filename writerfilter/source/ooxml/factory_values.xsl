@@ -68,38 +68,12 @@
   <xsl:include href="resourcestools.xsl"/>
 
   <xsl:template match="/">
-    <xsl:variable name="ns" select="substring-before(substring-after($file, 'OOXMLFactory_'), '.cxx')"/>
     <xsl:text>
-#include "doctok/sprmids.hxx"
-#include "doctok/resourceids.hxx"
-#include "ooxml/resourceids.hxx"
-#include "OOXMLFactory_values.hxx"
-#include "OOXMLFactory_</xsl:text>
-    <xsl:value-of select="$ns"/>
-    <xsl:text>.hxx"
-#include "OOXMLFastHelper.hxx"
-    
-namespace writerfilter {
-namespace ooxml {
+#ifndef INCLUDED_FACTORY_VALUES</xsl:text>
+#include &lt;rtl/ustring.hxx&gt;
 
-/// @cond GENERATED
-    </xsl:text>
-    <xsl:for-each select="/model/namespace[@name=$ns]">
-        <xsl:call-template name="factorymutexdecl"/>
-        <xsl:call-template name="factoryconstructor"/>
-        <xsl:call-template name="factorydestructor"/>
-        <xsl:call-template name="factorygetinstance"/>
-        <xsl:call-template name="factoryattributetoresourcemap"/>
-        <xsl:call-template name="factorylistvaluemap"/>
-        <xsl:call-template name="factorycreateelementmap"/>
-        <xsl:call-template name="factoryactions"/>
-        <xsl:call-template name="factorygetdefinename"/>
-        <xsl:call-template name="factorytokentoidmap"/>
-    </xsl:for-each>
-    <xsl:text>
-/// @endcond
-}}
-</xsl:text>
-</xsl:template>
-
+<xsl:call-template name="valueconstantdecls"/>
+<xsl:text>
+#endif // INCLUDED_FACTORY_VALUES&#xa;</xsl:text>
+  </xsl:template>
 </xsl:stylesheet>
