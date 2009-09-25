@@ -53,6 +53,7 @@ LinePropertiesContext::LinePropertiesContext( ContextHandler& rParent, const Ref
 {
     AttributeList aAttribs( xAttribs );
     mrLineProperties.moLineWidth = aAttribs.getInteger( XML_w );
+    mrLineProperties.moLineCompound = aAttribs.getToken( XML_cmpd );
     mrLineProperties.moLineCap = aAttribs.getToken( XML_cap );
 }
 
@@ -79,6 +80,11 @@ Reference< XFastContextHandler > LinePropertiesContext::createFastChildContext( 
             mrLineProperties.moPresetDash = aAttribs.getToken( XML_val );
         break;
         case A_TOKEN( custDash ):  // CT_DashStopList
+            xRet = this;
+        break;
+        case A_TOKEN( ds ):
+            mrLineProperties.maCustomDash.push_back( LineProperties::DashStop(
+                aAttribs.getInteger( XML_d, 0 ), aAttribs.getInteger( XML_sp, 0 ) ) );
         break;
 
         // LineJoinPropertiesGroup
