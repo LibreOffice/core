@@ -32,9 +32,16 @@
 
 #include <algorithm>
 
+#include "com/sun/star/container/NoSuchElementException.hpp"
+#include "com/sun/star/container/XNameAccess.hpp"
+#include "com/sun/star/lang/WrappedTargetException.hpp"
+#include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/Type.hxx"
+#include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "osl/diagnose.h"
 #include "rtl/ref.hxx"
@@ -42,6 +49,7 @@
 #include "rtl/string.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include "sal/types.h"
 
 #include "data.hxx"
 #include "localizedpropertynode.hxx"
@@ -66,8 +74,13 @@ namespace css = com::sun::star;
 
 }
 
-XcuParser::XcuParser(int layer, Data * data): valueParser_(layer), data_(data)
-{}
+XcuParser::XcuParser(
+    css::uno::Reference< css::uno::XComponentContext > const & context,
+    int layer, Data * data):
+    context_(context), valueParser_(layer), data_(data)
+{
+    OSL_ASSERT(context.is());
+}
 
 XcuParser::~XcuParser() {}
 
@@ -370,6 +383,7 @@ void XcuParser::handlePropValue(XmlReader & reader, PropertyNode * prop) {
     OSL_ASSERT(!state_.top().record);
     Span attrNil;
     Span attrSeparator;
+    Span attrExternal;
     for (;;) {
         XmlReader::Namespace attrNs;
         Span attrLn;
@@ -384,6 +398,10 @@ void XcuParser::handlePropValue(XmlReader & reader, PropertyNode * prop) {
             attrLn.equals(RTL_CONSTASCII_STRINGPARAM("separator")))
         {
             attrSeparator = reader.getAttributeValue(false);
+        } else if (attrNs == XmlReader::NAMESPACE_OOR &&
+            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("external")))
+        {
+            attrExternal = reader.getAttributeValue(true);
         }
     }
     if (xmldata::parseBoolean(attrNil, false)) {
@@ -395,7 +413,66 @@ void XcuParser::handlePropValue(XmlReader & reader, PropertyNode * prop) {
                  reader.getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
         }
+        if (attrExternal.is()) {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "xsi:nil and oor:external attributes for prop in ")) +
+                 reader.getUrl()),
+                css::uno::Reference< css::uno::XInterface >());
+        }
         prop->setValue(valueParser_.getLayer(), css::uno::Any());
+        state_.push(State());
+    } else if (attrExternal.is()) {
+        rtl::OUString external(xmldata::convertFromUtf8(attrExternal));
+        sal_Int32 i = external.indexOf(' ');
+        if (i <= 0) {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "bad oor:external attribute value in ")) +
+                 reader.getUrl()),
+                css::uno::Reference< css::uno::XInterface >());
+        }
+        css::uno::Reference< css::container::XNameAccess > service;
+        try {
+            service = css::uno::Reference< css::container::XNameAccess >(
+                (css::uno::Reference< css::lang::XMultiComponentFactory >(
+                    context_->getServiceManager(), css::uno::UNO_SET_THROW)->
+                 createInstanceWithContext(external.copy(0, i), context_)),
+                css::uno::UNO_QUERY_THROW);
+        } catch (css::uno::RuntimeException &) {
+            throw;
+        } catch (css::uno::Exception & e) {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "cannot instantiate oor:external service: ")) +
+                 e.Message),
+                css::uno::Reference< css::uno::XInterface >());
+        }
+        css::uno::Any value;
+        try {
+            value = service->getByName(external.copy(i + 1));
+        } catch (css::container::NoSuchElementException & e) {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("unknwon oor:external ID: ")) +
+                 e.Message),
+                css::uno::Reference< css::uno::XInterface >());
+        } catch (css::lang::WrappedTargetException & e) {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "cannot obtain oor:external value: ")) +
+                 e.Message),
+                css::uno::Reference< css::uno::XInterface >());
+        }
+        css::uno::Type t;
+        if (!(value >>= t) || t != cppu::UnoType< cppu::UnoVoidType >::get()) {
+            //TODO: check value type
+            prop->setValue(valueParser_.getLayer(), value);
+        }
         state_.push(State());
     } else {
         valueParser_.separator_ = attrSeparator;

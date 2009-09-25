@@ -35,11 +35,15 @@
 #include <set>
 
 #include "boost/noncopyable.hpp"
+#include "com/sun/star/uno/Reference.hxx"
 #include "rtl/ref.hxx"
 
 #include "data.hxx"
 #include "path.hxx"
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
 namespace rtl {
     class Bootstrap;
     class OUString;
@@ -54,7 +58,11 @@ class RootAccess;
 
 class Components: private boost::noncopyable {
 public:
-    static Components & singleton();
+    static void initSingleton(
+        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+            const & context);
+
+    static Components & getSingleton();
 
     static bool allLocales(rtl::OUString const & locale);
 
@@ -83,17 +91,26 @@ public:
     void insertXcuFile(int layer, rtl::OUString const & fileUri);
 
 private:
-    Components();
+    Components(
+        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+            const & context);
 
     ~Components();
 
     void parseFiles(
         int layer, rtl::OUString const & extension,
-        void (* parseFile)(rtl::OUString const &, int, Data *),
+        void (* parseFile)(
+            com::sun::star::uno::Reference<
+                com::sun::star::uno::XComponentContext > const &,
+            rtl::OUString const &, int, Data *),
         rtl::OUString const & url, bool recursive);
 
     void parseFileList(
-        int layer, void (* parseFile)(rtl::OUString const &, int, Data *),
+        int layer,
+        void (* parseFile)(
+            com::sun::star::uno::Reference<
+                com::sun::star::uno::XComponentContext > const &,
+            rtl::OUString const &, int, Data *),
         rtl::OUString const & urls, rtl::Bootstrap const & ini);
 
     void parseXcdFiles(int layer, rtl::OUString const & url);
@@ -112,6 +129,8 @@ private:
 
     typedef std::set< RootAccess * > WeakRootSet;
 
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        context_;
     Data data_;
     WeakRootSet roots_;
 };

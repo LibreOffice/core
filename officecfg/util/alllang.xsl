@@ -316,6 +316,9 @@
 			<xsl:when test="not ($dataval)">
 				<xsl:value-of select="true()"/>
 			</xsl:when>
+            <xsl:when test="$dataval/@oor:external">
+                <xsl:value-of select="false()"/>
+            </xsl:when>
 			<xsl:when test="not ($schemaval)">
 				<xsl:choose>
 					<xsl:when test="$dataval/@xsi:nil='true'">

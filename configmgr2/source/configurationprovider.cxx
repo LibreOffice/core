@@ -60,6 +60,7 @@
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/interfacecontainer.hxx"
 #include "cppuhelper/weak.hxx"
+#include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include "sal/types.h"
 #include "rtl/ref.hxx"
@@ -108,7 +109,9 @@ public:
         rtl::OUString const & locale):
         ServiceBase(*static_cast< osl::Mutex * >(this)), context_(context),
         locale_(locale)
-    {}
+    {
+        OSL_ASSERT(context.is());
+    }
 
 private:
     virtual ~Service() {}
@@ -272,7 +275,8 @@ Service::createInstanceWithArguments(
             static_cast< cppu::OWeakObject * >(this));
     }
     osl::MutexGuard guard(lock);
-    Components & components = Components::singleton();
+    Components::initSingleton(context_);
+    Components & components = Components::getSingleton();
     rtl::Reference< RootAccess > root(
         new RootAccess(components, nodepath, locale, update));
     if (root->isValue()) {

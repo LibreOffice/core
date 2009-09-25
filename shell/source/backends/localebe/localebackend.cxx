@@ -32,9 +32,6 @@
 #include "precompiled_shell.hxx"
 
 #include "localebackend.hxx"
-#include "localelayer.hxx"
-#include <com/sun/star/configuration/backend/ComponentChangeEvent.hpp>
-#include <uno/current_context.hxx>
 #include <osl/time.h>
 
 #include <stdio.h>
@@ -229,11 +226,7 @@ rtl::OUString ImplGetLocale(LCID lcid)
 
 // -------------------------------------------------------------------------------
 
-LocaleBackend::LocaleBackend(const uno::Reference<uno::XComponentContext>& xContext)
-    throw (backend::BackendAccessException) :
-    ::cppu::WeakImplHelper2 < backend::XSingleLayerStratum, lang::XServiceInfo > (),
-    m_xContext(xContext)
-
+LocaleBackend::LocaleBackend()
 {
 }
 
@@ -245,11 +238,9 @@ LocaleBackend::~LocaleBackend(void)
 
 //------------------------------------------------------------------------------
 
-LocaleBackend* LocaleBackend::createInstance(
-    const uno::Reference<uno::XComponentContext>& xContext
-)
+LocaleBackend* LocaleBackend::createInstance()
 {
-    return new LocaleBackend(xContext);
+    return new LocaleBackend;
 }
 
 // ---------------------------------------------------------------------------------------
@@ -291,61 +282,49 @@ rtl::OUString LocaleBackend::getSystemLocale(void)
 }
 //------------------------------------------------------------------------------
 
-rtl::OUString LocaleBackend::createTimeStamp()
+css::uno::Type LocaleBackend::getElementType() throw(css::uno::RuntimeException)
 {
-    // the time stamp is free text, so just returning the values here.
-    return getLocale() + getUILocale() + getSystemLocale();
+    return cppu::UnoType< cppu::UnoVoidType >::get();
 }
 
-//------------------------------------------------------------------------------
-
-uno::Reference<backend::XLayer> SAL_CALL LocaleBackend::getLayer(
-        const rtl::OUString& aComponent, const rtl::OUString& /*aTimestamp*/)
-    throw (backend::BackendAccessException, lang::IllegalArgumentException)
+sal_Bool LocaleBackend::hasElements() throw(css::uno::RuntimeException)
 {
+    return true;
+}
 
-    uno::Sequence<rtl::OUString> aComps( getSupportedComponents() );
-    if( aComponent.equals( aComps[0]) )
-    {
-        if( ! m_xSystemLayer.is() )
-        {
-            uno::Sequence<backend::PropertyInfo> aPropInfoList(3);
-
-            aPropInfoList[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.System/L10N/UILocale") );
-            aPropInfoList[0].Type = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "string" ) );
-            aPropInfoList[0].Protected = sal_False;
-            aPropInfoList[0].Value = uno::makeAny( getUILocale() );
-
-            aPropInfoList[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.System/L10N/Locale") );
-            aPropInfoList[1].Type = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "string" ));
-            aPropInfoList[1].Protected = sal_False;
-            aPropInfoList[1].Value = uno::makeAny( getLocale() );
-
-            aPropInfoList[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.System/L10N/SystemLocale") );
-            aPropInfoList[2].Type = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "string" ));
-            aPropInfoList[2].Protected = sal_False;
-            aPropInfoList[2].Value = uno::makeAny( getSystemLocale() );
-
-            m_xSystemLayer = new LocaleLayer(aPropInfoList, createTimeStamp(), m_xContext);
-        }
-
-        return m_xSystemLayer;
+css::uno::Any LocaleBackend::getByName(rtl::OUString const & aName)
+    throw (
+        css::container::NoSuchElementException,
+        css::lang::WrappedTargetException, css::uno::RuntimeException)
+{
+    if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Locale"))) {
+        return css::uno::makeAny(getLocale());
+    } else if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SystemLocale"))) {
+        return css::uno::makeAny(getSystemLocale());
+    } else if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UILocale"))) {
+        return css::uno::makeAny(getUILocale());
+    } else {
+        throw css::container::NoSuchElementException(
+            aName, static_cast< cppu::OWeakObject * >(this));
     }
-
-    return uno::Reference<backend::XLayer>();
 }
 
-//------------------------------------------------------------------------------
-
-uno::Reference<backend::XUpdatableLayer> SAL_CALL
-LocaleBackend::getUpdatableLayer(const rtl::OUString& /*aComponent*/)
-    throw (backend::BackendAccessException,lang::NoSupportException,
-           lang::IllegalArgumentException)
+css::uno::Sequence< rtl::OUString > LocaleBackend::getElementNames()
+    throw (css::uno::RuntimeException)
 {
-    throw lang::NoSupportException(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "LocaleBackend: No Update Operation allowed, Read Only access") ),
-        *this) ;
+    css::uno::Sequence< rtl::OUString > names(3);
+    names[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Locale"));
+    names[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SystemLocale"));
+    names[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UILocale"));
+    return names;
+}
+
+sal_Bool LocaleBackend::hasByName(rtl::OUString const & aName)
+    throw (css::uno::RuntimeException)
+{
+    return aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Locale")) ||
+        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SystemLocale")) ||
+        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UILocale"));
 }
 
 //------------------------------------------------------------------------------
@@ -366,10 +345,8 @@ rtl::OUString SAL_CALL LocaleBackend::getImplementationName(void)
 
 uno::Sequence<rtl::OUString> SAL_CALL LocaleBackend::getBackendServiceNames(void)
 {
-    uno::Sequence<rtl::OUString> aServiceNameList(2);
+    uno::Sequence<rtl::OUString> aServiceNameList(1);
     aServiceNameList[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.LocaleBackend")) ;
-    aServiceNameList[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.PlatformBackend")) ;
-
     return aServiceNameList ;
 }
 
@@ -394,16 +371,3 @@ uno::Sequence<rtl::OUString> SAL_CALL LocaleBackend::getSupportedServiceNames(vo
 {
     return getBackendServiceNames() ;
 }
-
-// ---------------------------------------------------------------------------------------
-
-uno::Sequence<rtl::OUString> SAL_CALL LocaleBackend::getSupportedComponents(void)
-{
-    uno::Sequence<rtl::OUString> aSupportedComponentList(1);
-    aSupportedComponentList[0] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.System" )
-    );
-
-    return aSupportedComponentList;
-}
-

@@ -34,6 +34,7 @@
 
 #include <stack>
 
+#include "com/sun/star/uno/Reference.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
@@ -46,6 +47,10 @@
 #include "xmldata.hxx"
 #include "xmlreader.hxx"
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
+
 namespace configmgr {
 
 class GroupNode;
@@ -57,7 +62,10 @@ struct Data;
 
 class XcuParser: public Parser {
 public:
-    XcuParser(int layer, Data * data);
+    XcuParser(
+        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+            const & context,
+        int layer, Data * data);
 
 private:
     virtual ~XcuParser();
@@ -132,6 +140,8 @@ private:
 
     typedef std::stack< State > StateStack;
 
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        context_;
     ValueParser valueParser_;
     Data * data_;
     rtl::OUString componentName_;

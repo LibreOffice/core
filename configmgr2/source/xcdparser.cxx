@@ -34,6 +34,7 @@
 
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "osl/diagnose.hxx"
 #include "rtl/string.h"
@@ -56,9 +57,13 @@ namespace css = com::sun::star;
 }
 
 XcdParser::XcdParser(
+    css::uno::Reference< css::uno::XComponentContext > const & context,
     int layer, Dependencies const & dependencies, Data * data):
-    layer_(layer), dependencies_(dependencies), data_(data), state_(STATE_START)
-{}
+    context_(context), layer_(layer), dependencies_(dependencies), data_(data),
+    state_(STATE_START)
+{
+    OSL_ASSERT(context.is());
+}
 
 XcdParser::~XcdParser() {}
 
@@ -140,7 +145,7 @@ bool XcdParser::startElement(
         if (ns == XmlReader::NAMESPACE_OOR &&
             name.equals(RTL_CONSTASCII_STRINGPARAM("component-data")))
         {
-            nestedParser_ = new XcuParser(layer_ + 1, data_);
+            nestedParser_ = new XcuParser(context_, layer_ + 1, data_);
             nesting_ = 1;
             return nestedParser_->startElement(reader, ns, name);
         }

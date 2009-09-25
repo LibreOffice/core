@@ -42,6 +42,7 @@ PACKAGE=org.openoffice
 XCUFILES= \
     Inet.xcu \
     Setup.xcu \
+    System.xcu \
     VCL.xcu \
     FirstStartWizard.xcu \
     UserProfile.xcu
