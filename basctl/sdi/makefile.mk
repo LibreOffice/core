@@ -38,7 +38,7 @@ TARGET=basslots
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
+.IF "$(L10N_framework)"==""
 SDI1NAME=$(TARGET)
 SDI1EXPORT=basctl
 
@@ -53,6 +53,6 @@ SVSDI1DEPEND= \
     baside.sdi
 
 # --- Targets -------------------------------------------------------
-
+.ENDIF
 .INCLUDE :  target.mk
 

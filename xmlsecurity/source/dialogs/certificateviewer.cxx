@@ -311,8 +311,10 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
     InsertElement( String( XMLSEC_RES( STR_SERIALNUM ) ), aLBEntry, aDetails, true );
 
-    aLBEntry = XmlSec::GetPureContent( xCert->getIssuerName(), ", " );
-    aDetails = XmlSec::GetPureContent( xCert->getIssuerName(), "\n", true );
+    std::pair< ::rtl::OUString, ::rtl::OUString> pairIssuer =
+        XmlSec::GetDNForCertDetailsView(xCert->getIssuerName());
+    aLBEntry = pairIssuer.first;
+    aDetails = pairIssuer.second;
     InsertElement( String( XMLSEC_RES( STR_ISSUER ) ), aLBEntry, aDetails );
     /*
     aSeq = xCert->getIssuerUniqueID();
@@ -333,8 +335,10 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
     InsertElement( String( XMLSEC_RES( STR_VALIDTO ) ), aLBEntry, aLBEntry );
 
-    aLBEntry = XmlSec::GetPureContent( xCert->getSubjectName(), ", " );
-    aDetails = XmlSec::GetPureContent( xCert->getSubjectName(), "\n", true );
+    std::pair< ::rtl::OUString, ::rtl::OUString > pairSubject =
+        XmlSec::GetDNForCertDetailsView(xCert->getSubjectName());
+    aLBEntry = pairSubject.first;
+    aDetails = pairSubject.second;
     InsertElement( String( XMLSEC_RES( STR_SUBJECT ) ), aLBEntry, aDetails );
     /*
     aSeq = xCert->getSubjectUniqueID();

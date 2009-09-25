@@ -73,15 +73,18 @@ ALL: 	ALLDEP
 
 .INCLUDE :  target.mk
 
+test:
+    echo $(SOLARBINDIR)
+
 .IF "$(BUILD_QADEVOOO)" == "YES"
 show_targets:
-    +@java $(RUNNER_CLASSPATH) complexlib.ShowTargets $(foreach,i,$(JAVAFILES) $(i:s/.\$///:s/.java//))
+    +@$(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) complexlib.ShowTargets $(foreach,i,$(JAVAFILES) $(i:s/.\$///:s/.java//))
 
 run:
-    +$(COPY) integration$/forms$/*.props $(CLASSDIR)$/$(PACKAGE) && java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce forms_all.sce
+    +$(COPY) integration$/forms$/*.props $(CLASSDIR)$/$(PACKAGE) && $(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce forms_all.sce
 
 run_%:
-    +$(COPY) integration$/forms$/*.props $(CLASSDIR)$/$(PACKAGE) && java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o integration.$(PRJNAME).$(@:s/run_//)
+    +$(COPY) integration$/forms$/*.props $(CLASSDIR)$/$(PACKAGE) && $(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o integration.$(PRJNAME).$(@:s/run_//)
 
 .ELSE
 run: show_targets

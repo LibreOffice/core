@@ -76,6 +76,7 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
 , m_nMagicalHackSize( 0 )
 , m_bHasSeekable( sal_False )
 , m_bCompressedIsSetFromOutside( sal_False )
+, m_bFromManifest( sal_False )
 {
     OSL_ENSURE( m_xFactory.is(), "No factory is provided to ZipPackageStream!\n" );
 
@@ -90,7 +91,7 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
     aEntry.nCompressedSize  = -1;
     aEntry.nSize        = -1;
     aEntry.nOffset      = -1;
-    aEntry.nNameLen     = -1;
+    aEntry.nPathLen     = -1;
     aEntry.nExtraLen    = -1;
 
     if ( !aImplementationId.getLength() )
@@ -113,8 +114,8 @@ void ZipPackageStream::setZipEntryOnLoading( const ZipEntry &rInEntry)
     aEntry.nCompressedSize = rInEntry.nCompressedSize;
     aEntry.nSize = rInEntry.nSize;
     aEntry.nOffset = rInEntry.nOffset;
-    aEntry.sName = rInEntry.sName;
-    aEntry.nNameLen = rInEntry.nNameLen;
+    aEntry.sPath = rInEntry.sPath;
+    aEntry.nPathLen = rInEntry.nPathLen;
     aEntry.nExtraLen = rInEntry.nExtraLen;
 
     if ( aEntry.nMethod == STORED )
@@ -229,10 +230,8 @@ Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( sal_B
         if ( !xNewPackStream.is() )
             throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
-        if ( !m_aSharedMutexRef.Is() )
-            m_aSharedMutexRef = new SotMutexHolder();
         xNewPackStream->setDataStream( static_cast< io::XInputStream* >(
-                                                    new WrapStreamForShare( GetOwnSeekStream(), m_aSharedMutexRef ) ) );
+                                                    new WrapStreamForShare( GetOwnSeekStream(), rZipPackage.GetSharedMutexRef() ) ) );
 
         Reference< XPropertySet > xNewPSProps( xNewPackStream, UNO_QUERY );
         if ( !xNewPSProps.is() )
@@ -385,7 +384,6 @@ void SAL_CALL ZipPackageStream::setInputStream( const Reference< io::XInputStrea
         throw(RuntimeException)
 {
     // if seekable access is required the wrapping will be done on demand
-    m_aSharedMutexRef = new SotMutexHolder();
     xStream = aStream;
     m_bHasSeekable = sal_False;
     SetPackageMember ( sal_False );
@@ -403,13 +401,11 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawData()
         {
             if ( !xEncryptionData.isEmpty() && !bHaveOwnKey )
                 xEncryptionData->aKey = rZipPackage.getEncryptionKey();
-            return rZipPackage.getZipFile().getRawData( aEntry, xEncryptionData, bIsEncrypted );
+            return rZipPackage.getZipFile().getRawData( aEntry, xEncryptionData, bIsEncrypted, rZipPackage.GetSharedMutexRef() );
         }
         else if ( GetOwnSeekStream().is() )
         {
-            if ( !m_aSharedMutexRef.Is() )
-                m_aSharedMutexRef = new SotMutexHolder();
-            return new WrapStreamForShare( GetOwnSeekStream(), m_aSharedMutexRef );
+            return new WrapStreamForShare( GetOwnSeekStream(), rZipPackage.GetSharedMutexRef() );
         }
         else
             return Reference < io::XInputStream > ();
@@ -436,13 +432,11 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
         {
             if ( !xEncryptionData.isEmpty() && !bHaveOwnKey )
                 xEncryptionData->aKey = rZipPackage.getEncryptionKey();
-            return rZipPackage.getZipFile().getInputStream( aEntry, xEncryptionData, bIsEncrypted );
+            return rZipPackage.getZipFile().getInputStream( aEntry, xEncryptionData, bIsEncrypted, rZipPackage.GetSharedMutexRef() );
         }
         else if ( GetOwnSeekStream().is() )
         {
-            if ( !m_aSharedMutexRef.Is() )
-                m_aSharedMutexRef = new SotMutexHolder();
-            return new WrapStreamForShare( GetOwnSeekStream(), m_aSharedMutexRef );
+            return new WrapStreamForShare( GetOwnSeekStream(), rZipPackage.GetSharedMutexRef() );
         }
         else
             return Reference < io::XInputStream > ();
@@ -482,15 +476,13 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
         if ( !xEncryptionData.isEmpty() && !bHaveOwnKey )
             xEncryptionData->aKey = rZipPackage.getEncryptionKey();
 
-        return rZipPackage.getZipFile().getDataStream( aEntry, xEncryptionData, bIsEncrypted );
+        return rZipPackage.getZipFile().getDataStream( aEntry, xEncryptionData, bIsEncrypted, rZipPackage.GetSharedMutexRef() );
     }
     else if ( m_nStreamMode == PACKAGE_STREAM_RAW )
         return ZipFile::StaticGetDataFromRawStream( GetOwnSeekStream(), xEncryptionData );
     else if ( GetOwnSeekStream().is() )
     {
-        if ( !m_aSharedMutexRef.Is() )
-            m_aSharedMutexRef = new SotMutexHolder();
-        return new WrapStreamForShare( GetOwnSeekStream(), m_aSharedMutexRef );
+        return new WrapStreamForShare( GetOwnSeekStream(), rZipPackage.GetSharedMutexRef() );
     }
     else
         return uno::Reference< io::XInputStream >();
@@ -515,15 +507,13 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream()
         if ( !bIsEncrypted || xEncryptionData.isEmpty() )
             throw packages::NoEncryptionException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
-        return rZipPackage.getZipFile().getWrappedRawStream( aEntry, xEncryptionData, sMediaType );
+        return rZipPackage.getZipFile().getWrappedRawStream( aEntry, xEncryptionData, sMediaType, rZipPackage.GetSharedMutexRef() );
     }
     else if ( GetOwnSeekStream().is() )
     {
         if ( m_nStreamMode == PACKAGE_STREAM_RAW )
         {
-            if ( !m_aSharedMutexRef.Is() )
-                m_aSharedMutexRef = new SotMutexHolder();
-            return new WrapStreamForShare( GetOwnSeekStream(), m_aSharedMutexRef );
+            return new WrapStreamForShare( GetOwnSeekStream(), rZipPackage.GetSharedMutexRef() );
         }
         else if ( m_nStreamMode == PACKAGE_STREAM_DATA && bToBeEncrypted )
             return TryToGetRawFromDataStream( sal_True );
@@ -568,7 +558,6 @@ void SAL_CALL ZipPackageStream::setRawStream( const Reference< io::XInputStream 
     // the raw stream MUST have seekable access
     m_bHasSeekable = sal_True;
 
-    m_aSharedMutexRef = new SotMutexHolder();
     SetPackageMember ( sal_False );
     aEntry.nTime = -1;
     m_nStreamMode = PACKAGE_STREAM_RAW;
@@ -589,7 +578,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getPlainRawStream(
 
     if (IsPackageMember())
     {
-        return rZipPackage.getZipFile().getRawData( aEntry, xEncryptionData, bIsEncrypted );
+        return rZipPackage.getZipFile().getRawData( aEntry, xEncryptionData, bIsEncrypted, rZipPackage.GetSharedMutexRef() );
     }
     else if ( GetOwnSeekStream().is() )
     {
@@ -688,11 +677,11 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
             OUString sTempString;
             if ( ( aValue >>= sTempString ) )
             {
-                sal_Int32 nNameLength = sTempString.getLength();
-                Sequence < sal_Int8 > aSequence ( nNameLength );
+                sal_Int32 nPathLength = sTempString.getLength();
+                Sequence < sal_Int8 > aSequence ( nPathLength );
                 sal_Int8 *pArray = aSequence.getArray();
                 const sal_Unicode *pChar = sTempString.getStr();
-                for ( sal_Int16 i = 0; i < nNameLength; i++)
+                for ( sal_Int16 i = 0; i < nPathLength; i++)
                     pArray[i] = static_cast < const sal_Int8 > (pChar[i]);
                 aNewKey = aSequence;
             }
