@@ -57,18 +57,20 @@ CXXFLAGS+= $(LFS_CFLAGS)
 
 SLOFILES=	\
             $(SLO)$/utility.obj\
-            $(SLO)$/readline.obj\
             $(SLO)$/filepath.obj\
             $(SLO)$/debugbase.obj\
             $(SLO)$/loadmodulerelative.obj
 
+#			$(SLO)$/readline.obj\
+
 #.IF "$(UPDATER)"=="YES"
 OBJFILES=	\
             $(OBJ)$/utility.obj\
-            $(OBJ)$/readline.obj\
             $(OBJ)$/filepath.obj\
             $(OBJ)$/debugbase.obj\
             $(OBJ)$/loadmodulerelative.obj
+
+#			$(OBJ)$/readline.obj\
 #.ENDIF
 
 # --- Targets ------------------------------------------------------

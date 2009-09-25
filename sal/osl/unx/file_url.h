@@ -28,43 +28,45 @@
  *
  ************************************************************************/
 
- /***************************************************
-  * Internal header file, declares all functions
-  * that are not part of the offical API and are
-  * not defined in the osl header files
-  **************************************************/
+#ifndef INCLUDED_FILE_URL_H
+#define INCLUDED_FILE_URL_H
 
- #ifndef _FILE_URL_H_
- #define _FILE_URL_H_
+#include "osl/file.h"
 
- #ifndef _FILE_H_
- #include <osl/file.h>
- #endif
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
- #ifdef __cplusplus
- extern "C"
- {
- #endif
+/**************************************************
+ * osl_getSystemPathFromFileURL_Ex
+ *************************************************/
 
- /**************************************************
-  * _osl_getSystemPathFromFileURL
-  *************************************************/
+#define FURL_ALLOW_RELATIVE sal_True
+#define FURL_DENY_RELATIVE  sal_False
 
- #define FURL_ALLOW_RELATIVE sal_True
- #define FURL_DENY_RELATIVE  sal_False
+oslFileError osl_getSystemPathFromFileURL_Ex(rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath, sal_Bool bAllowRelative);
 
- oslFileError osl_getSystemPathFromFileURL_Ex(rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath, sal_Bool bAllowRelative);
+/**************************************************
+ * FileURLToPath
+ *************************************************/
 
- /**************************************************
-  * FileURLToPath
-  *************************************************/
+oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileURL);
 
- oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileURL);
+/***************************************************
+ * UnicodeToText
+ **************************************************/
 
+int UnicodeToText(char * buffer, size_t bufLen, const sal_Unicode * uniText, sal_Int32 uniTextLen);
 
- #ifdef __cplusplus
- }
- #endif
+/***************************************************
+ * TextToUniCode
+ **************************************************/
 
+int TextToUnicode(const char* text, size_t text_buffer_size, sal_Unicode* unic_text, sal_Int32 unic_text_buffer_size);
 
- #endif /* #define _FILE_URL_H_ */
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* #define INCLUDED_FILE_URL_H */

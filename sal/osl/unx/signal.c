@@ -46,6 +46,7 @@
 
 #ifdef LINUX
 #include <execinfo.h>
+#include <link.h>
 #define INCLUDE_BACKTRACE
 #define STACKTYPE "Linux"
 #endif
@@ -392,6 +393,88 @@ static int fputs_xml( const char *string, FILE *stream )
 
 #define REPORTENV_PARAM     "-crashreportenv:"
 
+#if defined SAL_ENABLE_CRASH_REPORT && defined INCLUDE_BACKTRACE && \
+    defined LINUX
+
+typedef struct
+{
+    const char *name;
+    ElfW(Off) offset;
+} dynamic_entry;
+
+static int
+callback(struct dl_phdr_info *info, size_t size, void *data)
+{
+    const ElfW(Phdr) *pDynamic = NULL;
+
+    if (size == sizeof(struct dl_phdr_info))
+    {
+        int i;
+        for (i = 0; i < info->dlpi_phnum; ++i)
+        {
+            if (info->dlpi_phdr[i].p_type == PT_DYNAMIC)
+            {
+                pDynamic = &(info->dlpi_phdr[i]);
+                break;
+            }
+        }
+    }
+
+    if (pDynamic)
+    {
+        char buffer[100];
+        int len;
+        char exe[PATH_MAX];
+        const char *dsoname = info->dlpi_name;
+
+        dynamic_entry* entry = (dynamic_entry*)data;
+
+        if (strcmp(dsoname, "") == 0)
+        {
+            snprintf(buffer, sizeof(buffer), "/proc/%d/exe", getpid());
+            if ((len = readlink(buffer, exe, PATH_MAX)) != -1)
+            {
+                exe[len] = '\0';
+                dsoname = exe;
+            }
+        }
+
+        if (strcmp(dsoname, entry->name) == 0)
+        {
+            entry->offset = pDynamic->p_offset;
+            return 1;
+        }
+    }
+    return 0;
+}
+
+/* Get the location of the .dynamic section offset for the given elf file.
+ * i.e. same as the "Offset" value shown for DYNAMIC from readelf -l foo
+ *
+ * We want to know this value so that if the binaries have been modifed
+ * by prelink then we can still process the call stack on server side
+ * by comparing this value to that of an "un-prelinked but known to be
+ * otherwise equivalent" version of those binaries and adjust the call
+ * stack addresses by the differences between .dynamic addresses so as
+ * to be able to map the prelinked addresses back to the unprelinked
+ * addresses
+ *
+ * cmc@openoffice.org
+ */
+static ElfW(Off)
+dynamic_section_offset(const char *name)
+{
+    dynamic_entry entry;
+
+    entry.name = name;
+    entry.offset = 0;
+
+    dl_iterate_phdr(callback, &entry);
+
+    return entry.offset;
+}
+#endif
+
 static int ReportCrash( int Signal )
 {
 #ifdef SAL_ENABLE_CRASH_REPORT
@@ -572,6 +655,11 @@ static int ReportCrash( int Signal )
 
                             if ( dl_info.dli_fbase && dl_info.dli_fname )
                             {
+#ifdef LINUX
+                                ElfW(Off) dynamic_offset = dynamic_section_offset(dl_info.dli_fname);
+                                fprintf( stackout, " 0x%" SAL_PRI_SIZET "x:", dynamic_offset);
+#endif
+
                                 fprintf( stackout, " %s + 0x%" SAL_PRI_PTRDIFFT "x",
                                     dl_info.dli_fname,
                                     (char*)stackframes[iFrame] - (char*)dl_info.dli_fbase
@@ -583,6 +671,10 @@ static int ReportCrash( int Signal )
 
                                 if ( dli_fdir )
                                     fprintf( xmlout, " path=\"%s\"", dli_fdir );
+
+#ifdef LINUX
+                                fprintf( xmlout, " dynamicoffset=\"0x%" SAL_PRI_SIZET "x\"", dynamic_offset );
+#endif
                             }
                             else
                                 fprintf( stackout, " ????????" );
