@@ -2016,47 +2016,6 @@ sal_Bool Desktop::implcp_ctor( const css::uno::Reference< css::lang::XMultiServi
 
 //*****************************************************************************************************************
 //  We work with valid listener only.
-sal_Bool Desktop::implcp_addTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
-{
-    return(
-            ( &xListener        ==  NULL        )   ||
-            ( xListener.is()    ==  sal_False   )
-          );
-}
-
-//*****************************************************************************************************************
-//  We work with valid listener only.
-sal_Bool Desktop::implcp_removeTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
-{
-    return(
-            ( &xListener        ==  NULL        )   ||
-            ( xListener.is()    ==  sal_False   )
-          );
-}
-
-//*****************************************************************************************************************
-//  The target frame could be ""(!), but flags must be in range of right enum.
-sal_Bool Desktop::implcp_findFrame( const ::rtl::OUString&  sTargetFrameName,
-                                          sal_Int32         nSearchFlags    )
-{
-    return(
-            ( &sTargetFrameName == NULL )   ||
-            (
-                (    nSearchFlags != css::frame::FrameSearchFlag::AUTO        ) &&
-                ( !( nSearchFlags &  css::frame::FrameSearchFlag::PARENT    ) ) &&
-                ( !( nSearchFlags &  css::frame::FrameSearchFlag::SELF      ) ) &&
-                ( !( nSearchFlags &  css::frame::FrameSearchFlag::CHILDREN  ) ) &&
-                ( !( nSearchFlags &  css::frame::FrameSearchFlag::CREATE    ) ) &&
-                ( !( nSearchFlags &  css::frame::FrameSearchFlag::SIBLINGS  ) ) &&
-                ( !( nSearchFlags &  css::frame::FrameSearchFlag::TASKS     ) ) &&
-                ( !( nSearchFlags &  css::frame::FrameSearchFlag::ALL       ) ) &&
-                ( !( nSearchFlags &  css::frame::FrameSearchFlag::GLOBAL    ) )
-            )
-          );
-}
-
-//*****************************************************************************************************************
-//  We work with valid listener only.
 sal_Bool Desktop::implcp_addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
     return(
@@ -2072,15 +2031,6 @@ sal_Bool Desktop::implcp_removeEventListener( const css::uno::Reference< css::la
     return(
             ( &xListener        ==  NULL        )   ||
             ( xListener.is()    ==  sal_False   )
-          );
-}
-
-//*****************************************************************************************************************
-sal_Bool Desktop::implcp_statusChanged( const css::frame::FeatureStateEvent& aEvent )
-{
-    return(
-            ( &aEvent                              == NULL ) ||
-            ( aEvent.FeatureDescriptor.getLength() <  1    )
           );
 }
 

@@ -36,6 +36,7 @@ TARGET=constants
 PACKAGE=org$/vba$/constants
 
 # --- Settings -----------------------------------------------------
+
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 .IF "$(ENABLE_VBA)"!="YES"
@@ -43,8 +44,8 @@ dummy:
         @echo "not building vba..."
 .ELSE
 
+.IF "$(L10N_framework)"==""
 # ------------------------------------------------------------------------
-
 # I tried to use the IDLFILES target but it failed dismally
 MY_GEN_IDL_PATH=$(MISC)$/idl
 MY_GEN_UCR_PATH=$(OUT)$/ucr$/$(PACKAGE)
@@ -53,10 +54,12 @@ MYTMPIDLFILES=$(shell @ls $(MY_GEN_IDL_PATH))
 MYIDLFILES=$(foreach,i,$(MYTMPIDLFILES) $(MY_GEN_IDL_PATH)$/$(i))
 MYURDFILES=$(foreach,i,$(MYIDLFILES) $(MY_GEN_UCR_PATH)$/$(i:b).urd)
 MYDBTARGET=$(OUT)$/ucr/constants.db
-
+.ENDIF
+.ENDIF
 
 .INCLUDE :  target.mk
 
+.IF "$(L10N_framework)"==""
 ALLTAR: $(MYDBTARGET)
 
 $(MY_GEN_UCR_PATH)$/%.urd: $(MY_GEN_IDL_PATH)$/%.idl
@@ -66,4 +69,3 @@ $(MYDBTARGET) : $(MYURDFILES)  $(MYIDLFILES)
     $(REGMERGE) $(OUT)$/ucr/constants.db /UCR @$(mktmp $(MYURDFILES))
 
 .ENDIF
-

@@ -205,21 +205,6 @@ void FwkTabPage::Resize()
     }
 }
 
-// -----------------------------------------------------------------------
-
-void FwkTabPage::Reset()
-{
-    CallMethod( BACK_METHOD );
-    ActivatePage();
-}
-
-// -----------------------------------------------------------------------
-
-void FwkTabPage::Save()
-{
-    CallMethod( OK_METHOD );
-}
-
 // class FwkTabWindow ---------------------------------------------
 
 FwkTabWindow::FwkTabWindow( Window* pParent ) :
@@ -413,13 +398,6 @@ void FwkTabWindow::RemovePage( sal_Int32 nIndex )
         if (RemoveEntry(nIndex))
             delete pEntry;
     }
-}
-
-// -----------------------------------------------------------------------
-
-sal_Int32 FwkTabWindow::GetActivePageId() const
-{
-    return m_aTabCtrl.GetCurPageId();
 }
 
 // -----------------------------------------------------------------------

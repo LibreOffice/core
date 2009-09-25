@@ -35,6 +35,7 @@
 #include <sal/types.h>
 #include <svx/xenum.hxx>
 #include <svx/outlobj.hxx>
+#include <svx/sdtaitm.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -68,6 +69,10 @@ namespace drawinglayer
             // #i101556# use versioning from text attributes to detect changes
             sal_uInt32                              maPropertiesVersion;
 
+            // text alignments
+            SdrTextHorzAdjust                       maSdrTextHorzAdjust;
+            SdrTextVertAdjust                       maSdrTextVertAdjust;
+
             // bitfield
             unsigned                                mbContour : 1;
             unsigned                                mbFitToSize : 1;
@@ -75,6 +80,7 @@ namespace drawinglayer
             unsigned                                mbBlink : 1;
             unsigned                                mbScroll : 1;
             unsigned                                mbInEditMode : 1;
+            unsigned                                mbFixedCellHeight : 1;
 
         public:
             SdrTextAttribute(
@@ -85,12 +91,15 @@ namespace drawinglayer
                 sal_Int32 aTextUpperDistance,
                 sal_Int32 aTextRightDistance,
                 sal_Int32 aTextLowerDistance,
+                SdrTextHorzAdjust aSdrTextHorzAdjust,
+                SdrTextVertAdjust aSdrTextVertAdjust,
                 bool bContour,
                 bool bFitToSize,
                 bool bHideContour,
                 bool bBlink,
                 bool bScroll,
-                bool bInEditMode);
+                bool bInEditMode,
+                bool bFixedCellHeight);
             ~SdrTextAttribute();
 
             // copy constructor and assigment operator
@@ -109,12 +118,15 @@ namespace drawinglayer
             bool isBlink() const { return mbBlink; }
             bool isScroll() const { return mbScroll; }
             bool isInEditMode() const { return mbInEditMode; }
+            bool isFixedCellHeight() const { return mbFixedCellHeight; }
             const SdrFormTextAttribute* getSdrFormTextAttribute() const { return mpSdrFormTextAttribute; }
             sal_Int32 getTextLeftDistance() const { return maTextLeftDistance; }
             sal_Int32 getTextUpperDistance() const { return maTextUpperDistance; }
             sal_Int32 getTextRightDistance() const { return maTextRightDistance; }
             sal_Int32 getTextLowerDistance() const { return maTextLowerDistance; }
             sal_uInt32 getPropertiesVersion() const { return maPropertiesVersion; }
+            SdrTextHorzAdjust getSdrTextHorzAdjust() const { return maSdrTextHorzAdjust; }
+            SdrTextVertAdjust getSdrTextVertAdjust() const { return maSdrTextVertAdjust; }
 
             // animation timing generation
             void getBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const;

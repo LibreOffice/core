@@ -145,16 +145,6 @@ IMPL_LINK(SfxAsyncExec_Impl, TimerHdl, Timer*, pTimer)
 }
 
 class SfxBindings_Impl
-
-/*  [Beschreibung]
-
-    Diese Implementations-Struktur der Klasse SfxBindings dient
-    der Entkopplung von "Anderungen vom exportierten Interface sowie
-    der Verringerung von extern sichtbaren Symbolen.
-
-    Eine Instanz exisitiert pro SfxBindings-Instanz f"ur deren Laufzeit.
-*/
-
 {
 public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchRecorder > xRecorder;
@@ -186,20 +176,6 @@ public:
 //--------------------------------------------------------------------
 
 struct SfxFoundCache_Impl
-
-/*  [Beschreibung]
-
-    In Instanzen dieser Struktur werden in <SfxBindings::CreateSet_Impl()>
-    weitere Informationen zu den gemeinsam von einem <Slot-Server> zu
-    erfragenden Status gesammelt, deren Ids dort in die Ranges eines
-    <SfxItemSet>s aufgenommen werden.
-
-    Diese Informationen werden w"ahrend der Suche nach den zusammen
-    upzudatenden Ids sowieso als Zwischenergebnis ermittelt und nachher
-    wieder ben"otigt, daher macht es Sinn, sie f"ur diesen kurzen Zeitraum
-    gleich aufzubewahren.
-*/
-
 {
     sal_uInt16          nSlotId;    // die Slot-Id
     sal_uInt16          nWhichId;   // falls verf"ugbar die Which-Id, sonst nSlotId
@@ -242,20 +218,6 @@ SV_IMPL_OP_PTRARR_SORT(SfxFoundCacheArr_Impl, SfxFoundCache_Impl*);
 //==========================================================================
 
 SfxBindings::SfxBindings()
-
-/*  [Beschreibung]
-
-    Konstruktor der Klasse SfxBindings. Genau eine Instanz wird automatisch
-    von der <SfxApplication> vor <SfxApplication::Init()> angelegt. Wird
-    eine Instanz ben"otigt, z.B. zum Invalidieren von Slots, sollte diese
-    "uber den zugeh"origen <SfxViewFrame> besorgt werden. Bestimmte
-    SfxViewFrame Subklassen (z.B. <SfxInPlaceFrame>) legen ihre eigene
-    Instanz der SfxBindings an.
-
-    <SfxControllerItem> Instanzen k"onnen erst angelegt werden, wenn
-    die zugeh"orige SfxBindings Instanz existiert.
-*/
-
 :   pImp(new SfxBindings_Impl),
     pDispatcher(0),
     nRegLevel(1)    // geht erst auf 0, wenn Dispatcher gesetzt
@@ -324,23 +286,6 @@ SfxBindings::~SfxBindings()
 //--------------------------------------------------------------------
 
 void SfxBindings::DeleteControllers_Impl()
-
-/*  [Beschreibung]
-
-    Interne Methode zum l"oschen noch existierender <SfxControllerItem>
-    Instanzen, die bei dieser SfxBindings Instanz angemeldet sind.
-
-    Dies sind i.d.R. <SfxPopupWindow>s. Nich sich selbst geh"orende
-    SfxControllerItems d"urfen bei Aufruf nur noch existieren, wenn sie
-    einem der restlichen SfxPopupWindows geh"oren.
-
-
-    [Anmerkung]
-
-    Wird beim Beenden der Applikation gerufen, bevor das Applikations-
-    Fenster gel"oscht wird.
-*/
-
 {
     // in der ersten Runde den SfxPopupWindows l"oschen
     sal_uInt16 nCount = pImp->pCaches->Count();
@@ -415,20 +360,6 @@ SfxPopupAction SfxBindings::GetPopupAction_Impl() const
 //--------------------------------------------------------------------
 
 void SfxBindings::HidePopups( bool bHide )
-
-/*  [Beschreibung]
-
-    Dieser Methode versteckt und zeigt die <SfxPopupWindows>, die aus
-    <SfxToolboxControl>s dieser SfxBindings-Instanz abgerissen wurden bzw.
-    floating <SfxChildWindow>-Instanzen dieser SfxBindings-Instanz.
-
-
-    [Anmerkung]
-
-    Es k"onnten noch weitere Floating-Windows exisitieren, die durch
-    diese Methode nicht erfa\st werden.
-*/
-
 {
     // SfxPopupWindows hiden
     HidePopupCtrls_Impl( bHide );
@@ -469,13 +400,6 @@ void SfxBindings::Update_Impl
 (
     SfxStateCache*  pCache      // der upzudatende SfxStatusCache
 )
-
-/*  [Beschreibung]
-
-    Interne Methode zum Updaten eines Caches und den von derselben
-    Status-Methode in derselben Shell bedienten und dirty Slots.
-*/
-
 {
     if( pCache->GetDispatch().is() && pCache->GetItemLink() )
     {
@@ -558,35 +482,6 @@ void SfxBindings::Update
 (
     sal_uInt16      nId     // die gebundene und upzudatende Slot-Id
 )
-
-/*  [Beschreibung]
-
-    Diese Methode sorgt f"ur synchrones Updaten der auf die Slot-Id nId
-    gebundenen <SfxContollerItem> Instanzen, die an dieser SfxBindings
-    Instanz angemeldet sind. Vergleichbar zu Window::Update()
-    (StarView) erfolgt ein Update nur, wenn entweder ein auf diese
-    Slot-Id gebundenes SfxContollerItem dirty ist, oder die Slot-Id
-    selbst dirty ist. Dies kann durch einen vorhergehendes Aufruf von
-    <SfxBindings::Invalidate(sal_uInt16)> erzwungen werden.
-
-
-    [Anmerkung]
-
-    Es ist g"unstiger, zun"achst alle zu invalidierenden Slot-Ids per
-    <SfxBindings::Invalidate(sal_uInt16)> zu invalidieren und dann
-    Update() aufzurufen, als einzelne abwechselnde Invalidate/Update,
-    da von derselben Status-Methode bediente Status-Anfragen von
-    den SfxBindings automatisch zusammengefa"st werden.
-
-
-    [Querverweise]
-
-    <SfxShell::Invalidate(sal_uInt16)>
-    <SfxBindings::Invalidate(sal_uInt16)>
-    <SfxBindings::InvalidateAll(sal_Bool)>
-    <SfxBindings::Update()>
-*/
-
 {
     DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
@@ -654,26 +549,6 @@ void SfxBindings::Update
 //--------------------------------------------------------------------
 
 void SfxBindings::Update()
-
-/*  [Beschreibung]
-
-    Diese Methode sorgt f"ur synchrones Updaten aller <SfxContollerItem>
-    Instanzen, die an dieser SfxBindings Instanz angemeldet sind. Vergleichbar
-    zu Window::Update() (StarView) erfolgt ein Update nur, wenn entweder ein
-    SfxContollerItem dirty ist, in einem Status-Cache der Zeiger auf den
-    <Slot-Server> dirty ist. Ersteres kann durch einen Aufruf von
-    <SfxBindings::Invalidate(sal_uInt16)> erzwungen werden, letzters durch
-    <SfxBindings::InvalidateAll(sal_Bool)>.
-
-
-    [Querverweise]
-
-    <SfxShell::Invalidate(sal_uInt16)>
-    <SfxBindings::Invalidate(sal_uInt16)>
-    <SfxBindings::InvalidateAll(sal_Bool)>
-    <SfxBindings::Update(sal_uInt16)>
-*/
-
 {
     DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
@@ -702,19 +577,6 @@ void SfxBindings::SetState
 (
     const SfxItemSet&   rSet    // zu setzende Status-Werte
 )
-
-/*  [Beschreibung]
-
-    Diese Methode erlaubt das direkte Setzen neuer Status-Werte, ohne
-    den Umweg "uber <SfxBindings::Invalidate()> und das dann im Update
-    erfolgende Rufen der Status-Methoden an den <SfxShell>s.
-
-
-    [Querverweise]
-
-    <SfxBindings::SetState(const SfxPoolItem&)>
-*/
-
 {
     // wenn gelockt, dann nur invalidieren
     if ( nRegLevel )
@@ -759,23 +621,6 @@ void SfxBindings::SetState
 (
     const SfxPoolItem&  rItem   // zu setzender Status-Wert
 )
-
-/*  [Beschreibung]
-
-    Diese Methode erlaubt das direkte Setzen eines neuen Status-Wertes,
-    ohne den Umweg "uber <SfxBindings::Invalidate()> und das dann im Update
-    erfolgende Rufen der Status-Methoden an den <SfxShell>s.
-
-    Mit dieser Methode k"onnen nur <SfxPoolItem>s mit Slot, nicht
-    aber mit Which-Id gesetzt werden, da kein <SfxItemPool> bekannt ist,
-    "uber den gemappt werden k"onnte.
-
-
-    [Querverweise]
-
-    <SfxBindings::SetState(const SfxItemSet&)>
-*/
-
 {
     if ( nRegLevel )
     {
@@ -824,25 +669,6 @@ SfxStateCache* SfxBindings::GetStateCache
                                 wurde, bzw. an der es einfef"ugt werden
                                 w"urde. */
 )
-
-/*  [Beschreibung]
-
-    Diese Methode sucht die zu einer Slot-Id geh"orige <SfxStatusCache>
-    Instanz. Falls die Slot-Id in keinem Controller gebunden ist, wird
-    ein 0-Pointer zur"uckgegeben.
-
-    Falls pPos != 0, wird erst ab der Position mit der Suche angefangen.
-    Dieses ist eine Optimierung, f"ur den Fall, da"s die kleineren
-    Ids bereits abgearbeitet wurden.
-
-    In *pPos wird der ::com::sun::star::sdbcx::Index innerhalb der SfxBindings zur"uckgegeben,
-    unter dem dieser Cache z.Zt. abgelegt ist. Dieser ::com::sun::star::sdbcx::Index ist bis zum
-    n"achsten Aufruf von <SfxBindings::EnterRegistrations()> g"ultig.
-    W"ahrend der Umkonfiguration (<SfxBindings::IsInRegistrations()> == sal_True)
-    kann ist der ::com::sun::star::sdbcx::Index und der R"uckgabewert nur sehr kurzfristig
-    g"ultig.
-*/
-
 {
     DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
@@ -870,27 +696,6 @@ void SfxBindings::InvalidateAll
                                 sal_False
                                 Slot-Server bleiben g"ultig */
 )
-
-/*  [Beschreibung]
-
-    Invalidiert alle <SfxControllerItem> Instanzen, die an dieser
-    SfxBindings Instanz angemeldet sind, und bei bWithMsg == sal_True
-    ebenfalls die <Slot-Server>-Caches.
-
-    Es wird daraufhin ein Timer gestartet, bei dessen Ablauf das Updaten
-    beginnt. Somit k"onnen mehrere Invalidierungen vorgenommen werden,
-    bevor "uberhaupt etwas passiert.
-
-
-    [Querverweise]
-
-    <SfxShell::Invalidate(sal_uInt16)>
-    <SfxBindings::Invalidate(sal_uInt16)>
-    <SfxBindings::Invalidate(sal_uInt16*)>
-    <SfxBindings::Update()>
-    <SfxBindings::Update(sal_uInt16)>
-*/
-
 {
     DBG_PROFSTART(SfxBindingsInvalidateAll);
     DBG_ASSERT( !pImp->bInUpdate, "SfxBindings::Invalidate while in update" );
@@ -942,26 +747,6 @@ void SfxBindings::Invalidate
     const sal_uInt16* pIds      /*  numerisch sortiertes 0-terminiertes Array
                                 von Slot-Ids (einzel, nicht als Paare!) */
 )
-
-/*  [Beschreibung]
-
-    Invalidiert die <SfxControllerItem> Instanzen der Slot-Ids in 'pIds',
-    die an dieser SfxBindings Instanz angemeldet sind.
-
-    Es wird daraufhin ein Timer gestartet, bei dessen Ablauf das Updaten
-    beginnt. Somit k"onnen mehrere Invalidierungen vorgenommen werden,
-    bevor "uberhaupt etwas passiert.
-
-
-    [Querverweise]
-
-    <SfxShell::Invalidate(sal_uInt16)>
-    <SfxBindings::Invalidate(sal_uInt16)>
-    <SfxBindings::InvalidateAll(sal_uInt16)>
-    <SfxBindings::Update()>
-    <SfxBindings::Update(sal_uInt16)>
-*/
-
 {
     DBG_PROFSTART(SfxBindingsInvalidateAll);
 //  DBG_ASSERT( !pImp->bInUpdate, "SfxBindings::Invalidate while in update" );
@@ -1032,26 +817,6 @@ void SfxBindings::InvalidateShell
                                             Slot-Ids werden invalidiert */
                                             //! MI: z. Zt. immer bDeep
 )
-
-/*  [Beschreibung]
-
-    Invalidiert alle <SfxControllerItem> Instanzen, die zur Zeit von
-    der angegebenen SfxShell Instanz bedient werden  und an dieser
-    SfxBindings Instanz angemeldet sind
-
-    Es wird daraufhin ein Timer gestartet, bei dessen Ablauf das Updaten
-    beginnt. Somit k"onnen mehrere Invalidierungen vorgenommen werden,
-    bevor "uberhaupt etwas passiert.
-
-
-    [Querverweise]
-
-    <SfxShell::Invalidate(sal_uInt16)>
-    <SfxBindings::Invalidate(sal_uInt16)>
-    <SfxBindings::Update()>
-    <SfxBindings::Update(sal_uInt16)>
-*/
-
 {
     DBG_ASSERT( !pImp->bInUpdate, "SfxBindings::Invalidate while in update" );
 
@@ -1108,24 +873,6 @@ void SfxBindings::Invalidate
 (
     sal_uInt16 nId              // zu invalidierende Slot-Id
 )
-
-/*  [Beschreibung]
-
-    Invalidiert alle <SfxControllerItem> Instanzen, die auf die Slot-Id
-    nId gebunden sind und an dieser SfxBindings Instanz angemeldet sind.
-
-    Es wird daraufhin ein Timer gestartet, bei dessen Ablauf das Updaten
-    beginnt. Somit k"onnen mehrere Invalidierungen vorgenommen werden,
-    bevor "uberhaupt etwas passiert.
-
-
-    [Querverweise]
-    <SfxBindings::Invalidate(sal_uInt16*)>
-    <SfxBindings::InvalidateAll(sal_Bool)>
-    <SfxBindings::Update()>
-    <SfxBindings::Update(sal_uInt16)>
-*/
-
 {
     DBG_MEMTEST();
 //  DBG_ASSERT( !pImp->bInUpdate, "SfxBindings::Invalidate while in update" );
@@ -1166,24 +913,6 @@ void SfxBindings::Invalidate
     sal_Bool    bWithItem,          // StateCache clearen ?
     sal_Bool    bWithMsg            // SlotServer neu holen ?
 )
-
-/*  [Beschreibung]
-
-    Invalidiert alle <SfxControllerItem> Instanzen, die auf die Slot-Id
-    nId gebunden sind und an dieser SfxBindings Instanz angemeldet sind,
-    und bei bWithMsg == sal_True ebenfalls den <Slot-Server>-Cache.
-
-    Es wird daraufhin ein Timer gestartet, bei dessen Ablauf das Updaten
-    beginnt. Somit k"onnen mehrere Invalidierungen vorgenommen werden,
-    bevor "uberhaupt etwas passiert.
-
-    [Querverweise]
-    <SfxBindings::Invalidate(sal_uInt16*)>
-    <SfxBindings::InvalidateAll(sal_Bool)>
-    <SfxBindings::Update()>
-    <SfxBindings::Update(sal_uInt16)>
-*/
-
 {
     DBG_MEMTEST();
     DBG_ASSERT( !pImp->bInUpdate, "SfxBindings::Invalidate while in update" );
@@ -1214,52 +943,9 @@ void SfxBindings::Invalidate
     }
 }
 
-void SfxBindings::Invalidate
-(
-    sal_uInt16,             // zu invalidierende Slot-Id
-    sal_Bool                // SlotServer neu holen ?
-)
-
-/*  [Beschreibung]
-
-    Invalidiert alle <SfxControllerItem> Instanzen, die auf die Slot-Id
-    nId gebunden sind und an dieser SfxBindings Instanz angemeldet sind,
-    und bei bWithMsg == sal_True ebenfalls den <Slot-Server>-Cache.
-
-    Es wird daraufhin ein Timer gestartet, bei dessen Ablauf das Updaten
-    beginnt. Somit k"onnen mehrere Invalidierungen vorgenommen werden,
-    bevor "uberhaupt etwas passiert.
-
-    [Querverweise]
-    <SfxBindings::Invalidate(sal_uInt16*)>
-    <SfxBindings::InvalidateAll(sal_Bool)>
-    <SfxBindings::Update()>
-    <SfxBindings::Update(sal_uInt16)>
-*/
-
-{
-    DBG_ERROR( "Methode veraltet!" );
-}
-
 //--------------------------------------------------------------------
 
 sal_Bool SfxBindings::IsBound( sal_uInt16 nSlotId, sal_uInt16 nStartSearchAt )
-
-/*  [Beschreibung]
-
-    Stellt fest, ob die angegebene Slot-Id in einem <SfxControllerItem>
-    gebunden ist, der an dieser SfxBindings Instanz angemeldet ist.
-
-
-    [R"uckgabewert]
-
-    sal_Bool                sal_True
-                        Die angegeben Slot-Id ist gebunden.
-
-                        sal_False
-                        Die angegeben Slot-Id ist nicht gebunden.
-*/
-
 {
     DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
@@ -1269,14 +955,6 @@ sal_Bool SfxBindings::IsBound( sal_uInt16 nSlotId, sal_uInt16 nStartSearchAt )
 //--------------------------------------------------------------------
 
 sal_uInt16 SfxBindings::GetSlotPos( sal_uInt16 nId, sal_uInt16 nStartSearchAt )
-
-/*  [Beschreibung]
-
-    Ermittelt den ::com::sun::star::sdbcx::Index der angegebenen Slot-Id in den SfxBindings.
-    Falls die Slot-Id nicht gebunden ist, wird der ::com::sun::star::sdbcx::Index zur"uckgegeben,
-    an dem sie eingef"ugt w"urde.
-*/
-
 {
     DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
@@ -1471,30 +1149,6 @@ const SfxPoolItem* SfxBindings::ExecuteSynchron( sal_uInt16 nId, const SfxPoolIt
 
 sal_Bool SfxBindings::Execute( sal_uInt16 nId, const SfxPoolItem** ppItems, sal_uInt16 nModi, SfxCallMode nCallMode,
                         const SfxPoolItem **ppInternalArgs )
-
-/*  [Beschreibung]
-
-    F"uhrt den Slot mit der Slot-Id nId "uber den <Slot-Server> Cache
-    aus. Dies ist nur bei in dieser SfxBindings INstanz gebundenen
-    Slot-Ids m"oglich.
-
-
-    [R"uckgabewert]
-
-    sal_Bool                sal_True
-                        Das Execute wurde ausgef"uhrt.
-
-                        sal_False
-                        Das Execute konnte nicht ausgef"uhrt werden,
-                        weil der Slot entweder nicht zur Verf"ugung steht
-                        (in keiner aktiven <SfxShell> vorhanden oder
-                        disabled) ist oder der Anwender die Ausf"uhrung
-                        abgebrochen hat (Cancel in einem Dialog).
-
-
-    [Querverweise]
-    <SfxDispatcher>
-*/
 {
     DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
@@ -1716,13 +1370,6 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
 //--------------------------------------------------------------------
 
 void SfxBindings::UpdateSlotServer_Impl()
-
-/*  [Beschreibung]
-
-    Interne Methode zum Updaten der Pointer auf die SlotServer
-    nach <SfxBindings::InvalidateAll(sal_Bool)>.
-*/
-
 {
     DBG_PROFSTART(SfxBindingsUpdateServers);
     DBG_MEMTEST();
@@ -1785,16 +1432,6 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     const SfxSlotServer**    pMsgServer, // out: Slot-Server zu nId
     SfxFoundCacheArr_Impl&      rFound      // out: Liste der Caches der Siblings
 )
-
-/*  [Beschreibung]
-
-    Diese interne Methode sucht zu pCache die Slot-Ids, die von derselben
-    Status-Methode bedient werden und ebenfalls gebunden und dirty sind.
-    Es wird ein SfxItemSet zusammengestellt, das die Slot-Ids (oder falls
-    vorhanden die mit dem Pool der Shell gemappten Which-Ids) enth"alt.
-    Die Caches dieser Slots werden in pFoundCaches zur"uckgeliefert.
-*/
-
 {
     DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
@@ -1942,18 +1579,6 @@ void SfxBindings::UpdateControllers_Impl
     const SfxPoolItem*          pItem,  // item to send to controller
     SfxItemState                eState  // state of item
 )
-
-/*  [Beschreibung]
-
-    Dieses ist eine Hilfsmethode f"ur NextJob_Impl mit der die SfxController,
-    welche auf nSlotId gebunden sind, upgedated werden. Dabei wird der
-    Wert aus dem SfxPoolItem unter dem Which-Wert nWhich aus dem Set rSet
-    genommen.
-
-    Falls zu rSlot Enum-Werte in der Slotmap eingetragen sind, und diese
-    gebunden sind, werden sie ebenfalls upgedated.
-*/
-
 {
     DBG_ASSERT( !pFound->pSlot || SFX_KIND_ENUM != pFound->pSlot->GetKind(),
                 "direct update of enum slot isn't allowed" );
@@ -2059,13 +1684,6 @@ void SfxBindings::UpdateControllers_Impl
 //--------------------------------------------------------------------
 
 IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
-
-/*  [Beschreibung]
-
-    Die SfxController werden "uber einen Timer updated. Dieses ist der
-    dazugeh"orige interne TimeOut-Handler.
- */
-
 {
 #ifdef DBG_UTIL
     // on Windows very often C++ Exceptions (GPF etc.) are caught by MSVCRT or another MS library
@@ -2178,17 +1796,25 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
         }
     }
 
-    // volatiles wieder von vorne starten
     pImp->nMsgPos = 0;
-    pImp->aTimer.SetTimeout(TIMEOUT_IDLE);
+
+    // check for volatile slots
+    bool bVolatileSlotsPresent = false;
     for ( sal_uInt16 n = 0; n < nCount; ++n )
     {
         SfxStateCache* pCache = (*pImp->pCaches)[n];
         const SfxSlotServer *pSlotServer = pCache->GetSlotServer(*pDispatcher, pImp->xProv);
-        if ( pSlotServer &&
-             pSlotServer->GetSlot()->IsMode(SFX_SLOT_VOLATILE) )
+        if ( pSlotServer && pSlotServer->GetSlot()->IsMode(SFX_SLOT_VOLATILE) )
+        {
             pCache->Invalidate(sal_False);
+            bVolatileSlotsPresent = true;
+        }
     }
+
+    if (bVolatileSlotsPresent)
+        pImp->aTimer.SetTimeout(TIMEOUT_IDLE);
+    else
+        pImp->aTimer.Stop();
 
     // Update-Runde ist beendet
     pImp->bInNextJob = sal_False;
@@ -2210,35 +1836,6 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
 //--------------------------------------------------------------------
 
 sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
-
-/*  [Beschreibung]
-
-    Die An- oder Abmeldung von <SfxControllerItem> Instanzen mu"s in
-    EnterRegistrations() und LeaveRegistrations() geklammert werden.
-    W"ahrend dieser Zeit erfolgen keine Udates der <SfxContollerItem>
-    Instanzen (weder der alten noch der neu angemeldeten).
-
-    [Parameter]
-
-    pFile, nLine            Dateiname und Zeilennummer der rufenden
-                            Methode (nur Debug)
-
-    [R"uckgabewert]
-
-    sal_uInt16                  Level der Registrierung. Dieser kann in
-                            <SfxBindings::LeaveRegistrations(sal_uInt16)> als
-                            Parameter angegeben werden, um die Paarigkeit
-                            der EnterRegistrations() und LeaveRegistrations()
-                            zu pr"ufen.
-
-
-    [Querverweise]
-    <SfxBindings::IsInRegistrations()>
-    <SfxBindings::Register(SfxControllerItem&)>
-    <SfxBindings::Release(SfxControllerItem&)>
-    <SfxBindings::LeaveRegistrations()>
-*/
-
 {
     (void)pFile;
     (void)nLine;
@@ -2296,36 +1893,6 @@ sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
 //--------------------------------------------------------------------
 
 void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int nLine )
-
-/*  [Beschreibung]
-
-    Die An- oder Abmeldung von <SfxControllerItem> Instanzen mu"s in
-    EnterRegistrations() und LeaveRegistrations() geklammert werden.
-    W"ahrend dieser Zeit erfolgen keine Udates der <SfxContollerItem>
-    Instanzen (weder der alten noch der neu angemeldeten).
-
-
-    [Parameter]
-
-    sal_uInt16 nLevel           == USRT_MAX
-                            keine Paarigkeits-Pr"ufung f"ur diese Klammerung
-
-
-    pFile, nLine            Dateiname und Zeilennummer der rufenden
-                            Methode (nur Debug)
-
-                            < USHRT_MAX
-                            R"uckgabewert des zugeh"origen EnterRegistrations()
-                            zum pr"ufen der Paarigkeit.
-
-
-    [Querverweise]
-    <SfxBindings::IsInRegistrations()>
-    <SfxBindings::Register(SfxControllerItem&)>
-    <SfxBindings::Release(SfxControllerItem&)>
-    <SfxBindings::EnterRegistrations()>
-*/
-
 {
     (void)nLevel; // unused variable
     (void)pFile;
@@ -2425,26 +1992,6 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int 
 //--------------------------------------------------------------------
 
 const SfxSlot* SfxBindings::GetSlot(sal_uInt16 nSlotId)
-
-/*  [Beschreibung]
-
-    Diese Methode liefert einen Pointer auf den zur Zeit gecacheten
-    SfxSlot f"ur die angegebene Slot-Id.
-
-
-    [R"uckgabewert]
-
-    const <SfxSlot>*        0
-                            Falls die Slot-Id nicht gebunden ist oder
-                            ein solcher Slot momentan in keiner aktiven
-                            <SfxShell> vorhanden ist.
-
-                            != 0
-                            Falls die Slot-Id gebunden ist und ein solcher
-                            Slot momentan in einer aktiven <SfxShell>
-                            vorhanden ist.
-*/
-
 {
     DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
@@ -2463,17 +2010,6 @@ const SfxSlot* SfxBindings::GetSlot(sal_uInt16 nSlotId)
 //--------------------------------------------------------------------
 
 void SfxBindings::SetDispatcher( SfxDispatcher *pDisp )
-
-/*  [Beschreibung]
-
-    Setzt den zur Zeit von dieser SfxBindings Instanz zu verwendenden
-    Dispatcher um.
-
-    Falls sich der Dispatcher dadurch "andert, wird intern
-    <SFxBindings::InvalidateAll(sal_Bool)> mit sal_True gerufen, also jegliche
-    gecachete Information der Bindings weggeworfen.
-*/
-
 {
     SfxDispatcher *pOldDispat = pDispatcher;
     if ( pDisp != pDispatcher )
@@ -2541,17 +2077,11 @@ void SfxBindings::SetDispatcher( SfxDispatcher *pDisp )
 //--------------------------------------------------------------------
 
 void SfxBindings::ClearCache_Impl( sal_uInt16 nSlotId )
-
-//  interne Methode zum forwarden dieses Methodenaufrufs
-
 {
     GetStateCache(nSlotId)->ClearCache();
 }
 
 //--------------------------------------------------------------------
-
-// interne Methode zum Ansto\sen des Statusupdates
-
 void SfxBindings::StartUpdate_Impl( sal_Bool bComplete )
 {
     if ( pImp->pSubBindings )
@@ -2568,18 +2098,6 @@ void SfxBindings::StartUpdate_Impl( sal_Bool bComplete )
 //-------------------------------------------------------------------------
 
 SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
-/*  [Beschreibung]
-
-    Wird gerufen, um den Status f"ur 'nSlot' zu erfragen. Wenn der return
-    value SFX_ITEM_SET ist, wird ein SfxPoolItem zur"uckgegeben, indem der
-    rpState entsprechend gesetzt wird. Es findet dabei ein Eigent"umer"ubergang
-    statt, d.h. die aufrufende Methode mu\s das Item l"oschen.
-
-    Anmerkung: diese Methode ist sehr teuer und sollte nur gerufen werden,
-    wenn kein Controller f"ur das Erfragen des Status angelegt werden kann oder
-    der Status unbedingt sofort geliefert werden mu\s.
-*/
-
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp;
     SfxStateCache *pCache = GetStateCache( nSlot );
@@ -2869,15 +2387,6 @@ BOOL SfxBindings::ExecuteCommand_Impl( const String& rCommand )
 
     return FALSE;
 }
-
-//REMOVE SfxConfigManager* SfxBindings::GetConfigManager( USHORT nType ) const
-//{
-//REMOVE        SfxConfigManager *pMgr = pDispatcher->GetFrame()->GetObjectShell()->GetConfigManager();
-//REMOVE        if ( pMgr && pMgr->HasConfigItem( nType ) )
-//REMOVE            return pMgr;
-//REMOVE        else
-//        return SFX_APP()->GetConfigManager_Impl();
-//}
 
 com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxBindings::GetRecorder() const
 {

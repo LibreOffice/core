@@ -316,7 +316,7 @@ SHL4OBJS=       \
                 $(SLO)$/statusindicatorfactory.obj  \
                 $(SLO)$/statusindicatorinterfacewrapper.obj \
                 $(SLO)$/statusindicator.obj         \
-                $(SLO)$/stillinteraction.obj        \
+                $(SLO)$/quietinteraction.obj        \
                 $(SLO)$/storageholder.obj           \
                 $(SLO)$/substitutepathvars.obj      \
                 $(SLO)$/tagwindowasmodified.obj     \

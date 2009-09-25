@@ -55,7 +55,7 @@
 #ifndef __FRAMEWORK_CONSTANT_CONTAINERQUERY_HXX_
 #include <constant/containerquery.hxx>
 #endif
-#include <interaction/stillinteraction.hxx>
+#include <interaction/quietinteraction.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/resetableguard.hxx>
@@ -172,6 +172,7 @@ LoadEnv::LoadEnv(const css::uno::Reference< css::lang::XMultiServiceFactory >& x
     : ThreadHelpBase(     )
     , m_xSMGR       (xSMGR)
     , m_pCheck      (this )
+    , m_pQuietInteraction( 0 )
 {
 }
 
@@ -348,8 +349,9 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
     {
         nMacroMode  = css::document::MacroExecMode::NEVER_EXECUTE;
         nUpdateMode = css::document::UpdateDocMode::NO_UPDATE;
-        StillInteraction* pInteraction = new StillInteraction();
-        xInteractionHandler = css::uno::Reference< css::task::XInteractionHandler >(static_cast< css::task::XInteractionHandler* >(pInteraction), css::uno::UNO_QUERY);
+        m_pQuietInteraction = new QuietInteraction();
+        m_pQuietInteraction->acquire();
+        xInteractionHandler = css::uno::Reference< css::task::XInteractionHandler >(static_cast< css::task::XInteractionHandler* >(m_pQuietInteraction), css::uno::UNO_QUERY);
     }
 
     if (
@@ -1660,8 +1662,7 @@ void LoadEnv::impl_reactForLoadingState()
                 m_xTargetFrame->setName(sFrameName);
         }
     }
-    else
-    if (m_bReactivateControllerOnError)
+    else if (m_bReactivateControllerOnError)
     {
         // Try to reactivate the old document (if any exists!)
         css::uno::Reference< css::frame::XController > xOldDoc = m_xTargetFrame->getController();
@@ -1677,8 +1678,7 @@ void LoadEnv::impl_reactForLoadingState()
             m_bReactivateControllerOnError = sal_False;
         }
     }
-    else
-    if (m_bCloseFrameOnError)
+    else if (m_bCloseFrameOnError)
     {
         // close empty frames
         css::uno::Reference< css::util::XCloseable > xCloseable (m_xTargetFrame, css::uno::UNO_QUERY);
@@ -1712,7 +1712,25 @@ void LoadEnv::impl_reactForLoadingState()
     // Otherwhise it hold a might existing stream open!
     m_lMediaDescriptor.clear();
 
+    css::uno::Any aRequest;
+    bool bThrow = false;
+    if ( !m_bLoaded && m_pQuietInteraction && m_pQuietInteraction->wasUsed() )
+    {
+        aRequest = m_pQuietInteraction->getRequest();
+        m_pQuietInteraction->release();
+        m_pQuietInteraction = 0;
+        bThrow = true;
+    }
+
     aReadLock.unlock();
+
+    if (bThrow)
+    {
+        css::uno::Exception aEx;
+        if ( aRequest >>= aEx )
+            throw LoadEnvException( LoadEnvException::ID_GENERAL_ERROR, aEx );
+    }
+
     // <- SAFE ----------------------------------
 }
 
