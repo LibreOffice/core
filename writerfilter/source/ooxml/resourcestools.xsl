@@ -2267,10 +2267,12 @@ uno::Reference&lt;XFastContextHandler&gt; </xsl:text>
 
 <xsl:template name="factoryattributetoresourcemapinner">
     <xsl:for-each select=".//rng:attribute">
+      <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
+        
         <xsl:variable name="resource">
-            <xsl:for-each select="rng:ref">
-                <xsl:value-of select="key('context-resource', @name)/@resource"/>
-            </xsl:for-each>
+          <xsl:for-each select="key('context-resource', @name)[generate-id(ancestor::namespace) = $mynsid]">
+            <xsl:value-of select="@resource"/>
+          </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="refdefine1">
           <xsl:for-each select="rng:ref">
