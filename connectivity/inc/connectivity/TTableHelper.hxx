@@ -39,17 +39,50 @@
 
 namespace connectivity
 {
+    typedef sal_Int32   OrdinalPosition;
+    struct ColumnDesc
+    {
+        ::rtl::OUString sName;
+        ::rtl::OUString aField6;
+        ::rtl::OUString sField13;
+        sal_Int32       nField5
+                    ,   nField7
+                    ,   nField9
+                    ,   nField11;
+
+        OrdinalPosition nOrdinalPosition;
+
+        ColumnDesc() {}
+        ColumnDesc( const ::rtl::OUString& _rName
+            , sal_Int32     _nField5
+            , const ::rtl::OUString& _aField6
+            , sal_Int32     _nField7
+            , sal_Int32     _nField9
+            , sal_Int32     _nField11
+            , const ::rtl::OUString& _sField13
+            ,OrdinalPosition _nPosition )
+            :sName( _rName )
+            ,aField6(_aField6)
+            ,sField13(_sField13)
+            ,nField5(_nField5)
+            ,nField7(_nField7)
+            ,nField9(_nField9)
+            ,nField11(_nField11)
+            ,nOrdinalPosition( _nPosition )
+        {
+        }
+    };
     typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
 
     OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
 
     DECLARE_STL_USTRINGACCESS_MAP( sdbcx::TKeyProperties , TKeyMap);
 
+    struct OTableHelperImpl;
+
     class OOO_DLLPUBLIC_DBTOOLS OTableHelper : public OTable_TYPEDEF
     {
-        TKeyMap  m_aKeys;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
+        ::std::auto_ptr<OTableHelperImpl> m_pImpl;
 
         void refreshPrimaryKeys(TStringVector& _rKeys);
         void refreshForgeinKeys(TStringVector& _rKeys);
@@ -83,10 +116,14 @@ namespace connectivity
         */
         virtual ::rtl::OUString getRenameStart() const;
 
+        virtual ~OTableHelper();
+
     public:
         virtual void refreshColumns();
         virtual void refreshKeys();
         virtual void refreshIndexes();
+
+        const ColumnDesc* getColumnDescription(const ::rtl::OUString& _sName) const;
 
     public:
         OTableHelper(   sdbcx::OCollection* _pTables,
@@ -103,7 +140,7 @@ namespace connectivity
             );
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() const;
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() const { return m_xConnection; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() const;
 
         virtual void SAL_CALL acquire() throw();
         virtual void SAL_CALL release() throw();

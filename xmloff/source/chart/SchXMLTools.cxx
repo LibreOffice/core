@@ -173,6 +173,7 @@ static __FAR_DATA SvXMLEnumMapEntry aXMLChartClassMap[] =
     { XML_BAR,          XML_CHART_CLASS_BAR     },
     { XML_STOCK,        XML_CHART_CLASS_STOCK   },
     { XML_BUBBLE,       XML_CHART_CLASS_BUBBLE  },
+    { XML_SURFACE,      XML_CHART_CLASS_BAR     }, //@todo change this if a surface chart is available
     { XML_ADD_IN,       XML_CHART_CLASS_ADDIN   },
     { XML_TOKEN_INVALID, XML_CHART_CLASS_UNKNOWN }
 };
@@ -292,6 +293,14 @@ OUString GetChartTypeByClassName(
             aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Stock"));
         else
             aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("CandleStick"));
+    }
+    else if( IsXMLToken( rClassName, XML_SURFACE ))
+    {
+        //@todo change this if a surface chart is available
+        if( bUseOldNames )
+            aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Bar"));
+        else
+            aResultBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Column"));
     }
     else
         bInternalType = false;

@@ -90,8 +90,8 @@ Sequence< PropertyValue > SAL_CALL ODatabaseMetaDataBase::getConnectionInfo(  ) 
 void SAL_CALL ODatabaseMetaDataBase::disposing( const EventObject& /*Source*/ ) throw(RuntimeException)
 {
     // cut off all references to the connection
-    m_xConnection       = NULL;
-    m_xListenerHelper   = NULL;
+m_xConnection.clear();
+m_xListenerHelper.clear();
 }
 // -----------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  ) throw(SQLException, RuntimeException)

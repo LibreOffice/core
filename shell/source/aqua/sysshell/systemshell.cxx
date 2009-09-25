@@ -71,17 +71,49 @@ static rtl::OUString translateToExternalUrl(const rtl::OUString& internalUrl)
     return extUrl;
 }
 
+// #i104525# many versions of OSX have problems with some URLs:
+// when an app requests OSX to add one of these URLs to the "Recent Items" list
+// then this app gets killed (TextEdit, Preview, etc. and also OOo)
+static bool isDangerousUrl( const rtl::OUString& rUrl)
+{
+    // use a heuristic that detects all known cases since there is no official comment
+    // on the exact impact and root cause of the OSX bug
+    const int nLen = rUrl.getLength();
+    const sal_Unicode* p = rUrl.getStr();
+    for( int i = 0; i < nLen-3; ++i, ++p) {
+        if( p[0] != '%')
+            continue;
+        // escaped percent?
+        if( (p[1] == '2') && (p[2] == '5'))
+            return true;
+        // escapes are considered to be UTF-8 encoded
+        // => check for invalid UTF-8 leading byte
+        if( (p[1] != 'f') && (p[1] != 'F'))
+            continue;
+        int cLowNibble = p[2];
+        if( (cLowNibble >= '0') && (cLowNibble <= '9'))
+            return false;
+        if( cLowNibble >= 'a')
+            cLowNibble -= 'a' - 'A';
+        if( (cLowNibble < 'A') || (cLowNibble >= 'C'))
+            return true;
+    }
+
+    return false;
+}
+
 namespace SystemShell {
 
     //##############################
-    void AddToRecentDocumentList(const rtl::OUString& aFileUrl, const rtl::OUString& aMimeType)
+    void AddToRecentDocumentList(const rtl::OUString& aFileUrl, const rtl::OUString& /*aMimeType*/)
     {
         // Convert file URL for external use (see above)
         rtl::OUString externalUrl = translateToExternalUrl(aFileUrl);
         if( 0 == externalUrl.getLength() )
             externalUrl = aFileUrl;
 
-        if( externalUrl.getLength() )
+        if( externalUrl.getLength()
+        &&  !isDangerousUrl( externalUrl))
         {
             NSString* pString = [[NSString alloc] initWithCharacters: externalUrl.getStr() length: externalUrl.getLength()];
             NSURL* pURL = [NSURL URLWithString: pString];

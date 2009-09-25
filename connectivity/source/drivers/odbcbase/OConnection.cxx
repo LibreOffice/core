@@ -69,6 +69,7 @@ OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
                          ,m_bParameterSubstitution(sal_False)
                          ,m_bIgnoreDriverPrivileges(sal_False)
                          ,m_bPreventGetVersionColumns(sal_False)
+                         ,m_bReadOnly(sal_True)
 {
     m_pDriver->acquire();
 }
@@ -104,7 +105,6 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     if (m_aConnectionHandle == SQL_NULL_HANDLE)
         return -1;
 
-    sal_Bool bReadOnly; //weil Methode statisch hier noch einmal ein lokales bReadOnly
     SQLRETURN nSQLRETURN = 0;
     SDB_ODBC_CHAR szConnStrOut[4096];
     SDB_ODBC_CHAR szConnStrIn[2048];
@@ -153,11 +153,11 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     {
         ::rtl::OUString aVal;
         OTools::GetInfo(this,m_aConnectionHandle,SQL_DATA_SOURCE_READ_ONLY,aVal,*this,getTextEncoding());
-        bReadOnly = !aVal.compareToAscii("Y");
+        m_bReadOnly = !aVal.compareToAscii("Y");
     }
     catch(Exception&)
     {
-        bReadOnly = sal_True;
+        m_bReadOnly = sal_True;
     }
     try
     {
@@ -172,7 +172,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
 
     // autocoomit ist immer default
 
-    if (!bReadOnly)
+    if (!m_bReadOnly)
         N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_AUTOCOMMIT,(SQLPOINTER)SQL_AUTOCOMMIT_ON,SQL_IS_INTEGER);
 
     return nSQLRETURN;
@@ -299,10 +299,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    if(m_aTypeInfo.empty())
-        buildTypeInfo();
-
-    Reference< XPreparedStatement > xReturn = new OPreparedStatement(this,m_aTypeInfo,sql);
+    Reference< XPreparedStatement > xReturn = new OPreparedStatement(this,sql);
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
 }
@@ -399,15 +396,10 @@ void SAL_CALL OConnection::setReadOnly( sal_Bool readOnly ) throw(SQLException, 
         m_aConnectionHandle,SQL_HANDLE_DBC,*this);
 }
 // --------------------------------------------------------------------------------
-sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OConnection::isReadOnly() throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
-
-    ::rtl::OUString aValue;
-    OTools::GetInfo(this,m_aConnectionHandle,SQL_DATA_SOURCE_READ_ONLY,aValue,*this,getTextEncoding());
-    return !aValue.compareToAscii("Y");
+    // const member which will initialized only once
+    return m_bReadOnly;
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQLException, RuntimeException)

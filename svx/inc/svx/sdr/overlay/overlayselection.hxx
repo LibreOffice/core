@@ -78,7 +78,7 @@ namespace sdr
             virtual ~OverlaySelection();
 
             // data read access
-            const OverlayType getOverlayType() const { return meOverlayType; }
+            OverlayType getOverlayType() const { return meOverlayType; }
             const std::vector< basegfx::B2DRange >& getRanges() const { return maRanges; }
             bool getBorder() const { return mbBorder; }
 

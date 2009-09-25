@@ -38,7 +38,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
+.IF "$(L10N_framework)"==""
 #-----------------------------------------------------------
 
 SLOFILES = \
@@ -51,4 +51,6 @@ SLOFILES = \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	$(PRJ)$/util$/target.pmk
+.ENDIF # L10N_framework
+
 .INCLUDE :	target.mk

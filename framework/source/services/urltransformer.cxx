@@ -77,21 +77,11 @@ using namespace ::com::sun::star::util          ;
 //*****************************************************************************************************************
 //  constructor
 //*****************************************************************************************************************
-URLTransformer::URLTransformer( const Reference< XMultiServiceFactory >& xFactory )
-        //  Init baseclasses first
-        //  Attention:
-        //      Don't change order of initialization!
-        //      ThreadHelpBase is a struct with a mutex as member. We can't use a mutex as member, while
-        //      we must garant right initialization and a valid value of this! First initialize
-        //      baseclasses and then members. And we need the mutex for other baseclasses !!!
-        :   ThreadHelpBase  ( &Application::GetSolarMutex() )
-        ,   OWeakObject     (                               )
-        // Init member
-        ,   m_xFactory      ( xFactory                      )
+URLTransformer::URLTransformer( const Reference< XMultiServiceFactory >& /*xFactory*/ )
 {
     // Safe impossible cases.
     // Method not defined for all incoming parameter.
-    LOG_ASSERT( xFactory.is(), "URLTransformer::URLTransformer()\nInvalid parameter detected!\n" )
+    //LOG_ASSERT( xFactory.is(), "URLTransformer::URLTransformer()\nInvalid parameter detected!\n" )
 }
 
 //*****************************************************************************************************************
@@ -105,19 +95,6 @@ URLTransformer::~URLTransformer()
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 
-DEFINE_XINTERFACE_3                 (   URLTransformer                      ,
-                                        OWeakObject                         ,
-                                        DIRECT_INTERFACE(XTypeProvider      ),
-                                        DIRECT_INTERFACE(XServiceInfo       ),
-                                        DIRECT_INTERFACE(XURLTransformer    )
-                                    )
-
-DEFINE_XTYPEPROVIDER_3              (   URLTransformer  ,
-                                        XTypeProvider   ,
-                                        XServiceInfo    ,
-                                        XURLTransformer
-                                    )
-
 DEFINE_XSERVICEINFO_MULTISERVICE    (   URLTransformer                      ,
                                         OWeakObject                         ,
                                         SERVICENAME_URLTRANSFORMER          ,
@@ -129,21 +106,68 @@ DEFINE_INIT_SERVICE                 (   URLTransformer,
                                         }
                                     )
 
+namespace
+{
+    void lcl_ParserHelper(INetURLObject& _rParser,URL& _rURL,bool _bUseIntern)
+    {
+        // Get all information about this URL.
+        _rURL.Protocol  = INetURLObject::GetScheme( _rParser.GetProtocol() );
+        _rURL.User      = _rParser.GetUser  ( INetURLObject::DECODE_WITH_CHARSET );
+        _rURL.Password  = _rParser.GetPass  ( INetURLObject::DECODE_WITH_CHARSET );
+        _rURL.Server        = _rParser.GetHost  ( INetURLObject::DECODE_WITH_CHARSET );
+        _rURL.Port      = (sal_Int16)_rParser.GetPort();
+
+        sal_Int32 nCount = _rParser.getSegmentCount( false );
+        if ( nCount > 0 )
+        {
+            // Don't add last segment as it is the name!
+            --nCount;
+
+            rtl::OUStringBuffer aPath;
+            for ( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+            {
+                aPath.append( sal_Unicode( '/' ));
+                aPath.append( _rParser.getName( nIndex, false, INetURLObject::NO_DECODE ));
+            }
+
+            if ( nCount > 0 )
+                aPath.append( sal_Unicode( '/' )); // final slash!
+
+            _rURL.Path = aPath.makeStringAndClear();
+            _rURL.Name = _rParser.getName( INetURLObject::LAST_SEGMENT, false, INetURLObject::NO_DECODE );
+        }
+        else
+        {
+            _rURL.Path       = _rParser.GetURLPath( INetURLObject::NO_DECODE           );
+            _rURL.Name      = _rParser.GetName  (                                    );
+        }
+
+        _rURL.Arguments  = _rParser.GetParam  ( INetURLObject::NO_DECODE           );
+        _rURL.Mark      = _rParser.GetMark  ( INetURLObject::DECODE_WITH_CHARSET );
+
+        // INetURLObject supports only an intelligent method of parsing URL's. So write
+        // back Complete to have a valid encoded URL in all cases!
+        _rURL.Complete  = _rParser.GetMainURL( INetURLObject::NO_DECODE           );
+        if ( _bUseIntern )
+            _rURL.Complete   = _rURL.Complete.intern();
+
+        _rParser.SetMark    ( ::rtl::OUString() );
+        _rParser.SetParam( ::rtl::OUString() );
+
+        _rURL.Main       = _rParser.GetMainURL( INetURLObject::NO_DECODE           );
+    }
+}
 //*****************************************************************************************************************
 //  XURLTransformer
 //*****************************************************************************************************************
 sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeException )
 {
-    // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
-
     // Safe impossible cases.
     if  (( &aURL                        ==  NULL    )   ||
          ( aURL.Complete.getLength()    <   1       )       )
     {
         return sal_False;
     }
-
     // Try to extract the protocol
     sal_Int32 nURLIndex = aURL.Complete.indexOf( sal_Unicode( ':' ));
     ::rtl::OUString aProtocol;
@@ -165,50 +189,7 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeExcepti
             }
             else if ( !aParser.HasError() )
             {
-                aURL.Protocol   = INetURLObject::GetScheme( aParser.GetProtocol() );
-                aURL.User       = aParser.GetUser   ( INetURLObject::DECODE_WITH_CHARSET );
-                aURL.Password   = aParser.GetPass   ( INetURLObject::DECODE_WITH_CHARSET );
-                aURL.Server     = aParser.GetHost   ( INetURLObject::DECODE_WITH_CHARSET );
-                aURL.Port       = (sal_Int16)aParser.GetPort();
-
-                sal_Int32 nCount = aParser.getSegmentCount( false );
-                if ( nCount > 0 )
-                {
-                    // Don't add last segment as it is the name!
-                    --nCount;
-
-                    rtl::OUStringBuffer aPath;
-                    for ( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
-                    {
-                        aPath.append( sal_Unicode( '/' ));
-                        aPath.append( aParser.getName( nIndex, false, INetURLObject::NO_DECODE ));
-                    }
-
-                    if ( nCount > 0 )
-                        aPath.append( sal_Unicode( '/' )); // final slash!
-
-                    aURL.Path = aPath.makeStringAndClear();
-                    aURL.Name = aParser.getName( INetURLObject::LAST_SEGMENT, false, INetURLObject::NO_DECODE );
-                }
-                else
-                {
-                    aURL.Path       = aParser.GetURLPath( INetURLObject::NO_DECODE           );
-                    aURL.Name       = aParser.GetName   (                                    );
-                }
-
-                aURL.Arguments  = aParser.GetParam  ( INetURLObject::NO_DECODE           );
-                aURL.Mark       = aParser.GetMark   ( INetURLObject::DECODE_WITH_CHARSET );
-
-                // INetURLObject supports only an intelligent method of parsing URL's. So write
-                // back Complete to have a valid encoded URL in all cases!
-                aURL.Complete   = aParser.GetMainURL( INetURLObject::NO_DECODE           );
-                aURL.Complete   = aURL.Complete.intern();
-
-                aParser.SetMark ( ::rtl::OUString() );
-                aParser.SetParam( ::rtl::OUString() );
-
-                aURL.Main       = aParser.GetMainURL( INetURLObject::NO_DECODE           );
-
+                lcl_ParserHelper(aParser,aURL,false);
                 // Return "URL is parsed".
                 return sal_True;
             }
@@ -235,8 +216,6 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeExcepti
 sal_Bool SAL_CALL URLTransformer::parseSmart(           URL&        aURL            ,
                                                 const   ::rtl::OUString&    sSmartProtocol  ) throw( RuntimeException )
 {
-    // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
     // Safe impossible cases.
     if  (( &aURL                            ==  NULL    ) ||
          ( aURL.Complete.getLength()        <   1       )    )
@@ -251,48 +230,7 @@ sal_Bool SAL_CALL URLTransformer::parseSmart(           URL&        aURL        
     bool bOk = aParser.SetSmartURL( aURL.Complete );
     if ( bOk )
     {
-        // Get all information about this URL.
-        aURL.Protocol   = INetURLObject::GetScheme( aParser.GetProtocol() );
-        aURL.User       = aParser.GetUser   ( INetURLObject::DECODE_WITH_CHARSET );
-        aURL.Password   = aParser.GetPass   ( INetURLObject::DECODE_WITH_CHARSET );
-        aURL.Server     = aParser.GetHost   ( INetURLObject::DECODE_WITH_CHARSET );
-        aURL.Port       = (sal_Int16)aParser.GetPort();
-
-        sal_Int32 nCount = aParser.getSegmentCount( false );
-        if ( nCount > 0 )
-        {
-            // Don't add last segment as it is the name!
-            --nCount;
-
-            rtl::OUStringBuffer aPath;
-            for ( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
-            {
-                aPath.append( sal_Unicode( '/' ));
-                aPath.append( aParser.getName( nIndex, false, INetURLObject::NO_DECODE ));
-            }
-
-            if ( nCount > 0 )
-                aPath.append( sal_Unicode( '/' )); // final slash!
-
-            aURL.Path = aPath.makeStringAndClear();
-            aURL.Name = aParser.getName( INetURLObject::LAST_SEGMENT, false, INetURLObject::NO_DECODE );
-        }
-        else
-        {
-            aURL.Path       = aParser.GetURLPath( INetURLObject::NO_DECODE           );
-            aURL.Name       = aParser.GetName   (                                    );
-        }
-
-        aURL.Arguments  = aParser.GetParam  ( INetURLObject::NO_DECODE           );
-        aURL.Mark       = aParser.GetMark   ( INetURLObject::DECODE_WITH_CHARSET );
-
-        aURL.Complete   = aParser.GetMainURL( INetURLObject::NO_DECODE           );
-
-        aParser.SetMark ( ::rtl::OUString() );
-        aParser.SetParam( ::rtl::OUString() );
-
-        aURL.Main       = aParser.GetMainURL( INetURLObject::NO_DECODE           );
-
+        lcl_ParserHelper(aParser,aURL,true);
         // Return "URL is parsed".
         return sal_True;
     }
@@ -333,9 +271,6 @@ sal_Bool SAL_CALL URLTransformer::parseSmart(           URL&        aURL        
 //*****************************************************************************************************************
 sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException )
 {
-    // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
-
     // Safe impossible cases.
     if  ( &aURL == NULL )
         return sal_False ;
@@ -400,9 +335,6 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
 ::rtl::OUString SAL_CALL URLTransformer::getPresentation(   const   URL&        aURL            ,
                                                             sal_Bool    bWithPassword   ) throw( RuntimeException )
 {
-    // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
-
     // Safe impossible cases.
     if  (( &aURL                        ==  NULL        )   ||
          ( aURL.Complete.getLength()    <   1           )   ||

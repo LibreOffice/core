@@ -60,6 +60,7 @@ private:
 
     cssu::Reference< css::security::XCertificate >  mxCert;
     cssu::Reference< css::embed::XStorage >         mxStore;
+    ::rtl::OUString                                 maODFVersion;
     const cssu::Sequence< css::security::DocumentSignatureInformation >*    mpInfos;
 
     FixedImage          maSymbolImg;
@@ -96,6 +97,7 @@ public:
     void    SetDocumentURL( const String& rDocURL );
 
     void    SetStorage( const cssu::Reference < css::embed::XStorage >& rxStore,
+                        const ::rtl::OUString& aODFVersion,
                         const cssu::Sequence< css::security::DocumentSignatureInformation >& _rInfos );
     void    SetCertificate( const cssu::Reference< css::security::XCertificate >& _rxCert );
 };

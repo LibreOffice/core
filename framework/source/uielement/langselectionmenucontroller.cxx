@@ -44,7 +44,6 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
 //_________________________________________________________________________________________________________________
@@ -72,7 +71,7 @@
 #include <svtools/languageoptions.hxx>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <svtools/langtab.hxx>
-#include <classes/fwkresid.hxx>
+#include <classes/fwlresid.hxx>
 
 #ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
 #include <classes/resource.hrc>
@@ -107,6 +106,7 @@ DEFINE_INIT_SERVICE                     (   LanguageSelectionMenuController, {} 
 LanguageSelectionMenuController::LanguageSelectionMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
     PopupMenuControllerBase( xServiceManager ),
     m_bShowMenu( sal_True )
+    ,m_aLangGuessHelper(xServiceManager)
 {
 }
 
@@ -167,129 +167,65 @@ void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureState
 }
 
 // XMenuListener
-void SAL_CALL LanguageSelectionMenuController::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
+void LanguageSelectionMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
 {
-}
+    Reference< XDispatch > xDispatch = _xDispatch;
 
-void SAL_CALL LanguageSelectionMenuController::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
-{
-    Reference< css::awt::XPopupMenu >   xPopupMenu;
-    Reference< XDispatch >              xDispatch;
-    Reference< XMultiServiceFactory >   xServiceManager;
-
-    ResetableGuard aLock( m_aLock );
-    xPopupMenu      = m_xPopupMenu;
-    //xDispatch       = m_xDispatch;
-    xServiceManager = m_xServiceManager;
-    aLock.unlock();
-
-    if ( xPopupMenu.is())//&& xDispatch.is()
-    {
-        VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( xPopupMenu );
-        if ( pPopupMenu )
-        {
-            css::util::URL               aTargetURL;
-            Sequence< PropertyValue >    aArgs;
-            Reference< XURLTransformer > xURLTransformer( xServiceManager->createInstance(
-                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                        UNO_QUERY );
-
-            {
-                vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
-                // Command URL used to dispatch the selected font family name
-                PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
-                aTargetURL.Complete = pVCLPopupMenu->GetItemCommand( rEvent.MenuId );
-            }
-
-            if ( aTargetURL.Complete == m_aMenuCommandURL_Font )
-            {   //open format/character dialog for current selection
-                xDispatch = m_xMenuDispatch_Font;
-            }
-            else if ( aTargetURL.Complete == m_aMenuCommandURL_Lang )
-            {   //open language tab-page in tools/options dialog
-                xDispatch = m_xMenuDispatch_Lang;
-            }
-            else if ( aTargetURL.Complete == m_aMenuCommandURL_CharDlgForParagraph )
-            {   //open format/character dialog for current selection
-                xDispatch = m_xMenuDispatch_CharDlgForParagraph;
-            }
-
-            xURLTransformer->parseStrict( aTargetURL );
-            if ( !xDispatch.is() )
-            {
-                Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-                if ( xDispatchProvider.is() )
-                    xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-            }
-
-            if ( xDispatch.is() )
-            {
-                if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-                    UiEventLogHelper(::rtl::OUString::createFromAscii("LanguageSelectionMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
-                xDispatch->dispatch( aTargetURL, aArgs );
-            }
-        }
+    if ( aTargetURL.Complete == m_aMenuCommandURL_Font )
+    {   //open format/character dialog for current selection
+        xDispatch = m_xMenuDispatch_Font;
     }
-}
+    else if ( aTargetURL.Complete == m_aMenuCommandURL_Lang )
+    {   //open language tab-page in tools/options dialog
+        xDispatch = m_xMenuDispatch_Lang;
+    }
+    else if ( aTargetURL.Complete == m_aMenuCommandURL_CharDlgForParagraph )
+    {   //open format/character dialog for current selection
+        xDispatch = m_xMenuDispatch_CharDlgForParagraph;
+    }
 
-void SAL_CALL LanguageSelectionMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
-{
-}
+    if ( !xDispatch.is() )
+    {
+        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+        if ( xDispatchProvider.is() )
+            xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+    }
 
-void SAL_CALL LanguageSelectionMenuController::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
-{
+    if ( xDispatch.is() )
+    {
+        Sequence<PropertyValue>      aArgs;
+        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+            UiEventLogHelper(::rtl::OUString::createFromAscii("LanguageSelectionMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
+        xDispatch->dispatch( aTargetURL, aArgs );
+    }
 }
 
 // XPopupMenuController
-void SAL_CALL LanguageSelectionMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw (RuntimeException)
+void LanguageSelectionMenuController::impl_setPopupMenu()
 {
-    ResetableGuard aLock( m_aLock );
+    Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
 
-    if ( m_bDisposed )
-        throw DisposedException();
+    com::sun::star::util::URL aTargetURL;
 
-    if ( m_xFrame.is() && !m_xPopupMenu.is() )
-    {
-        // Create popup menu on demand
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    // Register for language updates
+    aTargetURL.Complete = m_aLangStatusCommandURL;
+    m_xURLTransformer->parseStrict( aTargetURL );
+    m_xLanguageDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
 
-        m_xPopupMenu = xPopupMenu;
-        m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >( (OWeakObject*)this, UNO_QUERY ));
+    // Register for setting languages and opening language dialog
+    aTargetURL.Complete = m_aMenuCommandURL_Lang;
+    m_xURLTransformer->parseStrict( aTargetURL );
+    m_xMenuDispatch_Lang = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
 
+    // Register for opening character dialog
+    aTargetURL.Complete = m_aMenuCommandURL_Font;
+    m_xURLTransformer->parseStrict( aTargetURL );
+    m_xMenuDispatch_Font = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
 
-        Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                    UNO_QUERY );
-        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-
-        com::sun::star::util::URL aTargetURL;
-        aTargetURL.Complete = m_aCommandURL;
-        xURLTransformer->parseStrict( aTargetURL );
-        m_xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-
-        // Register for language updates
-        aTargetURL.Complete = m_aLangStatusCommandURL;
-        xURLTransformer->parseStrict( aTargetURL );
-        m_xLanguageDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-
-        // Register for setting languages and opening language dialog
-        aTargetURL.Complete = m_aMenuCommandURL_Lang;
-        xURLTransformer->parseStrict( aTargetURL );
-        m_xMenuDispatch_Lang = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-
-        // Register for opening character dialog
-        aTargetURL.Complete = m_aMenuCommandURL_Font;
-        xURLTransformer->parseStrict( aTargetURL );
-        m_xMenuDispatch_Font = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-
-        // Register for opening character dialog with preselected paragraph
-        aTargetURL.Complete = m_aMenuCommandURL_CharDlgForParagraph;
-        xURLTransformer->parseStrict( aTargetURL );
-        m_xMenuDispatch_CharDlgForParagraph = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-
-        updatePopupMenu();
-    }
+    // Register for opening character dialog with preselected paragraph
+    aTargetURL.Complete = m_aMenuCommandURL_CharDlgForParagraph;
+    m_xURLTransformer->parseStrict( aTargetURL );
+    m_xMenuDispatch_CharDlgForParagraph = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
 }
 
 void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu , const Mode eMode )
@@ -306,9 +242,9 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     if ( pVCLPopupMenu )
         pPopupMenu = (PopupMenu *)pVCLPopupMenu->GetMenu();
 
-    String aCmd=String::CreateFromAscii("");
-    String aCmd_Dialog=String::CreateFromAscii("");
-    String aCmd_Language=String::CreateFromAscii("");
+    String aCmd;
+    String aCmd_Dialog;
+    String aCmd_Language;
     if( eMode == MODE_SetLanguageSelectionMenu )
     {
         aCmd_Dialog+=String::CreateFromAscii(".uno:FontDialog?Language:string=*");
@@ -332,7 +268,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     USHORT nItemId = 1;
 
     //1--add current language
-    if(m_aCurLang!=::rtl::OUString::createFromAscii(""))
+    if(m_aCurLang.getLength())
     {
         LangItems[m_aCurLang]=m_aCurLang;
     }
@@ -404,17 +340,18 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
                     break;
                 const Locale& rLocale=rLocales[i];
                 if(IsScriptTypeMatchingToLanguage(m_nScriptType, aLanguageTable.GetType(rLocale.Language)))
-                    LangItems[::rtl::OUString(rLocale.Language)]=::rtl::OUString(rLocale.Language);
+                    LangItems[rLocale.Language] = rLocale.Language;
             }
         }
     }
     std::map< sal_Int16, ::rtl::OUString > LangTable;
 
+    const ::rtl::OUString sAsterix(RTL_CONSTASCII_USTRINGPARAM("*"));
     for(std::map< ::rtl::OUString, ::rtl::OUString >::const_iterator it = LangItems.begin(); it != LangItems.end(); ++it)
     {
         if(it->first != ::rtl::OUString( aLangTable.GetString( LANGUAGE_NONE ) )&&
-           it->first != ::rtl::OUString::createFromAscii("*") &&
-           it->first != ::rtl::OUString::createFromAscii(""))
+           it->first != sAsterix &&
+           it->first.getLength())
         {
             ++nItemId;
             pPopupMenu->InsertItem( nItemId,it->first);
@@ -432,14 +369,14 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
 
     //7--none
     nItemId++;
-    pPopupMenu->InsertItem( nItemId, String(FwkResId( STR_LANGSTATUS_NONE )) );
+    pPopupMenu->InsertItem( nItemId, String(FwlResId( STR_LANGSTATUS_NONE )) );
     aCmd=aCmd_Language;
     aCmd+=String::CreateFromAscii("LANGUAGE_NONE");
     pPopupMenu->SetItemCommand(nItemId,aCmd);
 
     //More...
     nItemId++;
-    pPopupMenu->InsertItem( nItemId, String(FwkResId( STR_LANGSTATUS_MORE )));
+    pPopupMenu->InsertItem( nItemId, String(FwlResId( STR_LANGSTATUS_MORE )));
     pPopupMenu->SetItemCommand(nItemId,aCmd_Dialog);
 }
 
@@ -451,12 +388,9 @@ void SAL_CALL LanguageSelectionMenuController::updatePopupMenu() throw ( ::com::
     // Force status update to get information about the current languages
     ResetableGuard aLock( m_aLock );
     Reference< XDispatch > xDispatch( m_xLanguageDispatch );
-    Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                UNO_QUERY );
     com::sun::star::util::URL aTargetURL;
     aTargetURL.Complete = m_aLangStatusCommandURL;
-    xURLTransformer->parseStrict( aTargetURL );
+    m_xURLTransformer->parseStrict( aTargetURL );
     aLock.unlock();
 
     if ( xDispatch.is() )
@@ -484,39 +418,19 @@ void SAL_CALL LanguageSelectionMenuController::updatePopupMenu() throw ( ::com::
 // XInitialization
 void SAL_CALL LanguageSelectionMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
-    const rtl::OUString aFrameName( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-    const rtl::OUString aCommandURLName( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
-
     ResetableGuard aLock( m_aLock );
 
     sal_Bool bInitalized( m_bInitialized );
     if ( !bInitalized )
     {
-        PropertyValue       aPropValue;
-        rtl::OUString       aCommandURL;
-        Reference< XFrame > xFrame;
+        PopupMenuControllerBase::initialize(aArguments);
 
-        for ( int i = 0; i < aArguments.getLength(); i++ )
+        if ( m_bInitialized )
         {
-            if ( aArguments[i] >>= aPropValue )
-            {
-                if ( aPropValue.Name.equalsAscii( "Frame" ))
-                    aPropValue.Value >>= xFrame;
-                else if ( aPropValue.Name.equalsAscii( "CommandURL" ))
-                    aPropValue.Value >>= aCommandURL;
-            }
-        }
-
-        if ( xFrame.is() && aCommandURL.getLength() )
-        {
-            m_xFrame                              = xFrame;
-            m_aCommandURL                         = aCommandURL;
-            m_aBaseURL                            = determineBaseURL( aCommandURL );
             m_aLangStatusCommandURL               = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LanguageStatus" ));
             m_aMenuCommandURL_Lang                = m_aLangStatusCommandURL;
             m_aMenuCommandURL_Font                = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontDialog" ));
             m_aMenuCommandURL_CharDlgForParagraph = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontDialogForParagraph" ));
-            m_bInitialized                        = true;
         }
     }
 }

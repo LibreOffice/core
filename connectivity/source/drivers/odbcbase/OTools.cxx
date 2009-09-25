@@ -571,9 +571,12 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                 return ::rtl::OUString();
             // Bei Fehler bricht der GETDATA-Makro mit return ab,
             // bei NULL mit break!
-            SQLINTEGER nLen = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : (nMaxLen-1);
+            SQLINTEGER nRealSize = 0;
+            if ( pcbValue > -1 )
+                nRealSize = pcbValue / sizeof(sal_Unicode);
+            SQLINTEGER nLen = pcbValue != SQL_NO_TOTAL ? std::min(nRealSize, nMaxLen) : (nMaxLen-1);
             waCharArray[nLen] = 0;
-            aData = ::rtl::OUString(waCharArray);
+            aData.append(waCharArray,nLen);
 
             // Es handelt sich um Binaerdaten, um einen String, der fuer
             // StarView zu lang ist oder der Treiber kann die Laenge der
@@ -598,7 +601,10 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                                                 (SQLINTEGER)nLen+1,
                                                 &pcbValue),
                                     _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
-                nLen = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : (nMaxLen-1);
+                nRealSize = 0;
+                if ( pcbValue > -1 )
+                    nRealSize = pcbValue / sizeof(sal_Unicode);
+                nLen = pcbValue != SQL_NO_TOTAL ? std::min(nRealSize, nMaxLen) : (nMaxLen-1);
                 waCharArray[nLen] = 0;
 
                 aData.append(::rtl::OUString(waCharArray));
@@ -628,7 +634,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
             aCharArray[nLen] = 0;
             if ( ((pcbValue == SQL_NO_TOTAL) || pcbValue > nMaxLen) && aCharArray[nLen-1] == 0 && nLen > 0 )
                 --nLen;
-            aData = ::rtl::OUString((const sal_Char*)aCharArray,nLen, _nTextEncoding);
+            aData.append(::rtl::OUString((const sal_Char*)aCharArray,nLen, _nTextEncoding));
 
             // Es handelt sich um Binaerdaten, um einen String, der fuer
             // StarView zu lang ist oder der Treiber kann die Laenge der

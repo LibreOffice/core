@@ -188,8 +188,8 @@ void OResultSet::disposing(void)
     if(m_bFreeHandle)
         m_pStatement->getOwnConnection()->freeStatementHandle(m_aStatementHandle);
 
-    m_xStatement    = NULL;
-    m_xMetaData     = NULL;
+m_xStatement.clear();
+m_xMetaData.clear();
 }
 // -------------------------------------------------------------------------
 SQLRETURN OResultSet::unbind(sal_Bool _bUnbindHandle)
@@ -1491,7 +1491,7 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
 
     for (; pColumn < pColumnEnd; ++nColumn, ++pColumn)
     {
-        sal_Int32 nType = pColumn->getTypeKind();
+        const sal_Int32 nType = pColumn->getTypeKind();
         switch (nType)
         {
             case DataType::CHAR:

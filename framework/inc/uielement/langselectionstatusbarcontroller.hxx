@@ -88,6 +88,7 @@ class LangSelectionStatusbarController : public svt::StatusbarController
         LangSelectionStatusbarController(LangSelectionStatusbarController &); // not defined
         void operator =(LangSelectionStatusbarController &); // not defined
 
+
         sal_Bool            m_bShowMenu;
         sal_Int16           m_nScriptType;
         ::rtl::OUString     m_aCurrentLanguage;

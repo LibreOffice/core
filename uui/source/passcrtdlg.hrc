@@ -43,5 +43,4 @@
 #define FT_PASSWORD_CRT          9
 #define FT_MSPASSWORD_WARNING 10
 
-
 #endif // UUI_PASSCRTDLG_HRC

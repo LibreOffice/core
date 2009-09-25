@@ -129,6 +129,7 @@ struct ColumnInfo
     Reference< XColumn >    xColumn;
     sal_Int32               nNullable;
     sal_Bool                bAutoIncrement;
+    sal_Bool                bReadOnly;
     ::rtl::OUString         sName;
 
     // information about the control(s) bound to this column
@@ -148,6 +149,7 @@ struct ColumnInfo
         :xColumn()
         ,nNullable( ColumnValue::NULLABLE_UNKNOWN )
         ,bAutoIncrement( sal_False )
+        ,bReadOnly( sal_False )
         ,sName()
         ,xFirstControlWithInputRequired()
         ,xFirstGridWithInputRequiredColumn()
@@ -202,6 +204,7 @@ ColumnInfoCache::ColumnInfoCache( const Reference< XColumnsSupplier >& _rxColSup
             OSL_VERIFY( xColumnProps->getPropertyValue( FM_PROP_ISNULLABLE ) >>= aColInfo.nNullable );
             OSL_VERIFY( xColumnProps->getPropertyValue( FM_PROP_AUTOINCREMENT ) >>= aColInfo.bAutoIncrement );
             OSL_VERIFY( xColumnProps->getPropertyValue( FM_PROP_NAME ) >>= aColInfo.sName );
+            OSL_VERIFY( xColumnProps->getPropertyValue( FM_PROP_ISREADONLY ) >>= aColInfo.bReadOnly );
 
             m_aColumns.push_back( aColInfo );
         }
@@ -227,6 +230,7 @@ namespace
         OSL_VERIFY( _rxControlModel->getPropertyValue( FM_PROP_INPUT_REQUIRED ) >>= bInputRequired );
         return ( bInputRequired != sal_False );
     }
+
     void lcl_resetColumnControlInfo( ColumnInfo& _rColInfo )
     {
         _rColInfo.xFirstControlWithInputRequired.clear();
@@ -2956,7 +2960,6 @@ void FmXFormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                                 aRow[(*iter).xText] = sCriteria;
                             }
                         }
-                        break;
                     }
                 }
             }
@@ -3500,6 +3503,9 @@ sal_Bool SAL_CALL FmXFormController::approveRowChange(const RowChangeEvent& _rEv
                 continue;
 
             if ( rColInfo.bAutoIncrement )
+                continue;
+
+            if ( rColInfo.bReadOnly )
                 continue;
 
             if ( !rColInfo.xFirstControlWithInputRequired.is() && !rColInfo.xFirstGridWithInputRequiredColumn.is() )

@@ -555,6 +555,8 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\SmartTagCtl.hxx %_DEST%\inc%_EXT%\svx\SmartTagCtl.hxx
 ..\inc\svx\databaselocationinput.hxx %_DEST%\inc%_EXT%\svx\databaselocationinput.hxx
 ..\inc\xlinjoit.hxx %_DEST%\inc%_EXT%\svx\xlinjoit.hxx
+..\inc\svx\dbcharsethelper.hxx %_DEST%\inc%_EXT%\svx\dbcharsethelper.hxx
+..\inc\svx\dbtoolsclient.hxx %_DEST%\inc%_EXT%\svx\dbtoolsclient.hxx
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\properties

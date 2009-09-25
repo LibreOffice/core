@@ -56,7 +56,12 @@ namespace drawinglayer
             {
                 const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(
-                    basegfx::B2DPolyPolygon(aUnitOutline), getTextBox(), *getSdrSTAttribute().getText(), 0, false, getWordWrap()));
+                    basegfx::B2DPolyPolygon(aUnitOutline),
+                    getTextBox(),
+                    *getSdrSTAttribute().getText(),
+                    0,
+                    isForceTextClipToTextRange(), // #SJ# use CellText mode; text upper-left
+                    getWordWrap()));
             }
 
             // add shadow
@@ -72,12 +77,14 @@ namespace drawinglayer
             const attribute::SdrShadowTextAttribute& rSdrSTAttribute,
             const Primitive2DSequence& rSubPrimitives,
             const basegfx::B2DHomMatrix& rTextBox,
-            bool bWordWrap)
+            bool bWordWrap,
+            bool bForceTextClipToTextRange)
         :   BasePrimitive2D(),
             maSdrSTAttribute(rSdrSTAttribute),
             maSubPrimitives(rSubPrimitives),
             maTextBox(rTextBox),
-            mbWordWrap(bWordWrap)
+            mbWordWrap(bWordWrap),
+            mbForceTextClipToTextRange(bForceTextClipToTextRange)
         {
         }
 
@@ -90,7 +97,8 @@ namespace drawinglayer
                 return (getSdrSTAttribute() == rCompare.getSdrSTAttribute()
                     && getSubPrimitives() == rCompare.getSubPrimitives()
                     && getTextBox() == rCompare.getTextBox()
-                    && getWordWrap() == rCompare.getWordWrap());
+                    && getWordWrap() == rCompare.getWordWrap()
+                    && isForceTextClipToTextRange() == rCompare.isForceTextClipToTextRange());
             }
 
             return false;

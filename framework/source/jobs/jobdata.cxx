@@ -660,23 +660,20 @@ css::uno::Sequence< ::rtl::OUString > JobData::getEnabledJobsForEvent( const css
 
     for (sal_Int32 s=0; s<c; ++s)
     {
-        css::uno::Any aNode = xJobList->getByName(pAllJobs[s]);
         css::uno::Reference< css::beans::XPropertySet > xJob;
         if (
-            !(aNode >>= xJob) ||
+            !(xJobList->getByName(pAllJobs[s]) >>= xJob) ||
             !(xJob.is()     )
            )
         {
            continue;
         }
 
-        aNode = xJob->getPropertyValue(ADMINTIME);
         ::rtl::OUString sAdminTime;
-        aNode >>= sAdminTime;
+        xJob->getPropertyValue(ADMINTIME) >>= sAdminTime;
 
-        aNode = xJob->getPropertyValue(USERTIME);
         ::rtl::OUString sUserTime;
-        aNode >>= sUserTime;
+        xJob->getPropertyValue(USERTIME) >>= sUserTime;
 
         if (!isEnabled(sAdminTime, sUserTime))
             continue;

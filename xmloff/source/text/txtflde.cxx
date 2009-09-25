@@ -148,7 +148,7 @@ static sal_Char __READONLY_DATA FIELD_SERVICE_BIBLIOGRAPHY[] = "Bibliography";
 static sal_Char __READONLY_DATA FIELD_SERVICE_SCRIPT[] = "Script";
 static sal_Char __READONLY_DATA FIELD_SERVICE_ANNOTATION[] = "Annotation";
 static sal_Char __READONLY_DATA FIELD_SERVICE_COMBINED_CHARACTERS[] = "CombinedCharacters";
-static sal_Char __READONLY_DATA FIELD_SERVICE_META[] = "MetaField";
+static sal_Char __READONLY_DATA FIELD_SERVICE_META[] = "MetadataField";
 static sal_Char __READONLY_DATA FIELD_SERVICE_MEASURE[] = "Measure";
 static sal_Char __READONLY_DATA FIELD_SERVICE_TABLE_FORMULA[] = "TableFormula";
 static sal_Char __READONLY_DATA FIELD_SERVICE_DROP_DOWN[] = "DropDown";
@@ -263,7 +263,7 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
                                         XMLPropertyState* pCombinedCharState)
     : rExport(rExp),
       pUsedMasters(NULL),
-      sServicePrefix(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.")),
+      sServicePrefix(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.textfield.")),
       sFieldMasterPrefix(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.FieldMaster.")),
       sPresentationServicePrefix(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TextField.")),
 
@@ -645,7 +645,7 @@ sal_Bool XMLTextFieldExport::IsStringField(
         return !bRet;
     }
 
-    case FIELD_ID_META://FIXME ?????? no idea...
+    case FIELD_ID_META:
         return 0 > GetIntProperty(sPropertyNumberFormat, xPropSet);
 
     case FIELD_ID_DATABASE_DISPLAY:
@@ -740,7 +740,8 @@ sal_Bool XMLTextFieldExport::IsStringField(
 /// export the styles needed by the given field. Called on first pass
 /// through document
 void XMLTextFieldExport::ExportFieldAutoStyle(
-    const Reference<XTextField> & rTextField, sal_Bool bProgress )
+    const Reference<XTextField> & rTextField, const sal_Bool bProgress,
+    const sal_Bool bRecursive )
 {
     // get property set
     Reference<XPropertySet> xPropSet(rTextField, UNO_QUERY);
@@ -835,7 +836,10 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
 
     case FIELD_ID_META:
         // recurse into content (does not export element, so can be done first)
-        ExportMetaField(xPropSet, true, bProgress);
+        if (bRecursive)
+        {
+            ExportMetaField(xPropSet, true, bProgress);
+        }
         // fall-through: for the meta-field itself!
     case FIELD_ID_DOCINFO_PRINT_TIME:
     case FIELD_ID_DOCINFO_PRINT_DATE:
@@ -2263,7 +2267,6 @@ void XMLTextFieldExport::ExportMacro(
     GetExport().Characters(rContent);
 }
 
-// FIXME: this is untested
 void XMLTextFieldExport::ExportMetaField(
     const Reference<XPropertySet> & i_xMeta,
     bool i_bAutoStyles, sal_Bool i_bProgress )
