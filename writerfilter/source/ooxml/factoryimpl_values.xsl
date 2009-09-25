@@ -7,7 +7,7 @@
  
   OpenOffice.org - a multi-platform office productivity suite
  
-  $RCSfile: values.xsl,v $
+  $RCSfile: fastresources_wml.xsl,v $
  
   $Revision: 1.3 $
  
@@ -68,25 +68,8 @@
   <xsl:include href="resourcestools.xsl"/>
 
   <xsl:template match="/">
-    <out xml:space="preserve">
-      <xsl:call-template name="licenseheader"/>
-      <xsl:text>
-#ifndef INCLUDED_OOXML_VALUES_HXX
-#define INCLUDED_OOXML_VALUES_HXX
-
-#include &lt;rtl/ustring.hxx&gt;
-#include "OOXMLPropertySetImpl.hxx"
-
-namespace writerfilter {
-namespace ooxml {
-
-/// @cond GENERATED
-      </xsl:text>
-      <xsl:call-template name="valuedecls"/>
-      <xsl:text>
-/// @endcond
-}}
-#endif //INCLUDED_OOXML_VALUES_HXX&#xa;</xsl:text></out></xsl:template>
-
-  <xsl:template match="*"/>
+    <xsl:text>
+#include "OOXMLFactory_values.hxx"</xsl:text>
+<xsl:call-template name="valueconstants"/>
+  </xsl:template>
 </xsl:stylesheet>

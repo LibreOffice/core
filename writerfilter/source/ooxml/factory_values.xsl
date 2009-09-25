@@ -7,7 +7,7 @@
  
   OpenOffice.org - a multi-platform office productivity suite
  
-  $RCSfile: fastresourcesimpl_wml.xsl,v $
+  $RCSfile: fastresources_wml.xsl,v $
  
   $Revision: 1.3 $
  
@@ -68,35 +68,12 @@
   <xsl:include href="resourcestools.xsl"/>
 
   <xsl:template match="/">
-    <out>
-      <xsl:variable name="ns" select="substring-before(substring-after($file, 'OOXMLfastresources_'), '.cxx')"/>
-      <xsl:call-template name="licenseheader"/>
-      <xsl:text>
-// namespace: </xsl:text>
-      <xsl:value-of select="$ns"/>
-      <xsl:text>
-#include &lt;iostream&gt;
-#include &lt;doctok/resourceids.hxx&gt;
-#include &lt;ooxml/resourceids.hxx&gt;
-#include &lt;doctok/sprmids.hxx&gt;
-#include "OOXMLfastresources.hxx"
-#include "OOXMLFastTokens.hxx"
-#include "OOXMLFastHelper.hxx"
-#include "OOXMLvalues.hxx"
-#include "Handler.hxx"
+    <xsl:text>
+#ifndef INCLUDED_FACTORY_VALUES</xsl:text>
+#include &lt;rtl/ustring.hxx&gt;
 
-/// @cond GENERATED
-
-namespace writerfilter {
-namespace ooxml {
-using namespace ::std;
-
-      </xsl:text>
-      <xsl:call-template name="fastcontextimpls"><xsl:with-param name="ns" select="$ns"/></xsl:call-template>
-      <xsl:text>
-}}
-/// @endcond GENERATED
-&#xa;</xsl:text></out></xsl:template>
-
-  <xsl:template match="*"/>
+<xsl:call-template name="valueconstantdecls"/>
+<xsl:text>
+#endif // INCLUDED_FACTORY_VALUES&#xa;</xsl:text>
+  </xsl:template>
 </xsl:stylesheet>

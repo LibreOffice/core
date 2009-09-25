@@ -71,8 +71,9 @@
     <xsl:variable name="ns" select="substring-before(substring-after($file, 'OOXMLFactory_'), '.cxx')"/>
     <xsl:text>
 #include "doctok/sprmids.hxx"
+#include "doctok/resourceids.hxx"
 #include "ooxml/resourceids.hxx"
-#include "OOXMLfastresources.hxx"
+#include "OOXMLFactory_values.hxx"
 #include "OOXMLFactory_</xsl:text>
     <xsl:value-of select="$ns"/>
     <xsl:text>.hxx"
