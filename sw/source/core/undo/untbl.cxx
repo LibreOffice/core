@@ -590,7 +590,7 @@ SwTableNode* SwNodes::UndoTableToText( ULONG nSttNd, ULONG nEndNd,
             ASSERT( pTxtNd, "Wo ist der TextNode geblieben?" );
             SwIndex aCntPos( pTxtNd, pSave->m_nCntnt - 1 );
 
-            pTxtNd->Erase( aCntPos, 1 );
+            pTxtNd->EraseText( aCntPos, 1 );
             SwCntntNode* pNewNd = pTxtNd->SplitCntntNode(
                                         SwPosition( aSttIdx, aCntPos ));
             if( aBkmkArr.Count() )
@@ -2120,7 +2120,7 @@ CHECKTABLE(pTblNd->GetTable())
                         pTxtNd->RstAttr( aTmpIdx, pTxtNd->GetTxt().Len() -
                                                             nDelPos + 1 );
                     // das Trennzeichen loeschen
-                    pTxtNd->Erase( aTmpIdx, 1 );
+                    pTxtNd->EraseText( aTmpIdx, 1 );
                 }
 //              delete pUndo;
 DUMPDOC( &rDoc, String( "d:\\tmp\\tab_") + String( aNewSttNds.Count() - i ) +
@@ -2197,7 +2197,7 @@ void SwUndoTblMerge::MoveBoxCntnt( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& r
     SwUndoMove* pUndo = new SwUndoMove( pDoc, rRg, rPos );
     sal_Bool bDoesUndo = pDoc->DoesUndo();
     pDoc->DoUndo( sal_False );
-    pDoc->Move( rRg, rPos, pSaveTbl->IsNewModel() ?
+    pDoc->MoveNodeRange( rRg, rPos, (pSaveTbl->IsNewModel()) ?
         IDocumentContentOperations::DOC_NO_DELFRMS :
         IDocumentContentOperations::DOC_MOVEDEFAULT );
     if( bDoesUndo )
@@ -2348,8 +2348,9 @@ void SwUndoTblNumFmt::Undo( SwUndoIter& rIter )
         SwIndex aIdx( pTxtNd, 0 );
         if( aStr.Len() )
         {
-            pTxtNd->Erase( aIdx );
-            pTxtNd->Insert( aStr, aIdx, INS_NOHINTEXPAND );
+            pTxtNd->EraseText( aIdx );
+            pTxtNd->InsertText( aStr, aIdx,
+                IDocumentContentOperations::INS_NOHINTEXPAND );
         }
     }
 

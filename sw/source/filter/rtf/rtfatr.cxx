@@ -102,7 +102,6 @@
 #include <fmtfld.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtftn.hxx>
-#include <fmthbsh.hxx>
 #include <fchrfmt.hxx>
 #include <fmtautofmt.hxx>
 #include <fmtcntnt.hxx>
@@ -2790,8 +2789,8 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             */
             const String& rFldPar1 = pFld->GetPar1();
             USHORT nScript;
-            if( pBreakIt->xBreak.is() )
-                nScript = pBreakIt->xBreak->getScriptType( rFldPar1, 0);
+            if( pBreakIt->GetBreakIter().is() )
+                nScript = pBreakIt->GetBreakIter()->getScriptType( rFldPar1, 0);
             else
                 nScript = i18n::ScriptType::ASIAN;
 
@@ -3048,14 +3047,6 @@ static Writer& OutRTF_SwFtn( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-static Writer& OutRTF_SwHardBlank( Writer& rWrt, const SfxPoolItem& rHt)
-{
-    RTFOutFuncs::Out_String(rWrt.Strm(),
-        String(((SwFmtHardBlank&)rHt).GetChar()), ((SwRTFWriter&)rWrt).eDefaultEncoding,
-        ((SwRTFWriter&)rWrt).bWriteHelpFmt);
-    return rWrt;
-}
-
 static Writer& OutRTF_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
 {
     const SwFmtCharFmt& rChrFmt = (const SwFmtCharFmt&)rHt;
@@ -3110,8 +3101,8 @@ static Writer& OutRTF_SwTxtRuby( Writer& rWrt, const SfxPoolItem& rHt )
         defaulting to asian.
         */
     USHORT nScript;
-    if( pBreakIt->xBreak.is() )
-        nScript = pBreakIt->xBreak->getScriptType( rRuby.GetText(), 0);
+    if( pBreakIt->GetBreakIter().is() )
+        nScript = pBreakIt->GetBreakIter()->getScriptType( rRuby.GetText(), 0);
     else
         nScript = i18n::ScriptType::ASIAN;
 
@@ -3153,8 +3144,8 @@ static Writer& OutRTF_SwTxtRuby( Writer& rWrt, const SfxPoolItem& rHt )
         rWrt.Strm() << "\\\\a" << cDirective;
     rWrt.Strm() << "(\\\\s\\\\up ";
 
-    if( pBreakIt->xBreak.is() )
-        nScript = pBreakIt->xBreak->getScriptType( pNd->GetTxt(),
+    if( pBreakIt->GetBreakIter().is() )
+        nScript = pBreakIt->GetBreakIter()->getScriptType( pNd->GetTxt(),
                                                    *pRubyTxt->GetStart() );
     else
         nScript = i18n::ScriptType::ASIAN;
@@ -4275,7 +4266,7 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_TXTATR_FLYCNT */             OutRTF_SwFlyCntnt,
 /* RES_TXTATR_FTN */                OutRTF_SwFtn,
 /* RES_TXTATR_SOFTHYPH */           0,  // old attr. - coded now by character
-/* RES_TXTATR_HARDBLANK*/           OutRTF_SwHardBlank,
+/* RES_TXTATR_HARDBLANK*/           0,
 /* RES_TXTATR_DUMMY1 */             0, // Dummy:
 /* RES_TXTATR_DUMMY2 */             0, // Dummy:
 

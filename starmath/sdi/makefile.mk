@@ -39,7 +39,7 @@ SVSDIINC=$(PRJ)$/inc
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
+.IF "$(L10N_framework)"==""
 # --- Files --------------------------------------------------------
 
 
@@ -56,6 +56,7 @@ SVSDI1DEPEND= \
     $(SVSDIINC)$/starmath.hrc
 
 # --- Targets -------------------------------------------------------
+.ENDIF
 
 .INCLUDE :  target.mk
 

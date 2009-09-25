@@ -1,4 +1,5 @@
-/*************************************************************************
+/**************************************************************************
+ *
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -44,6 +45,7 @@
 #include <svx/pbinitem.hxx>
 #include <svx/svdview.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <svtools/syslocale.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
 #include <fmtfsize.hxx>
@@ -353,8 +355,8 @@ void lcl_FormatPostIt( IDocumentContentOperations* pIDCO, SwPaM& aPam, SwPostItF
     aStr.AppendAscii(sTmp);
     aStr += pField->GetPar1();
     aStr += ' ';
-    aStr += GetAppLocaleData().getDate( pField->GetDate() );
-    pIDCO->Insert( aPam, aStr, true );
+    aStr += SvtSysLocale().GetLocaleData().getDate( pField->GetDate() );
+    pIDCO->InsertString( aPam, aStr );
 
     pIDCO->SplitNode( *aPam.GetPoint(), false );
     aStr = pField->GetPar2();
@@ -362,7 +364,7 @@ void lcl_FormatPostIt( IDocumentContentOperations* pIDCO, SwPaM& aPam, SwPostItF
     // Bei Windows und Co alle CR rausschmeissen
     aStr.EraseAllChars( '\r' );
 #endif
-    pIDCO->Insert( aPam, aStr, true );
+    pIDCO->InsertString( aPam, aStr );
     pIDCO->SplitNode( *aPam.GetPoint(), false );
     pIDCO->SplitNode( *aPam.GetPoint(), false );
 }
@@ -453,7 +455,7 @@ void lcl_PrintPostItsEndDoc( ViewShell* pPrtShell,
     aPam.Move( fnMoveBackward, fnGoDoc );
     aPam.SetMark();
     aPam.Move( fnMoveForward, fnGoDoc );
-    pPrtDoc->Delete( aPam );
+    pPrtDoc->DeleteRange( aPam );
 
     for( USHORT i = 0, nVirtPg, nLineNo; i < nPostIts; ++i )
     {
@@ -502,7 +504,7 @@ void lcl_PrintPostItsEndPage( ViewShell* pPrtShell,
     aPam.Move( fnMoveBackward, fnGoDoc );
     aPam.SetMark();
     aPam.Move( fnMoveForward, fnGoDoc );
-    pPrtDoc->Delete( aPam );
+    pPrtDoc->DeleteRange( aPam );
 
     while( i < nPostIts )
     {
@@ -1516,7 +1518,9 @@ BOOL ViewShell::IsAnyFieldInDoc() const
         {
             const SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
-            if( pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
+            //#i101026# mod: do not include postits in field check
+            const SwField* pFld = pFmtFld->GetFld();
+            if( pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() && (pFld->Which() != RES_POSTITFLD))
                 return TRUE;
         }
     return FALSE;

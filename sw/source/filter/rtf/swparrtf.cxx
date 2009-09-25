@@ -55,7 +55,6 @@
 #include <svx/hyznitem.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtfld.hxx>
-#include <fmthbsh.hxx>
 #include <fmthdft.hxx>
 #include <fmtcntnt.hxx>
 #include <txtftn.hxx>
@@ -448,7 +447,6 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
         rtfSections::myrDummyIter aDEnd = maSegments.maDummyPageNos.rend();
         for (rtfSections::myrDummyIter aI = maSegments.maDummyPageNos.rbegin(); aI != aDEnd; ++aI)
             pDoc->DelPageDesc(*aI);
-
 
         if( aFlyArr.Count() )
             SetFlysInDoc();
@@ -852,7 +850,8 @@ SwSectionFmt *rtfSections::InsertSection(SwPaM& rMyPaM, rtfSection &rSection)
     aSet.Put(SvxFrameDirectionItem(
         nRTLPgn ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
 
-    rSection.mpSection = mrReader.pDoc->Insert( rMyPaM, aSection, &aSet );
+    rSection.mpSection =
+        mrReader.pDoc->InsertSwSection( rMyPaM, aSection, &aSet );
     ASSERT(rSection.mpSection, "section not inserted!");
     if (!rSection.mpSection)
         return 0;
@@ -1003,7 +1002,7 @@ void rtfSections::InsertSegments(bool bNewDoc)
                     aIter->maStart.GetNode().GetCntntNode(), 0);
                 SwPaM aPage(aPamStart);
 
-                mrReader.pDoc->Insert(aPage, aPgDesc, 0);
+                mrReader.pDoc->InsertPoolItem(aPage, aPgDesc, 0);
             }
             ++nDesc;
         }
@@ -1824,7 +1823,8 @@ void SwRTFParser::NextToken( int nToken )
             if (lcl_UsedPara(*pPam))
                 InsertPara();
             CheckInsNewTblLine();
-            pDoc->Insert(*pPam, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
+            pDoc->InsertPoolItem(*pPam,
+                SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
         }
         break;
 
@@ -1976,12 +1976,13 @@ void SwRTFParser::NextToken( int nToken )
                 &const_cast<const SwDoc *>(pDoc)
                 ->GetPageDesc( USHORT(nTokenValue) );
             CheckInsNewTblLine();
-            pDoc->Insert( *pPam, SwFmtPageDesc( pPgDsc ), 0);
+            pDoc->InsertPoolItem(*pPam, SwFmtPageDesc( pPgDsc ), 0);
         }
         break;
 
     case RTF_COLUM:
-        pDoc->Insert( *pPam, SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE, RES_BREAK ), 0);
+        pDoc->InsertPoolItem(*pPam,
+                SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE, RES_BREAK ), 0);
         break;
 
     case RTF_DXFRTEXT:      // werden nur im Zusammenhang mit Flys ausgewertet
@@ -2001,7 +2002,7 @@ SETCHDATEFIELD:
             SwDateTimeField aDateFld( (SwDateTimeFieldType*)
                                         pDoc->GetSysFldType( RES_DATETIMEFLD ), DATEFLD, nFormat);
             CheckInsNewTblLine();
-            pDoc->Insert( *pPam, SwFmtFld( aDateFld ), 0);
+            pDoc->InsertPoolItem(*pPam, SwFmtFld( aDateFld ), 0);
         }
         break;
 
@@ -2013,7 +2014,7 @@ SETCHDATEFIELD:
             SwDateTimeField aTimeFld( (SwDateTimeFieldType*)
                     pDoc->GetSysFldType( RES_DATETIMEFLD ), TIMEFLD, nFormat);
             CheckInsNewTblLine();
-            pDoc->Insert( *pPam, SwFmtFld( aTimeFld ), 0);
+            pDoc->InsertPoolItem(*pPam, SwFmtFld( aTimeFld ), 0);
         }
         break;
 
@@ -2023,7 +2024,7 @@ SETCHDATEFIELD:
                                     pDoc->GetSysFldType( RES_PAGENUMBERFLD ),
                                     PG_RANDOM, SVX_NUM_ARABIC );
             CheckInsNewTblLine();
-            pDoc->Insert( *pPam, SwFmtFld( aPageFld), 0);
+            pDoc->InsertPoolItem(*pPam, SwFmtFld(aPageFld), 0);
         }
         break;
 
@@ -2053,7 +2054,7 @@ SETCHDATEFIELD:
             CheckInsNewTblLine();
             if( nTokenValue )
                 aToken = (sal_Unicode )nTokenValue;
-            pDoc->Insert( *pPam, aToken, true );
+            pDoc->InsertString( *pPam, aToken );
         }
         break;
 
@@ -2119,7 +2120,7 @@ void SwRTFParser::InsertText()
     if(pRedlineDelete)
         mpRedlineStack->open(*pPam->GetPoint(), *pRedlineDelete);
 
-    pDoc->Insert( *pPam, aToken, true );
+    pDoc->InsertString( *pPam, aToken );
 
     if(pRedlineDelete)
     {
@@ -2283,14 +2284,15 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
                 }
             } while( 0 != (pStyle = GetStyleTbl().Next()) );
 
-            pDoc->Insert(aPam, *pCharFmt, 0);
+            pDoc->InsertPoolItem(aPam, *pCharFmt, 0);
             rSet.GetAttrSet().ClearItem(RES_TXTATR_CHARFMT);     //test hack
         }
         if (rSet.GetAttrSet().Count())
         {
             // dann setze ueber diesen Bereich die Attrbiute
             SetSwgValues(rSet.GetAttrSet());
-            pDoc->Insert(aPam, rSet.GetAttrSet(), nsSetAttrMode::SETATTR_DONTCHGNUMRULE);
+            pDoc->InsertItemSet(aPam, rSet.GetAttrSet(),
+                    nsSetAttrMode::SETATTR_DONTCHGNUMRULE);
         }
     }
 
@@ -2452,7 +2454,7 @@ void SwRTFParser::SetPageInformationAsDefault(const DocPageInformation &rInfo)
         {
             SwFmtPageDesc aPgDsc( &rPg );
             aPgDsc.SetNumOffset( nPgStart );
-            pDoc->Insert( *pPam, aPgDsc, 0 );
+            pDoc->InsertPoolItem( *pPam, aPgDsc, 0 );
         }
     }
 }
@@ -3711,7 +3713,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
             aSet.Put( SwFmtAnchor( FLY_IN_CNTNT ));
             pHdFtFmt = pDoc->MakeFlySection( FLY_IN_CNTNT, pPam->GetPoint(), &aSet );
 
-            pTxtAttr = pPam->GetNode()->GetTxtNode()->GetTxtAttr(
+            pTxtAttr = pPam->GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
                                                 nPos, RES_TXTATR_FLYCNT );
             ASSERT( pTxtAttr, "konnte den Fly nicht einfuegen/finden" );
 
@@ -4297,7 +4299,7 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
         {
             const SwPageDesc* pPgDsc = &const_cast<const SwDoc *>(pDoc)
                 ->GetPageDesc( (USHORT)nTokenValue );
-            pDoc->Insert( *pPam, SwFmtPageDesc( pPgDsc ), 0);
+            pDoc->InsertPoolItem( *pPam, SwFmtPageDesc( pPgDsc ), 0);
         }
         break;
     case RTF_CS:

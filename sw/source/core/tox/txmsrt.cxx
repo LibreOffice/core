@@ -223,7 +223,7 @@ void SwTOXSortTabBase::FillText( SwTxtNode& rNd, const SwIndex& rInsPos,
 
     GetTxt( sMyTxt, sMyTxtReading );
 
-    rNd.Insert( sMyTxt, rInsPos );
+    rNd.InsertText( sMyTxt, rInsPos );
 }
 
 BOOL SwTOXSortTabBase::operator==( const SwTOXSortTabBase& rCmp )
@@ -459,7 +459,7 @@ void SwTOXIndex::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT ) cons
     else
         GetTxt( sTmp, sTmpReading );
 
-    rNd.Insert( sTmp, rInsPos );
+    rNd.InsertText( sTmp, rInsPos );
 }
 
 
@@ -582,7 +582,7 @@ void SwTOXContent::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT ) co
     {
         String sTmp, sTmpReading;
         GetTxt( sTmp, sTmpReading );
-        rNd.Insert( sTmp, rInsPos );
+        rNd.InsertText( sTmp, rInsPos );
     }
 }
 
@@ -684,7 +684,7 @@ void SwTOXPara::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT ) const
         String sTmp, sTmpReading;
         GetTxt( sTmp, sTmpReading );
         sTmp.SearchAndReplaceAll('\t', ' ');
-        rNd.Insert( sTmp, rInsPos );
+        rNd.InsertText( sTmp, rInsPos );
     }
 }
 
@@ -904,7 +904,7 @@ void    SwTOXAuthority::FillText( SwTxtNode& rNd,
     }
     else
         sText = (pField->GetFieldText((ToxAuthorityField) nAuthField));
-    rNd.Insert( sText, rInsPos );
+    rNd.InsertText( sText, rInsPos );
 }
 /* -----------------14.10.99 09:35-------------------
 

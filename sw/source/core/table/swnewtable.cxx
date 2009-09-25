@@ -909,7 +909,10 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     if( pUndo )
                         pUndo->MoveBoxCntnt( pDoc, aRg, rInsPosNd );
                     else
-                        pDoc->Move( aRg, rInsPosNd, IDocumentContentOperations::DOC_NO_DELFRMS );
+                    {
+                        pDoc->MoveNodeRange( aRg, rInsPosNd,
+                            IDocumentContentOperations::DOC_NO_DELFRMS );
+                    }
                 }
             }
             // Only the cell of the first selected column will stay alive

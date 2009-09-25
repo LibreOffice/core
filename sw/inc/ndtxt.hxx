@@ -38,6 +38,7 @@
 #include <errhdl.hxx>
 #include <modeltoviewhelper.hxx>
 #include <SwNumberTreeTypes.hxx>
+#include <IDocumentContentOperations.hxx>
 
 #include <sfx2/Metadatable.hxx>
 
@@ -75,11 +76,6 @@ class SwScriptInfo;
 struct SwDocStat;
 struct SwParaIdleData_Impl;
 
-// Konstanten fuer das Text-Insert:
-#define INS_DEFAULT         0x0000 // keine Extras
-#define INS_EMPTYEXPAND     0x0001 // leere Hints beim Einfuegen aufspannen
-#define INS_NOHINTEXPAND    0x0002 // Hints an der InsPos nicht aufspannen
-
 namespace com { namespace sun { namespace star { namespace uno {
     template < class > class Sequence;
 }}}}
@@ -97,8 +93,6 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     friend class SwNodes;
     friend class SwTxtFrm;
     friend class SwScriptInfo;
-    friend void SwpHints::Insert( SwTxtAttr*, SwTxtNode&, USHORT );
-    friend void SwpHints::BuildPortions( SwTxtNode&, SwTxtAttr&, USHORT );
 
     //Kann 0 sein, nur dann nicht 0 wenn harte Attribute drin stehen.
     //Also niemals direkt zugreifen!
@@ -148,11 +142,10 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     SW_DLLPRIVATE SwTxtNode* _MakeNewTxtNode( const SwNodeIndex&, BOOL bNext = TRUE,
                                 BOOL bChgFollow = TRUE );
 
-    SW_DLLPRIVATE void  _Cut( SwTxtNode *pDest, const SwIndex &rDestStart,
-                  const SwIndex &rStart, xub_StrLen nLen, BOOL bUpdate = TRUE );
-
-    SW_DLLPRIVATE SwTxtAttr* MakeTxtAttr( const SfxPoolItem& rNew, xub_StrLen nStt, xub_StrLen nEnd, bool bRedlineAttr = false );
-    SW_DLLPRIVATE SwTxtAttr* MakeTxtAttr( const SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd );
+    SW_DLLPRIVATE void CutImpl(
+          SwTxtNode * const pDest, const SwIndex & rDestStart,
+          const SwIndex & rStart, /*const*/ xub_StrLen nLen,
+          const bool bUpdate = true );
 
     // Verlagere alles umfassende harte Attribute in den AttrSet des Absatzes
     SW_DLLPRIVATE void MoveTxtAttr_To_AttrSet();  // wird von SplitNode gerufen.
@@ -258,21 +251,30 @@ public:
     virtual USHORT ResetAllAttr();
     // <--
 
-    /*
-     * Einfuegen anderer Datentypen durch Erzeugen eines
-     * temporaeren Strings.
+    /// insert text content
+    void InsertText( const XubString & rStr, const SwIndex & rIdx,
+                     const enum IDocumentContentOperations::InsertFlags nMode
+                         = IDocumentContentOperations::INS_DEFAULT );
+
+    /** delete text content
+        ATTENTION: must not be called with a range that overlaps the start of
+                   an attribute with both extent and dummy char
      */
-    SwTxtNode&  Insert( xub_Unicode c, const SwIndex &rIdx );
-    SwTxtNode&  Insert( const XubString &rStr, const SwIndex &rIdx,
-                        const USHORT nMode = INS_DEFAULT );
+    void EraseText ( const SwIndex &rIdx, const xub_StrLen nCount = STRING_LEN,
+                     const enum IDocumentContentOperations::InsertFlags nMode
+                         = IDocumentContentOperations::INS_DEFAULT );
 
-    SwTxtNode&  Erase( const SwIndex &rIdx, xub_StrLen nCount = STRING_LEN,
-                       const USHORT nMode = INS_DEFAULT );
-
-    // Aktionen auf Attributen
-    // loesche alle TextAttribute die als Attribut im Set vorhanden sind
-    // (Set-Pointer != 0 ) oder alle deren Which-Wert mit nWhich mappen
-    // oder wenn Which = 0, alle.
+    /** delete all attributes.
+        If neither pSet nor nWhich is given, delete all attributes (except
+        refmarks, toxmarks, meta) in range.
+        @param rIdx     start position
+        @param nLen     range in which attributes will be deleted
+        @param pSet     if not 0, delete only attributes contained in pSet
+        @param nWhich   if not 0, delete only attributes with matching which
+        @param bInclRefToxMark
+            refmarks, toxmarks, and metas will be ignored unless this is true
+        ATTENTION: setting bInclRefToxMark is only allowed from UNDO!
+     */
     void    RstAttr( const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich = 0,
                     const SfxItemSet* pSet = 0, BOOL bInclRefToxMark = FALSE );
     void    GCAttr();
@@ -283,17 +285,20 @@ public:
     // loesche alle Attribute aus dem SwpHintsArray.
     void    ClearSwpHintsArr( bool bDelFields );
 
-    // Insert pAttr into hints array.
-    BOOL    Insert( SwTxtAttr *pAttr, USHORT nMode = 0 );
-    // lege ein neues TextAttribut an und fuege es ins SwpHints-Array ein
-    // returne den neuen Pointer (oder 0 bei Fehlern)!
-    SwTxtAttr* InsertItem( const SfxPoolItem& rAttr,
-                           xub_StrLen nStt, xub_StrLen nEnd, USHORT nMode = 0 );
+    /// Insert pAttr into hints array. @return true iff inserted successfully
+    bool    InsertHint( SwTxtAttr * const pAttr,
+                  const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
+    /// create new text attribute from rAttr and insert it
+    /// @return     inserted hint; 0 if not sure the hint is inserted
+    SwTxtAttr* InsertItem( SfxPoolItem& rAttr,
+                  const xub_StrLen nStart, const xub_StrLen nEnd,
+                  const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
 
     // setze diese Attribute am TextNode. Wird der gesamte Bereich umspannt,
     // dann setze sie nur im AutoAttrSet (SwCntntNode:: SetAttr)
     BOOL SetAttr( const SfxItemSet& rSet,
-                  xub_StrLen nStt, xub_StrLen nEnd, USHORT nMode = 0 );
+                  xub_StrLen nStt, xub_StrLen nEnd,
+                  const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
     // erfrage die Attribute vom TextNode ueber den Bereich
     // --> OD 2008-01-16 #newlistlevelattrs#
     // Introduce 4th optional parameter <bMergeIndentValuesOfNumRule>.
@@ -311,32 +316,34 @@ public:
     // uebertrage Attribute eines AttrSets ( AutoFmt ) in das SwpHintsArray
     void FmtToTxtAttr( SwTxtNode* pNd );
 
-    // loeschen eines einzelnen Attributes (fuer SwUndoAttr)
-    // ( nur das Attribut loeschen, dass mit Which,Start und End oder
-    //   mit pTxtHint identisch ist (es gibt nur ein gueltiges))
-    //  AUSNAHME: ToxMarks !!!
-    void    Delete( USHORT nTxtWhich, xub_StrLen nStart, xub_StrLen nEnd = 0 );
-    void    Delete( SwTxtAttr * pTxtAttr, BOOL bThisOnly = FALSE );
+    /// delete all attributes of type nWhich at nStart (opt. end nEnd)
+    void DeleteAttributes( const USHORT nWhich,
+                  const xub_StrLen nStart, const xub_StrLen nEnd = 0 );
+    /// delete the attribute pTxtAttr
+    void DeleteAttribute ( SwTxtAttr * const pTxtAttr );
 
     // Aktionen auf Text und Attributen
     // --> OD 2008-11-18 #i96213#
     // introduce optional parameter to control, if all attributes have to be copied.
-    void Copy( SwTxtNode *pDest,
+    void CopyText( SwTxtNode * const pDest,
                const SwIndex &rStart,
-               USHORT nLen,
+               const xub_StrLen nLen,
                const bool bForceCopyOfAllAttrs = false );
-    void Copy( SwTxtNode *pDest,
+    void CopyText( SwTxtNode * const pDest,
                const SwIndex &rDestStart,
                const SwIndex &rStart,
                xub_StrLen nLen,
                const bool bForceCopyOfAllAttrs = false );
     // <--
-    void    Cut(SwTxtNode *pDest, const SwIndex &rStart, xub_StrLen nLen);
-    inline void Cut(SwTxtNode *pDest, const SwIndex &rDestStart,
-                    const SwIndex &rStart, xub_StrLen nLen);
-    // ersetze im String an Position nIdx das Zeichen
-    void Replace( const SwIndex& rStart, xub_Unicode cCh );
-    void Replace( const SwIndex& rStart, xub_StrLen nLen, const XubString& rText );
+
+    void        CutText(SwTxtNode * const pDest,
+                    const SwIndex & rStart, const xub_StrLen nLen);
+    inline void CutText(SwTxtNode * const pDest, const SwIndex &rDestStart,
+                    const SwIndex & rStart, const xub_StrLen nLen);
+
+    /// replace nDelLen characters at rStart with rText
+    void ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
+            const XubString& rText );
     void ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen, const XubString& rText,
                     const ::com::sun::star::uno::Sequence<sal_Int32>& rOffsets );
 
@@ -355,18 +362,21 @@ public:
     // gebe das vorgegebene Attribut, welches an der TextPosition (rIdx)
     // gesetzt ist zurueck. Gibt es keines, returne 0-Pointer
     // gesetzt heisst: Start <= rIdx < End
+    // FIXME: this function does not seem to be well-defined for those
+    // hints of which several may cover a single position, like TOXMark,
+    // or CharFmt
     SwTxtAttr *GetTxtAttr( const SwIndex& rIdx, USHORT nWhichHt,
                            BOOL bExpand = FALSE ) const;
 
-    // Diese Methode liefert nur Textattribute auf der Position nIdx
-    // zurueck, die kein EndIdx besitzen und denselben Which besitzen.
-    // Ueblicherweise steht an dieser Position ein CH_TXTATR.
-    // Bei RES_TXTATR_END entfaellt die Pruefung auf den Which-Wert.
-    SwTxtAttr *GetTxtAttr( const xub_StrLen nIdx,
-                           const USHORT nWhichHt = RES_TXTATR_END ) const;
-
-    SwTxtFld  *GetTxtFld( const SwIndex& rIdx )
-        { return (SwTxtFld *)GetTxtAttr( rIdx, RES_TXTATR_FIELD ); }
+    /** get the text attribute at position nIndex which owns
+        the dummy character CH_TXTATR_* at that position, if one exists.
+        @param nIndex   the position in the text
+        @param nWhich   if different from RES_TXTATR_END, return only
+                        attribute with given which id
+        @return the text attribute at nIndex of type nWhich, if it exists
+    */
+    SwTxtAttr *GetTxtAttrForCharAt( const xub_StrLen nIndex,
+                       const RES_TXTATR nWhich = RES_TXTATR_END ) const;
 
     // Aktuelles Wort zurueckliefern
     XubString GetCurWord(xub_StrLen) const;
@@ -754,17 +764,14 @@ public:
     bool IsHidden() const;
 // <--
 
-    inline SwTxtAttr* MakeRedlineTxtAttr( const SfxPoolItem& rNew )
-        { return MakeTxtAttr( rNew, 0, 0, true ); }
-
     TYPEINFO(); // fuer rtti
 
     // fuers Umhaengen der TxtFmtCollections (Outline-Nummerierung!!)
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
 
-    // aus SwIndexReg
-    virtual void Update( const SwIndex & aPos, USHORT xub_StrLen,
-                         BOOL bNegativ = FALSE, BOOL bDelete = FALSE );
+    // override SwIndexReg
+    virtual void Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
+                 const bool bNegative = false, const bool bDelete = false );
 
     // change text to Upper/Lower/Hiragana/Katagana/...
     void TransliterateText( utl::TransliterationWrapper& rTrans,
@@ -865,11 +872,11 @@ inline const SwTxtNode   *SwNode::GetTxtNode() const
 }
 #endif
 
-inline void SwTxtNode::Cut(SwTxtNode *pDest, const SwIndex &rDestStart,
-                            const SwIndex &rStart, xub_StrLen nLen)
+inline void
+SwTxtNode::CutText(SwTxtNode * const pDest, const SwIndex & rDestStart,
+                    const SwIndex & rStart, const xub_StrLen nLen)
 {
-    _Cut( pDest, rDestStart, rStart, nLen, TRUE );
+    CutImpl( pDest, rDestStart, rStart, nLen, true );
 }
-
 
 #endif

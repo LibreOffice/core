@@ -3655,30 +3655,37 @@ const SwRect SwPageFrm::PrtWithoutHeaderAndFooter() const
 /** method to determine the spacing values of a frame
 
     OD 2004-03-10 #i28701#
+    OD 2009-08-28 #i102458#
+    Add output parameter <obIsLineSpacingProportional>
 
     @author OD
 */
-void GetSpacingValuesOfFrm( const SwFrm& _rFrm,
-                            SwTwips& _roLowerSpacing,
-                            SwTwips& _roLineSpacing )
+void GetSpacingValuesOfFrm( const SwFrm& rFrm,
+                            SwTwips& onLowerSpacing,
+                            SwTwips& onLineSpacing,
+                            bool& obIsLineSpacingProportional )
 {
-    if ( !_rFrm.IsFlowFrm() )
+    if ( !rFrm.IsFlowFrm() )
     {
-        _roLowerSpacing = 0L;
-        _roLineSpacing = 0L;
+        onLowerSpacing = 0;
+        onLineSpacing = 0;
     }
     else
     {
-        const SvxULSpaceItem& rULSpace = _rFrm.GetAttrSet()->GetULSpace();
-        _roLowerSpacing = rULSpace.GetLower();
+        const SvxULSpaceItem& rULSpace = rFrm.GetAttrSet()->GetULSpace();
+        onLowerSpacing = rULSpace.GetLower();
 
-        _roLineSpacing = 0;
-        if ( _rFrm.IsTxtFrm() )
+        onLineSpacing = 0;
+        obIsLineSpacingProportional = false;
+        if ( rFrm.IsTxtFrm() )
         {
-            _roLineSpacing = static_cast<const SwTxtFrm&>(_rFrm).GetLineSpace();
+            onLineSpacing = static_cast<const SwTxtFrm&>(rFrm).GetLineSpace();
+            obIsLineSpacingProportional =
+                onLineSpacing != 0 &&
+                static_cast<const SwTxtFrm&>(rFrm).GetLineSpace( true ) == 0;
         }
 
-        ASSERT( _roLowerSpacing >= 0 && _roLineSpacing >= 0,
+        ASSERT( onLowerSpacing >= 0 && onLineSpacing >= 0,
                 "<GetSpacingValuesOfFrm(..)> - spacing values aren't positive!" );
     }
 }

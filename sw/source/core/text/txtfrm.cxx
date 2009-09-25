@@ -500,26 +500,10 @@ bool lcl_HideObj( const SwTxtFrm& _rFrm,
                         _rFrm.GetTxtNode()->GetTxt().GetChar( _nObjAnchorPos );
             if ( cAnchorChar == CH_TXTATR_BREAKWORD )
             {
-                SwpHints* pHints =
-                        const_cast<SwTxtFrm&>(_rFrm).GetTxtNode()->GetpSwpHints();
-                const SwTxtAttr* pHint( 0 );
-                if( pHints )
-                {
-                    for ( USHORT i = 0; i < pHints->Count(); ++i )
-                    {
-                        SwTxtAttr* pPos = pHints->GetTextHint(i);
-                        xub_StrLen nStart = *pPos->GetStart();
-                        if ( _nObjAnchorPos < nStart )
-                            break;
-                        if ( _nObjAnchorPos == nStart && !pPos->GetEnd() )
-                        {
-                            pHint = pPos;
-                            break;
-                        }
-                    }
-                }
-                if ( pHint &&
-                     pHint->Which() == RES_TXTATR_FLYCNT )
+                const SwTxtAttr* const pHint(
+                    _rFrm.GetTxtNode()->GetTxtAttrForCharAt(_nObjAnchorPos,
+                        RES_TXTATR_FLYCNT) );
+                if ( pHint )
                 {
                     const SwFrmFmt* pFrmFmt =
                         static_cast<const SwTxtFlyCnt*>(pHint)->GetFlyCnt().GetFrmFmt();

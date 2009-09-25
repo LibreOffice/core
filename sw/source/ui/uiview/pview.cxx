@@ -1580,6 +1580,10 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
     {
         switch(nWhich)
         {
+        case SID_BROWSER_MODE:
+        case FN_PRINT_LAYOUT:
+            rSet.DisableItem(nWhich);
+            break;
         case FN_START_OF_DOCUMENT:
         {
             if ( pPagePrevwLay->IsPageVisible( 1 ) )
@@ -2491,6 +2495,10 @@ SfxPrinter*  SwPagePreView::GetPrinter( BOOL bCreate )
 USHORT  SwPagePreView::SetPrinter( SfxPrinter *pNew, USHORT nDiffFlags, bool )
 {
     ViewShell &rSh = *GetViewShell();
+    SfxPrinter* pOld = rSh.getIDocumentDeviceAccess()->getPrinter( false );
+    if ( pOld && pOld->IsPrinting() )
+        return SFX_PRINTERROR_BUSY;
+
     SwEditShell &rESh = (SwEditShell&)rSh;  //Buh...
     if( ( SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP ) & nDiffFlags )
     {

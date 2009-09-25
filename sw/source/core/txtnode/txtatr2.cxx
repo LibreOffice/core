@@ -46,24 +46,19 @@
 #include <poolfmt.hxx>      // RES_POOLCHR_INET_...
 #include <doc.hxx>          // SwDoc
 #include <fmtruby.hxx>
-#include <fmthbsh.hxx>
+#include <fmtmeta.hxx>
+
 
 TYPEINIT1(SwTxtINetFmt,SwClient);
 TYPEINIT1(SwTxtRuby,SwClient);
 
-/*************************************************************************
- *                      class SwTxtHardBlank
- *************************************************************************/
+// ATT_XMLCONTAINERITEM ******************************
 
-SwTxtHardBlank::SwTxtHardBlank( const SwFmtHardBlank& rAttr, xub_StrLen nStt )
-  : SwTxtAttr( rAttr, nStt )
-  , m_Char( rAttr.GetChar() )
-{
-    ASSERT( ' ' != m_Char && '-' != m_Char,
-            "Invalid character for the HardBlank attribute - "
-            "must be a normal unicode character" );
-}
-
+SwTxtXMLAttrContainer::SwTxtXMLAttrContainer(
+                            SvXMLAttrContainerItem& rAttr,
+                            xub_StrLen nStt, xub_StrLen nEnde )
+    : SwTxtAttrEnd( rAttr, nStt, nEnde )
+{}
 
 /*************************************************************************
  *                      class SwTxtCharFmt
@@ -110,20 +105,42 @@ BOOL SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
     return FALSE;
 }
 
+
+/*************************************************************************
+ *                        class SwTxtAttrNesting
+ *************************************************************************/
+
+SwTxtAttrNesting::SwTxtAttrNesting( SfxPoolItem & i_rAttr,
+            const xub_StrLen i_nStart, const xub_StrLen i_nEnd )
+    : SwTxtAttrEnd( i_rAttr, i_nStart, i_nEnd )
+{
+    SetDontExpand( true );  // never expand this attribute
+    // lock the expand flag: simple guarantee that nesting will not be
+    // invalidated by expand operations
+    SetLockExpandFlag( true );
+    SetDontExpandStartAttr( true );
+    SetNesting( true );
+}
+
+SwTxtAttrNesting::~SwTxtAttrNesting()
+{
+}
+
+
 /*************************************************************************
  *                      class SwTxtINetFmt
  *************************************************************************/
 
 SwTxtINetFmt::SwTxtINetFmt( SwFmtINetFmt& rAttr,
-                            xub_StrLen nStt, xub_StrLen nEnde )
-    : SwTxtAttrEnd( rAttr, nStt, nEnde )
+                            xub_StrLen nStart, xub_StrLen nEnd )
+    : SwTxtAttrNesting( rAttr, nStart, nEnd )
     , SwClient( 0 )
     , m_pTxtNode( 0 )
     , m_bVisited( false )
     , m_bVisitedValid( false )
 {
     rAttr.pTxtAttr  = this;
-    SetCharFmtAttr( TRUE );
+    SetCharFmtAttr( true );
 }
 
 SwTxtINetFmt::~SwTxtINetFmt( )
@@ -212,30 +229,17 @@ BOOL SwTxtINetFmt::IsProtect( ) const
     return m_pTxtNode && m_pTxtNode->IsProtect();
 }
 
-// ATT_XNLCONTAINERITEM ******************************
-
-SwTxtXMLAttrContainer::SwTxtXMLAttrContainer(
-                            const SvXMLAttrContainerItem& rAttr,
-                            xub_StrLen nStt, xub_StrLen nEnde )
-    : SwTxtAttrEnd( rAttr, nStt, nEnde )
-{}
-
-
 /*************************************************************************
  *                      class SwTxtRuby
  *************************************************************************/
 
 SwTxtRuby::SwTxtRuby( SwFmtRuby& rAttr,
                       xub_StrLen nStart, xub_StrLen nEnd )
-    : SwTxtAttrEnd( rAttr, nStart, nEnd )
+    : SwTxtAttrNesting( rAttr, nStart, nEnd )
     , SwClient( 0 )
     , m_pTxtNode( 0 )
 {
     rAttr.pTxtAttr  = this;
-    SetDontExpand( true );  // never expand this attribute
-    SetLockExpandFlag( true );
-    SetDontMergeAttr( true );
-    SetDontExpandStartAttr( true );
 }
 
 SwTxtRuby::~SwTxtRuby()
@@ -310,11 +314,26 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
     return pRet;
 }
 
-// ******************************
 
-SwTxt2Lines::SwTxt2Lines( const SvxTwoLinesItem& rAttr,
-                        xub_StrLen nStt, xub_StrLen nEnde )
-    : SwTxtAttrEnd( rAttr, nStt, nEnde )
+/*************************************************************************
+ *                        class SwTxtMeta
+ *************************************************************************/
+
+SwTxtMeta::SwTxtMeta( SwFmtMeta & i_rAttr,
+        const xub_StrLen i_nStart, const xub_StrLen i_nEnd )
+    : SwTxtAttrNesting( i_rAttr, i_nStart, i_nEnd )
+    , m_pTxtNode( 0 )
 {
+    i_rAttr.SetTxtAttr( this );
+    SetHasDummyChar(true);
+}
+
+SwTxtMeta::~SwTxtMeta()
+{
+    SwFmtMeta & rFmtMeta( static_cast<SwFmtMeta &>(GetAttr()) );
+    if (rFmtMeta.GetTxtAttr() == this)
+    {
+        rFmtMeta.SetTxtAttr(0);
+    }
 }
 

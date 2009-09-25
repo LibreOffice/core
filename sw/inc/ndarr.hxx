@@ -180,7 +180,7 @@ public:
 
     BOOL _MoveNodes( const SwNodeRange&, SwNodes& rNodes, const SwNodeIndex&,
                 BOOL bNewFrms = TRUE );
-    void Move( SwPaM&, SwPosition&, SwNodes& rNodes, BOOL bSplitNd=TRUE );
+    void MoveRange( SwPaM&, SwPosition&, SwNodes& rNodes );
 
     void _Copy( const SwNodeRange& rRg, const SwNodeIndex& rInsPos,
                 BOOL bNewFrms = TRUE ) const

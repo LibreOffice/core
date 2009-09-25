@@ -39,6 +39,7 @@
 #include <unotools/collatorwrapper.hxx>
 #include <svtools/urihelper.hxx>
 #include <svtools/stritem.hxx>
+#include <svtools/syslocale.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -732,7 +733,7 @@ SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, USHORT *pPercent,
 
 String GetAppLangDateTimeString( const DateTime& rDT )
 {
-    LocaleDataWrapper& rAppLclData = GetAppLocaleData();
+    const LocaleDataWrapper& rAppLclData = SvtSysLocale().GetLocaleData();
     String sRet( rAppLclData.getDate( rDT ));
     ( sRet += ' ' ) += rAppLclData.getTime( rDT, FALSE, FALSE );
     return sRet;

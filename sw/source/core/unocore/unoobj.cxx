@@ -59,7 +59,6 @@
 #include <swerror.h>
 #include <swtblfmt.hxx>
 #include <fmtruby.hxx>
-#include <fmthbsh.hxx>
 #include <docsh.hxx>
 #include <docstyle.hxx>
 #include <charfmt.hxx>
@@ -92,6 +91,7 @@
 #include <unocoll.hxx>
 #include <unostyle.hxx>
 #include <unofield.hxx>
+#include <unometa.hxx>
 #include <fmtanchr.hxx>
 #include <svx/flstitem.hxx>
 #include <svtools/ctrltool.hxx>
@@ -118,10 +118,9 @@
 #include <dcontact.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <crsskip.hxx>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <memory>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -378,9 +377,11 @@ void lcl_SetTxtFmtColl(const uno::Any& rAny, SwPaM& rPaM)
         SwTxtFmtColl *pLocal = pStyle->GetCollection();
         UnoActionContext aAction(pDoc);
         pDoc->StartUndo( UNDO_START, NULL );
-        FOREACHUNOPAM_START(&rPaM)
-            pDoc->SetTxtFmtColl(*PUNOPAM, pLocal);
-        FOREACHUNOPAM_END()
+        SwPaM *pTmpCrsr = &rPaM;
+        do {
+            pDoc->SetTxtFmtColl(*pTmpCrsr, pLocal);
+            pTmpCrsr = static_cast<SwPaM*>(pTmpCrsr->GetNext());
+        } while ( pTmpCrsr != &rPaM );
         pDoc->EndUndo( UNDO_END, NULL );
     }
     else
@@ -653,7 +654,7 @@ return bRet;
 /* -----------------30.06.98 08:39-------------------
  *
  * --------------------------------------------------*/
-SwFmtColl* SwXTextCursor::GetCurTxtFmtColl(SwPaM& rPam, BOOL bConditional)
+SwFmtColl* SwXTextCursor::GetCurTxtFmtColl(SwPaM& rPaM, BOOL bConditional)
 {
     static const sal_uInt16 nMaxLookup = 1000;
     SwFmtColl *pFmt = 0;
@@ -661,12 +662,13 @@ SwFmtColl* SwXTextCursor::GetCurTxtFmtColl(SwPaM& rPam, BOOL bConditional)
 //  if ( GetCrsrCnt() > nMaxLookup )
 //      return 0;
     sal_Bool bError = sal_False;
-    FOREACHUNOPAM_START(&rPam)
+    SwPaM *pTmpCrsr = &rPaM;
+    do {
 
-        ULONG nSttNd = PUNOPAM->GetMark()->nNode.GetIndex(),
-              nEndNd = PUNOPAM->GetPoint()->nNode.GetIndex();
-        xub_StrLen nSttCnt = PUNOPAM->GetMark()->nContent.GetIndex(),
-                nEndCnt = PUNOPAM->GetPoint()->nContent.GetIndex();
+        ULONG nSttNd = pTmpCrsr->GetMark()->nNode.GetIndex();
+        ULONG nEndNd = pTmpCrsr->GetPoint()->nNode.GetIndex();
+        xub_StrLen nSttCnt = pTmpCrsr->GetMark()->nContent.GetIndex();
+        xub_StrLen nEndCnt = pTmpCrsr->GetPoint()->nContent.GetIndex();
 
         if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
         {
@@ -680,7 +682,7 @@ SwFmtColl* SwXTextCursor::GetCurTxtFmtColl(SwPaM& rPam, BOOL bConditional)
             break;
         }
 
-        const SwNodes& rNds = rPam.GetDoc()->GetNodes();
+        const SwNodes& rNds = rPaM.GetDoc()->GetNodes();
         for( ULONG n = nSttNd; n <= nEndNd; ++n )
         {
             const SwTxtNode* pNd = rNds[ n ]->GetTxtNode();
@@ -699,7 +701,9 @@ SwFmtColl* SwXTextCursor::GetCurTxtFmtColl(SwPaM& rPam, BOOL bConditional)
         }
         if(bError)
             break;
-    FOREACHUNOPAM_END()
+
+        pTmpCrsr = static_cast<SwPaM*>(pTmpCrsr->GetNext());
+    } while ( pTmpCrsr != &rPaM );
     return bError ? 0 : pFmt;
 }
 
@@ -851,7 +855,8 @@ SwXTextCursor::~SwXTextCursor()
 /*-- 09.12.98 14:19:18---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextCursor::DeleteAndInsert(const String& rText)
+void SwXTextCursor::DeleteAndInsert(const String& rText,
+        const bool bForceExpandHints)
 {
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
@@ -870,10 +875,12 @@ void SwXTextCursor::DeleteAndInsert(const String& rText)
             }
             if(nTxtLen)
             {
-                if( !SwUnoCursorHelper::DocInsertStringSplitCR( *pDoc, *_pStartCrsr, rText ) )
-                {
-                    DBG_ASSERT( sal_False, "Doc->Insert(Str) failed." );
-                }
+                const bool bSuccess(
+                    SwUnoCursorHelper::DocInsertStringSplitCR(
+                        *pDoc, *_pStartCrsr, rText, bForceExpandHints ) );
+                DBG_ASSERT( bSuccess, "Doc->Insert(Str) failed." );
+                (void) bSuccess;
+
                 SwXTextCursor::SelectPam(*pUnoCrsr, sal_True);
                 _pStartCrsr->Left(rText.Len(), CRSR_SKIP_CHARS, FALSE, FALSE);
             }
@@ -881,6 +888,82 @@ void SwXTextCursor::DeleteAndInsert(const String& rText)
         pDoc->EndUndo(UNDO_INSERT, NULL);
     }
 }
+
+
+enum ForceIntoMetaMode { META_CHECK_BOTH, META_INIT_START, META_INIT_END };
+
+sal_Bool lcl_ForceIntoMeta(SwPaM & rCursor,
+        uno::Reference<text::XText> const & xParentText,
+        const enum ForceIntoMetaMode eMode)
+{
+    sal_Bool bRet( sal_True ); // means not forced in META_CHECK_BOTH
+    SwXMeta const * const pXMeta( dynamic_cast<SwXMeta*>(xParentText.get()) );
+    ASSERT(pXMeta, "no parent?");
+    if (!pXMeta)
+        throw uno::RuntimeException();
+    SwTxtNode * pTxtNode;
+    xub_StrLen nStart;
+    xub_StrLen nEnd;
+    const bool bSuccess( pXMeta->SetContentRange(pTxtNode, nStart, nEnd) );
+    ASSERT(bSuccess, "no pam?");
+    if (!bSuccess)
+        throw uno::RuntimeException();
+    // force the cursor back into the meta if it has moved outside
+    SwPosition start(*pTxtNode, nStart);
+    SwPosition end(*pTxtNode, nEnd);
+    switch (eMode)
+    {
+        case META_INIT_START:
+            *rCursor.GetPoint() = start;
+            break;
+        case META_INIT_END:
+            *rCursor.GetPoint() = end;
+            break;
+        case META_CHECK_BOTH:
+            if (*rCursor.Start() < start)
+            {
+                *rCursor.Start() = start;
+                bRet = sal_False;
+            }
+            if (*rCursor.End() > end)
+            {
+                *rCursor.End() = end;
+                bRet = sal_False;
+            }
+            break;
+    }
+    return bRet;
+}
+
+bool SwXTextCursor::IsAtEndOfMeta() const
+{
+    if (CURSOR_META == eType)
+    {
+        SwUnoCrsr const * const pCursor( GetCrsr() );
+        SwXMeta const*const pXMeta( dynamic_cast<SwXMeta*>(xParentText.get()) );
+        ASSERT(pXMeta, "no meta?");
+        if (pCursor && pXMeta)
+        {
+            SwTxtNode * pTxtNode;
+            xub_StrLen nStart;
+            xub_StrLen nEnd;
+            const bool bSuccess(
+                    pXMeta->SetContentRange(pTxtNode, nStart, nEnd) );
+            ASSERT(bSuccess, "no pam?");
+            if (bSuccess)
+            {
+                const SwPosition end(*pTxtNode, nEnd);
+                if (   (*pCursor->GetPoint() == end)
+                    || (*pCursor->GetMark()  == end))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 /* -----------------------------10.03.00 18:02--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -972,6 +1055,11 @@ sal_Bool SwXTextCursor::goLeft(sal_Int16 nCount, sal_Bool Expand) throw( uno::Ru
     {
         SwXTextCursor::SelectPam(*pUnoCrsr, Expand);
         bRet = pUnoCrsr->Left( nCount, CRSR_SKIP_CHARS, FALSE, FALSE);
+        if (CURSOR_META == eType)
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH)
+                && bRet;
+        }
     }
     else
     {
@@ -991,6 +1079,11 @@ sal_Bool SwXTextCursor::goRight(sal_Int16 nCount, sal_Bool Expand) throw( uno::R
     {
         SwXTextCursor::SelectPam(*pUnoCrsr, Expand);
         bRet = pUnoCrsr->Right(nCount, CRSR_SKIP_CHARS, FALSE, FALSE);
+        if (CURSOR_META == eType)
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH)
+                && bRet;
+        }
     }
     else
     {
@@ -1044,6 +1137,10 @@ void SwXTextCursor::gotoStart(sal_Bool Expand) throw( uno::RuntimeException )
         {
             pUnoCrsr->MoveSection( fnSectionCurr, fnSectionStart);
         }
+        else if (CURSOR_META == eType)
+        {
+            lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_INIT_START);
+        }
     }
     else
     {
@@ -1061,7 +1158,9 @@ void SwXTextCursor::gotoEnd(sal_Bool Expand) throw( uno::RuntimeException )
     {
         SwXTextCursor::SelectPam(*pUnoCrsr, Expand);
         if(eType == CURSOR_BODY)
+        {
             pUnoCrsr->Move( fnMoveForward, fnGoDoc );
+        }
         else if(eType == CURSOR_FRAME ||
                 eType == CURSOR_TBLTEXT ||
                 eType == CURSOR_HEADER ||
@@ -1070,6 +1169,10 @@ void SwXTextCursor::gotoEnd(sal_Bool Expand) throw( uno::RuntimeException )
                 eType == CURSOR_REDLINE)
         {
             pUnoCrsr->MoveSection( fnSectionCurr, fnSectionEnd);
+        }
+        else if (CURSOR_META == eType)
+        {
+            lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_INIT_END);
         }
     }
     else
@@ -1097,6 +1200,11 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
         pCursor = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
+    }
+
+    if (!pRange && !pCursor)
+    {
+        throw uno::RuntimeException();
     }
 
     SwStartNodeType eSearchNodeType = SwNormalStartNode;
@@ -1139,6 +1247,27 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
     if(pOwnStartNode != pTmp)
     {
         throw uno::RuntimeException();
+    }
+
+    if (CURSOR_META == eType)
+    {
+        const SwPosition & rPoint( (pRange)
+            ? pRange->GetBookmark()->GetMarkPos()
+            : *pCursor->GetPaM()->GetPoint() );
+        const SwPosition & rMark ( (pRange)
+            ? ((pRange->GetBookmark()->IsExpanded())
+                    ? pRange->GetBookmark()->GetOtherMarkPos() : rPoint)
+            : *pCursor->GetPaM()->GetMark() );
+        SwPaM aPam(rPoint, rMark);
+        const bool bNotForced(
+                lcl_ForceIntoMeta(aPam, xParentText, META_CHECK_BOTH) );
+        if (!bNotForced)
+        {
+            throw uno::RuntimeException(
+                C2U("gotoRange: parameter range not contained in nesting"
+                    " text content for which this cursor was created"),
+                static_cast<text::XWordCursor*>(this));
+        }
     }
 
     //jetzt muss die Selektion erweitert werden
@@ -1277,7 +1406,9 @@ sal_Bool SwXTextCursor::gotoNextWord(sal_Bool Expand) throw( uno::RuntimeExcepti
         //Absatzende?
         if(pUnoCrsr->GetCntntNode() &&
                 pPoint->nContent == pUnoCrsr->GetCntntNode()->Len())
+        {
             pUnoCrsr->Right(1, CRSR_SKIP_CHARS, FALSE, FALSE);
+        }
         else
         {
             sal_Bool bTmp = pUnoCrsr->GoNextWordWT( i18n::WordType::DICTIONARY_WORD );
@@ -1289,6 +1420,10 @@ sal_Bool SwXTextCursor::gotoNextWord(sal_Bool Expand) throw( uno::RuntimeExcepti
         // return true if cursor has moved
         bRet = &pPoint->nNode.GetNode() != pOldNode  ||
                 pPoint->nContent.GetIndex() != nOldIndex;
+        if (bRet && (CURSOR_META == eType))
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH);
+        }
     }
     else
     {
@@ -1316,7 +1451,9 @@ sal_Bool SwXTextCursor::gotoPreviousWord(sal_Bool Expand) throw( uno::RuntimeExc
         SwXTextCursor::SelectPam(*pUnoCrsr, Expand);
         //Absatzanfang ?
         if(pPoint->nContent == 0)
+        {
             pUnoCrsr->Left(1, CRSR_SKIP_CHARS, FALSE, FALSE);
+        }
         else
         {
             pUnoCrsr->GoPrevWordWT( i18n::WordType::DICTIONARY_WORD );
@@ -1327,6 +1464,10 @@ sal_Bool SwXTextCursor::gotoPreviousWord(sal_Bool Expand) throw( uno::RuntimeExc
         // return true if cursor has moved
         bRet = &pPoint->nNode.GetNode() != pOldNode  ||
                 pPoint->nContent.GetIndex() != nOldIndex;
+        if (bRet && (CURSOR_META == eType))
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH);
+        }
     }
     else
     {
@@ -1363,6 +1504,10 @@ sal_Bool SwXTextCursor::gotoEndOfWord(sal_Bool Expand) throw( uno::RuntimeExcept
             pPoint->nNode       = rOldNode;
             pPoint->nContent    = nOldIndex;
         }
+        else if (CURSOR_META == eType)
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH);
+        }
     }
     else
     {
@@ -1398,6 +1543,10 @@ sal_Bool SwXTextCursor::gotoStartOfWord(sal_Bool Expand) throw( uno::RuntimeExce
         {
             pPoint->nNode       = rOldNode;
             pPoint->nContent    = nOldIndex;
+        }
+        else if (CURSOR_META == eType)
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH);
         }
     }
     else
@@ -1489,6 +1638,11 @@ sal_Bool SwXTextCursor::gotoNextSentence(sal_Bool Expand) throw( uno::RuntimeExc
             if (bWasEOS && !bNextWord)
                 bRet = sal_False;
         }
+        if (CURSOR_META == eType)
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH)
+                && bRet;
+        }
     }
     else
         throw uno::RuntimeException();
@@ -1516,6 +1670,11 @@ sal_Bool SwXTextCursor::gotoPreviousSentence(sal_Bool Expand) throw( uno::Runtim
                 pUnoCrsr->GoSentence(SwCursor::PREV_SENT);
             }
         }
+        if (CURSOR_META == eType)
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH)
+                && bRet;
+        }
     }
     else
         throw uno::RuntimeException();
@@ -1538,6 +1697,11 @@ sal_Bool SwXTextCursor::gotoStartOfSentence(sal_Bool Expand) throw( uno::Runtime
         bRet = SwUnoCursorHelper::IsStartOfPara(*pUnoCrsr)
             || pUnoCrsr->GoSentence(SwCursor::START_SENT) ||
             SwUnoCursorHelper::IsStartOfPara(*pUnoCrsr);
+        if (CURSOR_META == eType)
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH)
+                && bRet;
+        }
     }
     else
         throw uno::RuntimeException();
@@ -1561,7 +1725,11 @@ sal_Bool SwXTextCursor::gotoEndOfSentence(sal_Bool Expand) throw( uno::RuntimeEx
         bRet = !bAlreadyParaEnd &&
                     (pUnoCrsr->GoSentence(SwCursor::END_SENT) ||
                         pUnoCrsr->MovePara(fnParaCurr, fnParaEnd));
-
+        if (CURSOR_META == eType)
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH)
+                && bRet;
+        }
     }
     else
         throw uno::RuntimeException();
@@ -1603,6 +1771,8 @@ sal_Bool SwXTextCursor::gotoStartOfParagraph(sal_Bool Expand) throw( uno::Runtim
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bRet = sal_False;
+    if (CURSOR_META == eType)
+        return bRet;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr )
     {
@@ -1627,6 +1797,8 @@ sal_Bool SwXTextCursor::gotoEndOfParagraph(sal_Bool Expand) throw( uno::RuntimeE
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bRet = sal_False;
+    if (CURSOR_META == eType)
+        return bRet;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
@@ -1651,6 +1823,8 @@ sal_Bool SwXTextCursor::gotoNextParagraph(sal_Bool Expand) throw( uno::RuntimeEx
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bRet = sal_False;
+    if (CURSOR_META == eType)
+        return bRet;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
@@ -1668,6 +1842,8 @@ sal_Bool SwXTextCursor::gotoPreviousParagraph(sal_Bool Expand) throw( uno::Runti
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bRet = sal_False;
+    if (CURSOR_META == eType)
+        return bRet;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
@@ -1697,7 +1873,19 @@ uno::Reference< XTextRange >  SwXTextCursor::getStart(void) throw( uno::RuntimeE
     {
         SwPaM aPam(*pUnoCrsr->Start());
         uno::Reference< XText >  xParent = getText();
-        xRet = new SwXTextRange(aPam, xParent);
+        if (CURSOR_META == eType)
+        {
+            // return cursor to prevent modifying SwXTextRange for META
+            SwXTextCursor * const pCursor(
+                new SwXTextCursor(xParent, *pUnoCrsr->GetPoint(),
+                    CURSOR_META, pUnoCrsr->GetDoc()) );
+            pCursor->gotoStart(sal_False);
+            xRet = static_cast<text::XWordCursor*>(pCursor);
+        }
+        else
+        {
+            xRet = new SwXTextRange(aPam, xParent);
+        }
     }
     else
         throw uno::RuntimeException();
@@ -1715,7 +1903,19 @@ uno::Reference< XTextRange >  SwXTextCursor::getEnd(void) throw( uno::RuntimeExc
     {
         SwPaM aPam(*pUnoCrsr->End());
         uno::Reference< XText >  xParent = getText();
-        xRet = new SwXTextRange(aPam, xParent);
+        if (CURSOR_META == eType)
+        {
+            // return cursor to prevent modifying SwXTextRange for META
+            SwXTextCursor * const pCursor(
+                new SwXTextCursor(xParent, *pUnoCrsr->GetPoint(),
+                    CURSOR_META, pUnoCrsr->GetDoc()) );
+            pCursor->gotoEnd(sal_False);
+            xRet = static_cast<text::XWordCursor*>(pCursor);
+        }
+        else
+        {
+            xRet = new SwXTextRange(aPam, xParent);
+        }
     }
     else
         throw uno::RuntimeException();
@@ -1762,7 +1962,11 @@ void SwXTextCursor::setString(const OUString& aString) throw( uno::RuntimeExcept
     if(!pUnoCrsr)
         throw uno::RuntimeException();
 
-    DeleteAndInsert(aString);
+    const bool bForceExpandHints( (CURSOR_META != eType)
+        ? false
+        : dynamic_cast<SwXMeta*>(xParentText.get())->CheckForOwnMemberMeta(
+            0, GetPaM(), true) );
+    DeleteAndInsert(aString, bForceExpandHints);
 }
 /* -----------------------------03.05.00 12:56--------------------------------
 

@@ -3031,7 +3031,8 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         if ( !bInValid )
         {
             pRoot->ResetIdleFormat();
-            pImp->GetShell()->GetDoc()->GetDocShell()->Broadcast( SfxEventHint( SW_EVENT_LAYOUT_FINISHED ) );
+            SfxObjectShell* pDocShell = pImp->GetShell()->GetDoc()->GetDocShell();
+            pDocShell->Broadcast( SfxEventHint( SW_EVENT_LAYOUT_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_LAYOUT_FINISHED), pDocShell ) );
         }
     }
 

@@ -109,7 +109,6 @@
 #include <pagedesc.hxx>     // for SwPageDesc
 #include <flddat.hxx>       // for Date fields
 #include <ndtxt.hxx>        // for Numrules
-#include <fmthbsh.hxx>
 #include <swrect.hxx>
 #include <reffld.hxx>
 #include <ftninfo.hxx>
@@ -2383,9 +2382,9 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
             GetExport( ).OutputField( 0, eCode, sStr, WRITEFIELD_START | WRITEFIELD_CMD_START |
                 WRITEFIELD_CMD_END );
         }
-
-        GetExport( ).bStartTOX = false;
     }
+
+    GetExport( ).bStartTOX = false;
 }
 
 void AttributeOutputBase::EndTOX( const SwSection& rSect )
@@ -2961,8 +2960,8 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         font size of that script as our default.
         */
         USHORT nScript;
-        if( pBreakIt->xBreak.is() )
-            nScript = pBreakIt->xBreak->getScriptType( pFld->GetPar1(), 0);
+        if( pBreakIt->GetBreakIter().is() )
+            nScript = pBreakIt->GetBreakIter()->getScriptType( pFld->GetPar1(), 0);
         else
             nScript = i18n::ScriptType::ASIAN;
 
@@ -3140,10 +3139,6 @@ void WW8AttributeOutput::ParaVerticalAlign( const SvxParaVertAlignItem& rAlign )
 
 // NoHyphen: ich habe keine Entsprechung in der SW-UI und WW-UI gefunden
 
-void WW8AttributeOutput::TextHardBlank( const SwFmtHardBlank& rHardBlank )
-{
-    m_rWW8Export.WriteChar( rHardBlank.GetChar() );
-}
 
 // RefMark, NoLineBreakHere  fehlen noch
 
@@ -3757,8 +3752,17 @@ void WW8AttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
         UINT16 nHeight = rGrid.GetBaseHeight() + rGrid.GetRubyHeight();
         m_rWW8Export.InsUInt16( NS_sprm::LN_SDyaLinePitch );
         m_rWW8Export.InsUInt16( nHeight );
-        sal_uInt32 nPageCharSize = ItemGet<SvxFontHeightItem>(*(m_rWW8Export.pStyles->GetSwFmt()),
-                RES_CHRATR_CJK_FONTSIZE).GetHeight();
+
+        MSWordStyles * pStyles = m_rWW8Export.pStyles;
+        SwFmt * pSwFmt = pStyles->GetSwFmt();
+
+        sal_uInt32 nPageCharSize = 0;
+
+        if (pSwFmt != NULL)
+        {
+            nPageCharSize = ItemGet<SvxFontHeightItem>
+            (*pSwFmt, RES_CHRATR_CJK_FONTSIZE).GetHeight();
+        }
 
         INT32 nCharWidth = rGrid.GetBaseWidth() - nPageCharSize;
         INT32 nFraction = 0;
@@ -4543,9 +4547,9 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
                     {
                         const SwTxtNode* pNd = (const SwTxtNode*)GetExport().pOutFmtNode;
                         pSet = &pNd->GetSwAttrSet();
-                        if ( pBreakIt->xBreak.is() )
+                        if ( pBreakIt->GetBreakIter().is() )
                         {
-                            nScript = pBreakIt->xBreak->
+                            nScript = pBreakIt->GetBreakIter()->
                                 getScriptType(pNd->GetTxt(), 0);
                         }
                     }
@@ -5145,9 +5149,6 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
         case RES_TXTATR_FTN:
             TextFootnote( static_cast< const SwFmtFtn& >( rHt ) );
-            break;
-        case RES_TXTATR_HARDBLANK:
-            TextHardBlank( static_cast< const SwFmtHardBlank& >( rHt ) );
             break;
 
         case RES_PARATR_LINESPACING:

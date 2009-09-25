@@ -1034,7 +1034,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                                             nChPos + 1 );
 
                     // Trennzeichen loeschen und SuchString korrigieren
-                    pTxtNd->Erase( aCntPos.nContent, 1 );
+                    pTxtNd->EraseText( aCntPos.nContent, 1 );
                     pTxt = pTxtNd->GetTxt().GetBuffer();
                     nChPos = 0;
                     --nChPos, --pTxt;           // for the ++ in the for loop !!!
@@ -1551,7 +1551,8 @@ BOOL lcl_DelBox( const SwTableBox*& rpBox, void* pPara )
             {
                 // Inserting the seperator
                 SwIndex aCntIdx( pDelPara->pLastNd, pDelPara->pLastNd->GetTxt().Len());
-                pDelPara->pLastNd->Insert( pDelPara->cCh, aCntIdx );
+                pDelPara->pLastNd->InsertText( pDelPara->cCh, aCntIdx,
+                    IDocumentContentOperations::INS_EMPTYEXPAND );
                 if( pDelPara->pUndo )
                     pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx, aDelRg.aEnd.GetIndex(),
                                                 aCntIdx.GetIndex() );

@@ -127,8 +127,8 @@ RES_TXTATR_WITHEND_BEGIN = RES_TXTATR_BEGIN ,
     RES_TXTATR_DUMMY5,                              // 46
     RES_TXTATR_CJK_RUBY,                            // 47
     RES_TXTATR_UNKNOWN_CONTAINER,                   // 48
-    RES_TXTATR_DUMMY6,                              // 49
-    RES_TXTATR_DUMMY7,                              // 50
+    RES_TXTATR_META,                                // 49
+    RES_TXTATR_METAFIELD,                           // 50
 RES_TXTATR_WITHEND_END,
 
 // alle TextAttribute ohne ein Ende
@@ -136,8 +136,8 @@ RES_TXTATR_NOEND_BEGIN = RES_TXTATR_WITHEND_END,
     RES_TXTATR_FIELD = RES_TXTATR_NOEND_BEGIN,      // 51
     RES_TXTATR_FLYCNT,                              // 52
     RES_TXTATR_FTN,                                 // 53
-    RES_TXTATR_SOFTHYPH,                            // 54
-    RES_TXTATR_HARDBLANK,                           // 55
+    RES_TXTATR_DUMMY4,                              // 54
+    RES_TXTATR_DUMMY3,                              // 55
     RES_TXTATR_DUMMY1,                              // 56
     RES_TXTATR_DUMMY2,                              // 57
 RES_TXTATR_NOEND_END,

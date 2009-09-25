@@ -38,20 +38,20 @@ PRJNAME=sw
 TARGET=swslots
 
 # --- Settings -----------------------------------------------------
-
+.IF "$(L10N_framework)"==""
 SVSDIINC=$(PRJ)$/source$/ui$/inc
+.ENDIF
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
 
-
+.IF "$(L10N_framework)"==""
 SDI1NAME=$(TARGET)
 SDI1EXPORT=swriter
 #SIDHRCNAME=swslots.hrc
 
 # --- Files --------------------------------------------------------
-
 SVSDI1DEPEND= \
         $(SOLARINCXDIR)$/sfx2/sfx.sdi \
         $(SOLARINCXDIR)$/sfx2/sfxitems.sdi \
@@ -102,7 +102,9 @@ SVSDI1DEPEND= \
         annotsh.sdi\
         swslots.hrc \
         $(INC)$/globals.hrc \
-        $(INC)$/cmdid.h
+                $(INC)$/cmdid.h \
+                $(SOLARINCXDIR)$/svxslots.ilb
+.ENDIF
 
 # --- Targets -------------------------------------------------------
 

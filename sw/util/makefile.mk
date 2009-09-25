@@ -190,6 +190,7 @@ SHL3STDLIBS= \
             $(SVLLIB) \
             $(UNOTOOLSLIB) \
             $(TOOLSLIB) \
+            $(I18NISOLANGLIB) \
             $(COMPHELPERLIB) \
             $(UCBHELPERLIB)	\
             $(CPPUHELPERLIB)	\

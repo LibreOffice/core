@@ -701,7 +701,7 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
                 if (i < nLength - 1)
                     sStr += '\t';
             }
-            pSh->SwEditShell::Insert(sStr);
+            pSh->SwEditShell::Insert2(sStr);
             pSh->SwFEShell::SplitNode();    // Zeilenvorschub
         }
     }
@@ -932,9 +932,9 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
     do {
         nStartRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
         {
-            SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, pSh->GetView().GetViewFrame()->GetObjectShell()));
+            SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE), pSh->GetView().GetViewFrame()->GetObjectShell()));
             pSh->ViewShell::UpdateFlds();
-            SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, pSh->GetView().GetViewFrame()->GetObjectShell()));
+            SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), pSh->GetView().GetViewFrame()->GetObjectShell()));
             ++rOpt.nMergeAct;
 
             // launch MailMergeEvent if required
@@ -1455,9 +1455,9 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                             SwDoc* pWorkDoc = ((SwDocShell*)(&xWorkDocSh))->GetDoc();
                             SwNewDBMgr* pOldDBMgr = pWorkDoc->GetNewDBMgr();
                             pWorkDoc->SetNewDBMgr( this );
-                            SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, xWorkDocSh));
+                            SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE), xWorkDocSh));
                             pWorkDoc->UpdateFlds(NULL, false);
-                            SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, xWorkDocSh));
+                            SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), xWorkDocSh));
 
                             // alle versteckten Felder/Bereiche entfernen
                             pWorkDoc->RemoveInvisibleContent();
@@ -2858,7 +2858,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
             aDescriptor[daCursor] <<= xResSet;
 
         SfxObjectShellRef xDocShell = rSh.GetView().GetViewFrame()->GetObjectShell();
-        SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, xDocShell));
+        SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), xDocShell));
         {
             //copy rSh to aTempFile
             ::rtl::OUString sTempURL;
@@ -2924,7 +2924,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
             //remove the temporary file
             SWUnoHelper::UCB_DeleteFile( sTempURL );
         }
-        SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, rSh.GetView().GetViewFrame()->GetObjectShell()));
+        SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), rSh.GetView().GetViewFrame()->GetObjectShell()));
 
         // reset the cursor inside
         xResSet = NULL;
@@ -3260,9 +3260,9 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 // create a layout
                 rWorkShell.CalcLayout();
                 rWorkShell.UnlockExpFlds();
-                SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
-                rWorkShell.ViewShell::UpdateFlds();
-                SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
+                SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE), rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
+            rWorkShell.ViewShell::UpdateFlds();
+                SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
 
             // strip invisible content and convert fields to text
             rWorkShell.RemoveInvisibleContent();

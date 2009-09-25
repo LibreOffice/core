@@ -158,8 +158,8 @@ void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSection& rSect,
     }
 }
 
-SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
-                            const SfxItemSet* pAttr, BOOL bUpdate )
+SwSection* SwDoc::InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
+                            const SfxItemSet* pAttr, bool bUpdate )
 {
     const SwNode* pPrvNd = 0;
     USHORT nRegionRet = 0;
@@ -178,10 +178,11 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
         if( !pStt->nContent.GetIndex() &&
             pEnd->nNode.GetNode().GetCntntNode()->Len() ==
             pEnd->nContent.GetIndex() )
-
-            ::lcl_CheckEmptyLayFrm( GetNodes(), (SwSection&)rNew,
+        {
+            ::lcl_CheckEmptyLayFrm( GetNodes(), const_cast<SwSection&>(rNew),
                                     pStt->nNode.GetNode(),
                                     pEnd->nNode.GetNode() );
+        }
     }
 
     SwUndoInsSection* pUndoInsSect = 0;
@@ -193,9 +194,11 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
         DoUndo( FALSE );
     }
 
-    SwSectionFmt* pFmt = MakeSectionFmt( 0 );
-    if( pAttr )
+    SwSectionFmt* const pFmt = MakeSectionFmt( 0 );
+    if ( pAttr )
+    {
         pFmt->SetFmtAttr( *pAttr );
+    }
 
     SwSectionNode* pNewSectNode = 0;
 
@@ -222,16 +225,27 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
         {
             if( pUndoInsSect )
             {
-                SwTxtNode* pTNd;
                 if( !( pPrvNd && 1 == nRegionRet ) &&
-                    pSttPos->nContent.GetIndex() &&
-                    0 != ( pTNd = pSttPos->nNode.GetNode().GetTxtNode() ))
-                    pUndoInsSect->SaveSplitNode( pTNd, TRUE );
+                    pSttPos->nContent.GetIndex() )
+                {
+                    SwTxtNode* const pTNd =
+                        pSttPos->nNode.GetNode().GetTxtNode();
+                    if (pTNd)
+                    {
+                        pUndoInsSect->SaveSplitNode( pTNd, TRUE );
+                    }
+                }
 
-                if( !( pPrvNd && 2 == nRegionRet ) &&
-                    0 != ( pTNd = pEndPos->nNode.GetNode().GetTxtNode() ) &&
-                    pTNd->GetTxt().Len() != pEndPos->nContent.GetIndex() )
-                    pUndoInsSect->SaveSplitNode( pTNd, FALSE );
+                if ( !( pPrvNd && 2 == nRegionRet ) )
+                {
+                    SwTxtNode *const pTNd =
+                        pEndPos->nNode.GetNode().GetTxtNode();
+                    if (pTNd &&
+                        (pTNd->GetTxt().Len() != pEndPos->nContent.GetIndex()))
+                    {
+                        pUndoInsSect->SaveSplitNode( pTNd, FALSE );
+                    }
+                }
             }
 
             const SwCntntNode* pCNd;
@@ -241,7 +255,9 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
                 pSttPos->nContent.Assign( pSttPos->nNode.GetNode().GetCntntNode(), 0 );
             }
             else if( pSttPos->nContent.GetIndex() )
+            {
                 SplitNode( *pSttPos, false );
+            }
 
             if( pPrvNd && 2 == nRegionRet )
             {
@@ -293,7 +309,9 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
         else
         {
             if( pUndoInsSect && pCNd->IsTxtNode() )
+            {
                 pUndoInsSect->SaveSplitNode( (SwTxtNode*)pCNd, TRUE );
+            }
             SplitNode( *pPos, false );
             pNewSectNode = GetNodes().InsertSection( pPos->nNode, *pFmt, rNew, 0, TRUE );
         }
@@ -309,9 +327,13 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
     {
         SwPaM aPam( *pNewSectNode->EndOfSectionNode(), *pNewSectNode, 1 );
         if( IsRedlineOn() )
+        {
             AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
+        }
         else
+        {
             SplitRedline( aPam );
+        }
     }
 
     // ist eine Condition gesetzt
@@ -320,7 +342,9 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
         // dann berechne bis zu dieser Position
         SwCalc aCalc( *this );
         if( ! IsInReading() )
+        {
             FldsToCalc( aCalc, pNewSectNode->GetIndex(), USHRT_MAX );
+        }
         SwSection& rNewSect = pNewSectNode->GetSection();
         rNewSect.SetCondHidden( aCalc.Calculate( rNewSect.GetCondition() ).GetBool() );
     }
@@ -335,7 +359,9 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
             ( FTNEND_ATTXTEND_OWNNUMSEQ == ( nVal = ((SwFmtEndAtTxtEnd&)
                             pAttr->Get( RES_END_AT_TXTEND )).GetValue() ) ||
               FTNEND_ATTXTEND_OWNNUMANDFMT == nVal ))
+        {
             bUpdateFtn = TRUE;
+        }
     }
 
     if( pUndoInsSect )
@@ -346,10 +372,14 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
     }
 
     if( rNew.IsLinkType() )
+    {
         pNewSectNode->GetSection().CreateLink( bUpdate ? CREATE_UPDATE : CREATE_CONNECT );
+    }
 
     if( bUpdateFtn )
+    {
         GetFtnIdxs().UpdateFtn( SwNodeIndex( *pNewSectNode ));
+    }
 
     SetModified();
     return &pNewSectNode->GetSection();

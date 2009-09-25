@@ -2230,12 +2230,12 @@ void ViewShell::ApplyViewOptions( const SwViewOption &rOpt )
     {
         SwViewOption aOpt( *pSh->GetViewOptions() );
         aOpt.SetFldName( rOpt.IsFldName() );
-        aOpt.SetShowHiddenField( rOpt.IsShowHiddenField() );
+            aOpt.SetShowHiddenField( rOpt.IsShowHiddenField() );
         aOpt.SetShowHiddenPara( rOpt.IsShowHiddenPara() );
-        aOpt.SetShowHiddenChar( rOpt.IsShowHiddenChar() );
-        aOpt.SetViewLayoutBookMode( rOpt.IsViewLayoutBookMode() );
-        aOpt.SetViewLayoutColumns( rOpt.GetViewLayoutColumns() );
-
+            aOpt.SetShowHiddenChar( rOpt.IsShowHiddenChar() );
+            aOpt.SetViewLayoutBookMode( rOpt.IsViewLayoutBookMode() );
+            aOpt.SetViewLayoutColumns( rOpt.GetViewLayoutColumns() );
+        aOpt.SetPostIts(rOpt.IsPostIts());
         if ( !(aOpt == *pSh->GetViewOptions()) )
             pSh->ImplApplyViewOptions( aOpt );
         pSh = (ViewShell*)pSh->GetNext();

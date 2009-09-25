@@ -141,6 +141,7 @@ class SwFont
     Color       aOverColor;     // color of the overlining
     BYTE        nToxCnt;        // Zaehlt die Schachtelungstiefe der Tox
     BYTE        nRefCnt;        // Zaehlt die Schachtelungstiefe der Refs
+    BYTE        m_nMetaCount;   // count META/METAFIELD
     BYTE        nActual;        // actual font (Latin, CJK or CTL)
 
     // Schalter fuer die Font-Extensions
@@ -245,6 +246,9 @@ public:
     inline BYTE &GetRef() { return nRefCnt; }
     inline BYTE GetRef() const { return nRefCnt; }
     inline BOOL IsRef() const { return ( 0 != nRefCnt ); }
+    inline BYTE &GetMeta() { return m_nMetaCount; }
+    inline BYTE GetMeta() const { return m_nMetaCount; }
+    inline bool IsMeta() const { return (0 != m_nMetaCount); }
     inline void SetURL( const BOOL bURL );
     inline BOOL IsURL() const { return bURL; }
     inline void SetGreyWave( const BOOL bNew );

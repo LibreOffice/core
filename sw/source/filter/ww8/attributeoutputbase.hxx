@@ -449,9 +449,6 @@ protected:
     /// Sfx item RES_TXTATR_FTN
     virtual void TextFootnote_Impl( const SwFmtFtn& ) = 0;
 
-    /// Sfx item RES_TXTATR_HARDBLANK
-    virtual void TextHardBlank( const SwFmtHardBlank& ) = 0;
-
     /// Sfx item RES_PARATR_LINESPACING
     void ParaLineSpacing( const SvxLineSpacingItem& );
 

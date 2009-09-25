@@ -343,7 +343,10 @@ BOOL SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
     else
         aInsPos  = pMyDoc->GetNodes().GetEndOfContent();
 
-    BOOL bRet = pMyDoc->Move( aRg, aInsPos, IDocumentContentOperations::DOC_MOVEALLFLYS );
+    bool bRet = pMyDoc->MoveNodeRange( aRg, aInsPos,
+        static_cast<IDocumentContentOperations::SwMoveFlags>(
+              IDocumentContentOperations::DOC_MOVEALLFLYS
+            | IDocumentContentOperations::DOC_CREATEUNDOOBJ ));
 
     EndAllAction();
     return bRet;

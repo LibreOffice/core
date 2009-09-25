@@ -452,7 +452,8 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         aRg.aEnd    = aRg.aStart.GetIndex() + 1;
 
         // Nodes verschieben
-        Move( aRg, aStart, IDocumentContentOperations::DOC_MOVEDEFAULT );
+        MoveNodeRange( aRg, aStart,
+            IDocumentContentOperations::DOC_MOVEDEFAULT );
 
         // Undo Verschiebungen einpflegen
         if(pUndoSort)
@@ -777,7 +778,8 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
 
     // Einfuegen der Source
     SwNodeIndex aIns( *pTar->GetSttNd()->EndOfSectionNode() );
-    pDoc->Move( aRg, aIns, IDocumentContentOperations::DOC_MOVEDEFAULT );
+    pDoc->MoveNodeRange( aRg, aIns,
+        IDocumentContentOperations::DOC_MOVEDEFAULT );
 
     // Falls erster Node leer -> weg damit
     if(bDelFirst)
