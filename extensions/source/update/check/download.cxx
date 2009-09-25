@@ -267,6 +267,9 @@ bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProx
         rtl::OString aURL(rtl::OUStringToOString(rURL, RTL_TEXTENCODING_UTF8));
         curl_easy_setopt(pCURL, CURLOPT_URL, aURL.getStr());
 
+        // abort on http errors
+        curl_easy_setopt(pCURL, CURLOPT_FAILONERROR, 1);
+
         // enable redirection
         curl_easy_setopt(pCURL, CURLOPT_FOLLOWLOCATION, 1);
 
@@ -318,7 +321,30 @@ bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProx
             if( NULL != error_message )
                 aMessage = error_message;
 
-            out.Handler->downloadStalled( rtl::OStringToOUString(aMessage, RTL_TEXTENCODING_UTF8) );
+            if ( CURLE_HTTP_RETURNED_ERROR == cc )
+            {
+                long nError;
+                curl_easy_getinfo( pCURL, CURLINFO_RESPONSE_CODE, &nError );
+
+                if ( 403 == nError )
+                    aMessage += RTL_CONSTASCII_STRINGPARAM( " 403: Access denied!" );
+                else if ( 404 == nError )
+                    aMessage += RTL_CONSTASCII_STRINGPARAM( " 404: File not found!" );
+                else if ( 416 == nError )
+                {
+                    // we got this error probably, because we already downloaded the file
+                    out.Handler->downloadFinished(out.File);
+                    ret = true;
+                }
+                else
+                {
+                    aMessage += RTL_CONSTASCII_STRINGPARAM( ":error code = " );
+                    aMessage += aMessage.valueOf( nError );
+                    aMessage += RTL_CONSTASCII_STRINGPARAM( " !" );
+                }
+            }
+            if ( !ret )
+                out.Handler->downloadStalled( rtl::OStringToOUString(aMessage, RTL_TEXTENCODING_UTF8) );
         }
 
         curl_easy_cleanup(pCURL);
