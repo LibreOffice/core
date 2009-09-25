@@ -19,6 +19,6 @@ OpenOffice_Dev_SDK  unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci1
 #URE             unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngi6,unxsoli4,unxsols4,wntmsci12  en-US   ure
 OpenOfficeLanguagepack   unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro,unxmacxi.pro    de      ooolanguagepack
 OpenOfficeLanguagepack   unxlngi6,unxsoli4,unxsols4,wntmsci12,unxmacxi                                     de      ooolanguagepack
-OpenOfficeDevLanguagepack   unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro     de|fr|ja|ar   ooodevlanguagepack
+OpenOfficeDevLanguagepack   unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro,unxmacxi.pro     de|fr|ja|ar   ooodevlanguagepack
 #BrOfficeLanguagepack     unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro        pt-BR   broolanguagepack
 

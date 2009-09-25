@@ -23,13 +23,13 @@ AdminNetworkLocation	BannerLine	Line	0	44	374	0	1
 AdminNetworkLocation	Branding1	Text	4	229	140	13	3		{&MSSWhiteSerif8}[ProductName]		
 AdminNetworkLocation	Branding2	Text	3	228	140	13	65537		[ProductName]		
 AdminNetworkLocation	Browse	PushButton	286	124	66	17	3		OOO_CONTROL_17	Back	
-AdminNetworkLocation	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_18	SetupPathEdit	
+AdminNetworkLocation	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_18	LBBrowse	
 AdminNetworkLocation	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_19		
 AdminNetworkLocation	DlgLine	Line	145	234	229	0	1				
 AdminNetworkLocation	DlgText	Text	21	51	326	40	3		OOO_CONTROL_20		
 AdminNetworkLocation	DlgTitle	Text	13	6	280	25	65539		OOO_CONTROL_21		
 AdminNetworkLocation	InstallNow	PushButton	230	243	66	17	3		OOO_CONTROL_22	Cancel	
-AdminNetworkLocation	LBBrowse	Text	21	90	100	10	3		OOO_CONTROL_23		
+AdminNetworkLocation	LBBrowse	Text	21	90	100	10	3		OOO_CONTROL_23	SetupPathEdit	
 AdminNetworkLocation	SetupPathEdit	PathEdit	21	102	330	17	3	TARGETDIR		Browse	
 AdminWelcome	Back	PushButton	164	243	66	17	1		OOO_CONTROL_24	Next	
 AdminWelcome	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_25	Back	

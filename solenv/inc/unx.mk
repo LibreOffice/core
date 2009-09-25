@@ -232,9 +232,9 @@ DLLPOST!:=$(DLLPOST).$($(UNIXVERSIONNAMES)_MAJOR)
 # enable building/linking KDE-dependent code in both OOo and SO build environment
 .IF "$(ENABLE_KDE)" != ""
 .IF "$(KDE_ROOT)"!=""
-KDE_CFLAGS:=-I$(KDE_ROOT)$/include -DQT_CLEAN_NAMESPACE
+KDE_CFLAGS:=-I$(KDE_ROOT)/include -DQT_CLEAN_NAMESPACE
 KDE_LIBS:=-lkdeui -lkdecore -lqt-mt
-SOLARLIB+=-L$(KDE_ROOT)$/lib
+SOLARLIB+=-L$(KDE_ROOT)/lib
 .ENDIF          # "$(KDE_ROOT)"!=""
 .ENDIF          # "$(ENABLE_KDE)" != ""
 

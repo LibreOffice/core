@@ -71,9 +71,9 @@ SHL2LINKFLAGS_X64+=$(LINKFLAGS_X64)
 .IF "$(SHL1IMPLIB_X64)" == ""
 SHL1IMPLIB_X64=i$(TARGET)_t1
 .ENDIF			# "$(SHL1IMPLIB_X64)" == ""
-USE_1IMPLIB_X64=-implib:$(LB_X64)$/$(SHL1IMPLIB_X64).lib
+USE_1IMPLIB_X64=-implib:$(LB_X64)/$(SHL1IMPLIB_X64).lib
 .IF "$(SHL1TARGET_X64)"!=""
-SHL1IMPLIBN_X64=$(LB_X64)$/$(SHL1IMPLIB_X64).lib
+SHL1IMPLIBN_X64=$(LB_X64)/$(SHL1IMPLIB_X64).lib
 .ENDIF # "$(SLOFILES_X64)$(OBJFILES_X64)"!=""
 
 make_x64_dirs :
@@ -146,16 +146,16 @@ $(DEF1TARGETN_X64) : \
     @echo GetVersionInfo		>>$@.tmpfile
 .IF "$(DEFLIB1NAME_X64)"!=""
 .IF "$(SHL1USE_EXPORTS_X64)"==""
-    @-$(EXPORT1_PROTECT) $(RMHACK1) $(MISC_X64)$/$(SHL1TARGET_X64).exp
-    @$(EXPORT1_PROTECT) $(LIBMGR_X64) -EXTRACT:/ /OUT:$(MISC_X64)$/$(SHL1TARGET_X64).exp $(SLB_X64)$/$(DEFLIB1NAME_X64).lib
-    @$(EXPORT1_PROTECT) $(LDUMP2) -E 20 -F $(MISC_X64)$/$(SHL1TARGET_X64).flt $(MISC_X64)$/$(SHL1TARGET_X64).exp			   >>$@.tmpfile
-    $(EXPORT1_PROTECT) $(RMHACK1) $(MISC_X64)$/$(SHL1TARGET_X64).exp
+    @-$(EXPORT1_PROTECT) $(RMHACK1) $(MISC_X64)/$(SHL1TARGET_X64).exp
+    @$(EXPORT1_PROTECT) $(LIBMGR_X64) -EXTRACT:/ /OUT:$(MISC_X64)/$(SHL1TARGET_X64).exp $(SLB_X64)/$(DEFLIB1NAME_X64).lib
+    @$(EXPORT1_PROTECT) $(LDUMP2) -E 20 -F $(MISC_X64)/$(SHL1TARGET_X64).flt $(MISC_X64)/$(SHL1TARGET_X64).exp			   >>$@.tmpfile
+    $(EXPORT1_PROTECT) $(RMHACK1) $(MISC_X64)/$(SHL1TARGET_X64).exp
 .ELSE			# "$(SHL1USE_EXPORTS_X64)"==""
-    @$(EXPORT1_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB1NAME_X64) $(SLB_X64)$/$(i).lib) | $(GREP) EXPORT: > $(MISC_X64)$/$(SHL1TARGET_X64).direct
+    @$(EXPORT1_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB1NAME_X64) $(SLB_X64)/$(i).lib) | $(GREP) EXPORT: > $(MISC_X64)/$(SHL1TARGET_X64).direct
 .IF "$(SHL1USE_EXPORTS_X64)"!="name"
-    @$(EXPORT1_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF1FILTER_X64) $(MISC_X64)$/$(SHL1TARGET_X64).direct >>$@.tmpfile
+    @$(EXPORT1_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF1FILTER_X64) $(MISC_X64)/$(SHL1TARGET_X64).direct >>$@.tmpfile
 .ELSE			# "$(SHL1USE_EXPORTS_X64)"!="name"
-    @$(EXPORT1_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF1FILTER_X64) $(MISC_X64)$/$(SHL1TARGET_X64).direct >>$@.tmpfile
+    @$(EXPORT1_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF1FILTER_X64) $(MISC_X64)/$(SHL1TARGET_X64).direct >>$@.tmpfile
 .ENDIF			# "$(SHL1USE_EXPORTS_X64)"!="name"
 .ENDIF			# "$(SHL1USE_EXPORTS)"==""
 .ENDIF				# "$(DEFLIB1NAME)"!=""
@@ -184,16 +184,16 @@ $(DEF2TARGETN_X64) : \
     @echo GetVersionInfo		>>$@.tmpfile
 .IF "$(DEFLIB2NAME_X64)"!=""
 .IF "$(SHL2USE_EXPORTS_X64)"==""
-    @-$(EXPORT2_PROTECT) $(RMHACK1) $(MISC_X64)$/$(SHL2TARGET_X64).exp
-    @$(EXPORT2_PROTECT) $(LIBMGR_X64) -EXTRACT:/ /OUT:$(MISC_X64)$/$(SHL2TARGET_X64).exp $(SLB_X64)$/$(DEFLIB2NAME_X64).lib
-    @$(EXPORT2_PROTECT) $(LDUMP2) -E 20 -F $(MISC_X64)$/$(SHL2TARGET_X64).flt $(MISC_X64)$/$(SHL2TARGET_X64).exp			   >>$@.tmpfile
-    $(EXPORT2_PROTECT) $(RMHACK1) $(MISC_X64)$/$(SHL2TARGET_X64).exp
+    @-$(EXPORT2_PROTECT) $(RMHACK1) $(MISC_X64)/$(SHL2TARGET_X64).exp
+    @$(EXPORT2_PROTECT) $(LIBMGR_X64) -EXTRACT:/ /OUT:$(MISC_X64)/$(SHL2TARGET_X64).exp $(SLB_X64)/$(DEFLIB2NAME_X64).lib
+    @$(EXPORT2_PROTECT) $(LDUMP2) -E 20 -F $(MISC_X64)/$(SHL2TARGET_X64).flt $(MISC_X64)/$(SHL2TARGET_X64).exp			   >>$@.tmpfile
+    $(EXPORT2_PROTECT) $(RMHACK1) $(MISC_X64)/$(SHL2TARGET_X64).exp
 .ELSE			# "$(SHL2USE_EXPORTS_X64)"==""
-    @$(EXPORT2_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB2NAME_X64) $(SLB_X64)$/$(i).lib) | $(GREP) EXPORT: > $(MISC_X64)$/$(SHL2TARGET_X64).direct
+    @$(EXPORT2_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB2NAME_X64) $(SLB_X64)/$(i).lib) | $(GREP) EXPORT: > $(MISC_X64)/$(SHL2TARGET_X64).direct
 .IF "$(SHL2USE_EXPORTS_X64)"!="name"
-    @$(EXPORT2_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF2FILTER_X64) $(MISC_X64)$/$(SHL2TARGET_X64).direct >>$@.tmpfile
+    @$(EXPORT2_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF2FILTER_X64) $(MISC_X64)/$(SHL2TARGET_X64).direct >>$@.tmpfile
 .ELSE			# "$(SHL2USE_EXPORTS_X64)"!="name"
-    @$(EXPORT2_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF2FILTER_X64) $(MISC_X64)$/$(SHL2TARGET_X64).direct >>$@.tmpfile
+    @$(EXPORT2_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF2FILTER_X64) $(MISC_X64)/$(SHL2TARGET_X64).direct >>$@.tmpfile
 .ENDIF			# "$(SHL2USE_EXPORTS_X64)"!="name"
 .ENDIF			# "$(SHL2USE_EXPORTS)"==""
 .ENDIF				# "$(DEFLIB1NAME)"!=""
@@ -213,28 +213,28 @@ $(DEF2TARGETN_X64) : \
 .IF "$(SHL1TARGET_X64)"!=""
 .IF "$(VERSIONOBJ_X64)"!=""
 SHL1VERSIONOBJ_X64:=$(VERSIONOBJ_X64:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET_X64))}$(VERSIONOBJ_X64:f)
-USE_VERSIONH_X64:=$(INCCOM)$/$(SHL1VERSIONOBJ_X64:b).h
+USE_VERSIONH_X64:=$(INCCOM)/$(SHL1VERSIONOBJ_X64:b).h
 SHL1VERSIONOBJDEP_X64:=$(VERSIONOBJ_X64:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET_X64))}$(VERSIONOBJ_X64:f)
-$(MISC_X64)$/$(SHL1VERSIONOBJ_X64:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL1VERSIONOBJ_X64:b).h
-    $(TYPE) $(SOLARENV)$/src$/version.c | $(SED) s/_version.h/$(SHL1VERSIONOBJ_X64:b).h/ > $@
+$(MISC_X64)/$(SHL1VERSIONOBJ_X64:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL1VERSIONOBJ_X64:b).h
+    $(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL1VERSIONOBJ_X64:b).h/ > $@
 .INIT : $(SHL1VERSIONOBJDEP_X64)
 .ENDIF
 
 .IF "$(USE_DEFFILE_X64)"==""
-USE_1IMPLIB_DEPS_X64=$(LB_X64)$/$(SHL1IMPLIB_X64).lib
+USE_1IMPLIB_DEPS_X64=$(LB_X64)/$(SHL1IMPLIB_X64).lib
 .ENDIF			# "$(USE_DEFFILE_X64)"==""
 
 .IF "$(SHL1RES_X64)"!=""
 SHL1ALLRES_X64+=$(SHL1RES_X64)
-SHL1LINKRES_X64*=$(MISC_X64)$/$(SHL1TARGET_X64).res
-SHL1LINKRESO_X64*=$(MISC_X64)$/$(SHL1TARGET_X64)_res.o
+SHL1LINKRES_X64*=$(MISC_X64)/$(SHL1TARGET_X64).res
+SHL1LINKRESO_X64*=$(MISC_X64)/$(SHL1TARGET_X64)_res.o
 .ENDIF			# "$(SHL1RES_X64)"!=""
 
 .IF "$(SHL1DEFAULTRES_X64)$(use_shl_versions)"!=""
-SHL1DEFAULTRES_X64*=$(MISC_X64)$/$(SHL1TARGET_X64)_def.res
+SHL1DEFAULTRES_X64*=$(MISC_X64)/$(SHL1TARGET_X64)_def.res
 SHL1ALLRES_X64+=$(SHL1DEFAULTRES_X64)
-SHL1LINKRES_X64*=$(MISC_X64)$/$(SHL1TARGET_X64).res
-SHL1LINKRESO_X64*=$(MISC_X64)$/$(SHL1TARGET_X64)_res.o
+SHL1LINKRES_X64*=$(MISC_X64)/$(SHL1TARGET_X64).res
+SHL1LINKRESO_X64*=$(MISC_X64)/$(SHL1TARGET_X64)_res.o
 .ENDIF			# "$(SHL1DEFAULTRES)$(use_shl_versions)"!=""
 .ENDIF # "$(SHL1TARGET_X64)"=!""
 
@@ -252,28 +252,24 @@ $(SHL1TARGETN_X64) : \
     @echo ------------------------------
     @echo Making: $(SHL1TARGETN_X64)
 .IF "$(SHL1DEFAULTRES_X64)"!=""
-    @@-$(RM) $(MISC_X64)$/$(SHL1DEFAULTRES_X64:b).rc
+    @@-$(RM) $(MISC_X64)/$(SHL1DEFAULTRES_X64:b).rc
 .IF "$(use_shl_versions)" != ""
 .IF "$(SHL1ADD_VERINFO_X64)"!=""
-    @echo $(EMQ)#include $(EMQ)"$(SHL1ADD_VERINFO)$(EMQ)" >> $(MISC_X64)$/$(SHL1DEFAULTRES_X64:b).rc
+    @echo $(EMQ)#include $(EMQ)"$(SHL1ADD_VERINFO)$(EMQ)" >> $(MISC_X64)/$(SHL1DEFAULTRES_X64:b).rc
 .ELSE			# "$(SHL1ADD_VERINFO_X64)"!=""
-    @echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC_X64)$/$(SHL1DEFAULTRES_X64:b).rc
-    @echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC_X64)$/$(SHL1DEFAULTRES_X64:b).rc
-    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC_X64)$/$(SHL1DEFAULTRES_X64:b).rc
+    @echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC_X64)/$(SHL1DEFAULTRES_X64:b).rc
+    @echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC_X64)/$(SHL1DEFAULTRES_X64:b).rc
+    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC_X64)/$(SHL1DEFAULTRES_X64:b).rc
 .ENDIF			# "$(SHL1ADD_VERINFO_X64)"!=""
-    @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC_X64)$/$(SHL1DEFAULTRES_X64:b).rc
-    @echo $(EMQ)#define ORG_NAME	$(SHL1TARGET_X64)$(DLLPOST) >> $(MISC_X64)$/$(SHL1DEFAULTRES_X64:b).rc
-    @echo $(EMQ)#define INTERNAL_NAME $(SHL1TARGET_X64:b) >> $(MISC_X64)$/$(SHL1DEFAULTRES_X64:b).rc
-    @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC_X64)$/$(SHL1DEFAULTRES_X64:b).rc
+    @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC_X64)/$(SHL1DEFAULTRES_X64:b).rc
+    @echo $(EMQ)#define ORG_NAME	$(SHL1TARGET_X64)$(DLLPOST) >> $(MISC_X64)/$(SHL1DEFAULTRES_X64:b).rc
+    @echo $(EMQ)#define INTERNAL_NAME $(SHL1TARGET_X64:b) >> $(MISC_X64)/$(SHL1DEFAULTRES_X64:b).rc
+    @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC_X64)/$(SHL1DEFAULTRES_X64:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS_X64) $(MISC_X64)$/$(SHL1DEFAULTRES_X64:b).rc
+    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS_X64) $(MISC_X64)/$(SHL1DEFAULTRES_X64:b).rc
 .ENDIF # "$(SHL1DEFAULTRES_X64)"!=""
 .IF "$(SHL1ALLRES_X64)"!=""
-.IF "$(USE_SHELL)"=="4nt"
-    $(COPY) /b $(SHL1ALLRES_X64:s/res /res+/) $(SHL1LINKRES_X64)
-.ELSE			# "$(USE_SHELL)"=="4nt"
     $(TYPE) $(SHL1ALLRES_X64) > $(SHL1LINKRES_X64)
-.ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL1ALLRES)"!=""
 .IF "$(USE_DEFFILE_X64)"!=""
     $(LINK_X64) @$(mktmp \
@@ -281,7 +277,7 @@ $(SHL1TARGETN_X64) : \
         $(LINKFLAGSSHL_X64) \
         $(SHL1STACK_X64) $(SHL1BASEX_X64)	\
         -out:$@ \
-        -map:$(MISC_X64)$/$(@:b).map \
+        -map:$(MISC_X64)/$(@:b).map \
         -def:$(SHL1DEF_X64) \
         $(USE_1IMPLIB_X64) \
         $(STDOBJ_X64) \
@@ -295,7 +291,7 @@ $(SHL1TARGETN_X64) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
@@ -306,8 +302,8 @@ $(SHL1TARGETN_X64) : \
     $(LINK_X64) @$(mktmp	$(SHL1LINKFLAGS_X64)			\
         $(LINKFLAGSSHL_X64) $(SHL1BASEX_X64)		\
         $(SHL1STACK_X64) -out:$(SHL1TARGETN_X64)	\
-        -map:$(MISC_X64)$/$(@:B).map				\
-        $(LB_X64)$/$(SHL1IMPLIB_X64).exp				\
+        -map:$(MISC_X64)/$(@:B).map				\
+        $(LB_X64)/$(SHL1IMPLIB_X64).exp				\
         $(STDOBJ_X64)							\
         $(SHL1OBJS_X64) $(SHL1VERSIONOBJ_X64) \
         $(SHL1LIBS_X64)                         \
@@ -319,7 +315,7 @@ $(SHL1TARGETN_X64) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
@@ -350,10 +346,10 @@ $(SHL1IMPLIBN_X64):	\
 SHL2IMPLIB_X64=i$(TARGET)_t2
 .ENDIF			# "$(SHL2IMPLIB_X64)" == ""
 .IF "$(COM)" != "GCC"
-USE_2IMPLIB_X64=-implib:$(LB_X64)$/$(SHL2IMPLIB_X64).lib
+USE_2IMPLIB_X64=-implib:$(LB_X64)/$(SHL2IMPLIB_X64).lib
 .ENDIF			# "$(COM)" != "GCC"
 .IF "$(SHL2TARGET_X64)"!=""
-SHL2IMPLIBN_X64=$(LB_X64)$/$(SHL2IMPLIB_X64).lib
+SHL2IMPLIBN_X64=$(LB_X64)/$(SHL2IMPLIB_X64).lib
 .ENDIF # "$(SLOFILES_X64)$(OBJFILES_X64)"!=""
 
 .IF "$(LIBTARGET)" == ""
@@ -363,28 +359,28 @@ ALLTAR : $(SHL2IMPLIBN_X64)
 .IF "$(SHL2TARGET_X64)"!=""
 .IF "$(VERSIONOBJ_X64)"!=""
 SHL2VERSIONOBJ_X64:=$(VERSIONOBJ_X64:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET_X64))}$(VERSIONOBJ_X64:f)
-USE_VERSIONH_X64:=$(INCCOM)$/$(SHL2VERSIONOBJ_X64:b).h
+USE_VERSIONH_X64:=$(INCCOM)/$(SHL2VERSIONOBJ_X64:b).h
 SHL2VERSIONOBJDEP_X64:=$(VERSIONOBJ_X64:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET_X64))}$(VERSIONOBJ_X64:f)
-$(MISC_X64)$/$(SHL2VERSIONOBJ_X64:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL2VERSIONOBJ_X64:b).h
-    $(TYPE) $(SOLARENV)$/src$/version.c | $(SED) s/_version.h/$(SHL2VERSIONOBJ_X64:b).h/ > $@
+$(MISC_X64)/$(SHL2VERSIONOBJ_X64:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL2VERSIONOBJ_X64:b).h
+    $(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL2VERSIONOBJ_X64:b).h/ > $@
 .INIT : $(SHL2VERSIONOBJDEP_X64)
 .ENDIF
 
 .IF "$(USE_DEFFILE_X64)"==""
-USE_2IMPLIB_DEPS_X64=$(LB_X64)$/$(SHL2IMPLIB_X64).lib
+USE_2IMPLIB_DEPS_X64=$(LB_X64)/$(SHL2IMPLIB_X64).lib
 .ENDIF			# "$(USE_DEFFILE_X64)"==""
 
 .IF "$(SHL2RES_X64)"!=""
 SHL2ALLRES_X64+=$(SHL2RES_X64)
-SHL2LINKRES_X64*=$(MISC_X64)$/$(SHL2TARGET_X64).res
-SHL2LINKRESO_X64*=$(MISC_X64)$/$(SHL2TARGET_X64)_res.o
+SHL2LINKRES_X64*=$(MISC_X64)/$(SHL2TARGET_X64).res
+SHL2LINKRESO_X64*=$(MISC_X64)/$(SHL2TARGET_X64)_res.o
 .ENDIF			# "$(SHL2RES_X64)"!=""
 
 .IF "$(SHL2DEFAULTRES_X64)$(use_shl_versions)"!=""
-SHL2DEFAULTRES_X64*=$(MISC_X64)$/$(SHL2TARGET_X64)_def.res
+SHL2DEFAULTRES_X64*=$(MISC_X64)/$(SHL2TARGET_X64)_def.res
 SHL2ALLRES_X64+=$(SHL2DEFAULTRES_X64)
-SHL2LINKRES_X64*=$(MISC_X64)$/$(SHL2TARGET_X64).res
-SHL2LINKRESO_X64*=$(MISC_X64)$/$(SHL2TARGET_X64)_res.o
+SHL2LINKRES_X64*=$(MISC_X64)/$(SHL2TARGET_X64).res
+SHL2LINKRESO_X64*=$(MISC_X64)/$(SHL2TARGET_X64)_res.o
 .ENDIF			# "$(SHL2DEFAULTRES)$(use_shl_versions)"!=""
 .ENDIF # "$(SHL2TARGET_X64)"=!""
 
@@ -402,28 +398,24 @@ $(SHL2TARGETN_X64) : \
     @echo ------------------------------
     @echo Making: $(SHL2TARGETN_X64)
 .IF "$(SHL2DEFAULTRES_X64)"!=""
-    @@-$(RM) $(MISC_X64)$/$(SHL2DEFAULTRES_X64:b).rc
+    @@-$(RM) $(MISC_X64)/$(SHL2DEFAULTRES_X64:b).rc
 .IF "$(use_shl_versions)" != ""
 .IF "$(SHL2ADD_VERINFO_X64)"!=""
-    @echo $(EMQ)#include $(EMQ)"$(SHL2ADD_VERINFO)$(EMQ)" >> $(MISC_X64)$/$(SHL2DEFAULTRES_X64:b).rc
+    @echo $(EMQ)#include $(EMQ)"$(SHL2ADD_VERINFO)$(EMQ)" >> $(MISC_X64)/$(SHL2DEFAULTRES_X64:b).rc
 .ELSE			# "$(SHL2ADD_VERINFO_X64)"!=""
-    @echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC_X64)$/$(SHL2DEFAULTRES_X64:b).rc
-    @echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC_X64)$/$(SHL2DEFAULTRES_X64:b).rc
-    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC_X64)$/$(SHL2DEFAULTRES_X64:b).rc
+    @echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC_X64)/$(SHL2DEFAULTRES_X64:b).rc
+    @echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC_X64)/$(SHL2DEFAULTRES_X64:b).rc
+    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC_X64)/$(SHL2DEFAULTRES_X64:b).rc
 .ENDIF			# "$(SHL1ADD_VERINFO_X64)"!=""
-    @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC_X64)$/$(SHL2DEFAULTRES_X64:b).rc
-    @echo $(EMQ)#define ORG_NAME	$(SHL2TARGET_X64)$(DLLPOST) >> $(MISC_X64)$/$(SHL2DEFAULTRES_X64:b).rc
-    @echo $(EMQ)#define INTERNAL_NAME $(SHL1TARGET_X64:b) >> $(MISC_X64)$/$(SHL2DEFAULTRES_X64:b).rc
-    @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC_X64)$/$(SHL2DEFAULTRES_X64:b).rc
+    @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC_X64)/$(SHL2DEFAULTRES_X64:b).rc
+    @echo $(EMQ)#define ORG_NAME	$(SHL2TARGET_X64)$(DLLPOST) >> $(MISC_X64)/$(SHL2DEFAULTRES_X64:b).rc
+    @echo $(EMQ)#define INTERNAL_NAME $(SHL1TARGET_X64:b) >> $(MISC_X64)/$(SHL2DEFAULTRES_X64:b).rc
+    @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC_X64)/$(SHL2DEFAULTRES_X64:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS_X64) $(MISC_X64)$/$(SHL2DEFAULTRES_X64:b).rc
+    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS_X64) $(MISC_X64)/$(SHL2DEFAULTRES_X64:b).rc
 .ENDIF # "$(SHL2DEFAULTRES_X64)"!=""
 .IF "$(SHL2ALLRES_X64)"!=""
-.IF "$(USE_SHELL)"=="4nt"
-    $(COPY) /b $(SHL2ALLRES_X64:s/res /res+/) $(SHL2LINKRES_X64)
-.ELSE			# "$(USE_SHELL)"=="4nt"
     $(TYPE) $(SHL2ALLRES_X64) > $(SHL2LINKRES_X64)
-.ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL2ALLRES)"!=""
 .IF "$(USE_DEFFILE_X64)"!=""
     $(LINK_X64) @$(mktmp \
@@ -431,7 +423,7 @@ $(SHL2TARGETN_X64) : \
         $(LINKFLAGSSHL_X64) \
         $(SHL2STACK_X64) $(SHL2BASEX_X64)	\
         -out:$@ \
-        -map:$(MISC_X64)$/$(@:b).map \
+        -map:$(MISC_X64)/$(@:b).map \
         -def:$(SHL2DEF_X64) \
         $(USE_2IMPLIB_X64) \
         $(STDOBJ_X64) \
@@ -445,7 +437,7 @@ $(SHL2TARGETN_X64) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
@@ -456,8 +448,8 @@ $(SHL2TARGETN_X64) : \
     $(LINK_X64) @$(mktmp	$(SHL2LINKFLAGS_X64)			\
         $(LINKFLAGSSHL_X64) $(SHL2BASEX_X64)		\
         $(SHL2STACK_X64) -out:$(SHL2TARGETN_X64)	\
-        -map:$(MISC_X64)$/$(@:B).map				\
-        $(LB_X64)$/$(SHL2IMPLIB_X64).exp				\
+        -map:$(MISC_X64)/$(@:B).map				\
+        $(LB_X64)/$(SHL2IMPLIB_X64).exp				\
         $(STDOBJ_X64)							\
         $(SHL2OBJS_X64) $(SHL2VERSIONOBJ_X64) \
         $(SHL2LIBS_X64)                         \
@@ -469,7 +461,7 @@ $(SHL2TARGETN_X64) : \
     @@$(LS) $@
     @echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
 .ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
@@ -498,28 +490,28 @@ $(SHL2IMPLIBN_X64):	\
 
 
 
-$(SLO_X64)$/%.obj : %.cxx
+$(SLO_X64)/%.obj : %.cxx
     @echo ------------------------------
     @echo Making: $@
     @@-$(RM) $@ >& $(NULLDEV)
     -$(MKDIR) $(@:d)
-    $(CAPTURE_COMMAND) $(CXX_X64) $(USE_CFLAGS_X64) $(INCLUDE_X64) $(CFLAGSCXX_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CDEFSMT_X64) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO_X64)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx $(CAPTURE_OUTPUT)
+    $(CAPTURE_COMMAND) $(CXX_X64) $(USE_CFLAGS_X64) $(INCLUDE_X64) $(CFLAGSCXX_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CDEFSMT_X64) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO_X64)/$*.obj $(CFLAGSINCXX)$(PWD)/$*.cxx $(CAPTURE_OUTPUT)
 
-$(SLO_X64)$/%.obj : $(MISC)$/%.c
+$(SLO_X64)/%.obj : $(MISC)/%.c
     @echo ------------------------------
     @echo Making: $@
     -$(MKDIR) $(@:d)
     @@-$(RM) $@
-    @$(TYPE) $(mktmp $(CC_X64) $(USE_CFLAGS_X64) $(INCLUDE_C) $(CFLAGSCC_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CFLAGSAPPEND_X64) $(CFLAGSOUTOBJ)$(SLO_X64)$/$*.obj $(MISC)$/$*.c )
+    @$(TYPE) $(mktmp $(CC_X64) $(USE_CFLAGS_X64) $(INCLUDE_C) $(CFLAGSCC_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CFLAGSAPPEND_X64) $(CFLAGSOUTOBJ)$(SLO_X64)/$*.obj $(MISC)/$*.c )
     @$(ECHONL)
-    $(CC_X64) @$(mktmp $(USE_CFLAGS_X64) $(INCLUDE_C) $(CFLAGSCC_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CFLAGSAPPEND_X64) $(CFLAGSOUTOBJ)$(SLO_X64)$/$*.obj $(MISC)$/$*.c )
+    $(CC_X64) @$(mktmp $(USE_CFLAGS_X64) $(INCLUDE_C) $(CFLAGSCC_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CFLAGSAPPEND_X64) $(CFLAGSOUTOBJ)$(SLO_X64)/$*.obj $(MISC)/$*.c )
 
-$(SLO_X64)$/%.obj : %.c
+$(SLO_X64)/%.obj : %.c
     @echo ------------------------------
     @echo Making: $@
     -$(MKDIR) $(@:d)
     @@-$(RM) $@
-    $(CC_X64) @$(mktmp $(USE_CFLAGS_X64) $(INCLUDE_C) $(CFLAGSCC_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CDEFSMT_X64) $(CFLAGSAPPEND_X64) $(CFLAGSOUTOBJ)$(SLO_X64)$/$*.obj $*.c )
+    $(CC_X64) @$(mktmp $(USE_CFLAGS_X64) $(INCLUDE_C) $(CFLAGSCC_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CDEFSMT_X64) $(CFLAGSAPPEND_X64) $(CFLAGSOUTOBJ)$(SLO_X64)/$*.obj $*.c )
 
 .ENDIF			# "$(BUILD_X64)"!=""
 

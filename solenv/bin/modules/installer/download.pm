@@ -1531,7 +1531,7 @@ sub get_path_to_nsis_sdk
         # do we have nsis already in path ?
         @paths = split(/:/, $ENV{'PATH'});
         foreach $paths (@paths) {
-            $path =~ s/[\/\\]+$//; # remove trailing slashes;
+            $paths =~ s/[\/\\]+$//; # remove trailing slashes;
             $nsispath = $paths . "/nsis";
 
             if ( -x $nsispath ) {
@@ -1548,11 +1548,11 @@ sub get_path_to_nsis_sdk
         $nsispath = $ENV{'NSISSDK_SOURCE'}; # overriding the NSIS SDK with NSISSDK_SOURCE
     }
 
-    if( ($^O =~ /cygwin/i) and $nsispath =~ /\\/ ) {
-        # We need a POSIX path for W32-4nt-cygwin-perl
-        $nsispath =~ s/\\/\\\\/g;
-        chomp( $nsispath = qx{cygpath -u "$nsispath"} );
-    }
+#   if( ($^O =~ /cygwin/i) and $nsispath =~ /\\/ ) {
+#       # We need a POSIX path for W32-4nt-cygwin-perl
+#       $nsispath =~ s/\\/\\\\/g;
+#       chomp( $nsispath = qx{cygpath -u "$nsispath"} );
+#   }
 
     if ( $nsispath eq "" )
     {
