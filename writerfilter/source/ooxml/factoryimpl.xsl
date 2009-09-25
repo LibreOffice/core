@@ -70,7 +70,11 @@
   <xsl:template match="/">
     <xsl:text>    
 #include "OOXMLFactory.hxx"
-#include "OOXMLFastHelper.hxx"</xsl:text>
+#include "OOXMLFastHelper.hxx"
+#include "OOXMLStreamImpl.hxx"
+#include "doctok/sprmids.hxx"
+#include "doctok/resourceids.hxx"
+</xsl:text>
     <xsl:call-template name="factoryincludes"/>
     <xsl:text>
 namespace writerfilter {
@@ -81,6 +85,9 @@ namespace ooxml {
     <xsl:call-template name="factorycreatecontextfromfactory"/>
     <xsl:call-template name="factoryfornamespace"/>
     <xsl:call-template name="factorycreatefromstart"/>
+    <xsl:call-template name="fasttokentoid"/>
+    <xsl:call-template name="sprmkind"/>
+    <xsl:call-template name="getfastparser"/>
     <xsl:text>
 /// @endcond
 }}
