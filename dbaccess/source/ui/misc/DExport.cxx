@@ -66,6 +66,7 @@
 #include "WExtendPages.hxx"
 #include "WCPage.hxx"
 #include <svtools/syslocale.hxx>
+#include <svtools/zforlist.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/FValue.hxx>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
@@ -344,9 +345,14 @@ void ODatabaseExport::insertValueIntoColumn()
                             bool bNumberFormatError = false;
                             if ( m_pFormatter && m_sNumToken.Len() )
                             {
-                                LanguageType eNumLang;
-                                sal_uInt32 nNumberFormat2;
+                                LanguageType eNumLang = LANGUAGE_NONE;
+                                sal_uInt32 nNumberFormat2( nNumberFormat );
                                 fOutNumber = SfxHTMLParser::GetTableDataOptionsValNum(nNumberFormat2,eNumLang,m_sTextToken,m_sNumToken,*m_pFormatter);
+                                if ( eNumLang != LANGUAGE_NONE )
+                                {
+                                    nNumberFormat2 = m_pFormatter->GetFormatForLanguageIfBuiltIn( nNumberFormat2, eNumLang );
+                                    m_pFormatter->IsNumberFormat( m_sTextToken, nNumberFormat2, fOutNumber );
+                                }
                                 nNumberFormat = static_cast<sal_Int32>(nNumberFormat2);
                             }
                             else
@@ -357,6 +363,7 @@ void ODatabaseExport::insertValueIntoColumn()
                                     NumberFormat::DATETIME
                                     ,NumberFormat::DATE
                                     ,NumberFormat::TIME
+                                    ,NumberFormat::CURRENCY
                                     ,NumberFormat::NUMBER
                                     ,NumberFormat::LOGICAL
                                 };
@@ -438,9 +445,13 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
         if ( m_pFormatter && m_sNumToken.Len() )
         {
             LanguageType eNumLang;
-            sal_uInt32 nFormatKey;
+            sal_uInt32 nFormatKey(0);
             fOutNumber = SfxHTMLParser::GetTableDataOptionsValNum(nFormatKey,eNumLang,m_sTextToken,m_sNumToken,*m_pFormatter);
-            //double fOutNumber2 = SfxHTMLParser::GetTableDataOptionsValNum(nNumberFormat2,eNumLang,m_sValToken,m_sNumToken,*m_pFormatter);
+            if ( eNumLang != LANGUAGE_NONE )
+            {
+                nFormatKey = m_pFormatter->GetFormatForLanguageIfBuiltIn( nFormatKey, eNumLang );
+                m_pFormatter->IsNumberFormat( m_sTextToken, nFormatKey, fOutNumber );
+            }
             Reference<XPropertySet> xProp = xFormats->getByKey(nFormatKey);
             xProp->getPropertyValue(PROPERTY_TYPE) >>= nNumberFormat;
         }
@@ -575,7 +586,7 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
         {
             sal_Int32 nDataType;
             sal_Int32 nLength(0),nScale(0);
-            sal_Int16 nType = m_vNumberFormat[i];
+            sal_Int16 nType = m_vNumberFormat[i] & ~NumberFormat::DEFINED;
 
             switch ( nType )
             {

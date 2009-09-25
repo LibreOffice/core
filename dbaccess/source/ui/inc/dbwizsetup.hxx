@@ -98,6 +98,7 @@ private:
     String                  m_sRM_ADABASText;
     String                  m_sRM_ADOText;
     String                  m_sRM_JDBCText;
+    String                  m_sRM_MySQLNativePageTitle;
     String                  m_sRM_OracleText;
     String                  m_sRM_MySQLText;
     String                  m_sRM_ODBCText;

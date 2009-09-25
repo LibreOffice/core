@@ -35,24 +35,14 @@
 #include "ConnectionPageSetup.hxx"
 #endif
 
-#ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
-#ifndef _DBAUI_CURLEDIT_HXX_
+#include "admincontrols.hxx"
 #include "curledit.hxx"
-#endif
-#ifndef SVTOOLS_INC_ROADMAPWIZARD_HXX
-#include <svtools/roadmapwizard.hxx>
-#endif
-#ifndef _SV_FIELD_HXX
-#include <vcl/field.hxx>
-#endif
-#ifndef DBAUI_TEXTCONNECTIONHELPER_HXX
 #include "TextConnectionHelper.hxx"
-#endif
+
+#include <svtools/roadmapwizard.hxx>
+#include <ucbhelper/content.hxx>
+#include <vcl/field.hxx>
 
 
 //.........................................................................
@@ -140,6 +130,33 @@ namespace dbaui
         CheckBox            m_aCBUseSSL;
     };
 
+    //========================================================================
+    //= MySQLNativeSetupPage
+    //========================================================================
+    class MySQLNativeSetupPage : public OGenericAdministrationPage
+    {
+    private:
+        FixedText           m_aHeader;
+        FixedText           m_aHelpText;
+        MySQLNativeSettings m_aMySQLSettings;
+
+    public:
+        MySQLNativeSetupPage( Window* _pParent, const SfxItemSet& _rCoreAttrs );
+
+        static OGenericAdministrationPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
+
+    protected:
+        virtual void fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList );
+        virtual void fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList );
+
+        virtual BOOL FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+
+        virtual Link getControlModifiedLink();
+
+    private:
+        DECL_LINK( OnModified, Edit* );
+    };
 
     //========================================================================
     //= OGeneralSpecialJDBCConnectionPageSetup
@@ -156,22 +173,17 @@ namespace dbaui
                                         , USHORT _nHeaderTextResId
                                         , USHORT _nDriverClassId );
     static  OGenericAdministrationPage* CreateMySQLJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
-    static  OGenericAdministrationPage* CreateMySQLNATIVETabPage( Window* pParent, const SfxItemSet& _rAttrSet );
     static  OGenericAdministrationPage* CreateOracleJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
-    virtual Link getControlModifiedLink() { return LINK(this, OGeneralSpecialJDBCConnectionPageSetup, OnEditModified); }
-
 
     protected:
-
-
         virtual BOOL FillItemSet( SfxItemSet& _rCoreAttrs );
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual Link getControlModifiedLink() { return LINK(this, OGeneralSpecialJDBCConnectionPageSetup, OnEditModified); }
 
         DECL_LINK(OnTestJavaClickHdl,PushButton*);
         DECL_LINK(OnEditModified,Edit*);
-        FixedText*          m_pFTHeaderText;
         FixedText           m_aFTHelpText;
         FixedText           m_aFTDatabasename;
         Edit                m_aETDatabasename;
@@ -180,8 +192,6 @@ namespace dbaui
         FixedText           m_aFTPortNumber;
         FixedText           m_aFTDefaultPortNumber;
         NumericField        m_aNFPortNumber;
-        FixedText           m_aFTSocket;
-        Edit                m_aETSocket;
 
 
         FixedText           m_aFTDriverClass;
@@ -190,7 +200,6 @@ namespace dbaui
 
         String              m_sDefaultJdbcDriverName;
         USHORT              m_nPortId;
-        bool                m_bUseClass;
     };
 
 

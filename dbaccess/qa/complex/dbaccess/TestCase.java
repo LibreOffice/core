@@ -84,9 +84,10 @@ public abstract class TestCase extends complexlib.ComplexTestCase
      */
     protected final String createTempFileURL() throws IOException
     {
-        final File documentFile = java.io.File.createTempFile( getTestObjectName(), ".odb" );
-        documentFile.deleteOnExit();
-        return documentFile.getAbsoluteFile().toURI().toURL().toString();
+        final File documentFile = java.io.File.createTempFile( getTestObjectName(), ".odb" ).getAbsoluteFile();
+        if ( documentFile.exists() )
+            documentFile.delete();
+        return FileHelper.getOOoCompatibleFileURL( documentFile.toURI().toURL().toString() );
     }
 
     // --------------------------------------------------------------------------------------------------------

@@ -73,6 +73,7 @@ enum DATASOURCE_TYPE
     DST_MSACCESS_2007       = 22,
      DST_EMBEDDED_HSQLDB    = 23,
     DST_MYSQL_NATIVE        = 24,
+    DST_MYSQL_NATIVE_DIRECT = 25,
 
     DST_USERDEFINE1,    /// first user defined driver
     DST_USERDEFINE2,
@@ -144,6 +145,9 @@ public:
 
     /// on a given string, return the type prefix
     String getPrefix(const ::rtl::OUString& _sURL) const;
+
+    /// determines whether there is a driver for the given URL prefix/pattern
+    bool    hasDriver( const sal_Char* _pAsciiPattern ) const;
 
     /// on a given string, return the Java Driver Class
     String getJavaDriverClass(const ::rtl::OUString& _sURL) const;

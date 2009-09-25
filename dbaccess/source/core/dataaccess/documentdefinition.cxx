@@ -1928,7 +1928,7 @@ Reference< XComponent > ODocumentDefinition::impl_openUI_nolck_throw( bool _bFor
     Reference< XComponent > xComponent;
     try
     {
-        ::rtl::OUString sName( m_pImpl->m_aProps.aTitle );
+        ::rtl::OUString sName( impl_getHierarchicalName( false ) );
         sal_Int32 nObjectType = m_bForm ? DatabaseObject::FORM : DatabaseObject::REPORT;
         aGuard.clear();
 

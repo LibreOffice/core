@@ -78,16 +78,37 @@ namespace dbaccess
         /** loads a string from the resource file, substituting a placeholder with a given string
 
             @param  _nResId
-                the resource ID of the string to loAD
+                the resource ID of the string to load
             @param  _pPlaceholderAscii
                 the ASCII representation of the placeholder string
             @param  _rReplace
-                the string which should substutite the placeholder
+                the string which should substitute the placeholder
         */
         static ::rtl::OUString  loadString(
                 sal_uInt16              _nResId,
                 const sal_Char*         _pPlaceholderAscii,
                 const ::rtl::OUString&  _rReplace
+        );
+
+        /** loads a string from the resource file, substituting two placeholders with given strings
+
+            @param  _nResId
+                the resource ID of the string to load
+            @param  _pPlaceholderAscii1
+                the ASCII representation of the first placeholder string
+            @param  _rReplace1
+                the string which should substitute the first placeholder
+            @param  _pPlaceholderAscii2
+                the ASCII representation of the second placeholder string
+            @param  _rReplace2
+                the string which should substitute the second placeholder
+        */
+        static ::rtl::OUString  loadString(
+                sal_uInt16              _nResId,
+                const sal_Char*         _pPlaceholderAscii1,
+                const ::rtl::OUString&  _rReplace1,
+                const sal_Char*         _pPlaceholderAscii2,
+                const ::rtl::OUString&  _rReplace2
         );
 
         static ResMgr*  getResManager();

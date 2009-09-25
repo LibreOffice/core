@@ -38,6 +38,7 @@
 #endif
 
 class VCLXWindow;
+class WaitObject;
 namespace dbaui
 {
     class OTableConnectionData;
@@ -48,6 +49,8 @@ namespace dbaui
     class ORelationController : public OJoinController
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTables;
+        ::std::auto_ptr<WaitObject> m_pWaitObject;
+        ULONG       m_nThreadEvent;
         sal_Bool    m_bRelationsPossible;
     protected:
         // all the features which should be handled by this class
@@ -59,7 +62,7 @@ namespace dbaui
 
         ORelationDesignView*    getRelationView() { return static_cast<ORelationDesignView*>(m_pView); }
         void loadData();
-        TTableWindowData::value_type existsTable(const ::rtl::OUString& _rComposedTableName) const;
+        TTableWindowData::value_type existsTable(const ::rtl::OUString& _rComposedTableName,sal_Bool _bCase) const;
 
         // load the window positions out of the datasource
         void loadLayoutInformation();
@@ -70,6 +73,8 @@ namespace dbaui
         ~ORelationController();
         // temp
         void SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY );
+
+        void mergeData(const TTableConnectionData& _aConnectionData);
 
         virtual sal_Bool Construct(Window* pParent);
 
@@ -92,6 +97,7 @@ namespace dbaui
         virtual void reset();
         virtual void impl_initialize();
         virtual ::rtl::OUString getPrivateTitle( ) const;
+        DECL_LINK( OnThreadFinished, void* );
     };
 }
 #endif // DBAUI_RELATIONCONTROLLER_HXX

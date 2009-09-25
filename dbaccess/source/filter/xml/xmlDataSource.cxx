@@ -73,7 +73,7 @@
 #include <tools/diagnose_ex.h>
 #endif
 #include "xmlConnectionData.hxx"
-#include "xmlJavaClassPath.hxx"
+
 namespace dbaxml
 {
     using namespace ::com::sun::star::uno;
@@ -196,6 +196,9 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 aProperty.Name = INFO_CONN_LDAP_ROWCOUNT;
                 aProperty.Value <<= sValue.toInt32();
                 break;
+            case XML_TOK_JAVA_CLASSPATH:
+                aProperty.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClassPath"));
+                break;
         }
         if ( aProperty.Name.getLength() )
         {
@@ -285,10 +288,6 @@ SvXMLImportContext* OXMLDataSource::CreateChildContext(
         case XML_TOK_DRIVER_SETTINGS:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             pContext = new OXMLDataSource( GetOwnImport(), nPrefix, rLocalName, xAttrList, OXMLDataSource::eDriverSettings );
-            break;
-        case XML_TOK_JAVA_CLASSPATH:
-            GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLJavaClassPath( GetOwnImport(), nPrefix, rLocalName,xAttrList );
             break;
         case XML_TOK_APPLICATION_CONNECTION_SETTINGS:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );

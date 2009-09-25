@@ -1179,7 +1179,8 @@ void OTableController::alterColumns()
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_vRowList.begin();
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aEnd = m_vRowList.end();
     // first look for columns where something other than the name changed
-    for(sal_Int32 nPos = 0;aIter != aEnd;++aIter,++nPos)
+    sal_Int32 nPos = 0;
+    for(;aIter != aEnd;++aIter,++nPos)
     {
         OSL_ENSURE(*aIter,"OTableRow is null!");
         OFieldDescription* pField = (*aIter)->GetActFieldDescr();
@@ -1198,10 +1199,9 @@ void OTableController::alterColumns()
             xColumns->getByName(pField->GetName()) >>= xColumn;
             OSL_ENSURE(xColumn.is(),"Column is null!");
 
-            sal_Int32 nType=0,nPrecision=0,nScale=0,nNullable=0,nFormatKey=0,nAlignment=0;
+            sal_Int32 nType=0,nPrecision=0,nScale=0,nNullable=0;
             sal_Bool bAutoIncrement = false;
-            ::rtl::OUString sDescription, sTypeName;
-            Any aControlDefault;
+            ::rtl::OUString sTypeName;
 
             xColumn->getPropertyValue(PROPERTY_TYPE)            >>= nType;
             xColumn->getPropertyValue(PROPERTY_PRECISION)       >>= nPrecision;
@@ -1220,19 +1220,10 @@ void OTableController::alterColumns()
             }
 
             //  xColumn->getPropertyValue(PROPERTY_ISCURRENCY,::cppu::bool2any(pField->IsCurrency()));
-            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
-                xColumn->getPropertyValue(PROPERTY_HELPTEXT) >>= sDescription;
-            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
-                aControlDefault = xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT);
-            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
-                xColumn->getPropertyValue(PROPERTY_FORMATKEY)   >>= nFormatKey;
-            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
-                xColumn->getPropertyValue(PROPERTY_ALIGN)       >>= nAlignment;
-
             // check if something changed
             if((nType != pField->GetType()                  ||
                 sTypeName != pField->GetTypeName()         ||
-                nPrecision != pField->GetPrecision()        ||
+                (nPrecision != pField->GetPrecision() && nPrecision )       ||
                 nScale != pField->GetScale()                ||
                 nNullable != pField->GetIsNullable()        ||
                 bAutoIncrement != pField->IsAutoIncrement())&&
@@ -1285,26 +1276,7 @@ void OTableController::alterColumns()
                 bReload = sal_True;
             }
 
-            if(nFormatKey != pField->GetFormatKey())
-            {
-                if(xColumn.is() && xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
-                    xColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(pField->GetFormatKey()));
-            }
-            if(nAlignment != dbaui::mapTextAllign(pField->GetHorJustify()))
-            {
-                if(xColumn.is() && xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
-                    xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(pField->GetHorJustify())));
-            }
-            if(sDescription != pField->GetDescription())
-            {
-                if(xColumn.is() && xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
-                    xColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(pField->GetDescription()));
-            }
-            if ( aControlDefault != pField->GetControlDefault())
-            {
-                if(xColumn.is() && xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
-                    xColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,pField->GetControlDefault());
-            }
+
         }
         else if(xColumnFactory.is() && xAlter.is() && nPos < nColumnCount)
         { // we can't find the column so we could try it with the index before we drop and append a new column
@@ -1350,6 +1322,37 @@ void OTableController::alterColumns()
         }
         else
             bReload = sal_True;
+    } // for(sal_Int32 nPos = 0;aIter != aEnd;++aIter,++nPos)
+    // alter column settings
+    aIter = m_vRowList.begin();
+
+    // first look for columns where something other than the name changed
+    for(nPos = 0;aIter != aEnd;++aIter,++nPos)
+    {
+        OSL_ENSURE(*aIter,"OTableRow is null!");
+        OFieldDescription* pField = (*aIter)->GetActFieldDescr();
+        if ( !pField )
+            continue;
+        if ( (*aIter)->IsReadOnly() )
+        {
+            aColumns[pField->GetName()] = sal_True;
+            continue;
+        }
+
+        Reference<XPropertySet> xColumn;
+        if ( xColumns->hasByName(pField->GetName()) )
+        {
+            xColumns->getByName(pField->GetName()) >>= xColumn;
+            Reference<XPropertySetInfo> xInfo = xColumn->getPropertySetInfo();
+            if ( xInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
+                xColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(pField->GetDescription()));
+            if(xInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
+                xColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,pField->GetControlDefault());
+            if(xInfo->hasPropertyByName(PROPERTY_FORMATKEY))
+                xColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(pField->GetFormatKey()));
+            if(xInfo->hasPropertyByName(PROPERTY_ALIGN))
+                xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(pField->GetHorJustify())));
+        } // if ( xColumns->hasByName(pField->GetName()) )
     }
     // second drop all columns which could be found by name
     Reference<XNameAccess> xKeyColumns  = getKeyColumns();

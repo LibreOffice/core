@@ -108,7 +108,6 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include "finteraction.hxx"
 #include <connectivity/CommonTools.hxx>
-#include <connectivity/DriversConfig.hxx>
 #include "dbaccess_helpid.hrc"
 #include <svtools/pathoptions.hxx>
 #include <svtools/roadmapwizard.hxx>
@@ -240,17 +239,9 @@ DBG_NAME(OTextConnectionPageSetup)
         m_aETBaseDN.SetModifyHdl(getControlModifiedLink());
         m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
         m_aCBUseSSL.SetToggleHdl(getControlModifiedLink());
-        // #98982# OJ
-        m_aNFPortNumber.SetUseThousandSep(sal_False);
         SetRoadmapStateValue(sal_False);
         FreeResource();
     }
-
-    // -----------------------------------------------------------------------
-    /* OGenericAdministrationPage*  ODriversSettings::CreateLDAP( Window* pParent, const SfxItemSet& _rAttrSet )
-    {
-        return ( new OLDAPConnectionPageSetup( pParent, _rAttrSet ) );
-    }*/
 
     // -----------------------------------------------------------------------
     sal_Bool OLDAPConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
@@ -344,9 +335,9 @@ DBG_NAME(OMySQLIntroPageSetup)
         DBG_CTOR(OMySQLIntroPageSetup,NULL);
 
         SetControlFontWeight(&m_aFT_Headertext);
+           m_aRB_ODBCDatabase.SetToggleHdl(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
            m_aRB_JDBCDatabase.SetToggleHdl(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
         m_aRB_NATIVEDatabase.SetToggleHdl(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
-        m_aRB_JDBCDatabase.SetState(sal_True);
         FreeResource();
     }
 
@@ -367,17 +358,21 @@ DBG_NAME(OMySQLIntroPageSetup)
     // -----------------------------------------------------------------------
     void OMySQLIntroPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool /*_bSaveValue*/)
     {
+        // show the "Connect directly" option only if the driver is installed
         DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet.GetItem(DSID_TYPECOLLECTION));
-        if (pCollectionItem)
-        {
-            ::dbaccess::ODsnTypeCollection* pCollection = pCollectionItem->getCollection();
-            if ( pCollection->getPrefix(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysql:mysqlc:"))).Len() )
-            {
-                m_aRB_NATIVEDatabase.Show();
-                m_aRB_JDBCDatabase.SetState(sal_False);
-                m_aRB_NATIVEDatabase.SetState(sal_True);
-            }
-        }
+        bool bHasMySQLNative = ( pCollectionItem != NULL ) && pCollectionItem->getCollection()->hasDriver( "sdbc:mysqlc:" );
+        if ( bHasMySQLNative )
+            m_aRB_NATIVEDatabase.Show();
+
+        // if any of the options is checked, then there's nothing to do
+        if ( m_aRB_ODBCDatabase.IsChecked() || m_aRB_JDBCDatabase.IsChecked() || m_aRB_NATIVEDatabase.IsChecked() )
+            return;
+
+        // prefer "native" or "JDBC"
+        if ( bHasMySQLNative )
+            m_aRB_NATIVEDatabase.Check();
+        else
+            m_aRB_JDBCDatabase.Check();
     }
 
 
@@ -410,6 +405,119 @@ DBG_NAME(OMySQLIntroPageSetup)
             return VIA_ODBC;
     }
 
+    // =======================================================================
+    // = MySQLNativeSetupPage
+    // =======================================================================
+    // -----------------------------------------------------------------------
+    MySQLNativeSetupPage::MySQLNativeSetupPage( Window* _pParent, const SfxItemSet& _rCoreAttrs )
+        :OGenericAdministrationPage( _pParent, ModuleRes( PAGE_DBWIZARD_MYSQL_NATIVE ), _rCoreAttrs )
+        ,m_aHeader              ( this, ModuleRes( FT_SETUP_WIZARD_HEADER ) )
+        ,m_aHelpText            ( this, ModuleRes( FT_SETUP_WIZARD_HELP ) )
+        ,m_aMySQLSettings       ( *this, getControlModifiedLink() )
+    {
+        SetControlFontWeight( &m_aHeader );
+
+        LayoutHelper::positionBelow( m_aHelpText, m_aMySQLSettings, UnrelatedControls, 0 );
+        m_aMySQLSettings.Show();
+
+        SetRoadmapStateValue(sal_False);
+        FreeResource();
+    }
+
+    // -----------------------------------------------------------------------
+    OGenericAdministrationPage* MySQLNativeSetupPage::Create( Window* pParent, const SfxItemSet& _rAttrSet )
+    {
+        return new MySQLNativeSetupPage( pParent, _rAttrSet );
+    }
+
+    // -----------------------------------------------------------------------
+    void MySQLNativeSetupPage::fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList )
+    {
+        m_aMySQLSettings.fillControls( _rControlList );
+    }
+
+    // -----------------------------------------------------------------------
+    void MySQLNativeSetupPage::fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList )
+    {
+        _rControlList.push_back( new ODisableWrapper< FixedText >( &m_aHelpText ) );
+        m_aMySQLSettings.fillWindows( _rControlList );
+    }
+
+    // -----------------------------------------------------------------------
+    sal_Bool MySQLNativeSetupPage::FillItemSet( SfxItemSet& _rSet )
+    {
+        return m_aMySQLSettings.FillItemSet( _rSet );
+    }
+
+    // -----------------------------------------------------------------------
+    void MySQLNativeSetupPage::implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue )
+    {
+        m_aMySQLSettings.implInitControls( _rSet );
+
+        OGenericAdministrationPage::implInitControls( _rSet, _bSaveValue );
+
+        OnModified( NULL );
+    }
+
+    // -----------------------------------------------------------------------
+    Link MySQLNativeSetupPage::getControlModifiedLink()
+    {
+        return LINK( this, MySQLNativeSetupPage, OnModified );
+    }
+
+    // -----------------------------------------------------------------------
+    IMPL_LINK( MySQLNativeSetupPage, OnModified, Edit*, _pEdit )
+    {
+        SetRoadmapStateValue( m_aMySQLSettings.canAdvance() );
+
+        return OGenericAdministrationPage::getControlModifiedLink().Call( _pEdit );
+    }
+
+    //========================================================================
+    //= OMySQLJDBCConnectionPageSetup
+    //========================================================================
+    OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( Window* pParent,USHORT _nResId, const SfxItemSet& _rCoreAttrs ,USHORT _nPortId, USHORT _nDefaultPortResId, USHORT _nHelpTextResId, USHORT _nHeaderTextResId, USHORT _nDriverClassId)
+        :OGenericAdministrationPage(pParent, ModuleRes(_nResId), _rCoreAttrs)
+        ,m_aFTHelpText          (this, ModuleRes(FT_AUTOWIZARDHELPTEXT))
+        ,m_aFTDatabasename      (this, ModuleRes(FT_AUTODATABASENAME))
+        ,m_aETDatabasename      (this, ModuleRes(ET_AUTODATABASENAME))
+        ,m_aFTHostname          (this, ModuleRes(FT_AUTOHOSTNAME))
+        ,m_aETHostname          (this, ModuleRes(ET_AUTOHOSTNAME))
+        ,m_aFTPortNumber        (this, ModuleRes(FT_AUTOPORTNUMBER))
+        ,m_aFTDefaultPortNumber (this, ModuleRes(FT_AUTOPORTNUMBERDEFAULT))
+        ,m_aNFPortNumber        (this, ModuleRes(NF_AUTOPORTNUMBER))
+        ,m_aFTDriverClass       (this, ModuleRes(FT_AUTOJDBCDRIVERCLASS))
+        ,m_aETDriverClass       (this, ModuleRes(ET_AUTOJDBCDRIVERCLASS))
+        ,m_aPBTestJavaDriver    (this, ModuleRes(PB_AUTOTESTDRIVERCLASS))
+        ,m_nPortId(_nPortId)
+    {
+        m_aFTDriverClass.SetText(String(ModuleRes(_nDriverClassId)));
+
+        m_aFTDefaultPortNumber.SetText(String(ModuleRes(_nDefaultPortResId)));
+        String sHelpText = String(ModuleRes(_nHelpTextResId));
+        m_aFTHelpText.SetText(sHelpText);
+        //TODO this code snippet is redundant
+        SetHeaderText(FT_AUTOWIZARDHEADER, _nHeaderTextResId);
+
+        m_aETDatabasename.SetModifyHdl(getControlModifiedLink());
+        m_aETHostname.SetModifyHdl(getControlModifiedLink());
+        m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
+
+        m_aETDriverClass.SetModifyHdl(LINK(this, OGeneralSpecialJDBCConnectionPageSetup, OnEditModified));
+        m_aPBTestJavaDriver.SetClickHdl(LINK(this,OGeneralSpecialJDBCConnectionPageSetup,OnTestJavaClickHdl));
+
+        SFX_ITEMSET_GET(_rCoreAttrs, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
+        SFX_ITEMSET_GET(_rCoreAttrs, pTypesItem, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
+        ::dbaccess::ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
+        if (pTypeCollection && pUrlItem && pUrlItem->GetValue().Len() )
+        {
+            m_sDefaultJdbcDriverName = pTypeCollection->getJavaDriverClass(pUrlItem->GetValue());
+        }
+
+        SetRoadmapStateValue(sal_False);
+        FreeResource();
+    }
+
 
     // -----------------------------------------------------------------------
     OGenericAdministrationPage* OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
@@ -425,20 +533,6 @@ DBG_NAME(OMySQLIntroPageSetup)
     }
 
     // -----------------------------------------------------------------------
-    OGenericAdministrationPage* OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLNATIVETabPage( Window* pParent, const SfxItemSet& _rAttrSet )
-    {
-        return ( new OGeneralSpecialJDBCConnectionPageSetup( pParent,
-                                                         PAGE_DBWIZARD_MYSQL_NATIVE,
-                                                         _rAttrSet,
-                                                         DSID_MYSQL_PORTNUMBER ,
-                                                         STR_MYSQL_DEFAULT,
-                                                         STR_MYSQLJDBC_HELPTEXT,
-                                                         STR_MYSQLJDBC_HEADERTEXT,
-                                                         0) );
-    }
-
-
-    // -----------------------------------------------------------------------
     OGenericAdministrationPage* OGeneralSpecialJDBCConnectionPageSetup::CreateOracleJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OGeneralSpecialJDBCConnectionPageSetup( pParent,
@@ -451,75 +545,6 @@ DBG_NAME(OMySQLIntroPageSetup)
                                                           STR_ORACLE_DRIVERCLASSTEXT) );
     }
 
-
-    //========================================================================
-    //= OMySQLJDBCConnectionPageSetup
-    //========================================================================
-    OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( Window* pParent,USHORT _nResId, const SfxItemSet& _rCoreAttrs ,USHORT _nPortId, USHORT _nDefaultPortResId, USHORT _nHelpTextResId, USHORT _nHeaderTextResId, USHORT _nDriverClassId)
-        :OGenericAdministrationPage(pParent, ModuleRes(_nResId), _rCoreAttrs)
-        ,m_pFTHeaderText        (NULL)
-        ,m_aFTHelpText          (this, ModuleRes(FT_AUTOWIZARDHELPTEXT))
-        ,m_aFTDatabasename      (this, ModuleRes(FT_AUTODATABASENAME))
-        ,m_aETDatabasename      (this, ModuleRes(ET_AUTODATABASENAME))
-        ,m_aFTHostname          (this, ModuleRes(FT_AUTOHOSTNAME))
-        ,m_aETHostname          (this, ModuleRes(ET_AUTOHOSTNAME))
-        ,m_aFTPortNumber        (this, ModuleRes(FT_AUTOPORTNUMBER))
-        ,m_aFTDefaultPortNumber (this, ModuleRes(FT_AUTOPORTNUMBERDEFAULT))
-        ,m_aNFPortNumber        (this, ModuleRes(NF_AUTOPORTNUMBER))
-        ,m_aFTSocket            (this, ModuleRes(FT_SOCKET))
-        ,m_aETSocket            (this, ModuleRes(ET_SOCKET))
-        ,m_aFTDriverClass       (this, ModuleRes(FT_AUTOJDBCDRIVERCLASS))
-        ,m_aETDriverClass       (this, ModuleRes(ET_AUTOJDBCDRIVERCLASS))
-        ,m_aPBTestJavaDriver    (this, ModuleRes(PB_AUTOTESTDRIVERCLASS))
-        ,m_nPortId(_nPortId)
-        ,m_bUseClass(true)
-    {
-        if ( _nDriverClassId )
-            m_aFTDriverClass.SetText(String(ModuleRes(_nDriverClassId)));
-        else
-        {
-            m_bUseClass = false;
-            m_aFTDriverClass.Show(FALSE);
-            m_aPBTestJavaDriver.Show(FALSE);
-            m_aETDriverClass.Show(FALSE);
-        }
-
-        m_aFTSocket.Show(_nResId == PAGE_DBWIZARD_MYSQL_NATIVE && !m_bUseClass);
-        m_aETSocket.Show(_nResId == PAGE_DBWIZARD_MYSQL_NATIVE && !m_bUseClass);
-
-        m_aFTDefaultPortNumber.SetText(String(ModuleRes(_nDefaultPortResId)));
-        String sHelpText = String(ModuleRes(_nHelpTextResId));
-        m_aFTHelpText.SetText(sHelpText);
-        //TODO this code snippet is redundant
-        SetHeaderText(FT_AUTOWIZARDHEADER, _nHeaderTextResId);
-
-        m_aETDatabasename.SetModifyHdl(getControlModifiedLink());
-        m_aETHostname.SetModifyHdl(getControlModifiedLink());
-        m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
-        m_aETSocket.SetModifyHdl(getControlModifiedLink());
-
-        if ( m_bUseClass )
-        {
-            m_aETDriverClass.SetModifyHdl(LINK(this, OGeneralSpecialJDBCConnectionPageSetup, OnEditModified));
-            m_aPBTestJavaDriver.SetClickHdl(LINK(this,OGeneralSpecialJDBCConnectionPageSetup,OnTestJavaClickHdl));
-        }
-
-        m_aNFPortNumber.SetUseThousandSep(sal_False);
-        if ( m_bUseClass )
-        {
-            SFX_ITEMSET_GET(_rCoreAttrs, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
-            SFX_ITEMSET_GET(_rCoreAttrs, pTypesItem, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
-            ::dbaccess::ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
-            if (pTypeCollection && pUrlItem && pUrlItem->GetValue().Len() )
-            {
-                m_sDefaultJdbcDriverName = pTypeCollection->getJavaDriverClass(pUrlItem->GetValue());
-            }
-        }
-        SetRoadmapStateValue(sal_False);
-        FreeResource();
-    }
-
-
     // -----------------------------------------------------------------------
     void OGeneralSpecialJDBCConnectionPageSetup::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
@@ -527,7 +552,6 @@ DBG_NAME(OMySQLIntroPageSetup)
         _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aETDriverClass));
         _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aETHostname));
         _rControlList.push_back(new OSaveValueWrapper<NumericField>(&m_aNFPortNumber));
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aETSocket));
     }
     // -----------------------------------------------------------------------
     void OGeneralSpecialJDBCConnectionPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
@@ -537,21 +561,17 @@ DBG_NAME(OMySQLIntroPageSetup)
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTHostname));
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTPortNumber));
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDefaultPortNumber));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTSocket));
-        if ( m_bUseClass )
-            _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDriverClass));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDriverClass));
     }
 
     // -----------------------------------------------------------------------
     sal_Bool OGeneralSpecialJDBCConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = sal_False;
-        if ( m_bUseClass )
-            fillString(_rSet,&m_aETDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
+        fillString(_rSet,&m_aETDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
         fillString(_rSet,&m_aETHostname,DSID_CONN_HOSTNAME,bChangedSomething);
         fillString(_rSet,&m_aETDatabasename,DSID_DATABASENAME,bChangedSomething);
         fillInt32(_rSet,&m_aNFPortNumber,m_nPortId,bChangedSomething );
-        fillString(_rSet,&m_aETSocket,DSID_CONN_SOCKET,bChangedSomething);
         return bChangedSomething;
     }
 
@@ -562,42 +582,36 @@ DBG_NAME(OMySQLIntroPageSetup)
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        const SfxStringItem *pDrvItem = NULL;
-        if ( m_bUseClass )
-            pDrvItem = (const SfxStringItem*) (_rSet).GetItem( DSID_JDBCDRIVERCLASS, sal_True, TYPE(SfxStringItem) );
-
+        SFX_ITEMSET_GET(_rSet, pDatabaseName, SfxStringItem, DSID_DATABASENAME, sal_True);
+        SFX_ITEMSET_GET(_rSet, pDrvItem, SfxStringItem, DSID_JDBCDRIVERCLASS, sal_True);
         SFX_ITEMSET_GET(_rSet, pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
         SFX_ITEMSET_GET(_rSet, pPortNumber, SfxInt32Item, m_nPortId, sal_True);
-        SFX_ITEMSET_GET(_rSet, pSocket, SfxStringItem, DSID_CONN_SOCKET, sal_True);
 
         if ( bValid )
         {
-            if ( m_bUseClass )
-            {
-                m_aETDriverClass.SetText(pDrvItem->GetValue());
-                m_aETDriverClass.ClearModifyFlag();
-            }
+            m_aETDatabasename.SetText(pDatabaseName->GetValue());
+            m_aETDatabasename.ClearModifyFlag();
+
+            m_aETDriverClass.SetText(pDrvItem->GetValue());
+            m_aETDriverClass.ClearModifyFlag();
 
             m_aETHostname.SetText(pHostName->GetValue());
             m_aETHostname.ClearModifyFlag();
 
             m_aNFPortNumber.SetValue(pPortNumber->GetValue());
             m_aNFPortNumber.ClearModifyFlag();
-
-            m_aETSocket.SetText(pSocket->GetValue());
-            m_aETSocket.ClearModifyFlag();
         }
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
 
         // to get the correct value when saveValue was called by base class
-        if ( m_bUseClass && !m_aETDriverClass.GetText().Len() )
+        if ( !m_aETDriverClass.GetText().Len() )
         {
             m_aETDriverClass.SetText(m_sDefaultJdbcDriverName);
             m_aETDriverClass.SetModifyFlag();
         }
         callModifiedHdl();
 
-        sal_Bool bRoadmapState = ((m_aETDatabasename.GetText().Len() != 0 ) && ( m_aETHostname.GetText().Len() != 0 ) && (m_aNFPortNumber.GetText().Len() != 0 ) && ( !m_bUseClass || m_aETDriverClass.GetText().Len() != 0 ));
+        sal_Bool bRoadmapState = ((m_aETDatabasename.GetText().Len() != 0 ) && ( m_aETHostname.GetText().Len() != 0 ) && (m_aNFPortNumber.GetText().Len() != 0 ) && ( m_aETDriverClass.GetText().Len() != 0 ));
         SetRoadmapStateValue(bRoadmapState);
     }
 
@@ -605,7 +619,6 @@ DBG_NAME(OMySQLIntroPageSetup)
     IMPL_LINK(OGeneralSpecialJDBCConnectionPageSetup, OnTestJavaClickHdl, PushButton*, /*_pButton*/)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        OSL_ENSURE(m_bUseClass,"Who called this one?");
 
         sal_Bool bSuccess = sal_False;
         try
@@ -630,14 +643,13 @@ DBG_NAME(OMySQLIntroPageSetup)
     // -----------------------------------------------------------------------
     IMPL_LINK(OGeneralSpecialJDBCConnectionPageSetup, OnEditModified, Edit*, _pEdit)
     {
-        if ( m_bUseClass && _pEdit == &m_aETDriverClass )
+        if ( _pEdit == &m_aETDriverClass )
             m_aPBTestJavaDriver.Enable( m_aETDriverClass.GetText().Len() != 0 );
-        sal_Bool bRoadmapState = ((m_aETDatabasename.GetText().Len() != 0 ) && ( m_aETHostname.GetText().Len() != 0 ) && (m_aNFPortNumber.GetText().Len() != 0 ) && ( !m_bUseClass || m_aETDriverClass.GetText().Len() != 0 ));
+        sal_Bool bRoadmapState = ((m_aETDatabasename.GetText().Len() != 0 ) && ( m_aETHostname.GetText().Len() != 0 ) && (m_aNFPortNumber.GetText().Len() != 0 ) && ( m_aETDriverClass.GetText().Len() != 0 ));
         SetRoadmapStateValue(bRoadmapState);
         callModifiedHdl();
         return 0L;
     }
-
 
     // -----------------------------------------------------------------------
     OGenericAdministrationPage* OJDBCConnectionPageSetup::CreateJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet )

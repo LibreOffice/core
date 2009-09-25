@@ -180,6 +180,9 @@ namespace dbaccess
         * @param evt is a sequence of property change events.
         */
         void notifyPropertiesChange( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyChangeEvent >& evt ) const;
+
+        ::rtl::OUString impl_getHierarchicalName( bool _includingRootContainer ) const;
+
     public:
 
         OContentHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB

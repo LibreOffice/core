@@ -102,6 +102,7 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
+#include <cppuhelper/exc_hlp.hxx>
 
 /** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
@@ -162,8 +163,8 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #endif
 #include <com/sun/star/ucb/IOErrorCode.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <com/sun/star/task/XInteractionHandler2.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 
 /** === end UNO includes === **/
@@ -264,6 +265,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     , m_sRM_ADABASText(ModuleRes(STR_PAGETITLE_ADABAS))
     , m_sRM_ADOText(ModuleRes(STR_PAGETITLE_ADO))
     , m_sRM_JDBCText(ModuleRes(STR_PAGETITLE_JDBC))
+    , m_sRM_MySQLNativePageTitle(ModuleRes(STR_PAGETITLE_MYSQL_NATIVE))
     , m_pGeneralPage( NULL )
     , m_pMySQLIntroPage(NULL)
     , m_pCollection( NULL )
@@ -387,7 +389,7 @@ String ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
             sRoadmapItem = m_sRM_JDBCText;
             break;
         case PAGE_DBSETUPWIZARD_MYSQL_NATIVE:
-            sRoadmapItem = m_sRM_JDBCText;
+            sRoadmapItem = m_sRM_MySQLNativePageTitle;
             break;
         case PAGE_DBSETUPWIZARD_MYSQL_ODBC:
             sRoadmapItem = m_sRM_ODBCText;
@@ -454,14 +456,11 @@ void DataSourceInfoConverter::convert(const ::dbaccess::ODsnTypeCollection* _pCo
     ::comphelper::NamedValueCollection aDS(aInfo);
 
     ::connectivity::DriversConfig aDriverConfig(m_xFactory);
-    const ::comphelper::NamedValueCollection&  aOldMetaData     = aDriverConfig.getMetaData(_sOldURLPrefix);
+
     const ::comphelper::NamedValueCollection&  aOldProperties   = aDriverConfig.getProperties(_sOldURLPrefix);
-
-    const ::comphelper::NamedValueCollection&  aNewMetaData     = aDriverConfig.getMetaData(_sNewURLPrefix);
     const ::comphelper::NamedValueCollection&  aNewProperties   = aDriverConfig.getProperties(_sNewURLPrefix);
-
-    lcl_removeUnused(aOldMetaData,aNewMetaData,aDS);
     lcl_removeUnused(aOldProperties,aNewProperties,aDS);
+
     aDS >>= aInfo;
     _xDatasource->setPropertyValue(PROPERTY_INFO,uno::makeAny(aInfo));
 }
@@ -472,7 +471,12 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     {
     case OGeneralPage::eCreateNew:
     {
-        activatePath( static_cast<PathId>(m_pCollection->getIndexOf(m_pCollection->getEmbeddedDatabase()) + 1), sal_True);
+        sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( m_pCollection->getEmbeddedDatabase() );
+        if ( nCreateNewDBIndex == -1 )
+            nCreateNewDBIndex = m_pCollection->getIndexOf( ::rtl::OUString::createFromAscii( "sdbc:dbase:" ) );
+        OSL_ENSURE( nCreateNewDBIndex != -1, "ODbTypeWizDialogSetup::activateDatabasePath: the GeneralPage should have prevented this!" );
+        activatePath( static_cast< PathId >( nCreateNewDBIndex + 1 ), sal_True );
+
         enableState(PAGE_DBSETUPWIZARD_FINAL, sal_True );
         enableButtons( WZB_FINISH, sal_True);
     }
@@ -675,7 +679,7 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
             break;
         case PAGE_DBSETUPWIZARD_MYSQL_NATIVE:
             m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysql:mysqlc:")))));
-            pPage = OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLNATIVETabPage( this, *m_pOutSet);
+            pPage = MySQLNativeSetupPage::Create( this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_ORACLE:
@@ -847,9 +851,23 @@ void ODbTypeWizDialogSetup::enableConfirmSettings( bool _bEnable )
 }
 
 //-------------------------------------------------------------------------
+namespace
+{
+    bool lcl_handle( const Reference< XInteractionHandler2 >& _rxHandler, const Any& _rRequest )
+    {
+        OInteractionRequest* pRequest = new OInteractionRequest( _rRequest );
+        Reference < XInteractionRequest > xRequest( pRequest );
+        OInteractionAbort* pAbort = new OInteractionAbort;
+        pRequest->addContinuation( pAbort );
+
+        return _rxHandler->handleInteractionRequest( xRequest );
+    }
+}
+
+//-------------------------------------------------------------------------
 sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 {
-    Reference< XInteractionHandler > xHandler( getORB()->createInstance( SERVICE_TASK_INTERACTION_HANDLER ), UNO_QUERY );
+    Reference< XInteractionHandler2 > xHandler( getORB()->createInstance( SERVICE_TASK_INTERACTION_HANDLER ), UNO_QUERY );
     try
     {
         if (callSaveAsDialog() == sal_True)
@@ -876,17 +894,25 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             return sal_True;
         }
     }
-    catch (Exception& e)
+    catch ( const Exception& e )
     {
-        InteractiveIOException aRequest;
-        aRequest.Code = IOErrorCode_GENERAL;
-        OInteractionRequest * pRequest  = new OInteractionRequest (makeAny (aRequest));
-        Reference < XInteractionRequest > xRequest(pRequest );
-        OInteractionAbort* pAbort = new OInteractionAbort;
-        pRequest ->addContinuation (pAbort );
+        Any aError = ::cppu::getCaughtException();
         if ( xHandler.is() )
-            xHandler->handle( xRequest );
-        (void)e;    // make compiler happy
+        {
+            if ( !lcl_handle( xHandler, aError ) )
+            {
+                InteractiveIOException aRequest;
+                aRequest.Classification = InteractionClassification_ERROR;
+                if ( aError.isExtractableTo( ::cppu::UnoType< IOException >::get() ) )
+                    // assume savint the document faile
+                    aRequest.Code = IOErrorCode_CANT_WRITE;
+                else
+                    aRequest.Code = IOErrorCode_GENERAL;
+                aRequest.Message = e.Message;
+                aRequest.Context = e.Context;
+                lcl_handle( xHandler, makeAny( aRequest ) );
+            }
+        }
     }
     return sal_False;
 }

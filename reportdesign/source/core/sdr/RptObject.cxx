@@ -1248,7 +1248,7 @@ void OOle2Obj::initializeChart( const uno::Reference< frame::XModel>& _xModel)
             uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
         aArgs[2] = beans::PropertyValue(
             ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
-            uno::makeAny( sal_False ), beans::PropertyState_DIRECT_VALUE );
+            uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
         aArgs[3] = beans::PropertyValue(
             ::rtl::OUString::createFromAscii("DataRowSource"), -1,
             uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );

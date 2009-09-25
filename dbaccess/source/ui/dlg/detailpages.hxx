@@ -58,6 +58,7 @@
 #ifndef DBAUI_TEXTCONNECTIONHELPER_HXX
 #include "TextConnectionHelper.hxx"
 #endif
+#include "admincontrols.hxx"
 
 #include <svtools/dialogcontrolling.hxx>
 
@@ -261,14 +262,7 @@ namespace dbaui
 
     private:
         FixedLine           m_aSeparator1;
-        FixedText           m_aDatabaseNameLabel;
-        Edit                m_aDatabaseName;
-        FixedText           m_aFTHostname;
-        Edit                m_aEDHostname;
-        FixedText           m_aPortNumber;
-        NumericField        m_aNFPortNumber;
-        FixedText           m_aFTSocket;
-        Edit                m_aEDSocket;
+        MySQLNativeSettings m_aMySQLSettings;
 
         FixedLine           m_aSeparator2;
         FixedText           m_aUserNameLabel;
