@@ -135,6 +135,7 @@ public final class Loader {
         // invoke the main method
         if ( className != null ) {
             ClassLoader cl = getCustomLoader();
+            Thread.currentThread().setContextClassLoader(cl);
             Class c = cl.loadClass( className );
             Method m = c.getMethod( "main", new Class[] { String[].class } );
             m.invoke( null, new Object[] { args } );
