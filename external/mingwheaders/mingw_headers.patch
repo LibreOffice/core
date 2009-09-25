@@ -12,24 +12,8 @@
 +#endif
 +
 +#endif
---- include/winres.h.orig	2006-07-22 23:41:18.000000000 +0900
-+++ include/winres.h	2006-07-22 23:41:18.000000000 +0900
-@@ -0,0 +1,13 @@
-+#ifndef _WINRES_H
-+#define _WINRES_H
-+#if __GNUC__ >=3
-+#pragma GCC system_header
-+#endif
-+
-+#define VS_VERSION_INFO 1
-+#include <winresrc.h>
-+#ifdef IDC_STATIC
-+#undef IDC_STATIC
-+#endif
-+#define IDC_STATIC (-1)
-+#endif
---- include/excpt.h.orig	2005-01-14 05:19:52.000000000 +0900
-+++ include/excpt.h	2006-12-31 09:21:56.000000000 +0900
+--- include/excpt.h.orig	2009-01-11 04:32:43.000000000 +0900
++++ include/excpt.h	2009-08-21 09:21:56.000000000 +0900
 @@ -16,8 +16,11 @@
  
  /* All the headers include this file. */
@@ -174,8 +158,8 @@
  #endif
  
  #endif	/* Not RC_INVOKED */
---- include/tchar.h.orig	2006-03-26 09:21:36.000000000 +0900
-+++ include/tchar.h	2006-03-26 09:21:42.000000000 +0900
+--- include/tchar.h.orig	2009-01-11 04:32:46.000000000 +0900
++++ include/tchar.h	2009-08-21 09:21:56.000000000 +0900
 @@ -223,6 +223,9 @@
  #define _ttelldir	_wtelldir
  #define _tseekdir	_wseekdir
@@ -195,8 +179,8 @@
  #endif	/* Not _UNICODE */
  
  /*
---- include/amvideo.h.orig	2006-11-19 08:08:30.000000000 +0900
-+++ include/amvideo.h	2007-01-16 23:11:24.656250000 +0900
+--- include/amvideo.h.orig	2008-12-06 11:31:53.000000000 +0900
++++ include/amvideo.h	2009-08-21 09:21:56.000000000 +0900
 @@ -52,10 +52,10 @@
  	BITMAPINFOHEADER bmiHeader;
  } VIDEOINFOHEADER;
@@ -212,51 +196,32 @@
  	REFERENCE_TIME AvgTimePerFrame;
  	BITMAPINFOHEADER bmiHeader;
  	union {
---- include/bdatypes.h.orig	2006-11-19 08:08:30.000000000 +0900
-+++ include/bdatypes.h	2007-01-16 23:21:10.062500000 +0900
-@@ -17,9 +17,9 @@
- } MEDIA_SAMPLE_CONTENT;
- /*--- DirectShow Reference - DirectShow Structures */
- typedef struct {
--	DWORD dwOffset
--	DWORD dwPacketLength
--	DWORD dwStride
-+	DWORD dwOffset;
-+	DWORD dwPacketLength;
-+	DWORD dwStride;
- } MPEG2_TRANSPORT_STRIDE;
- typedef struct {
- 	ULONG ulPID;
---- include/imm.h.orig	2007-12-27 23:07:19.000000000 +0900
-+++ include/imm.h	2008-11-08 07:28:48.983375000 +0900
-@@ -105,6 +105,7 @@
- #define UI_CAP_ROTANY 4
- #define SCS_CAP_COMPSTR 1
- #define SCS_CAP_MAKEREAD 2
-+#define SCS_CAP_SETRECONVERTSTRING 4
- #define SELECT_CAP_CONVERSION 1
- #define SELECT_CAP_SENTENCE 2
- #define GGL_LEVEL 1
-@@ -208,6 +209,7 @@
- #define IME_REGWORD_STYLE_USER_FIRST 0x80000000
- #define IME_REGWORD_STYLE_USER_LAST 0xFFFFFFFF
- #define IMR_RECONVERTSTRING 4
-+#define IMR_CONFIRMRECONVERTSTRING 5
- #define IMR_QUERYCHARPOSITION 6
- #define SOFTKEYBOARD_TYPE_T1 1
- #define SOFTKEYBOARD_TYPE_C1 2
-@@ -285,7 +287,7 @@
-   DWORD dwCompStrOffset;
-   DWORD dwTargetStrLen;
-   DWORD dwTargetStrOffset;
--} RECONVERTSTRING, *PRECONVERTSTRING;
-+} RECONVERTSTRING, *PRECONVERTSTRING, *LPRECONVERTSTRING;
- typedef struct tagREGISTERWORDA {
- 	LPSTR lpReading;
- 	LPSTR lpWord;
---- include/oaidl.h.orig	2006-11-19 08:08:33.000000000 +0900
-+++ include/oaidl.h	2007-01-20 09:08:24.625000000 +0900
-@@ -78,6 +78,8 @@
+--- include/basetyps.h.orig	2008-12-06 11:31:53.000000000 +0900
++++ include/basetyps.h	2009-08-21 09:21:56.000000000 +0900
+@@ -80,6 +80,8 @@
+    CONST_VTABLE struct i##Vtbl
+ #  define DECLARE_INTERFACE_(i,b) DECLARE_INTERFACE(i)
+ # endif
++# define DECLARE_INTERFACE_IID(i,s) EXTERN_C const IID IID_##i; DECLARE_INTERFACE(i)
++# define DECLARE_INTERFACE_IID_(i,b,s) EXTERN_C const IID IID_##i; DECLARE_INTERFACE_(i,b)
+ # define BEGIN_INTERFACE
+ # define END_INTERFACE
+ 
+--- include/oaidl.h.orig	2008-12-06 11:32:03.000000000 +0900
++++ include/oaidl.h	2009-08-21 09:21:56.000000000 +0900
+@@ -65,8 +65,11 @@
+ 
+ typedef _COM_interface ITypeLib *LPTYPELIB;
+ typedef _COM_interface ITypeLib2 *LPTYPELIB2;
++typedef _COM_interface ICreateTypeInfo ICreateTypeInfo;
+ typedef _COM_interface ICreateTypeInfo *LPCREATETYPEINFO;
+ typedef _COM_interface ICreateTypeInfo2 *LPCREATETYPEINFO2;
++typedef _COM_interface ICreateTypeLib ICreateTypeLib;
++typedef _COM_interface ICreateTypeLib2 ICreateTypeLib2;
+ typedef _COM_interface ICreateTypeLib *LPCREATETYPELIB;
+ typedef _COM_interface ICreateTypeLib2 *LPCREATETYPELIB2;
+ typedef _COM_interface ITypeComp *LPTYPECOMP;
+@@ -78,6 +81,8 @@
  typedef _COM_interface ICreateErrorInfo *LPCREATEERRORINFO;
  typedef _COM_interface ISupportErrorInfo *LPSUPPORTERRORINFO;
  typedef _COM_interface IRecordInfo *LPRECORDINFO;
@@ -265,7 +230,7 @@
  
  extern const IID IID_ITypeLib;
  extern const IID IID_ITypeLib2;
-@@ -772,6 +774,29 @@
+@@ -772,6 +777,29 @@
  };
  #undef INTERFACE
  
@@ -295,57 +260,16 @@
  #ifdef __cplusplus
  }
  #endif
---- include/objidl.h.orig	2006-11-19 08:08:34.000000000 +0900
-+++ include/objidl.h	2008-11-30 11:56:53.875000000 +0900
-@@ -1,3 +1,4 @@
+--- include/objidl.h.orig	2008-12-06 11:32:04.000000000 +0900
++++ include/objidl.h	2009-08-21 09:21:56.000000000 +0900
+@@ -1,3 +1,6 @@
++#include <windows.h>
 +#include <ole2.h>
++
  #ifndef _OBJIDL_H
  #define _OBJIDL_H
  #if __GNUC__ >= 3
-@@ -127,6 +128,7 @@
- 	struct IAdviseSink *pAdvSink;
- 	DWORD dwConnection;
- } STATDATA;
-+#if 0
- typedef struct tagSTATPROPSETSTG {
- 	FMTID fmtid;
- 	CLSID clsid;
-@@ -135,6 +137,7 @@
- 	FILETIME ctime;
- 	FILETIME atime;
- } STATPROPSETSTG;
-+#endif
- typedef enum tagEXTCONN {
- 	EXTCONN_STRONG=1,
- 	EXTCONN_WEAK=2,
-@@ -247,6 +250,7 @@
- typedef enum tagSERVERCALL {
- 	SERVERCALL_ISHANDLED,SERVERCALL_REJECTED,SERVERCALL_RETRYLATER
- } SERVERCALL;
-+#if 0
- typedef struct tagCAUB {
- 	ULONG cElems;
- 	unsigned char *pElems;
-@@ -406,6 +410,7 @@
- 	PROPSETFLAG_DEFAULT,PROPSETFLAG_NONSIMPLE,PROPSETFLAG_ANSI,
- 	PROPSETFLAG_UNBUFFERED=4
- } PROPSETFLAG;
-+#endif
- typedef struct tagSTORAGELAYOUT {
- 	DWORD LayoutType;
- 	OLECHAR* pwcsElementName;
-@@ -454,8 +459,10 @@
- DECLARE_ENUMERATOR(FORMATETC);
- DECLARE_ENUMERATOR(HLITEM);
- DECLARE_ENUMERATOR(STATDATA);
-+#if 0
- DECLARE_ENUMERATOR(STATPROPSETSTG);
- DECLARE_ENUMERATOR(STATPROPSTG);
-+#endif
- DECLARE_ENUMERATOR(STATSTG);
- DECLARE_ENUMERATOR_(IEnumString,LPOLESTR);
- DECLARE_ENUMERATOR_(IEnumMoniker,_COM_interface IMoniker*);
-@@ -880,8 +887,8 @@
+@@ -880,8 +883,8 @@
  	STDMETHOD(QueryInterface)(THIS_ REFIID,PVOID*) PURE;
  	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
  	STDMETHOD_(ULONG,Release)(THIS) PURE;
@@ -356,71 +280,120 @@
  };
  #undef INTERFACE
  
-@@ -927,6 +934,7 @@
- };
- #undef INTERFACE
+--- include/specstrings.h.orig	2008-12-06 11:32:09.000000000 +0900
++++ include/specstrings.h	2009-08-21 09:21:56.000000000 +0900
+@@ -11,8 +11,31 @@
+ /* __in and __out currently conflict with libstdc++, use with caution */
  
-+#if 0
- EXTERN_C const IID IID_IPropertyStorage;
- #define INTERFACE IPropertyStorage
- DECLARE_INTERFACE_(IPropertyStorage,IUnknown)
-@@ -962,6 +970,7 @@
- 	STDMETHOD(Enum)(THIS_ IEnumSTATPROPSETSTG**) PURE;
- };
- #undef INTERFACE
-+#endif
  
- EXTERN_C const IID IID_IClientSecurity;
- #define INTERFACE IClientSecurity
---- include/objfwd.h.orig	2006-03-26 09:21:36.000000000 +0900
-+++ include/objfwd.h	2006-03-26 09:21:42.000000000 +0900
-@@ -27,7 +27,7 @@
- typedef _COM_interface IEnumFORMATETC *LPENUMFORMATETC;
- typedef _COM_interface IEnumSTATDATA *LPENUMSTATDATA;
- typedef _COM_interface IEnumSTATSTG *LPENUMSTATSTG;
--typedef _COM_interface IEnumSTATPROPSTG LPENUMSTATPROPSTG;
-+typedef _COM_interface IEnumSTATPROPSTG *LPENUMSTATPROPSTG;
- typedef _COM_interface IEnumString *LPENUMSTRING;
- typedef _COM_interface IEnumUnknown *LPENUMUNKNOWN;
- typedef _COM_interface IStorage *LPSTORAGE;
---- include/uxtheme.h.orig	2006-11-19 08:08:36.000000000 +0900
-+++ include/uxtheme.h	2007-01-18 18:51:37.125000000 +0900
++#define __RPC__deref_inout_opt
++#define __RPC__deref_opt_inout_ecount_full_opt(size)
++#define __RPC__deref_opt_inout_opt
++#define __RPC__deref_out
++#define __RPC__deref_out_ecount_full_opt(size)
++#define __RPC__deref_out_opt
++#define __RPC__deref_out_opt_string
++#define __RPC__in
++#define __RPC__in_ecount_full(size)
++#define __RPC__in_ecount_full_opt(size)
++#define __RPC__in_opt
++#define __RPC__inout
++#define __RPC__inout_ecount_full(size)
++#define __RPC__inout_ecount_full_opt(size)
++#define __RPC__inout_opt
++#define __RPC__out
++#define __RPC__out_ecount_full(size)
++#define __RPC__out_ecount_full_string(size)
++#define __RPC__out_ecount_part(size,init)
++#define __RPC_unique_pointer
+ #define __bcount(size)
+ #define __bcount_opt(size)
++#define __callback
++#define __checkReturn
++#define __deref
+ #define __deref_bcount(size)
+ #define __deref_bcount_opt(size)
+ #define __deref_ecount(size)
+@@ -36,6 +59,7 @@
+ #define __deref_inout_ecount_opt(size)
+ #define __deref_inout_ecount_part(size,length)
+ #define __deref_inout_ecount_part_opt(size,length)
++#define __deref_inout_ecount_z(size)
+ #define __deref_inout_opt
+ #define __deref_opt_bcount(size)
+ #define __deref_opt_bcount_opt(size)
+@@ -89,14 +113,23 @@
+ #define __deref_out_ecount_part(size,length)
+ #define __deref_out_ecount_part_opt(size,length)
+ #define __deref_out_opt
++#define __deref_out_z
++#define __deref_out_z_opt
+ #define __ecount(size)
+ #define __ecount_opt(size)
++#define __field_bcount(size)
++#define __field_ecount(size)
++#define __field_ecount_opt(size)
++#define __format_string
++#define __gdi_entry
+ #define __in
+ #define __in_bcount(size)
+ #define __in_bcount_opt(size)
+ #define __in_ecount(size)
+ #define __in_ecount_opt(size)
+ #define __in_opt
++#define __in_xcount(size)
++#define __in_z_opt
+ #define __inout
+ #define __inout_bcount(size)
+ #define __inout_bcount_full(size)
+@@ -111,7 +144,12 @@
+ #define __inout_ecount_part(size,length)
+ #define __inout_ecount_part_opt(size,length)
+ #define __inout_opt
++#define __inout_xcount(size)
++#define __notnull
++#define __nullnullterminated
++#define __nullterminated
+ #define __out
++#define __out_awcount(expr,size)
+ #define __out_bcount(size)
+ #define __out_bcount_full(size)
+ #define __out_bcount_full_opt(size)
+@@ -119,12 +157,20 @@
+ #define __out_bcount_part(size,length)
+ #define __out_bcount_part_opt(size,length)
+ #define __out_ecount(size)
++#define __out_ecount(size)
+ #define __out_ecount_full(size)
+ #define __out_ecount_full_opt(size)
+ #define __out_ecount_opt(size)
+ #define __out_ecount_part(size,length)
+ #define __out_ecount_part_opt(size,length)
+ #define __out_opt 
++#define __out_xcount(size)
++#define __out_xcount_opt(size)
++#define __reserved
++#define __struct_bcount(size)
++#define __success(expr)
++#define __typefix(ctype)
++#define __unaligned
+ 
+ 
+ #endif /*_SPECSTRINGS_H */
+--- include/uxtheme.h.orig	2008-12-06 11:32:11.000000000 +0900
++++ include/uxtheme.h	2009-08-21 09:21:56.000000000 +0900
 @@ -10,7 +10,7 @@
  extern "C" {
  #endif
  
 -#if (_WIN32_WINNT >= 0x0501)
-+//#if (_WIN32_WINNT >= 0x0501)
++#if (_WIN32_WINNT >= 0x0500)
  #define DTBG_CLIPRECT 0x00000001
  #define DTBG_DRAWSOLID 0x00000002
  #define DTBG_OMITBORDER 0x00000004
-@@ -265,7 +265,7 @@
- HTHEME WINAPI OpenThemeData(HWND,LPCWSTR);
- void WINAPI SetThemeAppProperties(DWORD);
- HRESULT WINAPI SetWindowTheme(HWND,LPCWSTR,LPCWSTR);
--#endif
-+//#endif
- 
- #ifdef __cplusplus
- }
---- include/winbase.h.orig	2006-11-19 08:08:36.000000000 +0900
-+++ include/winbase.h	2007-07-27 21:14:27.621750000 +0900
-@@ -993,12 +993,14 @@
- 	WORD Reserved2;
- 	CHAR szPathName[OFS_MAXPATHNAME];
- } OFSTRUCT,*LPOFSTRUCT,*POFSTRUCT;
-+#if 0
- typedef struct _WIN_CERTIFICATE {
-       DWORD dwLength;
-       WORD wRevision;
-       WORD wCertificateType;
-       BYTE bCertificate[1];
- } WIN_CERTIFICATE, *LPWIN_CERTIFICATE;
-+#endif
- #if (_WIN32_WINNT >= 0x0501)
- typedef struct tagACTCTXA {
- 	ULONG cbSize;
-@@ -1342,8 +1344,8 @@
+--- include/winbase.h.orig	2008-12-06 11:32:11.000000000 +0900
++++ include/winbase.h	2009-08-21 09:21:56.000000000 +0900
+@@ -1354,8 +1354,8 @@
  WINBASEAPI HANDLE WINAPI FindFirstFileExW(LPCWSTR,FINDEX_INFO_LEVELS,PVOID,FINDEX_SEARCH_OPS,PVOID,DWORD);
  WINBASEAPI BOOL WINAPI FindFirstFreeAce(PACL,PVOID*);
  #if (_WIN32_WINNT >= 0x0500)
@@ -431,7 +404,7 @@
  WINBASEAPI HANDLE WINAPI FindFirstVolumeMountPointA(LPSTR,LPSTR,DWORD);
  WINBASEAPI HANDLE WINAPI FindFirstVolumeMountPointW(LPWSTR,LPWSTR,DWORD);
  #endif
-@@ -1351,7 +1353,7 @@
+@@ -1363,7 +1363,7 @@
  WINBASEAPI BOOL WINAPI FindNextFileA(HANDLE,LPWIN32_FIND_DATAA);
  WINBASEAPI BOOL WINAPI FindNextFileW(HANDLE,LPWIN32_FIND_DATAW);
  #if (_WIN32_WINNT >= 0x0500)
@@ -440,7 +413,7 @@
  WINBASEAPI BOOL WINAPI FindNextVolumeW(HANDLE,LPWSTR,DWORD);
  WINBASEAPI BOOL WINAPI FindNextVolumeMountPointA(HANDLE,LPSTR,DWORD);
  WINBASEAPI BOOL WINAPI FindNextVolumeMountPointW(HANDLE,LPWSTR,DWORD);
-@@ -1463,10 +1465,10 @@
+@@ -1475,10 +1475,10 @@
  WINBASEAPI DWORD WINAPI GetLogicalDrives(void);
  WINBASEAPI DWORD WINAPI GetLogicalDriveStringsA(DWORD,LPSTR);
  WINBASEAPI DWORD WINAPI GetLogicalDriveStringsW(DWORD,LPWSTR);
@@ -453,7 +426,7 @@
  WINBASEAPI BOOL WINAPI GetMailslotInfo(HANDLE,PDWORD,PDWORD,PDWORD,PDWORD);
  WINBASEAPI DWORD WINAPI GetModuleFileNameA(HINSTANCE,LPSTR,DWORD);
  WINBASEAPI DWORD WINAPI GetModuleFileNameW(HINSTANCE,LPWSTR,DWORD);
-@@ -1504,9 +1506,9 @@
+@@ -1519,9 +1519,9 @@
  #endif
  WINBASEAPI HANDLE WINAPI GetProcessHeap(VOID);
  WINBASEAPI DWORD WINAPI GetProcessHeaps(DWORD,PHANDLE);
@@ -465,7 +438,7 @@
  #if (_WIN32_WINNT >= 0x0500)
  WINBASEAPI BOOL WINAPI GetProcessIoCounters(HANDLE,PIO_COUNTERS);
  #endif
-@@ -1784,9 +1786,9 @@
+@@ -1802,9 +1802,9 @@
  WINBASEAPI BOOL WINAPI OpenProcessToken(HANDLE,DWORD,PHANDLE);
  WINBASEAPI HANDLE WINAPI OpenSemaphoreA(DWORD,BOOL,LPCSTR);
  WINBASEAPI HANDLE WINAPI OpenSemaphoreW(DWORD,BOOL,LPCWSTR);
@@ -477,15 +450,15 @@
  WINBASEAPI BOOL WINAPI OpenThreadToken(HANDLE,DWORD,BOOL,PHANDLE);
  WINBASEAPI HANDLE WINAPI OpenWaitableTimerA(DWORD,BOOL,LPCSTR);
  WINBASEAPI HANDLE WINAPI OpenWaitableTimerW(DWORD,BOOL,LPCWSTR);
-@@ -2024,6 +2026,7 @@
- WINBASEAPI BOOL WINAPI WriteProfileStringA(LPCSTR,LPCSTR,LPCSTR);
- WINBASEAPI BOOL WINAPI WriteProfileStringW(LPCWSTR,LPCWSTR,LPCWSTR);
- WINBASEAPI DWORD WINAPI WriteTapemark(HANDLE,DWORD,DWORD,BOOL);
-+WINBASEAPI BOOL WINAPI CheckTokenMembership(HANDLE,PSID,PBOOL);
- #define Yield()
- #if (_WIN32_WINNT >= 0x0501)
- WINBASEAPI BOOL WINAPI ZombifyActCtx(HANDLE);
-@@ -2130,9 +2133,9 @@
+@@ -2029,6 +2029,7 @@
+ WINBASEAPI DWORD WINAPI WaitForSingleObjectEx(HANDLE,DWORD,BOOL);
+ WINBASEAPI BOOL WINAPI WaitNamedPipeA(LPCSTR,DWORD);
+ WINBASEAPI BOOL WINAPI WaitNamedPipeW(LPCWSTR,DWORD);
++WINBASEAPI UINT WINAPI WinExec(LPCSTR,UINT);
+ WINBASEAPI BOOL WINAPI WinLoadTrustProvider(GUID*);
+ WINBASEAPI BOOL WINAPI WriteFile(HANDLE,PCVOID,DWORD,PDWORD,LPOVERLAPPED);
+ WINBASEAPI BOOL WINAPI WriteFileEx(HANDLE,PCVOID,DWORD,LPOVERLAPPED,LPOVERLAPPED_COMPLETION_ROUTINE);
+@@ -2151,9 +2152,9 @@
  #define GetFileAttributesEx GetFileAttributesExW
  #define GetFullPathName GetFullPathNameW
  #define GetLogicalDriveStrings GetLogicalDriveStringsW
@@ -497,7 +470,7 @@
  #define GetModuleFileName GetModuleFileNameW
  #define GetModuleHandle GetModuleHandleW
  #if (_WIN32_WINNT >= 0x0500)
-@@ -2325,9 +2328,9 @@
+@@ -2346,9 +2347,9 @@
  #define GetFileAttributesEx GetFileAttributesExA
  #define GetFullPathName GetFullPathNameA
  #define GetLogicalDriveStrings GetLogicalDriveStringsA
@@ -509,8 +482,18 @@
  #define GetNamedPipeHandleState GetNamedPipeHandleStateA
  #define GetModuleHandle GetModuleHandleA
  #if (_WIN32_WINNT >= 0x0500)
---- include/wininet.h.orig	2006-03-26 09:21:36.000000000 +0900
-+++ include/wininet.h	2006-04-04 23:18:14.000000000 +0900
+--- include/windef.h.orig	2008-12-06 11:32:12.000000000 +0900
++++ include/windef.h	2009-08-21 09:21:56.000000000 +0900
+@@ -251,6 +251,7 @@
+ typedef unsigned int UINT,*PUINT,*LPUINT;
+ 
+ #include <winnt.h>
++#include <specstrings.h>
+ 
+ typedef UINT_PTR WPARAM;
+ typedef LONG_PTR LPARAM;
+--- include/wininet.h.orig	2008-12-06 11:32:13.000000000 +0900
++++ include/wininet.h	2009-08-21 09:21:56.000000000 +0900
 @@ -868,6 +868,7 @@
  BOOL WINAPI InternetAutodial(DWORD,DWORD);
  BOOL WINAPI InternetAutodialHangup(DWORD);
@@ -519,23 +502,8 @@
  BOOL WINAPI InternetSetDialState(LPCTSTR,DWORD,DWORD);
  BOOL WINAPI InternetReadFileExA(HINTERNET,LPINTERNET_BUFFERSA,DWORD,DWORD_PTR);
  BOOL WINAPI InternetReadFileExW(HINTERNET,LPINTERNET_BUFFERSW,DWORD,DWORD_PTR);
---- include/winnt.h.orig	2006-11-19 08:08:37.000000000 +0900
-+++ include/winnt.h	2007-01-16 07:06:57.796875000 +0900
-@@ -67,9 +67,9 @@
- #endif
- #endif
- 
--#ifndef C_ASSERT
--#define C_ASSERT(expr) typedef char __C_ASSERT__[(expr)?1:-1]
--#endif
-+//#ifndef C_ASSERT
-+//#define C_ASSERT(expr) typedef char __C_ASSERT__[(expr)?1:-1]
-+//#endif
- 
- #ifndef VOID
- #define VOID void
---- include/winver.h.orig	2006-03-26 09:21:36.000000000 +0900
-+++ include/winver.h	2006-03-26 09:21:42.000000000 +0900
+--- include/winver.h.orig	2008-12-06 11:32:14.000000000 +0900
++++ include/winver.h	2009-08-21 09:21:56.000000000 +0900
 @@ -101,10 +101,10 @@
  DWORD WINAPI VerFindFileW(DWORD,LPWSTR,LPWSTR,LPWSTR,LPWSTR,PUINT,LPWSTR,PUINT);
  DWORD WINAPI VerInstallFileA(DWORD,LPSTR,LPSTR,LPSTR,LPSTR,LPSTR,LPSTR,PUINT);
@@ -551,8 +519,8 @@
  DWORD WINAPI VerLanguageNameA(DWORD,LPSTR,DWORD);
  DWORD WINAPI VerLanguageNameW(DWORD,LPWSTR,DWORD);
  BOOL WINAPI VerQueryValueA(const LPVOID,LPSTR,LPVOID*,PUINT);
---- include/wtypes.h.orig	2006-11-19 08:08:37.000000000 +0900
-+++ include/wtypes.h	2007-01-19 23:05:02.531250000 +0900
+--- include/wtypes.h.orig	2008-12-06 11:32:14.000000000 +0900
++++ include/wtypes.h	2009-08-21 09:21:56.000000000 +0900
 @@ -66,6 +66,19 @@
  	unsigned short asData[1];
  }FLAGGED_WORD_BLOB;
@@ -634,20 +602,8 @@
  #ifdef __cplusplus
  }
  #endif
---- include/sys/stat.h.orig	2006-06-25 19:45:42.000000000 +0900
-+++ include/sys/stat.h	2006-12-30 18:26:27.578125000 +0900
-@@ -11,6 +11,9 @@
- 
- #ifndef _STAT_H_
- #define _STAT_H_
-+#if __GNUC__ >=3
-+#pragma GCC system_header
-+#endif
- 
- /* All the headers include this file. */
- #include <_mingw.h>
---- include/adoctint.h.orig	2005-04-04 18:50:18.000000000 +0900
-+++ include/adoctint.h	2007-12-14 23:43:07.754125000 +0900
+--- include/adoctint.h.orig	2008-01-18 22:17:10.000000000 +0900
++++ include/adoctint.h	2009-08-21 09:21:56.000000000 +0900
 @@ -11,6 +11,9 @@
  //--------------------------------------------------------------------
  #ifndef _ADOCTINT_H_
@@ -712,8 +668,8 @@
          
          virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Delete( 
              /* [in] */ VARIANT Item) = 0;
---- include/adodef.h.orig	2005-04-04 18:50:18.000000000 +0900
-+++ include/adodef.h	2007-01-05 21:48:51.265625000 +0900
+--- include/adodef.h.orig	2008-01-18 22:17:10.000000000 +0900
++++ include/adodef.h	2009-08-21 09:21:56.000000000 +0900
 @@ -12,6 +12,9 @@
  
  #ifndef _ADODEF_H_
@@ -724,8 +680,8 @@
  
  // TYPELIB MAJOR VERSIONS
  #define ADO_MAJOR			6
---- include/adoguids.h.orig	2005-04-04 18:50:18.000000000 +0900
-+++ include/adoguids.h	2007-01-05 21:50:10.265625000 +0900
+--- include/adoguids.h.orig	2008-01-18 22:17:10.000000000 +0900
++++ include/adoguids.h	2009-08-21 09:21:56.000000000 +0900
 @@ -11,6 +11,10 @@
  //-----------------------------------------------------------------------------
  
@@ -737,8 +693,8 @@
  #define STRING_GUID(l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) l##-##w1##-##w2##-##b1##b2##-##b3##b4##b5##b6##b7##b8
  
  #if defined(__midl) || defined(GEN_MIDL)
---- include/adoint.h.orig	2005-04-04 18:50:18.000000000 +0900
-+++ include/adoint.h	2007-01-02 17:36:43.593750000 +0900
+--- include/adoint.h.orig	2008-01-18 22:17:10.000000000 +0900
++++ include/adoint.h	2009-08-21 09:21:56.000000000 +0900
 @@ -11,6 +11,9 @@
  //--------------------------------------------------------------------
  #ifndef _ADOINT_H_
@@ -840,7 +796,7 @@
  {
      ULONG   cbOID;
 --- include/commctrl.h.orig	2008-01-18 22:17:14.000000000 +0900
-+++ include/commctrl.h	 2009-02-16 21:34:39.065125000 +0900
++++ include/commctrl.h	2009-08-21 09:21:56.000000000 +0900
 @@ -14,6 +14,14 @@
  #ifndef _INC_COMMCTRL
  #define _INC_COMMCTRL
@@ -856,15 +812,6 @@
  #if defined(_MSC_VER) && (_MSC_VER >= 1200)
  #pragma warning(push)
  #pragma warning(disable:4001) /* nonstandard extension : single line comment */
-@@ -23,7 +31,7 @@
- 
- #ifndef _HRESULT_DEFINED
- #define _HRESULT_DEFINED
--typedef __success(return >= 0) long HRESULT;
-+typedef long HRESULT;
- #endif // !_HRESULT_DEFINED
- 
- #ifndef NOUSER
 @@ -369,8 +377,10 @@
  
  // Shell reserved               (0U-580U) -  (0U-589U)
@@ -925,8 +872,8 @@
  #endif  /* _INC_COMMCTRL */
  
  
---- include/control.h.orig	2005-04-14 17:54:38.000000000 +0900
-+++ include/control.h	2007-01-02 22:16:33.031250000 +0900
+--- include/control.h.orig	2008-01-18 22:17:14.000000000 +0900
++++ include/control.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -934,8 +881,8 @@
  
  
  /* this ALWAYS GENERATED file contains the definitions for the interfaces */
---- include/dispex.h.orig	2007-03-31 19:44:54.000000000 +0900
-+++ include/dispex.h	2007-03-24 17:40:20.000000000 +0900
+--- include/dispex.h.orig	2008-01-18 22:17:16.000000000 +0900
++++ include/dispex.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -943,8 +890,8 @@
  
  
  /* this ALWAYS GENERATED file contains the definitions for the interfaces */
---- include/filter.h.orig	2005-04-14 17:54:44.000000000 +0900
-+++ include/filter.h	2007-01-02 11:15:03.671875000 +0900
+--- include/filter.h.orig	2008-01-18 22:17:18.000000000 +0900
++++ include/filter.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -952,8 +899,8 @@
  
  
  /* this ALWAYS GENERATED file contains the definitions for the interfaces */
---- include/gdiplusbitmap.h.orig	2005-04-14 17:54:44.000000000 +0900
-+++ include/gdiplusbitmap.h	2007-01-02 11:17:13.125000000 +0900
+--- include/gdiplusbitmap.h.orig	2008-01-18 22:17:46.000000000 +0900
++++ include/gdiplusbitmap.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -961,8 +908,8 @@
  /**************************************************************************\
  *
  * Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
---- include/gdiplusbrush.h.orig	2005-04-14 17:54:44.000000000 +0900
-+++ include/gdiplusbrush.h	2007-01-02 10:33:22.734375000 +0900
+--- include/gdiplusbrush.h.orig	2008-01-18 22:17:46.000000000 +0900
++++ include/gdiplusbrush.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -970,8 +917,8 @@
  /**************************************************************************\
  * 
  * Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
---- include/gdiplusenums.h.orig	2003-03-26 16:34:34.000000000 +0900
-+++ include/gdiplusenums.h	2004-12-30 20:42:34.000000000 +0900
+--- include/gdiplusenums.h.orig	2008-01-18 22:17:46.000000000 +0900
++++ include/gdiplusenums.h	2009-08-21 09:21:56.000000000 +0900
 @@ -542,7 +542,7 @@
  
  #define GDIP_EMFPLUS_RECORD_BASE        0x00004000
@@ -981,8 +928,8 @@
  #define GDIP_EMFPLUS_RECORD_TO_WMF(n)   ((n) & (~GDIP_WMF_RECORD_BASE))
  #define GDIP_IS_WMF_RECORDTYPE(n)       (((n) & GDIP_WMF_RECORD_BASE) != 0)
  
---- include/gdiplusfont.h.orig	2005-04-14 17:54:44.000000000 +0900
-+++ include/gdiplusfont.h	2007-01-02 10:35:57.671875000 +0900
+--- include/gdiplusfont.h.orig	2008-01-18 22:17:46.000000000 +0900
++++ include/gdiplusfont.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -1010,8 +957,8 @@
          IN HENHMETAFILE       hemf,
          IN UINT               cbData16,     
          OUT LPBYTE            pData16,
---- include/gdiplusimageattributes.h.orig	2005-04-14 17:54:44.000000000 +0900
-+++ include/gdiplusimageattributes.h	2007-01-02 10:21:23.031250000 +0900
+--- include/gdiplusimageattributes.h.orig	2008-01-18 22:17:46.000000000 +0900
++++ include/gdiplusimageattributes.h	2009-08-21 09:21:56.000000000 +0900
 @@ -32,6 +32,9 @@
  
  #ifndef _GDIPLUSIMAGEATTRIBUTES_H
@@ -1022,8 +969,8 @@
  
  class GpImageAttributes;
  
---- include/gdiplusimaging.h.orig	2003-03-26 16:34:34.000000000 +0900
-+++ include/gdiplusimaging.h	2007-12-04 21:16:38.000000000 +0900
+--- include/gdiplusimaging.h.orig	2008-01-18 22:17:46.000000000 +0900
++++ include/gdiplusimaging.h	2009-08-21 09:21:56.000000000 +0900
 @@ -160,7 +160,7 @@
      UINT Width;
      UINT Height;
@@ -1033,8 +980,8 @@
      VOID* Scan0;
      UINT_PTR Reserved;
  };
---- include/gdiplusmatrix.h.orig	2005-04-14 17:54:44.000000000 +0900
-+++ include/gdiplusmatrix.h	2007-01-02 10:32:35.203125000 +0900
+--- include/gdiplusmatrix.h.orig	2008-01-18 22:17:46.000000000 +0900
++++ include/gdiplusmatrix.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -1042,8 +989,8 @@
  /**************************************************************************\
  * 
  * Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
---- include/gdipluspath.h.orig	2005-04-14 17:54:44.000000000 +0900
-+++ include/gdipluspath.h	2007-01-02 10:34:33.125000000 +0900
+--- include/gdipluspath.h.orig	2008-01-18 22:17:46.000000000 +0900
++++ include/gdipluspath.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -1051,8 +998,8 @@
  /**************************************************************************\
  *
  * Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
---- include/gdipluspen.h.orig	2005-04-14 17:54:44.000000000 +0900
-+++ include/gdipluspen.h	2007-01-02 10:34:12.593750000 +0900
+--- include/gdipluspen.h.orig	2008-01-18 22:17:46.000000000 +0900
++++ include/gdipluspen.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -1060,8 +1007,8 @@
  /**************************************************************************\
  * 
  * Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
---- include/gdiplusregion.h.orig	2005-04-14 17:54:44.000000000 +0900
-+++ include/gdiplusregion.h	2007-01-02 10:35:23.453125000 +0900
+--- include/gdiplusregion.h.orig	2008-01-18 22:17:46.000000000 +0900
++++ include/gdiplusregion.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -1069,8 +1016,8 @@
  /**************************************************************************\
  *
  * Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
---- include/gdiplusstringformat.h.orig	2005-04-14 17:54:44.000000000 +0900
-+++ include/gdiplusstringformat.h	2007-08-29 23:10:06.497500000 +0900
+--- include/gdiplusstringformat.h.orig	2008-01-18 22:17:46.000000000 +0900
++++ include/gdiplusstringformat.h	2009-08-21 09:21:56.000000000 +0900
 @@ -217,7 +217,7 @@
          ));
      }
@@ -1080,8 +1027,34 @@
      {
          StringTrimming trimming;
          SetStatus(DllExports::GdipGetStringFormatTrimming(
---- include/imagehlp.h.orig	2008-03-22 06:10:42.084500000 +1000
-+++ include/imagehlp.h	2009-02-16 21:34:39.065125000 +0900
+--- include/imm.h.orig	2008-01-18 22:17:20.000000000 +0900
++++ include/imm.h	2009-08-21 09:21:56.000000000 +0900
+@@ -7,6 +7,13 @@
+ #ifndef _IMM_
+ #define _IMM_
+ 
++#define __in
++#define __out
++#ifdef __cplusplus
++#define __inline inline
++#else
++#define __inline static __inline__
++#endif
+ 
+ #ifdef __cplusplus
+ extern "C" {
+@@ -715,5 +722,9 @@
+ }
+ #endif
+ 
++#undef __in
++#undef __out
++#undef __inline
++
+ #endif  // _IMM_
+ 
+--- include/imagehlp.h.orig	2008-01-18 22:17:20.000000000 +0900
++++ include/imagehlp.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -1131,261 +1104,8 @@
 +
  #endif // _IMAGEHLP_
  
---- include/intsafe.h.orig	2008-03-22 06:10:42.100125000 +1000
-+++ include/intsafe.h	2008-03-24 02:25:53.710750000 +1000
-@@ -111,7 +111,7 @@
- 
- 
- 
--typedef __success(return >= 0) long HRESULT;
-+typedef long HRESULT;
- 
- #define SUCCEEDED(hr)   (((HRESULT)(hr)) >= 0)
- #define FAILED(hr)      (((HRESULT)(hr)) < 0)
-@@ -134,7 +134,7 @@
-     || defined(_M_IA64) || defined(_M_AMD64)
- #define UInt32x32To64(a, b) (((unsigned __int64)((unsigned int)(a))) * ((unsigned __int64)((unsigned int)(b))))
- #elif defined(_M_IX86)
--#define UInt32x32To64(a, b) ((unsigned __int64)(((unsigned __int64)((unsigned int)(a))) * ((unsigned int)(b))))
-+//#define UInt32x32To64(a, b) ((unsigned __int64)(((unsigned __int64)((unsigned int)(a))) * ((unsigned int)(b))))
- #else
- #error Must define a target architecture.
- #endif
-@@ -142,22 +142,22 @@
- //
- // Min/Max type values
- //
--#define INT8_MIN        (-127i8 - 1)
-+#define INT8_MIN        ((signed char)(-127) - 1)
- #define SHORT_MIN       (-32768)
--#define INT16_MIN       (-32767i16 - 1)
--#define INT_MIN         (-2147483647 - 1)
--#define INT32_MIN       (-2147483647i32 - 1)
--#define LONG_MIN        (-2147483647L - 1)
--#define LONGLONG_MIN    (-9223372036854775807i64 - 1)
--#define LONG64_MIN      (-9223372036854775807i64 - 1)
--#define INT64_MIN       (-9223372036854775807i64 - 1)
-+#define INT16_MIN       ((short)(-32767) - 1)
-+//#define INT_MIN         (-2147483647 - 1)
-+#define INT32_MIN       (-2147483647L - 1)
-+//#define LONG_MIN        (-2147483647L - 1)
-+#define LONGLONG_MIN    (-9223372036854775807ll - 1)
-+#define LONG64_MIN      (-9223372036854775807ll - 1)
-+#define INT64_MIN       (-9223372036854775807ll - 1)
- #define INT128_MIN      (-170141183460469231731687303715884105727i128 - 1)
- 
- #ifdef _WIN64
--#define INT_PTR_MIN     (-9223372036854775807i64 - 1)
--#define LONG_PTR_MIN    (-9223372036854775807i64 - 1)
--#define PTRDIFF_T_MIN   (-9223372036854775807i64 - 1)
--#define SSIZE_T_MIN     (-9223372036854775807i64 - 1)
-+#define INT_PTR_MIN     (-9223372036854775807ll - 1)
-+#define LONG_PTR_MIN    (-9223372036854775807ll - 1)
-+#define PTRDIFF_T_MIN   (-9223372036854775807ll - 1)
-+#define SSIZE_T_MIN     (-9223372036854775807ll - 1)
- #else
- #define INT_PTR_MIN     (-2147483647 - 1)
- #define LONG_PTR_MIN    (-2147483647L - 1)
-@@ -165,44 +165,44 @@
- #define SSIZE_T_MIN     (-2147483647L - 1)
- #endif
- 
--#define INT8_MAX        127i8
--#define UINT8_MAX       0xffui8
-+#define INT8_MAX        ((signed char)(127))
-+#define UINT8_MAX       ((unsigned char)(0xff))
- #define BYTE_MAX        0xff
- #define SHORT_MAX       32767
--#define INT16_MAX       32767i16
-+#define INT16_MAX       ((short)(32767))
- #define USHORT_MAX      0xffff
--#define UINT16_MAX      0xffffui16
-+#define UINT16_MAX      ((unsigned short)(0xffff))
- #define WORD_MAX        0xffff
- #define INT_MAX         2147483647
--#define INT32_MAX       2147483647i32
-+#define INT32_MAX       2147483647L
- #define UINT_MAX        0xffffffff
--#define UINT32_MAX      0xffffffffui32
-+#define UINT32_MAX      0xffffffffu
- #define LONG_MAX        2147483647L
- #define ULONG_MAX       0xffffffffUL
- #define DWORD_MAX       0xffffffffUL
--#define LONGLONG_MAX    9223372036854775807i64
--#define LONG64_MAX      9223372036854775807i64
--#define INT64_MAX       9223372036854775807i64
--#define ULONGLONG_MAX   0xffffffffffffffffui64
--#define DWORDLONG_MAX   0xffffffffffffffffui64
--#define ULONG64_MAX     0xffffffffffffffffui64
--#define DWORD64_MAX     0xffffffffffffffffui64
--#define UINT64_MAX      0xffffffffffffffffui64
-+#define LONGLONG_MAX    9223372036854775807ll
-+#define LONG64_MAX      9223372036854775807ll
-+#define INT64_MAX       9223372036854775807ll
-+#define ULONGLONG_MAX   0xffffffffffffffffull
-+#define DWORDLONG_MAX   0xffffffffffffffffull
-+#define ULONG64_MAX     0xffffffffffffffffull
-+#define DWORD64_MAX     0xffffffffffffffffull
-+#define UINT64_MAX      0xffffffffffffffffull
- #define INT128_MAX      170141183460469231731687303715884105727i128
- #define UINT128_MAX     0xffffffffffffffffffffffffffffffffui128
- 
- #undef SIZE_T_MAX
- 
- #ifdef _WIN64
--#define INT_PTR_MAX     9223372036854775807i64
--#define UINT_PTR_MAX    0xffffffffffffffffui64
--#define LONG_PTR_MAX    9223372036854775807i64
--#define ULONG_PTR_MAX   0xffffffffffffffffui64
--#define DWORD_PTR_MAX   0xffffffffffffffffui64
--#define PTRDIFF_T_MAX   9223372036854775807i64
--#define SIZE_T_MAX      0xffffffffffffffffui64
--#define SSIZE_T_MAX     9223372036854775807i64
--#define _SIZE_T_MAX     0xffffffffffffffffui64
-+#define INT_PTR_MAX     9223372036854775807ll
-+#define UINT_PTR_MAX    0xffffffffffffffffull
-+#define LONG_PTR_MAX    9223372036854775807ll
-+#define ULONG_PTR_MAX   0xffffffffffffffffull
-+#define DWORD_PTR_MAX   0xffffffffffffffffull
-+#define PTRDIFF_T_MAX   9223372036854775807ll
-+#define SIZE_T_MAX      0xffffffffffffffffull
-+#define SSIZE_T_MAX     9223372036854775807ll
-+#define _SIZE_T_MAX     0xffffffffffffffffull
- #else
- #define INT_PTR_MAX     2147483647 
- #define UINT_PTR_MAX    0xffffffff
-@@ -219,39 +219,39 @@
- //
- // It is common for -1 to be used as an error value
- //
--#define INT8_ERROR      (-1i8)
--#define UINT8_ERROR     0xffui8
-+#define INT8_ERROR      (((signed char)(-1)))
-+#define UINT8_ERROR     ((unsigned char)(0xff))
- #define BYTE_ERROR      0xff
- #define SHORT_ERROR     (-1)
--#define INT16_ERROR     (-1i16)
-+#define INT16_ERROR     (((short)(-1)))
- #define USHORT_ERROR    0xffff
--#define UINT16_ERROR    0xffffui16
-+#define UINT16_ERROR    ((unsigned short)(0xffff))
- #define WORD_ERROR      0xffff
- #define INT_ERROR       (-1)
--#define INT32_ERROR     (-1i32)
-+#define INT32_ERROR     (-1L)
- #define UINT_ERROR      0xffffffff
--#define UINT32_ERROR    0xffffffffui32
-+#define UINT32_ERROR    0xffffffffuL
- #define LONG_ERROR      (-1L)
- #define ULONG_ERROR     0xffffffffUL
- #define DWORD_ERROR     0xffffffffUL
--#define LONGLONG_ERROR  (-1i64)
--#define LONG64_ERROR    (-1i64)
--#define INT64_ERROR     (-1i64)
--#define ULONGLONG_ERROR 0xffffffffffffffffui64
--#define DWORDLONG_ERROR 0xffffffffffffffffui64
--#define ULONG64_ERROR   0xffffffffffffffffui64
--#define UINT64_ERROR    0xffffffffffffffffui64
--
--#ifdef _WIN64
--#define INT_PTR_ERROR   (-1i64)
--#define UINT_PTR_ERROR  0xffffffffffffffffui64
--#define LONG_PTR_ERROR  (-1i64)
--#define ULONG_PTR_ERROR 0xffffffffffffffffui64
--#define DWORD_PTR_ERROR 0xffffffffffffffffui64
--#define PTRDIFF_T_ERROR (-1i64)
--#define SIZE_T_ERROR    0xffffffffffffffffui64
--#define SSIZE_T_ERROR   (-1i64)
--#define _SIZE_T_ERROR   0xffffffffffffffffui64
-+#define LONGLONG_ERROR  (-1ll)
-+#define LONG64_ERROR    (-1ll)
-+#define INT64_ERROR     (-1ll)
-+#define ULONGLONG_ERROR 0xffffffffffffffffull
-+#define DWORDLONG_ERROR 0xffffffffffffffffull
-+#define ULONG64_ERROR   0xffffffffffffffffull
-+#define UINT64_ERROR    0xffffffffffffffffull
-+
-+#ifdef _WIN64
-+#define INT_PTR_ERROR   (-1ll)
-+#define UINT_PTR_ERROR  0xffffffffffffffffull
-+#define LONG_PTR_ERROR  (-1ll)
-+#define ULONG_PTR_ERROR 0xffffffffffffffffull
-+#define DWORD_PTR_ERROR 0xffffffffffffffffull
-+#define PTRDIFF_T_ERROR (-1ll)
-+#define SIZE_T_ERROR    0xffffffffffffffffull
-+#define SSIZE_T_ERROR   (-1ll)
-+#define _SIZE_T_ERROR   0xffffffffffffffffull
- #else
- #define INT_PTR_ERROR   (-1) 
- #define UINT_PTR_ERROR  0xffffffff
-@@ -7570,13 +7570,13 @@
- 
-             // a * d must be less than 2^32 or there would be bits set in the high 64-bits
-             ad = (((ULONGLONG)dw_a) * (ULONGLONG)dw_d);
--            if ((ad & 0xffffffff00000000) == 0)
-+            if ((ad & 0xffffffff00000000ULL) == 0)
-             {
-                 dw_b = (DWORD)ullMultiplicand;
- 
-                 // b * c must be less than 2^32 or there would be bits set in the high 64-bits
-                 bc = (((ULONGLONG)dw_b) * (ULONGLONG)dw_c);
--                if ((bc & 0xffffffff00000000) == 0)
-+                if ((bc & 0xffffffff00000000ULL) == 0)
-                 {
-                     // now sum them all up checking for overflow.
-                     // shifting is safe because we already checked for overflow above
-@@ -8015,10 +8015,14 @@
- // Macros that are no longer used in this header but which clients may
- // depend on being defined here.
- //
--#define LOWORD(_dw)     ((WORD)(((DWORD_PTR)(_dw)) & 0xffff))
--#define HIWORD(_dw)     ((WORD)((((DWORD_PTR)(_dw)) >> 16) & 0xffff))
-+//#define LOWORD(_dw)     ((WORD)(((DWORD_PTR)(_dw)) & 0xffff))
-+//#define HIWORD(_dw)     ((WORD)((((DWORD_PTR)(_dw)) >> 16) & 0xffff))
- #define LODWORD(_qw)    ((DWORD)(_qw))
- #define HIDWORD(_qw)    ((DWORD)(((_qw) >> 32) & 0xffffffff))
- 
-+#undef __in
-+#undef __out
-+#undef __inline
-+
- #endif // _INTSAFE_H_INCLUDED_
- 
---- include/mapinls.h.orig	2005-04-14 17:54:46.000000000 +0900
-+++ include/mapinls.h	2006-12-30 20:46:11.125000000 +0900
-@@ -72,7 +72,7 @@
- typedef const void FAR *				LPCVOID;
- 
- #ifndef _MAC
--#ifndef LPOLESTR
-+#ifndef OLESTR
- #if !defined (_WIN32)
- 
- #define LPOLESTR        LPSTR
-@@ -88,9 +88,11 @@
- #define OLESTR(str)     L##str
- 
- #endif /* !_WIN32 */
--#endif /* LPOLESTR */
-+#endif /* OLESTR */
- #endif /* _MAC */
- 
-+#ifndef NORM_IGNORECASE
-+
- #define NORM_IGNORECASE      			0x00000001     /* ignore case */
- #define NORM_IGNORENONSPACE  			0x00000002     /* ignore diacritics */
- #define NORM_IGNORESYMBOLS   			0x00000004     /* ignore symbols */
-@@ -103,6 +105,8 @@
- #define NORM_IGNOREKANATYPE				0x00000040		/* ignore kanatype */
- #endif
- 
-+#endif /* NORM_IGNORECASE */
-+
- #if defined(WIN16)
- 
- #define	lstrcpyA						lstrcpy
---- include/mapiwin.h.orig	2003-03-26 16:34:38.000000000 +0900
-+++ include/mapiwin.h	2004-12-28 21:41:14.000000000 +0900
+--- include/mapiwin.h.orig	2008-01-18 22:17:22.000000000 +0900
++++ include/mapiwin.h	2009-08-21 09:21:56.000000000 +0900
 @@ -428,5 +428,5 @@
  #endif
  
@@ -1393,8 +1113,8 @@
 -
 +
  
---- include/msdasc.h.orig	2005-04-04 18:50:18.000000000 +0900
-+++ include/msdasc.h	2007-01-05 21:47:51.515625000 +0900
+--- include/msdasc.h.orig	2008-01-18 22:17:26.000000000 +0900
++++ include/msdasc.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -1402,8 +1122,62 @@
  
  
  /* this ALWAYS GENERATED file contains the definitions for the interfaces */
---- include/multimon.h.orig	2005-04-14 17:54:52.000000000 +0900
-+++ include/multimon.h	2006-12-31 18:00:37.203125000 +0900
+--- include/msi.h.orig	2008-01-18 22:17:28.000000000 +0900
++++ include/msi.h	2009-08-21 09:21:56.000000000 +0900
+@@ -59,6 +59,14 @@
+ #endif // _MSI_NO_CRYPTO
+ #endif //(_WIN32_MSI >= 150)
+ 
++#define __in
++#define __out
++#ifdef __cplusplus
++#define __inline inline
++#else
++#define __inline static __inline__
++#endif
++
+ // --------------------------------------------------------------------------
+ // Installer generic handle definitions
+ // --------------------------------------------------------------------------
+@@ -2248,5 +2256,9 @@
+ // LOCALIZE END
+ 
+ 
++#undef __in
++#undef __out
++#undef __inline
++
+ #endif // _MSI_H_
+ 
+--- include/msiquery.h.orig	2008-01-18 22:17:28.000000000 +0900
++++ include/msiquery.h	2009-08-21 09:21:56.000000000 +0900
+@@ -21,6 +21,14 @@
+ #define _MSIQUERY_H_
+ #include "msi.h"  // INSTALLSTATE
+ 
++#define __in
++#define __out
++#ifdef __cplusplus
++#define __inline inline
++#else
++#define __inline static __inline__
++#endif
++
+ #define MSI_NULL_INTEGER 0x80000000  // integer value reserved for null
+ 
+ // MsiOpenDatabase persist predefine values, otherwise output database path is used
+@@ -1026,5 +1034,9 @@
+ }
+ #endif
+ 
++#undef __in
++#undef __out
++#undef __inline
++
+ #endif // _MSIQUERY_H_
+ 
+--- include/multimon.h.orig	2008-01-18 22:17:30.000000000 +0900
++++ include/multimon.h	2009-08-21 09:21:56.000000000 +0900
 @@ -175,7 +175,7 @@
  
  BOOL IsPlatformNT()
@@ -1448,8 +1222,8 @@
  #endif // __NTQUERY_H__
  
  
---- include/ocidl.h.orig	2008-03-22 06:10:42.272000000 +1000
-+++ include/ocidl.h	2009-02-16 21:34:39.065125000 +0900
+--- include/ocidl.h.orig	2008-01-18 22:17:32.000000000 +0900
++++ include/ocidl.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -1497,8 +1271,8 @@
  #endif
  
  
---- include/oleauto.h.orig	2008-03-22 06:10:43.225125000 +1000
-+++ include/oleauto.h	2009-02-16 21:34:39.065125000 +0900
+--- include/oleauto.h.orig	2008-01-18 22:17:32.000000000 +0900
++++ include/oleauto.h	2009-08-21 09:21:56.000000000 +0900
 @@ -56,6 +56,14 @@
  /* pull in the MIDL generated header */
  #include <oaidl.h>
@@ -1514,17 +1288,7 @@
  
  /*---------------------------------------------------------------------*/
  /*                            BSTR API                                 */
-@@ -948,6 +956,9 @@
- /*             ICreateTypeLib                                          */
- /*---------------------------------------------------------------------*/
- 
-+typedef interface ICreateTypeLib ICreateTypeLib;
-+typedef interface ICreateTypeLib2 ICreateTypeLib2;
-+typedef interface ICreateTypeInfo ICreateTypeInfo;
- typedef ICreateTypeLib * LPCREATETYPELIB;
- 
- typedef ICreateTypeInfo * LPCREATETYPEINFO;
-@@ -1160,7 +1171,7 @@
+@@ -1160,7 +1168,7 @@
  
  // Declare variant access functions.
  
@@ -1533,7 +1297,7 @@
  #define V_UNION(X, Y)   ((X)->n1.n2.n3.Y)
  #define V_VT(X)         ((X)->n1.n2.vt)
  #define V_RECORDINFO(X) ((X)->n1.n2.n3.brecVal.pRecInfo)
-@@ -1242,5 +1253,9 @@
+@@ -1242,5 +1250,9 @@
  #include <poppack.h>
  #endif // RC_INVOKED
  
@@ -1543,8 +1307,35 @@
 +
  #endif     // __OLEAUTO_H__
  
---- include/oledb.h.orig	2005-04-04 18:50:18.000000000 +0900
-+++ include/oledb.h	2007-01-02 17:16:30.656250000 +0900
+--- include/olectl.h.orig	2008-01-18 22:17:32.000000000 +0900
++++ include/olectl.h	2009-08-21 09:21:56.000000000 +0900
+@@ -28,6 +28,14 @@
+ #include <ocidl.h>
+ #endif // _MAC
+ 
++#define __in
++#define __out
++#ifdef __cplusplus
++#define __inline inline
++#else
++#define __inline static __inline__
++#endif
++
+ #ifdef _OLEAUT32_
+ #define WINOLECTLAPI        STDAPI
+ #define WINOLECTLAPI_(type) STDAPI_(type)
+@@ -616,5 +624,9 @@
+ 
+ #endif // defined(__MKTYPLIB__) || defined(__midl)
+ 
++#undef __in
++#undef __out
++#undef __inline
++
+ #endif // _OLECTL_H_
+ 
+--- include/oledb.h.orig	2008-01-18 22:17:32.000000000 +0900
++++ include/oledb.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -1561,8 +1352,8 @@
  #define _FILETIME_
  typedef struct _FILETIME {
  		DWORD dwLowDateTime;
---- include/oleidl.h.orig	2008-03-22 06:10:42.350125000 +1000
-+++ include/oleidl.h	2009-02-16 21:34:39.065125000 +0900
+--- include/oleidl.h.orig	2008-01-18 22:17:32.000000000 +0900
++++ include/oleidl.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -1597,7 +1388,7 @@
  
  
 --- include/propidl.h.orig	2008-01-18 22:17:32.000000000 +0900
-+++ include/propidl.h	2009-02-16 21:34:39.065125000 +0900
++++ include/propidl.h	2009-08-21 09:21:56.000000000 +0900
 @@ -76,6 +76,14 @@
  #include "objidl.h"
  #include "oaidl.h"
@@ -1613,37 +1404,69 @@
  #ifdef __cplusplus
  extern "C"{
  #endif 
-@@ -285,11 +293,6 @@
- #define tag_inner_PROPVARIANT
- #endif
+@@ -143,6 +151,7 @@
+     CHAR *pElems;
+     } 	CAC;
  
--#if !defined(_MSC_EXTENSIONS)
--
--struct tagPROPVARIANT;
--
--#else
- #ifndef MIDL_PASS
- struct tagPROPVARIANT {
-   union {
-@@ -316,7 +319,7 @@
-         FLOAT fltVal;
-         DOUBLE dblVal;
-         VARIANT_BOOL boolVal;
--        _VARIANT_BOOL bool;
-+//        _VARIANT_BOOL bool;
-         SCODE scode;
-         CY cyVal;
-         DATE date;
-@@ -384,8 +387,6 @@
- };
- #endif
++#if 0
+ typedef struct tagCAUB
+     {
+     ULONG cElems;
+@@ -268,6 +277,7 @@
+     ULONG cElems;
+     CLSID *pElems;
+     } 	CACLSID;
++#endif
  
--#endif /* _MSC_EXTENSIONS */
--
  #ifdef MIDL_PASS
- // This is the LPPROPVARIANT definition for marshaling.
- typedef struct tag_inner_PROPVARIANT *LPPROPVARIANT;
-@@ -1268,6 +1269,10 @@
+ // This is the PROPVARIANT padding layout for marshaling.
+@@ -509,6 +519,7 @@
+ 
+ #define	PRSPEC_PROPID	( 1 )
+ 
++#if 0
+ typedef struct tagPROPSPEC
+     {
+     ULONG ulKind;
+@@ -526,12 +537,14 @@
+     PROPID propid;
+     VARTYPE vt;
+     } 	STATPROPSTG;
++#endif
+ 
+ // Macros for parsing the OS Version of the Property Set Header
+ #define PROPSETHDR_OSVER_KIND(dwOSVer)      HIWORD( (dwOSVer) )
+ #define PROPSETHDR_OSVER_MAJOR(dwOSVer)     LOBYTE(LOWORD( (dwOSVer) ))
+ #define PROPSETHDR_OSVER_MINOR(dwOSVer)     HIBYTE(LOWORD( (dwOSVer) ))
+ #define PROPSETHDR_OSVERSION_UNKNOWN        0xFFFFFFFF
++#if 0
+ typedef struct tagSTATPROPSETSTG
+     {
+     FMTID fmtid;
+@@ -542,12 +555,14 @@
+     FILETIME atime;
+     DWORD dwOSVersion;
+     } 	STATPROPSETSTG;
++#endif
+ 
+ 
+ 
+ extern RPC_IF_HANDLE __MIDL_itf_propidl_0000_0000_v0_0_c_ifspec;
+ extern RPC_IF_HANDLE __MIDL_itf_propidl_0000_0000_v0_0_s_ifspec;
+ 
++#if 0
+ #ifndef __IPropertyStorage_INTERFACE_DEFINED__
+ #define __IPropertyStorage_INTERFACE_DEFINED__
+ 
+@@ -1136,6 +1151,7 @@
+ 
+ 
+ #endif 	/* __IEnumSTATPROPSETSTG_INTERFACE_DEFINED__ */
++#endif
+ 
+ 
+ /* interface __MIDL_itf_propidl_0000_0004 */
+@@ -1268,6 +1284,10 @@
  }
  #endif
  
@@ -1654,8 +1477,21 @@
  #endif
  
  
---- include/propsys.h.orig	2008-03-22 06:10:42.412625000 +1000
-+++ include/propsys.h	2009-02-16 21:34:39.065125000 +0900
+--- include/propkeydef.h.orig	2008-01-18 22:17:32.000000000 +0900
++++ include/propkeydef.h	2009-08-21 09:21:56.000000000 +0900
+@@ -2,6 +2,10 @@
+ #define PID_FIRST_USABLE 2
+ #endif
+ 
++#ifndef __MIDL_CONST
++#define __MIDL_CONST const
++#endif
++
+ #ifndef REFPROPERTYKEY
+ #ifdef __cplusplus
+ #define REFPROPERTYKEY const PROPERTYKEY &
+--- include/propsys.h.orig	2008-01-18 22:17:34.000000000 +0900
++++ include/propsys.h	2009-08-21 09:21:56.000000000 +0900
 @@ -228,6 +228,14 @@
  #endif // 0
  #include <propkeydef.h>
@@ -1682,32 +1518,8 @@
  #endif
  
  
---- include/qedit.h.orig	2005-04-14 17:54:56.000000000 +0900
-+++ include/qedit.h	2007-01-02 22:11:05.140625000 +0900
-@@ -1,3 +1,6 @@
-+#if __GNUC__ >=3
-+#pragma GCC system_header
-+#endif
- 
- 
- /* this ALWAYS GENERATED file contains the definitions for the interfaces */
-@@ -6546,10 +6549,10 @@
- #define DEX_IDS_GRAPH_ERROR        1427
- #define DEX_IDS_GRID_ERROR        1428
- #define DEX_IDS_INTERFACE_ERROR    1429
--EXTERN_GUID(CLSID_VideoEffects1Category, 0xcc7bfb42, 0xf175, 0x11d1, 0xa3, 0x92, 0x0, 0xe0, 0x29, 0x1f, 0x39, 0x59);
--EXTERN_GUID(CLSID_VideoEffects2Category, 0xcc7bfb43, 0xf175, 0x11d1, 0xa3, 0x92, 0x0, 0xe0, 0x29, 0x1f, 0x39, 0x59);
--EXTERN_GUID(CLSID_AudioEffects1Category, 0xcc7bfb44, 0xf175, 0x11d1, 0xa3, 0x92, 0x0, 0xe0, 0x29, 0x1f, 0x39, 0x59);
--EXTERN_GUID(CLSID_AudioEffects2Category, 0xcc7bfb45, 0xf175, 0x11d1, 0xa3, 0x92, 0x0, 0xe0, 0x29, 0x1f, 0x39, 0x59);
-+DEFINE_GUID(CLSID_VideoEffects1Category, 0xcc7bfb42, 0xf175, 0x11d1, 0xa3, 0x92, 0x0, 0xe0, 0x29, 0x1f, 0x39, 0x59);
-+DEFINE_GUID(CLSID_VideoEffects2Category, 0xcc7bfb43, 0xf175, 0x11d1, 0xa3, 0x92, 0x0, 0xe0, 0x29, 0x1f, 0x39, 0x59);
-+DEFINE_GUID(CLSID_AudioEffects1Category, 0xcc7bfb44, 0xf175, 0x11d1, 0xa3, 0x92, 0x0, 0xe0, 0x29, 0x1f, 0x39, 0x59);
-+DEFINE_GUID(CLSID_AudioEffects2Category, 0xcc7bfb45, 0xf175, 0x11d1, 0xa3, 0x92, 0x0, 0xe0, 0x29, 0x1f, 0x39, 0x59);
- 
- 
- extern RPC_IF_HANDLE __MIDL_itf_qedit_0001_0097_v0_0_c_ifspec;
 --- include/shlobj.h.orig	2008-01-18 22:17:36.000000000 +0900
-+++ include/shlobj.h	2009-02-16 21:34:39.065125000 +0900
++++ include/shlobj.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -1730,538 +1542,16 @@
  #if defined(_MSC_VER) && (_MSC_VER >= 1200)
  #pragma once
  #endif
-@@ -250,9 +261,10 @@
- #define GIL_FORCENOSHIELD 0x0400      // icon must *not* be "stamped" with the LUA shield
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IExtractIconA;
- #define INTERFACE   IExtractIconA
- 
--DECLARE_INTERFACE_IID_(IExtractIconA, IUnknown, "000214eb-0000-0000-c000-000000000046")
-+DECLARE_INTERFACE_(IExtractIconA, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -278,9 +290,10 @@
- typedef IExtractIconA * LPEXTRACTICONA;
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IExtractIconW;
- #define INTERFACE   IExtractIconW
- 
--DECLARE_INTERFACE_IID_(IExtractIconW, IUnknown, "000214fa-0000-0000-c000-000000000046")
-+DECLARE_INTERFACE_(IExtractIconW, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -350,9 +363,10 @@
- //===========================================================================
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IShellIconOverlayIdentifier;
- #define INTERFACE   IShellIconOverlayIdentifier
- 
--DECLARE_INTERFACE_IID_(IShellIconOverlayIdentifier, IUnknown, "0c6c4200-c589-11d0-999a-00c04fd655e1")
-+DECLARE_INTERFACE_(IShellIconOverlayIdentifier, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -399,9 +413,10 @@
- //===========================================================================
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IShellIconOverlayManager;
- #define INTERFACE   IShellIconOverlayManager
- 
--DECLARE_INTERFACE_IID_(IShellIconOverlayManager, IUnknown, "f10b5e34-dd3b-42a7-aa7d-2f4ec54bb09b")
-+DECLARE_INTERFACE_(IShellIconOverlayManager, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -447,9 +462,10 @@
- //===========================================================================
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IShellIconOverlay;
- #define INTERFACE   IShellIconOverlay
- 
--DECLARE_INTERFACE_IID_(IShellIconOverlay, IUnknown, "7d688a70-c613-11d0-999b-00c04fd655e1")
-+DECLARE_INTERFACE_(IShellIconOverlay, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -636,9 +652,10 @@
- //===========================================================================
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IShellExecuteHookA;
- #define INTERFACE   IShellExecuteHookA
- 
--DECLARE_INTERFACE_IID_(IShellExecuteHookA, IUnknown, "000214f5-0000-0000-c000-000000000046")
-+DECLARE_INTERFACE_(IShellExecuteHookA, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -650,9 +667,10 @@
- };
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IShellExecuteHookW;
- #define INTERFACE   IShellExecuteHookW
- 
--DECLARE_INTERFACE_IID_(IShellExecuteHookW, IUnknown, "000214fb-0000-0000-c000-000000000046")
-+DECLARE_INTERFACE_(IShellExecuteHookW, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -679,9 +697,10 @@
- //===========================================================================
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IURLSearchHook;
- #define INTERFACE   IURLSearchHook
- 
--DECLARE_INTERFACE_IID_(IURLSearchHook, IUnknown, "ac60f6a0-0fd9-11d0-99cb-00c04fd64497")
-+DECLARE_INTERFACE_(IURLSearchHook, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -693,9 +712,10 @@
- };
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_ISearchContext;
- #define INTERFACE   ISearchContext
- 
--DECLARE_INTERFACE_IID_(ISearchContext, IUnknown, "09F656A2-41AF-480C-88F7-16CC0D164615")
-+DECLARE_INTERFACE_(ISearchContext, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -709,9 +729,10 @@
- };
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IURLSearchHook2;
- #define INTERFACE   IURLSearchHook2
- 
--DECLARE_INTERFACE_IID_(IURLSearchHook2, IURLSearchHook, "5ee44da4-6d32-46e3-86bc-07540dedd0e0")
-+DECLARE_INTERFACE_(IURLSearchHook2, IURLSearchHook)
- {
-     // *** IURLSearchHook2 methods ***
-     STDMETHOD(TranslateWithSearchContext)(THIS_ __out_ecount(cchBufferSize) LPWSTR lpwszSearchURL, DWORD cchBufferSize, __in_opt ISearchContext * pSearchContext) PURE;
-@@ -724,9 +745,10 @@
- //===========================================================================
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_INewShortcutHookA;
- #define INTERFACE   INewShortcutHookA
- 
--DECLARE_INTERFACE_IID_(INewShortcutHookA, IUnknown, "000214e1-0000-0000-c000-000000000046")
-+DECLARE_INTERFACE_(INewShortcutHookA, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -743,9 +765,10 @@
- };
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_INewShortcutHookW;
- #define INTERFACE   INewShortcutHookW
- 
--DECLARE_INTERFACE_IID_(INewShortcutHookW, IUnknown, "000214f7-0000-0000-c000-000000000046")
-+DECLARE_INTERFACE_(INewShortcutHookW, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -800,9 +823,10 @@
- //===========================================================================
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_ICopyHookA;
- #define INTERFACE   ICopyHookA
- 
--DECLARE_INTERFACE_IID_(ICopyHookA, IUnknown, "000214EF-0000-0000-c000-000000000046")
-+DECLARE_INTERFACE_(ICopyHookA, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -817,9 +841,10 @@
- typedef ICopyHookA *    LPCOPYHOOKA;
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_ICopyHookW;
- #define INTERFACE   ICopyHookW
- 
--DECLARE_INTERFACE_IID_(ICopyHookW, IUnknown, "000214FC-0000-0000-c000-000000000046")
-+DECLARE_INTERFACE_(ICopyHookW, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -853,9 +878,10 @@
- //===========================================================================
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IFileViewerSite;
- #define INTERFACE   IFileViewerSite
- 
--DECLARE_INTERFACE_IID_(IFileViewerSite, IUnknown, "000214f3-0000-0000-c000-000000000046")
-+DECLARE_INTERFACE_(IFileViewerSite, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -912,9 +938,10 @@
- #define FVSIF_CANVIEWIT 0x40000000      // The viewer can view it.
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IFileViewerA;
- #define INTERFACE   IFileViewerA
- 
--DECLARE_INTERFACE_IID(IFileViewerA, "000214f0-0000-0000-c000-000000000046")
-+DECLARE_INTERFACE(IFileViewerA)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -930,9 +957,10 @@
- typedef IFileViewerA * LPFILEVIEWERA;
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IFileViewerW;
- #define INTERFACE   IFileViewerW
- 
--DECLARE_INTERFACE_IID(IFileViewerW, "000214f8-0000-0000-c000-000000000046")
-+DECLARE_INTERFACE(IFileViewerW)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -1484,9 +1512,10 @@
- // implement IShellFolder2::GetDetailsOf()/GetDetailsEx() instead
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IShellDetails;
- #define INTERFACE   IShellDetails
- 
--DECLARE_INTERFACE_IID_(IShellDetails, IUnknown, "000214EC-0000-0000-c000-000000000046")
-+DECLARE_INTERFACE_(IShellDetails, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -1513,9 +1542,10 @@
- //
- 
- #undef INTERFACE
-+EXTERN_C const IID IID_IObjMgr;
- #define INTERFACE IObjMgr
- 
--DECLARE_INTERFACE_IID_(IObjMgr, IUnknown, "00BB2761-6A77-11D0-A535-00C04FD7D062")
-+DECLARE_INTERFACE_(IObjMgr, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -1547,9 +1577,10 @@
- //
- 
- #undef INTERFACE
-+EXTERN_C const IID IID_ICurrentWorkingDirectory;
- #define INTERFACE ICurrentWorkingDirectory
- 
--DECLARE_INTERFACE_IID_(ICurrentWorkingDirectory, IUnknown, "91956D21-9276-11d1-921A-006097DF5BD4")
-+DECLARE_INTERFACE_(ICurrentWorkingDirectory, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -1578,9 +1609,10 @@
- //
- 
- #undef INTERFACE
-+EXTERN_C const IID IID_IACList;
- #define INTERFACE IACList
- 
--DECLARE_INTERFACE_IID_(IACList, IUnknown, "77A130B0-94FD-11D0-A544-00C04FD7d062")
-+DECLARE_INTERFACE_(IACList, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -1597,6 +1629,7 @@
- // List COM object that implements this interface.
- 
- #undef INTERFACE
-+EXTERN_C const IID IID_IACList2;
- #define INTERFACE IACList2
- 
- typedef enum _tagAUTOCOMPLETELISTOPTIONS
-@@ -1615,7 +1648,7 @@
- #endif
- } AUTOCOMPLETELISTOPTIONS;
- 
--DECLARE_INTERFACE_IID_(IACList2, IACList, "470141a0-5186-11d2-bbb6-0060977b464c")
-+DECLARE_INTERFACE_(IACList2, IACList)
- {
-     // *** IACList2 specific methods ***
-     STDMETHOD(SetOptions)(THIS_ DWORD dwFlag) PURE;
-@@ -1692,9 +1725,10 @@
- 
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IProgressDialog;
- #define INTERFACE   IProgressDialog
- 
--DECLARE_INTERFACE_IID_(IProgressDialog, IUnknown, "EBBC7C04-315E-11d2-B62F-006097DF5BD4")
-+DECLARE_INTERFACE_(IProgressDialog, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -1751,9 +1785,10 @@
- 
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IDockingWindowSite;
- #define INTERFACE   IDockingWindowSite
- 
--DECLARE_INTERFACE_IID_(IDockingWindowSite, IOleWindow, "2a342fc2-7b26-11d0-8ca9-00a0c92dbfe8")
-+DECLARE_INTERFACE_(IDockingWindowSite, IOleWindow)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-@@ -1800,9 +1835,10 @@
- 
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IDockingWindowFrame;
- #define INTERFACE   IDockingWindowFrame
- 
--DECLARE_INTERFACE_IID_(IDockingWindowFrame, IOleWindow, "47d2657a-7b27-11d0-8ca9-00a0c92dbfe8")
-+DECLARE_INTERFACE_(IDockingWindowFrame, IOleWindow)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-@@ -1829,9 +1865,10 @@
-  */
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IThumbnailCapture;
- #define INTERFACE   IThumbnailCapture
- 
--DECLARE_INTERFACE_IID_(IThumbnailCapture, IUnknown, "4ea39266-7211-409f-b622-f63dbd16c533")
-+DECLARE_INTERFACE_(IThumbnailCapture, IUnknown)
- {
-     // *** IThumbnailCapture methods ***
-     STDMETHOD (CaptureThumbnail)    ( THIS_ const SIZE * pMaxSize,
-@@ -1856,9 +1893,10 @@
- #include <poppack.h>        /* Return to byte packing */
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IEnumShellImageStore;
- #define INTERFACE   IEnumShellImageStore
- 
--DECLARE_INTERFACE_IID_( IEnumShellImageStore, IUnknown, "6DFD582B-92E3-11D1-98A3-00C04FB687DA" )
-+DECLARE_INTERFACE_( IEnumShellImageStore, IUnknown)
- {
-     STDMETHOD ( QueryInterface ) ( THIS_ REFIID riid, void **ppv ) PURE;
-     STDMETHOD_( ULONG, AddRef ) ( THIS ) PURE;
-@@ -1878,11 +1916,12 @@
- #define SHIMSTCAPFLAG_PURGEABLE   0x0002       // does the store require dead items purging externally ?
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IShellImageStore;
- #define INTERFACE   IShellImageStore
- 
- // this interface is used to manipulate the Image cache. It can potentially be used
- // in a free threaded manner in conjunction with the Lock parameter to Open and close
--DECLARE_INTERFACE_IID_( IShellImageStore, IUnknown, "48C8118C-B924-11D1-98D5-00C04FB687DA" )
-+DECLARE_INTERFACE_( IShellImageStore, IUnknown)
- {
-     STDMETHOD ( QueryInterface )( THIS_ REFIID riid, void **ppv ) PURE;
-     STDMETHOD_( ULONG, AddRef ) ( THIS ) PURE;
-@@ -1961,9 +2000,10 @@
- #include <poppack.h>        /* Return to byte packing */
- 
- #undef INTERFACE
-+EXTERN_C const IID IID_IShellFolderBand;
- #define INTERFACE IShellFolderBand
- 
--DECLARE_INTERFACE_IID_(IShellFolderBand, IUnknown, "7FE80CC8-C247-11d0-B93A-00A0C90312E1")
-+DECLARE_INTERFACE_(IShellFolderBand, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -1984,9 +2024,10 @@
- ////  IDeskBarClient
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IDeskBarClient;
- #define INTERFACE   IDeskBarClient
- 
--DECLARE_INTERFACE_IID_(IDeskBarClient, IOleWindow, "EB0FE175-1A3A-11D0-89B3-00A0C90A90AC")
-+DECLARE_INTERFACE_(IDeskBarClient, IOleWindow)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -2238,9 +2279,10 @@
- //
- 
- #undef INTERFACE
-+EXTERN_C const IID IID_IActiveDesktop;
- #define INTERFACE IActiveDesktop
- 
--DECLARE_INTERFACE_IID_(IActiveDesktop, IUnknown, "f490eb00-1240-11d1-9888-006097deacf9")
-+DECLARE_INTERFACE_(IActiveDesktop, IUnknown)
- {
-     // IUnknown methods
-     STDMETHOD (QueryInterface)(THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -2288,9 +2330,10 @@
- #define SCHEME_CREATE           0x0080
- 
- #undef INTERFACE
-+EXTERN_C const IID IID_IActiveDesktopP;
- #define INTERFACE IActiveDesktopP
- 
--DECLARE_INTERFACE_IID_(IActiveDesktopP, IUnknown, "52502EE0-EC80-11D0-89AB-00C04FC2972D")
-+DECLARE_INTERFACE_(IActiveDesktopP, IUnknown)
- {
-     // IUnknown methods
-     STDMETHOD (QueryInterface)(THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -2311,9 +2354,10 @@
- #define GADOF_DIRTY    0x00000001
- 
- #undef INTERFACE
-+EXTERN_C const IID IID_IADesktopP2;
- #define INTERFACE IADesktopP2
- 
--DECLARE_INTERFACE_IID_(IADesktopP2, IUnknown, "B22754E2-4574-11d1-9888-006097DEACF9")
-+DECLARE_INTERFACE_(IADesktopP2, IUnknown)
- {
-     // IUnknown methods
-     STDMETHOD (QueryInterface)(THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -2375,11 +2419,12 @@
- #include <poppack.h>        /* Return to byte packing */
- 
- #undef INTERFACE
-+EXTERN_C const IID IID_IColumnProvider;
- #define INTERFACE IColumnProvider
- 
- // Note: these objects must be threadsafe!  GetItemData _will_ be called
- // simultaneously from multiple threads.
--DECLARE_INTERFACE_IID_(IColumnProvider, IUnknown, "E8025004-1C42-11d2-BE2C-00A0C9A83DA1")
-+DECLARE_INTERFACE_(IColumnProvider, IUnknown)
- {
-     // IUnknown methods
-     STDMETHOD (QueryInterface)(THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -2698,9 +2743,10 @@
- // IShellChangeNotify
- //
- #undef  INTERFACE
-+EXTERN_C const IID IID_IShellChangeNotify;
- #define INTERFACE  IShellChangeNotify
- 
--DECLARE_INTERFACE_IID_(IShellChangeNotify, IUnknown, "D82BE2B1-5764-11D0-A96E-00C04FD705A2")
-+DECLARE_INTERFACE_(IShellChangeNotify, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -2723,9 +2769,10 @@
- //-------------------------------------------------------------------------
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IQueryInfo;
- #define INTERFACE  IQueryInfo
- 
--DECLARE_INTERFACE_IID_(IQueryInfo, IUnknown, "00021500-0000-0000-c000-000000000046")
-+DECLARE_INTERFACE_(IQueryInfo, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -3117,7 +3164,7 @@
+@@ -3117,7 +3128,7 @@
  SHSTDAPI_(BOOL)                 ILIsEqual(__in PCIDLIST_ABSOLUTE pidl1, __in PCIDLIST_ABSOLUTE pidl2);
  SHSTDAPI_(BOOL)                 ILIsParent(__in PCIDLIST_ABSOLUTE pidl1, __in PCIDLIST_ABSOLUTE pidl2, BOOL fImmediate);
  SHSTDAPI                        ILSaveToStream(__in IStream *pstm, __in PCUIDLIST_RELATIVE pidl);
 -DECLSPEC_DEPRECATED SHSTDAPI    ILLoadFromStream(__in IStream *pstm, __inout PIDLIST_RELATIVE *pidl);
-+//SHSTDAPI    ILLoadFromStream(__in IStream *pstm, __inout PIDLIST_RELATIVE *pidl);
++SHSTDAPI    ILLoadFromStream(__in IStream *pstm, __inout PIDLIST_RELATIVE *pidl);
  SHSTDAPI                        ILLoadFromStreamEx(__in IStream *pstm, __deref_out PIDLIST_RELATIVE *pidl);
  
  #if (_WIN32_IE >= 0x0400)
-@@ -3188,8 +3235,9 @@
- 
- #if (NTDDI_VERSION >= NTDDI_WIN2K && NTDDI_VERSION < NTDDI_VISTA)
- #undef  INTERFACE
-+EXTERN_C const IID IID_IDefViewFrame;
- #define INTERFACE   IDefViewFrame
--DECLARE_INTERFACE_IID_(IDefViewFrame, IUnknown, "710EB7A0-45ED-11D0-924A-0020AFC7AC4D")
-+DECLARE_INTERFACE_(IDefViewFrame, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, __out void **ppv) PURE;
-@@ -3522,8 +3570,9 @@
- // IDocViewSite
- //
- #undef  INTERFACE
-+EXTERN_C const IID IID_IDocViewSite;
- #define INTERFACE  IDocViewSite
--DECLARE_INTERFACE_IID_(IDocViewSite, IUnknown, "87D605E0-C511-11CF-89A9-00A0C9054129")
-+DECLARE_INTERFACE_(IDocViewSite, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
-@@ -3588,9 +3637,10 @@
- SHSTDAPI_(BOOL) IsUserAnAdmin(void);
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IInitializeObject;
- #define INTERFACE   IInitializeObject
- 
--DECLARE_INTERFACE_IID_(IInitializeObject, IUnknown, "4622AD16-FF23-11d0-8D34-00A0C90F2719")
-+DECLARE_INTERFACE_(IInitializeObject, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-@@ -3609,9 +3659,10 @@
- };
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IBanneredBar;
- #define INTERFACE   IBanneredBar
- 
--DECLARE_INTERFACE_IID_(IBanneredBar, IUnknown, "596A9A94-013E-11d1-8D34-00A0C90F2719")
-+DECLARE_INTERFACE_(IBanneredBar, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-@@ -3633,9 +3684,10 @@
- 
- //
- #undef  INTERFACE
-+EXTERN_C const IID IID_IShellFolderViewCB;
- #define INTERFACE   IShellFolderViewCB
- 
--DECLARE_INTERFACE_IID_(IShellFolderViewCB, IUnknown, "2047E320-F2A9-11CE-AE65-08002B2E1262")
-+DECLARE_INTERFACE_(IShellFolderViewCB, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-@@ -3774,9 +3826,10 @@
- #define SFVS_SELECT_INVERT      0x2 // Inver the selection
- 
- #undef  INTERFACE
-+EXTERN_C const IID IID_IShellFolderView;
- #define INTERFACE   IShellFolderView
- 
--DECLARE_INTERFACE_IID_(IShellFolderView, IUnknown, "37A378C0-F82D-11CE-AE65-08002B2E1262")
-+DECLARE_INTERFACE_(IShellFolderView, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-@@ -4358,8 +4411,9 @@
- //
- //--------------------------------------------------------------------------
- #undef  INTERFACE
-+EXTERN_C const IID IID_INamedPropertyBag;
- #define INTERFACE  INamedPropertyBag
--DECLARE_INTERFACE_IID_(INamedPropertyBag, IUnknown, "FB700430-952C-11d1-946F-000000000000")
-+DECLARE_INTERFACE_(INamedPropertyBag, IUnknown)
- {
-     // *** IUnknown methods ***
-     STDMETHOD(QueryInterface)   (THIS_ REFIID riid, void **ppv) PURE;
-@@ -4578,5 +4632,9 @@
+@@ -4578,5 +4589,9 @@
  #endif
  #endif
  
@@ -2272,7 +1562,7 @@
  #endif /* _SHLOBJ_H_ */
  
 --- include/shobjidl.h.orig	2008-01-18 22:17:36.000000000 +0900
-+++ include/shobjidl.h	2009-02-16 21:34:39.065125000 +0900
++++ include/shobjidl.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -2311,15 +1601,7 @@
  
  
  extern RPC_IF_HANDLE __MIDL_itf_shobjidl_0000_0026_v0_0_c_ifspec;
-@@ -7323,6 +7334,7 @@
- #define FCT_MERGE       0x0001
- #define FCT_CONFIGABLE  0x0002
- #define FCT_ADDTOEND    0x0004
-+
- #ifdef _NEVER_
- typedef LPARAM LPTBBUTTONSB;
- 
-@@ -7331,6 +7343,13 @@
+@@ -7331,6 +7342,13 @@
  typedef LPTBBUTTON LPTBBUTTONSB;
  #endif //_NEVER_
  
@@ -2333,7 +1615,7 @@
  
  extern RPC_IF_HANDLE __MIDL_itf_shobjidl_0000_0032_v0_0_c_ifspec;
  extern RPC_IF_HANDLE __MIDL_itf_shobjidl_0000_0032_v0_0_s_ifspec;
-@@ -29000,6 +29019,10 @@
+@@ -29000,6 +29018,10 @@
  }
  #endif
  
@@ -2344,8 +1626,8 @@
  #endif
  
  
---- include/shtypes.h.orig	2006-12-30 18:12:26.093750000 +0900
-+++ include/shtypes.h	2006-12-30 18:24:10.953125000 +0900
+--- include/shtypes.h.orig	2008-01-18 22:17:36.000000000 +0900
++++ include/shtypes.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -2362,118 +1644,8 @@
  
  typedef /* [wire_marshal] */ ITEMIDLIST __unaligned *LPITEMIDLIST;
  
---- include/specstrings.h.orig	2008-01-18 22:17:38.000000000 +0900
-+++ include/specstrings.h	2009-02-16 21:34:39.065125000 +0900
-@@ -6,7 +6,106 @@
- #if _MSC_VER
- #pragma once
- #endif
--#include <sal.h>  
-+//#include <sal.h>  
-+#define __RPC__deref_in_ecount_full_opt(x)
-+#define __RPC__deref_inout_opt
-+#define __RPC__deref_opt_inout_opt
-+#define __RPC__deref_opt_inout_ecount_full_opt(x)
-+#define __RPC__deref_out
-+#define __RPC__deref_out_ecount_full_opt(x)
-+#define __RPC__deref_out_opt
-+#define __RPC__deref_out_opt_string
-+#define __RPC__in
-+#define __RPC__in_ecount_full(x)
-+#define __RPC__in_ecount_full_opt(x)
-+#define __RPC__in_opt
-+#define __RPC__inout
-+#define __RPC__inout_ecount_full(x)
-+#define __RPC__inout_ecount_full_opt(x)
-+#define __RPC__inout_opt
-+#define __RPC__out
-+#define __RPC__out_ecount_full(x)
-+#define __RPC__out_ecount_full_string(x)
-+#define __RPC__out_ecount_part(x,y)
-+#define __RPC_unique_pointer
-+#define __callback
-+#define __inner_checkReturn
-+#define __inner_control_entrypoint(x)
-+#define __control_entrypoint(x)
-+#define __data_entrypoint(x)
-+#define __deref
-+#define __deref_inout
-+#define __deref_inout_ecount_z(x)
-+#define __deref_inout_opt
-+#define __deref_opt_inout_bcount_part_opt(x,y)
-+#define __deref_opt_inout_opt
-+#define __deref_opt_out
-+#define __deref_opt_out_bcount(x)
-+#define __deref_opt_out_ecount(x)
-+#define __deref_opt_out_opt
-+#define __deref_out
-+#define __deref_out_bcount(x)
-+#define __deref_out_bcount_opt(x)
-+#define __deref_out_ecount(x)
-+#define __deref_out_ecount_opt(x)
-+#define __deref_out_ecount_part(x,y)
-+#define __deref_out_opt
-+#define __deref_out_z
-+#define __deref_out_z_opt
-+#define __format_string
-+#define __in
-+#define __in_bcount(x)
-+#define __in_bcount_opt(x)
-+#define __in_ecount(x)
-+#define __in_ecount_opt(x)
-+#define __in_opt
-+#define __in_z
-+#define __in_z_opt
-+#define __inout
-+#define __inout_bcount(x)
-+#define __inout_bcount_full(x)
-+#define __inout_bcount_opt(x)
-+#define __inout_bcount_part(x,y)
-+#define __inout_bcount_part_opt(x,y)
-+#define __inout_ecount(x)
-+#define __inout_ecount_opt(x)
-+#define __inout_opt
-+#define __nullnullterminated
-+#define __nullterminated
-+#define __out
-+#define __out_bcount(x)
-+#define __out_bcount_full(x)
-+#define __out_bcount_opt(x)
-+#define __out_bcount_part(x,y)
-+#define __out_bcount_part_opt(x,y)
-+#define __out_ecount(x)
-+#define __out_ecount_full(x)
-+#define __out_ecount_opt(x)
-+#define __out_ecount_part(x,y)
-+#define __out_ecount_part_opt(x,y)
-+#define __out_opt
-+#define __out_xcount(x)
-+#define __out_xcount_opt(x)
-+#define __reserved
-+#define __success(x)
-+#define __typefix(x)
-+#define __post
-+#define __deref
-+#define __pre
-+#define __exceptthat
-+#define __notnull
-+#define __maybenull
-+#define __byte_writableTo(x)
-+#define __valid
-+#define __refparam
-+#define __elem_writableTo(x)
-+#ifdef __cplusplus
-+#define __forceinline inline
-+#define __inline inline
-+#else
-+#define __forceinline static __inline__
-+#define __inline static __inline__
-+#endif
- 
- #ifndef __SAL_H_FULL_VER
- #define __SAL_H_FULL_VER 140050727
---- include/sspi.h.orig	2008-03-22 06:10:42.631375000 +1000
-+++ include/sspi.h	2009-02-16 21:34:39.065125000 +0900
+--- include/sspi.h.orig	2008-01-18 22:17:38.000000000 +0900
++++ include/sspi.h	2009-08-21 09:21:56.000000000 +0900
 @@ -20,6 +20,14 @@
  #define __SSPI_H__
  // end_ntifs
@@ -2608,8 +1780,8 @@
 +
  #endif  // _STRSAFE_H_INCLUDED_
  
---- include/structuredquery.h.orig	2008-03-22 06:10:42.756375000 +1000
-+++ include/structuredquery.h	2009-02-16 21:34:39.065125000 +0900
+--- include/structuredquery.h.orig	2008-01-18 22:17:38.000000000 +0900
++++ include/structuredquery.h	2009-08-21 09:21:56.000000000 +0900
 @@ -233,6 +233,14 @@
  #include "ocidl.h"
  #include "propidl.h"
@@ -2636,8 +1808,8 @@
  #endif
  
  
---- include/urlmon.h.orig	2008-03-22 06:10:42.818875000 +1000
-+++ include/urlmon.h	2009-02-16 21:34:39.065125000 +0900
+--- include/urlmon.h.orig	2008-01-18 22:17:40.000000000 +0900
++++ include/urlmon.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -2725,19 +1897,22 @@
  #endif // __WINCRYPT_H__
  
  
---- include/winerror.h.orig	2008-03-20 13:39:15.127375000 +0900
-+++ include/winerror.h	2008-03-20 14:33:29.097125000 +0900
-@@ -23065,7 +23065,7 @@
+--- include/winerror.h.orig	2008-01-18 22:17:42.000000000 +0900
++++ include/winerror.h	2009-08-21 09:21:56.000000000 +0900
+@@ -23,6 +23,11 @@
  
- #if !defined(_HRESULT_DEFINED) && !defined(__midl)
- #define _HRESULT_DEFINED
--typedef __success(return >= 0) long HRESULT;
-+typedef long HRESULT;
- #endif
+ #include <specstrings.h>
  
- #ifndef __midl
---- include/wingdi.h.orig	2008-03-22 06:10:42.897000000 +1000
-+++ include/wingdi.h	2009-02-16 21:34:39.065125000 +0900
++#ifdef __cplusplus
++#define __inline inline
++#else
++#define __inline static __inline__
++#endif
+ //
+ //  Values are 32 bit values laid out as follows:
+ //
+--- include/wingdi.h.orig	2008-01-18 22:17:42.000000000 +0900
++++ include/wingdi.h	2009-08-21 09:21:56.000000000 +0900
 @@ -9,6 +9,13 @@
  #ifndef _WINGDI_
  #define _WINGDI_
@@ -2752,20 +1927,7 @@
  
  #pragma once
  
-@@ -1169,11 +1176,10 @@
- typedef struct tagLOGPALETTE {
-     WORD        palVersion;
-     WORD        palNumEntries;
--    __field_ecount_opt(palNumEntries) PALETTEENTRY        palPalEntry[1];
-+     __field_ecount_opt(palNumEntries) PALETTEENTRY        palPalEntry[1];
- } LOGPALETTE, *PLOGPALETTE, NEAR *NPLOGPALETTE, FAR *LPLOGPALETTE;
- #endif // !_LOGPALETTE_DEFINED
- 
--
- /* Logical Font */
- #define LF_FACESIZE         32
- 
-@@ -1901,7 +1907,7 @@
+@@ -1901,7 +1908,7 @@
  /* size of a form name string */
  #define CCHFORMNAME 32
  
@@ -2774,32 +1936,6 @@
  typedef struct _devicemodeA {
      BYTE   dmDeviceName[CCHDEVICENAME];
      WORD dmSpecVersion;
-@@ -2900,7 +2906,7 @@
- typedef FARPROC LINEDDAPROC;
- #endif
- 
--
-+WINGDIAPI int WINAPI FillRect(HDC,LPCRECT,HBRUSH);
- 
- WINGDIAPI int WINAPI AddFontResourceA(__in LPCSTR);
- WINGDIAPI int WINAPI AddFontResourceW(__in LPCWSTR);
-@@ -3254,7 +3260,7 @@
- WINGDIAPI int   WINAPI GetDeviceCaps( __in_opt HDC hdc, __in int index);
- WINGDIAPI int   WINAPI GetDIBits( __in HDC hdc, __in HBITMAP hbm, __in UINT start, __in UINT cLines,  __out_opt LPVOID lpvBits, __inout_xcount(sizeof(BITMAPINFOHEADER)) LPBITMAPINFO lpbmi, __in UINT usage);  // SAL actual size of lpbmi is computed from structure elements
- 
--__success(return != GDI_ERROR)
-+//__success(return != GDI_ERROR)
- WINGDIAPI DWORD WINAPI GetFontData (    __in HDC     hdc,
-                                         __in DWORD   dwTable,
-                                         __in DWORD   dwOffset,
-@@ -4346,6 +4352,7 @@
- WINGDIAPI BOOL        WINAPI ColorCorrectPalette( __in HDC hdc, __in HPALETTE hPal, __in DWORD deFirst, __in DWORD num);
- #endif
- 
-+
- #ifndef NOMETAFILE
- 
- // Enhanced metafile constants.
 @@ -5424,6 +5431,10 @@
  }
  #endif
@@ -2811,70 +1947,26 @@
  #endif /* _WINGDI_ */
  
  
---- include/winsock2.h.orig	2008-03-22 06:10:42.912625000 +1000
-+++ include/winsock2.h	2009-02-16 21:34:39.065125000 +0900
-@@ -1,3 +1,6 @@
-+#if __GNUC__ >=3
-+#pragma GCC system_header
+--- include/wintrust.h.orig	2008-01-18 22:17:42.000000000 +0900
++++ include/wintrust.h	2009-08-21 09:21:56.000000000 +0900
+@@ -1252,6 +1252,7 @@
+ //
+ #ifdef WT_DEFINE_ALL_APIS
+ 
++#if 0
+ typedef struct _WIN_CERTIFICATE
+ {
+     DWORD       dwLength;
+@@ -1260,6 +1261,7 @@
+     BYTE        bCertificate[ANYSIZE_ARRAY];
+ 
+ } WIN_CERTIFICATE, *LPWIN_CERTIFICATE;
 +#endif
- //$TAG BIZDEV
- //  $IPCategory:     
- //  $DealPointID:    118736
-@@ -24,9 +27,9 @@
-  * conditions for redistribution.
-  */
  
--#ifndef _WINSOCK2API_
--#define _WINSOCK2API_
--#define _WINSOCKAPI_   /* Prevent inclusion of winsock.h in windows.h */
-+#ifndef _WINSOCK2_H
-+#define _WINSOCK2_H
-+#define _WINSOCK_H /* to prevent later inclusion of winsock.h */
- 
- #pragma once
- 
-@@ -66,6 +69,14 @@
- #include <windows.h>
- #endif /* _INC_WINDOWS */
- 
-+#define __in
-+#define __out
-+#ifdef __cplusplus
-+#define __inline inline
-+#else
-+#define __inline static __inline__
-+#endif
-+
- /*
-  * Define the current Winsock version. To build an earlier Winsock version
-  * application redefine this value prior to including Winsock2.h.
-@@ -1107,10 +1118,8 @@
-  * registration (RNR) API
-  */
- 
--#ifndef _tagBLOB_DEFINED
--#define _tagBLOB_DEFINED
--#define _BLOB_DEFINED
--#define _LPBLOB_DEFINED
-+#ifndef __BLOB_T_DEFINED
-+#define __BLOB_T_DEFINED
- typedef struct _BLOB {
-     ULONG cbSize ;
- #ifdef MIDL_PASS
-@@ -3920,5 +3929,9 @@
- #endif // IPV6STRICT
- #endif //(_WIN32_WINNT >= 0x0501)
- 
--#endif  /* _WINSOCK2API_ */
-+#undef __in
-+#undef __out
-+#undef __inline
-+
-+#endif  /* _WINSOCK2_H */
- 
-
---- include/winuser.h.orig	2008-07-19 14:56:51.278750000 +0900
-+++ include/winuser.h	2009-02-16 21:34:39.065125000 +0900
+ #define WIN_CERT_REVISION_1_0               (0x0100)
+ #define WIN_CERT_REVISION_2_0               (0x0200)
+--- include/winuser.h.orig	2008-01-18 22:17:44.000000000 +0900
++++ include/winuser.h	2009-08-21 09:21:56.000000000 +0900
 @@ -11,6 +11,15 @@
  #ifndef _WINUSER_
  #define _WINUSER_
@@ -2900,16 +1992,7 @@
  
  #ifndef NOUSER
  
-@@ -215,6 +224,8 @@
- #pragma warning(disable:4995)
- #endif
- 
-+WINUSERAPI UINT WINAPI WinExec(LPCSTR,UINT);
-+
- WINUSERAPI
- int
- WINAPI
-@@ -10717,7 +10728,7 @@
+@@ -10717,7 +10726,7 @@
  #define CDS_RESET                    0x40000000
  #define CDS_NORESET                  0x10000000
  
@@ -2918,7 +2001,7 @@
  
  /* Return values for ChangeDisplaySettings */
  #define DISP_CHANGE_SUCCESSFUL       0
-@@ -12571,16 +12582,20 @@
+@@ -12571,16 +12580,20 @@
  
  
  
@@ -2944,107 +2027,8 @@
  #endif /* !_WINUSER_ */
  
  
---- include/ws2ipdef.h.orig	2008-01-18 22:17:44.000000000 +0900
-+++ include/ws2ipdef.h	2009-02-16 21:34:39.065125000 +0900
-@@ -1,3 +1,6 @@
-+#if __GNUC__ >=3
-+#pragma GCC system_header
-+#endif
- /*++
- 
- Copyright (c) Microsoft Corporation. All rights reserved.
-@@ -52,10 +55,10 @@
- #define WS2IPDEF_ASSERT(exp) ((VOID) 0)
- #endif
- 
--#ifdef _MSC_VER
--#define WS2TCPIP_INLINE __inline
-+#ifdef __cplusplus
-+#define WS2TCPIP_INLINE inline
- #else
--#define WS2TCPIP_INLINE extern inline /* GNU style */
-+#define WS2TCPIP_INLINE static __inline__
- #endif
-     
- #include <in6addr.h>
-@@ -760,7 +763,7 @@
-     ULONG ipv6mr_interface;     // Interface index.
- } IPV6_MREQ, *PIPV6_MREQ;
- 
--#if (NTDDI_VERSION >= NTDDI_WINXP)
-+#if 0
- //
- // Structure for GROUP_REQ used by protocol independent source filters
- // (MCAST_JOIN_GROUP and MCAST_LEAVE_GROUP). 
-@@ -805,6 +808,8 @@
-     ULONG ipi_ifindex;    // Send/receive interface index.
- } IN_PKTINFO, *PIN_PKTINFO;
- 
-+#define C_ASSERT(x)
-+
- C_ASSERT(sizeof(IN_PKTINFO) == 8);
- 
- //
---- include/ws2tcpip.h.orig	2008-01-18 22:17:44.000000000 +0900
-+++ include/ws2tcpip.h	2009-02-16 21:34:39.065125000 +0900
-@@ -18,6 +18,9 @@
- 
- #ifndef _WS2TCPIP_H_
- #define _WS2TCPIP_H_
-+#if __GNUC__ >=3
-+#pragma GCC system_header
-+#endif
- 
- #if _MSC_VER > 1000
- #pragma once
-@@ -27,15 +30,23 @@
- #include <ws2ipdef.h>
- #include <limits.h>
- 
-+#define __in
-+#define __out
-+#ifdef __cplusplus
-+#define __inline inline
-+#else
-+#define __inline static __inline__
-+#endif
-+
- /* Option to use with [gs]etsockopt at the IPPROTO_UDP level */
- 
- #define UDP_NOCHECKSUM  1
- #define UDP_CHECKSUM_COVERAGE   20  /* Set/get UDP-Lite checksum coverage */
- 
--#ifdef _MSC_VER
--#define WS2TCPIP_INLINE __inline
-+#ifdef __cplusplus
-+#define WS2TCPIP_INLINE inline
- #else
--#define WS2TCPIP_INLINE extern inline /* GNU style */
-+#define WS2TCPIP_INLINE static __inline__
- #endif
- 
- /* Error codes from getaddrinfo() */
-@@ -835,7 +846,7 @@
-     return Error;
- }
- 
--#if (NTDDI_VERSION >= NTDDI_WINXP)
-+#if 0
- WS2TCPIP_INLINE
- int
- setsourcefilter(
-@@ -1056,5 +1067,9 @@
- #include <wspiapi.h>
- #endif
- 
-+#undef __in
-+#undef __out
-+#undef __inline
-+
- #endif  /* _WS2TCPIP_H_ */
- 
---- include/wspiapi.h.orig	2005-04-14 17:55:04.000000000 +0900
-+++ include/wspiapi.h	2009-02-16 21:34:39.065125000 +0900
+--- include/wspiapi.h.orig	2008-01-18 22:17:44.000000000 +0900
++++ include/wspiapi.h	2009-08-21 09:21:56.000000000 +0900
 @@ -15,6 +15,9 @@
  
  #ifndef _WSPIAPI_H_
@@ -3085,8 +2069,17 @@
  /*==========================================================================;
   *
   *  Copyright (C) Microsoft Corporation.  All Rights Reserved.
+--- include/d3dx9core.h.orig	2006-03-31 12:16:02.000000000 +0900
++++ include/d3dx9core.h	2009-08-21 09:21:56.000000000 +0900
+@@ -1,3 +1,6 @@
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
+ ///////////////////////////////////////////////////////////////////////////
+ //
+ //  Copyright (C) Microsoft Corporation.  All Rights Reserved.
 --- include/d3dx9math.h.orig	2005-07-22 17:00:18.000000000 +0900
-+++ include/d3dx9math.h	2007-11-30 21:41:52.230625000 +0900
++++ include/d3dx9math.h	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -3095,7 +2088,7 @@
  //
  //  Copyright (C) Microsoft Corporation.  All Rights Reserved.
 --- include/d3dx9math.inl.orig	2005-03-18 17:26:56.000000000 +0900
-+++ include/d3dx9math.inl	2007-11-30 21:41:38.496250000 +0900
++++ include/d3dx9math.inl	2009-08-21 09:21:56.000000000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3
 +#pragma GCC system_header
@@ -3103,110 +2096,7 @@
  //////////////////////////////////////////////////////////////////////////////
  //
  //  Copyright (C) Microsoft Corporation.  All Rights Reserved.
---- include/d3dx9core.h.orig	2006-03-31 12:16:02.000000000 +0900
-+++ include/d3dx9core.h	2007-11-30 21:41:13.199375000 +0900
-@@ -1,3 +1,6 @@
-+#if __GNUC__ >=3
-+#pragma GCC system_header
-+#endif
- ///////////////////////////////////////////////////////////////////////////
- //
- //  Copyright (C) Microsoft Corporation.  All Rights Reserved.
---- include/msi.h.orig	2008-01-18 22:17:28.000000000 +0900
-+++ include/msi.h	2009-02-16 21:34:39.065125000 +0900
-@@ -59,6 +59,14 @@
- #endif // _MSI_NO_CRYPTO
- #endif //(_WIN32_MSI >= 150)
- 
-+#define __in
-+#define __out
-+#ifdef __cplusplus
-+#define __inline inline
-+#else
-+#define __inline static __inline__
-+#endif
-+
- // --------------------------------------------------------------------------
- // Installer generic handle definitions
- // --------------------------------------------------------------------------
-@@ -2248,5 +2256,9 @@
- // LOCALIZE END
- 
- 
-+#undef __in
-+#undef __out
-+#undef __inline
-+
- #endif // _MSI_H_
- 
---- include/msiquery.h.orig	2008-01-18 22:17:28.000000000 +0900
-+++ include/msiquery.h	2009-02-16 21:34:39.065125000 +0900
-@@ -21,6 +21,14 @@
- #define _MSIQUERY_H_
- #include "msi.h"  // INSTALLSTATE
- 
-+#define __in
-+#define __out
-+#ifdef __cplusplus
-+#define __inline inline
-+#else
-+#define __inline static __inline__
-+#endif
-+
- #define MSI_NULL_INTEGER 0x80000000  // integer value reserved for null
- 
- // MsiOpenDatabase persist predefine values, otherwise output database path is used
-@@ -1026,5 +1034,9 @@
- }
- #endif
- 
-+#undef __in
-+#undef __out
-+#undef __inline
-+
- #endif // _MSIQUERY_H_
- 
---- include/olectl.h.orig	2008-03-22 06:10:42.000000000 +1000
-+++ include/olectl.h	2009-02-16 21:34:39.065125000 +0900
-@@ -28,6 +28,14 @@
- #include <ocidl.h>
- #endif // _MAC
- 
-+#define __in
-+#define __out
-+#ifdef __cplusplus
-+#define __inline inline
-+#else
-+#define __inline static __inline__
-+#endif
-+
- #ifdef _OLEAUT32_
- #define WINOLECTLAPI        STDAPI
- #define WINOLECTLAPI_(type) STDAPI_(type)
-@@ -616,5 +624,9 @@
- 
- #endif // defined(__MKTYPLIB__) || defined(__midl)
- 
-+#undef __in
-+#undef __out
-+#undef __inline
-+
- #endif // _OLECTL_H_
- 
---- include/propkeydef.h.orig	2008-01-18 22:17:32.000000000 +0900
-+++ include/propkeydef.h	2008-03-22 21:56:32.734375000 +1000
-@@ -2,6 +2,10 @@
- #define PID_FIRST_USABLE 2
- #endif
- 
-+#ifndef __MIDL_CONST
-+#define __MIDL_CONST const
-+#endif
-+
- #ifndef REFPROPERTYKEY
- #ifdef __cplusplus
- #define REFPROPERTYKEY const PROPERTYKEY &
---- icnlude/dxtrans.h.orig	2004-09-28 00:18:32.000000000 +0900
+--- include/dxtrans.h.orig	2004-09-28 00:18:32.000000000 +0900
 +++ include/dxtrans.h	2007-01-02 22:08:41.640625000 +0900
 @@ -1,3 +1,6 @@
 +#if __GNUC__ >=3

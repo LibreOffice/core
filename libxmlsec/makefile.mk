@@ -49,7 +49,8 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 XMLSEC1VERSION=1.2.6
 
 TARFILE_NAME=$(PRJNAME)-$(XMLSEC1VERSION)
-PATCH_FILES=$(TARFILE_NAME).patch
+PATCH_FILES=$(TARFILE_NAME).patch xmlsec1-1.2.6-mingwport24.patch
+
 
 ADDITIONAL_FILES= \
     include$/xmlsec$/nss$/akmngr.h \
@@ -87,7 +88,7 @@ xmlsec_LIBS+=-lstdc++_s
 .ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure
-CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --with-mozilla_ver=1.7.5 --with-mscrypto --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(xmlsec_CC)" CFLAGS="-D_MT" LDFLAGS="-no-undefined -L$(ILIB:s/;/ -L/)" LIBS="$(xmlsec_LIBS)" LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --with-mozilla_ver=1.7.5 --with-mscrypto --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(xmlsec_CC)" CFLAGS="-D_MT" LDFLAGS="-no-undefined -L$(ILIB:s/;/ -L/)" LIBS="$(xmlsec_LIBS)" LIBXML2LIB=$(LIBXML2LIB) OBJDUMP="$(WRAPCMD) objdump"
 .IF "$(SYSTEM_MOZILLA)" != "YES"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
 .ENDIF
@@ -120,7 +121,9 @@ xmlsec_CFLAGS+=$(C_RESTRICTIONFLAGS)
 xmlsec_CFLAGS+=$(EXTRA_CFLAGS)
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 xmlsec_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
-.ENDIF			# "$(SYSBASE)"!=""
+.ELIF "$(OS)"=="MACOSX" # "$(SYSBASE)"!=""
+xmlsec_CPPFLAGS+=$(EXTRA_CDEFS)
+.ENDIF
 
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
 xmlsec_LDFLAGS+=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
@@ -139,7 +142,7 @@ LDFLAGS:=$(xmlsec_LDFLAGS)
 .ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
-CONFIGURE_FLAGS=--with-pic --disable-shared --with-libxslt=no --with-openssl=no --with-gnutls=no LIBXML2LIB="$(LIBXML2LIB)" ZLIB3RDLIB=$(ZLIB3RDLIB)
+CONFIGURE_FLAGS=--with-pic --disable-shared --with-libxslt=no --with-openssl=no --with-gnutls=no LIBXML2LIB="$(LIBXML2LIB)"
 # system-mozilla needs pkgconfig to get the information about nss
 # FIXME: This also will enable pkg-config usage for libxml2. It *seems*
 # that the internal headers still are used when they are there but....
