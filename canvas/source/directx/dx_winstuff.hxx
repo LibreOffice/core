@@ -97,25 +97,18 @@
 
 #undef DrawText
 
-// Needed for #?$&/@ gdiplus header
-#ifndef max
-#define max(a,b)            (((a) > (b)) ? (a) : (b))
-#define __WORKAROUND_MAX_DEFINED__
-#endif
-
-#ifndef min
-#define min(a,b)            (((a) < (b)) ? (a) : (b))
-#define __WORKAROUND_MIN_DEFINED__
+#ifdef __MINGW32__
+using ::std::max;
+using ::std::min;
 #endif
 
 #include <gdiplus.h>
 
-#ifdef __WORKAROUND_MAX_DEFINED__
-#undef max
+#ifdef min
+#   undef min
 #endif
-
-#ifdef __WORKAROUND_MIN_DEFINED__
-#undef min
+#ifdef max
+#   undef max
 #endif
 
 namespace dxcanvas

@@ -190,14 +190,20 @@ static sal_Unicode lowerLetter[] = {
     0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A
 };
 
-DefaultNumberingProvider::DefaultNumberingProvider( const Reference < XMultiServiceFactory >& xMSF ) : xSMgr(xMSF)
+DefaultNumberingProvider::DefaultNumberingProvider( const Reference < XMultiServiceFactory >& xMSF ) : xSMgr(xMSF),translit(NULL)
 {
-        translit = new TransliterationImpl(xMSF);
+
 }
 
 DefaultNumberingProvider::~DefaultNumberingProvider()
 {
         delete translit;
+}
+
+void DefaultNumberingProvider::impl_loadTranslit()
+{
+    if ( !translit )
+        translit = new TransliterationImpl(xSMgr);
 }
 
 Sequence< Reference<container::XIndexAccess> >
@@ -463,6 +469,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                     const OUString &tmp = OUString::valueOf( number );
                     OUString transliteration;
                     getPropertyByName(aProperties, "Transliteration", sal_True) >>= transliteration;
+                    impl_loadTranslit();
                     translit->loadModuleByImplName(transliteration, aLocale);
                     result += translit->transliterateString2String(tmp, 0, tmp.getLength());
                } catch (Exception& ) {

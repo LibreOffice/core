@@ -578,7 +578,7 @@ sal_Int16 VCLXMenu::execute( const ::com::sun::star::uno::Reference< ::com::sun:
 
     sal_Int16 nRet = 0;
     if ( mpMenu && IsPopupMenu() )
-        nRet = ((PopupMenu*)mpMenu)->Execute( VCLUnoHelper::GetWindow( rxWindowPeer ), VCLRectangle(rArea), nFlags );
+        nRet = ((PopupMenu*)mpMenu)->Execute( VCLUnoHelper::GetWindow( rxWindowPeer ), VCLRectangle(rArea), nFlags | POPUPMENU_NOMOUSEUPCLOSE );
     return nRet;
 }
 

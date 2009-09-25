@@ -49,15 +49,15 @@ CDEFS+= -DEDITDEBUG
 SRS1NAME=$(TARGET)
 SRC1FILES=	dlgepbm.src \
             epbmstr.src
-
+.IF "$(L10N_framework)"==""
 SLOFILES =	$(SLO)$/epbm.obj \
             $(SLO)$/dlgepbm.obj
-
+.ENDIF
 # ==========================================================================
 
 RESLIB1NAME=$(TARGET2)
 RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
-
+.IF "$(L10N_framework)"==""
 SHL1TARGET= 	epb$(DLLPOSTFIX)
 SHL1IMPLIB= 	epbm
 SHL1STDLIBS=	$(TOOLSLIB) $(VCLLIB) $(CPPULIB)	$(SVTOOLLIB) $(SALLIB)
@@ -73,7 +73,7 @@ SHL1OBJS=		$(SLO)$/epbm.obj
 SHL1VERSIONMAP=exports.map
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
-
+.ENDIF
 # ==========================================================================
 
 .INCLUDE :	target.mk

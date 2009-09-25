@@ -168,6 +168,8 @@ static const struct {
     { "fy_NL",  lcl_DATA_EURO },
     { "oc_FR",  lcl_DATA_EURO },
     { "mt_MT",  lcl_DATA_EURO },
+    { "sc_IT",  lcl_DATA_EURO },
+    { "ast_ES", lcl_DATA_EURO },
 
     { "ja_JP",  lcl_DATA_OTHERS },
     { "ko_KR",  lcl_DATA_OTHERS },
@@ -243,6 +245,9 @@ static const struct {
     { "my_MM",  lcl_DATA_OTHERS },
     { "shs_CA", lcl_DATA_OTHERS },
     { "tpi_PG", lcl_DATA_OTHERS },
+    { "ar_OM",  lcl_DATA_OTHERS },
+    { "ug_CN",  lcl_DATA_OTHERS },
+    { "om_ET",  lcl_DATA_OTHERS },
 };
 
 static const sal_Unicode under = sal_Unicode('_');
@@ -1386,6 +1391,7 @@ OutlineNumbering::OutlineNumbering(const OutlineNumberingLevel_Impl* pOutlnLevel
 
 OutlineNumbering::~OutlineNumbering()
 {
+        delete [] m_pOutlineLevels;
 }
 
 sal_Int32 OutlineNumbering::getCount(  ) throw(RuntimeException)
