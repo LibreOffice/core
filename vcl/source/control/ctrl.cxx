@@ -551,13 +551,40 @@ void Control::ImplInitSettings( const BOOL _bFont, const BOOL _bForeground )
 void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect, const XubString& _rStr,
     USHORT _nStyle, MetricVector* _pVector, String* _pDisplayText ) const
 {
+#ifdef FS_DEBUG
+    if ( !_pVector )
+    {
+        static MetricVector aCharRects;
+        static String sDisplayText;
+        aCharRects.clear();
+        sDisplayText = String();
+        _pVector = &aCharRects;
+        _pDisplayText = &sDisplayText;
+    }
+#endif
+
     if ( !mpControlData->mpReferenceDevice )
     {
         _io_rRect = _rTargetDevice.GetTextRect( _io_rRect, _rStr, _nStyle );
         _rTargetDevice.DrawText( _io_rRect, _rStr, _nStyle, _pVector, _pDisplayText );
-        return;
+    }
+    else
+    {
+        ControlTextRenderer aRenderer( *this, _rTargetDevice, *mpControlData->mpReferenceDevice );
+        _io_rRect = aRenderer.DrawText( _io_rRect, _rStr, _nStyle, _pVector, _pDisplayText );
     }
 
-    ControlTextRenderer aRenderer( *this, _rTargetDevice, *mpControlData->mpReferenceDevice );
-    _io_rRect = aRenderer.DrawText( _io_rRect, _rStr, _nStyle, _pVector, _pDisplayText );
+#ifdef FS_DEBUG
+    _rTargetDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+    _rTargetDevice.SetLineColor( COL_LIGHTRED );
+    _rTargetDevice.SetFillColor();
+    for (   MetricVector::const_iterator cr = _pVector->begin();
+            cr != _pVector->end();
+            ++cr
+        )
+    {
+        _rTargetDevice.DrawRect( *cr );
+    }
+    _rTargetDevice.Pop();
+#endif
 }
