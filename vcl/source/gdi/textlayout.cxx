@@ -31,10 +31,22 @@
 #include "vcl/outfont.hxx"
 #include "vcl/textlayout.hxx"
 
+#include <com/sun/star/i18n/ScriptDirection.hpp>
+
+#include <tools/diagnose_ex.h>
+
+#if OSL_DEBUG_LEVEL > 1
+#include <rtl/strbuf.hxx>
+#endif
+
 //........................................................................
 namespace vcl
 {
 //........................................................................
+
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::uno::Exception;
+    namespace ScriptDirection = ::com::sun::star::i18n::ScriptDirection;
 
     //====================================================================
     //= DefaultTextLayout
@@ -112,6 +124,7 @@ namespace vcl
         OutputDevice&   m_rReferenceDevice;
         Font            m_aUnzoomedPointFont;
         const Fraction  m_aZoom;
+        const bool      m_bRTLEnabled;
 
         Rectangle       m_aCompleteTextRect;
     };
@@ -119,13 +132,15 @@ namespace vcl
     //====================================================================
     //= ControlTextRenderer
     //====================================================================
-    ReferenceDeviceTextLayout::ReferenceDeviceTextLayout( const Control& _rControl, OutputDevice& _rTargetDevice, OutputDevice& _rReferenceDevice )
+    ReferenceDeviceTextLayout::ReferenceDeviceTextLayout( const Control& _rControl, OutputDevice& _rTargetDevice,
+        OutputDevice& _rReferenceDevice )
         :m_rTargetDevice( _rTargetDevice )
         ,m_rReferenceDevice( _rReferenceDevice )
         ,m_aUnzoomedPointFont( _rControl.GetUnzoomedControlPointFont() )
         ,m_aZoom( _rControl.GetZoom() )
+        ,m_bRTLEnabled( _rControl.IsRTLEnabled() )
     {
-        m_rTargetDevice.Push( PUSH_MAPMODE | PUSH_FONT );
+        m_rTargetDevice.Push( PUSH_MAPMODE | PUSH_FONT | PUSH_TEXTLAYOUTMODE );
 
         MapMode aTargetMapMode( m_rTargetDevice.GetMapMode() );
         OSL_ENSURE( aTargetMapMode.GetOrigin() == Point(), "ReferenceDeviceTextLayout::ReferenceDeviceTextLayout: uhm, the code below won't work here ..." );
@@ -153,12 +168,11 @@ namespace vcl
         _rTargetDevice.SetFont( aDrawFont );
 
         // transfer font to the reference device
-        m_rReferenceDevice.Push( PUSH_FONT );
+        m_rReferenceDevice.Push( PUSH_FONT | PUSH_TEXTLAYOUTMODE );
         Font aRefFont( m_aUnzoomedPointFont );
         aRefFont.SetSize( OutputDevice::LogicToLogic(
             aRefFont.GetSize(), MAP_POINT, m_rReferenceDevice.GetMapMode().GetMapUnit() ) );
         m_rReferenceDevice.SetFont( aRefFont );
-
     }
 
     //--------------------------------------------------------------------
@@ -215,9 +229,33 @@ namespace vcl
         if ( !lcl_normalizeLength( _rText, _nStartIndex, _nLength ) )
             return 0;
 
+        m_rReferenceDevice.SetLayoutMode( TEXT_LAYOUT_BIDI_LTR );
+            // TODO: make this layout mode dependent on some educated guess about the text
+            // TODO: even better: break the text into script type portions ... but this way too far goes into the direction
+            // of re-implementing EditEngine and Writer-Code features here.
+
         // retrieve the character widths from the reference device
         long nTextWidth = m_rReferenceDevice.GetTextArray( _rText, _pDXAry, _nStartIndex, _nLength );
 
+#if OSL_DEBUG_LEVEL > 1
+        if ( _pDXAry )
+        {
+            ::rtl::OStringBuffer aTrace;
+            aTrace.append( "ReferenceDeviceTextLayout::GetTextArray( " );
+            aTrace.append( ::rtl::OUStringToOString( _rText, RTL_TEXTENCODING_UTF8 ) );
+            aTrace.append( " ): " );
+            aTrace.append( nTextWidth );
+            aTrace.append( " = ( " );
+            for ( size_t i=0; i<_nLength; )
+            {
+                aTrace.append( _pDXAry[i] );
+                if ( ++i < _nLength )
+                    aTrace.append( ", " );
+            }
+            aTrace.append( ")" );
+            OSL_TRACE( aTrace.makeStringAndClear().getStr() );
+        }
+#endif
         // adjust the widths, which are in ref-device units, to the target device
         DeviceUnitMapping aMapping( m_rTargetDevice, m_rReferenceDevice );
         if ( _pDXAry )
@@ -308,19 +346,21 @@ namespace vcl
     //--------------------------------------------------------------------
     Rectangle ReferenceDeviceTextLayout::DrawText( const Rectangle& _rRect, const XubString& _rText, USHORT _nStyle, MetricVector* _pVector, String* _pDisplayText)
     {
-        Rectangle aRect( _rRect );
+        if ( !_rText.Len() )
+            return Rectangle();
+
+        // determine text layout mode from the RTL-ness of the control whose text we render
+        ULONG nTextLayoutMode = m_bRTLEnabled ? TEXT_LAYOUT_BIDI_RTL : TEXT_LAYOUT_BIDI_LTR;
+        m_rReferenceDevice.SetLayoutMode( nTextLayoutMode );
+        m_rTargetDevice.SetLayoutMode( nTextLayoutMode | TEXT_LAYOUT_TEXTORIGIN_LEFT );
+            // TEXT_LAYOUT_TEXTORIGIN_LEFT is because when we do actually draw the text (in DrawText( Point, ... )), then
+            // our caller gives us the left border of the draw position, regardless of script type, text layout,
+            // and the like
 
         // in our ctor, we set the map mode of the target device from pixel to twip, but our caller doesn't know this,
         // but passed pixel coordinates. So, adjust the rect.
-        aRect = m_rTargetDevice.PixelToLogic( aRect );
+        Rectangle aRect( m_rTargetDevice.PixelToLogic( _rRect ) );
 
-#ifdef FS_DEBUG
-        m_rTargetDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-        m_rTargetDevice.SetLineColor( COL_LIGHTBLUE );
-        m_rTargetDevice.SetFillColor();
-        m_rTargetDevice.DrawRect( aRect );
-        m_rTargetDevice.Pop();
-#endif
         onBeginDrawText();
         m_rTargetDevice.DrawText( aRect, _rText, _nStyle, _pVector, _pDisplayText, this );
         Rectangle aTextRect = onEndDrawText();
