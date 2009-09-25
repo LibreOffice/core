@@ -41,11 +41,11 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .IF  "$(ENABLE_CAIRO)" == ""
 all:
-        @echo "Nothing to do (Cairo not enabled)."
+    @echo "Nothing to do (Cairo not enabled)."
 
 .ELIF "$(BUILD_PIXMAN)" == ""
 all:
-       @echo "Not building pixman."
+    @echo "Not building pixman."
 
 .ENDIF
 
@@ -81,7 +81,12 @@ BUILD_ACTION=$(GNUMAKE) -f Makefile.win32
 # ----------- Native Mac OS X (Aqua/Quartz) --------------------------------
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-static=yes --enable-shared=no
+CONFIGURE_FLAGS=--enable-static=yes --enable-shared=no CPPFLAGS="$(EXTRA_CDEFS)"
+.IF "$(SYSBASE)"!=""
+.IF "$(EXTRA_CFLAGS)"!=""
+CONFIGURE_FLAGS+=CFLAGS="$(EXTRA_CFLAGS) $(EXTRA_CDEFS)"
+.ENDIF # "$(EXTRA_CDEFS)"!=""
+.ENDIF # "$(SYSBASE)"!=""
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)

@@ -60,11 +60,11 @@ ALLTAR: \
 .ENDIF
 .IF "$(GUI)" == "UNX"
 
-$(MISC)$/unpacked_$(TARGET)_lib : $(OS)$(COM)$(CPU)lib.zip $(OS)$(COM)$(CPU)runtime.zip
+$(MISC)$/unpacked_%_lib : $(OS)$(COM)$(CPU)lib.zip '$(OS)$(COM)$(CPU)runtime.zip'
     unzip -o -d $(LB) $(OS)$(COM)$(CPU)lib.zip && unzip -o -d $(LB) $(OS)$(COM)$(CPU)runtime.zip && $(TOUCH) $@
     chmod -R 775 $(LB)
 
-$(MISC)$/unpacked_$(TARGET)_inc : $(OS)$(COM)$(CPU)inc.zip
+$(MISC)$/unpacked_%_inc : $(OS)$(COM)$(CPU)inc.zip
     unzip -o -d $(INCCOM) $(OS)$(COM)$(CPU)inc.zip && $(TOUCH)	$@
     chmod -R 775 $(INCCOM)
 
@@ -79,14 +79,28 @@ $(MISC)$/unpacked_$(TARGET)_inc : $(OS)$(COM)$(CPU)inc.zip
 
 .ENDIF
 
-$(BIN)$/mozruntime.zip : $(OS)$(COM)$(CPU)runtime.zip
+$(BIN)$/mozruntime%zip : $(OS)$(COM)$(CPU)runtime.zip
     $(COPY) $(OS)$(COM)$(CPU)runtime.zip $(BIN)$/mozruntime.zip
+
+# add alternative rules for universal binary moz-zips
+.IF "$(GUIBASE)" == "aqua"
+$(MISC)$/unpacked_%_lib : $(OS)$(COM)UBlib.zip '$(OS)$(COM)UBruntime.zip'
+    unzip -o -d $(LB) $(OS)$(COM)UBlib.zip && unzip -o -d $(LB) $(OS)$(COM)UBruntime.zip && $(TOUCH) $@
+    chmod -R 775 $(LB)
+  
+$(MISC)$/unpacked_%_inc : $(OS)$(COM)UBinc.zip
+    unzip -o -d $(INCCOM) $(OS)$(COM)UBinc.zip && $(TOUCH)	$@
+    chmod -R 775 $(INCCOM)
+
+$(BIN)$/mozruntime%zip : $(OS)$(COM)UBruntime.zip
+    $(COPY) $(OS)$(COM)UBruntime.zip $(BIN)$/mozruntime.zip
+
+.ENDIF # "$(GUIBASE)"=="aqua"
 
 LIBLIST =
 BIN_RUNTIMELIST = 
 NSS_INCLUDE_LIST =
 NSS_MODULE_RUNTIME_LIST =
-
 .IF "$(ENABLE_NSS_MODULE)"=="YES"
 # The prebuilt moz files include all the old NSS stuff from moz and not the new
 # NSS libs, headers, etc, from the separate nss module. If we use the nss module

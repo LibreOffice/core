@@ -1,0 +1,183 @@
+--- misc/boost_1_39_0/boost/function/function_template.hpp	2008-10-16 15:21:50.000000000 +0200
++++ misc/build/boost_1_39_0/boost/function/function_template.hpp	2009-07-09 12:58:51.141224220 +0200
+@@ -950,10 +950,10 @@
+           f.vtable->manager(f.functor, this->functor,
+                             boost::detail::function::move_functor_tag);
+ 		  f.vtable = 0;
+-#if !defined(BOOST_NO_EXCEPTIONS)      
+         } else {
+           clear();
+         }
++#if !defined(BOOST_NO_EXCEPTIONS)      
+       } catch (...) {
+         vtable = 0;
+         throw;
+--- misc/boost_1_39_0/boost/function/function_base.hpp	2008-10-16 15:21:50.000000000 +0200
++++ misc/build/boost_1_39_0/boost/function/function_base.hpp	2009-07-12 21:42:22.779873909 +0200
+@@ -42,7 +42,7 @@
+ #endif       
+ 
+ // Define BOOST_FUNCTION_STD_NS to the namespace that contains type_info.
+-#ifdef BOOST_NO_EXCEPTION_STD_NAMESPACE
++#ifdef BOOST_NO_STD_TYPEINFO
+ // Embedded VC++ does not have type_info in namespace std
+ #  define BOOST_FUNCTION_STD_NS
+ #else
+--- misc/boost_1_39_0/boost/config/compiler/visualc.hpp	2009-03-26 20:00:00.000000000 +0100
++++ misc/build/boost_1_39_0/boost/config/compiler/visualc.hpp	2009-06-10 21:53:42.484375000 +0200
+@@ -138,6 +138,9 @@
+ #  define BOOST_NO_RTTI
+ #endif
+ 
++// disable WORKAROUND macro - gives warning for undefined macros
++#define BOOST_STRICT_CONFIG 1
++
+ //
+ // all versions support __declspec:
+ //
+--- misc/boost_1_39_0/boost/mpl/apply_wrap.hpp	2008-10-11 08:50:46.000000000 +0200
++++ misc/build/boost_1_39_0/boost/mpl/apply_wrap.hpp	2009-06-10 21:53:42.500000000 +0200
+@@ -173,8 +173,8 @@
+ #   undef i_
+ 
+ ///// iteration, depth == 2
+-
+-#elif BOOST_PP_ITERATION_DEPTH() == 2
++#else
++#if BOOST_PP_ITERATION_DEPTH() == 2
+ 
+ #   define j_ BOOST_PP_FRAME_ITERATION(2)
+ 
+@@ -230,4 +231,5 @@
+ #   undef j_
+ 
+ #endif // BOOST_PP_ITERATION_DEPTH()
++#endif
+ #endif // BOOST_PP_IS_ITERATING
+--- misc/boost_1_39_0/boost/mpl/bind.hpp	2008-10-11 08:19:02.000000000 +0200
++++ misc/build/boost_1_39_0/boost/mpl/bind.hpp	2009-06-10 21:53:42.515625000 +0200
+@@ -531,7 +531,8 @@
+ 
+ ///// iteration, depth == 2
+ 
+-#elif BOOST_PP_ITERATION_DEPTH() == 2
++#else
++#if BOOST_PP_ITERATION_DEPTH() == 2
+ 
+ #   define j_ BOOST_PP_FRAME_ITERATION(2)
+ #   if !defined(BOOST_MPL_CFG_NO_UNNAMED_PLACEHOLDER_SUPPORT)
+@@ -548,4 +549,5 @@
+ #   undef j_
+ 
+ #endif // BOOST_PP_ITERATION_DEPTH()
++#endif
+ #endif // BOOST_PP_IS_ITERATING
+--- misc/boost_1_39_0/boost/spirit/home/classic/core/impl/match.ipp	2008-06-22 17:05:38.000000000 +0200
++++ misc/build/boost_1_39_0/boost/spirit/home/classic/core/impl/match.ipp	2009-06-10 21:53:42.531250000 +0200
+@@ -19,12 +19,12 @@
+     : len(-1), val() {}
+ 
+     template <typename T>
+-    inline match<T>::match(std::size_t length)
+-    : len(length), val() {}
++    inline match<T>::match(std::size_t _length)
++    : len(_length), val() {}
+ 
+     template <typename T>
+-    inline match<T>::match(std::size_t length, ctor_param_t val_)
+-    : len(length), val(val_) {}
++    inline match<T>::match(std::size_t _length, ctor_param_t val_)
++    : len(_length), val(val_) {}
+ 
+     template <typename T>
+     inline bool
+@@ -66,11 +66,11 @@
+     inline match<nil_t>::match()
+     : len(-1) {}
+ 
+-    inline match<nil_t>::match(std::size_t length)
+-    : len(length) {}
++    inline match<nil_t>::match(std::size_t _length)
++    : len(_length) {}
+ 
+-    inline match<nil_t>::match(std::size_t length, nil_t)
+-    : len(length) {}
++    inline match<nil_t>::match(std::size_t _length, nil_t)
++    : len(_length) {}
+ 
+     inline bool
+     match<nil_t>::operator!() const
+--- misc/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/impl/rule.ipp	2008-06-22 17:05:38.000000000 +0200
++++ misc/build/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/impl/rule.ipp	2009-06-10 21:53:42.546875000 +0200
+@@ -226,7 +226,7 @@
+         template <typename ParserT, typename ScannerT, typename AttrT>
+         struct concrete_parser : abstract_parser<ScannerT, AttrT>
+         {
+-            concrete_parser(ParserT const& p) : p(p) {}
++            concrete_parser(ParserT const& _p) : p(_p) {}
+             virtual ~concrete_parser() {}
+ 
+             virtual typename match_result<ScannerT, AttrT>::type
+--- misc/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/parser_id.hpp	2008-06-22 17:05:38.000000000 +0200
++++ misc/build/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/parser_id.hpp	2009-06-10 21:53:42.562500000 +0200
+@@ -106,7 +106,7 @@
+                 : parser_id(reinterpret_cast<std::size_t>(this)); 
+         }
+ 
+-        void set_id(parser_id id) { tag = id; } 
++        void set_id(parser_id _id) { tag = _id; } 
+         
+     private:
+     
+--- misc/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/rule.hpp	2008-06-22 17:05:38.000000000 +0200
++++ misc/build/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/rule.hpp	2009-07-08 22:23:45.899895415 +0200
+@@ -159,11 +159,11 @@
+             return ptr.get();
+         }
+ 
+-        rule(abstract_parser_t* ptr)
+-        : ptr(ptr) {}
++        rule(abstract_parser_t* _ptr)
++        : ptr(_ptr) {}
+ 
+-        rule(abstract_parser_t const* ptr)
+-        : ptr(ptr) {}
++        rule(abstract_parser_t const* _ptr)
++        : ptr(_ptr) {}
+ 
+         scoped_ptr<abstract_parser_t> ptr;
+     };
+--- misc/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/subrule.hpp	2008-06-22 17:05:38.000000000 +0200
++++ misc/build/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/subrule.hpp	2009-06-10 21:53:42.593750000 +0200
+@@ -210,7 +210,7 @@
+             subrule_list<
+                 subrule_parser<ID2, DefT2, ContextT2>,
+                 nil_t> >
+-        operator,(subrule_parser<ID2, DefT2, ContextT2> const& rhs) const
++        operator,(subrule_parser<ID2, DefT2, ContextT2> const& _rhs) const
+         {
+             return subrule_list<
+                 self_t,
+@@ -220,7 +220,7 @@
+                         *this,
+                         subrule_list<
+                             subrule_parser<ID2, DefT2, ContextT2>, nil_t>(
+-                                rhs, nil_t()));
++                                _rhs, nil_t()));
+         }
+ 
+         typename DefT::embed_t rhs;
+@@ -258,10 +258,10 @@
+         parse_main(ScannerT const& scan) const
+         {
+             typedef typename parser_result<self_t, ScannerT>::type result_t;
+-            result_t result;
++            result_t _result;
+             impl::parse_subrule<result_t, ScannerT, ID>::
+-                do_(result, scan);
+-            return result;
++                do_(_result, scan);
++            return _result;
+         }
+ 
+         template <typename ScannerT>

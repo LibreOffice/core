@@ -6,10 +6,6 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.9 $
-#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -29,40 +25,22 @@
 #
 #*************************************************************************
 
-# Hopefully we can move to a newer boost version soon, coming with spirit 1.8.*,
-# so there won't be the need handle a separate spirit 1.6.* anymore.
-# Depends on the compilers... :(
+PRJ=..$/..
 
-# dmake create_clean -- just unpacks
-# dmake patch -- unpacks and applies patch file
-# dmake create_patch -- creates a patch file
-
-PRJ=..
-
-PRJNAME=ooo_boost
-TARGET=ooo_spirit
+PRJNAME=bitstream_vera_fonts
+TARGET=ttf_gentium
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
 
-# force patched boost for sunpro CC
-# to workaround opt bug when compiling with -xO3
-.IF "$(SYSTEM_BOOST)" == "YES" && ("$(OS)"!="SOLARIS" || "$(COM)"=="GCC")
-all:
-        @echo "An already available installation of boost should exist on your system."
-        @echo "Therefore the version provided here does not need to be built in addition."
-.ELSE
-
 # --- Files --------------------------------------------------------
 
-.IF "$(COMID)"=="gcc3" && "$(CCNUMVER)">="000400000000" 
-all:
-        @echo "spirit is already included in boost 1.34"
-.ELSE
+TARFILE_NAME=gentiumbasic-fonts-1.10
+TARFILE_ROOTDIR=gentiumbasic-fonts-1.10
 
-TARFILE_NAME=spirit-1.6.1
-PATCH_FILES=$(PRJ)$/$(TARFILE_NAME).patch
+PATCH_FILES=
+
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
@@ -75,7 +53,8 @@ BUILD_FLAGS=
 
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
-.INCLUDE : tg_ext.mk
 
+.IF "$(WITH_FONTS)"!="NO"
+.INCLUDE : tg_ext.mk
 .ENDIF
-.ENDIF
+
