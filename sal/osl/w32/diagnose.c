@@ -90,9 +90,13 @@ void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
     if ( IsDebuggerPresent() )
     {
         sal_Char    szMessage[512];
-        szMessage[sizeof(szMessage)-1] = 0;
         written = _vsnprintf( szMessage, sizeof(szMessage) - 2, lpszFormat, args );
-        szMessage[ written == -1 ? sizeof(szMessage) - 2 : written ] = '\n';
+        if (written == -1)
+        {
+            written = sizeof(szMessage) - 2;
+        }
+        szMessage[written] = '\n';
+        szMessage[written + 1] = '\0';
         OutputDebugString( szMessage );
     }
 
