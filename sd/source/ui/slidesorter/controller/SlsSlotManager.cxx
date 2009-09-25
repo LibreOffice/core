@@ -703,13 +703,13 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
     SdTransferable* pTransferClip = SD_MOD()->pTransferClip;
 
     if (rSet.GetItemState(SID_PASTE)  == SFX_ITEM_AVAILABLE
-        || rSet.GetItemState(SID_PASTE2)  == SFX_ITEM_AVAILABLE)
+        || rSet.GetItemState(SID_PASTE_SPECIAL)  == SFX_ITEM_AVAILABLE)
     {
         // Keine eigenen Clipboard-Daten?
         if ( !pTransferClip || !pTransferClip->GetDocShell() )
         {
             rSet.DisableItem(SID_PASTE);
-            rSet.DisableItem(SID_PASTE2);
+            rSet.DisableItem(SID_PASTE_SPECIAL);
         }
         else
         {
@@ -739,7 +739,7 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
                 if ( ! bIsPastingSupported)
                 {
                     rSet.DisableItem(SID_PASTE);
-                    rSet.DisableItem(SID_PASTE2);
+                    rSet.DisableItem(SID_PASTE_SPECIAL);
                 }
             }
         }
@@ -748,7 +748,7 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
     // Cut, copy and paste of master pages is not yet implemented properly
     if (rSet.GetItemState(SID_COPY) == SFX_ITEM_AVAILABLE
         || rSet.GetItemState(SID_PASTE)  == SFX_ITEM_AVAILABLE
-        || rSet.GetItemState(SID_PASTE2)  == SFX_ITEM_AVAILABLE
+        || rSet.GetItemState(SID_PASTE_SPECIAL)  == SFX_ITEM_AVAILABLE
         || rSet.GetItemState(SID_CUT)  == SFX_ITEM_AVAILABLE)
     {
         if (mrSlideSorter.GetModel().GetEditMode() == EM_MASTERPAGE)
@@ -759,8 +759,8 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
                 rSet.DisableItem(SID_COPY);
             if (rSet.GetItemState(SID_PASTE) == SFX_ITEM_AVAILABLE)
                 rSet.DisableItem(SID_PASTE);
-            if (rSet.GetItemState(SID_PASTE2) == SFX_ITEM_AVAILABLE)
-                rSet.DisableItem(SID_PASTE2);
+            if (rSet.GetItemState(SID_PASTE_SPECIAL) == SFX_ITEM_AVAILABLE)
+                rSet.DisableItem(SID_PASTE_SPECIAL);
         }
     }
 

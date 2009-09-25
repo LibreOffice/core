@@ -55,6 +55,7 @@ RESLIB1SRSFILES=\
     $(SRS)$/animui.srs			\
     $(SRS)$/slideshow.srs		\
     $(SRS)$/uitable.srs			\
+    $(SRS)$/uiannotations.srs	\
     $(SOLARCOMMONRESDIR)$/sfx.srs
 
 # --- StarDraw DLL
@@ -119,10 +120,13 @@ LIB3FILES=      \
             $(SLB)$/dlg.lib			\
             $(SLB)$/core.lib		\
             $(SLB)$/undo.lib		\
+            $(SLB)$/annotations.lib	\
+            $(SLB)$/text.lib		\
             $(SLB)$/helper.lib		\
             $(SLB)$/xml.lib			\
             $(SLB)$/cgm.lib			\
             $(SLB)$/uitable.lib		\
+            $(SLB)$/uiannotations.lib\
             $(SLB)$/grf.lib
 
 LIB5TARGET=$(SLB)$/sdraw3_2.lib

@@ -570,7 +570,12 @@ void SAL_CALL EventMultiplexer::Implementation::propertyChange (
     }
     else if (rEvent.PropertyName.equals(msEditModePropertyName))
     {
-        CallListeners(EventMultiplexerEvent::EID_EDIT_MODE);
+        bool bIsMasterPageMode (false);
+        rEvent.NewValue >>= bIsMasterPageMode;
+        if (bIsMasterPageMode)
+            CallListeners(EventMultiplexerEvent::EID_EDIT_MODE_MASTER);
+        else
+            CallListeners(EventMultiplexerEvent::EID_EDIT_MODE_NORMAL);
     }
 }
 
@@ -783,8 +788,9 @@ void EventMultiplexer::Implementation::CallListeners (
 
 void EventMultiplexer::Implementation::CallListeners (EventMultiplexerEvent& rEvent)
 {
-    ListenerList::const_iterator iListener (maListeners.begin());
-    ListenerList::const_iterator iListenerEnd (maListeners.end());
+    ListenerList aCopyListeners( maListeners );
+    ListenerList::iterator iListener (aCopyListeners.begin());
+    ListenerList::const_iterator iListenerEnd (aCopyListeners.end());
     for (; iListener!=iListenerEnd; ++iListener)
     {
         if ((iListener->second && rEvent.meEventId) != 0)

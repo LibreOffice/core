@@ -171,6 +171,10 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
             AddTabPage( RID_SVXPAGE_CHAR_EFFECTS );
             AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );
             AddTabPage( RID_SVXPAGE_TEXTATTR );
+            AddTabPage( RID_SVXPAGE_PICK_BULLET );
+            AddTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );
+            AddTabPage( RID_SVXPAGE_PICK_BMP );
+            AddTabPage( RID_SVXPAGE_NUM_OPTIONS );
             AddTabPage( RID_SVXPAGE_TABULATOR );
         }
         break;
