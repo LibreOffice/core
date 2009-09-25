@@ -41,6 +41,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE : rtlbootstrap.mk
 .INCLUDE : settings.mk
+.IF "$(L10N_framework)"==""
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 .IF "$(ENABLE_PRESENTER_SCREEN)" == "NO"
@@ -54,6 +55,7 @@ common_build_zip=
 # --- Files -------------------------------------
 
 SLOFILES=										\
+    $(SLO)$/PresenterAccessibility.obj			\
     $(SLO)$/PresenterAnimation.obj				\
     $(SLO)$/PresenterAnimator.obj				\
     $(SLO)$/PresenterBitmapContainer.obj		\
@@ -83,6 +85,7 @@ SLOFILES=										\
     $(SLO)$/PresenterSlideSorter.obj			\
     $(SLO)$/PresenterSprite.obj					\
     $(SLO)$/PresenterSpritePane.obj				\
+    $(SLO)$/PresenterTextView.obj				\
     $(SLO)$/PresenterTheme.obj					\
     $(SLO)$/PresenterTimer.obj					\
     $(SLO)$/PresenterToolBar.obj				\
@@ -99,6 +102,7 @@ SHL1TARGET=		$(TARGET).uno
 SHL1STDLIBS=	$(CPPUHELPERLIB)	\
                 $(CPPULIB)			\
                 $(SALLIB)
+
 SHL1DEPN=
 SHL1IMPLIB=		i$(SHL1TARGET)
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
@@ -257,9 +261,10 @@ PLATFORMID:=$(RTL_OS:l)_$(RTL_ARCH:l)
 
 
 # --- Targets ----------------------------------
+.ENDIF # L10N_framework
 
 .INCLUDE : target.mk
-
+.IF "$(L10N_framework)"==""
 $(SLO)$/PresenterComponent.obj : $(INCCOM)$/PresenterExtensionIdentifier.hxx
 
 $(INCCOM)$/PresenterExtensionIdentifier.hxx : PresenterExtensionIdentifier.txx
@@ -362,3 +367,8 @@ $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
 
 
 .ENDIF # "$(ENABLE_PRESENTER_SCREEN)" != "NO"
+.ELSE
+ivo:
+    $(ECHO)
+.ENDIF # L10N_framework
+

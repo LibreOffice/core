@@ -32,7 +32,7 @@
 PRJ=..
 PRJNAME=reportbuilder
 TARGET=rpt
-EXTENSION_VERSION_BASE=1.1.0
+EXTENSION_VERSION_BASE=1.2.0
 
 .IF "$(CWS_WORK_STAMP)" == ""
     EXTENSION_VERSION=$(EXTENSION_VERSION_BASE)
@@ -42,7 +42,7 @@ EXTENSION_VERSION_BASE=1.1.0
 
 # --- Settings ----------------------------------
 .INCLUDE :  makefile.pmk
-
+.IF "$(L10N_framework)"==""
 # ------------------------------------------------------------------
 # calready set in util$/makefile.pmk
 # EXTENSIONNAME:=sun-report-builder
@@ -122,13 +122,13 @@ COMPONENT_MANIFEST_SEARCHDIR:=registry
 
 # make sure to add your custom files here
 EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(COMPONENT_HTMLFILES) $(COMPONENT_OTR_FILES) $(COMPONENT_HELP) $(COMPONENT_IMAGES)
-
+.ENDIF
 # --- Targets ----------------------------------
 
 .INCLUDE : extension_pre.mk
 .INCLUDE : target.mk
 .INCLUDE : extension_post.mk
-
+.IF "$(L10N_framework)"==""
 $(EXTENSIONDIR)$/%.jar : $(SOLARBINDIR)$/%.jar
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
@@ -152,7 +152,7 @@ $(COMPONENT_HELP) : $$(@:f)
 $(DESCRIPTION_SRC): description.xml
     +-$(RM) $@
     $(TYPE) description.xml | $(SED) "s/#VERSION#/$(EXTENSION_VERSION)/" > $@
-
+.ENDIF
 .ELSE			# "$(SOLAR_JAVA)"!=""
 .INCLUDE : target.mk
 .ENDIF			# "$(SOLAR_JAVA)"!=""

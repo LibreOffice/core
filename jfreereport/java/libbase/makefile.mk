@@ -64,6 +64,7 @@ BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" 
 .INCLUDE : target.mk
 
 .IF "$(SOLAR_JAVA)" != ""
+.IF "$(L10N_framework)"==""
 .INCLUDE : tg_ext.mk
 
 ALLTAR : $(CLASSDIR)$/$(TARGET)$(VERSION).jar 
@@ -84,4 +85,4 @@ $(CLASSDIR)$/commons-logging.jar :
 $(CLASSDIR)$/$(TARGET)$(VERSION).jar : $(CLASSDIR)$/commons-logging.jar $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
     $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/build$/lib$/$(TARGET).jar $(CLASSDIR)$/$(TARGET)$(VERSION).jar
 .ENDIF
-
+.ENDIF

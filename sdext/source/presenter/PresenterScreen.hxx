@@ -164,6 +164,7 @@ private:
     {
     public:
         ::rtl::OUString msTitle;
+        ::rtl::OUString msAccessibleTitle;
         bool mbIsOpaque;
     };
     typedef ::std::map<rtl::OUString,ViewDescriptor> ViewDescriptorContainer;

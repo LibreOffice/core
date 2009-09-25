@@ -801,9 +801,9 @@ void SetNotesViewCommand::Execute (void)
         return;
 
     if (mbOn)
-        pWindowManager->SetLayoutMode(PresenterWindowManager::Notes);
+        pWindowManager->SetViewMode(PresenterWindowManager::VM_Notes);
     else
-        pWindowManager->SetLayoutMode(PresenterWindowManager::Standard);
+        pWindowManager->SetViewMode(PresenterWindowManager::VM_Standard);
 }
 
 
@@ -836,9 +836,7 @@ Any SetNotesViewCommand::GetState (void) const
 bool SetNotesViewCommand::IsActive (
     const ::rtl::Reference<PresenterWindowManager>& rpWindowManager) const
 {
-    return rpWindowManager->GetLayoutMode() == PresenterWindowManager::Notes
-        && !rpWindowManager->IsSlideSorterActive()
-        && !rpWindowManager->IsHelpViewActive();
+    return rpWindowManager->GetViewMode() == PresenterWindowManager::VM_Notes;
 }
 
 
@@ -891,7 +889,7 @@ Any SetSlideSorterCommand::GetState (void) const
     if ( ! pWindowManager.is())
         return Any(false);
 
-    return Any(pWindowManager->IsSlideSorterActive());
+    return Any(pWindowManager->GetViewMode()==PresenterWindowManager::VM_SlideOverview);
 }
 
 
@@ -944,7 +942,7 @@ Any SetHelpViewCommand::GetState (void) const
     if ( ! pWindowManager.is())
         return Any(false);
 
-    return Any(pWindowManager->IsHelpViewActive());
+    return Any(pWindowManager->GetViewMode()==PresenterWindowManager::VM_Help);
 }
 
 
