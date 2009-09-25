@@ -37,6 +37,7 @@
 #include <tools/mempool.hxx>
 #include <svtools/listener.hxx>
 #include "global.hxx"
+#include "rangenam.hxx"
 #include "formula/grammar.hxx"
 #include "tokenarray.hxx"
 #include "formularesult.hxx"
@@ -289,8 +290,6 @@ enum ScMatrixMode {
     MM_FAKE      = 3                    // Interpret "as-if" matrix formula (legacy)
 };
 
-class ScIndexMap;
-
 class SC_DLLPUBLIC ScFormulaCell : public ScBaseCell, public SvtListener
 {
 private:
@@ -413,7 +412,7 @@ public:
     void            UpdateCompile( BOOL bForceIfNameInUse = FALSE );
     BOOL            IsRangeNameInUse(USHORT nIndex) const;
     void            FindRangeNamesInUse(std::set<USHORT>& rIndexes) const;
-    void            ReplaceRangeNamesInUse( const ScIndexMap& rMap );
+    void            ReplaceRangeNamesInUse( const ScRangeData::IndexMap& rMap );
     BOOL            IsSubTotal() const                      { return bSubTotal; }
     BOOL            IsChanged() const                       { return bChanged; }
     void            ResetChanged()                          { bChanged = FALSE; }

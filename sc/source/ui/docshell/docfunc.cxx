@@ -94,6 +94,7 @@
 #include "compiler.hxx"
 #include "scui_def.hxx" //CHINA001
 #include "tabprotection.hxx"
+#include "clipparam.hxx"
 
 #include <memory>
 
@@ -113,6 +114,14 @@ IMPL_LINK( ScDocFunc, NotifyDrawUndo, SdrUndoAction*, pUndoAction )
     else
         rDocShell.GetUndoManager()->AddUndoAction( new ScUndoDraw( pUndoAction, &rDocShell ) );
     rDocShell.SetDrawModified();
+
+    // the affected sheet isn't known, so all stream positions are invalidated
+    ScDocument* pDoc = rDocShell.GetDocument();
+    SCTAB nTabCount = pDoc->GetTableCount();
+    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+        if (pDoc->IsStreamValid(nTab))
+            pDoc->SetStreamValid(nTab, FALSE);
+
     return 0;
 }
 
@@ -1061,6 +1070,9 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
     if( rDoc.IsUndoEnabled() )
         rDocShell.GetUndoManager()->AddUndoAction( new ScUndoShowHideNote( rDocShell, rPos, bShow ) );
 
+    if (rDoc.IsStreamValid(rPos.Tab()))
+        rDoc.SetStreamValid(rPos.Tab(), FALSE);
+
     rDocShell.SetDocumentModified();
 
     return true;
@@ -1088,6 +1100,9 @@ bool ScDocFunc::SetNoteText( const ScAddress& rPos, const String& rText, BOOL bA
         pNote->SetText( rPos, aNewText );
 
     //! Undo !!!
+
+    if (pDoc->IsStreamValid(rPos.Tab()))
+        pDoc->SetStreamValid(rPos.Tab(), FALSE);
 
     rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
@@ -1142,6 +1157,10 @@ bool ScDocFunc::ReplaceNote( const ScAddress& rPos, const String& rNoteText, con
 
         // repaint cell (to make note marker visible)
         rDocShell.PostPaintCell( rPos );
+
+        if (rDoc.IsStreamValid(rPos.Tab()))
+            rDoc.SetStreamValid(rPos.Tab(), FALSE);
+
         aModificator.SetDocumentModified();
         bDone = true;
     }
@@ -1997,7 +2016,7 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                     nScenarioCount ++;
 
                 pDoc->CopyToDocument( nUndoStartX, nUndoStartY, i, nUndoEndX, nUndoEndY, i+nScenarioCount,
-                    IDF_ALL, FALSE, pUndoDoc );
+                    IDF_ALL | IDF_NOCAPTIONS, FALSE, pUndoDoc );
             }
         }
 
@@ -2258,8 +2277,8 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     }
     ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
 
-    pDoc->CopyToClip( nStartCol, nStartRow, nEndCol, nEndRow, bCut, pClipDoc,
-                        FALSE, &aSourceMark, bScenariosAdded, TRUE );
+    ScClipParam aClipParam(ScRange(nStartCol, nStartRow, 0, nEndCol, nEndRow, 0), bCut);
+    pDoc->CopyToClip(aClipParam, pClipDoc, &aSourceMark, false, bScenariosAdded, true);
 
     ScDrawLayer::SetGlobalDrawPersist(NULL);
 
@@ -3558,7 +3577,7 @@ BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
             //! auch bei Undo selektierte Tabellen beruecksichtigen
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( pDoc, nStartTab, nEndTab );
-            pDoc->CopyToDocument( rRange, IDF_ALL, FALSE, pUndoDoc );
+            pDoc->CopyToDocument( rRange, IDF_ALL & ~IDF_NOTE, FALSE, pUndoDoc );
         }
 
         // use TokenArray if given, string (and flags) otherwise
@@ -3646,7 +3665,7 @@ BOOL ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
             //! auch bei Undo selektierte Tabellen beruecksichtigen
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( pDoc, nStartTab, nEndTab );
-            pDoc->CopyToDocument( rRange, IDF_ALL, FALSE, pUndoDoc );
+            pDoc->CopyToDocument( rRange, IDF_ALL & ~IDF_NOTE, FALSE, pUndoDoc );
 
             rDocShell.GetUndoManager()->AddUndoAction(
                     new ScUndoTabOp( &rDocShell,

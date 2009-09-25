@@ -63,7 +63,6 @@
 using ::com::sun::star::sheet::DataPilotFieldReference;
 
 // STATIC DATA -----------------------------------------------------------
-
 // ============================================================================
 
 LabelData::LabelData( const String& rName, short nCol, bool bIsValue ) :

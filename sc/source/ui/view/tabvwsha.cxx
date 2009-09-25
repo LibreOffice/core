@@ -72,11 +72,23 @@
 #include "compiler.hxx"
 
 
-BOOL ScTabViewShell::GetFunction( String& rFuncStr )
+BOOL ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
 {
     String aStr;
 
     ScSubTotalFunc eFunc = (ScSubTotalFunc) SC_MOD()->GetAppOptions().GetStatusFunc();
+    ScViewData* pViewData   = GetViewData();
+    ScMarkData& rMark       = pViewData->GetMarkData();
+    bool bIgnoreError = (rMark.IsMarked() || rMark.IsMultiMarked());
+
+    if (bIgnoreError && (eFunc == SUBTOTAL_FUNC_CNT || eFunc == SUBTOTAL_FUNC_CNT2))
+        nErrCode = 0;
+
+    if (nErrCode)
+    {
+        rFuncStr = ScGlobal::GetLongErrorString(nErrCode);
+        return true;
+    }
 
     USHORT nGlobStrId = 0;
     switch (eFunc)
@@ -94,9 +106,7 @@ BOOL ScTabViewShell::GetFunction( String& rFuncStr )
     }
     if (nGlobStrId)
     {
-        ScViewData* pViewData   = GetViewData();
         ScDocument* pDoc        = pViewData->GetDocument();
-        ScMarkData& rMark       = pViewData->GetMarkData();
         SCCOL       nPosX       = pViewData->GetCurX();
         SCROW       nPosY       = pViewData->GetCurY();
         SCTAB       nTab        = pViewData->GetTabNo();
@@ -104,30 +114,38 @@ BOOL ScTabViewShell::GetFunction( String& rFuncStr )
         aStr = ScGlobal::GetRscString(nGlobStrId);
         aStr += '=';
 
-        //  Anzahl im Standardformat, die anderen nach Cursorposition
-        sal_uInt32 nNumFmt = 0;
-        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-        if ( eFunc != SUBTOTAL_FUNC_CNT && eFunc != SUBTOTAL_FUNC_CNT2 )
-        {
-            //  Zahlformat aus Attributen oder Formel
-            pDoc->GetNumberFormat( nPosX, nPosY, nTab, nNumFmt );
-            if ( (nNumFmt % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
-            {
-                ScBaseCell* pCell;
-                pDoc->GetCell( nPosX, nPosY, nTab, pCell );
-                if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
-                    nNumFmt = ((ScFormulaCell*)pCell)->GetStandardFormat(
-                        *pFormatter, nNumFmt );
-            }
-        }
         ScAddress aCursor( nPosX, nPosY, nTab );
         double nVal;
         if ( pDoc->GetSelectionFunction( eFunc, aCursor, rMark, nVal ) )
         {
-            String aValStr;
-            Color* pDummy;
-            pFormatter->GetOutputString( nVal, nNumFmt, aValStr, &pDummy );
-            aStr += aValStr;
+            if ( nVal == 0.0 )
+                aStr += '0';
+            else
+            {
+                //  Anzahl im Standardformat, die anderen nach Cursorposition
+                SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                sal_uInt32 nNumFmt = 0;
+                if ( eFunc != SUBTOTAL_FUNC_CNT && eFunc != SUBTOTAL_FUNC_CNT2 )
+                {
+                    //  Zahlformat aus Attributen oder Formel
+                    pDoc->GetNumberFormat( nPosX, nPosY, nTab, nNumFmt );
+                    if ( (nNumFmt % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
+                    {
+                        ScBaseCell* pCell;
+                        pDoc->GetCell( nPosX, nPosY, nTab, pCell );
+                        if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
+                        {
+
+                            nNumFmt = ((ScFormulaCell*)pCell)->GetStandardFormat(*pFormatter, nNumFmt );
+                        }
+                    }
+                }
+
+                String aValStr;
+                Color* pDummy;
+                pFormatter->GetOutputString( nVal, nNumFmt, aValStr, &pDummy );
+                aStr += aValStr;
+            }
         }
 
         rFuncStr = aStr;

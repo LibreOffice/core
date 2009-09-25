@@ -1192,20 +1192,20 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
 bool lcl_IsNamedDataField( const ScDPGetPivotDataField& rTarget, const String& rSourceName, const String& rGivenName )
 {
     // match one of the names, ignoring case
-    return ScGlobal::pTransliteration->isEqual( rTarget.maFieldName, rSourceName ) ||
-           ScGlobal::pTransliteration->isEqual( rTarget.maFieldName, rGivenName );
+    return ScGlobal::GetpTransliteration()->isEqual( rTarget.maFieldName, rSourceName ) ||
+           ScGlobal::GetpTransliteration()->isEqual( rTarget.maFieldName, rGivenName );
 }
 
 bool lcl_IsNamedCategoryField( const ScDPGetPivotDataField& rFilter, const ScDPOutLevelData& rField )
 {
     //! name from source instead of caption?
-    return ScGlobal::pTransliteration->isEqual( rFilter.maFieldName, rField.aCaption );
+    return ScGlobal::GetpTransliteration()->isEqual( rFilter.maFieldName, rField.aCaption );
 }
 
 bool lcl_IsCondition( const sheet::MemberResult& rResultEntry, const ScDPGetPivotDataField& rFilter )
 {
     //! handle numeric conditions?
-    return ScGlobal::pTransliteration->isEqual( rResultEntry.Name, rFilter.maValStr );
+    return ScGlobal::GetpTransliteration()->isEqual( rResultEntry.Name, rFilter.maValStr );
 }
 
 bool lcl_CheckPageField( const ScDPOutLevelData& rField,

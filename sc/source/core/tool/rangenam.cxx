@@ -49,7 +49,6 @@
 #include "rechead.hxx"
 #include "refupdat.hxx"
 #include "document.hxx"
-#include "indexmap.hxx"
 
 using namespace formula;
 
@@ -454,48 +453,45 @@ void ScRangeData::UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable)
     }
 }
 
-//  wie beim Uebernehmen von Namen in Excel
 
 void ScRangeData::MakeValidName( String& rName )        // static
 {
     //ScCompiler::InitSymbolsNative();
 
-    //  ungueltige Zeichen vorne weglassen
+    // strip leading invalid characters
     xub_StrLen nPos = 0;
     xub_StrLen nLen = rName.Len();
-    while ( nPos < nLen && !ScCompiler::IsWordChar( rName, nPos) )
+    while ( nPos < nLen && !ScCompiler::IsCharFlagAllConventions( rName, nPos, SC_COMPILER_C_NAME) )
         ++nPos;
     if ( nPos>0 )
         rName.Erase(0,nPos);
 
-    //  wenn vorne ein ungueltiges Anfangszeichen steht, '_' davor
-    if ( rName.Len() && !ScCompiler::IsCharWordChar( rName, 0 ) )
+    // if the first character is an invalid start character, precede with '_'
+    if ( rName.Len() && !ScCompiler::IsCharFlagAllConventions( rName, 0, SC_COMPILER_C_CHAR_NAME ) )
         rName.Insert('_',0);
 
-    //  ungueltige durch '_' ersetzen
+    // replace invalid with '_'
     nLen = rName.Len();
     for (nPos=0; nPos<nLen; nPos++)
     {
-        if ( !ScCompiler::IsWordChar( rName, nPos) )
+        if ( !ScCompiler::IsCharFlagAllConventions( rName, nPos, SC_COMPILER_C_NAME) )
             rName.SetChar( nPos, '_' );
     }
 
-    // Name darf keine Referenz beinhalten, wie in IsNameValid
+    // Ensure that the proposed name is not a reference under any convention,
+    // same as in IsNameValid()
     ScAddress aAddr;
-        ScRange aRange;
-    int nConv = FormulaGrammar::CONV_UNSPECIFIED; // use int so that op++ works
-
-    // Ensure that the proposed name is not an address under any convention
-    while ( ++nConv != FormulaGrammar::CONV_LAST )
-        {
+    ScRange aRange;
+    for (int nConv = FormulaGrammar::CONV_UNSPECIFIED; ++nConv < FormulaGrammar::CONV_LAST; )
+    {
         ScAddress::Details details( static_cast<FormulaGrammar::AddressConvention>( nConv ) );
-        while( aRange.Parse( rName, NULL, details )
-               || aAddr.Parse( rName, NULL, details ) )
+        // Don't check Parse on VALID, any partial only VALID may result in
+        // #REF! during compile later!
+        while (aRange.Parse( rName, NULL, details) || aAddr.Parse( rName, NULL, details))
         {
-            //! Range Parse auch bei Bereich mit ungueltigem Tabellennamen gueltig
-            //! Address Parse dito, Name erzeugt deswegen bei Compile ein #REF!
-            if ( rName.SearchAndReplace( ':', '_' ) == STRING_NOTFOUND
-              && rName.SearchAndReplace( '.', '_' ) == STRING_NOTFOUND )
+            //! Range Parse is partially valid also with invalid sheet name,
+            //! Address Parse dito, during compile name would generate a #REF!
+            if ( rName.SearchAndReplace( '.', '_' ) == STRING_NOTFOUND )
                 rName.Insert('_',0);
         }
     }
@@ -503,26 +499,25 @@ void ScRangeData::MakeValidName( String& rName )        // static
 
 BOOL ScRangeData::IsNameValid( const String& rName, ScDocument* pDoc )
 {
-    /*  If changed, ScfTools::ConvertToScDefinedName (sc/source/filter/ftools/ftools.cxx)
-        needs to be changed too. */
+    /* XXX If changed, sc/source/filter/ftools/ftools.cxx
+     * ScfTools::ConvertToScDefinedName needs to be changed too. */
     xub_StrLen nPos = 0;
     xub_StrLen nLen = rName.Len();
-    if ( !nLen || !ScCompiler::IsCharWordChar( rName, nPos++ ) )
+    if ( !nLen || !ScCompiler::IsCharFlagAllConventions( rName, nPos++, SC_COMPILER_C_CHAR_NAME ) )
         return FALSE;
     while ( nPos < nLen )
     {
-        if ( !ScCompiler::IsWordChar( rName, nPos++ ) )
+        if ( !ScCompiler::IsCharFlagAllConventions( rName, nPos++, SC_COMPILER_C_NAME ) )
             return FALSE;
     }
-    // Parse nicht auf VALID pruefen, es reicht, wenn irgendein Bestandteil
-    // erkannt wurde
+    ScAddress aAddr;
     ScRange aRange;
-    if( aRange.Parse( rName, pDoc ) )   // THIS IS WRONG
-        return FALSE;
-    else
+    for (int nConv = FormulaGrammar::CONV_UNSPECIFIED; ++nConv < FormulaGrammar::CONV_LAST; )
     {
-        ScAddress aAddr;
-        if ( aAddr.Parse( rName, pDoc ) )   // THIS IS WRONG
+        ScAddress::Details details( static_cast<FormulaGrammar::AddressConvention>( nConv ) );
+        // Don't check Parse on VALID, any partial only VALID may result in
+        // #REF! during compile later!
+        if (aRange.Parse( rName, pDoc, details) || aAddr.Parse( rName, pDoc, details))
             return FALSE;
     }
     return TRUE;
@@ -588,20 +583,20 @@ void ScRangeData::TransferTabRef( SCTAB nOldTab, SCTAB nNewTab )
     }
 }
 
-
-void ScRangeData::ReplaceRangeNamesInUse( const ScIndexMap& rMap )
+void ScRangeData::ReplaceRangeNamesInUse( const IndexMap& rMap )
 {
-    BOOL bCompile = FALSE;
+    bool bCompile = false;
     for ( FormulaToken* p = pCode->First(); p; p = pCode->Next() )
     {
         if ( p->GetOpCode() == ocName )
         {
-            const USHORT nOldIndex = p->GetIndex();
-            const USHORT nNewIndex = rMap.Find( nOldIndex );
+            const sal_uInt16 nOldIndex = p->GetIndex();
+            IndexMap::const_iterator itr = rMap.find(nOldIndex);
+            const sal_uInt16 nNewIndex = itr == rMap.end() ? nOldIndex : itr->second;
             if ( nOldIndex != nNewIndex )
             {
                 p->SetIndex( nNewIndex );
-                bCompile = TRUE;
+                bCompile = true;
             }
         }
     }
@@ -683,7 +678,7 @@ __cdecl
 #endif
 ScRangeData_QsortNameCompare( const void* p1, const void* p2 )
 {
-    return (int) ScGlobal::pCollator->compareString(
+    return (int) ScGlobal::GetCollator()->compareString(
             (*(const ScRangeData**)p1)->GetName(),
             (*(const ScRangeData**)p2)->GetName() );
 }

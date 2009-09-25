@@ -41,7 +41,7 @@ SVSDIINC=$(PRJ)$/source$/ui$/inc
 
 # --- Files --------------------------------------------------------
 
-
+.IF "$(L10N_framework)"==""
 SDI1NAME=$(TARGET)
 #SIDHRCNAME=SCSLOTS.HRC
 SDI1EXPORT=scalc
@@ -71,7 +71,9 @@ SVSDI1DEPEND= \
     mediash.sdi \
     pgbrksh.sdi \
     scslots.hrc \
-    $(INC)$/sc.hrc
+    $(INC)$/sc.hrc \
+    $(SOLARINCXDIR)$/svxslots.ilb
+.ENDIF
 
 # --- Targets -------------------------------------------------------
 

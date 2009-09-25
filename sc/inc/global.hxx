@@ -541,9 +541,15 @@ class ScGlobal
     static  SvNumberFormatter*  pEnglishFormatter;          // for UNO / XML export
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XOrdinalSuffix> xOrdinalSuffix;
+    static CalendarWrapper*     pCalendar;
+    static CollatorWrapper*     pCaseCollator;
+    static CollatorWrapper*     pCollator;
+    static ::utl::TransliterationWrapper* pTransliteration;
+    static ::utl::TransliterationWrapper* pCaseTransliteration;
+    static IntlWrapper*         pScIntlWrapper;
+    static ::com::sun::star::lang::Locale*      pLocale;
 
 public:
-    static ::com::sun::star::lang::Locale*      pLocale;
     static SvtSysLocale*        pSysLocale;
     // for faster access a pointer to the single instance provided by SvtSysLocale
     SC_DLLPUBLIC static const CharClass*     pCharClass;
@@ -551,15 +557,15 @@ public:
     SC_DLLPUBLIC static const LocaleDataWrapper* pLocaleData;
     SC_DLLPUBLIC static const LocaleDataWrapper* GetpLocaleData();
 
-    static CalendarWrapper*     pCalendar;
-    SC_DLLPUBLIC static CollatorWrapper*        pCollator;
-    static CollatorWrapper*     pCaseCollator;
+    static CalendarWrapper*     GetCalendar();
+    SC_DLLPUBLIC static CollatorWrapper*        GetCollator();
+    static CollatorWrapper*     GetCaseCollator();
+    static IntlWrapper*         GetScIntlWrapper();
+    static ::com::sun::star::lang::Locale*      GetLocale();
 
-    static ::utl::TransliterationWrapper* pTransliteration;
     SC_DLLPUBLIC static ::utl::TransliterationWrapper* GetpTransliteration(); //CHINA001
+    static ::utl::TransliterationWrapper* GetCaseTransliteration();
 
-    static ::utl::TransliterationWrapper* pCaseTransliteration;
-    static IntlWrapper*         pScIntlWrapper;
     SC_DLLPUBLIC static LanguageType            eLnge;
     static sal_Unicode          cListDelimiter;
 

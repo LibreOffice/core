@@ -38,6 +38,10 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 
+namespace com { namespace sun { namespace star {
+    namespace beans { class XPropertySet; }
+} } }
+
 #include <hash_map>
 
 class ScOutlineArray;
@@ -71,6 +75,9 @@ class ScXMLExport : public SvXMLExport
     ScDocument*                 pDoc;
     com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet> xCurrentTable;
     com::sun::star::uno::Reference <com::sun::star::table::XCellRange> xCurrentTableCellRange;
+
+    com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xSourceStream;
+    sal_Int32                   nSourceStreamPos;
 
     UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
     UniReference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
@@ -139,7 +146,7 @@ class ScXMLExport : public SvXMLExport
 
     void CollectInternalShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 
-    com::sun::star::table::CellRangeAddress GetEndAddress(com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& xTable,
+    com::sun::star::table::CellRangeAddress GetEndAddress(const com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& xTable,
                                                         const sal_Int32 nTable);
 //  ScMyEmptyDatabaseRangesContainer GetEmptyDatabaseRanges();
     void GetAreaLinks( com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc, ScMyAreaLinksContainer& rAreaLinks );
@@ -207,7 +214,21 @@ class ScXMLExport : public SvXMLExport
 
     void CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uInt16 nAttrib);
 
+    void AddStyleFromCells(
+        const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xProperties,
+        const com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet >& xTable,
+        sal_Int32 nTable, const rtl::OUString* pOldName );
+    void AddStyleFromColumn(
+        const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xColumnProperties,
+        const rtl::OUString* pOldName, sal_Int32& rIndex, sal_Bool& rIsVisible );
+    void AddStyleFromRow(
+        const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xRowProperties,
+        const rtl::OUString* pOldName, sal_Int32& rIndex );
+
     void IncrementProgressBar(sal_Bool bEditCell, sal_Int32 nInc = 1);
+
+    void CopySourceStream( sal_Int32 nStartOffset, sal_Int32 nEndOffset, sal_Int32& rNewStart, sal_Int32& rNewEnd );
+
 protected:
     virtual SvXMLAutoStylePoolP* CreateAutoStylePool();
     virtual XMLPageExport* CreatePageExport();
@@ -233,6 +254,8 @@ public:
 
     UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() { return xCellStylesPropertySetMapper; }
     UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() { return xTableStylesPropertySetMapper; }
+
+    void SetSourceStream( const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xNewStream );
 
     void GetChangeTrackViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
     virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
