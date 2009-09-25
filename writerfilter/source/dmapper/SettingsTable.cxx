@@ -85,7 +85,7 @@ SettingsTable::~SettingsTable()
     delete m_pImpl;
 }
 
-void SettingsTable::attribute(Id Name, Value & val)
+void SettingsTable::attribute(Id /*Name*/, Value & val)
 {
     int nIntValue = val.getInt();
     (void)nIntValue;

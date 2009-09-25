@@ -525,7 +525,7 @@ void OOXMLFastContextHandler::setId(Id rId)
     debug_logger->startElement("setId");
 
     static char sBuffer[256];
-    snprintf(sBuffer, sizeof(sBuffer), "%ld", rId);
+    snprintf(sBuffer, sizeof(sBuffer), "%" SAL_PRIuUINT32, rId);
 
     debug_logger->attribute("id", sBuffer);
     debug_logger->chars((*QNameToString::Instance())(rId));

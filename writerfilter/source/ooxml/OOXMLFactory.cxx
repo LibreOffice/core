@@ -281,7 +281,7 @@ void OOXMLFactory::startAction(OOXMLFastContextHandler * pHandler, Token_t /*nTo
     }
 }
 
-void OOXMLFactory::endAction(OOXMLFastContextHandler * pHandler, Token_t nToken)
+void OOXMLFactory::endAction(OOXMLFastContextHandler * pHandler, Token_t /*nToken*/)
 {
     Id nDefine = pHandler->getDefine();
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
