@@ -55,13 +55,17 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/numbers.hxx>
+#include <i18npool/mslangid.hxx>
 #include <svtools/syslocale.hxx>
 #include <tools/gen.hxx>
 #include <tools/diagnose_ex.h>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <set>
 
@@ -100,6 +104,7 @@ namespace svxform
     using ::com::sun::star::util::XNumberFormats;
     using ::com::sun::star::util::XNumberFormatTypes;
     using ::com::sun::star::awt::FontDescriptor;
+    using ::com::sun::star::lang::Locale;
     /** === end UNO using === **/
     namespace FormComponentType = ::com::sun::star::form::FormComponentType;
     namespace ScrollBarOrientation = ::com::sun::star::awt::ScrollBarOrientation;
@@ -110,6 +115,7 @@ namespace svxform
     namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
     namespace FontEmphasis = ::com::sun::star::text::FontEmphasis;
     namespace FontEmphasisMark = ::com::sun::star::awt::FontEmphasisMark;
+    namespace ScriptType = ::com::sun::star::i18n::ScriptType;
 
     //====================================================================
     //= FormControlFactory_Data
@@ -479,90 +485,63 @@ namespace svxform
         }
 
         //....................................................................
-        /// translates a css.text.FontEmphasis into a css.awt.FontEmphasisMark
-        Any lcl_translateFontEmphasis( const Any& _rTextFontEmphasis )
-        {
-            sal_Int16 nTextFontEmphasis( FontEmphasis::NONE );
-            OSL_VERIFY( _rTextFontEmphasis >>= nTextFontEmphasis );
-
-            sal_Int16 nFontEmphasisMark = FontEmphasisMark::NONE;
-            switch ( nTextFontEmphasis )
-            {
-            case FontEmphasis::NONE         : nFontEmphasisMark = FontEmphasisMark::NONE;  break;
-            case FontEmphasis::DOT_ABOVE    : nFontEmphasisMark = FontEmphasisMark::DOT     | FontEmphasisMark::ABOVE;  break;
-            case FontEmphasis::CIRCLE_ABOVE : nFontEmphasisMark = FontEmphasisMark::CIRCLE  | FontEmphasisMark::ABOVE;  break;
-            case FontEmphasis::DISK_ABOVE   : nFontEmphasisMark = FontEmphasisMark::DISC    | FontEmphasisMark::ABOVE;  break;
-            case FontEmphasis::ACCENT_ABOVE : nFontEmphasisMark = FontEmphasisMark::ACCENT  | FontEmphasisMark::ABOVE;  break;
-            case FontEmphasis::DOT_BELOW    : nFontEmphasisMark = FontEmphasisMark::DOT     | FontEmphasisMark::BELOW;  break;
-            case FontEmphasis::CIRCLE_BELOW : nFontEmphasisMark = FontEmphasisMark::CIRCLE  | FontEmphasisMark::BELOW;  break;
-            case FontEmphasis::DISK_BELOW   : nFontEmphasisMark = FontEmphasisMark::DISC    | FontEmphasisMark::BELOW;  break;
-            case FontEmphasis::ACCENT_BELOW : nFontEmphasisMark = FontEmphasisMark::ACCENT  | FontEmphasisMark::BELOW;  break;
-            default:
-                OSL_ENSURE( false, "lcl_translateFontEmphasis: invalid text emphasis!" );
-                break;
-            }
-            return makeAny( nFontEmphasisMark );
-        }
-
-        //....................................................................
-        template< typename SIMPLE_TYPE >
-        void lcl_transferPropertyValue( const Reference< XPropertySet >& _rxSource, const Reference< XPropertySetInfo >& _rxCachedPSI,
-            const sal_Char* _pAsciiPropertyName, SIMPLE_TYPE& _out_rDest )
-        {
-            const ::rtl::OUString sPropertyName( ::rtl::OUString::createFromAscii( _pAsciiPropertyName ) );
-            if ( !_rxCachedPSI->hasPropertyByName( sPropertyName ) )
-                return;
-            Any aValue = _rxSource->getPropertyValue( sPropertyName );
-            OSL_VERIFY( aValue >>= _out_rDest );
-        }
-
-        //....................................................................
         static void lcl_initializeControlFont( const Reference< XPropertySet >& _rxModel )
         {
             try
             {
                 Reference< XPropertySet > xStyle( lcl_getDefaultDocumentTextStyle_throw( _rxModel ), UNO_SET_THROW );
                 Reference< XPropertySetInfo > xStylePSI( xStyle->getPropertySetInfo(), UNO_SET_THROW );
-                FontDescriptor aFont;
 
-                lcl_transferPropertyValue( xStyle, xStylePSI, "CharFontName", aFont.Name );
-                lcl_transferPropertyValue( xStyle, xStylePSI, "CharFontStyleName", aFont.StyleName );
-                lcl_transferPropertyValue( xStyle, xStylePSI, "CharFontFamily", aFont.Family );
-                lcl_transferPropertyValue( xStyle, xStylePSI, "CharFontCharSet", aFont.CharSet );
-                lcl_transferPropertyValue( xStyle, xStylePSI, "CharFontPitch", aFont.Pitch );
-                lcl_transferPropertyValue( xStyle, xStylePSI, "CharUnderline", aFont.Underline );
-                lcl_transferPropertyValue( xStyle, xStylePSI, "CharWeight", aFont.Weight );
-                lcl_transferPropertyValue( xStyle, xStylePSI, "CharPosture", aFont.Slant );
-                lcl_transferPropertyValue( xStyle, xStylePSI, "CharStrikeout", aFont.Strikeout );
-                lcl_transferPropertyValue( xStyle, xStylePSI, "CharWordMode", aFont.WordLineMode );
-                lcl_transferPropertyValue( xStyle, xStylePSI, "CharFontType", aFont.Type );
-                lcl_transferPropertyValue( xStyle, xStylePSI, "CharAutoKerning", aFont.Kerning );
+                // determine the script type associated with the system locale
+                const LocaleDataWrapper& rSysLocaleData = SvtSysLocale().GetLocaleData();
+                const sal_Int16 eSysLocaleScriptType = MsLangId::getScriptType( MsLangId::convertLocaleToLanguage( rSysLocaleData.getLocale() ) );
 
-                short nCharScaleWidth = 100;
-                lcl_transferPropertyValue( xStyle, xStylePSI, "CharScaleWidth", nCharScaleWidth );
-                if ( nCharScaleWidth )
-                    aFont.CharacterWidth = (float)nCharScaleWidth;
+                // depending on this script type, use the right property from the document's style which controls the
+                // default locale for document content
+                const sal_Char* pCharLocalePropertyName = "CharLocale";
+                switch ( eSysLocaleScriptType )
+                {
+                case ScriptType::LATIN:
+                    // already defaulted above
+                    break;
+                case ScriptType::ASIAN:
+                    pCharLocalePropertyName = "CharLocaleAsian";
+                    break;
+                case ScriptType::COMPLEX:
+                    pCharLocalePropertyName = "CharLocaleComplex";
+                    break;
+                default:
+                    OSL_ENSURE( false, "lcl_initializeControlFont: unexpected script type for system locale!" );
+                    break;
+                }
 
-                float nCharHeight = 0;
-                lcl_transferPropertyValue( xStyle, xStylePSI, "CharHeight", nCharHeight );
-                aFont.Height = (short)nCharHeight;
+                ::rtl::OUString sCharLocalePropertyName = ::rtl::OUString::createFromAscii( pCharLocalePropertyName );
+                Locale aDocumentCharLocale;
+                if ( xStylePSI->hasPropertyByName( sCharLocalePropertyName ) )
+                {
+                    OSL_VERIFY( xStyle->getPropertyValue( sCharLocalePropertyName ) >>= aDocumentCharLocale );
+                }
+                // fall back to CharLocale property at the style
+                if ( !aDocumentCharLocale.Language.getLength() )
+                {
+                    sCharLocalePropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharLocale" ) );
+                    if ( xStylePSI->hasPropertyByName( sCharLocalePropertyName ) )
+                    {
+                        OSL_VERIFY( xStyle->getPropertyValue( sCharLocalePropertyName ) >>= aDocumentCharLocale );
+                    }
+                }
+                // fall back to the system locale
+                if ( !aDocumentCharLocale.Language.getLength() )
+                {
+                    aDocumentCharLocale = rSysLocaleData.getLocale();
+                }
 
+                // retrieve a default font for this locale, and set it at the control
+                Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_SANS, MsLangId::convertLocaleToLanguage( aDocumentCharLocale ), DEFAULTFONT_FLAGS_ONLYONE );
+                FontDescriptor aFontDesc = VCLUnoHelper::CreateFontDescriptor( aFont );
                 _rxModel->setPropertyValue(
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FontDescriptor" ) ),
-                    makeAny( aFont )
-                );
-
-                _rxModel->setPropertyValue(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FontEmphasisMark" ) ),
-                    lcl_translateFontEmphasis( xStyle->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharEmphasis" ) ) ) )
-                );
-                _rxModel->setPropertyValue(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FontRelief" ) ),
-                    xStyle->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharRelief" ) ) )
-                );
-                _rxModel->setPropertyValue(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextLineColor" ) ),
-                    xStyle->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharUnderlineColor" ) ) )
+                    makeAny( aFontDesc )
                 );
             }
             catch( const Exception& )
@@ -646,14 +625,9 @@ namespace svxform
                 break;
             }
 
-            // let the control have the same font as the host document uses by default
-            // #b6875455# / 2009-09-23 / frank.schoenheit@sun.com
-            if  (   xPSI->hasPropertyByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReferenceDevice" ) ) )
-                &&  ControlLayouter::useDocumentReferenceDevice( _eDocType )
-                )
-                // the above is a somewhat weak heuristics for "when to use the document font", admittedly.
-                // However, /me thinks this can only be solved with real "Form Control Styles" in each application.
-                lcl_initializeControlFont( _rxControlModel );
+            // some default font, to not rely on the implicit font, which differs across platforms and desktop
+            // themes
+            lcl_initializeControlFont( _rxControlModel );
 
             // initial default label for the control
             if ( xPSI->hasPropertyByName( FM_PROP_LABEL ) )
