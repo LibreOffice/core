@@ -50,8 +50,6 @@
 '\***********************************************************************
 
 testcase tInsertGraphic_41
-QaErrorLog "#i102477# - tInsertGraphic_41 crashes testtool. Therefore outcommented."
-goto endsub
 
   Dim sLeft as String
   Dim sRight as String

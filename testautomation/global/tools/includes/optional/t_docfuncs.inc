@@ -37,14 +37,14 @@
 '*
 '\******************************************************************************
 
-private const VERBOSE = false
+private const VERBOSE = FALSE
 
 function hUseImpressAutopilot( bEnable as boolean ) as boolean
 
     '///<h3>Enable/disable the Impress Autopilot in Tools/Options</h3>
     '///<i>Starting point: Any plain document</i>
     '///<ul>
-    const CFN = "hUseImpressAutopilot::"
+    const CFN = "global::tools::includes::optional::t_docfuncs.inc::hUseImpressAutopilot::"
     
     if ( VERBOSE ) then printlog( CFN & "Enter" )
 
@@ -97,7 +97,7 @@ function hCloseNavigator() as boolean
     '///<h3>Function to close the navigator</h3>
     '///<i>Starting point: Any document</i>
     '///<ul>
-    const CFN = "hCloseNavigator::"
+    const CFN = "global::tools::includes::optional::t_docfuncs.inc::hCloseNavigator::"
     
     if ( VERBOSE ) then printlog( CFN & "Enter" )
     
@@ -133,7 +133,7 @@ function hNumericDocType( doctype as integer ) as string
     '///<u>Using file: global/input/applications.txt as reference</u>
     '///<ul>
     
-    const CFN = "hNumericDocType::"
+    const CFN = "global::tools::includes::optional::t_docfuncs.inc::hNumericDocType::"
     
     dim sFile as string
         sFile = gTesttoolPath & "global\input\applications.txt"
@@ -142,7 +142,7 @@ function hNumericDocType( doctype as integer ) as string
     dim sList( 100 ) as string
     dim iDocTypes as integer
     
-    'printlog( CFN & "Enter" )
+    if ( VERBOSE ) then printlog( CFN & "Enter" )
     
     '///+<li>Retrieve matching list from file</li>
     hGetDataFileSection( sFile , sList() , "application" , "" , "" )
@@ -161,7 +161,7 @@ function hNumericDocType( doctype as integer ) as string
     '///+<li>Set a plain text name as returnvalue for the function</li>
     hGetDataFileSection( sFile , sList() , "application_names" , "" , "" )
     hNumericDocType() = hGetValueForKeyAsString( sList() , gApplication )
-    'printlog( CFN & "Exit" )
+    if ( VERBOSE ) then printlog( CFN & "Exit" )
     '///</ul>
 
 end function
@@ -232,7 +232,7 @@ function hIdentifyWriterDoc( cString as string, bWarn as boolean ) as boolean
     
     use "global\tools\includes\optional\t_stringtools.inc"
 
-    const CFN = "hIdentifyWriterDoc::"
+    const CFN = "global::tools::includes::optional::t_docfuncs.inc::hIdentifyWriterDoc::"
     dim cIdentifier as string
     dim irc as integer ' some temporary returnvalue
     
@@ -322,7 +322,7 @@ function hCreateDocument() as boolean
     '///<ul>
     
 
-    const CFN = "hCreateDocument::"
+    const CFN = "global::tools::includes::optional::t_docfuncs.inc::hCreateDocument::"
 
     dim iDocCountBefore as integer 
     dim iDocCountAfter as integer
@@ -385,7 +385,7 @@ function hDocumentTypeKeys( cString as string ) as boolean
     '///<u>Description</u>:
     '///<ul>
     
-    const CFN = "hDocumentTypeKeys::"
+    const CFN = "global::tools::includes::optional::t_docfuncs.inc::hDocumentTypeKeys::"
     dim brc as boolean
         brc = true
         
@@ -428,144 +428,29 @@ end function
 
 function hDestroyDocument() as boolean
 
-
-    '///<h3>Enhanced version of hCloseDoc()</h3>
-    '///<i>Close a document and print some additional information to the log to
-    '///+ ease debugging tests which handle a lot of documents</i><br><br>
-
-    '///<u>Parameter(s):</u><br>
-    '///<ol>
-    '///+<li>No input parameters</li>
-    '///</ol>
-
-
-    '///<u>Returns:</u><br>
-    '///<ol>
-    '///+<li>Return value description</li>
-    '///<ul>
-    '///+<li>TRUE: The document was closed successfully (-1 open document)</li>
-    '///+<li>TRUE: We are on backing window, no document closed</li>
-    '///+<li>FALSE: The number of documents is unchanged, closing failed</li>
-    '///+<li>FALSE: If any error occurred during close (open dialogs etc.)</li>
-    '///</ul>
-    '///</ol>
-
-    const CFN = "hDestroyDocument::"
-    dim brc as boolean 'a multi purpose boolean returnvalue
-    dim irc as integer
+    const CFN = "global::tools::includes::optional::t_docfuncs.inc::hDestroyDocument: "
+    dim iDocCount as integer : iDocCount = getDocumentCount()
+    hDestroyDocument() = false
     
-    dim iOpenDocsBefore as integer
-    dim iOpenDocsAfter as integer
-    dim iAttemptToClose as integer
+    if ( iDocCount = 0 ) then exit function
+    if ( VERBOSE ) then printlog( CFN & "In.: Open: " & iDocCount )
 
-    '///<u>Description:</u>
-    '///<ul>
-    '///+<li>Get the current number of documents</li>
-    iOpenDocsBefore = getDocumentCount
-    if ( VERBOSE ) then printlog( CFN & "Open documents before close: " & iOpenDocsBefore )
+    hUseAsyncSlot( "FileClose" )
     
-    '///+<li>Handle special case of 0 open documents</li>
-    '///<ul>
-    if ( iOpenDocsBefore = 0 ) then
+    Kontext "Active"
+    if ( Active.Exists( 2 ) ) then
+        printlog( "Msgbox: " & Active.getText() )
+        try
+            Active.No
+        catch
+            Active.Click ( 202 )
+        endcatch
+        wait( 1000 )
+    end if
     
-        '///+<li>If gApplication has been set to BACKGROUND explicitly we do a restart</li>
-        if ( ucase( gApplication ) = "BACKGROUND" ) then
-        
-            do while ( getDocumentCount > 0 ) 
-                hCloseDocument()
-            loop
- 
-            iOpenDocsAfter = getDocumentCount
-            printlog( CFN & "Open documents after restart: " & iOpenDocsAfter )
-            
-            if ( iOpenDocsAfter = 0 ) then
-                hDestroyDocument() = true
-                exit function
-            else
-                warnlog( CFN & "There should be 0 open documents" )
-                hDestroyDocument() = false
-                exit function
-            endif
-            
-        '///+<li>Otherwise just do not close the backing window - do nothing</li>
-        else
-            printlog( CFN & "On backing window, no action taken" )
-            hDestroyDocument() = true
-            exit function
-        endif
-        
-    endif
-    '///</ul>
-                
-    '///+<li>Handle more than one open document - handle FileOpen/FileSave dialogs</li>
-    '///<ul>
-    brc = true
-    for iAttemptToClose = 1 to 3
-    
-        '///+<li>FileOpen</li>
-        kontext "OeffnenDlg"
-        if ( OeffnenDlg.exists( 1 ) ) then
-            qaerrorlog( CFN & "Closed FileOpen dialog. This was not expected." )
-            OeffnenDlg.cancel()
-            brc = false
-        endif
-        
-        '///+<li>FileSave</li>
-        kontext "SpeichernDlg"
-        if ( SpeichernDlg.exists( 1 ) ) then
-            qaerrorlog( CFN & "Closed FileSave dialog. This was not expected." )
-            brc = false
-        endif
-        
-        '///+<li>Check for any messagebox (some might still be floating around)</li>
-        '///<ul>
-        kontext "active"
-        if ( active.exists( 1 ) ) then
-        
-            qaerrorlog( CFN & "Closed unexpected messagebox: " & active.getText() )
-            
-            '///+<li>Try to close the dialog clicking on &quot;OK&quot;</li>
-            try
-                active.ok()
-                printlog( CFN & "Clicked <OK> to close the dialog" )
-            catch
-                printlog( CFN & "Failed using OK" )
-            endcatch
-            
-            '///+<li>Try to close the dialog clicking on &quot;YES&quot;</li>
-            try
-                active.yes()
-                printlog( CFN & "Clicked <YES> to close the dialog" )
-            catch
-                printlog( CFN & "Failed using <YES>" )
-            endcatch
-            
-            brc = false
-            
-        endif
-        '///</ul>
-        
-        '///+<li>Close the current document using hCloseDocument()</li>
-        call hCloseDocument()
-        
-        '///+<li>Verify that the document has indeed been closed, exit function if yes</li>
-        iOpenDocsAfter = getDocumentCount
-        if ( iOpenDocsAfter = ( iOpenDocsBefore - 1 ) ) then
-            printlog( CFN & "Document closed. Currently open: " & iOpenDocsAfter )
-            hDestroyDocument() = brc
-            exit function
-        else
-            qaerrorlog( CFN & "Failed to close document, retrying" )
-            brc = false
-        endif
-        
-    next iAttemptToClose    
-    '///</ul>
-    '///</ul>
-
-    if ( VERBOSE ) then printlog( CFN & "Exit with result: " & brc )
-
-    hDestroyDocument() = brc
+    if ( getDocumentCount() = iDocCount ) then hCloseDocument()
+    if ( getDocumentCount() = iDocCount - 1 ) then hDestroyDocument() = true
+    if ( VERBOSE ) then printlog( CFN & "Out: Open: " & getDocumentCount() )
 
 end function
 
@@ -593,7 +478,7 @@ function hInitSingleDoc() as boolean
     '///</ul>
     '///</ol>
 
-    const CFN = "hInitSingleDoc::"
+    const CFN = "global::tools::includes::optional::t_docfuncs.inc::hInitSingleDoc::"
     dim cOldApplication as string
 
     '///<u>Description:</u>
@@ -649,7 +534,7 @@ function hInitBackingMode() as boolean
     '///</ul>
     '///</ol>
 
-    const CFN = "hInitBackingMode::"
+    const CFN = "global::tools::includes::optional::t_docfuncs.inc::hInitBackingMode::"
 
     '///<u>Description:</u>
     '///<ul>
@@ -701,7 +586,7 @@ function hInitWriteDocIdentifier( cString as string ) as boolean
     '///</ul>
     '///</ol>
 
-    const CFN = "hInitWriteDocIdentifier::"
+    const CFN = "global::tools::includes::optional::t_docfuncs.inc::hInitWriteDocIdentifier::"
 
     '///<u>Description:</u>
     '///<ul>

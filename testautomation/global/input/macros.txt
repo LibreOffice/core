@@ -211,11 +211,54 @@ End Function
 ' Date should contain the year 1900 and the value should be 2
 
 Sub Main
-Dim v
-v = DateSerial(0,1,1)
-Msgbox ("Date :  " & v)
-MsgBox ("Value : " & CDbl(v))
+    Dim v
+    v = DateSerial(0,1,1)
+    Msgbox ("Date :  " & v)
+    MsgBox ("Value : " & CDbl(v))
 End Sub
 
 # ---------------------------------------------------------------------------- #
 
+[i103691]
+option vbasupport 1
+
+Sub Main
+    dim a, b
+
+    if (not a = b) then 
+        msgbox( "not equal" )
+    else
+        msgbox( "Equal" )    
+    end if
+End Sub
+# ---------------------------------------------------------------------------- #
+
+[i103697]
+Private Declare Function FooFunction Lib "foo" ( nVal )
+Public  Declare Function FooFunction2 Lib "foo" ( nVal )
+
+sub main
+	msgbox( "i103697" )
+end sub
+
+# ---------------------------------------------------------------------------- #
+
+[i103990]
+type MyType
+	a( 3 ) as integer
+	b as double
+end type
+
+Sub Main
+	dim mt as MyType
+	mt.a(0) = 42
+	mt.a(1) = 43
+	mt.b = 3.14
+	msgbox( mt.a(0) )
+	msgbox( mt.a(1) )
+	if ( mt.b = 3.14 ) then
+    	msgbox( "Pi" )
+    else
+        msgbox( "Error" )
+    endif
+end sub

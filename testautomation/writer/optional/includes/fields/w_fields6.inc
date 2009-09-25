@@ -39,25 +39,25 @@
 
 sub w_fields6
 
-    Call tFunctions_1        'Conditional text
-    Call tFunctions_2        'Hidden text
-    Call tFunctions_3        'Hidden paragraph
-    Call tFunctions_4        'Input field
-    Call tFunctions_5        'Placeholder - text
-    Call tFunctions_6        'Placeholder - table
-    Call tFunctions_7        'Placeholder - frame
-    Call tFunctions_8        'Placeholder - graphics
-    Call tFunctions_9        'Placeholder - object
-    Call tFunctions_10       'Input list - Remove
-    Call tFunctions_11       'Input list - Move up
-    Call tFunctions_12       'Input list - Move down
-    Call tFunctions_13       'Combine Character
+    Call tFunctionsConditionalText
+    Call tFunctionsHiddenText
+    Call tFunctionsHiddenParagraph
+    Call tFunctionsInputField
+    Call tFunctionsPlaceholderText
+    Call tFunctionsPlaceholderTable
+    Call tFunctionsPlaceholderFrame
+    Call tFunctionsPlaceholderGraphics
+    Call tFunctionsPlaceholderObject
+    Call tFunctionsInputlistRemove
+    Call tFunctionsInputlistMoveUp
+    Call tFunctionsInputlistMoveDown
+    Call tFunctionsCombineCharacter
 
 end sub
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_1
+testcase tFunctionsConditionalText
 
   Dim sName      as String
   Dim sValue()   as String
@@ -134,7 +134,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_2
+testcase tFunctionsHiddenText
 
   Dim sName       as String
   Dim sValue()    as String
@@ -219,7 +219,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_3
+testcase tFunctionsHiddenParagraph
 
   Dim sName       as String
   Dim sValue()    as String
@@ -307,7 +307,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_4
+testcase tFunctionsInputField
 
   Dim sReference as String
   Dim sFieldContent as String
@@ -350,7 +350,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_5
+testcase tFunctionsPlaceholderText
 
   Dim sPlaceHolder as String
 
@@ -384,7 +384,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_6
+testcase tFunctionsPlaceholderTable
 
     printlog "Placeholder - Table"
     '/// <b> Placeholder - Table </b>
@@ -449,7 +449,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_7
+testcase tFunctionsPlaceholderFrame
 
     printlog "Placeholder - Frame"
     '/// <b> Placeholder - Frame </b>
@@ -515,7 +515,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_8
+testcase tFunctionsPlaceholderGraphics
 
     printlog "Placeholder - Graphics"
     '/// <b> Placeholder - Graphics </b>
@@ -580,7 +580,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_9
+testcase tFunctionsPlaceholderObject
 
     printlog "Placeholder - Object"
     '/// <b> Placeholder - Object </b>
@@ -644,7 +644,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_10
+testcase tFunctionsInputlistRemove
 
   Dim sItem1 as String
   Dim sItem2 as String
@@ -692,7 +692,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_11
+testcase tFunctionsInputlistMoveUp
 
   Dim sItem1 as String
   Dim sItem2 as String
@@ -739,7 +739,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_12
+testcase tFunctionsInputlistMoveDown
 
   Dim sItem1 as String
   Dim sItem2 as String
@@ -787,7 +787,9 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_13
+testcase tFunctionsCombineCharacter
+Warnlog "#i102752# - tFunctionsCombineCharacter outcommented due to bug."
+goto endsub
 
 	Dim sCombineCharacter as String
     Dim sTestFile as String

@@ -558,6 +558,8 @@ testcase tToolsOptionsHTMLGrid
     
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Cancel
+	
+	sleep (2)
     
     '-------------------------------------------------------------------------------
     printlog ("'/// Function Test: Grid Resolution ///'")
