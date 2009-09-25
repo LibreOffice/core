@@ -299,18 +299,21 @@ MY_FILES_main = \
 MY_FILES_main += \
     $(MY_MOD)/DataAccess/macab.xcu \
     $(MY_MOD)/org/openoffice/Office/Accelerators-macosx.xcu \
-    $(MY_MOD)/org/openoffice/Office/Common-macosx.xcu
+    $(MY_MOD)/org/openoffice/Office/Common-macosx.xcu \
+    $(MY_MOD)/org/openoffice/Office/Paths-macosx.xcu
 .ELIF "$(GUIBASE)" == "unx"
 MY_FILES_main += \
     $(MY_MOD)/org/openoffice/Office/Accelerators-unxwnt.xcu \
     $(MY_MOD)/org/openoffice/Office/Common-UseOOoFileDialogs.xcu \
-    $(MY_MOD)/org/openoffice/Office/Common-unx.xcu
+    $(MY_MOD)/org/openoffice/Office/Common-unx.xcu \
+    $(MY_MOD)/org/openoffice/Office/Paths-unxwnt.xcu
 .ELIF "$(GUIBASE)" == "WIN"
 MY_FILES_main += \
     $(MY_MOD)/DataAccess/ado.xcu \
     $(MY_MOD)/org/openoffice/Office/Accelerators-unxwnt.xcu \
     $(MY_MOD)/org/openoffice/Office/Common-wnt.xcu \
-    $(MY_MOD)/org/openoffice/Office/Linguistic-ForceDefaultLanguage.xcu
+    $(MY_MOD)/org/openoffice/Office/Linguistic-ForceDefaultLanguage.xcu \
+    $(MY_MOD)/org/openoffice/Office/Paths-unxwnt.xcu
 .ELSE
 ERROR: unknown-GUIBASE
 .END
