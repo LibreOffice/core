@@ -1643,7 +1643,6 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
     {
         case BASEPROPERTY_REFERENCE_DEVICE:
         {
-            // TODO: at the moment, the refdevice is hackily implemented for Button and derived classes only
             Control* pControl = dynamic_cast< Control* >( pWindow );
             OSL_ENSURE( pControl, "VCLXWindow::setProperty( RefDevice ): need a Control for this!" );
             if ( !pControl )
@@ -2174,12 +2173,14 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
         {
             case BASEPROPERTY_REFERENCE_DEVICE:
             {
-                // TODO: at the moment, the refdevice is hackily implemented for Button and derived classes only
-                Button* pButton = dynamic_cast< Button* >( GetWindow() );
-                if ( !pButton )
+                Control* pControl = dynamic_cast< Control* >( GetWindow() );
+                OSL_ENSURE( pControl, "VCLXWindow::setProperty( RefDevice ): need a Control for this!" );
+                if ( !pControl )
                     break;
 
-                // TODO: hmm ... it seems there is no way to query an OutputDevice for its XDevice ...?
+                VCLXDevice* pDevice = new VCLXDevice;
+                pDevice->SetOutputDevice( pControl->GetReferenceDevice() );
+                aProp <<= Reference< XDevice >( pDevice );
             }
             break;
 
