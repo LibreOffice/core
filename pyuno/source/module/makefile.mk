@@ -39,6 +39,7 @@ LINKFLAGSDEFS = # do not fail with missing symbols
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.IF "$(L10N_framework)"==""
 #-------------------------------------------------------------------
 
 .IF "$(OS)$(CPU)$(COMEX)" == "SOLARISS4"
@@ -128,10 +129,11 @@ ALLTAR : \
     $(DLLDEST)$/unohelper.py	\
     $(PYUNO_MODULE)			\
     $(MISC)$/$(PYUNORC)		
+.ENDIF 
 .ENDIF
 
 .INCLUDE :  target.mk
-
+.IF "$(L10N_framework)"==""
 $(DLLDEST)$/%.py: %.py
     cp $? $@
 
@@ -163,4 +165,5 @@ $(MISC)$/$(PYUNORC) : pyuno
 $(MISC)$/pyuno.flt : pyuno.flt
     -rm -f $@
     cat $? > $@
+.ENDIF # L10N_framework
 

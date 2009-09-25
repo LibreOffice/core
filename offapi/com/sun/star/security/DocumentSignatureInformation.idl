@@ -59,6 +59,25 @@ struct DocumentSignatureInformation
        <type scope="com::sun::star::security">CertificateValidity</type>.
      */
     long CertificateStatus;
+    /* indicates what content of a document is signed.
+        <p>
+        This value can be ignored when this struct is returned as part of
+        a macro signature validation.
+        As of OpenOffice.org 3.2 and ODF 1.2 the document signature comprises
+        all files except the signature file itself.
+        Signatures in OOo 2.x were only
+        applied to the files in the root of the document, except mimetype, the
+        Pictures and ObjectReplacements/Objects folder. That is, macros
+        were not part of the document signature.
+        OOo 3.0 signed everthing, execept mimetype and the META-INF folder.
+        <p>
+        If PartialDocumentSignature is true, then the signature was created by OOo
+        with a version less then 3.2. In this case, not all files are signed. The
+        signature can still be regarded as valid, as long as SignatureIsValid is true
+        and the certificate could be validated. However, users should be notified about
+        the fact, that not everything in this document is signed.
+    */
+    boolean PartialDocumentSignature;
 
 };
 
