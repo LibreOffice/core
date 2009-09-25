@@ -315,6 +315,8 @@ namespace svxform
     //--------------------------------------------------------------------
     bool ControlLayouter::useDocumentReferenceDevice( DocumentType _eDocType )
     {
+        if ( _eDocType == eUnknownDocumentType )
+            return false;
         OConfigurationNode aConfig = getLayoutSettings( _eDocType );
         Any aUseRefDevice = aConfig.getNodeValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseDocumentTextMetrics" ) ) );
         bool bUseRefDevice = false;

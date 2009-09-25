@@ -318,7 +318,6 @@ sal_Bool FmFormModel::ControlsUseRefDevice() const
 {
     if ( !m_pImpl->aControlsUseRefDevice )
     {
-        OSL_PRECOND( m_pObjShell, "FmFormModel::ControlsUseRefDevice: no object shell -> no document -> no document type -> no way!" );
         DocumentType eDocType = eUnknownDocumentType;
         if ( m_pObjShell )
             eDocType = DocumentClassification::classifyHostDocument( m_pObjShell->GetModel() );
