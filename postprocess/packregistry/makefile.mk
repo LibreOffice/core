@@ -270,6 +270,7 @@ MY_FILES_main = \
     $(MY_XCU)/Office/WebWizard.xcu \
     $(MY_XCU)/Office/Writer.xcu \
     $(MY_XCU)/Setup.xcu \
+    $(MY_XCU)/System.xcu \
     $(MY_XCU)/TypeDetection/UISort.xcu \
     $(MY_XCU)/UserProfile.xcu \
     $(MY_XCU)/VCL.xcu \
