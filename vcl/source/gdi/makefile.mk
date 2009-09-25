@@ -51,73 +51,6 @@ CDEFS+=-DENABLE_GRAPHITE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=	$(SLO)$/salmisc.obj 	\
-            $(SLO)$/animate.obj 	\
-            $(SLO)$/impanmvw.obj	\
-            $(SLO)$/bitmap.obj		\
-            $(SLO)$/bitmap2.obj 	\
-            $(SLO)$/bitmap3.obj 	\
-            $(SLO)$/bitmap4.obj 	\
-            $(SLO)$/alpha.obj		\
-            $(SLO)$/bitmapex.obj	\
-            $(SLO)$/imgcons.obj 	\
-            $(SLO)$/bmpacc.obj		\
-            $(SLO)$/bmpacc2.obj 	\
-            $(SLO)$/bmpacc3.obj 	\
-            $(SLO)$/bmpfast.obj	\
-            $(SLO)$/cvtsvm.obj		\
-            $(SLO)$/cvtgrf.obj		\
-            $(SLO)$/font.obj		\
-            $(SLO)$/gdimtf.obj		\
-            $(SLO)$/gfxlink.obj 	\
-            $(SLO)$/gradient.obj	\
-            $(SLO)$/hatch.obj		\
-            $(SLO)$/graph.obj		\
-            $(SLO)$/image.obj		\
-            $(SLO)$/impimage.obj		\
-            $(SLO)$/impbmp.obj		\
-            $(SLO)$/impgraph.obj	\
-            $(SLO)$/impimagetree.obj \
-            $(SLO)$/imagerepository.obj   \
-            $(SLO)$/impprn.obj		\
-            $(SLO)$/impvect.obj 	\
-            $(SLO)$/implncvt.obj	\
-            $(SLO)$/jobset.obj		\
-            $(SLO)$/lineinfo.obj	\
-            $(SLO)$/mapmod.obj		\
-            $(SLO)$/metaact.obj 	\
-            $(SLO)$/metric.obj		\
-            $(SLO)$/octree.obj		\
-            $(SLO)$/outmap.obj		\
-            $(SLO)$/outdev.obj		\
-            $(SLO)$/outdev2.obj 	\
-            $(SLO)$/outdev3.obj 	\
-            $(SLO)$/outdev4.obj 	\
-            $(SLO)$/outdev5.obj 	\
-            $(SLO)$/outdev6.obj 	\
-            $(SLO)$/virdev.obj      \
-            $(SLO)$/fontcvt.obj		\
-            $(SLO)$/print.obj		\
-            $(SLO)$/print2.obj		\
-            $(SLO)$/regband.obj 	\
-            $(SLO)$/region.obj		\
-            $(SLO)$/wall.obj		\
-            $(SLO)$/fontcfg.obj		\
-            $(SLO)$/base14.obj		\
-            $(SLO)$/pdfwriter.obj	\
-            $(SLO)$/pdfwriter_impl.obj	\
-            $(SLO)$/pdffontcache.obj\
-            $(SLO)$/sallayout.obj		\
-            $(SLO)$/salgdilayout.obj	\
-            $(SLO)$/extoutdevdata.obj	\
-            $(SLO)$/pdfextoutdevdata.obj	\
-            $(SLO)$/salnativewidgets-none.obj	\
-            $(SLO)$/bmpconv.obj		\
-            $(SLO)$/pngread.obj		\
-            $(SLO)$/pngwrite.obj	\
-            $(SLO)$/graphictools.obj \
-            $(SLO)$/textlayout.obj
-
 EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/outdev.obj		\
                     $(SLO)$/outdev3.obj 	\
@@ -144,6 +77,48 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/gdimtf.obj		\
                     $(SLO)$/graphictools.obj
 
+SLOFILES=	$(EXCEPTIONSFILES)      \
+            $(SLO)$/animate.obj 	\
+            $(SLO)$/impanmvw.obj	\
+            $(SLO)$/bitmap.obj		\
+            $(SLO)$/bitmap2.obj 	\
+            $(SLO)$/bitmap3.obj 	\
+            $(SLO)$/bitmap4.obj 	\
+            $(SLO)$/alpha.obj		\
+            $(SLO)$/bitmapex.obj	\
+            $(SLO)$/imgcons.obj 	\
+            $(SLO)$/bmpacc.obj		\
+            $(SLO)$/bmpacc2.obj 	\
+            $(SLO)$/bmpacc3.obj 	\
+            $(SLO)$/bmpfast.obj	\
+            $(SLO)$/cvtsvm.obj		\
+            $(SLO)$/cvtgrf.obj		\
+            $(SLO)$/font.obj		\
+            $(SLO)$/gradient.obj	\
+            $(SLO)$/hatch.obj		\
+            $(SLO)$/graph.obj		\
+            $(SLO)$/impbmp.obj		\
+            $(SLO)$/imagerepository.obj   \
+            $(SLO)$/impvect.obj 	\
+            $(SLO)$/implncvt.obj	\
+            $(SLO)$/lineinfo.obj	\
+            $(SLO)$/mapmod.obj		\
+            $(SLO)$/metaact.obj 	\
+            $(SLO)$/octree.obj		\
+            $(SLO)$/outmap.obj		\
+            $(SLO)$/outdev2.obj 	\
+            $(SLO)$/outdev4.obj 	\
+            $(SLO)$/outdev5.obj 	\
+            $(SLO)$/outdev6.obj 	\
+            $(SLO)$/regband.obj 	\
+            $(SLO)$/region.obj		\
+            $(SLO)$/wall.obj		\
+            $(SLO)$/base14.obj		\
+            $(SLO)$/pdfwriter.obj	\
+            $(SLO)$/salgdilayout.obj	\
+            $(SLO)$/extoutdevdata.obj	\
+            $(SLO)$/salnativewidgets-none.obj   \
+            $(SLO)$/textlayout.obj
 
 # --- Targets ------------------------------------------------------
 
