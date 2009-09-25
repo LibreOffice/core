@@ -521,6 +521,9 @@
         <prop oor:name="DynamicBorderColors" oor:type="xs:boolean">
           <value>true</value>
         </prop>
+        <prop oor:name="UseDocumentTextMetrics" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
       <node oor:name="com.sun.star.sheet.SpreadsheetDocument">
         <prop oor:name="UseDocumentTextMetrics" oor:type="xs:boolean">
