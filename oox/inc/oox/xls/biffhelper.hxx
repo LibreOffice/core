@@ -470,6 +470,7 @@ const sal_uInt16 BIFF_ID_STANDARDWIDTH      = 0x0099;
 const sal_uInt16 BIFF2_ID_STRING            = 0x0007;
 const sal_uInt16 BIFF3_ID_STRING            = 0x0207;
 const sal_uInt16 BIFF_ID_STYLE              = 0x0293;
+const sal_uInt16 BIFF_ID_STYLEEXT           = 0x0892;
 const sal_uInt16 BIFF_ID_SXEXT              = 0x00DC;
 const sal_uInt16 BIFF_ID_TOPMARGIN          = 0x0028;
 const sal_uInt16 BIFF_ID_TXO                = 0x01B6;

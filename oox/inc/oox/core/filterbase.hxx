@@ -198,8 +198,13 @@ public:
     sal_Int32           convertScreenPixelX( double fPixelX ) const;
     /** Converts the passed value from vertical screen pixels to 1/100 mm. */
     sal_Int32           convertScreenPixelY( double fPixelY ) const;
+
     /** Returns a system color specified by the passed XML token identifier. */
-    sal_Int32           getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb = -1 ) const;
+    sal_Int32           getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb = API_RGB_TRANSPARENT ) const;
+    /** Derived classes may implement to resolve a scheme color from the passed XML token identifier. */
+    virtual sal_Int32   getSchemeColor( sal_Int32 nToken ) const;
+    /** Derived classes may implement to resolve a palette index to an RGB color. */
+    virtual sal_Int32   getPaletteColor( sal_Int32 nPaletteIdx ) const;
 
     /** Requests a password from the media descriptor or from the user. On
         success, the password will be inserted into the media descriptor. */

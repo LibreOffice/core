@@ -54,6 +54,7 @@ SLOFILES =	\
         $(SLO)$/contexthandler.obj			\
         $(SLO)$/contexthandler2.obj			\
         $(SLO)$/facreg.obj					\
+        $(SLO)$/fasttokenhandler.obj		\
         $(SLO)$/filterbase.obj				\
         $(SLO)$/filterdetect.obj			\
         $(SLO)$/fragmenthandler.obj			\

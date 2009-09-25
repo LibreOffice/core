@@ -52,7 +52,7 @@ OoxWorkbookFragmentBase::OoxWorkbookFragmentBase(
 // ============================================================================
 
 OoxWorksheetFragmentBase::OoxWorksheetFragmentBase( const WorkbookHelper& rHelper,
-        const OUString& rFragmentPath, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int32 nSheet ) :
+        const OUString& rFragmentPath, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     FragmentHandler2( rHelper.getOoxFilter(), rFragmentPath ),
     WorksheetHelperRoot( rHelper, xProgressBar, eSheetType, nSheet )
 {
@@ -228,7 +228,7 @@ BiffWorkbookFragmentBase::BiffWorkbookFragmentBase( const WorkbookHelper& rHelpe
 // ============================================================================
 
 BiffWorksheetFragmentBase::BiffWorksheetFragmentBase( const BiffWorkbookFragmentBase& rParent,
-        ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int32 nSheet ) :
+        ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     BiffFragmentHandler( rParent ),
     WorksheetHelperRoot( rParent, xProgressBar, eSheetType, nSheet )
 {
@@ -237,7 +237,7 @@ BiffWorksheetFragmentBase::BiffWorksheetFragmentBase( const BiffWorkbookFragment
 // ============================================================================
 
 BiffSkipWorksheetFragment::BiffSkipWorksheetFragment(
-        const BiffWorkbookFragmentBase& rParent, ISegmentProgressBarRef xProgressBar, sal_Int32 nSheet ) :
+        const BiffWorkbookFragmentBase& rParent, ISegmentProgressBarRef xProgressBar, sal_Int16 nSheet ) :
     BiffWorksheetFragmentBase( rParent, xProgressBar, SHEETTYPE_EMPTYSHEET, nSheet )
 {
 }

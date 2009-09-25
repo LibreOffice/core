@@ -28,104 +28,84 @@
  *
  ************************************************************************/
 
-#include <string.h>
-#include <osl/mutex.hxx>
+#include "oox/token/tokenmap.hxx"
 #include <rtl/strbuf.hxx>
-#include <com/sun/star/xml/sax/FastToken.hpp>
-#include "oox/core/fasttokenhandler.hxx"
+#include <rtl/string.hxx>
 #include "tokens.hxx"
+#include "oox/helper/containerhelper.hxx"
 
 using ::rtl::OString;
-using ::rtl::OStringBuffer;
 using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::osl::Mutex;
-using ::osl::MutexGuard;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::xml::sax::FastToken::DONTKNOW;
 
 namespace oox {
-
-#include "tokens.inc"
-#include "tokenwords.inc"
 
 // ============================================================================
 
 namespace {
 
-Mutex& lclGetTokenMutex()
-{
-    static Mutex aMutex;
-    return aMutex;
-}
+// include auto-generated token lists
+#include "tokens.inc"
+#include "tokenwords.inc"
 
 } // namespace
 
 // ============================================================================
 
-FastTokenHandler::FastTokenHandler()
+TokenMap::TokenMap() :
+    maTokenNames( static_cast< size_t >( XML_TOKEN_COUNT ) )
 {
+    const sal_Char* const* ppcTokenWord = xmltokenwordlist;
+    for( TokenNameVector::iterator aIt = maTokenNames.begin(), aEnd = maTokenNames.end(); aIt != aEnd; ++aIt, ++ppcTokenWord )
+    {
+        OString aUtf8Token( *ppcTokenWord );
+        aIt->maUniName = OStringToOUString( aUtf8Token, RTL_TEXTENCODING_UTF8 );
+        aIt->maUtf8Name = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aUtf8Token.getStr() ), aUtf8Token.getLength() );
+    }
+
 #if OSL_DEBUG_LEVEL > 0
-    MutexGuard aGuard( lclGetTokenMutex() );
+    // check that the perfect_hash is in sync with the token name list
     bool bOk = true;
-    for( sal_Int32 nIdx = 0; bOk && (nIdx < XML_TOKEN_COUNT); ++nIdx )
+    for( sal_Int32 nToken = 0; bOk && (nToken < XML_TOKEN_COUNT); ++nToken )
     {
         // check that the getIdentifier <-> getToken roundtrip works
-        OUString aToken = getIdentifier( nIdx );
-        bOk = getToken( aToken ) == nIdx;
-        OSL_ENSURE( bOk, OStringBuffer( "FastTokenHandler::FastTokenHandler - token list broken, #" ).
-            append( nIdx ).append( ", '" ).
-            append( OUStringToOString( aToken, RTL_TEXTENCODING_ASCII_US ) ).append( '\'' ).getStr() );
+        OString aUtf8Name = OUStringToOString( maTokenNames[ nToken ].maUniName, RTL_TEXTENCODING_UTF8 );
+        struct xmltoken* pToken = Perfect_Hash::in_word_set( aUtf8Name.getStr(), aUtf8Name.getLength() );
+        bOk = pToken && (pToken->nToken == nToken);
+        OSL_ENSURE( bOk, ::rtl::OStringBuffer( "FastTokenHandler::FastTokenHandler - token list broken, #" ).
+            append( nToken ).append( ", '" ).append( aUtf8Name ).append( '\'' ).getStr() );
     }
 #endif
 }
 
-FastTokenHandler::~FastTokenHandler()
+TokenMap::~TokenMap()
 {
 }
 
-sal_Int32 FastTokenHandler::getToken( const OUString& rIdentifier ) throw( RuntimeException )
+OUString TokenMap::getUnicodeTokenName( sal_Int32 nToken ) const
 {
-    MutexGuard aGuard( lclGetTokenMutex() );
-
-    OString aUTF8 = OUStringToOString( rIdentifier, RTL_TEXTENCODING_UTF8 );
-
-    struct xmltoken * t = Perfect_Hash::in_word_set( aUTF8.getStr(), aUTF8.getLength() );
-    return t ? t->nToken : DONTKNOW;
+    const TokenName* pTokenName = ContainerHelper::getVectorElement( maTokenNames, nToken );
+    return pTokenName ? pTokenName->maUniName : OUString();
 }
 
-OUString FastTokenHandler::getIdentifier( sal_Int32 nToken ) throw( RuntimeException )
+sal_Int32 TokenMap::getTokenFromUnicode( const OUString& rUnicodeName ) const
 {
-    MutexGuard aGuard( lclGetTokenMutex() );
-
-    if( nToken >= XML_TOKEN_COUNT )
-        return OUString();
-
-    static OUString aTokens[XML_TOKEN_COUNT];
-
-    if( aTokens[nToken].getLength() == 0 )
-        aTokens[nToken] = OUString::createFromAscii( tokentowordlist[nToken] );
-
-    return aTokens[nToken];
+    OString aUtf8Name = OUStringToOString( rUnicodeName, RTL_TEXTENCODING_UTF8 );
+    struct xmltoken* pToken = Perfect_Hash::in_word_set( aUtf8Name.getStr(), aUtf8Name.getLength() );
+    return pToken ? pToken->nToken : XML_TOKEN_INVALID;
 }
 
-Sequence< sal_Int8 > FastTokenHandler::getUTF8Identifier( sal_Int32 nToken ) throw( RuntimeException )
+Sequence< sal_Int8 > TokenMap::getUtf8TokenName( sal_Int32 nToken ) const
 {
-    MutexGuard aGuard( lclGetTokenMutex() );
-
-    if( nToken >= XML_TOKEN_COUNT )
-        return Sequence< sal_Int8 >();
-
-    return Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8 *>(tokentowordlist[nToken]), strlen(tokentowordlist[nToken]));
+    const TokenName* pTokenName = ContainerHelper::getVectorElement( maTokenNames, nToken );
+    return pTokenName ? pTokenName->maUtf8Name : Sequence< sal_Int8 >();
 }
 
-sal_Int32 FastTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& rIdentifier ) throw( RuntimeException )
+sal_Int32 TokenMap::getTokenFromUtf8( const Sequence< sal_Int8 >& rUtf8Name ) const
 {
-    MutexGuard aGuard( lclGetTokenMutex() );
-
-    struct xmltoken * t = Perfect_Hash::in_word_set( reinterpret_cast< const char* >( rIdentifier.getConstArray() ), rIdentifier.getLength());
-    return t ? t->nToken : DONTKNOW;
+    struct xmltoken* pToken = Perfect_Hash::in_word_set(
+        reinterpret_cast< const char* >( rUtf8Name.getConstArray() ), rUtf8Name.getLength() );
+    return pToken ? pToken->nToken : XML_TOKEN_INVALID;
 }
 
 // ============================================================================
