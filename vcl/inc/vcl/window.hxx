@@ -320,7 +320,6 @@ typedef USHORT StateChangedType;
 #define IMPL_MSGBOX_OFFSET_EXTRA_X      0
 #define IMPL_MSGBOX_OFFSET_EXTRA_Y      2
 #define IMPL_SEP_MSGBOX_IMAGE           8
-#define IMPL_SEP_BUTTON_IMAGE           4
 
 #define DLGWINDOW_PREV                  0
 #define DLGWINDOW_NEXT                  1

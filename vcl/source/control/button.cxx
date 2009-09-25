@@ -2416,10 +2416,8 @@ if ( bNativeOK == FALSE )
 
 void RadioButton::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                             const Point& rPos, const Size& rSize,
-                            const Size& rImageSize, long nImageSep,
-                            Rectangle& rStateRect,
-                            Rectangle& rMouseRect,
-                            bool bLayout )
+                            const Size& rImageSize, Rectangle& rStateRect,
+                            Rectangle& rMouseRect, bool bLayout )
 {
     WinBits                 nWinStyle = GetStyle();
     XubString               aText( GetText() );
@@ -2438,9 +2436,9 @@ void RadioButton::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
         {
             USHORT nTextStyle = Button::ImplGetTextStyle( aText, nWinStyle, nDrawFlags );
 
+            const long nImageSep = GetDrawPixel( pDev, ImplGetImageToTextDistance() );
             Size aSize( rSize );
             Point aPos( rPos );
-
             aPos.X() += rImageSize.Width() + nImageSep;
             aSize.Width() -= rImageSize.Width() + nImageSep;
 
@@ -2570,7 +2568,7 @@ void RadioButton::ImplDrawRadioButton( bool bLayout )
 
     // Draw control text
     ImplDraw( this, 0, Point(), GetOutputSizePixel(),
-              aImageSize, IMPL_SEP_BUTTON_IMAGE, maStateRect, maMouseRect, bLayout );
+              aImageSize, maStateRect, maMouseRect, bLayout );
 
     if( !bLayout || (IsNativeControlSupported(CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL)==TRUE) )
     {
@@ -2901,8 +2899,7 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
         pDev->SetTextFillColor();
 
         ImplDraw( pDev, nFlags, aPos, aSize,
-                  aImageSize, GetDrawPixel( pDev, IMPL_SEP_BUTTON_IMAGE ),
-                  aStateRect, aMouseRect );
+                  aImageSize, aStateRect, aMouseRect );
 
         Point   aCenterPos = aStateRect.Center();
         long    nRadX = aImageSize.Width()/2;
@@ -3150,6 +3147,15 @@ void RadioButton::Check( BOOL bCheck )
 
 // -----------------------------------------------------------------------
 
+long RadioButton::ImplGetImageToTextDistance() const
+{
+    // 4 pixels, but take zoom into account, so the text doesn't "jump" relative to surrounding elements,
+    // which might have been aligned with the text of the check box
+    return CalcZoom( 4 );
+}
+
+// -----------------------------------------------------------------------
+
 Size RadioButton::ImplGetRadioImageSize() const
 {
     Size aSize;
@@ -3323,12 +3329,12 @@ Size RadioButton::CalcMinimumSize( long nMaxWidth ) const
     {
         // subtract what will be added later
         nMaxWidth-=2;
-        nMaxWidth -= IMPL_SEP_BUTTON_IMAGE;
+        nMaxWidth -= ImplGetImageToTextDistance();
 
         Size aTextSize = GetTextRect( Rectangle( Point(), Size( nMaxWidth > 0 ? nMaxWidth : 0x7fffffff, 0x7fffffff ) ),
                                       aText, FixedText::ImplGetTextStyle( GetStyle() ) ).GetSize();
         aSize.Width()+=2;   // for focus rect
-        aSize.Width() += IMPL_SEP_BUTTON_IMAGE;
+        aSize.Width() += ImplGetImageToTextDistance();
         aSize.Width() += aTextSize.Width();
         if ( aSize.Height() < aTextSize.Height() )
             aSize.Height() = aTextSize.Height();
@@ -3513,9 +3519,8 @@ void CheckBox::ImplDrawCheckBoxState()
 
 void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                          const Point& rPos, const Size& rSize,
-                         const Size& rImageSize, long nImageSep,
-                         Rectangle& rStateRect, Rectangle& rMouseRect,
-                         bool bLayout )
+                         const Size& rImageSize, Rectangle& rStateRect,
+                         Rectangle& rMouseRect, bool bLayout )
 {
     WinBits                 nWinStyle = GetStyle();
     XubString               aText( GetText() );
@@ -3529,6 +3534,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
     {
         USHORT nTextStyle = Button::ImplGetTextStyle( aText, nWinStyle, nDrawFlags );
 
+        const long nImageSep = GetDrawPixel( pDev, ImplGetImageToTextDistance() );
         Size aSize( rSize );
         Point aPos( rPos );
         aPos.X() += rImageSize.Width() + nImageSep;
@@ -3626,7 +3632,7 @@ void CheckBox::ImplDrawCheckBox( bool bLayout )
         HideFocus();
 
     ImplDraw( this, 0, Point(), GetOutputSizePixel(), aImageSize,
-              IMPL_SEP_BUTTON_IMAGE, maStateRect, maMouseRect, bLayout );
+              maStateRect, maMouseRect, bLayout );
 
     if( !bLayout )
     {
@@ -3838,8 +3844,7 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->SetTextFillColor();
 
     ImplDraw( pDev, nFlags, aPos, aSize,
-              aImageSize, GetDrawPixel( pDev, IMPL_SEP_BUTTON_IMAGE ),
-              aStateRect, aMouseRect, false );
+              aImageSize, aStateRect, aMouseRect, false );
 
     pDev->SetLineColor();
     pDev->SetFillColor( Color( COL_BLACK ) );
@@ -4085,6 +4090,15 @@ void CheckBox::EnableTriState( BOOL bTriState )
 
 // -----------------------------------------------------------------------
 
+long CheckBox::ImplGetImageToTextDistance() const
+{
+    // 4 pixels, but take zoom into account, so the text doesn't "jump" relative to surrounding elements,
+    // which might have been aligned with the text of the check box
+    return CalcZoom( 4 );
+}
+
+// -----------------------------------------------------------------------
+
 Size CheckBox::ImplGetCheckImageSize() const
 {
     Size aSize;
@@ -4218,12 +4232,12 @@ Size CheckBox::CalcMinimumSize( long nMaxWidth ) const
     {
         // subtract what will be added later
         nMaxWidth-=2;
-        nMaxWidth -= IMPL_SEP_BUTTON_IMAGE;
+        nMaxWidth -= ImplGetImageToTextDistance();
 
         Size aTextSize = GetTextRect( Rectangle( Point(), Size( nMaxWidth > 0 ? nMaxWidth : 0x7fffffff, 0x7fffffff ) ),
                                       aText, FixedText::ImplGetTextStyle( GetStyle() ) ).GetSize();
         aSize.Width()+=2;    // for focus rect
-        aSize.Width() += IMPL_SEP_BUTTON_IMAGE;
+        aSize.Width() += ImplGetImageToTextDistance();
         aSize.Width() += aTextSize.Width();
         if ( aSize.Height() < aTextSize.Height() )
             aSize.Height() = aTextSize.Height();

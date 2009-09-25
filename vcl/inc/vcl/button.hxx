@@ -311,13 +311,13 @@ private:
     SAL_DLLPRIVATE void     ImplDrawRadioButtonState();
     SAL_DLLPRIVATE void     ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                               const Point& rPos, const Size& rSize,
-                              const Size& rImageSize, long nImageSep,
-                              Rectangle& rStateRect, Rectangle& rMouseRect,
-                              bool bLayout = false );
+                              const Size& rImageSize, Rectangle& rStateRect,
+                              Rectangle& rMouseRect, bool bLayout = false );
     SAL_DLLPRIVATE void     ImplDrawRadioButton( bool bLayout = false );
     SAL_DLLPRIVATE void     ImplInvalidateOrDrawRadioButtonState();
     SAL_DLLPRIVATE void     ImplUncheckAllOther();
     SAL_DLLPRIVATE Size     ImplGetRadioImageSize() const;
+    SAL_DLLPRIVATE long     ImplGetImageToTextDistance() const;
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE          RadioButton(const RadioButton &);
@@ -428,10 +428,10 @@ private:
     SAL_DLLPRIVATE void         ImplInvalidateOrDrawCheckBoxState();
     SAL_DLLPRIVATE void         ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                                     const Point& rPos, const Size& rSize,
-                                    const Size& rImageSize, long nImageSep,
-                                    Rectangle& rStateRect,
+                                    const Size& rImageSize, Rectangle& rStateRect,
                                     Rectangle& rMouseRect, bool bLayout );
     SAL_DLLPRIVATE void         ImplDrawCheckBox( bool bLayout = false );
+    SAL_DLLPRIVATE long         ImplGetImageToTextDistance() const;
     SAL_DLLPRIVATE Size         ImplGetCheckImageSize() const;
 
     // Copy assignment is forbidden and not implemented.
