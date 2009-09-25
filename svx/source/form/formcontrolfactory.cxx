@@ -43,29 +43,21 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
-#include <com/sun/star/awt/FontEmphasisMark.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
-#include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/numbers.hxx>
-#include <i18npool/mslangid.hxx>
 #include <svtools/syslocale.hxx>
 #include <tools/gen.hxx>
 #include <tools/diagnose_ex.h>
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include <set>
 
@@ -94,9 +86,6 @@ namespace svxform
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::container::XChild;
     using ::com::sun::star::form::XGridColumnFactory;
-    using ::com::sun::star::lang::XServiceInfo;
-    using ::com::sun::star::style::XStyleFamiliesSupplier;
-    using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::style::VerticalAlignment_MIDDLE;
     using ::com::sun::star::beans::Property;
     using ::com::sun::star::uno::TypeClass_DOUBLE;
@@ -113,9 +102,6 @@ namespace svxform
     namespace DataType = ::com::sun::star::sdbc::DataType;
     namespace ColumnValue = ::com::sun::star::sdbc::ColumnValue;
     namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
-    namespace FontEmphasis = ::com::sun::star::text::FontEmphasis;
-    namespace FontEmphasisMark = ::com::sun::star::awt::FontEmphasisMark;
-    namespace ScriptType = ::com::sun::star::i18n::ScriptType;
 
     //====================================================================
     //= FormControlFactory_Data
@@ -246,65 +232,6 @@ namespace svxform
                 OSL_ENSURE( sal_False, "lcl_getDataSourceIndirectProperties: caught an exception!" );
             }
             return aInfo;
-        }
-        /*
-            ATTENTION!
-            Broken for solaris? It seems that the old used template argument TYPE was already
-            defined as a macro ... which expand to ... "TYPE "!?
-            All platforms are OK - excepting Solaris. There the line "template< class TYPE >"
-            was expanded to "template < class TYPE " where the closing ">" was missing.
-        */
-        #ifdef MYTYPE
-            #error "Who defines the macro MYTYPE, which is used as template argument here?"
-        #endif
-
-        //....................................................................
-        template< class MYTYPE >
-        Reference< MYTYPE > getTypedModelNode( const Reference< XInterface >& _rxModelNode )
-        {
-            Reference< MYTYPE > xTypedNode( _rxModelNode, UNO_QUERY );
-            if ( xTypedNode.is() )
-                return xTypedNode;
-            else
-            {
-                Reference< XChild > xChild( _rxModelNode, UNO_QUERY );
-                if ( xChild.is() )
-                    return getTypedModelNode< MYTYPE >( xChild->getParent() );
-                else
-                    return NULL;
-            }
-        }
-
-        //....................................................................
-        static bool lcl_getDocumentDefaultStyleAndFamily( const Reference< XInterface >& _rxDocument, ::rtl::OUString& _rFamilyName, ::rtl::OUString& _rStyleName ) SAL_THROW(( Exception ))
-        {
-            bool bSuccess = true;
-            Reference< XServiceInfo > xDocumentSI( _rxDocument, UNO_QUERY );
-            if ( xDocumentSI.is() )
-            {
-                if (  xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ) )
-                   || xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.WebDocument" ) ) )
-                   )
-                {
-                    _rFamilyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParagraphStyles" ) );
-                    _rStyleName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-                }
-                else if ( xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ) ) )
-                {
-                    _rFamilyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CellStyles" ) );
-                    _rStyleName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Default" ) );
-                }
-                else if (  xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) )
-                        || xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) )
-                        )
-                {
-                    _rFamilyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) );
-                    _rStyleName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "standard" ) );
-                }
-                else
-                    bSuccess = false;
-            }
-            return bSuccess;
         }
 
         //....................................................................
@@ -439,28 +366,11 @@ namespace svxform
         };
 
         //....................................................................
-        Reference< XPropertySet > lcl_getDefaultDocumentTextStyle_throw( const Reference< XPropertySet >& _rxModel )
-        {
-            // the style family collection
-            Reference< XStyleFamiliesSupplier > xSuppStyleFamilies( getTypedModelNode< XStyleFamiliesSupplier >( _rxModel.get() ), UNO_SET_THROW );
-            Reference< XNameAccess > xStyleFamilies( xSuppStyleFamilies->getStyleFamilies(), UNO_SET_THROW );
-
-            // the names of the family, and the style - depends on the document type we live in
-            ::rtl::OUString sFamilyName, sStyleName;
-            if ( !lcl_getDocumentDefaultStyleAndFamily( xSuppStyleFamilies.get(), sFamilyName, sStyleName ) )
-                throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unknown document type!" ) ), NULL );
-
-            // the concrete style
-            Reference< XNameAccess > xStyleFamily( xStyleFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
-            return Reference< XPropertySet >( xStyleFamily->getByName( sStyleName ), UNO_QUERY_THROW );
-        }
-
-        //....................................................................
         static void lcl_initializeCharacterAttributes( const Reference< XPropertySet >& _rxModel )
         {
             try
             {
-                Reference< XPropertySet > xStyle( lcl_getDefaultDocumentTextStyle_throw( _rxModel ), UNO_SET_THROW );
+                Reference< XPropertySet > xStyle( ControlLayouter::getDefaultDocumentTextStyle( _rxModel ), UNO_SET_THROW );
 
                 // transfer all properties which are described by the style
                 Reference< XPropertySetInfo > xSourcePropInfo( xStyle->getPropertySetInfo(), UNO_SET_THROW );
@@ -477,72 +387,6 @@ namespace svxform
 
                     ++pCharacterProperty;
                 }
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
-        }
-
-        //....................................................................
-        static void lcl_initializeControlFont( const Reference< XPropertySet >& _rxModel )
-        {
-            try
-            {
-                Reference< XPropertySet > xStyle( lcl_getDefaultDocumentTextStyle_throw( _rxModel ), UNO_SET_THROW );
-                Reference< XPropertySetInfo > xStylePSI( xStyle->getPropertySetInfo(), UNO_SET_THROW );
-
-                // determine the script type associated with the system locale
-                const LocaleDataWrapper& rSysLocaleData = SvtSysLocale().GetLocaleData();
-                const sal_Int16 eSysLocaleScriptType = MsLangId::getScriptType( MsLangId::convertLocaleToLanguage( rSysLocaleData.getLocale() ) );
-
-                // depending on this script type, use the right property from the document's style which controls the
-                // default locale for document content
-                const sal_Char* pCharLocalePropertyName = "CharLocale";
-                switch ( eSysLocaleScriptType )
-                {
-                case ScriptType::LATIN:
-                    // already defaulted above
-                    break;
-                case ScriptType::ASIAN:
-                    pCharLocalePropertyName = "CharLocaleAsian";
-                    break;
-                case ScriptType::COMPLEX:
-                    pCharLocalePropertyName = "CharLocaleComplex";
-                    break;
-                default:
-                    OSL_ENSURE( false, "lcl_initializeControlFont: unexpected script type for system locale!" );
-                    break;
-                }
-
-                ::rtl::OUString sCharLocalePropertyName = ::rtl::OUString::createFromAscii( pCharLocalePropertyName );
-                Locale aDocumentCharLocale;
-                if ( xStylePSI->hasPropertyByName( sCharLocalePropertyName ) )
-                {
-                    OSL_VERIFY( xStyle->getPropertyValue( sCharLocalePropertyName ) >>= aDocumentCharLocale );
-                }
-                // fall back to CharLocale property at the style
-                if ( !aDocumentCharLocale.Language.getLength() )
-                {
-                    sCharLocalePropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharLocale" ) );
-                    if ( xStylePSI->hasPropertyByName( sCharLocalePropertyName ) )
-                    {
-                        OSL_VERIFY( xStyle->getPropertyValue( sCharLocalePropertyName ) >>= aDocumentCharLocale );
-                    }
-                }
-                // fall back to the system locale
-                if ( !aDocumentCharLocale.Language.getLength() )
-                {
-                    aDocumentCharLocale = rSysLocaleData.getLocale();
-                }
-
-                // retrieve a default font for this locale, and set it at the control
-                Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_SANS, MsLangId::convertLocaleToLanguage( aDocumentCharLocale ), DEFAULTFONT_FLAGS_ONLYONE );
-                FontDescriptor aFontDesc = VCLUnoHelper::CreateFontDescriptor( aFont );
-                _rxModel->setPropertyValue(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FontDescriptor" ) ),
-                    makeAny( aFontDesc )
-                );
             }
             catch( const Exception& )
             {
@@ -624,10 +468,6 @@ namespace svxform
                 }
                 break;
             }
-
-            // some default font, to not rely on the implicit font, which differs across platforms and desktop
-            // themes
-            lcl_initializeControlFont( _rxControlModel );
 
             // initial default label for the control
             if ( xPSI->hasPropertyByName( FM_PROP_LABEL ) )
