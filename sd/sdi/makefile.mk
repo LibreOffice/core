@@ -72,7 +72,6 @@ SVSDI1DEPEND= \
     ViewShellBase.sdi \
     TaskPaneViewShell.sdi \
     sdslots.hrc \
-        $(SOLARINCXDIR)$/svxslots.ilb   \
     $(PRJ)$/inc$/app.hrc
 
 SVSDI2DEPEND= \
@@ -95,7 +94,6 @@ SVSDI2DEPEND= \
     ViewShellBase.sdi \
     TaskPaneViewShell.sdi \
     sdslots.hrc \
-        $(SOLARINCXDIR)$/svxslots.ilb   \
     $(PRJ)$/inc$/app.hrc
 
 # --- Targets -------------------------------------------------------
