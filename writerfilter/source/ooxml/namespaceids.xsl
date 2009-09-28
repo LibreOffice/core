@@ -62,7 +62,18 @@
   <xsl:output method="text" />
   <xsl:param name="prefix"/>
   
-  <xsl:include href="resourcestools.xsl"/>
+  <xsl:include href="factorytools.xsl"/>
+
+<xsl:template name="namespaceids">
+  <xsl:for-each select="//namespace-alias">
+    <xsl:text>
+const sal_uInt32 </xsl:text>
+<xsl:call-template name="namespaceid"/>
+<xsl:text> = </xsl:text>
+<xsl:value-of select="@id"/>
+<xsl:text> &lt;&lt; 16;</xsl:text>
+  </xsl:for-each>
+</xsl:template>
 
   <xsl:template match="/">
     <out xml:space="preserve">

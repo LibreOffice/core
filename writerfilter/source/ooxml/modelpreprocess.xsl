@@ -64,8 +64,6 @@
     xmlns:UML = 'org.omg.xmi.namespace.UML' xml:space="default">
   <xsl:output method="xml" />
 
-  <!--<xsl:include href="resourcestools.xsl"/>-->
-
   <xsl:key name="namespace-aliases" match="//namespace-alias" use="@name"/>
 
   <xsl:template match="/">

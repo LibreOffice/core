@@ -65,7 +65,61 @@
   <xsl:output method="text" />
   <xsl:param name="prefix"/>
   
-  <xsl:include href="resourcestools.xsl"/>
+  <xsl:include href="factorytools.xsl"/>
+
+<xsl:template name="factoryactiondecls">
+    <xsl:variable name="ns" select="@name"/>
+    <xsl:for-each select="resource/action">
+        <xsl:sort select="@name"/>
+        <xsl:if test="generate-id(key('actions', @name)[ancestor::namespace/@name=$ns][1]) = generate-id(.)">
+            <xsl:text>
+    void </xsl:text>
+            <xsl:value-of select="@name"/>
+            <xsl:text>Action(OOXMLFastContextHandler * pHandler</xsl:text>
+            <xsl:if test="@name='characters'">
+                <xsl:text>, const ::rtl::OUString &amp; sText</xsl:text>
+            </xsl:if>
+            <xsl:text>);</xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
+<!-- factorydecl -->
+<xsl:template name="factorydecl">
+    <xsl:variable name="classname">
+        <xsl:call-template name="factoryclassname"/>
+    </xsl:variable>
+    <xsl:text>
+class </xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text> : public OOXMLFactory_ns
+{
+public:
+    typedef boost::shared_ptr &lt; OOXMLFactory_ns &gt; Pointer_t;
+    
+    static Pointer_t getInstance();
+    
+    virtual AttributeToResourceMapPointer createAttributeToResourceMap(Id nId);
+    virtual ListValueMapPointer createListValueMap(Id nId);
+    virtual CreateElementMapPointer createCreateElementMap(Id nId);
+    virtual TokenToIdMapPointer createTokenToIdMap(Id nId);
+    virtual string getDefineName(Id nId) const;</xsl:text>
+    <xsl:call-template name="factoryactiondecls"/>
+    <xsl:text>
+    
+    virtual ~</xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>();
+    
+protected:
+    static Pointer_t m_pInstance;
+
+    </xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>();
+};
+    </xsl:text>
+</xsl:template>
 
   <xsl:template match="/">
     <xsl:variable name="ns" select="substring-before(substring-after($file, 'OOXMLFactory_'), '.hxx')"/>

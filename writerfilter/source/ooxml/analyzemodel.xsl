@@ -4,7 +4,7 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 	xmlns:rng="http://relaxng.org/ns/structure/1.0">
 
-<xsl:include href="resourcestools.xsl"/>
+<xsl:include href="factorytools.xsl"/>
 <xsl:output method="xml"/>
 
 <xsl:template match="/">

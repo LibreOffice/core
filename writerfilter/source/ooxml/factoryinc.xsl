@@ -65,7 +65,29 @@
   <xsl:output method="text" />
   <xsl:param name="prefix"/>
   
-  <xsl:include href="resourcestools.xsl"/>
+  <xsl:include href="factorytools.xsl"/>
+
+  <xsl:template name="factorynamespaceiddecls">
+    <xsl:for-each select="/model/namespace">
+      <xsl:sort select="@name"/>
+      <xsl:text>
+extern const Id </xsl:text>
+<xsl:call-template name="idfornamespace"/>
+<xsl:text>;</xsl:text>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="factorynamespaceidimpls">
+    <xsl:for-each select="/model/namespace">
+      <xsl:sort select="@name"/>
+      <xsl:text>
+const Id </xsl:text>
+<xsl:call-template name="idfornamespace"/>
+<xsl:text> = </xsl:text>
+<xsl:value-of select="position()"/>
+<xsl:text> &lt;&lt; 16;</xsl:text>
+    </xsl:for-each>
+</xsl:template>
 
   <xsl:template match="/">
     <xsl:text>

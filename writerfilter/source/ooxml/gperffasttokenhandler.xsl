@@ -67,7 +67,31 @@
     xml:space="default">
   <xsl:output method="text" />
 
-  <xsl:include href="resourcestools.xsl"/>
+  <xsl:include href="factorytools.xsl"/>
+
+  <!--
+      Generates input for gperf to genreate hash map for OOXMLFastTokenHandler
+  -->
+  <xsl:template name="gperfinputfasttokenhandler">
+    <xsl:text>
+%{
+#include "OOXMLFastTokens.hxx"
+
+namespace writerfilter { namespace ooxml { namespace tokenmap {
+%}
+struct token { const char * name; Token_t nToken; };
+%%</xsl:text>
+    <xsl:for-each select=".//rng:element|.//rng:attribute">
+      <xsl:if test="generate-id(.) = generate-id(key('same-token-name', @localname)[1])">
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:value-of select="@localname"/>
+        <xsl:text>, </xsl:text>
+        <xsl:call-template name="fastlocalname"/>
+      </xsl:if>
+    </xsl:for-each>
+    <xsl:text>
+%%&#xa;</xsl:text>
+}}}&#xa;</xsl:template>
 
   <xsl:template match="/">
     <xsl:call-template name="gperfinputfasttokenhandler"/>

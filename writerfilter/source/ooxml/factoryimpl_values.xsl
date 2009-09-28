@@ -65,7 +65,29 @@
   <xsl:output method="text" />
   <xsl:param name="prefix"/>
   
-  <xsl:include href="resourcestools.xsl"/>
+  <xsl:include href="factorytools.xsl"/>
+
+  <!--
+      Generates constant definitions for attribute values.
+  -->
+  <xsl:template name="valueconstants">
+    <xsl:text>
+rtl::OUString </xsl:text>
+<xsl:call-template name="valuestringname">
+  <xsl:with-param name="string"></xsl:with-param>
+</xsl:call-template>
+<xsl:text>(RTL_CONSTASCII_USTRINGPARAM(""));</xsl:text>
+<xsl:for-each select="//rng:value[generate-id(key('value-with-content', text())[1]) = generate-id(.)]">
+  <xsl:text>
+rtl::OUString </xsl:text>
+<xsl:call-template name="valuestringname">
+  <xsl:with-param name="string" select="."/>
+</xsl:call-template>
+<xsl:text>(RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
+<xsl:value-of select="."/> 
+<xsl:text>"));</xsl:text>
+</xsl:for-each>
+  </xsl:template>
 
   <xsl:template match="/">
     <xsl:text>

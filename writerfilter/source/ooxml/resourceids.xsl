@@ -68,7 +68,27 @@
     xml:space="default">
   <xsl:output method="text" />
 
-  <xsl:include href="resourcestools.xsl"/>
+  <xsl:include href="factorytools.xsl"/>
+
+  <!--
+      Generates contant definitions for tokenids.
+  -->
+  <xsl:template name="defineooxmlids">
+    <xsl:text>
+namespace NS_ooxml
+{</xsl:text>
+<xsl:for-each select="//@tokenid|//@sendtokenid">
+  <xsl:if test="contains(., 'ooxml:') and generate-id(.) = generate-id(key('tokenids', .)[1])">
+    <xsl:text>
+    const Id LN_</xsl:text>
+    <xsl:value-of select="substring-after(., 'ooxml:')"/>
+    <xsl:text> = </xsl:text>
+    <xsl:value-of select="90000 + position()"/>
+    <xsl:text>;</xsl:text>
+  </xsl:if>
+</xsl:for-each>
+}
+  </xsl:template>
 
   <xsl:template match="/">
     <out>

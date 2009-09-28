@@ -65,7 +65,7 @@
   <xsl:output method="text" />
   <xsl:param name="prefix"/>
   
-  <xsl:include href="resourcestools.xsl"/>
+  <xsl:include href="factorytools.xsl"/>
 
   <xsl:template match="/">
     <xsl:text>    
