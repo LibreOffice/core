@@ -39,7 +39,6 @@ SlotIdFile( "sfx2/sfx.hrc" )
 ]
 {
     include "sfxitems.sdi"
-    item String     SvxClipboardFmtItem;    //! Dummy
     include "sfx.sdi"
     include "docslots.sdi"
     include "viwslots.sdi"
