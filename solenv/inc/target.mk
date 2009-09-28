@@ -1396,9 +1396,8 @@ $(UNIXTEXT) : $(UNIXTEXT:f)
 $(LOCALIZESDF)%:
     @echo $(LOCALIZESDF)
     @@-$(MKDIRHIER) $(@:d)
+    $(TOUCH) $@
 
-.IF "$(LOCALIZATION_FOUND)"==""
-.IF "$(LOCALIZESDF)"!=""
 "$(LOCALIZESDF)" : $(SOLARCOMMONSDFDIR)/$(PRJNAME).zip
     @@-$(MKDIRHIER) $(@:d)
     @@-$(MKDIRHIER) $(COMMONMISC)/$(PRJNAME)_$(TARGET)
