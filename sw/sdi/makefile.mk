@@ -102,8 +102,7 @@ SVSDI1DEPEND= \
         annotsh.sdi\
         swslots.hrc \
         $(INC)$/globals.hrc \
-                $(INC)$/cmdid.h \
-                $(SOLARINCXDIR)$/svxslots.ilb
+                $(INC)$/cmdid.h 
 .ENDIF
 
 # --- Targets -------------------------------------------------------
