@@ -273,7 +273,7 @@ TESTSHL2LIB = -ltestshl2$(DLLPOSTFIX)
 .IF "$(SYSTEM_LIBXSLT)"=="YES"
 XSLTLIB=$(LIBXSLT_LIBS)
 .ELSE
-XSLTLIB=-lxslt $(ZLIB3RDLIB) $(LIBXML2LIB)
+XSLTLIB=-lxslt $(LIBXML2LIB)
 .ENDIF
 .IF "$(GUI)$(COM)"=="WNTGCC"
 JVMFWKLIB = -ljvmfwk$(UDK_MAJOR)
@@ -477,7 +477,7 @@ SYSSHELLLIB=sysshell.lib
 JVMACCESSLIB = ijvmaccess.lib
 CPPUNITLIB = cppunit.lib
 TESTSHL2LIB = testshl2.lib
-XSLTLIB = libxslt.lib $(ZLIB3RDLIB) $(LIBXML2LIB)
+XSLTLIB = libxslt.lib $(LIBXML2LIB)
 .IF "$(GUI)"=="OS2"
 REDLANDLIB = raptor.a rasqal.a rdf.a $(LIBXML2LIB) $(OPENSSLLIB) pthread.lib
 .ELSE
