@@ -191,6 +191,7 @@ namespace writerfilter
     {
         XMLTag::Pointer_t pTag(new XMLTag("root"));
         mTags.push(pTag);
+        mpRoot = pTag;
     }
 
     void TagLogger::element(const string & name)
@@ -262,7 +263,7 @@ namespace writerfilter
 
     ostream & TagLogger::output(ostream & o) const
     {
-        return currentTag()->output(o);
+        return mpRoot->output(o);
     }
 
     void TagLogger::dump(const char * name)

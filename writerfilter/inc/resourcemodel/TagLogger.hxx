@@ -93,6 +93,7 @@ namespace writerfilter
     private:
         stack<XMLTag::Pointer_t> mTags;
         XMLTag::Pointer_t currentTag() const;
+        XMLTag::Pointer_t mpRoot;
 
         TagLogger();
 
