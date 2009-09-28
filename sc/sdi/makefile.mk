@@ -71,8 +71,7 @@ SVSDI1DEPEND= \
     mediash.sdi \
     pgbrksh.sdi \
     scslots.hrc \
-    $(INC)$/sc.hrc \
-    $(SOLARINCXDIR)$/svxslots.ilb
+    $(INC)$/sc.hrc 
 .ENDIF
 
 # --- Targets -------------------------------------------------------
