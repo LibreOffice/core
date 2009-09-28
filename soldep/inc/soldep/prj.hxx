@@ -403,7 +403,7 @@ public:
     ByteString      GetName(){ return aStarName; }; // dummy function of VG
     void            Read( String &rFileName );
     void            Read( SolarFileList *pSOlarFiles );
-    void            ReadXmlBuildList(const ByteString& sBuildLstPath);
+//  void            ReadXmlBuildList(const ByteString& sBuildLstPath);
 
 
     BOOL            HasProject( ByteString aProjectName );

@@ -43,7 +43,7 @@
 #include <soldep/depper.hxx>
 #include <soldep/soldep.hxx>
 #include <soldep/soldlg.hxx>
-#include <soldep/XmlBuildList.hxx>
+//#include <soldep/XmlBuildList.hxx>
 #include "dtsodcmp.hrc"
 
 IMPLEMENT_HASHTABLE_OWNER( SolIdMapper, ByteString, ULONG* );
@@ -66,8 +66,9 @@ SolDep::SolDep( Window* pBaseWindow )
                 : Depper( pBaseWindow ),
                 mbBServer(FALSE),
                 mpTravellerList( NULL ),
-                mbIsHide( FALSE ),
-                mpXmlBuildList (NULL)
+                mbIsHide( FALSE )
+//              ,
+//              mpXmlBuildList (NULL)
 {
     /*
     ByteString sModulPath ("."); // wo soll das Perlmodul stehen???
@@ -103,8 +104,8 @@ SolDep::~SolDep()
     delete mpSolIdMapper;
     delete mpStarWriter;
     delete mpStandLst;
-    if (mpXmlBuildList)
-        delete mpXmlBuildList;
+//  if (mpXmlBuildList)
+//      delete mpXmlBuildList;
 }
 
 /*****************************************************************************/

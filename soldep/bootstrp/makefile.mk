@@ -38,7 +38,7 @@ ENABLE_EXCEPTIONS=true
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  $(PRJ)$/util$/perl.mk
+#.INCLUDE :  $(PRJ)$/util$/perl.mk
 .INCLUDE :  settings.mk
 
 # fixme, code is not yet 64 bit clean
@@ -60,7 +60,9 @@ SLOFILES=\
           $(SLO)$/appdef.obj \
            $(SLO)$/hashtbl.obj		\
           $(SLO)$/prj.obj \
-          $(SLO)$/XmlBuildList.obj
+
+          
+#          $(SLO)$/XmlBuildList.obj
 
 
 SHL1TARGET	=$(TARGET)$(DLLPOSTFIX)
