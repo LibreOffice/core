@@ -383,7 +383,7 @@ BOOL SmParser::IsDelimiter( const String &rTxt, xub_StrLen nPos )
 
     BOOL bIsDelim = *pDelim != 0;
 
-    INT16 nTypJp = SM_MOD1()->GetSysLocale().GetCharClass().getType( rTxt, nPos );
+    INT16 nTypJp = SM_MOD()->GetSysLocale().GetCharClass().getType( rTxt, nPos );
     bIsDelim |= nTypJp == com::sun::star::i18n::UnicodeType::SPACE_SEPARATOR ||
                 nTypJp == com::sun::star::i18n::UnicodeType::CONTROL;
 
@@ -441,7 +441,7 @@ void SmParser::NextToken()
     xub_StrLen  nRealStart;
     BOOL        bCont;
     BOOL        bNumStart = FALSE;
-    CharClass   aCC(SM_MOD1()->GetSysLocale().GetCharClass().getLocale());
+    CharClass   aCC(SM_MOD()->GetSysLocale().GetCharClass().getLocale());
     do
     {
         // skip white spaces
@@ -1365,7 +1365,7 @@ void SmParser::Blank()
 
     // Blanks am Zeilenende ignorieren wenn die entsprechende Option gesetzt ist
     if ( CurToken.eType == TNEWLINE ||
-             (CurToken.eType == TEND && SM_MOD1()->GetConfig()->IsIgnoreSpacesRight()) )
+             (CurToken.eType == TEND && SM_MOD()->GetConfig()->IsIgnoreSpacesRight()) )
     {
         pBlankNode->Clear();
     }
@@ -2289,13 +2289,13 @@ void SmParser::Special()
         // UI uses localized names XML file format does not.)
         if (IsImportSymbolNames())
         {
-            const SmLocalizedSymbolData &rLSD = SM_MOD1()->GetLocSymbolData();
+            const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
             aNewName = rLSD.GetUiSymbolName( rName );
             bReplace = TRUE;
         }
         else if (IsExportSymbolNames())
         {
-            const SmLocalizedSymbolData &rLSD = SM_MOD1()->GetLocSymbolData();
+            const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
             aNewName = rLSD.GetExportSymbolName( rName );
             bReplace = TRUE;
         }
@@ -2303,7 +2303,7 @@ void SmParser::Special()
     else    // 5.0 <-> 6.0 formula text (symbol name) conversion
     {
         LanguageType nLanguage = GetLanguage();
-        SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+        SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
         const ResStringArray *pFrom = 0;
         const ResStringArray *pTo   = 0;
         if (CONVERT_50_TO_60 == GetConversion())

@@ -111,7 +111,7 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell):
     const Fraction aFraction (1,1);
     SetMapMode( MapMode(MAP_100TH_MM, Point(), aFraction, aFraction));
 
-    ApplyColorConfigValues( SM_MOD1()->GetColorConfig() );
+    ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
 
     SetTotalSize();
 
@@ -149,7 +149,7 @@ void SmGraphicWindow::ApplyColorConfigValues( const svtools::ColorConfig &rColor
 
 void SmGraphicWindow::DataChanged( const DataChangedEvent& rEvt )
 {
-    ApplyColorConfigValues( SM_MOD1()->GetColorConfig() );
+    ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
 
     ScrollableWindow::DataChanged( rEvt );
 }
@@ -274,7 +274,7 @@ void SmGraphicWindow::SetCursor(const Rectangle &rRect)
     // The old cursor will be removed, and the new one will be shown if
     // that is activated in the ConfigItem
 {
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
 
     if (IsCursorVisible())
         ShowCursor(FALSE);      // clean up remainings of old cursor
@@ -328,7 +328,7 @@ void SmGraphicWindow::Paint(const Rectangle&)
         nCol++;
         const SmNode *pFound = SetCursorPos(nRow, nCol);
 
-        SmModule  *pp = SM_MOD1();
+        SmModule  *pp = SM_MOD();
         if (pFound && pp->GetConfig()->IsShowFormulaCursor())
             ShowCursor(TRUE);
     }
@@ -1015,7 +1015,7 @@ void SmViewShell::Impl_Print(
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Impl_Print" );
 
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
 
     rOutDev.Push();
     rOutDev.SetLineColor( Color(COL_BLACK) );
@@ -1187,7 +1187,7 @@ USHORT SmViewShell::Print(SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPri
         OutputRect.Right() -= 1500 - (aPrtPaperSize.Width() -
                                       (aPrtPageOffset.X() + OutputRect.Right()));
 
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
     Impl_Print( *pPrinter, pp->GetConfig()->GetPrintSize(),
                  OutputRect, aZeroPoint );
 
@@ -1217,7 +1217,7 @@ USHORT SmViewShell::SetPrinter(SfxPrinter *pNewPrinter, USHORT nDiffFlags, bool 
 
     if ((nDiffFlags & SFX_PRINTER_OPTIONS) == SFX_PRINTER_OPTIONS)
     {
-        SmModule *pp = SM_MOD1();
+        SmModule *pp = SM_MOD();
         pp->GetConfig()->ItemSetToConfig(pNewPrinter->GetOptions());
     }
     return 0;
@@ -1405,7 +1405,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
     {
         case SID_FORMULACURSOR:
         {
-            SmModule *pp = SM_MOD1();
+            SmModule *pp = SM_MOD();
 
             const SfxItemSet  *pArgs = rReq.GetArgs();
             const SfxPoolItem *pItem;
@@ -1707,11 +1707,11 @@ void SmViewShell::Execute(SfxRequest& rReq)
             SmDocShell *pDoc = GetDoc();
             OutputDevice *pDev = pDoc->GetPrinter();
             if (!pDev || pDev->GetDevFontCount() == 0)
-                pDev = &SM_MOD1()->GetDefaultVirtualDev();
+                pDev = &SM_MOD()->GetDefaultVirtualDev();
             DBG_ASSERT (pDev, "device for font list missing" );
 
-            SmModule *pp = SM_MOD1();
-            SmSymbolDialog( NULL, pDev, pp->GetSymSetManager(), *this ).Execute();
+            SmModule *pp = SM_MOD();
+            SmSymbolDialog( NULL, pDev, pp->GetSymbolManager(), *this ).Execute();
         }
         break;
 
@@ -1789,7 +1789,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 
         case SID_FORMULACURSOR:
             {
-                SmModule *pp = SM_MOD1();
+                SmModule *pp = SM_MOD();
                 rSet.Put(SfxBoolItem(nWh, pp->GetConfig()->IsShowFormulaCursor()));
             }
             break;

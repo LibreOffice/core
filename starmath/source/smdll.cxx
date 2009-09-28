@@ -78,7 +78,7 @@ void SmDLL::Init()
     SmModule** ppShlPtr = (SmModule**) GetAppData(SHL_SM);
     *ppShlPtr = new SmModule( &rFactory );
 
-    SfxModule *p = SM_MOD1();
+    SfxModule *p = SM_MOD();
     SmModule *pp = (SmModule *) p;
 
     rFactory.SetDocumentServiceName( String::CreateFromAscii("com.sun.star.formula.FormulaProperties") );

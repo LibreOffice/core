@@ -151,8 +151,8 @@ void SmDocShell::LoadSymbols()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::LoadSymbols" );
 
-    SmModule *pp = SM_MOD1();
-    pp->GetSymSetManager().Load();
+    SmModule *pp = SM_MOD();
+    pp->GetSymbolManager().Load();
 }
 
 
@@ -282,7 +282,7 @@ void SmDocShell::ArrangeFormula()
             pOutDev = &pView->GetGraphicWindow();
         else
         {
-            pOutDev = &SM_MOD1()->GetDefaultVirtualDev();
+            pOutDev = &SM_MOD()->GetDefaultVirtualDev();
             pOutDev->SetMapMode( MapMode(MAP_100TH_MM) );
         }
     }
@@ -616,7 +616,7 @@ Printer* SmDocShell::GetPrt()
                            SID_NO_RIGHT_SPACES, SID_NO_RIGHT_SPACES,
                            0);
 
-        SmModule *pp = SM_MOD1();
+        SmModule *pp = SM_MOD();
         pp->GetConfig()->ConfigToItemSet(*pOptions);
         pPrinter = new SfxPrinter(pOptions);
         pPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
@@ -698,7 +698,7 @@ SmDocShell::SmDocShell(SfxObjectCreateMode eMode,const sal_Bool _bScriptSupport)
 
     SetPool(&SFX_APP()->GetPool());
 
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
     aFormat = pp->GetConfig()->GetStandardFormat();
 
     StartListening(aFormat);
@@ -718,7 +718,7 @@ SmDocShell::~SmDocShell()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::~SmDocShell" );
 
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
 
     EndListening(aFormat);
     EndListening(*pp->GetConfig());
@@ -1014,7 +1014,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_AUTO_REDRAW :
         {
-            SmModule *pp = SM_MOD1();
+            SmModule *pp = SM_MOD();
             BOOL bRedraw = pp->GetConfig()->IsAutoRedraw();
             pp->GetConfig()->SetAutoRedraw(!bRedraw);
         }
@@ -1033,7 +1033,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
             // get device used to retrieve the FontList
             OutputDevice *pDev = GetPrinter();
             if (!pDev || pDev->GetDevFontCount() == 0)
-                pDev = &SM_MOD1()->GetDefaultVirtualDev();
+                pDev = &SM_MOD()->GetDefaultVirtualDev();
             DBG_ASSERT (pDev, "device for font list missing" );
 
             SmFontTypeDialog *pFontTypeDialog = new SmFontTypeDialog( NULL, pDev );
@@ -1117,7 +1117,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
                 pAlignDialog->WriteTo(aNewFormat);
 
-                SmModule *pp = SM_MOD1();
+                SmModule *pp = SM_MOD();
                 SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
                 pAlignDialog->WriteTo( aFmt );
                 pp->GetConfig()->SetStandardFormat( aFmt );
@@ -1202,7 +1202,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
 
         case SID_AUTO_REDRAW :
             {
-                SmModule  *pp = SM_MOD1();
+                SmModule  *pp = SM_MOD();
                 BOOL       bRedraw = pp->GetConfig()->IsAutoRedraw();
 
                 rSet.Put(SfxBoolItem(SID_AUTO_REDRAW, bRedraw));
@@ -1291,8 +1291,8 @@ void SmDocShell::SaveSymbols()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SaveSymbols" );
 
-    SmModule *pp = SM_MOD1();
-    pp->GetSymSetManager().Save();
+    SmModule *pp = SM_MOD();
+    pp->GetSymbolManager().Save();
 }
 
 

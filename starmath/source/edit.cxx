@@ -116,7 +116,7 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     // Even RTL languages don't use RTL for math
     rCmdBox.GetEditWindow()->EnableRTL( FALSE );
 
-    ApplyColorConfigValues( SM_MOD1()->GetColorConfig() );
+    ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
 
     // compare DataChanged
     SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
@@ -212,7 +212,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
 {
     const StyleSettings aSettings( GetSettings().GetStyleSettings() );
 
-    ApplyColorConfigValues( SM_MOD1()->GetColorConfig() );
+    ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
     SetBackground( aSettings.GetWindowColor() );
 
     // edit fields in other Applications use this font instead of
@@ -246,7 +246,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
 
 IMPL_LINK( SmEditWindow, ModifyTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
 {
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
     if (pp->GetConfig()->IsAutoRedraw())
         Flush();
     aModifyTimer.Start();
