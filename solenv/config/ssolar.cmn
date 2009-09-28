@@ -39,6 +39,7 @@ common
 		BUILD_OS_MINOR
 		BUILD_OS_REV
 		BUILD_OS_MAJOR
+		BUILD_PIXMAN
 		BUILD_TOOLS
         BUILD_TYPE
 		BUILD_SPECIAL
@@ -270,7 +271,6 @@ common
         NO_HIDS
         PAM_LINK
         PAM
-        PYTHONHOME
         PYTHONPATH
         SOLAR_PLUGIN
         URE_BOOTSTRAP

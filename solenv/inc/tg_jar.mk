@@ -45,9 +45,9 @@ $(JARTARGETN) : $(JARMANIFEST) $(JAVACLASSFILES) $(JAVATARGET)
 
 .IF "$(CUSTOMMANIFESTFILE)"!=""
 
-CUSTOMMANIFESTFILEDEP:=$(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f)
+CUSTOMMANIFESTFILEDEP:=$(MISC)/$(TARGET)_$(CUSTOMMANIFESTFILE:f)
 
-$(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f) : $(subst,/,$/ $(DMAKE_WORK_DIR))$/$(CUSTOMMANIFESTFILE)
+$(MISC)/$(TARGET)_$(CUSTOMMANIFESTFILE:f) : $(subst,/,/ $(DMAKE_WORK_DIR))/$(CUSTOMMANIFESTFILE)
     -$(RM) $@
     $(COPY) $< $@
 .ENDIF			# "$(CUSTOMMANIFESTFILE)"!=""
@@ -62,7 +62,7 @@ $(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP)
 # $(RSCREVISION) contains chars that must be quoted (for *NIX shells)
     echo $(USQ)Solar-Version: $(RSCREVISION)$(USQ) >> $@
 .IF "$(CUSTOMMANIFESTFILE)"!=""
-    $(TYPE) $(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f) >> $@
+    $(TYPE) $(MISC)/$(TARGET)_$(CUSTOMMANIFESTFILE:f) >> $@
 .ENDIF			# "$(CUSTOMMANIFESTFILE)"!=""
 .ENDIF			# "$(JARMANIFEST)"!=""
 .ENDIF			# "$(NEW_JAR_PACK)"!=""
@@ -76,13 +76,13 @@ $(JARTARGETN) .PHONY :
 .ELSE			# "$(NOJARDEP)"!="" || "$(NEW_JAR_PACK)"!=""
 .DIRCACHE = no
 $(JARTARGETN) :
-#$(JARTARGETN) .SETDIR=$(CLASSDIR) .SEQUENTIAL : $(JARTARGETDEP) $(shell @-cat -s $(MISC)$/$(JARTARGETN).dep )
+#$(JARTARGETN) .SETDIR=$(CLASSDIR) .SEQUENTIAL : $(JARTARGETDEP) $(shell @-cat -s $(MISC)/$(JARTARGETN).dep )
 .ENDIF			# "$(NOJARDEP)"!="" || "$(NEW_JAR_PACK)"!=""
 .IF "$(OS)$(CPU)"=="SOLARISS"
     @-find . -type d -user $(USER) ! -perm -5 -print | xargs test "$$1" != "" && chmod +r $$1 
 .ENDIF
 .IF "$(JARMANIFEST)"!=""
-    cd $(CLASSDIR)$/$(TARGET) && zip -u -rX ..$/$(@:f) $(subst,$(CLASSDIR)$/$(TARGET)$/, $(JARMANIFEST)) $(CHECKZIPRESULT)
+    cd $(CLASSDIR)/$(TARGET) && zip -u -rX ../$(@:f) $(subst,$(CLASSDIR)/$(TARGET)/, $(JARMANIFEST)) $(CHECKZIPRESULT)
 .ENDIF			# "$(JARMANIFEST)"!=""
     cd $(CLASSDIR) && zip -u -rX $(@:f) $(subst,\,/ $(JARCLASSDIRS)) $(CHECKZIPRESULT)
 .ENDIF

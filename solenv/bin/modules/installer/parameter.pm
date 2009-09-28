@@ -49,7 +49,7 @@ sub usage
 
     print <<Ende;
 --------------------------------------------------------------------------------
-$installer::globals::prog V1.0 (c) Ingo Schmidt 2003
+$installer::globals::prog
 The following parameter are needed:
 -f: Path to the product list (required)
 -s: Path to the setup script (optional, if defined in product list)

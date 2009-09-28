@@ -1808,6 +1808,7 @@ ToFile( "HAVE_LD_HASH_STYLE","@HAVE_LD_HASH_STYLE@","e" );
 ToFile( "HAVE_LD_BSYMBOLIC_FUNCTIONS",
 		"@HAVE_LD_BSYMBOLIC_FUNCTIONS@","e" );
 ToFile( "CXX",               $CXX,               "e" );
+ToFile( "USE_CCACHE",        "@USE_CCACHE@",     "e" );
 ToFile( "MINGWCXX",          "@MINGWCXX@",       "e" );
 ToFile( "MINGWSTRIP",        "@MINGWSTRIP@",     "e" );
 ToFile( "USE_SYSTEM_STL",    "@USE_SYSTEM_STL@", "e" );

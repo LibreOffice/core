@@ -35,36 +35,36 @@ MKFILENAME:=tg_merge.mk
 
 .IF "$(WITH_LANG)"!=""
 .IF "$(ULFFILES)"!=""
-$(foreach,i,$(ULFFILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF) 
+$(foreach,i,$(ULFFILES) $(COMMONMISC)/$(TARGET)/$i) : $$(@:f) $(LOCALIZESDF) 
 .ENDIF          # "$(ULFFILES)"!=""
 
 # *.xrb merge
 .IF "$(XMLPROPERTIES)"!=""
-$(foreach,i,$(XMLPROPERTIES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF) 
+$(foreach,i,$(XMLPROPERTIES) $(COMMONMISC)/$(TARGET)/$i) : $$(@:f) $(LOCALIZESDF) 
 .ENDIF          # "$(ULFFILES)"!=""
 
 # *.xrm merge
 .IF "$(READMEFILES)"!=""
-$(foreach,i,$(READMEFILES) $(COMMONMISC)$/$(TARGET)$/$(i:b).xrm) : $$(@:f) $(LOCALIZESDF) 
+$(foreach,i,$(READMEFILES) $(COMMONMISC)/$(TARGET)/$(i:b).xrm) : $$(@:f) $(LOCALIZESDF) 
 .ENDIF          # "$(ULFFILES)"!=""
 
 # *.xrm merge
 #.IF "$(APOCHELPFILES)"!=""
-#$(foreach,i,$(APOCHELPFILES) $(COMMONMISC)$/$(MYPATH)$/$(i:b).xrm) : $$(@:f) $(LOCALIZESDF) 
+#$(foreach,i,$(APOCHELPFILES) $(COMMONMISC)/$(MYPATH)/$(i:b).xrm) : $$(@:f) $(LOCALIZESDF) 
 #.ENDIF          # "$(ULFFILES)"!=""
 # *.xcu merge
 .IF "$(LOCALIZEDFILES)"!=""
-$(foreach,i,$(LOCALIZEDFILES) $(PROCESSOUT)$/merge$/{$(subst,.,$/ $(PACKAGE))}$/$(i:b).xcu) : $$(@:f) $(LOCALIZESDF) 
+$(foreach,i,$(LOCALIZEDFILES) $(PROCESSOUT)/merge/{$(subst,.,/ $(PACKAGE))}/$(i:b).xcu) : $$(@:f) $(LOCALIZESDF) 
 .ENDIF          # "$(ULFFILES)"!=""
 .ENDIF			# "$(WITH_LANG)"!=""
 
 # dependencies from *.ulf to par-files
 .IF "$(ULFPARFILES)"!=""
-$(ULFPARFILES) : $(COMMONMISC)$/$(TARGET)$/$$(@:b).$(LANGFILEEXT)
+$(ULFPARFILES) : $(COMMONMISC)/$(TARGET)/$$(@:b).$(LANGFILEEXT)
 .ENDIF          # "$(ULFPARFILES)"!=""
 
 # *.xrm merge
 #.IF "$(READMEFILES)"!=""
-#$(uniq $(foreach,i,$(READMEFILES) $(COMMONMISC)$/$(TARGET)$/$(i:b).xrm)) : $$(@:f) $(LOCALIZESDF)
+#$(uniq $(foreach,i,$(READMEFILES) $(COMMONMISC)/$(TARGET)/$(i:b).xrm)) : $$(@:f) $(LOCALIZESDF)
 #.ENDIF          # "$(ULFFILES)"!=""
 

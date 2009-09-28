@@ -34,30 +34,30 @@
 
 .IF "$(SRS$(TNR)NAME)"!=""
 .IF "$(BUILDHIDS)"!=""
-HID$(TNR)FILES=$(foreach,i,$(SRC$(TNR)FILES:f) $(SRS)$/$(i:s/.src/.hid/))
-HIDSRS$(TNR)PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS$(TNR)NAME)_srs.hid
+HID$(TNR)FILES=$(foreach,i,$(SRC$(TNR)FILES:f) $(SRS)/$(i:s/.src/.hid/))
+HIDSRS$(TNR)PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))/$(SRS$(TNR)NAME)_srs.hid
 $(HIDSRS$(TNR)PARTICLE) : $(HID$(TNR)FILES)
     @echo ------------------------------
     @echo Making: $@
     @-$(RM) $@
-    $(TYPE) $(mktmp  $(subst,$/,/ $(HID$(TNR)FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
+    $(TYPE) $(mktmp  $(subst,/,/ $(HID$(TNR)FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
     @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDSRS$(TNR)PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
-$(MISC)$/$(TARGET).$(SRS$(TNR)NAME).dprr: $(LOCALIZE_ME_DEST)
+$(MISC)/$(TARGET).$(SRS$(TNR)NAME).dprr: $(LOCALIZE_ME_DEST)
 
-$(MISC)$/$(TARGET).$(SRS$(TNR)NAME).dprr: $(SRC$(TNR)FILES) $(HIDSRS$(TNR)PARTICLE) $(HID$(TNR)FILES)
+$(MISC)/$(TARGET).$(SRS$(TNR)NAME).dprr: $(SRC$(TNR)FILES) $(HIDSRS$(TNR)PARTICLE) $(HID$(TNR)FILES)
     @echo ------------------------------
     @echo Making: $@
-    @@-$(RM) $(MISC)$/$(TARGET).$(SRS$(TNR)NAME).dprr
-    $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS$(TNR)NAME).srs} -fo=$@ -p=$(TARGET) $(SRC$(TNR)FILES)
+    @@-$(RM) $(MISC)/$(TARGET).$(SRS$(TNR)NAME).dprr
+    $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)/$(SRS$(TNR)NAME).srs} -fo=$@ -p=$(TARGET) $(SRC$(TNR)FILES)
 
 .IF "$(WITH_LANG)"!=""
 
-$(foreach,i,$(SRC$(TNR)FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)  
+$(foreach,i,$(SRC$(TNR)FILES) $(COMMONMISC)/$(TARGET)/$i) : $$(@:f) $(LOCALIZESDF)  
     -$(MKDIR) $(@:d)
     -$(RM) $@
     -$(MKDIRHIER) $(COMMONMISC)$/$(PRJNAME)
@@ -65,11 +65,11 @@ $(foreach,i,$(SRC$(TNR)FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZE
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 
-$(SRS)$/$(SRS$(TNR)NAME).srs: $(LOCALIZE_ME_DEST)
+$(SRS)/$(SRS$(TNR)NAME).srs: $(LOCALIZE_ME_DEST)
 
-$(SRS)$/$(SRS$(TNR)NAME).srs: $(foreach,i,$(SRC$(TNR)FILES) $(COMMONMISC)$/$(TARGET)$/$i)
+$(SRS)/$(SRS$(TNR)NAME).srs: $(foreach,i,$(SRC$(TNR)FILES) $(COMMONMISC)/$(TARGET)/$i)
 .ELSE			# "$(WITH_LANG)"!=""
-$(SRS)$/$(SRS$(TNR)NAME).srs: $(SRC$(TNR)FILES)
+$(SRS)/$(SRS$(TNR)NAME).srs: $(SRC$(TNR)FILES)
 .ENDIF			# "$(WITH_LANG)"!=""
     @echo ------------------------------
     @echo Making: $@
