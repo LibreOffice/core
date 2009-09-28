@@ -62,9 +62,9 @@ static cppu::ImplementationEntry const services[] = {
     { &dummy, &configmgr::configuration_provider::getImplementationName,
       &configmgr::configuration_provider::getSupportedServiceNames,
       &configmgr::configuration_provider::createFactory, 0, 0 },
-     { &dummy, &configmgr::default_provider::getImplementationName,
-       &configmgr::default_provider::getSupportedServiceNames,
-       &configmgr::default_provider::createFactory, 0, 0 },
+    { &dummy, &configmgr::default_provider::getImplementationName,
+      &configmgr::default_provider::getSupportedServiceNames,
+      &configmgr::default_provider::createFactory, 0, 0 },
     { 0, 0, 0, 0, 0, 0 }
 };
 
