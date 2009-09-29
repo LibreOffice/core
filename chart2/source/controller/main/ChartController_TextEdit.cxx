@@ -166,15 +166,26 @@ bool ChartController::EndTextEdit()
 
             TitleHelper::setCompleteString( aString, uno::Reference<
                 ::com::sun::star::chart2::XTitle >::query( xPropSet ), m_xCC );
-        }
 
-        try
-        {
-            m_xUndoManager->postAction( C2U("Edit Text") );
+            try
+            {
+                m_xUndoManager->postAction( C2U("Edit Text") );
+            }
+            catch( uno::RuntimeException& e)
+            {
+                ASSERT_EXCEPTION( e );
+            }
         }
-        catch( uno::RuntimeException& e)
+        else
         {
-            ASSERT_EXCEPTION( e );
+            try
+            {
+                m_xUndoManager->cancelAction();
+            }
+            catch ( uno::RuntimeException& e )
+            {
+                ASSERT_EXCEPTION( e );
+            }
         }
     }
     return true;

@@ -39,14 +39,17 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/chart2/XUndoManager.hpp>
 #include <com/sun/star/chart2/XUndoHelper.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase4.hxx>
 #include <rtl/ustring.hxx>
 
 // for pair
 #include <utility>
 // for auto_ptr
 #include <memory>
+
+class SdrUndoAction;
 
 namespace com { namespace sun { namespace star {
 namespace frame {
@@ -65,10 +68,11 @@ class UndoElement;
 class  UndoStack;
 class  ModifyBroadcaster;
 
-typedef ::cppu::WeakComponentImplHelper3<
+typedef ::cppu::WeakComponentImplHelper4<
             ::com::sun::star::util::XModifyBroadcaster,
             ::com::sun::star::chart2::XUndoManager,
-            ::com::sun::star::chart2::XUndoHelper >
+            ::com::sun::star::chart2::XUndoHelper,
+            ::com::sun::star::lang::XUnoTunnel >
     UndoManager_Base;
 
 } // namespace impl
@@ -89,6 +93,15 @@ class UndoManager :
 public:
     explicit UndoManager();
     virtual ~UndoManager();
+
+    void addShapeUndoAction( SdrUndoAction* pAction );
+
+    // ____ XUnoTunnel ____
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
+    static UndoManager* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xObj );
 
 protected:
     // ____ ConfigItemListener ____
@@ -148,7 +161,8 @@ private:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xCurrentModel,
         impl::UndoStack * pStackToRemoveFrom,
-        impl::UndoStack * pStackToAddTo );
+        impl::UndoStack * pStackToAddTo,
+        bool bUndo = true );
 
     ::std::auto_ptr< impl::UndoStack > m_apUndoStack;
     ::std::auto_ptr< impl::UndoStack > m_apRedoStack;

@@ -110,7 +110,10 @@ UndoElement::~UndoElement()
 
 void UndoElement::initialize( const Reference< frame::XModel > & xModel )
 {
-    m_xModel.set( UndoElement::cloneModel( xModel ));
+    if ( xModel.is() )
+    {
+        m_xModel.set( UndoElement::cloneModel( xModel ) );
+    }
 }
 
 void UndoElement::dispose()
@@ -354,6 +357,29 @@ UndoElement * UndoElementWithSelection::createFromModel(
         const Reference< frame::XModel > & xModel )
 {
     return new UndoElementWithSelection( getActionString(), xModel );
+}
+
+// ----------------------------------------
+
+ShapeUndoElement::ShapeUndoElement( const OUString& rActionString, SdrUndoAction* pAction )
+    :UndoElement( rActionString, Reference< frame::XModel >() )
+    ,m_pAction( pAction )
+{
+}
+
+ShapeUndoElement::ShapeUndoElement( const ShapeUndoElement& rOther )
+    :UndoElement( rOther )
+    ,m_pAction( rOther.m_pAction )
+{
+}
+
+ShapeUndoElement::~ShapeUndoElement()
+{
+}
+
+SdrUndoAction* ShapeUndoElement::getSdrUndoAction()
+{
+    return m_pAction;
 }
 
 // ========================================

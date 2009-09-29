@@ -56,6 +56,7 @@
 #include "AccessibleChartView.hxx"
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"
+#include "UndoManager.hxx"
 
 #include <comphelper/InlineContainer.hxx>
 
@@ -1384,6 +1385,20 @@ void SAL_CALL ChartController::modified( const lang::EventObject& /* aEvent */ )
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
+IMPL_LINK( ChartController, NotifyUndoActionHdl, SdrUndoAction*, pUndoAction )
+{
+    ::rtl::OUString aObjectCID = m_aSelection.getSelectedCID();
+    if ( aObjectCID.getLength() == 0 )
+    {
+        UndoManager* pUndoManager = UndoManager::getImplementation( m_xUndoManager );
+        if ( pUndoManager )
+        {
+            pUndoManager->addShapeUndoAction( pUndoAction );
+        }
+    }
+    return 0L;
+}
+
 DrawModelWrapper* ChartController::GetDrawModelWrapper()
 {
     if( !m_pDrawModelWrapper.get() )
@@ -1391,6 +1406,10 @@ DrawModelWrapper* ChartController::GetDrawModelWrapper()
         ExplicitValueProvider* pProvider = ExplicitValueProvider::getExplicitValueProvider( m_xChartView );
         if( pProvider )
             m_pDrawModelWrapper = pProvider->getDrawModelWrapper();
+        if ( m_pDrawModelWrapper.get() )
+        {
+            m_pDrawModelWrapper->getSdrModel().SetNotifyUndoActionHdl( LINK( this, ChartController, NotifyUndoActionHdl ) );
+        }
     }
     return m_pDrawModelWrapper.get();
 }

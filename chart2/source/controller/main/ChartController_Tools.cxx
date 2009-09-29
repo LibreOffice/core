@@ -79,10 +79,13 @@
 // for SolarMutex
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 // for OutlinerView
 #include <svx/outliner.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdundo.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unopage.hxx>
 
@@ -413,13 +416,14 @@ void ChartController::impl_PasteGraphic(
 void ChartController::impl_PasteShapes( SdrModel* pModel )
 {
     DrawModelWrapper* pDrawModelWrapper( this->GetDrawModelWrapper() );
-    if ( pDrawModelWrapper )
+    if ( pDrawModelWrapper && m_pDrawViewWrapper )
     {
         Reference< drawing::XDrawPage > xDestPage( pDrawModelWrapper->getMainDrawPage() );
         SdrPage* pDestPage = GetSdrPageFromXDrawPage( xDestPage );
         if ( pDestPage )
         {
             Reference< drawing::XShape > xSelShape;
+            m_pDrawViewWrapper->BegUndo( SVX_RESSTR( RID_SVX_3D_UNDO_EXCHANGE_PASTE ) );
             sal_uInt16 nCount = pModel->GetPageCount();
             for ( sal_uInt16 i = 0; i < nCount; ++i )
             {
@@ -442,6 +446,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
                         }
 
                         pDestPage->InsertObject( pNewObj );
+                        m_pDrawViewWrapper->AddUndo( new SdrUndoInsertObj( *pNewObj ) );
                         xSelShape = xShape;
                     }
                 }
@@ -456,6 +461,8 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
             // select last inserted shape
             m_aSelection.setSelection( xSelShape );
             m_aSelection.applySelection( m_pDrawViewWrapper );
+
+            m_pDrawViewWrapper->EndUndo();
         }
     }
 }
@@ -463,7 +470,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
 void ChartController::impl_PasteStringAsTextShape( const OUString& rString, const awt::Point& rPosition )
 {
     DrawModelWrapper* pDrawModelWrapper( this->GetDrawModelWrapper() );
-    if ( pDrawModelWrapper )
+    if ( pDrawModelWrapper && m_pDrawViewWrapper )
     {
         const Reference< lang::XMultiServiceFactory >& xShapeFactory( pDrawModelWrapper->getShapeFactory() );
         const Reference< drawing::XDrawPage >& xDrawPage( pDrawModelWrapper->getMainDrawPage() );
@@ -495,6 +502,14 @@ void ChartController::impl_PasteStringAsTextShape( const OUString& rString, cons
 
                 m_aSelection.setSelection( xTextShape );
                 m_aSelection.applySelection( m_pDrawViewWrapper );
+
+                SdrObject* pObj = DrawViewWrapper::getSdrObject( xTextShape );
+                if ( pObj )
+                {
+                    m_pDrawViewWrapper->BegUndo( SVX_RESSTR( RID_SVX_3D_UNDO_EXCHANGE_PASTE ) );
+                    m_pDrawViewWrapper->AddUndo( new SdrUndoInsertObj( *pObj ) );
+                    m_pDrawViewWrapper->EndUndo();
+                }
             }
             catch ( const uno::Exception& ex )
             {

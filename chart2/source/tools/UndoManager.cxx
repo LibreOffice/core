@@ -44,6 +44,8 @@
 
 #include <unotools/configitem.hxx>
 #include <cppuhelper/compbase1.hxx>
+#include <rtl/uuid.h>
+#include <svx/svdundo.hxx>
 
 #include <functional>
 
@@ -134,10 +136,31 @@ UndoManager::~UndoManager()
     m_pLastRemeberedUndoElement = 0;
 }
 
+void UndoManager::addShapeUndoAction( SdrUndoAction* pAction )
+{
+    if ( !pAction )
+    {
+        return;
+    }
+
+    impl::ShapeUndoElement* pShapeUndoElement = new impl::ShapeUndoElement( pAction->GetComment(), pAction );
+    if ( pShapeUndoElement )
+    {
+        m_apUndoStack->push( pShapeUndoElement );
+        m_apRedoStack->disposeAndClear();
+        if ( !m_apUndoStepsConfigItem.get() )
+        {
+            retrieveConfigUndoSteps();
+        }
+        fireModifyEvent();
+    }
+}
+
 void UndoManager::impl_undoRedo(
     Reference< frame::XModel > & xCurrentModel,
     impl::UndoStack * pStackToRemoveFrom,
-    impl::UndoStack * pStackToAddTo )
+    impl::UndoStack * pStackToAddTo,
+    bool bUndo )
 {
     if( pStackToRemoveFrom && ! pStackToRemoveFrom->empty() )
     {
@@ -145,11 +168,32 @@ void UndoManager::impl_undoRedo(
         impl::UndoElement * pTop( pStackToRemoveFrom->top());
         if( pTop )
         {
-            // put a clone of current model into redo/undo stack with the same
-            // action string as the undo/redo
-            pStackToAddTo->push( pTop->createFromModel( xCurrentModel ));
-            // change current model by properties of the model from undo
-            pTop->applyToModel( xCurrentModel );
+            impl::ShapeUndoElement* pShapeUndoElement = dynamic_cast< impl::ShapeUndoElement* >( pTop );
+            if ( pShapeUndoElement )
+            {
+                impl::ShapeUndoElement* pNewShapeUndoElement = new impl::ShapeUndoElement( *pShapeUndoElement );
+                pStackToAddTo->push( pNewShapeUndoElement );
+                SdrUndoAction* pAction = pNewShapeUndoElement->getSdrUndoAction();
+                if ( pAction )
+                {
+                    if ( bUndo )
+                    {
+                        pAction->Undo();
+                    }
+                    else
+                    {
+                        pAction->Redo();
+                    }
+                }
+            }
+            else
+            {
+                // put a clone of current model into redo/undo stack with the same
+                // action string as the undo/redo
+                pStackToAddTo->push( pTop->createFromModel( xCurrentModel ));
+                // change current model by properties of the model from undo
+                pTop->applyToModel( xCurrentModel );
+            }
             // remove the top undo element
             pStackToRemoveFrom->pop(), pTop = 0;
             ChartViewHelper::setViewToDirtyState( xCurrentModel );
@@ -290,14 +334,14 @@ void SAL_CALL UndoManager::undo( Reference< frame::XModel >& xCurrentModel )
     throw (uno::RuntimeException)
 {
     OSL_ASSERT( m_apUndoStack.get() && m_apRedoStack.get());
-    impl_undoRedo( xCurrentModel, m_apUndoStack.get(), m_apRedoStack.get());
+    impl_undoRedo( xCurrentModel, m_apUndoStack.get(), m_apRedoStack.get(), true );
 }
 
 void SAL_CALL UndoManager::redo( Reference< frame::XModel >& xCurrentModel )
     throw (uno::RuntimeException)
 {
     OSL_ASSERT( m_apUndoStack.get() && m_apRedoStack.get());
-    impl_undoRedo( xCurrentModel, m_apRedoStack.get(), m_apUndoStack.get());
+    impl_undoRedo( xCurrentModel, m_apRedoStack.get(), m_apUndoStack.get(), false );
 }
 
 ::sal_Bool SAL_CALL UndoManager::undoPossible()
@@ -350,6 +394,46 @@ void SAL_CALL UndoManager::applyModelContent(
     throw (uno::RuntimeException)
 {
     impl::UndoElement::applyModelContentToModel( xModelToChange, xModelToCopyFrom );
+}
+
+// ____ XUnoTunnel ____
+sal_Int64 UndoManager::getSomething( const Sequence< sal_Int8 >& rId )
+    throw (uno::RuntimeException)
+{
+    if ( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) )
+    {
+        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ) );
+    }
+    return 0;
+}
+
+// static
+const Sequence< sal_Int8 >& UndoManager::getUnoTunnelId()
+{
+    static Sequence< sal_Int8 >* pSeq = 0;
+    if( !pSeq )
+    {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        if( !pSeq )
+        {
+            static Sequence< sal_Int8 > aSeq( 16 );
+            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
+            pSeq = &aSeq;
+        }
+    }
+    return *pSeq;
+}
+
+// static
+UndoManager* UndoManager::getImplementation( const Reference< uno::XInterface > xObj )
+{
+    UndoManager* pRet = NULL;
+    Reference< lang::XUnoTunnel > xUT( xObj, uno::UNO_QUERY );
+    if ( xUT.is() )
+    {
+        pRet = reinterpret_cast< UndoManager* >( sal::static_int_cast< sal_IntPtr >( xUT->getSomething( getUnoTunnelId() ) ) );
+    }
+    return pRet;
 }
 
 } //  namespace chart

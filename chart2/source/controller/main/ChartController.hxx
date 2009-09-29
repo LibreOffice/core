@@ -477,6 +477,8 @@ public:
 
     bool isShapeContext() const;
 
+    DECL_LINK( NotifyUndoActionHdl, SdrUndoAction* );
+
 public:
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
