@@ -327,8 +327,12 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         //SJ: vertical writing is not required, by removing this item no outliner is created
         aSet.ClearItem( SDRATTR_TEXTDIRECTION );
 
-        // For primitive rendering, shadow handling is done completely based on the geometry, so i removed it here
-        aSet.ClearItem(SDRATTR_SHADOW);
+        // #i105323# For 3D AutoShapes, the shadow attribute has to be applied to each
+        // created visualisation helper model shape individually. The shadow itself
+        // will then be rendered from the 3D renderer correctly for the whole 3D scene
+        // (and thus behind all objects of which the visualisation may be built). So,
+        // dio NOT remove it from the ItemSet here.
+        // aSet.ClearItem(SDRATTR_SHADOW);
 
         std::vector< E3dCompoundObject* > aPlaceholderObjectList;
 

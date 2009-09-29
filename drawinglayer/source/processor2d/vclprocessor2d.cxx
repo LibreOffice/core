@@ -625,6 +625,98 @@ namespace drawinglayer
             }
         }
 
+        // direct draw of bitmap
+        void VclProcessor2D::RenderPolyPolygonBitmapPrimitive2D(const primitive2d::PolyPolygonBitmapPrimitive2D& rPolygonCandidate)
+        {
+            bool bDone(false);
+            const basegfx::B2DPolyPolygon& rPolyPolygon = rPolygonCandidate.getB2DPolyPolygon();
+
+            if(rPolyPolygon.count())
+            {
+                const attribute::FillBitmapAttribute& rFillBitmapAttribute = rPolygonCandidate.getFillBitmap();
+                const Bitmap& rBitmap = rFillBitmapAttribute.getBitmap();
+
+                if(rBitmap.IsEmpty())
+                {
+                    // empty bitmap, done
+                    bDone = true;
+                }
+                else
+                {
+                    // try to catch cases where the bitmap will be color-modified to a single
+                    // color (e.g. shadow). This would NOT be optimizable with an alpha channel
+                    // at the Bitmap which we do not have here. When this should change, this
+                    // optimization has to be reworked accordingly.
+                    const sal_uInt32 nBColorModifierStackCount(maBColorModifierStack.count());
+
+                    if(nBColorModifierStackCount)
+                    {
+                        const basegfx::BColorModifier& rTopmostModifier = maBColorModifierStack.getBColorModifier(nBColorModifierStackCount - 1);
+
+                        if(basegfx::BCOLORMODIFYMODE_REPLACE == rTopmostModifier.getMode())
+                        {
+                            // the bitmap fill is in unified color, so we can replace it with
+                            // a single polygon fill. The form of the fill depends on tiling
+                            if(rFillBitmapAttribute.getTiling())
+                            {
+                                // with tiling, fill the whole PolyPolygon with the modifier color
+                                basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolyPolygon);
+
+                                aLocalPolyPolygon.transform(maCurrentTransformation);
+                                mpOutputDevice->SetLineColor();
+                                mpOutputDevice->SetFillColor(Color(rTopmostModifier.getBColor()));
+                                mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
+                            }
+                            else
+                            {
+                                // without tiling, only the area common to the bitmap tile and the
+                                // PolyPolygon is filled. Create the bitmap tile area in object
+                                // coordinates. For this, the object transformation needs to be created
+                                // from the already scaled PolyPolygon. The tile area in object
+                                // coordinates wil always be non-rotated, so it's not necessary to
+                                // work with a polygon here
+                                basegfx::B2DRange aTileRange(rFillBitmapAttribute.getTopLeft(),
+                                    rFillBitmapAttribute.getTopLeft() + rFillBitmapAttribute.getSize());
+                                const basegfx::B2DRange aPolyPolygonRange(rPolyPolygon.getB2DRange());
+                                basegfx::B2DHomMatrix aNewObjectTransform;
+
+                                aNewObjectTransform.set(0, 0, aPolyPolygonRange.getWidth());
+                                aNewObjectTransform.set(1, 1, aPolyPolygonRange.getHeight());
+                                aNewObjectTransform.set(0, 2, aPolyPolygonRange.getMinX());
+                                aNewObjectTransform.set(1, 2, aPolyPolygonRange.getMinY());
+                                aTileRange.transform(aNewObjectTransform);
+
+                                // now clip the object polyPolygon against the tile range
+                                // to get the common area (OR)
+                                basegfx::B2DPolyPolygon aTarget = basegfx::tools::clipPolyPolygonOnRange(rPolyPolygon, aTileRange, true, false);
+
+                                if(aTarget.count())
+                                {
+                                    aTarget.transform(maCurrentTransformation);
+                                    mpOutputDevice->SetLineColor();
+                                    mpOutputDevice->SetFillColor(Color(rTopmostModifier.getBColor()));
+                                    mpOutputDevice->DrawPolyPolygon(aTarget);
+                                }
+                            }
+
+                            bDone = true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // empty polyPolygon, done
+                bDone = true;
+            }
+
+            if(!bDone)
+            {
+                // use default decomposition
+                process(rPolygonCandidate.get2DDecomposition(getViewInformation2D()));
+            }
+        }
+
         // direct draw of PolyPolygon with color
         void VclProcessor2D::RenderPolyPolygonColorPrimitive2D(const primitive2d::PolyPolygonColorPrimitive2D& rPolygonCandidate)
         {

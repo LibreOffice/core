@@ -162,12 +162,19 @@ namespace drawinglayer
                 {
                     // 2D Scene primitive containing 3D stuff; extract 2D contour in world coordinates
                     const primitive2d::ScenePrimitive2D& rScenePrimitive2DCandidate(static_cast< const primitive2d::ScenePrimitive2D& >(rCandidate));
-                    const primitive2d::Primitive2DSequence xExtracted2DSceneGeometry(rScenePrimitive2DCandidate.getGeometry2D(getViewInformation2D()));
+                    const primitive2d::Primitive2DSequence xExtracted2DSceneGeometry(rScenePrimitive2DCandidate.getGeometry2D());
+                    const primitive2d::Primitive2DSequence xExtracted2DSceneShadow(rScenePrimitive2DCandidate.getShadow2D(getViewInformation2D()));
 
                     // proccess content
                     if(xExtracted2DSceneGeometry.hasElements())
                     {
                         process(xExtracted2DSceneGeometry);
+                    }
+
+                    // proccess content
+                    if(xExtracted2DSceneShadow.hasElements())
+                    {
+                        process(xExtracted2DSceneShadow);
                     }
 
                     break;

@@ -57,6 +57,10 @@ namespace drawinglayer
             // that the text needs to be block formatted
             unsigned                                    mbWordWrap : 1;
 
+            // defines that the object contains/is a 3D AutoShape. Needed for
+            // making exceptions with shadow generation
+            unsigned                                    mb3DShape : 1;
+
         protected:
             // local decomposition.
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
@@ -66,13 +70,15 @@ namespace drawinglayer
                 const attribute::SdrShadowTextAttribute& rSdrSTAttribute,
                 const Primitive2DSequence& rSubPrimitives,
                 const basegfx::B2DHomMatrix& rTextBox,
-                bool bWordWrap);
+                bool bWordWrap,
+                bool b3DShape);
 
             // data access
             const attribute::SdrShadowTextAttribute& getSdrSTAttribute() const { return maSdrSTAttribute; }
             const Primitive2DSequence& getSubPrimitives() const { return maSubPrimitives; }
             const basegfx::B2DHomMatrix& getTextBox() const { return maTextBox; }
             bool getWordWrap() const { return mbWordWrap; }
+            bool get3DShape() const { return mb3DShape; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

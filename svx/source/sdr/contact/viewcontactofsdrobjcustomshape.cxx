@@ -40,6 +40,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/obj3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -122,6 +123,7 @@ namespace sdr
 
                 // create Primitive2DSequence from sub-geometry
                 const SdrObject* pSdrObjRepresentation = GetCustomShapeObj().GetSdrObjectFromCustomShape();
+                bool b3DShape(false);
 
                 if(pSdrObjRepresentation)
                 {
@@ -130,6 +132,12 @@ namespace sdr
                     while(aIterator.IsMore())
                     {
                         SdrObject& rCandidate = *aIterator.Next();
+
+                        if(!b3DShape && dynamic_cast< E3dObject* >(&rCandidate))
+                        {
+                            b3DShape = true;
+                        }
+
                         const drawinglayer::primitive2d::Primitive2DSequence xNew(rCandidate.GetViewContact().getViewIndependentPrimitive2DSequence());
                         drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xGroup, xNew);
                     }
@@ -204,7 +212,11 @@ namespace sdr
 
                     // create primitive
                     const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrCustomShapePrimitive2D(
-                        *pAttribute, xGroup, aTextBoxMatrix, bWordWrap));
+                        *pAttribute,
+                        xGroup,
+                        aTextBoxMatrix,
+                        bWordWrap,
+                        b3DShape));
                     xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                 }
 

@@ -200,6 +200,17 @@ namespace drawinglayer
                     fViewSizeY *= fReduceFactor;
                 }
 
+                if(rViewInformation.getReducedDisplayQuality())
+                {
+                    // when reducing the visualisation is allowed (e.g. an OverlayObject
+                    // only needed for dragging), reduce resolution extra
+                    // to speed up dragging interactions (1/4th currently)
+                    const double fReducedVisualisationFactor(0.25);
+                    fReduceFactor *= fReducedVisualisationFactor;
+                    fViewSizeX *= fReducedVisualisationFactor;
+                    fViewSizeY *= fReducedVisualisationFactor;
+                }
+
                 // calculate logic render size in world coordinates for usage in renderer
                 basegfx::B2DVector aLogicRenderSize(
                     aDiscreteRange.getWidth() * fReduceFactor,
@@ -207,9 +218,8 @@ namespace drawinglayer
                 aLogicRenderSize *= rViewInformation.getInverseObjectToViewTransformation();
 
                 // determine the oversample value
-                static bool bDoOversample(false);
                 static sal_uInt16 nDefaultOversampleValue(3);
-                const sal_uInt16 nOversampleValue((bDoOversample || aDrawinglayerOpt.IsAntiAliasing()) ? nDefaultOversampleValue : 0);
+                const sal_uInt16 nOversampleValue(aDrawinglayerOpt.IsAntiAliasing() ? nDefaultOversampleValue : 0);
 
                 // use default 3D primitive processor to create BitmapEx for aUnitVisiblePart and process
                 processor3d::ZBufferProcessor3D aZBufferProcessor3D(
@@ -262,16 +272,9 @@ namespace drawinglayer
             return aRetval;
         }
 
-        Primitive2DSequence ScenePrimitive2D::getGeometry2D(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence ScenePrimitive2D::getGeometry2D() const
         {
             Primitive2DSequence aRetval;
-
-            // create 2D shadows from contained 3D primitives
-            if(impGetShadow3D(rViewInformation))
-            {
-                // add extracted 2d shadows (before 3d scene creations itself)
-                aRetval = maShadowPrimitives;
-            }
 
             // create 2D projected geometry from 3D geometry
             if(getChildren3D().hasElements())
@@ -284,9 +287,22 @@ namespace drawinglayer
                 // process local primitives
                 aGeometryProcessor.process(getChildren3D());
 
-                // fetch result and append
-                Primitive2DSequence a2DExtractedPrimitives(aGeometryProcessor.getPrimitive2DSequence());
-                appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, a2DExtractedPrimitives);
+                // fetch result
+                aRetval = aGeometryProcessor.getPrimitive2DSequence();
+            }
+
+            return aRetval;
+        }
+
+        Primitive2DSequence ScenePrimitive2D::getShadow2D(const geometry::ViewInformation2D& rViewInformation) const
+        {
+            Primitive2DSequence aRetval;
+
+            // create 2D shadows from contained 3D primitives
+            if(impGetShadow3D(rViewInformation))
+            {
+                // add extracted 2d shadows (before 3d scene creations itself)
+                aRetval = maShadowPrimitives;
             }
 
             return aRetval;

@@ -90,6 +90,8 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\processor2d
 
 mkdir: %_DEST%\inc%_EXT%\drawinglayer\processor3d
 ..\inc\drawinglayer\processor3d\baseprocessor3d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor3d\baseprocessor3d.hxx
+..\inc\drawinglayer\processor3d\cutfindprocessor3d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor3d\cutfindprocessor3d.hxx
+..\inc\drawinglayer\processor3d\defaultprocessor3d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor3d\defaultprocessor3d.hxx
 ..\inc\drawinglayer\processor3d\zbufferprocessor3d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor3d\zbufferprocessor3d.hxx
 ..\inc\drawinglayer\processor3d\tbufferprocessor3d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor3d\tbufferprocessor3d.hxx
 
