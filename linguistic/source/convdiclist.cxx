@@ -36,7 +36,6 @@
 #include <svtools/pathoptions.hxx>
 #include <svtools/useroptions.hxx>
 #include <svtools/lingucfg.hxx>
-#include <sfx2/docfile.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/instance.hxx>
 #include <cppuhelper/factory.hxx>   // helper for factories

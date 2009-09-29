@@ -30,27 +30,32 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
-#include "dlistimp.hxx"
-#include "dicimp.hxx"
-#include "lngopt.hxx"
 
+#include <cppuhelper/factory.hxx>
+#include <i18npool/mslangid.hxx>
 #include <osl/file.hxx>
+#include <svtools/pathoptions.hxx>
+#include <svtools/useroptions.hxx>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
-#include <i18npool/mslangid.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/useroptions.hxx>
-#include <sfx2/docfile.hxx>
-#include <vcl/svapp.hxx>
-#include <cppuhelper/factory.hxx>   // helper for factories
 #include <unotools/localfilehelper.hxx>
+#include <unotools/processfactory.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <vcl/svapp.hxx>
+
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+
+#include "defs.hxx"
+#include "dlistimp.hxx"
+#include "dicimp.hxx"
+#include "lngopt.hxx"
 
 //using namespace utl;
 using namespace osl;
@@ -929,11 +934,28 @@ static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg )
     if(aExt != aDIC)
         return FALSE;
 
-    // get stream to be used
-    SfxMedium aMedium( rFileURL, STREAM_READ | STREAM_SHARE_DENYWRITE, FALSE );
-    SvStream *pStream = aMedium.GetInStream();
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( utl::getProcessServiceFactory() );
 
-    int nDicVersion = ReadDicVersion (pStream, nLng, bNeg);
+    // get XInputStream stream
+    uno::Reference< io::XInputStream > xStream;
+    try
+    {
+        uno::Reference< ucb::XSimpleFileAccess > xAccess( xServiceFactory->createInstance(
+                A2OU( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
+        xStream = xAccess->openFileRead( rFileURL );
+    }
+    catch (uno::Exception & e)
+    {
+        DBG_ASSERT( 0, "failed to get input stream" );
+        (void) e;
+    }
+    DBG_ASSERT( xStream.is(), "failed to get stream for read" );
+    if (!xStream.is())
+        return FALSE;
+
+    SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
+
+    int nDicVersion = ReadDicVersion(pStream, nLng, bNeg);
     if (2 == nDicVersion || nDicVersion >= 5)
         return TRUE;
 

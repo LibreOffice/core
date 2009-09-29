@@ -30,29 +30,30 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
-#include <i18npool/lang.h>
 
-#ifndef _DICIMP_HXX
+#include <cppuhelper/factory.hxx>
 #include <dicimp.hxx>
-#endif
-#ifndef _HYPHIMP_HXX
 #include <hyphdsp.hxx>
-#endif
-#include <tools/urlobj.hxx>
+#include <i18npool/lang.h>
+#include <i18npool/mslangid.hxx>
+#include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
-#include <sfx2/docfile.hxx>
-#include <osl/mutex.hxx>
+#include <tools/urlobj.hxx>
 #include <unotools/processfactory.hxx>
-#include <i18npool/mslangid.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/linguistic2/DictionaryType.hpp>
 #include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
 
-#include <cppuhelper/factory.hxx>   // helper for factories
+#include "defs.hxx"
+
 
 using namespace utl;
 using namespace osl;
@@ -88,7 +89,7 @@ static sal_Bool getTag(const ByteString &rLine,
 }
 
 
-INT16 ReadDicVersion( SvStream *pStream, USHORT &nLng, BOOL &bNeg )
+INT16 ReadDicVersion( SvStreamPtr &rpStream, USHORT &nLng, BOOL &bNeg )
 {
     // Sniff the header
     INT16 nDicVersion;
@@ -97,13 +98,13 @@ INT16 ReadDicVersion( SvStream *pStream, USHORT &nLng, BOOL &bNeg )
     nLng = LANGUAGE_NONE;
     bNeg = FALSE;
 
-    if (!pStream || pStream->GetError())
+    if (!rpStream.get() || rpStream->GetError())
         return -1;
 
-    sal_Size nSniffPos = pStream->Tell();
+    sal_Size nSniffPos = rpStream->Tell();
     static sal_Size nVerOOo7Len = sal::static_int_cast< sal_Size >(strlen( pVerOOo7 ));
     pMagicHeader[ nVerOOo7Len ] = '\0';
-    if ((pStream->Read((void *) pMagicHeader, nVerOOo7Len) == nVerOOo7Len) &&
+    if ((rpStream->Read((void *) pMagicHeader, nVerOOo7Len) == nVerOOo7Len) &&
         !strcmp(pMagicHeader, pVerOOo7))
     {
         sal_Bool bSuccess;
@@ -112,10 +113,10 @@ INT16 ReadDicVersion( SvStream *pStream, USHORT &nLng, BOOL &bNeg )
         nDicVersion = 7;
 
         // 1st skip magic / header line
-        pStream->ReadLine(aLine);
+        rpStream->ReadLine(aLine);
 
         // 2nd line: language all | en-US | pt-BR ...
-        while (sal_True == (bSuccess = pStream->ReadLine(aLine)))
+        while (sal_True == (bSuccess = rpStream->ReadLine(aLine)))
         {
             ByteString aTagValue;
 
@@ -151,13 +152,13 @@ INT16 ReadDicVersion( SvStream *pStream, USHORT &nLng, BOOL &bNeg )
     {
         USHORT nLen;
 
-        pStream->Seek (nSniffPos );
+        rpStream->Seek (nSniffPos );
 
-        *pStream >> nLen;
+        *rpStream >> nLen;
         if (nLen >= MAX_HEADER_LENGTH)
             return -1;
 
-        pStream->Read(pMagicHeader, nLen);
+        rpStream->Read(pMagicHeader, nLen);
         pMagicHeader[nLen] = '\0';
 
         // Check version magic
@@ -175,14 +176,14 @@ INT16 ReadDicVersion( SvStream *pStream, USHORT &nLng, BOOL &bNeg )
             6 == nDicVersion)
         {
             // The language of the dictionary
-            *pStream >> nLng;
+            *rpStream >> nLng;
 
             if (VERS2_NOLANGUAGE == nLng)
                 nLng = LANGUAGE_NONE;
 
             // Negative Flag
             sal_Char nTmp;
-            *pStream >> nTmp;
+            *rpStream >> nTmp;
             bNeg = (BOOL)nTmp;
         }
     }
@@ -270,14 +271,29 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
 
     if (rMainURL.getLength() == 0)
         return 0;
+    DBG_ASSERT(!INetURLObject( rURL ).HasError(), "lng : invalid URL");
+
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( utl::getProcessServiceFactory() );
+
+    // get XInputStream stream
+    uno::Reference< io::XInputStream > xStream;
+    try
+    {
+        uno::Reference< ucb::XSimpleFileAccess > xAccess( xServiceFactory->createInstance(
+                A2OU( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
+        xStream = xAccess->openFileRead( rMainURL );
+    }
+    catch (uno::Exception & e)
+    {
+        DBG_ASSERT( 0, "failed to get input stream" );
+        (void) e;
+    }
+    if (!xStream.is())
+        return static_cast< ULONG >(-1);
+
+    SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
 
     ULONG nErr = sal::static_int_cast< ULONG >(-1);
-
-    // get stream to use
-    SfxMedium aMedium( rMainURL, STREAM_READ | STREAM_SHARE_DENYWRITE, FALSE );
-    SvStream *pStream = aMedium.GetInStream();
-    if (!pStream)
-        return nErr;
 
     // Header einlesen
     BOOL bNegativ;
@@ -285,6 +301,7 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
     nDicVersion = ReadDicVersion(pStream, nLang, bNegativ);
     if (0 != (nErr = pStream->GetError()))
         return nErr;
+
     nLanguage = nLang;
 
     eDicType = bNegativ ? DictionaryType_NEGATIVE : DictionaryType_POSITIVE;
@@ -398,16 +415,29 @@ ULONG DictionaryNeo::saveEntries(const OUString &rURL)
 
     if (rURL.getLength() == 0)
         return 0;
+    DBG_ASSERT(!INetURLObject( rURL ).HasError(), "lng : invalid URL");
+
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( utl::getProcessServiceFactory() );
+
+    // get XOutputStream stream
+    uno::Reference< io::XStream > xStream;
+    try
+    {
+        uno::Reference< ucb::XSimpleFileAccess > xAccess( xServiceFactory->createInstance(
+                A2OU( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
+        xStream = xAccess->openFileReadWrite( rURL );
+    }
+    catch (uno::Exception & e)
+    {
+        DBG_ASSERT( 0, "failed to get input stream" );
+        (void) e;
+    }
+    if (!xStream.is())
+        return static_cast< ULONG >(-1);
+
+    SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
 
     ULONG nErr = sal::static_int_cast< ULONG >(-1);
-
-    DBG_ASSERT(!INetURLObject( rURL ).HasError(), "lng : invalid URL");
-    SfxMedium   aMedium( rURL, STREAM_WRITE | STREAM_TRUNC | STREAM_SHARE_DENYALL,
-                         FALSE );
-    aMedium.CreateTempFile();   // use temp file to write to...
-    SvStream *pStream = aMedium.GetOutStream();
-    if (!pStream)
-        return nErr;
 
     rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
     if (nDicVersion >= 6)
@@ -499,10 +529,6 @@ ULONG DictionaryNeo::saveEntries(const OUString &rURL)
 
     //! get return value before Stream is destroyed
     ULONG nError = pStream->GetError();
-
-    // flush file, close it and release any lock
-    aMedium.Close();
-    aMedium.Commit();
 
     return nError;
 }

@@ -36,7 +36,6 @@
 #include <tools/string.hxx>
 #include <i18npool/mslangid.hxx>
 #include <tools/stream.hxx>
-#include <sfx2/docfile.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/processfactory.hxx>
 #include <ucbhelper/content.hxx>
@@ -335,7 +334,7 @@ void ConvDicXMLRightTextContext_Impl::EndElement()
 
 ///////////////////////////////////////////////////////////////////////////
 
-sal_Bool ConvDicXMLExport::Export( SfxMedium & /*rMedium*/ )
+sal_Bool ConvDicXMLExport::Export()
 {
     sal_Bool bRet = sal_False;
 

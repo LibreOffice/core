@@ -74,7 +74,6 @@ SHL1STDLIBS= \
         $(SVTOOLLIB)	\
         $(SVLLIB)		\
         $(VCLLIB)		\
-        $(SFXLIB)		\
         $(SALLIB)		\
         $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)  \
