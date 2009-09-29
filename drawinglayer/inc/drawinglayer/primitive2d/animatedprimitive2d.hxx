@@ -99,14 +99,14 @@ namespace drawinglayer
         class AnimatedBlinkPrimitive2D : public AnimatedSwitchPrimitive2D
         {
         protected:
-            // create local decomposition
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
-
         public:
             AnimatedBlinkPrimitive2D(
                 const animation::AnimationEntry& rAnimationEntry,
                 const Primitive2DSequence& rChildren,
                 bool bIsTextAnimation);
+
+            // create local decomposition
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()
@@ -127,15 +127,15 @@ namespace drawinglayer
             std::vector< basegfx::tools::B2DHomMatrixBufferedDecompose >        maMatrixStack;
 
         protected:
-            // create local decomposition
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
-
         public:
             AnimatedInterpolatePrimitive2D(
                 const std::vector< basegfx::B2DHomMatrix >& rmMatrixStack,
                 const animation::AnimationEntry& rAnimationEntry,
                 const Primitive2DSequence& rChildren,
                 bool bIsTextAnimation);
+
+            // create local decomposition
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()

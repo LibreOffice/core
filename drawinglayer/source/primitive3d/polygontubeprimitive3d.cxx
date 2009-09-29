@@ -417,7 +417,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence PolygonTubePrimitive3D::create3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DSequence PolygonTubePrimitive3D::impCreate3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             const sal_uInt32 nPointCount(getB3DPolygon().count());
             std::vector< BasePrimitive3D* > aResultVector;
@@ -541,6 +541,7 @@ namespace drawinglayer
             double fDegreeStepWidth,
             double fMiterMinimumAngle)
         :   PolygonHairlinePrimitive3D(rPolygon, rBColor),
+            maLast3DDecomposition(),
             mfRadius(fRadius),
             mfDegreeStepWidth(fDegreeStepWidth),
             mfMiterMinimumAngle(fMiterMinimumAngle),
@@ -561,6 +562,19 @@ namespace drawinglayer
             }
 
             return false;
+        }
+
+        Primitive3DSequence PolygonTubePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+
+            if(!getLast3DDecomposition().hasElements())
+            {
+                const Primitive3DSequence aNewSequence(impCreate3DDecomposition(rViewInformation));
+                const_cast< PolygonTubePrimitive3D* >(this)->setLast3DDecomposition(aNewSequence);
+            }
+
+            return getLast3DDecomposition();
         }
 
         // provide unique ID

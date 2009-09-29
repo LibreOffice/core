@@ -114,7 +114,15 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence AnimatedBlinkPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        AnimatedBlinkPrimitive2D::AnimatedBlinkPrimitive2D(
+            const animation::AnimationEntry& rAnimationEntry,
+            const Primitive2DSequence& rChildren,
+            bool bIsTextAnimation)
+        :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, bIsTextAnimation)
+        {
+        }
+
+        Primitive2DSequence AnimatedBlinkPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             if(getChildren().hasElements())
             {
@@ -129,14 +137,6 @@ namespace drawinglayer
             return Primitive2DSequence();
         }
 
-        AnimatedBlinkPrimitive2D::AnimatedBlinkPrimitive2D(
-            const animation::AnimationEntry& rAnimationEntry,
-            const Primitive2DSequence& rChildren,
-            bool bIsTextAnimation)
-        :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, bIsTextAnimation)
-        {
-        }
-
         // provide unique ID
         ImplPrimitrive2DIDBlock(AnimatedBlinkPrimitive2D, PRIMITIVE2D_ID_ANIMATEDBLINKPRIMITIVE2D)
 
@@ -149,7 +149,25 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence AnimatedInterpolatePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        AnimatedInterpolatePrimitive2D::AnimatedInterpolatePrimitive2D(
+            const std::vector< basegfx::B2DHomMatrix >& rmMatrixStack,
+            const animation::AnimationEntry& rAnimationEntry,
+            const Primitive2DSequence& rChildren,
+            bool bIsTextAnimation)
+        :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, bIsTextAnimation),
+            maMatrixStack()
+        {
+            // copy matrices to locally pre-decomposed matrix stack
+            const sal_uInt32 nCount(rmMatrixStack.size());
+            maMatrixStack.reserve(nCount);
+
+            for(sal_uInt32 a(0L); a < nCount; a++)
+            {
+                maMatrixStack.push_back(basegfx::tools::B2DHomMatrixBufferedDecompose(rmMatrixStack[a]));
+            }
+        }
+
+        Primitive2DSequence AnimatedInterpolatePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             const sal_uInt32 nSize(maMatrixStack.size());
 
@@ -201,24 +219,6 @@ namespace drawinglayer
             else
             {
                 return getChildren();
-            }
-        }
-
-        AnimatedInterpolatePrimitive2D::AnimatedInterpolatePrimitive2D(
-            const std::vector< basegfx::B2DHomMatrix >& rmMatrixStack,
-            const animation::AnimationEntry& rAnimationEntry,
-            const Primitive2DSequence& rChildren,
-            bool bIsTextAnimation)
-        :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, bIsTextAnimation),
-            maMatrixStack()
-        {
-            // copy matrices to locally pre-decomposed matrix stack
-            const sal_uInt32 nCount(rmMatrixStack.size());
-            maMatrixStack.reserve(nCount);
-
-            for(sal_uInt32 a(0L); a < nCount; a++)
-            {
-                maMatrixStack.push_back(basegfx::tools::B2DHomMatrixBufferedDecompose(rmMatrixStack[a]));
             }
         }
 

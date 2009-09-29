@@ -46,7 +46,35 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrOle2Primitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        SdrOle2Primitive2D::SdrOle2Primitive2D(
+            const Primitive2DSequence& rOLEContent,
+            const basegfx::B2DHomMatrix& rTransform,
+            const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute)
+        :   BasePrimitive2D(),
+            maOLEContent(rOLEContent),
+            maTransform(rTransform),
+            maSdrLFSTAttribute(rSdrLFSTAttribute)
+        {
+        }
+
+        bool SdrOle2Primitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+        {
+            if(BasePrimitive2D::operator==(rPrimitive))
+            {
+                const SdrOle2Primitive2D& rCompare = (SdrOle2Primitive2D&)rPrimitive;
+
+                if(getOLEContent() == rCompare.getOLEContent()
+                    && getTransform() == rCompare.getTransform()
+                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        Primitive2DSequence SdrOle2Primitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             // to take care of getSdrLFSTAttribute() later, the same as in SdrGrafPrimitive2D::create2DDecomposition
             // should happen. For the moment we only need the OLE itself
@@ -120,34 +148,6 @@ namespace drawinglayer
             }
 
             return aRetval;
-        }
-
-        SdrOle2Primitive2D::SdrOle2Primitive2D(
-            const Primitive2DSequence& rOLEContent,
-            const basegfx::B2DHomMatrix& rTransform,
-            const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute)
-        :   BasePrimitive2D(),
-            maOLEContent(rOLEContent),
-            maTransform(rTransform),
-            maSdrLFSTAttribute(rSdrLFSTAttribute)
-        {
-        }
-
-        bool SdrOle2Primitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BasePrimitive2D::operator==(rPrimitive))
-            {
-                const SdrOle2Primitive2D& rCompare = (SdrOle2Primitive2D&)rPrimitive;
-
-                if(getOLEContent() == rCompare.getOLEContent()
-                    && getTransform() == rCompare.getTransform()
-                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute())
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         // provide unique ID

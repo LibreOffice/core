@@ -53,10 +53,6 @@ namespace drawinglayer
             basegfx::B2DHomMatrix                       maTransform;
             attribute::SdrLineFillShadowTextAttribute   maSdrLFSTAttribute;
 
-        protected:
-            // local decomposition.
-            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
-
         public:
             SdrOle2Primitive2D(
                 const Primitive2DSequence& rOLEContent,
@@ -70,6 +66,9 @@ namespace drawinglayer
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+
+            // local decomposition.
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()
