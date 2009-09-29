@@ -47,6 +47,7 @@
 #include "rtl/ref.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
+#include "rtl/textenc.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -434,44 +435,52 @@ void XcuParser::handlePropValue(XmlReader & reader, PropertyNode * prop) {
                  reader.getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
         }
-        css::uno::Reference< css::container::XNameAccess > service;
+        css::uno::Reference< css::uno::XInterface > service;
         try {
-            service = css::uno::Reference< css::container::XNameAccess >(
-                (css::uno::Reference< css::lang::XMultiComponentFactory >(
-                    context_->getServiceManager(), css::uno::UNO_SET_THROW)->
-                 createInstanceWithContext(external.copy(0, i), context_)),
-                css::uno::UNO_QUERY_THROW);
+            service = css::uno::Reference< css::lang::XMultiComponentFactory >(
+                context_->getServiceManager(), css::uno::UNO_SET_THROW)->
+                createInstanceWithContext(external.copy(0, i), context_);
         } catch (css::uno::RuntimeException &) {
+            // Assuming these exceptions are real errors:
             throw;
         } catch (css::uno::Exception & e) {
-            throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "cannot instantiate oor:external service: ")) +
-                 e.Message),
-                css::uno::Reference< css::uno::XInterface >());
+            // Assuming these exceptions indicate that the service is not
+            // installed:
+            OSL_TRACE(
+                "createInstance(%s) failed with %s",
+                rtl::OUStringToOString(
+                    external.copy(0, i), RTL_TEXTENCODING_UTF8).getStr(),
+                rtl::OUStringToOString(
+                    e.Message, RTL_TEXTENCODING_UTF8).getStr());
         }
-        css::uno::Any value;
-        try {
-            value = service->getByName(external.copy(i + 1));
-        } catch (css::container::NoSuchElementException & e) {
-            throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("unknwon oor:external ID: ")) +
-                 e.Message),
-                css::uno::Reference< css::uno::XInterface >());
-        } catch (css::lang::WrappedTargetException & e) {
-            throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "cannot obtain oor:external value: ")) +
-                 e.Message),
-                css::uno::Reference< css::uno::XInterface >());
-        }
-        css::uno::Type t;
-        if (!(value >>= t) || t != cppu::UnoType< cppu::UnoVoidType >::get()) {
-            //TODO: check value type
-            prop->setValue(valueParser_.getLayer(), value);
+        if (service.is()) {
+            css::uno::Any value;
+            try {
+                value = css::uno::Reference< css::container::XNameAccess >(
+                    service, css::uno::UNO_QUERY_THROW)->
+                    getByName(external.copy(i + 1));
+            } catch (css::container::NoSuchElementException & e) {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "unknwon oor:external ID: ")) +
+                     e.Message),
+                    css::uno::Reference< css::uno::XInterface >());
+            } catch (css::lang::WrappedTargetException & e) {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "cannot obtain oor:external value: ")) +
+                     e.Message),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            css::uno::Type t;
+            if (!(value >>= t) ||
+                t != cppu::UnoType< cppu::UnoVoidType >::get())
+            {
+                //TODO: check value type
+                prop->setValue(valueParser_.getLayer(), value);
+            }
         }
         state_.push(State());
     } else {
