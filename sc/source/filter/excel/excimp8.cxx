@@ -266,23 +266,9 @@ void ImportExcel8::ReadBasic( void )
         bool bLoadStrg = pFilterOpt->IsLoadExcelBasicStorage();
         if( bLoadCode || bLoadStrg )
         {
-            uno::Any aGlobs;
-            uno::Sequence< uno::Any > aArgs(1);
-            aArgs[ 0 ] <<= pShell->GetModel();
-            aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( ::rtl::OUString::createFromAscii( "ooo.vba.excel.Globals"), aArgs );
-            pShell->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
             SvxImportMSVBasic aBasicImport( *pShell, *xRootStrg, bLoadCode, bLoadStrg );
-        bool bAsComment = !bLoadExecutable || !aGlobs.hasValue();
+        bool bAsComment = !bLoadExecutable;
             aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA, bAsComment );
-                // There may be implications setting the current component
-                // too early :-/ so I will just manually set the Basic Variables
-                BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
-                if ( pAppMgr )
-                   pAppMgr->SetGlobalUNOConstant( "ThisComponent", makeAny( pShell->GetModel() ) );
-                {
-                    uno::Any aModel = uno::makeAny( pShell->GetModel() );
-                    pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aModel );
-                }
         }
     }
 }
