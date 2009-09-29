@@ -119,6 +119,33 @@ IMPL_LINK( AsyncQuitHandler, OnAsyncQuit, void*, /*pNull*/ )
     return 0L;
 }
 
+#if 0
+bool UnlockControllerHack( StarBASIC* pBasic )
+{
+    bool bRes = false;
+    if ( pBasic && pBasic->IsDocBasic() )
+    {
+        uno::Any aUnoVar;
+        ::rtl::OUString sVarName( ::rtl::OUString::createFromAscii( "ThisComponent" ) );
+        SbUnoObject* pGlobs = dynamic_cast<SbUnoObject*>( pBasic->Find( sVarName, SbxCLASS_DONTCARE ) );
+        if ( pGlobs )
+            aUnoVar = pGlobs->getUnoAny();
+        uno::Reference< frame::XModel > xModel( aUnoVar, uno::UNO_QUERY);
+        if ( xModel.is() )
+        {
+            try
+            {
+                xModel->unlockControllers();
+                bRes = true;
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+    }
+    return bRes;
+}
+#endif
 /////////////////////////////////////////////////////////////////////////////
 
 // Ein BASIC-Modul hat EXTSEARCH gesetzt, damit die im Modul enthaltenen
@@ -730,6 +757,13 @@ USHORT SbModule::Run( SbMethod* pMeth )
         pINST->nCallLvl--;          // Call-Level wieder runter
         StarBASIC::FatalError( SbERR_STACK_OVERFLOW );
     }
+
+    // VBA always ensure screenupdating is enabled after completing
+    StarBASIC* pBasic = PTR_CAST(StarBASIC,GetParent());
+#if 0
+    if ( pBasic && pBasic->IsDocBasic() && !pINST )
+        UnlockControllerHack( pBasic );
+#endif
     if( bDelInst )
     {
         // #57841 Uno-Objekte, die in RTL-Funktionen gehalten werden,
@@ -739,6 +773,11 @@ USHORT SbModule::Run( SbMethod* pMeth )
         delete pINST;
         pINST = NULL;
     }
+    if ( pBasic && pBasic->IsDocBasic() && pBasic->IsQuitApplication() && !pINST )
+    {
+        Application::PostUserEvent( LINK( &AsyncQuitHandler::instance(), AsyncQuitHandler, OnAsyncQuit ), NULL );
+    }
+
     return nRes;
 }
 
