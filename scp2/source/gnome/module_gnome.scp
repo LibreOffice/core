@@ -62,6 +62,9 @@ Module gid_Module_Optional_Gnome
 #ifdef ENABLE_GCONF
       gid_File_Lib_Gconfbe
 #endif
+#if defined ENABLE_GNOMEVFS && defined ENABLE_LOCKDOWN
+      gid_File_Share_Registry_Gconflockdown_Xcd
+#endif
     );
 End
 
