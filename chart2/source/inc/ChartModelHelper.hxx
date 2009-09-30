@@ -58,8 +58,6 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTTOOLS ChartModelHelper
 {
 public:
-    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager > createUndoManager();
-
     static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XRangeHighlighter > createRangeHighlighter(
             const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier >& xSelectionSupplier );
 

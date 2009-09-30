@@ -108,6 +108,9 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
 
     // attention: passing this as reference to ImplChartModel
     m_pImplChartModel.reset( new impl::ImplChartModel( xContext, this ));
+
+    m_xUndoManager = Reference< chart2::XUndoManager >(
+        this->createInstance( CHART_UNDOMANAGER_SERVICE_NAME ), uno::UNO_QUERY );
 }
 
 ChartModel::ChartModel( const ChartModel & rOther )
@@ -128,6 +131,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , m_xStorage( 0 ) //rOther.m_xStorage )
     , m_aVisualAreaSize( rOther.m_aVisualAreaSize )
     , m_aGraphicObjectVector( rOther.m_aGraphicObjectVector )
+    , m_xUndoManager( rOther.m_xUndoManager )
 {
     OSL_TRACE( "ChartModel: Copy-CTOR called" );
 
@@ -1215,7 +1219,7 @@ void SAL_CALL ChartModel::setParent( const Reference< uno::XInterface >& Parent 
 Reference< chart2::XUndoManager > SAL_CALL ChartModel::getUndoManager()
     throw (uno::RuntimeException)
 {
-    return m_pImplChartModel->GetUndoManager();
+    return m_xUndoManager;
 }
 
 // ____ XDataSource ____

@@ -157,9 +157,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
         GetPageBackground();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager >
-        GetUndoManager();
-
     void CreateDefaultChart();
 
     ::com::sun::star::uno::Reference<
@@ -232,8 +229,6 @@ private:
     bool                                  m_bIsDisposed;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                           m_xPageBackground;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager >
-                                          m_xUndoManager;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xDashTable;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xGradientTable;

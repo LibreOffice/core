@@ -59,12 +59,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 //static
-uno::Reference< chart2::XUndoManager > ChartModelHelper::createUndoManager()
-{
-    return new UndoManager();
-}
-
-//static
 uno::Reference< chart2::data::XRangeHighlighter > ChartModelHelper::createRangeHighlighter(
         const uno::Reference< view::XSelectionSupplier > & xSelectionSupplier )
 {

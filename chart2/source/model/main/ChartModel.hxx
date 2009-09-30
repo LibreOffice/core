@@ -150,6 +150,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >          m_xParent;
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XRangeHighlighter > m_xRangeHighlighter;
     ::std::vector< GraphicObject >                                               m_aGraphicObjectVector;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager >   m_xUndoManager;
 
 private:
     //private methods

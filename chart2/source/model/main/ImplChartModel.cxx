@@ -112,7 +112,6 @@ ImplChartModel::ImplChartModel(
         m_spChartData( new ChartData( m_xContext )),
         m_bIsDisposed( false ),
         m_xPageBackground( new PageBackground( m_xContext )),
-        m_xUndoManager( ChartModelHelper::createUndoManager() ),
         m_xDashTable( createNameContainer( ::getCppuType( reinterpret_cast< const drawing::LineDash * >(0)),
                 C2U( "com.sun.star.drawing.DashTable" ), C2U( "com.sun.star.comp.chart.DashTable" ) )),
         m_xGradientTable( createNameContainer( ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
@@ -460,11 +459,6 @@ void ImplChartModel::dispose()
 Reference< beans::XPropertySet > ImplChartModel::GetPageBackground()
 {
     return m_xPageBackground;
-}
-
-Reference< chart2::XUndoManager > ImplChartModel::GetUndoManager()
-{
-    return m_xUndoManager;
 }
 
 void ImplChartModel::SetNewData( const Reference< chart2::data::XDataSource > & xDataSource,
