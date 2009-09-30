@@ -598,7 +598,7 @@ void SheetViewSettings::finalizeImport()
     aPropMap[ PROP_IsOutlineSymbolsSet ]          <<= xModel->mbShowOutline;
 
     if (!xModel->maTabColor.isAuto())
-        aPropMap[ PROP_TabColor ] <<= static_cast< sal_Int32 >(xModel->maTabColor.getColor(*this));
+        aPropMap[ PROP_TabColor ] <<= static_cast< sal_Int32 >(xModel->maTabColor.getColor(getBaseFilter()));
 
     // store sheet view settings in global view settings object
     getViewSettings().setSheetViewSettings( getSheetIndex(), xModel, Any( aPropMap.makePropertyValueSequence() ) );
