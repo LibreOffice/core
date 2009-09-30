@@ -681,12 +681,20 @@
             </node>
             <node oor:name=".uno:NoteVisible" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Show Note</value>
+                    <value xml:lang="en-US">Show Comment</value>
                 </prop>
-            </node>
+      </node>
+      <node oor:name=".uno:InsertAnnotation" oor:op="replace">
+          <prop oor:name="Label" oor:type="xs:string">
+            <value xml:lang="en-US">Comm~ent</value>
+          </prop>
+          <prop oor:name="Properties" oor:type="xs:int">
+            <value>1</value>
+          </prop>
+      </node>
             <node oor:name=".uno:DeleteNote" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Delete Note</value>
+                    <value xml:lang="en-US">Delete Comment</value>
                 </prop>
             </node>
             <node oor:name=".uno:InputLineVisible" oor:op="replace">

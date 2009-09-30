@@ -266,7 +266,38 @@ namespace drawinglayer
 
                     case GRAPHIC_GDIMETAFILE :
                     {
-                        xPrimitive = Primitive2DReference(new MetafilePrimitive2D(getTransform(), aTransformedGraphic.GetGDIMetaFile()));
+                        // create MetafilePrimitive2D
+                        const GDIMetaFile& rMetafile = aTransformedGraphic.GetGDIMetaFile();
+
+                        xPrimitive = Primitive2DReference(
+                            new MetafilePrimitive2D(
+                                getTransform(),
+                                rMetafile));
+
+                        // #i100357# find out if clipping is needed for this primitive. Unfortunately,
+                        // there exist Metafiles who's content is bigger than the proposed PrefSize set
+                        // at them. This is an error, but we need to work around this
+                        const Size aMetaFilePrefSize(rMetafile.GetPrefSize());
+                        const Size aMetaFileRealSize(
+                            const_cast< GDIMetaFile& >(rMetafile).GetBoundRect(
+                                *Application::GetDefaultDevice()).GetSize());
+
+                        if(aMetaFileRealSize.getWidth() > aMetaFilePrefSize.getWidth()
+                            || aMetaFileRealSize.getHeight() > aMetaFilePrefSize.getHeight())
+                        {
+                            // clipping needed. Embed to MaskPrimitive2D. Create childs and mask polygon
+                            const primitive2d::Primitive2DSequence aChildContent(&xPrimitive, 1);
+                            basegfx::B2DPolygon aMaskPolygon(
+                                basegfx::tools::createPolygonFromRect(
+                                    basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                            aMaskPolygon.transform(getTransform());
+
+                            xPrimitive = Primitive2DReference(
+                                new MaskPrimitive2D(
+                                    basegfx::B2DPolyPolygon(aMaskPolygon),
+                                    aChildContent));
+                        }
+
                         break;
                     }
 

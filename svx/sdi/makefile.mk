@@ -39,6 +39,8 @@ TARGET=svxslots
 
 .INCLUDE :  settings.mk
 
+.IF "$(L10N_framework)"==""
+
 SDI1NAME=$(TARGET)
 SDI1EXPORT=svx
 
@@ -53,6 +55,6 @@ SVSDI1DEPEND= \
     svxitems.sdi
 
 # --- Targets -------------------------------------------------------
-
+.ENDIF
 .INCLUDE :  target.mk
 

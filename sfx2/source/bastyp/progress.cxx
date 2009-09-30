@@ -117,20 +117,8 @@ struct SfxProgress_Impl : public SfxCancellable
 #define aTypeLibInfo aProgressTypeLibImpl
 
 //========================================================================
-#if defined(_MSC_VER) && (_MSC_VER < 1300)
-inline ULONG Get10ThSec()
-{
-#if defined (MSC) && defined (WIN)
-    ULONG n10Ticks = 10 * (ULONG)GetTickCount();
-#else
-    ULONG n10Ticks = 10 * (ULONG)clock();
-#endif
-
-    return n10Ticks / CLOCKS_PER_SEC;
-}
-#else
 extern ULONG Get10ThSec();
-#endif
+
 // -----------------------------------------------------------------------
 
 void SfxProgress_Impl::Enable_Impl( BOOL bEnable )

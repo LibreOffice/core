@@ -116,7 +116,6 @@ namespace drawinglayer
             mnLastPageNumber(0),
             mnLastPageCount(0),
             maLastTextBackgroundColor(),
-            mbLastSpellCheck(false),
             mbContainsPageField(false),
             mbContainsPageCountField(false),
             mbContainsOtherFields(false)
@@ -137,7 +136,13 @@ namespace drawinglayer
             {
                 const SdrTextPrimitive2D& rCompare = (SdrTextPrimitive2D&)rPrimitive;
 
-                return (getOutlinerParaObject() == rCompare.getOutlinerParaObject());
+                return (
+
+                    // compare OPO and content, but not WrongList
+                    getOutlinerParaObject() == rCompare.getOutlinerParaObject()
+
+                    // also compare WrongList (not-persistent data, but visualized)
+                    && getOutlinerParaObject().isWrongListEqual(rCompare.getOutlinerParaObject()));
             }
 
             return false;
@@ -145,9 +150,6 @@ namespace drawinglayer
 
         Primitive2DSequence SdrTextPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            const bool bCurrentSpellCheck(getSdrText()
-                ? getSdrText()->GetObject().impCheckSpellCheckForDecomposeTextPrimitive()
-                : false);
             uno::Reference< drawing::XDrawPage > xCurrentlyVisualizingPage;
             bool bCurrentlyVisualizingPageIsSet(false);
             Color aNewTextBackgroundColor;
@@ -157,10 +159,10 @@ namespace drawinglayer
 
             if(getLocalDecomposition().hasElements())
             {
-                bool bDoDelete(getLastSpellCheck() != bCurrentSpellCheck);
+                bool bDoDelete(false);
 
                 // check visualized page
-                if(!bDoDelete && (mbContainsPageField || mbContainsPageCountField || mbContainsOtherFields))
+                if(mbContainsPageField || mbContainsPageCountField || mbContainsOtherFields)
                 {
                     // get visualized page and remember
                     xCurrentlyVisualizingPage = rViewInformation.getVisualizedPage();
@@ -236,7 +238,6 @@ namespace drawinglayer
                     aNewTextBackgroundColor = rDrawOutliner.GetBackgroundColor();
                 }
 
-                const_cast< SdrTextPrimitive2D* >(this)->setLastSpellCheck(bCurrentSpellCheck);
                 const_cast< SdrTextPrimitive2D* >(this)->mxLastVisualizingPage = xCurrentlyVisualizingPage;
                 const_cast< SdrTextPrimitive2D* >(this)->mnLastPageNumber = nCurrentlyValidPageNumber;
                 const_cast< SdrTextPrimitive2D* >(this)->mnLastPageCount = nCurrentlyValidPageCount;
@@ -258,15 +259,7 @@ namespace drawinglayer
         Primitive2DSequence SdrContourTextPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
-            const bool bCurrentSpellCheck(getSdrText()
-                ? getSdrText()->GetObject().impDecomposeContourTextPrimitive(aRetval, *this, aViewInformation)
-                : false);
-
-            if(getLastSpellCheck() != bCurrentSpellCheck)
-            {
-                // remember last spell check state; this is part of the decomposition source data definition
-                const_cast< SdrContourTextPrimitive2D* >(this)->setLastSpellCheck(bCurrentSpellCheck);
-            }
+            getSdrText()->GetObject().impDecomposeContourTextPrimitive(aRetval, *this, aViewInformation);
 
             return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
         }
@@ -319,15 +312,7 @@ namespace drawinglayer
         Primitive2DSequence SdrPathTextPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
-            const bool bCurrentSpellCheck(getSdrText()
-                ? getSdrText()->GetObject().impDecomposePathTextPrimitive(aRetval, *this, aViewInformation)
-                : false);
-
-            if(getLastSpellCheck() != bCurrentSpellCheck)
-            {
-                // remember last spell check state; this is part of the decomposition source data definition
-                const_cast< SdrPathTextPrimitive2D* >(this)->setLastSpellCheck(bCurrentSpellCheck);
-            }
+            getSdrText()->GetObject().impDecomposePathTextPrimitive(aRetval, *this, aViewInformation);
 
             return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
         }
@@ -383,15 +368,7 @@ namespace drawinglayer
         Primitive2DSequence SdrBlockTextPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
-            const bool bCurrentSpellCheck(getSdrText()
-                ? getSdrText()->GetObject().impDecomposeBlockTextPrimitive(aRetval, *this, aViewInformation)
-                : false);
-
-            if(getLastSpellCheck() != bCurrentSpellCheck)
-            {
-                // remember last spell check state; this is part of the decomposition source data definition
-                const_cast< SdrBlockTextPrimitive2D* >(this)->setLastSpellCheck(bCurrentSpellCheck);
-            }
+            getSdrText()->GetObject().impDecomposeBlockTextPrimitive(aRetval, *this, aViewInformation);
 
             return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
         }
@@ -400,11 +377,17 @@ namespace drawinglayer
             const SdrText* pSdrText,
             const OutlinerParaObject& rOutlinerParaObject,
             const basegfx::B2DHomMatrix& rTextRangeTransform,
+            SdrTextHorzAdjust aSdrTextHorzAdjust,
+            SdrTextVertAdjust aSdrTextVertAdjust,
+            bool bFixedCellHeight,
             bool bUnlimitedPage,
             bool bCellText,
             bool bWordWrap)
         :   SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
             maTextRangeTransform(rTextRangeTransform),
+            maSdrTextHorzAdjust(aSdrTextHorzAdjust),
+            maSdrTextVertAdjust(aSdrTextVertAdjust),
+            mbFixedCellHeight(bFixedCellHeight),
             mbUnlimitedPage(bUnlimitedPage),
             mbCellText(bCellText),
             mbWordWrap(bWordWrap)
@@ -418,6 +401,9 @@ namespace drawinglayer
                 const SdrBlockTextPrimitive2D& rCompare = (SdrBlockTextPrimitive2D&)rPrimitive;
 
                 return (getTextRangeTransform() == rCompare.getTextRangeTransform()
+                    && getSdrTextHorzAdjust() == rCompare.getSdrTextHorzAdjust()
+                    && getSdrTextVertAdjust() == rCompare.getSdrTextVertAdjust()
+                    && isFixedCellHeight() == rCompare.isFixedCellHeight()
                     && getUnlimitedPage() == rCompare.getUnlimitedPage()
                     && getCellText() == rCompare.getCellText()
                     && getWordWrap() == rCompare.getWordWrap());
@@ -432,6 +418,9 @@ namespace drawinglayer
                 getSdrText(),
                 getOutlinerParaObject(),
                 rTransform * getTextRangeTransform(),
+                getSdrTextHorzAdjust(),
+                getSdrTextVertAdjust(),
+                isFixedCellHeight(),
                 getUnlimitedPage(),
                 getCellText(),
                 getWordWrap());
@@ -452,15 +441,7 @@ namespace drawinglayer
         Primitive2DSequence SdrStretchTextPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
-            const bool bCurrentSpellCheck(getSdrText()
-                ? getSdrText()->GetObject().impDecomposeStretchTextPrimitive(aRetval, *this, aViewInformation)
-                : false);
-
-            if(getLastSpellCheck() != bCurrentSpellCheck)
-            {
-                // remember last spell check state; this is part of the decomposition source data definition
-                const_cast< SdrStretchTextPrimitive2D* >(this)->setLastSpellCheck(bCurrentSpellCheck);
-            }
+            getSdrText()->GetObject().impDecomposeStretchTextPrimitive(aRetval, *this, aViewInformation);
 
             return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
         }
@@ -468,9 +449,11 @@ namespace drawinglayer
         SdrStretchTextPrimitive2D::SdrStretchTextPrimitive2D(
             const SdrText* pSdrText,
             const OutlinerParaObject& rOutlinerParaObject,
-            const basegfx::B2DHomMatrix& rTextRangeTransform)
+            const basegfx::B2DHomMatrix& rTextRangeTransform,
+            bool bFixedCellHeight)
         :   SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
-            maTextRangeTransform(rTextRangeTransform)
+            maTextRangeTransform(rTextRangeTransform),
+            mbFixedCellHeight(bFixedCellHeight)
         {
         }
 
@@ -480,7 +463,8 @@ namespace drawinglayer
             {
                 const SdrStretchTextPrimitive2D& rCompare = (SdrStretchTextPrimitive2D&)rPrimitive;
 
-                return (getTextRangeTransform() == rCompare.getTextRangeTransform());
+                return (getTextRangeTransform() == rCompare.getTextRangeTransform()
+                    && isFixedCellHeight() == rCompare.isFixedCellHeight());
             }
 
             return false;
@@ -491,7 +475,8 @@ namespace drawinglayer
             return new SdrStretchTextPrimitive2D(
                 getSdrText(),
                 getOutlinerParaObject(),
-                rTransform * getTextRangeTransform());
+                rTransform * getTextRangeTransform(),
+                isFixedCellHeight());
         }
 
         // provide unique ID
