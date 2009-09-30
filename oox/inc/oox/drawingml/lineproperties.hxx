@@ -86,11 +86,16 @@ struct LineArrowProperties
 
 struct LineProperties
 {
+    typedef ::std::pair< sal_Int32, sal_Int32 > DashStop;
+    typedef ::std::vector< DashStop >           DashStopVector;
+
     LineArrowProperties maStartArrow;       /// Start line arrow style.
     LineArrowProperties maEndArrow;         /// End line arrow style.
     FillProperties      maLineFill;         /// Line fill (solid, gradient, ...).
+    DashStopVector      maCustomDash;       /// User-defined line dash style.
     OptValue< sal_Int32 > moLineWidth;      /// Line width (EMUs).
     OptValue< sal_Int32 > moPresetDash;     /// Preset dash (OOXML token).
+    OptValue< sal_Int32 > moLineCompound;   /// Line compound type (OOXML token).
     OptValue< sal_Int32 > moLineCap;        /// Line cap (OOXML token).
     OptValue< sal_Int32 > moLineJoint;      /// Line joint type (OOXML token).
 
@@ -102,18 +107,18 @@ struct LineProperties
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,
-                            const LinePropertyIds& rPropIds,
-                            const ::oox::core::XmlFilterBase& rFilter,
+                            const ::oox::core::FilterBase& rFilter,
                             ModelObjectHelper& rModelObjHelper,
-                            sal_Int32 nPhClr ) const;
+                            const LinePropertyIds& rPropIds = DEFAULT_IDS,
+                            sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 
     /** Writes the properties to the passed property map. */
     void                pushToPropSet(
                             PropertySet& rPropSet,
-                            const LinePropertyIds& rPropIds,
-                            const ::oox::core::XmlFilterBase& rFilter,
+                            const ::oox::core::FilterBase& rFilter,
                             ModelObjectHelper& rModelObjHelper,
-                            sal_Int32 nPhClr ) const;
+                            const LinePropertyIds& rPropIds = DEFAULT_IDS,
+                            sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 };
 
 // ============================================================================

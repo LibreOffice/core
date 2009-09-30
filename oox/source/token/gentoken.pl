@@ -3,7 +3,7 @@ $ARGV1 = shift @ARGV;
 $ARGV2 = shift @ARGV;
 $ARGV3 = shift @ARGV;
 
-open ( TOKENS, $ARGV0 ) || die "can't open token file: $!";
+open ( TOKENS, $ARGV0 ) || die "can't open $ARGV0 file: $!";
 my %tokens;
 
 while ( <TOKENS> )
@@ -17,15 +17,15 @@ while ( <TOKENS> )
 }
 close ( TOKENS );
 
-open ( HXX, ">$ARGV1" ) or die "can't open tokens.hxx file: $!";
-open ( WORDS, ">$ARGV2" ) or die "can't open tokenwords.inl file: $!";
-open ( GPERF, ">$ARGV3" ) or die "can't open tokens.gperf file: $!";
+open ( HXX, ">$ARGV1" ) or die "can't open $ARGV1 file: $!";
+open ( WORDS, ">$ARGV2" ) or die "can't open $ARGV2 file: $!";
+open ( GPERF, ">$ARGV3" ) or die "can't open $ARGV3 file: $!";
 
 print ( HXX "#ifndef OOX_TOKENS_HXX\n" );
 print ( HXX "#define OOX_TOKENS_HXX\n\n" );
-print ( HXX "#include <sal/types.h>\n" );
+print ( HXX "#include <com/sun/star/xml/sax/FastToken.hpp>\n" );
 
-print ( WORDS "static const sal_Char* tokentowordlist[] = {\n" );
+print ( WORDS "static const sal_Char* xmltokenwordlist[] = {\n" );
 
 print ( GPERF "%language=C++\n" );
 print ( GPERF "%global-table\n" );
@@ -47,7 +47,7 @@ foreach( sort( keys( %tokens ) ) )
 }
 
 print ( HXX "const sal_Int32 XML_TOKEN_COUNT = $i;\n" );
-print ( HXX "const sal_Int32 XML_TOKEN_INVALID = -1;\n\n" );
+print ( HXX "const sal_Int32 XML_TOKEN_INVALID = ::com::sun::star::xml::sax::FastToken::DONTKNOW;\n\n" );
 print ( HXX "const sal_Int32 XML_ROOT_CONTEXT = SAL_MAX_INT32;\n\n" );
 print ( HXX "#endif\n" );
 

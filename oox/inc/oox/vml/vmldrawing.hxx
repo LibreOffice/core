@@ -47,6 +47,7 @@ namespace oox { namespace ole { class AxControlHelper; } }
 namespace oox {
 namespace vml {
 
+class ShapeBase;
 class ShapeContainer;
 struct ShapeClientData;
 
@@ -132,6 +133,9 @@ public:
     const OleObjectInfo* getOleObjectInfo( const ::rtl::OUString& rShapeId ) const;
     /** Returns the registered info structure for a form control, if extant. */
     const ControlInfo*  getControlInfo( const ::rtl::OUString& rShapeId ) const;
+
+    /** Derived classes may disable conversion of specific shapes. */
+    virtual bool        isShapeSupported( const ShapeBase& rShape ) const;
 
     /** Derived classes may calculate the shape rectangle from a non-standard
         anchor information string. */

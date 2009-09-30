@@ -43,6 +43,14 @@ namespace drawingml {
 
 // ============================================================================
 
+const sal_Int32 PER_PERCENT     = 1000;
+const sal_Int32 MAX_PERCENT     = 100 * PER_PERCENT;
+
+const sal_Int32 PER_DEGREE      = 60000;
+const sal_Int32 MAX_DEGREE      = 360 * PER_DEGREE;
+
+// ============================================================================
+
 struct LineProperties;
 typedef ::boost::shared_ptr< LineProperties > LinePropertiesPtr;
 
