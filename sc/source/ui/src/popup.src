@@ -86,19 +86,19 @@ Menu RID_POPUP_CELLS
         {
             Identifier = SID_INSERT_POSTIT ;
             HelpId = SID_INSERT_POSTIT ;
-            Text [ en-US ] = "Insert ~Note" ;
+            Text [ en-US ] = "Insert Co~mment" ;
         };
         MenuItem
         {
             Identifier = SID_DELETE_NOTE ;
             HelpId = SID_DELETE_NOTE ;
-            Text [ en-US ] = "D~elete Note" ;
+            Text [ en-US ] = "D~elete Comment" ;
         };
         MenuItem
         {
             Identifier = FID_NOTE_VISIBLE ;
             HelpId = FID_NOTE_VISIBLE ;
-            Text [ en-US ] = "Sho~w Note" ;
+            Text [ en-US ] = "Sho~w Comment" ;
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -126,8 +126,8 @@ Menu RID_POPUP_CELLS
 
         MenuItem
         {
-            Identifier = FID_PASTE_CONTENTS ;
-            HelpId = FID_PASTE_CONTENTS ;
+            Identifier = SID_PASTE_SPECIAL ;
+            HelpId = SID_PASTE_SPECIAL ;
             Text [ en-US ] = "P~aste Special..." ;
         };
          //------------------------------
@@ -533,7 +533,7 @@ Menu RID_POPUP_PAGEBREAK
         {
             Identifier = FID_NOTE_VISIBLE ;
             HelpId = FID_NOTE_VISIBLE ;
-            Text [ en-US ] = "Sho~w Note" ;
+            Text [ en-US ] = "Sho~w Comment" ;
         };
     };
 };

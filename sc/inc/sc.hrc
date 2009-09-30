@@ -675,7 +675,6 @@
 #define FILE_MENU_END           (SC_FUNCTION_START + 20)
 
 #define EDIT_MENU_START         (FILE_MENU_END)
-#define FID_PASTE_CONTENTS      (EDIT_MENU_START)
 #define FID_DELETE_CELLCONTENTS (EDIT_MENU_START + 1)
 #define FID_DELETE_CELL         (EDIT_MENU_START + 2)
 #define FID_DELETE_TABLE        (EDIT_MENU_START + 3)
@@ -858,8 +857,6 @@
 #define RID_INPUTBAR_END        (RID_INPUTBAR_START+1)
 
 #define DRAW_BAR_START          (RID_INPUTBAR_END)
-//! SID_OBJECT_MIRROR wird sicher mal allgemein
-#define SID_OBJECT_MIRROR       (DRAW_BAR_START)
 #define SID_DRAWTOABOVE         (DRAW_BAR_START+15)
 #define SID_DRAWTOBELOW         (DRAW_BAR_START+16)
 //#define SID_GROUP             (DRAW_BAR_START+17)
@@ -1107,10 +1104,6 @@
 
 #define SID_DELETE_SCENARIO     (SID_NEW_SLOTS+95)
 #define SID_EDIT_SCENARIO       (SID_NEW_SLOTS+96)
-
-#define SID_GET_CLPBRD_FORMAT_COUNT     (SID_NEW_SLOTS+97)
-#define SID_GET_CLPBRD_FORMAT_BY_IDX    (SID_NEW_SLOTS+98)
-#define SID_GET_CLPBRD_FORMAT_NAME      (SID_NEW_SLOTS+99)
 
 // idl Parameter ---------------------------------------------------------
 
