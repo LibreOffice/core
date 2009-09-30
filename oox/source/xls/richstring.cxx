@@ -29,6 +29,7 @@
  ************************************************************************/
 
 #include "oox/xls/richstring.hxx"
+#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/text/XText.hpp>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -37,6 +38,7 @@
 
 using ::rtl::OString;
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::text::XText;
 using ::com::sun::star::text::XTextRange;
@@ -490,12 +492,20 @@ void RichString::finalizeImport()
     maFontPortions.forEachMem( &RichStringPortion::finalizeImport );
 }
 
+OUString RichString::getPlainText() const
+{
+    OUStringBuffer aBuffer;
+    for( PortionVec::const_iterator aIt = maFontPortions.begin(), aEnd = maFontPortions.end(); aIt != aEnd; ++aIt )
+        aBuffer.append( (*aIt)->getText() );
+    return aBuffer.makeStringAndClear();
+}
+
 void RichString::convert( const Reference< XText >& rxText, sal_Int32 nXfId ) const
 {
     for( PortionVec::const_iterator aIt = maFontPortions.begin(), aEnd = maFontPortions.end(); aIt != aEnd; ++aIt )
     {
         (*aIt)->convert( rxText, nXfId );
-        nXfId = -1;
+        nXfId = -1; // use passed XF identifier for first portion only
     }
 }
 

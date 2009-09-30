@@ -32,6 +32,7 @@
 
 #include <cstdio>
 
+#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
@@ -52,6 +53,7 @@
 #include "oox/core/recordparser.hxx"
 #include "oox/core/relationshandler.hxx"
 
+using ::rtl::OStringBuffer;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::beans::StringPair;
@@ -209,8 +211,17 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
         InputSource aSource;
         aSource.aInputStream = xInStrm;
         aSource.sSystemId = aFragmentPath;
-        xParser->parseStream( aSource );
-        return true;
+        // own try/catch block for showing parser failure assertion with fragment path
+        try
+        {
+            xParser->parseStream( aSource );
+            return true;
+        }
+        catch( Exception& )
+        {
+            OSL_ENSURE( false, OStringBuffer( "XmlFilterBase::importFragment - XML parser failed in fragment '" ).
+                append( OUStringToOString( aFragmentPath, RTL_TEXTENCODING_ASCII_US ) ).append( '\'' ).getStr() );
+        }
     }
     catch( Exception& )
     {

@@ -94,7 +94,7 @@ private:
     /** Imports a sheet fragment with passed type from current stream position. */
     bool                importSheetFragment(
                             ISegmentProgressBar& rProgressBar,
-                            BiffFragmentType eFragment, sal_Int32 nSheet );
+                            BiffFragmentType eFragment, sal_Int16 nCalcSheet );
 };
 
 // ============================================================================

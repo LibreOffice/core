@@ -31,9 +31,8 @@
 #ifndef OOX_XLS_WORKSHEETBUFFER_HXX
 #define OOX_XLS_WORKSHEETBUFFER_HXX
 
-#include <vector>
-#include <map>
 #include <utility>
+#include "oox/helper/containerhelper.hxx"
 #include "oox/xls/workbookhelper.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -50,7 +49,6 @@ struct SheetInfoModel
 {
     ::rtl::OUString     maRelId;        /// Relation identifier for the sheet substream.
     ::rtl::OUString     maName;         /// Original name of the sheet.
-    ::rtl::OUString     maFinalName;    /// Final (converted) name of the sheet.
     sal_Int32           mnSheetId;      /// Sheet identifier.
     sal_Int32           mnState;        /// Visibility state.
 
@@ -70,6 +68,9 @@ class WorksheetBuffer : public WorkbookHelper
 public:
     explicit            WorksheetBuffer( const WorkbookHelper& rHelper );
 
+    /** Returns the base file name without path and file extension. */
+    static ::rtl::OUString getBaseFileName( const ::rtl::OUString& rUrl );
+
     /** Initializes the buffer for single sheet files (BIFF2-BIFF4). */
     void                initializeSingleSheet();
 
@@ -79,34 +80,49 @@ public:
     void                importSheet( RecordInputStream& rStrm );
     /** Imports the SHEET record from the passed BIFF stream. */
     void                importSheet( BiffInputStream& rStrm );
-
     /** Inserts a new empty sheet into the document. Looks for an unused name.
-         @return  Internal index of the new sheet. */
+         @return  Index of the new sheet in the Calc document. */
     sal_Int16           insertEmptySheet( const ::rtl::OUString& rPreferredName, bool bVisible );
 
     /** Returns the number of original sheets contained in the workbook. */
-    sal_Int32           getSheetCount() const;
-    /** Returns the OOX relation identifier of the specified sheet. */
-    ::rtl::OUString     getSheetRelId( sal_Int32 nSheet ) const;
-    /** Returns the finalized name of the specified sheet. */
-    ::rtl::OUString     getCalcSheetName( sal_Int32 nSheet ) const;
-    /** Returns the finalized name of the sheet with the passed original name. */
-    ::rtl::OUString     getCalcSheetName( const ::rtl::OUString& rModelName ) const;
-    /** Returns the index of the sheet with the passed original name. */
-    sal_Int32           getCalcSheetIndex( const ::rtl::OUString& rModelName ) const;
+    sal_Int32           getWorksheetCount() const;
+    /** Returns the OOX relation identifier of the specified worksheet. */
+    ::rtl::OUString     getWorksheetRelId( sal_Int32 nWorksheet ) const;
+
+    /** Returns the Calc index of the specified worksheet. */
+    sal_Int16           getCalcSheetIndex( sal_Int32 nWorksheet ) const;
+    /** Returns the finalized name of the specified worksheet. */
+    ::rtl::OUString     getCalcSheetName( sal_Int32 nWorksheet ) const;
+
+    /** Returns the Calc index of the sheet with the passed original worksheet name. */
+    sal_Int16           getCalcSheetIndex( const ::rtl::OUString& rWorksheetName ) const;
+    /** Returns the finalized name of the sheet with the passed worksheet name. */
+    ::rtl::OUString     getCalcSheetName( const ::rtl::OUString& rWorksheetName ) const;
 
 private:
+    struct SheetInfo : public SheetInfoModel
+    {
+        ::rtl::OUString     maCalcName;
+        ::rtl::OUString     maCalcQuotedName;
+        sal_Int16           mnCalcSheet;
+
+        explicit            SheetInfo( const SheetInfoModel& rModel, sal_Int16 nCalcSheet, const ::rtl::OUString& rCalcName );
+    };
+
     typedef ::std::pair< sal_Int16, ::rtl::OUString > IndexNamePair;
 
-    const SheetInfoModel* getSheetInfo( sal_Int32 nSheet ) const;
-
-    IndexNamePair       insertSheet( const ::rtl::OUString& rPreferredName, sal_Int16 nSheet, bool bVisible );
+    /** Creates a new sheet in the Calc document. Does not insert anything in the own lists. */
+    IndexNamePair       createSheet( const ::rtl::OUString& rPreferredName, sal_Int32 nSheetPos, bool bVisible );
+    /** Creates a new sheet in the Calc document and inserts the related SheetInfo. */
     void                insertSheet( const SheetInfoModel& rModel );
 
 private:
-    typedef ::std::vector< SheetInfoModel > SheetInfoModelVec;
+    typedef RefVector< SheetInfo > SheetInfoVector;
+    SheetInfoVector     maSheetInfos;
 
-    SheetInfoModelVec   maSheetInfos;
+    struct SheetNameCompare { bool operator()( const ::rtl::OUString& rName1, const ::rtl::OUString& rName2 ) const; };
+    typedef RefMap< ::rtl::OUString, SheetInfo, SheetNameCompare > SheetInfoMap;
+    SheetInfoMap        maSheetInfosByName;
 };
 
 // ============================================================================

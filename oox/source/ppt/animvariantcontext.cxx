@@ -40,6 +40,7 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/fragmenthandler.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/colorchoicecontext.hxx"
 #include "pptfilterhelpers.hxx"
 #include "tokens.hxx"

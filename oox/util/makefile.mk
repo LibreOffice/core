@@ -39,7 +39,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
+.IF "$(L10N_framework)"==""
 # --- Allgemein ----------------------------------------------------
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
@@ -94,5 +94,6 @@ DEF1NAME    =$(SHL1TARGET)
 DEFLIB1NAME =$(TARGET)
 
 # --- Targets ----------------------------------------------------------
+.ENDIF # L10N_framework
 
 .INCLUDE :  target.mk

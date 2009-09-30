@@ -83,8 +83,6 @@ protected:
     /** Derived classes returns the UNO form of the current context. Called exactly once. */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >
                         createControlForm() const = 0;
-    /** Derived classes may implement to resolve a palette index to an RGB color. */
-    virtual sal_Int32   getPaletteColor( sal_uInt16 nPaletteIdx ) const;
 
 private:
     const ::oox::core::FilterBase& mrFilter;

@@ -57,6 +57,7 @@ using ::com::sun::star::container::XIndexContainer;
 using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::document::XViewDataSupplier;
 using ::com::sun::star::table::CellAddress;
+using ::oox::core::FilterBase;
 
 namespace oox {
 namespace xls {
@@ -197,6 +198,11 @@ sal_Int32 SheetViewModel::getPageBreakZoom() const
     const sal_Int32& rnZoom = isPageBreakPreview() ? mnCurrentZoom : mnSheetLayoutZoom;
     sal_Int32 nZoom = (rnZoom > 0) ? rnZoom : OOX_SHEETVIEW_SHEETLAYZOOM_DEF;
     return getLimitedValue< sal_Int32 >( nZoom, API_ZOOMVALUE_MIN, API_ZOOMVALUE_MAX );
+}
+
+sal_Int32 SheetViewModel::getGridColor( const FilterBase& rFilter ) const
+{
+    return mbDefGridColor ? API_RGB_TRANSPARENT : maGridColor.getColor( rFilter );
 }
 
 const PaneSelectionModel* SheetViewModel::getPaneSelection( sal_Int32 nPaneId ) const
@@ -506,7 +512,7 @@ void SheetViewSettings::finalizeImport()
     }
 
     // sheet selected (active sheet must be selected)
-    bool bSelected = xModel->mbSelected || (getSheetIndex() == getViewSettings().getActiveSheetIndex());
+    bool bSelected = xModel->mbSelected || (getSheetIndex() == getViewSettings().getActiveCalcSheet());
 
     // visible area and current cursor position (selection not supported via API)
     CellAddress aFirstPos = xModel->maFirstPos;
@@ -566,10 +572,6 @@ void SheetViewSettings::finalizeImport()
         break;
     }
 
-    // automatic grid color
-    if( xModel->mbDefGridColor )
-        xModel->maGridColor.setAuto();
-
     // write the sheet view settings into the property sequence
     PropertyMap aPropMap;
     aPropMap[ PROP_TableSelected ]                <<= bSelected;
@@ -587,7 +589,7 @@ void SheetViewSettings::finalizeImport()
     aPropMap[ PROP_ZoomType ]                     <<= API_ZOOMTYPE_PERCENT;
     aPropMap[ PROP_ZoomValue ]                    <<= static_cast< sal_Int16 >( xModel->getNormalZoom() );
     aPropMap[ PROP_PageViewZoomValue ]            <<= static_cast< sal_Int16 >( xModel->getPageBreakZoom() );
-    aPropMap[ PROP_GridColor ]                    <<= xModel->maGridColor.getColor( *this );
+    aPropMap[ PROP_GridColor ]                    <<= xModel->getGridColor( getBaseFilter() );
     aPropMap[ PROP_ShowPageBreakPreview ]         <<= xModel->isPageBreakPreview();
     aPropMap[ PROP_ShowFormulas ]                 <<= xModel->mbShowFormulas;
     aPropMap[ PROP_ShowGrid ]                     <<= xModel->mbShowGrid;
@@ -701,7 +703,7 @@ void ViewSettings::importWindow1( BiffInputStream& rStrm )
     }
 }
 
-void ViewSettings::setSheetViewSettings( sal_Int32 nSheet, const SheetViewModelRef& rxSheetView, const Any& rProperties )
+void ViewSettings::setSheetViewSettings( sal_Int16 nSheet, const SheetViewModelRef& rxSheetView, const Any& rProperties )
 {
     maSheetViews[ nSheet ] = rxSheetView;
     maSheetProps[ nSheet ] = rProperties;
@@ -710,7 +712,7 @@ void ViewSettings::setSheetViewSettings( sal_Int32 nSheet, const SheetViewModelR
 void ViewSettings::finalizeImport()
 {
     const WorksheetBuffer& rWorksheets = getWorksheets();
-    if( rWorksheets.getSheetCount() <= 0 ) return;
+    if( rWorksheets.getWorksheetCount() <= 0 ) return;
 
     // force creation of workbook view model to get the Excel defaults
     const WorkbookViewModel& rModel = maBookViews.empty() ? createWorkbookView() : *maBookViews.front();
@@ -725,7 +727,7 @@ void ViewSettings::finalizeImport()
         ContainerHelper::insertByName( xSheetsNC, rWorksheets.getCalcSheetName( aIt->first ), aIt->second );
 
     // use active sheet to set sheet properties that are document-global in Calc
-    sal_Int32 nActiveSheet = getActiveSheetIndex();
+    sal_Int16 nActiveSheet = getActiveCalcSheet();
     SheetViewModelRef& rxActiveSheetView = maSheetViews[ nActiveSheet ];
     OSL_ENSURE( rxActiveSheetView.get(), "ViewSettings::finalizeImport - missing active sheet view settings" );
     if( !rxActiveSheetView )
@@ -744,7 +746,7 @@ void ViewSettings::finalizeImport()
         aPropMap[ PROP_ShowObjects ]                   <<= nShowMode;
         aPropMap[ PROP_ShowCharts ]                    <<= nShowMode;
         aPropMap[ PROP_ShowDrawing ]                   <<= nShowMode;
-        aPropMap[ PROP_GridColor ]                     <<= rxActiveSheetView->maGridColor.getColor( *this );
+        aPropMap[ PROP_GridColor ]                     <<= rxActiveSheetView->getGridColor( getBaseFilter() );
         aPropMap[ PROP_ShowPageBreakPreview ]          <<= rxActiveSheetView->isPageBreakPreview();
         aPropMap[ PROP_ShowFormulas ]                  <<= rxActiveSheetView->mbShowFormulas;
         aPropMap[ PROP_ShowGrid ]                      <<= rxActiveSheetView->mbShowGrid;
@@ -763,10 +765,9 @@ void ViewSettings::finalizeImport()
     }
 }
 
-sal_Int32 ViewSettings::getActiveSheetIndex() const
+sal_Int16 ViewSettings::getActiveCalcSheet() const
 {
-    sal_Int32 nSheetCount = getLimitedValue< sal_Int32, sal_Int32 >( getWorksheets().getSheetCount(), 1, SAL_MAX_INT32 );
-    return maBookViews.empty() ? 0 : getLimitedValue< sal_Int32, sal_Int32 >( maBookViews.front()->mnActiveSheet, 0, nSheetCount - 1 );
+    return maBookViews.empty() ? 0 : ::std::max< sal_Int16 >( getWorksheets().getCalcSheetIndex( maBookViews.front()->mnActiveSheet ), 0 );
 }
 
 // private --------------------------------------------------------------------
