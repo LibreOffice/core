@@ -191,7 +191,7 @@ void lcl_updateVersionListDirectly(IFileDialog* pDialog)
     // at least an empty version list will be better then the wrong one .-)
     iCustomize->RemoveAllControlItems(CONTROL_VERSIONLIST);
 
-    HRESULT                   hResult;
+    HRESULT                   hResult = E_FAIL;
     ComPtr< IShellItemArray > iItems;
     ComPtr< IShellItem >      iItem;
 

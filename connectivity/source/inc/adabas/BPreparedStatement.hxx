@@ -46,7 +46,7 @@ namespace connectivity
             virtual void setResultSetType(sal_Int32 _par0)          ;
             virtual void setUsingBookmarks(sal_Bool _bUseBookmark)  ;
         public:
-            OAdabasPreparedStatement( OAdabasConnection* _pConnection,const ::std::vector<OTypeInfo>& _TypeInfo,const ::rtl::OUString& sql);
+            OAdabasPreparedStatement( OAdabasConnection* _pConnection,const ::rtl::OUString& sql);
         };
     }
 }

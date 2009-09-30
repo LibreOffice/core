@@ -140,7 +140,6 @@ ToolBarEntryProperty ToolBoxEntries[OReadToolBoxDocumentHandler::TB_XML_ENTRY_CO
 
 OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XIndexContainer >& rItemContainer ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
-    ::cppu::OWeakObject(),
     m_rItemContainer( rItemContainer ),
     m_aType( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE )),
     m_aLabel( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL )),
@@ -191,18 +190,6 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
 
 OReadToolBoxDocumentHandler::~OReadToolBoxDocumentHandler()
 {
-}
-
-Any SAL_CALL OReadToolBoxDocumentHandler::queryInterface( const Type & rType )
-throw( RuntimeException )
-{
-    Any a = ::cppu::queryInterface(
-                rType ,
-                SAL_STATIC_CAST( XDocumentHandler*, this ));
-    if ( a.hasValue() )
-        return a;
-
-    return OWeakObject::queryInterface( rType );
 }
 
 // XDocumentHandler
@@ -435,12 +422,12 @@ throw(  SAXException, RuntimeException )
                     aToolbarItemProp[4].Name = m_aStyle;
                     aToolbarItemProp[5].Name = m_aIsVisible;
 
-                    aToolbarItemProp[0].Value = makeAny( aCommandURL );
-                    aToolbarItemProp[1].Value = makeAny( aHelpURL );
-                    aToolbarItemProp[2].Value = makeAny( aLabel );
+                    aToolbarItemProp[0].Value <<= aCommandURL;
+                    aToolbarItemProp[1].Value <<= aHelpURL;
+                    aToolbarItemProp[2].Value <<= aLabel;
                     aToolbarItemProp[3].Value = makeAny( ::com::sun::star::ui::ItemType::DEFAULT );
-                    aToolbarItemProp[4].Value = makeAny( nItemBits );
-                    aToolbarItemProp[5].Value = makeAny( bVisible );
+                    aToolbarItemProp[4].Value <<= nItemBits;
+                    aToolbarItemProp[5].Value <<= bVisible;
 
                     m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
                 }
@@ -693,8 +680,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
     {
         try
         {
-            Any a = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" )));
-            a >>= aUIName;
+            xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ))) >>= aUIName;
         }
         catch ( UnknownPropertyException& )
         {

@@ -110,7 +110,7 @@ void OViews::impl_refresh(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 void OViews::disposing(void)
 {
-    m_xMetaData = NULL;
+m_xMetaData.clear();
     OCollection::disposing();
 }
 // -------------------------------------------------------------------------

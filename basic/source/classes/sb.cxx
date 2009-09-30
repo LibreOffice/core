@@ -303,6 +303,33 @@ SbxObject* SbTypeFactory::cloneTypeObjectImpl( const SbxObject& rTypeObj )
         if( pProp )
         {
             SbxProperty* pNewProp = new SbxProperty( *pProp );
+            if( pVar->GetType() & SbxARRAY )
+            {
+                SbxBase* pParObj = pVar->GetObject();
+                SbxDimArray* pSource = PTR_CAST(SbxDimArray,pParObj);
+                SbxDimArray* pDest = new SbxDimArray( pVar->GetType() );
+                INT32 lb = 0;
+                INT32 ub = 0;
+
+                pDest->setHasFixedSize( pSource->hasFixedSize() );
+                if ( pSource->GetDims() && pSource->hasFixedSize() )
+                {
+                    for ( INT32 j = 1 ; j <= pSource->GetDims(); ++j )
+                    {
+                        pSource->GetDim32( (INT32)j, lb, ub );
+                        pDest->AddDim32( lb, ub );
+                    }
+                }
+                else 
+                    pDest->unoAddDim( 0, -1 ); // variant array
+
+                USHORT nSavFlags = pVar->GetFlags();
+                pNewProp->ResetFlag( SBX_FIXED );
+                // need to reset the FIXED flag 
+                // when calling PutObject ( because the type will not match Object )    
+                pNewProp->PutObject( pDest );
+                pNewProp->SetFlags( nSavFlags );
+            }
             pProps->PutDirect( pNewProp, i );
         }
     }

@@ -170,6 +170,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
         const sal_Char* pVersion = 0;
         switch( getDefaultVersion() )
         {
+        case SvtSaveOptions::ODFVER_LATEST: pVersion = "1.2"; break;
         case SvtSaveOptions::ODFVER_012: pVersion = "1.2"; break;
         case SvtSaveOptions::ODFVER_011: pVersion = "1.1"; break;
         case SvtSaveOptions::ODFVER_010: break;

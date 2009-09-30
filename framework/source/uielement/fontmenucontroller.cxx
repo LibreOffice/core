@@ -44,7 +44,6 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
 
@@ -119,6 +118,7 @@ void FontMenuController::fillPopupMenu( const Sequence< ::rtl::OUString >& rFont
     if ( pVCLPopupMenu )
     {
         vector<rtl::OUString> aVector;
+        aVector.reserve(rFontNameSeq.getLength());
         for ( USHORT i = 0; i < rFontNameSeq.getLength(); i++ )
         {
             aVector.push_back(MnemonicGenerator::EraseAllMnemonicChars(pFontNameArray[i]));
@@ -126,7 +126,8 @@ void FontMenuController::fillPopupMenu( const Sequence< ::rtl::OUString >& rFont
         sort(aVector.begin(), aVector.end(), lcl_I18nCompareString );
 
         const rtl::OUString aFontNameCommandPrefix( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharFontName?CharFontName.FamilyName:string=" ));
-        for(USHORT i = 0; i < aVector.size(); i++)
+        const sal_Int16 nCount = (sal_Int16)aVector.size();
+        for ( sal_Int16 i = 0; i < nCount; i++ )
         {
             const rtl::OUString& rName = aVector[i];
             m_xPopupMenu->insertItem( i+1, rName, css::awt::MenuItemStyle::RADIOCHECK | css::awt::MenuItemStyle::AUTOCHECK, i );
@@ -178,51 +179,16 @@ void SAL_CALL FontMenuController::statusChanged( const FeatureStateEvent& Event 
 }
 
 // XMenuListener
-void SAL_CALL FontMenuController::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
+void FontMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
 {
-}
-
-void SAL_CALL FontMenuController::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
-{
-    Reference< css::awt::XPopupMenu >   xPopupMenu;
-    Reference< XDispatch >              xDispatch;
-    Reference< XMultiServiceFactory >   xServiceManager;
-
-    ResetableGuard aLock( m_aLock );
-    xPopupMenu      = m_xPopupMenu;
-    xDispatch       = m_xDispatch;
-    xServiceManager = m_xServiceManager;
-    aLock.unlock();
-
-    if ( xPopupMenu.is() && xDispatch.is() )
-    {
-        VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( xPopupMenu );
-        if ( pPopupMenu )
-        {
-            css::util::URL               aTargetURL;
-            Sequence<PropertyValue>      aArgs;
-            Reference< XURLTransformer > xURLTransformer( xServiceManager->createInstance(
-                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                        UNO_QUERY );
-
-            {
-                vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
-                // Command URL used to dispatch the selected font family name
-                PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
-                aTargetURL.Complete = pVCLPopupMenu->GetItemCommand( rEvent.MenuId );
-            }
-
-            xURLTransformer->parseStrict( aTargetURL );
-            if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-                UiEventLogHelper(::rtl::OUString::createFromAscii("FontMenuController")).log(
-                    m_xServiceManager,
-                    m_xFrame,
-                    aTargetURL,
-                    Sequence<PropertyValue>());
-            xDispatch->dispatch( aTargetURL, aArgs );
-        }
-    }
+    Sequence<PropertyValue>      aArgs;
+    if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+        UiEventLogHelper(::rtl::OUString::createFromAscii("FontMenuController")).log(
+            m_xServiceManager,
+            m_xFrame,
+            aTargetURL,
+            Sequence<PropertyValue>());
+    _xDispatch->dispatch( aTargetURL, aArgs );
 }
 
 void SAL_CALL FontMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
@@ -262,44 +228,16 @@ void SAL_CALL FontMenuController::activate( const css::awt::MenuEvent& ) throw (
     }
 }
 
-void SAL_CALL FontMenuController::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
-{
-}
-
 // XPopupMenuController
-void SAL_CALL FontMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw (RuntimeException)
+void FontMenuController::impl_setPopupMenu()
 {
-    ResetableGuard aLock( m_aLock );
+    Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
 
-    if ( m_bDisposed )
-        throw DisposedException();
-
-    if ( m_xFrame.is() && !m_xPopupMenu.is() )
-    {
-        // Create popup menu on demand
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
-        m_xPopupMenu = xPopupMenu;
-        m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >( (OWeakObject*)this, UNO_QUERY ));
-
-
-        Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                    UNO_QUERY );
-        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-
-        com::sun::star::util::URL aTargetURL;
-        aTargetURL.Complete = m_aCommandURL;
-        xURLTransformer->parseStrict( aTargetURL );
-        m_xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-
-        // Register for font list updates to get the current font list from the controller
-        aTargetURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontNameList" ));
-        xURLTransformer->parseStrict( aTargetURL );
-        m_xFontListDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-
-        updatePopupMenu();
-    }
+    com::sun::star::util::URL aTargetURL;
+    // Register for font list updates to get the current font list from the controller
+    aTargetURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontNameList" ));
+    m_xURLTransformer->parseStrict( aTargetURL );
+    m_xFontListDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
 }
 
 void SAL_CALL FontMenuController::updatePopupMenu() throw ( ::com::sun::star::uno::RuntimeException )
@@ -308,12 +246,9 @@ void SAL_CALL FontMenuController::updatePopupMenu() throw ( ::com::sun::star::un
 
     ResetableGuard aLock( m_aLock );
     Reference< XDispatch > xDispatch( m_xFontListDispatch );
-    Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                UNO_QUERY );
     com::sun::star::util::URL aTargetURL;
     aTargetURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontNameList" ));
-    xURLTransformer->parseStrict( aTargetURL );
+    m_xURLTransformer->parseStrict( aTargetURL );
     aLock.unlock();
 
     if ( xDispatch.is() )
@@ -321,12 +256,6 @@ void SAL_CALL FontMenuController::updatePopupMenu() throw ( ::com::sun::star::un
         xDispatch->addStatusListener( SAL_STATIC_CAST( XStatusListener*, this ), aTargetURL );
         xDispatch->removeStatusListener( SAL_STATIC_CAST( XStatusListener*, this ), aTargetURL );
     }
-}
-
-// XInitialization
-void SAL_CALL FontMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
-{
-    PopupMenuControllerBase::initialize( aArguments );
 }
 
 }

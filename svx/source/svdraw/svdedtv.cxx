@@ -937,7 +937,12 @@ void SdrEditView::ReplaceObjectAtView(SdrObject* pOldObj, SdrPageView& rPV, SdrO
     const bool bUndo = IsUndoEnabled();
     if( bUndo  )
         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoReplaceObject(*pOldObj,*pNewObj));
+
+    if( IsObjMarked( pOldObj ) )
+        MarkObj( pOldObj, &rPV, TRUE /*unmark!*/ );
+
     pOL->ReplaceObject(pNewObj,pOldObj->GetOrdNum());
+
     if( !bUndo )
         SdrObject::Free( pOldObj );
 

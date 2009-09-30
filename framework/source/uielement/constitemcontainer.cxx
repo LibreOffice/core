@@ -201,13 +201,13 @@ ConstItemContainer::ConstItemContainer( const Reference< XIndexAccess >& rSource
         try
         {
             sal_Int32 nCount = rSourceContainer->getCount();
+            m_aItemVector.reserve(nCount);
             if ( bFastCopy )
             {
                 for ( sal_Int32 i = 0; i < nCount; i++ )
                 {
                     Sequence< PropertyValue > aPropSeq;
-                    Any a = rSourceContainer->getByIndex( i );
-                    if ( a >>= aPropSeq )
+                    if ( rSourceContainer->getByIndex( i ) >>= aPropSeq )
                         m_aItemVector.push_back( aPropSeq );
                 }
             }
@@ -216,8 +216,7 @@ ConstItemContainer::ConstItemContainer( const Reference< XIndexAccess >& rSource
                 for ( sal_Int32 i = 0; i < nCount; i++ )
                 {
                     Sequence< PropertyValue > aPropSeq;
-                    Any a = rSourceContainer->getByIndex( i );
-                    if ( a >>= aPropSeq )
+                    if ( rSourceContainer->getByIndex( i ) >>= aPropSeq )
                     {
                         sal_Int32 nContainerIndex = -1;
                         Reference< XIndexAccess > xIndexAccess;
@@ -252,7 +251,8 @@ ConstItemContainer::~ConstItemContainer()
 // private
 void ConstItemContainer::copyItemContainer( const std::vector< Sequence< PropertyValue > >& rSourceVector )
 {
-    for ( sal_uInt32 i = 0; i < rSourceVector.size(); i++ )
+    const sal_uInt32 nCount = rSourceVector.size();
+    for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
         sal_Int32 nContainerIndex = -1;
         Sequence< PropertyValue > aPropSeq( rSourceVector[i] );
@@ -328,7 +328,7 @@ ConstItemContainer* ConstItemContainer::GetImplementation( const ::com::sun::sta
 sal_Bool SAL_CALL ConstItemContainer::hasElements()
 throw ( RuntimeException )
 {
-    return ( m_aItemVector.size() != 0 );
+    return ( !m_aItemVector.empty() );
 }
 
 // XIndexAccess

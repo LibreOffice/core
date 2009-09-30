@@ -143,7 +143,7 @@ ImageButtonToolbarController::ImageButtonToolbarController(
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
 {
     sal_Bool bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
-    sal_Bool bHiContrast( pToolbar->GetDisplayBackground().GetColor().IsDark() );
+    sal_Bool bHiContrast( pToolbar->GetSettings().GetStyleSettings().GetHighContrastMode() );
 
     Image aImage = AddonsOptions().GetImageFromURL( aCommand, bBigImages, bHiContrast, sal_True );
 
@@ -164,14 +164,6 @@ throw ( RuntimeException )
 {
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
     ComplexToolbarController::dispose();
-}
-
-// ------------------------------------------------------------------
-
-void SAL_CALL ImageButtonToolbarController::execute( sal_Int16 KeyModifier )
-throw ( RuntimeException )
-{
-    ComplexToolbarController::execute( KeyModifier );
 }
 
 // ------------------------------------------------------------------

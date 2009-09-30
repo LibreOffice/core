@@ -70,11 +70,11 @@ class ToggleButtonToolbarController : public ComplexToolbarController
         virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException );
 
         // XToolbarController
-        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createPopupWindow() throw (::com::sun::star::uno::RuntimeException);
 
     protected:
         virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand );
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const;
 
     private:
         DECL_LINK( MenuSelectHdl, Menu *);

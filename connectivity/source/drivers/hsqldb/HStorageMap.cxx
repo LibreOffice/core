@@ -64,12 +64,12 @@ namespace connectivity
         {
             try
             {
-                m_xStream = NULL;
-                m_xSeek = NULL;
+               m_xStream.clear();
+            m_xSeek.clear();
                 if ( m_xInputStream.is() )
                 {
                     m_xInputStream->closeInput();
-                    m_xInputStream = NULL;
+                m_xInputStream.clear();
                 }
                 if ( m_xOutputStream.is() )
                 {
@@ -86,7 +86,7 @@ namespace connectivity
                         OSL_UNUSED( e );
                         OSL_ENSURE(0,"Could not dispose OutputStream");
                     }
-                    m_xOutputStream = NULL;
+                m_xOutputStream.clear();
                 }
             }
             catch(Exception& )

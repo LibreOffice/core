@@ -118,36 +118,9 @@ public:
 
 class SFX2_DLLPUBLIC SfxEventConfiguration
 {
-friend class SfxEventConfigItem_Impl;
-
-    SvxMacroTableDtor*      pAppTable;
-    SvxMacroTableDtor*      pDocTable;
-    sal_Bool                bIgnoreConfigure;
-
 public:
-                            SfxEventConfiguration();
-                            ~SfxEventConfiguration();
-
-    void                    ConfigureEvent(USHORT nId, const SvxMacro&,
-                                SfxObjectShell* pObjSh);
-    void                    ConfigureEvent(USHORT nId, const String& rMacro,
-                                SfxObjectShell* pObjSh);
-
-    SvxMacroTableDtor*      GetDocEventTable(SfxObjectShell*);
-
-    static void             RegisterEvent( USHORT nId, const String& rName,
-                                           const String& rMacroName );
-
-    SAL_DLLPRIVATE BOOL Warn_Impl( SfxObjectShell *pDoc, const SvxMacro* pMacro );
-    SAL_DLLPRIVATE void PropagateEvent_Impl( SfxObjectShell *pDoc,
-                                                     USHORT nId,
-                                                     const SvxMacro* pMacro );
-    SAL_DLLPRIVATE static rtl::OUString GetEventName_Impl( ULONG nID );
-    SAL_DLLPRIVATE static ULONG GetEventId_Impl( const rtl::OUString& rEventName );
-    SAL_DLLPRIVATE ::com::sun::star::uno::Any CreateEventData_Impl( const SvxMacro *pMacro );
-
-    SAL_DLLPRIVATE static ULONG GetPos_Impl( USHORT nID, sal_Bool &rFound );
-    SAL_DLLPRIVATE static ULONG GetPos_Impl( const String& rName, sal_Bool &rFound );
+    static void                         ConfigureEvent( ::rtl::OUString aName, const SvxMacro&, SfxObjectShell* pObjSh);
+    static SvxMacro*                    ConvertToMacro( const com::sun::star::uno::Any& rElement, SfxObjectShell* pDoc, BOOL bBlowUp );
 };
 
 #endif

@@ -40,7 +40,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE : settings.mk
 
-OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
 CFLAGSCXX+=$(OBJCXXFLAGS)
 
 # --- Files --------------------------------------------------------

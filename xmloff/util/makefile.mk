@@ -41,7 +41,7 @@ USE_DEFFILE=TRUE
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 
 # --- Allgemein ----------------------------------------------------
-
+.IF "$(L10N_framework)"==""
 LIB1TARGET= $(SLB)$/xo.lib
 LIB1FILES=	\
     $(SLB)$/core.lib \
@@ -115,5 +115,5 @@ DEFLIB1NAME =xo
 DEF1DES     =XML Office Lib
 
 # --- Targets ----------------------------------------------------------
-
+.ENDIF
 .INCLUDE :  target.mk

@@ -120,7 +120,10 @@ class EnhancedCustomShape2d : public SfxItemSet
         sal_Int32                   nRotateAngle;
 
         sal_Bool                    SetAdjustValueAsDouble( const double& rValue, const sal_Int32 nIndex );
-        Color                       GetColorData( const Color& rFillColor, sal_uInt32 nIndex );
+        sal_Int32                   GetLuminanceChange( sal_uInt32 nIndex ) const;
+        Color                       GetColorData( const Color& rFillColor, sal_uInt32 nIndex ) const;
+        void                        AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rCustomShapeSet,
+                                                  sal_uInt32& nColorIndex, sal_uInt32 nColorCount);
         sal_Bool                    GetParameter( double& rParameterReturnValue,  const com::sun::star::drawing::EnhancedCustomShapeParameter&,
                                                     const sal_Bool bReplaceGeoWidth, const sal_Bool bReplaceGeoHeight ) const;
         Point                       GetPoint( const com::sun::star::drawing::EnhancedCustomShapeParameterPair&,
