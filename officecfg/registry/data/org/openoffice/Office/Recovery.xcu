@@ -28,20 +28,17 @@
 * for a copy of the LGPLv3 License.
 **********************************************************************-->
 
-<oor:component-data xmlns:oor="http://openoffice.org/2001/registry"
-    oor:package="org.openoffice" oor:name="System">
-  <node oor:name="L10N">
-    <prop oor:name="Locale">
+<oor:component-data xmlns:install="http://openoffice.org/2004/installation"
+    xmlns:oor="http://openoffice.org/2001/registry"
+    oor:package="org.openoffice.Office" oor:name="Recovery">
+  <node oor:name="AutoSave" install:module="gconflockdown">
+    <prop oor:name="Enabled">
       <value oor:external=
-          "com.sun.star.configuration.backend.LocaleBackend Locale"/>
+          "com.sun.star.configuration.backend.GconfBackend AutoSaveEnabled"/>
     </prop>
-    <prop oor:name="UILocale">
+    <prop oor:name="TimeIntervall">
       <value oor:external=
-          "com.sun.star.configuration.backend.LocaleBackend UILocale"/>
-    </prop>
-    <prop oor:name="SystemLocale">
-      <value oor:external=
-          "com.sun.star.configuration.backend.LocaleBackend SystemLocale"/>
+       "com.sun.star.configuration.backend.GconfBackend AutoSaveTimeIntervall"/>
     </prop>
   </node>
 </oor:component-data>

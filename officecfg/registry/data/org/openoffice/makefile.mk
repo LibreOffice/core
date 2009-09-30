@@ -49,6 +49,9 @@ XCUFILES= \
 
 MODULEFILES= \
     Inet-defaultsearchengine.xcu \
+    Inet-macosx.xcu \
+    Inet-unixdesktop.xcu \
+    Inet-wnt.xcu \
     Setup-brand.xcu \
     Setup-writer.xcu   \
     Setup-calc.xcu   \
@@ -57,7 +60,10 @@ MODULEFILES= \
     Setup-base.xcu   \
     Setup-math.xcu \
     Setup-report.xcu \
-    Setup-start.xcu
+    Setup-start.xcu \
+    UserProfile-gconflockdown.xcu \
+    VCL-gconflockdown.xcu \
+    VCL-unixdesktop.xcu
 
 LOCALIZEDFILES=Setup.xcu
 

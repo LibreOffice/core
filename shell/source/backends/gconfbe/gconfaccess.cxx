@@ -1,81 +1,104 @@
 /*************************************************************************
- *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * Copyright 2008 by Sun Microsystems, Inc.
- *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gconflayer.cxx,v $
- * $Revision: 1.15 $
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2009 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* $RCSfile: code,v $
+*
+* $Revision: 1.4 $
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
 
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
-#include "gconflayer.hxx"
-#include <com/sun/star/configuration/backend/PropertyInfo.hpp>
-
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERCONTENTDESCIBER_HPP_
-#include <com/sun/star/configuration/backend/XLayerContentDescriber.hpp>
-#endif
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <osl/security.hxx>
-#include <osl/file.hxx>
-#include <osl/thread.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include "sal/config.h"
 
 #include <string.h>
 
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "osl/file.hxx"
+#include "osl/security.hxx"
+#include "osl/thread.h"
+#include "rtl/strbuf.hxx"
+#include "rtl/ustrbuf.hxx"
+
+#include "gconfaccess.hxx"
+
+#define GCONF_PROXY_MODE_KEY "/system/proxy/mode"
+#define GCONF_AUTO_SAVE_KEY  "/apps/openoffice/auto_save"
+
+namespace gconfaccess {
+
+namespace {
+
+namespace css = com::sun::star ;
+namespace uno = css::uno ;
 using namespace rtl;
 
-//==============================================================================
-
-GconfLayer::GconfLayer( const uno::Reference<uno::XComponentContext>& xContext,
-    const ConfigurationValue pConfigurationValuesList[],
-    const sal_Int32 nConfigurationValues,
-    const char * pPreloadValuesList[] )
-    :m_pConfigurationValuesList( pConfigurationValuesList )
-    ,m_nConfigurationValues( nConfigurationValues )
-    ,m_pPreloadValuesList( pPreloadValuesList )
+GConfClient* getGconfClient()
 {
-    //Create instance of LayerContentDescriber Service
-    rtl::OUString const k_sLayerDescriberService( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.configuration.backend.LayerDescriber" ) );
+    static GConfClient* mClient= 0;
+    if (mClient == NULL)
+    {
+        /* initialize glib object type library */
+        g_type_init();
 
-    typedef uno::Reference<backend::XLayerContentDescriber> LayerDescriber;
-    uno::Reference< lang::XMultiComponentFactory > xServiceManager = xContext->getServiceManager();
-    if( xServiceManager.is() )
-    {
-        m_xLayerContentDescriber = LayerDescriber::query(
-            xServiceManager->createInstanceWithContext( k_sLayerDescriberService, xContext ) );
+        GError* aError = NULL;
+        if (!gconf_init(0, NULL, &aError))
+        {
+            rtl::OUStringBuffer msg;
+            msg.appendAscii("GconfBackend:GconfLayer: Cannot Initialize Gconf connection - " );
+            msg.appendAscii(aError->message);
+
+            g_error_free(aError);
+            aError = NULL;
+            throw uno::RuntimeException(msg.makeStringAndClear(),NULL);
+        }
+
+        mClient = gconf_client_get_default();
+        if (!mClient)
+        {
+            throw uno::RuntimeException(rtl::OUString::createFromAscii
+                ("GconfBackend:GconfLayer: Cannot Initialize Gconf connection"),NULL);
+        }
+
+        static const char * const PreloadValuesList[] =
+        {
+            "/desktop/gnome/interface",
+            "/system/proxy",
+            "/system/http_proxy/host",
+            "/desktop/gnome/url-handlers/mailto",
+#ifdef ENABLE_LOCKDOWN
+            "/apps/openoffice",
+            "/desktop/gnome/lockdown",
+            "/apps/openoffice/lockdown",
+#endif // ENABLE_LOCKDOWN
+            NULL
+        };
+        int i = 0;
+        while( PreloadValuesList[i] != NULL )
+            gconf_client_preload( mClient, PreloadValuesList[i++], GCONF_CLIENT_PRELOAD_ONELEVEL, NULL );
     }
-    else
-    {
-        OSL_TRACE( "Could not retrieve ServiceManager" );
-    }
+
+    return mClient;
 }
-
-//------------------------------------------------------------------------------
 
 static OUString xdg_user_dir_lookup (const char *type)
 {
@@ -376,13 +399,12 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
 
 //------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL isDependencySatisfied( const ConfigurationValue aValue )
+sal_Bool SAL_CALL isDependencySatisfied( GConfClient* aClient, const ConfigurationValue aValue )
 {
     switch( aValue.nDependsOn )
     {
         case SETTING_PROXY_MODE:
         {
-            GConfClient* aClient = GconfBackend::getGconfClient();
             GConfValue* aGconfValue = gconf_client_get( aClient, GCONF_PROXY_MODE_KEY, NULL );
 
             if ( aGconfValue != NULL )
@@ -449,116 +471,380 @@ sal_Bool SAL_CALL isDependencySatisfied( const ConfigurationValue aValue )
     return sal_False;
 }
 
-//------------------------------------------------------------------------------
-
-void SAL_CALL GconfLayer::readData( const uno::Reference<backend::XLayerHandler>& xHandler )
-    throw ( backend::MalformedDataException, lang::NullPointerException,
-            lang::WrappedTargetException, uno::RuntimeException )
-{
-    if( ! m_xLayerContentDescriber.is() )
-    {
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "Could not create com.sun.star.configuration.backend.LayerContentDescriber Service"
-        ) ), static_cast < backend::XLayer * > (this) );
-    }
-
-    uno::Sequence<backend::PropertyInfo> aPropInfoList( m_nConfigurationValues );
-    sal_Int32 nProperties = 0;
-
-    GConfClient* aClient = GconfBackend::getGconfClient();
-    GConfValue* aGconfValue;
-    int i = 0;
-
-    while( m_pPreloadValuesList[i] != NULL )
-        gconf_client_preload( aClient, m_pPreloadValuesList[i++], GCONF_CLIENT_PRELOAD_ONELEVEL, NULL );
-
-    for( i = 0; i < m_nConfigurationValues; i++ )
-    {
-        if( ( m_pConfigurationValuesList[i].nDependsOn != SETTINGS_LAST ) && !isDependencySatisfied( m_pConfigurationValuesList[i] ) )
-            continue;
-
-        aGconfValue = gconf_client_get( aClient, m_pConfigurationValuesList[i].GconfItem, NULL );
-
-        if( aGconfValue != NULL )
-        {
-            aPropInfoList[nProperties].Name      = rtl::OUString::createFromAscii( m_pConfigurationValuesList[i].OOoConfItem );
-            aPropInfoList[nProperties].Type      = rtl::OUString::createFromAscii( m_pConfigurationValuesList[i].OOoConfValueType );
-            aPropInfoList[nProperties].Protected = m_pConfigurationValuesList[i].bLocked;
-
-            if( m_pConfigurationValuesList[i].bNeedsTranslation )
-                aPropInfoList[nProperties].Value = translateToOOo( m_pConfigurationValuesList[i], aGconfValue );
-            else
-                aPropInfoList[nProperties].Value = makeAnyOfGconfValue( aGconfValue );
-
-            gconf_value_free( aGconfValue );
-
-            nProperties++;
-        }
-    }
-
-    if( nProperties > 0 )
-    {
-        aPropInfoList.realloc( nProperties );
-        m_xLayerContentDescriber->describeLayer( xHandler, aPropInfoList );
-    }
 }
 
-//------------------------------------------------------------------------------
-
-rtl::OUString SAL_CALL GconfLayer::getTimestamp( void )
-    throw (uno::RuntimeException)
+ConfigurationValue const ConfigurationValues[] =
 {
-    // Return a hash of the values as timestamp to avoid regenerating
-    // the binary cache on each office launch.
-    rtl::OStringBuffer aTimeStamp;
-
-    // Make sure the timestamp differs from beta
-    sal_Int32 nHashCode = 0;
-
-    GConfClient* aClient = GconfBackend::getGconfClient();
-    GConfValue* aGconfValue;
-    int i = 0;
-
-    while( m_pPreloadValuesList[i] != NULL )
-        gconf_client_preload( aClient, m_pPreloadValuesList[i++], GCONF_CLIENT_PRELOAD_ONELEVEL, NULL );
-
-    for( i = 0; i < m_nConfigurationValues; i++ )
     {
-        aGconfValue = gconf_client_get( aClient, m_pConfigurationValuesList[i].GconfItem, NULL );
+        SETTING_ENABLE_ACCESSIBILITY,
+        "/desktop/gnome/interface/accessibility",
+        "EnableATToolSupport",
+        sal_True,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_PROXY_MODE,
+        GCONF_PROXY_MODE_KEY,
+        "ooInetProxyType",
+        sal_True,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_PROXY_HTTP_HOST,
+        "/system/http_proxy/host",
+        "ooInetHTTPProxyName",
+        sal_False,
+        SETTING_PROXY_MODE
+    },
+
+    {
+        SETTING_PROXY_HTTP_PORT,
+        "/system/http_proxy/port",
+        "ooInetHTTPProxyPort",
+        sal_False,
+        SETTING_PROXY_MODE
+    },
+
+     {
+        SETTING_PROXY_HTTPS_HOST,
+        "/system/proxy/secure_host",
+        "ooInetHTTPSProxyName",
+        sal_False,
+        SETTING_PROXY_MODE
+    },
+
+    {
+        SETTING_PROXY_HTTPS_PORT,
+        "/system/proxy/secure_port",
+        "ooInetHTTPSProxyPort",
+        sal_False,
+        SETTING_PROXY_MODE
+    },
+
+    {
+        SETTING_PROXY_FTP_HOST,
+        "/system/proxy/ftp_host",
+        "ooInetFTPProxyName",
+        sal_False,
+        SETTING_PROXY_MODE
+    },
+
+    {
+        SETTING_PROXY_FTP_PORT,
+        "/system/proxy/ftp_port",
+        "ooInetFTPProxyPort",
+        sal_False,
+        SETTING_PROXY_MODE
+    },
+
+    {
+        SETTING_NO_PROXY_FOR,
+        "/system/http_proxy/ignore_hosts",
+        "ooInetNoProxy",
+        sal_True,
+        SETTING_PROXY_MODE
+    },
+
+    {
+        SETTING_MAILER_PROGRAM,
+        "/desktop/gnome/url-handlers/mailto/command",
+        "ExternalMailer",
+        sal_True,
+        SETTINGS_LAST
+    },
+    {
+        SETTING_SOURCEVIEWFONT_NAME,
+        "/desktop/gnome/interface/monospace_font_name",
+        "SourceViewFontName",
+        sal_True,
+        SETTINGS_LAST
+    },
+    {
+        SETTING_SOURCEVIEWFONT_HEIGHT,
+        "/desktop/gnome/interface/monospace_font_name",
+        "SourceViewFontHeight",
+        sal_True,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_WORK_DIRECTORY,
+        "/desktop/gnome/url-handlers/mailto/command", // dummy
+        "WorkPathVariable",
+        sal_True,
+        SETTING_WORK_DIRECTORY, // so that the existence of the dir can be checked
+    },
+
+#ifdef ENABLE_LOCKDOWN
+    {
+        SETTING_WRITER_DEFAULT_DOC_FORMAT,
+        "/apps/openoffice/writer_default_document_format",
+        "TextDocumentSetupFactoryDefaultFilter",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_IMPRESS_DEFAULT_DOC_FORMAT,
+        "/apps/openoffice/impress_default_document_format",
+        "PresentationDocumentSetupFactoryDefaultFilter",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_CALC_DEFAULT_DOC_FORMAT,
+        "/apps/openoffice/calc_default_document_format",
+        "SpreadsheetDocumentSetupFactoryDefaultFilter",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_AUTO_SAVE,
+        GCONF_AUTO_SAVE_KEY,
+        "AutoSaveEnabled",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_AUTO_SAVE_INTERVAL,
+        "/apps/openoffice/auto_save_interval",
+        "AutoSaveTimeIntervall",
+        sal_False,
+        SETTING_AUTO_SAVE
+    },
+
+    {
+        SETTING_USER_GIVENNAME,
+        "/desktop/gnome/url-handlers/mailto/command", // dummy
+        "givenname",
+        sal_True,
+        SETTING_USER_GIVENNAME
+    },
+
+    {
+        SETTING_USER_SURNAME,
+        "/desktop/gnome/url-handlers/mailto/command", // dummy
+        "sn",
+        sal_True,
+        SETTING_USER_SURNAME
+    },
+
+    {
+        SETTING_DISABLE_PRINTING,
+        "/desktop/gnome/lockdown/disable_printing",
+        "DisablePrinting",
+        sal_True,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_USE_SYSTEM_FILE_DIALOG,
+        "/apps/openoffice/use_system_file_dialog",
+        "UseSystemFileDialog",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_PRINTING_MODIFIES_DOCUMENT,
+        "/apps/openoffice/printing_modifies_doc",
+        "PrintingModifiesDocument",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_SHOW_ICONS_IN_MENUS,
+        "/apps/openoffice/show_menu_icons",
+        "ShowIconsInMenues",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_SHOW_INACTIVE_MENUITEMS,
+        "/apps/openoffice/show_menu_inactive_items",
+        "DontHideDisabledEntry",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_SHOW_FONT_PREVIEW,
+        "/apps/openoffice/show_font_preview",
+        "ShowFontBoxWYSIWYG",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_SHOW_FONT_HISTORY,
+        "/apps/openoffice/show_font_history",
+        "FontViewHistory",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_ENABLE_OPENGL,
+        "/apps/openoffice/use_opengl",
+        "OpenGL",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_OPTIMIZE_OPENGL,
+        "/apps/openoffice/optimize_opengl",
+        "OpenGL_Faster",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_USE_SYSTEM_FONT,
+        "/apps/openoffice/use_system_font",
+        "AccessibilityIsSystemFont",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_USE_FONT_ANTI_ALIASING,
+        "/apps/openoffice/use_font_anti_aliasing",
+        "FontAntiAliasingEnabled",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_FONT_ANTI_ALIASING_MIN_PIXEL,
+        "/apps/openoffice/font_anti_aliasing_min_pixel",
+        "FontAntiAliasingMinPixelHeight",
+        sal_True,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_WARN_CREATE_PDF,
+        "/apps/openoffice/lockdown/warn_info_create_pdf",
+        "WarnCreatePDF",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_WARN_PRINT_DOC,
+        "/apps/openoffice/lockdown/warn_info_printing",
+        "WarnPrintDoc",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_WARN_SAVEORSEND_DOC,
+        "/apps/openoffice/lockdown/warn_info_saving",
+        "WarnSaveOrSendDoc",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_WARN_SIGN_DOC,
+        "/apps/openoffice/lockdown/warn_info_signing",
+        "WarnSignDoc",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_REMOVE_PERSONAL_INFO,
+        "/apps/openoffice/lockdown/remove_personal_info_on_save",
+        "Scripting/RemovePersonalInfoOnSaving",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_RECOMMEND_PASSWORD,
+        "/apps/openoffice/lockdown/recommend_password_on_save",
+        "RecommendPasswordProtection",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_UNDO_STEPS,
+        "/apps/openoffice/undo_steps",
+        "UndoSteps",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_SYMBOL_SET,
+        "/apps/openoffice/icon_size",
+        "SymbolSet",
+        sal_True,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_MACRO_SECURITY_LEVEL,
+        "/apps/openoffice/lockdown/macro_security_level",
+        "MacroSecurityLevel",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_CREATE_BACKUP,
+        "/apps/openoffice/create_backup",
+        "CreateBackup",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_WARN_ALIEN_FORMAT,
+        "/apps/openoffice/warn_alien_format",
+        "WarnAlienFormat",
+        sal_False,
+        SETTINGS_LAST
+    },
+
+#endif // ENABLE_LOCKDOWN
+};
+
+std::size_t const nConfigurationValues =
+    sizeof ConfigurationValues / sizeof ConfigurationValues[0];
+
+css::uno::Any getValue(ConfigurationValue const & data) {
+    GConfClient* aClient = getGconfClient();
+    GConfValue* aGconfValue;
+    if( ( data.nDependsOn == SETTINGS_LAST ) || isDependencySatisfied( aClient, data ) )
+    {
+        aGconfValue = gconf_client_get( aClient, data.GconfItem, NULL );
 
         if( aGconfValue != NULL )
         {
-            switch( aGconfValue->type )
-            {
-                case GCONF_VALUE_BOOL:
-                    nHashCode ^= (sal_Int32) !gconf_value_get_bool( aGconfValue );
-                    break;
+            css::uno::Any value;
+            if( data.bNeedsTranslation )
+                value = translateToOOo( data, aGconfValue );
+            else
+                value = makeAnyOfGconfValue( aGconfValue );
 
-                case GCONF_VALUE_INT:
-                    nHashCode ^= (sal_Int32) gconf_value_get_int( aGconfValue );
-                    break;
-
-                case GCONF_VALUE_STRING:
-                    nHashCode ^= (sal_Int32) g_str_hash( gconf_value_get_string( aGconfValue ) );
-                    break;
-
-                case GCONF_VALUE_LIST:
-                    if( GCONF_VALUE_STRING == gconf_value_get_list_type( aGconfValue ) )
-                    {
-                        GSList *list = gconf_value_get_list( aGconfValue );
-                        for(; list; list = g_slist_next(list))
-                            nHashCode ^= (sal_Int32) g_str_hash( gconf_value_get_string((GConfValue *) list->data) );
-                        break;
-                    }
-
-                default:
-                    fprintf( stderr, "getTimestamp: Type not handled.\n" );
-                    break;
-            }
-            nHashCode = (nHashCode << 5) - nHashCode;
             gconf_value_free( aGconfValue );
+
+            return value;
         }
     }
+    return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
+}
 
-    return rtl::OUString::valueOf( nHashCode );
 }

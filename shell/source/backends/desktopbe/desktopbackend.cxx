@@ -30,8 +30,6 @@
 #include "precompiled_shell.hxx"
 #include "sal/config.h"
 
-#include <cstddef>
-
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/container/NoSuchElementException.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
@@ -39,57 +37,57 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/WrappedTargetException.hpp"
 #include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/Type.hxx"
-#include "com/sun/star/uno/XCurrentContext.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/uno/XCurrentContext.hpp"
 #include "cppu/unotype.hxx"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/weak.hxx"
+#include "osl/diagnose.h"
 #include "rtl/string.h"
+#include "rtl/textenc.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "uno/current_context.hxx"
 #include "uno/lbnames.h"
 
-#include "gconfaccess.hxx"
-#include "orbit.h"
-
 namespace {
 
 namespace css = com::sun::star;
 
-rtl::OUString SAL_CALL getServiceImplementationName() {
+rtl::OUString SAL_CALL getDefaultImplementationName() {
     return rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.comp.configuration.backend.GconfBackend"));
+            "com.sun.star.comp.configuration.backend.DesktopBackend"));
 }
 
-css::uno::Sequence< rtl::OUString > SAL_CALL getServiceSupportedServiceNames() {
+css::uno::Sequence< rtl::OUString > SAL_CALL getDefaultSupportedServiceNames() {
     rtl::OUString name(
         RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.configuration.backend.GconfBackend"));
+            "com.sun.star.configuration.backend.DesktopBackend"));
     return css::uno::Sequence< rtl::OUString >(&name, 1);
 }
 
-class Service:
+class Default:
     public cppu::WeakImplHelper2<
         css::lang::XServiceInfo, css::container::XNameAccess >,
     private boost::noncopyable
 {
 public:
-    Service();
+    Default() {}
 
 private:
-    virtual ~Service() {}
+    virtual ~Default() {}
 
     virtual rtl::OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
-    { return getServiceImplementationName(); }
+    { return getDefaultImplementationName(); }
 
     virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
         throw (css::uno::RuntimeException)
@@ -97,7 +95,7 @@ private:
 
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)
-    { return getServiceSupportedServiceNames(); }
+    { return getDefaultSupportedServiceNames(); }
 
     virtual css::uno::Type SAL_CALL getElementType()
         throw (css::uno::RuntimeException)
@@ -116,78 +114,113 @@ private:
 
     virtual sal_Bool SAL_CALL hasByName(rtl::OUString const & aName)
         throw (css::uno::RuntimeException);
-
-    bool enabled_;
 };
 
-Service::Service(): enabled_(false) {
-    css::uno::Reference< css::uno::XCurrentContext > context(
-        css::uno::getCurrentContext());
-    if (context.is()) {
-        rtl::OUString desktop;
-        context->getValueByName(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("system.desktop-environment"))) >>=
-            desktop;
-        enabled_ = desktop.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("GNOME")) &&
-            ((orbit_major_version == 2 && orbit_minor_version >= 8) ||
-             orbit_major_version > 2);
-            // ORBit-2 versions < 2.8 cause a deadlock with the gtk+ VCL plugin
-    }
-}
-
-css::uno::Any Service::getByName(rtl::OUString const & aName)
+css::uno::Any Default::getByName(rtl::OUString const & aName)
     throw (
         css::container::NoSuchElementException,
         css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
-    for (std::size_t i = 0; i < gconfaccess::nConfigurationValues; ++i) {
-        if (aName.equalsAscii(
-                gconfaccess::ConfigurationValues[i].OOoConfItem))
-        {
-            return enabled_
-                ? gconfaccess::getValue(gconfaccess::ConfigurationValues[i])
-                : css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
-        }
+    if (!hasByName(aName)) {
+        throw css::container::NoSuchElementException(
+            aName, static_cast< cppu::OWeakObject * >(this));
     }
-    throw css::container::NoSuchElementException(
-        aName, static_cast< cppu::OWeakObject * >(this));
+    return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
 }
 
-css::uno::Sequence< rtl::OUString > Service::getElementNames()
+css::uno::Sequence< rtl::OUString > Default::getElementNames()
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< rtl::OUString > names(
-        gconfaccess::nConfigurationValues);
-    for (std::size_t i = 0; i < gconfaccess::nConfigurationValues; ++i) {
-        names[i] = rtl::OUString::createFromAscii(
-            gconfaccess::ConfigurationValues[i].OOoConfItem);
-    }
+    css::uno::Sequence< rtl::OUString > names(13);
+    names[0] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("EnableATToolSupport"));
+    names[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ExternalMailer"));
+    names[2] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("SourceViewFontHeight"));
+    names[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SourceViewFontName"));
+    names[4] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkPathVariable"));
+    names[5] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyName"));
+    names[6] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyPort"));
+    names[7] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyName"));
+    names[8] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyPort"));
+    names[9] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPSProxyName"));
+    names[10] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPSProxyPort"));
+    names[11] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetNoProxy"));
+    names[12] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetProxyType"));
     return names;
 }
 
-sal_Bool Service::hasByName(rtl::OUString const & aName)
+sal_Bool Default::hasByName(rtl::OUString const & aName)
     throw (css::uno::RuntimeException)
 {
-    for (std::size_t i = 0; i < gconfaccess::nConfigurationValues; ++i) {
-        if (aName.equalsAscii(
-                gconfaccess::ConfigurationValues[i].OOoConfItem))
-        {
+    css::uno::Sequence< rtl::OUString > names(getElementNames());
+    for (sal_Int32 i = 0; i < names.getLength(); ++i) {
+        if (aName == names[i]) {
             return true;
         }
     }
     return false;
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
-    css::uno::Reference< css::uno::XComponentContext > const &)
+css::uno::Reference< css::uno::XInterface > createBackend(
+    css::uno::Reference< css::uno::XComponentContext > const & context,
+    rtl::OUString const & name)
 {
-    return static_cast< cppu::OWeakObject * >(new Service);
+    try {
+        return css::uno::Reference< css::lang::XMultiComponentFactory >(
+            context->getServiceManager(), css::uno::UNO_SET_THROW)->
+            createInstanceWithContext(name, context);
+    } catch (css::uno::RuntimeException &) {
+        // Assuming these exceptions are real errors:
+        throw;
+    } catch (css::uno::Exception & e) {
+        // Assuming these exceptions indicate that the service is not installed:
+        OSL_TRACE(
+            "createInstance(%s) failed with %s",
+            rtl::OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr(),
+            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        return css::uno::Reference< css::uno::XInterface >();
+    }
+}
+
+css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
+    css::uno::Reference< css::uno::XComponentContext > const & context)
+{
+    rtl::OUString desktop;
+    css::uno::Reference< css::uno::XCurrentContext > current(
+        css::uno::getCurrentContext());
+    if (current.is()) {
+        current->getValueByName(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("system.desktop-environment"))) >>=
+            desktop;
+    }
+    // Fall back to the default if the specific backend is not available:
+    css::uno::Reference< css::uno::XInterface > backend;
+    if (desktop.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("GNOME"))) {
+        backend = createBackend(
+            context,
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.backend.GconfBackend")));
+    } else if (desktop.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("KDE"))) {
+        backend = createBackend(
+            context,
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.backend.KDEBackend")));
+    } //TODO: KDE4?
+    return backend.is()
+        ? backend : static_cast< cppu::OWeakObject * >(new Default);
 }
 
 static cppu::ImplementationEntry const services[] = {
-    { &createInstance, &getServiceImplementationName,
-      &getServiceSupportedServiceNames, &cppu::createSingleComponentFactory, 0,
+    { &createInstance, &getDefaultImplementationName,
+      &getDefaultSupportedServiceNames, &cppu::createSingleComponentFactory, 0,
       0 },
     { 0, 0, 0, 0, 0, 0 }
 };

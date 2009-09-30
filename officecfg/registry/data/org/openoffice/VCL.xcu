@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,16 +29,20 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-data SYSTEM "../../../component-update.dtd">
-<oor:component-data oor:name="VCL" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<oor:component-data oor:name="VCL" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <node oor:name="Settings">
     <node oor:name="Accessibility" oor:op="replace">
       <prop oor:name="EnableATToolSupport" oor:type="xs:string" oor:op="replace">
         <value>false</value>
+        <value install:module="unixdesktop" oor:external=
+       "com.sun.star.configuration.backend.DesktopBackend EnableATToolSupport"/>
       </prop>
     </node>
     <node oor:name="DesktopManagement" oor:op="replace">
       <prop oor:name="DisablePrinting" oor:type="xs:string" oor:op="replace">
         <value>false</value>
+        <value install:module="gconflockdown" oor:external=
+            "com.sun.star.configuration.backend.GconfBackend DisablePrinting"/>
       </prop>
     </node>
     <node oor:name="Transfer" oor:op="replace">
