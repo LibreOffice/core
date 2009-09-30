@@ -27,7 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package lib;
 
 import com.sun.star.beans.Property;
@@ -71,7 +70,9 @@ import com.sun.star.uno.Type;
  * @see #compare
  * @see #toString(Object)
  */
-public class MultiPropertyTest extends MultiMethodTest {
+public class MultiPropertyTest extends MultiMethodTest
+{
+
     /**
      * Contains a XPropertySet interface of the tested object. Is initialized
      * in MultiMethodTest code.
@@ -82,18 +83,23 @@ public class MultiPropertyTest extends MultiMethodTest {
     /**
      * Overrides super.before() to check the service is supported by the object.
      */
-    protected void before() {
-        XServiceInfo xInfo = (XServiceInfo)UnoRuntime.queryInterface(
+    protected void before()
+    {
+        XServiceInfo xInfo = (XServiceInfo) UnoRuntime.queryInterface(
                 XServiceInfo.class, oObj);
 
         optionalService = entry.isOptional;
 
         String theService = getTestedClassName();
-        if (xInfo != null && !xInfo.supportsService(theService)) {
-            log.println("Service "+theService+" not available");
-            if (optionalService) {
+        if (xInfo != null && !xInfo.supportsService(theService))
+        {
+            log.println("Service " + theService + " not available");
+            if (optionalService)
+            {
                 log.println("This is OK since it is optional");
-            } else {
+            }
+            else
+            {
                 Status.failed(theService + " is not supported");
             }
         }
@@ -107,10 +113,14 @@ public class MultiPropertyTest extends MultiMethodTest {
      *
      * @see #MultiMethodTest.invokeTestMethod()
      */
-    protected void invokeTestMethod(Method meth, String methName) {
-        if (meth != null) {
+    protected void invokeTestMethod(Method meth, String methName)
+    {
+        if (meth != null)
+        {
             super.invokeTestMethod(meth, methName);
-        } else {
+        }
+        else
+        {
             testProperty(methName);
         }
     }
@@ -122,7 +132,9 @@ public class MultiPropertyTest extends MultiMethodTest {
      * each property separately, by providing subclass of PropertyTester
      * and passing it to testProperty(String, PropertyTester method).
      */
-    public class PropertyTester {
+    public class PropertyTester
+    {
+
         /**
          * The method defines the whole process of testing propName
          * property.
@@ -140,37 +152,46 @@ public class MultiPropertyTest extends MultiMethodTest {
          * @result - adds the result of testing propName property to
          *           MultiMethodTest.tRes.
          */
-        protected void testProperty(String propName) {
+        protected void testProperty(String propName)
+        {
             XPropertySetInfo info = oObj.getPropertySetInfo();
 
-            if (!info.hasPropertyByName(propName)) {
-                if (isOptional(propName) || optionalService) {
-                    // skipping optional property test
-                    log.println("Property '" + propName
-                            + "' is optional and not supported");
-                    tRes.tested(propName,true);
-                    return;
-                } else {
-                    // cannot test the property
-                    log.println("Tested XPropertySet does not contain'"
-                            + propName + "' property");
-                    tRes.tested(propName, false);
-                    return;
+            if (info != null)
+            {
+                if (!info.hasPropertyByName(propName))
+                {
+                    if (isOptional(propName) || optionalService)
+                    {
+                        // skipping optional property test
+                        log.println("Property '" + propName + "' is optional and not supported");
+                        tRes.tested(propName, true);
+                        return;
+                    }
+                    else
+                    {
+                        // cannot test the property
+                        log.println("Tested XPropertySet does not contain'" + propName + "' property");
+                        tRes.tested(propName, false);
+                        return;
+                    }
                 }
             }
 
-            try {
+            try
+            {
                 Object oldValue = oObj.getPropertyValue(propName);
 
                 Object newValue;
 
                 // trying to create new value
-                try {
+                try
+                {
                     newValue = getNewValue(propName, oldValue);
-                } catch (java.lang.IllegalArgumentException e) {
+                }
+                catch (java.lang.IllegalArgumentException e)
+                {
                     // skipping test since new value is not available
-                    Status.failed("Cannot create new value for '"
-                            + propName + " : " + e.getMessage());
+                    Status.failed("Cannot create new value for '" + propName + " : " + e.getMessage());
                     return;
                 }
 
@@ -178,20 +199,31 @@ public class MultiPropertyTest extends MultiMethodTest {
                 // to pass it to checkResult method
                 Exception exception = null;
 
-                try {
+                try
+                {
                     log.println("try to set:");
                     log.println("old = " + toString(oldValue));
                     log.println("new = " + toString(newValue));
                     oObj.setPropertyValue(propName, newValue);
-                } catch(IllegalArgumentException e) {
+                }
+                catch (IllegalArgumentException e)
+                {
                     exception = e;
-                } catch(PropertyVetoException e) {
+                }
+                catch (PropertyVetoException e)
+                {
                     exception = e;
-                } catch(WrappedTargetException e) {
+                }
+                catch (WrappedTargetException e)
+                {
                     exception = e;
-                } catch(UnknownPropertyException e) {
+                }
+                catch (UnknownPropertyException e)
+                {
                     exception = e;
-                } catch(RuntimeException e) {
+                }
+                catch (RuntimeException e)
+                {
                     exception = e;
                 }
 
@@ -200,7 +232,9 @@ public class MultiPropertyTest extends MultiMethodTest {
 
                 // checking results
                 checkResult(propName, oldValue, newValue, resValue, exception);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 log.println("Exception occured while testing property '" + propName + "'");
                 e.printStackTrace(log);
                 tRes.tested(propName, false);
@@ -234,130 +268,175 @@ public class MultiPropertyTest extends MultiMethodTest {
          */
         protected void checkResult(String propName, Object oldValue,
                 Object newValue, Object resValue, Exception exception)
-                    throws Exception {
+                throws Exception
+        {
             XPropertySetInfo info = oObj.getPropertySetInfo();
+            if (info == null)
+            {
+                log.println("Can't get XPropertySetInfo for property " + propName);
+                tRes.tested(propName, false);
+                return;
+            }
             Property prop = info.getPropertyByName(propName);
 
             short attr = prop.Attributes;
-            boolean readOnly = (prop.Attributes
-                    & PropertyAttribute.READONLY) != 0;
-            boolean maybeVoid = (prop.Attributes
-                    & PropertyAttribute.MAYBEVOID) != 0;
+            boolean readOnly = (prop.Attributes & PropertyAttribute.READONLY) != 0;
+            boolean maybeVoid = (prop.Attributes & PropertyAttribute.MAYBEVOID) != 0;
             //check get-set methods
-            if (maybeVoid) log.println("Property "+propName+" is void");
-            if (readOnly) log.println("Property "+propName+" is readOnly");
-            if (util.utils.isVoid(oldValue) && !maybeVoid) {
-                log.println(propName
-                        + " is void, but it's not MAYBEVOID");
+            if (maybeVoid)
+            {
+                log.println("Property " + propName + " is void");
+            }
+            if (readOnly)
+            {
+                log.println("Property " + propName + " is readOnly");
+            }
+            if (util.utils.isVoid(oldValue) && !maybeVoid)
+            {
+                log.println(propName + " is void, but it's not MAYBEVOID");
                 tRes.tested(propName, false);
-            } else if (oldValue == null ) {
-                log.println(propName
-                        + " has null value, and therefore can't be changed");
+            }
+            else if (oldValue == null)
+            {
+                log.println(propName + " has null value, and therefore can't be changed");
                 tRes.tested(propName, true);
-            } else if (readOnly) {
+            }
+            else if (readOnly)
+            {
                 // check if exception was thrown
-                if (exception != null) {
-                    if (exception instanceof PropertyVetoException) {
+                if (exception != null)
+                {
+                    if (exception instanceof PropertyVetoException)
+                    {
                         // the change of read only prohibited - OK
                         log.println("Property is ReadOnly and wasn't changed");
                         log.println("Property '" + propName + "' OK");
                         tRes.tested(propName, true);
-                    } else if (exception instanceof IllegalArgumentException) {
+                    }
+                    else if (exception instanceof IllegalArgumentException)
+                    {
                         // the change of read only prohibited - OK
                         log.println("Property is ReadOnly and wasn't changed");
                         log.println("Property '" + propName + "' OK");
                         tRes.tested(propName, true);
-                    } else if (exception instanceof UnknownPropertyException) {
+                    }
+                    else if (exception instanceof UnknownPropertyException)
+                    {
                         // the change of read only prohibited - OK
                         log.println("Property is ReadOnly and wasn't changed");
                         log.println("Property '" + propName + "' OK");
                         tRes.tested(propName, true);
-                    }else if (exception instanceof RuntimeException) {
+                    }
+                    else if (exception instanceof RuntimeException)
+                    {
                         // the change of read only prohibited - OK
                         log.println("Property is ReadOnly and wasn't changed");
                         log.println("Property '" + propName + "' OK");
                         tRes.tested(propName, true);
-                    } else {
+                    }
+                    else
+                    {
                         throw exception;
                     }
-                } else {
+                }
+                else
+                {
                     // if no exception - check that value
                     // has not changed
-                    if (!compare(resValue, oldValue)) {
-                        log.println("Read only property '"
-                                + propName + "' has changed");
-                        try {
-                            if (!util.utils.isVoid(oldValue)
-                                                && oldValue instanceof Any) {
-                                oldValue = AnyConverter.toObject
-                                        (new Type(((Any)oldValue).getClass()),oldValue);
+                    if (!compare(resValue, oldValue))
+                    {
+                        log.println("Read only property '" + propName + "' has changed");
+                        try
+                        {
+                            if (!util.utils.isVoid(oldValue) && oldValue instanceof Any)
+                            {
+                                oldValue = AnyConverter.toObject(new Type(((Any) oldValue).getClass()), oldValue);
                             }
 //                            log.println("old = " + toString(oldValue));
 //                            log.println("new = " + toString(newValue));
                             log.println("result = " + toString(resValue));
-                        } catch(com.sun.star.lang.IllegalArgumentException iae) {
+                        }
+                        catch (com.sun.star.lang.IllegalArgumentException iae)
+                        {
                             log.println("NOTIFY: this property needs further investigations.");
                             log.println("\t The type seems to be an Any with value of NULL.");
                             log.println("\t Maybe the property should get it's own test method.");
                         }
 
                         tRes.tested(propName, false);
-                    } else {
-                        log.println("Read only property '"
-                                + propName + "' hasn't changed");
+                    }
+                    else
+                    {
+                        log.println("Read only property '" + propName + "' hasn't changed");
                         log.println("Property '" + propName + "' OK");
                         tRes.tested(propName, true);
                     }
                 }
-            } else {
-                if (exception == null) {
+            }
+            else
+            {
+                if (exception == null)
+                {
                     // if no exception thrown
                     // check that the new value is set
-                    if ((!compare(resValue, newValue)) || (compare(resValue, oldValue))) {
-                        log.println("Value for '" + propName
-                                + "' hasn't changed as expected");
-                        try {
-                            if (!util.utils.isVoid(oldValue)
-                                            && oldValue instanceof Any) {
-                                oldValue = AnyConverter.toObject
-                                        (new Type(((Any)oldValue).getClass()),oldValue);
+                    if ((!compare(resValue, newValue)) || (compare(resValue, oldValue)))
+                    {
+                        log.println("Value for '" + propName + "' hasn't changed as expected");
+                        try
+                        {
+                            if (!util.utils.isVoid(oldValue) && oldValue instanceof Any)
+                            {
+                                oldValue = AnyConverter.toObject(new Type(((Any) oldValue).getClass()), oldValue);
                             }
 //                            log.println("old = " + toString(oldValue));
 //                            log.println("new = " + toString(newValue));
                             log.println("result = " + toString(resValue));
-                        } catch(com.sun.star.lang.IllegalArgumentException iae) {
+                        }
+                        catch (com.sun.star.lang.IllegalArgumentException iae)
+                        {
                             log.println("NOTIFY: this property needs further investigations.");
                             log.println("\t The type seems to be an Any with value of NULL.");
                             log.println("\t Maybe the property should get it's own test method.");
                         }
-                        if (resValue != null ) {
-                            if ( (!compare(resValue, oldValue)) || (!resValue.equals(oldValue))) {
+                        if (resValue != null)
+                        {
+                            if ((!compare(resValue, oldValue)) || (!resValue.equals(oldValue)))
+                            {
                                 log.println("But it has changed.");
                                 tRes.tested(propName, true);
-                            } else {
+                            }
+                            else
+                            {
                                 tRes.tested(propName, false);
                             }
                         }
-                        else {
+                        else
+                        {
                             tRes.tested(propName, false);
                         }
                         //tRes.tested(propName, false);
-                    } else {
+                    }
+                    else
+                    {
                         log.println("Property '" + propName + "' OK");
-                        try {
-                            if (!util.utils.isVoid(oldValue)
-                                                   && oldValue instanceof Any) {
-                                oldValue = AnyConverter.toObject
-                                        (new Type(((Any)oldValue).getClass()),oldValue);
+                        try
+                        {
+                            if (!util.utils.isVoid(oldValue) && oldValue instanceof Any)
+                            {
+                                oldValue = AnyConverter.toObject(new Type(((Any) oldValue).getClass()), oldValue);
                             }
 //                            log.println("old = " + toString(oldValue));
 //                            log.println("new = " + toString(newValue));
                             log.println("result = " + toString(resValue));
-                        } catch(com.sun.star.lang.IllegalArgumentException iae) {
+                        }
+                        catch (com.sun.star.lang.IllegalArgumentException iae)
+                        {
                         }
                         tRes.tested(propName, true);
                     }
-                } else {
+                }
+                else
+                {
                     throw exception;
                 }
             }
@@ -371,7 +450,8 @@ public class MultiPropertyTest extends MultiMethodTest {
          * when oldValue is null.
          */
         protected Object getNewValue(String propName, Object oldValue)
-                throws java.lang.IllegalArgumentException {
+                throws java.lang.IllegalArgumentException
+        {
             return ValueChanger.changePValue(oldValue);
         }
 
@@ -382,7 +462,8 @@ public class MultiPropertyTest extends MultiMethodTest {
          * which is not apropriate in some cases(e.g., structs with equals
          * not overridden).
          */
-        protected boolean compare(Object obj1, Object obj2) {
+        protected boolean compare(Object obj1, Object obj2)
+        {
             return callCompare(obj1, obj2);
         }
 
@@ -391,7 +472,8 @@ public class MultiPropertyTest extends MultiMethodTest {
          * MultipropertyTest.toString(Object), but subclasses can override
          * to change the behaviour.
          */
-        protected String toString(Object obj) {
+        protected String toString(Object obj)
+        {
             return callToString(obj);
         }
     }
@@ -402,9 +484,11 @@ public class MultiPropertyTest extends MultiMethodTest {
      * class returns one of these two values depending on the
      * old value, so new value is not equal to old value.
      */
-    public class PropertyValueSwitcher extends PropertyTester {
-        Object val1 = null ;
-        Object val2 = null ;
+    public class PropertyValueSwitcher extends PropertyTester
+    {
+
+        Object val1 = null;
+        Object val2 = null;
 
         /**
          * Constructs a property tester with two different values
@@ -415,9 +499,10 @@ public class MultiPropertyTest extends MultiMethodTest {
          * @param val1 Not <code>null</code> value for the property
          * tested which differs from the first value.
          */
-        public PropertyValueSwitcher(Object val1, Object val2) {
-            this.val1 = val1 ;
-            this.val2 = val2 ;
+        public PropertyValueSwitcher(Object val1, Object val2)
+        {
+            this.val1 = val1;
+            this.val2 = val2;
         }
 
         /**
@@ -427,18 +512,24 @@ public class MultiPropertyTest extends MultiMethodTest {
          * @return The second value if old value is equal to the first
          * one, the first value otherwise.
          */
-        protected Object getNewValue(String propName, Object old) {
+        protected Object getNewValue(String propName, Object old)
+        {
             if (ValueComparer.equalValue(val1, old))
-                return val2 ;
+            {
+                return val2;
+            }
             else
-                return val1 ;
+            {
+                return val1;
+            }
         }
     }
 
     /**
      * The method performs testing of propName property using propTester.
      */
-    protected void testProperty(String propName, PropertyTester propTester) {
+    protected void testProperty(String propName, PropertyTester propTester)
+    {
         propTester.testProperty(propName);
     }
 
@@ -446,7 +537,8 @@ public class MultiPropertyTest extends MultiMethodTest {
      * The method performs testing of propName property. It uses PropertyTester
      * instance for testing.
      */
-    protected void testProperty(String propName) {
+    protected void testProperty(String propName)
+    {
         testProperty(propName, new PropertyTester());
     }
 
@@ -456,7 +548,8 @@ public class MultiPropertyTest extends MultiMethodTest {
      *
      * @see #PropertyValueSwitcher
      */
-    protected void testProperty(String propName, Object val1, Object val2) {
+    protected void testProperty(String propName, Object val1, Object val2)
+    {
         testProperty(propName, new PropertyValueSwitcher(val1, val2));
     }
 
@@ -464,14 +557,16 @@ public class MultiPropertyTest extends MultiMethodTest {
      * The method just calls compare. This is a workaround to CodeWarrior's
      * compiler bug.
      */
-    private boolean callCompare(Object obj1, Object obj2) {
+    private boolean callCompare(Object obj1, Object obj2)
+    {
         return compare(obj1, obj2);
     }
 
     /**
      * Compares two object. In the implementation calls obj1.equals(obj2).
      */
-    protected boolean compare(Object obj1, Object obj2) {
+    protected boolean compare(Object obj1, Object obj2)
+    {
         return ValueComparer.equalValue(obj1, obj2);
     }
 
@@ -479,7 +574,8 @@ public class MultiPropertyTest extends MultiMethodTest {
      * The method just calls toString. This is a workaround to
      * CodeWarrior's compiler bug.
      */
-    private String callToString(Object obj) {
+    private String callToString(Object obj)
+    {
         return toString(obj);
     }
 
@@ -487,7 +583,8 @@ public class MultiPropertyTest extends MultiMethodTest {
      * Gets string representation of the obj. In the implementation
      * returns obj.toString().
      */
-    protected String toString(Object obj) {
+    protected String toString(Object obj)
+    {
         return obj == null ? "null" : obj.toString();
     }
 }

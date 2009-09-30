@@ -187,7 +187,7 @@ public class Runner
 
     public static void main(String[] args)
     {
-        System.out.println("OOoRunner Main()");
+        System.out.println("OOoRunner Main() version from 20090825 (yyyymmdd)");
 
         setStartTime(getTime());
 

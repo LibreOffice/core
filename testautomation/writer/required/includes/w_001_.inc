@@ -61,7 +61,7 @@ end sub
 
 testcase tFileNewLabels
 
-Warnlog "#i102218# - tFileNewLabels outcommented due to bug."
+QAErrorLog "#i102218# - tFileNewLabels outcommented due to bug."
 goto endsub
 
     Dim iSheetFormat as integer
@@ -253,7 +253,7 @@ endcase
 
 testcase tFileNewBusinessCards
 
-Warnlog "#i102218# - tFileNewBusinessCards outcommented due to bug."
+QAErrorLog "#i102218# - tFileNewBusinessCards outcommented due to bug."
 goto endsub
 
     Dim iFormat as integer
@@ -944,7 +944,7 @@ testcase tFileSaveWithPassword
     
     
     PrintLog "File / Save as ..."
-    FileSaveAs
+    hUseAsyncSlot( "FileSaveAs" )
     
     Kontext "SpeichernDlg"
     if ( SpeichernDlg.exists( 2 ) ) then

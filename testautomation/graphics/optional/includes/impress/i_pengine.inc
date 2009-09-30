@@ -675,7 +675,6 @@ testcase tSlideShowCustomAnimation
             kontext "TabMotionPaths"
             if TabMotionPaths.exists(5) then
                 DialogTest(TabMotionPaths)
-                qaErrorLog("#i44701# selection needs to be made on the page where you say 'OK'")
                 Effects.select(2)
             else
                 bError = true

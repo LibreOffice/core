@@ -34,7 +34,7 @@ package graphical;
 // -----------------------------------------------------------------------------
 abstract class CountPixel
 {
-    int m_nCount = 0;
+    protected int m_nCount = 0;
     public int getCount() {return m_nCount;}
     public abstract void count(int _nRGB);
 }
@@ -47,9 +47,9 @@ class CountNotWhite extends CountPixel
             // System.out.println("CountWhite()");
         }
 
-    public void count(final int pixel)
+    public void countold(final int pixel)
         {
-            final int alpha = (pixel >> 24) & 0xff;
+            // final int alpha = (pixel >> 24) & 0xff;
             final int red   = (pixel >> 16) & 0xff;
             final int green = (pixel >>  8) & 0xff;
             final int blue  = (pixel      ) & 0xff;
@@ -61,6 +61,28 @@ class CountNotWhite extends CountPixel
             }
             ++m_nCount;
         }
+    public void count(final int pixel)
+        {
+            // final int alpha = (pixel >> 24) & 0xff;
+            final int blue  = (pixel      ) & 0xff;
+            if (blue != 0xff)
+            {
+                ++m_nCount;
+                return;
+            }
+            final int green = (pixel >>  8) & 0xff;
+            if (green != 0xff)
+            {
+                ++m_nCount;
+                return;
+            }
+            final int red   = (pixel >> 16) & 0xff;
+            if (red != 0xff)
+            {
+                ++m_nCount;
+                return;
+            }
+        }
 }
 
 // -----------------------------------------------------------------------------
@@ -71,9 +93,9 @@ class CountNotBlack extends CountPixel
             // System.out.println("CountBlack()");
         }
 
-    public void count(final int pixel)
+    public void countold(final int pixel)
         {
-            final int alpha = (pixel >> 24) & 0xff;
+            // final int alpha = (pixel >> 24) & 0xff;
             final int red   = (pixel >> 16) & 0xff;
             final int green = (pixel >>  8) & 0xff;
             final int blue  = (pixel      ) & 0xff;
@@ -83,6 +105,28 @@ class CountNotBlack extends CountPixel
                 return;
             }
             ++m_nCount;
+        }
+    public void count(final int pixel)
+        {
+            // final int alpha = (pixel >> 24) & 0xff;
+            final int blue  = (pixel      ) & 0xff;
+            if (blue != 0x00)
+            {
+                ++m_nCount;
+                return;
+            }
+            final int green = (pixel >>  8) & 0xff;
+            if (green != 0x00)
+            {
+                ++m_nCount;
+                return;
+            }
+            final int red   = (pixel >> 16) & 0xff;
+            if (red != 0x00)
+            {
+                ++m_nCount;
+                return;
+            }
         }
 }
 
@@ -157,7 +201,7 @@ public class PixelCounter {
         throws java.io.IOException
         {
             ImageHelper aImage = ImageHelper.createImageHelper(_sFile);
-            int nw = graphics_stuff.countNotWhitePixel(aImage);
+            final int nw = graphics_stuff.countNotWhitePixel(aImage);
             return nw;
         }
 
@@ -165,7 +209,7 @@ public class PixelCounter {
         throws java.io.IOException
         {
             ImageHelper aImage = ImageHelper.createImageHelper(_sFile);
-            int nw = graphics_stuff.countNotBlackPixel(aImage);
+            final int nw = graphics_stuff.countNotBlackPixel(aImage);
             return nw;
         }
 

@@ -645,8 +645,8 @@ testcase tAssigningStyles1
         Case 55 : sStyles = Array("Limpar formatação", "Corpo do texto", "Padrão", "Título 1", "Título 2", "Título 3", "Mais...")
         Case 81 : sStyles = Array("書式設定の解除", "本文", "標準", "見出し 1", "見出し 2", "見出し 3", "詳細...")
         Case 82 : sStyles = Array("서식 지우기", "기본값", "제목 1", "제목 2", "제목 3", "텍스트 본문", "자세히...")
-        Case 86 : sStyles = Array("清除格式", "标准", "标题 1", "标题 2", "标题 3", "正文", "更多(~M)...")
-        Case 88 : sStyles = Array("清除格式", "內文", "標準", "標題 1", "標題 2", "標題 3", "更多...")
+        Case 86 : sStyles = Array("清除格式", "默认", "标题 1", "标题 2", "标题 3", "正文", "更多(~M)...")
+        Case 88 : sStyles = Array("清除格式", "內文", "標題 1", "標題 2", "標題 3", "預設", "更多...")
         Case 90 : sStyles = Array("Biçimlendirmeyi temizle", "Başlık 1", "Başlık 2", "Başlık 3", "Metin gövdesi", "Varsayılan", "Diğer...")
         Case else : Warnlog "Current language not supported. Please add styles to list!"
                     Kontext "Textobjectbar"
@@ -793,6 +793,7 @@ endcase
 testcase tAssigningStyles4
     Dim i as integer
     Dim sTemp as string
+    Dim sStyle as integer
     
     printlog "- Clear formatting: whole paragraph"
     printlog "Open a new writer document"
@@ -807,6 +808,8 @@ testcase tAssigningStyles4
     Call wTypeKeys "<Mod1 A>"
     printlog "Apply style 'Heading 1' through Styles & Formatting combobox"
     Kontext "Textobjectbar"
+    ' remeber default style
+    sStyle = Vorlage.GetSelIndex
     for i = 1 to Vorlage.GetItemCount
         Vorlage.Select i
         sTemp = Vorlage.GetSelText
@@ -827,7 +830,7 @@ testcase tAssigningStyles4
 
     wait 500    
     Kontext "Textobjectbar"
-    if Vorlage.GetSelIndex <> 2 then
+    if Vorlage.GetSelIndex <> sStyle then
         warnlog "Seems paragraph has not been set to default! " & Vorlage.GetSelText & "(" & Vorlage.GetSelIndex & ")" 
     end if
 

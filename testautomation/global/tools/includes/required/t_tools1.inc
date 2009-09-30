@@ -41,7 +41,7 @@ private SLEEP_TIME_REQUESTED as integer
 private SLEEP_CALLS_SUM as integer
 private SLEEP_TIME_USED as integer
 
-private const VERBOSE = true
+private const VERBOSE = FALSE
 
 function GetClipboardText as string
 
@@ -240,13 +240,22 @@ end function
 
 function Sleep( optional _iSeconds as integer ) as integer
 
+    const CFN = "global::tools::includes::required::Sleep(...): "
+    
+    const STATUS_NO_DELAY          = 0
+    const STATUS_TIMEOUT_EXCEEDED  = 1
+    const STATUS_WAITSLOT_CRASHED  = 2
+    const STATUS_CLASSIC_WAIT_USED = 3
+
+    ' This is the "classic" behavior of the sleep function. If you did not set 
+    ' GLOBAL_USE_NEW_SLEEP to TRUE in your .bas file, this will be used.
     if ( not GLOBAL_USE_NEW_SLEEP ) then
         if ( IsMissing( _iSeconds ) ) then
             wait( 1000 )
         else
             wait( _iSeconds * 1000 )
         endif
-        sleep() = 0
+        sleep() = STATUS_CLASSIC_WAIT_USED
         exit function
     endif
 
@@ -266,19 +275,17 @@ function Sleep( optional _iSeconds as integer ) as integer
     ' 2 = Wait() was used (classic method, fallback).
     ' 3 = Wait() was used (forced old behavior)
 
-    const CFN = "global::tools::includes::required::Sleep(...): "
-    
-    const STATUS_NO_DELAY          = 0
-    const STATUS_TIMEOUT_EXCEEDED  = 1
-    const STATUS_WAITSLOT_CRASHED  = 2
-    const STATUS_CLASSIC_WAIT_USED = 3
-
     dim iMilliseconds as integer
     dim iStatus as integer       : iStatus      = 0
     dim lBegin as long           : lBegin       = GetSystemTicks
     dim iSeconds as integer      : iSeconds     = 5
     dim iSystemDelay as integer  : iSystemDelay = 1000
     dim iTimeDiff as long        : iTimeDiff    = 0
+    
+    ' On Solaris we are a little slower, so we increase the system delay a little
+    if ( instr( lcase( gtSysName ) , "solaris" ) > 0 ) then
+        iSystemDelay = 1500
+    endif
 
     ' Override default wait time (5 seconds) if parameter is given
     if ( not IsMissing( _iSeconds ) ) then
@@ -314,7 +321,7 @@ function Sleep( optional _iSeconds as integer ) as integer
     ' Find out how long it took, warn if time was zero (sleep most likely not required)
     iTimeDiff = GetSystemTicks - lBegin
     if ( iTimeDiff = 0 ) then
-        QAErrorLog( CFN & "Zero time. Please consider removing Sleep() statement" )
+        printlog( CFN & "Zero time. Please consider removing Sleep() statement" )
     endif
     
     if ( VERBOSE ) then
@@ -333,11 +340,11 @@ function Sleep( optional _iSeconds as integer ) as integer
         & iTimeDiff & " ms, rc=" & iStatus )
         select case iStatus
         case STATUS_TIMEOUT_EXCEEDED : 
-            QAErrorLog( CFN & "Timeout exceeded. Please increase the delay" )
+            printlog( CFN & "Timeout exceeded." )
         case STATUS_WAITSLOT_CRASHED : 
-            QAErrorlog( CFN & "Used Wait(n). WaitSlot() failed." )
+            printlog( CFN & "Used Wait(n). WaitSlot() failed." )
         case STATUS_CLASSIC_WAIT_USED : 
-            QAErrorLog( CFN & "Used Wait(n). Classic behavior forced" )
+            printlog( CFN & "Used Wait(n). Classic behavior forced" )
         end select
     endif
     Sleep() = iStatus
@@ -1215,6 +1222,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "filesaveall"                    : FileSaveAll( "SynchronMode", TRUE )
             case "fileexport"                     : FileExport
             case "filereload"                     : FileReload( "SynchronMode", TRUE )
+            case "fileopen"                       : FileOpen
             
             case "editdoc"                        : EditDoc
             case "editcopy"                       : EditCopy

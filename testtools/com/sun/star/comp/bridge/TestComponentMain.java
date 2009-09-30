@@ -104,11 +104,11 @@ public class TestComponentMain
 
         XComponentContext ctx = com.sun.star.comp.helper.Bootstrap.createInitialComponentContext( null );
         XMultiComponentFactory smgr = ctx.getServiceManager();
-        XMultiServiceFactory oldsmgr = (XMultiServiceFactory)
+        XMultiServiceFactory oldsmgr =
             UnoRuntime.queryInterface( XMultiServiceFactory.class, smgr );
 
         // prepare servicemanager
-        XSet set = (XSet) UnoRuntime.queryInterface(XSet.class, smgr);
+        XSet set = UnoRuntime.queryInterface(XSet.class, smgr);
         Object o = com.sun.star.comp.bridge.TestComponent.__getServiceFactory(
             "com.sun.star.comp.bridge.TestComponent$_TestObject", oldsmgr,null );
         set.insert(o);
@@ -121,7 +121,7 @@ public class TestComponentMain
 
             XConnection xConnection = xAcceptor.accept(conDcp);
 
-            XBridgeFactory xBridgeFactory = (XBridgeFactory)UnoRuntime.queryInterface(
+            XBridgeFactory xBridgeFactory = UnoRuntime.queryInterface(
                 XBridgeFactory.class,
                 smgr.createInstanceWithContext("com.sun.star.bridge.BridgeFactory",ctx));
 
@@ -130,8 +130,8 @@ public class TestComponentMain
 
             if (singleaccept) {
                 Listener listener = new Listener();
-                ((XComponent) UnoRuntime.queryInterface(
-                    XComponent.class, xBridge)).addEventListener(listener);
+                UnoRuntime.queryInterface(XComponent.class, xBridge).
+                    addEventListener(listener);
                 listener.await();
                 break;
             }

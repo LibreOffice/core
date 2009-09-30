@@ -1331,7 +1331,7 @@ function fCreateMozillaAddressbookDatasource(sFileName, optional sRegister) as b
         call fClosedatabase(true)
 
 	catch
-    	warnlog "*** Failed *** Data source was not created"
+    	qaerrorlog "*** Failed *** Data source was not created"
         bOK = false
     endcatch	
 	
