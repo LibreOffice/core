@@ -35,7 +35,6 @@
 #include "DiagramHelper.hxx"
 #include "DataSourceHelper.hxx"
 #include "ControllerLockGuard.hxx"
-#include "UndoManager.hxx"
 #include "RangeHighlighter.hxx"
 #include "InternalDataProvider.hxx"
 
