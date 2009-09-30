@@ -88,7 +88,7 @@ public class ComponentContext_Test {
                 System.err.println( "### bootstrap context test failed: 2!" );
             }
 
-            XComponent xComp = (XComponent)UnoRuntime.queryInterface(
+            XComponent xComp = UnoRuntime.queryInterface(
                 XComponent.class, xInitialContext );
             xComp.dispose();
         }

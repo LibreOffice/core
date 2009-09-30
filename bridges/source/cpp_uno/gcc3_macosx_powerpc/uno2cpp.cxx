@@ -110,6 +110,9 @@ static void callVirtualMethod(
      /* set up a pointer to the stack parameter area */
      __asm__ ( "addi %0,r1,24" : "=r" (p) : /* no inputs */ );
 
+     // #i94421#, work around compiler error:
+     volatile long * pCopy = p;
+     (void) pCopy; // avoid warning about unused variable
 
      // never called
      // if (! pAdjustedThisPtr )CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something

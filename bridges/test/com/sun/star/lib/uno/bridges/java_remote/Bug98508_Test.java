@@ -76,7 +76,7 @@ public final class Bug98508_Test extends ComplexTestCase {
 
         protected boolean run(XComponentContext context) throws Throwable {
             Test98508Interface ifc
-                = (Test98508Interface) UnoRuntime.queryInterface(
+                = UnoRuntime.queryInterface(
                     Test98508Interface.class,
                     getBridge(context).getInstance(""));
             try {

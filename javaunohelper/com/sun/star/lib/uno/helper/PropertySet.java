@@ -671,7 +671,7 @@ XMultiPropertySet
                             // We try to get an XInterface of setVal and set an XInterface type.
                             if (setVal instanceof XInterface)
                             {
-                                XInterface xint= (XInterface) UnoRuntime.queryInterface(XInterface.class, setVal);
+                                XInterface xint= UnoRuntime.queryInterface(XInterface.class, setVal);
                                 if (xint != null)
                                     convObj= new Any(new Type(XInterface.class), xint);
                             }
