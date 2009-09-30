@@ -434,7 +434,7 @@ SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
         if (pErr)
             *pErr = nErr;
         lcl_toUpper(aCellStr);
-        bFound = ScGlobal::pTransliteration->isEqual(aCellStr, aUpper);
+        bFound = ScGlobal::GetpTransliteration()->isEqual(aCellStr, aUpper);
         if (!bFound)
             aLook.IncCol();
     }

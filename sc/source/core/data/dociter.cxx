@@ -737,7 +737,7 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
     aResults.reserve(nEntryCount);
 
     const CollatorWrapper& rCollator =
-        mpParam->bCaseSens ? *ScGlobal::pCaseCollator : *ScGlobal::pCollator;
+        mpParam->bCaseSens ? *ScGlobal::GetCaseCollator() : *ScGlobal::GetCollator();
 
     for (SCSIZE i = 0; i < nEntryCount; ++i)
     {
