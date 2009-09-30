@@ -65,6 +65,10 @@ end sub
 testcase tToolsMacro
 '///<u><b>Tools - Macro</b></u>
 
+	Dim iWhichSecurityLevel as integer
+	printlog " Set SecurityLevel to low and remember starting value"
+	iWhichSecurityLevel = hSetMacroSecurity(0)
+
     '/// Open new Spreadsheet document
     printlog " Open new Spreadsheet document"
     Call hNewDocument
@@ -146,28 +150,17 @@ testcase tToolsMacro
     '/// Close ' BeanShell Macros' dialog by 'Close'
     printlog " Close ' BeanShell Macros' dialog by 'Close'"
     ScriptOrganizer.Close
+    Call hCloseDocument
+	printlog " Open testdocument 'gTesttoolPath + spreadsheet\required\input\DocwithMacro.ods'"
+    Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\required\input\DocwithMacro.ods" ))
+	Kontext
+    if Active.exists then 
+        Active.ok
+    end if
+    Call sMakeReadOnlyDocumentEditable
     '/// Use 'Tools – Macro – Signature'
     printlog " Use 'Tools – Macro – Signature'"
     ToolsMacrosSignature
-    '/// Accept  saving messagebox with 'Yes'
-    printlog " Accept  saving messagebox with 'Yes'"
-    Kontext
-    if Active.exists then 
-        Active.yes
-    end if
-    Kontext "SpeichernDlg"
-    '/// Enter 'File name' 'MacroSignature_created_by_Testtool'
-    printlog " Enter 'File name' 'MacroSignature_created_by_Testtool'"
-    DateiName.SetText "MacroSignature_created_by_Testtool"
-    '/// Click 'Save' button
-    printlog " Click 'Save' button"
-    Speichern.Click
-    '/// If the file allready exists because of an earlier testrun, close messagebox by YES
-    printlog " If the file allready exists because of an earlier testrun, close messagebox by YES"
-    Kontext
-    if Active.exists then 
-        Active.yes
-    end if
     Kontext "DigitalSignature"
     Call DialogTest ( DigitalSignature )
     '/// On 'Digital Signatures' dialog press 'Add' button
@@ -209,6 +202,8 @@ testcase tToolsMacro
     '/// Close document
     printlog " Close document"
     Call hCloseDocument
+    printlog " Reset SecurityLevel to starting value"
+    Call hSetMacroSecurity(iWhichSecurityLevel)
 
 endcase
 

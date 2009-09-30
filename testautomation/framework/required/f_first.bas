@@ -46,6 +46,7 @@ sub main
 
     use "framework\required\includes\first.inc"
     use "framework\required\includes\graphics_import.inc"
+    use "global\required\includes\g_option_application.inc"
     
     call hStatusIn ("framework", "f_first.bas")
     call tAllNew
@@ -56,7 +57,7 @@ sub main
     call tJava
     
     gApplication = "WRITER"
-    call tToolsOptionsTest
+    call tToolsOptionsTestFirst
     call tDatabaseCheck
     call tHelpRegistration
     call hStatusOut   
@@ -69,9 +70,6 @@ sub LoadIncludeFiles
 
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    
-    use "global\required\includes\g_option.inc"
-    
     use "global\tools\includes\optional\t_ui_filters.inc"
     use "global\tools\includes\optional\t_filetools.inc"
     use "global\tools\includes\optional\t_docfuncs.inc"
