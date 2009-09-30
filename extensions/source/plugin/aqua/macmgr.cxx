@@ -413,6 +413,7 @@ static bool checkBlackList( CFBundleRef i_xBundle )
     if( bundleversion && CFGetTypeID(bundleversion) == CFStringGetTypeID() )
         aBundleVersion = getString( static_cast<CFStringRef>(bundleversion) );
 
+    bool bReject = false;
     // #i102735# VLC plugin prior to 1.0 tends to crash
     if( aBundleName.equalsAscii( "VLC Plug-in" ) )
     {
@@ -420,17 +421,24 @@ static bool checkBlackList( CFBundleRef i_xBundle )
         rtl::OUString aMajor( aBundleVersion.getToken( 0, '.', nIndex ) );
         if( aMajor.toInt32() < 1 )
         {
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "rejecting VCL plugin (%s %s)\n",
-                     rtl::OUStringToOString( aBundleName, RTL_TEXTENCODING_UTF8 ).getStr(),
-                     rtl::OUStringToOString( aBundleVersion, RTL_TEXTENCODING_UTF8 ).getStr()
-                     );
-            #endif
-            return true;
+            bReject = true;
         }
     }
+    // #i103674# Garmin Communicator Plugin crashes
+    else if( aBundleName.equalsAscii( "Garmin Communicator Plugin" ) )
+    {
+        bReject = true;
+    }
 
-    return false;
+    #if OSL_DEBUG_LEVEL > 1
+    if( bReject )
+        fprintf( stderr, "rejecting plugin \"%s\" version %s\n",
+                 rtl::OUStringToOString( aBundleName, RTL_TEXTENCODING_UTF8 ).getStr(),
+                 rtl::OUStringToOString( aBundleVersion, RTL_TEXTENCODING_UTF8 ).getStr()
+                 );
+    #endif
+
+    return bReject;
 }
 
 static int getPluginDescriptions( CFBundleRef i_xBundle , list< PluginDescription* >& io_rDescriptions )
@@ -572,7 +580,7 @@ static rtl::OUString FindFolderURL(  FSVolumeRefNum vRefNum, OSType folderType )
     return aRet;
 }
 
-Sequence<PluginDescription> XPluginManager_Impl::getPluginDescriptions() throw()
+Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() throw()
 {
     static Sequence<PluginDescription> aDescriptions;
     static BOOL bHavePlugins = FALSE;
