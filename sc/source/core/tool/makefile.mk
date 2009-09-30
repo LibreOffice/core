@@ -80,7 +80,6 @@ SLOFILES =  \
         $(SLO)$/filtopt.obj \
         $(SLO)$/formulaparserpool.obj \
         $(SLO)$/hints.obj \
-        $(SLO)$/indexmap.obj \
         $(SLO)$/inputopt.obj \
         $(SLO)$/interpr1.obj \
         $(SLO)$/interpr2.obj \

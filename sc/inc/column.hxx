@@ -35,6 +35,7 @@
 #include "global.hxx"
 #include "compressedarray.hxx"
 #include "address.hxx"
+#include "rangenam.hxx"
 #include <tools/solar.h>
 
 #include <set>
@@ -96,8 +97,6 @@ struct ColEntry
     ScBaseCell* pCell;
 };
 
-
-class ScIndexMap;
 
 class ScColumn
 {
@@ -299,7 +298,7 @@ public:
     void        SetTabNo(SCTAB nNewTab);
     BOOL        IsRangeNameInUse(SCROW nRow1, SCROW nRow2, USHORT nIndex) const;
     void        FindRangeNamesInUse(SCROW nRow1, SCROW nRow2, std::set<USHORT>& rIndexes) const;
-    void        ReplaceRangeNamesInUse( SCROW nRow1, SCROW nRow2, const ScIndexMap& rMap );
+    void        ReplaceRangeNamesInUse( SCROW nRow1, SCROW nRow2, const ScRangeData::IndexMap& rMap );
 
     const SfxPoolItem*      GetAttr( SCROW nRow, USHORT nWhich ) const;
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;

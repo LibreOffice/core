@@ -86,7 +86,6 @@
 #include "editutil.hxx"
 #include "hints.hxx"
 #include "dpobject.hxx"
-#include "indexmap.hxx"
 #include "scrdata.hxx"
 #include "poolhelp.hxx"
 #include "unoreflist.hxx"
@@ -96,6 +95,7 @@
 #include "externalrefmgr.hxx"
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
+#include "clipparam.hxx"
 
 // pImpl because including lookupcache.hxx in document.hxx isn't wanted, and
 // dtor plus helpers are convenient.
@@ -155,6 +155,8 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pScriptTypeData( NULL ),
         pCacheFieldEditEngine( NULL ),
         pDocProtection( NULL ),
+        mpClipParam( NULL),
+        pExternalRefMgr( NULL ),
         pViewOptions( NULL ),
         pDocOptions( NULL ),
         pExtDocOptions( NULL ),
@@ -182,7 +184,6 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         bForcedFormulaPending( FALSE ),
         bCalculatingFormulaTree( FALSE ),
         bIsClip( eMode == SCDOCMODE_CLIP ),
-        bCutMode( FALSE ),
         bIsUndo( eMode == SCDOCMODE_UNDO ),
         bIsVisible( FALSE ),
         bIsEmbedded( FALSE ),
@@ -217,6 +218,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         mbAdjustHeightEnabled( true ),
         mbExecuteLinkEnabled( true ),
         mbChangeReadOnlyEnabled( false ),
+        mbStreamValidLocked( false ),
         mnNamedRangesLockCount( 0 )
 {
     SetStorageGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT);
@@ -259,6 +261,15 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
 
     aTrackTimer.SetTimeoutHdl( LINK( this, ScDocument, TrackTimeHdl ) );
     aTrackTimer.SetTimeout( 100 );
+}
+
+SvxLinkManager* ScDocument::GetLinkManager()  const
+{
+    if ( bAutoCalc && !pLinkManager && pShell)
+    {
+        pLinkManager = new SvxLinkManager( pShell );
+    }
+    return pLinkManager;
 }
 
 
@@ -371,7 +382,7 @@ ScDocument::~ScDocument()
 
     // Links aufrauemen
 
-    if ( pLinkManager )
+    if ( GetLinkManager() )
     {
         // BaseLinks freigeben
         for ( USHORT n = pLinkManager->GetServers().Count(); n; )
@@ -962,23 +973,18 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             bOldAutoCalcSrc = pSrcDoc->GetAutoCalc();
             pSrcDoc->SetAutoCalc( TRUE );   // falls was berechnet werden muss
         }
-        SvNumberFormatter* pThisFormatter = xPoolHelper->GetFormTable();
-        SvNumberFormatter* pOtherFormatter = pSrcDoc->xPoolHelper->GetFormTable();
-        if (pOtherFormatter && pOtherFormatter != pThisFormatter)
+
         {
-            SvNumberFormatterIndexTable* pExchangeList =
-                     pThisFormatter->MergeFormatter(*(pOtherFormatter));
-            if (pExchangeList->Count() > 0)
-                pFormatExchangeList = pExchangeList;
+            NumFmtMergeHandler aNumFmtMergeHdl(this, pSrcDoc);
+
+            nDestPos = Min(nDestPos, (SCTAB)(GetTableCount() - 1));
+            {   // scope for bulk broadcast
+                ScBulkBroadcast aBulkBroadcast( pBASM);
+                pSrcDoc->pTab[nSrcPos]->CopyToTable(0, 0, MAXCOL, MAXROW,
+                        ( bResultsOnly ? IDF_ALL & ~IDF_FORMULA : IDF_ALL),
+                        FALSE, pTab[nDestPos] );
+            }
         }
-        nDestPos = Min(nDestPos, (SCTAB)(GetTableCount() - 1));
-        {   // scope for bulk broadcast
-            ScBulkBroadcast aBulkBroadcast( pBASM);
-            pSrcDoc->pTab[nSrcPos]->CopyToTable(0, 0, MAXCOL, MAXROW,
-                    ( bResultsOnly ? IDF_ALL & ~IDF_FORMULA : IDF_ALL),
-                    FALSE, pTab[nDestPos] );
-        }
-        pFormatExchangeList = NULL;
         pTab[nDestPos]->SetTabNo(nDestPos);
 
         if ( !bResultsOnly )
@@ -988,7 +994,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             // array containing range names which might need update of indices
             ScRangeData** pSrcRangeNames = nSrcRangeNames ? new ScRangeData* [nSrcRangeNames] : NULL;
             // the index mapping thereof
-            ScIndexMap aSrcRangeMap( nSrcRangeNames );
+            ScRangeData::IndexMap aSrcRangeMap;
             BOOL bRangeNameReplace = FALSE;
 
             // find named ranges that are used in the source sheet
@@ -1013,7 +1019,8 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                         USHORT nExistingIndex = pExistingData->GetIndex();
 
                         pSrcRangeNames[i] = NULL;       // don't modify the named range
-                        aSrcRangeMap.SetPair( i, nOldIndex, nExistingIndex );
+                        aSrcRangeMap.insert(
+                            ScRangeData::IndexMap::value_type(nOldIndex, nExistingIndex));
                         bRangeNameReplace = TRUE;
                         bNamesLost = TRUE;
                     }
@@ -1033,7 +1040,8 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                             pData->TransferTabRef( nSrcPos, nDestPos );
                             pSrcRangeNames[i] = pData;
                             USHORT nNewIndex = pData->GetIndex();
-                            aSrcRangeMap.SetPair( i, nOldIndex, nNewIndex );
+                            aSrcRangeMap.insert(
+                                ScRangeData::IndexMap::value_type(nOldIndex, nNewIndex));
                             if ( !bRangeNameReplace )
                                 bRangeNameReplace = ( nOldIndex != nNewIndex );
                         }

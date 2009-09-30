@@ -80,6 +80,7 @@
 #include "listenercalls.hxx"
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
+#include "clipparam.hxx"
 
 #include <memory>
 
@@ -428,7 +429,7 @@ BOOL ScDocument::LinkExternalTab( SCTAB& rTab, const String& aDocTab,
     {
         ScTableLink* pLink = new ScTableLink( pShell, aFileName, aFilterName, aOptions, nRefreshDelay );
         pLink->SetInCreate( TRUE );
-        pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName,
+        GetLinkManager()->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName,
                                         &aFilterName );
         pLink->Update();
         pLink->SetInCreate( FALSE );
@@ -439,10 +440,11 @@ BOOL ScDocument::LinkExternalTab( SCTAB& rTab, const String& aDocTab,
     return TRUE;
 }
 
-ScExternalRefManager* ScDocument::GetExternalRefManager()
+ScExternalRefManager* ScDocument::GetExternalRefManager() const
 {
+    ScDocument* pThis = const_cast<ScDocument*>(this);
     if (!pExternalRefMgr.get())
-        pExternalRefMgr.reset(new ScExternalRefManager(this));
+        pThis->pExternalRefMgr.reset( new ScExternalRefManager( pThis));
 
     return pExternalRefMgr.get();
 }
@@ -854,7 +856,7 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
         {
             ScDocument* pClipDoc = SC_MOD()->GetClipDoc();
             if (pClipDoc)
-                pClipDoc->bCutMode = FALSE;
+                pClipDoc->GetClipParam().mbCutMode = false;
         }
     }
 }
@@ -864,7 +866,10 @@ void ScDocument::UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDo
 {
     DBG_ASSERT(pClipDoc->bIsClip, "UpdateTranspose: kein Clip");
 
-    ScRange aSource = pClipDoc->aClipRange;         // Tab wird noch angepasst
+    ScRange aSource;
+    ScClipParam& rClipParam = GetClipParam();
+    if (rClipParam.maRanges.Count())
+        aSource = *rClipParam.maRanges.First();
     ScAddress aDest = rDestPos;
 
     SCTAB nClipTab = 0;
@@ -1735,10 +1740,7 @@ void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
     *pDocOptions = rOpt;
     rOpt.GetDate( d,m,y );
 
-    SvNumberFormatter* pFormatter = xPoolHelper->GetFormTable();
-    pFormatter->ChangeNullDate( d,m,y );
-    pFormatter->ChangeStandardPrec( (USHORT)rOpt.GetStdPrecision() );
-    pFormatter->SetYear2000( rOpt.GetYear2000() );
+    xPoolHelper->SetFormTableOpt(rOpt);
 }
 
 const ScViewOptions& ScDocument::GetViewOptions() const

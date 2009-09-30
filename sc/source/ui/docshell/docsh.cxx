@@ -120,6 +120,7 @@
 #include "cfgids.hxx"
 #include "warnpassword.hxx"
 #include "optsolver.hxx"
+#include "sheetdata.hxx"
 #include "tabprotection.hxx"
 
 #include "docsh.hxx"
@@ -757,7 +758,12 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     if ( IsDocShared() && !SC_MOD()->IsInSharedDocSaving() )
                     {
                     }
+                    UseSheetSaveEntries();      // use positions from saved file for next saving
                 }
+                break;
+            case SFX_EVENT_SAVEASDOCDONE:
+                // new positions are used after "save" and "save as", but not "save to"
+                UseSheetSaveEntries();      // use positions from saved file for next saving
                 break;
             default:
                 {
@@ -1892,38 +1898,28 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
                 aDocument.SetExtDocOptions( pExtDocOpt = new ScExtDocOptions );
             pViewShell->GetViewData()->WriteExtOptions( *pExtDocOpt );
 
-#if ENABLE_SHEET_PROTECTION
-            bool bNeedRetypePassDlg = ScPassHashHelper::needsPassHashRegen(aDocument, PASSHASH_XL);
-            if (bNeedRetypePassDlg && !pViewShell->ExecuteRetypePassDlg(PASSHASH_XL))
+            /*  #115980# #i104990# If the imported document contains a medium
+                password, determine if we can save it, otherwise ask the users
+                whether they want to save without it. */
+            if( !::sfx2::CheckMSPasswordCapabilityForExport( aFltName ) )
             {
-                SetError( ERRCODE_ABORT );
-                return false;
-            }
-#else
-
-            do
-            {
-                SfxItemSet* pSet = rMed.GetItemSet();
-                if (!pSet)
-                    break;
-
-                const SfxPoolItem* pItem = NULL;
-                if (SFX_ITEM_SET != pSet->GetItemState(SID_PASSWORD, sal_True, &pItem))
-                    // password is not set.
-                    break;
-
-                /*  #115980 #If the imported document contained an encrypted password -
-                    determine if we should save without it. */
-                bDoSave = ScWarnPassword::WarningOnPassword( rMed );
-
-                if (bDoSave)
+                SfxItemSet* pItemSet = rMed.GetItemSet();
+                const SfxPoolItem* pItem = 0;
+                if( pItemSet && pItemSet->GetItemState( SID_PASSWORD, sal_True, &pItem ) == SFX_ITEM_SET )
                 {
-                    // #i42858# warn only one time
-                    pSet->ClearItem(SID_PASSWORD);
+                    bDoSave = ScWarnPassword::WarningOnPassword( rMed );
+                    // #i42858# remove password from medium (warn only one time)
+                    if( bDoSave )
+                        pItemSet->ClearItem( SID_PASSWORD );
                 }
             }
-            while (false);
 
+#if ENABLE_SHEET_PROTECTION
+            if( bDoSave )
+            {
+                bool bNeedRetypePassDlg = ScPassHashHelper::needsPassHashRegen( aDocument, PASSHASH_XL );
+                bDoSave = !bNeedRetypePassDlg || pViewShell->ExecuteRetypePassDlg( PASSHASH_XL );
+            }
 #endif
         }
 
@@ -2259,6 +2255,7 @@ BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static
         pPaintLockData  ( NULL ), \
         pOldJobSetup    ( NULL ), \
         pSolverSaveData ( NULL ), \
+        pSheetSaveData  ( NULL ), \
         pModificator    ( NULL )
 
 //------------------------------------------------------------------
@@ -2352,6 +2349,7 @@ __EXPORT ScDocShell::~ScDocShell()
     delete pOldJobSetup;        // gesetzt nur bei Fehler in StartJob()
 
     delete pSolverSaveData;
+    delete pSheetSaveData;
     delete pOldAutoDBRange;
 
     if (pModificator)
@@ -2520,6 +2518,39 @@ void ScDocShell::SetSolverSaveData( const ScOptSolverSave& rData )
 {
     delete pSolverSaveData;
     pSolverSaveData = new ScOptSolverSave( rData );
+}
+
+ScSheetSaveData* ScDocShell::GetSheetSaveData()
+{
+    if (!pSheetSaveData)
+        pSheetSaveData = new ScSheetSaveData;
+
+    return pSheetSaveData;
+}
+
+void ScDocShell::UseSheetSaveEntries()
+{
+    if (pSheetSaveData)
+    {
+        pSheetSaveData->UseSaveEntries();   // use positions from saved file for next saving
+
+        bool bHasEntries = false;
+        SCTAB nTabCount = aDocument.GetTableCount();
+        SCTAB nTab;
+        for (nTab = 0; nTab < nTabCount; ++nTab)
+            if (pSheetSaveData->HasStreamPos(nTab))
+                bHasEntries = true;
+
+        if (!bHasEntries)
+        {
+            // if no positions were set (for example, export to other format),
+            // reset all "valid" flags
+
+            for (nTab = 0; nTab < nTabCount; ++nTab)
+                if (aDocument.IsStreamValid(nTab))
+                    aDocument.SetStreamValid(nTab, FALSE);
+        }
+    }
 }
 
 // --- ScDocShellModificator ------------------------------------------

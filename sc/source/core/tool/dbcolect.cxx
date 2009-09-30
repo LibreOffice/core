@@ -701,7 +701,7 @@ short ScDBCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
     const String& rStr1 = ((ScDBData*)pKey1)->GetName();
     const String& rStr2 = ((ScDBData*)pKey2)->GetName();
-    return (short) ScGlobal::pTransliteration->compareString( rStr1, rStr2 );
+    return (short) ScGlobal::GetpTransliteration()->compareString( rStr1, rStr2 );
 }
 
 //  IsEqual - alles gleich

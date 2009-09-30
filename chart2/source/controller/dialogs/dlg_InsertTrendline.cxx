@@ -42,6 +42,7 @@
 #include "ObjectIdentifier.hxx"
 #include "DiagramHelper.hxx"
 #include "AxisHelper.hxx"
+#include "ObjectNameProvider.hxx"
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 
@@ -74,7 +75,7 @@ InsertTrendlineDialog::InsertTrendlineDialog( Window* pParent, const SfxItemSet&
         m_apTrendlineResources( new TrendlineResources( this, rInAttrs, true ))
 {
     FreeResource();
-    this->SetText( String( SchResId( STR_OBJECT_CURVES )));
+    this->SetText( ObjectNameProvider::getName_ObjectForAllSeries( OBJECTTYPE_DATA_CURVE ) );
 }
 
 InsertTrendlineDialog::~InsertTrendlineDialog()

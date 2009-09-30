@@ -294,13 +294,13 @@ void ScBroadcastAreaSlot::DelBroadcastAreasInRange( const ScRange& rRange )
         if (rRange.In( rAreaRange))
         {
             ScBroadcastArea* pArea = *aIter;
+            aBroadcastAreaTbl.erase( aIter++);  // erase before modifying
             if (!pArea->DecRef())
             {
                 if (pBASM->IsInBulkBroadcast())
                     pBASM->RemoveBulkArea( pArea);
                 delete pArea;
             }
-            aBroadcastAreaTbl.erase( aIter++);
         }
         else
             ++aIter;

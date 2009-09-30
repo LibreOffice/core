@@ -878,7 +878,7 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const rtl::OUString& rString,
     sal_Int32 nPrefixLength(rPrefix.getLength());
     rtl::OUString sTemp(rString.copy(nPrefixLength));
     sal_Int32 nIndex(sTemp.toInt32());
-    if (aAutoStyleNames.at(nIndex - 1)->equals(rString))
+    if (nIndex > 0 && static_cast<size_t>(nIndex-1) < aAutoStyleNames.size() && aAutoStyleNames.at(nIndex - 1)->equals(rString))
     {
         bIsAutoStyle = sal_True;
         return nIndex - 1;
@@ -1111,7 +1111,7 @@ sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(const rtl::OUString& rStrin
     sal_Int32 nPrefixLength(rPrefix.getLength());
     rtl::OUString sTemp(rString.copy(nPrefixLength));
     sal_Int32 nIndex(sTemp.toInt32());
-    if (aStyleNames.at(nIndex - 1)->equals(rString))
+    if (nIndex > 0 && static_cast<size_t>(nIndex-1) < aStyleNames.size() && aStyleNames.at(nIndex - 1)->equals(rString))
         return nIndex - 1;
     else
     {

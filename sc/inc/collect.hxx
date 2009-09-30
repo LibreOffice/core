@@ -80,7 +80,7 @@ public:
 
     ScDataObject*   At(USHORT nIndex) const;
     virtual USHORT      IndexOf(ScDataObject* pScDataObject) const;
-    USHORT GetCount() const { return nCount; }
+    USHORT GetCount() const;
 
             ScDataObject* operator[]( const USHORT nIndex) const {return At(nIndex);}
             ScCollection&   operator=( const ScCollection& rCol );
@@ -192,6 +192,7 @@ public:
 
             TypedScStrCollection( const TypedScStrCollection& rCpy )
                 : ScSortedCollection( rCpy ) { bCaseSensitive = rCpy.bCaseSensitive; }
+            ~TypedScStrCollection();
 
     virtual ScDataObject*       Clone() const;
     virtual short           Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) const;

@@ -49,6 +49,7 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 #include "transobj.hxx"
+#include "clipparam.hxx"
 
 
 // STATIC DATA -----------------------------------------------------------
@@ -447,7 +448,8 @@ void ScTabControl::DoDrag( const Region& /* rRegion */ )
     aTabMark.SetMarkArea( ScRange(0,0,nTab,MAXCOL,MAXROW,nTab) );
 
     ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
-    pDoc->CopyToClip( 0,0, MAXCOL,MAXROW, FALSE, pClipDoc, FALSE, &aTabMark );
+    ScClipParam aClipParam(ScRange(0, 0, 0, MAXCOL, MAXROW, 0), false);
+    pDoc->CopyToClip(aClipParam, pClipDoc, &aTabMark, false);
 
     TransferableObjectDescriptor aObjDesc;
     pDocSh->FillTransferableObjectDescriptor( aObjDesc );

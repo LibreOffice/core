@@ -406,6 +406,7 @@ void ScDocShell::UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore )
 {
     BOOL bIsUndoEnabled = aDocument.IsUndoEnabled();
     aDocument.EnableUndo( FALSE );
+    aDocument.LockStreamValid( true );      // ignore draw page size (but not formula results)
     if ( bBefore )          // check all sheets up to nUpdateTab
     {
         SCTAB nTabCount = aDocument.GetTableCount();
@@ -437,6 +438,7 @@ void ScDocShell::UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore )
             aDocument.SetPendingRowHeights( nUpdateTab, FALSE );
         }
     }
+    aDocument.LockStreamValid( false );
     aDocument.EnableUndo( bIsUndoEnabled );
 }
 

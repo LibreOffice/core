@@ -68,12 +68,14 @@ enum ScDPFieldType
 class ScDPFieldWindow : public Control
 {
 private:
+    typedef ::std::pair< String, bool > FieldString;    // true = text fits into button
+
     String                  aName;          /// name of the control, used in Accessibility
     ScDPLayoutDlg*          pDlg;           /// Parent dialog.
     Rectangle               aWndRect;       /// Area rectangle in pixels.
     FixedText*              pFtCaption;     /// FixedText containing the name of the control.
     Point                   aTextPos;       /// Position of the caption text.
-    std::vector< String >   aFieldArr;      /// Pointer to string array of the field names.
+    std::vector< FieldString > aFieldArr;   /// String array of the field names and flags, if text fits into button.
     ScDPFieldType           eType;          /// Type of this area.
     Color                   aFaceColor;     /// Color for dialog background.
     Color                   aWinColor;      /// Color for window background.
@@ -97,13 +99,16 @@ private:
     void                    DrawField(
                                 OutputDevice& rDev,
                                 const Rectangle& rRect,
-                                const String& rText,
+                                FieldString& rText,
                                 bool bFocus );
 
     /** @return  TRUE, if the field index is inside of the control area. */
     bool                    IsValidIndex( size_t nIndex ) const;
     /** @return  TRUE, if the field with the given index exists. */
     bool                    IsExistingIndex( size_t nIndex ) const;
+    /** @return  TRUE, if the field with the given index exists and the text is
+                    too long for the button control. */
+    bool                    IsShortenedText( size_t nIndex ) const;
     /** @return  The new selection index after moving to the given direction. */
     size_t                  CalcNewFieldIndex( SCsCOL nDX, SCsROW nDY ) const;
 

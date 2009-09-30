@@ -271,6 +271,11 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                 if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
                         rSet, rChanges ) )
                     InvalidateTextWidth( NULL, NULL, bNumFormatChanged );
+
+                for (SCTAB nTab=0; nTab<=MAXTAB; ++nTab)
+                    if (pTab[nTab] && pTab[nTab]->IsStreamValid())
+                        pTab[nTab]->SetStreamValid( FALSE );
+
                 ULONG nOldFormat =
                     ((const SfxUInt32Item*)&rSet.Get(
                     ATTR_VALUE_FORMAT ))->GetValue();
@@ -319,20 +324,8 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
 void ScDocument::CopyStdStylesFrom( ScDocument* pSrcDoc )
 {
     // #b5017505# number format exchange list has to be handled here, too
-
-    SvNumberFormatter* pThisFormatter = xPoolHelper->GetFormTable();
-    SvNumberFormatter* pOtherFormatter = pSrcDoc->xPoolHelper->GetFormTable();
-    if (pOtherFormatter && pOtherFormatter != pThisFormatter)
-    {
-        SvNumberFormatterIndexTable* pExchangeList =
-                pThisFormatter->MergeFormatter(*(pOtherFormatter));
-        if (pExchangeList->Count() > 0)
-            pFormatExchangeList = pExchangeList;
-    }
-
+    NumFmtMergeHandler aNumFmtMergeHdl(this, pSrcDoc);
     xPoolHelper->GetStylePool()->CopyStdStylesFrom( pSrcDoc->xPoolHelper->GetStylePool() );
-
-    pFormatExchangeList = NULL;
 }
 
 //------------------------------------------------------------------------
@@ -920,7 +913,7 @@ BOOL ScDocument::IdleCheckLinks()           // TRUE = demnaechst wieder versuche
 {
     BOOL bAnyLeft = FALSE;
 
-    if (pLinkManager)
+    if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -948,7 +941,7 @@ void ScDocument::SaveDdeLinks(SvStream& rStream) const
     //  bei 4.0-Export alle mit Modus != DEFAULT weglassen
     BOOL bExport40 = ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_40 );
 
-    const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+    const ::sfx2::SvBaseLinks& rLinks = GetLinkManager()->GetLinks();
     USHORT nCount = rLinks.Count();
 
     //  erstmal zaehlen...
@@ -986,6 +979,7 @@ void ScDocument::LoadDdeLinks(SvStream& rStream)
 {
     ScMultipleReadHeader aHdr( rStream );
 
+    GetLinkManager();
     USHORT nCount;
     rStream >> nCount;
     for (USHORT i=0; i<nCount; i++)
@@ -998,7 +992,7 @@ void ScDocument::LoadDdeLinks(SvStream& rStream)
 
 BOOL ScDocument::HasDdeLinks() const
 {
-    if (pLinkManager)           // Clipboard z.B. hat keinen LinkManager
+    if (GetLinkManager())           // Clipboard z.B. hat keinen LinkManager
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -1025,7 +1019,7 @@ BOOL ScDocument::IsInLinkUpdate() const
 
 void ScDocument::UpdateExternalRefLinks()
 {
-    if (!pLinkManager)
+    if (!GetLinkManager())
         return;
 
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
@@ -1064,7 +1058,7 @@ void ScDocument::UpdateExternalRefLinks()
 
 void ScDocument::UpdateDdeLinks()
 {
-    if (pLinkManager)
+    if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -1110,7 +1104,7 @@ BOOL ScDocument::UpdateDdeLink( const String& rAppl, const String& rTopic, const
     //! wenn's mal alles asynchron wird, aber auch hier
 
     BOOL bFound = FALSE;
-    if (pLinkManager)
+    if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -1135,7 +1129,7 @@ BOOL ScDocument::UpdateDdeLink( const String& rAppl, const String& rTopic, const
 
 void ScDocument::DisconnectDdeLinks()
 {
-    if (pLinkManager)
+    if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -1158,7 +1152,7 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
             pDestDoc->LoadDdeLinks(*pClipData);
         }
     }
-    else if (pLinkManager)              // Links direkt kopieren
+    else if (GetLinkManager())              // Links direkt kopieren
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -1179,7 +1173,7 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
 USHORT ScDocument::GetDdeLinkCount() const
 {
     USHORT nDdeCount = 0;
-    if (pLinkManager)
+    if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -1255,12 +1249,12 @@ ScDdeLink* lclGetDdeLink( const SvxLinkManager* pLinkManager, USHORT nDdePos )
 
 bool ScDocument::FindDdeLink( const String& rAppl, const String& rTopic, const String& rItem, BYTE nMode, USHORT& rnDdePos )
 {
-    return lclGetDdeLink( pLinkManager, rAppl, rTopic, rItem, nMode, &rnDdePos ) != NULL;
+    return lclGetDdeLink( GetLinkManager(), rAppl, rTopic, rItem, nMode, &rnDdePos ) != NULL;
 }
 
 bool ScDocument::GetDdeLinkData( USHORT nDdePos, String& rAppl, String& rTopic, String& rItem ) const
 {
-    if( const ScDdeLink* pDdeLink = lclGetDdeLink( pLinkManager, nDdePos ) )
+    if( const ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos ) )
     {
         rAppl  = pDdeLink->GetAppl();
         rTopic = pDdeLink->GetTopic();
@@ -1272,7 +1266,7 @@ bool ScDocument::GetDdeLinkData( USHORT nDdePos, String& rAppl, String& rTopic, 
 
 bool ScDocument::GetDdeLinkMode( USHORT nDdePos, BYTE& rnMode ) const
 {
-    if( const ScDdeLink* pDdeLink = lclGetDdeLink( pLinkManager, nDdePos ) )
+    if( const ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos ) )
     {
         rnMode = pDdeLink->GetMode();
         return true;
@@ -1282,7 +1276,7 @@ bool ScDocument::GetDdeLinkMode( USHORT nDdePos, BYTE& rnMode ) const
 
 const ScMatrix* ScDocument::GetDdeLinkResultMatrix( USHORT nDdePos ) const
 {
-    const ScDdeLink* pDdeLink = lclGetDdeLink( pLinkManager, nDdePos );
+    const ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos );
     return pDdeLink ? pDdeLink->GetResult() : NULL;
 }
 
@@ -1293,7 +1287,7 @@ bool ScDocument::CreateDdeLink( const String& rAppl, const String& rTopic, const
         on existing and new links. */
     //! store DDE links additionally at document (for efficiency)?
     DBG_ASSERT( nMode != SC_DDE_IGNOREMODE, "ScDocument::CreateDdeLink - SC_DDE_IGNOREMODE not allowed here" );
-    if( pLinkManager && (nMode != SC_DDE_IGNOREMODE) )
+    if( GetLinkManager() && (nMode != SC_DDE_IGNOREMODE) )
     {
         ScDdeLink* pDdeLink = lclGetDdeLink( pLinkManager, rAppl, rTopic, rItem, nMode );
         if( !pDdeLink )
@@ -1314,7 +1308,7 @@ bool ScDocument::CreateDdeLink( const String& rAppl, const String& rTopic, const
 
 bool ScDocument::SetDdeLinkResultMatrix( USHORT nDdePos, ScMatrix* pResults )
 {
-    if( ScDdeLink* pDdeLink = lclGetDdeLink( pLinkManager, nDdePos ) )
+    if( ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos ) )
     {
         pDdeLink->SetResult( pResults );
         return true;
@@ -1326,7 +1320,7 @@ bool ScDocument::SetDdeLinkResultMatrix( USHORT nDdePos, ScMatrix* pResults )
 
 BOOL ScDocument::HasAreaLinks() const
 {
-    if (pLinkManager)           // Clipboard z.B. hat keinen LinkManager
+    if (GetLinkManager())           // Clipboard z.B. hat keinen LinkManager
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -1340,7 +1334,7 @@ BOOL ScDocument::HasAreaLinks() const
 
 void ScDocument::UpdateAreaLinks()
 {
-    if (pLinkManager)
+    if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -1355,7 +1349,7 @@ void ScDocument::UpdateAreaLinks()
 
 void ScDocument::DeleteAreaLinksOnTab( SCTAB nTab )
 {
-    if (pLinkManager)
+    if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nPos = 0;
@@ -1374,7 +1368,7 @@ void ScDocument::DeleteAreaLinksOnTab( SCTAB nTab )
 void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
                              const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    if (pLinkManager)
+    if (GetLinkManager())
     {
         bool bAnyUpdate = false;
 

@@ -104,7 +104,7 @@ sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const String& rList )
         xub_StrLen nCount = rList.GetTokenCount('\t');
         for ( xub_StrLen i=0; i<nCount; i+=2 )
         {
-            if ( ScGlobal::GetpTransliteration()->isEqual( aStr, rList.GetToken(i,'\t') ) )//CHINA001 if ( ScGlobal::pTransliteration->isEqual( aStr, rList.GetToken(i,'\t') ) )
+            if ( ScGlobal::GetpTransliteration()->isEqual( aStr, rList.GetToken(i,'\t') ) )//CHINA001 if ( ScGlobal::GetpTransliteration()->isEqual( aStr, rList.GetToken(i,'\t') ) )
                 c = (sal_Unicode)rList.GetToken(i+1,'\t').ToInt32();
         }
         if (!c && aStr.Len())
