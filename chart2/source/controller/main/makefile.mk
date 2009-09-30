@@ -73,7 +73,10 @@ SLOFILES =  \
             $(SLO)$/ChartTransferable.obj \
             $(SLO)$/FeatureCommandDispatchBase.obj \
             $(SLO)$/DrawCommandDispatch.obj \
-            $(SLO)$/ShapeController.obj
+            $(SLO)$/ShapeController.obj \
+            $(SLO)$/ImplUndoManager.obj \
+            $(SLO)$/UndoManager.obj \
+            $(SLO)$/UndoGuard.obj
 
 #			$(SLO)$/CommonConverters.obj \
 #			$(SLO)$/Scaling.obj	\
