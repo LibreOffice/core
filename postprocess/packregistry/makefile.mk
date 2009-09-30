@@ -71,7 +71,7 @@ MY_FILES_brand = \
 .IF "$(ENABLE_SVCTAGS)" == "YES"
 MY_FILES_brand += \
     $(MY_MOD)/org/openoffice/Office/Jobs/Jobs-registration.xcu
-.ENDIF
+.END
 
 MY_DEPS_binfilter = main
 MY_FILES_binfilter = \
@@ -298,48 +298,61 @@ MY_FILES_main = \
 .IF "$(GUIBASE)" == "aqua"
 MY_FILES_main += \
     $(MY_MOD)/DataAccess/macab.xcu \
+    $(MY_MOD)/org/openoffice/Inet-macosx.xcu \
     $(MY_MOD)/org/openoffice/Office/Accelerators-macosx.xcu \
     $(MY_MOD)/org/openoffice/Office/Common-macosx.xcu \
     $(MY_MOD)/org/openoffice/Office/Paths-macosx.xcu
+        # Inet-macosx.xcu must come after Inet.xcu
 .ELIF "$(GUIBASE)" == "unx"
 MY_FILES_main += \
     $(MY_MOD)/org/openoffice/Office/Accelerators-unxwnt.xcu \
     $(MY_MOD)/org/openoffice/Office/Common-UseOOoFileDialogs.xcu \
     $(MY_MOD)/org/openoffice/Office/Common-unx.xcu \
     $(MY_MOD)/org/openoffice/Office/Paths-unxwnt.xcu
+.IF "$(ENABLE_GCONF)" == "TRUE" || "$(ENABLE_KDE)" == "TRUE" #TODO: KDE4?
+MY_FILES_main += \
+    $(MY_MOD)/org/openoffice/Inet-unixdesktop.xcu \
+    $(MY_MOD)/org/openoffice/Office/Common-unixdesktop.xcu \
+    $(MY_MOD)/org/openoffice/Office/Paths-unixdesktop.xcu \
+    $(MY_MOD)/org/openoffice/VCL-unixdesktop.xcu
+        # Inet-unixdesktop.xcu must come after Inet.xcu
+        # VCL-unixdesktop.xcu must come after VCL.xcu
+.END
 .ELIF "$(GUIBASE)" == "WIN"
 MY_FILES_main += \
     $(MY_MOD)/DataAccess/ado.xcu \
+    $(MY_MOD)/org/openoffice/Inet-wnt.xcu \
     $(MY_MOD)/org/openoffice/Office/Accelerators-unxwnt.xcu \
     $(MY_MOD)/org/openoffice/Office/Common-wnt.xcu \
     $(MY_MOD)/org/openoffice/Office/Linguistic-ForceDefaultLanguage.xcu \
     $(MY_MOD)/org/openoffice/Office/Paths-unxwnt.xcu
+        # Inet-wnt.xcu must come after Inet.xcu
 .ELSE
 ERROR: unknown-GUIBASE
 .END
 .IF "$(OS)" == "WNT" || "$(OS)" == "LINUX" || \
         ("$(OS)" == "SOLARIS" && "$(CPU)" == "S") || "$(OS)" == "NETBSD"
 MY_FILES_main += $(MY_MOD)/DataAccess/adabas.xcu
-.ENDIF
+.END
 .IF "$(ENABLE_EVOAB2)" == "TRUE"
 MY_FILES_main += $(MY_MOD)/DataAccess/evoab2.xcu
-.ENDIF
+.END
 .IF "$(SOLAR_JAVA)" == "TRUE"
 MY_FILES_main += \
     $(MY_MOD)/DataAccess/hsqldb.xcu \
     $(MY_MOD)/DataAccess/jdbc.xcu
-.ENDIF
+.END
 .IF "$(ENABLE_KAB)" == "TRUE"
 MY_FILES_main += $(MY_MOD)/DataAccess/kab.xcu
-.ENDIF
+.END
 .IF "$(SYSTEM_MOZILLA)" == "NO" && "$(WITH_MOZILLA)" == "YES" && \
         "$(OS)" != "MACOSX"
 .IF "$(OS)" == "WNT"
 MY_FILES_main += $(MY_MOD)/DataAccess/mozab.xcu
 .ELSE
 MY_FILES_main += $(MY_MOD)/DataAccess/mozab2.xcu
-.ENDIF
-.ENDIF
+.END
+.END
 
 MY_DEPS_math = main
 MY_FILES_math = \
@@ -412,6 +425,17 @@ MY_DEPS_xsltfilter = main
 MY_FILES_xsltfilter = \
     $(MY_MOD)/fcfg_xslt_filters.xcu \
     $(MY_MOD)/fcfg_xslt_types.xcu
+
+.IF "$(GUIBASE)" == "unx" && "$(ENABLE_GCONF)" == "TRUE" && \
+        "$(ENABLE_LOCKDOWN)" == "YES"
+MY_XCDS += $(MISC)/gconflockdown.xcd
+MY_DEPS_gconflockdown = main
+MY_FILES_gconflockdown = \
+    $(MY_MOD)/org/openoffice/Office/Common-gconflockdown.xcu \
+    $(MY_MOD)/org/openoffice/Office/Recovery-gconflockdown.xcu \
+    $(MY_MOD)/org/openoffice/UserProfile-gconflockdown.xcu \
+    $(MY_MOD)/org/openoffice/VCL-gconflockdown.xcu
+.END
 
 .INCLUDE: settings.mk
 .INCLUDE: target.mk
