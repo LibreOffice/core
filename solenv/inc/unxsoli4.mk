@@ -114,7 +114,7 @@ CFLAGSWERRCXX=-xwe
 MODULES_WITH_WARNINGS := \
     soldep
 
-STDOBJVCL=$(L)$/salmain.o
+STDOBJVCL=$(L)/salmain.o
 
 THREADLIB=
 .IF "$(PURIFY)"!=""
@@ -127,7 +127,7 @@ LINKC=$(CC)
 # link against set of baseline libraries
 .IF "$(SYSBASE)"!=""
 C_RESTRICTIONFLAGS*=-xc99=none
-#LD_OPTIONS+:=-L$(SYSBASE)$/usr$/lib
+#LD_OPTIONS+:=-L$(SYSBASE)/usr/lib
 CDEFS+=-DSYSBASE="$(SYSBASE)"
 CFLAGSCC+=$(C_RESTRICTIONFLAGS)
 #.EXPORT : LD_OPTIONS
@@ -197,8 +197,9 @@ STDSHLGUIMT=$(DYNAMIC) -lpthread CPPRUNTIME -lm -lc
 STDSHLCUIMT=$(DYNAMIC) -lpthread CPPRUNTIME -lm -lc
 
 # libdl.so - no really an GUI library but required in this context
-STDLIBGUIMT+=-lX11 -ldl
-STDSHLGUIMT+=-lX11 -ldl
+STDLIBGUIMT+=-ldl
+STDSHLGUIMT+=-ldl
+X11LINK_DYNAMIC = -lX11
 
 # @@@ interposer needed for -Bdirect @@@
 # LIBSALCPPRT*=-z allextract -lsalcpprt -z defaultextract

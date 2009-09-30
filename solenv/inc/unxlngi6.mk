@@ -38,7 +38,7 @@ JAVAFLAGSDEBUG=-g
 
 # filter for supressing verbose messages from linker
 #not needed at the moment
-#LINKOUTPUT_FILTER=" |& $(SOLARENV)$/bin$/msg_filter"
+#LINKOUTPUT_FILTER=" |& $(SOLARENV)/bin/msg_filter"
 
 # _PTHREADS is needed for the stl
 CDEFS+=$(PTHREAD_CFLAGS) -DGLIBC=2 -DX86 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=$(STLPORT_VER)
@@ -67,7 +67,7 @@ CXX*=g++
 # name of C Compiler
 CC*=gcc
 .IF "$(SYSBASE)"!=""
-CFLAGS_SYSBASE:=-isystem $(SYSBASE)$/usr$/include
+CFLAGS_SYSBASE:=-isystem $(SYSBASE)/usr/include
 CXX+:=$(CFLAGS_SYSBASE)
 CC+:=$(CFLAGS_SYSBASE)
 .ENDIF          # "$(SYSBASE)"!=""
@@ -96,8 +96,8 @@ CFLAGSCXX += -fvisibility-inlines-hidden
 .ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 
 CFLAGS_CREATE_PCH=-x c++-header -I$(INCPCH) -DPRECOMPILED_HEADERS
-CFLAGS_USE_PCH=-I$(SLO)$/pch -DPRECOMPILED_HEADERS -Winvalid-pch
-CFLAGS_USE_EXCEPTIONS_PCH=-I$(SLO)$/pch_ex -DPRECOMPILED_HEADERS -Winvalid-pch
+CFLAGS_USE_PCH=-I$(SLO)/pch -DPRECOMPILED_HEADERS -Winvalid-pch
+CFLAGS_USE_EXCEPTIONS_PCH=-I$(SLO)/pch_ex -DPRECOMPILED_HEADERS -Winvalid-pch
 
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
 CFLAGSOBJGUIMT=
@@ -188,7 +188,7 @@ SONAME_SWITCH=-Wl,-h
 STDLIBCPP=-lstdc++
 
 # default objectfilenames to link
-STDOBJVCL=$(L)$/salmain.o
+STDOBJVCL=$(L)/salmain.o
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
@@ -207,11 +207,13 @@ LINKFLAGS += -Wl,-zdynsort
 .ENDIF
 
 # libraries for linking applications
-STDLIBGUIMT+=-Wl,--as-needed -lX11 -ldl -lpthread -lm -Wl,--no-as-needed
+STDLIBGUIMT+=-Wl,--as-needed -ldl -lpthread -lm -Wl,--no-as-needed
 STDLIBCUIMT+=-Wl,--as-needed -ldl -lpthread -lm -Wl,--no-as-needed
 # libraries for linking shared libraries
-STDSHLGUIMT+=-Wl,--as-needed -lX11 -lXext -ldl -lpthread -lm -Wl,--no-as-needed
+STDSHLGUIMT+=-Wl,--as-needed -ldl -lpthread -lm -Wl,--no-as-needed
 STDSHLCUIMT+=-Wl,--as-needed -ldl -lpthread -lm -Wl,--no-as-needed
+
+X11LINK_DYNAMIC = -lX11 -lXext
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
