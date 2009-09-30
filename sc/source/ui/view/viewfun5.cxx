@@ -79,6 +79,7 @@
 
 #include "asciiopt.hxx"
 #include "scabstdlg.hxx"
+#include "clipparam.hxx"
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/dbaexchange.hxx>
@@ -163,12 +164,12 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     if ( pSrcDoc->GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
                         pSrcDoc->GetCellArea( nSrcTab, nLastCol, nLastRow );
                     else
-                        {
+                    {
                         nFirstCol = nLastCol = 0;
                         nFirstRow = nLastRow = 0;
-                        }
-                    pSrcDoc->CopyToClip( nFirstCol, nFirstRow, nLastCol, nLastRow,
-                                            FALSE, pClipDoc, FALSE, &aSrcMark );
+                    }
+                    ScClipParam aClipParam(ScRange(nFirstCol, nFirstRow, 0, nLastCol, nLastRow, 0), false);
+                    pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aSrcMark);
                     ScGlobal::SetClipDocName( xDocShRef->GetTitle( SFX_TITLE_FULLNAME ) );
 
                     SetCursor( nPosX, nPosY );

@@ -172,8 +172,8 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 )
 
 BOOL ScTable::IsSortCollatorGlobal() const
 {
-    return  pSortCollator == ScGlobal::pCollator ||
-            pSortCollator == ScGlobal::pCaseCollator;
+    return  pSortCollator == ScGlobal::GetCollator() ||
+            pSortCollator == ScGlobal::GetCaseCollator();
 }
 
 
@@ -189,8 +189,8 @@ void ScTable::InitSortCollator( const ScSortParam& rPar )
     else
     {   // SYSTEM
         DestroySortCollator();
-        pSortCollator = (rPar.bCaseSens ? ScGlobal::pCaseCollator :
-            ScGlobal::pCollator);
+        pSortCollator = (rPar.bCaseSens ? ScGlobal::GetCaseCollator() :
+            ScGlobal::GetCollator());
     }
 }
 
@@ -949,10 +949,10 @@ BOOL ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
     long    nPos = -1;
     SCSIZE  i    = 0;
     BOOL    bMatchWholeCell = pDocument->GetDocOptions().IsMatchWholeCell();
-    CollatorWrapper* pCollator = (rParam.bCaseSens ? ScGlobal::pCaseCollator :
-        ScGlobal::pCollator);
+    CollatorWrapper* pCollator = (rParam.bCaseSens ? ScGlobal::GetCaseCollator() :
+        ScGlobal::GetCollator());
     ::utl::TransliterationWrapper* pTransliteration = (rParam.bCaseSens ?
-        ScGlobal::pCaseTransliteration : ScGlobal::pTransliteration);
+        ScGlobal::GetCaseTransliteration() : ScGlobal::GetpTransliteration());
 
     while ( (i < nEntryCount) && rParam.GetEntry(i).bDoQuery )
     {

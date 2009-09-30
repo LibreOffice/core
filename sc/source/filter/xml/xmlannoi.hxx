@@ -34,11 +34,26 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <svx/editdata.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 
 class ScXMLImport;
 class ScXMLTableRowCellContext;
+
+struct ScXMLAnnotationStyleEntry
+{
+    sal_uInt16          mnFamily;
+    rtl::OUString       maName;
+    ESelection          maSelection;
+
+    ScXMLAnnotationStyleEntry( sal_uInt16 nFam, const rtl::OUString& rNam, const ESelection& rSel ) :
+        mnFamily( nFam ),
+        maName( rNam ),
+        maSelection( rSel )
+    {
+    }
+};
 
 struct ScXMLAnnotationData
 {
@@ -49,8 +64,11 @@ struct ScXMLAnnotationData
     ::rtl::OUString     maAuthor;
     ::rtl::OUString     maCreateDate;
     ::rtl::OUString     maSimpleText;
+    ::rtl::OUString     maStyleName;
+    ::rtl::OUString     maTextStyle;
     bool                mbUseShapePos;
     bool                mbShown;
+    std::vector<ScXMLAnnotationStyleEntry> maContentStyles;
 
     explicit            ScXMLAnnotationData();
                         ~ScXMLAnnotationData();
@@ -82,7 +100,10 @@ public:
 
     void SetShape(
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+        const ::rtl::OUString& rStyleName, const ::rtl::OUString& rTextStyle );
+
+    void AddContentStyle( sal_uInt16 nFamily, const rtl::OUString& rName, const ESelection& rSelection );
 
 private:
     ScXMLAnnotationData& mrAnnotationData;

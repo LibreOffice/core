@@ -1874,7 +1874,7 @@ void ScColumn::FindRangeNamesInUse(SCROW nRow1, SCROW nRow2, std::set<USHORT>& r
 }
 
 void ScColumn::ReplaceRangeNamesInUse(SCROW nRow1, SCROW nRow2,
-                                     const ScIndexMap& rMap )
+                                     const ScRangeData::IndexMap& rMap )
 {
     if (pItems)
         for (SCSIZE i = 0; i < nCount; i++)
@@ -1890,7 +1890,6 @@ void ScColumn::ReplaceRangeNamesInUse(SCROW nRow1, SCROW nRow2,
             }
         }
 }
-
 
 void ScColumn::SetDirtyVar()
 {

@@ -102,7 +102,7 @@ ScSpew ScInterpreter::theSpew;
 
 void ScInterpreter::ReplaceCell( ScAddress& rPos )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ReplaceCell" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ReplaceCell" );
     ScInterpreterTableOpParams* pTOp = pDok->aTableOpList.First();
     while (pTOp)
     {
@@ -124,7 +124,7 @@ void ScInterpreter::ReplaceCell( ScAddress& rPos )
 
 void ScInterpreter::ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ReplaceCell" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ReplaceCell" );
     ScAddress aCellPos( rCol, rRow, rTab );
     ScInterpreterTableOpParams* pTOp = pDok->aTableOpList.First();
     while (pTOp)
@@ -151,7 +151,7 @@ void ScInterpreter::ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab )
 
 BOOL ScInterpreter::IsTableOpInRange( const ScRange& rRange )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::IsTableOpInRange" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::IsTableOpInRange" );
     if ( rRange.aStart == rRange.aEnd )
         return FALSE;   // not considered to be a range in TableOp sense
 
@@ -171,7 +171,7 @@ BOOL ScInterpreter::IsTableOpInRange( const ScRange& rRange )
 
 ULONG ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, const ScBaseCell* pCell)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetCellNumberFormat" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetCellNumberFormat" );
     ULONG nFormat;
     USHORT nErr;
     if ( pCell )
@@ -196,10 +196,10 @@ ULONG ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, const ScBaseCel
 }
 
 
-// nur ValueCell, Formelzellen speichern das Ergebnis bereits gerundet
+/// Only ValueCell, formula cells already store the result rounded.
 double ScInterpreter::GetValueCellValue( const ScAddress& rPos, const ScValueCell* pCell )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetValueCellValue" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetValueCellValue" );
     double fVal = pCell->GetValue();
     if ( bCalcAsShown && fVal != 0.0 )
     {
@@ -210,9 +210,207 @@ double ScInterpreter::GetValueCellValue( const ScAddress& rPos, const ScValueCel
 }
 
 
+/** Convert string content to numeric value.
+
+    Converted are only integer numbers including exponent, and ISO 8601 dates
+    and times in their extended formats with separators. Anything else,
+    especially fractional numeric values with decimal separators or dates other
+    than ISO 8601 would be locale dependent and is a no-no. Leading and
+    trailing blanks are ignored.
+
+    The following ISO 8601 formats are converted:
+
+    CCYY-MM-DD
+    CCYY-MM-DDThh:mm
+    CCYY-MM-DDThh:mm:ss
+    CCYY-MM-DDThh:mm:ss,s
+    CCYY-MM-DDThh:mm:ss.s
+    hh:mm
+    hh:mm:ss
+    hh:mm:ss,s
+    hh:mm:ss.s
+
+    The century CC may not be omitted and the two-digit year setting is not
+    taken into account. Instead of the T date and time separator exactly one
+    blank may be used.
+
+    If a date is given, it must be a valid Gregorian calendar date. In this
+    case the optional time must be in the range 00:00 to 23:59:59.99999...
+    If only time is given, it may have any value for hours, taking elapsed time
+    into account; minutes and seconds are limited to the value 59 as well.
+ */
+
+double ScInterpreter::ConvertStringToValue( const String& rStr )
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ConvertStringToValue" );
+    double fValue = 0.0;
+    ::rtl::OUString aStr( rStr);
+    rtl_math_ConversionStatus eStatus;
+    sal_Int32 nParseEnd;
+    // Decimal and group separator 0 => only integer and possibly exponent,
+    // stops at first non-digit non-sign.
+    fValue = ::rtl::math::stringToDouble( aStr, 0, 0, &eStatus, &nParseEnd);
+    sal_Int32 nLen;
+    if (eStatus == rtl_math_ConversionStatus_Ok && nParseEnd < (nLen = aStr.getLength()))
+    {
+        // Not at string end, check for trailing blanks or switch to date or
+        // time parsing or bail out.
+        const sal_Unicode* const pStart = aStr.getStr();
+        const sal_Unicode* p = pStart + nParseEnd;
+        const sal_Unicode* const pStop = pStart + nLen;
+        switch (*p++)
+        {
+            case ' ':
+                while (p < pStop && *p == ' ')
+                    ++p;
+                if (p < pStop)
+                    SetError( errNoValue);
+                break;
+            case '-':
+            case ':':
+                {
+                    bool bDate = (*(p-1) == '-');
+                    enum State { year = 0, month, day, hour, minute, second, fraction, done, blank, stop };
+                    sal_Int32 nUnit[done] = {0,0,0,0,0,0,0};
+                    const sal_Int32 nLimit[done] = {0,12,31,0,59,59,0};
+                    State eState = (bDate ? month : minute);
+                    nCurFmtType = (bDate ? NUMBERFORMAT_DATE : NUMBERFORMAT_TIME);
+                    nUnit[eState-1] = aStr.copy( 0, nParseEnd).toInt32();
+                    const sal_Unicode* pLastStart = p;
+                    // Ensure there's no preceding sign. Negative dates
+                    // currently aren't handled correctly. Also discard
+                    // +CCYY-MM-DD
+                    p = pStart;
+                    while (p < pStop && *p == ' ')
+                        ++p;
+                    if (p < pStop && !CharClass::isAsciiDigit(*p))
+                        SetError( errNoValue);
+                    p = pLastStart;
+                    while (p < pStop && !nGlobalError && eState < blank)
+                    {
+                        if (eState == minute)
+                            nCurFmtType |= NUMBERFORMAT_TIME;
+                        if (CharClass::isAsciiDigit(*p))
+                        {
+                            // Maximum 2 digits per unit, except fractions.
+                            if (p - pLastStart >= 2 && eState != fraction)
+                                SetError( errNoValue);
+                        }
+                        else if (p > pLastStart)
+                        {
+                            // We had at least one digit.
+                            if (eState < done)
+                            {
+                                nUnit[eState] = aStr.copy( pLastStart - pStart, p - pLastStart).toInt32();
+                                if (nLimit[eState] && nLimit[eState] < nUnit[eState])
+                                    SetError( errNoValue);
+                            }
+                            pLastStart = p + 1;     // hypothetical next start
+                            // Delimiters must match, a trailing delimiter
+                            // yields an invalid date/time.
+                            switch (eState)
+                            {
+                                case month:
+                                    // Month must be followed by separator and
+                                    // day, no trailing blanks.
+                                    if (*p != '-' || (p+1 == pStop))
+                                        SetError( errNoValue);
+                                    break;
+                                case day:
+                                    if ((*p != 'T' || (p+1 == pStop)) && *p != ' ')
+                                        SetError( errNoValue);
+                                    // Take one blank as a valid delimiter
+                                    // between date and time.
+                                    break;
+                                case hour:
+                                    // Hour must be followed by separator and
+                                    // minute, no trailing blanks.
+                                    if (*p != ':' || (p+1 == pStop))
+                                        SetError( errNoValue);
+                                    break;
+                                case minute:
+                                    if ((*p != ':' || (p+1 == pStop)) && *p != ' ')
+                                        SetError( errNoValue);
+                                    if (*p == ' ')
+                                        eState = done;
+                                    break;
+                                case second:
+                                    if (((*p != ',' && *p != '.') || (p+1 == pStop)) && *p != ' ')
+                                        SetError( errNoValue);
+                                    if (*p == ' ')
+                                        eState = done;
+                                    break;
+                                case fraction:
+                                    eState = done;
+                                    break;
+                                case year:
+                                case done:
+                                case blank:
+                                case stop:
+                                    SetError( errNoValue);
+                                    break;
+                            }
+                            eState = static_cast<State>(eState + 1);
+                        }
+                        else
+                            SetError( errNoValue);
+                        ++p;
+                    }
+                    if (eState == blank)
+                    {
+                        while (p < pStop && *p == ' ')
+                            ++p;
+                        if (p < pStop)
+                            SetError( errNoValue);
+                        eState = stop;
+                    }
+
+                    // Month without day, or hour without minute.
+                    if (eState == month || (eState == day && p <= pLastStart) ||
+                            eState == hour || (eState == minute && p <= pLastStart))
+                        SetError( errNoValue);
+
+                    if (!nGlobalError)
+                    {
+                        // Catch the very last unit at end of string.
+                        if (p > pLastStart && eState < done)
+                        {
+                            nUnit[eState] = aStr.copy( pLastStart - pStart, p - pLastStart).toInt32();
+                            if (nLimit[eState] && nLimit[eState] < nUnit[eState])
+                                SetError( errNoValue);
+                        }
+                        if (bDate && nUnit[hour] > 23)
+                            SetError( errNoValue);
+                        if (!nGlobalError)
+                        {
+                            if (bDate && nUnit[day] == 0)
+                                nUnit[day] = 1;
+                            double fFraction = (nUnit[fraction] <= 0 ? 0.0 :
+                                    ::rtl::math::pow10Exp( nUnit[fraction],
+                                        static_cast<int>( -ceil( log10( static_cast<double>( nUnit[fraction]))))));
+                            fValue = (bDate ? GetDateSerial(
+                                        sal::static_int_cast<INT16>(nUnit[year]),
+                                        sal::static_int_cast<INT16>(nUnit[month]),
+                                        sal::static_int_cast<INT16>(nUnit[day]),
+                                        true) : 0.0);
+                            fValue += ((nUnit[hour] * 3600) + (nUnit[minute] * 60) + nUnit[second] + fFraction) / 86400.0;
+                        }
+                    }
+                }
+                break;
+            default:
+                SetError( errNoValue);
+        }
+        if (nGlobalError)
+            fValue = 0.0;
+    }
+    return fValue;
+}
+
+
 double ScInterpreter::GetCellValue( const ScAddress& rPos, const ScBaseCell* pCell )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetCellValue" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetCellValue" );
     USHORT nErr = nGlobalError;
     nGlobalError = 0;
     double nVal = GetCellValueOrZero( rPos, pCell );
@@ -224,8 +422,8 @@ double ScInterpreter::GetCellValue( const ScAddress& rPos, const ScBaseCell* pCe
 
 double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCell* pCell )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetCellValueOrZero" );
-    double fValue;
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetCellValueOrZero" );
+    double fValue = 0.0;
     if (pCell)
     {
         CellType eType = pCell->GetCellType();
@@ -245,8 +443,9 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
                     }
                     else
                     {
-                        SetError(errCellNoValue);
-                        fValue = 0.0;
+                        String aStr;
+                        pFCell->GetString( aStr );
+                        fValue = ConvertStringToValue( aStr );
                     }
                 }
                 else
@@ -267,26 +466,28 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
             break;
             case  CELLTYPE_STRING:
             case  CELLTYPE_EDIT:
-#if 0
-// Xcl does it, but SUM(A1:A2) differs from A1+A2. No good.
             {
+                // SUM(A1:A2) differs from A1+A2. No good. But people insist on
+                // it ... #i5658#
                 String aStr;
                 if ( eType == CELLTYPE_STRING )
                     ((ScStringCell*)pCell)->GetString( aStr );
                 else
                     ((ScEditCell*)pCell)->GetString( aStr );
-                sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
-                if ( !pFormatter->IsNumberFormat( aStr, nFIndex, fValue ) )
-                {
-                    SetError(errNoValue);
-                    fValue = 0.0;
-                }
+                fValue = ConvertStringToValue( aStr );
             }
             break;
+            case CELLTYPE_NONE:
+            case CELLTYPE_NOTE:
+                fValue = 0.0;       // empty or broadcaster cell
+            break;
+            case CELLTYPE_SYMBOLS:
+#if DBG_UTIL
+            case CELLTYPE_DESTROYED:
 #endif
-            default:
                 SetError(errCellNoValue);
                 fValue = 0.0;
+            break;
         }
     }
     else
@@ -297,7 +498,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
 
 void ScInterpreter::GetCellString( String& rStr, const ScBaseCell* pCell )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetCellString" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetCellString" );
     USHORT nErr = 0;
     if (pCell)
     {
@@ -348,7 +549,7 @@ void ScInterpreter::GetCellString( String& rStr, const ScBaseCell* pCell )
 BOOL ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2, BYTE* pCellArr)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::CreateDoubleArr" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CreateDoubleArr" );
 #if SC_ROWLIMIT_MORE_THAN_64K
 #error row limit 64k
 #endif
@@ -429,7 +630,7 @@ BOOL ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                     BYTE* pCellArr)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::CreateStringArr" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CreateStringArr" );
 #if SC_ROWLIMIT_MORE_THAN_64K
 #error row limit 64k
 #endif
@@ -524,7 +725,7 @@ BOOL ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                   SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                   BYTE* pCellArr)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::CreateCellArr" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CreateCellArr" );
 #if SC_ROWLIMIT_MORE_THAN_64K
 #error row limit 64k
 #endif
@@ -645,7 +846,7 @@ BOOL ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 
 void ScInterpreter::PushWithoutError( FormulaToken& r )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushWithoutError" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushWithoutError" );
     if ( sp >= MAXSTACK )
         SetError( errStackOverflow );
     else
@@ -663,7 +864,7 @@ void ScInterpreter::PushWithoutError( FormulaToken& r )
 
 void ScInterpreter::Push( FormulaToken& r )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::Push" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::Push" );
     if ( sp >= MAXSTACK )
         SetError( errStackOverflow );
     else
@@ -686,7 +887,7 @@ void ScInterpreter::Push( FormulaToken& r )
 
 void ScInterpreter::PushTempToken( FormulaToken* p )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushTempToken" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushTempToken" );
     if ( sp >= MAXSTACK )
     {
         SetError( errStackOverflow );
@@ -719,7 +920,7 @@ void ScInterpreter::PushTempToken( FormulaToken* p )
 
 void ScInterpreter::PushTempTokenWithoutError( FormulaToken* p )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushTempTokenWithoutError" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushTempTokenWithoutError" );
     p->IncRef();
     if ( sp >= MAXSTACK )
     {
@@ -741,7 +942,7 @@ void ScInterpreter::PushTempTokenWithoutError( FormulaToken* p )
 
 void ScInterpreter::PushTempToken( const FormulaToken& r )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushTempToken" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushTempToken" );
     if (!IfErrorPushError())
         PushTempTokenWithoutError( r.Clone());
 }
@@ -750,7 +951,7 @@ void ScInterpreter::PushTempToken( const FormulaToken& r )
 void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
         const ScAddress & rAddress, short * pRetTypeExpr, ULONG * pRetIndexExpr )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushCellResultToken" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushCellResultToken" );
     ScBaseCell* pCell = pDok->GetCell( rAddress);
     if (!pCell || pCell->HasEmptyData())
     {
@@ -795,7 +996,7 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
 
 void ScInterpreter::Pop()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::Pop" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::Pop" );
     if( sp )
         sp--;
     else
@@ -807,7 +1008,7 @@ void ScInterpreter::Pop()
 
 void ScInterpreter::PopError()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopError" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PopError" );
     if( sp )
     {
         sp--;
@@ -821,7 +1022,7 @@ void ScInterpreter::PopError()
 
 FormulaTokenRef ScInterpreter::PopToken()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopToken" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PopToken" );
     if (sp)
     {
         sp--;
@@ -838,7 +1039,7 @@ FormulaTokenRef ScInterpreter::PopToken()
 
 double ScInterpreter::PopDouble()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopDouble" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PopDouble" );
     nCurFmtType = NUMBERFORMAT_NUMBER;
     nCurFmtIndex = 0;
     if( sp )
@@ -867,7 +1068,7 @@ double ScInterpreter::PopDouble()
 
 const String& ScInterpreter::PopString()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopString" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PopString" );
     nCurFmtType = NUMBERFORMAT_TEXT;
     nCurFmtIndex = 0;
     if( sp )
@@ -896,7 +1097,7 @@ const String& ScInterpreter::PopString()
 
 void ScInterpreter::ValidateRef( const ScSingleRefData & rRef )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ValidateRef" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ValidateRef" );
     SCCOL nCol;
     SCROW nRow;
     SCTAB nTab;
@@ -906,7 +1107,7 @@ void ScInterpreter::ValidateRef( const ScSingleRefData & rRef )
 
 void ScInterpreter::ValidateRef( const ScComplexRefData & rRef )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ValidateRef" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ValidateRef" );
     ValidateRef( rRef.Ref1);
     ValidateRef( rRef.Ref2);
 }
@@ -914,7 +1115,7 @@ void ScInterpreter::ValidateRef( const ScComplexRefData & rRef )
 
 void ScInterpreter::ValidateRef( const ScRefList & rRefList )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ValidateRef" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ValidateRef" );
     ScRefList::const_iterator it( rRefList.begin());
     ScRefList::const_iterator end( rRefList.end());
     for ( ; it != end; ++it)
@@ -927,7 +1128,7 @@ void ScInterpreter::ValidateRef( const ScRefList & rRefList )
 void ScInterpreter::SingleRefToVars( const ScSingleRefData & rRef,
         SCCOL & rCol, SCROW & rRow, SCTAB & rTab )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::SingleRefToVars" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::SingleRefToVars" );
     if ( rRef.IsColRel() )
         rCol = aPos.Col() + rRef.nRelCol;
     else
@@ -951,7 +1152,7 @@ void ScInterpreter::SingleRefToVars( const ScSingleRefData & rRef,
 
 void ScInterpreter::PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopSingleRef" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PopSingleRef" );
     if( sp )
     {
         --sp;
@@ -977,7 +1178,7 @@ void ScInterpreter::PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab)
 
 void ScInterpreter::PopSingleRef( ScAddress& rAdr )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopSingleRef" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PopSingleRef" );
     if( sp )
     {
         --sp;
@@ -1012,7 +1213,7 @@ void ScInterpreter::DoubleRefToVars( const ScToken* p,
         SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
         BOOL bDontCheckForTableOp )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::DoubleRefToVars" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::DoubleRefToVars" );
     const ScComplexRefData& rCRef = p->GetDoubleRef();
     SingleRefToVars( rCRef.Ref1, rCol1, rRow1, rTab1);
     SingleRefToVars( rCRef.Ref2, rCol2, rRow2, rTab2);
@@ -1067,7 +1268,7 @@ void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                                  SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
                                  BOOL bDontCheckForTableOp )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopDoubleRef" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PopDoubleRef" );
     if( sp )
     {
         --sp;
@@ -1093,7 +1294,7 @@ void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
 void ScInterpreter::DoubleRefToRange( const ScComplexRefData & rCRef,
         ScRange & rRange, BOOL bDontCheckForTableOp )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::DoubleRefToRange" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::DoubleRefToRange" );
     SCCOL nCol;
     SCROW nRow;
     SCTAB nTab;
@@ -1111,7 +1312,7 @@ void ScInterpreter::DoubleRefToRange( const ScComplexRefData & rCRef,
 
 void ScInterpreter::PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRefInList )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopDoubleRef" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PopDoubleRef" );
     if (sp)
     {
         formula::FormulaToken* pToken = pStack[ sp-1 ];
@@ -1158,7 +1359,7 @@ void ScInterpreter::PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRe
 
 void ScInterpreter::PopDoubleRef( ScRange& rRange, BOOL bDontCheckForTableOp )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopDoubleRef" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PopDoubleRef" );
     if( sp )
     {
         --sp;
@@ -1182,7 +1383,7 @@ void ScInterpreter::PopDoubleRef( ScRange& rRange, BOOL bDontCheckForTableOp )
 
 BOOL ScInterpreter::PopDoubleRefOrSingleRef( ScAddress& rAdr )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopDoubleRefOrSingleRef" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PopDoubleRefOrSingleRef" );
     switch ( GetStackType() )
     {
         case svDoubleRef :
@@ -1208,7 +1409,7 @@ BOOL ScInterpreter::PopDoubleRefOrSingleRef( ScAddress& rAdr )
 
 void ScInterpreter::PopDoubleRefPushMatrix()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopDoubleRefPushMatrix" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PopDoubleRefPushMatrix" );
     if ( GetStackType() == svDoubleRef )
     {
         ScMatrixRef pMat = GetMatrix();
@@ -1224,14 +1425,14 @@ void ScInterpreter::PopDoubleRefPushMatrix()
 
 ScTokenMatrixMap* ScInterpreter::CreateTokenMatrixMap()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::CreateTokenMatrixMap" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CreateTokenMatrixMap" );
     return new ScTokenMatrixMap;
 }
 
 
 bool ScInterpreter::ConvertMatrixParameters()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ConvertMatrixParameters" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ConvertMatrixParameters" );
     USHORT nParams = pCur->GetParamCount();
     DBG_ASSERT( nParams <= sp, "ConvertMatrixParameters: stack/param count mismatch");
     SCSIZE nJumpCols = 0, nJumpRows = 0;
@@ -1278,7 +1479,8 @@ bool ScInterpreter::ConvertMatrixParameters()
                 {
                     ScParameterClassification::Type eType =
                         ScParameterClassification::GetParameterType( pCur, nParams - i);
-                    if ( eType != ScParameterClassification::Reference )
+                    if ( eType != ScParameterClassification::Reference &&
+                            eType != ScParameterClassification::ReferenceOrForceArray)
                     {
                         SCCOL nCol1, nCol2;
                         SCROW nRow1, nRow2;
@@ -1309,7 +1511,8 @@ bool ScInterpreter::ConvertMatrixParameters()
                 {
                     ScParameterClassification::Type eType =
                         ScParameterClassification::GetParameterType( pCur, nParams - i);
-                    if ( eType != ScParameterClassification::Reference )
+                    if ( eType != ScParameterClassification::Reference &&
+                            eType != ScParameterClassification::ReferenceOrForceArray)
                     {
                         // can't convert to matrix
                         SetError( errNoValue);
@@ -1361,7 +1564,7 @@ bool ScInterpreter::ConvertMatrixParameters()
 
 ScMatrixRef ScInterpreter::PopMatrix()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PopMatrix" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PopMatrix" );
     if( sp )
     {
         --sp;
@@ -1392,7 +1595,7 @@ ScMatrixRef ScInterpreter::PopMatrix()
 
 void ScInterpreter::PushDouble(double nVal)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushDouble" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushDouble" );
     TreatDoubleError( nVal );
     if (!IfErrorPushError())
         PushTempTokenWithoutError( new FormulaDoubleToken( nVal ) );
@@ -1401,7 +1604,7 @@ void ScInterpreter::PushDouble(double nVal)
 
 void ScInterpreter::PushInt(int nVal)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushInt" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushInt" );
     if (!IfErrorPushError())
         PushTempTokenWithoutError( new FormulaDoubleToken( nVal ) );
 }
@@ -1409,7 +1612,7 @@ void ScInterpreter::PushInt(int nVal)
 
 void ScInterpreter::PushStringBuffer( const sal_Unicode* pString )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushStringBuffer" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushStringBuffer" );
     if ( pString )
         PushString( String( pString ) );
     else
@@ -1419,7 +1622,7 @@ void ScInterpreter::PushStringBuffer( const sal_Unicode* pString )
 
 void ScInterpreter::PushString( const String& rString )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushString" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushString" );
     if (!IfErrorPushError())
         PushTempTokenWithoutError( new FormulaStringToken( rString ) );
 }
@@ -1427,7 +1630,7 @@ void ScInterpreter::PushString( const String& rString )
 
 void ScInterpreter::PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushSingleRef" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushSingleRef" );
     if (!IfErrorPushError())
     {
         ScSingleRefData aRef;
@@ -1443,7 +1646,7 @@ void ScInterpreter::PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab)
 void ScInterpreter::PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                   SCCOL nCol2, SCROW nRow2, SCTAB nTab2)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushDoubleRef" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushDoubleRef" );
     if (!IfErrorPushError())
     {
         ScComplexRefData aRef;
@@ -1461,7 +1664,7 @@ void ScInterpreter::PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 
 void ScInterpreter::PushMatrix(ScMatrix* pMat)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushMatrix" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushMatrix" );
     pMat->SetErrorInterpreter( NULL);
     // No   if (!IfErrorPushError())   because ScMatrix stores errors itself,
     // but with notifying ScInterpreter via nGlobalError, substituting it would
@@ -1474,56 +1677,56 @@ void ScInterpreter::PushMatrix(ScMatrix* pMat)
 
 void ScInterpreter::PushError( USHORT nError )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushError" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushError" );
     SetError( nError );     // only sets error if not already set
     PushTempTokenWithoutError( new FormulaErrorToken( nGlobalError));
 }
 
 void ScInterpreter::PushParameterExpected()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushParameterExpected" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushParameterExpected" );
     PushError( errParameterExpected);
 }
 
 
 void ScInterpreter::PushIllegalParameter()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushIllegalParameter" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushIllegalParameter" );
     PushError( errIllegalParameter);
 }
 
 
 void ScInterpreter::PushIllegalArgument()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushIllegalArgument" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushIllegalArgument" );
     PushError( errIllegalArgument);
 }
 
 
 void ScInterpreter::PushNA()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushNA" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushNA" );
     PushError( NOTAVAILABLE);
 }
 
 
 void ScInterpreter::PushNoValue()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::PushNoValue" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushNoValue" );
     PushError( errNoValue);
 }
 
 
 BOOL ScInterpreter::IsMissing()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::IsMissing" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::IsMissing" );
     return sp && pStack[sp - 1]->GetType() == svMissing;
 }
 
 
 StackVar ScInterpreter::GetRawStackType()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetRawStackType" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetRawStackType" );
     StackVar eRes;
     if( sp )
     {
@@ -1540,7 +1743,7 @@ StackVar ScInterpreter::GetRawStackType()
 
 StackVar ScInterpreter::GetStackType()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetStackType" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetStackType" );
     StackVar eRes;
     if( sp )
     {
@@ -1559,7 +1762,7 @@ StackVar ScInterpreter::GetStackType()
 
 StackVar ScInterpreter::GetStackType( BYTE nParam )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetStackType" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetStackType" );
     StackVar eRes;
     if( sp > nParam-1 )
     {
@@ -1575,7 +1778,7 @@ StackVar ScInterpreter::GetStackType( BYTE nParam )
 
 BOOL ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::DoubleRefToPosSingleRef" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::DoubleRefToPosSingleRef" );
     // Check for a singleton first - no implicit intersection for them.
     if( rRange.aStart == rRange.aEnd )
     {
@@ -1664,7 +1867,7 @@ BOOL ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& r
 
 double ScInterpreter::GetDouble()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetDouble" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetDouble" );
     double nVal;
     switch( GetRawStackType() )
     {
@@ -1672,15 +1875,7 @@ double ScInterpreter::GetDouble()
             nVal = PopDouble();
         break;
         case svString:
-        {
-            String aStr(PopString());
-            sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
-            if(!pFormatter->IsNumberFormat( aStr, nFIndex, nVal ) )
-            {
-                SetError( errIllegalArgument);      //! fit to ScN()
-                nVal = 0.0;
-            }
-        }
+            nVal = ConvertStringToValue( PopString());
         break;
         case svSingleRef:
         {
@@ -1748,7 +1943,7 @@ double ScInterpreter::GetDouble()
 
 double ScInterpreter::GetDoubleWithDefault(double nDefault)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetDoubleWithDefault" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetDoubleWithDefault" );
     bool bMissing = IsMissing();
     double nResultVal = GetDouble();
     if ( bMissing )
@@ -1759,7 +1954,7 @@ double ScInterpreter::GetDoubleWithDefault(double nDefault)
 
 const String& ScInterpreter::GetString()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetString" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetString" );
     switch (GetRawStackType())
     {
         case svError:
@@ -1850,7 +2045,7 @@ const String& ScInterpreter::GetString()
 ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix( double& rDouble,
         String& rString )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetDoubleOrStringFromMatrix" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetDoubleOrStringFromMatrix" );
     ScMatValType nMatValType = SC_MATVAL_EMPTY;
     switch ( GetStackType() )
     {
@@ -1900,7 +2095,7 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix( double& rDouble,
 
 void ScInterpreter::ScDBGet()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBGet" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBGet" );
     BOOL bMissingField = FALSE;
     auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (!pQueryParam.get())
@@ -1937,7 +2132,7 @@ void ScInterpreter::ScDBGet()
 
 void ScInterpreter::ScExternal()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScExternal" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScExternal" );
     USHORT nIndex;
     BYTE nParamCount = GetByte();
     String aUnoName;
@@ -2484,14 +2679,14 @@ void ScInterpreter::ScExternal()
 
 void ScInterpreter::ScMissing()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScMissing" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMissing" );
     PushTempToken( new FormulaMissingToken );
 }
 
 
 void ScInterpreter::ScMacro()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScMacro" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMacro" );
     SbxBase::ResetError();
 
     BYTE nParamCount = GetByte();
@@ -2720,7 +2915,7 @@ void ScInterpreter::ScMacro()
 
 BOOL ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::SetSbxVariable" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::SetSbxVariable" );
     BOOL bOk = TRUE;
     ScBaseCell* pCell = pDok->GetCell( rPos );
     if (pCell)
@@ -2778,7 +2973,7 @@ BOOL ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
 
 void ScInterpreter::ScTableOp()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScTableOp" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTableOp" );
     BYTE nParamCount = GetByte();
     if (nParamCount != 3 && nParamCount != 5)
     {
@@ -2874,7 +3069,7 @@ void ScInterpreter::ScTableOp()
 
 void ScInterpreter::ScErrCell()
 {
-RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScErrCell" );
+RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScErrCell" );
     double fErrNum = GetDouble();
     PushError((USHORT) fErrNum);
 }
@@ -2882,7 +3077,7 @@ RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter
 
 void ScInterpreter::ScDBArea()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBArea" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBArea" );
     ScDBData* pDBData = pDok->GetDBCollection()->FindIndex( pCur->GetIndex());
     if (pDBData)
     {
@@ -2904,7 +3099,7 @@ void ScInterpreter::ScDBArea()
 
 void ScInterpreter::ScColRowNameAuto()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScColRowNameAuto" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScColRowNameAuto" );
     ScComplexRefData aRefData( static_cast<const ScToken*>(pCur)->GetDoubleRef() );
     aRefData.CalcAbsIfRel( aPos );
     if ( aRefData.Valid() )
@@ -3065,7 +3260,7 @@ void ScInterpreter::ScExternalRef()
 
 void ScInterpreter::ScAnswer()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScAnswer" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScAnswer" );
     String aStr( GetString() );
     if( aStr.EqualsIgnoreCaseAscii( "Das Leben, das Universum und der ganze Rest" ) )
     {
@@ -3079,12 +3274,12 @@ void ScInterpreter::ScAnswer()
 
 void ScInterpreter::ScCalcTeam()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScCalcTeam" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCalcTeam" );
     static BOOL bShown = FALSE;
     if( !bShown )
     {
         ShowTheTeam();
-        String aTeam( RTL_CONSTASCII_USTRINGPARAM( "Ballach, Nebel, Rentz, Rathke, Marmion" ) );
+        String aTeam( RTL_CONSTASCII_USTRINGPARAM( "Nebel, Benisch, Rentz, Rathke" ) );
         if ( (GetByte() == 1) && ::rtl::math::approxEqual( GetDouble(), 1996) )
             aTeam.AppendAscii( "   (a word with 'B': -Olk, -Nietsch, -Daeumling)" );
         PushString( aTeam );
@@ -3097,7 +3292,7 @@ void ScInterpreter::ScCalcTeam()
 
 void ScInterpreter::ScSpewFunc()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScSpewFunc" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSpewFunc" );
     BOOL bRefresh = FALSE;
     BOOL bClear = FALSE;
     // Stack aufraeumen
@@ -3145,7 +3340,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 
 void ScInterpreter::ScGame()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScGame" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGame" );
     enum GameType {
         SC_GAME_NONE,
         SC_GAME_ONCE,
@@ -3374,7 +3569,7 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     pFormatter( pDoc->GetFormatTable() ),
     bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScTTT" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTTT" );
 //  pStack = new ScToken*[ MAXSTACK ];
 
     BYTE cMatFlag = pMyFormulaCell->GetMatrixFlag();
@@ -3408,7 +3603,7 @@ ScInterpreter::~ScInterpreter()
 
 void ScInterpreter::GlobalExit()        // static
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GlobalExit" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GlobalExit" );
     DBG_ASSERT(!bGlobalStackInUse, "wer benutzt noch den TokenStack?");
     DELETEZ(pGlobalStack);
 }
@@ -3416,7 +3611,7 @@ void ScInterpreter::GlobalExit()        // static
 
 StackVar ScInterpreter::Interpret()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::Interpret" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::Interpret" );
     short nRetTypeExpr = NUMBERFORMAT_UNDEFINED;
     ULONG nRetIndexExpr = 0;
     USHORT nErrorFunction = 0;
@@ -3803,6 +3998,8 @@ StackVar ScInterpreter::Interpret()
                 case ocGetPivotData     : ScGetPivotData();             break;
                 case ocJis              : ScJis();                      break;
                 case ocAsc              : ScAsc();                      break;
+                case ocUnicode          : ScUnicode();                  break;
+                case ocUnichar          : ScUnichar();                  break;
                 case ocAnswer           : ScAnswer();                   break;
                 case ocTeam             : ScCalcTeam();                 break;
                 case ocTTT              : ScTTT();                      break;

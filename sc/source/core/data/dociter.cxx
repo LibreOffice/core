@@ -1383,8 +1383,8 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
 
     ScBaseCell* pCell;
     SCSIZE nHi, nLo;
-    CollatorWrapper* pCollator = (aParam.bCaseSens ? ScGlobal::pCaseCollator :
-        ScGlobal::pCollator);
+    CollatorWrapper* pCollator = (aParam.bCaseSens ? ScGlobal::GetCaseCollator() :
+        ScGlobal::GetCollator());
     SvNumberFormatter& rFormatter = *(pDoc->GetFormatTable());
     const ScQueryEntry& rEntry = aParam.GetEntry(0);
     bool bLessEqual = rEntry.eOp == SC_LESS_EQUAL;

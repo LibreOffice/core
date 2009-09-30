@@ -170,6 +170,9 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern, BOOL bAlloc )
         }
         delete[] pData;
 
+        if (pDocument->IsStreamValid(nTab))
+            pDocument->SetStreamValid(nTab, FALSE);
+
         if (bAlloc)
         {
             nCount = nLimit = 1;
@@ -472,6 +475,9 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                 pData[nInsert].pPattern = pPattern;
                 nCount++;
             }
+
+            if (pDocument->IsStreamValid(nTab))
+                pDocument->SetStreamValid(nTab, FALSE);
         }
     }
 //  InfoBox(0, String(nCount) + String(" Eintraege") ).Execute();
@@ -550,6 +556,9 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
             delete pNewPattern;
         }
         while ((nStart <= nEndRow) && (nPos < nCount));
+
+        if (pDocument->IsStreamValid(nTab))
+            pDocument->SetStreamValid(nTab, FALSE);
     }
 
 #ifdef DBG_UTIL
@@ -789,6 +798,9 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
             }
         }
         while (nStart <= nEndRow);
+
+        if (pDocument->IsStreamValid(nTab))
+            pDocument->SetStreamValid(nTab, FALSE);
     }
 
 #ifdef DBG_UTIL

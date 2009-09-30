@@ -119,6 +119,8 @@ protected:
                                                 //  Abschneiden von Zellen fuehrt
 
     // Record-Funktionen
+    void                    ReadFileSharing();
+
     sal_uInt16              ReadXFIndex( bool bBiff2 );
 
     void                    ReadDimensions();

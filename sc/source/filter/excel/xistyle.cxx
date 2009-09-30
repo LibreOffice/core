@@ -1088,26 +1088,25 @@ void XclImpXF::ReadXF( XclImpStream& rStrm )
     }
 }
 
-void XclImpXF::SetStyleName( const String& rStyleName )
+void XclImpXF::SetStyleName( const String& rStyleName, bool bBuiltIn, bool bForceCreate )
 {
     DBG_ASSERT( IsStyleXF(), "XclImpXF::SetStyleName - not a style XF" );
-    DBG_ASSERT( rStyleName.Len(), "XclImpXF::SetStyleName - style name empty" );
-    if( IsStyleXF() && !maStyleName.Len() )
+    DBG_ASSERT( rStyleName.Len() > 0, "XclImpXF::SetStyleName - style name empty" );
+    if( IsStyleXF() && (rStyleName.Len() > 0) )
     {
         maStyleName = rStyleName;
-        mbForceCreate = true;
+        mbWasBuiltIn = bBuiltIn;
+        mbForceCreate = bForceCreate;
     }
 }
 
-void XclImpXF::SetBuiltInStyleName( sal_uInt8 nStyleId, sal_uInt8 nLevel )
+void XclImpXF::ChangeStyleName( const String& rStyleName )
 {
-    DBG_ASSERT( IsStyleXF(), "XclImpXF::SetStyleName - not a style XF" );
-    if( IsStyleXF() && !maStyleName.Len() )
-    {
-        mbWasBuiltIn = true;
-        maStyleName = XclTools::GetBuiltInStyleName( nStyleId, nLevel );
-        mbForceCreate = nStyleId == EXC_STYLE_NORMAL;   // force creation of "Default" style
-    }
+    DBG_ASSERT( IsStyleXF(), "XclImpXF::ChangeStyleName - not a style XF" );
+    DBG_ASSERT( rStyleName.Len() > 0, "XclImpXF::ChangeStyleName - new style name empty" );
+    DBG_ASSERT( maStyleName.Len() > 0, "XclImpXF::ChangeStyleName - old style name empty" );
+    if( IsStyleXF() && (rStyleName.Len() > 0) )
+        maStyleName = rStyleName;
 }
 
 void XclImpXF::CreateUserStyle()
@@ -1239,6 +1238,7 @@ ScStyleSheet* XclImpXF::CreateStyleSheet()
 {
     if( !mpStyleSheet && maStyleName.Len() )    // valid name implies style XF
     {
+        bool bCreatePattern = false;
         // there may be a user-defined "Default" - test on built-in too!
         bool bDefStyle = mbWasBuiltIn && (maStyleName == ScGlobal::GetRscString( STR_STYLENAME_STANDARD ));
         if( bDefStyle )
@@ -1249,16 +1249,23 @@ ScStyleSheet* XclImpXF::CreateStyleSheet()
             mpStyleSheet = static_cast< ScStyleSheet* >( GetStyleSheetPool().Find(
                 ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SFX_STYLE_FAMILY_PARA ) );
             DBG_ASSERT( mpStyleSheet, "XclImpXF::CreateStyleSheet - Default style not found" );
+            bCreatePattern = true;
         }
         else
         {
-            /*  mbWasBuiltIn==true forces renaming of equal-named user defined styles
-                to be able to re-export built-in styles correctly. */
-            mpStyleSheet = &ScfTools::MakeCellStyleSheet( GetStyleSheetPool(), maStyleName, mbWasBuiltIn );
+            /*  #i103281# do not create another style sheet of the same name,
+                if it exists already. This is needed to prevent that styles
+                pasted from clipboard get duplicated over and over. */
+            mpStyleSheet = static_cast< ScStyleSheet* >( GetStyleSheetPool().Find( maStyleName, SFX_STYLE_FAMILY_PARA ) );
+            if( !mpStyleSheet )
+            {
+                mpStyleSheet = &static_cast< ScStyleSheet& >( GetStyleSheetPool().Make( maStyleName, SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_USERDEF ) );
+                bCreatePattern = true;
+            }
         }
 
         // bDefStyle==true omits default pool items in CreatePattern()
-        if( mpStyleSheet )
+        if( bCreatePattern && mpStyleSheet )
             mpStyleSheet->GetItemSet().Put( CreatePattern( bDefStyle ).GetItemSet() );
     }
     return mpStyleSheet;
@@ -1274,6 +1281,16 @@ XclImpXFBuffer::XclImpXFBuffer( const XclImpRoot& rRoot ) :
 void XclImpXFBuffer::Initialize()
 {
     maXFList.Clear();
+    maStyleXFs.clear();
+    /*  Reserve style names that are built-in in Calc. For BIFF4 workbooks
+        which contain a separate list of styles per sheet, reserve all existing
+        names if current sheet is not the first sheet. This will create unique
+        names for styles in different sheets with the same name. */
+    bool bReserveAll = (GetBiff() == EXC_BIFF4) && (GetCurrScTab() > 0);
+    SfxStyleSheetIterator aStyleIter( GetDoc().GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
+    for( SfxStyleSheetBase* pStyleSheet = aStyleIter.First(); pStyleSheet; pStyleSheet = aStyleIter.Next() )
+        if( bReserveAll || !pStyleSheet->IsUserDefined() )
+            maStyleXFs[ pStyleSheet->GetName() ] = 0;
 }
 
 void XclImpXFBuffer::ReadXF( XclImpStream& rStrm )
@@ -1282,9 +1299,9 @@ void XclImpXFBuffer::ReadXF( XclImpStream& rStrm )
     pXF->ReadXF( rStrm );
     maXFList.Append( pXF );
 
+    // set the name of the "Default" cell style (always the first XF in an Excel file)
     if( (GetBiff() >= EXC_BIFF3) && (maXFList.Count() == 1) )
-        // set the name of the "Default" cell style (always the first XF in an Excel file)
-        pXF->SetBuiltInStyleName( EXC_STYLE_NORMAL, 0 );
+        CalcStyleName( *pXF, EXC_STYLE_NORMAL, 0 );
 }
 
 void XclImpXFBuffer::ReadStyle( XclImpStream& rStrm )
@@ -1301,7 +1318,7 @@ void XclImpXFBuffer::ReadStyle( XclImpStream& rStrm )
         {
             sal_uInt8 nStyleId, nLevel;
             rStrm >> nStyleId >> nLevel;
-            pXF->SetBuiltInStyleName( nStyleId, nLevel );
+            CalcStyleName( *pXF, nStyleId, nLevel );
         }
         else                                                // user-defined styles
         {
@@ -1310,8 +1327,20 @@ void XclImpXFBuffer::ReadStyle( XclImpStream& rStrm )
                 aStyleName = rStrm.ReadByteString( false );    // 8 bit length
             else
                 aStyleName = rStrm.ReadUniString();
-            if( aStyleName.Len() )  // #i1624# #i1768# ignore unnamed styles
-                pXF->SetStyleName( aStyleName );
+
+            if( aStyleName.Len() > 0 )  // #i1624# #i1768# ignore unnamed styles
+            {
+                // #i103281# check if this is a new built-in style introduced in XL2007
+                bool bBuiltIn = false;
+                if( (GetBiff() == EXC_BIFF8) && (rStrm.GetNextRecId() == EXC_ID_STYLEEXT) && rStrm.StartNextRecord() )
+                {
+                    sal_uInt8 nExtFlags;
+                    rStrm.Ignore( 12 );
+                    rStrm >> nExtFlags;
+                    bBuiltIn = ::get_flag( nExtFlags, EXC_STYLEEXT_BUILTIN );
+                }
+                CalcStyleName( *pXF, aStyleName, bBuiltIn );
+            }
         }
     }
 }
@@ -1342,6 +1371,49 @@ void XclImpXFBuffer::ApplyPattern(
         // #108770# set 'Standard' number format for all Boolean cells
         ULONG nForceScNumFmt = rXFIndex.IsBoolCell() ? GetNumFmtBuffer().GetStdScNumFmt() : NUMBERFORMAT_ENTRY_NOT_FOUND;
         pXF->ApplyPattern( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, nForceScNumFmt );
+    }
+}
+
+void XclImpXFBuffer::CalcStyleName( XclImpXF& rXF, const String& rStyleName, bool bBuiltIn )
+{
+    DBG_ASSERT( rStyleName.Len() > 0, "XclImpXFBuffer::CalcStyleName - style name empty" );
+    if( rStyleName.Len() > 0 )
+    {
+        String aStyleName = bBuiltIn ? XclTools::GetBuiltInStyleName( rStyleName ) : rStyleName;
+        SetStyleName( rXF, aStyleName, bBuiltIn, !bBuiltIn );
+    }
+}
+
+void XclImpXFBuffer::CalcStyleName( XclImpXF& rXF, sal_uInt8 nStyleId, sal_uInt8 nLevel )
+{
+    // force creation of "Default" style
+    SetStyleName( rXF, XclTools::GetBuiltInStyleName( nStyleId, nLevel ), true, nStyleId == EXC_STYLE_NORMAL );
+}
+
+void XclImpXFBuffer::SetStyleName( XclImpXF& rXF, const String& rStyleName, bool bBuiltIn, bool bForceCreate )
+{
+    DBG_ASSERT( rXF.IsStyleXF(), "XclImpXFBuffer::SetStyleName - not a style XF" );
+    if( rXF.IsStyleXF() )
+    {
+        // find an unused name
+        String aUnusedName( rStyleName );
+        sal_Int32 nIndex = 0;
+        while( maStyleXFs.count( aUnusedName ) > 0 )
+            aUnusedName.Assign( rStyleName ).Append( ' ' ).Append( String::CreateFromInt32( ++nIndex ) );
+
+        // move old style to new name, if new style is built-in
+        if( bBuiltIn && (aUnusedName != rStyleName) )
+        {
+            XclImpXF*& rpXF = maStyleXFs[ aUnusedName ];
+            rpXF = maStyleXFs[ rStyleName ];
+            if( rpXF )
+                rpXF->ChangeStyleName( aUnusedName );
+            aUnusedName = rStyleName;
+        }
+
+        // insert new style
+        maStyleXFs[ aUnusedName ] = &rXF;
+        rXF.SetStyleName( aUnusedName, bBuiltIn, bForceCreate );
     }
 }
 

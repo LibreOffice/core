@@ -559,24 +559,9 @@ void ScGlobal::Init()
 
     //! Wenn Sortierung etc. von der Sprache der installierten Offfice-Version
     //! abhaengen sollen, hier "Application::GetSettings().GetUILanguage()"
-    LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
-    pLocale = new ::com::sun::star::lang::Locale( Application::GetSettings().GetLocale());
     pSysLocale = new SvtSysLocale;
     pCharClass = pSysLocale->GetCharClassPtr();
     pLocaleData = pSysLocale->GetLocaleDataPtr();
-    pCalendar = new CalendarWrapper( ::comphelper::getProcessServiceFactory() );
-    pCalendar->loadDefaultCalendar( *pLocale );
-    pCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
-    pCollator->loadDefaultCollator( *pLocale, SC_COLLATOR_IGNORES );
-    pCaseCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
-    pCaseCollator->loadDefaultCollator( *pLocale, 0 );
-    pTransliteration = new ::utl::TransliterationWrapper(
-        ::comphelper::getProcessServiceFactory(), SC_TRANSLITERATION_IGNORECASE );
-    pTransliteration->loadModuleIfNeeded( eOfficeLanguage );
-    pCaseTransliteration = new ::utl::TransliterationWrapper(
-        ::comphelper::getProcessServiceFactory(), SC_TRANSLITERATION_CASESENSE );
-    pCaseTransliteration->loadModuleIfNeeded( eOfficeLanguage );
-    pScIntlWrapper = new IntlWrapper( ::comphelper::getProcessServiceFactory(), *pLocale );
 
     ppRscString = new String *[ STR_COUNT ];
     for( USHORT nC = 0 ; nC < STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
@@ -1766,6 +1751,7 @@ ScFunctionMgr::ScFunctionMgr()
         aCatLists[i] = new List;
 
     pRootList = aCatLists[0];                               // Gesamtliste ("Alle") erstellen
+    CollatorWrapper* pCaseCollator = ScGlobal::GetCaseCollator();
     for ( n=0; n<nCount; n++ )
     {
         ULONG nTmpCnt=0;
@@ -1775,8 +1761,7 @@ ScFunctionMgr::ScFunctionMgr()
             // ist zwar case-sensitiv, aber Umlaute muessen richtig einsortiert werden
 
             const ScFuncDesc*   pTmpDesc = (const ScFuncDesc*)pRootList->GetObject(nTmpCnt);
-            if ( ScGlobal::pCaseCollator->compareString(
-                        *pDesc->pFuncName, *pTmpDesc->pFuncName ) == COMPARE_LESS )
+            if ( pCaseCollator->compareString(*pDesc->pFuncName, *pTmpDesc->pFuncName ) == COMPARE_LESS )
                 break;
         }
         pRootList->Insert((void*)pDesc, nTmpCnt);                   // Einsortieren
@@ -1949,6 +1934,13 @@ sal_uInt32 ScFunctionCategory::getNumber() const
 
 utl::TransliterationWrapper* ScGlobal::GetpTransliteration() //add by CHINA001
 {
+    if ( !pTransliteration )
+    {
+        const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
+        pTransliteration = new ::utl::TransliterationWrapper(
+            ::comphelper::getProcessServiceFactory(), SC_TRANSLITERATION_IGNORECASE );
+        pTransliteration->loadModuleIfNeeded( eOfficeLanguage );
+    }
     DBG_ASSERT(
         pTransliteration,
         "ScGlobal::GetpTransliteration() called before ScGlobal::Init()");
@@ -1962,3 +1954,57 @@ const LocaleDataWrapper* ScGlobal::GetpLocaleData()
         "ScGlobal::GetpLocaleData() called before ScGlobal::Init()");
     return pLocaleData;
 }
+CalendarWrapper*     ScGlobal::GetCalendar()
+{
+    if ( !pCalendar )
+    {
+        pCalendar = new CalendarWrapper( ::comphelper::getProcessServiceFactory() );
+        pCalendar->loadDefaultCalendar( *GetLocale() );
+    }
+    return pCalendar;
+}
+CollatorWrapper*        ScGlobal::GetCollator()
+{
+    if ( !pCollator )
+    {
+        pCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
+        pCollator->loadDefaultCollator( *GetLocale(), SC_COLLATOR_IGNORES );
+    } // if ( !pCollator )
+    return pCollator;
+}
+CollatorWrapper*        ScGlobal::GetCaseCollator()
+{
+    if ( !pCaseCollator )
+    {
+        pCaseCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
+        pCaseCollator->loadDefaultCollator( *GetLocale(), 0 );
+    } // if ( !pCaseCollator )
+    return pCaseCollator;
+}
+::utl::TransliterationWrapper* ScGlobal::GetCaseTransliteration()
+{
+    if ( !pCaseTransliteration )
+    {
+        const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
+        pCaseTransliteration = new ::utl::TransliterationWrapper(::comphelper::getProcessServiceFactory(), SC_TRANSLITERATION_CASESENSE );
+        pCaseTransliteration->loadModuleIfNeeded( eOfficeLanguage );
+    } // if ( !pCaseTransliteration )
+    return pCaseTransliteration;
+}
+IntlWrapper*         ScGlobal::GetScIntlWrapper()
+{
+    if ( !pScIntlWrapper )
+    {
+        pScIntlWrapper = new IntlWrapper( ::comphelper::getProcessServiceFactory(), *GetLocale() );
+    }
+    return pScIntlWrapper;
+}
+::com::sun::star::lang::Locale*     ScGlobal::GetLocale()
+{
+    if ( !pLocale )
+    {
+        pLocale = new ::com::sun::star::lang::Locale( Application::GetSettings().GetLocale());
+    }
+    return pLocale;
+}
+

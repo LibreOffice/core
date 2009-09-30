@@ -1098,7 +1098,7 @@ bool lcl_IsAtStart( const String& rList, const String& rSearch, sal_Int32& rMatc
             }
         }
 
-        if ( bParsed && ScGlobal::pTransliteration->isEqual( aDequoted, rSearch ) )
+        if ( bParsed && ScGlobal::GetpTransliteration()->isEqual( aDequoted, rSearch ) )
         {
             nMatchList = nQuoteEnd;             // match count in the list string, including quotes
             nMatchSearch = rSearch.Len();
@@ -1107,7 +1107,7 @@ bool lcl_IsAtStart( const String& rList, const String& rSearch, sal_Int32& rMatc
     else
     {
         // otherwise look for search string at the start of rList
-        ScGlobal::pTransliteration->equals( rList, 0, rList.Len(), nMatchList,
+        ScGlobal::GetpTransliteration()->equals( rList, 0, rList.Len(), nMatchList,
                                             rSearch, 0, rSearch.Len(), nMatchSearch );
     }
 
