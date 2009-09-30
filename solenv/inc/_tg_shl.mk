@@ -44,6 +44,7 @@ EXTRALIBPATHS1+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL1VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL1VERSIONOBJ:b).h
@@ -58,6 +59,7 @@ $(MISC)/$(SHL1VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL1VERSIO
 
 .INIT : $(SHL1VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -295,13 +297,13 @@ $(SHL1TARGETN) : \
     @echo dlltool --input-def $(SHL1DEF) \
         --dllname $(SHL1TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_1.cmd
+    @noop $(assign ALL1OBJLIST:=$(STDOBJ) $(SHL1OBJS) $(SHL1LINKRESO) $(shell $(TYPE) /dev/null $(SHL1LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB1NAME)"!=""	# do not have to include objs
-    @echo 	--output-exp $(MISC)/$(@:b)_exp.o >> $(MISC)/$(TARGET).$(@:b)_1.cmd
-.ELSE			# "$(DEFLIB1NAME)"!=""	# do not have to include objs
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(STDOBJ) $(SHL1OBJS) $(SHL1LINKRESO) \
-        `$(TYPE) /dev/null $(SHL1LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g`  >> $(MISC)/$(TARGET).$(@:b)_1.cmd
+    @noop $(assign DEF1OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB1NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
+    @noop $(foreach,i,$(DEF1OBJLIST) $(assign ALL1OBJLIST:=$(ALL1OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB1NAME)"!=""
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
+        $(ALL1OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_1.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) $(SHL1OBJS) $(SHL1LINKRESO) \
         `$(TYPE) /dev/null $(SHL1LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
@@ -581,6 +583,7 @@ EXTRALIBPATHS2+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL2VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL2TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL2VERSIONOBJ:b).h
@@ -595,6 +598,7 @@ $(MISC)/$(SHL2VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL2VERSIO
 
 .INIT : $(SHL2VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -832,13 +836,13 @@ $(SHL2TARGETN) : \
     @echo dlltool --input-def $(SHL2DEF) \
         --dllname $(SHL2TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_2.cmd
+    @noop $(assign ALL2OBJLIST:=$(STDOBJ) $(SHL2OBJS) $(SHL2LINKRESO) $(shell $(TYPE) /dev/null $(SHL2LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB2NAME)"!=""	# do not have to include objs
-    @echo 	--output-exp $(MISC)/$(@:b)_exp.o >> $(MISC)/$(TARGET).$(@:b)_2.cmd
-.ELSE			# "$(DEFLIB2NAME)"!=""	# do not have to include objs
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(STDOBJ) $(SHL2OBJS) $(SHL2LINKRESO) \
-        `$(TYPE) /dev/null $(SHL2LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g`  >> $(MISC)/$(TARGET).$(@:b)_2.cmd
+    @noop $(assign DEF2OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB2NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
+    @noop $(foreach,i,$(DEF2OBJLIST) $(assign ALL2OBJLIST:=$(ALL2OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB2NAME)"!=""
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
+        $(ALL2OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_2.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) $(SHL2OBJS) $(SHL2LINKRESO) \
         `$(TYPE) /dev/null $(SHL2LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
@@ -1118,6 +1122,7 @@ EXTRALIBPATHS3+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL3VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL3VERSIONOBJ:b).h
@@ -1132,6 +1137,7 @@ $(MISC)/$(SHL3VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL3VERSIO
 
 .INIT : $(SHL3VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -1369,13 +1375,13 @@ $(SHL3TARGETN) : \
     @echo dlltool --input-def $(SHL3DEF) \
         --dllname $(SHL3TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_3.cmd
+    @noop $(assign ALL3OBJLIST:=$(STDOBJ) $(SHL3OBJS) $(SHL3LINKRESO) $(shell $(TYPE) /dev/null $(SHL3LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB3NAME)"!=""	# do not have to include objs
-    @echo 	--output-exp $(MISC)/$(@:b)_exp.o >> $(MISC)/$(TARGET).$(@:b)_3.cmd
-.ELSE			# "$(DEFLIB3NAME)"!=""	# do not have to include objs
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(STDOBJ) $(SHL3OBJS) $(SHL3LINKRESO) \
-        `$(TYPE) /dev/null $(SHL3LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g`  >> $(MISC)/$(TARGET).$(@:b)_3.cmd
+    @noop $(assign DEF3OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB3NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
+    @noop $(foreach,i,$(DEF3OBJLIST) $(assign ALL3OBJLIST:=$(ALL3OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB3NAME)"!=""
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
+        $(ALL3OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_3.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) $(SHL3OBJS) $(SHL3LINKRESO) \
         `$(TYPE) /dev/null $(SHL3LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
@@ -1655,6 +1661,7 @@ EXTRALIBPATHS4+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL4VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL4TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL4VERSIONOBJ:b).h
@@ -1669,6 +1676,7 @@ $(MISC)/$(SHL4VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL4VERSIO
 
 .INIT : $(SHL4VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -1906,13 +1914,13 @@ $(SHL4TARGETN) : \
     @echo dlltool --input-def $(SHL4DEF) \
         --dllname $(SHL4TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_4.cmd
+    @noop $(assign ALL4OBJLIST:=$(STDOBJ) $(SHL4OBJS) $(SHL4LINKRESO) $(shell $(TYPE) /dev/null $(SHL4LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB4NAME)"!=""	# do not have to include objs
-    @echo 	--output-exp $(MISC)/$(@:b)_exp.o >> $(MISC)/$(TARGET).$(@:b)_4.cmd
-.ELSE			# "$(DEFLIB4NAME)"!=""	# do not have to include objs
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(STDOBJ) $(SHL4OBJS) $(SHL4LINKRESO) \
-        `$(TYPE) /dev/null $(SHL4LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g`  >> $(MISC)/$(TARGET).$(@:b)_4.cmd
+    @noop $(assign DEF4OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB4NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
+    @noop $(foreach,i,$(DEF4OBJLIST) $(assign ALL4OBJLIST:=$(ALL4OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB4NAME)"!=""
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
+        $(ALL4OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_4.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) $(SHL4OBJS) $(SHL4LINKRESO) \
         `$(TYPE) /dev/null $(SHL4LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
@@ -2192,6 +2200,7 @@ EXTRALIBPATHS5+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL5VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL5VERSIONOBJ:b).h
@@ -2206,6 +2215,7 @@ $(MISC)/$(SHL5VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL5VERSIO
 
 .INIT : $(SHL5VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -2443,13 +2453,13 @@ $(SHL5TARGETN) : \
     @echo dlltool --input-def $(SHL5DEF) \
         --dllname $(SHL5TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_5.cmd
+    @noop $(assign ALL5OBJLIST:=$(STDOBJ) $(SHL5OBJS) $(SHL5LINKRESO) $(shell $(TYPE) /dev/null $(SHL5LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB5NAME)"!=""	# do not have to include objs
-    @echo 	--output-exp $(MISC)/$(@:b)_exp.o >> $(MISC)/$(TARGET).$(@:b)_5.cmd
-.ELSE			# "$(DEFLIB5NAME)"!=""	# do not have to include objs
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(STDOBJ) $(SHL5OBJS) $(SHL5LINKRESO) \
-        `$(TYPE) /dev/null $(SHL5LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g`  >> $(MISC)/$(TARGET).$(@:b)_5.cmd
+    @noop $(assign DEF5OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB5NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
+    @noop $(foreach,i,$(DEF5OBJLIST) $(assign ALL5OBJLIST:=$(ALL5OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB5NAME)"!=""
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
+        $(ALL5OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_5.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) $(SHL5OBJS) $(SHL5LINKRESO) \
         `$(TYPE) /dev/null $(SHL5LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
@@ -2729,6 +2739,7 @@ EXTRALIBPATHS6+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL6VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL6TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL6VERSIONOBJ:b).h
@@ -2743,6 +2754,7 @@ $(MISC)/$(SHL6VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL6VERSIO
 
 .INIT : $(SHL6VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -2980,13 +2992,13 @@ $(SHL6TARGETN) : \
     @echo dlltool --input-def $(SHL6DEF) \
         --dllname $(SHL6TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_6.cmd
+    @noop $(assign ALL6OBJLIST:=$(STDOBJ) $(SHL6OBJS) $(SHL6LINKRESO) $(shell $(TYPE) /dev/null $(SHL6LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB6NAME)"!=""	# do not have to include objs
-    @echo 	--output-exp $(MISC)/$(@:b)_exp.o >> $(MISC)/$(TARGET).$(@:b)_6.cmd
-.ELSE			# "$(DEFLIB6NAME)"!=""	# do not have to include objs
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(STDOBJ) $(SHL6OBJS) $(SHL6LINKRESO) \
-        `$(TYPE) /dev/null $(SHL6LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g`  >> $(MISC)/$(TARGET).$(@:b)_6.cmd
+    @noop $(assign DEF6OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB6NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
+    @noop $(foreach,i,$(DEF6OBJLIST) $(assign ALL6OBJLIST:=$(ALL6OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB6NAME)"!=""
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
+        $(ALL6OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_6.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) $(SHL6OBJS) $(SHL6LINKRESO) \
         `$(TYPE) /dev/null $(SHL6LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
@@ -3266,6 +3278,7 @@ EXTRALIBPATHS7+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL7VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL7VERSIONOBJ:b).h
@@ -3280,6 +3293,7 @@ $(MISC)/$(SHL7VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL7VERSIO
 
 .INIT : $(SHL7VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -3517,13 +3531,13 @@ $(SHL7TARGETN) : \
     @echo dlltool --input-def $(SHL7DEF) \
         --dllname $(SHL7TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_7.cmd
+    @noop $(assign ALL7OBJLIST:=$(STDOBJ) $(SHL7OBJS) $(SHL7LINKRESO) $(shell $(TYPE) /dev/null $(SHL7LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB7NAME)"!=""	# do not have to include objs
-    @echo 	--output-exp $(MISC)/$(@:b)_exp.o >> $(MISC)/$(TARGET).$(@:b)_7.cmd
-.ELSE			# "$(DEFLIB7NAME)"!=""	# do not have to include objs
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(STDOBJ) $(SHL7OBJS) $(SHL7LINKRESO) \
-        `$(TYPE) /dev/null $(SHL7LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g`  >> $(MISC)/$(TARGET).$(@:b)_7.cmd
+    @noop $(assign DEF7OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB7NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
+    @noop $(foreach,i,$(DEF7OBJLIST) $(assign ALL7OBJLIST:=$(ALL7OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB7NAME)"!=""
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
+        $(ALL7OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_7.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) $(SHL7OBJS) $(SHL7LINKRESO) \
         `$(TYPE) /dev/null $(SHL7LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
@@ -3803,6 +3817,7 @@ EXTRALIBPATHS8+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL8VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL8TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL8VERSIONOBJ:b).h
@@ -3817,6 +3832,7 @@ $(MISC)/$(SHL8VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL8VERSIO
 
 .INIT : $(SHL8VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -4054,13 +4070,13 @@ $(SHL8TARGETN) : \
     @echo dlltool --input-def $(SHL8DEF) \
         --dllname $(SHL8TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_8.cmd
+    @noop $(assign ALL8OBJLIST:=$(STDOBJ) $(SHL8OBJS) $(SHL8LINKRESO) $(shell $(TYPE) /dev/null $(SHL8LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB8NAME)"!=""	# do not have to include objs
-    @echo 	--output-exp $(MISC)/$(@:b)_exp.o >> $(MISC)/$(TARGET).$(@:b)_8.cmd
-.ELSE			# "$(DEFLIB8NAME)"!=""	# do not have to include objs
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(STDOBJ) $(SHL8OBJS) $(SHL8LINKRESO) \
-        `$(TYPE) /dev/null $(SHL8LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g`  >> $(MISC)/$(TARGET).$(@:b)_8.cmd
+    @noop $(assign DEF8OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB8NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
+    @noop $(foreach,i,$(DEF8OBJLIST) $(assign ALL8OBJLIST:=$(ALL8OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB8NAME)"!=""
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
+        $(ALL8OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_8.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) $(SHL8OBJS) $(SHL8LINKRESO) \
         `$(TYPE) /dev/null $(SHL8LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
@@ -4340,6 +4356,7 @@ EXTRALIBPATHS9+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL9VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL9VERSIONOBJ:b).h
@@ -4354,6 +4371,7 @@ $(MISC)/$(SHL9VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL9VERSIO
 
 .INIT : $(SHL9VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -4591,13 +4609,13 @@ $(SHL9TARGETN) : \
     @echo dlltool --input-def $(SHL9DEF) \
         --dllname $(SHL9TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_9.cmd
+    @noop $(assign ALL9OBJLIST:=$(STDOBJ) $(SHL9OBJS) $(SHL9LINKRESO) $(shell $(TYPE) /dev/null $(SHL9LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB9NAME)"!=""	# do not have to include objs
-    @echo 	--output-exp $(MISC)/$(@:b)_exp.o >> $(MISC)/$(TARGET).$(@:b)_9.cmd
-.ELSE			# "$(DEFLIB9NAME)"!=""	# do not have to include objs
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(STDOBJ) $(SHL9OBJS) $(SHL9LINKRESO) \
-        `$(TYPE) /dev/null $(SHL9LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g`  >> $(MISC)/$(TARGET).$(@:b)_9.cmd
+    @noop $(assign DEF9OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB9NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
+    @noop $(foreach,i,$(DEF9OBJLIST) $(assign ALL9OBJLIST:=$(ALL9OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB9NAME)"!=""
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
+        $(ALL9OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_9.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) $(SHL9OBJS) $(SHL9LINKRESO) \
         `$(TYPE) /dev/null $(SHL9LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
@@ -4877,6 +4895,7 @@ EXTRALIBPATHS10+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL10VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL10TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL10VERSIONOBJ:b).h
@@ -4891,6 +4910,7 @@ $(MISC)/$(SHL10VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL10VERS
 
 .INIT : $(SHL10VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -5128,13 +5148,13 @@ $(SHL10TARGETN) : \
     @echo dlltool --input-def $(SHL10DEF) \
         --dllname $(SHL10TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_10.cmd
+    @noop $(assign ALL10OBJLIST:=$(STDOBJ) $(SHL10OBJS) $(SHL10LINKRESO) $(shell $(TYPE) /dev/null $(SHL10LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB10NAME)"!=""	# do not have to include objs
-    @echo 	--output-exp $(MISC)/$(@:b)_exp.o >> $(MISC)/$(TARGET).$(@:b)_10.cmd
-.ELSE			# "$(DEFLIB10NAME)"!=""	# do not have to include objs
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(STDOBJ) $(SHL10OBJS) $(SHL10LINKRESO) \
-        `$(TYPE) /dev/null $(SHL10LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g`  >> $(MISC)/$(TARGET).$(@:b)_10.cmd
+    @noop $(assign DEF10OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB10NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
+    @noop $(foreach,i,$(DEF10OBJLIST) $(assign ALL10OBJLIST:=$(ALL10OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB10NAME)"!=""
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
+        $(ALL10OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_10.cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) $(SHL10OBJS) $(SHL10LINKRESO) \
         `$(TYPE) /dev/null $(SHL10LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \

@@ -72,10 +72,10 @@ AC_ARG_ENABLE(mozilla,
                           version, use this option.
 ],,enable_mozilla="yes")
 AC_ARG_WITH(fonts,
-[  --without-fonts         Removes Bitstream Vera fonts from
-                          openoffice.org installation set, for people building
-                          for specific distributions where the fonts are known 
-                          to be already available
+[  --without-fonts         OOo includes some third-party fonts to provide a reliable
+                          basis for help content, templates, samples, etc.
+                          When these fonts are already known to be available on the
+                          system then you should use this option.
 ],,)
 AC_ARG_WITH(ppds,
 [  --without-ppds          Removes Postscript Printer definition files from
@@ -676,6 +676,15 @@ AC_ARG_ENABLE(check-only,
  
                           Usage: --enable-check-only=yes
 ],,)
+AC_ARG_ENABLE(ccache-skip,
+[[  --enable-ccache-skip    [default=auto] allow the use of --ccache-skip to 
+                          escape compiler flags that would otherwise prevent 
+                          caching of the result (currently used on Mac only)
+                          NOTE: requires patched version because of a bug in
+                          ccache (see issue 104567 for details and patch) 
+                          explicitly enable if your version of ccache doesn't 
+                          identify as version 2.4_OOo
+]],,enable_ccache_skip=auto)
 AC_ARG_WITH(lang,
 [  --with-lang             Use this option to build OpenOffice.org with
                           additional language support. English (US) is always
@@ -2588,6 +2597,55 @@ if test "$GCC" = "yes"; then
    fi
 fi
 
+# ===================================================================
+# use --ccache-skip?
+# ===================================================================
+dnl used to escape compiler options for ccache that otherwise prevent 
+dnl caching of the results (like "-x objective-c++" for Mac)
+AC_MSG_CHECKING([whether we are allowed and able to use --ccache-skip])
+if test "$_os" != "Darwin" ; then
+   AC_MSG_RESULT([only used on Mac currently, skipping])
+elif test "$enable_ccache_skip" = "no" ; then
+   AC_MSG_RESULT([no - diabled explicitly])
+elif test "$enable_ccache_skip" = "yes" ; then
+   AC_MSG_RESULT([yes - enabled explicitly, skipping checks])
+   AC_SUBST([USE_CCACHE], [YES])
+elif test "$enable_ccache_skip" = "auto" ; then
+   # checking for ccache presence/version
+   AC_MSG_RESULT([probing...])
+   AC_PATH_PROG([CCACHE],[ccache],[not_found])
+   if test "$CCACHE" = "not_found" ; then
+      AC_MSG_NOTICE([not enabling --ccache-skip (ccache not found)])
+   else
+      # check ccache version 
+      AC_MSG_CHECKING([whether version of ccache is suitable])
+      CCACHE_VERSION=`"$CCACHE" -V | "$AWK" '/^ccache version/{print $3}'`
+      if test "$CCACHE_VERSION" = "2.4_OOo"; then
+         AC_MSG_RESULT([yes])
+         AC_MSG_CHECKING([whether ccache is actually used for the build])
+         AC_LANG_PUSH([C++])
+         save_CXXFLAGS=$CXXFLAGS
+         CXXFLAGS="$CXXFLAGS --ccache-skip -O2"
+         dnl an empty program will do, we're checking the compiler flags
+         AC_COMPILE_IFELSE(AC_LANG_PROGRAM([],[]), 
+            [use_ccache=yes], [use_ccache=no])
+         if test $use_ccache = yes ; then
+            AC_MSG_RESULT([yes, will enable --ccache-skip])
+            AC_SUBST([USE_CCACHE], [YES])
+         else
+            AC_MSG_RESULT([no, will not enable --ccache-skip])
+         fi
+         CXXFLAGS=$save_CXXFLAGS
+         AC_LANG_POP([C++])
+      else
+         AC_MSG_RESULT([no])
+         AC_MSG_NOTICE([ccache version $CCACHE_VERSION not accepted. See description for --enable-ccache-skip])
+      fi
+   fi
+else
+   AC_MSG_ERROR([invalid option to --enable-ccache-skip. Valid values are "auto", "yes" and "no"])
+fi
+
 dnl ===================================================================
 dnl system stl sanity tests
 dnl ===================================================================
@@ -4025,8 +4083,24 @@ if test -n "$with_system_boost" -o -n "$with_system_headers" && \
    AC_LANG_PUSH([C++])
    AC_CHECK_HEADER(boost/shared_ptr.hpp, [],
        [AC_MSG_ERROR(boost/shared_ptr.hpp not found. install boost)], [])
-   AC_CHECK_HEADER(boost/spirit/core.hpp, [],
-       [AC_MSG_ERROR(boost/spirit/core.hpp not found. install boost)], [])
+   AC_CHECK_HEADER(boost/spirit/include/classic_core.hpp, [],
+       [AC_MSG_ERROR(boost/spirit/include/classic_core.hpp not found. install boost >= 1.38)], [])
+   AC_CHECK_HEADER(boost/function.hpp, [],
+       [AC_MSG_ERROR(boost/function.hpp not found. install boost)], [])
+
+   save_CXXFLAGS=$CXXFLAGS
+   CXXFLAGS="$CXXFLAGS -fno-exceptions"
+   AC_MSG_CHECKING([whether boost/function.hpp compiles with -fno-exceptions])
+   AC_TRY_COMPILE([#include <boost/function.hpp>
+], [],
+   ac_cv_cxx_boost_no_exceptons_broken=no, ac_cv_cxx_boost_no_exceptons_broken=yes)
+
+   if test "$ac_cv_cxx_boost_no_exceptons_broken" = "yes"; then
+	AC_MSG_ERROR([no, see https://bugzilla.redhat.com/show_bug.cgi?id=477131])
+   else
+  	AC_MSG_RESULT([yes])
+   fi
+   CXXFLAGS=$save_CXXFLAGS
    AC_LANG_POP([C++])
 else
    AC_MSG_RESULT([internal])
@@ -4721,8 +4795,14 @@ else
     NEON_CFLAGS=
     BUILD_TYPE="$BUILD_TYPE NEON"
 fi
+AC_SUBST(SYSTEM_NEON)
+AC_SUBST(NEON_VERSION)
+AC_SUBST(NEON_LIBS)
+AC_SUBST(NEON_CFLAGS)
+fi
+
 dnl ===================================================================
-dnl Check for system openssl (only neon needs it!)
+dnl Check for system openssl
 dnl ===================================================================
 if test "$_os" = "Darwin" && test "$with_system_openssl" != "no"; then
    with_system_openssl=yes
@@ -4748,12 +4828,6 @@ fi
 AC_SUBST(SYSTEM_OPENSSL)
 AC_SUBST(OPENSSL_CFLAGS)
 AC_SUBST(OPENSSL_LIBS)
-
-AC_SUBST(SYSTEM_NEON)
-AC_SUBST(NEON_VERSION)
-AC_SUBST(NEON_LIBS)
-AC_SUBST(NEON_CFLAGS)
-fi
 
 dnl ===================================================================
 dnl Test for disabling agg
@@ -6027,8 +6101,8 @@ KDE4_CFLAGS=""
 KDE4_LIBS=""
 MOC4="moc"
 if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
-   qt_incdirs="$QTINC $QTDIR /usr/include/qt4 /usr/include $x_includes"
-   qt_libdirs="$QTLIB /usr/lib $x_libraries"
+   qt_incdirs="$QT4INC $QT4DIR /usr/include/qt4 /usr/include $x_includes"
+   qt_libdirs="$QT4LIB /usr/lib $x_libraries"
    
    kde_incdirs="/usr/include $x_includes"
    kde_libdirs="/usr/lib $x_libraries"
@@ -6036,6 +6110,15 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    if test "$build_cpu" == "x86_64" ; then
       qt_libdirs="$qt_libdirs /usr/lib64/qt4 /usr/lib64/qt /usr/lib64"
       kde_libdirs="$kde_libdirs /usr/lib64 /usr/lib64/kde4"
+   fi
+
+   if test -n "$KDE4DIR" ; then
+      kde_incdirs="$KDE4DIR/include $kde_incdirs"
+      if test "$build_cpu" != "x86_64" ; then
+         kde_libdirs="$KDE4DIR/lib $kde_libdirs"
+      else
+         kde_libdirs="$KDE4DIR/lib64 $KDE4DIR/lib $kde_libdirs"
+      fi
    fi
 
    qt_test_include="Qt/qobject.h"
@@ -6054,7 +6137,7 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    
    AC_MSG_RESULT([$qt_header_dir])
    if test "x$qt_header_dir" = "xno" ; then
-      AC_MSG_ERROR([Qt4 headers not found.  Please specify the root of your Qt4 installation by exporting QTDIR before running "configure".])
+      AC_MSG_ERROR([Qt4 headers not found.  Please specify the root of your Qt4 installation by exporting QT4DIR before running "configure".])
    fi
    
    AC_MSG_CHECKING([for Qt4 libraries])
@@ -6069,14 +6152,14 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    AC_MSG_RESULT([$qt_lib_dir])
    
    if test "x$qt_lib_dir" = "xno" ; then
-      AC_MSG_ERROR([Qt4 libraries not found.  Please specify the root of your Qt4 installation by exporting QTDIR before running "configure".])
+      AC_MSG_ERROR([Qt4 libraries not found.  Please specify the root of your Qt4 installation by exporting QT4DIR before running "configure".])
    fi
 
    dnl Check for Meta Object Compiler
-   AC_PATH_PROG( MOC4, moc, no, [$PATH:$QTDIR/bin] )
+   AC_PATH_PROG( MOC4, moc, no, [$PATH:$QT4DIR/bin] )
    if test "$MOC4" = "no" ; then
       AC_MSG_ERROR([Qt Meta Object Compiler not found.  Please specify
-the root of your Qt installation by exporting QTDIR before running "configure".])
+the root of your Qt installation by exporting QT4DIR before running "configure".])
    fi
 
    dnl Check for KDE4 headers
@@ -6090,7 +6173,7 @@ the root of your Qt installation by exporting QTDIR before running "configure".]
    done
    AC_MSG_RESULT([$kde_incdir])
    if test "x$kde_incdir" = "xno" ; then
-      AC_MSG_ERROR([KDE4 headers not found.  Please specify the root of your KDE4 installation by exporting KDEDIR before running "configure".])
+      AC_MSG_ERROR([KDE4 headers not found.  Please specify the root of your KDE4 installation by exporting KDE4DIR before running "configure".])
    fi
 
    dnl Check for KDE4 libraries
@@ -6105,7 +6188,7 @@ the root of your Qt installation by exporting QTDIR before running "configure".]
    
    AC_MSG_RESULT([$kde_libdir])
    if test "x$kde_libdir" = "xno" ; then
-      AC_MSG_ERROR([KDE4 libraries not found.  Please specify the root of your KDE4 installation by exporting KDEDIR before running "configure".])
+      AC_MSG_ERROR([KDE4 libraries not found.  Please specify the root of your KDE4 installation by exporting KDE4DIR before running "configure".])
    fi
 
    KDE4_CFLAGS="`pkg-config --cflags QtCore` `pkg-config --cflags QtGui` -I$kde_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"

@@ -77,6 +77,7 @@ EXTRALIBPATHS$(TNR)+=-L$(SOLAR_STLLIBPATH)
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.IF "$(L10N_framework)"==""
 .IF "$(VERSIONOBJ)"!=""
 SHL$(TNR)VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)/$(SHL$(TNR)VERSIONOBJ:b).h
@@ -91,6 +92,7 @@ $(MISC)/$(SHL$(TNR)VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL$(
 
 .INIT : $(SHL$(TNR)VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
+.ENDIF
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
@@ -328,13 +330,13 @@ $(SHL$(TNR)TARGETN) : \
     @echo dlltool --input-def $(SHL$(TNR)DEF) \
         --dllname $(SHL$(TNR)TARGET)$(DLLPOST) \
         --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+    @noop $(assign ALL$(TNR)OBJLIST:=$(STDOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) $(shell $(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB$(TNR)NAME)"!=""	# do not have to include objs
-    @echo 	--output-exp $(MISC)/$(@:b)_exp.o >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-.ELSE			# "$(DEFLIB$(TNR)NAME)"!=""	# do not have to include objs
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
-        $(STDOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) \
-        `$(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g`  >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+    @noop $(assign DEF$(TNR)OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
+    @noop $(foreach,i,$(DEF$(TNR)OBJLIST) $(assign ALL$(TNR)OBJLIST:=$(ALL$(TNR)OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB$(TNR)NAME)"!=""
+    @echo	--output-exp $(MISC)/$(@:b)_exp.o \
+        $(ALL$(TNR)OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
     @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
         $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) \
         `$(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
