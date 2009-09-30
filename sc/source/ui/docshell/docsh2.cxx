@@ -110,6 +110,17 @@ BOOL __EXPORT ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xSt
         aArgs[ 0 ] <<= GetModel();
     aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
     GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
+        // Fake ThisComponent being setup by Activate ( which is a view
+        // related thing ),
+        //  a) if another document is opened then in theory  ThisComponent
+        //     will be reset as before,
+        //  b) when this document is  'really' Activated then ThisComponent
+        //     again will be set as before
+        // The only wrinkle seems if this document is loaded 'InVisible'
+        // but.. I don't see that this is possible from the vba API
+        // I could be wrong though
+        // There may be implications setting the current component
+        // too early :-/ so I will just manually set the Basic Variables
         BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
         if ( pAppMgr )
             pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
