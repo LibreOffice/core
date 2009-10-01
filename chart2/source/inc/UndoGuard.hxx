@@ -32,7 +32,6 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/chart2/XUndoManager.hpp>
-#include "charttoolsdllapi.hxx"
 
 // header for class OUString
 #include <rtl/ustring.hxx>
@@ -51,7 +50,7 @@ public:
             ::com::sun::star::frame::XModel > & xModel );
     virtual ~UndoGuard_Base();
 
-OOO_DLLPUBLIC_CHARTTOOLS void commitAction();
+    void commitAction();
 
 protected:
     ::com::sun::star::uno::Reference<
@@ -67,7 +66,7 @@ protected:
     cancelAction in the DTOR if no other method is called.
     If commitAction is called the destructor does nothin anymore.
  */
-class OOO_DLLPUBLIC_CHARTTOOLS UndoGuard : public UndoGuard_Base
+class UndoGuard : public UndoGuard_Base
 {
 public:
     explicit UndoGuard( const rtl::OUString& rUndoMessage
@@ -82,7 +81,7 @@ public:
     cancelActionUndo in the DTOR if no other method is called.
     If commitAction is called the destructor does nothin anymore.
  */
-class OOO_DLLPUBLIC_CHARTTOOLS UndoLiveUpdateGuard : public UndoGuard_Base
+class UndoLiveUpdateGuard : public UndoGuard_Base
 {
 public:
     explicit UndoLiveUpdateGuard( const rtl::OUString& rUndoMessage
@@ -96,7 +95,7 @@ public:
 /** Same as UndoLiveUpdateGuard but with additional storage of the chart's data.
     Only use this if the data has internal data.
  */
-class OOO_DLLPUBLIC_CHARTTOOLS UndoLiveUpdateGuardWithData :
+class UndoLiveUpdateGuardWithData :
         public UndoGuard_Base
 {
 public:
@@ -108,7 +107,7 @@ public:
     virtual ~UndoLiveUpdateGuardWithData();
 };
 
-class OOO_DLLPUBLIC_CHARTTOOLS UndoGuardWithSelection : public UndoGuard_Base
+class UndoGuardWithSelection : public UndoGuard_Base
 {
 public:
     explicit UndoGuardWithSelection( const rtl::OUString& rUndoMessage
