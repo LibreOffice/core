@@ -213,7 +213,13 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.configuration.backend.KDEBackend")));
-    } //TODO: KDE4?
+    } else if (desktop.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("KDE4"))) {
+        backend = createBackend(
+            context,
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.backend.KDE4Backend")));
+    }
     return backend.is()
         ? backend : static_cast< cppu::OWeakObject * >(new Default);
 }

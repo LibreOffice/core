@@ -31,10 +31,8 @@
 #ifndef _MACBACKEND_HXX_
 #define _MACBACKEND_HXX_
 
-#include <com/sun/star/configuration/backend/XSingleLayerStratum.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/configuration/backend/XBackendChangesNotifier.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/string.hxx>
 
@@ -44,18 +42,13 @@
 namespace css = com::sun::star;
 namespace uno = css::uno;
 namespace lang = css::lang;
-namespace backend = css::configuration::backend;
 
-
-/**
-  Implements the SingleLayerStratum service.
-  */
-class MacOSXBackend : public ::cppu::WeakImplHelper2 <backend::XSingleLayerStratum, lang::XServiceInfo >
+class MacOSXBackend : public ::cppu::WeakImplHelper2 <css::container::XNameAccess, lang::XServiceInfo >
 {
 
 public:
 
-    static MacOSXBackend* createInstance(const uno::Reference<uno::XComponentContext>& xContext);
+    static MacOSXBackend* createInstance();
 
     // XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName()
@@ -81,19 +74,27 @@ public:
     */
     static uno::Sequence<rtl::OUString> SAL_CALL getBackendServiceNames(void);
 
-    /**
-       Provides the supported component nodes
+        //XNameAccess
+        virtual uno::Type SAL_CALL
+        getElementType()
+            throw (uno::RuntimeException);
 
-       @return supported component nodes
-    */
-    static uno::Sequence<rtl::OUString> SAL_CALL getSupportedComponents(void);
+        virtual sal_Bool SAL_CALL
+        hasElements()
+            throw (uno::RuntimeException);
 
-    // XSingleLayerStratum
-    virtual uno::Reference<backend::XLayer> SAL_CALL getLayer(const rtl::OUString& aLayerId, const rtl::OUString& aTimestamp)
-        throw (backend::BackendAccessException, lang::IllegalArgumentException);
+        virtual uno::Any SAL_CALL
+        getByName( const rtl::OUString& aName )
+            throw (css::container::NoSuchElementException,
+                   lang::WrappedTargetException, uno::RuntimeException);
 
-    virtual uno::Reference<backend::XUpdatableLayer> SAL_CALL getUpdatableLayer(const rtl::OUString& aLayerId)
-        throw (backend::BackendAccessException, lang::NoSupportException, lang::IllegalArgumentException);
+        virtual uno::Sequence<rtl::OUString> SAL_CALL
+        getElementNames()
+            throw (uno::RuntimeException);
+
+        virtual sal_Bool SAL_CALL
+        hasByName( const rtl::OUString& aName )
+            throw (uno::RuntimeException);
 
 protected:
 
@@ -102,18 +103,10 @@ protected:
 
        @param xContext   component context
     */
-    MacOSXBackend(const uno::Reference<uno::XComponentContext>& xContext)
-        throw (backend::BackendAccessException);
+    MacOSXBackend();
 
     /** Destructor */
     ~MacOSXBackend(void);
-
-private:
-
-    uno::Reference<uno::XComponentContext> m_xContext;
-    uno::Reference<backend::XLayer> m_xSystemLayer;
-    uno::Reference<backend::XLayer> m_xPathLayer;
-
 };
 
 #endif // _MACBACKEND_HXX_

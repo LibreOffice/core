@@ -31,18 +31,139 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
 
+// For MAXHOSTNAMELEN constant
+#include <sys/param.h>
+
+#include <premac.h>
+#include <SystemConfiguration/SystemConfiguration.h>
+#include <Foundation/NSPathUtilities.h>
+#include <postmac.h>
+
 #include "macbackend.hxx"
-#include "macbelayer.hxx"
-#include <com/sun/star/configuration/backend/ComponentChangeEvent.hpp>
-#include <uno/current_context.hxx>
 
-#define MACBE_INET_COMPONENT    "org.openoffice.Inet"
-#define MACBE_PATHS_COMPONENT   "org.openoffice.Office.Paths"
+#include "rtl/ustrbuf.hxx"
+#include "osl/file.h"
 
-MacOSXBackend::MacOSXBackend(const uno::Reference<uno::XComponentContext>& xContext)
-        throw (backend::BackendAccessException) :
-        ::cppu::WeakImplHelper2 < backend::XSingleLayerStratum, lang::XServiceInfo > (),
-        m_xContext(xContext)
+#define SPACE      ' '
+#define SEMI_COLON ';'
+
+typedef struct
+{
+    rtl::OUString Server;
+    sal_Int32 Port;
+} ProxyEntry;
+
+typedef enum {
+    sHTTP,
+    sHTTPS,
+    sFTP
+} ServiceType;
+
+//------------------------------------------------------------------------
+// helper functions
+//------------------------------------------------------------------------
+
+namespace // private
+{
+
+/*
+ * Returns current proxy settings for selected service type (HTTP or
+ * FTP) as a C string (in the buffer specified by host and hostSize)
+ * and a port number.
+ */
+
+bool GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *port)
+{
+    bool                result;
+    CFDictionaryRef     proxyDict;
+    CFNumberRef         enableNum;
+    int                 enable;
+    CFStringRef         hostStr;
+    CFNumberRef         portNum;
+    int                 portInt;
+
+    proxyDict = SCDynamicStoreCopyProxies(NULL);
+
+    if (!proxyDict)
+        return false;
+
+    CFStringRef proxiesEnable;
+    CFStringRef proxiesProxy;
+    CFStringRef proxiesPort;
+
+    switch ( sType )
+    {
+        case sHTTP : proxiesEnable =  kSCPropNetProxiesHTTPEnable;
+                     proxiesProxy = kSCPropNetProxiesHTTPProxy;
+                     proxiesPort = kSCPropNetProxiesHTTPPort;
+            break;
+        case sHTTPS: proxiesEnable = kSCPropNetProxiesHTTPSEnable;
+                     proxiesProxy = kSCPropNetProxiesHTTPSProxy;
+                     proxiesPort = kSCPropNetProxiesHTTPSPort;
+            break;
+        default: proxiesEnable = kSCPropNetProxiesFTPEnable;
+                 proxiesProxy = kSCPropNetProxiesFTPProxy;
+                 proxiesPort = kSCPropNetProxiesFTPPort;
+            break;
+    }
+    // Proxy enabled?
+    enableNum = (CFNumberRef) CFDictionaryGetValue( proxyDict,
+                                                   proxiesEnable );
+
+    result = (enableNum != NULL) && (CFGetTypeID(enableNum) == CFNumberGetTypeID());
+
+    if (result)
+        result = CFNumberGetValue(enableNum, kCFNumberIntType, &enable) && (enable != 0);
+
+    // Proxy enabled -> get hostname
+    if (result)
+    {
+        hostStr = (CFStringRef) CFDictionaryGetValue( proxyDict,
+                                                     proxiesProxy );
+
+        result = (hostStr != NULL) && (CFGetTypeID(hostStr) == CFStringGetTypeID());
+    }
+
+    if (result)
+        result = CFStringGetCString(hostStr, host, (CFIndex) hostSize, kCFStringEncodingASCII);
+
+    // Get proxy port
+    if (result)
+    {
+        portNum = (CFNumberRef) CFDictionaryGetValue( proxyDict,
+                                                     proxiesPort );
+
+        result = (portNum != NULL) && (CFGetTypeID(portNum) == CFNumberGetTypeID());
+    }
+    else
+    {
+        CFRelease(proxyDict);
+        return false;
+    }
+
+    if (result)
+        result = CFNumberGetValue(portNum, kCFNumberIntType, &portInt);
+
+    if (result)
+        *port = (UInt16) portInt;
+
+    if (proxyDict)
+        CFRelease(proxyDict);
+
+    if (!result)
+    {
+        *host = 0;
+        *port = 0;
+    }
+
+    return result;
+}
+
+} // end private namespace
+
+//------------------------------------------------------------------------------
+
+MacOSXBackend::MacOSXBackend()
 {
 }
 
@@ -54,46 +175,293 @@ MacOSXBackend::~MacOSXBackend(void)
 
 //------------------------------------------------------------------------------
 
-MacOSXBackend* MacOSXBackend::createInstance(const uno::Reference<uno::XComponentContext>& xContext)
+MacOSXBackend* MacOSXBackend::createInstance()
 {
-    return new MacOSXBackend(xContext);
+    return new MacOSXBackend;
 }
 
 // ---------------------------------------------------------------------------------------
 
-uno::Reference<backend::XLayer> SAL_CALL MacOSXBackend::getLayer(const rtl::OUString& aComponent, const rtl::OUString& /*aTimestamp*/)
-    throw (backend::BackendAccessException, lang::IllegalArgumentException)
-{
-    if( aComponent.equalsAscii( MACBE_INET_COMPONENT ) )
-    {
-        if( ! m_xSystemLayer.is() )
-            m_xSystemLayer = new MacOSXLayer( m_xContext );
+rtl::OUString CFStringToOUString(const CFStringRef sOrig) {
+    CFRetain(sOrig);
 
-        return m_xSystemLayer;
-    }
-    else if( aComponent.equalsAscii( MACBE_PATHS_COMPONENT ) )
-    {
-        if( ! m_xPathLayer.is() )
-            m_xPathLayer = new MacOSXPathLayer( m_xContext );
-        return m_xPathLayer;
-    }
+    CFIndex nStringLen = CFStringGetLength(sOrig)+1;
 
-    return uno::Reference<backend::XLayer>();
+    // Allocate a c string buffer
+    char sBuffer[nStringLen];
+
+    CFStringGetCString(sOrig, sBuffer, nStringLen, kCFStringEncodingASCII);
+
+    CFRelease(sOrig);
+
+    return rtl::OUString::createFromAscii((sal_Char*)sBuffer);
 }
 
-//------------------------------------------------------------------------------
-
-uno::Reference<backend::XUpdatableLayer> SAL_CALL
-    MacOSXBackend::getUpdatableLayer(const rtl::OUString& /*aComponent*/)
-    throw (backend::BackendAccessException,lang::NoSupportException,
-           lang::IllegalArgumentException)
+rtl::OUString GetOUString( NSString* pStr )
 {
-    throw lang::NoSupportException(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                           "MacOSXBackend: No Update Operation allowed, Read Only access") ),
-        *this);
+    if( ! pStr )
+        return rtl::OUString();
+    int nLen = [pStr length];
+    if( nLen == 0 )
+        return rtl::OUString();
 
-    return NULL;
+    rtl::OUStringBuffer aBuf( nLen+1 );
+    aBuf.setLength( nLen );
+    [pStr getCharacters: const_cast<sal_Unicode*>(aBuf.getStr())];
+    return aBuf.makeStringAndClear();
+}
+
+css::uno::Type MacOSXBackend::getElementType() throw(css::uno::RuntimeException)
+{
+    return cppu::UnoType< cppu::UnoVoidType >::get();
+}
+
+sal_Bool MacOSXBackend::hasElements() throw(css::uno::RuntimeException)
+{
+    return true;
+}
+
+css::uno::Any MacOSXBackend::getByName(rtl::OUString const & aName)
+    throw (
+        css::container::NoSuchElementException,
+        css::lang::WrappedTargetException, css::uno::RuntimeException)
+{
+    if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("WorkPathVariable"))) {
+        rtl::OUString aDocDir;
+        NSArray* pPaths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, true );
+        if( pPaths && [pPaths count] > 0 )
+        {
+            aDocDir = GetOUString( [pPaths objectAtIndex: 0] );
+
+            rtl::OUString aDocURL;
+            if( aDocDir.getLength() > 0 &&
+                osl_getFileURLFromSystemPath( aDocDir.pData, &aDocURL.pData ) == osl_File_E_None )
+            {
+                return css::uno::makeAny(aDocURL);
+            }
+            else
+            {
+                OSL_TRACE( "user documents list contains empty file path or conversion failed" );
+            }
+        }
+        else
+        {
+            OSL_TRACE( "Got nil or empty list of user document directories" );
+        }
+        return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
+    } else if (aName.equalsAsciiL(
+                   RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyName")))
+    {
+        ProxyEntry aFtpProxy;
+
+        char host[MAXHOSTNAMELEN];
+        UInt16 port;
+        bool retVal;
+
+        retVal = GetProxySetting(sFTP, host, 100, &port);
+
+        if (retVal)
+        {
+            aFtpProxy.Server = rtl::OUString::createFromAscii( host );
+        }
+
+        // ftp proxy name
+        if( aFtpProxy.Server.getLength() > 0 )
+        {
+            return uno::makeAny( aFtpProxy.Server );
+        }
+        return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
+    } else if (aName.equalsAsciiL(
+                   RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyPort")))
+    {
+        ProxyEntry aFtpProxy;
+
+        char host[MAXHOSTNAMELEN];
+        UInt16 port;
+        bool retVal;
+
+        retVal = GetProxySetting(sFTP, host, 100, &port);
+
+        if (retVal)
+        {
+            aFtpProxy.Port = port;
+        }
+
+        // ftp proxy port
+        if( aFtpProxy.Port > 0 )
+        {
+            return uno::makeAny( aFtpProxy.Port );
+        }
+        return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
+    } else if (aName.equalsAsciiL(
+                   RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyName")))
+    {
+        ProxyEntry aHttpProxy;
+
+        char host[MAXHOSTNAMELEN];
+        UInt16 port;
+        bool retVal;
+
+        retVal = GetProxySetting(sHTTP, host, 100, &port);
+
+        if (retVal)
+        {
+            aHttpProxy.Server = rtl::OUString::createFromAscii( host );
+        }
+
+        // http proxy name
+        if( aHttpProxy.Server.getLength() > 0 )
+        {
+            return uno::makeAny( aHttpProxy.Server );
+        }
+        return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
+    } else if (aName.equalsAsciiL(
+                   RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyPort")))
+    {
+        ProxyEntry aHttpProxy;
+
+        char host[MAXHOSTNAMELEN];
+        UInt16 port;
+        bool retVal;
+
+        retVal = GetProxySetting(sHTTP, host, 100, &port);
+
+        if (retVal)
+        {
+            aHttpProxy.Port = port;
+        }
+
+        // http proxy port
+        if( aHttpProxy.Port > 0 )
+        {
+            return uno::makeAny( aHttpProxy.Port );
+        }
+        return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
+    } else if (aName.equalsAsciiL(
+                   RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyName")))
+    {
+        ProxyEntry aHttpsProxy;
+
+        char host[MAXHOSTNAMELEN];
+        UInt16 port;
+        bool retVal;
+
+        retVal = GetProxySetting(sHTTPS, host, 100, &port);
+
+        if (retVal)
+        {
+            aHttpsProxy.Server = rtl::OUString::createFromAscii( host );
+        }
+
+        // https proxy name
+        if( aHttpsProxy.Server.getLength() > 0 )
+        {
+            return uno::makeAny( aHttpsProxy.Server );
+        }
+        return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
+    } else if (aName.equalsAsciiL(
+                   RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyPort")))
+    {
+        ProxyEntry aHttpsProxy;
+
+        char host[MAXHOSTNAMELEN];
+        UInt16 port;
+        bool retVal;
+
+        retVal = GetProxySetting(sHTTPS, host, 100, &port);
+
+        if (retVal)
+        {
+            aHttpsProxy.Port = port;
+        }
+
+        // https proxy port
+        if( aHttpsProxy.Port > 0 )
+        {
+            return uno::makeAny( aHttpsProxy.Port );
+        }
+        return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
+    } else if (aName.equalsAsciiL(
+                   RTL_CONSTASCII_STRINGPARAM("ooInetProxyType")))
+    {
+        // override default for ProxyType, which is "0" meaning "No proxies".
+        sal_Int32 nProperties = 1;
+        return uno::makeAny( nProperties );
+    } else if (aName.equalsAsciiL(
+                   RTL_CONSTASCII_STRINGPARAM("ooInetNoProxy")))
+    {
+        rtl::OUString aProxyBypassList;
+
+        CFArrayRef rExceptionsList;
+        CFDictionaryRef rProxyDict = SCDynamicStoreCopyProxies(NULL);
+
+        if (!rProxyDict)
+            rExceptionsList = false;
+        else
+            rExceptionsList = (CFArrayRef) CFDictionaryGetValue(rProxyDict, kSCPropNetProxiesExceptionsList);
+
+        if (rExceptionsList)
+        {
+            for (CFIndex idx = 0; idx < CFArrayGetCount(rExceptionsList); idx++)
+            {
+                CFStringRef rException = (CFStringRef) CFArrayGetValueAtIndex(rExceptionsList, idx);
+
+                if (idx>0)
+                    aProxyBypassList += rtl::OUString::createFromAscii( ";" );
+
+                aProxyBypassList += CFStringToOUString(rException);
+            }
+        }
+
+        if (rProxyDict)
+            CFRelease(rProxyDict);
+
+        // fill proxy bypass list
+        if( aProxyBypassList.getLength() > 0 )
+        {
+            return uno::makeAny( aProxyBypassList.replace( SPACE, SEMI_COLON ) );
+        }
+        return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
+    } else {
+        throw css::container::NoSuchElementException(
+            aName, static_cast< cppu::OWeakObject * >(this));
+    }
+}
+
+css::uno::Sequence< rtl::OUString > MacOSXBackend::getElementNames()
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Sequence< rtl::OUString > names(9);
+    names[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkPathVariable"));
+    names[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyName"));
+    names[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyPort"));
+    names[3] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyName"));
+    names[4] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyPort"));
+    names[5] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPSProxyName"));
+    names[6] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPSProxyPort"));
+    names[7] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetNoProxy"));
+    names[8] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetProxyType"));
+    return names;
+}
+
+sal_Bool MacOSXBackend::hasByName(rtl::OUString const & aName)
+    throw (css::uno::RuntimeException)
+{
+    return aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("WorkPathVariable")) ||
+        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyName")) ||
+        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyPort")) ||
+        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyName")) ||
+        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyPort")) ||
+        aName.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyName")) ||
+        aName.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyPort")) ||
+        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetNoProxy")) ||
+        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetProxyType"));
 }
 
 //------------------------------------------------------------------------------
@@ -115,9 +483,8 @@ rtl::OUString SAL_CALL MacOSXBackend::getImplementationName(void)
 
 uno::Sequence<rtl::OUString> SAL_CALL MacOSXBackend::getBackendServiceNames(void)
 {
-    uno::Sequence<rtl::OUString> aServiceNameList(2);
+    uno::Sequence<rtl::OUString> aServiceNameList(1);
     aServiceNameList[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.MacOSXBackend"));
-    aServiceNameList[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.PlatformBackend"));
 
     return aServiceNameList;
 }
@@ -143,15 +510,3 @@ uno::Sequence<rtl::OUString> SAL_CALL MacOSXBackend::getSupportedServiceNames(vo
 {
     return getBackendServiceNames();
 }
-
-// ---------------------------------------------------------------------------------------
-
-uno::Sequence<rtl::OUString> SAL_CALL MacOSXBackend::getSupportedComponents(void)
-{
-    uno::Sequence<rtl::OUString> aSupportedComponentList(2);
-    aSupportedComponentList[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( MACBE_INET_COMPONENT ) );
-    aSupportedComponentList[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( MACBE_PATHS_COMPONENT ) );
-
-    return aSupportedComponentList;
-}
-

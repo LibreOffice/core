@@ -35,11 +35,7 @@ TARGET=kdebe
 
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
-
-COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/types.rdb
-UNOUCROUT=$(OUT)$/inc$/$(TARGET)
-INCPRE=$(UNOUCROUT)
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings ---
 
@@ -64,12 +60,8 @@ CFLAGS+=$(KDE_CFLAGS)
 # --- Files ---
 
 SLOFILES=\
-    $(SLO)$/kdebackend.obj \
-    $(SLO)$/kdecommonlayer.obj \
-    $(SLO)$/kdeinetlayer.obj \
-    $(SLO)$/kdevcllayer.obj \
-    $(SLO)$/kdepathslayer.obj \
-    $(SLO)$/kdebecdef.obj
+    $(SLO)$/kdeaccess.obj \
+    $(SLO)$/kdebackend.obj
 
 SHL1NOCHECK=TRUE
 SHL1TARGET=$(TARGET)1.uno   
@@ -82,8 +74,7 @@ SHL1STDLIBS=    \
         $(CPPULIB) \
         $(SALLIB) \
         $(KDE_LIBS) -lkio
-        
-SHL1VERSIONMAP=exports.map
+
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
