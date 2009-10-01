@@ -57,8 +57,8 @@ class GroupNode;
 class LocalizedPropertyNode;
 class PropertyNode;
 class SetNode;
-class Span;
 struct Data;
+struct Span;
 
 class XcuParser: public Parser {
 public:

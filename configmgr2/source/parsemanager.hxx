@@ -53,7 +53,7 @@ public:
         rtl::OUString const & url, rtl::Reference< Parser > const & parser)
         SAL_THROW((
             com::sun::star::container::NoSuchElementException,
-            com::sun::star::uno::UnoRuntimeException));
+            com::sun::star::uno::RuntimeException));
 
     bool parse();
 

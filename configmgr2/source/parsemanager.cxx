@@ -50,7 +50,7 @@ namespace css = com::sun::star;
 ParseManager::ParseManager(
     rtl::OUString const & url, rtl::Reference< Parser > const & parser)
     SAL_THROW((
-        css::container::NoSuchElementException, css::uno::UnoRuntimeException)):
+        css::container::NoSuchElementException, css::uno::RuntimeException)):
     reader_(url), parser_(parser)
 {
     OSL_ASSERT(parser.is());

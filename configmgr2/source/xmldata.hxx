@@ -38,8 +38,8 @@ namespace rtl { class OUString; }
 
 namespace configmgr {
 
-class Span;
 class XmlReader;
+struct Span;
 
 namespace xmldata {
 

@@ -40,7 +40,7 @@
 
 namespace configmgr {
 
-class Span;
+struct Span;
 
 class Parser: public salhelper::SimpleReferenceObject {
 public:

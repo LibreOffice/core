@@ -84,7 +84,7 @@ void parseXcsFile(
     css::uno::Reference< css::uno::XComponentContext > const &,
     rtl::OUString const & url, int layer, Data * data)
     SAL_THROW((
-        css::container::NoSuchElementException, css::uno::UnoRuntimeException))
+        css::container::NoSuchElementException, css::uno::RuntimeException))
 {
     OSL_VERIFY(
         rtl::Reference< ParseManager >(
@@ -95,7 +95,7 @@ void parseXcuFile(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     rtl::OUString const & url, int layer, Data * data)
     SAL_THROW((
-        css::container::NoSuchElementException, css::uno::UnoRuntimeException))
+        css::container::NoSuchElementException, css::uno::RuntimeException))
 {
     OSL_VERIFY(
         rtl::Reference< ParseManager >(

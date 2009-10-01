@@ -69,7 +69,7 @@ bool isSpace(char c) {
 
 XmlReader::XmlReader(rtl::OUString const & fileUrl)
     SAL_THROW((
-        css::container::NoSuchElementException, css::uno::UnoRuntimeException)):
+        css::container::NoSuchElementException, css::uno::RuntimeException)):
     fileUrl_(fileUrl)
 {
     switch (osl_openFile(fileUrl_.pData, &fileHandle_, osl_File_OpenFlag_Read))

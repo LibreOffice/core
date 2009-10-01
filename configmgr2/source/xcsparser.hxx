@@ -45,8 +45,8 @@
 namespace configmgr {
 
 class SetNode;
-class Span;
 struct Data;
+struct Span;
 
 class XcsParser: public Parser {
 public:

@@ -52,7 +52,7 @@ public:
     explicit XmlReader(rtl::OUString const & fileUrl)
         SAL_THROW((
             com::sun::star::container::NoSuchElementException,
-            com::sun::star::uno::UnoRuntimeException));
+            com::sun::star::uno::RuntimeException));
 
     ~XmlReader();
 

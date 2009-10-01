@@ -47,8 +47,8 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 namespace configmgr {
 
-class Span;
 struct Data;
+struct Span;
 
 class XcdParser: public Parser {
 public:
