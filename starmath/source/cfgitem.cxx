@@ -580,19 +580,6 @@ void SmMathConfig::Save()
     SaveFontFormatList();
 }
 
-
-USHORT SmMathConfig::GetSymbolCount() const
-{
-    return ((SmMathConfig *) this)->GetSymSetManager().GetSymbolCount();
-}
-
-
-const SmSym * SmMathConfig::GetSymbol( USHORT nIndex ) const
-{
-    return ((SmMathConfig *) this)->GetSymSetManager().GetSymbolByPos( nIndex );
-}
-
-
 void SmMathConfig::GetSymbols( std::vector< SmSym > &rSymbols ) const
 {
     Sequence< OUString > aNodes( ((SmMathConfig*) this)->GetNodeNames( A2OU( SYMBOL_LIST ) ) );
