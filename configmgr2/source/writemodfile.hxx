@@ -36,9 +36,12 @@ namespace rtl { class OUString; }
 
 namespace configmgr {
 
+class Components;
 struct Data;
 
-void writeModFile(rtl::OUString const & url, Data const & data);
+void writeModFile(
+    Components const & components, rtl::OUString const & url,
+    Data const & data);
 
 }
 

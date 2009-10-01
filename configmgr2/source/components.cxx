@@ -33,7 +33,14 @@
 #include <algorithm>
 #include <list>
 
+#include "com/sun/star/beans/Optional.hpp"
+#include "com/sun/star/beans/UnknownPropertyException.hpp"
+#include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/container/NoSuchElementException.hpp"
+#include "com/sun/star/lang/WrappedTargetException.hpp"
+#include "com/sun/star/lang/XMultiComponentFactory.hpp"
+#include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
@@ -43,6 +50,7 @@
 #include "rtl/bootstrap.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
+#include "rtl/textenc.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -80,9 +88,7 @@ void parseSystemLayer() {
     //TODO
 }
 
-void parseXcsFile(
-    css::uno::Reference< css::uno::XComponentContext > const &,
-    rtl::OUString const & url, int layer, Data * data)
+void parseXcsFile(rtl::OUString const & url, int layer, Data * data)
     SAL_THROW((
         css::container::NoSuchElementException, css::uno::RuntimeException))
 {
@@ -91,16 +97,13 @@ void parseXcsFile(
             new ParseManager(url, new XcsParser(layer, data)))->parse());
 }
 
-void parseXcuFile(
-    css::uno::Reference< css::uno::XComponentContext > const & context,
-    rtl::OUString const & url, int layer, Data * data)
+void parseXcuFile(rtl::OUString const & url, int layer, Data * data)
     SAL_THROW((
         css::container::NoSuchElementException, css::uno::RuntimeException))
 {
     OSL_VERIFY(
         rtl::Reference< ParseManager >(
-            new ParseManager(url, new XcuParser(context, layer, data)))->
-        parse());
+            new ParseManager(url, new XcuParser(layer, data)))->parse());
 }
 
 rtl::OUString expand(rtl::OUString const & str) {
@@ -202,14 +205,12 @@ void Components::addModification(Path const & path) {
 }
 
 void Components::writeModifications() {
-    writeModFile(getModificationFileUrl(), data_);
+    writeModFile(*this, getModificationFileUrl(), data_);
 }
 
 void Components::insertXcsFile(int layer, rtl::OUString const & fileUri) {
     try {
-        parseXcsFile(
-            css::uno::Reference< css::uno::XComponentContext >(), fileUri,
-            layer, &data_);
+        parseXcsFile(fileUri, layer, &data_);
     } catch (css::container::NoSuchElementException & e) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -221,7 +222,7 @@ void Components::insertXcsFile(int layer, rtl::OUString const & fileUri) {
 
 void Components::insertXcuFile(int layer, rtl::OUString const & fileUri) {
     try {
-        parseXcuFile(context_, fileUri, layer + 1, &data_);
+        parseXcuFile(fileUri, layer + 1, &data_);
     } catch (css::container::NoSuchElementException & e) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -229,6 +230,68 @@ void Components::insertXcuFile(int layer, rtl::OUString const & fileUri) {
              e.Message),
             css::uno::Reference< css::uno::XInterface >());
     }
+}
+
+css::beans::Optional< css::uno::Any > Components::getExternalValue(
+    rtl::OUString const & descriptor) const
+{
+    sal_Int32 i = descriptor.indexOf(' ');
+    if (i <= 0) {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("bad external value descriptor ")) +
+             descriptor),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    //TODO: Do not make calls with mutex locked:
+    css::uno::Reference< css::uno::XInterface > service;
+    try {
+        service = css::uno::Reference< css::lang::XMultiComponentFactory >(
+            context_->getServiceManager(), css::uno::UNO_SET_THROW)->
+            createInstanceWithContext(descriptor.copy(0, i), context_);
+    } catch (css::uno::RuntimeException &) {
+        // Assuming these exceptions are real errors:
+        throw;
+    } catch (css::uno::Exception & e) {
+        // Assuming these exceptions indicate that the service is not installed:
+        OSL_TRACE(
+            "createInstance(%s) failed with %s",
+            rtl::OUStringToOString(
+                descriptor.copy(0, i), RTL_TEXTENCODING_UTF8).getStr(),
+            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+    }
+    css::beans::Optional< css::uno::Any > value;
+    if (service.is()) {
+        try {
+            if (!((css::uno::Reference< css::beans::XPropertySet >(
+                       service, css::uno::UNO_QUERY_THROW)->
+                   getPropertyValue(descriptor.copy(i + 1))) >>=
+                  value))
+            {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "cannot obtain external value through ")) +
+                     descriptor),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+        } catch (css::beans::UnknownPropertyException & e) {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "unknwon external value descriptor ID: ")) +
+                 e.Message),
+                css::uno::Reference< css::uno::XInterface >());
+        } catch (css::lang::WrappedTargetException & e) {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "cannot obtain external value: ")) +
+                 e.Message),
+                css::uno::Reference< css::uno::XInterface >());
+        }
+    }
+    return value;
 }
 
 Components::Components(
@@ -313,9 +376,7 @@ Components::~Components() {}
 
 void Components::parseFiles(
     int layer, rtl::OUString const & extension,
-    void (* parseFile)(
-        css::uno::Reference< css::uno::XComponentContext > const &,
-        rtl::OUString const &, int, Data *),
+    void (* parseFile)(rtl::OUString const &, int, Data *),
     rtl::OUString const & url, bool recursive)
 {
     osl::Directory dir(url);
@@ -365,7 +426,7 @@ void Components::parseFiles(
                 file.match(extension, file.getLength() - extension.getLength()))
             {
                 try {
-                    (*parseFile)(context_, stat.getFileURL(), layer, &data_);
+                    (*parseFile)(stat.getFileURL(), layer, &data_);
                 } catch (css::container::NoSuchElementException & e) {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
@@ -380,10 +441,7 @@ void Components::parseFiles(
 }
 
 void Components::parseFileList(
-    int layer,
-    void (* parseFile)(
-        css::uno::Reference< css::uno::XComponentContext > const &,
-        rtl::OUString const &, int, Data *),
+    int layer, void (* parseFile)(rtl::OUString const &, int, Data *),
     rtl::OUString const & urls, rtl::Bootstrap const & ini)
 {
     for (sal_Int32 i = 0;;) {
@@ -391,7 +449,7 @@ void Components::parseFileList(
         if (url.getLength() != 0) {
             ini.expandMacrosFrom(url); //TODO: detect failure
             try {
-                (*parseFile)(context_, url, layer, &data_);
+                (*parseFile)(url, layer, &data_);
             } catch (css::container::NoSuchElementException & e) {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(
@@ -459,8 +517,7 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
                 rtl::Reference< ParseManager > manager;
                 try {
                     manager = new ParseManager(
-                        stat.getFileURL(),
-                        new XcdParser(context_, layer, deps, &data_));
+                        stat.getFileURL(), new XcdParser(layer, deps, &data_));
                 } catch (css::container::NoSuchElementException & e) {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
@@ -551,8 +608,7 @@ rtl::OUString Components::getModificationFileUrl() const {
 
 void Components::parseModificationLayer() {
     try {
-        parseXcuFile(
-            context_, getModificationFileUrl(), Data::NO_LAYER, &data_);
+        parseXcuFile(getModificationFileUrl(), Data::NO_LAYER, &data_);
     } catch (css::container::NoSuchElementException &) {
         OSL_TRACE(
             "configmgr user registrymodifications.xcu does not (yet) exist");

@@ -271,7 +271,8 @@ css::uno::Any ChildAccess::asValue() {
     }
     switch (node_->kind()) {
     case Node::KIND_PROPERTY:
-        return dynamic_cast< PropertyNode * >(node_.get())->getValue();
+        return dynamic_cast< PropertyNode * >(node_.get())->getValue(
+            getComponents());
     case Node::KIND_LOCALIZED_PROPERTY:
         {
             rtl::OUString locale(getRootAccess()->getLocale());

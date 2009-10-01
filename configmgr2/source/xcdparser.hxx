@@ -34,16 +34,11 @@
 
 #include <set>
 
-#include "com/sun/star/uno/Reference.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
 #include "parser.hxx"
 #include "xmlreader.hxx"
-
-namespace com { namespace sun { namespace star { namespace uno {
-    class XComponentContext;
-} } } }
 
 namespace configmgr {
 
@@ -54,10 +49,7 @@ class XcdParser: public Parser {
 public:
     typedef std::set< rtl::OUString > Dependencies;
 
-    XcdParser(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context,
-        int layer, Dependencies const & dependencies, Data * data);
+    XcdParser(int layer, Dependencies const & dependencies, Data * data);
 
 private:
     virtual ~XcdParser();
@@ -74,8 +66,6 @@ private:
     enum State {
         STATE_START, STATE_DEPENDENCIES, STATE_DEPENDENCY, STATE_COMPONENTS };
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-        context_;
     int layer_;
     Dependencies const & dependencies_;
     Data * data_;

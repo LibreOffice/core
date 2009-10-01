@@ -32,25 +32,16 @@
 
 #include <algorithm>
 
-#include "com/sun/star/beans/Optional.hpp"
-#include "com/sun/star/beans/UnknownPropertyException.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/lang/WrappedTargetException.hpp"
-#include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "osl/diagnose.h"
 #include "rtl/ref.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
-#include "rtl/textenc.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "sal/types.h"
 
 #include "data.hxx"
 #include "localizedpropertynode.hxx"
@@ -75,13 +66,8 @@ namespace css = com::sun::star;
 
 }
 
-XcuParser::XcuParser(
-    css::uno::Reference< css::uno::XComponentContext > const & context,
-    int layer, Data * data):
-    context_(context), valueParser_(layer), data_(data)
-{
-    OSL_ASSERT(context.is());
-}
+XcuParser::XcuParser(int layer, Data * data): valueParser_(layer), data_(data)
+{}
 
 XcuParser::~XcuParser() {}
 
@@ -426,8 +412,7 @@ void XcuParser::handlePropValue(XmlReader & reader, PropertyNode * prop) {
         state_.push(State());
     } else if (attrExternal.is()) {
         rtl::OUString external(xmldata::convertFromUtf8(attrExternal));
-        sal_Int32 i = external.indexOf(' ');
-        if (i <= 0) {
+        if (external.getLength() == 0) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
@@ -435,58 +420,7 @@ void XcuParser::handlePropValue(XmlReader & reader, PropertyNode * prop) {
                  reader.getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
         }
-        css::uno::Reference< css::uno::XInterface > service;
-        try {
-            service = css::uno::Reference< css::lang::XMultiComponentFactory >(
-                context_->getServiceManager(), css::uno::UNO_SET_THROW)->
-                createInstanceWithContext(external.copy(0, i), context_);
-        } catch (css::uno::RuntimeException &) {
-            // Assuming these exceptions are real errors:
-            throw;
-        } catch (css::uno::Exception & e) {
-            // Assuming these exceptions indicate that the service is not
-            // installed:
-            OSL_TRACE(
-                "createInstance(%s) failed with %s",
-                rtl::OUStringToOString(
-                    external.copy(0, i), RTL_TEXTENCODING_UTF8).getStr(),
-                rtl::OUStringToOString(
-                    e.Message, RTL_TEXTENCODING_UTF8).getStr());
-        }
-        if (service.is()) {
-            css::beans::Optional< css::uno::Any > value;
-            try {
-                if (!((css::uno::Reference< css::beans::XPropertySet >(
-                           service, css::uno::UNO_QUERY_THROW)->
-                       getPropertyValue(external.copy(i + 1))) >>=
-                      value))
-                {
-                    throw css::uno::RuntimeException(
-                        rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "cannot obtain oor:external value")),
-                        css::uno::Reference< css::uno::XInterface >());
-                }
-            } catch (css::beans::UnknownPropertyException & e) {
-                throw css::uno::RuntimeException(
-                    (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "unknwon oor:external ID: ")) +
-                     e.Message),
-                    css::uno::Reference< css::uno::XInterface >());
-            } catch (css::lang::WrappedTargetException & e) {
-                throw css::uno::RuntimeException(
-                    (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "cannot obtain oor:external value: ")) +
-                     e.Message),
-                    css::uno::Reference< css::uno::XInterface >());
-            }
-            if (value.IsPresent) {
-                //TODO: check value type
-                prop->setValue(valueParser_.getLayer(), value.Value);
-            }
-        }
+        prop->setExternal(valueParser_.getLayer(), external);
         state_.push(State());
     } else {
         valueParser_.separator_ = attrSeparator;

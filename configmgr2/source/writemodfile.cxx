@@ -62,6 +62,8 @@
 
 namespace configmgr {
 
+class Components;
+
 namespace {
 
 namespace css = com::sun::star;
@@ -340,8 +342,9 @@ void writeValue(oslFileHandle handle, Type type, css::uno::Any const & value) {
 }
 
 void writeNode(
-    oslFileHandle handle, rtl::Reference< Node > const & parent,
-    rtl::OUString const & name, rtl::Reference< Node > const & node)
+    Components const & components, oslFileHandle handle,
+    rtl::Reference< Node > const & parent, rtl::OUString const & name,
+    rtl::Reference< Node > const & node)
 {
     static Span const typeNames[] = {
         Span(), Span(), Span(), // TYPE_ERROR, TYPE_NIL, TYPE_ANY
@@ -368,7 +371,7 @@ void writeNode(
             writeData(handle, RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"fuse\""));
             Type type = prop->getType();
             if (type == TYPE_ANY) {
-                type = mapType(prop->getValue());
+                type = mapType(prop->getValue(components));
                 if (type != TYPE_ERROR) { //TODO
                     writeData(
                         handle, RTL_CONSTASCII_STRINGPARAM(" oor:type=\""));
@@ -378,7 +381,7 @@ void writeNode(
                 }
             }
             writeData(handle, "><value");
-            writeValue(handle, type, prop->getValue());
+            writeValue(handle, type, prop->getValue(components));
             writeData(handle, "</prop>");
         }
         break;
@@ -389,7 +392,7 @@ void writeNode(
         for (NodeMap::iterator i(node->getMembers().begin());
              i != node->getMembers().end(); ++i)
         {
-            writeNode(handle, node, i->first, i->second);
+            writeNode(components, handle, node, i->first, i->second);
         }
         writeData(handle, RTL_CONSTASCII_STRINGPARAM("</prop>"));
         break;
@@ -430,7 +433,7 @@ void writeNode(
         for (NodeMap::iterator i(node->getMembers().begin());
              i != node->getMembers().end(); ++i)
         {
-            writeNode(handle, node, i->first, i->second);
+            writeNode(components, handle, node, i->first, i->second);
         }
         writeData(handle, RTL_CONSTASCII_STRINGPARAM("</node>"));
         break;
@@ -438,7 +441,8 @@ void writeNode(
 }
 
 void writeModifications(
-    oslFileHandle handle, rtl::OUString const & grandparentPathRepresentation,
+    Components const & components, oslFileHandle handle,
+    rtl::OUString const & grandparentPathRepresentation,
     rtl::OUString const & parentName, rtl::Reference< Node > const & parent,
     rtl::OUString const & nodeName, rtl::Reference< Node > const & node,
     Modifications::Node const & modifications)
@@ -454,7 +458,7 @@ void writeModifications(
                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
                  Data::createSegment(parent->getTemplateName(), parentName)));
             writeData(handle, RTL_CONSTASCII_STRINGPARAM("\">"));
-            writeNode(handle, parent, nodeName, node);
+            writeNode(components, handle, parent, nodeName, node);
             writeData(handle, RTL_CONSTASCII_STRINGPARAM("</item>"));
             // It is never necessary to write the oor:mandatory attribute, as it
             // cannot be set via the UNO API.
@@ -530,7 +534,7 @@ void writeModifications(
              i != modifications.children.end(); ++i)
         {
             writeModifications(
-                handle, parentPathRep, nodeName, node, i->first,
+                components, handle, parentPathRep, nodeName, node, i->first,
                 node->getMember(i->first), i->second);
         }
     }
@@ -538,7 +542,9 @@ void writeModifications(
 
 }
 
-void writeModFile(rtl::OUString const & url, Data const & data) {
+void writeModFile(
+    Components const & components, rtl::OUString const & url, Data const & data)
+{
     sal_Int32 i = url.lastIndexOf('/');
     OSL_ASSERT(i != -1);
     rtl::OUString dir(url.copy(0, i));
@@ -579,7 +585,7 @@ void writeModFile(rtl::OUString const & url, Data const & data) {
          j != data.modifications.getRoot().children.end(); ++j)
     {
         writeModifications(
-            tmp.handle, rtl::OUString(), rtl::OUString(),
+            components, tmp.handle, rtl::OUString(), rtl::OUString(),
             rtl::Reference< Node >(), j->first,
             Data::findNode(Data::NO_LAYER, data.components, j->first),
             j->second);

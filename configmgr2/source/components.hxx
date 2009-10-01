@@ -35,6 +35,7 @@
 #include <set>
 
 #include "boost/noncopyable.hpp"
+#include "com/sun/star/beans/Optional.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "rtl/ref.hxx"
 
@@ -42,6 +43,7 @@
 #include "path.hxx"
 
 namespace com { namespace sun { namespace star { namespace uno {
+    class Any;
     class XComponentContext;
 } } } }
 namespace rtl {
@@ -90,6 +92,9 @@ public:
 
     void insertXcuFile(int layer, rtl::OUString const & fileUri);
 
+    com::sun::star::beans::Optional< com::sun::star::uno::Any >
+    getExternalValue(rtl::OUString const & descriptor) const;
+
 private:
     Components(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
@@ -99,18 +104,12 @@ private:
 
     void parseFiles(
         int layer, rtl::OUString const & extension,
-        void (* parseFile)(
-            com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext > const &,
-            rtl::OUString const &, int, Data *),
+        void (* parseFile)(rtl::OUString const &, int, Data *),
         rtl::OUString const & url, bool recursive);
 
     void parseFileList(
         int layer,
-        void (* parseFile)(
-            com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext > const &,
-            rtl::OUString const &, int, Data *),
+        void (* parseFile)(rtl::OUString const &, int, Data *),
         rtl::OUString const & urls, rtl::Bootstrap const & ini);
 
     void parseXcdFiles(int layer, rtl::OUString const & url);

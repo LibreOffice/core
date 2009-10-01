@@ -42,6 +42,8 @@ namespace rtl { class OUString; }
 
 namespace configmgr {
 
+class Components;
+
 class PropertyNode: public Node {
 public:
     PropertyNode(
@@ -54,9 +56,11 @@ public:
 
     bool isNillable() const;
 
-    com::sun::star::uno::Any getValue() const;
+    com::sun::star::uno::Any getValue(Components const & components);
 
     void setValue(int layer, com::sun::star::uno::Any const & value);
+
+    void setExternal(int layer, rtl::OUString const & descriptor);
 
     bool isExtension() const;
 
@@ -70,6 +74,7 @@ private:
     Type type_;
     bool nillable_;
     com::sun::star::uno::Any value_;
+    rtl::OUString externalDescriptor_;
     bool extension_;
 };
 

@@ -30,11 +30,14 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
+#include "com/sun/star/beans/Optional.hpp"
 #include "com/sun/star/uno/Any.hxx"
+#include "osl/diagnose.h"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
+#include "components.hxx"
 #include "node.hxx"
 #include "propertynode.hxx"
 #include "type.hxx"
@@ -66,13 +69,28 @@ bool PropertyNode::isNillable() const {
     return nillable_;
 }
 
-css::uno::Any PropertyNode::getValue() const {
+css::uno::Any PropertyNode::getValue(Components const & components) {
+    if (externalDescriptor_.getLength() != 0) {
+        css::beans::Optional< css::uno::Any > val(
+            components.getExternalValue(externalDescriptor_));
+        if (val.IsPresent) {
+            value_ = val.Value; //TODO: check value type
+        }
+        externalDescriptor_ = rtl::OUString(); // must not throw
+    }
     return value_;
 }
 
 void PropertyNode::setValue(int layer, css::uno::Any const & value) {
     setLayer(layer);
     value_ = value;
+    externalDescriptor_ = rtl::OUString();
+}
+
+void PropertyNode::setExternal(int layer, rtl::OUString const & descriptor) {
+    OSL_ASSERT(descriptor.getLength() != 0);
+    setLayer(layer);
+    externalDescriptor_ = descriptor;
 }
 
 bool PropertyNode::isExtension() const {
@@ -81,7 +99,8 @@ bool PropertyNode::isExtension() const {
 
 PropertyNode::PropertyNode(PropertyNode const & other):
     Node(other), type_(other.type_), nillable_(other.nillable_),
-    value_(other.value_), extension_(other.extension_)
+    value_(other.value_), externalDescriptor_(other.externalDescriptor_),
+    extension_(other.extension_)
 {}
 
 PropertyNode::~PropertyNode() {}
