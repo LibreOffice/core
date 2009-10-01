@@ -2094,22 +2094,22 @@
       </node>
       <node oor:name=".uno:ChangeCaseToLower" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">~Lowercase</value>
+          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">~lowercase</value>
         </prop>
       </node>
       <node oor:name=".uno:ChangeCaseToUpper" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">~Uppercase</value>
+          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">~UPPERCASE</value>
         </prop>
       </node>
       <node oor:name=".uno:ChangeCaseToTitleCase" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">~Title case</value>
+          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">~Capitalize Every Word</value>
         </prop>
       </node>
       <node oor:name=".uno:ChangeCaseToToggleCase" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">T~oggle case</value>
+          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">~tOGGLE cASE</value>
         </prop>
       </node>
       <node oor:name=".uno:ChangeCaseToHalfWidth" oor:op="replace">
