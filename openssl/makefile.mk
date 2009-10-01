@@ -70,10 +70,14 @@ OUT2INC += include/openssl/*
     ADDITIONAL_FILES:= \
         libcrypto_OOo_0_9_8k.map \
         libssl_OOo_0_9_8k.map
-    .IF "$(CPU)" == "X"
+    .IF "$(CPU)" == "I"
+        CONFIGURE_ACTION=Configure linux-elf
+    .ELIF "$(CPU)" == "X"
+        CONFIGURE_ACTION=Configure linux-x86_64
+    .ELIF "$(BUILD64)" == "1"
         CONFIGURE_ACTION=Configure linux-generic64
     .ELSE
-        CONFIGURE_ACTION=Configure linux-elf
+        CONFIGURE_ACTION=Configure linux-generic32
     .ENDIF
     # if you build openssl as shared library you have to patch the Makefile.Shared "LD_LIBRARY_PATH=$$LD_LIBRARY_PATH \"
     #BUILD_ACTION=make 'SHARED_LDFLAGS=-Wl,--version-script=./lib$$(SHLIBDIRS)_OOo_0_9_8e.map'
@@ -86,23 +90,19 @@ OUT2INC += include/openssl/*
         libssl_OOo_0_9_8k.map
     #BUILD_ACTION=make 'SHARED_LDFLAGS=-G -dy -z text -M./lib$$$$$$$$(SHLIBDIRS)_OOo_0_9_8e.map'
 
-    # We need a 64 BIT switch (currently I disable 64 Bit by default). 
-    # Please replace this with a global switch if available
-    #USE_64 = 1
+    # Use BUILD64 when 1 to select new specific 64bit Configurations if necessary
 
-    # Solaris INTEL
-    .IF "$(CPUNAME)" == "INTEL" 
+    .IF "$(CPUNAME)" == "INTEL" # Solaris INTEL
         .IF "$(CPU)" == "X"
            CONFIGURE_ACTION=Configure solaris64-x86_64-cc
         .ELSE
            CONFIGURE_ACTION=Configure solaris-x86-cc
         .ENDIF
+    .ELIF "$(CPU)" == "U" # Solaris SPARC
+       CONFIGURE_ACTION=Configure solaris64-sparcv9-cc
     .ELSE
-    # Solaris SPARC
-        .IF "$(CPU)" == "U"
-           CONFIGURE_ACTION=Configure solaris64-sparcv9-cc
-        .ENDIF
-.ENDIF
+       CONFIGURE_ACTION=Configure solaris-sparcv9-cc
+    .ENDIF
 .ENDIF
 
 .IF "$(OS)" == "WNT"
