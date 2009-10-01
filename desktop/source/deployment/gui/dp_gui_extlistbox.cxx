@@ -471,13 +471,15 @@ void ExtensionBox_Impl::selectEntry( const long nPos )
 
         if ( IsReallyVisible() )
         {
-            m_bNeedsRecalc = true;
             m_bAdjustActive = true;
         }
     }
 
     if ( IsReallyVisible() )
+    {
+        m_bNeedsRecalc = true;
         Invalidate();
+    }
 
     guard.clear();
 }
