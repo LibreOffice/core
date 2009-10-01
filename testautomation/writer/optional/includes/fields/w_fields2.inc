@@ -392,59 +392,65 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tDocumentFilename
-    if bAsianLan = true then
-        QaErrorLog "No testing with Asian language. Aborting."
-        exit sub
-    end if
-
-  Dim  sTestFile     as String
-  Dim  sFilename(4)  as String
-  Dim  i             as Integer
-
-  sTestFile    = Convertpath (gTesttoolpath + "writer\optional\input\fields\pageTest.sxw")
-
-  sFilename(0) = "pageTest.sxw"
-  sFilename(1) = "pageTest"
-  sFilename(2) = Convertpath (gTesttoolpath + "writer\optional\input\fields\")
-  sFilename(3) = sTestFile
-
-  printlog "Insert/Fields/Other/Document / File name"
- '/// <b> Insert/Fields/Other/Document / File name </b>
-
-  Call hNewDocument
-
-  '/// Open test file pageTest.sxw
-   Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
-   Call wTypeKeys "<MOD1 Home>"
-   Call wTypeKeys "<End><Return>"
-
-  '/// Insert/Fields/Other/Document / File name
-  '/// Insert File name, File name without extension ,
-  '/// Path , Path/File name
-  '/// Check if the insertion is correct
-   Call fInsertFieldsOther("TabDokumentFeldbefehle")
-     Feldtyp.Select fGetType("File name")
-     for i = 0 to 3
-         Kontext "TabDokumentFeldbefehle"
-         Formatliste.Select i+1
-         Sleep 1
-         Einfuegen.Click
-         sleep 1
-         Call wTypeKeys "<F9>"
-         Sleep 2
-         Call wTypeKeys "<Shift LEFT>"  'HOME
-         Sleep 1
-         if fGetFieldContent() <> sFilename(i) then
-             Warnlog i &" - Should get " & sFilename(i) & " but get " & fGetFieldContent()
-         end if
-         Call wTypeKeys "<Delete>"
-     next i
-     Kontext "TabDokumentFeldbefehle"
-   TabDokumentFeldbefehle.Close
-
- Call hCloseDocument
+	if bAsianLan = true then
+		QaErrorLog "No testing with Asian language. Aborting."
+		goto endsub
+	end if
+	
+	Dim  sOriginalFile as String
+	Dim  sTestFile     as String
+	Dim  sFilename(4)  as String
+	Dim  i             as Integer
+	
+	sTestFile    = Convertpath (gOfficepath + "user\work\pageTest.sxw")
+	sOriginalFile    = Convertpath (gTesttoolpath + "writer\optional\input\fields\pageTest.sxw")
+	' document has to be copied to local file system to avoid opening a read-only file
+	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
+	FileCopy (sOriginalFile, sTestFile)
+	if hFileExists ( sTestFile ) = false then
+		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
+		goto endsub
+	end if
+	
+	sFilename(0) = "pageTest.sxw"
+	sFilename(1) = "pageTest"
+	sFilename(2) = Convertpath (gOfficepath + "user\work\")
+	sFilename(3) = sTestFile
+	
+	printlog "Insert/Fields/Other/Document / File name"
+	
+	Call hNewDocument
+	
+	'/// Open test file pageTest.sxw
+	Call hFileOpen(sTestFile)
+	
+	Call wTypeKeys "<MOD1 Home>"
+	Call wTypeKeys "<End><Return>"
+	
+	printlog "Insert/Fields/Other/Document / File name"
+	printlog "Insert File name, File name without extension , Path , Path/File name"
+	printlog "Check if the insertion is correct"
+	Call fInsertFieldsOther("TabDokumentFeldbefehle")
+	Feldtyp.Select fGetType("File name")
+	for i = 0 to 3
+		Kontext "TabDokumentFeldbefehle"
+		Formatliste.Select i+1
+		Sleep 1
+		Einfuegen.Click
+		sleep 1
+		Call wTypeKeys "<F9>"
+		Sleep 2
+		Call wTypeKeys "<Shift LEFT>"  'HOME
+		Sleep 1
+		if fGetFieldContent() <> sFilename(i) then
+			Warnlog i &" - Should get " & sFilename(i) & " but get " & fGetFieldContent()
+		end if
+		Call wTypeKeys "<Delete>"
+	next i
+	Kontext "TabDokumentFeldbefehle"
+	TabDokumentFeldbefehle.Close
+	
+	Call hCloseDocument
 
 endcase
 

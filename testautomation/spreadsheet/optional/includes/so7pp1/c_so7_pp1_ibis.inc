@@ -146,6 +146,7 @@ testcase tIBIS111158
     end if
     '/// Close all disturbing menus
     Kontext "ControlPropertiesDialog" 
+    sleep(1)
     ControlPropertiesDialog.close
     sleep(2)
     Kontext "FormularNavigator"
