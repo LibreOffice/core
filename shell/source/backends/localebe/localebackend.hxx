@@ -31,7 +31,7 @@
 #ifndef _FIXEDVALUEBACKEND_HXX_
 #define _FIXEDVALUEBACKEND_HXX_
 
-#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/string.hxx>
@@ -42,7 +42,7 @@ namespace uno = css::uno ;
 namespace lang = css::lang ;
 
 class LocaleBackend : public ::cppu::WeakImplHelper2 <
-        css::container::XNameAccess,
+        css::beans::XPropertySet,
         lang::XServiceInfo > {
 
     public :
@@ -75,27 +75,56 @@ class LocaleBackend : public ::cppu::WeakImplHelper2 <
           */
         static uno::Sequence<rtl::OUString> SAL_CALL getBackendServiceNames(void) ;
 
-        //XNameAccess
-        virtual uno::Type SAL_CALL
-        getElementType()
-            throw (uno::RuntimeException);
+        // XPropertySet
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+        getPropertySetInfo() throw (css::uno::RuntimeException)
+        { return css::uno::Reference< css::beans::XPropertySetInfo >(); }
 
-        virtual sal_Bool SAL_CALL
-        hasElements()
-            throw (uno::RuntimeException);
+        virtual void SAL_CALL setPropertyValue(
+            rtl::OUString const &, css::uno::Any const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::beans::PropertyVetoException,
+                css::lang::IllegalArgumentException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException);
 
-        virtual uno::Any SAL_CALL
-        getByName( const rtl::OUString& aName )
-            throw (css::container::NoSuchElementException,
-                   lang::WrappedTargetException, uno::RuntimeException);
+        virtual css::uno::Any SAL_CALL getPropertyValue(
+            rtl::OUString const & PropertyName)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException);
 
-        virtual uno::Sequence<rtl::OUString> SAL_CALL
-        getElementNames()
-            throw (uno::RuntimeException);
+        virtual void SAL_CALL addPropertyChangeListener(
+            rtl::OUString const &,
+            css::uno::Reference< css::beans::XPropertyChangeListener > const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException)
+        {}
 
-        virtual sal_Bool SAL_CALL
-        hasByName( const rtl::OUString& aName )
-            throw (uno::RuntimeException);
+        virtual void SAL_CALL removePropertyChangeListener(
+            rtl::OUString const &,
+            css::uno::Reference< css::beans::XPropertyChangeListener > const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException)
+        {}
+
+        virtual void SAL_CALL addVetoableChangeListener(
+            rtl::OUString const &,
+            css::uno::Reference< css::beans::XVetoableChangeListener > const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException)
+        {}
+
+        virtual void SAL_CALL removeVetoableChangeListener(
+            rtl::OUString const &,
+            css::uno::Reference< css::beans::XVetoableChangeListener > const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException)
+        {}
 
     protected:
         /**

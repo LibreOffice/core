@@ -43,6 +43,8 @@
 #include "rtl/string.h"
 #include "rtl/ustring.hxx"
 
+#include "kde4access.hxx"
+
 #define SPACE      ' '
 #define COMMA      ','
 #define SEMI_COLON ';'
@@ -56,7 +58,7 @@ namespace uno = css::uno ;
 
 }
 
-css::uno::Any getValue(rtl::OUString const & id) {
+css::beans::Optional< css::uno::Any > getValue(rtl::OUString const & id) {
     if (id.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ExternalMailer"))) {
         KEMailSettings aEmailSettings;
         QString aClientProgram;
@@ -68,7 +70,8 @@ css::uno::Any getValue(rtl::OUString const & id) {
         else
             aClientProgram = aClientProgram.section(SPACE, 0, 0);
         sClientProgram = (const sal_Unicode *) aClientProgram.utf16();
-        return uno::makeAny( sClientProgram );
+        return css::beans::Optional< css::uno::Any >(
+            true, uno::makeAny( sClientProgram ) );
     } else if (id.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("SourceViewFontHeight")))
     {
@@ -77,7 +80,8 @@ css::uno::Any getValue(rtl::OUString const & id) {
 
         aFixedFont = KGlobalSettings::fixedFont();
         nFontHeight = aFixedFont.pointSize();
-        return uno::makeAny( nFontHeight );
+        return css::beans::Optional< css::uno::Any >(
+            true, uno::makeAny( nFontHeight ) );
     } else if (id.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("SourceViewFontName")))
     {
@@ -88,13 +92,15 @@ css::uno::Any getValue(rtl::OUString const & id) {
         aFixedFont = KGlobalSettings::fixedFont();
         aFontName = aFixedFont.family();
         sFontName = (const sal_Unicode *) aFontName.utf16();
-        return uno::makeAny( sFontName );
+        return css::beans::Optional< css::uno::Any >(
+            true, uno::makeAny( sFontName ) );
     } else if (id.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("EnableATToolSupport")))
     {
         /* does not make much sense without an accessibility bridge */
         sal_Bool ATToolSupport = sal_False;
-        return uno::makeAny( rtl::OUString::valueOf( ATToolSupport ) );
+        return css::beans::Optional< css::uno::Any >(
+            true, uno::makeAny( rtl::OUString::valueOf( ATToolSupport ) ) );
     } else if (id.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("WorkPathVariable")))
     {
@@ -105,7 +111,8 @@ css::uno::Any getValue(rtl::OUString const & id) {
             aDocumentsDir.truncate ( aDocumentsDir.length() - 1 );
         sDocumentsDir = (const sal_Unicode *) aDocumentsDir.utf16();
         osl_getFileURLFromSystemPath( sDocumentsDir.pData, &sDocumentsURL.pData );
-        return uno::makeAny( sDocumentsURL );
+        return css::beans::Optional< css::uno::Any >(
+            true, uno::makeAny( sDocumentsURL ) );
     } else if (id.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyName")))
     {
@@ -130,7 +137,8 @@ css::uno::Any getValue(rtl::OUString const & id) {
         {
             KUrl aProxy(aFTPProxy);
             ::rtl::OUString sProxy = (const sal_Unicode *) aProxy.host().utf16();
-            return uno::makeAny( sProxy );
+            return css::beans::Optional< css::uno::Any >(
+                true, uno::makeAny( sProxy ) );
         }
     } else if (id.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyPort")))
@@ -156,7 +164,8 @@ css::uno::Any getValue(rtl::OUString const & id) {
         {
             KUrl aProxy(aFTPProxy);
             sal_Int32 nPort = aProxy.port();
-            return uno::makeAny( nPort );
+            return css::beans::Optional< css::uno::Any >(
+                true, uno::makeAny( nPort ) );
         }
     } else if (id.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyName")))
@@ -182,7 +191,8 @@ css::uno::Any getValue(rtl::OUString const & id) {
         {
             KUrl aProxy(aHTTPProxy);
             ::rtl::OUString sProxy = (const sal_Unicode *) aProxy.host().utf16();
-            return uno::makeAny( sProxy );
+            return css::beans::Optional< css::uno::Any >(
+                true, uno::makeAny( sProxy ) );
         }
     } else if (id.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyPort")))
@@ -208,7 +218,8 @@ css::uno::Any getValue(rtl::OUString const & id) {
         {
             KUrl aProxy(aHTTPProxy);
             sal_Int32 nPort = aProxy.port();
-            return uno::makeAny( nPort );
+            return css::beans::Optional< css::uno::Any >(
+                true, uno::makeAny( nPort ) );
         }
     } else if (id.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyName")))
@@ -234,7 +245,8 @@ css::uno::Any getValue(rtl::OUString const & id) {
         {
             KUrl aProxy(aHTTPSProxy);
             ::rtl::OUString sProxy = (const sal_Unicode *) aProxy.host().utf16();
-            return uno::makeAny( sProxy );
+            return css::beans::Optional< css::uno::Any >(
+                true, uno::makeAny( sProxy ) );
         }
     } else if (id.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyPort")))
@@ -260,7 +272,8 @@ css::uno::Any getValue(rtl::OUString const & id) {
         {
             KUrl aProxy(aHTTPSProxy);
             sal_Int32 nPort = aProxy.port();
-            return uno::makeAny( nPort );
+            return css::beans::Optional< css::uno::Any >(
+                true, uno::makeAny( nPort ) );
         }
     } else if (id.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetNoProxy"))) {
         QString aNoProxyFor;
@@ -281,7 +294,8 @@ css::uno::Any getValue(rtl::OUString const & id) {
 
             aNoProxyFor = aNoProxyFor.replace( COMMA, SEMI_COLON );
             sNoProxyFor = (const sal_Unicode *) aNoProxyFor.utf16();
-            return uno::makeAny( sNoProxyFor );
+            return css::beans::Optional< css::uno::Any >(
+                true, uno::makeAny( sNoProxyFor ) );
         }
     } else if (id.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetProxyType"))) {
         int nProxyType;
@@ -296,11 +310,12 @@ css::uno::Any getValue(rtl::OUString const & id) {
         default:                            // No proxy is used
             nProxyType = 0;
         }
-        return uno::makeAny( (sal_Int32) nProxyType );
+        return css::beans::Optional< css::uno::Any >(
+            true, uno::makeAny( (sal_Int32) nProxyType ) );
     } else {
         OSL_ASSERT(false); // this cannot happen
     }
-    return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
+    return css::beans::Optional< css::uno::Any >();
 }
 
 }

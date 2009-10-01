@@ -34,6 +34,7 @@
 
 #include <cstddef>
 
+#include "com/sun/star/beans/Optional.hpp"
 #include "gconf/gconf-client.h"
 #include "sal/types.h"
 
@@ -112,7 +113,8 @@ extern ConfigurationValue const ConfigurationValues[];
 
 extern std::size_t const nConfigurationValues;
 
-com::sun::star::uno::Any getValue(ConfigurationValue const & data);
+com::sun::star::beans::Optional< com::sun::star::uno::Any > getValue(
+    ConfigurationValue const & data);
 
 }
 

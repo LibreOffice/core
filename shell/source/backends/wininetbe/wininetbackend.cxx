@@ -114,10 +114,7 @@ namespace // private
 
 //------------------------------------------------------------------------------
 
-WinInetBackend::WinInetBackend():
-    hasProxyType_(false), hasNoProxy_(false), hasHttpProxyName_(false),
-    hasHttpProxyPort_(false), hasHttpsProxyName_(false),
-    hasHttpsProxyPort_(false), hasFtpProxyName_(false), hasFtpProxyPort_(false)
+WinInetBackend::WinInetBackend()
 {
     Library hWinInetDll( LoadLibrary( WININET_DLL_NAME ) );
     if( hWinInetDll.module )
@@ -166,8 +163,8 @@ WinInetBackend::WinInetBackend():
             // override default for ProxyType, which is "0" meaning "No proxies".
             sal_Int32 nProperties = 1;
 
-            valueProxyType_ = nProperties;
-            hasProxyType_ = true;
+            valueProxyType_.IsPresent = true;
+            valueProxyType_.Value <<= nProperties;
 
             // fill proxy bypass list
             if( aProxyBypassList.getLength() > 0 )
@@ -192,8 +189,8 @@ WinInetBackend::WinInetBackend():
 
                 aProxyBypassList = aReverseList.makeStringAndClear();
 
-                valueNoProxy_ = aProxyBypassList.replace( SPACE, SEMI_COLON );
-                hasNoProxy_ = true;
+                valueNoProxy_.IsPresent = true;
+                valueNoProxy_.Value <<= aProxyBypassList.replace( SPACE, SEMI_COLON );
             }
 
             if( aProxyList.getLength() > 0 )
@@ -246,43 +243,43 @@ WinInetBackend::WinInetBackend():
                 // http proxy name
                 if( aHttpProxy.Server.getLength() > 0 )
                 {
-                    valueHttpProxyName_ = aHttpProxy.Server;
-                    hasHttpProxyName_ = true;
+                    valueHttpProxyName_.IsPresent = true;
+                    valueHttpProxyName_.Value <<= aHttpProxy.Server;
                 }
 
                 // http proxy port
                 if( aHttpProxy.Port.getLength() > 0 )
                 {
-                    valueHttpProxyPort_ = aHttpProxy.Port.toInt32();
-                    hasHttpProxyPort_ = true;
+                    valueHttpProxyPort_.IsPresent = true;
+                    valueHttpProxyPort_.Value <<= aHttpProxy.Port.toInt32();
                 }
 
                 // https proxy name
                 if( aHttpsProxy.Server.getLength() > 0 )
                 {
-                    valueHttpsProxyName_ = aHttpsProxy.Server;
-                    valueHttpsProxyPort_ = true;
+                    valueHttpsProxyName_.IsPresent = true;
+                    valueHttpsProxyName_.Value <<= aHttpsProxy.Server;
                 }
 
                 // https proxy port
                 if( aHttpsProxy.Port.getLength() > 0 )
                 {
-                    valueHttpsProxyPort_ = aHttpsProxy.Port.toInt32();
-                    hasHttpsProxyPort_ = true;
+                    valueHttpsProxyPort_.IsPresent = true;
+                    valueHttpsProxyPort_.Value <<= aHttpsProxy.Port.toInt32();
                 }
 
                 // ftp proxy name
                 if( aFtpProxy.Server.getLength() > 0 )
                 {
-                    valueFtpProxyName_ = aFtpProxy.Server;
-                    hasFtpProxyName_ = true;
+                    valueFtpProxyName_.IsPresent = true;
+                    valueFtpProxyName_.Value <<= aFtpProxy.Server;
                 }
 
                 // ftp proxy port
                 if( aFtpProxy.Port.getLength() > 0 )
                 {
-                    valueFtpProxyPort_ = aFtpProxy.Port.toInt32();
-                    hasFtpProxyPort_ = true;
+                    valueFtpProxyPort_.IsPresent = true;
+                    valueFtpProxyPort_.Value <<= aFtpProxy.Port.toInt32();
                 }
             }
         }
@@ -304,106 +301,61 @@ WinInetBackend* WinInetBackend::createInstance()
 
 // ---------------------------------------------------------------------------------------
 
-css::uno::Type WinInetBackend::getElementType() throw(css::uno::RuntimeException)
-{
-    return cppu::UnoType< cppu::UnoVoidType >::get();
-}
-
-sal_Bool WinInetBackend::hasElements() throw(css::uno::RuntimeException)
-{
-    return true;
-}
-
-css::uno::Any WinInetBackend::getByName(rtl::OUString const & aName)
+void WinInetBackend::setPropertyValue(
+    rtl::OUString const &, css::uno::Any const &)
     throw (
-        css::container::NoSuchElementException,
-        css::lang::WrappedTargetException, css::uno::RuntimeException)
+        css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
+        css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
 {
-    if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyName"))) {
-        return hasFtpProxyName_
-            ? uno::makeAny( valueFtpProxyName_ )
-            : css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
-    } else if (aName.equalsAsciiL(
+    throw css::lang::IllegalArgumentException(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("setPropertyValue not supported")),
+        static_cast< cppu::OWeakObject * >(this), -1);
+}
+
+css::uno::Any WinInetBackend::getPropertyValue(
+    rtl::OUString const & PropertyName)
+    throw (
+        css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
+{
+    if (PropertyName.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyName")))
+    {
+        return css::uno::makeAny(valueFtpProxyName_);
+    } else if (PropertyName.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyPort")))
     {
-        return hasFtpProxyPort_
-            ? uno::makeAny( valueFtpProxyPort_ )
-            : css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
-    } else if (aName.equalsAsciiL(
+        return css::uno::makeAny(valueFtpProxyPort_);
+    } else if (PropertyName.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyName")))
     {
-        return hasHttpProxyName_
-            ? uno::makeAny( valueHttpProxyName_ )
-            : css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
-    } else if (aName.equalsAsciiL(
+        return css::uno::makeAny(valueHttpProxyName_);
+    } else if (PropertyName.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyPort")))
     {
-        return hasHttpProxyPort_
-            ? uno::makeAny( valueHttpProxyPort_ )
-            : css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
-    } else if (aName.equalsAsciiL(
+        return css::uno::makeAny(valueHttpProxyPort_);
+    } else if (PropertyName.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyName")))
     {
-        return hasHttpsProxyName_
-            ? uno::makeAny( valueHttpsProxyName_ )
-            : css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
-    } else if (aName.equalsAsciiL(
+        return css::uno::makeAny(valueHttpsProxyName_);
+    } else if (PropertyName.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyPort")))
     {
-        return hasHttpsProxyPort_
-            ? uno::makeAny( valueHttpsProxyPort_ )
-            : css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
-    } else if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetNoProxy")))
+        return css::uno::makeAny(valueHttpsProxyPort_);
+    } else if (PropertyName.equalsAsciiL(
+                   RTL_CONSTASCII_STRINGPARAM("ooInetNoProxy")))
     {
-        return hasNoProxy_
-            ? uno::makeAny( valueNoProxy_ )
-            : css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
-    } else if (aName.equalsAsciiL(
+        return css::uno::makeAny(valueNoProxy_);
+    } else if (PropertyName.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetProxyType")))
     {
-        return hasProxyType_
-            ? uno::makeAny( valueProxyType_ )
-            : css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
+        return css::uno::makeAny(valueProxyType_);
     } else {
-        throw css::container::NoSuchElementException(
-            aName, static_cast< cppu::OWeakObject * >(this));
+        throw css::beans::UnknownPropertyException(
+            PropertyName, static_cast< cppu::OWeakObject * >(this));
     }
-}
-
-css::uno::Sequence< rtl::OUString > WinInetBackend::getElementNames()
-    throw (css::uno::RuntimeException)
-{
-    css::uno::Sequence< rtl::OUString > names(8);
-    names[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyName"));
-    names[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyPort"));
-    names[2] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyName"));
-    names[3] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyPort"));
-    names[4] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPSProxyName"));
-    names[5] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPSProxyPort"));
-    names[6] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetNoProxy"));
-    names[7] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetProxyType"));
-    return names;
-}
-
-sal_Bool WinInetBackend::hasByName(rtl::OUString const & aName)
-    throw (css::uno::RuntimeException)
-{
-    return
-        aName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyName")) ||
-        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyPort")) ||
-        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyName")) ||
-        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyPort")) ||
-        aName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyName")) ||
-        aName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyPort")) ||
-        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetNoProxy")) ||
-        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetProxyType"));
 }
 
 //------------------------------------------------------------------------------

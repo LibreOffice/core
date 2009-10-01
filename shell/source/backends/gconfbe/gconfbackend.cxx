@@ -33,18 +33,24 @@
 #include <cstddef>
 
 #include "boost/noncopyable.hpp"
-#include "com/sun/star/container/NoSuchElementException.hpp"
-#include "com/sun/star/container/XNameAccess.hpp"
+#include "com/sun/star/beans/Optional.hpp"
+#include "com/sun/star/beans/PropertyVetoException.hpp"
+#include "com/sun/star/beans/UnknownPropertyException.hpp"
+#include "com/sun/star/beans/XPropertyChangeListener.hpp"
+#include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/beans/XPropertySetInfo.hpp"
+#include "com/sun/star/beans/XVetoableChangeListener.hpp"
+#include "com/sun/star/lang/IllegalArgumentException.hpp"
+#include "com/sun/star/lang/WrappedTargetException.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/WrappedTargetException.hpp"
 #include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/Type.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XCurrentContext.hpp"
-#include "cppu/unotype.hxx"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/implementationentry.hxx"
@@ -78,7 +84,7 @@ css::uno::Sequence< rtl::OUString > SAL_CALL getServiceSupportedServiceNames() {
 
 class Service:
     public cppu::WeakImplHelper2<
-        css::lang::XServiceInfo, css::container::XNameAccess >,
+        css::lang::XServiceInfo, css::beans::XPropertySet >,
     private boost::noncopyable
 {
 public:
@@ -99,23 +105,55 @@ private:
     getSupportedServiceNames() throw (css::uno::RuntimeException)
     { return getServiceSupportedServiceNames(); }
 
-    virtual css::uno::Type SAL_CALL getElementType()
-        throw (css::uno::RuntimeException)
-    { return cppu::UnoType< cppu::UnoVoidType >::get(); }
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    getPropertySetInfo() throw (css::uno::RuntimeException)
+    { return css::uno::Reference< css::beans::XPropertySetInfo >(); }
 
-    virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException)
-    { return true; }
-
-    virtual css::uno::Any SAL_CALL getByName(rtl::OUString const & aName)
+    virtual void SAL_CALL setPropertyValue(
+        rtl::OUString const &, css::uno::Any const &)
         throw (
-            css::container::NoSuchElementException,
+            css::beans::UnknownPropertyException,
+            css::beans::PropertyVetoException,
+            css::lang::IllegalArgumentException,
             css::lang::WrappedTargetException, css::uno::RuntimeException);
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getElementNames()
-        throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getPropertyValue(
+        rtl::OUString const & PropertyName)
+        throw (
+            css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException, css::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL hasByName(rtl::OUString const & aName)
-        throw (css::uno::RuntimeException);
+    virtual void SAL_CALL addPropertyChangeListener(
+        rtl::OUString const &,
+        css::uno::Reference< css::beans::XPropertyChangeListener > const &)
+        throw (
+            css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException, css::uno::RuntimeException)
+    {}
+
+    virtual void SAL_CALL removePropertyChangeListener(
+        rtl::OUString const &,
+        css::uno::Reference< css::beans::XPropertyChangeListener > const &)
+        throw (
+            css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException, css::uno::RuntimeException)
+    {}
+
+    virtual void SAL_CALL addVetoableChangeListener(
+        rtl::OUString const &,
+        css::uno::Reference< css::beans::XVetoableChangeListener > const &)
+        throw (
+            css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException, css::uno::RuntimeException)
+    {}
+
+    virtual void SAL_CALL removeVetoableChangeListener(
+        rtl::OUString const &,
+        css::uno::Reference< css::beans::XVetoableChangeListener > const &)
+        throw (
+            css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException, css::uno::RuntimeException)
+    {}
 
     bool enabled_;
 };
@@ -136,47 +174,35 @@ Service::Service(): enabled_(false) {
     }
 }
 
-css::uno::Any Service::getByName(rtl::OUString const & aName)
+void Service::setPropertyValue(rtl::OUString const &, css::uno::Any const &)
     throw (
-        css::container::NoSuchElementException,
-        css::lang::WrappedTargetException, css::uno::RuntimeException)
+        css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
+        css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
+{
+    throw css::lang::IllegalArgumentException(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("setPropertyValue not supported")),
+        static_cast< cppu::OWeakObject * >(this), -1);
+}
+
+css::uno::Any Service::getPropertyValue(rtl::OUString const & PropertyName)
+    throw (
+        css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
 {
     for (std::size_t i = 0; i < gconfaccess::nConfigurationValues; ++i) {
-        if (aName.equalsAscii(
+        if (PropertyName.equalsAscii(
                 gconfaccess::ConfigurationValues[i].OOoConfItem))
         {
-            return enabled_
+            return css::uno::makeAny(
+                enabled_
                 ? gconfaccess::getValue(gconfaccess::ConfigurationValues[i])
-                : css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
+                : css::beans::Optional< css::uno::Any >());
         }
     }
-    throw css::container::NoSuchElementException(
-        aName, static_cast< cppu::OWeakObject * >(this));
-}
-
-css::uno::Sequence< rtl::OUString > Service::getElementNames()
-    throw (css::uno::RuntimeException)
-{
-    css::uno::Sequence< rtl::OUString > names(
-        gconfaccess::nConfigurationValues);
-    for (std::size_t i = 0; i < gconfaccess::nConfigurationValues; ++i) {
-        names[i] = rtl::OUString::createFromAscii(
-            gconfaccess::ConfigurationValues[i].OOoConfItem);
-    }
-    return names;
-}
-
-sal_Bool Service::hasByName(rtl::OUString const & aName)
-    throw (css::uno::RuntimeException)
-{
-    for (std::size_t i = 0; i < gconfaccess::nConfigurationValues; ++i) {
-        if (aName.equalsAscii(
-                gconfaccess::ConfigurationValues[i].OOoConfItem))
-        {
-            return true;
-        }
-    }
-    return false;
+    throw css::beans::UnknownPropertyException(
+        PropertyName, static_cast< cppu::OWeakObject * >(this));
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(

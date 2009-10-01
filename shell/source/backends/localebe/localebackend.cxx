@@ -32,6 +32,7 @@
 #include "precompiled_shell.hxx"
 
 #include "localebackend.hxx"
+#include <com/sun/star/beans/Optional.hpp>
 #include <osl/time.h>
 
 #include <stdio.h>
@@ -282,49 +283,45 @@ rtl::OUString LocaleBackend::getSystemLocale(void)
 }
 //------------------------------------------------------------------------------
 
-css::uno::Type LocaleBackend::getElementType() throw(css::uno::RuntimeException)
-{
-    return cppu::UnoType< cppu::UnoVoidType >::get();
-}
-
-sal_Bool LocaleBackend::hasElements() throw(css::uno::RuntimeException)
-{
-    return true;
-}
-
-css::uno::Any LocaleBackend::getByName(rtl::OUString const & aName)
+void LocaleBackend::setPropertyValue(
+    rtl::OUString const &, css::uno::Any const &)
     throw (
-        css::container::NoSuchElementException,
-        css::lang::WrappedTargetException, css::uno::RuntimeException)
+        css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
+        css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
 {
-    if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Locale"))) {
-        return css::uno::makeAny(getLocale());
-    } else if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SystemLocale"))) {
-        return css::uno::makeAny(getSystemLocale());
-    } else if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UILocale"))) {
-        return css::uno::makeAny(getUILocale());
+    throw css::lang::IllegalArgumentException(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("setPropertyValue not supported")),
+        static_cast< cppu::OWeakObject * >(this), -1);
+}
+
+css::uno::Any LocaleBackend::getPropertyValue(
+    rtl::OUString const & PropertyName)
+    throw (
+        css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
+{
+    if (PropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Locale"))) {
+        return css::uno::makeAny(
+            css::beans::Optional< css::uno::Any >(
+                true, css::uno::makeAny(getLocale())));
+    } else if (PropertyName.equalsAsciiL(
+                   RTL_CONSTASCII_STRINGPARAM("SystemLocale")))
+    {
+        return css::uno::makeAny(
+            css::beans::Optional< css::uno::Any >(
+                true, css::uno::makeAny(getSystemLocale())));
+    } else if (PropertyName.equalsAsciiL(
+                   RTL_CONSTASCII_STRINGPARAM("UILocale")))
+    {
+        return css::uno::makeAny(
+            css::beans::Optional< css::uno::Any >(
+                true, css::uno::makeAny(getUILocale())));
     } else {
-        throw css::container::NoSuchElementException(
-            aName, static_cast< cppu::OWeakObject * >(this));
+        throw css::beans::UnknownPropertyException(
+            PropertyName, static_cast< cppu::OWeakObject * >(this));
     }
-}
-
-css::uno::Sequence< rtl::OUString > LocaleBackend::getElementNames()
-    throw (css::uno::RuntimeException)
-{
-    css::uno::Sequence< rtl::OUString > names(3);
-    names[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Locale"));
-    names[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SystemLocale"));
-    names[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UILocale"));
-    return names;
-}
-
-sal_Bool LocaleBackend::hasByName(rtl::OUString const & aName)
-    throw (css::uno::RuntimeException)
-{
-    return aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Locale")) ||
-        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SystemLocale")) ||
-        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UILocale"));
 }
 
 //------------------------------------------------------------------------------

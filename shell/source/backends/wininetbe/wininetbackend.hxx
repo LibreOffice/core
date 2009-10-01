@@ -31,9 +31,9 @@
 #ifndef _FIXEDVALUEBACKEND_HXX_
 #define _FIXEDVALUEBACKEND_HXX_
 
-#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/configuration/backend/XBackendChangesNotifier.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/string.hxx>
 
@@ -42,7 +42,7 @@ namespace uno = css::uno ;
 namespace lang = css::lang ;
 
 class WinInetBackend : public ::cppu::WeakImplHelper2 <
-        css::container::XNameAccess,
+        css::beans::XPropertySet,
         lang::XServiceInfo > {
 
     public :
@@ -75,27 +75,56 @@ class WinInetBackend : public ::cppu::WeakImplHelper2 <
           */
         static uno::Sequence<rtl::OUString> SAL_CALL getBackendServiceNames(void) ;
 
-        //XNameAccess
-        virtual uno::Type SAL_CALL
-        getElementType()
-            throw (uno::RuntimeException);
+        // XPropertySet
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+        getPropertySetInfo() throw (css::uno::RuntimeException)
+        { return css::uno::Reference< css::beans::XPropertySetInfo >(); }
 
-        virtual sal_Bool SAL_CALL
-        hasElements()
-            throw (uno::RuntimeException);
+        virtual void SAL_CALL setPropertyValue(
+            rtl::OUString const &, css::uno::Any const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::beans::PropertyVetoException,
+                css::lang::IllegalArgumentException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException);
 
-        virtual uno::Any SAL_CALL
-        getByName( const rtl::OUString& aName )
-            throw (css::container::NoSuchElementException,
-                   lang::WrappedTargetException, uno::RuntimeException);
+        virtual css::uno::Any SAL_CALL getPropertyValue(
+            rtl::OUString const & PropertyName)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException);
 
-        virtual uno::Sequence<rtl::OUString> SAL_CALL
-        getElementNames()
-            throw (uno::RuntimeException);
+        virtual void SAL_CALL addPropertyChangeListener(
+            rtl::OUString const &,
+            css::uno::Reference< css::beans::XPropertyChangeListener > const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException)
+        {}
 
-        virtual sal_Bool SAL_CALL
-        hasByName( const rtl::OUString& aName )
-            throw (uno::RuntimeException);
+        virtual void SAL_CALL removePropertyChangeListener(
+            rtl::OUString const &,
+            css::uno::Reference< css::beans::XPropertyChangeListener > const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException)
+        {}
+
+        virtual void SAL_CALL addVetoableChangeListener(
+            rtl::OUString const &,
+            css::uno::Reference< css::beans::XVetoableChangeListener > const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException)
+        {}
+
+        virtual void SAL_CALL removeVetoableChangeListener(
+            rtl::OUString const &,
+            css::uno::Reference< css::beans::XVetoableChangeListener > const &)
+            throw (
+                css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException, css::uno::RuntimeException)
+        {}
 
     protected:
         /**
@@ -109,22 +138,22 @@ class WinInetBackend : public ::cppu::WeakImplHelper2 <
         ~WinInetBackend(void) ;
 
     private:
-        sal_Int32 valueProxyType_;
-        rtl::OUString valueNoProxy_;
-        rtl::OUString valueHttpProxyName_;
-        sal_Int32 valueHttpProxyPort_;
-        rtl::OUString valueHttpsProxyName_;
-        sal_Int32 valueHttpsProxyPort_;
-        rtl::OUString valueFtpProxyName_;
-        sal_Int32 valueFtpProxyPort_;
-        bool hasProxyType_;
-        bool hasNoProxy_;
-        bool hasHttpProxyName_;
-        bool hasHttpProxyPort_;
-        bool hasHttpsProxyName_;
-        bool hasHttpsProxyPort_;
-        bool hasFtpProxyName_;
-        bool hasFtpProxyPort_;
+        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+            valueProxyType_;
+        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+            valueNoProxy_;
+        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+            valueHttpProxyName_;
+        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+            valueHttpProxyPort_;
+        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+            valueHttpsProxyName_;
+        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+            valueHttpsProxyPort_;
+        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+            valueFtpProxyName_;
+        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+            valueFtpProxyPort_;
 } ;
 
 

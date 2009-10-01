@@ -824,7 +824,8 @@ ConfigurationValue const ConfigurationValues[] =
 std::size_t const nConfigurationValues =
     sizeof ConfigurationValues / sizeof ConfigurationValues[0];
 
-css::uno::Any getValue(ConfigurationValue const & data) {
+css::beans::Optional< css::uno::Any > getValue(ConfigurationValue const & data)
+{
     GConfClient* aClient = getGconfClient();
     GConfValue* aGconfValue;
     if( ( data.nDependsOn == SETTINGS_LAST ) || isDependencySatisfied( aClient, data ) )
@@ -841,10 +842,10 @@ css::uno::Any getValue(ConfigurationValue const & data) {
 
             gconf_value_free( aGconfValue );
 
-            return value;
+            return css::beans::Optional< css::uno::Any >(true, value);
         }
     }
-    return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
+    return css::beans::Optional< css::uno::Any >();
 }
 
 }

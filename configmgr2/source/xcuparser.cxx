@@ -32,15 +32,15 @@
 
 #include <algorithm>
 
-#include "com/sun/star/container/NoSuchElementException.hpp"
-#include "com/sun/star/container/XNameAccess.hpp"
+#include "com/sun/star/beans/Optional.hpp"
+#include "com/sun/star/beans/UnknownPropertyException.hpp"
+#include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/lang/WrappedTargetException.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Type.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "osl/diagnose.h"
@@ -454,12 +454,20 @@ void XcuParser::handlePropValue(XmlReader & reader, PropertyNode * prop) {
                     e.Message, RTL_TEXTENCODING_UTF8).getStr());
         }
         if (service.is()) {
-            css::uno::Any value;
+            css::beans::Optional< css::uno::Any > value;
             try {
-                value = css::uno::Reference< css::container::XNameAccess >(
-                    service, css::uno::UNO_QUERY_THROW)->
-                    getByName(external.copy(i + 1));
-            } catch (css::container::NoSuchElementException & e) {
+                if (!((css::uno::Reference< css::beans::XPropertySet >(
+                           service, css::uno::UNO_QUERY_THROW)->
+                       getPropertyValue(external.copy(i + 1))) >>=
+                      value))
+                {
+                    throw css::uno::RuntimeException(
+                        rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "cannot obtain oor:external value")),
+                        css::uno::Reference< css::uno::XInterface >());
+                }
+            } catch (css::beans::UnknownPropertyException & e) {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
@@ -474,12 +482,9 @@ void XcuParser::handlePropValue(XmlReader & reader, PropertyNode * prop) {
                      e.Message),
                     css::uno::Reference< css::uno::XInterface >());
             }
-            css::uno::Type t;
-            if (!(value >>= t) ||
-                t != cppu::UnoType< cppu::UnoVoidType >::get())
-            {
+            if (value.IsPresent) {
                 //TODO: check value type
-                prop->setValue(valueParser_.getLayer(), value);
+                prop->setValue(valueParser_.getLayer(), value.Value);
             }
         }
         state_.push(State());

@@ -41,6 +41,7 @@
 
 #include "macbackend.hxx"
 
+#include "com/sun/star/beans/Optional.hpp"
 #include "rtl/ustrbuf.hxx"
 #include "osl/file.h"
 
@@ -211,22 +212,28 @@ rtl::OUString GetOUString( NSString* pStr )
     return aBuf.makeStringAndClear();
 }
 
-css::uno::Type MacOSXBackend::getElementType() throw(css::uno::RuntimeException)
-{
-    return cppu::UnoType< cppu::UnoVoidType >::get();
-}
-
-sal_Bool MacOSXBackend::hasElements() throw(css::uno::RuntimeException)
-{
-    return true;
-}
-
-css::uno::Any MacOSXBackend::getByName(rtl::OUString const & aName)
+void MacOSXBackend::setPropertyValue(
+    rtl::OUString const &, css::uno::Any const &)
     throw (
-        css::container::NoSuchElementException,
-        css::lang::WrappedTargetException, css::uno::RuntimeException)
+        css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
+        css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
 {
-    if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("WorkPathVariable"))) {
+    throw css::lang::IllegalArgumentException(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("setPropertyValue not supported")),
+        static_cast< cppu::OWeakObject * >(this), -1);
+}
+
+css::uno::Any MacOSXBackend::getPropertyValue(
+    rtl::OUString const & PropertyName)
+    throw (
+        css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
+{
+    if (PropertyName.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("WorkPathVariable")))
+    {
         rtl::OUString aDocDir;
         NSArray* pPaths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, true );
         if( pPaths && [pPaths count] > 0 )
@@ -237,7 +244,9 @@ css::uno::Any MacOSXBackend::getByName(rtl::OUString const & aName)
             if( aDocDir.getLength() > 0 &&
                 osl_getFileURLFromSystemPath( aDocDir.pData, &aDocURL.pData ) == osl_File_E_None )
             {
-                return css::uno::makeAny(aDocURL);
+                return css::uno::makeAny(
+                    css::beans::Optional< css::uno::Any >(
+                        true, css::uno::makeAny( aDocURL ) ) );
             }
             else
             {
@@ -248,8 +257,8 @@ css::uno::Any MacOSXBackend::getByName(rtl::OUString const & aName)
         {
             OSL_TRACE( "Got nil or empty list of user document directories" );
         }
-        return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
-    } else if (aName.equalsAsciiL(
+        return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
+    } else if (PropertyName.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyName")))
     {
         ProxyEntry aFtpProxy;
@@ -268,10 +277,12 @@ css::uno::Any MacOSXBackend::getByName(rtl::OUString const & aName)
         // ftp proxy name
         if( aFtpProxy.Server.getLength() > 0 )
         {
-            return uno::makeAny( aFtpProxy.Server );
+            return css::uno::makeAny(
+                css::beans::Optional< css::uno::Any >(
+                    true, uno::makeAny( aFtpProxy.Server ) ) );
         }
-        return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
-    } else if (aName.equalsAsciiL(
+        return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
+    } else if (PropertyName.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyPort")))
     {
         ProxyEntry aFtpProxy;
@@ -290,10 +301,12 @@ css::uno::Any MacOSXBackend::getByName(rtl::OUString const & aName)
         // ftp proxy port
         if( aFtpProxy.Port > 0 )
         {
-            return uno::makeAny( aFtpProxy.Port );
+            return css::uno::makeAny(
+                css::beans::Optional< css::uno::Any >(
+                    true, uno::makeAny( aFtpProxy.Port ) ) );
         }
-        return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
-    } else if (aName.equalsAsciiL(
+        return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
+    } else if (PropertyName.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyName")))
     {
         ProxyEntry aHttpProxy;
@@ -312,10 +325,12 @@ css::uno::Any MacOSXBackend::getByName(rtl::OUString const & aName)
         // http proxy name
         if( aHttpProxy.Server.getLength() > 0 )
         {
-            return uno::makeAny( aHttpProxy.Server );
+            return css::uno::makeAny(
+                css::beans::Optional< css::uno::Any >(
+                    true, uno::makeAny( aHttpProxy.Server ) ) );
         }
-        return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
-    } else if (aName.equalsAsciiL(
+        return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
+    } else if (PropertyName.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyPort")))
     {
         ProxyEntry aHttpProxy;
@@ -334,10 +349,12 @@ css::uno::Any MacOSXBackend::getByName(rtl::OUString const & aName)
         // http proxy port
         if( aHttpProxy.Port > 0 )
         {
-            return uno::makeAny( aHttpProxy.Port );
+            return css::uno::makeAny(
+                css::beans::Optional< css::uno::Any >(
+                    true, uno::makeAny( aHttpProxy.Port ) ) );
         }
-        return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
-    } else if (aName.equalsAsciiL(
+        return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
+    } else if (PropertyName.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyName")))
     {
         ProxyEntry aHttpsProxy;
@@ -356,10 +373,12 @@ css::uno::Any MacOSXBackend::getByName(rtl::OUString const & aName)
         // https proxy name
         if( aHttpsProxy.Server.getLength() > 0 )
         {
-            return uno::makeAny( aHttpsProxy.Server );
+            return css::uno::makeAny(
+                css::beans::Optional< css::uno::Any >(
+                    true, uno::makeAny( aHttpsProxy.Server ) ) );
         }
-        return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
-    } else if (aName.equalsAsciiL(
+        return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
+    } else if (PropertyName.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyPort")))
     {
         ProxyEntry aHttpsProxy;
@@ -378,16 +397,20 @@ css::uno::Any MacOSXBackend::getByName(rtl::OUString const & aName)
         // https proxy port
         if( aHttpsProxy.Port > 0 )
         {
-            return uno::makeAny( aHttpsProxy.Port );
+            return css::uno::makeAny(
+                css::beans::Optional< css::uno::Any >(
+                    true, uno::makeAny( aHttpsProxy.Port ) ) );
         }
-        return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
-    } else if (aName.equalsAsciiL(
+        return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
+    } else if (PropertyName.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetProxyType")))
     {
         // override default for ProxyType, which is "0" meaning "No proxies".
         sal_Int32 nProperties = 1;
-        return uno::makeAny( nProperties );
-    } else if (aName.equalsAsciiL(
+        return css::uno::makeAny(
+            css::beans::Optional< css::uno::Any >(
+                true, uno::makeAny( nProperties ) ) );
+    } else if (PropertyName.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("ooInetNoProxy")))
     {
         rtl::OUString aProxyBypassList;
@@ -419,49 +442,16 @@ css::uno::Any MacOSXBackend::getByName(rtl::OUString const & aName)
         // fill proxy bypass list
         if( aProxyBypassList.getLength() > 0 )
         {
-            return uno::makeAny( aProxyBypassList.replace( SPACE, SEMI_COLON ) );
+            return css::uno::makeAny(
+                css::beans::Optional< css::uno::Any >(
+                    true,
+                    uno::makeAny( aProxyBypassList.replace( SPACE, SEMI_COLON ) ) ) );
         }
-        return css::uno::makeAny(cppu::UnoType< cppu::UnoVoidType >::get());
+        return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
     } else {
-        throw css::container::NoSuchElementException(
-            aName, static_cast< cppu::OWeakObject * >(this));
+        throw css::beans::UnknownPropertyException(
+            PropertyName, static_cast< cppu::OWeakObject * >(this));
     }
-}
-
-css::uno::Sequence< rtl::OUString > MacOSXBackend::getElementNames()
-    throw (css::uno::RuntimeException)
-{
-    css::uno::Sequence< rtl::OUString > names(9);
-    names[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkPathVariable"));
-    names[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyName"));
-    names[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyPort"));
-    names[3] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyName"));
-    names[4] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyPort"));
-    names[5] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPSProxyName"));
-    names[6] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPSProxyPort"));
-    names[7] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetNoProxy"));
-    names[8] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetProxyType"));
-    return names;
-}
-
-sal_Bool MacOSXBackend::hasByName(rtl::OUString const & aName)
-    throw (css::uno::RuntimeException)
-{
-    return aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("WorkPathVariable")) ||
-        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyName")) ||
-        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetFTPProxyPort")) ||
-        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyName")) ||
-        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetHTTPProxyPort")) ||
-        aName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyName")) ||
-        aName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("ooInetHTTPSProxyPort")) ||
-        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetNoProxy")) ||
-        aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooInetProxyType"));
 }
 
 //------------------------------------------------------------------------------
