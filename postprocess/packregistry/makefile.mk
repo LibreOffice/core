@@ -305,19 +305,16 @@ MY_FILES_main += \
         # Inet-macosx.xcu must come after Inet.xcu
 .ELIF "$(GUIBASE)" == "unx"
 MY_FILES_main += \
+    $(MY_MOD)/org/openoffice/Inet-unixdesktop.xcu \
     $(MY_MOD)/org/openoffice/Office/Accelerators-unxwnt.xcu \
     $(MY_MOD)/org/openoffice/Office/Common-UseOOoFileDialogs.xcu \
-    $(MY_MOD)/org/openoffice/Office/Common-unx.xcu \
-    $(MY_MOD)/org/openoffice/Office/Paths-unxwnt.xcu
-.IF "$(ENABLE_GCONF)" == "TRUE" || "$(ENABLE_KDE)" == "TRUE" #TODO: KDE4?
-MY_FILES_main += \
-    $(MY_MOD)/org/openoffice/Inet-unixdesktop.xcu \
     $(MY_MOD)/org/openoffice/Office/Common-unixdesktop.xcu \
+    $(MY_MOD)/org/openoffice/Office/Common-unx.xcu \
     $(MY_MOD)/org/openoffice/Office/Paths-unixdesktop.xcu \
+    $(MY_MOD)/org/openoffice/Office/Paths-unxwnt.xcu \
     $(MY_MOD)/org/openoffice/VCL-unixdesktop.xcu
         # Inet-unixdesktop.xcu must come after Inet.xcu
         # VCL-unixdesktop.xcu must come after VCL.xcu
-.END
 .ELIF "$(GUIBASE)" == "WIN"
 MY_FILES_main += \
     $(MY_MOD)/DataAccess/ado.xcu \
