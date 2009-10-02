@@ -389,6 +389,14 @@
                     <value xml:lang="en-US">Name...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:LineArrowEnd" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Line Ends with Arrow</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="Popups">
             <node oor:name=".uno:ArrangeRow" oor:op="replace">
