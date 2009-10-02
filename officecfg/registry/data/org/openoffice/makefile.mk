@@ -67,18 +67,8 @@ MODULEFILES= \
 
 LOCALIZEDFILES=Setup.xcu
 
-SAMPLEFILES= \
-    LDAP.xcu.sample
-
 .INCLUDE :  target.mk
 
 LANGUAGEPACKS=$(MISC)$/registry$/spool$/Langpack-{$(alllangiso)}.xcu
-SAMPLETARGETS=$(MISC)$/registry$/data$/$(PACKAGEDIR)$/{$(SAMPLEFILES)}
 
 ALLTAR : $(LANGUAGEPACKS)
-ALLTAR : $(SAMPLETARGETS)
-
-$(SAMPLETARGETS) : $(SAMPLEFILES)
-    -$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-
