@@ -32,6 +32,7 @@
 
 #include "sal/config.h"
 
+#include <map>
 #include <set>
 
 #include "boost/noncopyable.hpp"
@@ -42,10 +43,13 @@
 #include "data.hxx"
 #include "path.hxx"
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class Any;
-    class XComponentContext;
-} } } }
+namespace com { namespace sun { namespace star {
+    namespace beans { class XPropertySet; }
+    namespace uno {
+        class Any;
+        class XComponentContext;
+    }
+} } }
 namespace rtl {
     class Bootstrap;
     class OUString;
@@ -93,7 +97,7 @@ public:
     void insertXcuFile(int layer, rtl::OUString const & fileUri);
 
     com::sun::star::beans::Optional< com::sun::star::uno::Any >
-    getExternalValue(rtl::OUString const & descriptor) const;
+    getExternalValue(rtl::OUString const & descriptor);
 
 private:
     Components(
@@ -128,10 +132,18 @@ private:
 
     typedef std::set< RootAccess * > WeakRootSet;
 
+    typedef
+        std::map<
+            rtl::OUString,
+            com::sun::star::uno::Reference<
+                com::sun::star::beans::XPropertySet > >
+        ExternalServices;
+
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         context_;
     Data data_;
     WeakRootSet roots_;
+    ExternalServices externalServices_;
 };
 
 }

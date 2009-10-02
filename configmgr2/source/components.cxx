@@ -84,10 +84,6 @@ struct UnresolvedListItem {
 
 typedef std::list< UnresolvedListItem > UnresolvedList;
 
-void parseSystemLayer() {
-    //TODO
-}
-
 void parseXcsFile(rtl::OUString const & url, int layer, Data * data)
     SAL_THROW((
         css::container::NoSuchElementException, css::uno::RuntimeException))
@@ -233,7 +229,7 @@ void Components::insertXcuFile(int layer, rtl::OUString const & fileUri) {
 }
 
 css::beans::Optional< css::uno::Any > Components::getExternalValue(
-    rtl::OUString const & descriptor) const
+    rtl::OUString const & descriptor)
 {
     sal_Int32 i = descriptor.indexOf(' ');
     if (i <= 0) {
@@ -244,28 +240,38 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
             css::uno::Reference< css::uno::XInterface >());
     }
     //TODO: Do not make calls with mutex locked:
-    css::uno::Reference< css::uno::XInterface > service;
-    try {
-        service = css::uno::Reference< css::lang::XMultiComponentFactory >(
-            context_->getServiceManager(), css::uno::UNO_SET_THROW)->
-            createInstanceWithContext(descriptor.copy(0, i), context_);
-    } catch (css::uno::RuntimeException &) {
-        // Assuming these exceptions are real errors:
-        throw;
-    } catch (css::uno::Exception & e) {
-        // Assuming these exceptions indicate that the service is not installed:
-        OSL_TRACE(
-            "createInstance(%s) failed with %s",
-            rtl::OUStringToOString(
-                descriptor.copy(0, i), RTL_TEXTENCODING_UTF8).getStr(),
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+    rtl::OUString name(descriptor.copy(0, i));
+    ExternalServices::iterator j(externalServices_.find(name));
+    if (j == externalServices_.end()) {
+        css::uno::Reference< css::uno::XInterface > service;
+        try {
+            service = css::uno::Reference< css::lang::XMultiComponentFactory >(
+                context_->getServiceManager(), css::uno::UNO_SET_THROW)->
+                createInstanceWithContext(name, context_);
+        } catch (css::uno::RuntimeException &) {
+            // Assuming these exceptions are real errors:
+            throw;
+        } catch (css::uno::Exception & e) {
+            // Assuming these exceptions indicate that the service is not
+            // installed:
+            OSL_TRACE(
+                "createInstance(%s) failed with %s",
+                rtl::OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr(),
+                rtl::OUStringToOString(
+                    e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        }
+        css::uno::Reference< css::beans::XPropertySet > propset;
+        if (service.is()) {
+            propset = css::uno::Reference< css::beans::XPropertySet >(
+                service, css::uno::UNO_QUERY_THROW);
+        }
+        j = externalServices_.insert(
+            ExternalServices::value_type(name, propset)).first;
     }
     css::beans::Optional< css::uno::Any > value;
-    if (service.is()) {
+    if (j->second.is()) {
         try {
-            if (!((css::uno::Reference< css::beans::XPropertySet >(
-                       service, css::uno::UNO_QUERY_THROW)->
-                   getPropertyValue(descriptor.copy(i + 1))) >>=
+            if (!(j->second->getPropertyValue(descriptor.copy(i + 1)) >>=
                   value))
             {
                 throw css::uno::RuntimeException(
@@ -345,7 +351,6 @@ Components::Components(
                     ":UNO_SHARED_PACKAGES_CACHE}/registry/"
                     "com.sun.star.comp.deployment.configuration."
                     "PackageRegistryBackend/configmgrrc"))));
-    parseSystemLayer();
     parseXcsXcuLayer( //TODO: migrate
         11,
         expand(

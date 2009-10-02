@@ -69,7 +69,7 @@ bool PropertyNode::isNillable() const {
     return nillable_;
 }
 
-css::uno::Any PropertyNode::getValue(Components const & components) {
+css::uno::Any PropertyNode::getValue(Components & components) {
     if (externalDescriptor_.getLength() != 0) {
         css::beans::Optional< css::uno::Any > val(
             components.getExternalValue(externalDescriptor_));

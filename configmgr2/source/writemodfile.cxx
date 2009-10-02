@@ -342,7 +342,7 @@ void writeValue(oslFileHandle handle, Type type, css::uno::Any const & value) {
 }
 
 void writeNode(
-    Components const & components, oslFileHandle handle,
+    Components & components, oslFileHandle handle,
     rtl::Reference< Node > const & parent, rtl::OUString const & name,
     rtl::Reference< Node > const & node)
 {
@@ -441,7 +441,7 @@ void writeNode(
 }
 
 void writeModifications(
-    Components const & components, oslFileHandle handle,
+    Components & components, oslFileHandle handle,
     rtl::OUString const & grandparentPathRepresentation,
     rtl::OUString const & parentName, rtl::Reference< Node > const & parent,
     rtl::OUString const & nodeName, rtl::Reference< Node > const & node,
@@ -543,7 +543,7 @@ void writeModifications(
 }
 
 void writeModFile(
-    Components const & components, rtl::OUString const & url, Data const & data)
+    Components & components, rtl::OUString const & url, Data const & data)
 {
     sal_Int32 i = url.lastIndexOf('/');
     OSL_ASSERT(i != -1);

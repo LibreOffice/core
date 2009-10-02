@@ -56,7 +56,7 @@ public:
 
     bool isNillable() const;
 
-    com::sun::star::uno::Any getValue(Components const & components);
+    com::sun::star::uno::Any getValue(Components & components);
 
     void setValue(int layer, com::sun::star::uno::Any const & value);
 

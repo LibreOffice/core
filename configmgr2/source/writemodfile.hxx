@@ -40,8 +40,7 @@ class Components;
 struct Data;
 
 void writeModFile(
-    Components const & components, rtl::OUString const & url,
-    Data const & data);
+    Components & components, rtl::OUString const & url, Data const & data);
 
 }
 
