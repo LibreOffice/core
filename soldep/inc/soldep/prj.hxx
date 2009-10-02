@@ -418,6 +418,8 @@ public:
     void            ReplaceFileEntry( StarFileList *pStarFiles, StarFile* pFile );
     void            UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bRead = FALSE,
                         BOOL bLocal = FALSE, const char *pSourceRoot = NULL  );
+    void            FullReload( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bRead = FALSE,
+                        BOOL bLocal = FALSE, const char *pSourceRoot = NULL  );
     void            GenerateFileLoadList( SolarFileList *pSolarFiles );
     BOOL            CheckFileLoadList(SolarFileList *pSolarFiles);
 

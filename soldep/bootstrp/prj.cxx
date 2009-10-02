@@ -1230,6 +1230,12 @@ void Star::UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersi
                                     aEntry += DirEntry( ssAddPath );
                                 }
                             }
+                            sPath = rVersion;
+                            sPath += "/settings/SHORTPATH";
+                            GenericInformation *pShortPath = pStandLst->GetInfo( sPath, TRUE );
+                            BOOL bShortPath = FALSE;
+                            if (pShortPath && (pShortPath->GetValue() == "_TRUE"))
+                                bShortPath = TRUE;
                             sSourceRoot = aEntry.GetFull();
                             GenericInformationList *pProjects = pProjectsKey->GetSubList();
                             if ( pProjects ) {
@@ -1243,7 +1249,11 @@ void Star::UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersi
                                     GenericInformation * pDir = pProject->GetSubInfo (aDirStr);
                                     if (pDir) {
                                         ByteString aDir = pDir->GetValue();
-                                        DirEntry aRootEntry = aEntry.GetPath() + DirEntry(aDir);
+                                        DirEntry aRootEntry;
+                                        if (bShortPath)
+                                            aRootEntry = aEntry + DirEntry(aDir);
+                                        else
+                                            aRootEntry = aEntry.GetPath() + DirEntry(aDir);
                                         sLocalSourceRoot = aRootEntry.GetFull();
                                     }
 
@@ -1274,6 +1284,18 @@ void Star::UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersi
         else
             GenerateFileLoadList( pFileList );
     }
+}
+
+/*****************************************************************************/
+void Star::FullReload( GenericInformationList *pStandLst, ByteString &rVersion,
+    BOOL bRead, BOOL bLocal, const char *pSourceRoot )
+/*****************************************************************************/
+{
+    ClearAvailableDeps();
+    ClearCurrentDeps();
+    ClearLoadedFilesList();
+    RemoveAllPrj();
+    UpdateFileList( pStandLst, rVersion, bRead, bLocal, pSourceRoot );
 }
 
 /*****************************************************************************/
@@ -2379,6 +2401,12 @@ StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, GenericInformationList *
                                     aEntry += DirEntry( ssAddPath );
                                 }
                             }
+                            sPath = rVersion;
+                            sPath += "/settings/SHORTPATH";
+                            GenericInformation *pShortPath = pStandLst->GetInfo( sPath, TRUE );
+                            BOOL bShortPath = FALSE;
+                            if (pShortPath && (pShortPath->GetValue() == "_TRUE"))
+                                bShortPath = TRUE;
                             sSourceRoot = aEntry.GetFull();
                             GenericInformationList *pProjects = pProjectsKey->GetSubList();
                             if ( pProjects ) {
@@ -2396,7 +2424,11 @@ StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, GenericInformationList *
                                     GenericInformation * pDir = pProject->GetSubInfo (aDirStr);
                                     if (pDir) {
                                         ByteString aDir = pDir->GetValue();
-                                        aPrjEntry = aEntry.GetPath() + DirEntry(aDir);
+                                        if (bShortPath)
+                                            aPrjEntry = aEntry;
+                                        else
+                                            aPrjEntry = aEntry.GetPath();
+                                        aPrjEntry += DirEntry(aDir);
                                     }
 
                                     aPrjEntry += DirEntry( ssProject );
