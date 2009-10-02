@@ -32,6 +32,7 @@
 #include "precompiled_chart2.hxx"
 
 #include "DrawCommandDispatch.hxx"
+#include "DrawCommandDispatch.hrc"
 #include "ChartController.hxx"
 #include "DrawViewWrapper.hxx"
 #include "chartview/DrawModelWrapper.hxx"
@@ -39,10 +40,16 @@
 
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svxids.hrc>
 #include <svx/unoapi.hxx>
+#include <svx/xlnedit.hxx>
+#include <svx/xlnedwit.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xtable.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 #include <boost/bind.hpp>
@@ -98,6 +105,65 @@ void DrawCommandDispatch::initialize()
     FeatureCommandDispatchBase::initialize();
 }
 
+::basegfx::B2DPolyPolygon getPolygon( sal_uInt16 nResId, SdrModel& rModel )
+{
+    ::basegfx::B2DPolyPolygon aReturn;
+    XLineEndList* pLineEndList = rModel.GetLineEndList();
+    if ( pLineEndList )
+    {
+        String aName( SVX_RES( nResId ) );
+        long nCount = pLineEndList->Count();
+        for ( long nIndex = 0; nIndex < nCount; ++nIndex )
+        {
+            XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nIndex );
+            if ( pEntry->GetName() == aName )
+            {
+                aReturn = pEntry->GetLineEnd();
+                break;
+            }
+        }
+    }
+    return aReturn;
+}
+
+void DrawCommandDispatch::setLineEnds( SfxItemSet& rAttr )
+{
+    if ( m_nFeatureId == COMMAND_ID_LINE_ARROW_END && m_pChartController )
+    {
+        DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
+        DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
+        if ( pDrawModelWrapper && pDrawViewWrapper )
+        {
+            ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, pDrawModelWrapper->getSdrModel() ) );
+            if ( !aArrow.count() )
+            {
+                ::basegfx::B2DPolygon aNewArrow;
+                aNewArrow.append( ::basegfx::B2DPoint( 10.0, 0.0 ) );
+                aNewArrow.append( ::basegfx::B2DPoint( 0.0, 30.0) );
+                aNewArrow.append( ::basegfx::B2DPoint( 20.0, 30.0 ) );
+                aNewArrow.setClosed( true );
+                aArrow.append( aNewArrow );
+            }
+
+            SfxItemSet aSet( pDrawViewWrapper->GetModel()->GetItemPool() );
+            pDrawViewWrapper->GetAttributes( aSet );
+
+            long nWidth = 300; // (1/100th mm)
+            if ( aSet.GetItemState( XATTR_LINEWIDTH ) != SFX_ITEM_DONTCARE )
+            {
+                long nValue = ( ( const XLineWidthItem& ) aSet.Get( XATTR_LINEWIDTH ) ).GetValue();
+                if ( nValue > 0 )
+                {
+                    nWidth = nValue * 3;
+                }
+            }
+
+            rAttr.Put( XLineEndItem( SVX_RESSTR( RID_SVXSTR_ARROW ), aArrow ) );
+            rAttr.Put( XLineEndWidthItem( nWidth ) );
+        }
+    }
+}
+
 // WeakComponentImplHelperBase
 void DrawCommandDispatch::disposing()
 {
@@ -120,6 +186,7 @@ FeatureState DrawCommandDispatch::getState( const ::rtl::OUString& rCommand )
     {
         case SID_OBJECT_SELECT:
         case SID_DRAW_LINE:
+        case COMMAND_ID_LINE_ARROW_END:
         case SID_DRAW_RECT:
         case SID_DRAW_ELLIPSE:
         case SID_DRAW_TEXT:
@@ -147,6 +214,7 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
     SdrObjKind eKind = OBJ_NONE;
     bool bCreate = false;
     sal_uInt16 nFeatureId = m_aSupportedFeatures[ rCommand ].nFeatureId;
+    m_nFeatureId = nFeatureId;
 
     switch ( nFeatureId )
     {
@@ -157,6 +225,7 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
             }
             break;
         case SID_DRAW_LINE:
+        case COMMAND_ID_LINE_ARROW_END:
             {
                 eDrawMode = CHARTDRAW_INSERT;
                 eKind = OBJ_LINE;
@@ -236,11 +305,12 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
 
 void DrawCommandDispatch::describeSupportedFeatures()
 {
-    implDescribeSupportedFeature( ".uno:SelectObject",  SID_OBJECT_SELECT,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Line",          SID_DRAW_LINE,      CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Rect",          SID_DRAW_RECT,      CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Ellipse",       SID_DRAW_ELLIPSE,   CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:DrawText",      SID_DRAW_TEXT,      CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SelectObject",  SID_OBJECT_SELECT,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Line",          SID_DRAW_LINE,              CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:LineArrowEnd",  COMMAND_ID_LINE_ARROW_END,  CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Rect",          SID_DRAW_RECT,              CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Ellipse",       SID_DRAW_ELLIPSE,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DrawText",      SID_DRAW_TEXT,              CommandGroup::INSERT );
 }
 
 void DrawCommandDispatch::setInsertObj( USHORT eObj, const ::rtl::OUString& rShapeType )
@@ -283,6 +353,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                 switch ( nID )
                 {
                     case SID_DRAW_LINE:
+                    case COMMAND_ID_LINE_ARROW_END:
                         {
                             if ( pObj->ISA( SdrPathObj ) )
                             {
@@ -294,6 +365,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                                 aPoly.append( basegfx::B2DPoint( aEnd.X(), nYMiddle ) );
                                 ( dynamic_cast< SdrPathObj* >( pObj ) )->SetPathPoly( basegfx::B2DPolyPolygon( aPoly ) );
                                 SfxItemSet aSet( pDrawModelWrapper->GetItemPool() );
+                                setLineEnds( aSet );
                                 pObj->SetMergedItemSet( aSet );
                             }
                         }

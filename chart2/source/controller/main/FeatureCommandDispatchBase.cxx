@@ -43,6 +43,7 @@ namespace chart
 
 FeatureCommandDispatchBase::FeatureCommandDispatchBase( const Reference< uno::XComponentContext >& rxContext )
     :CommandDispatch( rxContext )
+    ,m_nFeatureId( 0 )
 {
 }
 

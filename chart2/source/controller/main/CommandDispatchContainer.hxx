@@ -125,6 +125,7 @@ public:
             const ::com::sun::star::util::URL & rURL );
 
     void setDrawCommandDispatch( DrawCommandDispatch* pDispatch );
+    DrawCommandDispatch* getDrawCommandDispatch() { return m_pDrawCommandDispatch; }
     void setShapeController( ShapeController* pController );
     ShapeController* getShapeController() { return m_pShapeController; }
 

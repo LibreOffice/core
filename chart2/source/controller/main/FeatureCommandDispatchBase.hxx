@@ -106,6 +106,8 @@ protected:
 
     mutable SupportedFeatures m_aSupportedFeatures;
 
+    sal_uInt16 m_nFeatureId;
+
 private:
     void fillSupportedFeatures();
 };

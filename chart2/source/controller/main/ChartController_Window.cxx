@@ -52,6 +52,7 @@
 #include "RelativePositionHelper.hxx"
 #include "chartview/DrawModelWrapper.hxx"
 #include "MenuResIds.hrc"
+#include "DrawCommandDispatch.hxx"
 
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
@@ -582,6 +583,14 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
             if ( !pDrawViewWrapper->IsAction() )
             {
                 pDrawViewWrapper->BegCreateObj( aMPos);
+                SdrObject* pObj = pDrawViewWrapper->GetCreateObj();
+                DrawCommandDispatch* pDrawCommandDispatch = m_aDispatchContainer.getDrawCommandDispatch();
+                if ( pObj && m_pDrawModelWrapper && pDrawCommandDispatch )
+                {
+                    SfxItemSet aSet( m_pDrawModelWrapper->GetItemPool() );
+                    pDrawCommandDispatch->setLineEnds( aSet );
+                    pObj->SetMergedItemSet( aSet );
+                }
             }
             impl_SetMousePointer( rMEvt );
             return;

@@ -4,6 +4,7 @@
  <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:helpid="10128"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:helpid="10102"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineArrowEnd" toolbar:helpid="27173"/>
  <toolbar:toolbaritem xlink:href=".uno:Rect" toolbar:helpid="10104"/>
  <toolbar:toolbaritem xlink:href=".uno:Ellipse" toolbar:helpid="10110"/>
  <toolbar:toolbaritem xlink:href=".uno:Polygon_Unfilled" toolbar:visible="false" toolbar:helpid="10395"/>

@@ -34,6 +34,7 @@
 
 #include <tools/solar.h>
 
+class SfxItemSet;
 class SdrObject;
 
 //.............................................................................
@@ -54,6 +55,8 @@ public:
 
     // late initialisation, especially for adding as listener
     virtual void initialize();
+
+    void setLineEnds( SfxItemSet& rAttr );
 
 protected:
     // WeakComponentImplHelperBase
