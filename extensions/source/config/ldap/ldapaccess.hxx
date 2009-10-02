@@ -31,6 +31,10 @@
 #ifndef EXTENSIONS_CONFIG_LDAP_LDAPACCESS_HXX_
 #define EXTENSIONS_CONFIG_LDAP_LDAPACCESS_HXX_
 
+#include "sal/config.h"
+
+#include <map>
+
 #include "wrapldapinclude.hxx"
 #include <com/sun/star/ldap/LdapGenericException.hpp>
 
@@ -57,6 +61,8 @@ typedef LDAP_API(LDAP *) (LDAP_CALL *t_ldap_init)( const char *defhost, int defp
 typedef LDAP_API(int) (LDAP_CALL *t_ldap_msgfree)( LDAPMessage *lm );
 typedef LDAP_API(char *) (LDAP_CALL *t_ldap_get_dn)( LDAP *ld, LDAPMessage *entry );
 typedef LDAP_API(LDAPMessage *) (LDAP_CALL *t_ldap_first_entry)( LDAP *ld,  LDAPMessage *chain );
+typedef LDAP_API(char *) (LDAP_CALL *t_ldap_first_attribute)( LDAP *ld, LDAPMessage *entry, void **ptr );
+typedef LDAP_API(char *) (LDAP_CALL *t_ldap_next_attribute)( LDAP *ld, LDAPMessage *entry, void *ptr );
 typedef LDAP_API(int) (LDAP_CALL *t_ldap_search_s)( LDAP *ld, const char *base, int scope,  const char *filter, char **attrs, int attrsonly, LDAPMessage **res );
 typedef LDAP_API(void) (LDAP_CALL *t_ldap_value_free)( char **vals );
 typedef LDAP_API(char **) (LDAP_CALL *t_ldap_get_values)( LDAP *ld, LDAPMessage *entry, const char *target );
@@ -79,9 +85,9 @@ struct LdapDefinition
     rtl::OString mUserObjectClass;
     /** User Entity Unique Attribute */
     rtl::OString mUserUniqueAttr;
-    /** Mapping File */
-    rtl::OString mMapping;
  } ;
+
+typedef std::map< rtl::OUString, rtl::OUString > LdapData; // key/value pairs
 
 /** Class encapulating all LDAP functionality */
 class LdapConnection
@@ -98,36 +104,19 @@ public:
         throw (ldap::LdapConnectionException,
                 ldap::LdapGenericException);
 
-    /** query connection status */
-    bool isConnected() const { return isValid(); }
-
     /**
         Gets LdapUserProfile from LDAP repository for specified user
         @param aUser    name of logged on user
         @param aUserProfileMap  Map containing LDAP->00o mapping
-        @param aUserProfile     struct for holding OOo values
+       @param aUserProfile     struct for holding OOo values
 
          @throws com::sun::star::ldap::LdapGenericException
                   if an LDAP error occurs.
     */
-    void getUserProfile(const rtl::OUString& aUser,
-                        const LdapUserProfileMap& aUserProfileMap,
-                        LdapUserProfile& aUserProfile)
+    void getUserProfile(const rtl::OUString& aUser, LdapData * data)
          throw (lang::IllegalArgumentException,
                  ldap::LdapConnectionException,
                  ldap::LdapGenericException);
-    /**
-          Retrieves a single attribute from a single entry.
-          @param aDn            entry DN
-          @param aAttribute     attribute name
-
-          @throws com::sun::star::ldap::LdapGenericException
-                  if an LDAP error occurs.
-     */
-     rtl::OString getSingleAttribute(const rtl::OString& aDn,
-                                     const rtl::OString& aAttribute)
-        throw (ldap::LdapConnectionException,
-                ldap::LdapGenericException);
 
     /** finds DN of user
         @return  DN of User
@@ -169,6 +158,8 @@ private:
     static t_ldap_msgfree           s_p_msgfree;
     static t_ldap_get_dn            s_p_get_dn;
     static t_ldap_first_entry       s_p_first_entry;
+    static t_ldap_first_attribute   s_p_first_attribute;
+    static t_ldap_next_attribute    s_p_next_attribute;
     static t_ldap_search_s          s_p_search_s;
 
     static t_ldap_memfree           s_p_memfree;
