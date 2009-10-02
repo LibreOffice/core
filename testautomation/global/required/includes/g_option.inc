@@ -700,55 +700,62 @@ testcase tToolsOptionsImprovementProgram
     printlog( "Update test for the tools/options dialog of the OOo Improvement Program" )
 
     dim cLogFile as string
-    cLogFile = gOfficePath & "user\temp\feedback\Current.csv"
-    cLogFile = convertpath( cLogFile )
+        cLogFile = gOfficePath & "user\temp\feedback\Current.csv"
+        cLogFile = convertpath( cLogFile )
 
     if ( hDeleteFile( cLogFile ) ) then
+    
         printlog( "Test environment is clean, no logfile present (anymore)" )
-    endif
 
-    ToolsOptions
-    hToolsOptions( "StarOffice", "Improvement" )
-    printlog( "Improvement Program tabpage" )
+        ToolsOptions
+        hToolsOptions( "StarOffice", "Improvement" )
+        printlog( "Improvement Program tabpage" )
 
-    call DialogTest( TabOOoImprovement )
+        call DialogTest( TabOOoImprovement )
 
-    ParticipateNo.check()
-    ParticipateYes.check()
+        ParticipateNo.check()
+        ParticipateYes.check()
 
-    if ( ShowData.isEnabled() ) then
+        if ( ShowData.isEnabled() ) then
 
-        ShowData.click()
+            ShowData.click()
 
-        Kontext "TextImport"
-        if ( TextImport.exists( 1 ) ) then
-            printlog( "Text import dialog" )
+            Kontext "FilterAuswahl"
+            if ( FilterAuswahl.exists( 1 ) ) then
+                printlog( "Text import dialog/FilterAuswahl" )
 
-            call DialogTest( TextImport )
-            TextImport.cancel()
+                call DialogTest( FilterAuswahl )
+                FilterAuswahl.cancel()
+            else
+                qaerrorlog( "#i97340# Show Data button enabled but no logged data found" )
+            endif
+
+            Kontext "Active"
+            if ( Active.exists( 1 ) ) then
+                printlog( "Messagebox: " & Active.getText() )
+                Active.ok()
+            else
+                warnlog( "No warning for missing file: " & cLogFile )
+            endif
+
+            Kontext "Active"
+            if ( Active.exists( 1 ) ) then
+                warnlog( "#97342# Second message for missing " & cLogFile )
+                Active.ok()
+            endif
         else
-            qaerrorlog( "#i97340# Show Data button enabled but no logged data found" )
+            printlog( "Show data is disabled" )
         endif
 
-        Kontext "Active"
-        if ( Active.exists( 1 ) ) then
-            printlog( "Messagebox: " & Active.getText() )
-            Active.ok()
-        else
-            warnlog( "No warning for missing file: " & cLogFile )
-        endif
-
-        Kontext "Active"
-        if ( Active.exists( 1 ) ) then
-            warnlog( "#97342# Second message for missing " & cLogFile )
-            Active.ok()
-        endif
+        Kontext "OptionenDlg"
+        OptionenDlg.cancel()
+        
     else
-        printlog( "Show data is disabled" )
+        ' hDeleteFile() returns FALSE if the file is still present for some weird reason
+        ' We should warn about this because the test breaks at a later point then.
+        warnlog( "Logfile present, it could not be deleted. Please check path and accessrights" )
+        printlog( "Path: " & cLogFile )
     endif
-
-    Kontext "OptionenDlg"
-    OptionenDlg.cancel()
 
 endcase
 
