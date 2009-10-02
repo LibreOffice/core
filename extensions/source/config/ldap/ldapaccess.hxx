@@ -129,8 +129,6 @@ public:
     void loadModule();
 
     static t_ldap_err2string        s_p_err2string;
-    static t_ldap_value_free        s_p_value_free;
-    static t_ldap_get_values        s_p_get_values;
 private:
 
     void initConnection()
@@ -151,6 +149,8 @@ private:
     LdapDefinition mLdapDefinition;
 
     static oslModule                s_Ldap_Module;
+    static t_ldap_value_free        s_p_value_free;
+    static t_ldap_get_values        s_p_get_values;
     static t_ldap_unbind_s          s_p_unbind_s;
     static t_ldap_simple_bind_s     s_p_simple_bind_s;
     static t_ldap_set_option        s_p_set_option;

@@ -222,6 +222,7 @@ void LdapConnection::initConnection()
                 LdapData::value_type(
                     rtl::OStringToOUString(attr, RTL_TEXTENCODING_ASCII_US),
                     rtl::OStringToOUString(*values, RTL_TEXTENCODING_UTF8)));
+            (*s_p_value_free)(values);
         }
         attr = (*s_p_next_attribute)(mConnection, result.msg, ptr);
     }
