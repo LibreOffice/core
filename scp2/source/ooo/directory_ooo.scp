@@ -727,26 +727,6 @@ Directory gid_Dir_Share_Registry
     DosName = "registry";
 End
 
-Directory gid_Dir_Share_Registry_Ldap
-    ParentID = gid_Dir_Share_Registry;
-    HostName = "ldap";
-End
-
-Directory gid_Dir_Share_Registry_Data
-    ParentID = gid_Dir_Share_Registry;
-    HostName = "data";
-End
-
-Directory gid_Dir_Share_Registry_Data_Org
-    ParentID = gid_Dir_Share_Registry_Data;
-    HostName = "org";
-End
-
-Directory gid_Dir_Share_Registry_Data_Org_Openoffice
-    ParentID = gid_Dir_Share_Registry_Data_Org;
-    HostName = "openoffice";
-End
-
 Directory gid_Dir_Share_Registry_Res
     ParentID = gid_Dir_Share_Registry;
     HostName = "res";

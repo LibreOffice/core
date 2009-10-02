@@ -1176,25 +1176,18 @@ File gid_File_Share_Registry_Main_Xcd
     Name = "main.xcd";
 End
 
-File gid_File_Oo_Ldap_Xcu
+File gid_File_Oo_Ldap_Xcd_Sample
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice;
-    Name = "/registry/data/org/openoffice/LDAP.xcu.sample";
+    Dir = gid_Dir_Share_Registry;
+    Name = "oo-ldap.xcd.sample";
 End
 
-File gid_File_Oo_Ldap_Attr_Map
+File gid_File_Oo_Ad_Ldap_Xcd_Sample
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Ldap;
-    Name = "/registry/schema/oo-ldap-attr.map";
-End
-
-File gid_File_Oo_AD_Ldap_Attr_Map
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Ldap;
-    Name = "/registry/schema/oo-ad-ldap-attr.map";
+    Dir = gid_Dir_Share_Registry;
+    Name = "oo-ad-ldap.xcd.sample";
 End
 
 File gid_File_Rdb_Offapi
