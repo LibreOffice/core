@@ -15697,7 +15697,6 @@
         </list>
       </define>
       <define name="CT_HdrFtrRef">
-        <ref name="CT_Rel"/>
         <attribute name="type">
           <ref name="ST_HdrFtr"/>
           <xs:documentation>Header or Footer Type</xs:documentation>
