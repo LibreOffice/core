@@ -22499,6 +22499,9 @@
       <attribute name="id" tokenid="ooxml:CT_FtnEdnRef_id" action="setXNoteId"/>
       <action name="end" action="handleXNotes"/>
     </resource>
+    <resource name="CT_FtnEdnSepRef" resource="Properties">
+      <attribute name="id" tokenid="ooxml:CT_FtnEdnSepRef_id"/>
+    </resource>
     <resource name="CT_FtnEdn" resource="XNote">
       <attribute name="type" tokenid="ooxml:CT_FtnEdn_type" action="checkXNoteType"/>
       <attribute name="id" tokenid="ooxml:CT_FtnEdn_id" action="checkId"/>
