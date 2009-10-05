@@ -158,6 +158,9 @@ for a rng:define
           <xsl:value-of select="@resource"/>
         </xsl:for-each>
       </xsl:for-each>
+      <xsl:for-each select=".//rng:text">
+        <xsl:text>String</xsl:text>
+      </xsl:for-each>
     </xsl:variable>
 
     <xsl:variable name="refdefine1">
@@ -179,8 +182,9 @@ for a rng:define
       </xsl:choose>
     </xsl:variable>
 
-    <xsl:if test="string-length($resource) > 0">
-      <xsl:text>
+    <xsl:choose>
+      <xsl:when test="string-length($resource) > 0">
+        <xsl:text>
         (*pMap)[</xsl:text>
         <xsl:call-template name="fasttoken"/>
         <xsl:text>] = AttributeInfo(RT_</xsl:text>
@@ -188,7 +192,13 @@ for a rng:define
         <xsl:text>, </xsl:text>
         <xsl:value-of select="$refdefine"/>
         <xsl:text>);</xsl:text>
-    </xsl:if>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>
+      // empty resource: </xsl:text>
+      <xsl:call-template name="fasttoken"/>
+      </xsl:otherwise>
+    </xsl:choose>
     
   </xsl:for-each>
   
