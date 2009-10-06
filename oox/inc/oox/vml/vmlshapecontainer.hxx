@@ -73,12 +73,22 @@ public:
 
     /** Returns true, if this contaikner does not contain any shapes. */
     inline bool         empty() const { return maShapes.empty(); }
+
     /** Returns the shape template with the passed identifier.
         @param bDeep  True = searches in all group shapes too. */
     const ShapeType*    getShapeTypeById( const ::rtl::OUString& rShapeId, bool bDeep ) const;
     /** Returns the shape with the passed identifier.
         @param bDeep  True = searches in all group shapes too. */
     const ShapeBase*    getShapeById( const ::rtl::OUString& rShapeId, bool bDeep ) const;
+
+    /** Searches for a shape type by using the passed functor that takes a
+        constant reference of a ShapeType object. */
+    template< typename Functor >
+    const ShapeType*    findShapeType( const Functor& rFunctor ) const;
+    /** Searches for a shape by using the passed functor that takes a constant
+        reference of a ShapeBase object. */
+    template< typename Functor >
+    const ShapeBase*    findShape( const Functor& rFunctor ) const;
 
     /** Returns the first shape in the collection (Word only). */
     const ShapeBase*    getFirstShape() const;
@@ -109,6 +119,18 @@ ShapeT& ShapeContainer::createShape()
     ::boost::shared_ptr< ShapeT > xShape( new ShapeT( mrDrawing ) );
     maShapes.push_back( xShape );
     return *xShape;
+}
+
+template< typename Functor >
+const ShapeType* ShapeContainer::findShapeType( const Functor& rFunctor ) const
+{
+    return maTypes.findIf( rFunctor ).get();
+}
+
+template< typename Functor >
+const ShapeBase* ShapeContainer::findShape( const Functor& rFunctor ) const
+{
+    return maShapes.findIf( rFunctor ).get();
 }
 
 // ============================================================================

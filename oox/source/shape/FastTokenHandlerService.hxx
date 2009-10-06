@@ -27,17 +27,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef OOX_SHAPE_FAST_TOKEN_HANDLER_SERVICE_HXX
-#define OOX_SHAPE_FAST_TOKEN_HANDLER_SERVICE_HXX
 
-#include <oox/core/fasttokenhandler.hxx>
+#ifndef OOX_SHAPE_FASTTOKENHANDLERSERVICE_HXX
+#define OOX_SHAPE_FASTTOKENHANDLERSERVICE_HXX
 
-#include "sal/config.h"
-#include "cppuhelper/factory.hxx"
-#include "cppuhelper/implementationentry.hxx"
-#include "cppuhelper/implbase2.hxx"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/xml/sax/XFastTokenHandler.hpp"
+#include <sal/config.h>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include "oox/core/fasttokenhandler.hxx"
 
 namespace css = ::com::sun::star;
 
@@ -70,7 +69,7 @@ private:
     virtual ~FastTokenHandlerService() {}
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    FastTokenHandler mFastTokenHandler;
+    ::oox::core::FastTokenHandler mFastTokenHandler;
 };
 
 ::rtl::OUString SAL_CALL FastTokenHandlerService_getImplementationName();

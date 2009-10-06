@@ -53,11 +53,6 @@ const ::oox::drawingml::Theme* ShapeFilterBase::getCurrentTheme() const
     return 0;
 }
 
-sal_Int32 ShapeFilterBase::getSchemeClr(sal_Int32 /*nColorSchemeToken*/ ) const
-{
-    return 0;
-}
-
 ::oox::vml::Drawing* ShapeFilterBase::getVmlDrawing()
 {
     return 0;

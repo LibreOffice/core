@@ -91,7 +91,7 @@ public:
     template< typename FunctorType >
     inline void         forEach( const FunctorType& rFunctor ) const
                         {
-                            ::std::for_each( this->begin(), this->end(), Functor< FunctorType >( rFunctor ) );
+                            ::std::for_each( this->begin(), this->end(), ForEachFunctor< FunctorType >( rFunctor ) );
                         }
 
     /** Calls the passed member function of ObjType on every contained object. */
@@ -115,13 +115,30 @@ public:
                             forEach( ::boost::bind( pFunc, _1, aParam1, aParam2 ) );
                         }
 
+    /** Searches for an element by using the passed functor that takes a
+        constant reference of the object type (const ObjType&). */
+    template< typename FunctorType >
+    inline value_type   findIf( const FunctorType& rFunctor ) const
+                        {
+                            typename container_type::const_iterator aIt = ::std::find_if( this->begin(), this->end(), FindFunctor< FunctorType >( rFunctor ) );
+                            return (aIt == this->end()) ? value_type() : *aIt;
+                        }
+
 private:
     template< typename FunctorType >
-    struct Functor
+    struct ForEachFunctor
     {
         const FunctorType&  mrFunctor;
-        inline explicit     Functor( const FunctorType& rFunctor ) : mrFunctor( rFunctor ) {}
-        inline void         operator()( const value_type& rValue ) const { mrFunctor( *rValue ); }
+        inline explicit     ForEachFunctor( const FunctorType& rFunctor ) : mrFunctor( rFunctor ) {}
+        inline void         operator()( const value_type& rxValue ) const { if( rxValue.get() ) mrFunctor( *rxValue ); }
+    };
+
+    template< typename FunctorType >
+    struct FindFunctor
+    {
+        const FunctorType&  mrFunctor;
+        inline explicit     FindFunctor( const FunctorType& rFunctor ) : mrFunctor( rFunctor ) {}
+        inline bool         operator()( const value_type& rxValue ) const { return rxValue.get() && mrFunctor( *rxValue ); }
     };
 
     inline const value_type* getRef( sal_Int32 nIndex ) const
@@ -170,7 +187,7 @@ public:
     template< typename FunctorType >
     inline void         forEach( const FunctorType& rFunctor ) const
                         {
-                            ::std::for_each( this->begin(), this->end(), Functor< FunctorType >( rFunctor ) );
+                            ::std::for_each( this->begin(), this->end(), ForEachFunctor< FunctorType >( rFunctor ) );
                         }
 
     /** Calls the passed member function of ObjType on every contained object. */
@@ -196,11 +213,11 @@ public:
 
 private:
     template< typename FunctorType >
-    struct Functor
+    struct ForEachFunctor
     {
         const FunctorType&  mrFunctor;
-        inline explicit     Functor( const FunctorType& rFunctor ) : mrFunctor( rFunctor ) {}
-        inline void         operator()( const value_type& rValue ) const { mrFunctor( *rValue.second ); }
+        inline explicit     ForEachFunctor( const FunctorType& rFunctor ) : mrFunctor( rFunctor ) {}
+        inline void         operator()( const value_type& rValue ) const { if( rValue.second.get() ) mrFunctor( *rValue.second ); }
     };
 
     inline const mapped_type* getRef( key_type nKey ) const

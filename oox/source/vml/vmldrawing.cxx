@@ -147,6 +147,11 @@ const ControlInfo* Drawing::getControlInfo( const OUString& rShapeId ) const
     return ContainerHelper::getMapElement( maControls, rShapeId );
 }
 
+bool Drawing::isShapeSupported( const ShapeBase& /*rShape*/ ) const
+{
+    return true;
+}
+
 bool Drawing::convertShapeClientAnchor( Rectangle& /*orShapeRect*/, const OUString& /*rShapeAnchor*/ ) const
 {
     return false;
