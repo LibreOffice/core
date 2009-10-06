@@ -47,9 +47,9 @@
 
 #include <svtools/style.hxx>
 #include <svtools/itempool.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <svtools/syslocale.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/viewfrm.hxx>

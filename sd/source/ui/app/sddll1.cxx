@@ -32,7 +32,7 @@
 #include "precompiled_sd.hxx"
 
 
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include "sddll.hxx"
 #include "diactrl.hxx"
 #include "tbx_ww.hxx"

@@ -55,7 +55,7 @@
 #include <svx/fmshell.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 
 #include "app.hrc"
 #include "strings.hrc"

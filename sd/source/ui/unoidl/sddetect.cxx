@@ -83,7 +83,7 @@
 #include <svx/impgrf.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <sot/storage.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <com/sun/star/util/XArchiver.hpp>
 #include <comphelper/processfactory.hxx>
 

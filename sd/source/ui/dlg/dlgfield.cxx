@@ -45,7 +45,7 @@
 #include <sfx2/docfile.hxx>
 #include <svtools/itemset.hxx>
 #include <svx/langitem.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 
 #include "strings.hrc"
 #include "dlgfield.hrc"

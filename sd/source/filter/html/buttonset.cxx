@@ -42,7 +42,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 #include <boost/shared_ptr.hpp>
 

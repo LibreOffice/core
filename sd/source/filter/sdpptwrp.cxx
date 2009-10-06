@@ -37,7 +37,7 @@
 #include <svx/msoleexp.hxx>
 #include <svx/svxmsbas.hxx>
 #include <svx/svxerr.hxx>
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 
 #include "sdpptwrp.hxx"
 #include "ppt/pptin.hxx"

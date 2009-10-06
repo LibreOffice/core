@@ -50,7 +50,7 @@
 #include <svtools/insdlg.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/globalnameitem.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svx/pfiledlg.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/dialogs.hrc>

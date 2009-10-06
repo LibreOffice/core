@@ -49,7 +49,7 @@
 #include <svx/flditem.hxx>
 #include <svx/editstat.hxx>
 #include "optsitem.hxx"
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include "Outliner.hxx"

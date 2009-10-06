@@ -67,7 +67,7 @@
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 // #80365# include necessary for XML progress bar at load time
 #include <svtools/itemset.hxx>

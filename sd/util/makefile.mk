@@ -171,6 +171,7 @@ SHL2STDLIBS= \
             $(VCLLIB) \
                         $(SOTLIB) \
             $(TOOLSLIB) \
+              $(UNOTOOLSLIB)      \
             $(UCBHELPERLIB) \
             $(CPPUHELPERLIB) \
             $(CPPULIB) \

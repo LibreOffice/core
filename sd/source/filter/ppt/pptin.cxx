@@ -88,11 +88,11 @@
 #include "../../ui/inc/FrameView.hxx"
 #include "../../ui/inc/optsitem.hxx"
 
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <sfx2/progress.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <svx/editstat.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/docfac.hxx>
 #define MAX_USER_MOVE       2
 

@@ -36,7 +36,7 @@
 #include <svtools/inethist.hxx>
 #include <svtools/poolitem.hxx>
 #include <svtools/flagitem.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>

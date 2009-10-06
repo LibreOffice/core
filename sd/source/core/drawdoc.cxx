@@ -42,7 +42,7 @@
 #include <svx/eeitem.hxx>
 #include <svx/scriptspaceitem.hxx>
 
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 
 #ifndef _OFA_MISCCFG_HXX
 #include <svtools/misccfg.hxx>
@@ -71,16 +71,16 @@
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svx/outlobj.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <comphelper/extract.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
 #ifndef _SVTOOLS_PATHOPTIONS_HXX_
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #endif
-#include <svtools/lingucfg.hxx>
-#include <svtools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
 
 #include "eetext.hxx"
 #include "drawdoc.hxx"

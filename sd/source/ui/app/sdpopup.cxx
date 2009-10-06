@@ -39,7 +39,7 @@
 #include <svtools/zforlist.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 
 #include "strings.hrc"
 #include "sdpopup.hxx"

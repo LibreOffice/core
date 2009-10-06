@@ -40,7 +40,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <tools/fsys.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>

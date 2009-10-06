@@ -51,7 +51,7 @@
 #include <svtools/controldims.hrc>
 #endif
 #include <svx/gallery.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
 #include "DrawViewShell.hxx"

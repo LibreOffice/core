@@ -66,7 +66,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
-#include <svtools/historyoptions.hxx>
+#include <unotools/historyoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <sfx2/filedlghelper.hxx>

@@ -54,7 +54,7 @@
 #include <vcl/waitobj.hxx>
 #include <osl/file.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svx/svdpagv.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <svtools/aeitem.hxx>

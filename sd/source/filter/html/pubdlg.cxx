@@ -60,8 +60,8 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <pres.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 #include "sdresid.hxx"
 #include "sdattr.hxx"

@@ -61,7 +61,7 @@
 #include <svtools/slstitm.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/insdlg.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/languageoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/request.hxx>
