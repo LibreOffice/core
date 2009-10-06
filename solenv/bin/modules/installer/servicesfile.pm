@@ -274,7 +274,7 @@ sub fix_cygwin_path
 {
     my ( $path ) = @_;
 
-    if ( $installer::globals::iswin eq 1 && $ENV{'USE_SHELL'} ne "4nt" && $installer::globals::wrapcmd eq "" )
+    if ( $installer::globals::iswin eq 1 && $installer::globals::wrapcmd eq "" )
     {
     $path = qx{cygpath -m "$path"};
     chomp($path);
@@ -293,7 +293,7 @@ sub get_source_path_cygwin_safe
     my ( $name, $array, $int ) = @_;
 
     my $ret = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$name, $array, $int);
-    if ( $installer::globals::iswin eq 1 && $ENV{'USE_SHELL'} ne "4nt" )
+    if ( $installer::globals::iswin eq 1 )
     {
     if( substr( $$ret, 1,1 ) eq ":" )
     {
@@ -523,7 +523,7 @@ sub prepare_classpath_for_java_registration
         if ( $ENV{'CLASSPATH'} ) { $oldclasspathstring = $ENV{'CLASSPATH'}; }
         else { $oldclasspathstring = "\."; }
         my $classpathstring = $$jarfileref . $local_pathseparator . $oldclasspathstring;
-        if (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" )) {
+        if ( $^O =~ /cygwin/i ) {
             $classpathstring =~ s/\//\\/g;      # guw.pl likes '\' in $PATH.
         }
         $ENV{'CLASSPATH'} = $classpathstring;
@@ -933,12 +933,12 @@ sub create_services_rdb
             # my $servicesdir = installer::systemactions::create_directories($servicesname, $languagestringref);
             my $servicesdir = installer::systemactions::create_directories($uniquedirname, $languagestringref);
 
-            if ( $^O =~ /cygwin/i && $ENV{'USE_SHELL'} eq "4nt" )
-            {      # $servicesdir is used as a parameter for regcomp and has to be DOS style
-                $servicesdir = qx{cygpath -d "$servicesdir"};
-                chomp($servicesdir);
-                $servicesdir =~ s/\\/\//g;
-            }
+#           if ( $^O =~ /cygwin/i )
+#           {      # $servicesdir is used as a parameter for regcomp and has to be DOS style
+#               $servicesdir = qx{cygpath -d "$servicesdir"};
+#               chomp($servicesdir);
+#               $servicesdir =~ s/\\/\//g;
+#           }
 
             push(@installer::globals::removedirs, $servicesdir);
 

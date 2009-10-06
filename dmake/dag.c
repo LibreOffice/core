@@ -369,14 +369,17 @@ int     flags;          /* initial ht_flags */
      /* strip out any \<nl> combinations where \ is the current
       * CONTINUATION char */
      for(p=q; (p=strchr(p,CONTINUATION_CHAR))!=NIL(char); )
-        if( p[1] == '\n' )
-           strcpy( p, p+2 );
+        if( p[1] == '\n' ) {
+           size_t len = strlen(p+2)+1;
+           memmove ( p, p+2, len );
+        }
         else
            p++;
 
      p = DmStrSpn(q ," \t");    /* Strip white space before ... */
      if( p != q ) {
-        strcpy( q, p);
+        size_t len = strlen(p)+1;
+        memmove( q, p, len );
         p = q;
      }
 

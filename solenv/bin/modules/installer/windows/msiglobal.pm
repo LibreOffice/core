@@ -1697,12 +1697,10 @@ sub include_cabs_into_msi
 
     $msifilename = installer::converter::make_path_conform($msifilename);
 
-    if ( $ENV{'USE_SHELL'} ne "4nt" ) {
-        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
-        $idtdirbase =~ s/\//\\\\/g;
-        $msifilename =~ s/\//\\\\/g;
-        $extraslash = "\\";
-    }
+    # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+    $idtdirbase =~ s/\//\\\\/g;
+    $msifilename =~ s/\//\\\\/g;
+    $extraslash = "\\";
 
     my $allcabfiles = installer::systemactions::find_file_with_file_extension("cab", $installdir);
 

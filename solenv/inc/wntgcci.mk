@@ -29,7 +29,7 @@
 #
 #*************************************************************************
 
-# mk file for wntgcci6
+# mk file for Window Intel using GCC
 
 SOLAR_JAVA*=TRUE
 FULL_DESK=TRUE
@@ -81,10 +81,7 @@ CFLAGSNOOPT=-O0
 # Compiler flags for describing the output path
 CFLAGSOUTOBJ=-o
 #plattform hart setzen
-CDEFS+=-DWIN32 -DWINVER=0x500 -D_WIN32_IE=0x500 -D_M_IX86 -DSTLPORT_VERSION=450 -D_NATIVE_WCHAR_T_DEFINED
-.IF  "$(DYNAMIC_CRT)"!=""
-CDEFS+=-D_DLL
-.ENDIF
+CDEFS+=-DWIN32 -DWINVER=0x500 -D_WIN32_IE=0x500 -D_DLL -D_M_IX86 -DSTLPORT_VERSION=450 -D_NATIVE_WCHAR_T_DEFINED
 
 # -Wshadow does not work for C with nested uses of pthread_cleanup_push:
 CFLAGSWARNCC=-Wall -Wextra -Wendif-labels
@@ -120,8 +117,6 @@ MINGWLIBDIR=$(COMPATH)$/lib$/mingw
 .ELSE
 MINGWLIBDIR=$(COMPATH)$/lib
 .ENDIF
-MINGWSSTDOBJ=$(MINGW_CLIB_DIR)$/crtbegin.o
-MINGWSSTDENDOBJ=$(MINGW_CLIB_DIR)$/crtend.o
 LINKFLAGSAPPGUI=-mwindows $(MINGWLIBDIR)$/crt2.o
 LINKFLAGSSHLGUI=--warn-once -mwindows -shared $(MINGWLIBDIR)$/dllcrt2.o
 LINKFLAGSAPPCUI=-mconsole $(MINGWLIBDIR)$/crt2.o
@@ -131,33 +126,19 @@ LINKFLAGSPROF=
 LINKFLAGSDEBUG=-g
 LINKFLAGSOPT=
 
-.IF "$(MINGW_SHARED_GXXLIB)"=="YES" && "$(DYNAMIC_CRT)"!=""
-STDLIBCPP=-lstdc++_s
-.ELSE
 STDLIBCPP=-lstdc++
-.ENDIF
 UWINAPILIB*=$(DYNAMIC) -luwinapi
 
-.IF "$(MINGW_SHARED_GCCLIB)"=="YES" && "$(DYNAMIC_CRT)"!=""
-MINGW_LIBGCC=-lgcc_s -lgcc
-LINKFLAGS+=-shared-libgcc
-.ELSE
-.IF "$(MINGW_GCCLIB_EH)"=="YES"
-MINGW_LIBGCC=-lgcc_eh -lgcc
-.ELSE
-MINGW_LIBGCC=-lgcc
-.ENDIF
-.ENDIF
 STDOBJVCL=$(L)$/salmain.obj
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
-STDLIBGUIMT=-Wl,--start-group CPPRUNTIME $(MINGW_LIBGCC)
-STDLIBCUIMT=-Wl,--start-group CPPRUNTIME $(MINGW_LIBGCC)
-STDSHLGUIMT=-Wl,--start-group CPPRUNTIME $(MINGW_LIBGCC)
-STDSHLCUIMT=-Wl,--start-group CPPRUNTIME $(MINGW_LIBGCC)
-.IF  "$(DYNAMIC_CRT)"!=""
+STDLIBGUIMT=-Wl,--start-group CPPRUNTIME -lgcc
+STDLIBCUIMT=-Wl,--start-group CPPRUNTIME -lgcc
+STDSHLGUIMT=-Wl,--start-group CPPRUNTIME -lgcc
+STDSHLCUIMT=-Wl,--start-group CPPRUNTIME -lgcc
+.IF  "$(MINGW_NODLL)"==""
 STDLIBGUIMT+=-lmingwthrd
 STDLIBCUIMT+=-lmingwthrd
 STDSHLGUIMT+=-lmingwthrd
@@ -169,7 +150,7 @@ STDSHLGUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -l
 STDSHLCUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
 
 LIBSTLPORT=-lstlport_gcc
-LIBSTLPORTST=-lstlport_gcc_static $(STDLIBCPP)
+LIBSTLPORTST=-lstlport_gcc_static
 
 LIBMGR=ar
 LIBFLAGS=-rsu

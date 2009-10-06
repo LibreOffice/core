@@ -355,7 +355,7 @@ elsif ( $platform =~ m/freebsd/ )
 elsif ( $platform =~ m/linux/ ) 
 {
 # General Linux settings:
-      $CVER           = "C300";
+      $CVER           = "C341";
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@'; 
@@ -390,20 +390,13 @@ elsif ( $platform =~ m/linux/ )
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
       }
 
-      if( @GCCVER@ >= 30401 ) {
-         $OUTPATH     = "unxlngi6";
-      	 $CVER        = "C341";
-      }
-      else {
-         $OUTPATH     = "unxlngi4";
-      }
+      $OUTPATH     = "unxlngi6";
    }
    elsif ($platform =~ m/^x86_64/)
    {  print "Setting Linux x86-64 specific values... ";
       $outfile        = "LinuxX86-64Env.Set";
       $CPU            = "X";
       $CPUNAME        = "X86_64";
-      $CVER           = "C341";
       $OUTPATH        = "unxlngx6";
       # Blackdown.org JDK porting project uses `amd64' and `server' in JDK 1.4.2 RC1
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64";
@@ -416,7 +409,6 @@ elsif ( $platform =~ m/linux/ )
       $outfile        = "LinuxIA64Env.Set";
       $CPU            = "A";
       $CPUNAME        = "IA64";
-      $CVER           = "C341";
       $OUTPATH        = "unxlnga";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ia64";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ia64".$ds."server";
@@ -499,7 +491,6 @@ elsif ( $platform =~ m/linux/ )
       $outfile        = "LinuxM68KEnv.Set";
       $CPU            = "6";
       $CPUNAME        = "M68K";
-      $CVER           = "C341";
       $OUTPATH        = "unxlngm68k";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k".$ds."server";
@@ -1808,6 +1799,7 @@ ToFile( "HAVE_LD_HASH_STYLE","@HAVE_LD_HASH_STYLE@","e" );
 ToFile( "HAVE_LD_BSYMBOLIC_FUNCTIONS",
 		"@HAVE_LD_BSYMBOLIC_FUNCTIONS@","e" );
 ToFile( "CXX",               $CXX,               "e" );
+ToFile( "USE_CCACHE",        "@USE_CCACHE@",     "e" );
 ToFile( "MINGWCXX",          "@MINGWCXX@",       "e" );
 ToFile( "MINGWSTRIP",        "@MINGWSTRIP@",     "e" );
 ToFile( "USE_SYSTEM_STL",    "@USE_SYSTEM_STL@", "e" );

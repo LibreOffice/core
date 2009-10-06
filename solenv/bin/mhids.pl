@@ -143,10 +143,6 @@ $workfile = "$tmpdir/${filebase}_".$$;
 
 # now get $workfile ready for shell usage...
 $shell_workfile = $workfile;
-$shell_workfile =~ s/\//\\/g if ( "$ENV{USE_SHELL}" eq "4nt" );
-if (( "$ENV{USE_SHELL}" eq "4nt" ) && ( "$^O" eq "cygwin" )) {
-    $shell_workfile =~ s/\//\\\\/;
-}
 
 print "workfile: $workfile\n";
 
