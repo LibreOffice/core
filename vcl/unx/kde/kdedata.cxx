@@ -29,7 +29,7 @@
 #include "precompiled_vcl.hxx"
 
 #define _SV_SALDATA_CXX
-#include "kde_headers.h"
+#include <shell/kde_headers.h>
 
 #include <unistd.h>
 #include <fcntl.h>
