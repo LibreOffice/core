@@ -413,9 +413,6 @@ SwTxtNode& SwTxtNode::Insert( xub_Unicode c, const SwIndex &rIdx )
         }
         TryDeleteSwpHints();
     }
-    // den Frames Bescheid sagen
-    SwInsChr aHint( rIdx.GetIndex()-1 );
-    SwModify::Modify( 0, &aHint );
     return *this;
 }
 

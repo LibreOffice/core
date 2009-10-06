@@ -1509,18 +1509,6 @@ BOOL SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
 //        return TRUE;
     // <--
 
-    case RES_GETLOWERNUMLEVEL:
-        if( IsTxtNode() &&
-            0 != ( pItem = (SwNumRuleItem*)GetNoCondAttr(
-            RES_PARATR_NUMRULE, TRUE )) && pItem->GetValue().Len() &&
-            pItem->GetValue() == ((SwNRuleLowerLevel&)rInfo).GetName() &&
-            ((SwTxtNode*)this)->GetActualListLevel()
-                > ((SwNRuleLowerLevel&)rInfo).GetLevel() )
-        {
-            return FALSE;
-        }
-        break;
-
     case RES_FINDNEARESTNODE:
         if( ((SwFmtPageDesc&)GetAttr( RES_PAGEDESC )).GetPageDesc() )
             ((SwFindNearestNode&)rInfo).CheckNode( *this );
