@@ -40,7 +40,7 @@
 #include <vcl/help.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/urihelper.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>

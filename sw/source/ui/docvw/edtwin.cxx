@@ -49,7 +49,7 @@
 #include <vcl/cmdevt.h>
 #include <sot/storage.hxx>
 #include <svtools/macitem.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
 #endif

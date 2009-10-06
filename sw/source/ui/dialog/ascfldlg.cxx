@@ -37,7 +37,7 @@
 #include <rtl/textenc.h>
 #include <i18npool/mslangid.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 #include <fontcfg.hxx>
 #include <swmodule.hxx>
 #include <svx/unolingu.hxx>

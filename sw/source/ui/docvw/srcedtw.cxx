@@ -49,7 +49,7 @@
 #include <sfx2/app.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/txtattr.hxx>
-#include <svtools/sourceviewconfig.hxx>
+#include <unotools/sourceviewconfig.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/flstitem.hxx>
 #include <vcl/metric.hxx>
@@ -248,7 +248,7 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     pVScrollbar(0),
 
     pSrcView(pParentView),
-    pSourceViewConfig(new svt::SourceViewConfig),
+    pSourceViewConfig(new utl::SourceViewConfig),
 
     nCurTextWidth(0),
     nStartLine(USHRT_MAX),
@@ -258,14 +258,14 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
 {
     SetHelpId(HID_SOURCE_EDITWIN);
     CreateTextEngine();
-    StartListening(*pSourceViewConfig);
+    pSourceViewConfig->AddListener(this);
 }
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
  SwSrcEditWindow::~SwSrcEditWindow()
 {
-    EndListening(*pSourceViewConfig);
+    pSourceViewConfig->RemoveListener(this);
     delete pSourceViewConfig;
     aSyntaxIdleTimer.Stop();
     if ( pTextEngine )
@@ -842,7 +842,11 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             DoDelayedSyntaxHighlight( (USHORT)rTextHint.GetValue() );
         }
     }
-    else if(&rBC == pSourceViewConfig)
+}
+
+void SwSrcEditWindow::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst )
+{
+    if( pBrdCst == pSourceViewConfig)
         SetFont();
 }
 

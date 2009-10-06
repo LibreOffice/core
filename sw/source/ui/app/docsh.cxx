@@ -44,7 +44,7 @@
 #include <svtools/stritem.hxx>
 #include <svx/adjitem.hxx>
 #include <basic/sbx.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/misccfg.hxx>
@@ -111,8 +111,8 @@
 #include "warnpassword.hxx"
 
 #include <cfgid.h>
-#include <svtools/moduleoptions.hxx>
-#include <svtools/fltrcfg.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <svx/htmlcfg.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/objface.hxx>

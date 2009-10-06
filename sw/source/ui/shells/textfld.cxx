@@ -39,7 +39,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/itempool.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/macitem.hxx>

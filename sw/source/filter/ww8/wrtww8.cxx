@@ -48,7 +48,7 @@
 #define _SVSTDARR_BOOLS
 #include <svtools/svstdarr.hxx>
 
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <vcl/salbtype.hxx>
 #include <sot/storage.hxx>
 #include <svtools/zformat.hxx>

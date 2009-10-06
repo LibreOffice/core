@@ -53,8 +53,8 @@
 #include <svx/linkmgr.hxx>
 #include <svx/forbiddencharacterstable.hxx>
 #include <svtools/zforlist.hxx>
-#include <svtools/compatibility.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/compatibility.hxx>
+#include <unotools/lingucfg.hxx>
 #include <svx/svdpage.hxx>
 #include <paratr.hxx>
 #include <fchrfmt.hxx>

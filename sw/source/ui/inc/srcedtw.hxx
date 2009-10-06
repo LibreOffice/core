@@ -32,6 +32,7 @@
 
 #include <vcl/window.hxx>
 #include <svtools/lstner.hxx>
+#include <unotools/options.hxx>
 #include <vcl/timer.hxx>
 
 #ifndef _TABLE_HXX //autogen
@@ -45,6 +46,11 @@ class SwSrcEditWindow;
 class TextEngine;
 class ExtTextView;
 class DataChangedEvent;
+
+namespace utl
+{
+    class SourceViewConfig;
+};
 
 class TextViewOutWin : public Window
 {
@@ -69,7 +75,7 @@ public:
 
 //------------------------------------------------------------
 namespace svt{ class SourceViewConfig;}
-class SwSrcEditWindow : public Window, public SfxListener
+class SwSrcEditWindow : public Window, public SfxListener, public utl::ConfigurationListener
 {
 private:
     ExtTextView*    pTextView;
@@ -80,7 +86,7 @@ private:
                     *pVScrollbar;
 
     SwSrcView*      pSrcView;
-    svt::SourceViewConfig* pSourceViewConfig;
+    utl::SourceViewConfig* pSourceViewConfig;
 
     long            nCurTextWidth;
     USHORT          nStartLine;
@@ -114,6 +120,7 @@ protected:
     void            DoSyntaxHighlight( USHORT nPara );
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void    ConfigurationChanged( utl::ConfigurationBroadcaster* );
 
     DECL_LINK(ScrollHdl, ScrollBar*);
 

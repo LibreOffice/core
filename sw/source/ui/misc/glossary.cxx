@@ -53,8 +53,8 @@
 #include <svtools/svstdarr.hxx>
 #endif
 #include <svtools/stritem.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/lingucfg.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/fcontnr.hxx>
 

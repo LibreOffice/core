@@ -53,7 +53,7 @@
 #include <svtools/imap.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
-#include <svtools/eventcfg.hxx>
+#include <unotools/eventcfg.hxx>
 
 #include <fmtornt.hxx>
 #include <fmturl.hxx>

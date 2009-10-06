@@ -46,7 +46,7 @@
 #include <unotools/streamwrap.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/stritem.hxx>
 #include <sfx2/frame.hxx>

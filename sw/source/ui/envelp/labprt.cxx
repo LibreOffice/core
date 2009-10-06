@@ -37,7 +37,7 @@
 
 
 #include <svtools/prnsetup.hxx>
-#include <svtools/cmdoptions.hxx>
+#include <unotools/cmdoptions.hxx>
 #include <vcl/print.hxx>
 #include <wrtsh.hxx>
 #include <label.hxx>

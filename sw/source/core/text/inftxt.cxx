@@ -33,8 +33,8 @@
 
 
 #include <com/sun/star/uno/Sequence.h>
-#include <svtools/linguprops.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
 #include <hintids.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/hyznitem.hxx>

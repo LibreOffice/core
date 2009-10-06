@@ -42,7 +42,7 @@
 #include <sot/storage.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 #include <sfx2/docfile.hxx>
 #ifndef _OFA_MISCCFG_HXX //autogen
 #include <svtools/misccfg.hxx>

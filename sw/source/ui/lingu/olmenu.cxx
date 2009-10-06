@@ -37,8 +37,8 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 #endif
-#include <svtools/lingucfg.hxx>
-#include <svtools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
 #include <svtools/filter.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/svxacorr.hxx>
@@ -69,7 +69,7 @@
 #include <svx/splwrap.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 #include <svx/acorrcfg.hxx>
 #include <swmodule.hxx>
 #include <cmdid.h>

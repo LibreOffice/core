@@ -35,7 +35,7 @@
 #include <svtools/itemset.hxx>
 #include <svtools/hint.hxx>
 #include <svtools/smplhint.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svtools/eitem.hxx>
 #include <svtools/itempool.hxx>

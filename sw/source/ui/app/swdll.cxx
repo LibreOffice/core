@@ -51,7 +51,7 @@
 #include <dobjfac.hxx>
 #include <cfgid.h>
 
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #ifndef _FM_FMOBJFAC_HXX
 #include <svx/fmobjfac.hxx>

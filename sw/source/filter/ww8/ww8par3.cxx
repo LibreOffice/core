@@ -95,7 +95,7 @@
 #include "ww8par2.hxx"  // wg. Listen-Attributen in Styles
 
 #include <IMark.hxx>
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 
 #include <stdio.h>
 

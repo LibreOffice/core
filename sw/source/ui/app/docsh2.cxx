@@ -56,7 +56,7 @@
 */
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/transfer.hxx>
 #ifndef _SFXSIDS_HRC //autogen
 #include <sfx2/dialogs.hrc>

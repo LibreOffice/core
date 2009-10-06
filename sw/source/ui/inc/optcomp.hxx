@@ -33,7 +33,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-#include <svtools/compatibility.hxx>
+#include <unotools/compatibility.hxx>
 #include <svx/checklbx.hxx>
 
 // class SwCompatibilityOptPage ------------------------------------------

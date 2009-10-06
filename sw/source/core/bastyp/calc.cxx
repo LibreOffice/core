@@ -49,7 +49,7 @@
 #include <unotools/charclass.hxx>
 #include <svx/unolingu.hxx>
 #include <svx/scripttypeitem.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <tools/datetime.hxx>
 #include <svtools/zforlist.hxx>
 #include <swmodule.hxx>

@@ -39,7 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/urihelper.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <goodies/mailenum.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>

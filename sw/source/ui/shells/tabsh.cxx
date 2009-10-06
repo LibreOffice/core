@@ -38,7 +38,7 @@
 #endif
 #include <svtools/stritem.hxx>
 #include <svtools/whiter.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/srchitem.hxx>
 #include <svx/lrspitem.hxx>

@@ -41,10 +41,10 @@
 #include <vcl/inputctx.hxx>
 #include <basic/sbxobj.hxx>
 #include <svtools/eitem.hxx>
-#include <svtools/undoopt.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/undoopt.hxx>
+#include <unotools/lingucfg.hxx>
 #include <svtools/printdlg.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>

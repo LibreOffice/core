@@ -69,8 +69,8 @@
 
 #include <svtools/langtab.hxx>
 #include <svtools/slstitm.hxx>
-#include <svtools/securityoptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/securityoptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <svtools/languageoptions.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/svmedit.hxx>

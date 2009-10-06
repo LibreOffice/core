@@ -40,7 +40,7 @@
 #include <svtools/urihelper.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>
 #include <svx/dialmgr.hxx>
 #ifndef _SVX_DIALOGS_HRC

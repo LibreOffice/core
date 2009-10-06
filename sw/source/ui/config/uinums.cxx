@@ -36,7 +36,7 @@
 
 #include <hintids.hxx>
 #include <svtools/urihelper.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <tools/stream.hxx>
 #ifndef _SFX_INIMGR_HXX
 #endif

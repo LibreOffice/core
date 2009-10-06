@@ -87,7 +87,7 @@
 #include <glosdoc.hxx>
 #include <uiitems.hxx>
 #include <svx/langitem.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 #include <svx/unolingu.hxx>
 
 #ifndef _GLOBALS_HRC

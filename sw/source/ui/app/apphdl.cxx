@@ -39,8 +39,8 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 #include <svtools/urihelper.hxx>
-#include <svtools/undoopt.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/undoopt.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
@@ -56,7 +56,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/ctloptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/insctrl.hxx>
@@ -805,29 +805,6 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 pObjSh = SfxObjectShell::GetNext(*pObjSh);
             }
         }
-        else if(SFX_HINT_USER_OPTIONS_CHANGED == nHintId)
-        {
-            bAuthorInitialised = FALSE;
-        }
-        else if(SFX_HINT_UNDO_OPTIONS_CHANGED == nHintId)
-        {
-            const int nNew = GetUndoOptions().GetUndoCount();
-            const int nOld = SwEditShell::GetUndoActionCount();
-            if(!nNew || !nOld)
-            {
-                sal_Bool bUndo = nNew != 0;
-                //ueber DocShells iterieren und Undo umschalten
-
-                TypeId aType(TYPE(SwDocShell));
-                SwDocShell* pDocShell = (SwDocShell*)SfxObjectShell::GetFirst(&aType);
-                while( pDocShell )
-                {
-                    pDocShell->GetDoc()->DoUndo( bUndo );
-                    pDocShell = (SwDocShell*)SfxObjectShell::GetNext(*pDocShell, &aType);
-                }
-            }
-            SwEditShell::SetUndoActionCount( static_cast< USHORT >(nNew));
-        }
         else if(SFX_HINT_DEINITIALIZING == nHintId)
         {
             DELETEZ(pWebUsrPref);
@@ -848,11 +825,38 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             DELETEZ(pAccessibilityOptions);
             EndListening(*pCTLOptions);
             DELETEZ(pCTLOptions);
-            EndListening(*pUserOptions);
+            pUserOptions->RemoveListener(this);
             DELETEZ(pUserOptions);
-            EndListening(*pUndoOptions);
+            pUndoOptions->RemoveListener(this);
             DELETEZ(pUndoOptions);
         }
+    }
+}
+
+void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst )
+{
+    if( pBrdCst == pUserOptions )
+    {
+        bAuthorInitialised = FALSE;
+    }
+    else if( pBrdCst == pUndoOptions )
+    {
+        const int nNew = GetUndoOptions().GetUndoCount();
+        const int nOld = SwEditShell::GetUndoActionCount();
+        if(!nNew || !nOld)
+        {
+            sal_Bool bUndo = nNew != 0;
+            //ueber DocShells iterieren und Undo umschalten
+
+            TypeId aType(TYPE(SwDocShell));
+            SwDocShell* pDocShell = (SwDocShell*)SfxObjectShell::GetFirst(&aType);
+            while( pDocShell )
+            {
+                pDocShell->GetDoc()->DoUndo( bUndo );
+                pDocShell = (SwDocShell*)SfxObjectShell::GetNext(*pDocShell, &aType);
+            }
+        }
+        SwEditShell::SetUndoActionCount( static_cast< USHORT >(nNew));
     }
 }
 
@@ -910,7 +914,7 @@ SvtUserOptions& SwModule::GetUserOptions()
     if(!pUserOptions)
     {
         pUserOptions = new SvtUserOptions;
-        StartListening(*pUserOptions);
+        pUserOptions->AddListener(this);
     }
     return *pUserOptions;
 }
@@ -922,7 +926,7 @@ SvtUndoOptions& SwModule::GetUndoOptions()
     if(!pUndoOptions)
     {
         pUndoOptions = new SvtUndoOptions;
-        StartListening(*pUndoOptions);
+        pUndoOptions->AddListener(this);
     }
     return *pUndoOptions;
 }

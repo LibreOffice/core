@@ -59,9 +59,9 @@
 #include <svtools/fstathelper.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/itempool.hxx>
-#include <svtools/lingucfg.hxx>
-#include <svtools/linguprops.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/ptitem.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/slstitm.hxx>

@@ -71,7 +71,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/xflclit.hxx>
 
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <fmtfld.hxx>
 #include <fmturl.hxx>
 #include <fmtinfmt.hxx>

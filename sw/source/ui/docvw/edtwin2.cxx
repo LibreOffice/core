@@ -42,7 +42,7 @@
 #include <vcl/help.hxx>
 #endif
 #include <svtools/stritem.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <txtrfmrk.hxx>
 #include <fmtrfmrk.hxx>

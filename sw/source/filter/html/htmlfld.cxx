@@ -39,7 +39,7 @@
 #include "docsh.hxx"
 #include <svtools/htmltokn.h>
 #include <svtools/zformat.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <fmtfld.hxx>
 #include <ndtxt.hxx>
 #include <doc.hxx>

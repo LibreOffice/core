@@ -39,8 +39,8 @@
 #include <svx/srchitem.hxx>
 #include <SwSpellDialogChildWindow.hxx>
 #include <svtools/eitem.hxx>
-#include <svtools/linguprops.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
 #include <viewopt.hxx>
 #include <globals.h>
 #include <sfx2/app.hxx>
@@ -99,7 +99,7 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #include <IDocumentSettingAccess.hxx>
 

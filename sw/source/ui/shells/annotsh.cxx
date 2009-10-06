@@ -68,7 +68,7 @@
 #include <svtools/whiter.hxx>
 #include <svtools/cjkoptions.hxx>
 #include <svtools/ctloptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/flditem.hxx>
 #include <svx/editstat.hxx>

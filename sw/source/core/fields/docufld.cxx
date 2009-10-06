@@ -65,7 +65,7 @@
 #include <vcl/svapp.hxx>
 #endif
 #include <svtools/urihelper.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <svtools/syslocale.hxx>
 
 #include <tools/time.hxx>

@@ -45,12 +45,12 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/stritem.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/undo.hxx>
 #include <svtools/txtcmp.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/whiter.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <svtools/transfer.hxx>
 
 #include <svx/htmlcfg.hxx>

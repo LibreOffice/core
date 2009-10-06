@@ -37,7 +37,7 @@
 #endif
 #include <sfx2/viewsh.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <sot/exchange.hxx>

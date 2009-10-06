@@ -56,7 +56,7 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/soerr.hxx>
 #include <tools/cachestr.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/brkitem.hxx>
 #include <svx/svxacorr.hxx>

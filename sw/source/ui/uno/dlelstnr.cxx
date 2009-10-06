@@ -41,7 +41,7 @@
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
 
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/processfactory.hxx>

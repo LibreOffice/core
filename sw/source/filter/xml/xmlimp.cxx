@@ -65,7 +65,7 @@
 #include <sfx2/printer.hxx>
 #include <ForbiddenCharactersEnum.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <tools/diagnose_ex.h>
 #include <hash_set>
 #include <stringhash.hxx>

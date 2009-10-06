@@ -148,6 +148,7 @@ DEF2NAME=       $(SHL2TARGET)
 SHL2STDLIBS= \
             $(SFX2LIB) \
             $(SVTOOLLIB) \
+    $(UNOTOOLSLIB) \
             $(SVLLIB) \
             $(VCLLIB) \
             $(SOTLIB) \

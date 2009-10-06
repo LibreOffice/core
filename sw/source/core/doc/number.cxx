@@ -64,7 +64,7 @@
 #include <algorithm>
 // <--
 // --> OD 2008-06-06 #i89178#
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 // <--
 // --> OD 2008-07-08 #i91400#
 #include <IDocumentListsAccess.hxx>

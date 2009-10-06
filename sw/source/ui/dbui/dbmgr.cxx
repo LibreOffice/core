@@ -63,7 +63,7 @@
 #include <pagedesc.hxx>
 #include <vcl/lstbox.hxx>
 #include <unotools/tempfile.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/urihelper.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
