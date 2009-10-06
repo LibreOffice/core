@@ -41,7 +41,7 @@
 #endif
 #include <svtools/svtabbx.hxx>
 #include <svtools/poolitem.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #include "xmlfiltercommon.hxx"
 
