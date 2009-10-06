@@ -37,7 +37,6 @@
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
-#include <sfx2/docfile.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/processfactory.hxx>
 #include <ucbhelper/content.hxx>

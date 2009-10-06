@@ -30,19 +30,21 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
+
+#include <cppuhelper/factory.hxx>
 #include <i18npool/lang.h>
-#include <tools/urlobj.hxx>
+#include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <tools/stream.hxx>
-#include <sfx2/docfile.hxx>
-#include <osl/mutex.hxx>
-#include <unotools/processfactory.hxx>
+#include <tools/string.hxx>
+#include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
+#include <unotools/processfactory.hxx>
+#include <unotools/streamwrap.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
-#include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/linguistic2/XConversionPropertyType.hpp>
@@ -50,18 +52,19 @@
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HPP_
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/uno/Reference.h>
-#endif
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/util/XFlushListener.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
-#include <unotools/streamwrap.hxx>
 
 
 #include "convdic.hxx"
@@ -89,23 +92,27 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
 {
     if (rMainURL.Len() == 0)
         return;
-
-    // get stream to be used
     DBG_ASSERT(!INetURLObject( rMainURL ).HasError(), "invalid URL");
-    SfxMedium aMedium( rMainURL, STREAM_READ | STREAM_SHARE_DENYWRITE, FALSE );
-    SvStream *pStream = aMedium.GetInStream();
-    DBG_ASSERT( pStream, "input stream missing" );
-    if (!pStream || pStream->GetError())
+
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( utl::getProcessServiceFactory() );
+
+    // get xInputStream stream
+    uno::Reference< io::XInputStream > xIn;
+    try
+    {
+        uno::Reference< ucb::XSimpleFileAccess > xAccess( xServiceFactory->createInstance(
+                A2OU( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
+        xIn = xAccess->openFileRead( rMainURL );
+    }
+    catch (uno::Exception & e)
+    {
+        DBG_ASSERT( 0, "failed to get input stream" );
+        (void) e;
+    }
+    if (!xIn.is())
         return;
 
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory(
-            utl::getProcessServiceFactory() );
-    DBG_ASSERT( xServiceFactory.is(), "XMLReader::Read: got no service manager" );
-    if (!xServiceFactory.is())
-        return;
-
-    uno::Reference< io::XInputStream > xIn = new utl::OInputStreamWrapper( *pStream );
-    DBG_ASSERT( xIn.is(), "input stream missing" );
+    SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xIn ) );
 
     ULONG nError = sal::static_int_cast< ULONG >(-1);
 
@@ -274,23 +281,29 @@ void ConvDic::Save()
     DBG_ASSERT( !bNeedEntries, "saving while entries missing" );
     if (aMainURL.Len() == 0 || bNeedEntries)
         return;
-
     DBG_ASSERT(!INetURLObject( aMainURL ).HasError(), "invalid URL");
-    SfxMedium   aMedium( aMainURL, STREAM_WRITE | STREAM_TRUNC | STREAM_SHARE_DENYALL,
-                         FALSE );
-    aMedium.CreateTempFile();   // use temp file to write to...
 
-    SvStream *pStream = aMedium.GetOutStream();
-    DBG_ASSERT( pStream, "output stream missing" );
-    if (!pStream || pStream->GetError())
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( utl::getProcessServiceFactory() );
+
+    // get XOutputStream stream
+    uno::Reference< io::XStream > xStream;
+    try
+    {
+        uno::Reference< ucb::XSimpleFileAccess > xAccess( xServiceFactory->createInstance(
+                A2OU( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
+        xStream = xAccess->openFileReadWrite( aMainURL );
+    }
+    catch (uno::Exception & e)
+    {
+        DBG_ASSERT( 0, "failed to get input stream" );
+        (void) e;
+    }
+    if (!xStream.is())
         return;
-    uno::Reference< io::XOutputStream > xOut(
-            new utl::OOutputStreamWrapper( *pStream ) );
-    DBG_ASSERT( xOut.is(), "output stream missing" );
+
+    SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
 
     // get XML writer
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory(
-            utl::getProcessServiceFactory() );
     uno::Reference< io::XActiveDataSource > xSaxWriter;
     if (xServiceFactory.is())
     {
@@ -306,10 +319,10 @@ void ConvDic::Save()
     }
     DBG_ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
 
-    if (xSaxWriter.is() && xOut.is())
+    if (xSaxWriter.is() && xStream.is())
     {
         // connect XML writer to output stream
-        xSaxWriter->setOutputStream( xOut );
+        xSaxWriter->setOutputStream( xStream->getOutputStream() );
 
         // prepare arguments (prepend doc handler to given arguments)
         uno::Reference< xml::sax::XDocumentHandler > xDocHandler( xSaxWriter, UNO_QUERY );
@@ -318,15 +331,10 @@ void ConvDic::Save()
         //!! keep a first(!) reference until everything is done to
         //!! ensure the proper lifetime of the object
         uno::Reference< document::XFilter > aRef( (document::XFilter *) pExport );
-        sal_Bool bRet = pExport->Export( aMedium );     // write entries to file
+        sal_Bool bRet = pExport->Export();     // write entries to file
         DBG_ASSERT( !pStream->GetError(), "I/O error while writing to stream" );
         if (bRet)
-        {
-            // flush file, close it and release any lock
-            aMedium.Close();
-            aMedium.Commit();
             bIsModified = FALSE;
-        }
     }
     DBG_ASSERT( !bIsModified, "dictionary still modified after save. Save failed?" );
 }
