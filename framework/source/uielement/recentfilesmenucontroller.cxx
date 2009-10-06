@@ -62,7 +62,7 @@
 #include <vcl/i18nhelp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <svtools/historyoptions.hxx>
+#include <unotools/historyoptions.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <osl/file.hxx>
 //#include <tools/solar.hrc>

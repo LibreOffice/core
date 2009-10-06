@@ -37,7 +37,7 @@
 
 // include ---------------------------------------------------------------
 #include <vcl/settings.hxx>
-#include <svtools/viewoptions.hxx>
+#include <unotools/viewoptions.hxx>
 
 #include "cuihyperdlg.hxx"
 

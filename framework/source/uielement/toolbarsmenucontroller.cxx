@@ -80,7 +80,7 @@
 #endif
 #include <vcl/window.hxx>
 #include <svtools/menuoptions.hxx>
-#include <svtools/cmdoptions.hxx>
+#include <unotools/cmdoptions.hxx>
 #include <dispatch/uieventloghelper.hxx>
 #include <rtl/logfile.hxx>
 

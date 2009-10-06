@@ -66,8 +66,8 @@
 #include <com/sun/star/util/URL.hpp>
 #include <osl/time.h>
 #include <comphelper/processfactory.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/internaloptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/internaloptions.hxx>
 #include <stdio.h>
 //_______________________________________________
 // interface includes

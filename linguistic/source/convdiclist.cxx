@@ -33,9 +33,9 @@
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/lingucfg.hxx>
 #include <sfx2/docfile.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/instance.hxx>

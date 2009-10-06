@@ -60,7 +60,7 @@
 #include <sfx2/app.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/visitem.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>

@@ -41,7 +41,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 #include <svtools/itemprop.hxx>
 #include <unotools/configitem.hxx>
 #include <com/sun/star/uno/Any.h>

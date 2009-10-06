@@ -44,7 +44,7 @@
 #ifndef _SPLITWIN_HXX //autogen
 #include <vcl/splitwin.hxx>
 #endif
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/eitem.hxx>

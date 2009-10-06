@@ -50,7 +50,7 @@
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-#include <svtools/viewoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #include <svtools/apearcfg.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/i18nhelp.hxx>

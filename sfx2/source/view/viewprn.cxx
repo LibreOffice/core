@@ -48,8 +48,8 @@
 #include <svtools/intitem.hxx>
 #include <svtools/eitem.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/printwarningoptions.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/printwarningoptions.hxx>
 #include <tools/datetime.hxx>
 
 #include <sfx2/viewsh.hxx>

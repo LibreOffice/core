@@ -47,9 +47,9 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/evntconf.hxx>
-#include <svtools/eventcfg.hxx>
+#include <unotools/eventcfg.hxx>
 
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include "eventsupplier.hxx"
 

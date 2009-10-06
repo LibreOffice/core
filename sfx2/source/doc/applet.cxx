@@ -43,7 +43,7 @@
 #include <vcl/syschild.hxx>
 #include <rtl/ustring.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <svtools/javaoptions.hxx>
+#include <unotools/javaoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <comphelper/TypeGeneration.hxx>
 

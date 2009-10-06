@@ -34,8 +34,8 @@
 #include <vcl/msgbox.hxx> //add CHINA001
 #include <vcl/button.hxx>
 // header for class SvtLinguConfig
-#include <svtools/lingucfg.hxx>
-#include <svtools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
 
 #include <set>
 #include <map>

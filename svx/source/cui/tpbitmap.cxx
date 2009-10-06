@@ -55,7 +55,7 @@
 #ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <unotools/localfilehelper.hxx>

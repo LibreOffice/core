@@ -44,7 +44,7 @@
 /** === end UNO includes === **/
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/smplhint.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>

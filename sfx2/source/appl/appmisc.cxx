@@ -41,8 +41,8 @@
 #include <svtools/intitem.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/internaloptions.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/internaloptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
 #ifndef _COM_SUN_STAR_BEANS_PropertyValue_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -64,7 +64,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/bootstrap.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <osl/file.hxx>
 
 #include "sfxresid.hxx"

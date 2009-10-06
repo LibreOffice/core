@@ -41,7 +41,7 @@
 #include <basic/sbx.hxx>
 
 #include <sot/storage.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 
 #ifndef _RTL_USTRING_
 #include <rtl/ustring.h>

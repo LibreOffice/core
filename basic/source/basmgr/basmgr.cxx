@@ -40,7 +40,7 @@
 #include <vcl/msgbox.hxx>
 #include <basic/sbx.hxx>
 #include <sot/storinfo.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <basic/sbmod.hxx>

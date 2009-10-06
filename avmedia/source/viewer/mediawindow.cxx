@@ -36,7 +36,7 @@
 #include "mediawindow.hrc"
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

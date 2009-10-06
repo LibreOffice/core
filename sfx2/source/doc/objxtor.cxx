@@ -61,7 +61,7 @@
 #include <basic/sbstar.hxx>
 #include <svtools/stritem.hxx>
 #include <basic/sbx.hxx>
-#include <svtools/eventcfg.hxx>
+#include <unotools/eventcfg.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/signaturestate.hxx>
@@ -71,7 +71,7 @@
 #endif
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
-#include <svtools/printwarningoptions.hxx>
+#include <unotools/printwarningoptions.hxx>
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
@@ -83,7 +83,7 @@
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 
 #include <svtools/urihelper.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/sharecontrolfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>

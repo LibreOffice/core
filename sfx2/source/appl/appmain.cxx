@@ -40,7 +40,7 @@
 #include <svtools/cstitem.hxx>
 #include <tools/config.hxx>
 #include <svtools/ehdl.hxx>
-#include <svtools/startoptions.hxx>
+#include <unotools/startoptions.hxx>
 #include <svtools/itempool.hxx>
 #include <svtools/urihelper.hxx>
 #include <svtools/helpopt.hxx>

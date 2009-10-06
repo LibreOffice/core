@@ -38,7 +38,7 @@
 #include <sfx2/docfac.hxx>
 
 #include <comphelper/classids.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 #include <tools/rcid.h>
 #include <tools/vcompat.hxx>

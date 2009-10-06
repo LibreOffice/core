@@ -41,8 +41,8 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/viewoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <ucbhelper/content.hxx>
 #include <osl/file.hxx>

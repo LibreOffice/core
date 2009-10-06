@@ -35,7 +35,7 @@
 #include "lngprops.hxx"
 #include "misc.hxx"
 #include <tools/debug.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 #include <vcl/svapp.hxx>
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type

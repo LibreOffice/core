@@ -80,16 +80,15 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/interaction.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/cachestr.hxx>
-#include <svtools/addxmltostorageoptions.hxx>
 #include <unotools/streamwrap.hxx>
 
-#include <svtools/saveopt.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/saveopt.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/localfilehelper.hxx>

@@ -45,10 +45,10 @@
 #include <ucbhelper/contentbroker.hxx>
 #include "svtools/ehdl.hxx"
 #include "svtools/urihelper.hxx"
-#include "svtools/pathoptions.hxx"
-#include "svtools/viewoptions.hxx"
+#include "unotools/pathoptions.hxx"
+#include "unotools/viewoptions.hxx"
 #include "svtools/fileview.hxx"
-#include "svtools/inetoptions.hxx"
+#include "unotools/inetoptions.hxx"
 #include "svtools/sfxecode.hxx"
 #include "svtools/svarray.hxx"
 #include "svtools/svtabbx.hxx"

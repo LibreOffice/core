@@ -48,7 +48,7 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <svtools/eitem.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include "dbregistersettings.hxx"
 #include "connpooloptions.hxx"
 

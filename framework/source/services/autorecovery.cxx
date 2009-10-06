@@ -80,7 +80,7 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <unotools/tempfile.hxx>

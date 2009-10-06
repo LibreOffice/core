@@ -49,11 +49,11 @@
 #include <tools/config.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/defaultoptions.hxx>
+#include <unotools/defaultoptions.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/moduleoptions.hxx>
-#include <svtools/viewoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/viewoptions.hxx>
 
 #define _SVX_OPTPATH_CXX
 

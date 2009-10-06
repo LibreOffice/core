@@ -54,7 +54,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <sfx2/mnumgr.hxx>

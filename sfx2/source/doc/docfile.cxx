@@ -121,7 +121,7 @@ using namespace ::com::sun::star::io;
 #include <tools/urlobj.hxx>
 #include <tools/inetmime.hxx>
 #include <unotools/ucblockbytes.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/asynclink.hxx>
 #include <svtools/inettype.hxx>
 #include <ucbhelper/contentbroker.hxx>
@@ -133,7 +133,7 @@ using namespace ::com::sun::star::io;
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/interactionrequest.hxx>
 #include <sot/stg.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <svtools/documentlockfile.hxx>
 
 #include "opostponedtruncationstream.hxx"

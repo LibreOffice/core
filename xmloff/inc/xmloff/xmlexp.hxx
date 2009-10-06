@@ -68,7 +68,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <xmloff/XMLPageExport.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
@@ -87,7 +87,7 @@ class XMLImageMapExport;
 class XMLErrors;
 
 // --> OD 2006-03-14 #i51726#
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 // <--
 
 namespace rtl { class OUString; }

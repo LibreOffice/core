@@ -46,7 +46,7 @@
 #include <svx/eeitem.hxx>
 #include <svtools/itemset.hxx>
 #include <tools/config.hxx>
-#include <svtools/cacheoptions.hxx>
+#include <unotools/cacheoptions.hxx>
 #include <svtools/whiter.hxx>
 #include <tools/bigint.hxx>
 #include "fontitem.hxx"

@@ -39,13 +39,13 @@
 #include <tools/shl.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 #define _SVX_OPTGENRL_CXX
 
 #include <svx/dialogs.hrc>
 #include "optgenrl.hrc"
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include "cuioptgenrl.hxx"
 #include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"

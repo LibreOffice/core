@@ -39,8 +39,8 @@
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <i18npool/mslangid.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <sfx2/docfile.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/factory.hxx>   // helper for factories

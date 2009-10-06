@@ -71,16 +71,16 @@
 #include <linguistic/misc.hxx>
 #endif
 #include <svtools/helpopt.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/languageoptions.hxx>
-#include <svtools/optionsdlg.hxx>
+#include <unotools/optionsdlg.hxx>
 #include <sfx2/module.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/waitobj.hxx>
 #include <svtools/slstitm.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/viewoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #include <sfx2/printopt.hxx>
 #include <osl/module.h>
 #include <osl/process.h>
@@ -91,7 +91,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <svtools/apearcfg.hxx>
-#include <svtools/linguprops.hxx>
+#include <unotools/linguprops.hxx>
 #include <sfx2/app.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xflclit.hxx>

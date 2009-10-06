@@ -52,7 +52,7 @@ namespace com { namespace sun { namespace star { namespace text { class XTextRan
 #include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
 #include <svtools/svtreebx.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #include "srchdlg.hxx"
 

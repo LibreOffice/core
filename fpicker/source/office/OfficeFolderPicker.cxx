@@ -45,7 +45,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 // using ----------------------------------------------------------------
 

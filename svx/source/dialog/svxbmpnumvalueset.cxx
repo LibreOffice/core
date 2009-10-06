@@ -60,7 +60,7 @@
 #include <drawitem.hxx>
 #include <numvset.hxx>
 #include <htmlmode.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
 #include <unolingu.hxx>
 #include <com/sun/star/style/NumberingType.hpp>

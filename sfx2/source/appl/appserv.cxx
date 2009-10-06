@@ -84,9 +84,9 @@
 #include <vcl/stdtext.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <svtools/pathoptions.hxx>
-#include <svtools/moduleoptions.hxx>
-#include <svtools/regoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/regoptions.hxx>
 #include <svtools/helpopt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/shl.hxx>
@@ -1209,7 +1209,7 @@ void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
             {
                 case SID_ONLINE_REGISTRATION:
                 {
-                    ::svt::RegOptions aOptions;
+                    ::utl::RegOptions aOptions;
                     if ( !aOptions.allowMenu() )
                         rSet.DisableItem( SID_ONLINE_REGISTRATION );
                 }

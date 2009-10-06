@@ -39,8 +39,8 @@
 
 #include <svtools/soerr.hxx>
 #include <svtools/svtools.hrc>
-#include <svtools/saveopt.hxx>
-#include <svtools/localisationoptions.hxx>
+#include <unotools/saveopt.hxx>
+#include <unotools/localisationoptions.hxx>
 #include <tools/config.hxx>
 #ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
@@ -60,9 +60,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <vos/security.hxx>
 #include <ucbhelper/configurationkeys.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/historyoptions.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/historyoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <cppuhelper/implbase2.hxx>
 
 #include <rtl/logfile.hxx>

@@ -62,12 +62,12 @@
 
 #include "guisaveas.hxx"
 
-#include <svtools/pathoptions.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/itemset.hxx>
 #include <svtools/adrparse.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/saveopt.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>

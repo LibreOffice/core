@@ -36,7 +36,7 @@
 #endif
 
 // include ---------------------------------------------------------------
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/intitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>

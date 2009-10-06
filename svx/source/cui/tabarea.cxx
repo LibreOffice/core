@@ -43,7 +43,7 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>

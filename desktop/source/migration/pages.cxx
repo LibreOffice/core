@@ -43,8 +43,8 @@
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
-#include <svtools/regoptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/regoptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -546,7 +546,7 @@ sal_Bool RegistrationPage::commitPage( CommitPageReason _eReason )
 {
     if ( _eReason == eFinish )
     {
-        ::svt::RegOptions aOptions;
+        ::utl::RegOptions aOptions;
         rtl::OUString aEvent;
 
         if ( m_rbNow.IsChecked())
@@ -603,7 +603,7 @@ void RegistrationPage::prepareSingleMode()
 
 bool RegistrationPage::hasReminderDateCome()
 {
-    return ::svt::RegOptions().hasReminderDateCome();
+    return ::utl::RegOptions().hasReminderDateCome();
 }
 
 void RegistrationPage::executeSingleMode()
@@ -620,7 +620,7 @@ void RegistrationPage::executeSingleMode()
     if ( eMode == RegistrationPage::rmNow || eMode == RegistrationPage::rmLater )
         pPage->commitPage( IWizardPage::eFinish );
     if ( eMode != RegistrationPage::rmLater )
-        ::svt::RegOptions().removeReminder();
+        ::utl::RegOptions().removeReminder();
 }
 
 // -----------------------------------------------------------------------

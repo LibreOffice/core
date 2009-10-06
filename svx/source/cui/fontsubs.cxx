@@ -45,7 +45,7 @@
 #ifndef _OFA_FONTSUBSTCONFIG_HXX
 #include <svtools/fontsubstconfig.hxx>
 #endif
-#include <svtools/sourceviewconfig.hxx>
+#include <unotools/sourceviewconfig.hxx>
 
 #include "fontsubs.hrc"
 #include "fontsubs.hxx"
@@ -85,7 +85,7 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
 
     sAutomatic          (SVX_RES( STR_AUTOMATIC  )),
     pConfig(new SvtFontSubstConfig),
-    pSourceViewConfig(new svt::SourceViewConfig),
+    pSourceViewConfig(new utl::SourceViewConfig),
 
     sHeader1            (SVX_RES( STR_HEADER1       )),
     sHeader2            (SVX_RES( STR_HEADER2       )),

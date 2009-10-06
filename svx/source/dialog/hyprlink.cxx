@@ -33,7 +33,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/configitem.hxx>
-#include <svtools/cmdoptions.hxx>
+#include <unotools/cmdoptions.hxx>
 #include <svtools/inetimg.hxx>
 #include <svtools/urlbmk.hxx>
 #include <svtools/eitem.hxx>

@@ -65,7 +65,7 @@
 #include <svtools/visitem.hxx>
 #include <svtools/urlbmk.hxx>
 #include <vcl/toolbox.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #include <svtools/imagemgr.hxx>
 #include <comphelper/processfactory.hxx>

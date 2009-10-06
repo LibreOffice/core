@@ -75,7 +75,7 @@
 #include <vcl/svapp.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/eitem.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 #include <ucbhelper/content.hxx>

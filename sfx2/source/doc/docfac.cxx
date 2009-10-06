@@ -35,8 +35,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <tools/config.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>

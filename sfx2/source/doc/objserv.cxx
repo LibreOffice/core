@@ -64,10 +64,10 @@
 
 #include <comphelper/string.hxx>
 #include <basic/sbx.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <svtools/asynclink.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <comphelper/documentconstants.hxx>
 
 #include <sfx2/app.hxx>

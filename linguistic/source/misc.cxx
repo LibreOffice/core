@@ -33,7 +33,7 @@
 #include <tools/string.hxx>
 #include <tools/fsys.hxx>
 #include <tools/debug.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/lngmisc.hxx>
 #include <ucbhelper/content.hxx>
 #include <i18npool/mslangid.hxx>

@@ -52,14 +52,14 @@
 #include <svtools/ctloptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/datetime.hxx>
 #include <math.h>
 
-#include <svtools/saveopt.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/saveopt.hxx>
+#include <unotools/useroptions.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <vcl/virdev.hxx>
 

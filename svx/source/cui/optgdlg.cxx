@@ -37,7 +37,7 @@
 #include <goodies/grfmgr.hxx>
 #include <svtools/flagitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 #include <svtools/szitem.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -46,14 +46,14 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <i18npool/mslangid.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/cacheoptions.hxx>
-#include <svtools/fontoptions.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/cacheoptions.hxx>
+#include <unotools/fontoptions.hxx>
 #include <svtools/menuoptions.hxx>
-#include <svtools/startoptions.hxx>
+#include <unotools/startoptions.hxx>
 #include <svtools/languageoptions.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/printwarningoptions.hxx>
+#include <unotools/printwarningoptions.hxx>
 #include <svtools/syslocaleoptions.hxx>
 #include <svtools/helpopt.hxx>
 #include <svtools/accessibilityoptions.hxx>
@@ -89,7 +89,7 @@
 
 #include <svx/dialmgr.hxx>
 #include <svtools/helpopt.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

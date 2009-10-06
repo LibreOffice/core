@@ -46,8 +46,8 @@
 #include <tools/config.hxx>
 #include <vcl/image.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/dynamicmenuoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/dynamicmenuoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>

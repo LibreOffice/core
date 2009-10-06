@@ -33,7 +33,7 @@
 
 #include <vcl/split.hxx>
 #include <vcl/ctrl.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>
 #include "gallery.hrc"

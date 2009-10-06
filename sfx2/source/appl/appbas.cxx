@@ -53,9 +53,9 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 
-#include <svtools/undoopt.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/undoopt.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <unotools/bootstrap.hxx>
 
 #include <sfx2/appuno.hxx>

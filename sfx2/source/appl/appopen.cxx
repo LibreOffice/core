@@ -75,11 +75,11 @@
 #include <basic/sbxobj.hxx>
 #include <svtools/urihelper.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/templdlg.hxx>
 #include <osl/file.hxx>
-#include <svtools/extendedsecurityoptions.hxx>
+#include <unotools/extendedsecurityoptions.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <vcl/svapp.hxx>
 

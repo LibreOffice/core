@@ -39,7 +39,7 @@
 #include <vcl/msgbox.hxx>
 #include <svtools/asynclink.hxx>
 
-#include <svtools/printwarningoptions.hxx>
+#include <unotools/printwarningoptions.hxx>
 #include <svtools/eitem.hxx>
 
 #ifndef GCC

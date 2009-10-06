@@ -39,7 +39,7 @@
 #include <rtl/string.hxx>
 #endif
 #ifndef _SVTOOLS_PATHOPTIONS_HXX
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #endif
 #include <tools/resid.hxx>
 #include <i18npool/mslangid.hxx>

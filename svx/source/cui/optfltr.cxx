@@ -36,9 +36,9 @@
 #endif
 
 // include ---------------------------------------------------------------
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 #include "optfltr.hxx"
 #include "optfltr.hrc"
 #include <svx/dialogs.hrc>

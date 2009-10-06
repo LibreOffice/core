@@ -38,7 +38,7 @@
 // include ---------------------------------------------------------------
 #include <unolingu.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/sfontitm.hxx>
 #include <sfx2/printer.hxx>

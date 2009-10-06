@@ -34,7 +34,7 @@
 #include <tools/solar.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 ///////////////////////////////////////////////////////////////////////////
 //

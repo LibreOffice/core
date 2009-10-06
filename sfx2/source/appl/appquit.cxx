@@ -42,7 +42,7 @@
 #endif
 #include <svtools/eitem.hxx>
 
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <svtools/misccfg.hxx>
 
 #ifndef GCC

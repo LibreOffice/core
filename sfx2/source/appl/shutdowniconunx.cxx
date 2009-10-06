@@ -1,9 +1,9 @@
 
 #ifdef ENABLE_QUICKSTART_APPLET
 
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
-#include <svtools/dynamicmenuoptions.hxx>
+#include <unotools/dynamicmenuoptions.hxx>
 
 #include <gtk/gtk.h>
 #include <glib.h>

@@ -73,7 +73,7 @@
 #include <sot/storinfo.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/mediadescriptor.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #ifndef css
 namespace css = ::com::sun::star;

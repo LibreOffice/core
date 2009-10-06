@@ -34,7 +34,7 @@
 #include "sfx2/dllapi.h"
 #include <tools/string.hxx>
 #include <svtools/hint.hxx>
-#include <svtools/eventcfg.hxx>
+#include <unotools/eventcfg.hxx>
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>

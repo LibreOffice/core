@@ -38,7 +38,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/urihelper.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <svtools/imagemgr.hxx>
 #include <tools/datetime.hxx>
 

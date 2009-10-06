@@ -80,7 +80,7 @@
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
@@ -111,7 +111,7 @@ using namespace ::com::sun::star::container;
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <tools/inetmime.hxx>
 #include <tools/urlobj.hxx>

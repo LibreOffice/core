@@ -38,7 +38,7 @@
 // include ---------------------------------------------------------------
 
 #ifndef INCLUDED_SVTOOLS_SECURITIYOPTIONS_HXX
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #endif
 #include <svtools/stdctrl.hxx>
 #include <svx/dialmgr.hxx>

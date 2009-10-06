@@ -53,8 +53,8 @@
 #include <vcl/waitobj.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/color.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <sot/exchange.hxx>
 #include <comphelper/storagehelper.hxx>
 

@@ -39,7 +39,7 @@
 #include <svtools/asynclink.hxx>
 #include <basic/sbx.hxx>
 
-#include <svtools/undoopt.hxx>
+#include <unotools/undoopt.hxx>
 
 #ifndef GCC
 #endif

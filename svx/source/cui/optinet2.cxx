@@ -55,7 +55,7 @@
 #ifndef _CNTWIDS_HRC
 #include <svtools/cntwids.hrc>
 #endif
-#include <svtools/inetoptions.hxx>
+#include <unotools/inetoptions.hxx>
 #ifndef _SV_SVAPP_HXX
 #include <sfx2/app.hxx>
 #endif
@@ -64,15 +64,15 @@
 #include <vcl/help.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #ifndef INCLUDED_SVTOOLS_SECURITIYOPTIONS_HXX
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #endif
 #ifndef _SVTOOLS_JAVAPTIONS_HXX
-#include <svtools/javaoptions.hxx>
+#include <unotools/javaoptions.hxx>
 #endif
 #include <unotools/localfilehelper.hxx>
-#include <svtools/extendedsecurityoptions.hxx>
+#include <unotools/extendedsecurityoptions.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #define _SVX_OPTINET2_CXX
 #include <svx/dialmgr.hxx>

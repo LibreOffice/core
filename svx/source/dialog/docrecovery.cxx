@@ -65,7 +65,7 @@
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <rtl/bootstrap.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <unotools/localfilehelper.hxx>
 
 #define RET_BACK    100

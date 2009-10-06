@@ -38,7 +38,7 @@
 #include <svtools/intitem.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/itemset.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/datetime.hxx>

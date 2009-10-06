@@ -42,7 +42,7 @@
 #include <svtools/slstitm.hxx>
 #include <svtools/itemiter.hxx>
 #include <svtools/style.hxx>
-#include <svtools/searchopt.hxx>
+#include <unotools/searchopt.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/module.hxx>

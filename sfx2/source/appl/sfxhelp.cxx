@@ -56,12 +56,12 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <svtools/helpopt.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/configmgr.hxx>
 #include <ucbhelper/content.hxx>
 
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>

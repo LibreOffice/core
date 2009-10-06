@@ -75,9 +75,9 @@
 #include <unotools/tempfile.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/startoptions.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/internaloptions.hxx>
+#include <unotools/startoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/internaloptions.hxx>
 
 
 #define DEFINE_CONST_OUSTRING(CONSTASCII)       OUString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))

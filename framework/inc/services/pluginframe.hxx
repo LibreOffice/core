@@ -57,7 +57,7 @@
 #ifndef _VCL_ATOM_HXX
 #include <vcl/threadex.hxx>
 #endif
-#include <svtools/cmdoptions.hxx>
+#include <unotools/cmdoptions.hxx>
 
 
 //_________________________________________________________________________________________________________________

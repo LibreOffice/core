@@ -36,6 +36,11 @@
 #include <vcl/toolbox.hxx>
 #include <svtools/ctrlbox.hxx>
 
+namespace utl
+{
+    class SourceViewConfig;
+};
+
 // class SvxFontSubstCheckListBox ------------------------------------------
 
 class SvxFontSubstCheckListBox : public SvxSimpleTable
@@ -88,7 +93,7 @@ class SvxFontSubstTabPage : public SfxTabPage
     String                      sAutomatic;
 
     SvtFontSubstConfig*         pConfig;
-    svt::SourceViewConfig*      pSourceViewConfig;
+    utl::SourceViewConfig*      pSourceViewConfig;
 
     String          sHeader1;
     String          sHeader2;

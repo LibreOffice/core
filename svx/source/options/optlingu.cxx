@@ -45,7 +45,7 @@
 #include <tools/dynary.hxx>
 #include <i18npool/mslangid.hxx>
 //#include <svtools/svarray.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 #include <unolingu.hxx>
 #include <dlgutil.hxx>
 #include <linguistic/lngprops.hxx>
@@ -70,7 +70,7 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <svtools/extendedsecurityoptions.hxx>
+#include <unotools/extendedsecurityoptions.hxx>
 #include <svtools/svlbox.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/intitem.hxx>

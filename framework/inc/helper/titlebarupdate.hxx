@@ -93,7 +93,7 @@
 //_________________________________________________________________________________________________________________
 
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_

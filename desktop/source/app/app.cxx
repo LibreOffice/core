@@ -114,14 +114,14 @@
 #include <unotools/ucbhelper.hxx>
 #include <tools/tempfile.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <osl/module.h>
 #include <osl/file.hxx>
 #include <osl/signal.h>
 #include <rtl/uuid.h>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/languageoptions.hxx>
-#include <svtools/internaloptions.hxx>
+#include <unotools/internaloptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/syslocaleoptions.hxx>
@@ -149,7 +149,7 @@
 #include <svtools/apearcfg.hxx>
 #include <svtools/misccfg.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/regoptions.hxx>
+#include <unotools/regoptions.hxx>
 
 #include "langselect.hxx"
 
@@ -1400,7 +1400,7 @@ void Desktop::Main()
 
             if (IsFirstStartWizardNeeded())
             {
-                ::svt::RegOptions().removeReminder(); // remove patch registration reminder
+                ::utl::RegOptions().removeReminder(); // remove patch registration reminder
                 Reference< XJob > xFirstStartJob( xSMgr->createInstance(
                     DEFINE_CONST_UNICODE( "com.sun.star.comp.desktop.FirstStart" ) ), UNO_QUERY );
                 if (xFirstStartJob.is())

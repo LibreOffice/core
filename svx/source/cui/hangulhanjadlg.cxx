@@ -48,8 +48,8 @@
 #include <tools/urlobj.hxx>
 #include <vcl/controllayout.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/lingucfg.hxx>
-#include <svtools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
 //#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 //#include <com/sun/star/frame/XStorable.hpp>
 //#endif

@@ -37,7 +37,7 @@
 
 
 #include <tools/shl.hxx>
-#include <svtools/searchopt.hxx>
+#include <unotools/searchopt.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 
 #ifndef _SVX_DIALOGS_HRC

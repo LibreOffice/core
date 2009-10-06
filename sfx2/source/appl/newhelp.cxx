@@ -95,10 +95,10 @@
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/ui/XDockingAreaAcceptor.hpp>
 #include <svtools/helpopt.hxx>
-#include <svtools/historyoptions.hxx>
+#include <unotools/historyoptions.hxx>
 #include <svtools/menuoptions.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/viewoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #include <svtools/svtdata.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/cachestr.hxx>

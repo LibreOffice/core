@@ -73,6 +73,7 @@ SHL1STDLIBS=\
     $(VOSLIB)					\
     $(SVLLIB)					\
     $(TOOLSLIB)					\
+        $(UNOTOOLSLIB) \
     $(SALLIB)					\
     $(DBTOOLSLIB)				\
     $(DBFILELIB)				\

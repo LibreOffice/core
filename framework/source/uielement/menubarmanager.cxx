@@ -82,9 +82,9 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 #include <svtools/menuoptions.hxx>
-#include <svtools/historyoptions.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/cmdoptions.hxx>
+#include <unotools/historyoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/cmdoptions.hxx>
 #include <unotools/localfilehelper.hxx>
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>

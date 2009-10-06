@@ -97,8 +97,8 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <rtl/ustring.hxx>
 #include <vos/process.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <tools/urlobj.hxx>
 

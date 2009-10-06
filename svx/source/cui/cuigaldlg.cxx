@@ -41,7 +41,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <avmedia/mediawindow.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <avmedia/mediawindow.hxx>
 #include "opengrf.hxx"
 #include "impgrf.hxx"

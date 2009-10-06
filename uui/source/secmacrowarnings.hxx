@@ -33,7 +33,7 @@
 
 #include <vcl/dialog.hxx>
 #include <svtools/stdctrl.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <vcl/button.hxx>
 
 namespace com {

@@ -42,8 +42,8 @@
 #include <svtools/ctrlbox.hxx>
 #include <vcl/scrbar.hxx>
 #include <svx/xtable.hxx>
-#include <svtools/moduleoptions.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <boost/shared_ptr.hpp>
 //CHINA001 #ifndef _SVX_DLG_NAME_HXX

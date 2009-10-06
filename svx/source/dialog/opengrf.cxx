@@ -58,7 +58,7 @@
 #endif
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svx/dialmgr.hxx>
 #include "opengrf.hxx"
 

@@ -58,7 +58,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 //_______________________________________________
 // namespace

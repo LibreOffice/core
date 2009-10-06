@@ -52,7 +52,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <svtools/eventcfg.hxx>
+#include <unotools/eventcfg.hxx>
 
 #include "headertablistbox.hxx"
 #include "macropg_impl.hxx"

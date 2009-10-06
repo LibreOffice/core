@@ -34,7 +34,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <vcl/msgbox.hxx>
-#include <svtools/viewoptions.hxx>
+#include <unotools/viewoptions.hxx>
 
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>

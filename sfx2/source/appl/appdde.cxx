@@ -41,7 +41,7 @@
 #include <sfx2/linkmgr.hxx>
 
 #include <tools/urlobj.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #ifndef GCC
 #endif
 

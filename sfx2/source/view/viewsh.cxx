@@ -55,12 +55,12 @@
 #include <vos/mutex.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/soerr.hxx>
-#include <svtools/internaloptions.hxx>
+#include <unotools/internaloptions.hxx>
 
-#include <svtools/javaoptions.hxx>
+#include <unotools/javaoptions.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbuno.hxx>
 #include <framework/actiontriggerhelper.hxx>

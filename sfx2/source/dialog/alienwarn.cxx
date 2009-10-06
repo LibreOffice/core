@@ -38,7 +38,7 @@
 #include "alienwarn.hrc"
 #include "dialog.hrc"
 #include <vcl/msgbox.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 // class SfxAlienWarningDialog -------------------------------------------
 

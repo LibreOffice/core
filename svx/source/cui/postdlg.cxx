@@ -45,7 +45,7 @@
 #endif
 #include <svtools/itempool.hxx>
 #include <svtools/itemset.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>

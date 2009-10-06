@@ -36,7 +36,7 @@
 #include <tools/vcompat.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/docfile.hxx>
 #include "gallery.hxx"
 #include "galmisc.hxx"

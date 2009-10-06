@@ -49,8 +49,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <svtools/moduleoptions.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/saveopt.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/container/XContainerQuery.hpp>
@@ -66,7 +66,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/configitem.hxx>
-#include <svtools/optionsdlg.hxx>
+#include <unotools/optionsdlg.hxx>
 
 #include <vcl/msgbox.hxx>
 

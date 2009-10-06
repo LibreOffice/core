@@ -61,7 +61,7 @@
 //_________________________________________________________________________________________________________________
 #include <tools/config.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/dynamicmenuoptions.hxx>
+#include <unotools/dynamicmenuoptions.hxx>
 #include <svtools/menuoptions.hxx>
 #include <rtl/logfile.hxx>
 

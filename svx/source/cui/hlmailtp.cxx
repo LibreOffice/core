@@ -41,8 +41,8 @@
 
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #include "hlmailtp.hxx"
 #include "hyperdlg.hrc"

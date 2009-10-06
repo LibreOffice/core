@@ -68,12 +68,12 @@
 #include <unotools/configmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/wldcrd.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <svtools/helpopt.hxx>
-#include <svtools/undoopt.hxx>
-#include <svtools/securityoptions.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/inetoptions.hxx>
+#include <unotools/undoopt.hxx>
+#include <unotools/securityoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/inetoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <vcl/toolbox.hxx>
 #include <unotools/localfilehelper.hxx>

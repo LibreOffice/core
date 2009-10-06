@@ -36,7 +36,7 @@
 #ifndef __SBX_SBXVARIABLE_HXX
 #include <basic/sbxvar.hxx>
 #endif
-#include <svtools/searchopt.hxx>
+#include <unotools/searchopt.hxx>
 #include <com/sun/star/util/XReplaceable.hpp>
 #include <com/sun/star/util/XSearchable.hpp>
 #include <com/sun/star/util/XSearchDescriptor.hpp>

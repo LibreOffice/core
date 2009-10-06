@@ -45,7 +45,7 @@
 // #97148# ---------------
 #include "svtools/ctypeitm.hxx"
 #include "svtools/eitem.hxx"
-#include "svtools/viewoptions.hxx"
+#include "unotools/viewoptions.hxx"
 #include "svtools/fileview.hxx"
 #include "svtools/inettbc.hxx"
 #include "iodlg.hxx"
@@ -54,7 +54,7 @@
 #endif
 #include "svtools/imagemgr.hxx"
 #include <unotools/localfilehelper.hxx>
-#include "svtools/useroptions.hxx"
+#include "unotools/useroptions.hxx"
 #ifndef _RTL_INSTANCE_HXX_
 #include "rtl/instance.hxx"
 #endif

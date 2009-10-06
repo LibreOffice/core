@@ -105,7 +105,7 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <rtl/logfile.hxx>
-#include <svtools/cmdoptions.hxx>
+#include <unotools/cmdoptions.hxx>
 
 #include <algorithm>
 #include <boost/bind.hpp>

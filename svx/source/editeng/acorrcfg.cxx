@@ -35,7 +35,7 @@
 #include <sfx2/app.hxx>
 
 #include <tools/urlobj.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/urihelper.hxx>
 
 #include <svx/svxacorr.hxx>

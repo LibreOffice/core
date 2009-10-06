@@ -39,8 +39,8 @@
 // header for define RET_OK
 #include <vcl/msgbox.hxx>
 // header for class SvtLinguConfigItem
-#include <svtools/lingucfg.hxx>
-#include <svtools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
 #ifndef _SVX_HELPID_HRC
 #include "helpid.hrc"
 #endif

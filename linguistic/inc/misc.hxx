@@ -44,7 +44,7 @@
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/implbase1.hxx> // helper for implementations
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <i18npool/lang.h>
 #include <tools/string.hxx>
 #include <unotools/charclass.hxx>

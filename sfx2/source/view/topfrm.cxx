@@ -68,7 +68,7 @@
 #include <svtools/sfxecode.hxx>
 #include <vcl/dialog.hxx>
 #include <svtools/urihelper.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>
 

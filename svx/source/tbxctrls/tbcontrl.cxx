@@ -45,7 +45,7 @@
 #include <svtools/style.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/stritem.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
@@ -58,7 +58,7 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/fontoptions.hxx>
+#include <unotools/fontoptions.hxx>
 #ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
 #endif

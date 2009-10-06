@@ -72,7 +72,7 @@
 #include <linguistic/lngprops.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 
 
 using ::rtl::OUString;

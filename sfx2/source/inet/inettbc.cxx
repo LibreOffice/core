@@ -43,7 +43,7 @@
 #include <svtools/eitem.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/cancel.hxx>
-#include <svtools/historyoptions.hxx>
+#include <unotools/historyoptions.hxx>
 #include <svtools/folderrestriction.hxx>
 #include <vcl/toolbox.hxx>
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
@@ -59,7 +59,7 @@
 
 #include <svtools/itemset.hxx>
 #include <svtools/urihelper.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/asynclink.hxx>
 #include <svtools/inettbc.hxx>
 

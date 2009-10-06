@@ -180,7 +180,7 @@
 #include "svtools/filedlg.hxx"
 #include "svtools/hint.hxx"
 #include "svtools/lstner.hxx"
-#include "svtools/pathoptions.hxx"
+#include "unotools/pathoptions.hxx"
 #include "svtools/sfxecode.hxx"
 #include "svtools/smplhint.hxx"
 #include "svtools/solar.hrc"
