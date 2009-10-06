@@ -33,12 +33,12 @@
 #include <svtools/editsyntaxhighlighter.hxx>
 #include <svtools/lstner.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/sourceviewconfig.hxx>
+#include <unotools/sourceviewconfig.hxx>
 
 namespace dbaui
 {
     class OQueryTextView;
-    class OSqlEdit : public MultiLineEditSyntaxHighlight, SfxListener
+    class OSqlEdit : public MultiLineEditSyntaxHighlight, SfxListener, utl::ConfigurationListener
     {
     private:
         Timer                   m_timerInvalidate;
@@ -48,7 +48,7 @@ namespace dbaui
         OQueryTextView*         m_pView;
         BOOL                    m_bAccelAction;     // Wird bei Cut, Copy, Paste gesetzt
         BOOL                    m_bStopTimer;
-        svt::SourceViewConfig   m_SourceViewConfig;
+        utl::SourceViewConfig   m_SourceViewConfig;
         svtools::ColorConfig    m_ColorConfig;
 
         DECL_LINK(OnUndoActionTimer, void*);
@@ -83,6 +83,7 @@ namespace dbaui
         void startTimer();
 
         virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+        virtual void    ConfigurationChanged( utl::ConfigurationBroadcaster* );
         using MultiLineEditSyntaxHighlight::Notify;
     };
 }

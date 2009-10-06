@@ -104,7 +104,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #endif
 #include <svtools/filenotation.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <tools/diagnose_ex.h>
 #include <connectivity/DriversConfig.hxx>
 

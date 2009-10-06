@@ -143,7 +143,7 @@
 #include <svtools/aeitem.hxx> //CHINA001
 #include <svtools/cliplistener.hxx>
 #include <svtools/syslocale.hxx>
-#include <svtools/viewoptions.hxx>
+#include <unotools/viewoptions.hxx>
 
 #include <vos/mutex.hxx>
 #include "PropertyForward.hxx"

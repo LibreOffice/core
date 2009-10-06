@@ -106,7 +106,7 @@
 #include "browserids.hxx"
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #endif
 #include "IApplicationController.hxx"
 

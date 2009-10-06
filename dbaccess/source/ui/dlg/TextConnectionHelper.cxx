@@ -141,7 +141,7 @@
 #endif
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #endif
 
 #ifndef SVTOOLS_INC_ROADMAPWIZARD_HXX

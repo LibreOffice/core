@@ -47,7 +47,7 @@
 #include <comphelper/numberedcollection.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/property.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <framework/titlehelper.hxx>
 

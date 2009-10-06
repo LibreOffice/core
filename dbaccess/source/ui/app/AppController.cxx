@@ -135,10 +135,10 @@
 #include <vcl/menu.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_INTERNALOPTIONS_HXX
-#include <svtools/internaloptions.hxx>
+#include <unotools/internaloptions.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -178,7 +178,7 @@
 #include <sfx2/mailmodelapi.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #endif
 #ifndef _SVTREEBOX_HXX
 #include <svtools/svtreebx.hxx>
@@ -219,7 +219,7 @@
 #include <sfx2/QuerySaveDocument.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
-#include <svtools/historyoptions.hxx>
+#include <unotools/historyoptions.hxx>
 #endif
 #ifndef SVTOOLS_FILENOTATION_HXX_
 #include <svtools/filenotation.hxx>

@@ -62,7 +62,7 @@
 #include <svtools/svtreebx.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
-#include <svtools/viewoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #endif
 #ifndef _DBAUI_INDEXES_HXX_
 #include "indexes.hxx"

@@ -102,7 +102,7 @@
 #include <boost/mem_fn.hpp>
 #include <boost/bind.hpp>
 #include <boost/utility.hpp>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include "RptModel.hxx"
 #include "UndoEnv.hxx"
 #include "FormattedField.hxx"
@@ -111,7 +111,7 @@
 #include "Shape.hxx"
 #include "ReportHelperImpl.hxx"
 #include <svtools/itempool.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <osl/thread.hxx>
 
 #include <svx/paperinf.hxx>

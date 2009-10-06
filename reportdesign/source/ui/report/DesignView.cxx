@@ -34,7 +34,7 @@
 #include "ReportController.hxx"
 #include <comphelper/types.hxx>
 #include <svtools/syslocale.hxx>
-#include <svtools/viewoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #include "RptDef.hxx"
 #include "UITools.hxx"
 #include "RptObject.hxx"

@@ -51,7 +51,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/sharedunocomponent.hxx>
 

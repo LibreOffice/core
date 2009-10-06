@@ -59,7 +59,7 @@
 #endif
 #include <comphelper/sequence.hxx>
 #include <svtools/filenotation.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include "dsntypes.hxx"
 namespace dbaxml
 {

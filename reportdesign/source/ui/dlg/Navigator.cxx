@@ -73,7 +73,7 @@
 namespace rptui
 {
 using namespace ::com::sun::star;
-using namespace svt;
+using namespace utl;
 using namespace ::comphelper;
 
 USHORT lcl_getImageId(const uno::Reference< report::XReportComponent>& _xElement)

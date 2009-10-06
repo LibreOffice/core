@@ -109,7 +109,7 @@
 #include "finteraction.hxx"
 #include <connectivity/CommonTools.hxx>
 #include "dbaccess_helpid.hrc"
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/roadmapwizard.hxx>
 #include "TextConnectionHelper.hxx"
 

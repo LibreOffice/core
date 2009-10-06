@@ -116,7 +116,7 @@
 #include <sot/storage.hxx>
 #include <svtools/filenotation.hxx>
 #include <svtools/intitem.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/svtreebx.hxx>
 #include <svx/algitem.hxx>
