@@ -66,6 +66,7 @@ class SbiParser : public SbiTokenizer
     void StmntBlock( SbiToken );    // Statement-Block abarbeiten
     void DefType( BOOL bPrivate );  // Parse type declaration
     void DefEnum( BOOL bPrivate );  // Parse enum declaration
+    void DefDeclare( BOOL bPrivate );
     void EnableCompatibility();
 public:
     SbxArrayRef   rTypeArray;       // das Type-Array

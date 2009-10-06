@@ -381,6 +381,13 @@ sal_Bool SvXMLAutoStylePoolP::Add(OUString& rName, sal_Int32 nFamily, const OUSt
     return pImpl->Add(rName, nFamily, rParent, rProperties);
 }
 
+sal_Bool SvXMLAutoStylePoolP::AddNamed( const OUString& rName, sal_Int32 nFamily, const OUString& rParent,
+                                        const ::std::vector< XMLPropertyState >& rProperties )
+
+{
+    return pImpl->AddNamed(rName, nFamily, rParent, rProperties);
+}
+
 OUString SvXMLAutoStylePoolP::AddAndCache( sal_Int32 nFamily,
                                   const vector< XMLPropertyState >& rProperties )
 {

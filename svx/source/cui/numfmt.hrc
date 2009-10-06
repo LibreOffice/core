@@ -64,10 +64,9 @@
 #define IB_INFO                 31
 #define IL_ICON                 32
 #define LB_CURRENCY             33
-#define STR_EUROPE              34
-#define CB_SOURCEFORMAT         35
-#define IL_ICON_HC              36
-#define STR_AUTO_ENTRY          37
+#define CB_SOURCEFORMAT         34
+#define IL_ICON_HC              35
+#define STR_AUTO_ENTRY          36
 
 #define TBX_ADDREMOVE           1
 #define IID_ADD                 1

@@ -39,6 +39,8 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "connectivity/dbexception.hxx"
 #include "resource/ado_res.hrc"
+#include <Objbase.h>
+
 
 #include "resource/sharedresources.hxx"
 
@@ -57,12 +59,19 @@ ODriver::ODriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang:
     : ODriver_BASE(m_aMutex)
     ,m_xORB(_xORB)
 {
-    CoInitialize(NULL);
+     if ( FAILED(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)) )
+     {
+         CoUninitialize();
+         int h = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+         (void)h;
+         ++h;
+     }
 }
 // -------------------------------------------------------------------------
 ODriver::~ODriver()
 {
     CoUninitialize();
+    CoInitialize(NULL);
 }
 //------------------------------------------------------------------------------
 void ODriver::disposing()

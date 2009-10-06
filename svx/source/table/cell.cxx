@@ -278,19 +278,6 @@ namespace sdr
         void CellProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
         {
             TextProperties::SetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
-
-            if( bDontRemoveHardAttr && pNewStyleSheet )
-            {
-                GetObjectItemSet();
-
-                const SfxItemSet& rStyleAttribs = pNewStyleSheet->GetItemSet();
-
-                for ( USHORT nWhich = SDRATTR_START; nWhich <= SDRATTR_TABLE_LAST; nWhich++ )
-                {
-                    if ( rStyleAttribs.GetItemState( nWhich ) == SFX_ITEM_ON )
-                        mpItemSet->ClearItem( nWhich );
-                }
-            }
         }
     } // end of namespace properties
 } // end of namespace sdr

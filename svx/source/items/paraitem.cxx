@@ -889,7 +889,7 @@ SvxTabStop::SvxTabStop()
 {
     nTabPos = 0;
     eAdjustment = SVX_TAB_ADJUST_LEFT;
-    cDecimal = SvtSysLocale().GetLocaleData().getNumDecimalSep().GetChar(0);
+    m_cDecimal = cDfltDecimalChar;
     cFill = cDfltFillChar;
 }
 
@@ -900,10 +900,15 @@ SvxTabStop::SvxTabStop( const long nPos, const SvxTabAdjust eAdjst,
 {
     nTabPos = nPos;
     eAdjustment = eAdjst;
-    cDecimal = ( cDfltDecimalChar == cDec ) ? SvtSysLocale().GetLocaleData().getNumDecimalSep().GetChar(0) : cDec;
+    m_cDecimal = cDec;
     cFill = cFil;
 }
-
+// -----------------------------------------------------------------------------
+void SvxTabStop::fillDecimal() const
+{
+    if ( cDfltDecimalChar == m_cDecimal )
+        m_cDecimal = SvtSysLocale().GetLocaleData().getNumDecimalSep().GetChar(0);
+}
 // -----------------------------------------------------------------------
 
 XubString SvxTabStop::GetValueString() const
@@ -918,7 +923,7 @@ XubString SvxTabStop::GetValueString() const
     aStr += cpDelim;
     aStr += sal_Unicode('[');
     aStr += XubString( ResId( RID_SVXITEMS_TAB_DECIMAL_CHAR, DIALOG_MGR() ) );
-    aStr += cDecimal;
+    aStr += GetDecimal();
     aStr += sal_Unicode(']');
     aStr += cpDelim;
     aStr += cpDelim;

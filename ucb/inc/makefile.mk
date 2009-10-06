@@ -41,6 +41,7 @@ TARGET=inc
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
+.IF "$(L10N_framework)"==""
 
 .IF "$(ENABLE_PCH)"!=""
 ALLTAR : \
@@ -48,4 +49,4 @@ ALLTAR : \
     $(SLO)$/precompiled_ex.pch
     
 .ENDIF			# "$(ENABLE_PCH)"!=""
-
+.ENDIF 		# L10N_framework

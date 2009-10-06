@@ -65,9 +65,8 @@ using namespace com::sun::star::util;
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.OPreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
 
-OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInfoVector& _TypeInfo,const ::rtl::OUString& sql)
+OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const ::rtl::OUString& sql)
     :OStatement_BASE2(_pConnection)
-    ,m_aTypeInfo(_TypeInfo)
     ,numParams(0)
     ,boundParams(NULL)
     ,m_bPrepared(sal_False)
@@ -80,12 +79,11 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInf
             OSQLParser aParser(_pConnection->getDriver()->getORB());
             ::rtl::OUString sErrorMessage;
             ::rtl::OUString sNewSql;
-            OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,sql);
-            if(pNode)
+            ::std::auto_ptr<OSQLParseNode> pNode( aParser.parseTree(sErrorMessage,sql) );
+            if ( pNode.get() )
             {   // special handling for parameters
-                OSQLParseNode::substituteParameterNames(pNode);
+                OSQLParseNode::substituteParameterNames(pNode.get());
                 pNode->parseNodeToStr( sNewSql, _pConnection );
-                delete pNode;
                 m_sSqlStatement = sNewSql;
             }
         }
@@ -446,11 +444,11 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
     checkParameterIndex(parameterIndex);
 
     sal_Int8* lenBuf = getLengthBuf (parameterIndex);
-    *(SDWORD*)lenBuf = SQL_NULL_DATA;
+    *(SQLLEN*)lenBuf = SQL_NULL_DATA;
 
 
-    SQLINTEGER  prec = 0;
-    SQLUINTEGER nColumnSize = 0;
+    SQLLEN prec = 0;
+    SQLULEN nColumnSize = 0;
     if (sqlType == SQL_CHAR || sqlType == SQL_VARCHAR || sqlType == SQL_LONGVARCHAR)
     {
         prec = 1;
@@ -476,7 +474,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
                                             nDecimalDigits,
                                             NULL,
                                             prec,
-                                            (SDWORD*)lenBuf
+                                            (SQLLEN*)lenBuf
                                             );
     OTools::ThrowException(m_pConnection,nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
@@ -819,12 +817,18 @@ sal_Int32 OPreparedStatement::getPrecision ( sal_Int32 sqlType)
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     sal_Int32 prec = -1;
-    if (m_aTypeInfo.size())
+    const TTypeInfoVector& rTypeInfo = m_pConnection->getTypeInfo();
+    if ( !rTypeInfo.empty() )
+    {
+        m_pConnection->buildTypeInfo();
+    }
+
+    if ( !rTypeInfo.empty() )
     {
         OTypeInfo aInfo;
         aInfo.nType = (sal_Int16)sqlType;
-        TTypeInfoVector::const_iterator aIter = ::std::find(m_aTypeInfo.begin(),m_aTypeInfo.end(),aInfo);
-        if(aIter != m_aTypeInfo.end())
+        TTypeInfoVector::const_iterator aIter = ::std::find(rTypeInfo.begin(),rTypeInfo.end(),aInfo);
+        if(aIter != rTypeInfo.end())
             prec = (*aIter).nPrecision;
     }
     return prec;
@@ -861,7 +865,7 @@ void OPreparedStatement::setStream (
 
     // Bind the parameter with SQL_LEN_DATA_AT_EXEC
     SQLSMALLINT   Ctype = SQL_C_CHAR;
-    SDWORD  atExec = SQL_LEN_DATA_AT_EXEC (length);
+    SQLLEN  atExec = SQL_LEN_DATA_AT_EXEC (length);
     memcpy (dataBuf, &ParameterIndex, sizeof(ParameterIndex));
     memcpy (lenBuf, &atExec, sizeof (atExec));
 
@@ -872,14 +876,14 @@ void OPreparedStatement::setStream (
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     N3SQLBindParameter(m_aStatementHandle,
                         (SQLUSMALLINT)ParameterIndex,
-                        (SQLSMALLINT)SQL_PARAM_INPUT,
+                        (SQLUSMALLINT)SQL_PARAM_INPUT,
                         Ctype,
                         (SQLSMALLINT)SQLtype,
-                        (SQLUINTEGER)length,
+                        (SQLULEN)length,
                         0,
                         dataBuf,
                         sizeof(ParameterIndex),
-                        (SDWORD*)lenBuf);
+                        (SQLLEN*)lenBuf);
 
     // Save the input stream
     boundParams[ParameterIndex - 1].setInputStream (x, length);

@@ -34,62 +34,30 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-
-#include <threadhelp/threadhelpbase.hxx>
-#include <macros/generic.hxx>
-#include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
+#include <uifactory/toolbarcontrollerfactory.hxx>
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/frame/XUIControllerRegistration.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <cppuhelper/weak.hxx>
-#include <rtl/ustring.hxx>
+
 
 namespace framework
 {
 
-class ConfigurationAccess_StatusbarControllerFactory;
-class StatusbarControllerFactory :  public com::sun::star::lang::XTypeProvider                      ,
-                                    public com::sun::star::lang::XServiceInfo                       ,
-                                    public com::sun::star::lang::XMultiComponentFactory             ,
-                                    public ::com::sun::star::frame::XUIControllerRegistration ,
-                                    private ThreadHelpBase                                          ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                                    public ::cppu::OWeakObject
+class ConfigurationAccess_ControllerFactory;
+class StatusbarControllerFactory :  public ToolbarControllerFactory
 {
     public:
         StatusbarControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
-        virtual ~StatusbarControllerFactory();
 
         //  XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
-
-        // XMultiComponentFactory
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithContext( const ::rtl::OUString& aServiceSpecifier, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& Context ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& Context ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableServiceNames() throw (::com::sun::star::uno::RuntimeException);
-
-        // XUIControllerRegistration
-        virtual sal_Bool SAL_CALL hasController( const ::rtl::OUString& aCommandURL, const rtl::OUString& aModuleName ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL registerController( const ::rtl::OUString& aCommandURL, const rtl::OUString& aModuleName, const ::rtl::OUString& aControllerImplementationName ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL deregisterController( const ::rtl::OUString& aCommandURL, const rtl::OUString& aModuleName ) throw (::com::sun::star::uno::RuntimeException);
-
-    private:
-        sal_Bool                                                                         m_bConfigRead;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
-        ConfigurationAccess_StatusbarControllerFactory*                                  m_pConfigAccess;
 };
 
 } // namespace framework

@@ -579,7 +579,7 @@ void OEvoabResultSet::disposing(void)
     g_list_free(m_pContacts);
     m_pContacts = NULL;
     m_pStatement = NULL;
-    m_xMetaData = NULL;
+m_xMetaData.clear();
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OEvoabResultSet::queryInterface( const Type & rType ) throw(RuntimeException)

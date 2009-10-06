@@ -460,13 +460,13 @@ TabPage OFA_TP_LANGUAGES
     FixedText FT_USERINTERFACE
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 108 , 8 ) ;
         Text [ en-US ] = "~User interface";
     };
     ListBox LB_USERINTERFACE
     {
-        Pos = MAP_APPFONT ( 135 , 14 ) ;
-        Size = MAP_APPFONT ( 113 , 60 ) ;
+        Pos = MAP_APPFONT ( 123 , 14 ) ;
+        Size = MAP_APPFONT ( 125 , 60 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -481,13 +481,13 @@ TabPage OFA_TP_LANGUAGES
     FixedText FT_LOCALESETTING
     {
         Pos = MAP_APPFONT ( 12 , 31 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 108 , 8 ) ;
         Text [ en-US ] = "Locale setting";
     };
     ListBox LB_LOCALESETTING
     {
-        Pos = MAP_APPFONT ( 135 , 30 ) ;
-        Size = MAP_APPFONT ( 113 , 60 ) ;
+        Pos = MAP_APPFONT ( 123 , 30 ) ;
+        Size = MAP_APPFONT ( 125 , 60 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -496,13 +496,13 @@ TabPage OFA_TP_LANGUAGES
     FixedText FT_DECIMALSEPARATOR
     {
         Pos = MAP_APPFONT ( 12 , 46 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 108 , 8 ) ;
         Text [ en-US ] = "Decimal separator key";
     };
     CheckBox CB_DECIMALSEPARATOR
     {
-        Pos = MAP_APPFONT ( 135 , 46) ;
-        Size = MAP_APPFONT ( 119 , RSC_CD_CHECKBOX_HEIGHT ) ;
+        Pos = MAP_APPFONT ( 123 , 46) ;
+        Size = MAP_APPFONT ( 125 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "~Same as locale setting ( %1 )";
     };
     FixedImage FI_CURRENCY
@@ -514,13 +514,13 @@ TabPage OFA_TP_LANGUAGES
     FixedText FT_CURRENCY
     {
         Pos = MAP_APPFONT ( 12 , 61 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 108 , 8 ) ;
         Text [ en-US ] = "~Default currency";
     };
     ListBox LB_CURRENCY
     {
-        Pos = MAP_APPFONT ( 135 , 59 ) ;
-        Size = MAP_APPFONT ( 113 , 60 ) ;
+        Pos = MAP_APPFONT ( 123 , 59 ) ;
+        Size = MAP_APPFONT ( 125 , 60 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -541,14 +541,14 @@ TabPage OFA_TP_LANGUAGES
     FixedText FT_WEST_LANG
     {
         Pos = MAP_APPFONT ( 12 , 90 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 108 , 8 ) ;
         Text [ en-US ] = "Western";
     };
 
     ListBox LB_WEST_LANG
     {
-        Pos = MAP_APPFONT ( 135 ,  88 ) ;
-        Size = MAP_APPFONT ( 113 , 60 ) ;
+        Pos = MAP_APPFONT ( 123 ,  88 ) ;
+        Size = MAP_APPFONT ( 125 , 60 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -563,13 +563,13 @@ TabPage OFA_TP_LANGUAGES
     FixedText FT_ASIAN_LANG
     {
         Pos = MAP_APPFONT ( 12 , 106 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 108 , 8 ) ;
         Text [ en-US ] = "Asian";
     };
     ListBox LB_ASIAN_LANG
     {
-        Pos = MAP_APPFONT ( 135 , 104 ) ;
-        Size = MAP_APPFONT ( 113 , 60 ) ;
+        Pos = MAP_APPFONT ( 123 , 104 ) ;
+        Size = MAP_APPFONT ( 125 , 60 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -584,13 +584,13 @@ TabPage OFA_TP_LANGUAGES
     FixedText FT_COMPLEX_LANG
     {
         Pos = MAP_APPFONT ( 12 , 122 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 108 , 8 ) ;
         Text [ en-US ] = "C~TL";
     };
     ListBox LB_COMPLEX_LANG
     {
-        Pos = MAP_APPFONT ( 135 , 120 ) ;
-        Size = MAP_APPFONT ( 113 , 60 ) ;
+        Pos = MAP_APPFONT ( 123 , 120 ) ;
+        Size = MAP_APPFONT ( 125 , 60 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -598,8 +598,8 @@ TabPage OFA_TP_LANGUAGES
     };
     CheckBox CB_CURRENT_DOC
     {
-        Pos = MAP_APPFONT ( 135 , 135 ) ;
-        Size = MAP_APPFONT ( 113 , RSC_CD_CHECKBOX_HEIGHT ) ;
+        Pos = MAP_APPFONT ( 123 , 135 ) ;
+        Size = MAP_APPFONT ( 125 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "For the current document only";
     };
     FixedLine FL_ENHANCED

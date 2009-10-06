@@ -34,7 +34,7 @@
 #include "txencbox.hxx"
 #include "txenctab.hxx"
 #include <svx/dialogs.hrc>
-#include "dbcharsethelper.hxx"
+#include "svx/dbcharsethelper.hxx"
 #include <vcl/svapp.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/locale.h>

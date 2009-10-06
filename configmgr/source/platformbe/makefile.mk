@@ -42,6 +42,7 @@ SYSMGR_MAJOR=1
 # --- Settings ---
 
 .INCLUDE : settings.mk
+.IF "$(L10N_framework)"==""
 .INCLUDE : $(PRJ)$/makefile.pmk
 DLLPRE =
 
@@ -69,6 +70,7 @@ DEF1EXPORTFILE=exports.dxp
 DEF1DES=Configuration: System Integration Manager
 
 # --- Targets ---
+.ENDIF # L10N_framework
 
 .INCLUDE : target.mk
 
