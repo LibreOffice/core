@@ -582,7 +582,15 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
             }
             if ( !pDrawViewWrapper->IsAction() )
             {
-                pDrawViewWrapper->BegCreateObj( aMPos);
+                if ( pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_CAPTION )
+                {
+                    Size aCaptionSize( 2268, 1134 );
+                    pDrawViewWrapper->BegCreateCaptionObj( aMPos, aCaptionSize );
+                }
+                else
+                {
+                    pDrawViewWrapper->BegCreateObj( aMPos);
+                }
                 SdrObject* pObj = pDrawViewWrapper->GetCreateObj();
                 DrawCommandDispatch* pDrawCommandDispatch = m_aDispatchContainer.getDrawCommandDispatch();
                 if ( pObj && m_pDrawModelWrapper && pDrawCommandDispatch )
@@ -1642,6 +1650,11 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
                     case OBJ_TEXT:
                         {
                             ePointerStyle = POINTER_DRAW_TEXT;
+                        }
+                        break;
+                    case OBJ_CAPTION:
+                        {
+                            ePointerStyle = POINTER_DRAW_CAPTION;
                         }
                         break;
                     default:

@@ -42,6 +42,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/svdocapt.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svxids.hrc>
@@ -190,6 +191,7 @@ FeatureState DrawCommandDispatch::getState( const ::rtl::OUString& rCommand )
         case SID_DRAW_RECT:
         case SID_DRAW_ELLIPSE:
         case SID_DRAW_TEXT:
+        case SID_DRAW_CAPTION:
             {
                 aReturn.bEnabled = true;
                 aReturn.aState <<= false;
@@ -248,6 +250,12 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
                 eDrawMode = CHARTDRAW_INSERT;
                 eKind = OBJ_TEXT;
                 bCreate = true;
+            }
+            break;
+        case SID_DRAW_CAPTION:
+            {
+                eDrawMode = CHARTDRAW_INSERT;
+                eKind = OBJ_CAPTION;
             }
             break;
         default:
@@ -311,6 +319,7 @@ void DrawCommandDispatch::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:Rect",          SID_DRAW_RECT,              CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:Ellipse",       SID_DRAW_ELLIPSE,           CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:DrawText",      SID_DRAW_TEXT,              CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DrawCaption",   SID_DRAW_CAPTION,           CommandGroup::INSERT );
 }
 
 void DrawCommandDispatch::setInsertObj( USHORT eObj, const ::rtl::OUString& rShapeType )
@@ -390,6 +399,34 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                                         aSet.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_RIGHT ) );
                                         pTextObj->SetMergedItemSet( aSet );
                                     }
+                                }
+                            }
+                        }
+                        break;
+                    case SID_DRAW_CAPTION:
+                    case SID_DRAW_CAPTION_VERTICAL:
+                        {
+                            if ( pObj->ISA( SdrCaptionObj ) )
+                            {
+                                sal_Bool bIsVertical( SID_DRAW_CAPTION_VERTICAL == nID );
+                                SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
+                                if ( pTextObj )
+                                {
+                                    pTextObj->SetVerticalWriting( bIsVertical );
+                                }
+                                if ( bIsVertical )
+                                {
+                                    SfxItemSet aSet( pObj->GetMergedItemSet() );
+                                    aSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
+                                    aSet.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_RIGHT ) );
+                                    pObj->SetMergedItemSet( aSet );
+                                }
+                                SdrCaptionObj* pCaptionObj = dynamic_cast< SdrCaptionObj* >( pObj );
+                                if ( pCaptionObj )
+                                {
+                                    pCaptionObj->SetLogicRect( aRect );
+                                    pCaptionObj->SetTailPos(
+                                        aRect.TopLeft() - Point( aRect.GetWidth() / 2, aRect.GetHeight() / 2 ) );
                                 }
                             }
                         }
