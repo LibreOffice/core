@@ -819,7 +819,7 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
 
 --------------------------------------------------*/
 
-void SwSrcEditWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if ( rHint.ISA( TextHint ) )
     {
