@@ -35,7 +35,7 @@
 
 //------------------------------------------------------------------------
 
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/docinf.hxx>

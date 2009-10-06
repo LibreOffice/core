@@ -155,13 +155,13 @@
 #include <svtools/brdcst.hxx>
 #include <svtools/cenumitm.hxx>
 #include <svtools/cintitem.hxx>
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/listener.hxx>
 #include <svtools/lstner.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/solar.hrc>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <svx/editobj.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/fmglob.hxx>

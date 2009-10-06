@@ -39,7 +39,7 @@
 #include <tools/queue.hxx>
 #include <tools/mempool.hxx>
 #include <tools/link.hxx>
-#include <svtools/lstner.hxx>
+#include <unotools/options.hxx>
 #include "global.hxx"
 #include "bigrange.hxx"
 #include "collect.hxx"
@@ -994,9 +994,7 @@ DECLARE_TABLE( ScChangeActionTable, ScChangeAction* )
 // "normalen" Actions in die Quere zu kommen.
 #define SC_CHGTRACK_GENERATED_START ((UINT32) 0xfffffff0)
 
-// SfxListener an der Applikation, um Aenderungen des Usernamens mitzubekommen
-
-class ScChangeTrack : public SfxListener
+class ScChangeTrack : public utl::ConfigurationListener
 {
     friend void ScChangeAction::RejectRestoreContents( ScChangeTrack*, SCsCOL, SCsROW );
     friend BOOL ScChangeActionDel::Reject( ScDocument* pDoc );
@@ -1059,7 +1057,6 @@ class ScChangeTrack : public SfxListener
                                     const ScBaseCell* pOldCell,
                                     const ScBaseCell* pNewCell );
 
-    virtual void                Notify( SfxBroadcaster&, const SfxHint& );
             void                Init();
             void                DtorClear();
             void                SetLoadSave( BOOL bVal ) { bLoadSave = bVal; }
@@ -1130,6 +1127,7 @@ class ScChangeTrack : public SfxListener
 #endif  // SC_CHGTRACK_CXX
 
             void                ClearMsgQueue();
+    virtual void                ConfigurationChanged( utl::ConfigurationBroadcaster* );
 
 public:
 

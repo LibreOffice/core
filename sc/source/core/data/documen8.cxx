@@ -58,7 +58,7 @@
 #include <svtools/misccfg.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <vcl/virdev.hxx>
 #include <vcl/msgbox.hxx>

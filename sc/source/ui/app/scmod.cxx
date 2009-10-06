@@ -57,7 +57,7 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/ctloptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <vcl/status.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>

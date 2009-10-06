@@ -42,7 +42,7 @@
 
 #include <svtools/numuno.hxx>
 #include <svtools/smplhint.hxx>
-#include <svtools/undoopt.hxx>
+#include <unotools/undoopt.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/pdfextoutdevdata.hxx>

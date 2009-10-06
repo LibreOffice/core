@@ -42,7 +42,7 @@
 
 
 #include <sot/clsids.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
@@ -64,7 +64,7 @@
 #include <sfx2/objface.hxx>
 #include <svx/srchitem.hxx>
 #include <svx/svxmsbas.hxx>
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <svtools/documentlockfile.hxx>
 #include <svtools/sharecontrolfile.hxx>
 #include <unotools/charclass.hxx>

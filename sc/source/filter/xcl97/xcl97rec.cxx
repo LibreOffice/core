@@ -57,7 +57,7 @@
 
 #include "scitems.hxx"
 
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/frmdiritem.hxx>
@@ -65,7 +65,7 @@
 #include <svx/eeitem.hxx>
 #include <svx/msoleexp.hxx>
 
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 #include <stdio.h>

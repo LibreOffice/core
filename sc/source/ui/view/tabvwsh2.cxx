@@ -43,7 +43,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/aeitem.hxx>
 #include <svtools/whiter.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/languageoptions.hxx>
 #include <sfx2/dispatch.hxx>
 

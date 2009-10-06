@@ -38,7 +38,7 @@
 #include <svtools/slstitm.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/whiter.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svtools/insdlg.hxx>
 #include <sot/formats.hxx>

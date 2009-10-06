@@ -45,7 +45,7 @@
 // header for class Svx3DPercentDiagonalItem
 #include <svx/svx3ditems.hxx>
 // header for class SvtPathOptions
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 // header E3dObjFactory
 #include <svx/objfac3d.hxx>
 // header for class SdrObjList

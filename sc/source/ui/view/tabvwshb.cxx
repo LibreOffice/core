@@ -65,7 +65,7 @@
 #include <svtools/soerr.hxx>
 #include <svtools/rectitem.hxx>
 #include <svtools/whiter.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <sot/exchange.hxx>
 
 #include "tabvwsh.hxx"

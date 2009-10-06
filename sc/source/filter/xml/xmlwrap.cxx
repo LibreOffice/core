@@ -71,7 +71,7 @@
 
 #include <svx/xmleohlp.hxx>
 #include <rtl/logfile.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 #include "document.hxx"
 #include "xmlwrap.hxx"

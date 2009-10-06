@@ -49,7 +49,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/urihelper.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/insdlg.hxx>
 #include <svtools/soerr.hxx>
 #include <svx/svxdlg.hxx>

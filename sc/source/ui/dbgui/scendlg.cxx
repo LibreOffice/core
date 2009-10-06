@@ -39,7 +39,7 @@
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/localedatawrapper.hxx>
 

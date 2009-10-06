@@ -43,7 +43,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 // for SfxBoolItem
 #include <svtools/eitem.hxx>

@@ -48,7 +48,7 @@
 #include <vcl/msgbox.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/visitem.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>

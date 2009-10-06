@@ -70,7 +70,7 @@
 #include <sfx2/passwd.hxx>
 #include <svx/hlnkitem.hxx>
 #include <basic/sbxcore.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/localedatawrapper.hxx>
 

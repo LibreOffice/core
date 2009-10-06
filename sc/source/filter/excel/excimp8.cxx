@@ -36,7 +36,7 @@
 
 #include <scitems.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 
 #include <svtools/wmf.hxx>
 

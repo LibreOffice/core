@@ -47,7 +47,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/poolcach.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <svtools/zforlist.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>

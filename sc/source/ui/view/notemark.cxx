@@ -36,7 +36,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdocapt.hxx>
 #include <sfx2/printer.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/itempool.hxx>
 #include <vcl/svapp.hxx>
 

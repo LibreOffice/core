@@ -40,7 +40,7 @@
 #include <unotools/localfilehelper.hxx>
 
 #include <tools/debug.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>

@@ -32,7 +32,7 @@
 #include "precompiled_sc.hxx"
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <svtools/itemset.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/eitem.hxx>

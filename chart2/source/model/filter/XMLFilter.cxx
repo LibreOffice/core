@@ -41,7 +41,7 @@
 // header contains only macros
 #include <svtools/sfxecode.hxx>
 // header for class SvtSaveOptions
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <comphelper/genericpropertyset.hxx>
 // header for struct PropertyMapEntry
 #include <comphelper/propertysetinfo.hxx>

@@ -218,7 +218,7 @@
 #include "svtools/itemiter.hxx"
 #include "svtools/itempool.hxx"
 #include "svtools/itemset.hxx"
-#include "svtools/pathoptions.hxx"
+#include "unotools/pathoptions.hxx"
 #include "svtools/poolitem.hxx"
 #include "svtools/stritem.hxx"
 #include "svtools/syslocale.hxx"

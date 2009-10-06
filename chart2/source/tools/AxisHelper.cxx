@@ -42,7 +42,7 @@
 #include "DataSeriesHelper.hxx"
 #include "Scaling.hxx"
 
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 

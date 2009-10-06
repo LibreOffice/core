@@ -38,8 +38,8 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/textsearch.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
 #include <stdlib.h>
