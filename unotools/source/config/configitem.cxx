@@ -104,7 +104,7 @@ namespace utl{
         virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException);
 
         //XAsyncCallback
-        virtual void SAL_CALL notify ( const Any& rData );
+        virtual void SAL_CALL notify ( const Any& rData ) throw(RuntimeException);
     };
 /* -----------------------------12.02.01 11:38--------------------------------
 
@@ -222,7 +222,7 @@ void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) th
     }
 }
 
-void ConfigChangeListener_Impl::notify ( const Any& rData )
+void ConfigChangeListener_Impl::notify ( const Any& rData ) throw(RuntimeException)
 {
     Sequence<OUString>  aChangedNames;
     if ( (rData >>= aChangedNames) && pParent )
