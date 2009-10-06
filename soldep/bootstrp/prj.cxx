@@ -37,8 +37,6 @@
 #include <tools/geninfo.hxx>
 #include <soldep/prj.hxx>
 #include <bootstrp/inimgr.hxx>
-#include <soldep/XmlBuildList.hxx>
-#include "XmlBuildListDef.hxx"
 
 #ifndef MACOSX
 #pragma hdrstop
@@ -1105,46 +1103,42 @@ Prj& Prj::operator<<  ( SvStream& rStream )
 //
 
 /*****************************************************************************/
-Star::Star(XmlBuildList* pXmlBuildListObj)
+Star::Star()
 /*****************************************************************************/
                 : pDepMode (NULL),
-                pAllDepMode (NULL),
-                mpXmlBuildList (pXmlBuildListObj)
+                pAllDepMode (NULL)
 {
     // this ctor is only used by StarWriter
 }
 
 /*****************************************************************************/
-Star::Star(XmlBuildList* pXmlBuildListObj, String aFileName, USHORT nMode )
+Star::Star(String aFileName, USHORT nMode )
 /*****************************************************************************/
                 : nStarMode( nMode ),
                 sFileName( aFileName ),
                 pDepMode (NULL),
-                pAllDepMode (NULL),
-                mpXmlBuildList (pXmlBuildListObj)
+                pAllDepMode (NULL)
 {
     Read( aFileName );
 }
 
 /*****************************************************************************/
-Star::Star(XmlBuildList* pXmlBuildListObj, SolarFileList *pSolarFiles )
+Star::Star(SolarFileList *pSolarFiles )
 /*****************************************************************************/
                 : nStarMode( STAR_MODE_MULTIPLE_PARSE ),
                 pDepMode (NULL),
-                pAllDepMode (NULL),
-                mpXmlBuildList (pXmlBuildListObj)
+                pAllDepMode (NULL)
 {
     // this ctor is used by StarBuilder to get the information for the whole workspace
     Read( pSolarFiles );
 }
 
 /*****************************************************************************/
-Star::Star(XmlBuildList* pXmlBuildListObj, GenericInformationList *pStandLst, ByteString &rVersion,
+Star::Star(GenericInformationList *pStandLst, ByteString &rVersion,
     BOOL bLocal, const char *pSourceRoot )
 /*****************************************************************************/
                 : pDepMode (NULL),
-                pAllDepMode (NULL),
-                mpXmlBuildList (pXmlBuildListObj)
+                pAllDepMode (NULL)
 {
     UpdateFileList (pStandLst, rVersion, TRUE, bLocal, pSourceRoot);
 }
@@ -2299,27 +2293,27 @@ Star& Star::operator<<  ( SvStream& rStream )
 //
 
 /*****************************************************************************/
-StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, String aFileName, BOOL bReadComments, USHORT nMode )
+StarWriter::StarWriter( String aFileName, BOOL bReadComments, USHORT nMode )
 /*****************************************************************************/
-                : Star (pXmlBuildListObj)
+                : Star ()
 {
     sFileName = aFileName;
     Read ( aFileName, bReadComments, nMode );
 }
 
 /*****************************************************************************/
-StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, SolarFileList *pSolarFiles, BOOL bReadComments )
+StarWriter::StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments )
 /*****************************************************************************/
-                : Star (pXmlBuildListObj)
+                : Star ()
 {
     Read( pSolarFiles, bReadComments );
 }
 
 /*****************************************************************************/
-StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, GenericInformationList *pStandLst, ByteString &rVersion,
+StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
     ByteString &rMinor, BOOL bReadComments, BOOL bLocal, const char *pSourceRoot )
 /*****************************************************************************/
-                : Star (pXmlBuildListObj)
+                : Star ()
 {
     ByteString sPath( rVersion );
     if ( pSourceRoot )

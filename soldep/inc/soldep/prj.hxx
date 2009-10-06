@@ -58,7 +58,6 @@
 
 class SByteStringList;
 class GenericInformationList;
-class XmlBuildList;
 
 /*
 // Pfade auf Konfigurationsdateien des Build-Servers
@@ -377,7 +376,6 @@ protected:
     String          sFileName;
     SByteStringList* pDepMode;
     SByteStringList* pAllDepMode;
-    XmlBuildList*   mpXmlBuildList;
 
     Link aFileIOErrorHdl; // called with &String as parameter!!!
 
@@ -389,10 +387,10 @@ protected:
     ULONG           SearchFileEntry( StarFileList *pStarFiles, StarFile* pFile );
 
 public:
-                    Star( XmlBuildList* pXmlBuildListObj );
-                    Star( XmlBuildList* pXmlBuildListObj, String aFileName, USHORT nMode = STAR_MODE_SINGLE_PARSE );
-                    Star( XmlBuildList* pXmlBuildListObj, SolarFileList *pSolarFiles );
-                    Star( XmlBuildList* pXmlBuildListObj, GenericInformationList *pStandLst, ByteString &rVersion, BOOL bLocal = FALSE,
+                    Star();
+                    Star( String aFileName, USHORT nMode = STAR_MODE_SINGLE_PARSE );
+                    Star( SolarFileList *pSolarFiles );
+                    Star( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bLocal = FALSE,
                         const char *pSourceRoot = NULL  );
 
                     ~Star();
@@ -448,9 +446,9 @@ private:
     USHORT          WritePrj( Prj *pPrj, SvFileStream& rStream );
 
 public:
-                    StarWriter( XmlBuildList* pXmlBuildListObj, String aFileName, BOOL bReadComments = FALSE, USHORT nMode = STAR_MODE_SINGLE_PARSE );
-                    StarWriter( XmlBuildList* pXmlBuildListObj, SolarFileList *pSolarFiles, BOOL bReadComments = FALSE );
-                    StarWriter( XmlBuildList* pXmlBuildListObj, GenericInformationList *pStandLst, ByteString &rVersion, ByteString &rMinor,
+                    StarWriter( String aFileName, BOOL bReadComments = FALSE, USHORT nMode = STAR_MODE_SINGLE_PARSE );
+                    StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments = FALSE );
+                    StarWriter( GenericInformationList *pStandLst, ByteString &rVersion, ByteString &rMinor,
                         BOOL bReadComments = FALSE, BOOL bLocal = FALSE, const char *pSourceRoot = NULL );
 
     void            CleanUp();

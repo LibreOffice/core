@@ -50,8 +50,7 @@ all:
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES= \
-          $(SLO)$/prj.obj	\
-          $(SLO)$/XmlBuildList.obj
+          $(SLO)$/prj.obj	
 
 SLOFILES=\
           $(SLO)$/dep.obj \
@@ -60,10 +59,6 @@ SLOFILES=\
           $(SLO)$/appdef.obj \
            $(SLO)$/hashtbl.obj		\
           $(SLO)$/prj.obj \
-
-          
-#          $(SLO)$/XmlBuildList.obj
-
 
 SHL1TARGET	=$(TARGET)$(DLLPOSTFIX)
 SHL1IMPLIB	=$(TARGET)
@@ -74,8 +69,7 @@ SHL1STDLIBS=\
             $(TOOLSLIB) \
             $(BTSTRPLIB)		\
             $(VOSLIB)			\
-            $(SALLIB)   \
-               $(PERL_LIB)
+            $(SALLIB)
 
 DEF1NAME    =$(SHL1TARGET)
 DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt

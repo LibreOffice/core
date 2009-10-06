@@ -43,7 +43,6 @@
 #include <soldep/depper.hxx>
 #include <soldep/soldep.hxx>
 #include <soldep/soldlg.hxx>
-//#include <soldep/XmlBuildList.hxx>
 #include "dtsodcmp.hrc"
 
 IMPLEMENT_HASHTABLE_OWNER( SolIdMapper, ByteString, ULONG* );
@@ -67,19 +66,7 @@ SolDep::SolDep( Window* pBaseWindow )
                 mbBServer(FALSE),
                 mpTravellerList( NULL ),
                 mbIsHide( FALSE )
-//              ,
-//              mpXmlBuildList (NULL)
 {
-    /*
-    ByteString sModulPath ("."); // wo soll das Perlmodul stehen???
-    try
-    {
-        mpXmlBuildList = new XmlBuildList (sModulPath);
-    }
-    catch (XmlBuildListException& Exception) {
-        const char* Message = Exception.getMessage();
-    }
-    */
     mnSolWinCount = 0;
     mnSolLastId = 0;
 //    mpPrjIdMapper = new SolIdMapper( 63997 );
@@ -104,8 +91,6 @@ SolDep::~SolDep()
     delete mpSolIdMapper;
     delete mpStarWriter;
     delete mpStandLst;
-//  if (mpXmlBuildList)
-//      delete mpXmlBuildList;
 }
 
 /*****************************************************************************/
@@ -572,12 +557,12 @@ USHORT SolDep::ReadSource(BOOL bUpdater)
     mpSolIdMapper = new SolIdMapper( 63997 );
     if (mpStandLst && bUpdater)
     {
-        mpStarWriter = new StarWriter( mpXmlBuildList, mpStandLst, msVersionMajor, msVersionMinor, TRUE );
+        mpStarWriter = new StarWriter( mpStandLst, msVersionMajor, msVersionMinor, TRUE );
     } else
     {
         SolarFileList* pSolarFileList;
         pSolarFileList = GetPrjListFromDir();
-        mpStarWriter = new StarWriter( mpXmlBuildList, pSolarFileList, TRUE );
+        mpStarWriter = new StarWriter( pSolarFileList, TRUE );
     }
     ByteString sTitle( SOLDEPL_NAME );
     if ( mpStarWriter->GetMode() == STAR_MODE_SINGLE_PARSE ) {
