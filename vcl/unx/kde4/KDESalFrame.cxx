@@ -318,6 +318,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         aMenuBack = toColor( qMenuCG.color( QPalette::Button ) );
 
         style.SetMenuTextColor( aMenuFore );
+        style.SetMenuBarTextColor( aMenuFore );
         style.SetMenuColor( aMenuBack );
         style.SetMenuBarColor( aMenuBack );
 

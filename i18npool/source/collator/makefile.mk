@@ -42,7 +42,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-txtlist:=$(shell @cd data && ls *.txt)
+txtlist:=$(shell @cd data >& $(NULLDEV) && ls *.txt)
 LOCAL_RULE_LANGS:=$(uniq $(foreach,i,$(txtlist) $(i:s/-/_/:s/_/ /:1)))
 rules_dependencies:=$(foreach,i,$(txtlist) data$/$i) $(INCCOM)$/lrl_include.hxx
 

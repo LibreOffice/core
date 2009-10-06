@@ -407,7 +407,7 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
         { "out", "out://", 0, true, false, false, false, false, false,
           false, false },
         { "vnd.sun.star.wfs", "vnd.sun.star.wfs://", 0, true, false, false,
-          false, true, false, true, false },
+          false, true, true, true, false },
         { "vnd.sun.star.hier", "vnd.sun.star.hier:", 0, true, false, false,
           false, false, false, true, false },
         { "vim", "vim://", 0, true, true, false, true, false, false, true,
@@ -4825,9 +4825,8 @@ bool INetURLObject::setFSysPath(rtl::OUString const & rFSysPath,
             break;
     }
 
-    rtl::OUStringBuffer aSynAbsURIRef(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file://"),
-        RTL_TEXTENCODING_ASCII_US));
+    rtl::OUStringBuffer aSynAbsURIRef(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file://")));
+
     switch (eStyle)
     {
         case FSYS_VOS:

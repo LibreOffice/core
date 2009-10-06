@@ -150,6 +150,17 @@ public:
 
 public:
 
+    /** Called by the corresponding ValueSet when it gets the focus.
+        Stores the new focus state and broadcasts a state change event.
+    */
+    void GetFocus (void);
+
+    /** Called by the corresponding ValueSet when it loses the focus.
+        Stores the new focus state and broadcasts a state change event.
+    */
+    void LoseFocus (void);
+
+
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -201,6 +212,8 @@ private:
         ::com::sun::star::accessibility::XAccessibleEventListener > >   mxEventListeners;
     ValueSet*                                                           mpParent;
     bool                                                                mbIsTransientChildrenDisabled;
+    /// The current FOCUSED state.
+    bool mbIsFocused;
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 

@@ -478,6 +478,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maMenuHighlightColor( rData.maMenuHighlightColor ),
     maMenuHighlightTextColor( rData.maMenuHighlightTextColor ),
     maMenuTextColor( rData.maMenuTextColor ),
+    maMenuBarTextColor( rData.maMenuBarTextColor ),
     maMonoColor( rData.maMonoColor ),
     maRadioCheckTextColor( rData.maRadioCheckTextColor ),
     maShadowColor( rData.maShadowColor ),
@@ -597,6 +598,7 @@ void ImplStyleData::SetStandardStyles()
     maMenuBarColor              = Color( COL_LIGHTGRAY );
     maMenuBorderColor           = Color( COL_LIGHTGRAY );
     maMenuTextColor             = Color( COL_BLACK );
+    maMenuBarTextColor          = Color( COL_BLACK );
     maMenuHighlightColor        = Color( COL_BLUE );
     maMenuHighlightTextColor    = Color( COL_WHITE );
     maHighlightColor            = Color( COL_BLUE );
@@ -1028,6 +1030,7 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->maMenuBarColor            == rSet.mpData->maMenuBarColor)             &&
          (mpData->maMenuBorderColor         == rSet.mpData->maMenuBorderColor)          &&
          (mpData->maMenuTextColor           == rSet.mpData->maMenuTextColor)            &&
+         (mpData->maMenuBarTextColor        == rSet.mpData->maMenuBarTextColor)         &&
          (mpData->maMenuHighlightColor      == rSet.mpData->maMenuHighlightColor)       &&
          (mpData->maMenuHighlightTextColor  == rSet.mpData->maMenuHighlightTextColor)   &&
          (mpData->maHighlightColor          == rSet.mpData->maHighlightColor)           &&

@@ -218,11 +218,15 @@ namespace comphelper
     // public UiEventsLogger interface
     sal_Bool UiEventsLogger::isEnabled()
     {
-        try {
-            UiEventsLogger_Impl::prepareMutex();
-            Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
-            return UiEventsLogger_Impl::getInstance()->m_Active;
-        } catch(...) { return false; } // never throws
+        if ( UiEventsLogger_Impl::getEnabledFromCfg() )
+        {
+            try {
+                UiEventsLogger_Impl::prepareMutex();
+                Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+                return UiEventsLogger_Impl::getInstance()->m_Active;
+            } catch(...) { return false; } // never throws
+        } // if ( )
+        return sal_False;
     }
 
     sal_Int32 UiEventsLogger::getSessionLogEventCount()
