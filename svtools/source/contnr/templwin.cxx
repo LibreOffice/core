@@ -33,9 +33,9 @@
 #include "templwin.hxx"
 #include "templdlg.hxx"
 #include <svtools/svtdata.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/dynamicmenuoptions.hxx>
-#include <svtools/extendedsecurityoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/dynamicmenuoptions.hxx>
+#include <unotools/extendedsecurityoptions.hxx>
 #include <svtools/xtextedt.hxx>
 #include <svtools/inettype.hxx>
 #include "imagemgr.hxx"
@@ -52,8 +52,8 @@
 #ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>
 #endif
-#include <svtools/pathoptions.hxx>
-#include <svtools/viewoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #include <unotools/ucbhelper.hxx>
 
 #include "unotools/configmgr.hxx"

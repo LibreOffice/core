@@ -36,7 +36,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <svtools/brdcst.hxx>
 #include <svtools/lstner.hxx>
-#include <svtools/options.hxx>
+#include <unotools/options.hxx>
 
 //-----------------------------------------------------------------------------
 namespace svtools{
@@ -108,7 +108,7 @@ struct ColorConfigValue
 
  ---------------------------------------------------------------------------*/
 class SVT_DLLPUBLIC ColorConfig:
-    public svt::detail::Options, public SfxBroadcaster, public SfxListener
+    public utl::detail::Options, public SfxBroadcaster, public SfxListener
 {
     friend class ColorConfig_Impl;
 private:

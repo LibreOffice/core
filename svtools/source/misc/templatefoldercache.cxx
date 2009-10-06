@@ -45,7 +45,7 @@
 #include <vos/refernce.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 #include "comphelper/processfactory.hxx"
 

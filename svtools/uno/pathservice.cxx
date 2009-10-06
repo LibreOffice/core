@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include "sal/types.h"
 #include "rtl/ustring.hxx"
 #include <cppuhelper/implbase2.hxx>

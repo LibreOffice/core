@@ -46,7 +46,7 @@
 #include <vcl/svapp.hxx>
 
 #include <rtl/logfile.hxx>
-#include "itemholder1.hxx"
+#include "itemholder2.hxx"
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -452,7 +452,7 @@ SvtMenuOptions::SvtMenuOptions()
         RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtMenuOptions_Impl::ctor()");
         m_pDataContainer = new SvtMenuOptions_Impl();
 
-        ItemHolder1::holdConfigItem(E_MENUOPTIONS);
+        ItemHolder2::holdConfigItem(E_MENUOPTIONS);
     }
 }
 

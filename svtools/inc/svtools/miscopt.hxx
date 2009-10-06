@@ -39,7 +39,7 @@
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <rtl/ustring.hxx>
-#include <svtools/options.hxx>
+#include <unotools/options.hxx>
 
 //_________________________________________________________________________________________________________________
 //  forward declarations
@@ -71,7 +71,7 @@ class Link;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SVT_DLLPUBLIC SvtMiscOptions: public svt::detail::Options
+class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods

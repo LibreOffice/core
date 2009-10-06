@@ -37,7 +37,7 @@
 #define  SVTOOLS_USEROPTTEST_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 
 namespace css = ::com::sun::star;
 

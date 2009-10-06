@@ -35,12 +35,12 @@
 #include <tools/string.hxx>
 #include <svtools/brdcst.hxx>
 #include <svtools/lstner.hxx>
-#include <svtools/options.hxx>
+#include <unotools/options.hxx>
 
 class SvtAccessibilityOptions_Impl;
 
 class SVT_DLLPUBLIC SvtAccessibilityOptions:
-    public svt::detail::Options, public SfxBroadcaster, private SfxListener
+    public utl::detail::Options, public SfxBroadcaster, private SfxListener
 {
 private:
     static SvtAccessibilityOptions_Impl* volatile sm_pSingleImplConfig;

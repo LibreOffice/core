@@ -37,7 +37,7 @@
 #include "svtools/svldllapi.h"
 #include <sal/types.h>
 #include <osl/mutex.hxx>
-#include <svtools/options.hxx>
+#include <unotools/options.hxx>
 
 //_________________________________________________________________________________________________________________
 //  forward declarations
@@ -67,7 +67,7 @@ class SvtMenuOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SVL_DLLPUBLIC SvtMenuOptions: public svt::detail::Options
+class SVL_DLLPUBLIC SvtMenuOptions: public utl::detail::Options
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods

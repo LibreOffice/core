@@ -36,6 +36,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 #include "unotools/unotoolsdllapi.h"
+#include "unotools/options.hxx"
 
 //-----------------------------------------------------------------------------
 namespace com{ namespace sun{ namespace star{
@@ -76,7 +77,7 @@ namespace utl
     class ConfigManager;
     struct ConfigItem_Impl;
 
-    class UNOTOOLS_DLLPUBLIC ConfigItem
+    class UNOTOOLS_DLLPUBLIC ConfigItem : public ConfigurationBroadcaster
     {
             friend class ConfigChangeListener_Impl;
             friend class ConfigManager;
@@ -87,6 +88,7 @@ namespace utl
             com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
                                         xChangeLstnr;
             ConfigItem_Impl*            pImpl;
+            IMPL_ConfigurationListenerList* mpList;
 
             ConfigItem();//
             void                    RemoveChangesListener();

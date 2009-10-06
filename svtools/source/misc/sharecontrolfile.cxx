@@ -57,7 +57,7 @@
 #include <unotools/bootstrap.hxx>
 #include <unotools/streamwrap.hxx>
 
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 
 #include <svtools/sharecontrolfile.hxx>
 

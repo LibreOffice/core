@@ -56,7 +56,7 @@
 
 #include <ucbhelper/content.hxx>
 
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 
 #include <svtools/documentlockfile.hxx>
 

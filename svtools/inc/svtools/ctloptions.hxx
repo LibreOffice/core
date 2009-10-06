@@ -34,14 +34,14 @@
 #include <sal/types.h>
 #include <svtools/brdcst.hxx>
 #include <svtools/lstner.hxx>
-#include <svtools/options.hxx>
+#include <unotools/options.hxx>
 
 class SvtCTLOptions_Impl;
 
 // class SvtCTLOptions --------------------------------------------------------
 
 class SVT_DLLPUBLIC SvtCTLOptions:
-    public svt::detail::Options, public SfxBroadcaster, public SfxListener
+    public utl::detail::Options, public SfxBroadcaster, public SfxListener
 {
 private:
     SvtCTLOptions_Impl*    m_pImp;

@@ -73,7 +73,7 @@
 #endif
 
 #ifndef _SVT_LOGHELPER_HXX
-#include <loghelper.hxx>
+#include <unotools/loghelper.hxx>
 #endif
 
 #include <itemholder2.hxx>

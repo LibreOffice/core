@@ -1,7 +1,7 @@
 #*************************************************************************
 #*
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -83,13 +83,12 @@ LIB7FILES=	\
         $(SLB)$/svdde.lib \
         $(SLB)$/svhtml.lib     \
         $(SLB)$/svrtf.lib	\
-        $(SLB)$/heavyconfig.lib 	\
+        $(SLB)$/config.lib	\
         $(SLB)$/table.lib 	\
-        $(SLB)$/java.lib	
+        $(SLB)$/java.lib
 
 LIB8TARGET= $(SLB)$/svl.lib
 LIB8FILES=	\
-        $(SLB)$/config.lib	\
         $(SLB)$/filerec.lib \
         $(SLB)$/filepicker.lib \
         $(SLB)$/items1.lib	\

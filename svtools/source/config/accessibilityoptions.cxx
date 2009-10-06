@@ -57,7 +57,7 @@
 #include <unotools/processfactory.hxx>
 #endif
 #ifndef _SVT_LOGHELPER_HXX_
-#include <loghelper.hxx>
+#include <unotools/loghelper.hxx>
 #endif
 
 #include <svtools/smplhint.hxx>

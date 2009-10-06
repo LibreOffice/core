@@ -35,7 +35,7 @@
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
-#include <svtools/options.hxx>
+#include <unotools/options.hxx>
 
 class SvtPrintOptions_Impl;
 
@@ -45,7 +45,7 @@ class SvtPrintOptions_Impl;
 
 class PrinterOptions;
 
-class SVT_DLLPUBLIC SvtBasePrintOptions: public svt::detail::Options
+class SVT_DLLPUBLIC SvtBasePrintOptions: public utl::detail::Options
 {
 protected:
 

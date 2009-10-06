@@ -46,6 +46,7 @@
 #include <svtools/accessibilityoptions.hxx>
 #include <apearcfg.hxx>
 #include <svtools/cjkoptions.hxx>
+#include <svtools/menuoptions.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/ctloptions.hxx>
 #include <fontsubstconfig.hxx>
@@ -54,9 +55,7 @@
 #include <misccfg.hxx>
 #include <svtools/printoptions.hxx>
 #include <svtools/syslocaleoptions.hxx>
-#include <svtools/undoopt.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/options.hxx>
+#include <unotools/options.hxx>
 #include <svtools/miscopt.hxx>
 
 
@@ -206,6 +205,10 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
 // no ref count            rItem.pItem = new SfxMiscCfg();
             break;
 
+        case E_MENUOPTIONS :
+            rItem.pItem = new SvtMenuOptions();
+            break;
+
         case E_PRINTOPTIONS :
             rItem.pItem = new SvtPrinterOptions();
             break;
@@ -218,13 +221,6 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
             rItem.pItem = new SvtSysLocaleOptions();
             break;
 
-        case E_UNDOOPTIONS :
-            rItem.pItem = new SvtUndoOptions();
-            break;
-
-        case E_USEROPTIONS :
-            rItem.pItem = new SvtUserOptions();
-            break;
         case E_MISCOPTIONS :
             rItem.pItem = new SvtMiscOptions();
             break;

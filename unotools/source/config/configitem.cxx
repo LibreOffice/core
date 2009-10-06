@@ -33,6 +33,7 @@
 #include "unotools/configitem.hxx"
 #include "unotools/configmgr.hxx"
 #include "unotools/configpathes.hxx"
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
@@ -43,6 +44,8 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/awt/XRequestCallback.hpp>
+#include <com/sun/star/awt/XCallback.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/XStringEscape.hpp>
@@ -62,7 +65,7 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::configuration;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx> // helper for implementations
 
 #ifdef DBG_UTIL
 inline void lcl_CFG_DBG_EXCEPTION(const sal_Char* cText, const Exception& rEx)
@@ -82,14 +85,15 @@ catch(Exception& rEx)   \
 #endif
 
 namespace utl{
-    class ConfigChangeListener_Impl : public cppu::WeakImplHelper1
+    class ConfigChangeListener_Impl : public cppu::WeakImplHelper2
     <
-        com::sun::star::util::XChangesListener
+        com::sun::star::util::XChangesListener,
+        com::sun::star::awt::XCallback
     >
     {
+        public:
             ConfigItem*                 pParent;
             const Sequence< OUString >  aPropertyNames;
-        public:
             ConfigChangeListener_Impl(ConfigItem& rItem, const Sequence< OUString >& rNames);
             ~ConfigChangeListener_Impl();
 
@@ -99,6 +103,8 @@ namespace utl{
         //XEventListener
         virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException);
 
+        //XAsyncCallback
+        virtual void SAL_CALL notify ( const Any& rData );
     };
 /* -----------------------------12.02.01 11:38--------------------------------
 
@@ -211,15 +217,25 @@ void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) th
     if(nNotify)
     {
         aChangedNames.realloc(nNotify);
-        pParent->CallNotify(aChangedNames);
+        Reference < com::sun::star::awt::XRequestCallback > aCallback( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.awt.AsyncCallback") ), UNO_QUERY );
+        aCallback->addCallback( this, makeAny( aChangedNames ) );
     }
 }
+
+void ConfigChangeListener_Impl::notify ( const Any& rData )
+{
+    Sequence<OUString>  aChangedNames;
+    if ( (rData >>= aChangedNames) && pParent )
+        pParent->CallNotify(aChangedNames);
+}
+
 /* -----------------------------29.08.00 16:34--------------------------------
 
  ---------------------------------------------------------------------------*/
 void ConfigChangeListener_Impl::disposing( const EventObject& /*rSource*/ ) throw(RuntimeException)
 {
-    pParent->RemoveChangesListener();
+    if ( pParent )
+        pParent->RemoveChangesListener();
 }
 /* -----------------------------29.08.00 12:50--------------------------------
 
@@ -266,6 +282,9 @@ ConfigItem::~ConfigItem()
 {
     if(pImpl->pManager)
     {
+        ConfigChangeListener_Impl* pListener = dynamic_cast < ConfigChangeListener_Impl* >( xChangeLstnr.get() );
+        if ( pListener )
+            pListener->pParent = 0;
         RemoveChangesListener();
         pImpl->pManager->RemoveConfigItem(*this);
     }
@@ -304,7 +323,9 @@ void ConfigItem::CallNotify( const com::sun::star::uno::Sequence<OUString>& rPro
 {
     if(!IsInValueChange() || pImpl->bEnableInternalNotification)
         Notify(rPropertyNames);
+    NotifyListeners();
 }
+
 /* -----------------------------29.08.00 12:52--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1418,6 +1439,4 @@ void ConfigItem::UnlockTree()
     if(0 != (pImpl->nMode&CONFIG_MODE_RELEASE_TREE))
         m_xHierarchyAccess = 0;
 }
-
-
 

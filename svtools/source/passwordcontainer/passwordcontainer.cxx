@@ -33,7 +33,7 @@
 
 #include "passwordcontainer.hxx"
 
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include "cppuhelper/factory.hxx"
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

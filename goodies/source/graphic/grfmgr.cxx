@@ -44,7 +44,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/salbtype.hxx>
-#include <svtools/cacheoptions.hxx>
+#include <unotools/cacheoptions.hxx>
 #include "grfmgr.hxx"
 
 // -----------

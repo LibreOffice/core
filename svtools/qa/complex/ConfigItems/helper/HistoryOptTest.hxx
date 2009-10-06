@@ -37,7 +37,7 @@
 #define  SVTOOLS_HISTORYOPTTEST_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <svtools/historyoptions.hxx>
+#include <unotools/historyoptions.hxx>
 
 namespace css = ::com::sun::star;
 

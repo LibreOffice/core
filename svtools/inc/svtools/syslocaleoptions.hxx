@@ -38,7 +38,7 @@
 #include <tools/link.hxx>
 #include <i18npool/lang.h>
 #include <tools/string.hxx>
-#include <svtools/options.hxx>
+#include <unotools/options.hxx>
 
 // bits for broadcasting hints of changes in a SfxSimpleHint, may be combined
 const ULONG SYSLOCALEOPTIONS_HINT_LOCALE    = 0x00000001;
@@ -48,7 +48,7 @@ class SvtSysLocaleOptions_Impl;
 class SvtListener;
 namespace osl { class Mutex; }
 
-class SVT_DLLPUBLIC SvtSysLocaleOptions: public svt::detail::Options
+class SVT_DLLPUBLIC SvtSysLocaleOptions: public utl::detail::Options
 {
     static  SvtSysLocaleOptions_Impl*   pOptions;
     static  sal_Int32                   nRefCount;

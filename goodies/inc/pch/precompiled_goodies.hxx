@@ -96,7 +96,7 @@
 #include "rtl/uuid.h"
 
 #include "svtools/FilterConfigItem.hxx"
-#include "svtools/cacheoptions.hxx"
+#include "unotools/cacheoptions.hxx"
 #include "svtools/fltcall.hxx"
 #include "svtools/itemprop.hxx"
 #include "svtools/lstner.hxx"

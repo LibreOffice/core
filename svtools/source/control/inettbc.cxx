@@ -66,13 +66,13 @@
 #include <vos/mutex.hxx>
 #endif
 #include <vcl/svapp.hxx>
-#include <svtools/historyoptions.hxx>
+#include <unotools/historyoptions.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/cancel.hxx>
 #include <svtools/itemset.hxx>
 #include "urihelper.hxx"
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>

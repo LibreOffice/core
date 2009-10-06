@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #include "HistoryOptTest.hxx"
-#include "configitems/historyoptions_const.hxx"
+#include <unotools/historyoptions_const.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

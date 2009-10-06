@@ -32,13 +32,13 @@
 
 #include "svtools/svtdllapi.h"
 #include <sal/types.h>
-#include <svtools/options.hxx>
+#include <unotools/options.hxx>
 
 class SvtCJKOptions_Impl;
 
 // class SvtCJKOptions --------------------------------------------------
 
-class SVT_DLLPUBLIC SvtCJKOptions: public svt::detail::Options
+class SVT_DLLPUBLIC SvtCJKOptions: public utl::detail::Options
 {
 private:
     SvtCJKOptions_Impl*    pImp;

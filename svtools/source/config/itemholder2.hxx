@@ -34,7 +34,7 @@
 //-----------------------------------------------
 // includes
 
-#include "itemholderbase.hxx"
+#include <unotools/itemholderbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 
