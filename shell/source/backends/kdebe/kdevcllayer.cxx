@@ -36,7 +36,7 @@
 #include <com/sun/star/configuration/backend/XLayerContentDescriber.hpp>
 #endif
 #include <com/sun/star/uno/Sequence.hxx>
-#include <vcl/kde_headers.h>
+#include "kde_headers.h"
 
 //==============================================================================
 
