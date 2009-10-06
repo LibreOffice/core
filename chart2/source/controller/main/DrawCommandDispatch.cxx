@@ -190,6 +190,7 @@ FeatureState DrawCommandDispatch::getState( const ::rtl::OUString& rCommand )
         case COMMAND_ID_LINE_ARROW_END:
         case SID_DRAW_RECT:
         case SID_DRAW_ELLIPSE:
+        case SID_DRAW_FREELINE_NOFILL:
         case SID_DRAW_TEXT:
         case SID_DRAW_CAPTION:
             {
@@ -243,6 +244,12 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
             {
                 eDrawMode = CHARTDRAW_INSERT;
                 eKind = OBJ_CIRC;
+            }
+            break;
+        case SID_DRAW_FREELINE_NOFILL:
+            {
+                eDrawMode = CHARTDRAW_INSERT;
+                eKind = OBJ_FREELINE;
             }
             break;
         case SID_DRAW_TEXT:
@@ -313,13 +320,14 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
 
 void DrawCommandDispatch::describeSupportedFeatures()
 {
-    implDescribeSupportedFeature( ".uno:SelectObject",  SID_OBJECT_SELECT,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Line",          SID_DRAW_LINE,              CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:LineArrowEnd",  COMMAND_ID_LINE_ARROW_END,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Rect",          SID_DRAW_RECT,              CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Ellipse",       SID_DRAW_ELLIPSE,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:DrawText",      SID_DRAW_TEXT,              CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:DrawCaption",   SID_DRAW_CAPTION,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SelectObject",      SID_OBJECT_SELECT,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Line",              SID_DRAW_LINE,              CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:LineArrowEnd",      COMMAND_ID_LINE_ARROW_END,  CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Rect",              SID_DRAW_RECT,              CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Ellipse",           SID_DRAW_ELLIPSE,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Freeline_Unfilled", SID_DRAW_FREELINE_NOFILL,   CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DrawText",          SID_DRAW_TEXT,              CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DrawCaption",       SID_DRAW_CAPTION,           CommandGroup::INSERT );
 }
 
 void DrawCommandDispatch::setInsertObj( USHORT eObj, const ::rtl::OUString& rShapeType )
@@ -376,6 +384,26 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                                 SfxItemSet aSet( pDrawModelWrapper->GetItemPool() );
                                 setLineEnds( aSet );
                                 pObj->SetMergedItemSet( aSet );
+                            }
+                        }
+                        break;
+                    case SID_DRAW_FREELINE_NOFILL:
+                        {
+                            if ( pObj->ISA( SdrPathObj ) )
+                            {
+                                basegfx::B2DPolygon aInnerPoly;
+                                aInnerPoly.append( basegfx::B2DPoint( aRect.Left(), aRect.Bottom() ) );
+                                aInnerPoly.appendBezierSegment(
+                                    basegfx::B2DPoint( aRect.Left(), aRect.Top() ),
+                                    basegfx::B2DPoint( aRect.Center().X(), aRect.Top() ),
+                                    basegfx::B2DPoint( aRect.Center().X(), aRect.Center().Y() ) );
+                                aInnerPoly.appendBezierSegment(
+                                    basegfx::B2DPoint( aRect.Center().X(), aRect.Bottom() ),
+                                    basegfx::B2DPoint( aRect.Right(), aRect.Bottom() ),
+                                    basegfx::B2DPoint( aRect.Right(), aRect.Top() ) );
+                                basegfx::B2DPolyPolygon aPoly;
+                                aPoly.append( aInnerPoly );
+                                ( dynamic_cast< SdrPathObj* >( pObj ) )->SetPathPoly( aPoly );
                             }
                         }
                         break;

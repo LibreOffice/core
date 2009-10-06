@@ -1647,6 +1647,11 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
                             ePointerStyle = POINTER_DRAW_ELLIPSE;
                         }
                         break;
+                    case OBJ_FREELINE:
+                        {
+                            ePointerStyle = POINTER_DRAW_POLYGON;
+                        }
+                        break;
                     case OBJ_TEXT:
                         {
                             ePointerStyle = POINTER_DRAW_TEXT;
