@@ -49,8 +49,8 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <i18npool/mslangid.hxx>
-#include <svtools/lingucfg.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/pathoptions.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 #include <linguistic/misc.hxx>

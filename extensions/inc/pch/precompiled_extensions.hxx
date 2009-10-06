@@ -510,7 +510,7 @@
 #include "svtools/filenotation.hxx"
 #include "svtools/imgdef.hxx"
 #include "svtools/miscopt.hxx"
-#include "svtools/moduleoptions.hxx"
+#include "unotools/moduleoptions.hxx"
 #include "svtools/numuno.hxx"
 
 #include "svx/flagsdef.hxx"

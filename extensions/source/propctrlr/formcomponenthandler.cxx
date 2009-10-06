@@ -94,7 +94,7 @@
 #include <svtools/filenotation.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/itemset.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/numuno.hxx>
 #include <svtools/urihelper.hxx>
 #include <svx/dialogs.hrc>

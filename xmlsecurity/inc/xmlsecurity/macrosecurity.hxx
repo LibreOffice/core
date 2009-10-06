@@ -39,7 +39,7 @@
 #include <vcl/tabpage.hxx>
 #include <svtools/stdctrl.hxx>
 #include <svx/simptabl.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 
 namespace com {
 namespace sun {

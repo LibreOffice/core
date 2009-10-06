@@ -340,7 +340,7 @@
 #include "svtools/itempool.hxx"
 #include "svtools/itemset.hxx"
 #include "svtools/languageoptions.hxx"
-#include "svtools/lingucfg.hxx"
+#include "unotools/lingucfg.hxx"
 #include "svtools/numuno.hxx"
 #include "svtools/poolitem.hxx"
 #include "svtools/solar.hrc"

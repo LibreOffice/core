@@ -44,7 +44,7 @@
 #include <vcl/mapunit.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 #include <svtools/undo.hxx>
 #include <vos/mutex.hxx>
 
