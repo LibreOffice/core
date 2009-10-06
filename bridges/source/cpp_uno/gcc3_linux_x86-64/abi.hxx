@@ -63,7 +63,7 @@ bool examine_argument( typelib_TypeDescriptionReference *pTypeRef, bool bInRetur
 */
 bool return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef );
 
-void fill_struct( typelib_TypeDescriptionReference *pTypeRef, void * const *pGPR, void * const *pSSE, void *pStruct );
+void fill_struct( typelib_TypeDescriptionReference *pTypeRef, const sal_uInt64* pGPR, const double* pSSE, void *pStruct );
 
 } // namespace x86_64
 

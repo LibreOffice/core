@@ -159,28 +159,7 @@ static typelib_TypeClass cpp2uno_call(
         else // struct <= 16 bytes || ptr to complex value || ref
         {
             void *pCppStack;
-            char pTmpStruct[16];
-
-            if ( bFitsRegisters && !rParam.bOut &&
-                 ( pParamTypeDescr->eTypeClass == typelib_TypeClass_STRUCT ||
-                   pParamTypeDescr->eTypeClass == typelib_TypeClass_EXCEPTION ) )
-            {
-                if ( ( nr_gpr + nUsedGPR <= x86_64::MAX_GPR_REGS ) && ( nr_fpr + nUsedSSE <= x86_64::MAX_SSE_REGS ) )
-                {
-                    x86_64::fill_struct( rParam.pTypeRef, gpreg, fpreg, pTmpStruct );
-#if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "nUsedGPR == %d, nUsedSSE == %d, pTmpStruct[0] == 0x%x, pTmpStruct[1] == 0x%x, **gpreg == 0x%lx\n",
-                            nUsedGPR, nUsedSSE, pTmpStruct[0], pTmpStruct[1], *(sal_uInt64*)*gpreg );
-#endif
-
-                    pCppArgs[nPos] = pCppStack = reinterpret_cast<void *>( pTmpStruct );
-                    gpreg += nUsedGPR;
-                    fpreg += nUsedSSE;
-                }
-                else
-                    pCppArgs[nPos] = pCppStack = *ovrflw++;
-            }
-            else if ( nr_gpr < x86_64::MAX_GPR_REGS )
+            if ( nr_gpr < x86_64::MAX_GPR_REGS )
             {
                 pCppArgs[nPos] = pCppStack = *gpreg++;
                 nr_gpr++;
