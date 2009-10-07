@@ -170,102 +170,113 @@ namespace drawinglayer
         {
             // calculate relative point in unified 2D scene
             const basegfx::B2DPoint aLogicHitPosition(getViewInformation2D().getInverseObjectToViewTransformation() * getDiscreteHitPosition());
-            basegfx::B2DHomMatrix aInverseSceneTransform(rCandidate.getObjectTransformation());
-            aInverseSceneTransform.invert();
-            const basegfx::B2DPoint aRelativePoint(aInverseSceneTransform * aLogicHitPosition);
 
-            // check if test point is inside scene's unified area at all
-            if(aRelativePoint.getX() >= 0.0 && aRelativePoint.getX() <= 1.0
-                && aRelativePoint.getY() >= 0.0 && aRelativePoint.getY() <= 1.0)
+            // use bitmap check in ScenePrimitive2D
+            bool bTryFastResult(false);
+
+            if(rCandidate.tryToCheckLastVisualisationDirectHit(aLogicHitPosition, bTryFastResult))
             {
-                // get 3D view information
-                const geometry::ViewInformation3D& rObjectViewInformation3D = rCandidate.getViewInformation3D();
+                mbHit = bTryFastResult;
+            }
+            else
+            {
+                basegfx::B2DHomMatrix aInverseSceneTransform(rCandidate.getObjectTransformation());
+                aInverseSceneTransform.invert();
+                const basegfx::B2DPoint aRelativePoint(aInverseSceneTransform * aLogicHitPosition);
 
-                // create HitPoint Front and Back, transform to object coordinates
-                basegfx::B3DHomMatrix aViewToObject(rObjectViewInformation3D.getObjectToView());
-                aViewToObject.invert();
-                const basegfx::B3DPoint aFront(aViewToObject * basegfx::B3DPoint(aRelativePoint.getX(), aRelativePoint.getY(), 0.0));
-                const basegfx::B3DPoint aBack(aViewToObject * basegfx::B3DPoint(aRelativePoint.getX(), aRelativePoint.getY(), 1.0));
-
-                if(!aFront.equal(aBack))
+                // check if test point is inside scene's unified area at all
+                if(aRelativePoint.getX() >= 0.0 && aRelativePoint.getX() <= 1.0
+                    && aRelativePoint.getY() >= 0.0 && aRelativePoint.getY() <= 1.0)
                 {
-                    const primitive3d::Primitive3DSequence& rPrimitives = rCandidate.getChildren3D();
+                    // get 3D view information
+                    const geometry::ViewInformation3D& rObjectViewInformation3D = rCandidate.getViewInformation3D();
 
-                    if(rPrimitives.hasElements())
+                    // create HitPoint Front and Back, transform to object coordinates
+                    basegfx::B3DHomMatrix aViewToObject(rObjectViewInformation3D.getObjectToView());
+                    aViewToObject.invert();
+                    const basegfx::B3DPoint aFront(aViewToObject * basegfx::B3DPoint(aRelativePoint.getX(), aRelativePoint.getY(), 0.0));
+                    const basegfx::B3DPoint aBack(aViewToObject * basegfx::B3DPoint(aRelativePoint.getX(), aRelativePoint.getY(), 1.0));
+
+                    if(!aFront.equal(aBack))
                     {
-                        // make BoundVolume empty and overlapping test for speedup
-                        const basegfx::B3DRange aObjectRange(
-                            drawinglayer::primitive3d::getB3DRangeFromPrimitive3DSequence(
-                                rPrimitives, rObjectViewInformation3D));
+                        const primitive3d::Primitive3DSequence& rPrimitives = rCandidate.getChildren3D();
 
-                        if(!aObjectRange.isEmpty())
+                        if(rPrimitives.hasElements())
                         {
-                            const basegfx::B3DRange aFrontBackRange(aFront, aBack);
+                            // make BoundVolume empty and overlapping test for speedup
+                            const basegfx::B3DRange aObjectRange(
+                                drawinglayer::primitive3d::getB3DRangeFromPrimitive3DSequence(
+                                    rPrimitives, rObjectViewInformation3D));
 
-                            if(aObjectRange.overlaps(aFrontBackRange))
+                            if(!aObjectRange.isEmpty())
                             {
-                                // bound volumes hit, geometric cut tests needed
-                                drawinglayer::processor3d::CutFindProcessor aCutFindProcessor(
-                                    rObjectViewInformation3D,
-                                    aFront,
-                                    aBack,
-                                    true);
-                                aCutFindProcessor.process(rPrimitives);
+                                const basegfx::B3DRange aFrontBackRange(aFront, aBack);
 
-                                mbHit = (0 != aCutFindProcessor.getCutPoints().size());
+                                if(aObjectRange.overlaps(aFrontBackRange))
+                                {
+                                    // bound volumes hit, geometric cut tests needed
+                                    drawinglayer::processor3d::CutFindProcessor aCutFindProcessor(
+                                        rObjectViewInformation3D,
+                                        aFront,
+                                        aBack,
+                                        true);
+                                    aCutFindProcessor.process(rPrimitives);
+
+                                    mbHit = (0 != aCutFindProcessor.getCutPoints().size());
+                                }
                             }
                         }
                     }
                 }
+
+                // This is needed to check hit with 3D shadows, too. HitTest is without shadow
+                // to keep compatible with previous versions. Keeping here as reference
+                //
+                // if(!getHit())
+                // {
+                //     // if scene has shadow, check hit with shadow, too
+                //     const primitive2d::Primitive2DSequence xExtracted2DSceneShadow(rCandidate.getShadow2D(getViewInformation2D()));
+                //
+                //     if(xExtracted2DSceneShadow.hasElements())
+                //     {
+                //         // proccess extracted 2D content
+                //         process(xExtracted2DSceneShadow);
+                //     }
+                // }
+
+                if(!getHit())
+                {
+                    // empty 3D scene; Check for border hit
+                    basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                    aOutline.transform(rCandidate.getObjectTransformation());
+
+                    mbHit = checkHairlineHitWithTolerance(aOutline, getDiscreteHitTolerance());
+                }
+
+                // This is what the previous version did. Keeping it here for reference
+                //
+                // // 2D Scene primitive containing 3D stuff; extract 2D contour in world coordinates
+                // // This may be refined later to an own 3D HitTest renderer which processes the 3D
+                // // geometry directly
+                // const primitive2d::ScenePrimitive2D& rScenePrimitive2DCandidate(static_cast< const primitive2d::ScenePrimitive2D& >(rCandidate));
+                // const primitive2d::Primitive2DSequence xExtracted2DSceneGeometry(rScenePrimitive2DCandidate.getGeometry2D());
+                // const primitive2d::Primitive2DSequence xExtracted2DSceneShadow(rScenePrimitive2DCandidate.getShadow2D(getViewInformation2D()));
+                //
+                // if(xExtracted2DSceneGeometry.hasElements() || xExtracted2DSceneShadow.hasElements())
+                // {
+                //     // proccess extracted 2D content
+                //     process(xExtracted2DSceneGeometry);
+                //     process(xExtracted2DSceneShadow);
+                // }
+                // else
+                // {
+                //     // empty 3D scene; Check for border hit
+                //     const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+                //     basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                //
+                //     mbHit = checkHairlineHitWithTolerance(aOutline, getDiscreteHitTolerance());
+                // }
             }
-
-            // This is needed to check hit with 3D shadows, too. HitTest is without shadow
-            // to keep compatible with previous versions. Keeping here as reference
-            //
-            // if(!getHit())
-            // {
-            //     // if scene has shadow, check hit with shadow, too
-            //     const primitive2d::Primitive2DSequence xExtracted2DSceneShadow(rCandidate.getShadow2D(getViewInformation2D()));
-            //
-            //     if(xExtracted2DSceneShadow.hasElements())
-            //     {
-            //         // proccess extracted 2D content
-            //         process(xExtracted2DSceneShadow);
-            //     }
-            // }
-
-            if(!getHit())
-            {
-                // empty 3D scene; Check for border hit
-                basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
-                aOutline.transform(rCandidate.getObjectTransformation());
-
-                mbHit = checkHairlineHitWithTolerance(aOutline, getDiscreteHitTolerance());
-            }
-
-            // This is what the previous version did. Keeping it here for reference
-            //
-            // // 2D Scene primitive containing 3D stuff; extract 2D contour in world coordinates
-            // // This may be refined later to an own 3D HitTest renderer which processes the 3D
-            // // geometry directly
-            // const primitive2d::ScenePrimitive2D& rScenePrimitive2DCandidate(static_cast< const primitive2d::ScenePrimitive2D& >(rCandidate));
-            // const primitive2d::Primitive2DSequence xExtracted2DSceneGeometry(rScenePrimitive2DCandidate.getGeometry2D());
-            // const primitive2d::Primitive2DSequence xExtracted2DSceneShadow(rScenePrimitive2DCandidate.getShadow2D(getViewInformation2D()));
-            //
-            // if(xExtracted2DSceneGeometry.hasElements() || xExtracted2DSceneShadow.hasElements())
-            // {
-            //     // proccess extracted 2D content
-            //     process(xExtracted2DSceneGeometry);
-            //     process(xExtracted2DSceneShadow);
-            // }
-            // else
-            // {
-            //     // empty 3D scene; Check for border hit
-            //     const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
-            //     basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
-            //
-            //     mbHit = checkHairlineHitWithTolerance(aOutline, getDiscreteHitTolerance());
-            // }
         }
 
         void HitTestProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)

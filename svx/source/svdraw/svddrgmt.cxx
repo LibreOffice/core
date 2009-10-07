@@ -207,6 +207,32 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntrySdrObject::createPrim
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+SdrDragEntryPrimitive2DSequence::SdrDragEntryPrimitive2DSequence(
+    const drawinglayer::primitive2d::Primitive2DSequence& rSequence,
+    bool bAddToTransparent)
+:   SdrDragEntry(),
+    maPrimitive2DSequence(rSequence)
+{
+    // add parts to transparent overlay stuff eventually
+    setAddToTransparent(bAddToTransparent);
+}
+
+SdrDragEntryPrimitive2DSequence::~SdrDragEntryPrimitive2DSequence()
+{
+}
+
+drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPrimitive2DSequence::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
+{
+    drawinglayer::primitive2d::Primitive2DReference aTransformPrimitive2D(
+        new drawinglayer::primitive2d::TransformPrimitive2D(
+            rDragMethod.getCurrentTransformation(),
+            maPrimitive2DSequence));
+
+    return drawinglayer::primitive2d::Primitive2DSequence(&aTransformPrimitive2D, 1);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 SdrDragEntryPointGlueDrag::SdrDragEntryPointGlueDrag(const std::vector< basegfx::B2DPoint >& rPositions, bool bIsPointDrag)
 :   maPositions(rPositions),
     mbIsPointDrag(bIsPointDrag)
@@ -319,6 +345,13 @@ void SdrDragMethod::createSdrDragEntries()
     }
 }
 
+void SdrDragMethod::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify)
+{
+    // add full obejct drag; Clone() at the object has to work
+    // for this
+    addSdrDragEntry(new SdrDragEntrySdrObject(rOriginal, rObjectContact, bModify));
+}
+
 void SdrDragMethod::createSdrDragEntries_SolidDrag()
 {
     const sal_uInt32 nMarkAnz(getSdrDragView().GetMarkedObjectCount());
@@ -360,7 +393,7 @@ void SdrDragMethod::createSdrDragEntries_SolidDrag()
                                 {
                                     // add full obejct drag; Clone() at the object has to work
                                     // for this
-                                    addSdrDragEntry(new SdrDragEntrySdrObject(*pCandidate, rOC, true));
+                                    createSdrDragEntryForSdrObject(*pCandidate, rOC, true);
                                 }
 
                                 if(bAddWireframe)
@@ -1348,6 +1381,21 @@ Pointer SdrDragObjOwn::GetSdrDragPointer() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(SdrDragMove,SdrDragMethod);
+
+void SdrDragMove::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool /*bModify*/)
+{
+    // for SdrDragMove, use current Primitive2DSequence of SdrObject visualisation
+    // in given ObjectContact directly
+    sdr::contact::ViewContact& rVC = rOriginal.GetViewContact();
+    sdr::contact::ViewObjectContact& rVOC = rVC.GetViewObjectContact(rObjectContact);
+    sdr::contact::DisplayInfo aDisplayInfo;
+
+    // Do not use the last ViewPort set at the OC from the last ProcessDisplay(),
+    // here we want the complete primitive sequence without visibility clippings
+    rObjectContact.resetViewPort();
+
+    addSdrDragEntry(new SdrDragEntryPrimitive2DSequence(rVOC.getPrimitive2DSequenceHierarchy(aDisplayInfo), true));
+}
 
 void SdrDragMove::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {

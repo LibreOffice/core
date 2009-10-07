@@ -100,7 +100,7 @@ namespace drawinglayer
             return maShadowPrimitives.hasElements();
         }
 
-        void ScenePrimitive2D::calculateDsicreteSizes(
+        void ScenePrimitive2D::calculateDiscreteSizes(
             const geometry::ViewInformation2D& rViewInformation,
             basegfx::B2DRange& rDiscreteRange,
             basegfx::B2DRange& rVisibleDiscreteRange,
@@ -110,23 +110,12 @@ namespace drawinglayer
             rDiscreteRange = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
             rDiscreteRange.transform(rViewInformation.getObjectToViewTransformation() * getObjectTransformation());
 
-            // force to discrete expanded bounds (it grows, so expanding works perfectly well)
-            rDiscreteRange.expand(basegfx::B2DTuple(floor(rDiscreteRange.getMinX()), floor(rDiscreteRange.getMinY())));
-            rDiscreteRange.expand(basegfx::B2DTuple(ceil(rDiscreteRange.getMaxX()), ceil(rDiscreteRange.getMaxY())));
-
             // clip it against discrete Viewport (if set)
             rVisibleDiscreteRange = rDiscreteRange;
 
             if(!rViewInformation.getViewport().isEmpty())
             {
                 rVisibleDiscreteRange.intersect(rViewInformation.getDiscreteViewport());
-
-                if(!rVisibleDiscreteRange.isEmpty())
-                {
-                    // force to discrete expanded bounds, too
-                    rVisibleDiscreteRange.expand(basegfx::B2DTuple(floor(rVisibleDiscreteRange.getMinX()), floor(rVisibleDiscreteRange.getMinY())));
-                    rVisibleDiscreteRange.expand(basegfx::B2DTuple(ceil(rVisibleDiscreteRange.getMaxX()), ceil(rVisibleDiscreteRange.getMaxY())));
-                }
             }
 
             if(rVisibleDiscreteRange.isEmpty())
@@ -177,11 +166,11 @@ namespace drawinglayer
                 }
             }
 
-            // get the involved ranges (see helper method calculateDsicreteSizes for details)
+            // get the involved ranges (see helper method calculateDiscreteSizes for details)
             basegfx::B2DRange aDiscreteRange;
             basegfx::B2DRange aVisibleDiscreteRange;
             basegfx::B2DRange aUnitVisibleRange;
-            calculateDsicreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
+            calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
 
             if(!aVisibleDiscreteRange.isEmpty())
             {
@@ -204,11 +193,25 @@ namespace drawinglayer
                 {
                     // when reducing the visualisation is allowed (e.g. an OverlayObject
                     // only needed for dragging), reduce resolution extra
-                    // to speed up dragging interactions (1/4th currently)
-                    const double fReducedVisualisationFactor(0.25);
-                    fReduceFactor *= fReducedVisualisationFactor;
-                    fViewSizeX *= fReducedVisualisationFactor;
-                    fViewSizeY *= fReducedVisualisationFactor;
+                    // to speed up dragging interactions
+                    const double fArea(fViewSizeX * fViewSizeY);
+                    double fReducedVisualisationFactor(1.0 / (sqrt(fArea) * (1.0 / 170.0)));
+
+                    if(fReducedVisualisationFactor > 1.0)
+                    {
+                        fReducedVisualisationFactor = 1.0;
+                    }
+                    else if(fReducedVisualisationFactor < 0.20)
+                    {
+                        fReducedVisualisationFactor = 0.20;
+                    }
+
+                    if(fReducedVisualisationFactor != 1.0)
+                    {
+                        fReduceFactor *= fReducedVisualisationFactor;
+                        fViewSizeX *= fReducedVisualisationFactor;
+                        fViewSizeY *= fReducedVisualisationFactor;
+                    }
                 }
 
                 // calculate logic render size in world coordinates for usage in renderer
@@ -234,18 +237,16 @@ namespace drawinglayer
 
                 aZBufferProcessor3D.processNonTransparent(getChildren3D());
                 aZBufferProcessor3D.processTransparent(getChildren3D());
-                const BitmapEx aNewBitmap(aZBufferProcessor3D.getBitmapEx());
-                const Size aBitmapSizePixel(aNewBitmap.GetSizePixel());
+                const_cast< ScenePrimitive2D* >(this)->maOldRenderedBitmap = aZBufferProcessor3D.getBitmapEx();
+                const Size aBitmapSizePixel(maOldRenderedBitmap.GetSizePixel());
 
                 if(aBitmapSizePixel.getWidth() && aBitmapSizePixel.getHeight())
                 {
                     // create transform for the created bitmap in discrete coordinates first.
-                    // #i97772# Do not forget to apply evtl. render size reduction to scaling
                     basegfx::B2DHomMatrix aNew2DTransform;
-                    const double fSizeReductionFactor(1.0 / fReduceFactor);
 
-                    aNew2DTransform.set(0, 0, (double)(aBitmapSizePixel.getWidth() - 1) * fSizeReductionFactor);
-                    aNew2DTransform.set(1, 1, (double)(aBitmapSizePixel.getHeight() - 1) * fSizeReductionFactor);
+                    aNew2DTransform.set(0, 0, aVisibleDiscreteRange.getWidth());
+                    aNew2DTransform.set(1, 1, aVisibleDiscreteRange.getHeight());
                     aNew2DTransform.set(0, 2, aVisibleDiscreteRange.getMinX());
                     aNew2DTransform.set(1, 2, aVisibleDiscreteRange.getMinY());
 
@@ -253,7 +254,7 @@ namespace drawinglayer
                     aNew2DTransform *= rViewInformation.getInverseObjectToViewTransformation();
 
                     // create bitmap primitive and add
-                    const Primitive2DReference xRef(new BitmapPrimitive2D(aNewBitmap, aNew2DTransform));
+                    const Primitive2DReference xRef(new BitmapPrimitive2D(maOldRenderedBitmap, aNew2DTransform));
                     appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xRef);
 
                     // test: Allow to add an outline in the debugger when tests are needed
@@ -308,6 +309,47 @@ namespace drawinglayer
             return aRetval;
         }
 
+        bool ScenePrimitive2D::tryToCheckLastVisualisationDirectHit(const basegfx::B2DPoint& rLogicHitPoint, bool& o_rResult) const
+        {
+            if(!maOldRenderedBitmap.IsEmpty() && !maOldUnitVisiblePart.isEmpty())
+            {
+                basegfx::B2DHomMatrix aInverseSceneTransform(getObjectTransformation());
+                aInverseSceneTransform.invert();
+                const basegfx::B2DPoint aRelativePoint(aInverseSceneTransform * rLogicHitPoint);
+
+                if(maOldUnitVisiblePart.isInside(aRelativePoint))
+                {
+                    // calculate coordinates relative to visualized part
+                    double fDivisorX(maOldUnitVisiblePart.getWidth());
+                    double fDivisorY(maOldUnitVisiblePart.getHeight());
+
+                    if(basegfx::fTools::equalZero(fDivisorX))
+                    {
+                        fDivisorX = 1.0;
+                    }
+
+                    if(basegfx::fTools::equalZero(fDivisorY))
+                    {
+                        fDivisorY = 1.0;
+                    }
+
+                    const double fRelativeX((aRelativePoint.getX() - maOldUnitVisiblePart.getMinX()) / fDivisorX);
+                    const double fRelativeY((aRelativePoint.getY() - maOldUnitVisiblePart.getMinY()) / fDivisorY);
+
+                    // combine with real BitmapSizePixel to get bitmap coordinates
+                    const Size aBitmapSizePixel(maOldRenderedBitmap.GetSizePixel());
+                    const sal_Int32 nX(basegfx::fround(fRelativeX * aBitmapSizePixel.Width()));
+                    const sal_Int32 nY(basegfx::fround(fRelativeY * aBitmapSizePixel.Height()));
+
+                    // try to get a statement about transparency in that pixel
+                    o_rResult = (0xff != maOldRenderedBitmap.GetTransparency(nX, nY));
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         ScenePrimitive2D::ScenePrimitive2D(
             const primitive3d::Primitive3DSequence& rxChildren3D,
             const attribute::SdrSceneAttribute& rSdrSceneAttribute,
@@ -324,7 +366,8 @@ namespace drawinglayer
             mbShadow3DChecked(false),
             mfOldDiscreteSizeX(0.0),
             mfOldDiscreteSizeY(0.0),
-            maOldUnitVisiblePart()
+            maOldUnitVisiblePart(),
+            maOldRenderedBitmap()
         {
         }
 
@@ -375,7 +418,7 @@ namespace drawinglayer
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            // get the involved ranges (see helper method calculateDsicreteSizes for details)
+            // get the involved ranges (see helper method calculateDiscreteSizes for details)
             basegfx::B2DRange aDiscreteRange;
             basegfx::B2DRange aUnitVisibleRange;
             bool bNeedNewDecomposition(false);
@@ -384,21 +427,22 @@ namespace drawinglayer
             if(getBuffered2DDecomposition().hasElements())
             {
                 basegfx::B2DRange aVisibleDiscreteRange;
-                calculateDsicreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
+                calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
                 bDiscreteSizesAreCalculated = true;
 
-                // display has changed and cannot be reused when resolution did change
-                if(!basegfx::fTools::equal(aDiscreteRange.getWidth(), mfOldDiscreteSizeX) ||
-                    !basegfx::fTools::equal(aDiscreteRange.getHeight(), mfOldDiscreteSizeY))
+                // needs to be painted when the new part is not part of the last
+                // decomposition
+                if(!maOldUnitVisiblePart.isInside(aUnitVisibleRange))
                 {
                     bNeedNewDecomposition = true;
                 }
 
+                // display has changed and cannot be reused when resolution got bigger. It
+                // can be reused when resolution got smaller, though.
                 if(!bNeedNewDecomposition)
                 {
-                    // needs to be painted when the new part is not part of the last
-                    // decomposition
-                    if(!maOldUnitVisiblePart.isInside(aUnitVisibleRange))
+                    if(basegfx::fTools::more(aDiscreteRange.getWidth(), mfOldDiscreteSizeX) ||
+                        basegfx::fTools::more(aDiscreteRange.getHeight(), mfOldDiscreteSizeY))
                     {
                         bNeedNewDecomposition = true;
                     }
@@ -416,7 +460,7 @@ namespace drawinglayer
                 if(!bDiscreteSizesAreCalculated)
                 {
                     basegfx::B2DRange aVisibleDiscreteRange;
-                    calculateDsicreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
+                    calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
                 }
 
                 // remember last used NewDiscreteSize and NewUnitVisiblePart
