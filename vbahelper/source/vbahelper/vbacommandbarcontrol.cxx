@@ -124,7 +124,7 @@ ScVbaCommandBarControl::getEnabled() throw (uno::RuntimeException)
     {
         // currently only the menu in the MenuBat support Enable/Disable
         // FIXME: how to support the menu item in Toolbar
-        bEnabled = m_xParentMenu->isItemEnabled( m_xParentMenu->getItemId( m_nPosition ) );
+        bEnabled = m_xParentMenu->isItemEnabled( m_xParentMenu->getItemId( sal::static_int_cast< sal_Int16 >( m_nPosition ) ) );
     }
     else
     {
@@ -140,7 +140,7 @@ ScVbaCommandBarControl::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeExcep
     if( m_xParentMenu.is() )
     {
         // currently only the menu in the MenuBat support Enable/Disable
-        m_xParentMenu->enableItem( m_xParentMenu->getItemId( m_nPosition ), _enabled );
+        m_xParentMenu->enableItem( m_xParentMenu->getItemId( sal::static_int_cast< sal_Int16 >( m_nPosition ) ), _enabled );
     }
     else
     {
@@ -173,7 +173,7 @@ ScVbaCommandBarControl::Controls( const uno::Any& aIndex ) throw (script::BasicE
     uno::Reference< awt::XMenu > xMenu;
     if( m_xParentMenu.is() )
     {
-        sal_Int32 nItemId = m_xParentMenu->getItemId( m_nPosition );
+        sal_Int16 nItemId = m_xParentMenu->getItemId( sal::static_int_cast< sal_Int16 >( m_nPosition ) );
         xMenu.set( m_xParentMenu->getPopupMenu( nItemId ), uno::UNO_QUERY );
     }
 

@@ -179,7 +179,7 @@ void SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, const u
 float SAL_CALL VbaApplicationBase::CentimetersToPoints( float _Centimeters ) throw (uno::RuntimeException)
 {
     // i cm = 28.35 points
-    static const float rate = 28.35;
+    static const float rate = 28.35f;
     return ( _Centimeters * rate );
 }
 

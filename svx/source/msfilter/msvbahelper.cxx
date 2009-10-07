@@ -28,6 +28,7 @@
  *
  ************************************************************************/
 
+#include "precompiled_svx.hxx"
 #include <svx/msvbahelper.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>

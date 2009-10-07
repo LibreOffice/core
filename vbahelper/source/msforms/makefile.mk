@@ -33,7 +33,8 @@ PRJ=..$/..
 PRJNAME=vbahelper
 TARGET=msforms
 
-ENABLE_EXCEPTIONS := TRUE
+ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 
