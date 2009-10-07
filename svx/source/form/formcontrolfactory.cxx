@@ -95,6 +95,8 @@ namespace svxform
     using ::com::sun::star::util::XNumberFormatTypes;
     using ::com::sun::star::awt::FontDescriptor;
     using ::com::sun::star::lang::Locale;
+    using ::com::sun::star::lang::XServiceInfo;
+    using ::com::sun::star::container::XNameAccess;
     /** === end UNO using === **/
     namespace FormComponentType = ::com::sun::star::form::FormComponentType;
     namespace ScrollBarOrientation = ::com::sun::star::awt::ScrollBarOrientation;
