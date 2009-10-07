@@ -56,7 +56,7 @@ namespace ooo
             public:
                 static SfxItemSet* GetDataSet( ScCellRangeObj* pRangeObj );
             };
-};
-};
-};
+}
+}
+}
 #endif

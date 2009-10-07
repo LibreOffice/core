@@ -259,6 +259,12 @@ ScVbaWorkbooks::Open( const rtl::OUString& rFileName, const uno::Any& /*UpdateLi
     return aRet;
 }
 
+uno::Any
+ScVbaWorkbooks::Open( const rtl::OUString& Filename, const uno::Any& ReadOnly, const uno::Sequence< beans::PropertyValue >& rProps ) throw (css::uno::RuntimeException)
+{
+    return VbaDocumentsBase::Open( Filename, ReadOnly, rProps );
+}
+
 rtl::OUString&
 ScVbaWorkbooks::getServiceImplName()
 {
