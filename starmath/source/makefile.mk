@@ -77,7 +77,6 @@ SLO1FILES =  \
         $(SLO)$/utility.obj \
         $(SLO)$/rect.obj \
         $(SLO)$/unomodel.obj \
-        $(SLO)$/viewhdl.obj \
         $(SLO)$/view.obj
 
 SLO2FILES =  \
