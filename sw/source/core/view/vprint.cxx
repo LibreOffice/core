@@ -539,7 +539,7 @@ SwPrintUIOptions::SwPrintUIOptions( bool bWeb,  bool bSwSrcView ) :
                                                    );
 
     // create a bool option for brochure RTL dependent on brochure
-    uno::Sequence< rtl::OUString > aBRTLChoices( 3 );
+    uno::Sequence< rtl::OUString > aBRTLChoices( 2 );
     aBRTLChoices[0] = aLocalizedStrings.GetString( 35 );
     aBRTLChoices[1] = aLocalizedStrings.GetString( 36 );
     vcl::PrinterOptionsHelper::UIControlOptions aBrochureRTLOpt( aBrochurePropertyName, -1, sal_True );
