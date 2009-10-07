@@ -23005,6 +23005,10 @@
       <action name="start" action="startSectionGroup"/>
       <action name="end" action="endSectionGroup"/>
     </resource>
+    <resource name="CT_Footnotes" resource="Stream"/>
+    <resource name="footnotes" resource="Stream"/>
+    <resource name="CT_Endnotes" resource="Stream"/>
+    <resource name="endnotes" resource="Stream"/>
     <resource name="CT_SmartTagType" resource="Properties">
       <attribute name="namespaceuri" tokenid="ooxml:CT_SmartTagType_namespaceuri"/>
       <attribute name="name" tokenid="ooxml:CT_SmartTagType_name"/>
@@ -23132,9 +23136,5 @@
     <resource name="CT_GlossaryDocument" resource="Stream"/>
     <resource name="document" resource="Stream"/>
     <resource name="glossaryDocument" resource="Stream"/>
-    <resource name="footnotes" resource="Stream"/>
-    <resource name="CT_Footnotes" resource="Stream"/>
-    <resource name="endnotes" resource="Stream"/>
-    <resource name="CT_Endnotes" resource="Stream"/>
   </namespace>
 </model>
