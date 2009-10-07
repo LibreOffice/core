@@ -962,11 +962,11 @@ StringArray STR_PRINTOPTUI
         < "For printers with multiple trays this option specifies whether the paper tray used is specified by the system settings of the printer."; >;
         < "Print"; >;
         < "None (document only)"; >;
-        < "Notes only"; >;
+        < "Comments only"; >;
         < "Place at end of document"; >;
         < "Place at end of page"; >;
-        < "Specify where to print notes (if any)."; >;
-        < "~Notes"; >;
+        < "Specify where to print comments (if any)."; >;
+        < "~Comments"; >;
         < "Page sides";>;
         < "All pages"; >;
         < "Back sides / left pages"; >;
