@@ -152,7 +152,7 @@ ScVbaApplication::getSelection() throw (uno::RuntimeException)
 {
     OSL_TRACE("** ScVbaApplication::getSelection() ** ");
     uno::Reference< frame::XModel > xModel( getCurrentDocument() );
-    uno::Reference< lang::XServiceInfo > xServiceInfo( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
+    uno::Reference< lang::XServiceInfo > xServiceInfo( xModel->getCurrentSelection(), uno::UNO_QUERY_THROW );
     rtl::OUString sImpementaionName = xServiceInfo->getImplementationName();
     if( sImpementaionName.equalsIgnoreAsciiCaseAscii("com.sun.star.drawing.SvxShapeCollection") )
     {
