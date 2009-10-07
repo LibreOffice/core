@@ -2871,6 +2871,12 @@ void SAL_CALL SwXTextDocument::render(
     if(!IsValid())
         throw RuntimeException();
 
+    // due to #110067# (document page count changes sometimes during
+    // PDF export/printing) we can not check for the upper bound properly.
+    // Thus instead of throwing the exception we silently return.
+    if (0 > nRenderer)
+        throw IllegalArgumentException();
+
     const bool bIsPDFExport = !lcl_SeqHasProperty( rxOptions, "IsPrinter" );
     bool bIsSwSrcView = false;
     SfxViewShell *pView = GetRenderView( bIsSwSrcView, rxOptions, bIsPDFExport );
@@ -2886,126 +2892,123 @@ void SAL_CALL SwXTextDocument::render(
     }
     m_pPrintUIOptions->processProperties( rxOptions );
     const bool bPrintProspect   = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
+    const bool bLastPage        = m_pPrintUIOptions->getBoolValue( "IsLastPage", sal_False );
 
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
     DBG_ASSERT( pDoc && pView, "doc or view shell missing!" );
-    if (!pDoc || !pView)
-        return;
-
-    // due to #110067# (document page count changes sometimes during
-    // PDF export/printing) we can not check for the upper bound properly.
-    // Thus instead of throwing the exception we silently return.
-    if (0 > nRenderer)
-        throw IllegalArgumentException();
-    sal_Int32 nMaxRenderer = 0;
-    if (!bIsSwSrcView)
+    if (pDoc && pView)
     {
-        DBG_ASSERT( m_pRenderData, "m_pRenderData missing!!" );
-        nMaxRenderer = bPrintProspect?
-            m_pRenderData->GetPagePairsForProspectPrinting().size() - 1 :
-            m_pRenderData->GetPagesToPrint().size() - 1;
-    }
-    // since SwSrcView::PrintSource is a poor implementation to get the number of pages to print
-    // we obmit checking of the upper bound in this case.
-    if (!bIsSwSrcView && nRenderer > nMaxRenderer)
-        return;
-
-    if (bIsSwSrcView)
-    {
-        SwSrcView *pSwSrcView = dynamic_cast< SwSrcView * >(pView);
-        OutputDevice *pOutDev = lcl_GetOutputDevice( *m_pPrintUIOptions );
-        pSwSrcView->PrintSource( pOutDev, nRenderer + 1, false );
-    }
-    else
-    {
-        // the view shell should be SwView for documents PDF export
-        // or SwPagePreView for PDF export of the page preview
-        //!! (check for SwView first as in GuessViewShell) !!
-        DBG_ASSERT( pView, "!! view missing !!" );
-        const TypeId aSwViewTypeId = TYPE(SwView);
-        ViewShell* pVwSh = 0;
-        if (pView)
+        sal_Int32 nMaxRenderer = 0;
+        if (!bIsSwSrcView)
         {
-            pVwSh = pView->IsA(aSwViewTypeId) ?
-                        ((SwView*)pView)->GetWrtShellPtr() :
-                        ((SwPagePreView*)pView)->GetViewShell();
+            DBG_ASSERT( m_pRenderData, "m_pRenderData missing!!" );
+            nMaxRenderer = bPrintProspect?
+                m_pRenderData->GetPagePairsForProspectPrinting().size() - 1 :
+                m_pRenderData->GetPagesToPrint().size() - 1;
         }
-
-        // get output device to use
-        OutputDevice * pOut = lcl_GetOutputDevice( *m_pPrintUIOptions );
-
-        if(pVwSh && pOut && m_pRenderData->HasSwPrtOptions())
+        // since SwSrcView::PrintSource is a poor implementation to get the number of pages to print
+        // we obmit checking of the upper bound in this case.
+        if (bIsSwSrcView || nRenderer <= nMaxRenderer)
         {
-            const rtl::OUString aPageRange  = m_pPrintUIOptions->getStringValue( "PageRange", OUString() );
-            const bool bFirstPage           = m_pPrintUIOptions->getBoolValue( "IsFirstPage", sal_False );
-            const bool bLastPage            = m_pPrintUIOptions->getBoolValue( "IsLastPage", sal_False );
-            bool bIsSkipEmptyPages          = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
-
-            DBG_ASSERT(( pView->IsA(aSwViewTypeId) &&  m_pRenderData->IsViewOptionAdjust())
-                    || (!pView->IsA(aSwViewTypeId) && !m_pRenderData->IsViewOptionAdjust()),
-                    "SwView / SwViewOptionAdjust_Impl availability mismatch" );
-
-            // since printing now also use the API for PDF export this option
-            // should be set for printing as well ...
-            pVwSh->SetPDFExportOption( sal_True );
-
-            // --> FME 2004-06-08 #i12836# enhanced pdf export
-            //
-            // First, we have to export hyperlinks, notes, and outline to pdf.
-            // During this process, additional information required for tagging
-            // the pdf file are collected, which are evaulated during painting.
-            //
-            SwWrtShell* pWrtShell = pView->IsA(aSwViewTypeId) ?
-                                    ((SwView*)pView)->GetWrtShellPtr() :
-                                    0;
-
-            if (bIsPDFExport && bFirstPage && pWrtShell)
+            if (bIsSwSrcView)
             {
-                SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages, sal_False );
+                SwSrcView *pSwSrcView = dynamic_cast< SwSrcView * >(pView);
+                OutputDevice *pOutDev = lcl_GetOutputDevice( *m_pPrintUIOptions );
+                pSwSrcView->PrintSource( pOutDev, nRenderer + 1, false );
             }
-            // <--
-
-            const SwPrtOptions &rSwPrtOptions = *m_pRenderData->GetSwPrtOptions();
-            if (bPrintProspect)
-                pVwSh->PrintProspect( pOut, rSwPrtOptions, nRenderer );
-            else    // normal printing and PDF export
-                pVwSh->PrintOrPDFExport( pOut, rSwPrtOptions, nRenderer );
-
-            // --> FME 2004-10-08 #i35176#
-            //
-            // After printing the last page, we take care for the links coming
-            // from the EditEngine. The links are generated during the painting
-            // process, but the destinations are still missing.
-            //
-            if (bIsPDFExport && bLastPage && pWrtShell)
+            else
             {
-                SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages,  sal_True );
-            }
-            // <--
-
-            pVwSh->SetPDFExportOption( sal_False );
-
-            // last page to be rendered? (not necessarily the last page of the document)
-            // -> do clean-up of data
-            if (bLastPage)
-            {
-                // #i96167# haggai: delete pViewOptionsAdjust here because it makes use
-                // of the shell, which might get destroyed in lcl_DisposeView!
-                if (m_pRenderData && m_pRenderData->IsViewOptionAdjust())
-                    m_pRenderData->ViewOptionAdjustStop();
-
-                if (m_pRenderData && m_pRenderData->HasPostItData())
-                    m_pRenderData->DeletePostItData();
-                if (m_pHiddenViewFrame)
+                // the view shell should be SwView for documents PDF export
+                // or SwPagePreView for PDF export of the page preview
+                //!! (check for SwView first as in GuessViewShell) !!
+                DBG_ASSERT( pView, "!! view missing !!" );
+                const TypeId aSwViewTypeId = TYPE(SwView);
+                ViewShell* pVwSh = 0;
+                if (pView)
                 {
-                    lcl_DisposeView( m_pHiddenViewFrame, pDocShell );
-                    m_pHiddenViewFrame = 0;
+                    pVwSh = pView->IsA(aSwViewTypeId) ?
+                                ((SwView*)pView)->GetWrtShellPtr() :
+                                ((SwPagePreView*)pView)->GetViewShell();
                 }
 
-                delete m_pRenderData;       m_pRenderData     = NULL;
-                delete m_pPrintUIOptions;   m_pPrintUIOptions = NULL;
+                // get output device to use
+                OutputDevice * pOut = lcl_GetOutputDevice( *m_pPrintUIOptions );
+
+                if(pVwSh && pOut && m_pRenderData->HasSwPrtOptions())
+                {
+                    const rtl::OUString aPageRange  = m_pPrintUIOptions->getStringValue( "PageRange", OUString() );
+                    const bool bFirstPage           = m_pPrintUIOptions->getBoolValue( "IsFirstPage", sal_False );
+                    bool bIsSkipEmptyPages          = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
+
+                    DBG_ASSERT(( pView->IsA(aSwViewTypeId) &&  m_pRenderData->IsViewOptionAdjust())
+                            || (!pView->IsA(aSwViewTypeId) && !m_pRenderData->IsViewOptionAdjust()),
+                            "SwView / SwViewOptionAdjust_Impl availability mismatch" );
+
+                    // since printing now also use the API for PDF export this option
+                    // should be set for printing as well ...
+                    pVwSh->SetPDFExportOption( sal_True );
+
+                    // --> FME 2004-06-08 #i12836# enhanced pdf export
+                    //
+                    // First, we have to export hyperlinks, notes, and outline to pdf.
+                    // During this process, additional information required for tagging
+                    // the pdf file are collected, which are evaulated during painting.
+                    //
+                    SwWrtShell* pWrtShell = pView->IsA(aSwViewTypeId) ?
+                                            ((SwView*)pView)->GetWrtShellPtr() :
+                                            0;
+
+                    if (bIsPDFExport && bFirstPage && pWrtShell)
+                    {
+                        SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages, sal_False );
+                    }
+                    // <--
+
+                    const SwPrtOptions &rSwPrtOptions = *m_pRenderData->GetSwPrtOptions();
+                    if (bPrintProspect)
+                        pVwSh->PrintProspect( pOut, rSwPrtOptions, nRenderer );
+                    else    // normal printing and PDF export
+                        pVwSh->PrintOrPDFExport( pOut, rSwPrtOptions, nRenderer );
+
+                    // --> FME 2004-10-08 #i35176#
+                    //
+                    // After printing the last page, we take care for the links coming
+                    // from the EditEngine. The links are generated during the painting
+                    // process, but the destinations are still missing.
+                    //
+                    if (bIsPDFExport && bLastPage && pWrtShell)
+                    {
+                        SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages,  sal_True );
+                    }
+                    // <--
+
+                    pVwSh->SetPDFExportOption( sal_False );
+
+                    // last page to be rendered? (not necessarily the last page of the document)
+                    // -> do clean-up of data
+                    if (bLastPage)
+                    {
+                        // #i96167# haggai: delete pViewOptionsAdjust here because it makes use
+                        // of the shell, which might get destroyed in lcl_DisposeView!
+                        if (m_pRenderData && m_pRenderData->IsViewOptionAdjust())
+                            m_pRenderData->ViewOptionAdjustStop();
+
+                        if (m_pRenderData && m_pRenderData->HasPostItData())
+                            m_pRenderData->DeletePostItData();
+                        if (m_pHiddenViewFrame)
+                        {
+                            lcl_DisposeView( m_pHiddenViewFrame, pDocShell );
+                            m_pHiddenViewFrame = 0;
+                        }
+                    }
+                }
             }
         }
+    }
+    if( bLastPage )
+    {
+        delete m_pRenderData;       m_pRenderData     = NULL;
+        delete m_pPrintUIOptions;   m_pPrintUIOptions = NULL;
     }
 }
 /* -----------------------------03.10.04 -------------------------------------
