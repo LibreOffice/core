@@ -103,8 +103,9 @@ namespace toolkit
         throw( uno::RuntimeException )
     {
         uno::Sequence< ::rtl::OUString > aServices( UnoControlModel::getSupportedServiceNames() );
-        aServices.realloc( aServices.getLength() + 1 );
-        aServices[ aServices.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName_UnoThrobberControlModel );
+        aServices.realloc( aServices.getLength() + 2 );
+        aServices[ aServices.getLength() - 2 ] = ::rtl::OUString::createFromAscii( szServiceName_UnoThrobberControlModel );
+        aServices[ aServices.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName2_UnoThrobberControlModel );
         return aServices;
     }
 
@@ -154,8 +155,9 @@ namespace toolkit
         throw( uno::RuntimeException )
     {
         uno::Sequence< ::rtl::OUString > aServices( UnoControlBase::getSupportedServiceNames() );
-        aServices.realloc( aServices.getLength() + 1 );
-        aServices[ aServices.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName_UnoThrobberControl );
+        aServices.realloc( aServices.getLength() + 2 );
+        aServices[ aServices.getLength() - 2 ] = ::rtl::OUString::createFromAscii( szServiceName_UnoThrobberControl );
+        aServices[ aServices.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName2_UnoThrobberControl );
         return aServices;
     }
 
