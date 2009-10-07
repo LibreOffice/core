@@ -65,7 +65,7 @@ sal_Int32 SwVbaStyle::getLanguageID( const uno::Reference< beans::XPropertySet >
 
 void SwVbaStyle::setLanguageID( const uno::Reference< beans::XPropertySet >& xTCProps, sal_Int32 _languageid ) throw (uno::RuntimeException)
 {
-    lang::Locale aLocale = MsLangId::convertLanguageToLocale( _languageid );
+    lang::Locale aLocale = MsLangId::convertLanguageToLocale( static_cast<LanguageType>(_languageid) );
     xTCProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CharLocale") ), uno::makeAny( aLocale ) ) ;
 }
 

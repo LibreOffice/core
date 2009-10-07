@@ -51,7 +51,7 @@ namespace ooo
         css::uno::Reference< css::style::XStyle > getCurrentPageStyle( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
         sal_Int32 getPageCount( const css::uno::Reference< css::frame::XModel>& xModel ) throw (css::uno::RuntimeException);
 
-}; // word
-}; // vba
-}; // ooo
+} // word
+} // vba
+} // ooo
 #endif

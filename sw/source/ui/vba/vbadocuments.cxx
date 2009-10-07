@@ -161,6 +161,25 @@ SwVbaDocuments::Open( const ::rtl::OUString& Filename, const uno::Any& /*Confirm
     return aRet;
 }
 
+    // VbaDocumentsBase / XDocumentsBase (to avoid warning C4266 for hiding function on wntmsci)
+uno::Any SAL_CALL
+SwVbaDocuments::Add() throw (uno::RuntimeException)
+{
+    return VbaDocumentsBase::Add();
+}
+
+void SAL_CALL
+SwVbaDocuments::Close(  ) throw (uno::RuntimeException)
+{
+    VbaDocumentsBase::Close();
+}
+
+uno::Any SAL_CALL
+SwVbaDocuments::Open( const ::rtl::OUString& Filename, const uno::Any& ReadOnly, const uno::Sequence< beans::PropertyValue >& rProps ) throw (uno::RuntimeException)
+{
+    return VbaDocumentsBase::Open( Filename, ReadOnly, rProps );
+}
+
 rtl::OUString&
 SwVbaDocuments::getServiceImplName()
 {

@@ -43,7 +43,7 @@ class SwVbaField : public SwVbaField_BASE
     css::uno::Reference< css::text::XTextDocument > mxTextDocument;
     css::uno::Reference< css::text::XTextField > mxTextField;
 public:
-    SwVbaField( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rDocument, const css::uno::Reference< css::text::XTextField >& xTextField) throw ( css::uno::RuntimeException);;
+    SwVbaField( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rDocument, const css::uno::Reference< css::text::XTextField >& xTextField) throw ( css::uno::RuntimeException);
 
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
