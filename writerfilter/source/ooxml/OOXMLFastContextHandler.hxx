@@ -171,6 +171,7 @@ public:
 
     void setDocument(OOXMLDocument * pDocument);
     OOXMLDocument * getDocument();
+    void setXNoteId(OOXMLValue::Pointer_t pValue);
     void setXNoteId(const ::rtl::OUString & rId);
     const rtl::OUString & getXNoteId() const;
     void setForwardEvents(bool bForwardEvents);
@@ -514,7 +515,7 @@ public:
     OOXMLFastContextHandlerXNote(OOXMLFastContextHandler * pContext);
     virtual ~OOXMLFastContextHandlerXNote();
 
-    void checkId(const rtl::OUString & rId);
+    void checkId(OOXMLValue::Pointer_t pValue);
 
     virtual string getType() const { return "XNote"; }
 

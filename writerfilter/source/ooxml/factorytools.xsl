@@ -261,25 +261,6 @@ NS_<namespace/@alias>
     </xsl:for-each>
 </xsl:template>
 
-<xsl:template name="factorycreateelementmapfromstart">
-    <xsl:for-each select="start">
-        <xsl:variable name="name" select="@name"/>
-        <xsl:variable name="block">
-            <xsl:for-each select="ancestor::namespace/rng:grammar/rng:define[@name=$name]">
-                <xsl:call-template name="factorycreateelementmapinner">
-                </xsl:call-template>
-            </xsl:for-each>
-        </xsl:variable>
-        <xsl:if test="string-length($block) > 0">
-            <xsl:text>
-        /* start: </xsl:text>
-            <xsl:value-of select="$name"/>
-            <xsl:text>*/</xsl:text>
-            <xsl:value-of select="$block"/>
-        </xsl:if>
-    </xsl:for-each>
-</xsl:template>
-
 <!-- factoryclassname -->
 <xsl:template name="factoryclassname">
     <xsl:text>OOXMLFactory_</xsl:text>

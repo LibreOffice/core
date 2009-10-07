@@ -105,6 +105,7 @@ public:
     virtual TokenToIdMapPointer createTokenToIdMap(Id nId);
     virtual string getDefineName(Id nId) const;</xsl:text>
     <xsl:call-template name="factoryactiondecls"/>
+    virtual void attributeAction(OOXMLFastContextHandler * pHandler, Token_t nToken, OOXMLValue::Pointer_t pValue);
     <xsl:text>
     
     virtual ~</xsl:text>

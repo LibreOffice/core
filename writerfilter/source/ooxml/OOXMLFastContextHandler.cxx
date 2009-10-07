@@ -1043,6 +1043,11 @@ void OOXMLFastContextHandler::setXNoteId(const ::rtl::OUString & rId)
     mpParserState->setXNoteId(rId);
 }
 
+void OOXMLFastContextHandler::setXNoteId(OOXMLValue::Pointer_t pValue)
+{
+    mpParserState->setXNoteId(pValue->getString());
+}
+
 const rtl::OUString & OOXMLFastContextHandler::getXNoteId() const
 {
     return mpParserState->getXNoteId();
@@ -1764,16 +1769,16 @@ void OOXMLFastContextHandlerXNote::lcl_endFastElement
     setForwardEvents(mbForwardEventsSaved);
 }
 
-void OOXMLFastContextHandlerXNote::checkId(const rtl::OUString & rId)
+void OOXMLFastContextHandlerXNote::checkId(OOXMLValue::Pointer_t pValue)
 {
 #ifdef DEBUG_ELEMENT
     debug_logger->startElement("checkId");
-    debug_logger->attribute("myId", rId);
+    debug_logger->attribute("myId", pValue->getString());
     debug_logger->attribute("id", getXNoteId());
     debug_logger->endElement("checkId");
 #endif
 
-    msMyXNoteId = rId;
+    msMyXNoteId = pValue->getString();
 }
 
 /*

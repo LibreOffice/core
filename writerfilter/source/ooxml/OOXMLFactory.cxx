@@ -164,6 +164,9 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
 #endif
                         ::rtl::OUString aValue(Attribs->getValue(aIt->first));
                         OOXMLFastHelper<OOXMLBooleanValue>::newProperty(pHandler, nId, aValue);
+
+                        OOXMLValue::Pointer_t pValue(new OOXMLBooleanValue(aValue));
+                        pFactory->attributeAction(pHandler, aIt->first, pValue);
                     }
                     break;
                 case RT_String:
@@ -175,6 +178,8 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                         OOXMLFastHelper<OOXMLStringValue>::newProperty
                             (pHandler, nId, aValue);
 
+                        OOXMLValue::Pointer_t pValue(new OOXMLStringValue(aValue));
+                        pFactory->attributeAction(pHandler, aIt->first, pValue);
                     }
                     break;
                 case RT_Integer:
@@ -185,6 +190,9 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                         ::rtl::OUString aValue(Attribs->getValue(aIt->first));
                         OOXMLFastHelper<OOXMLIntegerValue>::newProperty
                             (pHandler, nId, aValue);
+
+                        OOXMLValue::Pointer_t pValue(new OOXMLIntegerValue(aValue));
+                        pFactory->attributeAction(pHandler, aIt->first, pValue);
                     }
                     break;
                 case RT_Hex:
@@ -195,6 +203,9 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                         ::rtl::OUString aValue(Attribs->getValue(aIt->first));
                         OOXMLFastHelper<OOXMLHexValue>::newProperty
                             (pHandler, nId, aValue);
+
+                        OOXMLValue::Pointer_t pValue(new OOXMLHexValue(aValue));
+                        pFactory->attributeAction(pHandler, aIt->first, pValue);
                     }
                     break;
                 case RT_List:
@@ -217,6 +228,9 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
 
                             OOXMLFastHelper<OOXMLIntegerValue>::newProperty
                                 (pHandler, nId, nValue);
+
+                            OOXMLValue::Pointer_t pValue(new OOXMLIntegerValue(nValue));
+                            pFactory->attributeAction(pHandler, aIt->first, pValue);
                         }
 #ifdef DEBUG_ATTRIBUTES
                         debug_logger->endElement("list");
@@ -307,6 +321,10 @@ void OOXMLFactory_ns::endAction(OOXMLFastContextHandler *)
 }
 
 void OOXMLFactory_ns::charactersAction(OOXMLFastContextHandler *, const ::rtl::OUString &)
+{
+}
+
+void OOXMLFactory_ns::attributeAction(OOXMLFastContextHandler *, Token_t, OOXMLValue::Pointer_t)
 {
 }
 

@@ -316,6 +316,25 @@ ListValueMapPointer </xsl:text>
     </xsl:for-each>
 </xsl:template>
 
+<xsl:template name="factorycreateelementmapfromstart">
+    <xsl:for-each select="start">
+        <xsl:variable name="name" select="@name"/>
+        <xsl:variable name="block">
+            <xsl:for-each select="ancestor::namespace/rng:grammar/rng:define[@name=$name]">
+                <xsl:call-template name="factorycreateelementmapinner">
+                </xsl:call-template>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:text>
+        /* start: </xsl:text>
+        <xsl:value-of select="$name"/>
+        <xsl:text>*/</xsl:text>
+        <xsl:if test="string-length($block) > 0">
+            <xsl:value-of select="$block"/>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
 <!-- factoryelementtoresourcemap -->
 <xsl:template name="factorycreateelementmap">
     <xsl:text>
@@ -520,7 +539,8 @@ void </xsl:text>
     default:
         break;
     }
-}</xsl:text>
+}
+</xsl:text>
 </xsl:template>
 
 <!-- factoryactions -->
@@ -638,7 +658,99 @@ TokenToIdMapPointer </xsl:text>
     }
     
     return pMap;
-}</xsl:text>
+}
+</xsl:text>
+</xsl:template>
+
+<xsl:template name="factoryattributeactiondefineinner">
+  <xsl:variable name="name" select="@name"/>
+  <xsl:variable name="block">
+    <xsl:for-each select="ancestor::namespace/resource[@name=$name]">
+      <xsl:for-each select="attribute[@action]">
+        <xsl:text>
+        case </xsl:text>
+        <xsl:call-template name="fasttoken"/>
+        <xsl:text>:
+            pHandler-></xsl:text>
+            <xsl:value-of select="@action"/>
+            <xsl:text>(pValue);
+            break;</xsl:text>
+      </xsl:for-each>
+    </xsl:for-each>
+  </xsl:variable>
+  <xsl:if test="string-length($block) > 0">
+    <xsl:variable name="handlertype">
+      <xsl:text>OOXMLFastContextHandler</xsl:text>
+        <xsl:for-each select="ancestor::namespace/resource[@name=$name]">
+          <xsl:value-of select="@resource"/>
+        </xsl:for-each>      
+    </xsl:variable>
+    <xsl:text>
+    {
+        </xsl:text>
+        <xsl:value-of select="$handlertype"/>
+        <xsl:text> * pHandler = dynamic_cast&lt;</xsl:text>
+        <xsl:value-of select="$handlertype"/>
+        <xsl:text> * &gt;(_pHandler);
+
+        switch(nToken)
+        {</xsl:text>
+        <xsl:value-of select="$block"/>
+        <xsl:text>
+        default:
+            break;
+        }
+    }</xsl:text>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="factoryattributeactioninner">
+    <xsl:for-each select="rng:grammar/rng:define">
+      <xsl:variable name="inner">
+        <xsl:call-template name="factoryattributeactiondefineinner"/>
+      </xsl:variable>
+      <xsl:if test="string-length($inner) > 0">
+        <xsl:text>
+    </xsl:text>
+    <xsl:call-template name="caselabeldefine"/>
+    <xsl:value-of select="$inner"/>
+    <xsl:text>
+        break;</xsl:text>
+      </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="factoryattributeaction">
+  <xsl:variable name="inner">
+    <xsl:call-template name="factoryattributeactioninner"/>
+  </xsl:variable>
+  <xsl:choose>
+    <xsl:when test="string-length($inner) > 0">
+      <xsl:text>
+void </xsl:text>
+<xsl:call-template name="factoryclassname"/>
+<xsl:text>::attributeAction(OOXMLFastContextHandler * _pHandler, Token_t nToken, OOXMLValue::Pointer_t pValue)
+{
+    switch(_pHandler->getDefine())
+    {</xsl:text>
+    <xsl:value-of select="$inner"/>
+    <xsl:text>
+    default:
+        break;
+    }
+}
+</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>
+void </xsl:text>
+<xsl:call-template name="factoryclassname"/>
+<xsl:text>::attributeAction(OOXMLFastContextHandler *, Token_t, OOXMLValue::Pointer_t)
+{
+}
+</xsl:text>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
   <xsl:template match="/">
@@ -669,6 +781,7 @@ namespace ooxml {
         <xsl:call-template name="factoryactions"/>
         <xsl:call-template name="factorygetdefinename"/>
         <xsl:call-template name="factorytokentoidmap"/>
+        <xsl:call-template name="factoryattributeaction"/>
     </xsl:for-each>
     <xsl:text>
 /// @endcond

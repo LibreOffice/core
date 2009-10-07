@@ -22503,7 +22503,7 @@
       <attribute name="id" tokenid="ooxml:CT_FtnEdnSepRef_id"/>
     </resource>
     <resource name="CT_FtnEdn" resource="XNote">
-      <attribute name="type" tokenid="ooxml:CT_FtnEdn_type" action="checkXNoteType"/>
+      <attribute name="type" tokenid="ooxml:CT_FtnEdn_type"/>
       <attribute name="id" tokenid="ooxml:CT_FtnEdn_id" action="checkId"/>
       <action name="start" action="propagateCharacterProperties"/>
       <action name="end" action="endSectionGroup"/>
@@ -23132,5 +23132,9 @@
     <resource name="CT_GlossaryDocument" resource="Stream"/>
     <resource name="document" resource="Stream"/>
     <resource name="glossaryDocument" resource="Stream"/>
+    <resource name="footnotes" resource="Stream"/>
+    <resource name="CT_Footnotes" resource="Stream"/>
+    <resource name="endnotes" resource="Stream"/>
+    <resource name="CT_Endnotes" resource="Stream"/>
   </namespace>
 </model>
