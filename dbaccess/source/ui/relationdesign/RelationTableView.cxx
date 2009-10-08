@@ -207,7 +207,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     OTableWindow* pDestWin = jxdDest.pListBox->GetTabWin();
 
     ::std::vector<OTableConnection*>::const_iterator aIter = getTableConnections()->begin();
-    for(;aIter != getTableConnections()->end();++aIter)
+    ::std::vector<OTableConnection*>::const_iterator aEnd = getTableConnections()->end();
+    for(;aIter != aEnd;++aIter)
     {
         OTableConnection* pFirst = *aIter;
         if((pFirst->GetSourceWin() == pSourceWin && pFirst->GetDestWin() == pDestWin) ||

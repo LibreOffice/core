@@ -126,7 +126,8 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
     }
     if ( sLocation.getLength() && sMediaType.getLength() )
     {
-        ::rtl::OUString sURL(dbaccess::ODsnTypeCollection::getDatasourcePrefixFromMediaType(sMediaType,sFileTypeExtension));
+        ::dbaccess::ODsnTypeCollection aTypeCollection(rImport.getORB());
+        ::rtl::OUString sURL(aTypeCollection.getDatasourcePrefixFromMediaType(sMediaType,sFileTypeExtension));
         sURL += sLocation;
         try
         {

@@ -58,8 +58,6 @@ namespace dbaui
     */
     class OConnectionTabPage : public OConnectionHelper
     {
-        ::dbaccess::ODsnTypeCollection*
-                            m_pCollection;  /// the DSN type collection instance
         sal_Bool            m_bUserGrabFocus : 1;
     protected:
         // connection

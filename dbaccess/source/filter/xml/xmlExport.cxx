@@ -106,6 +106,7 @@
 #include <svtools/filenotation.hxx>
 #include <svtools/pathoptions.hxx>
 #include <tools/diagnose_ex.h>
+#include <connectivity/DriversConfig.hxx>
 
 #include <boost/optional.hpp>
 
@@ -251,6 +252,7 @@ namespace dbaxml
 // -----------------------------------------------------------------------------
 ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 nExportFlag)
 : SvXMLExport( _rxMSF,MAP_10TH_MM,XML_DATABASE, EXPORT_OASIS | nExportFlag)
+,m_aTypeCollection(_rxMSF)
 ,m_bAllreadyFilled(sal_False)
 {
     GetMM100UnitConverter().setCoreMeasureUnit(MAP_10TH_MM);
@@ -338,6 +340,11 @@ void ODBExport::exportDataSource()
         xSettingsState->getPropertyDefault( INFO_FIELDDELIMITER ) >>= aDelimiter.sField;
         xSettingsState->getPropertyDefault( INFO_DECIMALDELIMITER ) >>= aDelimiter.sDecimal;
         xSettingsState->getPropertyDefault( INFO_THOUSANDSDELIMITER ) >>= aDelimiter.sThousand;
+
+        ::connectivity::DriversConfig aDriverConfig(getServiceFactory());
+        const ::rtl::OUString sURL = ::comphelper::getString(xProp->getPropertyValue(PROPERTY_URL));
+        ::comphelper::NamedValueCollection aMetaData = aDriverConfig.getMetaData(sURL);
+        aMetaData.merge( aDriverConfig.getProperties(sURL),true ) ;
 
         static ::rtl::OUString s_sTrue(::xmloff::token::GetXMLToken( XML_TRUE ));
         static ::rtl::OUString s_sFalse(::xmloff::token::GetXMLToken( XML_FALSE ));
@@ -507,8 +514,11 @@ void ODBExport::exportDataSource()
                 }
                 else
                 {
-                    m_aDataSourceSettings.push_back( TypedPropertyValue(
-                        pProperties->Name, pProperties->Type, aValue ) );
+                    if ( !aMetaData.has(pProperties->Name) || aMetaData.get(pProperties->Name) != aValue )
+                    {
+                        m_aDataSourceSettings.push_back( TypedPropertyValue(
+                            pProperties->Name, pProperties->Type, aValue ) );
+                    }
                     continue;
                 }
             }
@@ -609,8 +619,7 @@ void ODBExport::exportConnectionData()
         ::rtl::OUString sValue;
         Reference<XPropertySet> xProp(getDataSource());
         xProp->getPropertyValue(PROPERTY_URL) >>= sValue;
-        const ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType(sValue);
-        if ( m_aTypeCollection.isFileSystemBased(eType) )
+        if ( m_aTypeCollection.isFileSystemBased(sValue) )
         {
             SvXMLElementExport aDatabaseDescription(*this,XML_NAMESPACE_DB, XML_DATABASE_DESCRIPTION, sal_True, sal_True);
             {
@@ -620,11 +629,16 @@ void ODBExport::exportConnectionData()
                 if ( sOrigUrl == sFileName )
                 {
                     ::svt::OFileNotation aTransformer( sFileName );
-                    AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,GetRelativeReference(aTransformer.get( ::svt::OFileNotation::N_URL )));
+                    ::rtl::OUStringBuffer sURL( aTransformer.get( ::svt::OFileNotation::N_URL ) );
+                    if ( sURL.charAt(sURL.getLength()-1) != '/' )
+                        sURL.append(sal_Unicode('/'));
+
+                    AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,GetRelativeReference(sURL.makeStringAndClear()));
                 } // if ( sOrigUrl == sFileName )
                 else
                     AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,sOrigUrl);
-                AddAttribute(XML_NAMESPACE_DB,XML_MEDIA_TYPE,m_aTypeCollection.getMediaType(eType));
+                AddAttribute(XML_NAMESPACE_DB,XML_MEDIA_TYPE,m_aTypeCollection.getMediaType(sValue));
+                const ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.determineType(sValue);
                 try
                 {
                     ::rtl::OUString sExtension;
@@ -655,7 +669,7 @@ void ODBExport::exportConnectionData()
             {
                 SvXMLElementExport aDatabaseDescription(*this,XML_NAMESPACE_DB, XML_DATABASE_DESCRIPTION, sal_True, sal_True);
                 {
-                    String sType = m_aTypeCollection.getDatasourcePrefix(eType);
+                    String sType = m_aTypeCollection.getPrefix(sValue);
                     sType.EraseTrailingChars(':');
                     AddAttribute(XML_NAMESPACE_DB,XML_TYPE,sType);
                     AddAttribute(XML_NAMESPACE_DB,XML_HOSTNAME,sHostName);

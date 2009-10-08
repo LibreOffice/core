@@ -166,6 +166,9 @@
 #include <cppuhelper/exc_hlp.hxx>
 #endif
 #include "dsmeta.hxx"
+#include <boost/bind.hpp>
+#include <algorithm>
+#include <functional>
 
 extern "C" void SAL_CALL createRegistryInfo_OTableControl()
 {
@@ -255,7 +258,6 @@ OTableController::OTableController(const Reference< XMultiServiceFactory >& _rM)
     InvalidateAll();
     m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
     m_pTypeInfo->aUIName = m_sTypeNames.GetToken(TYPE_OTHER);
-    m_aTypeCollection.initUserDriverTypes(_rM);
 }
 // -----------------------------------------------------------------------------
 OTableController::~OTableController()
@@ -1015,7 +1017,8 @@ void OTableController::loadData()
             for(;pKeyBegin != pKeyEnd;++pKeyBegin)
             {
                 ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator rowIter = m_vRowList.begin();
-                for(;rowIter != m_vRowList.end();++rowIter)
+                ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator rowEnd = m_vRowList.end();
+                for(;rowIter != rowEnd;++rowIter)
                 {
                     if((*rowIter)->GetActFieldDescr()->GetName() == *pKeyBegin)
                     {
@@ -1399,7 +1402,7 @@ void OTableController::alterColumns()
 
     // third append the new columns
     aIter = m_vRowList.begin();
-    for(;aIter != m_vRowList.end();++aIter)
+    for(;aIter != aEnd;++aIter)
     {
         OSL_ENSURE(*aIter,"OTableRow is null!");
         OFieldDescription* pField = (*aIter)->GetActFieldDescr();
@@ -1437,7 +1440,7 @@ void OTableController::alterColumns()
     if ( xKeyColumns.is() )
     {
         aIter = m_vRowList.begin();
-        for(;aIter != m_vRowList.end();++aIter)
+        for(;aIter != aEnd;++aIter)
         {
             OSL_ENSURE(*aIter,"OTableRow is null!");
             OFieldDescription* pField = (*aIter)->GetActFieldDescr();
@@ -1551,9 +1554,7 @@ void OTableController::assignTable()
                 setEditable( xMeta.is() && !xMeta->isReadOnly() && (isAlterAllowed() || isDropAllowed() || isAddAllowed()) );
                 if(!isEditable())
                 {
-                    ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_vRowList.begin();
-                    for(; aIter != m_vRowList.end(); ++aIter)
-                        (*aIter)->SetReadOnly(sal_True);
+                    ::std::for_each(m_vRowList.begin(),m_vRowList.end(),boost::bind( &OTableRow::SetReadOnly, _1, boost::cref( sal_True )));
                 }
                 m_bNew = sal_False;
                 // be notified when the table is in disposing
@@ -1612,7 +1613,8 @@ void OTableController::reSyncRows()
     sal_Bool bAlterAllowed  = isAlterAllowed();
     sal_Bool bAddAllowed    = isAddAllowed();
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_vRowList.begin();
-    for(;aIter != m_vRowList.end();++aIter)
+    ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aEnd = m_vRowList.end();
+    for(;aIter != aEnd;++aIter)
     {
         OSL_ENSURE(*aIter,"OTableRow is null!");
         OFieldDescription* pField = (*aIter)->GetActFieldDescr();
@@ -1636,7 +1638,8 @@ void OTableController::reSyncRows()
     ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->supportsMixedCaseQuotedIdentifiers() : sal_True);
 
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = m_vRowList.begin();
-    for(sal_Int32 i=0;aIter != m_vRowList.end();++aIter)
+    ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = m_vRowList.end();
+    for(sal_Int32 i=0;aIter != aEnd;++aIter)
     {
         OFieldDescription* pFieldDesc = (*aIter)->GetActFieldDescr();
         if (pFieldDesc && pFieldDesc->GetName().getLength() && bCase(sName,pFieldDesc->GetName()))
@@ -1702,8 +1705,6 @@ sal_Int32 OTableController::getFirstEmptyRowPosition() const
 // -----------------------------------------------------------------------------
 bool OTableController::isAutoIncrementPrimaryKey() const
 {
-    ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(getDataSource()->getPropertyValue(PROPERTY_URL)));
-    DataSourceMetaData aMeta(eType);
-    return aMeta.getAdvancedSettingsSupport().bAutoIncrementIsPrimaryKey;
+    return getSdbMetaData().isAutoIncrementPrimaryKey();
 }
 // -----------------------------------------------------------------------------

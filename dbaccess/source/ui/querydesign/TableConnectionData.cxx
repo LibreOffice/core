@@ -111,7 +111,8 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
     OConnectionLineDataVec* pLineData = const_cast<OTableConnectionData*>(&rConnData)->GetConnLineDataList();
 
     OConnectionLineDataVec::const_iterator aIter = pLineData->begin();
-    for(;aIter != pLineData->end();++aIter)
+    OConnectionLineDataVec::const_iterator aEnd = pLineData->end();
+    for(;aIter != aEnd;++aIter)
         m_vConnLineData.push_back(new OConnectionLineData(**aIter));
 
     return *this;
@@ -140,12 +141,13 @@ BOOL OTableConnectionData::SetConnLine( USHORT nIndex, const String& rSourceFiel
 BOOL OTableConnectionData::AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName )
 {
     OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
-    for(;aIter != m_vConnLineData.end();++aIter)
+    OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
+    for(;aIter != aEnd;++aIter)
     {
         if((*aIter)->GetDestFieldName() == rDestFieldName && (*aIter)->GetSourceFieldName() == rSourceFieldName)
             break;
     }
-    if(aIter == m_vConnLineData.end())
+    if(aIter == aEnd)
     {
         OConnectionLineDataRef pNew = new OConnectionLineData(rSourceFieldName, rDestFieldName);
         if (!pNew.isValid())

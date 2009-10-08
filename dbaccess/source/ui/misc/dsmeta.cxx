@@ -29,7 +29,9 @@
  ************************************************************************/
 
 #include "dsmeta.hxx"
-
+#include <connectivity/DriversConfig.hxx>
+#include "dsntypes.hxx"
+#include <comphelper/processfactory.hxx>
 /** === begin UNO includes === **/
 /** === end UNO includes === **/
 
@@ -41,34 +43,12 @@ namespace dbaui
 //........................................................................
 
     /** === begin UNO using === **/
+    using namespace dbaccess;
+    using namespace ::com::sun::star;
     /** === end UNO using === **/
 
     struct InitAdvanced : public AdvancedSettingsSupport
     {
-        // strange ctor, but makes instantiating this class more readable (see below)
-        InitAdvanced( short _Generated, short _SQL, short _Append, short _As, short _Outer, short _Priv, short _Param,
-                      short _Version, short _Catalog, short _Schema, short _Index, short _DOS, short _Required, short _Bool,short _IgnoreCur,short _AutoPKey, short _EscapeDT )
-            :AdvancedSettingsSupport()
-        {
-            bGeneratedValues               = ( _Generated != 0 );
-            bUseSQL92NamingConstraints     = ( _SQL       != 0 );
-            bAppendTableAliasInSelect      = ( _Append    != 0 );
-            bUseKeywordAsBeforeAlias       = ( _As        != 0 );
-            bUseBracketedOuterJoinSyntax   = ( _Outer     != 0 );
-            bIgnoreDriverPrivileges        = ( _Priv      != 0 );
-            bParameterNameSubstitution     = ( _Param     != 0 );
-            bDisplayVersionColumns         = ( _Version   != 0 );
-            bUseCatalogInSelect            = ( _Catalog   != 0 );
-            bUseSchemaInSelect             = ( _Schema    != 0 );
-            bUseIndexDirectionKeyword      = ( _Index     != 0 );
-            bUseDOSLineEnds                = ( _DOS       != 0 );
-            bBooleanComparisonMode         = ( _Bool      != 0 );
-            bFormsCheckRequiredFields      = ( _Required  != 0 );
-            bIgnoreCurrency                = ( _IgnoreCur != 0 );
-            bAutoIncrementIsPrimaryKey     = ( _AutoPKey  != 0 );
-            bEscapeDateTime                = ( _EscapeDT  != 0 );
-        }
-
         enum Special { All, AllButIgnoreCurrency, None };
 
         InitAdvanced( Special _eType )
@@ -89,7 +69,6 @@ namespace dbaui
             bBooleanComparisonMode         = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
             bFormsCheckRequiredFields      = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
             bIgnoreCurrency                = ( _eType == All );
-            bAutoIncrementIsPrimaryKey     = false; // hsqldb special
             bEscapeDateTime                = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
         }
     };
@@ -114,95 +93,125 @@ namespace dbaui
     //= global tables
     //====================================================================
     //--------------------------------------------------------------------
-    static const AdvancedSettingsSupport& getAdvancedSettingsSupport( ::dbaccess::DATASOURCE_TYPE _eType )
+    static const AdvancedSettingsSupport& getAdvancedSettingsSupport( const ::rtl::OUString& _sURL )
     {
-        typedef ::std::map< ::dbaccess::DATASOURCE_TYPE, AdvancedSettingsSupport >    AdvancedSupport;
-
+        DECLARE_STL_USTRINGACCESS_MAP( AdvancedSettingsSupport, AdvancedSupport);
         static AdvancedSupport s_aSupport;
         if ( s_aSupport.empty() )
         {
-            s_aSupport[  ::dbaccess::DST_MSACCESS            ] = InitAdvanced( 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0 );
-            s_aSupport[  ::dbaccess::DST_MYSQL_ODBC          ] = InitAdvanced( 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0 );
-            s_aSupport[  ::dbaccess::DST_MYSQL_JDBC          ] = InitAdvanced( 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1 );
-            s_aSupport[  ::dbaccess::DST_MYSQL_NATIVE        ] = InitAdvanced( 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0 );
-            s_aSupport[  ::dbaccess::DST_ORACLE_JDBC         ] = InitAdvanced( InitAdvanced::All );
-            s_aSupport[  ::dbaccess::DST_ADABAS              ] = InitAdvanced( 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0 );
-            s_aSupport[  ::dbaccess::DST_CALC                ] = InitAdvanced( InitAdvanced::None );
-            s_aSupport[  ::dbaccess::DST_DBASE               ] = InitAdvanced( 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 );
-            s_aSupport[  ::dbaccess::DST_FLAT                ] = InitAdvanced( 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-            s_aSupport[  ::dbaccess::DST_JDBC                ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
-            s_aSupport[  ::dbaccess::DST_ODBC                ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
-            s_aSupport[  ::dbaccess::DST_ADO                 ] = InitAdvanced( 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 );
-            s_aSupport[  ::dbaccess::DST_MOZILLA             ] = InitAdvanced( InitAdvanced::None );
-            s_aSupport[  ::dbaccess::DST_THUNDERBIRD         ] = InitAdvanced( InitAdvanced::None );
-            s_aSupport[  ::dbaccess::DST_LDAP                ] = InitAdvanced( InitAdvanced::None );
-            s_aSupport[  ::dbaccess::DST_OUTLOOK             ] = InitAdvanced( InitAdvanced::None );
-            s_aSupport[  ::dbaccess::DST_OUTLOOKEXP          ] = InitAdvanced( InitAdvanced::None );
-            s_aSupport[  ::dbaccess::DST_EVOLUTION           ] = InitAdvanced( InitAdvanced::None );
-            s_aSupport[  ::dbaccess::DST_EVOLUTION_GROUPWISE ] = InitAdvanced( InitAdvanced::None );
-            s_aSupport[  ::dbaccess::DST_EVOLUTION_LDAP      ] = InitAdvanced( InitAdvanced::None );
-            s_aSupport[  ::dbaccess::DST_KAB                 ] = InitAdvanced( InitAdvanced::None );
-            s_aSupport[  ::dbaccess::DST_MACAB               ] = InitAdvanced( InitAdvanced::None );
-            s_aSupport[  ::dbaccess::DST_MSACCESS_2007       ] = InitAdvanced( 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0 );
-            s_aSupport[  ::dbaccess::DST_EMBEDDED_HSQLDB     ] = InitAdvanced( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0 );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE1         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE2         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE3         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE4         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE5         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE6         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE7         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE8         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE9         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE10        ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
-        }
-        return s_aSupport[ _eType ];
+            ::connectivity::DriversConfig aDriverConfig(::comphelper::getProcessServiceFactory());
+            const uno::Sequence< ::rtl::OUString > aURLs = aDriverConfig.getURLs();
+            const ::rtl::OUString* pIter = aURLs.getConstArray();
+            const ::rtl::OUString* pEnd = pIter + aURLs.getLength();
+            for(;pIter != pEnd;++pIter)
+            {
+                InitAdvanced aInit(InitAdvanced::None);
+                const uno::Sequence< beans::NamedValue> aProperties = aDriverConfig.getFeatures(*pIter).getNamedValues();
+                const beans::NamedValue* pPropertiesIter = aProperties.getConstArray();
+                const beans::NamedValue* pPropertiesEnd  = pPropertiesIter + aProperties.getLength();
+                for (;pPropertiesIter != pPropertiesEnd ; ++pPropertiesIter)
+                {
+                    if ( pPropertiesIter->Name.equalsAscii("GeneratedValues") )
+                    {
+                        pPropertiesIter->Value >>= aInit.bGeneratedValues;
+                    }
+                    else if ( pPropertiesIter->Name.equalsAscii("UseSQL92NamingConstraints") )
+                    {
+                        pPropertiesIter->Value >>= aInit.bUseSQL92NamingConstraints;
+                    }
+                    else if ( pPropertiesIter->Name.equalsAscii("AppendTableAliasInSelect") )
+                    {
+                        pPropertiesIter->Value >>= aInit.bAppendTableAliasInSelect;
+                    }
+                    else if ( pPropertiesIter->Name.equalsAscii("UseKeywordAsBeforeAlias") )
+                    {
+                        pPropertiesIter->Value >>= aInit.bUseKeywordAsBeforeAlias;
+                    }
+                    else if ( pPropertiesIter->Name.equalsAscii("UseBracketedOuterJoinSyntax") )
+                    {
+                        pPropertiesIter->Value >>= aInit.bUseBracketedOuterJoinSyntax;
+                    }
+                    else if ( pPropertiesIter->Name.equalsAscii("IgnoreDriverPrivileges") )
+                    {
+                        pPropertiesIter->Value >>= aInit.bIgnoreDriverPrivileges;
+                    }
+                    else if ( pPropertiesIter->Name.equalsAscii("ParameterNameSubstitution") )
+                    {
+                        pPropertiesIter->Value >>= aInit.bParameterNameSubstitution;
+                    }
+                    else if ( pPropertiesIter->Name.equalsAscii("DisplayVersionColumns") )
+                    {
+                        pPropertiesIter->Value >>= aInit.bDisplayVersionColumns;
+                    }
+                    else if ( pPropertiesIter->Name.equalsAscii("UseCatalogInSelect") )
+                    {
+                        pPropertiesIter->Value >>= aInit.bUseCatalogInSelect;
+                    }
+                    else if ( pPropertiesIter->Name.equalsAscii("UseSchemaInSelect") )
+                    {
+                        pPropertiesIter->Value >>= aInit.bUseSchemaInSelect;
+                    }
+                    else if ( pPropertiesIter->Name.equalsAscii("UseIndexDirectionKeyword") )
+                    {
+                        pPropertiesIter->Value >>= aInit.bUseIndexDirectionKeyword;
+                    }
+                    else if ( pPropertiesIter->Name.equalsAscii("UseDOSLineEnds") )
+                    {
+                        pPropertiesIter->Value >>= aInit.bUseDOSLineEnds;
+                    }
+                    else if ( pPropertiesIter->Name.equalsAscii("BooleanComparisonMode") )
+                    {
+                        pPropertiesIter->Value >>= aInit.bBooleanComparisonMode;
+                    }
+                    else if ( pPropertiesIter->Name.equalsAscii("FormsCheckRequiredFields") )
+                    {
+                        pPropertiesIter->Value >>= aInit.bFormsCheckRequiredFields;
+                    }
+                    else if ( pPropertiesIter->Name.equalsAscii("IgnoreCurrency") )
+                    {
+                        pPropertiesIter->Value >>= aInit.bIgnoreCurrency;
+                    }
+                    else if ( pPropertiesIter->Name.equalsAscii("EscapeDateTime") )
+                    {
+                        pPropertiesIter->Value >>= aInit.bEscapeDateTime;
+                    }
+                } // for (;pPropertiesIter != pPropertiesEnd ; ++pPropertiesIter)
+                s_aSupport.insert(AdvancedSupport::value_type(*pIter,aInit));
+            }
+        } // if ( s_aSupport.empty() )
+        OSL_ENSURE(s_aSupport.find(_sURL) != s_aSupport.end(),"Illegal URL!");
+        return s_aSupport[ _sURL ];
     }
 
     //--------------------------------------------------------------------
-    static AuthenticationMode getAuthenticationMode( ::dbaccess::DATASOURCE_TYPE _eType )
+    static AuthenticationMode getAuthenticationMode( const ::rtl::OUString& _sURL )
     {
-        typedef ::std::map< ::dbaccess::DATASOURCE_TYPE, FeatureSupport >    Supported;
-
+        DECLARE_STL_USTRINGACCESS_MAP( FeatureSupport, Supported);
         static Supported s_aSupport;
         if ( s_aSupport.empty() )
         {
-            s_aSupport[  ::dbaccess::DST_MSACCESS            ] = FeatureSupport( AuthNone    );
-            s_aSupport[  ::dbaccess::DST_MYSQL_NATIVE        ] = FeatureSupport( AuthUserPwd );
-            s_aSupport[  ::dbaccess::DST_MYSQL_ODBC          ] = FeatureSupport( AuthUserPwd );
-            s_aSupport[  ::dbaccess::DST_MYSQL_JDBC          ] = FeatureSupport( AuthUserPwd );
-            s_aSupport[  ::dbaccess::DST_ORACLE_JDBC         ] = FeatureSupport( AuthUserPwd );
-            s_aSupport[  ::dbaccess::DST_ADABAS              ] = FeatureSupport( AuthUserPwd );
-            s_aSupport[  ::dbaccess::DST_CALC                ] = FeatureSupport( AuthPwd     );
-            s_aSupport[  ::dbaccess::DST_DBASE               ] = FeatureSupport( AuthNone    );
-            s_aSupport[  ::dbaccess::DST_FLAT                ] = FeatureSupport( AuthNone    );
-            s_aSupport[  ::dbaccess::DST_JDBC                ] = FeatureSupport( AuthUserPwd );
-            s_aSupport[  ::dbaccess::DST_ODBC                ] = FeatureSupport( AuthUserPwd );
-            s_aSupport[  ::dbaccess::DST_ADO                 ] = FeatureSupport( AuthUserPwd );
-            s_aSupport[  ::dbaccess::DST_MOZILLA             ] = FeatureSupport( AuthNone    );
-            s_aSupport[  ::dbaccess::DST_THUNDERBIRD         ] = FeatureSupport( AuthNone    );
-            s_aSupport[  ::dbaccess::DST_LDAP                ] = FeatureSupport( AuthUserPwd );
-            s_aSupport[  ::dbaccess::DST_OUTLOOK             ] = FeatureSupport( AuthNone    );
-            s_aSupport[  ::dbaccess::DST_OUTLOOKEXP          ] = FeatureSupport( AuthNone    );
-            s_aSupport[  ::dbaccess::DST_EVOLUTION           ] = FeatureSupport( AuthNone    );
-            s_aSupport[  ::dbaccess::DST_EVOLUTION_GROUPWISE ] = FeatureSupport( AuthNone    );
-            s_aSupport[  ::dbaccess::DST_EVOLUTION_LDAP      ] = FeatureSupport( AuthNone    );
-            s_aSupport[  ::dbaccess::DST_KAB                 ] = FeatureSupport( AuthNone    );
-            s_aSupport[  ::dbaccess::DST_MACAB               ] = FeatureSupport( AuthNone    );
-            s_aSupport[  ::dbaccess::DST_MSACCESS_2007       ] = FeatureSupport( AuthNone    );
-            s_aSupport[  ::dbaccess::DST_EMBEDDED_HSQLDB     ] = FeatureSupport( AuthNone    );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE1         ] = FeatureSupport( AuthUserPwd );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE2         ] = FeatureSupport( AuthUserPwd );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE3         ] = FeatureSupport( AuthUserPwd );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE4         ] = FeatureSupport( AuthUserPwd );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE5         ] = FeatureSupport( AuthUserPwd );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE6         ] = FeatureSupport( AuthUserPwd );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE7         ] = FeatureSupport( AuthUserPwd );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE8         ] = FeatureSupport( AuthUserPwd );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE9         ] = FeatureSupport( AuthUserPwd );
-            s_aSupport[  ::dbaccess::DST_USERDEFINE10        ] = FeatureSupport( AuthUserPwd );
-        }
-        return s_aSupport[ _eType ].eAuthentication;
+            ::connectivity::DriversConfig aDriverConfig(::comphelper::getProcessServiceFactory());
+            const uno::Sequence< ::rtl::OUString > aURLs = aDriverConfig.getURLs();
+            const ::rtl::OUString* pIter = aURLs.getConstArray();
+            const ::rtl::OUString* pEnd = pIter + aURLs.getLength();
+            for(;pIter != pEnd;++pIter)
+            {
+                FeatureSupport aInit( AuthNone );
+                const ::comphelper::NamedValueCollection& aMetaData = aDriverConfig.getMetaData(*pIter);
+                if ( aMetaData.has("Authentication") )
+                {
+                    ::rtl::OUString sAuth;
+                    aMetaData.get("Authentication") >>= sAuth;
+                    if ( sAuth.equalsAscii("UserPassword") )
+                        aInit = AuthUserPwd;
+                    else if ( sAuth.equalsAscii("Password") )
+                        aInit = AuthPwd;
+                }
+                s_aSupport.insert(Supported::value_type(*pIter,aInit));
+            } // for(;pIter != pEnd;++pIter)
+        } // if ( s_aSupport.empty() )
+        OSL_ENSURE(s_aSupport.find(_sURL) != s_aSupport.end(),"Illegal URL!");
+        return s_aSupport[ _sURL ].eAuthentication;
     }
 
     //====================================================================
@@ -211,17 +220,17 @@ namespace dbaui
     class DataSourceMetaData_Impl
     {
     public:
-        DataSourceMetaData_Impl( ::dbaccess::DATASOURCE_TYPE _eType );
+        DataSourceMetaData_Impl( const ::rtl::OUString& _sURL );
 
-        inline ::dbaccess::DATASOURCE_TYPE getType() const { return m_eType; }
+        inline ::rtl::OUString getType() const { return m_sURL; }
 
     private:
-        ::dbaccess::DATASOURCE_TYPE m_eType;
+        const ::rtl::OUString m_sURL;
     };
 
     //--------------------------------------------------------------------
-    DataSourceMetaData_Impl::DataSourceMetaData_Impl( ::dbaccess::DATASOURCE_TYPE _eType )
-        :m_eType( _eType )
+    DataSourceMetaData_Impl::DataSourceMetaData_Impl( const ::rtl::OUString& _sURL )
+        :m_sURL( _sURL )
     {
     }
 
@@ -229,8 +238,8 @@ namespace dbaui
     //= DataSourceMetaData
     //====================================================================
     //--------------------------------------------------------------------
-    DataSourceMetaData::DataSourceMetaData( ::dbaccess::DATASOURCE_TYPE _eType )
-        :m_pImpl( new DataSourceMetaData_Impl( _eType ) )
+    DataSourceMetaData::DataSourceMetaData( const ::rtl::OUString& _sURL )
+        :m_pImpl( new DataSourceMetaData_Impl( _sURL ) )
     {
     }
 
@@ -252,9 +261,9 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
-    AuthenticationMode  DataSourceMetaData::getAuthentication( ::dbaccess::DATASOURCE_TYPE _eType )
+    AuthenticationMode  DataSourceMetaData::getAuthentication( const ::rtl::OUString& _sURL )
     {
-        return getAuthenticationMode( _eType );
+        return getAuthenticationMode( _sURL );
     }
 
 //........................................................................

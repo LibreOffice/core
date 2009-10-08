@@ -207,7 +207,7 @@ ODesignView::~ODesignView()
     if ( m_pAddField )
     {
         SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( UID_RPT_RPT_APP_VIEW ) );
-        aDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( m_pAddField->GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)).GetBuffer() ) );
+        aDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( m_pAddField->GetWindowState(WINDOWSTATE_MASK_ALL).GetBuffer() ) );
         notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         ::std::auto_ptr<Window> aTemp2(m_pAddField);
         m_pAddField = NULL;
@@ -215,7 +215,7 @@ ODesignView::~ODesignView()
     if ( m_pReportExplorer )
     {
         SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_NAVIGATOR ) );
-        aDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( m_pReportExplorer->GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)).GetBuffer() ) );
+        aDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( m_pReportExplorer->GetWindowState(WINDOWSTATE_MASK_ALL).GetBuffer() ) );
         notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         ::std::auto_ptr<Window> aTemp2(m_pReportExplorer);
         m_pReportExplorer = NULL;

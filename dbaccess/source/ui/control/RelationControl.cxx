@@ -532,13 +532,14 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
     // -----------------------------------------------------------------------------
     void OTableListBoxControl::fillListBoxes()
     {
-        DBG_ASSERT(m_pTableMap->size() >= 2, "OTableListBoxControl::OTableListBoxControl : brauche mindestens zwei TabWins !");
+        DBG_ASSERT( !m_pTableMap->empty(), "OTableListBoxControl::fillListBoxes: no table window!");
         OTableWindow* pInitialLeft = NULL;
         OTableWindow* pInitialRight = NULL;
 
         // die Namen aller TabWins einsammeln
         OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->begin();
-        for(;aIter != m_pTableMap->end();++aIter)
+        OJoinTableView::OTableWindowMap::const_iterator aEnd = m_pTableMap->end();
+        for(;aIter != aEnd;++aIter)
         {
             m_lmbLeftTable.InsertEntry(aIter->first);
             m_lmbRightTable.InsertEntry(aIter->first);
@@ -553,6 +554,12 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
                 pInitialRight = aIter->second;
                 m_strCurrentRight = aIter->first;
             }
+        } // for(;aIter != m_pTableMap->end();++aIter)
+
+        if ( !pInitialRight )
+        {
+            pInitialRight = pInitialLeft;
+            m_strCurrentRight = m_strCurrentLeft;
         }
 
         // die entsprechenden Defs an mein Controls

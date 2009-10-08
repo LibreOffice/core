@@ -194,7 +194,8 @@ namespace dbaccess
                      const ::comphelper::ComponentContext& _rContext,
                      const ::rtl::OUString& _rUpdateTableName,
                      sal_Bool&  _bModified,
-                     sal_Bool&  _bNew);
+                     sal_Bool&  _bNew,
+                     const ORowSetValueVector& _aParameterValueForCache);
         ~ORowSetCache();
 
 

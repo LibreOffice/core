@@ -88,6 +88,8 @@ SHL1STDLIBS=\
     $(CPPULIB)			\
     $(SFXLIB)			\
     $(SVLLIB)			\
+    $(DBTOOLSLIB)		\
+    $(UNOTOOLSLIB)		\
     $(SO2LIB)			\
     $(SALLIB)
 

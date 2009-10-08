@@ -31,9 +31,6 @@
 #ifndef INCLUDED_BEAUTIFIER_HXX
 #define INCLUDED_BEAUTIFIER_HXX
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_reportdesign.hxx"
-
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 /** === end UNO includes === **/

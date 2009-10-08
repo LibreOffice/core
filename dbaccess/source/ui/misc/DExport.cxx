@@ -686,35 +686,7 @@ sal_Bool ODatabaseExport::createRowSet()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::createRowSet" );
     DBG_CHKTHIS(ODatabaseExport,NULL);
-    //Reference<XResultSet> xDestSet(m_xFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.RowSet")),UNO_QUERY);
-    //Reference<XPropertySet > xProp(xDestSet,UNO_QUERY);
-    //if(xProp.is())
-    //{
-    //  ::rtl::OUString sDestName = ::dbtools::composeTableName(
- //           m_xConnection->getMetaData(), m_xTable, ::dbtools::eInDataManipulation, false, false, false );
-
-    //  xProp->setPropertyValue(PROPERTY_ACTIVE_CONNECTION,makeAny(m_xConnection.getTyped()));
-    //  xProp->setPropertyValue(PROPERTY_COMMAND_TYPE,makeAny(CommandType::TABLE));
-    //  xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(sDestName));
-    //  xProp->setPropertyValue(PROPERTY_IGNORERESULT,::cppu::bool2any(sal_True));
- //       xProp->setPropertyValue(PROPERTY_FETCHSIZE,sal_Int32(1));
-    //  Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
-    //  xRowSet->execute();
-
- //       Reference< XResultSetMetaDataSupplier> xSrcMetaSup(xRowSet,UNO_QUERY_THROW);
-    //  m_xResultSetMetaData = xSrcMetaSup->getMetaData();
-
- //       if ( ::dbtools::canInsert(xProp) )
- //       {
- //           m_pUpdateHelper.reset(new ORowUpdateHelper(xRowSet));
-    //      OSL_ENSURE(m_xResultSetMetaData.is(),"No ResultSetMetaData!");
- //           TPositions::iterator aIter = m_vColumns.begin();
- //           for (;aIter != m_vColumns.end() ; ++aIter)
- //               aIter->first = aIter->second;
-    //    }
- //       else
-            m_pUpdateHelper.reset(new OParameterUpdateHelper(createPreparedStatment(m_xConnection->getMetaData(),m_xTable,m_vColumns)));
-    //}
+    m_pUpdateHelper.reset(new OParameterUpdateHelper(createPreparedStatment(m_xConnection->getMetaData(),m_xTable,m_vColumns)));
 
     return m_pUpdateHelper.get() != NULL;
 }
@@ -760,6 +732,7 @@ sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _rTableName,const
                         m_bIsAutoIncrement  = aWizard.shouldCreatePrimaryKey();
                         m_vColumns          = aWizard.GetColumnPositions();
                         m_vColumnTypes      = aWizard.GetColumnTypes();
+                        m_bAppendFirstLine  = !aWizard.UseHeaderLine();
                     }
                     break;
                 default:
@@ -891,7 +864,8 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
 
     i = 1;
     // create the sql string
-    for (::std::vector< ::rtl::OUString>::iterator aInsertIter = aInsertList.begin(); aInsertIter != aInsertList.end(); ++aInsertIter)
+    ::std::vector< ::rtl::OUString>::iterator aInsertEnd = aInsertList.end();
+    for (::std::vector< ::rtl::OUString>::iterator aInsertIter = aInsertList.begin(); aInsertIter != aInsertEnd; ++aInsertIter)
     {
         if ( aInsertIter->getLength() )
         {

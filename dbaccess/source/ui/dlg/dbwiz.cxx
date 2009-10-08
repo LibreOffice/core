@@ -43,6 +43,7 @@
 #ifndef _DBAUI_DATASOURCEITEMS_HXX_
 #include "dsitems.hxx"
 #endif
+#include "dsnItem.hxx"
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
 #endif
@@ -153,6 +154,10 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
     m_pFinish->SetHelpId(HID_DBWIZ_FINISH);
     m_pHelp->SetUniqueId(UID_DBWIZ_HELP);
     // no local resources needed anymore
+
+    DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _pItems->GetItem(DSID_TYPECOLLECTION));
+    m_pCollection = pCollectionItem->getCollection();
+
     FreeResource();
     ActivatePage();
 }
@@ -167,24 +172,9 @@ ODbTypeWizDialog::~ODbTypeWizDialog()
 IMPL_LINK(ODbTypeWizDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
 {
     m_eType = _pTabPage->GetSelectedType();
-    switch(m_eType)
-    {
-        case  ::dbaccess::DST_MOZILLA:
-        case  ::dbaccess::DST_OUTLOOK:
-        case  ::dbaccess::DST_OUTLOOKEXP:
-        case  ::dbaccess::DST_EVOLUTION:
-        case  ::dbaccess::DST_EVOLUTION_GROUPWISE:
-        case  ::dbaccess::DST_EVOLUTION_LDAP:
-        case  ::dbaccess::DST_KAB:
-        case  ::dbaccess::DST_MACAB:
-            enableButtons(WZB_NEXT,sal_False);
-            enableButtons(WZB_FINISH,sal_True);
-            break;
-        default:
-            enableButtons(WZB_NEXT,sal_True);
-            enableButtons(WZB_FINISH,sal_False);
-            break;
-    }
+    const bool bURLRequired = m_pCollection->isConnectionUrlRequired(m_eType);
+    enableButtons(WZB_NEXT,bURLRequired);
+    enableButtons(WZB_FINISH,!bURLRequired);
     return 1L;
 }
 //-------------------------------------------------------------------------
@@ -194,7 +184,7 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCur
     switch(_nCurrentState)
     {
         case START_PAGE:
-            switch(m_eType)
+            switch(m_pCollection->determineType(m_eType))
             {
                 case  ::dbaccess::DST_MOZILLA:
                 case  ::dbaccess::DST_OUTLOOK:
@@ -215,7 +205,7 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCur
             }
             break;
         case CONNECTION_PAGE:
-            switch(m_eType)
+            switch(m_pCollection->determineType(m_eType))
             {
                 case  ::dbaccess::DST_MOZILLA:
                 case  ::dbaccess::DST_THUNDERBIRD:
@@ -295,7 +285,7 @@ Reference< XDriver > ODbTypeWizDialog::getDriver()
     return m_pImpl->getDriver();
 }
 // -----------------------------------------------------------------------------
-::dbaccess::DATASOURCE_TYPE ODbTypeWizDialog::getDatasourceType(const SfxItemSet& _rSet) const
+::rtl::OUString ODbTypeWizDialog::getDatasourceType(const SfxItemSet& _rSet) const
 {
     return m_pImpl->getDatasourceType(_rSet);
 }
@@ -409,6 +399,12 @@ sal_Bool ODbTypeWizDialog::saveDatasource()
     SfxTabPage* pPage = static_cast<SfxTabPage*>(WizardDialog::GetPage(getCurrentState()));
     if ( pPage )
         pPage->FillItemSet(*m_pOutSet);
+
+    DataSourceInfoConverter aConverter(getORB());
+    ::rtl::OUString sOldURL;
+    if ( m_pImpl->getCurrentDataSource().is() )
+        m_pImpl->getCurrentDataSource()->getPropertyValue(PROPERTY_URL) >>= sOldURL;
+    aConverter.convert(m_pCollection,sOldURL,m_eType,m_pImpl->getCurrentDataSource());
     return sal_True;
 }
 // -----------------------------------------------------------------------------

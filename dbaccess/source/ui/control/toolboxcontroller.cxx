@@ -175,7 +175,8 @@ namespace dbaui
         }
 
         TCommandState::iterator aIter = m_aStates.begin();
-        for (; aIter != m_aStates.end(); ++aIter)
+        TCommandState::iterator aEnd = m_aStates.end();
+        for (; aIter != aEnd; ++aIter)
             addStatusListener(aIter->first);
 
         ToolBox*    pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));

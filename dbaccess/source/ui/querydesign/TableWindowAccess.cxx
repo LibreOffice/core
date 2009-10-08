@@ -187,9 +187,10 @@ namespace dbaui
             // search the postion of our table window in the table window map
             OJoinTableView::OTableWindowMap* pMap = m_pTable->getTableView()->GetTabWinMap();
             OJoinTableView::OTableWindowMap::iterator aIter = pMap->begin();
-            for (nIndex = 0; aIter != pMap->end() && aIter->second != m_pTable; ++nIndex,++aIter)
+            OJoinTableView::OTableWindowMap::iterator aEnd = pMap->end();
+            for (nIndex = 0; aIter != aEnd && aIter->second != m_pTable; ++nIndex,++aIter)
                 ;
-            nIndex = aIter != pMap->end() ? nIndex : -1;
+            nIndex = aIter != aEnd ? nIndex : -1;
         }
         return nIndex;
     }
@@ -278,9 +279,10 @@ namespace dbaui
             const ::std::vector<OTableConnection*>* pConnectionList = pView->getTableConnections();
 
             ::std::vector<OTableConnection*>::const_iterator aIter = pView->getTableConnections(m_pTable);
+            ::std::vector<OTableConnection*>::const_iterator aEnd = pConnectionList->end();
             ::std::vector< Reference<XInterface> > aRelations;
             aRelations.reserve(5); // just guessing
-            for (; aIter != pConnectionList->end() ; ++aIter )
+            for (; aIter != aEnd ; ++aIter )
                 aRelations.push_back(getParentChild(aIter - pConnectionList->begin()));
 
             Reference<XInterface> *pRelations = aRelations.empty() ? 0 : &aRelations[0];

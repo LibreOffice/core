@@ -608,7 +608,8 @@ void ODatabaseModelImpl::clearConnections()
     aConnections.swap( m_aConnections );
 
     Reference< XConnection > xConn;
-    for ( OWeakConnectionArray::iterator i = aConnections.begin(); aConnections.end() != i; ++i )
+    OWeakConnectionArray::iterator aEnd = aConnections.end();
+    for ( OWeakConnectionArray::iterator i = aConnections.begin(); aEnd != i; ++i )
     {
         xConn = *i;
         if ( xConn.is() )

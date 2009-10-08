@@ -963,7 +963,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         {
             const OTypeInfoMap* pTypeInfo = getTypeInfo();
             OTypeInfoMap::const_iterator aIter = pTypeInfo->begin();
-            for(;aIter != pTypeInfo->end();++aIter)
+            OTypeInfoMap::const_iterator aEnd = pTypeInfo->end();
+            for(;aIter != aEnd;++aIter)
                 m_pType->InsertEntry( aIter->second->aUIName );
         }
         m_pType->SelectEntryPos(0);

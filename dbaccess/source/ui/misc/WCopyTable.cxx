@@ -633,6 +633,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
         bAllowViews = false;
 
     OCopyTable* pPage1( new OCopyTable( this ) );
+    pPage1->disallowUseHeaderLine();
     if ( !bAllowViews )
         pPage1->disallowViews();
     pPage1->setCreateStyleAction();
@@ -831,7 +832,8 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
         if ( bContainsColumns )
         {   // we have dest columns so look for the matching column
             ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
-            for(;aSrcIter != m_vSourceVec.end();++aSrcIter)
+            ODatabaseExport::TColumnVector::const_iterator aSrcEnd = m_vSourceVec.end();
+            for(;aSrcIter != aSrcEnd;++aSrcIter)
             {
                 ODatabaseExport::TColumns::iterator aDestIter = m_vDestColumns.find(m_mNameMapping[(*aSrcIter)->first]);
 
@@ -856,7 +858,8 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
             sal_Int32 nMaxNameLen       = getMaxColumnNameLength();
 
             ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
-            for(_rnBreakPos=0;aSrcIter != m_vSourceVec.end() && bRet ;++aSrcIter,++_rnBreakPos)
+            ODatabaseExport::TColumnVector::const_iterator aSrcEnd = m_vSourceVec.end();
+            for(_rnBreakPos=0;aSrcIter != aSrcEnd && bRet ;++aSrcIter,++_rnBreakPos)
             {
                 OFieldDescription* pField = new OFieldDescription(*(*aSrcIter)->second);
                 pField->SetName(convertColumnName(TExportColumnFindFunctor(&m_vDestColumns),(*aSrcIter)->first,sExtraChars,nMaxNameLen));
@@ -1096,7 +1099,8 @@ void OCopyTableWizard::impl_loadSourceData()
 void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, ODatabaseExport::TColumns& _rColumns, ODatabaseExport::TColumnVector& _rColVector )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::loadData" );
-    for ( ODatabaseExport::TColumns::iterator col = _rColumns.begin(); col != _rColumns.end(); ++col )
+    ODatabaseExport::TColumns::iterator colEnd = _rColumns.end();
+    for ( ODatabaseExport::TColumns::iterator col = _rColumns.begin(); col != colEnd; ++col )
         delete col->second;
 
     _rColVector.clear();
@@ -1176,7 +1180,8 @@ void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier>& _rxColSup, co
     OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
 
     ODatabaseExport::TColumnVector::const_iterator aIter = _pVec->begin();
-    for(;aIter != _pVec->end();++aIter)
+    ODatabaseExport::TColumnVector::const_iterator aEnd = _pVec->end();
+    for(;aIter != aEnd;++aIter)
     {
         OFieldDescription* pField = (*aIter)->second;
         if(!pField)

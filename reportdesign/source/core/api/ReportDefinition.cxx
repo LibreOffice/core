@@ -295,7 +295,7 @@ OStyle::OStyle()
 :OStyle_PBASE(m_aBHelper)
 ,m_aSize(21000,29700)
 {
-    const ::Size aDefaultSize = SvxPaperInfo::GetPaperSize(SvxPaperInfo::GetDefaultSvxPaper(Application::GetSettings().GetLanguage()),MAP_100TH_MM);
+    const ::Size aDefaultSize = SvxPaperInfo::GetDefaultPaperSize( MAP_100TH_MM );
     m_aSize.Height = aDefaultSize.Height();
     m_aSize.Width = aDefaultSize.Width();
 

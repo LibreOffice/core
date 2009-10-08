@@ -65,7 +65,10 @@
 #endif
 
 #include <list>
-
+namespace rtl
+{
+    class OUStringBuffer;
+}
 namespace com{ namespace sun { namespace star{namespace sdbc{ class XParameters; } } } }
 
 namespace dbaccess
@@ -98,8 +101,8 @@ namespace dbaccess
                             );
         void fillParameters( const ORowSetRow& _rRow
                             ,const connectivity::OSQLTable& _xTable
-                            ,::rtl::OUString& _sCondition
-                            ,::rtl::OUString& _sParameter
+                            ,::rtl::OUStringBuffer& _sCondition
+                            ,::rtl::OUStringBuffer& _sParameter
                             ,::std::list< sal_Int32>& _rOrgValues);
         void fillTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 

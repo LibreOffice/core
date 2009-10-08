@@ -166,7 +166,7 @@ namespace dbaui
             @return
                 <FALSE/> if an error occured, otherwise <TRUE/>
         */
-        sal_Bool getSelectedDataSource(::dbaccess::DATASOURCE_TYPE _eType,::rtl::OUString& _sReturn,::rtl::OUString& _sCurr);
+        sal_Bool getSelectedDataSource(::rtl::OUString& _sReturn,::rtl::OUString& _sCurr);
 
         // svt::IWizardPage
         virtual void initializePage();

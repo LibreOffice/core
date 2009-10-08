@@ -515,12 +515,13 @@ TTableWindowData::value_type ORelationController::existsTable(const ::rtl::OUStr
     Reference<XDatabaseMetaData> xMeta = getConnection()->getMetaData();
     ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
     TTableWindowData::const_iterator aIter = m_vTableData.begin();
-    for(;aIter != m_vTableData.end();++aIter)
+    TTableWindowData::const_iterator aEnd = m_vTableData.end();
+    for(;aIter != aEnd;++aIter)
     {
         if(bCase((*aIter)->GetComposedName(),_rComposedTableName))
             break;
     }
-    return ( aIter != m_vTableData.end()) ? *aIter : TTableWindowData::value_type();
+    return ( aIter != aEnd) ? *aIter : TTableWindowData::value_type();
 }
 // -----------------------------------------------------------------------------
 void ORelationController::loadLayoutInformation()

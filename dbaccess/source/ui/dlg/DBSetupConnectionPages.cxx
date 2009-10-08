@@ -103,37 +103,16 @@
 #include <svtools/filenotation.hxx>
 #endif
 
-#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
-#endif
-#ifndef _UNOTOOLS_UCBHELPER_HXX
 #include <unotools/ucbhelper.hxx>
-#endif
-#ifndef _UCBHELPER_COMMANDENVIRONMENT_HXX
 #include <ucbhelper/commandenvironment.hxx>
-#endif
-#ifndef DBAUI_FILEPICKER_INTERACTION_HXX
 #include "finteraction.hxx"
-#endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
-#endif
-
-#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include <connectivity/DriversConfig.hxx>
 #include "dbaccess_helpid.hrc"
-#endif
-
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
-
-#ifndef SVTOOLS_INC_ROADMAPWIZARD_HXX
 #include <svtools/roadmapwizard.hxx>
-#endif
-
-#ifndef DBAUI_TEXTCONNECTIONHELPER_HXX
 #include "TextConnectionHelper.hxx"
-#endif
 
 
 //.........................................................................
@@ -288,7 +267,7 @@ DBG_NAME(OTextConnectionPageSetup)
                 pCollection = pCollectionItem->getCollection();
             DBG_ASSERT(pCollection, "OLDAPConnectionPageSetup::FillItemSet : really need a DSN type collection !");
 
-            String sUrl = pCollection->getDatasourcePrefix( ::dbaccess::DST_LDAP);
+            String sUrl = pCollection->getPrefix( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:ldap:")));
             sUrl += m_aETHostServer.GetText();
             _rSet.Put(SfxStringItem(DSID_CONNECTURL, sUrl));
             bChangedSomething = sal_True;
@@ -389,13 +368,10 @@ DBG_NAME(OMySQLIntroPageSetup)
     void OMySQLIntroPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool /*_bSaveValue*/)
     {
         DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet.GetItem(DSID_TYPECOLLECTION));
-        ::dbaccess::ODsnTypeCollection* pCollection = NULL;
         if (pCollectionItem)
         {
-            pCollection = pCollectionItem->getCollection();
-            String sUrl = pCollection->getDatasourcePrefix( ::dbaccess::DST_MYSQL_NATIVE);
-            uno::Reference< sdbc::XDriverAccess > xDriverManager( m_xORB->createInstance( SERVICE_SDBC_DRIVERMANAGER ), uno::UNO_QUERY );
-            if ( xDriverManager.is() && xDriverManager->getDriverByURL( sUrl ).is() )
+            ::dbaccess::ODsnTypeCollection* pCollection = pCollectionItem->getCollection();
+            if ( pCollection->getPrefix(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysql:mysqlc:"))).Len() )
             {
                 m_aRB_NATIVEDatabase.Show();
                 m_aRB_JDBCDatabase.SetState(sal_False);
@@ -443,7 +419,6 @@ DBG_NAME(OMySQLIntroPageSetup)
                                                          _rAttrSet,
                                                          DSID_MYSQL_PORTNUMBER ,
                                                          STR_MYSQL_DEFAULT,
-                                                         "com.mysql.jdbc.Driver",
                                                          STR_MYSQLJDBC_HELPTEXT,
                                                          STR_MYSQLJDBC_HEADERTEXT,
                                                          STR_MYSQL_DRIVERCLASSTEXT) );
@@ -457,7 +432,6 @@ DBG_NAME(OMySQLIntroPageSetup)
                                                          _rAttrSet,
                                                          DSID_MYSQL_PORTNUMBER ,
                                                          STR_MYSQL_DEFAULT,
-                                                         NULL,
                                                          STR_MYSQLJDBC_HELPTEXT,
                                                          STR_MYSQLJDBC_HEADERTEXT,
                                                          0) );
@@ -472,7 +446,6 @@ DBG_NAME(OMySQLIntroPageSetup)
                                                           _rAttrSet,
                                                           DSID_ORACLE_PORTNUMBER,
                                                           STR_ORACLE_DEFAULT,
-                                                          "oracle.jdbc.driver.OracleDriver",
                                                           STR_ORACLE_HELPTEXT,
                                                           STR_ORACLE_HEADERTEXT,
                                                           STR_ORACLE_DRIVERCLASSTEXT) );
@@ -482,7 +455,7 @@ DBG_NAME(OMySQLIntroPageSetup)
     //========================================================================
     //= OMySQLJDBCConnectionPageSetup
     //========================================================================
-    OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( Window* pParent,USHORT _nResId, const SfxItemSet& _rCoreAttrs ,USHORT _nPortId, USHORT _nDefaultPortResId, const sal_Char* _pDriverName, USHORT _nHelpTextResId, USHORT _nHeaderTextResId, USHORT _nDriverClassId)
+    OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( Window* pParent,USHORT _nResId, const SfxItemSet& _rCoreAttrs ,USHORT _nPortId, USHORT _nDefaultPortResId, USHORT _nHelpTextResId, USHORT _nHeaderTextResId, USHORT _nDriverClassId)
         :OGenericAdministrationPage(pParent, ModuleRes(_nResId), _rCoreAttrs)
         ,m_pFTHeaderText        (NULL)
         ,m_aFTHelpText          (this, ModuleRes(FT_AUTOWIZARDHELPTEXT))
@@ -533,7 +506,15 @@ DBG_NAME(OMySQLIntroPageSetup)
 
         m_aNFPortNumber.SetUseThousandSep(sal_False);
         if ( m_bUseClass )
-            m_sDefaultJdbcDriverName = String::CreateFromAscii(_pDriverName);
+        {
+            SFX_ITEMSET_GET(_rCoreAttrs, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
+            SFX_ITEMSET_GET(_rCoreAttrs, pTypesItem, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
+            ::dbaccess::ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
+            if (pTypeCollection && pUrlItem && pUrlItem->GetValue().Len() )
+            {
+                m_sDefaultJdbcDriverName = pTypeCollection->getJavaDriverClass(pUrlItem->GetValue());
+            }
+        }
         SetRoadmapStateValue(sal_False);
         FreeResource();
     }
@@ -710,8 +691,20 @@ DBG_NAME(OMySQLIntroPageSetup)
 
         if ( bValid )
         {
-            m_aETDriverClass.SetText(pDrvItem->GetValue());
-            m_aETDriverClass.ClearModifyFlag();
+            if ( !pDrvItem->GetValue().Len() )
+            {
+                String sDefaultJdbcDriverName = m_pCollection->getJavaDriverClass(m_eType);
+                if ( sDefaultJdbcDriverName.Len() )
+                {
+                    m_aETDriverClass.SetText(sDefaultJdbcDriverName);
+                    m_aETDriverClass.SetModifyFlag();
+                } // if ( sDefaultJdbcDriverName.Len() )
+            } // if ( !pJdbcDrvItem->GetValue().Len() )
+            else
+            {
+                m_aETDriverClass.SetText(pDrvItem->GetValue());
+                m_aETDriverClass.ClearModifyFlag();
+            }
         }
         sal_Bool bEnable = pDrvItem->GetValue().Len() != 0;
         m_aPBTestJavaDriver.Enable(bEnable);

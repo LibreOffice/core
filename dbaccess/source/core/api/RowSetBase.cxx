@@ -1322,7 +1322,8 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
     sal_Int32 i=0;
     try
     {
-        for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != m_aDataColumns.end();++aIter,++i) // #104278# OJ ++i inserted
+        TDataColumns::iterator aEnd = m_aDataColumns.end();
+        for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != aEnd;++aIter,++i) // #104278# OJ ++i inserted
             (*aIter)->fireValueChange(_rOldRow.isValid() ? (_rOldRow->get())[i+1] : ::connectivity::ORowSetValue());
     }
     catch(Exception&)

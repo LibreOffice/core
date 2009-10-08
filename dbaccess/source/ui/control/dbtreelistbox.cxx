@@ -56,6 +56,7 @@
 #ifndef _COM_SUN_STAR_UI_XCONTEXTMENUINTERCEPTOR_HPP_
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
 #endif
+#include <com/sun/star/frame/XFrame.hpp>
 #ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
 #endif
@@ -80,7 +81,8 @@
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
-
+#include <framework/imageproducer.hxx>
+#include <vcl/svapp.hxx>
 #include <memory>
 
 // .........................................................................
@@ -88,6 +90,7 @@ namespace dbaui
 {
 // .........................................................................
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -546,9 +549,9 @@ namespace
             {
                 lcl_adjustMenuItemIDs( *pPopup, _rCommandController );
                 continue;
-            }
+            } // if ( pPopup )
 
-            USHORT nCommandId = _rCommandController.registerCommandURL( aCommand );
+            const USHORT nCommandId = _rCommandController.registerCommandURL( aCommand );
             _rMenu.InsertItem( nCommandId, _rMenu.GetItemText( nId ), _rMenu.GetItemImage( nId ),
                 _rMenu.GetItemBits( nId ), pos );
 
@@ -560,6 +563,34 @@ namespace
 
             // remove the "old" item
             _rMenu.RemoveItem( pos+1 );
+        }
+    }
+    void lcl_insertMenuItemImages( Menu& _rMenu, IController& _rCommandController )
+    {
+        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+        const BOOL bHiContrast = rSettings.GetMenuColor().IsDark();
+        uno::Reference< frame::XController > xController = _rCommandController.getXController();
+        uno::Reference< frame::XFrame> xFrame;
+        if ( xController.is() )
+            xFrame = xController->getFrame();
+        USHORT nCount = _rMenu.GetItemCount();
+        for ( USHORT pos = 0; pos < nCount; ++pos )
+        {
+            // do not adjust separators
+            if ( _rMenu.GetItemType( pos ) == MENUITEM_SEPARATOR )
+                continue;
+
+            USHORT nId = _rMenu.GetItemId(pos);
+            String aCommand = _rMenu.GetItemCommand( nId );
+            PopupMenu* pPopup = _rMenu.GetPopupMenu( nId );
+            if ( pPopup )
+            {
+                lcl_insertMenuItemImages( *pPopup, _rCommandController );
+                continue;
+            } // if ( pPopup )
+
+            if ( xFrame.is() )
+                _rMenu.SetItemImage(nId,framework::GetImageFromURL(xFrame,aCommand,FALSE,bHiContrast));
         }
     }
     // =========================================================================
@@ -629,6 +660,8 @@ PopupMenu* DBTreeListBox::CreateContextMenu( void )
     pContextMenu.reset( m_pContextMenuProvider->getContextMenu( *this ) );
     // disable what is not available currently
     lcl_enableEntries( pContextMenu.get(), m_pContextMenuProvider->getCommandController() );
+    // set images
+    lcl_insertMenuItemImages( *pContextMenu, m_pContextMenuProvider->getCommandController() );
     // allow context menu interception
     ::cppu::OInterfaceContainerHelper* pInterceptors = m_pContextMenuProvider->getContextMenuInterceptors();
     if ( !pInterceptors || !pInterceptors->getLength() )
@@ -695,7 +728,7 @@ PopupMenu* DBTreeListBox::CreateContextMenu( void )
         // the interceptors only know command URLs, but our menus primarily work
         // with IDs -> we need to translate the commands to IDs
         lcl_adjustMenuItemIDs( *pModifiedMenu, m_pContextMenuProvider->getCommandController() );
-    }
+    } // if ( bModifiedMenu )
 
     return pContextMenu.release();
 }

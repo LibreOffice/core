@@ -200,7 +200,6 @@ namespace dbaui
     DBG_NAME(OConnectionTabPage)
     OConnectionTabPage::OConnectionTabPage(Window* pParent, const SfxItemSet& _rCoreAttrs)
         :OConnectionHelper(pParent, ModuleRes(PAGE_CONNECTION), _rCoreAttrs)
-        ,m_pCollection(NULL)
         ,m_bUserGrabFocus(sal_True)
         ,m_aFL1(this, ModuleRes(FL_SEPARATOR1))
         ,m_aFL2(this, ModuleRes(FL_SEPARATOR2))
@@ -223,12 +222,6 @@ namespace dbaui
         m_aTestConnection.SetClickHdl(LINK(this,OGenericAdministrationPage,OnTestConnectionClickHdl));
         m_aTestJavaDriver.SetClickHdl(LINK(this,OConnectionTabPage,OnTestJavaClickHdl));
 
-        // extract the datasource type collection from the item set
-        DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rCoreAttrs.GetItem(DSID_TYPECOLLECTION));
-        if (pCollectionItem)
-            m_pCollection = pCollectionItem->getCollection();
-        DBG_ASSERT(m_pCollection, "OConnectionTabPage::OConnectionTabPage : really need a DSN type collection !");
-
         FreeResource();
     }
 
@@ -249,7 +242,8 @@ namespace dbaui
         OConnectionHelper::implInitControls( _rSet, _bSaveValue);
 
         LocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
-        switch( m_eType )
+        ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);
+        switch( eType )
         {
             case  ::dbaccess::DST_DBASE:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_DBASE_PATH_OR_FILE)));
@@ -287,7 +281,7 @@ namespace dbaui
             case  ::dbaccess::DST_MYSQL_ODBC:
             case  ::dbaccess::DST_ODBC:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_NAME_OF_ODBC_DATASOURCE)));
-                m_aConnectionURL.SetHelpId( m_eType ==  ::dbaccess::DST_MYSQL_ODBC ? HID_DSADMIN_MYSQL_ODBC_DATASOURCE : HID_DSADMIN_ODBC_DATASOURCE);
+                m_aConnectionURL.SetHelpId( eType ==  ::dbaccess::DST_MYSQL_ODBC ? HID_DSADMIN_MYSQL_ODBC_DATASOURCE : HID_DSADMIN_ODBC_DATASOURCE);
                 break;
             case  ::dbaccess::DST_LDAP:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_HOSTNAME)));
@@ -319,8 +313,6 @@ namespace dbaui
                 m_aConnectionURL.Hide();
                 break;
             case  ::dbaccess::DST_JDBC:
-                m_aFT_Connection.SetText(String(ModuleRes(STR_COMMONURL)));
-                // run through
             default:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_COMMONURL)));
                 break;
@@ -355,8 +347,18 @@ namespace dbaui
             String sUrl = pUrlItem->GetValue();
             setURL( sUrl );
 
-            BOOL bEnableJDBC = m_eType ==  ::dbaccess::DST_JDBC;
-            m_aJavaDriver.SetText(pJdbcDrvItem->GetValue());
+            const BOOL bEnableJDBC = m_pCollection->determineType(m_eType) == ::dbaccess::DST_JDBC;
+            if ( !pJdbcDrvItem->GetValue().Len() )
+            {
+                String sDefaultJdbcDriverName = m_pCollection->getJavaDriverClass(m_eType);
+                if ( sDefaultJdbcDriverName.Len() )
+                {
+                    m_aJavaDriver.SetText(sDefaultJdbcDriverName);
+                    m_aJavaDriver.SetModifyFlag();
+                }
+            } // if ( !pJdbcDrvItem->GetValue().Len() )
+            else
+                m_aJavaDriver.SetText(pJdbcDrvItem->GetValue());
 
             m_aJavaDriverLabel.Show(bEnableJDBC);
             m_aJavaDriver.Show(bEnableJDBC);
@@ -409,7 +411,7 @@ namespace dbaui
 
         fillBool(_rSet,&m_aPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
 
-        if ( m_eType ==  ::dbaccess::DST_JDBC )
+        if ( m_pCollection->determineType(m_eType) ==  ::dbaccess::DST_JDBC )
         {
             fillString(_rSet,&m_aJavaDriver, DSID_JDBCDRIVERCLASS, bChangedSomething);
         }
@@ -445,7 +447,7 @@ namespace dbaui
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         BOOL bEnableTestConnection = !m_aConnectionURL.IsVisible() || (m_aConnectionURL.GetTextNoPrefix().Len() != 0);
-        if ( m_eType ==  ::dbaccess::DST_JDBC )
+        if ( m_pCollection->determineType(m_eType) ==  ::dbaccess::DST_JDBC )
             bEnableTestConnection = bEnableTestConnection && (m_aJavaDriver.GetText().Len() != 0);
         m_aTestConnection.Enable(bEnableTestConnection);
         return true;

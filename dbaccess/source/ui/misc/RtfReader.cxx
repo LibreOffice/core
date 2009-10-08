@@ -163,16 +163,17 @@ void ORTFReader::NextToken( int nToken )
                 break;
             case RTF_TROWD:
                 {
-                    sal_uInt32 nTell = rInput.Tell(); // verändert vielleicht die Position des Streams
                     bool bInsertRow = true;
                     if ( !m_xTable.is() ) // erste Zeile als Header verwenden
                     {
+                        sal_uInt32 nTell = rInput.Tell(); // verändert vielleicht die Position des Streams
+
                         m_bError = !CreateTable(nToken);
                         bInsertRow = m_bAppendFirstLine;
                         if ( m_bAppendFirstLine )
                         {
                             rInput.Seek(nTell);
-                            bInsertRow = true;
+                            rInput.ResetError();
                         }
                     }
                     if ( bInsertRow && !m_bError)
@@ -333,7 +334,7 @@ sal_Bool ORTFReader::CreateTable(int nToken)
                 break;
         }
     }
-    while((nTmpToken2 = GetNextToken()) != RTF_ROW && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED);
+    while((nTmpToken2 = GetNextToken()) != RTF_TROWD && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED);
 
     sal_Bool bOk = !m_vDestVector.empty();
     if(bOk)

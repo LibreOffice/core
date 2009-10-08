@@ -111,12 +111,14 @@ Sequence< Type > OStatementBase::getTypes() throw (RuntimeException)
                            ::getCppuType( (const Reference< XWarningsSupplier > *)0 ),
                            ::getCppuType( (const Reference< XCloseable > *)0 ),
                            ::getCppuType( (const Reference< XMultipleResults > *)0 ),
-                           ::getCppuType( (const Reference< XPreparedBatchExecution > *)0 ),
                            ::getCppuType( (const Reference< ::com::sun::star::util::XCancellable > *)0 ),
                             OSubComponent::getTypes() );
     Reference< XGeneratedResultSet > xGRes(m_xAggregateAsSet, UNO_QUERY);
     if ( xGRes.is() )
         aTypes = OTypeCollection(::getCppuType( (const Reference< XGeneratedResultSet > *)0 ),aTypes.getTypes());
+    Reference< XPreparedBatchExecution > xPreparedBatchExecution(m_xAggregateAsSet, UNO_QUERY);
+    if ( xPreparedBatchExecution.is() )
+        aTypes = OTypeCollection(::getCppuType( (const Reference< XPreparedBatchExecution > *)0 ),aTypes.getTypes());
 
     return aTypes.getTypes();
 }
@@ -134,7 +136,6 @@ Any OStatementBase::queryInterface( const Type & rType ) throw (RuntimeException
                     static_cast< XPropertySet * >( this ),
                     static_cast< XWarningsSupplier * >( this ),
                     static_cast< XCloseable * >( this ),
-                    static_cast< XPreparedBatchExecution * >( this ),
                     static_cast< XMultipleResults * >( this ),
                     static_cast< ::com::sun::star::util::XCancellable * >( this ));
         if ( !aIface.hasValue() )
@@ -142,6 +143,12 @@ Any OStatementBase::queryInterface( const Type & rType ) throw (RuntimeException
             Reference< XGeneratedResultSet > xGRes(m_xAggregateAsSet, UNO_QUERY);
             if ( ::getCppuType( (const Reference< XGeneratedResultSet > *)0 ) == rType && xGRes.is() )
                 aIface = ::cppu::queryInterface(rType,static_cast< XGeneratedResultSet * >( this ));
+        } // if ( !aIface.hasValue() )
+        if ( !aIface.hasValue() )
+        {
+            Reference< XPreparedBatchExecution > xGRes(m_xAggregateAsSet, UNO_QUERY);
+            if ( ::getCppuType( (const Reference< XPreparedBatchExecution > *)0 ) == rType && xGRes.is() )
+                aIface = ::cppu::queryInterface(rType,static_cast< XPreparedBatchExecution * >( this ));
         }
     }
     return aIface;
@@ -582,6 +589,46 @@ sal_Bool OStatement::execute( const rtl::OUString& _rSQL ) throw( SQLException, 
 
     ::rtl::OUString sSQL( impl_doEscapeProcessing_nothrow( _rSQL ) );
     return m_xAggregateStatement->execute( sSQL );
+}
+//------------------------------------------------------------------------------
+void OStatement::addBatch( const rtl::OUString& _rSQL ) throw( SQLException, RuntimeException )
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::execute" );
+    MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+
+    // first check the meta data
+    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+    if (!xMeta.is() && !xMeta->supportsBatchUpdates())
+        throwFunctionSequenceException(*this);
+
+    ::rtl::OUString sSQL( impl_doEscapeProcessing_nothrow( _rSQL ) );
+    Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->addBatch( sSQL );
+}
+//------------------------------------------------------------------------------
+void OStatement::clearBatch( ) throw( SQLException, RuntimeException )
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::execute" );
+    MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    // first check the meta data
+    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+    if (!xMeta.is() && !xMeta->supportsBatchUpdates())
+        throwFunctionSequenceException(*this);
+
+    Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->clearBatch();
+}
+//------------------------------------------------------------------------------
+Sequence< sal_Int32 > OStatement::executeBatch( ) throw( SQLException, RuntimeException )
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::execute" );
+    MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    // first check the meta data
+    Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
+    if (!xMeta.is() && !xMeta->supportsBatchUpdates())
+        throwFunctionSequenceException(*this);
+    return Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->executeBatch( );
 }
 
 //------------------------------------------------------------------------------
