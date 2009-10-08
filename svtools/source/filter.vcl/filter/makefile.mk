@@ -40,6 +40,8 @@ LIBTARGET=NO
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/svt.pmk
 
+SOLARINC+=-I../../inc
+
 # --- Files --------------------------------------------------------
 
 SRS1NAME=$(TARGET)

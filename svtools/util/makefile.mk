@@ -35,7 +35,6 @@ PRJNAME=svtools
 TARGET=svtool
 RESTARGET=svt
 RESTARGETPATCH=svp
-RESTARGETSIMPLE=svs
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
 ENABLE_EXCEPTIONS=TRUE
@@ -49,53 +48,33 @@ USE_LDUMP2=TRUE
 # --- general section ----------------------------------------------------
 
 .IF "$(GUI)"!="UNX"
-LIB3TARGET= $(LB)$/svtool.lib
-LIB3FILES=	$(LB)$/_svt.lib
+LIB2TARGET= $(LB)$/svtool.lib
+LIB2FILES=	$(LB)$/_svt.lib
 .ENDIF
 
-.IF "$(GUI)"!="UNX"
-LIB4TARGET= $(LB)$/isvl.lib
-LIB4FILES=	$(LB)$/_isvl.lib
-.ENDIF
-
-LIB7TARGET= $(SLB)$/svt.lib
-LIB7FILES=	\
-        $(SLB)$/misc.lib		\
-        $(SLB)$/items.lib		\
+LIB1TARGET= $(SLB)$/svt.lib
+LIB1FILES=	\
         $(SLB)$/browse.lib		\
+        $(SLB)$/config.lib	\
+        $(SLB)$/svcontnr.lib	\
         $(SLB)$/ctrl.lib		\
         $(SLB)$/dialogs.lib 	\
         $(SLB)$/edit.lib		\
-        $(SLB)$/unoiface.lib	\
         $(SLB)$/filter.lib		\
+        $(SLB)$/filter.uno.lib	\
         $(SLB)$/igif.lib		\
         $(SLB)$/jpeg.lib		\
         $(SLB)$/ixpm.lib		\
         $(SLB)$/ixbm.lib		\
-        $(SLB)$/numbers.lib 	\
-        $(SLB)$/numbers.uno.lib 	\
         $(SLB)$/wmf.lib 		\
-        $(SLB)$/undo.lib		\
-        $(SLB)$/urlobj.lib		\
+        $(SLB)$/java.lib		\
+        $(SLB)$/misc.lib		\
         $(SLB)$/plugapp.lib 	\
-        $(SLB)$/svcontnr.lib	\
-        $(SLB)$/syslocale.lib   \
-        $(SLB)$/svdde.lib \
         $(SLB)$/svhtml.lib     \
         $(SLB)$/svrtf.lib	\
-        $(SLB)$/config.lib	\
         $(SLB)$/table.lib 	\
-        $(SLB)$/java.lib
-
-LIB8TARGET= $(SLB)$/svl.lib
-LIB8FILES=	\
-        $(SLB)$/filerec.lib \
-        $(SLB)$/filepicker.lib \
-        $(SLB)$/items1.lib	\
-        $(SLB)$/misc1.lib	\
-        $(SLB)$/notify.lib	\
-        $(SLB)$/svarray.lib \
-        $(SLB)$/svsql.lib
+        $(SLB)$/unoiface.lib	\
+        $(SLB)$/urlobj.lib	
 
 # generation of resourcen-lib ----------------------------------------
 
@@ -111,12 +90,6 @@ RESLIB1SRSFILES= \
         $(SRS)$/uno.srs         \
         $(SRS)$/browse.srs		\
         $(SRS)$/javaerror.srs
-
-RESLIB2NAME=	$(RESTARGETSIMPLE)
-RESLIB2SRSFILES=\
-        $(SRS)$/items1.srs \
-        $(SRS)$/misc1.srs
-
 
 RESLIB3NAME= $(RESTARGETPATCH)
 RESLIB3SRSFILES= \
@@ -168,54 +141,15 @@ SHL1STDLIBS+= \
         $(OLEAUT32LIB)
 .ENDIF # WNT
 
-SHL1OBJS= \
-    $(SLO)$/svtdata.obj
-
 SHL1LIBS= \
     $(SLB)$/svt.lib
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-SHL1DEPN=$(SHL2TARGETN)
 
 DEF1NAME=	$(SHL1TARGET)
-DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
 DEFLIB1NAME =svt
 DEF1DES 	=SvTools
 
-
-# --- svtools lite --------------------------------------------------
-
-SHL2TARGET= svl$(DLLPOSTFIX)
-SHL2IMPLIB= _isvl
-SHL2USE_EXPORTS=name
-#Do not link with VCL or any other library that links with VCL
-SHL2STDLIBS= \
-        $(UNOTOOLSLIB)		\
-        $(TOOLSLIB) 		\
-        $(I18NISOLANGLIB)   \
-        $(UCBHELPERLIB)		\
-        $(COMPHELPERLIB)	\
-        $(CPPUHELPERLIB)	\
-        $(CPPULIB)			\
-        $(VOSLIB)			\
-        $(VCLLIB)			\
-        $(SALLIB)
-
-.IF "$(GUI)"=="WNT"
-SHL2STDLIBS+= \
-        $(UWINAPILIB) \
-        $(ADVAPI32LIB)	\
-        $(GDI32LIB)
-.ENDIF # WNT
-
-SHL2LIBS=	$(SLB)$/svl.lib
-
-SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
-
-DEF2NAME=	$(SHL2TARGET)
-DEF2DEPN=	$(MISC)$/$(SHL2TARGET).flt $(SLB)$/svl.lib
-DEFLIB2NAME=svl
-DEF2DES =SvTools lite
 
 # --- g2g application --------------------------------------------------
 
@@ -240,19 +174,14 @@ APP2STDLIBS+=	$(VCLLIB)		\
 # --- Targets ------------------------------------------------------
 
 .IF "$(GUI)"=="UNX"
-SVTTARGETS= $(LB)$/lib$(SHL2TARGET)$(DLLPOST) $(LB)$/lib$(SHL1TARGET)$(DLLPOST)
+SVTTARGETS= $(LB)$/lib$(SHL1TARGET)$(DLLPOST)
 .ELSE
-SVTTARGETS= $(LB)$/isvl.lib \
-            $(BIN)$/$(SHL2TARGET)$(DLLPOST) $(BIN)$/$(SHL1TARGET)$(DLLPOST)
+SVTTARGETS= $(BIN)$/$(SHL1TARGET)$(DLLPOST)
 .ENDIF
 
 # just a quick fix - has to be cleaned up some day...
 .IF "$(L10N-framework)"==""
-ALL: $(SLB)$/svl.lib \
-    $(SLB)$/svt.lib \
-    $(MISC)$/$(SHL2TARGET).flt \
-    $(MISC)$/$(SHL1TARGET).flt \
-    $(MISC)$/$(SHL2TARGET).def \
+ALL: $(SLB)$/svt.lib \
     $(MISC)$/$(SHL1TARGET).def \
     $(SVTTARGETS) \
     ALLTAR
@@ -260,15 +189,4 @@ ALL: $(SLB)$/svl.lib \
 
 .INCLUDE :	target.mk
 
-# --- Svtools-Control-Filter-Datei ---
-
-$(MISC)$/$(SHL1TARGET).flt: svt.flt
-    @echo ------------------------------
-    @echo Making: $@
-    $(TYPE) svt.flt >$@
-
-$(MISC)$/$(SHL2TARGET).flt: svl.flt
-    @echo ------------------------------
-    @echo Making: $@
-    $(TYPE) svl.flt >$@
 

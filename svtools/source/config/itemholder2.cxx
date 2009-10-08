@@ -31,11 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#ifdef  SVL_DLLIMPLEMENTATION
-#undef  SVL_DLLIMPLEMENTATION
-#endif
-#define SVT_DLLIMPLEMENTATION
-
 #include "itemholder2.hxx"
 
 //-----------------------------------------------
@@ -45,16 +40,11 @@
 
 #include <svtools/accessibilityoptions.hxx>
 #include <apearcfg.hxx>
-#include <svtools/cjkoptions.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/ctloptions.hxx>
 #include <fontsubstconfig.hxx>
 #include <svtools/helpopt.hxx>
-#include <svtools/languageoptions.hxx>
-#include <misccfg.hxx>
 #include <svtools/printoptions.hxx>
-#include <svtools/syslocaleoptions.hxx>
 #include <unotools/options.hxx>
 #include <svtools/miscopt.hxx>
 
@@ -177,16 +167,8 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
 // no ref count            rItem.pItem = new SvtTabAppearanceCfg();
             break;
 
-        case E_CJKOPTIONS :
-            rItem.pItem = new SvtCJKOptions();
-            break;
-
         case E_COLORCFG :
             rItem.pItem = new ::svtools::ColorConfig();
-            break;
-
-        case E_CTLOPTIONS :
-            rItem.pItem = new SvtCTLOptions();
             break;
 
         case E_FONTSUBSTCONFIG :
@@ -195,14 +177,6 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
 
         case E_HELPOPTIONS :
             rItem.pItem = new SvtHelpOptions();
-            break;
-
-        case E_LANGUAGEOPTIONS :
-// capsulate CTL and CJL options !            rItem.pItem = new SvtLanguageOptions();
-            break;
-
-        case E_MISCCFG :
-// no ref count            rItem.pItem = new SfxMiscCfg();
             break;
 
         case E_MENUOPTIONS :
@@ -215,10 +189,6 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
 
         case E_PRINTFILEOPTIONS :
             rItem.pItem = new SvtPrintFileOptions();
-            break;
-
-        case E_SYSLOCALEOPTIONS :
-            rItem.pItem = new SvtSysLocaleOptions();
             break;
 
         case E_MISCOPTIONS :

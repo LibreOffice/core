@@ -36,17 +36,7 @@
 #include <tools/shl.hxx>
 #include <vos/process.hxx>
 #include <svtools/svtdata.hxx>
-
-namespace unnamed_svtools_svtdata {}
-using namespace unnamed_svtools_svtdata;
-    // unnamed namespaces don't work well yet
-
-//============================================================================
-namespace unnamed_svtools_svtdata {
-
-typedef std::map< rtl::OUString, SimpleResMgr * > SimpleResMgrMap;
-
-}
+#include <vcl/svapp.hxx>
 
 //============================================================================
 //
@@ -57,11 +47,6 @@ typedef std::map< rtl::OUString, SimpleResMgr * > SimpleResMgrMap;
 ImpSvtData::~ImpSvtData()
 {
     delete pResMgr;
-    for (SimpleResMgrMap::iterator t
-             = static_cast< SimpleResMgrMap * >(m_pThreadsafeRMs)->begin();
-         t != static_cast< SimpleResMgrMap * >(m_pThreadsafeRMs)->end(); ++t)
-        delete t->second;
-    delete static_cast< SimpleResMgrMap * >(m_pThreadsafeRMs);
 }
 
 //============================================================================
@@ -74,22 +59,9 @@ ResMgr * ImpSvtData::GetResMgr(const ::com::sun::star::lang::Locale aLocale)
     return pResMgr;
 }
 
-//============================================================================
-SimpleResMgr* ImpSvtData::GetSimpleRM(const ::com::sun::star::lang::Locale& rLocale)
+ResMgr * ImpSvtData::GetResMgr()
 {
-    if (!m_pThreadsafeRMs)
-        m_pThreadsafeRMs = new SimpleResMgrMap;
-    rtl::OUString aISOcode = rLocale.Language;
-    aISOcode += rtl::OStringToOUString("-", RTL_TEXTENCODING_UTF8);
-    aISOcode += rLocale.Country;
-
-    SimpleResMgr *& rResMgr
-        = (*static_cast< SimpleResMgrMap * >(m_pThreadsafeRMs))[aISOcode];
-    if (!rResMgr)
-    {
-        rResMgr = new SimpleResMgr(CREATEVERSIONRESMGR_NAME(svs), rLocale );
-    }
-    return rResMgr;
+    return GetResMgr(Application::GetSettings().GetUILocale());
 }
 
 ResMgr * ImpSvtData::GetPatchResMgr(const ::com::sun::star::lang::Locale& aLocale)
@@ -99,6 +71,16 @@ ResMgr * ImpSvtData::GetPatchResMgr(const ::com::sun::star::lang::Locale& aLocal
         pPatchResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(svp), aLocale);
     }
     return pPatchResMgr;
+}
+
+ResMgr * ImpSvtData::GetPatchResMgr()
+{
+    return GetPatchResMgr(Application::GetSettings().GetUILocale());
+}
+
+SvpResId::SvpResId( USHORT nId ) :
+    ResId( nId, *ImpSvtData::GetSvtData().GetPatchResMgr() )
+{
 }
 
 //============================================================================

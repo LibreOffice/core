@@ -76,7 +76,7 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-#include "urlbmk.hxx"
+#include "svtools/urlbmk.hxx"
 #include "inetimg.hxx"
 #include <svtools/wmf.hxx>
 #include <svtools/imap.hxx>

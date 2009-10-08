@@ -70,7 +70,7 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include "localresaccess.hxx"
 #ifndef SVTOOLS_FILENOTATION_HXX_
-#include "filenotation.hxx"
+#include "svtools/filenotation.hxx"
 #endif
 #include <tools/urlobj.hxx>
 

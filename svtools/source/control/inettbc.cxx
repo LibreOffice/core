@@ -71,7 +71,7 @@
 #include <svtools/stritem.hxx>
 #include <svtools/cancel.hxx>
 #include <svtools/itemset.hxx>
-#include "urihelper.hxx"
+#include "svtools/urihelper.hxx"
 #include <unotools/pathoptions.hxx>
 
 #define _SVSTDARR_STRINGSDTOR

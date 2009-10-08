@@ -31,11 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#ifdef  SVL_DLLIMPLEMENTATION
-#undef  SVL_DLLIMPLEMENTATION
-#endif
-#define SVT_DLLIMPLEMENTATION
-
 #include "fontsubstconfig.hxx"
 #include <svtools/svarray.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

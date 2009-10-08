@@ -44,7 +44,7 @@
 #include <tools/stream.hxx>
 
 #include <sot/formats.hxx>
-#include <urlbmk.hxx>
+#include <svtools/urlbmk.hxx>
 
 #ifndef _COM_SUN_STAR_TEXT_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>

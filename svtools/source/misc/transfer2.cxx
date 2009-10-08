@@ -50,7 +50,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #endif
 
-#include "urlbmk.hxx"
+#include "svtools/urlbmk.hxx"
 #include "inetimg.hxx"
 #include <svtools/imap.hxx>
 #include <svtools/transfer.hxx>

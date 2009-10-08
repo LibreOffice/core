@@ -27,11 +27,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-#ifdef  SVL_DLLIMPLEMENTATION
-#undef  SVL_DLLIMPLEMENTATION
-#endif
-#define SVT_DLLIMPLEMENTATION
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
 
 #include "extcolorcfg.hxx"
 #include <com/sun/star/uno/Any.hxx>

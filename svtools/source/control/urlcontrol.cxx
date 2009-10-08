@@ -31,12 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#ifndef SVTOOL_URLCONTROL_HXX
 #include <svtools/urlcontrol.hxx>
-#endif
-#ifndef SVTOOLS_FILENOTATION_HXX_
-#include "filenotation.hxx"
-#endif
+#include "svtools/filenotation.hxx"
 
 //.........................................................................
 namespace svt

@@ -43,7 +43,7 @@
 #endif
 #include <sot/formats.hxx>
 
-#include "urihelper.hxx"
+#include "svtools/urihelper.hxx"
 #include <svtools/imap.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>

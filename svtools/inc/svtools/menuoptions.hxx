@@ -34,7 +34,7 @@
 //  includes
 //_________________________________________________________________________________________________________________
 
-#include "svtools/svldllapi.h"
+#include "svtools/svtdllapi.h"
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <unotools/options.hxx>
@@ -67,7 +67,7 @@ class SvtMenuOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SVL_DLLPUBLIC SvtMenuOptions: public utl::detail::Options
+class SVT_DLLPUBLIC SvtMenuOptions: public utl::detail::Options
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -148,7 +148,7 @@ class SVL_DLLPUBLIC SvtMenuOptions: public utl::detail::Options
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        SVL_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
+        SVT_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member

@@ -44,7 +44,7 @@
 #include <svtools/imaprect.hxx>
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
-#include "urihelper.hxx"
+#include "svtools/urihelper.hxx"
 
 #ifndef RTL_CONSTASCII_STRINGPARAM
 #define RTL_CONSTASCII_STRINGPARAM( c ) c, sizeof(c)-1

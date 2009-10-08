@@ -46,7 +46,7 @@ SRS1NAME=	uno
 SRC1FILES=  unoifac2.src
 
 SLOFILES= \
-            $(SLO)$/adrtempuno.obj \
+            $(SLO)$/addrtempuno.obj \
             $(SLO)$/contextmenuhelper.obj \
             $(SLO)$/framestatuslistener.obj \
             $(SLO)$/generictoolboxcontroller.obj \

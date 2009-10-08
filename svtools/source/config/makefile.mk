@@ -38,27 +38,22 @@ ENABLE_EXCEPTIONS := TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/svl.pmk
+.INCLUDE :  $(PRJ)$/util$/svt.pmk
 
 # --- Files --------------------------------------------------------
 
 SLOFILES=  \
-    $(SLO)$/accessibilityoptions.obj	\
-    $(SLO)$/apearcfg.obj				\
-        $(SLO)$/cjkoptions.obj          \
+        $(SLO)$/accessibilityoptions.obj	\
+        $(SLO)$/apearcfg.obj				\
         $(SLO)$/colorcfg.obj            \
-        $(SLO)$/ctloptions.obj          \
         $(SLO)$/extcolorcfg.obj            \
-    $(SLO)$/fontsubstconfig.obj				\
+        $(SLO)$/fontsubstconfig.obj				\
         $(SLO)$/helpopt.obj                 \
-    $(SLO)$/itemholder2.obj \
-        $(SLO)$/languageoptions.obj     \
-    $(SLO)$/menuoptions.obj				\
-    $(SLO)$/misccfg.obj				\
+        $(SLO)$/itemholder2.obj \
+        $(SLO)$/menuoptions.obj				\
         $(SLO)$/miscopt.obj             \
-    $(SLO)$/optionsdrawinglayer.obj		\
-    $(SLO)$/printoptions.obj			\
-        $(SLO)$/syslocaleoptions.obj
+        $(SLO)$/optionsdrawinglayer.obj		\
+        $(SLO)$/printoptions.obj			
 
 # --- Targets ------------------------------------------------------
 

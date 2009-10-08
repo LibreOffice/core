@@ -47,7 +47,7 @@
 #include <svtools/printdlg.hxx>
 #include <svtools/svtdata.hxx>
 #include <filedlg.hxx>
-#include "pickerhelper.hxx"
+#include "svtools/pickerhelper.hxx"
 #ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>
 #endif
