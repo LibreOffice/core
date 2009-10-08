@@ -88,6 +88,7 @@ namespace frm
         getPropertyDefaultByHandle( PROPERTY_ID_DEFAULTCONTROL          ) >>= m_sDefaultControl;
         getPropertyDefaultByHandle( PROPERTY_ID_BORDER                  ) >>= m_nBorder;
         getPropertyDefaultByHandle( PROPERTY_ID_ENABLED                 ) >>= m_bEnabled;
+        getPropertyDefaultByHandle( PROPERTY_ID_ENABLEVISIBLE           ) >>= m_bEnableVisible;
         getPropertyDefaultByHandle( PROPERTY_ID_HARDLINEBREAKS          ) >>= m_bHardLineBreaks;
         getPropertyDefaultByHandle( PROPERTY_ID_HSCROLL                 ) >>= m_bHScroll;
         getPropertyDefaultByHandle( PROPERTY_ID_VSCROLL                 ) >>= m_bVScroll;
@@ -124,6 +125,7 @@ namespace frm
         m_sHelpURL               = _pOriginal->m_sHelpURL;
         m_nBorder                = _pOriginal->m_nBorder;
         m_bEnabled               = _pOriginal->m_bEnabled;
+        m_bEnableVisible         = _pOriginal->m_bEnableVisible;
         m_bHardLineBreaks        = _pOriginal->m_bHardLineBreaks;
         m_bHScroll               = _pOriginal->m_bHScroll;
         m_bVScroll               = _pOriginal->m_bVScroll;
@@ -188,6 +190,7 @@ namespace frm
         REGISTER_PROP_2( HELPTEXT,              m_sHelpText,                BOUND, MAYBEDEFAULT );
         REGISTER_PROP_2( HELPURL,               m_sHelpURL,                 BOUND, MAYBEDEFAULT );
         REGISTER_PROP_2( ENABLED,               m_bEnabled,                 BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( ENABLEVISIBLE,               m_bEnableVisible,                 BOUND, MAYBEDEFAULT );
         REGISTER_PROP_2( BORDER,                m_nBorder,                  BOUND, MAYBEDEFAULT );
         REGISTER_PROP_2( HARDLINEBREAKS,        m_bHardLineBreaks,          BOUND, MAYBEDEFAULT );
         REGISTER_PROP_2( HSCROLL,               m_bHScroll,                 BOUND, MAYBEDEFAULT );
@@ -456,6 +459,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_ENABLED:
+        case PROPERTY_ID_ENABLEVISIBLE:
         case PROPERTY_ID_PRINTABLE:
         case PROPERTY_ID_HIDEINACTIVESELECTION:
             aDefault <<= (sal_Bool)sal_True;

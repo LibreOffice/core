@@ -206,7 +206,7 @@ namespace frm
 #define PROPERTY_ID_FILTERPROPOSAL      (PROPERTY_ID_START +162)    // BOOL
 #define PROPERTY_ID_FIELDSOURCE         (PROPERTY_ID_START +163)    // String
 #define PROPERTY_ID_TABLENAME           (PROPERTY_ID_START +164)    // String
-    // FREE
+#define PROPERTY_ID_ENABLEVISIBLE       (PROPERTY_ID_START +165)    // BOOL
     // FREE
     // FREE
     // FREE

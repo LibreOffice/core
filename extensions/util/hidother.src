@@ -308,4 +308,6 @@ hidspecial HID_CHECK_FOR_UPD_CANCEL             { HelpId = HID_CHECK_FOR_UPD_CAN
 hidspecial HID_PROP_NOLABEL                     { HelpId = HID_PROP_NOLABEL; }
 hidspecial HID_PROP_INPUT_REQUIRED              { HelpId = HID_PROP_INPUT_REQUIRED; }
 hidspecial HID_PROP_WRITING_MODE                { HelpId = HID_PROP_WRITING_MODE; }
+hidspecial HID_PROP_ENABLE_VISIBLE              { HelpId = HID_PROP_ENABLE_VISIBLE; }
+hidspecial HID_PROP_WHEEL_BEHAVIOR              { HelpId = HID_PROP_WHEEL_BEHAVIOR; }
 hidspecial HID_PROP_ANCHOR_TYPE                 { HelpId = HID_PROP_ANCHOR_TYPE; }

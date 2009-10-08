@@ -298,7 +298,7 @@ Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(  const Reference<
                             Reference< XInterface >() );
 
     if ( !rData->aKey.getLength() )
-        throw packages::WrongPasswordException();
+        throw packages::WrongPasswordException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     Reference< XSeekable > xSeek( xStream, UNO_QUERY );
     if ( !xSeek.is() )
@@ -324,7 +324,7 @@ Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(  const Reference<
         xStream->readBytes( aReadBuffer, nSize );
 
         if ( !StaticHasValidPassword( aReadBuffer, rData ) )
-            throw packages::WrongPasswordException();
+            throw packages::WrongPasswordException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
     return new XUnbufferedStream ( xStream, rData );
@@ -557,7 +557,7 @@ Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry,
         // check if we can decrypt it or not
         OSL_ENSURE( rData->aDigest.getLength(), "Can't detect password correctness without digest!\n" );
         if ( rData->aDigest.getLength() && !hasValidPassword ( rEntry, rData ) )
-                throw packages::WrongPasswordException();
+                throw packages::WrongPasswordException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
     else
         bNeedRawStream = ( rEntry.nMethod == STORED );
@@ -589,7 +589,7 @@ Reference< XInputStream > SAL_CALL ZipFile::getWrappedRawStream(
             RuntimeException )
 {
     if ( rData.isEmpty() )
-        throw packages::NoEncryptionException();
+        throw packages::NoEncryptionException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );

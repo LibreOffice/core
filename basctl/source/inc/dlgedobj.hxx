@@ -140,7 +140,6 @@ public:
     virtual void SAL_CALL _elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
 
     virtual void SetLayer(SdrLayerID nLayer);
-    virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
 };
 
 
@@ -193,8 +192,6 @@ public:
     virtual void UpdateTabOrder();
     virtual void UpdateGroups();
     virtual void UpdateTabOrderAndGroups();
-
-    virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
 
     ::com::sun::star::awt::DeviceInfo getDeviceInfo() const;
 

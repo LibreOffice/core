@@ -54,6 +54,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/packages/NoEncryptionException.hpp>
+#include <com/sun/star/logging/XSimpleLogRing.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
@@ -155,6 +156,7 @@ struct OStorage_Impl
     SotElementList_Impl                         m_aDeletedList;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xPackageFolder;
+    ::com::sun::star::uno::Reference< ::com::sun::star::logging::XSimpleLogRing >  m_xLogRing;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > m_xPackage;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  m_xFactory;
@@ -211,6 +213,8 @@ struct OStorage_Impl
                     sal_Int16 nStorageType );
 
     ~OStorage_Impl();
+
+    void AddLog( const ::rtl::OUString& aMessage );
 
     void SetReadOnlyWrap( OStorage& aStorage );
     void RemoveReadOnlyWrap( OStorage& aStorage );

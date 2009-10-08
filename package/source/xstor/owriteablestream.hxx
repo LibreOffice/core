@@ -49,6 +49,7 @@
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/logging/XSimpleLogRing.hpp>
 
 
 #include <cppuhelper/implbase1.hxx>
@@ -73,6 +74,11 @@ struct PreCreationStruct
 
 namespace cppu {
     class OTypeCollection;
+}
+
+namespace package {
+    void StaticAddLog( const ::rtl::OUString& aMessage );
+    ::com::sun::star::uno::Sequence< sal_Int8 > MakeKeyFromPass( const ::rtl::OUString& aPass, sal_Bool bUseUTF );
 }
 
 struct WSInternalData_Impl
@@ -114,6 +120,7 @@ struct OWriteStream_Impl : public PreCreationStruct
     sal_Bool                        m_bFlushed;      // sending the streams is coordinated by the root storage of the package
 
     ::com::sun::star::uno::Reference< ::com::sun::star::packages::XDataSinkEncrSupport > m_xPackageStream;
+    ::com::sun::star::uno::Reference< ::com::sun::star::logging::XSimpleLogRing >  m_xLogRing;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
@@ -181,6 +188,8 @@ public:
     ~OWriteStream_Impl();
 
     void CleanCacheStream();
+
+    void AddLog( const ::rtl::OUString& aMessage );
 
     sal_Bool UsesCommonPass_Impl() { return m_bUseCommonPass; }
     sal_Bool HasTempFile_Impl() { return ( m_aTempURL.getLength() != 0 ); }
