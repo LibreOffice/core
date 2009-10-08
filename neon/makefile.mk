@@ -50,10 +50,10 @@ TARGET=so_neon
     @echo "neon disabled...."
 .ENDIF
 
-NEON_NAME=neon-0.26.3
+NEON_NAME=neon-0.28.2
 
 TARFILE_NAME=$(NEON_NAME)
-PATCH_FILE_NAME=neon.patch
+PATCH_FILES=neon.patch
 ADDITIONAL_FILES=src$/makefile.mk src$/config.h
 
 BUILD_DIR=src

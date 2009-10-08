@@ -1,0 +1,621 @@
+--- misc/hunspell-1.2.8/intl/localename.c	2007-04-06 10:05:34.000000000 +0200
++++ misc/build/hunspell-1.2.8/intl/localename.c	2008-11-01 16:30:49.000000000 +0100
+@@ -140,6 +140,9 @@
+ # ifndef LANG_SINDHI
+ # define LANG_SINDHI 0x59
+ # endif
++# ifndef LANG_SORBIAN
++# define LANG_SORBIAN 0x2e
++# endif
+ # ifndef LANG_SLOVAK
+ # define LANG_SLOVAK 0x1b
+ # endif
+--- misc/hunspell-1.2.8/src/hunspell/affixmgr.cxx	2008-11-01 08:00:41.000000000 +0100
++++ misc/build/hunspell-1.2.8/src/hunspell/affixmgr.cxx	2008-11-01 16:30:49.000000000 +0100
+@@ -25,6 +25,10 @@
+ #endif
+ #endif
+ 
++#ifdef OS2
++#undef DEBUG
++#endif
++
+ AffixMgr::AffixMgr(const char * affpath, HashMgr** ptr, int * md, const char * key) 
+ {
+   // register hash manager and load affix data from aff file
+@@ -2133,7 +2137,7 @@
+         while ((rv) && ((needaffix && TESTAFF(rv->astr, needaffix, rv->alen)) ||
+                         !((compoundflag && !words && TESTAFF(rv->astr, compoundflag, rv->alen)) ||
+                           (compoundend && !words && TESTAFF(rv->astr, compoundend, rv->alen)) ||
+-                           (numdefcpd && defcpd_check(&words, wnum + 1, rv, NULL,1))))) {
++                           (numdefcpd && words && defcpd_check(&words, wnum + 1, rv, NULL,1))))) {
+             rv = rv->next_homonym;
+         }
+ 
+--- misc/hunspell-1.2.8/src/hunspell/affixmgr.hxx	2008-10-30 21:28:59.000000000 +0100
++++ misc/build/hunspell-1.2.8/src/hunspell/affixmgr.hxx	2008-11-01 16:30:49.000000000 +0100
+@@ -2,9 +2,6 @@
+ #define _AFFIXMGR_HXX_
+ 
+ #ifdef MOZILLA_CLIENT
+-#ifdef __SUNPRO_CC // for SunONE Studio compiler
+-using namespace std;
+-#endif
+ #include <stdio.h>
+ #else
+ #include <cstdio>
+--- misc/hunspell-1.2.8/src/hunspell/atypes.hxx	2008-10-29 15:30:51.000000000 +0100
++++ misc/build/hunspell-1.2.8/src/hunspell/atypes.hxx	2008-11-01 16:30:49.000000000 +0100
+@@ -1,6 +1,8 @@
+ #ifndef _ATYPES_HXX_
+ #define _ATYPES_HXX_
+ 
++#include <stdio.h>
++
+ #ifndef HUNSPELL_WARNING
+ #ifdef HUNSPELL_WARNING_ON
+ #define HUNSPELL_WARNING fprintf
+--- misc/hunspell-1.2.8/src/hunspell/csutil.cxx	Wed Oct 22 12:15:28 2008
++++ misc/build/hunspell-1.2.8/src/hunspell/csutil.cxx	Thu Feb 19 18:13:34 2009
+@@ -18,13 +18,13 @@
+ #include "langnum.hxx"
+ 
+ #ifdef OPENOFFICEORG
+-#  include <unicode/uchar.h>
++#include <unicode/uchar.h>
+ #else
+-#  ifndef MOZILLA_CLIENT
+-#    include "utf_info.cxx"
+-#    define UTF_LST_LEN (sizeof(utf_lst) / (sizeof(unicode_info)))
+-#  endif
++#ifndef MOZILLA_CLIENT
++#include "utf_info.cxx"
++#define UTF_LST_LEN (sizeof(utf_lst) / (sizeof(unicode_info)))
+ #endif
++#endif
+ 
+ #ifdef MOZILLA_CLIENT
+ #include "nsCOMPtr.h"
+--- misc/hunspell-1.2.8/src/hunspell/filemgr.cxx	Sat Nov  1 15:09:41 2008
++++ misc/build/hunspell-1.2.8/src/hunspell/filemgr.cxx	Thu Feb 19 17:28:35 2009
+@@ -11,6 +11,7 @@
+ #include <stdio.h>
+ #endif
+ 
++using namespace std;
+ #include "filemgr.hxx"
+ 
+ int FileMgr::fail(const char * err, const char * par) {
+--- misc/hunspell-1.2.8/src/hunspell/filemgr.hxx	Mon Aug 11 11:32:02 2008
++++ misc/build/hunspell-1.2.8/src/hunspell/filemgr.hxx	Thu Feb 19 13:58:01 2009
+@@ -6,7 +6,7 @@
+ class FileMgr
+ {
+ protected:
+-    FILE * fin;
++    std::FILE * fin;
+     Hunzip * hin;
+     char in[BUFSIZE + 50]; // input buffer
+     int fail(const char * err, const char * par);
+--- misc/hunspell-1.2.8/src/hunspell/hashmgr.cxx	Thu Aug 14 16:49:33 2008
++++ misc/build/hunspell-1.2.8/src/hunspell/hashmgr.cxx	Thu Feb 19 17:25:33 2009
+@@ -6,6 +6,9 @@
+ #include <cstring>
+ #include <cstdio>
+ #include <cctype>
++//#ifdef __SUNPRO_CC // for SunONE Studio compiler
++//using namespace std;
++//#endif
+ #else
+ #include <stdlib.h> 
+ #include <string.h>
+@@ -13,10 +16,6 @@
+ #include <ctype.h>
+ #endif
+ 
+-#include "hashmgr.hxx"
+-#include "csutil.hxx"
+-#include "atypes.hxx"
+-
+ #ifdef MOZILLA_CLIENT
+ #ifdef __SUNPRO_CC // for SunONE Studio compiler
+ using namespace std;
+@@ -27,6 +26,10 @@
+ #endif
+ #endif
+ 
++#include "hashmgr.hxx"
++#include "csutil.hxx"
++#include "atypes.hxx"
++
+ // build a hash table from a munched word list
+ 
+ HashMgr::HashMgr(const char * tpath, const char * apath, const char * key)
+@@ -459,6 +462,10 @@
+         }
+       } else {
+         al = decode_flags(&flags, ap + 1, dict);
++        if (al == -1) {
++            HUNSPELL_WARNING(stderr, "Can't allocate memory.\n");
++            return 6;
++        }
+         flag_qsort(flags, 0, al);
+       }
+     } else {
+@@ -499,6 +506,11 @@
+ 
+ int HashMgr::decode_flags(unsigned short ** result, char * flags, FileMgr * af) {
+     int len;
++    if (*flags == '\0') {
++        HUNSPELL_WARNING(stderr, "error: line %d: bad flagvector\n", af->getlinenum());
++        *result = NULL;
++        return 0;
++    }
+     switch (flag_mode) {
+       case FLAG_LONG: { // two-character flags (1x2yZz -> 1x 2y Zz)
+         len = strlen(flags);
+--- misc/hunspell-1.2.8/src/hunspell/hashmgr.hxx	2008-08-12 12:22:54.000000000 +0200
++++ misc/build/hunspell-1.2.8/src/hunspell/hashmgr.hxx	2009-02-19 12:57:11.780108100 +0100
+@@ -3,6 +3,7 @@
+ 
+ #ifndef MOZILLA_CLIENT
+ #include <cstdio>
++/* using namespace std; */
+ #else
+ #include <stdio.h>
+ #endif
+--- misc/hunspell-1.2.8/src/hunspell/hunspell.cxx	Thu Oct 30 20:15:53 2008
++++ misc/build/hunspell-1.2.8/src/hunspell/hunspell.cxx	Thu Feb 19 18:13:35 2009
+@@ -1,3 +1,7 @@
++#ifdef _MSC_VER
++#pragma setlocale("C")
++#endif
++
+ #include "license.hunspell"
+ #include "license.myspell"
+ 
+@@ -11,11 +15,6 @@
+ #include <stdio.h>
+ #endif
+ 
+-#include "hunspell.hxx"
+-#include "hunspell.h"
+-#include "config.h"
+-#include "csutil.hxx"
+-
+ #ifndef MOZILLA_CLIENT
+ #ifndef WIN32
+ using namespace std;
+@@ -22,6 +21,9 @@
+ #endif
+ #endif
+ 
++#include "hunspell.hxx"
++#include "csutil.hxx"
++
+ Hunspell::Hunspell(const char * affpath, const char * dpath, const char * key)
+ {
+     encoding = NULL;
+@@ -338,7 +340,11 @@
+   char wspace[MAXWORDUTF8LEN];
+   w_char unicw[MAXWORDLEN];
+   // Hunspell supports XML input of the simplified API (see manual)
+-  if (strcmp(word, SPELL_XML) == 0) return 1;
++  if (strncmp(word, SPELL_XML, sizeof(SPELL_XML) - 3) == 0) {
++    if (strcmp(word, SPELL_XML) == 0) return 1; // query XML interface support
++    return 0;
++  }
++
+   int nc = strlen(word);
+   int wl2 = 0;
+   if (utf8) {
+@@ -1854,89 +1860,3 @@
+ }
+ 
+ #endif // END OF HUNSPELL_EXPERIMENTAL CODE
+-
+-Hunhandle *Hunspell_create(const char * affpath, const char * dpath)
+-{
+-        return (Hunhandle*)(new Hunspell(affpath, dpath));
+-}
+-
+-Hunhandle *Hunspell_create_key(const char * affpath, const char * dpath,
+-    const char * key)
+-{
+-        return (Hunhandle*)(new Hunspell(affpath, dpath, key));
+-}
+-
+-void Hunspell_destroy(Hunhandle *pHunspell)
+-{
+-        delete (Hunspell*)(pHunspell);
+-}
+-
+-int Hunspell_spell(Hunhandle *pHunspell, const char *word)
+-{
+-        return ((Hunspell*)pHunspell)->spell(word);
+-}
+-
+-char *Hunspell_get_dic_encoding(Hunhandle *pHunspell)
+-{
+-        return ((Hunspell*)pHunspell)->get_dic_encoding();
+-}
+-
+-int Hunspell_suggest(Hunhandle *pHunspell, char*** slst, const char * word)
+-{
+-        return ((Hunspell*)pHunspell)->suggest(slst, word);
+-}
+-
+-int Hunspell_analyze(Hunhandle *pHunspell, char*** slst, const char * word)
+-{
+-        return ((Hunspell*)pHunspell)->analyze(slst, word);
+-}
+-
+-int Hunspell_stem(Hunhandle *pHunspell, char*** slst, const char * word)
+-{
+-        return ((Hunspell*)pHunspell)->stem(slst, word);
+-}
+-
+-int Hunspell_stem(Hunhandle *pHunspell, char*** slst, char** desc, int n)
+-{
+-        return ((Hunspell*)pHunspell)->stem(slst, desc, n);
+-}
+-
+-int Hunspell_generate(Hunhandle *pHunspell, char*** slst, const char * word,
+-    const char * word2)
+-{
+-        return ((Hunspell*)pHunspell)->generate(slst, word, word2);
+-}
+-
+-int Hunspell_generate(Hunhandle *pHunspell, char*** slst, const char * word,
+-    char** desc, int n)
+-{
+-        return ((Hunspell*)pHunspell)->generate(slst, word, desc, n);
+-}
+-
+-  /* functions for run-time modification of the dictionary */
+-
+-  /* add word to the run-time dictionary */
+-
+-int Hunspell_add(Hunhandle *pHunspell, const char * word) {
+-        return ((Hunspell*)pHunspell)->add(word);
+-}
+-
+-  /* add word to the run-time dictionary with affix flags of
+-   * the example (a dictionary word): Hunspell will recognize
+-   * affixed forms of the new word, too.
+-   */
+-
+-int Hunspell_add_with_affix(Hunhandle *pHunspell, const char * word,
+-        const char * example) {
+-        return ((Hunspell*)pHunspell)->add_with_affix(word, example);
+-}
+-
+-  /* remove word from the run-time dictionary */
+-
+-int Hunspell_remove(Hunhandle *pHunspell, const char * word) {
+-        return ((Hunspell*)pHunspell)->remove(word);
+-}
+-
+-void Hunspell_free_list(Hunhandle *pHunspell, char *** slst, int n) {
+-        freelist(slst, n);
+-}
+--- misc/hunspell-1.2.8/src/hunspell/hunspell.hxx	2008-07-09 16:14:39.000000000 +0200
++++ misc/build/hunspell-1.2.8/src/hunspell/hunspell.hxx	2008-11-26 18:32:58.765625000 +0100
+@@ -28,11 +28,7 @@
+ 	#endif
+ #endif
+ 
+-#ifdef WIN32
+-class DLLEXPORT Hunspell
+-#else
+ class Hunspell
+-#endif
+ {
+   AffixMgr*       pAMgr;
+   HashMgr*        pHMgr[MAXDIC];
+--- misc/hunspell-1.2.8/src/hunspell/hunzip.cxx	Tue Jun 17 10:57:55 2008
++++ misc/build/hunspell-1.2.8/src/hunspell/hunzip.cxx	Thu Feb 19 17:29:19 2009
+@@ -8,6 +8,7 @@
+ #include <stdio.h> 
+ #endif
+ 
++using namespace std;
+ #include "hunzip.hxx"
+ 
+ #define CODELEN  65536
+--- misc/hunspell-1.2.8/src/hunspell/hunzip.hxx	Thu Feb 19 15:59:42 2009
++++ misc/build/hunspell-1.2.8/src/hunspell/hunzip.hxx	Thu Feb 19 18:13:35 2009
+@@ -18,6 +18,8 @@
+ #define MSG_MEMORY "error: %s: missing memory\n"
+ #define MSG_KEY    "error: %s: missing or bad password\n"
+ 
++#include <stdlib.h>
++
+ struct bit {
+     unsigned char c[2];
+     int v[2];
+--- misc/hunspell-1.2.8/src/hunspell/license.hunspell	2008-06-17 10:57:55.000000000 +0200
++++ misc/build/hunspell-1.2.8/src/hunspell/license.hunspell	2008-11-01 16:30:49.000000000 +0100
+@@ -56,4 +56,3 @@
+  *
+  * ***** END LICENSE BLOCK ***** */
+ 
+-#include "config.h"
+--- misc/hunspell-1.2.8/src/hunspell/makefile.mk	Tue Jun 17 10:57:55 2008
++++ misc/build/hunspell-1.2.8/src/hunspell/makefile.mk	Thu Feb 19 18:13:52 2009
+@@ -60,11 +60,12 @@
+ #
+ #*************************************************************************
+ 
+-PRJ = ..
++PRJ = ../../../../../..
+ 
+ PRJNAME	= hunspell
+ TARGET	= hunspell
+-LIBTARGET=NO
++LIBTARGET=YES
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+ 
+ #----- Settings ---------------------------------------------------------
+ 
+@@ -73,7 +74,7 @@
+ # --- Files --------------------------------------------------------
+ 
+ # all_target: ALLTAR DICTIONARY
+-all_target: ALLTAR
++#all_target: ALLTAR
+ 
+ ##CXXFLAGS += -I..$/..$/lingutil
+ ##CFLAGSCXX += -I..$/..$/lingutil
+@@ -89,6 +90,10 @@
+ 		$(SLO)$/utf_info.obj \
+ 		$(SLO)$/hashmgr.obj \
+ 		$(SLO)$/suggestmgr.obj \
++		$(SLO)$/phonet.obj \
++		$(SLO)$/hunzip.obj \
++		$(SLO)$/filemgr.obj \
++		$(SLO)$/replist.obj \
+ 		$(SLO)$/hunspell.obj
+ 
+ LIB1TARGET= $(SLB)$/lib$(TARGET).lib
+--- misc/hunspell-1.2.8/src/hunspell/phonet.cxx	2008-08-13 15:29:08.000000000 +0200
++++ misc/build/hunspell-1.2.8/src/hunspell/phonet.cxx	2008-11-01 16:30:49.000000000 +0100
+@@ -32,6 +32,7 @@
+ #include <cstring>
+ #include <cstdio>
+ #include <cctype>
++using namespace std;
+ #else
+ #include <stdlib.h> 
+ #include <string.h>
+--- misc/hunspell-1.2.8/src/hunspell/replist.cxx	Sat Nov  1 15:09:51 2008
++++ misc/build/hunspell-1.2.8/src/hunspell/replist.cxx	Thu Feb 19 14:02:51 2009
+@@ -13,6 +13,7 @@
+ 
+ #include "replist.hxx"
+ #include "csutil.hxx"
++using namespace std;
+ 
+ RepList::RepList(int n) {
+     dat = (replentry **) malloc(sizeof(replentry *) * n);
+--- misc/hunspell-1.2.8/src/tools/analyze.cxx	Tue Jun 17 13:44:50 2008
++++ misc/build/hunspell-1.2.8/src/tools/analyze.cxx	Thu Feb 19 18:13:35 2009
+@@ -3,13 +3,13 @@
+ #include <cstdlib>
+ #include <cstdio>
+ 
+-#include "hunspell.hxx"
+-
+ #ifndef WIN32
+ using namespace std;
+ #endif
+ 
++#include "hunspell.hxx"
+ 
++
+ 
+ int main(int argc, char **argv)
+ {
+--- misc/hunspell-1.2.8/src/tools/chmorph.cxx	Tue Jun 17 12:15:34 2008
++++ misc/build/hunspell-1.2.8/src/tools/chmorph.cxx	Thu Feb 19 17:36:46 2009
+@@ -2,13 +2,13 @@
+ #include <cstdlib>
+ #include <cstdio>
+ 
+-#include "hunspell.hxx"
+-#include "textparser.hxx"
+-
+ #ifndef W32
+ using namespace std;
+ #endif
+ 
++#include "hunspell.hxx"
++#include "textparser.hxx"
++
+ int 
+ main(int argc, char** argv)
+ {
+--- misc/hunspell-1.2.8/src/tools/example.cxx	Tue Jun 17 13:07:24 2008
++++ misc/build/hunspell-1.2.8/src/tools/example.cxx	Thu Feb 19 17:38:12 2009
+@@ -2,12 +2,12 @@
+ #include <cstdlib>
+ #include <cstdio>
+ 
++using namespace std;
++
+ #include "hunspell.hxx"
+ 
+ extern char * mystrdup(const char * s);
+ 
+-using namespace std;
+-
+ int 
+ main(int argc, char** argv)
+ {
+--- misc/hunspell-1.2.8/src/tools/hunspell.cxx	2008-09-04 15:44:19.000000000 +0200
++++ misc/build/hunspell-1.2.8/src/tools/hunspell.cxx	2008-11-01 16:31:24.000000000 +0100
+@@ -7,10 +7,20 @@
+ 
+ #include <cstdlib>
+ #include <cstdio>
++
++#ifdef __SUNPRO_CC
++using namespace std;
++#include <string.h>
++#include <malloc.h>
++#endif
++
+ #include "config.h"
+ #include "hunspell.hxx"
+ #include "csutil.hxx"
+ 
++// switch off iconv support for tests (fixing Solaris problems)
++#undef HAVE_ICONV
++
+ #ifndef HUNSPELL_EXTRA
+ #define suggest_auto suggest
+ #endif
+@@ -98,8 +108,10 @@
+ #if ENABLE_NLS
+ #ifdef HAVE_LOCALE_H
+ #include <locale.h>
++#ifdef HAVE_LANGINFO_CODESET
+ #include <langinfo.h>
+ #endif
++#endif
+ 
+ #ifdef HAVE_LIBINTL_H
+ #include <libintl.h>
+@@ -1385,9 +1397,11 @@
+ #ifdef HAVE_LOCALE_H
+ 	ui_lang = setlocale(LC_ALL, "");
+ 	textdomain("hunspell");
++#ifdef HAVE_LANGINFO_CODESET
+         ui_enc = nl_langinfo(CODESET);
+ #endif
+ #endif
++#endif
+ 
+ #ifdef HAVE_READLINE
+ 	rl_set_key("", rl_escape, rl_get_keymap());
+--- misc/hunspell-1.2.8/src/tools/hunzip.cxx	Tue Jan 15 11:10:04 2008
++++ misc/build/hunspell-1.2.8/src/tools/hunzip.cxx	Thu Feb 19 17:38:12 2009
+@@ -2,6 +2,8 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
++using namespace std;
++
+ #include "hunzip.hxx"
+ 
+ #define DESC "hunzip - decompress a hzip file to the standard output\n" \
+--- misc/hunspell-1.2.8/src/tools/hzip.c	Fri Apr  4 15:20:10 2008
++++ misc/build/hunspell-1.2.8/src/tools/hzip.c	Thu Feb 19 18:13:35 2009
+@@ -44,7 +44,7 @@
+     if (tree->type != code_NODE) {
+         int i = tree->word;
+         code[deep] = '\0';
+-        if (tree->type == code_TERM) i = CODELEN; // terminal code
++        if (tree->type == code_TERM) i = CODELEN; 
+         table[i] = malloc((deep + 1) * sizeof(char));
+ 	strcpy(table[i], code);
+     }        
+@@ -63,7 +63,7 @@
+     return ni;
+ }
+ 
+-// return length of the freq array
++
+ int get_freqdata(struct item *** dest, FILE * f, unsigned short * termword) {
+     int freq[CODELEN];
+     int i, j, k, n;
+@@ -88,7 +88,7 @@
+        (*dest)[n]->word = i;
+        n++;
+     }
+-    // terminal sequence (also contains the last odd byte of the file)
++    
+     (*dest)[n] = newitem(1, NULL, NULL, code_TERM);
+     *termword = *((unsigned short *) c);
+     return n + 1;
+@@ -134,20 +134,20 @@
+     char c[2];
+     char * enc = key;
+ 
+-    // header and codes
+-    fprintf(f2, "%s", (key ? MAGIC_ENCRYPTED : MAGIC)); // 3-byte HEADER
++    
++    fprintf(f2, "%s", (key ? MAGIC_ENCRYPTED : MAGIC)); 
+     cl = (unsigned char) (n & 0x00ff);
+     ch = (unsigned char) (n >> 8);
+     if (key) {
+         unsigned char cs;
+         for (cs = 0; *enc; enc++) cs ^= *enc;
+-        fprintf(f2, "%c", cs);  // 1-byte check sum
++        fprintf(f2, "%c", cs);  
+         enc = key;        
+         ch ^= *enc;
+         if ((*(++enc)) == '\0') enc = key;
+         cl ^= *enc;
+     }
+-    fprintf(f2, "%c%c", ch, cl);   // upper and lower byte of record count
++    fprintf(f2, "%c%c", ch, cl);   
+     for (i = 0; i < BUFSIZE; i++) bitbuf[i] = '\0';
+     for (i = 0; i < CODELEN + 1; i++) if (table[i]) {
+         unsigned short * d = (unsigned short *) &c;
+@@ -159,7 +159,7 @@
+             if (*(++enc) == '\0') enc = key;
+             c[1] ^= *enc;
+         }        
+-        fprintf(f2, "%c%c", c[0], c[1]); // 2-character code id
++        fprintf(f2, "%c%c", c[0], c[1]); 
+         bits = 0;
+         write_bits(f2, bitbuf, &bits, table[i]);
+         if (key) {
+@@ -169,11 +169,11 @@
+                 if (*(++enc) == '\0') enc = key;
+                 bitbuf[cl] ^= *enc;
+             }
+-        } else fprintf(f2, "%c", (unsigned char) bits); // 1-byte code length
+-        fwrite(bitbuf, sizeof(char), bits/8 + 1, f2);   // x-byte code
++        } else fprintf(f2, "%c", (unsigned char) bits); 
++        fwrite(bitbuf, sizeof(char), bits/8 + 1, f2);   
+     }
+ 
+-    // file encoding 
++    
+     bits = 0;
+     while((cx[0] = getc(f)) != -1 && (cx[1] = getc(f)) != -1) {
+         c[0] = cx[0];
+@@ -180,7 +180,7 @@
+         c[1] = cx[1];
+         write_bits(f2, bitbuf, &bits, table[*((unsigned short *) c)]);
+     }
+-    // terminal suffixes
++    
+     write_bits(f2, bitbuf, &bits, table[CODELEN]);
+     if (bits > 0) fwrite(bitbuf, sizeof(char), bits/8 + 1, f2);
+ }
+@@ -201,11 +201,11 @@
+             } else pfx = 0;
+         }
+         if (i > 0 && buf[i - 1] == '\n') {
+-            if (j == i) j--; // line duplicate
++            if (j == i) j--; 
+             if (j > 29) j = 29;
+             c = j;
+             if (c == '\t') c = 30;
+-            // common suffix
++            
+             for (; buf[i - m - 2] == prev[prevlen - m - 2] && 
+                 m < i - j - 1 && m < 15; m++);
+             if (m == 1) m = 0;
+@@ -221,7 +221,7 @@
+             *p = buf[k];
+         }
+         if (m > 0) {
+-            *p = m + 31; // 33-46
++            *p = m + 31; 
+             p++;
+         }
+         if (i > 0 && buf[i - 1] == '\n') {

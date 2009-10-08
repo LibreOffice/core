@@ -50,7 +50,7 @@ all:
 
 
 TARFILE_NAME=Python-$(PYVERSION)
-PATCH_FILE_NAME=Python-$(PYVERSION).patch
+PATCH_FILES=Python-$(PYVERSION).patch
 
 PYPROJECTS= \
     datetime 	\
@@ -116,7 +116,7 @@ CC+:=$(ARCH_FLAGS)
 python_LDFLAGS+=$(ARCH_FLAGS)
 .ENDIF
 
-CONFIGURE_ACTION=./configure --prefix=$(MYCWD)/python-inst --enable-shared CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
+CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure --prefix=$(MYCWD)/python-inst --enable-shared CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
 .IF "$(OS)$(CPU)" == "SOLARISI"
 CONFIGURE_ACTION += --disable-ipv6
 .ENDIF

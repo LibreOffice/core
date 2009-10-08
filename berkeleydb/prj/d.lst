@@ -10,6 +10,8 @@ mkdir: %_DEST%\inc%_EXT%\berkeleydb
 
 ..\%__SRC%\lib\libdb-4.2.dylib %_DEST%\lib%_EXT%\libdb-4.2.dylib
 
+..\%__SRC%\lib\libdb42.a %_DEST%\lib%_EXT%\libdb-4.2.a
+
 ..\%__SRC%\bin\libdb42.dll %_DEST%\bin%_EXT%\libdb42.dll
 ..\%__SRC%\bin\libdb_cxx42.dll %_DEST%\bin%_EXT%\libdb_cxx42.dll
 

@@ -62,9 +62,9 @@ ADDITIONAL_FILES=    \
 
 # not needed for win32. comment out when causing problems...
 .IF "$(GUI)$(COM)"=="WNTGCC"
-PATCH_FILE_NAME=db-4.2.52-mingw.patch
+PATCH_FILES=db-4.2.52-mingw.patch
 .ELSE
-PATCH_FILE_NAME=db-4.2.52.patch
+PATCH_FILES=db-4.2.52.patch
 .ENDIF
 
 # clean compiler flags

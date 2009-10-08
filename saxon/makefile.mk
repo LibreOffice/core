@@ -52,7 +52,7 @@ TARFILE_NAME=source-9.0.0.7-bj
 ADDITIONAL_FILES=build.xml
 TARFILE_ROOTDIR=src
 
-PATCH_FILE_NAME=saxon-9.0.0.7-bj.patch
+PATCH_FILES=saxon-9.0.0.7-bj.patch
 
 BUILD_ACTION=$(ANT) $(ANT_FLAGS) -Dsolarbindir=$(SOLARBINDIR) jar-bj 
 

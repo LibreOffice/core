@@ -266,7 +266,21 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
 .ENDIF
 
 # zip runtime files to mozruntime.zip
+.IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS"
+# regxpcom needs to find libxpcom.so next to itself:
+.IF "$(USE_SHELL)"=="bash"
+    cd $(RUNTIME_DIR) && \
+        LD_LIBRARY_PATH=$${{LD_LIBRARY_PATH+$${{LD_LIBRARY_PATH}}:}}. \
+        .$/regxpcom$(REG_SUBFIX)
+.ELSE
+    cd $(RUNTIME_DIR) && if ($$?LD_LIBRARY_PATH == 1) \
+        eval 'setenv LD_LIBRARY_PATH "$${{LD_LIBRARY_PATH}}:."' && \
+        if ($$?LD_LIBRARY_PATH == 0) setenv LD_LIBRARY_PATH . && \
+        .$/regxpcom$(REG_SUBFIX)
+.ENDIF
+.ELSE
     cd $(RUNTIME_DIR) && .$/regxpcom$(REG_SUBFIX)
+.ENDIF
     $(COPY) $(RUNTIME_DIR)$/components$/xpti.dat $(RUNTIME_DIR)$/components$/xptitemp.dat
     $(RM) $(RUNTIME_DIR)$/regxpcom$(REG_SUBFIX)
     cd $(RUNTIME_DIR) && zip -r ..$/..$/bin$/mozruntime.zip *

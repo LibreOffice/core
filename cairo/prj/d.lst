@@ -1,9 +1,6 @@
 mkdir: %_DEST%\inc%_EXT%\cairo
 ..\%__SRC%\inc\cairo*.h %_DEST%\inc%_EXT%\cairo\cairo*.h
 
-mkdir: %_DEST%\inc%_EXT%\pixman-1
-..\%__SRC%\inc\pixman*.h %_DEST%\inc%_EXT%\pixman-1\pixman*.h
-
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
 ..\%__SRC%\lib\lib*.so.* %_DEST%\lib%_EXT%\lib*.so.*
 ..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%\lib*.dylib

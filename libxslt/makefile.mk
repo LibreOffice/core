@@ -51,7 +51,7 @@ all:
 LIBXSLTVERSION=$(LIBXSLT_MAJOR).$(LIBXSLT_MINOR).$(LIBXSLT_MICRO)
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXSLTVERSION)
-PATCH_FILE_NAME=$(TARFILE_NAME).patch
+PATCH_FILES=$(TARFILE_NAME).patch
 
 # This is only for UNX environment now
 
@@ -117,6 +117,8 @@ OUT2BIN+=xsltproc$/.libs$/xsltproc
 OUT2BIN+=xslt-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
+OUT2LIB+=libxslt$/.libs$/*.a
+OUT2LIB+=libexslt$/.libs$/*.a
 OUT2BIN+=libxslt$/.libs$/*.dll
 OUT2BIN+=libexslt$/.libs$/*.dll
 OUT2BIN+=xsltproc$/.libs$/*.exe*

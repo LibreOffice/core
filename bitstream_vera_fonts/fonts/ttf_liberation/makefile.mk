@@ -43,7 +43,7 @@ TARGET=ttf_liberation
 TARFILE_NAME=liberation-fonts-1.04
 TARFILE_ROOTDIR=liberation-fonts-1.04
 
-PATCH_FILE_NAME=
+PATCH_FILES=
 
 
 CONFIGURE_DIR=

@@ -50,7 +50,7 @@ all:
 
 TARFILE_NAME=zlib-1.1.4
 
-PATCH_FILE_NAME=zlib-1.1.4.patch
+PATCH_FILES=zlib-1.1.4.patch
 ADDITIONAL_FILES=makefile.mk
 
 #relative to CONFIGURE_DIR

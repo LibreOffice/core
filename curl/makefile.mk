@@ -46,7 +46,7 @@ all:
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=curl-7.12.2
-PATCH_FILE_NAME=curl-7.12.2.patch
+PATCH_FILES=curl-7.12.2.patch
 CONVERTFILES= \
     lib$/Makefile.vc6
 

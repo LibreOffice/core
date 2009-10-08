@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.6.4.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,53 +40,38 @@ TARGET=hunspell
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=hunspell-1.1.12-2
-TARFILE_ROOTDIR=hunspell-1.1.12
+TARFILE_NAME=hunspell-1.2.8
+TARFILE_ROOTDIR=hunspell-1.2.8
 
 #ADDITIONAL_FILES += src/hunspell/makefile.mk
 
-PATCH_FILE_NAME=hunspell-1.1.12.patch
+PATCH_FILES=hunspell-1.2.8.patch
 
 .IF "$(GUI)"=="UNX"
 #CONFIGURE_DIR=$(BUILD_DIR)
 
 #relative to CONFIGURE_DIR
-CONFIGURE_ACTION=configure
+CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) configure
 CONFIGURE_FLAGS= --disable-shared --with-pic
 .IF "$(COMNAME)"=="sunpro5"
 CONFIGURE_FLAGS+= CFLAGS=-xc99=none
 .ENDIF                  # "$(COMNAME)"=="sunpro5"
 
-.IF "$(COM)"=="C52" && "$(CPU)"=="U"
-LCL_CONFIGURE_CFLAGS+=-m64
-.ENDIF
-
 .IF "$(SYSBASE)"!=""
 .IF "$(EXTRA_CFLAGS)"!=""
-LCL_CONFIGURE_CFLAGS+=$(EXTRA_CFLAGS)
-.ENDIF # "$(EXTRA_CFLAGS)"!=""
+CONFIGURE_FLAGS+= CFLAGS="$(EXTRA_CFLAGS)" CXXFLAGS="$(EXTRA_CFLAGS)"
 .ENDIF # "$(SYSBASE)"!=""
-
-.IF "$(LCL_CONFIGURE_CFLAGS)"!=""
-CONFIGURE_FLAGS+=CFLAGS='$(LCL_CONFIGURE_CFLAGS)' CXXFLAGS='$(LCL_CONFIGURE_CFLAGS)'
-.ENDIF
+.ENDIF # "$(EXTRA_CFLAGS)"!=""
 
 BUILD_ACTION=make && make check
 
-OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.1.a
+OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.2.a
 
 .ENDIF # "$(GUI)"=="UNX"
 
 
 .IF "$(GUI)"=="WNT"
-.IF "$(COM)"=="GCC"
-CONFIGURE_ACTION=configure
-CONFIGURE_FLAGS= --disable-shared --with-pic
-BUILD_ACTION=make
-OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.1.a
-.ELSE
 BUILD_ACTION=cd src/hunspell && dmake
-.ENDIF
 .ENDIF # "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="OS2"

@@ -48,7 +48,7 @@ TARFILE_NAME=icu-$(ICU_MAJOR).$(ICU_MINOR)
 .ENDIF
 TARFILE_ROOTDIR=icu
 
-PATCH_FILE_NAME=${TARFILE_NAME}.patch
+PATCH_FILES=${TARFILE_NAME}.patch
 
 # ADDITIONAL_FILES=
 
@@ -116,7 +116,7 @@ CONFIGURE_FLAGS=
 # note the position of the single quotes.
 
 BUILD_DIR=$(CONFIGURE_DIR)
-BUILD_ACTION=$(GNUMAKE)
+BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
 OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \
     $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR) \
@@ -243,10 +243,10 @@ OUT2BIN= \
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
 
-.IF "$(BINARY_PATCH_FILE_NAME)"!=""
+.IF "$(BINARY_PATCH_FILES)"!=""
 
 $(PACKAGE_DIR)$/so_add_binary :  $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
-    cd $(PACKAGE_DIR) && gunzip -c $(BACK_PATH)$(BINARY_PATCH_FILE_NAME) | tar $(TAR_EXCLUDE_SWITCH) -xvf -
+    cd $(PACKAGE_DIR) && gunzip -c $(BACK_PATH)$(BINARY_PATCH_FILES) | tar $(TAR_EXCLUDE_SWITCH) -xvf -
     $(TOUCH) $(PACKAGE_DIR)$/so_add_binary
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_add_binary
